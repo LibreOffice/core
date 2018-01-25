@@ -30,6 +30,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/spltitem.hxx>
+#include <unotools/configmgr.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <svl/urihelper.hxx>
@@ -2857,9 +2858,19 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
                 break;
             case HtmlOptionId::COLSPAN:
                 m_nColSpan = static_cast<sal_uInt16>(rOption.GetNumber());
+                if (m_nColSpan > 256)
+                {
+                    SAL_INFO("sw.html", "ignoring huge COLSPAN " << m_nColSpan);
+                    m_nColSpan = 1;
+                }
                 break;
             case HtmlOptionId::ROWSPAN:
                 m_nRowSpan = static_cast<sal_uInt16>(rOption.GetNumber());
+                if (m_nRowSpan > 8192 || (m_nRowSpan > 256 && utl::ConfigManager::IsFuzzing()))
+                {
+                    SAL_INFO("sw.html", "ignoring huge ROWSPAN " << m_nRowSpan);
+                    m_nRowSpan = 1;
+                }
                 break;
             case HtmlOptionId::ALIGN:
                 m_eAdjust = rOption.GetEnum( aHTMLPAlignTable, m_eAdjust );
@@ -4265,6 +4276,11 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                     break;
                 case HtmlOptionId::SPAN:
                     pSaveStruct->nColGrpSpan = static_cast<sal_uInt16>(rOption.GetNumber());
+                    if (pSaveStruct->nColGrpSpan > 256)
+                    {
+                        SAL_INFO("sw.html", "ignoring huge SPAN " << pSaveStruct->nColGrpSpan);
+                        pSaveStruct->nColGrpSpan = 1;
+                    }
                     break;
                 case HtmlOptionId::WIDTH:
                     pSaveStruct->nColGrpWidth = static_cast<sal_uInt16>(rOption.GetNumber());
@@ -4347,6 +4363,11 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                         break;
                     case HtmlOptionId::SPAN:
                         nColSpan = static_cast<sal_uInt16>(rOption.GetNumber());
+                        if (nColSpan > 256)
+                        {
+                            SAL_INFO("sw.html", "ignoring huge SPAN " << nColSpan);
+                            nColSpan = 1;
+                        }
                         break;
                     case HtmlOptionId::WIDTH:
                         nColWidth = static_cast<sal_uInt16>(rOption.GetNumber());
