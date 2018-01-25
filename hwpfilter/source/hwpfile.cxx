@@ -122,6 +122,13 @@ int HWPFile::SetState(int errcode)
     return error_code;
 }
 
+bool HWPFile::Read1b(unsigned char &out)
+{
+    if (!hiodev || !hiodev->read1b(out))
+        return false;
+    return true;
+}
+
 bool HWPFile::Read1b(char &out)
 {
     unsigned char tmp8;
@@ -148,11 +155,6 @@ bool HWPFile::Read4b(int &out)
         return false;
     out = tmp32;
     return true;
-}
-
-size_t HWPFile::Read1b(void *ptr, size_t nmemb)
-{
-    return hiodev ? hiodev->read1b(ptr, nmemb) : 0;
 }
 
 size_t HWPFile::Read2b(void *ptr, size_t nmemb)
