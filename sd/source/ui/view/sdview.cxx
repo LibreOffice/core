@@ -761,9 +761,9 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
 {
     maMasterViewFilter.End();
 
-    ::tools::WeakReference<SdrObject> xObj( GetTextEditObject() );
+    ::tools::WeakReference<SdrTextObj> xObj( GetTextEditObject() );
 
-    bool bDefaultTextRestored = RestoreDefaultText( dynamic_cast< SdrTextObj* >( GetTextEditObject() ) );
+    bool bDefaultTextRestored = RestoreDefaultText( xObj.get() );
 
     SdrEndTextEditKind eKind = FmFormView::SdrEndTextEdit(bDontDeleteReally);
 
@@ -780,7 +780,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
     }
     else if( xObj.is() && xObj->IsEmptyPresObj() )
     {
-        SdrTextObj* pObj = dynamic_cast< SdrTextObj* >( xObj.get() );
+        SdrTextObj* pObj = xObj.get();
         if( pObj && pObj->HasText() )
         {
             SdrPage* pPage = pObj->GetPage();
@@ -1194,7 +1194,7 @@ void View::OnBeginPasteOrDrop( PasteOrDropInfos* /*pInfo*/ )
 void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfo )
 {
     /* Style Sheet handling */
-    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( GetTextEditObject() );
+    SdrTextObj* pTextObj = GetTextEditObject();
     SdrOutliner* pOutliner = GetTextEditOutliner();
     if( !pOutliner || !pTextObj || !pTextObj->GetPage() )
         return;

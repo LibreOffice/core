@@ -56,13 +56,13 @@ namespace tools
 {
 
 /** private connection helper, do not use directly */
-template <class reference_type>
 struct WeakConnection
 {
     sal_Int32   mnRefCount;
-    reference_type* mpReference;
+    void*       mpReference;
 
-    WeakConnection( reference_type* pReference ) : mnRefCount( 0 ), mpReference( pReference ) {};
+    WeakConnection() : mnRefCount( 0 ), mpReference( nullptr ) {};
+    WeakConnection( void* pReference ) : mnRefCount( 0 ), mpReference( pReference ) {};
     void acquire() { mnRefCount++; }
     void release() { mnRefCount--; if( mnRefCount == 0 ) delete this; }
 };
@@ -118,14 +118,14 @@ public:
     inline WeakReference<reference_type>& operator= (WeakReference<reference_type> && handle);
 
 private:
-    rtl::Reference<WeakConnection< reference_type >> mpWeakConnection;
+    rtl::Reference<WeakConnection> mpWeakConnection;
 };
 
 /** derive your implementation classes from this class if you want them to support weak references */
 template <class reference_type>
 class WeakBase
 {
-    friend class WeakReference<reference_type>;
+    template<typename T> friend class WeakReference;
 
 public:
     inline WeakBase();
@@ -140,8 +140,8 @@ public:
     inline void clearWeak();
 
 private:
-    inline WeakConnection< reference_type >* getWeakConnection();
-    rtl::Reference<WeakConnection< reference_type >> mpWeakConnection;
+    inline WeakConnection* getWeakConnection();
+    rtl::Reference<WeakConnection> mpWeakConnection;
 };
 
 }

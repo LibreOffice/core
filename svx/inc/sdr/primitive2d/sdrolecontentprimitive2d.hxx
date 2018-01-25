@@ -37,7 +37,7 @@ namespace drawinglayer
         class SdrOleContentPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            tools::WeakReference<SdrObject>             mpSdrOle2Obj;
+            tools::WeakReference<SdrOle2Obj>            mpSdrOle2Obj;
             basegfx::B2DHomMatrix                       maObjectTransform;
 
             // #i104867# The GraphicVersion number to identify in operator== if

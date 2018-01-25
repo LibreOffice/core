@@ -288,7 +288,7 @@ private:
     ViewShellBase* mpBase;
 
     ::tools::Rectangle maLastVisArea;
-    ::tools::WeakReference<SdrPage> mpCurrentPage;
+    ::tools::WeakReference<SdPage> mpCurrentPage;
     bool mbMasterPageMode;
     bool mbLayerMode;
 

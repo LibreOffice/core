@@ -35,7 +35,7 @@ namespace drawinglayer
     {
         void SdrOleContentPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
-            const SdrOle2Obj* pSource = (mpSdrOle2Obj.is() ? static_cast< SdrOle2Obj* >(mpSdrOle2Obj.get()) : nullptr);
+            const SdrOle2Obj* pSource = mpSdrOle2Obj.get();
             bool bScaleContent(false);
             Graphic aGraphic;
 
