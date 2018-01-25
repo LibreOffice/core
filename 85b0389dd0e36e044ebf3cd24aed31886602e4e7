@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_4383b5cc",
+        "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2371,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-25T17:51:13Z",
+      "side": 1,
+      "message": "0. this should remember the ScViewData* returned by ScDocShell::GetViewData() instead of calling it thrice.\n\n1. and most important: ScDocShell::IsUpdateEnabled() is not related to whether the user allowed update of links or not or update of links at all.\n\n2. this should probably use the same mechanism as in getSrcDocument() below, namely !mpDoc-\u003eIsExecuteLinkEnabled())",
+      "revId": "85b0389dd0e36e044ebf3cd24aed31886602e4e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
