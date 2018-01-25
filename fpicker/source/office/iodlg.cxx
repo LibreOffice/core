@@ -68,6 +68,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <comphelper/interaction.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
@@ -1807,6 +1808,9 @@ void SvtFileDialog::EnableControl( Control* _pControl, bool _bEnable )
 
 short SvtFileDialog::PrepareExecute()
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return 0;
+
     OUString aEnvValue;
     if ( getEnvironmentValue( "WorkDirMustContainRemovableMedia", aEnvValue ) && aEnvValue == "1" )
     {
