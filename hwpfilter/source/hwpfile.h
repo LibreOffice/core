@@ -127,6 +127,7 @@ class DLLEXPORT HWPFile
 /**
  * Reads one byte from HIODev
  */
+        bool Read1b(unsigned char &out);
         bool Read1b(char &out);
 /**
  * Reads two byte from HIODev
@@ -137,10 +138,6 @@ class DLLEXPORT HWPFile
  */
         bool Read4b(unsigned int &out);
         bool Read4b(int &out);
-/**
- * Reads nmemb byte array from HIODev
- */
-        size_t Read1b(void *ptr, size_t nmemb);
 /**
  * Reads nmemb short type array from HIODev
  */

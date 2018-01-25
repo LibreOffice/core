@@ -71,10 +71,10 @@ bool FieldCode::Read(HWPFile & hwpf)
 
     hwpf.Read4b(&size, 1);
     hwpf.Read2b(&dummy, 1);
-    hwpf.Read1b(&type, 2);
+    hwpf.ReadBlock(&type, 2);
     hwpf.Read4b(reserved1.data(), 1);
     hwpf.Read2b(&location_info, 1);
-    hwpf.Read1b(reserved2.data(), 22);
+    hwpf.ReadBlock(reserved2.data(), 22);
     hwpf.Read4b(&len1, 1);
     hwpf.Read4b(&len2, 1);
     hwpf.Read4b(&len3, 1);
@@ -197,14 +197,14 @@ bool Cell::Read(HWPFile & hwpf)
     hwpf.Read2b(&txthigh, 1);
     hwpf.Read2b(&cellhigh, 1);
 
-    hwpf.Read1b(&flag, 1);
-    hwpf.Read1b(&changed, 1);
-    hwpf.Read1b(&used, 1);
-    hwpf.Read1b(&ver_align, 1);
-    hwpf.Read1b(linetype, 4);
-    hwpf.Read1b(&shade, 1);
-    hwpf.Read1b(&diagonal, 1);
-    return hwpf.Read1b(&protect, 1) == 1;
+    hwpf.Read1b(flag);
+    hwpf.Read1b(changed);
+    hwpf.Read1b(used);
+    hwpf.Read1b(ver_align);
+    hwpf.ReadBlock(linetype, 4);
+    hwpf.Read1b(shade);
+    hwpf.Read1b(diagonal);
+    return hwpf.Read1b(protect);
 }
 
 bool TxtBox::Read(HWPFile & hwpf)
@@ -226,8 +226,8 @@ bool TxtBox::Read(HWPFile & hwpf)
 
     style.boxnum = fboxnum++;
      zorder = zindex++;
-    hwpf.Read1b(&style.anchor_type, 1);
-    hwpf.Read1b(&style.txtflow, 1);
+    hwpf.Read1b(style.anchor_type);
+    hwpf.Read1b(style.txtflow);
     hwpf.Read2b(&style.xpos, 1);
     hwpf.Read2b(&style.ypos, 1);
     hwpf.Read2b(&option, 1);
@@ -242,10 +242,10 @@ bool TxtBox::Read(HWPFile & hwpf)
     hwpf.Read2b(&xs, 1);
     hwpf.Read2b(&ys, 1);
     hwpf.Read2b(&cap_margin, 1);
-    hwpf.Read1b(&xpos_type, 1);
-    hwpf.Read1b(&ypos_type, 1);
-    hwpf.Read1b(&smart_linesp, 1);
-    hwpf.Read1b(&reserved1, 1);
+    hwpf.Read1b(xpos_type);
+    hwpf.Read1b(ypos_type);
+    hwpf.Read1b(smart_linesp);
+    hwpf.Read1b(reserved1);
     hwpf.Read2b(&pgx, 1);
     hwpf.Read2b(&pgy, 1);
     hwpf.Read2b(&pgno, 1);
@@ -381,8 +381,8 @@ bool Picture::Read(HWPFile & hwpf)
 
     style.boxnum = fboxnum++;
      zorder = zindex++;
-    hwpf.Read1b(&style.anchor_type, 1);           /* Reference position */
-    hwpf.Read1b(&style.txtflow, 1);               /* Avoid painting. 0-2 (seat occupied, transparency, harmony) */
+    hwpf.Read1b(style.anchor_type);               /* Reference position */
+    hwpf.Read1b(style.txtflow);                   /* Avoid painting. 0-2 (seat occupied, transparency, harmony) */
     hwpf.Read2b(&style.xpos, 1);                  /* Horizontal position: 1=left, 2=right, 3=center, and others=any */
     hwpf.Read2b(&style.ypos, 1);                  /* Vertical position: 1=top, 2=down, 3=middle, and others=any */
     hwpf.Read2b(&option, 1);                      /* Other options: Borders, reverse picture, and so on. Save as bit. */
@@ -396,10 +396,10 @@ bool Picture::Read(HWPFile & hwpf)
     hwpf.Read2b(&xs, 1);                          /* The total size (box size + caption + margin) Horizontal */
     hwpf.Read2b(&ys, 1);                          /* Vertical */
     hwpf.Read2b(&cap_margin, 1);                  /* Caption margins */
-    hwpf.Read1b(&xpos_type, 1);
-    hwpf.Read1b(&ypos_type, 1);
-    hwpf.Read1b(&smart_linesp, 1);                /* Line Spacing protection: 0 unprotected 1 protected */
-    hwpf.Read1b(&reserved1, 1);
+    hwpf.Read1b(xpos_type);
+    hwpf.Read1b(ypos_type);
+    hwpf.Read1b(smart_linesp);                    /* Line Spacing protection: 0 unprotected 1 protected */
+    hwpf.Read1b(reserved1);
     hwpf.Read2b(&pgx, 1);                         /* Real Calculated box width */
     hwpf.Read2b(&pgy, 1);                         /* Height */
     hwpf.Read2b(&pgno, 1);                        /* Page number: starts from 0 */
@@ -407,7 +407,7 @@ bool Picture::Read(HWPFile & hwpf)
     hwpf.Read2b(&cap_pos, 1);                     /* Caption positions 0-7 Menu Order. */
     hwpf.Read2b(&num, 1);                         /* Box number, serial number which starts from 0 */
 
-    hwpf.Read1b(&pictype, 1);                     /* Picture type */
+    hwpf.Read1b(pictype);                         /* Picture type */
 
     unsigned short tmp16;
     if (!hwpf.Read2b(tmp16))                      /* the real horizontal starting point where shows the picture */
@@ -423,8 +423,8 @@ bool Picture::Read(HWPFile & hwpf)
         return false;
     scale[1] = tmp16;
 
-    hwpf.Read1b(picinfo.picun.path, 256);         /* Picture File Name: when type is not a Drawing. */
-    hwpf.Read1b(reserved3, 9);                    /* Brightness / Contrast / Picture Effect, etc. */
+    hwpf.ReadBlock(picinfo.picun.path, 256);      /* Picture File Name: when type is not a Drawing. */
+    hwpf.ReadBlock(reserved3, 9);                 /* Brightness / Contrast / Picture Effect, etc. */
 
     UpdateBBox(this);
     if( pictype != PICTYPE_DRAW )
@@ -517,9 +517,9 @@ bool Line::Read(HWPFile & hwpf)
     style.boxnum = fboxnum++;
      zorder = zindex++;
     style.boxtype = 'L';
-    hwpf.Read1b(&reserved2, 8);
-    hwpf.Read1b(&style.anchor_type, 1);
-    hwpf.Read1b(&style.txtflow, 1);
+    hwpf.ReadBlock(&reserved2, 8);
+    hwpf.Read1b(style.anchor_type);
+    hwpf.Read1b(style.txtflow);
     hwpf.Read2b(&style.xpos, 1);
     hwpf.Read2b(&style.ypos, 1);
     hwpf.Read2b(&option, 1);
@@ -537,8 +537,8 @@ bool Line::Read(HWPFile & hwpf)
     hwpf.linenumber = 1;
     hwpf.Read2b(&boundsy, 1);
     hwpf.Read2b(&boundey, 1);
-    hwpf.Read1b(&boundx, 1);
-    hwpf.Read1b(&draw, 1);
+    hwpf.Read1b(boundx);
+    hwpf.Read1b(draw);
 
     hwpf.Read2b(&pgx, 1);
     hwpf.Read2b(&pgy, 1);
@@ -572,7 +572,7 @@ bool Hidden::Read(HWPFile & hwpf)
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
 
-    hwpf.Read1b(info, 8);
+    hwpf.ReadBlock(info, 8);
     hwpf.ReadParaList(plist);
 
     return !hwpf.State();
@@ -597,9 +597,9 @@ bool HeaderFooter::Read(HWPFile & hwpf)
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
 
-    hwpf.Read1b(info, 8);
-    hwpf.Read1b(&type, 1);
-    hwpf.Read1b(&where, 1);
+    hwpf.ReadBlock(info, 8);
+    hwpf.Read1b(type);
+    hwpf.Read1b(where);
     lnnumber = 0;
     hwpf.ReadParaList(plist, CH_HEADER_FOOTER);
     linenumber = sal::static_int_cast<unsigned char>(lnnumber);
@@ -629,7 +629,7 @@ bool Footnote::Read(HWPFile & hwpf)
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
 
-    hwpf.Read1b(info, 8);
+    hwpf.ReadBlock(info, 8);
     hwpf.Read2b(&number, 1);
     hwpf.Read2b(&type, 1);
     unsigned short tmp16;
@@ -741,7 +741,7 @@ MailMerge::MailMerge()
 
 bool MailMerge::Read(HWPFile & hwpf)
 {
-    hwpf.Read1b(field_name, 20);
+    hwpf.ReadBlock(field_name, 20);
     hwpf.Read2b(&dummy, 1);
 
     if (hh != dummy){
@@ -844,8 +844,8 @@ Outline::Outline()
 bool Outline::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&kind, 1);
-    hwpf.Read1b(&shape, 1);
-    hwpf.Read1b(&level, 1);
+    hwpf.Read1b(shape);
+    hwpf.Read1b(level);
     hwpf.Read2b(number, 7);
     hwpf.Read2b(user_shape, 7);
     hwpf.Read2b(deco, 14);

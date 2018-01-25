@@ -78,8 +78,8 @@ void HWPInfo::Read(HWPFile & hwpf)
     hwpf.Read2b(&cur_col, 1);                     /* When a document is saving, the paragraph number where the coursor is */
     hwpf.Read2b(&cur_row, 1);                     /* Paragraphs rows */
 
-    hwpf.Read1b(&paper.paper_kind, 1);            /* Paper Type */
-    hwpf.Read1b(&paper.paper_direction, 1);       /* Paper orientation */
+    hwpf.Read1b(paper.paper_kind);                /* Paper Type */
+    hwpf.Read1b(paper.paper_direction);           /* Paper orientation */
 
 // paper geometry information
     unsigned short tmp16;
@@ -111,15 +111,14 @@ void HWPInfo::Read(HWPFile & hwpf)
         return;
     paper.gutter_length = tmp16;                  /* The binding margin */
     hwpf.Read2b(&readonly, 1);                    /* Reserve */
-    hwpf.Read1b(reserved1, 4);                    /* Reserve */
-    hwpf.Read1b(&chain_info.chain_page_no, 1);    /* Connect page number: 1-Connect, 0-newly started (used in connection printing) */
-    hwpf.Read1b(&chain_info.chain_footnote_no, 1);/* Connect footnote number: 1-connect, 0-newly started*/
+    hwpf.ReadBlock(reserved1, 4);                 /* Reserve */
+    hwpf.Read1b(chain_info.chain_page_no);        /* Connect page number: 1-Connect, 0-newly started (used in connection printing) */
+    hwpf.Read1b(chain_info.chain_footnote_no);    /* Connect footnote number: 1-connect, 0-newly started*/
                                                   /* the file name to be printed with connection */
-    hwpf.Read1b(chain_info.chain_filename, CHAIN_MAX_PATH);
+    hwpf.ReadBlock(chain_info.chain_filename, CHAIN_MAX_PATH);
 
-    hwpf.Read1b(annotation, ANNOTATION_LEN);      /* Annotation (additional information when a file is saving.) */
+    hwpf.ReadBlock(annotation, ANNOTATION_LEN);   /* Annotation (additional information when a file is saving.) */
     hwpf.Read2b(&encrypted, 1);                   /* encrypt: 0-normal file(without password), 1-protected by password */
-//hwpf.Read1b(reserved2, 6);                      /* it turned into below three values. */
     hwpf.Read2b(&beginpagenum,1);                 /* Page starting number */
 
 // footnote
@@ -135,8 +134,8 @@ void HWPInfo::Read(HWPFile & hwpf)
     if (!hwpf.Read2b(tmp16))
         return;
     spfnfn = tmp16;
-    hwpf.Read1b(&fnchar, 1);
-    hwpf.Read1b(&fnlinetype, 1);
+    hwpf.Read1b(fnchar);
+    hwpf.Read1b(fnlinetype);
 // border layout
     for (int & ii : bordermargin)
     {
@@ -146,11 +145,11 @@ void HWPInfo::Read(HWPFile & hwpf)
     }
     hwpf.Read2b(&borderline, 1);
 
-    hwpf.Read1b(&empty_line_hide, 1);
-    hwpf.Read1b(&table_move, 1);
-    hwpf.Read1b(&compressed, 1);
+    hwpf.Read1b(empty_line_hide);
+    hwpf.Read1b(table_move);
+    hwpf.Read1b(compressed);
 
-    hwpf.Read1b(&reserved3, 1);
+    hwpf.Read1b(reserved3);
 
     hwpf.Read2b(&info_block_len, 1);
     if (hwpf.State())
@@ -231,18 +230,18 @@ void ParaShape::Read(HWPFile & hwpf)
         return;
     pspacing_next = tmp16;
 
-    hwpf.Read1b(&condense, 1);
-    hwpf.Read1b(&arrange_type, 1);
+    hwpf.Read1b(condense);
+    hwpf.Read1b(arrange_type);
     for (TabSet & tab : tabs)
     {
-        hwpf.Read1b(&tab.type, 1);
-        hwpf.Read1b(&tab.dot_continue, 1);
+        hwpf.Read1b(tab.type);
+        hwpf.Read1b(tab.dot_continue);
         if (!hwpf.Read2b(tmp16))
             return;
         tab.position = tmp16;
     }
-    hwpf.Read1b(&coldef.ncols, 1);
-    hwpf.Read1b(&coldef.separator, 1);
+    hwpf.Read1b(coldef.ncols);
+    hwpf.Read1b(coldef.separator);
     if (!hwpf.Read2b(tmp16))
         return;
     coldef.spacing = tmp16;
@@ -252,14 +251,14 @@ void ParaShape::Read(HWPFile & hwpf)
     if (!hwpf.Read2b(tmp16))
         return;
     coldef.columnlen0 = tmp16;
-    hwpf.Read1b(&shade, 1);
-    hwpf.Read1b(&outline, 1);
-    hwpf.Read1b(&outline_continue, 1);
+    hwpf.Read1b(shade);
+    hwpf.Read1b(outline);
+    hwpf.Read1b(outline_continue);
     if (!hwpf.Read2b(tmp16))
         return;
     pspacing_prev = tmp16;
 
-    hwpf.Read1b(reserved, 2);
+    hwpf.ReadBlock(reserved, 2);
 }
 
 
@@ -269,13 +268,13 @@ void CharShape::Read(HWPFile & hwpf)
     if (!hwpf.Read2b(tmp16))
         return;
     size = tmp16;
-    hwpf.Read1b(font, NLanguage);
-    hwpf.Read1b(ratio, NLanguage);
-    hwpf.Read1b(space, NLanguage);
-    hwpf.Read1b(color, 2);
-    hwpf.Read1b(&shade, 1);
-    hwpf.Read1b(&attr, 1);
-    hwpf.Read1b(reserved, 4);
+    hwpf.ReadBlock(font, NLanguage);
+    hwpf.ReadBlock(ratio, NLanguage);
+    hwpf.ReadBlock(space, NLanguage);
+    hwpf.ReadBlock(color, 2);
+    hwpf.Read1b(shade);
+    hwpf.Read1b(attr);
+    hwpf.ReadBlock(reserved, 4);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

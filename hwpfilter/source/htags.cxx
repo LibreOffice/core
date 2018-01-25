@@ -27,11 +27,12 @@
 
 bool HyperText::Read(HWPFile& hwpf)
 {
-    size_t nRead = hwpf.Read1b(filename, 256);
+    size_t nRead = hwpf.ReadBlock(filename, 256);
     nRead += hwpf.Read2b(bookmark, 16);
-    nRead += hwpf.Read1b(macro, 325);
-    nRead += hwpf.Read1b(&type, 1);
-    nRead += hwpf.Read1b(reserve, 3);
+    nRead += hwpf.ReadBlock(macro, 325);
+    if (hwpf.Read1b(type))
+        ++nRead;
+    nRead += hwpf.ReadBlock(reserve, 3);
     if( type == 2 )
     {
         for( int i = 1; i < 256; i++)
@@ -61,8 +62,8 @@ bool EmPicture::Read(HWPFile & hwpf)
 {
     if (size == 0)
         return false;
-    hwpf.Read1b(name, 16);
-    hwpf.Read1b(type, 16);
+    hwpf.ReadBlock(name, 16);
+    hwpf.ReadBlock(type, 16);
     name[0] = 'H';
     name[1] = 'W';
     name[2] = 'P';
