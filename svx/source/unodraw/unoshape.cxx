@@ -1220,13 +1220,13 @@ void SAL_CALL SvxShape::setSize( const awt::Size& rSize )
             //aRect.SetSize(aLocalSize); // this call subtract 1 // http://www.openoffice.org/issues/show_bug.cgi?id=83193
             if ( !aLocalSize.Width() )
             {
-                aRect.Right() = RECT_EMPTY;
+                aRect.SetWidthEmpty();
             }
             else
                 aRect.setWidth(aLocalSize.Width());
             if ( !aLocalSize.Height() )
             {
-                aRect.Bottom() = RECT_EMPTY;
+                aRect.SetHeightEmpty();
             }
             else
                 aRect.setHeight(aLocalSize.Height());

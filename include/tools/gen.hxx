@@ -327,7 +327,6 @@ inline std::basic_ostream<charT, traits> & operator <<(
 }
 // Rectangle
 
-#define RECT_EMPTY  (short(-32767))
 #define RECT_MAX    LONG_MAX
 #define RECT_MIN    LONG_MIN
 
@@ -344,11 +343,14 @@ namespace tools
 {
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Rectangle
 {
+    static constexpr short RECT_EMPTY = -32767;
 public:
                         Rectangle();
                         Rectangle( const Point& rLT, const Point& rRB );
                         Rectangle( long nLeft, long nTop,
                                    long nRight, long nBottom );
+    /// Constructs an empty Rectangle, with top/left at the specified params
+                        Rectangle( long nLeft, long nTop );
                         Rectangle( const Point& rLT, const Size& rSize );
 
     long                Left() const    { return nLeft;   }
@@ -394,6 +396,8 @@ public:
     bool                IsOver( const tools::Rectangle& rRect ) const;
 
     void                SetEmpty() { nRight = nBottom = RECT_EMPTY; }
+    void                SetWidthEmpty() { nRight = RECT_EMPTY; }
+    void                SetHeightEmpty() { nBottom = RECT_EMPTY; }
     inline bool         IsEmpty() const;
 
     inline bool         operator == ( const tools::Rectangle& rRect ) const;
@@ -459,6 +463,13 @@ inline tools::Rectangle::Rectangle( long _nLeft,  long _nTop,
     nTop    = _nTop;
     nRight  = _nRight;
     nBottom = _nBottom;
+}
+
+inline tools::Rectangle::Rectangle( long _nLeft,  long _nTop )
+{
+    nLeft   = _nLeft;
+    nTop    = _nTop;
+    nRight = nBottom = RECT_EMPTY;
 }
 
 inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSize )
@@ -650,19 +661,18 @@ namespace tools
 {
 inline Rectangle operator + ( const Rectangle& rRect, const Point& rPt )
 {
-    Rectangle aRect( rRect.nLeft  + rPt.X(), rRect.nTop    + rPt.Y(),
-                     (rRect.nRight  == RECT_EMPTY) ? RECT_EMPTY : rRect.nRight + rPt.X(),
-                     (rRect.nBottom == RECT_EMPTY) ? RECT_EMPTY : rRect.nBottom + rPt.Y() );
-    return aRect;
+    return rRect.IsEmpty()
+        ?  Rectangle( rRect.nLeft  + rPt.X(), rRect.nTop    + rPt.Y() )
+        :  Rectangle( rRect.nLeft  + rPt.X(), rRect.nTop    + rPt.Y(),
+                      rRect.nRight + rPt.X(), rRect.nBottom + rPt.Y() );
 }
 
 inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt )
 {
-    Rectangle aRect( rRect.nLeft - rPt.X(),
-                     rRect.nTop - rPt.Y(),
-                     (rRect.nRight  == RECT_EMPTY) ? RECT_EMPTY : rRect.nRight - rPt.X(),
-                     (rRect.nBottom == RECT_EMPTY) ? RECT_EMPTY : rRect.nBottom - rPt.Y() );
-    return aRect;
+    return rRect.IsEmpty()
+        ? Rectangle( rRect.nLeft - rPt.X(),  rRect.nTop - rPt.Y() )
+        : Rectangle( rRect.nLeft - rPt.X(),  rRect.nTop - rPt.Y(),
+                     rRect.nRight - rPt.X(), rRect.nBottom - rPt.Y() );
 }
 }
 
