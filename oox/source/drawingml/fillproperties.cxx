@@ -673,10 +673,15 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     Color aColor( maPatternProps.maPattFgColor );
                     if( aColor.isUsed() && maPatternProps.moPattPreset.has() )
                     {
-                        // we do not support hatches that have background
-                        // color too, so all this is some best-effort approach
                         eFillStyle = FillStyle_HATCH;
                         rPropMap.setProperty( ShapeProperty::FillHatch, createHatch( maPatternProps.moPattPreset.get(), aColor.getColor( rGraphicHelper, nPhClr ) ) );
+
+                        // Set background color for hatch
+                        if(maPatternProps.maPattBgColor.isUsed())
+                        {
+                            rPropMap.setProperty( ShapeProperty::FillBackground, true );
+                            rPropMap.setProperty( ShapeProperty::FillColor, maPatternProps.maPattBgColor.getColor( rGraphicHelper, nPhClr ) );
+                        }
                     }
                     else if ( maPatternProps.maPattBgColor.isUsed() )
                     {

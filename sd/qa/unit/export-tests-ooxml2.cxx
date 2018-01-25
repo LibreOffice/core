@@ -124,6 +124,7 @@ public:
     void testGroupsRotatedPosition();
     void testAccentColor();
     void testTdf114848();
+    void testTdf107608();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -173,6 +174,7 @@ public:
     CPPUNIT_TEST(testGroupsRotatedPosition);
     CPPUNIT_TEST(testAccentColor);
     CPPUNIT_TEST(testTdf114848);
+    CPPUNIT_TEST(testTdf107608);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1313,6 +1315,30 @@ void SdOOXMLExportTest2::testTdf114848()
     assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val", "1f497d");
     xmlDocPtr pXmlDocTheme2 = parseExport(tempFile, "ppt/theme/theme2.xml");
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val", "1f497d");
+}
+
+void SdOOXMLExportTest2::testTdf107608()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf107608.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY_THROW );
+
+    drawing::FillStyle aFillStyle( drawing::FillStyle_NONE );
+    xPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, aFillStyle);
+
+    bool bBackgroundFill = false;
+    xPropSet->getPropertyValue("FillBackground") >>= bBackgroundFill;
+    CPPUNIT_ASSERT(bBackgroundFill);
+
+    sal_Int32 nBackgroundColor;
+    xPropSet->getPropertyValue("FillColor") >>= nBackgroundColor;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x92D050), nBackgroundColor);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
