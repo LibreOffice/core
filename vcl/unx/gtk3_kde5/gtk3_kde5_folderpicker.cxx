@@ -28,7 +28,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <vcl/svapp.hxx>
 
-#include <strings.hrc>
+#include <svids.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;

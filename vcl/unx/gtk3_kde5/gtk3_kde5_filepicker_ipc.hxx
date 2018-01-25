@@ -35,7 +35,7 @@
 #include <thread>
 #include <sstream>
 
-OUString getResString(const char* pResId);
+OUString getResString(sal_Int32 pResId);
 
 class Gtk3KDE5FilePickerIpc
 {
