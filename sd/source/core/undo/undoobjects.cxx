@@ -254,20 +254,20 @@ UndoObjectPresentationKind::UndoObjectPresentationKind(SdrObject& rObject)
 :   SdrUndoObj(rObject)
 ,   meOldKind(PRESOBJ_NONE)
 ,   meNewKind(PRESOBJ_NONE)
-,   mxPage( rObject.GetPage() )
+,   mxPage( static_cast<SdPage*>(rObject.GetPage()) )
 ,   mxSdrObject( &rObject )
 {
     DBG_ASSERT( mxPage.is(), "sd::UndoObjectPresentationKind::UndoObjectPresentationKind(), does not work for shapes without a slide!" );
 
     if( mxPage.is() )
-        meOldKind = static_cast< SdPage* >( mxPage.get() )->GetPresObjKind( &rObject );
+        meOldKind = mxPage->GetPresObjKind( &rObject );
 }
 
 void UndoObjectPresentationKind::Undo()
 {
     if( mxPage.is() && mxSdrObject.is() )
     {
-        SdPage* pPage = static_cast< SdPage* >( mxPage.get() );
+        SdPage* pPage = mxPage.get();
         meNewKind =  pPage->GetPresObjKind( mxSdrObject.get() );
         if( meNewKind != PRESOBJ_NONE )
             pPage->RemovePresObj( mxSdrObject.get() );
@@ -280,7 +280,7 @@ void UndoObjectPresentationKind::Redo()
 {
     if( mxPage.is() && mxSdrObject.is() )
     {
-        SdPage* pPage = static_cast< SdPage* >( mxPage.get() );
+        SdPage* pPage = mxPage.get();
         if( meOldKind != PRESOBJ_NONE )
             pPage->RemovePresObj( mxSdrObject.get() );
         if( meNewKind != PRESOBJ_NONE )
@@ -300,14 +300,14 @@ void UndoAutoLayoutPosAndSize::Undo()
 
 void UndoAutoLayoutPosAndSize::Redo()
 {
-    SdPage* pPage = static_cast< SdPage* >( mxPage.get() );
+    SdPage* pPage = mxPage.get();
     if( pPage )
         pPage->SetAutoLayout( pPage->GetAutoLayout() );
 }
 
 UndoGeoObject::UndoGeoObject( SdrObject& rNewObj )
 : SdrUndoGeoObj( rNewObj )
-, mxPage( rNewObj.GetPage() )
+, mxPage( static_cast<SdPage*>(rNewObj.GetPage()) )
 , mxSdrObject( &rNewObj )
 {
 }
@@ -319,7 +319,7 @@ void UndoGeoObject::Undo()
     {
         if( mxPage.is() )
         {
-            ScopeLockGuard aGuard( static_cast< SdPage* >( mxPage.get() )->maLockAutoLayoutArrangement );
+            ScopeLockGuard aGuard( mxPage->maLockAutoLayoutArrangement );
             SdrUndoGeoObj::Undo();
         }
         else
@@ -336,7 +336,7 @@ void UndoGeoObject::Redo()
     {
         if( mxPage.is() )
         {
-            ScopeLockGuard aGuard( static_cast< SdPage* >(mxPage.get())->maLockAutoLayoutArrangement );
+            ScopeLockGuard aGuard( mxPage->maLockAutoLayoutArrangement );
             SdrUndoGeoObj::Redo();
         }
         else
@@ -348,7 +348,7 @@ void UndoGeoObject::Redo()
 
 UndoAttrObject::UndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )
 : SdrUndoAttrObj( rObject, bStyleSheet1, bSaveText )
-, mxPage( rObject.GetPage() )
+, mxPage( static_cast<SdPage*>(rObject.GetPage()) )
 , mxSdrObject( &rObject )
 {
 }
@@ -360,7 +360,7 @@ void UndoAttrObject::Undo()
     {
         if( mxPage.is() )
         {
-            ScopeLockGuard aGuard( static_cast< SdPage* >( mxPage.get() )->maLockAutoLayoutArrangement );
+            ScopeLockGuard aGuard( mxPage->maLockAutoLayoutArrangement );
             SdrUndoAttrObj::Undo();
         }
         else
@@ -377,7 +377,7 @@ void UndoAttrObject::Redo()
     {
         if( mxPage.is() )
         {
-            ScopeLockGuard aGuard( static_cast< SdPage* >( mxPage.get() )->maLockAutoLayoutArrangement );
+            ScopeLockGuard aGuard( mxPage->maLockAutoLayoutArrangement );
             SdrUndoAttrObj::Redo();
         }
         else

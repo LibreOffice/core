@@ -736,7 +736,7 @@ Color GetTextEditBackgroundColor(const SdrObjEditView& rView)
     if(!rStyleSettings.GetHighContrastMode())
     {
         bool bFound(false);
-        SdrTextObj* pText = dynamic_cast< SdrTextObj * >(rView.GetTextEditObject());
+        SdrTextObj* pText = rView.GetTextEditObject();
 
         if(pText && pText->IsClosedObj())
         {

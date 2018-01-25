@@ -1169,7 +1169,6 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
 
 SdrPage::SdrPage(const SdrPage& rSrcPage)
 :   SdrObjList(rSrcPage.pModel, this),
-    tools::WeakBase< SdrPage >(),
     mpViewContact(nullptr),
     mnWidth(rSrcPage.mnWidth),
     mnHeight(rSrcPage.mnHeight),

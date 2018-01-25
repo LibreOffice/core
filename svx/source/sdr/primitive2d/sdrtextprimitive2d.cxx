@@ -119,6 +119,8 @@ namespace drawinglayer
                 || rETO.HasField(SvxAuthorField::StaticClassId());
         }
 
+        const SdrText* SdrTextPrimitive2D::getSdrText() const { return mrSdrText.get(); }
+
         bool SdrTextPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))

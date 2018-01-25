@@ -141,7 +141,7 @@ public:
 
 struct SdrModelImpl;
 
-class SVX_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase< SdrModel >
+class SVX_DLLPUBLIC SdrModel : public SfxBroadcaster, public virtual tools::WeakBase
 {
 protected:
     std::vector<SdrPage*> maMaPag;     // master pages
