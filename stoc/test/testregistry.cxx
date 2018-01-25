@@ -636,7 +636,7 @@ void test_DefaultRegistry(
 
     // shutdown
     Reference< css::lang::XComponent > xComp( rSMgr, UNO_QUERY );
-    OSL_ENSURE( xComp.is(), "### serivce manager has to implement XComponent!" );
+    OSL_ENSURE( xComp.is(), "### service manager has to implement XComponent!" );
     xComp->dispose();
 
     printf("Test DefaultRegistry, OK!\n");
