@@ -171,7 +171,7 @@ enum class WorkingDocType { SOURCE, TARGET, COPY };
 static SfxObjectShell* lcl_CreateWorkingDocument(
     const WorkingDocType aType, const SwWrtShell &rSourceWrtShell,
     const vcl::Window *pSourceWindow,
-    SwDBManager** const pDBManager,
+    SwDBManager** const ppDBManager,
     SwView** const pView, SwWrtShell** const pWrtShell, SwDoc** const pDoc );
 
 static bool lcl_getCountFromResultSet( sal_Int32& rCount, const SwDSParam* pParam )
@@ -962,7 +962,7 @@ static SfxObjectShell* lcl_CreateWorkingDocument(
     // optional input
     const vcl::Window *pSourceWindow,
     // optional in and output to swap the DB manager
-    SwDBManager** const pDBManager,
+    SwDBManager** const ppDBManager,
     // optional output
     SwView** const pView, SwWrtShell** const pWrtShell, SwDoc** const pDoc )
 {
@@ -987,17 +987,17 @@ static SfxObjectShell* lcl_CreateWorkingDocument(
 
     if( aType == WorkingDocType::TARGET )
     {
-        assert( !pDBManager );
+        assert( !ppDBManager );
         pWorkDoc->SetInMailMerge( true );
         pWorkWrtShell->SetLabelDoc( false );
     }
     else
     {
         // We have to swap the DBmanager of the new doc, so we also need input
-        assert( pDBManager && *pDBManager );
+        assert(ppDBManager && *ppDBManager);
         SwDBManager *pWorkDBManager = pWorkDoc->GetDBManager();
-        pWorkDoc->SetDBManager( *pDBManager );
-        *pDBManager = pWorkDBManager;
+        pWorkDoc->SetDBManager( *ppDBManager );
+        *ppDBManager = pWorkDBManager;
 
         if( aType == WorkingDocType::SOURCE )
         {

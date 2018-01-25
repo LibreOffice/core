@@ -283,7 +283,8 @@ class SW_DLLPUBLIC SwDoc final
     SwTOXTypes      *mpTOXTypes;                   //< Tables/indices
     SwDefTOXBase_Impl * mpDefTOXBases;             //< defaults of SwTOXBase's
 
-    SwDBManager         *mpDBManager;              //< Pointer to the DBManager for evaluation of DB-fields.
+    std::unique_ptr<SwDBManager> m_pOwnDBManager; //< own DBManager
+    SwDBManager * m_pDBManager; //< DBManager for evaluation of DB-fields.
 
     SwNumRule       *mpOutlineRule;
     SwFootnoteInfo       *mpFootnoteInfo;
@@ -688,8 +689,8 @@ public:
     bool IsInVerticalText( const SwPosition& rPos ) const;
 
     // Database  and DB-Manager
-    void SetDBManager( SwDBManager* pNewMgr )     { mpDBManager = pNewMgr; }
-    SwDBManager* GetDBManager() const             { return mpDBManager; }
+    void SetDBManager( SwDBManager* pNewMgr )     { m_pDBManager = pNewMgr; }
+    SwDBManager* GetDBManager() const             { return m_pDBManager; }
     void ChangeDBFields( const std::vector<OUString>& rOldNames,
                         const OUString& rNewName );
     void SetInitDBFields(bool b);

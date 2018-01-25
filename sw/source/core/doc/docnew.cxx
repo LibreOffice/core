@@ -346,7 +346,8 @@ SwDoc::SwDoc()
 
 #if HAVE_FEATURE_DBCONNECTIVITY
     // Create DBManager
-    mpDBManager = new SwDBManager(this);
+    m_pOwnDBManager.reset(new SwDBManager(this));
+    m_pDBManager = m_pOwnDBManager.get();
 #endif
 
     // create TOXTypes
@@ -534,22 +535,22 @@ SwDoc::~SwDoc()
 #if HAVE_FEATURE_DBCONNECTIVITY
     // On load, SwDBManager::setEmbeddedName() may register a data source.
     // If we have an embedded one, then sDataSource points to the registered name, so revoke it here.
-    if (!mpDBManager->getEmbeddedName().isEmpty() && !maDBData.sDataSource.isEmpty())
+    if (!m_pOwnDBManager->getEmbeddedName().isEmpty() && !maDBData.sDataSource.isEmpty())
     {
         // Remove the revoke listener here first, so that we don't remove the data source from the document.
-        mpDBManager->releaseRevokeListener();
+        m_pOwnDBManager->releaseRevokeListener();
         SwDBManager::RevokeDataSource(maDBData.sDataSource);
-        SwDBManager::RevokeDataSource(mpDBManager->getEmbeddedName());
+        SwDBManager::RevokeDataSource(m_pOwnDBManager->getEmbeddedName());
     }
-    else if (!mpDBManager->getEmbeddedName().isEmpty())
+    else if (!m_pOwnDBManager->getEmbeddedName().isEmpty())
     {
         // Remove the revoke listener here first, so that we don't remove the data source from the document.
-        mpDBManager->releaseRevokeListener();
+        m_pOwnDBManager->releaseRevokeListener();
         // Remove connections which was committed but not used.
-        mpDBManager->RevokeNotUsedConnections();
+        m_pOwnDBManager->RevokeNotUsedConnections();
     }
 
-    DELETEZ( mpDBManager );
+    m_pOwnDBManager.reset();
 #endif
 
     // All Flys need to be destroyed before the Drawing Model,
