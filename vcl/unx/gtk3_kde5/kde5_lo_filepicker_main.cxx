@@ -21,14 +21,29 @@
 #include "kde5_filepicker_ipc.hxx"
 
 #include <QApplication>
+#include <QDebug>
+#include <QCommandLineParser>
 
-#include <iostream>
+#include <config_version.h>
 
 int main(int argc, char** argv)
 {
+    QApplication::setOrganizationName("LibreOffice");
+    QApplication::setOrganizationDomain("libreoffice.org");
     QApplication::setApplicationName(QStringLiteral("lo_kde5filepicker"));
-    QApplication app(argc, argv);
     QApplication::setQuitOnLastWindowClosed(false);
+    QApplication::setApplicationVersion(LIBO_VERSION_DOTTED);
+
+    QApplication app(argc, argv);
+
+    QCommandLineParser parser;
+    parser.setApplicationDescription(
+        QObject::tr("Helper executable for LibreOffice KDE/Plasma integration.\n"
+                    "Do not run this executable directly. Rather, use it indirectly via "
+                    "the gtk3_kde5 VCL plugin (SAL_USE_VCLPLUGIN=gtk3_kde5)."));
+    parser.addVersionOption();
+    parser.addHelpOption();
+    parser.process(app);
 
     KDE5FilePicker filePicker;
     FilePickerIpc ipc(&filePicker);
