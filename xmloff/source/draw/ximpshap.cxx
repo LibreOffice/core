@@ -1091,8 +1091,8 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     }
 
     // set sizes for transformation
-    maSize.Width = aBottomRight.X - aTopLeft.X;
-    maSize.Height = aBottomRight.Y - aTopLeft.Y;
+    maSize.Width = o3tl::saturating_add(aBottomRight.X, -aTopLeft.X);
+    maSize.Height = o3tl::saturating_add(aBottomRight.Y, -aTopLeft.Y);
     maPosition.X = aTopLeft.X;
     maPosition.Y = aTopLeft.Y;
 
@@ -1100,7 +1100,6 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     SetTransformation();
 
     SdXMLShapeContext::StartElement(xAttrList);
-
 }
 
 
