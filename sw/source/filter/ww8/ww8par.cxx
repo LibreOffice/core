@@ -392,9 +392,6 @@ public:
     Sttb();
 
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* fp ) override;
-#endif
     OUString getStringAtIndex( sal_uInt32 );
 };
 
@@ -426,28 +423,6 @@ bool Sttb::Read( SvStream& rS )
     }
     return true;
 }
-
-#if OSL_DEBUG_LEVEL > 1
-void Sttb::Print( FILE* fp )
-{
-    fprintf( fp, "[ 0x%" SAL_PRIxUINT32 " ] Sttb - dump\n", nOffSet);
-    fprintf( fp, " fExtend 0x%x [expected 0xFFFF ]\n", fExtend );
-    fprintf( fp, " cData no. or string data items %d (0x%x)\n", cData, cData );
-
-    if ( cData )
-    {
-        for (sal_uInt16 index = 0; index < cData; ++index)
-        {
-            if (index >= dataItems.size())
-            {
-                fprintf(fp, "   Sttb truncated at entry %d(0x%x)\n", static_cast< int >( index ), static_cast< unsigned int >( index ));
-                break;
-            }
-            fprintf(fp,"   string dataItem[ %d(0x%x) ] has name %s\n", static_cast< int >( index ), static_cast< unsigned int >( index ), OUStringToOString( dataItems[ index ].data, RTL_TEXTENCODING_UTF8 ).getStr() );
-        }
-    }
-}
-#endif
 
 OUString
 Sttb::getStringAtIndex( sal_uInt32 index )
@@ -4756,9 +4731,6 @@ void SwWW8ImplReader::ReadDocInfo()
                 if (!checkSeek(*m_pTableStream, m_xWwFib->m_fcSttbfAssoc) || !aSttb.Read(*m_pTableStream))
                     SAL_WARN("sw.ww8", "** Read of SttbAssoc data failed!!!! ");
                 m_pTableStream->Seek( nCur ); // return to previous position, is that necessary?
-#if OSL_DEBUG_LEVEL > 1
-                aSttb.Print( stderr );
-#endif
                 OUString sPath = aSttb.getStringAtIndex( 0x1 );
                 OUString aURL;
                 // attempt to convert to url (won't work for obvious reasons on linux)
@@ -4840,9 +4812,6 @@ void WW8Customizations::Import( SwDocShell* pShell )
             SAL_WARN("sw.ww8", "** Read of Customization data failed!!!! ");
             return;
         }
-#if OSL_DEBUG_LEVEL > 1
-        aTCG.Print( stderr );
-#endif
         aTCG.ImportCustomToolBar( *pShell );
     }
     catch(...)
