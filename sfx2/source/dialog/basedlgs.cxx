@@ -171,13 +171,6 @@ void SfxModalDialog::StateChanged( StateChangedType nType )
                 aItems.emplace_back("title", GetText().toUtf8());
             SfxViewShell::Current()->notifyWindow(GetLOKWindowId(), "created", aItems);
         }
-        else if (nType == StateChangedType::Visible &&
-                 !IsVisible() &&
-                 GetLOKNotifier())
-        {
-            SfxViewShell::Current()->notifyWindow(GetLOKWindowId(), "close");
-            ReleaseLOKNotifier();
-        }
     }
 
     ModalDialog::StateChanged(nType);
