@@ -448,7 +448,7 @@ bool Picture::Read(HWPFile & hwpf)
         {
            size_t nOldSize = follow.size();
            size_t nBlock = std::min(SAL_N_ELEMENTS(hwpf.scratch), follow_block_size - nOldSize);
-           size_t nReadBlock = hwpf.Read1b(hwpf.scratch, nBlock);
+           size_t nReadBlock = hwpf.ReadBlock(hwpf.scratch, nBlock);
            if (nReadBlock)
            {
                follow.insert(follow.end(), hwpf.scratch, hwpf.scratch + nReadBlock);
