@@ -3333,20 +3333,6 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, Button*, pBtn, void )
         return;
 
     const long nSpace = m_pCtrlParentWin->GetSizePixel().Width();
-#if OSL_DEBUG_LEVEL > 1
-    //find all start/end positions and print it
-    OUString sMessage("Space: " + OUString::number(nSpace) + " | ");
-
-    for (VclPtr<Control> const & pDebugCtrl : aControlList)
-    {
-        long nDebugXPos = pDebugCtrl->GetPosPixel().X();
-        long nDebugWidth = pDebugCtrl->GetSizePixel().Width();
-
-        sMessage += OUString::number(nDebugXPos) + " "
-                  + OUString::number(nDebugXPos + nDebugWidth) + " | ";
-    }
-
-#endif
 
     long nMove = 0;
     if(pBtn == m_pLeftScrollWin)
