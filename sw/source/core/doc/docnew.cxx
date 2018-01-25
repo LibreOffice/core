@@ -498,8 +498,8 @@ SwDoc::~SwDoc()
 
     // Delete for Collections
     // So that we get rid of the dependencies
-    mpFootnoteInfo->ReleaseCollection();
-    mpEndNoteInfo->ReleaseCollection();
+    mpFootnoteInfo->EndListeningAll();
+    mpEndNoteInfo->EndListeningAll();
 
     assert(mpDfltTextFormatColl == (*mpTextFormatCollTable)[0]
             && "Default-Text-Collection must always be at the start");
@@ -711,8 +711,8 @@ void SwDoc::ClearDoc()
 
     // Delete for Collections
     // So that we get rid of the dependencies
-    mpFootnoteInfo->ReleaseCollection();
-    mpEndNoteInfo->ReleaseCollection();
+    mpFootnoteInfo->EndListeningAll();
+    mpEndNoteInfo->EndListeningAll();
 
     // Optimization: Based on the fact that Standard is always 2nd in the
     // array, we should delete it as the last. With this we avoid

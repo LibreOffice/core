@@ -71,7 +71,6 @@ public:
 
     void SetPrefix(const OUString& rSet) { sPrefix = rSet; }
     void SetSuffix(const OUString& rSet) { sSuffix = rSet; }
-    void ReleaseCollection() { if ( GetRegisteredInNonConst() ) GetRegisteredInNonConst()->Remove( this ); }
 };
 
 enum SwFootnotePos
