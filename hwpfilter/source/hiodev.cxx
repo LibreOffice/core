@@ -53,24 +53,6 @@ void HIODev::init()
     compressed = false;
 }
 
-
-size_t HIODev::read1b(void *ptr, size_t nmemb)
-{
-    uchar *p = static_cast<uchar *>(ptr);
-
-    if (state())
-        return 0;
-    size_t ii;
-    for (ii = 0; ii < nmemb; ++ii)
-    {
-        if (!read1b(p[ii]))
-            break;
-        if (state())
-            break;
-    }
-    return ii;
-}
-
 size_t HIODev::read2b(void *ptr, size_t nmemb)
 {
     ushort *p = static_cast<ushort *>(ptr);
