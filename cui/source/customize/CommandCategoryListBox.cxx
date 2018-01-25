@@ -43,6 +43,8 @@
 #include <o3tl/make_unique.hxx>
 #include <i18nutil/searchopt.hxx>
 
+#include <cfg.hxx> //for SaveInData
+
 CommandCategoryListBox::CommandCategoryListBox(vcl::Window* pParent)
     : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
     , pStylesInfo( nullptr )
@@ -198,7 +200,8 @@ void CommandCategoryListBox::Init(
 void CommandCategoryListBox::FillFunctionsList(
     const css::uno::Sequence<css::frame::DispatchInformation>& xCommands,
     const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox,
-    const OUString& filterTerm )
+    const OUString& filterTerm,
+    SaveInData *pCurrentSaveInData )
 {
     // Setup search filter parameters
     m_searchOptions.searchString = filterTerm;
@@ -217,7 +220,11 @@ void CommandCategoryListBox::FillFunctionsList(
             continue;
         }
 
-        SvTreeListEntry* pFuncEntry = pFunctionListBox->InsertEntry(sUIName );
+        Image aImage;
+        if (pCurrentSaveInData)
+            aImage = pCurrentSaveInData->GetImage(rInfo.Command);
+
+        SvTreeListEntry* pFuncEntry = pFunctionListBox->InsertEntry(sUIName, aImage, aImage );
 
         m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SLOT, 0 ) );
         SfxGroupInfo_Impl* pGrpInfo = m_aGroupInfo.back().get();
@@ -255,7 +262,7 @@ OUString CommandCategoryListBox::MapCommand2UIName(const OUString& sCommand)
 }
 
 void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox,
-                                                const OUString& filterTerm )
+                                                const OUString& filterTerm , SaveInData *pCurrentSaveInData)
 {
     SfxGroupInfo_Impl *pInfo = static_cast<SfxGroupInfo_Impl*>(GetSelectedEntryData());
     pFunctionListBox->SetUpdateMode(false);
@@ -281,7 +288,7 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
                     {
                         lCommands = xProvider->getConfigurableDispatchInformation(
                                         pCurrentInfo->nUniqueID );
-                        FillFunctionsList( lCommands, pFunctionListBox, filterTerm );
+                        FillFunctionsList( lCommands, pFunctionListBox, filterTerm, pCurrentSaveInData );
                     }
                     catch( css::container::NoSuchElementException& )
                     {
@@ -298,7 +305,7 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
                 xProvider (m_xFrame, css::uno::UNO_QUERY_THROW);
             css::uno::Sequence< css::frame::DispatchInformation > lCommands =
                 xProvider->getConfigurableDispatchInformation(nGroup);
-            FillFunctionsList( lCommands, pFunctionListBox, filterTerm );
+            FillFunctionsList( lCommands, pFunctionListBox, filterTerm, pCurrentSaveInData );
             break;
         }
         case SfxCfgKind::GROUP_SCRIPTCONTAINER: //Macros
@@ -363,7 +370,7 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
                         pMacroGroup->EnableChildrenOnDemand();
 
                         //Add the children and the grand children
-                        addChildren( pMacroGroup, childGroup, pFunctionListBox, filterTerm );
+                        addChildren( pMacroGroup, childGroup, pFunctionListBox, filterTerm, pCurrentSaveInData );
 
                         // Remove the main group if empty
                         if (!pMacroGroup->HasChildren())
@@ -464,7 +471,7 @@ void CommandCategoryListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
 
 void CommandCategoryListBox::addChildren(
     SvTreeListEntry* parentEntry, const css::uno::Reference< css::script::browse::XBrowseNode > &parentNode,
-    const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox, const OUString& filterTerm )
+    const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox, const OUString& filterTerm , SaveInData *pCurrentSaveInData)
 {
     // Setup search filter parameters
     m_searchOptions.searchString = filterTerm;
@@ -486,7 +493,7 @@ void CommandCategoryListBox::addChildren(
             pNewEntry->SetUserData( m_aGroupInfo.back().get() );
             pNewEntry->EnableChildrenOnDemand();
 
-            addChildren(pNewEntry, child, pFunctionListBox, filterTerm);
+            addChildren(pNewEntry, child, pFunctionListBox, filterTerm, pCurrentSaveInData);
 
             // Remove the group if empty
             if (!pNewEntry->HasChildren())
@@ -537,7 +544,11 @@ void CommandCategoryListBox::addChildren(
 
             OUString* pScriptURI = new OUString( uri );
 
-            SvTreeListEntry* pNewEntry = pFunctionListBox->InsertEntry( sUIName, parentEntry );
+            Image aImage;
+            if (pCurrentSaveInData)
+                aImage = pCurrentSaveInData->GetImage(uri);
+
+            SvTreeListEntry* pNewEntry = pFunctionListBox->InsertEntry( sUIName, aImage, aImage, parentEntry );
 
             m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SCRIPT, 0, pScriptURI ));
             m_aGroupInfo.back()->sCommand = uri;
