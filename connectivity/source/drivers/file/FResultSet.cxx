@@ -1111,11 +1111,11 @@ void OResultSet::sortRows()
     }
 
     OSortIndex::TKeyTypeVector eKeyType(m_aOrderbyColumnNumber.size());
-    std::vector<sal_Int32>::const_iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
-    for (std::vector<sal_Int16>::size_type i=0;aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
+    size_t i = 0;
+    for (auto const& elem : m_aOrderbyColumnNumber)
     {
-        OSL_ENSURE(static_cast<sal_Int32>(m_aSelectRow->get().size()) > *aOrderByIter,"Invalid Index");
-        switch ((*(m_aSelectRow->get().begin()+*aOrderByIter))->getValue().getTypeKind())
+        OSL_ENSURE(static_cast<sal_Int32>(m_aSelectRow->get().size()) > elem,"Invalid Index");
+        switch ((*(m_aSelectRow->get().begin()+elem))->getValue().getTypeKind())
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
@@ -1144,7 +1144,8 @@ void OResultSet::sortRows()
                 SAL_WARN( "connectivity.drivers","OFILECursor::Execute: Data type not implemented");
                 break;
         }
-        (m_aSelectRow->get())[*aOrderByIter]->setBound(true);
+        (m_aSelectRow->get())[elem]->setBound(true);
+        ++i;
     }
 
     m_pSortIndex = new OSortIndex(eKeyType,m_aOrderbyAscending);

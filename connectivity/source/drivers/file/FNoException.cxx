@@ -59,9 +59,9 @@ void OPredicateCompiler::Clean()
 void OSQLAnalyzer::bindParameterRow(OValueRefRow const & _pRow)
 {
     OCodeList& rCodeList    = m_aCompiler->m_aCodeList;
-    for(OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end();++aIter)
+    for (auto const& code : rCodeList)
     {
-        OOperandParam* pParam = dynamic_cast<OOperandParam*>(*aIter);
+        OOperandParam* pParam = dynamic_cast<OOperandParam*>(code);
         if ( pParam )
             pParam->bindValue(_pRow);
     }
@@ -93,11 +93,10 @@ OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRefRow const & _rRow)
 
     OKeyValue* pKeyValue = OKeyValue::createKeyValue(nBookmarkValue);
 
-    std::vector<sal_Int32>::const_iterator aIter = m_aOrderbyColumnNumber.begin();
-    for (;aIter != m_aOrderbyColumnNumber.end(); ++aIter)
+    for (auto const& elem : m_aOrderbyColumnNumber)
     {
-        OSL_ENSURE(*aIter < static_cast<sal_Int32>(_rRow->get().size()),"Invalid index for orderkey values!");
-        pKeyValue->pushKey(new ORowSetValueDecorator((_rRow->get())[*aIter]->getValue()));
+        OSL_ENSURE(elem < static_cast<sal_Int32>(_rRow->get().size()),"Invalid index for orderkey values!");
+        pKeyValue->pushKey(new ORowSetValueDecorator((_rRow->get())[elem]->getValue()));
     }
 
     return pKeyValue;

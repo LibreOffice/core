@@ -118,9 +118,9 @@ void OSQLAnalyzer::start(OSQLParseNode const * pSQLParseNode)
 
 void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow)
 {
-    for (OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end(); ++aIter)
+    for (auto const& code : rCodeList)
     {
-        OOperandAttr* pAttr = dynamic_cast<OOperandAttr*>(*aIter);
+        OOperandAttr* pAttr = dynamic_cast<OOperandAttr*>(code);
         if (pAttr)
         {
             pAttr->bindValue(_pRow);
@@ -131,10 +131,10 @@ void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow)
 void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
 {
     // first the select part
-    for ( std::vector< TPredicates >::const_iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
+    for (auto const& selectionEval : m_aSelectionEvaluations)
     {
-        if ( aIter->first.is() )
-            bindRow(aIter->first->m_aCodeList,_pRow);
+        if ( selectionEval.first.is() )
+            bindRow(selectionEval.first->m_aCodeList,_pRow);
     }
 }
 
@@ -159,10 +159,14 @@ bool OSQLAnalyzer::hasFunctions() const
     if ( m_bSelectionFirstTime )
     {
         m_bSelectionFirstTime = false;
-        for ( std::vector< TPredicates >::const_iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end() && !m_bHasSelectionCode ;++aIter)
+        for (auto const& selectionEval : m_aSelectionEvaluations)
         {
-            if ( aIter->first.is() )
-                m_bHasSelectionCode = aIter->first->hasCode();
+            if ( selectionEval.first.is() )
+            {
+                m_bHasSelectionCode = selectionEval.first->hasCode();
+                if (m_bHasSelectionCode)
+                    break;
+            }
         }
     }
     return m_bHasSelectionCode;
@@ -171,37 +175,38 @@ bool OSQLAnalyzer::hasFunctions() const
 void OSQLAnalyzer::setSelectionEvaluationResult(OValueRefRow const & _pRow,const std::vector<sal_Int32>& _rColumnMapping)
 {
     sal_Int32 nPos = 1;
-    for ( std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter,++nPos)
+    for (auto const& selectionEval : m_aSelectionEvaluations)
     {
-        if ( aIter->second.is() )
+        if ( selectionEval.second.is() )
         {
             // the first column (index 0) is for convenience only. The first real select column is no 1.
             sal_Int32   map = nPos;
             if ( nPos < static_cast< sal_Int32 >( _rColumnMapping.size() ) )
                 map = _rColumnMapping[nPos];
             if ( map > 0 )
-                aIter->second->startSelection( (_pRow->get())[map] );
+                selectionEval.second->startSelection( (_pRow->get())[map] );
         }
+        ++nPos;
     }
 }
 
 void OSQLAnalyzer::dispose()
 {
     m_aCompiler->dispose();
-    for ( std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
+    for (auto const& selectionEval : m_aSelectionEvaluations)
     {
-        if ( aIter->first.is() )
-            aIter->first->dispose();
+        if ( selectionEval.first.is() )
+            selectionEval.first->dispose();
     }
 }
 
 void OSQLAnalyzer::setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols)
 {
     m_aCompiler->setOrigColumns(rCols);
-    for ( std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
+    for (auto const& selectionEval : m_aSelectionEvaluations)
     {
-        if ( aIter->first.is() )
-            aIter->first->setOrigColumns(rCols);
+        if ( selectionEval.first.is() )
+            selectionEval.first->setOrigColumns(rCols);
     }
 }
 

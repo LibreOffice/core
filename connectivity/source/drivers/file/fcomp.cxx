@@ -536,17 +536,16 @@ bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
 {
     static bool bResult;
 
-    OCodeList::iterator aIter = rCodeList.begin();
-    if (!(*aIter))
+    if (!(rCodeList[0]))
         return true;        // no Predicate
 
-    for(;aIter != rCodeList.end();++aIter)
+    for (auto const& code : rCodeList)
     {
-        OOperand* pOperand = dynamic_cast<OOperand* >(*aIter);
+        OOperand* pOperand = dynamic_cast<OOperand* >(code);
         if (pOperand)
             m_aStack.push(pOperand);
         else
-            static_cast<OOperator *>(*aIter)->Exec(m_aStack);
+            static_cast<OOperator *>(code)->Exec(m_aStack);
     }
 
     OOperand* pOperand = m_aStack.top();
@@ -563,17 +562,16 @@ bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
 
 void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList, ORowSetValueDecoratorRef const & _rVal)
 {
-    OCodeList::iterator aIter = rCodeList.begin();
-    if (!(*aIter))
+    if (!(rCodeList[0]))
         return ;        // no Predicate
 
-    for(;aIter != rCodeList.end();++aIter)
+    for (auto const& code : rCodeList)
     {
-        OOperand* pOperand = dynamic_cast<OOperand* >(*aIter);
+        OOperand* pOperand = dynamic_cast<OOperand* >(code);
         if (pOperand)
             m_aStack.push(pOperand);
         else
-            static_cast<OOperator *>(*aIter)->Exec(m_aStack);
+            static_cast<OOperator *>(code)->Exec(m_aStack);
     }
 
     OOperand* pOperand = m_aStack.top();
