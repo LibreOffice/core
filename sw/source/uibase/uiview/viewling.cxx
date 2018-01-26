@@ -572,7 +572,7 @@ void SwView::StartThesaurus()
 
         if (pDlg)
         {
-            guard.dismiss(); // ignore, we'll call SetIdle() explictly after the dialog ends
+            guard.dismiss(); // ignore, we'll call SetIdle() explicitly after the dialog ends
 
             pDlg->StartExecuteAsync([=](sal_Int32 nResult){
                 if (nResult == RET_OK )
