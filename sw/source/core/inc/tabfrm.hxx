@@ -201,8 +201,8 @@ public:
 
     bool CalcFlyOffsets(
         SwTwips& rUpper,
-        long& rLeftOffset,
-        long& rRightOffset ) const;
+        sal_Int32& rLeftOffset,
+        sal_Int32& rRightOffset ) const;
 
     SwTwips CalcHeightOfFirstContentLine() const;
 

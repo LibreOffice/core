@@ -250,7 +250,7 @@ struct CpyPara
     CpyPara( SwTableNode* pNd, sal_uInt16 nCopies, CpyTabFrames& rFrameArr )
         : pDoc( pNd->GetDoc() ), pTableNd( pNd ), rTabFrameArr(rFrameArr),
         pInsLine(nullptr), pInsBox(nullptr), nOldSize(0), nNewSize(0),
-        nMinLeft(ULONG_MAX), nMaxRight(0),
+        nMinLeft(SAL_MAX_UINT32), nMaxRight(0),
         nCpyCnt(nCopies), nInsPos(0),
         nLnIdx(0), nBoxIdx(0),
         nDelBorderFlag(0), bCpyContent( true )
@@ -3499,7 +3499,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                 else if( ppUndo )
                     *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );
 
-                long nFrameWidth = LONG_MAX;
+                long nFrameWidth = SAL_MAX_INT32;
                 LockModify();
                 SwFormatFrameSize aSz( rSz );
                 SvxLRSpaceItem aLR( rLR );
@@ -3583,7 +3583,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                 // If the Table happens to contain relative values (USHORT_MAX),
                 // we need to convert them to absolute ones now.
                 // Bug 61494
-                if( LONG_MAX != nFrameWidth )
+                if( SAL_MAX_INT32 != nFrameWidth )
                 {
                     SwFormatFrameSize aAbsSz( aSz );
                     aAbsSz.SetWidth( nFrameWidth );

@@ -54,9 +54,9 @@ class CharClass;
 class LocaleDataWrapper;
 class CollatorWrapper;
 
-typedef long SwTwips;
-#define INVALID_TWIPS   LONG_MAX
-#define TWIPS_MAX       (LONG_MAX - 1)
+typedef sal_Int32 SwTwips;
+#define INVALID_TWIPS   SAL_MAX_INT32
+#define TWIPS_MAX       (SAL_MAX_INT32 - 1)
 
 // Converts Millimeters to Twips (1 mm == 56.905479 twips).
 template <typename T = SwTwips>

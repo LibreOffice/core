@@ -941,7 +941,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
             if (nY <= aOverallAreaBRPos.Y())
                 _rOut.DrawLine( Point( nHLineX, nY ),
                                 Point( bVLines
-                                        ? std::min(long(aPos.X() - 1), aOverallAreaBRPos.X())
+                                        ? std::min<sal_Int32>(aPos.X() - 1, aOverallAreaBRPos.X())
                                         : aOverallAreaBRPos.X(),
                                       nY ) );
             _rOut.Pop();
@@ -1357,7 +1357,7 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
     // event occurred out of data area
     if ( rEvt.IsRight() )
         pDataWin->Command(
-            CommandEvent( Point( 1, LONG_MAX ), CommandEventId::ContextMenu, true ) );
+            CommandEvent( Point( 1, RECT_MAX ), CommandEventId::ContextMenu, true ) );
     else
         SetNoSelection();
 }
@@ -1392,7 +1392,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
                     pDataWin->HideTracking() ;
 
                     // check allowed width and new delta
-                    nDragX = std::max( rEvt.GetPosPixel().X(), nMinResizeX );
+                    nDragX = std::max<sal_Int32>( rEvt.GetPosPixel().X(), nMinResizeX );
                     long nDeltaX = nDragX - nResizeX;
                     sal_uInt16 nId = GetColumnId(nResizeCol);
                     sal_uLong nOldWidth = GetColumnWidth(nId);
@@ -1422,7 +1422,7 @@ void BrowseBox::MouseButtonUp( const MouseEvent & rEvt )
         pDataWin->HideTracking();
 
         // width changed?
-        nDragX = std::max( rEvt.GetPosPixel().X(), nMinResizeX );
+        nDragX = std::max<sal_Int32>( rEvt.GetPosPixel().X(), nMinResizeX );
         if ( (nDragX - nResizeX) != static_cast<long>(pCols[ nResizeCol ]->Width()) )
         {
             // resize column

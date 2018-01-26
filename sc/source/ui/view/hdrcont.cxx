@@ -711,13 +711,13 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
         tools::Rectangle aVis( aPoint,GetOutputSizePixel() );
         if (bVertical)
         {
-            aVis.Left() = LONG_MIN;
-            aVis.Right() = LONG_MAX;
+            aVis.Left() = SAL_MIN_INT32;
+            aVis.Right() = SAL_MAX_INT32;
         }
         else
         {
-            aVis.Top() = LONG_MIN;
-            aVis.Bottom() = LONG_MAX;
+            aVis.Top() = SAL_MIN_INT32;
+            aVis.Bottom() = SAL_MAX_INT32;
         }
         pSelEngine->SetVisibleArea( aVis );
 
