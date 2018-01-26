@@ -145,12 +145,10 @@ void HStreamIODev::flush()
         gz_flush(_gzfp, Z_FINISH);
 }
 
-
-int HStreamIODev::state() const
+bool HStreamIODev::state() const
 {
-    return 0;
+    return false;
 }
-
 
 /* zlib 관련 부분 */
 bool HStreamIODev::setCompressed(bool flag)
@@ -291,15 +289,13 @@ void HMemIODev::flush()
 {
 }
 
-
-int HMemIODev::state() const
+bool HMemIODev::state() const
 {
     if (pos <= length)
-        return 0;
+        return false;
     else
-        return -1;
+        return true;
 }
-
 
 bool HMemIODev::setCompressed(bool )
 {
@@ -309,7 +305,7 @@ bool HMemIODev::setCompressed(bool )
 bool HMemIODev::read1b(unsigned char &out)
 {
     ++pos;
-    if (pos <= length)
+    if (!state())
     {
         out = ptr[pos - 1];
         return true;
@@ -329,7 +325,7 @@ bool HMemIODev::read1b(char &out)
 bool HMemIODev::read2b(unsigned short &out)
 {
     pos += 2;
-    if (pos <= length)
+    if (!state())
     {
          out = ptr[pos - 1] << 8 | ptr[pos - 2];
          return true;
@@ -340,7 +336,7 @@ bool HMemIODev::read2b(unsigned short &out)
 bool HMemIODev::read4b(unsigned int &out)
 {
     pos += 4;
-    if (pos <= length)
+    if (!state())
     {
         out = static_cast<unsigned int>(ptr[pos - 1] << 24 | ptr[pos - 2] << 16 |
                     ptr[pos - 3] << 8 | ptr[pos - 4]);
@@ -360,6 +356,8 @@ bool HMemIODev::read4b(int &out)
 
 size_t HMemIODev::readBlock(void *p, size_t size)
 {
+    if (state())
+        return 0;
     if (length < pos + size)
         size = length - pos;
     memcpy(p, ptr + pos, size);
@@ -369,7 +367,7 @@ size_t HMemIODev::readBlock(void *p, size_t size)
 
 size_t HMemIODev::skipBlock(size_t size)
 {
-    if (length < pos + size)
+    if (state() || length < pos + size)
         return 0;
     pos += size;
     return size;
