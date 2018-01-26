@@ -1319,6 +1319,7 @@ void Window::Update()
          }
 
         pUpdateWindow->ImplCallPaint(nullptr, pUpdateWindow->mpWindowImpl->mnPaintFlags);
+        pUpdateWindow->LogicInvalidate(nullptr);
 
         if (xWindow->IsDisposed())
            return;
