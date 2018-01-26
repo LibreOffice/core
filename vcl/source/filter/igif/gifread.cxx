@@ -662,7 +662,7 @@ void GIFReader::CreateNewBitmaps()
         aAnimBmp.eDisposal = Disposal::Not;
 
     nAnimationByteSize += aAnimBmp.aBmpEx.GetSizeBytes();
-    nAnimationMinFileData += nImageWidth * nImageHeight / 2560;
+    nAnimationMinFileData += static_cast<sal_uInt64>(nImageWidth) * nImageHeight / 2560;
     aAnimation.Insert( aAnimBmp );
 
     if( aAnimation.Count() == 1 )
