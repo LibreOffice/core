@@ -16,6 +16,24 @@
       "revId": "85b0389dd0e36e044ebf3cd24aed31886602e4e7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_460ca394",
+        "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2371,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2018-01-26T08:09:33Z",
+      "side": 1,
+      "message": "Thx for notes!\n\n0. Taken into account (in spite of changed code)\n\n1-2. Agree. But mpDoc-\u003eIsExecuteLinkEnabled seems not what is wanted: it is set to true automatically after XML load without any conditions or user demand.\n\nAs far as I see user\u0027s choice to allow loading of external content is being written to EmbeddedObjectContainer, so I\u0027m taking flag value from there now.",
+      "parentUuid": "fa31d9ce_4383b5cc",
+      "revId": "85b0389dd0e36e044ebf3cd24aed31886602e4e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
