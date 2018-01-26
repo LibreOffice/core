@@ -822,9 +822,6 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
 {
     GenericUnixSalData *pData = GetGenericUnixSalData();
 
-    // initialize frame geometry
-    memset( &maGeometry, 0, sizeof(maGeometry) );
-
     mpParent                    = static_cast< X11SalFrame* >( pParent );
 
     mbTransientForRoot          = false;
