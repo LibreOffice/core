@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+#include <com/sun/star/sheet/FormulaResult.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -200,9 +201,9 @@ namespace calc
                         Reference< XPropertySet > xProp( xCell, UNO_QUERY);
                         if (xProp.is())
                         {
-                            CellContentType eContentType;
-                            if ((xProp->getPropertyValue("CellContentType") >>= eContentType) &&
-                                    eContentType == CellContentType_VALUE)
+                            sal_Int32 nResultType;
+                            if ((xProp->getPropertyValue("FormulaResultType2") >>= nResultType) &&
+                                    nResultType == FormulaResult::VALUE)
                                 *pAny <<= xCell->getValue();
                             else
                                 *pAny <<= sText;

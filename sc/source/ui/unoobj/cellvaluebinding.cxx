@@ -22,6 +22,7 @@
 #include <com/sun/star/form/binding/IncompatibleTypesException.hpp>
 #include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/sheet/FormulaResult.hpp>
 #include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeData.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -203,8 +204,9 @@ namespace calc
                         Reference<XPropertySet> xProp( m_xCell, UNO_QUERY );
                         if ( xProp.is() )
                         {
-                            CellContentType eContentType;
-                            if ( (xProp->getPropertyValue("CellContentType") >>= eContentType) && eContentType == CellContentType_VALUE )
+                            sal_Int32 nResultType;
+                            if ( (xProp->getPropertyValue("FormulaResultType2") >>= nResultType)
+                                    && nResultType == FormulaResult::VALUE )
                                 bHasValue = true;
                         }
                     }
