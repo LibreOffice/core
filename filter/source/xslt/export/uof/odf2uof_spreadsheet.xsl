@@ -2358,10 +2358,9 @@
                 <xsl:attribute name="uof:locID">s0116</xsl:attribute>
                 <xsl:choose>
                     <xsl:when test="style:chart-properties/@fo:vertical-align = 'top'">top</xsl:when>
-                    <xsl:when test="style:chart-propeoperties/@fo:vertical-align = 'middle'">center</xsl:when>
-                    <xsl:when test="style:charties/@fo:vertical-align = 'bottom'">bottom</xsl:when>
-                    <xsl:when test="style:chart-prrt-properties/@fo:vertical-align = 'justify'">justify</xsl:when>
-                    <xsl:when test="style:chart-properties/@fo:vertical-align = 'top'">top</xsl:when>
+                    <xsl:when test="style:chart-properties/@fo:vertical-align = 'middle'">center</xsl:when>
+                    <xsl:when test="style:chart-properties/@fo:vertical-align = 'bottom'">bottom</xsl:when>
+                    <xsl:when test="style:chart-properties/@fo:vertical-align = 'justify'">justify</xsl:when>
                     <xsl:otherwise>distributed</xsl:otherwise>
                 </xsl:choose>
             </xsl:element>
