@@ -16,6 +16,24 @@
       "revId": "d04cd496236fcd940b106625baf5b44bb8934071",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_2665ef44",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-26T08:32:47Z",
+      "side": 1,
+      "message": "At least with the reproducer for me:\n\n\u003e (gdb) p rIndexEntry\n\u003e $1 \u003d \"\"\n\u003e (gdb) p startPos\n\u003e $2 \u003d 0\n\u003e (gdb) p table_count\n\u003e $3 \u003d 1\n\u003e (gdb) p tables[0]\n\u003e $4 \u003d {\n\u003e   start \u003d 0 u\u0027\\000\u0027, \n\u003e   end \u003d 255 u\u0027ÿ\u0027, \n\u003e   table \u003d 0x280ed060 \u0027\\377\u0027 \u003crepeats 48 times\u003e\n\u003e }\n\ni.e., 0 /is/ in the table, but maps to 0xFF.",
+      "parentUuid": "fa31d9ce_a351d164",
+      "revId": "d04cd496236fcd940b106625baf5b44bb8934071",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
