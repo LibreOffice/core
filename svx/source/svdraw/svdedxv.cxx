@@ -2413,7 +2413,7 @@ void SdrObjEditView::MarkListHasChanged()
         // check for table
         if( pObj && (pObj->GetObjInventor() == SdrInventor::Default ) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
         {
-            mxSelectionController = sdr::table::CreateTableController( this, pObj, mxLastSelectionController );
+            mxSelectionController = sdr::table::CreateTableController( this, static_cast<sdr::table::SdrTableObj const *>(pObj), mxLastSelectionController );
             if( mxSelectionController.is() )
             {
                 mxLastSelectionController.clear();
