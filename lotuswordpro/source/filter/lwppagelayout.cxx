@@ -476,7 +476,7 @@ void LwpPageLayout::ConvertFillerPageText(XFContentContainer* pCont)
         //get fillerpage story from division info
         LwpDocument* pDoc = m_pFoundry->GetDocument();
         LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(pDoc->GetDivInfoID().obj().get());
-        LwpStory* pStory = dynamic_cast<LwpStory*>(pDivInfo->GetFillerPageTextID().obj().get());
+        LwpStory* pStory = pDivInfo ? dynamic_cast<LwpStory*>(pDivInfo->GetFillerPageTextID().obj().get()) : nullptr;
 
         //parse fillerpage story
         if(pStory)
