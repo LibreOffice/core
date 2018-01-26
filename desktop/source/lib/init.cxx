@@ -3682,7 +3682,7 @@ static void preloadData()
     std::cerr << "Preload languages\n";
     // force load language singleton
     SvtLanguageTable::HasLanguageType(LANGUAGE_SYSTEM);
-    LanguageTag::isValidBcp47("foo", nullptr);
+    (void)LanguageTag::isValidBcp47("foo", nullptr);
 }
 
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfileUrl)
