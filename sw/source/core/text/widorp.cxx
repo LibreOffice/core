@@ -153,7 +153,7 @@ bool SwTextFrameBreak::IsInside( SwTextMargin const &rLine ) const
             // The LineHeight exceeds the current Frame height.
             // Call a test Grow to detect if the Frame could
             // grow the requested area.
-            nHeight += m_pFrame->GrowTst( LONG_MAX );
+            nHeight += m_pFrame->GrowTst( SAL_MAX_INT32 );
 
             // The Grow() returns the height by which the Upper of the TextFrame
             // would let the TextFrame grow.

@@ -70,8 +70,8 @@ SwFieldDokPage::SwFieldDokPage(vcl::Window* pParent, const SfxItemSet *const pCo
     m_pNumFormatLB->SetDoubleClickHdl(LINK(this, SwFieldDokPage, NumFormatHdl));
 
     m_pLevelED->SetMax(MAXLEVEL);
-    m_pDateOffsetED->SetMin(LONG_MIN);
-    m_pDateOffsetED->SetMax(LONG_MAX);
+    m_pDateOffsetED->SetMin(SAL_MIN_INT32);
+    m_pDateOffsetED->SetMax(SAL_MAX_INT32);
     //enable 'active' language selection
     m_pNumFormatLB->SetShowLanguageControl(true);
 }

@@ -4402,7 +4402,7 @@ eBookStatus WW8PLCFx_Book::GetStatus() const
 long WW8PLCFx_Book::GetHandle() const
 {
     if( !pBook[0] || !pBook[1] )
-        return LONG_MAX;
+        return SAL_MAX_INT32;
 
     if( nIsEnd )
         return pBook[1]->GetIdx();
@@ -4411,7 +4411,7 @@ long WW8PLCFx_Book::GetHandle() const
         if (const void* p = pBook[0]->GetData(pBook[0]->GetIdx()))
             return SVBT16ToShort( *static_cast<SVBT16 const *>(p) );
         else
-            return LONG_MAX;
+            return SAL_MAX_INT32;
     }
 }
 
@@ -4609,7 +4609,7 @@ void WW8PLCFx_AtnBook::advance()
 long WW8PLCFx_AtnBook::getHandle() const
 {
     if (!m_pBook[0] || !m_pBook[1])
-        return LONG_MAX;
+        return SAL_MAX_INT32;
 
     if (m_bIsEnd)
         return m_pBook[1]->GetIdx();
@@ -4618,7 +4618,7 @@ long WW8PLCFx_AtnBook::getHandle() const
         if (const void* p = m_pBook[0]->GetData(m_pBook[0]->GetIdx()))
             return SVBT16ToShort(*static_cast<const SVBT16*>(p));
         else
-            return LONG_MAX;
+            return SAL_MAX_INT32;
     }
 }
 
@@ -4741,7 +4741,7 @@ void WW8PLCFx_FactoidBook::advance()
 long WW8PLCFx_FactoidBook::getHandle() const
 {
     if (!m_pBook[0] || !m_pBook[1])
-        return LONG_MAX;
+        return SAL_MAX_INT32;
 
     if (m_bIsEnd)
         return m_pBook[1]->GetIdx();
@@ -4750,7 +4750,7 @@ long WW8PLCFx_FactoidBook::getHandle() const
         if (const void* p = m_pBook[0]->GetData(m_pBook[0]->GetIdx()))
             return SVBT16ToShort(*static_cast<const SVBT16*>(p));
         else
-            return LONG_MAX;
+            return SAL_MAX_INT32;
     }
 }
 

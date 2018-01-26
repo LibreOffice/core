@@ -244,13 +244,13 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
         if( aPixelSz.Width() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
-                append("=\"").append(static_cast<sal_Int32>(aPixelSz.Width())).append("\"");
+                append("=\"").append(aPixelSz.Width()).append("\"");
         }
 
         if( aPixelSz.Height() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height).
-                append("=\"").append(static_cast<sal_Int32>(aPixelSz.Height())).append("\"");
+                append("=\"").append(aPixelSz.Height()).append("\"");
         }
     }
 

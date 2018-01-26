@@ -599,7 +599,7 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
         {
             // <rPt> point is above environment of given content frame
             // correct for vertical layout?
-            rRet.nMain = LONG_MAX;
+            rRet.nMain = SAL_MAX_INT32;
         }
         else if( rPt.X() < pUp->getFrameArea().Left() &&
                  rPt.Y() <= ( bVert ? pUp->getFrameArea().Top() : pUp->getFrameArea().Bottom() ) )
@@ -625,7 +625,7 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                 return pCnt;
             }
             else
-                rRet.nMain = LONG_MAX;
+                rRet.nMain = SAL_MAX_INT32;
         }
         else
         {
@@ -844,7 +844,7 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                 return pLay;
             }
             else
-                rRet.nMain = LONG_MAX;
+                rRet.nMain = SAL_MAX_INT32;
         }
     }
     return nullptr;
@@ -876,10 +876,10 @@ static sal_uInt64 lcl_FindCntDiff( const Point &rPt, const SwLayoutFrame *pLay,
         {
             //Calculate the distance between those two points.
             //'delta' X^2 + 'delta' Y^2 = 'distance'^2
-            sal_uInt64 dX = std::max( pCnt->getFrameArea().Left(), rPt.X() ) -
-                       std::min( pCnt->getFrameArea().Left(), rPt.X() ),
-                  dY = std::max( pCnt->getFrameArea().Top(), rPt.Y() ) -
-                       std::min( pCnt->getFrameArea().Top(), rPt.Y() );
+            sal_uInt64 dX = std::max<sal_Int32>( pCnt->getFrameArea().Left(), rPt.X() ) -
+                       std::min<sal_Int32>( pCnt->getFrameArea().Left(), rPt.X() ),
+                  dY = std::max<sal_Int32>( pCnt->getFrameArea().Top(), rPt.Y() ) -
+                       std::min<sal_Int32>( pCnt->getFrameArea().Top(), rPt.Y() );
             // square of the difference will do fine here
             const sal_uInt64 nDiff = (dX * dX) + (dY * dY);
             if ( pCnt->getFrameArea().Top() <= rPt.Y() )
@@ -1098,8 +1098,8 @@ const SwContentFrame *FindAnchor( const SwFrame *pOldAnch, const Point &rNew,
             }
         }
         if ( !pUpFrame )
-            nUp.nMain = LONG_MAX;
-        if ( nUp.nMain >= 0 && LONG_MAX != nUp.nMain )
+            nUp.nMain = SAL_MAX_INT32;
+        if ( nUp.nMain >= 0 && SAL_MAX_INT32 != nUp.nMain )
         {
             bNegAllowed = false;
             if ( nUpLst.nMain < 0 ) //don't take the wrong one, if the value
@@ -1114,7 +1114,7 @@ const SwContentFrame *FindAnchor( const SwFrame *pOldAnch, const Point &rNew,
     const SwContentFrame *pDownFrame = pCnt;
     SwDistance nDownLst;
     if ( nDown.nMain < 0 )
-        nDown.nMain = LONG_MAX;
+        nDown.nMain = SAL_MAX_INT32;
     do
     {
         pDownLst = pDownFrame; nDownLst = nDown;
@@ -1126,31 +1126,31 @@ const SwContentFrame *FindAnchor( const SwFrame *pOldAnch, const Point &rNew,
         {
             ::lcl_CalcDownDist( nDown, aNew, pDownFrame );
             if ( nDown.nMain < 0 )
-                nDown.nMain = LONG_MAX;
+                nDown.nMain = SAL_MAX_INT32;
             //It makes sense to search further, if the distance grows inside
             //a table.
             if ( pDownLst->IsInTab() && pDownFrame->IsInTab() )
             {
-                while ( pDownFrame && ( ( nDown.nMain != LONG_MAX && pDownFrame->IsInTab()) || bBody != pDownFrame->IsInDocBody() ) )
+                while ( pDownFrame && ( ( nDown.nMain != SAL_MAX_INT32 && pDownFrame->IsInTab()) || bBody != pDownFrame->IsInDocBody() ) )
                 {
                     pDownFrame = pDownFrame->GetNextContentFrame();
                     if ( pDownFrame )
                         ::lcl_CalcDownDist( nDown, aNew, pDownFrame );
                     if ( nDown.nMain < 0 )
-                        nDown.nMain = LONG_MAX;
+                        nDown.nMain = SAL_MAX_INT32;
                 }
             }
         }
         if ( !pDownFrame )
-            nDown.nMain = LONG_MAX;
+            nDown.nMain = SAL_MAX_INT32;
 
     } while ( pDownFrame && nDown <= nDownLst &&
-              nDown.nMain != LONG_MAX && nDownLst.nMain != LONG_MAX );
+              nDown.nMain != SAL_MAX_INT32 && nDownLst.nMain != SAL_MAX_INT32 );
 
     //If we couldn't find one in both directions, we'll search the Content whose
     //left upper corner is the nearest to the point. Such a situation may
     //happen, if the point doesn't lay in the text flow but in any margin.
-    if ( nDownLst.nMain == LONG_MAX && nUpLst.nMain == LONG_MAX )
+    if ( nDownLst.nMain == SAL_MAX_INT32 && nUpLst.nMain == SAL_MAX_INT32 )
     {
         // If an OLE objects, which is contained in a fly frame
         // is resized in inplace mode and the new Position is outside the
@@ -1274,7 +1274,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
             nX = pCnt->getFrameArea().Left() - pOriginal->getFrameArea().Left();
     }
 
-    if ( nY == LONG_MAX )
+    if ( nY == SAL_MAX_INT32 )
     {
         // #i70582#
         const SwTwips nTopForObjPos = lcl_GetTopForObjPos(pCnt, bVert, bVertL2R);
@@ -1343,9 +1343,9 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
                 }
                 ResetLastCharRectHeight();
                 if( text::RelOrientation::CHAR == pFormat->GetVertOrient().GetRelationOrient() )
-                    nY = LONG_MAX;
+                    nY = SAL_MAX_INT32;
                 if( text::RelOrientation::CHAR == pFormat->GetHoriOrient().GetRelationOrient() )
-                    nX = LONG_MAX;
+                    nX = SAL_MAX_INT32;
             }
             else
             {

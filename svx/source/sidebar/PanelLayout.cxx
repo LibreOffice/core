@@ -95,9 +95,9 @@ void PanelLayout::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, P
 
     Size aSize(GetOptimalSize());
     if (!bCanHandleSmallerWidth)
-        nWidth = std::max(nWidth,aSize.Width());
+        nWidth = std::max<sal_Int32>(nWidth,aSize.Width());
     if (!bCanHandleSmallerHeight)
-        nHeight = std::max(nHeight,aSize.Height());
+        nHeight = std::max<sal_Int32>(nHeight,aSize.Height());
 
     Control::setPosSizePixel(nX, nY, nWidth, nHeight, nFlags);
 

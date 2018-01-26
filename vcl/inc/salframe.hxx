@@ -147,7 +147,7 @@ public:
     virtual void            SetMinClientSize( long nWidth, long nHeight ) = 0;
     virtual void            SetMaxClientSize( long nWidth, long nHeight ) = 0;
     virtual void            SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) = 0;
-    virtual void            GetClientSize( long& rWidth, long& rHeight ) = 0;
+    virtual void            GetClientSize( sal_Int32& rWidth, sal_Int32& rHeight ) = 0;
     virtual void            GetWorkArea( tools::Rectangle& rRect ) = 0;
     virtual SalFrame*       GetParent() const = 0;
     // Note: x will be mirrored at parent if UI mirroring is active

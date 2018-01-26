@@ -647,13 +647,13 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     tools::Rectangle aRect( pRectObj->GetRectangle() );
 
                     aCoords = OStringBuffer()
-                        .append(static_cast<sal_Int32>(aRect.Left()))
+                        .append(aRect.Left())
                         .append(',')
-                        .append(static_cast<sal_Int32>(aRect.Top()))
+                        .append(aRect.Top())
                         .append(',')
-                        .append(static_cast<sal_Int32>(aRect.Right()))
+                        .append(aRect.Right())
                         .append(',')
-                        .append(static_cast<sal_Int32>(aRect.Bottom()))
+                        .append(aRect.Bottom())
                         .makeStringAndClear();
                 }
                 break;
@@ -666,9 +666,9 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     long nOff = pCirc->GetRadius();
 
                     aCoords = OStringBuffer()
-                        .append(static_cast<sal_Int32>(aCenter.X()))
+                        .append(aCenter.X())
                         .append(',')
-                        .append(static_cast<sal_Int32>(aCenter.Y()))
+                        .append(aCenter.Y())
                         .append(',')
                         .append(static_cast<sal_Int32>(nOff))
                         .makeStringAndClear();
@@ -685,17 +685,17 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     if( nCount>0 )
                     {
                         const Point& rPoint = aPoly[0];
-                        aTmpBuf.append(static_cast<sal_Int32>(rPoint.X()))
+                        aTmpBuf.append(rPoint.X())
                             .append(',')
-                            .append(static_cast<sal_Int32>(rPoint.Y()));
+                            .append(rPoint.Y());
                     }
                     for( sal_uInt16 j=1; j<nCount; j++ )
                     {
                         const Point& rPoint = aPoly[j];
                         aTmpBuf.append(',')
-                            .append(static_cast<sal_Int32>(rPoint.X()))
+                            .append(rPoint.X())
                             .append(',')
-                            .append(static_cast<sal_Int32>(rPoint.Y()));
+                            .append(rPoint.Y());
                     }
                     aCoords = aTmpBuf.makeStringAndClear();
                 }

@@ -1561,10 +1561,10 @@ void SdImportTest::testTdf103473()
     SdrTextObj *const pObj = dynamic_cast<SdrTextObj *const>(pPage->GetObj(0));
     CPPUNIT_ASSERT(pObj);
     ::tools::Rectangle aRect = pObj->GetGeoRect();
-    CPPUNIT_ASSERT_EQUAL(3629L, aRect.Left());
-    CPPUNIT_ASSERT_EQUAL(4431L, aRect.Top());
-    CPPUNIT_ASSERT_EQUAL(8353L, aRect.Right());
-    CPPUNIT_ASSERT_EQUAL(9155L, aRect.Bottom());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3629), sal_Int32(aRect.Left()));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4431), sal_Int32(aRect.Top()));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8353), sal_Int32(aRect.Right()));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9155), sal_Int32(aRect.Bottom()));
 
     xDocShRef->DoClose();
 }
@@ -1903,8 +1903,8 @@ bool SdImportTest::checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeN
             ReadDIB(aBitmap, aBitmapStream, true);
         }
     }
-    CPPUNIT_ASSERT_EQUAL(8L, aBitmap.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(8L, aBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aBitmap.GetSizePixel().Height());
     return checkPatternValues(rExpected, aBitmap);
 }
 
@@ -2341,7 +2341,7 @@ void SdImportTest::testTdf114913()
     CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
     const SvxNumBulletItem *pItem = pTxtObj->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pItem);
-    CPPUNIT_ASSERT_EQUAL(long(691), pItem->GetNumRule()->GetLevel(0).GetGraphicSize().getHeight());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(691), pItem->GetNumRule()->GetLevel(0).GetGraphicSize().getHeight());
 
     xDocShRef->DoClose();
 }

@@ -214,12 +214,22 @@ inline long HmmToTwips (long nVal)
             FUNIT_100TH_MM, FUNIT_TWIP) );
 }
 
-inline void TwipsToMM( long& nVal )
+inline void TwipsToMM( ::tools::details::Assigner nVal )
 {
     nVal = TwipsToHmm (nVal);
 }
 
-inline void ReverseTwipsToMM( long& nVal )
+inline void TwipsToMM( sal_Int32& nVal )
+{
+    nVal = TwipsToHmm (nVal);
+}
+
+inline void ReverseTwipsToMM( ::tools::details::Assigner nVal )
+{
+    nVal = HmmToTwips (nVal);
+}
+
+inline void ReverseTwipsToMM( sal_Int32& nVal )
 {
     nVal = HmmToTwips (nVal);
 }

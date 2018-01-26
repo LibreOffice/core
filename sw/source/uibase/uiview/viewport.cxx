@@ -103,7 +103,7 @@ static void lcl_GetPos(SwView const * pView,
 
     // use a reference to access/modify the correct coordinate
     // returned by accessors to non-const object
-    long & rCoord = bHori ? rPos.X() : rPos.Y();
+    sal_Int32 & rCoord = bHori ? rPos.X() : rPos.Y();
     rCoord += lDelta;
     if ( bBorder && rCoord < DOCUMENTBORDER )
         rCoord = DOCUMENTBORDER;
@@ -357,12 +357,12 @@ void SwView::CalcPt( Point *pPt, const tools::Rectangle &rRect,
     if(nDesHeight > nCurHeight) // the height is not sufficient, then nYScroll is no longer of interest
     {
         pPt->setY( rRect.Top() );
-        pPt->setY( std::max( lMin, pPt->Y() ) );
+        pPt->setY( std::max<sal_Int32>( lMin, pPt->Y() ) );
     }
     else if ( rRect.Top() < m_aVisArea.Top() )                // Upward shift
     {
         pPt->setY( rRect.Top() - (nRangeY != USHRT_MAX ? nRangeY : nYScroll) );
-        pPt->setY( std::max( lMin, pPt->Y() ) );
+        pPt->setY( std::max<sal_Int32>( lMin, pPt->Y() ) );
     }
     else if( rRect.Bottom() > m_aVisArea.Bottom() )   // Downward shift
     {
@@ -382,9 +382,9 @@ void SwView::CalcPt( Point *pPt, const tools::Rectangle &rRect,
     else if ( rRect.Left() < m_aVisArea.Left() )      // Shift left
     {
         pPt->setX( rRect.Left() - (nRangeX != USHRT_MAX ? nRangeX : nXScroll) );
-        pPt->setX( std::max( ::GetLeftMargin( *this ) + nLeftOfst, pPt->X() ) );
-        pPt->setX( std::min( rRect.Left() - nScrollX, pPt->X() ) );
-        pPt->setX( std::max( 0L, pPt->X() ) );
+        pPt->setX( std::max<sal_Int32>( ::GetLeftMargin( *this ) + nLeftOfst, pPt->X() ) );
+        pPt->setX( std::min<sal_Int32>( rRect.Left() - nScrollX, pPt->X() ) );
+        pPt->setX( std::max<sal_Int32>( 0, pPt->X() ) );
     }
 }
 
@@ -465,7 +465,7 @@ void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt
         if( m_bTopCursor )
         {
             const long nBorder = IsDocumentBorder() ? DOCUMENTBORDER : 0;
-            aPt.setY( std::min( std::max( nBorder, rRect.Top() ),
+            aPt.setY( std::min,sal_Int32>( std::max<sal_Int32>( nBorder, rRect.Top() ),
                                 m_aDocSz.Height() + nBorder -
                                     m_aVisArea.GetHeight() ) );
         }
@@ -482,7 +482,7 @@ void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt
         if( m_bTopCursor )
         {
             const long nBorder = IsDocumentBorder() ? DOCUMENTBORDER : 0;
-            aPt.setY( std::min( std::max( nBorder, rRect.Top() ),
+            aPt.setY( std::min<sal_Int32>( std::max<sal_Int32>( nBorder, rRect.Top() ),
                                 m_aDocSz.Height() + nBorder -
                                     m_aVisArea.GetHeight() ) );
         }
@@ -505,7 +505,7 @@ void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt
                   - m_aVisArea.Left() - m_aVisArea.Right() ) / 2 );
         aPnt.setX( SetHScrollMax( aPnt.X() ) );
         const SwTwips lMin = IsDocumentBorder() ? DOCUMENTBORDER : 0;
-        aPnt.setX( std::max( (GetLeftMargin( *this ) - lMin) + nLeftOfst, aPnt.X() ) );
+        aPnt.setX( std::max<sal_Int32>( (GetLeftMargin( *this ) - lMin) + nLeftOfst, aPnt.X() ) );
     }
     m_aVisArea = aOldVisArea;
     if( pCareWn )
@@ -573,7 +573,7 @@ long SwView::PageUp()
 
     Point aPos(m_aVisArea.TopLeft());
     aPos.AdjustY( -(m_aVisArea.GetHeight() - (GetYScroll() / 2)) );
-    aPos.setY( std::max(0L, aPos.Y()) );
+    aPos.setY( std::max<sal_Int32>(0, aPos.Y()) );
     SetVisArea( aPos );
     return 1;
 }
