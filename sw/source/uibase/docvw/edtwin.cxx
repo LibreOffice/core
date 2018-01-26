@@ -1065,10 +1065,10 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
                            pToCharContentPos, bFollowTextFlow,
                            false, &aRefPoint );
     }
-    long nLeft = std::min( aTmp.Left() - aBoundRect.Left(), aSnap.Width() );
-    long nRight = std::min( aBoundRect.Right() - aTmp.Right(), aSnap.Width() );
-    long nUp = std::min( aTmp.Top() - aBoundRect.Top(), aSnap.Height() );
-    long nDown = std::min( aBoundRect.Bottom() - aTmp.Bottom(), aSnap.Height() );
+    long nLeft = std::min<sal_Int32>( aTmp.Left() - aBoundRect.Left(), aSnap.Width() );
+    long nRight = std::min<sal_Int32>( aBoundRect.Right() - aTmp.Right(), aSnap.Width() );
+    long nUp = std::min<sal_Int32>( aTmp.Top() - aBoundRect.Top(), aSnap.Height() );
+    long nDown = std::min<sal_Int32>( aBoundRect.Bottom() - aTmp.Bottom(), aSnap.Height() );
 
     switch ( nDir )
     {

@@ -3830,14 +3830,14 @@ static OString ExportPICT(const SwFlyFrameFormat* pFlyFrameFormat, const Size& r
         aRet.append(rCr.GetBottom());
 
         aRet.append(OOO_STRING_SVTOOLS_RTF_PICW);
-        aRet.append(static_cast<sal_Int32>(rMapped.Width()));
+        aRet.append(rMapped.Width());
         aRet.append(OOO_STRING_SVTOOLS_RTF_PICH);
-        aRet.append(static_cast<sal_Int32>(rMapped.Height()));
+        aRet.append(rMapped.Height());
 
         aRet.append(OOO_STRING_SVTOOLS_RTF_PICWGOAL);
-        aRet.append(static_cast<sal_Int32>(rOrig.Width()));
+        aRet.append(rOrig.Width());
         aRet.append(OOO_STRING_SVTOOLS_RTF_PICHGOAL);
-        aRet.append(static_cast<sal_Int32>(rOrig.Height()));
+        aRet.append(rOrig.Height());
 
         aRet.append(pBLIPType);
         if (bIsWMF)

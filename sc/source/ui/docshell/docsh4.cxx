@@ -2099,14 +2099,14 @@ tools::Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
 
 namespace {
 
-void SnapHor( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCCOL& rStartCol )
+void SnapHor( const ScDocument& rDoc, SCTAB nTab, ::tools::details::Assigner rVal, SCCOL& rStartCol )
 {
     SCCOL nCol = 0;
-    long nTwips = static_cast<long>(rVal / HMM_PER_TWIPS);
-    long nSnap = 0;
+    sal_Int32 nTwips = rVal / HMM_PER_TWIPS;
+    sal_Int32 nSnap = 0;
     while ( nCol<MAXCOL )
     {
-        long nAdd = rDoc.GetColWidth(nCol, nTab);
+        sal_Int32 nAdd = rDoc.GetColWidth(nCol, nTab);
         if ( nSnap + nAdd/2 < nTwips || nCol < rStartCol )
         {
             nSnap += nAdd;
@@ -2115,15 +2115,15 @@ void SnapHor( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCCOL& rStartCol )
         else
             break;
     }
-    rVal = static_cast<long>( nSnap * HMM_PER_TWIPS );
+    rVal = nSnap * HMM_PER_TWIPS;
     rStartCol = nCol;
 }
 
-void SnapVer( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCROW& rStartRow )
+void SnapVer( const ScDocument& rDoc, SCTAB nTab, tools::details::Assigner rVal, SCROW& rStartRow )
 {
     SCROW nRow = 0;
-    long nTwips = static_cast<long>(rVal / HMM_PER_TWIPS);
-    long nSnap = 0;
+    sal_Int32 nTwips = rVal / HMM_PER_TWIPS;
+    sal_Int32 nSnap = 0;
 
     bool bFound = false;
     for (SCROW i = nRow; i <= MAXROW; ++i)
@@ -2136,7 +2136,7 @@ void SnapVer( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCROW& rStartRow )
         }
 
         nRow = i;
-        long nAdd = rDoc.GetRowHeight(i, nTab);
+        sal_Int32 nAdd = rDoc.GetRowHeight(i, nTab);
         if ( nSnap + nAdd/2 < nTwips || nRow < rStartRow )
         {
             nSnap += nAdd;
@@ -2151,7 +2151,7 @@ void SnapVer( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCROW& rStartRow )
     if (!bFound)
         nRow = MAXROW;  // all hidden down to the bottom
 
-    rVal = static_cast<long>( nSnap * HMM_PER_TWIPS );
+    rVal = nSnap * HMM_PER_TWIPS;
     rStartRow = nRow;
 }
 

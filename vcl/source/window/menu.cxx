@@ -1516,7 +1516,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
                     aSz.AdjustWidth(pData->aSz.Width() );
                 }
                 else
-                    pData->aSz.setHeight( std::max( std::max( nTextHeight, pData->aSz.Height() ), nMinMenuItemHeight ) );
+                    pData->aSz.setHeight( std::max<sal_Int32>( std::max<sal_Int32>( nTextHeight, pData->aSz.Height() ), nMinMenuItemHeight ) );
 
                 nWidth += nTextWidth;
             }
@@ -1536,7 +1536,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
                     if ( nFontHeight > nWidth )
                         nWidth += nFontHeight;
 
-                pData->aSz.setHeight( std::max( std::max( nFontHeight, pData->aSz.Height() ), nMinMenuItemHeight ) );
+                pData->aSz.setHeight( std::max<sal_Int32>( std::max<sal_Int32>( nFontHeight, pData->aSz.Height() ), nMinMenuItemHeight ) );
             }
 
             pData->aSz.AdjustHeight(EXTRAITEMHEIGHT ); // little bit more distance
@@ -1592,7 +1592,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             nImgOrChkWidth = aMaxSize.Height() + nExtra;
         else // non NWF case
             nImgOrChkWidth = nFontHeight/2 + gfxExtra;
-        nImgOrChkWidth = std::max( nImgOrChkWidth, aMaxImgSz.Width() + gfxExtra );
+        nImgOrChkWidth = std::max<sal_Int32>( nImgOrChkWidth, aMaxImgSz.Width() + gfxExtra );
         nTextPos = static_cast<sal_uInt16>(nImgOrChkPos + nImgOrChkWidth);
         nTextPos = nTextPos + gfxExtra;
 

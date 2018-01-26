@@ -1054,7 +1054,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
     SwFrameFormat *pFormat = GetFormat();
     const bool bVert = GetAnchorFrame()->IsVertical();
     const SwTwips nNewY = bVert ? rNewPos.X() : rNewPos.Y();
-    SwTwips nTmpY = nNewY == LONG_MAX ? 0 : nNewY;
+    SwTwips nTmpY = nNewY == SAL_MAX_INT32 ? 0 : nNewY;
     if( bVert )
         nTmpY = -nTmpY;
     SfxItemSet aSet( pFormat->GetDoc()->GetAttrPool(),
@@ -1079,7 +1079,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
     {
         if( text::RelOrientation::CHAR == aVert.GetRelationOrient() && IsAutoPos() )
         {
-            if( LONG_MAX != nNewY )
+            if( SAL_MAX_INT32 != nNewY )
             {
                 aVert.SetVertOrient( text::VertOrientation::NONE );
                 sal_Int32 nOfs =
@@ -1113,7 +1113,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
     if ( !IsFlyInContentFrame() )
     {
         const SwTwips nNewX = bVert ? rNewPos.Y() : rNewPos.X();
-        SwTwips nTmpX = nNewX == LONG_MAX ? 0 : nNewX;
+        SwTwips nTmpX = nNewX == SAL_MAX_INT32 ? 0 : nNewX;
         SwFormatHoriOrient aHori( pFormat->GetHoriOrient() );
         // #i34948# - handle also at-page and at-fly anchored
         // Writer fly frames
@@ -1134,7 +1134,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
             aHori.SetHoriOrient( text::HoriOrientation::NONE );
             if( text::RelOrientation::CHAR == aHori.GetRelationOrient() && IsAutoPos() )
             {
-                if( LONG_MAX != nNewX )
+                if( SAL_MAX_INT32 != nNewX )
                 {
                     if( !pAutoFrame )
                     {
@@ -1762,8 +1762,8 @@ SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
     if ( Lower() && !IsColLocked() && !HasFixSize() )
     {
         SwTwips nSize = aRectFnSet.GetHeight(getFrameArea());
-        if( nSize > 0 && nDist > ( LONG_MAX - nSize ) )
-            nDist = LONG_MAX - nSize;
+        if( nSize > 0 && nDist > ( SAL_MAX_INT32 - nSize ) )
+            nDist = SAL_MAX_INT32 - nSize;
 
         if ( nDist <= 0 )
             return 0;
@@ -2335,7 +2335,7 @@ Size SwFlyFrame::CalcRel( const SwFormatFrameSize &rSz ) const
     const SwFrame *pRel = IsFlyLayFrame() ? GetAnchorFrame() : GetAnchorFrame()->GetUpper();
     if( pRel ) // LAYER_IMPL
     {
-        long nRelWidth = LONG_MAX, nRelHeight = LONG_MAX;
+        sal_Int32 nRelWidth = SAL_MAX_INT32, nRelHeight = SAL_MAX_INT32;
         const SwViewShell *pSh = getRootFrame()->GetCurrShell();
         if ( ( pRel->IsBodyFrame() || pRel->IsPageFrame() ) &&
              pSh && pSh->GetViewOptions()->getBrowseMode() &&
