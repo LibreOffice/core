@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_c6e5f3a8",
+        "filename": "offapi/com/sun/star/chart2/DataPointCustomLabelField.idl",
+        "patchSetId": 14
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-01-26T09:05:42Z",
+      "side": 1,
+      "message": "No @since tag?",
+      "revId": "2d18140dac11de65931ecf23d7f6c16d91fca831",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e6e2f79e",
+        "filename": "offapi/com/sun/star/chart2/DataPointCustomLabelFieldType.idl",
+        "patchSetId": 14
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-01-26T09:05:42Z",
+      "side": 1,
+      "message": "Can you avoid \"published\" here? That will just cause maintenance pain later. Also, no @since.",
+      "revId": "2d18140dac11de65931ecf23d7f6c16d91fca831",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_06ee2b8b",
+        "filename": "offapi/com/sun/star/chart2/DataPointProperties.idl",
+        "patchSetId": 14
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-01-26T09:05:42Z",
+      "side": 1,
+      "message": "I think you can avoid com::sun::star::chart2 here since you\u0027re in that namespace.",
+      "revId": "2d18140dac11de65931ecf23d7f6c16d91fca831",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_26f32f75",
+        "filename": "offapi/com/sun/star/chart2/XDataPointCustomLabelField.idl",
+        "patchSetId": 14
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-01-26T09:05:42Z",
+      "side": 1,
+      "message": "Can\u0027t you properly inherit from XFormattedString2 here, instead of this legacy explicit \"interface\" keyword?",
+      "revId": "2d18140dac11de65931ecf23d7f6c16d91fca831",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
