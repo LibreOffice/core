@@ -183,7 +183,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
     // 5. paragraph border
     // Note: These values have already been used during calculation
     // of the printing area of the paragraph.
-    const int nLMWithNum = pNode->GetLeftMarginWithNum( true );
+    const sal_Int32 nLMWithNum = pNode->GetLeftMarginWithNum( true );
     if ( m_pFrame->IsRightToLeft() )
     {
         // this calculation is identical this the calculation for L2R layout - see below
@@ -219,7 +219,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
         else
         {
             nLeft = m_pFrame->getFrameArea().Left() +
-                    std::max( long( rSpace.GetTextLeft() + nLMWithNum ),
+                    std::max<sal_Int32>( rSpace.GetTextLeft() + nLMWithNum,
                          m_pFrame->getFramePrintArea().Left() );
         }
     }
@@ -243,7 +243,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
     else
     {
         short nFLOfst = 0;
-        long nFirstLineOfs = 0;
+        sal_Int32 nFirstLineOfs = 0;
         if( !pNode->GetFirstLineOfsWithNum( nFLOfst ) &&
             rSpace.IsAutoFirst() )
         {
@@ -312,7 +312,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
         else
         {
               nFirst = m_pFrame->getFrameArea().Left() +
-                     std::max( rSpace.GetTextLeft() + nLMWithNum+ nFirstLineOfs,
+                     std::max<sal_Int32>( rSpace.GetTextLeft() + nLMWithNum+ nFirstLineOfs,
                           m_pFrame->getFramePrintArea().Left() );
         }
 

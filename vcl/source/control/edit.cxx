@@ -743,7 +743,7 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
         }
     }
 
-    maText.remove( static_cast<sal_Int32>(aSelection.Min()), static_cast<sal_Int32>(aSelection.Len()) );
+    maText.remove( aSelection.Min(), aSelection.Len() );
     maSelection.Min() = aSelection.Min();
     maSelection.Max() = aSelection.Min();
     ImplAlignAndPaint();
@@ -807,9 +807,9 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
     ImplClearLayoutData();
 
     if ( aSelection.Len() )
-        maText.remove( static_cast<sal_Int32>(aSelection.Min()), static_cast<sal_Int32>(aSelection.Len()) );
+        maText.remove( aSelection.Min(), aSelection.Len() );
     else if ( !mbInsertMode && (aSelection.Max() < maText.getLength()) )
-        maText.remove( static_cast<sal_Int32>(aSelection.Max()), 1 );
+        maText.remove( aSelection.Max(), 1 );
 
     // take care of input-sequence-checking now
     if (bIsUserInput && !rStr.isEmpty())
@@ -829,7 +829,7 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
         if (bIsInputSequenceChecking && (xISC = ImplGetInputSequenceChecker()).is())
         {
             sal_Unicode cChar = rStr[0];
-            sal_Int32 nTmpPos = static_cast< sal_Int32 >( aSelection.Min() );
+            sal_Int32 nTmpPos = aSelection.Min();
             sal_Int16 nCheckMode = officecfg::Office::Common::I18N::CTL::CTLSequenceCheckingRestricted::get()?
                     i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
 
@@ -876,7 +876,7 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
     }
 
     if ( !aNewText.isEmpty() )
-        maText.insert( static_cast<sal_Int32>(aSelection.Min()), aNewText );
+        maText.insert( aSelection.Min(), aNewText );
 
     if ( !pNewSel )
     {
@@ -2036,7 +2036,7 @@ void Edit::Command( const CommandEvent& rCEvt )
     {
         DeleteSelected();
         delete mpIMEInfos;
-        sal_Int32 nPos = static_cast<sal_Int32>(maSelection.Max());
+        sal_Int32 nPos = maSelection.Max();
         mpIMEInfos = new Impl_IMEInfos( nPos, OUString(maText.getStr() + nPos ) );
         mpIMEInfos->bWasCursorOverwrite = !IsInsertMode();
     }

@@ -3977,7 +3977,7 @@ Size SwEntryBrowseBox::GetOptimalSize() const
 
     long nWidth(std::accumulate(aWidths.begin(), aWidths.end(), 0));
 
-    aSize.setWidth( std::max(aSize.Width(), nWidth) );
+    aSize.setWidth( std::max<sal_Int32>(aSize.Width(), nWidth) );
 
     return aSize;
 }

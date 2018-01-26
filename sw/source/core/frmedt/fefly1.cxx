@@ -1353,7 +1353,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
     // allocated values
     Point aPt( pFly->getFramePrintArea().Pos() );
     aPt += pFly->getFrameArea().Pos();
-    if ( rRect.Top() != LONG_MIN && rRect.Pos() != aPt && !bPosProt )
+    if ( rRect.Top() != RECT_MIN && rRect.Pos() != aPt && !bPosProt )
     {
         aPt = rRect.Pos();
         aPt.setX(aPt.getX() - pFly->getFramePrintArea().Left());
