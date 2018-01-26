@@ -220,15 +220,56 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectToolboxHdl, ToolBox *, void)
     sal_uInt16 nId = maToolbox->GetCurItemId();
     const OUString sCommand = maToolbox->GetItemCommand(nId);
     PageJump ePage = PAGE_NONE;
-
+    RefreshDocumentLB();
     if (sCommand == "first")
-        ePage = PAGE_FIRST;
+        {
+            ePage = PAGE_FIRST;
+            maToolbox->EnableItem(maToolbox->GetItemId(sCommand), false);
+            maToolbox->EnableItem(maToolbox->GetItemId("previous"), false);
+            maTlbObjects->Select( maTlbObjects->GetFirstEntryInView() );
+            maToolbox->EnableItem(maToolbox->GetItemId("next"));
+            maToolbox->EnableItem(maToolbox->GetItemId("last"));
+        }
     else if (sCommand == "previous")
-        ePage = PAGE_PREVIOUS;
+        {
+            ePage = PAGE_PREVIOUS;
+
+            if( maTlbObjects->GetPrevEntryInView( maTlbObjects->GetCurEntry() ) == maTlbObjects->GetFirstEntryInView() )
+               {
+                   maToolbox->EnableItem(maToolbox->GetItemId(sCommand), false);
+                   maToolbox->EnableItem(maToolbox->GetItemId("first"), false);
+                   maToolbox->EnableItem(maToolbox->GetItemId("next"));
+                   maToolbox->EnableItem(maToolbox->GetItemId("last"));
+               }
+
+            if( maTlbObjects->GetPrevEntryInView( maTlbObjects->GetCurEntry() ) != nullptr )
+                maTlbObjects->Select( maTlbObjects->GetPrevEntryInView( maTlbObjects->GetCurEntry() ) );
+        }
     else if (sCommand == "next")
-        ePage = PAGE_NEXT;
+        {
+            ePage = PAGE_NEXT;
+
+            if( maTlbObjects->GetNextEntryInView( maTlbObjects->GetCurEntry() ) == maTlbObjects->GetLastEntryInView() )
+               {
+                   maToolbox->EnableItem(maToolbox->GetItemId(sCommand), false);
+                   maToolbox->EnableItem(maToolbox->GetItemId("last"), false);
+                   maToolbox->EnableItem(maToolbox->GetItemId("previous"));
+                   maToolbox->EnableItem(maToolbox->GetItemId("first"));
+               }
+
+            if( maTlbObjects->GetNextEntryInView( maTlbObjects->GetCurEntry() ) != nullptr )
+                maTlbObjects->Select( maTlbObjects->GetNextEntryInView( maTlbObjects->GetCurEntry() ) );
+        }
+
     else if (sCommand == "last")
-        ePage = PAGE_LAST;
+        {
+            ePage = PAGE_LAST;
+            maToolbox->EnableItem(maToolbox->GetItemId(sCommand), false);
+            maToolbox->EnableItem(maToolbox->GetItemId("next"), false);
+            maTlbObjects->Select( maTlbObjects->GetLastEntryInView() );
+            maToolbox->EnableItem(maToolbox->GetItemId("previous"));
+            maToolbox->EnableItem(maToolbox->GetItemId("first"));
+        }
 
     if (ePage != PAGE_NONE)
     {
