@@ -243,7 +243,7 @@ private:
     void            GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
                                            SCCOL& rAreaX, SCROW& rAreaY, ScFollowMode& rMode);
 
-    void            SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SCROW nMovX);
+    void            SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SCCOL nMovX);
     void            SkipCursorVertical(SCCOL& rCurX, SCROW& rCurY, SCROW nOldY, SCROW nMovY);
 
     /**
