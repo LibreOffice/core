@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_e14901d2",
+        "filename": "offapi/com/sun/star/text/RubyPosition.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2018-01-26T15:29:14Z",
+      "side": 1,
+      "message": "This correspond to m_nPosition of SwFormatRuby, which is a sal_uInt16. I prevent to change that. Do you think it should be changed, or alternatively, in idl use long but cast it to sal_uInt16 internally?",
+      "parentUuid": "fa31d9ce_01d9b521",
+      "revId": "e438c33f09d281ea00cf57b172cdc491ee5abeb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_61fef16c",
         "filename": "offapi/type_reference/offapi.idl",
         "patchSetId": 2
