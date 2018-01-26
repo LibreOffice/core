@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_e6aaf76f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-01-26T07:28:02Z",
+      "side": 1,
+      "message": "Please describe what this commit does, e.g.\n\"tdf#114306 Fix crash when ....\"",
+      "revId": "239d28afa04f448906a8aad3490ac209e8f51e18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_06b62bdc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-01-26T07:28:02Z",
+      "side": 1,
+      "message": "better name the commit hash, noone knows how long this Gerrit instance exists:\n\n\"Regression from 18765b9fa739337d2d891513f6e2fb7c3ce23b50\"\n\n( 18765b9fa739337d2d891513f6e2fb7c3ce23b50 is the git hash for your original commit: https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d18765b9fa739337d2d891513f6e2fb7c3ce23b50 )",
+      "revId": "239d28afa04f448906a8aad3490ac209e8f51e18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
