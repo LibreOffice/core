@@ -21,6 +21,7 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -168,6 +169,9 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                         sal_Int32 nLen2 = aLocaleNames.getLength();
                         for (k = 0;  k < nLen2;  ++k)
                         {
+                            if (!comphelper::LibreOfficeKit::isWhitelistedLanguage(aLocaleNames[k]))
+                                continue;
+
                             aLocaleNamesSet.insert( aLocaleNames[k] );
                         }
                     }
