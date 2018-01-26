@@ -681,11 +681,10 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         if(xColumns.is())
         {
             OUString aColName, aParameterValue;
-            OSQLColumns::Vector::const_iterator aIter = xColumns->get().begin();
             sal_Int32 i = 1;
-            for(;aIter != xColumns->get().end();++aIter)
+            for (auto const& column : xColumns->get())
             {
-                (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
+                column->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
                 SAL_INFO("connectivity.mork", "Prop Column Name: " << aColName);
                 if ( m_aParameterRow.is() ) {
                     aParameterValue = (m_aParameterRow->get())[static_cast<sal_uInt16>(i)];

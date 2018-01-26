@@ -221,26 +221,23 @@ void Connection::close()
         m_settings.tables.clear();
         m_settings.users.clear();
 
-        for( WeakHashMap::const_iterator ii = m_myStatements.begin() ;
-             ii != m_myStatements.end() ;
-             ++ii )
+        for (auto const& statement : m_myStatements)
         {
-            Reference< XCloseable > r = ii->second;
+            Reference< XCloseable > r = statement.second;
             if( r.is() )
                 vectorCloseable.push_back( r );
         }
     }
 
     // close all created statements
-    for( CloseableVector::iterator ii = vectorCloseable.begin(); ii != vectorCloseable.end() ; ++ii )
-        ii->get()->close();
+    for (auto const& elem : vectorCloseable)
+        elem.get()->close();
 
     // close all created statements
-    for( DisposeableVector::iterator iiDispose = vectorDispose.begin();
-         iiDispose != vectorDispose.end() ; ++iiDispose )
+    for (auto const& elem : vectorDispose)
     {
-        if( iiDispose->is() )
-            iiDispose->get()->dispose();
+        if( elem.is() )
+            elem.get()->dispose();
     }
 }
 

@@ -1786,15 +1786,14 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
     }
 
 
-    std::vector< std::vector<Any> >::const_iterator ii = vec.begin();
     OUString lastTableOid;
     sal_Int32 index = 0;
     std::vector< std::vector< Any > > ret( vec.size() );
     int elements = 0;
-    for( ; ii != vec.end() ; ++ ii )
+    for (auto const& elem : vec)
     {
 
-        std::vector< Any > row = *ii;
+        std::vector< Any > row = elem;
         OUString tableOid;
         OUString attnum;
 

@@ -107,8 +107,8 @@ namespace
             OSL_ENSURE(!m_aNameMap.size(),"OCollection::reFill: collection isn't empty");
             m_aElements.reserve(_rVector.size());
 
-            for(::std::vector< OUString>::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
-                m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectEntry(*i,ObjectType())));
+            for (auto const& elem : _rVector)
+                m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectEntry(elem,ObjectType())));
         }
 
         virtual bool rename(const OUString& _sOldName, const OUString& _sNewName) override
@@ -165,13 +165,13 @@ namespace
 
         virtual void disposeElements() override
         {
-            for( ObjectIter aIter = m_aNameMap.begin(); aIter != m_aNameMap.end(); ++aIter)
+            for (auto & name : m_aNameMap)
             {
-                Reference<XComponent> xComp(aIter->second.get(),UNO_QUERY);
+                Reference<XComponent> xComp(name.second.get(),UNO_QUERY);
                 if ( xComp.is() )
                 {
                     ::comphelper::disposeComponent(xComp);
-                    (*aIter).second = T();
+                    name.second = T();
                 }
             }
             m_aElements.clear();

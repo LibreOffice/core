@@ -1625,9 +1625,8 @@ OSQLParseNode::OSQLParseNode(const OSQLParseNode& rParseNode)
     // created and reattached instead of the old pointer.
 
     // If not a leaf, then process SubTrees
-    for (OSQLParseNodes::const_iterator i = rParseNode.m_aChildren.begin();
-         i != rParseNode.m_aChildren.end(); ++i)
-        append(new OSQLParseNode(**i));
+    for (auto const& child : rParseNode.m_aChildren)
+        append(new OSQLParseNode(*child));
 }
 
 
@@ -1640,15 +1639,13 @@ OSQLParseNode& OSQLParseNode::operator=(const OSQLParseNode& rParseNode)
         m_eNodeType  = rParseNode.m_eNodeType;
         m_nNodeID    = rParseNode.m_nNodeID;
 
-        for (OSQLParseNodes::const_iterator i = m_aChildren.begin();
-            i != m_aChildren.end(); ++i)
-            delete *i;
+        for (auto const& child : m_aChildren)
+            delete child;
 
         m_aChildren.clear();
 
-        for (OSQLParseNodes::const_iterator j = rParseNode.m_aChildren.begin();
-             j != rParseNode.m_aChildren.end(); ++j)
-            append(new OSQLParseNode(**j));
+        for (auto const& child : rParseNode.m_aChildren)
+            append(new OSQLParseNode(*child));
     }
     return *this;
 }
@@ -1675,9 +1672,8 @@ bool OSQLParseNode::operator==(OSQLParseNode const & rParseNode) const
 
 OSQLParseNode::~OSQLParseNode()
 {
-    for (OSQLParseNodes::const_iterator i = m_aChildren.begin();
-         i != m_aChildren.end(); ++i)
-        delete *i;
+    for (auto const& child : m_aChildren)
+        delete child;
     m_aChildren.clear();
 }
 
@@ -1771,9 +1767,12 @@ OSQLParseNode* OSQLParseNode::getByRule(OSQLParseNode::Rule eRule) const
         pRetNode = const_cast<OSQLParseNode*>(this);
     else
     {
-        for (OSQLParseNodes::const_iterator i = m_aChildren.begin();
-            !pRetNode && i != m_aChildren.end(); ++i)
-            pRetNode = (*i)->getByRule(eRule);
+        for (auto const& child : m_aChildren)
+        {
+            pRetNode = child->getByRule(eRule);
+            if (pRetNode)
+                break;
+        }
     }
     return pRetNode;
 }
@@ -2274,11 +2273,8 @@ void OSQLParseNode::showParseTree( OUStringBuffer& _inout_rBuffer, sal_uInt32 nL
         _inout_rBuffer.append( '\n' );
 
         // Get the first sub tree
-        for (   OSQLParseNodes::const_iterator i = m_aChildren.begin();
-                i != m_aChildren.end();
-                ++i
-             )
-            (*i)->showParseTree( _inout_rBuffer, nLevel+1 );
+        for (auto const& child : m_aChildren)
+            child->showParseTree( _inout_rBuffer, nLevel+1 );
     }
     else
     {

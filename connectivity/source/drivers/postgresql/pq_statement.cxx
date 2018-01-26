@@ -749,46 +749,47 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
             {
                 OUString value;
                 OString columnName = OUStringToOString( keyColumnNames[i], ConnectionSettings::encoding );
-                String2StringMap::const_iterator ii = namedValues.begin();
-                for( ; ii != namedValues.end() ; ++ii )
+                bool bColumnMatchNamedValue = false;
+                for (auto const& namedValue : namedValues)
                 {
-                    if( columnName.equalsIgnoreAsciiCase( ii->first ) )
+                    if( columnName.equalsIgnoreAsciiCase( namedValue.first ) )
                     {
-                        value = OStringToOUString( ii->second , ConnectionSettings::encoding );
+                        value = OStringToOUString( namedValue.second , ConnectionSettings::encoding );
+                        bColumnMatchNamedValue = true;
                         break;
                     }
                 }
 
                 // check, if a column of the primary key was not inserted explicitly,
-                if( ii == namedValues.end() )
+                if( !bColumnMatchNamedValue )
                 {
-
                     if( autoValues.begin() == autoValues.end() )
                     {
                         getAutoValues( autoValues, connection, schemaName, tableName );
                     }
                     // this could mean, that the column is a default or auto value, check this ...
-                    String2StringMap::const_iterator j = autoValues.begin();
-                    for( ; j != autoValues.end() ; ++j )
+                    bool bColumnMatchAutoValue = false;
+                    for (auto const& autoValue : autoValues)
                     {
-                        if( columnName.equalsIgnoreAsciiCase( j->first ) )
+                        if( columnName.equalsIgnoreAsciiCase( autoValue.first ) )
                         {
                             // it is indeed an auto value.
-                            value = OStringToOUString(j->second, RTL_TEXTENCODING_ASCII_US );
+                            value = OStringToOUString(autoValue.second, RTL_TEXTENCODING_ASCII_US );
                             // check, whether it is a sequence
 
-                            if( j->second.startsWith("nextval(") )
+                            if( autoValue.second.startsWith("nextval(") )
                             {
                                 // retrieve current sequence value:
                                 OUStringBuffer myBuf(128 );
                                 myBuf.append( "SELECT currval(" );
-                                myBuf.appendAscii( &(j->second.getStr()[8]));
+                                myBuf.appendAscii( &(autoValue.second.getStr()[8]));
                                 value = querySingleValue( connection, myBuf.makeStringAndClear() );
                             }
+                            bColumnMatchAutoValue = true;
                             break;
                         }
                     }
-                    if( j == autoValues.end() )
+                    if( !bColumnMatchAutoValue )
                     {
                         // it even was no autovalue, no sense to continue as we can't query the
                         // inserted row

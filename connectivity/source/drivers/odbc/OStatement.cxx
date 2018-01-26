@@ -484,10 +484,11 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  )
 
 
     OString aBatchSql;
-    sal_Int32 nLen = 0;
-    for(std::vector< OUString>::const_iterator i=m_aBatchVector.begin();i != m_aBatchVector.end();++i,++nLen)
+    sal_Int32 nLen = m_aBatchVector.size();
+
+    for (auto const& elem : m_aBatchVector)
     {
-        aBatchSql += OUStringToOString(*i,getOwnConnection()->getTextEncoding());
+        aBatchSql += OUStringToOString(elem,getOwnConnection()->getTextEncoding());
         aBatchSql += ";";
     }
 

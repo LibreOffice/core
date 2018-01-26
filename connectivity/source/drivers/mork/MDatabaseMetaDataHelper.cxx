@@ -51,8 +51,9 @@ bool MDatabaseMetaDataHelper::getTableStrings( OConnection* _pCon,
     std::set<std::string> lists;
     MorkParser* pMork = _pCon->getMorkParser("AddressBook");
     pMork->retrieveLists(lists);
-    for (std::set<std::string>::const_iterator iter = lists.begin(); iter != lists.end(); ++iter) {
-        OUString groupTableName = OStringToOUString((*iter).c_str(), RTL_TEXTENCODING_UTF8);
+    for (auto const& elem : lists)
+    {
+        OUString groupTableName = OStringToOUString(elem.c_str(), RTL_TEXTENCODING_UTF8);
         SAL_INFO("connectivity.mork", "add Table " << groupTableName);
 
         _rStrings.push_back(groupTableName);
@@ -63,8 +64,9 @@ bool MDatabaseMetaDataHelper::getTableStrings( OConnection* _pCon,
     std::set<std::string> lists_history;
     pMork = _pCon->getMorkParser("CollectedAddressBook");
     pMork->retrieveLists(lists_history);
-    for (std::set<std::string>::const_iterator iter = lists_history.begin(); iter != lists_history.end(); ++iter) {
-        OUString groupTableName = OStringToOUString((*iter).c_str(), RTL_TEXTENCODING_UTF8);
+    for (auto const& elem : lists_history)
+    {
+        OUString groupTableName = OStringToOUString(elem.c_str(), RTL_TEXTENCODING_UTF8);
         SAL_INFO("connectivity.mork", "add Table " << groupTableName);
 
         _rStrings.push_back(groupTableName);

@@ -97,11 +97,8 @@ void MQueryHelper::append(MQueryHelperResultEntry* resEnt)
 
 void MQueryHelper::clear_results()
 {
-    resultsArray::iterator iter = m_aResults.begin();
-    while ( iter != m_aResults.end() ) {
-        delete *iter;
-        ++iter;
-    }
+    for (auto const& result : m_aResults)
+        delete result;
     m_aResults.clear();
 }
 
@@ -206,20 +203,20 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
     MorkRowMap::Map::const_iterator rowIter;
 
     // Iterate all tables
-    for ( tableIter = Tables->map.begin(); tableIter != Tables->map.end(); ++tableIter )
+    for (auto & table : Tables->map)
     {
-        if (tableIter->first != 1) break;
-        Rows = MorkParser::getRows( 0x80, &tableIter->second );
+        if (table.first != 1) break;
+        Rows = MorkParser::getRows( 0x80, &table.second );
         if ( Rows )
         {
             // Iterate all rows
-            for ( rowIter = Rows->map.begin(); rowIter != Rows->map.end(); ++rowIter )
+            for (auto const& row : Rows->map)
             {
                 // list specific table
                 // only retrieve rowIds that belong to that list table.
                 if (handleListTable)
                 {
-                    int rowId = rowIter->first;
+                    int rowId = row.first;
                     // belongs this row id to the list table?
                     if (listRecords.end() == listRecords.find(rowId))
                     {
@@ -229,21 +226,19 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
                 }
 
                 MQueryHelperResultEntry* entry = new MQueryHelperResultEntry();
-                for (MorkCells::const_iterator CellsIter = rowIter->second.begin();
-                     CellsIter != rowIter->second.end(); ++CellsIter )
+                for (auto const& cell : row.second)
                 {
-                    std::string column = pMork->getColumn(CellsIter->first);
-                    std::string value = pMork->getValue(CellsIter->second);
+                    std::string column = pMork->getColumn(cell.first);
+                    std::string value = pMork->getValue(cell.second);
                     OString key(column.c_str(), static_cast<sal_Int32>(column.size()));
                     OString valueOString(value.c_str(), static_cast<sal_Int32>(value.size()));
                     OUString valueOUString = OStringToOUString( valueOString, RTL_TEXTENCODING_UTF8 );
                     entry->setValue(key, valueOUString);
                 }
-                std::vector<bool> vector = entryMatchedByExpression(this, &expr, entry);
                 bool result = true;
-                for (std::vector<bool>::const_iterator iter = vector.begin(); iter != vector.end(); ++iter)
+                for (auto const& elem : entryMatchedByExpression(this, &expr, entry))
                 {
-                    result = result && *iter;
+                    result = result && elem;
                 }
                 if (result)
                 {
@@ -262,13 +257,10 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
 std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpression const * _aExpr, MQueryHelperResultEntry* entry)
 {
     std::vector<bool> resultVector;
-    MQueryExpression::ExprVector::const_iterator evIter;
-    for( evIter = _aExpr->getExpressions().begin();
-         evIter != _aExpr->getExpressions().end();
-         ++evIter )
+    for (auto const& expr : _aExpr->getExpressions())
     {
-        if ( (*evIter)->isStringExpr() ) {
-            MQueryExpressionString* evStr = static_cast<MQueryExpressionString*> (*evIter);
+        if ( expr->isStringExpr() ) {
+            MQueryExpressionString* evStr = static_cast<MQueryExpressionString*> (expr);
             // Set the 'name' property of the boolString.
             OString attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToUTF8Alias( evStr->getName() );
             SAL_INFO("connectivity.mork", "Name = " << attrName);
@@ -318,22 +310,24 @@ std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpressi
                 resultVector.push_back(currentValue.isEmpty());
             }
         }
-        else if ( (*evIter)->isExpr() ) {
+        else if ( expr->isExpr() ) {
             SAL_INFO("connectivity.mork", "Appending Subquery Expression");
-            MQueryExpression* queryExpression = static_cast<MQueryExpression*> (*evIter);
+            MQueryExpression* queryExpression = static_cast<MQueryExpression*> (expr);
             // recursive call
             std::vector<bool> subquery_result = entryMatchedByExpression(_aQuery, queryExpression, entry);
             MQueryExpression::bool_cond condition = queryExpression->getExpressionCondition();
             if (condition == MQueryExpression::OR) {
                 bool result = false;
-                for (std::vector<bool>::const_iterator iter =  subquery_result.begin(); iter != subquery_result.end(); ++iter) {
-                    result = result || *iter;
+                for (auto const& elem : subquery_result)
+                {
+                    result = result || elem;
                 }
                 resultVector.push_back(result);
             } else if (condition == MQueryExpression::AND) {
                 bool result = true;
-                for (std::vector<bool>::const_iterator iter = subquery_result.begin(); iter != subquery_result.end(); ++iter) {
-                    result = result && *iter;
+                for (auto const& elem : subquery_result)
+                {
+                    result = result && elem;
                 }
                 resultVector.push_back(result);
             } else {
