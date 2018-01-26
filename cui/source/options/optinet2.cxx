@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Security.hxx>
 #include <tools/config.hxx>
@@ -98,7 +99,24 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
 
-// static ----------------------------------------------------------------
+namespace {
+
+bool isValidPort(OUString const & value) {
+    if (!comphelper::string::isdigitAsciiString(value)) {
+        return false;
+    }
+    auto const n = value.toUInt64();
+    if (n > 65535) {
+        return false;
+    }
+    if (n != 0) {
+        return true;
+    }
+    // Overflow in OUString::toUInt64 returns 0, so need to check value contains only zeroes:
+    return o3tl::u16string_view(value).find_first_not_of(u'0') == o3tl::u16string_view::npos;
+}
+
+}
 
 VCL_BUILDER_FACTORY_ARGS(SvxNoSpaceEdit, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK)
 
@@ -128,10 +146,7 @@ void SvxNoSpaceEdit::Modify()
 
     if ( bOnlyNumeric )
     {
-        OUString aValue = GetText();
-
-        if ( !comphelper::string::isdigitAsciiString(aValue) || static_cast<long>(aValue.toInt32()) > USHRT_MAX )
-            // the maximum value of a port number is USHRT_MAX
+        if ( !isValidPort(GetText()) )
             ScopedVclPtrInstance<MessageDialog>(this, CuiResId( RID_SVXSTR_OPT_PROXYPORTS))->Execute();
     }
 }
@@ -527,9 +542,7 @@ IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox&, rBox, void )
 IMPL_STATIC_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Control&, rControl, void )
 {
     Edit* pEdit = static_cast<Edit*>(&rControl);
-    OUString aValue = pEdit->GetText();
-
-    if ( !comphelper::string::isdigitAsciiString(aValue) || static_cast<long>(aValue.toInt32()) > USHRT_MAX )
+    if ( !isValidPort(pEdit->GetText()) )
         pEdit->SetText( OUString('0') );
 }
 
