@@ -222,13 +222,30 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectToolboxHdl, ToolBox *, void)
     PageJump ePage = PAGE_NONE;
 
     if (sCommand == "first")
-        ePage = PAGE_FIRST;
+        {
+            ePage = PAGE_FIRST;
+            OUString aStr =maTlbObjects->GetEntryText( maTlbObjects->GetFirstEntryInView() );
+            maTlbObjects->SelectEntry( aStr );
+        }
     else if (sCommand == "previous")
-        ePage = PAGE_PREVIOUS;
+        {
+            ePage = PAGE_PREVIOUS;
+            OUString aStr =maTlbObjects->GetEntryText( maTlbObjects->GetPrevEntryInView(maTlbObjects->GetCurEntry() ) );
+            maTlbObjects->SelectEntry( aStr );
+        }
     else if (sCommand == "next")
-        ePage = PAGE_NEXT;
+        {
+            ePage = PAGE_NEXT;
+            OUString aStr =maTlbObjects->GetEntryText( maTlbObjects->GetNextEntryInView(maTlbObjects->GetCurEntry() ) );
+            maTlbObjects->SelectEntry( aStr );
+        }
+
     else if (sCommand == "last")
-        ePage = PAGE_LAST;
+        {
+            ePage = PAGE_LAST;
+            OUString aStr =maTlbObjects->GetEntryText( maTlbObjects->GetLastEntryInView() );
+            maTlbObjects->SelectEntry( aStr );
+        }
 
     if (ePage != PAGE_NONE)
     {
