@@ -52,7 +52,7 @@ public class _XScrollBar extends MultiMethodTest {
 
     public void _removeAdjustmentListener() {
         //this method is checked in addAjustmentListener
-        //so that method is requiered here and if it works
+        //so that method is required here and if it works
         //this method is given OK too
         requiredMethod("addAdjustmentListener()");
         tRes.tested("removeAdjustmentListener()", true);
@@ -67,7 +67,7 @@ public class _XScrollBar extends MultiMethodTest {
 
     public void _getBlockIncrement() {
         //this method is checked in the corresponding set method
-        //so that method is requiered here and if it works
+        //so that method is required here and if it works
         //this method is given OK too
         requiredMethod("setBlockIncrement()");
         tRes.tested("getBlockIncrement()", true);
@@ -82,7 +82,7 @@ public class _XScrollBar extends MultiMethodTest {
 
     public void _getLineIncrement() {
         //this method is checked in the corresponding set method
-        //so that method is requiered here and if it works
+        //so that method is required here and if it works
         //this method is given OK too
         requiredMethod("setLineIncrement()");
         tRes.tested("getLineIncrement()", true);
@@ -97,7 +97,7 @@ public class _XScrollBar extends MultiMethodTest {
 
     public void _getMaximum() {
         //this method is checked in the corresponding set method
-        //so that method is requiered here and if it works
+        //so that method is required here and if it works
         //this method is given OK too
         requiredMethod("setMaximum()");
         tRes.tested("getMaximum()", true);
@@ -112,7 +112,7 @@ public class _XScrollBar extends MultiMethodTest {
 
     public void _getOrientation() {
         //this method is checked in the corresponding set method
-        //so that method is requiered here and if it works
+        //so that method is required here and if it works
         //this method is given OK too
         requiredMethod("setOrientation()");
         tRes.tested("getOrientation()", true);
@@ -128,7 +128,7 @@ public class _XScrollBar extends MultiMethodTest {
 
     public void _getValue() {
         //this method is checked in the corresponding set method
-        //so that method is requiered here and if it works
+        //so that method is required here and if it works
         //this method is given OK too
         requiredMethod("setValue()");
         tRes.tested("getValue()", true);
@@ -143,7 +143,7 @@ public class _XScrollBar extends MultiMethodTest {
 
     public void _getVisibleSize() {
         //this method is checked in the corresponding set method
-        //so that method is requiered here and if it works
+        //so that method is required here and if it works
         //this method is given OK too
         requiredMethod("setVisibleSize()");
         tRes.tested("getVisibleSize()", true);

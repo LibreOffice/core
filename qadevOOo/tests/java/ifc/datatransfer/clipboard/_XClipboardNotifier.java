@@ -60,7 +60,7 @@ public class _XClipboardNotifier extends MultiMethodTest {
     }
 
     /**
-     * Simpliest <code>XTransferable</code> interface implementation
+     * Simplest <code>XTransferable</code> interface implementation
      * which supports "text/html" data type.
      */
     static class MyTransferable implements XTransferable {

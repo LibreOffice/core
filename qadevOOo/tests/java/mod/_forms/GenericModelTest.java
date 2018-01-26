@@ -374,7 +374,7 @@ public class GenericModelTest extends TestCase {
         XControlShape aShape = null;
         XMultiServiceFactory xMSF = Param.getMSF();
 
-        log.println("adding contol shape '" + m_kindOfControl + "'");
+        log.println("adding control shape '" + m_kindOfControl + "'");
         aShape = FormTools.createControlShape(m_xTextDoc, 3000,
                                                         4500, 15000, 10000,
                                                         m_kindOfControl);

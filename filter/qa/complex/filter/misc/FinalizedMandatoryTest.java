@@ -97,7 +97,7 @@ public class FinalizedMandatoryTest
 
         Object oInterface = xMSF.createInstance(serviceName);
 
-        assertNotNull("Service wan't created", oInterface);
+        assertNotNull("Service wasn't created", oInterface);
         return (XInterface) oInterface;
     }
 
