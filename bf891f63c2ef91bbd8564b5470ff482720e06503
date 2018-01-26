@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_fc8d2a7c",
+        "filename": "sd/source/ui/dlg/navigatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-01-26T20:56:38Z",
+      "side": 1,
+      "message": "It might be better to use simple SvTreeListBox::Select() method here, which uses SvTreeListEntry pointer so you don\u0027t need to get the entry\u0027s string representation.",
+      "range": {
+        "startLine": 228,
+        "startChar": 26,
+        "endLine": 228,
+        "endChar": 37
+      },
+      "revId": "bf891f63c2ef91bbd8564b5470ff482720e06503",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
