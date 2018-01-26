@@ -21,6 +21,7 @@
 
 // SwDoc interfaces
 #include <com/sun/star/embed/XStorage.hpp>
+#include <o3tl/deleter.hxx>
 #include <vcl/idle.hxx>
 #include "swdllapi.h"
 #include "swtypes.hxx"
@@ -41,7 +42,6 @@
 #include "docary.hxx"
 #include "pagedesc.hxx"
 #include "tblenum.hxx"
-
 #include <memory>
 #include <set>
 #include <unordered_map>
@@ -283,7 +283,7 @@ class SW_DLLPUBLIC SwDoc final
     SwTOXTypes      *mpTOXTypes;                   //< Tables/indices
     SwDefTOXBase_Impl * mpDefTOXBases;             //< defaults of SwTOXBase's
 
-    std::unique_ptr<SwDBManager> m_pOwnDBManager; //< own DBManager
+    std::unique_ptr<SwDBManager, o3tl::default_delete<SwDBManager>> m_pOwnDBManager; //< own DBManager
     SwDBManager * m_pDBManager; //< DBManager for evaluation of DB-fields.
 
     SwNumRule       *mpOutlineRule;
