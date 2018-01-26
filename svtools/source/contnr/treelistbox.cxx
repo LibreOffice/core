@@ -3489,6 +3489,19 @@ SvTreeListEntry* SvTreeListBox::GetNextEntryInView(SvTreeListEntry* pEntry ) con
     return pNext;
 }
 
+SvTreeListEntry* SvTreeListBox::GetPrevEntryInView(SvTreeListEntry* pEntry ) const
+{
+    SvTreeListEntry* pPrev = PrevVisible( pEntry );
+    if( pPrev )
+    {
+        Point aPos( GetEntryPosition(pPrev) );
+        const Size& rSize = pImpl->GetOutputSize();
+        if( aPos.Y() < 0 || aPos.Y() >= rSize.Height() )
+            return nullptr;
+    }
+    return pPrev;
+}
+
 SvTreeListEntry* SvTreeListBox::GetLastEntryInView() const
 {
     SvTreeListEntry* pEntry = GetFirstEntryInView();

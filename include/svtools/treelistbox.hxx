@@ -746,6 +746,7 @@ public:
 
     SvTreeListEntry*    GetFirstEntryInView() const;
     SvTreeListEntry*    GetNextEntryInView(SvTreeListEntry*) const;
+    SvTreeListEntry*    GetPrevEntryInView(SvTreeListEntry*) const;
     SvTreeListEntry*    GetLastEntryInView() const;
     void            ScrollToAbsPos( long nPos );
 
