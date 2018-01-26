@@ -125,19 +125,14 @@ SwFormat &SwFormat::operator=(const SwFormat& rFormat)
         ModifyNotification( &aChgOld, &aChgNew ); // send all modified ones
     }
 
-    if( GetRegisteredIn() != rFormat.GetRegisteredIn() )
+    if(GetRegisteredIn() != rFormat.GetRegisteredIn())
     {
-        EndListeningAll();
-        if( rFormat.GetRegisteredIn() )
-        {
-            const_cast<SwFormat&>(rFormat).GetRegisteredInNonConst()->Add(this);
-            m_aSet.SetParent( &rFormat.m_aSet );
-        }
-        else
-        {
-            m_aSet.SetParent( nullptr );
-        }
+        StartListeningToSameModifyAs(rFormat);
+        m_aSet.SetParent( GetRegisteredIn()
+            ? &rFormat.m_aSet
+            : nullptr);
     }
+
     m_bAutoFormat = rFormat.m_bAutoFormat;
     m_bHidden = rFormat.m_bHidden;
     m_bAutoUpdateFormat = rFormat.m_bAutoUpdateFormat;

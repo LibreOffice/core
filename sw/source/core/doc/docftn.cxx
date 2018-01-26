@@ -39,26 +39,10 @@
 
 SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 {
-    if( rInfo.GetFootnoteTextColl() )
-        rInfo.GetFootnoteTextColl()->Add(this);
-    else
-        EndListeningAll();
-
-    if ( rInfo.aPageDescDep.GetRegisteredIn() )
-        const_cast<SwModify*>(rInfo.aPageDescDep.GetRegisteredIn())->Add( &aPageDescDep );
-    else
-        aPageDescDep.EndListeningAll();
-
-    if ( rInfo.aCharFormatDep.GetRegisteredIn() )
-        const_cast<SwModify*>(rInfo.aCharFormatDep.GetRegisteredIn())->Add( &aCharFormatDep );
-    else
-        aCharFormatDep.EndListeningAll();
-
-    if ( rInfo.aAnchorCharFormatDep.GetRegisteredIn() )
-        const_cast<SwModify*>(rInfo.aAnchorCharFormatDep.GetRegisteredIn())->Add(
-                                                    &aAnchorCharFormatDep );
-    else
-        aAnchorCharFormatDep.EndListeningAll();
+    StartListeningToSameModifyAs(rInfo);
+    aPageDescDep.StartListeningToSameModifyAs(rInfo.aPageDescDep);
+    aCharFormatDep.StartListeningToSameModifyAs(rInfo.aCharFormatDep);
+    aAnchorCharFormatDep.StartListeningToSameModifyAs(rInfo.aAnchorCharFormatDep);
 
     aFormat = rInfo.aFormat;
     nFootnoteOffset = rInfo.nFootnoteOffset;
@@ -95,15 +79,9 @@ SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
     aFormat( rInfo.aFormat ),
     nFootnoteOffset( rInfo.nFootnoteOffset )
 {
-    if( rInfo.aPageDescDep.GetRegisteredIn() )
-        const_cast<SwModify*>(rInfo.aPageDescDep.GetRegisteredIn())->Add( &aPageDescDep );
-
-    if( rInfo.aCharFormatDep.GetRegisteredIn() )
-        const_cast<SwModify*>(rInfo.aCharFormatDep.GetRegisteredIn())->Add( &aCharFormatDep );
-
-    if( rInfo.aAnchorCharFormatDep.GetRegisteredIn() )
-        const_cast<SwModify*>(rInfo.aAnchorCharFormatDep.GetRegisteredIn())->Add(
-                &aAnchorCharFormatDep );
+    aPageDescDep.StartListeningToSameModifyAs(rInfo.aPageDescDep);
+    aCharFormatDep.StartListeningToSameModifyAs(rInfo.aCharFormatDep);
+    aAnchorCharFormatDep.StartListeningToSameModifyAs(rInfo.aAnchorCharFormatDep);
 }
 
 SwEndNoteInfo::SwEndNoteInfo() :
