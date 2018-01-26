@@ -356,14 +356,14 @@ private:
     long                            mnOutOffX;
     /// Output offset for device output in pixel (pseudo window offset within window system's frames)
     long                            mnOutOffY;
-    long                            mnOutWidth;
-    long                            mnOutHeight;
+    sal_Int32                       mnOutWidth;
+    sal_Int32                       mnOutHeight;
     sal_Int32                       mnDPIX;
     sal_Int32                       mnDPIY;
     sal_Int32                       mnDPIScalePercentage; ///< For Hi-DPI displays, we want to draw elements for a percentage larger
     /// font specific text alignment offsets in pixel units
-    mutable long                    mnTextOffX;
-    mutable long                    mnTextOffY;
+    mutable sal_Int32               mnTextOffX;
+    mutable sal_Int32               mnTextOffY;
     mutable long                    mnEmphasisAscent;
     mutable long                    mnEmphasisDescent;
     DrawModeFlags                   mnDrawMode;
@@ -1179,13 +1179,13 @@ private:
     SAL_DLLPRIVATE void         ImplDrawSpecialText( SalLayout& );
     SAL_DLLPRIVATE void         ImplDrawTextRect( long nBaseX, long nBaseY, long nX, long nY, long nWidth, long nHeight );
 
-    SAL_DLLPRIVATE static void  ImplDrawWavePixel( long nOriginX, long nOriginY, long nCurX, long nCurY, short nOrientation, SalGraphics* pGraphics, OutputDevice const * pOutDev,
+    SAL_DLLPRIVATE static void  ImplDrawWavePixel( long nOriginX, long nOriginY, sal_Int32 nCurX, sal_Int32 nCurY, short nOrientation, SalGraphics* pGraphics, OutputDevice const * pOutDev,
                                                    bool bDrawPixAsRect, long nPixWidth, long nPixHeight );
     SAL_DLLPRIVATE void         ImplDrawWaveLine( long nBaseX, long nBaseY, long nStartX, long nStartY, long nWidth, long nHeight, long nLineWidth, short nOrientation, const Color& rColor );
     SAL_DLLPRIVATE void         ImplDrawWaveTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
     SAL_DLLPRIVATE void         ImplDrawStraightTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
     SAL_DLLPRIVATE void         ImplDrawStrikeoutLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
-    SAL_DLLPRIVATE void         ImplDrawStrikeoutChar( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
+    SAL_DLLPRIVATE void         ImplDrawStrikeoutChar( long nBaseX, long nBaseY, sal_Int32 nX, sal_Int32 nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
     SAL_DLLPRIVATE void         ImplDrawMnemonicLine( long nX, long nY, long nWidth );
 
     SAL_DLLPRIVATE static bool  ImplIsUnderlineAbove( const vcl::Font& );

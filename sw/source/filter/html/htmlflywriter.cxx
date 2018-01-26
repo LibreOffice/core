@@ -635,13 +635,13 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         if( aPixelSpc.Width() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_hspace).
-                append("=\"").append(static_cast<sal_Int32>(aPixelSpc.Width())).append("\"");
+                append("=\"").append(aPixelSpc.Width()).append("\"");
         }
 
         if( aPixelSpc.Height() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_vspace).
-                append("=\"").append(static_cast<sal_Int32>(aPixelSpc.Height())).append("\"");
+                append("=\"").append(aPixelSpc.Height()).append("\"");
         }
     }
 
@@ -714,7 +714,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
             if( nPrcWidth )
                 sOut.append(static_cast<sal_Int32>(nPrcWidth)).append('%');
             else
-                sOut.append(static_cast<sal_Int32>(aPixelSz.Width()));
+                sOut.append(aPixelSz.Width());
             sOut.append("\"");
         }
 
@@ -726,7 +726,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
             if( nPrcHeight )
                 sOut.append(static_cast<sal_Int32>(nPrcHeight)).append('%');
             else
-                sOut.append(static_cast<sal_Int32>(aPixelSz.Height()));
+                sOut.append(aPixelSz.Height());
             sOut.append("\"");
         }
     }
@@ -901,12 +901,12 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
 
         if (aPixelSpc.Width())
         {
-            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_hspace, static_cast<sal_Int32>(aPixelSpc.Width()));
+            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_hspace, aPixelSpc.Width());
         }
 
         if (aPixelSpc.Height())
         {
-            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_vspace, static_cast<sal_Int32>(aPixelSpc.Height()));
+            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_vspace, aPixelSpc.Height());
         }
     }
 
@@ -978,7 +978,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
             if (nPrcWidth)
                 sWidth = OString::number(static_cast<sal_Int32>(nPrcWidth)) + "%";
             else
-                sWidth = OString::number(static_cast<sal_Int32>(aPixelSz.Width()));
+                sWidth = OString::number(aPixelSz.Width());
             aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_width, sWidth);
         }
 
@@ -989,7 +989,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
             if (nPrcHeight)
                 sHeight = OString::number(static_cast<sal_Int32>(nPrcHeight)) + "%";
             else
-                sHeight = OString::number(static_cast<sal_Int32>(aPixelSz.Height()));
+                sHeight = OString::number(aPixelSz.Height());
             aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_height, sHeight);
         }
     }

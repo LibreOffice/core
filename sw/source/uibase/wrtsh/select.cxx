@@ -325,7 +325,7 @@ long SwWrtShell::SetCursorKillSel(const Point *pPt, bool bTextOnly )
 void SwWrtShell::UnSelectFrame()
 {
     // Remove Frame selection with guaranteed invalid position
-    Point aPt(LONG_MIN, LONG_MIN);
+    Point aPt(SAL_MIN_INT32, SAL_MIN_INT32);
     SelectObj(aPt);
     SwTransferable::ClearSelection( *this );
 }

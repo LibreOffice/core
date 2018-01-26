@@ -2244,7 +2244,7 @@ Size ValueSet::GetLargestItemSize()
         {
             aSize.Height() += 3 * NAME_LINE_HEIGHT +
                 maVirDev->GetTextHeight();
-            aSize.Width() = std::max(aSize.Width(),
+            aSize.Width() = std::max<sal_Int32>(aSize.Width(),
                                      maVirDev->GetTextWidth(pItem->maText) + NAME_OFFSET);
         }
 

@@ -348,9 +348,9 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                         aTmp1 = GetOut()->LogicToPixel( aTmp1 );
                         tools::Rectangle aTmp2( GetOut()->PixelToLogic( aTmp1 ) );
                         if ( aTmp2.Left() > aRect.Left() )
-                            aTmp1.Left() = std::max( 0L, aTmp1.Left() - 1 );
+                            aTmp1.Left() = std::max( 0, aTmp1.Left() - 1 );
                         if ( aTmp2.Top() > aRect.Top() )
-                            aTmp1.Top() = std::max( 0L, aTmp1.Top() - 1 );
+                            aTmp1.Top() = std::max( 0, aTmp1.Top() - 1 );
                         aTmp1.Right() += 1;
                         aTmp1.Bottom() += 1;
                         aTmp1 = GetOut()->PixelToLogic( aTmp1 );
@@ -1271,8 +1271,8 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle
             aRect.Height( aSize.Height() );
             if ( pRect )
             {
-                aRect.Pos().X() = std::max(aRect.Left(),pRect->Left()-aPixSz.Width());
-                aRect.Right( std::min(aRect.Right()+2*aPixSz.Width(), pRect->Right()+aPixSz.Width()));
+                aRect.Pos().X() = std::max<sal_Int32>(aRect.Left(),pRect->Left()-aPixSz.Width());
+                aRect.Right( std::min<sal_Int32>(aRect.Right()+2*aPixSz.Width(), pRect->Right()+aPixSz.Width()));
             }
             else
                 aRect.SSize().Width() += 2*aPixSz.Width();
