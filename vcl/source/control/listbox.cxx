@@ -1231,7 +1231,7 @@ Size ListBox::CalcSubEditSize() const
         if (m_nMaxWidthChars != -1)
         {
             long nMaxWidth = m_nMaxWidthChars * approximate_char_width();
-            aSz.Width() = std::min(aSz.Width(), nMaxWidth);
+            aSz.Width() = std::min<sal_Int32>(aSz.Width(), nMaxWidth);
         }
 
         // Do not create ultrathin ListBoxes, it doesn't look good

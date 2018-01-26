@@ -150,7 +150,7 @@ void SwTableFUNC::SetColWidth(sal_uInt16 nNum, SwTwips nNewWidth )
             aCols[ GetRightSeparator(nNum-1) ] -= nDiff;
     }
     else
-        aCols.SetRight( std::min( nNewWidth, aCols.GetRightMax()) );
+        aCols.SetRight( std::min<sal_Int32>( nNewWidth, aCols.GetRightMax()) );
 
     pSh->StartAllAction();
     pSh->SetTabCols( aCols, bCurrentOnly );

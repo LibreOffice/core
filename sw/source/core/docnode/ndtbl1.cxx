@@ -433,7 +433,7 @@ bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly )
         {
             if( !bTstOnly )
             {
-                long nHeight = 0;
+                sal_Int32 nHeight = 0;
 
                 for ( auto pLn : aRowArr )
                 {
@@ -1293,7 +1293,7 @@ static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrame *pCell )
     // To compensate for the accuracy of calculation later on in SwTable::SetTabCols
     // we keep adding up a little.
     nRet += COLFUZZY;
-    return static_cast<sal_uInt16>(std::max( long(MINLAY), nRet ));
+    return static_cast<sal_uInt16>(std::max<sal_Int32>( MINLAY, nRet ));
 }
 
 /* The Line is within the Selection but not outlined by the TabCols.
