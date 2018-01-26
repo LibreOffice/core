@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_3c87c262",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2031,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-26T20:42:29Z",
+      "side": 1,
+      "message": "Declaration of pObjData should be moved below where it is used.",
+      "revId": "c1550ef4a34fd80e6ac966eeb756ddb5b01eacf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
