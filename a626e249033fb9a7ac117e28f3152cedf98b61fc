@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_016a9580",
+        "filename": "sc/source/core/data/documen3.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-26T13:10:53Z",
+      "side": 1,
+      "message": "See follow-up commit https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d707e0f4e6b6e36432c0f04f22719428a7e1a50ee",
+      "revId": "a626e249033fb9a7ac117e28f3152cedf98b61fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
