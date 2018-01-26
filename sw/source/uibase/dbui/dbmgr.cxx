@@ -801,7 +801,7 @@ SwDBManager::SwDBManager(SwDoc* pDoc)
 {
 }
 
-SwDBManager::~SwDBManager() COVERITY_NOEXCEPT_FALSE
+SwDBManager::~SwDBManager()
 {
     RevokeLastRegistrations();
 
