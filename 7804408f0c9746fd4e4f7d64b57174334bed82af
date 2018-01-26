@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_9c4b4e2b",
+        "filename": "editeng/source/misc/svxacorr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-26T22:07:13Z",
+      "side": 1,
+      "message": "yes, rTxt may be dead here as it aliases SwTextNode::m_Text\n\nSo why is DoAutoCorrect called with a SwTextNode::m_Text reference? Turns out we tried copying the string (by accident), but that didn\u0027t work, see commit e2b9946022c2a286ebac625ccb45f5ddddd5a5d6.\n\nThe spaghetti code in this function needs to have a BIG WARNING COMMENT to avoid accessing rTxt after ChgAutoCorrWord has returned \"true\" once, because it\u0027s not at all obvious.",
+      "revId": "7804408f0c9746fd4e4f7d64b57174334bed82af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_1c375eb1",
+        "filename": "sw/source/core/edit/acorrect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-26T22:07:13Z",
+      "side": 1,
+      "message": "yes, definitely necessary\n\nalthough, look at the assignment in line 389 - is that going to be the same position? move this into the branch above?",
+      "revId": "7804408f0c9746fd4e4f7d64b57174334bed82af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
