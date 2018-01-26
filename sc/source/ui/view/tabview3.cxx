@@ -1369,21 +1369,21 @@ void ScTabView::MoveCursorEnter( bool bShift )          // bShift -> up/down
             break;
     }
 
+    SCCOL nCurX;
+    SCROW nCurY;
+    aViewData.GetMoveCursor( nCurX,nCurY );
+    SCCOL nNewX = nCurX;
+    SCROW nNewY = nCurY;
+    SCTAB nTab  = aViewData.GetTabNo();
+
     ScMarkData& rMark = aViewData.GetMarkData();
+    ScDocument* pDoc  = aViewData.GetDocument();
+
     if (rMark.IsMarked() || rMark.IsMultiMarked())
     {
-        SCCOL nCurX;
-        SCROW nCurY;
-        aViewData.GetMoveCursor( nCurX,nCurY );
-        SCCOL nNewX = nCurX;
-        SCROW nNewY = nCurY;
-        SCTAB nTab = aViewData.GetTabNo();
+        pDoc->GetNextPos( nNewX, nNewY, nTab, nMoveX, nMoveY, true, false, rMark );
 
-        ScDocument* pDoc = aViewData.GetDocument();
-        pDoc->GetNextPos( nNewX,nNewY, nTab, nMoveX,nMoveY, true, false, rMark );
-
-        MoveCursorRel( nNewX-nCurX, nNewY-nCurY,
-                            SC_FOLLOW_LINE, false, true );
+        MoveCursorRel( nNewX - nCurX, nNewY - nCurY, SC_FOLLOW_LINE, false, true );
 
         //  update input line even if cursor was not moved
         if ( nNewX == nCurX && nNewY == nCurY )
@@ -1393,18 +1393,17 @@ void ScTabView::MoveCursorEnter( bool bShift )          // bShift -> up/down
     {
         if ( nMoveY != 0 && !nMoveX )
         {
+            pDoc->GetNextPos( nNewX, nNewY, nTab, nMoveX, nMoveY, true, false, rMark );
+
             // after Tab and Enter back to the starting column again
             SCCOL nTabCol = aViewData.GetTabStartCol();
             if (nTabCol != SC_TABSTART_NONE)
             {
-                SCCOL nCurX;
-                SCROW nCurY;
-                aViewData.GetMoveCursor( nCurX,nCurY );
-                nMoveX = nTabCol-nCurX;
+                nNewX = nTabCol;
             }
         }
 
-        MoveCursorRel( nMoveX,nMoveY, SC_FOLLOW_LINE, false );
+        MoveCursorRel( nNewX - nCurX, nNewY - nCurY, SC_FOLLOW_LINE, false, true );
     }
 }
 
