@@ -837,7 +837,6 @@ void SwUndoSaveContent::MovePtForward( SwPaM& rPam, bool bMvBkwrd )
 //                  - Footnotes
 //                  - Flys
 //                  - Bookmarks
-//                  - Directories
 
 // #i81002# - extending method
 // delete certain (not all) cross-reference bookmarks at text node of <rMark>
@@ -1210,7 +1209,7 @@ void SwUndoSaveSection::SaveSection(
 {
     SwPaM aPam( rRange.aStart, rRange.aEnd );
 
-    // delete all footnotes, fly frames, bookmarks and indexes
+    // delete all footnotes, fly frames, bookmarks
     DelContentIndex( *aPam.GetMark(), *aPam.GetPoint() );
     {
         // move certain indexes out of deleted range
