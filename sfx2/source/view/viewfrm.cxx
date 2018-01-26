@@ -827,7 +827,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
                 else
                 {
                     // If any ChildFrame is reloadable, the slot is enabled,
-                    // so you can perfom CTRL-Reload
+                    // so you can perform CTRL-Reload
                     rSet.Put( SfxBoolItem( nWhich, false));
                 }
 
@@ -2062,7 +2062,7 @@ void SfxViewFrame::ExecView_Impl
                 return;
             }
 
-            // Get ViewData of FrameSets recursivly.
+            // Get ViewData of FrameSets recursively.
             GetFrame().GetViewData_Impl();
             SfxMedium* pMed = GetObjectShell()->GetMedium();
 
