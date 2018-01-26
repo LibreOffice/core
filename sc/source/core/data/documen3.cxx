@@ -212,7 +212,6 @@ bool ScDocument::IsAddressInRangeName( RangeNameScope eScope, ScAddress& rAddres
 {
     ScRangeName* pRangeNames;
     ScRange aNameRange;
-    bool bRet = false;
 
     if (eScope == RangeNameScope::GLOBAL)
         pRangeNames= GetRangeName();
@@ -223,15 +222,14 @@ bool ScDocument::IsAddressInRangeName( RangeNameScope eScope, ScAddress& rAddres
 
     for (ScRangeName::iterator itr = itrBegin; itr != itrEnd; ++itr)
     {
-        itr->second->IsValidReference(aNameRange);
-        bRet = aNameRange.In(rAddress);
-        if (!bRet)
-            continue;
-        else
-            break;
+        if (itr->second->IsValidReference(aNameRange))
+        {
+            if (aNameRange.In(rAddress))
+                return true;
+        }
     }
 
-    return bRet;
+    return false;
 }
 
 bool ScDocument::InsertNewRangeName( const OUString& rName, const ScAddress& rPos, const OUString& rExpr )
