@@ -2046,7 +2046,7 @@ void SwTiledRenderingTest::testTdf115088()
     Scheduler::ProcessEventsToIdle();
     comphelper::dispatchCommand(".uno:Copy", uno::Sequence<beans::PropertyValue>());
 
-    // Move cursor to the begining of the first line and paste
+    // Move cursor to the beginning of the first line and paste
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_HOME | KEY_MOD1);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_HOME | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
