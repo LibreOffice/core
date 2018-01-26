@@ -87,9 +87,9 @@ namespace connectivity
         ::osl::MutexGuard aGuard(m_aMutex);
 
 
-        for (TWeakPairVector::iterator i = m_aConnections.begin(); m_aConnections.end() != i; ++i)
+        for (auto const& connection : m_aConnections)
         {
-            Reference<XInterface > xTemp = i->first.get();
+            Reference<XInterface > xTemp = connection.first.get();
             ::comphelper::disposeComponent(xTemp);
         }
         m_aConnections.clear();

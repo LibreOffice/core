@@ -437,11 +437,9 @@ void OPreparedStatement::describeParameter()
         if(rTabs.size())
         {
             OSQLTable xTable = rTabs.begin()->second;
-            std::vector< OSQLParseNode*>::const_iterator aIter =
-aParseNodes.begin();
-            for (;aIter != aParseNodes.end();++aIter )
+            for (auto const& parseNode : aParseNodes)
             {
-                describeColumn(*aIter,(*aIter)->getParent()->getChild(0),xTable);
+                describeColumn(parseNode,parseNode->getParent()->getChild(0),xTable);
             }
         }
     }

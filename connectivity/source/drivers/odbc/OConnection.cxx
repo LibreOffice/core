@@ -472,8 +472,8 @@ void OConnection::disposing()
 
     OConnection_BASE::disposing();
 
-    for (auto aConIter = m_aConnections.begin(); aConIter != m_aConnections.end(); ++aConIter )
-        aConIter->second->dispose();
+    for (auto const& connection : m_aConnections)
+        connection.second->dispose();
 
     m_aConnections.clear();
 

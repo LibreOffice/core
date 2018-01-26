@@ -44,9 +44,9 @@ void ODBCDriver::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
 
 
-    for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
+    for (auto const& connection : m_xConnections)
     {
-        Reference< XComponent > xComp(i->get(), UNO_QUERY);
+        Reference< XComponent > xComp(connection.get(), UNO_QUERY);
         if (xComp.is())
             xComp->dispose();
     }

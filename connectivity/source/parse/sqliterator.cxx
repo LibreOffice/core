@@ -722,12 +722,9 @@ namespace
             // look up the column in the select column, to find an possible alias
             if ( _pSelectColumns )
             {
-                for (   OSQLColumns::Vector::const_iterator lookupColumn = _pSelectColumns->get().begin();
-                        lookupColumn != _pSelectColumns->get().end();
-                        ++lookupColumn
-                    )
+                for (auto const& lookupColumn : _pSelectColumns->get())
                 {
-                    Reference< XPropertySet > xColumn( *lookupColumn );
+                    Reference< XPropertySet > xColumn( lookupColumn );
                     try
                     {
                         OUString sName, sTableName;
@@ -804,20 +801,20 @@ bool OSQLParseTreeIterator::impl_getColumnTableRange(const OSQLParseNode* pNode,
         if (aTableRange.isEmpty())   // None found
         {
             // Look for the columns in the tables
-            for (OSQLTables::const_iterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end(); ++aIter)
+            for (auto const& table : *m_pImpl->m_pTables)
             {
-                if (aIter->second.is())
+                if (table.second.is())
                 {
                     try
                     {
-                        Reference< XNameAccess > xColumns = aIter->second->getColumns();
+                        Reference< XNameAccess > xColumns = table.second->getColumns();
                         if(xColumns->hasByName(aColName))
                         {
                             Reference< XPropertySet > xColumn;
                             if (xColumns->getByName(aColName) >>= xColumn)
                             {
                                 OSL_ENSURE(xColumn.is(),"Column isn't a propertyset!");
-                                aTableRange = aIter->first;
+                                aTableRange = table.first;
                                 break;
                             }
                         }
@@ -1644,8 +1641,8 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> co
     if(rColumnName.toChar() == '*' && rTableRange.isEmpty())
     {   // SELECT * ...
         OSL_ENSURE(_rColumns == m_aSelectColumns,"Invalid columns used here!");
-        for(OSQLTables::const_iterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end();++aIter)
-            appendColumns(_rColumns,aIter->first,aIter->second);
+        for (auto const& table : *m_pImpl->m_pTables)
+            appendColumns(_rColumns,table.first,table.second);
     }
     else if( rColumnName.toChar() == '*' && !rTableRange.isEmpty() )
     {   // SELECT <table>.*
@@ -1662,12 +1659,12 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> co
         {
             Reference< XPropertySet> xNewColumn;
 
-            for ( OSQLTables::const_iterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end(); ++aIter )
+            for (auto const& table : *m_pImpl->m_pTables)
             {
-                if ( !aIter->second.is() )
+                if ( !table.second.is() )
                     continue;
 
-                Reference<XNameAccess> xColumns = aIter->second->getColumns();
+                Reference<XNameAccess> xColumns = table.second->getColumns();
                 Reference< XPropertySet > xColumn;
                 if  (   !xColumns->hasByName( rColumnName )
                     ||  !( xColumns->getByName( rColumnName ) >>= xColumn )
@@ -1678,7 +1675,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> co
 
                 OParseColumn* pColumn = new OParseColumn(xColumn,isCaseSensitive());
                 xNewColumn = pColumn;
-                pColumn->setTableName(aIter->first);
+                pColumn->setTableName(table.first);
                 pColumn->setName(aNewColName);
                 pColumn->setRealName(rColumnName);
 
@@ -1989,11 +1986,9 @@ const OSQLParseNode* OSQLParseTreeIterator::getSimpleHavingTree() const
 
 Reference< XPropertySet > OSQLParseTreeIterator::findSelectColumn( const OUString & rColumnName )
 {
-    for ( OSQLColumns::Vector::const_iterator lookupColumn = m_aSelectColumns->get().begin();
-          lookupColumn != m_aSelectColumns->get().end();
-          ++lookupColumn )
+    for (auto const& lookupColumn : m_aSelectColumns->get())
     {
-        Reference< XPropertySet > xColumn( *lookupColumn );
+        Reference< XPropertySet > xColumn( lookupColumn );
         try
         {
             OUString sName;
@@ -2034,16 +2029,15 @@ Reference< XPropertySet > OSQLParseTreeIterator::findColumn(const OSQLTables& _r
     }
     if ( !xColumn.is() )
     {
-        const OSQLTables::const_iterator aEnd = _rTables.end();
-        for(OSQLTables::const_iterator aIter = _rTables.begin(); aIter != aEnd; ++aIter)
+        for (auto const& table : _rTables)
         {
-            if ( aIter->second.is() )
+            if ( table.second.is() )
             {
-                Reference<XNameAccess> xColumns = aIter->second->getColumns();
+                Reference<XNameAccess> xColumns = table.second->getColumns();
                 if( xColumns.is() && xColumns->hasByName(rColumnName) && (xColumns->getByName(rColumnName) >>= xColumn) )
                 {
                     OSL_ENSURE(xColumn.is(),"Column isn't a propertyset!");
-                    // Cannot take "rTableRange = aIter->first" because that is the fully composed name
+                    // Cannot take "rTableRange = table.first" because that is the fully composed name
                     // that is, catalogName.schemaName.tableName
                     rTableRange = getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TABLENAME)));
                     break; // This column must only exits once
