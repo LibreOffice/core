@@ -731,7 +731,7 @@ void ScTabView::GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eM
     rMode = eMode;
 }
 
-void ScTabView::SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SCROW nMovX)
+void ScTabView::SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SCCOL nMovX)
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
