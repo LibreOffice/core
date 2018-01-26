@@ -178,7 +178,7 @@ public:
 class MSFILTER_DLLPUBLIC MSCodec97
 {
 public:
-    MSCodec97(size_t nHashLen);
+    MSCodec97(size_t nHashLen, const OUString& rEncKeyName);
     virtual ~MSCodec97();
 
     /** Initializes the algorithm with the encryption data.
@@ -195,7 +195,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    css::uno::Sequence< css::beans::NamedValue > GetEncryptionData();
+    virtual css::uno::Sequence<css::beans::NamedValue> GetEncryptionData();
 
     /** Initializes the algorithm with the specified password and document ID.
 
@@ -317,6 +317,7 @@ private:
     MSCodec97&          operator=(const MSCodec97&) = delete;
 
 protected:
+    OUString            m_sEncKeyName;
     size_t              m_nHashLen;
     rtlCipher           m_hCipher;
     std::vector<sal_uInt8> m_aDocId;
@@ -396,6 +397,8 @@ private:
 
 class MSFILTER_DLLPUBLIC MSCodec_CryptoAPI :  public MSCodec97
 {
+private:
+    css::uno::Sequence<sal_Int8> m_aStd97Key;
 public:
     MSCodec_CryptoAPI();
 
@@ -403,6 +406,7 @@ public:
                          const sal_uInt8 pDocId[16]) override;
     virtual bool InitCipher(sal_uInt32 nCounter) override;
     virtual void GetDigestFromSalt(const sal_uInt8* pSaltData, sal_uInt8* pDigest) override;
+    virtual css::uno::Sequence<css::beans::NamedValue> GetEncryptionData() override;
 };
 
 const sal_uInt32 ENCRYPTINFO_CRYPTOAPI      = 0x00000004;
