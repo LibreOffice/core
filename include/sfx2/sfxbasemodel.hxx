@@ -78,6 +78,7 @@
 #include <com/sun/star/script/XStarBasicAccess.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <boost/shared_ptr.hpp>
 
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -1465,7 +1466,7 @@ private:
 
 private:
 
-    IMPL_SfxBaseModel_DataContainer*    m_pData ;
+    boost::shared_ptr<IMPL_SfxBaseModel_DataContainer> m_pData;
     // cannot be held in m_pData, since it needs to be accessed in non-threadsafe context
     const bool                          m_bSupportEmbeddedScripts;
     const bool                          m_bSupportDocRecovery;

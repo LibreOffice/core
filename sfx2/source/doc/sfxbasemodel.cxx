@@ -827,9 +827,7 @@ void SAL_CALL SfxBaseModel::dispose() throw(RuntimeException)
     // m_pData member must be set to zero before 0delete is called to
     // force disposed exception whenever someone tries to access our
     // instance while in the dtor.
-    IMPL_SfxBaseModel_DataContainer* pData = m_pData;
-    m_pData = 0;
-    delete pData;
+    m_pData.reset();
 }
 
 //________________________________________________________________________________________________________
@@ -1564,7 +1562,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
     if ( m_pData->m_pObjectShell.Is() )
     {
         m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "storeSelf"  ) );
-        SfxSaveGuard aSaveGuard(this, m_pData, sal_False);
+        SfxSaveGuard aSaveGuard(this, m_pData.get(), sal_False);
 
         sal_Bool bCheckIn = sal_False;
         for ( sal_Int32 nInd = 0; nInd < aSeqArgs.getLength(); nInd++ )
@@ -1693,7 +1691,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUString&                   rURL
     if ( m_pData->m_pObjectShell.Is() )
     {
         m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "storeAsURL"  ) );
-        SfxSaveGuard aSaveGuard(this, m_pData, sal_False);
+        SfxSaveGuard aSaveGuard(this, m_pData.get(), sal_False);
 
         impl_store( rURL, rArgs, sal_False );
 
@@ -1734,7 +1732,7 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUString&                   rURL
     if ( m_pData->m_pObjectShell.Is() )
     {
         m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "storeToURL"  ) );
-        SfxSaveGuard aSaveGuard(this, m_pData, sal_False);
+        SfxSaveGuard aSaveGuard(this, m_pData.get(), sal_False);
         impl_store( rURL, rArgs, sal_True );
     }
 }
@@ -1750,7 +1748,7 @@ void SAL_CALL SfxBaseModel::storeToRecoveryFile( const OUString& i_TargetLocatio
     SfxModelGuard aGuard( *this );
 
     // delegate
-    SfxSaveGuard aSaveGuard( this, m_pData, sal_False );
+    SfxSaveGuard aSaveGuard( this, m_pData.get(), sal_False );
     impl_store( i_TargetLocation, i_MediaDescriptor, sal_True );
 
     // no need for subsequent calls to storeToRecoveryFile, unless we're modified, again
@@ -3172,6 +3170,9 @@ void SfxBaseModel::postEvent_Impl( const OUString& aName, const Reference< frame
     if ( impl_isDisposed() )
         return;
 
+    // keep m_pData alive, if notified target would close the document
+    boost::shared_ptr<IMPL_SfxBaseModel_DataContainer> pData(m_pData);
+
     DBG_ASSERT( !aName.isEmpty(), "Empty event name!" );
     if (aName.isEmpty())
         return;
@@ -3885,7 +3886,7 @@ bool SfxBaseModel::impl_getPrintHelper()
     aValues[0] <<= Reference < frame::XModel > (static_cast< frame::XModel* >(this), UNO_QUERY );
     xInit->initialize( aValues );
     Reference < view::XPrintJobBroadcaster > xBrd( m_pData->m_xPrintable, UNO_QUERY );
-    xBrd->addPrintJobListener( new SfxPrintHelperListener_Impl( m_pData ) );
+    xBrd->addPrintJobListener( new SfxPrintHelperListener_Impl( m_pData.get() ) );
     return true;
 }
 
