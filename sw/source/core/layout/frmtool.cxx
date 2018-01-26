@@ -3155,7 +3155,7 @@ static SwTwips lcl_CalcCellRstHeight( SwLayoutFrame *pCell )
 
 SwTwips CalcRowRstHeight( SwLayoutFrame *pRow )
 {
-    SwTwips nRstHeight = LONG_MAX;
+    SwTwips nRstHeight = SAL_MAX_INT32;
     SwFrame *pLow = pRow->Lower();
     while (pLow && pLow->IsLayoutFrame())
     {

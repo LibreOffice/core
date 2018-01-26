@@ -367,10 +367,10 @@ void SwFrame::dumpInfosAsXml( xmlTextWriterPtr writer ) const
 {
     // output the Frame
     xmlTextWriterStartElement( writer, BAD_CAST( "bounds" ) );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "left" ), "%ld", getFrameArea().Left() );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "top" ), "%ld", getFrameArea().Top() );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "width" ), "%ld", getFrameArea().Width() );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "height" ), "%ld", getFrameArea().Height() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "left" ), "%" SAL_PRIdINT32, getFrameArea().Left() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "top" ), "%" SAL_PRIdINT32, getFrameArea().Top() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "width" ), "%" SAL_PRIdINT32, getFrameArea().Width() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "height" ), "%" SAL_PRIdINT32, getFrameArea().Height() );
     xmlTextWriterWriteAttribute(writer, BAD_CAST("mbFixSize"), BAD_CAST(OString::boolean(HasFixSize()).getStr()));
     xmlTextWriterWriteAttribute(writer, BAD_CAST("mbValidPos"), BAD_CAST(OString::boolean(isFrameAreaPositionValid()).getStr()));
     xmlTextWriterWriteAttribute(writer, BAD_CAST("mbValidSize"), BAD_CAST(OString::boolean(isFrameAreaSizeValid()).getStr()));
@@ -379,10 +379,10 @@ void SwFrame::dumpInfosAsXml( xmlTextWriterPtr writer ) const
 
     // output the Prt
     xmlTextWriterStartElement( writer, BAD_CAST( "prtBounds" ) );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "left" ), "%ld", getFramePrintArea().Left() );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "top" ), "%ld", getFramePrintArea().Top() );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "width" ), "%ld", getFramePrintArea().Width() );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "height" ), "%ld", getFramePrintArea().Height() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "left" ), "%" SAL_PRIdINT32, getFramePrintArea().Left() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "top" ), "%" SAL_PRIdINT32, getFramePrintArea().Top() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "width" ), "%" SAL_PRIdINT32, getFramePrintArea().Width() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "height" ), "%" SAL_PRIdINT32, getFramePrintArea().Height() );
     xmlTextWriterEndElement( writer );
 }
 
@@ -446,10 +446,10 @@ void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer ) const
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
 
     xmlTextWriterStartElement( writer, BAD_CAST( "bounds" ) );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "left" ), "%ld", GetObjBoundRect().Left() );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "top" ), "%ld", GetObjBoundRect().Top() );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "width" ), "%ld", GetObjBoundRect().Width() );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "height" ), "%ld", GetObjBoundRect().Height() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "left" ), "%" SAL_PRIdINT32, GetObjBoundRect().Left() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "top" ), "%" SAL_PRIdINT32, GetObjBoundRect().Top() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "width" ), "%" SAL_PRIdINT32, GetObjBoundRect().Width() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "height" ), "%" SAL_PRIdINT32, GetObjBoundRect().Height() );
     xmlTextWriterEndElement( writer );
 
     if (const SdrObject* pObject = GetDrawObj())

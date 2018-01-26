@@ -1388,7 +1388,7 @@ ImplToolItem* ToolBox::ImplGetItem( sal_uInt16 nItemId ) const
     return nullptr;
 }
 
-static void ImplAddButtonBorder( long &rWidth, long& rHeight, bool bNativeButtons )
+static void ImplAddButtonBorder( sal_Int32 &rWidth, sal_Int32& rHeight, bool bNativeButtons )
 {
     rWidth += SMALLBUTTON_HSIZE;
     rHeight += SMALLBUTTON_VSIZE;
@@ -1412,8 +1412,8 @@ bool ToolBox::ImplCalcItem()
 
     long            nDefWidth;
     long            nDefHeight;
-    long            nMaxWidth = 0;
-    long            nMaxHeight = 0;
+    sal_Int32       nMaxWidth = 0;
+    sal_Int32       nMaxHeight = 0;
     long            nMinWidth   = 6;
     long            nMinHeight  = 6;
     long            nDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
@@ -1630,8 +1630,8 @@ bool ToolBox::ImplCalcItem()
 
                 if( item.meType == ToolBoxItemType::BUTTON )
                 {
-                    long nMinW = std::max(nMinWidth, item.maMinimalItemSize.Width());
-                    long nMinH = std::max(nMinHeight, item.maMinimalItemSize.Height());
+                    long nMinW = std::max<sal_Int32>(nMinWidth, item.maMinimalItemSize.Width());
+                    long nMinH = std::max<sal_Int32>(nMinHeight, item.maMinimalItemSize.Height());
 
                     long nGrowContentWidth = 0;
                     long nGrowContentHeight = 0;
@@ -1676,8 +1676,8 @@ bool ToolBox::ImplCalcItem()
         // as this is used for alignment of multiple toolbars
         // it is only required for docked toolbars
 
-        long nFixedWidth = nDefWidth+nDropDownArrowWidth;
-        long nFixedHeight = nDefHeight;
+        sal_Int32 nFixedWidth = nDefWidth+nDropDownArrowWidth;
+        sal_Int32 nFixedHeight = nDefHeight;
         ImplAddButtonBorder( nFixedWidth, nFixedHeight, mpData->mbNativeButtons );
 
         if( mbHorz )
