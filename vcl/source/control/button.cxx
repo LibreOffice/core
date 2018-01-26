@@ -1639,7 +1639,7 @@ Size PushButton::CalcMinimumSize() const
         Size textSize = GetTextRect( tools::Rectangle( Point(), Size( 0x7fffffff, 0x7fffffff ) ),
                                      PushButton::GetText(), ImplGetTextStyle( DrawFlags::NONE ) ).GetSize();
         aSize.AdjustWidth(textSize.Width() );
-        aSize.setHeight( std::max( aSize.Height(), long( textSize.Height() * 1.15 ) ) );
+        aSize.setHeight( std::max<sal_Int32>( aSize.Height(), sal_Int32( textSize.Height() * 1.15 ) ) );
     }
 
     // cf. ImplDrawPushButton ...

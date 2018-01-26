@@ -49,13 +49,13 @@ bool           SwRootFrame::s_isNoVirDev = false;
 
 SwCache *SwFrame::mpCache = nullptr;
 
-long FirstMinusSecond( long nFirst, long nSecond )
+sal_Int32 FirstMinusSecond( sal_Int32 nFirst, sal_Int32 nSecond )
     { return nFirst - nSecond; }
-long SecondMinusFirst( long nFirst, long nSecond )
+sal_Int32 SecondMinusFirst( sal_Int32 nFirst, sal_Int32 nSecond )
     { return nSecond - nFirst; }
-long SwIncrement( long nA, long nAdd )
+sal_Int32 SwIncrement( sal_Int32 nA, sal_Int32 nAdd )
     { return nA + nAdd; }
-long SwDecrement( long nA, long nSub )
+sal_Int32 SwDecrement( sal_Int32 nA, sal_Int32 nSub )
     { return nA - nSub; }
 
 static SwRectFnCollection aHorizontal = {
@@ -107,7 +107,7 @@ static SwRectFnCollection aHorizontal = {
     /*.fnXDiff =*/&FirstMinusSecond,
     /*.fnYDiff =*/&FirstMinusSecond,
     /*.fnXInc =*/&SwIncrement,
-    /*.fnYInc =*/&o3tl::saturating_add<long>,
+    /*.fnYInc =*/&o3tl::saturating_add<sal_Int32>,
 
     /*.fnSetLeftAndWidth =*/&SwRect::SetLeftAndWidth,
     /*.fnSetTopAndHeight =*/&SwRect::SetTopAndHeight

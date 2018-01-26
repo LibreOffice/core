@@ -91,7 +91,7 @@ VCL_BUILDER_FACTORY(SvxPageWindow)
 void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     Fraction aXScale(aWinSize.Width(), std::max(long(aSize.Width() * 2 + aSize.Width() / 8), 1L));
-    Fraction aYScale(aWinSize.Height(), std::max(aSize.Height(), 1L));
+    Fraction aYScale(aWinSize.Height(), std::max<sal_Int32>(aSize.Height(), 1));
     MapMode aMapMode(rRenderContext.GetMapMode());
 
     if(aYScale < aXScale)

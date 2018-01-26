@@ -523,8 +523,8 @@ void SwTiledRenderingTest::testSearchViewArea()
     {
         {"SearchItem.SearchString", uno::makeAny(OUString("Heading"))},
         {"SearchItem.Backward", uno::makeAny(false)},
-        {"SearchItem.SearchStartPointX", uno::makeAny(static_cast<sal_Int32>(aPoint.getX()))},
-        {"SearchItem.SearchStartPointY", uno::makeAny(static_cast<sal_Int32>(aPoint.getY()))}
+        {"SearchItem.SearchStartPointX", uno::makeAny(aPoint.getX())},
+        {"SearchItem.SearchStartPointY", uno::makeAny(aPoint.getY())}
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was just "Heading", i.e. SwView::SearchAndWrap() did not search from only the top of the second page.

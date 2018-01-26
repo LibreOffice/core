@@ -40,7 +40,7 @@ public:
     inline SwRect( const SwRect &rRect );
     inline SwRect( const Point& rLT, const Size&  rSize );
     inline SwRect( const Point& rLT, const Point& rRB );
-    inline SwRect( long X, long Y, long Width, long Height );
+    inline SwRect( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height );
 
     //SV-SS e.g. SwRect( pWin->GetClipRect() );
     SwRect( const tools::Rectangle &rRect );
@@ -48,25 +48,25 @@ public:
     //Set-Methods
     inline void Chg( const Point& rNP, const Size &rNS );
     inline void Pos(  const Point& rNew );
-    inline void Pos( const long nNewX, const long nNewY );
+    inline void Pos( const sal_Int32 nNewX, const sal_Int32 nNewY );
     inline void SSize( const Size&  rNew  );
-    inline void SSize( const long nHeight, const long nWidth );
-    inline void Width(  long nNew );
-    inline void Height( long nNew );
-    inline void Left( const long nLeft );
-    inline void Right( const long nRight );
-    inline void Top( const long nTop );
-    inline void Bottom( const long nBottom );
+    inline void SSize( const sal_Int32 nHeight, const sal_Int32 nWidth );
+    inline void Width(  sal_Int32 nNew );
+    inline void Height( sal_Int32 nNew );
+    inline void Left( const sal_Int32 nLeft );
+    inline void Right( const sal_Int32 nRight );
+    inline void Top( const sal_Int32 nTop );
+    inline void Bottom( const sal_Int32 nBottom );
 
     //Get-Methods
     inline const Point &Pos()  const;
     inline const Size  &SSize() const;
-    inline long Width()  const;
-    inline long Height() const;
-    inline long Left()   const;
-    inline long Right()  const;
-    inline long Top()    const;
-    inline long Bottom() const;
+    inline sal_Int32 Width()  const;
+    inline sal_Int32 Height() const;
+    inline sal_Int32 Left()   const;
+    inline sal_Int32 Right()  const;
+    inline sal_Int32 Top()    const;
+    inline sal_Int32 Bottom() const;
 
     // In order to be able to access the members of Pos and SSize from the layout side.
     inline Point &Pos();
@@ -83,7 +83,7 @@ public:
     SwRect &Intersection_( const SwRect &rRect );
 
     bool IsInside( const Point& rPOINT ) const;
-    bool IsNear(const Point& rPoint, long nTolerance ) const;
+    bool IsNear(const Point& rPoint, sal_Int32 nTolerance ) const;
     bool IsInside( const SwRect& rRect ) const;
     bool IsOver( const SwRect& rRect ) const;
     inline bool HasArea() const;
@@ -105,30 +105,30 @@ public:
     friend SvStream& WriteSwRect( SvStream &rStream, const SwRect &rRect );
 
 
-    void Top_(      const long nTop );
-    void Bottom_(   const long nBottom );
-    void Left_(     const long nLeft );
-    void Right_(    const long nRight );
-    void Width_(    const long nNew );
-    void Height_(   const long nNew );
-    long Top_()     const;
-    long Bottom_()  const;
-    long Left_()    const;
-    long Right_()   const;
-    long Width_()   const;
-    long Height_()  const;
-    void SubTop(    const long nSub );
-    void AddBottom( const long nAdd );
-    void SubLeft(   const long nSub );
-    void AddRight(  const long nAdd );
-    void AddWidth(  const long nAdd );
-    void AddHeight( const long nAdd );
-    void SetPosX(   const long nNew );
-    void SetPosY(   const long nNew );
-    void SetLeftAndWidth( long nLeft, long nNew );
-    void SetTopAndHeight( long nTop, long nNew );
-    void SetRightAndWidth( long nRight, long nNew );
-    void SetBottomAndHeight( long nBottom, long nNew );
+    void Top_(      const sal_Int32 nTop );
+    void Bottom_(   const sal_Int32 nBottom );
+    void Left_(     const sal_Int32 nLeft );
+    void Right_(    const sal_Int32 nRight );
+    void Width_(    const sal_Int32 nNew );
+    void Height_(   const sal_Int32 nNew );
+    sal_Int32 Top_()     const;
+    sal_Int32 Bottom_()  const;
+    sal_Int32 Left_()    const;
+    sal_Int32 Right_()   const;
+    sal_Int32 Width_()   const;
+    sal_Int32 Height_()  const;
+    void SubTop(    const sal_Int32 nSub );
+    void AddBottom( const sal_Int32 nAdd );
+    void SubLeft(   const sal_Int32 nSub );
+    void AddRight(  const sal_Int32 nAdd );
+    void AddWidth(  const sal_Int32 nAdd );
+    void AddHeight( const sal_Int32 nAdd );
+    void SetPosX(   const sal_Int32 nNew );
+    void SetPosY(   const sal_Int32 nNew );
+    void SetLeftAndWidth( sal_Int32 nLeft, sal_Int32 nNew );
+    void SetTopAndHeight( sal_Int32 nTop, sal_Int32 nNew );
+    void SetRightAndWidth( sal_Int32 nRight, sal_Int32 nNew );
+    void SetBottomAndHeight( sal_Int32 nBottom, sal_Int32 nNew );
     void SetUpperLeftCorner(  const Point& rNew );
     void SetUpperRightCorner(  const Point& rNew );
     void SetLowerLeftCorner(  const Point& rNew );
@@ -138,23 +138,23 @@ public:
     const Point BottomLeft()  const;
     const Point BottomRight()  const;
     const Size  SwappedSize() const;
-    long GetLeftDistance( long ) const;
-    long GetBottomDistance( long ) const;
-    long GetRightDistance( long ) const;
-    long GetTopDistance( long ) const;
-    bool OverStepLeft( long ) const;
-    bool OverStepBottom( long ) const;
-    bool OverStepTop( long ) const;
-    bool OverStepRight( long ) const;
+    sal_Int32 GetLeftDistance( sal_Int32 ) const;
+    sal_Int32 GetBottomDistance( sal_Int32 ) const;
+    sal_Int32 GetRightDistance( sal_Int32 ) const;
+    sal_Int32 GetTopDistance( sal_Int32 ) const;
+    bool OverStepLeft( sal_Int32 ) const;
+    bool OverStepBottom( sal_Int32 ) const;
+    bool OverStepTop( sal_Int32 ) const;
+    bool OverStepRight( sal_Int32 ) const;
 };
 
-typedef void (SwRect:: *SwRectSet)( const long nNew );
-typedef long (SwRect:: *SwRectGet)() const;
+typedef void (SwRect:: *SwRectSet)( const sal_Int32 nNew );
+typedef sal_Int32 (SwRect:: *SwRectGet)() const;
 typedef const Point (SwRect:: *SwRectPoint)() const;
 typedef const Size (SwRect:: *SwRectSize)() const;
-typedef bool (SwRect:: *SwRectMax)( long ) const;
-typedef long (SwRect:: *SwRectDist)( long ) const;
-typedef void (SwRect:: *SwRectSetTwice)( long, long );
+typedef bool (SwRect:: *SwRectMax)( sal_Int32 ) const;
+typedef sal_Int32 (SwRect:: *SwRectDist)( sal_Int32 ) const;
+typedef void (SwRect:: *SwRectSetTwice)( sal_Int32, sal_Int32 );
 typedef void (SwRect:: *SwRectSetPos)( const Point& );
 
 //  Set-Methods
@@ -167,7 +167,7 @@ inline void SwRect::Pos(  const Point& rNew )
 {
     m_Point = rNew;
 }
-inline void SwRect::Pos( const long nNewX, const long nNewY )
+inline void SwRect::Pos( const sal_Int32 nNewX, const sal_Int32 nNewY )
 {
     m_Point.setX(nNewX);
     m_Point.setY(nNewY);
@@ -176,34 +176,34 @@ inline void SwRect::SSize( const Size&  rNew  )
 {
     m_Size = rNew;
 }
-inline void SwRect::SSize( const long nNewHeight, const long nNewWidth )
+inline void SwRect::SSize( const sal_Int32 nNewHeight, const sal_Int32 nNewWidth )
 {
     m_Size.setWidth(nNewWidth);
     m_Size.setHeight(nNewHeight);
 }
-inline void SwRect::Width(  long nNew )
+inline void SwRect::Width(  sal_Int32 nNew )
 {
     m_Size.setWidth(nNew);
 }
-inline void SwRect::Height( long nNew )
+inline void SwRect::Height( sal_Int32 nNew )
 {
     m_Size.setHeight(nNew);
 }
-inline void SwRect::Left( const long nLeft )
+inline void SwRect::Left( const sal_Int32 nLeft )
 {
     m_Size.AdjustWidth( m_Point.getX() - nLeft );
     m_Point.setX(nLeft);
 }
-inline void SwRect::Right( const long nRight )
+inline void SwRect::Right( const sal_Int32 nRight )
 {
     m_Size.setWidth(nRight - m_Point.getX() + 1);
 }
-inline void SwRect::Top( const long nTop )
+inline void SwRect::Top( const sal_Int32 nTop )
 {
     m_Size.AdjustHeight( m_Point.getY() - nTop );
     m_Point.setY(nTop);
 }
-inline void SwRect::Bottom( const long nBottom )
+inline void SwRect::Bottom( const sal_Int32 nBottom )
 {
     m_Size.setHeight(nBottom - m_Point.getY() + 1);
 }
@@ -225,27 +225,27 @@ inline Size  &SwRect::SSize()
 {
     return m_Size;
 }
-inline long SwRect::Width()  const
+inline sal_Int32 SwRect::Width()  const
 {
     return m_Size.Width();
 }
-inline long SwRect::Height() const
+inline sal_Int32 SwRect::Height() const
 {
     return m_Size.Height();
 }
-inline long SwRect::Left()   const
+inline sal_Int32 SwRect::Left()   const
 {
     return m_Point.X();
 }
-inline long SwRect::Right()  const
+inline sal_Int32 SwRect::Right()  const
 {
     return m_Size.getWidth() ? m_Point.getX() + m_Size.getWidth() - 1 : m_Point.getX();
 }
-inline long SwRect::Top()    const
+inline sal_Int32 SwRect::Top()    const
 {
     return m_Point.Y();
 }
-inline long SwRect::Bottom() const
+inline sal_Int32 SwRect::Bottom() const
 {
     return m_Size.getHeight() ? m_Point.getY() + m_Size.getHeight() - 1 : m_Point.getY();
 }
@@ -282,8 +282,8 @@ inline tools::Rectangle SwRect::SVRect() const
 {
     SAL_WARN_IF( IsEmpty(), "sw", "SVRect() without Width or Height" );
     return tools::Rectangle( m_Point.getX(), m_Point.getY(),
-        m_Point.getX() + m_Size.getWidth() - 1,         //Right()
-        m_Point.getY() + m_Size.getHeight() - 1 );      //Bottom()
+        m_Point.getX() + (m_Size.getWidth() - 1),         //Right()
+        m_Point.getY() + (m_Size.getHeight() - 1) );      //Bottom()
 }
 
 inline bool SwRect::HasArea() const
@@ -323,7 +323,7 @@ inline SwRect::SwRect( const Point& rLT, const Point& rRB ) :
     m_Size( rRB.X() - rLT.X() + 1, rRB.Y() - rLT.Y() + 1 )
 {
 }
-inline SwRect::SwRect( long X, long Y, long W, long H ) :
+inline SwRect::SwRect( sal_Int32 X, sal_Int32 Y, sal_Int32 W, sal_Int32 H ) :
     m_Point( X, Y ),
     m_Size( W, H )
 {

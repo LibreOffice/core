@@ -386,10 +386,10 @@ public:
     const tools::Rectangle&    GetEntryBoundRect( SvxIconChoiceCtrlEntry* );
     void                InvalidateBoundingRect( tools::Rectangle& rRect )
                         {
-                            rRect.SetRight(LONG_MAX);
+                            rRect.SetRight(RECT_MAX);
                             bBoundRectsDirty = true;
                         }
-    static bool         IsBoundingRectValid( const tools::Rectangle& rRect ) { return ( rRect.Right() != LONG_MAX ); }
+    static bool         IsBoundingRectValid( const tools::Rectangle& rRect ) { return ( rRect.Right() != RECT_MAX ); }
 
     void                PaintEmphasis(const tools::Rectangle& rRect1, bool bSelected,
                                       bool bDropTarget, bool bCursored, vcl::RenderContext& rRenderContext );

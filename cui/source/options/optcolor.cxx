@@ -508,7 +508,7 @@ void ColorConfigWindow_Impl::CreateEntries()
         ScopedVclPtrInstance< FixedText > aFixedText(this);
         aCheckBox->SetText(sSampleText);
         aFixedText->SetText(sSampleText);
-        Size aCheckSize(aCheckBox->CalcMinimumSize(0x7fffffff));
+        Size aCheckSize(aCheckBox->CalcMinimumSize(RECT_MAX));
         Size aFixedSize(aFixedText->CalcMinimumSize());
         nCheckBoxLabelOffset = aCheckSize.Width() - aFixedSize.Width();
     }
