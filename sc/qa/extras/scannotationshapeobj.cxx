@@ -17,8 +17,6 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
-#define NUMBER_OF_TESTS 1
-
 using namespace css;
 using namespace css::uno;
 
@@ -42,13 +40,10 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static sal_Int32 nTest;
-    static uno::Reference<lang::XComponent> mxComponent;
+    uno::Reference<lang::XComponent> mxComponent;
     static uno::Reference<text::XTextContent> mxField;
 };
 
-sal_Int32 ScAnnotationShapeObj::nTest = 0;
-uno::Reference<lang::XComponent> ScAnnotationShapeObj::mxComponent;
 uno::Reference<text::XTextContent> ScAnnotationShapeObj::mxField;
 
 ScAnnotationShapeObj::ScAnnotationShapeObj()
@@ -58,29 +53,20 @@ ScAnnotationShapeObj::ScAnnotationShapeObj()
 
 void ScAnnotationShapeObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScAnnotationShapeObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        mxField.clear();
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
+    mxField.clear();
+    closeDocument(mxComponent);
 
     CalcUnoApiTest::tearDown();
 }
 
 uno::Reference<uno::XInterface> ScAnnotationShapeObj::init()
 {
-    if (!mxComponent.is())
-        // Load an empty document.
-        mxComponent = loadFromDesktop("private:factory/scalc");
-
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
