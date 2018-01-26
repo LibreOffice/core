@@ -76,16 +76,12 @@ SwLineNumberInfo::SwLineNumberInfo(const SwLineNumberInfo &rCpy ) : SwClient(),
     bCountInFlys( rCpy.IsCountInFlys() ),
     bRestartEachPage( rCpy.IsRestartEachPage() )
 {
-    if ( rCpy.GetRegisteredIn() )
-        const_cast<SwModify*>(rCpy.GetRegisteredIn())->Add( this );
+    StartListeningToSameModifyAs(rCpy);
 }
 
 SwLineNumberInfo& SwLineNumberInfo::operator=(const SwLineNumberInfo &rCpy)
 {
-    if ( rCpy.GetRegisteredIn() )
-        const_cast<SwModify*>(rCpy.GetRegisteredIn())->Add( this );
-    else
-        EndListeningAll();
+    StartListeningToSameModifyAs(rCpy);
 
     aType = rCpy.GetNumType();
     aDivider = rCpy.GetDivider();

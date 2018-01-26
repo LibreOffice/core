@@ -68,6 +68,14 @@ void SwClient::SwClientNotify(const SwModify&, const SfxHint& rHint)
     }
 };
 
+void SwClient::StartListeningToSameModifyAs(const SwClient& other)
+{
+    if(other.m_pRegisteredIn)
+        other.m_pRegisteredIn->Add(this);
+    else
+        EndListeningAll();
+}
+
 void SwClient::EndListeningAll()
 {
     if(m_pRegisteredIn)

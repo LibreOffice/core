@@ -133,10 +133,7 @@ SwAutoCompleteClient& SwAutoCompleteClient::operator=(const SwAutoCompleteClient
 {
     pAutoCompleteWord = rClient.pAutoCompleteWord;
     pDoc = rClient.pDoc;
-    if(rClient.GetRegisteredIn())
-        const_cast<SwModify*>(rClient.GetRegisteredIn())->Add(this);
-    else
-        EndListeningAll();
+    StartListeningToSameModifyAs(rClient);
     return *this;
 }
 
