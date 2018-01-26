@@ -413,7 +413,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_sendToSocket(
     You can specify a timeout-value in seconds/microseconds that denotes
     how long the operation will block if the Socket is not ready.
 
-    @param Socket the Socket to perfom the operation on.
+    @param Socket the Socket to perform the operation on.
     @param pTimeout if NULL, the operation will block without a timeout.
 
     @retval sal_True if read operations (recv, recvFrom, accept) on the Socket
@@ -428,7 +428,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isReceiveReady(
     You can specify a timeout-value in seconds/microseconds that denotes
     how long the operation will block if the Socket is not ready.
 
-    @param Socket the Socket to perfom the operation on.
+    @param Socket the Socket to perform the operation on.
     @param pTimeout if NULL, the operation will block without a timeout. Otherwise
         the time define by timeout value.
 
@@ -444,7 +444,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isSendReady(
     You can specify a timeout-value in seconds/microseconds that denotes
     how long the operation will block if the Socket has no pending OOB data.
 
-    @param Socket the Socket to perfom the operation on.
+    @param Socket the Socket to perform the operation on.
     @param pTimeout if NULL, the operation will block without a timeout.
 
     @retval sal_True if OOB-request operations (recv with appropriate flags)
@@ -456,7 +456,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isExceptionPending(
                             const TimeValue* pTimeout);
 
 /** Shuts down communication on a connected socket.
-    @param[in] Socket the Socket to perfom the operation on.
+    @param[in] Socket the Socket to perform the operation on.
     @param[in] Direction
     @parblock
         Direction denotes which end of the socket should be closed:
@@ -799,7 +799,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getInetPortOfSocketAddr(
 
 
 /** Sets the Port of Addr.
-    @param[in] Addr the SocketAddr to perfom the operation on.
+    @param[in] Addr the SocketAddr to perform the operation on.
     @param[in] Port is expected in host byte-order.
     @retval sal_False if Addr is not an inet-addr.
 */

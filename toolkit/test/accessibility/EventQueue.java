@@ -42,7 +42,7 @@ class EventQueue
         synchronized (maMonitor)
         {
             if (mbVerbose)
-                System.out.println ("queing regular event " + aEvent);
+                System.out.println ("queueing regular event " + aEvent);
             maRegularQueue.addLast (aEvent);
             maMonitor.notify ();
         }
@@ -57,7 +57,7 @@ class EventQueue
             synchronized (maMonitor)
             {
                 if (mbVerbose)
-                    System.out.println ("queing disposing event " + aEvent);
+                    System.out.println ("queueing disposing event " + aEvent);
                 maDisposingQueue.addLast (aEvent);
                 maMonitor.notify ();
             }

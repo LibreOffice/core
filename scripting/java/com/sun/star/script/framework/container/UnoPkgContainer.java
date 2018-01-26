@@ -106,7 +106,7 @@ public class UnoPkgContainer extends ParcelContainer {
                         // When all libraries within a package bundle
                         // ( for this language ) are removed also
                         // remove the container from its parent
-                        // Otherwise, a container ( with no containees )
+                        // Otherwise, a container ( with no containers )
                         // representing the uno package bundle will
                         // still exist and so will get displayed
                         if (container.parent() != null) {

@@ -160,7 +160,7 @@ int clewInit(const char* path)
 
     if (error)
     {
-        //  Failure queing atexit, shutdown with error
+        //  Failure queueing atexit, shutdown with error
         CLCC_DYNLIB_CLOSE(module);
         module = NULL;
 
