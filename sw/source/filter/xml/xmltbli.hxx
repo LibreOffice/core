@@ -91,6 +91,11 @@ class SwXMLTableContext : public XMLTextTableContext
     sal_uInt32          m_nCurCol;
     sal_Int32           m_nWidth;
 
+    // The maxiumum table width (i.e., maximum value for m_nWidth); musts be >= MINLAY and must also
+    // fit into ColumnWidthInfo::width (of type sal_uInt16), see e.g. the emplacement of
+    // MINLAY<=nWidht2<=MAX_WIDTH into m_aColumnWidths in SwXMLTableContext::InsertColumn:
+    static constexpr sal_Int32 MAX_WIDTH = SAL_MAX_UINT16;
+
     SwTableBox *NewTableBox( const SwStartNode *pStNd,
                              SwTableLine *pUpper );
     SwTableBox *MakeTableBox( SwTableLine *pUpper,
