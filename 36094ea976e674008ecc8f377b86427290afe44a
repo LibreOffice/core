@@ -104,6 +104,24 @@
       "revId": "36094ea976e674008ecc8f377b86427290afe44a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_0101b5ae",
+        "filename": "sw/source/core/undo/untblk.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-26T13:38:16Z",
+      "side": 1,
+      "message": "you are right of course",
+      "parentUuid": "1a430d35_5753fb6a",
+      "revId": "36094ea976e674008ecc8f377b86427290afe44a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
