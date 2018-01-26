@@ -514,13 +514,13 @@ void SwPagePreviewLayout::CalcDocPreviewPaintRect()
 
     Size aSize;
     if ( mbDoesLayoutColsFitIntoWindow )
-        aSize.setWidth( std::min( mnPreviewLayoutWidth,
+        aSize.setWidth( std::min<sal_Int32>( mnPreviewLayoutWidth,
                              maPreviewDocRect.GetWidth() - aTopLeftPos.X() ) );
     else
         aSize.setWidth( std::min( maPreviewDocRect.GetWidth() - aTopLeftPos.X(),
                              maWinSize.Width() - maAdditionalPaintOffset.X() ) );
     if ( mbDoesLayoutRowsFitIntoWindow )
-        aSize.setHeight( std::min( mnPreviewLayoutHeight,
+        aSize.setHeight( std::min<sal_Int32>( mnPreviewLayoutHeight,
                               maPreviewDocRect.GetHeight() - aTopLeftPos.Y() ) );
     else
         aSize.setHeight( std::min( maPreviewDocRect.GetHeight() - aTopLeftPos.Y(),
@@ -774,7 +774,7 @@ Point SwPagePreviewLayout::GetPreviewStartPosForNewScale(
             // check, if new y-position is outside document preview
             if ( aNewPaintStartPos.Y() > maPreviewDocRect.Bottom() )
                 aNewPaintStartPos.setY(
-                        std::max( 0L, maPreviewDocRect.Bottom() - mnPreviewLayoutHeight ) );
+                        std::max<sal_Int32>( 0, maPreviewDocRect.Bottom() - mnPreviewLayoutHeight ) );
         }
     }
 

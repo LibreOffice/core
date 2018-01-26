@@ -294,10 +294,10 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     if ( pMarginItem )
                     {
                         xSet->setPropertyValue("FrameMarginWidth",
-                            uno::makeAny( sal_Int32( aMargin.Width() ) ) );
+                            uno::makeAny( aMargin.Width() ) );
 
                         xSet->setPropertyValue("FrameMarginHeight",
-                            uno::makeAny( sal_Int32( aMargin.Height() ) ) );
+                            uno::makeAny( aMargin.Height() ) );
                     }
                 }
                 catch (const uno::Exception&)

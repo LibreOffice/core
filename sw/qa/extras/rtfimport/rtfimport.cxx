@@ -1364,8 +1364,8 @@ DECLARE_RTFIMPORT_TEST(testWatermark, "watermark.rtf")
     uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
     awt::Size aActualSize(xShape->getSize());
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(aExpectedSize.Width()), aActualSize.Width);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(aExpectedSize.Height()), aActualSize.Height);
+    CPPUNIT_ASSERT_EQUAL(aExpectedSize.Width(), aActualSize.Width);
+    CPPUNIT_ASSERT_EQUAL(aExpectedSize.Height(), aActualSize.Height);
 }
 
 DECLARE_RTFIMPORT_TEST(testTdf104016, "tdf104016.rtf")

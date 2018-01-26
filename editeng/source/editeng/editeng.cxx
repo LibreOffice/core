@@ -1790,17 +1790,17 @@ SvxFont EditEngine::GetStandardSvxFont( sal_Int32 nPara )
 void EditEngine::StripPortions()
 {
     ScopedVclPtrInstance< VirtualDevice > aTmpDev;
-    tools::Rectangle aBigRect( Point( 0, 0 ), Size( 0x7FFFFFFF, 0x7FFFFFFF ) );
+    tools::Rectangle aBigRect( Point( 0, 0 ), Size( RECT_MAX, RECT_MAX ) );
     if ( IsVertical() )
     {
         if( IsTopToBottom() )
         {
             aBigRect.SetRight( 0 );
-            aBigRect.SetLeft( -0x7FFFFFFF );
+            aBigRect.SetLeft( RECT_MIN );
         }
         else
         {
-            aBigRect.SetTop( -0x7FFFFFFF );
+            aBigRect.SetTop( RECT_MIN );
             aBigRect.SetBottom( 0 );
         }
     }

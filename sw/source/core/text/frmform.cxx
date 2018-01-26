@@ -231,11 +231,11 @@ bool SwTextFrame::CalcFollow( const sal_Int32 nTextOfst )
         }
 
         // The footnote area must not get larger
-        SwSaveFootnoteHeight aSave( FindFootnoteBossFrame( true ), LONG_MAX );
+        SwSaveFootnoteHeight aSave( FindFootnoteBossFrame( true ), SAL_MAX_INT32 );
 
         pMyFollow->CalcFootnoteFlag();
         if ( !pMyFollow->GetNext() && !pMyFollow->HasFootnote() )
-            nOldBottom =  aRectFnSet.IsVert() ? 0 : LONG_MAX;
+            nOldBottom =  aRectFnSet.IsVert() ? 0 : SAL_MAX_INT32;
 
         while( true )
         {
