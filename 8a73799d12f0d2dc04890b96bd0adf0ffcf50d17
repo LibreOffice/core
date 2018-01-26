@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_e6a7574d",
+        "filename": "sc/source/ui/unoobj/celllistsource.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-26T09:59:09Z",
+      "side": 1,
+      "message": "This is confusing. As this asks for the result of a formula cell it should use the new FormulaResultType2 instead.",
+      "revId": "8a73799d12f0d2dc04890b96bd0adf0ffcf50d17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_667287e7",
+        "filename": "sc/source/ui/unoobj/cellvaluebinding.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-26T09:59:09Z",
+      "side": 1,
+      "message": "Same here, use FormulaResultType instead.",
+      "revId": "8a73799d12f0d2dc04890b96bd0adf0ffcf50d17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_86777bd3",
+        "filename": "sc/source/ui/vba/vbarange.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-26T09:59:09Z",
+      "side": 1,
+      "message": "And this as well, FormulaResultType2.",
+      "revId": "8a73799d12f0d2dc04890b96bd0adf0ffcf50d17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
