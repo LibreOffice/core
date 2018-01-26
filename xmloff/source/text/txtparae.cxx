@@ -3141,7 +3141,11 @@ void XMLTextParagraphExport::_exportTextGraphic(
         const OString aExt( OUStringToOString( aSourceMimeType, RTL_TEXTENCODING_ASCII_US ) );
         aSourceMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension( aExt );
     }
+
+    if (GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012)
+    {
         GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aSourceMimeType);
+    }
 
     {
         SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_DRAW,
