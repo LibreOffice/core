@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_1cd03e53",
+        "filename": "sc/inc/drwlayer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-26T21:25:47Z",
+      "side": 1,
+      "message": "Nitpick: just combine such declarations on one line if they don\u0027t exceed 120 columns and existing code already does.",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 90
+      },
+      "revId": "35ed7ffbd87798c6143f2a80b2a850af1163e5d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_5cf3960a",
+        "filename": "sc/source/core/data/column4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-26T21:25:47Z",
+      "side": 1,
+      "message": "The result of aThisColRowDrawObjects[nRow] could be remembered as a vector\u0026 and reused in the UpdateDrawObjectsForRow() call, eliminating one map lookup.\nSame below for aOtherColRowDrawObjects[nRow].",
+      "revId": "35ed7ffbd87798c6143f2a80b2a850af1163e5d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_7cf85ae6",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2008,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-26T21:25:47Z",
+      "side": 1,
+      "message": "Move declarations of variables to where they are used.",
+      "revId": "35ed7ffbd87798c6143f2a80b2a850af1163e5d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_bcdad276",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2019,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-26T21:25:47Z",
+      "side": 1,
+      "message": "This row loop looks odd. Instead,\n\n ScRange aRange( nCol, nStartRow, nTab, nCol, nEndRow, nTab)\n\ncould be constructed beforehand and for each object the cell anchor address checked if it is contained within.\n\n if (aRange.In(pObjData-\u003emaStart)\n     ...",
+      "revId": "35ed7ffbd87798c6143f2a80b2a850af1163e5d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
