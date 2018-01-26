@@ -88,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_c1231d04",
+        "filename": "offapi/com/sun/star/text/RubyPosition.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-26T15:42:52Z",
+      "side": 1,
+      "message": "Shrug.  Feel free to stick to the tried-and-tested habit of using \u0027short\u0027 for these constants in UNOIDL, then.  :)",
+      "parentUuid": "fa31d9ce_e14901d2",
+      "revId": "e438c33f09d281ea00cf57b172cdc491ee5abeb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_61fef16c",
         "filename": "offapi/type_reference/offapi.idl",
         "patchSetId": 2
