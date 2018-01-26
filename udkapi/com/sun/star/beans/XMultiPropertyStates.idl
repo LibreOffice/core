@@ -81,7 +81,7 @@ published interface XMultiPropertyStates: com::sun::star::uno::XInterface
             raises( com::sun::star::beans::UnknownPropertyException );
 
     /** @returns
-            the default values of the propertes with the specified names.
+            the default values of the properties with the specified names.
 
         <p>If no default exists, is not known, or is void,
         then the return type at the corresponding position in the
@@ -92,7 +92,7 @@ published interface XMultiPropertyStates: com::sun::star::uno::XInterface
             This sequence must be alphabetically sorted.
 
         @throws UnknownPropertyException
-            if one of the propertes does not exist.
+            if one of the properties does not exist.
 
         @throws  com::sun::star::lang::WrappedTargetException
             if the implementation has an internal reason for the exception.

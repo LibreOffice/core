@@ -629,7 +629,7 @@ void SdDialogsTest::openAnyDialog()
         {
             // unknown dialog, should not happen in this basic loop.
             // You have probably forgotten to add a case and
-            // implementastion to createDialogByID, please do this
+            // implementation to createDialogByID, please do this
         }
     }
 
