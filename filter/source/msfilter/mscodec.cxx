@@ -245,8 +245,9 @@ void MSCodec_Xor95::Skip( std::size_t nBytes )
     mnOffset = (mnOffset + nBytes) & 0x0F;
 }
 
-MSCodec97::MSCodec97(size_t nHashLen)
-    : m_nHashLen(nHashLen)
+MSCodec97::MSCodec97(size_t nHashLen, const OUString& rEncKeyName)
+    : m_sEncKeyName(rEncKeyName)
+    , m_nHashLen(nHashLen)
     , m_hCipher(rtl_cipher_create(rtl_Cipher_AlgorithmARCFOUR, rtl_Cipher_ModeStream))
     , m_aDocId(16, 0)
     , m_aDigestValue(nHashLen, 0)
@@ -255,14 +256,14 @@ MSCodec97::MSCodec97(size_t nHashLen)
 }
 
 MSCodec_Std97::MSCodec_Std97()
-    : MSCodec97(RTL_DIGEST_LENGTH_MD5)
+    : MSCodec97(RTL_DIGEST_LENGTH_MD5, "STD97EncryptionKey")
 {
     m_hDigest = rtl_digest_create(rtl_Digest_AlgorithmMD5);
     assert(m_hDigest != nullptr);
 }
 
 MSCodec_CryptoAPI::MSCodec_CryptoAPI()
-    : MSCodec97(RTL_DIGEST_LENGTH_SHA1)
+    : MSCodec97(RTL_DIGEST_LENGTH_SHA1, "CryptoAPIEncryptionKey")
 {
 }
 
@@ -300,7 +301,7 @@ bool MSCodec97::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
     bool bResult = false;
 
     ::comphelper::SequenceAsHashMap aHashData( aData );
-    uno::Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault("STD97EncryptionKey", uno::Sequence< sal_Int8 >() );
+    uno::Sequence<sal_Int8> aKey = aHashData.getUnpackedValueOrDefault(m_sEncKeyName, uno::Sequence<sal_Int8>());
     const size_t nKeyLen = aKey.getLength();
     if (nKeyLen == m_nHashLen)
     {
@@ -328,7 +329,7 @@ uno::Sequence< beans::NamedValue > MSCodec97::GetEncryptionData()
 {
     ::comphelper::SequenceAsHashMap aHashData;
     assert(m_aDigestValue.size() == m_nHashLen);
-    aHashData[ OUString( "STD97EncryptionKey" ) ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(m_aDigestValue.data()), m_nHashLen );
+    aHashData[m_sEncKeyName] <<= uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8*>(m_aDigestValue.data()), m_nHashLen);
     aHashData[ OUString( "STD97UniqueID" ) ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(m_aDocId.data()), m_aDocId.size() );
 
     return aHashData.getAsConstNamedValueList();
@@ -384,6 +385,9 @@ void MSCodec_CryptoAPI::InitKey (
     (void)memcpy(m_aDocId.data(), pDocId, 16);
 
     lcl_PrintDigest(m_aDocId.data(), "DocId value");
+
+    //generate the old format key while we have the required data
+    m_aStd97Key = ::comphelper::DocPasswordHelper::GenerateStd97Key(pPassData, pDocId);
 }
 
 bool MSCodec97::VerifyKey(const sal_uInt8* pSaltData, const sal_uInt8* pSaltDigest)
@@ -481,6 +485,15 @@ bool MSCodec_CryptoAPI::InitCipher(sal_uInt32 nCounter)
                         hash.data(), ENCRYPT_KEY_SIZE_AES_128/8, nullptr, 0);
 
     return (result == rtl_Cipher_E_None);
+}
+
+uno::Sequence<beans::NamedValue> MSCodec_CryptoAPI::GetEncryptionData()
+{
+    ::comphelper::SequenceAsHashMap aHashData(MSCodec97::GetEncryptionData());
+    //add in the old encryption key as well as our new key so saving using the
+    //old crypto scheme can be done without reprompt for the password
+    aHashData[OUString("STD97EncryptionKey")] <<= m_aStd97Key;
+    return aHashData.getAsConstNamedValueList();
 }
 
 void MSCodec_Std97::CreateSaltDigest( const sal_uInt8 nSaltData[16], sal_uInt8 nSaltDigest[16] )
