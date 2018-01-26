@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_410acdd3",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 6421,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-26T13:12:23Z",
+      "side": 1,
+      "message": "See follow-up commit https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d09b81a42c2689b7249c8c39899c0b5b36c050306",
+      "revId": "cceaece18a42405190941865908636522e0ee4cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
