@@ -194,7 +194,8 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
         bSaveAsShown = rString.getToken(0, ',', nPos) == "true";
     }
     else
-        bSaveAsShown = true;    //default value
+        bSaveAsShown = true;    // default value
+
     // Token 9: used for "Save cell formulas" in export options
     if ( nPos >= 0 )
     {
@@ -202,6 +203,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     }
     else
         bSaveFormulas = false;
+
     // Token 10: Boolean for Trim spaces.
     if (nPos >= 0)
     {
