@@ -494,7 +494,7 @@ void ControlModelContainerBase::replaceByName( const OUString& aName, const Any&
     {
         // remove old control (and children) from global list of containers
         updateUserFormChildren( xAllChildren, aName, Remove, uno::Reference< XControlModel >() );
-        // Add new control (and containees if they exist)
+        // Add new control (and containers if they exist)
         updateUserFormChildren( xAllChildren, aName, Insert, xNewModel );
     }
     // stop listening at the old model
@@ -589,7 +589,7 @@ void ControlModelContainerBase::insertByName( const OUString& aName, const Any& 
     // hierarchy of the added control could contain a name clash, if we have access to the
     // list of global names then we need to recursively check for previously existing
     // names (we need to do this obviously before the 'this' objects container is updated)
-    // remove old control (and children) from global list of containees
+    // remove old control (and children) from global list of containers
     Reference< XNameContainer > xAllChildren( getPropertyValue( GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ) ), UNO_QUERY );
 
     if ( xAllChildren.is() )
@@ -1840,7 +1840,7 @@ ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContain
         {
             Reference< XPropertySet > xProps( xChildContainer, UNO_QUERY );
             // container control is being removed from this container, reset the
-            // global list of containees
+            // global list of containers
             if ( xProps.is() )
                 xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( uno::Reference< XNameContainer >() ) );
             Sequence< OUString > aChildNames = xChildContainer->getElementNames();
@@ -1855,7 +1855,7 @@ ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContain
         if ( xChildContainer.is() )
         {
             // container control is being added from this container, reset the
-            // global list of containees to point to the correct global list
+            // global list of containers to point to the correct global list
             Reference< XPropertySet > xProps( xChildContainer, UNO_QUERY );
             if ( xProps.is() )
                 xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( xAllChildren ) );
