@@ -141,13 +141,13 @@ void SAL_CALL SvxTableControllerModifyListener::disposing( const css::lang::Even
 // class SvxTableController
 
 
-rtl::Reference< sdr::SelectionController > CreateTableController( SdrObjEditView* pView, const SdrObject* pObj, const rtl::Reference< sdr::SelectionController >& xRefController )
+rtl::Reference< sdr::SelectionController > CreateTableController( SdrObjEditView* pView, const SdrTableObj* pObj, const rtl::Reference< sdr::SelectionController >& xRefController )
 {
     return SvxTableController::create( pView, pObj, xRefController );
 }
 
 
-rtl::Reference< sdr::SelectionController > SvxTableController::create( SdrObjEditView* pView, const SdrObject* pObj, const rtl::Reference< sdr::SelectionController >& xRefController )
+rtl::Reference< sdr::SelectionController > SvxTableController::create( SdrObjEditView* pView, const SdrTableObj* pObj, const rtl::Reference< sdr::SelectionController >& xRefController )
 {
     if( xRefController.is() )
     {
@@ -159,33 +159,27 @@ rtl::Reference< sdr::SelectionController > SvxTableController::create( SdrObjEdi
 }
 
 
-SvxTableController::SvxTableController( SdrObjEditView* pView, const SdrObject* pObj )
+SvxTableController::SvxTableController( SdrObjEditView* pView, const SdrTableObj* pObj )
 : mbCellSelectionMode(false)
 , mbLeftButtonDown(false)
 , mpSelectionOverlay(nullptr)
 , mpView( dynamic_cast< SdrView* >( pView ) )
-, mxTableObj( dynamic_cast< SdrTableObj* >( const_cast< SdrObject* >( pObj ) ) )
+, mxTableObj( const_cast< SdrTableObj* >( pObj ) )
 , mpModel( nullptr )
 , mnUpdateEvent( nullptr )
 {
-    if( pObj )
+    mpModel = mxTableObj->GetModel();
+
+    mxTableObj->getActiveCellPos( maCursorFirstPos );
+    maCursorLastPos = maCursorFirstPos;
+
+    Reference< XTable > xTable( mxTableObj->getTable() );
+    if( xTable.is() )
     {
-        mpModel = pObj->GetModel();
+        mxModifyListener = new SvxTableControllerModifyListener( this );
+        xTable->addModifyListener( mxModifyListener );
 
-        if( mxTableObj.is() )
-        {
-            mxTableObj->getActiveCellPos( maCursorFirstPos );
-            maCursorLastPos = maCursorFirstPos;
-
-            Reference< XTable > xTable( mxTableObj->getTable() );
-            if( xTable.is() )
-            {
-                mxModifyListener = new SvxTableControllerModifyListener( this );
-                xTable->addModifyListener( mxModifyListener );
-
-                mxTable.set( dynamic_cast< TableModel* >( xTable.get() ) );
-            }
-        }
+        mxTable.set( dynamic_cast< TableModel* >( xTable.get() ) );
     }
 }
 
