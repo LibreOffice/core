@@ -3720,7 +3720,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     if (eStage != PRE_INIT)
         comphelper::LibreOfficeKit::setStatusIndicatorCallback(lo_status_indicator_callback, pLib);
 
-    if (pUserProfileUrl)
+    if (pUserProfileUrl && eStage != PRE_INIT)
     {
         OUString url(
             pUserProfileUrl, strlen(pUserProfileUrl), RTL_TEXTENCODING_UTF8);
