@@ -205,7 +205,7 @@ public class SwXTextView extends TestCase {
         XForm myForm = null;
         String kindOfControl="CommandButton";
         XShape aShape = null;
-        log.println("adding contol shape '" + kindOfControl + "'");
+        log.println("adding control shape '" + kindOfControl + "'");
         aShape = FormTools.createControlShape(xTextDoc, 3000,
                                                         4500, 15000, 10000,
                                                         kindOfControl);

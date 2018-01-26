@@ -56,7 +56,7 @@ public class _XClipboard extends MultiMethodTest {
     }
 
     /**
-     * Simpliest <code>XTransferable</code> interface implementation.
+     * Simplest <code>XTransferable</code> interface implementation.
      */
     static class MyTransferable implements XTransferable {
         public Object getTransferData(DataFlavor dataFlavor) {

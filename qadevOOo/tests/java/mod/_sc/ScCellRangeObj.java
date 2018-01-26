@@ -267,7 +267,7 @@ public class ScCellRangeObj extends TestCase {
                 if (res) {
                     out.println("Sorted correctly");
                 } else {
-                    out.println("Sorted uncorrectly");
+                    out.println("Sorted incorrectly");
                 }
 
                 return res;

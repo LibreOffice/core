@@ -25,7 +25,7 @@ import com.sun.star.accessibility.XAccessibleEventListener;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
 
-/** Base class for object views that regsiters as accessibility event
+/** Base class for object views that registers as accessibility event
     listener.
 */
 abstract class ListeningObjectView

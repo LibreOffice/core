@@ -725,7 +725,7 @@ public class Protocol extends JComponent
 
 
     /**
-     * it trys to convert the given any into a suitable string notation .-)
+     * it tries to convert the given any into a suitable string notation .-)
     */
     private synchronized void impl_logAny( /*OUT*/ StringBuffer sOut ,
                                            /*IN */ Object       aAny )
