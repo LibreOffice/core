@@ -668,7 +668,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         }
     }
 
-    ::std::unique_ptr< ScTokenArray > pTokArr2;
+    ::std::unique_ptr< ScTokenArray > xTokArr2;
     if( nFmlaSize2 > 0 )
     {
         const ScTokenArray* pTokArr = nullptr;
@@ -677,8 +677,8 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
         {
-            pTokArr2.reset( pTokArr->Clone() );
-            GetDocRef().CheckLinkFormulaNeedingCheck( *pTokArr2);
+            xTokArr2.reset( pTokArr->Clone() );
+            GetDocRef().CheckLinkFormulaNeedingCheck( *xTokArr2);
         }
     }
 
@@ -694,7 +694,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         mxScCondFmt->SetRange(maRanges);
     }
 
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry(eMode, xTokArr1.get(), pTokArr2.get(), &GetDocRef(), aPos, aStyleName);
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(eMode, xTokArr1.get(), xTokArr2.get(), &GetDocRef(), aPos, aStyleName);
     mxScCondFmt->AddEntry( pEntry );
     ++mnCondIndex;
 }
