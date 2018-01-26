@@ -467,7 +467,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
     sal_Unicode cChar       = rKEvt.GetCharCode();
     sal_uInt16      nKeyCode    = aCode.GetCode();
     bool        bShift      = aCode.IsShift();
-    sal_Int32  nCursorPos = static_cast<sal_Int32>(aOldSel.Max());
+    sal_Int32  nCursorPos = aOldSel.Max();
     sal_Int32  nNewPos;
     sal_Int32  nTempPos;
 
@@ -524,7 +524,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             // all was selected by the focus
             Selection aSel( aOldSel );
             aSel.Justify();
-            nCursorPos = static_cast<sal_Int32>(aSel.Min());
+            nCursorPos = aSel.Min();
             ImplPatternMaxPos( pEdit->GetText(), rEditMask, nFormatFlags, bSameMask, nCursorPos, nNewPos );
             aSel.Max() = nNewPos;
             if ( bShift )
@@ -541,16 +541,16 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             Selection   aSel = aOldSel;
 
             aSel.Justify();
-            nNewPos = static_cast<sal_Int32>(aSel.Min());
+            nNewPos = aSel.Min();
 
              // if selection then delete it
             if ( aSel.Len() )
             {
                 if ( bSameMask )
-                    aStr.remove( static_cast<sal_Int32>(aSel.Min()), static_cast<sal_Int32>(aSel.Len()) );
+                    aStr.remove( aSel.Min(), aSel.Len() );
                 else
                 {
-                    OUString aRep = rLiteralMask.copy( static_cast<sal_Int32>(aSel.Min()), static_cast<sal_Int32>(aSel.Len()) );
+                    OUString aRep = rLiteralMask.copy( aSel.Min(), aSel.Len() );
                     aStr.remove( aSel.Min(), aRep.getLength() );
                     aStr.insert( aSel.Min(), aRep );
                 }
@@ -1324,7 +1324,7 @@ void DateField::ImplDateSpinArea( bool bUp )
         Selection aSelection = GetField()->GetSelection();
         aSelection.Justify();
         OUString aText( GetText() );
-        if ( static_cast<sal_Int32>(aSelection.Len()) == aText.getLength() )
+        if ( aSelection.Len() == aText.getLength() )
             ImplDateIncrementDay( aDate, bUp );
         else
         {
@@ -1344,7 +1344,7 @@ void DateField::ImplDateSpinArea( bool bUp )
                 for ( sal_Int8 i = 1; i <= 3; i++ )
                 {
                     nPos = aText.indexOf( aDateSep, nPos );
-                    if (nPos < 0 || nPos >= static_cast<sal_Int32>(aSelection.Max()))
+                    if (nPos < 0 || nPos >= aSelection.Max())
                     {
                         nDateArea = i;
                         break;
@@ -1585,7 +1585,7 @@ void DateFormatter::ImplNewFieldValue( const Date& rDate )
         OUString aText = GetField()->GetText();
 
         // If selected until the end then keep it that way
-        if ( static_cast<sal_Int32>(aSelection.Max()) == aText.getLength() )
+        if ( aSelection.Max() == aText.getLength() )
         {
             if ( !aSelection.Len() )
                 aSelection.Min() = SELECTION_MAX;
@@ -2364,7 +2364,7 @@ void TimeFormatter::ImplNewFieldValue( const tools::Time& rTime )
         OUString aText = GetField()->GetText();
 
         // If selected until the end then keep it that way
-        if ( static_cast<sal_Int32>(aSelection.Max()) == aText.getLength() )
+        if ( aSelection.Max() == aText.getLength() )
         {
             if ( !aSelection.Len() )
                 aSelection.Min() = SELECTION_MAX;

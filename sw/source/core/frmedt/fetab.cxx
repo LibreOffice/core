@@ -577,9 +577,9 @@ void SwFEShell::GetTabRows_(SwTabCols &rToFill, const SwFrame *pBox) const
             const long nLeftMin  = ( aRectFnSet.IsVert() ?
                                      pTab->GetPrtLeft() - pPage->getFrameArea().Left() :
                                      pTab->GetPrtTop() - pPage->getFrameArea().Top() );
-            const long nLeft     = aRectFnSet.IsVert() ? LONG_MAX : 0;
+            const long nLeft     = aRectFnSet.IsVert() ? SAL_MAX_INT32 : 0;
             const long nRight    = aRectFnSet.GetHeight(pTab->getFramePrintArea());
-            const long nRightMax = aRectFnSet.IsVert() ? nRight : LONG_MAX;
+            const long nRightMax = aRectFnSet.IsVert() ? nRight : SAL_MAX_INT32;
 
             if (m_pRowCache->pLastTabFrame != pTab || m_pRowCache->pLastCellFrame != pBox)
                 bDel = true;
@@ -1446,8 +1446,8 @@ static const SwCellFrame *lcl_FindFrame( const SwLayoutFrame *pLay, const Point 
                                           aRectFnSet.GetLeft(aTabRect);
                     const SwTwips nTop  = aRectFnSet.GetTop(aTabRect);
 
-                    SwTwips& rPointX = aRectFnSet.IsVert() ? aPt.Y() : aPt.X();
-                    SwTwips& rPointY = aRectFnSet.IsVert() ? aPt.X() : aPt.Y();
+                    sal_Int32& rPointX = aRectFnSet.IsVert() ? aPt.Y() : aPt.X();
+                    sal_Int32& rPointY = aRectFnSet.IsVert() ? aPt.X() : aPt.Y();
 
                     const SwTwips nXDiff = aRectFnSet.XDiff( nLeft, rPointX ) * ( bRTL ? -1 : 1 );
                     const SwTwips nYDiff = aRectFnSet.YDiff( nTop, rPointY );
