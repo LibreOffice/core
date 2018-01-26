@@ -779,7 +779,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
     SvTreeListEntry* pEntry = bSelect ? m_pTable->FirstSelected() : m_pTable->First();
-    sal_uLong nPos = LONG_MAX;
+    sal_uLong nPos = SAL_MAX_INT32;
 
     typedef std::vector<SvTreeListEntry*> ListBoxEntries_t;
     ListBoxEntries_t aRedlines;
@@ -794,7 +794,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
     {
         if( !m_pTable->GetParent( pEntry ) )
         {
-            if( bSelect && LONG_MAX == nPos )
+            if( bSelect && SAL_MAX_INT32 == nPos )
                 nPos = m_pTable->GetModel()->GetAbsPos( pEntry );
 
             RedlinData *pData = static_cast<RedlinData *>(pEntry->GetUserData());
@@ -855,7 +855,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
     m_bInhibitActivate = false;
     Activate();
 
-    if( ULONG_MAX != nPos && m_pTable->GetEntryCount() )
+    if( SAL_MAX_UINT32 != nPos && m_pTable->GetEntryCount() )
     {
         if( nPos >= m_pTable->GetEntryCount() )
             nPos = m_pTable->GetEntryCount() - 1;

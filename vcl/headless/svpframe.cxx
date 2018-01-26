@@ -285,7 +285,7 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
 #endif
 }
 
-void SvpSalFrame::GetClientSize( long& rWidth, long& rHeight )
+void SvpSalFrame::GetClientSize( sal_Int32& rWidth, sal_Int32& rHeight )
 {
     rWidth = maGeometry.nWidth;
     rHeight = maGeometry.nHeight;

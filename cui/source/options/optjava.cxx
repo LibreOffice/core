@@ -81,7 +81,7 @@ public:
         HeaderBar &rBar = GetTheHeaderBar();
         if (rBar.GetItemCount() < 4)
             return;
-        long nCheckWidth = std::max(GetControlColumnWidth() + 12,
+        long nCheckWidth = std::max<sal_Int32>(GetControlColumnWidth() + 12,
             rBar.LogicToPixel(Size(15, 0), MapMode(MapUnit::MapAppFont)).Width());
         long nVersionWidth = 12 +
             std::max(rBar.GetTextWidth(rBar.GetItemText(3)),

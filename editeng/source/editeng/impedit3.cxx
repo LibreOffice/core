@@ -405,7 +405,7 @@ void ImpEditEngine::FormatDoc()
             if ( aInvalidRect.IsEmpty() )
             {
                 // For Paperwidth 0 (AutoPageSize) it would otherwise be Empty()...
-                long nWidth = std::max( long(1), ( !IsVertical() ? aPaperSize.Width() : aPaperSize.Height() ) );
+                long nWidth = std::max<sal_Int32>( 1, ( !IsVertical() ? aPaperSize.Width() : aPaperSize.Height() ) );
                 Range aInvRange( GetInvalidYOffsets( pParaPortion ) );
                 aInvalidRect = tools::Rectangle( Point( 0, nY+aInvRange.Min() ),
                     Size( nWidth, aInvRange.Len() ) );
@@ -734,7 +734,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     {
         aBulletArea = GetEditEnginePtr()->GetBulletArea( GetParaPortions().GetPos( pParaPortion ) );
         if ( aBulletArea.Right() > 0 )
-            pParaPortion->SetBulletX( static_cast<sal_Int32>(GetXValue( aBulletArea.Right() )) );
+            pParaPortion->SetBulletX( static_cast<sal_Int32>(GetXValue( long(aBulletArea.Right()) )) );
         else
             pParaPortion->SetBulletX( 0 ); // if Bullet is set incorrectly
     }
@@ -1716,7 +1716,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion )
     {
         aBulletArea = GetEditEnginePtr()->GetBulletArea( GetParaPortions().GetPos( pParaPortion ) );
         if ( aBulletArea.Right() > 0 )
-            pParaPortion->SetBulletX( static_cast<sal_Int32>(GetXValue( aBulletArea.Right() )) );
+            pParaPortion->SetBulletX( static_cast<sal_Int32>(GetXValue( long(aBulletArea.Right()) )) );
         else
             pParaPortion->SetBulletX( 0 ); // If Bullet set incorrectly.
         if ( pParaPortion->GetBulletX() > nStartX )
@@ -4043,8 +4043,8 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_Int32 nNew
     {
         // in this case one can redraw directly without invalidating the
         // Portions
-        sal_Int32 nFirstPortion = std::min( static_cast<sal_Int32>(aOldPositions.Min()), nNewPos );
-        sal_Int32 nLastPortion = std::max( static_cast<sal_Int32>(aOldPositions.Max()), nNewPos );
+        sal_Int32 nFirstPortion = std::min( aOldPositions.Min(), nNewPos );
+        sal_Int32 nLastPortion = std::max( aOldPositions.Max(), nNewPos );
 
         ParaPortion* pUpperPortion = GetParaPortions().SafeGetObject( nFirstPortion );
         ParaPortion* pLowerPortion = GetParaPortions().SafeGetObject( nLastPortion );
@@ -4062,7 +4062,7 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_Int32 nNew
     else
     {
         // redraw from the upper invalid position
-        sal_Int32 nFirstInvPara = std::min( static_cast<sal_Int32>(aOldPositions.Min()), nNewPos );
+        sal_Int32 nFirstInvPara = std::min( aOldPositions.Min(), nNewPos );
         InvalidateFromParagraph( nFirstInvPara );
     }
     return aSel;

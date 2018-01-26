@@ -158,13 +158,13 @@ sal_uInt32 VMLExport::EnterGroup( const OUString& rShapeName, const tools::Recta
     if ( pRect && ( mnGroupLevel == 1 ) )
     {
         pAttrList->add( XML_coordorigin,
-                OStringBuffer( 20 ).append( sal_Int32( pRect->Left() ) )
-                .append( "," ).append( sal_Int32( pRect->Top() ) )
+                OStringBuffer( 20 ).append( pRect->Left() )
+                .append( "," ).append( pRect->Top() )
                 .makeStringAndClear() );
 
         pAttrList->add( XML_coordsize,
-                OStringBuffer( 20 ).append( sal_Int32( pRect->Right() ) - sal_Int32( pRect->Left() ) )
-                .append( "," ).append( sal_Int32( pRect->Bottom() ) - sal_Int32( pRect->Top() ) )
+                OStringBuffer( 20 ).append( pRect->Right() - pRect->Left() )
+                .append( "," ).append( pRect->Bottom() - pRect->Top() )
                 .makeStringAndClear() );
     }
 

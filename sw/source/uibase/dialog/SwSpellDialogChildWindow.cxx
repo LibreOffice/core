@@ -134,7 +134,7 @@ static void lcl_LeaveDrawText(SwWrtShell& rSh)
     if(rSh.GetDrawView())
     {
         rSh.GetDrawView()->SdrEndTextEdit( true );
-        Point aPt(LONG_MIN, LONG_MIN);
+        Point aPt(SAL_MIN_INT32, SAL_MIN_INT32);
         // go out of the frame
         rSh.SelectObj(aPt, SW_LEAVE_FRAME);
         rSh.EnterStdMode();
@@ -701,7 +701,7 @@ bool SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellM
                 else
                 {
                     rView.LeaveDrawCreate();
-                    Point aPt(LONG_MIN, LONG_MIN);
+                    Point aPt(SAL_MIN_INT32, SAL_MIN_INT32);
                     // go out of the frame
                     rShell.SelectObj(aPt, SW_LEAVE_FRAME);
                     SfxBindings& rBind = rView.GetViewFrame()->GetBindings();

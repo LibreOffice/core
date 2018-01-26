@@ -1436,8 +1436,8 @@ SwTwips SwFrame::Grow( SwTwips nDist, bool bTst, bool bInfo )
         SwRectFnSet aRectFnSet(this);
 
         SwTwips nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
-        if( nPrtHeight > 0 && nDist > (LONG_MAX - nPrtHeight) )
-            nDist = LONG_MAX - nPrtHeight;
+        if( nPrtHeight > 0 && nDist > (SAL_MAX_INT32 - nPrtHeight) )
+            nDist = SAL_MAX_INT32 - nPrtHeight;
 
         if ( IsFlyFrame() )
             return static_cast<SwFlyFrame*>(this)->Grow_( nDist, bTst );
@@ -1554,7 +1554,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
     {
         SwViewShell *pViewShell = getRootFrame()->GetCurrShell();
         SwLayoutFrame *pUp = GetUpper();
-        long nChg;
+        sal_Int32 nChg;
         const long nUpPrtBottom = pUp->getFrameArea().Height() -
                                   pUp->getFramePrintArea().Height() - pUp->getFramePrintArea().Top();
         SwRect aInva( pUp->getFrameArea() );
@@ -1580,7 +1580,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                     {
                         {
                             SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pBody);
-                            aFrm.Height(std::max( 0L, aFrm.Height() - nChg ));
+                            aFrm.Height(std::max<sal_Int32>( 0, aFrm.Height() - nChg ));
                         }
 
                         pBody->InvalidatePrt_();
@@ -2029,8 +2029,8 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
 
     SwTwips nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
     if( nFrameHeight > 0 &&
-         nDist > (LONG_MAX - nFrameHeight ) )
-        nDist = LONG_MAX - nFrameHeight;
+         nDist > (SAL_MAX_INT32 - nFrameHeight ) )
+        nDist = SAL_MAX_INT32 - nFrameHeight;
 
     const SwViewShell *pSh = getRootFrame()->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
@@ -2161,7 +2161,7 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         if( nRstHeight < 0 )
         {
             SwTwips nNextHeight = 0;
-            if( GetUpper()->IsSctFrame() && nDist > LONG_MAX/2 )
+            if( GetUpper()->IsSctFrame() && nDist > SAL_MAX_INT32/2 )
             {
                 SwFrame *pNxt = GetNext();
                 while( pNxt )
@@ -2552,8 +2552,8 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     const SwTwips nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
     const SwTwips nFramePos = getFrameArea().Pos().X();
 
-    if ( nFrameHeight > 0 && nDist > (LONG_MAX - nFrameHeight) )
-        nDist = LONG_MAX - nFrameHeight;
+    if ( nFrameHeight > 0 && nDist > (SAL_MAX_INT32 - nFrameHeight) )
+        nDist = SAL_MAX_INT32 - nFrameHeight;
 
     SwTwips nMin = 0;
     if ( GetUpper() && !IsCellFrame() )
@@ -2747,7 +2747,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
     {
         if( !Lower()->IsNeighbourFrame() )
         {   const SwFrame *pFrame = Lower();
-            const long nTmp = aRectFnSet.GetHeight(getFramePrintArea());
+            const sal_Int32 nTmp = aRectFnSet.GetHeight(getFramePrintArea());
             while( pFrame && nMin < nTmp )
             {   nMin += aRectFnSet.GetHeight(pFrame->getFrameArea());
                 pFrame = pFrame->GetNext();
@@ -3507,7 +3507,7 @@ long SwLayoutFrame::CalcRel( const SwFormatFrameSize &rSz ) const
     if ( nPercent )
     {
         const SwFrame *pRel = GetUpper();
-        long nRel = LONG_MAX;
+        sal_Int32 nRel = SAL_MAX_INT32;
         const SwViewShell *pSh = getRootFrame()->GetCurrShell();
         const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
         if( pRel->IsPageBodyFrame() && pSh && bBrowseMode && pSh->VisArea().Width() )
@@ -3612,7 +3612,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
         // nMinimum starts with the passed minimum height and is then remembered
         // as the maximum height on which column content still juts out of a
         // column.
-        // nMaximum starts with LONG_MAX and is then remembered as the minimum
+        // nMaximum starts with SAL_MAX_INT32 and is then remembered as the minimum
         // width on which the content fitted.
         // In column based sections nMaximum starts at the maximum value which
         // the surrounding defines, this can certainly be a value on which
@@ -3643,7 +3643,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
         {
             nMaximum = aRectFnSet.GetHeight(getFrameArea()) - nBorder +
                        aRectFnSet.BottomDist(getFrameArea(), aRectFnSet.GetPrtBottom(*GetUpper()));
-            nMaximum += GetUpper()->Grow( LONG_MAX, true );
+            nMaximum += GetUpper()->Grow( SAL_MAX_INT32, true );
             if( nMaximum < nMinimum )
             {
                 if( nMaximum < 0 )
@@ -3687,7 +3687,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
             }
         }
         else
-            nMaximum = LONG_MAX;
+            nMaximum = SAL_MAX_INT32;
 
         // #i3317# - reset temporarily consideration
         // of wrapping style influence
@@ -3746,7 +3746,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
             // OD 28.03.2003 #108446# - initialize local variable
             SwTwips nDiff = 0;
             SwTwips nMaxFree = 0;
-            SwTwips nAllFree = LONG_MAX;
+            SwTwips nAllFree = SAL_MAX_INT32;
             // set bFoundLower if there is at least one non-empty column
             bool bFoundLower = false;
             while( pCol )

@@ -47,7 +47,7 @@ class SwFrameFormats;
 class SwRegionRects;
 
 #define FAR_AWAY (SAL_MAX_INT32 - 20000)  // initial position of a Fly
-#define BROWSE_HEIGHT (56700L * 10L) // 10 Meters
+#define BROWSE_HEIGHT (56700 * 10) // 10 Meters
 #define GRFNUM_NO 0
 #define GRFNUM_YES 1
 #define GRFNUM_REPLACE 2
@@ -125,7 +125,7 @@ extern bool bDontCreateObjects;
 extern bool bSetCompletePaintOnInvalidate;
 
 // for table settings via keyboard
-long CalcRowRstHeight( SwLayoutFrame *pRow );
+SwTwips CalcRowRstHeight( SwLayoutFrame *pRow );
 long CalcHeightWithFlys( const SwFrame *pFrame );
 
 SwPageFrame *InsertNewPage( SwPageDesc &rDesc, SwFrame *pUpper,

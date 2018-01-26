@@ -216,8 +216,8 @@ void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
                 aFrmSize = Size(nLBorder - 3, (aTextLine.GetHeight() + 2) * 3);
                 break;
         }
-        aFrmSize.setWidth( std::max(5L, aFrmSize.Width()) );
-        aFrmSize.setHeight( std::max(5L, aFrmSize.Height()) );
+        aFrmSize.setWidth( std::max<sal_Int32>(5, aFrmSize.Width()) );
+        aFrmSize.setHeight( std::max<sal_Int32>(5, aFrmSize.Height()) );
     }
     else
     {
