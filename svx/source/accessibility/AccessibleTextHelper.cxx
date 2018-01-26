@@ -21,7 +21,6 @@
 // Global header
 
 
-#include <limits.h>
 #include <memory>
 #include <utility>
 #include <algorithm>
@@ -782,7 +781,7 @@ namespace accessibility
 
             for( nCurrPara=0; nCurrPara<nParas; ++nCurrPara )
             {
-                DBG_ASSERT(nCurrPara >= 0 && nCurrPara <= USHRT_MAX,
+                DBG_ASSERT(nCurrPara >= 0,
                            "AccessibleTextHelper_Impl::UpdateVisibleChildren: index value overflow");
 
                 aTmpBB = rCacheTF.GetParaBounds( nCurrPara );
@@ -1577,7 +1576,7 @@ namespace accessibility
         sal_Int32 nChild;
         for( nChild=mnFirstVisibleChild; nChild <= mnLastVisibleChild; ++nChild )
         {
-            DBG_ASSERT(nChild >= 0 && nChild <= USHRT_MAX,
+            DBG_ASSERT(nChild >= 0,
                        "AccessibleTextHelper_Impl::getAccessibleAt: index value overflow");
 
             tools::Rectangle aParaBounds( rCacheTF.GetParaBounds( nChild ) );
