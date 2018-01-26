@@ -120,7 +120,7 @@ void SidebarToolBox::InsertItem(const OUString& rCommand,
 
     ToolBox::InsertItem(aCommand, rFrame, nBits, rRequestedSize, nPos);
 
-    CreateController(GetItemId(aCommand), rFrame, std::max(rRequestedSize.Width(), 0L));
+    CreateController(GetItemId(aCommand), rFrame, std::max(rRequestedSize.Width(), 0));
     RegisterHandlers();
 }
 

@@ -591,7 +591,7 @@ void SwFlyFrameAttrMgr::SetRotation(sal_uInt16 nOld, sal_uInt16 nNew, const Size
 void SwFlyFrameAttrMgr::SetSize( const Size& rSize )
 {
     SwFormatFrameSize aSize( GetFrameSize() );
-    aSize.SetSize(Size(std::max(rSize.Width(), long(MINFLY)), std::max(rSize.Height(), long(MINFLY))));
+    aSize.SetSize(Size(std::max(rSize.Width(), MINFLY), std::max(rSize.Height(), MINFLY)));
     m_aSet.Put( aSize );
 }
 

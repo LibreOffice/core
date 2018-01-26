@@ -49,11 +49,11 @@ private:
     static BitmapBuffer*        ImplCreateDIB(
                                     Drawable aDrawable,
                                     SalX11Screen nXScreen,
-                                    long nDrawableDepth,
-                                    long nX,
-                                    long nY,
-                                    long nWidth,
-                                    long nHeight,
+                                    sal_Int32 nDrawableDepth,
+                                    sal_Int32 nX,
+                                    sal_Int32 nY,
+                                    sal_Int32 nWidth,
+                                    sal_Int32 nHeight,
                                     bool bGrey
                                 );
 

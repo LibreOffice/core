@@ -137,11 +137,11 @@ void SvtScriptedTextHelper_Impl::CalculateSizes()
 
     // calculate maximum font height
     SetOutDevFont( i18n::ScriptType::LATIN );
-    maTextSize.Height() = std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() );
+    maTextSize.Height() = std::max<sal_Int32>( maTextSize.Height(), mrOutDevice.GetTextHeight() );
     SetOutDevFont( i18n::ScriptType::ASIAN );
-    maTextSize.Height() = std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() );
+    maTextSize.Height() = std::max<sal_Int32>( maTextSize.Height(), mrOutDevice.GetTextHeight() );
     SetOutDevFont( i18n::ScriptType::COMPLEX );
-    maTextSize.Height() = std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() );
+    maTextSize.Height() = std::max<sal_Int32>( maTextSize.Height(), mrOutDevice.GetTextHeight() );
 
     mrOutDevice.Pop();
 }

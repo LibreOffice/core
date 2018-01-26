@@ -93,7 +93,7 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
 };
 static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet,
         sal_Int32 nHeight, sal_Int32 nWidth,
-        long *pTwipHeight=nullptr, long *pTwipWidth=nullptr )
+        sal_Int32 *pTwipHeight=nullptr, sal_Int32 *pTwipWidth=nullptr )
 {
     if( nWidth > 0 && nHeight > 0 )
     {

@@ -852,10 +852,10 @@ void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoi
 
 void OpenGLSalGraphicsImpl::DrawRect( long nX, long nY, long nWidth, long nHeight )
 {
-    long nX1( nX );
-    long nY1( nY );
-    long nX2( nX + nWidth );
-    long nY2( nY + nHeight );
+    sal_Int32 nX1( nX );
+    sal_Int32 nY1( nY );
+    sal_Int32 nX2( nX + nWidth );
+    sal_Int32 nY2( nY + nHeight );
     const SalPoint aPoints[] = { { nX1, nY2 }, { nX1, nY1 },
                                  { nX2, nY1 }, { nX2, nY2 }};
 
@@ -864,10 +864,10 @@ void OpenGLSalGraphicsImpl::DrawRect( long nX, long nY, long nWidth, long nHeigh
 
 void OpenGLSalGraphicsImpl::DrawRect( const tools::Rectangle& rRect )
 {
-    long nX1( rRect.Left() );
-    long nY1( rRect.Top() );
-    long nX2( rRect.Right() );
-    long nY2( rRect.Bottom() );
+    sal_Int32 nX1( rRect.Left() );
+    sal_Int32 nY1( rRect.Top() );
+    sal_Int32 nX2( rRect.Right() );
+    sal_Int32 nY2( rRect.Bottom() );
     const SalPoint aPoints[] = { { nX1, nY2 }, { nX1, nY1 },
                                  { nX2, nY1 }, { nX2, nY2 }};
 
