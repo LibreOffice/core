@@ -20,8 +20,6 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 4
-
 class ScAnnontationsObj : public CalcUnoApiTest, public apitest::XSheetAnnotations
 {
 public:
@@ -34,19 +32,20 @@ public:
     virtual uno::Reference< sheet::XSheetAnnotations > getAnnotations(long nIndex) override;
 
     CPPUNIT_TEST_SUITE(ScAnnontationsObj);
+
+    // XSheetAnnotations
     CPPUNIT_TEST(testInsertNew);
     CPPUNIT_TEST(testRemoveByIndex);
     CPPUNIT_TEST(testCount);
     CPPUNIT_TEST(testGetByIndex);
+
     CPPUNIT_TEST_SUITE_END();
+
 private:
 
-    static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< lang::XComponent > mxComponent;
 };
 
-sal_Int32 ScAnnontationsObj::nTest = 0;
-uno::Reference< lang::XComponent > ScAnnontationsObj::mxComponent;
 
 ScAnnontationsObj::ScAnnontationsObj()
        : CalcUnoApiTest("/sc/qa/extras/testdocuments")
@@ -57,6 +56,8 @@ uno::Reference< sheet::XSheetAnnotations> ScAnnontationsObj::getAnnotations(long
 {
     // get the sheet
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
+
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(nIndex), UNO_QUERY_THROW);
 
@@ -71,30 +72,22 @@ uno::Reference< sheet::XSheetAnnotations> ScAnnontationsObj::getAnnotations(long
 
 uno::Reference< uno::XInterface > ScAnnontationsObj::init()
 {
+    return getAnnotations(0);
+}
+
+void ScAnnontationsObj::setUp()
+{
+    CalcUnoApiTest::setUp();
+
     // get the test file
     OUString aFileURL;
     createFileURL("ScAnnotationObj.ods", aFileURL);
-    if(!mxComponent.is())
-        mxComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT_MESSAGE("Component not loaded",mxComponent.is());
-
-    return getAnnotations(0);
-}
-void ScAnnontationsObj::setUp()
-{
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
-    CalcUnoApiTest::setUp();
+    mxComponent = loadFromDesktop(aFileURL);
 }
 
 void ScAnnontationsObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
