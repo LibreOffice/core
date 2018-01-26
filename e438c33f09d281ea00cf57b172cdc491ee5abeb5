@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_c1cebd59",
+        "filename": "offapi/com/sun/star/style/CharacterProperties.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-26T15:08:47Z",
+      "side": 1,
+      "message": "@see -\u003e @since",
+      "revId": "e438c33f09d281ea00cf57b172cdc491ee5abeb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_4109ed94",
+        "filename": "offapi/com/sun/star/style/CharacterProperties.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-26T15:08:47Z",
+      "side": 1,
+      "message": "CharacterProperties is a published service, so this new optional property must come last in the service definition, to remain compatible",
+      "revId": "e438c33f09d281ea00cf57b172cdc491ee5abeb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e1dbc119",
+        "filename": "offapi/com/sun/star/text/RubyPosition.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-26T15:08:47Z",
+      "side": 1,
+      "message": "no need to publish this yet, IMO",
+      "revId": "e438c33f09d281ea00cf57b172cdc491ee5abeb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_01d9b521",
+        "filename": "offapi/com/sun/star/text/RubyPosition.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-26T15:08:47Z",
+      "side": 1,
+      "message": "as I wrote, better make these constants (and the corresponding RubyPosition) property be of type \u0027long\u0027 instead of \u0027short\u0027",
+      "revId": "e438c33f09d281ea00cf57b172cdc491ee5abeb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_61fef16c",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 2995,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-26T15:08:47Z",
+      "side": 1,
+      "message": "this insertion would only be necessary if RubyPosition were added to the middle of that service (see comment elsewhere); remove it completely again from this file (it will be added at the end the next time this file is re-generated after a LO version branch-off)",
+      "revId": "e438c33f09d281ea00cf57b172cdc491ee5abeb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_2104f97c",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 14744,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-26T15:08:47Z",
+      "side": 1,
+      "message": "do not manually add that here; it will be added the next time this file is re-generated after a LO version branch-off (if RubyPosition remains published)",
+      "revId": "e438c33f09d281ea00cf57b172cdc491ee5abeb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
