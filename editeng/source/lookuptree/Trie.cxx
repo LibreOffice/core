@@ -104,7 +104,7 @@ void TrieNode::collectSuggestionsForCurrentNode(TrieNode* pCurrent, const OUStri
     {
         rSuggestionList.push_back(aStringPath);
     }
-    // recursivly descend tree
+    // recursively descend tree
     pCurrent->collectSuggestions(aStringPath, rSuggestionList);
 }
 

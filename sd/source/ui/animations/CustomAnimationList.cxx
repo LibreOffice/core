@@ -69,7 +69,7 @@ using ::com::sun::star::beans::XPropertySetInfo;
 
 namespace sd {
 
-// go recursivly through all shapes in the given XShapes collection and return true as soon as the
+// go recursively through all shapes in the given XShapes collection and return true as soon as the
 // given shape is found. nIndex is incremented for each shape with the same shape type as the given
 // shape is found until the given shape is found.
 static bool getShapeIndex(  const Reference< XShapes >& xShapes, const Reference< XShape >& xShape, sal_Int32& nIndex )
