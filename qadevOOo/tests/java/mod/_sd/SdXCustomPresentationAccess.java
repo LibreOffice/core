@@ -159,7 +159,7 @@ public class SdXCustomPresentationAccess extends TestCase {
                 tEnv.addObjRelation("INSTANCE" + n, oInstance);
             }
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Could't adding INSTANCEn: " + e);
+            log.println("Couldn't adding INSTANCEn: " + e);
         }
 
         return tEnv;

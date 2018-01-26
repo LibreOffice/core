@@ -487,7 +487,7 @@ void SAL_CALL ProgressMonitor::dispose ()
     removeControl ( xRef_Button         );
     removeControl ( m_xProgressBar.get() );
 
-    // do'nt use "...->clear ()" or "... = XFixedText ()"
+    // don't use "...->clear ()" or "... = XFixedText ()"
     // when other hold a reference at this object !!!
     xRef_Topic_Top->dispose     ();
     xRef_Text_Top->dispose      ();
