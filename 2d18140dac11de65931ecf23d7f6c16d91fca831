@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa31d9ce_66ed278b",
+        "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-01-26T09:15:26Z",
+      "side": 1,
+      "message": "This approach here looks wrong. I think it does not cover secondary x-axis and I\u0027d be very careful with the assumption that the x-axis is always the first axis.",
+      "revId": "2d18140dac11de65931ecf23d7f6c16d91fca831",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_a6ff1f33",
+        "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-01-26T09:15:26Z",
+      "side": 1,
+      "message": "These are now basically part of the else branch to your if (bUseCustomLabel) above. Please merge the checks.",
+      "revId": "2d18140dac11de65931ecf23d7f6c16d91fca831",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_c6e5f3a8",
         "filename": "offapi/com/sun/star/chart2/DataPointCustomLabelField.idl",
         "patchSetId": 14
