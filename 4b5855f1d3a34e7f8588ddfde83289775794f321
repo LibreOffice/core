@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_3c3182a3",
+        "filename": "sc/source/ui/dbgui/asciiopt.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-26T22:56:52Z",
+      "side": 1,
+      "message": "One blank line wouldn\u0027t had hurt readability here ;-)\nLike in the other cases above.\n\nDone in commit 53a813c3d26932ac11b868c7bc27b50fe45d6f82",
+      "revId": "4b5855f1d3a34e7f8588ddfde83289775794f321",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_7c2bfa30",
+        "filename": "sc/source/ui/dbgui/asciiopt.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-26T22:56:52Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4b5855f1d3a34e7f8588ddfde83289775794f321",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
