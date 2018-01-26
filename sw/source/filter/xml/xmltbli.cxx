@@ -59,6 +59,7 @@
 #include <vcl/svapp.hxx>
 #include <ndtxt.hxx>
 
+#include <algorithm>
 #include <vector>
 #include <memory>
 
@@ -2693,9 +2694,11 @@ void SwXMLTableContext::MakeTable()
                 else
                 {
                     m_nWidth = pSize->GetWidth();
-                    if( m_nWidth < static_cast<sal_Int32>(GetColumnCount()) * MINLAY )
+                    sal_Int32 const min = static_cast<sal_Int32>(
+                        std::min<sal_uInt32>(GetColumnCount() * MINLAY, USHRT_MAX));
+                    if( m_nWidth < min )
                     {
-                        m_nWidth = GetColumnCount() * MINLAY;
+                        m_nWidth = min;
                     }
                     else if( m_nWidth > USHRT_MAX )
                     {
