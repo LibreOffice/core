@@ -324,9 +324,7 @@ SwViewShell::~SwViewShell()
 
         if ( mxDoc.get() )
         {
-            auto x = mxDoc->getReferenceCount();
-            mxDoc.clear();
-            if( x > 1 )
+            if( mxDoc->getReferenceCount() > 1 )
                 GetLayout()->ResetNewLayout();
         }
 
