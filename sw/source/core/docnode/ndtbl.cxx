@@ -2581,9 +2581,9 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
     const long nLeftMin  = ( aRectFnSet.IsVert() ?
                              pTab->GetPrtLeft() - pPage->getFrameArea().Left() :
                              pTab->GetPrtTop() - pPage->getFrameArea().Top() );
-    const long nLeft     = aRectFnSet.IsVert() ? LONG_MAX : 0;
+    const long nLeft     = aRectFnSet.IsVert() ? SAL_MAX_INT32 : 0;
     const long nRight    = aRectFnSet.GetHeight(pTab->getFramePrintArea());
-    const long nRightMax = aRectFnSet.IsVert() ? nRight : LONG_MAX;
+    const long nRightMax = aRectFnSet.IsVert() ? nRight : SAL_MAX_INT32;
 
     rFill.SetLeftMin( nLeftMin );
     rFill.SetLeft( nLeft );
@@ -2611,7 +2611,7 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
             aIter = aBoundaries.find( nUpperBorder );
             if ( aIter == aBoundaries.end() )
             {
-                aPair.first = nUpperBorder; aPair.second = LONG_MAX;
+                aPair.first = nUpperBorder; aPair.second = SAL_MAX_INT32;
                 aBoundaries[ nUpperBorder ] = aPair;
             }
 
@@ -2619,13 +2619,13 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
             aIter = aBoundaries.find( nLowerBorder );
             if ( aIter == aBoundaries.end() )
             {
-                aPair.first = nUpperBorder; aPair.second = LONG_MAX;
+                aPair.first = nUpperBorder; aPair.second = SAL_MAX_INT32;
             }
             else
             {
                 nLowerBorder = (*aIter).first;
                 long nNewLowerBorderUpperBoundary = std::max( (*aIter).second.first, nUpperBorder );
-                aPair.first = nNewLowerBorderUpperBoundary; aPair.second = LONG_MAX;
+                aPair.first = nNewLowerBorderUpperBoundary; aPair.second = SAL_MAX_INT32;
             }
             aBoundaries[ nLowerBorder ] = aPair;
 
@@ -2757,7 +2757,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
     if ( aRectFnSet.IsVert() )
     {
         nLeftMin = pTab->GetPrtLeft() - pPage->getFrameArea().Left();
-        aOld.SetLeft    ( LONG_MAX );
+        aOld.SetLeft    ( SAL_MAX_INT32 );
         aOld.SetRightMax( aOld.GetRight() );
 
     }
@@ -2765,7 +2765,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
     {
         nLeftMin = pTab->GetPrtTop() - pPage->getFrameArea().Top();
         aOld.SetLeft    ( 0 );
-        aOld.SetRightMax( LONG_MAX );
+        aOld.SetRightMax( SAL_MAX_INT32 );
     }
     aOld.SetLeftMin ( nLeftMin );
 

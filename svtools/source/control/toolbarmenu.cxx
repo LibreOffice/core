@@ -541,7 +541,7 @@ static long ImplGetNativeCheckAndRadioSize(vcl::RenderContext const & rRenderCon
         )
         {
             rRadioHeight = aNativeBounds.GetHeight();
-            rMaxWidth = std::max (rMaxWidth, aNativeContent.GetWidth());
+            rMaxWidth = std::max<sal_Int32>(rMaxWidth, aNativeContent.GetWidth());
         }
     }
     return std::max(rCheckHeight, rRadioHeight);
@@ -570,7 +570,7 @@ Size ToolbarMenu::implCalcSize()
             if( pEntry && pEntry->mbHasImage )
             {
                 Size aImgSz( pEntry->maImage.GetSizePixel() );
-                nMinMenuItemHeight = std::max( nMinMenuItemHeight, aImgSz.Height() + 6 );
+                nMinMenuItemHeight = std::max<sal_Int32>( nMinMenuItemHeight, aImgSz.Height() + 6 );
                 aMaxImgSz.setWidth( std::max( aMaxImgSz.Width(), aImgSz.Width() ) );
             }
         }
@@ -604,7 +604,7 @@ Size ToolbarMenu::implCalcSize()
             {
                 Size aControlSize( pEntry->mpControl->GetOutputSizePixel() );
 
-                nMaxTextWidth = std::max( aControlSize.Width(), nMaxTextWidth );
+                nMaxTextWidth = std::max<sal_Int32>( aControlSize.Width(), nMaxTextWidth );
                 pEntry->maSize.setHeight( aControlSize.Height() + 1 );
             }
 

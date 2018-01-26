@@ -2086,7 +2086,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
 
 void SfxHelpTextWindow_Impl::SetOnStartupBoxPosition()
 {
-    long nX = std::max( GetOutputSizePixel().Width() - aOnStartupCB->GetSizePixel().Width(), nMinPos );
+    long nX = std::max<sal_Int32>( GetOutputSizePixel().Width() - aOnStartupCB->GetSizePixel().Width(), nMinPos );
     Point aPos = aOnStartupCB->GetPosPixel();
     aPos.setX( nX );
     aOnStartupCB->SetPosPixel( aPos );

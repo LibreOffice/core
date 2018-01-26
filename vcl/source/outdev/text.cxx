@@ -156,8 +156,8 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
 tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
 {
     Point aPoint = rSalLayout.GetDrawPosition();
-    long nX = aPoint.X();
-    long nY = aPoint.Y();
+    sal_Int32 nX = aPoint.X();
+    sal_Int32 nY = aPoint.Y();
 
     long nWidth = rSalLayout.GetTextWidth();
     long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
@@ -169,8 +169,8 @@ tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout
         long nBaseX = nX, nBaseY = nY;
         if ( !(mpFontInstance->mnOrientation % 900) )
         {
-            long nX2 = nX+nWidth;
-            long nY2 = nY+nHeight;
+            sal_Int32 nX2 = nX+nWidth;
+            sal_Int32 nY2 = nY+nHeight;
 
             Point aBasePt( nBaseX, nBaseY );
             aBasePt.RotateAround( nX, nY, mpFontInstance->mnOrientation );

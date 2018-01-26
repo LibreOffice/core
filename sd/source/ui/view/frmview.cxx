@@ -349,17 +349,17 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
         {
             case SdrHelpLineKind::Point:
                 aLines.append( 'P' );
-                aLines.append( static_cast<sal_Int32>(rPos.X()) );
+                aLines.append( rPos.X() );
                 aLines.append( ',' );
-                aLines.append( static_cast<sal_Int32>(rPos.Y()) );
+                aLines.append( rPos.Y() );
                 break;
             case SdrHelpLineKind::Vertical:
                 aLines.append( 'V' );
-                aLines.append( static_cast<sal_Int32>(rPos.X()) );
+                aLines.append( rPos.X() );
                 break;
             case SdrHelpLineKind::Horizontal:
                 aLines.append( 'H' );
-                aLines.append( static_cast<sal_Int32>(rPos.Y()) );
+                aLines.append( rPos.Y() );
                 break;
             default:
                 OSL_FAIL( "Unsupported helpline Kind!" );
@@ -427,16 +427,16 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     {
         const ::tools::Rectangle aVisArea = GetVisArea();
 
-        aUserData.addValue( sUNO_View_VisibleAreaTop, makeAny( static_cast<sal_Int32>(aVisArea.Top()) ) );
-        aUserData.addValue( sUNO_View_VisibleAreaLeft, makeAny( static_cast<sal_Int32>(aVisArea.Left()) ) );
-        aUserData.addValue( sUNO_View_VisibleAreaWidth, makeAny( static_cast<sal_Int32>(aVisArea.GetWidth()) ) );
-        aUserData.addValue( sUNO_View_VisibleAreaHeight, makeAny( static_cast<sal_Int32>(aVisArea.GetHeight()) ) );
+        aUserData.addValue( sUNO_View_VisibleAreaTop, makeAny( aVisArea.Top() ) );
+        aUserData.addValue( sUNO_View_VisibleAreaLeft, makeAny( aVisArea.Left() ) );
+        aUserData.addValue( sUNO_View_VisibleAreaWidth, makeAny( aVisArea.GetWidth() ) );
+        aUserData.addValue( sUNO_View_VisibleAreaHeight, makeAny( aVisArea.GetHeight() ) );
     }
 
-    aUserData.addValue( sUNO_View_GridCoarseWidth, makeAny( static_cast<sal_Int32>(GetGridCoarse().Width()) ) );
-    aUserData.addValue( sUNO_View_GridCoarseHeight, makeAny( static_cast<sal_Int32>(GetGridCoarse().Height()) ) );
-    aUserData.addValue( sUNO_View_GridFineWidth, makeAny( static_cast<sal_Int32>(GetGridFine().Width()) ) );
-    aUserData.addValue( sUNO_View_GridFineHeight, makeAny( static_cast<sal_Int32>(GetGridFine().Height()) ) );
+    aUserData.addValue( sUNO_View_GridCoarseWidth, makeAny( GetGridCoarse().Width() ) );
+    aUserData.addValue( sUNO_View_GridCoarseHeight, makeAny( GetGridCoarse().Height() ) );
+    aUserData.addValue( sUNO_View_GridFineWidth, makeAny( GetGridFine().Width() ) );
+    aUserData.addValue( sUNO_View_GridFineHeight, makeAny( GetGridFine().Height() ) );
     aUserData.addValue( sUNO_View_GridSnapWidthXNumerator, makeAny( GetSnapGridWidthX().GetNumerator() ) );
     aUserData.addValue( sUNO_View_GridSnapWidthXDenominator, makeAny( GetSnapGridWidthX().GetDenominator() ) );
     aUserData.addValue( sUNO_View_GridSnapWidthYNumerator, makeAny( GetSnapGridWidthY().GetNumerator() ) );

@@ -283,7 +283,7 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
                 // dynamic height: calculate header height, add header <-> sheet area distance
                 (aHFConv.GetTotalHeight() + rHdrItemSet.Get( ATTR_ULSPACE ).GetLower()) :
                 // static height: ATTR_PAGE_SIZE already includes header <-> sheet area distance
-                static_cast< sal_Int32 >( rHdrItemSet.Get( ATTR_PAGE_SIZE ).GetSize().Height() );
+                ( rHdrItemSet.Get( ATTR_PAGE_SIZE ).GetSize().Height() );
             maData.mfHeaderMargin = maData.mfTopMargin;
             maData.mfTopMargin += XclTools::GetInchFromTwips( nHdrHeight );
         }
@@ -300,7 +300,7 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
                 // dynamic height: calculate footer height, add sheet area <-> footer distance
                 (aHFConv.GetTotalHeight() + rFtrItemSet.Get( ATTR_ULSPACE ).GetUpper()) :
                 // static height: ATTR_PAGE_SIZE already includes sheet area <-> footer distance
-                static_cast< sal_Int32 >( rFtrItemSet.Get( ATTR_PAGE_SIZE ).GetSize().Height() );
+                ( rFtrItemSet.Get( ATTR_PAGE_SIZE ).GetSize().Height() );
             maData.mfFooterMargin = maData.mfBottomMargin;
             maData.mfBottomMargin += XclTools::GetInchFromTwips( nFtrHeight );
         }

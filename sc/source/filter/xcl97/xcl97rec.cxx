@@ -653,9 +653,10 @@ void VmlCommentExporter::EndShape( sal_Int32 nShapeElement )
 {
     char pAnchor[100];
     sax_fastparser::FSHelperPtr pVmlDrawing = GetFS();
-    snprintf( pAnchor, 100, "%ld, %ld, %ld, %ld, %ld, %ld, %ld, %ld",
-                  maFrom.Left(), maFrom.Top(), maFrom.Right(), maFrom.Bottom(),
-                  maTo.Left(), maTo.Top(), maTo.Right(), maTo.Bottom() );
+    snprintf( pAnchor, 100, "%" SAL_PRIdINT32 ", %" SAL_PRIdINT32 ", %" SAL_PRIdINT32
+                  ", %" SAL_PRIdINT32 ", %" SAL_PRIdINT32 ", %" SAL_PRIdINT32 ", %" SAL_PRIdINT32 ", %" SAL_PRIdINT32,
+                  sal_Int32(maFrom.Left()), sal_Int32(maFrom.Top()), sal_Int32(maFrom.Right()), sal_Int32(maFrom.Bottom()),
+                  sal_Int32(maTo.Left()), sal_Int32(maTo.Top()), sal_Int32(maTo.Right()), sal_Int32(maTo.Bottom()) );
 
     pVmlDrawing->startElement( FSNS( XML_x, XML_ClientData ),
             XML_ObjectType, "Note",

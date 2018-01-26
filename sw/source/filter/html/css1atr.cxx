@@ -412,7 +412,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
 
     long nLongVal = 0;
     bool bOutLongVal = true;
-    if( nVal > LONG_MAX / nMul )
+    if( nVal > SAL_MAX_INT32 / nMul )
     {
         sal_Int64 nBigVal( nVal );
         nBigVal *= nMul;
@@ -420,7 +420,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
         nBigVal += 5;
         nBigVal /= 10;
 
-        if( nBigVal <= LONG_MAX )
+        if( nBigVal <= SAL_MAX_INT32 )
         {
             // a long is sufficient
             nLongVal = static_cast<long>(nBigVal);

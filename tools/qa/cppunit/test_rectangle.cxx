@@ -32,28 +32,28 @@ void Test::test_rectangle()
     {
         tools::Rectangle aRect(1,1,1,1);
 
-        CPPUNIT_ASSERT_EQUAL(long(1), aRect.GetWidth());
-        CPPUNIT_ASSERT_EQUAL(long(1), aRect.GetHeight());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRect.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRect.GetHeight());
 
-        CPPUNIT_ASSERT_EQUAL(long(0), aRect.getWidth());
-        CPPUNIT_ASSERT_EQUAL(long(0), aRect.getHeight());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aRect.getWidth());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aRect.getHeight());
     }
 
     {
         tools::Rectangle aRect(Point(), Size(1,1));
 
-        CPPUNIT_ASSERT_EQUAL(long(0), aRect.Left());
-        CPPUNIT_ASSERT_EQUAL(long(0), aRect.Top());
-        CPPUNIT_ASSERT_EQUAL(long(0), aRect.Right());
-        CPPUNIT_ASSERT_EQUAL(long(0), aRect.Bottom());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sal_Int32(aRect.Left()));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sal_Int32(aRect.Top()));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sal_Int32(aRect.Right()));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sal_Int32(aRect.Bottom()));
 
-        CPPUNIT_ASSERT_EQUAL(long(1), aRect.GetWidth());
-        CPPUNIT_ASSERT_EQUAL(long(1), aRect.GetHeight());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRect.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRect.GetHeight());
 
         aRect.setX(12);
-        CPPUNIT_ASSERT_EQUAL(long(1), aRect.GetHeight());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRect.GetHeight());
         aRect.setY(12);
-        CPPUNIT_ASSERT_EQUAL(long(1), aRect.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRect.GetWidth());
     }
 }
 

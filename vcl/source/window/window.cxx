@@ -2361,8 +2361,8 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
             // a system resize
             if ( mpWindowImpl->mbWaitSystemResize )
             {
-                long nOutWidth;
-                long nOutHeight;
+                sal_Int32 nOutWidth;
+                sal_Int32 nOutHeight;
                 mpWindowImpl->mpFrame->GetClientSize( nOutWidth, nOutHeight );
                 ImplHandleResize( this, nOutWidth, nOutHeight );
             }

@@ -2151,7 +2151,7 @@ Size TabControl::calculateRequisition() const
 
     Size aOptimalSize(aOptimalPageSize);
     aOptimalSize.AdjustHeight(nTabLabelsBottom );
-    aOptimalSize.setWidth( std::max(nTabLabelsRight, aOptimalSize.Width()) );
+    aOptimalSize.setWidth( std::max<sal_Int32>(nTabLabelsRight, aOptimalSize.Width()) );
 
     aOptimalSize.AdjustWidth(TAB_OFFSET * 2 );
     aOptimalSize.AdjustHeight(TAB_OFFSET * 2 );
@@ -2683,7 +2683,7 @@ Size NotebookbarTabControlBase::calculateRequisition() const
 
     Size aOptimalSize(aOptimalPageSize);
     aOptimalSize.AdjustHeight(nTabLabelsBottom );
-    aOptimalSize.setWidth( std::max(nTabLabelsRight, aOptimalSize.Width()) );
+    aOptimalSize.setWidth( std::max<sal_Int32>(nTabLabelsRight, aOptimalSize.Width()) );
 
     aOptimalSize.AdjustWidth(TAB_OFFSET * 2 );
     aOptimalSize.AdjustHeight(TAB_OFFSET * 2 );

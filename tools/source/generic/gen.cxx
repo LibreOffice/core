@@ -204,6 +204,7 @@ SvStream& ReadRectangle( SvStream& rIStream, tools::Rectangle& rRect )
     rRect.nTop = nTmpT;
     rRect.nRight = nTmpR;
     rRect.nBottom = nTmpB;
+    rRect.checkFieldsInRange();
 
     return rIStream;
 }

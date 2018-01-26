@@ -368,7 +368,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         }
         else
         {
-            sOut.append(static_cast<sal_Int32>(aPixelSz.Width()));
+            sOut.append(aPixelSz.Width());
         }
         sOut.append("\"");
     }
@@ -376,7 +376,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if( nHeight )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height)
-            .append("=\"").append(static_cast<sal_Int32>(aPixelSz.Height())).append("\"");
+            .append("=\"").append(aPixelSz.Height()).append("\"");
     }
 
     const SfxItemSet& rItemSet = pBox->GetFrameFormat()->GetAttrSet();
@@ -664,13 +664,13 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         if( aPixelSpc.Width() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_hspace).
-                append("=\"").append(static_cast<sal_Int32>(aPixelSpc.Width())).append("\"");
+                append("=\"").append(aPixelSpc.Width()).append("\"");
         }
 
         if( aPixelSpc.Height() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_vspace).
-                append("=\"").append(static_cast<sal_Int32>(aPixelSpc.Height())).append("\"");
+                append("=\"").append(aPixelSpc.Height()).append("\"");
         }
     }
 

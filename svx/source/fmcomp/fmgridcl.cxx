@@ -1494,7 +1494,7 @@ void FmGridControl::RowHeightChanged()
         try
         {
             sal_Int32 nUnzoomedPixelHeight = CalcReverseZoom( GetDataRowHeight() );
-            Any aProperty = makeAny( static_cast<sal_Int32>(PixelToLogic( Point(0, nUnzoomedPixelHeight), MapMode(MapUnit::Map10thMM)).Y()) );
+            Any aProperty = makeAny( PixelToLogic( Point(0, nUnzoomedPixelHeight), MapMode(MapUnit::Map10thMM)).Y() );
             xModel->setPropertyValue( FM_PROP_ROWHEIGHT, aProperty );
         }
         catch( const Exception& )
@@ -1517,7 +1517,7 @@ void FmGridControl::ColumnResized(sal_uInt16 nId)
         sal_Int32 nColumnWidth = GetColumnWidth(nId);
         nColumnWidth = CalcReverseZoom(nColumnWidth);
         // convert to 10THMM
-        aWidth <<= static_cast<sal_Int32>(PixelToLogic(Point(nColumnWidth, 0), MapMode(MapUnit::Map10thMM)).X());
+        aWidth <<= PixelToLogic(Point(nColumnWidth, 0), MapMode(MapUnit::Map10thMM)).X();
         xColModel->setPropertyValue(FM_PROP_WIDTH, aWidth);
     }
 }

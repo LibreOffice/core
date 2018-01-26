@@ -389,8 +389,8 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
     }
     else
     {
-        nLeftCrop = std::max( aOrigSz.Width() -
-                            (rCrop.GetRight() + rCrop.GetLeft()), long(1) );
+        nLeftCrop = std::max<sal_Int32>( aOrigSz.Width() -
+                                        (rCrop.GetRight() + rCrop.GetLeft()), 1 );
         const double nScale = double(aFramePrintArea.Width())  / double(nLeftCrop);
         nLeftCrop  = long(nScale * -rCrop.GetLeft() );
         nRightCrop = long(nScale * -rCrop.GetRight() );
@@ -412,7 +412,7 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
     }
     else
     {
-        nTopCrop = std::max( aOrigSz.Height() - (rCrop.GetTop() + rCrop.GetBottom()), long(1) );
+        nTopCrop = std::max<sal_Int32>( aOrigSz.Height() - (rCrop.GetTop() + rCrop.GetBottom()), 1 );
         const double nScale = double(aFramePrintArea.Height()) / double(nTopCrop);
         nTopCrop   = long(nScale * -rCrop.GetTop() );
         nBottomCrop= long(nScale * -rCrop.GetBottom() );

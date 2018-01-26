@@ -406,8 +406,8 @@ void BitmapTest::testScale()
 
     BitmapSymmetryCheck aBitmapSymmetryCheck;
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(10), aBitmap24Bit.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(10), aBitmap24Bit.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aBitmap24Bit.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aBitmap24Bit.GetSizePixel().Height());
 
     // Check symmetry of the bitmap
     CPPUNIT_ASSERT(BitmapSymmetryCheck::check(aBitmap24Bit));
@@ -421,8 +421,8 @@ void BitmapTest::testScale()
 
     aBitmap24Bit.Scale(2, 2, BmpScaleFlag::Fast);
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(20), aBitmap24Bit.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(20), aBitmap24Bit.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(20), aBitmap24Bit.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(20), aBitmap24Bit.GetSizePixel().Height());
 
     // After scaling the bitmap should still be symmetrical. This check guarantees that
     // scaling doesn't misalign the bitmap.

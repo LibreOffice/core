@@ -93,7 +93,7 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
         InitPrt( pPDFOut );
 
     // i#44963 Good occasion to check if page sizes in
-    // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
+    // page descriptions are still set to (SAL_MAX_INT32, SAL_MAX_INT32) (html import)
     if ( !bBrowseMode )
     {
         mxDoc->CheckDefaultPageFormat();

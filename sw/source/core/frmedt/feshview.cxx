@@ -1465,7 +1465,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
     const SdrObject *pBest  = nullptr,
                     *pTop   = nullptr;
 
-    const long nTmp = bNext ? LONG_MAX : 0;
+    const long nTmp = bNext ? SAL_MAX_INT32 : 0;
     Point aBestPos( nTmp, nTmp );
     Point aTopPos(  nTmp, nTmp );
     Point aCurPos;
@@ -1629,7 +1629,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
             }
         }
         // unfortunately nothing found
-        if( bNext ? (aBestPos.getX() == LONG_MAX) : (aBestPos.getX() == 0) )
+        if( bNext ? (aBestPos.getX() == SAL_MAX_INT32) : (aBestPos.getX() == 0) )
             pBest = pTop;
     }
 

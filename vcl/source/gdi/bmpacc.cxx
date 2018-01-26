@@ -348,7 +348,7 @@ void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc 
         // TODO: use fastbmp infrastructure
         Scanline pScanline = GetScanline( nY );
         Scanline pScanlineRead = rReadAcc.GetScanline(nY);
-        for( long nX = 0, nWidth = std::min( mpBuffer->mnWidth, rReadAcc.Width() ); nX < nWidth; nX++ )
+        for( long nX = 0, nWidth = std::min<sal_Int32>( mpBuffer->mnWidth, rReadAcc.Width() ); nX < nWidth; nX++ )
             SetPixelOnData( pScanline, nX, rReadAcc.GetPixelFromData( pScanlineRead, nX ) );
     }
 }
@@ -420,13 +420,13 @@ void BitmapWriteAccess::CopyBuffer( const BitmapReadAccess& rReadAcc )
     if( ( GetScanlineFormat() == rReadAcc.GetScanlineFormat() ) &&
         ( GetScanlineSize() == rReadAcc.GetScanlineSize() ) )
     {
-        const long  nHeight = std::min( mpBuffer->mnHeight, rReadAcc.Height() );
+        const long  nHeight = std::min<sal_Int32>( mpBuffer->mnHeight, rReadAcc.Height() );
         const sal_uLong nCount = nHeight * mpBuffer->mnScanlineSize;
 
         memcpy( mpBuffer->mpBits, rReadAcc.GetBuffer(), nCount );
     }
     else
-        for( long nY = 0, nHeight = std::min( mpBuffer->mnHeight, rReadAcc.Height() ); nY < nHeight; nY++ )
+        for( long nY = 0, nHeight = std::min<sal_Int32>( mpBuffer->mnHeight, rReadAcc.Height() ); nY < nHeight; nY++ )
             CopyScanline( nY, rReadAcc );
 }
 

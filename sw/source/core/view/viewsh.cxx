@@ -348,9 +348,9 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                         aTmp1 = GetOut()->LogicToPixel( aTmp1 );
                         tools::Rectangle aTmp2( GetOut()->PixelToLogic( aTmp1 ) );
                         if ( aTmp2.Left() > aRect.Left() )
-                            aTmp1.SetLeft( std::max( 0L, aTmp1.Left() - 1 ) );
+                            aTmp1.SetLeft( std::max<sal_Int32>( 0, aTmp1.Left() - 1 ) );
                         if ( aTmp2.Top() > aRect.Top() )
-                            aTmp1.SetTop( std::max( 0L, aTmp1.Top() - 1 ) );
+                            aTmp1.SetTop( std::max<sal_Int32>( 0, aTmp1.Top() - 1 ) );
                         aTmp1.AdjustRight(1 );
                         aTmp1.AdjustBottom(1 );
                         aTmp1 = GetOut()->PixelToLogic( aTmp1 );
@@ -1224,7 +1224,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle
     // #i98766# - disable smooth scrolling for Mac
 
     const sal_uLong nColCnt = mpOut->GetColorCount();
-    long lMult = 1, lMax = LONG_MAX;
+    long lMult = 1, lMax = SAL_MAX_INT32;
     if ( nColCnt == 65536 )
     {
         lMax = 7000;
@@ -1271,14 +1271,14 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle
             aRect.Height( aSize.Height() );
             if ( pRect )
             {
-                aRect.Pos().setX( std::max(aRect.Left(),pRect->Left()-aPixSz.Width()) );
-                aRect.Right( std::min(aRect.Right()+2*aPixSz.Width(), pRect->Right()+aPixSz.Width()));
+                aRect.Pos().setX( std::max<sal_Int32>(aRect.Left(),pRect->Left()-aPixSz.Width()) );
+                aRect.Right( std::min<sal_Int32>(aRect.Right()+2*aPixSz.Width(), pRect->Right()+aPixSz.Width()));
             }
             else
                 aRect.SSize().AdjustWidth(2*aPixSz.Width() );
             aRect.Pos().setY( lYDiff < 0 ? aOldVis.Bottom() - aPixSz.Height()
                                          : aRect.Top() - aSize.Height() + aPixSz.Height() );
-            aRect.Pos().setX( std::max( 0L, aRect.Left()-aPixSz.Width() ) );
+            aRect.Pos().setX( std::max<sal_Int32>( 0, aRect.Left()-aPixSz.Width() ) );
             aRect.Pos()  = GetWin()->PixelToLogic( GetWin()->LogicToPixel( aRect.Pos()));
             aRect.SSize()= GetWin()->PixelToLogic( GetWin()->LogicToPixel( aRect.SSize()));
             maVisArea = aRect;
@@ -2230,7 +2230,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     if( bBrowseModeChanged || bHideWhitespaceModeChanged )
     {
         // #i44963# Good occasion to check if page sizes in
-        // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
+        // page descriptions are still set to (SAL_MAX_INT32, SAL_MAX_INT32) (html import)
         mxDoc->CheckDefaultPageFormat();
         InvalidateLayout( true );
     }

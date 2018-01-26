@@ -316,7 +316,7 @@ Size FixedText::getTextDimensions(Control const *pControl, const OUString &rTxt,
     if ( !( pControl->GetStyle() & WB_NOLABEL ) )
         nStyle |= DrawTextFlags::Mnemonic;
 
-    return pControl->GetTextRect(tools::Rectangle( Point(), Size(nMaxWidth, 0x7fffffff)),
+    return pControl->GetTextRect(tools::Rectangle( Point(), Size(nMaxWidth, RECT_MAX)),
                                        rTxt, nStyle).GetSize();
 }
 

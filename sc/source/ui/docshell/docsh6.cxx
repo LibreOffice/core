@@ -86,15 +86,15 @@ void ScDocShell::SetVisAreaOrSize( const tools::Rectangle& rVisArea )
             //  Move the VisArea, otherwise only the upper left position would
             //  be changed in SnapVisArea, and the size would be wrong.
 
-            Point aNewPos( 0, std::max( aArea.Top(), long(0) ) );
+            Point aNewPos( 0, std::max<sal_Int32>( aArea.Top(), 0 ) );
             if ( bNegativePage )
             {
-                aNewPos.setX( std::min( aArea.Right(), long(0) ) );
+                aNewPos.setX( std::min<sal_Int32>( aArea.Right(), 0 ) );
                 lcl_SetTopRight( aArea, aNewPos );
             }
             else
             {
-                aNewPos.setX( std::max( aArea.Left(), long(0) ) );
+                aNewPos.setX( std::max<sal_Int32>( aArea.Left(), 0 ) );
                 aArea.SetPos( aNewPos );
             }
         }

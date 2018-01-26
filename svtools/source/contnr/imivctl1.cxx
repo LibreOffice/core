@@ -289,7 +289,7 @@ void SvxIconChoiceCtrl_Impl::InsertEntry( SvxIconChoiceCtrlEntry* pEntry, size_t
     // If the UpdateMode is true, don't set all bounding rectangles to
     // 'to be checked', but only the bounding rectangle of the new entry.
     // Thus, don't call InvalidateBoundingRect!
-    pEntry->aRect.SetRight( LONG_MAX );
+    pEntry->aRect.SetRight( RECT_MAX );
     if( bUpdateMode )
     {
         FindBoundingRect( pEntry );
@@ -1859,7 +1859,7 @@ long SvxIconChoiceCtrl_Impl::CalcBoundingWidth() const
     switch( nWinBits & VIEWMODE_MASK )
     {
         case WB_ICON:
-            nWidth = std::max( nStringWidth, aImageSize.Width() );
+            nWidth = std::max<sal_Int32>( nStringWidth, aImageSize.Width() );
             break;
 
         case WB_SMALLICON:
@@ -1887,7 +1887,7 @@ long SvxIconChoiceCtrl_Impl::CalcBoundingHeight() const
 
         case WB_SMALLICON:
         case WB_DETAILS:
-            nHeight = std::max( aImageSize.Height(), nStringHeight );
+            nHeight = std::max<sal_Int32>( aImageSize.Height(), nStringHeight );
             break;
     }
     if( nHeight > nMaxBoundHeight )
@@ -2349,7 +2349,7 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcMaxTextRect( const SvxIconChoiceCtr
         if( aBoundRect.Left() > aBoundRect.Right())
             aBoundRect.SetLeft( aBoundRect.Right() );
         if( pEntry->GetTextMode() == SvxIconChoiceCtrlTextMode::Full )
-            aBoundRect.SetBottom( LONG_MAX );
+            aBoundRect.SetBottom( RECT_MAX );
     }
     else
     {
@@ -3267,7 +3267,7 @@ bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
         return false;
 
     tools::Rectangle aOptTextRect( aTextRect );
-    aOptTextRect.SetBottom( LONG_MAX );
+    aOptTextRect.SetBottom( RECT_MAX );
     DrawTextFlags nNewFlags = nCurTextDrawFlags;
     nNewFlags &= ~DrawTextFlags( DrawTextFlags::Clip | DrawTextFlags::EndEllipsis );
     aOptTextRect = pView->GetTextRect( aOptTextRect, aEntryText, nNewFlags );

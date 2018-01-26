@@ -661,10 +661,10 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
     }
     if ( IsUserDrawEnabled() || aMetrics.bImage )
     {
-        aMetrics.nEntryWidth = std::max( aMetrics.nImgWidth, maUserItemSize.Width() );
+        aMetrics.nEntryWidth = std::max<sal_Int32>( aMetrics.nImgWidth, maUserItemSize.Width() );
         if ( aMetrics.bText )
             aMetrics.nEntryWidth += aMetrics.nTextWidth + IMG_TXT_DISTANCE;
-        aMetrics.nEntryHeight = std::max( std::max( mnMaxImgHeight, maUserItemSize.Height() ) + 2,
+        aMetrics.nEntryHeight = std::max<sal_Int32>( std::max<sal_Int32>( mnMaxImgHeight, maUserItemSize.Height() ) + 2,
                                      aMetrics.nEntryHeight );
     }
 
@@ -1802,7 +1802,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
 
             if (!bDrawTextAtImagePos && (mpEntryList->HasEntryImage(nPos) || IsUserDrawEnabled()))
             {
-                long nImageWidth = std::max(mnMaxImgWidth, maUserItemSize.Width());
+                sal_Int32 nImageWidth = std::max<sal_Int32>(mnMaxImgWidth, maUserItemSize.Width());
                 aTextRect.AdjustLeft(nImageWidth + IMG_TXT_DISTANCE );
             }
 

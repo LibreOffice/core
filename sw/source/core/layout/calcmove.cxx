@@ -157,7 +157,7 @@ bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool & )
                    ( pNewUpper->IsColBodyFrame() &&
                      !pNewUpper->GetUpper()->GetPrev() &&
                      !pNewUpper->GetUpper()->GetNext() ) ) ) )
-                nSpace += pNewUpper->Grow( LONG_MAX, true );
+                nSpace += pNewUpper->Grow( SAL_MAX_INT32, true );
 
             if ( nMoveAnyway < 3 )
             {
@@ -644,15 +644,15 @@ void SwFrame::MakePos()
 }
 
 // #i28701# - new type <SwSortedObjs>
-static void lcl_CheckObjects(SwSortedObjs& rSortedObjs, const SwFrame* pFrame, long& rBot)
+static void lcl_CheckObjects(SwSortedObjs& rSortedObjs, const SwFrame* pFrame, sal_Int32& rBot)
 {
     // And then there can be paragraph anchored frames that sit below their paragraph.
-    long nMax = 0;
+    sal_Int32 nMax = 0;
     for (SwAnchoredObject* pObj : rSortedObjs)
     {
         // #i28701# - consider changed type of <SwSortedObjs>
         // entries.
-        long nTmp = 0;
+        sal_Int32 nTmp = 0;
         if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
         {
             SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pObj);
@@ -679,11 +679,11 @@ size_t SwPageFrame::GetContentHeight(const long nTop, const long nBottom) const
                "SwPageFrame::GetContentHeight(): No support for columns.");
 
     // In pages without columns, the content defines the size.
-    long nBot = getFrameArea().Top() + nTop;
+    sal_Int32 nBot = getFrameArea().Top() + nTop;
     const SwFrame *pFrame = Lower();
     while (pFrame)
     {
-        long nTmp = 0;
+        sal_Int32 nTmp = 0;
         const SwFrame *pCnt = static_cast<const SwLayoutFrame*>(pFrame)->ContainsAny();
         while (pCnt && (pCnt->GetUpper() == pFrame ||
                static_cast<const SwLayoutFrame*>(pFrame)->IsAnLower(pCnt)))
@@ -812,7 +812,7 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         else
                         {
                             // In pages without columns, the content defines the size.
-                            long nBot = GetContentHeight(nTop, nBottom);
+                            sal_Int32 nBot = GetContentHeight(nTop, nBottom);
 
                             // #i35143# - If second page frame
                             // exists, the first page doesn't have to fulfill the
@@ -823,7 +823,7 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
                             }
                             // #i35143# - Assure, that the page
                             // doesn't exceed the defined browse height.
-                            aFrm.Height( std::min( nBot, BROWSE_HEIGHT ) );
+                            aFrm.Height( std::min<sal_Int32>( nBot, BROWSE_HEIGHT ) );
                         }
                     }
 
@@ -1053,7 +1053,7 @@ void SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
                 // Do not protrude the edge of the visible area. The page may be
                 // wider, because there may be objects with excess width
                 // (RootFrame::ImplCalcBrowseWidth())
-                long nMinWidth = 0;
+                sal_Int32 nMinWidth = 0;
 
                 for (size_t i = 0; GetDrawObjs() && i < GetDrawObjs()->size(); ++i)
                 {
@@ -1077,7 +1077,7 @@ void SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
                 }
 
                 const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
-                long nWidth = nWidthArea - 2 * ( IsVertical() ? aBorder.Height() : aBorder.Width() );
+                sal_Int32 nWidth = nWidthArea - 2 * ( IsVertical() ? aBorder.Height() : aBorder.Width() );
                 nWidth -= aRectFnSet.GetLeft(getFramePrintArea());
                 nWidth -= rAttrs.CalcRightLine();
                 nWidth = std::max( nMinWidth, nWidth );
@@ -1091,7 +1091,7 @@ void SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
                 // The PrtArea should already be at least MINLAY wide, matching the
                 // minimal values of the UI
                 SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-                aRectFnSet.SetWidth( aPrt, std::min( long(MINLAY), aRectFnSet.GetWidth(getFrameArea()) ) );
+                aRectFnSet.SetWidth( aPrt, std::min<sal_Int32>( MINLAY, aRectFnSet.GetWidth(getFrameArea()) ) );
                 SwTwips nTmp = aRectFnSet.GetWidth(getFrameArea()) - aRectFnSet.GetWidth(aPrt);
 
                 if( aRectFnSet.GetLeft(aPrt) > nTmp )

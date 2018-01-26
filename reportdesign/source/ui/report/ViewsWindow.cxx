@@ -818,7 +818,6 @@ void OViewsWindow::alignMarkedObjects(ControlModification _nControlModification,
                     aGetFun  = ::std::mem_fn(&tools::Rectangle::Left);
                     aSetFun  = ::std::mem_fn(&tools::Rectangle::SetLeft);
                     aRefFun  = ::std::mem_fn(&tools::Rectangle::Right);
-                    break;
                 default:
                     bMove = false;
                     break;

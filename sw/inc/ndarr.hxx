@@ -285,7 +285,7 @@ public:
        All base lines behind it are moved to a new table/ -node.
        Is the flag bCalcNewSize set to TRUE, the new SSize for both
        tables is calculated from the Maximum of the boxes, provided
-       SSize is set "absolute" (LONG_MAX).
+       SSize is set "absolute" (SAL_MAX_INT32).
        (Momentarily this is needed only for the RTF-parser.) */
     SwTableNode* SplitTable( const SwNodeIndex& rPos, bool bAfter = true,
                                 bool bCalcNewSize = false );

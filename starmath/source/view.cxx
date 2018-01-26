@@ -982,7 +982,7 @@ Size SmViewShell::GetTextSize(OutputDevice const & rDevice, const OUString& rTex
                 aLine = aLine.replaceAt(0, m, "");
                 aSize = GetTextLineSize(rDevice, aText);
                 aTextSize.AdjustHeight(aSize.Height() );
-                aTextSize.setWidth( std::max(aTextSize.Width(), std::min(aSize.Width(), MaxWidth)) );
+                aTextSize.setWidth( std::max(aTextSize.Width(), std::min<sal_Int32>(aSize.Width(), MaxWidth)) );
 
                 aLine = comphelper::string::stripStart(aLine, ' ');
                 aLine = comphelper::string::stripStart(aLine, '\t');

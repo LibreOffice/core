@@ -1394,9 +1394,9 @@ void PDFWriterImpl::PDFPage::appendRect( const tools::Rectangle& rRect, OStringB
 {
     appendPoint( rRect.BottomLeft() + Point( 0, 1 ), rBuffer );
     rBuffer.append( ' ' );
-    appendMappedLength( static_cast<sal_Int32>(rRect.GetWidth()), rBuffer, false );
+    appendMappedLength( rRect.GetWidth(), rBuffer, false );
     rBuffer.append( ' ' );
-    appendMappedLength( static_cast<sal_Int32>(rRect.GetHeight()), rBuffer );
+    appendMappedLength( rRect.GetHeight(), rBuffer );
     rBuffer.append( " re" );
 }
 
@@ -2767,10 +2767,10 @@ bool PDFWriterImpl::emitTilings()
             emitComment( "PDFWriterImpl::emitTilings" );
         }
 
-        sal_Int32 nX = static_cast<sal_Int32>(tiling.m_aRectangle.Left());
-        sal_Int32 nY = static_cast<sal_Int32>(tiling.m_aRectangle.Top());
-        sal_Int32 nW = static_cast<sal_Int32>(tiling.m_aRectangle.GetWidth());
-        sal_Int32 nH = static_cast<sal_Int32>(tiling.m_aRectangle.GetHeight());
+        sal_Int32 nX = tiling.m_aRectangle.Left();
+        sal_Int32 nY = tiling.m_aRectangle.Top();
+        sal_Int32 nW = tiling.m_aRectangle.GetWidth();
+        sal_Int32 nH = tiling.m_aRectangle.GetHeight();
         if( tiling.m_aCellSize.Width() == 0 )
             tiling.m_aCellSize.setWidth( nW );
         if( tiling.m_aCellSize.Height() == 0 )
@@ -3143,11 +3143,11 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const PhysicalFontFace* pFont, Font
     aLine.append( "\n"
                   "/FontBBox[" );
     // note: Top and Bottom are reversed in VCL and PDF rectangles
-    aLine.append( static_cast<sal_Int32>(rInfo.m_aFontBBox.TopLeft().X()) );
+    aLine.append( rInfo.m_aFontBBox.TopLeft().X() );
     aLine.append( ' ' );
-    aLine.append( static_cast<sal_Int32>(rInfo.m_aFontBBox.TopLeft().Y()) );
+    aLine.append( rInfo.m_aFontBBox.TopLeft().Y() );
     aLine.append( ' ' );
-    aLine.append( static_cast<sal_Int32>(rInfo.m_aFontBBox.BottomRight().X()) );
+    aLine.append( rInfo.m_aFontBBox.BottomRight().X() );
     aLine.append( ' ' );
     aLine.append( static_cast<sal_Int32>(rInfo.m_aFontBBox.BottomRight().Y()+1) );
     aLine.append( "]/ItalicAngle " );
@@ -4402,7 +4402,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     aDA.append( ' ' );
     aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
     aDA.append( ' ' );
-    m_aPages[ m_nCurrentPage ].appendMappedLength( sal_Int32( aCheckRect.GetHeight() ), aDA );
+    m_aPages[ m_nCurrentPage ].appendMappedLength( aCheckRect.GetHeight(), aDA );
     aDA.append( " Tf\n" );
     m_aPages[ m_nCurrentPage ].appendMappedLength( nCharXOffset, aDA );
     aDA.append( " " );
@@ -4502,7 +4502,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     aDA.append( ' ' );
     aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
     aDA.append( ' ' );
-    m_aPages[m_nCurrentPage].appendMappedLength( sal_Int32( aCheckRect.GetHeight() ), aDA );
+    m_aPages[m_nCurrentPage].appendMappedLength( aCheckRect.GetHeight(), aDA );
     aDA.append( " Tf\n0 0 Td\nET\nQ\n" );
     writeBuffer( aDA.getStr(), aDA.getLength() );
     setFillColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ) );
@@ -8677,9 +8677,9 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
             aLine.append('3');
             break;
         default:
-            aLine.append( static_cast<sal_Int32>(aSize.Width()) );
+            aLine.append( aSize.Width() );
             aLine.append( ' ' );
-            aLine.append( static_cast<sal_Int32>(aSize.Height()) );
+            aLine.append( aSize.Height() );
     }
     aLine.append( " ]\n"
                   "/BitsPerSample 8\n"
@@ -8811,13 +8811,13 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
             aPoly[1] = aBoundRect.TopCenter();
             aPoly.Rotate( aCenter, 3600 - nAngle );
 
-            aLine.append( static_cast<sal_Int32>(aPoly[0].X()) );
+            aLine.append( aPoly[0].X() );
             aLine.append( " " );
-            aLine.append( static_cast<sal_Int32>(aPoly[0].Y()) );
+            aLine.append( aPoly[0].Y() );
             aLine.append( " " );
-            aLine.append( static_cast<sal_Int32>(aPoly[1].X()));
+            aLine.append( aPoly[1].X() );
             aLine.append( " ");
-            aLine.append( static_cast<sal_Int32>(aPoly[1].Y()));
+            aLine.append( aPoly[1].Y() );
             aLine.append( " ]\n");
             aLine.append("/Extend [true true]\n");
             break;
@@ -8825,9 +8825,9 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
         default:
             aLine.append("/Domain[ 0 1 0 1 ]\n"
                     "/Matrix[ " );
-            aLine.append( static_cast<sal_Int32>(aSize.Width()) );
+            aLine.append( aSize.Width() );
             aLine.append( " 0 0 " );
-            aLine.append( static_cast<sal_Int32>(aSize.Height()) );
+            aLine.append( aSize.Height() );
             aLine.append( " 0 0 ]\n");
     }
     aLine.append("/Function " );
@@ -8880,9 +8880,9 @@ void PDFWriterImpl::writeJPG( JPGEmit& rObject )
     aLine.append( rObject.m_nObject );
     aLine.append( " 0 obj\n"
                   "<</Type/XObject/Subtype/Image/Width " );
-    aLine.append( static_cast<sal_Int32>(rObject.m_aID.m_aPixelSize.Width()) );
+    aLine.append( rObject.m_aID.m_aPixelSize.Width() );
     aLine.append( " /Height " );
-    aLine.append( static_cast<sal_Int32>(rObject.m_aID.m_aPixelSize.Height()) );
+    aLine.append( rObject.m_aID.m_aPixelSize.Height() );
     aLine.append( " /BitsPerComponent 8 " );
     if( rObject.m_bTrueColor )
         aLine.append( "/ColorSpace/DeviceRGB" );
@@ -9467,9 +9467,9 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     aLine.append( rObject.m_nObject );
     aLine.append( " 0 obj\n"
                   "<</Type/XObject/Subtype/Image/Width " );
-    aLine.append( static_cast<sal_Int32>(aBitmap.GetSizePixel().Width()) );
+    aLine.append( aBitmap.GetSizePixel().Width() );
     aLine.append( "/Height " );
-    aLine.append( static_cast<sal_Int32>(aBitmap.GetSizePixel().Height()) );
+    aLine.append( aBitmap.GetSizePixel().Height() );
     aLine.append( "/BitsPerComponent " );
     aLine.append( nBitsPerComponent );
     aLine.append( "/Length " );
@@ -9484,7 +9484,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         else
         {
             aLine.append( "/Filter/CCITTFaxDecode/DecodeParms<</K -1/BlackIs1 true/Columns " );
-            aLine.append( static_cast<sal_Int32>(aBitmap.GetSizePixel().Width()) );
+            aLine.append( aBitmap.GetSizePixel().Width() );
             aLine.append( ">>\n" );
         }
     }
@@ -9788,10 +9788,10 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
 
     aLine.append( "q " );
     sal_Int32 nCheckWidth = 0;
-    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rTargetArea.GetWidth()), aLine, false, &nCheckWidth );
+    m_aPages.back().appendMappedLength( rTargetArea.GetWidth(), aLine, false, &nCheckWidth );
     aLine.append( " 0 0 " );
     sal_Int32 nCheckHeight = 0;
-    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rTargetArea.GetHeight()), aLine, true, &nCheckHeight );
+    m_aPages.back().appendMappedLength( rTargetArea.GetHeight(), aLine, true, &nCheckHeight );
     aLine.append( ' ' );
     m_aPages.back().appendPoint( rTargetArea.BottomLeft(), aLine );
     aLine.append( " cm\n/Im" );
@@ -9827,10 +9827,10 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
         aLine.append( ' ' );
     }
     sal_Int32 nCheckWidth = 0;
-    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rDestSize.Width()), aLine, false, &nCheckWidth );
+    m_aPages.back().appendMappedLength( rDestSize.Width(), aLine, false, &nCheckWidth );
     aLine.append( " 0 0 " );
     sal_Int32 nCheckHeight = 0;
-    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rDestSize.Height()), aLine, true, &nCheckHeight );
+    m_aPages.back().appendMappedLength( rDestSize.Height(), aLine, true, &nCheckHeight );
     aLine.append( ' ' );
     m_aPages.back().appendPoint( rDestPoint + Point( 0, rDestSize.Height()-1 ), aLine );
     aLine.append( " cm\n/Im" );
@@ -9975,9 +9975,9 @@ void PDFWriterImpl::drawGradient( const tools::Rectangle& rRect, const Gradient&
     if( m_aGraphicsStack.front().m_aLineColor != COL_TRANSPARENT )
         aLine.append( "q " );
     aLine.append( "0 0 " );
-    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rRect.GetWidth()), aLine, false );
+    m_aPages.back().appendMappedLength( rRect.GetWidth(), aLine, false );
     aLine.append( ' ' );
-    m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rRect.GetHeight()), aLine );
+    m_aPages.back().appendMappedLength( rRect.GetHeight(), aLine );
     aLine.append( " re W n\n" );
 
     aLine.append( "/P" );
@@ -9986,9 +9986,9 @@ void PDFWriterImpl::drawGradient( const tools::Rectangle& rRect, const Gradient&
     if( m_aGraphicsStack.front().m_aLineColor != COL_TRANSPARENT )
     {
         aLine.append( "Q 0 0 " );
-        m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rRect.GetWidth()), aLine, false );
+        m_aPages.back().appendMappedLength( rRect.GetWidth(), aLine, false );
         aLine.append( ' ' );
-        m_aPages.back().appendMappedLength( static_cast<sal_Int32>(rRect.GetHeight()), aLine );
+        m_aPages.back().appendMappedLength( rRect.GetHeight(), aLine );
         aLine.append( " re S " );
     }
     aLine.append( "Q\n" );

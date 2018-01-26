@@ -216,7 +216,7 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
                 bGrow = false;
         }
         if( bGrow )
-                Grow( LONG_MAX );
+                Grow( SAL_MAX_INT32 );
         else
         {
             // VarSize is determined based on the content plus the borders
@@ -261,7 +261,7 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
                 SwTwips nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
                 if( nPrtHeight < 0 )
                 {
-                    const SwTwips nTmpDiff = std::max( aRectFnSet.GetTop(getFramePrintArea()), -nPrtHeight );
+                    const SwTwips nTmpDiff = std::max<sal_Int32>( aRectFnSet.GetTop(getFramePrintArea()), -nPrtHeight );
                     SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
                     aRectFnSet.SubTop( aPrt, nTmpDiff );
                 }
@@ -275,14 +275,14 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
 SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
 {
     // No check if FixSize since FootnoteContainer are variable up to their max. height.
-    // If the max. height is LONG_MAX, take as much space as needed.
+    // If the max. height is SAL_MAX_INT32, take as much space as needed.
     // If the page is a special footnote page, take also as much as possible.
     assert(GetUpper() && GetUpper()->IsFootnoteBossFrame());
 
     SwRectFnSet aRectFnSet(this);
     if( aRectFnSet.GetHeight(getFrameArea()) > 0 &&
-         nDist > ( LONG_MAX - aRectFnSet.GetHeight(getFrameArea()) ) )
-        nDist = LONG_MAX - aRectFnSet.GetHeight(getFrameArea());
+         nDist > ( SAL_MAX_INT32 - aRectFnSet.GetHeight(getFrameArea()) ) )
+        nDist = SAL_MAX_INT32 - aRectFnSet.GetHeight(getFrameArea());
 
     SwFootnoteBossFrame *pBoss = static_cast<SwFootnoteBossFrame*>(GetUpper());
     if( IsInSct() )
@@ -303,9 +303,9 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
     SwPageFrame *pPage = pBoss->FindPageFrame();
     if ( bBrowseMode || !pPage->IsFootnotePage() )
     {
-        if ( pBoss->GetMaxFootnoteHeight() != LONG_MAX )
+        if ( pBoss->GetMaxFootnoteHeight() != SAL_MAX_INT32 )
         {
-            nDist = std::min( nDist, pBoss->GetMaxFootnoteHeight()
+            nDist = std::min<sal_Int32>( nDist, pBoss->GetMaxFootnoteHeight()
                          - aRectFnSet.GetHeight(getFrameArea()) );
             if ( nDist <= 0 )
                 return 0;
@@ -2411,13 +2411,13 @@ void SwFootnoteBossFrame::SetFootnoteDeadLine( const SwTwips nDeadLine )
 
     const SwViewShell *pSh = getRootFrame() ? getRootFrame()->GetCurrShell() : nullptr;
     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
-        m_nMaxFootnoteHeight += pBody->Grow( LONG_MAX, true );
+        m_nMaxFootnoteHeight += pBody->Grow( SAL_MAX_INT32, true );
     if ( IsInSct() )
-        m_nMaxFootnoteHeight += FindSctFrame()->Grow( LONG_MAX, true );
+        m_nMaxFootnoteHeight += FindSctFrame()->Grow( SAL_MAX_INT32, true );
 
     if ( m_nMaxFootnoteHeight < 0 )
         m_nMaxFootnoteHeight = 0;
-    if ( nMax != LONG_MAX && m_nMaxFootnoteHeight > nMax )
+    if ( nMax != SAL_MAX_INT32 && m_nMaxFootnoteHeight > nMax )
         m_nMaxFootnoteHeight = nMax;
 }
 

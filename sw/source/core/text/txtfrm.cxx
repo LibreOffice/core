@@ -1900,7 +1900,7 @@ SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwip
 
     {
         SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*pFrame);
-        aRectFnSet.SetHeight( aPrt, std::max( 0L , aRectFnSet.GetHeight(pFrame->getFrameArea()) - aRectFnSet.GetTop(aPrt) - nLower ) );
+        aRectFnSet.SetHeight( aPrt, std::max<sal_Int32>( 0 , aRectFnSet.GetHeight(pFrame->getFrameArea()) - aRectFnSet.GetTop(aPrt) - nLower ) );
         aRectFnSet.SetWidth( aPrt, aRectFnSet.GetWidth(pFrame->getFrameArea()) - ( rAttrs.CalcLeft( pFrame ) + rAttrs.CalcRight( pFrame ) ) );
     }
 
@@ -2002,7 +2002,7 @@ bool SwTextFrame::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
     // force a MoveFwd
     if( IsWidow() || ( aRectFnSet.IsVert() ?
                        ( 0 == getFrameArea().Left() ) :
-                       ( LONG_MAX - 20000 < getFrameArea().Bottom() ) ) )
+                       ( SAL_MAX_INT32 - 20000 < getFrameArea().Bottom() ) ) )
     {
         SetWidow(false);
         if ( GetFollow() )
@@ -2011,7 +2011,7 @@ bool SwTextFrame::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
             // whether there's a Follow with a real height at all.
             // Else (e.g. for newly created SctFrames) we ignore the IsWidow() and
             // still check if we can find enough room
-            if( ( ( ! aRectFnSet.IsVert() && LONG_MAX - 20000 >= getFrameArea().Bottom() ) ||
+            if( ( ( ! aRectFnSet.IsVert() && SAL_MAX_INT32 - 20000 >= getFrameArea().Bottom() ) ||
                   (   aRectFnSet.IsVert() && 0 < getFrameArea().Left() ) ) &&
                   ( GetFollow()->IsVertical() ?
                     !GetFollow()->getFrameArea().Width() :

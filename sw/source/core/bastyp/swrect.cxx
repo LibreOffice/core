@@ -116,7 +116,7 @@ bool SwRect::IsInside( const Point& rPoint ) const
 }
 
 // mouse moving of table borders
-bool SwRect::IsNear( const Point& rPoint, long nTolerance ) const
+bool SwRect::IsNear( const Point& rPoint, sal_Int32 nTolerance ) const
 {
     bool bIsNearby = (((Left()   - nTolerance) <= rPoint.X()) &&
                       ((Top()    - nTolerance) <= rPoint.Y()) &&
@@ -148,28 +148,28 @@ void SwRect::Justify()
 }
 
 // Similar to the inline methods, but we need the function pointers
-void SwRect::Width_( const long nNew ) { m_Size.setWidth(nNew); }
-void SwRect::Height_( const long nNew ) { m_Size.setHeight(nNew); }
-void SwRect::Left_( const long nLeft ){ m_Size.AdjustWidth(m_Point.getX() - nLeft ); m_Point.setX(nLeft); }
-void SwRect::Right_( const long nRight ){ m_Size.setWidth(nRight - m_Point.getX()); }
-void SwRect::Top_( const long nTop ){ m_Size.AdjustHeight(m_Point.getY() - nTop ); m_Point.setY(nTop); }
-void SwRect::Bottom_( const long nBottom ){ m_Size.setHeight(nBottom - m_Point.getY()); }
+void SwRect::Width_( const sal_Int32 nNew ) { m_Size.setWidth(nNew); }
+void SwRect::Height_( const sal_Int32 nNew ) { m_Size.setHeight(nNew); }
+void SwRect::Left_( const sal_Int32 nLeft ){ m_Size.AdjustWidth(m_Point.getX() - nLeft ); m_Point.setX(nLeft); }
+void SwRect::Right_( const sal_Int32 nRight ){ m_Size.setWidth(nRight - m_Point.getX()); }
+void SwRect::Top_( const sal_Int32 nTop ){ m_Size.AdjustHeight(m_Point.getY() - nTop ); m_Point.setY(nTop); }
+void SwRect::Bottom_( const sal_Int32 nBottom ){ m_Size.setHeight(nBottom - m_Point.getY()); }
 
-long SwRect::Width_() const{ return m_Size.getWidth(); }
-long SwRect::Height_() const{ return m_Size.getHeight(); }
-long SwRect::Left_() const{ return m_Point.getX(); }
-long SwRect::Right_() const{ return m_Point.getX() + m_Size.getWidth(); }
-long SwRect::Top_() const{ return m_Point.getY(); }
-long SwRect::Bottom_() const{ return m_Point.getY() + m_Size.getHeight(); }
+sal_Int32 SwRect::Width_() const{ return m_Size.getWidth(); }
+sal_Int32 SwRect::Height_() const{ return m_Size.getHeight(); }
+sal_Int32 SwRect::Left_() const{ return m_Point.getX(); }
+sal_Int32 SwRect::Right_() const{ return m_Point.getX() + m_Size.getWidth(); }
+sal_Int32 SwRect::Top_() const{ return m_Point.getY(); }
+sal_Int32 SwRect::Bottom_() const{ return m_Point.getY() + m_Size.getHeight(); }
 
-void SwRect::AddWidth( const long nAdd ) { m_Size.AdjustWidth(nAdd ); }
-void SwRect::AddHeight( const long nAdd ) { m_Size.AdjustHeight(nAdd ); }
-void SwRect::SubLeft( const long nSub ){ m_Size.AdjustWidth(nSub ); m_Point.setX(m_Point.getX() - nSub); }
-void SwRect::AddRight( const long nAdd ){ m_Size.AdjustWidth(nAdd ); }
-void SwRect::SubTop( const long nSub ){ m_Size.AdjustHeight(nSub ); m_Point.setY(m_Point.getY() - nSub); }
-void SwRect::AddBottom( const long nAdd ){ m_Size.AdjustHeight(nAdd ); }
-void SwRect::SetPosX( const long nNew ){ m_Point.setX(nNew); }
-void SwRect::SetPosY( const long nNew ){ m_Point.setY(nNew); }
+void SwRect::AddWidth( const sal_Int32 nAdd ) { m_Size.AdjustWidth(nAdd ); }
+void SwRect::AddHeight( const sal_Int32 nAdd ) { m_Size.AdjustHeight(nAdd ); }
+void SwRect::SubLeft( const sal_Int32 nSub ){ m_Size.AdjustWidth(nSub ); m_Point.setX(m_Point.getX() - nSub); }
+void SwRect::AddRight( const sal_Int32 nAdd ){ m_Size.AdjustWidth(nAdd ); }
+void SwRect::SubTop( const sal_Int32 nSub ){ m_Size.AdjustHeight(nSub ); m_Point.setY(m_Point.getY() - nSub); }
+void SwRect::AddBottom( const sal_Int32 nAdd ){ m_Size.AdjustHeight(nAdd ); }
+void SwRect::SetPosX( const sal_Int32 nNew ){ m_Point.setX(nNew); }
+void SwRect::SetPosY( const sal_Int32 nNew ){ m_Point.setY(nNew); }
 
 const Size  SwRect::Size_() const { return SSize(); }
 const Size  SwRect::SwappedSize() const { return Size( m_Size.getHeight(), m_Size.getWidth() ); }
@@ -180,36 +180,36 @@ const Point SwRect::BottomLeft() const { return Point( m_Point.getX(), m_Point.g
 const Point SwRect::BottomRight() const
     { return Point( m_Point.getX() + m_Size.getWidth(), m_Point.getY() + m_Size.getHeight() ); }
 
-long SwRect::GetLeftDistance( long nLimit ) const { return m_Point.getX() - nLimit; }
-long SwRect::GetBottomDistance( long nLim ) const { return nLim - m_Point.getY() - m_Size.getHeight();}
-long SwRect::GetTopDistance( long nLimit ) const { return m_Point.getY() - nLimit; }
-long SwRect::GetRightDistance( long nLim ) const { return nLim - m_Point.getX() - m_Size.getWidth(); }
+sal_Int32 SwRect::GetLeftDistance( sal_Int32 nLimit ) const { return m_Point.getX() - nLimit; }
+sal_Int32 SwRect::GetBottomDistance( sal_Int32 nLim ) const { return nLim - m_Point.getY() - m_Size.getHeight();}
+sal_Int32 SwRect::GetTopDistance( sal_Int32 nLimit ) const { return m_Point.getY() - nLimit; }
+sal_Int32 SwRect::GetRightDistance( sal_Int32 nLim ) const { return nLim - m_Point.getX() - m_Size.getWidth(); }
 
-bool SwRect::OverStepLeft( long nLimit ) const
+bool SwRect::OverStepLeft( sal_Int32 nLimit ) const
     { return nLimit > m_Point.getX() && m_Point.getX() + m_Size.getWidth() > nLimit; }
-bool SwRect::OverStepBottom( long nLimit ) const
+bool SwRect::OverStepBottom( sal_Int32 nLimit ) const
     { return nLimit > m_Point.getY() && m_Point.getY() + m_Size.getHeight() > nLimit; }
-bool SwRect::OverStepTop( long nLimit ) const
+bool SwRect::OverStepTop( sal_Int32 nLimit ) const
     { return nLimit > m_Point.getY() && m_Point.getY() + m_Size.getHeight() > nLimit; }
-bool SwRect::OverStepRight( long nLimit ) const
+bool SwRect::OverStepRight( sal_Int32 nLimit ) const
     { return nLimit > m_Point.getX() && m_Point.getX() + m_Size.getWidth() > nLimit; }
 
-void SwRect::SetLeftAndWidth( long nLeft, long nNew )
+void SwRect::SetLeftAndWidth( sal_Int32 nLeft, sal_Int32 nNew )
 {
     m_Point.setX(nLeft);
     m_Size.setWidth(nNew);
 }
-void SwRect::SetTopAndHeight( long nTop, long nNew )
+void SwRect::SetTopAndHeight( sal_Int32 nTop, sal_Int32 nNew )
 {
     m_Point.setY(nTop);
     m_Size.setHeight(nNew);
 }
-void SwRect::SetRightAndWidth( long nRight, long nNew )
+void SwRect::SetRightAndWidth( sal_Int32 nRight, sal_Int32 nNew )
 {
     m_Point.setX(nRight - nNew);
     m_Size.setWidth(nNew);
 }
-void SwRect::SetBottomAndHeight( long nBottom, long nNew )
+void SwRect::SetBottomAndHeight( sal_Int32 nBottom, sal_Int32 nNew )
 {
     m_Point.setY(nBottom - nNew);
     m_Size.setHeight(nNew);

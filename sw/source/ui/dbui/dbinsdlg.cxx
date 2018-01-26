@@ -593,8 +593,8 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableToFromHdl, Button*, pButton, void )
         if( !aField.isEmpty() )
         {
             OUString aStr( m_pEdDbText->GetText() );
-            sal_Int32 nPos = static_cast<sal_Int32>(m_pEdDbText->GetSelection().Min());
-            const sal_Int32 nSel = static_cast<sal_Int32>(m_pEdDbText->GetSelection().Max()) - nPos;
+            sal_Int32 nPos = m_pEdDbText->GetSelection().Min();
+            const sal_Int32 nSel = m_pEdDbText->GetSelection().Max() - nPos;
             if( nSel )
                 // first delete the existing selection
                 aStr = aStr.replaceAt( nPos, nSel, "" );

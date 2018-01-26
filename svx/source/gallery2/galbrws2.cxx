@@ -959,8 +959,8 @@ sal_uInt32 GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos, Point& 
         }
     }
 
-    rSelPos.setX( std::max( std::min( rSelPos.X(), aOutputSizePixel.Width() - 1 ), 0L ) );
-    rSelPos.setY( std::max( std::min( rSelPos.Y(), aOutputSizePixel.Height() - 1 ), 0L ) );
+    rSelPos.setX( std::max<sal_Int32>( std::min<sal_Int32>( rSelPos.X(), aOutputSizePixel.Width() - 1 ), 0 ) );
+    rSelPos.setY( std::max<sal_Int32>( std::min<sal_Int32>( rSelPos.Y(), aOutputSizePixel.Height() - 1 ), 0 ) );
 
     if( nRet && ( !mpCurTheme || ( nRet > mpCurTheme->GetObjectCount() ) ) )
     {

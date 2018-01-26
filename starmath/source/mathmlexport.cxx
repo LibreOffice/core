@@ -522,16 +522,16 @@ void SmXMLExport::GetViewSettings( Sequence < PropertyValue >& aProps)
     tools::Rectangle aRect( pDocShell->GetVisArea() );
 
     pValue[nIndex].Name = "ViewAreaTop";
-    pValue[nIndex++].Value <<= aRect.Top();
+    pValue[nIndex++].Value <<= sal_Int32(aRect.Top());
 
     pValue[nIndex].Name = "ViewAreaLeft";
-    pValue[nIndex++].Value <<= aRect.Left();
+    pValue[nIndex++].Value <<= sal_Int32(aRect.Left());
 
     pValue[nIndex].Name = "ViewAreaWidth";
-    pValue[nIndex++].Value <<= aRect.GetWidth();
+    pValue[nIndex++].Value <<= sal_Int32(aRect.GetWidth());
 
     pValue[nIndex].Name = "ViewAreaHeight";
-    pValue[nIndex++].Value <<= aRect.GetHeight();
+    pValue[nIndex++].Value <<= sal_Int32(aRect.GetHeight());
 }
 
 void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
