@@ -20,6 +20,7 @@
 #include <com/sun/star/uno/Reference.h>
 
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -165,6 +166,9 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                     {
                         for (auto const& locale : aLocaleNames)
                         {
+                            if (!comphelper::LibreOfficeKit::isWhitelistedLanguage(locale))
+                                continue;
+
                             aLocaleNamesSet.insert(locale);
                         }
                     }

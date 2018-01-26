@@ -9,6 +9,8 @@
 
 #include <comphelper/lok.hxx>
 
+#include <iostream>
+
 namespace comphelper
 {
 
@@ -110,6 +112,52 @@ void setLanguageTag(const LanguageTag& languageTag)
 const LanguageTag& getLanguageTag()
 {
     return g_aLanguageTag;
+}
+
+bool isWhitelistedLanguage(const OUString& lang)
+{
+    if (!isActive())
+        return true;
+
+    static bool bInitialized = false;
+    static std::vector<OUString> aWhitelist;
+    if (!bInitialized)
+    {
+        const char* pWhitelist = getenv("LOK_WHITELIST_LANGUAGES");
+        if (pWhitelist)
+        {
+            std::stringstream stream(pWhitelist);
+            std::string s;
+
+            std::cerr << "Whitelisted languages: ";
+            while (getline(stream, s, ' ')) {
+                if (s.length() == 0)
+                    continue;
+
+                std::cerr << s << " ";
+                aWhitelist.emplace_back(OStringToOUString(s.c_str(), RTL_TEXTENCODING_UTF8));
+            }
+            std::cerr << std::endl;
+        }
+
+        if (aWhitelist.empty())
+            std::cerr << "No language whitelisted, turning off the language support." << std::endl;
+
+        bInitialized = true;
+    }
+
+    if (aWhitelist.empty())
+        return false;
+
+    for (auto& entry : aWhitelist)
+    {
+        if (lang.startsWith(entry))
+            return true;
+        if (lang.startsWith(entry.replace('_', '-')))
+            return true;
+    }
+
+    return false;
 }
 
 static void (*pStatusIndicatorCallback)(void *data, statusIndicatorCallbackType type, int percent)(nullptr);

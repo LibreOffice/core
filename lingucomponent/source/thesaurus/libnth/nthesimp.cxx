@@ -26,6 +26,7 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/pathoptions.hxx>
@@ -174,6 +175,9 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                 sal_Int32 nLen2 = aLocaleNames.getLength();
                 for (k = 0;  k < nLen2;  ++k)
                 {
+                    if (!comphelper::LibreOfficeKit::isWhitelistedLanguage(aLocaleNames[k]))
+                        continue;
+
                     aLocaleNamesSet.insert( aLocaleNames[k] );
                 }
             }
