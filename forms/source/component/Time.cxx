@@ -22,6 +22,7 @@
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/util/DateTime.hpp>
 
 using namespace dbtools;
 
@@ -235,6 +236,8 @@ bool OTimeModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
                 else
                 {
                     util::DateTime aDateTime = m_xColumn->getTimestamp();
+                    if (aDateTime.Year == 0 && aDateTime.Month == 0 && aDateTime.Day == 0)
+                        aDateTime = ::com::sun::star::util::DateTime(0,0,0,0,30,12,1899, false);
                     aDateTime.NanoSeconds = aTime.NanoSeconds;
                     aDateTime.Seconds = aTime.Seconds;
                     aDateTime.Minutes = aTime.Minutes;
