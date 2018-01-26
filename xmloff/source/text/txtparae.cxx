@@ -3117,7 +3117,10 @@ void XMLTextParagraphExport::_exportTextGraphic(
     // Add mimetype to make it easier for readers to get the base64 image type right, tdf#109202
     OUString aSourceMimeType = getMimeType(sOrigURL);
     if ( !aSourceMimeType.isEmpty() )
-        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aSourceMimeType);
+        if (GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012)
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aSourceMimeType);
+        }
 
     {
         SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_DRAW,
