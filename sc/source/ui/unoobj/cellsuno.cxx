@@ -6418,7 +6418,11 @@ sal_Int32 ScCellObj::GetResultType_Impl()
         if (pDocSh->GetDocument().GetCellType(aCellPos) == CELLTYPE_FORMULA)
         {
             ScFormulaCell* pFCell = pDocSh->GetDocument().GetFormulaCell(aCellPos);
-            if (pFCell->GetErrCode() != FormulaError::NONE )
+            if (!pFCell)
+            {
+                // should throw instead of default string?
+            }
+            else if (pFCell->GetErrCode() != FormulaError::NONE )
             {
                 eRet = sheet::FormulaResult::ERROR;
             }
