@@ -449,7 +449,7 @@ void CppuType::dumpFile(
         throw;
     }
     out.close();
-    makeValidTypeFile(
+    (void)makeValidTypeFile(
                u2b(fileUri), u2b(tmpUri), exists && options.isValid("-Gc"));
 }
 
