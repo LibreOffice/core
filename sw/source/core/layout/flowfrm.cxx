@@ -1427,7 +1427,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                     // former consideration
                     if ( pOwn->IsTextFrame() )
                     {
-                        nAdd = std::max( nAdd, static_cast<SwTextFrame*>(pOwn)->GetLineSpace() );
+                        nAdd = std::max<sal_Int32>( nAdd, static_cast<SwTextFrame*>(pOwn)->GetLineSpace() );
                     }
                     nUpper += nAdd;
                 }
@@ -1453,7 +1453,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                         }
                         else
                         {
-                            nAdd = std::max( nAdd, static_cast<SwTextFrame*>(pOwn)->GetLineSpace( true ) );
+                            nAdd = std::max<sal_Int32>( nAdd, static_cast<SwTextFrame*>(pOwn)->GetLineSpace( true ) );
                         }
                     }
                     nUpper += nAdd;
@@ -1469,7 +1469,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                 {
                     // former consideration
                     if ( pOwn->IsTextFrame() )
-                        nUpper = std::max( nUpper, static_cast<SwTextFrame*>(pOwn)->GetLineSpace() );
+                        nUpper = std::max<sal_Int32>( nUpper, static_cast<SwTextFrame*>(pOwn)->GetLineSpace() );
                     if ( nPrevLineSpacing != 0 )
                     {
                         nUpper = std::max( nUpper, nPrevLineSpacing );
@@ -1499,7 +1499,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                         }
                         else
                         {
-                            nAdd = std::max( nAdd, static_cast<SwTextFrame*>(pOwn)->GetLineSpace( true ) );
+                            nAdd = std::max<sal_Int32>( nAdd, static_cast<SwTextFrame*>(pOwn)->GetLineSpace( true ) );
                         }
                     }
                     nUpper += nAdd;

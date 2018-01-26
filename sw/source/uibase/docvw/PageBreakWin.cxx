@@ -368,8 +368,8 @@ void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
     // Place the button on the left or right?
     ::tools::Rectangle aVisArea = GetEditWin()->LogicToPixel( GetEditWin()->GetView().GetVisArea() );
 
-    long nLineLeft = std::max( nPgLeft, aVisArea.Left() );
-    long nLineRight = std::min( nPgRight, aVisArea.Right() );
+    long nLineLeft = std::max<sal_Int32>( nPgLeft, aVisArea.Left() );
+    long nLineRight = std::min<sal_Int32>( nPgRight, aVisArea.Right() );
     long nBtnLeft = nLineLeft;
 
     if ( m_pMousePt )

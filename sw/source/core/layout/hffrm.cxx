@@ -237,7 +237,7 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
 
             ColLock();
 
-            SwTwips nMaxHeight = LONG_MAX;
+            SwTwips nMaxHeight = SAL_MAX_INT32;
             SwTwips nRemaining, nOldHeight;
             // #i64301#
             // use the position of the footer printing area to control invalidation
@@ -428,7 +428,7 @@ void SwHeadFootFrame::Format(vcl::RenderContext* pRenderContext, const SwBorderA
     {
         lcl_LayoutFrameEnsureMinHeight(*this);
 
-        long nUL = pAttrs->CalcTop()  + pAttrs->CalcBottom();
+        SwTwips nUL = pAttrs->CalcTop()  + pAttrs->CalcBottom();
 
         if ( !isFramePrintAreaValid() )
             FormatPrt(nUL, pAttrs);

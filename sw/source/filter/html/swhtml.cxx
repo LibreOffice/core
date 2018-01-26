@@ -5030,7 +5030,7 @@ sal_uInt16 SwHTMLParser::ToTwips( sal_uInt16 nPixel )
     {
         long nTwips = Application::GetDefaultDevice()->PixelToLogic(
                     Size( nPixel, nPixel ), MapMode( MapUnit::MapTwip ) ).Width();
-        return static_cast<sal_uInt16>(std::min(nTwips, SwTwips(SAL_MAX_UINT16)));
+        return static_cast<sal_uInt16>(std::min<sal_uInt16>(nTwips, SwTwips(SAL_MAX_UINT16)));
     }
     else
         return nPixel;

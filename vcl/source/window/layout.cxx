@@ -1145,9 +1145,9 @@ static void calcMaxs(const array_type &A, std::vector<VclGrid::Value> &rWidths, 
             {
                 Size aChildSize = VclContainer::getLayoutRequisition(*pChild);
                 if (nWidth == 1)
-                    rWidths[x].m_nValue = std::max(rWidths[x].m_nValue, aChildSize.Width());
+                    rWidths[x].m_nValue = std::max<sal_Int32>(rWidths[x].m_nValue, aChildSize.Width());
                 if (nHeight == 1)
-                    rHeights[y].m_nValue = std::max(rHeights[y].m_nValue, aChildSize.Height());
+                    rHeights[y].m_nValue = std::max<sal_Int32>(rHeights[y].m_nValue, aChildSize.Height());
             }
         }
     }

@@ -311,7 +311,7 @@ IMPL_LINK(ComboBox::Impl, ImplAutocompleteHdl, Edit&, rEdit, void)
 
     {
         OUString    aFullText = rEdit.GetText();
-        OUString    aStartText = aFullText.copy( 0, static_cast<sal_Int32>(aSel.Max()) );
+        OUString    aStartText = aFullText.copy( 0, aSel.Max() );
         sal_Int32   nStart = m_pImplLB->GetCurrentPos();
 
         if ( nStart == LISTBOX_ENTRY_NOTFOUND )
@@ -1039,7 +1039,7 @@ Size ComboBox::CalcMinimumSize() const
     if (m_pImpl->m_nMaxWidthChars != -1)
     {
         long nMaxWidth = m_pImpl->m_nMaxWidthChars * approximate_char_width();
-        aSz.setWidth( std::min(aSz.Width(), nMaxWidth) );
+        aSz.setWidth( std::min<sal_Int32>(aSz.Width(), nMaxWidth) );
     }
 
     if (IsDropDownBox())

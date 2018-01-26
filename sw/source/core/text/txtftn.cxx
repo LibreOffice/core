@@ -221,7 +221,7 @@ static SwTwips lcl_GetFootnoteLower( const SwTextFrame* pFrame, SwTwips nLower )
     // the deadline should consider their lower borders.
     const SwFrame* pStartFrame = pFrame->GetUpper()->GetLower();
     OSL_ENSURE( pStartFrame, "Upper has no lower" );
-    SwTwips nFlyLower = aRectFnSet.IsVert() ? LONG_MAX : 0;
+    SwTwips nFlyLower = aRectFnSet.IsVert() ? SAL_MAX_INT32 : 0;
     while ( pStartFrame != pFrame )
     {
         OSL_ENSURE( pStartFrame, "Frame chain is broken" );
@@ -342,10 +342,10 @@ SwTwips SwTextFrame::GetFootnoteFrameHeight_() const
             if ( !pRef->IsInFootnoteConnect() )
             {
                 SwSaveFootnoteHeight aSave( const_cast<SwFootnoteBossFrame*>(pBoss), nHeight  );
-                nHeight = const_cast<SwFootnoteContFrame*>(static_cast<const SwFootnoteContFrame*>(pCont))->Grow( LONG_MAX, true );
+                nHeight = const_cast<SwFootnoteContFrame*>(static_cast<const SwFootnoteContFrame*>(pCont))->Grow( SAL_MAX_INT32, true );
             }
             else
-                nHeight = const_cast<SwFootnoteContFrame*>(static_cast<const SwFootnoteContFrame*>(pCont))->Grow( LONG_MAX, true );
+                nHeight = const_cast<SwFootnoteContFrame*>(static_cast<const SwFootnoteContFrame*>(pCont))->Grow( SAL_MAX_INT32, true );
 
             nHeight += nTmp;
             if( nHeight < 0 )

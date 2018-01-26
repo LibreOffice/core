@@ -871,10 +871,10 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                         makeAny( true ) );
 
                 xSet->setPropertyValue("FrameMarginWidth",
-                    makeAny( sal_Int32( aMargin.Width() ) ) );
+                    makeAny( aMargin.Width() ) );
 
                 xSet->setPropertyValue("FrameMarginHeight",
-                    makeAny( sal_Int32( aMargin.Height() ) ) );
+                    makeAny( aMargin.Height() ) );
             }
 
             SwFrameFormat *const pFrameFormat =

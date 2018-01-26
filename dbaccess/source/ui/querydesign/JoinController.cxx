@@ -394,10 +394,10 @@ void OJoinController::saveTableWindows( ::comphelper::NamedValueCollection& o_rV
             aWindowData.put( "ComposedName", elem->GetComposedName() );
             aWindowData.put( "TableName", elem->GetTableName() );
             aWindowData.put( "WindowName", elem->GetWinName() );
-            aWindowData.put( "WindowTop", static_cast<sal_Int32>(elem->GetPosition().Y()) );
-            aWindowData.put( "WindowLeft", static_cast<sal_Int32>(elem->GetPosition().X()) );
-            aWindowData.put( "WindowWidth", static_cast<sal_Int32>(elem->GetSize().Width()) );
-            aWindowData.put( "WindowHeight", static_cast<sal_Int32>(elem->GetSize().Height()) );
+            aWindowData.put( "WindowTop", elem->GetPosition().Y() );
+            aWindowData.put( "WindowLeft", elem->GetPosition().X() );
+            aWindowData.put( "WindowWidth", elem->GetSize().Width() );
+            aWindowData.put( "WindowHeight", elem->GetSize().Height() );
             aWindowData.put( "ShowAll", elem->IsShowAll() );
 
             const OUString sTableName( "Table" + OUString::number( i++ ) );
