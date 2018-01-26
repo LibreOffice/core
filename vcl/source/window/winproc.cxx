@@ -22,6 +22,7 @@
 
 #include <unotools/localedatawrapper.hxx>
 
+#include <comphelper/lok.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/timer.hxx>
@@ -157,6 +158,9 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
 
 static void ImplHandleMouseHelpRequest( vcl::Window* pChild, const Point& rMousePos )
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maHelpData.mpHelpWin ||
          !( pSVData->maHelpData.mpHelpWin->IsWindowOrChild( pChild ) ||
