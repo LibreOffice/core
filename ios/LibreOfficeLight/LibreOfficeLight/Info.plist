@@ -349,6 +349,7 @@
 				<string>org.libreoffice.cdr-document</string>
 				<string>org.libreoffice.visio-document</string>
 				<string>org.libreoffice.mspub-document</string>
+				<string>com.adobe.pdf</string>
 			</array>
 		</dict>
 	</array>
@@ -1782,6 +1783,28 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 				<array>
 					<string>application/x-mspublisher</string>
 				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.composite-​content</string>
+			</array>
+			<key>UTTypeDescription</key>
+                        <string>Apple PDF pasteboard type PDF data</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.adobe.pdf</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+                                <array>
+                                        <string>pdf</string>
+                                </array>
+                                <key>public.mime-type</key>
+                                <array>
+                                        <string>application/pdf</string>
+                                </array>
 			</dict>
 		</dict>
 	</array>
