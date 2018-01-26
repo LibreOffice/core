@@ -327,10 +327,10 @@ public:
 
 struct VCL_DLLPUBLIC BitmapBuffer
 {
-    ScanlineFormat       mnFormat;
-    long            mnWidth;
-    long            mnHeight;
-    long            mnScanlineSize;
+    ScanlineFormat  mnFormat;
+    sal_Int32       mnWidth;
+    sal_Int32       mnHeight;
+    sal_Int32       mnScanlineSize;
     sal_uInt16      mnBitCount;
     ColorMask       maColorMask;
     BitmapPalette   maPalette;

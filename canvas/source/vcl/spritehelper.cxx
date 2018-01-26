@@ -306,7 +306,7 @@ namespace vclcanvas
 
                     // paint sprite prio
                     vcl::Font aVCLFont;
-                    aVCLFont.SetFontHeight( std::min(long(20),aOutputSize.Height()) );
+                    aVCLFont.SetFontHeight( std::min(20,aOutputSize.Height()) );
                     aVCLFont.SetColor( COL_RED );
 
                     rTargetSurface.SetTextAlign(ALIGN_TOP);

@@ -5329,7 +5329,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                         {
                             nY -= nGrid;
                             SwTwips nPosY = std::max( aInter.Left(), nY );
-                            SwTwips nHeight = std::min(nRight, aTmp.Pos().X())-nPosY;
+                            SwTwips nHeight = std::min<sal_Int32>(nRight, aTmp.Pos().X())-nPosY;
                             if( nHeight > 0 )
                             {
                                 if( bCell )
@@ -5362,7 +5362,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                             if( bBorder )
                             {
                                 SwTwips nPos = std::max( aInter.Left(), nY );
-                                SwTwips nW = std::min(nRight, aTmp.Pos().X()) - nPos;
+                                SwTwips nW = std::min<sal_Int32>(nRight, aTmp.Pos().X()) - nPos;
                                 SwRect aVert( Point( nPos, aGrid.Top() ),
                                               Size( nW, 1 ) );
                                 if( nW > 0 )
@@ -5420,7 +5420,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                             if( bBorder )
                             {
                                 SwTwips nPos = std::max( aInter.Left(), nY );
-                                SwTwips nW = std::min(nRight, aTmp.Pos().X()) - nPos;
+                                SwTwips nW = std::min<sal_Int32>(nRight, aTmp.Pos().X()) - nPos;
                                 SwRect aVert( Point( nPos, aGrid.Top() ),
                                               Size( nW, 1 ) );
                                 if( nW > 0 )
@@ -5459,7 +5459,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                         if( bGrid )
                         {
                             nY += nGrid;
-                            SwTwips nPosY = std::max( aInter.Top(), aTmp.Pos().getY() );
+                            SwTwips nPosY = std::max<sal_Int32>( aInter.Top(), aTmp.Pos().getY() );
                             SwTwips nHeight = std::min(nBottom, nY ) - nPosY;
                             if( nHeight )
                             {
@@ -5492,7 +5492,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                             nY += nRuby;
                             if( bBorder )
                             {
-                                SwTwips nPos = std::max(aInter.Top(),aTmp.Pos().getY());
+                                SwTwips nPos = std::max<sal_Int32>(aInter.Top(),aTmp.Pos().getY());
                                 SwTwips nH = std::min( nBottom, nY ) - nPos;
                                 SwRect aVert( Point( aGrid.Left(), nPos ),
                                             Size( 1, nH ) );
@@ -5549,7 +5549,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
                             nY += nRuby;
                             if( bBorder )
                             {
-                                SwTwips nPos = std::max(aInter.Top(),aTmp.Pos().Y());
+                                SwTwips nPos = std::max<sal_Int32>(aInter.Top(),aTmp.Pos().Y());
                                 SwTwips nH = std::min( nBottom, nY ) - nPos;
                                 SwRect aVert( Point( aGrid.Left(), nPos ),
                                             Size( 1, nH ) );
@@ -6439,7 +6439,7 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
     const bool bHori = rP1.Y() == rP2.Y();
 
     // use pointers to member function in order to unify flow
-    typedef long& (Point:: *pmfPt)();
+    typedef sal_Int32& (Point:: *pmfPt)();
     const pmfPt pmfPtX = &Point::X;
     const pmfPt pmfPtY = &Point::Y;
     const pmfPt pDirPt = bHori ? pmfPtX : pmfPtY;
