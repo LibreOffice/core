@@ -56,13 +56,6 @@ private:
     JavaInteractionHandler(JavaInteractionHandler const&) = delete;
     JavaInteractionHandler& operator = (JavaInteractionHandler const &) = delete;
     SVT_DLLPRIVATE virtual ~JavaInteractionHandler();
-    bool m_bShowErrorsOnce;
-    bool m_bJavaDisabled_Handled;
-    bool m_bInvalidSettings_Handled;
-    bool m_bJavaNotFound_Handled;
-    bool m_bVMCreationFailure_Handled;
-    bool m_bRestartRequired_Handled;
-    sal_uInt16 m_nResult_JavaDisabled;
 };
 }
 
