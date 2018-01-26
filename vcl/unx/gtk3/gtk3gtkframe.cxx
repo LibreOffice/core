@@ -1630,7 +1630,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
     m_bDefaultPos = false;
 }
 
-void GtkSalFrame::GetClientSize( long& rWidth, long& rHeight )
+void GtkSalFrame::GetClientSize( sal_Int32& rWidth, sal_Int32& rHeight )
 {
     if( m_pWindow && !(m_nState & GDK_WINDOW_STATE_ICONIFIED) )
     {

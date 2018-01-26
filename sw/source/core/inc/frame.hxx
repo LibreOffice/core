@@ -846,20 +846,20 @@ public:
     bool IsInDtor() const { return mbInDtor; }
 
     // No inline cause we need the function pointers
-    long GetTopMargin() const;
-    long GetBottomMargin() const;
-    long GetLeftMargin() const;
-    long GetRightMargin() const;
-    void SetTopBottomMargins( long, long );
-    void SetLeftRightMargins( long, long );
-    void SetRightLeftMargins( long, long );
-    long GetPrtLeft() const;
-    long GetPrtBottom() const;
-    long GetPrtRight() const;
-    long GetPrtTop() const;
-    bool SetMinLeft( long );
-    bool SetMaxBottom( long );
-    bool SetMaxRight( long );
+    sal_Int32 GetTopMargin() const;
+    sal_Int32 GetBottomMargin() const;
+    sal_Int32 GetLeftMargin() const;
+    sal_Int32 GetRightMargin() const;
+    void SetTopBottomMargins( sal_Int32, sal_Int32 );
+    void SetLeftRightMargins( sal_Int32, sal_Int32 );
+    void SetRightLeftMargins( sal_Int32, sal_Int32 );
+    sal_Int32 GetPrtLeft() const;
+    sal_Int32 GetPrtBottom() const;
+    sal_Int32 GetPrtRight() const;
+    sal_Int32 GetPrtTop() const;
+    bool SetMinLeft( sal_Int32 );
+    bool SetMaxBottom( sal_Int32 );
+    bool SetMaxRight( sal_Int32 );
     void MakeBelowPos( const SwFrame*, const SwFrame*, bool );
     void MakeLeftPos( const SwFrame*, const SwFrame*, bool );
     void MakeRightPos( const SwFrame*, const SwFrame*, bool );
@@ -1223,11 +1223,11 @@ public:
     }
 };
 
-typedef long (SwFrame:: *SwFrameGet)() const;
-typedef bool (SwFrame:: *SwFrameMax)( long );
+typedef sal_Int32 (SwFrame:: *SwFrameGet)() const;
+typedef bool (SwFrame:: *SwFrameMax)( sal_Int32 );
 typedef void (SwFrame:: *SwFrameMakePos)( const SwFrame*, const SwFrame*, bool );
-typedef long (*SwOperator)( long, long );
-typedef void (SwFrame:: *SwFrameSet)( long, long );
+typedef sal_Int32 (*SwOperator)( sal_Int32, sal_Int32 );
+typedef void (SwFrame:: *SwFrameSet)( sal_Int32, sal_Int32 );
 
 struct SwRectFnCollection
 {
@@ -1315,58 +1315,58 @@ public:
             || (rRect1.*m_fnRect->fnGetLeft)() != (rRect2.*m_fnRect->fnGetLeft)());
     }
 
-    long  GetTop   (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetTop)   (); }
-    long  GetBottom(const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetBottom)(); }
-    long  GetLeft  (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetLeft)  (); }
-    long  GetRight (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetRight) (); }
-    long  GetWidth (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetWidth) (); }
-    long  GetHeight(const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetHeight)(); }
+    sal_Int32  GetTop   (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetTop)   (); }
+    sal_Int32  GetBottom(const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetBottom)(); }
+    sal_Int32  GetLeft  (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetLeft)  (); }
+    sal_Int32  GetRight (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetRight) (); }
+    sal_Int32  GetWidth (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetWidth) (); }
+    sal_Int32  GetHeight(const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetHeight)(); }
     Point GetPos   (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetPos)   (); }
     Size  GetSize  (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetSize)  (); }
 
-    void SetTop   (SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSetTop)   (nNew); }
-    void SetBottom(SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSetBottom)(nNew); }
-    void SetLeft  (SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSetLeft)  (nNew); }
-    void SetRight (SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSetRight) (nNew); }
-    void SetWidth (SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSetWidth) (nNew); }
-    void SetHeight(SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSetHeight)(nNew); }
+    void SetTop   (SwRect& rRect, sal_Int32 nNew) const { (rRect.*m_fnRect->fnSetTop)   (nNew); }
+    void SetBottom(SwRect& rRect, sal_Int32 nNew) const { (rRect.*m_fnRect->fnSetBottom)(nNew); }
+    void SetLeft  (SwRect& rRect, sal_Int32 nNew) const { (rRect.*m_fnRect->fnSetLeft)  (nNew); }
+    void SetRight (SwRect& rRect, sal_Int32 nNew) const { (rRect.*m_fnRect->fnSetRight) (nNew); }
+    void SetWidth (SwRect& rRect, sal_Int32 nNew) const { (rRect.*m_fnRect->fnSetWidth) (nNew); }
+    void SetHeight(SwRect& rRect, sal_Int32 nNew) const { (rRect.*m_fnRect->fnSetHeight)(nNew); }
 
-    void SubTop   (SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSubTop)   (nNew); }
-    void AddBottom(SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnAddBottom)(nNew); }
-    void SubLeft  (SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSubLeft)  (nNew); }
-    void AddRight (SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnAddRight) (nNew); }
-    void AddWidth (SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnAddWidth) (nNew); }
-    void AddHeight(SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnAddHeight)(nNew); }
+    void SubTop   (SwRect& rRect, sal_Int32 nNew) const { (rRect.*m_fnRect->fnSubTop)   (nNew); }
+    void AddBottom(SwRect& rRect, sal_Int32 nNew) const { (rRect.*m_fnRect->fnAddBottom)(nNew); }
+    void SubLeft  (SwRect& rRect, sal_Int32 nNew) const { (rRect.*m_fnRect->fnSubLeft)  (nNew); }
+    void AddRight (SwRect& rRect, sal_Int32 nNew) const { (rRect.*m_fnRect->fnAddRight) (nNew); }
+    void AddWidth (SwRect& rRect, sal_Int32 nNew) const { (rRect.*m_fnRect->fnAddWidth) (nNew); }
+    void AddHeight(SwRect& rRect, sal_Int32 nNew) const { (rRect.*m_fnRect->fnAddHeight)(nNew); }
 
-    void SetPosX(SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSetPosX)(nNew); }
-    void SetPosY(SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSetPosY)(nNew); }
+    void SetPosX(SwRect& rRect, sal_Int32 nNew) const { (rRect.*m_fnRect->fnSetPosX)(nNew); }
+    void SetPosY(SwRect& rRect, sal_Int32 nNew) const { (rRect.*m_fnRect->fnSetPosY)(nNew); }
 
-    long  GetTopMargin   (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetTopMargin)   (); }
-    long  GetBottomMargin(const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetBottomMargin)(); }
-    long  GetLeftMargin  (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetLeftMargin)  (); }
-    long  GetRightMargin (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetRightMargin) (); }
-    void  SetXMargins(SwFrame& rFrame, long nLeft, long nRight) const { (rFrame.*m_fnRect->fnSetXMargins)(nLeft, nRight); }
-    void  SetYMargins(SwFrame& rFrame, long nTop, long nBottom) const { (rFrame.*m_fnRect->fnSetYMargins)(nTop, nBottom); }
-    long  GetPrtTop      (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtTop)      (); }
-    long  GetPrtBottom   (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtBottom)   (); }
-    long  GetPrtLeft     (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtLeft)     (); }
-    long  GetPrtRight    (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtRight)    (); }
-    long  TopDist   (const SwRect& rRect, long nPos) const { return (rRect.*m_fnRect->fnTopDist)    (nPos); }
-    long  BottomDist(const SwRect& rRect, long nPos) const { return (rRect.*m_fnRect->fnBottomDist) (nPos); }
-    long  LeftDist   (const SwRect& rRect, long nPos) const { return (rRect.*m_fnRect->fnLeftDist)    (nPos); }
-    long  RightDist   (const SwRect& rRect, long nPos) const { return (rRect.*m_fnRect->fnRightDist)    (nPos); }
-    void  SetLimit (SwFrame& rFrame, long nNew) const { (rFrame.*m_fnRect->fnSetLimit) (nNew); }
-    bool  OverStep  (const SwRect& rRect, long nPos) const { return (rRect.*m_fnRect->fnOverStep)   (nPos); }
+    sal_Int32  GetTopMargin   (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetTopMargin)   (); }
+    sal_Int32  GetBottomMargin(const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetBottomMargin)(); }
+    sal_Int32  GetLeftMargin  (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetLeftMargin)  (); }
+    sal_Int32  GetRightMargin (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetRightMargin) (); }
+    void  SetXMargins(SwFrame& rFrame, sal_Int32 nLeft, sal_Int32 nRight) const { (rFrame.*m_fnRect->fnSetXMargins)(nLeft, nRight); }
+    void  SetYMargins(SwFrame& rFrame, sal_Int32 nTop, sal_Int32 nBottom) const { (rFrame.*m_fnRect->fnSetYMargins)(nTop, nBottom); }
+    sal_Int32  GetPrtTop      (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtTop)      (); }
+    sal_Int32  GetPrtBottom   (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtBottom)   (); }
+    sal_Int32  GetPrtLeft     (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtLeft)     (); }
+    sal_Int32  GetPrtRight    (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtRight)    (); }
+    sal_Int32  TopDist   (const SwRect& rRect, sal_Int32 nPos) const { return (rRect.*m_fnRect->fnTopDist)    (nPos); }
+    sal_Int32  BottomDist(const SwRect& rRect, sal_Int32 nPos) const { return (rRect.*m_fnRect->fnBottomDist) (nPos); }
+    sal_Int32  LeftDist   (const SwRect& rRect, sal_Int32 nPos) const { return (rRect.*m_fnRect->fnLeftDist)    (nPos); }
+    sal_Int32  RightDist   (const SwRect& rRect, sal_Int32 nPos) const { return (rRect.*m_fnRect->fnRightDist)    (nPos); }
+    void  SetLimit (SwFrame& rFrame, sal_Int32 nNew) const { (rFrame.*m_fnRect->fnSetLimit) (nNew); }
+    bool  OverStep  (const SwRect& rRect, sal_Int32 nPos) const { return (rRect.*m_fnRect->fnOverStep)   (nPos); }
 
     void SetPos(SwRect& rRect, const Point& rNew) const { (rRect.*m_fnRect->fnSetPos)(rNew); }
     void MakePos(SwFrame& rFrame, const SwFrame* pUp, const SwFrame* pPrv, bool bNotify) const { (rFrame.*m_fnRect->fnMakePos)(pUp, pPrv, bNotify); }
-    long XDiff(long n1, long n2) const { return (m_fnRect->fnXDiff) (n1, n2); }
-    long YDiff(long n1, long n2) const { return (m_fnRect->fnYDiff) (n1, n2); }
-    long XInc (long n1, long n2) const { return (m_fnRect->fnXInc)  (n1, n2); }
-    long YInc (long n1, long n2) const { return (m_fnRect->fnYInc)  (n1, n2); }
+    sal_Int32 XDiff(sal_Int32 n1, sal_Int32 n2) const { return (m_fnRect->fnXDiff) (n1, n2); }
+    sal_Int32 YDiff(sal_Int32 n1, sal_Int32 n2) const { return (m_fnRect->fnYDiff) (n1, n2); }
+    sal_Int32 XInc (sal_Int32 n1, sal_Int32 n2) const { return (m_fnRect->fnXInc)  (n1, n2); }
+    sal_Int32 YInc (sal_Int32 n1, sal_Int32 n2) const { return (m_fnRect->fnYInc)  (n1, n2); }
 
-    void SetLeftAndWidth(SwRect& rRect, long nLeft, long nWidth) const { (rRect.*m_fnRect->fnSetLeftAndWidth)(nLeft, nWidth); }
-    void SetTopAndHeight(SwRect& rRect, long nTop, long nHeight) const { (rRect.*m_fnRect->fnSetTopAndHeight)(nTop, nHeight); }
+    void SetLeftAndWidth(SwRect& rRect, sal_Int32 nLeft, sal_Int32 nWidth) const { (rRect.*m_fnRect->fnSetLeftAndWidth)(nLeft, nWidth); }
+    void SetTopAndHeight(SwRect& rRect, sal_Int32 nTop, sal_Int32 nHeight) const { (rRect.*m_fnRect->fnSetTopAndHeight)(nTop, nHeight); }
 
 private:
     bool m_bVert;

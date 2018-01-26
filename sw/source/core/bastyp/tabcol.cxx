@@ -71,7 +71,7 @@ void SwTabCols::Insert( long nValue, bool bValue, size_t nPos )
     SwTabColsEntry aEntry;
     aEntry.nPos = nValue;
     aEntry.nMin = 0;
-    aEntry.nMax = LONG_MAX;
+    aEntry.nMax = SAL_MAX_INT32;
     aEntry.bHidden = bValue;
     aData.insert( aData.begin() + nPos, aEntry );
 
