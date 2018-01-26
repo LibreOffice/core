@@ -739,7 +739,7 @@ private:
 
 private:
 
-    std::unique_ptr<IMPL_SfxBaseModel_DataContainer> m_pData;
+    std::shared_ptr<IMPL_SfxBaseModel_DataContainer> m_pData;
     // cannot be held in m_pData, since it needs to be accessed in non-threadsafe context
     const bool                          m_bSupportEmbeddedScripts;
     const bool                          m_bSupportDocRecovery;
