@@ -39,18 +39,30 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::task;
 
+namespace
+{
+static struct JavaEvents {
+    bool bDisabledHandled : 1;
+    bool bInvalidSettingsHandled : 1;
+    bool bNotFoundHandled : 1;
+    bool bVMCreationFailureHandled : 1;
+    bool bRestartRequiredHandled : 1;
+    sal_uInt16 nResult_JavaDisabled = RET_NO;
+    JavaEvents()
+        : bDisabledHandled(false)
+        , bInvalidSettingsHandled(false)
+        , bNotFoundHandled(false)
+        , bVMCreationFailureHandled(false)
+        , bRestartRequiredHandled(false)
+    {}
+} g_JavaEvents;
+}
+
 namespace svt
 {
 
 JavaInteractionHandler::JavaInteractionHandler() :
-    m_aRefCount(0),
-    m_bShowErrorsOnce(true),
-    m_bJavaDisabled_Handled(false),
-    m_bInvalidSettings_Handled(false),
-    m_bJavaNotFound_Handled(false),
-    m_bVMCreationFailure_Handled(false),
-    m_bRestartRequired_Handled(false),
-    m_nResult_JavaDisabled(RET_NO)
+    m_aRefCount(0)
 {
 }
 
@@ -113,11 +125,11 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
 
     if ( anyExc >>= e1 )
     {
-        if( ! (m_bShowErrorsOnce && m_bJavaNotFound_Handled))
+        if( !g_JavaEvents.bNotFoundHandled )
         {
            // No suitable JRE found
             SolarMutexGuard aSolarGuard;
-            m_bJavaNotFound_Handled = true;
+            g_JavaEvents.bNotFoundHandled = true;
 #if defined( MACOSX )
             ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_JAVANOTFOUND_MAC), VclMessageType::Warning);
 #elif defined( _WIN32 )
@@ -141,11 +153,11 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
     }
     else if ( anyExc >>= e2 )
     {
-        if( !(m_bShowErrorsOnce && m_bInvalidSettings_Handled))
+        if( !g_JavaEvents.bInvalidSettingsHandled )
         {
            // javavendors.xml was updated and Java has not been configured yet
             SolarMutexGuard aSolarGuard;
-            m_bInvalidSettings_Handled = true;
+            g_JavaEvents.bInvalidSettingsHandled = true;
 #ifdef MACOSX
             ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_INVALIDJAVASETTINGS_MAC), VclMessageType::Warning);
 #else
@@ -161,10 +173,10 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
     }
     else if ( anyExc >>= e3 )
     {
-        if( !(m_bShowErrorsOnce && m_bJavaDisabled_Handled))
+        if( !g_JavaEvents.bDisabledHandled )
         {
             SolarMutexGuard aSolarGuard;
-            m_bJavaDisabled_Handled = true;
+            g_JavaEvents.bDisabledHandled = true;
             // Java disabled. Give user a chance to enable Java inside Office.
             ScopedVclPtrInstance<MessageDialog> aQueryBox(nullptr , "JavaDisabledDialog",
                                                           "svt/ui/javadisableddialog.ui");
@@ -174,21 +186,21 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
                 jfw_setEnabled(true);
             }
 
-            m_nResult_JavaDisabled = nResult;
+            g_JavaEvents.nResult_JavaDisabled = nResult;
 
         }
         else
         {
-            nResult = m_nResult_JavaDisabled;
+            nResult = g_JavaEvents.nResult_JavaDisabled;
         }
     }
     else if ( anyExc >>= e4 )
     {
-        if( !(m_bShowErrorsOnce && m_bVMCreationFailure_Handled))
+        if( !g_JavaEvents.bVMCreationFailureHandled )
         {
             // Java not correctly installed, or damaged
             SolarMutexGuard aSolarGuard;
-            m_bVMCreationFailure_Handled = true;
+            g_JavaEvents.bVMCreationFailureHandled = true;
 #ifdef MACOSX
             ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, SvtResId(STR_ERROR_JVMCREATIONFAILED_MAC));
 #else
@@ -204,12 +216,12 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
     }
     else if ( anyExc >>= e5 )
     {
-        if( !(m_bShowErrorsOnce && m_bRestartRequired_Handled))
+        if( !g_JavaEvents.bRestartRequiredHandled )
         {
             // a new JRE was selected, but office needs to be restarted
             //before it can be used.
             SolarMutexGuard aSolarGuard;
-            m_bRestartRequired_Handled = true;
+            g_JavaEvents.bRestartRequiredHandled = true;
             svtools::executeRestartDialog(
                 comphelper::getProcessComponentContext(), nullptr,
                 svtools::RESTART_REASON_JAVA);
