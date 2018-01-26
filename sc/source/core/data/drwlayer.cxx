@@ -2011,12 +2011,11 @@ bool ScDrawLayer::HasObjectsAnchoredInRange(ScRange& rRange) const
 
     SdrObjListIter aIter( *pPage, IM_FLAT );
     SdrObject* pObject = aIter.Next();
-    ScDrawObjData* pObjData;
     while (pObject)
     {
         if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently
         {
-            pObjData = GetObjData(pObject);
+            ScDrawObjData* pObjData = GetObjData(pObject);
             if (pObjData && rRange.In(pObjData->maStart)) // Object is in given range
                 return true;
         }
