@@ -41,6 +41,10 @@
 #include <gdk/gdkx.h>
 #include <unx/gtk/gtkdata.hxx>
 
+#ifdef __GNUC__
+// since boost/filesystem/path.hpp is massively unclean
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
 #include <boost/filesystem/path.hpp>
 
 using namespace ::com::sun::star::ui::dialogs;

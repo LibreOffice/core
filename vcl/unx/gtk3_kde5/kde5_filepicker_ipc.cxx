@@ -53,8 +53,8 @@ void sendIpcArg(std::ostream& stream, const QStringList& list)
     }
 }
 
-FilePickerIpc::FilePickerIpc(KDE5FilePicker* filePicker, QObject* parent)
-    : QObject(parent)
+FilePickerIpc::FilePickerIpc(KDE5FilePicker* filePicker, QObject* _parent)
+    : QObject(_parent)
     , m_filePicker(filePicker)
     , m_stdinNotifier(new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this))
 {

@@ -34,8 +34,8 @@
 
 // KDE5FilePicker
 
-KDE5FilePicker::KDE5FilePicker(QObject* parent)
-    : QObject(parent)
+KDE5FilePicker::KDE5FilePicker(QObject* _parent)
+    : QObject(_parent)
     , _dialog(new QFileDialog(nullptr, {}, QDir::homePath()))
     , _extraControls(new QWidget)
     , _layout(new QFormLayout(_extraControls))
