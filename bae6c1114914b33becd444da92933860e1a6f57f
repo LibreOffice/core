@@ -16,6 +16,24 @@
       "revId": "bae6c1114914b33becd444da92933860e1a6f57f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_fc69aa8c",
+        "filename": "svl/source/numbers/zforscan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2748,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-26T22:20:48Z",
+      "side": 1,
+      "message": "So no, this is ok because with nCounter\u003dMaxCntPost on the next iteration of the while loop for this same \u00270\u0027 case the nPos so far is returned and indicates error.",
+      "parentUuid": "fa31d9ce_ecf2e399",
+      "revId": "bae6c1114914b33becd444da92933860e1a6f57f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
