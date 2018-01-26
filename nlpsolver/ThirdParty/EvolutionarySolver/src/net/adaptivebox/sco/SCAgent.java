@@ -108,9 +108,9 @@ public class SCAgent {
   public void updateInfo() {
     //Selects a bad point kw from TaoW points in Library
     int xw = externalLib.tournamentSelection(specComparator, TaoW, false);
-    //Repaces kw with pcurrent_t
+    //Replaces kw with pcurrent_t
     externalLib.getSelectedPoint(xw).importPoint(pcurrent_t);
-    //Repaces pcurrent_t (x(t)) with trailPoint (x(t+1))
+    //Replaces pcurrent_t (x(t)) with trailPoint (x(t+1))
     pcurrent_t.importPoint(trailPoint);
    }
 

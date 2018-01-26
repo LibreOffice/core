@@ -236,7 +236,7 @@ public class OfficeReportLayoutController extends ElementLayoutController
      * you'll suffer.
      *
      * @param flowController the flow controller of the parent.
-     * @return the joined layout controller that incorperates all changes from the
+     * @return the joined layout controller that incorporates all changes from the
      *         delegate.
      */
     public LayoutController join(final FlowController flowController)

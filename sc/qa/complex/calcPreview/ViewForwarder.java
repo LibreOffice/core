@@ -112,13 +112,13 @@ public class ViewForwarder {
             xCell = oSheet.getCellByPosition(0, 2) ;
             xCell.setFormula("Cell 2");
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            System.out.println("Exception ceating relation :");
+            System.out.println("Exception creating relation :");
             fail(e.getMessage());
         } catch(com.sun.star.lang.WrappedTargetException e) {
-            System.out.println("Exception ceating relation :");
+            System.out.println("Exception creating relation :");
             fail(e.getMessage());
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            System.out.println("Exception ceating relation :");
+            System.out.println("Exception creating relation :");
             fail(e.getMessage());
         }
 
@@ -516,13 +516,13 @@ public class ViewForwarder {
             xCell = oSheet.getCellByPosition(0, 2) ;
             xCell.setFormula("Cell 2");
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            System.out.println("Exception ceating relation :");
+            System.out.println("Exception creating relation :");
             fail(e.getMessage());
         } catch(com.sun.star.lang.WrappedTargetException e) {
-            System.out.println("Exception ceating relation :");
+            System.out.println("Exception creating relation :");
             fail(e.getMessage());
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            System.out.println("Exception ceating relation :");
+            System.out.println("Exception creating relation :");
             fail(e.getMessage());
         }
 
