@@ -61,8 +61,22 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( std::vector< css::beans
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
+    rOutProperties.emplace_back( "FillTransparenceGradient",
+                  FillProperties::PROP_FILL_TRANSPARENCE_GRADIENT,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+
     rOutProperties.emplace_back( "FillGradientName",
                   FillProperties::PROP_FILL_GRADIENT_NAME,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back( "FillTransparenceGradient",
+                  FillProperties::PROP_FILL_GRADIENT,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
@@ -81,6 +95,13 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( std::vector< css::beans
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
+    rOutProperties.emplace_back( "FillHatch",
+                  FillProperties::PROP_FILL_HATCH,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+
     //bitmap properties see lcl_AddPropertiesToVector_only_BitmapProperties()
 
     rOutProperties.emplace_back( "FillBackground",
@@ -94,6 +115,13 @@ void lcl_AddPropertiesToVector_only_BitmapProperties( std::vector< css::beans::P
 {
     rOutProperties.emplace_back( "FillBitmapName",
                   FillProperties::PROP_FILL_BITMAP_NAME,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back( "FillBitmap",
+                  FillProperties::PROP_FILL_BITMAP,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID

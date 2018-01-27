@@ -40,15 +40,15 @@ namespace FillProperties
         , PROP_FILL_COLOR
         , PROP_FILL_TRANSPARENCE
         , PROP_FILL_TRANSPARENCE_GRADIENT_NAME
-//        , PROP_FILL_TRANSPARENCE_GRADIENT //optional
+        , PROP_FILL_TRANSPARENCE_GRADIENT //optional
         , PROP_FILL_GRADIENT_NAME
         , PROP_FILL_GRADIENT_STEPCOUNT
-//        , PROP_FILL_GRADIENT   //optional
+        , PROP_FILL_GRADIENT   //optional
         , PROP_FILL_HATCH_NAME
-//        , PROP_FILL_HATCH  //optional
+        , PROP_FILL_HATCH  //optional
         // bitmap properties start
         , PROP_FILL_BITMAP_NAME
-//        , PROP_FILL_BITMAP //optional
+        , PROP_FILL_BITMAP //optional
 //        , PROP_FILL_BITMAP_URL //optional
         , PROP_FILL_BITMAP_OFFSETX
         , PROP_FILL_BITMAP_OFFSETY
