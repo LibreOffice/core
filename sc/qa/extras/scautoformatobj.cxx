@@ -25,8 +25,6 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-#define NUMBER_OF_TESTS 1
-
 class ScTableAutoFormatObj : public CalcUnoApiTest, public apitest::TableAutoFormat
 {
 public:
@@ -44,12 +42,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static sal_Int32 nTest;
-    static uno::Reference<lang::XComponent> mxComponent;
+    uno::Reference<lang::XComponent> mxComponent;
 };
-
-sal_Int32 ScTableAutoFormatObj::nTest = 0;
-uno::Reference<lang::XComponent> ScTableAutoFormatObj::mxComponent;
 
 ScTableAutoFormatObj::ScTableAutoFormatObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
@@ -58,10 +52,6 @@ ScTableAutoFormatObj::ScTableAutoFormatObj()
 
 uno::Reference<uno::XInterface> ScTableAutoFormatObj::init()
 {
-    // create a calc document
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop("private:factory/scalc");
-
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
@@ -76,19 +66,13 @@ uno::Reference<uno::XInterface> ScTableAutoFormatObj::init()
 
 void ScTableAutoFormatObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScTableAutoFormatObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
