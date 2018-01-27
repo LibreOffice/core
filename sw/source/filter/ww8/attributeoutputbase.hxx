@@ -668,6 +668,22 @@ public:
     const SwRedlineData* GetParagraphMarkerRedline( const SwTextNode& rNode, RedlineType_t aRedlineType );
 };
 
+class WW8Ruby
+{
+    sal_Int32 m_nJC;
+    sal_Char m_cDirective;
+    sal_uInt32 m_nRubyHeight;
+    sal_uInt32 m_nBaseHeight;
+    OUString m_sFontFamily;
+
+public:
+    WW8Ruby(const SwTextNode& rNode, const SwFormatRuby& rRuby, const MSWordExportBase& rExport );
+    sal_Int32   GetJC() { return m_nJC; }
+    sal_Char    GetDirective() { return m_cDirective; }
+    sal_uInt32   GetRubyHeight() { return m_nRubyHeight; }
+    sal_uInt32   GetBaseHeight() { return m_nBaseHeight; }
+    OUString    GetFontFamily() { return m_sFontFamily; }
+};
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_ATTRIBUTEOUTPUTBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
