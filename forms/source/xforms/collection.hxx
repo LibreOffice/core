@@ -245,11 +245,9 @@ protected:
             css::uno::makeAny( nPos ),
             css::uno::makeAny( getItem( nPos ) ),
             css::uno::Any() );
-        for( Listeners_t::iterator aIter = maListeners.begin();
-             aIter != maListeners.end();
-             ++aIter )
+        for (auto const& listener : maListeners)
         {
-            (*aIter)->elementInserted( aEvent );
+            listener->elementInserted( aEvent );
         }
     }
 
@@ -260,11 +258,9 @@ protected:
             css::uno::Any(),
             css::uno::makeAny( aOld ),
             css::uno::Any() );
-        for( Listeners_t::iterator aIter = maListeners.begin();
-             aIter != maListeners.end();
-             ++aIter )
+        for (auto const& listener : maListeners)
         {
-            (*aIter)->elementRemoved( aEvent );
+            listener->elementRemoved( aEvent );
         }
     }
 
@@ -276,11 +272,9 @@ protected:
             css::uno::makeAny( nPos ),
             css::uno::makeAny( getItem( nPos ) ),
             css::uno::makeAny( aNew ) );
-        for( Listeners_t::iterator aIter = maListeners.begin();
-             aIter != maListeners.end();
-             ++aIter )
+        for (auto const& listener : maListeners)
         {
-            (*aIter)->elementReplaced( aEvent );
+            listener->elementReplaced( aEvent );
         }
     }
 

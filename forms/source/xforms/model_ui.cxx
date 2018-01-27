@@ -881,11 +881,9 @@ OUString Model::getResultForExpression(
         // MIP (not binding): iterate over bindings contexts
         std::vector<EvaluationContext> aContext =
             pBinding->getMIPEvaluationContexts();
-        for( std::vector<EvaluationContext>::iterator aIter = aContext.begin();
-             aIter != aContext.end();
-             ++aIter )
+        for (auto const& elem : aContext)
         {
-            aExpression.evaluate( *aIter );
+            aExpression.evaluate(elem);
             aBuffer.append( lcl_serializeForDisplay(aExpression.getXPath()) );
             aBuffer.append( '\n' );
         }
