@@ -53,6 +53,8 @@
 #include <vcl/GraphicObject.hxx>
 #include <comphelper/lok.hxx>
 
+#include <svx/unobrushitemhelper.hxx>
+
 using namespace css;
 
 // table background
@@ -1442,11 +1444,10 @@ void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
     }
 }
 
-#include <svx/unobrushitemhelper.hxx>
-
 SvxBkgTabPage::SvxBkgTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
     SvxAreaTabPage( pParent, rInAttrs ),
-    m_pTblLBox(nullptr)
+    m_pTblLBox(nullptr),
+    bHighlighting(false)
 {
     VclPtr<vcl::Window> pBtn;
     get(pBtn, "btngradient"); pBtn->Hide();
@@ -1516,6 +1517,8 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
             break;
         }
     }
+    else if ( bHighlighting )
+        nSlot = SID_ATTR_BRUSH_CHAR;
 
     sal_uInt16 nWhich = GetWhich(nSlot);
 
@@ -1568,6 +1571,8 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
             m_pTblLBox->SelectEntryPos(0);
             m_pTblLBox->Show();
         }
+        else if (nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING)
+            bHighlighting = bool(nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING);
     }
     SvxAreaTabPage::PageCreated( aSet );
 }

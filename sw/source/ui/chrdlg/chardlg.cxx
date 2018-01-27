@@ -76,7 +76,7 @@ SwCharDlg::SwCharDlg(vcl::Window* pParent, SwView& rVw, const SfxItemSet& rCoreS
     m_nCharPosId = AddTabPage("position", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), nullptr );
     m_nCharTwoId = AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), nullptr );
     m_nCharUrlId = AddTabPage("hyperlink", SwCharURLPage::Create, nullptr);
-    m_nCharBgdId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr );
+    m_nCharBgdId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
     m_nCharBrdId = AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), nullptr );
 
     SvtCJKOptions aCJKOptions;
