@@ -1066,7 +1066,7 @@ sal_Int32 StgSmallStrm::Read( void* pBuf, sal_Int32 n )
     // small stream is likely to be < 64 KBytes.
     if( ( m_nPos + n ) > m_nSize )
         n = m_nSize - m_nPos;
-    short nDone = 0;
+    sal_Int32 nDone = 0;
     while( n )
     {
         short nBytes = m_nPageSize - m_nOffset;
@@ -1083,7 +1083,7 @@ sal_Int32 StgSmallStrm::Read( void* pBuf, sal_Int32 n )
                 break;
             // all reading through the stream
             short nRes = static_cast<short>(m_pData->Read( static_cast<sal_uInt8*>(pBuf) + nDone, nBytes ));
-            nDone = nDone + nRes;
+            nDone += nRes;
             m_nPos += nRes;
             n -= nRes;
             m_nOffset = m_nOffset + nRes;
@@ -1102,7 +1102,7 @@ sal_Int32 StgSmallStrm::Write( const void* pBuf, sal_Int32 n )
 {
     // you can safely assume that reads are not huge, since the
     // small stream is likely to be < 64 KBytes.
-    short nDone = 0;
+    sal_Int32 nDone = 0;
     if( ( m_nPos + n ) > m_nSize )
     {
         sal_Int32 nOld = m_nPos;
@@ -1126,7 +1126,7 @@ sal_Int32 StgSmallStrm::Write( const void* pBuf, sal_Int32 n )
             if( !m_pData->Pos2Page( nDataPos ) )
                 break;
             short nRes = static_cast<short>(m_pData->Write( static_cast<sal_uInt8 const *>(pBuf) + nDone, nBytes ));
-            nDone = nDone + nRes;
+            nDone += nRes;
             m_nPos += nRes;
             n -= nRes;
             m_nOffset = m_nOffset + nRes;
