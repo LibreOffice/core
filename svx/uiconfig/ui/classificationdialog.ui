@@ -6,7 +6,7 @@
   <object class="GtkDialog" id="AdvancedDocumentClassificationDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="classificationdialog|dialogname">Classification Dialog</property>
+    <property name="title" translatable="yes" context="classificationdialog|dialogname">Classification</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
