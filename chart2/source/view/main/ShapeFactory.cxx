@@ -2329,7 +2329,7 @@ uno::Reference< drawing::XShape >
             }
             catch( const uno::Exception& e )
             {
-                SAL_WARN("chart2", "Exception caught. " << e );
+                ASSERT_EXCEPTION( e );
             }
         }
     }
