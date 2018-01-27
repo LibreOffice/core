@@ -6460,17 +6460,17 @@
       </node>
       <node oor:name=".uno:ClassificationApply" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Apply Document Classification</value>
+          <value xml:lang="en-US">Apply document classification</value>
         </prop>
       </node>
       <node oor:name=".uno:ClassificationDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Classification Dialog</value>
+          <value xml:lang="en-US">Manage document classification</value>
         </prop>
       </node>
       <node oor:name=".uno:ParagraphClassificationDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Paragraph Classification Dialog</value>
+          <value xml:lang="en-US">Manage paragraph classification</value>
         </prop>
       </node>
       <node oor:name=".uno:EditSelectMenu" oor:op="replace">

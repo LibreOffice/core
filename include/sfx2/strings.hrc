@@ -248,7 +248,7 @@
 #define STR_CLASSIFIED_DOCUMENT                 NC_("STR_CLASSIFIED_DOCUMENT", "The classification label of this document is %1.")
 #define STR_TARGET_DOC_NOT_CLASSIFIED           NC_("STR_TARGET_DOC_NOT_CLASSIFIED", "This document must be classified before the clipboard can be pasted.")
 #define STR_DOC_CLASSIFICATION_TOO_LOW          NC_("STR_DOC_CLASSIFICATION_TOO_LOW", "This document has a lower classification level than the clipboard.")
-#define STR_CLASSIFIED_INTELLECTUAL_PROPERTY    NC_("STR_CLASSIFIED_INTELLECTUAL_PROPERTY", "Intellectual Property:")
+#define STR_CLASSIFIED_INTELLECTUAL_PROPERTY    NC_("STR_CLASSIFIED_INTELLECTUAL_PROPERTY", "Level")
 #define STR_CLASSIFIED_NATIONAL_SECURITY        NC_("STR_CLASSIFIED_NATIONAL_SECURITY", "National Security:")
 #define STR_CLASSIFIED_EXPORT_CONTROL           NC_("STR_CLASSIFIED_EXPORT_CONTROL", "Export Control:")
 #define STR_CHECKOUT                            NC_("STR_CHECKOUT", "Check Out")
