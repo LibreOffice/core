@@ -21,8 +21,6 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 17
-
 class ScDatabaseRangeObj : public CalcUnoApiTest, public apitest::DatabaseRange, public apitest::XDatabaseRange
 {
 public:
@@ -58,12 +56,8 @@ public:
 
     CPPUNIT_TEST_SUITE_END();
 private:
-    static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< lang::XComponent > mxComponent;
 };
-
-sal_Int32 ScDatabaseRangeObj::nTest = 0;
-uno::Reference< lang::XComponent > ScDatabaseRangeObj::mxComponent;
 
 ScDatabaseRangeObj::ScDatabaseRangeObj()
       : CalcUnoApiTest("/sc/qa/extras/testdocuments")
@@ -72,11 +66,6 @@ ScDatabaseRangeObj::ScDatabaseRangeObj()
 
 uno::Reference< uno::XInterface > ScDatabaseRangeObj::init( const OUString& rDBName )
 {
-    OUString aFileURL;
-    createFileURL("ScDatabaseRangeObj.ods", aFileURL);
-    if(!mxComponent.is())
-        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
@@ -89,19 +78,17 @@ uno::Reference< uno::XInterface > ScDatabaseRangeObj::init( const OUString& rDBN
 
 void ScDatabaseRangeObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+
+    OUString aFileURL;
+    createFileURL("ScDatabaseRangeObj.ods", aFileURL);
+    mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
+
 }
 
 void ScDatabaseRangeObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
