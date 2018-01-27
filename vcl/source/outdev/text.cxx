@@ -888,11 +888,6 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         if( mbInitFont )
             InitFont();
 
-
-        OUString aStrModifiable = rStr;
-        ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStrModifiable, nIndex, nLen,
-                0, nullptr);
-
         pLayoutCache->DrawBase() = ImplLogicToDevicePixel( rStartPt );
 
         ImplDrawText( *pLayoutCache );
