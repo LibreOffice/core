@@ -26,6 +26,8 @@
 #include <editeng/brushitem.hxx>
 #include <memory>
 
+#include "cuitabarea.hxx"
+
 class BackgroundPreviewImpl;
 class SvxOpenGraphicDialog;
 struct SvxBackgroundTable_Impl;
@@ -139,11 +141,10 @@ private:
     DECL_LINK( TblDestinationHdl_Impl, ListBox&, void );
 };
 
-#include "cuitabarea.hxx"
-
 class SvxBkgTabPage : public SvxAreaTabPage
 {
     VclPtr<ListBox> m_pTblLBox;
+    bool        bHighlighting       : 1;
 public:
     using SvxAreaTabPage::DeactivatePage;
 
