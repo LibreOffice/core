@@ -4133,4 +4133,91 @@ const NfKeywordTable & MSWordExportBase::GetNfKeywordTable()
     return *m_pKeyMap;
 }
 
+WW8Ruby::WW8Ruby(const SwTextNode& rNode, const SwFormatRuby& rRuby, const MSWordExportBase& rExport ):
+    m_nJC(0),
+    m_cDirective(0),
+    m_nRubyHeight(0),
+    m_nBaseHeight(0)
+{
+    switch ( rRuby.GetAdjustment() )
+    {
+        case css::text::RubyAdjust_LEFT:
+            m_nJC = 3;
+            m_cDirective = 'l';
+            break;
+        case css::text::RubyAdjust_CENTER:
+            //defaults to 0
+            break;
+        case css::text::RubyAdjust_RIGHT:
+            m_nJC = 4;
+            m_cDirective = 'r';
+            break;
+        case css::text::RubyAdjust_BLOCK:
+            m_nJC = 1;
+            m_cDirective = 'd';
+            break;
+        case css::text::RubyAdjust_INDENT_BLOCK:
+            m_nJC = 2;
+            m_cDirective = 'd';
+            break;
+        default:
+            OSL_ENSURE( false,"Unhandled Ruby justication code" );
+            break;
+    }
+
+    /*
+     MS needs to know the name and size of the font used in the ruby item,
+     but we could have written it in a mixture of asian and western
+     scripts, and each of these can be a different font and size than the
+     other, so we make a guess based upon the first character of the text,
+     defaulting to asian.
+     */
+    assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+    sal_uInt16 nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType(rRuby.GetText(), 0);
+
+    const SwTextRuby* pRubyText = rRuby.GetTextRuby();
+    const SwCharFormat* pFormat = pRubyText ? pRubyText->GetCharFormat() : nullptr;
+
+    long nHeight;
+    if (pFormat)
+    {
+        const auto& rFont
+            = ItemGet<SvxFontItem>(*pFormat, GetWhichOfScript(RES_CHRATR_FONT, nRubyScript));
+        m_sFontFamily = rFont.GetFamilyName();
+
+        const auto& rHeight = ItemGet<SvxFontHeightItem>(
+            *pFormat, GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript));
+        m_nRubyHeight = rHeight.GetHeight();
+    }
+    else
+    {
+        /*Get defaults if no formatting on ruby text*/
+
+        const SfxItemPool* pPool = rNode.GetSwAttrSet().GetPool();
+        pPool = pPool ? pPool : &rExport.m_pDoc->GetAttrPool();
+
+
+        const auto& rFont
+            = DefaultItemGet<SvxFontItem>(*pPool, GetWhichOfScript(RES_CHRATR_FONT, nRubyScript));
+        m_sFontFamily = rFont.GetFamilyName();
+
+        const auto& rHeight = DefaultItemGet<SvxFontHeightItem>(
+            *pPool, GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript));
+        m_nRubyHeight = rHeight.GetHeight();
+    }
+
+    if (pRubyText)
+        nRubyScript
+            = g_pBreakIt->GetBreakIter()->getScriptType(rNode.GetText(), pRubyText->GetStart());
+    else
+        nRubyScript = i18n::ScriptType::ASIAN;
+
+    const SwAttrSet& rSet = rNode.GetSwAttrSet();
+    auto& rHeightItem = static_cast<const SvxFontHeightItem&>(
+        rSet.Get(GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript)));
+
+    m_nBaseHeight = rHeightItem.GetHeight();
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
