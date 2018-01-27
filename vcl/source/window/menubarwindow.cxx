@@ -517,7 +517,14 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
             VclPtr<vcl::Window> xTempFocusId = xSaveFocusId;
             xSaveFocusId = nullptr;
             if (bAllowRestoreFocus)
+            {
+                // tdf#115227 the popup is already killed, so temporarily set us as the
+                // focus window, so we could avoid sending superfluous activate events
+                // to top window listeners.
+                ImplGetSVData()->maWinData.mpFocusWin = this;
                 Window::EndSaveFocus(xTempFocusId);
+                assert(xTempFocusId == nullptr || ImplGetSVData()->maWinData.mpFocusWin != this);
+            }
             // #105406# restore focus to document if we could not save focus before
             if (bDefaultToDocument && xTempFocusId == nullptr && bAllowRestoreFocus)
                 GrabFocusToDocument();

@@ -233,23 +233,6 @@ public:
     virtual css::uno::Reference< css::awt::XStyleSettings > SAL_CALL getStyleSettings() override;
 };
 
-class TOOLKIT_DLLPUBLIC VclListenerLock
-{
-private:
-    VCLXWindow* m_pLockWindow;
-
-public:
-    explicit VclListenerLock(VCLXWindow* _pLockWindow);
-    /**
-     * @param bSystemWindow - if pVclWindow or its first system window parent
-     * is locked.
-     */
-    explicit VclListenerLock(vcl::Window* pVclWindow, bool bSystemWindow);
-    ~VclListenerLock();
-    VclListenerLock(const VclListenerLock&) = delete;
-    VclListenerLock& operator=(const VclListenerLock&) = delete;
-};
-
 #endif // INCLUDED_TOOLKIT_AWT_VCLXWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,7 +35,6 @@
 #include <svtools/framestatuslistener.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/toolbarmenu.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include "toolbarmenuimp.hxx"
 
 using namespace ::com::sun::star::uno;
@@ -1487,7 +1486,6 @@ bool ToolbarPopup::IsInPopupMode()
 
 void ToolbarPopup::EndPopupMode()
 {
-    VclListenerLock aLock(this, /*bSystemWindow=*/true);
     GetDockingManager()->EndPopupMode(this);
 }
 

@@ -517,23 +517,26 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         }
         break;
         case VclEventId::WindowActivate:
-        {
-            if ( mpImpl->getTopWindowListeners().getLength() )
-            {
-                css::lang::EventObject aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                mpImpl->getTopWindowListeners().windowActivated( aEvent );
-            }
-        }
-        break;
         case VclEventId::WindowDeactivate:
         {
-            if ( mpImpl->getTopWindowListeners().getLength() )
+            if (!mpImpl->getTopWindowListeners().getLength())
+                return;
+
+            vcl::Window* pWin = static_cast<vcl::Window*>(rVclWindowEvent.GetData());
+            while (pWin)
             {
-                css::lang::EventObject aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                mpImpl->getTopWindowListeners().windowDeactivated( aEvent );
+                if (pWin->GetWindow(GetWindowType::Client) == GetWindow())
+                    return;
+
+                pWin = pWin->GetParent();
             }
+
+            css::lang::EventObject aEvent;
+            aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+            if (rVclWindowEvent.GetId() == VclEventId::WindowActivate)
+                mpImpl->getTopWindowListeners().windowActivated( aEvent );
+            else
+                mpImpl->getTopWindowListeners().windowDeactivated( aEvent );
         }
         break;
         case VclEventId::WindowClose:
