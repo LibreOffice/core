@@ -518,22 +518,48 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         break;
         case VclEventId::WindowActivate:
         {
-            if ( mpImpl->getTopWindowListeners().getLength() )
+            if (!mpImpl->getTopWindowListeners().getLength())
+                return;
+
+            vcl::Window* pOldWin = static_cast<vcl::Window*>(rVclWindowEvent.GetData());
+            while (pOldWin)
             {
-                css::lang::EventObject aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                mpImpl->getTopWindowListeners().windowActivated( aEvent );
+                if (pOldWin == GetWindow())
+                    return;
+
+                FloatingWindow* pFloatWin = dynamic_cast<FloatingWindow*>(pOldWin);
+                if (pFloatWin && pFloatWin->IsInPopupMode())
+                    return;
+
+                pOldWin = pOldWin->GetWindow(GetWindowType::RealParent);
             }
+
+            css::lang::EventObject aEvent;
+            aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+            mpImpl->getTopWindowListeners().windowActivated( aEvent );
         }
         break;
         case VclEventId::WindowDeactivate:
         {
-            if ( mpImpl->getTopWindowListeners().getLength() )
+            if (!mpImpl->getTopWindowListeners().getLength())
+                return;
+
+            vcl::Window* pNewWin = static_cast<vcl::Window*>(rVclWindowEvent.GetData());
+            while (pNewWin)
             {
-                css::lang::EventObject aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                mpImpl->getTopWindowListeners().windowDeactivated( aEvent );
+                if (pNewWin == GetWindow())
+                    return;
+
+                FloatingWindow* pFloatWin = dynamic_cast<FloatingWindow*>(pNewWin);
+                if (pFloatWin && pFloatWin->IsInPopupMode())
+                    return;
+
+                pNewWin = pNewWin->GetWindow(GetWindowType::RealParent);
             }
+
+            css::lang::EventObject aEvent;
+            aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+            mpImpl->getTopWindowListeners().windowDeactivated( aEvent );
         }
         break;
         case VclEventId::WindowClose:
