@@ -22,8 +22,6 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 2
-
 class ScAreaLinksObj : public CalcUnoApiTest, public apitest::XAreaLinks
 {
 public:
@@ -42,13 +40,9 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< lang::XComponent > mxComponent;
 
 };
-
-sal_Int32 ScAreaLinksObj::nTest = 0;
-uno::Reference< lang::XComponent > ScAreaLinksObj::mxComponent;
 
 ScAreaLinksObj::ScAreaLinksObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
@@ -57,10 +51,6 @@ ScAreaLinksObj::ScAreaLinksObj()
 
 uno::Reference< uno::XInterface > ScAreaLinksObj::init()
 {
-    // create a calc document
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop("private:factory/scalc");
-
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
@@ -72,19 +62,13 @@ uno::Reference< uno::XInterface > ScAreaLinksObj::init()
 
 void ScAreaLinksObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScAreaLinksObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
