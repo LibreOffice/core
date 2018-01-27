@@ -27,8 +27,6 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 7
-
 class ScCellRangesObj : public CalcUnoApiTest,
                         public apitest::XSheetCellRangeContainer,
                         public apitest::XSheetCellRanges,
@@ -60,12 +58,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< lang::XComponent > mxComponent;
 };
-
-sal_Int32 ScCellRangesObj::nTest = 0;
-uno::Reference< lang::XComponent > ScCellRangesObj::mxComponent;
 
 ScCellRangesObj::ScCellRangesObj():
     CalcUnoApiTest("/sc/qa/extras/testdocuments")
@@ -74,10 +68,6 @@ ScCellRangesObj::ScCellRangesObj():
 
 uno::Reference< uno::XInterface > ScCellRangesObj::init()
 {
-    // create a calc document
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop("private:factory/scalc");
-
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
@@ -109,19 +99,14 @@ uno::Reference< uno::XInterface > ScCellRangesObj::init()
 
 void ScCellRangesObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    // create a calc document
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScCellRangesObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
