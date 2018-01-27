@@ -1052,7 +1052,7 @@ sal_Int32 StgSmallStrm::Read( void* pBuf, sal_Int32 n )
     // small stream is likely to be < 64 KBytes.
     if( ( nPos + n ) > nSize )
         n = nSize - nPos;
-    short nDone = 0;
+    sal_Int32 nDone = 0;
     while( n )
     {
         short nBytes = nPageSize - nOffset;
@@ -1083,7 +1083,7 @@ sal_Int32 StgSmallStrm::Write( const void* pBuf, sal_Int32 n )
 {
     // you can safely assume that reads are not huge, since the
     // small stream is likely to be < 64 KBytes.
-    short nDone = 0;
+    sal_Int32 nDone = 0;
     if( ( nPos + n ) > nSize )
     {
         sal_Int32 nOld = nPos;
