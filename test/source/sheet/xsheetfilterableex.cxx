@@ -42,7 +42,7 @@ void XSheetFilterableEx::testCreateFilterDescriptorByObject()
     {
         // we don't care about the actual value, just that we can access the fields
         CPPUNIT_ASSERT_MESSAGE("Unable to retrieve field: StringValue",
-                               !field.StringValue.isEmpty());
+                               !field.StringValue.isEmpty() || field.StringValue.isEmpty());
         CPPUNIT_ASSERT_MESSAGE("Unable to retrieve field: IsNumeric",
                                !field.IsNumeric || field.IsNumeric);
         CPPUNIT_ASSERT_MESSAGE("Unable to retrieve field: NumericValue",
