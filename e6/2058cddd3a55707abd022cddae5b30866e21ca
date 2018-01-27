@@ -1,0 +1,9 @@
+Code-Review+1: Samuel Mehrbrodt <Samuel.Mehrbrodt@cib.de>
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+2: Caolán McNamara <caolanm@redhat.com>
+Verified+1: Caolán McNamara <caolanm@redhat.com>
+Submitted-by: Caolán McNamara <caolanm@redhat.com>
+Submitted-at: Sat, 27 Jan 2018 20:58:16 +0100
+Reviewed-on: https://gerrit.libreoffice.org/48693
+Project: core
+Branch: refs/heads/libreoffice-6-0
