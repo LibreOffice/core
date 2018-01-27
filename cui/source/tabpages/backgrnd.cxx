@@ -1441,4 +1441,82 @@ void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
     }
 }
 
+#include <cuitabarea.hxx>
+#include <svx/unobrushitemhelper.hxx>
+
+SvxBkgTabPage::SvxBkgTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
+    SvxAreaTabPage( pParent, rInAttrs ),
+    bHighlighting(false)
+{
+    VclPtr<vcl::Window> pBtn;
+    get(pBtn, "btngradient"); pBtn->Hide();
+    get(pBtn, "btnhatch");    pBtn->Hide();
+    get(pBtn, "btnbitmap");   pBtn->Hide();
+    get(pBtn, "btnpattern");  pBtn->Hide();
+
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    const SfxPoolItem* pItem = nullptr;
+
+    XColorListRef pColorTable = nullptr;
+    if ( pDocSh && ( nullptr != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
+    {
+        pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
+    }
+
+    if ( !pColorTable.is() )
+        pColorTable = XColorList::CreateStdColorList();
+
+    SetColorList(pColorTable);
+}
+
+DeactivateRC SvxBkgTabPage::DeactivatePage( SfxItemSet* _pSet )
+{
+    if ( DeactivateRC::KeepPage == SvxAreaTabPage::DeactivatePage( _pSet ) )
+        return DeactivateRC::KeepPage;
+
+    sal_uInt16 nWhich = SID_ATTR_BRUSH;
+    if ( bHighlighting )
+        nWhich = SID_ATTR_BRUSH_CHAR;
+
+    drawing::FillStyle eFillType = static_cast<const XFillStyleItem&>( _pSet->Get( XATTR_FILLSTYLE ) ).GetValue();
+    switch( eFillType )
+    {
+        case drawing::FillStyle_NONE:
+        {
+            _pSet->Put( SvxBrushItem( Color( COL_TRANSPARENT ), _pSet->GetPool()->GetWhich( nWhich ) ) );
+            break;
+        }
+        case drawing::FillStyle_SOLID:
+        {
+            XFillColorItem aColorItem( static_cast<const XFillColorItem&>( _pSet->Get( XATTR_FILLCOLOR ) ) );
+            _pSet->Put( SvxBrushItem( aColorItem.GetColorValue(), _pSet->GetPool()->GetWhich( nWhich ) ) );
+            break;
+        }
+        default:
+            break;
+    }
+
+    return DeactivateRC::LeavePage;
+}
+
+VclPtr<SfxTabPage> SvxBkgTabPage::Create( vcl::Window* pWindow,
+                                           const SfxItemSet* rAttrs )
+{
+    return VclPtr<SvxBkgTabPage>::Create( pWindow, *rAttrs );
+}
+
+void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
+{
+    const SfxUInt32Item* pFlagItem = aSet.GetItem<SfxUInt32Item>(SID_FLAG_TYPE, false);
+    if (pFlagItem)
+    {
+        SvxBackgroundTabFlags nFlags = static_cast<SvxBackgroundTabFlags>(pFlagItem->GetValue());
+        if ((nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING))
+        {
+            bHighlighting = bool(nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING);
+        }
+    }
+    SvxAreaTabPage::PageCreated( aSet );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
