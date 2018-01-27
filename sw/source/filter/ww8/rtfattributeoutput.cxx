@@ -450,100 +450,23 @@ void RtfAttributeOutput::RawText(const OUString& rText, rtl_TextEncoding eCharSe
 void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 nPos,
                                    const SwFormatRuby& rRuby)
 {
+    WW8Ruby aWW8Ruby(rNode, rRuby, GetExport());
     OUString aStr(FieldString(ww::eEQ));
     aStr += "\\* jc";
-    sal_Int32 nJC = 0;
-    sal_Char cDirective = 0;
-    switch (rRuby.GetAdjustment())
-    {
-        case css::text::RubyAdjust_LEFT:
-            nJC = 3;
-            cDirective = 'l';
-            break;
-        case css::text::RubyAdjust_CENTER:
-            //defaults to 0
-            break;
-        case css::text::RubyAdjust_RIGHT:
-            nJC = 4;
-            cDirective = 'r';
-            break;
-        case css::text::RubyAdjust_BLOCK:
-            nJC = 1;
-            cDirective = 'd';
-            break;
-        case css::text::RubyAdjust_INDENT_BLOCK:
-            nJC = 2;
-            cDirective = 'd';
-            break;
-        default:
-            OSL_ENSURE(false, "Unhandled Ruby justication code");
-            break;
-    }
-    aStr += OUString::number(nJC);
-
-    /*
-     MS needs to know the name and size of the font used in the ruby item,
-     but we could have written it in a mixture of asian and western
-     scripts, and each of these can be a different font and size than the
-     other, so we make a guess based upon the first character of the text,
-     defaulting to asian.
-     */
-    assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
-    sal_uInt16 nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType(rRuby.GetText(), 0);
-
-    const SwTextRuby* pRubyText = rRuby.GetTextRuby();
-    const SwCharFormat* pFormat = pRubyText ? pRubyText->GetCharFormat() : nullptr;
-    OUString sFamilyName;
-    long nHeight;
-    if (pFormat)
-    {
-        const auto& rFont
-            = ItemGet<SvxFontItem>(*pFormat, GetWhichOfScript(RES_CHRATR_FONT, nRubyScript));
-        sFamilyName = rFont.GetFamilyName();
-
-        const auto& rHeight = ItemGet<SvxFontHeightItem>(
-            *pFormat, GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript));
-        nHeight = rHeight.GetHeight();
-    }
-    else
-    {
-        /*Get defaults if no formatting on ruby text*/
-
-        const SfxItemPool* pPool = rNode.GetSwAttrSet().GetPool();
-        pPool = pPool ? pPool : &m_rExport.m_pDoc->GetAttrPool();
-
-        const auto& rFont
-            = DefaultItemGet<SvxFontItem>(*pPool, GetWhichOfScript(RES_CHRATR_FONT, nRubyScript));
-        sFamilyName = rFont.GetFamilyName();
-
-        const auto& rHeight = DefaultItemGet<SvxFontHeightItem>(
-            *pPool, GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript));
-        nHeight = rHeight.GetHeight();
-    }
-    nHeight = (nHeight + 5) / 10;
+    aStr += OUString::number(aWW8Ruby.GetJC());
 
     aStr += " \\* \"Font:";
-    aStr += sFamilyName;
+    aStr += aWW8Ruby.GetFontFamily();
     aStr += "\" \\* hps";
-    aStr += OUString::number(nHeight);
+    aStr += OUString::number((aWW8Ruby.GetRubyHeight() + 5) / 10);
     aStr += " \\o";
-    if (cDirective)
+    if (aWW8Ruby.GetDirective())
     {
-        aStr += "\\a" + OUString(cDirective);
+        aStr += "\\a" + OUString(aWW8Ruby.GetDirective());
     }
     aStr += "(\\s\\up ";
 
-    if (pRubyText)
-        nRubyScript
-            = g_pBreakIt->GetBreakIter()->getScriptType(rNode.GetText(), pRubyText->GetStart());
-    else
-        nRubyScript = i18n::ScriptType::ASIAN;
-
-    const SwAttrSet& rSet = rNode.GetSwAttrSet();
-    auto& rHeightItem = static_cast<const SvxFontHeightItem&>(
-        rSet.Get(GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript)));
-    nHeight = (rHeightItem.GetHeight() + 10) / 20 - 1;
-    aStr += OUString::number(nHeight);
+    aStr += OUString::number((aWW8Ruby.GetBaseHeight() + 10) / 20 - 1);
     aStr += "(";
     EndRun(&rNode, nPos);
     m_rExport.OutputField(nullptr, ww::eEQ, aStr, FieldFlags::Start | FieldFlags::CmdStart);
