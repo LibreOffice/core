@@ -24,8 +24,6 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 7
-
 class ScDataPilotFieldObj : public CalcUnoApiTest, public apitest::DataPilotField,
                                                    public apitest::XDataPilotField,
                                                    public apitest::XDataPilotFieldGrouping
@@ -57,12 +55,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< lang::XComponent > mxComponent;
 };
-
-sal_Int32 ScDataPilotFieldObj::nTest = 0;
-uno::Reference< lang::XComponent > ScDataPilotFieldObj::mxComponent;
 
 ScDataPilotFieldObj::ScDataPilotFieldObj()
      : CalcUnoApiTest("/sc/qa/extras/testdocuments")
@@ -71,11 +65,6 @@ ScDataPilotFieldObj::ScDataPilotFieldObj()
 
 uno::Reference< uno::XInterface > ScDataPilotFieldObj::init()
 {
-    OUString aFileURL;
-    createFileURL("scdatapilotfieldobj.ods", aFileURL);
-    if(!mxComponent.is())
-        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
@@ -100,19 +89,17 @@ uno::Reference< uno::XInterface > ScDataPilotFieldObj::init()
 
 void ScDataPilotFieldObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+
+    OUString aFileURL;
+    createFileURL("scdatapilotfieldobj.ods", aFileURL);
+    mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
+
 }
 
 void ScDataPilotFieldObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
