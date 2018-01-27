@@ -207,9 +207,7 @@ void Model::removeMIPs( void const * pTag )
     {
         if( aIter->second.first == pTag )
         {
-            MIPs_t::iterator next( aIter ); ++next;
-            maMIPs.erase( aIter );
-            aIter = next;
+            aIter = maMIPs.erase( aIter );
         }
         else
             ++aIter;

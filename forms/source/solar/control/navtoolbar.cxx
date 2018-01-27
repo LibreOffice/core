@@ -151,8 +151,8 @@ namespace frm
 
     void NavigationToolBar::dispose()
     {
-        for (auto i = m_aChildWins.begin(); i != m_aChildWins.end(); ++i)
-            i->disposeAndClear();
+        for (auto & childWin : m_aChildWins)
+            childWin.disposeAndClear();
         m_aChildWins.clear();
         m_pToolbar.disposeAndClear();
         vcl::Window::dispose();
@@ -358,12 +358,10 @@ namespace frm
 
         // translate them into command URLs
         css::uno::Sequence< OUString > aCommandURLs( aFormFeatures.size() );
-        for (   FormFeatures::const_iterator formFeature = aFormFeatures.begin();
-                formFeature != aFormFeatures.end();
-                ++formFeature
-            )
+        size_t i = 0;
+        for (auto const& formFeature : aFormFeatures)
         {
-            aCommandURLs[ formFeature - aFormFeatures.begin() ] = lcl_getCommandURL( *formFeature );
+            aCommandURLs[i++] = lcl_getCommandURL(formFeature);
         }
 
         // retrieve the images for the command URLs
@@ -371,12 +369,10 @@ namespace frm
 
         // and set them at the toolbar
         CommandImages::const_iterator commandImage = aCommandImages.begin();
-        for (   FormFeatures::const_iterator formFeature = aFormFeatures.begin();
-                formFeature != aFormFeatures.end();
-                ++formFeature, ++commandImage
-            )
+        for (auto const& formFeature : aFormFeatures)
         {
-            m_pToolbar->SetItemImage( *formFeature, *commandImage );
+            m_pToolbar->SetItemImage( formFeature, *commandImage );
+            ++commandImage;
         }
 
         // parts of our layout is dependent on the size of our icons

@@ -277,10 +277,10 @@ void ImageProducer::startProduction()
             ConsumerList_t aTmp = maConsList;
 
             // iterate through interfaces
-            for( ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter )
+            for (auto const& elem : aTmp)
             {
-                (*iter)->init( 0, 0 );
-                (*iter)->complete( css::awt::ImageStatus::IMAGESTATUS_STATICIMAGEDONE, this );
+                elem->init( 0, 0 );
+                elem->complete( css::awt::ImageStatus::IMAGESTATUS_STATICIMAGEDONE, this );
             }
 
             maDoneHdl.Call( nullptr );
@@ -321,8 +321,8 @@ void ImageProducer::ImplUpdateData( const Graphic& rGraphic )
         mbConsInit = false;
 
         // iterate through interfaces
-        for( ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter )
-            (*iter)->complete( css::awt::ImageStatus::IMAGESTATUS_STATICIMAGEDONE, this );
+        for (auto const& elem : aTmp)
+            elem->complete( css::awt::ImageStatus::IMAGESTATUS_STATICIMAGEDONE, this );
     }
 }
 
@@ -385,10 +385,10 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
         ConsumerList_t aTmp = maConsList;
 
         // iterate through interfaces
-        for( ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter)
+        for (auto const& elem : aTmp)
         {
-            (*iter)->init( pBmpAcc->Width(), pBmpAcc->Height() );
-            (*iter)->setColorModel( pBmpAcc->GetBitCount(),aRGBPal, nRMask, nGMask, nBMask, nAMask );
+            elem->init( pBmpAcc->Width(), pBmpAcc->Height() );
+            elem->setColorModel( pBmpAcc->GetBitCount(),aRGBPal, nRMask, nGMask, nBMask, nAMask );
         }
 
         Bitmap::ReleaseAccess( pBmpAcc );
@@ -448,8 +448,8 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
                 }
 
                 // iterate through interfaces
-                for (ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter)
-                    (*iter)->setPixelsByBytes( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
+                for (auto const& elem : aTmp)
+                    elem->setPixelsByBytes( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
             }
             else
             {
@@ -468,8 +468,8 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
                 }
 
                 // iterate through interfaces
-                for (ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter)
-                    (*iter)->setPixelsByLongs( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
+                for (auto const& elem : aTmp)
+                    elem->setPixelsByLongs( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
             }
         }
         else
@@ -494,8 +494,8 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
             }
 
             // iterate through interfaces
-                for (ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter)
-                    (*iter)->setPixelsByLongs( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
+            for (auto const& elem : aTmp)
+                elem->setPixelsByLongs( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
         }
 
         Bitmap::ReleaseAccess( pBmpAcc );

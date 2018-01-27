@@ -524,15 +524,12 @@ static void lcl_removeListenerFromNode( const Reference<XNode>& xNode,
     // EvaluationContext for each
     PathExpression::NodeVector_t aNodes = maBindingExpression.getNodeList();
     ::std::vector<EvaluationContext> aVector;
-    sal_Int32 nCount = 0; // count nodes for context position
-    for( PathExpression::NodeVector_t::iterator aIter = aNodes.begin();
-         aIter != aNodes.end();
-         ++aIter, ++nCount )
+    for (auto const& node : aNodes)
     {
-        OSL_ENSURE( aIter->is(), "no node?" );
+        OSL_ENSURE( node.is(), "no node?" );
 
         // create proper evaluation context for this MIP
-        aVector.emplace_back( *aIter, getModel(), getBindingNamespaces() );
+        aVector.emplace_back( node, getModel(), getBindingNamespaces() );
     }
     return aVector;
 }
@@ -578,23 +575,17 @@ void Binding::bind( bool bForceRebind )
     // 2) register suitable listeners on the instance (and remove old ones)
     if( maEventNodes.empty() || bForceRebind )
     {
-        for( auto aIter = maEventNodes.begin();
-             aIter != maEventNodes.end();
-             ++aIter )
-            lcl_removeListenerFromNode( *aIter, this );
+        for (auto const& eventNode : maEventNodes)
+            lcl_removeListenerFromNode( eventNode, this );
         maEventNodes.clear();
         if( isSimpleBinding() )
-            for( PathExpression::NodeVector_t::iterator aIter = aNodes.begin();
-                 aIter != aNodes.end();
-                 ++aIter )
-                maEventNodes.push_back( *aIter );
+            for (auto const& node : aNodes)
+                maEventNodes.push_back(node);
         else
             maEventNodes.emplace_back( aContext.mxContextNode->getOwnerDocument(),
                                   UNO_QUERY_THROW );
-        for( PathExpression::NodeVector_t::iterator aIter2 = maEventNodes.begin();
-             aIter2 != maEventNodes.end();
-             ++aIter2 )
-            lcl_addListenerToNode( *aIter2, this );
+        for (auto const& eventNode : maEventNodes)
+            lcl_addListenerToNode( eventNode, this );
     }
 
     // 3) remove old MIPs defined by this binding
@@ -604,11 +595,9 @@ void Binding::bind( bool bForceRebind )
 
     // 4) calculate all MIPs
     ::std::vector<EvaluationContext> aMIPContexts = _getMIPEvaluationContexts();
-    for( ::std::vector<EvaluationContext>::iterator aIter = aMIPContexts.begin();
-         aIter != aMIPContexts.end();
-         ++aIter )
+    for (auto & context : aMIPContexts)
     {
-        EvaluationContext& rContext = *aIter;
+        EvaluationContext& rContext = context;
 
         // evaluate calculate expression (and push value into instance)
         // (prevent recursion using mbInCalculate
@@ -812,10 +801,8 @@ void Binding::clear()
         pModel->removeMIPs( this );
 
     // remove all references
-    for( auto aIter = maEventNodes.begin();
-         aIter != maEventNodes.end();
-         ++aIter )
-        lcl_removeListenerFromNode( *aIter, this );
+    for (auto const& eventNode : maEventNodes)
+        lcl_removeListenerFromNode( eventNode, this );
     maEventNodes.clear();
 
     // clear expressions

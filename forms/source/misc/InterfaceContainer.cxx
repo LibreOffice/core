@@ -634,11 +634,9 @@ void SAL_CALL OInterfaceContainer::disposing(const css::lang::EventObject& _rSou
                 m_aMap.erase(i);
                 break;
             }
-
             ++i;
-
-            DBG_ASSERT( i != m_aMap.end(), "OInterfaceContainer::disposing: inconsistency: the element was in m_aItems, but not in m_aMap!" );
         }
+        DBG_ASSERT( i != m_aMap.end(), "OInterfaceContainer::disposing: inconsistency: the element was in m_aItems, but not in m_aMap!" );
     }
 }
 
