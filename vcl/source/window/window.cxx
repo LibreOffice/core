@@ -3242,7 +3242,7 @@ void Window::ImplCallDeactivateListeners( vcl::Window *pNew )
     if ( !pNew || !ImplIsChild( pNew ) )
     {
         VclPtr<vcl::Window> xWindow(this);
-        CallEventListeners( VclEventId::WindowDeactivate );
+        CallEventListeners( VclEventId::WindowDeactivate, pNew );
         if( xWindow->IsDisposed() )
             return;
 

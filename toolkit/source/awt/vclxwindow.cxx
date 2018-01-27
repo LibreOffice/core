@@ -518,22 +518,30 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         break;
         case VclEventId::WindowActivate:
         {
-            if ( mpImpl->getTopWindowListeners().getLength() )
-            {
-                css::lang::EventObject aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                mpImpl->getTopWindowListeners().windowActivated( aEvent );
-            }
+            if (!mpImpl->getTopWindowListeners().getLength())
+                break;
+
+            vcl::Window* pWin = static_cast<vcl::Window*>(rVclWindowEvent.GetData());
+            if (pWin && GetWindow()->IsWindowOrChild(pWin, true))
+                break;
+
+            css::lang::EventObject aEvent;
+            aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+            mpImpl->getTopWindowListeners().windowActivated( aEvent );
         }
         break;
         case VclEventId::WindowDeactivate:
         {
-            if ( mpImpl->getTopWindowListeners().getLength() )
-            {
-                css::lang::EventObject aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                mpImpl->getTopWindowListeners().windowDeactivated( aEvent );
-            }
+            if (!mpImpl->getTopWindowListeners().getLength())
+                break;
+
+            vcl::Window* pWin = static_cast<vcl::Window*>(rVclWindowEvent.GetData());
+            if (pWin && GetWindow()->IsWindowOrChild(pWin, true))
+                break;
+
+            css::lang::EventObject aEvent;
+            aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+            mpImpl->getTopWindowListeners().windowDeactivated( aEvent );
         }
         break;
         case VclEventId::WindowClose:
