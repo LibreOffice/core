@@ -119,6 +119,9 @@
 #include <numrule.hxx>
 #include <memory>
 
+#include <svx/xattr.hxx>
+#include <svx/unobrushitemhelper.hxx>
+
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -137,6 +140,7 @@ void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot, const 
             RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
             RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
             RES_BACKGROUND, RES_SHADOW,
+            XATTR_FILLSTYLE, XATTR_FILLCOLOR,
             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
             SID_HTML_MODE, SID_HTML_MODE,
             SID_ATTR_CHAR_WIDTH_FIT_TO_LINE, SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
@@ -173,6 +177,10 @@ void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot, const 
     VclPtr<SfxAbstractTabDialog> pDlg;
     if ( bUseDialog && GetActiveView() )
     {
+        sal_uInt16 nWhich = rWrtSh.GetView().GetPool().GetWhich( SID_ATTR_BRUSH_CHAR );
+        SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(pCoreSet->Get(nWhich)));
+        setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, *pCoreSet);
+
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
@@ -222,6 +230,10 @@ static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std:
 {
     SfxItemSet aTmpSet( *pSet );
     ::ConvertAttrGenToChar(aTmpSet, *pCoreSet, CONV_ATTR_STD);
+
+    // Clear these to prevent paragraph background being set.
+    aTmpSet.ClearItem( rWrtSh.GetView().GetPool().GetWhich( XATTR_FILLSTYLE ) );
+    aTmpSet.ClearItem( rWrtSh.GetView().GetPool().GetWhich( XATTR_FILLCOLOR ) );
 
     const SfxPoolItem* pSelectionItem;
     bool bInsert = false;
