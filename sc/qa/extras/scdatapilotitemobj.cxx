@@ -31,8 +31,6 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 1
-
 class ScDataPilotItemObj : public CalcUnoApiTest, public apitest::DataPilotItem
 {
 public:
@@ -50,14 +48,11 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static sal_Int32 nTest;
     static sal_Int32 nMaxFieldIndex;
-    static uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< lang::XComponent > mxComponent;
 };
 
-sal_Int32 ScDataPilotItemObj::nTest = 0;
 sal_Int32 ScDataPilotItemObj::nMaxFieldIndex = 6;
-uno::Reference< lang::XComponent > ScDataPilotItemObj::mxComponent;
 
 ScDataPilotItemObj::ScDataPilotItemObj()
      : CalcUnoApiTest("/sc/qa/extras/testdocuments")
@@ -68,10 +63,6 @@ uno::Reference< uno::XInterface > ScDataPilotItemObj::init()
 {
     table::CellRangeAddress sCellRangeAddress(0, 1, 0, nMaxFieldIndex - 1, nMaxFieldIndex - 1);
     table::CellAddress sCellAddress(0, 7, 8);
-
-    // create calc document
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop("private:factory/scalc");
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
@@ -125,19 +116,14 @@ uno::Reference< uno::XInterface > ScDataPilotItemObj::init()
 
 void ScDataPilotItemObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    // create calc document
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScDataPilotItemObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
