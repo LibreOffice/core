@@ -19,7 +19,6 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
@@ -214,8 +213,6 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow()
 
             pWin->EnableDocking();
             mxImpl->SetPopupWindow(pWin,pToolBox);
-
-            VclListenerLock aLock(pWin, /*bSystemWindow=*/true);
             vcl::Window::GetDockingManager()->StartPopupMode( pToolBox, pWin, eFloatFlags );
         }
     }

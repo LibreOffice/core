@@ -517,23 +517,43 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         }
         break;
         case VclEventId::WindowActivate:
-        {
-            if ( mpImpl->getTopWindowListeners().getLength() )
-            {
-                css::lang::EventObject aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                mpImpl->getTopWindowListeners().windowActivated( aEvent );
-            }
-        }
-        break;
         case VclEventId::WindowDeactivate:
         {
-            if ( mpImpl->getTopWindowListeners().getLength() )
+            if (!mpImpl->getTopWindowListeners().getLength())
+                return;
+
+            // Suppress events which are unlikely to be interesting to our listeners.
+            vcl::Window* pWin = static_cast<vcl::Window*>(rVclWindowEvent.GetData());
+            bool bSuppress = false;
+
+            while (pWin)
             {
-                css::lang::EventObject aEvent;
-                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                mpImpl->getTopWindowListeners().windowDeactivated( aEvent );
+                // Either the event came from the same window, from its
+                // child, or from a child of its border window (e.g.
+                // menubar or notebookbar).
+                if (pWin->GetWindow(GetWindowType::Client) == GetWindow())
+                    return;
+
+                if (pWin->IsMenuFloatingWindow())
+                    bSuppress = true;
+
+                if (pWin->GetType() == WindowType::FLOATINGWINDOW &&
+                    static_cast<FloatingWindow*>(pWin)->IsInPopupMode())
+                    bSuppress = true;
+
+                // Otherwise, don't suppress if the event came from a different frame.
+                if (!bSuppress && pWin->GetWindow(GetWindowType::Frame) == pWin)
+                    break;
+
+                pWin = pWin->GetWindow(GetWindowType::RealParent);
             }
+
+            css::lang::EventObject aEvent;
+            aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+            if (rVclWindowEvent.GetId() == VclEventId::WindowActivate)
+                mpImpl->getTopWindowListeners().windowActivated( aEvent );
+            else
+                mpImpl->getTopWindowListeners().windowDeactivated( aEvent );
         }
         break;
         case VclEventId::WindowClose:
