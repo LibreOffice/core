@@ -27,8 +27,6 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 3
-
 class ScCellObj : public CalcUnoApiTest, public apitest::SheetCell,
                                          public apitest::XCellAddressable,
                                          public apitest::XSheetAnnotationAnchor
@@ -54,14 +52,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-
-    static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
-
+    uno::Reference< lang::XComponent > mxComponent;
 };
-
-sal_Int32 ScCellObj::nTest = 0;
-uno::Reference< lang::XComponent > ScCellObj::mxComponent;
 
 ScCellObj::ScCellObj()
         : CalcUnoApiTest("/sc/qa/extras/testdocuments")
@@ -70,10 +62,6 @@ ScCellObj::ScCellObj()
 
 uno::Reference< uno::XInterface > ScCellObj::init()
 {
-    // create a calc document
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop("private:factory/scalc");
-
     uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xSheetDoc.is());
 
@@ -91,19 +79,13 @@ uno::Reference< uno::XInterface > ScCellObj::init()
 
 void ScCellObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScCellObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
