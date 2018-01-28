@@ -371,13 +371,13 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_RED:
-            m_aStates.top().aCurrentColor.nRed = nParam;
+            m_aStates.top().aCurrentColor.SetRed(nParam);
             break;
         case RTF_GREEN:
-            m_aStates.top().aCurrentColor.nGreen = nParam;
+            m_aStates.top().aCurrentColor.SetGreen(nParam);
             break;
         case RTF_BLUE:
-            m_aStates.top().aCurrentColor.nBlue = nParam;
+            m_aStates.top().aCurrentColor.SetBlue(nParam);
             break;
         case RTF_FCHARSET:
         {
