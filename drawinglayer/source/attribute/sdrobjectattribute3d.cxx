@@ -122,20 +122,11 @@ namespace drawinglayer
         {
         }
 
-        Sdr3DObjectAttribute::Sdr3DObjectAttribute(const Sdr3DObjectAttribute& rCandidate)
-        :   mpSdr3DObjectAttribute(rCandidate.mpSdr3DObjectAttribute)
-        {
-        }
+        Sdr3DObjectAttribute::Sdr3DObjectAttribute(const Sdr3DObjectAttribute&) = default;
 
-        Sdr3DObjectAttribute::~Sdr3DObjectAttribute()
-        {
-        }
+        Sdr3DObjectAttribute::~Sdr3DObjectAttribute() = default;
 
-        Sdr3DObjectAttribute& Sdr3DObjectAttribute::operator=(const Sdr3DObjectAttribute& rCandidate)
-        {
-            mpSdr3DObjectAttribute = rCandidate.mpSdr3DObjectAttribute;
-            return *this;
-        }
+        Sdr3DObjectAttribute& Sdr3DObjectAttribute::operator=(const Sdr3DObjectAttribute&) = default;
 
         bool Sdr3DObjectAttribute::operator==(const Sdr3DObjectAttribute& rCandidate) const
         {

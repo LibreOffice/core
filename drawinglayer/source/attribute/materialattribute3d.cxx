@@ -101,20 +101,11 @@ namespace drawinglayer
         {
         }
 
-        MaterialAttribute3D::MaterialAttribute3D(const MaterialAttribute3D& rCandidate)
-        :   mpMaterialAttribute3D(rCandidate.mpMaterialAttribute3D)
-        {
-        }
+        MaterialAttribute3D::MaterialAttribute3D(const MaterialAttribute3D&) = default;
 
-        MaterialAttribute3D::~MaterialAttribute3D()
-        {
-        }
+        MaterialAttribute3D::~MaterialAttribute3D() = default;
 
-        MaterialAttribute3D& MaterialAttribute3D::operator=(const MaterialAttribute3D& rCandidate)
-        {
-            mpMaterialAttribute3D = rCandidate.mpMaterialAttribute3D;
-            return *this;
-        }
+        MaterialAttribute3D& MaterialAttribute3D::operator=(const MaterialAttribute3D&) = default;
 
         bool MaterialAttribute3D::operator==(const MaterialAttribute3D& rCandidate) const
         {

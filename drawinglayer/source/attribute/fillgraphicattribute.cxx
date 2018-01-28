@@ -103,25 +103,16 @@ namespace drawinglayer
         {
         }
 
-        FillGraphicAttribute::FillGraphicAttribute(const FillGraphicAttribute& rCandidate)
-        :   mpFillGraphicAttribute(rCandidate.mpFillGraphicAttribute)
-        {
-        }
+        FillGraphicAttribute::FillGraphicAttribute(const FillGraphicAttribute&) = default;
 
-        FillGraphicAttribute::~FillGraphicAttribute()
-        {
-        }
+        FillGraphicAttribute::~FillGraphicAttribute() = default;
 
         bool FillGraphicAttribute::isDefault() const
         {
             return mpFillGraphicAttribute.same_object(theGlobalDefault::get());
         }
 
-        FillGraphicAttribute& FillGraphicAttribute::operator=(const FillGraphicAttribute& rCandidate)
-        {
-            mpFillGraphicAttribute = rCandidate.mpFillGraphicAttribute;
-            return *this;
-        }
+        FillGraphicAttribute& FillGraphicAttribute::operator=(const FillGraphicAttribute&) = default;
 
         bool FillGraphicAttribute::operator==(const FillGraphicAttribute& rCandidate) const
         {

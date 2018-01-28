@@ -59,10 +59,10 @@ namespace drawinglayer
                 const FillHatchAttribute& rHatch,
                 const SdrFillGraphicAttribute& rFillGraphic);
             SdrFillAttribute();
-            SdrFillAttribute(const SdrFillAttribute& rCandidate);
-            SdrFillAttribute(SdrFillAttribute&& rCandidate);
-            SdrFillAttribute& operator=(const SdrFillAttribute& rCandidate);
-            SdrFillAttribute& operator=(SdrFillAttribute&& rCandidate);
+            SdrFillAttribute(const SdrFillAttribute&);
+            SdrFillAttribute(SdrFillAttribute&&);
+            SdrFillAttribute& operator=(const SdrFillAttribute&);
+            SdrFillAttribute& operator=(SdrFillAttribute&&);
             ~SdrFillAttribute();
 
             // checks if the incarnation is default constructed

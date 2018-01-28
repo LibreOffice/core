@@ -86,36 +86,20 @@ namespace drawinglayer
         {
         }
 
-        SdrShadowAttribute::SdrShadowAttribute(const SdrShadowAttribute& rCandidate)
-        :   mpSdrShadowAttribute(rCandidate.mpSdrShadowAttribute)
-        {
-        }
+        SdrShadowAttribute::SdrShadowAttribute(const SdrShadowAttribute&) = default;
 
-        SdrShadowAttribute::SdrShadowAttribute(SdrShadowAttribute&& rCandidate)
-        :   mpSdrShadowAttribute(std::move(rCandidate.mpSdrShadowAttribute))
-        {
-        }
+        SdrShadowAttribute::SdrShadowAttribute(SdrShadowAttribute&&) = default;
 
-        SdrShadowAttribute::~SdrShadowAttribute()
-        {
-        }
+        SdrShadowAttribute::~SdrShadowAttribute() = default;
 
         bool SdrShadowAttribute::isDefault() const
         {
             return mpSdrShadowAttribute.same_object(theGlobalDefault::get());
         }
 
-        SdrShadowAttribute& SdrShadowAttribute::operator=(const SdrShadowAttribute& rCandidate)
-        {
-            mpSdrShadowAttribute = rCandidate.mpSdrShadowAttribute;
-            return *this;
-        }
+        SdrShadowAttribute& SdrShadowAttribute::operator=(const SdrShadowAttribute&) = default;
 
-        SdrShadowAttribute& SdrShadowAttribute::operator=(SdrShadowAttribute&& rCandidate)
-        {
-            mpSdrShadowAttribute = std::move(rCandidate.mpSdrShadowAttribute);
-            return *this;
-        }
+        SdrShadowAttribute& SdrShadowAttribute::operator=(SdrShadowAttribute&&) = default;
 
         bool SdrShadowAttribute::operator==(const SdrShadowAttribute& rCandidate) const
         {

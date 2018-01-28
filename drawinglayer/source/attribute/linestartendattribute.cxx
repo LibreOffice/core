@@ -86,25 +86,16 @@ namespace drawinglayer
         {
         }
 
-        LineStartEndAttribute::LineStartEndAttribute(const LineStartEndAttribute& rCandidate)
-        :   mpLineStartEndAttribute(rCandidate.mpLineStartEndAttribute)
-        {
-        }
+        LineStartEndAttribute::LineStartEndAttribute(const LineStartEndAttribute&) = default;
 
-        LineStartEndAttribute::~LineStartEndAttribute()
-        {
-        }
+        LineStartEndAttribute::~LineStartEndAttribute() = default;
 
         bool LineStartEndAttribute::isDefault() const
         {
             return mpLineStartEndAttribute.same_object(theGlobalDefault::get());
         }
 
-        LineStartEndAttribute& LineStartEndAttribute::operator=(const LineStartEndAttribute& rCandidate)
-        {
-            mpLineStartEndAttribute = rCandidate.mpLineStartEndAttribute;
-            return *this;
-        }
+        LineStartEndAttribute& LineStartEndAttribute::operator=(const LineStartEndAttribute&) = default;
 
         bool LineStartEndAttribute::operator==(const LineStartEndAttribute& rCandidate) const
         {

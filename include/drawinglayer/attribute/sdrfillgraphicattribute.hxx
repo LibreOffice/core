@@ -63,10 +63,10 @@ namespace drawinglayer
                 bool bStretch,
                 bool bLogSize);
             SdrFillGraphicAttribute();
-            SdrFillGraphicAttribute(const SdrFillGraphicAttribute& rCandidate);
-            SdrFillGraphicAttribute(SdrFillGraphicAttribute&& rCandidate);
-            SdrFillGraphicAttribute& operator=(const SdrFillGraphicAttribute& rCandidate);
-            SdrFillGraphicAttribute& operator=(SdrFillGraphicAttribute&& rCandidate);
+            SdrFillGraphicAttribute(const SdrFillGraphicAttribute&);
+            SdrFillGraphicAttribute(SdrFillGraphicAttribute&&);
+            SdrFillGraphicAttribute& operator=(const SdrFillGraphicAttribute&);
+            SdrFillGraphicAttribute& operator=(SdrFillGraphicAttribute&&);
             ~SdrFillGraphicAttribute();
 
             // checks if the incarnation is default constructed

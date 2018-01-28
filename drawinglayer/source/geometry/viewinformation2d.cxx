@@ -427,31 +427,15 @@ namespace drawinglayer
         {
         }
 
-        ViewInformation2D::ViewInformation2D(const ViewInformation2D& rCandidate)
-        :   mpViewInformation2D(rCandidate.mpViewInformation2D)
-        {
-        }
+        ViewInformation2D::ViewInformation2D(const ViewInformation2D&) = default;
 
-        ViewInformation2D::ViewInformation2D(ViewInformation2D&& rCandidate)
-        :   mpViewInformation2D(std::move(rCandidate.mpViewInformation2D))
-        {
-        }
+        ViewInformation2D::ViewInformation2D(ViewInformation2D&&) = default;
 
-        ViewInformation2D::~ViewInformation2D()
-        {
-        }
+        ViewInformation2D::~ViewInformation2D() = default;
 
-        ViewInformation2D& ViewInformation2D::operator=(const ViewInformation2D& rCandidate)
-        {
-            mpViewInformation2D = rCandidate.mpViewInformation2D;
-            return *this;
-        }
+        ViewInformation2D& ViewInformation2D::operator=(const ViewInformation2D&) = default;
 
-        ViewInformation2D& ViewInformation2D::operator=(ViewInformation2D&& rCandidate)
-        {
-            mpViewInformation2D = std::move(rCandidate.mpViewInformation2D);
-            return *this;
-        }
+        ViewInformation2D& ViewInformation2D::operator=(ViewInformation2D&&) = default;
 
         bool ViewInformation2D::operator==(const ViewInformation2D& rCandidate) const
         {
