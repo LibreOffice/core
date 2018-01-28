@@ -203,11 +203,10 @@ void TabControl::dispose()
 
 ImplTabItem* TabControl::ImplGetItem( sal_uInt16 nId ) const
 {
-    for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it )
+    for (auto & item : mpTabCtrlData->maItemList)
     {
-        if( it->mnId == nId )
-            return &(*it);
+        if( item.mnId == nId )
+            return &item;
     }
 
     return nullptr;
@@ -373,10 +372,9 @@ bool TabControl::ImplPlaceTabs( long nWidth )
 
     //collect widths
     std::vector<sal_Int32> aWidths;
-    for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it )
+    for (auto & item : mpTabCtrlData->maItemList)
     {
-        aWidths.push_back(ImplGetItemSize( &(*it), nMaxWidth ).Width());
+        aWidths.push_back(ImplGetItemSize( &item, nMaxWidth ).Width());
     }
 
     //aBreakIndexes will contain the indexes of the last tab on each row
@@ -400,10 +398,9 @@ bool TabControl::ImplPlaceTabs( long nWidth )
     size_t nIndex = 0;
     sal_uInt16 nPos = 0;
 
-    for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it, ++nIndex )
+    for (auto & item : mpTabCtrlData->maItemList)
     {
-        Size aSize = ImplGetItemSize( &(*it), nMaxWidth );
+        Size aSize = ImplGetItemSize( &item, nMaxWidth );
 
         bool bNewLine = false;
         if (!aBreakIndexes.empty() && nIndex > aBreakIndexes.front())
@@ -425,19 +422,20 @@ bool TabControl::ImplPlaceTabs( long nWidth )
         }
 
         tools::Rectangle aNewRect( Point( nX, nY ), aSize );
-        if ( mbSmallInvalidate && (it->maRect != aNewRect) )
+        if ( mbSmallInvalidate && (item.maRect != aNewRect) )
             mbSmallInvalidate = false;
-        it->maRect = aNewRect;
-        it->mnLine = nLines;
-        it->mbFullVisible = true;
+        item.maRect = aNewRect;
+        item.mnLine = nLines;
+        item.mbFullVisible = true;
 
         nLineWidthAry[nLines] += aSize.Width();
         nX += aSize.Width();
 
-        if ( it->mnId == mnCurPageId )
+        if ( item.mnId == mnCurPageId )
             nCurLine = nLines;
 
-        nPos++;
+        ++nPos;
+        ++nIndex;
     }
 
     if ( nLines )
@@ -461,8 +459,8 @@ bool TabControl::ImplPlaceTabs( long nWidth )
 
         sal_uInt16 i = 0;
         sal_uInt16 n = 0;
-        for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-             it != mpTabCtrlData->maItemList.end(); ++it )
+
+        for (auto & item : mpTabCtrlData->maItemList)
         {
             if ( i == nLinePosAry[n] )
             {
@@ -484,16 +482,16 @@ bool TabControl::ImplPlaceTabs( long nWidth )
                 n++;
             }
 
-            it->maRect.Left() += nIDX;
-            it->maRect.Right() += nIDX + nDX;
-            it->maRect.Top() = nLineHeightAry[n-1];
-            it->maRect.Bottom() = nLineHeightAry[n-1] + nIH;
+            item.maRect.Left() += nIDX;
+            item.maRect.Right() += nIDX + nDX;
+            item.maRect.Top() = nLineHeightAry[n-1];
+            item.maRect.Bottom() = nLineHeightAry[n-1] + nIH;
             nIDX += nDX;
 
             if ( nModDX )
             {
                 nIDX++;
-                it->maRect.Right()++;
+                item.maRect.Right()++;
                 nModDX--;
             }
 
@@ -505,16 +503,14 @@ bool TabControl::ImplPlaceTabs( long nWidth )
         if(ImplGetSVData()->maNWFData.mbCenteredTabs)
         {
             int nRightSpace = nMaxWidth;//space left on the right by the tabs
-            for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-                 it != mpTabCtrlData->maItemList.end(); ++it )
+            for (auto const& item : mpTabCtrlData->maItemList)
             {
-                nRightSpace -= it->maRect.Right()-it->maRect.Left();
+                nRightSpace -= item.maRect.Right()-item.maRect.Left();
             }
-            for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-                 it != mpTabCtrlData->maItemList.end(); ++it )
+            for (auto & item : mpTabCtrlData->maItemList)
             {
-                it->maRect.Left() += nRightSpace / 2;
-                it->maRect.Right() += nRightSpace / 2;
+                item.maRect.Left() += nRightSpace / 2;
+                item.maRect.Right() += nRightSpace / 2;
             }
         }
     }
@@ -828,10 +824,9 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
     if (IsMouseOver() && pItem->maRect.IsInside(GetPointerPosPixel()))
     {
         nState |= ControlState::ROLLOVER;
-        for (std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
-             it != mpTabCtrlData->maItemList.end(); ++it)
+        for (auto const& item : mpTabCtrlData->maItemList)
         {
-            if( (&(*it) != pItem) && (it->maRect.IsInside(GetPointerPosPixel())))
+            if( (&item != pItem) && (item.maRect.IsInside(GetPointerPosPixel())))
             {
                 nState &= ~ControlState::ROLLOVER; // avoid multiple highlighted tabs
                 break;
@@ -1054,12 +1049,11 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rect
 
     // find current item
     ImplTabItem* pCurItem = nullptr;
-    for (std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it )
+    for (auto & item : mpTabCtrlData->maItemList)
     {
-        if (it->mnId == mnCurPageId)
+        if (item.mnId == mnCurPageId)
         {
-            pCurItem = &(*it);
+            pCurItem = &item;
             break;
         }
     }
@@ -1265,11 +1259,10 @@ void TabControl::setAllocation(const Size &rAllocation)
     // check what needs to be invalidated
     Size aNewSize = rAllocation;
     long nNewWidth = aNewSize.Width();
-    for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it )
+    for (auto const& item : mpTabCtrlData->maItemList)
     {
-        if ( !it->mbFullVisible ||
-             (it->maRect.Right()-2 >= nNewWidth) )
+        if ( !item.mbFullVisible ||
+             (item.maRect.Right()-2 >= nNewWidth) )
         {
             mbSmallInvalidate = false;
             break;
@@ -1453,13 +1446,12 @@ void TabControl::Command( const CommandEvent& rCEvt )
         if ( bMenu )
         {
             ScopedVclPtrInstance<PopupMenu> aMenu;
-            for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-                 it != mpTabCtrlData->maItemList.end(); ++it )
+            for (auto const& item : mpTabCtrlData->maItemList)
             {
-                aMenu->InsertItem( it->mnId, it->maText, MenuItemBits::CHECKABLE | MenuItemBits::RADIOCHECK );
-                if ( it->mnId == mnCurPageId )
-                    aMenu->CheckItem( it->mnId );
-                aMenu->SetHelpId( it->mnId, it->maHelpId );
+                aMenu->InsertItem( item.mnId, item.maText, MenuItemBits::CHECKABLE | MenuItemBits::RADIOCHECK );
+                if ( item.mnId == mnCurPageId )
+                    aMenu->CheckItem( item.mnId );
+                aMenu->SetHelpId( item.mnId, item.maHelpId );
             }
 
             sal_uInt16 nId = aMenu->Execute( this, aMenuPos );
@@ -1523,14 +1515,13 @@ tools::Rectangle* TabControl::ImplFindPartRect( const Point& rPt )
 {
     ImplTabItem* pFoundItem = nullptr;
     int nFound = 0;
-    for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it )
+    for (auto & item : mpTabCtrlData->maItemList)
     {
-        if ( it->maRect.IsInside( rPt ) )
+        if ( item.maRect.IsInside( rPt ) )
         {
             // assure that only one tab is highlighted at a time
             nFound++;
-            pFoundItem = &(*it);
+            pFoundItem = &item;
         }
     }
     // assure that only one tab is highlighted at a time
@@ -1773,11 +1764,12 @@ sal_uInt16 TabControl::GetPageId( sal_uInt16 nPos ) const
 
 sal_uInt16 TabControl::GetPagePos( sal_uInt16 nPageId ) const
 {
-    for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it )
+    sal_uInt16 nPos = 0;
+    for (auto const& item : mpTabCtrlData->maItemList)
     {
-        if ( it->mnId == nPageId )
-            return static_cast<sal_uInt16>(it - mpTabCtrlData->maItemList.begin());
+        if ( item.mnId == nPageId )
+            return nPos;
+        ++nPos;
     }
 
     return TAB_PAGE_NOTFOUND;
@@ -1796,11 +1788,10 @@ sal_uInt16 TabControl::GetPageId( const Point& rPos ) const
 
 sal_uInt16 TabControl::GetPageId( const TabPage& rPage ) const
 {
-    for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it )
+    for (auto const& item : mpTabCtrlData->maItemList)
     {
-        if ( it->mpTabPage == &rPage )
-            return it->mnId;
+        if ( item.mpTabPage == &rPage )
+            return item.mnId;
     }
 
     return 0;
@@ -1808,11 +1799,10 @@ sal_uInt16 TabControl::GetPageId( const TabPage& rPage ) const
 
 sal_uInt16 TabControl::GetPageId( const OString& rName ) const
 {
-    for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it )
+    for (auto const& item : mpTabCtrlData->maItemList)
     {
-        if ( it->maTabName == rName )
-            return it->mnId;
+        if ( item.maTabName == rName )
+            return item.mnId;
     }
 
     return 0;
@@ -2110,18 +2100,17 @@ Size TabControl::calculateRequisition() const
     Size aOptimalPageSize(0, 0);
 
     sal_uInt16 nOrigPageId = GetCurPageId();
-    for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it )
+    for (auto const& item : mpTabCtrlData->maItemList)
     {
-        const TabPage *pPage = it->mpTabPage;
+        const TabPage *pPage = item.mpTabPage;
         //it's a real nuisance if the page is not inserted yet :-(
         //We need to force all tabs to exist to get overall optimal size for dialog
         if (!pPage)
         {
             TabControl *pThis = const_cast<TabControl*>(this);
-            pThis->SetCurPageId(it->mnId);
+            pThis->SetCurPageId(item.mnId);
             pThis->ActivatePage();
-            pPage = it->mpTabPage;
+            pPage = item.mpTabPage;
         }
 
         if (!pPage)
@@ -2146,12 +2135,11 @@ Size TabControl::calculateRequisition() const
     }
 
     long nTabLabelsBottom = 0, nTabLabelsRight = 0;
-    for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it )
+    for (sal_uInt16 nPos(0), sizeList(static_cast <sal_uInt16> (mpTabCtrlData->maItemList.size()));
+            nPos < sizeList; ++nPos)
     {
         TabControl* pThis = const_cast<TabControl*>(this);
 
-        sal_uInt16 nPos = it - mpTabCtrlData->maItemList.begin();
         tools::Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), LONG_MAX);
         if (aTabRect.Bottom() > nTabLabelsBottom)
             nTabLabelsBottom = aTabRect.Bottom();
@@ -2183,10 +2171,9 @@ void TabControl::queue_resize(StateChangedType eReason)
 std::vector<sal_uInt16> TabControl::GetPageIDs() const
 {
     std::vector<sal_uInt16> aIDs;
-    for (auto itr = mpTabCtrlData->maItemList.begin(), itrEnd = mpTabCtrlData->maItemList.end();
-            itr != itrEnd; ++itr)
+    for (auto const& item : mpTabCtrlData->maItemList)
     {
-        aIDs.push_back(itr->mnId);
+        aIDs.push_back(item.mnId);
     }
 
     return aIDs;
@@ -2362,13 +2349,12 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
 
     //collect widths
     std::vector<sal_Int32> aWidths;
-    for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it )
+    for (auto & item : mpTabCtrlData->maItemList)
     {
-        if( it->mbEnabled )
+        if( item.mbEnabled )
         {
-            long aSize = ImplGetItemSize( &(*it), nMaxWidth ).getWidth();
-            if( !it->maText.isEmpty() && aSize < 100)
+            long aSize = ImplGetItemSize( &item, nMaxWidth ).getWidth();
+            if( !item.maText.isEmpty() && aSize < 100)
             {
                 nFullWidth += 100;
                 aSize = 100;
@@ -2392,55 +2378,46 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
     long nLineWidthAry[100];
     nLineWidthAry[0] = 0;
 
-    size_t nIndex = 0;
-    sal_uInt16 nPos = 0;
-
-    for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it, ++nIndex )
+    for (auto & item : mpTabCtrlData->maItemList)
     {
-        Size aSize = ImplGetItemSize( &(*it), nMaxWidth );
+        Size aSize = ImplGetItemSize( &item, nMaxWidth );
 
-        if ( !it->mbEnabled )
+        if ( !item.mbEnabled )
         {
-            nPos++;
             continue;
         }
 
         // set minimum tab size
-        if( nFullWidth < nMaxWidth && !it->maText.isEmpty() && aSize.getWidth() < 100)
+        if( nFullWidth < nMaxWidth && !item.maText.isEmpty() && aSize.getWidth() < 100)
             aSize.Width() = 100;
 
-        if( !it->maText.isEmpty() && aSize.getHeight() < 28 )
+        if( !item.maText.isEmpty() && aSize.getHeight() < 28 )
             aSize.Height() = 28;
 
         tools::Rectangle aNewRect( Point( nX, nY ), aSize );
-        if ( mbSmallInvalidate && (it->maRect != aNewRect) )
+        if ( mbSmallInvalidate && (item.maRect != aNewRect) )
             mbSmallInvalidate = false;
 
-        it->maRect = aNewRect;
-        it->mnLine = 0;
-        it->mbFullVisible = true;
+        item.maRect = aNewRect;
+        item.mnLine = 0;
+        item.mbFullVisible = true;
 
         nLineWidthAry[0] += aSize.Width();
         nX += aSize.Width();
-
-        nPos++;
     }
 
     // only one line
     if(ImplGetSVData()->maNWFData.mbCenteredTabs)
     {
         int nRightSpace = nMaxWidth;//space left on the right by the tabs
-        for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-                it != mpTabCtrlData->maItemList.end(); ++it )
+        for (auto const& item : mpTabCtrlData->maItemList)
         {
-            nRightSpace -= it->maRect.Right()-it->maRect.Left();
+            nRightSpace -= item.maRect.Right()-item.maRect.Left();
         }
-        for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-                it != mpTabCtrlData->maItemList.end(); ++it )
+        for (auto & item : mpTabCtrlData->maItemList)
         {
-            it->maRect.Left() += nRightSpace / 2;
-            it->maRect.Right() += nRightSpace / 2;
+            item.maRect.Left() += nRightSpace / 2;
+            item.maRect.Right() += nRightSpace / 2;
         }
     }
 
@@ -2462,12 +2439,11 @@ void NotebookbarTabControlBase::ImplPaint(vcl::RenderContext& rRenderContext, co
 
     // find current item
     ImplTabItem* pCurItem = nullptr;
-    for (std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it )
+    for (auto & item : mpTabCtrlData->maItemList)
     {
-        if (it->mnId == mnCurPageId)
+        if (item.mnId == mnCurPageId)
         {
-            pCurItem = &(*it);
+            pCurItem = &item;
             break;
         }
     }
@@ -2653,18 +2629,17 @@ Size NotebookbarTabControlBase::calculateRequisition() const
     Size aOptimalPageSize(0, 0);
 
     sal_uInt16 nOrigPageId = GetCurPageId();
-    for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it )
+    for (auto const& item : mpTabCtrlData->maItemList)
     {
-        const TabPage *pPage = it->mpTabPage;
+        const TabPage *pPage = item.mpTabPage;
         //it's a real nuisance if the page is not inserted yet :-(
         //We need to force all tabs to exist to get overall optimal size for dialog
         if (!pPage)
         {
             NotebookbarTabControlBase *pThis = const_cast<NotebookbarTabControlBase*>(this);
-            pThis->SetCurPageId(it->mnId);
+            pThis->SetCurPageId(item.mnId);
             pThis->ActivatePage();
-            pPage = it->mpTabPage;
+            pPage = item.mpTabPage;
         }
 
         if (!pPage)
@@ -2689,12 +2664,11 @@ Size NotebookbarTabControlBase::calculateRequisition() const
     }
 
     long nTabLabelsBottom = 0, nTabLabelsRight = 0;
-    for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it )
+    for (sal_uInt16 nPos(0), sizeList(static_cast <sal_uInt16> (mpTabCtrlData->maItemList.size()));
+            nPos < sizeList; ++nPos)
     {
         NotebookbarTabControlBase* pThis = const_cast<NotebookbarTabControlBase*>(this);
 
-        sal_uInt16 nPos = it - mpTabCtrlData->maItemList.begin();
         tools::Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), LONG_MAX);
         if (aTabRect.Bottom() > nTabLabelsBottom)
         {
