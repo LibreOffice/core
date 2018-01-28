@@ -36,7 +36,8 @@ public:
 
         ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, rtl_TextEncoding nEnc )
             : nFieldSepCode(nFieldSep), nTextSepCode(nTextSep),
-            bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false), bSaveFormulas(false)
+            bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false), bSaveFormulas(false),
+            bRemoveSpace(false)
         { SetTextEncoding( nEnc ); }
 
     ScImportOptions& operator=( const ScImportOptions& rCpy )
