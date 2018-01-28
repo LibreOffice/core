@@ -56,9 +56,6 @@ class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
     sal_uInt16      nScale;
     sal_Unicode     cSymbol;
 
-    void    SetDefaultFont_Impl();
-    void    SetDefaults_Impl();
-
 public:
     explicit SvxBulletItem( sal_uInt16 nWhich );
     SvxBulletItem( const SvxBulletItem& );
