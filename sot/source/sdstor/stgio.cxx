@@ -279,7 +279,7 @@ FatError Validator::ValidateMasterFATs()
 
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
-        if( ( nErr = aFat.Mark(rIo.m_pFAT->GetPage( short(i), false ), aFat.GetPageSize(), -3 )) != FatError::Ok )
+        if( ( nErr = aFat.Mark(rIo.m_pFAT->GetPage(i, false), aFat.GetPageSize(), -3 )) != FatError::Ok)
             return nErr;
     }
     if( rIo.m_aHdr.GetMasters() )

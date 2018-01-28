@@ -588,13 +588,13 @@ bool StgFATStrm::Pos2Page( sal_Int32 nBytePos )
     m_nPage   = nBytePos / m_nPageSize;
     m_nOffset = static_cast<short>( nBytePos % m_nPageSize );
     m_nPos    = nBytePos;
-    m_nPage   = GetPage( static_cast<short>(m_nPage), false );
+    m_nPage   = GetPage(m_nPage, false);
     return m_nPage >= 0;
 }
 
 // Get the page number entry for the given page offset.
 
-sal_Int32 StgFATStrm::GetPage( short nOff, bool bMake, sal_uInt16 *pnMasterAlloc )
+sal_Int32 StgFATStrm::GetPage(sal_Int32 nOff, bool bMake, sal_uInt16 *pnMasterAlloc)
 {
     OSL_ENSURE( nOff >= 0, "The offset may not be negative!" );
     if( pnMasterAlloc ) *pnMasterAlloc = 0;
