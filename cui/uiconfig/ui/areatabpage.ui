@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.20.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <!-- interface-requires LibreOffice 1.0 -->
@@ -25,6 +25,22 @@
             <property name="spacing">12</property>
             <property name="layout_style">center</property>
             <child>
+              <object class="GtkComboBoxText" id="tablelb">
+                <property name="can_focus">False</property>
+                <property name="active">0</property>
+                <items>
+                  <item id="cellid" translatable="yes" context="areatabpage|tablelb">Cell</item>
+                  <item id="rowid" translatable="yes" context="areatabpage|tablelb">Row</item>
+                  <item id="tableid" translatable="yes" context="areatabpage|tablelb">Table</item>
+                </items>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="btnnone">
                 <property name="label" translatable="yes" context="areatabpage|btnnone">None</property>
                 <property name="visible">True</property>
@@ -34,7 +50,7 @@
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -47,7 +63,7 @@
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -60,20 +76,7 @@
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnhatch">
-                <property name="label" translatable="yes" context="areatabpage|btnhatch">Hatch</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">5</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -86,7 +89,7 @@
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">4</property>
               </packing>
             </child>
             <child>
@@ -99,7 +102,20 @@
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">4</property>
+                <property name="position">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btnhatch">
+                <property name="label" translatable="yes" context="areatabpage|btnhatch">Hatch</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">6</property>
               </packing>
             </child>
           </object>
