@@ -98,36 +98,20 @@ namespace drawinglayer
         {
         }
 
-        SdrSceneAttribute::SdrSceneAttribute(const SdrSceneAttribute& rCandidate)
-        :   mpSdrSceneAttribute(rCandidate.mpSdrSceneAttribute)
-        {
-        }
+        SdrSceneAttribute::SdrSceneAttribute(const SdrSceneAttribute&) = default;
 
-        SdrSceneAttribute::SdrSceneAttribute(SdrSceneAttribute&& rCandidate)
-        :   mpSdrSceneAttribute(std::move(rCandidate.mpSdrSceneAttribute))
-        {
-        }
+        SdrSceneAttribute::SdrSceneAttribute(SdrSceneAttribute&&) = default;
 
-        SdrSceneAttribute::~SdrSceneAttribute()
-        {
-        }
+        SdrSceneAttribute::~SdrSceneAttribute() = default;
 
         bool SdrSceneAttribute::isDefault() const
         {
             return mpSdrSceneAttribute.same_object(theGlobalDefault::get());
         }
 
-        SdrSceneAttribute& SdrSceneAttribute::operator=(const SdrSceneAttribute& rCandidate)
-        {
-            mpSdrSceneAttribute = rCandidate.mpSdrSceneAttribute;
-            return *this;
-        }
+        SdrSceneAttribute& SdrSceneAttribute::operator=(const SdrSceneAttribute&) = default;
 
-        SdrSceneAttribute& SdrSceneAttribute::operator=(SdrSceneAttribute&& rCandidate)
-        {
-            mpSdrSceneAttribute = std::move(rCandidate.mpSdrSceneAttribute);
-            return *this;
-        }
+        SdrSceneAttribute& SdrSceneAttribute::operator=(SdrSceneAttribute&&)  = default;
 
         bool SdrSceneAttribute::operator==(const SdrSceneAttribute& rCandidate) const
         {

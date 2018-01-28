@@ -50,10 +50,10 @@ namespace drawinglayer
                 const ::std::vector< double >& rDotDashArray,
                 double fFullDotDashLen = 0.0);
             StrokeAttribute();
-            StrokeAttribute(const StrokeAttribute& rCandidate);
-            StrokeAttribute(StrokeAttribute&& rCandidate);
-            StrokeAttribute& operator=(const StrokeAttribute& rCandidate);
-            StrokeAttribute& operator=(StrokeAttribute&& rCandidate);
+            StrokeAttribute(const StrokeAttribute&);
+            StrokeAttribute(StrokeAttribute&&);
+            StrokeAttribute& operator=(const StrokeAttribute&);
+            StrokeAttribute& operator=(StrokeAttribute&&);
             ~StrokeAttribute();
 
             // checks if the incarnation is default constructed

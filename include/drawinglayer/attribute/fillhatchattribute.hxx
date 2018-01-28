@@ -71,10 +71,10 @@ namespace drawinglayer
                 sal_uInt32 nMinimalDiscreteDistance,
                 bool bFillBackground);
             FillHatchAttribute();
-            FillHatchAttribute(const FillHatchAttribute& rCandidate);
-            FillHatchAttribute(FillHatchAttribute&& rCandidate);
-            FillHatchAttribute& operator=(const FillHatchAttribute& rCandidate);
-            FillHatchAttribute& operator=(FillHatchAttribute&& rCandidate);
+            FillHatchAttribute(const FillHatchAttribute&);
+            FillHatchAttribute(FillHatchAttribute&&);
+            FillHatchAttribute& operator=(const FillHatchAttribute&);
+            FillHatchAttribute& operator=(FillHatchAttribute&&);
             ~FillHatchAttribute();
 
             // checks if the incarnation is default constructed

@@ -134,31 +134,15 @@ namespace drawinglayer
         {
         }
 
-        FontAttribute::FontAttribute(const FontAttribute& rCandidate)
-        :   mpFontAttribute(rCandidate.mpFontAttribute)
-        {
-        }
+        FontAttribute::FontAttribute(const FontAttribute&) = default;
 
-        FontAttribute::FontAttribute(FontAttribute&& rCandidate)
-        :   mpFontAttribute(std::move(rCandidate.mpFontAttribute))
-        {
-        }
+        FontAttribute::FontAttribute(FontAttribute&&) = default;
 
-        FontAttribute::~FontAttribute()
-        {
-        }
+        FontAttribute::~FontAttribute() = default;
 
-        FontAttribute& FontAttribute::operator=(const FontAttribute& rCandidate)
-        {
-            mpFontAttribute = rCandidate.mpFontAttribute;
-            return *this;
-        }
+        FontAttribute& FontAttribute::operator=(const FontAttribute&) = default;
 
-        FontAttribute& FontAttribute::operator=(FontAttribute&& rCandidate)
-        {
-            mpFontAttribute = std::move(rCandidate.mpFontAttribute);
-            return *this;
-        }
+        FontAttribute& FontAttribute::operator=(FontAttribute&&) = default;
 
         bool FontAttribute::operator==(const FontAttribute& rCandidate) const
         {

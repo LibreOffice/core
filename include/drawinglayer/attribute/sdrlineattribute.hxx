@@ -61,10 +61,10 @@ namespace drawinglayer
                 const ::std::vector< double >& rDotDashArray,
                 double fFullDotDashLen);
             SdrLineAttribute();
-            SdrLineAttribute(const SdrLineAttribute& rCandidate);
-            SdrLineAttribute(SdrLineAttribute&& rCandidate);
-            SdrLineAttribute& operator=(const SdrLineAttribute& rCandidate);
-            SdrLineAttribute& operator=(SdrLineAttribute&& rCandidate);
+            SdrLineAttribute(const SdrLineAttribute&);
+            SdrLineAttribute(SdrLineAttribute&&);
+            SdrLineAttribute& operator=(const SdrLineAttribute&);
+            SdrLineAttribute& operator=(SdrLineAttribute&&);
             ~SdrLineAttribute();
 
             // checks if the incarnation is default constructed

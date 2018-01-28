@@ -103,25 +103,16 @@ namespace drawinglayer
         {
         }
 
-        LineAttribute::LineAttribute(const LineAttribute& rCandidate)
-        :   mpLineAttribute(rCandidate.mpLineAttribute)
-        {
-        }
+        LineAttribute::LineAttribute(const LineAttribute&) = default;
 
-        LineAttribute::~LineAttribute()
-        {
-        }
+        LineAttribute::~LineAttribute() = default;
 
         bool LineAttribute::isDefault() const
         {
             return mpLineAttribute.same_object(theGlobalDefault::get());
         }
 
-        LineAttribute& LineAttribute::operator=(const LineAttribute& rCandidate)
-        {
-            mpLineAttribute = rCandidate.mpLineAttribute;
-            return *this;
-        }
+        LineAttribute& LineAttribute::operator=(const LineAttribute&) = default;
 
         bool LineAttribute::operator==(const LineAttribute& rCandidate) const
         {

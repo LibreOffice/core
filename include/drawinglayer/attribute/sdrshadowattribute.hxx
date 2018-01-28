@@ -55,10 +55,10 @@ namespace drawinglayer
                 double fTransparence,
                 const basegfx::BColor& rColor);
             SdrShadowAttribute();
-            SdrShadowAttribute(const SdrShadowAttribute& rCandidate);
-            SdrShadowAttribute(SdrShadowAttribute&& rCandidate);
-            SdrShadowAttribute& operator=(const SdrShadowAttribute& rCandidate);
-            SdrShadowAttribute& operator=(SdrShadowAttribute&& rCandidate);
+            SdrShadowAttribute(const SdrShadowAttribute&);
+            SdrShadowAttribute(SdrShadowAttribute&&);
+            SdrShadowAttribute& operator=(const SdrShadowAttribute&);
+            SdrShadowAttribute& operator=(SdrShadowAttribute&&);
             ~SdrShadowAttribute();
 
             // checks if the incarnation is default constructed

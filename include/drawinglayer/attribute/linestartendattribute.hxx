@@ -54,8 +54,8 @@ namespace drawinglayer
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
                 bool bCentered);
             LineStartEndAttribute();
-            LineStartEndAttribute(const LineStartEndAttribute& rCandidate);
-            LineStartEndAttribute& operator=(const LineStartEndAttribute& rCandidate);
+            LineStartEndAttribute(const LineStartEndAttribute&);
+            LineStartEndAttribute& operator=(const LineStartEndAttribute&);
             ~LineStartEndAttribute();
 
             // checks if the incarnation is default constructed
