@@ -99,12 +99,9 @@ PhysicalFontFamily::PhysicalFontFamily( const OUString& rSearchName )
 PhysicalFontFamily::~PhysicalFontFamily()
 {
     // release all physical font faces
-    for( std::vector< PhysicalFontFace* >::iterator it=maFontFaces.begin(); it != maFontFaces.end(); )
-    {
-        delete *it;
-        it = maFontFaces.erase( it );
-    }
-
+    for (auto const& font : maFontFaces)
+        delete font;
+    maFontFaces.clear();
 }
 
 bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
@@ -225,9 +222,9 @@ PhysicalFontFace* PhysicalFontFamily::FindBestFontFace( const FontSelectPattern&
     // TODO: linear search improve!
     PhysicalFontFace* pBestFontFace = maFontFaces[0];
     FontMatchStatus aFontMatchStatus = {0,0,0, pTargetStyleName};
-    for( std::vector< PhysicalFontFace* >::const_iterator it=maFontFaces.begin(); it != maFontFaces.end(); ++it )
+    for (auto const& font : maFontFaces)
     {
-        PhysicalFontFace* pFoundFontFace = *it;
+        PhysicalFontFace* pFoundFontFace = font;
         if( pFoundFontFace->IsBetterMatch( rFSD, aFontMatchStatus ) )
             pBestFontFace = pFoundFontFace;
     }
@@ -240,9 +237,9 @@ PhysicalFontFace* PhysicalFontFamily::FindBestFontFace( const FontSelectPattern&
 void PhysicalFontFamily::UpdateDevFontList( ImplDeviceFontList& rDevFontList ) const
 {
     PhysicalFontFace* pPrevFace = nullptr;
-    for(std::vector< PhysicalFontFace* >::const_iterator it=maFontFaces.begin(); it != maFontFaces.end(); ++it )
+    for (auto const& font : maFontFaces)
     {
-        PhysicalFontFace* pFoundFontFace = *it;
+        PhysicalFontFace* pFoundFontFace = font;
         if( !pPrevFace || pFoundFontFace->CompareIgnoreSize( *pPrevFace ) )
             rDevFontList.Add( pFoundFontFace );
         pPrevFace = pFoundFontFace;
@@ -252,9 +249,9 @@ void PhysicalFontFamily::UpdateDevFontList( ImplDeviceFontList& rDevFontList ) c
 void PhysicalFontFamily::GetFontHeights( std::set<int>& rHeights ) const
 {
     // add all available font heights
-    for( std::vector< PhysicalFontFace* >::const_iterator it=maFontFaces.begin(); it != maFontFaces.end(); ++it )
+    for (auto const& font : maFontFaces)
     {
-        PhysicalFontFace *pFoundFontFace = *it;
+        PhysicalFontFace *pFoundFontFace = font;
         rHeights.insert( pFoundFontFace->GetHeight() );
     }
 }
@@ -264,9 +261,9 @@ void PhysicalFontFamily::UpdateCloneFontList(PhysicalFontCollection& rFontCollec
     OUString aFamilyName = GetEnglishSearchFontName( GetFamilyName() );
     PhysicalFontFamily* pFamily(nullptr);
 
-    for( std::vector< PhysicalFontFace* >::const_iterator it=maFontFaces.begin(); it != maFontFaces.end(); ++it )
+    for (auto const& font : maFontFaces)
     {
-        PhysicalFontFace *pFoundFontFace = *it;
+        PhysicalFontFace *pFoundFontFace = font;
 
         if (!pFamily)
         {   // tdf#98989 lazy create as family without faces won't work

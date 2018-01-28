@@ -331,19 +331,18 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
         // convert the set of supported code points to ranges
         std::vector<sal_UCS4> aSupportedRanges;
 
-        std::set<sal_UCS4>::const_iterator itChar = aSupportedCodePoints.begin();
-        for(; itChar != aSupportedCodePoints.end(); ++itChar )
+        for (auto const& supportedPoint : aSupportedCodePoints)
         {
             if( aSupportedRanges.empty()
-            || (aSupportedRanges.back() != *itChar) )
+            || (aSupportedRanges.back() != supportedPoint) )
             {
                 // add new range beginning with current unicode
-                aSupportedRanges.push_back( *itChar );
+                aSupportedRanges.push_back(supportedPoint);
                 aSupportedRanges.push_back( 0 );
             }
 
             // extend existing range to include current unicode
-            aSupportedRanges.back() = *itChar + 1;
+            aSupportedRanges.back() = supportedPoint + 1;
         }
 
         // glyph mapping for non-unicode fonts not implemented
@@ -357,9 +356,8 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
         if( nRangeCount <= 0 )
             return false;
         pCodePairs = new sal_UCS4[ nRangeCount * 2 ];
-        std::vector<sal_UCS4>::const_iterator itInt = aSupportedRanges.begin();
-        for( pCP = pCodePairs; itInt != aSupportedRanges.end(); ++itInt )
-            *(pCP++) = *itInt;
+        for (auto const& supportedRange : aSupportedRanges)
+            *(pCP++) = supportedRange;
     }
 
     // prepare the glyphid-array if needed
@@ -369,9 +367,8 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     {
         pGlyphIds = new sal_uInt16[ aGlyphIdArray.size() ];
         sal_uInt16* pOut = pGlyphIds;
-        std::vector<sal_uInt16>::const_iterator it = aGlyphIdArray.begin();
-        while( it != aGlyphIdArray.end() )
-            *(pOut++) = *(it++);
+        for (auto const& glyphId : aGlyphIdArray)
+            *(pOut++) = glyphId;
     }
 
     // update the result struct

@@ -113,13 +113,13 @@ TextCharAttrib* TextCharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_Int3
     if ( !mbHasEmptyAttribs )
         return nullptr;
 
-    for (std::vector<std::unique_ptr<TextCharAttrib> >::iterator it = maAttribs.begin(); it != maAttribs.end(); ++it)
+    for (auto const& attrib : maAttribs)
     {
-        if ( (*it)->GetStart() > nPos )
+        if ( attrib->GetStart() > nPos )
             return nullptr;
 
-        if ( ( (*it)->GetStart() == nPos ) && ( (*it)->GetEnd() == nPos ) && ( (*it)->Which() == nWhich ) )
-            return it->get();
+        if ( ( attrib->GetStart() == nPos ) && ( attrib->GetEnd() == nPos ) && ( attrib->Which() == nWhich ) )
+            return attrib.get();
     }
     return nullptr;
 }

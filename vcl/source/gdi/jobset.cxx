@@ -365,14 +365,13 @@ SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
             rOStream.WriteBytes( &aOldJobData, nOldJobDataSize );
             rOStream.WriteBytes( rJobData.GetDriverData(), rJobData.GetDriverDataLen() );
 
-            std::unordered_map< OUString, OUString >::const_iterator it;
             const std::unordered_map< OUString, OUString >& rValueMap(
                 rJobData.GetValueMap());
 
-            for( it = rValueMap.begin(); it != rValueMap.end(); ++it )
+            for (auto const& value : rValueMap)
             {
-                write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, it->first, RTL_TEXTENCODING_UTF8);
-                write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, it->second, RTL_TEXTENCODING_UTF8);
+                write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, value.first, RTL_TEXTENCODING_UTF8);
+                write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, value.second, RTL_TEXTENCODING_UTF8);
             }
             write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "COMPAT_DUPLEX_MODE");
             switch( rJobData.GetDuplexMode() )
