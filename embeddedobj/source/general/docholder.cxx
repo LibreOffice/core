@@ -969,14 +969,17 @@ bool DocumentHolder::LoadDocToFrame( bool bInPlace )
 
             // set document title to show in the title bar
             css::uno::Reference< css::frame::XTitle > xModelTitle( xDoc, css::uno::UNO_QUERY );
-            if( xModelTitle.is() && m_pEmbedObj && !m_pEmbedObj->getContainerName().isEmpty() )
+            if( xModelTitle.is() )
             {
                 std::locale aResLoc = Translate::Create("sfx");
                 OUString sEmbedded = Translate::get(STR_EMBEDDED_TITLE, aResLoc);
-                xModelTitle->setTitle( m_pEmbedObj->getContainerName() + sEmbedded );
-                m_aContainerName = m_pEmbedObj->getContainerName();
-                // TODO: get real m_aDocumentNamePart
-                m_aDocumentNamePart = sEmbedded;
+                if( !m_pEmbedObj->getContainerName().isEmpty() )
+                {
+                    xModelTitle->setTitle( m_pEmbedObj->getContainerName() + sEmbedded );
+                    m_aContainerName = m_pEmbedObj->getContainerName();
+                    // TODO: get real m_aDocumentNamePart
+                    m_aDocumentNamePart = sEmbedded;
+                }
             }
 
             if ( bInPlace )
