@@ -339,8 +339,8 @@ namespace accessibility
     ESelection AccessibleEditableTextPara::MakeSelection( sal_Int32 nStartEEIndex, sal_Int32 nEndEEIndex )
     {
         // check overflow
-        DBG_ASSERT(nStartEEIndex >= 0 && nStartEEIndex <= USHRT_MAX &&
-                   nEndEEIndex >= 0 && nEndEEIndex <= USHRT_MAX &&
+        DBG_ASSERT(nStartEEIndex >= 0 &&
+                   nEndEEIndex >= 0 &&
                    GetParagraphIndex() >= 0 && GetParagraphIndex() <= SAL_MAX_INT32,
                    "AccessibleEditableTextPara::MakeSelection: index value overflow");
 
