@@ -89,9 +89,9 @@ public:
         @param rTF
         The text forwarder to use in the calculations
      */
-    void SetEEIndex( sal_uInt16 nEEIndex, const SvxTextForwarder& rTF );
-    void SetEEIndex( sal_Int32 nPara, sal_uInt16 nEEIndex, const SvxTextForwarder& rTF ) { SetParagraph(nPara); SetEEIndex(nEEIndex, rTF); }
-    sal_uInt16 GetEEIndex() const;
+    void SetEEIndex( sal_Int32 nEEIndex, const SvxTextForwarder& rTF );
+    void SetEEIndex( sal_Int32 nPara, sal_Int32 nEEIndex, const SvxTextForwarder& rTF ) { SetParagraph(nPara); SetEEIndex(nEEIndex, rTF); }
+    sal_Int32 GetEEIndex() const;
 
     void SetFieldOffset( sal_Int32 nOffset, sal_Int32 nLen ) { mnFieldOffset = nOffset; mnFieldLen = nLen; }
     sal_Int32 GetFieldOffset() const { return mnFieldOffset; }
@@ -158,15 +158,15 @@ ESelection MakeEESelection( const SvxAccessibleTextIndex& rIndex )
                        rIndex.GetParagraph(), rIndex.GetEEIndex() + 1 );
 }
 
-sal_uInt16 SvxAccessibleTextIndex::GetEEIndex() const
+sal_Int32 SvxAccessibleTextIndex::GetEEIndex() const
 {
-    DBG_ASSERT(mnEEIndex >= 0 && mnEEIndex <= USHRT_MAX,
+    DBG_ASSERT(mnEEIndex >= 0,
                "SvxAccessibleTextIndex::GetEEIndex: index value overflow");
 
-    return static_cast< sal_uInt16 > (mnEEIndex);
+    return mnEEIndex;
 }
 
-void SvxAccessibleTextIndex::SetEEIndex( sal_uInt16 nEEIndex, const SvxTextForwarder& rTF )
+void SvxAccessibleTextIndex::SetEEIndex( sal_Int32 nEEIndex, const SvxTextForwarder& rTF )
 {
     // reset
     mnFieldOffset = 0;
@@ -632,7 +632,7 @@ void SvxAccessibleTextAdapter::FieldClicked( const SvxFieldItem& rField, sal_Int
     mpTextForwarder->FieldClicked( rField, nPara, nPos );
 }
 
-sal_uInt16 SvxAccessibleTextAdapter::CalcEditEngineIndex( sal_Int32 nPara, sal_Int32 nLogicalIndex )
+sal_Int32 SvxAccessibleTextAdapter::CalcEditEngineIndex( sal_Int32 nPara, sal_Int32 nLogicalIndex )
 {
     assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");
 
