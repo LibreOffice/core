@@ -1080,7 +1080,13 @@
         <node oor:name="QUOTELEFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ToggleFormula</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:ToggleFormula</value>
+          </prop>
+        </node>
+        <node oor:name="QUOTELEFT_MOD3" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:ToggleFormula</value>
           </prop>
         </node>
         <node oor:name="QUOTERIGHT_MOD1" oor:op="replace">
