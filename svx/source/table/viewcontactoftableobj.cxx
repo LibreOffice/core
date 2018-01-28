@@ -234,7 +234,7 @@ namespace sdr
                     svx::frame::Array aArray;
 
                     // initialize CellBorderArray for primitive creation
-                    aArray.Initialize(nRowCount, nColCount);
+                    aArray.Initialize(nColCount, nRowCount);
 
                     // create single primitives per cell
                     for(aCellPos.mnRow = 0; aCellPos.mnRow < nRowCount; aCellPos.mnRow++)
