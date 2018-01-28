@@ -501,9 +501,9 @@ void SvpSalGraphics::clipRegion(cairo_t* cr)
     }
     if (!aRectangles.empty())
     {
-        for (RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+        for (auto const& rectangle : aRectangles)
         {
-            cairo_rectangle(cr, aRectIter->Left(), aRectIter->Top(), aRectIter->GetWidth(), aRectIter->GetHeight());
+            cairo_rectangle(cr, rectangle.Left(), rectangle.Top(), rectangle.GetWidth(), rectangle.GetHeight());
         }
         cairo_clip(cr);
     }

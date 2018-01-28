@@ -2169,11 +2169,11 @@ void RadioButton::group(RadioButton &rOther)
         {
             std::vector< VclPtr<RadioButton> > aOthers(rOther.GetRadioButtonGroup(false));
             //make all members of the group share the same button group
-            for (auto aI = aOthers.begin(), aEnd = aOthers.end(); aI != aEnd; ++aI)
+            for (auto const& elem : aOthers)
             {
-                aFind = std::find(m_xGroup->begin(), m_xGroup->end(), *aI);
+                aFind = std::find(m_xGroup->begin(), m_xGroup->end(), elem);
                 if (aFind == m_xGroup->end())
-                    m_xGroup->push_back(*aI);
+                    m_xGroup->push_back(elem);
             }
         }
 
@@ -2238,9 +2238,9 @@ void RadioButton::ImplUncheckAllOther()
 
     std::vector<VclPtr<RadioButton> > aGroup(GetRadioButtonGroup(false));
     // iterate over radio button group and checked buttons
-    for (auto aI = aGroup.begin(), aEnd = aGroup.end(); aI != aEnd; ++aI)
+    for (auto const& elem : aGroup)
     {
-        VclPtr<RadioButton> pWindow = *aI;
+        VclPtr<RadioButton> pWindow = elem;
         if ( pWindow->IsChecked() )
         {
             pWindow->SetState( false );
