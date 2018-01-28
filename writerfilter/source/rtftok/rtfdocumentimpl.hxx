@@ -22,6 +22,7 @@
 #include <oox/mathml/importutils.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tools/colordata.hxx>
 
 #include <rtftok/RTFDocument.hxx>
 #include "rtfreferencetable.hxx"
@@ -127,10 +128,28 @@ struct TableRowBuffer
 class RTFColorTableEntry
 {
 public:
-    RTFColorTableEntry();
-    sal_uInt8 nRed = 0;
-    sal_uInt8 nGreen = 0;
-    sal_uInt8 nBlue = 0;
+    void SetRed(sal_uInt8 nRed)
+    {
+        m_bAuto = false;
+        m_nR = nRed;
+    }
+    void SetGreen(sal_uInt8 nGreen)
+    {
+        m_bAuto = false;
+        m_nG = nGreen;
+    }
+    void SetBlue(sal_uInt8 nBlue)
+    {
+        m_bAuto = false;
+        m_nB = nBlue;
+    }
+    ColorData GetColor() const { return m_bAuto ? COL_AUTO : RGB_COLORDATA(m_nR, m_nG, m_nB); }
+
+private:
+    bool m_bAuto = true;
+    sal_uInt8 m_nR = 0;
+    sal_uInt8 m_nG = 0;
+    sal_uInt8 m_nB = 0;
 };
 
 /// Stores the properties of a shape.
