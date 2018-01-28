@@ -49,6 +49,12 @@ $(eval $(call gb_Library_add_defs,vcl,\
 	-DENABLE_MERGELIBS=$(if $(MERGELIBS),1,0) \
 ))
 
+ifeq ($(SYSTEM_GLM),TRUE)
+$(eval $(call gb_Library_add_defs,vcl,\
+        -DGLM_ENABLE_EXPERIMENTAL \
+))
+endif
+
 $(eval $(call gb_Library_use_sdk_api,vcl))
 
 $(eval $(call gb_Library_use_custom_headers,vcl,\
