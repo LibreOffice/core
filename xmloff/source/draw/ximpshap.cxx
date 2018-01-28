@@ -1083,16 +1083,16 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
         pOuterSequence->realloc(2);
         awt::Point* pInnerSequence = pOuterSequence->getArray();
 
-        *pInnerSequence = awt::Point(o3tl::saturating_add(mnX1, -aTopLeft.X), o3tl::saturating_add(mnY1, -aTopLeft.Y));
+        *pInnerSequence = awt::Point(o3tl::saturating_sub(mnX1, aTopLeft.X), o3tl::saturating_sub(mnY1, aTopLeft.Y));
         pInnerSequence++;
-        *pInnerSequence = awt::Point(o3tl::saturating_add(mnX2, -aTopLeft.X), o3tl::saturating_add(mnY2, -aTopLeft.Y));
+        *pInnerSequence = awt::Point(o3tl::saturating_sub(mnX2, aTopLeft.X), o3tl::saturating_sub(mnY2, aTopLeft.Y));
 
         xPropSet->setPropertyValue("Geometry", Any(aPolyPoly));
     }
 
     // set sizes for transformation
-    maSize.Width = o3tl::saturating_add(aBottomRight.X, -aTopLeft.X);
-    maSize.Height = o3tl::saturating_add(aBottomRight.Y, -aTopLeft.Y);
+    maSize.Width = o3tl::saturating_sub(aBottomRight.X, aTopLeft.X);
+    maSize.Height = o3tl::saturating_sub(aBottomRight.Y, aTopLeft.Y);
     maPosition.X = aTopLeft.X;
     maPosition.Y = aTopLeft.Y;
 

@@ -57,6 +57,36 @@ typename std::enable_if<std::is_unsigned<T>::value, T>::type saturating_add(
 }
 
 template<typename T> inline
+typename std::enable_if<std::is_signed<T>::value, T>::type saturating_sub(
+    T a, T b)
+{
+    if (b >= 0) {
+        if (a >= std::numeric_limits<T>::min() + b) {
+            return a - b;
+        } else {
+            return std::numeric_limits<T>::min();
+        }
+    } else {
+        if (a <= std::numeric_limits<T>::max() + b) {
+            return a - b;
+        } else {
+            return std::numeric_limits<T>::max();
+        }
+    }
+}
+
+template<typename T> inline
+typename std::enable_if<std::is_unsigned<T>::value, T>::type saturating_sub(
+    T a, T b)
+{
+    if (a >= std::numeric_limits<T>::min() + b) {
+        return a - b;
+    } else {
+        return std::numeric_limits<T>::min();
+    }
+}
+
+template<typename T> inline
 typename std::enable_if<std::is_signed<T>::value, T>::type saturating_toggle_sign(
     T a)
 {
