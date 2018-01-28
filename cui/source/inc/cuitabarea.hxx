@@ -215,7 +215,6 @@ public:
 class SvxAreaTabPage : public SvxTabPage
 {
     using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
     static const sal_uInt16 pAreaRanges[];
 private:
     ScopedVclPtr<SfxTabPage>   m_pFillTabPage;
@@ -258,6 +257,8 @@ private:
     template< typename TabPage >
     DeactivateRC DeactivatePage_Impl( SfxItemSet* pSet );
 public:
+    using TabPage::DeactivatePage;
+
     SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SvxAreaTabPage() override;
     virtual void dispose() override;

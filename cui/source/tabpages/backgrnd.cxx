@@ -1442,4 +1442,134 @@ void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
     }
 }
 
+#include <svx/unobrushitemhelper.hxx>
+
+SvxBkgTabPage::SvxBkgTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
+    SvxAreaTabPage( pParent, rInAttrs ),
+    m_pTblLBox(nullptr)
+{
+    VclPtr<vcl::Window> pBtn;
+    get(pBtn, "btngradient"); pBtn->Hide();
+    get(pBtn, "btnhatch");    pBtn->Hide();
+    get(pBtn, "btnbitmap");   pBtn->Hide();
+    get(pBtn, "btnpattern");  pBtn->Hide();
+
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    const SfxPoolItem* pItem = nullptr;
+
+    XColorListRef pColorTable = nullptr;
+    if ( pDocSh && ( nullptr != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
+    {
+        pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
+    }
+
+    if ( !pColorTable.is() )
+        pColorTable = XColorList::CreateStdColorList();
+
+    XBitmapListRef pBitmapList = nullptr;
+    if ( pDocSh && ( nullptr != ( pItem = pDocSh->GetItem( SID_BITMAP_LIST ) ) ) )
+    {
+        pBitmapList = static_cast<const SvxBitmapListItem*>(pItem)->GetBitmapList();
+    }
+
+    SetColorList(pColorTable);
+    SetBitmapList(pBitmapList);
+}
+
+SvxBkgTabPage::~SvxBkgTabPage()
+{
+    disposeOnce();
+}
+
+void SvxBkgTabPage::dispose()
+{
+    m_pTblLBox.clear();
+    SvxAreaTabPage::dispose();
+}
+
+DeactivateRC SvxBkgTabPage::DeactivatePage( SfxItemSet* _pSet )
+{
+    if ( DeactivateRC::KeepPage == SvxAreaTabPage::DeactivatePage( _pSet ) )
+        return DeactivateRC::KeepPage;
+
+    if ( _pSet )
+        FillItemSet( _pSet );
+
+    return DeactivateRC::LeavePage;
+}
+
+bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
+{
+    sal_uInt16 nSlot = SID_ATTR_BRUSH;
+    if ( m_pTblLBox && m_pTblLBox->IsVisible() )
+    {
+        switch( m_pTblLBox->GetSelectedEntryPos() )
+        {
+            case TBL_DEST_CELL:
+                nSlot = SID_ATTR_BRUSH;
+            break;
+            case TBL_DEST_ROW:
+                nSlot = SID_ATTR_BRUSH_ROW;
+            break;
+            case TBL_DEST_TBL:
+                nSlot = SID_ATTR_BRUSH_TABLE;
+            break;
+        }
+    }
+
+    sal_uInt16 nWhich = GetWhich(nSlot);
+
+    drawing::FillStyle eFillType = rCoreSet->Get( XATTR_FILLSTYLE ).GetValue();
+    switch( eFillType )
+    {
+        case drawing::FillStyle_NONE:
+        {
+            rCoreSet->Put( SvxBrushItem( COL_TRANSPARENT, nWhich ) );
+            break;
+        }
+        case drawing::FillStyle_SOLID:
+        {
+            XFillColorItem aColorItem( rCoreSet->Get( XATTR_FILLCOLOR ) );
+            rCoreSet->Put( SvxBrushItem( aColorItem.GetColorValue(), nWhich ) );
+            break;
+        }
+        case drawing::FillStyle_BITMAP:
+        {
+            SvxBrushItem aBrushItem( getSvxBrushItemFromSourceSet( *rCoreSet, nWhich ) );
+            if ( GraphicType::NONE != aBrushItem.GetGraphicObject()->GetType() ) // no selection so use current
+                rCoreSet->Put( aBrushItem );
+            break;
+        }
+        default:
+            break;
+    }
+
+    return true;
+}
+
+VclPtr<SfxTabPage> SvxBkgTabPage::Create( vcl::Window* pWindow,
+                                           const SfxItemSet* rAttrs )
+{
+    return VclPtr<SvxBkgTabPage>::Create( pWindow, *rAttrs );
+}
+
+void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
+{
+    const SfxUInt32Item* pFlagItem = aSet.GetItem<SfxUInt32Item>(SID_FLAG_TYPE, false);
+    if (pFlagItem)
+    {
+        SvxBackgroundTabFlags nFlags = static_cast<SvxBackgroundTabFlags>(pFlagItem->GetValue());
+        if ( nFlags & SvxBackgroundTabFlags::SHOW_TBLCTL )
+        {
+            VclPtr<vcl::Window> pBtn;
+            get(pBtn, "btnbitmap");
+            pBtn->Show();
+            get(m_pTblLBox, "tablelb");
+            m_pTblLBox->SelectEntryPos(0);
+            m_pTblLBox->Show();
+        }
+    }
+    SvxAreaTabPage::PageCreated( aSet );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

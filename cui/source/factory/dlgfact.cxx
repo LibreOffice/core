@@ -1348,6 +1348,8 @@ CreateTabPage AbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId 
 {
     switch ( nId )
     {
+        case RID_SVXPAGE_BKG :
+            return SvxBkgTabPage::Create;
         case RID_SVXPAGE_TEXTANIMATION :
             return SvxTextAnimationPage::Create;
         case RID_SVXPAGE_TRANSPARENCE :
