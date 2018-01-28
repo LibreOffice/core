@@ -130,7 +130,9 @@ typedef enum {
     osl_File_E_NOTREADY,        /*!< device not ready                                            */
     osl_File_E_invalidError,    /*!< unmapped error: always last entry in enum!                  */
     osl_File_E_TIMEDOUT,        /*!< socket operation timed out                                  */
-    osl_File_E_NETWORK,
+    osl_File_E_NETWORK,         /*!< unexpected network error occurred (Windows) - could be a
+                                     user session was deleted, or an unexpected network error
+                                     occurred                                                    */
     osl_File_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslFileError;
 
@@ -828,7 +830,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
                 can mean that the address, length of the file or the
                 file offset are too large or not aligned on a page
                 boundary; on Linux can also mean after Linux 2.6.12
-                that the length was set to 0 (illogical.
+                that the length was set to 0 (illogical).
     @retval osl_File_E_OVERFLOW requested mapping size too large,
                 or the file offset was too large
     @retval osl_File_E_ACCES file descriptor to non-regular file, or
