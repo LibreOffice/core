@@ -87,9 +87,9 @@ namespace accessibility
                               sal_Int32 nEndPara, sal_Int32 nEndIndex )
     {
         DBG_ASSERT(nStartPara >= 0 &&
-                   nStartIndex >= 0 && nStartIndex <= USHRT_MAX &&
+                   nStartIndex >= 0 &&
                    nEndPara >= 0 &&
-                   nEndIndex >= 0 && nEndIndex <= USHRT_MAX ,
+                   nEndIndex >= 0,
                    "AccessibleStaticTextBase_Impl::MakeSelection: index value overflow");
 
         return ESelection(nStartPara, nStartIndex, nEndPara, nEndIndex);
@@ -301,7 +301,7 @@ namespace accessibility
             {
                 // check overflow
                 DBG_ASSERT(nCurrPara >= 0 &&
-                           nFlatIndex - nCurrIndex + nCurrCount >= 0 && nFlatIndex - nCurrIndex + nCurrCount <= USHRT_MAX ,
+                           nFlatIndex - nCurrIndex + nCurrCount >= 0,
                            "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
 
                 return EPosition(nCurrPara, nFlatIndex - nCurrIndex + nCurrCount);
@@ -313,7 +313,7 @@ namespace accessibility
         {
             // check overflow
             DBG_ASSERT(nCurrPara > 0 &&
-                       nFlatIndex - nCurrIndex + nCurrCount >= 0 && nFlatIndex - nCurrIndex + nCurrCount <= USHRT_MAX ,
+                       nFlatIndex - nCurrIndex + nCurrCount >= 0,
                        "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
 
             return EPosition(nCurrPara-1, nFlatIndex - nCurrIndex + nCurrCount);
