@@ -1625,8 +1625,8 @@ void SwMarkPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
     aLeftPagePrtArea = tools::Rectangle(Point(nLBorder, nTBorder), Point((nOutWPix - 1) - nRBorder, (nOutHPix - 1) - nBBorder));
     const long nWidth = aLeftPagePrtArea.GetWidth();
-    const long nKorr = (nWidth & 1) != 0 ? 0 : 1;
-    aLeftPagePrtArea.SetSize(Size(nWidth / 2 - (nLBorder + nRBorder) / 2 + nKorr, aLeftPagePrtArea.GetHeight()));
+    const long nCorr = (nWidth & 1) != 0 ? 0 : 1;
+    aLeftPagePrtArea.SetSize(Size(nWidth / 2 - (nLBorder + nRBorder) / 2 + nCorr, aLeftPagePrtArea.GetHeight()));
 
     aRightPagePrtArea = aLeftPagePrtArea;
     aRightPagePrtArea.Move(aLeftPagePrtArea.GetWidth() + nLBorder + nRBorder + 1, 0);
