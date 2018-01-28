@@ -369,7 +369,7 @@ oslFileError FileHandle_Impl::readAt(
     }
 
     ssize_t nBytes = ::pread(m_fd, pBuffer, nBytesRequested, nOffset);
-    if ((nBytes == -1) && (errno == EOVERFLOW))
+    if (nBytes == -1 && errno == EOVERFLOW)
     {
         /* Some 'pread()'s fail with EOVERFLOW when reading at (or past)
          * end-of-file, different from 'lseek() + read()' behaviour.
@@ -429,7 +429,7 @@ oslFileError FileHandle_Impl::readFileAt(
         return osl_File_E_None;
     }
 
-    if (m_kind == KIND_MEM || !(m_buffer))
+    if (m_kind == KIND_MEM || !m_buffer)
     {
         // not buffered
         return readAt(nOffset, pBuffer, nBytesRequested, pBytesRead);
@@ -509,6 +509,7 @@ oslFileError FileHandle_Impl::writeFileAt(
 
         return osl_File_E_None;
     }
+
     if (!m_buffer)
     {
         // not buffered
@@ -526,6 +527,7 @@ oslFileError FileHandle_Impl::writeFileAt(
             oslFileError result = syncFile();
             if (result != osl_File_E_None)
                 return result;
+
             m_bufptr = -1;
             m_buflen = 0;
 
@@ -667,6 +669,7 @@ oslFileError FileHandle_Impl::readLineAt(
                 curpos++;
                 break;
             }
+
             if (state != LINE_STATE_BEGIN)
             {
                 /* skip the newline char */
@@ -769,7 +772,8 @@ oslFileHandle osl::detail::createFileHandleFromFD(int fd)
         pImpl->m_size = sal::static_int_cast< sal_uInt64 >(aFileStat.st_size);
     }
 
-    SAL_INFO("sal.file", "osl::detail::createFileHandleFromFD(" << pImpl->m_fd << ", writeable) => " << pImpl->m_strFilePath);
+    SAL_INFO("sal.file", "osl::detail::createFileHandleFromFD(" << pImpl->m_fd << ", writeable) => "
+              << pImpl->m_strFilePath);
 
     return static_cast<oslFileHandle>(pImpl);
 }
@@ -785,9 +789,9 @@ static int osl_file_adjustLockFlags(const char *path, int flags)
      * for the filesystem name.
      */
     struct statfs s;
-    if(statfs(path, &s) >= 0)
+    if (statfs(path, &s) >= 0)
     {
-        if(strncmp("afpfs", s.f_fstypename, 5) == 0)
+        if (strncmp("afpfs", s.f_fstypename, 5) == 0)
         {
             flags &= ~O_EXLOCK;
             flags |=  O_SHLOCK;
@@ -808,9 +812,8 @@ static int osl_file_adjustLockFlags(const char *path, int flags)
 static bool osl_file_queryLocking(sal_uInt32 uFlags)
 {
 #if !defined HAVE_O_EXLOCK
-    if (!(uFlags & osl_File_OpenFlag_NoLock)
-        && ((uFlags & osl_File_OpenFlag_Write)
-            || (uFlags & osl_File_OpenFlag_Create)))
+    if (!(uFlags & osl_File_OpenFlag_NoLock) &&
+        (uFlags & osl_File_OpenFlag_Write || uFlags & osl_File_OpenFlag_Create))
     {
         static bool enabled = getenv("SAL_ENABLE_FILE_LOCKING") != nullptr;
             // getenv is not thread safe, so minimize use of result
@@ -947,7 +950,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
      * we get that oh so useful General Error when trying to open a
      * read-only document.
      */
-    if (fd  == -1 && (flags & O_RDWR) && errno == EPERM)
+    if (fd == -1 && (flags & O_RDWR) && errno == EPERM)
     {
         int rdonly_flags = (flags & ~O_ACCMODE) | O_RDONLY;
         fd = open_c( cpFilePath, rdonly_flags, mode );
@@ -969,7 +972,9 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
         if (f == -1)
         {
             int saved_errno = errno;
-            SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fcntl(" << fd << ", F_GETFL) failed: " << strerror(saved_errno));
+            SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", "
+                        << ((flags & O_RDWR) ? "writeable":"readonly") << "): fcntl("
+                        << fd << ", F_GETFL) failed: " << strerror(saved_errno));
             eRet = oslTranslateFileError(saved_errno);
             (void) close(fd);
             return eRet;
@@ -978,7 +983,9 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
         if (fcntl(fd, F_SETFL, (f & ~O_NONBLOCK)) == -1)
         {
             int saved_errno = errno;
-            SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fcntl(" << fd << ", F_SETFL) failed: " << strerror(saved_errno));
+            SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", "
+                        << ((flags & O_RDWR) ? "writeable":"readonly") << "): fcntl("
+                        << fd << ", F_SETFL) failed: " << strerror(saved_errno));
             eRet = oslTranslateFileError(saved_errno);
             (void) close(fd);
             return eRet;
@@ -991,7 +998,9 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
     if (fstat(fd, &aFileStat) == -1)
     {
         int saved_errno = errno;
-        SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fstat(" << fd << ") failed: " << strerror(saved_errno));
+        SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", "
+                    << ((flags & O_RDWR) ? "writeable":"readonly") << "): fstat("
+                    << fd << ") failed: " << strerror(saved_errno));
         eRet = oslTranslateFileError(saved_errno);
         (void) close(fd);
         return eRet;
@@ -1011,7 +1020,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
         if (flock(fd, LOCK_EX | LOCK_NB) == -1)
         {
             /* Mac OSX returns ENOTSUP for webdav drives. We should try read lock */
-            if ((errno != ENOTSUP) || ((flock(fd, LOCK_SH | LOCK_NB) == 1) && (errno != ENOTSUP)))
+            if (errno != ENOTSUP || (flock(fd, LOCK_SH | LOCK_NB) == 1 && errno != ENOTSUP))
             {
                 eRet = oslTranslateFileError(errno);
                 (void) close(fd);
@@ -1029,7 +1038,9 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
         if (fcntl(fd, F_SETLK, &aflock) == -1)
         {
             int saved_errno = errno;
-            SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fcntl(" << fd << ", F_SETLK) failed: " << strerror(saved_errno));
+            SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", "
+                        << ((flags & O_RDWR) ? "writeable":"readonly") << "): fcntl("
+                        << fd << ", F_SETLK) failed: " << strerror(saved_errno));
             eRet = oslTranslateFileError(saved_errno);
             (void) close(fd);
             return eRet;
@@ -1044,7 +1055,8 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
 
     pImpl->m_size = sal::static_int_cast< sal_uInt64 >(aFileStat.st_size);
 
-    SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << ") => " << pImpl->m_fd);
+    SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", "
+                << ((flags & O_RDWR) ? "writeable":"readonly") << ") => " << pImpl->m_fd);
 
     *pHandle = static_cast<oslFileHandle>(pImpl);
 
@@ -1060,7 +1072,7 @@ oslFileError openFile(rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uInt
 {
     oslFileError eRet;
 
-    if ((!ustrFileURL) || (ustrFileURL->length == 0) || (!pHandle))
+    if (!ustrFileURL || ustrFileURL->length == 0 || !pHandle)
         return osl_File_E_INVAL;
 
     /* convert file URL to system path */
@@ -1123,7 +1135,7 @@ oslFileError SAL_CALL osl_syncFile(oslFileHandle Handle)
 {
     FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
 
-    if ((!pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (pImpl->m_fd == -1)))
+    if (!pImpl || (pImpl->m_kind == FileHandle_Impl::KIND_FD && pImpl->m_fd == -1))
         return osl_File_E_INVAL;
 
     if (pImpl->m_kind == FileHandle_Impl::KIND_MEM)
@@ -1167,7 +1179,7 @@ oslFileError SAL_CALL osl_mapFile(
 {
     FileHandle_Impl* pImpl = static_cast< FileHandle_Impl* >(Handle);
 
-    if ((!pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (pImpl->m_fd == -1)) || (!ppAddr))
+    if (!pImpl || (pImpl->m_kind == FileHandle_Impl::KIND_FD && pImpl->m_fd == -1) || !ppAddr)
         return osl_File_E_INVAL;
 
     *ppAddr = nullptr;
@@ -1295,7 +1307,7 @@ oslFileError SAL_CALL osl_readLine(
 {
     FileHandle_Impl *pImpl = static_cast<FileHandle_Impl*>(Handle);
 
-    if ((!pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (pImpl->m_fd == -1)) || (!ppSequence))
+    if (!pImpl || (pImpl->m_kind == FileHandle_Impl::KIND_FD && pImpl->m_fd == -1) || !ppSequence)
         return osl_File_E_INVAL;
 
     sal_uInt64 uBytesRead = 0;
@@ -1318,7 +1330,7 @@ oslFileError SAL_CALL osl_readFile(
 {
     FileHandle_Impl* pImpl = static_cast< FileHandle_Impl* >(Handle);
 
-    if ((!pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (pImpl->m_fd == -1)) || (!pBuffer) || (!pBytesRead))
+    if (!pImpl || (pImpl->m_kind == FileHandle_Impl::KIND_FD && pImpl->m_fd == -1) || !pBuffer || !pBytesRead)
         return osl_File_E_INVAL;
 
     static sal_uInt64 const g_limit_ssize_t = std::numeric_limits< ssize_t >::max();
@@ -1345,7 +1357,7 @@ oslFileError SAL_CALL osl_writeFile(
 {
     FileHandle_Impl* pImpl = static_cast< FileHandle_Impl* >(Handle);
 
-    if ((!pImpl) || (pImpl->m_fd == -1) || (!pBuffer) || (!pBytesWritten))
+    if (!pImpl || pImpl->m_fd == -1 || !pBuffer || !pBytesWritten)
         return osl_File_E_INVAL;
 
     if ((pImpl->m_state & FileHandle_Impl::STATE_WRITEABLE) == 0)
@@ -1375,7 +1387,7 @@ oslFileError SAL_CALL osl_readFileAt(
 {
     FileHandle_Impl* pImpl = static_cast< FileHandle_Impl* >(Handle);
 
-    if ((!pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (pImpl->m_fd == -1)) || (!pBuffer) || (!pBytesRead))
+    if (!pImpl || (pImpl->m_kind == FileHandle_Impl::KIND_FD && pImpl->m_fd == -1) || !pBuffer || !pBytesRead)
         return osl_File_E_INVAL;
 
     if ((pImpl->m_state & FileHandle_Impl::STATE_SEEKABLE) == 0)
@@ -1407,7 +1419,7 @@ oslFileError SAL_CALL osl_writeFileAt(
 {
     FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
 
-    if ((!pImpl) || (pImpl->m_fd == -1) || (!pBuffer) || (!pBytesWritten))
+    if (!pImpl || pImpl->m_fd == -1 || !pBuffer || !pBytesWritten)
         return osl_File_E_INVAL;
 
     if ((pImpl->m_state & FileHandle_Impl::STATE_SEEKABLE) == 0)
@@ -1437,7 +1449,7 @@ oslFileError SAL_CALL osl_isEndOfFile(oslFileHandle Handle, sal_Bool *pIsEOF)
 {
     FileHandle_Impl* pImpl = static_cast< FileHandle_Impl* >(Handle);
 
-    if ((!pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (pImpl->m_fd == -1)) || (!pIsEOF))
+    if (!pImpl || (pImpl->m_kind == FileHandle_Impl::KIND_FD && pImpl->m_fd == -1) || !pIsEOF)
         return osl_File_E_INVAL;
 
     FileHandle_Impl::Guard lock(&(pImpl->m_mutex));
@@ -1450,7 +1462,7 @@ oslFileError SAL_CALL osl_getFilePos(oslFileHandle Handle, sal_uInt64* pPos)
 {
     FileHandle_Impl* pImpl = static_cast< FileHandle_Impl* >(Handle);
 
-    if ((!pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (pImpl->m_fd == -1)) || (!pPos))
+    if (!pImpl || (pImpl->m_kind == FileHandle_Impl::KIND_FD && pImpl->m_fd == -1) || !pPos)
         return osl_File_E_INVAL;
 
     FileHandle_Impl::Guard lock(&(pImpl->m_mutex));
@@ -1463,7 +1475,7 @@ oslFileError SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_
 {
     FileHandle_Impl* pImpl = static_cast< FileHandle_Impl* >(Handle);
 
-    if ((!pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (pImpl->m_fd == -1)))
+    if (!pImpl || (pImpl->m_kind == FileHandle_Impl::KIND_FD && pImpl->m_fd == -1))
         return osl_File_E_INVAL;
 
     if (exceedsMaxOffT(uOffset) || exceedsMinOffT(uOffset))
@@ -1510,7 +1522,7 @@ oslFileError SAL_CALL osl_getFileSize(oslFileHandle Handle, sal_uInt64* pSize)
 {
     FileHandle_Impl* pImpl = static_cast< FileHandle_Impl* >(Handle);
 
-    if ((!pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (pImpl->m_fd == -1)) || (!pSize))
+    if (!pImpl || (pImpl->m_kind == FileHandle_Impl::KIND_FD && pImpl->m_fd == -1) || !pSize)
         return osl_File_E_INVAL;
 
     FileHandle_Impl::Guard lock(&(pImpl->m_mutex));
@@ -1523,7 +1535,7 @@ oslFileError SAL_CALL osl_setFileSize(oslFileHandle Handle, sal_uInt64 uSize)
 {
     FileHandle_Impl* pImpl = static_cast< FileHandle_Impl* >(Handle);
 
-    if ((!pImpl) || (pImpl->m_fd == -1))
+    if (!pImpl || pImpl->m_fd == -1)
         return osl_File_E_INVAL;
 
     if ((pImpl->m_state & FileHandle_Impl::STATE_WRITEABLE) == 0)
