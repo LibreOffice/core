@@ -94,9 +94,8 @@ public:
     void push( ScaleRangeContext const &aRC ) { maStrips.push_back( aRC ); }
     virtual void doWork() override
     {
-        std::vector< ScaleRangeContext >::iterator it;
-        for (it = maStrips.begin(); it != maStrips.end(); ++it)
-            mpFn( *(it->mrCtx), it->mnStartY, it->mnEndY );
+        for (auto const& strip : maStrips)
+            mpFn( *(strip.mrCtx), strip.mnStartY, strip.mnEndY );
     }
 };
 

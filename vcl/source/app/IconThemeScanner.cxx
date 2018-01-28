@@ -92,9 +92,9 @@ void IconThemeScanner::ScanDirectoryForIconThemes(const OUString& paths)
             SAL_WARN("vcl.app", "Could not find any icon themes in the provided directory ('" <<path<<"'.");
             continue;
         }
-        for (std::vector<OUString>::iterator aI = iconThemePaths.begin(); aI != iconThemePaths.end(); ++aI)
+        for (auto const& iconThemePath : iconThemePaths)
         {
-            AddIconThemeByPath(*aI);
+            AddIconThemeByPath(iconThemePath);
         }
     }
 }

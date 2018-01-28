@@ -998,10 +998,10 @@ static const OUString ImplMetricToString( FieldUnit rUnit )
     if( pList )
     {
         // return unit's default string (ie, the first one )
-        for( FieldUnitStringList::const_iterator it = pList->begin(); it != pList->end(); ++it )
+        for (auto const& elem : *pList)
         {
-            if ( it->second == rUnit )
-                return it->first;
+            if ( elem.second == rUnit )
+                return elem.first;
         }
     }
 
@@ -1015,10 +1015,10 @@ FieldUnit MetricFormatter::StringToMetric(const OUString &rMetricString)
     {
         // return FieldUnit
         OUString aStr = rMetricString.toAsciiLowerCase().replaceAll(" ", "");
-        for( FieldUnitStringList::const_iterator it = pList->begin(); it != pList->end(); ++it )
+        for (auto const& elem : *pList)
         {
-            if ( it->first == aStr )
-                return it->second;
+            if ( elem.first == aStr )
+                return elem.second;
         }
     }
 
