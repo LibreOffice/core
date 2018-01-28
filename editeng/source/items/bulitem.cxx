@@ -29,25 +29,32 @@
 #define BULITEM_VERSION     (sal_uInt16(2))
 
 
-SvxBulletItem::SvxBulletItem( sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
+SvxBulletItem::SvxBulletItem( sal_uInt16 _nWhich )
+    : SfxPoolItem(_nWhich)
+    , aFont(OutputDevice::GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_SYSTEM, GetDefaultFontFlags::NONE ))
+    , nStart(1)
+    , nStyle(SvxBulletStyle::N123)
+    , nWidth(1200)  // 1.2cm
+    , nScale(75)
+    , cSymbol(' ')
 {
-    SetDefaultFont_Impl();
-    SetDefaults_Impl();
+    aFont.SetAlignment(ALIGN_BOTTOM);
+    aFont.SetTransparent( true );
 }
 
 
-SvxBulletItem::SvxBulletItem( const SvxBulletItem& rItem) : SfxPoolItem( rItem )
+SvxBulletItem::SvxBulletItem( const SvxBulletItem& rItem )
+    : SfxPoolItem(rItem)
+    , aFont(rItem.aFont)
+    , pGraphicObject(rItem.pGraphicObject ? new GraphicObject( *rItem.pGraphicObject ) : nullptr)
+    , aPrevText(rItem.aPrevText)
+    , aFollowText(rItem.aFollowText)
+    , nStart(rItem.nStart)
+    , nStyle(rItem.nStyle)
+    , nWidth(rItem.nWidth)
+    , nScale(rItem.nScale)
+    , cSymbol(rItem.cSymbol)
 {
-    aFont           = rItem.aFont;
-    if (rItem.pGraphicObject)
-        pGraphicObject.reset( new GraphicObject( *rItem.pGraphicObject ) );
-    aPrevText       = rItem.aPrevText;
-    aFollowText     = rItem.aFollowText;
-    nStart          = rItem.nStart;
-    nStyle          = rItem.nStyle;
-    nWidth          = rItem.nWidth;
-    nScale          = rItem.nScale;
-    cSymbol         = rItem.cSymbol;
 }
 
 
@@ -59,25 +66,6 @@ SvxBulletItem::~SvxBulletItem()
 SfxPoolItem* SvxBulletItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SvxBulletItem( *this );
-}
-
-
-void SvxBulletItem::SetDefaultFont_Impl()
-{
-    aFont = OutputDevice::GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_SYSTEM, GetDefaultFontFlags::NONE );
-    aFont.SetAlignment( ALIGN_BOTTOM);
-    aFont.SetTransparent( true );
-}
-
-
-void SvxBulletItem::SetDefaults_Impl()
-{
-    pGraphicObject  = nullptr;
-    nWidth          = 1200;  // 1.2cm
-    nStart          = 1;
-    nStyle          = SvxBulletStyle::N123;
-    cSymbol         = ' ';
-    nScale          = 75;
 }
 
 
