@@ -103,7 +103,7 @@ class StgFATStrm : public StgStrm {     // the master FAT stream
 public:
     explicit StgFATStrm(StgIo&, sal_Int32 nFatStrmSize);
     using StgStrm::GetPage;
-    sal_Int32 GetPage( short, bool, sal_uInt16 *pnMasterAlloc = nullptr);
+    sal_Int32 GetPage(sal_Int32, bool, sal_uInt16 *pnMasterAlloc = nullptr);
     virtual bool SetSize( sal_Int32 ) override;
 };
 
