@@ -130,7 +130,9 @@ typedef enum {
     osl_File_E_NOTREADY,        /*!< device not ready                                            */
     osl_File_E_invalidError,    /*!< unmapped error: always last entry in enum!                  */
     osl_File_E_TIMEDOUT,        /*!< socket operation timed out                                  */
-    osl_File_E_NETWORK,
+    osl_File_E_NETWORK,         /*!< unexpected network error occurred (Windows) - could be a
+                                     user session was deleted, or an unexpected network error
+                                     occurred                                                    */
     osl_File_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslFileError;
 
