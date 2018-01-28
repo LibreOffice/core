@@ -582,8 +582,12 @@ oslFileError FileHandle_Impl::readLineAt(
     off_t bufptr = nOffset / m_bufsiz * m_bufsiz;
     if (bufptr != m_bufptr)
     {
-        /* flush current buffer */
-        result = syncFile();
+        if (!S_ISSOCK(m_fd))
+        {
+            /* flush current buffer */
+            result = syncFile();
+        }
+
         if (result != osl_File_E_None)
             return result;
 
