@@ -575,6 +575,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet )
 
     sal_uInt32 nLineWidth = 0;
     sal_uInt32 nColor = 0;
+    sal_Int32 nColorAlpha = MAX_PERCENT;
     bool bColorSet = false;
     const char* cap = nullptr;
     drawing::LineDash aLineDash;
@@ -654,6 +655,10 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet )
                 nColor = mAny.get<sal_uInt32>() & 0xffffff;
                 bColorSet = true;
             }
+            if ( GETA( LineTransparence ) )
+            {
+                nColorAlpha = MAX_PERCENT - (mAny.get<sal_Int16>() * PER_PERCENT);
+            }
             break;
     }
 
@@ -668,7 +673,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet )
         if( nColor != nOriginalColor )
         {
             // the user has set a different color for the line
-            WriteSolidFill( nColor );
+            WriteSolidFill( nColor, nColorAlpha );
         }
         else if( !sColorFillScheme.isEmpty() )
         {
@@ -685,7 +690,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet )
         }
         else
         {
-            WriteSolidFill( nColor );
+            WriteSolidFill( nColor, nColorAlpha );
         }
     }
 
