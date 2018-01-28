@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_5241bd0a",
+        "filename": "sd/source/ui/dlg/navigatr.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-01-28T13:42:14Z",
+      "side": 1,
+      "message": "Indentation is still wrong.\nIt should look like this:\nif ()\n{\n     maTlbObjects-\u003eSelect()\n}\nelse if()\n{\n     maTlbObjects-\u003eSelect()\n}\n\nnot like this:\nif ()\n    {\n        maTlbObjects-\u003eSelect()\n    }\nelse if()\n    {\n        maTlbObjects-\u003eSelect()\n    }",
+      "range": {
+        "startLine": 225,
+        "startChar": 8,
+        "endLine": 225,
+        "endChar": 9
+      },
+      "revId": "5a4f4446481cf1be2f9b7d30f6f36c1db248bd06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
