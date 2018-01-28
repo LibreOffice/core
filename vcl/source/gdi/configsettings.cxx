@@ -59,19 +59,18 @@ void SettingsConfigItem::ImplCommit()
 {
     std::unordered_map< OUString, SmallOUStrMap >::const_iterator group;
 
-    for( group = m_aSettings.begin(); group != m_aSettings.end(); ++group )
+    for (auto const& setting : m_aSettings)
     {
-        OUString aKeyName( group->first );
+        OUString aKeyName( setting.first );
         /*bool bAdded =*/ AddNode( OUString(), aKeyName );
         Sequence< PropertyValue > aValues( group->second.size() );
         PropertyValue* pValues = aValues.getArray();
         int nIndex = 0;
-        SmallOUStrMap::const_iterator it;
-        for( it = group->second.begin(); it != group->second.end(); ++it )
+        for (auto const& elem : group->second)
         {
-            pValues[nIndex].Name    = aKeyName + "/" + it->first;
+            pValues[nIndex].Name    = aKeyName + "/" + elem.first;
             pValues[nIndex].Handle  = 0;
-            pValues[nIndex].Value <<= it->second;
+            pValues[nIndex].Value <<= elem.second;
             pValues[nIndex].State   = PropertyState_DIRECT_VALUE;
             nIndex++;
         }

@@ -91,10 +91,9 @@ ImplFontCache::ImplFontCache()
 
 ImplFontCache::~ImplFontCache()
 {
-    FontInstanceList::iterator it = maFontInstanceList.begin();
-    for(; it != maFontInstanceList.end(); ++it )
+    for (auto const& fontInstance : maFontInstanceList)
     {
-        LogicalFontInstance* pFontInstance = (*it).second;
+        LogicalFontInstance* pFontInstance = fontInstance.second;
         delete pFontInstance;
     }
 }
@@ -268,12 +267,14 @@ void ImplFontCache::Release(LogicalFontInstance* pFontInstance)
     FontInstanceList::iterator it_next = maFontInstanceList.begin();
     while( it_next != maFontInstanceList.end() )
     {
-        FontInstanceList::iterator it = it_next++;
-        LogicalFontInstance* pFontEntry = (*it).second;
+        LogicalFontInstance* pFontEntry = (*it_next).second;
         if( pFontEntry->mnRefCount > 0 )
+        {
+            ++it_next;
             continue;
+        }
 
-        maFontInstanceList.erase( it );
+        it_next = maFontInstanceList.erase(it_next);
         delete pFontEntry;
         --mnRef0Count;
         assert(mnRef0Count>=0 && "ImplFontCache::Release() - refcount0 underflow");
@@ -295,10 +296,9 @@ int ImplFontCache::CountUnreferencedEntries() const
 {
     size_t nCount = 0;
     // count unreferenced entries
-    for (FontInstanceList::const_iterator it = maFontInstanceList.begin();
-         it != maFontInstanceList.end(); ++it)
+    for (auto const& fontInstance : maFontInstanceList)
     {
-        const LogicalFontInstance* pFontEntry = it->second;
+        const LogicalFontInstance* pFontEntry = fontInstance.second;
         if (pFontEntry->mnRefCount > 0)
             continue;
         ++nCount;
@@ -311,10 +311,9 @@ void ImplFontCache::Invalidate()
     assert(CountUnreferencedEntries() == mnRef0Count);
 
     // delete unreferenced entries
-    FontInstanceList::iterator it = maFontInstanceList.begin();
-    for(; it != maFontInstanceList.end(); ++it )
+    for (auto const& fontInstance : maFontInstanceList)
     {
-        LogicalFontInstance* pFontEntry = (*it).second;
+        LogicalFontInstance* pFontEntry = fontInstance.second;
         if( pFontEntry->mnRefCount > 0 )
         {
             // These fonts will become orphans after clearing the list below;

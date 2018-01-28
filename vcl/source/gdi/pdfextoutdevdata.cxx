@@ -138,10 +138,9 @@ sal_Int32 GlobalSyncData::GetMappedStructId( sal_Int32 nStructId )
 
 void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
 {
-    for (std::deque< PDFExtOutDevDataSync::Action >::const_iterator aIter( mActions.begin() ), aEnd( mActions.end() ) ;
-         aIter != aEnd ; ++aIter)
+    for (auto const& action : mActions)
     {
-        switch( *aIter )
+        switch (action)
         {
             case PDFExtOutDevDataSync::CreateNamedDest : //i56629
             {

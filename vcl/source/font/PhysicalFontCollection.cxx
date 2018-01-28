@@ -90,10 +90,9 @@ void PhysicalFontCollection::Clear()
     mnFallbackCount = -1;
 
     // clear all entries in the device font list
-    PhysicalFontFamilies::iterator it = maPhysicalFontFamilies.begin();
-    for(; it != maPhysicalFontFamilies.end(); ++it )
+    for (auto const& family : maPhysicalFontFamilies)
     {
-        PhysicalFontFamily* pEntry = (*it).second;
+        PhysicalFontFamily* pEntry = family.second;
         delete pEntry;
     }
 
@@ -352,10 +351,9 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyBySubstFontAttr( c
     PhysicalFontFamily* pFoundData = nullptr;
 
     // use the font substitutions suggested by the FontNameAttr to find the font
-    ::std::vector< OUString >::const_iterator it = rFontAttr.Substitutions.begin();
-    for(; it != rFontAttr.Substitutions.end(); ++it )
+    for (auto const& substitution : rFontAttr.Substitutions)
     {
-        pFoundData = FindFontFamily( *it );
+        pFoundData = FindFontFamily(substitution);
         if( pFoundData )
             return pFoundData;
     }
@@ -392,11 +390,10 @@ void PhysicalFontCollection::ImplInitMatchData() const
     // calculate MatchData for all entries
     const utl::FontSubstConfiguration& rFontSubst = utl::FontSubstConfiguration::get();
 
-    PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.begin();
-    for(; it != maPhysicalFontFamilies.end(); ++it )
+    for (auto const& family : maPhysicalFontFamilies)
     {
-        const OUString& rSearchName = (*it).first;
-        PhysicalFontFamily* pEntry = (*it).second;
+        const OUString& rSearchName = family.first;
+        PhysicalFontFamily* pEntry = family.second;
 
         pEntry->InitMatchData( rFontSubst, rSearchName );
     }
@@ -423,10 +420,9 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes( ImplFont
     long    nBestMatch = 40000;
     ImplFontAttrs  nBestType = ImplFontAttrs::None;
 
-    PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.begin();
-    for(; it != maPhysicalFontFamilies.end(); ++it )
+    for (auto const& family : maPhysicalFontFamilies)
     {
-        PhysicalFontFamily* pData = (*it).second;
+        PhysicalFontFamily* pData = family.second;
 
         // Get all information about the matching font
         ImplFontAttrs nMatchType  = pData->GetMatchType();
@@ -489,7 +485,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes( ImplFont
         // test SYMBOL attributes
         if ( nSearchType & ImplFontAttrs::Symbol )
         {
-            const OUString& rSearchName = it->first;
+            const OUString& rSearchName = family.first;
             // prefer some special known symbol fonts
             if ( rSearchName == "starsymbol" )
             {
@@ -859,10 +855,9 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyOfDefaultFont() co
 
     ImplInitMatchData();
 
-    PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.begin();
-    for(; it !=  maPhysicalFontFamilies.end(); ++it )
+    for (auto const& family : maPhysicalFontFamilies)
     {
-        PhysicalFontFamily* pData = (*it).second;
+        PhysicalFontFamily* pData = family.second;
         if( pData->GetMatchType() & ImplFontAttrs::Symbol )
             continue;
 
@@ -874,7 +869,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyOfDefaultFont() co
         return pFoundData;
 
     // finding any font is better than finding no font at all
-    it = maPhysicalFontFamilies.begin();
+    auto it = maPhysicalFontFamilies.begin();
     if( it !=  maPhysicalFontFamilies.end() )
         pFoundData = (*it).second;
 
@@ -890,10 +885,9 @@ PhysicalFontCollection* PhysicalFontCollection::Clone() const
     // TODO: clone the config-font attributes too?
     pClonedCollection->mbMatchData    = false;
 
-    PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.begin();
-    for(; it != maPhysicalFontFamilies.end(); ++it )
+    for (auto const& family : maPhysicalFontFamilies)
     {
-        const PhysicalFontFamily* pFontFace = (*it).second;
+        const PhysicalFontFamily* pFontFace = family.second;
         pFontFace->UpdateCloneFontList(*pClonedCollection);
     }
 
@@ -904,10 +898,9 @@ ImplDeviceFontList* PhysicalFontCollection::GetDeviceFontList() const
 {
     ImplDeviceFontList* pDeviceFontList = new ImplDeviceFontList;
 
-    PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.begin();
-    for(; it != maPhysicalFontFamilies.end(); ++it )
+    for (auto const& family : maPhysicalFontFamilies)
     {
-        const PhysicalFontFamily* pFontFamily = (*it).second;
+        const PhysicalFontFamily* pFontFamily = family.second;
         pFontFamily->UpdateDevFontList( *pDeviceFontList );
     }
 
