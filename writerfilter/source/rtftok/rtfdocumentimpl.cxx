@@ -1210,10 +1210,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
     if (m_aStates.top().eDestination == Destination::COLORTABLE)
     {
         // we hit a ';' at the end of each color entry
-        sal_uInt32 color = (m_aStates.top().aCurrentColor.nRed << 16)
-                           | (m_aStates.top().aCurrentColor.nGreen << 8)
-                           | m_aStates.top().aCurrentColor.nBlue;
-        m_aColorTable.push_back(color);
+        m_aColorTable.push_back(m_aStates.top().aCurrentColor.GetColor());
         // set components back to zero
         m_aStates.top().aCurrentColor = RTFColorTableEntry();
     }
@@ -3424,8 +3421,6 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
 }
 
 void RTFDocumentImpl::resetFrame() { m_aStates.top().aFrame = RTFFrame(&m_aStates.top()); }
-
-RTFColorTableEntry::RTFColorTableEntry() = default;
 
 RTFPicture::RTFPicture() = default;
 
