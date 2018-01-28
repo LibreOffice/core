@@ -611,7 +611,7 @@ namespace accessibility
 
     bool AccessibleEditableTextPara::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nIndex )
     {
-        DBG_ASSERT(nIndex >= 0 && nIndex <= SAL_MAX_INT32,
+        DBG_ASSERT(nIndex >= 0,
                    "AccessibleEditableTextPara::GetAttributeRun: index value overflow");
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= SAL_MAX_INT32,
