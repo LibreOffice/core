@@ -2642,14 +2642,10 @@ HelpSettings::operator !=( const HelpSettings& rSet ) const
 ImplAllSettingsData::ImplAllSettingsData()
     :
         maLocale( LANGUAGE_SYSTEM ),
+        mnWindowUpdate( AllSettingsFlags::MOUSE | AllSettingsFlags::STYLE |
+                        AllSettingsFlags::MISC | AllSettingsFlags::LOCALE ),
         maUILocale( LANGUAGE_SYSTEM )
 {
-    mnWindowUpdate              = AllSettingsFlags::MOUSE | AllSettingsFlags::STYLE |
-                                  AllSettingsFlags::MISC | AllSettingsFlags::LOCALE;
-    mpLocaleDataWrapper         = nullptr;
-    mpUILocaleDataWrapper       = nullptr;
-    mpI18nHelper                = nullptr;
-    mpUII18nHelper              = nullptr;
     if (!utl::ConfigManager::IsFuzzing())
         maMiscSettings.SetEnableLocalizedDecimalSep( maSysLocale.GetOptions().IsDecimalSeparatorAsLocale() );
 }
@@ -2660,16 +2656,10 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     maMiscSettings( rData.maMiscSettings ),
     maHelpSettings( rData.maHelpSettings ),
     maLocale( rData.maLocale ),
+    mnWindowUpdate( rData.mnWindowUpdate ),
     maUILocale( rData.maUILocale )
 {
-    mnWindowUpdate              = rData.mnWindowUpdate;
-    // Pointer couldn't shared and objects haven't a copy ctor
-    // So we create the cache objects new, if the GetFunction is
-    // called
-    mpLocaleDataWrapper         = nullptr;
-    mpUILocaleDataWrapper       = nullptr;
-    mpI18nHelper                = nullptr;
-    mpUII18nHelper              = nullptr;
+    // Create the cache objects new when their getter is called.
 }
 
 ImplAllSettingsData::~ImplAllSettingsData()
