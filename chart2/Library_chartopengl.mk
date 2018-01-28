@@ -56,7 +56,7 @@ $(eval $(call gb_Library_add_exception_objects,chartopengl,\
 ))
 
 ifeq ($(SYSTEM_GLM),TRUE)
-$(eval $(call gb_Library_add_defs,chartcore,\
+$(eval $(call gb_Library_add_defs,chartopengl,\
         -DGLM_ENABLE_EXPERIMENTAL \
 ))
 endif
