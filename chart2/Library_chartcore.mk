@@ -23,6 +23,12 @@ $(eval $(call gb_Library_add_defs,chartcore,\
     -DOOO_DLLIMPLEMENTATION_CHARTVIEW \
 ))
 
+ifeq ($(SYSTEM_GLM),TRUE)
+$(eval $(call gb_Library_add_defs,chartcore,\
+        -DGLM_ENABLE_EXPERIMENTAL \
+))
+endif
+
 $(eval $(call gb_Library_set_precompiled_header,chartcore,$(SRCDIR)/chart2/inc/pch/precompiled_chartcore))
 
 $(eval $(call gb_Library_use_externals,chartcore,\
