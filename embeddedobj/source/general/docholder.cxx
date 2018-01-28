@@ -973,10 +973,13 @@ bool DocumentHolder::LoadDocToFrame( bool bInPlace )
             {
                 std::locale aResLoc = Translate::Create("sfx");
                 OUString sEmbedded = Translate::get(STR_EMBEDDED_TITLE, aResLoc);
-                xModelTitle->setTitle( m_pEmbedObj->getContainerName() + sEmbedded);
-                m_aContainerName = m_pEmbedObj->getContainerName();
-                // TODO: get real m_aDocumentNamePart
-                m_aDocumentNamePart = sEmbedded;
+                if( !m_pEmbedObj->getContainerName().isEmpty() )
+                {
+                    xModelTitle->setTitle( m_pEmbedObj->getContainerName() + sEmbedded );
+                    m_aContainerName = m_pEmbedObj->getContainerName();
+                    // TODO: get real m_aDocumentNamePart
+                    m_aDocumentNamePart = sEmbedded;
+                }
             }
 
             if ( bInPlace )
