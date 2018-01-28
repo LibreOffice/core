@@ -291,7 +291,7 @@ class SW_DLLPUBLIC SwDBManager
 
 public:
     SwDBManager(SwDoc* pDoc);
-    ~SwDBManager();
+    ~SwDBManager() COVERITY_NOEXCEPT_FALSE;
 
     /// MailMergeEvent source
     const SwXMailMerge *    GetMailMergeEvtSrc() const  { return pMergeEvtSrc; }
