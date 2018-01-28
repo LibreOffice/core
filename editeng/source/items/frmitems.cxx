@@ -488,7 +488,7 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_R_REL_MARGIN:
         {
             sal_Int32 nRel = 0;
-            if((rVal >>= nRel) && nRel >= 0 && nRel < USHRT_MAX)
+            if((rVal >>= nRel) && nRel >= 0 && nRel < SAL_MAX_UINT16)
             {
                 if(MID_L_REL_MARGIN== nMemberId)
                     nPropLeftMargin = static_cast<sal_uInt16>(nRel);
