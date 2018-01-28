@@ -227,7 +227,7 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
     // calculate unknowns
     sal_Int32 nCurrField, nFieldCount = rTF.GetFieldCount( GetParagraph() );
 
-    DBG_ASSERT(nIndex >= 0 && nIndex <= USHRT_MAX,
+    DBG_ASSERT(nIndex >= 0,
                "SvxAccessibleTextIndex::SetIndex: index value overflow");
 
     mnEEIndex = nIndex;
@@ -450,16 +450,14 @@ OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
     // trim field text, if necessary
     if( aStartIndex.InField() )
     {
-        DBG_ASSERT(aStartIndex.GetFieldOffset() >= 0 &&
-                   aStartIndex.GetFieldOffset() <= USHRT_MAX,
+        DBG_ASSERT(aStartIndex.GetFieldOffset() >= 0,
                    "SvxAccessibleTextIndex::GetText: index value overflow");
 
         sStr = sStr.copy( aStartIndex.GetFieldOffset() );
     }
     if( aEndIndex.InField() && aEndIndex.GetFieldOffset() )
     {
-        DBG_ASSERT(sStr.getLength() - (aEndIndex.GetFieldLen() - aEndIndex.GetFieldOffset()) >= 0 &&
-                   sStr.getLength() - (aEndIndex.GetFieldLen() - aEndIndex.GetFieldOffset()) <= USHRT_MAX,
+        DBG_ASSERT(sStr.getLength() - (aEndIndex.GetFieldLen() - aEndIndex.GetFieldOffset()) >= 0,
                    "SvxAccessibleTextIndex::GetText: index value overflow");
 
         sStr = sStr.copy(0, sStr.getLength() - (aEndIndex.GetFieldLen() - aEndIndex.GetFieldOffset()) );
@@ -473,8 +471,7 @@ OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
         // append trailing bullet
         sStr += aBulletInfo2.aText;
 
-        DBG_ASSERT(sStr.getLength() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) >= 0 &&
-                   sStr.getLength() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) <= USHRT_MAX,
+        DBG_ASSERT(sStr.getLength() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) >= 0,
                    "SvxAccessibleTextIndex::GetText: index value overflow");
 
         sStr = sStr.copy(0, sStr.getLength() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) );
@@ -484,8 +481,7 @@ OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
     {
         OUString sBullet = aBulletInfo2.aText;
 
-        DBG_ASSERT(sBullet.getLength() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) >= 0 &&
-                   sBullet.getLength() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) <= USHRT_MAX,
+        DBG_ASSERT(sBullet.getLength() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) >= 0,
                    "SvxAccessibleTextIndex::GetText: index value overflow");
 
         sBullet = sBullet.copy(0, sBullet.getLength() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) );
@@ -796,7 +792,7 @@ bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int32& 
     SvxAccessibleTextIndex aIndex;
     aIndex.SetEEIndex(nPara, nIndex, *this);
 
-    DBG_ASSERT(aIndex.GetIndex() >= 0 && aIndex.GetIndex() <= USHRT_MAX,
+    DBG_ASSERT(aIndex.GetIndex() >= 0,
                "SvxAccessibleTextIndex::SetIndex: index value overflow");
 
     nIndex = aIndex.GetIndex();
@@ -822,8 +818,7 @@ bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int32& 
             Point aPoint = rPoint;
             aPoint.Move( -aBulletInfo.aBounds.Left(), -aBulletInfo.aBounds.Top() );
 
-            DBG_ASSERT(aStringWrap.GetIndexAtPoint( aPoint ) >= 0 &&
-                       aStringWrap.GetIndexAtPoint( aPoint ) <= USHRT_MAX,
+            DBG_ASSERT(aStringWrap.GetIndexAtPoint( aPoint ) >= 0,
                        "SvxAccessibleTextIndex::SetIndex: index value overflow");
 
             nIndex = aStringWrap.GetIndexAtPoint( aPoint );
@@ -850,8 +845,7 @@ bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int32& 
         Point aPoint = rPoint;
         aPoint.Move( -aRect.Left(), -aRect.Top() );
 
-        DBG_ASSERT(aIndex.GetIndex() + aStringWrap.GetIndexAtPoint( rPoint ) >= 0 &&
-                   aIndex.GetIndex() + aStringWrap.GetIndexAtPoint( rPoint ) <= USHRT_MAX,
+        DBG_ASSERT(aIndex.GetIndex() + aStringWrap.GetIndexAtPoint( rPoint ) >= 0,
                    "SvxAccessibleTextIndex::SetIndex: index value overflow");
 
         nIndex = (aIndex.GetIndex() + aStringWrap.GetIndexAtPoint( aPoint ));
@@ -871,8 +865,7 @@ bool SvxAccessibleTextAdapter::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex
 
     if( aIndex.InBullet() )
     {
-        DBG_ASSERT(aIndex.GetBulletLen() >= 0 &&
-                   aIndex.GetBulletLen() <= USHRT_MAX,
+        DBG_ASSERT(aIndex.GetBulletLen() >= 0,
                    "SvxAccessibleTextIndex::SetIndex: index value overflow");
 
         // always treat bullet as separate word
@@ -885,9 +878,7 @@ bool SvxAccessibleTextAdapter::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex
     if( aIndex.InField() )
     {
         DBG_ASSERT(aIndex.GetIndex() - aIndex.GetFieldOffset() >= 0 &&
-                   aIndex.GetIndex() - aIndex.GetFieldOffset() <= USHRT_MAX &&
-                   nStart + aIndex.GetFieldLen() >= 0 &&
-                   nStart + aIndex.GetFieldLen() <= USHRT_MAX,
+                   nStart + aIndex.GetFieldLen() >= 0,
                    "SvxAccessibleTextIndex::SetIndex: index value overflow");
 
         // always treat field as separate word
@@ -902,14 +893,12 @@ bool SvxAccessibleTextAdapter::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex
         return false;
 
     aIndex.SetEEIndex( nPara, nStart, *this );
-    DBG_ASSERT(aIndex.GetIndex() >= 0 &&
-               aIndex.GetIndex() <= USHRT_MAX,
+    DBG_ASSERT(aIndex.GetIndex() >= 0,
                "SvxAccessibleTextIndex::SetIndex: index value overflow");
     nStart = aIndex.GetIndex();
 
     aIndex.SetEEIndex( nPara, nEnd, *this );
-    DBG_ASSERT(aIndex.GetIndex() >= 0 &&
-               aIndex.GetIndex() <= USHRT_MAX,
+    DBG_ASSERT(aIndex.GetIndex() >= 0,
                "SvxAccessibleTextIndex::SetIndex: index value overflow");
     nEnd = aIndex.GetIndex();
 
@@ -926,8 +915,7 @@ bool SvxAccessibleTextAdapter::GetAttributeRun( sal_Int32& nStartIndex, sal_Int3
 
     if( aIndex.InBullet() )
     {
-        DBG_ASSERT(aIndex.GetBulletLen() >= 0 &&
-                   aIndex.GetBulletLen() <= USHRT_MAX,
+        DBG_ASSERT(aIndex.GetBulletLen() >= 0,
                    "SvxAccessibleTextIndex::SetIndex: index value overflow");
 
         // always treat bullet as distinct attribute
@@ -939,8 +927,7 @@ bool SvxAccessibleTextAdapter::GetAttributeRun( sal_Int32& nStartIndex, sal_Int3
 
     if( aIndex.InField() )
     {
-        DBG_ASSERT(aIndex.GetIndex() - aIndex.GetFieldOffset() >= 0 &&
-                   aIndex.GetIndex() - aIndex.GetFieldOffset() <= USHRT_MAX,
+        DBG_ASSERT(aIndex.GetIndex() - aIndex.GetFieldOffset() >= 0,
                    "SvxAccessibleTextIndex::SetIndex: index value overflow");
 
         // always treat field as distinct attribute
@@ -954,14 +941,12 @@ bool SvxAccessibleTextAdapter::GetAttributeRun( sal_Int32& nStartIndex, sal_Int3
         return false;
 
     aIndex.SetEEIndex( nPara, nStartIndex, *this );
-    DBG_ASSERT(aIndex.GetIndex() >= 0 &&
-               aIndex.GetIndex() <= USHRT_MAX,
+    DBG_ASSERT(aIndex.GetIndex() >= 0,
                "SvxAccessibleTextIndex::SetIndex: index value overflow");
     nStartIndex = aIndex.GetIndex();
 
     aIndex.SetEEIndex( nPara, nEndIndex, *this );
-    DBG_ASSERT(aIndex.GetIndex() >= 0 &&
-               aIndex.GetIndex() <= USHRT_MAX,
+    DBG_ASSERT(aIndex.GetIndex() >= 0,
                "SvxAccessibleTextIndex::SetIndex: index value overflow");
     nEndIndex = aIndex.GetIndex();
 
@@ -1176,8 +1161,8 @@ bool SvxAccessibleTextEditViewAdapter::GetSelection( ESelection& rSel ) const
     aStartIndex.SetEEIndex( aSelection.nStartPara, aSelection.nStartPos, *mpTextForwarder );
     aEndIndex.SetEEIndex( aSelection.nEndPara, aSelection.nEndPos, *mpTextForwarder );
 
-    DBG_ASSERT(aStartIndex.GetIndex() >= 0 && aStartIndex.GetIndex() <= USHRT_MAX &&
-               aEndIndex.GetIndex() >= 0 && aEndIndex.GetIndex() <= USHRT_MAX,
+    DBG_ASSERT(aStartIndex.GetIndex() >= 0 &&
+               aEndIndex.GetIndex() >= 0,
                "SvxAccessibleTextEditViewAdapter::GetSelection: index value overflow");
 
     rSel = ESelection( aStartIndex.GetParagraph(), aStartIndex.GetIndex(),
