@@ -42,7 +42,7 @@ public:
     virtual void            RemoveAttribs( const ESelection& rSelection ) override;
     virtual void            GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const override;
 
-    sal_uInt16              CalcEditEngineIndex( sal_Int32 nPara, sal_Int32 nLogicalIndex );
+    sal_Int32               CalcEditEngineIndex( sal_Int32 nPara, sal_Int32 nLogicalIndex );
 
     virtual SfxItemState    GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const override;
     virtual SfxItemState    GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const override;
