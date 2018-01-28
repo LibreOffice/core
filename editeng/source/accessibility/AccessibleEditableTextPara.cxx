@@ -160,7 +160,7 @@ namespace accessibility
 
     css::lang::Locale AccessibleEditableTextPara::implGetLocale()
     {
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= SAL_MAX_INT32,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::getLocale: paragraph index value overflow");
 
         // return locale of first character in the paragraph
@@ -200,7 +200,7 @@ namespace accessibility
         SvxTextForwarder&   rCacheTF = GetTextForwarder();
         const sal_Int32     nParaIndex = GetParagraphIndex();
 
-        DBG_ASSERT(nParaIndex >= 0 && nParaIndex <= SAL_MAX_INT32,
+        DBG_ASSERT(nParaIndex >= 0,
                    "AccessibleEditableTextPara::implGetLineBoundary: paragraph index value overflow");
 
         const sal_Int32 nTextLen = rCacheTF.GetTextLen( nParaIndex );
@@ -341,7 +341,7 @@ namespace accessibility
         // check overflow
         DBG_ASSERT(nStartEEIndex >= 0 &&
                    nEndEEIndex >= 0 &&
-                   GetParagraphIndex() >= 0 && GetParagraphIndex() <= SAL_MAX_INT32,
+                   GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::MakeSelection: index value overflow");
 
         sal_Int32 nParaIndex = GetParagraphIndex();
@@ -535,7 +535,7 @@ namespace accessibility
 
     bool AccessibleEditableTextPara::HaveChildren()
     {
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= SAL_MAX_INT32,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::HaveChildren: paragraph index value overflow");
 
         return GetTextForwarder().HaveImageBullet( GetParagraphIndex() );
@@ -614,7 +614,7 @@ namespace accessibility
         DBG_ASSERT(nIndex >= 0,
                    "AccessibleEditableTextPara::GetAttributeRun: index value overflow");
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= SAL_MAX_INT32,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::getLocale: paragraph index value overflow");
 
         return GetTextForwarder().GetAttributeRun( nStartIndex,
@@ -997,7 +997,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= SAL_MAX_INT32,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::contains: index value overflow");
 
         awt::Rectangle aTmpRect = getBounds();
@@ -1044,7 +1044,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= SAL_MAX_INT32,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::getBounds: index value overflow");
 
         SvxTextForwarder& rCacheTF = GetTextForwarder();
@@ -1189,7 +1189,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::getCharacter: index value overflow");
 
         return OCommonAccessibleText::implGetCharacter( implGetText(), nIndex );
@@ -1294,7 +1294,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::getCharacterBounds: index value overflow");
 
         // #108900# Have position semantics now for nIndex, as
@@ -1327,7 +1327,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::getCharacterCount: index value overflow");
 
         return implGetText().getLength();
@@ -1383,7 +1383,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::getSelectedText: index value overflow");
 
         if( !HaveEditView() )
@@ -1396,7 +1396,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::getSelectionStart: index value overflow");
 
         if( !HaveEditView() )
@@ -1409,7 +1409,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::getSelectionEnd: index value overflow");
 
         if( !HaveEditView() )
@@ -1422,7 +1422,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::setSelection: paragraph index value overflow");
 
         CheckRange(nStartIndex, nEndIndex);
@@ -1442,7 +1442,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::getText: paragraph index value overflow");
 
         return implGetText();
@@ -1452,7 +1452,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::getTextRange: paragraph index value overflow");
 
         return OCommonAccessibleText::implGetTextRange(implGetText(), nStartIndex, nEndIndex);
@@ -1676,7 +1676,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::getTextAtIndex: paragraph index value overflow");
 
         css::accessibility::TextSegment aResult;
@@ -1791,7 +1791,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::getTextBeforeIndex: paragraph index value overflow");
 
         css::accessibility::TextSegment aResult;
@@ -1956,7 +1956,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::getTextBehindIndex: paragraph index value overflow");
 
         css::accessibility::TextSegment aResult;
@@ -2087,7 +2087,7 @@ namespace accessibility
 
             bool aRetVal;
 
-            DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+            DBG_ASSERT(GetParagraphIndex() >= 0,
                        "AccessibleEditableTextPara::copyText: index value overflow");
 
             CheckRange(nStartIndex, nEndIndex);
@@ -2125,7 +2125,7 @@ namespace accessibility
             SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( true );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
-            DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+            DBG_ASSERT(GetParagraphIndex() >= 0,
                        "AccessibleEditableTextPara::cutText: index value overflow");
 
             CheckRange(nStartIndex, nEndIndex);
@@ -2162,7 +2162,7 @@ namespace accessibility
             SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( true );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
-            DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+            DBG_ASSERT(GetParagraphIndex() >= 0,
                        "AccessibleEditableTextPara::pasteText: index value overflow");
 
             CheckPosition(nIndex);
@@ -2199,7 +2199,7 @@ namespace accessibility
             GetEditViewForwarder( true );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
-            DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+            DBG_ASSERT(GetParagraphIndex() >= 0,
                        "AccessibleEditableTextPara::deleteText: index value overflow");
 
             CheckRange(nStartIndex, nEndIndex);
@@ -2240,7 +2240,7 @@ namespace accessibility
             GetEditViewForwarder( true );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
-            DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+            DBG_ASSERT(GetParagraphIndex() >= 0,
                        "AccessibleEditableTextPara::insertText: index value overflow");
 
             CheckPosition(nIndex);
@@ -2280,7 +2280,7 @@ namespace accessibility
             GetEditViewForwarder( true );
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
-            DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+            DBG_ASSERT(GetParagraphIndex() >= 0,
                        "AccessibleEditableTextPara::replaceText: index value overflow");
 
             CheckRange(nStartIndex, nEndIndex);
@@ -2324,7 +2324,7 @@ namespace accessibility
             SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
             sal_Int32 nPara = GetParagraphIndex();
 
-            DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+            DBG_ASSERT(GetParagraphIndex() >= 0,
                        "AccessibleEditableTextPara::setAttributes: index value overflow");
 
             CheckRange(nStartIndex, nEndIndex);
@@ -2382,7 +2382,7 @@ namespace accessibility
 
         GetTextForwarder();
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::getCharacterAttributes: index value overflow");
 
         // get XPropertySetInfo for paragraph attributes and
@@ -2465,7 +2465,7 @@ namespace accessibility
 
         GetTextForwarder();
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::getCharacterAttributes: index value overflow");
 
         if( getCharacterCount() > 0 )
