@@ -854,7 +854,7 @@ OutlinerParaObject* SdrTextObj::GetEditOutlinerParaObject() const
     return pPara;
 }
 
-void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXKorreg)
+void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXCorrection)
 {
     OutputDevice* pOut = rOutliner.GetRefDevice();
     bool bNoStretching(false);
@@ -909,7 +909,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
 
     long nXTolPl=nWantWdt/100; // tolerance: +1%
     long nXTolMi=nWantWdt/25;  // tolerance: -4%
-    long nXKorr =nWantWdt/20;  // correction scale: 5%
+    long nXCorr =nWantWdt/20;  // correction scale: 5%
 
     long nX=(nWantWdt*100) /nIsWdt; // calculate X stretching
     long nY=(nWantHgt*100) /nIsHgt; // calculate Y stretching
@@ -946,14 +946,14 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
         nLoopCount++;
         Size aSiz(rOutliner.CalcTextSize());
         long nXDiff=aSiz.Width()-nWantWdt;
-        rFitXKorreg=Fraction(nWantWdt,aSiz.Width());
+        rFitXCorrection=Fraction(nWantWdt,aSiz.Width());
         if (((nXDiff>=nXTolMi || !bChkX) && nXDiff<=nXTolPl) || nXDiff==nXDiff0) {
             bNoMoreLoop = true;
         } else {
             // correct stretching factors
             long nMul=nWantWdt;
             long nDiv=aSiz.Width();
-            if (std::abs(nXDiff)<=2*nXKorr) {
+            if (std::abs(nXDiff)<=2*nXCorr) {
                 if (nMul>nDiv) nDiv+=(nMul-nDiv)/2; // but only add half of what we calculated,
                 else nMul+=(nDiv-nMul)/2;           // because the EditEngine calculates wrongly later on
             }
@@ -1228,7 +1228,7 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
                                                tools::Rectangle&       rTextRect,
                                                tools::Rectangle&       rAnchorRect,
                                                tools::Rectangle&       rPaintRect,
-                                               Fraction&        rFitXKorreg ) const
+                                               Fraction&        rFitXCorrection ) const
 {
     if (!bContourFrame)
     {
@@ -1249,7 +1249,7 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
         // FitToSize can't be used together with ContourFrame for now
         if (IsFitToSize())
         {
-            ImpSetCharStretching(rOutliner,rTextRect.GetSize(),rAnchorRect.GetSize(),rFitXKorreg);
+            ImpSetCharStretching(rOutliner,rTextRect.GetSize(),rAnchorRect.GetSize(),rFitXCorrection);
             rPaintRect=rAnchorRect;
         }
         else if (IsAutoFit())
@@ -1339,7 +1339,7 @@ void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle&
 {
     tools::Rectangle aTextRect;
     tools::Rectangle aAnchorRect;
-    Fraction aFitXKorreg(1,1);
+    Fraction aFitXCorrection(1,1);
 
     bool bContourFrame=IsContourTextFrame();
 
@@ -1351,7 +1351,7 @@ void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle&
         rOutl.SetRefMapMode(aMapMode);
     }
 
-    ImpSetupDrawOutlinerForPaint( bContourFrame, rOutl, aTextRect, aAnchorRect, rPaintRect, aFitXKorreg );
+    ImpSetupDrawOutlinerForPaint( bContourFrame, rOutl, aTextRect, aAnchorRect, rPaintRect, aFitXCorrection );
 }
 
 
@@ -1850,14 +1850,14 @@ GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
     tools::Rectangle aTextRect;
     tools::Rectangle aAnchorRect;
     tools::Rectangle aPaintRect;
-    Fraction aFitXKorreg(1,1);
+    Fraction aFitXCorrection(1,1);
     bool bContourFrame(IsContourTextFrame());
 
     // get outliner set up. To avoid getting a somehow rotated MetaFile,
     // temporarily disable object rotation.
     sal_Int32 nAngle(aGeo.nRotationAngle);
     aGeo.nRotationAngle = 0;
-    ImpSetupDrawOutlinerForPaint( bContourFrame, rOutliner, aTextRect, aAnchorRect, aPaintRect, aFitXKorreg );
+    ImpSetupDrawOutlinerForPaint( bContourFrame, rOutliner, aTextRect, aAnchorRect, aPaintRect, aFitXCorrection );
     aGeo.nRotationAngle = nAngle;
 
     tools::Rectangle aScrollFrameRect(aPaintRect);

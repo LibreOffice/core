@@ -263,7 +263,7 @@ private:
                                        tools::Rectangle&       rTextRect,
                                        tools::Rectangle&       rAnchorRect,
                                        tools::Rectangle&       rPaintRect,
-                                       Fraction&        aFitXKorreg ) const;
+                                       Fraction&        aFitXCorrection ) const;
     void ImpAutoFitText( SdrOutliner& rOutliner ) const;
     static void ImpAutoFitText( SdrOutliner& rOutliner, const Size& rShapeSize, bool bIsVerticalWriting );
     SVX_DLLPRIVATE SdrObject* ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const;
@@ -283,7 +283,7 @@ protected:
     SdrObject* ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed, bool bBezier) const;
     SdrObject* ImpConvertAddText(SdrObject* pObj, bool bBezier) const;
     void ImpSetTextStyleSheetListeners();
-    static void ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXKorreg);
+    static void ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXCorrection);
     static void ImpJustifyRect(tools::Rectangle& rRect);
     void ImpCheckShear();
     tools::Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;

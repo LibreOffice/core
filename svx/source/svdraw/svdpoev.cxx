@@ -360,7 +360,7 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
 
             if( bUndo )
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
-            bool bKorregFlag(false);
+            bool bCorrectionFlag(false);
             sal_uInt32 nMax(pObj->GetHdlCount());
 
             for(SdrUShortCont::const_reverse_iterator it = rPts.rbegin(); it != rPts.rend(); ++it)
@@ -379,10 +379,10 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
                 if(nNewPt0Idx)
                 {
                     // correction necessary?
-                    DBG_ASSERT(!bKorregFlag,"Multiple index corrections at SdrPolyEditView::RipUp().");
-                    if(!bKorregFlag)
+                    DBG_ASSERT(!bCorrectionFlag,"Multiple index corrections at SdrPolyEditView::RipUp().");
+                    if(!bCorrectionFlag)
                     {
-                        bKorregFlag = true;
+                        bCorrectionFlag = true;
 
                         SdrUShortCont aReplaceSet;
                         for(SdrUShortCont::const_iterator it2 = rPts.begin(); it2 != rPts.end(); ++it2)
