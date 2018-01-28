@@ -566,7 +566,7 @@ oslFileError SAL_CALL osl_createDirectoryPath(
     return create_dir_recursively_(sys_path.pData->buffer, aDirectoryCreationCallbackFunc, pData);
 }
 
-static oslFileError osl_psz_removeFile(const sal_Char* pszPath);
+static oslFileError osl_unlinkFile(const sal_Char* pszPath);
 static oslFileError osl_psz_copyFile(const sal_Char* pszPath, const sal_Char* pszDestPath, bool preserveMetadata);
 static oslFileError osl_psz_moveFile(const sal_Char* pszPath, const sal_Char* pszDestPath);
 
@@ -630,71 +630,65 @@ oslFileError SAL_CALL osl_copyFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
     return osl_psz_copyFile( srcPath, destPath, false );
 }
 
-oslFileError SAL_CALL osl_removeFile( rtl_uString* ustrFileURL )
+oslFileError SAL_CALL osl_removeFile(rtl_uString* ustrFileURL)
 {
     char path[PATH_MAX];
     oslFileError eRet;
 
-    SAL_WARN_IF((!ustrFileURL) || (ustrFileURL->length == 0), "sal.file", "Invalid file URL");
+    SAL_WARN_IF(!ustrFileURL || ustrFileURL->length == 0, "sal.file", "Invalid file URL");
 
     /* convert file url to system path */
-    eRet = FileURLToPath( path, PATH_MAX, ustrFileURL );
-    if( eRet != osl_File_E_None )
+    eRet = FileURLToPath(path, PATH_MAX, ustrFileURL);
+    if (eRet != osl_File_E_None)
         return eRet;
 
 #ifdef MACOSX
-    if ( macxp_resolveAlias( path, PATH_MAX ) != 0 )
-      return oslTranslateFileError( errno );
+    if (macxp_resolveAlias(path, PATH_MAX) != 0)
+      return oslTranslateFileError(errno);
 #endif/* MACOSX */
 
-    return osl_psz_removeFile( path );
+    return osl_unlinkFile(path);
 }
 
-static oslFileError oslDoMoveFile( const sal_Char* pszPath, const sal_Char* pszDestPath)
+static oslFileError oslDoMoveFile(const sal_Char* pszPath, const sal_Char* pszDestPath)
 {
     oslFileError tErr = osl_psz_moveFile(pszPath,pszDestPath);
-    if ( tErr == osl_File_E_None )
+    if (tErr == osl_File_E_None)
+        return tErr;
+
+    if (tErr != osl_File_E_XDEV)
+        return tErr;
+
+    tErr = osl_psz_copyFile(pszPath,pszDestPath, true);
+
+    if (tErr != osl_File_E_None)
     {
+        osl_unlinkFile(pszDestPath);
         return tErr;
     }
 
-    if ( tErr != osl_File_E_XDEV )
-    {
-        return tErr;
-    }
-
-    tErr=osl_psz_copyFile(pszPath,pszDestPath, true);
-
-    if ( tErr != osl_File_E_None )
-    {
-        osl_psz_removeFile(pszDestPath);
-        return tErr;
-    }
-
-    tErr=osl_psz_removeFile(pszPath);
+    tErr = osl_unlinkFile(pszPath);
 
     return tErr;
 }
 
-static oslFileError osl_psz_removeFile( const sal_Char* pszPath )
+static oslFileError osl_unlinkFile(const sal_Char* pszPath)
 {
     int nRet=0;
     struct stat aStat;
 
     nRet = lstat_c(pszPath,&aStat);
-    if ( nRet < 0 )
+    if (nRet < 0)
     {
         nRet=errno;
         return oslTranslateFileError(nRet);
     }
 
-    if ( S_ISDIR(aStat.st_mode) )
-    {
+    if (S_ISDIR(aStat.st_mode))
         return osl_File_E_ISDIR;
-    }
 
     nRet = unlink(pszPath);
-    if ( nRet < 0 )
+    if (nRet < 0)
     {
         nRet=errno;
         return oslTranslateFileError(nRet);
@@ -709,7 +703,7 @@ static oslFileError osl_psz_moveFile(const sal_Char* pszPath, const sal_Char* ps
 
     nRet = rename(pszPath,pszDestPath);
 
-    if ( nRet < 0 )
+    if (nRet < 0)
     {
         nRet=errno;
         return oslTranslateFileError(nRet);
@@ -734,55 +728,45 @@ static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* p
     /* mfe: does the source file really exists? */
     nRet = lstat_c(pszPath,&aFileStat);
 
-    if ( nRet < 0 )
+    if (nRet < 0)
     {
         nRet=errno;
         return oslTranslateFileError(nRet);
     }
 
-    /* mfe: we do only copy files here! */
-    if ( S_ISDIR(aFileStat.st_mode) )
-    {
+    /* we do only copy files here */
+    if (S_ISDIR(aFileStat.st_mode))
         return osl_File_E_ISDIR;
-    }
 
-    nSourceSize=static_cast<size_t>(aFileStat.st_size);
-    nMode=aFileStat.st_mode;
-    nAcTime=aFileStat.st_atime;
-    nModTime=aFileStat.st_mtime;
-    nUID=aFileStat.st_uid;
-    nGID=aFileStat.st_gid;
+    nSourceSize = static_cast< size_t >(aFileStat.st_size);
+    nMode = aFileStat.st_mode;
+    nAcTime = aFileStat.st_atime;
+    nModTime = aFileStat.st_mtime;
+    nUID = aFileStat.st_uid;
+    nGID = aFileStat.st_gid;
 
     nRet = stat_c(pszDestPath,&aFileStat);
-    if ( nRet < 0 )
+    if (nRet < 0)
     {
         nRet=errno;
 
-        if ( nRet == ENOENT )
-        {
+        if (nRet == ENOENT)
             DestFileExists=0;
-        }
     }
 
     /* mfe: the destination file must not be a directory! */
-    if ( nRet == 0 && S_ISDIR(aFileStat.st_mode) )
-    {
+    if (nRet == 0 && S_ISDIR(aFileStat.st_mode))
         return osl_File_E_ISDIR;
-    }
 
     /* mfe: file does not exists or is no dir */
 
-    tErr = oslDoCopy(pszPath,pszDestPath,nMode,nSourceSize,DestFileExists);
+    tErr = oslDoCopy(pszPath, pszDestPath, nMode, nSourceSize, DestFileExists);
 
-    if ( tErr != osl_File_E_None )
-    {
+    if (tErr != osl_File_E_None)
         return tErr;
-    }
 
     if (preserveMetadata)
-    {
-        attemptChangeMetadata(pszDestPath,nMode,nAcTime,nModTime,nUID,nGID);
-    }
+        attemptChangeMetadata(pszDestPath, nMode, nAcTime, nModTime, nUID, nGID);
 
     return tErr;
 }
