@@ -198,22 +198,28 @@ static AquaSalFrame* getMouseContainerFrame()
     [pNSWindow useOptimizedDrawing: YES]; // OSX recommendation when there are no overlapping subviews within the receiver
 #endif
 
-    // enable OSX>=10.7 fullscreen options if available and useful
-    bool bAllowFullScreen = (SalFrameStyleFlags::NONE == (mpFrame->mnStyle & (SalFrameStyleFlags::DIALOG | SalFrameStyleFlags::TOOLTIP | SalFrameStyleFlags::SYSTEMCHILD | SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::TOOLWINDOW | SalFrameStyleFlags::INTRO)));
-    bAllowFullScreen &= (SalFrameStyleFlags::NONE == (~mpFrame->mnStyle & SalFrameStyleFlags::SIZEABLE));
-    bAllowFullScreen &= (mpFrame->mpParent == nullptr);
-    const SEL setCollectionBehavior = @selector(setCollectionBehavior:);
-    if( bAllowFullScreen && [pNSWindow respondsToSelector: setCollectionBehavior])
-    {
-        const int bMode= (bAllowFullScreen ? NSWindowCollectionBehaviorFullScreenPrimary : NSWindowCollectionBehaviorFullScreenAuxiliary);
-        [pNSWindow performSelector:setCollectionBehavior withObject:reinterpret_cast<id>(static_cast<intptr_t>(bMode))];
-    }
+    // Disallow full-screen mode on macOS >= 10.11 where it is enabled by default. We don't want it
+    // for now as it will just be confused with LibreOffice's home-grown full-screen concept, with
+    // which it has nothing to do, and one can get into all kinds of weird states by using them
+    // intermixedly.
 
-    // disable OSX>=10.7 window restoration until we support it directly
-    const SEL setRestorable = @selector(setRestorable:);
-    if( [pNSWindow respondsToSelector: setRestorable]) {
-        [pNSWindow performSelector:setRestorable withObject:reinterpret_cast<id>(NO)];
-    }
+    // Ideally we should use the system full-screen mode and adapt the code for the home-grown thing
+    // to be in sync with that instead. (And we would then not need the button to get out of
+    // full-screen mode, as the normal way to get out of it is to either click on the green bubble
+    // again, or invoke the keyboard command again.)
+
+    // (Confusingly, at the moment the home-grown full-screen mode is bound to Cmd+Shift+F, which is
+    // the keyboard command normally used in apps to get in and out of the system full-screen mode.)
+
+    // Disabling system full-screen mode makes the green button on the title bar (on macOS >= 10.11)
+    // show a plus sign instead, and clicking it becomes identical to double-clicking the title bar,
+    // i.e. it maximizes / unmaximises the window. Sure, that state can also be confused with LO's
+    // home-grown full-screen mode. Oh well.
+
+    [pNSWindow setCollectionBehavior: NSWindowCollectionBehaviorFullScreenNone];
+
+    // Disable window restoration until we support it directly
+    [pNSWindow setRestorable: NO];
 
     return static_cast<SalFrameWindow *>(pNSWindow);
 }
