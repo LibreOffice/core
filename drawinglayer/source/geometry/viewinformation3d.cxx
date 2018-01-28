@@ -451,36 +451,20 @@ namespace drawinglayer
         {
         }
 
-        ViewInformation3D::ViewInformation3D(const ViewInformation3D& rCandidate)
-        :   mpViewInformation3D(rCandidate.mpViewInformation3D)
-        {
-        }
+        ViewInformation3D::ViewInformation3D(const ViewInformation3D&) = default;
 
-        ViewInformation3D::ViewInformation3D(ViewInformation3D&& rCandidate)
-        :   mpViewInformation3D(std::move(rCandidate.mpViewInformation3D))
-        {
-        }
+        ViewInformation3D::ViewInformation3D(ViewInformation3D&&) = default;
 
-        ViewInformation3D::~ViewInformation3D()
-        {
-        }
+        ViewInformation3D::~ViewInformation3D() = default;
 
         bool ViewInformation3D::isDefault() const
         {
             return mpViewInformation3D.same_object(theGlobalDefault::get());
         }
 
-        ViewInformation3D& ViewInformation3D::operator=(const ViewInformation3D& rCandidate)
-        {
-            mpViewInformation3D = rCandidate.mpViewInformation3D;
-            return *this;
-        }
+        ViewInformation3D& ViewInformation3D::operator=(const ViewInformation3D&) = default;
 
-        ViewInformation3D& ViewInformation3D::operator=(ViewInformation3D&& rCandidate)
-        {
-            mpViewInformation3D = std::move(rCandidate.mpViewInformation3D);
-            return *this;
-        }
+        ViewInformation3D& ViewInformation3D::operator=(ViewInformation3D&&) = default;
 
         bool ViewInformation3D::operator==(const ViewInformation3D& rCandidate) const
         {

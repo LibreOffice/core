@@ -136,36 +136,20 @@ namespace drawinglayer
         {
         }
 
-        SdrFillGraphicAttribute::SdrFillGraphicAttribute(const SdrFillGraphicAttribute& rCandidate)
-        :   mpSdrFillGraphicAttribute(rCandidate.mpSdrFillGraphicAttribute)
-        {
-        }
+        SdrFillGraphicAttribute::SdrFillGraphicAttribute(const SdrFillGraphicAttribute&) = default;
 
-        SdrFillGraphicAttribute::SdrFillGraphicAttribute(SdrFillGraphicAttribute&& rCandidate)
-        :   mpSdrFillGraphicAttribute(std::move(rCandidate.mpSdrFillGraphicAttribute))
-        {
-        }
+        SdrFillGraphicAttribute::SdrFillGraphicAttribute(SdrFillGraphicAttribute&&) = default;
 
-        SdrFillGraphicAttribute::~SdrFillGraphicAttribute()
-        {
-        }
+        SdrFillGraphicAttribute::~SdrFillGraphicAttribute() = default;
 
         bool SdrFillGraphicAttribute::isDefault() const
         {
             return mpSdrFillGraphicAttribute.same_object(theGlobalDefault::get());
         }
 
-        SdrFillGraphicAttribute& SdrFillGraphicAttribute::operator=(const SdrFillGraphicAttribute& rCandidate)
-        {
-            mpSdrFillGraphicAttribute = rCandidate.mpSdrFillGraphicAttribute;
-            return *this;
-        }
+        SdrFillGraphicAttribute& SdrFillGraphicAttribute::operator=(const SdrFillGraphicAttribute&) = default;
 
-        SdrFillGraphicAttribute& SdrFillGraphicAttribute::operator=(SdrFillGraphicAttribute&& rCandidate)
-        {
-            mpSdrFillGraphicAttribute = std::move(rCandidate.mpSdrFillGraphicAttribute);
-            return *this;
-        }
+        SdrFillGraphicAttribute& SdrFillGraphicAttribute::operator=(SdrFillGraphicAttribute&&) = default;
 
         bool SdrFillGraphicAttribute::operator==(const SdrFillGraphicAttribute& rCandidate) const
         {

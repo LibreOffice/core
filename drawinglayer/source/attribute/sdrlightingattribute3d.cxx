@@ -79,36 +79,21 @@ namespace drawinglayer
         {
         }
 
-        SdrLightingAttribute::SdrLightingAttribute(const SdrLightingAttribute& rCandidate)
-        :   mpSdrLightingAttribute(rCandidate.mpSdrLightingAttribute)
-        {
-        }
+        SdrLightingAttribute::SdrLightingAttribute(const SdrLightingAttribute&) = default;
 
-        SdrLightingAttribute::SdrLightingAttribute(SdrLightingAttribute&& rCandidate)
-        :   mpSdrLightingAttribute(std::move(rCandidate.mpSdrLightingAttribute))
-        {
-        }
+        SdrLightingAttribute::SdrLightingAttribute(SdrLightingAttribute&&) = default;
 
-        SdrLightingAttribute::~SdrLightingAttribute()
-        {
-        }
+        SdrLightingAttribute::~SdrLightingAttribute() = default;
+
 
         bool SdrLightingAttribute::isDefault() const
         {
             return mpSdrLightingAttribute.same_object(theGlobalDefault::get());
         }
 
-        SdrLightingAttribute& SdrLightingAttribute::operator=(const SdrLightingAttribute& rCandidate)
-        {
-            mpSdrLightingAttribute = rCandidate.mpSdrLightingAttribute;
-            return *this;
-        }
+        SdrLightingAttribute& SdrLightingAttribute::operator=(const SdrLightingAttribute&) = default;
 
-        SdrLightingAttribute& SdrLightingAttribute::operator=(SdrLightingAttribute&& rCandidate)
-        {
-            mpSdrLightingAttribute = std::move(rCandidate.mpSdrLightingAttribute);
-            return *this;
-        }
+        SdrLightingAttribute& SdrLightingAttribute::operator=(SdrLightingAttribute&&) = default;
 
         bool SdrLightingAttribute::operator==(const SdrLightingAttribute& rCandidate) const
         {

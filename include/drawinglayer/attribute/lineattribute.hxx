@@ -60,8 +60,8 @@ namespace drawinglayer
                 css::drawing::LineCap aLineCap = css::drawing::LineCap_BUTT,
                 double fMiterMinimumAngle = 15.0 * F_PI180);
             LineAttribute();
-            LineAttribute(const LineAttribute& rCandidate);
-            LineAttribute& operator=(const LineAttribute& rCandidate);
+            LineAttribute(const LineAttribute&);
+            LineAttribute& operator=(const LineAttribute&);
             ~LineAttribute();
 
             // checks if the incarnation is default constructed

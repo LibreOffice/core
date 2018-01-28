@@ -76,10 +76,10 @@ namespace drawinglayer
                 const basegfx::BColor& rEndColor,
                 sal_uInt16 nSteps);
             FillGradientAttribute();
-            FillGradientAttribute(const FillGradientAttribute& rCandidate);
-            FillGradientAttribute(FillGradientAttribute&& rCandidate);
-            FillGradientAttribute& operator=(const FillGradientAttribute& rCandidate);
-            FillGradientAttribute& operator=(FillGradientAttribute&& rCandidate);
+            FillGradientAttribute(const FillGradientAttribute&);
+            FillGradientAttribute(FillGradientAttribute&&);
+            FillGradientAttribute& operator=(const FillGradientAttribute&);
+            FillGradientAttribute& operator=(FillGradientAttribute&&);
             ~FillGradientAttribute();
 
             // checks if the incarnation is default constructed

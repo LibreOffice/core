@@ -63,11 +63,11 @@ namespace drawinglayer
                 bool bShadow3D,
                 bool bTextureFilter,
                 bool bReducedLineGeometry);
-            Sdr3DObjectAttribute(const Sdr3DObjectAttribute& rCandidate);
+            Sdr3DObjectAttribute(const Sdr3DObjectAttribute&);
             ~Sdr3DObjectAttribute();
 
             // assignment operator
-            Sdr3DObjectAttribute& operator=(const Sdr3DObjectAttribute& rCandidate);
+            Sdr3DObjectAttribute& operator=(const Sdr3DObjectAttribute&);
 
             // compare operator
             bool operator==(const Sdr3DObjectAttribute& rCandidate) const;

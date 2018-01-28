@@ -120,36 +120,20 @@ namespace drawinglayer
         {
         }
 
-        SdrLineStartEndAttribute::SdrLineStartEndAttribute(const SdrLineStartEndAttribute& rCandidate)
-        :   mpSdrLineStartEndAttribute(rCandidate.mpSdrLineStartEndAttribute)
-        {
-        }
+        SdrLineStartEndAttribute::SdrLineStartEndAttribute(const SdrLineStartEndAttribute&) = default;
 
-        SdrLineStartEndAttribute::SdrLineStartEndAttribute(SdrLineStartEndAttribute&& rCandidate)
-        :   mpSdrLineStartEndAttribute(std::move(rCandidate.mpSdrLineStartEndAttribute))
-        {
-        }
+        SdrLineStartEndAttribute::SdrLineStartEndAttribute(SdrLineStartEndAttribute&&) = default;
 
-        SdrLineStartEndAttribute::~SdrLineStartEndAttribute()
-        {
-        }
+        SdrLineStartEndAttribute::~SdrLineStartEndAttribute() = default;
 
         bool SdrLineStartEndAttribute::isDefault() const
         {
             return mpSdrLineStartEndAttribute.same_object(theGlobalDefault::get());
         }
 
-        SdrLineStartEndAttribute& SdrLineStartEndAttribute::operator=(const SdrLineStartEndAttribute& rCandidate)
-        {
-            mpSdrLineStartEndAttribute = rCandidate.mpSdrLineStartEndAttribute;
-            return *this;
-        }
+        SdrLineStartEndAttribute& SdrLineStartEndAttribute::operator=(const SdrLineStartEndAttribute&) = default;
 
-        SdrLineStartEndAttribute& SdrLineStartEndAttribute::operator=(SdrLineStartEndAttribute&& rCandidate)
-        {
-            mpSdrLineStartEndAttribute = std::move(rCandidate.mpSdrLineStartEndAttribute);
-            return *this;
-        }
+        SdrLineStartEndAttribute& SdrLineStartEndAttribute::operator=(SdrLineStartEndAttribute&&) = default;
 
         bool SdrLineStartEndAttribute::operator==(const SdrLineStartEndAttribute& rCandidate) const
         {
