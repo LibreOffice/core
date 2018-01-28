@@ -127,6 +127,7 @@ public:
     void testTdf68759();
     void testTdf90626();
     void testTdf107608();
+    void testTdf111786();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -179,6 +180,7 @@ public:
     CPPUNIT_TEST(testTdf68759);
     CPPUNIT_TEST(testTdf90626);
     CPPUNIT_TEST(testTdf107608);
+    CPPUNIT_TEST(testTdf111786);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1375,6 +1377,27 @@ void SdOOXMLExportTest2::testTdf107608()
     sal_Int32 nBackgroundColor;
     xPropSet->getPropertyValue("FillColor") >>= nBackgroundColor;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x92D050), nBackgroundColor);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf111786()
+{
+    // Export line transparency with the color
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf111786.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY_THROW );
+
+    sal_uInt32 nLineColor;
+    xPropSet->getPropertyValue("LineColor") >>= nLineColor;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0x3465A4), nLineColor);
+
+    sal_Int16 nTransparency;
+    xPropSet->getPropertyValue("LineTransparence") >>= nTransparency;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(33), nTransparency);
 
     xDocShRef->DoClose();
 }
