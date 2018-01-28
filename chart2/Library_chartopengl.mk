@@ -54,5 +54,11 @@ $(eval $(call gb_Library_add_exception_objects,chartopengl,\
     chart2/source/view/main/DummyXShape \
     chart2/source/view/main/OpenGLRender \
 ))
+
+ifeq ($(SYSTEM_GLM),TRUE)
+$(eval $(call gb_Library_add_defs,chartcore,\
+        -DGLM_ENABLE_EXPERIMENTAL \
+))
+endif
  
 # vim: set noet sw=4 ts=4:
