@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_9726c714",
+        "filename": "sd/source/ui/dlg/navigatr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-01-28T01:59:01Z",
+      "side": 1,
+      "message": "Indentation seems wrong here and bellow",
+      "range": {
+        "startLine": 225,
+        "startChar": 8,
+        "endLine": 225,
+        "endChar": 9
+      },
+      "revId": "1c48f6d1a61c9774ef2db67e2b50cb1ae5c46f74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
