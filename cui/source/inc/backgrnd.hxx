@@ -139,6 +139,24 @@ private:
     DECL_LINK( TblDestinationHdl_Impl, ListBox&, void );
 };
 
+#include "cuitabarea.hxx"
+
+class SvxBkgTabPage : public SvxAreaTabPage
+{
+    VclPtr<ListBox> m_pTblLBox;
+public:
+    using SvxAreaTabPage::DeactivatePage;
+
+    SvxBkgTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    virtual ~SvxBkgTabPage() override;
+    virtual void dispose() override;
+
+    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
+    virtual bool FillItemSet( SfxItemSet* ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
+    virtual void PageCreated( const SfxAllItemSet& aSet ) override;
+};
+
 #endif // INCLUDED_CUI_SOURCE_INC_BACKGRND_HXX
 
 
