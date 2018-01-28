@@ -1210,12 +1210,9 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
     if (m_aStates.top().eDestination == Destination::COLORTABLE)
     {
         // we hit a ';' at the end of each color entry
-        sal_uInt32 color = (m_aStates.top().aCurrentColor.nRed << 16)
-                           | (m_aStates.top().aCurrentColor.nGreen << 8)
-                           | m_aStates.top().aCurrentColor.nBlue;
-        m_aColorTable.push_back(color);
+        m_aColorTable.push_back(m_aStates.top().aCurrentColor.GetColor());
         // set components back to zero
-        m_aStates.top().aCurrentColor = RTFColorTableEntry();
+        m_aStates.top().aCurrentColor.Reset();
     }
     else if (!aStr.isEmpty())
         m_aHexBuffer.append(aStr);
