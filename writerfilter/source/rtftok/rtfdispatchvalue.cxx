@@ -557,7 +557,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
         case RTF_EXPND:
         {
-            auto pValue = std::make_shared<RTFValue>(nParam / 5);
+            // Convert quarter-points to twentieths of a point
+            auto pValue = std::make_shared<RTFValue>(nParam * 5);
             m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_spacing, pValue);
         }
         break;
