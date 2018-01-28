@@ -42,6 +42,7 @@
 #define RID_SVXPAGE_PAGE                    (RID_SVX_START +  25)
 #define RID_SVXPAGE_LINE                    (RID_SVX_START +  51)
 #define RID_SVXPAGE_AREA                    (RID_SVX_START +  56)
+#define RID_SVXPAGE_BKG                     (RID_SVX_START +  57)
 #define RID_SVXPAGE_SHADOW                  (RID_SVX_START +  61)
 #define RID_SVXPAGE_TRANSPARENCE            (RID_SVX_START +  54)
 #define RID_SVXPAGE_TEXTATTR                (RID_SVX_START + 153)

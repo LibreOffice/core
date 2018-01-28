@@ -86,6 +86,8 @@
 
 #include <memory>
 
+#include <svx/unobrushitemhelper.hxx>
+
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
@@ -100,6 +102,7 @@ void SwTableShell::InitInterface_Impl()
 
 static const sal_uInt16 aUITableAttrRange[] =
 {
+    XATTR_FILL_FIRST,               XATTR_FILL_LAST,
     FN_PARAM_TABLE_NAME,            FN_PARAM_TABLE_NAME,
     FN_PARAM_TABLE_HEADLINE,        FN_PARAM_TABLE_HEADLINE,
     FN_PARAM_TABLE_SPACE,           FN_PARAM_TABLE_SPACE,
@@ -588,6 +591,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 aCoreSet.Put( aBrush );
             else
                 aCoreSet.InvalidateItem( RES_BACKGROUND );
+
+            setSvxBrushItemAsFillAttributesToTargetSet(aBrush, aCoreSet);
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
