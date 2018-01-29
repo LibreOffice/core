@@ -783,9 +783,7 @@ void GtkSalFrame::InvalidateGraphics()
     {
         m_pGraphics->DeInit();
         m_pGraphics->SetWindow(nullptr);
-        delete m_pGraphics;
-        m_pGraphics = nullptr;
-        m_bGraphics = false;
+        m_pGraphics.reset();
     }
 }
 
@@ -803,7 +801,7 @@ GtkSalFrame::~GtkSalFrame()
         gdk_region_destroy( m_pRegion );
     }
 
-    delete m_pIMHandler;
+    m_pIMHandler.reset();
 
     GtkWidget *pEventWidget = getMouseEventWidget();
     for (auto handler_id : m_aMouseSignalIds)
@@ -1327,16 +1325,16 @@ SalGraphics* GtkSalFrame::AcquireGraphics()
 
     if( !m_pGraphics )
     {
-        m_pGraphics = new GtkSalGraphics( this, m_pWindow, m_nXScreen );
+        m_pGraphics.reset( new GtkSalGraphics( this, m_pWindow, m_nXScreen ) );
     }
     m_bGraphics = true;
-    return m_pGraphics;
+    return m_pGraphics.get();
 }
 
 void GtkSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 {
     (void) pGraphics;
-    assert( pGraphics == m_pGraphics );
+    assert( pGraphics == m_pGraphics.get() );
     m_bGraphics = false;
 }
 
@@ -2325,7 +2323,7 @@ void GtkSalFrame::SetInputContext( SalInputContext* pContext )
 
     // create a new im context
     if( ! m_pIMHandler )
-        m_pIMHandler = new IMHandler( this );
+        m_pIMHandler.reset( new IMHandler( this ) );
 }
 
 void GtkSalFrame::EndExtTextInput( EndExtTextInputFlags nFlags )
@@ -2350,7 +2348,7 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
     if( ! m_pWindow )
         return;
 
-    GtkSalGraphics* pGraphics = m_pGraphics;
+    GtkSalGraphics* pGraphics = m_pGraphics.get();
     bool bFreeGraphics = false;
     if( ! pGraphics )
     {
@@ -2432,11 +2430,7 @@ void GtkSalFrame::createNewWindow( ::Window aNewParent, bool bXEmbed, SalX11Scre
         m_pGraphics->SetDrawable( None, m_nXScreen );
 
     // first deinit frame
-    if( m_pIMHandler )
-    {
-        delete m_pIMHandler;
-        m_pIMHandler = nullptr;
-    }
+    m_pIMHandler.reset();
     if( m_pRegion )
     {
         gdk_region_destroy( m_pRegion );
