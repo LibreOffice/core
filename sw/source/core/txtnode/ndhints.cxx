@@ -328,10 +328,10 @@ bool SwpHints::Check(bool bPortionsMerged) const
         // 9) nesting portion check
         if (pHtThis->IsNesting())
         {
-            for ( size_t j = 0; j < Count(); ++j )
+            for (size_t j = 0; j < i; ++j)
             {
                 SwTextAttr const * const pOther( m_HintsByStart[j] );
-                if ( pOther->IsNesting() &&  (i != j) )
+                if (pOther->IsNesting())
                 {
                     SwComparePosition cmp = ComparePosition(
                         pHtThis->GetStart(), *pHtThis->End(),
