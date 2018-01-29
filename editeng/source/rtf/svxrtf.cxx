@@ -73,8 +73,8 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn )
     , bIsLeftToRightDef( true)
     , bIsInReadStyleTab( false)
 {
-    pDfltFont = new vcl::Font;
-    pDfltColor = new Color;
+    pDfltFont.reset( new vcl::Font );
+    pDfltColor.reset( new Color );
 }
 
 SvxRTFParser::~SvxRTFParser()
@@ -83,18 +83,11 @@ SvxRTFParser::~SvxRTFParser()
         ClearColorTbl();
     if( !aAttrStack.empty() )
         ClearAttrStack();
-
-    delete pRTFDefaults;
-
-    delete pInsPos;
-    delete pDfltFont;
-    delete pDfltColor;
 }
 
 void SvxRTFParser::SetInsPos( const EditPosition& rNew )
 {
-    delete pInsPos;
-    pInsPos = rNew.Clone();
+    pInsPos.reset( rNew.Clone() );
 }
 
 SvParserState SvxRTFParser::CallParser()
@@ -914,7 +907,7 @@ const SfxItemSet& SvxRTFParser::GetRTFDefaults()
 {
     if( !pRTFDefaults )
     {
-        pRTFDefaults = new SfxItemSet( *pAttrPool, &aWhichMap[0] );
+        pRTFDefaults.reset( new SfxItemSet( *pAttrPool, &aWhichMap[0] ) );
         sal_uInt16 nId;
         if( 0 != ( nId = aPardMap.nScriptSpace ))
         {
