@@ -823,7 +823,7 @@ GtkSalFrame::~GtkSalFrame()
         cairo_region_destroy( m_pRegion );
     }
 
-    delete m_pIMHandler;
+    m_pIMHandler.reset();
 
     //tdf#108705 remove grabs on event widget before
     //destroying event widget
@@ -870,8 +870,7 @@ GtkSalFrame::~GtkSalFrame()
     if( m_pForeignTopLevel )
         g_object_unref( G_OBJECT( m_pForeignTopLevel) );
 
-    delete m_pGraphics;
-    m_pGraphics = nullptr;
+    m_pGraphics.reset();
 
     if (m_pSurface)
         cairo_surface_destroy(m_pSurface);
@@ -1301,7 +1300,7 @@ SalGraphics* GtkSalFrame::AcquireGraphics()
 
     if( !m_pGraphics )
     {
-        m_pGraphics = new GtkSalGraphics( this, m_pWindow );
+        m_pGraphics.reset( new GtkSalGraphics( this, m_pWindow ) );
         if (!m_pSurface)
         {
             AllocateFrame();
@@ -1310,13 +1309,13 @@ SalGraphics* GtkSalFrame::AcquireGraphics()
         m_pGraphics->setSurface(m_pSurface, m_aFrameSize);
     }
     m_bGraphics = true;
-    return m_pGraphics;
+    return m_pGraphics.get();
 }
 
 void GtkSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 {
     (void) pGraphics;
-    assert( pGraphics == m_pGraphics );
+    assert( pGraphics == m_pGraphics.get() );
     m_bGraphics = false;
 }
 
@@ -2300,7 +2299,7 @@ void GtkSalFrame::SetInputContext( SalInputContext* pContext )
 
     // create a new im context
     if( ! m_pIMHandler )
-        m_pIMHandler = new IMHandler( this );
+        m_pIMHandler.reset( new IMHandler( this ) );
 }
 
 void GtkSalFrame::EndExtTextInput( EndExtTextInputFlags nFlags )
@@ -2325,7 +2324,7 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
     if( ! m_pWindow )
         return;
 
-    GtkSalGraphics* pGraphics = m_pGraphics;
+    GtkSalGraphics* pGraphics = m_pGraphics.get();
     bool bFreeGraphics = false;
     if( ! pGraphics )
     {
