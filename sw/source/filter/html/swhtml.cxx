@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
 #include <memory>
 #include <config_features.h>
 
@@ -4992,7 +4995,7 @@ sal_uInt16 SwHTMLParser::ToTwips( sal_uInt16 nPixel )
     {
         long nTwips = Application::GetDefaultDevice()->PixelToLogic(
                     Size( nPixel, nPixel ), MapMode( MapUnit::MapTwip ) ).Width();
-        return nTwips <= USHRT_MAX ? static_cast<sal_uInt16>(nTwips) : USHRT_MAX;
+        return static_cast<sal_uInt16>(std::min(nTwips, SwTwips(SAL_MAX_UINT16)));
     }
     else
         return nPixel;
