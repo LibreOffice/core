@@ -523,7 +523,6 @@ TextPaM TextEngine::ImpConnectParagraphs( sal_uInt32 nLeft, sal_uInt32 nRight )
     pLeftPortion->MarkSelectionInvalid( aPaM.GetIndex() );
 
     mpTEParaPortions->Remove( nRight );
-    delete pRightPortion;
     // the right Node is deleted by EditDoc::ConnectParagraphs()
 
     return aPaM;
@@ -601,7 +600,6 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
 void TextEngine::ImpRemoveParagraph( sal_uInt32 nPara )
 {
     TextNode* pNode = mpDoc->GetNodes()[ nPara ];
-    std::unique_ptr<TEParaPortion> xPortion(mpTEParaPortions->GetObject( nPara ));
 
     // the Node is handled by Undo and is deleted if appropriate
     mpDoc->GetNodes().erase( mpDoc->GetNodes().begin() + nPara );
@@ -611,7 +609,6 @@ void TextEngine::ImpRemoveParagraph( sal_uInt32 nPara )
         delete pNode;
 
     mpTEParaPortions->Remove( nPara );
-    xPortion.reset();
 
     ImpParagraphRemoved( nPara );
 }
