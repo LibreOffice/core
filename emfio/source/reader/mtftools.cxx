@@ -924,7 +924,7 @@ namespace emfio
 
     void MtfTools::UpdateClipRegion()
     {
-        if ( mbClipNeedsUpdate )
+        if (mbClipNeedsUpdate && !utl::ConfigManager::IsFuzzing())
         {
             mbClipNeedsUpdate = false;
             mbComplexClip = false;

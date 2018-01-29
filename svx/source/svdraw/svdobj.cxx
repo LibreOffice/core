@@ -49,6 +49,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>
 #include <tools/line.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
@@ -2369,7 +2370,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
             }
 
             // check for fill rsults
-            if(!aExtractedLineFills.empty())
+            if (!aExtractedLineFills.empty() && !utl::ConfigManager::IsFuzzing())
             {
                 // merge to a single tools::PolyPolygon (OR)
                 aMergedLineFillPolyPolygon = basegfx::utils::mergeToSinglePolyPolygon(aExtractedLineFills);
