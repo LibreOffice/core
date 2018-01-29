@@ -264,7 +264,10 @@ void XclImpName::InsertName(const ScTokenArray* pArray)
         }
     }
     if (pData)
+    {
+        GetDoc().CheckLinkFormulaNeedingCheck( *pData->GetCode());
         mpScData = pData;               // cache for later use
+    }
 }
 
 XclImpNameManager::XclImpNameManager( const XclImpRoot& rRoot ) :
