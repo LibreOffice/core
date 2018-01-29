@@ -162,7 +162,6 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
         }
     }
 // read string
-    hhstr.resize(nch);
     ii = 0;
     while (ii < nch)
     {
