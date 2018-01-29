@@ -236,11 +236,18 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                     csscd::LEFT,        csscd::CENTER, csscd::RIGHT,
                     csscd::BOTTOM_LEFT, csscd::BOTTOM, csscd::BOTTOM_RIGHT
                 };
-            const double nMax=std::max(
+            const double nMax = std::max({
                 fabs(mrModel.mxLayout->mfW),
-                fabs(mrModel.mxLayout->mfH));
-            const int simplifiedX=lclSgn(mrModel.mxLayout->mfX/nMax);
-            const int simplifiedY=lclSgn(mrModel.mxLayout->mfY/nMax);
+                fabs(mrModel.mxLayout->mfH),
+                fabs(mrModel.mxLayout->mfX),
+                fabs(mrModel.mxLayout->mfY) });
+            int simplifiedX = 0;
+            int simplifiedY = 0;
+            if( nMax != 0.0 )
+            {
+                simplifiedX = lclSgn(mrModel.mxLayout->mfX / nMax);
+                simplifiedY = lclSgn(mrModel.mxLayout->mfY / nMax);
+            }
             aPropSet.setProperty( PROP_LabelPlacement,
                                   aPositionsLookupTable[ simplifiedX+1 + 3*(simplifiedY+1) ] );
         }
