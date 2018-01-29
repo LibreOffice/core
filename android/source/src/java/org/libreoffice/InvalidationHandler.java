@@ -239,7 +239,10 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
         }
         final String value = parts[1];
         boolean pressed = Boolean.parseBoolean(value);
-
+        if (!mContext.getTileProvider().isReady()) {
+            Log.w(LOGTAG, "tile provider not ready, ignoring payload "+payload);
+            return;
+        }
         if (parts[0].equals(".uno:Bold")) {
             mContext.getFormattingController().onToggleStateChanged(Document.BOLD, pressed);
         } else if (parts[0].equals(".uno:Italic")) {

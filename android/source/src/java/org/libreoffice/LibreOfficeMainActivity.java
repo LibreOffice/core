@@ -719,6 +719,10 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         mTileProvider = loKitTileProvider;
     }
 
+    public LOKitTileProvider getTileProvider() {
+        return mTileProvider;
+    }
+
     public void savePassword(String pwd) {
         mPassword = pwd;
         synchronized (mTileProvider.getMessageCallback()) {
