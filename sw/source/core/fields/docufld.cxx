@@ -398,13 +398,13 @@ bool SwAuthorField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 SwFileNameFieldType::SwFileNameFieldType(SwDoc *pDocument)
     : SwFieldType( SwFieldIds::Filename )
 {
-    pDoc = pDocument;
+    m_pDoc = pDocument;
 }
 
 OUString SwFileNameFieldType::Expand(sal_uLong nFormat) const
 {
     OUString aRet;
-    const SwDocShell* pDShell = pDoc->GetDocShell();
+    const SwDocShell* pDShell = m_pDoc->GetDocShell();
     if( pDShell && pDShell->HasName() )
     {
         const INetURLObject& rURLObj = pDShell->GetMedium()->GetURLObject();
@@ -455,29 +455,29 @@ OUString SwFileNameFieldType::Expand(sal_uLong nFormat) const
 
 SwFieldType* SwFileNameFieldType::Copy() const
 {
-    SwFieldType *pTmp = new SwFileNameFieldType(pDoc);
+    SwFieldType *pTmp = new SwFileNameFieldType(m_pDoc);
     return pTmp;
 }
 
 SwFileNameField::SwFileNameField(SwFileNameFieldType* pTyp, sal_uInt32 nFormat)
     : SwField(pTyp, nFormat)
 {
-    aContent = static_cast<SwFileNameFieldType*>(GetTyp())->Expand(GetFormat());
+    m_aContent = static_cast<SwFileNameFieldType*>(GetTyp())->Expand(GetFormat());
 }
 
 OUString SwFileNameField::Expand() const
 {
     if (!IsFixed())
-        const_cast<SwFileNameField*>(this)->aContent = static_cast<SwFileNameFieldType*>(GetTyp())->Expand(GetFormat());
+        const_cast<SwFileNameField*>(this)->m_aContent = static_cast<SwFileNameFieldType*>(GetTyp())->Expand(GetFormat());
 
-    return aContent;
+    return m_aContent;
 }
 
 SwField* SwFileNameField::Copy() const
 {
     SwFileNameField *pTmp =
         new SwFileNameField(static_cast<SwFileNameFieldType*>(GetTyp()), GetFormat());
-    pTmp->SetExpansion(aContent);
+    pTmp->SetExpansion(m_aContent);
 
     return pTmp;
 }
@@ -511,7 +511,7 @@ bool SwFileNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
 
     case FIELD_PROP_PAR3:
-        rAny <<= aContent;
+        rAny <<= m_aContent;
         break;
 
     default:
@@ -559,7 +559,7 @@ bool SwFileNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
 
     case FIELD_PROP_PAR3:
-        rAny >>= aContent;
+        rAny >>= m_aContent;
         break;
 
     default:
@@ -1989,35 +1989,35 @@ OUString SwExtUserFieldType::Expand(sal_uInt16 nSub )
 // extended user information field
 
 SwExtUserField::SwExtUserField(SwExtUserFieldType* pTyp, sal_uInt16 nSubTyp, sal_uInt32 nFormat) :
-    SwField(pTyp, nFormat), nType(nSubTyp)
+    SwField(pTyp, nFormat), m_nType(nSubTyp)
 {
-    aContent = SwExtUserFieldType::Expand(nType);
+    m_aContent = SwExtUserFieldType::Expand(m_nType);
 }
 
 OUString SwExtUserField::Expand() const
 {
     if (!IsFixed())
-        const_cast<SwExtUserField*>(this)->aContent = SwExtUserFieldType::Expand(nType);
+        const_cast<SwExtUserField*>(this)->m_aContent = SwExtUserFieldType::Expand(m_nType);
 
-    return aContent;
+    return m_aContent;
 }
 
 SwField* SwExtUserField::Copy() const
 {
-    SwExtUserField* pField = new SwExtUserField(static_cast<SwExtUserFieldType*>(GetTyp()), nType, GetFormat());
-    pField->SetExpansion(aContent);
+    SwExtUserField* pField = new SwExtUserField(static_cast<SwExtUserFieldType*>(GetTyp()), m_nType, GetFormat());
+    pField->SetExpansion(m_aContent);
 
     return pField;
 }
 
 sal_uInt16 SwExtUserField::GetSubType() const
 {
-    return nType;
+    return m_nType;
 }
 
 void SwExtUserField::SetSubType(sal_uInt16 nSub)
 {
-    nType = nSub;
+    m_nType = nSub;
 }
 
 bool SwExtUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -2025,12 +2025,12 @@ bool SwExtUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        rAny <<= aContent;
+        rAny <<= m_aContent;
         break;
 
     case FIELD_PROP_USHORT1:
         {
-            sal_Int16 nTmp = nType;
+            sal_Int16 nTmp = m_nType;
             rAny <<= nTmp;
         }
         break;
@@ -2048,14 +2048,14 @@ bool SwExtUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        rAny >>= aContent;
+        rAny >>= m_aContent;
         break;
 
     case FIELD_PROP_USHORT1:
         {
             sal_Int16 nTmp = 0;
             rAny >>= nTmp;
-            nType = nTmp;
+            m_nType = nTmp;
         }
         break;
     case FIELD_PROP_BOOL1:

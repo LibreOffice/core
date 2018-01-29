@@ -54,7 +54,7 @@ void OWriterCatalog::refreshTables()
     if (m_pTables)
         m_pTables->reFill(aVector);
     else
-        m_pTables.reset( new OWriterTables(m_xMetaData, *this, m_aMutex, aVector) );
+        m_pTables.reset(new OWriterTables(m_xMetaData, *this, m_aMutex, aVector));
 }
 
 } // namespace writer
