@@ -131,7 +131,7 @@ static void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
     if ( rValue >>= aSeq )
     {
         sal_Int32 nCount = aSeq.getLength();
-        if ( nCount < USHRT_MAX )
+        if ( nCount < SAL_MAX_UINT16 )
         {
             const sal_Int32* pArray = aSeq.getConstArray();
             std::unique_ptr<sal_uInt16[]> pUShorts(new sal_uInt16[nCount]);
