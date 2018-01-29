@@ -23,6 +23,7 @@
 #include <editeng/editengdllapi.h>
 #include <tools/gen.hxx>
 #include <deque>
+#include <memory>
 
 namespace tools { class PolyPolygon; }
 namespace tools { class Rectangle; }
@@ -43,9 +44,9 @@ class EDITENG_DLLPUBLIC TextRanger
         RangeCache(const Range& rng) : range(rng) {};
     };
     std::deque<RangeCache> mRangeCache; //!< Cached range calculations.
-    tools::PolyPolygon *mpPolyPolygon; // Surface polygon
-    tools::PolyPolygon *mpLinePolyPolygon; // Line polygon
-    tools::Rectangle *pBound;  // Comprehensive rectangle
+    std::unique_ptr<tools::PolyPolygon> mpPolyPolygon; // Surface polygon
+    std::unique_ptr<tools::PolyPolygon> mpLinePolyPolygon; // Line polygon
+    std::unique_ptr<tools::Rectangle> pBound;  // Comprehensive rectangle
     sal_uInt16 nCacheSize;  // Cache-Size
     sal_uInt16 nRight;      // Distance Contour-Text
     sal_uInt16 nLeft;       // Distance Text-Contour
