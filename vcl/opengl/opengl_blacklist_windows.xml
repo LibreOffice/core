@@ -28,6 +28,10 @@
         <entry os="all" vendor="intel" compare="equal" version="20.19.15.4352">
             <device id="0x1927"/>
         </entry>
+        <!-- tdf#100243 -->
+        <entry os="all" vendor="intel" compare="equal" version="21.20.16.4664">
+            <device id="0x591b"/>
+        </entry>
         <entry os="7" vendor="intel">
             <device id="all"/>
         </entry>
