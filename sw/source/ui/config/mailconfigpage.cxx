@@ -175,9 +175,7 @@ bool SwMailConfigPage::FillItemSet( SfxItemSet* /*rSet*/ )
     if(m_pServerED->IsValueChangedFromSaved())
         m_pConfigItem->SetMailServer(m_pServerED->GetText());
 
-    if(m_pPortNF->IsModified())
-        m_pConfigItem->SetMailPort(static_cast<sal_Int16>(m_pPortNF->GetValue()));
-
+    m_pConfigItem->SetMailPort(static_cast<sal_Int16>(m_pPortNF->GetValue()));
     m_pConfigItem->SetSecureConnection(m_pSecureCB->IsChecked());
 
     m_pConfigItem->Commit();
@@ -231,6 +229,7 @@ IMPL_LINK(SwMailConfigPage, SecureHdl, Button*, pBox, void)
 {
     bool bEnable = static_cast<CheckBox*>(pBox)->IsChecked();
     m_pConfigItem->SetSecureConnection(bEnable);
+    m_pConfigItem->SetMailPort(static_cast<sal_Int16>(m_pPortNF->GetValue()));
     m_pPortNF->SetValue(m_pConfigItem->GetMailPort());
 }
 

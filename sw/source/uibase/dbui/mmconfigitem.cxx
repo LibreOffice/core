@@ -132,7 +132,6 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
 
     sal_Int16                               m_nMailPort;
     bool                                m_bIsMailReplyTo;
-    bool                                m_bIsDefaultPort;
     bool                                m_bIsSecureConnection;
     bool                                m_bIsAuthentication;
 
@@ -196,9 +195,8 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         m_bIsSMPTAfterPOP(false),
         m_nInServerPort( POP_SECURE_PORT ),
         m_bInServerPOP( true ),
-        m_nMailPort(0),
+        m_nMailPort(SECURE_PORT),
         m_bIsMailReplyTo(false),
-        m_bIsDefaultPort(false),
         m_bIsSecureConnection(true),
         m_bIsAuthentication(false),
 
@@ -256,7 +254,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
                 case 16: pValues[nProp] >>= m_bIsMailReplyTo;       break;
                 case 17: pValues[nProp] >>= m_sMailReplyTo;         break;
                 case 18: pValues[nProp] >>= m_sMailServer;          break;
-                case 19: m_bIsDefaultPort = !(pValues[nProp] >>= m_nMailPort); break;
+                case 19: pValues[nProp] >>= m_nMailPort;            break;
                 case 20: pValues[nProp] >>= m_bIsSecureConnection;           break;
                 case 21: pValues[nProp] >>= m_bIsAuthentication;             break;
                 case 22: pValues[nProp] >>= m_sMailUserName;                 break;
@@ -527,9 +525,7 @@ void  SwMailMergeConfigItem_Impl::ImplCommit()
             case 16: pValues[nProp] <<= m_bIsMailReplyTo;        break;
             case 17: pValues[nProp] <<= m_sMailReplyTo;         break;
             case 18: pValues[nProp] <<= m_sMailServer;          break;
-            case 19: if(!m_bIsDefaultPort)
-                        pValues[nProp] <<= m_nMailPort;
-            break;
+            case 19: pValues[nProp] <<= m_nMailPort;            break;
             case 20: pValues[nProp] <<= m_bIsSecureConnection;  break;
             case 21: pValues[nProp] <<= m_bIsAuthentication;    break;
             case 22: pValues[nProp] <<= m_sMailUserName;        break;
@@ -1381,17 +1377,23 @@ void SwMailMergeConfigItem::SetMailServer(const OUString& rAddress)
 
 sal_Int16 SwMailMergeConfigItem::GetMailPort() const
 {
-    return m_pImpl->m_bIsDefaultPort ?
-             (m_pImpl->m_bIsSecureConnection ? SECURE_PORT : DEFAULT_PORT) :
-             m_pImpl->m_nMailPort;
+    // provide appropriate TCP port, based on SSL/STARTTLS status, if current port is one of the defaults
+    switch (m_pImpl->m_nMailPort)
+    {
+    case SECURE_PORT:
+    case DEFAULT_PORT:
+        return m_pImpl->m_bIsSecureConnection ? SECURE_PORT : DEFAULT_PORT;
+        break;
+    default:
+        return m_pImpl->m_nMailPort;
+    }
 }
 
 void     SwMailMergeConfigItem::SetMailPort(sal_Int16 nSet)
 {
-    if(m_pImpl->m_nMailPort != nSet || m_pImpl->m_bIsDefaultPort)
+    if(m_pImpl->m_nMailPort != nSet)
     {
         m_pImpl->m_nMailPort = nSet;
-        m_pImpl->m_bIsDefaultPort = false;
         m_pImpl->SetModified();
     }
 }
