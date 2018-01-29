@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa31d9ce_54560a2a",
+        "filename": "sfx2/source/doc/sfxbasemodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3062,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-29T13:30:34Z",
+      "side": 1,
+      "message": "better put a uno::Reference or rtl::Reference (this) here?",
+      "revId": "6fc9a010d976fa2704013a0a997718a6aedcbb25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_547feaa9",
         "filename": "sfx2/source/doc/sfxbasemodel.cxx",
         "patchSetId": 1
