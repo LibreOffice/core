@@ -529,7 +529,7 @@ protected:
         i.e. construct calls Show, and if a11y is enabled this
         reenters the not-fully constructed object and calls
         CreateAccessibleDocumentView, so if construct is called
-        from the ctor then if a derived class is contructed the base-case
+        from the ctor then if a derived class is constructed the base-case
         CreateAccessibleDocumentView is used, not the derived
         CreateAccessibleDocumentView. i.e. run smoketest under a11y with
         debugging assertions enabled

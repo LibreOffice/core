@@ -42,7 +42,7 @@ namespace framework{
     @descr      This helper implements the complete XDispatchProviderInterception interface with
                 master/slave functionality AND using of optional features like registration of URL pattern!
 
-    @attention  Don't use this class as direct member - use it dynamicly. Do not derive from this class.
+    @attention  Don't use this class as direct member - use it dynamically. Do not derive from this class.
                 We hold a weakreference to our owner not to our superclass.
  */
 class InterceptionHelper : public  ::cppu::WeakImplHelper<
