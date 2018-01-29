@@ -677,19 +677,24 @@ DECLARE_RTFEXPORT_TEST(testFdo63428, "hello.rtf")
                          getProperty<OUString>(getRun(getParagraph(1), 4), "TextPortionType"));
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo69384, "hello.rtf")
+#endif
+
+DECLARE_RTFEXPORT_TEST(testFdo69384, "fdo69384-paste.rtf")
+{
+    // Check if the style is loaded
+    getStyles("ParagraphStyles")->getByName("Text body justified");
+}
+
+DECLARE_RTFEXPORT_TEST(testFdo69384Inserted, "hello.rtf")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
     paste("fdo69384-paste.rtf", xEnd);
 
-    // Import got interrupted in the middle of style sheet table import,
-    // resulting in missing styles and text.
-    getStyles("ParagraphStyles")->getByName("Text body justified");
+    // During insert of the RTF document we do not insert new styles
+    CPPUNIT_ASSERT(!getStyles("ParagraphStyles")->hasByName("Text body justified"));
 }
-
-#endif
 
 DECLARE_RTFEXPORT_TEST(testFdo61193, "hello.rtf")
 {
