@@ -1224,7 +1224,7 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
     bool bIncomplete = !rFuncData.GetFunction().is();       //TODO: extra flag?
 
     long nArgCount = rFuncData.GetArgumentCount();
-    if ( nArgCount > USHRT_MAX )
+    if ( nArgCount > SAL_MAX_UINT16 )
         return false;
 
     if ( bIncomplete )
