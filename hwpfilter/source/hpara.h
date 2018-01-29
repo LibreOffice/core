@@ -23,7 +23,9 @@
 #include "hwplib.h"
 #include "hwpfile.h"
 #include "hinfo.h"
+#include <map>
 #include <memory>
+#include <vector>
 
 struct HBox;
 
@@ -111,7 +113,7 @@ class DLLEXPORT HWPPara
 /**
  * Box object list
  */
-        std::vector<std::unique_ptr<HBox>> hhstr;
+        std::map<unsigned short, std::unique_ptr<HBox>> hhstr;
 
         HWPPara(void);
         ~HWPPara(void);
