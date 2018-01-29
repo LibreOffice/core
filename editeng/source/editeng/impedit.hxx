@@ -436,7 +436,7 @@ private:
     EditEngine*         pEditEngine;
     ViewsType           aEditViews;
     EditView*           pActiveView;
-    TextRanger*         pTextRanger;
+    std::unique_ptr<TextRanger> pTextRanger;
 
     SfxStyleSheetPool*  pStylePool;
     SfxItemPool*        pTextObjectPool;
@@ -446,13 +446,13 @@ private:
     VclPtr<VirtualDevice> mpOwnDev;
 
     svtools::ColorConfig maColorConfig;
-    mutable SvtCTLOptions*  pCTLOptions;
+    mutable std::unique_ptr<SvtCTLOptions> pCTLOptions;
 
     std::unique_ptr<SfxItemSet> pEmptyItemSet;
     EditUndoManager*    pUndoManager;
     ESelection*         pUndoMarkSelection;
 
-    ImplIMEInfos*       mpIMEInfos;
+    std::unique_ptr<ImplIMEInfos> mpIMEInfos;
 
     std::vector<EENotify> aNotifyCache;
 
@@ -474,7 +474,7 @@ private:
     sal_Int32          nBigTextObjectStart;
     css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpeller;
     css::uno::Reference< css::linguistic2::XHyphenator >    xHyphenator;
-    SpellInfo*          pSpellInfo;
+    std::unique_ptr<SpellInfo> pSpellInfo;
     mutable css::uno::Reference < css::i18n::XBreakIterator > xBI;
     mutable css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > xISC;
 
@@ -708,7 +708,7 @@ private:
     void ImplUpdateOverflowingParaNum( sal_uInt32 );
     void ImplUpdateOverflowingLineNum( sal_uInt32, sal_uInt32, sal_uInt32 );
 
-    SpellInfo *     CreateSpellInfo( bool bMultipleDocs );
+    void CreateSpellInfo( bool bMultipleDocs );
     /// Obtains a view shell ID from the active EditView.
     ViewShellId CreateViewShellId();
 
@@ -758,8 +758,8 @@ public:
     sal_uInt8               GetRightToLeft( sal_Int32 nPara, sal_Int32 nChar, sal_Int32* pStart = nullptr, sal_Int32* pEnd = nullptr );
     bool                    HasDifferentRTLLevels( const ContentNode* pNode );
 
-    void                    SetTextRanger( TextRanger* pRanger );
-    TextRanger*             GetTextRanger() const { return pTextRanger; }
+    void                    SetTextRanger( std::unique_ptr<TextRanger> pRanger );
+    TextRanger*             GetTextRanger() const { return pTextRanger.get(); }
 
     const Size&             GetMinAutoPaperSize() const             { return aMinAutoPaperSize; }
     void                    SetMinAutoPaperSize( const Size& rSz )  { aMinAutoPaperSize = rSz; }
@@ -942,7 +942,7 @@ public:
     void GetAllMisspellRanges( std::vector<editeng::MisspellRanges>& rRanges ) const;
     void SetAllMisspellRanges( const std::vector<editeng::MisspellRanges>& rRanges );
 
-    SpellInfo*          GetSpellInfo() const { return pSpellInfo; }
+    SpellInfo*          GetSpellInfo() const { return pSpellInfo.get(); }
 
     void                SetDefaultLanguage( LanguageType eLang ) { eDefLanguage = eLang; }
     LanguageType        GetDefaultLanguage() const { return eDefLanguage; }

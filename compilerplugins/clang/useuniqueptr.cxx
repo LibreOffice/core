@@ -213,6 +213,9 @@ void UseUniquePtr::CheckDeleteExpr(const CXXDestructorDecl* destructorDecl, cons
     // not sure how the node management is working here
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/i18npool/source/localedata/saxparser.cxx"))
         return;
+    // has a pointer that it only sometimes owns
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/editeng/source/editeng/impedit.hxx"))
+        return;
 
     report(
         DiagnosticsEngine::Warning,
