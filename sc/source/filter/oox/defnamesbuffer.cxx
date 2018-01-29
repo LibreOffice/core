@@ -38,6 +38,7 @@
 #include "tokenarray.hxx"
 #include "tokenuno.hxx"
 #include "compiler.hxx"
+#include "document.hxx"
 
 namespace oox {
 namespace xls {
@@ -334,6 +335,7 @@ std::unique_ptr<ScTokenArray> DefinedName::getScTokens(
     // after, a resulting error must be reset.
     FormulaError nErr = pArray->GetCodeError();
     aCompiler.CompileTokenArray();
+    getScDocument().CheckLinkFormulaNeedingCheck( *pArray);
     pArray->DelRPN();
     pArray->SetCodeError(nErr);
 
