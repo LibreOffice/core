@@ -51,8 +51,13 @@ typedef enum {
     A pipe can either be opened, or a new pipe can be created and opened.
 */
 typedef sal_uInt32 oslPipeOptions;
-#define osl_Pipe_OPEN        0x0000     /*< open existing pipe */
-#define osl_Pipe_CREATE      0x0001     /*< create pipe and open it, fails if already exists */
+#define osl_Pipe_OPEN                 0x0000 /*< open existing pipe */
+#define osl_Pipe_CREATE               0x0001 /*< create pipe and open it, fails if already exists */
+
+/* osl_Pipe_ENABLE_SERVER_POPUPS is intended to enable server process to become foreground
+   and steal focus on systems where a protection against that is implemented (currently only
+   for Windows). Only meaningful with osl_Pipe_OPEN. */
+#define osl_Pipe_ENABLE_SERVER_POPUPS 0x0002
 
 typedef struct oslPipeImpl * oslPipe;
 
