@@ -501,10 +501,10 @@ void OFlatTable::refreshColumns()
     for (auto const& column : m_aColumns->get())
         aVector.push_back(Reference< XNamed>(column,UNO_QUERY)->getName());
 
-    if(m_pColumns)
-        m_pColumns->reFill(aVector);
+    if(m_xColumns)
+        m_xColumns->reFill(aVector);
     else
-        m_pColumns  = new OFlatColumns(this,m_aMutex,aVector);
+        m_xColumns = new OFlatColumns(this,m_aMutex,aVector);
 }
 
 

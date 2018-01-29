@@ -36,6 +36,7 @@
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#include <memory>
 
 namespace connectivity
 {
@@ -72,9 +73,9 @@ namespace connectivity
             OUString m_Description;
             OUString m_Type;
 
-            OCollection*    m_pKeys;
-            OCollection*    m_pColumns;
-            OCollection*    m_pIndexes;
+            rtl::Reference<OCollection>  m_xKeys;
+            rtl::Reference<OCollection>  m_xColumns;
+            rtl::Reference<OCollection>  m_xIndexes;
             OCollection*    m_pTables;  // must hold his own container to notify him when renaming
 
             using OTableDescriptor_BASE::rBHelper;
