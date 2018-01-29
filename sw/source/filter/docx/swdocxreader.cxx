@@ -69,6 +69,13 @@ ErrCode SwDOCXReader::Read(SwDoc& rDoc, const OUString& /* rBaseURL */, SwPaM& r
 
     const uno::Reference<text::XTextRange> xInsertTextRange = SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), nullptr);
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pMedium->GetInStream()));
+
+    //SetLoading hack because the document properties will be re-initted
+    //by the xml filter and during the init, while its considered uninitialized,
+    //setting a property will inform the document its modified, which attempts
+    //to update the properties, which throws cause the properties are uninitialized
+    pDocShell->SetLoading(SfxLoadedFlags::NONE);
+
     uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
     {
         { "InputStream", uno::Any(xStream) },
@@ -87,6 +94,8 @@ ErrCode SwDOCXReader::Read(SwDoc& rDoc, const OUString& /* rBaseURL */, SwPaM& r
         SAL_WARN("sw.docx", "SwDOCXReader::Read(): " << e);
         ret = ERR_SWG_READ_ERROR;
     }
+    pDocShell->SetLoading(SfxLoadedFlags::ALL);
+
     return ret;
 }
 

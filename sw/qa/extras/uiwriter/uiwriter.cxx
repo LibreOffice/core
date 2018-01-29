@@ -264,6 +264,7 @@ public:
     void testTdf106736();
     void testTdf58604();
     void testTdf112025();
+    void testTdf72942();
     void testTdf113877();
     void testTdf113877NoMerge();
     void testMsWordCompTrailingBlanks();
@@ -442,6 +443,7 @@ public:
     CPPUNIT_TEST(testTdf106736);
     CPPUNIT_TEST(testTdf58604);
     CPPUNIT_TEST(testTdf112025);
+    CPPUNIT_TEST(testTdf72942);
     CPPUNIT_TEST(testTdf113877);
     CPPUNIT_TEST(testTdf113877NoMerge);
     CPPUNIT_TEST(testMsWordCompTrailingBlanks);
@@ -5277,6 +5279,39 @@ void SwUiWriterTest::testTdf112025()
 
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, "IsLandscape"));
+}
+
+void SwUiWriterTest::testTdf72942()
+{
+    load(DATA_DIRECTORY, "fdo72942.docx");
+
+    // get a page cursor
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToEndOfPage();
+
+    OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "fdo72942-insert.docx";
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({{ "Name", uno::makeAny(insertFileid) }}));
+    lcl_dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+
+    // check styles of paragraphs added from [fdo72942.docx]
+    const uno::Reference< text::XTextRange > xRun1 = getRun(getParagraph(1), 1);
+    CPPUNIT_ASSERT_EQUAL(OUString("Default English (Liberation serif) text with "), xRun1->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Liberation Serif"), getProperty<OUString>(xRun1, "CharFontName"));
+
+    const uno::Reference< text::XTextRange > xRun2 = getRun(getParagraph(2), 1);
+    CPPUNIT_ASSERT_EQUAL(OUString("Header 1 English text (Liberation sans) with "), xRun2->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Liberation Sans"), getProperty<OUString>(xRun2, "CharFontName"));
+
+    // check styles of paragraphs added from [fdo72942-insert.docx]
+    const uno::Reference< text::XTextRange > xRun3 = getRun(getParagraph(4), 1);
+    CPPUNIT_ASSERT_EQUAL(OUString("Default German text (Calibri) with "), xRun3->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Liberation Serif"), getProperty<OUString>(xRun3, "CharFontName"));
+
+    const uno::Reference< text::XTextRange > xRun4 = getRun(getParagraph(5), 1);
+    CPPUNIT_ASSERT_EQUAL(OUString("Header 1 German text (Calibri Light) with "), xRun4->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Liberation Sans"), getProperty<OUString>(xRun4, "CharFontName"));
 }
 
 void SwUiWriterTest::testTdf114306()
