@@ -1368,6 +1368,17 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 m_pImpl->applyMargins(xGraphicObjectProperties);
                 m_pImpl->applyName(xGraphicObjectProperties);
             }
+
+            // Handle horizontal flip.
+            bool bMirrored = false;
+            xShapeProps->getPropertyValue("IsMirrored") >>= bMirrored;
+            if (bMirrored)
+            {
+                xGraphicObjectProperties->setPropertyValue("HoriMirroredOnEvenPages",
+                                                           uno::makeAny(true));
+                xGraphicObjectProperties->setPropertyValue("HoriMirroredOnOddPages",
+                                                           uno::makeAny(true));
+            }
         }
     }
     catch( const uno::Exception& e )

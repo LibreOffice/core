@@ -641,6 +641,12 @@ DECLARE_OOXMLEXPORT_TEST(testWatermarkTrim, "tdf114308.docx")
     CPPUNIT_ASSERT_MESSAGE(ss.str(), nDifference >= -4);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testGraphicObjectFliph, "graphic-object-fliph.docx")
+{
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(1), "HoriMirroredOnEvenPages"));
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(1), "HoriMirroredOnOddPages"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
