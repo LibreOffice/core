@@ -173,7 +173,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const OUString& colName, const Ref
 #endif
         );
 
-    if ( !m_pColumns || !m_pColumns->hasByName(colName) )
+    if ( !m_xColumns || !m_xColumns->hasByName(colName) )
         throw NoSuchElementException(colName,*this);
 
 
@@ -181,7 +181,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const OUString& colName, const Ref
     {
         // first we have to check what should be altered
         Reference<XPropertySet> xProp;
-        m_pColumns->getByName(colName) >>= xProp;
+        m_xColumns->getByName(colName) >>= xProp;
         // first check the types
         sal_Int32 nOldType = 0,nNewType = 0,nOldPrec = 0,nNewPrec = 0,nOldScale = 0,nNewScale = 0;
 
@@ -269,14 +269,14 @@ void SAL_CALL OMySQLTable::alterColumnByName( const OUString& colName, const Ref
                 " " + OTables::adjustSQL(::dbtools::createStandardColumnPart(descriptor,getConnection(),static_cast<OTables*>(m_pTables),getTypeCreatePattern()));
             executeStatement(sSql);
         }
-        m_pColumns->refresh();
+        m_xColumns->refresh();
     }
     else
     {
-        if(m_pColumns)
+        if(m_xColumns)
         {
-            m_pColumns->dropByName(colName);
-            m_pColumns->appendByDescriptor(descriptor);
+            m_xColumns->dropByName(colName);
+            m_xColumns->appendByDescriptor(descriptor);
         }
     }
 
