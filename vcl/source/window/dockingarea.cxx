@@ -226,21 +226,20 @@ void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
             }
 
             // draw multiple toolbar backgrounds, i.e., one for each toolbar line
-            std::map<int, int>::const_iterator it;
-            for (it = ranges.begin(); it != ranges.end(); ++it)
+            for (auto const& range : ranges)
             {
                 tools::Rectangle aTBRect;
                 if (IsHorizontal())
                 {
                     aTBRect.Left()   = 0;
                     aTBRect.Right()  = aOutSz.Width() - 1;
-                    aTBRect.Top()    = it->first;
-                    aTBRect.Bottom() = it->first + it->second - 1;
+                    aTBRect.Top()    = range.first;
+                    aTBRect.Bottom() = range.first + range.second - 1;
                 }
                 else
                 {
-                    aTBRect.Left()   = it->first;
-                    aTBRect.Right()  = it->first + it->second - 1;
+                    aTBRect.Left()   = range.first;
+                    aTBRect.Right()  = range.first + range.second - 1;
                     aTBRect.Top()    = 0;
                     aTBRect.Bottom() = aOutSz.Height() - 1;
                 }
