@@ -82,7 +82,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_rtfexport \
     CppunitTest_sw_rtfexport2 \
     CppunitTest_sw_rtfexport3 \
-    CppunitTest_sw_rtfimport \
     CppunitTest_sw_odfexport \
     CppunitTest_sw_odfimport \
     CppunitTest_sw_txtexport \

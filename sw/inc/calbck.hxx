@@ -26,6 +26,8 @@
 #include "hints.hxx"
 #include <typeinfo>
 #include <type_traits>
+#include <vector>
+#include <memory>
 
 
 class SwModify;
@@ -229,6 +231,18 @@ private:
     }
     virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) override
         { if(m_pToTell) m_pToTell->SwClientNotifyCall(rModify, rHint); }
+};
+
+class SW_DLLPUBLIC SwMultiDepend final
+{
+    SwClient& m_rToTell;
+    std::vector<std::shared_ptr<SwDepend>> m_vpDepends;
+    public:
+        SwMultiDepend(SwClient& rToTell)
+            : m_rToTell(rToTell) {}
+        void StartListening(SwModify* pDepend);
+        void EndListening(SwModify* pDepend);
+        void EndListeningAll();
 };
 
 namespace sw

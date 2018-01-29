@@ -23,6 +23,7 @@
 #include <swcache.hxx>
 #include <swfntcch.hxx>
 #include <tools/debug.hxx>
+#include <algorithm>
 
 sw::LegacyModifyHint::~LegacyModifyHint() {}
 
@@ -278,6 +279,26 @@ void SwModify::CheckCaching( const sal_uInt16 nWhich )
             break;
         }
     }
+}
+
+void SwMultiDepend::StartListening(SwModify* pDepend)
+{
+    EndListening(nullptr);
+    m_vpDepends.push_back(std::make_unique<SwDepend>(&m_rToTell, pDepend));
+}
+
+void SwMultiDepend::EndListening(SwModify* pBroadcaster)
+{
+    m_vpDepends.erase(std::remove_if(m_vpDepends.begin(), m_vpDepends.end(),
+        [&pBroadcaster](const std::shared_ptr<SwDepend> pListener)
+        {
+            return pListener->GetRegisteredIn() == nullptr || pListener->GetRegisteredIn() == pBroadcaster;
+        }));
+}
+
+void SwMultiDepend::EndListeningAll()
+{
+    m_vpDepends.clear();
 }
 
 sw::ClientIteratorBase* sw::ClientIteratorBase::our_pClientIters = nullptr;
