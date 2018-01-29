@@ -68,6 +68,7 @@
 #include "lwpverdocument.hxx"
 #include <xfilter/xfstylemanager.hxx>
 #include <osl/thread.h>
+#include <set>
 
 LwpDocument::LwpDocument(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)
@@ -644,11 +645,15 @@ LwpDocument* LwpDocument::GetPreviousDivision()
 {
     LwpDocument* pRoot = GetRootDocument();
     LwpDocument *pLastDoc = pRoot ? pRoot->GetLastDivisionWithContents() : nullptr;
+    std::set<LwpDocument*> aSeen;
     while (pLastDoc)
     {
+        if (aSeen.find(pLastDoc) != aSeen.end())
+            throw std::runtime_error("loop in conversion");
         if (pLastDoc->GetEnSuperTableLayout().is())
             return pLastDoc;
         pLastDoc = pLastDoc->GetPreviousDivisionWithContents();
+        aSeen.insert(pLastDoc);
     }
     return nullptr;
 
