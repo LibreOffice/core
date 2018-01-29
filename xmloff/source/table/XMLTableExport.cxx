@@ -609,18 +609,15 @@ void XMLTableExport::exportTableTemplates()
             }
             else
             {
-                // Below condition checks if any of the extended version of
-                // XML are set
+                // checks if any of the extended version of ODF are set
                 if ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0)
                 {
+                    // tdf#106780 historically this wrong attribute was used
+                    // for the name; write it if extended because LO < 5.3 can
+                    // read only text:style-name, not the correct table:name
                     mrExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME, GetExport().EncodeStyleName( xTableStyle->getName() ) );
-                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, GetExport().EncodeStyleName( xTableStyle->getName() ) );
                 }
-                else
-                {
-                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, GetExport().EncodeStyleName( xTableStyle->getName() ) );
-                }
-
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, GetExport().EncodeStyleName(xTableStyle->getName()));
             }
 
              SvXMLElementExport tableTemplate( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_TEMPLATE, true, true );
