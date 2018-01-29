@@ -945,9 +945,9 @@ SvxRTFItemStackType::SvxRTFItemStackType(
     , m_pChildList( nullptr )
     , nStyleNo( 0 )
 {
-    pSttNd = rPos.MakeNodeIdx();
+    pSttNd.reset( rPos.MakeNodeIdx() );
     nSttCnt = rPos.GetCntIdx();
-    pEndNd = pSttNd;
+    pEndNd = pSttNd.get();
     nEndCnt = nSttCnt;
 }
 
@@ -959,9 +959,9 @@ SvxRTFItemStackType::SvxRTFItemStackType(
     , m_pChildList( nullptr )
     , nStyleNo( rCpy.nStyleNo )
 {
-    pSttNd = rPos.MakeNodeIdx();
+    pSttNd.reset( rPos.MakeNodeIdx() );
     nSttCnt = rPos.GetCntIdx();
-    pEndNd = pSttNd;
+    pEndNd = pSttNd.get();
     nEndCnt = nSttCnt;
 
     aAttrSet.SetParent( &rCpy.aAttrSet );
@@ -971,26 +971,23 @@ SvxRTFItemStackType::SvxRTFItemStackType(
 
 SvxRTFItemStackType::~SvxRTFItemStackType()
 {
-    delete m_pChildList;
-    if( pSttNd != pEndNd )
+    if( pSttNd.get() != pEndNd )
         delete pEndNd;
-    delete pSttNd;
 }
 
 void SvxRTFItemStackType::Add(std::unique_ptr<SvxRTFItemStackType> pIns)
 {
     if (!m_pChildList)
-         m_pChildList = new SvxRTFItemStackList;
+         m_pChildList.reset( new SvxRTFItemStackList );
     m_pChildList->push_back(std::move(pIns));
 }
 
 void SvxRTFItemStackType::SetStartPos( const EditPosition& rPos )
 {
-    if (pSttNd != pEndNd)
+    if (pSttNd.get() != pEndNd)
         delete pEndNd;
-    delete pSttNd;
-    pSttNd = rPos.MakeNodeIdx();
-    pEndNd = pSttNd;
+    pSttNd.reset(rPos.MakeNodeIdx() );
+    pEndNd = pSttNd.get();
     nSttCnt = rPos.GetCntIdx();
 }
 
@@ -1074,8 +1071,7 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
     }
     if (m_pChildList->empty())
     {
-        delete m_pChildList;
-        m_pChildList = nullptr;
+        m_pChildList.reset();
     }
 }
 void SvxRTFItemStackType::SetRTFDefaults( const SfxItemSet& rDefaults )

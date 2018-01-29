@@ -312,9 +312,10 @@ class EDITENG_DLLPUBLIC SvxRTFItemStackType
     friend class SvxRTFParser;
 
     SfxItemSet   aAttrSet;
-    EditNodeIdx  *pSttNd, *pEndNd;
+    std::unique_ptr<EditNodeIdx> pSttNd;
+    EditNodeIdx  *pEndNd;
     sal_Int32    nSttCnt, nEndCnt;
-    SvxRTFItemStackList* m_pChildList;
+    std::unique_ptr<SvxRTFItemStackList> m_pChildList;
     sal_uInt16   nStyleNo;
 
     SvxRTFItemStackType(SvxRTFItemStackType const&) = delete;
