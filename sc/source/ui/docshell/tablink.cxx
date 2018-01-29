@@ -178,7 +178,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     //  if new filter has been selected, forget options
     if (aFilterName != rNewFilter)
         aOptions.clear();
-    if ( pNewOptions )                  // options hard-specfied?
+    if ( pNewOptions )                  // options hard-specified?
         aOptions = *pNewOptions;
 
     //  always create ItemSet, so that DocShell can set the options

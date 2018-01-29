@@ -1023,7 +1023,7 @@ bool SwFEShell::GetFlyFrameAttr( SfxItemSet &rSet ) const
         if ( RndStdIds::FLY_AT_PAGE != eType )
         {
             // OD 12.11.2003 #i22341# - content anchor of anchor item is needed.
-            // Thus, don't overwrite anchor item by default contructed anchor item.
+            // Thus, don't overwrite anchor item by default constructed anchor item.
             if ( RndStdIds::FLY_AS_CHAR == eType )
             {
                 rSet.ClearItem( RES_OPAQUE );

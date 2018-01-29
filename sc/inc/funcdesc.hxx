@@ -383,7 +383,7 @@ public:
     /**
       Maps Etoken to character
 
-      Used for retrieving characters for parantheses and separators.
+      Used for retrieving characters for parentheses and separators.
 
       @param _eToken
       token for which, the corresponding character is retrieved

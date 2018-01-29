@@ -751,7 +751,7 @@ function getOutputDir()
 				stdout.WriteLine("\n Error: your specified output directory " +
 								 "\"" + sDir + "\" " +
 								 "contains one or more spaces.\n        That " +
-								 "causes problems with gnu make. Please specifiy" +
+								 "causes problems with gnu make. Please specify" +
 								 " a directory without spaces.");
 				bSkip = true;
 			}
