@@ -25,6 +25,7 @@
 #include <editeng/editdata.hxx>
 
 #include <com/sun/star/uno/Reference.h>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
   namespace datatransfer {
@@ -115,8 +116,8 @@ public:
     bool IsLastParaInterrupted() const;
 
 private:
-    NonOverflowingText *mpNonOverflowingTxt;
-    OverflowingText *mpOverflowingTxt;
+    std::unique_ptr<NonOverflowingText> mpNonOverflowingTxt;
+    std::unique_ptr<OverflowingText> mpOverflowingTxt;
 
     bool mbIsDeepMerge;
 };

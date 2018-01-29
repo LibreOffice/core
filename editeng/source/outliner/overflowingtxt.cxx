@@ -158,16 +158,14 @@ OutlinerParaObject *OverflowingText::DeeplyMergeParaObject(Outliner *pOutl, Outl
 
 OFlowChainedText::OFlowChainedText(Outliner const *pOutl, bool bIsDeepMerge)
 {
-    mpOverflowingTxt = pOutl->GetOverflowingText();
-    mpNonOverflowingTxt = pOutl->GetNonOverflowingText();
+    mpOverflowingTxt.reset( pOutl->GetOverflowingText() );
+    mpNonOverflowingTxt.reset( pOutl->GetNonOverflowingText() );
 
     mbIsDeepMerge = bIsDeepMerge;
 }
 
 OFlowChainedText::~OFlowChainedText()
 {
-    delete mpNonOverflowingTxt;
-    delete mpOverflowingTxt;
 }
 
 
