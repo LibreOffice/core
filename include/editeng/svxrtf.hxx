@@ -187,11 +187,11 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     RTFPardAttrMapIds aPardMap;
     std::vector<sal_uInt16> aWhichMap;
 
-    EditPosition* pInsPos;
+    std::unique_ptr<EditPosition> pInsPos;
     SfxItemPool* pAttrPool;
-    Color*  pDfltColor;
-    vcl::Font*   pDfltFont;
-    SfxItemSet *pRTFDefaults;
+    std::unique_ptr<Color>  pDfltColor;
+    std::unique_ptr<vcl::Font>   pDfltFont;
+    std::unique_ptr<SfxItemSet> pRTFDefaults;
 
     int     nDfltFont;
 
@@ -355,7 +355,7 @@ public:
 
 inline const Color& SvxRTFParser::GetColor( size_t nId ) const
 {
-    Color* pColor = pDfltColor;
+    Color* pColor = pDfltColor.get();
     if( nId < aColorTbl.size() )
         pColor = aColorTbl[ nId ];
     return *pColor;
