@@ -154,32 +154,30 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     }
 
     //Set Mnemonic widgets when everything has been imported
-    for (std::vector<MnemonicWidgetMap>::iterator aI = m_pParserState->m_aMnemonicWidgetMaps.begin(),
-        aEnd = m_pParserState->m_aMnemonicWidgetMaps.end(); aI != aEnd; ++aI)
+    for (auto const& mnemonicWidget : m_pParserState->m_aMnemonicWidgetMaps)
     {
-        FixedText *pOne = get<FixedText>(aI->m_sID);
-        vcl::Window *pOther = get<vcl::Window>(aI->m_sValue.toUtf8());
-        SAL_WARN_IF(!pOne || !pOther, "vcl", "missing either source " << aI->m_sID << " or target " << aI->m_sValue << " member of Mnemonic Widget Mapping");
+        FixedText *pOne = get<FixedText>(mnemonicWidget.m_sID);
+        vcl::Window *pOther = get<vcl::Window>(mnemonicWidget.m_sValue.toUtf8());
+        SAL_WARN_IF(!pOne || !pOther, "vcl", "missing either source " << mnemonicWidget.m_sID
+            << " or target " << mnemonicWidget.m_sValue << " member of Mnemonic Widget Mapping");
         if (pOne && pOther)
             pOne->set_mnemonic_widget(pOther);
     }
 
     //Set a11y relations when everything has been imported
-    for (AtkMap::iterator aI = m_pParserState->m_aAtkInfo.begin(),
-         aEnd = m_pParserState->m_aAtkInfo.end(); aI != aEnd; ++aI)
+    for (auto const& elemAtk : m_pParserState->m_aAtkInfo)
     {
-        vcl::Window *pSource = aI->first;
-        const stringmap &rMap = aI->second;
+        vcl::Window *pSource = elemAtk.first;
+        const stringmap &rMap = elemAtk.second;
 
-        for (stringmap::const_iterator aP = rMap.begin(),
-            aEndP = rMap.end(); aP != aEndP; ++aP)
+        for (auto const& elemMap : rMap)
         {
-            const OUString &rTarget = aP->second;
+            const OUString &rTarget = elemMap.second;
             vcl::Window *pTarget = get<vcl::Window>(rTarget.toUtf8());
             SAL_WARN_IF(!pTarget, "vcl", "missing member of a11y relation: " << rTarget);
             if (!pTarget)
                 continue;
-            const OString &rType = aP->first;
+            const OString &rType = elemMap.first;
             if (rType == "labelled-by")
                 pSource->SetAccessibleRelationLabeledBy(pTarget);
             else if (rType == "label-for")
@@ -194,89 +192,80 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     }
 
     //Set radiobutton groups when everything has been imported
-    for (std::vector<RadioButtonGroupMap>::iterator aI = m_pParserState->m_aGroupMaps.begin(),
-         aEnd = m_pParserState->m_aGroupMaps.end(); aI != aEnd; ++aI)
+    for (auto const& elem : m_pParserState->m_aGroupMaps)
     {
-        RadioButton *pOne = get<RadioButton>(aI->m_sID);
-        RadioButton *pOther = get<RadioButton>(aI->m_sValue);
+        RadioButton *pOne = get<RadioButton>(elem.m_sID);
+        RadioButton *pOther = get<RadioButton>(elem.m_sValue);
         SAL_WARN_IF(!pOne || !pOther, "vcl", "missing member of radiobutton group");
         if (pOne && pOther)
             pOne->group(*pOther);
     }
 
     //Set ComboBox models when everything has been imported
-    for (std::vector<ComboBoxModelMap>::iterator aI = m_pParserState->m_aModelMaps.begin(),
-         aEnd = m_pParserState->m_aModelMaps.end(); aI != aEnd; ++aI)
+    for (auto const& elem : m_pParserState->m_aModelMaps)
     {
-        ListBox *pTarget = get<ListBox>(aI->m_sID);
+        ListBox *pTarget = get<ListBox>(elem.m_sID);
         // pStore may be empty
-        const ListStore *pStore = get_model_by_name(aI->m_sValue.toUtf8());
+        const ListStore *pStore = get_model_by_name(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pTarget, "vcl", "missing elements of combobox");
         if (pTarget && pStore)
-            mungeModel(*pTarget, *pStore, aI->m_nActiveId);
+            mungeModel(*pTarget, *pStore, elem.m_nActiveId);
     }
 
     //Set TextView buffers when everything has been imported
-    for (std::vector<TextBufferMap>::iterator aI = m_pParserState->m_aTextBufferMaps.begin(),
-         aEnd = m_pParserState->m_aTextBufferMaps.end(); aI != aEnd; ++aI)
+    for (auto const& elem : m_pParserState->m_aTextBufferMaps)
     {
-        VclMultiLineEdit *pTarget = get<VclMultiLineEdit>(aI->m_sID);
-        const TextBuffer *pBuffer = get_buffer_by_name(aI->m_sValue.toUtf8());
+        VclMultiLineEdit *pTarget = get<VclMultiLineEdit>(elem.m_sID);
+        const TextBuffer *pBuffer = get_buffer_by_name(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pTarget || !pBuffer, "vcl", "missing elements of textview/textbuffer");
         if (pTarget && pBuffer)
             mungeTextBuffer(*pTarget, *pBuffer);
     }
 
     //Set SpinButton adjustments when everything has been imported
-    for (std::vector<WidgetAdjustmentMap>::iterator aI = m_pParserState->m_aNumericFormatterAdjustmentMaps.begin(),
-         aEnd = m_pParserState->m_aNumericFormatterAdjustmentMaps.end(); aI != aEnd; ++aI)
+    for (auto const& elem : m_pParserState->m_aNumericFormatterAdjustmentMaps)
     {
-        NumericFormatter *pTarget = dynamic_cast<NumericFormatter*>(get<vcl::Window>(aI->m_sID));
-        const Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue.toUtf8());
+        NumericFormatter *pTarget = dynamic_cast<NumericFormatter*>(get<vcl::Window>(elem.m_sID));
+        const Adjustment *pAdjustment = get_adjustment_by_name(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pTarget, "vcl", "missing NumericFormatter element of spinbutton/adjustment");
         SAL_WARN_IF(!pAdjustment, "vcl", "missing Adjustment element of spinbutton/adjustment");
         if (pTarget && pAdjustment)
             mungeAdjustment(*pTarget, *pAdjustment);
     }
 
-    for (std::vector<WidgetAdjustmentMap>::iterator aI = m_pParserState->m_aTimeFormatterAdjustmentMaps.begin(),
-         aEnd = m_pParserState->m_aTimeFormatterAdjustmentMaps.end(); aI != aEnd; ++aI)
+    for (auto const& elem : m_pParserState->m_aTimeFormatterAdjustmentMaps)
     {
-        TimeField *pTarget = dynamic_cast<TimeField*>(get<vcl::Window>(aI->m_sID));
-        const Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue.toUtf8());
+        TimeField *pTarget = dynamic_cast<TimeField*>(get<vcl::Window>(elem.m_sID));
+        const Adjustment *pAdjustment = get_adjustment_by_name(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
         if (pTarget && pAdjustment)
             mungeAdjustment(*pTarget, *pAdjustment);
     }
 
-    for (std::vector<WidgetAdjustmentMap>::iterator aI = m_pParserState->m_aDateFormatterAdjustmentMaps.begin(),
-         aEnd = m_pParserState->m_aDateFormatterAdjustmentMaps.end(); aI != aEnd; ++aI)
+    for (auto const& elem : m_pParserState->m_aDateFormatterAdjustmentMaps)
     {
-        DateField *pTarget = dynamic_cast<DateField*>(get<vcl::Window>(aI->m_sID));
-        const Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue.toUtf8());
+        DateField *pTarget = dynamic_cast<DateField*>(get<vcl::Window>(elem.m_sID));
+        const Adjustment *pAdjustment = get_adjustment_by_name(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
         if (pTarget && pAdjustment)
             mungeAdjustment(*pTarget, *pAdjustment);
     }
 
     //Set ScrollBar adjustments when everything has been imported
-    for (std::vector<WidgetAdjustmentMap>::iterator aI = m_pParserState->m_aScrollAdjustmentMaps.begin(),
-         aEnd = m_pParserState->m_aScrollAdjustmentMaps.end(); aI != aEnd; ++aI)
+    for (auto const& elem : m_pParserState->m_aScrollAdjustmentMaps)
     {
-        ScrollBar *pTarget = get<ScrollBar>(aI->m_sID);
-        const Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue.toUtf8());
+        ScrollBar *pTarget = get<ScrollBar>(elem.m_sID);
+        const Adjustment *pAdjustment = get_adjustment_by_name(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of scrollbar/adjustment");
         if (pTarget && pAdjustment)
             mungeAdjustment(*pTarget, *pAdjustment);
     }
 
     //Set Scale(Slider) adjustments
-    std::vector<WidgetAdjustmentMap>::iterator aIterator;
-    for (aIterator  = m_pParserState->m_aSliderAdjustmentMaps.begin();
-         aIterator != m_pParserState->m_aSliderAdjustmentMaps.end(); ++aIterator)
+    for (auto const& elem : m_pParserState->m_aSliderAdjustmentMaps)
     {
-        Slider* pTarget = dynamic_cast<Slider*>(get<vcl::Window>(aIterator->m_sID));
-        const Adjustment* pAdjustment = get_adjustment_by_name(aIterator->m_sValue.toUtf8());
+        Slider* pTarget = dynamic_cast<Slider*>(get<vcl::Window>(elem.m_sID));
+        const Adjustment* pAdjustment = get_adjustment_by_name(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of scale(slider)/adjustment");
         if (pTarget && pAdjustment)
         {
@@ -285,58 +274,54 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     }
 
     //Set size-groups when all widgets have been imported
-    for (std::vector<SizeGroup>::iterator aI = m_pParserState->m_aSizeGroups.begin(),
-        aEnd = m_pParserState->m_aSizeGroups.end(); aI != aEnd; ++aI)
+    for (auto const& sizeGroup : m_pParserState->m_aSizeGroups)
     {
         std::shared_ptr<VclSizeGroup> xGroup(std::make_shared<VclSizeGroup>());
 
-        for (stringmap::iterator aP = aI->m_aProperties.begin(),
-            aEndP = aI->m_aProperties.end(); aP != aEndP; ++aP)
+        for (auto const& elem : sizeGroup.m_aProperties)
         {
-            const OString &rKey = aP->first;
-            const OUString &rValue = aP->second;
+            const OString &rKey = elem.first;
+            const OUString &rValue = elem.second;
             xGroup->set_property(rKey, rValue);
         }
 
-        for (std::vector<OString>::iterator aW = aI->m_aWidgets.begin(),
-            aEndW = aI->m_aWidgets.end(); aW != aEndW; ++aW)
+        for (auto const& elem : sizeGroup.m_aWidgets)
         {
-            vcl::Window* pWindow = get<vcl::Window>(aW->getStr());
+            vcl::Window* pWindow = get<vcl::Window>(elem.getStr());
             pWindow->add_to_size_group(xGroup);
         }
     }
 
     //Set button images when everything has been imported
     std::set<OUString> aImagesToBeRemoved;
-    for (std::vector<ButtonImageWidgetMap>::iterator aI = m_pParserState->m_aButtonImageWidgetMaps.begin(),
-         aEnd = m_pParserState->m_aButtonImageWidgetMaps.end(); aI != aEnd; ++aI)
+    for (auto const& elem : m_pParserState->m_aButtonImageWidgetMaps)
     {
         PushButton *pTargetButton = nullptr;
         RadioButton *pTargetRadio = nullptr;
         Button *pTarget = nullptr;
 
-        if (!aI->m_bRadio)
+        if (!elem.m_bRadio)
         {
-            pTargetButton = get<PushButton>(aI->m_sID);
+            pTargetButton = get<PushButton>(elem.m_sID);
             pTarget = pTargetButton;
         }
         else
         {
-            pTargetRadio = get<RadioButton>(aI->m_sID);
+            pTargetRadio = get<RadioButton>(elem.m_sID);
             pTarget = pTargetRadio;
         }
 
-        FixedImage *pImage = get<FixedImage>(aI->m_sValue.toUtf8());
+        FixedImage *pImage = get<FixedImage>(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pTarget || !pImage,
             "vcl", "missing elements of button/image/stock");
         if (!pTarget || !pImage)
             continue;
-        aImagesToBeRemoved.insert(aI->m_sValue);
+        aImagesToBeRemoved.insert(elem.m_sValue);
 
-        VclBuilder::StockMap::iterator aFind = m_pParserState->m_aStockMap.find(aI->m_sValue.toUtf8());
+        VclBuilder::StockMap::iterator aFind = m_pParserState->m_aStockMap.find(elem.m_sValue.toUtf8());
         if (aFind == m_pParserState->m_aStockMap.end())
         {
-            if (!aI->m_bRadio)
+            if (!elem.m_bRadio)
                 pTargetButton->SetModeImage(pImage->GetImage());
             else
                 pTargetRadio->SetModeRadioImage(pImage->GetImage());
@@ -348,7 +333,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
             SAL_WARN_IF(eType == SymbolType::DONTKNOW, "vcl", "missing stock image element for button");
             if (eType == SymbolType::DONTKNOW)
                 continue;
-            if (!aI->m_bRadio)
+            if (!elem.m_bRadio)
             {
                 pTargetButton->SetSymbol(eType);
                 //fdo#76457 keep symbol images small e.g. tools->customize->menu
@@ -364,7 +349,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
             {
                 BitmapEx aBitmap(mapStockToImageResource(rImageInfo.m_sStock));
                 Image const aImage(aBitmap);
-                if (!aI->m_bRadio)
+                if (!elem.m_bRadio)
                     pTargetButton->SetModeImage(aImage);
                 else
                     pTargetRadio->SetModeRadioImage(aImage);
@@ -385,18 +370,16 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
 
     //There may be duplicate use of an Image, so we used a set to collect and
     //now we can remove them from the tree after their final munge
-    for (std::set<OUString>::iterator aI = aImagesToBeRemoved.begin(),
-        aEnd = aImagesToBeRemoved.end(); aI != aEnd; ++aI)
+    for (auto const& elem : aImagesToBeRemoved)
     {
-        delete_by_name(aI->toUtf8());
+        delete_by_name(elem.toUtf8());
     }
 
     //Set button menus when everything has been imported
-    for (std::vector<ButtonMenuMap>::iterator aI = m_pParserState->m_aButtonMenuMaps.begin(),
-         aEnd = m_pParserState->m_aButtonMenuMaps.end(); aI != aEnd; ++aI)
+    for (auto const& elem : m_pParserState->m_aButtonMenuMaps)
     {
-        MenuButton *pTarget = get<MenuButton>(aI->m_sID);
-        PopupMenu *pMenu = get_menu(aI->m_sValue.toUtf8());
+        MenuButton *pTarget = get<MenuButton>(elem.m_sID);
+        PopupMenu *pMenu = get_menu(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pTarget || !pMenu,
             "vcl", "missing elements of button/menu");
         if (!pTarget || !pMenu)
@@ -406,21 +389,20 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
 
     //Remove ScrollWindow parent widgets whose children in vcl implement scrolling
     //internally.
-    for (auto aI = m_pParserState->m_aRedundantParentWidgets.begin(),
-        aEnd = m_pParserState->m_aRedundantParentWidgets.end(); aI != aEnd; ++aI)
+    for (auto const& elem : m_pParserState->m_aRedundantParentWidgets)
     {
-        delete_by_window(aI->first);
+        delete_by_window(elem.first);
     }
 
     //fdo#67378 merge the label into the disclosure button
-    for (VclPtr<VclExpander> const & pOne : m_pParserState->m_aExpanderWidgets)
+    for (auto const& elem : m_pParserState->m_aExpanderWidgets)
     {
-        vcl::Window *pChild = pOne->get_child();
-        vcl::Window* pLabel = pOne->GetWindow(GetWindowType::LastChild);
+        vcl::Window *pChild = elem->get_child();
+        vcl::Window* pLabel = elem->GetWindow(GetWindowType::LastChild);
         if (pLabel && pLabel != pChild && pLabel->GetType() == WindowType::FIXEDTEXT)
         {
             FixedText *pLabelWidget = static_cast<FixedText*>(pLabel);
-            pOne->set_label(pLabelWidget->GetText());
+            elem->set_label(pLabelWidget->GetText());
             delete_by_window(pLabel);
         }
     }
@@ -436,13 +418,12 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     {
         int nButtons = 0;
         bool bHasDefButton = false;
-        for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
-             aEnd = m_aChildren.end(); aI != aEnd; ++aI)
+        for (auto const& child : m_aChildren)
         {
-            if (isButtonType(aI->m_pWindow->GetType()))
+            if (isButtonType(child.m_pWindow->GetType()))
             {
                 ++nButtons;
-                if (aI->m_pWindow->GetStyle() & WB_DEFBUTTON)
+                if (child.m_pWindow->GetStyle() & WB_DEFBUTTON)
                 {
                     bHasDefButton = true;
                     break;
@@ -1696,10 +1677,10 @@ namespace BuilderUtils
 {
     void set_properties(vcl::Window *pWindow, const VclBuilder::stringmap &rProps)
     {
-        for (VclBuilder::stringmap::const_iterator aI = rProps.begin(), aEnd = rProps.end(); aI != aEnd; ++aI)
+        for (auto const& prop : rProps)
         {
-            const OString &rKey = aI->first;
-            const OUString &rValue = aI->second;
+            const OString &rKey = prop.first;
+            const OUString &rValue = prop.second;
             pWindow->set_property(rKey, rValue);
         }
     }
@@ -1843,10 +1824,10 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString
         else
             BuilderUtils::set_properties(pCurrentChild, rProps);
 
-        for (stringmap::iterator aI = rPango.begin(), aEnd = rPango.end(); aI != aEnd; ++aI)
+        for (auto const& elem : rPango)
         {
-            const OString &rKey = aI->first;
-            const OUString &rValue = aI->second;
+            const OString &rKey = elem.first;
+            const OUString &rValue = elem.second;
             pCurrentChild->set_font_attribute(rKey, rValue);
         }
 
@@ -2341,10 +2322,10 @@ void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, vcl::Window *pWin
             break;
     }
 
-    for (stringmap::iterator aI = aProperties.begin(), aEnd = aProperties.end(); aI != aEnd; ++aI)
+    for (auto const& prop : aProperties)
     {
-        const OString &rKey = aI->first;
-        const OUString &rValue = aI->second;
+        const OString &rKey = prop.first;
+        const OUString &rValue = prop.second;
 
         if (pWindow && rKey.match("AtkObject::"))
             pWindow->set_property(rKey.copy(RTL_CONSTASCII_LENGTH("AtkObject::")), rValue);
@@ -2701,10 +2682,10 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const
     {
         pParent->SetHelpId(nNewId, m_sHelpRoot + rID);
 
-        for (stringmap::iterator aI = rProps.begin(), aEnd = rProps.end(); aI != aEnd; ++aI)
+        for (auto const& prop : rProps)
         {
-            const OString &rKey = aI->first;
-            const OUString &rValue = aI->second;
+            const OString &rKey = prop.first;
+            const OUString &rValue = prop.second;
 
             if (rKey == "tooltip-markup")
                 pParent->SetTipHelpText(nNewId, rValue);
@@ -2718,10 +2699,10 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const
                 SAL_INFO("vcl.layout", "unhandled property: " << rKey);
         }
 
-        for (accelmap::iterator aI = rAccels.begin(), aEnd = rAccels.end(); aI != aEnd; ++aI)
+        for (auto const& accel : rAccels)
         {
-            const OString &rSignal = aI->first;
-            const auto &rValue = aI->second;
+            const OString &rSignal = accel.first;
+            const auto &rValue = accel.second;
 
             if (rSignal == "activate")
                 pParent->SetAccelKey(nNewId, makeKeyCode(rValue));
@@ -2742,8 +2723,8 @@ template<typename T> bool insertItems(vcl::Window *pWindow, VclBuilder::stringma
         return false;
 
     sal_uInt16 nActiveId = extractActive(rMap);
-    for (std::vector<OUString>::const_iterator aI = rItems.begin(), aEnd = rItems.end(); aI != aEnd; ++aI)
-        pContainer->InsertEntry(*aI);
+    for (auto const& item : rItems)
+        pContainer->InsertEntry(item);
     if (nActiveId < rItems.size())
         pContainer->SelectEntryPos(nActiveId);
 
@@ -3222,11 +3203,10 @@ vcl::Window *VclBuilder::get_widget_root()
 
 vcl::Window *VclBuilder::get_by_name(const OString& sID)
 {
-    for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
-         aEnd = m_aChildren.end(); aI != aEnd; ++aI)
+    for (auto const& child : m_aChildren)
     {
-        if (aI->m_sID == sID)
-            return aI->m_pWindow;
+        if (child.m_sID == sID)
+            return child.m_pWindow;
     }
 
     return nullptr;
@@ -3234,11 +3214,10 @@ vcl::Window *VclBuilder::get_by_name(const OString& sID)
 
 PopupMenu *VclBuilder::get_menu(const OString& sID)
 {
-    for (std::vector<MenuAndId>::iterator aI = m_aMenus.begin(),
-         aEnd = m_aMenus.end(); aI != aEnd; ++aI)
+    for (auto const& menu : m_aMenus)
     {
-        if (aI->m_sID == sID)
-            return aI->m_pMenu;
+        if (menu.m_sID == sID)
+            return menu.m_pMenu;
     }
 
     return nullptr;
@@ -3246,12 +3225,11 @@ PopupMenu *VclBuilder::get_menu(const OString& sID)
 
 short VclBuilder::get_response(const vcl::Window *pWindow) const
 {
-    for (std::vector<WinAndId>::const_iterator aI = m_aChildren.begin(),
-         aEnd = m_aChildren.end(); aI != aEnd; ++aI)
+    for (auto const& child : m_aChildren)
     {
-        if (aI->m_pWindow == pWindow)
+        if (child.m_pWindow == pWindow)
         {
-            return aI->m_nResponseId;
+            return child.m_nResponseId;
         }
     }
 
@@ -3262,12 +3240,11 @@ short VclBuilder::get_response(const vcl::Window *pWindow) const
 
 void VclBuilder::set_response(const OString& sID, short nResponse)
 {
-    for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
-         aEnd = m_aChildren.end(); aI != aEnd; ++aI)
+    for (auto & child : m_aChildren)
     {
-        if (aI->m_sID == sID)
+        if (child.m_sID == sID)
         {
-            aI->m_nResponseId = nResponse;
+            child.m_nResponseId = nResponse;
             return;
         }
     }
@@ -3311,11 +3288,10 @@ void VclBuilder::drop_ownership(const vcl::Window *pWindow)
 
 OString VclBuilder::get_by_window(const vcl::Window *pWindow) const
 {
-    for (std::vector<WinAndId>::const_iterator aI = m_aChildren.begin(),
-         aEnd = m_aChildren.end(); aI != aEnd; ++aI)
+    for (auto const& child : m_aChildren)
     {
-        if (aI->m_pWindow == pWindow)
-            return aI->m_sID;
+        if (child.m_pWindow == pWindow)
+            return child.m_sID;
     }
 
     return OString();
@@ -3330,11 +3306,10 @@ VclBuilder::PackingData VclBuilder::get_window_packing_data(const vcl::Window *p
     const vcl::Window *pPropHolder = pWindow->ImplGetWindowImpl()->mpClientWindow ?
         pWindow->ImplGetWindowImpl()->mpClientWindow : pWindow;
 
-    for (std::vector<WinAndId>::const_iterator aI = m_aChildren.begin(),
-         aEnd = m_aChildren.end(); aI != aEnd; ++aI)
+    for (auto const& child : m_aChildren)
     {
-        if (aI->m_pWindow == pPropHolder)
-            return aI->m_aPackingData;
+        if (child.m_pWindow == pPropHolder)
+            return child.m_aPackingData;
     }
 
     return PackingData();
@@ -3342,11 +3317,10 @@ VclBuilder::PackingData VclBuilder::get_window_packing_data(const vcl::Window *p
 
 void VclBuilder::set_window_packing_position(const vcl::Window *pWindow, sal_Int32 nPosition)
 {
-    for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
-         aEnd = m_aChildren.end(); aI != aEnd; ++aI)
+    for (auto & child : m_aChildren)
     {
-        if (aI->m_pWindow == pWindow)
-            aI->m_aPackingData.m_nPosition = nPosition;
+        if (child.m_pWindow == pWindow)
+            child.m_aPackingData.m_nPosition = nPosition;
     }
 }
 
@@ -3376,10 +3350,9 @@ const VclBuilder::Adjustment *VclBuilder::get_adjustment_by_name(const OString& 
 
 void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId)
 {
-    for (std::vector<ListStore::row>::const_iterator aI = rStore.m_aEntries.begin(), aEnd = rStore.m_aEntries.end();
-        aI != aEnd; ++aI)
+    for (auto const& entry : rStore.m_aEntries)
     {
-        const ListStore::row &rRow = *aI;
+        const ListStore::row &rRow = entry;
         sal_uInt16 nEntry = rTarget.InsertEntry(rRow[0]);
         if (rRow.size() > 1)
         {
@@ -3395,10 +3368,10 @@ void VclBuilder::mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rA
 {
     int nMul = rtl_math_pow10Exp(1, rTarget.GetDecimalDigits());
 
-    for (stringmap::const_iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
+    for (auto const& elem : rAdjustment)
     {
-        const OString &rKey = aI->first;
-        const OUString &rValue = aI->second;
+        const OString &rKey = elem.first;
+        const OUString &rValue = elem.second;
 
         if (rKey == "upper")
         {
@@ -3431,10 +3404,10 @@ void VclBuilder::mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rA
 
 void VclBuilder::mungeAdjustment(TimeField &rTarget, const Adjustment &rAdjustment)
 {
-    for (stringmap::const_iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
+    for (auto const& elem : rAdjustment)
     {
-        const OString &rKey = aI->first;
-        const OUString &rValue = aI->second;
+        const OString &rKey = elem.first;
+        const OUString &rValue = elem.second;
 
         if (rKey == "upper")
         {
@@ -3462,10 +3435,10 @@ void VclBuilder::mungeAdjustment(TimeField &rTarget, const Adjustment &rAdjustme
 
 void VclBuilder::mungeAdjustment(DateField &rTarget, const Adjustment &rAdjustment)
 {
-    for (stringmap::const_iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
+    for (auto const& elem : rAdjustment)
     {
-        const OString &rKey = aI->first;
-        const OUString &rValue = aI->second;
+        const OString &rKey = elem.first;
+        const OUString &rValue = elem.second;
 
         if (rKey == "upper")
         {
@@ -3493,10 +3466,10 @@ void VclBuilder::mungeAdjustment(DateField &rTarget, const Adjustment &rAdjustme
 
 void VclBuilder::mungeAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment)
 {
-    for (stringmap::const_iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
+    for (auto const& elem : rAdjustment)
     {
-        const OString &rKey = aI->first;
-        const OUString &rValue = aI->second;
+        const OString &rKey = elem.first;
+        const OUString &rValue = elem.second;
 
         if (rKey == "upper")
             rTarget.SetRangeMax(rValue.toInt32());
@@ -3517,10 +3490,10 @@ void VclBuilder::mungeAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustme
 
 void VclBuilder::mungeAdjustment(Slider& rTarget, const Adjustment& rAdjustment)
 {
-    for (stringmap::const_iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
+    for (auto const& elem : rAdjustment)
     {
-        const OString &rKey = aI->first;
-        const OUString &rValue = aI->second;
+        const OString &rKey = elem.first;
+        const OUString &rValue = elem.second;
 
         if (rKey == "upper")
             rTarget.SetRangeMax(rValue.toInt32());
@@ -3541,10 +3514,10 @@ void VclBuilder::mungeAdjustment(Slider& rTarget, const Adjustment& rAdjustment)
 
 void VclBuilder::mungeTextBuffer(VclMultiLineEdit &rTarget, const TextBuffer &rTextBuffer)
 {
-    for (stringmap::const_iterator aI = rTextBuffer.begin(), aEnd = rTextBuffer.end(); aI != aEnd; ++aI)
+    for (auto const& elem : rTextBuffer)
     {
-        const OString &rKey = aI->first;
-        const OUString &rValue = aI->second;
+        const OString &rKey = elem.first;
+        const OUString &rValue = elem.second;
 
         if (rKey == "text")
             rTarget.SetText(rValue);

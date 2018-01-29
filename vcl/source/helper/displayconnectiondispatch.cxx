@@ -58,8 +58,8 @@ void DisplayConnectionDispatch::terminate()
     MutexGuard aGuard( m_aMutex );
     Any aEvent;
     std::list< css::uno::Reference< XEventHandler > > aLocalList( m_aHandlers );
-    for( ::std::list< css::uno::Reference< XEventHandler > >::const_iterator it = aLocalList.begin(); it != aLocalList.end(); ++it )
-        (*it)->handleEvent( aEvent );
+    for (auto const& elem : aLocalList)
+        elem->handleEvent( aEvent );
 }
 
 void SAL_CALL DisplayConnectionDispatch::addEventHandler( const Any& /*window*/, const css::uno::Reference< XEventHandler >& handler, sal_Int32 /*eventMask*/ )
@@ -107,8 +107,8 @@ bool DisplayConnectionDispatch::dispatchEvent( void const * pData, int nBytes )
         MutexGuard aGuard( m_aMutex );
         handlers = m_aHandlers;
     }
-    for( ::std::list< css::uno::Reference< XEventHandler > >::const_iterator it = handlers.begin(); it != handlers.end(); ++it )
-        if( (*it)->handleEvent( aEvent ) )
+    for (auto const& handle : handlers)
+        if( handle->handleEvent( aEvent ) )
             return true;
     return false;
 }

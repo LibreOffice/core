@@ -801,12 +801,12 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
     RectangleVector aRectangles;
     aWorkRgn.GetRegionRectangles(aRectangles);
 
-    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+    for (auto const& rectangle : aRectangles)
     {
-        const Point aMapPt(pMapX[aRectIter->Left()], pMapY[aRectIter->Top()]);
+        const Point aMapPt(pMapX[rectangle.Left()], pMapY[rectangle.Top()]);
         const Size aMapSz(
-            pMapX[aRectIter->Right() + 1] - aMapPt.X(),      // pMapX[L + W] -> L + ((R - L) + 1) -> R + 1
-            pMapY[aRectIter->Bottom() + 1] - aMapPt.Y());    // same for Y
+            pMapX[rectangle.Right() + 1] - aMapPt.X(),      // pMapX[L + W] -> L + ((R - L) + 1) -> R + 1
+            pMapY[rectangle.Bottom() + 1] - aMapPt.Y());    // same for Y
 
         DrawRect(tools::Rectangle(aMapPt, aMapSz));
     }

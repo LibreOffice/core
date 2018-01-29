@@ -200,9 +200,9 @@ std::vector<KeyEvent> generate_key_events_from_keycode(const OUString& rStr)
     OUString aRemainingText;
 
     std::vector<OUString> aTokens = comphelper::string::split(rStr, '+');
-    for (auto itr = aTokens.begin(), itrEnd = aTokens.end(); itr != itrEnd; ++itr)
+    for (auto const& token : aTokens)
     {
-        OUString aToken = itr->trim();
+        OUString aToken = token.trim();
         if (aToken == "CTRL")
         {
             bMod1 = true;
@@ -316,9 +316,9 @@ void WindowUIObject::execute(const OUString& rAction,
     bool bHandled = true;
     if (rAction == "SET")
     {
-        for (auto itr = rParameters.begin(); itr != rParameters.end(); ++itr)
+        for (auto const& parameter : rParameters)
         {
-            std::cout << itr->first;
+            std::cout << parameter.first;
         }
     }
     else if (rAction == "TYPE")
@@ -328,10 +328,9 @@ void WindowUIObject::execute(const OUString& rAction,
         {
             const OUString& rText = it->second;
             auto aKeyEvents = generate_key_events_from_text(rText);
-            for (auto itr = aKeyEvents.begin(), itrEnd = aKeyEvents.end();
-                    itr != itrEnd; ++itr)
+            for (auto const& keyEvent : aKeyEvents)
             {
-                mxWindow->KeyInput(*itr);
+                mxWindow->KeyInput(keyEvent);
             }
         }
         else if (rParameters.find("KEYCODE") != rParameters.end())
@@ -339,10 +338,9 @@ void WindowUIObject::execute(const OUString& rAction,
             auto itr = rParameters.find("KEYCODE");
             const OUString rText = itr->second;
             auto aKeyEvents = generate_key_events_from_keycode(rText);
-            for (auto itrKey = aKeyEvents.begin(), itrKeyEnd = aKeyEvents.end();
-                    itrKey != itrKeyEnd; ++itrKey)
+            for (auto const& keyEvent : aKeyEvents)
             {
-                mxWindow->KeyInput(*itrKey);
+                mxWindow->KeyInput(keyEvent);
             }
         }
         else
@@ -457,9 +455,9 @@ OUString WindowUIObject::dumpState() const
     OUStringBuffer aStateString = "{\"name\":\"" + mxWindow->get_id() + "\"";
     aStateString.append(", \"ImplementationName\":\"").appendAscii(typeid(*mxWindow.get()).name()).append("\"");
     StringMap aState = const_cast<WindowUIObject*>(this)->get_state();
-    for (auto itr = aState.begin(), itrEnd = aState.end(); itr != itrEnd; ++itr)
+    for (auto const& elem : aState)
     {
-        OUString property = ",\"" + itr->first + "\":\"" + escape(itr->second) + "\"";
+        OUString property = ",\"" + elem.first + "\":\"" + escape(elem.second) + "\"";
         aStateString.append(property);
     }
 
@@ -625,10 +623,9 @@ void EditUIObject::execute(const OUString& rAction,
 
             const OUString& rText = it->second;
             auto aKeyEvents = generate_key_events_from_text(rText);
-            for (auto itr = aKeyEvents.begin(), itrEnd = aKeyEvents.end();
-                    itr != itrEnd; ++itr)
+            for (auto const& keyEvent : aKeyEvents)
             {
-                mxEdit->KeyInput(*itr);
+                mxEdit->KeyInput(keyEvent);
             }
         }
         else

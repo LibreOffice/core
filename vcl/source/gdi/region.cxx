@@ -289,9 +289,9 @@ tools::PolyPolygon vcl::Region::ImplCreatePolyPolygonFromRegionBand() const
         RectangleVector aRectangles;
         GetRegionRectangles(aRectangles);
 
-        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+        for (auto const& rectangle : aRectangles)
         {
-            aRetval.Insert( tools::Polygon(*aRectIter) );
+            aRetval.Insert( tools::Polygon(rectangle) );
         }
     }
     else

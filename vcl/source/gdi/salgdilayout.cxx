@@ -236,10 +236,10 @@ void SalGraphics::mirror( vcl::Region& rRgn, const OutputDevice *pOutDev ) const
         rRgn.GetRegionRectangles(aRectangles);
         rRgn.SetEmpty();
 
-        for(RectangleVector::iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+        for (auto & rectangle : aRectangles)
         {
-            mirror(*aRectIter, pOutDev);
-            rRgn.Union(*aRectIter);
+            mirror(rectangle, pOutDev);
+            rRgn.Union(rectangle);
         }
 
         //ImplRegionInfo        aInfo;
