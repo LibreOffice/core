@@ -82,7 +82,6 @@ void SalGtkFilePicker::InitialMapping()
 SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext >& xContext ) :
     SalGtkPicker( xContext ),
     SalGtkFilePicker_Base( m_rbHelperMtx ),
-    m_pFilterVector( nullptr ),
     m_pParentWidget ( nullptr ),
     m_pVBox ( nullptr ),
     mnHID_FolderChange( 0 ),
@@ -525,7 +524,7 @@ void SalGtkFilePicker::ensureFilterVector( const OUString& _rInitialCurrentFilte
 {
     if( !m_pFilterVector )
     {
-        m_pFilterVector = new FilterVector;
+        m_pFilterVector.reset( new std::vector<FilterEntry> );
 
         // set the first filter to the current filter
         if ( m_aCurrentFilter.isEmpty() )
@@ -810,7 +809,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
 
             if (m_pFilterVector)
             {
-                FilterVector::iterator aVectorIter = ::std::find_if(
+                auto aVectorIter = ::std::find_if(
                     m_pFilterVector->begin(), m_pFilterVector->end(), FilterTitleMatch(sFilterName) );
 
                 OUString aFilter;
@@ -1969,7 +1968,7 @@ SalGtkFilePicker::~SalGtkFilePicker()
         gtk_widget_destroy( m_pHBoxs[i] );
     }
 
-    delete m_pFilterVector;
+    m_pFilterVector.reset();
 
     gtk_widget_destroy( m_pVBox );
 }

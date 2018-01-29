@@ -38,8 +38,6 @@
 struct FilterEntry;
 struct ElementEntry_Impl;
 
-typedef ::std::vector < FilterEntry >     FilterVector;
-
 // class declaration
 
 typedef cppu::WeakComponentImplHelper<
@@ -150,7 +148,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         css::uno::Reference< css::ui::dialogs::XFilePickerListener >
             m_xListener;
         OUString msPlayLabel;
-        FilterVector *m_pFilterVector;
+        std::unique_ptr<std::vector<FilterEntry>> m_pFilterVector;
         GtkWidget  *m_pParentWidget;
         GtkWidget  *m_pVBox;
         GtkWidget  *m_pFilterExpander;
