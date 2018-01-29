@@ -83,8 +83,8 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
     Cursor          hCursor_;
     int             nCaptured_;         // is captured
 
-    X11SalGraphics  *pGraphics_;            // current frame graphics
-    X11SalGraphics  *pFreeGraphics_;        // first free frame graphics
+    std::unique_ptr<X11SalGraphics> pGraphics_;            // current frame graphics
+    std::unique_ptr<X11SalGraphics> pFreeGraphics_;        // first free frame graphics
 
     bool            mbSendExtKeyModChange;
     ModKeyFlags     mnExtKeyMod;
@@ -126,12 +126,10 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
 
     SystemEnvData maSystemChildData;
 
-    SalI18N_InputContext *mpInputContext;
+    std::unique_ptr<SalI18N_InputContext> mpInputContext;
     Bool            mbInputFocus;
 
-    XRectangle*     m_pClipRectangles;
-    int             m_nCurClipRect;
-    int             m_nMaxClipRect;
+    std::vector<XRectangle> m_vClipRectangles;
 
     bool mPendingSizeEvent;
 
@@ -197,7 +195,7 @@ public:
     bool                    IsChildWindow() const { return bool(nStyle_ & (SalFrameStyleFlags::PLUG|SalFrameStyleFlags::SYSTEMCHILD)); }
     bool                    IsSysChildWindow() const { return bool(nStyle_ & SalFrameStyleFlags::SYSTEMCHILD); }
     bool                    IsFloatGrabWindow() const;
-    SalI18N_InputContext* getInputContext() const { return mpInputContext; }
+    SalI18N_InputContext* getInputContext() const { return mpInputContext.get(); }
     bool                    hasFocus() const { return mbInputFocus; }
 
     void                    beginUnicodeSequence();
