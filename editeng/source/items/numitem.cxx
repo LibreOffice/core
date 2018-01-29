@@ -210,8 +210,8 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     rStream.ReadUInt16( hasGraphicBrush );
     if ( hasGraphicBrush )
     {
-        pGraphicBrush = new SvxBrushItem( SID_ATTR_BRUSH );
-        pGraphicBrush = static_cast<SvxBrushItem*>(pGraphicBrush->Create( rStream, BRUSH_GRAPHIC_VERSION ));
+        std::unique_ptr<SvxBrushItem> pTmp( new SvxBrushItem( SID_ATTR_BRUSH ) );
+        pGraphicBrush.reset( static_cast<SvxBrushItem*>(pTmp->Create( rStream, BRUSH_GRAPHIC_VERSION )) );
     }
     else pGraphicBrush = nullptr;
     rStream.ReadUInt16( nTmp16 ); eVertOrient = nTmp16;
@@ -220,7 +220,7 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     rStream.ReadUInt16( hasBulletFont );
     if ( hasBulletFont )
     {
-        pBulletFont = new vcl::Font( );
+        pBulletFont.reset( new vcl::Font() );
         ReadFont( rStream, *pBulletFont );
     }
     else pBulletFont = nullptr;
@@ -239,8 +239,6 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
 
 SvxNumberFormat::~SvxNumberFormat()
 {
-    delete pGraphicBrush;
-    delete pBulletFont;
 }
 
 void SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverter)
@@ -335,14 +333,14 @@ SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
         nBulletRelSize      = rFormat.nBulletRelSize;
         SetShowSymbol(rFormat.IsShowSymbol());
         sCharStyleName      = rFormat.sCharStyleName;
-    DELETEZ(pGraphicBrush);
+    pGraphicBrush.reset();
     if(rFormat.pGraphicBrush)
     {
-        pGraphicBrush = new SvxBrushItem(*rFormat.pGraphicBrush);
+        pGraphicBrush.reset( new SvxBrushItem(*rFormat.pGraphicBrush) );
     }
-    DELETEZ(pBulletFont);
+    pBulletFont.reset();
     if(rFormat.pBulletFont)
-            pBulletFont = new vcl::Font(*rFormat.pBulletFont);
+        pBulletFont.reset( new vcl::Font(*rFormat.pBulletFont) );
     return *this;
 }
 
@@ -395,13 +393,11 @@ void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
 {
     if(!pBrushItem)
     {
-        delete pGraphicBrush;
-        pGraphicBrush = nullptr;
+        pGraphicBrush.reset();
     }
     else if ( !pGraphicBrush || (*pBrushItem != *pGraphicBrush) )
     {
-        delete pGraphicBrush;
-        pGraphicBrush =  static_cast<SvxBrushItem*>(pBrushItem->Clone());
+        pGraphicBrush.reset( static_cast<SvxBrushItem*>(pBrushItem->Clone()) );
    }
 
     if(pOrient)
@@ -419,8 +415,7 @@ void SvxNumberFormat::SetGraphic( const OUString& rName )
     if( pGraphicBrush && pGraphicBrush->GetGraphicLink() == rName )
         return ;
 
-    delete pGraphicBrush;
-    pGraphicBrush = new SvxBrushItem( rName, "", GPOS_AREA, 0 );
+    pGraphicBrush.reset( new SvxBrushItem( rName, "", GPOS_AREA, 0 ) );
     if( eVertOrient == text::VertOrientation::NONE )
         eVertOrient = text::VertOrientation::TOP;
 
@@ -434,8 +429,7 @@ sal_Int16    SvxNumberFormat::GetVertOrient() const
 
 void SvxNumberFormat::SetBulletFont(const vcl::Font* pFont)
 {
-    delete pBulletFont;
-    pBulletFont = pFont ? new vcl::Font(*pFont): nullptr;
+    pBulletFont.reset( pFont ? new vcl::Font(*pFont): nullptr );
 }
 
 void SvxNumberFormat::SetPositionAndSpaceMode( SvxNumPositionAndSpaceMode ePositionAndSpaceMode )
