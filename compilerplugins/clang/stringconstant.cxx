@@ -1029,7 +1029,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                             {
                                 report(
                                     DiagnosticsEngine::Warning,
-                                    ("call of '%0' with suspicous construction"
+                                    ("call of '%0' with suspicious construction"
                                      " of %1 with empty string constant"
                                      " argument"),
                                     getMemberLocation(call))
@@ -1510,7 +1510,7 @@ void StringConstant::reportChange(
                         {
                             report(
                                 DiagnosticsEngine::Warning,
-                                ("call of '%0' with suspicous call of %1 with"
+                                ("call of '%0' with suspicious call of %1 with"
                                  " empty string constant argument"),
                                 getMemberLocation(call))
                                 << fdecl->getQualifiedNameAsString() << original
@@ -1643,7 +1643,7 @@ void StringConstant::checkEmpty(
         case TreatEmpty::Error:
             report(
                 DiagnosticsEngine::Warning,
-                "call of '%0' with suspicous empty string constant argument",
+                "call of '%0' with suspicious empty string constant argument",
                 getMemberLocation(expr))
                 << callee->getQualifiedNameAsString() << expr->getSourceRange();
             break;

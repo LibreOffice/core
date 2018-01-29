@@ -91,7 +91,7 @@ public:
 
     /** Calculate the minimal zoom factor as the value at which the
         application area would completely fill the window.  All values set
-        manually or programatically are set to this value if they are
+        manually or programmatically are set to this value if they are
         smaller.  If the currently used zoom factor is smaller than the minimal zoom
         factor than set the minimal zoom factor as the new current zoom
         factor.

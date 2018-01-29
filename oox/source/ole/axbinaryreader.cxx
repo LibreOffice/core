@@ -149,7 +149,7 @@ bool AxBinaryPropertyReader::ArrayStringProperty::readProperty( AxAlignedInputSt
         if( !lclReadString( rInStrm, aString, rInStrm.readuInt32(), true ) )
             return false;
         mrArray.push_back( aString );
-        // every array string is aligned on 4 byte boundries
+        // every array string is aligned on 4 byte boundaries
         rInStrm.align( 4 );
     }
     return true;

@@ -2024,7 +2024,7 @@ namespace drawinglayer
                                     aViewTransform.scale(fDPIXChange, fDPIYChange);
                                 }
 
-                                // also take scaling from Size reduction into acount
+                                // also take scaling from Size reduction into account
                                 if(!basegfx::fTools::equal(fReduceFactor, 1.0))
                                 {
                                     aViewTransform.scale(fReduceFactor, fReduceFactor);
