@@ -130,12 +130,12 @@ static void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
     Sequence<sal_Int32> aSeq;
     if ( rValue >>= aSeq )
     {
-        long nCount = aSeq.getLength();
+        sal_Int32 nCount = aSeq.getLength();
         if ( nCount < USHRT_MAX )
         {
             const sal_Int32* pArray = aSeq.getConstArray();
             std::unique_ptr<sal_uInt16[]> pUShorts(new sal_uInt16[nCount]);
-            for (long i=0; i<nCount; i++)
+            for (sal_Int32 i=0; i<nCount; i++)
                 pUShorts[i] = static_cast<sal_uInt16>(pArray[i]);
 
             rOpt.SetLRUFuncList( pUShorts.get(), sal::static_int_cast<sal_uInt16>(nCount) );
