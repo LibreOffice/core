@@ -68,9 +68,6 @@ OTable::OTable(OCollection* _pTables,
                bool _bCase)
                : OTableDescriptor_BASE(m_aMutex)
                 ,ODescriptor(OTableDescriptor_BASE::rBHelper,_bCase,true)
-                ,m_pKeys(nullptr)
-                ,m_pColumns(nullptr)
-                ,m_pIndexes(nullptr)
                 ,m_pTables(_pTables)
 {
 }
@@ -85,9 +82,6 @@ OTable::OTable( OCollection*    _pTables,
                 ,m_SchemaName(SchemaName)
                 ,m_Description(Description)
                 ,m_Type(Type)
-                ,m_pKeys(nullptr)
-                ,m_pColumns(nullptr)
-                ,m_pIndexes(nullptr)
                 ,m_pTables(_pTables)
 {
     m_Name = Name;
@@ -95,9 +89,6 @@ OTable::OTable( OCollection*    _pTables,
 
 OTable::~OTable()
 {
-    delete m_pKeys;
-    delete m_pColumns;
-    delete m_pIndexes;
 }
 
 void OTable::construct()
@@ -151,12 +142,12 @@ void SAL_CALL OTable::disposing()
 
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    if(m_pKeys)
-        m_pKeys->disposing();
-    if(m_pColumns)
-        m_pColumns->disposing();
-    if(m_pIndexes)
-        m_pIndexes->disposing();
+    if(m_xKeys)
+        m_xKeys->disposing();
+    if(m_xColumns)
+        m_xColumns->disposing();
+    if(m_xIndexes)
+        m_xIndexes->disposing();
 
     m_pTables = nullptr;
 }
@@ -169,7 +160,7 @@ Reference< XNameAccess > SAL_CALL OTable::getColumns(  )
 
     try
     {
-        if ( !m_pColumns )
+        if ( !m_xColumns )
             refreshColumns();
     }
     catch( const RuntimeException& )
@@ -182,7 +173,7 @@ Reference< XNameAccess > SAL_CALL OTable::getColumns(  )
         // allowed
     }
 
-    return m_pColumns;
+    return m_xColumns.get();
 }
 
 
@@ -196,9 +187,9 @@ Reference< XIndexAccess > SAL_CALL OTable::getKeys(  )
 
     try
     {
-        if ( !m_pKeys )
+        if ( !m_xKeys )
             refreshKeys();
-        xKeys = m_pKeys;
+        xKeys = m_xKeys.get();
     }
     catch( const RuntimeException& )
     {
@@ -241,7 +232,7 @@ Reference< XNameAccess > SAL_CALL OTable::getIndexes(  )
 
     try
     {
-        if ( !m_pIndexes )
+        if ( !m_xIndexes )
             refreshIndexes();
     }
     catch( const RuntimeException& )
@@ -254,7 +245,7 @@ Reference< XNameAccess > SAL_CALL OTable::getIndexes(  )
         // allowed
     }
 
-    return m_pIndexes;
+    return m_xIndexes.get();
 }
 
 // XRename

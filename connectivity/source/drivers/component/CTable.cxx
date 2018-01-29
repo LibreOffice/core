@@ -90,10 +90,10 @@ void OComponentTable::refreshColumns()
     for(OSQLColumns::Vector::const_iterator aIter = m_aColumns->get().begin();aIter != aEnd;++aIter)
         aVector.push_back(Reference< XNamed>(*aIter,UNO_QUERY)->getName());
 
-    if(m_pColumns)
-        m_pColumns->reFill(aVector);
+    if(m_xColumns)
+        m_xColumns->reFill(aVector);
     else
-        m_pColumns  = new component::OComponentColumns(this,m_aMutex,aVector);
+        m_xColumns = new component::OComponentColumns(this,m_aMutex,aVector);
 }
 
 void OComponentTable::refreshIndexes()

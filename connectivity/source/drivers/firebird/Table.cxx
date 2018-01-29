@@ -116,7 +116,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
     MutexGuard aGuard(m_rMutex);
     checkDisposed(WeakComponentImplHelperBase::rBHelper.bDisposed);
 
-    uno::Reference< XPropertySet > xColumn(m_pColumns->getByName(rColName), UNO_QUERY);
+    uno::Reference< XPropertySet > xColumn(m_xColumns->getByName(rColName), UNO_QUERY);
 
     // sdbcx::Descriptor
     const bool bNameChanged = xColumn->getPropertyValue("Name") != rDescriptor->getPropertyValue("Name");
@@ -218,7 +218,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
     }
 
 
-    m_pColumns->refresh();
+    m_xColumns->refresh();
 }
 
 // ----- XRename --------------------------------------------------------------

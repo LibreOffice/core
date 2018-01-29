@@ -103,7 +103,7 @@ OColumn* ODBTable::createColumn(const OUString& _rName) const
     }
     else
     {
-        OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
+        OColumns* pColumns = static_cast<OColumns*>(m_xColumns.get());
         xProp.set(pColumns->createBaseObject(_rName),UNO_QUERY);
     }
 
@@ -294,12 +294,12 @@ void SAL_CALL ODBTable::alterColumnByName( const OUString& _rName, const Referen
     if ( !getAlterService().is() )
         throw SQLException(DBA_RES(RID_STR_NO_TABLE_RENAME),*this,SQLSTATE_GENERAL,1000,Any() );
 
-    if ( !m_pColumns->hasByName(_rName) )
+    if ( !m_xColumns->hasByName(_rName) )
         throw SQLException(DBA_RES(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,Any() );
 
     Reference<XPropertySet> xTable(this);
     getAlterService()->alterColumnByName(xTable,_rName,_rxDescriptor);
-    m_pColumns->refresh();
+    m_xColumns->refresh();
 }
 
 sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId )
