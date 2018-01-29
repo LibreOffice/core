@@ -1117,7 +1117,7 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
                 break;
             case 0x4B:
             case 0x6B:
-            case 0x2B: // Deleted Area Refernece                [323 273]
+            case 0x2B: // Deleted Area Reference                [323 273]
                 nIgnore = 6;
                 break;
             case 0x4C:

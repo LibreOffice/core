@@ -11,7 +11,7 @@
 // implementations reachable via the service manager.  If a given implementation
 // is the only implementor of some service that has a zero-parameter
 // constructor, instantiate the implementation through that service name.  If a
-// given implementation does not offer any such contructors (because it does not
+// given implementation does not offer any such constructors (because it does not
 // support any single-interface--based service, or because for each relevant
 // service there are multiple implementations or it does not have an appropriate
 // constructor) but does support at least one accumulation-based service, then

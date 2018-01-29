@@ -217,7 +217,7 @@ public:
 
     /** Typically skipping the current effect is triggered by mouse clicks
         or key presses that trigger the next effect.  This method allows the
-        skipping of effects to be triggered programatically.
+        skipping of effects to be triggered programmatically.
     */
     void callSkipEffectEventHandler();
 

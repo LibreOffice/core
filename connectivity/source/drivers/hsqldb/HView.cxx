@@ -76,7 +76,7 @@ namespace connectivity { namespace hsqldb
         // in HSQL, we need to do it this way ...
         //
         // I can imagine scenarios where this fails, e.g. when dropping the view
-        // succeedes, re-creating it fails, some other thread alters a table which
+        // succeeds, re-creating it fails, some other thread alters a table which
         // the view was based on, and then we try to restore the view with the
         // original command, which then fails, too.
         //

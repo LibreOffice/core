@@ -31,7 +31,7 @@ This class, as a base abstract class, sets a frame of functionality,
 delegating the data Object get/set methods to a Value object,
 and leaving the UI get/set methods abstract.
 Note that event listening is *not* a part of this model.
-the updateData() or updateUI() methods should be programatically called.
+the updateData() or updateUI() methods should be programmatically called.
 in child classes, the updateData() will be binded to UI event calls.
 <br><br>
 This class holds references to a Data Object and a Value object.
