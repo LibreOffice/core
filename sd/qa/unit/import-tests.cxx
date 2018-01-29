@@ -56,7 +56,6 @@
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -173,7 +172,6 @@ public:
     void testTdf90626();
     void testTdf114488();
     void testTdf114913();
-    void testTdf114821();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -250,7 +248,6 @@ public:
     CPPUNIT_TEST(testTdf90626);
     CPPUNIT_TEST(testTdf114488);
     CPPUNIT_TEST(testTdf114913);
-    CPPUNIT_TEST(testTdf114821);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2329,41 +2326,6 @@ void SdImportTest::testTdf114913()
     const SvxNumBulletItem *pItem = pTxtObj->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pItem);
     CPPUNIT_ASSERT_EQUAL(long(691), pItem->GetNumRule()->GetLevel(0).GetGraphicSize().getHeight());
-
-    xDocShRef->DoClose();
-}
-
-void SdImportTest::testTdf114821()
-{
-    css::uno::Any aAny;
-    sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc( "/sd/qa/unit/data/pptx/tdf114821.pptx" ), PPTX );
-
-    uno::Reference< beans::XPropertySet > xPropSet( getShapeFromPage( 0, 0, xDocShRef ) );
-    aAny = xPropSet->getPropertyValue( "Model" );
-    CPPUNIT_ASSERT_MESSAGE( "The shape doesn't have the property", aAny.hasValue() );
-
-    uno::Reference< chart::XChartDocument > xChartDoc;
-    aAny >>= xChartDoc;
-    CPPUNIT_ASSERT_MESSAGE( "failed to load chart", xChartDoc.is() );
-    uno::Reference< chart2::XChartDocument > xChart2Doc( xChartDoc, uno::UNO_QUERY );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load chart", xChart2Doc.is() );
-
-    uno::Reference< chart2::XCoordinateSystemContainer > xBCooSysCnt( xChart2Doc->getFirstDiagram(), uno::UNO_QUERY );
-    uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xBCooSysCnt->getCoordinateSystems() );
-    uno::Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[0], uno::UNO_QUERY );
-
-    uno::Reference< chart2::XDataSeriesContainer > xDSCnt( xCTCnt->getChartTypes()[0], uno::UNO_QUERY );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load data series", xDSCnt.is() );
-    uno::Sequence< uno::Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Invalid Series count", static_cast<sal_Int32>( 1 ), aSeriesSeq.getLength() );
-
-    const css::uno::Reference< css::beans::XPropertySet >& rPropSet0( aSeriesSeq[0]->getDataPointByIndex( 0 ) );
-    CPPUNIT_ASSERT( rPropSet0.is() );
-
-    // Check the first label
-    sal_Int32 aPlacement;
-    rPropSet0->getPropertyValue( "LabelPlacement" ) >>= aPlacement;
-    CPPUNIT_ASSERT_EQUAL( css::chart::DataLabelPlacement::TOP_LEFT, aPlacement );
 
     xDocShRef->DoClose();
 }
