@@ -862,7 +862,7 @@ basegfx::B2DRange Array::GetCellRange( size_t nCol, size_t nRow, bool bExpandMer
             // probably *should* be included in the above extended
             // GetColPosition/GetColWidth already. This might be
             // added due to GetColPosition/GetColWidth not working
-            // correcly over PageChanges (if used), but not sure.
+            // correctly over PageChanges (if used), but not sure.
             aRect.Left() -= rCell.mnAddLeft;
             aRect.Right() += rCell.mnAddRight;
             aRect.Top() -= rCell.mnAddTop;
