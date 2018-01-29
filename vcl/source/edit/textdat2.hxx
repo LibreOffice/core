@@ -212,15 +212,15 @@ public:
 class TEParaPortions
 {
 private:
-    std::vector<TEParaPortion*> mvData;
+    std::vector<std::unique_ptr<TEParaPortion>> mvData;
 
 public:
                     TEParaPortions() : mvData() {}
                     ~TEParaPortions();
 
     sal_uInt32      Count() const { return static_cast<sal_uInt32>(mvData.size()); }
-    TEParaPortion*  GetObject( sal_uInt32 nIndex ) { return mvData[nIndex]; }
-    void            Insert( TEParaPortion* pObject, sal_uInt32 nPos ) { mvData.insert( mvData.begin()+nPos, pObject ); }
+    TEParaPortion*  GetObject( sal_uInt32 nIndex ) { return mvData[nIndex].get(); }
+    void            Insert( TEParaPortion* pObject, sal_uInt32 nPos ) { mvData.emplace( mvData.begin()+nPos, pObject ); }
     void            Remove( sal_uInt32 nPos ) { mvData.erase( mvData.begin()+nPos ); }
 };
 

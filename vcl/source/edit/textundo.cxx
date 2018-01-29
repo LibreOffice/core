@@ -165,7 +165,6 @@ void TextUndoDelPara::Redo()
     // pNode is not valid anymore in case an Undo joined paragraphs
     mpNode = GetDoc()->GetNodes()[ mnPara ];
 
-    delete GetTEParaPortions()->GetObject( mnPara );
     GetTEParaPortions()->Remove( mnPara );
 
     // do not delete Node because of Undo!

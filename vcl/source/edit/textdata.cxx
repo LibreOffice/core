@@ -267,8 +267,6 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormat
 
 TEParaPortions::~TEParaPortions()
 {
-   for (auto const& elem : mvData)
-        delete elem;
 }
 
 IdleFormatter::IdleFormatter()
