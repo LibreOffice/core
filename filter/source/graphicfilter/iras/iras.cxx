@@ -239,6 +239,7 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
             sal_uInt8 nDat = 0;
             for (y = 0; y < mnHeight && mbStatus; ++y)
             {
+                Scanline pScanline = pAcc->GetScanline(y);
                 for (x = 0; x < mnWidth && mbStatus; ++x)
                 {
                     if (!(x & 7))
@@ -247,9 +248,9 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
                         if (!m_rRAS.good())
                             mbStatus = false;
                     }
-                    pAcc->SetPixelIndex( y, x,
+                    pAcc->SetPixelOnData(pScanline, x, BitmapColor(
                         sal::static_int_cast< sal_uInt8 >(
-                            nDat >> ( ( x & 7 ) ^ 7 )) );
+                            nDat >> ( ( x & 7 ) ^ 7 )) ));
                 }
                 if (!( ( x - 1 ) & 0x8 ) )
                 {
@@ -264,10 +265,11 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
         case 8 :
             for (y = 0; y < mnHeight && mbStatus; ++y)
             {
+                Scanline pScanline = pAcc->GetScanline(y);
                 for (x = 0; x < mnWidth && mbStatus; ++x)
                 {
                     sal_uInt8 nDat = ImplGetByte();
-                    pAcc->SetPixelIndex( y, x, nDat );
+                    pAcc->SetPixelOnData(pScanline, x, BitmapColor(nDat));
                     if (!m_rRAS.good())
                         mbStatus = false;
                 }
@@ -287,6 +289,7 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
                 case 24 :
                     for (y = 0; y < mnHeight && mbStatus; ++y)
                     {
+                        Scanline pScanline = pAcc->GetScanline(y);
                         for (x = 0; x < mnWidth && mbStatus; ++x)
                         {
                             if ( mnType == RAS_TYPE_RGB_FORMAT )
@@ -301,7 +304,7 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
                                 nGreen = ImplGetByte();
                                 nRed = ImplGetByte();
                             }
-                            pAcc->SetPixel ( y, x, BitmapColor( nRed, nGreen, nBlue ) );
+                            pAcc->SetPixelOnData(pScanline, x, BitmapColor(nRed, nGreen, nBlue));
                             if (!m_rRAS.good())
                                 mbStatus = false;
                         }
@@ -317,6 +320,7 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
                 case 32 :
                     for (y = 0; y < mnHeight && mbStatus; ++y)
                     {
+                        Scanline pScanline = pAcc->GetScanline(y);
                         for (x = 0; x < mnWidth && mbStatus; ++x)
                         {
                             ImplGetByte();               // pad byte > nil
@@ -332,7 +336,7 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
                                 nGreen = ImplGetByte();
                                 nRed = ImplGetByte();
                             }
-                            pAcc->SetPixel ( y, x, BitmapColor( nRed, nGreen, nBlue ) );
+                            pAcc->SetPixelOnData(pScanline, x, BitmapColor(nRed, nGreen, nBlue));
                             if (!m_rRAS.good())
                                 mbStatus = false;
                         }
