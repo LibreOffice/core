@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_f4729e7b",
+        "filename": "embeddedobj/source/general/docholder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-01-29T09:16:05Z",
+      "side": 1,
+      "message": "why not putting these lines on the if block and finally merge the 2 ifs?\nSo it would be:\nif ( xModelTitle.is() \u0026\u0026 !m_pEmbedObj...)\n{\n   std::locale aResLoc...\n   OUString sEmbedded...\n   xModelTitle-\u003esetTitle...\n...\n}",
+      "range": {
+        "startLine": 974,
+        "startChar": 1,
+        "endLine": 975,
+        "endChar": 81
+      },
+      "revId": "fa5cb31d3990c67fa8983e51cbe739c90ec477e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
