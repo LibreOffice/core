@@ -1474,8 +1474,17 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         }
         case RTF_LI:
         {
-            putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind,
-                               NS_ooxml::LN_CT_Ind_left, pIntValue);
+            if (m_aStates.top().eDestination == Destination::LISTLEVEL)
+            {
+                if (m_aStates.top().bLevelNumbersValid)
+                    putNestedAttribute(m_aStates.top().aTableSprms, NS_ooxml::LN_CT_PPrBase_ind,
+                                       NS_ooxml::LN_CT_Ind_left, pIntValue);
+            }
+            else
+            {
+                putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind,
+                                   NS_ooxml::LN_CT_Ind_left, pIntValue);
+            }
             // It turns out \li should reset the \fi inherited from the stylesheet.
             // So set the direct formatting to zero, if we don't have such direct formatting yet.
             putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind,

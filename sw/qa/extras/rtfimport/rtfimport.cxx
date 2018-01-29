@@ -175,6 +175,16 @@ DECLARE_RTFIMPORT_TEST(testFdo46662, "fdo46662.rtf")
     }
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf115155, "tdf115155.rtf")
+{
+    auto xLevels
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(2), "NumberingRules");
+    // 1st level
+    comphelper::SequenceAsHashMap aMap(xLevels->getByIndex(0));
+    // This was 1270: the left margin in the numbering rule was too small.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2540), aMap["IndentAt"].get<sal_Int32>());
+}
+
 DECLARE_RTFIMPORT_TEST(testTdf108951, "tdf108951.rtf")
 {
     // This test is import-only, as we assert the list ID, which is OK to
