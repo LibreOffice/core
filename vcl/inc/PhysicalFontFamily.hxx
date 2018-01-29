@@ -78,7 +78,7 @@ static void             CalcType( ImplFontAttrs& rType, FontWeight& rWeight, Fon
                                   FontFamily eFamily, const utl::FontNameAttr* pFontAttr );
 
 private:
-    std::vector< PhysicalFontFace* > maFontFaces;
+    std::vector< std::unique_ptr<PhysicalFontFace> > maFontFaces;
 
     OUString            maFamilyName;       // original font family name
     OUString            maSearchName;       // normalized font family name
