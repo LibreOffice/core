@@ -125,10 +125,10 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
 
     if ( anyExc >>= e1 )
     {
+        SolarMutexGuard aSolarGuard;
         if( !g_JavaEvents.bNotFoundHandled )
         {
            // No suitable JRE found
-            SolarMutexGuard aSolarGuard;
             g_JavaEvents.bNotFoundHandled = true;
 #if defined( MACOSX )
             ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_JAVANOTFOUND_MAC), VclMessageType::Warning);
@@ -153,10 +153,10 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
     }
     else if ( anyExc >>= e2 )
     {
+        SolarMutexGuard aSolarGuard;
         if( !g_JavaEvents.bInvalidSettingsHandled )
         {
            // javavendors.xml was updated and Java has not been configured yet
-            SolarMutexGuard aSolarGuard;
             g_JavaEvents.bInvalidSettingsHandled = true;
 #ifdef MACOSX
             ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_INVALIDJAVASETTINGS_MAC), VclMessageType::Warning);
@@ -173,9 +173,9 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
     }
     else if ( anyExc >>= e3 )
     {
+        SolarMutexGuard aSolarGuard;
         if( !g_JavaEvents.bDisabledHandled )
         {
-            SolarMutexGuard aSolarGuard;
             g_JavaEvents.bDisabledHandled = true;
             // Java disabled. Give user a chance to enable Java inside Office.
             ScopedVclPtrInstance<MessageDialog> aQueryBox(nullptr , "JavaDisabledDialog",
@@ -196,10 +196,10 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
     }
     else if ( anyExc >>= e4 )
     {
+        SolarMutexGuard aSolarGuard;
         if( !g_JavaEvents.bVMCreationFailureHandled )
         {
             // Java not correctly installed, or damaged
-            SolarMutexGuard aSolarGuard;
             g_JavaEvents.bVMCreationFailureHandled = true;
 #ifdef MACOSX
             ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, SvtResId(STR_ERROR_JVMCREATIONFAILED_MAC));
@@ -216,11 +216,11 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
     }
     else if ( anyExc >>= e5 )
     {
+        SolarMutexGuard aSolarGuard;
         if( !g_JavaEvents.bRestartRequiredHandled )
         {
             // a new JRE was selected, but office needs to be restarted
             //before it can be used.
-            SolarMutexGuard aSolarGuard;
             g_JavaEvents.bRestartRequiredHandled = true;
             svtools::executeRestartDialog(
                 comphelper::getProcessComponentContext(), nullptr,
