@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_37f358a0",
+        "filename": "sc/source/ui/unoobj/celllistsource.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-29T22:23:49Z",
+      "side": 1,
+      "message": "Setting the default to VALUE here is a little confusing to the reader, because if the FormulaResultType2 property could not be extracted the actual value obtained is sText of type STRING (the default result type does not matter in this case). Actually initializing nResultType is unnecessary (same as before with eContentType), if the \u003e\u003e\u003d operator fails then nResultType is not evaluated in the following.",
+      "revId": "46636add79ca5d419f050ac32b7c76a584614d47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_97308458",
+        "filename": "sc/source/ui/unoobj/cellvaluebinding.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-29T22:23:49Z",
+      "side": 1,
+      "message": "Ditto, confusing VALUE init.",
+      "revId": "46636add79ca5d419f050ac32b7c76a584614d47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_b7358847",
+        "filename": "sc/source/ui/vba/vbarange.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-29T22:23:49Z",
+      "side": 1,
+      "message": "Note: this init to VALUE is correct here, given the following code flow.",
+      "revId": "46636add79ca5d419f050ac32b7c76a584614d47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
