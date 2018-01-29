@@ -64,9 +64,14 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 mnMaxCol    (-1)
 {
     if (!rSymbol.isEmpty())
-        CompileRangeData( rSymbol, pDoc->IsImportingXML());
+    {
         // Let the compiler set an error on unknown names for a subsequent
         // CompileUnresolvedXML().
+        const bool bImporting = pDoc->IsImportingXML();
+        CompileRangeData( rSymbol, bImporting);
+        if (bImporting)
+            pDoc->CheckLinkFormulaNeedingCheck( *pCode);
+    }
     else
     {
         // #i63513#/#i65690# don't leave pCode as NULL.
@@ -199,6 +204,7 @@ void ScRangeData::CompileUnresolvedXML( sc::CompileFormulaContext& rCxt )
         // Don't let the compiler set an error for unknown names on final
         // compile, errors are handled by the interpreter thereafter.
         CompileRangeData( aSymbol, false);
+        rCxt.getDoc()->CheckLinkFormulaNeedingCheck( *pCode);
     }
 }
 
