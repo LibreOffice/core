@@ -197,7 +197,7 @@ public:
 
 class SwFileNameFieldType : public SwFieldType
 {
-    SwDoc *pDoc;
+    SwDoc *m_pDoc;
 public:
     SwFileNameFieldType(SwDoc*);
 
@@ -207,7 +207,7 @@ public:
 
 class SW_DLLPUBLIC SwFileNameField : public SwField
 {
-    OUString aContent;
+    OUString m_aContent;
 
 public:
     SwFileNameField(SwFileNameFieldType*, sal_uInt32 nFormat);
@@ -215,7 +215,7 @@ public:
     virtual OUString    Expand() const override;
     virtual SwField*    Copy() const override;
 
-    void         SetExpansion(const OUString& rStr) { aContent = rStr; }
+    void         SetExpansion(const OUString& rStr) { m_aContent = rStr; }
 
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
@@ -540,8 +540,8 @@ public:
 
 class SwExtUserField : public SwField
 {
-    OUString aContent;
-    sal_uInt16  nType;
+    OUString m_aContent;
+    sal_uInt16  m_nType;
 
 public:
     SwExtUserField(SwExtUserFieldType*, sal_uInt16 nSub, sal_uInt32 nFormat);
@@ -552,7 +552,7 @@ public:
     virtual sal_uInt16      GetSubType() const override;
     virtual void        SetSubType(sal_uInt16 nSub) override;
 
-    void         SetExpansion(const OUString& rStr) { aContent = rStr; }
+    void         SetExpansion(const OUString& rStr) { m_aContent = rStr; }
 
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
