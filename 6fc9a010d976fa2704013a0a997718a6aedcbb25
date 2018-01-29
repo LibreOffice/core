@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_547feaa9",
+        "filename": "sfx2/source/doc/sfxbasemodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3074,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-29T13:29:36Z",
+      "side": 1,
+      "message": "this has a uno::Reference of the SfxBaseModel",
+      "revId": "6fc9a010d976fa2704013a0a997718a6aedcbb25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_944fa291",
+        "filename": "sfx2/source/doc/sfxbasemodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3080,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-29T13:29:36Z",
+      "side": 1,
+      "message": "... which is dropped here so this looks like the earliest point when SfxBaseModel may be deleted",
+      "revId": "6fc9a010d976fa2704013a0a997718a6aedcbb25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_d4491a8d",
+        "filename": "sfx2/source/doc/sfxbasemodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3087,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-01-29T13:29:36Z",
+      "side": 1,
+      "message": "here we need to call acquire on the SfxBaseModel - but your patch only keeps the \"m_pData\" alive - which doesn\u0027t look enough to me.  the ref-count is in the base class OWeakImplHelper.",
+      "revId": "6fc9a010d976fa2704013a0a997718a6aedcbb25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
