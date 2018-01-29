@@ -260,8 +260,8 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                     csscd::BOTTOM_LEFT, csscd::BOTTOM, csscd::BOTTOM_RIGHT
                 };
             const double nMax=std::max(
-                fabs(mrModel.mxLayout->mfW),
-                fabs(mrModel.mxLayout->mfH));
+                fabs(mrModel.mxLayout->mfX),
+                fabs(mrModel.mxLayout->mfY));
             const int simplifiedX=lclSgn(mrModel.mxLayout->mfX/nMax);
             const int simplifiedY=lclSgn(mrModel.mxLayout->mfY/nMax);
             aPropSet.setProperty( PROP_LabelPlacement,
