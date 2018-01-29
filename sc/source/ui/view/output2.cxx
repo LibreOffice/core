@@ -2682,23 +2682,6 @@ bool ScOutputData::DrawEditParam::adjustHorAlignment(ScFieldEditEngine* pEngine)
     return false;
 }
 
-void ScOutputData::DrawEditParam::adjustForRTL()
-{
-    if (!mpEngine->IsRightToLeft(0))
-        // No RTL mode.
-        return;
-
-    //  For right-to-left, EditEngine always calculates its lines
-    //  beginning from the right edge, but EditLine::nStartPosX is
-    //  of sal_uInt16 type, so the PaperSize must be limited to USHRT_MAX.
-    Size aLogicPaper = mpEngine->GetPaperSize();
-    if ( aLogicPaper.Width() > USHRT_MAX )
-    {
-        aLogicPaper.Width() = USHRT_MAX;
-        mpEngine->SetPaperSize(aLogicPaper);
-    }
-}
-
 void ScOutputData::DrawEditParam::adjustForHyperlinkInPDF(Point aURLStart, const OutputDevice* pDev)
 {
     // PDF: whole-cell hyperlink from formula?
@@ -3141,8 +3124,6 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
         aURLStart = aLogicStart;      // copy before modifying for orientation
 
-        rParam.adjustForRTL();
-
         // bMoveClipped handling has been replaced by complete alignment
         // handling (also extending to the left).
 
@@ -3465,7 +3446,6 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
             }
         }
 
-        rParam.adjustForRTL();
         rParam.mpEngine->Draw(mpDev, aLogicStart, 900);
     }
 
@@ -3699,8 +3679,6 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
                 }
             }
         }
-
-        rParam.adjustForRTL();
 
         // bMoveClipped handling has been replaced by complete alignment
         // handling (also extending to the left).
@@ -3975,8 +3953,6 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
         aPaperLogic.Width() = nEngineWidth;
         rParam.mpEngine->SetPaperSize(aPaperLogic);
 
-        rParam.adjustForRTL();
-
         // bMoveClipped handling has been replaced by complete alignment
         // handling (also extending to the left).
 
@@ -4246,8 +4222,6 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
             aLogicStart.Y() += nTopM;
 
         aURLStart = aLogicStart;      // copy before modifying for orientation
-
-        rParam.adjustForRTL();
 
         // bMoveClipped handling has been replaced by complete alignment
         // handling (also extending to the left).
@@ -5075,19 +5049,6 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 }
 
                                 //  bSimClip is not used here (because nOriVal is set)
-
-                                if ( pEngine->IsRightToLeft( 0 ) )
-                                {
-                                    //  For right-to-left, EditEngine always calculates its lines
-                                    //  beginning from the right edge, but EditLine::nStartPosX is
-                                    //  of sal_uInt16 type, so the PaperSize must be limited to USHRT_MAX.
-                                    Size aLogicPaper = pEngine->GetPaperSize();
-                                    if ( aLogicPaper.Width() > USHRT_MAX )
-                                    {
-                                        aLogicPaper.Width() = USHRT_MAX;
-                                        pEngine->SetPaperSize(aLogicPaper);
-                                    }
-                                }
 
                                 pEngine->Draw( mpDev, aLogicStart, static_cast<short>(nOriVal) );
 
