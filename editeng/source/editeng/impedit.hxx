@@ -225,8 +225,8 @@ class ImpEditView : public vcl::unohelper::DragAndDropClient
 
 private:
     EditView*                 pEditView;
-    vcl::Cursor*              pCursor;
-    Color*                    pBackgroundColor;
+    std::unique_ptr<vcl::Cursor>  pCursor;
+    std::unique_ptr<Color>    pBackgroundColor;
     /// Containing view shell, if any.
     OutlinerViewShell*        mpViewShell;
     /// An other shell, just listening to our state, if any.
@@ -234,7 +234,7 @@ private:
     EditEngine*               pEditEngine;
     VclPtr<vcl::Window>       pOutWin;
     EditView::OutWindowSet    aOutWindowSet;
-    Pointer*                  pPointer;
+    std::unique_ptr<Pointer>  pPointer;
     std::unique_ptr<DragAndDropInfo>  pDragAndDropInfo;
 
     css::uno::Reference< css::datatransfer::dnd::XDragSourceListener > mxDnDListener;
@@ -1213,19 +1213,17 @@ inline const Pointer& ImpEditView::GetPointer()
 {
     if ( !pPointer )
     {
-        pPointer = new Pointer( IsVertical() ? PointerStyle::TextVertical : PointerStyle::Text );
+        pPointer.reset( new Pointer( IsVertical() ? PointerStyle::TextVertical : PointerStyle::Text ) );
         return *pPointer;
     }
 
     if(PointerStyle::Text == pPointer->GetStyle() && IsVertical())
     {
-        delete pPointer;
-        pPointer = new Pointer(PointerStyle::TextVertical);
+        pPointer.reset( new Pointer(PointerStyle::TextVertical) );
     }
     else if(PointerStyle::TextVertical == pPointer->GetStyle() && !IsVertical())
     {
-        delete pPointer;
-        pPointer = new Pointer(PointerStyle::Text);
+        pPointer.reset( new Pointer(PointerStyle::Text) );
     }
 
     return *pPointer;
@@ -1234,8 +1232,8 @@ inline const Pointer& ImpEditView::GetPointer()
 inline vcl::Cursor* ImpEditView::GetCursor()
 {
     if ( !pCursor )
-        pCursor = new vcl::Cursor;
-    return pCursor;
+        pCursor.reset( new vcl::Cursor );
+    return pCursor.get();
 }
 
 void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit );

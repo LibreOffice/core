@@ -408,7 +408,7 @@ const Pointer& EditView::GetPointer() const
 
 vcl::Cursor* EditView::GetCursor() const
 {
-    return pImpEditView->pCursor;
+    return pImpEditView->pCursor.get();
 }
 
 void EditView::InsertText( const OUString& rStr, bool bSelect )
