@@ -299,10 +299,10 @@ void OTableHelper::refreshColumns()
             );
     }
 
-    if(m_pColumns)
-        m_pColumns->reFill(aVector);
+    if(m_xColumns)
+        m_xColumns->reFill(aVector);
     else
-        m_pColumns  = createColumns(aVector);
+        m_xColumns = createColumns(aVector);
 }
 
 const ColumnDesc* OTableHelper::getColumnDescription(const OUString& _sName) const
@@ -424,10 +424,10 @@ void OTableHelper::refreshKeys()
     {
         refreshPrimaryKeys(aNames);
         refreshForeignKeys(aNames);
-        m_pKeys = createKeys(aNames);
+        m_xKeys = createKeys(aNames);
     } // if(!isNew())
-    else if (!m_pKeys )
-        m_pKeys = createKeys(aNames);
+    else if (!m_xKeys )
+        m_xKeys = createKeys(aNames);
     /*if(m_pKeys)
         m_pKeys->reFill(aVector);
     else*/
@@ -469,10 +469,10 @@ void OTableHelper::refreshIndexes()
         }
     }
 
-    if(m_pIndexes)
-        m_pIndexes->reFill(aVector);
+    if(m_xIndexes)
+        m_xIndexes->reFill(aVector);
     else
-        m_pIndexes  = createIndexes(aVector);
+        m_xIndexes = createIndexes(aVector);
 }
 
 OUString OTableHelper::getRenameStart() const
@@ -549,7 +549,7 @@ void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference
         );
 
     Reference< XPropertySet > xOld(
-        m_pColumns->getByIndex(index), css::uno::UNO_QUERY);
+        m_xColumns->getByIndex(index), css::uno::UNO_QUERY);
     if(xOld.is())
         alterColumnByName(getString(xOld->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),descriptor);
 }

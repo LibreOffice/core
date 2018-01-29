@@ -154,7 +154,7 @@ void SAL_CALL OHSQLTable::alterColumnByName( const OUString& colName, const Refe
 #endif
         );
 
-    if ( !m_pColumns || !m_pColumns->hasByName(colName) )
+    if ( !m_xColumns || !m_xColumns->hasByName(colName) )
         throw NoSuchElementException(colName,*this);
 
 
@@ -162,7 +162,7 @@ void SAL_CALL OHSQLTable::alterColumnByName( const OUString& colName, const Refe
     {
         // first we have to check what should be altered
         Reference<XPropertySet> xProp;
-        m_pColumns->getByName(colName) >>= xProp;
+        m_xColumns->getByName(colName) >>= xProp;
         // first check the types
         sal_Int32 nOldType = 0,nNewType = 0,nOldPrec = 0,nNewPrec = 0,nOldScale = 0,nNewScale = 0;
         OUString sOldTypeName, sNewTypeName;
@@ -237,14 +237,14 @@ void SAL_CALL OHSQLTable::alterColumnByName( const OUString& colName, const Refe
         else if(sOldDefault.isEmpty() && !sNewDefault.isEmpty())
             alterDefaultValue(sNewDefault,sNewColumnName);
 
-        m_pColumns->refresh();
+        m_xColumns->refresh();
     }
     else
     {
-        if(m_pColumns)
+        if(m_xColumns)
         {
-            m_pColumns->dropByName(colName);
-            m_pColumns->appendByDescriptor(descriptor);
+            m_xColumns->dropByName(colName);
+            m_xColumns->appendByDescriptor(descriptor);
         }
     }
 

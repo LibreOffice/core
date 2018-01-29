@@ -645,16 +645,16 @@ void ODbaseTable::refreshColumns()
     for (auto const& column : m_aColumns->get())
         aVector.push_back(Reference< XNamed>(column,UNO_QUERY)->getName());
 
-    if(m_pColumns)
-        m_pColumns->reFill(aVector);
+    if(m_xColumns)
+        m_xColumns->reFill(aVector);
     else
-        m_pColumns  = new ODbaseColumns(this,m_aMutex,aVector);
+        m_xColumns = new ODbaseColumns(this,m_aMutex,aVector);
 }
 
 void ODbaseTable::refreshIndexes()
 {
     ::std::vector< OUString> aVector;
-    if(m_pFileStream && (!m_pIndexes || m_pIndexes->getCount() == 0))
+    if(m_pFileStream && (!m_xIndexes || m_xIndexes->getCount() == 0))
     {
         INetURLObject aURL;
         aURL.SetURL(getEntry(m_pConnection,m_Name));
@@ -688,10 +688,10 @@ void ODbaseTable::refreshIndexes()
             }
         }
     }
-    if(m_pIndexes)
-        m_pIndexes->reFill(aVector);
+    if(m_xIndexes)
+        m_xIndexes->reFill(aVector);
     else
-        m_pIndexes  = new ODbaseIndexes(this,m_aMutex,aVector);
+        m_xIndexes = new ODbaseIndexes(this,m_aMutex,aVector);
 }
 
 
@@ -1182,7 +1182,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
     (*m_pFileStream).WriteUChar( aDate.GetMonth() );
     (*m_pFileStream).WriteUChar( aDate.GetDay() );
     (*m_pFileStream).WriteUInt32( 0 );                                    // number of data records
-    (*m_pFileStream).WriteUInt16( (m_pColumns->getCount()+1) * 32 + 1 );  // header information,
+    (*m_pFileStream).WriteUInt16( (m_xColumns->getCount()+1) * 32 + 1 );  // header information,
                                                                           // pColumns contains always an additional column
     (*m_pFileStream).WriteUInt16( 0 );                                     // record length will be determined later
     m_pFileStream->WriteBytes(aBuffer, 20);
@@ -1440,15 +1440,15 @@ bool ODbaseTable::DropImpl()
 {
     FileClose();
 
-    if(!m_pIndexes)
+    if(!m_xIndexes)
         refreshIndexes(); // look for indexes which must be deleted as well
 
-    bool bDropped = Drop_Static(getEntry(m_pConnection,m_Name),HasMemoFields(),m_pIndexes);
+    bool bDropped = Drop_Static(getEntry(m_pConnection,m_Name),HasMemoFields(),m_xIndexes.get());
     if(!bDropped)
     {// we couldn't drop the table so we have to reopen it
         construct();
-        if(m_pColumns)
-            m_pColumns->refresh();
+        if(m_xColumns)
+            m_xColumns->refresh();
     }
     return bDropped;
 }
@@ -1556,12 +1556,12 @@ bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
     Reference<XPropertySet> xCol;
     OUString aColName;
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
-    for (sal_Int32 i = 0; i < m_pColumns->getCount(); i++)
+    for (sal_Int32 i = 0; i < m_xColumns->getCount(); i++)
     {
         Reference<XPropertySet> xIndex = isUniqueByColumnName(i);
         if (xIndex.is())
         {
-            xCol.set(m_pColumns->getByIndex(i), css::uno::UNO_QUERY);
+            xCol.set(m_xColumns->getByIndex(i), css::uno::UNO_QUERY);
             OSL_ENSURE(xCol.is(),"ODbaseTable::DeleteRow column is null!");
             if(xCol.is())
             {
@@ -1595,20 +1595,20 @@ bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
 
 Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(sal_Int32 _nColumnPos)
 {
-    if(!m_pIndexes)
+    if(!m_xIndexes)
         refreshIndexes();
-    if(m_pIndexes->hasElements())
+    if(m_xIndexes->hasElements())
     {
         Reference<XPropertySet> xCol;
-        m_pColumns->getByIndex(_nColumnPos) >>= xCol;
+        m_xColumns->getByIndex(_nColumnPos) >>= xCol;
         OSL_ENSURE(xCol.is(),"ODbaseTable::isUniqueByColumnName column is null!");
         OUString sColName;
         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sColName;
 
         Reference<XPropertySet> xIndex;
-        for(sal_Int32 i=0;i<m_pIndexes->getCount();++i)
+        for(sal_Int32 i=0;i<m_xIndexes->getCount();++i)
         {
-            xIndex.set(m_pIndexes->getByIndex(i), css::uno::UNO_QUERY);
+            xIndex.set(m_xIndexes->getByIndex(i), css::uno::UNO_QUERY);
             if(xIndex.is() && getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
             {
                 Reference<XNameAccess> xCols(Reference<XColumnsSupplier>(xIndex,UNO_QUERY)->getColumns());
@@ -1638,19 +1638,19 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
     Reference<XPropertySet> xCol;
     Reference<XPropertySet> xIndex;
     OUString aColName;
-    const sal_Int32 nColumnCount = m_pColumns->getCount();
+    const sal_Int32 nColumnCount = m_xColumns->getCount();
     std::vector< Reference<XPropertySet> > aIndexedCols(nColumnCount);
 
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
 
-    Reference<XIndexAccess> xColumns = m_pColumns;
+    Reference<XIndexAccess> xColumns = m_xColumns.get();
     // first search a key that exist already in the table
     for (sal_Int32 i = 0; i < nColumnCount; ++i)
     {
         sal_Int32 nPos = i;
         if(_xCols != xColumns)
         {
-            m_pColumns->getByIndex(i) >>= xCol;
+            m_xColumns->getByIndex(i) >>= xCol;
             OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
             xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
 
@@ -1686,7 +1686,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                     // There is no unique value
                     if ( aColName.isEmpty() )
                     {
-                        m_pColumns->getByIndex(i) >>= xCol;
+                        m_xColumns->getByIndex(i) >>= xCol;
                         OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
                         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
                         xCol.clear();
@@ -1719,7 +1719,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
         }
         else
         {
-            m_pColumns->getByIndex(i) >>= xCol;
+            m_xColumns->getByIndex(i) >>= xCol;
             if ( xCol.is() )
             {
                 xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)) >>= nLen;
@@ -1753,7 +1753,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
         sal_Int32 nPos = i;
         if(_xCols != xColumns)
         {
-            m_pColumns->getByIndex(i) >>= xCol;
+            m_xColumns->getByIndex(i) >>= xCol;
             OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
             xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
             for(nPos = 0;nPos<_xCols->getCount();++nPos)
@@ -1849,7 +1849,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                 case DataType::DOUBLE:
                     {
                         const double d = thisColVal;
-                        m_pColumns->getByIndex(i) >>= xCol;
+                        m_xColumns->getByIndex(i) >>= xCol;
 
                         if (getBOOL(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency is treated separately
                         {
@@ -1889,7 +1889,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                     }
                     else
                     {
-                        m_pColumns->getByIndex(i) >>= xCol;
+                        m_xColumns->getByIndex(i) >>= xCol;
                         OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
                         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
                         std::vector< std::pair<const sal_Char* , OUString > > aStringToSubstitutes;
@@ -1952,7 +1952,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
         }
         catch ( const Exception& )
         {
-            m_pColumns->getByIndex(i) >>= xCol;
+            m_xColumns->getByIndex(i) >>= xCol;
             OSL_ENSURE( xCol.is(), "ODbaseTable::UpdateBuffer column is null!" );
             if ( xCol.is() )
                 xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
@@ -2113,11 +2113,11 @@ void SAL_CALL ODbaseTable::alterColumnByName( const OUString& colName, const Ref
 
 
     Reference<XDataDescriptorFactory> xOldColumn;
-    m_pColumns->getByName(colName) >>= xOldColumn;
+    m_xColumns->getByName(colName) >>= xOldColumn;
 
     try
     {
-        alterColumn(m_pColumns->findColumn(colName)-1,descriptor,xOldColumn);
+        alterColumn(m_xColumns->findColumn(colName)-1,descriptor,xOldColumn);
     }
     catch (const css::lang::IndexOutOfBoundsException&)
     {
@@ -2130,11 +2130,11 @@ void SAL_CALL ODbaseTable::alterColumnByIndex( sal_Int32 index, const Reference<
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
-    if(index < 0 || index >= m_pColumns->getCount())
+    if(index < 0 || index >= m_xColumns->getCount())
         throw IndexOutOfBoundsException(OUString::number(index),*this);
 
     Reference<XDataDescriptorFactory> xOldColumn;
-    m_pColumns->getByIndex(index) >>= xOldColumn;
+    m_xColumns->getByIndex(index) >>= xOldColumn;
     alterColumn(index,descriptor,xOldColumn);
 }
 
@@ -2142,7 +2142,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
                               const Reference< XPropertySet >& descriptor ,
                               const Reference< XDataDescriptorFactory >& xOldColumn )
 {
-    if(index < 0 || index >= m_pColumns->getCount())
+    if(index < 0 || index >= m_xColumns->getCount())
         throw IndexOutOfBoundsException(OUString::number(index),*this);
 
     ODbaseTable* pNewTable = nullptr;
@@ -2173,7 +2173,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
         for(;i < index;++i)
         {
             Reference<XPropertySet> xProp;
-            m_pColumns->getByIndex(i) >>= xProp;
+            m_xColumns->getByIndex(i) >>= xProp;
             Reference<XDataDescriptorFactory> xColumn(xProp,UNO_QUERY);
             Reference<XPropertySet> xCpy;
             if(xColumn.is())
@@ -2186,10 +2186,10 @@ void ODbaseTable::alterColumn(sal_Int32 index,
         ++i; // now insert our new column
         xAppend->appendByDescriptor(xCopyColumn);
 
-        for(;i < m_pColumns->getCount();++i)
+        for(;i < m_xColumns->getCount();++i)
         {
             Reference<XPropertySet> xProp;
-            m_pColumns->getByIndex(i) >>= xProp;
+            m_xColumns->getByIndex(i) >>= xProp;
             Reference<XDataDescriptorFactory> xColumn(xProp,UNO_QUERY);
             Reference<XPropertySet> xCpy;
             if(xColumn.is())
@@ -2241,8 +2241,8 @@ void ODbaseTable::alterColumn(sal_Int32 index,
         }
         FileClose();
         construct();
-        if(m_pColumns)
-            m_pColumns->refresh();
+        if(m_xColumns)
+            m_xColumns->refresh();
 
     }
     catch(const SQLException&)
@@ -2274,8 +2274,8 @@ void SAL_CALL ODbaseTable::rename( const OUString& newName )
     ODbaseTable_BASE::rename(newName);
 
     construct();
-    if(m_pColumns)
-        m_pColumns->refresh();
+    if(m_xColumns)
+        m_xColumns->refresh();
 }
 namespace
 {
@@ -2342,10 +2342,10 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
         bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
         // copy the structure
-        for(sal_Int32 i=0;i < m_pColumns->getCount();++i)
+        for(sal_Int32 i=0;i < m_xColumns->getCount();++i)
         {
             Reference<XPropertySet> xProp;
-            m_pColumns->getByIndex(i) >>= xProp;
+            m_xColumns->getByIndex(i) >>= xProp;
             Reference<XDataDescriptorFactory> xColumn(xProp,UNO_QUERY);
             Reference<XPropertySet> xCpy;
             if(xColumn.is())
@@ -2375,7 +2375,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
 
     pNewTable->construct();
     // copy the data
-    copyData(pNewTable,pNewTable->m_pColumns->getCount());
+    copyData(pNewTable,pNewTable->m_xColumns->getCount());
     // drop the old table
     if(DropImpl())
     {
@@ -2386,8 +2386,8 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
 
     FileClose();
     construct();
-    if(m_pColumns)
-        m_pColumns->refresh();
+    if(m_xColumns)
+        m_xColumns->refresh();
 }
 
 void ODbaseTable::dropColumn(sal_Int32 _nPos)
@@ -2401,12 +2401,12 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
         bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
         // copy the structure
-        for(sal_Int32 i=0;i < m_pColumns->getCount();++i)
+        for(sal_Int32 i=0;i < m_xColumns->getCount();++i)
         {
             if(_nPos != i)
             {
                 Reference<XPropertySet> xProp;
-                m_pColumns->getByIndex(i) >>= xProp;
+                m_xColumns->getByIndex(i) >>= xProp;
                 Reference<XDataDescriptorFactory> xColumn(xProp,UNO_QUERY);
                 Reference<XPropertySet> xCpy;
                 if(xColumn.is())
@@ -2470,11 +2470,11 @@ OUString ODbaseTable::createTempFile()
 void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
 {
     sal_Int32 nPos = _nPos + 1; // +1 because we always have the bookmark column as well
-    OValueRefRow aRow = new OValueRefVector(m_pColumns->getCount());
+    OValueRefRow aRow = new OValueRefVector(m_xColumns->getCount());
     OValueRefRow aInsertRow;
     if(_nPos)
     {
-        aInsertRow = new OValueRefVector(_pNewTable->m_pColumns->getCount());
+        aInsertRow = new OValueRefVector(_pNewTable->m_xColumns->getCount());
         std::for_each(aInsertRow->get().begin(),aInsertRow->get().end(),TSetRefBound(true));
     }
     else
@@ -2510,7 +2510,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
                         }
                     }
                 }
-                bOk = _pNewTable->InsertRow(*aInsertRow,_pNewTable->m_pColumns);
+                bOk = _pNewTable->InsertRow(*aInsertRow,_pNewTable->m_xColumns.get());
                 SAL_WARN_IF(!bOk, "connectivity.drivers", "Row could not be inserted!");
             }
             else
