@@ -35,9 +35,9 @@ namespace connectivity
                                                                //  driver object
             OColumnAlias    m_aColumnAlias;
             // Mork Parser (abook)
-            MorkParser* m_pBook;
+            std::unique_ptr<MorkParser> m_pBook;
             // Mork Parser (history)
-            MorkParser* m_pHistory;
+            std::unique_ptr<MorkParser> m_pHistory;
             // Store Catalog
             css::uno::Reference< css::sdbcx::XTablesSupplier> m_xCatalog;
 
@@ -48,7 +48,7 @@ namespace connectivity
             virtual ~OConnection() override;
 
             const rtl::Reference<MorkDriver>& getDriver() {return m_xDriver;};
-            MorkParser* getMorkParser(const OString& t) {return t == "CollectedAddressBook" ? m_pHistory : m_pBook;};
+            MorkParser* getMorkParser(const OString& t) {return t == "CollectedAddressBook" ? m_pHistory.get() : m_pBook.get();};
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;

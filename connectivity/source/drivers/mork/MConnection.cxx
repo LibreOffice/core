@@ -41,16 +41,16 @@ OConnection::OConnection(MorkDriver* _pDriver)
     :m_xDriver(_pDriver)
     ,m_aColumnAlias( _pDriver->getFactory() )
 {
-    m_pBook = new MorkParser();
-    m_pHistory = new MorkParser();
+    m_pBook.reset( new MorkParser() );
+    m_pHistory.reset( new MorkParser() );
 }
 
 OConnection::~OConnection()
 {
     if(!isClosed())
         close();
-    delete m_pBook;
-    delete m_pHistory;
+    m_pBook.reset();
+    m_pHistory.reset();
 }
 
 void OConnection::construct(const OUString& url)
