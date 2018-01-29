@@ -245,7 +245,7 @@ class EDITENG_DLLPUBLIC SvxNumRule final
     SvxNumRuleType      eNumberingType;         // Type of numbering
     bool                bContinuousNumbering;   // sequential numbering
 
-    SvxNumberFormat*    aFmts[SVX_MAX_NUM];
+    std::unique_ptr<SvxNumberFormat> aFmts[SVX_MAX_NUM];
     bool                aFmtsSet[SVX_MAX_NUM]; // Flags indicating valid levels
 
     static sal_Int32    nRefCount;

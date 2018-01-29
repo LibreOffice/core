@@ -559,7 +559,7 @@ SvxNumRule::SvxNumRule( SvxNumRuleFlags nFeatures,
     {
         if(i < nLevels)
         {
-            aFmts[i] = new SvxNumberFormat(SVX_NUM_CHARS_UPPER_LETTER);
+            aFmts[i].reset( new SvxNumberFormat(SVX_NUM_CHARS_UPPER_LETTER) );
             // It is a distinction between writer and draw
             if(nFeatures & SvxNumRuleFlags::CONTINUOUS)
             {
@@ -607,9 +607,9 @@ SvxNumRule::SvxNumRule(const SvxNumRule& rCopy)
     for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
         if(rCopy.aFmts[i])
-            aFmts[i] = new SvxNumberFormat(*rCopy.aFmts[i]);
+            aFmts[i].reset( new SvxNumberFormat(*rCopy.aFmts[i]) );
         else
-            aFmts[i] = nullptr;
+            aFmts[i].reset();
         aFmtsSet[i] = rCopy.aFmtsSet[i];
     }
 }
@@ -632,11 +632,11 @@ SvxNumRule::SvxNumRule( SvStream &rStream )
         bool hasNumberingFormat = nTmp16 & 1;
         aFmtsSet[i] = nTmp16 & 2; // fdo#68648 reset flag
         if ( hasNumberingFormat ){
-            aFmts[i] = new SvxNumberFormat( rStream );
+            aFmts[i].reset( new SvxNumberFormat( rStream ) );
         }
         else
         {
-            aFmts[i] = nullptr;
+            aFmts[i].reset();
             aFmtsSet[i] = false; // actually only false is valid
         }
     }
@@ -690,7 +690,7 @@ void SvxNumRule::dumpAsXml(struct _xmlTextWriter* pWriter) const
         {
             xmlTextWriterStartElement(pWriter, BAD_CAST("aFmts"));
             xmlTextWriterWriteAttribute(pWriter, BAD_CAST("i"), BAD_CAST(OUString::number(i).getStr()));
-            xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", aFmts[i]);
+            xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", aFmts[i].get());
             xmlTextWriterEndElement(pWriter);
         }
     }
@@ -700,8 +700,6 @@ void SvxNumRule::dumpAsXml(struct _xmlTextWriter* pWriter) const
 
 SvxNumRule::~SvxNumRule()
 {
-    for(SvxNumberFormat* aFmt : aFmts)
-        delete aFmt;
     if(!--nRefCount)
     {
         DELETEZ(pStdNumFmt);
@@ -717,11 +715,10 @@ SvxNumRule& SvxNumRule::operator=( const SvxNumRule& rCopy )
     eNumberingType       = rCopy.eNumberingType;
     for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
-        delete aFmts[i];
         if(rCopy.aFmts[i])
-            aFmts[i] = new SvxNumberFormat(*rCopy.aFmts[i]);
+            aFmts[i].reset( new SvxNumberFormat(*rCopy.aFmts[i]) );
         else
-            aFmts[i] = nullptr;
+            aFmts[i].reset();
         aFmtsSet[i] = rCopy.aFmtsSet[i];
     }
     return *this;
@@ -753,7 +750,7 @@ const SvxNumberFormat*  SvxNumRule::Get(sal_uInt16 nLevel)const
 {
     DBG_ASSERT(nLevel < SVX_MAX_NUM, "Wrong Level" );
     if( nLevel < SVX_MAX_NUM )
-        return aFmtsSet[nLevel] ? aFmts[nLevel] : nullptr;
+        return aFmtsSet[nLevel] ? aFmts[nLevel].get() : nullptr;
     else
         return nullptr;
 }
@@ -788,8 +785,7 @@ void SvxNumRule::SetLevel( sal_uInt16 i, const SvxNumberFormat& rNumFmt, bool bI
 
         if (bReplace)
         {
-            delete aFmts[i];
-            aFmts[i] = new SvxNumberFormat(rNumFmt);
+            aFmts[i].reset( new SvxNumberFormat(rNumFmt) );
             aFmtsSet[i] = bIsValid;
         }
     }
@@ -806,8 +802,7 @@ void SvxNumRule::SetLevel(sal_uInt16 nLevel, const SvxNumberFormat* pFmt)
             SetLevel(nLevel, *pFmt);
         else
         {
-            delete aFmts[nLevel];
-            aFmts[nLevel] = nullptr;
+            aFmts[nLevel].reset();
         }
     }
 }
