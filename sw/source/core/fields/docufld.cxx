@@ -2394,7 +2394,7 @@ bool SwRefPageGetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 // field type to jump to and edit
 
 SwJumpEditFieldType::SwJumpEditFieldType( SwDoc* pD )
-    : SwFieldType( SwFieldIds::JumpEdit ), m_pDoc( pD ), m_aDep( this, nullptr )
+    : SwFieldType( SwFieldIds::JumpEdit ), m_pDoc( pD ), m_aDep( *this )
 {
 }
 
@@ -2406,11 +2406,7 @@ SwFieldType* SwJumpEditFieldType::Copy() const
 SwCharFormat* SwJumpEditFieldType::GetCharFormat()
 {
     SwCharFormat* pFormat = m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( RES_POOLCHR_JUMPEDIT );
-
-    // not registered yet?
-    if( !m_aDep.GetRegisteredIn() )
-        pFormat->Add( &m_aDep );     // register
-
+    m_aDep.StartListening(pFormat);
     return pFormat;
 }
 
