@@ -125,6 +125,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <grfatr.hxx>
 
 #include <osl/file.hxx>
 #include <vcl/embeddedfontshelper.hxx>
@@ -4713,8 +4714,21 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     m_pSerializer->startElementNS( XML_pic, XML_spPr,
             XML_bwMode, "auto",
             FSEND );
-    m_pSerializer->startElementNS( XML_a, XML_xfrm,
-            FSEND );
+
+    rtl::Reference<sax_fastparser::FastAttributeList> xFrameAttributes(
+        FastSerializerHelper::createAttrList());
+
+    if (pGrfNode)
+    {
+        MirrorGraph eMirror = pGrfNode->GetSwAttrSet().Get(RES_GRFATR_MIRRORGRF).GetValue();
+        if (eMirror == MirrorGraph::Vertical || eMirror == MirrorGraph::Both)
+            // Mirror on the vertical axis is a horizontal flip.
+            xFrameAttributes->add(XML_flipH, "1");
+    }
+
+    m_pSerializer->startElementNS(
+        XML_a, XML_xfrm, uno::Reference<xml::sax::XFastAttributeList>(xFrameAttributes.get()));
+
     m_pSerializer->singleElementNS( XML_a, XML_off,
             XML_x, "0", XML_y, "0",
             FSEND );

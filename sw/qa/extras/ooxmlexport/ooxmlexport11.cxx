@@ -170,6 +170,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113183, "tdf113183.docx")
                                                 "HoriOrientPosition"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testGraphicObjectFliph, "graphic-object-fliph.docx")
+{
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(1), "HoriMirroredOnEvenPages"));
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(1), "HoriMirroredOnOddPages"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf113547, "tdf113547.docx")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(
