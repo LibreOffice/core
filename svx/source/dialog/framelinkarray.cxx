@@ -1069,7 +1069,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
     // lower of the upper CellBorder and thus have graphical parts that are
     // displayed one cell below and right/left of the target cell - analog to
     // other examples in all other directions.
-    // It would be possible to explicitely test this (if possible by indices at all)
+    // It would be possible to explicitly test this (if possible by indices at all)
     // looping and testing the styles in the outer cells to detect this, but since
     // for other usages (e.g. UI) usually nFirstRow==0 and nLastRow==GetRowCount()-1
     // (and analog for Col) it is okay to just expand the range when available.
@@ -1119,7 +1119,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                 // the needed transformations.
                 const bool bRotated(rCell.IsRotated());
 
-                // Additionally avoid double-handling by supressing handling when self not roated,
+                // Additionally avoid double-handling by suppressing handling when self not rotated,
                 // but above/left is rotated and thus already handled. Two directly connected
                 // rotated will paint/create both edges, they might be rotated differently.
                 const bool bSuppressAbove(!bRotated && nRow > nFirstRow && CELL(nCol, nRow - 1).IsRotated());

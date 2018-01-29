@@ -343,7 +343,7 @@ namespace sdr
 
                         // If RTL, mirror the whole unified table in X and move right.
                         // This is much easier than taking this into account for the whole
-                        // index calcualtions
+                        // index calculations
                         if(bIsRTL)
                         {
                             aTransform.scale(-1.0, 1.0);
