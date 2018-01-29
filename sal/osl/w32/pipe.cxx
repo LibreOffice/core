@@ -229,6 +229,14 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
                     rtl_uString_release(name);
                     rtl_uString_release(path);
 
+                    // We should try to transfer our privilege to become foreground process
+                    // to the other process, so that it may show popups (otherwise, they might
+                    // be blocked by SPI_GETFOREGROUNDLOCKTIMEOUT setting -
+                    // see SystemParametersInfo function at MSDN
+                    ULONG ServerProcessId = 0;
+                    if (GetNamedPipeServerProcessId(pPipe->m_File, &ServerProcessId))
+                        AllowSetForegroundWindow(ServerProcessId);
+
                     return pPipe;
                 }
                 else
