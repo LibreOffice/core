@@ -1186,12 +1186,18 @@ void ScDocument::CheckLinkFormulaNeedingCheck( const ScTokenArray& rCode )
     if (rCode.GetCodeLen())
     {
         if (rCode.HasOpCodeRPN(ocDde) || rCode.HasOpCodeRPN(ocWebservice))
+        {
             SetLinkFormulaNeedingCheck(true);
+            return;
+        }
     }
     else if (rCode.GetLen())
     {
         if (rCode.HasOpCode(ocDde) || rCode.HasOpCode(ocWebservice))
+        {
             SetLinkFormulaNeedingCheck(true);
+            return;
+        }
     }
     else
     {
