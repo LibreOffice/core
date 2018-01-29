@@ -241,7 +241,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="addnull">
-                                <property name="label" translatable="yes" context="relationdialog|addnull">_Set null</property>
+                                <property name="label" translatable="yes" context="relationdialog|addnull">_Set NULL</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -343,7 +343,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="delnull">
-                                <property name="label" translatable="yes" context="relationdialog|delnull">_Set null</property>
+                                <property name="label" translatable="yes" context="relationdialog|delnull">_Set NULL</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
