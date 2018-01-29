@@ -2610,25 +2610,21 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_Int32 nSta
 #endif
 }
 
-void ImpEditEngine::SetTextRanger( TextRanger* pRanger )
+void ImpEditEngine::SetTextRanger( std::unique_ptr<TextRanger> pRanger )
 {
-    if ( pTextRanger != pRanger )
+    pTextRanger = std::move(pRanger);
+
+    for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
     {
-        delete pTextRanger;
-        pTextRanger = pRanger;
-
-        for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
-        {
-            ParaPortion* pParaPortion = GetParaPortions()[nPara];
-            pParaPortion->MarkSelectionInvalid( 0 );
-            pParaPortion->GetLines().Reset();
-        }
-
-        FormatFullDoc();
-        UpdateViews( GetActiveView() );
-        if ( GetUpdateMode() && GetActiveView() )
-            pActiveView->ShowCursor(false, false);
+        ParaPortion* pParaPortion = GetParaPortions()[nPara];
+        pParaPortion->MarkSelectionInvalid( 0 );
+        pParaPortion->GetLines().Reset();
     }
+
+    FormatFullDoc();
+    UpdateViews( GetActiveView() );
+    if ( GetUpdateMode() && GetActiveView() )
+        pActiveView->ShowCursor(false, false);
 }
 
 void ImpEditEngine::SetVertical( bool bVertical, bool bTopToBottom)
@@ -4353,7 +4349,7 @@ LanguageType ImpEditEngine::ImplCalcDigitLang(LanguageType eCurLang) const
     // #114278# Also setting up digit language from Svt options
     // (cannot reliably inherit the outdev's setting)
     if( !pCTLOptions )
-        pCTLOptions = new SvtCTLOptions;
+        pCTLOptions.reset( new SvtCTLOptions );
 
     LanguageType eLang = eCurLang;
     const SvtCTLOptions::TextNumerals nCTLTextNumerals = pCTLOptions->GetCTLTextNumerals();

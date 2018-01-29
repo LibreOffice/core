@@ -523,7 +523,7 @@ void EditEngine::SetPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, const b
     }
 
     TextRanger* pRanger = new TextRanger( rPolyPolygon, pLinePolyPolygon, 30, 2, 2, bSimple, true );
-    pImpEditEngine->SetTextRanger( pRanger );
+    pImpEditEngine->SetTextRanger( std::unique_ptr<TextRanger>(pRanger) );
     pImpEditEngine->SetPaperSize( pRanger->GetBoundRect().GetSize() );
 }
 

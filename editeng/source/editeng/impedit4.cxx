@@ -1426,10 +1426,10 @@ Reference< XSpellChecker1 > const & ImpEditEngine::GetSpeller()
 }
 
 
-SpellInfo * ImpEditEngine::CreateSpellInfo( bool bMultipleDocs )
+void ImpEditEngine::CreateSpellInfo( bool bMultipleDocs )
 {
     if (!pSpellInfo)
-        pSpellInfo = new SpellInfo;
+        pSpellInfo.reset( new SpellInfo );
     else
         *pSpellInfo = SpellInfo();  // reset to default values
 
@@ -1439,7 +1439,6 @@ SpellInfo * ImpEditEngine::CreateSpellInfo( bool bMultipleDocs )
     // further changes elsewhere to work properly)
     pSpellInfo->aSpellStart = EPaM();
     pSpellInfo->aSpellTo    = EPaM( EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND );
-    return pSpellInfo;
 }
 
 
@@ -1459,7 +1458,7 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, bool bMultipleDoc )
     }
 
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
-    pSpellInfo = CreateSpellInfo( bMultipleDoc );
+    CreateSpellInfo( bMultipleDoc );
 
     bool bIsStart = false;
     if ( bMultipleDoc )
@@ -1483,8 +1482,7 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, bool bMultipleDoc )
         pEditView->ShowCursor( true, false );
     }
     EESpellState eState = pSpellInfo->eState;
-    delete pSpellInfo;
-    pSpellInfo = nullptr;
+    pSpellInfo.reset();
     return eState;
 }
 
@@ -1928,7 +1926,7 @@ bool ImpEditEngine::SpellSentence(EditView const & rEditView,
     bool bRet = false;
     EditSelection aCurSel( rEditView.pImpEditView->GetEditSelection() );
     if(!pSpellInfo)
-        pSpellInfo = CreateSpellInfo( true );
+        CreateSpellInfo( true );
     pSpellInfo->aCurSentenceStart = aCurSel.Min();
     DBG_ASSERT( xSpeller.is(), "No spell checker set!" );
     pSpellInfo->aLastSpellPortions.clear();

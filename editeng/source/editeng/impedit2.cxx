@@ -198,10 +198,10 @@ ImpEditEngine::~ImpEditEngine()
     // before destroying the ImpEditEngine!
     assert(!pUndoManager || typeid(*pUndoManager) == typeid(EditUndoManager));
     delete pUndoManager;
-    delete pTextRanger;
-    delete mpIMEInfos;
-    delete pCTLOptions;
-    delete pSpellInfo;
+    pTextRanger.reset();
+    mpIMEInfos.reset();
+    pCTLOptions.reset();
+    pSpellInfo.reset();
 }
 
 void ImpEditEngine::SetRefDevice( OutputDevice* pRef )
@@ -359,13 +359,13 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
     if ( rCEvt.GetCommand() == CommandEventId::StartExtTextInput )
     {
         pView->DeleteSelected();
-        delete mpIMEInfos;
+        mpIMEInfos.reset();
         EditPaM aPaM = pView->GetImpEditView()->GetEditSelection().Max();
         OUString aOldTextAfterStartPos = aPaM.GetNode()->Copy( aPaM.GetIndex() );
         sal_Int32 nMax = aOldTextAfterStartPos.indexOf( CH_FEATURE );
         if ( nMax != -1 )  // don't overwrite features!
             aOldTextAfterStartPos = aOldTextAfterStartPos.copy( 0, nMax );
-        mpIMEInfos = new ImplIMEInfos( aPaM, aOldTextAfterStartPos );
+        mpIMEInfos.reset( new ImplIMEInfos( aPaM, aOldTextAfterStartPos ) );
         mpIMEInfos->bWasCursorOverwrite = !pView->IsInsertMode();
         UndoActionStart( EDITUNDO_INSERT );
     }
@@ -400,8 +400,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
 
             bool bWasCursorOverwrite = mpIMEInfos->bWasCursorOverwrite;
 
-            delete mpIMEInfos;
-            mpIMEInfos = nullptr;
+            mpIMEInfos.reset();
 
             FormatAndUpdate( pView );
 
@@ -1590,7 +1589,7 @@ bool ImpEditEngine::IsInputSequenceCheckingRequired( sal_Unicode nChar, const Ed
 {
     uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
     if (!pCTLOptions)
-        pCTLOptions = new SvtCTLOptions;
+        pCTLOptions.reset( new SvtCTLOptions );
 
     // get the index that really is first
     const sal_Int32 nFirstPos = std::min(rCurSel.Min().GetIndex(), rCurSel.Max().GetIndex());
@@ -2616,7 +2615,7 @@ EditPaM ImpEditEngine::InsertTextUserInput( const EditSelection& rCurSel,
         {
             uno::Reference < i18n::XExtendedInputSequenceChecker > _xISC( ImplGetInputSequenceChecker() );
             if (!pCTLOptions)
-                pCTLOptions = new SvtCTLOptions;
+                pCTLOptions.reset( new SvtCTLOptions );
 
             if (_xISC.is() || pCTLOptions)
             {
@@ -3453,8 +3452,7 @@ void ImpEditEngine::SetActiveView( EditView* pView )
 
     if ( !pView && mpIMEInfos )
     {
-        delete mpIMEInfos;
-        mpIMEInfos = nullptr;
+        mpIMEInfos.reset();
     }
 }
 
@@ -4355,7 +4353,7 @@ bool ImpEditEngine::IsVisualCursorTravelingEnabled()
     bool bVisualCursorTravaling = false;
 
     if( !pCTLOptions )
-        pCTLOptions = new SvtCTLOptions;
+        pCTLOptions.reset( new SvtCTLOptions );
 
     if ( pCTLOptions->IsCTLFontEnabled() && ( pCTLOptions->GetCTLCursorMovement() == SvtCTLOptions::MOVEMENT_VISUAL ) )
     {
