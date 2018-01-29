@@ -111,7 +111,7 @@ public:
         m_pLoader = NULL;
     }
 
-    /** Constructor, loads the library if necessary otherwise the refernece count will
+    /** Constructor, loads the library if necessary otherwise the reference count will
         be increased.
 
         @param strModuleName specifies the library name.

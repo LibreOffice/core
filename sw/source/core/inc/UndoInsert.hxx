@@ -91,7 +91,7 @@ public:
 };
 
 SwRewriter
-MakeUndoReplaceRewriter(sal_uLong const ocurrences,
+MakeUndoReplaceRewriter(sal_uLong const occurrences,
     OUString const& sOld, OUString const& sNew);
 
 class SwUndoReplace

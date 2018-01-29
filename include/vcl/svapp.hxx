@@ -683,7 +683,7 @@ public:
 
     /** Remove a VCL event listener from the application.
 
-     @param     rEventListener  Const refernece to the event listener to be removed
+     @param     rEventListener  Const reference to the event listener to be removed
 
      @see AddEventListener, AddKeyListener, RemoveKeyListener
     */

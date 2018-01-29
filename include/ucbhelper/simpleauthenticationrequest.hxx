@@ -36,7 +36,7 @@ namespace ucbhelper {
   * instance contains an AuthenticationRequest and three interaction
   * continuations: "Abort", "Retry" and "SupplyAuthentication". The parameters
   * for the AuthenticationRequest and the InteractionSupplyAuthentication
-  * objects are partly taken from contructors parameters and partly defaulted
+  * objects are partly taken from constructors parameters and partly defaulted
   * as follows:
   *
   * Read-only values : servername, realm
