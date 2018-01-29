@@ -343,13 +343,13 @@ class NWPixmapCache
     int m_size;
     int m_idx;
     int m_screen;
-    NWPixmapCacheData* pData;
+    std::unique_ptr<NWPixmapCacheData[]> pData;
 public:
     explicit NWPixmapCache( SalX11Screen nScreen );
     ~NWPixmapCache();
 
     void SetSize( int n)
-        { delete [] pData; m_idx = 0; m_size = n; pData = new NWPixmapCacheData[m_size]; }
+        { m_idx = 0; m_size = n; pData.reset(new NWPixmapCacheData[m_size]); }
     int GetSize() const { return m_size; }
 
     bool Find( ControlType aType, ControlState aState, const tools::Rectangle& r_pixmapRect, GdkX11Pixmap** pPixmap, GdkX11Pixmap** pMask );
@@ -392,13 +392,11 @@ NWPixmapCache::~NWPixmapCache()
 {
     if( gWidgetData[m_screen].gNWPixmapCacheList )
         gWidgetData[m_screen].gNWPixmapCacheList->RemoveCache(this);
-    delete[] pData;
 }
 void NWPixmapCache::ThemeChanged()
 {
     // throw away cached pixmaps
-    int i;
-    for(i=0; i<m_size; i++)
+    for(int i=0; i<m_size; i++)
         pData[i].SetPixmap( nullptr, nullptr );
 }
 
