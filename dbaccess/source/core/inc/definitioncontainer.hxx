@@ -130,7 +130,7 @@ protected:
 
 protected:
     /** Additionally to our own approvals which new elements must pass, derived classes
-        can specifiy an additional approval instance here.
+        can specify an additional approval instance here.
 
         Every time a new element is inserted into the container (or an element is replaced
         with a new one), this new element must pass our own internal approval, plus the approval

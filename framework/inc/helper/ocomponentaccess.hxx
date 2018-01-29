@@ -118,7 +118,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper< css::container::XEnum
         /*-****************************************************************************************************
             @short      standard destructor
             @descr      This method destruct an instance of this class and clear some member.
-                        Don't use an instance of this class as normal member. Use it dynamicly with a pointer.
+                        Don't use an instance of this class as normal member. Use it dynamically with a pointer.
                         We hold a weakreference to our owner and not to our superclass!
                         That's the reason for a protected dtor.
 
