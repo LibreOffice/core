@@ -1246,12 +1246,12 @@ Outliner::Outliner(SfxItemPool* pPool, OutlinerMode nMode)
     , bPasting(false)
 {
 
-    pParaList = new ParagraphList;
+    pParaList.reset( new ParagraphList );
     pParaList->SetVisibleStateChangedHdl( LINK( this, Outliner, ParaVisibleStateChangedHdl ) );
     Paragraph* pPara = new Paragraph( 0 );
     pParaList->Append(pPara);
 
-    pEditEngine = new OutlinerEditEng( this, pPool );
+    pEditEngine.reset( new OutlinerEditEng( this, pPool ) );
     pEditEngine->SetBeginMovingParagraphsHdl( LINK( this, Outliner, BeginMovingParagraphsHdl ) );
     pEditEngine->SetEndMovingParagraphsHdl( LINK( this, Outliner, EndMovingParagraphsHdl ) );
     pEditEngine->SetBeginPasteOrDropHdl( LINK( this, Outliner, BeginPasteOrDropHdl ) );
@@ -1262,10 +1262,9 @@ Outliner::Outliner(SfxItemPool* pPool, OutlinerMode nMode)
 
 Outliner::~Outliner()
 {
-
     pParaList->Clear();
-    delete pParaList;
-    delete pEditEngine;
+    pParaList.reset();
+    pEditEngine.reset();
 }
 
 size_t Outliner::InsertView( OutlinerView* pView, size_t nIndex )

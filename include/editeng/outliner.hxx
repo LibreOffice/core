@@ -587,9 +587,9 @@ private:
 
     friend class TextChainingUtils;
 
-    OutlinerEditEng*    pEditEngine;
+    std::unique_ptr<OutlinerEditEng> pEditEngine;
 
-    ParagraphList*      pParaList;
+    std::unique_ptr<ParagraphList>   pParaList;
     ViewList            aViewList;
 
     sal_Int32           mnFirstSelPage;
