@@ -781,13 +781,14 @@ RequestHandler::Status PipeIpcThread::enable(rtl::Reference<IpcThread> * thread)
         osl::Security security;
 
         // Try to create pipe
-        if ( pipe.create( aPipeIdent.getStr(), osl_Pipe_CREATE, security ))
+        if ( pipe.create( aPipeIdent, osl_Pipe_CREATE, security ))
         {
             // Pipe created
             nPipeMode = PIPEMODE_CREATED;
         }
-        else if( pipe.create( aPipeIdent.getStr(), osl_Pipe_OPEN, security )) // Creation not successful, now we try to connect
+        else if( pipe.create( aPipeIdent, osl_Pipe_OPEN | osl_Pipe_ENABLE_SERVER_POPUPS, security ))
         {
+            // Creation not successful, now we try to connect
             osl::StreamPipe aStreamPipe(pipe.getHandle());
             if (readStringFromPipe(aStreamPipe) == SEND_ARGUMENTS)
             {
