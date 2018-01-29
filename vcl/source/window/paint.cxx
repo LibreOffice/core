@@ -1062,13 +1062,13 @@ void Window::SetWindowRegionPixel( const vcl::Region& rRegion )
                 mpWindowImpl->maWinRegion.GetRegionRectangles(aRectangles);
                 mpWindowImpl->mpFrame->BeginSetClipRegion(aRectangles.size());
 
-                for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+                for (auto const& rectangle : aRectangles)
                 {
                     mpWindowImpl->mpFrame->UnionClipRegion(
-                        aRectIter->Left(),
-                        aRectIter->Top(),
-                        aRectIter->GetWidth(),       // orig nWidth was ((R - L) + 1), same as GetWidth does
-                        aRectIter->GetHeight());     // same for height
+                        rectangle.Left(),
+                        rectangle.Top(),
+                        rectangle.GetWidth(),       // orig nWidth was ((R - L) + 1), same as GetWidth does
+                        rectangle.GetHeight());     // same for height
                 }
 
                 mpWindowImpl->mpFrame->EndSetClipRegion();

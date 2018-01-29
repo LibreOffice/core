@@ -302,9 +302,11 @@ std::vector<OString> TabDialog::getAllPageUIXMLDescriptions() const
                         // Use the UIXMLDescription without trailing '.ui', with one trailing '/'
                         bool bAlreadyAdded(false);
 
-                        for (auto i = aRetval.begin(); !bAlreadyAdded && i != aRetval.end(); i++)
+                        for (auto const& elem : aRetval)
                         {
-                            bAlreadyAdded = (*i == aNewName);
+                            bAlreadyAdded = (elem == aNewName);
+                            if (bAlreadyAdded)
+                                break;
                         }
 
                         if (bAlreadyAdded)

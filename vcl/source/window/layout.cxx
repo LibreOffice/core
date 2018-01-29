@@ -430,9 +430,9 @@ void VclBox::setAllocation(const Size &rAllocation)
             setPrimaryCoordinate(aPos, nPrimaryCoordinate + nAllocPrimaryDimension);
         }
 
-        for (std::vector<vcl::Window*>::iterator aI = aWindows[ePackType].begin(), aEnd = aWindows[ePackType].end(); aI != aEnd; ++aI)
+        for (auto const& window : aWindows[ePackType])
         {
-            vcl::Window *pChild = *aI;
+            vcl::Window *pChild = window;
 
             long nPadding = pChild->get_padding();
 
@@ -546,10 +546,9 @@ Size VclButtonBox::addReqGroups(const VclButtonBox::Requisition &rReq) const
 static long getMaxNonOutlier(const std::vector<long> &rG, long nAvgDimension)
 {
     long nMaxDimensionNonOutlier = 0;
-    for (std::vector<long>::const_iterator aI = rG.begin(),
-        aEnd = rG.end(); aI != aEnd; ++aI)
+    for (auto const& elem : rG)
     {
-        long nPrimaryChildDimension = *aI;
+        long nPrimaryChildDimension = elem;
         if (nPrimaryChildDimension < nAvgDimension * 1.5)
         {
             nMaxDimensionNonOutlier = std::max(nPrimaryChildDimension,
@@ -567,10 +566,9 @@ static std::vector<long> setButtonSizes(const std::vector<long> &rG,
     //set everything < 1.5 times the average to the same width, leave the
     //outliers un-touched
     std::vector<bool>::const_iterator aJ = rNonHomogeneous.begin();
-    for (std::vector<long>::const_iterator aI = rG.begin(), aEnd = rG.end();
-        aI != aEnd; ++aI, ++aJ)
+    for (auto const& elem : rG)
     {
-        long nPrimaryChildDimension = *aI;
+        long nPrimaryChildDimension = elem;
         bool bNonHomogeneous = *aJ;
         if (!bNonHomogeneous && nPrimaryChildDimension < nAvgDimension * 1.5)
         {
@@ -580,6 +578,7 @@ static std::vector<long> setButtonSizes(const std::vector<long> &rG,
         {
             aVec.push_back(std::max(nPrimaryChildDimension, nMinWidth));
         }
+        ++aJ;
     }
     return aVec;
 }
@@ -1044,10 +1043,9 @@ array_type assembleGrid(const VclGrid &rGrid)
                 GridEntry &rEntry = A[rSpan.x][rSpan.y];
                 candidates.insert(&rEntry);
             }
-            for (std::set<GridEntry*>::iterator aI = candidates.begin(), aEnd = candidates.end();
-                aI != aEnd; ++aI)
+            for (auto const& candidate : candidates)
             {
-                GridEntry *pEntry = *aI;
+                GridEntry *pEntry = candidate;
                 --pEntry->nSpanWidth;
             }
         }
@@ -1075,10 +1073,9 @@ array_type assembleGrid(const VclGrid &rGrid)
                 GridEntry &rEntry = A[rSpan.x][rSpan.y];
                 candidates.insert(&rEntry);
             }
-            for (std::set<GridEntry*>::iterator aI = candidates.begin(), aEnd = candidates.end();
-                aI != aEnd; ++aI)
+            for (auto const& candidate : candidates)
             {
-                GridEntry *pEntry = *aI;
+                GridEntry *pEntry = candidate;
                 --pEntry->nSpanHeight;
             }
         }
