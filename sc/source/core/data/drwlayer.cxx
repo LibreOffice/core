@@ -1936,6 +1936,7 @@ void ScDrawLayer::GetCellAnchorFromPosition( SdrObject &rObj, ScDrawObjData &rAn
         rAnchor.maEndOffset.X() = aObjRect.Right()-aCellRect.Left();
     else
         rAnchor.maEndOffset.X() = aCellRect.Right()-aObjRect.Left();
+
 }
 
 void ScDrawLayer::UpdateCellAnchorFromPositionEnd( SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect )
@@ -1976,9 +1977,9 @@ ScAnchorType ScDrawLayer::GetAnchorType( const SdrObject &rObj )
     return ScDrawLayer::GetObjData(const_cast<SdrObject*>(&rObj)) ? SCA_CELL : SCA_PAGE;
 }
 
-std::vector<SdrObject*> ScDrawLayer::GetObjectsAnchoredToCell(const ScAddress& rCell)
+std::vector<SdrObject*> ScDrawLayer::GetObjectsAnchoredToCell(const ScAddress& rCell) const
 {
-    SdrPage* pPage = GetPage(static_cast<sal_uInt16>(rCell.Tab()));
+    const SdrPage* pPage = GetPage(static_cast<sal_uInt16>(rCell.Tab()));
     if (!pPage || pPage->GetObjCount() < 1)
         return std::vector<SdrObject*>();
 

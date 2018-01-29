@@ -915,7 +915,8 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
 }
 
 bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
-        SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly, bool bStickyTopRow, bool bStickyLeftCol ) const
+        SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly, bool bStickyTopRow, bool bStickyLeftCol,
+        bool bConsiderCellNotes, bool bConsiderCellDrawObjects ) const
 {
     o_bShrunk = false;
 
@@ -946,6 +947,9 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
     {
         if (aCol[rEndCol].IsEmptyBlock( rStartRow, rEndRow))
         {
+            if (bConsiderCellDrawObjects && !aCol[rEndCol].IsDrawObjectsEmptyBlock( rStartRow, rEndRow ))
+                break;
+
             --rEndCol;
             o_bShrunk = true;
         }
@@ -959,6 +963,9 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
         {
             if (aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow))
             {
+                if (bConsiderCellDrawObjects && !aCol[rStartCol].IsDrawObjectsEmptyBlock( rStartRow, rEndRow ))
+                    break;
+
                 ++rStartCol;
                 o_bShrunk = true;
             }
@@ -976,7 +983,7 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
                 bool bFound = false;
                 for (SCCOL i=rStartCol; i<=rEndCol && !bFound; i++)
                 {
-                    if (aCol[i].HasDataAt( rStartRow))
+                    if (aCol[i].HasDataAt( rStartRow, bConsiderCellNotes, bConsiderCellDrawObjects))
                         bFound = true;
                 }
                 if (!bFound)
@@ -991,7 +998,8 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
 
         while (rStartRow < rEndRow)
         {
-            SCROW nLastDataRow = GetLastDataRow( rStartCol, rEndCol, rEndRow);
+            SCROW nLastDataRow = GetLastDataRow( rStartCol, rEndCol, rEndRow,
+                                                 bConsiderCellNotes, bConsiderCellDrawObjects);
             if (0 <= nLastDataRow && nLastDataRow < rEndRow)
             {
                 rEndRow = std::max( rStartRow, nLastDataRow);
@@ -1004,10 +1012,12 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
 
     return rStartCol != rEndCol || (bColumnsOnly ?
             !aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow) :
-            (rStartRow != rEndRow || aCol[rStartCol].HasDataAt( rStartRow)));
+            (rStartRow != rEndRow ||
+                aCol[rStartCol].HasDataAt( rStartRow, bConsiderCellNotes, bConsiderCellDrawObjects)));
 }
 
-SCROW ScTable::GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow ) const
+SCROW ScTable::GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow,
+                               bool bConsiderCellNotes, bool bConsiderCellDrawObjects ) const
 {
     if (!ValidCol(nCol1) || !ValidCol(nCol2))
         return -1;
@@ -1015,7 +1025,7 @@ SCROW ScTable::GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow ) const
     SCROW nNewLastRow = 0;
     for (SCCOL i = nCol1; i <= nCol2; ++i)
     {
-        SCROW nThis = aCol[i].GetLastDataPos(nLastRow);
+        SCROW nThis = aCol[i].GetLastDataPos(nLastRow, bConsiderCellNotes, bConsiderCellDrawObjects);
         if (nNewLastRow < nThis)
             nNewLastRow = nThis;
     }

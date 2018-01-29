@@ -1898,7 +1898,8 @@ void ScColumn::UpdateNoteCaptions( SCROW nRow1, SCROW nRow2 )
     NoteCaptionUpdater aFunc(nCol, nTab);
     sc::ProcessNote(maCellNotes.begin(), maCellNotes, nRow1, nRow2, aFunc);
 }
-void ScColumn::UpdateDrawObjects(std::vector<std::vector<SdrObject*>> pObjects, SCROW nRowStart, SCROW nRowEnd)
+
+void ScColumn::UpdateDrawObjects(std::vector<std::vector<SdrObject*>>& pObjects, SCROW nRowStart, SCROW nRowEnd)
 {
     int nObj = 0;
     for (SCROW nCurrentRow = nRowStart; nCurrentRow <= nRowEnd; nCurrentRow++, nObj++)
@@ -1906,30 +1907,53 @@ void ScColumn::UpdateDrawObjects(std::vector<std::vector<SdrObject*>> pObjects, 
         if (pObjects[nObj].empty())
             continue; // No draw objects in this row
 
-        for (auto &pObject : pObjects[nObj])
-        {
-            // Get anchor data
-            ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObject, false);
-            const ScAddress aOldStart = pObjData->maStart;
-            const ScAddress aOldEnd = pObjData->maEnd;
-
-            // Set start address
-            ScAddress aNewStart = ScAddress(nCol, nCurrentRow, nTab);
-            pObjData->maStart = aNewStart;
-
-            // Set end address
-            const SCCOL nObjectColSpan = aOldEnd.Col() - aOldStart.Col();
-            const SCROW nObjectRowSpan = aOldEnd.Row() - aOldStart.Row();
-            ScAddress aNewEnd = aNewStart;
-            aNewEnd.IncRow(nObjectRowSpan);
-            aNewEnd.IncCol(nObjectColSpan);
-            pObjData->maEnd = aNewEnd;
-
-            // Update draw object according to new anchor
-            ScDrawLayer* pDrawLayer = GetDoc().GetDrawLayer();
-            pDrawLayer->RecalcPos(pObject, *pObjData, false, false);
-        }
+        UpdateDrawObjectsForRow(pObjects[nObj], nCol, nCurrentRow);
     }
+}
+
+void ScColumn::UpdateDrawObjectsForRow( std::vector<SdrObject*>& pObjects, SCCOL nTargetCol, SCROW nTargetRow )
+{
+    for (auto &pObject : pObjects)
+    {
+        // Get anchor data
+        ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObject, false);
+        if (!pObjData)
+            continue;
+        const ScAddress aOldStart = pObjData->maStart;
+        const ScAddress aOldEnd = pObjData->maEnd;
+
+        // Set start address
+        ScAddress aNewStart = ScAddress(nTargetCol, nTargetRow, nTab);
+        pObjData->maStart = aNewStart;
+
+        // Set end address
+        const SCCOL nObjectColSpan = aOldEnd.Col() - aOldStart.Col();
+        const SCROW nObjectRowSpan = aOldEnd.Row() - aOldStart.Row();
+        ScAddress aNewEnd = aNewStart;
+        aNewEnd.IncRow(nObjectRowSpan);
+        aNewEnd.IncCol(nObjectColSpan);
+        pObjData->maEnd = aNewEnd;
+
+        // Update draw object according to new anchor
+        ScDrawLayer* pDrawLayer = GetDoc().GetDrawLayer();
+        if (pDrawLayer)
+            pDrawLayer->RecalcPos(pObject, *pObjData, false, false);
+    }
+}
+
+bool ScColumn::IsDrawObjectsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
+{
+    const ScDrawLayer* pDrawLayer = GetDoc().GetDrawLayer();
+    if (!pDrawLayer)
+        return true;
+
+    for (SCROW nCurrentRow = nStartRow; nCurrentRow <= nEndRow; nCurrentRow++)
+    {
+        ScAddress aCell(nCol, nCurrentRow, nTab);
+        if (!pDrawLayer->GetObjectsAnchoredToCell(aCell).empty())
+            return false;
+    }
+    return true;
 }
 
 void ScColumn::SwapCol(ScColumn& rCol)
