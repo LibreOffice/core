@@ -32,7 +32,13 @@
  	break;
      case CAIRO_FORMAT_RGB30:
  	ret = PIXMAN_x2r10g10b10;
-@@ -328,7 +328,7 @@
+@@ -323,12 +323,12 @@
+ 	ret = PIXMAN_r5g6b5;
+ 	break;
+ 	case CAIRO_FORMAT_RGB24_888:
+-	ret = PIXMAN_r8g8b8;
++	ret = PIXMAN_b8g8r8; // tweaked
+ 	break;
      case CAIRO_FORMAT_ARGB32:
      case CAIRO_FORMAT_INVALID:
      default:
