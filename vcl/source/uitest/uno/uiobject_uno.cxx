@@ -169,10 +169,11 @@ css::uno::Sequence<css::beans::PropertyValue> UIObjectUnoObj::getState()
     StringMap aMap = mpObj->get_state();
     css::uno::Sequence<css::beans::PropertyValue> aProps(aMap.size());
     sal_Int32 i = 0;
-    for (auto itr = aMap.begin(), itrEnd = aMap.end(); itr != itrEnd; ++itr, ++i)
+    for (auto const& elem : aMap)
     {
-        aProps[i].Name = itr->first;
-        aProps[i].Value <<= itr->second;
+        aProps[i].Name = elem.first;
+        aProps[i].Value <<= elem.second;
+        ++i;
     }
 
     return aProps;
@@ -187,9 +188,10 @@ css::uno::Sequence<OUString> UIObjectUnoObj::getChildren()
 
     css::uno::Sequence<OUString> aRet(aChildren.size());
     sal_Int32 i = 0;
-    for (auto itr = aChildren.begin(), itrEnd = aChildren.end(); itr != itrEnd; ++itr, ++i)
+    for (auto const& child : aChildren)
     {
-        aRet[i] = *itr;
+        aRet[i] = child;
+        ++i;
     }
 
     return aRet;

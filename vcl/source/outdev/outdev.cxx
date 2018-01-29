@@ -710,10 +710,10 @@ void OutputDevice::ReMirror( vcl::Region &rRegion ) const
     rRegion.GetRegionRectangles(aRectangles);
     vcl::Region aMirroredRegion;
 
-    for(RectangleVector::iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+    for (auto & rectangle : aRectangles)
     {
-        ReMirror(*aRectIter);
-        aMirroredRegion.Union(*aRectIter);
+        ReMirror(rectangle);
+        aMirroredRegion.Union(rectangle);
     }
 
     rRegion = aMirroredRegion;

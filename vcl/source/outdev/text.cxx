@@ -2473,9 +2473,8 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
 
             if( !aMatrix.isIdentity() )
             {
-                basegfx::B2DPolyPolygonVector::iterator aIt = rVector.begin();
-                for(; aIt != rVector.end(); ++aIt )
-                    (*aIt).transform( aMatrix );
+                for (auto & elem : rVector)
+                    elem.transform( aMatrix );
             }
         }
 
@@ -2507,9 +2506,8 @@ bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
 
     // convert to a tool polypolygon vector
     rResultVector.reserve( aB2DPolyPolyVector.size() );
-    basegfx::B2DPolyPolygonVector::const_iterator aIt = aB2DPolyPolyVector.begin();
-    for(; aIt != aB2DPolyPolyVector.end(); ++aIt )
-        rResultVector.emplace_back(*aIt); // #i76339#
+    for (auto const& elem : aB2DPolyPolyVector)
+        rResultVector.emplace_back(elem); // #i76339#
 
     return true;
 }
@@ -2527,10 +2525,9 @@ bool OutputDevice::GetTextOutline( tools::PolyPolygon& rPolyPoly, const OUString
         return false;
 
     // convert and merge into a tool polypolygon
-    basegfx::B2DPolyPolygonVector::const_iterator aIt = aB2DPolyPolyVector.begin();
-    for(; aIt != aB2DPolyPolyVector.end(); ++aIt )
-        for( unsigned int i = 0; i < aIt->count(); ++i )
-            rPolyPoly.Insert(tools::Polygon((*aIt).getB2DPolygon( i ))); // #i76339#
+    for (auto const& elem : aB2DPolyPolyVector)
+        for( unsigned int i = 0; i < elem.count(); ++i )
+            rPolyPoly.Insert(tools::Polygon(elem.getB2DPolygon( i ))); // #i76339#
 
     return true;
 }
