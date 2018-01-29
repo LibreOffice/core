@@ -253,7 +253,7 @@ class EDITENG_DLLPUBLIC SvxUnoTextRangeBase : public css::text::XTextRange,
     const SvxItemPropertySet* mpPropSet;
 
 protected:
-    SvxEditSource*          mpEditSource;
+    std::unique_ptr<SvxEditSource> mpEditSource;
     ESelection              maSelection;
 
     /// @throws css::beans::UnknownPropertyException
@@ -327,7 +327,7 @@ public:
 
     //const SfxItemPropertyMapEntry*   getPropertyMapEntries() const throw() { return maPropSet.getPropertyMapEntries(); }
     const SvxItemPropertySet*   getPropertySet() const throw() { return mpPropSet; }
-    SvxEditSource*              GetEditSource() const throw() { return mpEditSource; }
+    SvxEditSource*              GetEditSource() const throw() { return mpEditSource.get(); }
 
     static bool SetPropertyValueHelper( const SfxItemPropertySimpleEntry* pMap, const css::uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection = nullptr, SvxEditSource* pEditSource = nullptr );
     /// @throws css::uno::RuntimeException
