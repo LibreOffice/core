@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_54ab6a74",
+        "filename": "ucb/source/ucp/webdav-neon/webdavprovider.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-01-29T10:42:49Z",
+      "side": 0,
+      "message": "If you really want to get rid of those defines, you\u0027d need to adapt also webdav-serf code accordingly ...",
+      "revId": "6e1db87ac18e77a1b355f8a3014c904142f53f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

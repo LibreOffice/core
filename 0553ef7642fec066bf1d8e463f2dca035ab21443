@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_d49e7a55",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3886,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-01-29T10:42:49Z",
+      "side": 1,
+      "message": "Please add those constants to InetProtocol enum, if at all possible",
+      "revId": "0553ef7642fec066bf1d8e463f2dca035ab21443",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_f4a37e9c",
+        "filename": "ucb/Library_ucpdav1.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-01-29T10:42:49Z",
+      "side": 1,
+      "message": "Consistent indentation, please",
+      "revId": "0553ef7642fec066bf1d8e463f2dca035ab21443",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_14a1f294",
+        "filename": "ucb/source/ucp/webdav-neon/webdavcontent.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2801,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-01-29T10:42:49Z",
+      "side": 1,
+      "message": "For consistency, define this as WEBDAV_URL_SCHEME",
+      "revId": "0553ef7642fec066bf1d8e463f2dca035ab21443",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_34aef685",
+        "filename": "ucb/source/ucp/webdav-neon/webdavcontent.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2806,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-01-29T10:42:49Z",
+      "side": 1,
+      "message": "WEBDAVS_URL_SCHEME respectively",
+      "revId": "0553ef7642fec066bf1d8e463f2dca035ab21443",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_74b6aedd",
+        "filename": "ucb/source/ucp/webdav-neon/webdavprovider.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-01-29T10:42:49Z",
+      "side": 1,
+      "message": "i.e. carry out the same cleanup as the one here (good job btw) also in ucb/source/ucp/webdav/webdavprovider.cxx \nTo test your results, you need to build --with-webdav\u003dserf (unsure if this is possible on windows, though)",
+      "revId": "0553ef7642fec066bf1d8e463f2dca035ab21443",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
