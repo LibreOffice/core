@@ -632,7 +632,7 @@ public:
 class SwJumpEditFieldType : public SwFieldType
 {
     SwDoc* m_pDoc;
-    SwDepend m_aDep;
+    sw::WriterMultiListener m_aDep;
 
 public:
     SwJumpEditFieldType( SwDoc* pDoc );
