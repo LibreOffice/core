@@ -44,7 +44,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
     bVertical( bVert )
 {
     sal_uInt32 nCount(rPolyPolygon.count());
-    mpPolyPolygon = new tools::PolyPolygon( static_cast<sal_uInt16>(nCount) );
+    mpPolyPolygon.reset( new tools::PolyPolygon( static_cast<sal_uInt16>(nCount) ) );
 
     for(sal_uInt32 i(0); i < nCount; i++)
     {
@@ -56,7 +56,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
     if( pLinePolyPolygon )
     {
         nCount = pLinePolyPolygon->count();
-        mpLinePolyPolygon = new tools::PolyPolygon();
+        mpLinePolyPolygon.reset( new tools::PolyPolygon() );
 
         for(sal_uInt32 i(0); i < nCount; i++)
         {
@@ -73,9 +73,6 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
 TextRanger::~TextRanger()
 {
     mRangeCache.clear();
-    delete mpPolyPolygon;
-    delete mpLinePolyPolygon;
-    delete pBound;
 }
 
 /* TextRanger::SetVertical(..)
@@ -646,7 +643,7 @@ LongDqPtr TextRanger::GetTextRanges( const Range& rRange )
     SvxBoundArgs aArg( this, &(rngCache.results), rRange );
     aArg.Calc( *mpPolyPolygon );
     if( mpLinePolyPolygon )
-        aArg.Concat( mpLinePolyPolygon );
+        aArg.Concat( mpLinePolyPolygon.get() );
     //Add new result to the cache
     mRangeCache.push_back(rngCache);
     if (mRangeCache.size() > nCacheSize)
@@ -657,7 +654,7 @@ LongDqPtr TextRanger::GetTextRanges( const Range& rRange )
 const tools::Rectangle& TextRanger::GetBoundRect_()
 {
     DBG_ASSERT( nullptr == pBound, "Don't call twice." );
-    pBound = new tools::Rectangle( mpPolyPolygon->GetBoundRect() );
+    pBound.reset( new tools::Rectangle( mpPolyPolygon->GetBoundRect() ) );
     return *pBound;
 }
 
