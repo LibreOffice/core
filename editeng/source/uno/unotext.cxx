@@ -219,7 +219,7 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase(const SvxEditSource* pSource, const Svx
 
     DBG_ASSERT(pSource,"SvxUnoTextRangeBase: I need a valid SvxEditSource!");
 
-    mpEditSource = pSource->Clone();
+    mpEditSource.reset( pSource->Clone() );
     if (mpEditSource != nullptr)
     {
         ESelection aSelection;
@@ -244,7 +244,7 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase(const SvxUnoTextRangeBase& rRange)
 {
     SolarMutexGuard aGuard;
 
-    mpEditSource = rRange.mpEditSource ? rRange.mpEditSource->Clone() : nullptr;
+    mpEditSource.reset( rRange.mpEditSource ? rRange.mpEditSource->Clone() : nullptr );
 
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
     if( pForwarder )
@@ -261,8 +261,6 @@ SvxUnoTextRangeBase::~SvxUnoTextRangeBase() throw()
 {
     if( mpEditSource )
         mpEditSource->removeRange( this );
-
-    delete mpEditSource;
 }
 
 void SvxUnoTextRangeBase::SetEditSource( SvxEditSource* pSource ) throw()
@@ -270,7 +268,7 @@ void SvxUnoTextRangeBase::SetEditSource( SvxEditSource* pSource ) throw()
     DBG_ASSERT(pSource,"SvxUnoTextRangeBase: I need a valid SvxEditSource!");
     DBG_ASSERT(mpEditSource==nullptr,"SvxUnoTextRangeBase::SetEditSource called while SvxEditSource already set" );
 
-    mpEditSource = pSource;
+    mpEditSource.reset( pSource );
 
     maSelection.nStartPara = EE_PARA_MAX_COUNT;
 
@@ -300,7 +298,7 @@ void SvxUnoTextRangeBase::SetSelection( const ESelection& rSelection ) throw()
     SolarMutexGuard aGuard;
 
     maSelection = rSelection;
-    CheckSelection( maSelection, mpEditSource );
+    CheckSelection( maSelection, mpEditSource.get() );
 }
 
 // Interface XTextRange ( XText )
@@ -1313,7 +1311,7 @@ uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::getPropertyDefaults( con
 // internal
 void SvxUnoTextRangeBase::CollapseToStart() throw()
 {
-    CheckSelection( maSelection, mpEditSource );
+    CheckSelection( maSelection, mpEditSource.get() );
 
     maSelection.nEndPara = maSelection.nStartPara;
     maSelection.nEndPos  = maSelection.nStartPos;
@@ -1321,7 +1319,7 @@ void SvxUnoTextRangeBase::CollapseToStart() throw()
 
 void SvxUnoTextRangeBase::CollapseToEnd() throw()
 {
-    CheckSelection( maSelection, mpEditSource );
+    CheckSelection( maSelection, mpEditSource.get() );
 
     maSelection.nStartPara = maSelection.nEndPara;
     maSelection.nStartPos  = maSelection.nEndPos;
@@ -1329,7 +1327,7 @@ void SvxUnoTextRangeBase::CollapseToEnd() throw()
 
 bool SvxUnoTextRangeBase::IsCollapsed() throw()
 {
-    CheckSelection( maSelection, mpEditSource );
+    CheckSelection( maSelection, mpEditSource.get() );
 
     return ( maSelection.nStartPara == maSelection.nEndPara &&
              maSelection.nStartPos  == maSelection.nEndPos );
@@ -1337,7 +1335,7 @@ bool SvxUnoTextRangeBase::IsCollapsed() throw()
 
 bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, bool Expand) throw()
 {
-    CheckSelection( maSelection, mpEditSource );
+    CheckSelection( maSelection, mpEditSource.get() );
 
     //  #75098# use end position, as in Writer (start is anchor, end is cursor)
     sal_uInt16 nNewPos = maSelection.nEndPos;
@@ -1423,7 +1421,7 @@ void SvxUnoTextRangeBase::GotoStart(bool Expand) throw()
 
 void SvxUnoTextRangeBase::GotoEnd(bool Expand) throw()
 {
-    CheckSelection( maSelection, mpEditSource );
+    CheckSelection( maSelection, mpEditSource.get() );
 
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
     if( pForwarder )
