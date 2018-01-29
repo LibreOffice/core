@@ -136,11 +136,13 @@ private:
     // specifies the indent before the text, e.g. in L2R-layout the left margin
     long                mnIndentAt;
 
-    SvxBrushItem*       pGraphicBrush;
+    std::unique_ptr<SvxBrushItem>
+                        pGraphicBrush;
     sal_Int16           eVertOrient;        // vertical alignment of a bitmap
 
     Size                aGraphicSize;       // Always! in 1/100 mm
-    vcl::Font*          pBulletFont;        // Pointer to the bullet font
+    std::unique_ptr<vcl::Font>
+                        pBulletFont;        // Pointer to the bullet font
 
     OUString            sCharStyleName;     // Character Style
 
@@ -168,7 +170,7 @@ public:
     virtual OUString        GetCharFormatName()const;
 
     void            SetBulletFont(const vcl::Font* pFont);
-    const vcl::Font* GetBulletFont() const {return pBulletFont;}
+    const vcl::Font* GetBulletFont() const {return pBulletFont.get();}
     void            SetBulletChar(sal_Unicode cSet){cBullet = cSet;}
     sal_Unicode     GetBulletChar()const {return cBullet;}
     void            SetBulletRelSize(sal_uInt16 nSet) {nBulletRelSize = std::max(nSet,sal_uInt16(SVX_NUM_REL_SIZE_MIN));}
@@ -182,7 +184,7 @@ public:
     sal_uInt16      GetStart() const {return nStart;}
 
     virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = nullptr, const sal_Int16* pOrient = nullptr);
-    const SvxBrushItem*         GetBrush() const {return pGraphicBrush;}
+    const SvxBrushItem*         GetBrush() const {return pGraphicBrush.get();}
     void            SetGraphic( const OUString& rName );
     sal_Int16       GetVertOrient() const;
     void            SetGraphicSize(const Size& rSet) {aGraphicSize = rSet;}
