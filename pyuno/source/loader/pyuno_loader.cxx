@@ -227,6 +227,12 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
 
         // initialize python
         Py_Initialize();
+    }
+
+    // tdf#114815: initialize threads independently from Py_Initialize(),
+    // in case the latter was already called somewhere
+    if( ! PyEval_ThreadsInitialized() )
+    {
         PyEval_InitThreads();
 
         PyThreadState *tstate = PyThreadState_Get();
