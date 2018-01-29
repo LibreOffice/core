@@ -47,7 +47,7 @@ public:
     };
 
     /** Creates a new description generator with an empty description
-        string.  Usually you will want to call initialize next to specifiy
+        string.  Usually you will want to call initialize next to specify
         a general description of the shape.
         @param xShape
             The shape from which properties will be extracted by later calls
@@ -59,7 +59,7 @@ public:
     ~DescriptionGenerator();
 
     /** Initialize the description with the given prefix followed by the
-        shape's style in parantheses and a colon.
+        shape style in parentheses and a colon.
         @param sPrefix
             An introductory description of the shape that is made more
             specific by later calls to <member>addProperty</member>.
@@ -67,7 +67,7 @@ public:
     void Initialize (const OUString& sPrefix);
 
     /** Initialize the description with the specified string from the
-        resource followed by the shape's style in parantheses and a colon.
+        resource followed by the shape style in parentheses and a colon.
         @param pResourceId
             A resource id the specifies the introductory description of the
             shape that is made more specific by later calls to

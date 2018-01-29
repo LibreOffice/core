@@ -1903,7 +1903,7 @@ private:
 
     /** Convert a line in logical units to a line in physical device pixel units.
 
-     @param         rLineInfo   Const refernece to a line in logical units
+     @param         rLineInfo   Const reference to a line in logical units
 
      @returns Line based on physical device pixel coordinates and units.
      */

@@ -136,7 +136,7 @@ template<typename T> inline boost::optional<T const> tryGetConverted(
 
     @param any  an Any value.
 
-    @return a positive proxy for the value of the specfied type obtained from
+    @return a positive proxy for the value of the specified type obtained from
     the given Any, or a negative proxy if no such value can be obtained.
 */
 template<typename T> inline
@@ -270,7 +270,7 @@ template<typename T> typename detail::Optional<T>::type tryAccess(
 
     @param any  an Any value.
 
-    @return a positive proxy for the value of the specfied type obtained from
+    @return a positive proxy for the value of the specified type obtained from
     the given Any.  See tryAccess for details.
 
     @throws css::uno::RuntimeException  when a value of the requested type
@@ -307,7 +307,7 @@ template<typename T> inline typename detail::Optional<T>::type doAccess(
 
     @param any  an Any value.
 
-    @return a positive proxy for the value of the specfied type obtained from
+    @return a positive proxy for the value of the specified type obtained from
     the given Any.  See tryAccess for details.
 */
 template<typename T> inline typename detail::Optional<T>::type forceAccess(

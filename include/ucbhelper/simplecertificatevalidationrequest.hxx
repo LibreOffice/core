@@ -33,7 +33,7 @@ namespace ucbhelper {
   * Instances can be passed directly to XInteractionHandler::handle(...). Each
   * instance contains an CertificateValidationRequest and two interaction
   * continuations: "Abort" and "Approved". The parameters
-  * for the CertificateValidationRequest object are partly taken from contructors parameters and partly defaulted
+  * for the CertificateValidationRequest object are partly taken from constructors parameters and partly defaulted
   * as follows:
   *
   * Read-write values: certificateValidity, certificate
