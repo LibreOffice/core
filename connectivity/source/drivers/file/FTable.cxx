@@ -89,10 +89,10 @@ void OFileTable::refreshColumns()
             aVector.push_back(xRow->getString(4));
     }
 
-    if(m_pColumns)
-        m_pColumns->reFill(aVector);
+    if(m_xColumns)
+        m_xColumns->reFill(aVector);
     else
-        m_pColumns  = new OColumns(this,m_aMutex,aVector);
+        m_xColumns = new OColumns(this,m_aMutex,aVector);
 }
 
 void OFileTable::refreshKeys()
