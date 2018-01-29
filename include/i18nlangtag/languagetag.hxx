@@ -255,7 +255,7 @@ public:
      */
     bool                            isValidBcp47() const;
 
-    /** If this tag was contructed as an empty tag denoting the system locale.
+    /** If this tag was constructed as an empty tag denoting the system locale.
       */
     bool                            isSystemLocale() const { return mbSystemLocale;}
 
