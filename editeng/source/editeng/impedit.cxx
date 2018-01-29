@@ -99,18 +99,13 @@ ImpEditView::~ImpEditView()
 {
     RemoveDragAndDropListeners();
 
-    if ( pOutWin && ( pOutWin->GetCursor() == pCursor ) )
+    if ( pOutWin && ( pOutWin->GetCursor() == pCursor.get() ) )
         pOutWin->SetCursor( nullptr );
-
-    delete pCursor;
-    delete pBackgroundColor;
-    delete pPointer;
 }
 
 void ImpEditView::SetBackgroundColor( const Color& rColor )
 {
-    delete pBackgroundColor;
-    pBackgroundColor = new Color( rColor );
+    pBackgroundColor.reset( new Color( rColor ) );
 }
 
 void ImpEditView::RegisterViewShell(OutlinerViewShell* pViewShell)
