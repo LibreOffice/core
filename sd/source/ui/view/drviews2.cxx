@@ -882,20 +882,18 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
 
-            if (pArgs && pArgs->Count () == 1 )
+            const SfxUInt16Item* pScale = (pArgs && pArgs->Count () == 1) ?
+                rReq.GetArg<SfxUInt16Item>(SID_ATTR_ZOOMSLIDER) : nullptr;
+            if (pScale && CHECK_RANGE (5, pScale->GetValue (), 3000))
             {
-                const SfxUInt16Item* pScale = rReq.GetArg<SfxUInt16Item>(SID_ATTR_ZOOMSLIDER);
-                if (CHECK_RANGE (5, pScale->GetValue (), 3000))
-                {
-                    SetZoom (pScale->GetValue ());
+                SetZoom (pScale->GetValue ());
 
-                    SfxBindings& rBindings = GetViewFrame()->GetBindings();
-                    rBindings.Invalidate( SID_ATTR_ZOOM );
-                    rBindings.Invalidate( SID_ZOOM_IN );
-                    rBindings.Invalidate( SID_ZOOM_OUT );
-                    rBindings.Invalidate( SID_ATTR_ZOOMSLIDER );
+                SfxBindings& rBindings = GetViewFrame()->GetBindings();
+                rBindings.Invalidate( SID_ATTR_ZOOM );
+                rBindings.Invalidate( SID_ZOOM_IN );
+                rBindings.Invalidate( SID_ZOOM_OUT );
+                rBindings.Invalidate( SID_ATTR_ZOOMSLIDER );
 
-                }
             }
 
             Cancel();
