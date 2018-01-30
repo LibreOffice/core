@@ -24,9 +24,9 @@ SdrObjPlusData::SdrObjPlusData():
 
 SdrObjPlusData::~SdrObjPlusData()
 {
-    delete pBroadcast;
-    delete pUserDataList;
-    delete pGluePoints;
+    pBroadcast.reset();
+    pUserDataList.reset();
+    pGluePoints.reset();
 }
 
 SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
@@ -35,7 +35,7 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
     if (pUserDataList!=nullptr) {
         sal_uInt16 nCount=pUserDataList->GetUserDataCount();
         if (nCount!=0) {
-            pNeuPlusData->pUserDataList=new SdrObjUserDataList;
+            pNeuPlusData->pUserDataList.reset(new SdrObjUserDataList);
             for (sal_uInt16 i=0; i<nCount; i++) {
                 SdrObjUserData* pNeuUserData=pUserDataList->GetUserData(i).Clone(pObj1);
                 if (pNeuUserData!=nullptr) {
@@ -46,7 +46,7 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
             }
         }
     }
-    if (pGluePoints!=nullptr) pNeuPlusData->pGluePoints=new SdrGluePointList(*pGluePoints);
+    if (pGluePoints!=nullptr) pNeuPlusData->pGluePoints.reset(new SdrGluePointList(*pGluePoints));
     // MtfAnimator isn't copied either
 
     // #i68101#

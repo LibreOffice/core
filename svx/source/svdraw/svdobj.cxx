@@ -585,7 +585,7 @@ void SdrObject::SetLayer(SdrLayerID nLayer)
 void SdrObject::AddListener(SfxListener& rListener)
 {
     ImpForcePlusData();
-    if (pPlusData->pBroadcast==nullptr) pPlusData->pBroadcast=new SfxBroadcaster;
+    if (pPlusData->pBroadcast==nullptr) pPlusData->pBroadcast.reset(new SfxBroadcaster);
 
     // SdrEdgeObj may be connected to same SdrObject on both ends so allow it
     // to listen twice
@@ -598,15 +598,14 @@ void SdrObject::RemoveListener(SfxListener& rListener)
     if (pPlusData!=nullptr && pPlusData->pBroadcast!=nullptr) {
         rListener.EndListening(*pPlusData->pBroadcast);
         if (!pPlusData->pBroadcast->HasListeners()) {
-            delete pPlusData->pBroadcast;
-            pPlusData->pBroadcast=nullptr;
+            pPlusData->pBroadcast.reset();
         }
     }
 }
 
 const SfxBroadcaster* SdrObject::GetBroadcaster() const
 {
-    return pPlusData!=nullptr ? pPlusData->pBroadcast : nullptr;
+    return pPlusData!=nullptr ? pPlusData->pBroadcast.get() : nullptr;
 }
 
 void SdrObject::AddReference(SdrVirtObj& rVrtObj)
@@ -986,8 +985,7 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
         pPlusData=rObj.pPlusData->Clone(this);
     }
     if (pPlusData!=nullptr && pPlusData->pBroadcast!=nullptr) {
-        delete pPlusData->pBroadcast; // broadcaster isn't copied
-        pPlusData->pBroadcast=nullptr;
+        pPlusData->pBroadcast.reset(); // broadcaster isn't copied
     }
 
     delete pGrabBagItem;
@@ -1881,12 +1879,11 @@ void SdrObject::RestGeoData(const SdrObjGeoData& rGeo)
         if (pPlusData->pGluePoints!=nullptr) {
             *pPlusData->pGluePoints=*rGeo.pGPL;
         } else {
-            pPlusData->pGluePoints=new SdrGluePointList(*rGeo.pGPL);
+            pPlusData->pGluePoints.reset(new SdrGluePointList(*rGeo.pGPL));
         }
     } else {
         if (pPlusData!=nullptr && pPlusData->pGluePoints!=nullptr) {
-            delete pPlusData->pGluePoints;
-            pPlusData->pGluePoints=nullptr;
+            pPlusData->pGluePoints.reset();
         }
     }
 }
@@ -2249,7 +2246,7 @@ SdrGluePoint SdrObject::GetCornerGluePoint(sal_uInt16 nPosNum) const
 
 const SdrGluePointList* SdrObject::GetGluePointList() const
 {
-    if (pPlusData!=nullptr) return pPlusData->pGluePoints;
+    if (pPlusData!=nullptr) return pPlusData->pGluePoints.get();
     return nullptr;
 }
 
@@ -2258,9 +2255,9 @@ SdrGluePointList* SdrObject::ForceGluePointList()
 {
     ImpForcePlusData();
     if (pPlusData->pGluePoints==nullptr) {
-        pPlusData->pGluePoints=new SdrGluePointList;
+        pPlusData->pGluePoints.reset(new SdrGluePointList);
     }
-    return pPlusData->pGluePoints;
+    return pPlusData->pGluePoints.get();
 }
 
 void SdrObject::SetGlueReallyAbsolute(bool bOn)
@@ -2680,7 +2677,7 @@ void SdrObject::AppendUserData(SdrObjUserData* pData)
 
     ImpForcePlusData();
     if (!pPlusData->pUserDataList)
-        pPlusData->pUserDataList = new SdrObjUserDataList;
+        pPlusData->pUserDataList.reset( new SdrObjUserDataList );
 
     pPlusData->pUserDataList->AppendUserData(pData);
 }
@@ -2691,8 +2688,7 @@ void SdrObject::DeleteUserData(sal_uInt16 nNum)
     if (nNum<nCount) {
         pPlusData->pUserDataList->DeleteUserData(nNum);
         if (nCount==1)  {
-            delete pPlusData->pUserDataList;
-            pPlusData->pUserDataList=nullptr;
+            pPlusData->pUserDataList.reset();
         }
     } else {
         OSL_FAIL("SdrObject::DeleteUserData(): Invalid Index.");
