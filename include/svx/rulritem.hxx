@@ -26,7 +26,7 @@
 
 class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
 {
-    long    mlLeft;         // nLeft or the negativ first-line indentation
+    long    mlLeft;         // nLeft or the negative first-line indentation
     long    mlRight;        // the unproblematic right edge
 
   protected:

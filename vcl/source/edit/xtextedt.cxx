@@ -115,7 +115,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                         if ( nPara )
                         {
                             nPara--;
-                            nCur = GetTextLen( nPara )-1;   // no matter if negativ, as if Len()
+                            nCur = GetTextLen( nPara )-1;   // no matter if negative, as if Len()
                         }
                         else
                             break;

@@ -77,7 +77,7 @@ enum class ImplFontAttrs : sal_uLong
     BrushScript   = 0x10000000, ///< More Script
     Gothic        = 0x20000000,
     Schoolbook    = 0x40000000,
-    OtherStyle    = 0x80000000, ///< OldStyle, ... so negativ points
+    OtherStyle    = 0x80000000, ///< OldStyle, ... so negative points
     CJK_AllLang   = CJK_JP | CJK_SC | CJK_TC | CJK_KR,
     AllScript     = Script | Handwriting | Chancery | Comic | BrushScript,
     AllSubscript  = Handwriting | Chancery | Comic | BrushScript,

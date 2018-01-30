@@ -701,7 +701,7 @@ double ConvertToDec( const OUString& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim
     }
 
     if( nStrLen == nCharLim && !bFirstDig && (nFirstDig >= nBase / 2) )
-    {   // handling negativ values
+    {   // handling negative values
         fVal = ( pow( double( nBase ), double( nCharLim ) ) - fVal );   // complement
         fVal *= -1.0;
     }

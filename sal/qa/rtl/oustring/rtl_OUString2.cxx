@@ -264,7 +264,7 @@ public:
             {
                 toDouble_test_impl(_sValue);
 
-                // test also the negativ part.
+                // test also the negative part.
                 rtl::OString sNegativValue("-");
                 sNegativValue += _sValue;
                 toDouble_test_impl(sNegativValue);
@@ -399,7 +399,7 @@ public:
             {
                 toFloat_test_impl(_sValue);
 
-                // test also the negativ part.
+                // test also the negative part.
                 rtl::OString sNegativValue("-");
                 sNegativValue += _sValue;
                 toFloat_test_impl(sNegativValue);
