@@ -2428,7 +2428,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     nBulletWidth = nBulletWidth + pVDev->GetTextWidth(aText);
                 }
 
-                sal_uInt16 nTextXPos( 0 );
+                long nTextXPos( 0 );
                 if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
                 {
                     nTextXPos = nXStart;
@@ -2443,7 +2443,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     {
                         case SvxNumberFormat::LISTTAB:
                         {
-                            nTextXPos = static_cast<sal_uInt16>(rFmt.GetListtabPos() / nWidthRelation);
+                            nTextXPos = rFmt.GetListtabPos() / nWidthRelation;
                             if (nTextXPos < nNumberXPos + nBulletWidth)
                             {
                                 nTextXPos = nNumberXPos + nBulletWidth;
