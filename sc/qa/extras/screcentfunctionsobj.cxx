@@ -24,8 +24,6 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-#define NUMBER_OF_TESTS 3
-
 class ScRecentFunctionsObj : public CalcUnoApiTest, public apitest::XRecentFunctions
 {
 public:
@@ -45,12 +43,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static sal_Int32 nTest;
-    static uno::Reference<lang::XComponent> mxComponent;
+    uno::Reference<lang::XComponent> mxComponent;
 };
-
-sal_Int32 ScRecentFunctionsObj::nTest = 0;
-uno::Reference<lang::XComponent> ScRecentFunctionsObj::mxComponent;
 
 ScRecentFunctionsObj::ScRecentFunctionsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
@@ -59,10 +53,6 @@ ScRecentFunctionsObj::ScRecentFunctionsObj()
 
 uno::Reference<uno::XInterface> ScRecentFunctionsObj::init()
 {
-    // create a calc document
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop("private:factory/scalc");
-
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
@@ -72,19 +62,14 @@ uno::Reference<uno::XInterface> ScRecentFunctionsObj::init()
 
 void ScRecentFunctionsObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    // create a calc document
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScRecentFunctionsObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
