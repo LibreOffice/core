@@ -10121,11 +10121,14 @@ fi
 AC_SUBST(ENABLE_PDFIUM)
 
 SYSTEM_GPGMEPP=
-if test "$enable_mpl_subset" = "yes" ; then
-   :
-elif test "$_os" = "Linux" -o "$_os" = "Darwin" \
-   -o \( "$_os" = "WINNT" -a "$host_cpu" = "x86_64" \) \
-   -o \( "$_os" = "WINNT" -a "$host_cpu" = "i686" -a "$WINDOWS_SDK_ARCH" = "x86" \) ; then
+
+if test "$build_for_ios" = "YES"; then
+    AC_MSG_CHECKING([whether gpgmepp should be disabled due to iOS])
+    AC_MSG_RESULT([yes])
+elif test "$enable_mpl_subset" = "yes"; then
+    AC_MSG_CHECKING([whether gpgmepp should be disabled due to building just MPL])
+    AC_MSG_RESULT([yes])
+elif test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
     dnl ===================================================================
     dnl Check for system gpgme
     dnl ===================================================================
@@ -10153,6 +10156,8 @@ elif test "$_os" = "Linux" -o "$_os" = "Darwin" \
         if test "$_os" != "WINNT"; then
             GPG_ERROR_LIBS="-L${WORKDIR}/UnpackedTarball/libgpg-error/src/.libs -lgpg-error"
             LIBASSUAN_LIBS="-L${WORKDIR}/UnpackedTarball/libassuan/src/.libs -lassuan"
+        elif test "$host_cpu" = "i686" -a "$WINDOWS_SDK_ARCH" = "x64"; then
+            AC_MSG_ERROR(gpgme cannot be built on cygwin32 for Win64.)
         fi
     fi
     ENABLE_GPGMEPP=TRUE
