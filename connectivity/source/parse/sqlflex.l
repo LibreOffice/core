@@ -84,11 +84,17 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = nullptr;
     result = (c == EOF) ? YY_NULL : (buf[0] = c, 1);\
 }
 
-#define YY_FATAL_ERROR(msg)                         \
-{                                                   \
-    xxx_pGLOBAL_SQLSCAN->SQLyyerror(msg);           \
-    /*hack to silence -Wunused-function*/           \
-    if (0) yy_fatal_error(msg);                     \
+// coverity[+kill]
+static void do_fatal_error(const char* msg)
+{
+    xxx_pGLOBAL_SQLSCAN->SQLyyerror(msg);
+    /*hack to silence -Wunused-function*/
+    if (0) yy_fatal_error(msg);
+}
+
+#define YY_FATAL_ERROR(msg) \
+{                           \
+    do_fatal_error(msg);    \
 }
 
 %}
