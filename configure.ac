@@ -10120,7 +10120,9 @@ fi
 AC_SUBST(ENABLE_PDFIUM)
 
 SYSTEM_GPGMEPP=
-if test "$_os" = "Linux" -o "$_os" = "Darwin" \
+if test "$enable_mpl_subset" = "yes" ; then
+   :
+elif test "$_os" = "Linux" -o "$_os" = "Darwin" \
    -o \( "$_os" = "WINNT" -a "$host_cpu" = "x86_64" \) \
    -o \( "$_os" = "WINNT" -a "$host_cpu" = "i686" -a "$WINDOWS_SDK_ARCH" = "x86" \) ; then
     dnl ===================================================================
