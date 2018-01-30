@@ -2391,7 +2391,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                 long nBulletWidth = 0;
                 if (SVX_NUM_BITMAP == (rFmt.GetNumberingType() &(~LINK_TOKEN)))
                 {
-                    sal_uInt16 nYMiddle = nYStart + ( nFontHeight / 2 );
+                    long nYMiddle = nYStart + ( nFontHeight / 2 );
                     nBulletWidth = rFmt.IsShowSymbol() ? lcl_DrawGraphic(pVDev.get(), rFmt, nNumberXPos, nYMiddle, nWidthRelation) : 0;
                 }
                 else if (SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType())
