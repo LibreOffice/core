@@ -1920,9 +1920,6 @@ SvxAutoCorrectLanguageLists::SvxAutoCorrectLanguageLists(
 
 SvxAutoCorrectLanguageLists::~SvxAutoCorrectLanguageLists()
 {
-    delete pCplStt_ExcptLst;
-    delete pWrdStt_ExcptLst;
-    delete pAutocorr_List;
 }
 
 bool SvxAutoCorrectLanguageLists::IsFileChanged_Imp()
@@ -1944,18 +1941,15 @@ bool SvxAutoCorrectLanguageLists::IsFileChanged_Imp()
             // then remove all the lists fast!
             if( CplSttLstLoad & nFlags && pCplStt_ExcptLst )
             {
-                delete pCplStt_ExcptLst;
-                pCplStt_ExcptLst = nullptr;
+                pCplStt_ExcptLst.reset();
             }
             if( WrdSttLstLoad & nFlags && pWrdStt_ExcptLst )
             {
-                delete pWrdStt_ExcptLst;
-                pWrdStt_ExcptLst = nullptr;
+                pWrdStt_ExcptLst.reset();
             }
             if( ChgWordLstLoad & nFlags && pAutocorr_List )
             {
-                delete pAutocorr_List;
-                pAutocorr_List = nullptr;
+                pAutocorr_List.reset();
             }
             nFlags &= ~(CplSttLstLoad | WrdSttLstLoad | ChgWordLstLoad );
         }
@@ -1965,14 +1959,14 @@ bool SvxAutoCorrectLanguageLists::IsFileChanged_Imp()
 }
 
 void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
-                                        SvStringsISortDtor*& rpLst,
+                                        std::unique_ptr<SvStringsISortDtor>& rpLst,
                                         const sal_Char* pStrmName,
                                         tools::SvRef<SotStorage>& rStg)
 {
     if( rpLst )
         rpLst->clear();
     else
-        rpLst = new SvStringsISortDtor;
+        rpLst.reset( new SvStringsISortDtor );
 
     {
         const OUString sStrmName( pStrmName, strlen(pStrmName), RTL_TEXTENCODING_MS_1252 );
@@ -2098,7 +2092,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
     if( pAutocorr_List )
         pAutocorr_List->DeleteAndDestroyAll();
     else
-        pAutocorr_List = new SvxAutocorrWordList();
+        pAutocorr_List.reset( new SvxAutocorrWordList() );
 
     try
     {
@@ -2113,7 +2107,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
         // get parser
         uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
         SAL_INFO("editeng", "AutoCorrect Import" );
-        uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SvXMLAutoCorrectImport( xContext, pAutocorr_List, rAutoCorrect, xStg );
+        uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SvXMLAutoCorrectImport( xContext, pAutocorr_List.get(), rAutoCorrect, xStg );
         uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = static_cast< xml::sax::XFastTokenHandler* >( new SvXMLAutoCorrectTokenHandler );
 
         // connect parser and filter
@@ -2133,34 +2127,37 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
                                     &aModifiedDate, &aModifiedTime );
     aLastCheckTime = tools::Time( tools::Time::SYSTEM );
 
-    return pAutocorr_List;
-}
-
-void SvxAutoCorrectLanguageLists::SetAutocorrWordList( SvxAutocorrWordList* pList )
-{
-    if( pAutocorr_List && pList != pAutocorr_List )
-        delete pAutocorr_List;
-    pAutocorr_List = pList;
-    if( !pAutocorr_List )
-    {
-        OSL_ENSURE( false, "No valid list" );
-        pAutocorr_List = new SvxAutocorrWordList();
-    }
-    nFlags |= ChgWordLstLoad;
+    return pAutocorr_List.get();
 }
 
 const SvxAutocorrWordList* SvxAutoCorrectLanguageLists::GetAutocorrWordList()
 {
     if( !( ChgWordLstLoad & nFlags ) || IsFileChanged_Imp() )
-        SetAutocorrWordList( LoadAutocorrWordList() );
-    return pAutocorr_List;
+    {
+        LoadAutocorrWordList();
+        if( !pAutocorr_List )
+        {
+            OSL_ENSURE( false, "No valid list" );
+            pAutocorr_List.reset( new SvxAutocorrWordList() );
+        }
+        nFlags |= ChgWordLstLoad;
+    }
+    return pAutocorr_List.get();
 }
 
 SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetCplSttExceptList()
 {
     if( !( CplSttLstLoad & nFlags ) || IsFileChanged_Imp() )
-        SetCplSttExceptList( LoadCplSttExceptList() );
-    return pCplStt_ExcptLst;
+    {
+        LoadCplSttExceptList();
+        if( !pCplStt_ExcptLst )
+        {
+            OSL_ENSURE( false, "No valid list" );
+            pCplStt_ExcptLst.reset( new SvStringsISortDtor );
+        }
+        nFlags |= CplSttLstLoad;
+    }
+    return pCplStt_ExcptLst.get();
 }
 
 bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const OUString& rNew)
@@ -2216,7 +2213,7 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadCplSttExceptList()
     catch (const css::ucb::ContentCreationException&)
     {
     }
-    return pCplStt_ExcptLst;
+    return pCplStt_ExcptLst.get();
 }
 
 void SvxAutoCorrectLanguageLists::SaveCplSttExceptList()
@@ -2234,20 +2231,6 @@ void SvxAutoCorrectLanguageLists::SaveCplSttExceptList()
     aLastCheckTime = tools::Time( tools::Time::SYSTEM );
 }
 
-void SvxAutoCorrectLanguageLists::SetCplSttExceptList( SvStringsISortDtor* pList )
-{
-    if( pCplStt_ExcptLst && pList != pCplStt_ExcptLst )
-        delete pCplStt_ExcptLst;
-
-    pCplStt_ExcptLst = pList;
-    if( !pCplStt_ExcptLst )
-    {
-        OSL_ENSURE( false, "No valid list" );
-        pCplStt_ExcptLst = new SvStringsISortDtor;
-    }
-    nFlags |= CplSttLstLoad;
-}
-
 SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWrdSttExceptList()
 {
     try
@@ -2261,7 +2244,7 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWrdSttExceptList()
     {
         SAL_WARN("editeng", "SvxAutoCorrectLanguageLists::LoadWrdSttExceptList: Caught " << e);
     }
-    return pWrdStt_ExcptLst;
+    return pWrdStt_ExcptLst.get();
 }
 
 void SvxAutoCorrectLanguageLists::SaveWrdSttExceptList()
@@ -2278,24 +2261,19 @@ void SvxAutoCorrectLanguageLists::SaveWrdSttExceptList()
     aLastCheckTime = tools::Time( tools::Time::SYSTEM );
 }
 
-void SvxAutoCorrectLanguageLists::SetWrdSttExceptList( SvStringsISortDtor* pList )
-{
-    if( pWrdStt_ExcptLst && pList != pWrdStt_ExcptLst )
-        delete pWrdStt_ExcptLst;
-    pWrdStt_ExcptLst = pList;
-    if( !pWrdStt_ExcptLst )
-    {
-        OSL_ENSURE( false, "No valid list" );
-        pWrdStt_ExcptLst = new SvStringsISortDtor;
-    }
-    nFlags |= WrdSttLstLoad;
-}
-
 SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetWrdSttExceptList()
 {
     if( !( WrdSttLstLoad & nFlags ) || IsFileChanged_Imp() )
-        SetWrdSttExceptList( LoadWrdSttExceptList() );
-    return pWrdStt_ExcptLst;
+    {
+        LoadWrdSttExceptList();
+        if( !pWrdStt_ExcptLst )
+        {
+            OSL_ENSURE( false, "No valid list" );
+            pWrdStt_ExcptLst.reset( new SvStringsISortDtor );
+        }
+        nFlags |= WrdSttLstLoad;
+    }
+    return pWrdStt_ExcptLst.get();
 }
 
 void SvxAutoCorrectLanguageLists::RemoveStream_Imp( const OUString& rName )
@@ -2371,7 +2349,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
         {
             OUString sXMLWord     ( pXMLImplWrdStt_ExcptLstStr );
             OUString sXMLSentence ( pXMLImplCplStt_ExcptLstStr );
-            SvStringsISortDtor  *pTmpWordList = nullptr;
+            std::unique_ptr<SvStringsISortDtor> pTmpWordList;
 
             if (xSrcStg->IsContained( sXMLWord ) )
                 LoadXMLExceptList_Imp( pTmpWordList, pXMLImplWrdStt_ExcptLstStr, xSrcStg );
@@ -2379,8 +2357,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             if (pTmpWordList)
             {
                 SaveExceptList_Imp( *pTmpWordList, pXMLImplWrdStt_ExcptLstStr, xDstStg, true );
-                pTmpWordList->clear();
-                pTmpWordList = nullptr;
+                pTmpWordList.reset();
             }
 
 
@@ -2432,7 +2409,7 @@ bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SotStorage& rStg )
             xWriter->setOutputStream(xOut);
 
             uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
-            rtl::Reference< SvXMLAutoCorrectExport > xExp( new SvXMLAutoCorrectExport( xContext, pAutocorr_List, pXMLImplAutocorr_ListStr, xHandler ) );
+            rtl::Reference< SvXMLAutoCorrectExport > xExp( new SvXMLAutoCorrectExport( xContext, pAutocorr_List.get(), pXMLImplAutocorr_ListStr, xHandler ) );
 
             xExp->exportDoc( XML_BLOCK_LIST );
 
