@@ -35,6 +35,11 @@ def clearmakevars():
             del os.environ[makeenvvar]
 
 
+# Return list of ignored Emacs lock (.#*), auto-save (#*), and backup (*~) files:
+def ignore_emacs_files(dir, files):
+    return [f for f in files if f.startswith(".#") or f.startswith("#") or f.endswith("~")]
+
+
 class CheckGbuildToJson(unittest.TestCase):
     def setUp(self):
         getgbuildtesttools(self)
@@ -132,7 +137,7 @@ class CheckGbuildToJsonModules(unittest.TestCase):
             os.makedirs(os.path.join(self.tempwork, 'LinkTarget', 'Executable'))
             shutil.copy(self.gbuildtojson, os.path.join(self.tempwork, 'LinkTarget', 'Executable'))
             if module != 'solenv':
-                shutil.copytree(os.path.join(os.environ['SRCDIR'], module), os.path.join(self.tempsrc, module))
+                shutil.copytree(os.path.join(os.environ['SRCDIR'], module), os.path.join(self.tempsrc, module), ignore=ignore_emacs_files)
             (bashscripthandle, bashscriptname) = tempfile.mkstemp(prefix='gbuild')
             bashscript = os.fdopen(bashscripthandle, 'w', newline='\n')
             bashscript.write("set -e\n")
