@@ -27,18 +27,15 @@
 #include <list>
 #include <memory>
 #include <vector>
-#include <editeng/outlobj.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <tools/link.hxx>
 #include "swrect.hxx"
 #include <unotools/configitem.hxx>
-#include <unotools/options.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include "SidebarWindowsTypes.hxx"
 #include <svl/lstner.hxx>
 #include <vcl/vclptr.hxx>
-#include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 class OutputDevice;
 class SwWrtShell;
@@ -66,6 +63,7 @@ class SwFrame;
 namespace vcl { class Window; }
 struct ImplSVEvent;
 class OutlinerSearchable;
+class OutlinerParaObject;
 namespace i18nutil { struct SearchOptions2; }
 
 #define COL_NOTES_SIDEPANE_ARROW_ENABLED    RGB_COLORDATA(0,0,0)

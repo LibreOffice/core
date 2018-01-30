@@ -95,6 +95,8 @@ SwAccessibleChild::SwAccessibleChild( const SwFrame* pFrame,
 
 }
 
+SwAccessibleChild::~SwAccessibleChild() = default;
+
 void SwAccessibleChild::Init( const SdrObject* pDrawObj )
 {
     mpDrawObj = pDrawObj;

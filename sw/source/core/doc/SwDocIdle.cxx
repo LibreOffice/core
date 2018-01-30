@@ -19,6 +19,7 @@
 
 #include <view.hxx>
 #include <wrtsh.hxx>
+#include <doc.hxx>
 #include <docsh.hxx>
 #include <viewopt.hxx>
 #include <vcl/scheduler.hxx>

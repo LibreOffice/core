@@ -11,7 +11,6 @@
 #ifndef TOXTABSTOPTOKENHANDLER_HXX_
 #define TOXTABSTOPTOKENHANDLER_HXX_
 
-#include "swdllapi.h"
 #include <rtl/ustring.hxx>
 
 #include <editeng/tstpitem.hxx>

@@ -39,6 +39,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/outlobj.hxx>
 
 #include <comphelper/lok.hxx>
 #include <docufld.hxx>

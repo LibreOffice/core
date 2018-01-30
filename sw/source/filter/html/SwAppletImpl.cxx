@@ -26,6 +26,7 @@
 #include <comphelper/classids.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <svtools/embedhlp.hxx>
+#include <tools/globname.hxx>
 #include <hintids.hxx>
 
 using namespace com::sun::star;

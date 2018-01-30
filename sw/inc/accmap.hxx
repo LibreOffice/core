@@ -25,11 +25,8 @@
 #include <osl/mutex.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/IAccessibleParent.hxx>
-#include <tools/fract.hxx>
 
 #include <svx/AccessibleControlShape.hxx>
-#include <svx/AccessibleShape.hxx>
-#include "fesh.hxx"
 #include <o3tl/typed_flags_set.hxx>
 
 #include <list>
@@ -55,6 +52,8 @@ class SwAccessibleSelectedParas_Impl;
 class SwRect;
 class MapMode;
 class SwAccPreviewData;
+class SwFEShell;
+class Fraction;
 struct PreviewPage;
 namespace vcl { class Window; }
 
