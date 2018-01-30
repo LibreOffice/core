@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_9af34b73",
+        "filename": "vcl/source/window/toolbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3280,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-01-30T11:26:03Z",
+      "side": 1,
+      "message": "Just re reading the loop, with mnCurPos !\u003d ITEM_NOTFOUND, since mnCurPos is initialized with nNewPos, shouldn\u0027t we be safe here?\nIndeed, in the case newPos is initialized in loop, we break, so iterator should be synchronized with it.",
+      "parentUuid": "fa31d9ce_d4883aea",
+      "range": {
+        "startLine": 3280,
+        "startChar": 45,
+        "endLine": 3280,
+        "endChar": 71
+      },
+      "revId": "42e4e692715849e5c92c10c271f93fcf64762785",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_146bb21f",
         "filename": "vcl/source/window/toolbox.cxx",
         "patchSetId": 1
