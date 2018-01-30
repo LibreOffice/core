@@ -896,7 +896,7 @@ private:
         {
             ++m_rParser.m_nTableDepth;
         }
-        bool TooDeep() const { return m_rParser.m_nTableDepth > 2048; }
+        bool TooDeep() const { return m_rParser.m_nTableDepth > 1024; }
         ~TableDepthGuard()
         {
             --m_rParser.m_nTableDepth;
