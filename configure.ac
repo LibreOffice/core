@@ -10204,7 +10204,8 @@ AC_SUBST(ENABLE_PDFIUM)
 SYSTEM_GPGMEPP=
 
 if test "$build_for_ios" = "YES"; then
-    AC_MSG_CHECKING([gpgmepp disabled due to iOS])
+    AC_MSG_CHECKING([whether gpgmepp should be disabled due to iOS])
+    AC_MSG_RESULT([yes])
 elif test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
     dnl ===================================================================
     dnl Check for system gpgme
