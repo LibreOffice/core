@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_d7403c59",
+        "filename": "sw/qa/extras/rtfexport/rtfexport2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-01-30T01:08:30Z",
+      "side": 1,
+      "message": "this file looks mangled?",
+      "revId": "6bcf23ddeb82b68f1b353916d52995f11db91247",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_9736c401",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5309,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-01-30T01:08:30Z",
+      "side": 1,
+      "message": "why those? :)",
+      "revId": "6bcf23ddeb82b68f1b353916d52995f11db91247",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_b73bc8ea",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5314,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-01-30T01:08:30Z",
+      "side": 1,
+      "message": "and those?",
+      "revId": "6bcf23ddeb82b68f1b353916d52995f11db91247",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
