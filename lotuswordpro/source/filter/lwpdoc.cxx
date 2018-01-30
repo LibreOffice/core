@@ -312,11 +312,15 @@ void LwpDocument::RegisterBulletStyles()
         return;
     LwpSilverBullet* pBullet = dynamic_cast<LwpSilverBullet*>
                         (pBulletHead->GetHeadID().obj().get());
-    while(pBullet)
+    std::set<LwpSilverBullet*> aSeen;
+    while (pBullet)
     {
+        aSeen.insert(pBullet);
         pBullet->SetFoundry(m_pFoundry);
         pBullet->RegisterStyle();
         pBullet = dynamic_cast<LwpSilverBullet*> (pBullet->GetNext().obj().get());
+        if (aSeen.find(pBullet) != aSeen.end())
+            throw std::runtime_error("loop in conversion");
     }
 }
 /**
