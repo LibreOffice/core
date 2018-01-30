@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_77187085",
+        "filename": "android/source/src/java/org/libreoffice/FontController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-01-30T01:20:17Z",
+      "side": 1,
+      "message": "that looks unrelated, please keep that as a separate commit next time (you can always commit just parts of a file via \u0027git add -i \u003cfile\u003e\u0027)",
+      "revId": "03fdd18e7b98dd619d1b1c28e3120870fbfac213",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
