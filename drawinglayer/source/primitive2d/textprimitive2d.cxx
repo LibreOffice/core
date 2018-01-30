@@ -95,7 +95,7 @@ namespace drawinglayer
 
                 // if decomposition returns false, create no geometry since e.g. scaling may
                 // be zero
-                if(getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX))
+                if (getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX) && aScale.getX() != 0.0)
                 {
                     // handle special case: If scale is negative in (x,y) (3rd quadrant), it can
                     // be expressed as rotation by PI
