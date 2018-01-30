@@ -6197,12 +6197,12 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
         if ( 20 > nRead ) break;
         rSt >> ftcBi;
 
-        // ggfs. den Rest ueberlesen
+        // ggfs. Check the rest
         if( 20 < nRead )
             rSt.SeekRel( nRead-20 );
     }
-    while( !this ); // Trick: obiger Block wird genau einmal durchlaufen
-                    //   und kann vorzeitig per "break" verlassen werden.
+    while( 0 ); // Trick: The above block is run through exactly once
+                // and can be prematurely left by "break".
 
     if( 0 != rSt.GetError() )
     {
@@ -6255,19 +6255,19 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
             if( 8 > nRead ) break;
             rSt >> pStd->bchUpe;
 
-            // ab Ver8 sollten diese beiden Felder dazukommen:
+            // from Ver8 these two fields should be added
             if(10 > nRead ) break;
             rSt >> a16Bit;
             pStd->fAutoRedef =   a16Bit & 0x0001       ;
             pStd->fHidden    = ( a16Bit & 0x0002 ) >> 1;
 
-            // man kann nie wissen: vorsichtshalber ueberlesen
-            // wir eventuelle Fuellsel, die noch zum BASE-Part gehoeren...
+            // you never know: as a precaution, we read over any
+            // filler that still belongs to the BASE part...
             if( 10 < nRead )
                 rSt.SeekRel( nRead-10 );
         }
-        while( !this ); // Trick: obiger Block wird genau einmal durchlaufen
-                        //   und kann vorzeitig per "break" verlassen werden.
+        while( 0 ); // Trick: above block is run through exactly once and
+                    // can be prematurely left by "break".
 
         if( (0 != rSt.GetError()) || !nRead )
             DELETEZ( pStd );        // per NULL den Error melden
