@@ -178,11 +178,7 @@ ViewObjectContact::~ViewObjectContact()
     }
 
     // delete PrimitiveAnimation
-    if(mpPrimitiveAnimation)
-    {
-        delete mpPrimitiveAnimation;
-        mpPrimitiveAnimation = nullptr;
-    }
+    mpPrimitiveAnimation.reset();
 
     // take care of remembered ObjectContact. Remove from
     // OC first. The VC removal (below) CAN trigger a StopGettingViewed()
@@ -288,11 +284,7 @@ void ViewObjectContact::ActionChildInserted(ViewContact& rChild)
 void ViewObjectContact::checkForPrimitive2DAnimations()
 {
     // remove old one
-    if(mpPrimitiveAnimation)
-    {
-        delete mpPrimitiveAnimation;
-        mpPrimitiveAnimation = nullptr;
-    }
+    mpPrimitiveAnimation.reset();
 
     // check for animated primitives
     if(!mxPrimitive2DSequence.empty())
@@ -309,7 +301,7 @@ void ViewObjectContact::checkForPrimitive2DAnimations()
             if(!aAnimatedExtractor.getPrimitive2DSequence().empty())
             {
                 // derived primitiveList is animated, setup new PrimitiveAnimation
-                mpPrimitiveAnimation =  new sdr::animation::PrimitiveAnimation(*this, aAnimatedExtractor.getPrimitive2DSequence());
+                mpPrimitiveAnimation.reset( new sdr::animation::PrimitiveAnimation(*this, aAnimatedExtractor.getPrimitive2DSequence()) );
             }
         }
     }
