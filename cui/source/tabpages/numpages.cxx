@@ -2343,7 +2343,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
 
         if (bPosition)
         {
-            sal_uInt16 nLineHeight = nFontHeight * 8 / 7;
+            long nLineHeight = nFontHeight * 8 / 7;
             sal_uInt8 nStart = 0;
             while (!(nActLevel & (1<<nStart)))
             {
