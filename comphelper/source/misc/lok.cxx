@@ -123,6 +123,7 @@ bool isWhitelistedLanguage(const OUString& lang)
     static std::vector<OUString> aWhitelist;
     if (!bInitialized)
     {
+        // coverity[tainted_data] - we trust the contents of this variable
         const char* pWhitelist = getenv("LOK_WHITELIST_LANGUAGES");
         if (pWhitelist)
         {
