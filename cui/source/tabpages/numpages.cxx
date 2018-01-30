@@ -2229,11 +2229,11 @@ void SvxNumOptionsTabPage::EditModifyHdl_Impl( Edit* pEdit )
     SetModified();
 }
 
-static sal_uInt16 lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &rFmt, sal_uInt16 nXStart,
-                        sal_uInt16 nYMiddle, sal_uInt16 nDivision)
+static long lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &rFmt, long nXStart,
+                        long nYMiddle, long nDivision)
 {
     const SvxBrushItem* pBrushItem = rFmt.GetBrush();
-    sal_uInt16 nRet = 0;
+    long nRet = 0;
     if(pBrushItem)
     {
         const Graphic* pGrf = pBrushItem->GetGraphic();
@@ -2241,7 +2241,7 @@ static sal_uInt16 lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &r
         {
             Size aGSize( rFmt.GetGraphicSize() );
             aGSize.Width() /= nDivision;
-            nRet = static_cast<sal_uInt16>(aGSize.Width());
+            nRet = aGSize.Width();
             aGSize.Height() /= nDivision;
             pGrf->Draw( pVDev, Point(nXStart,nYMiddle - ( aGSize.Height() / 2) ),
                     pVDev->PixelToLogic( aGSize ) );
@@ -2251,9 +2251,9 @@ static sal_uInt16 lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &r
 
 }
 
-static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
-            const SvxNumberFormat& rFmt, sal_uInt16 nXStart,
-            sal_uInt16 nYStart, const Size& rSize)
+static long lcl_DrawBullet(VirtualDevice* pVDev,
+            const SvxNumberFormat& rFmt, long nXStart,
+            long nYStart, const Size& rSize)
 {
     vcl::Font aTmpFont(pVDev->GetFont());
 
@@ -2280,7 +2280,7 @@ static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
     long nY = nYStart;
     nY -= ((aTmpSize.Height() - rSize.Height())/ 2);
     pVDev->DrawText( Point(nXStart, nY), aText );
-    sal_uInt16 nRet = static_cast<sal_uInt16>(pVDev->GetTextWidth(aText));
+    long nRet = pVDev->GetTextWidth(aText);
 
     pVDev->SetFont(aTmpFont);
     return nRet;
@@ -2392,11 +2392,11 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                 if (SVX_NUM_BITMAP == (rFmt.GetNumberingType() &(~LINK_TOKEN)))
                 {
                     sal_uInt16 nYMiddle = nYStart + ( nFontHeight / 2 );
-                    nBulletWidth = rFmt.IsShowSymbol() ? lcl_DrawGraphic(pVDev.get(), rFmt, nNumberXPos, nYMiddle, nWidthRelation) : 0;
+                    nBulletWidth = rFmt.IsShowSymbol() ? static_cast<sal_uInt16>(lcl_DrawGraphic(pVDev.get(), rFmt, nNumberXPos, nYMiddle, nWidthRelation)) : 0;
                 }
                 else if (SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType())
                 {
-                    nBulletWidth =  rFmt.IsShowSymbol() ? lcl_DrawBullet(pVDev.get(), rFmt, nNumberXPos, nYStart, aStdFont.GetFontSize()) : 0;
+                    nBulletWidth =  rFmt.IsShowSymbol() ? static_cast<sal_uInt16>(lcl_DrawBullet(pVDev.get(), rFmt, nNumberXPos, nYStart, aStdFont.GetFontSize())) : 0;
                 }
                 else
                 {
@@ -2512,7 +2512,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     if (rFmt.IsShowSymbol())
                     {
                         sal_uInt16 nYMiddle = nYStart + ( nFontHeight / 2 );
-                        nTextOffset = lcl_DrawGraphic(pVDev.get(), rFmt, nXStart, nYMiddle, nWidthRelation);
+                        nTextOffset = static_cast<sal_uInt16>(lcl_DrawGraphic(pVDev.get(), rFmt, nXStart, nYMiddle, nWidthRelation));
                         nTextOffset = nTextOffset + nXStep;
                     }
                 }
@@ -2520,7 +2520,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                 {
                     if (rFmt.IsShowSymbol())
                     {
-                        nTextOffset =  lcl_DrawBullet(pVDev.get(), rFmt, nXStart, nYStart, aStdFont.GetFontSize());
+                        nTextOffset =  static_cast<sal_uInt16>(lcl_DrawBullet(pVDev.get(), rFmt, nXStart, nYStart, aStdFont.GetFontSize()));
                         nTextOffset = nTextOffset + nXStep;
                     }
                 }
