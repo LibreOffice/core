@@ -688,6 +688,7 @@ namespace emfio
                     {
                         for (sal_uInt16 y = 0; y < nHeight && mpInputStream->good(); ++y)
                         {
+                            Scanline pScanline = pAcc->GetScanline( y );
                             sal_uInt16 x = 0;
                             for (sal_uInt16 scan = 0; scan < nBytesPerScan; scan++ )
                             {
@@ -697,7 +698,7 @@ namespace emfio
                                 {
                                     if ( x < nWidth )
                                     {
-                                        pAcc->SetPixelIndex( y, x, (nEightPixels>>i)&1 );
+                                        pAcc->SetPixelOnData( pScanline, x, BitmapColor((nEightPixels>>i)&1) );
                                     }
                                     x++;
                                 }

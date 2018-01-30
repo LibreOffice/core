@@ -525,11 +525,12 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                             {
                                 for( nY = 0; nY < nHeight; nY++ )
                                 {
+                                    Scanline pScanline = pW->GetScanline(nY);
                                     for( nX = 0; nX < nWidth; nX++ )
                                     {
                                         if( pR->GetPixel( nY, nX ) == aBlack )
                                         {
-                                            pW->SetPixel( nY, nX, pMap[ pW->GetPixel( nY, nX ).GetIndex() ] );
+                                            pW->SetPixelOnData( pScanline, nX, pMap[ pW->GetPixel( nY, nX ).GetIndex() ] );
                                         }
                                     }
                                 }
@@ -569,12 +570,13 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                             {
                                 for( nY = 0; nY < nHeight; nY++ )
                                 {
+                                    Scanline pScanline = pW->GetScanline(nY);
                                     for( nX = 0; nX < nWidth; nX++ )
                                     {
                                         if( pR->GetPixel( nY, nX ) == aBlack )
                                         {
                                             aPixCol = pW->GetColor( nY, nX );
-                                            pW->SetPixel( nY, nX, aPixCol.Merge( aFillCol, cTrans ) );
+                                            pW->SetPixelOnData(pScanline, nX, aPixCol.Merge( aFillCol, cTrans ) );
                                         }
                                     }
                                 }

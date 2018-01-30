@@ -93,8 +93,8 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                     }
                     for ( ny = 0; --nyCount ; ny++, rDesc.mpBuf += rDesc.mnScanSize )
                     {
+                        Scanline pScanline = rDesc.mpAcc->GetScanline( ny );
                         nxC = nxCount;
-                        Scanline pScanline = rDesc.mpAcc->GetScanline(ny);
                         for ( nx = 0; --nxC; nx++ )
                         {   // this is not fast, but a one bit/pixel format is rarely used
                             rDesc.mpAcc->SetPixelOnData(pScanline, nx, BitmapColor(static_cast<sal_uInt8>( (*( rDesc.mpBuf + (nx >> 3)) >> ((nx & 7)^7))) & 1));
@@ -108,8 +108,8 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                     ImplSetCurrentPalette( rDesc );
                     for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
                     {
+                        Scanline pScanline = rDesc.mpAcc->GetScanline( ny );
                         nxC = nxCount;
-                        Scanline pScanline = rDesc.mpAcc->GetScanline(ny);
                         for ( nx = 0; --nxC; nx++ )
                         {   // this is not fast, but a two bits/pixel format is rarely used
                             rDesc.mpAcc->SetPixelOnData(pScanline, nx, BitmapColor(static_cast<sal_uInt8>( (*(rDesc.mpBuf + (nx >> 2)) >> (((nx & 3)^3) << 1))) & 3));
@@ -124,12 +124,13 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                     for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
                     {
                         nxC = nxCount;
+                        Scanline pScanline = rDesc.mpAcc->GetScanline( ny );
                         sal_Int8  nDat;
                         sal_uInt8* pTemp = rDesc.mpBuf;
                         for ( nx = 0; --nxC; nx++ )
                         {
                             nDat = *pTemp++;
-                            Scanline pScanline = rDesc.mpAcc->GetScanline(ny);
+
                             rDesc.mpAcc->SetPixelOnData(pScanline, nx, BitmapColor(static_cast<sal_uInt8>(nDat >> 4)));
                             if ( --nxC )
                             {
@@ -148,8 +149,8 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                     ImplSetCurrentPalette( rDesc );
                     for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
                     {
+                        Scanline pScanline = rDesc.mpAcc->GetScanline( ny );
                         sal_uInt8* pTemp = rDesc.mpBuf;
-                        Scanline pScanline = rDesc.mpAcc->GetScanline(ny);
                         nxC = nxCount;
                         for ( nx = 0; --nxC; nx++ )
                         {
@@ -164,9 +165,9 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                     BitmapColor aBitmapColor;
                     for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
                     {
+                        Scanline pScanline = rDesc.mpAcc->GetScanline( ny );
                         sal_uInt8* pTemp = rDesc.mpBuf;
                         nxC = nxCount;
-                        Scanline pScanline = rDesc.mpAcc->GetScanline(ny);
                         for ( nx = 0; --nxC; nx++ )
                         {
                             aBitmapColor.SetRed( *pTemp++ );

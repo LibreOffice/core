@@ -479,6 +479,7 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
 
                 for( long nY = 0, nY1 = 1, nY2 = 2; nY < nHeight2; nY++, nY1++, nY2++ )
                 {
+                    Scanline pScanline = pWriteAcc->GetScanline( nY1 );
                     for( long nX = 0, nXDst = 1, nXTmp; nX < nWidth2; nX++, nXDst++ )
                     {
                         nXTmp = nX;
@@ -498,9 +499,9 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                         nSum2 -= lGray;
 
                         if( ( nSum1 * nSum1 + nSum2 * nSum2 ) < lThres2 )
-                            pWriteAcc->SetPixelIndex( nY1, nXDst, nWhitePalIdx );
+                            pWriteAcc->SetPixelOnData( pScanline, nXDst, BitmapColor(nWhitePalIdx) );
                         else
-                            pWriteAcc->SetPixelIndex( nY1, nXDst, nBlackPalIdx );
+                            pWriteAcc->SetPixelOnData( pScanline, nXDst, BitmapColor(nBlackPalIdx) );
                     }
                 }
 

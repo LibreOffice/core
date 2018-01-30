@@ -322,6 +322,8 @@ namespace vclcanvas
                         // vs. multi-level transparency)
                         if( rBitmap.IsTransparent() )
                         {
+                            Scanline pScan = pWriteAccess->GetScanline( y );
+                            Scanline pScanAlpha = pAlphaWriteAccess->GetScanline( y );
                             // Handling alpha and mask just the same...
                             for( long x=0; x<aDestBmpSize.Width(); ++x )
                             {
@@ -333,18 +335,20 @@ namespace vclcanvas
                                 if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
                                     nSrcY < 0 || nSrcY >= aBmpSize.Height() )
                                 {
-                                    pAlphaWriteAccess->SetPixelIndex( y, x, 255 );
+                                    pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(255) );
                                 }
                                 else
                                 {
                                     const sal_uInt8 cAlphaIdx = pAlphaReadAccess->GetPixelIndex( nSrcY, nSrcX );
-                                    pAlphaWriteAccess->SetPixelIndex( y, x, aAlphaMap[ cAlphaIdx ] );
-                                    pWriteAccess->SetPixel( y, x, pReadAccess->GetPixel( nSrcY, nSrcX ) );
+                                    pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(aAlphaMap[ cAlphaIdx ]) );
+                                    pWriteAccess->SetPixelOnData( pScan, x, pReadAccess->GetPixel( nSrcY, nSrcX ) );
                                 }
                             }
                         }
                         else
                         {
+                            Scanline pScan = pWriteAccess->GetScanline( y );
+                            Scanline pScanAlpha = pAlphaWriteAccess->GetScanline( y );
                             for( long x=0; x<aDestBmpSize.Width(); ++x )
                             {
                                 ::basegfx::B2DPoint aPoint(x,y);
@@ -355,12 +359,12 @@ namespace vclcanvas
                                 if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
                                     nSrcY < 0 || nSrcY >= aBmpSize.Height() )
                                 {
-                                    pAlphaWriteAccess->SetPixel( y, x, BitmapColor(255) );
+                                    pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(255) );
                                 }
                                 else
                                 {
-                                    pAlphaWriteAccess->SetPixel( y, x, BitmapColor(0) );
-                                    pWriteAccess->SetPixel( y, x, pReadAccess->GetPixel( nSrcY,
+                                    pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(0) );
+                                    pWriteAccess->SetPixelOnData( pScan, x, pReadAccess->GetPixel( nSrcY,
                                                                                          nSrcX ) );
                                 }
                             }

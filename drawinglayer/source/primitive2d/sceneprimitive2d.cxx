@@ -63,6 +63,8 @@ namespace
 
                     for(sal_uInt32 y(0); y < nHeight; y++)
                     {
+                        Scanline pScanlineContent = pContent->GetScanline( y );
+                        Scanline pScanlineAlpha = pAlpha->GetScanline( y );
                         for(sal_uInt32 x(0); x < nWidth; x++)
                         {
                             sal_uInt16 nRed(0);
@@ -89,11 +91,11 @@ namespace
 
                             if(nOpacity)
                             {
-                                pContent->SetPixel(y, x, BitmapColor(
+                                pContent->SetPixelOnData(pScanlineContent, x, BitmapColor(
                                     static_cast<sal_uInt8>(nRed / nDivisor),
                                     static_cast<sal_uInt8>(nGreen / nDivisor),
                                     static_cast<sal_uInt8>(nBlue / nDivisor)));
-                                pAlpha->SetPixel(y, x, BitmapColor(255 - static_cast<sal_uInt8>(nOpacity)));
+                                pAlpha->SetPixelOnData(pScanlineAlpha, x, BitmapColor(255 - static_cast<sal_uInt8>(nOpacity)));
                             }
                         }
                     }
@@ -104,14 +106,16 @@ namespace
 
                     for(sal_uInt32 y(0); y < nHeight; y++)
                     {
+                        Scanline pScanlineContent = pContent->GetScanline( y );
+                        Scanline pScanlineAlpha = pAlpha->GetScanline( y );
                         for(sal_uInt32 x(0); x < nWidth; x++)
                         {
                             const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
 
                             if(rPixel.getOpacity())
                             {
-                                pContent->SetPixel(y, x, BitmapColor(rPixel.getRed(), rPixel.getGreen(), rPixel.getBlue()));
-                                pAlpha->SetPixel(y, x, BitmapColor(255 - rPixel.getOpacity()));
+                                pContent->SetPixelOnData(pScanlineContent, x, BitmapColor(rPixel.getRed(), rPixel.getGreen(), rPixel.getBlue()));
+                                pAlpha->SetPixelOnData(pScanlineAlpha, x, BitmapColor(255 - rPixel.getOpacity()));
                             }
                         }
                     }
