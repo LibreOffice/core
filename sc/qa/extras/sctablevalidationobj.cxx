@@ -29,8 +29,6 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-#define NUMBER_OF_TESTS 5
-
 class ScTableValidationObj : public CalcUnoApiTest,
                              public apitest::TableValidation,
                              public apitest::XSheetCondition
@@ -56,12 +54,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static sal_Int32 nTest;
-    static uno::Reference<lang::XComponent> mxComponent;
+    uno::Reference<lang::XComponent> mxComponent;
 };
-
-sal_Int32 ScTableValidationObj::nTest = 0;
-uno::Reference<lang::XComponent> ScTableValidationObj::mxComponent;
 
 ScTableValidationObj::ScTableValidationObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
@@ -70,10 +64,6 @@ ScTableValidationObj::ScTableValidationObj()
 
 uno::Reference<uno::XInterface> ScTableValidationObj::init()
 {
-    // create a calc document
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop("private:factory/scalc");
-
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
@@ -93,19 +83,14 @@ uno::Reference<uno::XInterface> ScTableValidationObj::init()
 
 void ScTableValidationObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    // create a calc document
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScTableValidationObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
