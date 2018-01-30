@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_E3DSCENEUPDATER_HXX
 
 #include <svx/svxdllapi.h>
+#include <memory>
 
 class SdrObject;
 class E3dScene;
@@ -53,7 +54,7 @@ class SVX_DLLPUBLIC E3DModifySceneSnapRectUpdater
 
     // the 3d transformation stack at the time of construction, valid when
     // mpScene is not zero
-    drawinglayer::geometry::ViewInformation3D*  mpViewInformation3D;
+    std::unique_ptr<drawinglayer::geometry::ViewInformation3D>  mpViewInformation3D;
 
 public:
     // the constructor evaluates and sets the members at construction time
