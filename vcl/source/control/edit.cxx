@@ -1125,7 +1125,7 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
             {
                 long nMaxNegX = (aOutSize.Width()-ImplGetExtraXOffset()) - GetTextWidth( aText );
                 mnXOffset -= aOutSize.Width() / 5;
-                if ( mnXOffset < nMaxNegX )  // both negativ...
+                if ( mnXOffset < nMaxNegX )  // both negative...
                     mnXOffset = nMaxNegX;
             }
         }

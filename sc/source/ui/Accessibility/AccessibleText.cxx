@@ -249,7 +249,7 @@ public:
 
     tools::Rectangle GetVisRect() const;
 
-    // clips the VisArea and calculates with the negativ coordinates
+    // clips the VisArea and calculates with the negative coordinates
     tools::Rectangle CorrectVisArea(const tools::Rectangle& rVisArea) const;
 };
 

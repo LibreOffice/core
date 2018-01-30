@@ -302,12 +302,12 @@ void DicList::SearchForDictionaries(
             sal_Int32 nPos  = aURL.indexOf('.');
             OUString aExt( aURL.copy(nPos + 1).toAsciiLowerCase() );
 
-            if ("dcn" == aExt)       // negativ
+            if ("dcn" == aExt)       // negative
                 bNeg = true;
-            else if ("dcp" == aExt)  // positiv
+            else if ("dcp" == aExt)  // positive
                 bNeg = false;
             else
-                continue;          // andere Files
+                continue;          // other files
         }
 
         // Record in the list of Dictionaries
