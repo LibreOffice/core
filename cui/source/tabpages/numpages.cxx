@@ -2388,15 +2388,15 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     }
                 }
 
-                sal_uInt16 nBulletWidth = 0;
+                long nBulletWidth = 0;
                 if (SVX_NUM_BITMAP == (rFmt.GetNumberingType() &(~LINK_TOKEN)))
                 {
                     sal_uInt16 nYMiddle = nYStart + ( nFontHeight / 2 );
-                    nBulletWidth = rFmt.IsShowSymbol() ? static_cast<sal_uInt16>(lcl_DrawGraphic(pVDev.get(), rFmt, nNumberXPos, nYMiddle, nWidthRelation)) : 0;
+                    nBulletWidth = rFmt.IsShowSymbol() ? lcl_DrawGraphic(pVDev.get(), rFmt, nNumberXPos, nYMiddle, nWidthRelation) : 0;
                 }
                 else if (SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType())
                 {
-                    nBulletWidth =  rFmt.IsShowSymbol() ? static_cast<sal_uInt16>(lcl_DrawBullet(pVDev.get(), rFmt, nNumberXPos, nYStart, aStdFont.GetFontSize())) : 0;
+                    nBulletWidth =  rFmt.IsShowSymbol() ? lcl_DrawBullet(pVDev.get(), rFmt, nNumberXPos, nYStart, aStdFont.GetFontSize()) : 0;
                 }
                 else
                 {
@@ -2416,7 +2416,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     pVDev->SetFont(aColorFont);
                     pVDev->DrawText(Point(nNumberXPos, nYStart), aText);
                     pVDev->SetFont(aSaveFont);
-                    nBulletWidth = sal_uInt16(pVDev->GetTextWidth(aText));
+                    nBulletWidth = pVDev->GetTextWidth(aText);
                     nPreNum++;
                 }
                 if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT &&
@@ -2425,7 +2425,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     pVDev->SetFont(aStdFont);
                     OUString aText(' ');
                     pVDev->DrawText( Point(nNumberXPos, nYStart), aText );
-                    nBulletWidth = nBulletWidth + static_cast<sal_uInt16>(pVDev->GetTextWidth(aText));
+                    nBulletWidth = nBulletWidth + pVDev->GetTextWidth(aText);
                 }
 
                 sal_uInt16 nTextXPos( 0 );
