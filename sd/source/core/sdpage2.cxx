@@ -397,7 +397,6 @@ SdPage::SdPage(const SdPage& rSrcPage)
     mbBackgroundFullSize = rSrcPage.mbBackgroundFullSize;
     meCharSet            = rSrcPage.meCharSet;
     mnPaperBin           = rSrcPage.mnPaperBin;
-    meOrientation        = rSrcPage.meOrientation;
 
     mpPageLink           = nullptr;    // is set when inserting via ConnectLink()
 
@@ -573,9 +572,9 @@ bool SdPage::Equals(const SdPage& rOtherPage) const
             mbLoopSound == rOtherPage.mbLoopSound && mbStopSound == rOtherPage.mbStopSound &&
             maBookmarkName == rOtherPage.maBookmarkName && mbScaleObjects == rOtherPage.mbScaleObjects &&
             mbBackgroundFullSize == rOtherPage.mbBackgroundFullSize && meCharSet == rOtherPage.meCharSet &&
-            mnPaperBin == rOtherPage.mnPaperBin && meOrientation == rOtherPage.meOrientation &&
-            mnTransitionType == rOtherPage.mnTransitionType && mnTransitionSubtype == rOtherPage.mnTransitionSubtype &&
-            mbTransitionDirection == rOtherPage.mbTransitionDirection && mnTransitionFadeColor == rOtherPage.mnTransitionFadeColor &&
+            mnPaperBin == rOtherPage.mnPaperBin && mnTransitionType == rOtherPage.mnTransitionType &&
+            mnTransitionSubtype == rOtherPage.mnTransitionSubtype && mbTransitionDirection == rOtherPage.mbTransitionDirection &&
+            mnTransitionFadeColor == rOtherPage.mnTransitionFadeColor &&
             rtl::math::approxEqual(mfTransitionDuration, rOtherPage.mfTransitionDuration));
  }
 

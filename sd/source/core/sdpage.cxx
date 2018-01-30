@@ -129,16 +129,6 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
     // presentation template of the outline objects. Therefore, it already
     // contains the designator for the outline (STR_LAYOUT_OUTLINE).
     maLayoutName = SdResId(STR_LAYOUT_DEFAULT_NAME)+ SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
-    Size aPageSize(GetSize());
-
-    if (aPageSize.Width() > aPageSize.Height())
-    {
-        meOrientation = Orientation::Landscape;
-    }
-    else
-    {
-        meOrientation = Orientation::Portrait;
-    }
 }
 
 namespace
@@ -1757,20 +1747,6 @@ void SdPage::SetSize(const Size& aSize)
     if (aSize != aOldSize)
     {
         FmFormPage::SetSize(aSize);
-
-        if (aOldSize.Height() == 10 && aOldSize.Width() == 10)
-        {
-            // this page gets a valid size for the first time. Therefore
-            // we initialize the orientation.
-            if (aSize.Width() > aSize.Height())
-            {
-                meOrientation = Orientation::Landscape;
-            }
-            else
-            {
-                meOrientation = Orientation::Portrait;
-            }
-        }
     }
 }
 
@@ -2614,14 +2590,22 @@ const OUString& SdPage::GetName() const
     return maCreatedPageName;
 }
 
-void SdPage::SetOrientation( Orientation eOrient)
+void SdPage::SetOrientation( Orientation /*eOrient*/)
 {
-    meOrientation = eOrient;
+    // Do nothing
 }
 
 Orientation SdPage::GetOrientation() const
 {
-    return meOrientation;
+    Size aSize = GetSize();
+    if ( aSize.getWidth() > aSize.getHeight() )
+    {
+        return Orientation::Landscape;
+    }
+    else
+    {
+        return Orientation::Portrait;
+    }
 }
 
 /*************************************************************************
