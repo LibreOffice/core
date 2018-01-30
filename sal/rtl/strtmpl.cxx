@@ -827,7 +827,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt32 )( IMPL_RTL_STRCODE* pStr,
     if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
         nRadix = 10;
 
-    /* is value negativ */
+    /* is value negative */
     if ( n < 0 )
     {
         *pStr = '-';
@@ -882,7 +882,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
     if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
         nRadix = 10;
 
-    /* is value negativ */
+    /* is value negative */
     if ( n < 0 )
     {
         *pStr = '-';
@@ -1567,7 +1567,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplaceStrAt )( IMPL_RTL_STRINGDATA** ppTh
         return;
     }
 
-    /* negativ index? */
+    /* negative index? */
     if ( nIndex < 0 )
     {
         nCount -= nIndex;

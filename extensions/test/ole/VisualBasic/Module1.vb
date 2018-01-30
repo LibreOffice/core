@@ -75,7 +75,7 @@ Public Sub Main()
 
 
         Dim dummy(-1) As Object
-        
+
         Dim Desktop As Object
         Desktop = objServiceManager.createInstance("com.sun.star.frame.Desktop")
 		Dim Doc As Object
@@ -184,7 +184,7 @@ Public Sub Main()
             MsgBox(sError)
 
         End If
- 
+
         'Out Parameter simple types
         '================================================
 
@@ -370,19 +370,19 @@ Public Sub Main()
 		Dim retAny As Object
 
 		retAny = emptyVar
-		inHyper = CDec("9223372036854775807") 'highest positiv value of int64
+		inHyper = CDec("9223372036854775807") 'highest positive value of int64
 		retAny = objOleTest.in_methodAny(inHyper)
 		sError = "hyper test failed"
 		If inHyper <> retAny Then
 			MsgBox(sError)
 		End If
-		inHyper = CDec("-9223372036854775808") 'lowest negativ value of int64
+		inHyper = CDec("-9223372036854775808") 'lowest negative value of int64
 		retAny = objOleTest.in_methodAny(inHyper)
 
 		If inHyper <> retAny Then
 			MsgBox(sError)
 		End If
-		inHyper = CDec("18446744073709551615") 'highest positiv value of unsigne int64
+		inHyper = CDec("18446744073709551615") 'highest positive value of unsigned int64
 		retAny = objOleTest.in_methodAny(inHyper)
 
 		If inHyper <> retAny Then
@@ -414,7 +414,7 @@ Public Sub Main()
 		Dim seqLongInAny(10) As Integer
 		For i = 0 To lengthInAny - 1
 			seqLongInAny(i) = i + 10
-		Next 
+		Next
 		Dim anySeqLong As Object
 		anySeqLong = objOleTest.Bridge_GetValueObject()
 		anySeqLong.Set("[]long", seqLongInAny)
@@ -604,7 +604,7 @@ Public Sub Main()
 			Debug.Print(countvar)
 			arrObj(countvar) = CreateObject("VBasicEventListener.VBEventListener")
 			arrObj(countvar).setQuiet(True)
-		Next 
+		Next
 
 		'Arrays always contain VARIANTS
 		Dim seq() As Object
@@ -615,7 +615,7 @@ Public Sub Main()
 			If arrLong(countvar) <> seq(countvar) Then
 				MsgBox("error")
 			End If
-		Next 
+		Next
 		seq = objOleTest.methodXInterface(arrObj)
 		Dim tmp As Object
 		For countvar = 0 To 2
@@ -624,14 +624,14 @@ Public Sub Main()
 			If seq(countvar).disposingCalled = False Then
 				MsgBox("Error")
 			End If
-		Next 
+		Next
 
 		'Array containing interfaces (element type is VT_DISPATCH)
 		Dim arEventListener(2) As Object
 		For countvar = 0 To 2
 			arEventListener(countvar) = CreateObject("VBasicEventListener.VBEventListener")
 			arEventListener(countvar).setQuiet(True)
-		Next 
+		Next
 
 		'The function calls disposing on the listeners
 		seq = objOleTest.methodXEventListeners(arEventListener)
@@ -640,19 +640,19 @@ Public Sub Main()
 			If arEventListener(countvar).disposingCalled = False Then
 				MsgBox("Error")
 			End If
-		Next 
+		Next
 		'Array containing interfaces (element type is VT_VARIANT which contains VT_DISPATCH
 		Dim arEventListener2(2) As Object
 		For countvar = 0 To 2
 			arEventListener2(countvar) = CreateObject("VBasicEventListener.VBEventListener")
 			arEventListener2(countvar).setQuiet(True)
-		Next 
+		Next
 		seq = objOleTest.methodXEventListeners(arEventListener2)
 		For countvar = 0 To 2
 			If arEventListener2(countvar).disposingCalled = False Then
 				MsgBox("Error")
 			End If
-		Next 
+		Next
 
 		'Variant containing Array containing interfaces (element type is VT_VARIANT which contains VT_DISPATCH
 		Dim arEventListener3(2) As Object
@@ -660,7 +660,7 @@ Public Sub Main()
 		For countvar = 0 To 2
 			arEventListener3(countvar) = CreateObject("VBasicEventListener.VBEventListener")
 			arEventListener3(countvar).setQuiet(True)
-		Next 
+		Next
 		Dim varContAr As Object
 		varContAr = VB6.CopyArray(arEventListener3)
 		seq = objOleTest.methodXEventListeners(varContAr)
@@ -668,7 +668,7 @@ Public Sub Main()
 			If arEventListener3(countvar).disposingCalled = False Then
 				MsgBox("Error")
 			End If
-		Next 
+		Next
 
 		'Get a sequence created in UNO, out param is Variant ( VT_BYREF|VT_VARIANT)
 		Dim seqX As Object
@@ -724,7 +724,7 @@ Public Sub Main()
 
 		For countvar = 0 To 2
 			inoutVar(countvar) = countvar + 10
-		Next 
+		Next
 
 		objOleTest.testinout_methodSequence(inoutVar)
 
@@ -734,7 +734,7 @@ Public Sub Main()
 			If inoutVar(countvar) <> countvar + 11 Then
 				MsgBox("error")
 			End If
-		Next 
+		Next
 
 		'Multidimensional array
 		'============================================================
@@ -797,8 +797,8 @@ Public Sub Main()
 			For j = 0 To 2
 				arArEventListener(i, j) = CreateObject("VBasicEventListener.VBEventListener")
 				arArEventListener(i, j).setQuiet(True)
-			Next 
-		Next 
+			Next
+		Next
 		'The function calls disposing on the listeners
 		seq = objOleTest.methodXEventListenersMul(arArEventListener)
 		For i = 0 To 1
@@ -806,8 +806,8 @@ Public Sub Main()
 				If arArEventListener(i, j).disposingCalled = False Then
 					MsgBox("Error")
 				End If
-			Next 
-		Next 
+			Next
+		Next
 
 		'Array containing interfaces (element type is VT_VARIANT containing VT_DISPATCH)
 		Dim arArEventListener2(1, 2) As Object
@@ -815,8 +815,8 @@ Public Sub Main()
 			For j = 0 To 2
 				arArEventListener2(i, j) = CreateObject("VBasicEventListener.VBEventListener")
 				arArEventListener2(i, j).setQuiet(True)
-			Next 
-		Next 
+			Next
+		Next
 		'The function calls disposing on the listeners
 		seq = objOleTest.methodXEventListenersMul(arArEventListener2)
 		For i = 0 To 1
@@ -824,8 +824,8 @@ Public Sub Main()
 				If arArEventListener2(i, j).disposingCalled = False Then
 					MsgBox("Error")
 				End If
-			Next 
-		Next 
+			Next
+		Next
 
 		' SAFEARRAY of VARIANTS containing SAFEARRAYs
 		'The ultimate element type is VT_DISPATCH ( XEventListener)
@@ -837,7 +837,7 @@ Public Sub Main()
 			seq2(i) = CreateObject("VBasicEventListener.VBEventListener")
 			seq1(i).setQuiet(True)
 			seq2(i).setQuiet(True)
-		Next 
+		Next
 		arEventListener4(0) = VB6.CopyArray(seq1)
 		arEventListener4(1) = VB6.CopyArray(seq2)
 		'The function calls disposing on the listeners
@@ -846,7 +846,7 @@ Public Sub Main()
 			If seq1(i).disposingCalled = False Or seq2(i).disposingCalled = False Then
 				MsgBox("Error")
 			End If
-		Next 
+		Next
 
 	End Function
 
