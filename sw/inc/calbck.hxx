@@ -20,17 +20,16 @@
 #ifndef INCLUDED_SW_INC_CALBCK_HXX
 #define INCLUDED_SW_INC_CALBCK_HXX
 
+#include <svl/hint.hxx>
+#include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include "ring.hxx"
 #include "hintids.hxx"
-#include "hints.hxx"
-#include <typeinfo>
 #include <type_traits>
 
 
 class SwModify;
-class SfxPoolItem;
-class SfxHint;
+class SwPtrMsgPoolItem;
 
 /*
     SwModify and SwClient cooperate in propagating attribute changes.

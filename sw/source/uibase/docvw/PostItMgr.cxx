@@ -73,6 +73,7 @@
 #include <editeng/langitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
 
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/lang.h>

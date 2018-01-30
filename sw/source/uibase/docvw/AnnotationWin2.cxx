@@ -46,6 +46,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/outlobj.hxx>
 
 #include <svl/zforlist.hxx>
 #include <svl/undo.hxx>

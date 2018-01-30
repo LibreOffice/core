@@ -23,9 +23,6 @@
 #include <config_features.h>
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <sfx2/frmhtmlw.hxx>
-#include <vcl/wrkwin.hxx>
-#include <sot/storage.hxx>
 #include <svl/itemset.hxx>
 #include <svl/ownlist.hxx>
 

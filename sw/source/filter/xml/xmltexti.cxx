@@ -58,6 +58,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svl/urihelper.hxx>
+#include <sfx2/frmdescr.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

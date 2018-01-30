@@ -34,6 +34,7 @@ class SwAccessibleChild
 {
     public:
         SwAccessibleChild();
+        ~SwAccessibleChild();
         explicit SwAccessibleChild( const SdrObject* pDrawObj );
         explicit SwAccessibleChild( const SwFrame* pFrame );
         explicit SwAccessibleChild( vcl::Window* pWindow );

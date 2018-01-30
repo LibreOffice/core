@@ -24,7 +24,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-#include <com/sun/star/i18n/XScriptTypeDetector.hpp>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include "swdllapi.h"

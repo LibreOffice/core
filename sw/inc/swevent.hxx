@@ -24,6 +24,7 @@
 #include <tools/solar.h>
 #include "calbck.hxx"
 #include "frmfmt.hxx"
+#include "hints.hxx"
 
 #define     STR_SW_EVENT_PAGE_COUNT           0
 #define     STR_SW_EVENT_MAIL_MERGE           1

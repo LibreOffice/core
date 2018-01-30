@@ -22,7 +22,6 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include "swdllapi.h"
 
 #include <memory>
 #include <vector>
