@@ -172,7 +172,11 @@ public:
         {}
 
         SfxPrintingHint( css::view::PrintableState nState )
-        : SfxViewEventHint( SfxEventHintId::PrintDoc, rtl::OUString(), nullptr, css::uno::Reference< css::frame::XController >() )
+        : SfxViewEventHint(
+            SfxEventHintId::PrintDoc,
+            GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOC ),
+            nullptr,
+            css::uno::Reference< css::frame::XController >() )
         , mnPrintableState( nState )
         {}
 
