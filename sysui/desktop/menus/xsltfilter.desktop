@@ -9,4 +9,4 @@ GenericName=XSLT based filters
 NoDisplay=true
 StartupNotify=true
 X-GIO-NoFuse=true
-X-KDE-Protocols=file,http,ftp,webdav
+X-KDE-Protocols=file,http,ftp,webdav,webdavs

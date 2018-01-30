@@ -32,7 +32,7 @@ X-GIO-NoFuse=true
 Keywords=Equation;OpenDocument Formula;Formula;odf;MathML;
 InitialPreference=5
 StartupWMClass=libreoffice-math
-X-KDE-Protocols=file,http,ftp,webdav
+X-KDE-Protocols=file,http,ftp,webdav,webdavs
 
 Actions=NewDocument;
 [Desktop Action NewDocument]
