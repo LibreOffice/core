@@ -6197,7 +6197,7 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
         if ( 20 > nRead ) break;
         rSt >> ftcBi;
 
-        // ggfs. Check the rest
+        // if necessary check the rest
         if( 20 < nRead )
             rSt.SeekRel( nRead-20 );
     }
