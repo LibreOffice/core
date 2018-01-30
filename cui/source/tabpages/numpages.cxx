@@ -2319,7 +2319,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
 
     if (pActNum)
     {
-        sal_uInt16 nWidthRelation = 30; // chapter dialog
+        long nWidthRelation = 30; // chapter dialog
 
         // height per level
         sal_uInt16 nXStep = sal::static_int_cast<sal_uInt16>(aSize.Width() / (3 * pActNum->GetLevelCount()));
