@@ -1309,6 +1309,8 @@ public:
                 int nSizeY = aSrc.GetSizePixel().Height();
                 for (int y = 0; y < nSizeY; y++)
                 {
+                    Scanline pScanlineMask = pMaskAcc->GetScanline( y );
+                    Scanline pScanlineRec = pRecAcc->GetScanline( y );
                     for (int x = 0; x < nSizeX; x++)
                     {
                         BitmapColor aColW = pAccW->GetPixel(y,x);
@@ -1324,7 +1326,7 @@ public:
                         nInverseAlpha = CLAMP(nInverseAlpha, 0, 255);
                         long nAlpha = 255 - nInverseAlpha;
 
-                        pMaskAcc->SetPixel(y,x,BitmapColor(static_cast<sal_Int8>(CLAMP(nInverseAlpha,0,255))));
+                        pMaskAcc->SetPixelOnData(pScanlineMask,x,BitmapColor(static_cast<sal_Int8>(CLAMP(nInverseAlpha,0,255))));
                         // now recover the pixels
                         long nR = (aColW.GetRed() + aColB.GetRed() - nInverseAlpha) * 128;
                         long nG = (aColW.GetGreen() + aColB.GetGreen() - nInverseAlpha) * 128;
@@ -1337,7 +1339,7 @@ public:
                         {
                             nR /= nAlpha; nG /= nAlpha; nB /= nAlpha;
                         }
-                        pRecAcc->SetPixel(y,x,BitmapColor(
+                        pRecAcc->SetPixelOnData(pScanlineRec,x,BitmapColor(
                                                 static_cast<sal_uInt8>(CLAMP(nR,0,255)),
                                                 static_cast<sal_uInt8>(CLAMP(nG,0,255)),
                                                 static_cast<sal_uInt8>(CLAMP(nB,0,255))));

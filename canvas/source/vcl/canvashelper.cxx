@@ -1044,12 +1044,11 @@ namespace vclcanvas
             int x, y, nCurrPos(0);
             for( y=0; y<nHeight; ++y )
             {
+                Scanline pScan = pWriteAccess->GetScanline( y );
                 switch( pWriteAccess->GetScanlineFormat() )
                 {
                     case ScanlineFormat::N8BitPal:
                     {
-                        Scanline pScan = pWriteAccess->GetScanline( y );
-
                         for( x=0; x<nWidth; ++x )
                         {
                             *pScan++ = static_cast<sal_uInt8>(pWriteAccess->GetBestPaletteIndex(
@@ -1064,8 +1063,6 @@ namespace vclcanvas
 
                     case ScanlineFormat::N24BitTcBgr:
                     {
-                        Scanline pScan = pWriteAccess->GetScanline( y );
-
                         for( x=0; x<nWidth; ++x )
                         {
                             *pScan++ = data[ nCurrPos+2 ];
@@ -1079,8 +1076,6 @@ namespace vclcanvas
 
                     case ScanlineFormat::N24BitTcRgb:
                     {
-                        Scanline pScan = pWriteAccess->GetScanline( y );
-
                         for( x=0; x<nWidth; ++x )
                         {
                             *pScan++ = data[ nCurrPos   ];
@@ -1096,7 +1091,7 @@ namespace vclcanvas
                     {
                         for( x=0; x<nWidth; ++x )
                         {
-                            pWriteAccess->SetPixel( y, x, BitmapColor( data[ nCurrPos   ],
+                            pWriteAccess->SetPixelOnData( pScan, x, BitmapColor( data[ nCurrPos   ],
                                                                        data[ nCurrPos+1 ],
                                                                        data[ nCurrPos+2 ] ) );
                             nCurrPos += 4;

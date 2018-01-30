@@ -961,6 +961,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
 
         for (sal_uInt16 ny = 0; ny < nHeight; ++ny)
         {
+            Scanline pScanline = pAcc->GetScanline( ny );
             sal_uInt16 nx = 0;
             if ( nRowBytes < 8 || nPackType == 1 )
             {
