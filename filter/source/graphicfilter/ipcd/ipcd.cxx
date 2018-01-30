@@ -328,16 +328,16 @@ void PCDReader::ReadImage()
                 if ( nOrientation < 2 )
                 {
                     if ( nOrientation == 0 )
-                        mpAcc->SetPixel( ny, nx, BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
+                        mpAcc->SetPixel1( ny, nx, BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
                     else
-                        mpAcc->SetPixel( nWidth - 1 - nx, ny, BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
+                        mpAcc->SetPixel1( nWidth - 1 - nx, ny, BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
                 }
                 else
                 {
                     if ( nOrientation == 2 )
-                        mpAcc->SetPixel( nHeight - 1 - ny, ( nWidth - 1 - nx ), BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
+                        mpAcc->SetPixel1( nHeight - 1 - ny, ( nWidth - 1 - nx ), BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
                     else
-                        mpAcc->SetPixel( nx, ( nHeight - 1 - ny ), BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
+                        mpAcc->SetPixel1( nx, ( nHeight - 1 - ny ), BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
                 }
             }
         }

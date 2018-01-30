@@ -116,7 +116,7 @@ MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
             double fBlue = 255.0-1.5*sqrt(static_cast<double>((128-nX)*(128-nX)+(255-nY)*(255-nY)));
             if( fBlue < 0.0 )
                 fBlue = 0.0;
-            pAcc->SetPixel( nY, nX, BitmapColor( sal_uInt8(fRed), sal_uInt8(fGreen), sal_uInt8(fBlue) ) );
+            pAcc->SetPixel1( nY, nX, BitmapColor( sal_uInt8(fRed), sal_uInt8(fGreen), sal_uInt8(fBlue) ) );
         }
     }
     Bitmap::ReleaseAccess( pAcc );

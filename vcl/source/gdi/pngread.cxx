@@ -1658,7 +1658,7 @@ void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, const BitmapColo
         return;
     nX >>= mnPreviewShift;
 
-    mxAcc->SetPixel( nY, nX, rBitmapColor );
+    mxAcc->SetPixel1( nY, nX, rBitmapColor );
 }
 
 void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, sal_uInt8 nPalIndex )
@@ -1678,12 +1678,12 @@ void PNGReaderImpl::ImplSetTranspPixel( sal_uInt32 nY, sal_uInt32 nX, const Bitm
         return;
     nX >>= mnPreviewShift;
 
-    mxAcc->SetPixel( nY, nX, rBitmapColor );
+    mxAcc->SetPixel1( nY, nX, rBitmapColor );
 
     if ( bTrans )
-        mpMaskAcc->SetPixel( nY, nX, mcTranspColor );
+        mpMaskAcc->SetPixel1( nY, nX, mcTranspColor );
     else
-        mpMaskAcc->SetPixel( nY, nX, mcOpaqueColor );
+        mpMaskAcc->SetPixel1( nY, nX, mcOpaqueColor );
 }
 
 void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
@@ -1695,7 +1695,7 @@ void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
     nX >>= mnPreviewShift;
 
     mxAcc->SetPixelIndex(nY, nX, SanitizePaletteIndex(nPalIndex, mxAcc->GetPaletteEntryCount()));
-    mpMaskAcc->SetPixel(nY, nX, BitmapColor(~nAlpha));
+    mpMaskAcc->SetPixel1(nY, nX, BitmapColor(~nAlpha));
 }
 
 void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
@@ -1706,10 +1706,10 @@ void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
         return;
     nX >>= mnPreviewShift;
 
-    mxAcc->SetPixel( nY, nX, rBitmapColor );
+    mxAcc->SetPixel1( nY, nX, rBitmapColor );
     if (!mpMaskAcc)
         return;
-    mpMaskAcc->SetPixel(nY, nX, BitmapColor(~nAlpha));
+    mpMaskAcc->SetPixel1(nY, nX, BitmapColor(~nAlpha));
 }
 
 sal_uInt32 PNGReaderImpl::ImplReadsal_uInt32()

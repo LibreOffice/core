@@ -374,9 +374,12 @@ void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc 
         memcpy(GetScanline(nY), rReadAcc.GetScanline(nY), rReadAcc.GetScanlineSize());
     }
     else
+    {
         // TODO: use fastbmp infrastructure
+        Scanline pScanline = GetScanline( nY );
         for( long nX = 0, nWidth = std::min( mpBuffer->mnWidth, rReadAcc.Width() ); nX < nWidth; nX++ )
-            SetPixel( nY, nX, rReadAcc.GetPixel( nY, nX ) );
+            SetPixelOnData( pScanline, nX, rReadAcc.GetPixel( nY, nX ) );
+    }
 }
 
 void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,

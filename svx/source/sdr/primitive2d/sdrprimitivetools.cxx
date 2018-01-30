@@ -53,16 +53,16 @@ namespace drawinglayer
                 const BitmapColor aMaskColor(0x01);
 
                 // Y,X unusual order (!)
-                pWContent->SetPixel(0, 1, aPixColor);
-                pWContent->SetPixel(1, 0, aPixColor);
-                pWContent->SetPixel(1, 1, aPixColor);
-                pWContent->SetPixel(1, 2, aPixColor);
-                pWContent->SetPixel(2, 1, aPixColor);
+                pWContent->SetPixel1(0, 1, aPixColor);
+                pWContent->SetPixel1(1, 0, aPixColor);
+                pWContent->SetPixel1(1, 1, aPixColor);
+                pWContent->SetPixel1(1, 2, aPixColor);
+                pWContent->SetPixel1(2, 1, aPixColor);
 
-                pWMask->SetPixel(0, 0, aMaskColor);
-                pWMask->SetPixel(0, 2, aMaskColor);
-                pWMask->SetPixel(2, 0, aMaskColor);
-                pWMask->SetPixel(2, 2, aMaskColor);
+                pWMask->SetPixel1(0, 0, aMaskColor);
+                pWMask->SetPixel1(0, 2, aMaskColor);
+                pWMask->SetPixel1(2, 0, aMaskColor);
+                pWMask->SetPixel1(2, 2, aMaskColor);
 
                 Bitmap::ReleaseAccess(pWContent);
                 Bitmap::ReleaseAccess(pWMask);

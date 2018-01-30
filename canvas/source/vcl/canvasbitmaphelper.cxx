@@ -237,13 +237,12 @@ namespace vclcanvas
             {
                 if( pAlphaWriteAccess.get() != nullptr )
                 {
+                    Scanline pScan  = pWriteAccess->GetScanline( y );
+                    Scanline pAScan = pAlphaWriteAccess->GetScanline( y );
                     switch( pWriteAccess->GetScanlineFormat() )
                     {
                         case ScanlineFormat::N8BitPal:
                         {
-                            Scanline pScan  = pWriteAccess->GetScanline( y );
-                            Scanline pAScan = pAlphaWriteAccess->GetScanline( y );
-
                             for( long x=rect.X1;
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
@@ -264,9 +263,6 @@ namespace vclcanvas
 
                         case ScanlineFormat::N24BitTcBgr:
                         {
-                            Scanline pScan  = pWriteAccess->GetScanline( y );
-                            Scanline pAScan = pAlphaWriteAccess->GetScanline( y );
-
                             for( long x=rect.X1;
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
@@ -286,9 +282,6 @@ namespace vclcanvas
 
                         case ScanlineFormat::N24BitTcRgb:
                         {
-                            Scanline pScan  = pWriteAccess->GetScanline( y );
-                            Scanline pAScan = pAlphaWriteAccess->GetScanline( y );
-
                             for( long x=rect.X1;
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
@@ -312,13 +305,13 @@ namespace vclcanvas
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
                             {
-                                pWriteAccess->SetPixel( y, x, BitmapColor( data[ nCurrPos   ],
+                                pWriteAccess->SetPixelOnData( pScan, x, BitmapColor( data[ nCurrPos   ],
                                                                            data[ nCurrPos+1 ],
                                                                            data[ nCurrPos+2 ] ) );
                                 nCurrPos += 3;
 
                                 // cast to unsigned byte, for correct subtraction result
-                                pAlphaWriteAccess->SetPixel( y, x,
+                                pAlphaWriteAccess->SetPixelOnData( pAScan, x,
                                                              BitmapColor(
                                                                  static_cast<sal_uInt8>(255 -
                                                                                    static_cast<sal_uInt8>(data[ nCurrPos++ ])) ) );
@@ -329,14 +322,13 @@ namespace vclcanvas
                 }
                 else
                 {
+                    Scanline pScan = pWriteAccess->GetScanline( y );
                     // TODO(Q3): This is copy'n'pasted from
                     // canvashelper.cxx, unify!
                     switch( pWriteAccess->GetScanlineFormat() )
                     {
                         case ScanlineFormat::N8BitPal:
                         {
-                            Scanline pScan = pWriteAccess->GetScanline( y );
-
                             for( long x=rect.X1;
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
@@ -353,8 +345,6 @@ namespace vclcanvas
 
                         case ScanlineFormat::N24BitTcBgr:
                         {
-                            Scanline pScan = pWriteAccess->GetScanline( y );
-
                             for( long x=rect.X1;
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
@@ -370,8 +360,6 @@ namespace vclcanvas
 
                         case ScanlineFormat::N24BitTcRgb:
                         {
-                            Scanline pScan = pWriteAccess->GetScanline( y );
-
                             for( long x=rect.X1;
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
@@ -391,7 +379,7 @@ namespace vclcanvas
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
                             {
-                                pWriteAccess->SetPixel( y, x, BitmapColor( data[ nCurrPos   ],
+                                pWriteAccess->SetPixelOnData( pScan, x, BitmapColor( data[ nCurrPos   ],
                                                                            data[ nCurrPos+1 ],
                                                                            data[ nCurrPos+2 ] ) );
                                 nCurrPos += 4; // skip three colors, _plus_ alpha
@@ -460,12 +448,12 @@ namespace vclcanvas
             ENSURE_OR_THROW( pWriteAccess.get() != nullptr,
                              "Could not acquire write access to bitmap" );
 
-            pWriteAccess->SetPixel( pos.Y, pos.X, BitmapColor( color[ 0 ],
+            pWriteAccess->SetPixel1( pos.Y, pos.X, BitmapColor( color[ 0 ],
                                                                color[ 1 ],
                                                                color[ 2 ] ) );
 
             if( pAlphaWriteAccess.get() != nullptr )
-                pAlphaWriteAccess->SetPixel( pos.Y, pos.X, BitmapColor( 255 - color[ 3 ] ) );
+                pAlphaWriteAccess->SetPixel1( pos.Y, pos.X, BitmapColor( 255 - color[ 3 ] ) );
 
             bCopyBack = true;
         }

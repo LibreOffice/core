@@ -323,7 +323,7 @@ bool ImplReadDIBPalette(SvStream& rIStm, BitmapPalette& rPal, bool bQuad)
 
 namespace
 {
-    sal_uInt8 SanitizePaletteIndex(sal_uInt8 nIndex, BitmapPalette& rPalette, bool bForceToMonoWhileReading)
+    BitmapColor SanitizePaletteIndex(sal_uInt8 nIndex, BitmapPalette& rPalette, bool bForceToMonoWhileReading)
     {
         const sal_uInt16 nPaletteEntryCount = rPalette.GetEntryCount();
         if (nPaletteEntryCount && nIndex >= nPaletteEntryCount)
@@ -337,10 +337,10 @@ namespace
 
         if (nPaletteEntryCount && bForceToMonoWhileReading)
         {
-            return static_cast<sal_uInt8>(rPalette[nIndex].GetLuminance() >= 255);
+            return BitmapColor(static_cast<sal_uInt8>(rPalette[nIndex].GetLuminance() >= 255));
         }
 
-        return nIndex;
+        return BitmapColor(nIndex);
     }
 
     BitmapColor SanitizeColor(const BitmapColor &rColor, bool bForceToMonoWhileReading)
@@ -374,6 +374,7 @@ bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header const & rHeader, BitmapWriteA
                 return false;
             nRunByte = *pRLE++;
 
+            Scanline pScanline = rAcc.GetScanline( nY );
             if( nRunByte > 2 )
             {
                 Scanline pScanline = rAcc.GetScanline(nY);
@@ -461,6 +462,7 @@ bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header const & rHeader, BitmapWriteA
             if (pRLE == pEndRLE)
                 return false;
             cTmp = *pRLE++;
+            Scanline pScanline = rAcc.GetScanline( nY );
 
             Scanline pScanline = rAcc.GetScanline(nY);
             if( bRLE4 )
@@ -745,6 +747,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                                 aMask.GetColorAndAlphaFor32Bit( aColor, aAlpha, reinterpret_cast<sal_uInt8*>(pTmp32++) );
                                 rAcc.SetPixelOnData(pScanline, nX, SanitizeColor(aColor, bForceToMonoWhileReading));
                                 pAccAlpha->SetPixelOnData(pAlphaScanline, nX, BitmapColor(sal_uInt8(0xff) - aAlpha));
+
                                 rAlphaUsed |= 0xff != aAlpha;
                             }
                         }

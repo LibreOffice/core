@@ -329,7 +329,7 @@ bool PBMReader::ImplReadBody()
                     nRed = 255 * nR / mnMaxVal;
                     nGreen = 255 * nG / mnMaxVal;
                     nBlue = 255 * nB / mnMaxVal;
-                    mpAcc->SetPixel( nHeight, nWidth++, BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
+                    mpAcc->SetPixel1( nHeight, nWidth++, BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
                     if ( nWidth == mnWidth )
                     {
                         nWidth = 0;
@@ -469,7 +469,7 @@ bool PBMReader::ImplReadBody()
                 if ( nCount == 3 )
                 {
                     nCount = 0;
-                    mpAcc->SetPixel( nHeight, nWidth++, BitmapColor( static_cast< sal_uInt8 >( ( nRGB[ 0 ] * 255 ) / mnMaxVal ),
+                    mpAcc->SetPixel1( nHeight, nWidth++, BitmapColor( static_cast< sal_uInt8 >( ( nRGB[ 0 ] * 255 ) / mnMaxVal ),
                                                                      static_cast< sal_uInt8 >( ( nRGB[ 1 ] * 255 ) / mnMaxVal ),
                                                                      static_cast< sal_uInt8 >( ( nRGB[ 2 ] * 255 ) / mnMaxVal ) ) );
                     nRGB[ 0 ] = nRGB[ 1 ] = nRGB[ 2 ] = 0;

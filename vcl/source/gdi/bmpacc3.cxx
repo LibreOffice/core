@@ -111,12 +111,12 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
             if (nEndY > nY)
             {
                 for (; nY <= nEndY; nY++ )
-                    SetPixel( nY, nX, rLineColor );
+                    SetPixel1( nY, nX, rLineColor );
             }
             else
             {
                 for (; nY >= nEndY; nY-- )
-                    SetPixel( nY, nX, rLineColor );
+                    SetPixel1( nY, nX, rLineColor );
             }
         }
         else if (rStart.Y() == rEnd.Y())
@@ -130,12 +130,12 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
             if (nEndX > nX)
             {
                 for (; nX <= nEndX; nX++)
-                    SetPixel(nY, nX, rLineColor);
+                    SetPixel1(nY, nX, rLineColor);
             }
             else
             {
                 for (; nX >= nEndX; nX--)
-                    SetPixel(nY, nX, rLineColor);
+                    SetPixel1(nY, nX, rLineColor);
             }
         }
         else
@@ -171,7 +171,7 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
 
                 for (nX = nX1, nY = nY1; nX <= nX2; nX++)
                 {
-                    SetPixel(nY, nX, rLineColor);
+                    SetPixel1(nY, nX, rLineColor);
 
                     if (nD < 0)
                         nD += nDY2;
@@ -210,7 +210,7 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
 
                 for (nX = nX1, nY = nY1; nY <= nY2; nY++)
                 {
-                    SetPixel(nY, nX, rLineColor);
+                    SetPixel1(nY, nX, rLineColor);
 
                     if (nD < 0)
                         nD += nDY2;
@@ -248,9 +248,10 @@ void BitmapWriteAccess::FillRect( const tools::Rectangle& rRect )
 
             for (long nY = nStartY; nY <= nEndY; nY++)
             {
+                Scanline pScanline = GetScanline( nY );
                 for (long nX = nStartX; nX <= nEndX; nX++)
                 {
-                    SetPixel(nY, nX, rFillColor);
+                    SetPixelOnData(pScanline, nX, rFillColor);
                 }
             }
         }

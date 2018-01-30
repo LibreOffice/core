@@ -658,9 +658,9 @@ void CanvasBitmapTest::runTest()
                 }
                 pAcc->SetFillColor(COL_GREEN);
                 pAcc->FillRect(tools::Rectangle(0,0,100,100));
-                pAcc->SetPixel(0,0,aWhite);
-                pAcc->SetPixel(0,1,aBlack);
-                pAcc->SetPixel(0,2,aWhite);
+                pAcc->SetPixel1(0,0,aWhite);
+                pAcc->SetPixel1(0,1,aBlack);
+                pAcc->SetPixel1(0,2,aWhite);
             }
         }
 
@@ -676,9 +676,9 @@ void CanvasBitmapTest::runTest()
             {
                 pAcc->SetFillColor(COL_BLACK);
                 pAcc->FillRect(tools::Rectangle(0,0,100,100));
-                pAcc->SetPixel(0,0,BitmapColor(1));
-                pAcc->SetPixel(0,1,BitmapColor(0));
-                pAcc->SetPixel(0,2,BitmapColor(1));
+                pAcc->SetPixel1(0,0,BitmapColor(1));
+                pAcc->SetPixel1(0,1,BitmapColor(0));
+                pAcc->SetPixel1(0,2,BitmapColor(1));
             }
         }
 
@@ -694,9 +694,9 @@ void CanvasBitmapTest::runTest()
             {
                 pAcc->SetFillColor(COL_BLACK);
                 pAcc->FillRect(tools::Rectangle(0,0,100,100));
-                pAcc->SetPixel(0,0,BitmapColor(255));
-                pAcc->SetPixel(0,1,BitmapColor(0));
-                pAcc->SetPixel(0,2,BitmapColor(255));
+                pAcc->SetPixel1(0,0,BitmapColor(255));
+                pAcc->SetPixel1(0,1,BitmapColor(0));
+                pAcc->SetPixel1(0,2,BitmapColor(255));
                 aAlpha.ReleaseAccess(pAcc);
             }
         }

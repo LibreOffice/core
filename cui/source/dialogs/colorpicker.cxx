@@ -334,72 +334,78 @@ void ColorFieldControl::UpdateBitmap()
         case HUE:
             while (y--)
             {
+                Scanline pScanline = pWriteAccess->GetScanline( y );
                 nBri = pPercent_Vert[y];
                 x = nWidth;
                 while (x--)
                 {
                     nSat = pPercent_Horiz[x];
-                    pWriteAccess->SetPixel(y, x, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
+                    pWriteAccess->SetPixelOnData(pScanline, x, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
                 }
             }
             break;
         case SATURATION:
             while (y--)
             {
+                Scanline pScanline = pWriteAccess->GetScanline( y );
                 nBri = pPercent_Vert[y];
                 x = nWidth;
                 while (x--)
                 {
                     nHue = pGrad_Horiz[x];
-                    pWriteAccess->SetPixel(y, x, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
+                    pWriteAccess->SetPixelOnData(pScanline, x, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
                 }
             }
             break;
         case BRIGHTNESS:
             while (y--)
             {
+                Scanline pScanline = pWriteAccess->GetScanline( y );
                 nSat = pPercent_Vert[y];
                 x = nWidth;
                 while (x--)
                 {
                     nHue = pGrad_Horiz[x];
-                    pWriteAccess->SetPixel(y, x, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
+                    pWriteAccess->SetPixelOnData(pScanline, x, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
                 }
             }
             break;
         case RED:
             while (y--)
             {
+                Scanline pScanline = pWriteAccess->GetScanline( y );
                 aBitmapColor.SetGreen(pRGB_Vert[y]);
                 x = nWidth;
                 while (x--)
                 {
                     aBitmapColor.SetBlue(pRGB_Horiz[x]);
-                    pWriteAccess->SetPixel(y, x, aBitmapColor);
+                    pWriteAccess->SetPixelOnData(pScanline, x, aBitmapColor);
                 }
             }
             break;
         case GREEN:
             while (y--)
             {
+                Scanline pScanline = pWriteAccess->GetScanline( y );
                 aBitmapColor.SetRed(pRGB_Vert[y]);
                 x = nWidth;
                 while (x--)
                 {
                     aBitmapColor.SetBlue(pRGB_Horiz[x]);
-                    pWriteAccess->SetPixel(y, x, aBitmapColor);
+                    pWriteAccess->SetPixelOnData(pScanline, x, aBitmapColor);
                 }
             }
             break;
         case BLUE:
             while (y--)
             {
+                Scanline pScanline = pWriteAccess->GetScanline( y );
                 aBitmapColor.SetGreen(pRGB_Vert[y]);
                 x = nWidth;
                 while (x--)
                 {
                     aBitmapColor.SetRed(pRGB_Horiz[x]);
-                    pWriteAccess->SetPixel(y, x, aBitmapColor);
+                    pWriteAccess->SetPixelOnData(pScanline, x, aBitmapColor);
                 }
             }
             break;
@@ -683,7 +689,7 @@ void ColorSliderControl::UpdateBitmap()
             {
                 nHue = static_cast<sal_uInt16>((359 * y) / nY);
                 aBitmapColor = BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri)));
-                pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
+                pWriteAccess->SetPixel1(nY - y, 0, aBitmapColor);
             }
             break;
 
@@ -692,7 +698,7 @@ void ColorSliderControl::UpdateBitmap()
             for (long y = 0; y <= nY; y++)
             {
                 nSat = static_cast<sal_uInt16>((100 * y) / nY);
-                pWriteAccess->SetPixel(nY - y, 0, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
+                pWriteAccess->SetPixel1(nY - y, 0, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
             }
             break;
 
@@ -700,7 +706,7 @@ void ColorSliderControl::UpdateBitmap()
             for (long y = 0; y <= nY; y++)
             {
                 nBri = static_cast<sal_uInt16>((100 * y) / nY);
-                pWriteAccess->SetPixel(nY - y, 0, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
+                pWriteAccess->SetPixel1(nY - y, 0, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
             }
             break;
 
@@ -708,7 +714,7 @@ void ColorSliderControl::UpdateBitmap()
             for (long y = 0; y <= nY; y++)
             {
                 aBitmapColor.SetRed(sal_uInt8((long(255) * y) / nY));
-                pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
+                pWriteAccess->SetPixel1(nY - y, 0, aBitmapColor);
             }
             break;
 
@@ -716,7 +722,7 @@ void ColorSliderControl::UpdateBitmap()
             for (long y = 0; y <= nY; y++)
             {
                 aBitmapColor.SetGreen(sal_uInt8((long(255) * y) / nY));
-                pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
+                pWriteAccess->SetPixel1(nY - y, 0, aBitmapColor);
             }
             break;
 
@@ -724,7 +730,7 @@ void ColorSliderControl::UpdateBitmap()
             for (long y = 0; y <= nY; y++)
             {
                 aBitmapColor.SetBlue(sal_uInt8((long(255) * y) / nY));
-                pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
+                pWriteAccess->SetPixel1(nY - y, 0, aBitmapColor);
             }
             break;
         }

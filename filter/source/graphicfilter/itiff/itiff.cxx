@@ -784,6 +784,8 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
 
     if ( nDstBitsPerPixel == 24 )
     {
+        Scanline pScanline = xAcc->GetScanline( nY );
+        Scanline pScanlineMask = xMaskAcc->GetScanline( nY );
         if ( nBitsPerSample == 8 && nSamplesPerPixel >= 3 &&
              nPlanes == 1 && nPhotometricInterpretation == 2 )
         {

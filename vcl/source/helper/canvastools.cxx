@@ -113,6 +113,7 @@ namespace vcl
                     if( !equalsLayout(aCurrLayout, rLayout) )
                         return false; // re-read bmp from the start
 
+                    Scanline pScanline = rWriteAcc->GetScanline( aRect.Y1 );
                     if( rAlphaAcc.get() )
                     {
                         // read ARGB color
@@ -123,12 +124,12 @@ namespace vcl
                             for( sal_Int32 x=0; x<nWidth; ++x )
                             {
                                 const rendering::ARGBColor& rColor=aARGBColors[x];
-                                rWriteAcc->SetPixelIndex( aRect.Y1, x,
-                                                     static_cast<sal_uInt8>(rWriteAcc->GetBestPaletteIndex(
+                                rWriteAcc->SetPixelOnData( pScanline, x,
+                                                     BitmapColor(static_cast<sal_uInt8>(rWriteAcc->GetBestPaletteIndex(
                                                          BitmapColor( toByteColor(rColor.Red),
                                                                       toByteColor(rColor.Green),
-                                                                      toByteColor(rColor.Blue)))) );
-                                rAlphaAcc->SetPixel( aRect.Y1, x,
+                                                                      toByteColor(rColor.Blue))))) );
+                                rAlphaAcc->SetPixelOnData( pScanline, x,
                                                      BitmapColor( 255 - toByteColor(rColor.Alpha) ));
                             }
                         }
@@ -137,11 +138,11 @@ namespace vcl
                             for( sal_Int32 x=0; x<nWidth; ++x )
                             {
                                 const rendering::ARGBColor& rColor=aARGBColors[x];
-                                rWriteAcc->SetPixel( aRect.Y1, x,
+                                rWriteAcc->SetPixelOnData( pScanline, x,
                                                      BitmapColor( toByteColor(rColor.Red),
                                                                   toByteColor(rColor.Green),
                                                                   toByteColor(rColor.Blue) ));
-                                rAlphaAcc->SetPixel( aRect.Y1, x,
+                                rAlphaAcc->SetPixelOnData( pScanline, x,
                                                      BitmapColor( 255 - toByteColor(rColor.Alpha) ));
                             }
                         }
@@ -155,11 +156,11 @@ namespace vcl
                             for( sal_Int32 x=0; x<nWidth; ++x )
                             {
                                 const rendering::RGBColor& rColor=aRGBColors[x];
-                                rWriteAcc->SetPixelIndex( aRect.Y1, x,
-                                                     static_cast<sal_uInt8>(rWriteAcc->GetBestPaletteIndex(
+                                rWriteAcc->SetPixelOnData( pScanline, x,
+                                                     BitmapColor(static_cast<sal_uInt8>(rWriteAcc->GetBestPaletteIndex(
                                                          BitmapColor( toByteColor(rColor.Red),
                                                                       toByteColor(rColor.Green),
-                                                                      toByteColor(rColor.Blue)))) );
+                                                                      toByteColor(rColor.Blue))))) );
                             }
                         }
                         else
@@ -167,7 +168,7 @@ namespace vcl
                             for( sal_Int32 x=0; x<nWidth; ++x )
                             {
                                 const rendering::RGBColor& rColor=aRGBColors[x];
-                                rWriteAcc->SetPixel( aRect.Y1, x,
+                                rWriteAcc->SetPixelOnData( pScanline, x,
                                                      BitmapColor( toByteColor(rColor.Red),
                                                                   toByteColor(rColor.Green),
                                                                   toByteColor(rColor.Blue) ));
