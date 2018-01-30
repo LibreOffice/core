@@ -23,8 +23,6 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 
-#define NUMBER_OF_TESTS 5
-
 using namespace css;
 using namespace css::uno;
 
@@ -52,17 +50,15 @@ public:
     // XTextContent
     CPPUNIT_TEST(testGetAnchor);
     CPPUNIT_TEST(testAttach);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static sal_Int32 nTest;
-    static uno::Reference<lang::XComponent> mxComponent;
+    uno::Reference<lang::XComponent> mxComponent;
     static uno::Reference<text::XTextField> mxField;
     static uno::Reference<text::XText> mxRightText;
 };
 
-sal_Int32 ScEditFieldObj_Header::nTest = 0;
-uno::Reference<lang::XComponent> ScEditFieldObj_Header::mxComponent;
 uno::Reference<text::XTextField> ScEditFieldObj_Header::mxField;
 uno::Reference<text::XText> ScEditFieldObj_Header::mxRightText;
 
@@ -73,21 +69,17 @@ ScEditFieldObj_Header::ScEditFieldObj_Header()
 
 void ScEditFieldObj_Header::setUp()
 {
-    ++nTest;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    // Load an empty document.
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScEditFieldObj_Header::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        // Clear these before the component is destroyed.  This is important!
-        mxField.clear();
-        mxRightText.clear();
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
+    // Clear these before the component is destroyed.  This is important!
+    mxField.clear();
+    mxRightText.clear();
+    closeDocument(mxComponent);
 
     CalcUnoApiTest::tearDown();
 }
@@ -97,10 +89,6 @@ uno::Reference<uno::XInterface> ScEditFieldObj_Header::init()
     // Return a field that's already in the header.
     if (!mxField.is())
     {
-        if (!mxComponent.is())
-            // Load an empty document.
-            mxComponent = loadFromDesktop("private:factory/scalc");
-
         uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, UNO_QUERY_THROW);
 
         // Create a new URL field object, and populate it with name and URL.
