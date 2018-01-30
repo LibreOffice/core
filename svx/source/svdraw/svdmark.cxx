@@ -214,10 +214,9 @@ void SdrMarkList::ImpForceSort()
 
 void SdrMarkList::Clear()
 {
-    for(size_t i = 0; i < GetMarkCount(); ++i)
+    for (auto const& elem : maList)
     {
-        SdrMark* pMark = GetMark(i);
-        delete pMark;
+        delete elem;
     }
     maList.clear();
     mbSorted = true; //we're empty, so can be considered sorted
