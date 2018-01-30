@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_ba264f66",
+        "filename": "sw/qa/extras/rtfexport/rtfexport2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2018-01-30T08:35:42Z",
+      "side": 1,
+      "message": "One failed under WIN64 test was fixed and enabled for WIN32 platform too.\n\nOther tests (disabled for WIN32) looks not related for the changes inside this commit.",
+      "parentUuid": "fa31d9ce_d7403c59",
+      "revId": "6bcf23ddeb82b68f1b353916d52995f11db91247",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_9736c401",
         "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_1af75bd4",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5309,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2018-01-30T08:35:42Z",
+      "side": 1,
+      "message": "This is original fonts in default styles, that should not be used, according to current filter strategy.\n\nIn the future, when the filter will be so clever to import these information too, we will need to use this check instead of current one.",
+      "parentUuid": "fa31d9ce_9736c401",
+      "revId": "6bcf23ddeb82b68f1b353916d52995f11db91247",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_b73bc8ea",
         "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
         "patchSetId": 4
@@ -47,6 +83,24 @@
       "writtenOn": "2018-01-30T01:08:30Z",
       "side": 1,
       "message": "and those?",
+      "revId": "6bcf23ddeb82b68f1b353916d52995f11db91247",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_3a041fbf",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5314,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2018-01-30T08:35:42Z",
+      "side": 1,
+      "message": "see above",
+      "parentUuid": "fa31d9ce_b73bc8ea",
       "revId": "6bcf23ddeb82b68f1b353916d52995f11db91247",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
