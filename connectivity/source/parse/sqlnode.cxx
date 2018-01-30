@@ -477,7 +477,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
             OUStringBuffer aStringPara;
             for (sal_uInt32 i=1; i<nCount; i++)
             {
-                const OSQLParseNode * pSubTree = m_aChildren[i];
+                const OSQLParseNode * pSubTree = m_aChildren[i].get();
                 if (pSubTree)
                 {
                     pSubTree->impl_parseNodeToString_throw( aStringPara, aNewParam, false );
@@ -508,10 +508,9 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
 
     if ( !bHandled )
     {
-        for (OSQLParseNodes::const_iterator i = m_aChildren.begin();
-            i != m_aChildren.end();)
+        for (auto i = m_aChildren.begin(); i != m_aChildren.end();)
         {
-            const OSQLParseNode* pSubTree = *i;
+            const OSQLParseNode* pSubTree = i->get();
             if ( !pSubTree )
             {
                 ++i;
@@ -547,7 +546,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
                     {
                         if(i != m_aChildren.end())
                         {
-                            pSubTree = *i;
+                            pSubTree = i->get();
                             if (pSubTree && pSubTree->getNodeType() == SQLNodeType::Equal)
                                 ++i;
                         }
@@ -714,7 +713,7 @@ void OSQLParseNode::impl_parseTableRangeNodeToString_throw(OUStringBuffer& rStri
 
     // rString += " ";
     std::for_each(m_aChildren.begin(),m_aChildren.end(),
-        [&] (OSQLParseNode *const pNode) { pNode->impl_parseNodeToString_throw(rString, rParam, false); });
+        [&] (std::unique_ptr<OSQLParseNode> const & pNode) { pNode->impl_parseNodeToString_throw(rString, rParam, false); });
 }
 
 
@@ -729,10 +728,10 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( OUStringBuffer& rString, c
     SQLParseNodeParameter aNewParam(rParam);
     //aNewParam.bQuote = sal_True; // why setting this to true? @see http://www.openoffice.org/issues/show_bug.cgi?id=75557
 
-    if ( !(bSimple && rParam.bPredicate && rParam.xField.is() && SQL_ISRULE(m_aChildren[0],column_ref) && columnMatchP(m_aChildren[0], rParam)) )
+    if ( !(bSimple && rParam.bPredicate && rParam.xField.is() && SQL_ISRULE(m_aChildren[0],column_ref) && columnMatchP(m_aChildren[0].get(), rParam)) )
         m_aChildren[0]->impl_parseNodeToString_throw( rString, aNewParam, bSimple );
 
-    const OSQLParseNode* pPart2 = m_aChildren[1];
+    const OSQLParseNode* pPart2 = m_aChildren[1].get();
     pPart2->getChild(0)->impl_parseNodeToString_throw( rString, aNewParam, false );
     pPart2->getChild(1)->impl_parseNodeToString_throw( rString, aNewParam, false );
     pParaNode = pPart2->getChild(2);
@@ -1639,9 +1638,6 @@ OSQLParseNode& OSQLParseNode::operator=(const OSQLParseNode& rParseNode)
         m_eNodeType  = rParseNode.m_eNodeType;
         m_nNodeID    = rParseNode.m_nNodeID;
 
-        for (auto const& child : m_aChildren)
-            delete child;
-
         m_aChildren.clear();
 
         for (auto const& child : rParseNode.m_aChildren)
@@ -1672,9 +1668,6 @@ bool OSQLParseNode::operator==(OSQLParseNode const & rParseNode) const
 
 OSQLParseNode::~OSQLParseNode()
 {
-    for (auto const& child : m_aChildren)
-        delete child;
-    m_aChildren.clear();
 }
 
 
@@ -1682,13 +1675,15 @@ void OSQLParseNode::append(OSQLParseNode* pNewNode)
 {
     OSL_ENSURE(pNewNode != nullptr, "OSQLParseNode: invalid NewSubTree");
     OSL_ENSURE(pNewNode->getParent() == nullptr, "OSQLParseNode: Node is not an orphan");
-    OSL_ENSURE(std::find(m_aChildren.begin(), m_aChildren.end(), pNewNode) == m_aChildren.end(),
-            "OSQLParseNode::append() Node already element of parent");
+    OSL_ENSURE(std::find_if(m_aChildren.begin(), m_aChildren.end(),
+                   [&] (std::unique_ptr<OSQLParseNode> const & r) { return r.get() == pNewNode; })
+               == m_aChildren.end(),
+               "OSQLParseNode::append() Node already element of parent");
 
     // Create connection to getParent
     pNewNode->setParent( this );
     // and attach the SubTree at the end
-    m_aChildren.push_back(pNewNode);
+    m_aChildren.emplace_back(pNewNode);
 }
 
 bool OSQLParseNode::addDateValue(OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const
@@ -1696,8 +1691,8 @@ bool OSQLParseNode::addDateValue(OUStringBuffer& rString, const SQLParseNodePara
     // special display for date/time values
     if (SQL_ISRULE(this,set_fct_spec) && SQL_ISPUNCTUATION(m_aChildren[0],"{"))
     {
-        const OSQLParseNode* pODBCNode = m_aChildren[1];
-        const OSQLParseNode* pODBCNodeChild = pODBCNode->m_aChildren[0];
+        const OSQLParseNode* pODBCNode = m_aChildren[1].get();
+        const OSQLParseNode* pODBCNodeChild = pODBCNode->m_aChildren[0].get();
 
         if (pODBCNodeChild->getNodeType() == SQLNodeType::Keyword && (
             SQL_ISTOKEN(pODBCNodeChild, D) ||
@@ -2360,7 +2355,7 @@ void OSQLParseNode::insert(sal_uInt32 nPos, OSQLParseNode* pNewSubTree)
 
     // Create connection to getParent
     pNewSubTree->setParent( this );
-    m_aChildren.insert(m_aChildren.begin() + nPos, pNewSubTree);
+    m_aChildren.emplace(m_aChildren.begin() + nPos, pNewSubTree);
 }
 
 // removeAt methods
@@ -2368,30 +2363,40 @@ void OSQLParseNode::insert(sal_uInt32 nPos, OSQLParseNode* pNewSubTree)
 OSQLParseNode* OSQLParseNode::removeAt(sal_uInt32 nPos)
 {
     OSL_ENSURE(nPos < m_aChildren.size(),"Illegal position for removeAt");
-    OSQLParseNodes::iterator aPos(m_aChildren.begin() + nPos);
-    OSQLParseNode* pNode = *aPos;
+    auto aPos(m_aChildren.begin() + nPos);
+    auto pNode = std::move(*aPos);
 
     // Set the getParent of the removed node to NULL
     pNode->setParent( nullptr );
 
     m_aChildren.erase(aPos);
-    return pNode;
+    return pNode.release();
 }
 
 // Replace methods
 
-OSQLParseNode* OSQLParseNode::replace (OSQLParseNode* pOldSubNode, OSQLParseNode* pNewSubNode )
+OSQLParseNode* OSQLParseNode::replace(OSQLParseNode* pOldSubNode, OSQLParseNode* pNewSubNode )
 {
     OSL_ENSURE(pOldSubNode != nullptr && pNewSubNode != nullptr, "OSQLParseNode: invalid nodes");
     OSL_ENSURE(pNewSubNode->getParent() == nullptr, "OSQLParseNode: node already has getParent");
-    OSL_ENSURE(std::find(m_aChildren.begin(), m_aChildren.end(), pOldSubNode) != m_aChildren.end(),
-            "OSQLParseNode::Replace() Node not element of parent");
-    OSL_ENSURE(std::find(m_aChildren.begin(), m_aChildren.end(), pNewSubNode) == m_aChildren.end(),
-            "OSQLParseNode::Replace() Node already element of parent");
+    OSL_ENSURE(std::find_if(m_aChildren.begin(), m_aChildren.end(),
+                   [&] (std::unique_ptr<OSQLParseNode> const & r) { return r.get() == pOldSubNode; })
+                != m_aChildren.end(),
+               "OSQLParseNode::Replace() Node not element of parent");
+    OSL_ENSURE(std::find_if(m_aChildren.begin(), m_aChildren.end(),
+                   [&] (std::unique_ptr<OSQLParseNode> const & r) { return r.get() == pNewSubNode; })
+                == m_aChildren.end(),
+               "OSQLParseNode::Replace() Node already element of parent");
 
     pOldSubNode->setParent( nullptr );
     pNewSubNode->setParent( this );
-    std::replace(m_aChildren.begin(), m_aChildren.end(), pOldSubNode, pNewSubNode);
+    for (auto it = m_aChildren.begin(); it != m_aChildren.end(); ++it)
+        if (it->get() == pOldSubNode)
+        {
+            it->release();
+            it->reset(pNewSubNode);
+            break;
+        }
     return pOldSubNode;
 }
 

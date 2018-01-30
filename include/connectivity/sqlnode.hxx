@@ -63,8 +63,6 @@ namespace connectivity
     class OSQLParseNode;
     class IParseContext;
 
-    typedef ::std::vector< OSQLParseNode* >                  OSQLParseNodes;
-
     enum class SQLNodeType { Rule, ListRule, CommaListRule,
                          Keyword, Name,
                          String, IntNum, ApproxNum,
@@ -114,14 +112,15 @@ namespace connectivity
     {
         friend class OSQLParser;
 
-        OSQLParseNodes                  m_aChildren;
-        OSQLParseNode*                  m_pParent;      // pParent for reverse linkage in the tree
+        std::vector< std::unique_ptr<OSQLParseNode> >
+                                 m_aChildren;
+        OSQLParseNode*           m_pParent;      // pParent for reverse linkage in the tree
         OUString                 m_aNodeValue;   // token name, or empty in case of rules,
-                                                        // or OUString in case of
-                                                        // OUString, INT, etc.
-        SQLNodeType                     m_eNodeType;    // see above
-        sal_uInt32                      m_nNodeID;      // Rule ID (if IsRule())
-                                                        // or Token ID (if !IsRule())
+                                                 // or OUString in case of
+                                                 // OUString, INT, etc.
+        SQLNodeType              m_eNodeType;    // see above
+        sal_uInt32               m_nNodeID;      // Rule ID (if IsRule())
+                                                 // or Token ID (if !IsRule())
                                             // Rule IDs and Token IDs can't
                                             // be distinguished by their values,
                                             // IsRule has to be used for that!
@@ -441,9 +440,7 @@ namespace connectivity
 
     inline OSQLParseNode* OSQLParseNode::getChild(sal_uInt32 nPos) const
     {
-        assert(nPos < m_aChildren.size());
-
-        return m_aChildren[nPos];
+        return m_aChildren[nPos].get();
     }
 
     // utilities to query for a specific rule, token or punctuation
