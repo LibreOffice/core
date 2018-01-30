@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_dab5c3cd",
+        "filename": "vcl/source/window/toolbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3280,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-01-30T10:14:11Z",
+      "side": 1,
+      "message": "neither am I, but this changes the logic so I wouldn\u0027t do it :-)",
+      "parentUuid": "fa31d9ce_d4883aea",
+      "range": {
+        "startLine": 3280,
+        "startChar": 45,
+        "endLine": 3280,
+        "endChar": 71
+      },
+      "revId": "42e4e692715849e5c92c10c271f93fcf64762785",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_146bb21f",
         "filename": "vcl/source/window/toolbox.cxx",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-01-29T12:21:34Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 3451,
+        "startChar": 18,
+        "endLine": 3451,
+        "endChar": 43
+      },
+      "revId": "42e4e692715849e5c92c10c271f93fcf64762785",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_faca874e",
+        "filename": "vcl/source/window/toolbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3451,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-01-30T10:14:11Z",
+      "side": 1,
+      "message": "As far as I can see this part is a safe change, nNewPos is only not ITEM_NOTFOUND when the old iterator would address nNewPos. Which I think is the case for all the following changes.",
+      "parentUuid": "fa31d9ce_146bb21f",
       "range": {
         "startLine": 3451,
         "startChar": 18,
