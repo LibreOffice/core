@@ -122,7 +122,6 @@ friend class sd::UndoAttrObject;
     bool    mbBackgroundFullSize;     ///< Background object to represent the whole page.
     rtl_TextEncoding meCharSet;           ///< Text encoding
     sal_uInt16  mnPaperBin;               ///< PaperBin
-    Orientation meOrientation;            ///< Print orientation.
     SdPageLink* mpPageLink;               ///< Page link (at left sides only)
 
     sd::AnnotationVector    maAnnotations;
