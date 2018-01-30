@@ -2511,7 +2511,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                 {
                     if (rFmt.IsShowSymbol())
                     {
-                        sal_uInt16 nYMiddle = nYStart + ( nFontHeight / 2 );
+                        long nYMiddle = nYStart + ( nFontHeight / 2 );
                         nTextOffset = lcl_DrawGraphic(pVDev.get(), rFmt, nXStart, nYMiddle, nWidthRelation);
                         nTextOffset = nTextOffset + nXStep;
                     }
