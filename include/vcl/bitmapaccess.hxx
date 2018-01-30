@@ -321,7 +321,7 @@ public:
         mpBuffer->maPalette[nColor] = rBitmapColor;
     }
 
-    void SetPixel(long nY, long nX, const BitmapColor& rBitmapColor)
+    void SetPixel1(long nY, long nX, const BitmapColor& rBitmapColor)
     {
         assert(mpBuffer && "Access is not valid!");
         assert(nX < mpBuffer->mnWidth && "x-coordinate out of range!");
@@ -330,9 +330,9 @@ public:
         mFncSetPixel(GetScanline(nY), nX, rBitmapColor, maColorMask);
     }
 
-    void SetPixelIndex(long nY, long nX, sal_uInt8 cIndex)
+    void SetPixelIndex1(long nY, long nX, sal_uInt8 cIndex)
     {
-        SetPixel(nY, nX, BitmapColor(cIndex));
+        SetPixel1(nY, nX, BitmapColor(cIndex));
     }
 
     void SetLineColor(const Color& rColor);

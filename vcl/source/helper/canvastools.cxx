@@ -154,6 +154,7 @@ namespace vcl
                         {
                             for( sal_Int32 x=0; x<nWidth; ++x )
                             {
+                                Scanline pScanline = pWriteAcc->GetScanline(nDstY);
                                 const rendering::RGBColor& rColor=aRGBColors[x];
                                 rWriteAcc->SetPixelIndex( aRect.Y1, x,
                                                      static_cast<sal_uInt8>(rWriteAcc->GetBestPaletteIndex(

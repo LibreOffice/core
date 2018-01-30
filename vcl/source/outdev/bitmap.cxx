@@ -1430,6 +1430,8 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
                 const long nModY = ( nOutY & 0x0FL ) << 4;
                 int nOutX;
 
+                Scanline pScanline = pW->GetScanline(nY);
+                Scanline pScanlineAlpha = pAlphaW->GetScanline(nY);
                 for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
                 {
                     const long  nMapX = pMapX[ nX ];
@@ -1440,12 +1442,12 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
                     aIndex.SetIndex( static_cast<sal_uInt8>( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16 ] +
                                               nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16 ] +
                                               nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16 ] ) );
-                    pW->SetPixel( nY, nX, aIndex );
+                    pW->SetPixelOnData( pScanline, nX, aIndex );
 
                     aIndex.SetIndex( static_cast<sal_uInt8>( nVCLRLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16 ] +
                                                    nVCLGLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16 ] +
                                                    nVCLBLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16 ] ) );
-                    pAlphaW->SetPixel( nY, nX, aIndex );
+                    pAlphaW->SetPixelOnData( pScanlineAlpha, nX, aIndex );
                 }
             }
         }
@@ -1461,14 +1463,16 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
             for( nY = 0; nY < nDstHeight; nY++ )
             {
                 const long  nMapY = pMapY[ nY ];
+                Scanline pScanlineB = pB->GetScanline(nY);
+                Scanline pScanlineAlpha = pAlphaW->GetScanline(nY);
 
                 for( nX = 0; nX < nDstWidth; nX++ )
                 {
                     const long nMapX = pMapX[ nX ];
                     aDstCol = AlphaBlend( nX, nY, nMapX, nMapY, pP, pA, pB.get(), pAlphaW.get(), nResAlpha );
 
-                    pB->SetPixel(nY, nX, pB->GetBestMatchingColor(aDstCol));
-                    pAlphaW->SetPixel(nY, nX, pB->GetBestMatchingColor(Color(255L-nResAlpha, 255L-nResAlpha, 255L-nResAlpha)));
+                    pB->SetPixelOnData(pScanlineB, nX, pB->GetBestMatchingColor(aDstCol));
+                    pAlphaW->SetPixelOnData(pScanlineAlpha, nX, pB->GetBestMatchingColor(Color(255L-nResAlpha, 255L-nResAlpha, 255L-nResAlpha)));
                 }
             }
         }
@@ -1523,6 +1527,7 @@ Bitmap OutputDevice::BlendBitmap(
                 const long nModY = ( nOutY & 0x0FL ) << 4;
                 int nOutX;
 
+                Scanline pScanline = pW->GetScanline(nY);
                 for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
                 {
                     long  nMapX = pMapX[ nX ];
@@ -1537,7 +1542,7 @@ Bitmap OutputDevice::BlendBitmap(
                     aIndex.SetIndex( static_cast<sal_uInt8>( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16 ] +
                                               nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16 ] +
                                               nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16 ] ) );
-                    pW->SetPixel( nY, nX, aIndex );
+                    pW->SetPixelOnData( pScanline, nX, aIndex );
                 }
             }
         }
@@ -1575,8 +1580,9 @@ Bitmap OutputDevice::BlendBitmap(
                             {
                                 nMapY = aBmpRect.Bottom() - nMapY;
                             }
-                            Scanline    pPScan = pP->GetScanline( nMapY );
-                            Scanline    pAScan = pA->GetScanline( nMapY );
+                            Scanline pPScan = pP->GetScanline( nMapY );
+                            Scanline pAScan = pA->GetScanline( nMapY );
+                            Scanline pBScan = pB->GetScanline( nY );
 
                             for( nX = 0; nX < nDstWidth; nX++ )
                             {
@@ -1587,8 +1593,8 @@ Bitmap OutputDevice::BlendBitmap(
                                     nMapX = aBmpRect.Right() - nMapX;
                                 }
                                 aDstCol = pB->GetPixel( nY, nX );
-                                pB->SetPixel( nY, nX, aDstCol.Merge( pP->GetPaletteColor( pPScan[ nMapX ] ),
-                                                                     pAScan[ nMapX ] ) );
+                                pB->SetPixelOnData( pBScan, nX, aDstCol.Merge( pP->GetPaletteColor( pPScan[ nMapX ] ),
+                                                                                pAScan[ nMapX ] ) );
                             }
                         }
                     }
@@ -1605,8 +1611,8 @@ Bitmap OutputDevice::BlendBitmap(
                         {
                             nMapY = aBmpRect.Bottom() - nMapY;
                         }
-                        Scanline    pAScan = pA->GetScanline( nMapY );
-
+                        Scanline pAScan = pA->GetScanline( nMapY );
+                        Scanline pBScan = pB->GetScanline(nY);
                         for( nX = 0; nX < nDstWidth; nX++ )
                         {
                             long nMapX = pMapX[ nX ];
@@ -1616,7 +1622,7 @@ Bitmap OutputDevice::BlendBitmap(
                                 nMapX = aBmpRect.Right() - nMapX;
                             }
                             aDstCol = pB->GetPixel( nY, nX );
-                            pB->SetPixel( nY, nX, aDstCol.Merge( pP->GetColor( nMapY, nMapX ),
+                            pB->SetPixelOnData( pBScan, nX, aDstCol.Merge( pP->GetColor( nMapY, nMapX ),
                                                                  pAScan[ nMapX ] ) );
                         }
                     }
