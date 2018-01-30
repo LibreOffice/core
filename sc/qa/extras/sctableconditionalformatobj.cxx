@@ -34,8 +34,6 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-#define NUMBER_OF_TESTS 3
-
 class ScTableConditionalFormatObj : public CalcUnoApiTest, public apitest::XSheetConditionalEntries
 {
 public:
@@ -56,12 +54,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static sal_Int32 nTest;
-    static uno::Reference<lang::XComponent> mxComponent;
+    uno::Reference<lang::XComponent> mxComponent;
 };
-
-sal_Int32 ScTableConditionalFormatObj::nTest = 0;
-uno::Reference<lang::XComponent> ScTableConditionalFormatObj::mxComponent;
 
 ScTableConditionalFormatObj::ScTableConditionalFormatObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
@@ -70,10 +64,6 @@ ScTableConditionalFormatObj::ScTableConditionalFormatObj()
 
 uno::Reference<uno::XInterface> ScTableConditionalFormatObj::init()
 {
-    // create a calc document
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop("private:factory/scalc");
-
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
@@ -114,19 +104,14 @@ uno::Sequence<beans::PropertyValue> ScTableConditionalFormatObj::createCondition
 
 void ScTableConditionalFormatObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    // create a calc document
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScTableConditionalFormatObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
