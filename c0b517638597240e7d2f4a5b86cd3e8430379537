@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_3d6df998",
+        "filename": "sd/qa/unit/activex-controls-tests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-01-30T18:57:53Z",
+      "side": 1,
+      "message": "Some unecessary whitespace changes here.",
+      "range": {
+        "startLine": 1228,
+        "startChar": 87,
+        "endLine": 1228,
+        "endChar": 89
+      },
+      "revId": "c0b517638597240e7d2f4a5b86cd3e8430379537",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
