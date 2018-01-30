@@ -42,8 +42,6 @@ using namespace css::uno;
 namespace sc_apitest
 {
 
-#define NUMBER_OF_TESTS 35
-
 class ScTableSheetObj : public CalcUnoApiTest, public apitest::Scenario,
                                                public apitest::XCellFormatRangesSupplier,
                                                public apitest::XCellRangeAddressable,
@@ -170,12 +168,8 @@ public:
 
 private:
     OUString maFileURL;
-    static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< lang::XComponent > mxComponent;
 };
-
-sal_Int32 ScTableSheetObj::nTest = 0;
-uno::Reference< lang::XComponent > ScTableSheetObj::mxComponent;
 
 ScTableSheetObj::ScTableSheetObj():
     CalcUnoApiTest("/sc/qa/extras/testdocuments"),
@@ -187,11 +181,6 @@ ScTableSheetObj::ScTableSheetObj():
 
 uno::Reference< uno::XInterface > ScTableSheetObj::init()
 {
-    createFileURL("ScTableSheetObj.ods", maFileURL);
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop(maFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT_MESSAGE("no component loaded", mxComponent.is());
-
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
@@ -219,11 +208,6 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
 
 uno::Reference<uno::XInterface> ScTableSheetObj::getScenarioSpreadsheet()
 {
-    createFileURL("ScTableSheetObj.ods", maFileURL);
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop(maFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT_MESSAGE("no component loaded", mxComponent.is());
-
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
@@ -252,11 +236,6 @@ uno::Reference<uno::XInterface> ScTableSheetObj::getScenarioSpreadsheet()
 
 uno::Reference< uno::XInterface > ScTableSheetObj::getXSpreadsheet()
 {
-    createFileURL("ScTableSheetObj.ods", maFileURL);
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop(maFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT_MESSAGE("no component loaded", mxComponent.is());
-
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
@@ -288,19 +267,14 @@ OUString ScTableSheetObj::getFileURL()
 
 void ScTableSheetObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    createFileURL("ScTableSheetObj.ods", maFileURL);
+    mxComponent = loadFromDesktop(maFileURL, "com.sun.star.sheet.SpreadsheetDocument");
 }
 
 void ScTableSheetObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
