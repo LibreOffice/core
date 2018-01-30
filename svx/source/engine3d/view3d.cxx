@@ -999,14 +999,12 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
 
 struct E3dDepthNeighbour
 {
-    E3dDepthNeighbour*          mpNext;
     E3dExtrudeObj*              mpObj;
     basegfx::B2DPolyPolygon     maPreparedPolyPolygon;
 
-    E3dDepthNeighbour()
-    :   mpNext(nullptr),
-        mpObj(nullptr),
-        maPreparedPolyPolygon()
+    E3dDepthNeighbour(E3dExtrudeObj* pObj, basegfx::B2DPolyPolygon const & rPreparedPolyPolygon)
+    :   mpObj(pObj),
+        maPreparedPolyPolygon(rPreparedPolyPolygon)
     {
     }
 };
@@ -1014,22 +1012,11 @@ struct E3dDepthNeighbour
 struct E3dDepthLayer
 {
     E3dDepthLayer*              mpDown;
-    E3dDepthNeighbour*          mpNext;
+    std::vector<E3dDepthNeighbour> mvNeighbours;
 
     E3dDepthLayer()
-    :   mpDown(nullptr),
-        mpNext(nullptr)
+    :   mpDown(nullptr)
     {
-    }
-
-    ~E3dDepthLayer()
-    {
-        while(mpNext)
-        {
-            E3dDepthNeighbour* pSucc = mpNext->mpNext;
-            delete mpNext;
-            mpNext = pSucc;
-        }
     }
 };
 
@@ -1060,23 +1047,23 @@ void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
                 {
                     // do we have overlap with an object of this layer?
                     bool bOverlap(false);
-                    E3dDepthNeighbour* pAct = pLayer->mpNext;
+                    auto itAct = pLayer->mvNeighbours.begin();
 
-                    while(!bOverlap && pAct)
+                    while(!bOverlap && itAct != pLayer->mvNeighbours.end())
                     {
-                        // do pAct->mpObj and pExtrudeObj overlap? Check by
+                        // do itAct->mpObj and pExtrudeObj overlap? Check by
                         // using logical AND clipping
                         const basegfx::B2DPolyPolygon aAndPolyPolygon(
                             basegfx::utils::solvePolygonOperationAnd(
                                 aExtrudePoly,
-                                pAct->maPreparedPolyPolygon));
+                                itAct->maPreparedPolyPolygon));
 
                         bOverlap = (0 != aAndPolyPolygon.count());
 
                         if(bOverlap)
                         {
                             // second criteria: is another fillstyle or color used?
-                            const SfxItemSet& rCompareSet = pAct->mpObj->GetMergedItemSet();
+                            const SfxItemSet& rCompareSet = itAct->mpObj->GetMergedItemSet();
 
                             drawing::FillStyle eCompareFillStyle = rCompareSet.Get(XATTR_FILLSTYLE).GetValue();
 
@@ -1098,7 +1085,7 @@ void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
                             }
                         }
 
-                        pAct = pAct->mpNext;
+                        ++itAct;
                     }
 
                     if(bOverlap)
@@ -1107,18 +1094,12 @@ void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
                         pLayer->mpDown = new E3dDepthLayer;
                         pLayer = pLayer->mpDown;
                         nNumLayers++;
-                        pLayer->mpNext = new E3dDepthNeighbour;
-                        pLayer->mpNext->mpObj = pExtrudeObj;
-                        pLayer->mpNext->maPreparedPolyPolygon = aExtrudePoly;
+                        pLayer->mvNeighbours.emplace_back(pExtrudeObj, aExtrudePoly);
                     }
                     else
                     {
                         // no, add to current layer
-                        E3dDepthNeighbour* pNewNext = new E3dDepthNeighbour;
-                        pNewNext->mpObj = pExtrudeObj;
-                        pNewNext->maPreparedPolyPolygon = aExtrudePoly;
-                        pNewNext->mpNext = pLayer->mpNext;
-                        pLayer->mpNext = pNewNext;
+                        pLayer->mvNeighbours.emplace(pLayer->mvNeighbours.begin(), pExtrudeObj, aExtrudePoly);
                     }
                 }
                 else
@@ -1127,9 +1108,7 @@ void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
                     pBaseLayer = new E3dDepthLayer;
                     pLayer = pBaseLayer;
                     nNumLayers++;
-                    pLayer->mpNext = new E3dDepthNeighbour;
-                    pLayer->mpNext->mpObj = pExtrudeObj;
-                    pLayer->mpNext->maPreparedPolyPolygon = aExtrudePoly;
+                    pLayer->mvNeighbours.emplace_back(pExtrudeObj, aExtrudePoly);
                 }
             }
         }
@@ -1145,15 +1124,15 @@ void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
             while(pLayer)
             {
                 // move along layer
-                E3dDepthNeighbour* pAct = pLayer->mpNext;
+                auto itAct = pLayer->mvNeighbours.begin();
 
-                while(pAct)
+                while(itAct != pLayer->mvNeighbours.end())
                 {
                     // adapt extrude value
-                    pAct->mpObj->SetMergedItem(SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, sal_uInt32(fMinDepth + 0.5)));
+                    itAct->mpObj->SetMergedItem(SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, sal_uInt32(fMinDepth + 0.5)));
 
                     // next
-                    pAct = pAct->mpNext;
+                    ++itAct;
                 }
 
                 // next layer
