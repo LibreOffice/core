@@ -1,0 +1,14 @@
+Enable using Vista+ native CONDITION_VARIABLE and SRWLOCK
+
+diff -ru python3.orig/PCbuild/pythoncore.vcxproj python3/PCbuild/pythoncore.vcxproj
+--- python3.orig/PCbuild/pythoncore.vcxproj
++++ python3/PCbuild/pythoncore.vcxproj
+@@ -66,7 +66,7 @@
+     <ClCompile>
+       <AdditionalOptions>/Zm200  %(AdditionalOptions)</AdditionalOptions>
+       <AdditionalIncludeDirectories>$(PySourcePath)Python;$(PySourcePath)Modules\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+-      <PreprocessorDefinitions>_USRDLL;Py_BUILD_CORE;Py_ENABLE_SHARED;MS_DLL_ID="$(SysWinVer)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <PreprocessorDefinitions>_USRDLL;Py_BUILD_CORE;Py_ENABLE_SHARED;MS_DLL_ID="$(SysWinVer)";_PY_EMULATED_WIN_CV=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+       <AdditionalDependencies>version.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
