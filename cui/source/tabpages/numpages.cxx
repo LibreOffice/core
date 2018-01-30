@@ -2359,7 +2359,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
 
                 sal_uInt16 nXStart( 0 );
                 short nTextOffset( 0 );
-                sal_uInt16 nNumberXPos( 0 );
+                long nNumberXPos( 0 );
                 if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
                 {
                     nXStart = rFmt.GetAbsLSpace() / nWidthRelation;
@@ -2384,7 +2384,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     }
                     else
                     {
-                        nNumberXPos = static_cast<sal_uInt16>(nTmpNumberXPos);
+                        nNumberXPos = nTmpNumberXPos;
                     }
                 }
 
