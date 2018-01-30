@@ -26,6 +26,7 @@
 #include <tools/urlobj.hxx>
 
 #include <cstdio>
+#include <memory>
 #include <vector>
 
 class SvStream;
@@ -78,8 +79,6 @@ public:
     void                    SetId( sal_uInt32 nNewId, bool bResetThemeName );
 };
 
-typedef ::std::vector< GalleryThemeEntry* > GalleryThemeList;
-
 class SfxListener;
 class GalleryTheme;
 class GalleryThemeCacheEntry;
@@ -95,7 +94,7 @@ class SVX_DLLPUBLIC Gallery : public SfxBroadcaster
 
 private:
 
-    GalleryThemeList            aThemeList;
+    std::vector< std::unique_ptr<GalleryThemeEntry> > aThemeList;
     GalleryCacheThemeList       aThemeCache;
     INetURLObject               aRelURL;
     INetURLObject               aUserURL;
@@ -111,6 +110,8 @@ private:
 
                                 Gallery( const OUString& rMultiPath );
                                 virtual ~Gallery() override;
+    Gallery&                    operator=( Gallery const & ) = delete; // MSVC2015 workaround
+                                Gallery( Gallery const & ) = delete; // MSVC2015 workaround
 
 public:
 
@@ -118,7 +119,7 @@ public:
 
     SAL_DLLPRIVATE size_t       GetThemeCount() const { return aThemeList.size(); }
     SAL_DLLPRIVATE const GalleryThemeEntry* GetThemeInfo( size_t nPos )
-                                { return nPos < aThemeList.size() ? aThemeList[ nPos ] : nullptr; }
+                                { return nPos < aThemeList.size() ? aThemeList[ nPos ].get() : nullptr; }
     SAL_DLLPRIVATE const GalleryThemeEntry* GetThemeInfo( const OUString& rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
 
     bool                        HasTheme( const OUString& rThemeName );
