@@ -120,17 +120,6 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
     OUStringBuffer aBuf(SdResId(STR_LAYOUT_DEFAULT_NAME).toString());
     aBuf.append(SD_LT_SEPARATOR).append(SdResId(STR_LAYOUT_OUTLINE).toString());
     maLayoutName = aBuf.makeStringAndClear();
-
-    Size aPageSize(GetSize());
-
-    if (aPageSize.Width() > aPageSize.Height())
-    {
-        meOrientation = ORIENTATION_LANDSCAPE;
-    }
-    else
-    {
-        meOrientation = ORIENTATION_PORTRAIT;
-    }
 }
 
 /*************************************************************************
@@ -1724,20 +1713,6 @@ void SdPage::SetSize(const Size& aSize)
     if (aSize != aOldSize)
     {
         FmFormPage::SetSize(aSize);
-
-        if (aOldSize.Height() == 10 && aOldSize.Width() == 10)
-        {
-            // this page gets a valid size for the first time. Therefore
-            // we initialize the orientation.
-            if (aSize.Width() > aSize.Height())
-            {
-                meOrientation = ORIENTATION_LANDSCAPE;
-            }
-            else
-            {
-                meOrientation = ORIENTATION_PORTRAIT;
-            }
-        }
     }
 }
 
@@ -2585,14 +2560,22 @@ const OUString& SdPage::GetName() const
     return maCreatedPageName;
 }
 
-void SdPage::SetOrientation( Orientation eOrient)
+void SdPage::SetOrientation( Orientation /*eOrient*/)
 {
-    meOrientation = eOrient;
+    // Do nothing
 }
 
 Orientation SdPage::GetOrientation() const
 {
-    return meOrientation;
+    Size aSize = GetSize();
+    if ( aSize.getWidth() > aSize.getHeight() )
+    {
+        return ORIENTATION_LANDSCAPE;
+    }
+    else
+    {
+        return ORIENTATION_PORTRAIT;
+    }
 }
 
 /*************************************************************************

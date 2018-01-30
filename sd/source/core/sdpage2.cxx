@@ -396,7 +396,6 @@ SdPage::SdPage(const SdPage& rSrcPage)
     mbBackgroundFullSize = rSrcPage.mbBackgroundFullSize;
     meCharSet            = rSrcPage.meCharSet;
     mnPaperBin           = rSrcPage.mnPaperBin;
-    meOrientation        = rSrcPage.meOrientation;
 
     mpPageLink           = nullptr;    // is set when inserting via ConnectLink()
 
@@ -568,7 +567,7 @@ OString SdPage::stringify() const
              append(OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8)).*/
              append(OUStringToOString(maBookmarkName, RTL_TEXTENCODING_UTF8)).
              append(mbScaleObjects).append(mbBackgroundFullSize).append((sal_Int32)meCharSet).append((sal_Int32)mnPaperBin).
-             append((sal_Int32)meOrientation).append((sal_Int32)mnTransitionType).append((sal_Int32)mnTransitionSubtype).append(mbTransitionDirection).
+             append((sal_Int32)mnTransitionType).append((sal_Int32)mnTransitionSubtype).append(mbTransitionDirection).
              append(mnTransitionFadeColor).append(mfTransitionDuration);//.append(mbIsPrecious);
 
     const size_t n = GetObjCount();
