@@ -154,7 +154,7 @@
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkRadioButton" id="alwaysrb">
-                                <property name="label" translatable="yes" context="scgeneralpage|alwaysrb">_Always</property>
+                                <property name="label" translatable="yes" context="scgeneralpage|alwaysrb">_Always (from trusted locations)</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
