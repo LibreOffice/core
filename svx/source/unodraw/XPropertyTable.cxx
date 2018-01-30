@@ -23,6 +23,8 @@
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -613,28 +615,27 @@ uno::Reference< uno::XInterface > SvxUnoXBitmapTable_createInstance( XPropertyLi
 // SvxUnoXPropertyTable
 uno::Any SvxUnoXBitmapTable::getAny( const XPropertyEntry* pEntry ) const
 {
-    OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
-    const GraphicObject& rGraphicObject(static_cast<const XBitmapEntry*>(pEntry)->GetGraphicObject());
-    aURL += OStringToOUString(rGraphicObject.GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
-
-    return uno::Any(aURL);
+    auto xBitmapEntry = static_cast<const XBitmapEntry*>(pEntry);
+    css::uno::Reference<css::awt::XBitmap> xBitmap(xBitmapEntry->GetGraphicObject().GetGraphic().GetXGraphic(), uno::UNO_QUERY);
+    return uno::Any(xBitmap);
 }
 
 std::unique_ptr<XPropertyEntry> SvxUnoXBitmapTable::createEntry(const OUString& rName, const uno::Any& rAny) const
 {
-    OUString aURL;
-    if(!(rAny >>= aURL))
+    if (!rAny.has<uno::Reference<awt::XBitmap>>())
         return std::unique_ptr<XPropertyEntry>();
 
-    const GraphicObject aGrafObj(GraphicObject::CreateGraphicObjectFromURL(aURL));
-
-    return o3tl::make_unique<XBitmapEntry>(aGrafObj, rName);
+    auto xBitmap = rAny.get<uno::Reference<awt::XBitmap>>();
+    uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
+    Graphic aGraphic(xGraphic);
+    GraphicObject aGraphicObject(aGraphic);
+    return o3tl::make_unique<XBitmapEntry>(aGraphicObject, rName);
 }
 
 // XElementAccess
 uno::Type SAL_CALL SvxUnoXBitmapTable::getElementType()
 {
-    return ::cppu::UnoType<OUString>::get();
+    return ::cppu::UnoType<awt::XBitmap>::get();
 }
 
 // XServiceInfo

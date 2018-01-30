@@ -76,6 +76,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 
@@ -1313,19 +1314,27 @@ void ChartExport::exportBitmapFill( const Reference< XPropertySet >& xPropSet )
         uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
         try
         {
-            uno::Reference< container::XNameAccess > xBitmap( xFact->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY );
-            uno::Any rValue = xBitmap->getByName( sFillBitmapName );
-            OUString sBitmapURL;
-            if( rValue >>= sBitmapURL )
+            uno::Reference< container::XNameAccess > xBitmapTable( xFact->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY );
+            uno::Any rValue = xBitmapTable->getByName( sFillBitmapName );
+            if (rValue.has<uno::Reference<awt::XBitmap>>())
             {
-                WriteBlipFill( xPropSet, sBitmapURL, XML_a, true, true );
+                uno::Reference<awt::XBitmap> xBitmap = rValue.get<uno::Reference<awt::XBitmap>>();
+                uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
+                if (xGraphic.is())
+                {
+                    WriteXGraphicBlipFill(xPropSet, xGraphic, XML_a, true, true);
+                }
+            }
+            else if (rValue.has<OUString>()) // TODO: Remove, when not used anymore
+            {
+                OUString sBitmapURL = rValue.get<OUString>();
+                WriteBlipFill(xPropSet, sBitmapURL, XML_a, true, true);
             }
         }
         catch (const uno::Exception & rEx)
         {
             SAL_INFO("oox", "ChartExport::exportBitmapFill " << rEx);
         }
-
     }
 }
 
