@@ -2333,7 +2333,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
         aStdFont.SetColor(aTextColor);
         aStdFont.SetFillColor(aBackColor);
 
-        sal_uInt16 nFontHeight = nYStep * 6 / 10;
+        long nFontHeight = nYStep * 6 / 10;
         if (bPosition)
             nFontHeight = nYStep * 15 / 10;
         aStdFont.SetFontSize(Size( 0, nFontHeight ));
