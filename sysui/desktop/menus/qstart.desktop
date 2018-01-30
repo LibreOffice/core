@@ -25,4 +25,4 @@ NoDisplay=true
 Name=%PRODUCTNAME Quickstarter
 Comment=Hook for quickstarter startup
 X-GIO-NoFuse=true
-X-KDE-Protocols=file,http,ftp,webdav
+X-KDE-Protocols=file,http,ftp,webdav,webdavs
