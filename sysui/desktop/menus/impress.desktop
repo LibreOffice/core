@@ -31,7 +31,7 @@ X-GIO-NoFuse=true
 Keywords=Slideshow;Slides;OpenDocument Presentation;Microsoft PowerPoint;Microsoft Works;OpenOffice Impress;odp;ppt;pptx;
 InitialPreference=5
 StartupWMClass=libreoffice-impress
-X-KDE-Protocols=file,http,ftp,webdav
+X-KDE-Protocols=file,http,ftp,webdav,webdavs
 
 Actions=NewDocument;
 [Desktop Action NewDocument]

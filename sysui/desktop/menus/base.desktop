@@ -31,7 +31,7 @@ X-GIO-NoFuse=true
 Keywords=Data;SQL;
 InitialPreference=5
 StartupWMClass=libreoffice-base
-X-KDE-Protocols=file,http,ftp,webdav
+X-KDE-Protocols=file,http,ftp,webdav,webdavs
 
 Actions=NewDocument;
 [Desktop Action NewDocument]
