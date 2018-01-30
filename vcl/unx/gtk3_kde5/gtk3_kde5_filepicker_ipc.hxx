@@ -71,10 +71,43 @@ public:
 
     std::string readResponseLine();
 
+    // workaround gcc <= 4.8 bug: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55914
+    template <int...> struct seq
+    {
+    };
+    template <int N, int... S> struct gens : gens<N - 1, N - 1, S...>
+    {
+    };
+    template <int... S> struct gens<0, S...>
+    {
+        typedef seq<S...> type;
+    };
+    template <typename... Args> struct ArgsReader
+    {
+        ArgsReader(Args&... args)
+            : m_args(args...)
+        {
+        }
+
+        void operator()(std::istream& stream)
+        {
+            callFunc(stream, typename gens<sizeof...(Args)>::type());
+        }
+
+    private:
+        template <int... S> void callFunc(std::istream& stream, seq<S...>)
+        {
+            readIpcArgs(stream, std::get<S>(m_args)...);
+        }
+
+        std::tuple<Args&...> m_args;
+    };
+
     template <typename... Args> void readResponse(uint64_t id, Args&... args)
     {
         // read synchronously from a background thread and run the eventloop until the value becomes available
         // this allows us to keep the GUI responsive and also enables access to the LO clipboard
+        ArgsReader<Args...> argsReader(args...);
         await(std::async(std::launch::async, [&]() {
             while (true)
             {
@@ -92,7 +125,7 @@ public:
                 if (m_incomingResponse == id)
                 {
                     // the response we are waiting for came in
-                    readIpcArgs(m_responseStream, args...);
+                    argsReader(m_responseStream);
                     m_incomingResponse = 0;
                     break;
                 }
