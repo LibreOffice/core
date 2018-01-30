@@ -24,6 +24,7 @@
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -363,7 +364,7 @@ bool SvxXMLXTableExportComponent::exportTable() throw()
                 pExporter.reset(new SvxXMLGradientEntryExporter(*this));
                 pEleName = "gradient-table";
             }
-            else if( aExportType == cppu::UnoType<OUString>::get())
+            else if( aExportType == cppu::UnoType<awt::XBitmap>::get())
             {
                 pExporter.reset(new SvxXMLBitmapEntryExporter(*this));
                 pEleName = "bitmap-table";
@@ -484,7 +485,7 @@ SvxXMLBitmapEntryExporter::SvxXMLBitmapEntryExporter( SvXMLExport& rExport )
 
 void SvxXMLBitmapEntryExporter::exportEntry( const OUString& rStrName, const Any& rValue )
 {
-    XMLImageStyle::exportXML( rStrName, rValue, mrExport );
+    XMLImageStyle::exportXML(rStrName, rValue, mrExport);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

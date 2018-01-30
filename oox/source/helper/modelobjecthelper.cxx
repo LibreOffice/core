@@ -24,6 +24,8 @@
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/helper.hxx>
 #include <osl/diagnose.h>
@@ -131,6 +133,14 @@ OUString ModelObjectHelper::insertFillBitmapUrl( const OUString& rGraphicUrl )
 {
     if( !rGraphicUrl.isEmpty() )
         return maBitmapUrlContainer.insertObject( maBitmapUrlNameBase, Any( rGraphicUrl ), true );
+    return OUString();
+}
+
+OUString ModelObjectHelper::insertFillBitmapXGraphic(uno::Reference<graphic::XGraphic> const & rxGraphic)
+{
+    uno::Reference<awt::XBitmap> xBitmap(rxGraphic, uno::UNO_QUERY);
+    if (xBitmap.is())
+        return maBitmapUrlContainer.insertObject(maBitmapUrlNameBase, Any(xBitmap), true);
     return OUString();
 }
 
