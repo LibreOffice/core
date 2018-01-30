@@ -22,6 +22,7 @@
 
 #include <sal/types.h>
 
+#include <memory>
 #include <vector>
 #include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
@@ -55,7 +56,7 @@ private:
     drawinglayer::primitive2d::Primitive2DContainer  mxPrimitive2DSequence;
 
     // the PrimitiveAnimation if Primitive2DContainer contains animations
-    sdr::animation::PrimitiveAnimation*             mpPrimitiveAnimation;
+    std::unique_ptr<sdr::animation::PrimitiveAnimation> mpPrimitiveAnimation;
 
     // This bool gets set when the object gets invalidated by ActionChanged() and
     // can be used from the OC to late-invalidates
