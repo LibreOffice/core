@@ -2485,7 +2485,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
             {
                 const SvxNumberFormat &rFmt = pActNum->GetLevel(nLevel);
                 aNum.GetLevelVal()[ nLevel ] = rFmt.GetStart();
-                sal_uInt16 nXStart( 0 );
+                long nXStart( 0 );
                 pVDev->SetFillColor( aBackColor );
 
                 if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
@@ -2501,7 +2501,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     }
                     else
                     {
-                        nXStart = static_cast<sal_uInt16>(nTmpXStart);
+                        nXStart = nTmpXStart;
                     }
                 }
                 nXStart /= 2;
