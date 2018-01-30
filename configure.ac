@@ -10206,6 +10206,9 @@ SYSTEM_GPGMEPP=
 if test "$build_for_ios" = "YES"; then
     AC_MSG_CHECKING([whether gpgmepp should be disabled due to iOS])
     AC_MSG_RESULT([yes])
+elif test "$enable_mpl_subset" = "yes"; then
+    AC_MSG_CHECKING([whether gpgmepp should be disabled due to building just MPL])
+    AC_MSG_RESULT([yes])
 elif test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
     dnl ===================================================================
     dnl Check for system gpgme
