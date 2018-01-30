@@ -324,7 +324,7 @@
 #define STR_DOC_PRINTED                         NC_("STR_DOC_PRINTED", "Printed")
 #define STR_BY                                  NC_("STR_BY", "by")
 #define STR_ON                                  NC_("STR_ON", "on")
-#define STR_RELOAD_TABLES                       NC_("STR_RELOAD_TABLES", "This file contains links to other files.\nShould they be updated?")
+#define STR_RELOAD_TABLES                       NC_("STR_RELOAD_TABLES", "This file contains links to other files or external resources.\nShould they be updated?")
 #define STR_REIMPORT_AFTER_LOAD                 NC_("STR_REIMPORT_AFTER_LOAD", "This file contains queries. The results of these queries were not saved.\nDo you want these queries to be repeated?")
 #define STR_INSERT_FULL                         NC_("STR_INSERT_FULL", "Filled cells cannot be shifted\nbeyond the sheet.")
 #define STR_TABINSERT_ERROR                     NC_("STR_TABINSERT_ERROR", "The table could not be inserted.")
