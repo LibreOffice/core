@@ -277,6 +277,7 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
         sal_uInt8 *pSource2 = pPlane[ 1 ];
         sal_uInt8 *pSource3 = pPlane[ 2 ];
         sal_uInt8 *pSource4 = pPlane[ 3 ];
+        Scanline pScanline = pAcc->GetScanline( ny );
         switch ( nBitsPerPlanePix + ( nPlanes << 8 ) )
         {
             // 2 colors
@@ -285,9 +286,9 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
                 {
                     sal_uLong nShift = ( i & 7 ) ^ 7;
                     if ( nShift == 0 )
-                        pAcc->SetPixelIndex( ny, i, *(pSource1++) & 1 );
+                        pAcc->SetPixelOnData( pScanline, i, BitmapColor(*(pSource1++) & 1) );
                     else
-                        pAcc->SetPixelIndex( ny, i, (*pSource1 >> nShift ) & 1 );
+                        pAcc->SetPixelOnData( pScanline, i, BitmapColor((*pSource1 >> nShift ) & 1) );
                 }
                 break;
             // 4 colors
@@ -309,14 +310,14 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
                             nCol = ( *pSource1++ ) & 0x03;
                             break;
                     }
-                    pAcc->SetPixelIndex( ny, i, nCol );
+                    pAcc->SetPixelOnData( pScanline, i, BitmapColor(nCol) );
                 }
                 break;
             // 256 colors
             case 0x108 :
                 for ( i = 0; i < nWidth; i++ )
                 {
-                    pAcc->SetPixelIndex( ny, i, *pSource1++ );
+                    pAcc->SetPixelOnData( pScanline, i, BitmapColor(*pSource1++) );
                 }
                 break;
             // 8 colors
@@ -327,14 +328,14 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
                     if ( nShift == 0 )
                     {
                         nCol = ( *pSource1++ & 1) + ( ( *pSource2++ << 1 ) & 2 ) + ( ( *pSource3++ << 2 ) & 4 );
-                        pAcc->SetPixelIndex( ny, i, nCol );
+                        pAcc->SetPixelOnData( pScanline, i, BitmapColor(nCol) );
                     }
                     else
                     {
                         nCol = sal::static_int_cast< sal_uInt8 >(
                             ( ( *pSource1 >> nShift ) & 1)  + ( ( ( *pSource2 >> nShift ) << 1 ) & 2 ) +
                             ( ( ( *pSource3 >> nShift ) << 2 ) & 4 ));
-                        pAcc->SetPixelIndex( ny, i, nCol );
+                        pAcc->SetPixelOnData( pScanline, i, BitmapColor(nCol) );
                     }
                 }
                 break;
@@ -347,14 +348,14 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
                     {
                         nCol = ( *pSource1++ & 1) + ( ( *pSource2++ << 1 ) & 2 ) + ( ( *pSource3++ << 2 ) & 4 ) +
                             ( ( *pSource4++ << 3 ) & 8 );
-                        pAcc->SetPixelIndex( ny, i, nCol );
+                        pAcc->SetPixelOnData( pScanline, i, BitmapColor(nCol) );
                     }
                     else
                     {
                         nCol = sal::static_int_cast< sal_uInt8 >(
                             ( ( *pSource1 >> nShift ) & 1)  + ( ( ( *pSource2 >> nShift ) << 1 ) & 2 ) +
                             ( ( ( *pSource3 >> nShift ) << 2 ) & 4 ) + ( ( ( *pSource4 >> nShift ) << 3 ) & 8 ));
-                        pAcc->SetPixelIndex( ny, i, nCol );
+                        pAcc->SetPixelOnData( pScanline, i, BitmapColor(nCol) );
                     }
                 }
                 break;
@@ -362,7 +363,7 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
             case 0x308 :
                 for ( i = 0; i < nWidth; i++ )
                 {
-                    pAcc->SetPixel( ny, i, Color( *pSource1++, *pSource2++, *pSource3++ ) );
+                    pAcc->SetPixelOnData( pScanline, i, Color( *pSource1++, *pSource2++, *pSource3++ ) );
 
                 }
                 break;

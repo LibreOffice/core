@@ -837,14 +837,15 @@ namespace
 
                 for(long y(0); y < aDestinationSizePixel.getHeight(); y++)
                 {
+                    Scanline pScanline = xWrite->GetScanline( y );
                     for(long x(0); x < aDestinationSizePixel.getWidth(); x++)
                     {
                         const basegfx::B2DPoint aSourceCoor(rTransform * basegfx::B2DPoint(x, y));
 
                         if(bSmooth)
                         {
-                            xWrite->SetPixel(
-                                y,
+                            xWrite->SetPixelOnData(
+                                pScanline,
                                 x,
                                 xRead->GetInterpolatedColorWithFallback(
                                     aSourceCoor.getY(),
@@ -855,8 +856,8 @@ namespace
                         {
                             // this version does the correct <= 0.0 checks, so no need
                             // to do the static_cast< sal_Int32 > self and make an error
-                            xWrite->SetPixel(
-                                y,
+                            xWrite->SetPixelOnData(
+                                pScanline,
                                 x,
                                 xRead->GetColorWithFallback(
                                     aSourceCoor.getY(),
@@ -1099,6 +1100,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                 {
                     for(sal_uInt32 y(0); y < static_cast<sal_uInt32>(xContent->Height()); y++)
                     {
+                        Scanline pScanline = xContent->GetScanline( y );
                         for(sal_uInt32 x(0); x < static_cast<sal_uInt32>(xContent->Width()); x++)
                         {
                             const BitmapColor aBMCol(xContent->GetColor(y, x));
@@ -1108,7 +1110,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                                 static_cast<double>(aBMCol.GetBlue()) * fConvertColor);
                             const basegfx::BColor aBDest(rModifier->getModifiedColor(aBSource));
 
-                            xContent->SetPixel(y, x, BitmapColor(Color(aBDest)));
+                            xContent->SetPixelOnData(pScanline, x, BitmapColor(Color(aBDest)));
                         }
                     }
                 }
@@ -1210,10 +1212,12 @@ BitmapEx createBlendFrame(
         {
             long x(0);
             long y(0);
+            Scanline pScanContent = pContent->GetScanline( 0 );
+            Scanline pScanAlpha = pContent->GetScanline( 0 );
 
             // x == 0, y == 0, top-left corner
-            pContent->SetPixel(0, 0, aColorTopLeft);
-            pAlpha->SetPixelIndex(0, 0, nAlpha);
+            pContent->SetPixelOnData(pScanContent, 0, aColorTopLeft);
+            pAlpha->SetPixelOnData(pScanAlpha, 0, BitmapColor(nAlpha));
 
             // y == 0, top line left to right
             for(x = 1; x < nW - 1; x++)
@@ -1221,26 +1225,28 @@ BitmapEx createBlendFrame(
                 Color aMix(aColorTopLeft);
 
                 aMix.Merge(aColorTopRight, 255 - sal_uInt8((x * 255) / nW));
-                pContent->SetPixel(0, x, aMix);
-                pAlpha->SetPixelIndex(0, x, nAlpha);
+                pContent->SetPixelOnData(pScanContent, x, aMix);
+                pAlpha->SetPixelOnData(pScanAlpha, x, BitmapColor(nAlpha));
             }
 
             // x == nW - 1, y == 0, top-right corner
             // #i123690# Caution! When nW is 1, x == nW is possible (!)
             if(x < nW)
             {
-                pContent->SetPixel(0, x, aColorTopRight);
-                pAlpha->SetPixelIndex(0, x, nAlpha);
+                pContent->SetPixelOnData(pScanContent, x, aColorTopRight);
+                pAlpha->SetPixelOnData(pScanAlpha, x, BitmapColor(nAlpha));
             }
 
             // x == 0 and nW - 1, left and right line top-down
             for(y = 1; y < nH - 1; y++)
             {
+                pScanContent = pContent->GetScanline( y );
+                pScanAlpha = pContent->GetScanline( y );
                 Color aMixA(aColorTopLeft);
 
                 aMixA.Merge(aColorBottomLeft, 255 - sal_uInt8((y * 255) / nH));
-                pContent->SetPixel(y, 0, aMixA);
-                pAlpha->SetPixelIndex(y, 0, nAlpha);
+                pContent->SetPixelOnData(pScanContent, 0, aMixA);
+                pAlpha->SetPixelOnData(pScanAlpha, 0, BitmapColor(nAlpha));
 
                 // #i123690# Caution! When nW is 1, x == nW is possible (!)
                 if(x < nW)
@@ -1248,8 +1254,8 @@ BitmapEx createBlendFrame(
                     Color aMixB(aColorTopRight);
 
                     aMixB.Merge(aColorBottomRight, 255 - sal_uInt8((y * 255) / nH));
-                    pContent->SetPixel(y, x, aMixB);
-                    pAlpha->SetPixelIndex(y, x, nAlpha);
+                    pContent->SetPixelOnData(pScanContent, x, aMixB);
+                    pAlpha->SetPixelOnData(pScanAlpha, x, BitmapColor(nAlpha));
                 }
             }
 
@@ -1257,8 +1263,8 @@ BitmapEx createBlendFrame(
             if(y < nH)
             {
                 // x == 0, y == nH - 1, bottom-left corner
-                pContent->SetPixel(y, 0, aColorBottomLeft);
-                pAlpha->SetPixelIndex(y, 0, nAlpha);
+                pContent->SetPixelOnData(pScanContent, 0, aColorBottomLeft);
+                pAlpha->SetPixelOnData(pScanAlpha, 0, BitmapColor(nAlpha));
 
                 // y == nH - 1, bottom line left to right
                 for(x = 1; x < nW - 1; x++)
@@ -1266,16 +1272,16 @@ BitmapEx createBlendFrame(
                     Color aMix(aColorBottomLeft);
 
                     aMix.Merge(aColorBottomRight, 255 - sal_uInt8(((x - 0)* 255) / nW));
-                    pContent->SetPixel(y, x, aMix);
-                    pAlpha->SetPixelIndex(y, x, nAlpha);
+                    pContent->SetPixelOnData(pScanContent, x, aMix);
+                    pAlpha->SetPixelOnData(pScanAlpha, x, BitmapColor(nAlpha));
                 }
 
                 // x == nW - 1, y == nH - 1, bottom-right corner
                 // #i123690# Caution! When nW is 1, x == nW is possible (!)
                 if(x < nW)
                 {
-                    pContent->SetPixel(y, x, aColorBottomRight);
-                    pAlpha->SetPixelIndex(y, x, nAlpha);
+                    pContent->SetPixelOnData(pScanContent, x, aColorBottomRight);
+                    pAlpha->SetPixelOnData(pScanAlpha, x, BitmapColor(nAlpha));
                 }
             }
 

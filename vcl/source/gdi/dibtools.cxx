@@ -323,7 +323,7 @@ bool ImplReadDIBPalette(SvStream& rIStm, BitmapPalette& rPal, bool bQuad)
 
 namespace
 {
-    sal_uInt8 SanitizePaletteIndex(sal_uInt8 nIndex, BitmapPalette& rPalette, bool bForceToMonoWhileReading)
+    BitmapColor SanitizePaletteIndex(sal_uInt8 nIndex, BitmapPalette& rPalette, bool bForceToMonoWhileReading)
     {
         const sal_uInt16 nPaletteEntryCount = rPalette.GetEntryCount();
         if (nPaletteEntryCount && nIndex >= nPaletteEntryCount)
@@ -337,10 +337,10 @@ namespace
 
         if (nPaletteEntryCount && bForceToMonoWhileReading)
         {
-            return static_cast<sal_uInt8>(rPalette[nIndex].GetLuminance() >= 255);
+            return BitmapColor(static_cast<sal_uInt8>(rPalette[nIndex].GetLuminance() >= 255));
         }
 
-        return nIndex;
+        return BitmapColor(nIndex);
     }
 
     BitmapColor SanitizeColor(const BitmapColor &rColor, bool bForceToMonoWhileReading)
