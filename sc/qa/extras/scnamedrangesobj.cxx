@@ -19,32 +19,29 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 3
-
 class ScNamedRangesObj : public CalcUnoApiTest, public apitest::XNamedRanges
 {
 public:
+    ScNamedRangesObj();
+
     virtual void setUp() override;
     virtual void tearDown() override;
 
     virtual uno::Reference< uno::XInterface > init(sal_Int32 nSheet = 0) override;
 
-    ScNamedRangesObj();
-
     CPPUNIT_TEST_SUITE(ScNamedRangesObj);
+
+    // XNamedRanges
     CPPUNIT_TEST(testAddNewByName);
     CPPUNIT_TEST(testAddNewFromTitles);
     //CPPUNIT_TEST_EXCEPTION(testRemoveByName, uno::RuntimeException);
     CPPUNIT_TEST(testOutputList);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< lang::XComponent > mxComponent;
 };
-
-sal_Int32 ScNamedRangesObj::nTest = 0;
-uno::Reference< lang::XComponent > ScNamedRangesObj::mxComponent;
 
 ScNamedRangesObj::ScNamedRangesObj()
      : CalcUnoApiTest("/sc/qa/extras/testdocuments")
@@ -53,10 +50,6 @@ ScNamedRangesObj::ScNamedRangesObj()
 
 uno::Reference< uno::XInterface > ScNamedRangesObj::init(sal_Int32 nSheet)
 {
-    OUString aFileURL;
-    createFileURL("ScNamedRangeObj.ods", aFileURL);
-    if(!mxComponent.is())
-        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT_MESSAGE("no component loaded", mxComponent.is());
 
     uno::Reference< beans::XPropertySet > xPropSet (mxComponent, UNO_QUERY_THROW);
@@ -65,26 +58,23 @@ uno::Reference< uno::XInterface > ScNamedRangesObj::init(sal_Int32 nSheet)
     //set value from xnamedranges.hxx
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndexAccess(xDoc->getSheets(), UNO_QUERY_THROW);
-    xSheet.set(xIndexAccess->getByIndex(nSheet),UNO_QUERY_THROW);
+    xSheet.set(xIndexAccess->getByIndex(nSheet), UNO_QUERY_THROW);
 
     return xNamedRanges;
 }
 
 void ScNamedRangesObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    // create a calc document
+    OUString aFileURL;
+    createFileURL("ScNamedRangeObj.ods", aFileURL);
+    mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
 }
 
 void ScNamedRangesObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
