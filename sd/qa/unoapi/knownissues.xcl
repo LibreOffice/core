@@ -16,6 +16,11 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+### tdf#115345 - not useful to set Orientation ###
+sd.SdDrawPage::com::sun::star::drawing::GenericDrawPage
+sd.SdGenericDrawPage::com::sun::star::drawing::GenericDrawPage
+sd.SdMasterPage::com::sun::star::drawing::GenericDrawPage
+
 ### i84994 ###
 sd.SdXImpressDocument::com::sun::star::view::XPrintable
 # -> disabled in sd.sce
