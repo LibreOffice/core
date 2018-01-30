@@ -21,8 +21,6 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 3
-
 class ScModelObj : public UnoApiTest, public apitest::XConsolidatable,
                                       public apitest::XGoalSeek
 {
@@ -46,8 +44,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< lang::XComponent > mxComponent;
 };
 
 ScModelObj::ScModelObj()
@@ -55,15 +52,8 @@ ScModelObj::ScModelObj()
 {
 }
 
-sal_Int32 ScModelObj::nTest = 0;
-uno::Reference< lang::XComponent > ScModelObj::mxComponent;
-
 uno::Reference< uno::XInterface > ScModelObj::init()
 {
-    OUString aFileURL;
-    createFileURL("ScModelObj.ods", aFileURL);
-    if(!mxComponent.is())
-        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT_MESSAGE("no component loaded", mxComponent.is());
 
     return mxComponent;
@@ -71,19 +61,16 @@ uno::Reference< uno::XInterface > ScModelObj::init()
 
 void ScModelObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     UnoApiTest::setUp();
+    // create a calc document
+    OUString aFileURL;
+    createFileURL("ScModelObj.ods", aFileURL);
+    mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
 }
 
 void ScModelObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     UnoApiTest::tearDown();
 }
 
