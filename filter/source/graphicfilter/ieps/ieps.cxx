@@ -665,6 +665,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                             char nByte;
                             for (long y = 0; bIsValid && y < nHeight; ++y)
                             {
+                                Scanline pScanline = pAcc->GetScanline( y );
                                 int nBitsLeft = 0;
                                 for (long x = 0; x < nWidth; ++x)
                                 {
@@ -714,10 +715,10 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                                     if (!bIsValid)
                                         break;
                                     if ( nBitDepth == 1 )
-                                        pAcc->SetPixelIndex( y, x, static_cast<sal_uInt8>(nDat >> nBitsLeft) & 1 );
+                                        pAcc->SetPixelOnData( pScanline, x, BitmapColor(static_cast<sal_uInt8>(nDat >> nBitsLeft) & 1) );
                                     else
                                     {
-                                        pAcc->SetPixelIndex( y, x, nDat ? 1 : 0 );  // nBitDepth == 8
+                                        pAcc->SetPixelOnData( pScanline, x, BitmapColor(nDat ? 1 : 0) );  // nBitDepth == 8
                                         nBitsLeft = 0;
                                     }
                                 }

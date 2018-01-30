@@ -613,6 +613,7 @@ bool TGAReader::ImplReadBody()
         {
             nX = nXStart;
             nXCount = 0;
+            Scanline pScanline = mpAcc->GetScanline( nY );
 
             if ( mbIndexing )
             {
@@ -630,7 +631,7 @@ bool TGAReader::ImplReadBody()
                             nRed = static_cast<sal_uInt8>( mpColorMap[ nRGB16 ] >> 16 );
                             nGreen = static_cast<sal_uInt8>( mpColorMap[ nRGB16 ] >> 8 );
                             nBlue = static_cast<sal_uInt8>( mpColorMap[ nRGB16 ] );
-                            mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
+                            mpAcc->SetPixelOnData( pScanline, nX, BitmapColor( nRed, nGreen, nBlue ) );
                         }
                         break;
 
@@ -643,7 +644,7 @@ bool TGAReader::ImplReadBody()
                                 return false;
                             if ( nDummy >= mpFileHeader->nColorMapLength )
                                 return false;
-                            mpAcc->SetPixelIndex( nY, nX, nDummy );
+                            mpAcc->SetPixelOnData( pScanline, nX, BitmapColor(nDummy) );
                         }
                         break;
                     default:
@@ -662,7 +663,7 @@ bool TGAReader::ImplReadBody()
                                 m_rTGA.ReadUChar( nBlue ).ReadUChar( nGreen ).ReadUChar( nRed ).ReadUChar( nDummy );
                                 if ( !m_rTGA.good())
                                     return false;
-                                mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
+                                mpAcc->SetPixelOnData( pScanline, nX, BitmapColor( nRed, nGreen, nBlue ) );
                             }
                         }
                         break;
@@ -674,7 +675,7 @@ bool TGAReader::ImplReadBody()
                             m_rTGA.ReadUChar( nBlue ).ReadUChar( nGreen ).ReadUChar( nRed );
                             if ( !m_rTGA.good())
                                 return false;
-                            mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
+                            mpAcc->SetPixelOnData( pScanline, nX, BitmapColor( nRed, nGreen, nBlue ) );
                         }
                         break;
 
@@ -688,7 +689,7 @@ bool TGAReader::ImplReadBody()
                             nRed = static_cast<sal_uInt8>( nRGB16 >> 7 ) & 0xf8;
                             nGreen = static_cast<sal_uInt8>( nRGB16 >> 2 ) & 0xf8;
                             nBlue = static_cast<sal_uInt8>( nRGB16 << 3 ) & 0xf8;
-                            mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
+                            mpAcc->SetPixelOnData( pScanline, nX, BitmapColor( nRed, nGreen, nBlue ) );
                         }
                         break;
                     default:
