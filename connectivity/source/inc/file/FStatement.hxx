@@ -78,7 +78,7 @@ namespace connectivity
 
             rtl::Reference<OConnection>                 m_pConnection;// The owning Connection object
             connectivity::OSQLParseNode*                m_pParseTree;
-            OSQLAnalyzer*                               m_pSQLAnalyzer; //the sql analyzer used by the resultset
+            std::unique_ptr<OSQLAnalyzer>               m_pSQLAnalyzer; //the sql analyzer used by the resultset
 
             rtl::Reference<OFileTable>                  m_pTable;       // the current table
             OValueRefRow                                m_aSelectRow;
