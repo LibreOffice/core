@@ -22,8 +22,6 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 9
-
 class ScNamedRangeObj : public CalcUnoApiTest, public apitest::XNamedRange, public apitest::XNamed, public apitest::XCellRangeReferrer
 {
 public:
@@ -36,6 +34,7 @@ public:
     virtual uno::Reference< sheet::XNamedRange > getNamedRange(const OUString& rRangeName) override;
 
     CPPUNIT_TEST_SUITE(ScNamedRangeObj);
+
     CPPUNIT_TEST(testGetContent);
     CPPUNIT_TEST(testSetContent);
     CPPUNIT_TEST(testGetType);
@@ -45,16 +44,12 @@ public:
     CPPUNIT_TEST(testSetName);
     CPPUNIT_TEST(testGetName);
     CPPUNIT_TEST(testGetReferredCells);
+
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference< sheet::XNamedRanges > init_impl();
-
-    static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< lang::XComponent > mxComponent;
 };
-
-sal_Int32 ScNamedRangeObj::nTest = 0;
-uno::Reference< lang::XComponent > ScNamedRangeObj::mxComponent;
 
 ScNamedRangeObj::ScNamedRangeObj():
         CalcUnoApiTest("/sc/qa/extras/testdocuments"),
@@ -65,10 +60,6 @@ ScNamedRangeObj::ScNamedRangeObj():
 
 uno::Reference< sheet::XNamedRanges > ScNamedRangeObj::init_impl()
 {
-    OUString aFileURL;
-    createFileURL("ScNamedRangeObj.ods", aFileURL);
-    if(!mxComponent.is())
-        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT_MESSAGE("no component loaded", mxComponent.is());
 
     uno::Reference< beans::XPropertySet > xPropSet (mxComponent, UNO_QUERY_THROW);
@@ -94,19 +85,16 @@ uno::Reference< uno::XInterface > ScNamedRangeObj::init()
 
 void ScNamedRangeObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    // create a calc document
+    OUString aFileURL;
+    createFileURL("ScNamedRangeObj.ods", aFileURL);
+    mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
 }
 
 void ScNamedRangeObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
