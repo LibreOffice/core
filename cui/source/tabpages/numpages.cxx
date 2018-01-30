@@ -2325,7 +2325,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
         sal_uInt16 nXStep = sal::static_int_cast<sal_uInt16>(aSize.Width() / (3 * pActNum->GetLevelCount()));
         if (pActNum->GetLevelCount() < 10)
             nXStep /= 2;
-        sal_uInt16 nYStart = 4;
+        long nYStart = 4;
         // the whole height mustn't be used for a single level
         sal_uInt16 nYStep = sal::static_int_cast<sal_uInt16>((aSize.Height() - 6)/ (pActNum->GetLevelCount() > 1 ? pActNum->GetLevelCount() : 5));
 
