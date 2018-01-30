@@ -20,8 +20,6 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 
-#define NUMBER_OF_TESTS 7
-
 using namespace css;
 using namespace css::uno;
 
@@ -61,13 +59,10 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static sal_Int32 nTest;
-    static uno::Reference<lang::XComponent> mxComponent;
+    uno::Reference<lang::XComponent> mxComponent;
     static uno::Reference<text::XTextField> mxField;
 };
 
-sal_Int32 ScEditFieldObj_Cell::nTest = 0;
-uno::Reference<lang::XComponent> ScEditFieldObj_Cell::mxComponent;
 uno::Reference<text::XTextField> ScEditFieldObj_Cell::mxField;
 
 ScEditFieldObj_Cell::ScEditFieldObj_Cell()
@@ -77,20 +72,15 @@ ScEditFieldObj_Cell::ScEditFieldObj_Cell()
 
 void ScEditFieldObj_Cell::setUp()
 {
-    ++nTest;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    // Load an empty document.
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScEditFieldObj_Cell::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        mxField.clear();
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    mxField.clear();
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
@@ -113,10 +103,6 @@ uno::Reference<uno::XInterface> ScEditFieldObj_Cell::init()
     // Return a field that's already in the cell.
     if (!mxField.is())
     {
-        if (!mxComponent.is())
-            // Load an empty document.
-            mxComponent = loadFromDesktop("private:factory/scalc");
-
         uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, UNO_QUERY_THROW);
 
         // Create a new URL field object, and populate it with name and URL.
@@ -161,7 +147,6 @@ uno::Reference<text::XTextRange> ScEditFieldObj_Cell::getTextRange()
 
 void ScEditFieldObj_Cell::testEditFieldProperties()
 {
-    CPPUNIT_ASSERT_MESSAGE("component doesn't exist.", mxComponent.is());
     uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, UNO_QUERY_THROW);
 
     {
