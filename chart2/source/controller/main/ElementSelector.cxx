@@ -299,7 +299,7 @@ uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::create
         if( pParent )
         {
             m_apSelectorListBox.reset( VclPtr<SelectorListBox>::Create( pParent, WB_DROPDOWN|WB_AUTOHSCROLL|WB_BORDER ) );
-            ::Size aLogicalSize( 95, 160 );
+            ::Size aLogicalSize( 75, 160 );
             ::Size aPixelSize = m_apSelectorListBox->LogicToPixel(aLogicalSize, MapMode(MapUnit::MapAppFont));
             m_apSelectorListBox->SetSizePixel( aPixelSize );
             m_apSelectorListBox->SetDropDownLineCount( 5 );
