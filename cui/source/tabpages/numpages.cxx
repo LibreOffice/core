@@ -2365,7 +2365,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     nXStart = rFmt.GetAbsLSpace() / nWidthRelation;
                     nTextOffset = rFmt.GetCharTextDistance() / nWidthRelation;
                     nNumberXPos = nXStart;
-                    sal_uInt16 nFirstLineOffset = (-rFmt.GetFirstLineOffset()) / nWidthRelation;
+                    long nFirstLineOffset = (-rFmt.GetFirstLineOffset()) / nWidthRelation;
 
                     if (nFirstLineOffset <= nNumberXPos)
                         nNumberXPos = nNumberXPos - nFirstLineOffset;
