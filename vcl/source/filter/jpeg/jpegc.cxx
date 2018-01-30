@@ -290,6 +290,7 @@ void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputStream, 
                 if (rContext.cinfo.out_color_space == JCS_CMYK)
                 {
                     // convert CMYK to RGB
+                    Scanline pScanline = pAccess->GetScanline(yIndex);
                     for (long cmyk = 0, x = 0; cmyk < nWidth * 4; cmyk += 4, ++x)
                     {
                         int color_C = 255 - rContext.pCYMKBuffer[cmyk + 0];
@@ -301,7 +302,7 @@ void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputStream, 
                         sal_uInt8 cGreen = aRangeLimit[255L - (color_M + color_K)];
                         sal_uInt8 cBlue = aRangeLimit[255L - (color_Y + color_K)];
 
-                        pAccess->SetPixel(yIndex, x, BitmapColor(cRed, cGreen, cBlue));
+                        pAccess->SetPixelOnData(pScanline, x, BitmapColor(cRed, cGreen, cBlue));
                     }
                 }
                 else
