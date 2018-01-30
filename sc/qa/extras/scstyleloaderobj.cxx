@@ -9,16 +9,15 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xstyleloader.hxx>
+
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
 
 using namespace css;
 using namespace css::uno;
 
 namespace sc_apitest {
-
-#define NUMBER_OF_TESTS 2
 
 class ScStyleLoaderObj : public CalcUnoApiTest, public apitest::XStyleLoader
 {
@@ -29,97 +28,65 @@ public:
     virtual void tearDown() override;
 
     virtual uno::Reference< uno::XInterface > init() override;
-    virtual uno::Reference< lang::XComponent  > getTargetComponent() override;
+    virtual uno::Reference< lang::XComponent > getTargetComponent() override;
     virtual uno::Reference< lang::XComponent > getSourceComponent() override;
     virtual OUString getTestURL() override;
 
     CPPUNIT_TEST_SUITE(ScStyleLoaderObj);
+
+    // XStyleLoader
     CPPUNIT_TEST(testLoadStylesFromURL);
     CPPUNIT_TEST(testLoadStylesFromDocument);
+
     CPPUNIT_TEST_SUITE_END();
-
 private:
-
-    static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxSourceComponent;
-    static uno::Reference< lang::XComponent > mxTargetComponent;
-
-
+    uno::Reference< lang::XComponent > mxSourceComponent;
+    uno::Reference< lang::XComponent > mxTargetComponent;
 };
 
-sal_Int32 ScStyleLoaderObj::nTest = 0;
-uno::Reference< lang::XComponent > ScStyleLoaderObj::mxSourceComponent;
-uno::Reference< lang::XComponent > ScStyleLoaderObj::mxTargetComponent;
-
-
 ScStyleLoaderObj::ScStyleLoaderObj()
-       : CalcUnoApiTest("sc/qa/extras/testdocuments")
+    : CalcUnoApiTest("sc/qa/extras/testdocuments")
 {
 }
-
 
 uno::Reference< uno::XInterface > ScStyleLoaderObj::init()
 {
-  return getTargetComponent();
+    return getTargetComponent();
 }
 
-
-uno::Reference< lang::XComponent > ScStyleLoaderObj::getTargetComponent(){
-  // target is always an empty document
-
-    if (mxTargetComponent.is())
-        closeDocument(mxTargetComponent);
-
-    mxTargetComponent = loadFromDesktop("private:factory/scalc");
-
+uno::Reference< lang::XComponent > ScStyleLoaderObj::getTargetComponent()
+{
+    // target is always an empty document
     return mxTargetComponent;
 }
 
-uno::Reference< lang::XComponent > ScStyleLoaderObj::getSourceComponent(){
-
-    if (mxSourceComponent.is())
-        closeDocument(mxSourceComponent);
-
-      // get the test file url
-      OUString aFileURL = getTestURL();
-
-      if(!mxSourceComponent.is())
-          mxSourceComponent = loadFromDesktop(aFileURL);
-      CPPUNIT_ASSERT_MESSAGE("Component not loaded",mxSourceComponent.is());
-
+uno::Reference< lang::XComponent > ScStyleLoaderObj::getSourceComponent()
+{
+    CPPUNIT_ASSERT_MESSAGE("Component not loaded",mxSourceComponent.is());
     return mxSourceComponent;
 }
 
-OUString ScStyleLoaderObj::getTestURL(){
-
+OUString ScStyleLoaderObj::getTestURL()
+{
       OUString aFileURL;
       createFileURL("ScStyleLoaderObj.ods", aFileURL);
-
       return aFileURL;
 }
 
 void ScStyleLoaderObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+
+    mxTargetComponent = loadFromDesktop("private:factory/scalc");
+    // get the test file url
+    OUString aFileURL = getTestURL();
+    mxSourceComponent = loadFromDesktop(aFileURL);
 }
 
 void ScStyleLoaderObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-      if (mxSourceComponent.is())
-      {
-          closeDocument(mxSourceComponent);
-          mxSourceComponent.clear();
-      }
-      if (mxTargetComponent.is())
-      {
-          closeDocument(mxTargetComponent);
-          mxTargetComponent.clear();
-      }
-    }
+    closeDocument(mxSourceComponent);
+    closeDocument(mxTargetComponent);
     CalcUnoApiTest::tearDown();
 }
 
