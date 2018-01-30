@@ -45,11 +45,7 @@ namespace sdr
         // de-register at used page
         maUsedPage.RemovePageUser(*this);
 
-        if(mpViewContact)
-        {
-            delete mpViewContact;
-            mpViewContact = nullptr;
-        }
+        mpViewContact.reset();
     }
 
     // ViewContact part
@@ -57,8 +53,8 @@ namespace sdr
     {
         if(!mpViewContact)
         {
-            const_cast< MasterPageDescriptor* >(this)->mpViewContact =
-                new sdr::contact::ViewContactOfMasterPageDescriptor(*const_cast< MasterPageDescriptor* >(this));
+            mpViewContact.reset(
+                new sdr::contact::ViewContactOfMasterPageDescriptor(*const_cast< MasterPageDescriptor* >(this)) );
         }
 
         return *mpViewContact;

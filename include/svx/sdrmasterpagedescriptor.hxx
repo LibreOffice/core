@@ -22,6 +22,7 @@
 
 #include <svx/sdrpageuser.hxx>
 #include <svx/svdsob.hxx>
+#include <memory>
 
 class SdrObject;
 class SfxItemSet;
@@ -45,7 +46,7 @@ namespace sdr
         SdrLayerIDSet                                       maVisibleLayers;
 
         // ViewContact part
-        sdr::contact::ViewContact*                      mpViewContact;
+        mutable std::unique_ptr<sdr::contact::ViewContact>      mpViewContact;
 
         void operator=(const MasterPageDescriptor& rCandidate) = delete;
 
