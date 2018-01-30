@@ -339,7 +339,7 @@ FormulaLogger::GroupScope FormulaLogger::enterGroup(
 {
     // Get the file name if available.
     const SfxObjectShell* pShell = rDoc.GetDocumentShell();
-    const SfxMedium* pMedium = pShell->GetMedium();
+    const SfxMedium* pMedium = pShell ? pShell->GetMedium() : nullptr;
     OUString aName;
     if (pMedium)
         aName = pMedium->GetURLObject().GetLastName();
