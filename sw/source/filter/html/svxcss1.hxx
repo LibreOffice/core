@@ -100,6 +100,7 @@ class SvxCSS1PropertyInfo
     void DestroyBorderInfos();
 
 public:
+    static constexpr sal_uInt16 UNSET_BORDER_DISTANCE = SAL_MAX_UINT16;
 
     OUString m_aId;             // ID for bookmarks, frame, and so
 

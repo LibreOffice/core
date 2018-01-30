@@ -356,6 +356,10 @@ void SvxCSS1BorderInfo::SetBorderLine( SvxBoxItemLine nLine, SvxBoxItem &rBoxIte
     rBoxItem.SetLine( &aBorderLine, nLine );
 }
 
+#if __cplusplus <= 201402
+constexpr sal_uInt16 SvxCSS1PropertyInfo::UNSET_BORDER_DISTANCE;
+#endif
+
 SvxCSS1PropertyInfo::SvxCSS1PropertyInfo()
 {
     for(SvxCSS1BorderInfo* & rp : m_aBorderInfos)
@@ -427,7 +431,7 @@ void SvxCSS1PropertyInfo::Clear()
 
     m_ePosition = SVX_CSS1_POS_NONE;
     m_nTopBorderDistance = m_nBottomBorderDistance =
-    m_nLeftBorderDistance = m_nRightBorderDistance = USHRT_MAX;
+    m_nLeftBorderDistance = m_nRightBorderDistance = UNSET_BORDER_DISTANCE;
 
     m_nNumberingType = SVX_NUM_CHARS_UPPER_LETTER;
     m_cBulletChar = ' ';
@@ -476,13 +480,13 @@ void SvxCSS1PropertyInfo::Merge( const SvxCSS1PropertyInfo& rProp )
         }
     }
 
-    if( USHRT_MAX != rProp.m_nTopBorderDistance )
+    if( UNSET_BORDER_DISTANCE != rProp.m_nTopBorderDistance )
         m_nTopBorderDistance = rProp.m_nTopBorderDistance;
-    if( USHRT_MAX != rProp.m_nBottomBorderDistance )
+    if( UNSET_BORDER_DISTANCE != rProp.m_nBottomBorderDistance )
         m_nBottomBorderDistance = rProp.m_nBottomBorderDistance;
-    if( USHRT_MAX != rProp.m_nLeftBorderDistance )
+    if( UNSET_BORDER_DISTANCE != rProp.m_nLeftBorderDistance )
         m_nLeftBorderDistance = rProp.m_nLeftBorderDistance;
-    if( USHRT_MAX != rProp.m_nRightBorderDistance )
+    if( UNSET_BORDER_DISTANCE != rProp.m_nRightBorderDistance )
         m_nRightBorderDistance = rProp.m_nRightBorderDistance;
 
     m_nColumnCount = rProp.m_nColumnCount;
@@ -587,10 +591,10 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
                                       sal_uInt16 nMinBorderDist,
                                       const SvxBoxItem *pDfltItem )
 {
-    bool bChg = m_nTopBorderDistance != USHRT_MAX ||
-                m_nBottomBorderDistance != USHRT_MAX ||
-                m_nLeftBorderDistance != USHRT_MAX ||
-                m_nRightBorderDistance != USHRT_MAX;
+    bool bChg = m_nTopBorderDistance != UNSET_BORDER_DISTANCE ||
+                m_nBottomBorderDistance != UNSET_BORDER_DISTANCE ||
+                m_nLeftBorderDistance != UNSET_BORDER_DISTANCE ||
+                m_nRightBorderDistance != UNSET_BORDER_DISTANCE;
 
     for( size_t i=0; !bChg && i<SAL_N_ELEMENTS(m_aBorderInfos); ++i )
         bChg = m_aBorderInfos[i]!=nullptr;
@@ -626,25 +630,25 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
         {
         case 0: nLine = SvxBoxItemLine::TOP;
                 nDist = m_nTopBorderDistance;
-                m_nTopBorderDistance = USHRT_MAX;
+                m_nTopBorderDistance = UNSET_BORDER_DISTANCE;
                 break;
         case 1: nLine = SvxBoxItemLine::BOTTOM;
                 nDist = m_nBottomBorderDistance;
-                m_nBottomBorderDistance = USHRT_MAX;
+                m_nBottomBorderDistance = UNSET_BORDER_DISTANCE;
                 break;
         case 2: nLine = SvxBoxItemLine::LEFT;
                 nDist = m_nLeftBorderDistance;
-                m_nLeftBorderDistance = USHRT_MAX;
+                m_nLeftBorderDistance = UNSET_BORDER_DISTANCE;
                 break;
         case 3: nLine = SvxBoxItemLine::RIGHT;
                 nDist = m_nRightBorderDistance;
-                m_nRightBorderDistance = USHRT_MAX;
+                m_nRightBorderDistance = UNSET_BORDER_DISTANCE;
                 break;
         }
 
         if( aBoxItem.GetLine( nLine ) )
         {
-            if( USHRT_MAX == nDist )
+            if( UNSET_BORDER_DISTANCE == nDist )
                 nDist = aBoxItem.GetDistance( nLine );
 
             if( nDist < nMinBorderDist )
@@ -2475,8 +2479,8 @@ static bool ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
             long nTmp = pExpr->GetSLength();
             if( nTmp < 0 )
                 nTmp = 0;
-            else if( nTmp > USHRT_MAX-1 )
-                nTmp = USHRT_MAX-1;
+            else if( nTmp > SvxCSS1PropertyInfo::UNSET_BORDER_DISTANCE-1 )
+                nTmp = SvxCSS1PropertyInfo::UNSET_BORDER_DISTANCE-1;
             nDist = static_cast<sal_uInt16>(nTmp);
             bSet = true;
         }
@@ -2491,8 +2495,8 @@ static bool ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
                 if( nPWidth < 0 )
                     nPWidth = 0;
                 SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
-                if( nPWidth > USHRT_MAX-1 )
-                    nPWidth = USHRT_MAX-1;
+                if( nPWidth > SvxCSS1PropertyInfo::UNSET_BORDER_DISTANCE-1 )
+                    nPWidth = SvxCSS1PropertyInfo::UNSET_BORDER_DISTANCE-1;
                 nDist = static_cast<sal_uInt16>(nPWidth);
                 bSet = true;
             }
