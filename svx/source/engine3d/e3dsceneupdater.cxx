@@ -51,7 +51,7 @@ E3DModifySceneSnapRectUpdater::E3DModifySceneSnapRectUpdater(const SdrObject* pO
                 else
                 {
                     // secure current 3D transformation stack
-                    mpViewInformation3D = new drawinglayer::geometry::ViewInformation3D(rVCScene.getViewInformation3D(aAllContentRange));
+                    mpViewInformation3D.reset( new drawinglayer::geometry::ViewInformation3D(rVCScene.getViewInformation3D(aAllContentRange)) );
                 }
             }
         }
@@ -83,8 +83,7 @@ E3DModifySceneSnapRectUpdater::~E3DModifySceneSnapRectUpdater()
                     mpViewInformation3D->getDeviceToView(),
                     mpViewInformation3D->getViewTime(),
                     mpViewInformation3D->getExtendedInformationSequence());
-                delete mpViewInformation3D;
-                mpViewInformation3D = pNew;
+                mpViewInformation3D.reset(pNew);
             }
 
             // transform content range to scene-relative coordinates using old 3d transformation stack
@@ -111,8 +110,6 @@ E3DModifySceneSnapRectUpdater::~E3DModifySceneSnapRectUpdater()
             }
         }
     }
-
-    delete mpViewInformation3D;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
