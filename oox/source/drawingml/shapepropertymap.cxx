@@ -23,6 +23,8 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+
 #include <oox/helper/modelobjecthelper.hxx>
 #include <oox/token/properties.hxx>
 
@@ -194,12 +196,13 @@ bool ShapePropertyMap::setFillBitmapUrl( sal_Int32 nPropId, const Any& rValue )
     return false;
 }
 
-bool ShapePropertyMap::setFillBitmapNameFromUrl( const Any& rValue )
+bool ShapePropertyMap::setFillBitmapNameFromUrl(const Any& rValue)
 {
-    if( rValue.has< OUString >() )
+    if (rValue.has<uno::Reference<graphic::XGraphic>>())
     {
-        OUString aBitmapUrlName = mrModelObjHelper.insertFillBitmapUrl( rValue.get< OUString >() );
-        return !aBitmapUrlName.isEmpty() && setProperty( PROP_FillBitmapName, aBitmapUrlName );
+        auto xGraphic = rValue.get<uno::Reference<graphic::XGraphic>>();
+        OUString aBitmapUrlName = mrModelObjHelper.insertFillBitmapXGraphic(xGraphic);
+        return !aBitmapUrlName.isEmpty() && setProperty(PROP_FillBitmapName, aBitmapUrlName);
     }
     return false;
 }

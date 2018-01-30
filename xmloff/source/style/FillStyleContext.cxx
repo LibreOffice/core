@@ -18,6 +18,8 @@
  */
 
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 #include "FillStyleContext.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/GradientStyle.hxx>
@@ -158,34 +160,61 @@ SvXMLImportContextRef XMLBitmapStyleContext::CreateChildContext( sal_uInt16 nPre
 
 void XMLBitmapStyleContext::EndElement()
 {
-    OUString sURL;
-    maAny >>= sURL;
-
-    if( sURL.isEmpty() && mxBase64Stream.is() )
+    if (maAny.has<uno::Reference<graphic::XGraphic>>())
     {
-        sURL = GetImport().ResolveGraphicObjectURLFromBase64( mxBase64Stream );
-        mxBase64Stream = nullptr;
-        maAny <<= sURL;
-    }
+        uno::Reference<container::XNameContainer> xBitmapContainer(GetImport().GetBitmapHelper());
 
-    uno::Reference< container::XNameContainer > xBitmap( GetImport().GetBitmapHelper() );
+        uno::Reference<graphic::XGraphic> xGraphic = maAny.get<uno::Reference<graphic::XGraphic>>();
+        uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
 
-    try
-    {
-        if(xBitmap.is())
+        try
         {
-            if( xBitmap->hasByName( maStrName ) )
+            if (xBitmapContainer.is())
             {
-                xBitmap->replaceByName( maStrName, maAny );
-            }
-            else
-            {
-                xBitmap->insertByName( maStrName, maAny );
+                if (xBitmapContainer->hasByName(maStrName))
+                {
+                    xBitmapContainer->replaceByName(maStrName, uno::Any(xBitmap));
+                }
+                else
+                {
+                    xBitmapContainer->insertByName(maStrName, uno::Any(xBitmap));
+                }
             }
         }
+        catch (container::ElementExistException&)
+        {}
     }
-    catch( container::ElementExistException& )
-    {}
+    else
+    {
+        OUString sURL;
+        maAny >>= sURL;
+
+        if( sURL.isEmpty() && mxBase64Stream.is() )
+        {
+            sURL = GetImport().ResolveGraphicObjectURLFromBase64( mxBase64Stream );
+            mxBase64Stream = nullptr;
+            maAny <<= sURL;
+        }
+
+        uno::Reference< container::XNameContainer > xBitmap( GetImport().GetBitmapHelper() );
+
+        try
+        {
+            if(xBitmap.is())
+            {
+                if( xBitmap->hasByName( maStrName ) )
+                {
+                    xBitmap->replaceByName( maStrName, maAny );
+                }
+                else
+                {
+                    xBitmap->insertByName( maStrName, maAny );
+                }
+            }
+        }
+        catch( container::ElementExistException& )
+        {}
+    }
 }
 
 bool XMLBitmapStyleContext::IsTransient() const
