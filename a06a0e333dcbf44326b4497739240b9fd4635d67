@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_fa5e0744",
+        "filename": "sc/source/core/data/column4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-30T12:24:01Z",
+      "side": 1,
+      "message": "Nitpick: as they are references use the r... prefix, so rThisCellDrawObjects and rOtherCellDrawObjects.",
+      "revId": "a06a0e333dcbf44326b4497739240b9fd4635d67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_da49438d",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2013,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-01-30T12:24:01Z",
+      "side": 1,
+      "message": "pObjData may be nullptr returned from GetObjData() so must still be checked.",
+      "revId": "a06a0e333dcbf44326b4497739240b9fd4635d67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
