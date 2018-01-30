@@ -26,8 +26,6 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-#define NUMBER_OF_TESTS 2
-
 class ScLabelRangeObj : public CalcUnoApiTest, public apitest::XLabelRange
 {
 public:
@@ -46,12 +44,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static sal_Int32 nTest;
-    static uno::Reference<lang::XComponent> mxComponent;
+    uno::Reference<lang::XComponent> mxComponent;
 };
-
-sal_Int32 ScLabelRangeObj::nTest = 0;
-uno::Reference<lang::XComponent> ScLabelRangeObj::mxComponent;
 
 ScLabelRangeObj::ScLabelRangeObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
@@ -60,10 +54,6 @@ ScLabelRangeObj::ScLabelRangeObj()
 
 uno::Reference<uno::XInterface> ScLabelRangeObj::init()
 {
-    // create a calc document
-    if (!mxComponent.is())
-        mxComponent = loadFromDesktop("private:factory/scalc");
-
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
@@ -82,19 +72,14 @@ uno::Reference<uno::XInterface> ScLabelRangeObj::init()
 
 void ScLabelRangeObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    // create calc document
+    mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScLabelRangeObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
