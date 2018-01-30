@@ -57,16 +57,14 @@ SettingsConfigItem::~SettingsConfigItem()
 
 void SettingsConfigItem::ImplCommit()
 {
-    std::unordered_map< OUString, SmallOUStrMap >::const_iterator group;
-
     for (auto const& setting : m_aSettings)
     {
         OUString aKeyName( setting.first );
         /*bool bAdded =*/ AddNode( OUString(), aKeyName );
-        Sequence< PropertyValue > aValues( group->second.size() );
+        Sequence< PropertyValue > aValues( setting.second.size() );
         PropertyValue* pValues = aValues.getArray();
         int nIndex = 0;
-        for (auto const& elem : group->second)
+        for (auto const& elem : setting.second)
         {
             pValues[nIndex].Name    = aKeyName + "/" + elem.first;
             pValues[nIndex].Handle  = 0;
