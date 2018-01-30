@@ -23,6 +23,7 @@
 #include <svx/sdr/animation/objectanimator.hxx>
 #include <svx/svxdllapi.h>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <memory>
 
 class SdrLayerIDSet;
 namespace tools { class Rectangle; }
@@ -67,7 +68,7 @@ private:
     sdr::animation::primitiveAnimator               maPrimitiveAnimator;
 
     // the EventHandler for e.g. asynchronious loading of graphics
-    sdr::event::TimerEventHandler*                  mpEventHandler;
+    std::unique_ptr<sdr::event::TimerEventHandler>  mpEventHandler;
 
     // The redirector. If set it is used to pipe all supported calls
     // to the redirector

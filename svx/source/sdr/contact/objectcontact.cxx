@@ -66,12 +66,8 @@ ObjectContact::~ObjectContact() COVERITY_NOEXCEPT_FALSE
     DBG_ASSERT(maViewObjectContactVector.empty(), "Corrupted ViewObjectContactList (!)");
 
     // delete the EventHandler. This will destroy all still contained events.
-    if(mpEventHandler)
-    {
-        // If there are still Events registered, something has went wrong
-        delete mpEventHandler;
-        mpEventHandler = nullptr;
-    }
+    mpEventHandler.reset();
+    // If there are still Events registered, something has went wrong
 }
 
 // LazyInvalidate request. Default implementation directly handles
@@ -151,7 +147,7 @@ sdr::event::TimerEventHandler& ObjectContact::GetEventHandler() const
 {
     if(!HasEventHandler())
     {
-        const_cast< ObjectContact* >(this)->mpEventHandler = new sdr::event::TimerEventHandler();
+        const_cast< ObjectContact* >(this)->mpEventHandler.reset( new sdr::event::TimerEventHandler() );
     }
     return *mpEventHandler;
 }
