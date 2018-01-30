@@ -308,17 +308,20 @@ namespace vclcanvas
 
                         default:
                         {
+                            Scanline pScan  = pWriteAccess->GetScanline( y );
+                            Scanline pAScan = pAlphaWriteAccess->GetScanline( y );
+
                             for( long x=rect.X1;
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
                             {
-                                pWriteAccess->SetPixel( y, x, BitmapColor( data[ nCurrPos   ],
+                                pWriteAccess->SetPixelOnData( pScan, x, BitmapColor( data[ nCurrPos   ],
                                                                            data[ nCurrPos+1 ],
                                                                            data[ nCurrPos+2 ] ) );
                                 nCurrPos += 3;
 
                                 // cast to unsigned byte, for correct subtraction result
-                                pAlphaWriteAccess->SetPixel( y, x,
+                                pAlphaWriteAccess->SetPixelOnData( pAScan, x,
                                                              BitmapColor(
                                                                  static_cast<sal_uInt8>(255 -
                                                                                    static_cast<sal_uInt8>(data[ nCurrPos++ ])) ) );
@@ -387,11 +390,13 @@ namespace vclcanvas
 
                         default:
                         {
+                            Scanline pScan = pWriteAccess->GetScanline( y );
+
                             for( long x=rect.X1;
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
                             {
-                                pWriteAccess->SetPixel( y, x, BitmapColor( data[ nCurrPos   ],
+                                pWriteAccess->SetPixelOnData( pScan, x, BitmapColor( data[ nCurrPos   ],
                                                                            data[ nCurrPos+1 ],
                                                                            data[ nCurrPos+2 ] ) );
                                 nCurrPos += 4; // skip three colors, _plus_ alpha

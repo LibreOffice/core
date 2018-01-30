@@ -961,10 +961,10 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
 
         for (sal_uInt16 ny = 0; ny < nHeight; ++ny)
         {
+            Scanline pScanline = pAcc->GetScanline( ny );
             sal_uInt16 nx = 0;
             if ( nRowBytes < 8 || nPackType == 1 )
             {
-                Scanline pScanline = pAcc->GetScanline(ny);
                 for (size_t i = 0; i < nWidth; ++i)
                 {
                     pPict->ReadUInt16( nD );
@@ -1004,7 +1004,6 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                            this case. Have a look at 32bit, there I changed the
                            encoding, so that it is used a straight forward array
                          */
-                        Scanline pScanline = pAcc->GetScanline(ny);
                         for (size_t i = 0; i < nCount; ++i)
                         {
                             pPict->ReadUInt16( nD );
@@ -1025,7 +1024,6 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                         nRed = static_cast<sal_uInt8>( nD >> 7 );
                         nGreen = static_cast<sal_uInt8>( nD >> 2 );
                         nBlue = static_cast<sal_uInt8>( nD << 3 );
-                        Scanline pScanline = pAcc->GetScanline(ny);
                         for (size_t i = 0; i < nCount; ++i)
                         {
                             pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(nRed, nGreen, nBlue));

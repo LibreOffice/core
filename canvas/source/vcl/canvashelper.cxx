@@ -1094,9 +1094,11 @@ namespace vclcanvas
 
                     default:
                     {
+                        Scanline pScan = pWriteAccess->GetScanline( y );
+
                         for( x=0; x<nWidth; ++x )
                         {
-                            pWriteAccess->SetPixel( y, x, BitmapColor( data[ nCurrPos   ],
+                            pWriteAccess->SetPixelOnData( pScan, x, BitmapColor( data[ nCurrPos   ],
                                                                        data[ nCurrPos+1 ],
                                                                        data[ nCurrPos+2 ] ) );
                             nCurrPos += 4;

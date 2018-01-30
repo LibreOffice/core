@@ -248,9 +248,10 @@ void BitmapWriteAccess::FillRect( const tools::Rectangle& rRect )
 
             for (long nY = nStartY; nY <= nEndY; nY++)
             {
+                Scanline pScanline = GetScanline( nY );
                 for (long nX = nStartX; nX <= nEndX; nX++)
                 {
-                    SetPixel(nY, nX, rFillColor);
+                    SetPixelOnData(pScanline, nX, rFillColor);
                 }
             }
         }
