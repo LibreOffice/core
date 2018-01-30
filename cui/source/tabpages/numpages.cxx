@@ -2506,13 +2506,13 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                 }
                 nXStart /= 2;
                 nXStart += 2;
-                sal_uInt16 nTextOffset = 2 * nXStep;
+                long nTextOffset = 2 * nXStep;
                 if (SVX_NUM_BITMAP == (rFmt.GetNumberingType()&(~LINK_TOKEN)))
                 {
                     if (rFmt.IsShowSymbol())
                     {
                         sal_uInt16 nYMiddle = nYStart + ( nFontHeight / 2 );
-                        nTextOffset = static_cast<sal_uInt16>(lcl_DrawGraphic(pVDev.get(), rFmt, nXStart, nYMiddle, nWidthRelation));
+                        nTextOffset = lcl_DrawGraphic(pVDev.get(), rFmt, nXStart, nYMiddle, nWidthRelation);
                         nTextOffset = nTextOffset + nXStep;
                     }
                 }
@@ -2520,7 +2520,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                 {
                     if (rFmt.IsShowSymbol())
                     {
-                        nTextOffset =  static_cast<sal_uInt16>(lcl_DrawBullet(pVDev.get(), rFmt, nXStart, nYStart, aStdFont.GetFontSize()));
+                        nTextOffset =  lcl_DrawBullet(pVDev.get(), rFmt, nXStart, nYStart, aStdFont.GetFontSize());
                         nTextOffset = nTextOffset + nXStep;
                     }
                 }
@@ -2540,7 +2540,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     OUString aText(pActNum->MakeNumString(aNum));
                     pVDev->DrawText(Point(nXStart, nYStart), aText);
                     pVDev->SetFont(aStdFont);
-                    nTextOffset = static_cast<sal_uInt16>(pVDev->GetTextWidth(aText));
+                    nTextOffset = pVDev->GetTextWidth(aText);
                     nTextOffset = nTextOffset + nXStep;
                     nPreNum++;
                 }
