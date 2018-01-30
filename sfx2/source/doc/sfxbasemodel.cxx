@@ -3062,8 +3062,11 @@ void SfxBaseModel::postEvent_Impl( const OUString& aName, const Reference< frame
     if ( impl_isDisposed() )
         return;
 
-    // keep m_pData alive, if notified target would close the document
+    // keep m_pData alive, if notified target would dispose the document
     std::shared_ptr<IMPL_SfxBaseModel_DataContainer> pData(m_pData);
+
+    // also make sure this object doesn't self-destruct while notifying
+    rtl::Reference<SfxBaseModel> self(this);
 
     DBG_ASSERT( !aName.isEmpty(), "Empty event name!" );
     if (aName.isEmpty())
