@@ -61,8 +61,6 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/filter/source/graphicfilter/idxf/dxfentrd.hxx"))
         return true;
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/framework/source/uielement/popuptoolbarcontroller.cxx"))
-        return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/sc/source/ui/vba/vbastyles.hxx"))
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/sd/inc/Outliner.hxx"))
@@ -98,6 +96,8 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
             return false;
         for (const FieldDecl* baseFieldDecl : baseCXXRecordDecl->fields())
         {
+            // TODO look for overlaps even with private fields
+
             if (baseFieldDecl->getAccess() == AS_private
                 || !baseFieldDecl->getDeclName().isIdentifier()
                 || fieldDecl->getName() != baseFieldDecl->getName()) {
