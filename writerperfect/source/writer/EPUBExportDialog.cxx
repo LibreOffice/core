@@ -70,11 +70,11 @@ sal_Int32 PositionToVersion(sal_Int32 nPosition)
 namespace writerperfect
 {
 
-EPUBExportDialog::EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsHashMap &rFilterData, uno::Reference<uno::XComponentContext> xContext, const css::uno::Reference<css::lang::XComponent> &xDocument)
+EPUBExportDialog::EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsHashMap &rFilterData, uno::Reference<uno::XComponentContext> xContext, css::uno::Reference<css::lang::XComponent> xDocument)
     : ModalDialog(pParent, "EpubDialog", "writerperfect/ui/exportepub.ui"),
       mxContext(std::move(xContext)),
       mrFilterData(rFilterData),
-      mxSourceDocument(xDocument)
+      mxSourceDocument(std::move(xDocument))
 {
     get(m_pVersion, "versionlb");
     assert(PositionToVersion(m_pVersion->GetSelectedEntryPos()) == EPUBExportFilter::GetDefaultVersion());

@@ -19,10 +19,12 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "exp/xmlimp.hxx"
-
 namespace writerperfect
 {
+namespace exp
+{
+struct FixedLayoutPage;
+}
 
 /// EPUB export XFilter implementation.
 class EPUBExportFilter : public cppu::WeakImplHelper
