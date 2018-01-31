@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_c87259e5",
+        "filename": "connectivity/source/inc/ado/Aolevariant.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-31T12:36:21Z",
+      "side": 1,
+      "message": "not sure if it\u0027s relevant that this include must precede certain other includes; but if it is, there should probably be a comment about that",
+      "revId": "952c997677fc3b446bbdab2f3a701884708fdd27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
