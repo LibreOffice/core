@@ -24,9 +24,7 @@
 #include <wchar.h>
 
 #define WIN32_LEAN_AND_MEAN
-#pragma warning(push, 1)
 #include <windows.h>
-#pragma warning(pop)
 
 #include <tools/pathutils.hxx>
 
