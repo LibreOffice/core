@@ -150,13 +150,13 @@ GdkScreen *
 GtkSalSystem::getScreenMonitorFromIdx (int nIdx, gint &nMonitor)
 {
     GdkScreen *pScreen = nullptr;
-    for (ScreenMonitors_t::const_iterator aIt(maScreenMonitors.begin()), aEnd(maScreenMonitors.end()); aIt != aEnd; ++aIt)
+    for (auto const& screenMonitor : maScreenMonitors)
     {
-        pScreen = aIt->first;
+        pScreen = screenMonitor.first;
         if (!pScreen)
             break;
-        if (nIdx >= aIt->second)
-            nIdx -= aIt->second;
+        if (nIdx >= screenMonitor.second)
+            nIdx -= screenMonitor.second;
         else
             break;
     }
@@ -173,11 +173,11 @@ int
 GtkSalSystem::getScreenIdxFromPtr (GdkScreen *pScreen)
 {
     int nIdx = 0;
-    for (ScreenMonitors_t::const_iterator aIt(maScreenMonitors.begin()), aEnd(maScreenMonitors.end()); aIt != aEnd; ++aIt)
+    for (auto const& screenMonitor : maScreenMonitors)
     {
-        if (aIt->first == pScreen)
+        if (screenMonitor.first == pScreen)
             return nIdx;
-        nIdx += aIt->second;
+        nIdx += screenMonitor.second;
     }
     g_warning ("failed to find screen %p", pScreen);
     return 0;

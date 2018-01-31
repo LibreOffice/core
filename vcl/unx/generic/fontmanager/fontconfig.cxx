@@ -269,16 +269,15 @@ namespace
         sFullMatch += OString('-');
         sFullMatch += OUStringToOString(rLangTag.getCountry().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8);
 
-        std::vector<lang_and_element>::const_iterator aEnd = elements.end();
         bool alreadyclosematch = false;
         bool found_fallback_englishname = false;
-        for( std::vector<lang_and_element>::const_iterator aIter = elements.begin(); aIter != aEnd; ++aIter )
+        for (auto const& element : elements)
         {
-            const char *pLang = reinterpret_cast<const char*>(aIter->first);
+            const char *pLang = reinterpret_cast<const char*>(element.first);
             if( sFullMatch == pLang)
             {
                 // both language and country match
-                candidate = aIter->second;
+                candidate = element.second;
                 break;
             }
             else if( alreadyclosematch )
@@ -290,7 +289,7 @@ namespace
             else if( sLangMatch == pLang)
             {
                 // just the language matches
-                candidate = aIter->second;
+                candidate = element.second;
                 alreadyclosematch = true;
             }
             else if( found_fallback_englishname )
@@ -303,7 +302,7 @@ namespace
             {
                 // select a fallback candidate of the first english element
                 // name
-                candidate = aIter->second;
+                candidate = element.second;
                 found_fallback_englishname = true;
             }
         }
@@ -315,10 +314,9 @@ namespace
 void FontCfgWrapper::cacheLocalizedFontNames(const FcChar8 *origfontname, const FcChar8 *bestfontname,
     const std::vector< lang_and_element > &lang_and_elements)
 {
-    std::vector<lang_and_element>::const_iterator aEnd = lang_and_elements.end();
-    for (std::vector<lang_and_element>::const_iterator aIter = lang_and_elements.begin(); aIter != aEnd; ++aIter)
+    for (auto const& element : lang_and_elements)
     {
-        const char *candidate = reinterpret_cast<const char*>(aIter->second);
+        const char *candidate = reinterpret_cast<const char*>(element.second);
         if (rtl_str_compare(candidate, reinterpret_cast<const char*>(bestfontname)) != 0)
             m_aFontNameToLocalized[OString(candidate)] = OString(reinterpret_cast<const char*>(bestfontname));
     }
@@ -585,11 +583,11 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int>& o
                 // a collection entry, get the correct index
                 if( eIndexRes == FcResultMatch && nCollectionEntry != -1 )
                 {
-                    for (auto it = aFonts.begin(); it != aFonts.end(); ++it)
+                    for (auto & font : aFonts)
                     {
-                        if( (*it)->m_nCollectionEntry == nCollectionEntry )
+                        if( font->m_nCollectionEntry == nCollectionEntry )
                         {
-                            xUpdate = std::move(*it);
+                            xUpdate = std::move(font);
                             break;
                         }
                     }

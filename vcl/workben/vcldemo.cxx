@@ -180,8 +180,8 @@ public:
     static std::vector<tools::Rectangle> partition(const tools::Rectangle &rRect, int nX, int nY)
     {
         std::vector<tools::Rectangle> aRegions = partition(rRect.GetSize(), nX, nY);
-        for (auto it = aRegions.begin(); it != aRegions.end(); ++it)
-            it->Move(rRect.Left(), rRect.Top());
+        for (auto & region : aRegions)
+            region.Move(rRect.Left(), rRect.Top());
 
         return aRegions;
     }
@@ -1506,8 +1506,8 @@ public:
     }
     void Invalidate()
     {
-        for (size_t i = 0; i < maInvalidates.size(); ++i)
-            maInvalidates[i]->Invalidate();
+        for (auto const& invalidate : maInvalidates)
+            invalidate->Invalidate();
     }
 };
 

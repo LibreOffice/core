@@ -41,12 +41,12 @@ X11GlyphCache::~X11GlyphCache()
     for( int i = 0; i < nMaxScreens; i++ )
     {
         SalDisplay::RenderEntryMap& rMap = pSalDisp->GetRenderEntries( SalX11Screen (i) );
-        for( SalDisplay::RenderEntryMap::iterator it = rMap.begin(); it != rMap.end(); ++it )
+        for (auto const& elem : rMap)
         {
-            if( it->second.m_aPixmap )
-                ::XFreePixmap( pX11Disp, it->second.m_aPixmap );
-            if( it->second.m_aPicture )
-                rRenderPeer.FreePicture( it->second.m_aPicture );
+            if( elem.second.m_aPixmap )
+                ::XFreePixmap( pX11Disp, elem.second.m_aPixmap );
+            if( elem.second.m_aPicture )
+                rRenderPeer.FreePicture( elem.second.m_aPicture );
         }
         rMap.clear();
     }

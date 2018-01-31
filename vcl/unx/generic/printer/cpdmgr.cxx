@@ -59,7 +59,8 @@ void CPDManager::onNameAcquired (GDBusConnection *connection,
 
     CPDManager* current = static_cast<CPDManager*>(user_data);
     std::vector<std::pair<std::string, gchar*>> backends = current->getTempBackends();
-    for (std::vector<std::pair<std::string, gchar*>>::iterator it = backends.begin(); it != backends.end(); ++it) {
+    for (auto const& backend : backends)
+    {
         GDBusProxy *proxy;
         // Get Interface for introspection
         g_file_get_contents (BACKEND_INTERFACE, &contents, nullptr, nullptr);
@@ -67,12 +68,12 @@ void CPDManager::onNameAcquired (GDBusConnection *connection,
         proxy = g_dbus_proxy_new_sync (connection,
                                        G_DBUS_PROXY_FLAGS_NONE,
                                        introspection_data->interfaces[0],
-                                       it->first.c_str(),
-                                       it->second,
+                                       backend.first.c_str(),
+                                       backend.second,
                                        "org.openprinting.PrintBackend",
                                        nullptr,
                                        nullptr);
-        g_free(it->second);
+        g_free(backend.second);
         g_assert (proxy != nullptr);
         g_dbus_proxy_call(proxy, "ActivateBackend",
                           nullptr,
@@ -296,16 +297,13 @@ CPDManager::~CPDManager()
     g_dbus_connection_close_sync (m_pConnection,
                                   nullptr,
                                   nullptr);
-    std::unordered_map<std::string, GDBusProxy *>::iterator it = m_pBackends.begin();
-    for(; it != m_pBackends.end(); ++it)
+    for (auto const& backend : m_pBackends)
     {
-        g_object_unref(it->second);
+        g_object_unref(backend.second);
     }
-    std::unordered_map<OUString, CPDPrinter *>::iterator dest_it =
-        m_aCPDDestMap.begin();
-    for(; dest_it != m_aCPDDestMap.end(); ++dest_it)
+    for (auto const& backend : m_aCPDDestMap)
     {
-        free(dest_it->second);
+        free(backend.second);
     }
 #endif
 }
@@ -433,21 +431,21 @@ const PPDParser* CPDManager::createCPDParser( const OUString& rPrinter )
             PPDContext& rContext = m_aDefaultContexts[ aPrinter ];
             rContext.setParser( pNewParser );
             setDefaultPaper( rContext );
-            std::vector<PPDKey*>::iterator keyit;
-            std::vector<OUString>::iterator defit;
-            for (keyit = keys.begin(), defit = default_values.begin(); keyit != keys.end(); keyit++, defit++ ) {
-                pKey = *keyit;
-                const PPDValue* p1Value = pKey->getValue( *defit );
+            std::vector<OUString>::iterator defit = default_values.begin();
+            for (auto const& key : keys)
+            {
+                const PPDValue* p1Value = key->getValue( *defit );
                 if( p1Value )
                 {
-                    if( p1Value != pKey->getDefaultValue() )
+                    if( p1Value != key->getDefaultValue() )
                     {
-                        rContext.setValue( pKey, p1Value, true );
+                        rContext.setValue( key, p1Value, true );
                         SAL_INFO("vcl.unx.print", "key " << pKey->getKey() << " is set to " << *defit);
                     }
                     else
                         SAL_INFO("vcl.unx.print", "key " << pKey->getKey() << " is defaulted to " << *defit);
                 }
+                ++defit;
             }
 
             rInfo.m_pParser = pNewParser;
