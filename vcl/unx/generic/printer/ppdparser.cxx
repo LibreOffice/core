@@ -445,9 +445,9 @@ void PPDParser::initPPDFiles(PPDCache &rPPDCache)
     // check installation directories
     std::vector< OUString > aPathList;
     psp::getPrinterPathList( aPathList, PRINTER_PPDDIR );
-    for( std::vector< OUString >::const_iterator ppd_it = aPathList.begin(); ppd_it != aPathList.end(); ++ppd_it )
+    for (auto const& path : aPathList)
     {
-        INetURLObject aPPDDir( *ppd_it, INetProtocol::File, INetURLObject::EncodeMechanism::All );
+        INetURLObject aPPDDir( path, INetProtocol::File, INetURLObject::EncodeMechanism::All );
         scanPPDDir( aPPDDir.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     }
     if( rPPDCache.pAllPPDFiles->find( OUString( "SGENPRT" ) ) == rPPDCache.pAllPPDFiles->end() )
@@ -776,9 +776,9 @@ PPDParser::PPDParser( const OUString& rFile ) :
 #if OSL_DEBUG_LEVEL > 1
     SAL_INFO("vcl.unx.print", "acquired " << m_aKeys.size()
             << " Keys from PPD " << m_aFile << ":");
-    for( PPDParser::hash_type::const_iterator it = m_aKeys.begin(); it != m_aKeys.end(); ++it )
+    for (auto const& key : m_aKeys)
     {
-        const PPDKey* pKey = it->second;
+        const PPDKey* pKey = key.second;
         char const* pSetupType = "<unknown>";
         switch( pKey->m_eSetupType )
         {
@@ -815,12 +815,12 @@ PPDParser::PPDParser( const OUString& rFile ) :
     }
     SAL_INFO("vcl.unx.print",
             "constraints: (" << m_aConstraints.size() << " found)");
-    for( std::vector< PPDConstraint >::const_iterator cit = m_aConstraints.begin(); cit != m_aConstraints.end(); ++cit )
+    for (auto const& constraint : m_aConstraints)
     {
-        SAL_INFO("vcl.unx.print", "*\"" << cit->m_pKey1->getKey() << "\" \""
-                << (cit->m_pOption1 ? cit->m_pOption1->m_aOption : "<nil>")
-                << "\" *\"" << cit->m_pKey2->getKey() << "\" \""
-                << (cit->m_pOption2 ? cit->m_pOption2->m_aOption : "<nil>")
+        SAL_INFO("vcl.unx.print", "*\"" << constraint.m_pKey1->getKey() << "\" \""
+                << (constraint.m_pOption1 ? constraint.m_pOption1->m_aOption : "<nil>")
+                << "\" *\"" << constraint.m_pKey2->getKey() << "\" \""
+                << (constraint.m_pOption2 ? constraint.m_pOption2->m_aOption : "<nil>")
                 << "\"");
     }
 #endif
@@ -883,8 +883,8 @@ PPDParser::PPDParser( const OUString& rFile ) :
 
 PPDParser::~PPDParser()
 {
-    for( PPDParser::hash_type::iterator it = m_aKeys.begin(); it != m_aKeys.end(); ++it )
-        delete it->second;
+    for (auto const& key : m_aKeys)
+        delete key.second;
     m_pTranslator.reset();
 }
 
@@ -1815,16 +1815,16 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
         return true;
 
     const ::std::vector< PPDParser::PPDConstraint >& rConstraints( m_pParser->getConstraints() );
-    for( ::std::vector< PPDParser::PPDConstraint >::const_iterator it = rConstraints.begin(); it != rConstraints.end(); ++it )
+    for (auto const& constraint : rConstraints)
     {
-        const PPDKey* pLeft     = it->m_pKey1;
-        const PPDKey* pRight    = it->m_pKey2;
+        const PPDKey* pLeft     = constraint.m_pKey1;
+        const PPDKey* pRight    = constraint.m_pKey2;
         if( ! pLeft || ! pRight || ( pKey != pLeft && pKey != pRight ) )
             continue;
 
         const PPDKey* pOtherKey = pKey == pLeft ? pRight : pLeft;
-        const PPDValue* pOtherKeyOption = pKey == pLeft ? it->m_pOption2 : it->m_pOption1;
-        const PPDValue* pKeyOption = pKey == pLeft ? it->m_pOption1 : it->m_pOption2;
+        const PPDValue* pOtherKeyOption = pKey == pLeft ? constraint.m_pOption2 : constraint.m_pOption1;
+        const PPDValue* pKeyOption = pKey == pLeft ? constraint.m_pOption1 : constraint.m_pOption2;
 
         // syntax *Key1 option1 *Key2 option2
         if( pKeyOption && pOtherKeyOption )
@@ -1887,15 +1887,14 @@ char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
     rBytes = 0;
     if( m_aCurrentValues.empty() )
         return nullptr;
-    hash_type::const_iterator it;
-    for( it = m_aCurrentValues.begin(); it != m_aCurrentValues.end(); ++it )
+    for (auto const& elem : m_aCurrentValues)
     {
-        OString aCopy(OUStringToOString(it->first->getKey(), RTL_TEXTENCODING_MS_1252));
+        OString aCopy(OUStringToOString(elem.first->getKey(), RTL_TEXTENCODING_MS_1252));
         rBytes += aCopy.getLength();
         rBytes += 1; // for ':'
-        if( it->second )
+        if( elem.second )
         {
-            aCopy = OUStringToOString(it->second->m_aOption, RTL_TEXTENCODING_MS_1252);
+            aCopy = OUStringToOString(elem.second->m_aOption, RTL_TEXTENCODING_MS_1252);
             rBytes += aCopy.getLength();
         }
         else
@@ -1906,15 +1905,15 @@ char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
     char* pBuffer = new char[ rBytes ];
     memset( pBuffer, 0, rBytes );
     char* pRun = pBuffer;
-    for( it = m_aCurrentValues.begin(); it != m_aCurrentValues.end(); ++it )
+    for (auto const& elem : m_aCurrentValues)
     {
-        OString aCopy(OUStringToOString(it->first->getKey(), RTL_TEXTENCODING_MS_1252));
+        OString aCopy(OUStringToOString(elem.first->getKey(), RTL_TEXTENCODING_MS_1252));
         int nBytes = aCopy.getLength();
         memcpy( pRun, aCopy.getStr(), nBytes );
         pRun += nBytes;
         *pRun++ = ':';
-        if( it->second )
-            aCopy = OUStringToOString(it->second->m_aOption, RTL_TEXTENCODING_MS_1252);
+        if( elem.second )
+            aCopy = OUStringToOString(elem.second->m_aOption, RTL_TEXTENCODING_MS_1252);
         else
             aCopy = "*nil";
         nBytes = aCopy.getLength();

@@ -1574,8 +1574,8 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
     SAL_WARN_IF( !systemChildren.empty(), "vcl", "WinSalFrame::SetParent() parent of living system child window will be destroyed!");
 
     // reparent children before old parent is destroyed
-    for( ::std::vector< WinSalFrame* >::iterator iChild = children.begin(); iChild != children.end(); ++iChild )
-        ImplSetParentFrame( *iChild, hWnd, false );
+    for (auto & child : children)
+        ImplSetParentFrame( child, hWnd, false );
 
     children.clear();
     systemChildren.clear();

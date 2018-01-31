@@ -294,19 +294,19 @@ bool GenPspGraphics::setClipRegion( const vcl::Region& i_rClip )
     i_rClip.GetRegionRectangles(aRectangles);
     m_pPrinterGfx->BeginSetClipRegion();
 
-    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+    for (auto const& rectangle : aRectangles)
     {
-        const long nW(aRectIter->GetWidth());
+        const long nW(rectangle.GetWidth());
 
         if(nW)
         {
-            const long nH(aRectIter->GetHeight());
+            const long nH(rectangle.GetHeight());
 
             if(nH)
             {
                 m_pPrinterGfx->UnionClipRegion(
-                    aRectIter->Left(),
-                    aRectIter->Top(),
+                    rectangle.Left(),
+                    rectangle.Top(),
                     nW,
                     nH);
             }
@@ -691,11 +691,11 @@ bool GenPspGraphics::AddTempDevFontHelper( PhysicalFontCollection* pFontCollecti
     if( aFontIds.empty() )
         return false;
 
-    for (std::vector<psp::fontID>::iterator aI = aFontIds.begin(), aEnd = aFontIds.end(); aI != aEnd; ++aI)
+    for (auto const& elem : aFontIds)
     {
         // prepare font data
         psp::FastPrintFontInfo aInfo;
-        rMgr.getFontFastInfo( *aI, aInfo );
+        rMgr.getFontFastInfo( elem, aInfo );
         aInfo.m_aFamilyName = rFontName;
 
         // inform glyph cache of new font

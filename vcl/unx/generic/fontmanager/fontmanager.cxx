@@ -154,8 +154,8 @@ PrintFontManager::~PrintFontManager()
 {
     m_aFontInstallerTimer.Stop();
     deinitFontconfig();
-    for( std::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
-        delete (*it).second;
+    for (auto const& font : m_aFonts)
+        delete font.second;
 }
 
 OString PrintFontManager::getDirectory( int nAtom ) const
@@ -195,10 +195,10 @@ std::vector<fontID> PrintFontManager::addFontFile( const OString& rFileName )
         std::vector<std::unique_ptr<PrintFont>> aNewFonts = analyzeFontFile(nDirID, aName);
         if (!aNewFonts.empty())
         {
-            for (auto it = aNewFonts.begin(); it != aNewFonts.end(); ++it)
+            for (auto & font : aNewFonts)
             {
                 fontID nFontId = m_nNextFontID++;
-                m_aFonts[nFontId] = it->release();
+                m_aFonts[nFontId] = font.release();
                 m_aFontFileToFontID[ aName ].insert( nFontId );
                 aFontIds.push_back(nFontId);
             }
@@ -314,15 +314,19 @@ fontID PrintFontManager::findFontFileID( int nDirID, const OString& rFontFile, i
     if( set_it == m_aFontFileToFontID.end() )
         return nID;
 
-    for( ::std::set< fontID >::const_iterator font_it = set_it->second.begin(); font_it != set_it->second.end() && ! nID; ++font_it )
+    for (auto const& elem : set_it->second)
     {
-        std::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.find( *font_it );
+        std::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.find(elem);
         if( it == m_aFonts.end() )
             continue;
         PrintFont* const pFont = (*it).second;
         if (pFont->m_nDirectory == nDirID &&
             pFont->m_aFontFile == rFontFile && pFont->m_nCollectionEntry == nFaceIndex)
-                nID = it->first;
+        {
+            nID = it->first;
+            if (nID)
+                break;
+        }
     }
 
     return nID;
@@ -336,15 +340,15 @@ std::vector<fontID> PrintFontManager::findFontFileIDs( int nDirID, const OString
     if( set_it == m_aFontFileToFontID.end() )
         return aIds;
 
-    for( ::std::set< fontID >::const_iterator font_it = set_it->second.begin(); font_it != set_it->second.end(); ++font_it )
+    for (auto const& elem : set_it->second)
     {
-        std::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.find( *font_it );
+        std::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.find(elem);
         if( it == m_aFonts.end() )
             continue;
-         PrintFont* const pFont = (*it).second;
-         if (pFont->m_nDirectory == nDirID &&
-             pFont->m_aFontFile == rFontFile)
-             aIds.push_back(it->first);
+        PrintFont* const pFont = (*it).second;
+        if (pFont->m_nDirectory == nDirID &&
+            pFont->m_aFontFile == rFontFile)
+            aIds.push_back(it->first);
     }
 
     return aIds;
@@ -713,8 +717,8 @@ void PrintFontManager::initialize()
     // gtk-fontconfig-timestamp changes to reflect new font installed and
     // PrintFontManager::initialize called again
     {
-        for( std::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
-            delete (*it).second;
+        for (auto const& font : m_aFonts)
+            delete font.second;
         m_nNextFontID = 1;
         m_aFonts.clear();
     }

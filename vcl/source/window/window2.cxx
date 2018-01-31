@@ -1669,9 +1669,9 @@ Size Window::get_preferred_size() const
         {
             const bool bIgnoreInHidden = pWindowImpl->m_xSizeGroup->get_ignore_hidden();
             const std::set<VclPtr<vcl::Window> > &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
-            for (auto aI = rWindows.begin(), aEnd = rWindows.end(); aI != aEnd; ++aI)
+            for (auto const& window : rWindows)
             {
-                const vcl::Window *pOther = *aI;
+                const vcl::Window *pOther = window;
                 if (pOther == this)
                     continue;
                 if (bIgnoreInHidden && !pOther->IsVisible())

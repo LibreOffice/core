@@ -387,9 +387,9 @@ void Window::dispose()
 
     // clear mnemonic labels
     std::vector<VclPtr<FixedText> > aMnemonicLabels(list_mnemonic_labels());
-    for (auto aI = aMnemonicLabels.begin(); aI != aMnemonicLabels.end(); ++aI)
+    for (auto const& mnemonicLabel : aMnemonicLabels)
     {
-        remove_mnemonic_label(*aI);
+        remove_mnemonic_label(mnemonicLabel);
     }
 
     // hide window in order to trigger the Paint-Handling
@@ -2587,18 +2587,16 @@ void Window::EnableInput( bool bEnable, const vcl::Window* pExcludeWindow )
     if( mpWindowImpl->mbFrame )
     {
         ::std::vector< VclPtr<vcl::Window> >& rList = mpWindowImpl->mpFrameData->maOwnerDrawList;
-        auto p = rList.begin();
-        while( p != rList.end() )
+        for (auto const& elem : rList)
         {
             // Is Window in the path from this window
-            if ( ImplGetFirstOverlapWindow()->ImplIsWindowOrChild( (*p), true ) )
+            if ( ImplGetFirstOverlapWindow()->ImplIsWindowOrChild( elem, true ) )
             {
                 // Is Window not in the exclude window path or not the
                 // exclude window, than change the status
-                if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( (*p), true ) )
-                    (*p)->EnableInput( bEnable );
+                if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( elem, true ) )
+                    elem->EnableInput( bEnable );
             }
-            ++p;
         }
     }
 }

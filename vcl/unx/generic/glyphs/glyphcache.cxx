@@ -49,9 +49,9 @@ GlyphCache::~GlyphCache()
 
 void GlyphCache::InvalidateAllGlyphs()
 {
-    for( FontList::iterator it = maFontList.begin(), end = maFontList.end(); it != end; ++it )
+    for (auto const& font : maFontList)
     {
-        FreetypeFont* pFreetypeFont = it->second;
+        FreetypeFont* pFreetypeFont = font.second;
         // free all pFreetypeFont related data
         pFreetypeFont->GarbageCollect( mnLruIndex+0x10000000 );
         delete pFreetypeFont;
@@ -63,9 +63,9 @@ void GlyphCache::InvalidateAllGlyphs()
 
 void GlyphCache::ClearFontOptions()
 {
-    for( FontList::iterator it = maFontList.begin(), end = maFontList.end(); it != end; ++it )
+    for (auto const& font : maFontList)
     {
-        FreetypeFont* pFreetypeFont = it->second;
+        FreetypeFont* pFreetypeFont = font.second;
         // free demand-loaded FontConfig related data
         pFreetypeFont->ClearFontOptions();
     }

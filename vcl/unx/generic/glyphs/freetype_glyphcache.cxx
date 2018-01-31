@@ -313,18 +313,18 @@ void FreetypeManager::AddFontFile( const OString& rNormalizedName,
 
 void FreetypeManager::AnnounceFonts( PhysicalFontCollection* pToAdd ) const
 {
-    for( FontList::const_iterator it = maFontList.begin(); it != maFontList.end(); ++it )
+    for (auto const& font : maFontList)
     {
-        FreetypeFontInfo* pFreetypeFontInfo = it->second;
+        FreetypeFontInfo* pFreetypeFontInfo = font.second;
         pFreetypeFontInfo->AnnounceFont( pToAdd );
     }
 }
 
 void FreetypeManager::ClearFontList( )
 {
-    for( FontList::iterator it = maFontList.begin(); it != maFontList.end(); ++it )
+    for (auto const& font : maFontList)
     {
-        FreetypeFontInfo* pFreetypeFontInfo = it->second;
+        FreetypeFontInfo* pFreetypeFontInfo = font.second;
         delete pFreetypeFontInfo;
     }
     maFontList.clear();

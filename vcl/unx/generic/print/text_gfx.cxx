@@ -66,17 +66,18 @@ void PrinterGfx::drawGlyph(const Point& rPoint,
 
     // draw the string
     // search for a glyph set matching the set font
-    std::vector< GlyphSet >::iterator aIter;
-    for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); ++aIter)
-        if ( ((*aIter).GetFontID()  == mnFontID)
-             && ((*aIter).IsVertical() == mbTextVertical))
+    bool bGlyphFound = false;
+    for (auto & elem : maPS3Font)
+        if ( (elem.GetFontID()  == mnFontID)
+             && (elem.IsVertical() == mbTextVertical))
         {
-            (*aIter).DrawGlyph (*this, rPoint, aGlyphId, nDelta);
+            elem.DrawGlyph (*this, rPoint, aGlyphId, nDelta);
+            bGlyphFound = true;
             break;
         }
 
     // not found ? create a new one
-    if (aIter == maPS3Font.end())
+    if (!bGlyphFound)
     {
         maPS3Font.emplace_back(mnFontID, mbTextVertical);
         maPS3Font.back().DrawGlyph (*this, rPoint, aGlyphId, nDelta);

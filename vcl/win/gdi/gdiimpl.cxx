@@ -1228,34 +1228,34 @@ bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
         RECT* pNextClipRect         = reinterpret_cast<RECT*>(&(mrParent.mpClipRgnData->Buffer));
         bool bFirstClipRect         = true;
 
-        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+        for (auto const& rectangle : aRectangles)
         {
-            const long nW(aRectIter->GetWidth());
-            const long nH(aRectIter->GetHeight());
+            const long nW(rectangle.GetWidth());
+            const long nH(rectangle.GetHeight());
 
             if(nW && nH)
             {
-                const long nRight(aRectIter->Left() + nW);
-                const long nBottom(aRectIter->Top() + nH);
+                const long nRight(rectangle.Left() + nW);
+                const long nBottom(rectangle.Top() + nH);
 
                 if(bFirstClipRect)
                 {
-                    pBoundRect->left = aRectIter->Left();
-                    pBoundRect->top = aRectIter->Top();
+                    pBoundRect->left = rectangle.Left();
+                    pBoundRect->top = rectangle.Top();
                     pBoundRect->right = nRight;
                     pBoundRect->bottom = nBottom;
                     bFirstClipRect = false;
                 }
                 else
                 {
-                    if(aRectIter->Left() < pBoundRect->left)
+                    if(rectangle.Left() < pBoundRect->left)
                     {
-                        pBoundRect->left = static_cast<int>(aRectIter->Left());
+                        pBoundRect->left = static_cast<int>(rectangle.Left());
                     }
 
-                    if(aRectIter->Top() < pBoundRect->top)
+                    if(rectangle.Top() < pBoundRect->top)
                     {
-                        pBoundRect->top = static_cast<int>(aRectIter->Top());
+                        pBoundRect->top = static_cast<int>(rectangle.Top());
                     }
 
                     if(nRight > pBoundRect->right)
@@ -1269,8 +1269,8 @@ bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
                     }
                 }
 
-                pNextClipRect->left = static_cast<int>(aRectIter->Left());
-                pNextClipRect->top = static_cast<int>(aRectIter->Top());
+                pNextClipRect->left = static_cast<int>(rectangle.Left());
+                pNextClipRect->top = static_cast<int>(rectangle.Top());
                 pNextClipRect->right = static_cast<int>(nRight);
                 pNextClipRect->bottom = static_cast<int>(nBottom);
                 pNextClipRect++;

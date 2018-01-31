@@ -1169,14 +1169,13 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
         int nFormat;
         ::std::list< Atom > aTypes;
         convertTypeToNative( rType, selection, nFormat, aTypes );
-        ::std::list< Atom >::const_iterator type_it;
         Atom nSelectedType = None;
-        for( type_it = aTypes.begin(); type_it != aTypes.end() && nSelectedType == None; ++type_it )
+        for (auto const& type : aTypes)
         {
-            for( auto const & i: rNativeTypes )
-                if( i == *type_it )
+            for( auto const & nativeType: rNativeTypes )
+                if(nativeType == type)
                 {
-                    nSelectedType = *type_it;
+                    nSelectedType = type;
                     if (nSelectedType != None)
                         break;
                 }
@@ -1900,16 +1899,15 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent const & rNotify 
         {
             bHandled = true;
             int nCurrentTime = time( nullptr );
-            std::unordered_map< Atom, IncrementalTransfer >::iterator inc_it;
             // throw out aborted transfers
             std::list< Atom > aTimeouts;
-            for( inc_it = it->second.begin(); inc_it != it->second.end(); ++inc_it )
+            for (auto const& incrementalTransfer : it->second)
             {
-                if( (nCurrentTime - inc_it->second.m_nTransferStartTime) > (getSelectionTimeout()+2) )
+                if( (nCurrentTime - incrementalTransfer.second.m_nTransferStartTime) > (getSelectionTimeout()+2) )
                 {
-                    aTimeouts.push_back( inc_it->first );
+                    aTimeouts.push_back( incrementalTransfer.first );
 #if OSL_DEBUG_LEVEL > 1
-                    const IncrementalTransfer& rInc = inc_it->second;
+                    const IncrementalTransfer& rInc = incrementalTransfer.second;
                     fprintf( stderr, "timeout on INCR transfer for window 0x%lx, property %s, type %s\n",
                              rInc.m_aRequestor,
                              OUStringToOString( getString( rInc.m_aProperty ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
@@ -1927,7 +1925,7 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent const & rNotify 
                 aTimeouts.pop_front();
             }
 
-            inc_it = it->second.find( rNotify.atom );
+            auto inc_it = it->second.find( rNotify.atom );
             if( inc_it != it->second.end() )
             {
                 IncrementalTransfer& rInc = inc_it->second;
@@ -3149,25 +3147,25 @@ void SelectionManager::startDrag(
         int root_x(0), root_y(0), win_x(0), win_y(0);
         unsigned int mask(0);
 
-        std::unordered_map< ::Window, DropTargetEntry >::const_iterator it;
-        it = m_aDropTargets.begin();
-        while( it != m_aDropTargets.end() )
+        bool bPointerFound = false;
+        for (auto const& dropTarget : m_aDropTargets)
         {
-            if( XQueryPointer( m_pDisplay, it->second.m_aRootWindow,
+            if( XQueryPointer( m_pDisplay, dropTarget.second.m_aRootWindow,
                                &aRoot, &aParent,
                                &root_x, &root_y,
                                &win_x, &win_y,
                                &mask ) )
             {
-                aParent = it->second.m_aRootWindow;
+                aParent = dropTarget.second.m_aRootWindow;
+                aRoot = aParent;
+                bPointerFound = true;
                 break;
             }
-            ++it;
         }
 
         // don't start DnD if there is none of our windows on the same screen as
         // the pointer or if no mouse button is pressed
-        if( it == m_aDropTargets.end() || (mask & (Button1Mask|Button2Mask|Button3Mask)) == 0 )
+        if( !bPointerFound || (mask & (Button1Mask|Button2Mask|Button3Mask)) == 0 )
         {
             aGuard.clear();
             if( listener.is() )
@@ -3180,7 +3178,6 @@ void SelectionManager::startDrag(
         // the drag (actually this is a poor substitute for an "endDrag"
         // method ).
         m_aDragSourceWindow = None;
-        aParent = aRoot = it->second.m_aRootWindow;
         do
         {
             XTranslateCoordinates( m_pDisplay, aRoot, aParent, root_x, root_y, &win_x, &win_y, &aChild );
@@ -3199,7 +3196,7 @@ void SelectionManager::startDrag(
         fprintf( stderr, "try to grab pointer ... " );
 #endif
         int nPointerGrabSuccess =
-            XGrabPointer( m_pDisplay, it->second.m_aRootWindow, True,
+            XGrabPointer( m_pDisplay, aRoot, True,
                           DRAG_EVENT_MASK,
                           GrabModeAsync, GrabModeAsync,
                           None,
@@ -3222,7 +3219,7 @@ void SelectionManager::startDrag(
                 {
                     vcl_sal::getSalDisplay(GetGenericUnixSalData())->CaptureMouse( nullptr );
                     nPointerGrabSuccess =
-                                XGrabPointer( m_pDisplay, it->second.m_aRootWindow, True,
+                                XGrabPointer( m_pDisplay, aRoot, True,
                                               DRAG_EVENT_MASK,
                                               GrabModeAsync, GrabModeAsync,
                                               None,
@@ -3238,7 +3235,7 @@ void SelectionManager::startDrag(
         fprintf( stderr, "try to grab keyboard ... " );
 #endif
         int nKeyboardGrabSuccess =
-            XGrabKeyboard( m_pDisplay, it->second.m_aRootWindow, True,
+            XGrabKeyboard( m_pDisplay, aRoot, True,
                            GrabModeAsync, GrabModeAsync, CurrentTime );
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "%d\n", nKeyboardGrabSuccess );
@@ -3274,14 +3271,12 @@ void SelectionManager::startDrag(
         requestOwnership( m_nXdndSelection );
 
         ::std::list< Atom > aConversions;
-        ::std::list< Atom >::const_iterator type_it;
         getNativeTypeList( m_aDragFlavors, aConversions, m_nXdndSelection );
 
-        int nTypes = aConversions.size();
-        Atom* pTypes = static_cast<Atom*>(alloca( sizeof(Atom)*nTypes ));
-        type_it = aConversions.begin();
-        for( int n = 0; n < nTypes; n++, ++type_it )
-            pTypes[n] = *type_it;
+        Atom* pTypes = static_cast<Atom*>(alloca( sizeof(Atom)*aConversions.size() ));
+        int nTypes = 0;
+        for (auto const& conversion : aConversions)
+            pTypes[nTypes++] = conversion;
 
         XChangeProperty( m_pDisplay, m_aWindow, m_nXdndTypeList, XA_ATOM, 32, PropModeReplace, reinterpret_cast<unsigned char*>(pTypes), nTypes );
 
@@ -3463,17 +3458,15 @@ void SelectionManager::transferablesFlavorsChanged()
     osl::MutexGuard aGuard(m_aMutex);
 
     m_aDragFlavors = m_xDragSourceTransferable->getTransferDataFlavors();
-    int i;
 
     std::list< Atom > aConversions;
-    std::list< Atom >::const_iterator type_it;
 
     getNativeTypeList( m_aDragFlavors, aConversions, m_nXdndSelection );
 
-    int nTypes = aConversions.size();
     Atom* pTypes = static_cast<Atom*>(alloca( sizeof(Atom)*aConversions.size() ));
-    for( i = 0, type_it = aConversions.begin(); type_it != aConversions.end(); ++type_it, i++ )
-        pTypes[i] = *type_it;
+    int nTypes = 0;
+    for (auto const& conversion : aConversions)
+        pTypes[nTypes++] = conversion;
     XChangeProperty( m_pDisplay, m_aWindow, m_nXdndTypeList, XA_ATOM, 32, PropModeReplace, reinterpret_cast<unsigned char*>(pTypes), nTypes );
 
     if( m_aCurrentDropWindow == None || m_nCurrentProtocolVersion < 0 )
@@ -3667,16 +3660,16 @@ void SelectionManager::run( void* pThis )
             osl::ClearableMutexGuard aGuard(This->m_aMutex);
             std::list< std::pair< SelectionAdaptor*, css::uno::Reference< XInterface > > > aChangeList;
 
-            for( std::unordered_map< Atom, Selection* >::iterator it = This->m_aSelections.begin(); it != This->m_aSelections.end(); ++it )
+            for (auto const& selection : This->m_aSelections)
             {
-                if( it->first != This->m_nXdndSelection && ! it->second->m_bOwner )
+                if( selection.first != This->m_nXdndSelection && ! selection.second->m_bOwner )
                 {
-                    ::Window aOwner = XGetSelectionOwner( This->m_pDisplay, it->first );
-                    if( aOwner != it->second->m_aLastOwner )
+                    ::Window aOwner = XGetSelectionOwner( This->m_pDisplay, selection.first );
+                    if( aOwner != selection.second->m_aLastOwner )
                     {
-                        it->second->m_aLastOwner = aOwner;
+                        selection.second->m_aLastOwner = aOwner;
                         std::pair< SelectionAdaptor*, css::uno::Reference< XInterface > >
-                            aKeep( it->second->m_pAdaptor, it->second->m_pAdaptor->getReference() );
+                            aKeep( selection.second->m_pAdaptor, selection.second->m_pAdaptor->getReference() );
                         aChangeList.push_back( aKeep );
                     }
                 }

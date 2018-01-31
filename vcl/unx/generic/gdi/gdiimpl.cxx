@@ -1010,20 +1010,20 @@ bool X11SalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
     RectangleVector aRectangles;
     i_rClip.GetRegionRectangles(aRectangles);
 
-    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+    for (auto const& rectangle : aRectangles)
     {
-        const long nW(aRectIter->GetWidth());
+        const long nW(rectangle.GetWidth());
 
         if(nW)
         {
-            const long nH(aRectIter->GetHeight());
+            const long nH(rectangle.GetHeight());
 
             if(nH)
             {
                 XRectangle aRect;
 
-                aRect.x = static_cast<short>(aRectIter->Left());
-                aRect.y = static_cast<short>(aRectIter->Top());
+                aRect.x = static_cast<short>(rectangle.Left());
+                aRect.y = static_cast<short>(rectangle.Top());
                 aRect.width = static_cast<unsigned short>(nW);
                 aRect.height = static_cast<unsigned short>(nH);
                 XUnionRectWithRegion(&aRect, mrParent.mpClipRegion, mrParent.mpClipRegion);
