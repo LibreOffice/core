@@ -27,18 +27,12 @@
 
 #include "FetcList.hxx"
 
-#if defined _MSC_VER
-#pragma warning(push,1)
-#endif
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
 #include <ole2.h>
 #include <objidl.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 /*--------------------------------------------------------------------------
     - the function principle of the windows clipboard:

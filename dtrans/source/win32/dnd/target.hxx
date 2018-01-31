@@ -28,13 +28,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <osl/mutex.hxx>
 
-#if defined _MSC_VER
-#pragma warning(push,1)
-#endif
 #include <oleidl.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 #include "globals.hxx"
 
 namespace com { namespace sun { namespace star { namespace uno {
