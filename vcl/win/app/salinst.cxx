@@ -58,21 +58,12 @@
 #endif
 #endif
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#pragma warning( disable: 4917 )
-#endif
-
 #include <prewin.h>
 
 #include <gdiplus.h>
 #include <shlobj.h>
 
 #include <postwin.h>
-
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 void SalAbort( const OUString& rErrorText, bool )
 {
