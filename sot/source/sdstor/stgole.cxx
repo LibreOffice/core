@@ -25,9 +25,6 @@
 #include <sot/storinfo.hxx>
 #include <sot/exchange.hxx>
 
-#ifdef _MSC_VER
-#pragma warning(disable: 4342)
-#endif
 ///////////////////////// class StgInternalStream
 
 StgInternalStream::StgInternalStream( BaseStorage& rStg, const OUString& rName, bool bWr )
