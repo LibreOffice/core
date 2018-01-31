@@ -182,7 +182,7 @@ protected:
     double          m_fMinHeight;
     OUString        m_strNextLink;
     enumXFFrameType m_eType;
-    sal_uInt32      m_nFlag;
+    sal_uInt32      m_nFrameFlag;
     bool            m_isTextBox;
 };
 
@@ -214,22 +214,22 @@ inline void XFFrame::SetWidth(double width)
 inline void XFFrame::SetHeight(double height)
 {
     m_aRect.SetHeight(height);
-    m_nFlag |= XFFRAME_FLAG_HEIGHT;
-    m_nFlag &= XFFRAME_FLAG_HEIGHT;
+    m_nFrameFlag |= XFFRAME_FLAG_HEIGHT;
+    m_nFrameFlag &= XFFRAME_FLAG_HEIGHT;
 }
 
 inline void XFFrame::SetMinHeight(double minHeight)
 {
     m_fMinHeight = minHeight;
-    m_nFlag |= XFFRAME_FLAG_MINHEIGHT;
-    m_nFlag &= XFFRAME_FLAG_MINHEIGHT;
+    m_nFrameFlag |= XFFRAME_FLAG_MINHEIGHT;
+    m_nFrameFlag &= XFFRAME_FLAG_MINHEIGHT;
 }
 
 inline void XFFrame::SetPosition(double x, double y, double width, double height)
 {
     m_aRect.SetStartPoint(XFPoint(x,y));
     m_aRect.SetSize(width,height);
-    m_nFlag |= XFFRAME_FLAG_HEIGHT;
+    m_nFrameFlag |= XFFRAME_FLAG_HEIGHT;
 }
 
 inline void XFFrame::SetPosition(const XFRect& rect)
