@@ -28,21 +28,12 @@
 
 #include <helpcompiler/HelpSearch.hxx>
 
-#if defined _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 4068 4263 4264 4266)
-#endif
-
 #if defined(__GNUC__)
 #  pragma GCC visibility push (default)
 #endif
 #include <CLucene.h>
 #if defined(__GNUC__)
 #  pragma GCC visibility pop
-#endif
-
-#if defined _MSC_VER
-#pragma warning(pop)
 #endif
 
 #include <rtl/ustring.hxx>
