@@ -70,6 +70,24 @@
       "revId": "952c997677fc3b446bbdab2f3a701884708fdd27",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e80c7d44",
+        "filename": "connectivity/source/inc/ado/Aolevariant.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-31T13:57:44Z",
+      "side": 1,
+      "message": "...unless the include of sdkddkver.h in ado_pre_sys_include.h was related to the warning disablement that preceded it (i.e., unless the include of sdkddver.h was strategically placed there with 1eec5566b24227e592f827c5e788ae3e45e0e127 \"fix connectivity build with Win8 SDK\" so that some warning that its (first) include triggered would be silenced)\n\nblindly replicating the include at the call-sites without understanding its original reason runs the danger of introducing new cruft that will be hard to clean up again",
+      "parentUuid": "fa31d9ce_482d89a6",
+      "revId": "952c997677fc3b446bbdab2f3a701884708fdd27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
