@@ -117,7 +117,7 @@ extern SwPathFinder *pPathFinder;
 //  (For more levels the values have to be multiplied with the levels+1;
 //  levels 0 ..4!)
 
-const sal_uInt16 lBullIndent = 1440/4;
+const short lBullIndent = 1440/4;
 const short lBullFirstLineOffset = -lBullIndent;
 const sal_uInt16 lNumIndent = 1440/4;
 const short lNumFirstLineOffset = -lNumIndent;
