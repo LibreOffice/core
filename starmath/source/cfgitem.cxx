@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
 #include <memory>
 #include <vector>
 
@@ -24,6 +25,8 @@
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
+#include <svl/languageoptions.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -796,6 +799,72 @@ void SmMathConfig::SaveOther()
     SetOtherModified( false );
 }
 
+namespace {
+
+// Latin default-fonts
+const DefaultFontType aLatinDefFnts[FNT_END] =
+{
+    DefaultFontType::SERIF,  // FNT_VARIABLE
+    DefaultFontType::SERIF,  // FNT_FUNCTION
+    DefaultFontType::SERIF,  // FNT_NUMBER
+    DefaultFontType::SERIF,  // FNT_TEXT
+    DefaultFontType::SERIF,  // FNT_SERIF
+    DefaultFontType::SANS,   // FNT_SANS
+    DefaultFontType::FIXED   // FNT_FIXED
+    //OpenSymbol,    // FNT_MATH
+};
+
+// CJK default-fonts
+//! we use non-asian fonts for variables, functions and numbers since they
+//! look better and even in asia only latin letters will be used for those.
+//! At least that's what I was told...
+const DefaultFontType aCJKDefFnts[FNT_END] =
+{
+    DefaultFontType::SERIF,          // FNT_VARIABLE
+    DefaultFontType::SERIF,          // FNT_FUNCTION
+    DefaultFontType::SERIF,          // FNT_NUMBER
+    DefaultFontType::CJK_TEXT,       // FNT_TEXT
+    DefaultFontType::CJK_TEXT,       // FNT_SERIF
+    DefaultFontType::CJK_DISPLAY,    // FNT_SANS
+    DefaultFontType::CJK_TEXT        // FNT_FIXED
+    //OpenSymbol,    // FNT_MATH
+};
+
+// CTL default-fonts
+const DefaultFontType aCTLDefFnts[FNT_END] =
+{
+    DefaultFontType::CTL_TEXT,    // FNT_VARIABLE
+    DefaultFontType::CTL_TEXT,    // FNT_FUNCTION
+    DefaultFontType::CTL_TEXT,    // FNT_NUMBER
+    DefaultFontType::CTL_TEXT,    // FNT_TEXT
+    DefaultFontType::CTL_TEXT,    // FNT_SERIF
+    DefaultFontType::CTL_TEXT,    // FNT_SANS
+    DefaultFontType::CTL_TEXT     // FNT_FIXED
+    //OpenSymbol,    // FNT_MATH
+};
+
+
+OUString lcl_GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
+{
+    assert(nIdent < FNT_END);
+    const DefaultFontType *pTable;
+    switch ( SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ) )
+    {
+        case SvtScriptType::LATIN :     pTable = aLatinDefFnts; break;
+        case SvtScriptType::ASIAN :     pTable = aCJKDefFnts; break;
+        case SvtScriptType::COMPLEX :   pTable = aCTLDefFnts; break;
+        default :
+            pTable = aLatinDefFnts;
+            SAL_WARN("starmath", "unknown script-type");
+    }
+
+    return OutputDevice::GetDefaultFont(pTable[ nIdent ], nLang,
+                                        GetDefaultFontFlags::OnlyOne ).GetFamilyName();
+}
+
+}
+
+
 void SmMathConfig::LoadFormat()
 {
     if (!pFormat)
@@ -863,7 +932,7 @@ void SmMathConfig::LoadFormat()
                 if (bUseDefaultFont)
                 {
                     aFnt = pFormat->GetFont( i );
-                    aFnt.SetFamilyName( GetDefaultFontName( nLang, i ) );
+                    aFnt.SetFamilyName( lcl_GetDefaultFontName( nLang, i ) );
                 }
                 else
                 {
