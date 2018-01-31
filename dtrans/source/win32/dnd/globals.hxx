@@ -28,13 +28,7 @@ namespace com { namespace sun { namespace star { namespace datatransfer {
     class XTransferable;
 } } } }
 
-#if defined _MSC_VER
-#pragma warning(push,1)
-#endif
 #include <wtypes.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 #include <sal/types.h>
 
 #define DNDSOURCE_SERVICE_NAME  "com.sun.star.datatransfer.dnd.OleDragSource"
