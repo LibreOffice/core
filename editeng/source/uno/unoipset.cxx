@@ -103,14 +103,14 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
         pItem = &(pPool->GetDefaultItem( pMap->nWID ));
 
     const MapUnit eMapUnit = pPool ? pPool->GetMetric(static_cast<sal_uInt16>(pMap->nWID)) : MapUnit::Map100thMM;
-    sal_uInt8 nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
+    sal_uInt8 nMemberId = pMap->nMemberId;
     if( eMapUnit == MapUnit::Map100thMM )
         nMemberId &= (~CONVERT_TWIPS);
 
     if(pItem)
     {
         pItem->QueryValue( aVal, nMemberId );
-        if( pMap->nMemberId & SFX_METRIC_ITEM )
+        if( pMap->nMoreFlags & PropertyMoreFlags::METRIC_ITEM )
         {
             if( eMapUnit != MapUnit::Map100thMM )
             {
@@ -166,7 +166,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
         const MapUnit eMapUnit = pPool ? pPool->GetMetric(static_cast<sal_uInt16>(pMap->nWID)) : MapUnit::Map100thMM;
 
         // check for needed metric translation
-        if( (pMap->nMemberId & SFX_METRIC_ITEM) && eMapUnit != MapUnit::Map100thMM )
+        if( (pMap->nMoreFlags & PropertyMoreFlags::METRIC_ITEM) && eMapUnit != MapUnit::Map100thMM )
         {
             if ( !bDontConvertNegativeValues || SvxUnoCheckForPositiveValue( aValue ) )
                 SvxUnoConvertFromMM( eMapUnit, aValue );
@@ -174,7 +174,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
 
         SfxPoolItem *pNewItem = pItem->Clone();
 
-        sal_uInt8 nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
+        sal_uInt8 nMemberId = pMap->nMemberId;
         if( eMapUnit == MapUnit::Map100thMM )
             nMemberId &= (~CONVERT_TWIPS);
 
@@ -198,7 +198,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
 
     // No UsrAny detected yet, generate Default entry and return this
     const MapUnit eMapUnit = mrItemPool.GetMetric(static_cast<sal_uInt16>(pMap->nWID));
-    sal_uInt8 nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
+    sal_uInt8 nMemberId = pMap->nMemberId;
     if( eMapUnit == MapUnit::Map100thMM )
         nMemberId &= (~CONVERT_TWIPS);
     uno::Any aVal;
@@ -222,10 +222,10 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
         }
     }
 
-    if( pMap->nMemberId & SFX_METRIC_ITEM )
+    if( pMap->nMoreFlags & PropertyMoreFlags::METRIC_ITEM )
     {
         // check for needed metric translation
-        if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != MapUnit::Map100thMM)
+        if(pMap->nMoreFlags & PropertyMoreFlags::METRIC_ITEM && eMapUnit != MapUnit::Map100thMM)
         {
             SvxUnoConvertToMM( eMapUnit, aVal );
         }
@@ -299,6 +299,7 @@ void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, uno::Any & rMetric ) throw
                 break;
             default:
                 SAL_WARN("editeng", "AW: Missing unit translation to 100th mm, " << OString::number(static_cast<sal_Int32>(rMetric.getValueTypeClass())));
+                assert(false);
             }
             break;
         }

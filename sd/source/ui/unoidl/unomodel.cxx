@@ -179,20 +179,20 @@ void SdUnoForbiddenCharsTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) t
     }
 }
 
-const sal_Int32 WID_MODEL_LANGUAGE           =  1;
-const sal_Int32 WID_MODEL_TABSTOP            =  2;
-const sal_Int32 WID_MODEL_VISAREA            =  3;
-const sal_Int32 WID_MODEL_MAPUNIT            =  4;
-const sal_Int32 WID_MODEL_FORBCHARS          =  5;
-const sal_Int32 WID_MODEL_CONTFOCUS          =  6;
-const sal_Int32 WID_MODEL_DSGNMODE           =  7;
-const sal_Int32 WID_MODEL_BASICLIBS          =  8;
-const sal_Int32 WID_MODEL_RUNTIMEUID         =  9;
-const sal_Int32 WID_MODEL_BUILDID            = 10;
-const sal_Int32 WID_MODEL_HASVALIDSIGNATURES = 11;
-const sal_Int32 WID_MODEL_DIALOGLIBS         = 12;
-const sal_Int32 WID_MODEL_FONTS              = 13;
-const sal_Int32 WID_MODEL_INTEROPGRABBAG     = 14;
+const sal_uInt16 WID_MODEL_LANGUAGE           =  1;
+const sal_uInt16 WID_MODEL_TABSTOP            =  2;
+const sal_uInt16 WID_MODEL_VISAREA            =  3;
+const sal_uInt16 WID_MODEL_MAPUNIT            =  4;
+const sal_uInt16 WID_MODEL_FORBCHARS          =  5;
+const sal_uInt16 WID_MODEL_CONTFOCUS          =  6;
+const sal_uInt16 WID_MODEL_DSGNMODE           =  7;
+const sal_uInt16 WID_MODEL_BASICLIBS          =  8;
+const sal_uInt16 WID_MODEL_RUNTIMEUID         =  9;
+const sal_uInt16 WID_MODEL_BUILDID            = 10;
+const sal_uInt16 WID_MODEL_HASVALIDSIGNATURES = 11;
+const sal_uInt16 WID_MODEL_DIALOGLIBS         = 12;
+const sal_uInt16 WID_MODEL_FONTS              = 13;
+const sal_uInt16 WID_MODEL_INTEROPGRABBAG     = 14;
 
 const SvxItemPropertySet* ImplGetDrawModelPropertySet()
 {
