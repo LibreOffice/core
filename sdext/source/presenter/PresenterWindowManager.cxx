@@ -599,7 +599,7 @@ void PresenterWindowManager::LayoutStandardMode()
 
 
     // For the current slide view calculate the outer height from the outer
-    // width.  This takes into acount the slide aspect ratio and thus has to
+    // width.  This takes into account the slide aspect ratio and thus has to
     // go over the inner pane size.
     PresenterPaneContainer::SharedPaneDescriptor pPane (
         mpPaneContainer->FindPaneURL(PresenterPaneFactory::msCurrentSlidePreviewPaneURL));
@@ -622,7 +622,7 @@ void PresenterWindowManager::LayoutStandardMode()
     }
 
     // For the next slide view calculate the outer height from the outer
-    // width.  This takes into acount the slide aspect ratio and thus has to
+    // width.  This takes into account the slide aspect ratio and thus has to
     // go over the inner pane size.
     pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNextSlidePreviewPaneURL);
     if (pPane.get() != nullptr)
@@ -685,7 +685,7 @@ void PresenterWindowManager::LayoutNotesMode()
     }
 
     // For the current slide view calculate the outer height from the outer
-    // width.  This takes into acount the slide aspect ratio and thus has to
+    // width.  This takes into account the slide aspect ratio and thus has to
     // go over the inner pane size.
     pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msCurrentSlidePreviewPaneURL);
     if (pPane.get() != nullptr)
@@ -706,7 +706,7 @@ void PresenterWindowManager::LayoutNotesMode()
     }
 
     // For the next slide view calculate the outer height from the outer
-    // width.  This takes into acount the slide aspect ratio and thus has to
+    // width.  This takes into account the slide aspect ratio and thus has to
     // go over the inner pane size.
     pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNextSlidePreviewPaneURL);
     if (pPane.get() != nullptr)

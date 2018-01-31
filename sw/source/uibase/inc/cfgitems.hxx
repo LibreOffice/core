@@ -94,7 +94,7 @@ public:
 };
 
 // OS 12.01.95
-// Item for settings dialog - printer/add ons
+// Item for settings dialog - printer/add-ons
 class SW_DLLPUBLIC SwAddPrinterItem : public SfxPoolItem, public SwPrintData
 {
     friend class SwAddPrinterTabPage;

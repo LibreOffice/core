@@ -562,9 +562,9 @@ PluginProgress::~PluginProgress()
 
 void SAL_CALL PluginProgress::dispose()
 {
-    // m_pPluginProgressWindow was deleted ...
+    // m_pPluginProgressWindow was deleted...
     // So the internal pointer of this progress
-    // weill be dead!
+    // will be dead!
     m_xProgress.clear();
 }
 
