@@ -29,7 +29,6 @@ Note that the actual process may involve a fair amount of undoing, hand editing,
 to get it to work :-)
 
 TODO some boost bind stuff appears to confuse it, notably in the xmloff module
-TODO does not find destructors that don't need to be virtual
 */
 
 namespace {

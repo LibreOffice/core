@@ -33,8 +33,6 @@ If you see another class:
 this is a bug =) since aFooMember assumes heap allocated lifecycle and
 not delete on last 'release'.
 
-TODO check that things that extend SvRefBase are managed by SvRef
-TODO fix the slideshow::internal::SlideView class (mentioned below)
 */
 
 namespace {
@@ -131,11 +129,6 @@ bool containsXInterfaceSubclass(const clang::Type* pType0) {
             return false;
         }
         if (isDerivedFrom(pRecordDecl, [](Decl const * decl) -> bool { return bool(loplugin::DeclCheck(decl).Class("OSbaWeakSubObject").Namespace("dbaui").GlobalNamespace()); })) { // module dbaccess
-            return false;
-        }
-        // The actual problem child is SlideView, of which this is the parent.
-        // Everything in the hierarchy above this wants to be managed via boost::shared_ptr
-        if (isDerivedFrom(pRecordDecl, [](Decl const * decl) -> bool { return bool(loplugin::DeclCheck(decl).Class("UnoView").Namespace("internal").Namespace("slideshow").GlobalNamespace()); })) { // module slideshow
             return false;
         }
         // FIXME This class has private operator new, and I cannot figure out how it can be dynamically instantiated
