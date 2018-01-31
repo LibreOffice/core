@@ -883,7 +883,7 @@ public:
 
     // TODO move as much as possible here from WW8Export! ;-)
 
-    static void CorrectTabStopInSet( SfxItemSet& rSet, sal_uInt16 nAbsLeft );
+    static void CorrectTabStopInSet( SfxItemSet& rSet, short nAbsLeft );
 
 private:
     MSWordExportBase( const MSWordExportBase& ) = delete;
