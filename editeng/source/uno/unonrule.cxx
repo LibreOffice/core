@@ -397,7 +397,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
             sal_Int32 nMargin = 0;
             if( aVal >>= nMargin )
             {
-                aFmt.SetAbsLSpace(static_cast<sal_uInt16>(nMargin));
+                aFmt.SetAbsLSpace(nMargin);
                 continue;
             }
         }
