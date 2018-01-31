@@ -86,7 +86,7 @@ d_Col = BitmapColor( static_cast<sal_uInt8>( _def_cR | ( ( _def_cR & maR.mnOr ) 
 
 class Color;
 
-class VCL_DLLPUBLIC BitmapColor
+class VCL_DLLPUBLIC BitmapColor final
 {
 private:
 
