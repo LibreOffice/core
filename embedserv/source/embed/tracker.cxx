@@ -23,10 +23,6 @@
 
 #include <sal/types.h>
 
-#ifdef _MSC_VER
-#pragma warning(disable : 4917 4555)
-#endif
-
 #include <stdafx.h>
 #include <stddef.h>
 #include <syswinwrapper.hxx>
