@@ -43,8 +43,6 @@
 #define WIN32_LEAN_AND_MEAN
 
 // winsock2.h includes windows.h
-#pragma warning(push,1) /* disable warnings within system headers */
-#pragma warning(disable:4917)
 #include <winsock2.h>
 #include <wsipx.h>
 #include <ws2tcpip.h>
@@ -52,6 +50,5 @@
 #ifndef NO_DEBUG_CRT
     #include <crtdbg.h>
 #endif
-#pragma warning(pop)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
