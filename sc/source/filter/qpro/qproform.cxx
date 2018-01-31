@@ -94,8 +94,12 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
 
     if( nArgs < nBufSize )
     {
-        for( nCount = 0; nCount < nArgs ; nCount++ )
+        for( nCount = 0; nCount < nArgs && aStack.HasMoreTokens() ; nCount++ )
             aStack >> eParam[ nCount ];
+
+        if (nCount < nArgs)
+            // Adapt count to reality. All sort of binary crap is possible.
+            nArgs = static_cast<sal_uInt16>(nCount);
     }
     else
         return;
