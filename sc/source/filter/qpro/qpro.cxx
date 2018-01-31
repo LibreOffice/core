@@ -101,6 +101,11 @@ ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSty
                 double nValue;
                 sal_uInt16 nState, nLen;
                 mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle ).ReadDouble( nValue ).ReadUInt16( nState ).ReadUInt16( nLen );
+                if (!mpStream->good())
+                {
+                    eRet = SCERR_IMPORT_FORMAT;
+                    break;
+                }
                 ScAddress aAddr( nCol, nRow, nTab );
                 const ScTokenArray *pArray;
 
