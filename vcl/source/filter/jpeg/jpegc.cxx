@@ -41,8 +41,8 @@ extern "C" {
 #define WarningLimit 1000
 
 #ifdef _MSC_VER
-#pragma warning(push, 1) /* disable to __declspec(align()) aligned warning */
-#pragma warning (disable: 4324)
+#pragma warning(push)
+#pragma warning (disable: 4324) /* disable to __declspec(align()) aligned warning */
 #endif
 
 struct ErrorManagerStruct
