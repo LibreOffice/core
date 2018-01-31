@@ -18,10 +18,6 @@
  */
 
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
-
 #include <pdfparse.hxx>
 
 // workaround windows compiler: do not include multi_pass.hpp
@@ -34,11 +30,6 @@
 
 #include <rtl/strbuf.hxx>
 #include <rtl/alloc.h>
-
-// disable warnings again because someone along the line has enabled them
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
 
 using namespace boost::spirit;
 using namespace pdfparse;
@@ -676,10 +667,6 @@ PDFEntry* PDFReader::read( const char* pFileName )
     return pRet;
 #endif // WIN32
 }
-
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
