@@ -50,7 +50,7 @@ void XSpreadsheets::testMoveByName()
     xSpreadsheets->insertNewByName("SheetToMove", 0);
     uno::Reference< container::XNameAccess > xNameAccess(xSpreadsheets, UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("Sheet to move was not insert",
-                           xNameAccess->hasByName("SheetToCopySrc"));
+                           xNameAccess->hasByName("SheetToMove"));
 
     xSpreadsheets->moveByName("SheetToMove", 2);
 
