@@ -31,15 +31,8 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #ifdef _WIN32
-#ifdef _MSC_VER
-#pragma warning(push,1) // disable warnings within system headers
-#pragma warning(disable: 4917)
-#endif
 #include <objbase.h>
 #include <shlobj.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 #endif
 
 namespace container = com::sun::star::container ;
