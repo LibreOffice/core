@@ -7,16 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifdef _MSC_VER
-#pragma warning(push, 1) /* disable warnings within system headers */
-#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <msi.h>
 #include <commctrl.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 extern "C" UINT __stdcall SortTree(MSIHANDLE)
 {

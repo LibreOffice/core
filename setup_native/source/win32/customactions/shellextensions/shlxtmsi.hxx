@@ -20,18 +20,9 @@
 #ifndef INCLUDED_SETUP_NATIVE_SOURCE_WIN32_CUSTOMACTIONS_SHELLEXTENSIONS_SHLXTMSI_HXX
 #define INCLUDED_SETUP_NATIVE_SOURCE_WIN32_CUSTOMACTIONS_SHELLEXTENSIONS_SHLXTMSI_HXX
 
-#ifdef _MSC_VER
-#pragma warning(push, 1) /* disable warnings within system headers */
-#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <msiquery.h>
-#ifdef _WIN32_WINNT_WINBLUE
-#include <VersionHelpers.h>
-#endif
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 #include <string>
 
