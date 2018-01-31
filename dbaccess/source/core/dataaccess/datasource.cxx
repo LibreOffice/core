@@ -1179,7 +1179,7 @@ Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, co
 Reference< XNameAccess > SAL_CALL ODatabaseSource::getBookmarks(  )
 {
     ModelMethodGuard aGuard( *this );
-    // tdf#114596 this may look nutty but see OBookmarkContainer::aquire()
+    // tdf#114596 this may look nutty but see OBookmarkContainer::acquire()
     return static_cast<XNameContainer*>(&m_Bookmarks);
 }
 
