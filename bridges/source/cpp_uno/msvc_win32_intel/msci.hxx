@@ -22,9 +22,7 @@
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
-#pragma warning(push, 1)
 #include <windows.h>
-#pragma warning(pop)
 
 #include "rtl/ustring.hxx"
 
