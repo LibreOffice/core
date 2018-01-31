@@ -2502,7 +2502,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
             throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-        if(0xFF == pEntry->nMemberId)
+        if(0xBF == pEntry->nMemberId)
         {
             lcl_SetSpecialProperty(pFormat, pEntry, aValue);
         }
@@ -2754,7 +2754,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
 
     if(pFormat)
     {
-        if(0xFF == pEntry->nMemberId)
+        if(0xBF == pEntry->nMemberId)
         {
             aRet = lcl_GetSpecialProperty(pFormat, pEntry );
         }

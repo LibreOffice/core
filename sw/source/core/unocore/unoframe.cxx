@@ -1411,11 +1411,11 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
     if (!pEntry)
         throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-    const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
+    const sal_uInt8 nMemberId(pEntry->nMemberId);
     uno::Any aValue(_rValue);
 
     // check for needed metric translation
-    if(pEntry->nMemberId & SFX_METRIC_ITEM)
+    if(pEntry->nMoreFlags & PropertyMoreFlags::METRIC_ITEM)
     {
         bool bDoIt(true);
 
@@ -2001,7 +2001,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     if (!pEntry)
         throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-    const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
+    const sal_uInt8 nMemberId(pEntry->nMemberId);
 
     if(FN_UNO_ANCHOR_TYPES == pEntry->nWID)
     {
@@ -2313,7 +2313,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     }
 
     // check for needed metric translation
-    if(pEntry->nMemberId & SFX_METRIC_ITEM)
+    if(pEntry->nMoreFlags & PropertyMoreFlags::METRIC_ITEM)
     {
         bool bDoIt(true);
 
@@ -2569,9 +2569,7 @@ uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
         {
             const SfxPoolItem& rDefItem =
                 pFormat->GetDoc()->GetAttrPool().GetDefaultItem(pEntry->nWID);
-            const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
-
-            rDefItem.QueryValue(aRet, nMemberId);
+            rDefItem.QueryValue(aRet, pEntry->nMemberId);
         }
 
     }

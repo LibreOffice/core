@@ -654,12 +654,12 @@ SfxItemPropertyMapEntry const * ImplGetSvxCaptionPropertyMap()
         { OUString("CaptionType"),              SDRATTR_CAPTIONTYPE,        cppu::UnoType<sal_Int16>::get(), 0, 0},
         { OUString("CaptionIsFixedAngle"),      SDRATTR_CAPTIONFIXEDANGLE,  cppu::UnoType<bool>::get(), 0, 0},
         { OUString("CaptionAngle"),             SDRATTR_CAPTIONANGLE,       cppu::UnoType<sal_Int32>::get(),    0,  0},
-        { OUString("CaptionGap"),               SDRATTR_CAPTIONGAP,         cppu::UnoType<sal_Int32>::get(),    0,  SFX_METRIC_ITEM},
+        { OUString("CaptionGap"),               SDRATTR_CAPTIONGAP,         cppu::UnoType<sal_Int32>::get(),    0,  0, PropertyMoreFlags::METRIC_ITEM},
         { OUString("CaptionEscapeDirection"),   SDRATTR_CAPTIONESCDIR,      cppu::UnoType<sal_Int32>::get(),    0,  0},
         { OUString("CaptionIsEscapeRelative"),  SDRATTR_CAPTIONESCISREL,    cppu::UnoType<bool>::get(), 0, 0},
         { OUString("CaptionEscapeRelative"),    SDRATTR_CAPTIONESCREL,      cppu::UnoType<sal_Int32>::get(),    0,  0},
-        { OUString("CaptionEscapeAbsolute"),    SDRATTR_CAPTIONESCABS,      cppu::UnoType<sal_Int32>::get(),    0,  SFX_METRIC_ITEM},
-        { OUString("CaptionLineLength"),        SDRATTR_CAPTIONLINELEN,     cppu::UnoType<sal_Int32>::get(),    0,  SFX_METRIC_ITEM},
+        { OUString("CaptionEscapeAbsolute"),    SDRATTR_CAPTIONESCABS,      cppu::UnoType<sal_Int32>::get(),    0,  0, PropertyMoreFlags::METRIC_ITEM},
+        { OUString("CaptionLineLength"),        SDRATTR_CAPTIONLINELEN,     cppu::UnoType<sal_Int32>::get(),    0,  0, PropertyMoreFlags::METRIC_ITEM},
         { OUString("CaptionIsFitLineLength"),   SDRATTR_CAPTIONFITLINELEN,  cppu::UnoType<bool>::get(), 0, 0},
         EDGERADIUS_PROPERTIES
         FILL_PROPERTIES
