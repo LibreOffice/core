@@ -94,9 +94,10 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                     for ( ny = 0; --nyCount ; ny++, rDesc.mpBuf += rDesc.mnScanSize )
                     {
                         nxC = nxCount;
+                        Scanline pScanline = rDesc.mpAcc->GetScanline(ny);
                         for ( nx = 0; --nxC; nx++ )
                         {   // this is not fast, but a one bit/pixel format is rarely used
-                            rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>( (*( rDesc.mpBuf + (nx >> 3)) >> ((nx & 7)^7))) & 1 );
+                            rDesc.mpAcc->SetPixelOnData(pScanline, nx, BitmapColor(static_cast<sal_uInt8>( (*( rDesc.mpBuf + (nx >> 3)) >> ((nx & 7)^7))) & 1));
                         }
                     }
                 }
@@ -108,9 +109,10 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                     for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
                     {
                         nxC = nxCount;
+                        Scanline pScanline = rDesc.mpAcc->GetScanline(ny);
                         for ( nx = 0; --nxC; nx++ )
                         {   // this is not fast, but a two bits/pixel format is rarely used
-                            rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>( (*(rDesc.mpBuf + (nx >> 2)) >> (((nx & 3)^3) << 1))) & 3 );
+                            rDesc.mpAcc->SetPixelOnData(pScanline, nx, BitmapColor(static_cast<sal_uInt8>( (*(rDesc.mpBuf + (nx >> 2)) >> (((nx & 3)^3) << 1))) & 3));
                         }
                     }
                 }
@@ -127,11 +129,12 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                         for ( nx = 0; --nxC; nx++ )
                         {
                             nDat = *pTemp++;
-                            rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>(nDat >> 4) );
+                            Scanline pScanline = rDesc.mpAcc->GetScanline(ny);
+                            rDesc.mpAcc->SetPixelOnData(pScanline, nx, BitmapColor(static_cast<sal_uInt8>(nDat >> 4)));
                             if ( --nxC )
                             {
-                                nx ++;
-                                rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>(nDat & 15) );
+                                ++nx;
+                                rDesc.mpAcc->SetPixelOnData(pScanline, nx, BitmapColor(static_cast<sal_uInt8>(nDat & 15)));
                             }
                             else
                                 break;
@@ -146,10 +149,11 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                     for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
                     {
                         sal_uInt8* pTemp = rDesc.mpBuf;
+                        Scanline pScanline = rDesc.mpAcc->GetScanline(ny);
                         nxC = nxCount;
                         for ( nx = 0; --nxC; nx++ )
                         {
-                            rDesc.mpAcc->SetPixelIndex( ny, nx, *(pTemp++) );
+                            rDesc.mpAcc->SetPixelOnData(pScanline, nx, BitmapColor(*(pTemp++)));
                         }
                     }
                 }
@@ -162,12 +166,13 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                     {
                         sal_uInt8* pTemp = rDesc.mpBuf;
                         nxC = nxCount;
+                        Scanline pScanline = rDesc.mpAcc->GetScanline(ny);
                         for ( nx = 0; --nxC; nx++ )
                         {
                             aBitmapColor.SetRed( *pTemp++ );
                             aBitmapColor.SetGreen( *pTemp++ );
                             aBitmapColor.SetBlue( *pTemp++ );
-                            rDesc.mpAcc->SetPixel( ny, nx, aBitmapColor );
+                            rDesc.mpAcc->SetPixelOnData(pScanline, nx, aBitmapColor);
                         }
                     }
                 }

@@ -241,8 +241,9 @@ bool XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat
 
                 if( bProcessed )
                 {
+                    Scanline pScanline = pAcc1->GetScanline(nRow);
                     while( ( nCol < nWidth ) && ( nBit < nBits ) )
-                        pAcc1->SetPixel( nRow, nCol++, ( nValue & ( 1 << nBit++ ) ) ? aBlack : aWhite );
+                        pAcc1->SetPixelOnData(pScanline, nCol++, ( nValue & ( 1 << nBit++ ) ) ? aBlack : aWhite);
 
                     if( nCol == nWidth )
                     {

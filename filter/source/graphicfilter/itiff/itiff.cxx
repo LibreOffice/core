@@ -789,6 +789,10 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
         {
             sal_uInt8* pt = getMapData(0);
 
+            Scanline pMaskScanLine = nullptr;
+            if (nSamplesPerPixel >= 4 && xMaskAcc)
+                pMaskScanLine = xMaskAcc->GetScanline(nY);
+
             // are the values being saved as difference?
             if ( 2 == nPredictor )
             {
@@ -801,11 +805,11 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                     nLRed = nLRed + pt[ 0 ];
                     nLGreen = nLGreen + pt[ 1 ];
                     nLBlue = nLBlue + pt[ 2 ];
-                    pAcc->SetPixel( nY, nx, Color( nLRed, nLGreen, nLBlue ) );
-                    if (nSamplesPerPixel >= 4 && xMaskAcc)
+                    pAcc->SetPixelOnData(pScanLine, nx, Color(nLRed, nLGreen, nLBlue));
+                    if (pMaskScanLine)
                     {
                         nLAlpha = nLAlpha + pt[ 3 ];
-                        xMaskAcc->SetPixel( nY, nx, BitmapColor(~nLAlpha) );
+                        xMaskAcc->SetPixelOnData(pMaskScanLine, nx, BitmapColor(~nLAlpha));
                     }
                 }
             }
@@ -813,11 +817,11 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
             {
                 for (sal_Int32 nx = 0; nx < nImageWidth; nx++, pt += nSamplesPerPixel)
                 {
-                    pAcc->SetPixel( nY, nx, Color( pt[0], pt[1], pt[2] ) );
-                    if (nSamplesPerPixel >= 4 && xMaskAcc)
+                    pAcc->SetPixelOnData(pScanLine, nx, Color(pt[0], pt[1], pt[2]));
+                    if (pMaskScanLine)
                     {
                         sal_uInt8 nAlpha = pt[3];
-                        xMaskAcc->SetPixel( nY, nx, BitmapColor(~nAlpha) );
+                        xMaskAcc->SetPixelOnData(pMaskScanLine, nx, BitmapColor(~nAlpha));
                     }
                 }
             }
@@ -841,7 +845,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                         nGreen = GetBits( getMapData(1), nx * nBitsPerSample, nBitsPerSample );
                         nBlue = GetBits( getMapData(2), nx * nBitsPerSample, nBitsPerSample );
                     }
-                    pAcc->SetPixel( nY, nx, Color( static_cast<sal_uInt8>( nRed - nMinMax ), static_cast<sal_uInt8>( nGreen - nMinMax ), static_cast<sal_uInt8>(nBlue - nMinMax) ) );
+                    pAcc->SetPixelOnData(pScanLine, nx, Color(static_cast<sal_uInt8>(nRed - nMinMax), static_cast<sal_uInt8>(nGreen - nMinMax), static_cast<sal_uInt8>(nBlue - nMinMax)));
                 }
             }
         }
@@ -867,7 +871,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                     nRed = 255 - static_cast<sal_uInt8>( nRed - nMinMax );
                     nGreen = 255 - static_cast<sal_uInt8>( nGreen - nMinMax );
                     nBlue = 255 - static_cast<sal_uInt8>( nBlue - nMinMax );
-                    pAcc->SetPixel( nY, nx, Color( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
+                    pAcc->SetPixelOnData(pScanLine, nx, Color(static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue)));
                 }
             }
         }
@@ -909,7 +913,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                                 255L/static_cast<sal_Int32>(nMaxSampleValue-nMinSampleValue) ) ));
                     nBlue = static_cast<sal_uInt8>(std::max( 0L, 255L - ( ( static_cast<sal_Int32>(nSamp[ 2 ]) + nBlack - ( static_cast<sal_Int32>(nMinSampleValue) << 1 ) ) *
                                 255L/static_cast<sal_Int32>(nMaxSampleValue-nMinSampleValue) ) ));
-                    pAcc->SetPixel( nY, nx, Color ( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
+                    pAcc->SetPixelOnData(pScanLine, nx, Color(static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue)));
                 }
             }
         }

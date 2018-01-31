@@ -1117,6 +1117,7 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
         {
             for ( long nY = 0; nY < aBitmapSizePixel.Height(); nY++ )
             {
+                Scanline pScanline = pAcc->GetScanline(nY);
                 for ( long nX = 0; nX < aBitmapSizePixel.Width(); nX++ )
                 {
                     double fX = static_cast< double >( nX ) / aBitmapSizePixel.Width();
@@ -1233,7 +1234,7 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
                     if ( nBlue > 255 )
                         nBlue = 255;
 
-                    pAcc->SetPixel( nY, nX, BitmapColor( static_cast< sal_Int8 >( nRed ), static_cast< sal_Int8 >( nGreen ), static_cast< sal_Int8 >( nBlue ) ) );
+                    pAcc->SetPixelOnData(pScanline, nX, BitmapColor(static_cast<sal_Int8>(nRed), static_cast<sal_Int8>(nGreen), static_cast<sal_Int8>(nBlue)));
                 }
             }
             Bitmap::ReleaseAccess( pAcc );
@@ -1376,6 +1377,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
 
                                 for (long y = 0; y < pWrite->Height(); ++y)
                                 {
+                                    Scanline pScanline = pWrite->GetScanline(y);
                                     for (long x = 0; x < pWrite->Width(); ++x)
                                     {
                                         Color aReadColor;
@@ -1385,9 +1387,9 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                                             aReadColor = pRead->GetPixel(y, x);
 
                                         if (aReadColor.GetColor() == 0)
-                                            pWrite->SetPixel(y, x, aCol2);
+                                            pWrite->SetPixelOnData(pScanline, x, aCol2);
                                         else
-                                            pWrite->SetPixel(y, x, aCol1);
+                                            pWrite->SetPixelOnData(pScanline, x, aCol1);
                                     }
                                 }
                             }

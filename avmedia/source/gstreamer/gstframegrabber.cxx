@@ -182,10 +182,11 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
             for( int y = 0; y < nHeight; ++y )
             {
                 sal_uInt8 *p = pData + y * nStride;
-                for( int x = 0; x < nWidth; ++x )
+                Scanline pScanline = pWrite->GetScanline(y);
+                for (int x = 0; x < nWidth; ++x)
                 {
-                    BitmapColor col( p[0], p[1], p[2] );
-                    pWrite->SetPixel( y, x, col );
+                    BitmapColor col(p[0], p[1], p[2]);
+                    pWrite->SetPixelOnData(pScanline, x, col);
                     p += 3;
                 }
             }

@@ -305,6 +305,8 @@ bool XPMReader::ImplGetScanLine( sal_uLong nY )
             bStatus = false;
         else
         {
+            Scanline pScanline = mpAcc->GetScanline(nY);
+            Scanline pMaskScanline = mpMaskAcc ? mpMaskAcc->GetScanline(nY) : nullptr;
             for (sal_uLong i = 0; i < mnWidth; ++i)
             {
                 OString aKey(reinterpret_cast<sal_Char*>(pString), mnCpp);
@@ -312,11 +314,11 @@ bool XPMReader::ImplGetScanLine( sal_uLong nY )
                 if (it != maColMap.end())
                 {
                     if (mnColors > 256)
-                        mpAcc->SetPixel(nY, i, Color(it->second[1], it->second[2], it->second[3]));
+                        mpAcc->SetPixelOnData(pScanline, i, Color(it->second[1], it->second[2], it->second[3]));
                     else
-                        mpAcc->SetPixel(nY, i, BitmapColor(it->second[1]));
-                    if (mpMaskAcc)
-                        mpMaskAcc->SetPixel(nY, i, it->second[0] ? aWhite : aBlack);
+                        mpAcc->SetPixelOnData(pScanline, i, BitmapColor(it->second[1]));
+                    if (pMaskScanline)
+                        mpMaskAcc->SetPixelOnData(pMaskScanline, i, it->second[0] ? aWhite : aBlack);
                 }
                 pString += mnCpp;
             }
