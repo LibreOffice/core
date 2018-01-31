@@ -152,7 +152,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
 
     /*
      * 0x00FFFFFF & color operation removes the alpha which is FF,
-     * if we dont remove it, the color value becomes negative which is not recognized by LOK
+     * if we don't remove it, the color value becomes negative which is not recognized by LOK
      */
     private void sendFontBackColorChange(int color){
         try {

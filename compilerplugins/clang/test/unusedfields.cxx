@@ -57,10 +57,10 @@ struct Bar
     // check that we don't see reads when inside copy/move assignment operator
     Bar& operator=(Bar const & other) { m_bar3 = other.m_bar3; return *this; }
 
-    // check that we DONT see reads here
+    // check that we DON'T see reads here
     int bar2() { return m_bar2; }
 
-    // check that we DONT see reads here
+    // check that we DON'T see reads here
     void bar3()
     {
         m_bar3 = nullptr;
@@ -130,7 +130,7 @@ struct ReadOnlyAnalysis
     int m_f5;
     int m_f6;
 
-    // check that we dont see a write of m_f1
+    // check that we don't see a write of m_f1
     ReadOnlyAnalysis() : m_f1(0) {}
 
     void method1(int&);
