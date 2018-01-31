@@ -116,6 +116,7 @@ public:
     void testFormulas();
     void testIntrusiveRing();
     void testClientModify();
+    void testWriterMultiListener();
     void test64kPageDescs();
     void testTdf92308();
     void testTableCellComparison();
@@ -1775,13 +1776,20 @@ namespace
     {
         int m_nModifyCount;
         int m_nNotifyCount;
-        TestClient() : m_nModifyCount(0), m_nNotifyCount(0) {};
+        int m_nModifyChangedCount;
+        const SwModify* m_pLastChangedModify;
+        TestClient() : m_nModifyCount(0), m_nNotifyCount(0), m_nModifyChangedCount(0), m_pLastChangedModify(nullptr) {};
         virtual void Modify( const SfxPoolItem*, const SfxPoolItem*) override
         { ++m_nModifyCount; }
         virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) override
         {
             if(typeid(TestHint) == typeid(rHint))
                 ++m_nNotifyCount;
+            else if(auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
+            {
+                ++m_nModifyChangedCount;
+                m_pLastChangedModify = pModifyChangedHint->m_pNew;
+            }
             else
                 SwClient::SwClientNotify(rModify, rHint);
         }
@@ -1894,6 +1902,30 @@ void SwDocTest::testClientModify()
     CPPUNIT_ASSERT_EQUAL(aClient2.m_nModifyCount,2);
     CPPUNIT_ASSERT_EQUAL(aClient1.m_nNotifyCount,1);
     CPPUNIT_ASSERT_EQUAL(aClient2.m_nNotifyCount,1);
+}
+void SwDocTest::testWriterMultiListener()
+{
+    TestModify aMod;
+    TestClient aClient;
+    sw::WriterMultiListener aMulti(aClient);
+    CPPUNIT_ASSERT(!aMulti.IsListeningTo(&aMod));
+    aMulti.StartListening(&aMod);
+    CPPUNIT_ASSERT(aMulti.IsListeningTo(&aMod));
+    aMulti.EndListeningAll();
+    CPPUNIT_ASSERT(!aMulti.IsListeningTo(&aMod));
+    aMulti.StartListening(&aMod);
+    aMulti.EndListening(&aMod);
+    CPPUNIT_ASSERT(!aMulti.IsListeningTo(&aMod));
+    int nPreDeathChangedCount;
+    {
+        TestModify aTempMod;
+        aMod.Add(&aTempMod);
+        aMulti.StartListening(&aTempMod);
+        nPreDeathChangedCount = aClient.m_nModifyChangedCount;
+    }
+    CPPUNIT_ASSERT(aMulti.IsListeningTo(&aMod));
+    CPPUNIT_ASSERT_EQUAL(aClient.m_nModifyChangedCount, nPreDeathChangedCount+1);
+    CPPUNIT_ASSERT_EQUAL(aClient.m_pLastChangedModify, static_cast<const SwModify*>(&aMod));
 }
 
 void SwDocTest::test64kPageDescs()

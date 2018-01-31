@@ -2385,6 +2385,13 @@ bool SwTableFormat::supportsFullDrawingLayerFillAttributeSet() const
     return false;
 }
 
+SwPosition SwTableFormat::GetPosition() const
+{
+    SwTable const * const pTable = SwTable::FindTable(this);
+    SwTableNode const * const pTableNode = pTable->GetTableNode();
+    return SwPosition(*pTableNode);
+}
+
 bool SwTableLineFormat::supportsFullDrawingLayerFillAttributeSet() const
 {
     return false;
