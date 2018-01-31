@@ -3761,10 +3761,10 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport const & rM
     rNumberFormat.SetBulletChar( nBuChar );
     rNumberFormat.SetBulletRelSize( static_cast<sal_uInt16>(nBulletHeight) );
     rNumberFormat.SetBulletColor( aCol );
-    sal_uInt16 nAbsLSpace = static_cast<sal_uInt16>( ( nTextOfs * 2540 ) / 576 );
-    sal_uInt16 nFirstLineOffset = nAbsLSpace - static_cast<sal_uInt16>( ( nBulletOfs * 2540 ) / 576 );
+    sal_uInt32 nAbsLSpace = ( nTextOfs * 2540 ) / 576;
+    sal_uInt32 nFirstLineOffset = nAbsLSpace - ( nBulletOfs * 2540 ) / 576;
     rNumberFormat.SetAbsLSpace( nAbsLSpace );
-    rNumberFormat.SetFirstLineOffset( -nFirstLineOffset );
+    rNumberFormat.SetFirstLineOffset( -static_cast<sal_Int32>(nFirstLineOffset) );
 }
 
 PPTCharSheet::PPTCharSheet( TSS_Type nInstance )
