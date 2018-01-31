@@ -21,9 +21,6 @@
 #include <com/sun/star/container/XSet.hpp>
 #include "FPServiceInfo.hxx"
 
-#ifdef _MSC_VER
-#pragma warning (disable:4917)
-#endif
 #include "VistaFilePicker.hxx"
 #include "../misc/WinImplHelper.hxx"
 #include <stdio.h>

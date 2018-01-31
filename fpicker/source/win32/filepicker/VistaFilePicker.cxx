@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef _MSC_VER
-#pragma warning (disable:4917)
-#endif
-
 #include "VistaFilePicker.hxx"
 
 #include "../misc/WinImplHelper.hxx"
@@ -40,13 +36,7 @@
 #include <osl/file.hxx>
 #include <officecfg/Office/Common.hxx>
 
-#ifdef _MSC_VER
-#pragma warning (push, 1)
-#endif
 #include <shlobj.h>
-#ifdef _MSC_VER
-#pragma warning (pop)
-#endif
 
 namespace fpicker{
 namespace win32{
