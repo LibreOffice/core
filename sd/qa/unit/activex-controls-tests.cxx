@@ -886,7 +886,7 @@ void SdActiveXControlsTest::testComboBoxProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(130), nMaxTextLen);
 
     xPropertySet->getPropertyValue("ReadOnly") >>= bReadOnly;
-    CPPUNIT_ASSERT_EQUAL(false, bReadOnly); // Bugous, should be true (tdf#111417)
+    CPPUNIT_ASSERT_EQUAL(false, bReadOnly); // Bogus, should be true (tdf#111417)
 
     xPropertySet->getPropertyValue("Align") >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::CENTER), nAlign);
@@ -983,7 +983,7 @@ void SdActiveXControlsTest::testListBoxProperties()
     CPPUNIT_ASSERT_EQUAL(true, bMultiSelection);
 
     xPropertySet->getPropertyValue("ReadOnly") >>= bReadOnly;
-    CPPUNIT_ASSERT_EQUAL(false, bReadOnly); // Bugous, should be true (tdf#111417)
+    CPPUNIT_ASSERT_EQUAL(false, bReadOnly); // Bogus, should be true (tdf#111417)
 
     xPropertySet->getPropertyValue("Align") >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::CENTER), nAlign);
