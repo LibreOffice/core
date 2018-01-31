@@ -71,7 +71,7 @@ SwXTextPortion::SwXTextPortion(
             ?  PROPERTY_MAP_REDLINE_PORTION
             :  PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
     , m_xParentText(rParent)
-    , m_FrameDepend(this, nullptr)
+    , m_aDepends(*this)
     , m_pFrameFormat(nullptr)
     , m_ePortionType(eType)
     , m_bIsCollapsed(false)
@@ -86,11 +86,12 @@ SwXTextPortion::SwXTextPortion(
     : m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
     , m_xParentText(rParent)
-    , m_FrameDepend(this, &rFormat)
+    , m_aDepends(*this)
     , m_pFrameFormat(&rFormat)
     , m_ePortionType(PORTION_FRAME)
     , m_bIsCollapsed(false)
 {
+    m_aDepends.StartListening(&rFormat);
     init( pPortionCursor);
 }
 
@@ -107,7 +108,7 @@ SwXTextPortion::SwXTextPortion(
     , m_pRubyAdjust ( bIsEnd ? nullptr : new uno::Any )
     , m_pRubyIsAbove( bIsEnd ? nullptr : new uno::Any )
     , m_pRubyPosition( bIsEnd ? nullptr : new uno::Any )
-    , m_FrameDepend(this, nullptr)
+    , m_aDepends(*this)
     , m_pFrameFormat(nullptr)
     , m_ePortionType( bIsEnd ? PORTION_RUBY_END : PORTION_RUBY_START )
     , m_bIsCollapsed(false)
@@ -129,7 +130,7 @@ SwXTextPortion::~SwXTextPortion()
 {
     SolarMutexGuard aGuard;
     m_pUnoCursor.reset(nullptr);
-    const_cast<SwDepend*>(&m_FrameDepend)->EndListeningAll();
+    m_aDepends.EndListeningAll();
 }
 
 uno::Reference< text::XText >  SwXTextPortion::getText()
@@ -798,14 +799,12 @@ sal_Int64 SwXTextPortion::getSomething( const uno::Sequence< sal_Int8 >& rId )
 
 uno::Sequence< OUString > SwXTextPortion::getAvailableServiceNames()
 {
-    SolarMutexGuard aGuard;
-    uno::Sequence<OUString> aRet { "com.sun.star.text.TextContent" };
-    return aRet;
+    return { "com.sun.star.text.TextContent" };
 }
 
 OUString SwXTextPortion::getImplementationName()
 {
-    return OUString("SwXTextPortion");
+    return "SwXTextPortion";
 }
 
 sal_Bool SwXTextPortion::supportsService(const OUString& rServiceName)
@@ -815,24 +814,22 @@ sal_Bool SwXTextPortion::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SwXTextPortion::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aRet(7);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TextPortion";
-    pArray[1] = "com.sun.star.style.CharacterProperties";
-    pArray[2] = "com.sun.star.style.CharacterPropertiesAsian";
-    pArray[3] = "com.sun.star.style.CharacterPropertiesComplex";
-    pArray[4] = "com.sun.star.style.ParagraphProperties";
-    pArray[5] = "com.sun.star.style.ParagraphPropertiesAsian";
-    pArray[6] = "com.sun.star.style.ParagraphPropertiesComplex";
-    return aRet;
+    return { "com.sun.star.text.TextPortion",
+            "com.sun.star.style.CharacterProperties",
+            "com.sun.star.style.CharacterPropertiesAsian",
+            "com.sun.star.style.CharacterPropertiesComplex",
+            "com.sun.star.style.ParagraphProperties",
+            "com.sun.star.style.ParagraphPropertiesAsian",
+            "com.sun.star.style.ParagraphPropertiesComplex" };
 }
 
-void SwXTextPortion::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXTextPortion::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    ClientModify(this, pOld, pNew);
-    if (!m_FrameDepend.GetRegisteredIn())
+    if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        m_pFrameFormat = nullptr;
+        ClientModify(this, pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+        if(!m_aDepends.IsListeningTo(m_pFrameFormat))
+            m_pFrameFormat = nullptr;
     }
 }
 
