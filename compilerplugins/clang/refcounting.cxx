@@ -142,6 +142,10 @@ bool containsXInterfaceSubclass(const clang::Type* pType0) {
         if (isDerivedFrom(pRecordDecl, [](Decl const * decl) -> bool { return bool(loplugin::DeclCheck(decl).Class("XPropertyList").GlobalNamespace()); })) { // module svx
             return false;
         }
+        // tdf#114596
+        if (isDerivedFrom(pRecordDecl, [](Decl const * decl) -> bool { return bool(loplugin::DeclCheck(decl).Class("OBookmarkContainer").Namespace("dbaccess").GlobalNamespace()); })) { // module dbaccess
+            return false;
+        }
     }
     if (pRecordDecl) {
         const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
