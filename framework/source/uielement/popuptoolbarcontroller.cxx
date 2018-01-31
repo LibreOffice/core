@@ -79,7 +79,6 @@ protected:
     virtual ToolBoxItemBits getDropDownStyle() const;
     void createPopupMenuController();
 
-    css::uno::Reference< css::uno::XComponentContext >      m_xContext;
     bool                                                    m_bHasController;
     OUString                                                m_aPopupCommand;
     css::uno::Reference< css::awt::XPopupMenu >             m_xPopupMenu;
@@ -92,7 +91,7 @@ private:
 PopupMenuToolbarController::PopupMenuToolbarController(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     const OUString &rPopupCommand )
-    : m_xContext( xContext )
+    : ToolBarBase( xContext, css::uno::Reference< css::frame::XFrame >(), /*aCommandURL*/OUString() )
     , m_bHasController( false )
     , m_aPopupCommand( rPopupCommand )
 {
