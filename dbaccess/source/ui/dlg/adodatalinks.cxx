@@ -19,17 +19,10 @@
 
 
 #if defined(_WIN32)
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#pragma warning(disable: 4917)
-#endif
 // LO/windows.h conflict
 #undef WB_LEFT
 #undef WB_RIGHT
 #include <msdasc.h>
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
 
 #include <o3tl/char16_t2wchar_t.hxx>
 
