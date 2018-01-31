@@ -687,20 +687,24 @@ public:
     const enum RangePosition    m_eRangePosition;
     SwDoc &                     m_rDoc;
     uno::Reference<text::XText> m_xParentText;
-    SwDepend            m_ObjectDepend; // register at format of table or frame
     ::sw::mark::IMark * m_pMark;
+    SwTableFormat* m_pTableFormat;
+    sw::WriterMultiListener m_aDepends;
+
 
     Impl(   SwDoc & rDoc, const enum RangePosition eRange,
-            SwFrameFormat *const pTableFormat,
+            SwTableFormat * const pTableFormat,
             const uno::Reference< text::XText > & xParent = nullptr)
         : SwClient()
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
         , m_eRangePosition(eRange)
         , m_rDoc(rDoc)
         , m_xParentText(xParent)
-        , m_ObjectDepend(this, pTableFormat)
         , m_pMark(nullptr)
+        , m_pTableFormat(pTableFormat)
+        , m_aDepends(*this)
     {
+        m_aDepends.StartListening(m_pTableFormat);
     }
 
     virtual ~Impl() override
@@ -720,35 +724,41 @@ public:
 
     const ::sw::mark::IMark * GetBookmark() const { return m_pMark; }
 
-protected:
-    // SwClient
-    virtual void    Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
-};
+    virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) override
+    {
+        if(m_eRangePosition == RANGE_IS_TABLE)
+        {
+            if(auto pFormat = dynamic_cast<const SwTableFormat*>(&rModify))
+                m_pTableFormat = const_cast<SwTableFormat*>(pFormat);
+        }
+        if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+        {
+            const auto pOld = pLegacyHint->m_pOld;
+            const auto pNew = pLegacyHint->m_pNew;
+            switch( pOld ? pOld->Which() : 0 )
+            {
+                case RES_REMOVE_UNO_OBJECT:
+                case RES_OBJECTDYING:
+                    Disconnect();
+                    break;
 
-void SwXTextRange::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
-{
-    const bool bAlreadyRegistered = nullptr != GetRegisteredIn();
-    ClientModify(this, pOld, pNew);
-    if (m_ObjectDepend.GetRegisteredIn())
-    {
-        ClientModify(&m_ObjectDepend, pOld, pNew);
-        // if the depend was removed then the range must be removed too
-        if (!m_ObjectDepend.GetRegisteredIn())
-        {
-            EndListeningAll();
-        }
-        // or if the range has been removed but the depend is still
-        // connected then the depend must be removed
-        else if (bAlreadyRegistered && !GetRegisteredIn())
-        {
-            m_ObjectDepend.EndListeningAll();
+                case RES_FMT_CHG:
+                    // Is the move to the new one finished and will the old one be deleted?
+                    if( m_aDepends.IsListeningTo(static_cast<const SwFormatChg*>(pNew)->pChangedFormat) &&
+                        static_cast<const SwFormatChg*>(pOld)->pChangedFormat->IsFormatInDTOR() )
+                        Disconnect();
+                    break;
+            }
         }
     }
-    if (!GetRegisteredIn())
+private:
+    void Disconnect()
     {
+        m_aDepends.EndListeningAll();
         m_pMark = nullptr;
+        m_pTableFormat = nullptr;
     }
-}
+};
 
 SwXTextRange::SwXTextRange(SwPaM const & rPam,
         const uno::Reference< text::XText > & xParent,
@@ -758,16 +768,12 @@ SwXTextRange::SwXTextRange(SwPaM const & rPam,
     SetPositions(rPam);
 }
 
-SwXTextRange::SwXTextRange(SwFrameFormat& rTableFormat)
+SwXTextRange::SwXTextRange(SwTableFormat& rTableFormat)
     : m_pImpl(
         new SwXTextRange::Impl(*rTableFormat.GetDoc(), RANGE_IS_TABLE, &rTableFormat) )
 {
-    SwTable *const pTable = SwTable::FindTable( &rTableFormat );
-    SwTableNode *const pTableNode = pTable->GetTableNode();
-    SwPosition aPosition( *pTableNode );
-    SwPaM aPam( aPosition );
-
-    SetPositions( aPam );
+    SwPaM aPam(rTableFormat.GetPosition());
+    SetPositions(aPam);
 }
 
 SwXTextRange::~SwXTextRange()
@@ -795,7 +801,7 @@ void SwXTextRange::SetPositions(const SwPaM& rPam)
     IDocumentMarkAccess* const pMA = m_pImpl->m_rDoc.getIDocumentMarkAccess();
     m_pImpl->m_pMark = pMA->makeMark(rPam, OUString(),
         IDocumentMarkAccess::MarkType::UNO_BOOKMARK, sw::mark::InsertMode::New);
-    m_pImpl->m_pMark->Add(m_pImpl.get());
+    m_pImpl->m_aDepends.StartListening(m_pImpl->m_pMark);
 }
 
 void SwXTextRange::DeleteAndInsert(
@@ -884,20 +890,8 @@ SwXTextRange::getText()
 {
     SolarMutexGuard aGuard;
 
-    if (!m_pImpl->m_xParentText.is())
-    {
-        if (m_pImpl->m_eRangePosition == RANGE_IS_TABLE &&
-            m_pImpl->m_ObjectDepend.GetRegisteredIn())
-        {
-            SwFrameFormat const*const pTableFormat = static_cast<SwFrameFormat const*>(
-                    m_pImpl->m_ObjectDepend.GetRegisteredIn());
-            SwTable const*const pTable = SwTable::FindTable( pTableFormat );
-            SwTableNode const*const pTableNode = pTable->GetTableNode();
-            const SwPosition aPosition( *pTableNode );
-            m_pImpl->m_xParentText =
-                ::sw::CreateParentXText(m_pImpl->m_rDoc, aPosition);
-        }
-    }
+    if (!m_pImpl->m_xParentText.is() && m_pImpl->m_eRangePosition == RANGE_IS_TABLE && m_pImpl->m_pTableFormat)
+        m_pImpl->m_xParentText = ::sw::CreateParentXText(m_pImpl->m_rDoc, m_pImpl->m_pTableFormat->GetPosition());
     OSL_ENSURE(m_pImpl->m_xParentText.is(), "SwXTextRange::getText: no text");
     return m_pImpl->m_xParentText;
 }
