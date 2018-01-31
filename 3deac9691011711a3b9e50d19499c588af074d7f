@@ -70,6 +70,24 @@
       "revId": "3deac9691011711a3b9e50d19499c588af074d7f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_282135fc",
+        "filename": "connectivity/source/inc/ado/ado_pre_sys_include.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-31T10:42:19Z",
+      "side": 0,
+      "message": "yeah, that\u0027s what it would boil down to, it seems",
+      "parentUuid": "fa31d9ce_e8263d15",
+      "revId": "3deac9691011711a3b9e50d19499c588af074d7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
