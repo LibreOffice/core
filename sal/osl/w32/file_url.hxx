@@ -25,18 +25,10 @@
 #include <osl/file.h>
 #include <osl/mutex.h>
 
-#ifdef _MSC_VER
-#pragma warning(push,1)
-#endif
-
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 #define PATHTYPE_ERROR                      0
 #define PATHTYPE_RELATIVE                   1
