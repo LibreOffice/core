@@ -247,6 +247,7 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_REFERENCE_FIELD_PART :    sName = "ReferenceFieldPart"; break;
         case PROP_SOURCE_NAME:    sName = "SourceName"; break;
         case PROP_REFERENCE_FIELD_SOURCE :    sName = "ReferenceFieldSource"; break;
+        case PROP_REFERENCE_FIELD_LANGUAGE :    sName = "ReferenceFieldLanguage"; break;
         case PROP_WIDTH_TYPE :    sName = "WidthType"; break;
         case PROP_TBL_LOOK : sName = "TblLook"; break;
         case PROP_TEXT_RANGE:    sName = "TextRange"; break;

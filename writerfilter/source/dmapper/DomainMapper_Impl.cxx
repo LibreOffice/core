@@ -4215,6 +4215,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                         xFieldProperties->setPropertyValue(
                             getPropertyName(PROP_SOURCE_NAME),
                             uno::makeAny(sFirstParam) );
+                        xFieldProperties->setPropertyValue(
+                            getPropertyName(PROP_REFERENCE_FIELD_LANGUAGE),
+                            uno::makeAny(sFirstParam) );
                         sal_Int16 nFieldPart = (bPageRef ? text::ReferenceFieldPart::PAGE : text::ReferenceFieldPart::TEXT);
                         OUString sValue;
                         if( lcl_FindInCommand( pContext->GetCommand(), 'p', sValue ))

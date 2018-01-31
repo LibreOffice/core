@@ -54,6 +54,19 @@ published service GetReference
         @see com::sun::star::text::Footnote
      */
     [property] short SequenceNumber;
+    /** contains the language id of the alternative language-dependent references.
+        <p> Alternative language-dependent forms of reference types. </p>
+
+        @since LibreOffice 6.1
+
+        <p> The current set of supported languages is:
+        <ul>
+            <li>hu : Hungarian, reference with lowercase article "a" or "az"</li>
+            <li>Hu : Hungarian, reference with uppercase article "A" or "Az"</li>
+        </ul>
+        </p>
+     */
+    [optional, property] string ReferenceFieldLanguage;
 };
 
 
