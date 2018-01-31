@@ -2681,6 +2681,9 @@ void ScExternalRefManager::maybeCreateRealFileName(sal_uInt16 nFileId)
 
 OUString ScExternalRefManager::getOwnDocumentName() const
 {
+    if (utl::ConfigManager::IsFuzzing())
+        return ("file:///tmp/document");
+
     SfxObjectShell* pShell = mpDoc->GetDocumentShell();
     if (!pShell)
         // This should not happen!
