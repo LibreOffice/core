@@ -52,6 +52,24 @@
       "revId": "952c997677fc3b446bbdab2f3a701884708fdd27",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_482d89a6",
+        "filename": "connectivity/source/inc/ado/Aolevariant.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-31T13:50:58Z",
+      "side": 1,
+      "message": "maybe; but the removal of the header that *maybe* not required anymore does not relate to the goal to remove pragmas silencing warnings, some of which could be useful; and I would not do that here, because regressions in either of these changes would not relate to the other change.",
+      "parentUuid": "fa31d9ce_c8409959",
+      "revId": "952c997677fc3b446bbdab2f3a701884708fdd27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
