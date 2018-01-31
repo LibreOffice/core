@@ -123,7 +123,7 @@ public class _XDictionaryList extends MultiMethodTest {
 
         oObj.flushEvents();
         oObj.addDictionary(xDic);
-        xDic.add("Positiv", false, "");
+        xDic.add("Positive", false, "");
         xDic.setActive(true);
         oObj.flushEvents();
         oObj.removeDictionary(xDic);
@@ -151,7 +151,7 @@ public class _XDictionaryList extends MultiMethodTest {
 
         oObj.flushEvents();
         oObj.addDictionary(xDic);
-        xDic.add("Positiv", false,"");
+        xDic.add("Positive", false,"");
         xDic.setActive(true);
 
         listenerCalled = false;
@@ -175,7 +175,7 @@ public class _XDictionaryList extends MultiMethodTest {
         short previous = oObj.getCount();
         addedDic = oObj.createDictionary("AddedDic",new Locale("en","US","WIN"),
                         com.sun.star.linguistic2.DictionaryType.POSITIVE,"");
-        addedDic.add("Positiv",false,"");
+        addedDic.add("Positive",false,"");
 
         oObj.addDictionary(addedDic);
 
@@ -235,7 +235,7 @@ public class _XDictionaryList extends MultiMethodTest {
         oObj.beginCollectEvents();
 
         oObj.addDictionary(xDic);
-        xDic.add("Positiv",false,"");
+        xDic.add("Positive",false,"");
         xDic.setActive(true);
 
         oObj.removeDictionary(xDic);

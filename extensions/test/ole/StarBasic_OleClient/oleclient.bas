@@ -216,7 +216,7 @@ inUnknown2 = inUnknown
 obj.inoutUnknown(inUnknown2)
 outUnknown = Nothing
 obj.inoutUnknown(outUnknown)
-inDecimal = CDec("18446744073709551615") 'highest positiv value of unsigne int64
+inDecimal = CDec("18446744073709551615") 'highest positive value of unsigned int64
 inDecimal2 = inDecimal
 obj.inoutDecimal(inDecimal2)
 outDecimal = 0
@@ -576,7 +576,7 @@ If Not IsNull(outObject) Then
 	Exit Function
 End If
 'Decimal passed by reference
-inrefDecimal = CDec("9223372036854775807") 'highest positiv value of int64
+inrefDecimal = CDec("9223372036854775807") 'highest positive value of int64
 obj.inrefDecimal(inrefDecimal)
 outrefDecimal = 0
 obj.outDecimal(outrefDecimal)

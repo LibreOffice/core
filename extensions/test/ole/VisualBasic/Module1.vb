@@ -291,7 +291,7 @@ Public Sub Main()
         retULong = outULong
         objOleTest.testinout_methodULong(retLong)
         objOleTest.testinout_methodULong(retLong)
-        outHyper = CDec("9223372036854775807") 'highest positiv value of int64
+        outHyper = CDec("9223372036854775807") 'highest positive value of int64
         retHyper = outHyper
         objOleTest.testinout_methodHyper(retHyper)
         objOleTest.testinout_methodHyper(retHyper)

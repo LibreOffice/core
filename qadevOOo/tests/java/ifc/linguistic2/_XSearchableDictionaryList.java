@@ -41,14 +41,14 @@ public class _XSearchableDictionaryList extends MultiMethodTest {
     * Has <b> OK </b> status if returned values are not null. <p>
     */
     public void _queryDictionaryEntry() {
-        XDictionaryEntry aNegativEntry = oObj.queryDictionaryEntry("Negativ",
+        XDictionaryEntry aNegativEntry = oObj.queryDictionaryEntry("Negative",
                                     new Locale("en","US","WIN"),false,true);
         if (aNegativEntry == null) {
             log.println("'queryDictionary' didn't work for negative dictionaries");
         } else {
             log.println("'queryDictionary' works for negative dictionaries");
         }
-        XDictionaryEntry aPositivEntry = oObj.queryDictionaryEntry("Positiv",
+        XDictionaryEntry aPositivEntry = oObj.queryDictionaryEntry("Positive",
                                     new Locale("en","US","WIN"),true,true);
         if (aPositivEntry == null) {
             log.println("'queryDictionary' didn't work for positive dictionaries");
