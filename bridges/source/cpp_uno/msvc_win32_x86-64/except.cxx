@@ -234,7 +234,6 @@ void
 #endif // 0
 
 
-#pragma warning( disable : 4237 )
 #include <sal/config.h>
 
 #include <memory>
