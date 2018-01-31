@@ -30,11 +30,6 @@
     hidden window and forward these requests via window messages.
 */
 
-#ifdef _MSC_VER
-#pragma warning( disable : 4786 ) // identifier was truncated to 'number'
-                                   // characters in the debug information
-#endif
-
 #if !defined WINVER
 #define WINVER 0x0400
 #endif
