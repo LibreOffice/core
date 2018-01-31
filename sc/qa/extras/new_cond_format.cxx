@@ -25,11 +25,6 @@ using namespace css;
 
 namespace sc_apitest {
 
-// tearDown checks this value before disposing mxCompnent
-// if NUMBER_OF_TESTS is less than the number of tests that call init(),
-// then the component is created again but not disposed, resulting in temp file leak
-#define NUMBER_OF_TESTS 7
-
 class ScConditionalFormatTest : public CalcUnoApiTest
 {
 public:
@@ -58,12 +53,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 private:
 
-    static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< lang::XComponent > mxComponent;
 };
-
-sal_Int32 ScConditionalFormatTest::nTest = 0;
-uno::Reference< lang::XComponent > ScConditionalFormatTest::mxComponent;
 
 ScConditionalFormatTest::ScConditionalFormatTest()
     : CalcUnoApiTest("sc/qa/extras/testdocuments/")
@@ -72,17 +63,9 @@ ScConditionalFormatTest::ScConditionalFormatTest()
 
 uno::Reference< uno::XInterface > ScConditionalFormatTest::init(sal_Int32 nIndex)
 {
-    if(!mxComponent.is())
-    {
-        // get the test file
-        OUString aFileURL;
-        createFileURL("new_cond_format_api.ods", aFileURL);
-        mxComponent = loadFromDesktop(aFileURL);
-    }
-    CPPUNIT_ASSERT_MESSAGE("Component not loaded", mxComponent.is());
-
     // get the first sheet
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(nIndex), uno::UNO_QUERY_THROW);
 
@@ -456,18 +439,16 @@ void ScConditionalFormatTest::testColorScaleProperties()
 
 void ScConditionalFormatTest::setUp()
 {
-    nTest++;
     CalcUnoApiTest::setUp();
+    // get the test file
+    OUString aFileURL;
+    createFileURL("new_cond_format_api.ods", aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 }
 
 void ScConditionalFormatTest::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
