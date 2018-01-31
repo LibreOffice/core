@@ -173,7 +173,7 @@ void SwTabFrame::RegistFlys()
 }
 
 void SwInvalidateAll( SwFrame *pFrame, long nBottom );
-static void lcl_RecalcRow( SwRowFrame* pRow, long nBottom );
+static bool lcl_RecalcRow( SwRowFrame* pRow, long nBottom );
 static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, long lYStart, bool bInva );
 // #i26945# - add parameter <_bOnlyRowsAndCells> to control
 // that only row and cell frames are formatted.
@@ -1565,7 +1565,8 @@ static bool lcl_InnerCalcLayout( SwFrame *pFrame,
     return bRet;
 }
 
-static void lcl_RecalcRow( SwRowFrame* pRow, long nBottom )
+// returns false if pRow is invalid
+static bool lcl_RecalcRow( SwRowFrame* pRow, long nBottom )
 {
     // FME 2007-08-30 #i81146# new loop control
     int nLoopControlRuns_1 = 0;
@@ -1623,7 +1624,7 @@ static void lcl_RecalcRow( SwRowFrame* pRow, long nBottom )
             if (!bRowStillExists)
             {
                 SAL_WARN("sw.layout", "no row anymore at " << pRow);
-                return;
+                return false;
             }
 
             // NEW TABLES
@@ -1667,7 +1668,8 @@ static void lcl_RecalcRow( SwRowFrame* pRow, long nBottom )
             }
         }
         break;
-    } while( true );
+    } while (true);
+    return true;
 }
 
 static void lcl_RecalcTable( SwTabFrame& rTab,
@@ -2354,7 +2356,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
             // 1. Try: bTryToSplit = true  => Try to split the row.
             // 2. Try: bTryToSplit = false => Split the table between the rows.
-            if ( pFirstNonHeadlineRow->GetNext() || bTryToSplit )
+            if ((pFirstNonHeadlineRow && pFirstNonHeadlineRow->GetNext()) || bTryToSplit )
             {
                 SwTwips nDeadLine = aRectFnSet.GetPrtBottom(*GetUpper());
                 if( IsInSct() || GetUpper()->IsInTab() ) // TABLE IN TABLE)
@@ -2363,7 +2365,11 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
                 {
                     SetInRecalcLowerRow( true );
-                    ::lcl_RecalcRow( static_cast<SwRowFrame*>(Lower()), nDeadLine );
+                    SwRowFrame* pRow = static_cast<SwRowFrame*>(Lower());
+                    if (!lcl_RecalcRow(pRow, nDeadLine))
+                    {
+                        pFirstNonHeadlineRow = GetFirstNonHeadlineRow();
+                    }
                     SetInRecalcLowerRow( false );
                 }
                 m_bLowersFormatted = true;
