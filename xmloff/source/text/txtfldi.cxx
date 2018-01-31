@@ -2626,6 +2626,9 @@ void XMLReferenceFieldImportContext::ProcessAttribute(
 
             break;
         }
+        case XML_TOK_TEXTFIELD_REFERENCE_LANGUAGE:
+            sLanguage = sAttrValue;
+            break;
     }
 
     // bValid: we need proper element type and name
@@ -2639,6 +2642,7 @@ void XMLReferenceFieldImportContext::PrepareField(
 
     xPropertySet->setPropertyValue("ReferenceFieldSource", Any(nSource));
 
+    xPropertySet->setPropertyValue("ReferenceFieldLanguage", Any(sLanguage));
     switch (nElementToken)
     {
         case XML_TOK_TEXT_REFERENCE_REF:
