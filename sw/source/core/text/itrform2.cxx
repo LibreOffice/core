@@ -2388,7 +2388,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         if( nNextTop > aInter.Bottom() )
         {
             SwTwips nH = nNextTop - aInter.Top();
-            if( nH < USHRT_MAX )
+            if( nH < SAL_MAX_UINT16 )
                 pFly->Height( sal_uInt16( nH ) );
         }
         if( nAscent < pFly->Height() )
