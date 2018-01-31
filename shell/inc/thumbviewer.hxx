@@ -20,17 +20,10 @@
 #ifndef INCLUDED_SHELL_INC_INTERNAL_THUMBVIEWER_HXX
 #define INCLUDED_SHELL_INC_INTERNAL_THUMBVIEWER_HXX
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#pragma warning(disable:4917)
-#endif
 #include <objidl.h>
 #include <shlobj.h>
 #ifndef DONT_HAVE_GDIPLUS
 #include <gdiplus.h>
-#endif
-#if defined _MSC_VER
-#pragma warning(pop)
 #endif
 #include <string>
 
