@@ -34,6 +34,24 @@
       "revId": "952c997677fc3b446bbdab2f3a701884708fdd27",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_c8409959",
+        "filename": "connectivity/source/inc/ado/Aolevariant.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-31T13:48:01Z",
+      "side": 1,
+      "message": "then maybe the include of sdkddkver.h from ado_pre_sys_include.h was (by now) merely an \"implementation detail\" of ado_pre_sys_include.h, and need not be replicated at the original include sites of ado_pre_sys_include.h now?",
+      "parentUuid": "fa31d9ce_884f8191",
+      "revId": "952c997677fc3b446bbdab2f3a701884708fdd27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
