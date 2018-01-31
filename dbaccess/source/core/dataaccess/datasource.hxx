@@ -82,7 +82,8 @@ class ODatabaseSource   :public ModelDependentComponent // must be first
 
 private:
     using ODatabaseSource_Base::rBHelper;
-    rtl::Reference<OBookmarkContainer> m_xBookmarks;
+    // note: this thing uses the ref-count of "this", see OBookmarkContainer::acquire!
+    OBookmarkContainer m_Bookmarks;
     ::comphelper::OInterfaceContainerHelper2       m_aFlushListeners;
 
 private:

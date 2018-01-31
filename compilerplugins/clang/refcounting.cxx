@@ -146,6 +146,10 @@ bool containsXInterfaceSubclass(const Type* pType0) {
         if (isDerivedFrom(pRecordDecl, "XPropertyList")) { // module svx
             return false;
         }
+        // tdf#114596
+        if (isDerivedFrom(pRecordDecl, "dbaccess::OBookmarkContainer")) { // module dbaccess
+            return false;
+        }
     }
     if (pRecordDecl) {
         const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
