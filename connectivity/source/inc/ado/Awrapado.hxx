@@ -22,11 +22,9 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 // Includes for ADO
-#include <ado/ado_pre_sys_include.h>
 #include <oledb.h>
 #include <ocidl.h>
 #include <adoint.h>
-#include <ado/ado_post_sys_include.h>
 #include <ado/adoimp.hxx>
 #include <ado/Aolewrap.hxx>
 #include <ado/Aolevariant.hxx>
