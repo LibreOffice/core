@@ -17,17 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#pragma warning(disable: 4917)
-#endif
 #include <objbase.h>
 #include <strmif.h>
 #include <control.h>
 #include <dshow.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
+
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
