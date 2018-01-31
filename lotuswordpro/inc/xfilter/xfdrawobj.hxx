@@ -88,7 +88,7 @@ public:
      */
     void SetRotate(double degree)
     {
-        m_nFlag |= XFDRAWOBJECT_FLAG_ROTATE;
+        m_nDrawFlag |= XFDRAWOBJECT_FLAG_ROTATE;
         m_fRotate = degree*2*PI/360;
         m_aRotatePoint = XFPoint(0,0);
     }
@@ -100,7 +100,7 @@ public:
 protected:
     double          m_fRotate;
     XFPoint         m_aRotatePoint;
-    unsigned int    m_nFlag;
+    unsigned int    m_nDrawFlag;
 };
 
 #endif
