@@ -20,13 +20,7 @@
 #ifndef INCLUDED_SHELL_INC_INTERNAL_SHLXTHDL_HXX
 #define INCLUDED_SHELL_INC_INTERNAL_SHLXTHDL_HXX
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
 #include <objbase.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 // {087B3AE3-E237-4467-B8DB-5A38AB959AC9}
 const CLSID CLSID_INFOTIP_HANDLER =

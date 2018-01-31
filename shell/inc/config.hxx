@@ -20,10 +20,6 @@
 #ifndef INCLUDED_SHELL_INC_INTERNAL_CONFIG_HXX
 #define INCLUDED_SHELL_INC_INTERNAL_CONFIG_HXX
 
-#ifdef _MSC_VER
-#pragma warning (disable : 4786 4503 4917)
-#endif
-
 #ifdef _AMD64_
 #define MODULE_NAME L"shlxthdl_x64.dll"
 #else
