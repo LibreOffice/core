@@ -112,7 +112,7 @@ public:
             const css::uno::Reference< css::text::XText > & xParent,
             const enum RangePosition eRange = RANGE_IN_TEXT);
     // only for RANGE_IS_TABLE
-    SwXTextRange(SwFrameFormat& rTableFormat);
+    SwXTextRange(SwTableFormat& rTableFormat);
 
     const SwDoc& GetDoc() const;
           SwDoc& GetDoc();

@@ -284,21 +284,35 @@ void SwModify::CheckCaching( const sal_uInt16 nWhich )
 void SwMultiDepend::StartListening(SwModify* pDepend)
 {
     EndListening(nullptr);
-    m_vpDepends.push_back(std::make_unique<SwDepend>(&m_rToTell, pDepend));
+    m_vDepends.emplace(m_vDepends.end(), &m_rToTell, pDepend);
+}
+
+
+bool SwMultiDepend::IsListeningTo(const SwModify* const pBroadcaster)
+{
+    return std::any_of(m_vDepends.begin(), m_vDepends.end(),
+        [&pBroadcaster](const SwDepend& aListener)
+        {
+            return aListener.GetRegisteredIn() == pBroadcaster;
+        });
 }
 
 void SwMultiDepend::EndListening(SwModify* pBroadcaster)
 {
-    m_vpDepends.erase(std::remove_if(m_vpDepends.begin(), m_vpDepends.end(),
+    m_vDepends.remove_if( [&pBroadcaster](const SwDepend& aListener)
+        {
+            return aListener.GetRegisteredIn() == nullptr || aListener.GetRegisteredIn() == pBroadcaster;
+        }); 
+ /*   m_vpDepends.erase(std::remove_if(m_vpDepends.begin(), m_vpDepends.end(),
         [&pBroadcaster](const std::shared_ptr<SwDepend> pListener)
         {
             return pListener->GetRegisteredIn() == nullptr || pListener->GetRegisteredIn() == pBroadcaster;
-        }));
+        })); */
 }
 
 void SwMultiDepend::EndListeningAll()
 {
-    m_vpDepends.clear();
+    m_vDepends.clear();
 }
 
 sw::ClientIteratorBase* sw::ClientIteratorBase::our_pClientIters = nullptr;

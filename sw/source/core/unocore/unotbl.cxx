@@ -2180,7 +2180,7 @@ SwXTextTable::attach(const uno::Reference<text::XTextRange> & xTextRange)
 uno::Reference<text::XTextRange>  SwXTextTable::getAnchor()
 {
     SolarMutexGuard aGuard;
-    SwFrameFormat* pFormat = lcl_EnsureCoreConnected(GetFrameFormat(), static_cast<cppu::OWeakObject*>(this));
+    auto pFormat = dynamic_cast<SwTableFormat*>(lcl_EnsureCoreConnected(GetFrameFormat(), static_cast<cppu::OWeakObject*>(this)));
     return new SwXTextRange(*pFormat);
 }
 

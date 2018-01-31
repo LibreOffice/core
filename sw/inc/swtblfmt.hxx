@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_SWTBLFMT_HXX
 
 #include "frmfmt.hxx"
+#include "pam.hxx"
 
 class SwDoc;
 
@@ -37,6 +38,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableFormat)
 
     virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
+    SwPosition GetPosition() const;
 };
 
 class SwTableLineFormat final : public SwFrameFormat

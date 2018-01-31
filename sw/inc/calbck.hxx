@@ -26,8 +26,7 @@
 #include "hints.hxx"
 #include <typeinfo>
 #include <type_traits>
-#include <vector>
-#include <memory>
+#include <list>
 
 
 class SwModify;
@@ -236,12 +235,13 @@ private:
 class SW_DLLPUBLIC SwMultiDepend final
 {
     SwClient& m_rToTell;
-    std::vector<std::shared_ptr<SwDepend>> m_vpDepends;
+    std::list<SwDepend> m_vDepends;
     public:
         SwMultiDepend(SwClient& rToTell)
             : m_rToTell(rToTell) {}
         void StartListening(SwModify* pDepend);
         void EndListening(SwModify* pDepend);
+        bool IsListeningTo(const SwModify* const pDepend);
         void EndListeningAll();
 };
 
