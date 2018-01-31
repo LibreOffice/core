@@ -3300,6 +3300,9 @@ namespace xmloff { namespace token {
         XML_ZEROS_DENOMINATOR_DIGITS,
         XML_INTEGER_FRACTION_DELIMITER,
 
+        // tdf#115319
+        XML_REFERENCE_LANGUAGE,
+
         XML_TOKEN_END
     };
 

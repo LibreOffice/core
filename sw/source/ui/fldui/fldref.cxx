@@ -31,6 +31,8 @@
 #include <SwNodeNum.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
+#include <unotools/configmgr.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 #include <comphelper/string.hxx>
 
@@ -822,6 +824,8 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
         m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(GetFieldMgr().GetFormatId( nTypeId, i )));
     }
     // #i83479#
+
+    sal_uInt16 nExtraSize( 0 );
     if ( bAddCrossRefFormats )
     {
         sal_uInt16 nFormat = FMT_REF_NUMBER_IDX;
@@ -833,8 +837,58 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
         nFormat = FMT_REF_NUMBER_FULL_CONTEXT_IDX;
         nPos = m_pFormatLB->InsertEntry(GetFieldMgr().GetFormatStr( nTypeId, nFormat ));
         m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(GetFieldMgr().GetFormatId( nTypeId, nFormat )));
-        nSize += 3;
+        nExtraSize = 3;
     }
+
+    // extra list items optionally, depending from reference-language
+    SvtSysLocaleOptions aSysLocaleOptions;
+    static const LanguageTag& rLang = aSysLocaleOptions.GetRealLanguageTag();
+
+    if (rLang.getLanguage() == "hu")
+    {
+        for (sal_uInt16 i = 0; i < nSize; i++)
+        {
+            sal_Int32 nPos = m_pFormatLB->InsertEntry(SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nTypeId, i ));
+            m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(GetFieldMgr().GetFormatId( nTypeId, i + SAL_N_ELEMENTS(FMT_REF_ARY))));
+        }
+        nExtraSize += nSize;
+
+        if ( bAddCrossRefFormats )
+        {
+            sal_uInt16 nFormat = FMT_REF_NUMBER_IDX + SAL_N_ELEMENTS(FMT_REF_ARY);
+            sal_Int32 nPos = m_pFormatLB->InsertEntry(SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nTypeId, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
+            m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(GetFieldMgr().GetFormatId( nTypeId, nFormat )));
+            nFormat = FMT_REF_NUMBER_NO_CONTEXT_IDX + SAL_N_ELEMENTS(FMT_REF_ARY);
+            nPos = m_pFormatLB->InsertEntry(SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nTypeId, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
+            m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(GetFieldMgr().GetFormatId( nTypeId, nFormat )));
+            nFormat = FMT_REF_NUMBER_FULL_CONTEXT_IDX + SAL_N_ELEMENTS(FMT_REF_ARY);
+            nPos = m_pFormatLB->InsertEntry(SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nTypeId, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
+            m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(GetFieldMgr().GetFormatId( nTypeId, nFormat )));
+            nExtraSize += 3;
+        }
+        // uppercase article
+        for (sal_uInt16 i = 0; i < nSize; i++)
+        {
+            sal_Int32 nPos = m_pFormatLB->InsertEntry(SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nTypeId, i ));
+            m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(GetFieldMgr().GetFormatId( nTypeId, i + 2 * SAL_N_ELEMENTS(FMT_REF_ARY))));
+        }
+        nExtraSize += nSize;
+        if ( bAddCrossRefFormats )
+        {
+            sal_uInt16 nFormat = FMT_REF_NUMBER_IDX + 2 * SAL_N_ELEMENTS(FMT_REF_ARY);
+            sal_Int32 nPos = m_pFormatLB->InsertEntry(SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nTypeId, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
+            m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(GetFieldMgr().GetFormatId( nTypeId, nFormat )));
+            nFormat = FMT_REF_NUMBER_NO_CONTEXT_IDX + 2 * SAL_N_ELEMENTS(FMT_REF_ARY);
+            nPos = m_pFormatLB->InsertEntry(SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nTypeId, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
+            m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(GetFieldMgr().GetFormatId( nTypeId, nFormat )));
+            nFormat = FMT_REF_NUMBER_FULL_CONTEXT_IDX + 2 * SAL_N_ELEMENTS(FMT_REF_ARY);
+            nPos = m_pFormatLB->InsertEntry(SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nTypeId, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
+            m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(GetFieldMgr().GetFormatId( nTypeId, nFormat )));
+            nExtraSize += 3;
+        }
+    }
+
+    nSize += nExtraSize;
 
     // select a certain entry
     if (nSize)
@@ -842,7 +896,7 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
         if (!IsFieldEdit())
             m_pFormatLB->SelectEntry(sOldSel);
         else
-            m_pFormatLB->SelectEntry(SwResId(FMT_REF_ARY[GetCurField()->GetFormat()]));
+            m_pFormatLB->SelectEntry(SwResId(FMT_REF_ARY[GetCurField()->GetFormat() % SAL_N_ELEMENTS(FMT_REF_ARY)]));
 
         if (!m_pFormatLB->GetSelectedEntryCount())
         {

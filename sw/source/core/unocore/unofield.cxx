@@ -1469,6 +1469,7 @@ void SAL_CALL SwXTextField::attach(
             SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef);
             pField = new SwGetRefField(static_cast<SwGetRefFieldType*>(pFieldType),
                         m_pImpl->m_pProps->sPar1,
+                        m_pImpl->m_pProps->sPar4,
                         0,
                         0,
                         0);

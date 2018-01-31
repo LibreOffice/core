@@ -977,6 +977,9 @@
 #define FMT_REF_NUMBER                          NC_("FMT_REF_NUMBER", "Number")
 #define FMT_REF_NUMBER_NO_CONTEXT               NC_("FMT_REF_NUMBER_NO_CONTEXT", "Number (no context)")
 #define FMT_REF_NUMBER_FULL_CONTEXT             NC_("FMT_REF_NUMBER_FULL_CONTEXT", "Number (full context)")
+
+#define FMT_REF_WITH_LOWERCASE_HU_ARTICLE       NC_("FMT_REF_WITH_LOWERCASE_HU_ARTICLE", "Article a/az + ")
+#define FMT_REF_WITH_UPPERCASE_HU_ARTICLE       NC_("FMT_REF_WITH_UPPERCASE_HU_ARTICLE", "Article A/Az + ")
 /*--------------------------------------------------------------------
     Description: placeholder
  --------------------------------------------------------------------*/
