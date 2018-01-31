@@ -134,7 +134,6 @@ public:
 
 private:
     OUString   m_strDataStyle;
-    OUString   m_strParentStyleName;
     enumXFAlignType m_eHoriAlign;
     enumXFAlignType m_eVertAlign;
 

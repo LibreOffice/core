@@ -63,8 +63,6 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/framework/source/uielement/popuptoolbarcontroller.cxx"))
         return true;
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/lotuswordpro/inc/xfilter/xfcellstyle.hxx"))
-        return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/sc/source/ui/vba/vbastyles.hxx"))
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/sd/inc/Outliner.hxx"))

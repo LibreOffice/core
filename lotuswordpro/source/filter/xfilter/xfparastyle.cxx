@@ -103,8 +103,6 @@ XFParaStyle::XFParaStyle(const XFParaStyle& other)
     , m_nFlag(other.m_nFlag)
     , m_bNumberRight(other.m_bNumberRight)
 {
-    m_strParentStyleName = other.m_strParentStyleName;
-
     if( other.m_pBorders )
         m_pBorders = new XFBorders(*other.m_pBorders);
     else
