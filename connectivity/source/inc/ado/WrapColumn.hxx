@@ -21,9 +21,8 @@
 
 #include <ado/Aolewrap.hxx>
 
-#include <ado/ado_pre_sys_include.h>
+#include <sdkddkver.h>
 #include <adoint.h>
-#include <ado/ado_post_sys_include.h>
 
 namespace connectivity
 {

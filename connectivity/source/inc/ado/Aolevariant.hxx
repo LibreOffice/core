@@ -23,9 +23,8 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <ado/ado_pre_sys_include.h>
+#include <sdkddkver.h>
 #include <oaidl.h>
-#include <ado/ado_post_sys_include.h>
 
 namespace com
 {

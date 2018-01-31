@@ -21,9 +21,8 @@
 
 #include <com/sun/star/sdbc/SQLException.hpp>
 
-#include <ado/ado_pre_sys_include.h>
+#include <sdkddkver.h>
 #include <adoctint.h>
-#include <ado/ado_post_sys_include.h>
 
 struct ADOConnection;
 namespace connectivity
