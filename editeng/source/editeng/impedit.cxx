@@ -963,7 +963,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
         if ( aEditCursor.Right() > aTmpVisArea.Right() )
         {
-            // Scroll left, positiv
+            // Scroll left, positive
             nDocDiffX = aEditCursor.Right() - aTmpVisArea.Right();
             // Can it be a little more?
             if ( aEditCursor.Right() < ( nMaxTextWidth - GetScrollDiffX() ) )

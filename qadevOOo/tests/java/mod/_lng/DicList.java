@@ -83,8 +83,8 @@ public class DicList extends TestCase {
             "en","US","WIN"),com.sun.star.linguistic2.DictionaryType.NEGATIVE,"");
         XDictionary xDic2 = xDicList.createDictionary("PositivDic",new Locale(
             "en","US","WIN"),com.sun.star.linguistic2.DictionaryType.POSITIVE,"");
-        xDic2.add("Positiv",false,"");
-        xDic.add("Negativ",true,"");
+        xDic2.add("Positive",false,"");
+        xDic.add("Negative",true,"");
         xDicList.addDictionary(xDic);
         xDicList.addDictionary(xDic2);
         xDic.setActive(true);
