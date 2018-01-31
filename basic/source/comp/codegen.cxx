@@ -468,19 +468,13 @@ public:
     virtual void end() override {}
     S offset()
     {
+        typedef decltype(T(1) + S(1)) larger_t; // type capable to hold both value ranges of T and S
         T result = 0 ;
         static const S max = std::numeric_limits< S >::max();
         result = m_nNumOp0 + ( ( sizeof(S) + 1 ) * m_nNumSingleParams ) + ( (( sizeof(S) * 2 )+ 1 )  * m_nNumDoubleParams );
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning( disable : 4309)
-#endif
-        return std::min(static_cast<T>(max), result);
-#ifdef _MSC_VER
-#pragma warning(push)
-#endif
+        return std::min<larger_t>(max, result);
     }
-   virtual bool processParams() override { return false; }
+    virtual bool processParams() override { return false; }
 };
 
 
