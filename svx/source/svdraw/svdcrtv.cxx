@@ -208,7 +208,7 @@ SdrCreateView::SdrCreateView(SdrModel* pModel1, OutputDevice* pOut)
 SdrCreateView::~SdrCreateView()
 {
     ImpClearConnectMarker();
-    delete mpCreateViewExtraData;
+    mpCreateViewExtraData.reset();
     SdrObject::Free( pAktCreate );
 }
 

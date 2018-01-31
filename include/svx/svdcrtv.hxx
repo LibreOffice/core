@@ -42,7 +42,7 @@ protected:
 
     // for migrating stuff from XOR, use ImpSdrCreateViewExtraData ATM to not need to
     // compile the apps all the time
-    ImpSdrCreateViewExtraData*  mpCreateViewExtraData;
+    std::unique_ptr<ImpSdrCreateViewExtraData> mpCreateViewExtraData;
 
     Pointer                     aAktCreatePointer;
 
