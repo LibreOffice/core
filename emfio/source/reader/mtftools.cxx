@@ -788,6 +788,8 @@ namespace emfio
 
     void MtfTools::IntersectClipRect( const tools::Rectangle& rRect )
     {
+        if (utl::ConfigManager::IsFuzzing())
+            return;
         mbClipNeedsUpdate=true;
         if ((rRect.Left()-rRect.Right()==0) && (rRect.Top()-rRect.Bottom()==0))
         {
@@ -798,18 +800,24 @@ namespace emfio
 
     void MtfTools::ExcludeClipRect( const tools::Rectangle& rRect )
     {
+        if (utl::ConfigManager::IsFuzzing())
+            return;
         mbClipNeedsUpdate=true;
         maClipPath.excludeClipRect( ImplMap( rRect ) );
     }
 
     void MtfTools::MoveClipRegion( const Size& rSize )
     {
+        if (utl::ConfigManager::IsFuzzing())
+            return;
         mbClipNeedsUpdate=true;
         maClipPath.moveClipRegion( ImplMap( rSize ) );
     }
 
     void MtfTools::SetClipPath( const tools::PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode, bool bIsMapped )
     {
+        if (utl::ConfigManager::IsFuzzing())
+            return;
         mbClipNeedsUpdate = true;
         tools::PolyPolygon aPolyPolygon(rPolyPolygon);
 
@@ -924,7 +932,7 @@ namespace emfio
 
     void MtfTools::UpdateClipRegion()
     {
-        if (mbClipNeedsUpdate && !utl::ConfigManager::IsFuzzing())
+        if (mbClipNeedsUpdate)
         {
             mbClipNeedsUpdate = false;
             mbComplexClip = false;

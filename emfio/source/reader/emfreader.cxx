@@ -1210,7 +1210,7 @@ namespace emfio
 
                     case EMR_SELECTCLIPPATH :
                     {
-                        sal_Int32 nClippingMode;
+                        sal_Int32 nClippingMode(0);
                         mpInputStream->ReadInt32(nClippingMode);
                         SetClipPath(GetPathObj(), nClippingMode, true);
                     }
@@ -1218,7 +1218,7 @@ namespace emfio
 
                     case EMR_EXTSELECTCLIPRGN :
                     {
-                        sal_Int32 nClippingMode, cbRgnData;
+                        sal_Int32 nClippingMode(0), cbRgnData(0);
                         mpInputStream->ReadInt32(cbRgnData);
                         mpInputStream->ReadInt32(nClippingMode);
 
