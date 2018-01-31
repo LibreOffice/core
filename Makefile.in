@@ -376,6 +376,12 @@ ifneq ($(ENABLE_MACOSX_SANDBOX),)
 	rm $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/MacOS/gengal
 	rm $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/MacOS/unopkg
 	rm $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/MacOS/unoinfo
+
+# Fix the protection of some externally sourced files that keep their original protection that
+# ridiculously doesn't allow 'read' by 'other'. (Which makes the files unusable anyway.) The App
+# Store validation catches this.
+
+	find $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents ! -perm -o=r -print0 | xargs -0 chmod o+r
 endif
 #
 # Then use the macosx-codesign-app-bundle script
