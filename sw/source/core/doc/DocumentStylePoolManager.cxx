@@ -1989,7 +1989,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             aFormat.SetIncludeUpperLevels( 1 );
             aFormat.SetSuffix( "." );
 
-            sal_uInt16 nOffs = 397; // 0.70 cm
+            long const nOffs = 397; // 0.70 cm
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2009,7 +2009,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
-                    long nPos = (n+1) * static_cast<long>(nOffs);
+                    long nPos = (n+1) * nOffs;
                     aFormat.SetListtabPos(nPos + 357);
                     aFormat.SetIndentAt(nPos + 357);
                 }
