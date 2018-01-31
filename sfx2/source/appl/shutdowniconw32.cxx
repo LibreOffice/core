@@ -22,11 +22,6 @@
 
 #include <sal/macros.h>
 
-// necessary to include system headers without warnings
-#ifdef _MSC_VER
-#pragma warning(disable:4668 4917)
-#endif
-
 #include <unotools/moduleoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 
