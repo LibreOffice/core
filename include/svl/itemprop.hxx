@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svl/itemset.hxx>
 #include <svl/svldllapi.h>
@@ -35,19 +36,43 @@ struct SfxItemPropertyMapEntry
     sal_uInt16                          nWID;  ///< WhichId of SfxPoolItem
     css::uno::Type                      aType; ///< UNO type of property
     /// flag bitmap, @see css::beans::PropertyAttribute
-    long                                nFlags;
+    sal_Int16                           nFlags;
     /// "member ID" to tell QueryValue/PutValue which property it is
     /// (when multiple properties map to the same nWID)
     sal_uInt8                           nMemberId;
+    PropertyMoreFlags                   nMoreFlags;
 
+    SfxItemPropertyMapEntry(OUString _aName, sal_uInt16 _nWID, css::uno::Type const & _rType,
+                               sal_Int16 _nFlags, sal_uInt8 const _nMemberId, PropertyMoreFlags _nMoreFlags = PropertyMoreFlags::NONE)
+        : aName(      _aName )
+        , nWID(      _nWID )
+        , aType(     _rType )
+        , nFlags(    _nFlags )
+        , nMemberId( _nMemberId )
+        , nMoreFlags( _nMoreFlags )
+        {
+            assert(_nFlags <= 0x1ff );
+            assert( (_nMemberId & 0x40) == 0 );
+            // Verify that if METRIC_ITEM is set, we are one of the types supported by
+            // SvxUnoConvertToMM.
+            assert(!(_nMoreFlags & PropertyMoreFlags::METRIC_ITEM) ||
+                ( (aType.getTypeClass() == css::uno::TypeClass_BYTE)
+                  || (aType.getTypeClass() == css::uno::TypeClass_SHORT)
+                  || (aType.getTypeClass() == css::uno::TypeClass_UNSIGNED_SHORT)
+                  || (aType.getTypeClass() == css::uno::TypeClass_LONG)
+                  || (aType.getTypeClass() == css::uno::TypeClass_UNSIGNED_LONG)
+                ) );
+        }
 };
 
 struct SfxItemPropertySimpleEntry
 {
     sal_uInt16                          nWID;
     css::uno::Type                      aType;
-    long                                nFlags;
+    /// flag bitmap, @see css::beans::PropertyAttribute
+    sal_Int16                           nFlags;
     sal_uInt8                           nMemberId;
+    PropertyMoreFlags                   nMoreFlags = PropertyMoreFlags::NONE;
 
     SfxItemPropertySimpleEntry()
         : nWID( 0 )
@@ -57,12 +82,34 @@ struct SfxItemPropertySimpleEntry
         }
 
     SfxItemPropertySimpleEntry(sal_uInt16 _nWID, css::uno::Type const & _rType,
-                               long _nFlags)
+                               sal_Int16 _nFlags)
         : nWID(      _nWID )
         , aType(     _rType )
         , nFlags(    _nFlags )
         , nMemberId( 0 )
         {
+            assert(_nFlags <= 0x1ff );
+        }
+
+    SfxItemPropertySimpleEntry(sal_uInt16 _nWID, css::uno::Type const & _rType,
+                               sal_Int16 _nFlags, sal_uInt8 const _nMemberId, PropertyMoreFlags _nMoreFlags)
+        : nWID(      _nWID )
+        , aType(     _rType )
+        , nFlags(    _nFlags )
+        , nMemberId( _nMemberId )
+        , nMoreFlags( _nMoreFlags )
+        {
+            assert(_nFlags <= 0x1ff );
+            assert( (_nMemberId & 0x40) == 0 );
+            // Verify that if METRIC_ITEM is set, we are one of the types supported by
+            // SvxUnoConvertToMM.
+            assert((_nMoreFlags & PropertyMoreFlags::METRIC_ITEM) &&
+                ( (aType.getTypeClass() == css::uno::TypeClass_BYTE)
+                  || (aType.getTypeClass() == css::uno::TypeClass_SHORT)
+                  || (aType.getTypeClass() == css::uno::TypeClass_UNSIGNED_SHORT)
+                  || (aType.getTypeClass() == css::uno::TypeClass_LONG)
+                  || (aType.getTypeClass() == css::uno::TypeClass_UNSIGNED_LONG)
+                ) );
         }
 
     SfxItemPropertySimpleEntry( const SfxItemPropertyMapEntry* pMapEntry )
@@ -70,6 +117,7 @@ struct SfxItemPropertySimpleEntry
         , aType( pMapEntry->aType )
         , nFlags( pMapEntry->nFlags )
         , nMemberId( pMapEntry->nMemberId )
+        , nMoreFlags( pMapEntry->nMoreFlags )
         {
         }
 

@@ -31,8 +31,6 @@ class SfxItemSet;
 class SvxShape;
 struct SvxIDPropertyCombine;
 
-#define SFX_METRIC_ITEM                         (0x40)
-
 class EDITENG_DLLPUBLIC SvxItemPropertySet
 {
     SfxItemPropertyMap          m_aPropertyMap;
