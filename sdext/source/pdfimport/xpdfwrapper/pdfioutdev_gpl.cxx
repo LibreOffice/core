@@ -28,10 +28,6 @@
 #include <memory>
 #include <vector>
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
-
 // sigh, UTF8.h was removed in poppler-0.21.0 and put back in 0.21.1, then renamed to UnicodeMapFuncs.h in 0.62.0
 // FIXME: we can't use #if POPPLER_CHECK_VERSION(0, 21, 0) && !POPPLER_CHECK_VERSION(0, 21, 1)
 //        because the internal poppler does not provide poppler-version.h and the macro always returns 0
@@ -43,10 +39,6 @@
 #include "UTF.h"
 #else
 #include "UTF8.h"
-#endif
-
-#if defined _MSC_VER
-#pragma warning(pop)
 #endif
 
 #ifdef _WIN32
