@@ -20,19 +20,9 @@
 #ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTAFILEPICKERIMPL_HXX
 #define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTAFILEPICKERIMPL_HXX
 
-#ifdef _MSC_VER
-#pragma warning( disable : 4917 )
-#endif
-
 #include "platform_vista.h"
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
 #include <shobjidl.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 #include "asyncrequests.hxx"
 #include "comptr.hxx"

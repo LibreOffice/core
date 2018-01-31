@@ -20,17 +20,13 @@
 #ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_PLATFORM_VISTA_H
 #define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_PLATFORM_VISTA_H
 
-#pragma once
-
 #undef _WTL_NO_CSTRING
 
 #define _WTL_NO_CSTRING
 
 #if defined _MSC_VER
-#pragma warning(push, 1)
 #include <comip.h>
 #undef RGB
-#pragma warning(pop)
 #endif
 
 #ifdef _MSC_VER
