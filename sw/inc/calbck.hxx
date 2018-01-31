@@ -26,6 +26,8 @@
 #include "ring.hxx"
 #include "hintids.hxx"
 #include <type_traits>
+#include <list>
+#include <memory>
 
 
 class SwModify;
@@ -69,6 +71,12 @@ namespace sw
         const SfxPoolItem* m_pOld;
         const SfxPoolItem* m_pNew;
     };
+    struct SW_DLLPUBLIC ModifyChangedHint final: SfxHint
+    {
+        ModifyChangedHint(const SwModify* pNew) : m_pNew(pNew) {};
+        virtual ~ModifyChangedHint() override;
+        const SwModify* m_pNew;
+    };
     /// refactoring out the some of the more sane SwClient functionality
     class SW_DLLPUBLIC WriterListener
     {
@@ -104,6 +112,7 @@ class SW_DLLPUBLIC SwClient : public ::sw::WriterListener
 protected:
     // single argument ctors shall be explicit.
     inline explicit SwClient( SwModify* pToRegisterIn );
+    SwClient(SwClient&&);
 
     // write access to pRegisteredIn shall be granted only to the object itself (protected access)
     SwModify* GetRegisteredInNonConst() const { return m_pRegisteredIn; }
@@ -122,7 +131,7 @@ public:
 
     // in case an SwModify object is destroyed that itself is registered in another SwModify,
     // its SwClient objects can decide to get registered to the latter instead by calling this method
-    void CheckRegistration( const SfxPoolItem *pOldValue );
+    std::unique_ptr<sw::ModifyChangedHint> CheckRegistration( const SfxPoolItem* pOldValue );
 
     // controlled access to Modify method
     // mba: this is still considered a hack and it should be fixed; the name makes grep-ing easier
@@ -212,6 +221,12 @@ class SW_DLLPUBLIC SwDepend final : public SwClient
 
 public:
     SwDepend(SwClient *pTellHim, SwModify *pDepend) : SwClient(pDepend), m_pToTell(pTellHim) {}
+    SwDepend(SwDepend&) = delete;
+    SwDepend(SwDepend&& o)
+        : SwClient(std::move(o)), m_pToTell(o.m_pToTell)
+    {
+        o.m_pToTell = nullptr;
+    }
 
     SwClient* GetToTell() { return m_pToTell; }
 
@@ -221,17 +236,41 @@ public:
 private:
     virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem *pNewValue ) override
     {
-        if( pNewValue && pNewValue->Which() == RES_OBJECTDYING )
-            CheckRegistration(pOldValue);
-        else if( m_pToTell )
-            m_pToTell->ModifyNotification(pOldValue, pNewValue);
+        SwClientNotify(*GetRegisteredIn(), sw::LegacyModifyHint(pOldValue, pNewValue));
     }
     virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) override
-        { if(m_pToTell) m_pToTell->SwClientNotifyCall(rModify, rHint); }
+    {
+        if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+        {
+            if( pLegacyHint->m_pNew && pLegacyHint->m_pNew->Which() == RES_OBJECTDYING )
+            {
+                auto pModifyChanged = CheckRegistration(pLegacyHint->m_pOld);
+                if(pModifyChanged)
+                    m_pToTell->SwClientNotify(rModify, *pModifyChanged);
+            }
+            else if( m_pToTell )
+                m_pToTell->ModifyNotification(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+        }
+        else if(m_pToTell)
+            m_pToTell->SwClientNotifyCall(rModify, rHint);
+    }
 };
+
 
 namespace sw
 {
+    class SW_DLLPUBLIC WriterMultiListener final
+    {
+        SwClient& m_rToTell;
+        std::list<SwDepend> m_vDepends;
+        public:
+            WriterMultiListener(SwClient& rToTell)
+                : m_rToTell(rToTell) {}
+            void StartListening(SwModify* pDepend);
+            void EndListening(SwModify* pDepend);
+            bool IsListeningTo(const SwModify* const pDepend);
+            void EndListeningAll();
+    };
     class ClientIteratorBase : public sw::Ring< ::sw::ClientIteratorBase >
     {
             friend SwClient* SwModify::Remove(SwClient*);
