@@ -88,8 +88,6 @@ enum class SmHorAlign {
     Right
 };
 
-OUString GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent );
-
 class SmFormat : public SfxBroadcaster
 {
     SmFace      vFont[FNT_END + 1];
