@@ -104,7 +104,7 @@ void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
             nChrFormatPoolId = RES_POOLCHR_BUL_LEVEL;
         }
 
-        sal_uInt16 nAbsLSpace = HTML_NUMBUL_MARGINLEFT;
+        short nAbsLSpace = HTML_NUMBUL_MARGINLEFT;
 
         short nFirstLineIndent  = HTML_NUMBUL_INDENT;
         if( nLevel > 0 )
@@ -265,17 +265,16 @@ void SwHTMLParser::NewNumBulList( HtmlTokenId nToken )
                 if( aPropInfo.m_bLeftMargin )
                 {
                     // Default indent has already been added
-                    sal_uInt16 nAbsLSpace =
+                    long nAbsLSpace =
                         aNumFormat.GetAbsLSpace() - HTML_NUMBUL_MARGINLEFT;
                     if( aPropInfo.m_nLeftMargin < 0 &&
                         nAbsLSpace < -aPropInfo.m_nLeftMargin )
                         nAbsLSpace = 0U;
-                    else if( aPropInfo.m_nLeftMargin > USHRT_MAX ||
-                             static_cast<long>(nAbsLSpace) +
-                                            aPropInfo.m_nLeftMargin > USHRT_MAX )
-                        nAbsLSpace = USHRT_MAX;
+                    else if( aPropInfo.m_nLeftMargin > SHRT_MAX ||
+                             nAbsLSpace + aPropInfo.m_nLeftMargin > SHRT_MAX )
+                        nAbsLSpace = SHRT_MAX;
                     else
-                        nAbsLSpace = nAbsLSpace + static_cast<sal_uInt16>(aPropInfo.m_nLeftMargin);
+                        nAbsLSpace = nAbsLSpace + aPropInfo.m_nLeftMargin;
 
                     aNumFormat.SetAbsLSpace( nAbsLSpace );
                     bChangeNumFormat = true;
