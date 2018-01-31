@@ -52,6 +52,24 @@
       "revId": "3deac9691011711a3b9e50d19499c588af074d7f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e8263d15",
+        "filename": "connectivity/source/inc/ado/ado_pre_sys_include.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-31T10:40:27Z",
+      "side": 0,
+      "message": "replace this with usual inclusion guards?",
+      "parentUuid": "fa31d9ce_881781a2",
+      "revId": "3deac9691011711a3b9e50d19499c588af074d7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
