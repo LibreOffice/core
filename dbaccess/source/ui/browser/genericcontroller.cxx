@@ -176,35 +176,6 @@ OGenericUnoController::OGenericUnoController(const Reference< XComponentContext 
     }
 }
 
-#ifdef _MSC_VER
-
-#pragma warning(push)
-#pragma warning(disable:4702)
-
-OGenericUnoController::OGenericUnoController()
-    :OGenericUnoController_Base( getMutex() )
-    ,m_pView(nullptr)
-#ifdef DBG_UTIL
-    ,m_bDescribingSupportedFeatures( false )
-#endif
-    ,m_aAsyncInvalidateAll(LINK(this, OGenericUnoController, OnAsyncInvalidateAll))
-    ,m_aAsyncCloseTask(LINK(this, OGenericUnoController, OnAsyncCloseTask))
-    ,m_aCurrentFrame( *this )
-    ,m_bPreview(false)
-    ,m_bReadOnly(false)
-    ,m_bCurrentlyModified(false)
-{
-    SAL_WARN("dbaccess.ui", "OGenericUnoController::OGenericUnoController: illegal call!" );
-    // This ctor only exists because the MSVC compiler complained about an unresolved external
-    // symbol. It should not be used at all. Since using it yields strange runtime problems,
-    // we simply abort here.
-    abort();
-}
-
-#pragma warning(pop)
-
-#endif
-
 OGenericUnoController::~OGenericUnoController()
 {
 

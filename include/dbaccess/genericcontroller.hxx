@@ -294,6 +294,7 @@ namespace dbaui
 
         // methods
         OGenericUnoController( const css::uno::Reference< css::uno::XComponentContext >& _rM );
+        OGenericUnoController() = delete;
         const ::comphelper::NamedValueCollection&
                                     getInitParams() const   { return m_aInitParameters; }
 
@@ -530,11 +531,6 @@ namespace dbaui
         virtual void SAL_CALL removeKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) override;
         virtual void SAL_CALL addMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
         virtual void SAL_CALL removeMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
-
-    protected:
-#ifdef _MSC_VER
-        OGenericUnoController();    // never implemented
-#endif
     };
 }
 

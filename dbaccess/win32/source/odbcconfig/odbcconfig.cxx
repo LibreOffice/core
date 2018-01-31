@@ -18,20 +18,11 @@
  */
 
 
-#ifdef _MSC_VER
-#pragma warning(push, 1)
-#pragma warning(disable:4005)
-#endif
-
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
 #include <sqlext.h>
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 // the name of the library which contains the SQLManageDataSources function
 #define ODBC_UI_LIB_NAME    L"ODBCCP32.DLL"
