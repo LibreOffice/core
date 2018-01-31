@@ -515,15 +515,12 @@ bool SwDoubleLinePortion::ChgSpaceAdd( SwLineLayout* pCurr,
             if( nMyBlank )
                 nMultiSpace /= nMyBlank;
 
-            if( nMultiSpace < USHRT_MAX * SPACING_PRECISION_FACTOR )
-            {
-//                pCurr->SetLLSpaceAdd( nMultiSpace, 0 );
-                // #i65711# SetLLSpaceAdd replaces the first value,
-                // instead we want to insert a new first value:
-                std::vector<long>* pVec = pCurr->GetpLLSpaceAdd();
-                pVec->insert( pVec->begin(), nMultiSpace );
-                bRet = true;
-            }
+//            pCurr->SetLLSpaceAdd( nMultiSpace, 0 );
+            // #i65711# SetLLSpaceAdd replaces the first value,
+            // instead we want to insert a new first value:
+            std::vector<long>* pVec = pCurr->GetpLLSpaceAdd();
+            pVec->insert( pVec->begin(), nMultiSpace );
+            bRet = true;
         }
     }
     return bRet;
