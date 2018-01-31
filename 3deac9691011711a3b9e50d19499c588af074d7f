@@ -16,6 +16,24 @@
       "revId": "3deac9691011711a3b9e50d19499c588af074d7f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_682b2dec",
+        "filename": "connectivity/source/inc/ado/ado_pre_sys_include.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-31T10:28:19Z",
+      "side": 0,
+      "message": "no idea - didn\u0027t look into this; should I?",
+      "parentUuid": "fa31d9ce_c8b5f9cd",
+      "revId": "3deac9691011711a3b9e50d19499c588af074d7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_a8352547",
+        "filename": "basic/source/comp/codegen.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-31T10:28:19Z",
+      "side": 1,
+      "message": "https://docs.microsoft.com/en-us/cpp/error-messages/compiler-warnings/compiler-warning-level-2-c4309\n\nAnd as it is being truncated, the truncated constant might become smaller than the compared value, so will be incorrectly returned",
+      "parentUuid": "fa31d9ce_c8ec19ca",
+      "revId": "c4963164ad0acf6e47f70faa159690a2f410a4b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_e8cabd4e",
         "filename": "connectivity/source/parse/sqlbison.y",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_a8fe0569",
+        "filename": "connectivity/source/parse/sqlbison.y",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-31T10:28:19Z",
+      "side": 1,
+      "message": "Well, this was for consistency with line 56 I guess... don\u0027t remember actually - will revert this line of course :)",
+      "parentUuid": "fa31d9ce_e8cabd4e",
+      "revId": "c4963164ad0acf6e47f70faa159690a2f410a4b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_68dded13",
         "filename": "include/dbaccess/genericcontroller.hxx",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2018-01-31T10:11:12Z",
       "side": 1,
       "message": "no need to make this user-declared, IMO",
+      "revId": "c4963164ad0acf6e47f70faa159690a2f410a4b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_08f6318f",
+        "filename": "include/dbaccess/genericcontroller.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-31T10:28:19Z",
+      "side": 1,
+      "message": "well... iirc, this generated a warning without the line - but will re-check",
+      "parentUuid": "fa31d9ce_68dded13",
       "revId": "c4963164ad0acf6e47f70faa159690a2f410a4b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
