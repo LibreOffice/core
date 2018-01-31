@@ -53,10 +53,8 @@ typedef struct _ADOTable Table;
 #endif
 
 
-#include <ado/ado_pre_sys_include.h>
 #include <adoint.h>
 #include <adoctint.h>
-#include <ado/ado_post_sys_include.h>
 
 
 #include <ado/Aolewrap.hxx>
