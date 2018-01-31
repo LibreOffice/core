@@ -34,7 +34,6 @@ $(eval $(call gb_Module_add_check_targets,comphelper,\
     CppunitTest_comphelper_syntaxhighlight_test \
     CppunitTest_comphelper_variadictemplates_test \
     CppunitTest_comphelper_ifcontainer \
-    CppunitTest_comphelper_test \
 ))
 
 # vim: set noet sw=4 ts=4:
