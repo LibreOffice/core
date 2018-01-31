@@ -1455,7 +1455,7 @@
           <info>
             <desc>Whether to use threaded calculation of formula groups when applicable.</desc>
           </info>
-          <value>true</value>
+          <value>false</value>
 	</prop>
 	<!-- Note: The default values below probably must correspond
 	to those assigned in setOpenCLConfigToDefault() in
