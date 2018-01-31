@@ -1453,9 +1453,9 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         }
                     }
 
-                    sal_uInt16 nAbsPos = lBullIndent;
-                    sal_uInt16 nSpaceSteps = nLvl
-                                            ? sal_uInt16(nLeftTextPos / nLvl)
+                    short nAbsPos = lBullIndent;
+                    SwTwips nSpaceSteps = nLvl
+                                            ? nLeftTextPos / nLvl
                                             : lBullIndent;
                     for( sal_uInt8 n = 0; n < MAXLEVEL; ++n, nAbsPos = nAbsPos + nSpaceSteps )
                     {
@@ -1477,8 +1477,8 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 
                         if( n == nLvl &&
                             nFrameWidth < ( nSpaceSteps * MAXLEVEL ) )
-                            nSpaceSteps = static_cast<sal_uInt16>(( nFrameWidth - nLeftTextPos ) /
-                                                ( MAXLEVEL - nLvl ));
+                            nSpaceSteps = ( nFrameWidth - nLeftTextPos ) /
+                                                ( MAXLEVEL - nLvl );
                     }
                 }
             }
@@ -1552,7 +1552,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         if( n < aNumTypes.getLength() )
                             aFormat.SetNumberingType(static_cast<SvxNumType>(aNumTypes[ n ] - '0'));
 
-                        aFormat.SetAbsLSpace( sal_uInt16( nSpaceSteps * n )
+                        aFormat.SetAbsLSpace( nSpaceSteps * n
                                             + lNumIndent );
 
                         if( !aFormat.GetCharFormat() )
@@ -1570,10 +1570,10 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         SwNumFormat aFormat( aRule.Get( n ) );
                         aFormat.SetIncludeUpperLevels( MAXLEVEL );
                         if( bDefStep )
-                            aFormat.SetAbsLSpace( sal_uInt16( (nLeftTextPos +
-                                SwNumRule::GetNumIndent(static_cast<sal_uInt8>(n-nLvl)))));
+                            aFormat.SetAbsLSpace( nLeftTextPos +
+                                SwNumRule::GetNumIndent(static_cast<sal_uInt8>(n-nLvl)));
                         else
-                            aFormat.SetAbsLSpace( sal_uInt16( nSpaceSteps * n )
+                            aFormat.SetAbsLSpace( nSpaceSteps * n
                                                 + lNumIndent );
                         aRule.Set( n, aFormat );
                     }
