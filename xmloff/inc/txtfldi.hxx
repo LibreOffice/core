@@ -89,6 +89,7 @@ enum XMLTextFieldAttrTokens
     XML_TOK_TEXTFIELD_CURRENT_VALUE,
 
     XML_TOK_TEXTFIELD_REFERENCE_FORMAT,
+    XML_TOK_TEXTFIELD_REFERENCE_LANGUAGE,
     XML_TOK_TEXTFIELD_REF_NAME,
     XML_TOK_TEXTFIELD_CONNECTION_NAME,
 
@@ -931,6 +932,7 @@ protected:
 class XMLReferenceFieldImportContext : public XMLTextFieldImportContext
 {
     OUString sName;
+    OUString sLanguage;
     sal_uInt16 nElementToken;
     sal_Int16 nSource;
     sal_Int16 nType;

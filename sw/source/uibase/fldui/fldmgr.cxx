@@ -1094,7 +1094,21 @@ bool SwFieldMgr::InsertField(
             SwGetRefFieldType* pTyp =
                 static_cast<SwGetRefFieldType*>( pCurShell->GetFieldType(0, SwFieldIds::GetRef) );
             sal_uInt16 nSeqNo = static_cast<sal_uInt16>(rData.m_sPar2.toInt32());
-            pField = new SwGetRefField(pTyp, rData.m_sPar1, nSubType, nSeqNo, nFormatId);
+            OUString sReferenceLanguage;
+            // handle language-variant formats
+            if (nFormatId >= SAL_N_ELEMENTS(FMT_REF_ARY))
+            {
+                LanguageType nLang = GetCurrLanguage();
+                if (nLang == LANGUAGE_HUNGARIAN)
+                {
+                    if (nFormatId >= SAL_N_ELEMENTS(FMT_REF_ARY) * 2)
+                        sReferenceLanguage = "Hu";
+                    else
+                        sReferenceLanguage = "hu";
+                }
+                nFormatId %= SAL_N_ELEMENTS(FMT_REF_ARY);
+            }
+            pField = new SwGetRefField(pTyp, rData.m_sPar1, sReferenceLanguage, nSubType, nSeqNo, nFormatId);
             bExp = true;
             break;
         }

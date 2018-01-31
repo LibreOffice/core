@@ -82,6 +82,7 @@ class SW_DLLPUBLIC SwGetRefField : public SwField
 {
 private:
     OUString sSetRefName;
+    OUString sSetReferenceLanguage;
     OUString sText;
     sal_uInt16 nSubType;
     sal_uInt16 nSeqNo;
@@ -95,7 +96,7 @@ private:
                           const sal_uInt32 nRefNumFormat );
 
 public:
-    SwGetRefField( SwGetRefFieldType*, const OUString& rSetRef,
+    SwGetRefField( SwGetRefFieldType*, const OUString& rSetRef, const OUString& rReferenceLanguage,
                     sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uLong nFormat );
 
     virtual ~SwGetRefField() override;

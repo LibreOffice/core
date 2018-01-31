@@ -287,6 +287,7 @@
 #define UNO_NAME_PRINT "Print"
 #define UNO_NAME_REFERENCE_FIELD_PART "ReferenceFieldPart"
 #define UNO_NAME_REFERENCE_FIELD_SOURCE "ReferenceFieldSource"
+#define UNO_NAME_REFERENCE_FIELD_LANGUAGE "ReferenceFieldLanguage"
 #define UNO_NAME_REGISTER_PARAGRAPH_STYLE "RegisterParagraphStyle"
 #define UNO_NAME_SCRIPT_TYPE "ScriptType"
 #define UNO_NAME_SEARCH_ALL "SearchAll"

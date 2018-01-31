@@ -464,6 +464,7 @@ private:
     const OUString sPropertyPlaceholderType;
     const OUString sPropertyReferenceFieldPart;
     const OUString sPropertyReferenceFieldSource;
+    const OUString sPropertyReferenceFieldLanguage;
     const OUString sPropertyScriptType;
     const OUString sPropertySelectedItem;
     const OUString sPropertySequenceNumber;

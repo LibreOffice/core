@@ -20,6 +20,7 @@
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
 #include <com/sun/star/text/ReferenceFieldSource.hpp>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/unolingu.hxx>
@@ -196,12 +197,151 @@ bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
     return bRefIsLower;
 }
 
+// tdf#115319 create alternative reference formats, if the user asked for it
+// (ReferenceFieldLanguage attribute of the reference field is not empty), and
+// language of the text and ReferenceFieldLanguage are the same.
+// Right now only HUNGARIAN seems to need this (as in the related issue,
+// the reversed caption order in autocaption, solved by #i61007#)
+static void lcl_formatReferenceLanguage( OUString& rRefText,
+                                         bool bClosingParenthesis, LanguageType eLang,
+                                         const OUString& rReferenceLanguage)
+{
+    if (eLang != LANGUAGE_HUNGARIAN || (rReferenceLanguage != "hu" && rReferenceLanguage != "Hu"))
+        return;
+
+    // Add Hungarian definitive article (a/az) before references,
+    // similar to \aref, \apageref etc. of LaTeX Babel package.
+    //
+    // for example:
+    //
+    //     "az 1. oldalon" ("on page 1"), but
+    //     "a 2. oldalon" ("on page 2")
+    //     "a fentebbi", "az alábbi" (above/below)
+    //     "a Lorem", "az Ipsum"
+    //
+    // Support following numberings of EU publications:
+    //
+    // 1., 1a., a), (1), (1a), iii., III., IA.
+    //
+    // (http://publications.europa.eu/code/hu/hu-120700.htm,
+    // http://publications.europa.eu/code/hu/hu-4100600.htm)
+
+    LanguageTag aLanguageTag(eLang);
+    CharClass aCharClass( aLanguageTag );
+    sal_Int32 nLen = rRefText.getLength();
+    sal_Int32 i;
+    // substring of rRefText starting with letter or number
+    OUString sNumbering;
+    // is article "az"?
+    bool bArticleAz = false;
+    // is numbering a number?
+    bool bNum = false;
+
+    // search first member of the numbering (numbers or letters)
+    for (i=0; i<nLen && (sNumbering.isEmpty() ||
+                ((bNum && aCharClass.isDigit(rRefText, i)) ||
+                (!bNum && aCharClass.isLetter(rRefText, i)))); ++i)
+    {
+      // start of numbering within the field text
+      if (sNumbering.isEmpty() && aCharClass.isLetterNumeric(rRefText, i)) {
+          sNumbering = rRefText.copy(i);
+          bNum = aCharClass.isDigit(rRefText, i);
+      }
+    }
+
+    // length of numbering
+    nLen = i - (rRefText.getLength() - sNumbering.getLength());
+
+    if (bNum)
+    {
+        // az 1, 1000, 1000000, 1000000000...
+        // az 5, 50, 500...
+        if ((sNumbering.startsWith("1") && (nLen == 1 || nLen == 4 || nLen == 7 || nLen == 10)) ||
+            sNumbering.startsWith("5"))
+                bArticleAz = true;
+    }
+    else if (nLen == 1 && sNumbering[0] < 128)
+    {
+        // ASCII 1-letter numbering
+        // az a), e), f) ... x)
+        // az i., v. (but, a x.)
+        static OUString sLettersStartingWithVowels = "aefilmnorsuxyAEFILMNORSUXY";
+        if (sLettersStartingWithVowels.indexOf(sNumbering[0]) != -1)
+        {
+            // x),  X) are letters, but x. and X. etc. are Roman numbers
+            if (bClosingParenthesis ||
+                (sNumbering[0] != 'x' && sNumbering[0] != 'X'))
+                    bArticleAz = true;
+        } else if ((sNumbering[0] == 'v' || sNumbering[0] == 'V') && !bClosingParenthesis)
+            // v), V) are letters, but v. and V. are Roman numbers
+            bArticleAz = true;
+    }
+    else
+    {
+        static const sal_Unicode sVowelsWithDiacritic[] = {
+            0x00E1, 0x00C1, 0x00E9, 0x00C9, 0x00ED, 0x00CD,
+            0x00F3, 0x00D3, 0x00F6, 0x00D6, 0x0151, 0x0150,
+            0x00FA, 0x00DA, 0x00FC, 0x00DC, 0x0171, 0x0170, 0 };
+        static OUString sVowels = "aAeEoOuU" + OUString(sVowelsWithDiacritic);
+
+        // handle more than 1-letter long Roman numbers and
+        // their possible combinations with letters:
+        // az IA, a IIB, a IIIC., az Ia, a IIb., a iiic), az LVIII. szonett
+        bool bRomanNumber = false;
+        if (nLen > 1 && (nLen + 1 >= sNumbering.getLength() || sNumbering[nLen] == '.'))
+        {
+            sal_Unicode last = sNumbering[nLen - 1];
+            OUString sNumberingTrim;
+            if ((last >= 'A' && last < 'I') || (last >= 'a' && last < 'i'))
+                sNumberingTrim = sNumbering.copy(0, nLen - 1);
+            else
+                sNumberingTrim = sNumbering.copy(0, nLen);
+            bRomanNumber =
+                sNumberingTrim.replaceAll("i", "").replaceAll("v", "").replaceAll("x", "").replaceAll("l", "").replaceAll("c", "").isEmpty() ||
+                sNumberingTrim.replaceAll("I", "").replaceAll("V", "").replaceAll("X", "").replaceAll("L", "").replaceAll("C", "").isEmpty();
+        }
+
+        if (
+             // Roman number and a letter optionally
+             ( bRomanNumber && (
+                  (sNumbering[0] == 'i' && sNumbering[1] != 'i' && sNumbering[1] != 'v' && sNumbering[1] != 'x') ||
+                  (sNumbering[0] == 'I' && sNumbering[1] != 'I' && sNumbering[1] != 'V' && sNumbering[1] != 'X') ||
+                  (sNumbering[0] == 'v' && sNumbering[1] != 'i') ||
+                  (sNumbering[0] == 'V' && sNumbering[1] != 'I') ||
+                  (sNumbering[0] == 'l' && sNumbering[1] != 'x') ||
+                  (sNumbering[0] == 'L' && sNumbering[1] != 'X')) ) ||
+             // a word starting with vowel (not Roman number)
+             ( !bRomanNumber && sVowels.indexOf(sNumbering[0]) != -1))
+        {
+            bArticleAz = true;
+        }
+    }
+    // not a title text starting already with a definitive article
+    if ( !sNumbering.startsWith("A ") && !sNumbering.startsWith("Az ") &&
+         !sNumbering.startsWith("a ") && !sNumbering.startsWith("az ") )
+    {
+        // lowercase, if rReferenceLanguage == "hu", not "Hu"
+        OUString sArticle;
+
+        if ( rReferenceLanguage == "hu" )
+            sArticle = "a";
+        else
+            sArticle = "A";
+
+        if (bArticleAz)
+            sArticle += "z";
+
+        rRefText = sArticle + " " + rRefText;
+    }
+}
+
 /// get references
 SwGetRefField::SwGetRefField( SwGetRefFieldType* pFieldType,
-                              const OUString& rSetRef, sal_uInt16 nSubTyp,
+                              const OUString& rSetRef, const OUString& rSetReferenceLanguage, sal_uInt16 nSubTyp,
                               sal_uInt16 nSequenceNo, sal_uLong nFormat )
     : SwField( pFieldType, nFormat ),
       sSetRefName( rSetRef ),
+      sSetReferenceLanguage( rSetReferenceLanguage ),
       nSubType( nSubTyp ),
       nSeqNo( nSequenceNo )
 {
@@ -380,6 +520,8 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                     if( nSeqNo == pFootnoteIdx->GetSeqRefNo() )
                     {
                         sText = pFootnoteIdx->GetFootnote().GetViewNumStr( *pDoc );
+                        if (!sSetReferenceLanguage.isEmpty())
+                            lcl_formatReferenceLanguage(sText, false, GetLanguage(), sSetReferenceLanguage);
                         break;
                     }
                 }
@@ -413,6 +555,8 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                         }
                     }
                     sText = aBuf.makeStringAndClear();
+                    if (!sSetReferenceLanguage.isEmpty())
+                        lcl_formatReferenceLanguage(sText, false, GetLanguage(), sSetReferenceLanguage);
                 }
             }
         }
@@ -436,6 +580,9 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                     sText = pPage->GetPageDesc()->GetNumType().GetNumStr( nPageNo );
                 else
                     sText = OUString::number(nPageNo);
+
+                if (!sSetReferenceLanguage.isEmpty())
+                    lcl_formatReferenceLanguage(sText, false, GetLanguage(), sSetReferenceLanguage);
             }
         }
         break;
@@ -451,6 +598,10 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                 aField.SetLevel( MAXLEVEL - 1 );
                 aField.ChangeExpansion( pFrame, pTextNd, true );
                 sText = aField.GetNumber();
+
+                if (!sSetReferenceLanguage.isEmpty())
+                    lcl_formatReferenceLanguage(sText, false, GetLanguage(), sSetReferenceLanguage);
+
             }
         }
         break;
@@ -478,6 +629,9 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                                     *pTextNd, nNumStart )
                         ? aLocaleData.getAboveWord()
                         : aLocaleData.getBelowWord();
+
+            if (!sSetReferenceLanguage.isEmpty())
+                    lcl_formatReferenceLanguage(sText, false, GetLanguage(), sSetReferenceLanguage);
         }
         break;
     // #i81002#
@@ -485,10 +639,19 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
     case REF_NUMBER_NO_CONTEXT:
     case REF_NUMBER_FULL_CONTEXT:
         {
+            // for differentiation of Roman numbers and letters in Hungarian article handling
+            bool bClosingParenthesis = false;
+
             if ( pFieldTextAttr && pFieldTextAttr->GetpTextNode() )
             {
                 sText = MakeRefNumStr( pFieldTextAttr->GetTextNode(), *pTextNd, GetFormat() );
+                if ( !sText.isEmpty() && !sSetReferenceLanguage.isEmpty() )
+                    bClosingParenthesis = pTextNd->GetNumRule()->MakeNumString( *(pTextNd->GetNum()), true).endsWith(")");
             }
+
+            if (!sSetReferenceLanguage.isEmpty())
+                lcl_formatReferenceLanguage(sText, bClosingParenthesis, GetLanguage(), sSetReferenceLanguage);
+
         }
         break;
 
@@ -575,7 +738,7 @@ OUString SwGetRefField::MakeRefNumStr( const SwTextNode& rTextNodeOfField,
 SwField* SwGetRefField::Copy() const
 {
     SwGetRefField* pField = new SwGetRefField( static_cast<SwGetRefFieldType*>(GetTyp()),
-                                                sSetRefName, nSubType,
+                                                sSetRefName, sSetReferenceLanguage, nSubType,
                                                 nSeqNo, GetFormat() );
     pField->sText = sText;
     return pField;
@@ -660,6 +823,9 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     case FIELD_PROP_PAR3:
         rAny <<= Expand();
         break;
+    case FIELD_PROP_PAR4:
+        rAny <<= sSetReferenceLanguage;
+        break;
     case FIELD_PROP_SHORT1:
         rAny <<= static_cast<sal_Int16>(nSeqNo);
         break;
@@ -731,6 +897,9 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             rAny >>= sTmpStr;
             SetExpand( sTmpStr );
         }
+        break;
+    case FIELD_PROP_PAR4:
+        rAny >>= sSetReferenceLanguage;
         break;
     case FIELD_PROP_SHORT1:
         {
