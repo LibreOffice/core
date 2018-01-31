@@ -19,7 +19,6 @@
 
 #ifndef INCLUDED_SFX2_SOURCE_DOC_SYSPATH_HXX
 #define INCLUDED_SFX2_SOURCE_DOC_SYSPATH_HXX
-//#pragma warning(disable:4917)
 
 #include <sfx2/dllapi.h>
 
