@@ -234,6 +234,36 @@ void XmlFilterBase::checkDocumentProperties(const Reference<XDocumentProperties>
     mbMSO2007 = true;
 }
 
+void XmlFilterBase::putPropertiesToDocumentGrabBag(const css::uno::Reference<css::lang::XComponent>& xDstDoc,
+                                                   const comphelper::SequenceAsHashMap& rProperties)
+{
+    try
+    {
+        uno::Reference<beans::XPropertySet> xDocProps(xDstDoc, uno::UNO_QUERY);
+        if (xDocProps.is())
+        {
+            uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
+
+            static const OUString aGrabBagPropName = "InteropGrabBag";
+            if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(aGrabBagPropName))
+            {
+                // get existing grab bag
+                comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(aGrabBagPropName));
+
+                // put the new items
+                aGrabBag.update(rProperties);
+
+                // put it back to the document
+                xDocProps->setPropertyValue(aGrabBagPropName, uno::Any(aGrabBag.getAsConstPropertyValueList()));
+            }
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        SAL_WARN("oox","Failed to save documents grab bag");
+    }
+}
+
 void XmlFilterBase::importDocumentProperties()
 {
     MediaDescriptor aMediaDesc( getMediaDescriptor() );
@@ -303,7 +333,7 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
         return false;
 
     // fragment handler must contain path to fragment stream
-    OUString aFragmentPath = rxHandler->getFragmentPath();
+    const OUString aFragmentPath = rxHandler->getFragmentPath();
     OSL_ENSURE( !aFragmentPath.isEmpty(), "XmlFilterBase::importFragment - missing fragment path" );
     if( aFragmentPath.isEmpty() )
         return false;
