@@ -23,13 +23,7 @@
 #include <wchar.h>
 
 #define WIN32_LEAN_AND_MEAN
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
 #include <windows.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 #include <tools/pathutils.hxx>
 
