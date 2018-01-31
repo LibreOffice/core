@@ -327,6 +327,7 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
     sPropertyPlaceholderType("PlaceHolderType"),
     sPropertyReferenceFieldPart("ReferenceFieldPart"),
     sPropertyReferenceFieldSource("ReferenceFieldSource"),
+    sPropertyReferenceFieldLanguage("ReferenceFieldLanguage"),
     sPropertyScriptType("ScriptType"),
     sPropertySelectedItem("SelectedItem"),
     sPropertySequenceNumber("SequenceNumber"),
@@ -1601,6 +1602,13 @@ void XMLTextFieldExport::ExportFieldHelper(
                       MakeSequenceRefName(
                           GetInt16Property(sPropertySequenceNumber, rPropSet),
                           GetStringProperty(sPropertySourceName, rPropSet) ) );
+        if (xPropSetInfo->hasPropertyByName(sPropertyReferenceFieldLanguage) &&
+            SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012)
+        {
+            // export text:reference-language attribute, if not empty
+            ProcessString(XML_REFERENCE_LANGUAGE,
+                    GetStringProperty(sPropertyReferenceFieldLanguage, rPropSet), true);
+        }
         ExportElement(
             MapReferenceSource(
                 GetInt16Property(sPropertyReferenceFieldSource, rPropSet)),
@@ -1616,6 +1624,13 @@ void XMLTextFieldExport::ExportFieldHelper(
                       XML_TEMPLATE);
         ProcessString(XML_REF_NAME,
                       GetStringProperty(sPropertySourceName, rPropSet));
+        if (xPropSetInfo->hasPropertyByName(sPropertyReferenceFieldLanguage) &&
+            SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012)
+        {
+            // export text:reference-language attribute, if not empty
+            ProcessString(XML_REFERENCE_LANGUAGE,
+                      GetStringProperty(sPropertyReferenceFieldLanguage, rPropSet), true);
+        }
         ExportElement(
             MapReferenceSource(GetInt16Property(
                 sPropertyReferenceFieldSource, rPropSet)),
@@ -1634,6 +1649,13 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessString(XML_REF_NAME,
                       MakeFootnoteRefName(GetInt16Property(
                           sPropertySequenceNumber, rPropSet)));
+        if (xPropSetInfo->hasPropertyByName(sPropertyReferenceFieldLanguage) &&
+            SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012)
+        {
+            // export text:reference-language attribute, if not empty
+            ProcessString(XML_REFERENCE_LANGUAGE,
+                      GetStringProperty(sPropertyReferenceFieldLanguage, rPropSet), true);
+        }
         ExportElement(
             MapReferenceSource(GetInt16Property(
                 sPropertyReferenceFieldSource, rPropSet)),
