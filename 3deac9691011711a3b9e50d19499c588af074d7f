@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_c8b5f9cd",
+        "filename": "connectivity/source/inc/ado/ado_pre_sys_include.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-01-31T10:11:12Z",
+      "side": 0,
+      "message": "I guess this ADO_REDUCED_WARN_LEVEL stuff and ado_post_sys_include.h can go completely now?",
+      "revId": "3deac9691011711a3b9e50d19499c588af074d7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
