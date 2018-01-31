@@ -114,8 +114,8 @@ private:
     std::unique_ptr< css::uno::Any > m_pRubyPosition;
     sw::UnoCursorPointer m_pUnoCursor;
 
-    const SwDepend              m_FrameDepend;
-    SwFrameFormat *                  m_pFrameFormat;
+    sw::WriterMultiListener m_aDepends;
+    SwFrameFormat*                  m_pFrameFormat;
     const SwTextPortionType     m_ePortionType;
 
     bool                        m_bIsCollapsed;
@@ -147,7 +147,7 @@ protected:
     virtual ~SwXTextPortion() override;
 
     //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 
 public:
     SwXTextPortion(const SwUnoCursor* pPortionCursor, css::uno::Reference< css::text::XText > const& rParent, SwTextPortionType   eType   );
