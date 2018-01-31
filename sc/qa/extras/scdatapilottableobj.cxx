@@ -8,11 +8,12 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xnamed.hxx>
+#include <test/sheet/xdatapilotdescriptor.hxx>
 #include <test/sheet/xdatapilottable.hxx>
 #include <test/sheet/xdatapilottable2.hxx>
-#include <test/sheet/xdatapilotdescriptor.hxx>
-#include <test/container/xnamed.hxx>
 
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
@@ -24,10 +25,11 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 16
-
-class ScDataPilotTableObj : public CalcUnoApiTest, public apitest::XDataPilotDescriptor, public apitest::XDataPilotTable,
-                                public apitest::XNamed, public apitest::XDataPilotTable2
+class ScDataPilotTableObj : public CalcUnoApiTest,
+                            public apitest::XDataPilotDescriptor,
+                            public apitest::XDataPilotTable,
+                            public apitest::XDataPilotTable2,
+                            public apitest::XNamed
 {
 public:
     ScDataPilotTableObj();
@@ -39,9 +41,8 @@ public:
     virtual uno::Reference< uno::XInterface > getSheets() override;
 
     CPPUNIT_TEST_SUITE(ScDataPilotTableObj);
-    CPPUNIT_TEST(testRefresh);
-    //CPPUNIT_TEST(testGetHiddenFields);
-    CPPUNIT_TEST(testGetOutputRange);
+
+    // XDataPilotDescriptor
     CPPUNIT_TEST(testSourceRange);
     CPPUNIT_TEST(testTag);
     CPPUNIT_TEST(testGetFilterDescriptor);
@@ -50,21 +51,27 @@ public:
     CPPUNIT_TEST(testGetRowFields);
     CPPUNIT_TEST(testGetPageFields);
     CPPUNIT_TEST(testGetDataFields);
-    CPPUNIT_TEST(testGetName);
-    CPPUNIT_TEST(testSetName);
+    //CPPUNIT_TEST(testGetHiddenFields);
+
+    // XDataPilotTable
+    CPPUNIT_TEST(testGetOutputRange);
+    CPPUNIT_TEST(testRefresh);
+
+    // XDataPilotTable2
     CPPUNIT_TEST(testGetDrillDownData);
     CPPUNIT_TEST(testInsertDrillDownSheet);
     CPPUNIT_TEST(testGetPositionData);
     CPPUNIT_TEST(testGetOutputRangeByType);
+
+    // XNamed
+    CPPUNIT_TEST(testGetName);
+    CPPUNIT_TEST(testSetName);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< lang::XComponent > mxComponent;
 };
-
-sal_Int32 ScDataPilotTableObj::nTest = 0;
-uno::Reference< lang::XComponent > ScDataPilotTableObj::mxComponent;
 
 ScDataPilotTableObj::ScDataPilotTableObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments"),
@@ -74,12 +81,6 @@ ScDataPilotTableObj::ScDataPilotTableObj()
 
 uno::Reference< uno::XInterface > ScDataPilotTableObj::init()
 {
-    OUString aFileURL;
-    createFileURL("ScDataPilotTableObj.ods", aFileURL);
-    if(!mxComponent.is())
-        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
@@ -113,12 +114,6 @@ uno::Reference< uno::XInterface > ScDataPilotTableObj::getSheets()
 
 uno::Reference< uno::XInterface > ScDataPilotTableObj::initDP2()
 {
-    OUString aFileURL;
-    createFileURL("ScDataPilotTableObj.ods", aFileURL);
-    if(!mxComponent.is())
-        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
@@ -143,19 +138,16 @@ uno::Reference< uno::XInterface > ScDataPilotTableObj::initDP2()
 
 void ScDataPilotTableObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    // create a calc document
+    OUString aFileURL;
+    createFileURL("ScDataPilotTableObj.ods", aFileURL);
+    mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
 }
 
 void ScDataPilotTableObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 

@@ -69,13 +69,6 @@ void XDataPilotDescriptor::testGetFilterDescriptor()
 
 void XDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet::XDataPilotDescriptor > const & xDescr)
 {
-    //this method should only be called once but needs to be called before any of the other tests
-    static bool bCalled = false;
-    if (bCalled)
-        return;
-    else
-        bCalled = true;
-
     uno::Reference< container::XIndexAccess > xIndex(xDescr->getDataPilotFields(), UNO_QUERY_THROW);
     CPPUNIT_ASSERT( xIndex.is());
 
