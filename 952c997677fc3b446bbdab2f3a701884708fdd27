@@ -16,6 +16,24 @@
       "revId": "952c997677fc3b446bbdab2f3a701884708fdd27",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_884f8191",
+        "filename": "connectivity/source/inc/ado/Aolevariant.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-01-31T13:06:07Z",
+      "side": 1,
+      "message": "There is no specific need in correct ordering iiuc; sdkddkver.h would also be included by oaidl.h (directly and indirectly in rpc.h) if COM_NO_WINDOWS_H isn\u0027t defined (which we don\u0027t). I don\u0027t think we should create some comments here which might be not true, based on wrong assumptions etc. Might be that the need was for some older SDK. I don\u0027t want to remove the header altogether, but also don\u0027t want to introduce some comments here.",
+      "parentUuid": "fa31d9ce_c87259e5",
+      "revId": "952c997677fc3b446bbdab2f3a701884708fdd27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
