@@ -8,9 +8,9 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xnamecontainer.hxx>
 #include <test/sheet/xspreadsheets.hxx>
 #include <test/sheet/xspreadsheets2.hxx>
-#include <test/container/xnamecontainer.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -19,8 +19,6 @@ using namespace css;
 using namespace css::uno;
 
 namespace sc_apitest {
-
-#define NUMBER_OF_TESTS 15
 
 class ScTableSheetsObj : public CalcUnoApiTest, public ::apitest::XSpreadsheets, public ::apitest::XSpreadsheets2, public apitest::XNameContainer
 {
@@ -31,11 +29,13 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScTableSheetsObj);
+
     // XSpreadsheets
     CPPUNIT_TEST(testInsertNewByName);
     CPPUNIT_TEST(testInsertNewByNameBadName);
     CPPUNIT_TEST(testCopyByName);
     CPPUNIT_TEST(testMoveByName);
+
     // XSpreadsheets2
     CPPUNIT_TEST(testImportedSheetNameAndIndex);
     CPPUNIT_TEST(testImportString);
@@ -47,7 +47,10 @@ public:
     CPPUNIT_TEST(testImportNamedRangeRedefinedInSource);
     CPPUNIT_TEST(testImportNewNamedRange);
     CPPUNIT_TEST(testImportCellStyle);
+
+    // XNameContainer
     CPPUNIT_TEST(testRemoveByName);
+
     CPPUNIT_TEST_SUITE_END();
 
     virtual uno::Reference< lang::XComponent > getComponent() override;
@@ -55,18 +58,13 @@ public:
     virtual uno::Reference< lang::XComponent > loadFromDesktop(const OUString& rString) override;
     virtual uno::Reference< uno::XInterface > init() override;
 protected:
-    static uno::Reference< lang::XComponent > mxComponent;
-    static sal_Int32 nTest;
+    uno::Reference< lang::XComponent > mxComponent;
 };
-
-uno::Reference< lang::XComponent > ScTableSheetsObj::mxComponent;
-sal_Int32 ScTableSheetsObj::nTest = 0;
 
 ScTableSheetsObj::ScTableSheetsObj():
             CalcUnoApiTest("/sc/qa/extras/testdocuments"),
             apitest::XNameContainer("Sheet2")
 {
-
 }
 
 uno::Reference< lang::XComponent > ScTableSheetsObj::getComponent()
@@ -86,12 +84,6 @@ uno::Reference< lang::XComponent > ScTableSheetsObj::loadFromDesktop(const OUStr
 
 uno::Reference< uno::XInterface > ScTableSheetsObj::init()
 {
-    OUString aFileURL;
-    createFileURL("rangenamessrc.ods", aFileURL);
-    if(!mxComponent.is())
-        mxComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT_MESSAGE("no component loaded", mxComponent.is());
-
     xDocument.set(mxComponent, UNO_QUERY_THROW);
     uno::Reference< uno::XInterface > xReturn( xDocument->getSheets(), UNO_QUERY_THROW);
 
@@ -100,19 +92,16 @@ uno::Reference< uno::XInterface > ScTableSheetsObj::init()
 
 void ScTableSheetsObj::setUp()
 {
-    nTest++;
-    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
+    // create a calc document
+    OUString aFileURL;
+    createFileURL("rangenamessrc.ods", aFileURL);
+    mxComponent = loadFromDesktop(aFileURL);
 }
 
 void ScTableSheetsObj::tearDown()
 {
-    if (nTest == NUMBER_OF_TESTS)
-    {
-        closeDocument(mxComponent);
-        mxComponent.clear();
-    }
-
+    closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
