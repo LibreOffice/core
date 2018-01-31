@@ -28,7 +28,6 @@
 #define OLESERV_DEACTIVATE      6
 
 #include <oleidl.h>
-#pragma warning(disable : 4265)
 #if defined __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wall"
