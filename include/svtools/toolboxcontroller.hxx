@@ -64,6 +64,7 @@ class SVT_DLLPUBLIC ToolboxController :
         ToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                            const css::uno::Reference< css::frame::XFrame >& xFrame,
                            const OUString& aCommandURL );
+        ToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
         ToolboxController();
         virtual ~ToolboxController() override;
 

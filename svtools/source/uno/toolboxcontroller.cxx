@@ -91,6 +91,22 @@ ToolboxController::ToolboxController() :
         &m_bSupportVisible, cppu::UnoType<decltype(m_bSupportVisible)>::get());
 }
 
+ToolboxController::ToolboxController(const Reference< XComponentContext >& rxContext) :
+    OPropertyContainer(GetBroadcastHelper())
+    ,   m_bSupportVisible(false)
+    ,   m_bInitialized( false )
+    ,   m_bDisposed( false )
+    ,   m_nToolBoxId( SAL_MAX_UINT16 )
+    ,   m_xContext( rxContext )
+    ,   m_aListenerContainer( m_aMutex )
+{
+    OSL_ASSERT( m_xContext.is() );
+    registerProperty( TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE,
+        TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE,
+        css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY,
+        &m_bSupportVisible, cppu::UnoType<decltype(m_bSupportVisible)>::get());
+}
+
 ToolboxController::~ToolboxController()
 {
 }
