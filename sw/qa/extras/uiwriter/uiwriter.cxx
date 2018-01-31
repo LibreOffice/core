@@ -5467,13 +5467,6 @@ void SwUiWriterTest::testSectionInTableInTable()
     createDoc("tdf112109.fodt");
 }
 
-void SwUiWriterTest::testTdf114536()
-{
-    // This crashed in SwTextFormatter::MergeCharacterBorder() due to a
-    // use after free.
-    createDoc("tdf114536.odt");
-}
-
 void SwUiWriterTest::testSectionInTableInTable2()
 {
     createDoc("split-section-in-nested-table.fodt");
@@ -5622,6 +5615,13 @@ void SwUiWriterTest::testTdf113790()
     // Save it as DOCX & load it again
     reload("Office Open XML Text", "tdf113790.docx");
     CPPUNIT_ASSERT(dynamic_cast<SwXTextDocument *>(mxComponent.get()));
+}
+
+void SwUiWriterTest::testTdf114536()
+{
+    // This crashed in SwTextFormatter::MergeCharacterBorder() due to a
+    // use after free.
+    createDoc("tdf114536.odt");
 }
 
 void SwUiWriterTest::testTdf115065()
