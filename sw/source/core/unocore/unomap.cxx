@@ -675,7 +675,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 static SfxItemPropertyMapEntry const aLinkTargetMap_Impl[] =
                 {
                     { OUString(UNO_LINK_DISPLAY_BITMAP), 0,     cppu::UnoType<css::awt::XBitmap>::get(), PropertyAttribute::READONLY, 0xff},
-                    { OUString(UNO_LINK_DISPLAY_NAME), 0,   cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0xff},
+                    { OUString(UNO_LINK_DISPLAY_NAME), 0,   cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0xbf},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aLinkTargetMap_Impl;
@@ -685,7 +685,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             {
                 static SfxItemPropertyMapEntry const aAutoTextGroupMap_Impl[] =
                 {
-                    { OUString(UNO_NAME_FILE_PATH), WID_GROUP_PATH,     cppu::UnoType<OUString>::get(),    PROPERTY_NONE,   PropertyAttribute::READONLY},
+                    { OUString(UNO_NAME_FILE_PATH), WID_GROUP_PATH,     cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0},
                     { OUString(UNO_NAME_TITLE), WID_GROUP_TITLE, cppu::UnoType<OUString>::get(),   PROPERTY_NONE,   0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };

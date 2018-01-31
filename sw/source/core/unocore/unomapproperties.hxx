@@ -61,8 +61,8 @@
     { OUString(UNO_NAME_CHAR_LOCALE_COMPLEX), RES_CHRATR_CTL_LANGUAGE ,   cppu::UnoType<css::lang::Locale>::get()  ,          PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },
 
 #define REDLINE_NODE_PROPERTIES \
-    { OUString(UNO_NAME_START_REDLINE), FN_UNO_REDLINE_NODE_START , cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(),   PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,  0xff }, \
-    { OUString(UNO_NAME_END_REDLINE), FN_UNO_REDLINE_NODE_END ,     cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(),       PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,  0xff },
+    { OUString(UNO_NAME_START_REDLINE), FN_UNO_REDLINE_NODE_START , cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(),   PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,  0xbf }, \
+    { OUString(UNO_NAME_END_REDLINE), FN_UNO_REDLINE_NODE_END ,     cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(),       PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,  0xbf },
 
 #define REDLINE_PROPERTIES \
     {OUString(UNO_NAME_REDLINE_AUTHOR), 0, cppu::UnoType<OUString>::get(),                     PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
@@ -250,7 +250,7 @@
         { OUString(UNO_NAME_CONTENT_SECTION), WID_IDX_CONTENT_SECTION,  cppu::UnoType<css::text::XTextSection>::get()  , PropertyAttribute::READONLY,     0},\
         { OUString(UNO_NAME_HEADER_SECTION), WID_IDX_HEADER_SECTION,  cppu::UnoType<css::text::XTextSection>::get()  , PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,     0},\
 
-#define ANCHOR_TYPES_PROPERTY    { OUString(UNO_NAME_ANCHOR_TYPES), FN_UNO_ANCHOR_TYPES,    cppu::UnoType< cppu::UnoSequenceType<css::text::TextContentAnchorType> >::get(),PropertyAttribute::READONLY, 0xff},
+#define ANCHOR_TYPES_PROPERTY    { OUString(UNO_NAME_ANCHOR_TYPES), FN_UNO_ANCHOR_TYPES,    cppu::UnoType< cppu::UnoSequenceType<css::text::TextContentAnchorType> >::get(),PropertyAttribute::READONLY, 0xbf},
 
 // #i18732# #i28701# #i73249#
 // all users of COMMON_FRAME_PROPERTIES add the new XATTR_FILL_FIRST, XATTR_FILL_LAST FillStyle,
@@ -315,7 +315,7 @@
     { OUString(UNO_NAME_RIGHT_BORDER_DISTANCE), RES_BOX,                cppu::UnoType<sal_Int32>::get(),   0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },                \
     { OUString(UNO_NAME_TOP_BORDER_DISTANCE), RES_BOX,              cppu::UnoType<sal_Int32>::get(),   0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },            \
     { OUString(UNO_NAME_BOTTOM_BORDER_DISTANCE), RES_BOX,               cppu::UnoType<sal_Int32>::get(),   0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },            \
-    { OUString(UNO_LINK_DISPLAY_NAME), FN_PARAM_LINK_DISPLAY_NAME,  cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0xff}, \
+    { OUString(UNO_LINK_DISPLAY_NAME), FN_PARAM_LINK_DISPLAY_NAME,  cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0xbf}, \
     { OUString(UNO_NAME_USER_DEFINED_ATTRIBUTES), RES_UNKNOWNATR_CONTAINER, cppu::UnoType<css::container::XNameContainer>::get(), PropertyAttribute::MAYBEVOID, 0 },\
     { OUString(UNO_NAME_Z_ORDER), FN_UNO_Z_ORDER,           cppu::UnoType<sal_Int32>::get(),       PROPERTY_NONE, 0}, \
     { OUString(UNO_NAME_IS_FOLLOWING_TEXT_FLOW), RES_FOLLOW_TEXT_FLOW,     cppu::UnoType<bool>::get(), PROPERTY_NONE, 0}, \
@@ -486,8 +486,8 @@
     { OUString(UNO_NAME_SW_FILLBMP_POSITION_OFFSET_X),          XATTR_FILLBMP_POSOFFSETX,   cppu::UnoType<sal_Int32>::get(),   0,  0}, \
     { OUString(UNO_NAME_SW_FILLBMP_POSITION_OFFSET_Y),          XATTR_FILLBMP_POSOFFSETY,   cppu::UnoType<sal_Int32>::get(),   0,  0}, \
     { OUString(UNO_NAME_SW_FILLBMP_RECTANGLE_POINT),            XATTR_FILLBMP_POS,          cppu::UnoType<css::drawing::RectanglePoint>::get(), 0,  0}, \
-    { OUString(UNO_NAME_SW_FILLBMP_SIZE_X),                     XATTR_FILLBMP_SIZEX,        cppu::UnoType<sal_Int32>::get(),   0,  SFX_METRIC_ITEM}, \
-    { OUString(UNO_NAME_SW_FILLBMP_SIZE_Y),                     XATTR_FILLBMP_SIZEY,        cppu::UnoType<sal_Int32>::get(),   0,  SFX_METRIC_ITEM},    \
+    { OUString(UNO_NAME_SW_FILLBMP_SIZE_X),                     XATTR_FILLBMP_SIZEX,        cppu::UnoType<sal_Int32>::get(),   0,  0, PropertyMoreFlags::METRIC_ITEM}, \
+    { OUString(UNO_NAME_SW_FILLBMP_SIZE_Y),                     XATTR_FILLBMP_SIZEY,        cppu::UnoType<sal_Int32>::get(),   0,  0, PropertyMoreFlags::METRIC_ITEM},    \
     { OUString(UNO_NAME_SW_FILLBMP_STRETCH),                    XATTR_FILLBMP_STRETCH,      cppu::UnoType<bool>::get(),       0,  0}, \
     { OUString(UNO_NAME_SW_FILLBMP_TILE),                       XATTR_FILLBMP_TILE,         cppu::UnoType<bool>::get(),       0,  0},\
     { OUString(UNO_NAME_SW_FILLBMP_MODE),                       OWN_ATTR_FILLBMP_MODE,      cppu::UnoType<drawing::BitmapMode>::get(), 0,  0}, \

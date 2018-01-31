@@ -158,6 +158,7 @@ class SvxBoxInfoItem;
 class SvxBoxItem;
 class SvxColorItem;
 class SvxLineItem;
+class SvxTextRotateItem;
 class SvxWritingModeItem;
 class XColorItem;
 
@@ -396,7 +397,7 @@ class XColorItem;
 #define SDRATTR_TABLE_BORDER_INNER              TypedWhichId<SvxBoxInfoItem>(SDRATTR_TABLE_FIRST+1)
 #define SDRATTR_TABLE_BORDER_TLBR               TypedWhichId<SvxLineItem>(SDRATTR_TABLE_FIRST+2)
 #define SDRATTR_TABLE_BORDER_BLTR               TypedWhichId<SvxLineItem>(SDRATTR_TABLE_FIRST+3)
-#define SDRATTR_TABLE_TEXT_ROTATION             (SDRATTR_TABLE_FIRST+4)
+#define SDRATTR_TABLE_TEXT_ROTATION             TypedWhichId<SvxTextRotateItem>(SDRATTR_TABLE_FIRST+4)
 
 #define SDRATTR_TABLE_LAST                      (SDRATTR_TABLE_TEXT_ROTATION)
 
