@@ -449,9 +449,8 @@ void SwXParagraph::Impl::GetSinglePropertyValue_Impl(
         case RES_BACKGROUND:
         {
             const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
-            const sal_uInt8 nMemberId(rEntry.nMemberId & (~SFX_METRIC_ITEM));
 
-            if(!aOriginalBrushItem.QueryValue(rAny, nMemberId))
+            if(!aOriginalBrushItem.QueryValue(rAny, rEntry.nMemberId))
             {
                 OSL_ENSURE(false, "Error getting attribute from RES_BACKGROUND (!)");
             }
@@ -500,7 +499,7 @@ void SwXParagraph::Impl::GetSinglePropertyValue_Impl(
         }
 
         // check for needed metric translation
-        if(rEntry.nMemberId & SFX_METRIC_ITEM)
+        if(rEntry.nMoreFlags & PropertyMoreFlags::METRIC_ITEM)
         {
             bool bDoIt(true);
 

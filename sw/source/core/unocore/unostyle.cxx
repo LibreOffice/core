@@ -1562,7 +1562,7 @@ const SwPageDesc* SwStyleBase_Impl::GetOldPageDesc()
 sal_uInt8 lcl_TranslateMetric(const SfxItemPropertySimpleEntry& rEntry, SwDoc* pDoc, uno::Any& o_aValue)
 {
     // check for needed metric translation
-    if(!(rEntry.nMemberId & SFX_METRIC_ITEM))
+    if(!(rEntry.nMoreFlags & PropertyMoreFlags::METRIC_ITEM))
         return rEntry.nMemberId;
     // exception: If these ItemTypes are used, do not convert when these are negative
     // since this means they are intended as percent values
@@ -1571,13 +1571,13 @@ sal_uInt8 lcl_TranslateMetric(const SfxItemPropertySimpleEntry& rEntry, SwDoc* p
             && o_aValue.get<sal_Int32>() < 0)
         return rEntry.nMemberId;
     if(!pDoc)
-        return rEntry.nMemberId & (~SFX_METRIC_ITEM);
+        return rEntry.nMemberId;
 
     const SfxItemPool& rPool = pDoc->GetAttrPool();
     const MapUnit eMapUnit(rPool.GetMetric(rEntry.nWID));
     if(eMapUnit != MapUnit::Map100thMM)
         SvxUnoConvertFromMM(eMapUnit, o_aValue);
-    return rEntry.nMemberId & (~SFX_METRIC_ITEM);
+    return rEntry.nMemberId;
 }
 template<>
 void SwXStyle::SetPropertyValue<HINT_BEGIN>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
@@ -2177,8 +2177,7 @@ template<>
 uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PAGEDESC)>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
-    const sal_uInt8 nMemberId(rEntry.nMemberId & (~SFX_METRIC_ITEM));
-    if(MID_PAGEDESC_PAGEDESCNAME != nMemberId)
+    if(MID_PAGEDESC_PAGEDESCNAME != rEntry.nMemberId)
         return GetStyleProperty<HINT_BEGIN>(rEntry, rPropSet, rBase);
     // special handling for RES_PAGEDESC
     const SfxPoolItem* pItem;
@@ -2276,9 +2275,8 @@ uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_BACKGROUND)>(const SfxItemPro
     PrepareStyleBase(rBase);
     const SfxItemSet& rSet = rBase.GetItemSet();
     const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
-    const sal_uInt8 nMemberId(rEntry.nMemberId & (~SFX_METRIC_ITEM));
     uno::Any aResult;
-    if(!aOriginalBrushItem.QueryValue(aResult, nMemberId))
+    if(!aOriginalBrushItem.QueryValue(aResult, rEntry.nMemberId))
         SAL_WARN("sw.uno", "error getting attribute from RES_BACKGROUND.");
     return aResult;
 }
@@ -2307,7 +2305,7 @@ uno::Any SwXStyle::GetStyleProperty<HINT_BEGIN>(const SfxItemPropertySimpleEntry
     if(rEntry.aType == cppu::UnoType<sal_Int16>::get() && aResult.getValueType() == cppu::UnoType<sal_Int32>::get())
         aResult <<= static_cast<sal_Int16>(aResult.get<sal_Int32>());
     // check for needed metric translation
-    if(rEntry.nMemberId & SFX_METRIC_ITEM && GetDoc())
+    if(rEntry.nMoreFlags & PropertyMoreFlags::METRIC_ITEM && GetDoc())
     {
         const SfxItemPool& rPool = GetDoc()->GetAttrPool();
         const MapUnit eMapUnit(rPool.GetMetric(rEntry.nWID));
@@ -3239,8 +3237,7 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
                 rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
                 const SfxItemSet& rSet = xStyle->GetItemSet();
                 const SfxPoolItem& rItem = rSet.Get(FN_PARAM_FTN_INFO);
-                const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
-                rItem.QueryValue(aRet[nProp], nMemberId);
+                rItem.QueryValue(aRet[nProp], pEntry->nMemberId);
             }
             break;
             default:
@@ -3560,11 +3557,11 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
                 continue;
             }
 
-            const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
+            const sal_uInt8 nMemberId(pEntry->nMemberId);
             bool bDone(false);
 
             // check for needed metric translation
-            if(pEntry->nMemberId & SFX_METRIC_ITEM)
+            if(pEntry->nMoreFlags & PropertyMoreFlags::METRIC_ITEM)
             {
                 bool bDoIt(true);
 
@@ -3967,9 +3964,8 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
                 case RES_BACKGROUND:
                 {
                     const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(*mpSet, RES_BACKGROUND));
-                    const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
 
-                    if(!aOriginalBrushItem.QueryValue(aTarget, nMemberId))
+                    if(!aOriginalBrushItem.QueryValue(aTarget, pEntry->nMemberId))
                     {
                         OSL_ENSURE(false, "Error getting attribute from RES_BACKGROUND (!)");
                     }
@@ -4019,7 +4015,7 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
             }
 
             // check for needed metric translation
-            if(pEntry->nMemberId & SFX_METRIC_ITEM)
+            if(pEntry->nMoreFlags & PropertyMoreFlags::METRIC_ITEM)
             {
                 bool bDoIt(true);
 
