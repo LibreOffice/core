@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_480109ae",
+        "filename": "sw/source/core/fields/reffld.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-01-31T08:22:36Z",
+      "side": 1,
+      "message": "A short doxygen comment about what the function does and what the parameters mean would be nice. Technically the 1st, 3rd and 4th parameter is an outgoing one, but probably this is not your intention.",
+      "revId": "07a502a1a485f11ff6f6d46a8a0a3cc9c46cef69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_2804d5be",
+        "filename": "sw/source/core/fields/reffld.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-01-31T08:22:36Z",
+      "side": 1,
+      "message": "If you negate this, then you can do an early return here and avoid indentation for the rest of the function -\u003e more readable.",
+      "revId": "07a502a1a485f11ff6f6d46a8a0a3cc9c46cef69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
