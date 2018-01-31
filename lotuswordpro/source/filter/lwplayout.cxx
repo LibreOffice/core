@@ -484,25 +484,17 @@ void LwpHeadLayout::RegisterStyle()
 {
     //Register all children styles
     rtl::Reference<LwpVirtualLayout> xLayout(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    std::set<LwpVirtualLayout*> aSeen;
     while (xLayout.is())
     {
+        aSeen.insert(xLayout.get());
         xLayout->SetFoundry(m_pFoundry);
         //if the layout is relative to para, the layout will be registered in para
         if (!xLayout->IsRelativeAnchored())
-        {
-            if (xLayout.get() == this)
-            {
-                OSL_FAIL("Layout points to itself");
-                break;
-            }
             xLayout->DoRegisterStyle();
-        }
         rtl::Reference<LwpVirtualLayout> xNext(dynamic_cast<LwpVirtualLayout*>(xLayout->GetNext().obj().get()));
-        if (xNext.get() == xLayout.get())
-        {
-            OSL_FAIL("Layout points to itself");
-            break;
-        }
+        if (aSeen.find(xNext.get()) != aSeen.end())
+            throw std::runtime_error("loop in conversion");
         xLayout = xNext;
     }
 }
