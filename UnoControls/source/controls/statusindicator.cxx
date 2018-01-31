@@ -301,7 +301,7 @@ void SAL_CALL StatusIndicator::dispose ()
     removeControl( xTextControl     );
     removeControl( m_xProgressBar.get() );
 
-    // do'nt use "...->clear ()" or "... = XFixedText ()"
+    // don't use "...->clear ()" or "... = XFixedText ()"
     // when other hold a reference at this object !!!
     xTextControl->dispose();
     m_xProgressBar->dispose();
@@ -356,8 +356,8 @@ const OUString StatusIndicator::impl_getStaticImplementationName()
 WindowDescriptor* StatusIndicator::impl_getWindowDescriptor( const css::uno::Reference< XWindowPeer >& xParentPeer )
 {
     // - used from "createPeer()" to set the values of an css::awt::WindowDescriptor !!!
-    // - if you will change the descriptor-values, you must override this virtuell function
-    // - the caller must release the memory for this dynamical descriptor !!!
+    // - if you will change the descriptor-values, you must override this virtual function
+    // - the caller must release the memory for this dynamical descriptor!!!
 
     WindowDescriptor* pDescriptor = new WindowDescriptor;
 
@@ -374,8 +374,8 @@ WindowDescriptor* StatusIndicator::impl_getWindowDescriptor( const css::uno::Ref
 
 void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::Reference< XGraphics > & rGraphics )
 {
-    // This paint method is not buffered !!
-    // Every request paint the completely control. ( but only, if peer exist )
+    // This paint method is not buffered!
+    // Every request paint the completely control. (But only, if peer exist)
      if ( rGraphics.is () )
     {
         MutexGuard  aGuard (m_aMutex);

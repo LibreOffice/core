@@ -75,7 +75,7 @@ static void createTheme( const OUString& aThemeName, const OUString& aGalleryURL
 
     pGallery = createGallery( aGalleryURL );
     if (!pGallery ) {
-            fprintf( stderr, "Could't create '%s'\n",
+            fprintf( stderr, "Couldn't create '%s'\n",
                      OUStringToOString( aGalleryURL, RTL_TEXTENCODING_UTF8 ).getStr() );
             exit( 1 );
     }

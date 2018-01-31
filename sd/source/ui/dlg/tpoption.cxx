@@ -631,7 +631,7 @@ void SdTpOptionsMisc::UpdateCompatibilityControls()
                 Reference<frame::XModel> xModel (xEnumeration->nextElement(), UNO_QUERY);
                 if (xModel.is())
                 {
-                    // There is at leas one model/document: Enable the compatibility controls.
+                    // There is at least one model/document: Enable the compatibility controls.
                     bIsEnabled = true;
                     break;
                 }

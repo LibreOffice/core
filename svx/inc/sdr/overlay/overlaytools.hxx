@@ -157,7 +157,7 @@ namespace drawinglayer
 
 
 // Overlay helper class for a hatch rectangle as used e.g. for text object
-// selection hilighting
+// selection highlighting
 namespace drawinglayer
 {
     namespace primitive2d

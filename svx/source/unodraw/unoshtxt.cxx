@@ -358,9 +358,9 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                     // Once SdrHintKind::BeginEdit is broadcast, each EditSource of
                     // AccessibleCell will handle it here and call below:
                     // mpView->GetTextEditOutliner()->SetNotifyHdl(), which
-                    // will replace the Notifer for current editable cell. It
+                    // will replace the Notifier for current editable cell. It
                     // is totally wrong. So add check here to avoid the
-                    // incorrect replacement of notifer.
+                    // incorrect replacement of notifier.
 
                     // Currently it only happens on the editsource of
                     // AccessibleCell

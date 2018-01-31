@@ -320,7 +320,7 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
     {
         case 0:
         {
-            OSL_ENSURE(!IsTextEditActive(), "Do not use a ImpTextframeHdl for hilighting text in active text edit, this will collide with EditEngine paints (!)");
+            OSL_ENSURE(!IsTextEditActive(), "Do not use a ImpTextframeHdl for highlighting text in active text edit, this will collide with EditEngine paints (!)");
             // hack for calc grid sync to ensure the hatched area
             // for a textbox is displayed at correct position
             pH = new ImpTextframeHdl(maRect + GetGridOffset() );
