@@ -47,8 +47,10 @@
 #include <sal/macros.h>
 
 #if defined _MSC_VER
-#pragma warning(push, 1)
-#pragma warning(disable:4273 4701)
+#pragma warning(push)
+#pragma warning(disable: 4324) // structure was padded due to alignment specifier
+#pragma warning(disable: 4065) // switch statement contains 'default' but no 'case' labels
+#pragma warning(disable: 4702) // unreachable code
 #endif
 
 #ifdef __GNUC__
@@ -4260,6 +4262,9 @@ trigger_name:
 ;
 %%
 
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
@@ -4818,7 +4823,3 @@ int OSQLParser::SQLlex()
 {
 	return OSQLScanner::SQLlex();
 }
-
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
