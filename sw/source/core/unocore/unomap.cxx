@@ -878,6 +878,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_REFERENCE_FIELD_SOURCE),FIELD_PROP_USHORT2, cppu::UnoType<sal_Int16>::get(),    PROPERTY_NONE,  0},
                     {OUString(UNO_NAME_SEQUENCE_NUMBER),    FIELD_PROP_SHORT1,  cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_SOURCE_NAME),        FIELD_PROP_PAR1,    cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
+                    {OUString(UNO_NAME_REFERENCE_FIELD_LANGUAGE), FIELD_PROP_PAR4, cppu::UnoType<OUString>::get(),  PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
