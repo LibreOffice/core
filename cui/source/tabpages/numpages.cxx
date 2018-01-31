@@ -3228,7 +3228,7 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, SpinField&, rFld, void )
                     if(0 == i)
                     {
                         long nTmp = aNumFmt.GetFirstLineOffset();
-                        aNumFmt.SetAbsLSpace( sal_uInt16(nValue - nTmp));
+                        aNumFmt.SetAbsLSpace( nValue - nTmp);
                     }
                     else
                     {
@@ -3236,7 +3236,7 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, SpinField&, rFld, void )
                                     pActNum->GetLevel( i - 1 ).GetFirstLineOffset() -
                                     pActNum->GetLevel( i ).GetFirstLineOffset();
 
-                        aNumFmt.SetAbsLSpace( sal_uInt16(nValue + nTmp));
+                        aNumFmt.SetAbsLSpace( nValue + nTmp);
                     }
                 }
                 else
@@ -3253,7 +3253,7 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, SpinField&, rFld, void )
                 // together with the FirstLineOffset the AbsLSpace must be changed, too
                 long nDiff = nValue + aNumFmt.GetFirstLineOffset();
                 long nAbsLSpace = aNumFmt.GetAbsLSpace();
-                aNumFmt.SetAbsLSpace(sal_uInt16(nAbsLSpace + nDiff));
+                aNumFmt.SetAbsLSpace(nAbsLSpace + nDiff);
                 aNumFmt.SetFirstLineOffset( -static_cast<short>(nValue) );
             }
 
