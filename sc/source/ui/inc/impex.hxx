@@ -54,6 +54,7 @@ class ScImportExport
     OUString    aNonConvertibleChars;
     OUString    maFilterOptions;
     sal_uLong   nSizeLimit;
+    SCROW       nMaxImportRow;
     sal_Unicode cSep;                   // Separator
     sal_Unicode cStr;                   // String Delimiter
     bool        bFormulas;              // Formula in Text?

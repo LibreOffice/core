@@ -55,6 +55,7 @@
 #include <globstr.hrc>
 #include <o3tl/safeint.hxx>
 #include <tools/svlibrary.h>
+#include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
 
 #include <memory>
@@ -92,7 +93,8 @@ enum class SylkVersion
 // Whole document without Undo
 ScImportExport::ScImportExport( ScDocument* p )
     : pDocSh( dynamic_cast< ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
-      nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
+      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? MAXROW : SCROWS32K),
+      cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( true ), bSingle( true ), bUndo( false ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
@@ -107,7 +109,8 @@ ScImportExport::ScImportExport( ScDocument* p )
 ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
     : pDocSh( dynamic_cast< ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
       aRange( rPt ),
-      nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
+      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? MAXROW : SCROWS32K),
+      cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
@@ -123,7 +126,8 @@ ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
 ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
     : pDocSh( dynamic_cast<ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
       aRange( r ),
-      nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
+      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? MAXROW : SCROWS32K),
+      cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( false ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
@@ -140,7 +144,8 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
 // If a View exists, the TabNo of the view will be used.
 ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
     : pDocSh( dynamic_cast< ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
-      nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
+      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? MAXROW : SCROWS32K),
+      cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
       bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
@@ -1796,10 +1801,10 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         {
                             bInvalidRow = false;
                             bool bFail = o3tl::checked_add(OUString(p).toInt32(), nStartRow - 1, nRow);
-                            if (bFail || nRow < 0 || MAXROW < nRow)
+                            if (bFail || nRow < 0 || nMaxImportRow < nRow)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;Y invalid nRow=" << nRow);
-                                nRow = std::max<SCROW>(0, std::min<SCROW>(nRow, MAXROW));
+                                nRow = std::max<SCROW>(0, std::min<SCROW>(nRow, nMaxImportRow));
                                 bInvalidRow = bOverflowRow = true;
                             }
                             break;
@@ -1820,10 +1825,10 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         {
                             bInvalidRefRow = false;
                             bool bFail = o3tl::checked_add(OUString(p).toInt32(), nStartRow - 1, nRefRow);
-                            if (bFail || nRefRow < 0 || MAXROW < nRefRow)
+                            if (bFail || nRefRow < 0 || nMaxImportRow < nRefRow)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;R invalid nRefRow=" << nRefRow);
-                                nRefRow = std::max<SCROW>(0, std::min<SCROW>(nRefRow, MAXROW));
+                                nRefRow = std::max<SCROW>(0, std::min<SCROW>(nRefRow, nMaxImportRow));
                                 bInvalidRefRow = bOverflowRow = true;
                             }
                             break;
@@ -1833,7 +1838,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             if( !bSingle &&
                                     ( nCol < nStartCol || nCol > nEndCol
                                       || nRow < nStartRow || nRow > nEndRow
-                                      || nCol > MAXCOL || nRow > MAXROW
+                                      || nCol > MAXCOL || nRow > nMaxImportRow
                                       || bInvalidCol || bInvalidRow ) )
                                 break;
                             if( !bData )
@@ -1957,10 +1962,10 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         {
                             bInvalidRow = false;
                             bool bFail = o3tl::checked_add(OUString(p).toInt32(), nStartRow - 1, nRow);
-                            if (bFail || nRow < 0 || MAXROW < nRow)
+                            if (bFail || nRow < 0 || nMaxImportRow < nRow)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;Y invalid nRow=" << nRow);
-                                nRow = std::max<SCROW>(0, std::min<SCROW>(nRow, MAXROW));
+                                nRow = std::max<SCROW>(0, std::min<SCROW>(nRow, nMaxImportRow));
                                 bInvalidRow = bOverflowRow = true;
                             }
                             break;
