@@ -493,7 +493,7 @@ private:
     );
 
     /// invalidate all our parameter-related stuff
-    void        invlidateParameters();
+    void        invalidateParameters();
 
     void        saveInsertOnlyState( );
     void        restoreInsertOnlyState( );
