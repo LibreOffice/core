@@ -16,6 +16,24 @@
       "revId": "384a049feeb87722a59166f290f090a7a6c9a9c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e9c47f93",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1338,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2018-02-01T12:22:23Z",
+      "side": 1,
+      "message": "I rewrote the code and forgot to remove it. Thanks.",
+      "parentUuid": "fa31d9ce_c9f89be8",
+      "revId": "384a049feeb87722a59166f290f090a7a6c9a9c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
