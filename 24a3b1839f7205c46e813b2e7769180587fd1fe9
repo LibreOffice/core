@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_89bf83cf",
+        "filename": "vcl/unx/generic/dtrans/X11_selection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3682,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-02-01T13:46:05Z",
+      "side": 1,
+      "message": "the clear is unnecessary, this vector will be destroyed at the end of the block in two lines :-)",
+      "revId": "24a3b1839f7205c46e813b2e7769180587fd1fe9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
