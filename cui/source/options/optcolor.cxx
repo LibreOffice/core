@@ -938,25 +938,17 @@ IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, SvxColorListBox&, rBox, void)
 IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control&, rCtrl, void)
 {
     // determine whether a control is completely visible
-    // and make it visible
     long aCtrlPosY = rCtrl.GetPosPixel().Y();
     unsigned const nWinHeight = m_pScrollWindow->GetSizePixel().Height();
     unsigned const nEntryHeight = m_pScrollWindow->GetEntryHeight();
     if ((GetFocusFlags::Tab & rCtrl.GetGetFocusFlags()) &&
-        (aCtrlPosY < 0 || nWinHeight < aCtrlPosY + nEntryHeight)
+        (aCtrlPosY < 0 || nWinHeight < aCtrlPosY + nEntryHeight || nWinHeight > aCtrlPosY + nEntryHeight)
     ) {
         long nThumbPos = m_pVScroll->GetThumbPos();
-        if (nWinHeight < aCtrlPosY + nEntryHeight)
         {
             //scroll down
-            nThumbPos += 2;
-        }
-        else
-        {
-            //scroll up
-            nThumbPos -= 2;
-            if(nThumbPos < 0)
-                nThumbPos = 0;
+            nThumbPos = aCtrlPosY/40; //aCtrlPosY help to scroll, It is divided by 40 as it sets how much it will scroll, Basically
+                                      // It keeps the highlighted listbox in up and middle of the page. Position of Highlighted box can be changed by slight change in denominator.
         }
         m_pVScroll->SetThumbPos(nThumbPos);
         ScrollHdl(m_pVScroll);
