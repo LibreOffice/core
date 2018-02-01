@@ -176,11 +176,10 @@ static void prependPythonPath( const OUString & pythonPathBootstrap )
     osl_setEnvironment(envVar.pData, envValue.pData);
 }
 
-Reference< XInterface > CreateInstance( const Reference< XComponentContext > & ctx )
+struct PythonInit
 {
-    Reference< XInterface > ret;
-
-    if( ! Py_IsInitialized() )
+PythonInit() {
+    if (! Py_IsInitialized()) // may be inited by getComponentContext() already
     {
         OUString pythonPath;
         OUString pythonHome;
@@ -236,9 +235,22 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
         // PyThreadAttach below.
         PyThreadState_Delete(tstate);
     }
+}
+};
+
+Reference<XInterface> CreateInstance(const Reference<XComponentContext> & ctx)
+{
+    // tdf#114815 thread-safe static to init python only once
+    static PythonInit s_Init;
+
+    Reference< XInterface > ret;
 
     PyThreadAttach attach( PyInterpreterState_Head() );
     {
+        // note: this can't race against getComponentContext() because
+        // either (in soffice.bin) CreateInstance() must be called before
+        // getComponentContext() can be called, or (in python.bin) the other
+        // way around
         if( ! Runtime::isInitialized() )
         {
             Runtime::initialize( ctx );
