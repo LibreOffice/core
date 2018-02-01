@@ -1508,7 +1508,6 @@ private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
     SwXDocumentIndexMark & m_rThis;
     SwMultiDepend m_aDepends;
-    bool m_bInReplaceMark;
 public:
     const SwTOXMark* m_pTOXMark;
     SwTOXType* m_pTOXType;
@@ -1541,7 +1540,6 @@ public:
             SwTOXMark const*const pMark)
         : m_rThis(rThis)
         , m_aDepends(*this)
-        , m_bInReplaceMark(false)
         , m_pTOXMark(pMark)
         , m_pTOXType(pType)
         , m_rPropSet(*aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Mark(eType)))
@@ -1567,9 +1565,8 @@ public:
 
     void ReplaceTOXMark(SwTOXType & rTOXType, SwTOXMark & rMark, SwPaM & rPam)
     {
-        m_bInReplaceMark = true;
+        m_aDepends.EndListeningAll(); // stop listening, so that we dont invalidate/dispose from the DeleteTOXMark()
         DeleteTOXMark();
-        m_bInReplaceMark = false;
         try {
             InsertTOXMark(rTOXType, rMark, rPam, nullptr);
         } catch (...) {
@@ -1584,19 +1581,16 @@ public:
     void Invalidate()
     {
         m_aDepends.EndListeningAll();
-        if (!m_bInReplaceMark) // #i109983# only dispose on delete, not on replace!
-        {
-            uno::Reference<uno::XInterface> const xThis(m_wThis);
-            // fdo#72695: if UNO object is already dead, don't revive it with event
-            if (xThis.is())
-            {
-                lang::EventObject const ev(xThis);
-                m_EventListeners.disposeAndClear(ev);
-            }
-        }
         m_pDoc = nullptr;
         m_pTOXMark = nullptr;
         m_pTOXType = nullptr;
+        uno::Reference<uno::XInterface> const xThis(m_wThis);
+        // fdo#72695: if UNO object is already dead, don't revive it with event
+        if (xThis.is())
+        {
+            lang::EventObject const ev(xThis);
+            m_EventListeners.disposeAndClear(ev);
+        }
     }
 protected:
     // SwClient
