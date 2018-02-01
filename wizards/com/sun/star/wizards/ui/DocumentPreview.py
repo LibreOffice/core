@@ -58,11 +58,6 @@ class DocumentPreview(object):
                 ps[item] = propValues[index]
             return self.setDocument(self.url, ps.getProperties1())
 
-    def reload(self, xmsf):
-        self.closeFrame()
-        self.createPreviewFrame(xmsf, self.xControl)
-        self.setDocument(self.url, self.loadArgs)
-
     def closeFrame(self):
         if self.xFrame is not None:
             self.xFrame.close(False)

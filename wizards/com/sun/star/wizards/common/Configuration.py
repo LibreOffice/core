@@ -54,45 +54,9 @@ class Configuration(object):
     def getNode(self, name, parent):
         return parent.getByName(name)
 
-    # This method creates a new configuration node and adds it
-    # to the given view. Note that if a node with the given name
-    # already exists it will be completely removed from
-    # the configuration.
-    # @param configView
-    # @param name
-    # @return the new created configuration node.
-    # @throws com.sun.star.lang.WrappedTargetException
-    # @throws ElementExistException
-    # @throws NoSuchElementException
-    # @throws com.sun.star.uno.Exception
-    @classmethod
-    def addConfigNode(self, configView, name):
-        try:
-            node = configView.getByName(name)
-        except Exception:
-            node = None
-        if (node is not None):
-            return node
-        else:
-            # create a new detached set element (instance of DataSourceDescription)
-            # the new element is the result !
-            node = configView.createInstance()
-            # insert it - this also names the element
-            configView.insertByName(name, node)
-            return node
-
-    @classmethod
-    def removeNode(self, configView, name):
-        if (configView.hasByName(name)):
-            configView.removeByName(name)
-
     @classmethod
     def commit(self, configView):
         configView.commitChanges()
-
-    @classmethod
-    def getChildrenNames(self, configView):
-        return configView.getElementNames()
 
     @classmethod
     def getInt(self, name, parent):

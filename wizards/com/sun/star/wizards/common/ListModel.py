@@ -28,10 +28,6 @@ class ListModel(object):
     def getElementAt(self, arg0):
         pass
 
-    @abstractmethod
-    def elements(self):
-        pass
-
     def addListDataListener(self, listener):
         pass
 

@@ -49,21 +49,6 @@ class SystemDialog(object):
             xmsf, "com.sun.star.ui.dialogs.FilePicker",
                 FILESAVE_AUTOEXTENSION)
 
-    @classmethod
-    def createOpenDialog(self, xmsf):
-        return SystemDialog(
-            xmsf, "com.sun.star.ui.dialogs.FilePicker", FILEOPEN_SIMPLE)
-
-    @classmethod
-    def createFolderDialog(self, xmsf):
-        return SystemDialog(
-            xmsf, "com.sun.star.ui.dialogs.FolderPicker", 0)
-
-    @classmethod
-    def createOfficeFolderDialog(self, xmsf):
-        return SystemDialog(
-            xmsf, "com.sun.star.ui.dialogs.OfficeFolderPicker", 0)
-
     def subst(self, path):
         try:
             s = self.xStringSubstitution.substituteVariables(path, False)
@@ -90,35 +75,8 @@ class SystemDialog(object):
 
         return self.sStorePath
 
-    def callFolderDialog(self, title, description, displayDir):
-        try:
-            self.systemDialog.setDisplayDirectory(
-                self.subst(displayDir))
-        except IllegalArgumentException as iae:
-            traceback.print_exc()
-            raise AttributeError(iae.getMessage());
-
-        self.systemDialog.setTitle(title)
-        self.systemDialog.setDescription(description)
-        if self.execute(self.systemDialog):
-            return self.systemDialog.getDirectory()
-        else:
-            return None
-
     def execute(self, execDialog):
         return execDialog.execute() == 1
-
-    def callOpenDialog(self, multiSelect, displayDirectory):
-        try:
-            self.systemDialog.setMultiSelectionMode(multiSelect)
-            self.systemDialog.setDisplayDirectory(self.subst(displayDirectory))
-            if self.execute(self.systemDialog):
-                return self.systemDialog.getSelectedFiles()
-
-        except Exception:
-            traceback.print_exc()
-
-        return None
 
     def addFilterToDialog(self, sExtension, filterName, setToDefault):
         try:

@@ -124,12 +124,6 @@ class UnoDialog2(UnoDialog):
 
         return xRadioButton
 
-    def insertTitledBox(self, sName, sPropNames, oPropValues):
-        oTitledBox = self.insertControlModel(
-            "com.sun.star.awt.UnoControlGroupBoxModel",
-            sName, sPropNames, oPropValues)
-        return oTitledBox
-
     def insertTextField(
         self, sName, sTextChanged, sPropNames, oPropValues, listener):
         return self.insertEditField(
@@ -169,19 +163,6 @@ class UnoDialog2(UnoDialog):
             xField.addTextListener(TextListenerProcAdapter(sTextChanged))
         return xField
 
-    def insertFileControl(
-        self, sName, sTextChanged, sPropNames, oPropValues, listener):
-        return self.insertEditField(sName, sTextChanged,
-            "com.sun.star.awt.UnoControlFileControlModel",
-            sPropNames, oPropValues, listener)
-
-    def insertCurrencyField(
-        self, sName, sTextChanged, sPropNames, oPropValues, listener):
-        return self.insertEditField(
-            sName, sTextChanged,
-            "com.sun.star.awt.UnoControlCurrencyFieldModel",
-            sPropNames, oPropValues, listener)
-
     def insertDateField(
         self, sName, sTextChanged, sPropNames, oPropValues, listener):
         return self.insertEditField(
@@ -201,12 +182,6 @@ class UnoDialog2(UnoDialog):
         return self.insertEditField(
             sName, sTextChanged,
             "com.sun.star.awt.UnoControlTimeFieldModel",
-            sPropNames, oPropValues, listener)
-
-    def insertPatternField(
-        self, sName, sTextChanged, oPropValues, listener):
-        return self.insertEditField(sName, sTextChanged,
-            "com.sun.star.awt.UnoControlPatternFieldModel",
             sPropNames, oPropValues, listener)
 
     def insertFormattedField(
@@ -240,18 +215,6 @@ class UnoDialog2(UnoDialog):
         if self.ControlList is not None:
             self.ControlList[sName] = iControlKey
         return oScrollBar
-
-    def insertProgressBar(self, sName, sPropNames, oPropValues):
-        oProgressBar = self.insertControlModel(
-            "com.sun.star.awt.UnoControlProgressBarModel",
-            sName, sPropNames, oPropValues)
-        return oProgressBar
-
-    def insertGroupBox(self, sName, sPropNames, oPropValues):
-        oGroupBox = self.insertControlModel(
-            "com.sun.star.awt.UnoControlGroupBoxModel",
-            sName, sPropNames, oPropValues)
-        return oGroupBox
 
     def showMessageBox(self, windowServiceName, windowAttribute, MessageText):
         return SystemDialog.showMessageBox(

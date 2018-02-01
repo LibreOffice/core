@@ -33,7 +33,3 @@ class TaskListener(EventListener):
     @abstractmethod
     def taskStatusChanged(self, te):
         pass
-
-    @abstractmethod
-    def subtaskNameChanged(self, te):
-        pass

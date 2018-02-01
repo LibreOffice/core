@@ -86,18 +86,18 @@ class WizardDialog(UnoDialog2):
     def setDialogProperties(self, closeable, height, moveable, position_x,
         position_Y, step, tabIndex, title, width):
         uno.invoke(self.xDialogModel, "setPropertyValues",
-             ((PropertyNames.PROPERTY_CLOSEABLE, 
-                PropertyNames.PROPERTY_HEIGHT, 
+             ((PropertyNames.PROPERTY_CLOSEABLE,
+                PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_MOVEABLE,
                 PropertyNames.PROPERTY_POSITION_X,
                 PropertyNames.PROPERTY_POSITION_Y,
-                PropertyNames.PROPERTY_STEP, 
+                PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_TITLE,
                 PropertyNames.PROPERTY_WIDTH),
-             (closeable, height, moveable, position_x, position_Y, step, 
-                tabIndex, title, width)))     
-        
+             (closeable, height, moveable, position_x, position_Y, step,
+                tabIndex, title, width)))
+
     def setRoadmapInteractive(self, _bInteractive):
         self.oRoadmap.Activated = _bInteractive
 
@@ -139,7 +139,7 @@ class WizardDialog(UnoDialog2):
                 break
         if self.sTemplatePath == "":
             raise Exception("could not find wizard templates")
-            
+
     def addRoadmap(self):
         try:
             iDialogHeight = self.xDialogModel.Height
@@ -322,7 +322,7 @@ class WizardDialog(UnoDialog2):
                 self.oRoadmap.insertByIndex(index, oRoadmapItem)
             except Exception:
                 traceback.print_exc()
-            
+
     def setStepEnabled(self, _nStep, bEnabled, enableNextButton=None):
         xRoadmapItem = self.getRoadmapItemByID(_nStep)
         if xRoadmapItem is not None:
@@ -423,9 +423,6 @@ class WizardDialog(UnoDialog2):
                 self.removeTerminateListener()
         except Exception:
              traceback.print_exc()
-
-    def getMaximalStep(self):
-        return self.nMaxStep
 
     def getCurrentStep(self):
         try:

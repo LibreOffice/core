@@ -87,22 +87,6 @@ class DataAware(object):
                 traceback.print_exc()
 
     '''
-    sets a new data object. Optionally
-    update the UI.
-    @param obj the new data object.
-    @param updateUI if true updateUI() will be called.
-    '''
-
-    def setDataObject(self, obj, updateUI):
-        #if obj is not None and not isinstance(obj, type(self._field)):
-        #    return
-
-        self._dataObject = obj
-
-        if updateUI:
-            self.updateUI()
-
-    '''
     updates the DataObject according to
     the current state of the UI control.
     '''
@@ -132,14 +116,3 @@ class DataAware(object):
                     setattr(self._dataObject, self._field, ui)
         except Exception:
             traceback.print_exc()
-
-    '''
-    given a collection containing DataAware objects,
-    calls updateUI() on each member of the collection.
-    @param dataAwares a collection containing DataAware objects.
-    '''
-
-    @classmethod
-    def updateUIs(self, dataAwares):
-        for i in dataAwares:
-            i.updateUI()

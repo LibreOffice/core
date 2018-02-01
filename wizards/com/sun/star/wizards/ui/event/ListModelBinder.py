@@ -36,14 +36,6 @@ class ListModelBinder(ListDataListener):
         self.listModel = newListModel
         self.listModel.addListDataListener(self)
 
-    def contentsChanged(self, lde):
-        selected = self.getSelectedItems()
-        i = lde.getIndex0()
-        while i <= lde.getIndex1():
-            self.update(i)
-            i += 1
-        self.setSelectedItems(selected)
-
     def update(self, i):
         self.remove(i, i)
         self.insert(i)
@@ -63,18 +55,6 @@ class ListModelBinder(ListDataListener):
     def getSelectedItems(self):
         return self.unoListModel.SelectedItems
 
-    def setSelectedItems(self, selected):
-        self.unoListModel.SelectedItems = selected;
-
-    def intervalAdded(self, lde):
-        i = lde.getIndex0()
-        while (i <= lde.getIndex1()):
-            self.insert(i)
-            i += 1
-
-    def intervalRemoved(self, lde):
-        self.remove(lde.getIndex0(), lde.getIndex1())
-
     class Renderer:
 
         @abstractmethod
@@ -85,25 +65,3 @@ class ListModelBinder(ListDataListener):
                 return str(item)
             else:
                 return item.toString()
-
-    @classmethod
-    def fillList(self, xlist, items, renderer):
-        xlist.Model.StringItemList = ()
-        for index,item in enumerate(items):
-            if item is not None:
-                if renderer is not None:
-                    aux = renderer.render(index)
-                else:
-                    aux = item.toString()
-                xlist.addItem(aux, index)
-
-    @classmethod
-    def fillComboBox(self, xComboBox, items, renderer):
-        xComboBox.Model.StringItemList = ()
-        for index,item in enumerate(items):
-            if item is not None:
-                if renderer is not None:
-                    aux = renderer.render(index)
-                else:
-                    aux = item.toString()
-                xComboBox.addItem(aux, index)

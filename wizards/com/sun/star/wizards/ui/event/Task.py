@@ -55,23 +55,6 @@ class Task:
         if (self.failed + self.successful == self.maximum):
             self.fireTaskFinished()
 
-    def advance1(self, success_, nextSubtaskName):
-        self.advance(success_)
-        self.setSubtaskName(nextSubtaskName)
-
-    def getStatus(self):
-        return self.successful + self.failed
-
-    def addTaskListener(self, tl):
-        self.listeners.append(tl)
-
-    def removeTaskListener(self, tl):
-        try:
-            index = self.listeners.index(tl)
-            self.listeners.pop(index)
-        except Exception:
-            traceback.print_exc()
-
     def fireTaskStatusChanged(self):
         te = TaskEvent(self, TaskEvent.TASK_STATUS_CHANGED)
         for i in range(len(self.listeners)):
@@ -91,24 +74,3 @@ class Task:
         te = TaskEvent(self, TaskEvent.TASK_FINISHED)
         for i in range(len(self.listeners)):
             self.listeners[i].taskFinished(te)
-
-    def fireSubtaskNameChanged(self):
-        te = TaskEvent(self, TaskEvent.SUBTASK_NAME_CHANGED)
-        for i in range(len(self.listeners)):
-            self.listeners[i].subtaskNameChanged(te)
-
-    def getSubtaskName(self):
-        return self.subtaskName
-
-    def getTaskName(self):
-        return self.taskName
-
-    def setSubtaskName(self, s):
-        self.subtaskName = s
-        self.fireSubtaskNameChanged()
-
-    def getFailed(self):
-        return self.failed
-
-    def getSuccessfull(self):
-        return self.successful

@@ -32,9 +32,3 @@ class TaskEvent:
         #super(TaskEvent, self).__init__(source)
         self.taskType = type_
         self.source = source_
-
-    def getTask(self):
-        return self.getSource()
-
-    def getSource(self):
-        return self.source
