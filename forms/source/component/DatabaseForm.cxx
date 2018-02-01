@@ -1687,11 +1687,11 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
             break;
         case PROPERTY_ID_MASTERFIELDS:
             rValue >>= m_aMasterFields;
-            invlidateParameters();
+            invalidateParameters();
             break;
         case PROPERTY_ID_DETAILFIELDS:
             rValue >>= m_aDetailFields;
-            invlidateParameters();
+            invalidateParameters();
             break;
         case PROPERTY_ID_CYCLE:
             m_aCycle = rValue;
@@ -2293,7 +2293,7 @@ void SAL_CALL ODatabaseForm::removeSQLErrorListener(const Reference<XSQLErrorLis
 }
 
 
-void ODatabaseForm::invlidateParameters()
+void ODatabaseForm::invalidateParameters()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aParameterManager.clearAllParameterInformation();
@@ -2314,7 +2314,7 @@ void ODatabaseForm::_propertyChanged(const PropertyChangeEvent& evt)
     else // it was one of the statement relevant props
     {
         // if the statement has changed we have to delete the parameter info
-        invlidateParameters();
+        invalidateParameters();
     }
 }
 
@@ -2866,7 +2866,7 @@ void SAL_CALL ODatabaseForm::unload()
         restoreInsertOnlyState( );
 
         // clear the parameters if there are any
-        invlidateParameters();
+        invalidateParameters();
 
         try
         {
