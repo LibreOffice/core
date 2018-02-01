@@ -30,7 +30,6 @@ class SwUndoInsNum : public SwUndo, private SwUndRng
 {
     SwNumRule aNumRule;
     SwHistory* pHistory;
-    sal_uLong nSttSet;
     SwNumRule* pOldNumRule;
     OUString sReplaceRule;
     sal_uInt16 nLRSavePos;

@@ -724,7 +724,6 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
     pPropInfo( nullptr ),
     nMinFixLineSpace(  MM50/2 ),
     eDfltEnc( RTL_TEXTENCODING_DONTKNOW ),
-    nScriptFlags( Css1ScriptFlags::AllMask ),
     bIgnoreFontFamily( false )
 {
     // also initialize item IDs
@@ -1059,18 +1058,11 @@ static void ParseCSS1_font_size( const CSS1Expression *pExpr,
     {
         SvxFontHeightItem aFontHeight( nHeight, nPropHeight,
                                        aItemIds.nFontHeight );
-        if( rParser.IsSetWesternProps() )
-            rItemSet.Put( aFontHeight );
-        if( rParser.IsSetCJKProps() )
-        {
-            aFontHeight.SetWhich( aItemIds.nFontHeightCJK );
-            rItemSet.Put( aFontHeight );
-        }
-        if( rParser.IsSetCTLProps() )
-        {
-            aFontHeight.SetWhich( aItemIds.nFontHeightCTL );
-            rItemSet.Put( aFontHeight );
-        }
+        rItemSet.Put( aFontHeight );
+        aFontHeight.SetWhich( aItemIds.nFontHeightCJK );
+        rItemSet.Put( aFontHeight );
+        aFontHeight.SetWhich( aItemIds.nFontHeightCTL );
+        rItemSet.Put( aFontHeight );
     }
 }
 
@@ -1135,25 +1127,18 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
     {
         SvxFontItem aFont( FAMILY_DONTKNOW, aName, OUString(), PITCH_DONTKNOW,
                             eEnc, aItemIds.nFont );
-        if( rParser.IsSetWesternProps() )
-            rItemSet.Put( aFont );
-        if( rParser.IsSetCJKProps() )
-        {
-            aFont.SetWhich( aItemIds.nFontCJK );
-            rItemSet.Put( aFont );
-        }
-        if( rParser.IsSetCTLProps() )
-        {
-            aFont.SetWhich( aItemIds.nFontCTL );
-            rItemSet.Put( aFont );
-        }
+        rItemSet.Put( aFont );
+        aFont.SetWhich( aItemIds.nFontCJK );
+        rItemSet.Put( aFont );
+        aFont.SetWhich( aItemIds.nFontCTL );
+        rItemSet.Put( aFont );
     }
 }
 
 static void ParseCSS1_font_weight( const CSS1Expression *pExpr,
                                    SfxItemSet &rItemSet,
                                    SvxCSS1PropertyInfo& /*rPropInfo*/,
-                                   const SvxCSS1Parser& rParser )
+                                   const SvxCSS1Parser& /*rParser*/ )
 {
     OSL_ENSURE( pExpr, "no expression" );
 
@@ -1167,18 +1152,11 @@ static void ParseCSS1_font_weight( const CSS1Expression *pExpr,
                                         nWeight ) )
             {
                 SvxWeightItem aWeight( static_cast<FontWeight>(nWeight), aItemIds.nWeight );
-                if( rParser.IsSetWesternProps() )
-                    rItemSet.Put( aWeight );
-                if( rParser.IsSetCJKProps() )
-                {
-                    aWeight.SetWhich( aItemIds.nWeightCJK );
-                    rItemSet.Put( aWeight );
-                }
-                if( rParser.IsSetCTLProps() )
-                {
-                    aWeight.SetWhich( aItemIds.nWeightCTL );
-                    rItemSet.Put( aWeight );
-                }
+                rItemSet.Put( aWeight );
+                aWeight.SetWhich( aItemIds.nWeightCJK );
+                rItemSet.Put( aWeight );
+                aWeight.SetWhich( aItemIds.nWeightCTL );
+                rItemSet.Put( aWeight );
             }
         }
         break;
@@ -1187,18 +1165,11 @@ static void ParseCSS1_font_weight( const CSS1Expression *pExpr,
             sal_uInt16 nWeight = static_cast<sal_uInt16>(pExpr->GetNumber());
             SvxWeightItem aWeight( nWeight>400 ? WEIGHT_BOLD : WEIGHT_NORMAL,
                                    aItemIds.nWeight );
-            if( rParser.IsSetWesternProps() )
-                rItemSet.Put( aWeight );
-            if( rParser.IsSetCJKProps() )
-            {
-                aWeight.SetWhich( aItemIds.nWeightCJK );
-                rItemSet.Put( aWeight );
-            }
-            if( rParser.IsSetCTLProps() )
-            {
-                aWeight.SetWhich( aItemIds.nWeightCTL );
-                rItemSet.Put( aWeight );
-            }
+            rItemSet.Put( aWeight );
+            aWeight.SetWhich( aItemIds.nWeightCJK );
+            rItemSet.Put( aWeight );
+            aWeight.SetWhich( aItemIds.nWeightCTL );
+            rItemSet.Put( aWeight );
         }
         break;
 
@@ -1210,7 +1181,7 @@ static void ParseCSS1_font_weight( const CSS1Expression *pExpr,
 static void ParseCSS1_font_style( const CSS1Expression *pExpr,
                                   SfxItemSet &rItemSet,
                                   SvxCSS1PropertyInfo& /*rPropInfo*/,
-                                  const SvxCSS1Parser& rParser )
+                                  const SvxCSS1Parser& /*rParser*/ )
 {
     OSL_ENSURE( pExpr, "no expression" );
 
@@ -1258,18 +1229,11 @@ static void ParseCSS1_font_style( const CSS1Expression *pExpr,
     if( bPosture )
     {
         SvxPostureItem aPosture( eItalic, aItemIds.nPosture );
-        if( rParser.IsSetWesternProps() )
-            rItemSet.Put( aPosture );
-        if( rParser.IsSetCJKProps() )
-        {
-            aPosture.SetWhich( aItemIds.nPostureCJK );
-            rItemSet.Put( aPosture );
-        }
-        if( rParser.IsSetCTLProps() )
-        {
-            aPosture.SetWhich( aItemIds.nPostureCTL );
-            rItemSet.Put( aPosture );
-        }
+        rItemSet.Put( aPosture );
+        aPosture.SetWhich( aItemIds.nPostureCJK );
+        rItemSet.Put( aPosture );
+        aPosture.SetWhich( aItemIds.nPostureCTL );
+        rItemSet.Put( aPosture );
     }
 
     if( bCaseMap )
@@ -1785,34 +1749,20 @@ static void ParseCSS1_font( const CSS1Expression *pExpr,
     // Since "font" resets all values for which nothing is specified,
     // we do it here.
     SvxPostureItem aPosture( eItalic, aItemIds.nPosture );
-    if( rParser.IsSetWesternProps() )
-        rItemSet.Put( aPosture );
-    if( rParser.IsSetCJKProps() )
-    {
-        aPosture.SetWhich( aItemIds.nPostureCJK );
-        rItemSet.Put( aPosture );
-    }
-    if( rParser.IsSetCTLProps() )
-    {
-        aPosture.SetWhich( aItemIds.nPostureCTL );
-        rItemSet.Put( aPosture );
-    }
+    rItemSet.Put( aPosture );
+    aPosture.SetWhich( aItemIds.nPostureCJK );
+    rItemSet.Put( aPosture );
+    aPosture.SetWhich( aItemIds.nPostureCTL );
+    rItemSet.Put( aPosture );
 
     rItemSet.Put( SvxCaseMapItem( eCaseMap, aItemIds.nCaseMap ) );
 
     SvxWeightItem aWeight( eWeight, aItemIds.nWeight );
-    if( rParser.IsSetWesternProps() )
-        rItemSet.Put( aWeight );
-    if( rParser.IsSetCJKProps() )
-    {
-        aWeight.SetWhich( aItemIds.nWeightCJK );
-        rItemSet.Put( aWeight );
-    }
-    if( rParser.IsSetCTLProps() )
-    {
-        aWeight.SetWhich( aItemIds.nWeightCTL );
-        rItemSet.Put( aWeight );
-    }
+    rItemSet.Put( aWeight );
+    aWeight.SetWhich( aItemIds.nWeightCJK );
+    rItemSet.Put( aWeight );
+    aWeight.SetWhich( aItemIds.nWeightCTL );
+    rItemSet.Put( aWeight );
 
     // font-size
     CSS1Expression aExpr( pExpr->GetType(), pExpr->GetString(),
@@ -3122,7 +3072,7 @@ static void ParseCSS1_orphans( const CSS1Expression *pExpr,
 static void ParseCSS1_so_language( const CSS1Expression *pExpr,
                                SfxItemSet &rItemSet,
                                SvxCSS1PropertyInfo& /*rPropInfo*/,
-                               const SvxCSS1Parser& rParser )
+                               const SvxCSS1Parser& /*rParser*/ )
 {
     if( CSS1_IDENT == pExpr->GetType() ||
         CSS1_STRING == pExpr->GetType() )
@@ -3131,18 +3081,11 @@ static void ParseCSS1_so_language( const CSS1Expression *pExpr,
         if( LANGUAGE_DONTKNOW != eLang )
         {
             SvxLanguageItem aLang( eLang, aItemIds.nLanguage );
-            if( rParser.IsSetWesternProps() )
-                rItemSet.Put( aLang );
-            if( rParser.IsSetCJKProps() )
-            {
-                aLang.SetWhich( aItemIds.nLanguageCJK );
-                rItemSet.Put( aLang );
-            }
-            if( rParser.IsSetCTLProps() )
-            {
-                aLang.SetWhich( aItemIds.nLanguageCTL );
-                rItemSet.Put( aLang );
-            }
+            rItemSet.Put( aLang );
+            aLang.SetWhich( aItemIds.nLanguageCJK );
+            rItemSet.Put( aLang );
+            aLang.SetWhich( aItemIds.nLanguageCTL );
+            rItemSet.Put( aLang );
         }
     }
 }
