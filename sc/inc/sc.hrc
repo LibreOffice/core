@@ -954,6 +954,7 @@
 #define SCSTR_VALID_LIST        (STR_START + 318)
 
 #define SCSTR_SELECT            (STR_START + 319)
+#define SCSTR_VALID_FORMULA     (STR_START + 320)
 
 // media shell
 #define SCSTR_MEDIASHELL        (STR_START + 401)
