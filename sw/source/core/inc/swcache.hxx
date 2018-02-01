@@ -107,8 +107,8 @@ public:
     void SetLRUOfst( const sal_uInt16 nOfst );  /// nOfst determines how many are not to be touched
     void ResetLRUOfst() { m_pFirst = m_pRealFirst; }
 
-    inline void IncreaseMax( const sal_uInt16 nAdd );
-    inline void DecreaseMax( const sal_uInt16 nSub );
+    void IncreaseMax( const sal_uInt16 nAdd );
+    void DecreaseMax( const sal_uInt16 nSub );
     sal_uInt16 GetCurMax() const { return m_nCurMax; }
     SwCacheObj *First() { return m_pRealFirst; }
     static inline SwCacheObj *Next( SwCacheObj *pCacheObj);
@@ -212,21 +212,6 @@ public:
     bool IsAvail() const { return m_pObj != nullptr; }
 };
 
-inline void SwCache::IncreaseMax( const sal_uInt16 nAdd )
-{
-    m_nCurMax = m_nCurMax + sal::static_int_cast< sal_uInt16 >(nAdd);
-#ifdef DBG_UTIL
-    ++m_nIncreaseMax;
-#endif
-}
-inline void SwCache::DecreaseMax( const sal_uInt16 nSub )
-{
-    if ( m_nCurMax > nSub )
-        m_nCurMax = m_nCurMax - sal::static_int_cast< sal_uInt16 >(nSub);
-#ifdef DBG_UTIL
-    ++m_nDecreaseMax;
-#endif
-}
 
 inline bool SwCacheObj::IsOwner( const void *pNew ) const
 {
