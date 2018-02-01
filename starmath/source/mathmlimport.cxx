@@ -2696,14 +2696,14 @@ void SmXMLTableContext_Impl::EndElement()
         throw std::range_error("row limit");
     aExpressionArray.resize(nCols*nRows);
     size_t j=0;
-    while ( !aReverseStack.empty() )
+    for (auto & elem : aReverseStack)
     {
-        std::unique_ptr<SmStructureNode> xArray(static_cast<SmStructureNode*>(aReverseStack.front().release()));
-        aReverseStack.pop_front();
+        std::unique_ptr<SmStructureNode> xArray(static_cast<SmStructureNode*>(elem.release()));
         for (size_t i = 0; i < xArray->GetNumSubNodes(); ++i)
             aExpressionArray[j++] = xArray->GetSubNode(i);
         xArray->SetSubNodes(SmNodeArray());
     }
+    aReverseStack.clear();
 
     SmToken aToken;
     aToken.cMathChar = '\0';

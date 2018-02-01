@@ -629,12 +629,12 @@ OleServer_Impl::OleServer_Impl( const Reference<XMultiServiceFactory>& smgr):
 
 OleServer_Impl::~OleServer_Impl()
 {
-    while (!m_wrapperList.empty())
+    for (auto const& elem : m_wrapperList)
     {
-        (*m_wrapperList.begin())->deregisterClass();
-        (*m_wrapperList.begin())->Release();
-        m_wrapperList.pop_front();
+        elem->deregisterClass();
+        elem->Release();
     }
+    m_wrapperList.clear();
 }
 
 OUString OleServer_Impl::getImplementationName()

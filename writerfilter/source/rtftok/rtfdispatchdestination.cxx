@@ -275,16 +275,15 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                         m_aStates.top().pCurrentBuffer = nullptr;
                     bool bCustomMark = false;
                     OUString aCustomMark;
-                    while (!m_aSuperBuffer.empty())
+                    for (auto const& elem : m_aSuperBuffer)
                     {
-                        Buf_t aTuple = m_aSuperBuffer.front();
-                        m_aSuperBuffer.pop_front();
-                        if (std::get<0>(aTuple) == BUFFER_UTEXT)
+                        if (std::get<0>(elem) == BUFFER_UTEXT)
                         {
-                            aCustomMark = std::get<1>(aTuple)->getString();
+                            aCustomMark = std::get<1>(elem)->getString();
                             bCustomMark = true;
                         }
                     }
+                    m_aSuperBuffer.clear();
                     m_aStates.top().eDestination = Destination::FOOTNOTE;
                     Mapper().startCharacterGroup();
                     runProps();

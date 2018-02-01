@@ -106,13 +106,13 @@ static int          nVisibleFloats      = 0;
 static void doReparentPresentationDialogues( SalDisplay const * pDisplay )
 {
     GetGenericUnixSalData()->ErrorTrapPush();
-    while( !aPresentationReparentList.empty() )
+    for (auto const& elem : aPresentationReparentList)
     {
         int x, y;
         ::Window aRoot, aChild;
         unsigned int w, h, bw, d;
         XGetGeometry( pDisplay->GetDisplay(),
-                      aPresentationReparentList.front(),
+                      elem,
                       &aRoot,
                       &x, &y, &w, &h, &bw, &d );
         XTranslateCoordinates( pDisplay->GetDisplay(),
@@ -122,11 +122,11 @@ static void doReparentPresentationDialogues( SalDisplay const * pDisplay )
                                &x, &y,
                                &aChild );
         XReparentWindow( pDisplay->GetDisplay(),
-                         aPresentationReparentList.front(),
+                         elem,
                          aRoot,
                          x, y );
-        aPresentationReparentList.pop_front();
     }
+    aPresentationReparentList.clear();
     if( hPresFocusWindow )
         XSetInputFocus( pDisplay->GetDisplay(), hPresFocusWindow, PointerRoot, CurrentTime );
     XSync( pDisplay->GetDisplay(), False );
