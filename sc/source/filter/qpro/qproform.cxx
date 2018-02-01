@@ -149,8 +149,8 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
             // There should be at least 4 arguments, but with binary crap may not..
             SAL_WARN_IF( nArgs < 4, "sc.filter","QProToSc::DoFunc - ocIpmt expects 4 parameters but got " << nArgs);
             // Store first 4 parameters to pool in order 3,2,1,0
-            if (nArgs > 3)
-                nArgs = 3;
+            if (nArgs > 4)
+                nArgs = 4;
         }
 
         sal_Int16 nLast = nArgs - 1;
