@@ -264,14 +264,13 @@ void AquaClipboard::fireClipboardChangedEvent()
 
     aGuard.clear();
 
-    while (!listeners.empty())
+    for (auto const& listener : listeners)
     {
-        if (listeners.front().is())
+        if (listener.is())
         {
-            try { listeners.front()->changedContents(aEvent); }
+            try { listener->changedContents(aEvent); }
             catch (RuntimeException&) { }
         }
-        listeners.pop_front();
     }
 }
 
