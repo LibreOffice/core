@@ -63,6 +63,7 @@
 #define SCSTR_VALID_MINIMUM                         NC_("SCSTR_VALID_MINIMUM", "~Minimum")
 #define SCSTR_VALID_MAXIMUM                         NC_("SCSTR_VALID_MAXIMUM", "~Maximum")
 #define SCSTR_VALID_VALUE                           NC_("SCSTR_VALID_VALUE", "~Value")
+#define SCSTR_VALID_FORMULA                         NC_("SCSTR_VALID_FORMULA", "~Formula")
 #define SCSTR_VALID_RANGE                           NC_("SCSTR_VALID_RANGE", "~Source")
 #define SCSTR_VALID_LIST                            NC_("SCSTR_VALID_LIST", "~Entries")
 // for dialogues:
