@@ -1993,7 +1993,7 @@ ScDrawLayer::GetObjectsAnchoredToRange(SCTAB nTab, SCCOL nCol, SCROW nStartRow, 
         if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently
         {
             ScDrawObjData* pObjData = GetObjData(pObject);
-            if (aRange.In(pObjData->maStart))
+            if (pObjData && aRange.In(pObjData->maStart))
                 aRowObjects[pObjData->maStart.Row()].push_back(pObject);
         }
         pObject = aIter.Next();
