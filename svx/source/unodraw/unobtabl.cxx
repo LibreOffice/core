@@ -31,6 +31,7 @@
 #include <editeng/unoprnms.hxx>
 #include <svx/unofill.hxx>
 #include <editeng/memberids.h>
+#include <com/sun/star/awt/XBitmap.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::cppu;
@@ -52,7 +53,7 @@ public:
 };
 
 SvxUnoBitmapTable::SvxUnoBitmapTable( SdrModel* pModel ) throw()
-: SvxUnoNameItemTable( pModel, XATTR_FILLBITMAP, MID_GRAFURL )
+: SvxUnoNameItemTable( pModel, XATTR_FILLBITMAP, MID_BITMAP )
 {
 }
 
@@ -91,7 +92,7 @@ NameOrIndex* SvxUnoBitmapTable::createItem() const
 // XElementAccess
 uno::Type SAL_CALL SvxUnoBitmapTable::getElementType(  )
 {
-    return ::cppu::UnoType<OUString>::get();
+    return ::cppu::UnoType<awt::XBitmap>::get();
 }
 
 /**

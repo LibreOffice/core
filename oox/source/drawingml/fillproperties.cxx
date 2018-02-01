@@ -28,6 +28,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -600,14 +601,24 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 if( maBlipProps.mxGraphic.is() && rPropMap.supportsProperty( ShapeProperty::FillBitmapUrl ) )
                 {
                     Reference< XGraphic > xGraphic = lclCheckAndApplyDuotoneTransform( maBlipProps, maBlipProps.mxGraphic, rGraphicHelper, nPhClr );
+                    uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
                     // TODO: "rotate with shape" is not possible with our current core
 
                     OUString aGraphicUrl = rGraphicHelper.createGraphicObject( xGraphic );
                     // push bitmap or named bitmap to property map
-                    if( !aGraphicUrl.isEmpty() && rPropMap.supportsProperty( ShapeProperty::FillBitmapNameFromUrl ) && rPropMap.setProperty( ShapeProperty::FillBitmapNameFromUrl, aGraphicUrl ) )
-                        eFillStyle = FillStyle_BITMAP;
-                    else if( !aGraphicUrl.isEmpty() && rPropMap.setProperty( ShapeProperty::FillBitmapUrl, aGraphicUrl ) )
-                        eFillStyle = FillStyle_BITMAP;
+
+                    if (!aGraphicUrl.isEmpty())
+                    {
+                        if (rPropMap.supportsProperty(ShapeProperty::FillBitmapNameFromUrl) &&
+                            rPropMap.setProperty(ShapeProperty::FillBitmapNameFromUrl, xGraphic))
+                        {
+                            eFillStyle = FillStyle_BITMAP;
+                        }
+                        else if (rPropMap.setProperty(ShapeProperty::FillBitmapUrl, aGraphicUrl))
+                        {
+                            eFillStyle = FillStyle_BITMAP;
+                        }
+                    }
 
                     // set other bitmap properties, if bitmap has been inserted into the map
                     if( eFillStyle == FillStyle_BITMAP )

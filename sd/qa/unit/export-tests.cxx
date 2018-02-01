@@ -144,6 +144,33 @@ public:
 
 };
 
+namespace
+{
+
+uno::Reference<awt::XBitmap> getBitmapFromTable(sd::DrawDocShellRef xDocShRef, OUString const & rName)
+{
+    uno::Reference<awt::XBitmap> xBitmap;
+
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
+
+    try
+    {
+        uno::Reference<container::XNameAccess> xBitmapTable(xFactory->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY);
+        uno::Any rValue = xBitmapTable->getByName(rName);
+        if (rValue.has<uno::Reference<awt::XBitmap>>())
+        {
+            return rValue.get<uno::Reference<awt::XBitmap>>();
+        }
+    }
+    catch (const uno::Exception & /*rEx*/)
+    {
+    }
+
+    return xBitmap;
+}
+
+}
+
 void SdExportTest::testBackgroundImage()
 {
     // Initial bug: N821567
@@ -168,7 +195,10 @@ void SdExportTest::testBackgroundImage()
             aAny = xBackgroundPropSet->getPropertyValue("FillBitmapName");
             aAny >>= bgImageName;
         }
-        CPPUNIT_ASSERT_MESSAGE("Slide Background is not imported from PPTX correctly", !bgImageName.isEmpty());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Slide Background is not imported from PPTX correctly", OUString("msFillBitmap 1"), bgImageName);
+
+        uno::Reference<awt::XBitmap> xBitmap = getBitmapFromTable(xDocShRef, bgImageName);
+        CPPUNIT_ASSERT_MESSAGE("Slide Background Bitmap is missing when imported from PPTX", xBitmap.is());
     }
 
     // Save as PPTX, reload and check again so we make sure exporting to PPTX is working correctly
@@ -187,7 +217,10 @@ void SdExportTest::testBackgroundImage()
             aAny = xBackgroundPropSet->getPropertyValue("FillBitmapName");
             aAny >>= bgImageName;
         }
-        CPPUNIT_ASSERT_MESSAGE("Slide Background is not exported to PPTX correctly", !bgImageName.isEmpty());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Slide Background is not exported from PPTX correctly", OUString("msFillBitmap 1"), bgImageName);
+
+        uno::Reference<awt::XBitmap> xBitmap = getBitmapFromTable(xDocShRef, bgImageName);
+        CPPUNIT_ASSERT_MESSAGE("Slide Background Bitmap is missing when exported from PPTX", xBitmap.is());
     }
 
     // Save as ODP, reload and check again so we make sure exporting and importing to ODP is working correctly
@@ -206,7 +239,10 @@ void SdExportTest::testBackgroundImage()
             aAny = xBackgroundPropSet->getPropertyValue("FillBitmapName");
             aAny >>= bgImageName;
         }
-        CPPUNIT_ASSERT_MESSAGE("Slide Background is not exported or imported to ODP correctly", !bgImageName.isEmpty());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Slide Background is not exported or imported from ODP correctly", OUString("msFillBitmap 1"), bgImageName);
+
+        uno::Reference<awt::XBitmap> xBitmap = getBitmapFromTable(xDocShRef, bgImageName);
+        CPPUNIT_ASSERT_MESSAGE("Slide Background Bitmap is missing when exported or imported from ODP", xBitmap.is());
     }
 
     xDocShRef->DoClose();

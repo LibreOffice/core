@@ -87,6 +87,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XMLOasisBasicExporter.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
+#include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <RDFaExportHelper.hxx>
 
@@ -1881,6 +1882,23 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
     return sRet;
 }
 
+OUString SvXMLExport::AddEmbeddedXGraphic(uno::Reference<graphic::XGraphic> const & rxGraphic)
+{
+    OUString sInternalURL;
+
+    uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler(mxGraphicResolver, uno::UNO_QUERY);
+
+    if (mxGraphicResolver.is() && xGraphicStorageHandler.is())
+    {
+        if (!(getExportFlags() & SvXMLExportFlags::EMBEDDED))
+        {
+            sInternalURL = xGraphicStorageHandler->saveGraphic(rxGraphic);
+        }
+    }
+
+    return sInternalURL;
+}
+
 Reference< XInputStream > SvXMLExport::GetEmbeddedGraphicObjectStream( const OUString& rGraphicObjectURL )
 {
     if( (getExportFlags() & SvXMLExportFlags::EMBEDDED) &&
@@ -1897,6 +1915,27 @@ Reference< XInputStream > SvXMLExport::GetEmbeddedGraphicObjectStream( const OUS
     }
 
     return nullptr;
+}
+
+bool SvXMLExport::AddEmbeddedXGraphicAsBase64(uno::Reference<graphic::XGraphic> const & rxGraphic)
+{
+    if ((getExportFlags() & SvXMLExportFlags::EMBEDDED) &&
+        mxGraphicResolver.is())
+    {
+        uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler(mxGraphicResolver, uno::UNO_QUERY);
+
+        if (xGraphicStorageHandler.is())
+        {
+            Reference<XInputStream> xInputStream(xGraphicStorageHandler->createInputStream(rxGraphic));
+            if (xInputStream.is())
+            {
+                XMLBase64Export aBase64Exp(*this);
+                return aBase64Exp.exportOfficeBinaryDataElement(xInputStream);
+            }
+        }
+    }
+
+    return false;
 }
 
 bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64( const OUString& rGraphicObjectURL )
