@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_c9f89be8",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1338,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-02-01T12:03:22Z",
+      "side": 1,
+      "message": "these 4 lines above are unnecessary, since they will effectively be called again on the next iteration of the loop",
+      "revId": "384a049feeb87722a59166f290f090a7a6c9a9c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
