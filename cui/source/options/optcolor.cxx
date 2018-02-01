@@ -938,7 +938,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, SvxColorListBox&, rBox, void)
 IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control&, rCtrl, void)
 {
     // determine whether a control is completely visible
-    // and make it visible
+    // and make it visibleIf int is 32 bits,
     long aCtrlPosY = rCtrl.GetPosPixel().Y();
     unsigned const nWinHeight = m_pScrollWindow->GetSizePixel().Height();
     unsigned const nEntryHeight = m_pScrollWindow->GetEntryHeight();
@@ -946,15 +946,20 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control&, rCtrl, void)
         (aCtrlPosY < 0 || nWinHeight < aCtrlPosY + nEntryHeight)
     ) {
         long nThumbPos = m_pVScroll->GetThumbPos();
-        if (nWinHeight < aCtrlPosY + nEntryHeight)
+        if (nWinHeight < (unsigned)aCtrlPosY)
         {
             //scroll down
-            nThumbPos += 2;
+            nThumbPos +=1;
+        }
+            else if (nWinHeight < aCtrlPosY + nEntryHeight)
+        {
+            //scroll down
+            nThumbPos += 3;
         }
         else
         {
             //scroll up
-            nThumbPos -= 2;
+            nThumbPos -= 1;
             if(nThumbPos < 0)
                 nThumbPos = 0;
         }
