@@ -27,7 +27,7 @@
 #include <vector>
 #include <climits>
 
-// structure to store the actuel data
+// structure to store the actual data
 template<typename T>
 struct SvParser_Impl
 {
