@@ -1836,27 +1836,9 @@ void SwTextFormatter::FeedInf( SwTextFormatInfo &rInf ) const
     rInf.SetRoot( m_pCurr );
     rInf.SetLineStart( m_nStart );
     rInf.SetIdx( m_nStart );
-
-    // Handle overflows:
-    // i#34348 Changed type from sal_uInt16 to SwTwips to enable
-    // the text formatting to cope with certain numbering indent values
-    SwTwips nTmpLeft = Left();
-    SwTwips nTmpRight = Right();
-    SwTwips nTmpFirst = FirstLeft();
-
-    if ( nTmpLeft > USHRT_MAX ||
-         nTmpRight > USHRT_MAX ||
-         nTmpFirst > USHRT_MAX )
-    {
-        SwRectFnSet aRectFnSet(rInf.GetTextFrame());
-        nTmpLeft = aRectFnSet.GetLeft(rInf.GetTextFrame()->getFrameArea());
-        nTmpRight = aRectFnSet.GetRight(rInf.GetTextFrame()->getFrameArea());
-        nTmpFirst = nTmpLeft;
-    }
-
-    rInf.Left(  nTmpLeft  );
-    rInf.Right( nTmpRight );
-    rInf.First( nTmpFirst );
+    rInf.Left( Left() );
+    rInf.Right( Right() );
+    rInf.First( FirstLeft() );
 
     rInf.RealWidth( sal_uInt16(rInf.Right() - GetLeftMargin()) );
     rInf.Width( rInf.RealWidth() );
