@@ -35,7 +35,7 @@ using namespace ::ooo::vba;
 
 SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : SwVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "WordDocumentContext" )
 {
-    SAL_INFO("sw", "SwVbaGlobals::SwVbaGlobals()");
+    SAL_INFO("sw.vba", "SwVbaGlobals::SwVbaGlobals()");
     uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
     aInitArgs[ 0 ].Name = "Application";
     aInitArgs[ 0 ].Value <<= getApplication();
@@ -47,7 +47,7 @@ SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Refere
 
 SwVbaGlobals::~SwVbaGlobals()
 {
-    SAL_INFO("sw", "SwVbaGlobals::~SwVbaGlobals");
+    SAL_INFO("sw.vba", "SwVbaGlobals::~SwVbaGlobals");
 }
 
 // XGlobals
@@ -55,7 +55,7 @@ SwVbaGlobals::~SwVbaGlobals()
 uno::Reference<word::XApplication > const &
 SwVbaGlobals::getApplication()
 {
-    SAL_INFO("sw", "In SwVbaGlobals::getApplication");
+    SAL_INFO("sw.vba", "In SwVbaGlobals::getApplication");
     if ( !mxApplication.is() )
          mxApplication.set( new SwVbaApplication( mxContext) );
 

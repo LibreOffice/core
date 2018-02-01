@@ -300,7 +300,7 @@ public:
         }
         catch (const uno::Exception&)
         {
-            SAL_WARN("sw", "Got exception");
+            SAL_WARN("sw.vba", "Got exception");
         }
         uno::Any aReturn;
         if ( rPropName == "LineCount" ) // special processing needed
@@ -837,7 +837,7 @@ public:
 
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
     {
-        SAL_INFO("sw", "hasByName(" << aName << ") returns " << mxUserDefinedProp->getPropertySetInfo()->hasPropertyByName( aName ) );
+        SAL_INFO("sw.vba", "hasByName(" << aName << ") returns " << mxUserDefinedProp->getPropertySetInfo()->hasPropertyByName( aName ) );
         return mxUserDefinedProp->getPropertySetInfo()->hasPropertyByName( aName );
     }
 
@@ -855,13 +855,13 @@ public:
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) override
     {
         // create a map of properties ( the key doesn't matter )
-        SAL_INFO("sw", "Creating an enumeration");
+        SAL_INFO("sw.vba", "Creating an enumeration");
         sal_Int32 key = 0;
         sal_Int32 nElem =  getCount();
         DocProps simpleDocPropSnapShot;
         for ( ; key < nElem; ++key )
              simpleDocPropSnapShot[ key ].set( getByIndex( key ), uno::UNO_QUERY_THROW );
-        SAL_INFO("sw", "After creating the enumeration");
+        SAL_INFO("sw.vba", "After creating the enumeration");
         return  new DocPropEnumeration( simpleDocPropSnapShot );
     }
 
