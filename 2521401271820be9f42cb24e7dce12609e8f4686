@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_c946db22",
+        "filename": "filter/source/xslt/export/uof/odf2uof_spreadsheet.xsl",
+        "patchSetId": 3
+      },
+      "lineNbr": 2365,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-01T12:32:18Z",
+      "side": 0,
+      "message": "Why does this remove now two attributes? Please just correct the typos, don\u0027t do anything else.",
+      "revId": "2521401271820be9f42cb24e7dce12609e8f4686",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
