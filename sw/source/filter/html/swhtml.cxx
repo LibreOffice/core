@@ -2971,13 +2971,11 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
             m_aMoveFlyCnts.erase( m_aMoveFlyCnts.begin() + n );
         }
     }
-    while( !aFields.empty() )
+    for (auto const& field : aFields)
     {
-        pAttr = aFields[0];
-
-        pCNd = pAttr->nSttPara.GetNode().GetContentNode();
-        pAttrPam->GetPoint()->nNode = pAttr->nSttPara;
-        pAttrPam->GetPoint()->nContent.Assign( pCNd, pAttr->nSttContent );
+        pCNd = field->nSttPara.GetNode().GetContentNode();
+        pAttrPam->GetPoint()->nNode = field->nSttPara;
+        pAttrPam->GetPoint()->nContent.Assign( pCNd, field->nSttContent );
 
         if( bBeforeTable &&
             pAttrPam->GetPoint()->nNode.GetIndex() == rEndIdx.GetIndex() )
@@ -2989,11 +2987,11 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
             pAttrPam->Move( fnMoveBackward );
         }
 
-        m_xDoc->getIDocumentContentOperations().InsertPoolItem( *pAttrPam, *pAttr->pItem );
+        m_xDoc->getIDocumentContentOperations().InsertPoolItem( *pAttrPam, *field->pItem );
 
-        aFields.pop_front();
-        delete pAttr;
+        delete field;
     }
+    aFields.clear();
 }
 
 void SwHTMLParser::NewAttr(const std::shared_ptr<HTMLAttrTable>& rAttrTable, HTMLAttr **ppAttr, const SfxPoolItem& rItem )
