@@ -24,7 +24,6 @@
 
 #include <ibase.h>
 
-#include <connectivity/OSubComponent.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <list>
 

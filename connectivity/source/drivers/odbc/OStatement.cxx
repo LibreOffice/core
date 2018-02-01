@@ -112,15 +112,8 @@ void SAL_CALL OStatement_Base::disposing()
 
 void OStatement_BASE2::disposing()
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-
-    dispose_ChildImpl();
+    ::osl::MutexGuard aGuard1(m_aMutex);
     OStatement_Base::disposing();
-}
-
-void SAL_CALL OStatement_BASE2::release() throw()
-{
-    release_ChildImpl();
 }
 
 Any SAL_CALL OStatement_Base::queryInterface( const Type & rType )

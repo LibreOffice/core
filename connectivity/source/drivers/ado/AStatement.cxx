@@ -53,7 +53,6 @@ using namespace ::std;
 
 OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(m_aMutex)
                                                         ,OPropertySetHelper(OStatement_BASE::rBHelper)
-                                                        ,OSubComponent<OStatement_Base, OStatement_BASE>(static_cast<cppu::OWeakObject*>(_pConnection), this)
                                                         ,m_pConnection(_pConnection)
                                                         ,m_nMaxRows(0)
                                                         ,m_nFetchSize(1)
@@ -104,13 +103,12 @@ void OStatement_Base::disposing()
     if (m_pConnection)
         m_pConnection->release();
 
-    dispose_ChildImpl();
     OStatement_BASE::disposing();
 }
 
 void SAL_CALL OStatement_Base::release() throw()
 {
-    release_ChildImpl();
+    OStatement_BASE::release();
 }
 
 Any SAL_CALL OStatement_Base::queryInterface( const Type & rType )

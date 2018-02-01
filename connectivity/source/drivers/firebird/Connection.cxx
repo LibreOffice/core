@@ -83,7 +83,6 @@ static const OUStringLiteral our_sFBKLocation( "firebird.fbk" );
 
 Connection::Connection(FirebirdDriver*    _pDriver)
     : Connection_BASE(m_aMutex)
-    , OSubComponent<Connection, Connection_BASE>(static_cast<cppu::OWeakObject*>(_pDriver), this)
     , m_xDriver(_pDriver)
     , m_sConnectionURL()
     , m_sFirebirdURL()
@@ -110,11 +109,6 @@ Connection::~Connection()
 {
     if(!isClosed())
         close();
-}
-
-void SAL_CALL Connection::release() throw()
-{
-    release_ChildImpl();
 }
 
 struct ConnectionGuard
@@ -928,7 +922,6 @@ void Connection::disposing()
     }
     // TODO: write to storage again?
 
-    dispose_ChildImpl();
     cppu::WeakComponentImplHelperBase::disposing();
     m_xDriver.clear();
 

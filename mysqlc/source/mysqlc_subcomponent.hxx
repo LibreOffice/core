@@ -58,39 +58,6 @@ namespace connectivity
         /// @throws css::lang::DisposedException
         void checkDisposed(bool _bThrow);
 
-        template <class SELF, class WEAK> class OSubComponent
-        {
-        protected:
-            // the parent must support the tunnel implementation
-            css::uno::Reference< css::uno::XInterface > m_xParent;
-            SELF*   m_pDerivedImplementation;
-
-        public:
-            OSubComponent(
-                    const css::uno::Reference< css::uno::XInterface >& _xParent,
-                    SELF* _pDerivedImplementation)
-                :m_xParent(_xParent)
-                ,m_pDerivedImplementation(_pDerivedImplementation)
-            {
-            }
-
-        protected:
-            void dispose_ChildImpl()
-            {
-                ::osl::MutexGuard aGuard(m_pDerivedImplementation->rBHelper.rMutex);
-                m_xParent = nullptr;
-            }
-            void release_ChildImpl()
-            {
-                release(m_pDerivedImplementation->m_refCount,
-                                        m_pDerivedImplementation->rBHelper,
-                                        m_xParent,
-                                        m_pDerivedImplementation);
-
-                m_pDerivedImplementation->WEAK::release();
-            }
-        };
-
         template <class TYPE>
         class OPropertyArrayUsageHelper
         {

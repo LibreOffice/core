@@ -259,7 +259,6 @@ jclass java_sql_Connection::theClass = nullptr;
 
 java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )
     :java_lang_Object()
-    ,OSubComponent<java_sql_Connection, java_sql_Connection_BASE>(static_cast<cppu::OWeakObject*>(const_cast<java_sql_Driver *>(&_rDriver)), this)
     ,m_xContext( _rDriver.getContext() )
     ,m_pDriver( &_rDriver )
     ,m_pDriverobject(nullptr)
@@ -291,18 +290,12 @@ java_sql_Connection::~java_sql_Connection()
     }
 }
 
-void SAL_CALL java_sql_Connection::release() throw()
-{
-    release_ChildImpl();
-}
-
 void java_sql_Connection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
     m_aLogger.log( LogLevel::INFO, STR_LOG_SHUTDOWN_CONNECTION );
 
-    dispose_ChildImpl();
     java_sql_Connection_BASE::disposing();
 
     if ( object )

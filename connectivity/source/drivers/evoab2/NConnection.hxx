@@ -23,7 +23,6 @@
 #include "NDriver.hxx"
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <connectivity/OSubComponent.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/warningscontainer.hxx>
@@ -49,10 +48,7 @@ namespace connectivity
         typedef connectivity::OMetaConnection               OConnection_BASE; // implements basics and text encoding
 
         class OEvoabConnection  :public OConnection_BASE
-                                ,public connectivity::OSubComponent<OEvoabConnection, OConnection_BASE>
         {
-            friend class connectivity::OSubComponent<OEvoabConnection, OConnection_BASE>;
-
         private:
             const OEvoabDriver&             m_rDriver;
             SDBCAddress::sdbc_address_type  m_eSDBCAddressType;
@@ -78,8 +74,6 @@ namespace connectivity
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
-            // XInterface
-            virtual void SAL_CALL release() throw() override;
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();

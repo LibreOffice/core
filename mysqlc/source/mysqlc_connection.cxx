@@ -63,7 +63,6 @@ using ::osl::MutexGuard;
 
 OConnection::OConnection(MysqlCDriver& _rDriver, sql::Driver * _cppDriver)
     :OMetaConnection_BASE(m_aMutex)
-    ,OSubComponent<OConnection, OConnection_BASE>(static_cast<cppu::OWeakObject*>(&_rDriver), this)
     ,m_xMetaData(nullptr)
     ,m_xDriver(&_rDriver)
     ,cppDriver(_cppDriver)
@@ -75,12 +74,6 @@ OConnection::~OConnection()
     if (!isClosed()) {
         close();
     }
-}
-
-void SAL_CALL OConnection::release()
-    throw()
-{
-    release_ChildImpl();
 }
 
 void OConnection::construct(const rtl::OUString& url, const Sequence< PropertyValue >& info)
@@ -505,7 +498,6 @@ void OConnection::disposing()
 
     m_xMetaData = WeakReference< XDatabaseMetaData >();
 
-    dispose_ChildImpl();
     OConnection_BASE::disposing();
 }
 

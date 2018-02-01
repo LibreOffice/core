@@ -122,8 +122,6 @@ void OStatement_BASE2::disposing()
 
     m_pConnection.clear();
 
-    dispose_ChildImpl();
-
     if ( m_pParseTree )
     {
         delete m_pParseTree;
@@ -140,7 +138,7 @@ void SAL_CALL OStatement_Base::acquire() throw()
 
 void SAL_CALL OStatement_BASE2::release() throw()
 {
-    release_ChildImpl();
+    OStatement_BASE::release();
 }
 
 Any SAL_CALL OStatement_Base::queryInterface( const Type & rType )

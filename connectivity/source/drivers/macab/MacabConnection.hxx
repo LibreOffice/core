@@ -21,7 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABCONNECTION_HXX
 
 #include <map>
-#include <connectivity/OSubComponent.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
@@ -45,16 +44,12 @@ namespace connectivity
         class MacabDriver;
         class MacabAddressBook;
 
-        //typedef OMetaConnection_BASE              MacabConnection_BASE; // implements basics and text encoding
         typedef std::vector< css::uno::WeakReferenceHelper > OWeakRefArray;
 
         typedef connectivity::OMetaConnection MacabConnection_BASE;
 
-        class MacabConnection : public MacabConnection_BASE,
-                                public OSubComponent<MacabConnection, MacabConnection_BASE>
+        class MacabConnection : public MacabConnection_BASE
         {
-            friend class OSubComponent<MacabConnection, MacabConnection_BASE>;
-
         protected:
 
             // Data attributes
@@ -73,9 +68,6 @@ namespace connectivity
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
-
-            // XInterface
-            virtual void SAL_CALL release() throw() override;
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();

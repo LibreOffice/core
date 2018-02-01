@@ -37,7 +37,6 @@ using namespace ::com::sun::star::lang;
 IMPLEMENT_SERVICE_INFO(OCatalog,"com.sun.star.comp.connectivity.OCatalog","com.sun.star.sdbcx.DatabaseDefinition")
 
 OCatalog::OCatalog(const Reference< XConnection> &_xConnection) : OCatalog_BASE(m_aMutex)
-            ,connectivity::OSubComponent<OCatalog, OCatalog_BASE>(_xConnection, this)
             ,m_pTables(nullptr)
             ,m_pViews(nullptr)
             ,m_pGroups(nullptr)
@@ -57,12 +56,6 @@ OCatalog::~OCatalog()
 {
 }
 
-void SAL_CALL OCatalog::release() throw()
-{
-    release_ChildImpl();
-}
-
-
 void SAL_CALL OCatalog::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -76,7 +69,6 @@ void SAL_CALL OCatalog::disposing()
     if(m_pUsers)
         m_pUsers->disposing();
 
-    dispose_ChildImpl();
     OCatalog_BASE::disposing();
 }
 

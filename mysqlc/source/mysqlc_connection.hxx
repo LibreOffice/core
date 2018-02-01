@@ -83,11 +83,8 @@ namespace connectivity
         typedef std::vector< css::uno::WeakReferenceHelper > OWeakRefArray;
 
         class OConnection final : public OBase_Mutex,
-                            public OConnection_BASE,
-                            public connectivity::mysqlc::OSubComponent<OConnection, OConnection_BASE>
+                            public OConnection_BASE
         {
-            friend class connectivity::mysqlc::OSubComponent<OConnection, OConnection_BASE>;
-
             ConnectionSettings  m_settings;
             css::uno::Reference< css::container::XNameAccess > m_typeMap;
             css::uno::Reference< css::util::XStringSubstitution > m_xParameterSubstitution;
@@ -119,9 +116,6 @@ namespace connectivity
 
             // OComponentHelper
             virtual void SAL_CALL disposing() SAL_OVERRIDE;
-
-            // XInterface
-            virtual void SAL_CALL release()                     throw() SAL_OVERRIDE;
 
             // XServiceInfo
             virtual rtl::OUString SAL_CALL getImplementationName() SAL_OVERRIDE;

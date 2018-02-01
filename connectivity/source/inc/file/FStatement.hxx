@@ -162,15 +162,11 @@ namespace connectivity
             virtual void SAL_CALL close(  ) override;
         };
 
-        class OOO_DLLPUBLIC_FILE OStatement_BASE2 :
-                                    public OStatement_Base,
-                                    public connectivity::OSubComponent<OStatement_BASE2, OStatement_BASE>
+        class OOO_DLLPUBLIC_FILE OStatement_BASE2 : public OStatement_Base
 
         {
-            friend class connectivity::OSubComponent<OStatement_BASE2, OStatement_BASE>;
         public:
-            OStatement_BASE2(OConnection* _pConnection ) :  OStatement_Base(_pConnection ),
-                                    connectivity::OSubComponent<OStatement_BASE2, OStatement_BASE>(static_cast<cppu::OWeakObject*>(_pConnection), this){}
+            OStatement_BASE2(OConnection* _pConnection ) : OStatement_Base(_pConnection ) {}
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
             // XInterface

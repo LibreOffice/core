@@ -27,7 +27,6 @@
 #include <ibase.h>
 
 #include <connectivity/CommonTools.hxx>
-#include <connectivity/OSubComponent.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <map>
@@ -67,11 +66,8 @@ namespace connectivity
         typedef std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
         typedef std::vector< css::uno::WeakReferenceHelper > OWeakRefArray;
 
-        class Connection : public Connection_BASE,
-                            public connectivity::OSubComponent<Connection, Connection_BASE>
+        class Connection : public Connection_BASE
         {
-            friend class connectivity::OSubComponent<Connection, Connection_BASE>;
-
             ::osl::Mutex        m_aMutex;
 
             TTypeInfoVector     m_aTypeInfo;    //  vector containing an entry
@@ -218,8 +214,6 @@ namespace connectivity
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
-            // XInterface
-            virtual void SAL_CALL release() throw() override;
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();

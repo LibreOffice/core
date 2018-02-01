@@ -45,8 +45,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
 OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
-                         : OSubComponent<OConnection, OConnection_BASE>(static_cast<cppu::OWeakObject*>(_pDriver), this)
-                         ,m_xDriver(_pDriver)
+                         :m_xDriver(_pDriver)
                          ,m_aConnectionHandle(nullptr)
                          ,m_pDriverHandleCopy(_pDriverHandle)
                          ,m_nStatementCount(0)
@@ -76,11 +75,6 @@ OConnection::~OConnection()
 
         m_aConnectionHandle = SQL_NULL_HANDLE;
     }
-}
-
-void SAL_CALL OConnection::release() throw()
-{
-    release_ChildImpl();
 }
 
 oslGenericFunction OConnection::getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const
@@ -480,8 +474,6 @@ void OConnection::disposing()
     if(!m_bClosed)
         N3SQLDisconnect(m_aConnectionHandle);
     m_bClosed   = true;
-
-    dispose_ChildImpl();
 }
 
 SQLHANDLE OConnection::createStatementHandle()
