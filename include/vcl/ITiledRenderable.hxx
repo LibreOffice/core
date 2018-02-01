@@ -241,6 +241,15 @@ public:
     {
         return OUString();
     }
+
+    /*
+     * Used for sheets in spreadsheet documents.
+     */
+    virtual bool isHiddenPart(int /*nPart*/)
+    {
+        return false;
+    }
+
 };
 } // namespace vcl
 

@@ -300,6 +300,10 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::setViewLanguage().
     void (*setViewLanguage) (LibreOfficeKitDocument* pThis, int nId, const char* language);
 
+    /// @see lok::Document::isHiddenPart().
+    bool (*isHiddenPart) (LibreOfficeKitDocument* pThis,
+                          int nPart);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
