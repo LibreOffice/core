@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_a96d2706",
+        "filename": "svx/source/xml/xmlgrhlp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-01T16:08:10Z",
+      "side": 1,
+      "message": "\"actually\", actually",
+      "revId": "e0913044e5cb786123e565094e756dacf41a3169",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
