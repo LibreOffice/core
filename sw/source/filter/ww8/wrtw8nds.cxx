@@ -3291,7 +3291,7 @@ WW8Ruby::WW8Ruby(const SwTextNode& rNode, const SwFormatRuby& rRuby, const MSWor
             m_cDirective = 'd';
             break;
         default:
-            OSL_ENSURE( false,"Unhandled Ruby justication code" );
+            OSL_ENSURE( false,"Unhandled Ruby justification code" );
             break;
     }
 
