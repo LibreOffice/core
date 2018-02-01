@@ -93,18 +93,15 @@ namespace slideshow
             }
 
             // process list of activities
-            while( !maCurrentActivitiesWaiting.empty() )
+            for (auto const& currentActivity : maCurrentActivitiesWaiting)
             {
                 // process topmost activity
-                ActivitySharedPtr pActivity( maCurrentActivitiesWaiting.front() );
-                maCurrentActivitiesWaiting.pop_front();
-
                 bool bReinsert( false );
 
                 try
                 {
                     // fire up activity
-                    bReinsert = pActivity->perform();
+                    bReinsert = currentActivity->perform();
                 }
                 catch( uno::RuntimeException& )
                 {
@@ -140,12 +137,13 @@ namespace slideshow
                 }
 
                 if( bReinsert )
-                    maCurrentActivitiesReinsert.push_back( pActivity );
+                    maCurrentActivitiesReinsert.push_back( currentActivity );
                 else
-                    maDequeuedActivities.push_back( pActivity );
+                    maDequeuedActivities.push_back( currentActivity );
 
                 SAL_INFO("slideshow.verbose", "ActivitiesQueue: inner loop heartbeat" );
             }
+            maCurrentActivitiesWaiting.clear();
 
             if( !maCurrentActivitiesReinsert.empty() )
             {

@@ -316,16 +316,15 @@ void SwRedlineItr::Clear_( SwFont* pFnt )
 {
     OSL_ENSURE( bOn, "SwRedlineItr::Clear: Off?" );
     bOn = false;
-    while (!m_Hints.empty())
+    for (auto const& hint : m_Hints)
     {
-        SwTextAttr *pPos = m_Hints.front();
-        m_Hints.pop_front();
         if( pFnt )
-            rAttrHandler.PopAndChg( *pPos, *pFnt );
+            rAttrHandler.PopAndChg( *hint, *pFnt );
         else
-            rAttrHandler.Pop( *pPos );
-        SwTextAttr::Destroy(pPos, const_cast<SwDoc&>(rDoc).GetAttrPool() );
+            rAttrHandler.Pop( *hint );
+        SwTextAttr::Destroy(hint, const_cast<SwDoc&>(rDoc).GetAttrPool() );
     }
+    m_Hints.clear();
 }
 
 sal_Int32 SwRedlineItr::GetNextRedln_( sal_Int32 nNext )

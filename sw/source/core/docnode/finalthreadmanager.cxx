@@ -337,11 +337,11 @@ void SAL_CALL FinalThreadManager::cancelAllJobs()
             {
                 delete mpCancelJobsThread;
                 mpCancelJobsThread = nullptr;
-                while ( !aThreads.empty() )
+                for (auto const& elem : aThreads)
                 {
-                    aThreads.front()->cancel();
-                    aThreads.pop_front();
+                    elem->cancel();
                 }
+                aThreads.clear();
             }
         }
         else

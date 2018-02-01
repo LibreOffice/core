@@ -102,11 +102,10 @@ void X11Clipboard::fireChangedContentsEvent()
     aGuard.clear();
 
     ClipboardEvent aEvent( static_cast<OWeakObject*>(this), m_aContents);
-    while( listeners.begin() != listeners.end() )
+    for (auto const& listener : listeners)
     {
-        if( listeners.front().is() )
-            listeners.front()->changedContents(aEvent);
-        listeners.pop_front();
+        if( listener.is() )
+            listener->changedContents(aEvent);
     }
 }
 
