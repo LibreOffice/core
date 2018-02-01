@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmap.hxx>
+#include <impbmp.hxx>
 
 #define S2(a,b)             { long t; if( ( t = b - a ) < 0 ) { a += t; b -= t; } }
 #define MN3(a,b,c)          S2(a,b); S2(a,c);
@@ -109,6 +110,32 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
     }
 
     return bRet;
+}
+
+void Bitmap::SetToData( sal_uInt8 const *pData, sal_Int32 nStride )
+{
+    assert(mxImpBmp);
+    auto nWidth = mxImpBmp->ImplGetSize().getWidth();
+    auto nHeight = mxImpBmp->ImplGetSize().getHeight();
+    assert(nStride >= nWidth);
+
+    BitmapWriteAccess *pWrite = AcquireWriteAccess();
+    assert(pWrite);
+    if( pWrite )
+    {
+        for( long y = 0; y < nHeight; ++y )
+        {
+            sal_uInt8 const *p = pData + y * nStride;
+            Scanline pScanline = pWrite->GetScanline(y);
+            for (long x = 0; x < nWidth; ++x)
+            {
+                BitmapColor col(p[0], p[1], p[2]);
+                pWrite->SetPixelOnData(pScanline, x, col);
+                p += 3;
+            }
+        }
+    }
+    ReleaseAccess( pWrite );
 }
 
 bool Bitmap::ImplConvolute3( const long* pMatrix )
