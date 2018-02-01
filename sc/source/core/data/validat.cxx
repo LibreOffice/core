@@ -536,9 +536,49 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
             break;
 
         case SC_VALID_CUSTOM:
-            //  for Custom, it must be eOp == ScConditionMode::Direct
-            //TODO: the value must be in the document !!!
-            bOk = IsCellValid(rCell, rPos);
+            {
+                // for Custom, it must be eOp == ScConditionMode::Direct
+                // the value must be in the document !!!
+
+                // so we save the original value
+                OUString aStrVal = mpDoc->GetString(rPos);
+                svl::SharedString aSS = mpDoc->GetSharedStringPool().intern(aStrVal);
+                std::unique_ptr<EditTextObject> pEditTextVal;
+                std::unique_ptr<ScFormulaCell> pFormulaVal;
+
+                ScRefCellValue aOriginalCellValue;
+                aOriginalCellValue.meType = mpDoc->GetCellType(rPos);
+                switch (aOriginalCellValue.meType)
+                {
+                    case CELLTYPE_VALUE:
+                        aOriginalCellValue.mfValue = mpDoc->GetValue(rPos);
+                    break;
+                    case CELLTYPE_STRING:
+                        aOriginalCellValue.mpString = &aSS;
+                    break;
+                    case CELLTYPE_EDIT:
+                    {
+                        pEditTextVal.reset(new EditTextObject(*(mpDoc->GetEditText(rPos))));
+                        aOriginalCellValue.mpEditText =  pEditTextVal.get();
+                    }
+                    break;
+                    case CELLTYPE_FORMULA:
+                    {
+                        pFormulaVal.reset(mpDoc->GetFormulaCell(rPos)->Clone());
+                        aOriginalCellValue.mpFormula = pFormulaVal.get();
+                    }
+                    break;
+                    case CELLTYPE_NONE:
+                    break;
+                }
+
+                // set cell value to current input
+                rCell.commit(*mpDoc, rPos);
+                // check if the new value is valid
+                bOk = IsCellValid(rCell, rPos);
+                // and restore the original value
+                aOriginalCellValue.commit(*mpDoc, rPos);
+            }
             break;
 
         case SC_VALID_TEXTLEN:
