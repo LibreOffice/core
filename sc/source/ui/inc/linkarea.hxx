@@ -47,7 +47,7 @@ private:
     VclPtr<OKButton>     m_pBtnOk;
 
     ScDocShell*             pSourceShell;
-    sfx2::DocumentInserter* pDocInserter;
+    std::unique_ptr<sfx2::DocumentInserter> pDocInserter;
 
     SfxObjectShellRef   aSourceRef;
 

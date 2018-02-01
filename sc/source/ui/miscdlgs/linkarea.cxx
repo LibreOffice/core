@@ -88,9 +88,8 @@ short ScLinkedAreaDlg::Execute()
 
 IMPL_LINK_NOARG_TYPED(ScLinkedAreaDlg, BrowseHdl, Button*, void)
 {
-    if ( !pDocInserter )
-        pDocInserter = new sfx2::DocumentInserter(
-            OUString::createFromAscii( ScDocShell::Factory().GetShortName() ) );
+    pDocInserter.reset( new sfx2::DocumentInserter(
+            OUString::createFromAscii( ScDocShell::Factory().GetShortName() ) ) );
     pDocInserter->StartExecuteModal( LINK( this, ScLinkedAreaDlg, DialogClosedHdl ) );
 }
 
