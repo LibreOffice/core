@@ -530,6 +530,12 @@ int ScModelObj::getPart()
     return pViewData->GetViewShell()->getPart();
 }
 
+bool ScModelObj::isHiddenPart( int nPart )
+{
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    return !(pViewData->GetDocument()->IsVisible(nPart));
+}
+
 OUString ScModelObj::getPartName( int nPart )
 {
     OUString sTabName;

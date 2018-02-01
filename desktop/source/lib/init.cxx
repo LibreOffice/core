@@ -636,6 +636,8 @@ static void doc_paintWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId
 
 static void doc_postWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, int nAction);
 
+static bool doc_isHiddenPart(LibreOfficeKitDocument* pThis, int nPart);
+
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
 {
@@ -689,6 +691,8 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->postWindow = doc_postWindow;
 
         m_pDocumentClass->setViewLanguage = doc_setViewLanguage;
+
+        m_pDocumentClass->isHiddenPart = doc_isHiddenPart;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -1895,6 +1899,19 @@ static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
     }
 
     pDoc->setPart( nPart );
+}
+
+static bool doc_isHiddenPart(LibreOfficeKitDocument* pThis, int nPart)
+{
+    SolarMutexGuard aGuard;
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return false;
+    }
+
+    return pDoc->isHiddenPart( nPart );
 }
 
 static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
