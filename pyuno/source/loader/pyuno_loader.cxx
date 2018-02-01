@@ -31,6 +31,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/instance.hxx>
 
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
@@ -176,11 +177,10 @@ static void prependPythonPath( const OUString & pythonPathBootstrap )
     osl_setEnvironment(envVar.pData, envValue.pData);
 }
 
-Reference< XInterface > CreateInstance( const Reference< XComponentContext > & ctx )
+struct PythonInit
 {
-    Reference< XInterface > ret;
-
-    if( ! Py_IsInitialized() )
+PythonInit() {
+    if (! Py_IsInitialized()) // may be inited by getComponentContext() already
     {
         OUString pythonPath;
         OUString pythonHome;
@@ -236,9 +236,26 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
         // PyThreadAttach below.
         PyThreadState_Delete(tstate);
     }
+}
+};
+
+namespace {
+    struct thePythonInit : public rtl::Static<PythonInit, thePythonInit> {};
+}
+
+Reference<XInterface> CreateInstance(const Reference<XComponentContext> & ctx)
+{
+    // tdf#114815 thread-safe static to init python only once
+    thePythonInit::get();
+
+    Reference< XInterface > ret;
 
     PyThreadAttach attach( PyInterpreterState_Head() );
     {
+        // note: this can't race against getComponentContext() because
+        // either (in soffice.bin) CreateInstance() must be called before
+        // getComponentContext() can be called, or (in python.bin) the other
+        // way around
         if( ! Runtime::isInitialized() )
         {
             Runtime::initialize( ctx );
