@@ -75,18 +75,18 @@ using namespace ::com::sun::star;
 class SwShapeDescriptor_Impl
 {
     bool m_isInReading;
-    SwFormatHoriOrient*    pHOrient;
-    SwFormatVertOrient*    pVOrient;
-    SwFormatAnchor*        pAnchor;
-    SwFormatSurround*      pSurround;
-    SvxULSpaceItem*     pULSpace;
-    SvxLRSpaceItem*     pLRSpace;
+    std::unique_ptr<SwFormatHoriOrient> m_pHOrient;
+    std::unique_ptr<SwFormatVertOrient> m_pVOrient;
+    std::unique_ptr<SwFormatAnchor> m_pAnchor;
+    std::unique_ptr<SwFormatSurround> m_pSurround;
+    std::unique_ptr<SvxULSpaceItem> m_pULSpace;
+    std::unique_ptr<SvxLRSpaceItem> m_pLRSpace;
     bool            bOpaque;
     uno::Reference< text::XTextRange > xTextRange;
     // #i26791#
-    SwFormatFollowTextFlow* mpFollowTextFlow;
+    std::unique_ptr<SwFormatFollowTextFlow> m_pFollowTextFlow;
     // #i28701#
-    SwFormatWrapInfluenceOnObjPos* pWrapInfluenceOnObjPos;
+    std::unique_ptr<SwFormatWrapInfluenceOnObjPos> m_pWrapInfluenceOnObjPos;
     // #i28749#
     sal_Int16 mnPositionLayoutDir;
 
@@ -99,90 +99,76 @@ public:
 public:
     SwShapeDescriptor_Impl(SwDoc const*const pDoc)
         : m_isInReading(pDoc && pDoc->IsInReading())
-        ,
      // #i32349# - no defaults, in order to determine on
      // adding a shape, if positioning attributes are set or not.
-     pHOrient( nullptr ),
-     pVOrient( nullptr ),
-     pAnchor(nullptr),
-     pSurround(nullptr),
-     pULSpace(nullptr),
-     pLRSpace(nullptr),
-     bOpaque(false),
+        , bOpaque(false)
      // #i26791#
-     mpFollowTextFlow( new SwFormatFollowTextFlow( false ) ),
+        , m_pFollowTextFlow( new SwFormatFollowTextFlow(false) )
      // #i28701# #i35017#
-     pWrapInfluenceOnObjPos( new SwFormatWrapInfluenceOnObjPos(
-                            text::WrapInfluenceOnPosition::ONCE_CONCURRENT ) ),
+        , m_pWrapInfluenceOnObjPos( new SwFormatWrapInfluenceOnObjPos(
+                            text::WrapInfluenceOnPosition::ONCE_CONCURRENT) )
      // #i28749#
-     mnPositionLayoutDir( text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
-     bInitializedPropertyNotifier(false)
+        , mnPositionLayoutDir(text::PositionLayoutDir::PositionInLayoutDirOfAnchor)
+        , bInitializedPropertyNotifier(false)
      {}
 
-    ~SwShapeDescriptor_Impl()
-    {
-        delete pHOrient;
-        delete pVOrient;
-        delete pAnchor;
-        delete pSurround;
-        delete pULSpace;
-        delete pLRSpace;
-        // #i26791#
-        delete mpFollowTextFlow;
-        // #i28701#
-        delete pWrapInfluenceOnObjPos;
-    }
     SwFormatAnchor*    GetAnchor(bool bCreate = false)
         {
-            if(bCreate && !pAnchor)
+            if (bCreate && !m_pAnchor)
             {
-                pAnchor = new SwFormatAnchor(RndStdIds::FLY_AS_CHAR);
+                m_pAnchor.reset(new SwFormatAnchor(RndStdIds::FLY_AS_CHAR));
             }
-            return pAnchor;
+            return m_pAnchor.get();
         }
     SwFormatHoriOrient* GetHOrient(bool bCreate = false)
         {
-            if (bCreate && !pHOrient)
+            if (bCreate && !m_pHOrient)
             {
                 // #i26791#
-                pHOrient = new SwFormatHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::FRAME );
+                m_pHOrient.reset(new SwFormatHoriOrient(0, text::HoriOrientation::NONE, text::RelOrientation::FRAME));
             }
-            return pHOrient;
+            return m_pHOrient.get();
         }
     SwFormatVertOrient* GetVOrient(bool bCreate = false)
         {
-            if(bCreate && !pVOrient)
+            if (bCreate && !m_pVOrient)
             {
                 if (m_isInReading && // tdf#113938 extensions might rely on old default
-                    (!GetAnchor(true) || pAnchor->GetAnchorId() == RndStdIds::FLY_AS_CHAR))
+                    (!GetAnchor(true) || m_pAnchor->GetAnchorId() == RndStdIds::FLY_AS_CHAR))
                 {   // for as-char, NONE ("from-top") is not a good default
-                    pVOrient = new SwFormatVertOrient(0, text::VertOrientation::TOP, text::RelOrientation::FRAME);
+                    m_pVOrient.reset(new SwFormatVertOrient(0, text::VertOrientation::TOP, text::RelOrientation::FRAME));
                 }
                 else
                 {   // #i26791#
-                    pVOrient = new SwFormatVertOrient(0, text::VertOrientation::NONE, text::RelOrientation::FRAME);
+                    m_pVOrient.reset(new SwFormatVertOrient(0, text::VertOrientation::NONE, text::RelOrientation::FRAME));
                 }
             }
-            return pVOrient;
+            return m_pVOrient.get();
         }
 
     SwFormatSurround*  GetSurround(bool bCreate = false)
         {
-            if(bCreate && !pSurround)
-                pSurround = new SwFormatSurround();
-            return pSurround;
+            if (bCreate && !m_pSurround)
+            {
+                m_pSurround.reset(new SwFormatSurround());
+            }
+            return m_pSurround.get();
         }
     SvxLRSpaceItem* GetLRSpace(bool bCreate = false)
         {
-            if(bCreate && !pLRSpace)
-                pLRSpace = new SvxLRSpaceItem(RES_LR_SPACE);
-            return pLRSpace;
+            if (bCreate && !m_pLRSpace)
+            {
+                m_pLRSpace.reset(new SvxLRSpaceItem(RES_LR_SPACE));
+            }
+            return m_pLRSpace.get();
         }
     SvxULSpaceItem* GetULSpace(bool bCreate = false)
         {
-            if(bCreate && !pULSpace)
-                pULSpace = new SvxULSpaceItem(RES_UL_SPACE);
-            return pULSpace;
+            if (bCreate && !m_pULSpace)
+            {
+                m_pULSpace.reset(new SvxULSpaceItem(RES_UL_SPACE));
+            }
+            return m_pULSpace.get();
         }
     uno::Reference< text::XTextRange > &    GetTextRange()
     {
@@ -196,24 +182,26 @@ public:
         {
             return bOpaque;
         }
-    void RemoveHOrient(){DELETEZ(pHOrient);}
-    void RemoveVOrient(){DELETEZ(pVOrient);}
-    void RemoveAnchor(){DELETEZ(pAnchor);}
-    void RemoveSurround(){DELETEZ(pSurround);}
-    void RemoveULSpace(){DELETEZ(pULSpace);}
-    void RemoveLRSpace(){DELETEZ(pLRSpace);}
+    void RemoveHOrient() { m_pHOrient.reset(); }
+    void RemoveVOrient() { m_pVOrient.reset(); }
+    void RemoveAnchor() { m_pAnchor.reset(); }
+    void RemoveSurround() { m_pSurround.reset(); }
+    void RemoveULSpace() { m_pULSpace.reset(); }
+    void RemoveLRSpace() { m_pLRSpace.reset(); }
     void SetOpaque(bool bSet){bOpaque = bSet;}
 
     // #i26791#
     SwFormatFollowTextFlow* GetFollowTextFlow( bool _bCreate = false )
     {
-        if ( _bCreate && !mpFollowTextFlow )
-            mpFollowTextFlow = new SwFormatFollowTextFlow( false );
-        return mpFollowTextFlow;
+        if (_bCreate && !m_pFollowTextFlow)
+        {
+            m_pFollowTextFlow.reset(new SwFormatFollowTextFlow(false));
+        }
+        return m_pFollowTextFlow.get();
     }
     void RemoveFollowTextFlow()
     {
-        DELETEZ(mpFollowTextFlow);
+        m_pFollowTextFlow.reset();
     }
 
     // #i28749#
@@ -242,17 +230,17 @@ public:
     SwFormatWrapInfluenceOnObjPos* GetWrapInfluenceOnObjPos(
                                         const bool _bCreate = false )
     {
-        if ( _bCreate && !pWrapInfluenceOnObjPos )
+        if (_bCreate && !m_pWrapInfluenceOnObjPos)
         {
-            pWrapInfluenceOnObjPos = new SwFormatWrapInfluenceOnObjPos(
+            m_pWrapInfluenceOnObjPos.reset(new SwFormatWrapInfluenceOnObjPos(
                         // #i35017#
-                        text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
+                        text::WrapInfluenceOnPosition::ONCE_CONCURRENT));
         }
-        return pWrapInfluenceOnObjPos;
+        return m_pWrapInfluenceOnObjPos.get();
     }
     void RemoveWrapInfluenceOnObjPos()
     {
-        DELETEZ(pWrapInfluenceOnObjPos);
+        m_pWrapInfluenceOnObjPos.reset();
     }
 };
 
