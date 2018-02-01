@@ -2232,6 +2232,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/document,\
 	XFilter \
 	XFilterAdapter \
 	XGraphicObjectResolver \
+	XGraphicStorageHandler \
 	XImporter \
 	XInteractionFilterOptions \
 	XInteractionFilterSelect \

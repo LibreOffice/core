@@ -207,6 +207,145 @@ void SAL_CALL SvXMLGraphicInputStream::closeInput()
     mxStmWrapper->closeInput();
 }
 
+namespace xmloff {
+
+class GraphicInputStream : public cppu::WeakImplHelper<XInputStream>
+{
+private:
+    virtual sal_Int32 SAL_CALL readBytes(Sequence<sal_Int8> & aData, sal_Int32 nBytesToRead) override;
+    virtual sal_Int32 SAL_CALL readSomeBytes(Sequence<sal_Int8> & aData, sal_Int32 nMaxBytesToRead) override;
+    virtual void SAL_CALL skipBytes(sal_Int32 nBytesToSkip) override;
+    virtual sal_Int32 SAL_CALL available() override;
+    virtual void SAL_CALL closeInput() override;
+
+private:
+    utl::TempFile maTempFile;
+    Reference<XInputStream> mxStreamWrapper;
+
+public:
+
+    explicit GraphicInputStream(GraphicObject const & raGraphicObject, const OUString & rMimeType);
+    GraphicInputStream(const GraphicInputStream&) = delete;
+
+    GraphicInputStream& operator=(const GraphicInputStream&) = delete;
+
+    bool exists() const
+    {
+        return mxStreamWrapper.is();
+    }
+};
+
+
+GraphicInputStream::GraphicInputStream(GraphicObject const & raGraphicObject, const OUString & rMimeType)
+{
+    GraphicObject aGraphicObject(raGraphicObject);
+
+    maTempFile.EnableKillingFile();
+
+    if (aGraphicObject.GetType() != GraphicType::NONE)
+    {
+        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream(maTempFile.GetURL(), StreamMode::WRITE | StreamMode::TRUNC);
+
+        if (pStream)
+        {
+            Graphic aGraphic(aGraphicObject.GetGraphic());
+            const GfxLink aGfxLink(aGraphic.GetLink());
+            bool bRet = false;
+
+            if (aGfxLink.GetDataSize() && aGfxLink.GetData())
+            {
+                if (rMimeType.isEmpty())
+                {
+                    pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
+                    bRet = (pStream->GetError() == ERRCODE_NONE);
+                }
+                else
+                {
+                    GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
+                    bRet = (rFilter.ExportGraphic(aGraphic, "", *pStream, rFilter.GetExportFormatNumberForMediaType(rMimeType)) == ERRCODE_NONE);
+                }
+            }
+            else
+            {
+                if (aGraphic.GetType() == GraphicType::Bitmap)
+                {
+                    GraphicFilter & rFilter = GraphicFilter::GetGraphicFilter();
+                    OUString aFormat = rMimeType;
+
+                    if (aGraphic.IsAnimated())
+                        aFormat = "image/gif";
+                    else if (aFormat.isEmpty())
+                        aFormat = "image/png";
+
+                    bRet = (rFilter.ExportGraphic(aGraphic, "", *pStream, rFilter.GetExportFormatNumberForMediaType(aFormat)) == ERRCODE_NONE);
+                }
+                else if (rMimeType.isEmpty() && aGraphic.GetType() == GraphicType::GdiMetafile)
+                {
+                    pStream->SetVersion(SOFFICE_FILEFORMAT_8);
+                    pStream->SetCompressMode(SvStreamCompressFlags::ZBITMAP);
+                    const_cast<GDIMetaFile&>(aGraphic.GetGDIMetaFile()).Write(*pStream);
+                    bRet = (pStream->GetError() == ERRCODE_NONE);
+                }
+                else if (!rMimeType.isEmpty())
+                {
+                    GraphicFilter & rFilter = GraphicFilter::GetGraphicFilter();
+                    bRet = ( rFilter.ExportGraphic( aGraphic, "", *pStream, rFilter.GetExportFormatNumberForMediaType( rMimeType ) ) == ERRCODE_NONE );
+                }
+            }
+
+            if (bRet)
+            {
+                pStream->Seek( 0 );
+                mxStreamWrapper = new ::utl::OInputStreamWrapper(pStream, true);
+            }
+            else
+                delete pStream;
+        }
+    }
+}
+
+sal_Int32 SAL_CALL GraphicInputStream::readBytes(Sequence<sal_Int8> & rData, sal_Int32 nBytesToRead)
+{
+    if (!mxStreamWrapper.is())
+        throw NotConnectedException();
+
+    return mxStreamWrapper->readBytes(rData, nBytesToRead);
+}
+
+sal_Int32 SAL_CALL GraphicInputStream::readSomeBytes(Sequence<sal_Int8>& rData, sal_Int32 nMaxBytesToRead )
+{
+    if (!mxStreamWrapper.is())
+        throw NotConnectedException() ;
+
+    return mxStreamWrapper->readSomeBytes(rData, nMaxBytesToRead);
+}
+
+void SAL_CALL GraphicInputStream::skipBytes(sal_Int32 nBytesToSkip)
+{
+    if (!mxStreamWrapper.is())
+        throw NotConnectedException();
+
+    mxStreamWrapper->skipBytes(nBytesToSkip);
+}
+
+sal_Int32 SAL_CALL GraphicInputStream::available()
+{
+    if (!mxStreamWrapper.is())
+        throw NotConnectedException();
+
+    return mxStreamWrapper->available();
+}
+
+void SAL_CALL GraphicInputStream::closeInput()
+{
+    if (!mxStreamWrapper.is())
+        throw NotConnectedException();
+
+    mxStreamWrapper->closeInput();
+}
+
+} // end xmloff namespace
+
 class SvXMLGraphicOutputStream:
     public cppu::WeakImplHelper<XOutputStream>
 {
@@ -356,16 +495,18 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
 
 }
 
-SvXMLGraphicHelper::SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode ) :
-    cppu::WeakComponentImplHelper< css::document::XGraphicObjectResolver,
-                                      css::document::XBinaryStreamResolver >( maMutex )
+SvXMLGraphicHelper::SvXMLGraphicHelper(SvXMLGraphicHelperMode eCreateMode)
+    : cppu::WeakComponentImplHelper<document::XGraphicObjectResolver,
+                                    document::XGraphicStorageHandler,
+                                    document::XBinaryStreamResolver>(maMutex)
 {
     Init( nullptr, eCreateMode, false );
 }
 
 SvXMLGraphicHelper::SvXMLGraphicHelper()
-    : cppu::WeakComponentImplHelper< css::document::XGraphicObjectResolver,
-                                      css::document::XBinaryStreamResolver >( maMutex )
+    : cppu::WeakComponentImplHelper<document::XGraphicObjectResolver,
+                                    document::XGraphicStorageHandler,
+                                    document::XBinaryStreamResolver>(maMutex)
     , meCreateMode(SvXMLGraphicHelperMode::Read)
     , mbDirect(false)
 {
@@ -786,6 +927,26 @@ rtl::Reference<SvXMLGraphicHelper> SvXMLGraphicHelper::Create( SvXMLGraphicHelpe
     return pThis;
 }
 
+namespace
+{
+
+void splitUserDataFromURL(OUString const & rWholeURL, OUString & rJustURL, OUString & rUserData)
+{
+    sal_Int32 nUser = rWholeURL.indexOf('?');
+    if (nUser >= 0)
+    {
+        rJustURL = rWholeURL.copy(0, nUser);
+        nUser++;
+        rUserData = rWholeURL.copy(nUser);
+    }
+    else
+    {
+        rJustURL = rWholeURL;
+    }
+}
+
+} // end anonymous namespace
+
 // XGraphicObjectResolver
 OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& rURL )
 {
@@ -829,12 +990,267 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& r
     return maGrfURLs[ nIndex ].second;
 }
 
+// XGraphicStorageHandler
+uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicHelper::loadGraphic(const OUString& rURL)
+{
+    osl::MutexGuard aGuard(maMutex);
+
+    uno::Reference<graphic::XGraphic> xGraphic;
+
+    OUString aURLOnly;
+    OUString aUserData;
+    splitUserDataFromURL(rURL, aURLOnly, aUserData);
+
+    auto aIterator = maGraphicObjects.find(aURLOnly);
+    if (aIterator != maGraphicObjects.end())
+    {
+        return aIterator->second;
+    }
+
+    OUString aPictureStorageName, aPictureStreamName;
+
+    if (ImplGetStreamNames(aURLOnly, aPictureStorageName, aPictureStreamName))
+    {
+        const GraphicObject aGraphicObject(ImplReadGraphic(aPictureStorageName, aPictureStreamName));
+
+        if (aGraphicObject.GetType() != GraphicType::NONE)
+        {
+            xGraphic = aGraphicObject.GetGraphic().GetXGraphic();
+            maGraphicObjects[aURLOnly] = xGraphic;
+        }
+    }
+
+    return xGraphic;
+}
+
+OUString SAL_CALL SvXMLGraphicHelper::saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
+{
+    Graphic aGraphic(rxGraphic);
+
+    auto aIterator = maExportGraphics.find(aGraphic);
+    if (aIterator != maExportGraphics.end())
+    {
+        return aIterator->second;
+    }
+
+    GraphicObject aGraphicObject(aGraphic);
+
+    if (aGraphicObject.GetType() != GraphicType::NONE)
+    {
+        OUString sId = OStringToOUString(aGraphicObject.GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
+
+        const GfxLink aGfxLink(aGraphic.GetLink());
+        OUString aExtension;
+        bool bUseGfxLink = true;
+
+        if (aGfxLink.GetDataSize())
+        {
+            switch (aGfxLink.GetType())
+            {
+                case GfxLinkType::EpsBuffer: aExtension = ".eps"; break;
+                case GfxLinkType::NativeGif: aExtension = ".gif"; break;
+                // #i15508# added BMP type for better exports (checked, works)
+                case GfxLinkType::NativeBmp: aExtension = ".bmp"; break;
+                case GfxLinkType::NativeJpg: aExtension = ".jpg"; break;
+                case GfxLinkType::NativePng: aExtension = ".png"; break;
+                case GfxLinkType::NativeTif: aExtension = ".tif"; break;
+                case GfxLinkType::NativeWmf: aExtension = ".wmf"; break;
+                case GfxLinkType::NativeMet: aExtension = ".met"; break;
+                case GfxLinkType::NativePct: aExtension = ".pct"; break;
+                case GfxLinkType::NativeSvg:
+                    // backward-compat kludge: since no released OOo
+                    // version to date can handle svg properly, wrap it up
+                    // into an svm. slight catch22 here, since strict ODF
+                    // conformance _recommends_ svg - then again, most old
+                    // ODF consumers are believed to be OOo
+                    if (SvtSaveOptions().GetODFDefaultVersion() <= SvtSaveOptions::ODFVER_012)
+                    {
+                        bUseGfxLink = false;
+                        aExtension = ".svm";
+                    }
+                    else
+                    {
+                        aExtension = ".svg";
+                    }
+                    break;
+                case GfxLinkType::NativePdf: aExtension = ".pdf"; break;
+
+                default:
+                    aExtension = ".grf";
+                break;
+            }
+        }
+        else
+        {
+            if (aGraphicObject.GetType() == GraphicType::Bitmap)
+            {
+                if (aGraphicObject.IsAnimated())
+                    aExtension = ".gif";
+                else
+                    aExtension = ".png";
+            }
+            else if (aGraphicObject.GetType() == GraphicType::GdiMetafile)
+            {
+                // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
+                GDIMetaFile& rMetafile(const_cast<GDIMetaFile&>(aGraphic.GetGDIMetaFile()));
+
+                if (ImplCheckForEPS(rMetafile))
+                    aExtension = ".eps";
+                else
+                    aExtension = ".svm";
+            }
+        }
+
+        OUString rPictureStreamName = sId + aExtension;
+
+        SvxGraphicHelperStream_Impl aStream(ImplGetGraphicStream(XML_GRAPHICSTORAGE_NAME, rPictureStreamName));
+
+        if (aStream.xStream.is())
+        {
+            const OUString aMimeType(ImplGetGraphicMimeType(rPictureStreamName));
+            uno::Reference<beans::XPropertySet> xProps(aStream.xStream, uno::UNO_QUERY);
+
+            // set stream properties (MediaType/Compression)
+            if (!aMimeType.isEmpty())
+            {
+                xProps->setPropertyValue("MediaType", uno::Any(aMimeType));
+            }
+
+            // picture formats that actuall _do_ benefit from zip
+            // storage compression
+            // .svm pics gets compressed via ZBITMAP old-style stream
+            // option below
+            static const char* aCompressiblePics[] =
+            {
+                "image/svg+xml",
+                "image/x-wmf",
+                "image/tiff",
+                "image/x-eps",
+                "image/bmp",
+                "image/x-pict"
+            };
+
+            bool bSuccess = false;
+
+            bool bCompressed = aMimeType.isEmpty();
+            if( !bCompressed )
+            {
+                for(const char* p : aCompressiblePics)
+                {
+                    if( aMimeType.equalsIgnoreAsciiCaseAscii(p) )
+                    {
+                        bCompressed = true;
+                        break;
+                    }
+                }
+            }
+
+            xProps->setPropertyValue("Compressed", Any(bCompressed));
+
+            std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(aStream.xStream));
+            if (bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData())
+            {
+                const uno::Sequence<sal_Int8>& rPdfData = aGraphic.getPdfData();
+                if (rPdfData.hasElements())
+                {
+                    // The graphic has PDF data attached to it, use that.
+                    // vcl::ImportPDF() possibly downgraded the PDF data from a
+                    // higher PDF version, while aGfxLink still contains the
+                    // original data provided by the user.
+                    pStream->WriteBytes(rPdfData.getConstArray(), rPdfData.getLength());
+                    bSuccess = (pStream->GetError() == ERRCODE_NONE);
+                }
+                else
+                    pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
+            }
+            else
+            {
+                if (aGraphic.GetType() == GraphicType::Bitmap)
+                {
+                    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+                    OUString aFormat;
+
+                    if (aGraphic.IsAnimated())
+                        aFormat = "gif";
+                    else
+                        aFormat = "png";
+
+                    bSuccess = (rFilter.ExportGraphic(aGraphic, "", *pStream, rFilter.GetExportFormatNumberForShortName(aFormat)) == ERRCODE_NONE);
+                }
+                else if (aGraphic.GetType() == GraphicType::GdiMetafile)
+                {
+                    pStream->SetVersion(SOFFICE_FILEFORMAT_8);
+                    pStream->SetCompressMode(SvStreamCompressFlags::ZBITMAP);
+
+                    // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
+                    GDIMetaFile& rMtf(const_cast<GDIMetaFile&>(aGraphic.GetGDIMetaFile()));
+                    const MetaCommentAction* pComment = ImplCheckForEPS(rMtf);
+                    if (pComment)
+                    {
+                        sal_uInt32 nSize = pComment->GetDataSize();
+                        const sal_uInt8* pData = pComment->GetData();
+                        if (nSize && pData)
+                            pStream->WriteBytes(pData, nSize);
+
+                        const MetaEPSAction* pAct = static_cast<const MetaEPSAction*>(rMtf.FirstAction());
+                        const GfxLink& rLink = pAct->GetLink();
+
+                        pStream->WriteBytes(rLink.GetData(), rLink.GetDataSize());
+                    }
+                    else
+                        rMtf.Write(*pStream);
+
+                    bSuccess = (pStream->GetError() == ERRCODE_NONE);
+                }
+            }
+            if (!bSuccess)
+                return OUString();
+
+            uno::Reference<embed::XTransactedObject> xStorage(aStream.xStorage, uno::UNO_QUERY);
+            pStream.reset();
+            aStream.xStream->getOutputStream()->closeOutput();
+            if (xStorage.is())
+                xStorage->commit();
+
+            OUString aStoragePath("Pictures/");
+            aStoragePath += rPictureStreamName;
+
+            // put into cache
+            maExportGraphics[aGraphic] = aStoragePath;
+
+            return aStoragePath;
+        }
+    }
+
+    return OUString();
+}
+
+uno::Reference<io::XInputStream> SAL_CALL SvXMLGraphicHelper::createInputStream(uno::Reference<graphic::XGraphic> const & rxGraphic)
+{
+    Reference<XInputStream> xInputStream;
+
+    Graphic aGraphic(rxGraphic);
+    GraphicObject aGraphicObject(aGraphic);
+
+    if (SvXMLGraphicHelperMode::Write == meCreateMode)
+    {
+        OUString sMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension(OUStringToOString(maOutputMimeType, RTL_TEXTENCODING_ASCII_US));
+        std::unique_ptr<xmloff::GraphicInputStream> pInputStream(new xmloff::GraphicInputStream(aGraphicObject, sMimeType));
+
+        // We release the pointer from unique_ptr and assign it to the input stream return type.
+        // In case the stream doesn't exists, unique_ptr will delete the pointer when we go out of scope.
+        if (pInputStream->exists())
+            xInputStream = pInputStream.release();
+    }
+
+    return xInputStream;
+}
+
 // XBinaryStreamResolver
 Reference< XInputStream > SAL_CALL SvXMLGraphicHelper::getInputStream( const OUString& rURL )
 {
     Reference< XInputStream >   xRet;
     OUString                    aPictureStorageName, aGraphicId;
-
 
     if( ( SvXMLGraphicHelperMode::Write == meCreateMode ) &&
         ImplGetStreamNames( rURL, aPictureStorageName, aGraphicId ) )
@@ -901,12 +1317,13 @@ namespace {
 
 namespace impl
 {
-typedef ::cppu::WeakComponentImplHelper<
-        lang::XInitialization,
-        document::XGraphicObjectResolver,
-        document::XBinaryStreamResolver,
-        lang::XServiceInfo >
+typedef cppu::WeakComponentImplHelper<lang::XInitialization,
+                                        document::XGraphicObjectResolver,
+                                        document::XGraphicStorageHandler,
+                                        document::XBinaryStreamResolver,
+                                        lang::XServiceInfo>
     SvXMLGraphicImportExportHelper_Base;
+
 class MutexContainer
 {
 public:
@@ -915,8 +1332,10 @@ public:
 protected:
     mutable ::osl::Mutex m_aMutex;
 };
+
 MutexContainer::~MutexContainer()
 {}
+
 } // namespace impl
 
 class SvXMLGraphicImportExportHelper :
@@ -938,6 +1357,16 @@ protected:
     // ____ XGraphicObjectResolver ____
     virtual OUString SAL_CALL resolveGraphicObjectURL( const OUString& aURL ) override;
 
+    // ____ XGraphicStorageHandler ____
+    virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
+        loadGraphic(const OUString& aURL) override;
+
+    virtual OUString SAL_CALL
+        saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
+
+    virtual css::uno::Reference<css::io::XInputStream> SAL_CALL
+        createInputStream(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
+
     // ____ XBinaryStreamResolver ____
     virtual Reference< io::XInputStream > SAL_CALL getInputStream( const OUString& aURL ) override;
     virtual Reference< io::XOutputStream > SAL_CALL createOutputStream() override;
@@ -951,6 +1380,7 @@ protected:
 private:
     SvXMLGraphicHelperMode              m_eGraphicHelperMode;
     Reference< XGraphicObjectResolver > m_xGraphicObjectResolver;
+    Reference< XGraphicStorageHandler > m_xGraphicStorageHandler;
     Reference< XBinaryStreamResolver >  m_xBinaryStreamResolver;
 };
 
@@ -965,8 +1395,8 @@ void SAL_CALL SvXMLGraphicImportExportHelper::disposing()
     OSL_ASSERT( xComp.is());
     if( xComp.is())
         xComp->dispose();
-    // m_xBinaryStreamResolver is a reference to the same object => don't call
-    // dispose() again
+    // m_xBinaryStreamResolver and m_xGraphicStorageHandler are a reference to the same object,
+    // don't call dispose() again
 }
 
 // ____ XInitialization ____
@@ -979,6 +1409,7 @@ void SAL_CALL SvXMLGraphicImportExportHelper::initialize(
 
     rtl::Reference<SvXMLGraphicHelper> pHelper( SvXMLGraphicHelper::Create( xStorage, m_eGraphicHelperMode ));
     m_xGraphicObjectResolver.set( pHelper.get() );
+    m_xGraphicStorageHandler.set( pHelper.get() );
     m_xBinaryStreamResolver.set( pHelper.get() );
 }
 
@@ -988,6 +1419,21 @@ OUString SAL_CALL SvXMLGraphicImportExportHelper::resolveGraphicObjectURL( const
     return m_xGraphicObjectResolver->resolveGraphicObjectURL( aURL );
 }
 
+// ____ XGraphicStorageHandler ____
+uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicImportExportHelper::loadGraphic(OUString const & rURL)
+{
+    return m_xGraphicStorageHandler->loadGraphic(rURL);
+}
+
+OUString SAL_CALL SvXMLGraphicImportExportHelper::saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
+{
+    return m_xGraphicStorageHandler->saveGraphic(rxGraphic);
+}
+
+uno::Reference<io::XInputStream> SAL_CALL SvXMLGraphicImportExportHelper::createInputStream(uno::Reference<graphic::XGraphic> const & rxGraphic)
+{
+    return m_xGraphicStorageHandler->createInputStream(rxGraphic);
+}
 
 // ____ XBinaryStreamResolver ____
 Reference< io::XInputStream > SAL_CALL SvXMLGraphicImportExportHelper::getInputStream( const OUString& aURL )
@@ -1018,10 +1464,10 @@ sal_Bool SAL_CALL SvXMLGraphicImportExportHelper::supportsService( const OUStrin
 
 Sequence< OUString > SAL_CALL SvXMLGraphicImportExportHelper::getSupportedServiceNames()
 {
-    // XGraphicObjectResolver and XBinaryStreamResolver are not part of any service
-    Sequence< OUString > aSupportedServiceNames( 2 );
+    Sequence< OUString > aSupportedServiceNames(3);
     aSupportedServiceNames[0] = "com.sun.star.document.GraphicObjectResolver";
-    aSupportedServiceNames[1] = "com.sun.star.document.BinaryStreamResolver";
+    aSupportedServiceNames[1] = "com.sun.star.document.GraphicStorageHandler";
+    aSupportedServiceNames[2] = "com.sun.star.document.BinaryStreamResolver";
     return aSupportedServiceNames;
 }
 
