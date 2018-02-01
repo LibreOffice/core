@@ -406,6 +406,9 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     HTMLAttrContexts m_aContexts;// the current context of attribute/token
     std::vector<SwFrameFormat *> m_aMoveFlyFrames;// Fly-Frames, the anchor is moved
     std::deque<sal_Int32> m_aMoveFlyCnts;// and the Content-Positions
+    //stray SwTableBoxes which need to be deleted to avoid leaking, but hold
+    //onto them until parsing is done
+    std::vector<std::unique_ptr<SwTableBox>> m_aOrphanedTableBoxes;
 
     SwApplet_Impl *m_pAppletImpl; // current applet
 
@@ -947,11 +950,7 @@ public:
         m_aTables.push_back(pNew);
     }
 
-    void DeregisterHTMLTable(HTMLTable* pOld)
-    {
-        m_aTables.erase(std::remove(m_aTables.begin(), m_aTables.end(), pOld));
-    }
-
+    void DeregisterHTMLTable(HTMLTable* pOld);
 };
 
 struct SwPendingStackData

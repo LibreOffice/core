@@ -401,7 +401,9 @@ class HTMLTable
 
     const SwStartNode *m_pPrevStartNode;   // the Table-Node or the Start-Node of the section before
     const SwTable *m_pSwTable;        // SW-Table (only on Top-Level)
-    SwTableBox* m_pBox1;                    // TableBox, generated when the Top-Level-Table was build
+public:
+    std::unique_ptr<SwTableBox> m_xBox1;    // TableBox, generated when the Top-Level-Table was build
+private:
     SwTableBoxFormat *m_pBoxFormat;         // frame::Frame-Format from SwTableBox
     SwTableLineFormat *m_pLineFormat;       // frame::Frame-Format from SwTableLine
     SwTableLineFormat *m_pLineFrameFormatNoHeight;
@@ -909,7 +911,6 @@ void HTMLTable::InitCtor(const HTMLTableOptions& rOptions)
     m_nRows = 0;
     m_nCurrentRow = 0; m_nCurrentColumn = 0;
 
-    m_pBox1 = nullptr;
     m_pBoxFormat = nullptr; m_pLineFormat = nullptr;
     m_pLineFrameFormatNoHeight = nullptr;
     m_xInheritedBackgroundBrush.reset();
@@ -1045,6 +1046,13 @@ HTMLTable::HTMLTable(SwHTMLParser* pPars,
 {
     InitCtor(rOptions);
     m_pParser->RegisterHTMLTable(this);
+}
+
+void SwHTMLParser::DeregisterHTMLTable(HTMLTable* pOld)
+{
+    if (pOld->m_xBox1)
+        m_aOrphanedTableBoxes.emplace_back(std::move(pOld->m_xBox1));
+    m_aTables.erase(std::remove(m_aTables.begin(), m_aTables.end(), pOld));
 }
 
 HTMLTable::~HTMLTable()
@@ -1465,12 +1473,11 @@ SwTableBox *HTMLTable::NewTableBox( const SwStartNode *pStNd,
 {
     SwTableBox *pBox;
 
-    if (m_pBox1 && m_pBox1->GetSttNd() == pStNd)
+    if (m_xBox1 && m_xBox1->GetSttNd() == pStNd)
     {
         // If the StartNode is the StartNode of the initially created box, we take that box
-        pBox = const_cast<HTMLTable*>(this)->m_pBox1;
+        pBox = const_cast<HTMLTable*>(this)->m_xBox1.release();
         pBox->SetUpper(pUpper);
-        const_cast<HTMLTable*>(this)->m_pBox1 = nullptr;
     }
     else
         pBox = new SwTableBox( m_pBoxFormat, *pStNd, pUpper );
@@ -2316,11 +2323,11 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
     // get the default line and box format
     // remember the first box and unlist it from the first row
     SwTableLine *pLine1 = (m_pSwTable->GetTabLines())[0];
-    m_pBox1 = (pLine1->GetTabBoxes())[0];
+    m_xBox1.reset((pLine1->GetTabBoxes())[0]);
     pLine1->GetTabBoxes().erase(pLine1->GetTabBoxes().begin());
 
     m_pLineFormat = static_cast<SwTableLineFormat*>(pLine1->GetFrameFormat());
-    m_pBoxFormat = static_cast<SwTableBoxFormat*>(m_pBox1->GetFrameFormat());
+    m_pBoxFormat = static_cast<SwTableBoxFormat*>(m_xBox1->GetFrameFormat());
 
     MakeTable_( pBox );
 
