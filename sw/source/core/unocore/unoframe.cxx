@@ -1222,27 +1222,27 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
         {
             uno::Any aAny2 = mxStyleFamily->getByName ("Frame");
             aAny2 >>= mxStyleData;
-            pProps = new SwFrameProperties_Impl( );
+            m_pProps.reset(new SwFrameProperties_Impl);
         }
         break;
         case FLYCNTTYPE_GRF:
         {
             uno::Any aAny2 = mxStyleFamily->getByName ("Graphics");
             aAny2 >>= mxStyleData;
-            pProps = new SwGraphicProperties_Impl( );
+            m_pProps.reset(new SwGraphicProperties_Impl);
         }
         break;
         case FLYCNTTYPE_OLE:
         {
             uno::Any aAny2 = mxStyleFamily->getByName ("OLE");
             aAny2 >>= mxStyleData;
-            pProps = new SwOLEProperties_Impl( );
+            m_pProps.reset(new SwOLEProperties_Impl);
         }
         break;
 
         default:
-            pProps = nullptr;
-            ;
+            m_pProps.reset();
+        break;
     }
 }
 
@@ -1252,7 +1252,6 @@ SwXFrame::SwXFrame(SwFrameFormat& rFrameFormat, FlyCntType eSet, const ::SfxItem
     , m_pPropSet(pSet)
     , m_pDoc(nullptr)
     , eType(eSet)
-    , pProps(nullptr)
     , bIsDescriptor(false)
     , m_pCopySource(nullptr)
     , m_nDrawAspect(embed::Aspects::MSOLE_CONTENT)
@@ -1263,7 +1262,7 @@ SwXFrame::~SwXFrame()
 {
     SolarMutexGuard aGuard;
     delete m_pCopySource;
-    delete pProps;
+    m_pProps.reset();
     EndListeningAll();
 }
 
@@ -1957,7 +1956,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
     }
     else if(IsDescriptor())
     {
-        pProps->SetProperty(pEntry->nWID, nMemberId, aValue);
+        m_pProps->SetProperty(pEntry->nWID, nMemberId, aValue);
         if( FN_UNO_FRAME_STYLE_NAME == pEntry->nWID )
         {
             OUString sStyleName;
@@ -2295,7 +2294,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         if(WID_LAYOUT_SIZE != pEntry->nWID)  // there is no LayoutSize in a descriptor
         {
             const uno::Any* pAny = nullptr;
-            if( !pProps->GetProperty( pEntry->nWID, nMemberId, pAny ) )
+            if (!m_pProps->GetProperty(pEntry->nWID, nMemberId, pAny))
                 aAny = mxStyleData->getPropertyValue( rPropertyName );
             else if ( pAny )
                 aAny = *pAny;
@@ -2666,7 +2665,7 @@ void SwXFrame::ResetDescriptor()
     bIsDescriptor = false;
     mxStyleData.clear();
     mxStyleFamily.clear();
-    DELETEZ(pProps);
+    m_pProps.reset();
 }
 
 void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRange)
@@ -2721,7 +2720,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
 
     // no the related items need to be added to the set
     bool bSizeFound;
-    if(!pProps->AnyToItemSet( pDoc, aFrameSet, aGrSet, bSizeFound))
+    if (!m_pProps->AnyToItemSet(pDoc, aFrameSet, aGrSet, bSizeFound))
         throw lang::IllegalArgumentException();
     // a TextRange is handled separately
     *aPam.GetPoint() = *aIntPam.GetPoint();
@@ -2754,7 +2753,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
 
     const ::uno::Any* pStyle;
     SwFrameFormat *pParentFrameFormat = nullptr;
-    if(pProps->GetProperty(FN_UNO_FRAME_STYLE_NAME, 0, pStyle))
+    if (m_pProps->GetProperty(FN_UNO_FRAME_STYLE_NAME, 0, pStyle))
         pParentFrameFormat = lcl_GetFrameFormat( *pStyle, pDoc );
 
     SwFlyFrameFormat* pFormat = nullptr;
@@ -2808,7 +2807,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         const ::uno::Any* pGraphicURL;
         OUString sGraphicURL;
         std::unique_ptr<GraphicObject> pGrfObj;
-        if(pProps->GetProperty(FN_UNO_GRAPHIC_U_R_L, 0, pGraphicURL))
+        if (m_pProps->GetProperty(FN_UNO_GRAPHIC_U_R_L, 0, pGraphicURL))
         {
             (*pGraphicURL) >>= sGraphicURL;
             if( sGraphicURL.startsWith(sPackageProtocol) )
@@ -2828,7 +2827,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         }
         Graphic aGraphic;
         const ::uno::Any* pGraphic;
-        const bool bHasGraphic = pProps->GetProperty( FN_UNO_GRAPHIC, 0, pGraphic );
+        const bool bHasGraphic = m_pProps->GetProperty(FN_UNO_GRAPHIC, 0, pGraphic);
         if( bHasGraphic )
         {
             uno::Reference< graphic::XGraphic > xGraphic;
@@ -2838,7 +2837,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
 
         OUString sFltName;
         const ::uno::Any* pFilter;
-        if(pProps->GetProperty(FN_UNO_GRAPHIC_FILTER, 0, pFilter))
+        if (m_pProps->GetProperty(FN_UNO_GRAPHIC_FILTER, 0, pFilter))
         {
             (*pFilter) >>= sFltName;
         }
@@ -2862,19 +2861,19 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
 
         }
         const ::uno::Any* pSurroundContour;
-        if(pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUR, pSurroundContour))
+        if (m_pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUR, pSurroundContour))
             setPropertyValue(UNO_NAME_SURROUND_CONTOUR, *pSurroundContour);
         const ::uno::Any* pContourOutside;
-        if(pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUROUTSIDE, pContourOutside))
+        if (m_pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUROUTSIDE, pContourOutside))
             setPropertyValue(UNO_NAME_CONTOUR_OUTSIDE, *pContourOutside);
         const ::uno::Any* pContourPoly;
-        if(pProps->GetProperty(FN_PARAM_CONTOUR_PP, 0, pContourPoly))
+        if (m_pProps->GetProperty(FN_PARAM_CONTOUR_PP, 0, pContourPoly))
             setPropertyValue(UNO_NAME_CONTOUR_POLY_POLYGON, *pContourPoly);
         const ::uno::Any* pPixelContour;
-        if(pProps->GetProperty(FN_UNO_IS_PIXEL_CONTOUR, 0, pPixelContour))
+        if (m_pProps->GetProperty(FN_UNO_IS_PIXEL_CONTOUR, 0, pPixelContour))
             setPropertyValue(UNO_NAME_IS_PIXEL_CONTOUR, *pPixelContour);
         const ::uno::Any* pAutoContour;
-        if(pProps->GetProperty(FN_UNO_IS_AUTOMATIC_CONTOUR, 0, pAutoContour))
+        if (m_pProps->GetProperty(FN_UNO_IS_AUTOMATIC_CONTOUR, 0, pAutoContour))
             setPropertyValue(UNO_NAME_IS_AUTOMATIC_CONTOUR, *pAutoContour);
     }
     else
@@ -2882,10 +2881,12 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         const ::uno::Any* pCLSID = nullptr;
         const ::uno::Any* pStreamName = nullptr;
         const ::uno::Any* pEmbeddedObject = nullptr;
-        if(!pProps->GetProperty(FN_UNO_CLSID, 0, pCLSID)
-            && !pProps->GetProperty( FN_UNO_STREAM_NAME, 0, pStreamName )
-            && !pProps->GetProperty( FN_EMBEDDED_OBJECT, 0, pEmbeddedObject ))
+        if (!m_pProps->GetProperty(FN_UNO_CLSID, 0, pCLSID)
+            && !m_pProps->GetProperty(FN_UNO_STREAM_NAME, 0, pStreamName)
+            && !m_pProps->GetProperty(FN_EMBEDDED_OBJECT, 0, pEmbeddedObject))
+        {
             throw uno::RuntimeException();
+        }
         if(pCLSID)
         {
             OUString aCLSID;
@@ -3034,27 +3035,27 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
     if( pFormat && pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
         GetOrCreateSdrObject(*pFormat);
     const ::uno::Any* pOrder;
-    if( pProps->GetProperty(FN_UNO_Z_ORDER, 0, pOrder) )
+    if (m_pProps->GetProperty(FN_UNO_Z_ORDER, 0, pOrder))
         setPropertyValue(UNO_NAME_Z_ORDER, *pOrder);
     const ::uno::Any* pReplacement;
-    if( pProps->GetProperty(FN_UNO_REPLACEMENT_GRAPHIC, 0, pReplacement) )
+    if (m_pProps->GetProperty(FN_UNO_REPLACEMENT_GRAPHIC, 0, pReplacement))
         setPropertyValue(UNO_NAME_GRAPHIC, *pReplacement);
     // new attribute Title
     const ::uno::Any* pTitle;
-    if ( pProps->GetProperty(FN_UNO_TITLE, 0, pTitle) )
+    if (m_pProps->GetProperty(FN_UNO_TITLE, 0, pTitle))
     {
         setPropertyValue(UNO_NAME_TITLE, *pTitle);
     }
     // new attribute Description
     const ::uno::Any* pDescription;
-    if ( pProps->GetProperty(FN_UNO_DESCRIPTION, 0, pDescription) )
+    if (m_pProps->GetProperty(FN_UNO_DESCRIPTION, 0, pDescription))
     {
         setPropertyValue(UNO_NAME_DESCRIPTION, *pDescription);
     }
 
     // For grabbag
     const uno::Any* pFrameIntropgrabbagItem;
-    if( pProps->GetProperty(RES_FRMATR_GRABBAG, 0, pFrameIntropgrabbagItem) )
+    if (m_pProps->GetProperty(RES_FRMATR_GRABBAG, 0, pFrameIntropgrabbagItem))
     {
         setPropertyValue(UNO_NAME_FRAME_INTEROP_GRAB_BAG, *pFrameIntropgrabbagItem);
     }
