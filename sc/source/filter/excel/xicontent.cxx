@@ -886,6 +886,15 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
         // No valid validation found.  Bail out.
         return;
 
+    // The default value for comparision is _BETWEEN. However, custom
+    // rules are a formula, and thus the comparator should be ignored
+    // and only a true or false from the formula is evaluated. In Calc,
+    // formulas use comparison SC_COND_DIRECT.
+    if( eValMode == SC_VALID_CUSTOM )
+    {
+        eCondMode = ScConditionMode::Direct;
+    }
+
     // first range for base address for relative references
     const ScRange& rScRange = aScRanges.front();    // aScRanges is not empty
 

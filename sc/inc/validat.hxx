@@ -132,6 +132,9 @@ public:
     bool IsDataValid(
         const OUString& rTest, const ScPatternAttr& rPattern, const ScAddress& rPos ) const;
 
+    bool IsDataValidCustom(
+        const OUString& rTest, const ScPatternAttr& rPattern, const ScAddress& rPos ) const;
+
     bool IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
                     // TRUE -> break
