@@ -37,6 +37,8 @@
 #include "frmfmt.hxx"
 #include "unotext.hxx"
 
+#include <memory>
+
 class SdrObject;
 class SwDoc;
 class SwFormat;
@@ -65,7 +67,7 @@ private:
     const FlyCntType                eType;
 
     // Descriptor-interface
-    BaseFrameProperties_Impl*       pProps;
+    std::unique_ptr<BaseFrameProperties_Impl> m_pProps;
     bool bIsDescriptor;
     OUString                        m_sName;
 
