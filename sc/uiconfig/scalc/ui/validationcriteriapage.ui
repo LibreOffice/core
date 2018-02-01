@@ -43,6 +43,10 @@
         <col id="0" translatable="yes" context="validationcriteriapage|liststore1">Text length</col>
         <col id="1">7</col>
       </row>
+      <row>
+        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">Custom</col>
+        <col id="1">8</col>
+      </row>
     </data>
   </object>
   <object class="GtkListStore" id="liststore2">

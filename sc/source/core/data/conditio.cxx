@@ -1242,6 +1242,9 @@ bool ScConditionEntry::IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos
 {
     const_cast<ScConditionEntry*>(this)->Interpret(rPos); // Evaluate formula
 
+    if ( eOp == ScConditionMode::Direct )
+        return nVal1 != 0.0;
+
     double nArg = 0.0;
     OUString aArgStr;
     bool bVal = lcl_GetCellContent( rCell, bIsStr1, nArg, aArgStr, mpDoc );

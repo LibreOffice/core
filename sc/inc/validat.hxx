@@ -132,6 +132,26 @@ public:
     bool IsDataValid(
         const OUString& rTest, const ScPatternAttr& rPattern, const ScAddress& rPos ) const;
 
+    // Custom validations (SC_VALID_CUSTOM) should be validated using this specific method.
+    // Take care that internally this method commits to the to be validated cell the new input,
+    // in order to be able to interpret the validating boolean formula on the new input.
+    // After the formula has been evaluated the original cell content is restored.
+    // At present is only used in ScInputHandler::EnterHandler: handling this case in the
+    // regular IsDataValid method would have been unsafe since it can be invoked
+    // by ScFormulaCell::InterpretTail.
+
+    struct CustomValidationPrivateAccess
+    {
+        // so IsDataValidCustom can be invoked only by ScInputHandler methods
+        friend class ScInputHandler;
+    private:
+        CustomValidationPrivateAccess() {}
+    };
+
+    bool IsDataValidCustom(
+        const OUString& rTest, const ScPatternAttr& rPattern,
+        const ScAddress& rPos, const CustomValidationPrivateAccess& ) const;
+
     bool IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
                     // TRUE -> break
