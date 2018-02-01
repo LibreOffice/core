@@ -70,7 +70,6 @@ EBookQuery * createTest( const OUString &aColumnName,
 OCommonStatement::OCommonStatement(OEvoabConnection* _pConnection)
     : OCommonStatement_IBase(m_aMutex)
     , ::comphelper::OPropertyContainer(OCommonStatement_IBase::rBHelper)
-    , OStatement_CBase( static_cast<cppu::OWeakObject*>(_pConnection), this )
     , m_xResultSet(nullptr)
     , m_xConnection(_pConnection)
     , m_aParser(_pConnection->getDriver().getComponentContext())
@@ -126,7 +125,6 @@ void OCommonStatement::disposing()
 
     m_xConnection.clear();
 
-    dispose_ChildImpl();
     OCommonStatement_IBase::disposing();
 }
 
@@ -532,7 +530,7 @@ void SAL_CALL OCommonStatement::acquire() throw()
 
 void SAL_CALL OCommonStatement::release() throw()
 {
-    release_ChildImpl();
+    OCommonStatement_IBase::release();
 }
 
 

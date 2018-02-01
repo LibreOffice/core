@@ -22,7 +22,6 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <connectivity/OSubComponent.hxx>
 #include <map>
 #include <connectivity/CommonTools.hxx>
 #include <OTypeInfo.hxx>
@@ -48,11 +47,8 @@ namespace connectivity
         typedef connectivity::OMetaConnection                           OConnection_BASE;
 
 
-        class OConnection : public OConnection_BASE,
-                            public connectivity::OSubComponent<OConnection, OConnection_BASE>
+        class OConnection : public OConnection_BASE
         {
-            friend class connectivity::OSubComponent<OConnection, OConnection_BASE>;
-
         protected:
 
             // Data attributes
@@ -87,8 +83,6 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
-            // XInterface
-            virtual void SAL_CALL release() throw() override;
 
             // XConnection
             virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;

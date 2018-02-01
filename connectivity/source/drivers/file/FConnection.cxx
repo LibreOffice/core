@@ -56,8 +56,7 @@ using namespace ::ucbhelper;
 typedef connectivity::OMetaConnection OConnection_BASE;
 
 OConnection::OConnection(OFileDriver*   _pDriver)
-    : OSubComponent<OConnection, OConnection_BASE>(static_cast<cppu::OWeakObject*>(_pDriver), this)
-    , m_pDriver(_pDriver)
+    : m_pDriver(_pDriver)
     , m_bAutoCommit(false)
     , m_bReadOnly(false)
     , m_bShowDeleted(false)
@@ -73,12 +72,6 @@ OConnection::~OConnection()
     if(!isClosed(  ))
         close();
 }
-
-void SAL_CALL OConnection::release() throw()
-{
-    release_ChildImpl();
-}
-
 
 bool OConnection::matchesExtension( const OUString& _rExt ) const
 {
@@ -371,8 +364,6 @@ void OConnection::disposing()
     m_xDir.clear();
     m_xContent.clear();
     m_xCatalog  = WeakReference< XTablesSupplier>();
-
-    dispose_ChildImpl();
 }
 
 Reference< XTablesSupplier > OConnection::createCatalog()

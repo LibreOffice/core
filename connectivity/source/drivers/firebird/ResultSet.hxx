@@ -25,7 +25,6 @@
 #include <ibase.h>
 
 #include <connectivity/FValue.hxx>
-#include <connectivity/OSubComponent.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>

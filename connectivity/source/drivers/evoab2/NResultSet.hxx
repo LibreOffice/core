@@ -40,7 +40,6 @@
 #include <connectivity/FValue.hxx>
 #include <connectivity/warningscontainer.hxx>
 #include "NStatement.hxx"
-#include <connectivity/OSubComponent.hxx>
 #include "NResultSetMetaData.hxx"
 
 namespace connectivity

@@ -81,7 +81,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <strings.hrc>
 #include <resource/sharedresources.hxx>
-#include <connectivity/OSubComponent.hxx>
 
 #include <algorithm>
 #include <iterator>
@@ -1944,48 +1943,6 @@ void getBooleanComparisonPredicate( const OUString& _rExpression, const bool _bV
 
 namespace connectivity
 {
-void release(oslInterlockedCount& _refCount,
-             ::cppu::OBroadcastHelper& rBHelper,
-             Reference< XInterface >& _xInterface,
-             css::lang::XComponent* _pObject) throw ()
-{
-    if (osl_atomic_decrement( &_refCount ) == 0)
-    {
-        osl_atomic_increment( &_refCount );
-
-        if (!rBHelper.bDisposed && !rBHelper.bInDispose)
-        {
-            // remember the parent
-            Reference< XInterface > xParent;
-            {
-                ::osl::MutexGuard aGuard( rBHelper.rMutex );
-                xParent = _xInterface;
-                _xInterface = nullptr;
-            }
-
-            // First dispose
-            try {
-                _pObject->dispose();
-            } catch (css::uno::RuntimeException & e) {
-                SAL_WARN(
-                    "connectivity.commontools", "Caught exception during dispose, " << e);
-            }
-
-            // only the alive ref holds the object
-            OSL_ASSERT( _refCount == 1 );
-
-            // release the parent in the ~
-            if (xParent.is())
-            {
-                ::osl::MutexGuard aGuard( rBHelper.rMutex );
-                _xInterface = xParent;
-            }
-        }
-    }
-    else
-        osl_atomic_increment( &_refCount );
-}
-
 void checkDisposed(bool _bThrow)
 {
     if (_bThrow)

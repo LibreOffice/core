@@ -89,7 +89,6 @@ void SAL_CALL OStatement_BASE2::disposing()
     ::comphelper::disposeComponent(m_xGeneratedStatement);
     m_pConnection.clear();
 
-    dispose_ChildImpl();
     java_sql_Statement_Base::disposing();
 }
 
@@ -106,12 +105,6 @@ void SAL_CALL java_sql_Statement_Base::disposing()
     m_aLogger.log( LogLevel::FINE, STR_LOG_CLOSING_STATEMENT );
     java_sql_Statement_BASE::disposing();
     clearObject();
-}
-
-
-void SAL_CALL OStatement_BASE2::release() throw()
-{
-    release_ChildImpl();
 }
 
 

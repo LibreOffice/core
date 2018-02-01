@@ -153,11 +153,6 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     osl_atomic_decrement( &m_refCount );
 }
 
-void SAL_CALL OConnection::release() throw()
-{
-    release_ChildImpl();
-}
-
 Reference< XStatement > SAL_CALL OConnection::createStatement(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -490,8 +485,6 @@ void OConnection::disposing()
 
     delete m_pAdoConnection;
     m_pAdoConnection = nullptr;
-
-    dispose_ChildImpl();
 }
 
 sal_Int64 SAL_CALL OConnection::getSomething( const css::uno::Sequence< sal_Int8 >& rId )

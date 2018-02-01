@@ -51,10 +51,6 @@ namespace connectivity
                                                     css::sdbc::XCloseable,
                                                     css::sdbc::XMultipleResults> OCommonStatement_IBase;
 
-        class OCommonStatement;
-        typedef OSubComponent< OCommonStatement, OCommonStatement_IBase >   OStatement_CBase;
-
-
         //************ Class: OCommonStatement
         // is a base class for the normal statement and for the prepared statement
 
@@ -62,11 +58,8 @@ namespace connectivity
                                 ,public OCommonStatement_IBase
                                 ,public ::cppu::OPropertySetHelper
                                 ,public OPropertyArrayUsageHelper<OCommonStatement>
-                                ,public OStatement_CBase
 
         {
-            friend class OSubComponent< OCommonStatement, OCommonStatement_IBase >;
-
         private:
             SQLWarning m_aLastWarning;
 

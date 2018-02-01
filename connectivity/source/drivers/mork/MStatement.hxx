@@ -43,16 +43,12 @@ namespace connectivity
         // is a base class for the normal statement and for the prepared statement
 
         class OCommonStatement;
-        typedef ::connectivity::OSubComponent< OCommonStatement, OCommonStatement_IBASE >  OCommonStatement_SBASE;
 
         class OCommonStatement  :public cppu::BaseMutex
                                 ,public OCommonStatement_IBASE
                                 ,public ::cppu::OPropertySetHelper
                                 ,public ::comphelper::OPropertyArrayUsageHelper< OCommonStatement >
-                                ,public OCommonStatement_SBASE
         {
-            friend class ::connectivity::OSubComponent< OCommonStatement, OCommonStatement_IBASE >;
-
         private:
             css::sdbc::SQLWarning                              m_aLastWarning;
 
