@@ -59,6 +59,7 @@
 #define SC_VALIDDLG_ALLOW_RANGE     5
 #define SC_VALIDDLG_ALLOW_LIST      6
 #define SC_VALIDDLG_ALLOW_TEXTLEN   7
+#define SC_VALIDDLG_ALLOW_CUSTOM    8
 
 /*  Position indexes for "Data" list box.
     They do not map directly to ScConditionMode and can safely be modified to
@@ -71,6 +72,7 @@
 #define SC_VALIDDLG_DATA_NOTEQUAL     5
 #define SC_VALIDDLG_DATA_VALIDRANGE   6
 #define SC_VALIDDLG_DATA_INVALIDRANGE 7
+#define SC_VALIDDLG_DATA_DIRECT       8
 
 namespace ValidListType = css::sheet::TableValidationVisibility;
 
@@ -200,7 +202,7 @@ sal_uInt16 lclGetPosFromValMode( ScValidationMode eValMode )
         case SC_VALID_TIME:     nLbPos = SC_VALIDDLG_ALLOW_TIME;    break;
         case SC_VALID_TEXTLEN:  nLbPos = SC_VALIDDLG_ALLOW_TEXTLEN; break;
         case SC_VALID_LIST:     nLbPos = SC_VALIDDLG_ALLOW_RANGE;   break;
-        case SC_VALID_CUSTOM:   nLbPos = SC_VALIDDLG_ALLOW_ANY;     break;  // not supported
+        case SC_VALID_CUSTOM:   nLbPos = SC_VALIDDLG_ALLOW_CUSTOM;  break;
         default:    OSL_FAIL( "lclGetPosFromValMode - unknown validity mode" );
     }
     return nLbPos;
@@ -220,6 +222,7 @@ ScValidationMode lclGetValModeFromPos( sal_uInt16 nLbPos )
         case SC_VALIDDLG_ALLOW_RANGE:   eValMode = SC_VALID_LIST;       break;
         case SC_VALIDDLG_ALLOW_LIST:    eValMode = SC_VALID_LIST;       break;
         case SC_VALIDDLG_ALLOW_TEXTLEN: eValMode = SC_VALID_TEXTLEN;    break;
+        case SC_VALIDDLG_ALLOW_CUSTOM:  eValMode = SC_VALID_CUSTOM;     break;
         default:    OSL_FAIL( "lclGetValModeFromPos - invalid list box position" );
     }
     return eValMode;
@@ -240,6 +243,7 @@ sal_uInt16 lclGetPosFromCondMode( ScConditionMode eCondMode )
         case SC_COND_NOTEQUAL:      nLbPos = SC_VALIDDLG_DATA_NOTEQUAL;     break;
         case SC_COND_BETWEEN:       nLbPos = SC_VALIDDLG_DATA_VALIDRANGE;      break;
         case SC_COND_NOTBETWEEN:    nLbPos = SC_VALIDDLG_DATA_INVALIDRANGE;   break;
+        case SC_COND_DIRECT:        nLbPos = SC_VALIDDLG_DATA_DIRECT;         break;
         default:    OSL_FAIL( "lclGetPosFromCondMode - unknown condition mode" );
     }
     return nLbPos;
@@ -259,6 +263,7 @@ ScConditionMode lclGetCondModeFromPos( sal_uInt16 nLbPos )
         case SC_VALIDDLG_DATA_NOTEQUAL:     eCondMode = SC_COND_NOTEQUAL;   break;
         case SC_VALIDDLG_DATA_VALIDRANGE:      eCondMode = SC_COND_BETWEEN;    break;
         case SC_VALIDDLG_DATA_INVALIDRANGE:   eCondMode = SC_COND_NOTBETWEEN; break;
+        case SC_VALIDDLG_DATA_DIRECT:         eCondMode = SC_COND_DIRECT;   break;
         default:    OSL_FAIL( "lclGetCondModeFromPos - invalid list box position" );
     }
     return eCondMode;
@@ -323,6 +328,7 @@ ScTPValidationValue::ScTPValidationValue( vcl::Window* pParent, const SfxItemSet
     , maStrMin(ScResId(SCSTR_VALID_MINIMUM))
     , maStrMax(ScResId(SCSTR_VALID_MAXIMUM))
     , maStrValue(ScResId(SCSTR_VALID_VALUE))
+    , maStrFormula(ScResId(SCSTR_VALID_FORMULA))
     , maStrRange(ScResId(SCSTR_VALID_RANGE))
     , maStrList(ScResId(SCSTR_VALID_LIST))
     , m_pRefEdit(nullptr)
@@ -464,10 +470,13 @@ bool ScTPValidationValue::FillItemSet( SfxItemSet* rArgSet )
         (m_pCbSort->IsChecked() ? ValidListType::SORTEDASCENDING : ValidListType::UNSORTED) :
         ValidListType::INVISIBLE;
 
-    rArgSet->Put( SfxAllEnumItem( FID_VALID_MODE, sal::static_int_cast<sal_uInt16>(
-                    lclGetValModeFromPos( m_pLbAllow->GetSelectEntryPos() ) ) ) );
-    rArgSet->Put( SfxAllEnumItem( FID_VALID_CONDMODE, sal::static_int_cast<sal_uInt16>(
-                    lclGetCondModeFromPos( m_pLbValue->GetSelectEntryPos() ) ) ) );
+    const sal_Int32 nLbPos = m_pLbAllow->GetSelectEntryPos();
+    bool bCustom = (nLbPos == SC_VALIDDLG_ALLOW_CUSTOM);
+    ScConditionMode eCondMode = bCustom ?
+            SC_COND_DIRECT : lclGetCondModeFromPos( m_pLbValue->GetSelectEntryPos() );
+
+    rArgSet->Put( SfxAllEnumItem( FID_VALID_MODE, sal::static_int_cast<sal_uInt16>( lclGetValModeFromPos( nLbPos ) ) ) );
+    rArgSet->Put( SfxAllEnumItem( FID_VALID_CONDMODE, sal::static_int_cast<sal_uInt16>( eCondMode ) ) );
     rArgSet->Put( SfxStringItem( FID_VALID_VALUE1, GetFirstFormula() ) );
     rArgSet->Put( SfxStringItem( FID_VALID_VALUE2, GetSecondFormula() ) );
     rArgSet->Put( SfxBoolItem( FID_VALID_BLANK, m_pCbAllow->IsChecked() ) );
@@ -609,6 +618,7 @@ IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl, ListBox&, void)
     bool bEnable = (nLbPos != SC_VALIDDLG_ALLOW_ANY);
     bool bRange = (nLbPos == SC_VALIDDLG_ALLOW_RANGE);
     bool bList = (nLbPos == SC_VALIDDLG_ALLOW_LIST);
+    bool bCustom = (nLbPos == SC_VALIDDLG_ALLOW_CUSTOM);
 
     m_pCbAllow->Enable( bEnable );   // Empty cell
     m_pFtValue->Enable( bEnable );
@@ -620,10 +630,13 @@ IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl, ListBox&, void)
     m_pEdMax->Enable( bEnable );
 
     bool bShowMax = false;
+
     if( bRange )
         m_pFtMin->SetText( maStrRange );
     else if( bList )
         m_pFtMin->SetText( maStrList );
+    else if( bCustom )
+        m_pFtMin->SetText( maStrFormula );
     else
     {
         switch( m_pLbValue->GetSelectEntryPos() )
@@ -647,8 +660,8 @@ IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl, ListBox&, void)
 
     m_pCbShow->Show( bRange || bList );
     m_pCbSort->Show( bRange || bList );
-    m_pFtValue->Show( !bRange && !bList );
-    m_pLbValue->Show( !bRange && !bList );
+    m_pFtValue->Show( !bRange && !bList && !bCustom);
+    m_pLbValue->Show( !bRange && !bList && !bCustom );
     m_pEdMin->Show( !bList );
     m_pEdList->Show( bList );
     m_pMinGrid->set_vexpand( bList );
