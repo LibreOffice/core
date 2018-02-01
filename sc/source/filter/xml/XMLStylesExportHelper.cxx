@@ -200,12 +200,18 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
             case sheet::ValidationType_WHOLE :
                 sCondition += "cell-content-is-whole-number()";
             break;
+            case sheet::ValidationType_CUSTOM :
+                sCondition += "is-true-formula(";
+                sCondition += aValidation.sFormula1;
+                sCondition += ")";
+            break;
             default:
             {
                 // added to avoid warnings
             }
         }
         if (aValidation.aValidationType != sheet::ValidationType_LIST &&
+                aValidation.aValidationType != sheet::ValidationType_CUSTOM &&
             (!aValidation.sFormula1.isEmpty() ||
              ((aValidation.aOperator == sheet::ConditionOperator_BETWEEN ||
                aValidation.aOperator == sheet::ConditionOperator_NOT_BETWEEN) &&
