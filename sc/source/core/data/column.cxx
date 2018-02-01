@@ -118,6 +118,16 @@ SCROW ScColumn::GetNextUnprotected( SCROW nRow, bool bUp ) const
     return pAttrArray->GetNextUnprotected(nRow, bUp);
 }
 
+bool ScColumn::GetProtectedRowSpan( SCROW& rStartRow, SCROW& rEndRow, SCROW nRow ) const
+{
+    if ( !HasAttrib( nRow, nRow, HasAttrFlags::Protected ))
+        return false;
+
+    pAttrArray->GetPatternRange( rStartRow, rEndRow, nRow );
+
+    return true;
+}
+
 sc::MatrixEdge ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sc::MatrixEdge nMask ) const
 {
     using namespace sc;

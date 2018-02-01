@@ -1318,10 +1318,50 @@ bool ScTable::ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
     return true;
 }
 
+// Skips the current cell if it is Hidden, Overlapped or Protected and Sheet is Protected
+bool ScTable::SkipRow( const SCCOL nCol, SCROW& rRow, const SCROW nMovY,
+        const ScMarkData& rMark, const bool bUp, const bool bSheetProtected ) const
+{
+    if ( !ValidRow( rRow ))
+        return false;
+
+    bool  bProtected = false;
+    SCROW nEndRow    = rRow;
+
+    if ( bSheetProtected )
+        bProtected  =  aCol[nCol].GetProtectedRowSpan( rRow, nEndRow, rRow );
+
+    if ( bProtected )
+    {
+        bUp ? rRow += nMovY : rRow = nEndRow + nMovY;
+
+        rRow  = rMark.GetNextMarked( nCol, rRow, bUp );
+
+        return true;
+    }
+    else
+    {
+        bool bRowHidden  = RowHidden( rRow );
+        bool bOverlapped = pDocument->HasAttrib( nCol, rRow, nTab, nCol, rRow, nTab, HasAttrFlags::Overlapped );
+
+        if ( bRowHidden || bOverlapped )
+        {
+            rRow += nMovY;
+            rRow  = rMark.GetNextMarked( nCol, rRow, bUp );
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
                                 bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const
 {
-    if (bUnprotected && !IsProtected())     // Is sheet really protected?
+    bool bSheetProtected = IsProtected();
+
+    if ( bUnprotected && !bSheetProtected )     // Is sheet really protected?
         bUnprotected = false;
 
     sal_uInt16 nWrap = 0;
@@ -1338,13 +1378,9 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
     {
         bool bUp = ( nMovY < 0 );
         nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-        while ( ValidRow(nRow) &&
-                (RowHidden(nRow) || pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HasAttrFlags::Overlapped)) )
-        {
-            //  skip hidden rows (see above)
-            nRow += nMovY;
-            nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-        }
+
+        while ( SkipRow( nCol, nRow, nMovY, rMark, bUp, bSheetProtected ))
+            ;
 
         while ( nRow < 0 || nRow > MAXROW )
         {
@@ -1368,13 +1404,9 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
             else if (nRow > MAXROW)
                 nRow = 0;
             nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-            while ( ValidRow(nRow) &&
-                    (RowHidden(nRow) || pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HasAttrFlags::Overlapped)) )
-            {
-                //  skip hidden rows (see above)
-                nRow += nMovY;
-                nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-            }
+
+            while ( SkipRow( nCol, nRow, nMovY, rMark, bUp, bSheetProtected ))
+                ;
         }
     }
 
