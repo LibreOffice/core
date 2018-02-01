@@ -327,6 +327,7 @@ void ScXMLContentValidationContext::GetCondition( ScMyImportValidation& rValidat
             case XML_COND_TEXTLENGTH_ISBETWEEN:     // condition is 'cell-content-text-length-is-between(<expression1>,<expression2>)'
             case XML_COND_TEXTLENGTH_ISNOTBETWEEN:  // condition is 'cell-content-text-length-is-not-between(<expression1>,<expression2>)'
             case XML_COND_ISINLIST:                 // condition is 'cell-content-is-in-list(<expression>)'
+            case XML_COND_ISTRUEFORMULA:            // condition is 'is-true-formula(<expression>)'
                 rValidation.aValidationType = aParseResult.meValidation;
                 rValidation.aOperator = aParseResult.meOperator;
             break;
