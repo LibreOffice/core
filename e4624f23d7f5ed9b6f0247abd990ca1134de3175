@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_e941df3a",
+        "filename": "filter/source/xslt/export/uof/odf2uof_spreadsheet.xsl",
+        "patchSetId": 1
+      },
+      "lineNbr": 2367,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-01T11:19:55Z",
+      "side": 1,
+      "message": "I have no idea whether these vertical alignment attributes are available in UOF, but certainly style:vertical-align \u003d \u0027justify\u0027 does not exist in ODF.\n\nI\u0027d rather correct only the typos, which are obviously wrong, in this commit, and not do any other change.",
+      "revId": "e4624f23d7f5ed9b6f0247abd990ca1134de3175",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
