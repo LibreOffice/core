@@ -139,7 +139,7 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode )
                     // stop sequence (first call deactivate-handler)
                     EndSequence();
 
-                    // set accelerator of the actuel item
+                    // set accelerator of the actual item
                     // and call the handler
                     bool bDel = false;
                     pAccel->maCurKeyCode    = rKeyCode;

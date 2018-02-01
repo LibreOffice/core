@@ -655,7 +655,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
                 xProps->setPropertyValue( "MediaType", Any(aMimeType) );
             }
 
-            // picture formats that actuall _do_ benefit from zip
+            // picture formats that actually _do_ benefit from zip
             // storage compression
             // .svm pics gets compressed via ZBITMAP old-style stream
             // option below
@@ -1116,7 +1116,7 @@ OUString SAL_CALL SvXMLGraphicHelper::saveGraphic(css::uno::Reference<css::graph
                 xProps->setPropertyValue("MediaType", uno::Any(aMimeType));
             }
 
-            // picture formats that actuall _do_ benefit from zip
+            // picture formats that actually _do_ benefit from zip
             // storage compression
             // .svm pics gets compressed via ZBITMAP old-style stream
             // option below
