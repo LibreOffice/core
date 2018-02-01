@@ -217,15 +217,6 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
     {
         if (IgnoreForCharStyle(aValIter->Name))
             continue;
-        else if(aValIter->Name=="CharInteropGrabBag" || aValIter->Name=="ParaInteropGrabBag") {
-            uno::Sequence<beans::PropertyValue> vGrabVals;
-            aValIter->Value >>= vGrabVals;
-            beans::PropertyValue* aGrabIter = vGrabVals.begin();
-            for(; aGrabIter!=vGrabVals.end(); ++aGrabIter) {
-                if(!IgnoreForCharStyle(aGrabIter->Name))
-                    rProperties.emplace_back(aGrabIter->Name, 0, aGrabIter->Value, beans::PropertyState_DIRECT_VALUE);
-            }
-        }
         else
             rProperties.emplace_back(aValIter->Name, 0, aValIter->Value, beans::PropertyState_DIRECT_VALUE);
     }
