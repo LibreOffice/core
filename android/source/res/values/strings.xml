@@ -7,7 +7,7 @@
     <string name="app_about_name"><b>LibreOffice Viewer \'Beta\'</b></string>
     <string name="app_version">Version: %1$s\nBuild ID: %2$s</string>
     <string name="app_description">LibreOffice Viewer is a document viewer based on LibreOffice.</string>
-    <string name="app_credits">http://www.libreoffice.org</string>
+    <string name="app_credits">https://www.libreoffice.org</string>
     <string name="app_vendor">This release was supplied by $VENDOR.</string>
     <string name="temp_file_saving_disabled">This file is read-only, saving is disabled.</string>
 
