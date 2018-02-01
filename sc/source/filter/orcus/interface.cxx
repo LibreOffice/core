@@ -1148,7 +1148,8 @@ void ScOrcusStyles::fill::applyToItemSet(SfxItemSet& rSet) const
         return;
     }
 
-    rSet.Put(SvxBrushItem(maBgColor, ATTR_BACKGROUND));
+    if (maPattern.equalsIgnoreAsciiCase("solid"))
+        rSet.Put(SvxBrushItem(maFgColor, ATTR_BACKGROUND));
 }
 
 ScOrcusStyles::protection::protection():
@@ -1574,15 +1575,19 @@ void ScOrcusStyles::set_fill_pattern_type(const char* s, size_t n)
     maCurrentFill.mbHasFillAttr = true;
 }
 
-void ScOrcusStyles::set_fill_fg_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue)
+void ScOrcusStyles::set_fill_fg_color(
+    orcus::spreadsheet::color_elem_t /*alpha*/, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue)
 {
-    maCurrentFill.maFgColor = Color(alpha, red, green, blue);
+    // Ignore the alpha element for now.
+    maCurrentFill.maFgColor = Color(red, green, blue);
     maCurrentFill.mbHasFillAttr = true;
 }
 
-void ScOrcusStyles::set_fill_bg_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue)
+void ScOrcusStyles::set_fill_bg_color(
+    orcus::spreadsheet::color_elem_t /*alpha*/, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue)
 {
-    maCurrentFill.maBgColor = Color(alpha, red, green, blue);
+    // Ignore the alpha element for now.
+    maCurrentFill.maBgColor = Color(red, green, blue);
     maCurrentFill.mbHasFillAttr = true;
 }
 
