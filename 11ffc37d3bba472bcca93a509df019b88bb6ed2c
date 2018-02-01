@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_a93b67ea",
+        "filename": "sw/source/core/layout/tabfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1617,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-02-01T16:36:42Z",
+      "side": 1,
+      "message": "that\u0027s kind of redundant, when you exit the next line?",
+      "revId": "11ffc37d3bba472bcca93a509df019b88bb6ed2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
