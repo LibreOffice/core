@@ -306,6 +306,9 @@ public:
     /// @see vcl::ITiledRenderable::getParts().
     virtual int getParts() override;
 
+    /// @see vcl::ITiledRenderable::getPartInfo().
+    virtual OUString getPartInfo( int nPart ) override;
+
     /// @see vcl::ITiledRenderable::getPartName().
     virtual OUString getPartName(int nPart) override;
 
