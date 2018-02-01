@@ -306,6 +306,9 @@ struct _LibreOfficeKitDocumentClass
                                          int nType,
                                          const char* pText);
 
+    /// @see lok::Document::getPartInfo().
+    char* (*getPartInfo) (LibreOfficeKitDocument* pThis, int nPart);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

@@ -360,6 +360,15 @@ public:
     {
         return OUString();
     }
+
+    /*
+     * Used for sheets in spreadsheet documents.
+     */
+    virtual OUString getPartInfo(int /*nPart*/)
+    {
+        return OUString();
+    }
+
 };
 } // namespace vcl
 
