@@ -36,12 +36,14 @@ using namespace ::ooo::vba;
 SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : SwVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "WordDocumentContext" )
 {
     SAL_INFO("sw.vba", "SwVbaGlobals::SwVbaGlobals()");
-    uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
+    uno::Sequence< beans::PropertyValue > aInitArgs( aArgs.getLength() + 1 );
     aInitArgs[ 0 ].Name = "Application";
     aInitArgs[ 0 ].Value <<= getApplication();
-    aInitArgs[ 1 ].Name = "WordDocumentContext";
-    aInitArgs[ 1 ].Value <<= getXSomethingFromArgs< frame::XModel >( aArgs, 0 );
-
+    if ( aArgs.getLength() > 0 )
+    {
+        aInitArgs[ 1 ].Name = "WordDocumentContext";
+        aInitArgs[ 1 ].Value <<= getXSomethingFromArgs< frame::XModel >( aArgs, 0 );
+    }
     init( aInitArgs );
 }
 
