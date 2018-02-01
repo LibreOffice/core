@@ -426,6 +426,50 @@ bool ScValidationData::DoError(weld::Window* pParent, const OUString& rInput,
     return ( eErrorStyle == SC_VALERR_STOP || nRet == RET_CANCEL );
 }
 
+bool ScValidationData::IsDataValidCustom(
+        const OUString& rTest,
+        const ScPatternAttr& rPattern,
+        const ScAddress& rPos ) const
+{
+    OSL_ENSURE(GetDataMode() == SC_VALID_CUSTOM,
+            "ScValidationData::IsDataValidCustom invoked for a non-custom validation");
+
+    if (rTest.isEmpty())              // check whether empty cells are allowed
+        return IsIgnoreBlank();
+
+    if (rTest[0] == '=')   // formulas do not pass the validity test
+        return false;
+
+    SvNumberFormatter* pFormatter = GetDocument()->GetFormatTable();
+
+    // get the value if any
+    sal_uInt32 nFormat = rPattern.GetNumberFormat( pFormatter );
+    double nVal;
+    bool bIsVal = pFormatter->IsNumberFormat( rTest, nFormat, nVal );
+
+    ScRefCellValue aTmpCell;
+    svl::SharedString aSS;
+    if (bIsVal)
+    {
+        aTmpCell.meType = CELLTYPE_VALUE;
+        aTmpCell.mfValue = nVal;
+    }
+    else
+    {
+        aTmpCell.meType = CELLTYPE_STRING;
+        aSS = mpDoc->GetSharedStringPool().intern(rTest);
+        aTmpCell.mpString = &aSS;
+    }
+
+    ScCellValue aOriginalCellValue(ScRefCellValue(*GetDocument(), rPos));
+
+    aTmpCell.commit(*GetDocument(), rPos);
+    bool bRet = IsCellValid(aTmpCell, rPos);
+    aOriginalCellValue.commit(*GetDocument(), rPos);
+
+    return bRet;
+}
+
 bool ScValidationData::IsDataValid(
     const OUString& rTest, const ScPatternAttr& rPattern, const ScAddress& rPos ) const
 {
@@ -487,6 +531,9 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
     if( eDataMode == SC_VALID_LIST )
         return IsListValid(rCell, rPos);
 
+    if ( eDataMode == SC_VALID_CUSTOM )
+        return IsCellValid(rCell, rPos);
+
     double nVal = 0.0;
     OUString aString;
     bool bIsVal = true;
@@ -533,12 +580,6 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
                 bOk = ::rtl::math::approxEqual( nVal, floor(nVal+0.5) );        // integers
             if ( bOk )
                 bOk = IsCellValid(rCell, rPos);
-            break;
-
-        case SC_VALID_CUSTOM:
-            //  for Custom, it must be eOp == ScConditionMode::Direct
-            //TODO: the value must be in the document !!!
-            bOk = IsCellValid(rCell, rPos);
             break;
 
         case SC_VALID_TEXTLEN:

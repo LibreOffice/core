@@ -2658,7 +2658,17 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
         {
             // #i67990# don't use pLastPattern in EnterHandler
             const ScPatternAttr* pPattern = pDoc->GetPattern( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );
-            bool bOk = pData->IsDataValid( aString, *pPattern, aCursorPos );
+
+            bool bOk;
+
+            if (pData->GetDataMode() == SC_VALID_CUSTOM)
+            {
+                bOk = pData->IsDataValidCustom( aString, *pPattern, aCursorPos );
+            }
+            else
+            {
+                bOk = pData->IsDataValid( aString, *pPattern, aCursorPos );
+            }
 
             if (!bOk)
             {
