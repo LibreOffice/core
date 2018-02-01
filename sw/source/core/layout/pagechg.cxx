@@ -1761,10 +1761,10 @@ void SwRootFrame::ImplCalcBrowseWidth()
             SwBorderAttrAccess aAccess( SwFrame::GetCache(), pFrame );
             const SwBorderAttrs &rAttrs = *aAccess.Get();
             const SwFormatHoriOrient &rHori = rAttrs.GetAttrSet().GetHoriOrient();
-            long nWidth = rAttrs.GetSize().Width();
-            if ( nWidth < USHRT_MAX-2000 && //-2k, because USHRT_MAX gets missing while trying to resize!
-                 text::HoriOrientation::FULL != rHori.GetHoriOrient() )
+            if ( text::HoriOrientation::FULL != rHori.GetHoriOrient() )
             {
+                long nWidth = rAttrs.GetSize().Width();
+
                 const SwHTMLTableLayout *pLayoutInfo =
                     static_cast<const SwTabFrame *>(pFrame)->GetTable()
                                             ->GetHTMLTableLayout();
