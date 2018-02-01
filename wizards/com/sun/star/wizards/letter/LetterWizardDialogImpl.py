@@ -83,7 +83,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.buildStep4()
             self.buildStep5()
             self.buildStep6()
-            
+
             self.initializePaths()
             self.initializeSalutation()
             self.initializeGreeting()
@@ -330,7 +330,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.chkBusinessPaperItemChanged()
             self.setElements(False)
             self.drawConstants()
-            
+
     def lstPrivOfficialStyleItemChanged(self):
         selectedItemPos = self.lstPrivOfficialStyle.SelectedItemPos
         if self.lstPrivOfficialStylePos != selectedItemPos:
@@ -741,16 +741,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.xDialogModel.lstGreeting.StringItemList = \
             tuple(self.resources.GreetingLabels)
 
-    def getCurrentLetter(self):
-        if self.myConfig.cp_LetterType == 0:
-            return self.myConfig.cp_BusinessLetter
-        elif self.myConfig.cp_LetterType == 1:
-            return self.myConfig.cp_PrivateOfficialLetter
-        elif self.myConfig.cp_LetterType == 2:
-            return self.myConfig.cp_PrivateLetter
-        else:
-            return None
-
     def initializeTemplates(self, xMSF):
         sLetterPath = self.sTemplatePath + "/wizard/letter"
         self.BusinessFiles = \
@@ -805,7 +795,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         OfficeDocument.attachEventCall(
             self.myLetterDoc.xTextDocument, "OnNew", "StarBasic",
             "macro:///Template.Correspondence.Database()")
-            
+
     def setElements(self, privLetter):
         if self.optSenderDefine.State:
             self.optSenderDefineItemChanged()
@@ -831,16 +821,16 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
         if self.optMakeChanges.State:
             self.optMakeChangesItemChanged()
-            
+
     def drawConstants(self):
         '''Localise the template'''
         constRangeList = self.myLetterDoc.searchFillInItems(1)
-        
+
         for i in constRangeList:
             text = i.String.lower()
             aux = TextElement(i, self.resources.dictConstants[text])
             aux.write()
-            
+
     def insertRoadmap(self):
         self.addRoadmap()
         self.insertRoadMapItems(

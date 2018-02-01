@@ -202,15 +202,6 @@ class UnoDialog(object):
         self.xUnoDialog.setVisible(True)
 
     '''
-    @param parent
-    @return 0 for cancel, 1 for ok
-    @throws com.sun.star.uno.Exception
-    '''
-
-    def executeDialogFromParent(self, parent):
-        return self.executeDialog(parent.xUnoDialog.PosSize)
-
-    '''
     @param XComponent
     @return 0 for cancel, 1 for ok
     @throws com.sun.star.uno.Exception
@@ -247,19 +238,6 @@ class UnoDialog(object):
         self.xUnoDialog.createPeer(xToolkit, parentPeer)
         self.xWindowPeer = self.xUnoDialog.getPeer()
         return self.xUnoDialog.getPeer()
-
-    # deletes the first entry when this is equal to "DelEntryName"
-    # returns true when a new item is selected
-
-    def deletefirstListboxEntry(self, ListBoxName, DelEntryName):
-        xListBox = self.xUnoDialog.getControl(ListBoxName)
-        FirstItem = xListBox.getItem(0)
-        if FirstItem.equals(DelEntryName):
-            SelPos = xListBox.getSelectedItemPos()
-            xListBox.removeItems(0, 1)
-            if SelPos > 0:
-                setControlProperty(ListBoxName, "SelectedItems", [SelPos])
-                xListBox.selectItemPos((short)(SelPos - 1), True)
 
     @classmethod
     def setEnabled(self, control, enabled):
@@ -321,7 +299,7 @@ class UnoDialog(object):
             return "SelectedItems"
         else:
             return ""
-        
+
     def isHighContrastModeActivated(self):
         if (self.xVclWindowPeer is not None):
             if (self.BisHighContrastModeActivated is None):

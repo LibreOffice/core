@@ -25,6 +25,3 @@ class EventListenerList(object):
 
     def remove(self, listener):
         self.list.remove(listener)
-
-    def getListenerList(self):
-        return self.list

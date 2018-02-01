@@ -73,44 +73,6 @@ class OfficeDocument(object):
         except PropertyVetoException:
             traceback.print_exc()
 
-    '''
-    Create a new office document, attached to the given frame.
-    @param desktop
-    @param frame
-    @param sDocumentType e.g. swriter, scalc, ( simpress, scalc : not tested)
-    @return the document Component
-    (implements XComponent) object ( XTextDocument, or XSpreadsheedDocument )
-    '''
-
-    @classmethod
-    def createNewDocument(self, frame, sDocumentType, preview, readonly):
-        loadValues = list(range(2))
-        loadValues[0] = uno.createUnoStruct(
-            'com.sun.star.beans.PropertyValue')
-        loadValues[0].Name = "ReadOnly"
-        if readonly:
-            loadValues[0].Value = True
-        else:
-            loadValues[0].Value = False
-
-        loadValues[1] = uno.createUnoStruct(
-            'com.sun.star.beans.PropertyValue')
-        loadValues[1].Name = "Preview"
-        if preview:
-            loadValues[1].Value = True
-        else:
-            loadValues[1].Value = False
-        sURL = "private:factory/" + sDocumentType
-        xComponent = None
-        try:
-            xComponent = frame.loadComponentFromURL(
-                sURL, "_self", 0, tuple(loadValues))
-
-        except Exception:
-            traceback.print_exc()
-
-        return xComponent
-
     @classmethod
     def createNewFrame(self, xMSF, listener, FrameName="_blank"):
         xFrame = None
@@ -205,7 +167,7 @@ class OfficeDocument(object):
                 oStoreProperties[1].Value = xMSF.createInstance(
                     "com.sun.star.comp.uui.UUIInteractionHandler")
             else:
-                oStoreProperties = list(range(0))      
+                oStoreProperties = list(range(0))
 
             StorePath = systemPathToFileUrl(StorePath)
             sPath = StorePath[:(StorePath.rfind("/") + 1)]
@@ -214,7 +176,7 @@ class OfficeDocument(object):
                 absolutize(sPath, sFile), tuple(oStoreProperties))
             return True
         except ErrorCodeIOException:
-            #Throw this exception when trying to save a file 
+            #Throw this exception when trying to save a file
             #which is already opened in Libreoffice
             #TODO: handle it properly
             return True
@@ -252,27 +214,6 @@ class OfficeDocument(object):
 
         except Exception:
             traceback.print_exc()
-
-    @classmethod
-    def getFileMediaDecriptor(self, xmsf, url):
-        typeDetect = xmsf.createInstance(
-            "com.sun.star.document.TypeDetection")
-        mediaDescr = list(range(1))
-        mediaDescr[0] = uno.createUnoStruct(
-            'com.sun.star.beans.PropertyValue')
-        mediaDescr[0].Name = "URL"
-        mediaDescr[0].Value = url
-        Type = typeDetect.queryTypeByDescriptor(tuple(mediaDescr), True)[0]
-        if Type == "":
-            return None
-        else:
-            return typeDetect.getByName(Type)
-
-    @classmethod
-    def getTypeMediaDescriptor(self, xmsf, type):
-        typeDetect = xmsf.createInstance(
-            "com.sun.star.document.TypeDetection")
-        return typeDetect.getByName(type)
 
     def showMessageBox(
         self, xMSF, windowServiceName, windowAttribute, MessageText):

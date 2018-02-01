@@ -146,7 +146,7 @@ class TextDocument(object):
         myFieldHandler = TextFieldHandler(self.xMSF, self.xTextDocument)
         myFieldHandler.updateDocInfoFields()
         return self.xTextDocument
-            
+
     def getPageSize(self):
         try:
             xNameAccess = self.xTextDocument.StyleFamilies
@@ -203,21 +203,6 @@ class TextDocument(object):
         except Exception:
             traceback.print_exc()
 
-    '''
-    Apparently there is no other way to get the
-    page count of a text document other than using a cursor and
-    making it jump to the last page...
-    @param model the document model.
-    @return the page count of the document.
-    '''
-
-    @classmethod
-    def getPageCount(self, model):
-        xController = model.getCurrentController()
-        xPC = xController.getViewCursor()
-        xPC.jumpToLastPage()
-        return xPC.getPage()
-
     @classmethod
     def getFrameByName(self, sFrameName, xTD):
         if xTD.TextFrames.hasByName(sFrameName):
@@ -227,20 +212,20 @@ class TextDocument(object):
 
     def searchFillInItems(self, typeSearch):
         sd = self.xTextDocument.createSearchDescriptor()
-        
+
         if typeSearch == 0:
             sd.setSearchString("<[^>]+>")
         elif typeSearch == 1:
             sd.setSearchString("#[^#]+#")
-            
+
         sd.setPropertyValue("SearchRegularExpression", True)
         sd.setPropertyValue("SearchWords", True)
-        
+
         auxList = []
         allItems = self.xTextDocument.findAll(sd)
         for i in list(range(allItems.Count)):
             auxList.append(allItems.getByIndex(i))
-            
+
         return auxList
 
     class DateUtils(object):
