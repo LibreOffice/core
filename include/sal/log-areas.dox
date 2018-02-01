@@ -518,6 +518,7 @@ certain functionality.
 @li @c sw.tiled
 @li @c sw.ui
 @li @c sw.uno - Writer UNO interfaces
+@li @c sw.vba - Writer VBA
 @li @c sw.ww8 - .doc/.docx export filter, .doc import filter (not writerfilter)
 @li @c sw.ww8.level2 - further info for sw.ww8
 @li @c sw.xml - Writer .odt import/export

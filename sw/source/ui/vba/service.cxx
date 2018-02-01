@@ -31,7 +31,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * vbaswobj_component_getFactory(
     void* pRet = sdecl::component_getFactoryHelper(pImplName,
             {&globals::serviceDecl, &::document::serviceDecl,
              &wrapformat::serviceDecl, &vbaeventshelper::serviceDecl} );
-    SAL_INFO("sw", "Ret is " << pRet);
+    SAL_INFO("sw.vba", "Ret is " << pRet);
     return pRet;
 }
 

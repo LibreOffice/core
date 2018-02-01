@@ -445,7 +445,7 @@ SwVbaDocument::getIntrospection(  )
 uno::Any SAL_CALL
 SwVbaDocument::invoke( const OUString& aFunctionName, const uno::Sequence< uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< uno::Any >& /*aOutParam*/ )
 {
-    SAL_INFO("sw", "** will barf " << aFunctionName );
+    SAL_INFO("sw.vba", "** will barf " << aFunctionName );
     throw uno::RuntimeException(); // unsupported operation
 }
 
