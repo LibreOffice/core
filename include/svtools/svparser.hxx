@@ -89,7 +89,7 @@ protected:
     virtual T GetNextToken_() = 0;
 
     // is called for each Token that is recognized in CallParser
-    virtual void NextToken( T nToken );
+    virtual void NextToken( T nToken ) = 0;
 
     // at times of SvRefBase derivation, not everybody may delete
     virtual ~SvParser() override;
