@@ -541,13 +541,6 @@ typename SvParser<T>::TokenStackType* SvParser<T>::GetStackPtr( short nCnt )
     return pTokenStack + nAktPos;
 }
 
-// is called for each token which is recognised by CallParser
-template<typename T>
-void SvParser<T>::NextToken( T )
-{
-}
-
-
 // to read asynchronous from SvStream
 
 template<typename T>
