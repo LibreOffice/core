@@ -19,6 +19,7 @@
 
 #include <swcache.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 
@@ -121,6 +122,26 @@ SwCache::~SwCache()
 
     for(SwCacheObjArr::const_iterator it = m_aCacheObjects.begin(); it != m_aCacheObjects.end(); ++it)
         delete *it;
+}
+
+void SwCache::IncreaseMax( const sal_uInt16 nAdd )
+{
+    if (o3tl::checked_add(m_nCurMax, nAdd, m_nCurMax))
+    {
+        std::abort();
+    }
+#ifdef DBG_UTIL
+    ++m_nIncreaseMax;
+#endif
+}
+
+void SwCache::DecreaseMax( const sal_uInt16 nSub )
+{
+    if ( m_nCurMax > nSub )
+        m_nCurMax = m_nCurMax - sal::static_int_cast< sal_uInt16 >(nSub);
+#ifdef DBG_UTIL
+    ++m_nDecreaseMax;
+#endif
 }
 
 void SwCache::Flush()
@@ -361,8 +382,9 @@ bool SwCache::Insert( SwCacheObj *pNew )
             pObj = pObj->GetPrev();
         if ( !pObj )
         {
-            OSL_FAIL( "Cache overflow." );
-            return false;
+            SAL_WARN("sw.core", "SwCache overflow.");
+            IncreaseMax(100); // embiggen & try again
+            return Insert(pNew);
         }
 
         nPos = pObj->GetCachePos();
