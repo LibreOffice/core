@@ -200,7 +200,6 @@ class SvxCSS1Parser : public CSS1Parser
     sal_uInt16 nMinFixLineSpace;    // minimum spacing for fixed line spacing
 
     rtl_TextEncoding    eDfltEnc;
-    Css1ScriptFlags     nScriptFlags;
 
     bool bIgnoreFontFamily;
 
@@ -301,10 +300,6 @@ public:
 
     virtual void SetDfltEncoding( rtl_TextEncoding eEnc );
     rtl_TextEncoding GetDfltEncoding() const { return eDfltEnc; }
-
-    bool IsSetWesternProps() const { return bool(nScriptFlags & Css1ScriptFlags::Western); }
-    bool IsSetCJKProps() const { return bool(nScriptFlags & Css1ScriptFlags::CJK); }
-    bool IsSetCTLProps() const { return bool(nScriptFlags & Css1ScriptFlags::CTL); }
 
     const OUString& GetBaseURL() const { return sBaseURL;}
 

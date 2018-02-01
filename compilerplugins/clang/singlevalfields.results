@@ -4,7 +4,7 @@ chart2/source/model/main/DataPoint.hxx:107
 chart2/source/view/inc/GL3DRenderer.hxx:161
     chart::opengl3D::TextInfoBatch batchNum
     512
-include/basic/sbxvar.hxx:67
+include/basic/sbxvar.hxx:70
     SbxValues::(anonymous) pData
     0
 include/editeng/charsetcoloritem.hxx:35
@@ -24,18 +24,6 @@ include/svtools/svparser.hxx:74
     0
 include/svtools/svparser.hxx:75
     SvParser::TokenStackType bTokenHasValue
-    0
-include/tools/multisel.hxx:41
-    MultiSelection bInverseCur
-    0
-include/unotools/textsearch.hxx:104
-    utl::SearchParam m_bWordOnly
-    0
-include/unotools/textsearch.hxx:105
-    utl::SearchParam m_bSrchInSel
-    0
-include/unotools/textsearch.hxx:110
-    utl::SearchParam nTransliterationFlags
     0
 include/vcl/filter/pdfdocument.hxx:173
     vcl::filter::PDFNameElement m_nLength
@@ -61,10 +49,10 @@ include/vcl/pdfwriter.hxx:559
 libreofficekit/source/gtk/lokdocview.cxx:84
     LOKDocViewPrivateImpl m_bIsLoading
     0
-opencl/source/opencl_device.cxx:53
+opencl/source/opencl_device.cxx:54
     (anonymous namespace)::LibreOfficeDeviceEvaluationIO inputSize
     15360
-opencl/source/opencl_device.cxx:54
+opencl/source/opencl_device.cxx:55
     (anonymous namespace)::LibreOfficeDeviceEvaluationIO outputSize
     15360
 pyuno/source/module/pyuno_impl.hxx:312
@@ -79,6 +67,12 @@ sc/inc/compiler.hxx:108
 sc/qa/unit/ucalc.hxx:41
     Test::RangeNameDef mnIndex
     1
+sc/source/filter/inc/xcl97rec.hxx:272
+    ExcBof8_Base nLowestBiffVer
+    6
+sc/source/filter/inc/xechart.hxx:859
+    XclExpChDropBar mnBarDist
+    100
 sd/inc/sdpptwrp.hxx:42
     SdPPTFilter pBas
     0
@@ -106,10 +100,10 @@ soltools/mkdepend/def.h:130
 soltools/mkdepend/def.h:132
     inclist i_searched
     1
-stoc/source/inspect/introspection.cxx:1533
+stoc/source/inspect/introspection.cxx:1530
     (anonymous namespace)::Cache::Data hits
     1
-sw/inc/hints.hxx:195
+sw/inc/hints.hxx:189
     SwAttrSetChg m_bDelSet
     0
 sw/inc/pagepreviewlayout.hxx:49
@@ -118,9 +112,9 @@ sw/inc/pagepreviewlayout.hxx:49
 sw/source/core/inc/frmtool.hxx:260
     SwBorderAttrs m_bBorderDist
     1
-sw/source/core/inc/swfont.hxx:170
-    SwFont m_bURL
-    0
+sw/source/core/inc/UndoNumbering.hxx:33
+    SwUndoInsNum nSttSet
+    18446744073709551615
 sw/source/core/inc/UndoSort.hxx:38
     SwSortUndoElement::(anonymous union)::(anonymous) nKenn
     4294967295
@@ -133,9 +127,12 @@ sw/source/filter/html/htmlcss1.cxx:78
 sw/source/filter/html/htmlcss1.cxx:79
     SwCSS1ItemIds nFormatKeep
     109
-sw/source/filter/html/svxcss1.hxx:199
+sw/source/filter/html/svxcss1.hxx:200
     SvxCSS1Parser nMinFixLineSpace
     141
+sw/source/filter/html/svxcss1.hxx:203
+    SvxCSS1Parser nScriptFlags
+    7
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk
     0
@@ -178,10 +175,49 @@ vcl/source/filter/jpeg/transupp.h:131
 vcl/source/font/font.cxx:539
     (anonymous namespace)::WeightSearchEntry weight
     5
-vcl/source/gdi/pdfwriter_impl.hxx:705
+vcl/source/gdi/dibtools.cxx:49
+    (anonymous namespace)::CIEXYZ aXyzX
+    0
+vcl/source/gdi/dibtools.cxx:50
+    (anonymous namespace)::CIEXYZ aXyzY
+    0
+vcl/source/gdi/dibtools.cxx:51
+    (anonymous namespace)::CIEXYZ aXyzZ
+    0
+vcl/source/gdi/dibtools.cxx:104
+    (anonymous namespace)::DIBV5Header nV5RedMask
+    0
+vcl/source/gdi/dibtools.cxx:105
+    (anonymous namespace)::DIBV5Header nV5GreenMask
+    0
+vcl/source/gdi/dibtools.cxx:106
+    (anonymous namespace)::DIBV5Header nV5BlueMask
+    0
+vcl/source/gdi/dibtools.cxx:107
+    (anonymous namespace)::DIBV5Header nV5AlphaMask
+    0
+vcl/source/gdi/dibtools.cxx:110
+    (anonymous namespace)::DIBV5Header nV5GammaRed
+    0
+vcl/source/gdi/dibtools.cxx:111
+    (anonymous namespace)::DIBV5Header nV5GammaGreen
+    0
+vcl/source/gdi/dibtools.cxx:112
+    (anonymous namespace)::DIBV5Header nV5GammaBlue
+    0
+vcl/source/gdi/dibtools.cxx:114
+    (anonymous namespace)::DIBV5Header nV5ProfileData
+    0
+vcl/source/gdi/dibtools.cxx:115
+    (anonymous namespace)::DIBV5Header nV5ProfileSize
+    0
+vcl/source/gdi/dibtools.cxx:116
+    (anonymous namespace)::DIBV5Header nV5Reserved
+    0
+vcl/source/gdi/pdfwriter_impl.hxx:698
     vcl::PDFWriterImpl m_nInheritedPageWidth
     595
-vcl/source/gdi/pdfwriter_impl.hxx:706
+vcl/source/gdi/pdfwriter_impl.hxx:699
     vcl::PDFWriterImpl m_nInheritedPageHeight
     842
 writerfilter/source/dmapper/GraphicImport.cxx:223

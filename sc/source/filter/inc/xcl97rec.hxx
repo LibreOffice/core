@@ -269,8 +269,6 @@ private:
 class ExcBof8_Base : public ExcBof_Base
 {
 protected:
-        sal_uInt32              nLowestBiffVer;     // sfo
-
     virtual void                SaveCont( XclExpStream& rStrm ) override;
 
 public:

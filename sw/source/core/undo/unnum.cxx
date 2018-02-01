@@ -33,7 +33,7 @@ SwUndoInsNum::SwUndoInsNum( const SwNumRule& rOldRule,
                             const SwDoc* pDoc,
                             SwUndoId nUndoId)
     : SwUndo( nUndoId, pDoc ),
-    aNumRule( rNewRule ), pHistory( nullptr ), nSttSet( ULONG_MAX ),
+    aNumRule( rNewRule ), pHistory( nullptr ),
     pOldNumRule( new SwNumRule( rOldRule )), nLRSavePos( 0 )
 {
 }
@@ -41,7 +41,7 @@ SwUndoInsNum::SwUndoInsNum( const SwNumRule& rOldRule,
 SwUndoInsNum::SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule )
     : SwUndo( SwUndoId::INSNUM, rPam.GetDoc() ), SwUndRng( rPam ),
     aNumRule( rRule ), pHistory( nullptr ),
-    nSttSet( ULONG_MAX ), pOldNumRule( nullptr ), nLRSavePos( 0 )
+    pOldNumRule( nullptr ), nLRSavePos( 0 )
 {
 }
 
@@ -49,7 +49,7 @@ SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
                             const OUString& rReplaceRule )
     : SwUndo( SwUndoId::INSNUM, rPos.nNode.GetNode().GetDoc() ),
     aNumRule( rRule ), pHistory( nullptr ),
-    nSttSet( ULONG_MAX ), pOldNumRule( nullptr ),
+    pOldNumRule( nullptr ),
     sReplaceRule( rReplaceRule ), nLRSavePos( 0 )
 {
     // No selection!
@@ -82,13 +82,6 @@ void SwUndoInsNum::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if( pHistory )
     {
-        SwTextNode* pNd;
-        if( ULONG_MAX != nSttSet &&
-            nullptr != ( pNd = rDoc.GetNodes()[ nSttSet ]->GetTextNode() ))
-                pNd->SetListRestart( true );
-        else
-            pNd = nullptr;
-
         if( nLRSavePos )
         {
             // Update immediately so that potential "old" LRSpaces will be valid again.

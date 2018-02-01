@@ -1008,7 +1008,6 @@ ExcBof8_Base::ExcBof8_Base()
     nVers           = 0x0600;
     nRupBuild       = 0x0dbb;
     nRupYear        = 0x07cc;
-    nLowestBiffVer  = 0x00000006;   // Biff8
 }
 void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& rShape, SCTAB nTab )
 {
@@ -1204,7 +1203,8 @@ void ExcBof8_Base::SaveCont( XclExpStream& rStrm )
 {
     rStrm.DisableEncryption();
     rStrm   << nVers << nDocType << nRupBuild << nRupYear
-            << sal_uInt32(0)/*nFileHistory*/ << nLowestBiffVer;
+            << sal_uInt32(0)/*nFileHistory*/
+            << sal_uInt32(0x06) /*nLowestBiffVer = Biff8*/;
 }
 
 sal_uInt16 ExcBof8_Base::GetNum() const

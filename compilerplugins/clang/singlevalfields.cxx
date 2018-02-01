@@ -31,7 +31,7 @@ Note that the actual process may involve a fair amount of undoing, hand editing,
 to get it to work :-)
 
 @TODO we don't spot fields that have been zero-initialised via calloc or rtl_allocateZeroMemory or memset
-@TODO calls to lambdas (see FIXME near CXXOperatorCallExpr)
+@TODO calls to lambdas where a reference to the field is taken
 
 */
 
@@ -309,12 +309,6 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
             }
             child = parent;
             parent = getParentStmt(parent);
-        }
-        else if (isa<CXXOperatorCallExpr>(parent))
-        {
-            // FIXME need to handle this properly
-            bPotentiallyAssignedTo = true;
-            break;
         }
         else if (isa<CallExpr>(parent))
         {

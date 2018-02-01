@@ -2374,8 +2374,7 @@ void XclExpChLegend::WriteBody( XclExpStream& rStrm )
 
 XclExpChDropBar::XclExpChDropBar( const XclExpChRoot& rRoot, XclChObjectType eObjType ) :
     XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_DROPBAR, EXC_ID_CHDROPBAR, 2 ),
-    meObjType( eObjType ),
-    mnBarDist( 100 )
+    meObjType( eObjType )
 {
 }
 
@@ -2394,7 +2393,7 @@ void XclExpChDropBar::WriteSubRecords( XclExpStream& rStrm )
 
 void XclExpChDropBar::WriteBody( XclExpStream& rStrm )
 {
-    rStrm << mnBarDist;
+    rStrm << sal_uInt16(100); // Distance between bars (CHDROPBAR record).
 }
 
 XclExpChTypeGroup::XclExpChTypeGroup( const XclExpChRoot& rRoot, sal_uInt16 nGroupIdx ) :

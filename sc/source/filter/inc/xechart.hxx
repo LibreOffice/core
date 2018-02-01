@@ -856,7 +856,6 @@ private:
 
 private:
     XclChObjectType     meObjType;          /// Type of the dropbar.
-    sal_uInt16          mnBarDist;          /// Distance between bars (CHDROPBAR record).
 };
 
 typedef std::shared_ptr< XclExpChDropBar > XclExpChDropBarRef;
