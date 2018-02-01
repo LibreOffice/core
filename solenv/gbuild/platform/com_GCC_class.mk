@@ -10,7 +10,7 @@
 ifeq ($(gb_FULLDEPS),$(true))
 ifneq (,$(CCACHE_HARDLINK))
 # cannot move hardlink over itself, so create dep file directly, even if that
-# might leave a broken file beind in case the build is interrupted forcefully
+# might leave a broken file behind in case the build is interrupted forcefully
 define gb_cxx_dep_generation_options
 -MMD -MT $(1) -MP -MF $(2)
 endef
