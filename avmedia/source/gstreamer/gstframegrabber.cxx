@@ -174,24 +174,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 
         int nStride = GST_ROUND_UP_4( nWidth * 3 );
         Bitmap aBmp( Size( nWidth, nHeight ), 24 );
-
-        BitmapWriteAccess *pWrite = aBmp.AcquireWriteAccess();
-        if( pWrite )
-        {
-            // yet another cheesy pixel copying loop
-            for( int y = 0; y < nHeight; ++y )
-            {
-                sal_uInt8 *p = pData + y * nStride;
-                Scanline pScanline = pWrite->GetScanline(y);
-                for (int x = 0; x < nWidth; ++x)
-                {
-                    BitmapColor col(p[0], p[1], p[2]);
-                    pWrite->SetPixelOnData(pScanline, x, col);
-                    p += 3;
-                }
-            }
-        }
-        Bitmap::ReleaseAccess( pWrite );
+        aBmp.SetToData( pData, nStride );
 
 #ifndef AVMEDIA_GST_0_10
         gst_buffer_unmap( pBuf, &aMapInfo );
