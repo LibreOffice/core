@@ -40,7 +40,7 @@
 
     So all places using HitTestNativeScrollbar on ControlPart::ThumbHorz, ControlPart::ThumbVert,
     ControlPart::TrackHorzLeft, ControlPart::TrackHorzRight, ControlPart::TrackVertUpper, ControlPart::TrackVertLower
-    do not use the control rectangle as region but the actuall part rectangle, making
+    do not use the control rectangle as region but the actual part rectangle, making
     only small deviations feasible.
 */
 
