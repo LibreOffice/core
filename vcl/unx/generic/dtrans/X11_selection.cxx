@@ -1900,7 +1900,7 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent const & rNotify 
             bHandled = true;
             int nCurrentTime = time( nullptr );
             // throw out aborted transfers
-            std::list< Atom > aTimeouts;
+            std::vector< Atom > aTimeouts;
             for (auto const& incrementalTransfer : it->second)
             {
                 if( (nCurrentTime - incrementalTransfer.second.m_nTransferStartTime) > (getSelectionTimeout()+2) )
@@ -1917,13 +1917,13 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent const & rNotify 
                 }
             }
 
-            while( !aTimeouts.empty() )
+            for (auto const& timeout : aTimeouts)
             {
                 // transfer broken, might even be a new client with the
                 // same window id
-                it->second.erase( aTimeouts.front() );
-                aTimeouts.pop_front();
+                it->second.erase( timeout );
             }
+            aTimeouts.clear();
 
             auto inc_it = it->second.find( rNotify.atom );
             if( inc_it != it->second.end() )
@@ -3658,7 +3658,7 @@ void SelectionManager::run( void* pThis )
         if( (aNow.tv_sec - aLast.tv_sec) > 0 )
         {
             osl::ClearableMutexGuard aGuard(This->m_aMutex);
-            std::list< std::pair< SelectionAdaptor*, css::uno::Reference< XInterface > > > aChangeList;
+            std::vector< std::pair< SelectionAdaptor*, css::uno::Reference< XInterface > > > aChangeVector;
 
             for (auto const& selection : This->m_aSelections)
             {
@@ -3670,15 +3670,14 @@ void SelectionManager::run( void* pThis )
                         selection.second->m_aLastOwner = aOwner;
                         std::pair< SelectionAdaptor*, css::uno::Reference< XInterface > >
                             aKeep( selection.second->m_pAdaptor, selection.second->m_pAdaptor->getReference() );
-                        aChangeList.push_back( aKeep );
+                        aChangeVector.push_back( aKeep );
                     }
                 }
             }
             aGuard.clear();
-            while( !aChangeList.empty() )
+            for (auto const& change : aChangeVector)
             {
-                aChangeList.front().first->fireContentsChanged();
-                aChangeList.pop_front();
+                change.first->fireContentsChanged();
             }
             aLast = aNow;
         }
