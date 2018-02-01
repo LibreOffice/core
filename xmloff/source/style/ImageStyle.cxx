@@ -45,39 +45,73 @@ enum SvXMLTokenMapAttrs
 
 void XMLImageStyle::exportXML(OUString const & rStrName, uno::Any const & rValue, SvXMLExport& rExport)
 {
-    OUString sImageURL;
+    if (rStrName.isEmpty())
+        return;
 
-    if( !rStrName.isEmpty() )
+    if (rValue.has<uno::Reference<awt::XBitmap>>())
     {
-        if( rValue >>= sImageURL )
+        // Name
+        bool bEncoded = false;
+        rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NAME,
+                             rExport.EncodeStyleName(rStrName, &bEncoded));
+        if (bEncoded)
         {
-            // Name
-            bool bEncoded = false;
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
-                                  rExport.EncodeStyleName( rStrName,
-                                                           &bEncoded ) );
-            if( bEncoded )
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
-                                      rStrName );
+            rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, rStrName);
+        }
 
-            // uri
-            const OUString aStr( rExport.AddEmbeddedGraphicObject( sImageURL ) );
-            if( !aStr.isEmpty() )
-            {
-                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aStr );
-                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-            }
+        auto xBitmap = rValue.get<uno::Reference<awt::XBitmap>>();
+        uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
 
-            // Do Write
-            SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_FILL_IMAGE, true, true );
+        const OUString aStr = rExport.AddEmbeddedXGraphic(xGraphic);
 
-            if( !sImageURL.isEmpty() )
-            {
-                // optional office:binary-data
-                rExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
-            }
+        // uri
+        if (!aStr.isEmpty())
+        {
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aStr );
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+        }
+
+        // Do Write
+        SvXMLElementExport aElem(rExport, XML_NAMESPACE_DRAW, XML_FILL_IMAGE, true, true);
+
+        if (xBitmap.is() && xGraphic.is())
+        {
+            // optional office:binary-data
+            rExport.AddEmbeddedXGraphicAsBase64(xGraphic);
+        }
+    }
+    else if (rValue.has<OUString>()) // TODO: Remove when GraphicObject URL aren't used anymore
+    {
+        OUString sImageURL = rValue.get<OUString>();
+
+        // Name
+        bool bEncoded = false;
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
+                              rExport.EncodeStyleName( rStrName,
+                                                       &bEncoded ) );
+        if( bEncoded )
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
+                                  rStrName );
+
+        // uri
+        const OUString aStr( rExport.AddEmbeddedGraphicObject( sImageURL ) );
+        if( !aStr.isEmpty() )
+        {
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aStr );
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+        }
+
+        // Do Write
+        SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_FILL_IMAGE, true, true );
+
+        if( !sImageURL.isEmpty() )
+        {
+            // optional office:binary-data
+            rExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
         }
     }
 }
@@ -98,8 +132,8 @@ bool XMLImageStyle::importXML(uno::Reference<xml::sax::XAttributeList> const & x
 
     bool bHasHRef = false;
     bool bHasName = false;
-    OUString aStrURL;
     OUString aDisplayName;
+    uno::Reference<graphic::XGraphic> xGraphic;
 
     SvXMLTokenMap aTokenMap( aHatchAttrTokenMap );
 
@@ -126,7 +160,7 @@ bool XMLImageStyle::importXML(uno::Reference<xml::sax::XAttributeList> const & x
                 break;
             case XML_TOK_IMAGE_URL:
                 {
-                    aStrURL = rImport.ResolveGraphicObjectURL( rStrValue, false );
+                    xGraphic = rImport.loadGraphicByURL(rStrValue);
                     bHasHRef = true;
                 }
                 break;
@@ -144,7 +178,7 @@ bool XMLImageStyle::importXML(uno::Reference<xml::sax::XAttributeList> const & x
         }
     }
 
-    rValue <<= aStrURL;
+    rValue <<= xGraphic;
 
     if( !aDisplayName.isEmpty() )
     {

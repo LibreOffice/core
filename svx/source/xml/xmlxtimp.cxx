@@ -28,6 +28,7 @@
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -275,7 +276,14 @@ void SvxXMLTableImportContext::importBitmap( const uno::Reference< XAttributeLis
 {
     try
     {
-        XMLImageStyle::importXML( xAttrList, rAny, rName, GetImport() );
+        uno::Any aGraphicAny;
+        XMLImageStyle::importXML(xAttrList, aGraphicAny, rName, GetImport());
+        if (aGraphicAny.has<uno::Reference<graphic::XGraphic>>())
+        {
+            auto xGraphic = aGraphicAny.get<uno::Reference<graphic::XGraphic>>();
+            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY_THROW);
+            rAny <<= xBitmap;
+        }
     }
     catch (const Exception&)
     {
@@ -453,7 +461,7 @@ SvXMLImportContext *SvxXMLXTableImport::CreateDocumentContext(
         }
         else if ( rLocalName == "bitmap-table" )
         {
-            if( aType == ::cppu::UnoType<OUString>::get())
+            if( aType == ::cppu::UnoType<awt::XBitmap>::get())
                 return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, SvxXMLTableImportContextEnum::Bitmap, mrTable, bOOoFormat );
         }
     }

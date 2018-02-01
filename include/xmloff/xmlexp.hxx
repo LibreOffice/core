@@ -48,6 +48,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -461,6 +462,10 @@ public:
 
     OUString AddEmbeddedGraphicObject(
                             const OUString& rGraphicObjectURL );
+
+    OUString AddEmbeddedXGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
+    bool AddEmbeddedXGraphicAsBase64(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
+
     css::uno::Reference<css::io::XInputStream> GetEmbeddedGraphicObjectStream(
         const OUString& rGraphicObjectURL);
     bool AddEmbeddedGraphicObjectAsBase64(

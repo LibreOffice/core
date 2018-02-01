@@ -27,6 +27,7 @@
 
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
@@ -157,7 +158,6 @@ public:
                                                 const OUString& aData) override;
     virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
 };
-
 
 class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
              css::xml::sax::XExtendedDocumentHandler,
@@ -400,9 +400,12 @@ public:
         mxNumberFormatsSupplier = _xNumberFormatSupplier;
     }
 
+    css::uno::Reference<css::graphic::XGraphic> loadGraphicByURL(const OUString& rURL);
+
     // Convert a local package URL into either a graphic manager or a
     // internal package URL. The later one happens only if bLoadURL is true
     OUString ResolveGraphicObjectURL( const OUString& rURL, bool bLoadOnDemand );
+
     css::uno::Reference< css::io::XOutputStream >
           GetStreamForGraphicObjectURLFromBase64();
     OUString ResolveGraphicObjectURLFromBase64(

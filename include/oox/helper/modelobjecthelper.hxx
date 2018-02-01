@@ -28,6 +28,7 @@
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Gradient; }
+    namespace graphic { class XGraphic; }
     namespace container { class XNameContainer; }
     namespace drawing { struct LineDash; }
     namespace drawing { struct PolyPolygonBezierCoords; }
@@ -106,6 +107,10 @@ public:
     /** Inserts a new named fill bitmap URL, returns the bitmap name, based on
         an internal constant name with a new unused index appended. */
     OUString     insertFillBitmapUrl( const OUString& rGraphicUrl );
+
+    /** Inserts a new named fill graphic, returns the bitmap name, based on
+        an internal constant name with a new unused index appended. */
+    OUString insertFillBitmapXGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
 
     OUString     getFillBitmapUrl( const OUString& rGraphicName );
 

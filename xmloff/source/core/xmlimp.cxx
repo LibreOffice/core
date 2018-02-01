@@ -44,6 +44,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/document/XBinaryStreamResolver.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
@@ -1312,6 +1313,8 @@ bool SvXMLImport::IsPackageURL( const OUString& rURL ) const
     if( (mnImportFlags & nTest) == nTest )
         return false;
 
+    // TODO: from this point extract to own static function
+
     // Some quick tests: Some may rely on the package structure!
     sal_Int32 nLen = rURL.getLength();
     if( nLen > 0 && '/' == rURL[0] )
@@ -1348,6 +1351,19 @@ bool SvXMLImport::IsPackageURL( const OUString& rURL ) const
     }
 
     return true;
+}
+
+css::uno::Reference<css::graphic::XGraphic> SvXMLImport::loadGraphicByURL(const OUString& rURL)
+{
+    css::uno::Reference<css::graphic::XGraphic> xGraphic;
+    uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler(mxGraphicResolver, uno::UNO_QUERY);
+
+    if (IsPackageURL(rURL) && xGraphicStorageHandler.is())
+    {
+        xGraphic = xGraphicStorageHandler->loadGraphic(rURL);
+    }
+
+    return xGraphic;
 }
 
 OUString SvXMLImport::ResolveGraphicObjectURL( const OUString& rURL,
