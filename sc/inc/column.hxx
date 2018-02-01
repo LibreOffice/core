@@ -254,7 +254,6 @@ public:
     bool TestInsertRow( SCROW nStartRow, SCSIZE nSize ) const;
     void        InsertRow( SCROW nStartRow, SCSIZE nSize );
     void GetUnprotectedCells(SCROW nStartRow, SCROW nEndRow, ScRangeList& rRangeList ) const;
-
     /**
      * @param nStartRow top row position
      * @param nSize size of the segment to delete.
