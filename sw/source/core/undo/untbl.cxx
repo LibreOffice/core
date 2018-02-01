@@ -2144,7 +2144,6 @@ SwUndoTableNumFormat::SwUndoTableNumFormat( const SwTableBox& rBox,
                                     const SfxItemSet* pNewSet )
     : SwUndo(SwUndoId::TBLNUMFMT, rBox.GetFrameFormat()->GetDoc())
     , m_pBoxSet(nullptr)
-    , m_pHistory(nullptr)
     , m_nFormatIdx(getSwDefaultTextFormat())
     , m_nNewFormatIdx(0)
     , m_fNum(0.0)
@@ -2162,8 +2161,8 @@ SwUndoTableNumFormat::SwUndoTableNumFormat( const SwTableBox& rBox,
     {
         SwTextNode* pTNd = pDoc->GetNodes()[ m_nNodePos ]->GetTextNode();
 
-        m_pHistory = new SwHistory;
-        SwRegHistory aRHst( *rBox.GetSttNd(), m_pHistory );
+        m_pHistory.reset(new SwHistory);
+        SwRegHistory aRHst( *rBox.GetSttNd(), m_pHistory.get() );
         // always save all text atttibutes because of possibly overlapping
         // areas of on/off
         m_pHistory->CopyAttr( pTNd->GetpSwpHints(), m_nNodePos, 0,
@@ -2204,13 +2203,15 @@ SwUndoTableNumFormat::SwUndoTableNumFormat( const SwTableBox& rBox,
     }
 
     // is a history needed at all?
-    if( m_pHistory && !m_pHistory->Count() )
-        DELETEZ( m_pHistory );
+    if (m_pHistory && !m_pHistory->Count())
+    {
+        m_pHistory.reset();
+    }
 }
 
 SwUndoTableNumFormat::~SwUndoTableNumFormat()
 {
-    delete m_pHistory;
+    m_pHistory.reset();
     delete m_pBoxSet;
 }
 
