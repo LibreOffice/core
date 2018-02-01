@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+
 #include <hintids.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <txtatr.hxx>
@@ -694,8 +698,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
                                 // It were cleaner and maybe necessary later on to iterate over the content
                                 // of the text frame and call GetMinMaxSize recursively
                                 nAktWidth = FLYINCNT_MIN_WIDTH; // 0.5 cm
-                                if( static_cast<long>(rMax) < USHRT_MAX )
-                                    rMax = USHRT_MAX;
+                                rMax = std::max(rMax, sal_uLong(USHRT_MAX));
                             }
                             else
                                 nAktWidth = pFrameFormat->GetFrameSize().GetWidth();
