@@ -27,9 +27,11 @@
 #include <set>
 #include <utility>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
+#include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/document/XBinaryStreamResolver.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <svx/svxdllapi.h>
+#include <unordered_map>
 
 enum class SvXMLGraphicHelperMode
 {
@@ -42,8 +44,9 @@ struct SvxGraphicHelperStream_Impl
     css::uno::Reference < css::io::XStream > xStream;
 };
 
-class SVX_DLLPUBLIC SvXMLGraphicHelper final : public cppu::WeakComponentImplHelper< css::document::XGraphicObjectResolver,
-                                                                    css::document::XBinaryStreamResolver >
+class SVX_DLLPUBLIC SvXMLGraphicHelper final : public cppu::WeakComponentImplHelper<css::document::XGraphicObjectResolver,
+                                                                                    css::document::XGraphicStorageHandler,
+                                                                                    css::document::XBinaryStreamResolver>
 {
     typedef ::std::pair< OUString, OUString >                                             URLPair;
     typedef ::std::vector< URLPair >                                                                    URLPairVector;
@@ -57,6 +60,10 @@ class SVX_DLLPUBLIC SvXMLGraphicHelper final : public cppu::WeakComponentImplHel
     GraphicObjectVector         maGrfObjs;
     GraphicOutputStreamVector   maGrfStms;
     ::std::set< OUString >      maURLSet;
+
+    std::unordered_map<OUString, css::uno::Reference<css::graphic::XGraphic>> maGraphicObjects;
+    std::unordered_map<Graphic, OUString> maExportGraphics;
+
     SvXMLGraphicHelperMode      meCreateMode;
     OUString                    maOutputMimeType;
     bool                        mbDirect;
@@ -101,6 +108,16 @@ public:
 
     // XGraphicObjectResolver
     virtual OUString SAL_CALL resolveGraphicObjectURL( const OUString& aURL ) override;
+
+    // XGraphicStorageHandler
+    virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
+        loadGraphic(const OUString& aURL) override;
+
+    virtual OUString SAL_CALL
+        saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
+
+    virtual css::uno::Reference<css::io::XInputStream> SAL_CALL
+        createInputStream(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
 
     // XBinaryStreamResolver
     virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream( const OUString& rURL ) override;
