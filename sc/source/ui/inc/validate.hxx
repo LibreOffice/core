@@ -119,6 +119,7 @@ private:
     OUString                    maStrMin;
     OUString                    maStrMax;
     OUString                    maStrValue;
+    OUString                    maStrFormula;
     OUString                    maStrRange;
     OUString                    maStrList;
     sal_Unicode                 mcFmlaSep;      /// List separator in formulas.
