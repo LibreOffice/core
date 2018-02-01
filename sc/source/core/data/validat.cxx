@@ -486,6 +486,9 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
     if( eDataMode == SC_VALID_LIST )
         return IsListValid(rCell, rPos);
 
+    if ( eDataMode == SC_VALID_CUSTOM )
+        return IsCellValid(rCell, rPos);
+
     double nVal = 0.0;
     OUString aString;
     bool bIsVal = true;
@@ -532,12 +535,6 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
                 bOk = ::rtl::math::approxEqual( nVal, floor(nVal+0.5) );        // integers
             if ( bOk )
                 bOk = IsCellValid(rCell, rPos);
-            break;
-
-        case SC_VALID_CUSTOM:
-            //  for Custom, it must be eOp == ScConditionMode::Direct
-            //TODO: the value must be in the document !!!
-            bOk = IsCellValid(rCell, rPos);
             break;
 
         case SC_VALID_TEXTLEN:
