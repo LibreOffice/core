@@ -1507,61 +1507,59 @@ class SwXDocumentIndexMark::Impl
 private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper2
     SwXDocumentIndexMark & m_rThis;
+    SwMultiDepend m_aDepends;
     bool m_bInReplaceMark;
-
 public:
+    const SwTOXMark* m_pTOXMark;
+    SwTOXType* m_pTOXType;
+
 
     uno::WeakReference<uno::XInterface> m_wThis;
-    SfxItemPropertySet const&   m_rPropSet;
-    const TOXTypes              m_eTOXType;
+    SfxItemPropertySet const& m_rPropSet;
+    const TOXTypes m_eTOXType;
     ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
-    bool                        m_bIsDescriptor;
-    SwDepend                    m_TypeDepend;
-    const SwTOXMark *           m_pTOXMark;
-    SwDoc *                     m_pDoc;
+    bool m_bIsDescriptor;
+    SwDoc* m_pDoc;
 
-    bool                    m_bMainEntry;
-    sal_uInt16                  m_nLevel;
-    OUString                    m_aBookmarkName;
-    OUString                    m_aEntryTypeName;
-    OUString                    m_sAltText;
-    OUString                    m_sPrimaryKey;
-    OUString                    m_sSecondaryKey;
-    OUString                    m_sTextReading;
-    OUString                    m_sPrimaryKeyReading;
-    OUString                    m_sSecondaryKeyReading;
-    OUString                    m_sUserIndexName;
-    OUString                    m_sCitaitonText;
+    bool m_bMainEntry;
+    sal_uInt16 m_nLevel;
+    OUString m_aBookmarkName;
+    OUString m_aEntryTypeName;
+    OUString m_sAltText;
+    OUString m_sPrimaryKey;
+    OUString m_sSecondaryKey;
+    OUString m_sTextReading;
+    OUString m_sPrimaryKeyReading;
+    OUString m_sSecondaryKeyReading;
+    OUString m_sUserIndexName;
+    OUString m_sCitaitonText;
 
-    Impl(   SwXDocumentIndexMark & rThis,
-            SwDoc *const pDoc,
+    Impl(SwXDocumentIndexMark& rThis,
+            SwDoc* const pDoc,
             const enum TOXTypes eType,
-            SwTOXType *const pType, SwTOXMark const*const pMark)
-        : SwClient(const_cast<SwTOXMark*>(pMark))
-        , m_rThis(rThis)
+            SwTOXType* const pType,
+            SwTOXMark const*const pMark)
+        : m_rThis(rThis)
+        , m_aDepends(*this)
         , m_bInReplaceMark(false)
-        , m_rPropSet(
-            *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Mark(eType)))
+        , m_pTOXMark(pMark)
+        , m_pTOXType(pType)
+        , m_rPropSet(*aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Mark(eType)))
         , m_eTOXType(eType)
         , m_EventListeners(m_Mutex)
         , m_bIsDescriptor(nullptr == pMark)
-        , m_TypeDepend(this, pType)
-        , m_pTOXMark(pMark)
         , m_pDoc(pDoc)
         , m_bMainEntry(false)
         , m_nLevel(0)
     {
-    }
-
-    SwTOXType * GetTOXType() const {
-        return static_cast<SwTOXType*>(
-                const_cast<SwModify *>(m_TypeDepend.GetRegisteredIn()));
+        m_aDepends.StartListening(const_cast<SwTOXMark*>(m_pTOXMark));
+        m_aDepends.StartListening(m_pTOXType);
     }
 
     void DeleteTOXMark()
     {
-        m_pDoc->DeleteTOXMark(m_pTOXMark); // calls Invalidate() via Modify!
-        m_pTOXMark = nullptr;
+        if (m_pTOXType && m_pTOXMark)
+            m_pDoc->DeleteTOXMark(m_pTOXMark); // calls Invalidate() via Modify!
     }
 
     void InsertTOXMark(SwTOXType & rTOXType, SwTOXMark & rMark, SwPaM & rPam,
@@ -1583,42 +1581,35 @@ public:
         }
     }
 
-    void    Invalidate();
+    void Invalidate()
+    {
+        m_aDepends.EndListeningAll();
+        if (!m_bInReplaceMark) // #i109983# only dispose on delete, not on replace!
+        {
+            uno::Reference<uno::XInterface> const xThis(m_wThis);
+            // fdo#72695: if UNO object is already dead, don't revive it with event
+            if (xThis.is())
+            {
+                lang::EventObject const ev(xThis);
+                m_EventListeners.disposeAndClear(ev);
+            }
+        }
+        m_pDoc = nullptr;
+        m_pTOXMark = nullptr;
+        m_pTOXType = nullptr;
+    }
 protected:
     // SwClient
-    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
-};
-
-void SwXDocumentIndexMark::Impl::Invalidate()
-{
-    if (GetRegisteredIn())
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) override
     {
-        EndListeningAll();
-        m_TypeDepend.EndListeningAll();
-    }
-    if (!m_bInReplaceMark) // #i109983# only dispose on delete, not on replace!
-    {
-        uno::Reference<uno::XInterface> const xThis(m_wThis);
-        // fdo#72695: if UNO object is already dead, don't revive it with event
-        if (xThis.is())
+        switch( pOld ? pOld->Which() : 0 )
         {
-            lang::EventObject const ev(xThis);
-            m_EventListeners.disposeAndClear(ev);
+            case RES_REMOVE_UNO_OBJECT:
+            case RES_OBJECTDYING:
+                Invalidate();
         }
     }
-    m_pDoc = nullptr;
-    m_pTOXMark = nullptr;
-}
-
-void SwXDocumentIndexMark::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
-{
-    ClientModify(this, pOld, pNew);
-
-    if (!GetRegisteredIn()) // removed => dispose
-    {
-        Invalidate();
-    }
-}
+};
 
 SwXDocumentIndexMark::SwXDocumentIndexMark(const TOXTypes eToxType)
     : m_pImpl( new SwXDocumentIndexMark::Impl(*this, nullptr, eToxType, nullptr, nullptr) )
@@ -1727,7 +1718,7 @@ SwXDocumentIndexMark::getMarkEntry()
     SolarMutexGuard aGuard;
 
     OUString sRet;
-    SwTOXType *const pType = m_pImpl->GetTOXType();
+    SwTOXType *const pType = m_pImpl->m_pTOXType;
     if (pType && m_pImpl->m_pTOXMark)
     {
         sRet = m_pImpl->m_pTOXMark->GetAlternativeText();
@@ -1748,7 +1739,7 @@ SwXDocumentIndexMark::setMarkEntry(const OUString& rIndexEntry)
 {
     SolarMutexGuard aGuard;
 
-    SwTOXType *const pType = m_pImpl->GetTOXType();
+    SwTOXType *const pType = m_pImpl->m_pTOXType;
     if (pType && m_pImpl->m_pTOXMark)
     {
         SwTOXMark aMark(*m_pImpl->m_pTOXMark);
@@ -1985,9 +1976,11 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     }
 
     m_pDoc = pDoc;
-    m_pTOXMark = & pTextAttr->GetTOXMark();
-    const_cast<SwTOXMark*>(m_pTOXMark)->Add(this);
-    rTOXType.Add(& m_TypeDepend);
+    m_pTOXMark = &pTextAttr->GetTOXMark();
+    m_pTOXType = &rTOXType;
+    m_aDepends.EndListeningAll();
+    m_aDepends.StartListening(const_cast<SwTOXMark*>(m_pTOXMark));
+    m_aDepends.StartListening(m_pTOXType);
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
@@ -1995,7 +1988,7 @@ SwXDocumentIndexMark::getAnchor()
 {
     SolarMutexGuard aGuard;
 
-    SwTOXType *const pType = m_pImpl->GetTOXType();
+    SwTOXType *const pType = m_pImpl->m_pTOXType;
     if (!pType || !m_pImpl->m_pTOXMark)
     {
         throw uno::RuntimeException();
@@ -2028,12 +2021,7 @@ void SAL_CALL
 SwXDocumentIndexMark::dispose()
 {
     SolarMutexGuard aGuard;
-
-    SwTOXType *const pType = m_pImpl->GetTOXType();
-    if (pType && m_pImpl->m_pTOXMark)
-    {
-        m_pImpl->DeleteTOXMark(); // call Invalidate() via modify!
-    }
+    m_pImpl->DeleteTOXMark(); // call Invalidate() via modify!
 }
 
 void SAL_CALL
@@ -2102,7 +2090,7 @@ SwXDocumentIndexMark::setPropertyValue(
             static_cast<cppu::OWeakObject *>(this));
     }
 
-    SwTOXType *const pType = m_pImpl->GetTOXType();
+    SwTOXType *const pType = m_pImpl->m_pTOXType;
     if (pType && m_pImpl->m_pTOXMark)
     {
         SwTOXMark aMark(*m_pImpl->m_pTOXMark);
@@ -2243,7 +2231,7 @@ SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
         return aRet;
     }
 
-    SwTOXType *const pType = m_pImpl->GetTOXType();
+    SwTOXType *const pType = m_pImpl->m_pTOXType;
     if (pType && m_pImpl->m_pTOXMark)
     {
         switch(pEntry->nWID)
