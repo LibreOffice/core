@@ -38,8 +38,7 @@ using namespace com::sun::star::sdbcx;
 IMPLEMENT_SERVICE_INFO(MacabConnection, "com.sun.star.sdbc.drivers.MacabConnection", "com.sun.star.sdbc.Connection")
 
 MacabConnection::MacabConnection(MacabDriver*   _pDriver)
-         : OSubComponent<MacabConnection, MacabConnection_BASE>(static_cast<cppu::OWeakObject*>(_pDriver), this),
-         m_pAddressBook(nullptr),
+         : m_pAddressBook(nullptr),
          m_pDriver(_pDriver)
 {
     m_pDriver->acquire();
@@ -52,11 +51,6 @@ MacabConnection::~MacabConnection()
 
     m_pDriver->release();
     m_pDriver = nullptr;
-}
-
-void SAL_CALL MacabConnection::release() throw()
-{
-    release_ChildImpl();
 }
 
 void MacabConnection::construct(const OUString&, const Sequence< PropertyValue >&)
@@ -279,9 +273,8 @@ void MacabConnection::disposing()
         m_pAddressBook = nullptr;
     }
 
-    m_xMetaData = css::uno::WeakReference< css::sdbc::XDatabaseMetaData>();
+    m_xMetaData.clear();
 
-    dispose_ChildImpl();
     MacabConnection_BASE::disposing();
 }
 

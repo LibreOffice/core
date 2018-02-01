@@ -52,11 +52,9 @@ namespace connectivity
         class OStatement_Base       :   public cppu::BaseMutex,
                                         public  OStatement_BASE,
                                         public  ::cppu::OPropertySetHelper,
-                                        public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>,
-                                        public  connectivity::OSubComponent<OStatement_Base, OStatement_BASE>
+                                        public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>
 
         {
-            friend class connectivity::OSubComponent<OStatement_Base, OStatement_BASE>;
             friend class OResultSet;
 
             css::sdbc::SQLWarning          m_aLastWarning;

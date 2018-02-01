@@ -38,8 +38,7 @@ static const int defaultScope = 0x80;
 
 
 OConnection::OConnection(MorkDriver* _pDriver)
-    :OSubComponent<OConnection, OConnection_BASE>(static_cast<cppu::OWeakObject*>(_pDriver), this)
-    ,m_xDriver(_pDriver)
+    :m_xDriver(_pDriver)
     ,m_aColumnAlias( _pDriver->getFactory() )
 {
     m_pBook = new MorkParser();
@@ -53,12 +52,6 @@ OConnection::~OConnection()
     delete m_pBook;
     delete m_pHistory;
 }
-
-void SAL_CALL OConnection::release() throw()
-{
-    release_ChildImpl();
-}
-
 
 void OConnection::construct(const OUString& url)
 {
@@ -349,7 +342,6 @@ void OConnection::disposing()
 {
     // we noticed that we should be destroyed in near future so we have to dispose our statements
     ::osl::MutexGuard aGuard(m_aMutex);
-    dispose_ChildImpl();
     m_xCatalog.clear();
 }
 

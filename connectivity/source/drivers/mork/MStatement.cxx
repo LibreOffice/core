@@ -54,7 +54,6 @@ OStatement::OStatement( OConnection* _pConnection) : OCommonStatement( _pConnect
 OCommonStatement::OCommonStatement(OConnection* _pConnection )
     :OCommonStatement_IBASE(m_aMutex)
     ,OPropertySetHelper(OCommonStatement_IBASE::rBHelper)
-    ,OCommonStatement_SBASE(static_cast<cppu::OWeakObject*>(_pConnection), this)
     ,m_pTable(nullptr)
     ,m_pConnection(_pConnection)
     ,m_aParser( comphelper::getComponentContext(_pConnection->getDriver()->getFactory()) )
@@ -82,7 +81,6 @@ void OCommonStatement::disposing()
     m_pSQLIterator->dispose();
     delete m_pParseTree;
 
-    dispose_ChildImpl();
     OCommonStatement_IBASE::disposing();
 }
 
@@ -372,7 +370,7 @@ void SAL_CALL OCommonStatement::acquire() throw()
 
 void SAL_CALL OCommonStatement::release() throw()
 {
-    release_ChildImpl();
+    OCommonStatement_IBASE::release();
 }
 
 void SAL_CALL OStatement::acquire() throw()

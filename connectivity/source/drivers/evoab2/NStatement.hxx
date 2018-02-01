@@ -34,7 +34,6 @@
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sqlparse.hxx>
 #include <connectivity/FValue.hxx>
-#include <connectivity/OSubComponent.hxx>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/propertycontainer.hxx>
@@ -147,17 +146,11 @@ namespace connectivity
         //************ Class: OCommonStatement
         // is a base class for the normal statement and for the prepared statement
 
-        class OCommonStatement;
-        typedef OSubComponent< OCommonStatement, OCommonStatement_IBase >   OStatement_CBase;
-
         class OCommonStatement  :public cppu::BaseMutex
                                 ,public OCommonStatement_IBase
                                 ,public ::comphelper::OPropertyContainer
                                 ,public ::comphelper::OPropertyArrayUsageHelper< OCommonStatement >
-                                ,public OStatement_CBase
         {
-            friend class OSubComponent< OCommonStatement, OCommonStatement_IBase >;
-
         private:
             css::uno::WeakReference< css::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
             rtl::Reference<OEvoabConnection>      m_xConnection;

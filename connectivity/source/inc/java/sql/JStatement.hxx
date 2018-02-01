@@ -32,7 +32,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
-#include <connectivity/OSubComponent.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <java/sql/Connection.hxx>
@@ -196,19 +195,14 @@ namespace connectivity
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
     };
 
-    class OStatement_BASE2  :public java_sql_Statement_Base
-                            ,public OSubComponent<OStatement_BASE2, java_sql_Statement_BASE>
+    class OStatement_BASE2 : public java_sql_Statement_Base
 
     {
-        friend class OSubComponent<OStatement_BASE2, java_sql_Statement_BASE>;
     public:
-        OStatement_BASE2(JNIEnv * pEnv, java_sql_Connection& _rCon ) : java_sql_Statement_Base( pEnv, _rCon ),
-                                OSubComponent<OStatement_BASE2, java_sql_Statement_BASE>(static_cast<cppu::OWeakObject*>(&_rCon), this){}
+        OStatement_BASE2(JNIEnv * pEnv, java_sql_Connection& _rCon ) : java_sql_Statement_Base( pEnv, _rCon ) {}
 
         // OComponentHelper
         virtual void SAL_CALL disposing() override;
-        // XInterface
-        virtual void SAL_CALL release() throw() override;
     };
 
     class java_sql_Statement :  public OStatement_BASE2,

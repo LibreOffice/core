@@ -55,7 +55,6 @@ using ::osl::MutexGuard;
 OCommonStatement::OCommonStatement(OConnection* _pConnection, sql::Statement *_cppStatement)
     :OCommonStatement_IBase(m_aMutex)
     ,OPropertySetHelper(OCommonStatement_IBase::rBHelper)
-    ,OStatement_CBase( static_cast<cppu::OWeakObject*>(_pConnection), this )
     ,m_xConnection(_pConnection)
     ,cppStatement(_cppStatement)
 {
@@ -81,7 +80,6 @@ void OCommonStatement::disposing()
     m_xConnection.clear();
     delete cppStatement;
 
-    dispose_ChildImpl();
     OCommonStatement_IBase::disposing();
 }
 
@@ -353,7 +351,7 @@ void SAL_CALL OCommonStatement::acquire()
 void SAL_CALL OCommonStatement::release()
     throw()
 {
-    release_ChildImpl();
+    OCommonStatement_IBase::release();
 }
 
 void SAL_CALL OStatement::acquire()

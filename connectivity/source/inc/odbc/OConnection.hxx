@@ -23,7 +23,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <connectivity/odbc.hxx>
 #include <odbc/odbcbasedllapi.hxx>
-#include <connectivity/OSubComponent.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <TConnection.hxx>
 #include <OTypeInfo.hxx>
@@ -46,11 +45,8 @@ namespace connectivity
 
         class OOO_DLLPUBLIC_ODBCBASE OConnection :
                             public OConnection_BASE,
-                            public connectivity::OSubComponent<OConnection, OConnection_BASE>,
                             public OAutoRetrievingBase
         {
-            friend class connectivity::OSubComponent<OConnection, OConnection_BASE>;
-
         protected:
 
             // Data attributes
@@ -87,8 +83,6 @@ namespace connectivity
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
-            // XInterface
-            virtual void SAL_CALL release() throw() override;
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();

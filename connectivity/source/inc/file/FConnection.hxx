@@ -22,7 +22,6 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <connectivity/OSubComponent.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <OTypeInfo.hxx>
 #include <rtl/ustring.hxx>
@@ -42,12 +41,8 @@ namespace connectivity
         class ODatabaseMetaData;
         class OFileDriver;
 
-        class OOO_DLLPUBLIC_FILE OConnection :
-                            public connectivity::OMetaConnection,
-                            public connectivity::OSubComponent<OConnection, connectivity::OMetaConnection>
+        class OOO_DLLPUBLIC_FILE OConnection : public connectivity::OMetaConnection
         {
-            friend class connectivity::OSubComponent<OConnection, connectivity::OMetaConnection>;
-
         protected:
 
             // Data attributes
@@ -82,8 +77,6 @@ namespace connectivity
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
-            // XInterface
-            virtual void SAL_CALL release() throw() override;
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();

@@ -165,7 +165,6 @@
 #include <connectivity/DriversConfig.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/IParseContext.hxx>
-#include <connectivity/OSubComponent.hxx>
 #include <connectivity/PColumn.hxx>
 #include <connectivity/ParameterCont.hxx>
 #include <connectivity/TIndex.hxx>

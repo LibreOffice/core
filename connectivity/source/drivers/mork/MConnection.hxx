@@ -10,7 +10,6 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCONNECTION_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCONNECTION_HXX
 
-#include <connectivity/OSubComponent.hxx>
 #include <TConnection.hxx>
 #include "MColumnAlias.hxx"
 
@@ -28,11 +27,8 @@ namespace connectivity
 
         typedef connectivity::OMetaConnection OConnection_BASE; // implements basics and text encoding
 
-        class OConnection final : public OConnection_BASE,
-                            public connectivity::OSubComponent<OConnection, OConnection_BASE>
+        class OConnection final : public OConnection_BASE
         {
-            friend class connectivity::OSubComponent<OConnection, OConnection_BASE>;
-
             // Data attributes
 
             rtl::Reference<MorkDriver> m_xDriver;              //  Pointer to the owning
@@ -56,8 +52,6 @@ namespace connectivity
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
-            // XInterface
-            virtual void SAL_CALL release() throw() override;
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();

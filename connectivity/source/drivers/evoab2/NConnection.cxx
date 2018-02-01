@@ -41,8 +41,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
 OEvoabConnection::OEvoabConnection(OEvoabDriver& _rDriver)
-    : OSubComponent<OEvoabConnection, OConnection_BASE>( static_cast<cppu::OWeakObject*>(&_rDriver), this )
-    , m_rDriver(_rDriver)
+    : m_rDriver(_rDriver)
     , m_eSDBCAddressType(SDBCAddress::EVO_LOCAL)
     , m_xCatalog(nullptr)
 {
@@ -58,11 +57,6 @@ OEvoabConnection::~OEvoabConnection()
     }
 }
 
-
-void SAL_CALL OEvoabConnection::release() throw()
-{
-    release_ChildImpl();
-}
 
 // XServiceInfo
 
@@ -198,7 +192,6 @@ void OEvoabConnection::disposing()
     // we noticed that we should be destroyed in near future so we have to dispose our statements
     ::osl::MutexGuard aGuard(m_aMutex);
     OConnection_BASE::disposing();
-    dispose_ChildImpl();
 }
 
 // -------------------------------- stubbed methods ------------------------------------------------
