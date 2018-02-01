@@ -14,6 +14,15 @@
   <block-list:block block-list:abbreviated-name=".*(r)" block-list:name="®"/>
   <block-list:block block-list:abbreviated-name=".*(tm)" block-list:name="™"/>
   <block-list:block block-list:abbreviated-name=".*%-al" block-list:name="%-kal"/>
+  <block-list:block block-list:abbreviated-name="»" block-list:name="’"/>
+  <block-list:block block-list:abbreviated-name="»«.*" block-list:name="’"/>
+  <block-list:block block-list:abbreviated-name=".*«d" block-list:name="’d"/>
+  <block-list:block block-list:abbreviated-name=".*«ll" block-list:name="’ll"/>
+  <block-list:block block-list:abbreviated-name=".*«m" block-list:name="’m"/>
+  <block-list:block block-list:abbreviated-name=".*«re" block-list:name="’re"/>
+  <block-list:block block-list:abbreviated-name=".*«s" block-list:name="’s"/>
+  <block-list:block block-list:abbreviated-name=".*«ve" block-list:name="’ve"/>
+  <block-list:block block-list:abbreviated-name=".*««.*" block-list:name="’"/>
   <block-list:block block-list:abbreviated-name="°C-szal" block-list:name="°C-kal"/>
   <block-list:block block-list:abbreviated-name=".*&lt;-.*" block-list:name="←"/>
   <block-list:block block-list:abbreviated-name="&lt;--" block-list:name="←"/>
@@ -28,6 +37,8 @@
   <block-list:block block-list:abbreviated-name="abbéli" block-list:name="abbeli"/>
   <block-list:block block-list:abbreviated-name="abszolut.*" block-list:name="abszolút"/>
   <block-list:block block-list:abbreviated-name="adatbáziskezelő.*" block-list:name="adatbázis-kezelő"/>
+  <block-list:block block-list:abbreviated-name="Adj«" block-list:name="Adj’"/>
+  <block-list:block block-list:abbreviated-name="adj«" block-list:name="adj’"/>
   <block-list:block block-list:abbreviated-name="Adriennel" block-list:name="Adrienn-nel"/>
   <block-list:block block-list:abbreviated-name="Adriennél" block-list:name="Adrienn-nél"/>
   <block-list:block block-list:abbreviated-name="affelett" block-list:name="afelett"/>
@@ -76,6 +87,10 @@
   <block-list:block block-list:abbreviated-name="billentyü.*" block-list:name="billentyű"/>
   <block-list:block block-list:abbreviated-name="billiárd asztal.*" block-list:name="biliárdasztal"/>
   <block-list:block block-list:abbreviated-name="bisztos" block-list:name="biztos"/>
+  <block-list:block block-list:abbreviated-name="Bizisten" block-list:name="Biz’ isten"/>
+  <block-list:block block-list:abbreviated-name="bizisten" block-list:name="biz’ isten"/>
+  <block-list:block block-list:abbreviated-name="Biz«" block-list:name="Biz’"/>
+  <block-list:block block-list:abbreviated-name="biz«" block-list:name="biz’"/>
   <block-list:block block-list:abbreviated-name="bíztatás.*" block-list:name="biztatás"/>
   <block-list:block block-list:abbreviated-name="box" block-list:name="boksz"/>
   <block-list:block block-list:abbreviated-name="boyler" block-list:name="bojler"/>
@@ -211,6 +226,12 @@
   <block-list:block block-list:abbreviated-name="gyengénlátók.*" block-list:name="gyengén látók"/>
   <block-list:block block-list:abbreviated-name="gyepp" block-list:name="gyep"/>
   <block-list:block block-list:abbreviated-name="had legyek" block-list:name="hadd legyek"/>
+  <block-list:block block-list:abbreviated-name="Hálaisten" block-list:name="Hála isten"/>
+  <block-list:block block-list:abbreviated-name="hálaisten" block-list:name="hála isten"/>
+  <block-list:block block-list:abbreviated-name="Hálisten" block-list:name="Hál’ isten"/>
+  <block-list:block block-list:abbreviated-name="hálisten" block-list:name="hál’ isten"/>
+  <block-list:block block-list:abbreviated-name="Hál«" block-list:name="Hál’"/>
+  <block-list:block block-list:abbreviated-name="hál«" block-list:name="hál’"/>
   <block-list:block block-list:abbreviated-name="Handel" block-list:name="Händel"/>
   <block-list:block block-list:abbreviated-name="harcbavetés.*" block-list:name="harcba vetés"/>
   <block-list:block block-list:abbreviated-name="harmónikus.*" block-list:name="harmonikus"/>
@@ -350,6 +371,8 @@
   <block-list:block block-list:abbreviated-name="kultúrált.*" block-list:name="kulturált"/>
   <block-list:block block-list:abbreviated-name="kúpalakú.*" block-list:name="kúp alakú"/>
   <block-list:block block-list:abbreviated-name="L-alakú.*" block-list:name="L alakú"/>
+  <block-list:block block-list:abbreviated-name="L«.*" block-list:name="L’"/>
+  <block-list:block block-list:abbreviated-name="l«.*" block-list:name="l’"/>
   <block-list:block block-list:abbreviated-name="lámpabura" block-list:name="lámpabúra"/>
   <block-list:block block-list:abbreviated-name="lámpaburá.*" block-list:name="lámpabúrá"/>
   <block-list:block block-list:abbreviated-name="ld." block-list:name="l."/>
@@ -479,6 +502,8 @@
   <block-list:block block-list:abbreviated-name="nagyvonalakban" block-list:name="nagy vonalakban"/>
   <block-list:block block-list:abbreviated-name="naív.*" block-list:name="naiv"/>
   <block-list:block block-list:abbreviated-name="napéjegyenlőség.*" block-list:name="nap-éj egyenlőség"/>
+  <block-list:block block-list:abbreviated-name="Neadjisten" block-list:name="Ne adj’ isten"/>
+  <block-list:block block-list:abbreviated-name="neadjisten" block-list:name="ne adj’ isten"/>
   <block-list:block block-list:abbreviated-name="négz" block-list:name="négy"/>
   <block-list:block block-list:abbreviated-name="négyhónapos.*" block-list:name="négy hónapos"/>
   <block-list:block block-list:abbreviated-name="négyzetalakú.*" block-list:name="négyzet alakú"/>
@@ -511,6 +536,8 @@
   <block-list:block block-list:abbreviated-name="nyomonkövetésé.*" block-list:name="nyomon követésé"/>
   <block-list:block block-list:abbreviated-name="nyujt" block-list:name="nyújt"/>
   <block-list:block block-list:abbreviated-name="nyul" block-list:name="nyúl"/>
+  <block-list:block block-list:abbreviated-name="O«.*" block-list:name="O’"/>
+  <block-list:block block-list:abbreviated-name="o«.*" block-list:name="o’"/>
   <block-list:block block-list:abbreviated-name="oda-visszaút.*" block-list:name="oda-vissza út"/>
   <block-list:block block-list:abbreviated-name="oda-visszautazás.*" block-list:name="oda-vissza utazás"/>
   <block-list:block block-list:abbreviated-name="odf" block-list:name="ODF"/>
