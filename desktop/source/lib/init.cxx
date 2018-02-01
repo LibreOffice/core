@@ -563,6 +563,8 @@ static void doc_paintWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId
 
 static void doc_postWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, int nAction);
 
+static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart);
+
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
 {
@@ -617,6 +619,8 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->postWindow = doc_postWindow;
 
         m_pDocumentClass->setViewLanguage = doc_setViewLanguage;
+
+        m_pDocumentClass->getPartInfo = doc_getPartInfo;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -1841,6 +1845,24 @@ static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
     }
 
     pDoc->setPart( nPart );
+}
+
+static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart)
+{
+    SolarMutexGuard aGuard;
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return nullptr;
+    }
+
+    OUString aPartInfo = pDoc->getPartInfo( nPart );
+    OString aString = OUStringToOString(aPartInfo, RTL_TEXTENCODING_UTF8);
+
+    char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
+    strcpy(pMemory, aString.getStr());
+    return pMemory;
 }
 
 static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)

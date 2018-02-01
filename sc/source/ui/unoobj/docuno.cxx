@@ -533,6 +533,18 @@ int ScModelObj::getPart()
     return pViewData->GetViewShell()->getPart();
 }
 
+OUString ScModelObj::getPartInfo( int nPart )
+{
+    OUString aPartInfo;
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    bool bIsVisible = pViewData->GetDocument()->IsVisible(nPart);
+
+    aPartInfo += "{ \"visible\": \"";
+    aPartInfo += OUString::number(bIsVisible);
+    aPartInfo += "\" }";
+    return aPartInfo;
+}
+
 OUString ScModelObj::getPartName( int nPart )
 {
     OUString sTabName;
