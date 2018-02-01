@@ -654,7 +654,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
 {
     // Create formula cells
     // Note: New Broadcaster (Note cells) may be inserted into the document!
-    if ( ( pFormula1 && !pFCell1 ) || ( pFormula2 && !pFCell2 ) )
+    if ( eOp != ScConditionMode::Direct && (( pFormula1 && !pFCell1 ) || ( pFormula2 && !pFCell2 )) )
         MakeCells( rPos );
 
     // Evaluate formulas
@@ -662,7 +662,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
 
     std::unique_ptr<ScFormulaCell> pTemp1;
     ScFormulaCell* pEff1 = pFCell1.get();
-    if ( bRelRef1 )
+    if ( bRelRef1 || eOp == ScConditionMode::Direct )
     {
         pTemp1.reset(pFormula1 ? new ScFormulaCell(mpDoc, rPos, *pFormula1) : new ScFormulaCell(mpDoc, rPos));
         pEff1 = pTemp1.get();
@@ -1238,9 +1238,80 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
     return bValid;
 }
 
+namespace {
+
+void lcl_SubstituteInputValue( const ScAddress& rPos, formula::FormulaToken* pToken, ScTokenArray* pFormula )
+{
+    if ( !pToken )
+        return;
+
+    FormulaTokenArrayPlainIterator aIter( *pFormula );
+    FormulaToken* t;
+    for ( t = aIter.Next(); t; t = aIter.Next() )
+    {
+        if ( t->GetType() == svSingleRef )
+        {
+            ScSingleRefData& rRef = *t->GetSingleRef();
+            ScAddress aAbsAddr = rRef.toAbs( rPos );
+            if (rPos == aAbsAddr)
+                pFormula->ReplaceToken( aIter.GetIndex() - 1, pToken, FormulaTokenArray::CODE_AND_RPN );
+        }
+    }
+}
+
+}
+
 bool ScConditionEntry::IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos ) const
 {
-    const_cast<ScConditionEntry*>(this)->Interpret(rPos); // Evaluate formula
+    {
+        ScConditionEntry* pThis = const_cast<ScConditionEntry*>(this);
+        std::unique_ptr<ScTokenArray> pFormulaCopy;
+
+        if ( eOp == ScConditionMode::Direct && pFormula1 )
+        {
+            formula::FormulaToken* pToken = nullptr;
+
+            switch ( rCell.meType )
+            {
+                case CELLTYPE_VALUE:
+                    pToken = new formula::FormulaDoubleToken( rCell.mfValue );
+                break;
+                case CELLTYPE_STRING:
+                    pToken = new formula::FormulaStringToken( *rCell.mpString );
+                break;
+                case CELLTYPE_EDIT:
+                    if (rCell.mpEditText)
+                    {
+                        OUString aStrVal = ScEditUtil::GetString( *rCell.mpEditText, mpDoc );
+                        svl::SharedString aSS = mpDoc->GetSharedStringPool().intern( aStrVal );
+                        pToken = new formula::FormulaStringToken( aSS );
+                    }
+                break;
+                case CELLTYPE_FORMULA:
+                {
+                    ScFormulaCell* pFCell = rCell.mpFormula;
+                    bool bIsVal = pFCell->IsValue();
+                    if ( bIsVal )
+                        pToken = new formula::FormulaDoubleToken( pFCell->GetValue() );
+                    else
+                        pToken = new formula::FormulaStringToken( pFCell->GetString() );
+                }
+                break;
+                default:
+                    return IsIgnoreBlank();
+            }
+
+            pFormulaCopy.reset( pFormula1->Clone() ) ;
+            lcl_SubstituteInputValue( rPos, pToken, pThis->pFormula1.get() );
+        }
+
+        pThis->Interpret( rPos ); // Evaluate formula
+
+        if ( pFormulaCopy )
+        {
+            pFormulaCopy.swap( pThis->pFormula1 );
+        }
+    }
 
     double nArg = 0.0;
     OUString aArgStr;
