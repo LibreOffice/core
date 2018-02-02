@@ -24,7 +24,7 @@
             <value xml:lang="en-US">QuattroPro Document</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
-        <prop oor:name="Type"><value>calc_WPS_QPro_Document</value></prop>
+        <prop oor:name="Type"><value>calc_QPro</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
     </node>
