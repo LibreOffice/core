@@ -152,28 +152,7 @@ void SwCache::Flush()
     SwCacheObj *pTmp;
     while ( pObj )
     {
-#ifdef DBG_UTIL
-        if ( pObj->IsLocked() )
-        {
-            OSL_FAIL( "Flushing locked objects." );
-            if ( !m_pRealFirst )
-            {
-                m_pRealFirst = m_pFirst = m_pLast = pObj;
-                pTmp = pObj->GetNext();
-                pObj->SetNext( nullptr ); pObj->SetPrev( nullptr );
-                pObj = pTmp;
-            }
-            else
-            {   m_pLast->SetNext( pObj );
-                pObj->SetPrev( m_pLast );
-                m_pLast = pObj;
-                pTmp = pObj->GetNext();
-                pObj->SetNext( nullptr );
-                pObj = pTmp;
-            }
-        }
-        else
-#endif
+        assert(!pObj->IsLocked());
         {
             pTmp = pObj;
             pObj = pTmp->GetNext();
