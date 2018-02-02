@@ -169,8 +169,8 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     {
         RID_SVXBMP_SHADOWNONE,
         RID_SVXBMP_SHADOW_BOT_RIGHT,
-        RID_SVXBMP_SHADOW_BOT_LEFT,
         RID_SVXBMP_SHADOW_TOP_RIGHT,
+        RID_SVXBMP_SHADOW_BOT_LEFT,
         RID_SVXBMP_SHADOW_TOP_LEFT
     };
 
