@@ -290,6 +290,10 @@ public:
     void            SetIncludeWidthHeight( bool bWidthHeight )  { bIncludeWidthHeight = bWidthHeight; }
 
     const SfxPoolItem*          GetItem( sal_uInt16 nIndex, sal_uInt16 nWhich ) const;
+    template<class T> const T*  GetItem( sal_uInt16 nIndex, TypedWhichId<T> nWhich ) const
+    {
+        return static_cast<const T*>(GetItem(nIndex, sal_uInt16(nWhich)));
+    }
     void                        PutItem( sal_uInt16 nIndex, const SfxPoolItem& rItem );
     void                        CopyItem( sal_uInt16 nToIndex, sal_uInt16 nFromIndex, sal_uInt16 nWhich );
 

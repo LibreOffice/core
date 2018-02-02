@@ -1299,8 +1299,7 @@ bool ScTable::ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
     if (bMarked && !rMark.IsCellMarked(nCol,nRow))
         return false;
 
-    if (bUnprotected && static_cast<const ScProtectionAttr*>(
-                        GetAttr(nCol,nRow,ATTR_PROTECTION))->GetProtection())
+    if (bUnprotected && GetAttr(nCol,nRow,ATTR_PROTECTION)->GetProtection())
         return false;
 
     if (bMarked || bUnprotected)        //TODO: also in other case ???

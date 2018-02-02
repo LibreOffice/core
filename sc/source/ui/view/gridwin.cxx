@@ -361,7 +361,7 @@ static void lcl_UnLockComment( ScDrawView* pView, const Point& rPos, const ScVie
     SdrObject* pObj = pNote ? pNote->GetCaption() : nullptr;
     if( pObj && pObj->GetLogicRect().IsInside( rPos ) && ScDrawLayer::IsNoteCaption( pObj ) )
     {
-        const ScProtectionAttr* pProtAttr =  static_cast< const ScProtectionAttr* > (rDoc.GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_PROTECTION ) );
+        const ScProtectionAttr* pProtAttr = rDoc.GetAttr( aCellPos, ATTR_PROTECTION );
         bool bProtectAttr = pProtAttr->GetProtection() || pProtAttr->GetHideCell() ;
         bool bProtectDoc =  rDoc.IsTabProtected( aCellPos.Tab() ) || pViewData->GetSfxDocShell()->IsReadOnly() ;
         // unlock internal layer (if not protected), will be relocked in ScDrawView::MarkListHasChanged()
@@ -1109,8 +1109,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
 
     sal_Int32 nSelPos = LISTBOX_ENTRY_NOTFOUND;
 
-    sal_uLong nIndex = static_cast<const SfxUInt32Item*>(pDoc->GetAttr(
-                            nCol, nRow, nTab, ATTR_VALIDDATA ))->GetValue();
+    sal_uLong nIndex = pDoc->GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA )->GetValue();
     if ( nIndex )
     {
         const ScValidationData* pData = pDoc->GetValidationEntry( nIndex );
@@ -1671,10 +1670,8 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         SCCOL nRealPosX;
         SCROW nRealPosY;
         pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nRealPosX, nRealPosY, false );//the real row/col
-        const ScMergeFlagAttr* pRealPosAttr = static_cast<const ScMergeFlagAttr*>(
-                                    pDoc->GetAttr( nRealPosX, nRealPosY, nTab, ATTR_MERGE_FLAG ));
-        const ScMergeFlagAttr* pAttr = static_cast<const ScMergeFlagAttr*>(
-                                    pDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG ));
+        const ScMergeFlagAttr* pRealPosAttr = pDoc->GetAttr( nRealPosX, nRealPosY, nTab, ATTR_MERGE_FLAG );
+        const ScMergeFlagAttr* pAttr = pDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG );
         if( pRealPosAttr->HasAutoFilter() )
         {
             SC_MOD()->InputEnterHandler();

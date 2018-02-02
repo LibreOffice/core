@@ -2296,8 +2296,7 @@ void ScInterpreter::ScCell()
                 sal_Unicode c = 0;
                 if (aCell.hasString())
                 {
-                    const SvxHorJustifyItem* pJustAttr = static_cast<const SvxHorJustifyItem*>(
-                        pDok->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_HOR_JUSTIFY ));
+                    const SvxHorJustifyItem* pJustAttr = pDok->GetAttr( aCellPos, ATTR_HOR_JUSTIFY );
                     switch( pJustAttr->GetValue() )
                     {
                         case SvxCellHorJustify::Standard:
@@ -2312,8 +2311,7 @@ void ScInterpreter::ScCell()
             }
             else if( aInfoType == "PROTECT" )
             {   // 1 = cell locked
-                const ScProtectionAttr* pProtAttr = static_cast<const ScProtectionAttr*>(
-                    pDok->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_PROTECTION ));
+                const ScProtectionAttr* pProtAttr = pDok->GetAttr( aCellPos, ATTR_PROTECTION );
                 PushInt( pProtAttr->GetProtection() ? 1 : 0 );
             }
 

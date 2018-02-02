@@ -946,8 +946,7 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
         }
         else
         {
-            ScMF nOverlap = static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
-                                rOverX, rOverY, nTab, ATTR_MERGE_FLAG ))->GetValue();
+            ScMF nOverlap = mpDoc->GetAttr(rOverX, rOverY, nTab, ATTR_MERGE_FLAG)->GetValue();
             bHOver = bool(nOverlap & ScMF::Hor);
             bVOver = bool(nOverlap & ScMF::Ver);
         }
@@ -972,8 +971,7 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
         }
         else
         {
-            ScMF nOverlap = static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
-                                rOverX, rOverY, nTab, ATTR_MERGE_FLAG ))->GetValue();
+            ScMF nOverlap = mpDoc->GetAttr( rOverX, rOverY, nTab, ATTR_MERGE_FLAG )->GetValue();
             bVOver = bool(nOverlap & ScMF::Ver);
         }
     }
@@ -1097,8 +1095,8 @@ bool ScOutputData::IsEmptyCellText( const RowInfo* pThisRowInfo, SCCOL nX, SCROW
 
         if ( bIsPrint || bTabProtected )
         {
-            const ScProtectionAttr* pAttr = static_cast<const ScProtectionAttr*>(
-                    mpDoc->GetEffItem( nX, nY, nTab, ATTR_PROTECTION ));
+            const ScProtectionAttr* pAttr =
+                    mpDoc->GetEffItem( nX, nY, nTab, ATTR_PROTECTION );
             if ( bIsPrint && pAttr->GetHidePrint() )
                 bEmpty = true;
             else if ( bTabProtected )

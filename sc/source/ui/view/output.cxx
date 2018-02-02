@@ -456,12 +456,12 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                                 if (nVisX <= nX2)
                                     bHOver = pThisRowInfo->pCellInfo[nVisX+1].bHOverlapped;
                                 else
-                                    bHOver = static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
-                                                nVisX,pThisRowInfo->nRowNo,nTab,ATTR_MERGE_FLAG))
+                                    bHOver = mpDoc->GetAttr(
+                                                nVisX,pThisRowInfo->nRowNo,nTab,ATTR_MERGE_FLAG)
                                                 ->IsHorOverlapped();
                                 if (bHOver)
-                                    bHOver = static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
-                                                nXplus1,pThisRowInfo->nRowNo,nTab,ATTR_MERGE_FLAG))
+                                    bHOver = mpDoc->GetAttr(
+                                                nXplus1,pThisRowInfo->nRowNo,nTab,ATTR_MERGE_FLAG)
                                                 ->IsHorOverlapped();
                             }
                         }
@@ -563,11 +563,11 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                                 bVOver = pRowInfo[nArrYplus1].pCellInfo[i+1].bVOverlapped;
                             else
                             {
-                                bVOver = static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
-                                            i,nYplus1,nTab,ATTR_MERGE_FLAG))
+                                bVOver = mpDoc->GetAttr(
+                                            i,nYplus1,nTab,ATTR_MERGE_FLAG)
                                             ->IsVerOverlapped()
-                                    &&   static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
-                                            i,nVisY,nTab,ATTR_MERGE_FLAG))
+                                    &&   mpDoc->GetAttr(
+                                            i,nVisY,nTab,ATTR_MERGE_FLAG)
                                             ->IsVerOverlapped();
                                     //! nVisY from Array ??
                             }
@@ -2351,15 +2351,15 @@ void ScOutputData::DrawClipMarks()
                         long nStartPosX = nPosX;
                         long nStartPosY = nPosY;
 
-                        while ( nOverX > 0 && ( static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
-                                nOverX, nOverY, nTab, ATTR_MERGE_FLAG ))->GetValue() & ScMF::Hor ) )
+                        while ( nOverX > 0 && ( mpDoc->GetAttr(
+                                nOverX, nOverY, nTab, ATTR_MERGE_FLAG )->GetValue() & ScMF::Hor ) )
                         {
                             --nOverX;
                             nStartPosX -= nLayoutSign * static_cast<long>( mpDoc->GetColWidth(nOverX,nTab) * mnPPTX );
                         }
 
-                        while ( nOverY > 0 && ( static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
-                                nOverX, nOverY, nTab, ATTR_MERGE_FLAG ))->GetValue() & ScMF::Ver ) )
+                        while ( nOverY > 0 && ( mpDoc->GetAttr(
+                                nOverX, nOverY, nTab, ATTR_MERGE_FLAG )->GetValue() & ScMF::Ver ) )
                         {
                             --nOverY;
                             nStartPosY -= nLayoutSign * static_cast<long>( mpDoc->GetRowHeight(nOverY,nTab) * mnPPTY );
@@ -2368,8 +2368,7 @@ void ScOutputData::DrawClipMarks()
                         long nOutWidth = static_cast<long>( mpDoc->GetColWidth(nOverX,nTab) * mnPPTX );
                         long nOutHeight = static_cast<long>( mpDoc->GetRowHeight(nOverY,nTab) * mnPPTY );
 
-                        const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>(
-                                    mpDoc->GetAttr( nOverX, nOverY, nTab, ATTR_MERGE ));
+                        const ScMergeAttr* pMerge = mpDoc->GetAttr( nOverX, nOverY, nTab, ATTR_MERGE );
                         SCCOL nCountX = pMerge->GetColMerge();
                         for (SCCOL i=1; i<nCountX; i++)
                             nOutWidth += static_cast<long>( mpDoc->GetColWidth(nOverX+i,nTab) * mnPPTX );

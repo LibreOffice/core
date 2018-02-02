@@ -128,25 +128,24 @@ void ScHTMLImport::WriteToDocument(
         if( (pEntry->nColOverlap > 1) || (pEntry->nRowOverlap > 1) )
         {
             SCTAB nTab = maRange.aStart.Tab();
-            const ScMergeAttr* pItem = static_cast<const ScMergeAttr*>( mpDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_MERGE ) );
+            const ScMergeAttr* pItem = mpDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_MERGE );
             if( pItem->IsMerged() )
             {
                 SCCOL nColMerge = pItem->GetColMerge();
                 SCROW nRowMerge = pItem->GetRowMerge();
 
-                const SvxBoxItem* pToItem = static_cast<const SvxBoxItem*>(
-                    mpDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_BORDER ) );
+                const SvxBoxItem* pToItem = mpDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_BORDER );
                 SvxBoxItem aNewItem( *pToItem );
                 if( nColMerge > 1 )
                 {
-                    const SvxBoxItem* pFromItem = static_cast<const SvxBoxItem*>(
-                        mpDoc->GetAttr( pEntry->nCol + nColMerge - 1, pEntry->nRow, nTab, ATTR_BORDER ) );
+                    const SvxBoxItem* pFromItem =
+                        mpDoc->GetAttr( pEntry->nCol + nColMerge - 1, pEntry->nRow, nTab, ATTR_BORDER );
                     aNewItem.SetLine( pFromItem->GetLine( SvxBoxItemLine::RIGHT ), SvxBoxItemLine::RIGHT );
                 }
                 if( nRowMerge > 1 )
                 {
-                    const SvxBoxItem* pFromItem = static_cast<const SvxBoxItem*>(
-                        mpDoc->GetAttr( pEntry->nCol, pEntry->nRow + nRowMerge - 1, nTab, ATTR_BORDER ) );
+                    const SvxBoxItem* pFromItem =
+                        mpDoc->GetAttr( pEntry->nCol, pEntry->nRow + nRowMerge - 1, nTab, ATTR_BORDER );
                     aNewItem.SetLine( pFromItem->GetLine( SvxBoxItemLine::BOTTOM ), SvxBoxItemLine::BOTTOM );
                 }
                 mpDoc->ApplyAttr( pEntry->nCol, pEntry->nRow, nTab, aNewItem );

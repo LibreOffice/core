@@ -836,8 +836,8 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
     if ( PasteFromClip( InsertDeleteFlags::CONTENTS, pInsDoc.get(), ScPasteFunc::NONE, false, false,
             false, INS_NONE, InsertDeleteFlags::ATTRIB ) )
     {
-        const SfxUInt32Item* pItem = static_cast<const SfxUInt32Item*>( pInsDoc->GetAttr(
-            nCol, nRow, nTab, ATTR_VALUE_FORMAT ) );
+        const SfxUInt32Item* pItem = pInsDoc->GetAttr(
+            nCol, nRow, nTab, ATTR_VALUE_FORMAT );
         if ( pItem )
         {   // set number format if incompatible
             // MarkData was already MarkToSimple'ed in PasteFromClip

@@ -335,7 +335,7 @@ bool CopyFromClipContext::isCloneNotes() const
 
 bool CopyFromClipContext::isDateCell( const ScColumn& rCol, SCROW nRow ) const
 {
-    sal_uLong nNumIndex = static_cast<const SfxUInt32Item&>(rCol.GetAttr(nRow, ATTR_VALUE_FORMAT)).GetValue();
+    sal_uLong nNumIndex = rCol.GetAttr(nRow, ATTR_VALUE_FORMAT).GetValue();
     SvNumFormatType nType = mpClipDoc->GetFormatTable()->GetType(nNumIndex);
     return (nType == SvNumFormatType::DATE) || (nType == SvNumFormatType::TIME) || (nType == SvNumFormatType::DATETIME);
 }

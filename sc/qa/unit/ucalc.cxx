@@ -3611,9 +3611,7 @@ void Test::testCopyPasteSkipEmpty()
                     return false;
                 }
 
-                const SvxBrushItem* pBrush =
-                    dynamic_cast<const SvxBrushItem*>(mpDoc->GetAttr(aPos, ATTR_BACKGROUND));
-
+                const SvxBrushItem* pBrush = mpDoc->GetAttr(aPos, ATTR_BACKGROUND);
                 if (!pBrush)
                 {
                     cerr << aPosStr << ": failed to get brush item from the cell." << endl;

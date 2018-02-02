@@ -261,7 +261,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     if (eCellType == CELLTYPE_VALUE)
     {
         double fVal;
-        sal_uInt32 nFormat = static_cast<const SfxUInt32Item*>(GetAttr(nCol,nRow,ATTR_VALUE_FORMAT))->GetValue();
+        sal_uInt32 nFormat = GetAttr(nCol,nRow,ATTR_VALUE_FORMAT)->GetValue();
         const SvNumFormatType nFormatType = pDocument->GetFormatTable()->GetType(nFormat);
         bool bDate = (nFormatType  == SvNumFormatType::DATE );
         bool bBooleanCell = (!bDate && nFormatType == SvNumFormatType::LOGICAL);
@@ -2115,11 +2115,11 @@ void ScTable::GetAutoFormatAttr(SCCOL nCol, SCROW nRow, sal_uInt16 nIndex, ScAut
 
 void ScTable::GetAutoFormatFrame(SCCOL nCol, SCROW nRow, sal_uInt16 nFlags, sal_uInt16 nIndex, ScAutoFormatData& rData)
 {
-    const SvxBoxItem* pTheBox = static_cast<const SvxBoxItem*>(GetAttr(nCol, nRow, ATTR_BORDER));
-    const SvxBoxItem* pLeftBox = static_cast<const SvxBoxItem*>(GetAttr(nCol - 1, nRow, ATTR_BORDER));
-    const SvxBoxItem* pTopBox = static_cast<const SvxBoxItem*>(GetAttr(nCol, nRow - 1, ATTR_BORDER));
-    const SvxBoxItem* pRightBox = static_cast<const SvxBoxItem*>(GetAttr(nCol + 1, nRow, ATTR_BORDER));
-    const SvxBoxItem* pBottomBox = static_cast<const SvxBoxItem*>(GetAttr(nCol, nRow + 1, ATTR_BORDER));
+    const SvxBoxItem* pTheBox = GetAttr(nCol, nRow, ATTR_BORDER);
+    const SvxBoxItem* pLeftBox = GetAttr(nCol - 1, nRow, ATTR_BORDER);
+    const SvxBoxItem* pTopBox = GetAttr(nCol, nRow - 1, ATTR_BORDER);
+    const SvxBoxItem* pRightBox = GetAttr(nCol + 1, nRow, ATTR_BORDER);
+    const SvxBoxItem* pBottomBox = GetAttr(nCol, nRow + 1, ATTR_BORDER);
 
     SvxBoxItem aBox( ATTR_BORDER );
     if (nFlags & LF_LEFT)

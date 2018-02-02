@@ -2226,9 +2226,9 @@ void ScTabView::StartDataSelect()
 
     // Do autofilter if the current cell has autofilter button.  Otherwise do
     // a normal data select popup.
-    const ScMergeFlagAttr* pAttr = static_cast<const ScMergeFlagAttr*>(
+    const ScMergeFlagAttr* pAttr =
         aViewData.GetDocument()->GetAttr(
-            nCol, nRow, aViewData.GetTabNo(), ATTR_MERGE_FLAG));
+            nCol, nRow, aViewData.GetTabNo(), ATTR_MERGE_FLAG);
 
     if (pAttr->HasAutoFilter())
         pWin->LaunchAutoFilterMenu(nCol, nRow);

@@ -511,8 +511,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         {
             i = *itr;
             aPos.SetTab( i );
-            const sal_uInt32 nIndex = static_cast<const SfxUInt32Item*>( pDoc->GetAttr(
-                        nCol, nRow, i, ATTR_VALUE_FORMAT ))->GetValue();
+            const sal_uInt32 nIndex = pDoc->GetAttr(
+                        nCol, nRow, i, ATTR_VALUE_FORMAT )->GetValue();
             const SvNumFormatType nType = pFormatter->GetType( nIndex);
             if (nType == SvNumFormatType::TEXT ||
                     ((rString[0] == '+' || rString[0] == '-') && nError != FormulaError::NONE && rString == aFormula))

@@ -41,6 +41,7 @@
 #include <svl/hint.hxx>
 #include <tools/gen.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/typedwhich.hxx>
 
 #include <cassert>
 #include <memory>
@@ -1618,7 +1619,15 @@ public:
                                               double& rResult );
 
     SC_DLLPUBLIC const SfxPoolItem*         GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const;
+    template<class T> const T*              GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedWhichId<T> nWhich ) const
+    {
+        return static_cast<const T*>(GetAttr(nCol, nRow, nTab, sal_uInt16(nWhich)));
+    }
     SC_DLLPUBLIC const SfxPoolItem*         GetAttr( const ScAddress& rPos, sal_uInt16 nWhich ) const;
+    template<class T> const T*              GetAttr( const ScAddress& rPos, TypedWhichId<T> nWhich ) const
+    {
+        return static_cast<const T*>(GetAttr(rPos, sal_uInt16(nWhich)));
+    }
     SC_DLLPUBLIC const ScPatternAttr*       GetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     SC_DLLPUBLIC const ScPatternAttr*       GetPattern( const ScAddress& rPos ) const;
     SC_DLLPUBLIC const ScPatternAttr*       GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const;
@@ -1633,6 +1642,10 @@ public:
                                                            const ScConditionalFormatList& rList,
                                                            const std::vector<sal_uInt32>& rIndex ) const;
     const SfxPoolItem*                      GetEffItem( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const;
+    template<class T> const T*              GetEffItem( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedWhichId<T> nWhich ) const
+    {
+        return static_cast<const T*>(GetEffItem(nCol, nRow, nTab, sal_uInt16(nWhich)));
+    }
 
     SC_DLLPUBLIC const css::uno::Reference< css::i18n::XBreakIterator >& GetBreakIterator();
     bool                        HasStringWeakCharacters( const OUString& rString );
