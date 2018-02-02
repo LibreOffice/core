@@ -32,6 +32,7 @@
 #include "oox/helper/attributelist.hxx"
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/token/properties.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::oox::core;
@@ -49,6 +50,11 @@ SlideTransitionContext::SlideTransitionContext( FragmentHandler2& rParent, const
 {
     // ST_TransitionSpeed
     maTransition.setOoxTransitionSpeed( rAttribs.getToken( XML_spd, XML_fast ) );
+
+    // p14:dur
+    sal_Int32 nDurationInMs = rAttribs.getInteger( P14_TOKEN( dur ), -1 );
+    if( nDurationInMs > -1 )
+        maTransition.setOoxTransitionSpeed( nDurationInMs / 1000.0 );
 
     // TODO
     rAttribs.getBool( XML_advClick, true );
