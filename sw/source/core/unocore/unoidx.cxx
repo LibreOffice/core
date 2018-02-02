@@ -1593,14 +1593,16 @@ public:
         }
     }
 protected:
-    // SwClient
-    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) override
+    virtual void SwClientNotify( const SwModify&, const SfxHint& rHint ) override
     {
-        switch( pOld ? pOld->Which() : 0 )
+        if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
         {
-            case RES_REMOVE_UNO_OBJECT:
-            case RES_OBJECTDYING:
-                Invalidate();
+            switch( pLegacyHint->m_pOld ? pLegacyHint->m_pOld->Which() : 0 )
+            {
+                case RES_REMOVE_UNO_OBJECT:
+                case RES_OBJECTDYING:
+                    Invalidate();
+            }
         }
     }
 };
