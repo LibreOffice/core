@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_7b1db672",
+        "filename": "include/sal/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-02T07:27:16Z",
+      "side": 1,
+      "message": "This IMO isn\u0027t a very useful @file-level documentation.  \"Data types\" is way too generic a description to be useful (and that it\u0027s about \"data types\" in some way one will likely have already understood from the filename, types.h).\n\nIt apparently was used to distinguish the \"Data types\" section from the \"Useful defines\" section below.  If you feel like it, you can remove both of those on the ground that they\u0027re rather useless comments, combined with ASCII-art \"noise\".",
+      "revId": "c90a374070326f2b6254a4c242291cab66d22da5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_9b126a61",
+        "filename": "include/sal/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-02T07:27:16Z",
+      "side": 1,
+      "message": "why change this?",
+      "revId": "c90a374070326f2b6254a4c242291cab66d22da5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
