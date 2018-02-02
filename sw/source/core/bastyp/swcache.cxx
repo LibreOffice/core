@@ -29,11 +29,14 @@
 void SwCache::Check()
 {
     if ( !m_pRealFirst )
+    {
+        assert(m_pFirst == nullptr && m_pLast == nullptr);
         return;
+    }
 
     // consistency check
-    SAL_WARN_IF( m_pLast->GetNext(), "sw.core", "Last but not last." );
-    SAL_WARN_IF( m_pRealFirst->GetPrev(), "sw.core", "First but not first." );
+    assert(m_pLast->GetNext() == nullptr);
+    assert(m_pRealFirst->GetPrev() == nullptr);
     sal_uInt16 nCnt = 0;
     bool bFirstFound = false;
     SwCacheObj *pObj = m_pRealFirst;
@@ -44,17 +47,19 @@ void SwCache::Check()
         SwCacheObj *pTmp = m_pLast;
         while ( pTmp && pTmp != pObj )
             pTmp = pTmp->GetPrev();
-        SAL_WARN_IF( !pTmp, "sw.core", "Object not found." );
+        assert(pTmp && "Object not found.");
 
         ++nCnt;
         if ( pObj == m_pFirst )
             bFirstFound = true;
         if ( !pObj->GetNext() )
-            SAL_WARN_IF( pObj != m_pLast, "sw.core", "Last not Found." );
+        {
+            assert(pObj == m_pLast);
+        }
         pObj = pObj->GetNext();
-        SAL_WARN_IF(pObj == pOldRealFirst, "sw.core", "Recursion in SwCache.");
+        assert(pObj != pOldRealFirst);
     }
-    SAL_WARN_IF( !bFirstFound, "sw.core", "First not Found." );
+    assert(bFirstFound);
     SAL_WARN_IF( nCnt + m_aFreePositions.size() != size(), "sw.core", "Lost Chain." );
     SAL_WARN_IF(
         size() == m_nCurMax && m_nCurMax != m_aFreePositions.size() + nCnt, "sw.core",
