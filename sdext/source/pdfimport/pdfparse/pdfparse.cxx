@@ -558,6 +558,8 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
             aTmp += "   " + OString(typeid( *(aGrammar.m_aObjectStack[i]) ).name());
 
         SAL_WARN("sdext.pdfimport.pdfparse", "parse error: " << rError.descriptor << " at buffer pos " << rError.where - pBuffer << ", object stack: " << aTmp);
+#else
+        (void)rError;
 #endif
     }
 
