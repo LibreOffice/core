@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_feac34ef",
+        "filename": "vcl/source/outdev/text.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-02-02T08:38:04Z",
+      "side": 1,
+      "message": "If you don\u0027t need to call AdjustLayout, do you need aLayoutArgs at all then ?",
+      "revId": "99aa3741d3310fc59de238c7e70dc8327d43261d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
