@@ -485,7 +485,6 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,f
 	calc_OOXML_Template \
 	calc_MS_Works_Document \
 	calc_WPS_Lotus_Document \
-	calc_WPS_QPro_Document \
 	calc_ClarisWorks \
 	calc_Claris_Resolve \
 	calc_Mac_Works \

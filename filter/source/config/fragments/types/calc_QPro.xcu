@@ -21,7 +21,7 @@
         <prop oor:name="Extensions"><value>wb2</value></prop>
         <prop oor:name="MediaType"/>
         <prop oor:name="Preferred"><value>true</value></prop>
-        <prop oor:name="PreferredFilter"><value>Quattro Pro 6.0</value></prop>
+        <prop oor:name="PreferredFilter"/>
         <prop oor:name="UIName">
             <value>Quattro Pro 6.0</value>
         </prop>

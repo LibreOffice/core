@@ -291,7 +291,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
         if (!detectThisFormat(*pStream, pQPro))
             return OUString();
 
-        pSearchFilterName = "Quattro Pro 6.0";
+        // Don't hard-code the filter name for this type.
     }
     else if (aTypeName == "calc_SYLK")
     {
@@ -320,10 +320,9 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
     SfxFilterMatcher aMatcher("scalc");
     std::shared_ptr<const SfxFilter> pFilter = aMatcher.GetFilter4FilterName(OUString::createFromAscii(pSearchFilterName));
 
-    if (!pFilter)
-        return OUString();
+    if (pFilter)
+        aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= pFilter->GetName();
 
-    aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= pFilter->GetName();
     aMediaDesc >> lDescriptor;
     return aTypeName;
 }
