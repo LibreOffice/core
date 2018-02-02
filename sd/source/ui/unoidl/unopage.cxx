@@ -94,7 +94,7 @@ enum WID_PAGE
     WID_PAGE_PAGENUMBERVISIBLE, WID_PAGE_DATETIMEVISIBLE, WID_PAGE_DATETIMEFIXED,
     WID_PAGE_DATETIMETEXT, WID_PAGE_DATETIMEFORMAT, WID_TRANSITION_TYPE, WID_TRANSITION_SUBTYPE,
     WID_TRANSITION_DIRECTION, WID_TRANSITION_FADE_COLOR, WID_TRANSITION_DURATION, WID_LOOP_SOUND,
-    WID_NAVORDER, WID_PAGE_PREVIEWMETAFILE
+    WID_NAVORDER, WID_PAGE_PREVIEWMETAFILE, WID_PAGE_TRANSITION_DURATION
 };
 
 static sal_Char const sEmptyPageName[sizeof("page")] = "page";
@@ -119,6 +119,7 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, PageKind eP
         { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::cppu::UnoType<sal_Int16>::get(),            beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::cppu::UnoType<view::PaperOrientation>::get(),0, 0},
         { OUString(UNO_NAME_PAGE_SPEED),            WID_PAGE_SPEED,     ::cppu::UnoType<presentation::AnimationSpeed>::get(), 0,  0},
+        { OUString(UNO_NAME_PAGE_TRANSITION_DURATION), WID_PAGE_TRANSITION_DURATION, ::cppu::UnoType<double>::get(), 0,  0 },
         { OUString(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},
         { OUString(UNO_NAME_PAGE_PREVIEW),          WID_PAGE_PREVIEW,   cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_PAGE_PREVIEWBITMAP),    WID_PAGE_PREVIEWBITMAP, cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
@@ -727,6 +728,15 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             GetPage()->setTransitionDuration( nEnum == 0 ? 3.0 : (nEnum == 1 ? 2.0 : 1.0 )  );
             break;
         }
+        case WID_PAGE_TRANSITION_DURATION:
+        {
+            double fDurationInSeconds = 0;
+            if( !( aValue >>= fDurationInSeconds ) )
+                throw lang::IllegalArgumentException();
+
+            GetPage()->setTransitionDuration( fDurationInSeconds );
+            break;
+        }
         case WID_PAGE_VISIBLE :
         {
             bool    bVisible = false;
@@ -1057,6 +1067,12 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
             const double fDuration = GetPage()->getTransitionDuration();
             aAny <<= presentation::AnimationSpeed(
                 fDuration < 2.0 ? 2 : fDuration > 2.0 ? 0 : 1);
+        }
+        break;
+    case WID_PAGE_TRANSITION_DURATION:
+        {
+            const double fDuration = GetPage()->getTransitionDuration();
+            aAny <<= fDuration;
         }
         break;
     case WID_PAGE_LAYOUT:
