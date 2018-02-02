@@ -64,24 +64,22 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="intro" translatesAutoresizingMaskIntoConstraints="NO" id="iba-PG-iZB">
-                    <rect key="frame" x="15" y="34" width="450" height="32"/>
+                    <rect key="frame" x="5" y="20" width="470" height="128"/>
                 </imageView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="I4U-tD-bDs" firstAttribute="top" secondItem="R3A-1h-X3D" secondAttribute="bottom" constant="5" id="1MI-gV-daV"/>
                 <constraint firstItem="h8D-4s-nQh" firstAttribute="top" secondItem="6sz-Sz-e1h" secondAttribute="bottom" constant="5" id="76h-os-PqN"/>
-                <constraint firstItem="iba-PG-iZB" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="40" id="8OF-eF-9yQ"/>
                 <constraint firstAttribute="trailing" secondItem="jCj-XE-D37" secondAttribute="trailing" constant="15" id="DmL-rk-YcF"/>
                 <constraint firstAttribute="bottom" secondItem="h8D-4s-nQh" secondAttribute="bottom" constant="10" id="ESJ-gH-xnX"/>
                 <constraint firstAttribute="trailing" secondItem="I4U-tD-bDs" secondAttribute="trailing" constant="15" id="EgU-Wx-Hpw"/>
                 <constraint firstItem="I4U-tD-bDs" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="Glv-5u-Qk4"/>
                 <constraint firstItem="LOF-2P-X0o" firstAttribute="top" secondItem="I4U-tD-bDs" secondAttribute="bottom" constant="5" id="H6a-qQ-p4a"/>
-                <constraint firstItem="kId-c2-rCX" firstAttribute="top" secondItem="iba-PG-iZB" secondAttribute="bottom" constant="8" symbolic="YES" id="Hhc-DB-S9J"/>
                 <constraint firstAttribute="trailing" secondItem="LOF-2P-X0o" secondAttribute="trailing" constant="15" id="J28-1n-Fgm"/>
                 <constraint firstItem="6sz-Sz-e1h" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="Jmn-sO-AVf"/>
-                <constraint firstAttribute="trailing" secondItem="iba-PG-iZB" secondAttribute="trailing" constant="15" id="M37-4I-bPv"/>
                 <constraint firstItem="kId-c2-rCX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="Qvq-TN-GGX"/>
+                <constraint firstAttribute="trailing" secondItem="iba-PG-iZB" secondAttribute="trailing" constant="5" id="SQG-Oy-orw"/>
                 <constraint firstItem="LOF-2P-X0o" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="T6B-k2-ejO"/>
                 <constraint firstItem="R3A-1h-X3D" firstAttribute="top" secondItem="jCj-XE-D37" secondAttribute="bottom" constant="5" id="Vzd-4l-NiA"/>
                 <constraint firstItem="h8D-4s-nQh" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="Wdb-nn-wdr"/>
@@ -92,11 +90,13 @@
                 <constraint firstItem="8ie-xW-0ye" firstAttribute="top" secondItem="kId-c2-rCX" secondAttribute="bottom" constant="15" id="ftR-wj-GaQ"/>
                 <constraint firstItem="jCj-XE-D37" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="hTT-gF-WpT"/>
                 <constraint firstItem="R3A-1h-X3D" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="hbP-Wj-hgc"/>
+                <constraint firstItem="iba-PG-iZB" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="jwj-qG-D6R"/>
                 <constraint firstItem="jCj-XE-D37" firstAttribute="top" secondItem="8ie-xW-0ye" secondAttribute="bottom" constant="5" id="nW0-DF-i3G"/>
                 <constraint firstAttribute="trailing" secondItem="h8D-4s-nQh" secondAttribute="trailing" constant="15" id="nz0-e0-vfD"/>
+                <constraint firstItem="kId-c2-rCX" firstAttribute="top" secondItem="iba-PG-iZB" secondAttribute="bottom" constant="8" symbolic="YES" id="ogG-Lo-8Ep"/>
                 <constraint firstAttribute="trailing" secondItem="8ie-xW-0ye" secondAttribute="trailing" constant="15" id="qKd-9S-EKe"/>
                 <constraint firstItem="6sz-Sz-e1h" firstAttribute="top" secondItem="LOF-2P-X0o" secondAttribute="bottom" constant="5" id="tdi-EJ-KXm"/>
-                <constraint firstItem="iba-PG-iZB" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="ysr-Kx-oiv"/>
+                <constraint firstItem="iba-PG-iZB" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="5" id="uoy-a0-Eez"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -104,6 +104,6 @@
         </view>
     </objects>
     <resources>
-        <image name="intro" width="250" height="64"/>
+        <image name="intro" width="500" height="128"/>
     </resources>
 </document>
