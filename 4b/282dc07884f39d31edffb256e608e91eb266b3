@@ -1,0 +1,8 @@
+Code-Review+1: Justin Luth <justin_luth@sil.org>
+Code-Review+2: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+Verified+1: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+Submitted-by: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+Submitted-at: Fri, 02 Feb 2018 09:56:29 +0100
+Reviewed-on: https://gerrit.libreoffice.org/49035
+Project: core
+Branch: refs/heads/private/swe/libreoffice-5-2+backports
