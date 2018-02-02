@@ -157,7 +157,7 @@ namespace sdr
 
             if(XATTR_LINEWIDTH == nWhich && rObj.DoesSupportTextIndentingOnLineWidthChange())
             {
-                nOldLineWidth = static_cast<const XLineWidthItem&>(GetItem(XATTR_LINEWIDTH)).GetValue();
+                nOldLineWidth = GetItem(XATTR_LINEWIDTH).GetValue();
             }
 
             if(pNewItem && (SDRATTR_TEXTDIRECTION == nWhich))
@@ -202,19 +202,19 @@ namespace sdr
             // #i25616#
             if(XATTR_LINEWIDTH == nWhich && rObj.DoesSupportTextIndentingOnLineWidthChange())
             {
-                const sal_Int32 nNewLineWidth(static_cast<const XLineWidthItem&>(GetItem(XATTR_LINEWIDTH)).GetValue());
+                const sal_Int32 nNewLineWidth(GetItem(XATTR_LINEWIDTH).GetValue());
                 const sal_Int32 nDifference((nNewLineWidth - nOldLineWidth) / 2);
 
                 if(nDifference)
                 {
-                    const bool bLineVisible(drawing::LineStyle_NONE != static_cast<const XLineStyleItem&>(GetItem(XATTR_LINESTYLE)).GetValue());
+                    const bool bLineVisible(drawing::LineStyle_NONE != GetItem(XATTR_LINESTYLE).GetValue());
 
                     if(bLineVisible)
                     {
-                        const sal_Int32 nLeftDist(static_cast<const SdrMetricItem&>(GetItem(SDRATTR_TEXT_LEFTDIST)).GetValue());
-                        const sal_Int32 nRightDist(static_cast<const SdrMetricItem&>(GetItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
-                        const sal_Int32 nUpperDist(static_cast<const SdrMetricItem&>(GetItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
-                        const sal_Int32 nLowerDist(static_cast<const SdrMetricItem&>(GetItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
+                        const sal_Int32 nLeftDist(GetItem(SDRATTR_TEXT_LEFTDIST).GetValue());
+                        const sal_Int32 nRightDist(GetItem(SDRATTR_TEXT_RIGHTDIST).GetValue());
+                        const sal_Int32 nUpperDist(GetItem(SDRATTR_TEXT_UPPERDIST).GetValue());
+                        const sal_Int32 nLowerDist(GetItem(SDRATTR_TEXT_LOWERDIST).GetValue());
 
                         SetObjectItemDirect(makeSdrTextLeftDistItem(nLeftDist + nDifference));
                         SetObjectItemDirect(makeSdrTextRightDistItem(nRightDist + nDifference));
