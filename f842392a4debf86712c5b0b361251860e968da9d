@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_bef8fce6",
+        "filename": "vcl/unx/gtk3/gtk3gtkframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-02-02T09:32:04Z",
+      "side": 0,
+      "message": "this piece looks like really useful debugging code - lets leave it in - and add some comment: // useful debugging code - please retain.",
+      "revId": "f842392a4debf86712c5b0b361251860e968da9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
