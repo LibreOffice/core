@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_3e740c34",
+        "filename": "sdext/source/pdfimport/tree/pdfiprocessor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-02-02T12:56:06Z",
+      "side": 1,
+      "message": "please use stable_sort here",
+      "revId": "dcdc0bd607c3844c82c1e418350539ffce854d24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
