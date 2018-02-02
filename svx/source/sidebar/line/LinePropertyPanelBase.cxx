@@ -741,8 +741,7 @@ void  LinePropertyPanelBase::FillLineEndList()
     if ( pSh && pSh->GetItem( SID_LINEEND_LIST ) )
     {
         mpLBStart->Enable();
-        SvxLineEndListItem aItem( *static_cast<const SvxLineEndListItem*>(pSh->GetItem( SID_LINEEND_LIST ) ) );
-        mxLineEndList = aItem.GetLineEndList();
+        mxLineEndList = pSh->GetItem( SID_LINEEND_LIST )->GetLineEndList();
 
         if (mxLineEndList.is())
         {
@@ -770,8 +769,7 @@ void  LinePropertyPanelBase::FillLineStyleList()
     if ( pSh && pSh->GetItem( SID_DASH_LIST ) )
     {
         mpLBStyle->Enable();
-        SvxDashListItem aItem( *static_cast<const SvxDashListItem*>(pSh->GetItem( SID_DASH_LIST ) ) );
-        mxLineStyleList = aItem.GetDashList();
+        mxLineStyleList = pSh->GetItem( SID_DASH_LIST )->GetDashList();
 
         if (mxLineStyleList.is())
         {

@@ -255,7 +255,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
         SetObjectShell( pObjSh );
 
         // set color table
-        const SvxColorListItem* pColItem = static_cast<const SvxColorListItem*>( pObjSh->GetItem( SID_COLOR_TABLE ) );
+        const SvxColorListItem* pColItem = pObjSh->GetItem( SID_COLOR_TABLE );
         if ( pColItem )
             pXCol = pColItem->GetColorList();
     }

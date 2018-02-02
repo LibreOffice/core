@@ -349,10 +349,9 @@ void SlideBackground::Update()
         case HATCH:
         {
             mpFillLB->Hide();
-            const SvxHatchListItem aItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
             mpFillAttr->Show();
             mpFillAttr->Clear();
-            mpFillAttr->Fill(aItem.GetHatchList());
+            mpFillAttr->Fill(pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
             mpFillGrad->Hide();
 
             const OUString aHatchName = GetHatchingSetOrDefault();
@@ -370,14 +369,12 @@ void SlideBackground::Update()
             OUString aName;
             if(nPos == BITMAP)
             {
-                const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
-                mpFillAttr->Fill(aItem.GetBitmapList());
+                mpFillAttr->Fill(pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
                 aName = GetBitmapSetOrDefault();
             }
             else if(nPos == PATTERN)
             {
-                const SvxPatternListItem aItem(*static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
-                mpFillAttr->Fill(aItem.GetPatternList());
+                mpFillAttr->Fill(pSh->GetItem(SID_PATTERN_LIST)->GetPatternList());
                 aName = GetPatternSetOrDefault();
             }
             mpFillAttr->SelectEntry( aName );
@@ -690,9 +687,9 @@ XGradient const & SlideBackground::GetGradientSetOrDefault()
     if( !mpGradientItem )
     {
         SfxObjectShell* pSh = SfxObjectShell::Current();
-        const SvxGradientListItem aGradListItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
-        const XGradient aGradient = aGradListItem.GetGradientList()->GetGradient(0)->GetGradient();
-        const OUString aGradientName = aGradListItem.GetGradientList()->GetGradient(0)->GetName();
+        const SvxGradientListItem * pGradListItem = pSh->GetItem(SID_GRADIENT_LIST);
+        const XGradient aGradient = pGradListItem->GetGradientList()->GetGradient(0)->GetGradient();
+        const OUString aGradientName = pGradListItem->GetGradientList()->GetGradient(0)->GetName();
 
         mpGradientItem.reset( new XFillGradientItem( aGradientName, aGradient ) );
     }
@@ -705,9 +702,9 @@ OUString const & SlideBackground::GetHatchingSetOrDefault()
     if( !mpHatchItem )
     {
         SfxObjectShell* pSh = SfxObjectShell::Current();
-        const SvxHatchListItem aHatchListItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
-        const XHatch aHatch = aHatchListItem.GetHatchList()->GetHatch(0)->GetHatch();
-        const OUString aHatchName = aHatchListItem.GetHatchList()->GetHatch(0)->GetName();
+        const SvxHatchListItem * pHatchListItem = pSh->GetItem(SID_HATCH_LIST);
+        const XHatch aHatch = pHatchListItem->GetHatchList()->GetHatch(0)->GetHatch();
+        const OUString aHatchName = pHatchListItem->GetHatchList()->GetHatch(0)->GetName();
 
         mpHatchItem.reset( new XFillHatchItem( aHatchName, aHatch ) );
     }
@@ -720,9 +717,9 @@ OUString const & SlideBackground::GetBitmapSetOrDefault()
     if( !mpBitmapItem || mpBitmapItem->isPattern())
     {
         SfxObjectShell* pSh = SfxObjectShell::Current();
-        const SvxBitmapListItem aBmpListItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
-        const GraphicObject aGraphObj = aBmpListItem.GetBitmapList()->GetBitmap(0)->GetGraphicObject();
-        const OUString aBmpName = aBmpListItem.GetBitmapList()->GetBitmap(0)->GetName();
+        const SvxBitmapListItem * pBmpListItem = pSh->GetItem(SID_BITMAP_LIST);
+        const GraphicObject aGraphObj = pBmpListItem->GetBitmapList()->GetBitmap(0)->GetGraphicObject();
+        const OUString aBmpName = pBmpListItem->GetBitmapList()->GetBitmap(0)->GetName();
 
         mpBitmapItem.reset( new XFillBitmapItem( aBmpName, aGraphObj ) );
     }
@@ -735,9 +732,9 @@ OUString const & SlideBackground::GetPatternSetOrDefault()
     if( !mpBitmapItem || !(mpBitmapItem->isPattern()))
     {
         SfxObjectShell* pSh = SfxObjectShell::Current();
-        const SvxPatternListItem aPtrnListItem(*static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
-        const GraphicObject aGraphObj = aPtrnListItem.GetPatternList()->GetBitmap(0)->GetGraphicObject();
-        const OUString aPtrnName = aPtrnListItem.GetPatternList()->GetBitmap(0)->GetName();
+        const SvxPatternListItem * pPtrnListItem = pSh->GetItem(SID_PATTERN_LIST);
+        const GraphicObject aGraphObj = pPtrnListItem->GetPatternList()->GetBitmap(0)->GetGraphicObject();
+        const OUString aPtrnName = pPtrnListItem->GetPatternList()->GetBitmap(0)->GetName();
 
         mpBitmapItem.reset( new XFillBitmapItem( aPtrnName, aGraphObj ) );
     }
@@ -1041,10 +1038,10 @@ IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, ListBox&, void)
 
         case HATCH:
         {
-            const SvxHatchListItem aHatchListItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
+            const SvxHatchListItem * pHatchListItem = pSh->GetItem(SID_HATCH_LIST);
             sal_uInt16 nPos = mpFillAttr->GetSelectedEntryPos();
-            XHatch aHatch = aHatchListItem.GetHatchList()->GetHatch(nPos)->GetHatch();
-            const OUString aHatchName = aHatchListItem.GetHatchList()->GetHatch(nPos)->GetName();
+            XHatch aHatch = pHatchListItem->GetHatchList()->GetHatch(nPos)->GetHatch();
+            const OUString aHatchName = pHatchListItem->GetHatchList()->GetHatch(nPos)->GetName();
 
             XFillHatchItem aItem(aHatchName, aHatch);
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_HATCH, SfxCallMode::RECORD, { &aItem });
@@ -1059,15 +1056,15 @@ IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, ListBox&, void)
             OUString aName;
             if( nFillPos == BITMAP )
             {
-                SvxBitmapListItem aBitmapListItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
-                aBitmap = aBitmapListItem.GetBitmapList()->GetBitmap(nPos)->GetGraphicObject();
-                aName = aBitmapListItem.GetBitmapList()->GetBitmap(nPos)->GetName();
+                SvxBitmapListItem const * pBitmapListItem = pSh->GetItem(SID_BITMAP_LIST);
+                aBitmap = pBitmapListItem->GetBitmapList()->GetBitmap(nPos)->GetGraphicObject();
+                aName = pBitmapListItem->GetBitmapList()->GetBitmap(nPos)->GetName();
             }
             else if( nFillPos == PATTERN )
             {
-                SvxPatternListItem aPatternListItem(*static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
-                aBitmap = aPatternListItem.GetPatternList()->GetBitmap(nPos)->GetGraphicObject();
-                aName = aPatternListItem.GetPatternList()->GetBitmap(nPos)->GetName();
+                SvxPatternListItem const * pPatternListItem = pSh->GetItem(SID_PATTERN_LIST);
+                aBitmap = pPatternListItem->GetPatternList()->GetBitmap(nPos)->GetGraphicObject();
+                aName = pPatternListItem->GetPatternList()->GetBitmap(nPos)->GetName();
             }
             XFillBitmapItem aItem(aName, aBitmap);
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::RECORD, { &aItem });

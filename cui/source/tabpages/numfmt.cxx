@@ -483,8 +483,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_VALUE ) );
 
     if ( SfxItemState::DONTCARE != eState )
-        pValFmtAttr = static_cast<const SfxUInt32Item*>(
-                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_VALUE ));
+        pValFmtAttr = GetItem( *rSet, SID_ATTR_NUMBERFORMAT_VALUE );
 
     eValType = pNumItem->GetValueType();
 

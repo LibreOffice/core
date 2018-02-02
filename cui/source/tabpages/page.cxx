@@ -1409,7 +1409,7 @@ DeactivateRC SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
                     GetCoreValue( *m_pPaperHeightEdit, eUnit ) );
 
         // put, if current size is different to the value in _pSet
-        const SvxSizeItem* pSize = static_cast<const SvxSizeItem*>(GetItem( *_pSet, SID_ATTR_PAGE_SIZE ));
+        const SvxSizeItem* pSize = GetItem( *_pSet, SID_ATTR_PAGE_SIZE );
         if ( aSize.Width() && ( !pSize || !IsEqualSize_Impl( pSize, aSize ) ) )
             _pSet->Put( SvxSizeItem( nWh, aSize ) );
     }
