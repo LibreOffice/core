@@ -42,7 +42,10 @@ namespace oox { namespace ppt {
         void setSlideProperties( PropertyMap& props );
         void setTransitionFilterProperties( const css::uno::Reference< css::animations::XTransitionFilter > & xFilter );
 
+        /// Set one of standard values for slide transition duration
         void setOoxTransitionSpeed( sal_Int32 nToken );
+        /// Set slide transition time directly
+        void setOoxTransitionSpeed( double fDuration );
         void setMode( bool bMode )
             { mbMode = bMode; }
         void setOoxAdvanceTime( sal_Int32 nAdvanceTime )
@@ -66,6 +69,7 @@ namespace oox { namespace ppt {
         bool  mbTransitionDirectionNormal;
         ::sal_Int16 mnAnimationSpeed;
         ::sal_Int32 mnFadeColor;
+        double mfTransitionDurationInSeconds;
         bool  mbMode; /**< http://api.libreoffice.org/docs/common/ref/com/sun/star/animations/XTransitionFilter.html Mode property */
         ::sal_Int32 mnAdvanceTime;
     };
