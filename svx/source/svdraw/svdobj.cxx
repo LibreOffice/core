@@ -3028,12 +3028,12 @@ bool SdrObject::IsInDestruction() const
 // return if fill is != drawing::FillStyle_NONE
 bool SdrObject::HasFillStyle() const
 {
-    return static_cast<const XFillStyleItem&>(GetObjectItem(XATTR_FILLSTYLE)).GetValue() != drawing::FillStyle_NONE;
+    return GetObjectItem(XATTR_FILLSTYLE).GetValue() != drawing::FillStyle_NONE;
 }
 
 bool SdrObject::HasLineStyle() const
 {
-    return static_cast<const XLineStyleItem&>(GetObjectItem(XATTR_LINESTYLE)).GetValue() != drawing::LineStyle_NONE;
+    return GetObjectItem(XATTR_LINESTYLE).GetValue() != drawing::LineStyle_NONE;
 }
 
 

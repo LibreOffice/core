@@ -1930,7 +1930,7 @@ void SdrTableObj::ReformatText()
 
 bool SdrTableObj::IsVerticalWriting() const
 {
-    const SvxWritingModeItem* pModeItem = dynamic_cast< const SvxWritingModeItem* >( &GetObjectItem( SDRATTR_TEXTDIRECTION ) );
+    const SvxWritingModeItem* pModeItem = &GetObjectItem( SDRATTR_TEXTDIRECTION );
     return pModeItem && pModeItem->GetValue() == css::text::WritingMode_TB_RL;
 }
 

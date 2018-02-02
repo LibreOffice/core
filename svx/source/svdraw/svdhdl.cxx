@@ -1660,7 +1660,7 @@ bool ImpEdgeHdl::IsHorzDrag() const
     if (nObjHdlNum<=1)
         return false;
 
-    SdrEdgeKind eEdgeKind = static_cast<const SdrEdgeKindItem&>(pEdge->GetObjectItem(SDRATTR_EDGEKIND)).GetValue();
+    SdrEdgeKind eEdgeKind = pEdge->GetObjectItem(SDRATTR_EDGEKIND).GetValue();
 
     const SdrEdgeInfoRec& rInfo=pEdge->aEdgeInfo;
     if (eEdgeKind==SdrEdgeKind::OrthoLines || eEdgeKind==SdrEdgeKind::Bezier)

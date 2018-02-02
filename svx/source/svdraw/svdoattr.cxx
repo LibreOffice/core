@@ -140,9 +140,9 @@ sal_Int32 SdrAttrObj::ImpGetLineWdt() const
 {
     sal_Int32 nRetval(0);
 
-    if(drawing::LineStyle_NONE != static_cast<const XLineStyleItem&>(GetObjectItem(XATTR_LINESTYLE)).GetValue())
+    if(drawing::LineStyle_NONE != GetObjectItem(XATTR_LINESTYLE).GetValue())
     {
-        nRetval = static_cast<const XLineWidthItem&>(GetObjectItem(XATTR_LINEWIDTH)).GetValue();
+        nRetval = GetObjectItem(XATTR_LINEWIDTH).GetValue();
     }
 
     return nRetval;

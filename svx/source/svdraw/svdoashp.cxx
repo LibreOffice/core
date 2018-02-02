@@ -1382,7 +1382,7 @@ void SdrObjCustomShape::AdaptTextMinSize()
 {
     if (!pModel || (!pModel->IsCreatingDataObj() && !pModel->IsPasteResize()))
     {
-        const bool bResizeShapeToFitText(static_cast< const SdrOnOffItem& >(GetObjectItem(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue());
+        const bool bResizeShapeToFitText(GetObjectItem(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue());
         SfxItemSet aSet(
             *GetObjectItemSet().GetPool(),
             svl::Items<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,

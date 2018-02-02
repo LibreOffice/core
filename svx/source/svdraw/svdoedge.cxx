@@ -817,7 +817,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
     const Point& rPt2, long nAngle2, const tools::Rectangle& rBoundRect2, const tools::Rectangle& rBewareRect2,
     sal_uIntPtr* pnQuality, SdrEdgeInfoRec* pInfo) const
 {
-    SdrEdgeKind eKind=static_cast<const SdrEdgeKindItem&>(GetObjectItem(SDRATTR_EDGEKIND)).GetValue();
+    SdrEdgeKind eKind=GetObjectItem(SDRATTR_EDGEKIND).GetValue();
     bool bRts1=nAngle1==0;
     bool bObn1=nAngle1==9000;
     bool bLks1=nAngle1==18000;
@@ -1708,7 +1708,7 @@ basegfx::B2DPolyPolygon SdrEdgeObj::GetEdgeTrackPath() const
 
 sal_uInt32 SdrEdgeObj::GetHdlCount() const
 {
-    SdrEdgeKind eKind=static_cast<const SdrEdgeKindItem&>(GetObjectItem(SDRATTR_EDGEKIND)).GetValue();
+    SdrEdgeKind eKind=GetObjectItem(SDRATTR_EDGEKIND).GetValue();
     sal_uInt32 nHdlCnt(0);
     sal_uInt32 nPointCount(pEdgeTrack->GetPointCount());
 
@@ -1748,7 +1748,7 @@ SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const
             pHdl=new ImpEdgeHdl((*pEdgeTrack)[sal_uInt16(nPointCount-1)],SdrHdlKind::Poly);
             if (aCon2.pObj!=nullptr && aCon2.bBestVertex) pHdl->Set1PixMore();
         } else {
-            SdrEdgeKind eKind=static_cast<const SdrEdgeKindItem&>(GetObjectItem(SDRATTR_EDGEKIND)).GetValue();
+            SdrEdgeKind eKind=GetObjectItem(SDRATTR_EDGEKIND).GetValue();
             if (eKind==SdrEdgeKind::OrthoLines || eKind==SdrEdgeKind::Bezier) {
                 sal_uInt32 nO1(aEdgeInfo.nObj1Lines > 0 ? aEdgeInfo.nObj1Lines - 1 : 0);
                 sal_uInt32 nO2(aEdgeInfo.nObj2Lines > 0 ? aEdgeInfo.nObj2Lines - 1 : 0);
