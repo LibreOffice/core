@@ -47,8 +47,8 @@ typedef InheritedHelperInterfaceWeakImpl< ov::XGlobalsBase > Globals_BASE;
 class VBAHELPER_DLLPUBLIC VbaGlobalsBase : public Globals_BASE
 {
 protected:
-    OUString msDocCtxName;
-    OUString msApplication;
+    const OUString msDocCtxName;
+    const OUString msApplication;
 
     bool hasServiceName( const OUString& serviceName );
     void init(  const css::uno::Sequence< css::beans::PropertyValue >& aInitArgs );
