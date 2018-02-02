@@ -45,6 +45,7 @@ namespace oox { namespace ppt {
         , mnTransitionSubType( 0 )
         , mbTransitionDirectionNormal( true )
         , mnAnimationSpeed( AnimationSpeed_FAST )
+        , mfTransitionDurationInSeconds( -1.0 )
         , mbMode( true )
         , mnAdvanceTime( -1 )
     {
@@ -56,6 +57,7 @@ namespace oox { namespace ppt {
         , mnTransitionSubType( 0 )
         , mbTransitionDirectionNormal( true )
         , mnAnimationSpeed( AnimationSpeed_FAST )
+        , mfTransitionDurationInSeconds( -1.0 )
         , mbMode( true )
         , mnAdvanceTime( -1 )
     {
@@ -76,6 +78,8 @@ namespace oox { namespace ppt {
             aProps.setProperty( PROP_TransitionSubtype, mnTransitionSubType);
             aProps.setProperty( PROP_TransitionDirection, mbTransitionDirectionNormal);
             aProps.setProperty( PROP_Speed, mnAnimationSpeed);
+            if( mfTransitionDurationInSeconds >= 0.0 )
+                aProps.setProperty( PROP_TransitionDuration, mfTransitionDurationInSeconds);
             aProps.setProperty( PROP_TransitionFadeColor, sal_Int32(0));
             if( mnAdvanceTime != -1 ) {
                 aProps.setProperty( PROP_Duration, mnAdvanceTime/1000);
@@ -110,24 +114,34 @@ namespace oox { namespace ppt {
     {
         switch( nToken  )
         {
-            /* In case you want to use time values in second,
-             * the speed values are located in the PPT97 importer
-             * sd/source/filter/ppt/ppt97animations.cxx:664
-             * (void Ppt97Animation::UpdateCacheData() const)
+            /* the speed values are located in the PPT97 importer
+             * sd/source/filter/ppt/pptin.cxx:1783
+             * (void ImplSdPPTImport::ImportPageEffect)
              */
         case XML_fast:
             mnAnimationSpeed = AnimationSpeed_FAST;
+            mfTransitionDurationInSeconds = 0.5;
             break;
         case XML_med:
             mnAnimationSpeed = AnimationSpeed_MEDIUM;
+            mfTransitionDurationInSeconds = 0.75;
             break;
         case XML_slow:
             mnAnimationSpeed = AnimationSpeed_SLOW;
+            mfTransitionDurationInSeconds = 1.0;
             break;
         default:
             // should not happen. just ignore
             break;
         }
+    }
+
+    void SlideTransition::setOoxTransitionSpeed( double fDurationInSeconds )
+    {
+        // for compatibility
+        mnAnimationSpeed = ( fDurationInSeconds <= 0.5 ) ? AnimationSpeed_FAST
+                                : ( fDurationInSeconds >= 1.0 ) ? AnimationSpeed_SLOW : AnimationSpeed_MEDIUM;
+        mfTransitionDurationInSeconds = fDurationInSeconds;
     }
 
     sal_Int16 SlideTransition::ooxToOdpEightDirections( ::sal_Int32 nOoxType )

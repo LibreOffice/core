@@ -530,6 +530,7 @@ TopMargin
 TotalsRow
 Transformation
 TransitionDirection
+TransitionDuration
 TransitionFadeColor
 TransitionSubtype
 TransitionType

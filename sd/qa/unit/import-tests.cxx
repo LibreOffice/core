@@ -174,6 +174,7 @@ public:
     void testTdf114488();
     void testTdf114913();
     void testTdf114821();
+    void testTdf115394();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -251,6 +252,7 @@ public:
     CPPUNIT_TEST(testTdf114488);
     CPPUNIT_TEST(testTdf114913);
     CPPUNIT_TEST(testTdf114821);
+    CPPUNIT_TEST(testTdf115394);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2376,6 +2378,38 @@ void SdImportTest::testTdf114821()
     CPPUNIT_ASSERT( rPropSet2.is() );
     rPropSet2->getPropertyValue( "LabelPlacement") >>= aPlacement;
     CPPUNIT_ASSERT_EQUAL( css::chart::DataLabelPlacement::TOP, aPlacement );
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf115394()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf115394.pptx"), PPTX);
+    double fTransitionDuration;
+
+    // Slow in MS formats
+    SdPage* pPage1 = xDocShRef->GetDoc()->GetSdPage(0, PageKind::Standard);
+    fTransitionDuration = pPage1->getTransitionDuration();
+    CPPUNIT_ASSERT_EQUAL(1.0, fTransitionDuration);
+
+    // Medium in MS formats
+    SdPage* pPage2 = xDocShRef->GetDoc()->GetSdPage(1, PageKind::Standard);
+    fTransitionDuration = pPage2->getTransitionDuration();
+    CPPUNIT_ASSERT_EQUAL(0.75, fTransitionDuration);
+
+    // Fast in MS formats
+    SdPage* pPage3 = xDocShRef->GetDoc()->GetSdPage(2, PageKind::Standard);
+    fTransitionDuration = pPage3->getTransitionDuration();
+    CPPUNIT_ASSERT_EQUAL(0.5, fTransitionDuration);
+
+    // Custom values
+    SdPage* pPage4 = xDocShRef->GetDoc()->GetSdPage(3, PageKind::Standard);
+    fTransitionDuration = pPage4->getTransitionDuration();
+    CPPUNIT_ASSERT_EQUAL(0.25, fTransitionDuration);
+
+    SdPage* pPage5 = xDocShRef->GetDoc()->GetSdPage(4, PageKind::Standard);
+    fTransitionDuration = pPage5->getTransitionDuration();
+    CPPUNIT_ASSERT_EQUAL(4.25, fTransitionDuration);
 
     xDocShRef->DoClose();
 }
