@@ -432,7 +432,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 
     pBoxItem  = static_cast<const SvxBoxItem*>(GetItem( *rSet, SID_ATTR_BORDER_OUTER ));
 
-    pBoxInfoItem = static_cast<const SvxBoxInfoItem*>(GetItem( *rSet, SID_ATTR_BORDER_INNER, false ));
+    pBoxInfoItem = GetItem( *rSet, SID_ATTR_BORDER_INNER, false );
 
     eCoreUnit = rSet->GetPool()->GetMetric( nWhichBox );
 
@@ -707,8 +707,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
                      || m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Left ) != svx::FrameBorderState::Hide
                      || m_pFrameSel->GetFrameBorderState( svx::FrameBorderType::Right ) != svx::FrameBorderState::Hide )
                 {
-                    const SvxBoxInfoItem* pOldBoxInfoItem = static_cast<const SvxBoxInfoItem*>(GetOldItem(
-                                                        *rCoreAttrs, SID_ATTR_BORDER_INNER ));
+                    const SvxBoxInfoItem* pOldBoxInfoItem = GetOldItem( *rCoreAttrs, SID_ATTR_BORDER_INNER );
                     if (
                         !pOldBoxItem ||
                         m_pLeftMF->IsValueChangedFromSaved() ||
@@ -1224,7 +1223,7 @@ void SvxBorderTabPage::UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset )
     if( !bIsCalcDoc )
         return;
     const SfxItemSet&     rOldSet         = GetItemSet();
-    const SvxBoxInfoItem* pOldBoxInfoItem = static_cast<const SvxBoxInfoItem*>(GetOldItem( rOldSet, SID_ATTR_BORDER_INNER ));
+    const SvxBoxInfoItem* pOldBoxInfoItem = GetOldItem( rOldSet, SID_ATTR_BORDER_INNER );
     const SvxBoxItem*     pOldBoxItem     = static_cast<const SvxBoxItem*>(GetOldItem( rOldSet, SID_ATTR_BORDER_OUTER ));
     if( !pOldBoxInfoItem || !pOldBoxItem )
         return;

@@ -52,7 +52,7 @@ void InitDrawModelAndDocShell(SwDocShell* pSwDocShell, SwDrawModel* pSwDrawDocum
             // get and decide on the color table to use
             if(pSwDocShell)
             {
-                const SvxColorListItem* pColItemFromDocShell = static_cast< const SvxColorListItem* >(pSwDocShell->GetItem(SID_COLOR_TABLE));
+                const SvxColorListItem* pColItemFromDocShell = pSwDocShell->GetItem(SID_COLOR_TABLE);
 
                 if(pColItemFromDocShell)
                 {

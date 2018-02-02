@@ -239,6 +239,10 @@ protected:
     sal_uInt16          GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const
                             { return pSet->GetPool()->GetWhich( nSlot, bDeep ); }
     const SfxPoolItem*  GetOldItem( const SfxItemSet& rSet, sal_uInt16 nSlot, bool bDeep = true );
+    template<class T> const T* GetOldItem( const SfxItemSet& rSet, TypedWhichId<T> nSlot, bool bDeep = true )
+    {
+        return static_cast<const T*>(GetOldItem(rSet, sal_uInt16(nSlot), bDeep));
+    }
     SfxTabDialog*       GetTabDialog() const;
 
     void                AddItemConnection( sfx::ItemConnectionBase* pConnection );
@@ -269,6 +273,10 @@ public:
     virtual void PageCreated (const SfxAllItemSet& aSet);
     virtual void ChangesApplied();
     static const SfxPoolItem* GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot, bool bDeep = true );
+    template<class T> static const T* GetItem( const SfxItemSet& rSet, TypedWhichId<T> nSlot, bool bDeep = true )
+    {
+        return static_cast<const T*>(GetItem(rSet, sal_uInt16(nSlot), bDeep));
+    }
 
     void SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame);
     css::uno::Reference< css::frame::XFrame > GetFrame();

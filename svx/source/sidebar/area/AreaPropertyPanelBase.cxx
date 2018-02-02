@@ -207,8 +207,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ClickImportBitmapHdl, Button*, void)
         LeaveWait();
         if( nError == ERRCODE_NONE )
         {
-            const SvxBitmapListItem aItem( *static_cast<const SvxBitmapListItem*>(SfxObjectShell::Current()->GetItem(SID_BITMAP_LIST)));
-            XBitmapListRef pList = aItem.GetBitmapList();
+            XBitmapListRef pList = SfxObjectShell::Current()->GetItem(SID_BITMAP_LIST)->GetBitmapList();
             INetURLObject   aURL( aDlg.GetPath() );
             OUString aFileName =  aURL.GetName().getToken( 0, '.' );
             OUString aName = aFileName;
@@ -303,11 +302,11 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
             mpMTRAngle->Enable();
             mpLbFillAttr->Clear();
 
-            const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
+            const SvxGradientListItem * pItem = pSh->GetItem(SID_GRADIENT_LIST);
 
-            if(0 < aItem.GetGradientList()->Count())
+            if(0 < pItem->GetGradientList()->Count())
             {
-                const XGradient aGradient = aItem.GetGradientList()->GetGradient(0)->GetGradient();
+                const XGradient aGradient = pItem->GetGradientList()->GetGradient(0)->GetGradient();
                 const XFillGradientItem aXFillGradientItem(aGradient);
 
                 // #i122676# change FillStyle and Gradient in one call
@@ -332,10 +331,10 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
             mpToolBoxColor->Hide();
             mpBmpImport->Hide();
 
-            const SvxHatchListItem* aItem( static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
-            if(aItem)
+            const SvxHatchListItem* pItem( pSh->GetItem(SID_HATCH_LIST) );
+            if(pItem)
             {
-                XHatchListRef pXHatchList(aItem->GetHatchList());
+                XHatchListRef pXHatchList(pItem->GetHatchList());
                 mpLbFillAttr->Enable();
                 mpLbFillAttr->Clear();
                 mpLbFillAttr->Fill(pXHatchList);
@@ -379,10 +378,10 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
             if(nPos == static_cast< sal_Int32 >(BITMAP))
             {
                 mpBmpImport->Show();
-                const SvxBitmapListItem* aItem( static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
-                if(aItem)
+                const SvxBitmapListItem* pItem = pSh->GetItem(SID_BITMAP_LIST);
+                if(pItem)
                 {
-                    XBitmapListRef pXBitmapList(aItem->GetBitmapList());
+                    XBitmapListRef pXBitmapList(pItem->GetBitmapList());
                     mpLbFillAttr->Fill(pXBitmapList);
 
                     mpLbFillAttr->AdaptDropDownLineCountToMaximum();
@@ -406,10 +405,10 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
             else if(nPos == static_cast< sal_Int32 >(PATTERN))
             {
                 mpBmpImport->Hide();
-                const SvxPatternListItem* aItem( static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
-                if(aItem)
+                const SvxPatternListItem* pItem = pSh->GetItem(SID_PATTERN_LIST);
+                if(pItem)
                 {
-                    XPatternListRef pXPatternList(aItem->GetPatternList());
+                    XPatternListRef pXPatternList(pItem->GetPatternList());
                     mpLbFillAttr->Fill(pXPatternList);
 
                     mpLbFillAttr->AdaptDropDownLineCountToMaximum();
@@ -524,11 +523,11 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
 
             if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_HATCH_LIST))
             {
-                const SvxHatchListItem aItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
+                const SvxHatchListItem * pItem = pSh->GetItem(SID_HATCH_LIST);
 
-                if(nPos < aItem.GetHatchList()->Count())
+                if(nPos < pItem->GetHatchList()->Count())
                 {
-                    const XHatch aHatch = aItem.GetHatchList()->GetHatch(nPos)->GetHatch();
+                    const XHatch aHatch = pItem->GetHatchList()->GetHatch(nPos)->GetHatch();
                     const XFillHatchItem aXFillHatchItem( mpLbFillAttr->GetSelectedEntry(), aHatch);
 
                     // #i122676# Change FillStyle and Hatch in one call
@@ -554,11 +553,11 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
 
             if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_BITMAP_LIST))
             {
-                const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
+                const SvxBitmapListItem * pItem = pSh->GetItem(SID_BITMAP_LIST);
 
-                if(nPos < aItem.GetBitmapList()->Count())
+                if(nPos < pItem->GetBitmapList()->Count())
                 {
-                    const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(nPos);
+                    const XBitmapEntry* pXBitmapEntry = pItem->GetBitmapList()->GetBitmap(nPos);
                     const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectedEntry(), pXBitmapEntry->GetGraphicObject());
 
                     // #i122676# Change FillStyle and Bitmap in one call
@@ -584,11 +583,11 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
 
             if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_PATTERN_LIST))
             {
-                const SvxPatternListItem aItem(*static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
+                const SvxPatternListItem * pItem = pSh->GetItem(SID_PATTERN_LIST);
 
-                if(nPos < aItem.GetPatternList()->Count())
+                if(nPos < pItem->GetPatternList()->Count())
                 {
-                    const XBitmapEntry* pXPatternEntry = aItem.GetPatternList()->GetBitmap(nPos);
+                    const XBitmapEntry* pXPatternEntry = pItem->GetPatternList()->GetBitmap(nPos);
                     const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectedEntry(), pXPatternEntry->GetGraphicObject());
 
                     // #i122676# Change FillStyle and Bitmap in one call
@@ -1024,11 +1023,10 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
                     {
                         const OUString aString( mpFillGradientItem->GetName() );
                         const SfxObjectShell* pSh = SfxObjectShell::Current();
-                        const SvxGradientListItem aItem( *static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
 
                         mpLbFillAttr->Clear();
                         mpLbFillAttr->Enable();
-                        mpLbFillAttr->Fill(aItem.GetGradientList());
+                        mpLbFillAttr->Fill(pSh->GetItem(SID_GRADIENT_LIST)->GetGradientList());
                         mpLbFillAttr->SelectEntry(aString);
                     }
                     else
@@ -1049,11 +1047,10 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
                     {
                         const OUString aString( mpHatchItem->GetName() );
                         const SfxObjectShell* pSh = SfxObjectShell::Current();
-                        const SvxHatchListItem aItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
 
                         mpLbFillAttr->Clear();
                         mpLbFillAttr->Enable();
-                        mpLbFillAttr->Fill(aItem.GetHatchList());
+                        mpLbFillAttr->Fill(pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
                         mpLbFillAttr->SelectEntry(aString);
                     }
                     else
@@ -1079,14 +1076,11 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
                         mpLbFillAttr->Show();
                         if(nSID == SID_BITMAP_LIST)
                         {
-                            const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
-
-                            mpLbFillAttr->Fill(aItem.GetBitmapList());
+                            mpLbFillAttr->Fill(pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
                         }
                         else if(nSID == SID_PATTERN_LIST)
                         {
-                            const SvxPatternListItem aItem(*static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
-                            mpLbFillAttr->Fill(aItem.GetPatternList());
+                            mpLbFillAttr->Fill(pSh->GetItem(SID_PATTERN_LIST)->GetPatternList());
                         }
                         mpLbFillAttr->SelectEntry(aString);
                     }
@@ -1146,10 +1140,9 @@ void AreaPropertyPanelBase::Update()
 
                 if(pSh && pSh->GetItem(SID_GRADIENT_LIST))
                 {
-                    const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
                     mpLbFillAttr->Enable();
                     mpLbFillAttr->Clear();
-                    mpLbFillAttr->Fill(aItem.GetGradientList());
+                    mpLbFillAttr->Fill(pSh->GetItem(SID_GRADIENT_LIST)->GetGradientList());
                     mpLbFillGradTo->SetNoSelection();
                     mpLbFillGradFrom->SetNoSelection();
                     if (mpFillGradientItem)
@@ -1189,10 +1182,9 @@ void AreaPropertyPanelBase::Update()
 
                 if(pSh && pSh->GetItem(SID_HATCH_LIST))
                 {
-                    const SvxHatchListItem aItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
                     mpLbFillAttr->Enable();
                     mpLbFillAttr->Clear();
-                    mpLbFillAttr->Fill(aItem.GetHatchList());
+                    mpLbFillAttr->Fill(pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
 
                     if(mpHatchItem)
                     {
@@ -1229,8 +1221,7 @@ void AreaPropertyPanelBase::Update()
                     {
                         mpBmpImport->Show();
                         mpLbFillType->SelectEntryPos(sal_uInt32(BITMAP));
-                        const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
-                        mpLbFillAttr->Fill(aItem.GetBitmapList());
+                        mpLbFillAttr->Fill(pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
 
                         const OUString aString(mpBitmapItem->GetName());
                         mpLbFillAttr->SelectEntry(aString);
@@ -1239,8 +1230,7 @@ void AreaPropertyPanelBase::Update()
                     {
                         mpBmpImport->Hide();
                         mpLbFillType->SelectEntryPos(sal_uInt32(PATTERN));
-                        const SvxPatternListItem aItem(*static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
-                        mpLbFillAttr->Fill(aItem.GetPatternList());
+                        mpLbFillAttr->Fill(pSh->GetItem(SID_PATTERN_LIST)->GetPatternList());
 
                         const OUString aString(mpBitmapItem->GetName());
                         mpLbFillAttr->SelectEntry(aString);

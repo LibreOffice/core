@@ -115,21 +115,21 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell const * pDocSh,
         SetInputSet(pOrgSet);
     }
 
-    SvxColorListItem aColorListItem(*static_cast<const SvxColorListItem*>( mpDocShell->GetItem( SID_COLOR_TABLE ) ) );
-    SvxGradientListItem aGradientListItem(*static_cast<const SvxGradientListItem*>( mpDocShell->GetItem( SID_GRADIENT_LIST ) ) );
-    SvxBitmapListItem aBitmapListItem(*static_cast<const SvxBitmapListItem*>( mpDocShell->GetItem( SID_BITMAP_LIST ) ) );
-    SvxPatternListItem aPatternListItem(*static_cast<const SvxPatternListItem*>( mpDocShell->GetItem( SID_PATTERN_LIST ) ) );
-    SvxHatchListItem aHatchListItem(*static_cast<const SvxHatchListItem*>( mpDocShell->GetItem( SID_HATCH_LIST ) ) );
-    SvxDashListItem aDashListItem(*static_cast<const SvxDashListItem*>( mpDocShell->GetItem( SID_DASH_LIST ) ) );
-    SvxLineEndListItem aLineEndListItem(*static_cast<const SvxLineEndListItem*>( mpDocShell->GetItem( SID_LINEEND_LIST ) ) );
+    SvxColorListItem const *pColorListItem = mpDocShell->GetItem( SID_COLOR_TABLE );
+    SvxGradientListItem const *pGradientListItem = mpDocShell->GetItem( SID_GRADIENT_LIST );
+    SvxBitmapListItem const *pBitmapListItem = mpDocShell->GetItem( SID_BITMAP_LIST );
+    SvxPatternListItem const *pPatternListItem = mpDocShell->GetItem( SID_PATTERN_LIST );
+    SvxHatchListItem const *pHatchListItem = mpDocShell->GetItem( SID_HATCH_LIST );
+    SvxDashListItem const *pDashListItem = mpDocShell->GetItem( SID_DASH_LIST );
+    SvxLineEndListItem const *pLineEndListItem = mpDocShell->GetItem( SID_LINEEND_LIST );
 
-    pColorTab = aColorListItem.GetColorList();
-    pDashList = aDashListItem.GetDashList();
-    pLineEndList = aLineEndListItem.GetLineEndList();
-    pGradientList = aGradientListItem.GetGradientList();
-    pHatchingList = aHatchListItem.GetHatchList();
-    pBitmapList = aBitmapListItem.GetBitmapList();
-    pPatternList = aPatternListItem.GetPatternList();
+    pColorTab = pColorListItem->GetColorList();
+    pDashList = pDashListItem->GetDashList();
+    pLineEndList = pLineEndListItem->GetLineEndList();
+    pGradientList = pGradientListItem->GetGradientList();
+    pHatchingList = pHatchListItem->GetHatchList();
+    pBitmapList = pBitmapListItem->GetBitmapList();
+    pPatternList = pPatternListItem->GetPatternList();
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");

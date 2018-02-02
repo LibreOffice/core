@@ -24,6 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
+#include <svl/typedwhich.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/sfxuno.hxx>
 #include <svl/SfxBroadcaster.hxx>
@@ -424,6 +425,10 @@ public:
         <SfxShell::RemoveItem(sal_uInt16)>
         */
     const SfxPoolItem*          GetItem( sal_uInt16 nSlotId ) const;
+    template<class T> const T*  GetItem( TypedWhichId<T> nWhich ) const
+    {
+        return static_cast<const T*>(GetItem(sal_uInt16(nWhich)));
+    }
 
     /**
         With this method, any objects of subclasses of <SfxPoolItem> can be made

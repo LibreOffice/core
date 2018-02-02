@@ -1387,8 +1387,8 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
     if(m_pSplitRowCB->IsValueChangedFromSaved())
         bModified |= nullptr != rSet->Put( SwFormatRowSplit( m_pSplitRowCB->IsChecked()));
 
-    const SvxFormatBreakItem* pBreak = static_cast<const SvxFormatBreakItem*>(GetOldItem( *rSet, RES_BREAK ));
-    const SwFormatPageDesc* pDesc = static_cast<const SwFormatPageDesc*>(GetOldItem( *rSet, RES_PAGEDESC ));
+    const SvxFormatBreakItem* pBreak = GetOldItem( *rSet, RES_BREAK );
+    const SwFormatPageDesc* pDesc = GetOldItem( *rSet, RES_PAGEDESC );
 
     bool bState = m_pPageCollCB->IsChecked();
 

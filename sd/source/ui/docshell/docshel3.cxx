@@ -236,7 +236,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case SID_GET_COLORLIST:
         {
-            const SvxColorListItem* pColItem = static_cast<const SvxColorListItem*>( GetItem( SID_COLOR_TABLE ) );
+            const SvxColorListItem* pColItem = GetItem( SID_COLOR_TABLE );
             XColorListRef pList = pColItem->GetColorList();
             rReq.SetReturnValue( OfaRefItem<XColorList>( SID_GET_COLORLIST, pList ) );
         }

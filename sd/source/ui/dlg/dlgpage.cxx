@@ -40,22 +40,17 @@ SdPageDlg::SdPageDlg( SfxObjectShell const * pDocSh, vcl::Window* pParent, const
                       , pAttr ),
         mpDocShell  ( pDocSh )
 {
-    SvxColorListItem aColorListItem(*static_cast<const SvxColorListItem*>(
-        ( mpDocShell->GetItem( SID_COLOR_TABLE ) ) ) );
-    SvxGradientListItem aGradientListItem(*static_cast<const SvxGradientListItem*>(
-        ( mpDocShell->GetItem( SID_GRADIENT_LIST ) ) ) );
-    SvxBitmapListItem aBitmapListItem(*static_cast<const SvxBitmapListItem*>(
-        ( mpDocShell->GetItem( SID_BITMAP_LIST ) ) ) );
-    SvxPatternListItem aPatternListItem(*static_cast<const SvxPatternListItem*>(
-        ( mpDocShell->GetItem( SID_PATTERN_LIST ) ) ) );
-    SvxHatchListItem aHatchListItem(*static_cast<const SvxHatchListItem*>(
-        ( mpDocShell->GetItem( SID_HATCH_LIST ) ) ) );
+    SvxColorListItem const * pColorListItem = mpDocShell->GetItem( SID_COLOR_TABLE );
+    SvxGradientListItem const * pGradientListItem = mpDocShell->GetItem( SID_GRADIENT_LIST );
+    SvxBitmapListItem const * pBitmapListItem = mpDocShell->GetItem( SID_BITMAP_LIST );
+    SvxPatternListItem const * pPatternListItem = mpDocShell->GetItem( SID_PATTERN_LIST );
+    SvxHatchListItem const * pHatchListItem = mpDocShell->GetItem( SID_HATCH_LIST );
 
-    mpColorList = aColorListItem.GetColorList();
-    mpGradientList = aGradientListItem.GetGradientList();
-    mpHatchingList = aHatchListItem.GetHatchList();
-    mpBitmapList = aBitmapListItem.GetBitmapList();
-    mpPatternList = aPatternListItem.GetPatternList();
+    mpColorList = pColorListItem->GetColorList();
+    mpGradientList = pGradientListItem->GetGradientList();
+    mpHatchingList = pHatchListItem->GetHatchList();
+    mpBitmapList = pBitmapListItem->GetBitmapList();
+    mpPatternList = pPatternListItem->GetPatternList();
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");

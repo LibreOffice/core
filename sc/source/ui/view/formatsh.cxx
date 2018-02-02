@@ -923,8 +923,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         if ( SfxStyleFamily::Para == eFam )
                         {
                             ScTabViewShell::UpdateNumberFormatter(
-                                static_cast<const SvxNumberInfoItem&>(
-                                    *(pDocSh->GetItem(SID_ATTR_NUMBERFORMAT_INFO)) ));
+                                    *( pDocSh->GetItem(SID_ATTR_NUMBERFORMAT_INFO) ));
 
                             pTabViewShell->UpdateStyleSheetInUse( pStyleSheet );
                             pTabViewShell->InvalidateAttribs();

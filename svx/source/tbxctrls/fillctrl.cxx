@@ -250,11 +250,10 @@ void SvxFillToolBoxControl::StateChanged(
                     {
                         const OUString aString( mpFillGradientItem->GetName() );
                         const SfxObjectShell* pSh = SfxObjectShell::Current();
-                        const SvxGradientListItem aItem( *static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
 
                         mpLbFillAttr->Clear();
                         mpLbFillAttr->Enable();
-                        mpLbFillAttr->Fill(aItem.GetGradientList());
+                        mpLbFillAttr->Fill(pSh->GetItem(SID_GRADIENT_LIST)->GetGradientList());
                         mpLbFillAttr->SelectEntry(aString);
                     }
                     else
@@ -275,11 +274,10 @@ void SvxFillToolBoxControl::StateChanged(
                     {
                         const OUString aString( mpHatchItem->GetName() );
                         const SfxObjectShell* pSh = SfxObjectShell::Current();
-                        const SvxHatchListItem aItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
 
                         mpLbFillAttr->Clear();
                         mpLbFillAttr->Enable();
-                        mpLbFillAttr->Fill(aItem.GetHatchList());
+                        mpLbFillAttr->Fill(pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
                         mpLbFillAttr->SelectEntry(aString);
                     }
                     else
@@ -300,11 +298,10 @@ void SvxFillToolBoxControl::StateChanged(
                     {
                         const OUString aString( mpBitmapItem->GetName() );
                         const SfxObjectShell* pSh = SfxObjectShell::Current();
-                        const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
 
                         mpLbFillAttr->Clear();
                         mpLbFillAttr->Enable();
-                        mpLbFillAttr->Fill(aItem.GetBitmapList());
+                        mpLbFillAttr->Fill(pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
                         mpLbFillAttr->SelectEntry(aString);
                     }
                     else
@@ -349,10 +346,9 @@ void SvxFillToolBoxControl::Update()
 
                 if(pSh && pSh->GetItem(SID_GRADIENT_LIST))
                 {
-                    const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
                     mpLbFillAttr->Enable();
                     mpLbFillAttr->Clear();
-                    mpLbFillAttr->Fill(aItem.GetGradientList());
+                    mpLbFillAttr->Fill(pSh->GetItem(SID_GRADIENT_LIST)->GetGradientList());
 
                     if(mpFillGradientItem)
                     {
@@ -408,10 +404,9 @@ void SvxFillToolBoxControl::Update()
 
                 if(pSh && pSh->GetItem(SID_HATCH_LIST))
                 {
-                    const SvxHatchListItem aItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
                     mpLbFillAttr->Enable();
                     mpLbFillAttr->Clear();
-                    mpLbFillAttr->Fill(aItem.GetHatchList());
+                    mpLbFillAttr->Fill(pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
 
                     if(mpHatchItem)
                     {
@@ -467,10 +462,9 @@ void SvxFillToolBoxControl::Update()
 
                 if(pSh && pSh->GetItem(SID_BITMAP_LIST))
                 {
-                    const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
                     mpLbFillAttr->Enable();
                     mpLbFillAttr->Clear();
-                    mpLbFillAttr->Fill(aItem.GetBitmapList());
+                    mpLbFillAttr->Fill(pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
 
                     if(mpBitmapItem)
                     {
@@ -620,21 +614,20 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
                 {
                     if(!mpLbFillAttr->GetEntryCount())
                     {
-                        const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
                         mpLbFillAttr->Enable();
                         mpLbFillAttr->Clear();
-                        mpLbFillAttr->Fill(aItem.GetGradientList());
+                        mpLbFillAttr->Fill(pSh->GetItem(SID_GRADIENT_LIST)->GetGradientList());
                     }
 
                     mpLbFillAttr->AdaptDropDownLineCountToMaximum();
 
                     if(LISTBOX_ENTRY_NOTFOUND != mnLastPosGradient)
                     {
-                        const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
+                        const SvxGradientListItem * pItem = pSh->GetItem(SID_GRADIENT_LIST);
 
-                        if(mnLastPosGradient < aItem.GetGradientList()->Count())
+                        if(mnLastPosGradient < pItem->GetGradientList()->Count())
                         {
-                            const XGradient aGradient = aItem.GetGradientList()->GetGradient(mnLastPosGradient)->GetGradient();
+                            const XGradient aGradient = pItem->GetGradientList()->GetGradient(mnLastPosGradient)->GetGradient();
                             const XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetEntry(mnLastPosGradient), aGradient);
 
                             // #i122676# change FillStyle and Gradient in one call
@@ -660,21 +653,20 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
                 {
                     if(!mpLbFillAttr->GetEntryCount())
                     {
-                        const SvxHatchListItem aItem( *static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
                         mpLbFillAttr->Enable();
                         mpLbFillAttr->Clear();
-                        mpLbFillAttr->Fill(aItem.GetHatchList());
+                        mpLbFillAttr->Fill(pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
                     }
 
                     mpLbFillAttr->AdaptDropDownLineCountToMaximum();
 
                     if(LISTBOX_ENTRY_NOTFOUND != mnLastPosHatch)
                     {
-                        const SvxHatchListItem aItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
+                        const SvxHatchListItem * pItem = pSh->GetItem(SID_HATCH_LIST);
 
-                        if(mnLastPosHatch < aItem.GetHatchList()->Count())
+                        if(mnLastPosHatch < pItem->GetHatchList()->Count())
                         {
-                            const XHatch aHatch = aItem.GetHatchList()->GetHatch(mnLastPosHatch)->GetHatch();
+                            const XHatch aHatch = pItem->GetHatchList()->GetHatch(mnLastPosHatch)->GetHatch();
                             const XFillHatchItem aXFillHatchItem(mpLbFillAttr->GetSelectedEntry(), aHatch);
 
                             // #i122676# change FillStyle and Hatch in one call
@@ -700,21 +692,20 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
                 {
                     if(!mpLbFillAttr->GetEntryCount())
                     {
-                        const SvxBitmapListItem aItem( *static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
                         mpLbFillAttr->Enable();
                         mpLbFillAttr->Clear();
-                        mpLbFillAttr->Fill(aItem.GetBitmapList());
+                        mpLbFillAttr->Fill(pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
                     }
 
                     mpLbFillAttr->AdaptDropDownLineCountToMaximum();
 
                     if(LISTBOX_ENTRY_NOTFOUND != mnLastPosBitmap)
                     {
-                        const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
+                        const SvxBitmapListItem * pItem = pSh->GetItem(SID_BITMAP_LIST);
 
-                        if(mnLastPosBitmap < aItem.GetBitmapList()->Count())
+                        if(mnLastPosBitmap < pItem->GetBitmapList()->Count())
                         {
-                            const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(mnLastPosBitmap);
+                            const XBitmapEntry* pXBitmapEntry = pItem->GetBitmapList()->GetBitmap(mnLastPosBitmap);
                             const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectedEntry(), pXBitmapEntry->GetGraphicObject());
 
                             // #i122676# change FillStyle and Bitmap in one call
@@ -776,11 +767,11 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
 
             if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_GRADIENT_LIST))
             {
-                const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
+                const SvxGradientListItem * pItem = pSh->GetItem(SID_GRADIENT_LIST);
 
-                if(nPos < aItem.GetGradientList()->Count())
+                if(nPos < pItem->GetGradientList()->Count())
                 {
-                    const XGradient aGradient = aItem.GetGradientList()->GetGradient(nPos)->GetGradient();
+                    const XGradient aGradient = pItem->GetGradientList()->GetGradient(nPos)->GetGradient();
                     const XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetSelectedEntry(), aGradient);
 
                     // #i122676# Change FillStyle and Gradinet in one call
@@ -809,11 +800,11 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
 
             if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_HATCH_LIST))
             {
-                const SvxHatchListItem aItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
+                const SvxHatchListItem * pItem = pSh->GetItem(SID_HATCH_LIST);
 
-                if(nPos < aItem.GetHatchList()->Count())
+                if(nPos < pItem->GetHatchList()->Count())
                 {
-                    const XHatch aHatch = aItem.GetHatchList()->GetHatch(nPos)->GetHatch();
+                    const XHatch aHatch = pItem->GetHatchList()->GetHatch(nPos)->GetHatch();
                     const XFillHatchItem aXFillHatchItem( mpLbFillAttr->GetSelectedEntry(), aHatch);
 
                     // #i122676# Change FillStyle and Hatch in one call
@@ -842,11 +833,11 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
 
             if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_BITMAP_LIST))
             {
-                const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
+                const SvxBitmapListItem * pItem = pSh->GetItem(SID_BITMAP_LIST);
 
-                if(nPos < aItem.GetBitmapList()->Count())
+                if(nPos < pItem->GetBitmapList()->Count())
                 {
-                    const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(nPos);
+                    const XBitmapEntry* pXBitmapEntry = pItem->GetBitmapList()->GetBitmap(nPos);
                     const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectedEntry(), pXBitmapEntry->GetGraphicObject());
 
                     // #i122676# Change FillStyle and Bitmap in one call
