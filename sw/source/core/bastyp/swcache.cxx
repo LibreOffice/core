@@ -199,16 +199,18 @@ void SwCache::ToTop( SwCacheObj *pObj )
     if ( !m_pRealFirst )
     {
         // the first will be inserted
-        OSL_ENSURE( !m_pFirst && !m_pLast, "First not first." );
+        assert(!m_pFirst && !m_pLast);
         m_pRealFirst = m_pFirst = m_pLast = pObj;
         CHECK;
         return;
     }
 
+    assert(m_pFirst && m_pLast);
+
     // cut
     if ( pObj == m_pLast )
     {
-        OSL_ENSURE( pObj->GetPrev(), "Last but no Prev." );
+        assert(pObj->GetPrev());
         m_pLast = pObj->GetPrev();
         m_pLast->SetNext( nullptr );
     }
@@ -231,8 +233,6 @@ void SwCache::ToTop( SwCacheObj *pObj )
     }
     else
     {
-        OSL_ENSURE( m_pFirst, "ToTop, First is not RealFirst an Empty." );
-
         if ( m_pFirst->GetPrev() )
         {
             m_pFirst->GetPrev()->SetNext( pObj );
@@ -433,7 +433,8 @@ bool SwCache::Insert( SwCacheObj *pNew )
         pNew->SetNext( m_pFirst );
     }
     else
-    { OSL_ENSURE( !m_pLast, "Last but no First." );
+    {
+        assert(!m_pLast);
         m_pLast = pNew;
     }
     if ( m_pFirst == m_pRealFirst )
