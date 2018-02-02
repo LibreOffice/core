@@ -73,6 +73,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/interaction.hxx>
+#include <svtools/langtab.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/securityoptions.hxx>
@@ -654,6 +655,9 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
     pImpl->nLoadedFlags = SfxLoadedFlags::NONE;
     pImpl->bModelInitialized = false;
+
+    // initialize static language table so language-related extensions are learned before the document loads
+    (void)SvtLanguageTable::GetLanguageEntryCount();
 
     //TODO/LATER: make a clear strategy how to handle "UsesStorage" etc.
     bool bOwnStorageFormat = IsOwnStorageFormat( *pMedium );
