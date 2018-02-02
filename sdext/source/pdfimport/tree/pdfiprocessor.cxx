@@ -685,34 +685,14 @@ static bool lr_tb_sort( Element* pLeft, Element* pRight )
     return false;
 }
 
-void PDFIProcessor::sortElements( Element* pEle, bool bDeep )
+void PDFIProcessor::sortElements(Element* pEle)
 {
     if( pEle->Children.empty() )
         return;
 
-    if( bDeep )
-    {
-        for (auto const& child : pEle->Children)
-        {
-            sortElements( child, bDeep );
-        }
-    }
-    // HACK: the stable sort member on std::list that takes a
-    // strict weak ordering requires member templates - which we
-    // do not have on all compilers. so we need to use std::stable_sort
-    // here - which does need random access iterators which the
-    // list iterators are not.
-    // so we need to copy the Element* to an array, stable sort that and
-    // copy them back.
-    std::vector<Element*> aChildren;
-    while( ! pEle->Children.empty() )
-    {
-        aChildren.push_back( pEle->Children.front() );
-        pEle->Children.pop_front();
-    }
-    std::stable_sort( aChildren.begin(), aChildren.end(), lr_tb_sort );
-    for (auto const& child : aChildren)
-        pEle->Children.push_back(child);
+    // sort method from std::list is equivalent to stable_sort
+    // See S Meyers, Effective STL
+    pEle->Children.sort(lr_tb_sort);
 }
 
 // helper method: get a mirrored string
