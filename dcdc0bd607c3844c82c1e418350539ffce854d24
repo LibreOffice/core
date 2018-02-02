@@ -34,6 +34,24 @@
       "revId": "dcdc0bd607c3844c82c1e418350539ffce854d24",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_1ec5883b",
+        "filename": "sdext/source/pdfimport/tree/pdfiprocessor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-02-02T13:26:11Z",
+      "side": 1,
+      "message": "ah good catch, excellent!\n\nplease note this requirement though (three word comment is enough), since it is not at all obvious from the call site ;)",
+      "parentUuid": "fa31d9ce_fea0b492",
+      "revId": "dcdc0bd607c3844c82c1e418350539ffce854d24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
