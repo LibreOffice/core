@@ -90,7 +90,7 @@ namespace pdfi
         const FontAttributes& getFont( sal_Int32 nFontId ) const;
         sal_Int32 getFontId( const FontAttributes& rAttr ) const;
 
-        void sortElements( Element* pElement, bool bDeep = false );
+        void sortElements( Element* pElement );
 
         static OUString mirrorString( const OUString& i_rInString );
 
