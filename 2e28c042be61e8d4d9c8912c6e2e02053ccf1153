@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_3e2deca7",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-02-02T19:43:20Z",
+      "side": 1,
+      "message": "Ah, only now do I start to understand what you meant in https://gerrit.libreoffice.org/#/c/46992/3/extensions/Library_scn.mk@15 . Thank you.",
+      "parentUuid": "fa31d9ce_de7770d2",
+      "revId": "2e28c042be61e8d4d9c8912c6e2e02053ccf1153",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_9e6df806",
         "filename": "external/Module_external.mk",
         "patchSetId": 5
@@ -48,6 +66,24 @@
       "writtenOn": "2018-02-02T17:45:56Z",
       "side": 1,
       "message": "wasn\u0027t it so that we need to unpack even on 32-bit WNT?",
+      "revId": "2e28c042be61e8d4d9c8912c6e2e02053ccf1153",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_1e302801",
+        "filename": "external/Module_external.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-02-02T19:43:20Z",
+      "side": 1,
+      "message": "Yes; I managed to confuse myself.",
+      "parentUuid": "fa31d9ce_9e6df806",
       "revId": "2e28c042be61e8d4d9c8912c6e2e02053ccf1153",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
