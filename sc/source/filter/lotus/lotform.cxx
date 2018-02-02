@@ -193,12 +193,23 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtStri
         sal_Int16 nLast = nCnt - 1;
 
         if( eOc == ocPMT )
-        {   // special case ocPMT, ignore (negate?) last parameter!
+        {   // special case ocPMT, negate last parameter!
             // additionally: 1. -> 3., 3. -> 2., 2. -> 1.
-            SAL_WARN_IF( nCnt != 3, "sc",
-                "+LotusToSc::DoFunc(): ocPMT needs 3 parameters!" );
-            aPool << eParam[ 1 ] << ocSep << eParam[ 0 ] << ocSep
-                << ocNegSub << eParam[ 2 ];
+            SAL_WARN_IF( nCnt != 3, "sc", "+LotusToSc::DoFunc(): ocPMT needs 3 parameters!" );
+            // There should be at least 3 arguments, but with binary crap may not..
+            switch (nCnt)
+            {
+                case 1:
+                    aPool << eParam[ 1 ];
+                break;
+                case 2:
+                    aPool << eParam[ 1 ] << ocSep << eParam[ 0 ];
+                break;
+                default:
+                case 3:
+                    aPool << eParam[ 1 ] << ocSep << eParam[ 0 ] << ocSep << ocNegSub << eParam[ 2 ];
+                break;
+            }
         }
         else
         {   // default
