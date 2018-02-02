@@ -389,16 +389,34 @@ bool SwCache::Insert( SwCacheObj *pNew )
 
         nPos = pObj->GetCachePos();
         if ( pObj == m_pLast )
-        { OSL_ENSURE( pObj->GetPrev(), "Last but no Prev" );
-            m_pLast = pObj->GetPrev();
-            m_pLast->SetNext( nullptr );
-        }
-        else
         {
-            if ( pObj->GetPrev() )
-                pObj->GetPrev()->SetNext( pObj->GetNext() );
-            if ( pObj->GetNext() )
-                pObj->GetNext()->SetPrev( pObj->GetPrev() );
+            m_pLast = pObj->GetPrev();
+            assert(m_pLast); // must have capacity > 1
+        }
+        if (pObj == m_pFirst)
+        {
+            if (pObj->GetNext())
+            {
+                m_pFirst = pObj->GetNext();
+            }
+            else
+            {
+                m_pFirst = pObj->GetPrev();
+            }
+            assert(m_pFirst); // must have capacity > 1
+        }
+        if (pObj == m_pRealFirst)
+        {
+            m_pRealFirst = pObj->GetNext();
+            assert(m_pRealFirst); // must have capacity > 1
+        }
+        if (pObj->GetPrev())
+        {
+            pObj->GetPrev()->SetNext( pObj->GetNext() );
+        }
+        if (pObj->GetNext())
+        {
+            pObj->GetNext()->SetPrev( pObj->GetPrev() );
         }
         delete pObj;
         m_aCacheObjects[nPos] = pNew;
