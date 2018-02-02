@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_de7770d2",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-02T17:46:54Z",
+      "side": 1,
+      "message": "oh, and LinkTarget, not Library... and no eval",
+      "parentUuid": "fa31d9ce_5e63801a",
+      "revId": "2e28c042be61e8d4d9c8912c6e2e02053ccf1153",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_9e6df806",
         "filename": "external/Module_external.mk",
         "patchSetId": 5
