@@ -23,6 +23,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/window.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/objsh.hxx>
@@ -51,6 +52,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/grfmgr.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace css;
 
@@ -160,6 +162,7 @@ protected:
     virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void    Resize() override;
+    virtual void    LogicInvalidate(const Rectangle* pRectangle) override;
 
 private:
 
@@ -319,6 +322,25 @@ void BackgroundPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
     Window::DataChanged( rDCEvt );
+}
+
+
+void BackgroundPreviewImpl::LogicInvalidate(const Rectangle* /*pRectangle*/)
+{
+    // Invalidate the container dialog or floating window
+    // The code is same as in Control::LogicInvalidate() method
+    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isDialogPainting())
+    {
+        if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
+        {
+            // invalidate the complete floating window for now
+            if (pParent->ImplIsFloatingWindow())
+                return pParent->LogicInvalidate(nullptr);
+
+            const Rectangle aRect(Point(GetOutOffXPixel(), GetOutOffYPixel()), Size(GetOutputWidthPixel(), GetOutputHeightPixel()));
+            pParent->LogicInvalidate(&aRect);
+        }
+    }
 }
 
 #define HDL(hdl) LINK(this,SvxBackgroundTabPage,hdl)
