@@ -26,6 +26,7 @@
 
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
+#include <svl/typedwhich.hxx>
 
 class SdrObject;
 class SfxItemSet;
@@ -164,6 +165,10 @@ namespace sdr
 
             // Just a convenient shortcut for GetObjectItemSet().Get(nWhich).
             const SfxPoolItem& GetItem(const sal_uInt16 nWhich) const;
+            template<class T> const T& GetItem(TypedWhichId<T> nWhich) const
+            {
+                return static_cast<const T&>(GetItem(sal_uInt16(nWhich)));
+            }
 
             // support for convenient broadcasting. Used from SetMergedItemAndBroadcast(),
             // ClearItemAndBroadcast() and SetItemSetAndBroadcast(), see above.

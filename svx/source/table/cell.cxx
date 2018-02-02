@@ -1186,10 +1186,10 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
         }
         case OWN_ATTR_TABLEBORDER:
         {
-            const SvxBoxInfoItem& rBoxInfoItem = static_cast<const SvxBoxInfoItem&>(mpProperties->GetItem(SDRATTR_TABLE_BORDER_INNER));
-            const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(mpProperties->GetItem(SDRATTR_TABLE_BORDER));
+            const SvxBoxInfoItem& rBoxInfoItem = mpProperties->GetItem(SDRATTR_TABLE_BORDER_INNER);
+            const SvxBoxItem& rBox = mpProperties->GetItem(SDRATTR_TABLE_BORDER);
 
-             TableBorder aTableBorder;
+            TableBorder aTableBorder;
             aTableBorder.TopLine                = SvxBoxItem::SvxLineToLine(rBox.GetTop(), false);
             aTableBorder.IsTopLineValid         = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::TOP);
             aTableBorder.BottomLine             = SvxBoxItem::SvxLineToLine(rBox.GetBottom(), false);
@@ -1209,8 +1209,8 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
         }
         case OWN_ATTR_FILLBMP_MODE:
         {
-            const XFillBmpStretchItem& rStretchItem = static_cast<const XFillBmpStretchItem&>(mpProperties->GetItem(XATTR_FILLBMP_STRETCH));
-            const XFillBmpTileItem& rTileItem = static_cast<const XFillBmpTileItem&>(mpProperties->GetItem(XATTR_FILLBMP_TILE));
+            const XFillBmpStretchItem& rStretchItem = mpProperties->GetItem(XATTR_FILLBMP_STRETCH);
+            const XFillBmpTileItem& rTileItem = mpProperties->GetItem(XATTR_FILLBMP_TILE);
             if( rTileItem.GetValue() )
             {
                 return Any( BitmapMode_REPEAT );
@@ -1226,7 +1226,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
         }
         case SDRATTR_TABLE_TEXT_ROTATION:
         {
-            const SvxTextRotateItem& rTextRotate = static_cast<const SvxTextRotateItem&>(mpProperties->GetItem(SDRATTR_TABLE_TEXT_ROTATION));
+            const SvxTextRotateItem& rTextRotate = mpProperties->GetItem(SDRATTR_TABLE_TEXT_ROTATION);
             return Any(sal_Int32(rTextRotate.GetValue() * 10));
         }
         default:
