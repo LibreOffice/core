@@ -9628,6 +9628,7 @@ module com {
      [property] ::com::sun::star::presentation::FadeEffect Effect;
      [property] short Layout;
      [property] ::com::sun::star::presentation::AnimationSpeed Speed;
+     [property, optional] double TransitionDuration;
      [property, optional] boolean IsHeaderVisible;
      [property, optional] string HeaderText;
      [property, optional] boolean IsFooterVisible;

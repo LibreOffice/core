@@ -79,10 +79,15 @@ published service DrawPage
     [property] short Layout;
 
 
-    /** defines the speed of the fade-in effect of this page.
+    /** Defines the speed of the fade-in effect of this page.
+        @see TransitionSpeed
      */
     [property] com::sun::star::presentation::AnimationSpeed Speed;
 
+    /** Specifies slide transition time in seconds.
+        @see Speed
+     */
+    [property, optional] double TransitionDuration;
 
     /** defines if a header presentation shape from the master page is visible
         on this page.
