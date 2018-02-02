@@ -33,6 +33,7 @@
 #define UNO_NAME_PAGE_NUMBER            "Number"
 #define UNO_NAME_PAGE_ORIENTATION       "Orientation"
 #define UNO_NAME_PAGE_SPEED             "Speed"
+#define UNO_NAME_PAGE_TRANSITION_DURATION  "TransitionDuration"
 #define UNO_NAME_PAGE_WIDTH             "Width"
 #define UNO_NAME_PAGE_PREVIEW           "Preview"
 #define UNO_NAME_PAGE_PREVIEWBITMAP     "PreviewBitmap"
