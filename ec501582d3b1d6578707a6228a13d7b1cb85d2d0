@@ -22,6 +22,30 @@
       "revId": "ec501582d3b1d6578707a6228a13d7b1cb85d2d0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_9ed178d0",
+        "filename": "svx/inc/numberingtype.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001777
+      },
+      "writtenOn": "2018-02-02T15:51:19Z",
+      "side": 1,
+      "message": "The first three numerals are the same (١، ٢، ٣), they start differ from the forth numeral. so I added the distinction for better readability.",
+      "parentUuid": "fa31d9ce_3a634d1c",
+      "range": {
+        "startLine": 58,
+        "startChar": 59,
+        "endLine": 58,
+        "endChar": 66
+      },
+      "revId": "ec501582d3b1d6578707a6228a13d7b1cb85d2d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
