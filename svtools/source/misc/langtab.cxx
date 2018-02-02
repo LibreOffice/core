@@ -150,6 +150,18 @@ const OUString ApplyLreOrRleEmbedding( const OUString &rText )
     return aRes;
 }
 
+static OUString lcl_getDescription( const OUString& rBcp47 )
+{
+    // Place in curly brackets, so all on-the-fly tags are grouped together at
+    // the top of a listbox (but behind the "[None]" entry), and not sprinkled
+    // all over, which alphabetically might make sense in an English UI only
+    // anyway. Also a visual indicator that it is a programmatical name, IMHO.
+    /* TODO: pulling descriptive names (language, script, country, subtags)
+     * from liblangtag or ISO databases might be nice, but those are English
+     * only. Maybe ICU, that has translations for language and country. */
+    return "{" + rBcp47 + "}";
+}
+
 SvtLanguageTableImpl::SvtLanguageTableImpl()
 {
     for (size_t i = 0; i < SAL_N_ELEMENTS(STR_ARR_SVT_LANGUAGE_TABLE); ++i)
@@ -162,21 +174,22 @@ SvtLanguageTableImpl::SvtLanguageTableImpl()
     sal_Int32 nLen = rElementNames.getLength();
     for (sal_Int32 i = 0; i < nLen; ++i)
     {
+        const OUString& rBcp47 = rElementNames[i];
         OUString aName;
         sal_Int32 nType = 0;
         uno::Reference <container::XNameAccess> xNB;
-        xNA->getByName(rElementNames[i]) >>= xNB;
+        xNA->getByName(rBcp47) >>= xNB;
         bool bSuccess = (xNB->getByName("Name") >>= aName) &&
                         (xNB->getByName("ScriptType") >>= nType);
         if (bSuccess)
         {
-            LanguageTag aLang(rElementNames[i]);
+            LanguageTag aLang(rBcp47);
             LanguageType nLangType = aLang.getLanguageType();
             if (nType <= LanguageTag::ScriptType::RTL && nType > LanguageTag::ScriptType::UNKNOWN)
                 aLang.setScriptType(LanguageTag::ScriptType(nType));
             sal_uInt32 nPos = FindIndex(nLangType);
             if (nPos == RESARRAY_INDEX_NOTFOUND)
-                AddItem((aName.isEmpty() ? rElementNames[i] : aName), nLangType);
+                AddItem((aName.isEmpty() ? lcl_getDescription(rBcp47) : aName), nLangType);
         }
     }
 }
@@ -192,18 +205,6 @@ bool SvtLanguageTableImpl::HasType( const LanguageType eType ) const
 bool SvtLanguageTable::HasLanguageType( const LanguageType eType )
 {
     return theLanguageTable::get().HasType( eType );
-}
-
-OUString lcl_getDescription( const OUString& rBcp47 )
-{
-    // Place in curly brackets, so all on-the-fly tags are grouped together at
-    // the top of a listbox (but behind the "[None]" entry), and not sprinkled
-    // all over, which alphabetically might make sense in an English UI only
-    // anyway. Also a visual indicator that it is a programmatical name, IMHO.
-    /* TODO: pulling descriptive names (language, script, country, subtags)
-     * from liblangtag or ISO databases might be nice, but those are English
-     * only. Maybe ICU, that has translations for language and country. */
-    return "{" + rBcp47 + "}";
 }
 
 const OUString SvtLanguageTableImpl::GetString( const LanguageType eType ) const
