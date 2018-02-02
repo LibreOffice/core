@@ -121,7 +121,7 @@ bool ImportLotus::BofFm3()
 
 void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
 {
-    SAL_WARN_IF( nRecLen < 4, "sc", "*ImportLotus::Columnwidth(): Record too short!" );
+    SAL_WARN_IF( nRecLen < 4, "sc.filter", "*ImportLotus::Columnwidth(): Record too short!" );
 
     sal_uInt8    nLTab, nWindow2;
     sal_uInt16    nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 2;
@@ -152,7 +152,7 @@ void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
 
 void ImportLotus::Hiddencolumn( sal_uInt16 nRecLen )
 {
-    SAL_WARN_IF( nRecLen < 4, "sc", "*ImportLotus::Hiddencolumn(): Record too short!" );
+    SAL_WARN_IF( nRecLen < 4, "sc.filter", "*ImportLotus::Hiddencolumn(): Record too short!" );
 
     sal_uInt8    nLTab, nWindow2;
     sal_uInt16    nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 2;
@@ -260,7 +260,7 @@ void ImportLotus::Smallnumcell()
 
 void ImportLotus::Formulacell( sal_uInt16 n )
 {
-    SAL_WARN_IF( !pIn, "sc", "-ImportLotus::Formulacell(): Null-Stream!" );
+    SAL_WARN_IF( !pIn, "sc.filter", "-ImportLotus::Formulacell(): Null-Stream!" );
 
     ScAddress           aAddr;
 
@@ -291,7 +291,7 @@ void ImportLotus::Read( OUString &r )
 
 void ImportLotus::RowPresentation( sal_uInt16 nRecLen )
 {
-    SAL_WARN_IF( nRecLen < 5, "sc", "*ImportLotus::RowPresentation(): Record too short!" );
+    SAL_WARN_IF( nRecLen < 5, "sc.filter", "*ImportLotus::RowPresentation(): Record too short!" );
 
     sal_uInt8    nLTab, nFlags;
     sal_uInt16  nRow, nHeight;
@@ -378,7 +378,7 @@ void ImportLotus::Font_Ysize()
 
 void ImportLotus::Row_( const sal_uInt16 nRecLen )
 {
-    SAL_WARN_IF( nExtTab < 0, "sc", "*ImportLotus::Row_(): not possible!" );
+    SAL_WARN_IF( nExtTab < 0, "sc.filter", "*ImportLotus::Row_(): not possible!" );
 
     sal_uInt16            nCntDwn = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 5;
     SCCOL           nColCnt = 0;

@@ -188,7 +188,7 @@ void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
 {
     // Actually with the current implementation of MAXROWCOUNT>=64k and nRow
     // being read as sal_uInt16 there's no chance that nRow would be invalid..
-    SAL_WARN_IF( !ValidRow(nRow), "sc", "*LotAttrCol::SetAttr(): ... and failed?!" );
+    SAL_WARN_IF( !ValidRow(nRow), "sc.filter", "*LotAttrCol::SetAttr(): ... and failed?!" );
 
     std::vector<std::unique_ptr<ENTRY> >::reverse_iterator iterLast = aEntries.rbegin();
 

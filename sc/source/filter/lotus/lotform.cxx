@@ -43,7 +43,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtStri
 
     bool                        bAddIn = false;
 
-    SAL_WARN_IF( nCnt > 128, "sc", "-LotusToSc::DoFunc(): Too many (128)!" );
+    SAL_WARN_IF( nCnt > 128, "sc.filter", "-LotusToSc::DoFunc(): Too many (128)!" );
 
     if( eOc == ocNoName )
     {
@@ -88,7 +88,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtStri
     switch( eOc )
     {
         case ocIndex:
-            SAL_WARN_IF( nCnt < 2, "sc", "+LotusToSc::DoFunc(): ocIndex needs at least 2 parameters!" );
+            SAL_WARN_IF( nCnt < 2, "sc.filter", "+LotusToSc::DoFunc(): ocIndex needs at least 2 parameters!" );
             nMerk0 = eParam[ 0 ];
             eParam[ 0 ] = eParam[ 1 ];
             eParam[ 1 ] = nMerk0;
@@ -97,7 +97,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtStri
             break;
         case ocIRR:
         {
-            SAL_WARN_IF( nCnt != 2, "sc", "+LotusToSc::DoFunc(): ocIRR needs 2 parameters!" );
+            SAL_WARN_IF( nCnt != 2, "sc.filter", "+LotusToSc::DoFunc(): ocIRR needs 2 parameters!" );
             nMerk0 = eParam[ 0 ];
             eParam[ 0 ] = eParam[ 1 ];
             eParam[ 1 ] = nMerk0;
@@ -132,7 +132,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtStri
         case ocRate:
         {
             // new quantity = 4!
-            SAL_WARN_IF( nCnt != 3, "sc",
+            SAL_WARN_IF( nCnt != 3, "sc.filter",
                 "*LotusToSc::DoFunc(): ZINS() needs 3 parameters!" );
             nCnt = 4;
             eParam[ 3 ] = eParam[ 0 ];  // 3. -> 1.
@@ -143,7 +143,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtStri
             break;
         case ocNper:
         {
-            SAL_WARN_IF( nCnt != 3, "sc",
+            SAL_WARN_IF( nCnt != 3, "sc.filter",
                 "*LotusToSc::DoFunc(): TERM() or CTERM() need 3 parameters!" );
             nCnt = 4;
             if ( OString(pExtString) == "TERM" )
@@ -195,7 +195,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtStri
         if( eOc == ocPMT )
         {   // special case ocPMT, negate last parameter!
             // additionally: 1. -> 3., 3. -> 2., 2. -> 1.
-            SAL_WARN_IF( nCnt != 3, "sc", "+LotusToSc::DoFunc(): ocPMT needs 3 parameters!" );
+            SAL_WARN_IF( nCnt != 3, "sc.filter", "+LotusToSc::DoFunc(): ocPMT needs 3 parameters!" );
             // There should be at least 3 arguments, but with binary crap may not..
             switch (nCnt)
             {
@@ -287,7 +287,7 @@ void LotusToSc::LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefDa
                     nRow &= 0x1FFF;
                 break;
             default:
-                SAL_WARN( "sc", "*LotusToSc::LotusRelToScRel(): unhandeled case?" );
+                SAL_WARN( "sc.filter", "*LotusToSc::LotusRelToScRel(): unhandeled case?" );
         }
     }
     else
@@ -307,7 +307,7 @@ void LotusToSc::LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefDa
                 nRow &= 0x3FFF;
                 break;
             default:
-                SAL_WARN( "sc", "*LotusToSc::LotusRelToScRel(): unhandeled case?" );
+                SAL_WARN( "sc.filter", "*LotusToSc::LotusRelToScRel(): unhandeled case?" );
         }
     }
 
@@ -654,14 +654,14 @@ void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest )
                 }
                 break;
                 default:
-                    SAL_WARN( "sc", "*LotusToSc::Convert(): unknown enum!" );
+                    SAL_WARN( "sc.filter", "*LotusToSc::Convert(): unknown enum!" );
         }
     }
 
     rpErg = aPool[ aStack.Get() ];
 
-    SAL_WARN_IF( nBytesLeft < 0, "sc", "*LotusToSc::Convert(): processed too much!");
-    SAL_WARN_IF( nBytesLeft > 0, "sc", "*LotusToSc::Convert(): what happens with the rest?" );
+    SAL_WARN_IF( nBytesLeft < 0, "sc.filter", "*LotusToSc::Convert(): processed too much!");
+    SAL_WARN_IF( nBytesLeft > 0, "sc.filter", "*LotusToSc::Convert(): what happens with the rest?" );
 
     if( rRest )
         aIn.SeekRel( nBytesLeft );  // Correct any remainder/overflow
