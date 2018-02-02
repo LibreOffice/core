@@ -730,7 +730,7 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const OUString& aPrope
                 {
                     case ATTR_STACKED:
                     {
-                        const SfxInt32Item* pRotItem = static_cast<const SfxInt32Item*>(pData->GetItem( nFieldIndex, ATTR_ROTATE_VALUE ));
+                        const SfxInt32Item* pRotItem = pData->GetItem( nFieldIndex, ATTR_ROTATE_VALUE );
                         sal_Int32 nRot = pRotItem ? pRotItem->GetValue() : 0;
                         bool bStacked = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aVal );

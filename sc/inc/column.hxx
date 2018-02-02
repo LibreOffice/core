@@ -447,6 +447,10 @@ public:
         sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt );
 
     const SfxPoolItem&      GetAttr( SCROW nRow, sal_uInt16 nWhich ) const;
+    template<class T> const T&  GetAttr( SCROW nRow, TypedWhichId<T> nWhich ) const
+    {
+        return static_cast<const T&>(GetAttr(nRow, sal_uInt16(nWhich)));
+    }
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
 

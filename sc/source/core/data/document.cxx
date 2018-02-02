@@ -3810,7 +3810,7 @@ bool ScDocument::HasStringCells( const ScRange& rRange ) const
 
 bool ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    sal_uInt32 nValidation = static_cast< const SfxUInt32Item* >( GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA ) )->GetValue();
+    sal_uInt32 nValidation = GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA )->GetValue();
     if( nValidation )
     {
         const ScValidationData* pData = GetValidationEntry( nValidation );
@@ -3822,7 +3822,7 @@ bool ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 
 bool ScDocument::HasValidationData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    sal_uInt32 nValidation = static_cast< const SfxUInt32Item* >( GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA ) )->GetValue();
+    sal_uInt32 nValidation = GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA )->GetValue();
     if( nValidation )
     {
         const ScValidationData* pData = GetValidationEntry( nValidation );
@@ -5218,7 +5218,7 @@ void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
 {
     //TODO: consider page limits for printing !!!!!
 
-    const SvxBoxItem* pThisAttr = static_cast<const SvxBoxItem*>( GetEffItem( nCol, nRow, nTab, ATTR_BORDER ) );
+    const SvxBoxItem* pThisAttr = GetEffItem( nCol, nRow, nTab, ATTR_BORDER );
     OSL_ENSURE(pThisAttr,"where is the attribute?");
 
     const SvxBorderLine* pLeftLine   = pThisAttr->GetLeft();
@@ -5228,29 +5228,25 @@ void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
     if ( nCol > 0 )
     {
-        const SvxBorderLine* pOther = static_cast<const SvxBoxItem*>(
-                                GetEffItem( nCol-1, nRow, nTab, ATTR_BORDER ))->GetRight();
+        const SvxBorderLine* pOther = GetEffItem( nCol-1, nRow, nTab, ATTR_BORDER )->GetRight();
         if ( ScHasPriority( pOther, pLeftLine ) )
             pLeftLine = pOther;
     }
     if ( nRow > 0 )
     {
-        const SvxBorderLine* pOther = static_cast<const SvxBoxItem*>(
-                                GetEffItem( nCol, nRow-1, nTab, ATTR_BORDER ))->GetBottom();
+        const SvxBorderLine* pOther = GetEffItem( nCol, nRow-1, nTab, ATTR_BORDER )->GetBottom();
         if ( ScHasPriority( pOther, pTopLine ) )
             pTopLine = pOther;
     }
     if ( nCol < MAXCOL )
     {
-        const SvxBorderLine* pOther = static_cast<const SvxBoxItem*>(
-                                GetEffItem( nCol+1, nRow, nTab, ATTR_BORDER ))->GetLeft();
+        const SvxBorderLine* pOther = GetEffItem( nCol+1, nRow, nTab, ATTR_BORDER )->GetLeft();
         if ( ScHasPriority( pOther, pRightLine ) )
             pRightLine = pOther;
     }
     if ( nRow < MAXROW )
     {
-        const SvxBorderLine* pOther = static_cast<const SvxBoxItem*>(
-                                GetEffItem( nCol, nRow+1, nTab, ATTR_BORDER ))->GetTop();
+        const SvxBorderLine* pOther = GetEffItem( nCol, nRow+1, nTab, ATTR_BORDER )->GetTop();
         if ( ScHasPriority( pOther, pBottomLine ) )
             pBottomLine = pOther;
     }
@@ -5446,8 +5442,7 @@ void ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
             SCCOL nOldCol = rStartCol;
             SCROW nOldRow = rStartRow;
             for (nCol=nOldCol; nCol<=nEndCol; nCol++)
-                while (static_cast<const ScMergeFlagAttr*>(GetAttr(nCol,rStartRow,nTab,ATTR_MERGE_FLAG))->
-                            IsVerOverlapped())
+                while (GetAttr(nCol,rStartRow,nTab,ATTR_MERGE_FLAG)->IsVerOverlapped())
                     --rStartRow;
 
             //TODO: pass on ?
@@ -5477,8 +5472,7 @@ void ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                         SCCOL nTempCol = nOldCol;
                         do
                             --nTempCol;
-                        while (static_cast<const ScMergeFlagAttr*>(GetAttr(nTempCol,nAttrRow,nTab,ATTR_MERGE_FLAG))
-                                ->IsHorOverlapped());
+                        while (GetAttr(nTempCol,nAttrRow,nTab,ATTR_MERGE_FLAG)->IsHorOverlapped());
                         if (nTempCol < rStartCol)
                             rStartCol = nTempCol;
                     }
@@ -5690,8 +5684,7 @@ void ScDocument::SkipOverlapped( SCCOL& rCol, SCROW& rRow, SCTAB nTab ) const
 
 bool ScDocument::IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    const ScMergeFlagAttr* pAttr = static_cast<const ScMergeFlagAttr*>(
-                                        GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ));
+    const ScMergeFlagAttr* pAttr = GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG );
     if (pAttr)
         return pAttr->IsHorOverlapped();
     else
@@ -5703,8 +5696,7 @@ bool ScDocument::IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 
 bool ScDocument::IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    const ScMergeFlagAttr* pAttr = static_cast<const ScMergeFlagAttr*>(
-                                        GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ));
+    const ScMergeFlagAttr* pAttr = GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG );
     if (pAttr)
         return pAttr->IsVerOverlapped();
     else

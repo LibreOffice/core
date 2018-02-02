@@ -193,8 +193,7 @@ tools::Rectangle ScAccessibleCell::GetBoundingBox() const
             simply expand the cell size to the width of the unrotated text. */
         if (mpDoc)
         {
-            const SfxInt32Item* pItem = static_cast< const SfxInt32Item* >(
-                mpDoc->GetAttr( maCellAddress.Col(), maCellAddress.Row(), maCellAddress.Tab(), ATTR_ROTATE_VALUE ) );
+            const SfxInt32Item* pItem = mpDoc->GetAttr( maCellAddress, ATTR_ROTATE_VALUE );
             if( pItem && (pItem->GetValue() != 0) )
             {
                 tools::Rectangle aParaRect = GetParagraphBoundingBox();
@@ -328,9 +327,7 @@ bool ScAccessibleCell::IsEditable(
         mpDoc)
     {
         // here I have to test whether the protection of the table should influence this cell.
-        const ScProtectionAttr* pItem = static_cast<const ScProtectionAttr*>(mpDoc->GetAttr(
-            maCellAddress.Col(), maCellAddress.Row(),
-            maCellAddress.Tab(), ATTR_PROTECTION));
+        const ScProtectionAttr* pItem = mpDoc->GetAttr(maCellAddress, ATTR_PROTECTION);
         if (pItem)
             bEditable = !pItem->GetProtection();
     }
@@ -343,9 +340,7 @@ bool ScAccessibleCell::IsOpaque()
     bool bOpaque(true);
     if (mpDoc)
     {
-        const SvxBrushItem* pItem = static_cast<const SvxBrushItem*>(mpDoc->GetAttr(
-            maCellAddress.Col(), maCellAddress.Row(),
-            maCellAddress.Tab(), ATTR_BACKGROUND));
+        const SvxBrushItem* pItem = mpDoc->GetAttr(maCellAddress, ATTR_BACKGROUND);
         if (pItem)
             bOpaque = pItem->GetColor() != COL_TRANSPARENT;
     }
@@ -536,7 +531,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScAccessibleCell::getCharacterAtt
     uno::Sequence< beans::PropertyValue > aAttribs = AccessibleStaticTextBase::getCharacterAttributes( nIndex, aRequestedAttributes );
     beans::PropertyValue *pAttribs = aAttribs.getArray();
 
-    sal_uInt16 nParaIndent = static_cast< const SfxUInt16Item* >( mpDoc->GetAttr( maCellAddress.Col(), maCellAddress.Row(), maCellAddress.Tab(), ATTR_INDENT ) )->GetValue();
+    sal_uInt16 nParaIndent = mpDoc->GetAttr( maCellAddress, ATTR_INDENT )->GetValue();
     if (nParaIndent > 0)
     {
         for (int i = 0; i < aAttribs.getLength(); ++i)
@@ -566,15 +561,14 @@ bool ScAccessibleCell::IsDropdown()
     sal_uInt16 nPosX = maCellAddress.Col();
     sal_uInt16 nPosY = sal_uInt16(maCellAddress.Row());
     sal_uInt16 nTab = maCellAddress.Tab();
-    sal_uInt32 nValidation = static_cast< const SfxUInt32Item* >( mpDoc->GetAttr( nPosX, nPosY, nTab, ATTR_VALIDDATA ) )->GetValue();
+    sal_uInt32 nValidation = mpDoc->GetAttr( nPosX, nPosY, nTab, ATTR_VALIDDATA )->GetValue();
     if( nValidation )
     {
         const ScValidationData* pData = mpDoc->GetValidationEntry( nValidation );
         if( pData && pData->HasSelectionList() )
             return true;
     }
-    const ScMergeFlagAttr* pAttr;
-    pAttr = static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG ));
+    const ScMergeFlagAttr* pAttr = mpDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG );
     if( pAttr->HasAutoFilter() )
     {
         return true;

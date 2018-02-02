@@ -195,8 +195,8 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowExtentAt( sal_Int32
     else
     {
         ScDocument& rDoc = mpViewShell->GetDocument();
-        const ScMergeAttr* pItem = static_cast<const ScMergeAttr*>(rDoc.GetAttr(
-            static_cast<SCCOL>(rColInfo.nDocIndex), static_cast<SCROW>(rRowInfo.nDocIndex), mpTableInfo->GetTab(), ATTR_MERGE ));
+        const ScMergeAttr* pItem = rDoc.GetAttr(
+            static_cast<SCCOL>(rColInfo.nDocIndex), static_cast<SCROW>(rRowInfo.nDocIndex), mpTableInfo->GetTab(), ATTR_MERGE );
         if ( pItem && pItem->GetRowMerge() > 0 )
             nRows = pItem->GetRowMerge();
     }
@@ -226,8 +226,8 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnExtentAt( sal_In
     else
     {
         ScDocument& rDoc = mpViewShell->GetDocument();
-        const ScMergeAttr* pItem = static_cast<const ScMergeAttr*>(rDoc.GetAttr(
-            static_cast<SCCOL>(rColInfo.nDocIndex), static_cast<SCROW>(rRowInfo.nDocIndex), mpTableInfo->GetTab(), ATTR_MERGE ));
+        const ScMergeAttr* pItem = rDoc.GetAttr(
+            static_cast<SCCOL>(rColInfo.nDocIndex), static_cast<SCROW>(rRowInfo.nDocIndex), mpTableInfo->GetTab(), ATTR_MERGE );
         if ( pItem && pItem->GetColMerge() > 0 )
             nColumns = pItem->GetColMerge();
     }

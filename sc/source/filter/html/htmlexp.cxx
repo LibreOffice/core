@@ -881,7 +881,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     OStringBuffer aStrTD(OOO_STRING_SVTOOLS_HTML_tabledata);
 
     // border of the cells
-    const SvxBoxItem* pBorder = static_cast<const SvxBoxItem*>( pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER ) );
+    const SvxBoxItem* pBorder = pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER );
     if ( pBorder && (pBorder->GetTop() || pBorder->GetBottom() || pBorder->GetLeft() || pBorder->GetRight()) )
     {
         aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_style).
