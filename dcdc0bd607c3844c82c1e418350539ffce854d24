@@ -16,6 +16,24 @@
       "revId": "dcdc0bd607c3844c82c1e418350539ffce854d24",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_fea0b492",
+        "filename": "sdext/source/pdfimport/tree/pdfiprocessor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-02-02T13:05:30Z",
+      "side": 1,
+      "message": "See https://books.google.fr/books?id\u003dBeO8AQAAQBAJ\u0026pg\u003dPA137\u0026lpg\u003dPA137\u0026dq\u003dstable_sort+list\u0026source\u003dbl\u0026ots\u003dB0w7-dIvtt\u0026sig\u003dYz71f08UVYGFha6pQ0J_ZGti4ZI\u0026hl\u003dfr\u0026sa\u003dX\u0026ved\u003d0ahUKEwikqr62pYfZAhVEJVAKHRllCJcQ6AEISjAE#v\u003donepage\u0026q\u003dstable_sort%20list\u0026f\u003dfalse\nit seems that the by default sort for list corresponds to stable_sort\n\nSee also:\nhttps://stackoverflow.com/questions/1100561/stable-sorting-a-stl-list-in-c",
+      "parentUuid": "fa31d9ce_3e740c34",
+      "revId": "dcdc0bd607c3844c82c1e418350539ffce854d24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
