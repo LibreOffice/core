@@ -1440,6 +1440,11 @@ void PDFWriterImpl::PDFPage::convertRect( Rectangle& rRect ) const
 void PDFWriterImpl::PDFPage::appendPolygon( const tools::Polygon& rPoly, OStringBuffer& rBuffer, bool bClose ) const
 {
     sal_uInt16 nPoints = rPoly.GetSize();
+
+    // "empty" zero-sized path can be removed to avoid visual artifacts in PDF
+    if (nPoints == 2 && rPoly[0] == rPoly[1])
+        return;
+
     /*
      *  #108582# applications do weird things
      */
