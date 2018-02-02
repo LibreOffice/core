@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_5e63801a",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-02T17:45:56Z",
+      "side": 1,
+      "message": "not scn, $(1)\n\nalso, should be inside the __use_sane_headers above (assuming SANE is added to BUILD_TYPE on WNT as well)",
+      "revId": "2e28c042be61e8d4d9c8912c6e2e02053ccf1153",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_9e6df806",
+        "filename": "external/Module_external.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-02T17:45:56Z",
+      "side": 1,
+      "message": "wasn\u0027t it so that we need to unpack even on 32-bit WNT?",
+      "revId": "2e28c042be61e8d4d9c8912c6e2e02053ccf1153",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
