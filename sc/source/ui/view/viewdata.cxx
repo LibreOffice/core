@@ -2334,7 +2334,7 @@ SCROW ScViewData::PrevCellsY( ScVSplitPos eWhichY ) const
 
 bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix ) const
 {
-    const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>( pDoc->GetAttr( nX,nY,nTabNo, ATTR_MERGE ) );
+    const ScMergeAttr* pMerge = pDoc->GetAttr( nX,nY,nTabNo, ATTR_MERGE );
     if ( pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1 )
     {
         long nOutWidth = 0;
@@ -2455,8 +2455,7 @@ void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
 
         if ( bRepair && ( bHOver || bVOver ) )
         {
-            const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>(
-                                pDoc->GetAttr( rPosX, rPosY, nTabNo, ATTR_MERGE ) );
+            const ScMergeAttr* pMerge = pDoc->GetAttr( rPosX, rPosY, nTabNo, ATTR_MERGE );
             if ( ( bHOver && pMerge->GetColMerge() <= 1 ) ||
                  ( bVOver && pMerge->GetRowMerge() <= 1 ) )
             {

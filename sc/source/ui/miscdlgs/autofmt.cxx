@@ -118,21 +118,21 @@ void ScAutoFmtPreview::MakeFonts( sal_uInt16 nIndex, vcl::Font& rFont, vcl::Font
         rFont = rCJKFont = rCTLFont = GetFont();
         Size aFontSize( rFont.GetFontSize().Width(), 10 * GetDPIScaleFactor() );
 
-        const SvxFontItem*        pFontItem       = static_cast<const SvxFontItem*>      (pCurData->GetItem( nIndex, ATTR_FONT ));
-        const SvxWeightItem*      pWeightItem     = static_cast<const SvxWeightItem*>    (pCurData->GetItem( nIndex, ATTR_FONT_WEIGHT ));
-        const SvxPostureItem*     pPostureItem    = static_cast<const SvxPostureItem*>   (pCurData->GetItem( nIndex, ATTR_FONT_POSTURE ));
-        const SvxFontItem*        pCJKFontItem    = static_cast<const SvxFontItem*>      (pCurData->GetItem( nIndex, ATTR_CJK_FONT ));
-        const SvxWeightItem*      pCJKWeightItem  = static_cast<const SvxWeightItem*>    (pCurData->GetItem( nIndex, ATTR_CJK_FONT_WEIGHT ));
-        const SvxPostureItem*     pCJKPostureItem = static_cast<const SvxPostureItem*>   (pCurData->GetItem( nIndex, ATTR_CJK_FONT_POSTURE ));
-        const SvxFontItem*        pCTLFontItem    = static_cast<const SvxFontItem*>      (pCurData->GetItem( nIndex, ATTR_CTL_FONT ));
-        const SvxWeightItem*      pCTLWeightItem  = static_cast<const SvxWeightItem*>    (pCurData->GetItem( nIndex, ATTR_CTL_FONT_WEIGHT ));
-        const SvxPostureItem*     pCTLPostureItem = static_cast<const SvxPostureItem*>   (pCurData->GetItem( nIndex, ATTR_CTL_FONT_POSTURE ));
-        const SvxUnderlineItem*   pUnderlineItem  = static_cast<const SvxUnderlineItem*> (pCurData->GetItem( nIndex, ATTR_FONT_UNDERLINE ));
-        const SvxOverlineItem*    pOverlineItem   = static_cast<const SvxOverlineItem*>  (pCurData->GetItem( nIndex, ATTR_FONT_OVERLINE ));
-        const SvxCrossedOutItem*  pCrossedOutItem = static_cast<const SvxCrossedOutItem*>(pCurData->GetItem( nIndex, ATTR_FONT_CROSSEDOUT ));
-        const SvxContourItem*     pContourItem    = static_cast<const SvxContourItem*>   (pCurData->GetItem( nIndex, ATTR_FONT_CONTOUR ));
-        const SvxShadowedItem*    pShadowedItem   = static_cast<const SvxShadowedItem*>  (pCurData->GetItem( nIndex, ATTR_FONT_SHADOWED ));
-        const SvxColorItem*       pColorItem      = static_cast<const SvxColorItem*>     (pCurData->GetItem( nIndex, ATTR_FONT_COLOR ));
+        const SvxFontItem*        pFontItem       = pCurData->GetItem( nIndex, ATTR_FONT );
+        const SvxWeightItem*      pWeightItem     = pCurData->GetItem( nIndex, ATTR_FONT_WEIGHT );
+        const SvxPostureItem*     pPostureItem    = pCurData->GetItem( nIndex, ATTR_FONT_POSTURE );
+        const SvxFontItem*        pCJKFontItem    = pCurData->GetItem( nIndex, ATTR_CJK_FONT );
+        const SvxWeightItem*      pCJKWeightItem  = pCurData->GetItem( nIndex, ATTR_CJK_FONT_WEIGHT );
+        const SvxPostureItem*     pCJKPostureItem = pCurData->GetItem( nIndex, ATTR_CJK_FONT_POSTURE );
+        const SvxFontItem*        pCTLFontItem    = pCurData->GetItem( nIndex, ATTR_CTL_FONT );
+        const SvxWeightItem*      pCTLWeightItem  = pCurData->GetItem( nIndex, ATTR_CTL_FONT_WEIGHT );
+        const SvxPostureItem*     pCTLPostureItem = pCurData->GetItem( nIndex, ATTR_CTL_FONT_POSTURE );
+        const SvxUnderlineItem*   pUnderlineItem  = pCurData->GetItem( nIndex, ATTR_FONT_UNDERLINE );
+        const SvxOverlineItem*    pOverlineItem   = pCurData->GetItem( nIndex, ATTR_FONT_OVERLINE );
+        const SvxCrossedOutItem*  pCrossedOutItem = pCurData->GetItem( nIndex, ATTR_FONT_CROSSEDOUT );
+        const SvxContourItem*     pContourItem    = pCurData->GetItem( nIndex, ATTR_FONT_CONTOUR );
+        const SvxShadowedItem*    pShadowedItem   = pCurData->GetItem( nIndex, ATTR_FONT_SHADOWED );
+        const SvxColorItem*       pColorItem      = pCurData->GetItem( nIndex, ATTR_FONT_COLOR );
 
         lcl_SetFontProperties( rFont, *pFontItem, *pWeightItem, *pPostureItem );
         lcl_SetFontProperties( rCJKFont, *pCJKFontItem, *pCJKWeightItem, *pCJKPostureItem );
@@ -174,13 +174,13 @@ sal_uInt16 ScAutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
 const SvxBoxItem& ScAutoFmtPreview::GetBoxItem( size_t nCol, size_t nRow ) const
 {
     OSL_ENSURE( pCurData, "ScAutoFmtPreview::GetBoxItem - no format data found" );
-    return *static_cast< const SvxBoxItem* >( pCurData->GetItem( GetFormatIndex( nCol, nRow ), ATTR_BORDER ) );
+    return * pCurData->GetItem( GetFormatIndex( nCol, nRow ), ATTR_BORDER );
 }
 
 const SvxLineItem& ScAutoFmtPreview::GetDiagItem( size_t nCol, size_t nRow, bool bTLBR ) const
 {
     OSL_ENSURE( pCurData, "ScAutoFmtPreview::GetDiagItem - no format data found" );
-    return *static_cast< const SvxLineItem* >( pCurData->GetItem( GetFormatIndex( nCol, nRow ), bTLBR ? ATTR_BORDER_TLBR : ATTR_BORDER_BLTR ) );
+    return * pCurData->GetItem( GetFormatIndex( nCol, nRow ), bTLBR ? ATTR_BORDER_TLBR : ATTR_BORDER_BLTR );
 }
 
 void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCol, size_t nRow)
@@ -261,7 +261,7 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
         // Justification:
 
         eJustification  = mbRTL ? SvxCellHorJustify::Right : bJustify ?
-            static_cast<const SvxHorJustifyItem*>(pCurData->GetItem(nFmtIndex, ATTR_HOR_JUSTIFY))->GetValue() :
+            pCurData->GetItem(nFmtIndex, ATTR_HOR_JUSTIFY)->GetValue() :
             SvxCellHorJustify::Standard;
 
         if (pCurData->GetIncludeFont())
@@ -367,8 +367,8 @@ void ScAutoFmtPreview::DrawBackground(vcl::RenderContext& rRenderContext)
         {
             for(size_t nCol = 0; nCol < 5; ++nCol)
             {
-                const SvxBrushItem* pItem = static_cast< const SvxBrushItem* >(
-                    pCurData->GetItem( GetFormatIndex( nCol, nRow ), ATTR_BACKGROUND ) );
+                const SvxBrushItem* pItem =
+                    pCurData->GetItem( GetFormatIndex( nCol, nRow ), ATTR_BACKGROUND );
 
                 rRenderContext.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
                 rRenderContext.SetLineColor();

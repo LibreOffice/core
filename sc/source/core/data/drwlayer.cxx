@@ -1735,7 +1735,7 @@ tools::Rectangle ScDrawLayer::GetCellRect( const ScDocument& rDoc, const ScAddre
         ScAddress aEndPos = rPos;
         if( bMergedCell )
         {
-            const ScMergeAttr* pMerge = static_cast< const ScMergeAttr* >( rDoc.GetAttr( rPos.Col(), rPos.Row(), rPos.Tab(), ATTR_MERGE ) );
+            const ScMergeAttr* pMerge = rDoc.GetAttr( rPos, ATTR_MERGE );
             if( pMerge->GetColMerge() > 1 )
                 aEndPos.IncCol( pMerge->GetColMerge() - 1 );
             if( pMerge->GetRowMerge() > 1 )

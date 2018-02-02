@@ -72,8 +72,7 @@ static void lcl_GetMergeRange( SCCOL nX, SCROW nY, SCSIZE nArrY,
         }
         else
         {
-            ScMF nOverlap = static_cast<const ScMergeFlagAttr*>(pDoc->GetAttr(
-                                rStartX, rStartY, nTab, ATTR_MERGE_FLAG ))->GetValue();
+            ScMF nOverlap = pDoc->GetAttr( rStartX, rStartY, nTab, ATTR_MERGE_FLAG )->GetValue();
             bHOver = bool(nOverlap & ScMF::Hor);
             bVOver = bool(nOverlap & ScMF::Ver);
         }
@@ -95,8 +94,8 @@ static void lcl_GetMergeRange( SCCOL nX, SCROW nY, SCSIZE nArrY,
         }
         else
         {
-            ScMF nOverlap = static_cast<const ScMergeFlagAttr*>(pDoc->GetAttr(
-                                rStartX, rStartY, nTab, ATTR_MERGE_FLAG ))->GetValue();
+            ScMF nOverlap = pDoc->GetAttr(
+                                rStartX, rStartY, nTab, ATTR_MERGE_FLAG )->GetValue();
             bVOver = bool(nOverlap & ScMF::Ver);
         }
     }
@@ -111,7 +110,7 @@ static void lcl_GetMergeRange( SCCOL nX, SCROW nY, SCSIZE nArrY,
                                         GetItem(ATTR_MERGE);
     }
     else
-        pMerge = static_cast<const ScMergeAttr*>( pDoc->GetAttr(rStartX,rStartY,nTab,ATTR_MERGE) );
+        pMerge = pDoc->GetAttr(rStartX,rStartY,nTab,ATTR_MERGE);
 
     rEndX = rStartX + pMerge->GetColMerge() - 1;
     rEndY = rStartY + pMerge->GetRowMerge() - 1;

@@ -654,8 +654,8 @@ public:
 
     bool isDateTime(size_t position)
     {
-        SvNumFormatType nType = mrDoc.GetFormatTable()->GetType(static_cast<const SfxUInt32Item&>(
-                          mrCol.GetAttr(position, ATTR_VALUE_FORMAT)).GetValue());
+        SvNumFormatType nType = mrDoc.GetFormatTable()->GetType(
+                          mrCol.GetAttr(position, ATTR_VALUE_FORMAT).GetValue());
 
         return (nType == SvNumFormatType::DATE) || (nType == SvNumFormatType::TIME) ||
                (nType == SvNumFormatType::DATETIME);
@@ -2785,7 +2785,7 @@ class MaxStringLenHandler
     {
         Color* pColor;
         OUString aString;
-        sal_uInt32 nFormat = static_cast<const SfxUInt32Item&>(mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT)).GetValue();
+        sal_uInt32 nFormat = mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT).GetValue();
         ScCellFormat::GetString(rCell, nFormat, aString, &pColor, *mpFormatter, mrColumn.GetDoc());
         sal_Int32 nLen = 0;
         if (mbOctetEncoding)
@@ -2891,8 +2891,8 @@ class MaxNumStringLenHandler
         OUString aString;
         OUString aSep;
         sal_uInt16 nPrec;
-        sal_uInt32 nFormat = static_cast<const SfxUInt32Item&>(
-                mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT)).GetValue();
+        sal_uInt32 nFormat =
+                mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT).GetValue();
         if (nFormat % SV_COUNTRY_LANGUAGE_OFFSET)
         {
             aSep = mpFormatter->GetFormatDecimalSep(nFormat);

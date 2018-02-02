@@ -201,8 +201,7 @@ void moveCursorByMergedCell(
         bSelectUnlocked = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
     }
 
-    const ScMergeAttr* pMergeAttr = static_cast<const ScMergeAttr*>(
-        pDoc->GetAttr(nOrigX, nOrigY, nTab, ATTR_MERGE));
+    const ScMergeAttr* pMergeAttr = pDoc->GetAttr(nOrigX, nOrigY, nTab, ATTR_MERGE);
 
     bool bOriginMerged = false;
     SCCOL nColSpan = 1;
@@ -512,8 +511,8 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
             // selection is moving in the upperleft direction, the anchor cell will
             // move to the lower-right corner of the merged anchor cell, and so on.
 
-            pMergeAttr = static_cast<const ScMergeAttr*>(
-                pDocument->GetAttr( nBlockStartXOrig, nBlockStartYOrig, nTab, ATTR_MERGE ) );
+            pMergeAttr =
+                pDocument->GetAttr( nBlockStartXOrig, nBlockStartYOrig, nTab, ATTR_MERGE );
             if ( pMergeAttr->IsMerged() )
             {
                 SCCOL nColSpan = pMergeAttr->GetColMerge();
@@ -538,8 +537,7 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
             // nCurXOffset/nCurYOffset may also be specified in the previous code
             // block, in which case whichever value is greater will take on.
 
-            pMergeAttr = static_cast<const ScMergeAttr*>(
-                pDocument->GetAttr( nCurX, nCurY, nTab, ATTR_MERGE ) );
+            pMergeAttr = pDocument->GetAttr( nCurX, nCurY, nTab, ATTR_MERGE );
             if ( pMergeAttr->IsMerged() )
             {
                 SCCOL nColSpan = pMergeAttr->GetColMerge();

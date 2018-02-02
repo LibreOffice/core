@@ -845,8 +845,8 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
                     SCTAB nSelTab = aSelRange.aStart.Tab();
                     if ( pDoc->HasValueData( nSelCol, nSelRow, nSelTab ) )
                     {
-                        sal_uLong nIndex = static_cast<const SfxUInt32Item*>(pDoc->GetAttr(
-                                        nSelCol, nSelRow, nSelTab, ATTR_VALUE_FORMAT))->GetValue();
+                        sal_uLong nIndex = pDoc->GetAttr(
+                                        nSelCol, nSelRow, nSelTab, ATTR_VALUE_FORMAT)->GetValue();
                         SvNumFormatType nType = pDoc->GetFormatTable()->GetType(nIndex);
                         if ( nType == SvNumFormatType::DATE || nType == SvNumFormatType::TIME || nType == SvNumFormatType::DATETIME )
                         {

@@ -838,8 +838,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     SCROW nCurY = GetViewData()->GetCurY();
                     SCTAB nTab = GetViewData()->GetTabNo();
                     ScAddress aCursorPos( nCurX, nCurY, nTab );
-                    sal_uLong nIndex = static_cast<const SfxUInt32Item*>(pDoc->GetAttr(
-                                nCurX, nCurY, nTab, ATTR_VALIDDATA ))->GetValue();
+                    sal_uLong nIndex = pDoc->GetAttr(
+                                nCurX, nCurY, nTab, ATTR_VALIDDATA )->GetValue();
                     if ( nIndex )
                     {
                         const ScValidationData* pOldData = pDoc->GetValidationEntry( nIndex );

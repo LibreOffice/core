@@ -1486,9 +1486,7 @@ bool ScDocument::HasAutoFilter( SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )
 
             for ( nCol=aParam.nCol1; nCol<=aParam.nCol2 && bHasAutoFilter; nCol++ )
             {
-                nFlag = static_cast<const ScMergeFlagAttr*>(
-                            GetAttr( nCol, nRow, nCurTab, ATTR_MERGE_FLAG ))->
-                                GetValue();
+                nFlag = GetAttr( nCol, nRow, nCurTab, ATTR_MERGE_FLAG )->GetValue();
 
                 if ( !(nFlag & ScMF::Auto) )
                     bHasAutoFilter = false;
@@ -1603,7 +1601,7 @@ void ScDocument::GetDataEntries(
         /*  Try to generate the list from list validation. This part is skipped,
             if bLimit==true, because in that case this function is called to get
             cell values for auto completion on input. */
-        sal_uInt32 nValidation = static_cast< const SfxUInt32Item* >( GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA ) )->GetValue();
+        sal_uInt32 nValidation = GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA )->GetValue();
         if( nValidation )
         {
             const ScValidationData* pData = GetValidationEntry( nValidation );
@@ -2060,8 +2058,7 @@ void ScDocument::DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
 
 void ScDocument::RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
-    const ScMergeAttr* pAttr = static_cast<const ScMergeAttr*>(
-                                    GetAttr( nCol, nRow, nTab, ATTR_MERGE ));
+    const ScMergeAttr* pAttr = GetAttr( nCol, nRow, nTab, ATTR_MERGE );
 
     if ( pAttr->GetColMerge() <= 1 && pAttr->GetRowMerge() <= 1 )
         return;
