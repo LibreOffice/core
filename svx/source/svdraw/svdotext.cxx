@@ -1471,7 +1471,7 @@ drawing::TextFitToSizeType SdrTextObj::GetFitToSize() const
     drawing::TextFitToSizeType eType = drawing::TextFitToSizeType_NONE;
 
     if(!IsAutoGrowWidth())
-        eType = static_cast<const SdrTextFitToSizeTypeItem&>(GetObjectItem(SDRATTR_TEXT_FITTOSIZE)).GetValue();
+        eType = GetObjectItem(SDRATTR_TEXT_FITTOSIZE).GetValue();
 
     return eType;
 }

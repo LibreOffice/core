@@ -783,7 +783,7 @@ OUString SdrGrafObj::TakeObjNameSingul() const
         {
             case GraphicType::Bitmap:
             {
-                const char* pId = ( ( pGraphic->IsTransparent() || static_cast<const SdrGrafTransparenceItem&>( GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
+                const char* pId = ( ( pGraphic->IsTransparent() || GetObjectItem( SDRATTR_GRAFTRANSPARENCE ).GetValue() ) ?
                                      ( IsLinkedGraphic() ? STR_ObjNameSingulGRAFBMPTRANSLNK : STR_ObjNameSingulGRAFBMPTRANS ) :
                                      ( IsLinkedGraphic() ? STR_ObjNameSingulGRAFBMPLNK : STR_ObjNameSingulGRAFBMP ) );
 
@@ -853,7 +853,7 @@ OUString SdrGrafObj::TakeObjNamePlural() const
         {
             case GraphicType::Bitmap:
             {
-                const char* pId = ( ( pGraphic->IsTransparent() || static_cast<const SdrGrafTransparenceItem&>( GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
+                const char* pId = ( ( pGraphic->IsTransparent() || GetObjectItem( SDRATTR_GRAFTRANSPARENCE ).GetValue() ) ?
                                      ( IsLinkedGraphic() ? STR_ObjNamePluralGRAFBMPTRANSLNK : STR_ObjNamePluralGRAFBMPTRANS ) :
                                      ( IsLinkedGraphic() ? STR_ObjNamePluralGRAFBMPLNK : STR_ObjNamePluralGRAFBMP ) );
 

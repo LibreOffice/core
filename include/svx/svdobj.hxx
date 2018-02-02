@@ -904,6 +904,10 @@ protected:
     void SetObjectItem(const SfxPoolItem& rItem);
     void SetObjectItemSet(const SfxItemSet& rSet);
     const SfxPoolItem& GetObjectItem(const sal_uInt16 nWhich) const;
+    template<class T> const T& GetObjectItem( TypedWhichId<T> nWhich ) const
+    {
+        return static_cast<const T&>(GetObjectItem(sal_uInt16(nWhich)));
+    }
 
     // get MapUnit the object is using
     MapUnit GetObjectMapUnit() const;
