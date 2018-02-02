@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_5b4ab284",
+        "filename": "slideshow/source/engine/activitiesqueue.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-02-02T06:53:34Z",
+      "side": 1,
+      "message": "for these kinds of changes where you are modifying action on a member field, are you completely sure that no other code can come in and modify the field while the loop is executing?",
+      "revId": "aebb3a3cd7a516712e30dcd319f392f16a304078",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
