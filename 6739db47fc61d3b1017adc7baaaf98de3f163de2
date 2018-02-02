@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_1e1bc81c",
+        "filename": "offapi/com/sun/star/presentation/DrawPage.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-02T11:10:07Z",
+      "side": 1,
+      "message": "please add @since LibreOffice 6.1",
+      "revId": "6739db47fc61d3b1017adc7baaaf98de3f163de2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_fe1d1410",
+        "filename": "offapi/com/sun/star/presentation/DrawPage.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-02T11:10:07Z",
+      "side": 1,
+      "message": "the only way to backwards-compatibly change a published service is to add optional properties at the very end\n\nnever change offapi/type_reference/offapi.idl",
+      "revId": "6739db47fc61d3b1017adc7baaaf98de3f163de2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
