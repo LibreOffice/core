@@ -553,10 +553,13 @@ static OUString searchValue( const OString &rBuffer, sal_Int32 from, const OStri
 }
 
 /// Parse the Persona web page, and find where to get the bitmaps + the color values.
-static bool parsePersonaInfo( const OString &rBuffer, OUString *pHeaderURL, OUString *pFooterURL,
+static bool parsePersonaInfo( const OString &rBufferArg, OUString *pHeaderURL, OUString *pFooterURL,
                               OUString *pTextColor, OUString *pAccentColor, OUString *pPreviewURL,
                               OUString *pName )
 {
+    // tdf#115417: buffer retrieved from html response can contain &quot; or &#34;
+    // let's replace the whole buffer with last one so we can treat it easily
+    OString rBuffer = rBufferArg.replaceAll(OString("&quot;"), OString("&#34;"));
     // it is the first attribute that contains "persona="
     sal_Int32 persona = rBuffer.indexOf( "data-browsertheme=\"{" );
     if ( persona < 0 )
