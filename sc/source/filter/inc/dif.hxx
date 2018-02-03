@@ -139,7 +139,7 @@ class DifColumn
         SCROW nEnd;
     };
 
-    ENTRY *mpAkt;
+    ENTRY *mpCurrent;
     std::vector<ENTRY> maEntries;
 
     DifColumn();

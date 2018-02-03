@@ -127,19 +127,19 @@ ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, c
         SCROW               nRowCnt = rInsPos.Row();
         DifAttrCache        aAttrCache;
 
-        DATASET             eAkt = D_UNKNOWN;
+        DATASET             eCurrent = D_UNKNOWN;
 
         ScSetStringParam aStrParam; // used to set string value without number detection.
         aStrParam.setTextInput();
 
-        while( eAkt != D_EOD )
+        while( eCurrent != D_EOD )
         {
-            eAkt = aDifParser.GetNextDataset();
+            eCurrent = aDifParser.GetNextDataset();
 
             aPrgrsBar.Progress();
             ScAddress aPos(nColCnt, nRowCnt, nBaseTab);
 
-            switch( eAkt )
+            switch( eCurrent )
             {
                 case D_BOT:
                     if( nColCnt < SCCOL_MAX )
@@ -434,30 +434,30 @@ bool DifParser::ReadNextLine( OUString& rStr )
 // a valid data record structure
 bool DifParser::LookAhead()
 {
-    const sal_Unicode* pAktBuffer;
+    const sal_Unicode* pCurrentBuffer;
     bool bValidStructure = false;
 
     OSL_ENSURE( aLookAheadLine.isEmpty(), "*DifParser::LookAhead(): LookAhead called twice in a row" );
     rIn.ReadUniOrByteStringLine( aLookAheadLine, rIn.GetStreamCharSet() );
 
-    pAktBuffer = aLookAheadLine.getStr();
+    pCurrentBuffer = aLookAheadLine.getStr();
 
-    switch( *pAktBuffer )
+    switch( *pCurrentBuffer )
     {
         case '-':                   // Special Datatype
-            pAktBuffer++;
+            pCurrentBuffer++;
 
-            if( Is1_0( pAktBuffer ) )
+            if( Is1_0( pCurrentBuffer ) )
             {
                 bValidStructure = true;
             }
             break;
         case '0':                   // Numeric Data
-            pAktBuffer++;
-            if( *pAktBuffer == ',' )
+            pCurrentBuffer++;
+            if( *pCurrentBuffer == ',' )
             {
-                pAktBuffer++;
-                bValidStructure = ( GetNumberDataset(pAktBuffer) != D_SYNT_ERROR );
+                pCurrentBuffer++;
+                bValidStructure = ( GetNumberDataset(pCurrentBuffer) != D_SYNT_ERROR );
             }
             break;
         case '1':                   // String Data
@@ -474,18 +474,18 @@ DATASET DifParser::GetNextDataset()
 {
     DATASET eRet = D_UNKNOWN;
     OUString aLine;
-    const sal_Unicode* pAktBuffer;
+    const sal_Unicode* pCurrentBuffer;
 
     ReadNextLine( aLine );
 
-    pAktBuffer = aLine.getStr();
+    pCurrentBuffer = aLine.getStr();
 
-    switch( *pAktBuffer )
+    switch( *pCurrentBuffer )
     {
         case '-':                   // Special Datatype
-            pAktBuffer++;
+            pCurrentBuffer++;
 
-            if( Is1_0( pAktBuffer ) )
+            if( Is1_0( pCurrentBuffer ) )
             {
                 ReadNextLine( aLine );
                 if( IsBOT( aLine.getStr() ) )
@@ -495,17 +495,17 @@ DATASET DifParser::GetNextDataset()
             }
             break;
         case '0':                   // Numeric Data
-            pAktBuffer++;           // value in fVal, 2. line in aData
-            if( *pAktBuffer == ',' )
+            pCurrentBuffer++;       // value in fVal, 2. line in aData
+            if( *pCurrentBuffer == ',' )
             {
-                pAktBuffer++;
-                eRet = GetNumberDataset(pAktBuffer);
+                pCurrentBuffer++;
+                eRet = GetNumberDataset(pCurrentBuffer);
                 OUString aTmpLine;
                 ReadNextLine( aTmpLine );
                 if ( eRet == D_SYNT_ERROR )
                 {   // for broken records write "#ERR: data" to cell
                     OUStringBuffer aTmp("#ERR: ");
-                    aTmp.append(pAktBuffer).append(" (");
+                    aTmp.append(pCurrentBuffer).append(" (");
                     aTmp.append(aTmpLine).append(')');
                     aData = aTmp.makeStringAndClear();
                     eRet = D_STRING;
@@ -588,30 +588,30 @@ const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, sal_uInt32&
     while (*pStart == ' ' || *pStart == '\t')
         ++pStart;
 
-    sal_Unicode     cAkt = *pStart;
+    sal_Unicode     cCurrent = *pStart;
 
-    if( IsNumber( cAkt ) )
-        rRet = static_cast<sal_uInt32>( cAkt - '0' );
+    if( IsNumber( cCurrent ) )
+        rRet = static_cast<sal_uInt32>( cCurrent - '0' );
     else
         return nullptr;
 
     pStart++;
-    cAkt = *pStart;
+    cCurrent = *pStart;
 
-    while( IsNumber( cAkt ) && rRet < ( 0xFFFFFFFF / 10 ) )
+    while( IsNumber( cCurrent ) && rRet < ( 0xFFFFFFFF / 10 ) )
     {
         rRet *= 10;
-        rRet += static_cast<sal_uInt32>( cAkt - '0' );
+        rRet += static_cast<sal_uInt32>( cCurrent - '0' );
 
         pStart++;
-        cAkt = *pStart;
+        cCurrent = *pStart;
     }
 
     return pStart;
 }
 
 DifColumn::DifColumn ()
-    : mpAkt(nullptr)
+    : mpCurrent(nullptr)
 {
 }
 
@@ -621,15 +621,15 @@ void DifColumn::SetNumFormat( SCROW nRow, const sal_uInt32 nNumFormat )
 
     if( nNumFormat > 0 )
     {
-        if(mpAkt)
+        if(mpCurrent)
         {
             OSL_ENSURE( nRow > 0,
                 "*DifColumn::SetNumFormat(): more cannot be zero!" );
-            OSL_ENSURE( nRow > mpAkt->nEnd,
+            OSL_ENSURE( nRow > mpCurrent->nEnd,
                 "*DifColumn::SetNumFormat(): start from scratch?" );
 
-            if( mpAkt->nNumFormat == nNumFormat && mpAkt->nEnd == nRow - 1 )
-                mpAkt->nEnd = nRow;
+            if( mpCurrent->nNumFormat == nNumFormat && mpCurrent->nEnd == nRow - 1 )
+                mpCurrent->nEnd = nRow;
             else
                 NewEntry( nRow, nNumFormat );
         }
@@ -637,15 +637,15 @@ void DifColumn::SetNumFormat( SCROW nRow, const sal_uInt32 nNumFormat )
             NewEntry(nRow,nNumFormat );
     }
     else
-        mpAkt = nullptr;
+        mpCurrent = nullptr;
 }
 
 void DifColumn::NewEntry( const SCROW nPos, const sal_uInt32 nNumFormat )
 {
     maEntries.emplace_back();
-    mpAkt = &maEntries.back();
-    mpAkt->nStart = mpAkt->nEnd = nPos;
-    mpAkt->nNumFormat = nNumFormat;
+    mpCurrent = &maEntries.back();
+    mpCurrent->nStart = mpCurrent->nEnd = nPos;
+    mpCurrent->nNumFormat = nNumFormat;
 
 }
 
