@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_d1268115",
+        "filename": "cui/source/options/optcolor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-02-03T16:26:04Z",
+      "side": 1,
+      "message": "This additional comment is not needed here.",
+      "range": {
+        "startLine": 941,
+        "startChar": 36,
+        "endLine": 941,
+        "endChar": 38
+      },
+      "revId": "1dbedc0a3d1e78151dfccbd5c079627daa1636cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_f1238503",
+        "filename": "cui/source/options/optcolor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-02-03T16:26:04Z",
+      "side": 1,
+      "message": "Seems better to cast the other variable to long instead. Since long is the bigger type. Also please use C++ style cast (static_casr) instead of this C style cast.",
+      "range": {
+        "startLine": 949,
+        "startChar": 26,
+        "endLine": 949,
+        "endChar": 34
+      },
+      "revId": "1dbedc0a3d1e78151dfccbd5c079627daa1636cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
