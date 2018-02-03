@@ -351,6 +351,7 @@ enum PropertyIds
         ,PROP_RUBY_STYLE
         ,PROP_RUBY_TEXT
         ,PROP_RUBY_ADJUST
+        ,PROP_RUBY_POSITION
     };
 
 //Returns the UNO string equivalent to eId.

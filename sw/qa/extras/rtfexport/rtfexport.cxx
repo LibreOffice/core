@@ -27,6 +27,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/text/RubyAdjust.hpp>
+#include <com/sun/star/text/RubyPosition.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 
@@ -398,6 +399,8 @@ DECLARE_RTFEXPORT_TEST(testTdf49073, "tdf49073.rtf")
                          getProperty<sal_Int16>(getParagraph(5)->getStart(), "RubyAdjust"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RubyAdjust_RIGHT),
                          getProperty<sal_Int16>(getParagraph(6)->getStart(), "RubyAdjust"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RubyPosition::INTER_CHARACTER),
+                         getProperty<sal_Int16>(getParagraph(7)->getStart(), "RubyPosition"));
 }
 
 DECLARE_RTFEXPORT_TEST(testMathRuns, "math-runs.rtf")
