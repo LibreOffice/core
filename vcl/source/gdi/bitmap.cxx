@@ -71,40 +71,48 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
                 else if( ( 4 == nBitCount ) || ( 8 == nBitCount ) )
                 {
                     aPal.SetEntryCount( 1 << nBitCount );
-                    aPal[ 0 ] = Color( COL_BLACK );
-                    aPal[ 1 ] = Color( COL_BLUE );
-                    aPal[ 2 ] = Color( COL_GREEN );
-                    aPal[ 3 ] = Color( COL_CYAN );
-                    aPal[ 4 ] = Color( COL_RED );
-                    aPal[ 5 ] = Color( COL_MAGENTA );
-                    aPal[ 6 ] = Color( COL_BROWN );
-                    aPal[ 7 ] = Color( COL_GRAY );
-                    aPal[ 8 ] = Color( COL_LIGHTGRAY );
-                    aPal[ 9 ] = Color( COL_LIGHTBLUE );
-                    aPal[ 10 ] = Color( COL_LIGHTGREEN );
-                    aPal[ 11 ] = Color( COL_LIGHTCYAN );
-                    aPal[ 12 ] = Color( COL_LIGHTRED );
-                    aPal[ 13 ] = Color( COL_LIGHTMAGENTA );
-                    aPal[ 14 ] = Color( COL_YELLOW );
-                    aPal[ 15 ] = Color( COL_WHITE );
+                    aPal[0]  = BitmapColor(0x00, 0x00, 0x00, true); // black
+                    aPal[1]  = BitmapColor(0x00, 0x00, 0x80, true); // blue
+                    aPal[2]  = BitmapColor(0x00, 0x80, 0x00, true); // green
+                    aPal[3]  = BitmapColor(0x00, 0x80, 0x80, true); // cyan
+                    aPal[4]  = BitmapColor(0x80, 0x00, 0x00, true); // red
+                    aPal[5]  = BitmapColor(0x80, 0x00, 0x80, true); // magenta
+                    aPal[6]  = BitmapColor(0x80, 0x80, 0x00, true); // brown
+                    aPal[7]  = BitmapColor(0x80, 0x80, 0x80, true); // grey
+                    aPal[8]  = BitmapColor(0xC0, 0xC0, 0xC0, true); // light grey
+                    aPal[9]  = BitmapColor(0x00, 0x00, 0xFF, true); // light blue
+                    aPal[10] = BitmapColor(0x00, 0xFF, 0x00, true); // light green
+                    aPal[11] = BitmapColor(0x00, 0xFF, 0xFF, true); // light cyan
+                    aPal[12] = BitmapColor(0xFF, 0x00, 0x00, true); // light red
+                    aPal[13] = BitmapColor(0xFF, 0x00, 0xFF, true); // light magenta
+                    aPal[14] = BitmapColor(0xFF, 0xFF, 0x00, true); // yellow
+                    aPal[15] = BitmapColor(0xFF, 0xFF, 0xFF, true); // white
 
                     // Create dither palette
-                    if( 8 == nBitCount )
+                    if (nBitCount == 8)
                     {
                         sal_uInt16 nActCol = 16;
 
-                        for( sal_uInt16 nB = 0; nB < 256; nB += 51 )
-                            for( sal_uInt16 nG = 0; nG < 256; nG += 51 )
-                                for( sal_uInt16 nR = 0; nR < 256; nR += 51 )
-                                    aPal[ nActCol++ ] = BitmapColor( static_cast<sal_uInt8>(nR), static_cast<sal_uInt8>(nG), static_cast<sal_uInt8>(nB) );
+                        for(sal_uInt16 nB = 0; nB < 256; nB += 51)
+                        {
+                            for(sal_uInt16 nG = 0; nG < 256; nG += 51)
+                            {
+                                for(sal_uInt16 nR = 0; nR < 256; nR += 51)
+                                {
+                                    aPal[nActCol++] = BitmapColor(static_cast<sal_uInt8>(nR), static_cast<sal_uInt8>(nG), static_cast<sal_uInt8>(nB), true);
+                                }
+                            }
+                        }
 
                         // Set standard Office colors
-                        aPal[ nActCol++ ] = BitmapColor( 0, 184, 255 );
+                        aPal[nActCol++] = BitmapColor(0x00, 0xB8, 0xFF);
                     }
                 }
             }
             else
+            {
                 pRealPal = const_cast<BitmapPalette*>(pPal);
+            }
         }
 
         mxImpBmp.reset(new ImpBitmap);
@@ -293,6 +301,7 @@ BitmapChecksum Bitmap::GetChecksum() const
         }
     }
 
+    SAL_INFO("vcl.gdi.checksum", "Bitmap::GetChecksum() returns " << nRet);
     return nRet;
 }
 
@@ -458,18 +467,20 @@ bool Bitmap::Erase(const Color& rFillColor)
 
 bool Bitmap::Invert()
 {
-    ScopedWriteAccess   pAcc(*this);
-    bool                bRet = false;
+    ScopedWriteAccess pAcc(*this);
+    bool bRet = false;
 
-    if( pAcc )
+    if (pAcc)
     {
-        if( pAcc->HasPalette() )
+        if (pAcc->HasPalette())
         {
-            BitmapPalette   aBmpPal( pAcc->GetPalette() );
-            const sal_uInt16    nCount = aBmpPal.GetEntryCount();
+            BitmapPalette aBmpPal(pAcc->GetPalette());
+            const sal_uInt16 nCount = aBmpPal.GetEntryCount();
 
-            for( sal_uInt16 i = 0; i < nCount; i++ )
-                aBmpPal[ i ].Invert();
+            for (sal_uInt16 i = 0; i < nCount; i++)
+            {
+                aBmpPal[i].Invert();
+            }
 
             pAcc->SetPalette( aBmpPal );
         }
@@ -481,8 +492,12 @@ bool Bitmap::Invert()
             for( long nY = 0; nY < nHeight; nY++ )
             {
                 Scanline pScanline = pAcc->GetScanline(nY);
-                for( long nX = 0; nX < nWidth; nX++ )
-                    pAcc->SetPixelOnData( pScanline, nX, pAcc->GetPixelFromData( pScanline, nX ).Invert() );
+                for (long nX = 0; nX < nWidth; nX++)
+                {
+                    BitmapColor aBmpColor(pAcc->GetPixelFromData(pScanline, nX));
+                    aBmpColor.Invert();
+                    pAcc->SetPixelOnData(pScanline, nX, aBmpColor);
+                }
             }
         }
 
