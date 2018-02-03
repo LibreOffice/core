@@ -13,7 +13,7 @@
 #include <address.hxx>
 #include <documentimport.hxx>
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/fontenum.hxx>
 #include <editeng/svxenum.hxx>
 

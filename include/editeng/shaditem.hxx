@@ -19,7 +19,7 @@
 #ifndef INCLUDED_EDITENG_SHADITEM_HXX
 #define INCLUDED_EDITENG_SHADITEM_HXX
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/editengdllapi.h>

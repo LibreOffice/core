@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_INC_AUTHRATR_HXX
 #define INCLUDED_SW_INC_AUTHRATR_HXX
 
-#include <tools/colordata.hxx>
+#include <vcl/colordata.hxx>
 #include "swdllapi.h"
 
 class SW_DLLPUBLIC AuthorCharAttr

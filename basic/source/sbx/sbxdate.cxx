@@ -21,7 +21,7 @@
 #include <vcl/settings.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/errcode.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <i18nlangtag/lang.h>
 #include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>

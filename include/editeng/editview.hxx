@@ -25,7 +25,7 @@
 
 #include <svl/style.hxx>
 #include <i18nlangtag/lang.h>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/cursor.hxx>

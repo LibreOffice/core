@@ -29,7 +29,7 @@
 #include <svl/numuno.hxx>
 #include <rtl/math.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 

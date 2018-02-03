@@ -83,7 +83,7 @@
 #include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <osl/mutex.hxx>
-#include <tools/colordata.hxx>
+#include <vcl/colordata.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/component.hxx>
 #include <rtl/ref.hxx>

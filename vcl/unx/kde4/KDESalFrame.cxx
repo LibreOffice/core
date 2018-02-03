@@ -37,7 +37,7 @@
 #include "KDEXLib.hxx"
 #include "KDESalGraphics.hxx"
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 
 #include <vcl/font.hxx>
 #include <vcl/settings.hxx>

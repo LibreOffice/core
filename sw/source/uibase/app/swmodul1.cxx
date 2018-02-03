@@ -62,7 +62,7 @@
 #include <IDocumentLayoutAccess.hxx>
 
 #include <unomid.h>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <PostItMgr.hxx>
 
 using namespace ::svx;

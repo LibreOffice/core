@@ -23,7 +23,7 @@
 #include <algorithm>
 #include <vcl/bitmap.hxx>
 #include <vcl/settings.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <rtl/ustring.hxx>
 
 #define ROADMAP_INDENT_X        4

@@ -29,7 +29,7 @@
 
 #include <vector>
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <swtypes.hxx>
 #include <viewopt.hxx>
 

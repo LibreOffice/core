@@ -24,7 +24,7 @@
 
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <o3tl/safeint.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
