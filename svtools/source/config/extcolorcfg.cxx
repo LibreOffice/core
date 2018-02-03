@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/configpaths.hxx>
 #include <com/sun/star/uno/Sequence.h>

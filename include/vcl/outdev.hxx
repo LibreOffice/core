@@ -23,7 +23,7 @@
 #include <tools/gen.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/poly.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/bitmap.hxx>

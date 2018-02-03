@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_XHATCH_HXX
 #define INCLUDED_SVX_XHATCH_HXX
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/drawing/HatchStyle.hpp>
 

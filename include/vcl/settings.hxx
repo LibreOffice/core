@@ -22,7 +22,7 @@
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/font.hxx>
 #include <vcl/accel.hxx>

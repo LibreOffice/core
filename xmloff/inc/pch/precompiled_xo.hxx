@@ -168,7 +168,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <sax/tools/converter.hxx>
 #include <svl/svldllapi.h>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fontenum.hxx>

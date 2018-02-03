@@ -16,7 +16,7 @@
 #include <sfx2/StylePreviewRenderer.hxx>
 #include <svx/svxdllapi.h>
 #include <rtl/ustring.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/gen.hxx>
 
 class OutputDevice;

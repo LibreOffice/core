@@ -22,7 +22,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <vcl/vclptr.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 
 namespace vcl { class Window; }
 

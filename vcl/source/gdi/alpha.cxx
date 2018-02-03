@@ -18,7 +18,7 @@
  */
 
 #include <vcl/bitmapaccess.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <vcl/alpha.hxx>
 
 AlphaMask::AlphaMask()

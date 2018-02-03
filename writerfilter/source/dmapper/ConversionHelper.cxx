@@ -25,7 +25,7 @@
 #include <editeng/borderline.hxx>
 #include <ooxml/resourceids.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/mapunit.hxx>
 #include <algorithm>
 #include <functional>

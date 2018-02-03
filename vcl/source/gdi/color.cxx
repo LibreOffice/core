@@ -23,7 +23,7 @@
 #include <sstream>
 #include <stdlib.h>
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/stream.hxx>
 #include <tools/helpers.hxx>
 #include <basegfx/color/bcolortools.hxx>

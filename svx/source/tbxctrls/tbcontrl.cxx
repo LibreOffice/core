@@ -22,7 +22,7 @@
 #include <utility>
 
 #include <comphelper/propertysequence.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/itemset.hxx>

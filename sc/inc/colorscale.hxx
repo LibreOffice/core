@@ -11,7 +11,7 @@
 #define INCLUDED_SC_INC_COLORSCALE_HXX
 
 #include <formula/grammar.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include "rangelst.hxx"
 #include "conditio.hxx"
 #include "document.hxx"

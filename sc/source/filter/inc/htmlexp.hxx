@@ -23,7 +23,7 @@
 #include <global.hxx>
 #include <rtl/textenc.h>
 #include <tools/gen.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <vector>
 #include <memory>
 

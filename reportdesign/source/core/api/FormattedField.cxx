@@ -22,7 +22,7 @@
 #include <strings.hxx>
 #include <strings.hrc>
 #include <core_resource.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/property.hxx>
 #include <cppuhelper/supportsservice.hxx>

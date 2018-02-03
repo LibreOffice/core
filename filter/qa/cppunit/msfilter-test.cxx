@@ -14,7 +14,7 @@
 
 #include <sal/types.h>
 #include <rtl/ustrbuf.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <filter/msfilter/util.hxx>
 
 #include <unotest/bootstrapfixturebase.hxx>
