@@ -42,16 +42,16 @@ void LotusFontBuffer::Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet )
 {
     sal_uInt8   nIntIndex = nIndex & 0x07;
 
-    ENTRY*  pAkt = pData + nIntIndex;
+    ENTRY*  pCurrent = pData + nIntIndex;
 
-    if( pAkt->pFont )
-        rItemSet.Put( *pAkt->pFont );
+    if( pCurrent->pFont )
+        rItemSet.Put( *pCurrent->pFont );
 
-    if( pAkt->pHeight )
-        rItemSet.Put( *pAkt->pHeight );
+    if( pCurrent->pHeight )
+        rItemSet.Put( *pCurrent->pHeight );
 
-    if( pAkt->pColor )
-        rItemSet.Put( *pAkt->pColor );
+    if( pCurrent->pColor )
+        rItemSet.Put( *pCurrent->pColor );
 
     if( nIndex & 0x08 )
     {
