@@ -1485,12 +1485,13 @@ void ScOrcusStyles::set_font_underline_color(orcus::spreadsheet::color_elem_t al
     maCurrentFont.maUnderlineColor = Color(alpha, red, green, blue);
 }
 
-void ScOrcusStyles::set_font_color(orcus::spreadsheet::color_elem_t alpha,
+void ScOrcusStyles::set_font_color(orcus::spreadsheet::color_elem_t /*alpha*/,
             orcus::spreadsheet::color_elem_t red,
             orcus::spreadsheet::color_elem_t green,
             orcus::spreadsheet::color_elem_t blue)
 {
-    maCurrentFont.maColor = Color(alpha, red, green, blue);
+    // Ignore the alpha value for now.
+    maCurrentFont.maColor = Color(red, green, blue);
     maCurrentFont.mbHasFontAttr = true;
 }
 
