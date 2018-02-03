@@ -61,7 +61,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <editeng/unoprnms.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>

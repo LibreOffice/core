@@ -28,7 +28,7 @@
 #include <svtools/svtabbx.hxx>
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentry.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/contnr.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>

@@ -400,7 +400,7 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

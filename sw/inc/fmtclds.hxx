@@ -20,7 +20,7 @@
 #define INCLUDED_SW_INC_FMTCLDS_HXX
 
 #include <editeng/borderline.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include "hintids.hxx"

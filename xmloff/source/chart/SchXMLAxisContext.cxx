@@ -29,7 +29,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>

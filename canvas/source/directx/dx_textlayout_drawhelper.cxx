@@ -29,7 +29,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/poly.hxx>
 #include <vcl/canvastools.hxx>

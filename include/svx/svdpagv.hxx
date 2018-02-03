@@ -22,7 +22,7 @@
 
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <rtl/ustring.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <svl/lstner.hxx>
 #include <svx/svdhlpln.hxx>
 #include <svx/svdsob.hxx>

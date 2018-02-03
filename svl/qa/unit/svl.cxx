@@ -37,7 +37,7 @@
 #include <svl/zformat.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <svl/sharedstring.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <unotools/syslocale.hxx>
 
 #include <memory>

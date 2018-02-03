@@ -21,7 +21,7 @@
 
 #include <memory>
 #include <tools/gen.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include "global.hxx"
 #include "rangelst.hxx"
 

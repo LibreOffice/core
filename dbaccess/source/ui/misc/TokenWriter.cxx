@@ -45,7 +45,7 @@
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/rtfkeywd.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <svtools/htmlout.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <svl/numuno.hxx>

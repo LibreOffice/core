@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_SWFRAMEEXAMPLE_HXX
 
 #include <vcl/window.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/gen.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/swframetypes.hxx>

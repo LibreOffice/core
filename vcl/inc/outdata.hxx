@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_OUTDATA_HXX
 #define INCLUDED_VCL_INC_OUTDATA_HXX
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <vcl/salgtype.hxx>
 
 inline SalColor ImplColorToSal( Color aColor )

@@ -24,7 +24,7 @@
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <memory>
 
 /*-************************************************************************************************************

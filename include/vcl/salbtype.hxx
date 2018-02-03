@@ -24,7 +24,7 @@
 #include <vcl/checksum.hxx>
 #include <vcl/salgtype.hxx>
 #include <tools/helpers.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
@@ -119,7 +119,6 @@ public:
     inline sal_uInt8    GetIndex() const;
     inline void         SetIndex( sal_uInt8 cIndex );
 
-    operator            Color() const = delete;
     Color               GetColor() const;
 
     inline sal_uInt8    GetBlueOrIndex() const;
