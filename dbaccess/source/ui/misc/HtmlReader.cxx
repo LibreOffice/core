@@ -44,7 +44,7 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <WCopyTable.hxx>
 #include <WExtendPages.hxx>
 #include <WNameMatch.hxx>

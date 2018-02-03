@@ -22,7 +22,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <unotools/charclass.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>

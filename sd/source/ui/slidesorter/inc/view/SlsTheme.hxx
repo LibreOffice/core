@@ -25,7 +25,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gradient.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 
 #include <memory>
 

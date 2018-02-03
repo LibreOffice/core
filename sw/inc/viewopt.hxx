@@ -23,7 +23,7 @@
 #include <config_features.h>
 
 #include <tools/gen.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 
 #include <sfx2/zoomitem.hxx>
 #include <svx/svxids.hrc>

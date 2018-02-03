@@ -22,7 +22,7 @@
 
 #include "undobase.hxx"
 #include <formula/grammar.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tabbgcolor.hxx>
 
 #include <memory>

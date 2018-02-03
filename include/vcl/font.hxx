@@ -24,7 +24,7 @@
 #include <sal/types.h>
 #include <vcl/dllapi.h>
 #include <i18nlangtag/languagetag.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/gen.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/fntstyle.hxx>

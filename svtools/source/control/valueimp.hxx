@@ -21,7 +21,7 @@
 #define INCLUDED_SVTOOLS_SOURCE_CONTROL_VALUEIMP_HXX
 
 #include <osl/mutex.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <vcl/image.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
