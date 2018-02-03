@@ -68,6 +68,12 @@ DECLARE_RTFEXPORT_TEST(testTdf104035, "tdf104035.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(convertTwipToMm100(450)), aTabStops[0].Position);
 }
 
+DECLARE_RTFEXPORT_TEST(testGraphicObjectFliph, "graphic-object-fliph.rtf")
+{
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(1), "HoriMirroredOnEvenPages"));
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(1), "HoriMirroredOnOddPages"));
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf114333, "tdf114333.rtf")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
