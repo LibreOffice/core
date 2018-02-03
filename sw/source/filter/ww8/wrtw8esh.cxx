@@ -1512,10 +1512,10 @@ ShapeFlag AddMirrorFlags(ShapeFlag nFlags, const SwMirrorGrf &rMirror)
         case MirrorGraph::Dont:
             break;
         case MirrorGraph::Vertical:
-            nFlags |= ShapeFlag::FlipH;
+            nFlags |= ShapeFlag::FlipV;
             break;
         case MirrorGraph::Horizontal:
-            nFlags |= ShapeFlag::FlipV;
+            nFlags |= ShapeFlag::FlipH;
             break;
         case MirrorGraph::Both:
             nFlags |= ShapeFlag::FlipH | ShapeFlag::FlipV;
