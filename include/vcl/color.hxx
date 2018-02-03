@@ -16,11 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLS_COLOR_HXX
-#define INCLUDED_TOOLS_COLOR_HXX
+#ifndef INCLUDED_VCL_COLOR_HXX
+#define INCLUDED_VCL_COLOR_HXX
 
-#include <tools/toolsdllapi.h>
-#include <tools/colordata.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/colordata.hxx>
 
 class SvStream;
 
@@ -28,7 +28,7 @@ class SvStream;
 
 // Color
 
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Color final
+class SAL_WARN_UNUSED VCL_DLLPUBLIC Color final
 {
     ColorData mnColor;
 
@@ -83,7 +83,7 @@ public:
     {
         mnColor = nColor;
     }
-    ColorData GetColor() const
+    VCL_DLLPUBLIC ColorData GetColor() const
     {
         return mnColor;
     }
@@ -140,8 +140,8 @@ public:
     SvStream& Read(SvStream& rIStream);
     SvStream& Write(SvStream& rOStream) const;
 
-    TOOLS_DLLPUBLIC friend SvStream& ReadColor(SvStream& rIStream, Color& rColor);
-    TOOLS_DLLPUBLIC friend SvStream& WriteColor(SvStream& rOStream, const Color& rColor);
+    VCL_DLLPUBLIC friend SvStream& ReadColor(SvStream& rIStream, Color& rColor);
+    VCL_DLLPUBLIC friend SvStream& WriteColor(SvStream& rOStream, const Color& rColor);
 
     // Return color as RGB hex string
     // for example "00ff00" for green color

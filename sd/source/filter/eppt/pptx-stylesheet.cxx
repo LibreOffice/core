@@ -20,7 +20,7 @@
 #include "epptbase.hxx"
 #include "epptdef.hxx"
 #include "text.hxx"
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <editeng/svxenum.hxx>
 
 using namespace ::com::sun::star;

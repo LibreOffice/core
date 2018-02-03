@@ -151,7 +151,7 @@
 #include <svx/unomid.hxx>
 #include <svx/xtable.hxx>
 #include <tablink.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>

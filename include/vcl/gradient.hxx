@@ -22,7 +22,7 @@
 
 #include <sal/types.h>
 #include <vcl/dllapi.h>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 
 #include <vcl/vclenum.hxx>
 #include <o3tl/cow_wrapper.hxx>

@@ -28,7 +28,7 @@
 #include <visitors.hxx>
 
 #include <comphelper/string.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <vcl/outdev.hxx>

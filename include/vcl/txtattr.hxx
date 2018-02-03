@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_TXTATTR_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/debug.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/dllapi.h>

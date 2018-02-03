@@ -25,7 +25,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <editeng/outlobj.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <svx/sdr/attribute/sdrformtextattribute.hxx>
 #include <tools/weakbase.hxx>
 #include <svx/sdtaitm.hxx>

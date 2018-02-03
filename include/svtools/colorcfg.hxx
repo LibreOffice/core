@@ -21,7 +21,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <unotools/options.hxx>
 #include <memory>

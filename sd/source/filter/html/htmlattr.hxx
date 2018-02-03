@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_FILTER_HTML_HTMLATTR_HXX
 
 #include <vcl/ctrl.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 
 class SdHtmlAttrPreview final : public Control
 {

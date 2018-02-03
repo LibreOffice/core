@@ -7782,8 +7782,6 @@ include/toolkit/helper/servicenames.hxx
 include/toolkit/helper/vclunohelper.hxx
 include/tools/b3dtrans.hxx
 include/tools/bigint.hxx
-include/tools/color.hxx
-include/tools/colordata.hxx
 include/tools/config.hxx
 include/tools/contnr.hxx
 include/tools/cpuid.hxx
@@ -7972,6 +7970,8 @@ include/vbahelper/vbashaperange.hxx
 include/vbahelper/vbashapes.hxx
 include/vbahelper/vbatextframe.hxx
 include/vbahelper/vbawindowbase.hxx
+include/vcl/color.hxx
+include/vcl/colordata.hxx
 include/vcl/BitmapTools.hxx
 include/vcl/EnumContext.hxx
 include/vcl/FilterConfigItem.hxx
@@ -16880,7 +16880,6 @@ tools/inc/pch/precompiled_tl.cxx
 tools/inc/pch/precompiled_tl.hxx
 tools/inc/poly.h
 tools/qa/cppunit/test_bigint.cxx
-tools/qa/cppunit/test_color.cxx
 tools/qa/cppunit/test_date.cxx
 tools/qa/cppunit/test_fract.cxx
 tools/qa/cppunit/test_inetmime.cxx
@@ -16898,7 +16897,6 @@ tools/source/fsys/urlobj.cxx
 tools/source/fsys/wldcrd.cxx
 tools/source/generic/b3dtrans.cxx
 tools/source/generic/bigint.cxx
-tools/source/generic/color.cxx
 tools/source/generic/config.cxx
 tools/source/generic/fract.cxx
 tools/source/generic/gen.cxx
@@ -18049,6 +18047,7 @@ vcl/osx/salprn.cxx
 vcl/osx/salsys.cxx
 vcl/osx/saltimer.cxx
 vcl/osx/service_entry.cxx
+vcl/qa/cppunit/test_color.cxx
 vcl/qa/cppunit/BitmapProcessorTest.cxx
 vcl/qa/cppunit/BitmapTest.cxx
 vcl/qa/cppunit/app/test_IconThemeInfo.cxx
@@ -18078,6 +18077,7 @@ vcl/quartz/salgdicommon.cxx
 vcl/quartz/salgdiutils.cxx
 vcl/quartz/salvd.cxx
 vcl/quartz/utils.cxx
+vcl/source/gdi/color.cxx
 vcl/source/app/IDialogRenderable.cxx
 vcl/source/app/ITiledRenderable.cxx
 vcl/source/app/IconThemeInfo.cxx

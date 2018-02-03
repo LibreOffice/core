@@ -22,7 +22,7 @@
 #include <view/SlsTheme.hxx>
 #include <controller/SlsProperties.hxx>
 #include <sdresid.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>

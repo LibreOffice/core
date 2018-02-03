@@ -543,8 +543,8 @@
 #include <svx/xpoly.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xtextit0.hxx>
-#include <tools/color.hxx>
-#include <tools/colordata.hxx>
+#include <vcl/color.hxx>
+#include <vcl/colordata.hxx>
 #include <tools/contnr.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>

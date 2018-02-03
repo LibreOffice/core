@@ -20,7 +20,7 @@
 #include <comphelper/string.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/character.hxx>

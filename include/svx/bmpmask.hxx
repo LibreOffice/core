@@ -26,7 +26,7 @@
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/xtable.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>

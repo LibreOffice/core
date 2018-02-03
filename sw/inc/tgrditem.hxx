@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_TGRDITEM_HXX
 #define INCLUDED_SW_INC_TGRDITEM_HXX
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include "hintids.hxx"
