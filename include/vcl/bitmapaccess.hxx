@@ -220,7 +220,7 @@ public:
 
     sal_uInt8 GetPixelIndex(long nY, long nX) const
     {
-        return GetPixel(nY, nX).GetBlueOrIndex();
+        return GetPixel(nY, nX).GetIndex();
     }
 
     sal_uInt8 GetLuminance(long nY, long nX) const
