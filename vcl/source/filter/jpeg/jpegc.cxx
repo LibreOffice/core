@@ -244,6 +244,7 @@ void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputStream, 
                 eScanlineFormat = ScanlineFormat::N8BitPal;
                 nPixelSize = 1;
             }
+#if defined(JCS_EXTENSIONS)
             else if (eFinalFormat == ScanlineFormat::N32BitTcBgra)
             {
                 best_out_color_space = JCS_EXT_BGRA;
@@ -262,7 +263,7 @@ void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputStream, 
                 eScanlineFormat = eFinalFormat;
                 nPixelSize = 4;
             }
-
+#endif
             if (rContext.cinfo.jpeg_color_space == JCS_YCCK)
                 rContext.cinfo.out_color_space = JCS_CMYK;
 
