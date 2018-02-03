@@ -465,7 +465,7 @@ public:
         }
     virtual ColorData ReadPixel() override
         {
-            return mrPalette[ *pData++ ].GetColor().GetColor();
+            return mrPalette[ *pData++ ].GetColor();
         }
     virtual void WritePixel( ColorData nColor ) override
         {
@@ -511,7 +511,7 @@ public:
             const BitmapColor& rColor = mrPalette[( pData[mnX >> 1] >> mnShift) & 0x0f];
             mnX++;
             mnShift ^= 4;
-            return rColor.GetColor().GetColor();
+            return rColor.GetColor();
         }
     virtual void WritePixel( ColorData nColor ) override
         {
@@ -552,7 +552,7 @@ public:
         {
             const BitmapColor& rColor = mrPalette[ (pData[mnX >> 3 ] >> ( 7 - ( mnX & 7 ) )) & 1];
             mnX++;
-            return rColor.GetColor().GetColor();
+            return rColor.GetColor();
         }
     virtual void WritePixel( ColorData nColor ) override
         {

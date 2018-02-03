@@ -2572,6 +2572,7 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
         }
     }
 
+    SAL_INFO("vcl.gdi.checksum", "GDIMetaFile::GetChecksum() returns " << nCrc);
     return nCrc;
 }
 

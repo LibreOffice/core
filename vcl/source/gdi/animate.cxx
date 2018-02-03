@@ -57,6 +57,8 @@ BitmapChecksum AnimationBitmap::GetChecksum() const
     UInt32ToSVBT32( static_cast<long>(bUserInput), aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
+    SAL_INFO("vcl.gdi.checksum", "AnimationBitmap::GetChecksum() returns " << nCrc);
+
     return nCrc;
 }
 
