@@ -284,9 +284,9 @@ include/test/sheet/xstyleloader.hxx:27
     class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> apitest::XStyleLoader::getTargetComponent()
 include/test/sheet/xusedareacursor.hxx:25
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XUsedAreaCursor::init()
-include/tools/color.hxx:140
+include/vcl/color.hxx:140
     class SvStream & Color::Read(class SvStream &)
-include/tools/color.hxx:141
+include/vcl/color.hxx:141
     class SvStream & Color::Write(class SvStream &) const
 include/tools/date.hxx:200
     _Bool Date::Normalize()

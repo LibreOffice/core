@@ -13,7 +13,7 @@
 #include "scdllapi.h"
 #include <boost/optional.hpp>
 #include <tools/fontenum.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <vcl/fntstyle.hxx>
 #include <i18nlangtag/lang.h>
 

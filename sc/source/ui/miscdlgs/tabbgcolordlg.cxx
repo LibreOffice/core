@@ -24,7 +24,7 @@
 #include <scresid.hxx>
 #include <strings.hrc>
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>

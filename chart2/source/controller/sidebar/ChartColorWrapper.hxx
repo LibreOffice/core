@@ -11,7 +11,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTCOLORWRAPPER_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <svx/Palette.hxx>
 
 class SvxColorToolBoxControl;

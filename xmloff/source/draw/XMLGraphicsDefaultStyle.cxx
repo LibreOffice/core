@@ -21,7 +21,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>

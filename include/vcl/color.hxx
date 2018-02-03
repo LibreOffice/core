@@ -16,19 +16,17 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLS_COLOR_HXX
-#define INCLUDED_TOOLS_COLOR_HXX
+#ifndef INCLUDED_VCL_COLOR_HXX
+#define INCLUDED_VCL_COLOR_HXX
 
-#include <tools/toolsdllapi.h>
-#include <tools/colordata.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/colordata.hxx>
 
 class SvStream;
 
 #include <basegfx/color/bcolor.hxx>
 
-// Color
-
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Color final
+class SAL_WARN_UNUSED VCL_DLLPUBLIC Color
 {
     ColorData mnColor;
 
@@ -53,48 +51,28 @@ public:
                                 sal_uInt8((rBColor.getBlue() * 255.0) + 0.5)))
     {}
 
-    bool operator<(const Color& b) const
-    {
-        return mnColor < b.GetColor();
-    }
+    virtual ~Color() {}
 
-    void SetRed(sal_uInt8 nRed);
-    sal_uInt8 GetRed() const
-    {
-        return COLORDATA_RED(mnColor);
-    }
-    void SetGreen(sal_uInt8 nGreen);
-    sal_uInt8 GetGreen() const
-    {
-        return COLORDATA_GREEN(mnColor);
-    }
-    void SetBlue(sal_uInt8 nBlue);
-    sal_uInt8 GetBlue() const
-    {
-        return COLORDATA_BLUE(mnColor);
-    }
+    bool operator<(const Color& b) const { return mnColor < b.GetColor(); }
+
+    virtual sal_uInt8 GetRed() const { return COLORDATA_RED(mnColor); }
+    virtual sal_uInt8 GetGreen() const { return COLORDATA_GREEN(mnColor); }
+    virtual sal_uInt8 GetBlue() const { return COLORDATA_BLUE(mnColor); }
+
+    virtual void SetRed(sal_uInt8 nRed);
+    virtual void SetGreen(sal_uInt8 nGreen);
+    virtual void SetBlue(sal_uInt8 nBlue);
+
+    sal_uInt8 GetTransparency() const { return COLORDATA_TRANSPARENCY(mnColor); }
     void SetTransparency(sal_uInt8 nTransparency);
-    sal_uInt8 GetTransparency() const
-    {
-        return COLORDATA_TRANSPARENCY(mnColor);
-    }
 
-    void SetColor(ColorData nColor)
-    {
-        mnColor = nColor;
-    }
-    ColorData GetColor() const
-    {
-        return mnColor;
-    }
-    ColorData GetRGBColor() const
-    {
-        return COLORDATA_RGB(mnColor);
-    }
+    VCL_DLLPUBLIC ColorData GetColor() const { return mnColor; }
+    void SetColor(ColorData nColor) { mnColor = nColor; }
 
+    ColorData GetRGBColor() const { return COLORDATA_RGB(mnColor); }
     sal_uInt8 GetColorError(const Color& rCompareColor) const;
-
     sal_uInt8 GetLuminance() const;
+
     void IncreaseLuminance(sal_uInt8 cLumInc);
     void DecreaseLuminance(sal_uInt8 cLumDec);
 
@@ -140,8 +118,8 @@ public:
     SvStream& Read(SvStream& rIStream);
     SvStream& Write(SvStream& rOStream) const;
 
-    TOOLS_DLLPUBLIC friend SvStream& ReadColor(SvStream& rIStream, Color& rColor);
-    TOOLS_DLLPUBLIC friend SvStream& WriteColor(SvStream& rOStream, const Color& rColor);
+    VCL_DLLPUBLIC friend SvStream& ReadColor(SvStream& rIStream, Color& rColor);
+    VCL_DLLPUBLIC friend SvStream& WriteColor(SvStream& rOStream, const Color& rColor);
 
     // Return color as RGB hex string
     // for example "00ff00" for green color

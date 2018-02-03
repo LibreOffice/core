@@ -22,7 +22,7 @@
 
 #include <sal/types.h>
 #include <svx/xenum.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <o3tl/cow_wrapper.hxx>
 
 // predefines

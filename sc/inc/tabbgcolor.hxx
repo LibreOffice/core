@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_INC_TABBGCOLOR_HXX
 #define INCLUDED_SC_INC_TABBGCOLOR_HXX
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include "address.hxx"
 
 #include <vector>

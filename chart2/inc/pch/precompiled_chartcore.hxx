@@ -177,7 +177,7 @@
 #include <svx/svxdllapi.h>
 #include <svx/unoshape.hxx>
 #include <svx/xpoly.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/contnr.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>

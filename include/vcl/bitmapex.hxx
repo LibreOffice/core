@@ -23,7 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>

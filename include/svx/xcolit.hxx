@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_XCOLIT_HXX
 #define INCLUDED_SVX_XCOLIT_HXX
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <svx/svxdllapi.h>
 
 #include <svx/xit.hxx>

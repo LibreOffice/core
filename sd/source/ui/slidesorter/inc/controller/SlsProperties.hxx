@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSPROPERTIES_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSPROPERTIES_HXX
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 
 namespace sd { namespace slidesorter { namespace controller {
 

@@ -22,7 +22,7 @@
 
 #include <address.hxx>
 #include <cellvalue.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/fract.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>

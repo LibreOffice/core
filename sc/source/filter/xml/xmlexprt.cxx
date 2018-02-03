@@ -106,7 +106,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/math.hxx>
 #include <svl/zforlist.hxx>

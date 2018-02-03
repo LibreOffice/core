@@ -27,7 +27,7 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 #include <o3tl/any.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/maptype.hxx>

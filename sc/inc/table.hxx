@@ -23,7 +23,7 @@
 #include <vector>
 #include <utility>
 #include <tools/gen.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include "attarray.hxx"
 #include "column.hxx"

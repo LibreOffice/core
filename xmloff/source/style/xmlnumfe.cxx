@@ -29,7 +29,7 @@
 #include <unotools/charclass.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
