@@ -88,6 +88,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/text/RubyPosition.hpp>
 #include <oox/export/vmlexport.hxx>
 
 #include "sprmids.hxx"
@@ -3293,6 +3294,12 @@ WW8Ruby::WW8Ruby(const SwTextNode& rNode, const SwFormatRuby& rRuby, const MSWor
         default:
             OSL_ENSURE( false,"Unhandled Ruby justification code" );
             break;
+    }
+
+    if ( rRuby.GetPosition() == css::text::RubyPosition::INTER_CHARACTER )
+    {
+        m_nJC = 5;
+        m_cDirective = 0;
     }
 
     /*
