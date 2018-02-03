@@ -47,7 +47,7 @@ ErrCode ImportLotus::Read()
     ErrCode        eRet = ERRCODE_NONE;
 //  ScFormulaCell   *pLastFormCell;
 
-    STATE           eAkt = S_START;
+    STATE               eCurrent = S_START;
 
     nTab = 0;
     nExtTab = -2;
@@ -57,28 +57,28 @@ ErrCode ImportLotus::Read()
     // start progressbar
     ScfStreamProgressBar aPrgrsBar( *pIn, pD->GetDocumentShell() );
     LotusContext &rContext = aConv.getContext();
-    while( eAkt != S_END )
+    while( eCurrent != S_END )
     {
         pIn->ReadUInt16( nOp ).ReadUInt16( nRecLen );
 
         if (!pIn->good() || nNextRec > SAL_MAX_UINT32 - nRecLen - 4)
         {
             eRet = SCERR_IMPORT_FORMAT;
-            eAkt = S_END;
+            eCurrent = S_END;
             if (!pIn->good())
                 break;  // while
         }
 
         nNextRec += nRecLen + 4;
 
-        switch( eAkt )
+        switch( eCurrent )
         {
 
             case S_START:                                           // S_START
             if( nOp )
             {
                 eRet = SCERR_IMPORT_UNKNOWN_WK;
-                eAkt = S_END;
+                eCurrent = S_END;
             }
             else
             {
@@ -87,16 +87,16 @@ ErrCode ImportLotus::Read()
                     Bof();
                     switch (rContext.pLotusRoot->eFirstType)
                     {
-                        case Lotus123Typ::WK3: eAkt = S_WK3; break;
-                        case Lotus123Typ::WK4: eAkt = S_WK4; break;
+                        case Lotus123Typ::WK3: eCurrent = S_WK3; break;
+                        case Lotus123Typ::WK4: eCurrent = S_WK4; break;
                         default:
                         eRet = SCERR_IMPORT_UNKNOWN_WK;
-                        eAkt = S_END;
+                        eCurrent = S_END;
                     }
                 }
                 else
                 {
-                    eAkt = S_END;                       // TODO: add here something for <= WK1!
+                    eCurrent = S_END;                   // TODO: add here something for <= WK1!
                     eRet = ErrCode(0xFFFFFFFF);
                 }
             }
@@ -110,13 +110,13 @@ ErrCode ImportLotus::Read()
             switch( nOp )
             {
                 case 0x0001:                            // EOF
-                eAkt = S_FM3;
+                eCurrent = S_FM3;
                 nTab++;
                 break;
 
                 case 0x0002:                            // PASSWORD
                 eRet = SCERR_IMPORT_FILEPASSWD;
-                eAkt = S_END;
+                eCurrent = S_END;
                 break;
 
                 case 0x0007:                            // COLUMNWIDTH
@@ -177,7 +177,7 @@ ErrCode ImportLotus::Read()
                 else
                 {
                     eRet = SCERR_IMPORT_FORMAT;
-                    eAkt = S_END;
+                    eCurrent = S_END;
                 }
             }
 
