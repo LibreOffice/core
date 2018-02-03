@@ -33,15 +33,15 @@
 sal_uInt32 StringHashEntry::MakeHashCode( const OUString& r )
 {
     sal_uInt32             n = 0;
-    const sal_Unicode*     pAkt = r.getStr();
-    sal_Unicode            cAkt = *pAkt;
+    const sal_Unicode*     pCurrent = r.getStr();
+    sal_Unicode            cCurrent = *pCurrent;
 
-    while( cAkt )
+    while( cCurrent )
     {
         n *= 70;
-        n += static_cast<sal_uInt32>(cAkt);
-        pAkt++;
-        cAkt = *pAkt;
+        n += static_cast<sal_uInt32>(cCurrent);
+        pCurrent++;
+        cCurrent = *pCurrent;
     }
 
     return n;
