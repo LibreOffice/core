@@ -19,7 +19,7 @@
 
 #include <svgtools.hxx>
 #include <osl/thread.h>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svgtoken.hxx>

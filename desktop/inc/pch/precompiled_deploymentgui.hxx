@@ -106,7 +106,7 @@
 #include <svtools/treelist.hxx>
 #include <svtools/treelistbox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/contnr.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>

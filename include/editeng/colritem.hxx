@@ -20,7 +20,7 @@
 #define INCLUDED_EDITENG_COLRITEM_HXX
 
 #include <svl/poolitem.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <editeng/editengdllapi.h>
 
 class SvXMLUnitConverter;

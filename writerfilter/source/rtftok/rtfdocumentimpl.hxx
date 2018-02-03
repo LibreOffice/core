@@ -22,7 +22,7 @@
 #include <oox/mathml/importutils.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/colordata.hxx>
+#include <vcl/colordata.hxx>
 
 #include <rtftok/RTFDocument.hxx>
 #include "rtfreferencetable.hxx"

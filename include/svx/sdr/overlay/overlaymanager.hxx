@@ -24,7 +24,7 @@
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <vcl/mapmod.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/gen.hxx>
 #include <svx/svxdllapi.h>
 #include <svtools/optionsdrawinglayer.hxx>

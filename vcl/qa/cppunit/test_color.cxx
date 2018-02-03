@@ -8,31 +8,32 @@
  */
 
 #include <sal/types.h>
+
+#include <test/bootstrapfixture.hxx>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
-#include <tools/color.hxx>
+
+#include <vcl/color.hxx>
 #include <tools/stream.hxx>
 
-namespace
-{
-
-class Test: public CppUnit::TestFixture
+class VclColorTest: public test::BootstrapFixture
 {
 public:
+
+    VclColorTest() : BootstrapFixture(true, false) {}
+
     void test_asRGBColor();
     void test_readAndWriteStream();
     void test_ApplyTintOrShade();
 
-    CPPUNIT_TEST_SUITE(Test);
+    CPPUNIT_TEST_SUITE(VclColorTest);
     CPPUNIT_TEST(test_asRGBColor);
     CPPUNIT_TEST(test_readAndWriteStream);
     CPPUNIT_TEST(test_ApplyTintOrShade);
     CPPUNIT_TEST_SUITE_END();
 };
 
-void Test::test_asRGBColor()
+void VclColorTest::test_asRGBColor()
 {
     Color aColor;
     aColor = COL_BLACK;
@@ -59,7 +60,7 @@ void Test::test_asRGBColor()
     CPPUNIT_ASSERT_EQUAL(aColor.AsRGBHexString(), OUString("ffffff"));
 }
 
-void Test::test_readAndWriteStream()
+void VclColorTest::test_readAndWriteStream()
 {
     SvMemoryStream aStream;
     Color aWriteColor(0x12, 0x34, 0x56);
@@ -85,7 +86,7 @@ OUString createTintShade(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB, OUString cons
     return aColor.AsRGBHexString();
 }
 
-void Test::test_ApplyTintOrShade()
+void VclColorTest::test_ApplyTintOrShade()
 {
     // BLACK reference
 
@@ -135,8 +136,8 @@ void Test::test_ApplyTintOrShade()
 
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
+CPPUNIT_TEST_SUITE_REGISTRATION(VclColorTest);
 
-}
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

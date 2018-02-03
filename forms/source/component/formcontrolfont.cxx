@@ -23,7 +23,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <toolkit/helper/emptyfontdescriptor.hxx>
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>

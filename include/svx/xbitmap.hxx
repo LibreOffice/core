@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_XBITMAP_HXX
 
 #include <memory>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <vcl/bitmap.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svx/xenum.hxx>

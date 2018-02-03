@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_VIEWIMP_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <svx/svdtypes.hxx>
 #include <vcl/timer.hxx>
 #include <swrect.hxx>

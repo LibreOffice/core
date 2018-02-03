@@ -23,7 +23,7 @@
 #include <svx/svxdllapi.h>
 
 #include <tools/gen.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <vcl/vclptr.hxx>
 
 class ToolBox;

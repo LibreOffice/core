@@ -22,7 +22,7 @@
 
 #include "address.hxx"
 #include <tools/gen.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include "scdllapi.h"
 #include "token.hxx"
 

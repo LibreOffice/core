@@ -21,7 +21,7 @@
 
 #include <svl/eitem.hxx>
 #include <vcl/vclenum.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <editeng/editengdllapi.h>
 
 class SvXMLUnitConverter;

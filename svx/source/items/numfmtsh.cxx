@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 
 #include <tools/debug.hxx>
 #include <i18nlangtag/mslangid.hxx>
