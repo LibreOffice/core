@@ -115,7 +115,7 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
         else
             break;
 
-        const sal_Int32 nAkt = nStt - rArr.size();
+        const sal_Int32 nCurrent = nStt - rArr.size();
 
         if ( bNewHint )
         {
@@ -141,17 +141,17 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
                         // end (might be normal 0x7f).
                         const bool bEmpty = pHt->Which() != RES_TXTATR_FIELD
                             || (static_txtattr_cast<SwTextField const*>(pHt)->GetFormatField().GetField()->ExpandField(true).isEmpty());
-                        if ( bEmpty && nStart == nAkt )
+                        if ( bEmpty && nStart == nCurrent )
                         {
-                            rArr.push_back( nAkt );
+                            rArr.push_back( nCurrent );
                             --rEnd;
-                            buf.remove(nAkt, 1);
+                            buf.remove(nCurrent, 1);
                         }
                         else
                         {
                             if ( bEmpty )
-                                aReplaced.push_back( nAkt );
-                            buf[nAkt] = '\x7f';
+                                aReplaced.push_back( nCurrent );
+                            buf[nCurrent] = '\x7f';
                         }
                     }
                     break;
@@ -159,9 +159,9 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
                     {
                         if( bRemoveCommentAnchors )
                         {
-                            rArr.push_back( nAkt );
+                            rArr.push_back( nCurrent );
                             --rEnd;
-                            buf.remove( nAkt, 1 );
+                            buf.remove( nCurrent, 1 );
                         }
                     }
                     break;
@@ -175,9 +175,9 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
 
         if ( bNewSoftHyphen )
         {
-            rArr.push_back( nAkt );
+            rArr.push_back( nCurrent );
             --rEnd;
-            buf.remove(nAkt, 1);
+            buf.remove(nCurrent, 1);
             ++nSoftHyphen;
         }
     }
