@@ -243,6 +243,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/vclreferencebase \
     vcl/source/outdev/nativecontrols \
     vcl/source/outdev/map \
+    vcl/source/gdi/color \
     vcl/source/gdi/alpha \
     vcl/source/gdi/animate \
     vcl/source/gdi/base14 \

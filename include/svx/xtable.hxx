@@ -28,7 +28,7 @@
 #include <svx/xflasit.hxx>
 #include <svx/xlnasit.hxx>
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/contnr.hxx>
 
 #include <cppuhelper/weak.hxx>

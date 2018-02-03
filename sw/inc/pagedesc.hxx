@@ -20,7 +20,7 @@
 #define INCLUDED_SW_INC_PAGEDESC_HXX
 
 #include <tools/fract.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include "swdllapi.h"
 #include "swtypes.hxx"
 #include "frmfmt.hxx"

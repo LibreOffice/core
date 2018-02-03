@@ -1680,7 +1680,7 @@ static const GdkRGBA& getDarkColor(int nViewId, LOKDocViewPrivate& priv)
     }
     else
     {
-        // Based on tools/colordata.hxx, COL_AUTHOR1_DARK..COL_AUTHOR9_DARK.
+        // Based on vcl/colordata.hxx, COL_AUTHOR1_DARK..COL_AUTHOR9_DARK.
         static std::vector<GdkRGBA> aColors =
         {
             {(double(198))/255, (double(146))/255, (double(0))/255, 0},

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_STARMATH_SOURCE_TMPDEVICE_HXX
 #define INCLUDED_STARMATH_SOURCE_TMPDEVICE_HXX
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <vcl/outdev.hxx>
 
 class SmTmpDevice

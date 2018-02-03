@@ -545,8 +545,8 @@
 #include <svx/xtextit0.hxx>
 #include <toolkit/dllapi.h>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/color.hxx>
-#include <tools/colordata.hxx>
+#include <vcl/color.hxx>
+#include <vcl/colordata.hxx>
 #include <tools/contnr.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>

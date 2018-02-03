@@ -22,7 +22,7 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <rtl/ref.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/svxdllapi.h>

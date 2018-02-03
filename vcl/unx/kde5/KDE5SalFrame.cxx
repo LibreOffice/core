@@ -35,7 +35,7 @@
 #include "KDE5XLib.hxx"
 #include "KDE5SalGraphics.hxx"
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 
 #include <vcl/font.hxx>
 #include <vcl/settings.hxx>

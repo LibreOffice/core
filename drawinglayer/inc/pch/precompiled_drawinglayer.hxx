@@ -136,7 +136,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/solar.h>

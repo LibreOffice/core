@@ -24,7 +24,7 @@
 #include <ooxml/resourceids.hxx>
 #include <filter/msfilter/util.hxx>
 #include <comphelper/sequence.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 
 namespace writerfilter {
 

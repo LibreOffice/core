@@ -24,7 +24,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
 #include <svx/fontlb.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>

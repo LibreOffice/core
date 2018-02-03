@@ -301,8 +301,8 @@
 #include <token.hxx>
 #include <tokenarray.hxx>
 #include <tokenuno.hxx>
-#include <tools/color.hxx>
-#include <tools/colordata.hxx>
+#include <vcl/color.hxx>
+#include <vcl/colordata.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>

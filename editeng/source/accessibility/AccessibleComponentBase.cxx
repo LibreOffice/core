@@ -27,7 +27,7 @@
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

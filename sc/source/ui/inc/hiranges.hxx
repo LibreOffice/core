@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_HIRANGES_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_HIRANGES_HXX
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <global.hxx>
 #include <address.hxx>
 

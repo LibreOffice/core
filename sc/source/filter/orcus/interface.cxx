@@ -51,7 +51,7 @@
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/lang.h>
 #include <vcl/outdev.hxx>
-#include <tools/colordata.hxx>
+#include <vcl/colordata.hxx>
 #include <tools/fontenum.hxx>
 
 #include <stylesbuffer.hxx>

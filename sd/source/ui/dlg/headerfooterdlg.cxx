@@ -42,7 +42,7 @@
 
 // preview control for presentation layout
 #include <vcl/ctrl.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/xlndsit.hxx>
