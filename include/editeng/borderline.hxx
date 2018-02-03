@@ -22,7 +22,7 @@
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
 #include <svtools/ctrlbox.hxx>

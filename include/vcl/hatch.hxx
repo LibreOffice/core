@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_HATCH_HXX
 #define INCLUDED_VCL_HATCH_HXX
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <vcl/dllapi.h>
 
 #include <vcl/vclenum.hxx>

@@ -19,7 +19,7 @@
 #include <FormatCondition.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <strings.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/property.hxx>
 #include <cppuhelper/supportsservice.hxx>

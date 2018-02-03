@@ -18,7 +18,7 @@
  */
 
 #include <svtools/hyperlabel.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/tabpage.hxx>

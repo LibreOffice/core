@@ -25,7 +25,7 @@
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <sdundo.hxx>
 #include <svx/svdopath.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 
 class SdDrawDocument;
 class SdrObject;

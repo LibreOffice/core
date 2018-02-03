@@ -24,7 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/solar.h>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <vcl/vclenum.hxx>
 
 #include <olinetab.hxx>

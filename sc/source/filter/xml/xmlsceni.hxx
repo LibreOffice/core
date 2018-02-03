@@ -21,7 +21,7 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <rangelst.hxx>
 #include "importcontext.hxx"
 

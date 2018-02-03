@@ -32,7 +32,7 @@
 #include <reportformula.hxx>
 #include <toolkit/helper/property.hxx>
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <svtools/extcolorcfg.hxx>
 #include <unotools/confignode.hxx>
 

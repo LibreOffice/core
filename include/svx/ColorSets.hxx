@@ -16,7 +16,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 
 namespace svx
 {

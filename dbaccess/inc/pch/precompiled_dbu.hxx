@@ -155,8 +155,8 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/treelistentry.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/color.hxx>
-#include <tools/colordata.hxx>
+#include <vcl/color.hxx>
+#include <vcl/colordata.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>

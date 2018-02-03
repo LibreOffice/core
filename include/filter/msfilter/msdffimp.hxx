@@ -39,7 +39,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <svx/msdffdef.hxx>
-#include <tools/colordata.hxx>
+#include <vcl/colordata.hxx>
 #include <vcl/errcode.hxx>
 #include <tools/gen.hxx>
 #include <tools/ref.hxx>
