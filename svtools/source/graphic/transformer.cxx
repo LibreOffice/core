@@ -53,13 +53,10 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
     const uno::Reference< uno::XInterface > xIFace(rxGraphic, uno::UNO_QUERY);
     ::Graphic aGraphic(*::unographic::Graphic::getImplementation(xIFace));
 
-    BitmapColor aBmpColorFrom(static_cast< sal_uInt8 >(nColorFrom), static_cast< sal_uInt8 >(nColorFrom >> 8), static_cast< sal_uInt8 >(nColorFrom >> 16));
-    BitmapColor aBmpColorTo( static_cast< sal_uInt8 >(nColorTo), static_cast< sal_uInt8 >(nColorTo >> 8), static_cast< sal_uInt8 >(nColorTo  >> 16));
+    BitmapColor aColorFrom(static_cast< sal_uInt8 >(nColorFrom), static_cast< sal_uInt8 >(nColorFrom >> 8), static_cast< sal_uInt8 >(nColorFrom >> 16));
+    BitmapColor aColorTo( static_cast< sal_uInt8 >(nColorTo), static_cast< sal_uInt8 >(nColorTo >> 8), static_cast< sal_uInt8 >(nColorTo  >> 16));
 
-    Color aColorFrom(aBmpColorFrom.GetColor());
-    Color aColorTo(aBmpColorTo.GetColor());
-
-    const sal_uInt8 cIndexFrom = aBmpColorFrom.GetBlueOrIndex();
+    const sal_uInt8 cIndexFrom = aColorFrom.GetBlueOrIndex();
 
     if (aGraphic.GetType() == GraphicType::Bitmap || aGraphic.GetType() == GraphicType::GdiMetafile)
     {
