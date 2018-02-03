@@ -527,7 +527,7 @@ IMAGE_SETEVENT:
         {
             const SvxColorItem& rColorItem = m_xAttrTab->pFontColor ?
               static_cast<const SvxColorItem &>(m_xAttrTab->pFontColor->GetItem()) :
-              static_cast<const SvxColorItem &>(m_xDoc->GetDefault(RES_CHRATR_COLOR));
+              m_xDoc->GetDefault(RES_CHRATR_COLOR);
             aHBorderLine.SetColor( rColorItem.GetValue() );
             aVBorderLine.SetColor( aHBorderLine.GetColor() );
         }

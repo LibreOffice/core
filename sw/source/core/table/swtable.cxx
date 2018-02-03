@@ -1901,8 +1901,8 @@ bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
             break;
         }
         case RES_FINDNEARESTNODE:
-            if( GetFrameFormat() && static_cast<const SwFormatPageDesc&>(GetFrameFormat()->GetFormatAttr(
-                RES_PAGEDESC )).GetPageDesc() &&
+            if( GetFrameFormat() &&
+                GetFrameFormat()->GetFormatAttr( RES_PAGEDESC ).GetPageDesc() &&
                 !m_TabSortContentBoxes.empty() &&
                 m_TabSortContentBoxes[0]->GetSttNd()->GetNodes().IsDocNodes() )
                 static_cast<SwFindNearestNode&>(rInfo).CheckNode( *

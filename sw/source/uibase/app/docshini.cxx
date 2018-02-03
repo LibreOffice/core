@@ -252,20 +252,20 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 
         sal_uInt16 nFontWhich = RES_CHRATR_FONT;
         sal_uInt16 nFontHeightWhich = RES_CHRATR_FONTSIZE;
-        LanguageType eLanguage = static_cast<const SvxLanguageItem&>(m_xDoc->GetDefault( RES_CHRATR_LANGUAGE )).GetLanguage();
+        LanguageType eLanguage = m_xDoc->GetDefault( RES_CHRATR_LANGUAGE ).GetLanguage();
         for(sal_uInt8 nIdx = 0; nIdx < 24; nIdx += 2)
         {
             if(nIdx == 8)
             {
                 nFontWhich = RES_CHRATR_CJK_FONT;
                 nFontHeightWhich = RES_CHRATR_CJK_FONTSIZE;
-                eLanguage = static_cast<const SvxLanguageItem&>(m_xDoc->GetDefault( RES_CHRATR_CJK_LANGUAGE )).GetLanguage();
+                eLanguage = m_xDoc->GetDefault( RES_CHRATR_CJK_LANGUAGE ).GetLanguage();
             }
             else if(nIdx == 16)
             {
                 nFontWhich = RES_CHRATR_CTL_FONT;
                 nFontHeightWhich = RES_CHRATR_CTL_FONTSIZE;
-                eLanguage = static_cast<const SvxLanguageItem&>(m_xDoc->GetDefault( RES_CHRATR_CTL_LANGUAGE )).GetLanguage();
+                eLanguage = m_xDoc->GetDefault( RES_CHRATR_CTL_LANGUAGE ).GetLanguage();
             }
             SwTextFormatColl *pColl = nullptr;
             if(!pStdFont->IsFontDefault(aFontIdPoolId[nIdx]))
@@ -672,8 +672,7 @@ void SwDocShell::SubInitNew()
 
     if(!bWeb)
     {
-        SvxHyphenZoneItem aHyp( static_cast<const SvxHyphenZoneItem&>( m_xDoc->GetDefault(
-                                                        RES_PARATR_HYPHENZONE)  ) );
+        SvxHyphenZoneItem aHyp( m_xDoc->GetDefault(RES_PARATR_HYPHENZONE)  );
         aHyp.GetMinLead()   = static_cast< sal_uInt8 >(aLinguOpt.nHyphMinLeading);
         aHyp.GetMinTrail()  = static_cast< sal_uInt8 >(aLinguOpt.nHyphMinTrailing);
 

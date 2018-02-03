@@ -91,6 +91,10 @@ public:
     /// If bInParents is FALSE, search only in this format for attribute.
     const SfxPoolItem& GetFormatAttr( sal_uInt16 nWhich,
                                    bool bInParents = true ) const;
+    template<class T> const T& GetFormatAttr( TypedWhichId<T> nWhich, bool bInParents = true ) const
+    {
+        return static_cast<const T&>(GetFormatAttr(sal_uInt16(nWhich), bInParents));
+    }
     SfxItemState GetItemState( sal_uInt16 nWhich, bool bSrchInParent = true,
                                     const SfxPoolItem **ppItem = nullptr ) const;
     SfxItemState GetBackgroundState(SvxBrushItem &rItem) const;

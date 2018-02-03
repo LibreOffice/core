@@ -840,7 +840,7 @@ bool SwSectionFormat::GetInfo( SfxPoolItem& rInfo ) const
     switch( rInfo.Which() )
     {
     case RES_FINDNEARESTNODE:
-        if( static_cast<const SwFormatPageDesc&>(GetFormatAttr( RES_PAGEDESC )).GetPageDesc() )
+        if( GetFormatAttr( RES_PAGEDESC ).GetPageDesc() )
         {
             const SwSectionNode* pNd = GetSectionNode();
             if( pNd )

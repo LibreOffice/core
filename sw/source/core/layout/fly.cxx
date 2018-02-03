@@ -90,8 +90,7 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
 
     // Size setting: Fixed size is always the width
     const SwFormatFrameSize &rFrameSize = pFormat->GetFrameSize();
-    const SvxFrameDirection nDir =
-        static_cast<const SvxFrameDirectionItem&>(pFormat->GetFormatAttr( RES_FRAMEDIR )).GetValue();
+    const SvxFrameDirection nDir = pFormat->GetFormatAttr( RES_FRAMEDIR ).GetValue();
     if( SvxFrameDirection::Environment == nDir )
     {
         mbDerivedVert = true;

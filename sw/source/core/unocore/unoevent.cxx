@@ -188,7 +188,7 @@ void SwFrameEventDescriptor::setMacroItem(const SvxMacroItem& rItem)
 
 const SvxMacroItem& SwFrameEventDescriptor::getMacroItem()
 {
-    return static_cast<const SvxMacroItem&>(rFrame.GetFrameFormat()->GetFormatAttr(RES_FRMMACRO));
+    return rFrame.GetFrameFormat()->GetFormatAttr(RES_FRMMACRO);
 }
 
 sal_uInt16 SwFrameEventDescriptor::getMacroItemWhich() const

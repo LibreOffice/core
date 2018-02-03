@@ -582,7 +582,7 @@ void SwTextFormatColl::SetAttrOutlineLevel( int nLevel)
 
 int SwTextFormatColl::GetAttrOutlineLevel() const
 {
-    return static_cast<const SfxUInt16Item &>(GetFormatAttr(RES_PARATR_OUTLINELEVEL)).GetValue();
+    return GetFormatAttr(RES_PARATR_OUTLINELEVEL).GetValue();
 }
 
 int SwTextFormatColl::GetAssignedOutlineStyleLevel() const

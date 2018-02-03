@@ -61,6 +61,7 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <IDocumentDrawModelAccess.hxx>
 #include <memory>
+#include <fmtfollowtextflow.hxx>
 
 using namespace ::com::sun::star;
 
@@ -226,12 +227,12 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
 
                         aSet.Put( pFrameFormat->GetFormatAttr(RES_FOLLOW_TEXT_FLOW) );
 
-                        SwFormatVertOrient aVOrient(static_cast<const SwFormatVertOrient&>(pFrameFormat->GetFormatAttr(RES_VERT_ORIENT)));
+                        SwFormatVertOrient aVOrient(pFrameFormat->GetFormatAttr(RES_VERT_ORIENT));
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_VERT_ORIENT, aVOrient.GetVertOrient()));
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_VERT_RELATION, aVOrient.GetRelationOrient() ));
                         aSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_VERT_POSITION, aVOrient.GetPos()));
 
-                        SwFormatHoriOrient aHOrient(static_cast<const SwFormatHoriOrient&>(pFrameFormat->GetFormatAttr(RES_HORI_ORIENT)));
+                        SwFormatHoriOrient aHOrient(pFrameFormat->GetFormatAttr(RES_HORI_ORIENT));
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_HORI_ORIENT, aHOrient.GetHoriOrient()));
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_HORI_RELATION, aHOrient.GetRelationOrient() ));
                         aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_HORI_MIRROR, aHOrient.IsPosToggle()));
@@ -449,7 +450,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                             pSh->StartAction();
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                             SwFrameFormat* pFrameFormat = FindFrameFormat( pObj );
-                            SwFormatVertOrient aVOrient(static_cast<const SwFormatVertOrient&>(pFrameFormat->GetFormatAttr(RES_VERT_ORIENT)));
+                            SwFormatVertOrient aVOrient(pFrameFormat->GetFormatAttr(RES_VERT_ORIENT));
                             aVOrient.SetVertOrient( nVertOrient );
                             pFrameFormat->SetFormatAttr(aVOrient);
                             pSh->EndAction();

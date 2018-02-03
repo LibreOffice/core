@@ -2162,7 +2162,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 sStr = FieldString(eCode);
 
                 {
-                    const SwFormatCol& rCol = static_cast<const SwFormatCol&>( rSect.GetFormat()->GetFormatAttr( RES_COL ) );
+                    const SwFormatCol& rCol = rSect.GetFormat()->GetFormatAttr( RES_COL );
                     const SwColumns& rColumns = rCol.GetColumns();
                     sal_Int32 nCol = rColumns.size();
 
@@ -2494,7 +2494,7 @@ void AttributeOutputBase::EndTOX( const SwSection& rSect,bool bCareEnd )
 
         if ( pTOX->GetType() == TOX_INDEX && GetExport().AddSectionBreaksForTOX() )
         {
-            const SwFormatCol& rCol = static_cast<const SwFormatCol&>( rSect.GetFormat()->GetFormatAttr( RES_COL ) );
+            const SwFormatCol& rCol = rSect.GetFormat()->GetFormatAttr( RES_COL );
             const SwColumns& rColumns = rCol.GetColumns();
             sal_Int32 nCol = rColumns.size();
 

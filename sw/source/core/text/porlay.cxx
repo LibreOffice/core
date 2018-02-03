@@ -2125,8 +2125,7 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode, MultiSelect
         for( size_t nTmp = 0; nTmp < pHints->Count(); ++nTmp )
         {
             const SwTextAttr* pTextAttr = pHints->Get( nTmp );
-            const SvxCharHiddenItem* pHiddenItem =
-                static_cast<const SvxCharHiddenItem*>( CharFormat::GetItem( *pTextAttr, RES_CHRATR_HIDDEN ) );
+            const SvxCharHiddenItem* pHiddenItem = CharFormat::GetItem( *pTextAttr, RES_CHRATR_HIDDEN );
             if( pHiddenItem )
             {
                 const sal_Int32 nSt = pTextAttr->GetStart();
