@@ -334,7 +334,7 @@ bool BitmapEx::Invert()
         bRet = aBitmap.Invert();
 
         if (bRet && (eTransparent == TransparentType::Color))
-            aTransparentColor = BitmapColor(aTransparentColor).Invert().GetColor();
+            aTransparentColor.Invert();
     }
 
     return bRet;
@@ -725,8 +725,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
 
                     if(pRead)
                     {
-                        const BitmapColor aBmpColor = pRead->GetColor(nY, nX);
-                        const Color aColor = aBmpColor.GetColor();
+                        const BitmapColor aColor = pRead->GetColor(nY, nX);
 
                         // If color is not equal to TransparentColor, we are not transparent
                         if (aColor != aTransparentColor)

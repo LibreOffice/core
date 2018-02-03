@@ -454,7 +454,7 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
         if (pReadAccess != nullptr)
         {
             // mpBitmap always has a bit count of 24 => use of GetPixel(...) is safe
-            maColor = pReadAccess->GetPixel(nY, nX).GetColor();
+            maColor = pReadAccess->GetPixel(nY, nX);
             Bitmap::ReleaseAccess(pReadAccess);
             pReadAccess = nullptr;
         }
