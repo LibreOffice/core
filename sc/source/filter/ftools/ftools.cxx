@@ -67,25 +67,25 @@ SEEEEEEE EEEEEEEE IMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM
 */
 
     long double lfDouble;
-    long double lfFakt = 256.0;
+    long double lfFactor = 256.0;
     sal_uInt8 pDouble10[ 10 ];
 
     rStrm.ReadBytes(pDouble10, 10);            // Intel-10 in pDouble10
 
     lfDouble  = static_cast< long double >( pDouble10[ 7 ] );   // Byte 7
-    lfDouble *= lfFakt;
+    lfDouble *= lfFactor;
     lfDouble += static_cast< long double >( pDouble10[ 6 ] );   // Byte 6
-    lfDouble *= lfFakt;
+    lfDouble *= lfFactor;
     lfDouble += static_cast< long double >( pDouble10[ 5 ] );   // Byte 5
-    lfDouble *= lfFakt;
+    lfDouble *= lfFactor;
     lfDouble += static_cast< long double >( pDouble10[ 4 ] );   // Byte 4
-    lfDouble *= lfFakt;
+    lfDouble *= lfFactor;
     lfDouble += static_cast< long double >( pDouble10[ 3 ] );   // Byte 3
-    lfDouble *= lfFakt;
+    lfDouble *= lfFactor;
     lfDouble += static_cast< long double >( pDouble10[ 2 ] );   // Byte 2
-    lfDouble *= lfFakt;
+    lfDouble *= lfFactor;
     lfDouble += static_cast< long double >( pDouble10[ 1 ] );   // Byte 1
-    lfDouble *= lfFakt;
+    lfDouble *= lfFactor;
     lfDouble += static_cast< long double >( pDouble10[ 0 ] );   // Byte 0
 
     //  For value 0.0 all bits are zero; pow(2.0,-16446) does not work with CSet compilers
