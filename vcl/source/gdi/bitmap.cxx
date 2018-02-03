@@ -458,18 +458,20 @@ bool Bitmap::Erase(const Color& rFillColor)
 
 bool Bitmap::Invert()
 {
-    ScopedWriteAccess   pAcc(*this);
-    bool                bRet = false;
+    ScopedWriteAccess pAcc(*this);
+    bool bRet = false;
 
-    if( pAcc )
+    if (pAcc)
     {
-        if( pAcc->HasPalette() )
+        if (pAcc->HasPalette())
         {
-            BitmapPalette   aBmpPal( pAcc->GetPalette() );
-            const sal_uInt16    nCount = aBmpPal.GetEntryCount();
+            BitmapPalette aBmpPal(pAcc->GetPalette());
+            const sal_uInt16 nCount = aBmpPal.GetEntryCount();
 
-            for( sal_uInt16 i = 0; i < nCount; i++ )
-                aBmpPal[ i ].Invert();
+            for (sal_uInt16 i = 0; i < nCount; i++)
+            {
+                aBmpPal[i].Invert();
+            }
 
             pAcc->SetPalette( aBmpPal );
         }
@@ -481,8 +483,12 @@ bool Bitmap::Invert()
             for( long nY = 0; nY < nHeight; nY++ )
             {
                 Scanline pScanline = pAcc->GetScanline(nY);
-                for( long nX = 0; nX < nWidth; nX++ )
-                    pAcc->SetPixelOnData( pScanline, nX, pAcc->GetPixelFromData( pScanline, nX ).Invert() );
+                for (long nX = 0; nX < nWidth; nX++)
+                {
+                    BitmapColor aBmpColor(pAcc->GetPixelFromData(pScanline, nX));
+                    aBmpColor.Invert();
+                    pAcc->SetPixelOnData(pScanline, nX, aBmpColor);
+                }
             }
         }
 
