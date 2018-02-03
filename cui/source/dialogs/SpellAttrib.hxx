@@ -25,7 +25,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 
 #define TEXTATTR_SPELL_ERROR            (TEXTATTR_USER_START + 1)
 #define TEXTATTR_SPELL_LANGUAGE         (TEXTATTR_USER_START + 2)

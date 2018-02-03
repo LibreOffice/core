@@ -78,7 +78,7 @@
 #include <cppu/cppudllapi.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <sfx2/dllapi.h>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <ucbhelper/content.hxx>

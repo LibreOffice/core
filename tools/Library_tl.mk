@@ -52,7 +52,6 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/fsys/wldcrd \
     tools/source/generic/b3dtrans \
     tools/source/generic/bigint \
-    tools/source/generic/color \
     tools/source/generic/config \
     tools/source/generic/fract \
     tools/source/generic/gen \

@@ -368,7 +368,7 @@
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/mutexhelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>

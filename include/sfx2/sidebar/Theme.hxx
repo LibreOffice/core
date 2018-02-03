@@ -21,7 +21,7 @@
 
 #include <sfx2/dllapi.h>
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <vcl/image.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>

@@ -191,8 +191,8 @@
 #include <svtools/svtdllapi.h>
 #include <svx/msdffdef.hxx>
 #include <svx/svxdllapi.h>
-#include <tools/color.hxx>
-#include <tools/colordata.hxx>
+#include <vcl/color.hxx>
+#include <vcl/colordata.hxx>
 #include <tools/date.hxx>
 #include <tools/gen.hxx>
 #include <tools/lineend.hxx>

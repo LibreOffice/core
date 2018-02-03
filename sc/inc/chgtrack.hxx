@@ -26,7 +26,7 @@
 #include <set>
 #include <stack>
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/datetime.hxx>
 #include <tools/link.hxx>
 #include <tools/mempool.hxx>
