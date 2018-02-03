@@ -32,6 +32,10 @@
         <entry os="all" vendor="intel" compare="equal" version="21.20.16.4664">
             <device id="0x591b"/>
         </entry>
+        <!-- tdf#115420 -->
+        <entry os="all" vendor="nvidia">
+            <device id="0x1b81"/>
+        </entry>
         <entry os="7" vendor="intel">
             <device id="all"/>
         </entry>
