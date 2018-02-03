@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_b1cf4daf",
+        "filename": "include/sal/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2018-02-03T01:42:16Z",
+      "side": 1,
+      "message": "thanks, will remove",
+      "parentUuid": "fa31d9ce_7b1db672",
+      "revId": "c90a374070326f2b6254a4c242291cab66d22da5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_9b126a61",
         "filename": "include/sal/types.h",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2018-02-02T07:27:16Z",
       "side": 1,
       "message": "why change this?",
+      "revId": "c90a374070326f2b6254a4c242291cab66d22da5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_91ca49a0",
+        "filename": "include/sal/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2018-02-03T01:42:16Z",
+      "side": 1,
+      "message": "Sorry, brain fart... no need to change this, I was thinking of something else... will change back",
+      "parentUuid": "fa31d9ce_9b126a61",
       "revId": "c90a374070326f2b6254a4c242291cab66d22da5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
