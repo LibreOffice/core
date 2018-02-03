@@ -25,7 +25,7 @@
 #include <editeng/svxenum.hxx>
 #include <tools/gen.hxx>
 #include <editeng/numdef.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Reference.h>

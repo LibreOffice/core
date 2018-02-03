@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_INC_IMPFONT_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/vclenum.hxx>
 

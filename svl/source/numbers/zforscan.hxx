@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/nfkeytab.hxx>
 #include <svl/nfsymbol.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <tools/date.hxx>
 
 class SvNumberFormatter;

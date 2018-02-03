@@ -25,7 +25,7 @@
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include "pres.hxx"
 #include <svx/svdobj.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include "sddllapi.h"
 
 class SdrObject;

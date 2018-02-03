@@ -124,8 +124,8 @@
 #include <svl/svldllapi.h>
 #include <svx/svxdllapi.h>
 #include <symbol.hxx>
-#include <tools/color.hxx>
-#include <tools/colordata.hxx>
+#include <vcl/color.hxx>
+#include <vcl/colordata.hxx>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>

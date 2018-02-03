@@ -21,7 +21,7 @@
 #include "ConversionHelper.hxx"
 #include <ooxml/resourceids.hxx>
 #include <filter/msfilter/util.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>

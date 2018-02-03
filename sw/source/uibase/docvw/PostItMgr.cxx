@@ -53,7 +53,7 @@
 #include <redline.hxx>
 #include <docary.hxx>
 #include <SwRewriter.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <unotools/datetime.hxx>
 
 #include <swmodule.hxx>

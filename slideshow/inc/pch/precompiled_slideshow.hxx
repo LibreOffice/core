@@ -248,8 +248,8 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <sfx2/notebookbar/NotebookbarContextControl.hxx>
-#include <tools/color.hxx>
-#include <tools/colordata.hxx>
+#include <vcl/color.hxx>
+#include <vcl/colordata.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>

@@ -41,7 +41,7 @@
 #include <connectivity/dbtools.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/string.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <WExtendPages.hxx>
 #include <QEnumTypes.hxx>
 #include <UITools.hxx>

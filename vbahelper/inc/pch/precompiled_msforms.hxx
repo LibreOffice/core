@@ -231,8 +231,8 @@
 #include <svtools/miscopt.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
-#include <tools/color.hxx>
-#include <tools/colordata.hxx>
+#include <vcl/color.hxx>
+#include <vcl/colordata.hxx>
 #include <tools/debug.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>

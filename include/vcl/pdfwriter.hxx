@@ -22,7 +22,7 @@
 #include <sal/types.h>
 
 #include <tools/gen.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <vcl/dllapi.h>

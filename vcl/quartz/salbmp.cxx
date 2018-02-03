@@ -24,7 +24,7 @@
 
 #include <o3tl/make_shared.hxx>
 #include <basegfx/vector/b2ivector.hxx>
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/salbtype.hxx>
 

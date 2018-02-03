@@ -27,7 +27,7 @@
 
 #include <vbahelper/vbahelperinterface.hxx>
 
-#include <tools/color.hxx>
+#include <vcl/color.hxx>
 
 class ScDocument;
 
