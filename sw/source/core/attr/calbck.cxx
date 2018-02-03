@@ -288,7 +288,7 @@ void SwMultiDepend::StartListening(SwModify* pDepend)
 }
 
 
-bool SwMultiDepend::IsListeningTo(const SwModify* const pBroadcaster)
+bool SwMultiDepend::IsListeningTo(const SwModify* const pBroadcaster) const
 {
     return std::any_of(m_vDepends.begin(), m_vDepends.end(),
         [&pBroadcaster](const SwDepend& aListener)

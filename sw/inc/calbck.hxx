@@ -241,7 +241,7 @@ class SW_DLLPUBLIC SwMultiDepend final
             : m_rToTell(rToTell) {}
         void StartListening(SwModify* pDepend);
         void EndListening(SwModify* pDepend);
-        bool IsListeningTo(const SwModify* const pDepend);
+        bool IsListeningTo(const SwModify* const pDepend) const;
         void EndListeningAll();
 };
 

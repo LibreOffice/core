@@ -492,13 +492,11 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
             const SwCharFormat* pCharFormat = nullptr;
             if( pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE )
             {
-                if( rFootnoteInfo.GetAnchorCharFormatDep()->GetRegisteredIn() )
-                    pCharFormat = rFootnoteInfo.GetAnchorCharFormat(*pDoc);
+                pCharFormat = rFootnoteInfo.GetAnchorCharFormat(*pDoc);
             }
             else
             {
-                if( rFootnoteInfo.GetCharFormatDep()->GetRegisteredIn() )
-                    pCharFormat = rFootnoteInfo.GetCharFormat(*pDoc);
+                pCharFormat = rFootnoteInfo.GetCharFormat(*pDoc);
             }
             if( pCharFormat )
             {
@@ -715,13 +713,11 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 const SwCharFormat* pCharFormat = nullptr;
                 if( pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE )
                 {
-                    if( rEndInfo.GetAnchorCharFormatDep()->GetRegisteredIn() )
-                        pCharFormat = rEndInfo.GetAnchorCharFormat(*pDoc);
+                    pCharFormat = rEndInfo.GetAnchorCharFormat(*pDoc);
                 }
                 else
                 {
-                    if( rEndInfo.GetCharFormatDep()->GetRegisteredIn() )
-                        pCharFormat = rEndInfo.GetCharFormat(*pDoc);
+                    pCharFormat = rEndInfo.GetCharFormat(*pDoc);
                 }
                 if( pCharFormat )
                 {
