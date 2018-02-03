@@ -325,8 +325,7 @@ void SwPageFrame::CheckGrid( bool bInvalidate )
 
 void SwPageFrame::CheckDirection( bool bVert )
 {
-    SvxFrameDirection nDir =
-            static_cast<const SvxFrameDirectionItem&>(GetFormat()->GetFormatAttr( RES_FRAMEDIR )).GetValue();
+    SvxFrameDirection nDir = GetFormat()->GetFormatAttr( RES_FRAMEDIR ).GetValue();
     if( bVert )
     {
         if( SvxFrameDirection::Horizontal_LR_TB == nDir || SvxFrameDirection::Horizontal_RL_TB == nDir )

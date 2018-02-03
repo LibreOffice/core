@@ -280,7 +280,7 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
         if( pCntIdx )
         {
             SwNode *pNode = &pCntIdx->GetNode();
-            const_cast<SwFormatContent&>(static_cast<const SwFormatContent&>(pFormat->GetFormatAttr( RES_CNTNT ))).SetNewContentIdx( nullptr );
+            const_cast<SwFormatContent&>(pFormat->GetFormatAttr( RES_CNTNT )).SetNewContentIdx( nullptr );
             m_rDoc.getIDocumentContentOperations().DeleteSection( pNode );
         }
 

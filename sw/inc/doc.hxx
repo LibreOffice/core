@@ -747,6 +747,10 @@ public:
 
     // Query default attribute in this document.
     const SfxPoolItem& GetDefault( sal_uInt16 nFormatHint ) const;
+    template<class T> const T&  GetDefault( TypedWhichId<T> nWhich ) const
+    {
+        return static_cast<const T&>(GetDefault(sal_uInt16(nWhich)));
+    }
 
     // Do not expand text attributes.
     bool DontExpandFormat( const SwPosition& rPos, bool bFlag = true );

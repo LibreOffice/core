@@ -206,7 +206,7 @@ static bool lcl_TableBox_HasTabBorders( const SwTableBox* pBox, bool *pBorders )
     else
     {
         const SvxBoxItem& rBoxItem =
-            static_cast<const SvxBoxItem&>(pBox->GetFrameFormat()->GetFormatAttr( RES_BOX ));
+            pBox->GetFrameFormat()->GetFormatAttr( RES_BOX );
 
         *pBorders = rBoxItem.GetTop() || rBoxItem.GetBottom() ||
                     rBoxItem.GetLeft() || rBoxItem.GetRight();

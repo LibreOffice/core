@@ -623,8 +623,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             SvxTabStopItem aTabStops( static_cast<const SvxTabStopItem&>(pReqArgs->
                                                         Get( nWhich )));
             aTabStops.SetWhich(RES_PARATR_TABSTOP);
-             const SvxTabStopItem& rDefTabs =
-                        static_cast<const SvxTabStopItem&>(rSh.GetDefault(RES_PARATR_TABSTOP));
+             const SvxTabStopItem& rDefTabs = rSh.GetDefault(RES_PARATR_TABSTOP);
 
             // Default tab at pos 0
             SfxItemSet aSet( GetPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE>{} );
@@ -729,8 +728,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                     SvxTabStop aSwTabStop( 0, SvxTabAdjust::Default );
                     aTabStops.Insert(aSwTabStop);
 
-                    const SvxTabStopItem& rDefTabs =
-                        static_cast<const SvxTabStopItem&>(rSh.GetDefault(RES_PARATR_TABSTOP));
+                    const SvxTabStopItem& rDefTabs = rSh.GetDefault(RES_PARATR_TABSTOP);
                     ::MakeDefTabs( ::GetTabDist(rDefTabs), aTabStops );
 
                     if( pColl && pColl->IsAutoUpdateFormat())
@@ -1432,8 +1430,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             {
                 SvxTabStopItem aTabStops(aCoreSet.Get( RES_PARATR_TABSTOP ));
 
-                const SvxTabStopItem& rDefTabs = static_cast<const SvxTabStopItem&>(
-                                            rSh.GetDefault(RES_PARATR_TABSTOP));
+                const SvxTabStopItem& rDefTabs = rSh.GetDefault(RES_PARATR_TABSTOP);
 
                 OSL_ENSURE(m_pHRuler, "why is there no ruler?");
                 const long nDefTabDist = ::GetTabDist(rDefTabs);
@@ -1859,7 +1856,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                     SvxColumnItem aColItem(nNum);
                     const SwRect aPrtRect = rSh.GetAnyCurRect(CurRectType::PagePrt, pPt);
-                    const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(rMaster.GetFormatAttr(RES_BOX));
+                    const SvxBoxItem& rBox = rMaster.GetFormatAttr(RES_BOX);
                     long nDist = rBox.GetSmallestDistance();
 
                     lcl_FillSvxColumn(

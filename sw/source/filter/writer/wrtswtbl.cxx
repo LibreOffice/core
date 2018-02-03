@@ -83,7 +83,7 @@ sal_uInt32 SwWriteTable::GetBoxWidth( const SwTableBox *pBox )
 {
     const SwFrameFormat *pFormat = pBox->GetFrameFormat();
     const SwFormatFrameSize& aFrameSize=
-        static_cast<const SwFormatFrameSize&>(pFormat->GetFormatAttr( RES_FRM_SIZE ));
+        pFormat->GetFormatAttr( RES_FRM_SIZE );
 
     return sal::static_int_cast<sal_uInt32>(aFrameSize.GetSize().Width());
 }
@@ -228,7 +228,7 @@ sal_uInt16 SwWriteTable::MergeBoxBorders( const SwTableBox *pBox,
     sal_uInt16 nBorderMask = 0;
 
     const SwFrameFormat *pFrameFormat = pBox->GetFrameFormat();
-    const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(pFrameFormat->GetFormatAttr( RES_BOX ));
+    const SvxBoxItem& rBoxItem = pFrameFormat->GetFormatAttr( RES_BOX );
 
     if( rBoxItem.GetTop() )
     {

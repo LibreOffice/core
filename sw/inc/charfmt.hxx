@@ -44,6 +44,10 @@ namespace CharFormat
 {
     SW_DLLPUBLIC extern const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr );
     extern const SfxPoolItem* GetItem( const SwTextAttr& rAttr, sal_uInt16 nWhich );
+    template<class T> const T* GetItem( const SwTextAttr& rAttr, TypedWhichId<T> nWhich )
+    {
+        return static_cast<const T*>(GetItem(rAttr, sal_uInt16(nWhich)));
+    }
     extern bool IsItemIncluded( const sal_uInt16 nWhich, const SwTextAttr *pAttr );
 }
 

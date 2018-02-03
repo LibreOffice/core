@@ -892,8 +892,7 @@ void SwDoc::SetDefaultPageMode(bool bSquaredPageMode)
     if( !bSquaredPageMode == !IsSquaredPageMode() )
         return;
 
-    const SwTextGridItem& rGrid =
-                    static_cast<const SwTextGridItem&>(GetDefault( RES_TEXTGRID ));
+    const SwTextGridItem& rGrid = GetDefault( RES_TEXTGRID );
     SwTextGridItem aNewGrid = rGrid;
     aNewGrid.SetSquaredMode(bSquaredPageMode);
     aNewGrid.Init();
@@ -906,7 +905,7 @@ void SwDoc::SetDefaultPageMode(bool bSquaredPageMode)
         SwFrameFormat& rMaster = rDesc.GetMaster();
         SwFrameFormat& rLeft = rDesc.GetLeft();
 
-        SwTextGridItem aGrid(static_cast<const SwTextGridItem&>(rMaster.GetFormatAttr(RES_TEXTGRID)));
+        SwTextGridItem aGrid(rMaster.GetFormatAttr(RES_TEXTGRID));
         aGrid.SwitchPaperMode( bSquaredPageMode );
         rMaster.SetFormatAttr(aGrid);
         rLeft.SetFormatAttr(aGrid);
@@ -915,8 +914,7 @@ void SwDoc::SetDefaultPageMode(bool bSquaredPageMode)
 
 bool SwDoc::IsSquaredPageMode() const
 {
-    const SwTextGridItem& rGrid =
-                        static_cast<const SwTextGridItem&>(GetDefault( RES_TEXTGRID ));
+    const SwTextGridItem& rGrid = GetDefault( RES_TEXTGRID );
     return rGrid.IsSquaredMode();
 }
 

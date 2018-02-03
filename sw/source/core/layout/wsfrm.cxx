@@ -399,7 +399,7 @@ void SwSectionFrame::CheckDirection( bool bVert )
     {
         const SwViewShell *pSh = getRootFrame()->GetCurrShell();
         const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
-        CheckDir(static_cast<const SvxFrameDirectionItem&>(pFormat->GetFormatAttr(RES_FRAMEDIR)).GetValue(),
+        CheckDir(pFormat->GetFormatAttr(RES_FRAMEDIR).GetValue(),
                     bVert, true, bBrowseMode );
     }
     else
@@ -413,7 +413,7 @@ void SwFlyFrame::CheckDirection( bool bVert )
     {
         const SwViewShell *pSh = getRootFrame()->GetCurrShell();
         const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
-        CheckDir(static_cast<const SvxFrameDirectionItem&>(pFormat->GetFormatAttr(RES_FRAMEDIR)).GetValue(),
+        CheckDir(pFormat->GetFormatAttr(RES_FRAMEDIR).GetValue(),
                     bVert, false, bBrowseMode );
     }
     else
@@ -427,7 +427,7 @@ void SwTabFrame::CheckDirection( bool bVert )
     {
         const SwViewShell *pSh = getRootFrame()->GetCurrShell();
         const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
-        CheckDir(static_cast<const SvxFrameDirectionItem&>(pFormat->GetFormatAttr(RES_FRAMEDIR)).GetValue(),
+        CheckDir(pFormat->GetFormatAttr(RES_FRAMEDIR).GetValue(),
                     bVert, true, bBrowseMode );
     }
     else

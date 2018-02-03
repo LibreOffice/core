@@ -3116,8 +3116,7 @@ bool SwTextNode::GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
                   RES_TXTATR_AUTOFMT == nWhich ))
             {
                 const SvxFontItem* const pFont =
-                    static_cast<const SvxFontItem*>(
-                        CharFormat::GetItem( *pHt, RES_CHRATR_FONT ));
+                    CharFormat::GetItem( *pHt, RES_CHRATR_FONT );
                 if ( pFont && RTL_TEXTENCODING_SYMBOL == pFont->GetCharSet() )
                 {
                     // attribute in area => copy

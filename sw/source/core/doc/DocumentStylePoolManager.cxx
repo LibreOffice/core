@@ -201,7 +201,7 @@ namespace
                                     SvxNumberFormat::LABEL_WIDTH_AND_POSITION &&
                         ( rNFormat.GetAbsLSpace() || rNFormat.GetFirstLineOffset() ) )
                 {
-                    SvxLRSpaceItem aLR( static_cast<const SvxLRSpaceItem&>(pColl->GetFormatAttr( RES_LR_SPACE )) );
+                    SvxLRSpaceItem aLR( pColl->GetFormatAttr( RES_LR_SPACE ) );
                     aLR.SetTextFirstLineOfstValue( rNFormat.GetFirstLineOffset() );
                     aLR.SetTextLeft( rNFormat.GetAbsLSpace() );
                     pColl->SetFormatAttr( aLR );
