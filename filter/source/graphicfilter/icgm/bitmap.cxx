@@ -24,8 +24,8 @@
 
 namespace {
 
-Color BMCOL(sal_uInt32 _col) {
-    return Color( static_cast<sal_Int8>(_col >> 16 ), static_cast<sal_Int8>( _col >> 8 ), static_cast<sal_Int8>(_col) );
+BitmapColor BMCOL(sal_uInt32 _col) {
+    return BitmapColor( static_cast<sal_Int8>(_col >> 16 ), static_cast<sal_Int8>( _col >> 8 ), static_cast<sal_Int8>(_col) );
 }
 
 }

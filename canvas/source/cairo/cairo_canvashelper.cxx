@@ -470,7 +470,7 @@ namespace cairocanvas
                             else
                                 nAlpha = data[ nOff + 3 ] = 255;
 #endif
-                            aColor = pBitmapReadAcc->GetPaletteColor(*pReadScan++).GetColor();
+                            aColor = pBitmapReadAcc->GetPaletteColor(*pReadScan++);
 
 #ifdef OSL_BIGENDIAN
                             data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( aColor.GetRed() ) )/255 );
@@ -611,7 +611,7 @@ namespace cairocanvas
 
                         for( nX = 0; nX < nWidth; nX++ )
                         {
-                            aColor = pBitmapReadAcc->GetColor( nY, nX ).GetColor();
+                            aColor = pBitmapReadAcc->GetColor(nY, nX);
 
                             // cairo need premultiplied color values
                             // TODO(rodo) handle endianness
