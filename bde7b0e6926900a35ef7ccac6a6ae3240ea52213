@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_51bc516c",
+        "filename": "include/vcl/salbtype.hxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-02-03T20:46:00Z",
+      "side": 1,
+      "message": "sberg said to temporary set it as deleted.. I guess we don\u0027t need this line marked as deleted anymore now that the conversion is complete.",
+      "range": {
+        "startLine": 122,
+        "startChar": 24,
+        "endLine": 122,
+        "endChar": 29
+      },
+      "revId": "bde7b0e6926900a35ef7ccac6a6ae3240ea52213",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
