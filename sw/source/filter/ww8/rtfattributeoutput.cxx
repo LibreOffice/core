@@ -3767,7 +3767,7 @@ static OString ExportPICT(const SwFlyFrameFormat* pFlyFrameFormat, const Size& r
                           const Size& rRendered, const Size& rMapped, const SwCropGrf& rCr,
                           const char* pBLIPType, const sal_uInt8* pGraphicAry, unsigned long nSize,
                           const RtfExport& rExport, SvStream* pStream = nullptr,
-                          bool bWritePicProp = true)
+                          bool bWritePicProp = true, const SwAttrSet* pAttrSet = nullptr)
 {
     OStringBuffer aRet;
     if (pBLIPType && nSize && pGraphicAry)
@@ -3786,6 +3786,15 @@ static OString ExportPICT(const SwFlyFrameFormat* pFlyFrameFormat, const Size& r
             lcl_AppendSP(aRet, "wzDescription", sDescription, rExport);
             OUString sName = pFlyFrameFormat->GetObjTitle();
             lcl_AppendSP(aRet, "wzName", sName, rExport);
+
+            if (pAttrSet)
+            {
+                MirrorGraph eMirror = pAttrSet->Get(RES_GRFATR_MIRRORGRF).GetValue();
+                if (eMirror == MirrorGraph::Vertical || eMirror == MirrorGraph::Both)
+                    // Mirror on the vertical axis is a horizontal flip.
+                    lcl_AppendSP(aRet, "fFlipH", "1", rExport);
+            }
+
             aRet.append("}"); //"}"
         }
 
@@ -4100,9 +4109,10 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
     }
 
     bool bWritePicProp = !pFrame || pFrame->IsInline();
+    const SwAttrSet* pAttrSet = pGrfNode->GetpSwAttrSet();
     if (pBLIPType)
         ExportPICT(pFlyFrameFormat, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize,
-                   m_rExport, &m_rExport.Strm(), bWritePicProp);
+                   m_rExport, &m_rExport.Strm(), bWritePicProp, pAttrSet);
     else
     {
         aStream.Seek(0);
@@ -4114,7 +4124,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
         pGraphicAry = static_cast<sal_uInt8 const*>(aStream.GetData());
 
         ExportPICT(pFlyFrameFormat, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize,
-                   m_rExport, &m_rExport.Strm(), bWritePicProp);
+                   m_rExport, &m_rExport.Strm(), bWritePicProp, pAttrSet);
     }
 
     if (!pFrame || pFrame->IsInline())
