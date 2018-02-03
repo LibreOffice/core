@@ -611,8 +611,8 @@ static OUString  lcl_FindColumn(const OUString& sFormatStr,sal_uInt16  &nUsedPos
     nSeparator = 0xff;
     while(nUsedPos < nLen && nSeparator == 0xff)
     {
-        sal_Unicode cAkt = sFormatStr[nUsedPos];
-        switch(cAkt)
+        sal_Unicode cCurrent = sFormatStr[nUsedPos];
+        switch(cCurrent)
         {
             case ',':
                 nSeparator = DB_SEP_SPACE;
@@ -627,7 +627,7 @@ static OUString  lcl_FindColumn(const OUString& sFormatStr,sal_uInt16  &nUsedPos
                 nSeparator = DB_SEP_NEWLINE;
             break;
             default:
-                sReturn += OUStringLiteral1(cAkt);
+                sReturn += OUStringLiteral1(cCurrent);
         }
         nUsedPos++;
 
