@@ -53,7 +53,7 @@ public:
 
     Size        GetSizePixel() const { return Bitmap::GetSizePixel(); }
 
-    BitmapChecksum   GetChecksum() const { return Bitmap::GetChecksum(); }
+    inline BitmapChecksum GetChecksum() const;
 
     Bitmap const & GetBitmap() const;
 
@@ -80,6 +80,14 @@ private:
     SAL_DLLPRIVATE void             ImplSetBitmap( const Bitmap& rBitmap );
 
 };
+
+
+inline BitmapChecksum AlphaMask::GetChecksum() const
+{
+    BitmapChecksum nChecksum = Bitmap::GetChecksum();
+    SAL_INFO("vcl.gdi.checksum", "AlphaMask::GetChecksum() returns " << nChecksum);
+    return nChecksum;
+}
 
 #endif // INCLUDED_VCL_ALPHA_HXX
 

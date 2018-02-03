@@ -436,7 +436,7 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
         mdX = double(nX) / double(aSize.Width() - 1.0);
         mdY = double(aSize.Height() - 1.0 - nY) / double(aSize.Height() - 1.0);
 
-        maColor = mxBitmap->GetPixel(Point(nX, nY)).GetColor();
+        maColor = mxBitmap->GetPixel(Point(nX, nY));
     }
 }
 

@@ -223,7 +223,7 @@ void GIFReader::CreateBitmaps(long nWidth, long nHeight, BitmapPalette* pPal,
         aBmp8 = Bitmap(aSize, 8, pPal);
 
         if (!!aBmp8 && bWatchForBackgroundColor && aAnimation.Count())
-            aBmp8.Erase((*pPal)[nBackgroundColor].GetColor());
+            aBmp8.Erase((*pPal)[nBackgroundColor]);
         else
             aBmp8.Erase(Color(COL_WHITE));
 
