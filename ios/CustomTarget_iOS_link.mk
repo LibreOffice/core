@@ -18,13 +18,13 @@ IOSSRC = $(SRCDIR)/ios/source/LibreOfficeKit.c
 
 ifeq ($(ENABLE_DEBUG),TRUE)
 ifeq ($(CPUNAME),X86_64)
-IOSKIT = $(IOSGEN)/simulator/libKit.dylib
+IOSKIT = $(IOSGEN)/Debug_x86_64/libKit.dylib
 else
-IOSKIT = $(IOSGEN)/debug/libKit.dylib
+IOSKIT = $(IOSGEN)/Debug_arm64/libKit.dylib
 endif
 else
 ifeq ($(CPUNAME),ARM64)
-IOSKIT = $(IOSGEN)/release/libKit.dylib
+IOSKIT = $(IOSGEN)/Release_arm64/libKit.dylib
 endif
 endif
 
@@ -81,7 +81,7 @@ endif
 
 #- clean ios  -----------------------------------------------------------------
 $(call gb_CustomTarget_get_clean_target,ios/iOS_link):
-	rm -f $(IOSKIT).dylib
+	rm -f $(IOSKIT)
 
 
 

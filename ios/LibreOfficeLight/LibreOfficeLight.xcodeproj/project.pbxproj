@@ -324,7 +324,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "echo hello\n\nGEN=$PROJECT_DIR/../generated\necho $arch\nif [ $arch = \"x86_64\" ]; then\nLIB=$GEN/simulator/libKit.dylib\nelse\nLIB=$GEN/release/libKit.dylib\nfi\necho $LIB\nln -sf $LIB $TARGET_BUILD_DIR/libKit.dylib\n\n\n\n\n";
+			shellScript = "\nGEN=$PROJECT_DIR/../generated/$CONFIGURATION\\_$arch/libKit.dylib\ncp $GEN $TARGET_BUILD_DIR/libKit.dylib\n\n\n\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -527,6 +527,7 @@
 				INFOPLIST_FILE = LibreOfficeLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jani.Editors.LibreOfficeLight;
@@ -560,6 +561,7 @@
 				INFOPLIST_FILE = LibreOfficeLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jani.Editors.LibreOfficeLight;

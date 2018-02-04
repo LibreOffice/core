@@ -12,9 +12,9 @@
 IOSGEN  = $(SRCDIR)/ios/generated
 IOSRES  = $(IOSGEN)/resources
 IOSDIRS = $(IOSGEN) \
-	       $(IOSGEN)/simulator \
-	       $(IOSGEN)/debug \
-	       $(IOSGEN)/release \
+	       $(IOSGEN)/Debug_x86_64 \
+	       $(IOSGEN)/Debug_arm64 \
+	       $(IOSGEN)/Release_arm64 \
 	  $(IOSRES) \
 	       $(IOSRES)/services \
                $(IOSRES)/program \
@@ -108,16 +108,5 @@ $(call gb_CustomTarget_get_clean_target,ios/iOS_setup):
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),ENV,2)
 	rm -rf $(IOSRES)/* $(IOSGEN)/native-code.h $(IOSGEN)/build
 	rm -rf $(WORKDIR)/ios
-ifeq ($(ENABLE_DEBUG),TRUE)
-ifeq ($(CPUNAME),X86_64)
-	rm -f $(IOSGEN)/simulator/*
-else
-	rm -f $(IOSGEN)/debug/*
-endif
-else
-ifeq ($(CPUNAME),ARM64)
-	rm -f $(IOSGEN)/release/*
-endif
-endif
 
 # vim: set noet sw=4 ts=4:
