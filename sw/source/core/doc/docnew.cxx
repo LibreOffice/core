@@ -689,8 +689,12 @@ void SwDoc::ClearDoc()
     // *after* the document nodes are deleted.
     mpOutlineRule = nullptr;
     for( SwNumRule* pNumRule : *mpNumRuleTable )
+    {
+        getIDocumentListsAccess().deleteListForListStyle(pNumRule->GetName());
         delete pNumRule;
+    }
     mpNumRuleTable->clear();
+    maNumRuleMap.clear();
 
     // creation of new outline numbering rule
     mpOutlineRule = new SwNumRule( SwNumRule::GetOutlineRuleName(),
