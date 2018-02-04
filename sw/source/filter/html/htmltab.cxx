@@ -2296,6 +2296,12 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         break;
     }
 
+    if (!m_pSwTable)
+    {
+        SAL_WARN("sw.html", "no table");
+        return;
+    }
+
     // get the table format and adapt it
     SwFrameFormat *pFrameFormat = m_pSwTable->GetFrameFormat();
     pFrameFormat->SetFormatAttr( SwFormatHoriOrient(0, eHoriOri) );
@@ -5196,8 +5202,9 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
             m_bUpperSpace = true;
             SetTextCollAttrs();
 
-            m_nParaCnt = m_nParaCnt - std::min(m_nParaCnt,
-                pTCntxt->GetTableNode()->GetTable().GetTabSortBoxes().size());
+            SwTableNode* pTableNode = pTCntxt->GetTableNode();
+            size_t nTableBoxSize = pTableNode ? pTableNode->GetTable().GetTabSortBoxes().size() : 0;
+            m_nParaCnt = m_nParaCnt - std::min(m_nParaCnt, nTableBoxSize);
 
             // Jump to a table if needed
             if( JUMPTO_TABLE == m_eJumpTo && m_xTable->GetSwTable() &&
