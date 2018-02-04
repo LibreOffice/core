@@ -122,10 +122,8 @@ namespace drawinglayer
                 {
                     const BitmapColor aBitmapColor(mpReadBitmap->GetColor(rY, rX));
 
-                    if(maBitmapEx.GetTransparentColor() == aBitmapColor.GetColor())
-                    {
+                    if (maBitmapEx.GetTransparentColor() == aBitmapColor)
                         return 255;
-                    }
 
                     break;
                 }

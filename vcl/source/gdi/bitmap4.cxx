@@ -693,43 +693,45 @@ bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam )
     return bRet;
 }
 
-bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam )
+bool Bitmap::ImplSolarize(const BmpFilterParam* pFilterParam)
 {
-    bool                bRet = false;
-    ScopedWriteAccess   pWriteAcc(*this);
+    bool bRet = false;
+    ScopedWriteAccess pWriteAcc(*this);
 
-    if( pWriteAcc )
+    if (pWriteAcc)
     {
-        const sal_uInt8 cThreshold = ( pFilterParam && pFilterParam->meFilter == BmpFilter::Solarize ) ?
+        const sal_uInt8 cThreshold = (pFilterParam && pFilterParam->meFilter == BmpFilter::Solarize) ?
                                 pFilterParam->mcSolarGreyThreshold : 128;
 
-        if( pWriteAcc->HasPalette() )
+        if (pWriteAcc->HasPalette())
         {
             const BitmapPalette& rPal = pWriteAcc->GetPalette();
 
-            for( sal_uInt16 i = 0, nCount = rPal.GetEntryCount(); i < nCount; i++ )
+            for(sal_uInt16 i = 0, nCount = rPal.GetEntryCount(); i < nCount; i++)
             {
-                if( rPal[ i ].GetLuminance() >= cThreshold )
+                if( rPal[i].GetLuminance() >= cThreshold )
                 {
-                    BitmapColor aCol( rPal[ i ] );
-                    pWriteAcc->SetPaletteColor( i, aCol.Invert() );
+                    BitmapColor aCol(rPal[i]);
+                    aCol.Invert();
+                    pWriteAcc->SetPaletteColor(i, aCol);
                 }
             }
         }
         else
         {
             BitmapColor aCol;
-            const long  nWidth = pWriteAcc->Width();
-            const long  nHeight = pWriteAcc->Height();
+            const long nWidth = pWriteAcc->Width();
+            const long nHeight = pWriteAcc->Height();
 
-            for( long nY = 0; nY < nHeight ; nY++ )
+            for (long nY = 0; nY < nHeight ; nY++)
             {
-                for( long nX = 0; nX < nWidth; nX++ )
+                for (long nX = 0; nX < nWidth; nX++)
                 {
-                    aCol = pWriteAcc->GetPixel( nY, nX );
+                    aCol = pWriteAcc->GetPixel(nY, nX);
+                    aCol.Invert();
 
-                    if( aCol.GetLuminance() >= cThreshold )
-                        pWriteAcc->SetPixel( nY, nX, aCol.Invert() );
+                    if (aCol.GetLuminance() >= cThreshold)
+                        pWriteAcc->SetPixel(nY, nX, aCol);
                 }
             }
         }

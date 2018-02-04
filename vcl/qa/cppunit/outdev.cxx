@@ -65,12 +65,12 @@ void VclOutdevTest::testVirtualDevice()
 
     // Gotcha: y and x swap for BitmapReadAccess: deep joy.
     Bitmap::ScopedReadAccess pAcc(aBmp);
-    CPPUNIT_ASSERT_EQUAL(Color(COL_WHITE), pAcc->GetPixel(0,0).GetColor());
+    CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF), pAcc->GetPixel(0,0));
 #if defined LINUX //TODO: various failures on Mac and Windows tinderboxes
-    CPPUNIT_ASSERT_EQUAL(Color(COL_BLUE), pAcc->GetPixel(2,1).GetColor());
-    CPPUNIT_ASSERT_EQUAL(Color(COL_RED), pAcc->GetPixel(30,31).GetColor());
+    CPPUNIT_ASSERT_EQUAL(BitmapColor(0x00, 0x00, 0x80), pAcc->GetPixel(2,1));
+    CPPUNIT_ASSERT_EQUAL(BitmapColor(0x80, 0x00, 0x00), pAcc->GetPixel(30,31));
 #endif
-    CPPUNIT_ASSERT_EQUAL(Color(COL_WHITE), pAcc->GetPixel(31,30).GetColor());
+    CPPUNIT_ASSERT_EQUAL(BitmapColor(0xFF, 0xFF, 0xFF), pAcc->GetPixel(31,30));
 
 #if 0
     VclPtr<vcl::Window> pWin = VclPtr<WorkWindow>::Create( (vcl::Window *)nullptr );

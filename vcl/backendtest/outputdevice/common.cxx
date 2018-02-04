@@ -29,7 +29,7 @@ void checkValue(Bitmap::ScopedWriteAccess& pAccess, int x, int y, Color aExpecte
                       int& nNumberOfQuirks, int& nNumberOfErrors, bool bQuirkMode, int nColorDeltaThresh = 0)
 {
     const bool bColorize = false;
-    Color aColor = pAccess->GetPixel(y, x).GetColor();
+    Color aColor = pAccess->GetPixel(y, x);
     int nColorDelta = deltaColor(aColor, aExpected);
 
     if (nColorDelta <= nColorDeltaThresh)

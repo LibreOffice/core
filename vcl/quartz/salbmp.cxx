@@ -465,7 +465,7 @@ public:
         }
     virtual ColorData ReadPixel() override
         {
-            return mrPalette[ *pData++ ].GetColor().GetColor();
+            return mrPalette[ *pData++ ].GetColor();
         }
     virtual void WritePixel( ColorData nColor ) override
         {

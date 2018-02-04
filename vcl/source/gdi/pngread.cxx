@@ -852,8 +852,7 @@ void PNGReaderImpl::ImplGetBackground()
 
                 if (nCol < mxAcc->GetPaletteEntryCount())
                 {
-                    BitmapColor aBmpColor = mxAcc->GetPaletteColor(static_cast<sal_uInt8>(nCol));
-                    mxAcc->Erase(aBmpColor.GetColor());
+                    mxAcc->Erase(mxAcc->GetPaletteColor(static_cast<sal_uInt8>(nCol)));
                     break;
                 }
             }
@@ -868,8 +867,7 @@ void PNGReaderImpl::ImplGetBackground()
                 // the color type 0 and 4 is always greyscale,
                 // so the return value can be used as index
                 sal_uInt8 nIndex = ImplScaleColor();
-                BitmapColor aBmpColor = mxAcc->GetPaletteColor(nIndex);
-                mxAcc->Erase(aBmpColor.GetColor());
+                mxAcc->Erase(mxAcc->GetPaletteColor(nIndex));
             }
         }
         break;

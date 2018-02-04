@@ -66,24 +66,24 @@ bool checkRect(Bitmap& rBitmap, int aLayerNumber, long nAreaHeight, long nAreaWi
 
     for (long y = firstY; y <= lastY; y++)
     {
-        Color aColorFirst = pAccess->GetPixel(y, firstX).GetColor();
+        Color aColorFirst = pAccess->GetPixel(y, firstX);
         delta = deltaColor(aColorFirst, aExpectedColor);
         if (delta > nMaxDelta)
             return false;
 
-        Color aColorLast = pAccess->GetPixel(y, lastX).GetColor();
+        Color aColorLast = pAccess->GetPixel(y, lastX);
         delta = deltaColor(aColorLast, aExpectedColor);
         if (delta > nMaxDelta)
             return false;
     }
     for (long x = firstX; x <= lastX; x++)
     {
-        Color aColorFirst = pAccess->GetPixel(firstY, x).GetColor();
+        Color aColorFirst = pAccess->GetPixel(firstY, x);
         delta = deltaColor(aColorFirst, aExpectedColor);
         if (delta > nMaxDelta)
             return false;
 
-        Color aColorLast  = pAccess->GetPixel(lastY, x).GetColor();
+        Color aColorLast  = pAccess->GetPixel(lastY, x);
         delta = deltaColor(aColorLast, aExpectedColor);
         if (delta > nMaxDelta)
             return false;

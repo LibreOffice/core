@@ -313,8 +313,8 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
 
             m_pCtlPixel->SetXBitmap(pGraphicObject->GetGraphic().GetBitmapEx());
 
-            Color aPixelColor = aFront.GetColor();
-            Color aBackColor = aBack.GetColor();
+            Color aPixelColor = aFront;
+            Color aBackColor = aBack;
 
             m_pLbColor->SelectEntry( aPixelColor );
             m_pLbBackgroundColor->SelectEntry( aBackColor );
