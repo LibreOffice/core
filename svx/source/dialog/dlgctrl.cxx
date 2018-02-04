@@ -988,8 +988,8 @@ void SvxPixelCtl::SetXBitmap(const BitmapEx& rBitmapEx)
         Bitmap aBitmap(rBitmapEx.GetBitmap());
         Bitmap::ScopedReadAccess pRead(aBitmap);
 
-        aBackgroundColor = aBack.GetColor();
-        aPixelColor = aFront.GetColor();
+        aBackgroundColor = aBack;
+        aPixelColor = aFront;
 
         for(sal_uInt16 i(0); i < nSquares; i++)
         {

@@ -220,7 +220,7 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
             Color aActualColor(aBgColor);
 
             if (pRA->HasPalette())
-                aActualColor = pRA->GetBestPaletteColor(aBgColor).GetColor();
+                aActualColor = pRA->GetBestPaletteColor(aBgColor);
 
             pRA.reset();
 

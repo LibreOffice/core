@@ -690,7 +690,8 @@ bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam )
                 if( rPal[ i ].GetLuminance() >= cThreshold )
                 {
                     BitmapColor aCol( rPal[ i ] );
-                    pWriteAcc->SetPaletteColor( i, aCol.Invert() );
+                    aCol.Invert();
+                    pWriteAcc->SetPaletteColor( i, aCol );
                 }
             }
         }
@@ -708,7 +709,11 @@ bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam )
                     aCol = pWriteAcc->GetPixelFromData( pScanline, nX );
 
                     if( aCol.GetLuminance() >= cThreshold )
-                        pWriteAcc->SetPixelOnData( pScanline, nX, aCol.Invert() );
+                    {
+                        BitmapColor aBmpColor(aCol);
+                        aBmpColor.Invert();
+                        pWriteAcc->SetPixelOnData( pScanline, nX, aBmpColor );
+                    }
                 }
             }
         }

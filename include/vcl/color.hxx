@@ -66,13 +66,13 @@ public:
     sal_uInt8 GetTransparency() const { return COLORDATA_TRANSPARENCY(mnColor); }
     void SetTransparency(sal_uInt8 nTransparency);
 
-    VCL_DLLPUBLIC ColorData GetColor() const { return mnColor; }
+    ColorData GetColor() const { return mnColor; }
     void SetColor(ColorData nColor) { mnColor = nColor; }
 
     ColorData GetRGBColor() const { return COLORDATA_RGB(mnColor); }
     sal_uInt8 GetColorError(const Color& rCompareColor) const;
-    sal_uInt8 GetLuminance() const;
 
+    sal_uInt8 GetLuminance() const;
     void IncreaseLuminance(sal_uInt8 cLumInc);
     void DecreaseLuminance(sal_uInt8 cLumDec);
 
