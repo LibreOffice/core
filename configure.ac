@@ -8256,13 +8256,6 @@ internal)
     if test "$HOME" = ""; then
         export HOME=""
     fi
-    # bz2 tarball and bzip2 is not standard
-    if test -z "$BZIP2"; then
-        AC_PATH_PROG( BZIP2, bzip2)
-        if test -z "$BZIP2"; then
-            AC_MSG_ERROR([the internal Python module has a .tar.bz2. You need bzip2])
-        fi
-    fi
     ;;
 no)
     DISABLE_PYTHON=TRUE
