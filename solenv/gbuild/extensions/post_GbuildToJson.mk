@@ -186,7 +186,7 @@ endef
 
 gb_Module_add_l10n_target =
 
-gb_GbuildToJson_BLACKLISTEDMODULES := connectivity compilerplugins cli_ure dictionaries bridges helpcompiler helpcontent2 icon-themes jurt sal shell cppu cppuhelper cpputools extensions external i18npool javaunohelper lingucomponent odk scaddins solenv stoc tools translations udkapi unoidl
+gb_GbuildToJson_BLACKLISTEDMODULES := connectivity compilerplugins cli_ure dictionaries bridges helpcompiler helpcontent2 icon-themes jurt sal shell cppu cppuhelper cpputools external i18npool javaunohelper lingucomponent odk scaddins solenv stoc tools translations udkapi unoidl
 
 define gb_Module__add_moduledir_impl
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2)/Module_$(2).mk
