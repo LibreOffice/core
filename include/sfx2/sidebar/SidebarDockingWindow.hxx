@@ -36,6 +36,7 @@ public:
                          vcl::Window* pParent, WinBits nBits);
     virtual ~SidebarDockingWindow() override;
     virtual void dispose() override;
+    virtual bool EventNotify(NotifyEvent& rEvent) override;
 
     using SfxDockingWindow::Close;
 
