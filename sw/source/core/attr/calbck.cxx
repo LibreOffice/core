@@ -26,7 +26,7 @@
 #include <algorithm>
 
 sw::LegacyModifyHint::~LegacyModifyHint() {}
-
+sw::ModifyChangedHint::~ModifyChangedHint() {}
 
 SwClient::~SwClient()
 {
@@ -37,28 +37,33 @@ SwClient::~SwClient()
         m_pRegisteredIn->Remove( this );
 }
 
-void SwClient::CheckRegistration( const SfxPoolItem* pOld )
+std::unique_ptr<sw::ModifyChangedHint> SwClient::CheckRegistration( const SfxPoolItem* pOld )
 {
     DBG_TESTSOLARMUTEX();
     // this method only handles notification about dying SwModify objects
     if( !pOld || pOld->Which() != RES_OBJECTDYING )
-        return;
+        return nullptr;
 
     const SwPtrMsgPoolItem* pDead = static_cast<const SwPtrMsgPoolItem*>(pOld);
-    if(pDead && pDead->pObject == m_pRegisteredIn)
+    if(!pDead || pDead->pObject != m_pRegisteredIn)
     {
-        // I've got a notification from the object I know
-        SwModify* pAbove = m_pRegisteredIn->GetRegisteredIn();
-        if(pAbove)
-        {
-            // if the dying object itself was listening at an SwModify, I take over
-            // adding myself to pAbove will automatically remove me from my current pRegisteredIn
-            pAbove->Add(this);
-            return;
-        }
+        assert(false); // we should only received death notes from objects we are following
+        return nullptr;
+    }
+    // I've got a notification from the object I know
+    SwModify* pAbove = m_pRegisteredIn->GetRegisteredIn();
+    if(pAbove)
+    {
+        // if the dying object itself was listening at an SwModify, I take over
+        // adding myself to pAbove will automatically remove me from my current pRegisteredIn
+        pAbove->Add(this);
+    }
+    else
+    {
         // destroy connection
         EndListeningAll();
     }
+    return std::make_unique<sw::ModifyChangedHint>(pAbove);
 }
 
 void SwClient::SwClientNotify(const SwModify&, const SfxHint& rHint)
@@ -303,11 +308,6 @@ void SwMultiDepend::EndListening(SwModify* pBroadcaster)
         {
             return aListener.GetRegisteredIn() == nullptr || aListener.GetRegisteredIn() == pBroadcaster;
         }); 
- /*   m_vpDepends.erase(std::remove_if(m_vpDepends.begin(), m_vpDepends.end(),
-        [&pBroadcaster](const std::shared_ptr<SwDepend> pListener)
-        {
-            return pListener->GetRegisteredIn() == nullptr || pListener->GetRegisteredIn() == pBroadcaster;
-        })); */
 }
 
 void SwMultiDepend::EndListeningAll()
