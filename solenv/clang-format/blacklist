@@ -163,7 +163,6 @@ avmedia/source/avmediadummy.cxx
 avmedia/source/framework/MediaControlBase.cxx
 avmedia/source/framework/mediacontrol.cxx
 avmedia/source/framework/mediaitem.cxx
-avmedia/source/framework/mediamisc.cxx
 avmedia/source/framework/mediaplayer.cxx
 avmedia/source/framework/mediatoolbox.cxx
 avmedia/source/framework/soundhandler.cxx
@@ -1235,7 +1234,6 @@ chart2/source/inc/RegressionCurveHelper.hxx
 chart2/source/inc/RelativePositionHelper.hxx
 chart2/source/inc/RelativeSizeHelper.hxx
 chart2/source/inc/ResId.hxx
-chart2/source/inc/ResourceManager.hxx
 chart2/source/inc/Scaling.hxx
 chart2/source/inc/SceneProperties.hxx
 chart2/source/inc/StackMode.hxx
@@ -1413,7 +1411,6 @@ chart2/source/tools/RegressionEquation.hxx
 chart2/source/tools/RelativePositionHelper.cxx
 chart2/source/tools/RelativeSizeHelper.cxx
 chart2/source/tools/ResId.cxx
-chart2/source/tools/ResourceManager.cxx
 chart2/source/tools/Scaling.cxx
 chart2/source/tools/SceneProperties.cxx
 chart2/source/tools/StatisticsHelper.cxx
@@ -1723,7 +1720,6 @@ compilerplugins/clang/compat.hxx
 compilerplugins/clang/constantparam.cxx
 compilerplugins/clang/constparams.cxx
 compilerplugins/clang/conststringvar.cxx
-compilerplugins/clang/convertuintptr.cxx
 compilerplugins/clang/countusersofdefaultparams.cxx
 compilerplugins/clang/cppunitassertequals.cxx
 compilerplugins/clang/cstylecast.cxx
@@ -1731,7 +1727,6 @@ compilerplugins/clang/datamembershadow.cxx
 compilerplugins/clang/derefnullptr.cxx
 compilerplugins/clang/dllprivate.cxx
 compilerplugins/clang/dodgyswitch.cxx
-compilerplugins/clang/droplong.cxx
 compilerplugins/clang/dyncastvisibility.cxx
 compilerplugins/clang/dynexcspec.cxx
 compilerplugins/clang/expandablemethods.cxx
@@ -2322,8 +2317,6 @@ connectivity/source/drivers/mork/MorkParser.cxx
 connectivity/source/drivers/mork/MorkParser.hxx
 connectivity/source/drivers/mork/dllapi.h
 connectivity/source/drivers/mork/mork_helper.cxx
-connectivity/source/drivers/mork/post_include_windows.h
-connectivity/source/drivers/mork/pre_include_windows.h
 connectivity/source/drivers/mozab/bootstrap/MMozillaBootstrap.cxx
 connectivity/source/drivers/mozab/bootstrap/MMozillaBootstrap.hxx
 connectivity/source/drivers/mozab/bootstrap/MNSFolders.cxx
@@ -2476,8 +2469,6 @@ connectivity/source/inc/ado/WrapIndex.hxx
 connectivity/source/inc/ado/WrapKey.hxx
 connectivity/source/inc/ado/WrapTable.hxx
 connectivity/source/inc/ado/WrapTypeDefs.hxx
-connectivity/source/inc/ado/ado_post_sys_include.h
-connectivity/source/inc/ado/ado_pre_sys_include.h
 connectivity/source/inc/ado/adoimp.hxx
 connectivity/source/inc/calc/CCatalog.hxx
 connectivity/source/inc/calc/CConnection.hxx
@@ -6411,7 +6402,6 @@ include/editeng/memberids.h
 include/editeng/misspellrange.hxx
 include/editeng/mutxhelp.hxx
 include/editeng/nhypitem.hxx
-include/editeng/nlbkitem.hxx
 include/editeng/numdef.hxx
 include/editeng/numitem.hxx
 include/editeng/opaqitem.hxx
@@ -6429,7 +6419,6 @@ include/editeng/pmdlitem.hxx
 include/editeng/postitem.hxx
 include/editeng/prntitem.hxx
 include/editeng/protitem.hxx
-include/editeng/prszitem.hxx
 include/editeng/rsiditem.hxx
 include/editeng/scriptspaceitem.hxx
 include/editeng/scripttypeitem.hxx
@@ -7728,7 +7717,6 @@ include/test/util/xreplaceable.hxx
 include/test/util/xsearchable.hxx
 include/test/xmldiff.hxx
 include/test/xmltesttools.hxx
-include/test/xmlwriter.hxx
 include/toolkit/awt/animatedimagespeer.hxx
 include/toolkit/awt/scrollabledialog.hxx
 include/toolkit/awt/vclxaccessiblecomponent.hxx
@@ -8289,7 +8277,6 @@ io/test/stm/testfactreg.cxx
 io/test/stm/testfactreg.hxx
 io/test/testcomponent.cxx
 io/test/testconnection.cxx
-ios/LibreOfficeLight/LibreOfficeLight/dummyLOkit.c
 ios/LibreOfficeLight/LibreOfficeLight/lokit-Bridging-Header.h
 ios/source/LibreOfficeKit.c
 ios/source/LibreOfficeKit.h
@@ -10017,7 +10004,6 @@ sc/inc/chartuno.hxx
 sc/inc/chgtrack.hxx
 sc/inc/chgviset.hxx
 sc/inc/clipcontext.hxx
-sc/inc/clipdata.hxx
 sc/inc/clipoptions.hxx
 sc/inc/clipparam.hxx
 sc/inc/colcontainer.hxx
@@ -12867,7 +12853,6 @@ setup_native/source/win32/customactions/tools/seterror.hxx
 sfx2/inc/arrdecl.hxx
 sfx2/inc/bitset.hxx
 sfx2/inc/bluthsndapi.hxx
-sfx2/inc/configmgr.hxx
 sfx2/inc/fwkhelper.hxx
 sfx2/inc/guisaveas.hxx
 sfx2/inc/inettbc.hxx
@@ -15761,7 +15746,6 @@ sw/source/core/text/txtfrm.cxx
 sw/source/core/text/txtftn.cxx
 sw/source/core/text/txthyph.cxx
 sw/source/core/text/txtinit.cxx
-sw/source/core/text/txtio.cxx
 sw/source/core/text/txtpaint.cxx
 sw/source/core/text/txtpaint.hxx
 sw/source/core/text/txttab.cxx
@@ -16789,7 +16773,6 @@ test/source/util/xreplaceable.cxx
 test/source/util/xsearchable.cxx
 test/source/vclbootstrapprotector.cxx
 test/source/xmltesttools.cxx
-test/source/xmlwriter.cxx
 testtools/source/bridgetest/bridgetest.cxx
 testtools/source/bridgetest/cli/cli_cpp_bridgetest.cxx
 testtools/source/bridgetest/constructors.cxx
@@ -18078,7 +18061,6 @@ vcl/quartz/salgdicommon.cxx
 vcl/quartz/salgdiutils.cxx
 vcl/quartz/salvd.cxx
 vcl/quartz/utils.cxx
-vcl/source/app/IDialogRenderable.cxx
 vcl/source/app/ITiledRenderable.cxx
 vcl/source/app/IconThemeInfo.cxx
 vcl/source/app/IconThemeScanner.cxx
@@ -18913,7 +18895,6 @@ writerperfect/source/calc/StarOfficeCalcImportFilter.hxx
 writerperfect/source/common/DirectoryStream.cxx
 writerperfect/source/common/DocumentHandler.cxx
 writerperfect/source/common/WPFTEncodingDialog.cxx
-writerperfect/source/common/WPFTResMgr.cxx
 writerperfect/source/common/WPXSvInputStream.cxx
 writerperfect/source/draw/CDRImportFilter.cxx
 writerperfect/source/draw/CDRImportFilter.hxx
@@ -19747,7 +19728,6 @@ xmlsecurity/qa/unit/xmlsecurity-dialogs-test.cxx
 xmlsecurity/source/component/certificatecontainer.cxx
 xmlsecurity/source/component/certificatecontainer.hxx
 xmlsecurity/source/component/documentdigitalsignatures.cxx
-xmlsecurity/source/component/documentdigitalsignatures.hxx
 xmlsecurity/source/component/registerservices.cxx
 xmlsecurity/source/dialogs/certificatechooser.cxx
 xmlsecurity/source/dialogs/certificateviewer.cxx
@@ -19839,8 +19819,6 @@ xmlsecurity/source/xmlsec/nss/xmlsignature_nssimpl.cxx
 xmlsecurity/source/xmlsec/nss/xmlsignature_nssimpl.hxx
 xmlsecurity/source/xmlsec/nss/xsec_nss.cxx
 xmlsecurity/source/xmlsec/saxhelper.cxx
-xmlsecurity/source/xmlsec/serialnumberadapter.cxx
-xmlsecurity/source/xmlsec/serialnumberadapter.hxx
 xmlsecurity/source/xmlsec/xmldocumentwrapper_xmlsecimpl.cxx
 xmlsecurity/source/xmlsec/xmlelementwrapper_xmlsecimpl.cxx
 xmlsecurity/source/xmlsec/xmlsec_init.cxx
