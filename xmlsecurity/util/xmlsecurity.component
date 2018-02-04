@@ -22,7 +22,8 @@
   <implementation name="com.sun.star.security.CertificateContainer">
     <service name="com.sun.star.security.CertificateContainer"/>
   </implementation>
-  <implementation name="com.sun.star.security.DocumentDigitalSignatures">
+  <implementation name="com.sun.star.security.DocumentDigitalSignatures"
+      constructor="com_sun_star_security_DocumentDigitalSignatures_get_implementation">
     <service name="com.sun.star.security.DocumentDigitalSignatures"/>
   </implementation>
 </component>

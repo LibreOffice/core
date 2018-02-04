@@ -22,7 +22,6 @@
 
 #include <cppuhelper/factory.hxx>
 
-#include "documentdigitalsignatures.hxx"
 #include "certificatecontainer.hxx"
 
 using namespace ::com::sun::star;
@@ -38,15 +37,7 @@ SAL_DLLPUBLIC_EXPORT void* xmlsecurity_component_getFactory( const sal_Char * pI
     //Decryptor
     OUString implName = OUString::createFromAscii( pImplName );
 
-    if ( pServiceManager && implName == DocumentDigitalSignatures::GetImplementationName() )
-    {
-        // DocumentDigitalSignatures
-        xFactory = cppu::createSingleComponentFactory(
-            DocumentDigitalSignatures_CreateInstance,
-            OUString::createFromAscii( pImplName ),
-            DocumentDigitalSignatures::GetSupportedServiceNames() );
-    }
-    else if ( pServiceManager && implName == CertificateContainer::impl_getStaticImplementationName() )
+    if (pServiceManager && implName == CertificateContainer::impl_getStaticImplementationName())
     {
         // CertificateContainer
         xFactory = cppu::createOneInstanceFactory(
