@@ -5865,7 +5865,45 @@ SfxVoidItem Margins SID_PREVIEW_MARGIN
 ]
 
 
+SfxVoidItem ScalingName SID_PREVIEW_SCALINGNAME
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
+
 SvxZoomSliderItem ScalingFactor SID_PREVIEW_SCALINGFACTOR
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
+
+SvxZoomSliderItem ScalingValue SID_PREVIEW_SCALINGVALUE
+()
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,

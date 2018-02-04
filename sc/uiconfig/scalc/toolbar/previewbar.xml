@@ -33,7 +33,10 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Margins"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ScalingName"/>
  <toolbar:toolbaritem xlink:href=".uno:ScalingFactor"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ScalingValue"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ClosePreview"/>
 </toolbar:toolbar>

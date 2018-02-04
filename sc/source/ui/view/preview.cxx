@@ -925,6 +925,7 @@ void ScPreview::StaticInvalidate()
     rBindings.Invalidate(SID_PREVIEW_ZOOMIN);
     rBindings.Invalidate(SID_PREVIEW_ZOOMOUT);
     rBindings.Invalidate(SID_PREVIEW_SCALINGFACTOR);
+    rBindings.Invalidate(SID_PREVIEW_SCALINGVALUE);
     rBindings.Invalidate(SID_ATTR_ZOOMSLIDER);
 }
 

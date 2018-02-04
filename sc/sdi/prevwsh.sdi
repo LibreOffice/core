@@ -31,6 +31,7 @@ interface TablePrintPreview
     SID_PREVIEW_LAST        [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_PREVIEW_MARGIN      [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_PREVIEW_SCALINGFACTOR   [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_PREVIEW_SCALINGVALUE    [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_ATTR_ZOOMSLIDER     [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
 
     SfxVoidItem GoUpBlock SID_CURSORPAGEUP

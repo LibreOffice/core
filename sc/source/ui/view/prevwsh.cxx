@@ -736,6 +736,8 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                 GetViewFrame()->GetBindings().Invalidate( nSlot );
             }
             break;
+        case SID_PREVIEW_SCALINGVALUE:
+            break;
         case SID_PRINTPREVIEW:
         case SID_PREVIEW_CLOSE:
             //  print preview is now always in the same frame as the tab view
@@ -847,6 +849,32 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
                                 SvxZoomSliderItem aZoomSliderItem( nCurrentZoom, MINZOOM_SLIDER, MAXZOOM_SLIDER, SID_PREVIEW_SCALINGFACTOR );
                                 aZoomSliderItem.AddSnappingPoint( 100 );
                                 rSet.Put( aZoomSliderItem );
+                            }
+                            else
+                                rSet.DisableItem( nWhich );
+                        }
+                    }
+                }
+                break;
+            case SID_PREVIEW_SCALINGVALUE:
+                {
+                    if( pDocShell->IsReadOnly() )
+                        rSet.DisableItem( nWhich );
+                    else
+                    {
+                        OUString aOldName               = pDocShell->GetDocument().GetPageStyle( pPreview->GetTab() );
+                        ScStyleSheetPool* pStylePool    = pDocShell->GetDocument().GetStyleSheetPool();
+                        SfxStyleSheetBase* pStyleSheet  = pStylePool->Find( aOldName, SfxStyleFamily::Page );
+                        OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
+
+                        if ( pStyleSheet )
+                        {
+                            SfxItemSet& rStyleSet   = pStyleSheet->GetItemSet();
+                            sal_uInt16 nCurrentZoom = rStyleSet.Get(ATTR_PAGE_SCALE).GetValue();
+                            if( nCurrentZoom )
+                            {
+                                OUString aString = OUString::number(nCurrentZoom);
+                                rSet.Put( SfxStringItem( nWhich, aString ) );
                             }
                             else
                                 rSet.DisableItem( nWhich );
