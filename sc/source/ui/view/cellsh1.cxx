@@ -1169,7 +1169,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         bColumns = true;
                     else if ( !GetViewData()->SimpleColMarked() && GetViewData()->SimpleRowMarked() )
                         bColumns = false;
-                    else if ( !comphelper::LibreOfficeKit::isActive() ) // TODO: handle this case in LOK too
+                    else
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
