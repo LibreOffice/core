@@ -147,7 +147,7 @@ private:
                                         ppP_RefTr;  // Pool for References
         std::unique_ptr<sal_uInt16[]>   pP_Id;      // Pool for Id-sets
         sal_uInt16                      nP_Id;
-        sal_uInt16                      nP_IdAkt;
+        sal_uInt16                      nP_IdCurrent;
         sal_uInt16                      nP_IdLast;  // last set-start
 
         struct  EXTCONT
@@ -165,7 +165,7 @@ private:
 
         std::unique_ptr<ScMatrix*[]>    ppP_Matrix;     // Pool for Matrices
         sal_uInt16                      nP_Matrix;
-        sal_uInt16                      nP_MatrixAkt;
+        sal_uInt16                      nP_MatrixCurrent;
 
         /** for storage of named ranges */
         struct RangeName
@@ -205,7 +205,7 @@ private:
         std::unique_ptr<E_TYPE[]>       pType;      // ...with Type-Info
         std::unique_ptr<sal_uInt16[]>   pSize;      // ...with size (Anz. sal_uInt16)
         sal_uInt16                      nElement;
-        sal_uInt16                      nElementAkt;
+        sal_uInt16                      nElementCurrent;
 
         static const sal_uInt16         nScTokenOff;// Offset for SC-Token
 #ifdef DBG_UTIL
@@ -217,11 +217,11 @@ private:
         bool                        GrowId();
         bool                        GrowElement();
         bool                        GrowMatrix();
-                                    /** @return false means nElementAkt range
+                                    /** @return false means nElementCurrent range
                                         below nScTokenOff would overflow or
                                         further allocation is not possible, no
                                         new ID available other than
-                                        nElementAkt+1.
+                                        nElementCurrent+1.
                                      */
         bool                        CheckElementOrGrow();
         bool                        GetElement( const sal_uInt16 nId );
@@ -355,12 +355,12 @@ inline TokenPool& TokenPool::operator <<( const TokenId& rId )
         nId = static_cast<sal_uInt16>(ocErrNull) + nScTokenOff + 1;
     }
 
-    if( nP_IdAkt >= nP_Id )
+    if( nP_IdCurrent >= nP_Id )
         if (!GrowId())
             return *this;
 
-    pP_Id[ nP_IdAkt ] = nId - 1;
-    nP_IdAkt++;
+    pP_Id[ nP_IdCurrent ] = nId - 1;
+    nP_IdCurrent++;
 
     return *this;
 }
@@ -372,19 +372,19 @@ inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
         SAL_WARN("sc.filter", "-TokenPool::operator<<: enum too large! " << static_cast<sal_uInt32>(eId));
     }
 
-    if( nP_IdAkt >= nP_Id )
+    if( nP_IdCurrent >= nP_Id )
         if (!GrowId())
             return *this;
 
-    pP_Id[ nP_IdAkt ] = static_cast<sal_uInt16>(eId) + nScTokenOff;
-    nP_IdAkt++;
+    pP_Id[ nP_IdCurrent ] = static_cast<sal_uInt16>(eId) + nScTokenOff;
+    nP_IdCurrent++;
 
     return *this;
 }
 
 inline TokenPool& TokenPool::operator <<( TokenStack& rStack )
 {
-    if( nP_IdAkt >= nP_Id )
+    if( nP_IdCurrent >= nP_Id )
         if (!GrowId())
             return *this;
 
@@ -394,8 +394,8 @@ inline TokenPool& TokenPool::operator <<( TokenStack& rStack )
         // Indicates error, so generate one. Empty stack, overflow, ...
         nId = static_cast<sal_uInt16>(ocErrNull) + nScTokenOff + 1;
     }
-    pP_Id[ nP_IdAkt ] = nId - 1;
-    nP_IdAkt++;
+    pP_Id[ nP_IdCurrent ] = nId - 1;
+    nP_IdCurrent++;
 
     return *this;
 }
