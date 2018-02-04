@@ -104,6 +104,15 @@ SfxChildAlignment SidebarDockingWindow::CheckAlignment (
     }
 }
 
+bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
+{
+    MouseNotifyEvent nType = rEvent.GetType();
+    if (MouseNotifyEvent::KEYINPUT == nType)
+        return true;
+
+    return Window::EventNotify(rEvent);
+}
+
 } } // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
