@@ -3348,10 +3348,14 @@ WW8Ruby::WW8Ruby(const SwTextNode& rNode, const SwFormatRuby& rRuby, const MSWor
     else
         nRubyScript = i18n::ScriptType::ASIAN;
 
-    const SwAttrSet& rSet = rNode.GetSwAttrSet();
-    auto& rHeightItem = static_cast<const SvxFontHeightItem&>(
-        rSet.Get(GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript)));
+    const OUString &rText = rNode.GetText();
+    sal_uInt16 nScript = i18n::ScriptType::LATIN;
 
+    if (!rText.isEmpty())
+        nScript = g_pBreakIt->GetBreakIter()->getScriptType(rText, 0);
+
+    sal_uInt16 nWhich = GetWhichOfScript(RES_CHRATR_FONTSIZE, nScript);
+    auto& rHeightItem = static_cast<const SvxFontHeightItem&>(rExport.GetItem(nWhich));
     m_nBaseHeight = rHeightItem.GetHeight();
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
