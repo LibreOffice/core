@@ -28,60 +28,57 @@
 /*
     Implementation notes:
     The void* hidden by oslMutex points to a WIN32
-    CRITICAL_SECTION structure.
+    SRWLOCK structure.
 */
 
 oslMutex SAL_CALL osl_createMutex(void)
 {
-    CRITICAL_SECTION *pMutexImpl;
+    PSRWLOCK pMutexImpl;
 
-    pMutexImpl = static_cast<CRITICAL_SECTION *>(calloc(sizeof(CRITICAL_SECTION), 1));
+    pMutexImpl = static_cast<PSRWLOCK>(calloc(sizeof(PSRWLOCK), 1));
 
     OSL_ASSERT(pMutexImpl); /* alloc successful? */
 
-    InitializeCriticalSection(pMutexImpl);
+    InitializeSRWLock(pMutexImpl);
 
     return reinterpret_cast<oslMutex>(pMutexImpl);
 }
 
 void SAL_CALL osl_destroyMutex(oslMutex Mutex)
 {
-    CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
-
-    if (pMutexImpl)
-    {
-        DeleteCriticalSection(pMutexImpl);
-        free(pMutexImpl);
-    }
+    // SRW locks do not need to be explicitly destroyed
+    // (see https://msdn.microsoft.com/en-us/library/ms683483)
+    // so only free the memory
+    free(Mutex);
 }
 
 sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
 {
-    CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
+    PSRWLOCK pMutexImpl = reinterpret_cast<PSRWLOCK>(Mutex);
 
     OSL_ASSERT(Mutex);
 
-    EnterCriticalSection(pMutexImpl);
+    AcquireSRWLockExclusive(pMutexImpl);
 
     return true;
 }
 
 sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
 {
-    CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
+    PSRWLOCK pMutexImpl = reinterpret_cast<PSRWLOCK>(Mutex);
 
     OSL_ASSERT(Mutex);
 
-    return TryEnterCriticalSection(pMutexImpl) != FALSE;
+    return TryAcquireSRWLockExclusive(pMutexImpl) != FALSE;
 }
 
 sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
 {
-    CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
+    PSRWLOCK pMutexImpl = reinterpret_cast<PSRWLOCK>(Mutex);
 
     OSL_ASSERT(Mutex);
 
-    LeaveCriticalSection(pMutexImpl);
+    ReleaseSRWLockExclusive(pMutexImpl);
 
     return true;
 }
