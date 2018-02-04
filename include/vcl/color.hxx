@@ -71,8 +71,8 @@ public:
 
     ColorData GetRGBColor() const { return COLORDATA_RGB(mnColor); }
     sal_uInt8 GetColorError(const Color& rCompareColor) const;
-    sal_uInt8 GetLuminance() const;
 
+    sal_uInt8 GetLuminance() const;
     void IncreaseLuminance(sal_uInt8 cLumInc);
     void DecreaseLuminance(sal_uInt8 cLumDec);
 

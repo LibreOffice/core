@@ -84,52 +84,42 @@ d_Col = BitmapColor( static_cast<sal_uInt8>( _def_cR | ( ( _def_cR & maR.mnOr ) 
     d_ALPHA )
 
 
-class Color;
-
-class VCL_DLLPUBLIC BitmapColor final
+class VCL_DLLPUBLIC BitmapColor final : public Color
 {
 private:
 
-    sal_uInt8               mcBlueOrIndex;
-    sal_uInt8               mcGreen;
-    sal_uInt8               mcRed;
-    sal_uInt8               mbIndex; // should be bool, but see above warning
+    sal_uInt8           mcIndex;
+    sal_uInt8           mbIndex; // should be bool, but see above warning
 
 public:
 
     inline              BitmapColor();
-    constexpr           BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue );
-    inline              BitmapColor( const Color& rColor );
-    explicit inline     BitmapColor( sal_uInt8 cIndex );
+    inline              BitmapColor(sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue);
+    inline              BitmapColor(const Color& rColor);
+    explicit inline     BitmapColor(sal_uInt8 cIndex);
 
     inline bool         operator==( const BitmapColor& rBitmapColor ) const;
     inline bool         operator!=( const BitmapColor& rBitmapColor ) const;
 
     inline bool         IsIndex() const;
-
-    inline sal_uInt8    GetRed() const;
-    inline void         SetRed( sal_uInt8 cRed );
-
-    inline sal_uInt8    GetGreen() const;
-    inline void         SetGreen( sal_uInt8 cGreen );
-
-    inline sal_uInt8    GetBlue() const;
-    inline void         SetBlue( sal_uInt8 cBlue );
-
     inline sal_uInt8    GetIndex() const;
-    inline void         SetIndex( sal_uInt8 cIndex );
+    inline void         SetIndex(sal_uInt8 cIndex);
 
-    Color               GetColor() const;
+    virtual inline sal_uInt8 GetBlue() const override;
+    virtual inline sal_uInt8 GetGreen() const override;
+    virtual inline sal_uInt8 GetRed() const override;
+
+    virtual inline void SetBlue(sal_uInt8 cBlue) override;
+    virtual inline void SetGreen(sal_uInt8 cGreen) override;
+    virtual inline void SetRed(sal_uInt8 cRed) override;
 
     inline sal_uInt8    GetBlueOrIndex() const;
 
-    inline BitmapColor& Invert();
+    virtual inline sal_uInt8 GetLuminance() const;
 
-    inline sal_uInt8    GetLuminance() const;
+    inline BitmapColor& Merge(const BitmapColor& rColor, sal_uInt8 cTransparency);
 
-    inline BitmapColor& Merge( const BitmapColor& rColor, sal_uInt8 cTransparency );
-
-    inline sal_uInt16   GetColorError( const BitmapColor& rBitmapColor ) const;
+    inline sal_uInt16   GetColorError(const BitmapColor& rBitmapColor) const;
 };
 
 template<typename charT, typename traits>
@@ -348,48 +338,41 @@ VCL_DLLPUBLIC BitmapBuffer* StretchAndConvert(
     const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
     ScanlineFormat nDstBitmapFormat, const BitmapPalette* pDstPal = nullptr, const ColorMask* pDstMask = nullptr );
 
-inline BitmapColor::BitmapColor() :
-            mcBlueOrIndex   ( 0 ),
-            mcGreen         ( 0 ),
-            mcRed           ( 0 ),
-            mbIndex         ( sal_uInt8(false) )
+BitmapColor::BitmapColor() :
+    mcIndex(0),
+    mbIndex(sal_uInt8(false))
 {
 }
 
-constexpr BitmapColor::BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue ) :
-            mcBlueOrIndex   ( cBlue ),
-            mcGreen         ( cGreen ),
-            mcRed           ( cRed ),
-            mbIndex         ( sal_uInt8(false) )
+inline BitmapColor::BitmapColor(sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue) :
+    Color(cRed, cGreen, cBlue),
+    mbIndex(sal_uInt8(false))
 {
 }
 
-inline BitmapColor::BitmapColor( const Color& rColor ) :
-            mcBlueOrIndex   ( rColor.GetBlue() ),
-            mcGreen         ( rColor.GetGreen() ),
-            mcRed           ( rColor.GetRed() ),
-            mbIndex         ( sal_uInt8(false) )
+inline BitmapColor::BitmapColor(const Color& rColor) :
+    Color(rColor),
+    mbIndex(sal_uInt8(false))
 {
 }
 
-inline BitmapColor::BitmapColor( sal_uInt8 cIndex ) :
-            mcBlueOrIndex   ( cIndex ),
-            mcGreen         ( 0 ),
-            mcRed           ( 0 ),
-            mbIndex         ( sal_uInt8(true) )
+inline BitmapColor::BitmapColor(sal_uInt8 cIndex) :
+    mcIndex(cIndex),
+    mbIndex(sal_uInt8(true))
 {
 }
 
-inline bool BitmapColor::operator==( const BitmapColor& rBitmapColor ) const
+inline bool BitmapColor::operator==(const BitmapColor& rBitmapColor) const
 {
-    return( ( mcBlueOrIndex == rBitmapColor.mcBlueOrIndex ) &&
-            ( mbIndex ? bool(rBitmapColor.mbIndex) :
-            ( mcGreen == rBitmapColor.mcGreen && mcRed == rBitmapColor.mcRed ) ) );
+    return(mbIndex ? bool(rBitmapColor.mbIndex) && mcIndex == rBitmapColor.mcIndex :
+              GetBlue() == rBitmapColor.GetBlue() &&
+              GetGreen() == rBitmapColor.GetGreen() &&
+              GetRed() == rBitmapColor.GetRed());
 }
 
-inline bool BitmapColor::operator!=( const BitmapColor& rBitmapColor ) const
+inline bool BitmapColor::operator!=(const BitmapColor& rBitmapColor) const
 {
-    return !( *this == rBitmapColor );
+    return !(*this == rBitmapColor);
 }
 
 inline bool BitmapColor::IsIndex() const
@@ -399,90 +382,83 @@ inline bool BitmapColor::IsIndex() const
 
 inline sal_uInt8 BitmapColor::GetRed() const
 {
-    assert( !mbIndex && "Pixel represents index into colortable" );
-    return mcRed;
+    assert(!mbIndex && "Pixel represents index into colortable");
+    return Color::GetRed();
 }
 
-inline void BitmapColor::SetRed( sal_uInt8 cRed )
+inline void BitmapColor::SetRed(sal_uInt8 cRed)
 {
-    assert( !mbIndex && "Pixel represents index into colortable" );
-    mcRed = cRed;
+    assert(!mbIndex && "Pixel represents index into colortable");
+    Color::SetRed(cRed);
 }
 
 inline sal_uInt8 BitmapColor::GetGreen() const
 {
-    assert( !mbIndex && "Pixel represents index into colortable" );
-    return mcGreen;
+    assert(!mbIndex && "Pixel represents index into colortable");
+    return Color::GetGreen();
 }
 
-inline void BitmapColor::SetGreen( sal_uInt8 cGreen )
+inline void BitmapColor::SetGreen(sal_uInt8 cGreen)
 {
-    assert( !mbIndex && "Pixel represents index into colortable" );
-    mcGreen = cGreen;
+    assert(!mbIndex && "Pixel represents index into colortable");
+    Color::SetGreen(cGreen);
 }
 
 inline sal_uInt8 BitmapColor::GetBlue() const
 {
-    assert( !mbIndex && "Pixel represents index into colortable" );
-    return mcBlueOrIndex;
+    assert(!mbIndex && "Pixel represents index into colortable");
+    return Color::GetBlue();
 }
 
-inline void BitmapColor::SetBlue( sal_uInt8 cBlue )
+inline void BitmapColor::SetBlue(sal_uInt8 cBlue)
 {
-    assert( !mbIndex && "Pixel represents index into colortable" );
-    mcBlueOrIndex = cBlue;
+    assert(!mbIndex && "Pixel represents index into colortable");
+    Color::SetBlue(cBlue);
 }
 
 inline sal_uInt8 BitmapColor::GetIndex() const
 {
-    assert( mbIndex && "Pixel represents color values" );
-    return mcBlueOrIndex;
+    assert(mbIndex && "Pixel represents color values");
+    return mcIndex;
 }
 
-inline void BitmapColor::SetIndex( sal_uInt8 cIndex )
+inline void BitmapColor::SetIndex(sal_uInt8 cIndex)
 {
-    assert( mbIndex && "Pixel represents color values" );
-    mcBlueOrIndex = cIndex;
+    assert(mbIndex && "Pixel represents color values");
+    mcIndex = cIndex;
 }
 
+/*
 inline Color BitmapColor::GetColor() const
 {
-    assert( !mbIndex && "Pixel represents index into colortable" );
-    return Color(mcRed, mcGreen, mcBlueOrIndex);
+    assert(!mbIndex && "Pixel represents index into colortable");
+    return Color(GetRed(), GetGreen(), GetBlue());
 }
+*/
 
 inline sal_uInt8 BitmapColor::GetBlueOrIndex() const
 {
     // #i47518# Yield a value regardless of mbIndex
-    return mcBlueOrIndex;
-}
+    if (mbIndex)
+        return mcIndex;
 
-inline BitmapColor& BitmapColor::Invert()
-{
-    assert( !mbIndex && "Pixel represents index into colortable" );
-    mcBlueOrIndex = ~mcBlueOrIndex;
-    mcGreen = ~mcGreen;
-    mcRed = ~mcRed;
-
-    return *this;
+    return Color::GetBlue();
 }
 
 inline sal_uInt8 BitmapColor::GetLuminance() const
 {
-    assert( !mbIndex && "Pixel represents index into colortable" );
-    return (static_cast<sal_uInt32>(mcBlueOrIndex) * 28
-            + static_cast<sal_uInt32>(mcGreen) * 151
-            + static_cast<sal_uInt32>(mcRed) * 77) >> 8;
+    assert(!mbIndex && "Pixel represents index into colortable");
+    return Color::GetLuminance();
 }
 
 
 inline BitmapColor& BitmapColor::Merge( const BitmapColor& rBitmapColor, sal_uInt8 cTransparency )
 {
-    assert( !mbIndex && "Pixel represents index into colortable" );
-    assert( !rBitmapColor.mbIndex && "Pixel represents index into colortable" );
-    mcBlueOrIndex = ColorChannelMerge( mcBlueOrIndex, rBitmapColor.mcBlueOrIndex, cTransparency );
-    mcGreen = ColorChannelMerge( mcGreen, rBitmapColor.mcGreen, cTransparency );
-    mcRed = ColorChannelMerge( mcRed, rBitmapColor.mcRed, cTransparency );
+    assert(!mbIndex && "Pixel represents index into colortable");
+    assert(!rBitmapColor.mbIndex && "Pixel represents index into colortable");
+    SetBlue(ColorChannelMerge(Color::GetBlue(), rBitmapColor.GetBlue(), cTransparency));
+    SetGreen(ColorChannelMerge(Color::GetGreen(), rBitmapColor.GetGreen(), cTransparency));
+    SetRed(ColorChannelMerge(Color::GetRed(), rBitmapColor.GetRed(), cTransparency));
 
     return *this;
 }
@@ -490,12 +466,12 @@ inline BitmapColor& BitmapColor::Merge( const BitmapColor& rBitmapColor, sal_uIn
 
 inline sal_uInt16 BitmapColor::GetColorError( const BitmapColor& rBitmapColor ) const
 {
-    assert( !mbIndex && "Pixel represents index into colortable" );
-    assert( !rBitmapColor.mbIndex && "Pixel represents index into colortable" );
+    assert(!mbIndex && "Pixel represents index into colortable");
+    assert(!rBitmapColor.mbIndex && "Pixel represents index into colortable");
     return static_cast<sal_uInt16>(
-        abs( static_cast<int>(mcBlueOrIndex) - static_cast<int>(rBitmapColor.mcBlueOrIndex) ) +
-        abs( static_cast<int>(mcGreen) - static_cast<int>(rBitmapColor.mcGreen) ) +
-        abs( static_cast<int>(mcRed) - static_cast<int>(rBitmapColor.mcRed) ) );
+        abs(static_cast<int>(GetBlue()) - static_cast<int>(rBitmapColor.GetBlue())) +
+        abs(static_cast<int>(GetGreen()) - static_cast<int>(rBitmapColor.GetGreen())) +
+        abs(static_cast<int>(GetRed()) - static_cast<int>(rBitmapColor.GetRed())));
 }
 
 inline sal_uInt32 ColorMask::GetRedMask() const
