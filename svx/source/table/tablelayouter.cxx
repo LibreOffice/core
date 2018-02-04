@@ -798,7 +798,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
 
     // now scale if wanted and needed
     if( bFit && nCurrentHeight != rArea.getHeight() )
-        distribute( maRows, rArea.getHeight() - nCurrentHeight );
+        distribute(maRows, o3tl::saturating_sub<sal_Int32>(rArea.getHeight(), nCurrentHeight));
 
     // last step, update left edges
     sal_Int32 nNewHeight = 0;
