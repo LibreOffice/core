@@ -38,8 +38,6 @@ namespace framework{
             registered for. Further there is a generic
             way to configure the shell command and it's list
             of arguments.
-
-    @author as96863
  */
 class ShellJob : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css::task::XJob >
 {
