@@ -952,6 +952,25 @@ void lcl_writeParagraphMarkerProperties(DocxAttributeOutput& rAttributeOutput, c
     }
 }
 
+const char *RubyAlignValues[] =
+{
+    "center",
+    "distributeLetter",
+    "distributeSpace",
+    "left",
+    "right",
+    "rightVertical"
+};
+
+
+const char *lclConvertWW8JCToOOXMLRubyAlign(sal_Int32 nJC)
+{
+    const sal_Int32 nElements = SAL_N_ELEMENTS(RubyAlignValues);
+    if ( nJC >=0 && nJC < nElements )
+        return RubyAlignValues[nJC];
+    return RubyAlignValues[0];
+}
+
 }
 
 void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMarkerProperties, const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted, const SwRedlineData* pRedlineParagraphMarkerInserted)
@@ -2499,16 +2518,28 @@ void DocxAttributeOutput::RawText(const OUString& rText, rtl_TextEncoding /*eCha
 
 void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, const SwFormatRuby& rRuby )
 {
+    WW8Ruby aWW8Ruby( rNode, rRuby, GetExport() );
     SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::StartRuby( const SwTextNode& rNode, const SwFormatRuby& rRuby )" );
     EndRun( &rNode, nPos ); // end run before starting ruby to avoid nested runs, and overlap
     assert(!m_closeHyperlinkInThisRun); // check that no hyperlink overlaps ruby
     assert(!m_closeHyperlinkInPreviousRun);
+    m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
     m_pSerializer->startElementNS( XML_w, XML_ruby, FSEND );
     m_pSerializer->startElementNS( XML_w, XML_rubyPr, FSEND );
-    // hps
-    // hpsBaseText
-    // hpsRaise
-    // lid
+
+    m_pSerializer->singleElementNS( XML_w, XML_rubyAlign,
+            FSNS( XML_w, XML_val ), lclConvertWW8JCToOOXMLRubyAlign(aWW8Ruby.GetJC()), FSEND );
+    sal_uInt32   nHps = (aWW8Ruby.GetRubyHeight() + 5) / 10;
+    sal_uInt32   nHpsBaseText = (aWW8Ruby.GetBaseHeight() + 5) / 10;
+    m_pSerializer->singleElementNS( XML_w, XML_hps,
+            FSNS( XML_w, XML_val ), OString::number(nHps).getStr(), FSEND );
+
+    m_pSerializer->singleElementNS( XML_w, XML_hpsRaise,
+            FSNS( XML_w, XML_val ), OString::number(nHpsBaseText).getStr(), FSEND );
+
+    m_pSerializer->singleElementNS( XML_w, XML_hpsBaseText,
+            FSNS( XML_w, XML_val ), OString::number(nHpsBaseText).getStr(), FSEND );
+
     lang::Locale aLocale( SwBreakIt::Get()->GetLocale(
                 rNode.GetLang( nPos ) ) );
     OUString sLang( LanguageTag::convertToBcp47( aLocale) );
@@ -2516,41 +2547,23 @@ void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, co
             FSNS( XML_w, XML_val ),
             OUStringToOString( sLang, RTL_TEXTENCODING_UTF8 ).getStr( ), FSEND );
 
-    OString sAlign ( "center" );
-    switch ( rRuby.GetAdjustment( ) )
-    {
-        case css::text::RubyAdjust_LEFT:
-            sAlign = OString( "left" );
-            break;
-        case css::text::RubyAdjust_CENTER:
-            // Defaults to center
-            break;
-        case css::text::RubyAdjust_RIGHT:
-            sAlign = OString( "right" );
-            break;
-        case css::text::RubyAdjust_BLOCK:
-            sAlign = OString( "distributeLetter" );
-            break;
-        case css::text::RubyAdjust_INDENT_BLOCK:
-            sAlign = OString( "distributeSpace" );
-            break;
-        default:
-            break;
-    }
-    m_pSerializer->singleElementNS( XML_w, XML_rubyAlign,
-            FSNS( XML_w, XML_val ), sAlign.getStr(), FSEND );
     m_pSerializer->endElementNS( XML_w, XML_rubyPr );
 
     m_pSerializer->startElementNS( XML_w, XML_rt, FSEND );
     StartRun( nullptr, nPos );
     StartRunProperties( );
-    SwWW8AttrIter aAttrIt( m_rExport, rNode );
-    aAttrIt.OutAttr( nPos, true );
 
-    sal_uInt16 nStyle = m_rExport.GetId( rRuby.GetTextRuby()->GetCharFormat() );
-    OString aStyleId(m_rExport.m_pStyles->GetStyleId(nStyle));
-    m_pSerializer->singleElementNS( XML_w, XML_rStyle,
-            FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
+    if (rRuby.GetTextRuby() && rRuby.GetTextRuby()->GetCharFormat())
+    {
+        const SwCharFormat* pFormat = rRuby.GetTextRuby()->GetCharFormat();
+        sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType(rRuby.GetText(), 0);
+        sal_uInt16 nWhichFont = (nScript == i18n::ScriptType::LATIN) ?  RES_CHRATR_FONT : RES_CHRATR_CJK_FONT;
+        sal_uInt16 nWhichFontSize = (nScript == i18n::ScriptType::LATIN) ?  RES_CHRATR_FONTSIZE : RES_CHRATR_CJK_FONTSIZE;
+
+        CharFont(ItemGet<SvxFontItem>(*pFormat, nWhichFont));
+        CharFontSize(ItemGet<SvxFontHeightItem>(*pFormat, nWhichFontSize));
+        CharFontSize(ItemGet<SvxFontHeightItem>(*pFormat, RES_CHRATR_CTL_FONTSIZE));
+    }
 
     EndRunProperties( nullptr );
     RunText( rRuby.GetText( ) );
@@ -2567,6 +2580,7 @@ void DocxAttributeOutput::EndRuby(const SwTextNode& rNode, sal_Int32 nPos)
     EndRun( &rNode, nPos );
     m_pSerializer->endElementNS( XML_w, XML_rubyBase );
     m_pSerializer->endElementNS( XML_w, XML_ruby );
+    m_pSerializer->endElementNS( XML_w, XML_r );
     StartRun(nullptr, nPos); // open Run again so OutputTextNode loop can close it
 }
 
