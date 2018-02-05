@@ -357,10 +357,6 @@ void Invocation_Impl::setMaterial( const Any& rMaterial )
         _xNameContainer.set( _xDirect, UNO_QUERY );
         _xENDirect.set( _xDirect, UNO_QUERY );
         _xDirect2.set( _xDirect, UNO_QUERY );
-
-        // only once!!!
-        //_xIntrospectionAccess = XIntrospectionAccessRef();
-        //_xPropertySet         = XPropertySetRef();
     }
     else
     {
@@ -417,20 +413,6 @@ void Invocation_Impl::setMaterial( const Any& rMaterial )
                 _xENIntrospection.set( _xIntrospectionAccess, UNO_QUERY );
             }
         }
-        /* only once !!!
-        _xDirect = XInvocationRef();
-        if( !_xIntrospectionAccess.is() )
-        {
-            // reset
-            _xElementAccess     = XElementAccessRef();
-            _xEnumerationAccess = XEnumerationAccessRef();
-            _xIndexAccess       = XIndexAccessRef();
-            _xIndexContainer    = XIndexContainerRef();
-            _xNameAccess        = XNameAccessRef();
-            _xNameContainer     = XNameContainerRef();
-            _xPropertySet       = XPropertySetRef();
-        }
-        */
     }
 }
 
