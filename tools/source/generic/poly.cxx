@@ -100,6 +100,24 @@ ImplPolygon::ImplPolygon( sal_uInt16 nInitSize, const Point* pInitAry, const Pol
     mnPoints   = nInitSize;
 }
 
+ImplPolygon::ImplPolygon( std::vector< std::pair<Point, PolyFlags> > const & rPointsAndFlags )
+{
+    auto nInitSize = rPointsAndFlags.size();
+    if ( nInitSize )
+    {
+        mxPointAry.reset(new Point[nInitSize]);
+        mxFlagAry.reset(new PolyFlags[nInitSize]);
+        int i = 0;
+        for (auto const & rPair : rPointsAndFlags) {
+            mxPointAry[i] = rPair.first;
+            mxFlagAry[i] = rPair.second;
+            ++i;
+        }
+    }
+
+    mnPoints   = nInitSize;
+}
+
 ImplPolygon::ImplPolygon( const tools::Rectangle& rRect )
 {
     if ( !rRect.IsEmpty() )
@@ -865,6 +883,10 @@ Polygon::Polygon( sal_uInt16 nSize ) : mpImplPolygon(ImplPolygon(nSize))
 }
 
 Polygon::Polygon( sal_uInt16 nPoints, const Point* pPtAry, const PolyFlags* pFlagAry ) : mpImplPolygon(ImplPolygon(nPoints, pPtAry, pFlagAry))
+{
+}
+
+Polygon::Polygon( std::vector< std::pair<Point, PolyFlags> > const & rPointsAndFlags ) : mpImplPolygon(ImplPolygon(rPointsAndFlags))
 {
 }
 
