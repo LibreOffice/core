@@ -22,6 +22,7 @@
 #include <editeng/lrspitem.hxx>
 #include <view.hxx>
 #include <drawbase.hxx>
+#include <unobaseclass.hxx>
 
 inline void SwWrtShell::OpenMark()
 {
@@ -176,6 +177,10 @@ long SwWrtShell::DelLeft()
 
     if( SwCursorShell::IsSttPara())
     {
+        // Start/EndAllAction to avoid cursor flickering
+        UnoActionContext c(GetDoc());
+        SwCursorShell::Push();
+
         // #i4032# Don't actually call a 'delete' if we
         // changed the table cell, compare DelRight().
         const SwStartNode * pSNdOld = pWasInTableNd ?
@@ -184,23 +189,34 @@ long SwWrtShell::DelLeft()
 
         // If the cursor is at the beginning of a paragraph, try to step
         // backwards. On failure we are done.
-        if( !SwCursorShell::Left(1,CRSR_SKIP_CHARS) )
-            return 0;
+        bool bDoSomething = SwCursorShell::Left(1,CRSR_SKIP_CHARS);
 
-        // If the cursor entered or left a table (or both) we are done. No step
-        // back.
-        const SwTableNode* pIsInTableNd = SwCursorShell::IsCursorInTable();
-        if( pIsInTableNd != pWasInTableNd )
-            return 0;
+        if (bDoSomething)
+        {
+            // If the cursor entered or left a table (or both) we are done.
+            const SwTableNode* pIsInTableNd = SwCursorShell::IsCursorInTable();
+            bDoSomething = pIsInTableNd == pWasInTableNd;
 
-        const SwStartNode* pSNdNew = pIsInTableNd ?
-                                     GetSwCursor()->GetNode().FindTableBoxStartNode() :
-                                     nullptr;
+            if (bDoSomething)
+            {
+                const SwStartNode* pSNdNew = pIsInTableNd ?
+                    GetSwCursor()->GetNode().FindTableBoxStartNode() :
+                    nullptr;
 
-        // #i4032# Don't actually call a 'delete' if we
-        // changed the table cell, compare DelRight().
-        if ( pSNdOld != pSNdNew )
+                // #i4032# Don't actually call a 'delete' if we
+                // changed the table cell, compare DelRight().
+                bDoSomething = pSNdOld == pSNdNew;
+            }
+        }
+
+        if (!bDoSomething)
+        {
+            // tdf#115132 Restore previous position and we are done
+            SwCursorShell::Pop(false);
             return 0;
+        }
+
+        SwCursorShell::Pop(true);
 
         OpenMark();
         SwCursorShell::Right(1,CRSR_SKIP_CHARS);
@@ -241,8 +257,6 @@ long SwWrtShell::DelRight()
     if(nSelection & nsSelectionType::SEL_TXT)
         nSelection = nsSelectionType::SEL_TXT;
 
-    const SwTableNode * pWasInTableNd = nullptr;
-
     switch( nSelection & ~(nsSelectionType::SEL_BEZ) )
     {
     case nsSelectionType::SEL_POSTIT:
@@ -277,70 +291,56 @@ long SwWrtShell::DelRight()
                 EnterStdMode();
         }
 
-        pWasInTableNd = IsCursorInTable();
-
-        if( nsSelectionType::SEL_TXT & nSelection && SwCursorShell::IsSttPara() &&
-            SwCursorShell::IsEndPara() )
+        if (SwCursorShell::IsEndPara())
         {
-            // save cursor
+            // Start/EndAllAction to avoid cursor flickering
+            UnoActionContext c(GetDoc());
+
+            const SwTableNode* pWasInTableNd = IsCursorInTable();
+            // #108049# Save the startnode of the current cell
+            const SwStartNode* pSNdOld = pWasInTableNd ?
+                GetSwCursor()->GetNode().FindTableBoxStartNode() : nullptr;
+            bool bCheckDelFull = nsSelectionType::SEL_TXT & nSelection && SwCursorShell::IsSttPara();
+            bool bDelFull = false;
+            bool bDoNothing = false;
+
+            // #i41424# Introduced a couple of
+            // Push()-Pop() pairs here. The reason for this is that a
+            // Right()-Left() combination does not make sure, that
+            // the cursor will be in its initial state, because there
+            // may be a numbering in front of the next paragraph.
             SwCursorShell::Push();
 
-            bool bDelFull = false;
-            if ( SwCursorShell::Right(1,CRSR_SKIP_CHARS) )
+            if (SwCursorShell::Right(1, CRSR_SKIP_CHARS))
             {
-                const SwTableNode * pCurrTableNd = IsCursorInTable();
-                bDelFull = pCurrTableNd && pCurrTableNd != pWasInTableNd;
+                const SwTableNode* pCurrTableNd = IsCursorInTable();
+                bDelFull = bCheckDelFull && pCurrTableNd && pCurrTableNd != pWasInTableNd;
+                if (!bDelFull && (IsCursorInTable() || (pCurrTableNd != pWasInTableNd)))
+                {
+                    // #108049# Save the startnode of the current cell.
+                    // May be different to pSNdOld as we have moved.
+                    const SwStartNode* pSNdNew = pCurrTableNd ?
+                        GetSwCursor()->GetNode().FindTableBoxStartNode() : nullptr;
+
+                    // tdf#115132 Only keep cursor position instead of deleting
+                    // if we have moved to a different cell
+                    bDoNothing = pSNdOld != pSNdNew;
+                }
             }
 
             // restore cursor
             SwCursorShell::Pop( false );
 
-            if( bDelFull )
+            if (bDelFull)
             {
                 DelFullPara();
                 UpdateAttr();
-                break;
             }
+            if (bDelFull || bDoNothing)
+                break;
         }
 
         {
-            // #108049# Save the startnode of the current cell
-            const SwStartNode * pSNdOld;
-            pSNdOld = GetSwCursor()->GetNode().FindTableBoxStartNode();
-
-            if ( SwCursorShell::IsEndPara() )
-            {
-                // #i41424# Introduced a couple of
-                // Push()-Pop() pairs here. The reason for this is that a
-                // Right()-Left() combination does not make sure, that
-                // the cursor will be in its initial state, because there
-                // may be a numbering in front of the next paragraph.
-                SwCursorShell::Push();
-
-                if ( SwCursorShell::Right(1, CRSR_SKIP_CHARS) )
-                {
-                    if (IsCursorInTable() || (pWasInTableNd != IsCursorInTable()))
-                    {
-                        /** #108049# Save the startnode of the current
-                            cell. May be different to pSNdOld as we have
-                            moved. */
-                        const SwStartNode * pSNdNew = GetSwCursor()
-                            ->GetNode().FindTableBoxStartNode();
-
-                        /** #108049# Only move instead of deleting if we
-                            have moved to a different cell */
-                        if (pSNdOld != pSNdNew)
-                        {
-                            SwCursorShell::Pop();
-                            break;
-                        }
-                    }
-                }
-
-                // restore cursor
-                SwCursorShell::Pop( false );
-            }
-
             // If we are just ahead of a fieldmark, then remove it completely
             sw::mark::IFieldmark* pFm = GetCurrentFieldmark();
             if (pFm && pFm->GetMarkStart() == *GetCursor()->GetPoint())

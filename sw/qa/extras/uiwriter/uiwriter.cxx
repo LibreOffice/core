@@ -242,6 +242,7 @@ public:
     void testCreateDocxAnnotation();
     void testTdf113790();
     void testTdf115013();
+    void testTdf115132();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -371,6 +372,7 @@ public:
     CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST(testTdf113790);
     CPPUNIT_TEST(testTdf115013);
+    CPPUNIT_TEST(testTdf115132);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4694,6 +4696,62 @@ void SwUiWriterTest::testTdf115013()
     CPPUNIT_ASSERT_EQUAL(sColumnName, sColumn);
 
     utl::removeTree(aWorkDir);
+}
+
+void SwUiWriterTest::testTdf115132()
+{
+    SwDoc* pDoc = createDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    std::vector<OUString> vTestTableNames;
+
+    // Create an empty paragraph that will separate first table from the rest
+    pWrtShell->SplitNode();
+    pWrtShell->SttDoc();
+    // Create a table at the start of document body
+    SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
+    const SwTable* pTable = &pWrtShell->InsertTable(TableOpt, 2, 3);
+    const SwTableFormat* pFormat = pTable->GetFrameFormat();
+    CPPUNIT_ASSERT(pFormat);
+    vTestTableNames.push_back(pFormat->GetName());
+    pWrtShell->EndDoc();
+    // Create a table after a paragraph
+    pTable = &pWrtShell->InsertTable(TableOpt, 2, 3);
+    pFormat = pTable->GetFrameFormat();
+    CPPUNIT_ASSERT(pFormat);
+    vTestTableNames.push_back(pFormat->GetName());
+    // Create a table immediately after the previous
+    pTable = &pWrtShell->InsertTable(TableOpt, 2, 3);
+    pFormat = pTable->GetFrameFormat();
+    CPPUNIT_ASSERT(pFormat);
+    vTestTableNames.push_back(pFormat->GetName());
+    // Create a nested table in the middle of last row
+    pWrtShell->GotoTable(vTestTableNames.back());
+    for (int i = 0; i < 4; ++i)
+        pWrtShell->GoNextCell(false);
+    pTable = &pWrtShell->InsertTable(TableOpt, 2, 3);
+    pFormat = pTable->GetFrameFormat();
+    CPPUNIT_ASSERT(pFormat);
+    vTestTableNames.push_back(pFormat->GetName());
+
+    // Now check that in any cell in all tables we don't go out of a cell
+    // using Delete or Backspace. We test cases when a table is the first node;
+    // when we are in a first/middle/last cell in a row; when there's a paragraph
+    // before/after this cell; when there's another table before/after this cell;
+    // in nested table.
+    for (const auto& rTableName : vTestTableNames)
+    {
+        pWrtShell->GotoTable(rTableName);
+        do {
+            const SwStartNode* pNd = pWrtShell->GetSwCursor()->GetNode().FindTableBoxStartNode();
+            pWrtShell->DelRight();
+            CPPUNIT_ASSERT_EQUAL(pNd, pWrtShell->GetSwCursor()->GetNode().FindTableBoxStartNode());
+            pWrtShell->DelLeft();
+            CPPUNIT_ASSERT_EQUAL(pNd, pWrtShell->GetSwCursor()->GetNode().FindTableBoxStartNode());
+        } while (pWrtShell->GoNextCell(false));
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
