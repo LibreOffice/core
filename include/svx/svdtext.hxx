@@ -23,6 +23,7 @@
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 #include <tools/weakbase.hxx>
+#include <memory>
 
 
 class OutlinerParaObject;
@@ -73,7 +74,7 @@ protected:
     virtual SfxStyleSheet* GetStyleSheet() const;
 
 private:
-    OutlinerParaObject* mpOutlinerParaObject;
+    std::unique_ptr<OutlinerParaObject> mpOutlinerParaObject;
     SdrTextObj& mrObject;
     SdrModel* mpModel;
     bool mbPortionInfoChecked;

@@ -40,7 +40,6 @@ SdrText::SdrText( SdrTextObj& rObject, OutlinerParaObject* pOutlinerParaObject /
 SdrText::~SdrText()
 {
     clearWeak();
-    delete mpOutlinerParaObject;
 }
 
 void SdrText::CheckPortionInfo( SdrOutliner& rOutliner )
@@ -57,8 +56,7 @@ void SdrText::CheckPortionInfo( SdrOutliner& rOutliner )
         if(mpOutlinerParaObject!=nullptr && rOutliner.ShouldCreateBigTextObject())
         {
             // #i102062# MemoryLeak closed
-            delete mpOutlinerParaObject;
-            mpOutlinerParaObject = rOutliner.CreateParaObject();
+            mpOutlinerParaObject.reset( rOutliner.CreateParaObject() );
         }
     }
 }
@@ -76,19 +74,17 @@ const SfxItemSet& SdrText::GetItemSet() const
 
 void SdrText::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
 {
-    if( mpOutlinerParaObject != pTextObject )
+    if( mpOutlinerParaObject.get() != pTextObject )
     {
         if( mpModel )
         {
             // Update HitTestOutliner
             const SdrTextObj* pTestObj = mpModel->GetHitTestOutliner().GetTextObj();
-            if( pTestObj && pTestObj->GetOutlinerParaObject() == mpOutlinerParaObject )
+            if( pTestObj && pTestObj->GetOutlinerParaObject() == mpOutlinerParaObject.get() )
                 mpModel->GetHitTestOutliner().SetTextObj( nullptr );
         }
 
-        delete mpOutlinerParaObject;
-
-        mpOutlinerParaObject = pTextObject;
+        mpOutlinerParaObject.reset(pTextObject);
 
         mbPortionInfoChecked = false;
     }
@@ -96,7 +92,7 @@ void SdrText::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
 
 OutlinerParaObject* SdrText::GetOutlinerParaObject() const
 {
-    return mpOutlinerParaObject;
+    return mpOutlinerParaObject.get();
 }
 
 /** returns the current OutlinerParaObject and removes it from this instance */
@@ -106,13 +102,12 @@ OutlinerParaObject* SdrText::RemoveOutlinerParaObject()
     {
         // Update HitTestOutliner
         const SdrTextObj* pTestObj = mpModel->GetHitTestOutliner().GetTextObj();
-        if( pTestObj && pTestObj->GetOutlinerParaObject() == mpOutlinerParaObject )
+        if( pTestObj && pTestObj->GetOutlinerParaObject() == mpOutlinerParaObject.get() )
             mpModel->GetHitTestOutliner().SetTextObj( nullptr );
     }
 
-    OutlinerParaObject* pOPO = mpOutlinerParaObject;
+    OutlinerParaObject* pOPO = mpOutlinerParaObject.release();
 
-    mpOutlinerParaObject = nullptr;
     mbPortionInfoChecked = false;
 
     return pOPO;
@@ -151,8 +146,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
     // now use the Outliner, etc. so the above SetAttr can work at all
     SdrOutliner& rOutliner = mrObject.ImpGetDrawOutliner();
     rOutliner.SetText(*mpOutlinerParaObject);
-    delete mpOutlinerParaObject;
-    mpOutlinerParaObject=nullptr;
+    mpOutlinerParaObject.reset();
     if (bScaleUnitChanged)
     {
         Fraction aMetricFactor=GetMapFactor(aOldUnit,aNewUnit).X();
