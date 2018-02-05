@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_TEXTCHAINFLOW_HXX
 
 #include <svx/textchain.hxx>
+#include <memory>
 
 class SdrTextObj;
 class SdrOutliner;
@@ -56,8 +57,8 @@ protected:
     ESelection maOverflowPosSel;
     ESelection maPostChainingSel;
 
-    OFlowChainedText *mpOverflChText;
-    UFlowChainedText *mpUnderflChText;
+    std::unique_ptr<OFlowChainedText> mpOverflChText;
+    std::unique_ptr<UFlowChainedText> mpUnderflChText;
 
     void impCheckForFlowEvents(SdrOutliner *, SdrOutliner *);
 

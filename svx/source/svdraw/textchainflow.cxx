@@ -46,8 +46,8 @@ TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)
 
 TextChainFlow::~TextChainFlow()
 {
-    delete mpOverflChText;
-    delete mpUnderflChText;
+    mpOverflChText.reset();
+    mpUnderflChText.reset();
 }
 
 void TextChainFlow::impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *)
@@ -91,14 +91,14 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
     // If we had an underflow before we have to deep merge paras anyway
     bool bMustMergeParaOF = bMustMergeParaAmongLinks || mbOFisUFinduced;
 
-    mpOverflChText = bOverflow ?
+    mpOverflChText.reset( bOverflow ?
                      new OFlowChainedText(pFlowOutl, bMustMergeParaOF) :
-                     nullptr;
+                     nullptr );
 
     // Set current underflowing text (if any)
-    mpUnderflChText = bUnderflow ?
+    mpUnderflChText.reset( bUnderflow ?
                       new UFlowChainedText(pFlowOutl, bMustMergeParaAmongLinks) :
-                      nullptr;
+                      nullptr );
 
     // Reset update mode // Reset it here because we use WriteRTF (needing updatemode = true) in the two constructors above
     if (!bOldUpdateMode) // Reset only if the old value was false
