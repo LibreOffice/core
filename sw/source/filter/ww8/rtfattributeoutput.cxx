@@ -2229,8 +2229,7 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
 
     const char* pUpDn;
 
-    SwTwips nH
-        = static_cast<const SvxFontHeightItem&>(m_rExport.GetItem(RES_CHRATR_FONTSIZE)).GetHeight();
+    SwTwips nH = m_rExport.GetItem(RES_CHRATR_FONTSIZE).GetHeight();
 
     if (0 < rEscapement.GetEsc())
         pUpDn = OOO_STRING_SVTOOLS_RTF_UP;
@@ -2752,7 +2751,7 @@ void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
     // Tabs are absolute by default.
     if (m_rExport.m_pDoc->getIDocumentSettingAccess().get(
             DocumentSettingId::TABS_RELATIVE_TO_INDENT))
-        nOffset = static_cast<const SvxLRSpaceItem&>(m_rExport.GetItem(RES_LR_SPACE)).GetTextLeft();
+        nOffset = m_rExport.GetItem(RES_LR_SPACE).GetTextLeft();
 
     for (sal_uInt16 n = 0; n < rTabStop.Count(); n++)
     {

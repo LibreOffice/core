@@ -612,6 +612,10 @@ public:
     }
 
     const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const;
+    template<class T> const T& GetItem( TypedWhichId<T> nWhich ) const
+    {
+        return static_cast<const T&>(GetItem(sal_uInt16(nWhich)));
+    }
 
     /// Find the reference.
     bool HasRefToObject( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo );
@@ -1405,7 +1409,7 @@ public:
 
     virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const = 0;
     virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const = 0;
-};
+ };
 
 /// Used to export formatted text associated to drawings.
 class MSWord_SdrAttrIter : public MSWordAttrIter

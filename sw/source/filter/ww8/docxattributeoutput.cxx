@@ -6757,7 +6757,7 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
         m_pSerializer->singleElementNS( XML_w, XML_vertAlign,
            FSNS( XML_w, XML_val ), sIss.getStr(), FSEND );
 
-    const SvxFontHeightItem& rItem = static_cast<const SvxFontHeightItem&>(m_rExport.GetItem(RES_CHRATR_FONTSIZE));
+    const SvxFontHeightItem& rItem = m_rExport.GetItem(RES_CHRATR_FONTSIZE);
     if (sIss.isEmpty() || sIss.match(OString("baseline")))
     {
         long nHeight = rItem.GetHeight();
