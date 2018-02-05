@@ -32,8 +32,10 @@ class SwDoc;
 
 class SW_DLLPUBLIC SwEndNoteInfo : public SwClient
 {
+    mutable SwMultiDepend aDepends;
+    mutable SwCharFormat* pAnchorFormat;
     SwDepend    aPageDescDep;
-    SwDepend    aCharFormatDep, aAnchorCharFormatDep;
+    SwDepend    aCharFormatDep;
     OUString sPrefix;
     OUString sSuffix;
 protected:
@@ -57,8 +59,8 @@ public:
     SwClient   *GetCharFormatDep() const { return const_cast<SwClient*>(static_cast<SwClient const *>(&aCharFormatDep)); }
 
     SwCharFormat* GetAnchorCharFormat(SwDoc &rDoc) const;
-    void SetAnchorCharFormat( SwCharFormat* );
-    SwClient   *GetAnchorCharFormatDep() const { return const_cast<SwClient*>(static_cast<SwClient const *>(&aAnchorCharFormatDep)); }
+    void SetAnchorCharFormat(SwCharFormat*);
+    SwCharFormat* GetCurrentCharFormat(const bool bAnchor) const;
 
     SwEndNoteInfo & operator=(const SwEndNoteInfo&);
     bool operator==( const SwEndNoteInfo &rInf ) const;

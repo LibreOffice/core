@@ -42,7 +42,9 @@ SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
     StartListeningToSameModifyAs(rInfo);
     aPageDescDep.StartListeningToSameModifyAs(rInfo.aPageDescDep);
     aCharFormatDep.StartListeningToSameModifyAs(rInfo.aCharFormatDep);
-    aAnchorCharFormatDep.StartListeningToSameModifyAs(rInfo.aAnchorCharFormatDep);
+    pAnchorFormat = rInfo.pAnchorFormat;
+    aDepends.EndListeningAll();
+    aDepends.StartListening(pAnchorFormat);
 
     aFormat = rInfo.aFormat;
     nFootnoteOffset = rInfo.nFootnoteOffset;
@@ -58,8 +60,7 @@ bool SwEndNoteInfo::operator==( const SwEndNoteInfo& rInfo ) const
                                 rInfo.aPageDescDep.GetRegisteredIn() &&
             aCharFormatDep.GetRegisteredIn() ==
                                 rInfo.aCharFormatDep.GetRegisteredIn() &&
-            aAnchorCharFormatDep.GetRegisteredIn() ==
-                                rInfo.aAnchorCharFormatDep.GetRegisteredIn() &&
+            pAnchorFormat == rInfo.pAnchorFormat &&
             GetFootnoteTextColl() == rInfo.GetFootnoteTextColl() &&
             aFormat.GetNumberingType() == rInfo.aFormat.GetNumberingType() &&
             nFootnoteOffset == rInfo.nFootnoteOffset &&
@@ -70,9 +71,10 @@ bool SwEndNoteInfo::operator==( const SwEndNoteInfo& rInfo ) const
 
 SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
     SwClient( rInfo.GetFootnoteTextColl() ),
+    aDepends(*this),
+    pAnchorFormat(rInfo.pAnchorFormat),
     aPageDescDep( this, nullptr ),
     aCharFormatDep( this, nullptr ),
-    aAnchorCharFormatDep( this, nullptr ),
     sPrefix( rInfo.sPrefix ),
     sSuffix( rInfo.sSuffix ),
     m_bEndNote( true ),
@@ -81,14 +83,15 @@ SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
 {
     aPageDescDep.StartListeningToSameModifyAs(rInfo.aPageDescDep);
     aCharFormatDep.StartListeningToSameModifyAs(rInfo.aCharFormatDep);
-    aAnchorCharFormatDep.StartListeningToSameModifyAs(rInfo.aAnchorCharFormatDep);
+    aDepends.StartListening(pAnchorFormat);
 }
 
 SwEndNoteInfo::SwEndNoteInfo() :
     SwClient(nullptr),
+    aDepends(*this),
+    pAnchorFormat(nullptr),
     aPageDescDep( this, nullptr ),
     aCharFormatDep( this, nullptr ),
-    aAnchorCharFormatDep( this, nullptr ),
     m_bEndNote( true ),
     nFootnoteOffset( 0 )
 {
@@ -144,22 +147,30 @@ void SwEndNoteInfo::SetCharFormat( SwCharFormat* pChFormat )
     pChFormat->Add( &static_cast<SwClient&>(aCharFormatDep) );
 }
 
-SwCharFormat* SwEndNoteInfo::GetAnchorCharFormat(SwDoc &rDoc) const
+SwCharFormat* SwEndNoteInfo::GetAnchorCharFormat(SwDoc& rDoc) const
 {
-    if( !aAnchorCharFormatDep.GetRegisteredIn() )
+    if(!pAnchorFormat)
     {
-        SwCharFormat* pFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( static_cast<sal_uInt16>(
+        pAnchorFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( static_cast<sal_uInt16>(
             m_bEndNote ? RES_POOLCHR_ENDNOTE_ANCHOR : RES_POOLCHR_FOOTNOTE_ANCHOR ) );
-        pFormat->Add( &const_cast<SwClient&>(static_cast<const SwClient&>(aAnchorCharFormatDep)) );
+        aDepends.StartListening(pAnchorFormat);
     }
-    return const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(aAnchorCharFormatDep.GetRegisteredIn()));
+    return pAnchorFormat;
 }
 
-void SwEndNoteInfo::SetAnchorCharFormat( SwCharFormat* pChFormat )
+void SwEndNoteInfo::SetAnchorCharFormat(SwCharFormat* pFormat)
 {
-    OSL_ENSURE(pChFormat, "no CharFormat?");
-    pChFormat->Add( &static_cast<SwClient&>(aAnchorCharFormatDep) );
+    pAnchorFormat = pFormat;
+    aDepends.StartListening(pAnchorFormat);
 }
+
+SwCharFormat* SwEndNoteInfo::GetCurrentCharFormat(const bool bAnchor) const
+{
+    return bAnchor
+        ? pAnchorFormat
+        : const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(aCharFormatDep.GetRegisteredIn()));
+}
+
 
 void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
@@ -172,7 +183,7 @@ void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         if( aCharFormatDep.GetRegisteredIn() )
             pDoc = static_cast<SwFormat*>(aCharFormatDep.GetRegisteredIn())->GetDoc();
         else
-            pDoc = static_cast<SwFormat*>(aAnchorCharFormatDep.GetRegisteredIn())->GetDoc();
+            pDoc = pAnchorFormat->GetDoc();
         SwFootnoteIdxs& rFootnoteIdxs = pDoc->GetFootnoteIdxs();
         for( size_t nPos = 0; nPos < rFootnoteIdxs.size(); ++nPos )
         {
