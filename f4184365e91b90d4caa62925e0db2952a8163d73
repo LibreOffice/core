@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_4f04a87d",
+        "filename": "package/source/zippackage/ZipPackage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-02-05T13:14:17Z",
+      "side": 1,
+      "message": "We don\u0027t comment out code. Remove the code and the old code will still be in the repository.",
+      "revId": "f4184365e91b90d4caa62925e0db2952a8163d73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
