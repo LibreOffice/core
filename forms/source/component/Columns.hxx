@@ -196,10 +196,8 @@ DECL_COLUMN(ComboBoxColumn)
 DECL_COLUMN(ListBoxColumn)
 DECL_COLUMN(FormattedFieldColumn)
 
-#endif // INCLUDED_FORMS_SOURCE_COMPONENT_COLUMNS_HXX
-
-
 }   // namespace frm
 
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_COLUMNS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

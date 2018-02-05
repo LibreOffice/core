@@ -65,10 +65,8 @@ protected:
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
 };
 
-#endif // INCLUDED_FORMS_SOURCE_COMPONENT_HIDDEN_HXX
-
-
 }
 
+#endif // INCLUDED_FORMS_SOURCE_COMPONENT_HIDDEN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
