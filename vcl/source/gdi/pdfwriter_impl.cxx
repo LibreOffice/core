@@ -505,8 +505,8 @@ void doTestCode()
 }
 #endif
 
-static const sal_Int32 nLog10Divisor = 1;
-static const double fDivisor = 10.0;
+static const sal_Int32 nLog10Divisor = 3;
+static const double fDivisor = 1000.0;
 
 static inline double pixelToPoint( double px ) { return px/fDivisor; }
 static inline sal_Int32 pointToPixel( double pt ) { return sal_Int32(pt*fDivisor); }
@@ -837,14 +837,21 @@ static void appendFixedInt( sal_Int32 nValue, OStringBuffer& rBuffer )
         rBuffer.append( '-' );
         nValue = -nValue;
     }
-    const sal_Int32 nFactor = 10;
-    const sal_Int32 nInt = nValue / nFactor;
+    sal_Int32 nFactor = 1, nDiv = nLog10Divisor;
+    while( nDiv-- )
+        nFactor *= 10;
+
+    sal_Int32 nInt = nValue / nFactor;
     rBuffer.append( nInt );
-    sal_Int32 nDecimal  = nValue % nFactor;
-    if (nDecimal)
+    if (nFactor > 1 && nValue % nFactor)
     {
-        rBuffer.append('.');
-        rBuffer.append(nDecimal);
+        rBuffer.append( '.' );
+        do
+        {
+            nFactor /= 10;
+            rBuffer.append((nValue / nFactor) % 10);
+        }
+        while (nFactor > 1 && nValue % nFactor); // omit trailing zeros
     }
 }
 
