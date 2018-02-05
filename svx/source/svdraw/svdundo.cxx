@@ -1032,15 +1032,15 @@ SdrUndoObjSetText::SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText)
 {
     SdrText* pText = static_cast< SdrTextObj*>( &rNewObj )->getText(mnText);
     if( pText && pText->GetOutlinerParaObject() )
-        pOldText = new OutlinerParaObject(*pText->GetOutlinerParaObject());
+        pOldText.reset( new OutlinerParaObject(*pText->GetOutlinerParaObject()) );
 
     bEmptyPresObj = rNewObj.IsEmptyPresObj();
 }
 
 SdrUndoObjSetText::~SdrUndoObjSetText()
 {
-    delete pOldText;
-    delete pNewText;
+    pOldText.reset();
+    pNewText.reset();
 }
 
 void SdrUndoObjSetText::AfterSetText()
@@ -1049,7 +1049,7 @@ void SdrUndoObjSetText::AfterSetText()
     {
         SdrText* pText = static_cast< SdrTextObj*>( pObj )->getText(mnText);
         if( pText && pText->GetOutlinerParaObject() )
-            pNewText = new OutlinerParaObject(*pText->GetOutlinerParaObject());
+            pNewText.reset( new OutlinerParaObject(*pText->GetOutlinerParaObject()) );
         bNewTextAvailable=true;
     }
 }
@@ -1172,7 +1172,7 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
                 if( bUndo )
                     rView.AddUndo(new SdrUndoObjSetText(*pTextObj,0));
 
-                OutlinerParaObject* pText1=pNewText;
+                OutlinerParaObject* pText1=pNewText.get();
                 if (pText1!=nullptr)
                     pText1 = new OutlinerParaObject(*pText1);
                 pTextObj->SetOutlinerParaObject(pText1);
