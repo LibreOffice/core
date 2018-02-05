@@ -225,8 +225,8 @@ sdr::properties::BaseProperties& SdrObject::GetProperties() const
 {
     if(!mpProperties)
     {
-        const_cast< SdrObject* >(this)->mpProperties =
-            const_cast< SdrObject* >(this)->CreateObjectSpecificProperties();
+        const_cast< SdrObject* >(this)->mpProperties.reset(
+            const_cast< SdrObject* >(this)->CreateObjectSpecificProperties() );
     }
 
     return *mpProperties;
@@ -262,8 +262,8 @@ sdr::contact::ViewContact& SdrObject::GetViewContact() const
 {
     if(!mpViewContact)
     {
-        const_cast< SdrObject* >(this)->mpViewContact =
-            const_cast< SdrObject* >(this)->CreateObjectSpecificViewContact();
+        const_cast< SdrObject* >(this)->mpViewContact.reset(
+            const_cast< SdrObject* >(this)->CreateObjectSpecificViewContact() );
     }
 
     return *mpViewContact;
@@ -358,21 +358,11 @@ SdrObject::~SdrObject()
     }
 
     SendUserCall(SdrUserCallType::Delete, GetLastBoundRect());
-    delete pPlusData;
+    pPlusData.reset();
 
-    delete pGrabBagItem;
-
-    if(mpProperties)
-    {
-        delete mpProperties;
-        mpProperties = nullptr;
-    }
-
-    if(mpViewContact)
-    {
-        delete mpViewContact;
-        mpViewContact = nullptr;
-    }
+    pGrabBagItem.reset();
+    mpProperties.reset();
+    mpViewContact.reset();
 }
 
 void SdrObject::Free( SdrObject*& _rpObject )
@@ -792,7 +782,7 @@ void SdrObject::GetGrabBagItem(css::uno::Any& rVal) const
 void SdrObject::SetGrabBagItem(const css::uno::Any& rVal)
 {
     if (pGrabBagItem == nullptr)
-        pGrabBagItem = new SfxGrabBagItem;
+        pGrabBagItem.reset(new SfxGrabBagItem);
 
     pGrabBagItem->PutValue(rVal, 0);
 
@@ -947,22 +937,13 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
     if( this == &rObj )
         return *this;
 
-    if(mpProperties)
-    {
-        delete mpProperties;
-        mpProperties = nullptr;
-    }
-
-    if(mpViewContact)
-    {
-        delete mpViewContact;
-        mpViewContact = nullptr;
-    }
+    mpProperties.reset();
+    mpViewContact.reset();
 
     // The Clone() method uses the local copy constructor from the individual
     // sdr::properties::BaseProperties class. Since the target class maybe for another
     // draw object, an SdrObject needs to be provided, as in the normal constructor.
-    mpProperties = &rObj.GetProperties().Clone(*this);
+    mpProperties.reset( &rObj.GetProperties().Clone(*this) );
 
     pModel  =rObj.pModel;
     pPage = rObj.pPage;
@@ -979,19 +960,17 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
     bNotVisibleAsMaster=rObj.bNotVisibleAsMaster;
     bSnapRectDirty=true;
     bNotMasterCachable=rObj.bNotMasterCachable;
-    delete pPlusData;
-    pPlusData=nullptr;
+    pPlusData.reset();
     if (rObj.pPlusData!=nullptr) {
-        pPlusData=rObj.pPlusData->Clone(this);
+        pPlusData.reset(rObj.pPlusData->Clone(this));
     }
     if (pPlusData!=nullptr && pPlusData->pBroadcast!=nullptr) {
         pPlusData->pBroadcast.reset(); // broadcaster isn't copied
     }
 
-    delete pGrabBagItem;
-    pGrabBagItem=nullptr;
+    pGrabBagItem.reset();
     if (rObj.pGrabBagItem!=nullptr)
-        pGrabBagItem=static_cast< SfxGrabBagItem* >( rObj.pGrabBagItem->Clone() );
+        pGrabBagItem.reset(static_cast< SfxGrabBagItem* >( rObj.pGrabBagItem->Clone() ));
 
     aGridOffset = rObj.aGridOffset;
     return *this;
@@ -1037,7 +1016,7 @@ void SdrObject::ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr) c
 void SdrObject::ImpForcePlusData()
 {
     if (!pPlusData)
-        pPlusData = new SdrObjPlusData;
+        pPlusData.reset( new SdrObjPlusData );
 }
 
 OUString SdrObject::GetAngleStr(long nAngle) const
