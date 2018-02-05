@@ -33,9 +33,9 @@ class SwDoc;
 class SW_DLLPUBLIC SwEndNoteInfo : public SwClient
 {
     mutable SwMultiDepend aDepends;
+    mutable SwPageDesc* pPageDesc;
     mutable SwCharFormat* pCharFormat;
     mutable SwCharFormat* pAnchorFormat;
-    SwDepend    aPageDescDep;
     OUString sPrefix;
     OUString sSuffix;
 protected:
@@ -46,10 +46,10 @@ public:
     SvxNumberType aFormat;
     sal_uInt16    nFootnoteOffset;
 
-    void        ChgPageDesc( SwPageDesc *pDesc );
-    SwPageDesc* GetPageDesc( SwDoc &rDoc ) const;
-    bool        KnowsPageDesc() const;
-    bool        DependsOn( const SwPageDesc* ) const;
+    void ChgPageDesc(SwPageDesc* pDesc);
+    SwPageDesc* GetPageDesc(SwDoc& rDoc) const;
+    bool KnowsPageDesc() const;
+    bool DependsOn(const SwPageDesc*) const;
 
     void SetFootnoteTextColl(SwTextFormatColl& rColl);
     SwTextFormatColl* GetFootnoteTextColl() const { return const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(GetRegisteredIn())); } // can be 0.

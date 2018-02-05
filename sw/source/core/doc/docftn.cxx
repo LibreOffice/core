@@ -40,10 +40,11 @@
 SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 {
     StartListeningToSameModifyAs(rInfo);
-    aPageDescDep.StartListeningToSameModifyAs(rInfo.aPageDescDep);
+    pPageDesc = rInfo.pPageDesc;
     pCharFormat = rInfo.pCharFormat;
     pAnchorFormat = rInfo.pAnchorFormat;
     aDepends.EndListeningAll();
+    aDepends.StartListening(pPageDesc);
     aDepends.StartListening(pCharFormat);
     aDepends.StartListening(pAnchorFormat);
 
@@ -57,8 +58,8 @@ SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 
 bool SwEndNoteInfo::operator==( const SwEndNoteInfo& rInfo ) const
 {
-    return  aPageDescDep.GetRegisteredIn() ==
-                                rInfo.aPageDescDep.GetRegisteredIn() &&
+    return
+            pPageDesc == rInfo.pPageDesc &&
             pCharFormat == rInfo.pCharFormat &&
             pAnchorFormat == rInfo.pAnchorFormat &&
             GetFootnoteTextColl() == rInfo.GetFootnoteTextColl() &&
@@ -72,16 +73,16 @@ bool SwEndNoteInfo::operator==( const SwEndNoteInfo& rInfo ) const
 SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
     SwClient( rInfo.GetFootnoteTextColl() ),
     aDepends(*this),
+    pPageDesc(rInfo.pPageDesc),
     pCharFormat(rInfo.pCharFormat),
     pAnchorFormat(rInfo.pAnchorFormat),
-    aPageDescDep( this, nullptr ),
     sPrefix( rInfo.sPrefix ),
     sSuffix( rInfo.sSuffix ),
     m_bEndNote( true ),
     aFormat( rInfo.aFormat ),
     nFootnoteOffset( rInfo.nFootnoteOffset )
 {
-    aPageDescDep.StartListeningToSameModifyAs(rInfo.aPageDescDep);
+    aDepends.StartListening(pPageDesc);
     aDepends.StartListening(pCharFormat);
     aDepends.StartListening(pAnchorFormat);
 }
@@ -89,40 +90,41 @@ SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
 SwEndNoteInfo::SwEndNoteInfo() :
     SwClient(nullptr),
     aDepends(*this),
+    pPageDesc(nullptr),
     pCharFormat(nullptr),
     pAnchorFormat(nullptr),
-    aPageDescDep( this, nullptr ),
     m_bEndNote( true ),
     nFootnoteOffset( 0 )
 {
     aFormat.SetNumberingType(SVX_NUM_ROMAN_LOWER);
 }
 
-SwPageDesc *SwEndNoteInfo::GetPageDesc( SwDoc &rDoc ) const
+SwPageDesc* SwEndNoteInfo::GetPageDesc(SwDoc& rDoc) const
 {
-    if ( !aPageDescDep.GetRegisteredIn() )
+    if(!pPageDesc)
     {
-        SwPageDesc *pDesc = rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( static_cast<sal_uInt16>(
-            m_bEndNote ? RES_POOLPAGE_ENDNOTE   : RES_POOLPAGE_FOOTNOTE ) );
-        pDesc->Add( &const_cast<SwClient&>(static_cast<const SwClient&>(aPageDescDep)) );
+        pPageDesc = rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( static_cast<sal_uInt16>(
+            m_bEndNote ? RES_POOLPAGE_ENDNOTE : RES_POOLPAGE_FOOTNOTE ) );
+        aDepends.StartListening(pPageDesc);
     }
-
-    return const_cast<SwPageDesc*>(static_cast<const SwPageDesc*>( aPageDescDep.GetRegisteredIn() ));
+    return pPageDesc;
 }
 
 bool SwEndNoteInfo::KnowsPageDesc() const
 {
-    return (aPageDescDep.GetRegisteredIn() != nullptr);
+    return pPageDesc != nullptr;
 }
 
-bool SwEndNoteInfo::DependsOn( const SwPageDesc* pDesc ) const
+bool SwEndNoteInfo::DependsOn(const SwPageDesc* pDesc) const
 {
-    return ( aPageDescDep.GetRegisteredIn() == pDesc );
+    return pPageDesc == pDesc;
 }
 
-void SwEndNoteInfo::ChgPageDesc( SwPageDesc *pDesc )
+void SwEndNoteInfo::ChgPageDesc(SwPageDesc* pDesc)
 {
-    pDesc->Add( &static_cast<SwClient&>(aPageDescDep) );
+    aDepends.EndListening(pPageDesc);
+    pPageDesc = pDesc;
+    aDepends.StartListening(pPageDesc);
 }
 
 void SwEndNoteInfo::SetFootnoteTextColl(SwTextFormatColl& rFormat)
@@ -201,6 +203,8 @@ void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
             pAnchorFormat = const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(pModifyChangedHint->m_pNew));
         else if(pCharFormat == &rModify)
             pAnchorFormat = const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(pModifyChangedHint->m_pNew));
+        else if(pPageDesc == &rModify)
+            pPageDesc = const_cast<SwPageDesc*>(static_cast<const SwPageDesc*>(pModifyChangedHint->m_pNew));
     }
 }
 
