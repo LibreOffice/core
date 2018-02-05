@@ -670,8 +670,14 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (m_aStates.top().eDestination == Destination::LISTOVERRIDEENTRY)
                 m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_AbstractNum_nsid, pIntValue);
             else
+            {
+                // Insert at the start, so properties inherited from the list
+                // can be overriden by direct formatting. But still allow the
+                // case when old-style paragraph numbering is already
+                // tokenized.
                 putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_numPr,
-                              NS_ooxml::LN_CT_NumPr_numId, pIntValue);
+                              NS_ooxml::LN_CT_NumPr_numId, pIntValue, RTFOverwrite::YES_PREPEND);
+            }
         }
         break;
         case RTF_UC:
