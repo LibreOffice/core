@@ -94,8 +94,8 @@ private:
     OUString aFileName; // If it's a Link, the filename can be found in here
     OUString aReferer;
     OUString aFilterName;
-    GraphicObject* pGraphic; // In order to speed up output of bitmaps, especially rotated ones
-    GraphicObject* mpReplacementGraphic;
+    std::unique_ptr<GraphicObject> mpGraphicObject; // In order to speed up output of bitmaps, especially rotated ones
+    std::unique_ptr<GraphicObject> mpReplacementGraphicObject;
     SdrGraphicLink* pGraphicLink; // And here a pointer for linked graphics
     bool bMirrored:1; // True: the graphic is horizontal, which means it's mirrored along the y-axis
 
