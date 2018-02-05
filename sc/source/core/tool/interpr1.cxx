@@ -7149,7 +7149,9 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
             }
         }
         break;
-        case svMatrix :
+        case svExternalDoubleRef:
+        case svExternalSingleRef:
+        case svMatrix:
         {
             svl::SharedString aStr;
             const ScMatValType nType = GetDoubleOrStringFromMatrix(rItem.mfVal, aStr);
@@ -7166,6 +7168,7 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
     } // switch ( GetStackType() )
     return true;
 }
+
 void ScInterpreter::ScVLookup()
 {
     CalculateLookup(false);
