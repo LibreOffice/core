@@ -14,6 +14,7 @@ IOSRES  = $(IOSGEN)/resources
 IOSDIRS = $(IOSGEN) \
 	       $(IOSGEN)/Debug_x86_64 \
 	       $(IOSGEN)/Debug_arm64 \
+	       $(IOSGEN)/Release_x86_64 \
 	       $(IOSGEN)/Release_arm64 \
 	  $(IOSRES) \
 	       $(IOSRES)/services \
