@@ -27,6 +27,7 @@
 #include <tools/fract.hxx>
 #include <vcl/outdev.hxx>
 #include <svx/svdobj.hxx>
+#include <memory>
 
 
 /**
@@ -162,7 +163,7 @@ class OLEObjCache
     std::vector<SdrOle2Obj*> maObjs;
 
     size_t         nSize;
-    AutoTimer*          pTimer;
+    std::unique_ptr<AutoTimer>  pTimer;
 
     static bool UnloadObj( SdrOle2Obj* pObj );
     DECL_LINK( UnloadCheckHdl, Timer*, void );
