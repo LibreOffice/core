@@ -29,9 +29,6 @@
 
 using namespace std;
 
-/**
-@author Jocelyn Merand
-*/
 class SimpleGuesser final {
 public:
     /**inits the object with conf file "./conf.txt"*/
