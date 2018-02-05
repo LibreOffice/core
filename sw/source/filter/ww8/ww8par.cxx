@@ -2418,7 +2418,7 @@ bool SwWW8ImplReader::SetSpacing(SwPaM &rMyPam, int nSpace, bool bIsUpper )
         bool bRet = false;
         const SwPosition* pSpacingPos = rMyPam.GetPoint();
 
-        const SvxULSpaceItem* pULSpaceItem = static_cast<const SvxULSpaceItem*>(m_xCtrlStck->GetFormatAttr(*pSpacingPos, RES_UL_SPACE));
+        const SvxULSpaceItem* pULSpaceItem = m_xCtrlStck->GetFormatAttr(*pSpacingPos, RES_UL_SPACE);
 
         if(pULSpaceItem != nullptr)
         {

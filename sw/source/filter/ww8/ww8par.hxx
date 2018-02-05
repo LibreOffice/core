@@ -408,6 +408,10 @@ public:
     void SetToggleBiDiAttrFlags(sal_uInt16 nFlags) {nToggleBiDiAttrFlags = nFlags;}
 
     const SfxPoolItem* GetFormatAttr(const SwPosition& rPos, sal_uInt16 nWhich);
+    template<class T> const T* GetFormatAttr( const SwPosition& rPos, TypedWhichId<T> nWhich )
+    {
+        return static_cast<const T*>(GetFormatAttr(rPos, sal_uInt16(nWhich)));
+    }
     const SfxPoolItem* GetStackAttr(const SwPosition& rPos, sal_uInt16 nWhich);
 };
 

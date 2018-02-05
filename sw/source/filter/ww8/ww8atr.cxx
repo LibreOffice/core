@@ -1387,8 +1387,7 @@ void WW8AttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
 
     if ( 0 == b || 0xFF == b )
     {
-        long nHeight = static_cast<const SvxFontHeightItem&>(m_rWW8Export.GetItem(
-                                    RES_CHRATR_FONTSIZE )).GetHeight();
+        long nHeight = m_rWW8Export.GetItem( RES_CHRATR_FONTSIZE ).GetHeight();
         m_rWW8Export.InsUInt16( NS_sprm::sprmCHpsPos );
 
         m_rWW8Export.InsUInt16( static_cast<short>(( nHeight * nEsc + 500 ) / 1000 ));
