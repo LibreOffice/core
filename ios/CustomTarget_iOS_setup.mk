@@ -66,6 +66,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	cp $(INSTDIR)/share/filter/oox-drawingml-cs-presets $(IOSRES)/share/filter
 	cp $(INSTDIR)/share/filter/vml-shape-types $(IOSRES)/share/filter
 	cp -R $(INSTDIR)/share/registry $(IOSRES)/share
+	cp $(INSTDIR)/share/config/*zip $(IOSRES)/share/config
 
 	# Set up rc (the "inifile", fundamentalrc, unorc, bootstraprc and versionrc.
 	(echo '[Bootstrap]' \
