@@ -777,6 +777,7 @@ namespace xmloff { namespace token {
         XML_FILL_IMAGE_REF_POINT_X,
         XML_FILL_IMAGE_REF_POINT_Y,
         XML_FILL_IMAGE_WIDTH,
+        XML_FILL_RULE,
         XML_FILTER,
         XML_FILTER_AND,
         XML_FILTER_CONDITION,
