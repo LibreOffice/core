@@ -37,6 +37,7 @@
 #include <svtools/transfer.hxx>
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 #include <vector>
 
 class DbGridControl;
@@ -64,14 +65,14 @@ enum class GridRowStatus
 class DbGridRow : public SvRefBase
 {
     css::uno::Any  m_aBookmark;        // Bookmark of the row, can be set
-    ::std::vector< ::svxform::DataColumn* >
+    ::std::vector< std::unique_ptr<::svxform::DataColumn> >
                                 m_aVariants;
     GridRowStatus               m_eStatus;
     bool                        m_bIsNew;
                                                     // row is no longer valid
                                                     // is removed on the next positioning
 public:
-    DbGridRow():m_eStatus(GridRowStatus::Clean), m_bIsNew(true) { }
+    DbGridRow();
     DbGridRow(CursorWrapper* pCur, bool bPaintCursor);
     void SetState(CursorWrapper* pCur, bool bPaintCursor);
 
