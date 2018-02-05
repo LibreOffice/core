@@ -1252,20 +1252,20 @@ bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 }
 
 SwHiddenTextFieldType::SwHiddenTextFieldType( bool bSetHidden )
-    : SwFieldType( SwFieldIds::HiddenText ), bHidden( bSetHidden )
+    : SwFieldType( SwFieldIds::HiddenText ), m_bHidden( bSetHidden )
 {
 }
 
 SwFieldType* SwHiddenTextFieldType::Copy() const
 {
-    return new SwHiddenTextFieldType( bHidden );
+    return new SwHiddenTextFieldType( m_bHidden );
 }
 
 void SwHiddenTextFieldType::SetHiddenFlag( bool bSetHidden )
 {
-    if( bHidden != bSetHidden )
+    if( m_bHidden != bSetHidden )
     {
-        bHidden = bSetHidden;
+        m_bHidden = bSetHidden;
         UpdateFields();       // notify all HiddenTexts
     }
 }
@@ -1276,26 +1276,26 @@ SwHiddenTextField::SwHiddenTextField( SwHiddenTextFieldType* pFieldType,
                                     const OUString& rStr,
                                     bool    bHidden,
                                     sal_uInt16  nSub) :
-    SwField( pFieldType ), aCond(rCond), nSubType(nSub),
-    bCanToggle(bConditional), bIsHidden(bHidden), bValid(false)
+    SwField( pFieldType ), m_aCond(rCond), m_nSubType(nSub),
+    m_bCanToggle(bConditional), m_bIsHidden(bHidden), m_bValid(false)
 {
-    if(nSubType == TYP_CONDTXTFLD)
+    if(m_nSubType == TYP_CONDTXTFLD)
     {
         sal_Int32 nPos = 0;
-        aTRUEText = rStr.getToken(0, '|', nPos);
+        m_aTRUEText = rStr.getToken(0, '|', nPos);
 
         if(nPos != -1)
         {
-            aFALSEText = rStr.getToken(0, '|', nPos);
+            m_aFALSEText = rStr.getToken(0, '|', nPos);
             if(nPos != -1)
             {
-                aContent = rStr.getToken(0, '|', nPos);
-                bValid = true;
+                m_aContent = rStr.getToken(0, '|', nPos);
+                m_bValid = true;
             }
         }
     }
     else
-        aTRUEText = rStr;
+        m_aTRUEText = rStr;
 }
 
 SwHiddenTextField::SwHiddenTextField( SwHiddenTextFieldType* pFieldType,
@@ -1303,10 +1303,10 @@ SwHiddenTextField::SwHiddenTextField( SwHiddenTextFieldType* pFieldType,
                                     const OUString& rTrue,
                                     const OUString& rFalse,
                                     sal_uInt16 nSub)
-    : SwField( pFieldType ), aTRUEText(rTrue), aFALSEText(rFalse), aCond(rCond), nSubType(nSub),
-      bIsHidden(true), bValid(false)
+    : SwField( pFieldType ), m_aTRUEText(rTrue), m_aFALSEText(rFalse), m_aCond(rCond), m_nSubType(nSub),
+      m_bIsHidden(true), m_bValid(false)
 {
-    bCanToggle = !aCond.isEmpty();
+    m_bCanToggle = !m_aCond.isEmpty();
 }
 
 OUString SwHiddenTextField::Expand() const
@@ -1314,19 +1314,19 @@ OUString SwHiddenTextField::Expand() const
     // Type: !Hidden  -> show always
     //        Hide    -> evaluate condition
 
-    if( TYP_CONDTXTFLD == nSubType )
+    if( TYP_CONDTXTFLD == m_nSubType )
     {
-        if( bValid )
-            return aContent;
+        if( m_bValid )
+            return m_aContent;
 
-        if( bCanToggle && !bIsHidden )
-            return aTRUEText;
+        if( m_bCanToggle && !m_bIsHidden )
+            return m_aTRUEText;
     }
     else if( !static_cast<SwHiddenTextFieldType*>(GetTyp())->GetHiddenFlag() ||
-        ( bCanToggle && bIsHidden ))
-        return aTRUEText;
+        ( m_bCanToggle && m_bIsHidden ))
+        return m_aTRUEText;
 
-    return aFALSEText;
+    return m_aFALSEText;
 }
 
 /// get current field value and cache it
@@ -1334,15 +1334,15 @@ void SwHiddenTextField::Evaluate(SwDoc* pDoc)
 {
     OSL_ENSURE(pDoc, "got no document");
 
-    if( TYP_CONDTXTFLD == nSubType )
+    if( TYP_CONDTXTFLD == m_nSubType )
     {
 #if !HAVE_FEATURE_DBCONNECTIVITY
         (void) pDoc;
 #else
         SwDBManager* pMgr = pDoc->GetDBManager();
 #endif
-        bValid = false;
-        OUString sTmpName = (bCanToggle && !bIsHidden) ? aTRUEText : aFALSEText;
+        m_bValid = false;
+        OUString sTmpName = (m_bCanToggle && !m_bIsHidden) ? m_aTRUEText : m_aFALSEText;
 
         // Database expressions need to be different from normal text. Therefore, normal text is set
         // in quotes. If the latter exist they will be removed. If not, check if potential DB name.
@@ -1351,8 +1351,8 @@ void SwHiddenTextField::Evaluate(SwDoc* pDoc)
             sTmpName.startsWith("\"") &&
             sTmpName.endsWith("\""))
         {
-            aContent = sTmpName.copy(1, sTmpName.getLength() - 2);
-            bValid = true;
+            m_aContent = sTmpName.copy(1, sTmpName.getLength() - 2);
+            m_bValid = true;
         }
         else if(sTmpName.indexOf('\"')<0 &&
             comphelper::string::getTokenCount(sTmpName, '.') > 2)
@@ -1374,12 +1374,12 @@ void SwHiddenTextField::Evaluate(SwDoc* pDoc)
                 {
                     double fNumber;
                     pMgr->GetMergeColumnCnt(GetColumnName( sTmpName ),
-                        GetLanguage(), aContent, &fNumber );
-                    bValid = true;
+                        GetLanguage(), m_aContent, &fNumber );
+                    m_bValid = true;
                 }
                 else if( !sDBName.isEmpty() && !sDataSource.isEmpty() &&
                          !sDataTableOrQuery.isEmpty() )
-                    bValid = true;
+                    m_bValid = true;
             }
 #endif
         }
@@ -1388,12 +1388,12 @@ void SwHiddenTextField::Evaluate(SwDoc* pDoc)
 
 OUString SwHiddenTextField::GetFieldName() const
 {
-    OUString aStr = SwFieldType::GetTypeStr(nSubType) +
-        " " + aCond + " " + aTRUEText;
+    OUString aStr = SwFieldType::GetTypeStr(m_nSubType) +
+        " " + m_aCond + " " + m_aTRUEText;
 
-    if (nSubType == TYP_CONDTXTFLD)
+    if (m_nSubType == TYP_CONDTXTFLD)
     {
-        aStr += " : " + aFALSEText;
+        aStr += " : " + m_aFALSEText;
     }
     return aStr;
 }
@@ -1401,59 +1401,59 @@ OUString SwHiddenTextField::GetFieldName() const
 SwField* SwHiddenTextField::Copy() const
 {
     SwHiddenTextField* pField =
-        new SwHiddenTextField(static_cast<SwHiddenTextFieldType*>(GetTyp()), aCond,
-                              aTRUEText, aFALSEText);
-    pField->bIsHidden = bIsHidden;
-    pField->bValid    = bValid;
-    pField->aContent  = aContent;
+        new SwHiddenTextField(static_cast<SwHiddenTextFieldType*>(GetTyp()), m_aCond,
+                              m_aTRUEText, m_aFALSEText);
+    pField->m_bIsHidden = m_bIsHidden;
+    pField->m_bValid    = m_bValid;
+    pField->m_aContent  = m_aContent;
     pField->SetFormat(GetFormat());
-    pField->nSubType  = nSubType;
+    pField->m_nSubType  = m_nSubType;
     return pField;
 }
 
 /// set condition
 void SwHiddenTextField::SetPar1(const OUString& rStr)
 {
-    aCond = rStr;
-    bCanToggle = !aCond.isEmpty();
+    m_aCond = rStr;
+    m_bCanToggle = !m_aCond.isEmpty();
 }
 
 OUString SwHiddenTextField::GetPar1() const
 {
-    return aCond;
+    return m_aCond;
 }
 
 /// set True/False text
 void SwHiddenTextField::SetPar2(const OUString& rStr)
 {
-    if (nSubType == TYP_CONDTXTFLD)
+    if (m_nSubType == TYP_CONDTXTFLD)
     {
         sal_Int32 nPos = rStr.indexOf('|');
         if (nPos == -1)
-            aTRUEText = rStr;
+            m_aTRUEText = rStr;
         else
         {
-            aTRUEText = rStr.copy(0, nPos);
-            aFALSEText = rStr.copy(nPos + 1);
+            m_aTRUEText = rStr.copy(0, nPos);
+            m_aFALSEText = rStr.copy(nPos + 1);
         }
     }
     else
-        aTRUEText = rStr;
+        m_aTRUEText = rStr;
 }
 
 /// get True/False text
 OUString SwHiddenTextField::GetPar2() const
 {
-    if(nSubType != TYP_CONDTXTFLD)
+    if(m_nSubType != TYP_CONDTXTFLD)
     {
-        return aTRUEText;
+        return m_aTRUEText;
     }
-    return aTRUEText + "|" + aFALSEText;
+    return m_aTRUEText + "|" + m_aFALSEText;
 }
 
 sal_uInt16 SwHiddenTextField::GetSubType() const
 {
-    return nSubType;
+    return m_nSubType;
 }
 
 bool SwHiddenTextField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -1461,19 +1461,19 @@ bool SwHiddenTextField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        rAny <<= aCond;
+        rAny <<= m_aCond;
         break;
     case FIELD_PROP_PAR2:
-        rAny <<= aTRUEText;
+        rAny <<= m_aTRUEText;
         break;
     case FIELD_PROP_PAR3:
-        rAny <<= aFALSEText;
+        rAny <<= m_aFALSEText;
         break;
     case FIELD_PROP_PAR4 :
-        rAny <<= aContent;
+        rAny <<= m_aContent;
         break;
     case FIELD_PROP_BOOL1:
-        rAny <<= bIsHidden;
+        rAny <<= m_bIsHidden;
         break;
     default:
         assert(false);
@@ -1493,17 +1493,17 @@ bool SwHiddenTextField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
     case FIELD_PROP_PAR2:
-        rAny >>= aTRUEText;
+        rAny >>= m_aTRUEText;
         break;
     case FIELD_PROP_PAR3:
-        rAny >>= aFALSEText;
+        rAny >>= m_aFALSEText;
         break;
     case FIELD_PROP_BOOL1:
-        bIsHidden = *o3tl::doAccess<bool>(rAny);
+        m_bIsHidden = *o3tl::doAccess<bool>(rAny);
         break;
     case FIELD_PROP_PAR4:
-        rAny >>= aContent;
-        bValid = true;
+        rAny >>= m_aContent;
+        m_bValid = true;
         break;
     default:
         assert(false);
@@ -1655,9 +1655,9 @@ SwFieldType* SwHiddenParaFieldType::Copy() const
 // field for line height 0
 
 SwHiddenParaField::SwHiddenParaField(SwHiddenParaFieldType* pTyp, const OUString& rStr)
-    : SwField(pTyp), aCond(rStr)
+    : SwField(pTyp), m_aCond(rStr)
 {
-    bIsHidden = false;
+    m_bIsHidden = false;
 }
 
 OUString SwHiddenParaField::Expand() const
@@ -1667,8 +1667,8 @@ OUString SwHiddenParaField::Expand() const
 
 SwField* SwHiddenParaField::Copy() const
 {
-    SwHiddenParaField* pField = new SwHiddenParaField(static_cast<SwHiddenParaFieldType*>(GetTyp()), aCond);
-    pField->bIsHidden = bIsHidden;
+    SwHiddenParaField* pField = new SwHiddenParaField(static_cast<SwHiddenParaFieldType*>(GetTyp()), m_aCond);
+    pField->m_bIsHidden = m_bIsHidden;
 
     return pField;
 }
@@ -1678,10 +1678,10 @@ bool SwHiddenParaField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch ( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        rAny <<= aCond;
+        rAny <<= m_aCond;
         break;
     case  FIELD_PROP_BOOL1:
-        rAny <<= bIsHidden;
+        rAny <<= m_bIsHidden;
         break;
 
     default:
@@ -1695,10 +1695,10 @@ bool SwHiddenParaField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch ( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        rAny >>= aCond;
+        rAny >>= m_aCond;
         break;
     case FIELD_PROP_BOOL1:
-        bIsHidden = *o3tl::doAccess<bool>(rAny);
+        m_bIsHidden = *o3tl::doAccess<bool>(rAny);
         break;
 
     default:
@@ -1710,12 +1710,12 @@ bool SwHiddenParaField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 /// set condition
 void SwHiddenParaField::SetPar1(const OUString& rStr)
 {
-    aCond = rStr;
+    m_aCond = rStr;
 }
 
 OUString SwHiddenParaField::GetPar1() const
 {
-    return aCond;
+    return m_aCond;
 }
 
 // PostIt field type
@@ -2415,43 +2415,43 @@ SwCharFormat* SwJumpEditFieldType::GetCharFormat()
 
 SwJumpEditField::SwJumpEditField( SwJumpEditFieldType* pTyp, sal_uInt32 nForm,
                                 const OUString& rText, const OUString& rHelp )
-    : SwField( pTyp, nForm ), sText( rText ), sHelp( rHelp )
+    : SwField( pTyp, nForm ), m_sText( rText ), m_sHelp( rHelp )
 {
 }
 
 OUString SwJumpEditField::Expand() const
 {
-    return "<" + sText + ">";
+    return "<" + m_sText + ">";
 }
 
 SwField* SwJumpEditField::Copy() const
 {
     return new SwJumpEditField( static_cast<SwJumpEditFieldType*>(GetTyp()), GetFormat(),
-                                sText, sHelp );
+                                m_sText, m_sHelp );
 }
 
 /// get place holder text
 OUString SwJumpEditField::GetPar1() const
 {
-    return sText;
+    return m_sText;
 }
 
 /// set place holder text
 void SwJumpEditField::SetPar1(const OUString& rStr)
 {
-    sText = rStr;
+    m_sText = rStr;
 }
 
 /// get hint text
 OUString SwJumpEditField::GetPar2() const
 {
-    return sHelp;
+    return m_sHelp;
 }
 
 /// set hint text
 void SwJumpEditField::SetPar2(const OUString& rStr)
 {
-    sHelp = rStr;
+    m_sHelp = rStr;
 }
 
 bool SwJumpEditField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -2474,10 +2474,10 @@ bool SwJumpEditField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_PAR1 :
-        rAny <<= sHelp;
+        rAny <<= m_sHelp;
         break;
     case FIELD_PROP_PAR2 :
-         rAny <<= sText;
+         rAny <<= m_sText;
          break;
     default:
         assert(false);
@@ -2507,10 +2507,10 @@ bool SwJumpEditField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
     case FIELD_PROP_PAR1 :
-        rAny >>= sHelp;
+        rAny >>= m_sHelp;
         break;
     case FIELD_PROP_PAR2 :
-         rAny >>= sText;
+         rAny >>= m_sText;
          break;
     default:
         assert(false);
