@@ -36,12 +36,12 @@ SdrOutliner* SdrOutlinerCache::createOutliner( OutlinerMode nOutlinerMode )
 
     if( (OutlinerMode::OutlineObject == nOutlinerMode) && !maModeOutline.empty() )
     {
-        pOutliner = maModeOutline.back();
+        pOutliner = maModeOutline.back().release();
         maModeOutline.pop_back();
     }
     else if( (OutlinerMode::TextObject == nOutlinerMode) && !maModeText.empty() )
     {
-        pOutliner = maModeText.back();
+        pOutliner = maModeText.back().release();
         maModeText.pop_back();
     }
     else
@@ -57,19 +57,6 @@ SdrOutliner* SdrOutlinerCache::createOutliner( OutlinerMode nOutlinerMode )
 
 SdrOutlinerCache::~SdrOutlinerCache()
 {
-    for( auto candA : maModeOutline )
-    {
-        delete candA;
-    }
-
-    maModeOutline.clear();
-
-    for( auto candB : maModeText )
-    {
-        delete candB;
-    }
-
-    maModeText.clear();
 }
 
 void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
@@ -80,7 +67,7 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
 
         if( OutlinerMode::OutlineObject == nOutlMode )
         {
-            maModeOutline.push_back(pOutliner);
+            maModeOutline.emplace_back(pOutliner);
             pOutliner->Clear();
             pOutliner->SetVertical( false );
 
@@ -89,7 +76,7 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
         }
         else if( OutlinerMode::TextObject == nOutlMode )
         {
-            maModeText.push_back(pOutliner);
+            maModeText.emplace_back(pOutliner);
             pOutliner->Clear();
             pOutliner->SetVertical( false );
 
