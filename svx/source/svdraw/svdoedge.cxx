@@ -505,14 +505,23 @@ void SdrEdgeObj::ImpSetTailPoint(bool bTail1, const Point& rPt)
 {
     sal_uInt16 nPointCount=pEdgeTrack->GetPointCount();
     if (nPointCount==0) {
+        pEdgeTrack->SetPointCount(2);
         (*pEdgeTrack)[0]=rPt;
         (*pEdgeTrack)[1]=rPt;
     } else if (nPointCount==1) {
-        if (!bTail1) (*pEdgeTrack)[1]=rPt;
-        else { (*pEdgeTrack)[1]=(*pEdgeTrack)[0]; (*pEdgeTrack)[0]=rPt; }
+        pEdgeTrack->SetPointCount(2);
+        if (!bTail1)
+            (*pEdgeTrack)[1]=rPt;
+        else
+        {
+            (*pEdgeTrack)[1]=(*pEdgeTrack)[0];
+            (*pEdgeTrack)[0]=rPt;
+        }
     } else {
-        if (!bTail1) (*pEdgeTrack)[sal_uInt16(nPointCount-1)]=rPt;
-        else (*pEdgeTrack)[0]=rPt;
+        if (!bTail1)
+            (*pEdgeTrack)[sal_uInt16(nPointCount-1)]=rPt;
+        else
+            (*pEdgeTrack)[0]=rPt;
     }
     ImpRecalcEdgeTrack();
     SetRectsDirty();
@@ -2402,9 +2411,11 @@ void SdrEdgeObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
     // TODO: Need an implementation to connect differently.
     ImpUndirtyEdgeTrack();
     sal_uInt16 nCount=pEdgeTrack->GetPointCount();
+    if (nCount == 0)
+        pEdgeTrack->SetPointCount(1);
     if (0 == i)
         (*pEdgeTrack)[0]=rPnt;
-    if (1 == i)
+    else if (1 == i)
         (*pEdgeTrack)[nCount-1]=rPnt;
     SetEdgeTrackDirty();
     SetRectsDirty();
