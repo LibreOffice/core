@@ -969,7 +969,7 @@ std::unique_ptr<SmTableNode> SmParser::DoTable()
     return xSNode;
 }
 
-SmNode *SmParser::DoAlign(bool bUseExtraSpaces)
+std::unique_ptr<SmNode> SmParser::DoAlign(bool bUseExtraSpaces)
     // parse alignment info (if any), then go on with rest of expression
 {
     DepthProtect aDepthGuard(m_nParseDepth);
@@ -986,7 +986,7 @@ SmNode *SmParser::DoAlign(bool bUseExtraSpaces)
 
         // allow for just one align statement in 5.0
         if (TokenInGroup(TG::Align))
-            return DoError(SmParseError::DoubleAlign);
+            return std::unique_ptr<SmNode>(DoError(SmParseError::DoubleAlign));
     }
 
     auto pNode = DoExpression(bUseExtraSpaces);
@@ -994,9 +994,9 @@ SmNode *SmParser::DoAlign(bool bUseExtraSpaces)
     if (xSNode)
     {
         xSNode->SetSubNode(0, pNode.release());
-        return xSNode.release();
+        return std::move(xSNode); // this explicit move can be omitted since C++14
     }
-    return pNode.release();
+    return pNode;
 }
 
 // Postcondition: m_aCurToken.eType == TEND || m_aCurToken.eType == TNEWLINE
@@ -1012,7 +1012,7 @@ SmLineNode *SmParser::DoLine()
     // (and go on with expressions that must not have alignment
     // statements in 'while' loop below. See also 'Expression()'.)
     if (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TNEWLINE)
-        ExpressionArray.emplace_back(std::unique_ptr<SmNode>(DoAlign()));
+        ExpressionArray.push_back(DoAlign());
 
     while (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TNEWLINE)
         ExpressionArray.push_back(DoExpression());
@@ -1336,7 +1336,7 @@ SmNode *SmParser::DoTerm(bool bGroupNumberIdent)
                 return xSNode.release();
             }
 
-            std::unique_ptr<SmNode> pNode(DoAlign(!bNoSpace));
+            auto pNode = DoAlign(!bNoSpace);
             if (m_aCurToken.eType == TRGROUP) {
                 NextToken();
                 return pNode.release();
@@ -2051,7 +2051,7 @@ SmBracebodyNode *SmParser::DoBracebody(bool bIsLeftRight)
             }
             else if (m_aCurToken.eType != TRIGHT)
             {
-                aNodes.emplace_back(std::unique_ptr<SmNode>(DoAlign()));
+                aNodes.push_back(DoAlign());
                 if (m_aCurToken.eType != TMLINE  &&  m_aCurToken.eType != TRIGHT)
                     aNodes.emplace_back(std::unique_ptr<SmNode>(DoError(SmParseError::RightExpected)));
             }
@@ -2068,7 +2068,7 @@ SmBracebodyNode *SmParser::DoBracebody(bool bIsLeftRight)
             }
             else if (!TokenInGroup(TG::RBrace))
             {
-                aNodes.emplace_back(std::unique_ptr<SmNode>(DoAlign()));
+                aNodes.push_back(DoAlign());
                 if (m_aCurToken.eType != TMLINE  &&  !TokenInGroup(TG::RBrace))
                     aNodes.emplace_back(std::unique_ptr<SmNode>(DoError(SmParseError::RbraceExpected)));
             }
@@ -2153,7 +2153,7 @@ SmStructureNode *SmParser::DoStack()
     do
     {
         NextToken();
-        aExprArr.emplace_back(std::unique_ptr<SmNode>(DoAlign()));
+        aExprArr.push_back(DoAlign());
     }
     while (m_aCurToken.eType == TPOUND);
 
@@ -2181,7 +2181,7 @@ SmStructureNode *SmParser::DoMatrix()
     do
     {
         NextToken();
-        aExprArr.emplace_back(std::unique_ptr<SmNode>(DoAlign()));
+        aExprArr.push_back(DoAlign());
     }
     while (m_aCurToken.eType == TPOUND);
 
@@ -2192,7 +2192,7 @@ SmStructureNode *SmParser::DoMatrix()
         NextToken();
         for (size_t i = 0; i < nCol; i++)
         {
-            std::unique_ptr<SmNode> xNode(DoAlign());
+            auto xNode = DoAlign();
             if (i < (nCol - 1))
             {
                 if (m_aCurToken.eType == TPOUND)
