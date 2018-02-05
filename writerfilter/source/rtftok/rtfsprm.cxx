@@ -78,6 +78,17 @@ RTFValue::Pointer_t RTFSprms::find(Id nKeyword, bool bFirst, bool bForWrite)
 void RTFSprms::set(Id nKeyword, RTFValue::Pointer_t pValue, RTFOverwrite eOverwrite)
 {
     ensureCopyBeforeWrite();
+
+    if (eOverwrite == RTFOverwrite::YES_PREPEND)
+    {
+        auto it = std::remove_if(
+            m_pSprms->begin(), m_pSprms->end(),
+            [nKeyword](const RTFSprms::Entry_t& rSprm) { return rSprm.first == nKeyword; });
+        m_pSprms->erase(it, m_pSprms->end());
+        m_pSprms->insert(m_pSprms->begin(), std::make_pair(nKeyword, pValue));
+        return;
+    }
+
     bool bFound = false;
     if (eOverwrite == RTFOverwrite::YES || eOverwrite == RTFOverwrite::NO_IGNORE)
     {
