@@ -262,14 +262,9 @@ void SdrUndoAttrObj::ensureStyleSheetInStyleSheetPool(SfxStyleSheetBasePool& rSt
 
 SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSaveText)
     : SdrUndoObj(rNewObj)
-    , pUndoSet(nullptr)
-    , pRedoSet(nullptr)
     , mxUndoStyleSheet()
     , mxRedoStyleSheet()
     , bHaveToTakeRedoSet(true)
-    , pTextUndo(nullptr)
-    , pTextRedo(nullptr)
-    , pUndoGroup(nullptr)
 {
     bStyleSheet = bStyleSheet1;
 
@@ -280,7 +275,7 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
     if(bIsGroup)
     {
         // it's a group object!
-        pUndoGroup = new SdrUndoGroup(*pObj->GetModel());
+        pUndoGroup.reset( new SdrUndoGroup(*pObj->GetModel()) );
         const size_t nObjCount(pOL->GetObjCount());
 
         for(size_t nObjNum = 0; nObjNum < nObjCount; ++nObjNum)
@@ -292,27 +287,27 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
 
     if(!bIsGroup || bIs3DScene)
     {
-        pUndoSet = new SfxItemSet(pObj->GetMergedItemSet());
+        pUndoSet.reset( new SfxItemSet(pObj->GetMergedItemSet()) );
 
         if(bStyleSheet)
             mxUndoStyleSheet = pObj->GetStyleSheet();
 
         if(bSaveText)
         {
-            pTextUndo = pObj->GetOutlinerParaObject();
-            if(pTextUndo)
-                pTextUndo = new OutlinerParaObject(*pTextUndo);
+            auto p = pObj->GetOutlinerParaObject();
+            if(p)
+                pTextUndo.reset( new OutlinerParaObject(*p) );
         }
     }
 }
 
 SdrUndoAttrObj::~SdrUndoAttrObj()
 {
-    delete pUndoSet;
-    delete pRedoSet;
-    delete pUndoGroup;
-    delete pTextUndo;
-    delete pTextRedo;
+    pUndoSet.reset();
+    pRedoSet.reset();
+    pUndoGroup.reset();
+    pTextUndo.reset();
+    pTextRedo.reset();
 }
 
 void SdrUndoAttrObj::Undo()
@@ -329,9 +324,7 @@ void SdrUndoAttrObj::Undo()
         {
             bHaveToTakeRedoSet = false;
 
-            delete pRedoSet;
-
-            pRedoSet = new SfxItemSet(pObj->GetMergedItemSet());
+            pRedoSet.reset( new SfxItemSet(pObj->GetMergedItemSet()) );
 
             if(bStyleSheet)
                 mxRedoStyleSheet = pObj->GetStyleSheet();
@@ -339,10 +332,9 @@ void SdrUndoAttrObj::Undo()
             if(pTextUndo)
             {
                 // #i8508#
-                pTextRedo = pObj->GetOutlinerParaObject();
-
-                if(pTextRedo)
-                    pTextRedo = new OutlinerParaObject(*pTextRedo);
+                auto p = pObj->GetOutlinerParaObject();
+                if(p)
+                    pTextRedo.reset( new OutlinerParaObject(*p) );
             }
         }
 
