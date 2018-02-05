@@ -30,7 +30,6 @@
 
 /** Implementation of a least recently used (lru) cache.
     <br>
-    @author Daniel Boelzle
 */
 template< class t_Key, class t_Val, class t_KeyHash >
 class LRU_Cache

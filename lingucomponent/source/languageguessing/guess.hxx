@@ -30,9 +30,6 @@
 
 using namespace std;
 
-/**
-@author Jocelyn Merand
- */
 class Guess final {
     public:
 

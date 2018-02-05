@@ -35,8 +35,6 @@ namespace framework{
 /** @short  implements a job component, which handle the special
             feature to show a suitable help page for every (visible!)
             loaded document.
-
-    @author as96863
  */
 class HelpOnStartup : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css::lang::XEventListener,css::task::XJob >
 {

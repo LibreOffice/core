@@ -37,9 +37,6 @@ MSFILTER_DLLPUBLIC rtl_TextEncoding getBestTextEncodingFromLocale(const css::lan
 MSFILTER_DLLPUBLIC sal_uInt32 BGRToRGB(sal_uInt32 nColour);
 
 /** Convert from DTTM to Writer's DateTime
-
-  @author
-  <a href="mailto:mmaher@openoffice.org">Martin Maher</a
   */
 MSFILTER_DLLPUBLIC DateTime DTTM2DateTime( long lDTTM );
 

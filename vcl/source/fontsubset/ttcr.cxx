@@ -19,9 +19,6 @@
 
 /*
  * TrueTypeCreator method implementation
- *
- * @author: Alexander Gelfenbain
- *
  */
 
 #include <assert.h>

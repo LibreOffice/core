@@ -31,9 +31,6 @@ namespace comphelper
 /** implements handling for compatibly reading/writing data from/into an input/output stream.
     data written in a block secured by this class should be readable by older versions which
     use the same mechanism.
-
-    @author Frank Schoenheit
-    @since  00/26/05
 */
 
 class COMPHELPER_DLLPUBLIC OStreamSection
