@@ -296,8 +296,9 @@ Image TabBar::GetItemImage(const DeckDescriptor& rDeckDescriptor) const
         mxFrame);
 }
 
-IMPL_LINK_NOARG(TabBar::Item, HandleClick, Button*, void)
+IMPL_LINK(TabBar::Item, HandleClick, Button*, pBtn, void)
 {
+    pBtn->GrabFocus();
     try
     {
         maDeckActivationFunctor(msDeckId);
