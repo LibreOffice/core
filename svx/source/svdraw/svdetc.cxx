@@ -108,7 +108,7 @@ OLEObjCache::OLEObjCache()
         nSize = officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get();
     else
         nSize = 100;
-    pTimer = new AutoTimer( "svx OLEObjCache pTimer UnloadCheck" );
+    pTimer.reset( new AutoTimer( "svx OLEObjCache pTimer UnloadCheck" ) );
     pTimer->SetInvokeHandler( LINK(this, OLEObjCache, UnloadCheckHdl) );
     pTimer->SetTimeout(20000);
     pTimer->SetStatic();
@@ -117,7 +117,6 @@ OLEObjCache::OLEObjCache()
 OLEObjCache::~OLEObjCache()
 {
     pTimer->Stop();
-    delete pTimer;
 }
 
 IMPL_LINK_NOARG(OLEObjCache, UnloadCheckHdl, Timer*, void)
