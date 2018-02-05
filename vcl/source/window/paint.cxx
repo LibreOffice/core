@@ -1201,6 +1201,12 @@ void Window::LogicInvalidate(const tools::Rectangle* pRectangle)
 
         pNotifier->notifyWindow(GetLOKWindowId(), "invalidate", aPayload);
     }
+    // Added for dialog items. Pass invalidation to the parent window.
+    else if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
+    {
+        const tools::Rectangle aRect(Point(GetOutOffXPixel(), GetOutOffYPixel()), Size(GetOutputWidthPixel(), GetOutputHeightPixel()));
+        pParent->LogicInvalidate(&aRect);
+    }
 }
 
 void Window::Validate()
