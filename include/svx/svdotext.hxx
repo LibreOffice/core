@@ -28,11 +28,12 @@
 #include <svl/style.hxx>
 #include <svx/xtextit0.hxx>
 #include <svx/svdtext.hxx>
-#include <vector>
 #include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <svx/svdpagv.hxx>
 #include <rtl/ref.hxx>
+#include <memory>
+#include <vector>
 
 
 //   forward declarations
@@ -185,7 +186,7 @@ protected:
     GeoStat                     aGeo;
 
     // this is the active text
-    SdrText*                    mpText;
+    std::unique_ptr<SdrText>    mpText;
 
     // This contains the dimensions of the text
     Size                        aTextSize;
