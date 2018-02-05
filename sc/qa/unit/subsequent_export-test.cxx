@@ -157,6 +157,7 @@ public:
     void testCeilingFloorXLS();
     void testCeilingFloorODS();
 
+    void testCustomXml();
 
 #if !defined _WIN32
     void testRelativePathsODS();
@@ -258,6 +259,7 @@ public:
     CPPUNIT_TEST(testCeilingFloorODSToXLSX);
     CPPUNIT_TEST(testCeilingFloorXLS);
     CPPUNIT_TEST(testCeilingFloorODS);
+    CPPUNIT_TEST(testCustomXml);
 #if !defined(_WIN32)
     CPPUNIT_TEST(testRelativePathsODS);
 #endif
@@ -2914,6 +2916,24 @@ void ScExportTest::testCeilingFloorODS()
     testCeilingFloor(FORMAT_ODS);
 }
 
+void ScExportTest::testCustomXml()
+{
+    // Load document and export it to a temporary file
+    ScDocShellRef xShell = loadDoc("customxml.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "customXml/item1.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    xmlDocPtr pRelsDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "customXml/_rels/item1.xml.rels");
+    CPPUNIT_ASSERT(pRelsDoc);
+
+    // Check image with artistic effect exists in the slide
+    // assertXPath(pXmlDoc, "/securelifecyclemarker/isprotected", "protected");
+
+    // Check there is a relation with the .wdp file that contains the backed up image
+    assertXPath(pRelsDoc, "/Relationships/Relationship[@Id='rId1']", "Target", "itemProps1.xml");
+}
 
 #if !defined _WIN32
 void ScExportTest::testRelativePathsODS()
