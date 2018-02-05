@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_2f3214f2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-02-05T09:01:29Z",
+      "side": 1,
+      "message": "Could you please write your author name as your full name is written? \"Manuj Vashist\", not \"manujvashist\".",
+      "revId": "700ba537cd51ee3b2e6c863a40040a54a0a93527",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
