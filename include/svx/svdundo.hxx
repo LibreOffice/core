@@ -207,10 +207,10 @@ public:
 class SVX_DLLPUBLIC SdrUndoGeoObj : public SdrUndoObj
 {
 protected:
-    SdrObjGeoData*              pUndoGeo;
-    SdrObjGeoData*              pRedoGeo;
+    std::unique_ptr<SdrObjGeoData>  pUndoGeo;
+    std::unique_ptr<SdrObjGeoData>  pRedoGeo;
     // If we have a group object:
-    SdrUndoGroup*               pUndoGroup;
+    std::unique_ptr<SdrUndoGroup>   pUndoGroup;
     /// If we have a table object, should its layout change?
     bool mbSkipChangeLayout;
 
