@@ -32,6 +32,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/controllayout.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <outdata.hxx>
 #include <outdev.h>
@@ -860,6 +861,14 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         // do not use cache with modified string
         if(mpFontInstance->mpConversion)
             pLayoutCache = nullptr;
+
+    #ifdef MACOSX
+        // FIXME: tdf#112990
+        // Cache text layout crashes on mac with OpenGL enabled
+        // Force it to not use the cache
+        if(OpenGLHelper::isVCLOpenGLEnabled())
+            pLayoutCache = nullptr;
+    #endif
 
     // without cache
     if(!pLayoutCache)
