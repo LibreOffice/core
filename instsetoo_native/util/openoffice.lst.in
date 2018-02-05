@@ -56,7 +56,7 @@ LibreOffice
             ABOUTBOXPRODUCTVERSIONSUFFIX @LIBO_VERSION_SUFFIX_SUFFIX@
             BASEPRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PCPFILENAME libreoffice.pcp
-            UPDATEURL http://update.libreoffice.org/check.php
+            UPDATEURL https://update.libreoffice.org/check.php
             ADD_INCLUDE_FILES cli_ure/version/version.txt,unoil/climaker/version.txt
             ADDSYSTEMINTEGRATION 1
             PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
@@ -68,10 +68,10 @@ LibreOffice
             OOODOWNLOADNAME 1
             CHANGETARGETDIR 1
             PATCHCODEFILE ooo_patchcodes.txt
-            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
             STARTCENTER_INFO_URL https://www.libreoffice.org/
-            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
+            DICT_REPO_URL https://extensions.libreoffice.org/dictionaries/
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active          1
@@ -107,7 +107,7 @@ LibreOfficeDev
             UREPACKAGEPREFIX libreofficedev
             SOLSUREPACKAGEPREFIX libreofficedev
             REGISTRYLAYERNAME LayerDev
-            UPDATEURL http://update.libreoffice.org/check.php
+            UPDATEURL https://update.libreoffice.org/check.php
             ADD_INCLUDE_FILES cli_ure/version/version.txt,unoil/climaker/version.txt
             ADDSYSTEMINTEGRATION 1
             PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
@@ -121,10 +121,10 @@ LibreOfficeDev
             PATCHCODEFILE ooodev_patchcodes.txt
             CODEFILENAME codes_ooodev.txt
             LOCALUSERDIR $ORIGIN/..
-            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
             STARTCENTER_INFO_URL https://www.libreoffice.org/
-            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
+            DICT_REPO_URL https://extensions.libreoffice.org/dictionaries/
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active          1
@@ -163,10 +163,10 @@ LibreOffice_SDK
             NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
             DONTUSESTARTMENUFOLDER 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
             STARTCENTER_INFO_URL https://www.libreoffice.org/
-            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
+            DICT_REPO_URL https://extensions.libreoffice.org/dictionaries/
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active 1
@@ -209,10 +209,10 @@ LibreOfficeDev_SDK
             NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
             DONTUSESTARTMENUFOLDER 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
             STARTCENTER_INFO_URL https://www.libreoffice.org/
-            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
+            DICT_REPO_URL https://extensions.libreoffice.org/dictionaries/
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active 1
