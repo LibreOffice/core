@@ -5535,10 +5535,11 @@ sal_Int32 DomainMapper_Impl::getCurrentNumberingProperty(const OUString& aProp)
     if (pProp)
         xNumberingRules.set(pProp->second, uno::UNO_QUERY);
     pProp = m_pTopContext->getProperty(PROP_NUMBERING_LEVEL);
-    sal_Int32 nNumberingLevel = -1;
+    // Default numbering level is the first one.
+    sal_Int32 nNumberingLevel = 0;
     if (pProp)
         pProp->second >>= nNumberingLevel;
-    if (xNumberingRules.is() && nNumberingLevel != -1)
+    if (xNumberingRules.is())
     {
         uno::Sequence<beans::PropertyValue> aProps;
         xNumberingRules->getByIndex(nNumberingLevel) >>= aProps;

@@ -108,9 +108,10 @@ void putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Po
     rAttributes.set(nId, pValue, eOverwrite);
 }
 
-void putNestedSprm(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Pointer_t& pValue)
+void putNestedSprm(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Pointer_t& pValue,
+                   RTFOverwrite eOverwrite)
 {
-    putNestedAttribute(rSprms, nParent, nId, pValue, RTFOverwrite::NO_APPEND, false);
+    putNestedAttribute(rSprms, nParent, nId, pValue, eOverwrite, false);
 }
 
 static RTFValue::Pointer_t lcl_getNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId)
