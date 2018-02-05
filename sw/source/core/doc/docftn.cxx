@@ -171,32 +171,38 @@ SwCharFormat* SwEndNoteInfo::GetCurrentCharFormat(const bool bAnchor) const
         : const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(aCharFormatDep.GetRegisteredIn()));
 }
 
-
-void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHint)
 {
-    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
-
-    if( RES_ATTRSET_CHG == nWhich ||
-        RES_FMT_CHG == nWhich )
+    if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        SwDoc* pDoc;
-        if( aCharFormatDep.GetRegisteredIn() )
-            pDoc = static_cast<SwFormat*>(aCharFormatDep.GetRegisteredIn())->GetDoc();
-        else
-            pDoc = pAnchorFormat->GetDoc();
-        SwFootnoteIdxs& rFootnoteIdxs = pDoc->GetFootnoteIdxs();
-        for( size_t nPos = 0; nPos < rFootnoteIdxs.size(); ++nPos )
+        const sal_uInt16 nWhich = pLegacyHint->m_pOld ? pLegacyHint->m_pOld->Which() : pLegacyHint->m_pNew ? pLegacyHint->m_pNew->Which() : 0 ;
+        if( RES_ATTRSET_CHG == nWhich ||
+            RES_FMT_CHG == nWhich )
         {
-            SwTextFootnote *pTextFootnote = rFootnoteIdxs[ nPos ];
-            const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
-            if ( rFootnote.IsEndNote() == m_bEndNote )
+            SwDoc* pDoc;
+            if( aCharFormatDep.GetRegisteredIn() )
+                pDoc = static_cast<SwFormat*>(aCharFormatDep.GetRegisteredIn())->GetDoc();
+            else
+                pDoc = pAnchorFormat->GetDoc();
+            SwFootnoteIdxs& rFootnoteIdxs = pDoc->GetFootnoteIdxs();
+            for( size_t nPos = 0; nPos < rFootnoteIdxs.size(); ++nPos )
             {
-                pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumStr());
+                SwTextFootnote *pTextFootnote = rFootnoteIdxs[ nPos ];
+                const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
+                if ( rFootnote.IsEndNote() == m_bEndNote )
+                {
+                    pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumStr());
+                }
             }
         }
+        else
+            CheckRegistration( pLegacyHint->m_pOld );
     }
-    else
-        CheckRegistration( pOld );
+    else if (auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
+    {
+        if(pAnchorFormat == &rModify)
+            pAnchorFormat = const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(pModifyChangedHint->m_pNew));
+    }
 }
 
 SwFootnoteInfo& SwFootnoteInfo::operator=(const SwFootnoteInfo& rInfo)

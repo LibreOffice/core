@@ -40,7 +40,7 @@ class SW_DLLPUBLIC SwEndNoteInfo : public SwClient
     OUString sSuffix;
 protected:
     bool        m_bEndNote;
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
+    virtual void SwClientNotify( const SwModify&, const SfxHint&) override;
 
 public:
     SvxNumberType aFormat;
