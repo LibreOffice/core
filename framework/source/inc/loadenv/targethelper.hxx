@@ -28,8 +28,6 @@ namespace framework{
 
 /** @short  can be used to detect, if a target name (used e.g. for XFrame.findFrame())
             has a special meaning or can be used as normal frame name (e.g. for XFrame.setName()).
-
-    @author as96863
  */
 class TargetHelper
 {

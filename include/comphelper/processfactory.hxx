@@ -32,8 +32,6 @@ namespace comphelper
 
 /**
  * This function set the process service factory.
- *
- * @author Juergen Schmidt
  */
 COMPHELPER_DLLPUBLIC void setProcessServiceFactory(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMgr);
 
@@ -41,8 +39,6 @@ COMPHELPER_DLLPUBLIC void setProcessServiceFactory(const css::uno::Reference< cs
  * This function gets the process service factory.
  *
  * If no service factory is set the function throws a RuntimeException.
- *
- * @author Juergen Schmidt
  */
 COMPHELPER_DLLPUBLIC css::uno::Reference< css::lang::XMultiServiceFactory > getProcessServiceFactory();
 

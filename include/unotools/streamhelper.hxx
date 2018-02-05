@@ -32,9 +32,6 @@ namespace utl
 
 /**
  * The helper implementation for a using input streams based on SvLockBytes.
- *
- * @author  Dirk Grobler
- * @since   00/28/03
  */
 class UNOTOOLS_DLLPUBLIC OInputStreamHelper : public cppu::WeakImplHelper<css::io::XInputStream, css::io::XSeekable>
 {
