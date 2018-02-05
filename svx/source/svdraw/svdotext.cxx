@@ -178,7 +178,7 @@ SdrTextObj::~SdrTextObj()
             rOutl.SetTextObj( nullptr );
     }
 
-    delete mpText;
+    mpText.reset();
 
     ImpDeregisterLink();
 }
@@ -2113,7 +2113,7 @@ SdrText* SdrTextObj::getActiveText() const
     if( !mpText )
         return getText( 0 );
     else
-        return mpText;
+        return mpText.get();
 }
 
 /** returns the nth available text. */
@@ -2121,9 +2121,9 @@ SdrText* SdrTextObj::getText( sal_Int32 nIndex ) const
 {
     if( nIndex == 0 )
     {
-        if( mpText == nullptr )
-            const_cast< SdrTextObj* >(this)->mpText = new SdrText( *const_cast< SdrTextObj* >(this) );
-        return mpText;
+        if( !mpText )
+            const_cast< SdrTextObj* >(this)->mpText.reset( new SdrText( *const_cast< SdrTextObj* >(this) ) );
+        return mpText.get();
     }
     else
     {
