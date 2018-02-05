@@ -236,8 +236,6 @@ public:
     virtual void onAccessibilityOptionsChanged();
 };
 
-#endif // INCLUDED_SVX_SVDVIEW_HXX
-
 // First of all the app creates a SdrModel.
 // Then it opens a Win and creates a SdrView.
 // ShowSdrPage() announces a page at SdrView.
@@ -270,5 +268,7 @@ public:
 //   ~~~~~~~~~~
 //     Pointer GetPreferredPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nTol=0) const;
 //     OUString GetStatusText();
+
+#endif // INCLUDED_SVX_SVDVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

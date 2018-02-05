@@ -53,10 +53,8 @@ namespace svxform
         }
     };
 
-#endif // INCLUDED_SVX_SOURCE_INC_SDBDATACOLUMN_HXX
-
-
 }
 
+#endif // INCLUDED_SVX_SOURCE_INC_SDBDATACOLUMN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

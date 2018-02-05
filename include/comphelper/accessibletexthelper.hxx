@@ -143,9 +143,6 @@ namespace comphelper
 }   // namespace comphelper
 
 
-#endif // INCLUDED_COMPHELPER_ACCESSIBLETEXTHELPER_HXX
-
-
 //  OAccessibleTextHelper is a helper class for implementing the
 //  XAccessibleText interface.
 
@@ -173,5 +170,6 @@ namespace comphelper
 //      setSelection
 //      copyText
 
+#endif // INCLUDED_COMPHELPER_ACCESSIBLETEXTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
