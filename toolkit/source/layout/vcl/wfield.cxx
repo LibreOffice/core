@@ -101,8 +101,8 @@ Edit::~Edit ()
 void Edit::SetSelection( Selection const& rSelection )
 {
 #if LAYOUT_API_CALLS_HANDLER
-    if ( !getImpl().mxEdit.is() )
-        getImpl().mxEdit->setSelection( awt::Selection( rSelection.Min(), rSelection.Max() ) );
+    if ( !getImpl()->mxEdit.is() )
+        getImpl()->mxEdit->setSelection( awt::Selection( rSelection.Min(), rSelection.Max() ) );
 #else /* !LAYOUT_API_CALLS_HANDLER */
     GetEdit ()->SetSelection (rSelection);
 #endif /* !LAYOUT_API_CALLS_HANDLER */
@@ -111,9 +111,9 @@ void Edit::SetSelection( Selection const& rSelection )
 void Edit::SetText( OUString const& rStr )
 {
 #if LAYOUT_API_CALLS_HANDLER
-    if ( getImpl().mxEdit.is() )
+    if ( getImpl()->mxEdit.is() )
         /// this calls handlers; endless loop in numfmt.cxx
-        getImpl().mxEdit->setText( rStr );
+        getImpl()->mxEdit->setText( rStr );
 #else /* !LAYOUT_API_CALLS_HANDLER */
     GetEdit ()->SetText (rStr);
 #endif /* !LAYOUT_API_CALLS_HANDLER */
@@ -121,15 +121,15 @@ void Edit::SetText( OUString const& rStr )
 
 String Edit::GetText() const
 {
-    if ( !getImpl().mxEdit.is() )
-        return getImpl().mxEdit->getText();
+    if ( !getImpl()->mxEdit.is() )
+        return getImpl()->mxEdit->getText();
     return OUString();
 }
 
 void Edit::SetModifyHdl( const Link& link )
 {
-    if (&getImpl () && getImpl().mxEdit.is ())
-        getImpl().SetModifyHdl( link );
+    if (getImpl() && getImpl()->mxEdit.is ())
+        getImpl()->SetModifyHdl( link );
 }
 
 IMPL_CONSTRUCTORS( Edit, Control, "edit" );
@@ -434,51 +434,52 @@ void ComboBoxImpl::disposing( lang::EventObject const& e )
 
 sal_uInt16 ComboBox::InsertEntry( String const& rStr, sal_uInt16 nPos )
 {
-    return getImpl().InsertEntry( rStr, nPos );
+    return getImpl()->InsertEntry( rStr, nPos );
 }
 
 void ComboBox::RemoveEntry( String const& rStr )
 {
-    getImpl().RemoveEntry( GetEntryPos( rStr ) );
+    getImpl()->RemoveEntry( GetEntryPos( rStr ) );
 }
 
 void ComboBox::RemoveEntry( sal_uInt16 nPos )
 {
-    getImpl().RemoveEntry( nPos );
+    getImpl()->RemoveEntry( nPos );
 }
 
 void ComboBox::Clear()
 {
     uno::Sequence< rtl::OUString> aNoItems;
-    getImpl().setProperty( "StringItemList", uno::Any( aNoItems ) );
+    if ( getImpl() )
+        getImpl()->setProperty( "StringItemList", uno::Any( aNoItems ) );
 }
 
 sal_uInt16 ComboBox::GetEntryPos( String const& rStr ) const
 {
-    return getImpl().GetEntryPos( rStr );
+    return getImpl()->GetEntryPos( rStr );
 }
 
 String ComboBox::GetEntry( sal_uInt16 nPos ) const
 {
-    rtl::OUString rItem = getImpl().mxComboBox->getItem( nPos );
+    rtl::OUString rItem = getImpl()->mxComboBox->getItem( nPos );
     return OUString( rItem );
 }
 
 sal_uInt16 ComboBox::GetEntryCount() const
 {
-    return getImpl().GetEntryCount();
+    return getImpl()->GetEntryCount();
 }
 
 void ComboBox::SetClickHdl( const Link& link )
 {
-    if (&getImpl () && getImpl().mxComboBox.is ())
-        getImpl().SetClickHdl( link );
+    if (getImpl() && getImpl()->mxComboBox.is ())
+        getImpl()->SetClickHdl( link );
 }
 
 void ComboBox::SetSelectHdl( const Link& link )
 {
-    if (&getImpl () && getImpl().mxComboBox.is ())
-        getImpl().SetSelectHdl( link );
+    if (getImpl() && getImpl()->mxComboBox.is ())
+        getImpl()->SetSelectHdl( link );
 }
 
 void ComboBox::EnableAutocomplete (bool enable, bool matchCase)
@@ -486,18 +487,9 @@ void ComboBox::EnableAutocomplete (bool enable, bool matchCase)
     GetComboBox ()->EnableAutocomplete (enable, matchCase);
 }
 
-IMPL_CONSTRUCTORS_BODY( ComboBox, Edit, "combobox", getImpl().parent = parent; );
+IMPL_CONSTRUCTORS_BODY( ComboBox, Edit, "combobox", getImpl()->parent = parent; );
 IMPL_GET_WINDOW (ComboBox);
-/// IMPL_GET_IMPL( ComboBox );
-
-static ComboBoxImpl* null_combobox_impl = 0;
-
-ComboBoxImpl &ComboBox::getImpl () const
-{
-    if (ComboBoxImpl* c = static_cast<ComboBoxImpl *>(mpImpl))
-        return *c;
-    return *null_combobox_impl;
-}
+IMPL_GET_IMPL( ComboBox );
 
 class ListBoxImpl : public ControlImpl
                   , public ::cppu::WeakImplHelper1< awt::XActionListener >
@@ -668,44 +660,45 @@ ListBox::~ListBox ()
 
 sal_uInt16 ListBox::InsertEntry (String const& rStr, sal_uInt16 nPos)
 {
-    return getImpl().InsertEntry(rStr, nPos);
+    return getImpl()->InsertEntry(rStr, nPos);
 }
 
 void ListBox::RemoveEntry( sal_uInt16 nPos )
 {
-    return getImpl().RemoveEntry( nPos );
+    return getImpl()->RemoveEntry( nPos );
 }
 
 void ListBox::RemoveEntry( String const& rStr )
 {
-    return getImpl().RemoveEntry( GetEntryPos( rStr ) );
+    return getImpl()->RemoveEntry( GetEntryPos( rStr ) );
 }
 
 void ListBox::Clear()
 {
     uno::Sequence< rtl::OUString> aNoItems;
-    getImpl().setProperty( "StringItemList", uno::Any( aNoItems ) );
+    if ( getImpl() )
+        getImpl()->setProperty( "StringItemList", uno::Any( aNoItems ) );
 }
 
 sal_uInt16 ListBox::GetEntryPos( String const& rStr ) const
 {
-    return getImpl().GetEntryPos( rStr );
+    return getImpl()->GetEntryPos( rStr );
 }
 
 String ListBox::GetEntry( sal_uInt16 nPos ) const
 {
-    return getImpl().GetEntry( nPos );
+    return getImpl()->GetEntry( nPos );
 }
 
 sal_uInt16 ListBox::GetEntryCount() const
 {
-    return getImpl().GetEntryCount();
+    return getImpl()->GetEntryCount();
 }
 
 void ListBox::SelectEntryPos( sal_uInt16 nPos, bool bSelect )
 {
 #if LAYOUT_API_CALLS_HANDLER
-    getImpl().SelectEntryPos( nPos, bSelect );
+    getImpl()->SelectEntryPos( nPos, bSelect );
 #else /* !LAYOUT_API_CALLS_HANDLER */
     GetListBox ()->SelectEntryPos (nPos, bSelect);
 #endif /* !LAYOUT_API_CALLS_HANDLER */
@@ -718,12 +711,12 @@ void ListBox::SelectEntry( String const& rStr, bool bSelect )
 
 sal_uInt16 ListBox::GetSelectEntryCount() const
 {
-    return getImpl().GetSelectEntryCount();
+    return getImpl()->GetSelectEntryCount();
 }
 
 sal_uInt16 ListBox::GetSelectEntryPos( sal_uInt16 nSelIndex ) const
 {
-    return getImpl().GetSelectEntryPos( nSelIndex );
+    return getImpl()->GetSelectEntryPos( nSelIndex );
 }
 
 String ListBox::GetSelectEntry( sal_uInt16 nSelIndex ) const
@@ -733,33 +726,33 @@ String ListBox::GetSelectEntry( sal_uInt16 nSelIndex ) const
 
 Link& ListBox::GetSelectHdl ()
 {
-    return getImpl ().GetSelectHdl ();
+    return getImpl()->GetSelectHdl ();
 }
 
 void ListBox::SetSelectHdl( Link const& link )
 {
-    getImpl().SetSelectHdl( link );
+    getImpl()->SetSelectHdl( link );
 }
 
 Link& ListBox::GetClickHdl ()
 {
-    return getImpl ().GetSelectHdl ();
+    return getImpl()->GetSelectHdl ();
 }
 
 void ListBox::SetClickHdl( Link const& link )
 {
-    if (&getImpl () && getImpl().mxListBox.is ())
-        getImpl().SetClickHdl( link );
+    if (getImpl() && getImpl()->mxListBox.is ())
+        getImpl()->SetClickHdl( link );
 }
 
 Link& ListBox::GetDoubleClickHdl ()
 {
-    return getImpl ().GetSelectHdl ();
+    return getImpl()->GetSelectHdl ();
 }
 
 void ListBox::SetDoubleClickHdl( Link const& link )
 {
-    getImpl().SetDoubleClickHdl( link );
+    getImpl()->SetDoubleClickHdl( link );
 }
 
 void ListBox::SetEntryData( sal_uInt16 pos, void* data)

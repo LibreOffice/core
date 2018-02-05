@@ -140,35 +140,36 @@ String Button::GetStandardText (sal_uInt16 button_type)
 
 void Button::SetText( OUString const& rStr )
 {
-    if ( !getImpl().mxButton.is() )
+    if ( !getImpl()->mxButton.is() )
         return;
-    getImpl().mxButton->setLabel( rStr );
+    getImpl()->mxButton->setLabel( rStr );
 }
 
 void Button::SetClickHdl( const Link& link )
 {
-    if (&getImpl () && getImpl().mxButton.is ())
-        getImpl().SetClickHdl( link );
+    if (getImpl() && getImpl()->mxButton.is ())
+        getImpl()->SetClickHdl( link );
 }
 
 Link& Button::GetClickHdl ()
 {
-    return getImpl().GetClickHdl ();
+    return getImpl()->GetClickHdl ();
 }
 
 bool Button::SetModeImage (Image const& image)
 {
-    return getImpl().SetModeImage (image.getImpl().mxGraphic);
+    return getImpl() || getImpl()->SetModeImage (image.getImpl().mxGraphic);
 }
 
 bool Button::SetModeImage (::Image const& image, BmpColorMode mode)
 {
-    return GetButton ()->SetModeImage (image, mode);
+    return !GetButton () || GetButton ()->SetModeImage (image, mode);
 }
 
 void Button::SetImageAlign( ImageAlign eAlign )
 {
-    getImpl().setProperty( "ImageAlign", uno::Any( (sal_Int16) eAlign ) );
+    if ( getImpl() )
+        getImpl()->setProperty( "ImageAlign", uno::Any( (sal_Int16) eAlign ) );
 }
 
 void Button::Click()
@@ -229,14 +230,15 @@ PushButton::~PushButton ()
 
 void PushButton::Check( bool bCheck )
 {
-    getImpl().setProperty( "State", uno::Any( (sal_Int16) !!bCheck ) );
+    if ( getImpl() )
+        getImpl()->setProperty( "State", uno::Any( (sal_Int16) !!bCheck ) );
     // XButton doesn't have explicit toggle event
-    getImpl().fireToggle();
+    getImpl()->fireToggle();
 }
 
 bool PushButton::IsChecked() const
 {
-    return !!( getImpl().getProperty( "State" ).get< sal_Int16 >() );
+    return !!( getImpl() && getImpl()->getProperty( "State" ).get< sal_Int16 >() );
 }
 
 void PushButton::Toggle()
@@ -246,8 +248,8 @@ void PushButton::Toggle()
 
 void PushButton::SetToggleHdl( const Link& link )
 {
-    if (&getImpl () && getImpl().mxButton.is ())
-        getImpl().SetToggleHdl( link );
+    if (getImpl() && getImpl()->mxButton.is ())
+        getImpl()->SetToggleHdl( link );
 }
 
 IMPL_GET_IMPL( PushButton );
@@ -343,18 +345,18 @@ RadioButton::~RadioButton ()
 
 void RadioButton::Check( bool bCheck )
 {
-    getImpl().Check( bCheck );
+    getImpl()->Check( bCheck );
 }
 
 bool RadioButton::IsChecked() const
 {
-    return getImpl().IsChecked();
+    return getImpl()->IsChecked();
 }
 
 void RadioButton::SetToggleHdl( const Link& link )
 {
-    if (&getImpl () && getImpl().mxRadioButton.is ())
-        getImpl().SetToggleHdl( link );
+    if (getImpl() && getImpl()->mxRadioButton.is ())
+        getImpl()->SetToggleHdl( link );
 }
 
 IMPL_GET_IMPL( RadioButton );
@@ -401,22 +403,22 @@ CheckBox::~CheckBox ()
 
 void CheckBox::Check( bool bCheck )
 {
-    if ( !getImpl().mxCheckBox.is() )
+    if ( !getImpl()->mxCheckBox.is() )
         return;
-    getImpl().mxCheckBox->setState( !!bCheck );
+    getImpl()->mxCheckBox->setState( !!bCheck );
 }
 
 bool CheckBox::IsChecked() const
 {
-    if ( !getImpl().mxCheckBox.is() )
+    if ( !getImpl()->mxCheckBox.is() )
         return false;
-    return getImpl().mxCheckBox->getState() != 0;
+    return getImpl()->mxCheckBox->getState() != 0;
 }
 
 void CheckBox::SetToggleHdl( const Link& link )
 {
-    if (&getImpl () && getImpl().mxCheckBox.is ())
-        getImpl().SetToggleHdl( link );
+    if (getImpl() && getImpl()->mxCheckBox.is ())
+        getImpl()->SetToggleHdl( link );
 }
 
 IMPL_GET_IMPL( CheckBox );
@@ -578,51 +580,51 @@ public:
 
 void AdvancedButton::AddAdvanced( Window* w )
 {
-    getImpl().AddAdvanced( w );
+    getImpl()->AddAdvanced( w );
 }
 
 void AdvancedButton::AddSimple( Window* w )
 {
-    getImpl().AddSimple( w );
+    getImpl()->AddSimple( w );
 }
 
 void AdvancedButton::RemoveAdvanced( Window* w )
 {
-    getImpl().RemoveAdvanced( w );
+    getImpl()->RemoveAdvanced( w );
 }
 
 void AdvancedButton::RemoveSimple( Window* w )
 {
-    getImpl().RemoveSimple( w );
+    getImpl()->RemoveSimple( w );
 }
 
 void AdvancedButton::SetAdvancedText (rtl::OUString const& text)
 {
     if (text.getLength ())
-        getImpl ().mAdvancedLabel = text;
+        getImpl()->mAdvancedLabel = text;
 }
 
 void AdvancedButton::SetSimpleText (rtl::OUString const& text)
 {
     if (text.getLength ())
-        getImpl ().mSimpleLabel = text;
+        getImpl()->mSimpleLabel = text;
 }
 
 rtl::OUString AdvancedButton::GetAdvancedText () const
 {
-    return getImpl ().mAdvancedLabel;
+    return getImpl()->mAdvancedLabel;
 }
 
 rtl::OUString AdvancedButton::GetSimpleText () const
 {
-    return getImpl ().mSimpleLabel;
+    return getImpl()->mSimpleLabel;
 }
 
 void AdvancedButton::SetDelta (int)
 {
 }
 
-IMPL_CONSTRUCTORS_BODY( AdvancedButton, PushButton, "advancedbutton", getImpl().simpleMode () );
+IMPL_CONSTRUCTORS_BODY( AdvancedButton, PushButton, "advancedbutton", getImpl()->simpleMode () );
 IMPL_GET_IMPL( AdvancedButton );
 
 
@@ -641,17 +643,17 @@ public:
 
 // TODO
 //BUTTON_IMPL( MoreButton, PushButton, 0 );
-IMPL_CONSTRUCTORS_BODY( MoreButton, AdvancedButton, "morebutton", getImpl().simpleMode () );
+IMPL_CONSTRUCTORS_BODY( MoreButton, AdvancedButton, "morebutton", getImpl()->simpleMode () );
 IMPL_GET_IMPL( MoreButton );
 
 void MoreButton::AddWindow( Window* w )
 {
-    getImpl().AddWindow( w );
+    getImpl()->AddWindow( w );
 }
 
 void MoreButton::RemoveWindow( Window* w )
 {
-    getImpl().RemoveWindow( w );
+    getImpl()->RemoveWindow( w );
 }
 
 void MoreButton::SetMoreText (rtl::OUString const& text)

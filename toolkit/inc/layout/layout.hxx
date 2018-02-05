@@ -102,7 +102,7 @@ public:
         t( Window *parent, WinBits nStyle = defaultWinBit ); \
         t (Window *parent, ResId const &res)
 #define DECL_GET_IMPL(t) \
-        inline t##Impl &getImpl() const
+        inline t##Impl *getImpl() const
 
 #define DECL_GET_WINDOW( cls ) ::cls* Get##cls() const
 #define IMPL_GET_WINDOW( cls ) ::cls* cls::Get##cls() const { return dynamic_cast< ::cls*>( GetWindow() ); }

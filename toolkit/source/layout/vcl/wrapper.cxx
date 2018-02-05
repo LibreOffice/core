@@ -206,7 +206,7 @@ void SAL_CALL WindowImpl::disposing (lang::EventObject const&)
 
 uno::Any WindowImpl::getProperty (char const* name)
 {
-    if ( !this || !mxVclPeer.is() )
+    if ( !mxVclPeer.is() )
         return css::uno::Any();
     return mxVclPeer->getProperty
         ( rtl::OUString( name, strlen( name ), RTL_TEXTENCODING_ASCII_US ) );
@@ -214,7 +214,7 @@ uno::Any WindowImpl::getProperty (char const* name)
 
 void WindowImpl::setProperty (char const *name, uno::Any any)
 {
-    if ( !this || !mxVclPeer.is() )
+    if ( !mxVclPeer.is() )
         return;
     mxVclPeer->setProperty
         ( rtl::OUString( name, strlen( name ), RTL_TEXTENCODING_ASCII_US ), any );
@@ -249,16 +249,7 @@ Window::~Window()
     mpImpl = 0;
 }
 
-///IMPL_GET_IMPL( Control );
-
-static ControlImpl* null_control_impl = 0;
-
-ControlImpl &Control::getImpl () const
-{
-    if (ControlImpl* c = static_cast<ControlImpl *>(mpImpl))
-        return *c;
-    return *null_control_impl;
-}
+IMPL_GET_IMPL( Control );
 
 Control::~Control ()
 {
@@ -336,7 +327,7 @@ void Window::ParentSet (Window *window)
 
 Context *Window::getContext()
 {
-    return this && mpImpl ? mpImpl->mpCtx : NULL;
+    return mpImpl ? mpImpl->mpCtx : NULL;
 }
 
 PeerHandle Window::GetPeer() const
@@ -553,7 +544,8 @@ void Window::SetStyle( WinBits nStyle )
                 aValue = uno::makeAny( (bool) nValue );
             else
                 aValue = uno::makeAny( (short) nValue );
-            mpImpl->setProperty( toolkitVclPropsMap[ i ].propName, aValue );
+            if ( mpImpl )
+                mpImpl->setProperty( toolkitVclPropsMap[ i ].propName, aValue );
         }
     }
 }
@@ -562,6 +554,8 @@ WinBits Window::GetStyle()
 {
     uno::Reference< awt::XVclWindowPeer > xPeer = mpImpl->mxVclPeer;
     WinBits ret = 0;
+    if ( !mpImpl )
+       return 0;
     for (int i = 0; i < toolkitVclPropsMapLen; i++)
     {
         if ( toolkitVclPropsMap[ i ].propName )
@@ -613,30 +607,30 @@ PeerHandle Window::CreatePeer( Window *parent, WinBits nStyle, const char *pName
 
 void Window::Enable( bool bEnable )
 {
-    if ( !getImpl().mxWindow.is() )
+    if ( !getImpl()->mxWindow.is() )
         return;
-    getImpl().mxWindow->setEnable( bEnable );
+    getImpl()->mxWindow->setEnable( bEnable );
 }
 
 void Window::Show( bool bVisible )
 {
-    if ( !getImpl().mxWindow.is() )
+    if ( !getImpl()->mxWindow.is() )
         return;
-    getImpl().mxWindow->setVisible( bVisible );
+    getImpl()->mxWindow->setVisible( bVisible );
     if (!bVisible)
-        getImpl ().bFirstTimeVisible = true;
-    else if (GetParent() && getImpl().bFirstTimeVisible)
+        getImpl()->bFirstTimeVisible = true;
+    else if (GetParent() && getImpl()->bFirstTimeVisible)
     {
-        getImpl().redraw ();
-        getImpl().bFirstTimeVisible = false;
+        getImpl()->redraw ();
+        getImpl()->bFirstTimeVisible = false;
     }
 }
 
 void Window::GrabFocus()
 {
-    if ( !getImpl().mxWindow.is() )
+    if ( !getImpl()->mxWindow.is() )
         return;
-    getImpl().mxWindow->setFocus();
+    getImpl()->mxWindow->setFocus();
 }
 
 void Window::SetUpdateMode(bool mode)
@@ -745,24 +739,24 @@ void SAL_CALL ControlImpl::focusLost (awt::FocusEvent const&)
 
 Link& Control::GetGetFocusHdl ()
 {
-    return getImpl ().GetGetFocusHdl ();
+    return getImpl()->GetGetFocusHdl ();
 }
 
 void Control::SetGetFocusHdl (Link const& link)
 {
-    if (&getImpl () && getImpl().mxWindow.is ())
-        getImpl ().SetGetFocusHdl (link);
+    if (getImpl() && getImpl()->mxWindow.is ())
+        getImpl()->SetGetFocusHdl (link);
 }
 
 Link& Control::GetLoseFocusHdl ()
 {
-    return getImpl ().GetLoseFocusHdl ();
+    return getImpl()->GetLoseFocusHdl ();
 }
 
 void Control::SetLoseFocusHdl (Link const& link)
 {
-    if (&getImpl () && getImpl().mxWindow.is ())
-        getImpl ().SetLoseFocusHdl (link);
+    if (getImpl() && getImpl()->mxWindow.is ())
+        getImpl()->SetLoseFocusHdl (link);
 }
 
 class DialogImpl : public WindowImpl
@@ -802,8 +796,8 @@ Dialog::~Dialog ()
 IMPL_GET_WINDOW (Dialog);
 IMPL_GET_IMPL (Dialog);
 
-#define MX_DIALOG if (getImpl ().mxDialog.is ()) getImpl ().mxDialog
-#define RETURN_MX_DIALOG if (getImpl ().mxDialog.is ()) return getImpl ().mxDialog
+#define MX_DIALOG if (getImpl()->mxDialog.is ()) getImpl()->mxDialog
+#define RETURN_MX_DIALOG if (getImpl()->mxDialog.is ()) return getImpl()->mxDialog
 
 short Dialog::Execute()
 {
@@ -1082,8 +1076,8 @@ public:
 IMPL_GET_WINDOW (TabControl);
 IMPL_GET_LAYOUT_VCLXWINDOW (TabControl);
 
-#define MX_TABCONTROL if (getImpl ().mxTabControl.is ()) getImpl ().mxTabControl
-#define RETURN_MX_TABCONTROL if (getImpl ().mxTabControl.is ()) return getImpl ().mxTabControl
+#define MX_TABCONTROL if (getImpl()->mxTabControl.is ()) getImpl()->mxTabControl
+#define RETURN_MX_TABCONTROL if (getImpl()->mxTabControl.is ()) return getImpl ()->mxTabControl
 
 TabControl::~TabControl ()
 {
@@ -1132,7 +1126,7 @@ void TabControl::InsertPage (sal_uInt16 id, OUString const& title, sal_uInt16 po
         //GetVCLXTabControl ()->AddChild (uno::Reference <awt::XLayoutConstrains> (page->::Window::GetWindowPeer (), uno::UNO_QUERY));
         //GetVCLXTabControl ()->AddChild (uno::Reference <awt::XLayoutConstrains> (page->GetComponentInterface (), uno::UNO_QUERY));
     }
-    getImpl ().redraw ();
+    getImpl()->redraw ();
 #endif
 }
 void TabControl::RemovePage (sal_uInt16 id)
@@ -1149,12 +1143,12 @@ sal_uInt16 TabControl::GetPageId (sal_uInt16 pos) const
 }
 sal_uInt16 TabControl::GetPagePos (sal_uInt16 id) const
 {
-    getImpl ().redraw ();
+    getImpl()->redraw ();
     return GetTabControl ()->GetPagePos (id);
 }
 void TabControl::SetCurPageId (sal_uInt16 id)
 {
-    getImpl ().redraw ();
+    getImpl()->redraw ();
     GetTabControl ()->SetCurPageId (id);
 }
 sal_uInt16 TabControl::GetCurPageId () const
@@ -1179,7 +1173,7 @@ void TabControl::SetTabPage (sal_uInt16 id, ::TabPage* page)
         //GetVCLXTabControl ()->AddChild (uno::Reference <awt::XLayoutConstrains> (page->GetComponentInterface (), uno::UNO_QUERY));
     }
 #endif
-    getImpl ().redraw ();
+    getImpl()->redraw ();
 }
 ::TabPage* TabControl::GetTabPage (sal_uInt16 id) const
 {
@@ -1187,21 +1181,21 @@ void TabControl::SetTabPage (sal_uInt16 id, ::TabPage* page)
 }
 void TabControl::SetActivatePageHdl (Link const& link)
 {
-    if (&getImpl () && getImpl().mxTabControl.is ())
-        getImpl ().SetActivatePageHdl (link);
+    if (getImpl() && getImpl()->mxTabControl.is ())
+        getImpl()->SetActivatePageHdl (link);
 }
 Link& TabControl::GetActivatePageHdl () const
 {
-    return getImpl ().GetActivatePageHdl ();
+    return getImpl()->GetActivatePageHdl ();
 }
 void TabControl::SetDeactivatePageHdl (Link const& link)
 {
-    if (&getImpl () && getImpl().mxTabControl.is ())
-        getImpl ().SetDeactivatePageHdl (link);
+    if (getImpl() && getImpl()->mxTabControl.is ())
+        getImpl()->SetDeactivatePageHdl (link);
 }
 Link& TabControl::GetDeactivatePageHdl () const
 {
-    return getImpl ().GetDeactivatePageHdl ();
+    return getImpl()->GetDeactivatePageHdl ();
 }
 void TabControl::SetTabPageSizePixel (Size const& size)
 {
@@ -1330,9 +1324,9 @@ IMPL_GET_IMPL( FixedText );
 
 void FixedText::SetText( OUString const& rStr )
 {
-    if ( !getImpl().mxFixedText.is() )
+    if ( !getImpl()->mxFixedText.is() )
         return;
-    getImpl().mxFixedText->setText( rStr );
+    getImpl()->mxFixedText->setText( rStr );
 }
 
 class FixedInfoImpl : public FixedTextImpl
@@ -1382,7 +1376,7 @@ public:
         }
 #if 0
         else
-            getImpl().mxGraphic->...();
+            getImpl()->mxGraphic->...();
 #endif
     }
 };
@@ -1393,10 +1387,10 @@ IMPL_GET_IMPL( FixedImage )
 void FixedImage::setImage( ::Image const& i )
 {
     (void) i;
-    if ( !getImpl().mxGraphic.is() )
+    if ( !getImpl()->mxGraphic.is() )
         return;
     //FIXME: hack moved to proplist
-    //getImpl().mxGraphic =
+    //getImpl()->mxGraphic =
 }
 
 #if 0
@@ -1419,37 +1413,37 @@ IMPL_GET_IMPL( ProgressBar );
 
 void ProgressBar::SetForegroundColor( util::Color color )
 {
-    if ( !getImpl().mxProgressBar.is() )
+    if ( !getImpl()->mxProgressBar.is() )
         return;
-    getImpl().mxProgressBar->setForegroundColor( color );
+    getImpl()->mxProgressBar->setForegroundColor( color );
 }
 
 void ProgressBar::SetBackgroundColor( util::Color color )
 {
-    if ( !getImpl().mxProgressBar.is() )
+    if ( !getImpl()->mxProgressBar.is() )
         return;
-    getImpl().mxProgressBar->setBackgroundColor( color );
+    getImpl()->mxProgressBar->setBackgroundColor( color );
 }
 
 void ProgressBar::SetValue( sal_Int32 i )
 {
-    if ( !getImpl().mxProgressBar.is() )
+    if ( !getImpl()->mxProgressBar.is() )
         return;
-    getImpl().mxProgressBar->setValue( i );
+    getImpl()->mxProgressBar->setValue( i );
 }
 
 void ProgressBar::SetRange( sal_Int32 min, sal_Int32 max )
 {
-    if ( !getImpl().mxProgressBar.is() )
+    if ( !getImpl()->mxProgressBar.is() )
         return;
-    getImpl().mxProgressBar->setRange( min, max );
+    getImpl()->mxProgressBar->setRange( min, max );
 }
 
 sal_Int32 ProgressBar::GetValue()
 {
-    if ( !getImpl().mxProgressBar.is() )
+    if ( !getImpl()->mxProgressBar.is() )
         return 0;
-    return getImpl().mxProgressBar->getValue();
+    return getImpl()->mxProgressBar->getValue();
 }
 
 class PluginImpl: public ControlImpl
@@ -1516,12 +1510,12 @@ LocalizedString::LocalizedString( Context *context, char const* id )
 
 String LocalizedString::getString ()
 {
-    return getImpl ().getText ();
+    return getImpl()->getText ();
 }
 
 OUString LocalizedString::getOUString ()
 {
-    return getImpl ().getText ();
+    return getImpl()->getText ();
 }
 
 LocalizedString::operator OUString ()
@@ -1532,13 +1526,13 @@ LocalizedString::operator OUString ()
 LocalizedString::operator OUString const& ()
 {
     getOUString ();
-    return getImpl ().maString;
+    return getImpl()->maString;
 }
 
 LocalizedString::operator String()
 {
     getOUString ();
-    return getImpl ().maString;
+    return getImpl()->maString;
 }
 
 String LocalizedString::GetToken (sal_uInt16 i, sal_Char c)
@@ -1548,24 +1542,24 @@ String LocalizedString::GetToken (sal_uInt16 i, sal_Char c)
 
 OUString LocalizedString::operator= (OUString const& s)
 {
-    getImpl().setText( s );
-    return getImpl().getText();
+    getImpl()->setText( s );
+    return getImpl()->getText();
 }
 
 OUString LocalizedString::operator+= (OUString const& b)
 {
-    OUString a = getImpl ().getText ();
+    OUString a = getImpl()->getText ();
     a += b;
-    getImpl ().setText (a);
-    return getImpl ().getText ();
+    getImpl()->setText (a);
+    return getImpl()->getText ();
 }
 
 OUString LocalizedString::operator+= (sal_Unicode const b)
 {
-    String a = getImpl ().getText ();
+    String a = getImpl()->getText ();
     a += b;
-    getImpl ().setText (a);
-    return getImpl ().getText ();
+    getImpl()->setText (a);
+    return getImpl()->getText ();
 }
 
 class InPlugImpl : public WindowImpl

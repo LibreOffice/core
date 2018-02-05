@@ -149,8 +149,8 @@ void Table::Add( Window *window, bool bXExpand, bool bYExpand,
 {
     if ( !window )
         return;
-    WindowImpl &rImpl = window->getImpl();
-    uno::Reference< awt::XLayoutConstrains > xChild( rImpl.mxWindow,
+    WindowImpl *pImpl = window->getImpl();
+    uno::Reference< awt::XLayoutConstrains > xChild( pImpl->mxWindow,
                                                      uno::UNO_QUERY );
     mxContainer->addChild( xChild );
     setProps( xChild, bXExpand, bYExpand, nXSpan, nYSpan );
@@ -194,8 +194,8 @@ void Box::Add( Window *window, bool bExpand, bool bFill, sal_Int32 nPadding)
 {
     if ( !window )
         return;
-    WindowImpl &rImpl = window->getImpl();
-    uno::Reference< awt::XLayoutConstrains > xChild( rImpl.mxWindow,
+    WindowImpl *pImpl = window->getImpl();
+    uno::Reference< awt::XLayoutConstrains > xChild( pImpl->mxWindow,
                                                      uno::UNO_QUERY );
 
     mxContainer->addChild( xChild );

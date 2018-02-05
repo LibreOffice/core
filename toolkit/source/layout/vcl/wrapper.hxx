@@ -83,14 +83,14 @@ public:
     void SAL_CALL focusLost (css::awt::FocusEvent const& e) throw (css::uno::RuntimeException);
 };
 
-inline WindowImpl &Window::getImpl() const{ return *(static_cast< WindowImpl * >( mpImpl )); }
+inline WindowImpl *Window::getImpl() const{ return (static_cast< WindowImpl * >( mpImpl )); }
 
 // Helpers for defining boiler-plate constructors ...
 // Could in-line in top-level but not with safe static_casts.
 #define IMPL_GET_IMPL(t) \
-    inline t##Impl &t::getImpl() const \
+    inline t##Impl* t::getImpl() const \
     { \
-        return *(static_cast<t##Impl *>(mpImpl)); \
+        return (static_cast<t##Impl *>(mpImpl)); \
     }
 #define IMPL_CONSTRUCTORS_BODY(t,par,unoName,body) \
     t::t( Context *context, const char *pId, sal_uInt32 nId ) \
