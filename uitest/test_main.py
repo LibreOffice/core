@@ -69,8 +69,6 @@ def add_tests_for_file(test_file, test_suite):
     test_name_limit = os.environ.get('UITEST_TEST_NAME', '')
     test_loader = unittest.TestLoader()
     module_name = os.path.splitext(os.path.split(test_file)[1])[0]
-    if len(test_name_limit) > 0 and not test_name_limit.startswith(module_name):
-        return
 
     loader = importlib.machinery.SourceFileLoader(module_name, test_file)
     mod = loader.load_module()
@@ -78,6 +76,10 @@ def add_tests_for_file(test_file, test_suite):
     for c in classes:
         test_names = test_loader.getTestCaseNames(c)
         for test_name in test_names:
+            full_name = ".".join([module_name, c.__name__, test_name])
+            if len(test_name_limit) > 0 and not test_name_limit.startswith(full_name):
+                continue
+
             obj = c(test_name, opts)
             test_suite.addTest(obj)
 
