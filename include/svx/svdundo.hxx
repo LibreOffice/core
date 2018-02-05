@@ -398,8 +398,10 @@ public:
 class SVX_DLLPUBLIC SdrUndoObjSetText : public SdrUndoObj
 {
 protected:
-    OutlinerParaObject*         pOldText;
-    OutlinerParaObject*         pNewText;
+    std::unique_ptr<OutlinerParaObject>
+                                pOldText;
+    std::unique_ptr<OutlinerParaObject>
+                                pNewText;
     bool                        bNewTextAvailable;
     bool                        bEmptyPresObj;
     sal_Int32                   mnText;
