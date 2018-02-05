@@ -124,6 +124,7 @@ public:
     void testGroupsRotatedPosition();
     void testAccentColor();
     void testTdf114848();
+    void testTdf115394();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -169,6 +170,7 @@ public:
     CPPUNIT_TEST(testGroupsRotatedPosition);
     CPPUNIT_TEST(testAccentColor);
     CPPUNIT_TEST(testTdf114848);
+    CPPUNIT_TEST(testTdf115394);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1113,6 +1115,40 @@ void SdOOXMLExportTest2::testTdf114848()
     assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val", "1f497d");
     xmlDocPtr pXmlDocTheme2 = parseExport(tempFile, "ppt/theme/theme2.xml");
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val", "1f497d");
+}
+
+void SdOOXMLExportTest2::testTdf115394()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf115394.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    double fTransitionDuration;
+
+    // Slow in MS formats
+    SdPage* pPage1 = xDocShRef->GetDoc()->GetSdPage(0, PageKind::Standard);
+    fTransitionDuration = pPage1->getTransitionDuration();
+    CPPUNIT_ASSERT_EQUAL(1.0, fTransitionDuration);
+
+    // Medium in MS formats
+    SdPage* pPage2 = xDocShRef->GetDoc()->GetSdPage(1, PageKind::Standard);
+    fTransitionDuration = pPage2->getTransitionDuration();
+    CPPUNIT_ASSERT_EQUAL(0.75, fTransitionDuration);
+
+    // Fast in MS formats
+    SdPage* pPage3 = xDocShRef->GetDoc()->GetSdPage(2, PageKind::Standard);
+    fTransitionDuration = pPage3->getTransitionDuration();
+    CPPUNIT_ASSERT_EQUAL(0.5, fTransitionDuration);
+
+    // Custom values
+    SdPage* pPage4 = xDocShRef->GetDoc()->GetSdPage(3, PageKind::Standard);
+    fTransitionDuration = pPage4->getTransitionDuration();
+    CPPUNIT_ASSERT_EQUAL(0.25, fTransitionDuration);
+
+    SdPage* pPage5 = xDocShRef->GetDoc()->GetSdPage(4, PageKind::Standard);
+    fTransitionDuration = pPage5->getTransitionDuration();
+    CPPUNIT_ASSERT_EQUAL(4.25, fTransitionDuration);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
