@@ -509,12 +509,19 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 // Word inherits FirstLineIndent property of the numbering, even if ParaLeftMargin is set, Writer does not.
                 // So copy it explicitly, if necessary.
                 sal_Int32 nFirstLineIndent = m_pImpl->getCurrentNumberingProperty("FirstLineIndent");
+                sal_Int32 nIndentAt = m_pImpl->getCurrentNumberingProperty("IndentAt");
+
+                sal_Int32 nParaLeftMargin = ConversionHelper::convertTwipToMM100(nIntValue);
+                if (nParaLeftMargin != 0 && nIndentAt == nParaLeftMargin)
+                    // Avoid direct left margin when it's the same as from the
+                    // numbering.
+                    break;
 
                 if (nFirstLineIndent != 0)
                     m_pImpl->GetTopContext()->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::makeAny(nFirstLineIndent), /*bOverwrite=*/false);
 
-                m_pImpl->GetTopContext()->Insert(
-                    PROP_PARA_LEFT_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
+                m_pImpl->GetTopContext()->Insert(PROP_PARA_LEFT_MARGIN,
+                                                 uno::makeAny(nParaLeftMargin));
             }
             break;
         case NS_ooxml::LN_CT_Ind_end:
@@ -551,8 +558,17 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_Ind_firstLine:
             if (m_pImpl->GetTopContext())
-                m_pImpl->GetTopContext()->Insert(
-                    PROP_PARA_FIRST_LINE_INDENT, uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
+            {
+                sal_Int32 nFirstLineIndent
+                    = m_pImpl->getCurrentNumberingProperty("FirstLineIndent");
+                sal_Int32 nParaFirstLineIndent = ConversionHelper::convertTwipToMM100(nIntValue);
+                if (nParaFirstLineIndent != 0 && nFirstLineIndent == nParaFirstLineIndent)
+                    // Avoid direct first margin when it's the same as from the
+                    // numbering.
+                    break;
+                m_pImpl->GetTopContext()->Insert(PROP_PARA_FIRST_LINE_INDENT,
+                                                 uno::makeAny(nParaFirstLineIndent));
+            }
             break;
         case NS_ooxml::LN_CT_Ind_rightChars:
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "rightChars", OUString::number(nIntValue));

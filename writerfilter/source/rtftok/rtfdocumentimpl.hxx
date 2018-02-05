@@ -365,7 +365,8 @@ public:
 };
 
 void putBorderProperty(RTFStack& aStates, Id nId, const RTFValue::Pointer_t& pValue);
-void putNestedSprm(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Pointer_t& pValue);
+void putNestedSprm(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Pointer_t& pValue,
+                   RTFOverwrite eOverwrite = RTFOverwrite::NO_APPEND);
 Id getParagraphBorder(sal_uInt32 nIndex);
 void putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Pointer_t& pValue,
                         RTFOverwrite eOverwrite = RTFOverwrite::YES, bool bAttribute = true);
