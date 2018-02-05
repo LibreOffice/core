@@ -142,7 +142,7 @@ protected:
     SdrObjConnection            aCon1;  // Connection status of the beginning of the line
     SdrObjConnection            aCon2;  // Connection status of the end of the line
 
-    XPolygon*                   pEdgeTrack;
+    std::unique_ptr<XPolygon>   pEdgeTrack;
     sal_uInt16                  nNotifyingCount; // Locking
     SdrEdgeInfoRec              aEdgeInfo;
 

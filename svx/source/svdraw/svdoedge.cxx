@@ -173,15 +173,13 @@ SdrEdgeObj::SdrEdgeObj()
 {
     bClosedObj=false;
     bIsEdge=true;
-    pEdgeTrack=new XPolygon;
-
+    pEdgeTrack.reset(new XPolygon);
 }
 
 SdrEdgeObj::~SdrEdgeObj()
 {
     SdrEdgeObj::DisconnectFromNode(true);
     SdrEdgeObj::DisconnectFromNode(false);
-    delete pEdgeTrack;
 }
 
 void SdrEdgeObj::ImpSetAttrToEdgeInfo()
