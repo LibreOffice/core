@@ -144,9 +144,9 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
         sChangeID = pChangeMgr->GetChangeID(this);
         if (!sChangeID.isEmpty() && pXFContentContainer)
         {
-            XFChangeStart* pChangeStart = new XFChangeStart;
-            pChangeStart->SetChangeID(sChangeID);
-            pXFContentContainer->Add(pChangeStart);
+            rtl::Reference<XFChangeStart> xChangeStart(new XFChangeStart);
+            xChangeStart->SetChangeID(sChangeID);
+            pXFContentContainer->Add(xChangeStart.get());
         }
     }
 
@@ -157,19 +157,19 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
     {
         if (!sChangeID.isEmpty() && pXFContentContainer)
         {
-            XFChangeEnd* pChangeEnd = new XFChangeEnd;
-            pChangeEnd->SetChangeID(sChangeID);
-            pXFContentContainer->Add(pChangeEnd);
+            rtl::Reference<XFChangeEnd> xChangeEnd(new XFChangeEnd);
+            xChangeEnd->SetChangeID(sChangeID);
+            pXFContentContainer->Add(xChangeEnd.get());
         }
     }
 
     if(LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE == nType
         && HasNextFrib())
     {
-        XFParagraph* pXFPara = new XFParagraph();
-        pXFPara->SetStyleName(m_StyleName);
-        m_pPara->AddXFContent(pXFPara);
-        m_pPara->GetFribs().SetXFPara(pXFPara);
+        rtl::Reference<XFParagraph> xXFPara(new XFParagraph);
+        xXFPara->SetStyleName(m_StyleName);
+        m_pPara->AddXFContent(xXFPara.get());
+        m_pPara->GetFribs().SetXFPara(xXFPara.get());
     }
 
 }
