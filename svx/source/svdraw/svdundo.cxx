@@ -581,9 +581,6 @@ OUString SdrUndoMoveObj::GetSdrRepeatComment(SdrView& /*rView*/) const
 
 SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
      : SdrUndoObj(rNewObj)
-     , pUndoGeo(nullptr)
-     , pRedoGeo(nullptr)
-     , pUndoGroup(nullptr)
      , mbSkipChangeLayout(false)
 {
     SdrObjList* pOL=rNewObj.GetSubList();
@@ -592,7 +589,7 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
         // this is a group object!
         // If this were 3D scene, we'd only add an Undo for the scene itself
         // (which we do elsewhere).
-        pUndoGroup=new SdrUndoGroup(*pObj->GetModel());
+        pUndoGroup.reset(new SdrUndoGroup(*pObj->GetModel()));
         const size_t nObjCount = pOL->GetObjCount();
         for (size_t nObjNum = 0; nObjNum<nObjCount; ++nObjNum) {
             pUndoGroup->AddAction(new SdrUndoGeoObj(*pOL->GetObj(nObjNum)));
@@ -600,15 +597,15 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
     }
     else
     {
-        pUndoGeo=pObj->GetGeoData();
+        pUndoGeo.reset(pObj->GetGeoData());
     }
 }
 
 SdrUndoGeoObj::~SdrUndoGeoObj()
 {
-    delete pUndoGeo;
-    delete pRedoGeo;
-    delete pUndoGroup;
+    pUndoGeo.reset();
+    pRedoGeo.reset();
+    pUndoGroup.reset();
 }
 
 void SdrUndoGeoObj::Undo()
@@ -625,8 +622,7 @@ void SdrUndoGeoObj::Undo()
     }
     else
     {
-        delete pRedoGeo;
-        pRedoGeo=pObj->GetGeoData();
+        pRedoGeo.reset(pObj->GetGeoData());
 
         auto pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pObj);
         if (pTableObj && mbSkipChangeLayout)
@@ -648,8 +644,7 @@ void SdrUndoGeoObj::Redo()
     }
     else
     {
-        delete pUndoGeo;
-        pUndoGeo=pObj->GetGeoData();
+        pUndoGeo.reset(pObj->GetGeoData());
         pObj->SetGeoData(*pRedoGeo);
     }
 
