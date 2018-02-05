@@ -277,28 +277,28 @@ public:
 
 class SwHiddenTextFieldType : public SwFieldType
 {
-    bool bHidden;
+    bool m_bHidden;
 public:
     SwHiddenTextFieldType(bool bSetHidden = true);
 
     virtual SwFieldType*    Copy() const override;
 
     void                    SetHiddenFlag( bool bSetHidden );
-    bool             GetHiddenFlag() const { return bHidden; }
+    bool             GetHiddenFlag() const { return m_bHidden; }
 };
 
 class SW_DLLPUBLIC SwHiddenTextField : public SwField
 {
-    OUString aTRUEText;         ///< Text if condition true.
-    OUString aFALSEText;        ///< If condition false.
-    OUString aContent;         ///< Evaluated DB-text.
+    OUString m_aTRUEText; ///< Text if condition true.
+    OUString m_aFALSEText; ///< If condition false.
+    OUString m_aContent; ///< Evaluated DB-text.
 
-    OUString aCond;            ///< Condition.
-    sal_uInt16  nSubType;
+    OUString m_aCond; ///< Condition.
+    sal_uInt16 m_nSubType;
 
-    bool    bCanToggle : 1;     ///< Can field be toggled alone?
-    bool    bIsHidden  : 1;     ///< Is it not visible?
-    bool    bValid     : 1;     ///< Is DB-field evaluated?
+    bool m_bCanToggle : 1; ///< Can field be toggled alone?
+    bool m_bIsHidden : 1; ///< Is it not visible?
+    bool m_bValid : 1; ///< Is DB-field evaluated?
 
     virtual OUString    Expand() const override;
     virtual SwField*    Copy() const override;
@@ -321,7 +321,7 @@ public:
 
     void                Evaluate(SwDoc*);
 
-    void         SetValue(bool bHidden)  { bIsHidden = bHidden; }
+    void         SetValue(bool bHidden)  { m_bIsHidden = bHidden; }
     static OUString     GetColumnName(const OUString& rName);
     static OUString     GetDBName(const OUString& rName, SwDoc *pDoc);
 
@@ -355,8 +355,8 @@ public:
 
 class SwHiddenParaField : public SwField
 {
-    OUString           aCond;
-    bool                bIsHidden:1;
+    OUString m_aCond;
+    bool m_bIsHidden;
 public:
     /// Direct input, delete old value.
     SwHiddenParaField(SwHiddenParaFieldType*, const OUString& rCond);
@@ -364,8 +364,8 @@ public:
     virtual OUString    Expand() const override;
     virtual SwField*    Copy() const override;
 
-    void                SetHidden(bool bHidden)     { bIsHidden = bHidden; }
-    bool                IsHidden() const            { return bIsHidden;    }
+    void                SetHidden(bool bHidden)     { m_bIsHidden = bHidden; }
+    bool                IsHidden() const            { return m_bIsHidden;    }
 
     /// Query, set condition.
     virtual OUString    GetPar1() const override;
@@ -643,7 +643,8 @@ public:
 
 class SwJumpEditField : public SwField
 {
-    OUString sText, sHelp;
+    OUString m_sText;
+    OUString m_sHelp;
 public:
     SwJumpEditField( SwJumpEditFieldType*, sal_uInt32 nFormat,
                      const OUString& sText, const OUString& sHelp );
