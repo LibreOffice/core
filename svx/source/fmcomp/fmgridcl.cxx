@@ -33,6 +33,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
 #include <bitmaps.hlst>
+#include <sdbdatacolumn.hxx>
 
 #include <com/sun/star/form/XConfirmDeleteListener.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>

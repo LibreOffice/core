@@ -846,8 +846,7 @@ DbGridRow::DbGridRow(CursorWrapper* pCur, bool bPaintCursor)
         {
             Reference< XPropertySet > xColSet(
                 xColumns->getByIndex(i), css::uno::UNO_QUERY);
-            DataColumn* pColumn = new DataColumn(xColSet);
-            m_aVariants.push_back( pColumn );
+            m_aVariants.emplace_back( new DataColumn(xColSet) );
         }
 
         if (pCur->rowDeleted())
@@ -884,9 +883,6 @@ DbGridRow::DbGridRow(CursorWrapper* pCur, bool bPaintCursor)
 
 DbGridRow::~DbGridRow()
 {
-    for (DataColumn* p : m_aVariants)
-        delete p;
-    m_aVariants.clear();
 }
 
 void DbGridRow::SetState(CursorWrapper* pCur, bool bPaintCursor)
