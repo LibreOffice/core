@@ -643,7 +643,43 @@ void PowerPointExport::WriteTransition( const FSHelperPtr& pFS )
     sal_Int32 advanceTiming = -1;
     sal_Int32 changeType = 0;
 
-    if( GETA( Speed ) ) {
+    sal_Int32 nTransitionDuration = -1;
+    bool isTransitionDurationSet = false;
+
+    // try to use TransitionDuration instead of old Speed property
+    if (GETA(TransitionDuration))
+    {
+        double fTransitionDuration = -1.0;
+        mAny >>= fTransitionDuration;
+        if (fTransitionDuration >= 0)
+        {
+            nTransitionDuration = fTransitionDuration * 1000.0;
+
+            // override values because in MS formats meaning of fast/medium/slow is different
+            if (nTransitionDuration <= 500)
+            {
+                // fast is default
+                speed = nullptr;
+            }
+            else if (nTransitionDuration >= 1000)
+            {
+                speed = "slow";
+            }
+            else
+            {
+                speed = "med";
+            }
+
+            bool isStandardValue = nTransitionDuration == 500
+                || nTransitionDuration == 750
+                || nTransitionDuration == 1000;
+
+            if(!isStandardValue)
+                isTransitionDurationSet = true;
+        }
+    }
+    else if (GETA(Speed))
+    {
         mAny >>= animationSpeed;
 
         switch( animationSpeed ) {
@@ -665,45 +701,6 @@ void PowerPointExport::WriteTransition( const FSHelperPtr& pFS )
     // 1 means automatic, 2 half automatic - not sure what it means - at least I don't see it in UI
     if( changeType == 1 && GETA( Duration ) )
         mAny >>= advanceTiming;
-
-    if (nTransition14 || pPresetTransition)
-    {
-        const char* pRequiresNS = nTransition14 ? "p14" : "p15";
-
-        pFS->startElement(FSNS(XML_mc, XML_AlternateContent), FSEND);
-        pFS->startElement(FSNS(XML_mc, XML_Choice), XML_Requires, pRequiresNS, FSEND);
-
-
-        pFS->startElementNS(XML_p, XML_transition,
-                            XML_spd, speed,
-                            XML_advTm, advanceTiming != -1 ? I32S( advanceTiming*1000 ) : nullptr,
-                            FSEND );
-
-        if (nTransition14)
-        {
-            pFS->singleElementNS(XML_p14, nTransition14,
-                                 XML_isInverted, pInverted,
-                                 XML_dir, pDirection14,
-                                 XML_pattern, pPattern,
-                                 FSEND );
-        }
-        else if (pPresetTransition)
-        {
-            pFS->singleElementNS(XML_p15, XML_prstTrans,
-                                 XML_prst, pPresetTransition,
-                                 FSEND );
-        }
-
-        pFS->endElement(FSNS(XML_p, XML_transition));
-
-        pFS->endElement(FSNS(XML_mc, XML_Choice));
-        pFS->startElement(FSNS(XML_mc, XML_Fallback), FSEND );
-    }
-
-    pFS->startElementNS(XML_p, XML_transition,
-                        XML_spd, speed,
-                        XML_advTm, advanceTiming != -1 ? I32S( advanceTiming*1000 ) : nullptr,
-                        FSEND );
 
     if (!bOOXmlSpecificTransition)
     {
@@ -797,6 +794,78 @@ void PowerPointExport::WriteTransition( const FSHelperPtr& pFS )
         }
     }
 
+    bool isAdvanceTimingSet = advanceTiming != -1;
+    if (nTransition14 || pPresetTransition || isTransitionDurationSet)
+    {
+        const char* pRequiresNS = (nTransition14 || isTransitionDurationSet) ? "p14" : "p15";
+
+        pFS->startElement(FSNS(XML_mc, XML_AlternateContent), FSEND);
+        pFS->startElement(FSNS(XML_mc, XML_Choice), XML_Requires, pRequiresNS, FSEND);
+
+        if(isTransitionDurationSet && isAdvanceTimingSet)
+        {
+            pFS->startElementNS(XML_p, XML_transition,
+                XML_spd, speed,
+                XML_advTm, I32S(advanceTiming * 1000),
+                FSNS(XML_p14, XML_dur), I32S(nTransitionDuration),
+                FSEND);
+        }
+        else if(isTransitionDurationSet)
+        {
+            pFS->startElementNS(XML_p, XML_transition,
+                XML_spd, speed,
+                FSNS(XML_p14, XML_dur), I32S(nTransitionDuration),
+                FSEND);
+        }
+        else if(isAdvanceTimingSet)
+        {
+            pFS->startElementNS(XML_p, XML_transition,
+                XML_spd, speed,
+                XML_advTm, I32S(advanceTiming * 1000),
+                FSEND);
+        }
+        else
+        {
+            pFS->startElementNS(XML_p, XML_transition,
+                XML_spd, speed,
+                FSEND);
+        }
+
+        if (nTransition14)
+        {
+            pFS->singleElementNS(XML_p14, nTransition14,
+                XML_isInverted, pInverted,
+                XML_dir, pDirection14,
+                XML_pattern, pPattern,
+                FSEND);
+        }
+        else if (pPresetTransition)
+        {
+            pFS->singleElementNS(XML_p15, XML_prstTrans,
+                XML_prst, pPresetTransition,
+                FSEND);
+        }
+        else if (isTransitionDurationSet && nTransition)
+        {
+            pFS->singleElementNS(XML_p, nTransition,
+                XML_dir, pDirection,
+                XML_orient, pOrientation,
+                XML_spokes, pSpokes,
+                XML_thruBlk, pThruBlk,
+                FSEND);
+        }
+
+        pFS->endElement(FSNS(XML_p, XML_transition));
+
+        pFS->endElement(FSNS(XML_mc, XML_Choice));
+        pFS->startElement(FSNS(XML_mc, XML_Fallback), FSEND);
+    }
+
+    pFS->startElementNS(XML_p, XML_transition,
+        XML_spd, speed,
+        XML_advTm, isAdvanceTimingSet ? I32S(advanceTiming * 1000) : nullptr,
+        FSEND);
+
     if (nTransition)
     {
         pFS->singleElementNS( XML_p, nTransition,
@@ -809,7 +878,7 @@ void PowerPointExport::WriteTransition( const FSHelperPtr& pFS )
 
     pFS->endElementNS(XML_p, XML_transition);
 
-    if (nTransition14 || pPresetTransition)
+    if (nTransition14 || pPresetTransition || isTransitionDurationSet)
     {
         pFS->endElement(FSNS(XML_mc, XML_Fallback));
         pFS->endElement(FSNS(XML_mc, XML_AlternateContent));
