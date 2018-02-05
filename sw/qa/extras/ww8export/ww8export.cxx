@@ -1295,7 +1295,7 @@ DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")
     }
 }
 
-#if !defined(MACOSX)
+#if !defined(MACOSX) && !defined(_WIN32)
 #if !TEST_FONTS_MISSING
 DECLARE_WW8EXPORT_TEST(testTableKeep, "tdf91083.odt")
 {
