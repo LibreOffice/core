@@ -41,7 +41,8 @@ enum class RTFOverwrite
 {
     YES, ///< Yes, if an existing key is found, overwrite it.
     NO_APPEND, ///< No, always append the value to the end of the list.
-    NO_IGNORE ///< No, if the key is already in the list, then ignore, otherwise append.
+    NO_IGNORE, ///< No, if the key is already in the list, then ignore, otherwise append.
+    YES_PREPEND ///< Yes, always prepend the value to the start of the list and remove existing entries.
 };
 
 /// A list of RTFSprm with a copy constructor that performs a deep copy.
