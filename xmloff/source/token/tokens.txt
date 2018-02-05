@@ -700,6 +700,7 @@ fill-image-ref-point
 fill-image-ref-point-x
 fill-image-ref-point-y
 fill-image-width
+fill-rule
 filter
 filter-and
 filter-condition
