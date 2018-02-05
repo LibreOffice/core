@@ -36,7 +36,7 @@ class IExtensionListBox: public Control
 public:
     enum { ENTRY_NOTFOUND = -1 };
 
-    IExtensionListBox( vcl::Window* pParent ): Control( pParent, WB_BORDER | WB_TABSTOP | WB_CHILDDLGCTRL ){}
+    IExtensionListBox( vcl::Window* pParent ): Control( pParent, WB_BORDER | WB_TABSTOP ){}
 
     /** @return  The count of the entries in the list box. */
     virtual sal_Int32 getItemCount() const = 0;
