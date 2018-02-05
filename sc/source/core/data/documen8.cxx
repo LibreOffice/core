@@ -1170,7 +1170,10 @@ void ScDocument::CheckLinkFormulaNeedingCheck( const ScTokenArray& rCode )
     }
     else
     {
-        assert(!"called with empty ScTokenArray");
+        // Possible with named expression without expression like Excel
+        // internal print ranges, obscure user define names, ... formula error
+        // cells without formula ...
+        SAL_WARN("sc.core","ScDocument::CheckLinkFormulaNeedingCheck - called with empty ScTokenArray");
     }
 }
 
