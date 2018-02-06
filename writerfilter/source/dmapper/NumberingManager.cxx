@@ -871,6 +871,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             }
             break;
             case NS_ooxml::LN_CT_Lvl_lvlPicBulletId:
+            if (ListLevel::Pointer pCurrentLevel = m_pCurrentDefinition->GetCurrentLevel())
             {
                 uno::Reference<drawing::XShape> xShape;
                 for (std::vector<NumPicBullet::Pointer>::iterator it = m_aNumPicBullets.begin(); it != m_aNumPicBullets.end(); ++it)
@@ -887,15 +888,15 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                     try
                     {
                         uno::Any aAny = xPropertySet->getPropertyValue("GraphicURL");
-                        if (aAny.has<OUString>())
-                            m_pCurrentDefinition->GetCurrentLevel()->SetGraphicURL(aAny.get<OUString>());
+                        if (aAny.has<OUString>() && pCurrentLevel)
+                            pCurrentLevel->SetGraphicURL(aAny.get<OUString>());
                     } catch(const beans::UnknownPropertyException&)
                     {}
                     try
                     {
                         uno::Reference< graphic::XGraphic > gr;
                         xPropertySet->getPropertyValue("Bitmap") >>= gr;
-                        m_pCurrentDefinition->GetCurrentLevel()->SetGraphicBitmap( gr );
+                        pCurrentLevel->SetGraphicBitmap( gr );
                     } catch(const beans::UnknownPropertyException&)
                     {}
 
@@ -910,12 +911,12 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                         int nWidth = (nHeight * aPrefSize.Width) / aPrefSize.Height;
 
                         awt::Size aSize( convertMm100ToTwip(nWidth), convertMm100ToTwip(nHeight) );
-                        m_pCurrentDefinition->GetCurrentLevel()->SetGraphicSize( aSize );
+                        pCurrentLevel->SetGraphicSize( aSize );
                     }
                     else
                     {
                         awt::Size aSize( convertMm100ToTwip(aPrefSize.Width), convertMm100ToTwip(aPrefSize.Height) );
-                        m_pCurrentDefinition->GetCurrentLevel()->SetGraphicSize( aSize );
+                        pCurrentLevel->SetGraphicSize( aSize );
                     }
                 }
             }
@@ -946,26 +947,26 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             }
             break;
             case NS_ooxml::LN_CT_Lvl_start:
-                if (m_pCurrentDefinition->GetCurrentLevel().get())
-                    m_pCurrentDefinition->GetCurrentLevel( )->SetValue( nSprmId, nIntValue );
+                if (ListLevel::Pointer pCurrentLevel = m_pCurrentDefinition->GetCurrentLevel())
+                    pCurrentLevel->SetValue( nSprmId, nIntValue );
                 bIsStartVisited = true;
             break;
             case NS_ooxml::LN_CT_Lvl_numFmt:
             case NS_ooxml::LN_CT_Lvl_isLgl:
             case NS_ooxml::LN_CT_Lvl_legacy:
-                if (m_pCurrentDefinition->GetCurrentLevel().get())
+                if (ListLevel::Pointer pCurrentLevel = m_pCurrentDefinition->GetCurrentLevel())
                 {
-                    m_pCurrentDefinition->GetCurrentLevel( )->SetValue( nSprmId, nIntValue );
+                    pCurrentLevel->SetValue( nSprmId, nIntValue );
                     if( !bIsStartVisited )
                     {
-                        m_pCurrentDefinition->GetCurrentLevel( )->SetValue( NS_ooxml::LN_CT_Lvl_start, 0 );
+                        pCurrentLevel->SetValue( NS_ooxml::LN_CT_Lvl_start, 0 );
                         bIsStartVisited = true;
                     }
                 }
             break;
             case NS_ooxml::LN_CT_Lvl_suff:
             {
-                if (m_pCurrentDefinition->GetCurrentLevel().get())
+                if (ListLevel::Pointer pCurrentLevel = m_pCurrentDefinition->GetCurrentLevel())
                 {
                     SvxNumberFormat::LabelFollowedBy value = SvxNumberFormat::LISTTAB;
                     if( rSprm.getValue()->getString() == "tab" )
@@ -977,7 +978,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                     else
                         SAL_WARN( "writerfilter", "Unknown ST_LevelSuffix value "
                             << rSprm.getValue()->getString());
-                    m_pCurrentDefinition->GetCurrentLevel()->SetValue( nSprmId, value );
+                    pCurrentLevel->SetValue( nSprmId, value );
                 }
             }
             break;
@@ -1014,11 +1015,15 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                     nValue = text::HoriOrientation::RIGHT;
                     break;
                 }
+
                 if (nValue != text::HoriOrientation::NONE)
                 {
-                    m_pCurrentDefinition->GetCurrentLevel( )->Insert(
-                        PROP_ADJUST, uno::makeAny( nValue ) );
-                        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                    if (ListLevel::Pointer pLevel = m_pCurrentDefinition->GetCurrentLevel())
+                    {
+                        pLevel->Insert(
+                            PROP_ADJUST, uno::makeAny( nValue ) );
+                            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                    }
                 }
             }
             break;
@@ -1042,10 +1047,12 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             case NS_ooxml::LN_CT_Lvl_pStyle:
             {
                 OUString sStyleName = rSprm.getValue( )->getString( );
-                ListLevel::Pointer pLevel = m_pCurrentDefinition->GetCurrentLevel( );
-                StyleSheetTablePtr pStylesTable = m_rDMapper.GetStyleSheetTable( );
-                const StyleSheetEntryPtr pStyle = pStylesTable->FindStyleSheetByISTD( sStyleName );
-                pLevel->SetParaStyle( pStyle );
+                if (ListLevel::Pointer pLevel = m_pCurrentDefinition->GetCurrentLevel())
+                {
+                    StyleSheetTablePtr pStylesTable = m_rDMapper.GetStyleSheetTable( );
+                    const StyleSheetEntryPtr pStyle = pStylesTable->FindStyleSheetByISTD( sStyleName );
+                    pLevel->SetParaStyle( pStyle );
+                }
             }
             break;
             case NS_ooxml::LN_CT_Num_lvlOverride:
@@ -1060,9 +1067,11 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 if(m_pCurrentDefinition)
                 {
                     if (ListLevel::Pointer pCurrentLevel = m_pCurrentDefinition->GetCurrentLevel())
+                    {
                         // <w:num> -> <w:lvlOverride> -> <w:startOverride> is the non-abstract equivalent of
                         // <w:abstractNum> -> <w:lvl> -> <w:start>
                         pCurrentLevel->SetValue(NS_ooxml::LN_CT_Lvl_start, nIntValue);
+                    }
                 }
             }
             break;
@@ -1080,9 +1089,9 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             case NS_ooxml::LN_EG_RPrBase_eastAsianLayout:
                 //no break!
             default:
-                if( m_pCurrentDefinition->GetCurrentLevel( ).get())
+                if (ListLevel::Pointer pCurrentLevel = m_pCurrentDefinition->GetCurrentLevel())
                 {
-                    m_rDMapper.PushListProperties( m_pCurrentDefinition->GetCurrentLevel( ) );
+                    m_rDMapper.PushListProperties(pCurrentLevel);
                     m_rDMapper.sprm( rSprm );
                     m_rDMapper.PopListProperties();
                 }
