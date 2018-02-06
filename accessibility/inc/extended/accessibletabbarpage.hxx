@@ -77,7 +77,6 @@ namespace accessibility
     public:
         AccessibleTabBarPage( TabBar* pTabBar, sal_uInt16 nPageId,
                               const css::uno::Reference< css::accessibility::XAccessible >& rxParent );
-        virtual ~AccessibleTabBarPage() override;
 
         // XInterface
         DECLARE_XINTERFACE()

@@ -99,10 +99,10 @@ namespace accessibility
         if (nChildIndex == 0)
         {
             //! so far the actual implementation object only supports column headers
-            xRet = implGetFixedChild( ::svt::BBINDEX_COLUMNHEADERBAR );
+            xRet = implGetHeaderBar( ::svt::BBTYPE_COLUMNHEADERBAR );
         }
         else if (nChildIndex == 1)
-            xRet = implGetFixedChild( ::svt::BBINDEX_TABLE );
+            xRet = implGetTable();
 
         if ( !xRet.is() )
             throw RuntimeException();

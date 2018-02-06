@@ -142,7 +142,7 @@ protected:
     */
     bool m_bHasListChild;
 
-    virtual ~VCLXAccessibleBox() override;
+    virtual ~VCLXAccessibleBox() override = default;
 
     /** Returns true when the object is valid.
     */

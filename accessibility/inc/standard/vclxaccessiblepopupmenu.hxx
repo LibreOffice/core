@@ -33,7 +33,6 @@ protected:
 
 public:
     VCLXAccessiblePopupMenu( Menu* pMenu );
-    virtual ~VCLXAccessiblePopupMenu() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

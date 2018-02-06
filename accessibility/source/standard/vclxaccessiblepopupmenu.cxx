@@ -36,12 +36,6 @@ VCLXAccessiblePopupMenu::VCLXAccessiblePopupMenu( Menu* pMenu )
 {
 }
 
-
-VCLXAccessiblePopupMenu::~VCLXAccessiblePopupMenu()
-{
-}
-
-
 bool VCLXAccessiblePopupMenu::IsFocused()
 {
     return !IsChildHighlighted();

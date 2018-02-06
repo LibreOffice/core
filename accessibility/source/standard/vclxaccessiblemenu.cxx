@@ -40,11 +40,6 @@ VCLXAccessibleMenu::VCLXAccessibleMenu( Menu* pParent, sal_uInt16 nItemPos, Menu
 }
 
 
-VCLXAccessibleMenu::~VCLXAccessibleMenu()
-{
-}
-
-
 bool VCLXAccessibleMenu::IsFocused()
 {
     bool bFocused = false;

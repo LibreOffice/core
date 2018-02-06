@@ -36,7 +36,7 @@ typedef ::cppu::ImplHelper1  <   css::accessibility::XAccessible
                             >   AccessibleTabListBox_Base;
 
 /** !!! */
-class AccessibleTabListBox
+class AccessibleTabListBox final
                 :public AccessibleBrowseBox
                 ,public AccessibleTabListBox_Base
                 ,public ::svt::IAccessibleTabListBox

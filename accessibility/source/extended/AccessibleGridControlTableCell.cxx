@@ -69,12 +69,6 @@ namespace accessibility
         implSetName( aAccName );
     }
 
-
-    AccessibleGridControlCell::~AccessibleGridControlCell()
-    {
-    }
-
-
     void SAL_CALL AccessibleGridControlCell::grabFocus()
     {
         SolarMutexGuard aSolarGuard;

@@ -55,10 +55,6 @@ namespace accessibility
     }
 
 
-    AccessibleTabBarPageList::~AccessibleTabBarPageList()
-    {
-    }
-
     void AccessibleTabBarPageList::UpdateShowing( bool bShowing )
     {
         for (Reference<XAccessible>& xChild : m_aAccessibleChildren)
