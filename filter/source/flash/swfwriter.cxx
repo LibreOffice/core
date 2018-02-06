@@ -93,8 +93,6 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
 Writer::~Writer()
 {
     mpVDev.disposeAndClear();
-    delete mpSprite;
-    delete mpTag;
 }
 
 
@@ -175,8 +173,8 @@ void Writer::storeTo( Reference< XOutputStream > const &xOutStream )
 sal_uInt16 Writer::startSprite()
 {
     sal_uInt16 nShapeId = createID();
-    mvSpriteStack.push(mpSprite);
-    mpSprite = new Sprite( nShapeId );
+    mvSpriteStack.push(mpSprite.release());
+    mpSprite.reset(new Sprite( nShapeId ));
     return nShapeId;
 }
 
@@ -189,15 +187,13 @@ void Writer::endSprite()
         endTag();
 
         mpSprite->write( *mpMovieStream );
-        delete mpSprite;
+        mpSprite.reset();
 
         if (!mvSpriteStack.empty())
         {
-            mpSprite = mvSpriteStack.top();
+            mpSprite.reset( mvSpriteStack.top() );
             mvSpriteStack.pop();
         }
-        else
-            mpSprite = nullptr;
     }
 }
 
@@ -243,7 +239,7 @@ void Writer::startTag( sal_uInt8 nTagId )
 {
     DBG_ASSERT( mpTag == nullptr, "Last tag was not ended");
 
-    mpTag = new Tag( nTagId );
+    mpTag.reset( new Tag( nTagId ) );
 }
 
 
@@ -253,14 +249,12 @@ void Writer::endTag()
 
     if( mpSprite && ( (nTag == TAG_END) || (nTag == TAG_SHOWFRAME) || (nTag == TAG_DOACTION) || (nTag == TAG_STARTSOUND) || (nTag == TAG_PLACEOBJECT) || (nTag == TAG_PLACEOBJECT2) || (nTag == TAG_REMOVEOBJECT2) || (nTag == TAG_FRAMELABEL) ) )
     {
-        mpSprite->addTag( mpTag );
-        mpTag = nullptr;
+        mpSprite->addTag( mpTag.release() );
     }
     else
     {
         mpTag->write( *mpMovieStream );
-        delete mpTag;
-        mpTag = nullptr;
+        mpTag.reset();
     }
 }
 
@@ -329,7 +323,7 @@ sal_uInt16 Writer::defineShape( const tools::PolyPolygon& rPolyPoly, const FillS
     mpTag->addUI8( 1 );         // FillStyleCount
 
     // FILLSTYLE
-    rFillStyle.addTo( mpTag );
+    rFillStyle.addTo( mpTag.get() );
 
     // LINESTYLEARRAY
     mpTag->addUI8( 0 );         // LineStyleCount

@@ -385,8 +385,8 @@ private:
     typedef std::vector<sal_uInt16> CharacterIdVector;
     CharacterIdVector       maShapeIds;
 
-    Tag* mpTag;
-    Sprite* mpSprite;
+    std::unique_ptr<Tag> mpTag;
+    std::unique_ptr<Sprite> mpSprite;
     std::stack<Sprite*> mvSpriteStack;
     ChecksumCache mBitmapCache;
 
