@@ -110,8 +110,8 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
     lArgs[4]   <<= aArg;
 
     bool bHidden
-        = rDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false);
-    aArg.Name = "Hidden";
+        = rDescriptor.getUnpackedValueOrDefault("HiddenForConversion", false);
+    aArg.Name = "HiddenForConversion";
     aArg.Value <<= bHidden;
     lArgs[5] <<= aArg;
 
