@@ -87,6 +87,7 @@ static const GUID CLIENTID_FILESAVE_PASSWORD        = {0xC12D4F4C, 0x4D41, 0x4D4
 static const GUID CLIENTID_FILESAVE_SELECTION       = {0x5B2482B3, 0x0358, 0x4E09, 0xAA, 0x64, 0x2B, 0x76, 0xB2, 0xA0, 0xDD, 0xFE};
 static const GUID CLIENTID_FILESAVE_TEMPLATE        = {0x9996D877, 0x20D5, 0x424B, 0x9C, 0x2E, 0xD3, 0xB6, 0x31, 0xEC, 0xF7, 0xCE};
 static const GUID CLIENTID_FILEOPEN_LINK_TEMPLATE   = {0x32237796, 0x1509, 0x49D1, 0xBB, 0x7E, 0x63, 0xAD, 0x36, 0xAE, 0x86, 0x8C};
+static const GUID CLIENTID_FILEOPEN_LINK_ANCHOR     = {0xBE3188CB, 0x399A, 0x45AE, 0x8F, 0x78, 0x75, 0x17, 0xAF, 0x26, 0x81, 0xEA};
 static const GUID CLIENTID_FILEOPEN_PLAY            = {0x32CFB147, 0xF5AE, 0x4F90, 0xA1, 0xF1, 0x81, 0x20, 0x72, 0xBB, 0x2F, 0xC5};
 static const GUID CLIENTID_FILEOPEN_LINK            = {0x39AC4BAE, 0x7D2D, 0x46BC, 0xBE, 0x2E, 0xF8, 0x8C, 0xB5, 0x65, 0x5E, 0x6A};
 
@@ -492,6 +493,7 @@ static const ::sal_Int32 GROUP_VERSION         =   1;
 static const ::sal_Int32 GROUP_TEMPLATE        =   2;
 static const ::sal_Int32 GROUP_IMAGETEMPLATE   =   3;
 static const ::sal_Int32 GROUP_CHECKBOXES      =   4;
+static const ::sal_Int32 GROUP_IMAGEANCHOR     =   5;
 
 
 static void setLabelToControl(TFileDialogCustomize iCustom, sal_uInt16 nControlId)
@@ -535,6 +537,10 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
             aGUID = CLIENTID_FILEOPEN_LINK_TEMPLATE;
             break;
 
+        case css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR :
+            aGUID = CLIENTID_FILEOPEN_LINK_ANCHOR;
+            break;
+
         case css::ui::dialogs::TemplateDescription::FILEOPEN_PLAY :
         case css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PLAY :
             aGUID = CLIENTID_FILEOPEN_PLAY;
@@ -571,6 +577,14 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
         iCustom->AddComboBox      (css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE);
         iCustom->EndVisualGroup   ();
         iCustom->MakeProminent    (GROUP_IMAGETEMPLATE);
+    }
+
+    if ((nFeatures & FEATURE_IMAGEANCHOR) == FEATURE_IMAGEANCHOR)
+    {
+        iCustom->StartVisualGroup (GROUP_IMAGEANCHOR, o3tl::toW(FpsResId(STR_SVT_FILEPICKER_IMAGE_ANCHOR).replaceFirst("~","").getStr()));
+        iCustom->AddComboBox      (css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_IMAGE_ANCHOR);
+        iCustom->EndVisualGroup   ();
+        iCustom->MakeProminent    (GROUP_IMAGEANCHOR);
     }
 
     iCustom->StartVisualGroup (GROUP_CHECKBOXES, L"");
@@ -1058,6 +1072,7 @@ void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
         case css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_VERSION :
         case css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_TEMPLATE :
         case css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE :
+        case css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_IMAGE_ANCHOR :
             {
                 HRESULT hResult;
                 switch (nAction)
@@ -1132,6 +1147,7 @@ void VistaFilePickerImpl::impl_sta_GetControlValue(const RequestRef& rRequest)
         case css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_VERSION:
         case css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_TEMPLATE:
         case css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE:
+        case css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_IMAGE_ANCHOR:
             {
                 DWORD    bValue = 0;
                 HRESULT hResult = iCustom->GetSelectedControlItem(nId, &bValue);
