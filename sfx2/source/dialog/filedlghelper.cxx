@@ -259,6 +259,11 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
             sHelpId = HID_FILEOPEN_IMAGE_TEMPLATE;
             break;
 
+        case ExtendedFilePickerElementIds::LISTBOX_IMAGE_ANCHOR_LABEL :
+        case ExtendedFilePickerElementIds::LISTBOX_IMAGE_ANCHOR :
+            sHelpId = HID_FILEOPEN_IMAGE_ANCHOR;
+            break;
+
         case ExtendedFilePickerElementIds::CHECKBOX_SELECTION :
             sHelpId = HID_FILESAVE_SELECTION;
             break;
@@ -820,6 +825,7 @@ static open_or_save_t lcl_OpenOrSave(sal_Int16 const nDialogType)
     {
         case FILEOPEN_SIMPLE:
         case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
+        case FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR:
         case FILEOPEN_PLAY:
         case FILEOPEN_LINK_PLAY:
         case FILEOPEN_READONLY_VERSION:
@@ -982,10 +988,11 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
             case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
                 nTemplateDescription = TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE;
                 mbHasPreview = true;
+                break;
 
-                // aPreviewTimer
-                maPreviewIdle.SetPriority( TaskPriority::LOWEST );
-                maPreviewIdle.SetInvokeHandler( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
+            case FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR:
+                nTemplateDescription = TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR;
+                mbHasPreview = true;
                 break;
 
             case FILEOPEN_PLAY:
@@ -1004,9 +1011,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
             case FILEOPEN_LINK_PREVIEW:
                 nTemplateDescription = TemplateDescription::FILEOPEN_LINK_PREVIEW;
                 mbHasPreview = true;
-                // aPreviewTimer
-                maPreviewIdle.SetPriority( TaskPriority::LOWEST );
-                maPreviewIdle.SetInvokeHandler( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
                 break;
 
             case FILESAVE_AUTOEXTENSION:
@@ -1018,14 +1022,17 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
             case FILEOPEN_PREVIEW:
                 nTemplateDescription = TemplateDescription::FILEOPEN_PREVIEW;
                 mbHasPreview = true;
-                // aPreviewTimer
-                maPreviewIdle.SetPriority( TaskPriority::LOWEST );
-                maPreviewIdle.SetInvokeHandler( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
                 break;
 
             default:
                 SAL_WARN( "sfx.dialog", "FileDialogHelper::ctor with unknown type" );
                 break;
+        }
+
+        if (mbHasPreview)
+        {
+            maPreviewIdle.SetPriority( TaskPriority::LOWEST );
+            maPreviewIdle.SetInvokeHandler( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
         }
 
         Sequence < Any > aInitArguments( !mpPreferredParentWindow ? 3 : 4 );

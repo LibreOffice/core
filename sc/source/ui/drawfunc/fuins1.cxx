@@ -43,7 +43,13 @@
 #include <strings.hrc>
 #include <globstr.hrc>
 
-using namespace ::com::sun::star;
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+
+using namespace css;
+using namespace css::uno;
 
 void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
 {
@@ -92,7 +98,8 @@ void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
 
 static void lcl_InsertGraphic( const Graphic& rGraphic,
                         const OUString& rFileName, const OUString& rFilterName, bool bAsLink, bool bApi,
-                        ScTabViewShell* pViewSh, const vcl::Window* pWindow, SdrView* pView )
+                        ScTabViewShell* pViewSh, const vcl::Window* pWindow, SdrView* pView,
+                        bool bAnchorToCell=true )
 {
     ScDrawView* pDrawView = pViewSh->GetScDrawView();
 
@@ -164,8 +171,8 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     OUString aName = pLayer->GetNewGraphicName();                 // "Graphics"
     pObj->SetName(aName);
 
-    // Anchor images to cell by default, tdf#86739
-    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *(rData.GetDocument()), rData.GetTabNo());
+    if (bAnchorToCell)
+        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *(rData.GetDocument()), rData.GetTabNo());
 
     //  don't select if from (dispatch) API, to allow subsequent cell operations
     SdrInsertFlags nInsOptions = bApi ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE;
@@ -258,7 +265,30 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
     }
     else
     {
-        SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC), pWin);
+        SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC), pWin,
+                                  ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR);
+
+        Reference<ui::dialogs::XFilePickerControlAccess> xCtrlAcc = aDlg.GetFilePickerControlAccess();
+        sal_Int16 nSelect = 0;
+        Sequence<OUString> aListBoxEntries {
+            ScResId(STR_ANCHOR_TO_CELL),
+            ScResId(STR_ANCHOR_TO_PAGE)
+        };
+        try
+        {
+            Any aTemplates(&aListBoxEntries, cppu::UnoType<decltype(aListBoxEntries)>::get());
+
+            xCtrlAcc->setValue(ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_IMAGE_ANCHOR,
+                ui::dialogs::ListboxControlActions::ADD_ITEMS, aTemplates);
+
+            Any aSelectPos(&nSelect, cppu::UnoType<decltype(nSelect)>::get());
+            xCtrlAcc->setValue(ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_IMAGE_ANCHOR,
+                ui::dialogs::ListboxControlActions::SET_SELECT_ITEM, aSelectPos);
+        }
+        catch (const Exception&)
+        {
+            SAL_WARN("sc", "control access failed");
+        }
 
         if( aDlg.Execute() == ERRCODE_NONE )
         {
@@ -278,7 +308,15 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
                         bAsLink = false; // don't store as link
                 }
 
-                lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, false, pViewSh, pWindow, pView );
+                // Anchor to cell or to page?
+                Any aAnchorValue = xCtrlAcc->getValue(
+                    ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_IMAGE_ANCHOR,
+                    ui::dialogs::ListboxControlActions::GET_SELECTED_ITEM );
+                OUString sAnchor;
+                aAnchorValue >>= sAnchor;
+                bool bAnchorToCell = sAnchor == ScResId(STR_ANCHOR_TO_CELL);
+
+                lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, false, pViewSh, pWindow, pView, bAnchorToCell );
 
                 //  append items for recording
                 rReq.AppendItem( SfxStringItem( SID_INSERT_GRAPHIC, aFileName ) );
