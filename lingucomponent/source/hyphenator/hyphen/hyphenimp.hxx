@@ -50,7 +50,7 @@ struct HDInfo {
   OUString         aName;
   Locale           aLoc;
   rtl_TextEncoding eEnc;
-  CharClass *      apCC;
+  std::unique_ptr<CharClass> apCC;
 };
 
 class Hyphenator :
@@ -65,11 +65,10 @@ class Hyphenator :
     >
 {
     Sequence< Locale >                      aSuppLocales;
-    HDInfo * aDicts;
-    sal_Int32 numdict;
+    std::vector< HDInfo >                   mvDicts;
 
     ::comphelper::OInterfaceContainerHelper2       aEvtListeners;
-    linguistic::PropertyHelper_Hyphenation* pPropHelper;
+    std::unique_ptr<linguistic::PropertyHelper_Hyphenation> pPropHelper;
     bool                                    bDisposing;
 
     Hyphenator(const Hyphenator &) = delete;

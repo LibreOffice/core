@@ -113,7 +113,6 @@ Thesaurus::~Thesaurus()
     if (pPropHelper)
     {
         pPropHelper->RemoveAsPropListener();
-        delete pPropHelper;
     }
 }
 
