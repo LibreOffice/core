@@ -265,7 +265,9 @@ SwLabPage::SwLabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pAddrBox->SetClickHdl (LINK(this, SwLabPage, AddrHdl         ));
     m_pDatabaseLB->SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
     m_pTableLB->SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
+    m_pDBFieldLB->SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
     m_pInsertBT->SetClickHdl (LINK(this, SwLabPage, FieldHdl        ));
+    m_pInsertBT->Disable(); // Disabling at first
     m_pContButton->SetClickHdl (LINK(this, SwLabPage, PageHdl         ));
     m_pSheetButton->SetClickHdl (LINK(this, SwLabPage, PageHdl         ));
     m_pMakeBox->SetSelectHdl(LINK(this, SwLabPage, MakeHdl         ));
@@ -343,18 +345,23 @@ IMPL_LINK( SwLabPage, DatabaseHdl, ListBox&, rListBox, void )
         GetDBManager()->GetTableNames(m_pTableLB, sActDBName);
 
     GetDBManager()->GetColumnNames(m_pDBFieldLB, sActDBName, m_pTableLB->GetSelectedEntry());
+
+    if( (!(m_pDatabaseLB->GetSelectedEntry()).isEmpty() && !(m_pTableLB->GetSelectedEntry()).isEmpty()) )
+    {
+        m_pInsertBT->Enable();
+    }
 }
 
 IMPL_LINK_NOARG(SwLabPage, FieldHdl, Button*, void)
 {
-    OUString aStr("<" + m_pDatabaseLB->GetSelectedEntry() + "." +
-                  m_pTableLB->GetSelectedEntry() + "." +
-                  (m_pTableLB->GetSelectedEntryData() == nullptr ? OUString("0") : OUString("1")) + "." +
-                  m_pDBFieldLB->GetSelectedEntry() + ">");
-    m_pWritingEdit->ReplaceSelected(aStr);
-    Selection aSel = m_pWritingEdit->GetSelection();
-    m_pWritingEdit->GrabFocus();
-    m_pWritingEdit->SetSelection(aSel);
+        OUString aStr("<" + m_pDatabaseLB->GetSelectedEntry() + "." +
+                      m_pTableLB->GetSelectedEntry() + "." +
+                      (m_pTableLB->GetSelectedEntryData() == nullptr ? OUString("0") : OUString("1")) + "." +
+                      m_pDBFieldLB->GetSelectedEntry() + ">");
+        m_pWritingEdit->ReplaceSelected(aStr);
+        Selection aSel = m_pWritingEdit->GetSelection();
+        m_pWritingEdit->GrabFocus();
+        m_pWritingEdit->SetSelection(aSel);
 }
 
 IMPL_LINK_NOARG(SwLabPage, PageHdl, Button*, void)
