@@ -387,8 +387,10 @@ private:
         size_t mnStyleXf;
         bool mbAlignment;
 
-        SvxCellHorJustify meHor_alignment;
-        SvxCellVerJustify meVer_alignment;
+        SvxCellHorJustify meHorAlignment;
+        SvxCellVerJustify meVerAlignment;
+        SvxCellJustifyMethod meHorAlignMethod;
+        SvxCellJustifyMethod meVerAlignMethod;
 
         xf();
     };
