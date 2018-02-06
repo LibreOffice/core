@@ -31,9 +31,6 @@ FloatingWindowAccessible::FloatingWindowAccessible(VCLXWindow* pWindow) :
     VCLXAccessibleComponent(pWindow)
 {
 }
-FloatingWindowAccessible::~FloatingWindowAccessible()
-{
-}
 
 void FloatingWindowAccessible::FillAccessibleRelationSet(utl::AccessibleRelationSetHelper& rRelationSet)
 {

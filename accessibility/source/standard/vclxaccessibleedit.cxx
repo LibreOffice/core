@@ -65,11 +65,6 @@ VCLXAccessibleEdit::VCLXAccessibleEdit( VCLXWindow* pVCLWindow )
 }
 
 
-VCLXAccessibleEdit::~VCLXAccessibleEdit()
-{
-}
-
-
 void VCLXAccessibleEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     switch ( rVclWindowEvent.GetId() )

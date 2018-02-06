@@ -36,7 +36,7 @@ typedef ::cppu::ImplHelper1  <   css::accessibility::XAccessible
                             >   AccessibleTabListBox_Base;
 
 /** !!! */
-class AccessibleTabListBox
+class AccessibleTabListBox final
                 :public AccessibleBrowseBox
                 ,public AccessibleTabListBox_Base
                 ,public ::svt::IAccessibleTabListBox
@@ -52,7 +52,6 @@ public:
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         SvHeaderTabListBox& rBox );
 
-public:
     // XInterface
     DECLARE_XINTERFACE( )
     // XTypeProvider
@@ -83,7 +82,7 @@ public:
         return AccessibleBrowseBox::getHeaderBar( svt::BBTYPE_COLUMNHEADERBAR );
     }
 
-protected:
+private:
     /** dtor() */
     virtual ~AccessibleTabListBox() override;
 

@@ -31,11 +31,6 @@ VCLXAccessibleFixedHyperlink::VCLXAccessibleFixedHyperlink( VCLXWindow* pVCLWind
 }
 
 
-VCLXAccessibleFixedHyperlink::~VCLXAccessibleFixedHyperlink()
-{
-}
-
-
 // XServiceInfo
 
 

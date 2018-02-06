@@ -48,10 +48,6 @@ AccessibleGridControlHeader::AccessibleGridControlHeader(
         "extended/AccessibleGridControlHeaderBar - invalid object type" );
 }
 
-AccessibleGridControlHeader::~AccessibleGridControlHeader()
-{
-}
-
 // XAccessibleContext ---------------------------------------------------------
 
 Reference< XAccessible > SAL_CALL
