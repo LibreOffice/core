@@ -227,6 +227,8 @@ public:
     void exportDocumentProperties( const css::uno::Reference< css::document::XDocumentProperties >& xProperties );
 
     void importDocumentProperties();
+    static void putPropertiesToDocumentGrabBag(const css::uno::Reference<css::lang::XComponent>& xDstDoc,
+                                               const comphelper::SequenceAsHashMap& rProperties);
 
     static FastParser* createParser();
 
