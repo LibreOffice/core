@@ -136,7 +136,10 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
                 mContext.preparePresentation();
                 return true;
             case R.id.action_add_slide:
-                mContext.addSlide();
+                mContext.addPart();
+                return true;
+            case R.id.action_add_worksheet:
+                mContext.addPart();
                 return true;
         }
         return false;

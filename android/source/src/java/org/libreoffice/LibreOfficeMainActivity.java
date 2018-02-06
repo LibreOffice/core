@@ -691,7 +691,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         aboutDialogFragment.show(getSupportFragmentManager(), "AboutDialogFragment");
     }
 
-    public void addSlide(){
+    public void addPart(){
         mTileProvider.addPart();
         mDocumentPartViewListAdapter.notifyDataSetChanged();
         setDocumentChanged(true);
