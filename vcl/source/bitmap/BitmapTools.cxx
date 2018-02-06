@@ -24,6 +24,8 @@
 #include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/salbtype.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 using namespace css;
 
@@ -99,6 +101,38 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
         }
     }
 
+}
+
+/** Copy block of image data into the bitmap.
+    Assumes that the Bitmap has been constructed with the desired size.
+
+    @param pData
+    The block of data to copy
+    @param nStride
+    The number of bytes in a scanline, must >= width
+*/
+BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nStride, sal_uInt16 nBitCount )
+{
+    assert(nStride >= nWidth);
+    Bitmap aBmp( Size( nWidth, nHeight ), nBitCount );
+
+    Bitmap::ScopedWriteAccess pWrite(aBmp);
+    assert(pWrite.get());
+    if( pWrite.get() )
+    {
+        for( long y = 0; y < nHeight; ++y )
+        {
+            sal_uInt8 const *p = pData + y * nStride;
+            Scanline pScanline = pWrite->GetScanline(y);
+            for (long x = 0; x < nWidth; ++x)
+            {
+                BitmapColor col(p[0], p[1], p[2]);
+                pWrite->SetPixelOnData(pScanline, x, col);
+                p += 3;
+            }
+        }
+    }
+    return aBmp;
 }
 
 }} // end vcl::bitmap

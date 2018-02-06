@@ -650,16 +650,6 @@ public:
                                 BmpFilter eFilter,
                                 const BmpFilterParam* pFilterParam = nullptr );
 
-    /** Copy block of image data into the bitmap.
-        Assumes that the Bitmap has been constructed with the desired size.
-
-        @param pData
-        The block of data to copy
-        @param nStride
-        The number of bytes in a scanline, must >= width
-     */
-    void                    SetToData( sal_uInt8 const *pData, sal_Int32 nStride );
-
 public:
 
     SAL_DLLPRIVATE void     ImplMakeUnique();
