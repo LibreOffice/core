@@ -347,14 +347,17 @@ IMPL_LINK( SwLabPage, DatabaseHdl, ListBox&, rListBox, void )
 
 IMPL_LINK_NOARG(SwLabPage, FieldHdl, Button*, void)
 {
-    OUString aStr("<" + m_pDatabaseLB->GetSelectedEntry() + "." +
-                  m_pTableLB->GetSelectedEntry() + "." +
-                  (m_pTableLB->GetSelectedEntryData() == nullptr ? OUString("0") : OUString("1")) + "." +
-                  m_pDBFieldLB->GetSelectedEntry() + ">");
+    if(m_pDatabaseLB->GetSelectedEntry()!="" && m_pTableLB->GetSelectedEntryData()!="" && m_pDBFieldLB->GetSelectedEntry()!="")
+    {
+        OUString aStr("<" + m_pDatabaseLB->GetSelectedEntry() + "." +
+                      m_pTableLB->GetSelectedEntry() + "." +
+                      (m_pTableLB->GetSelectedEntryData() == nullptr ? OUString("0") : OUString("1")) + "." +
+                      m_pDBFieldLB->GetSelectedEntry() + ">");
     m_pWritingEdit->ReplaceSelected(aStr);
     Selection aSel = m_pWritingEdit->GetSelection();
     m_pWritingEdit->GrabFocus();
     m_pWritingEdit->SetSelection(aSel);
+    }
 }
 
 IMPL_LINK_NOARG(SwLabPage, PageHdl, Button*, void)
