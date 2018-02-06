@@ -112,8 +112,7 @@ void CGM::ImplDoClass4()
         CGMBitmapDescriptor* pBmpDesc = mpBitmapInUse->GetBitmap();
         // do anything with the bitmap
         mpOutAct->DrawBitmap( pBmpDesc );
-        delete mpBitmapInUse;
-        mpBitmapInUse = nullptr;
+        mpBitmapInUse.reset();
     }
 
     if ( ( mpChart == nullptr ) || mpChart->IsAnnotation() )
@@ -316,7 +315,7 @@ void CGM::ImplDoClass4()
                 }
                 else
                 {
-                    mpBitmapInUse = new CGMBitmap( *this );
+                    mpBitmapInUse.reset( new CGMBitmap( *this ) );
                 }
             }
             break;

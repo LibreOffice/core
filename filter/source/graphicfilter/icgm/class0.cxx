@@ -38,8 +38,7 @@ void CGM::ImplDoClass0()
                 CGMBitmapDescriptor* pBmpDesc = mpBitmapInUse->GetBitmap();
                 // do anything with the bitmap
                 mpOutAct->DrawBitmap( pBmpDesc );
-                delete mpBitmapInUse;
-                mpBitmapInUse = nullptr;
+                mpBitmapInUse.reset();
             }
             mbIsFinished = true;
             mbPictureBody = false;
@@ -75,8 +74,7 @@ void CGM::ImplDoClass0()
                     CGMBitmapDescriptor* pBmpDesc = mpBitmapInUse->GetBitmap();
                     // do anything with the bitmap
                     mpOutAct->DrawBitmap( pBmpDesc );
-                    delete mpBitmapInUse;
-                    mpBitmapInUse = nullptr;
+                    mpBitmapInUse.reset();
                 }
                 mpOutAct->EndFigure();                          // close potential figures
                 mpOutAct->EndGrouping();                        // finish potential groups

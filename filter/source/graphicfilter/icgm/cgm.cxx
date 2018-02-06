@@ -64,26 +64,19 @@ CGM::CGM(uno::Reference< frame::XModel > const & rModel)
     , mnElementID(0)
     , mnElementSize(0)
 {
-    pElement = new CGMElements;
-    pCopyOfE = new CGMElements;
+    pElement.reset( new CGMElements );
+    pCopyOfE.reset( new CGMElements );
 }
 
 CGM::~CGM()
 {
-    for(sal_uInt8* i : maDefRepList)
-        delete [] i;
     maDefRepList.clear();
     maDefRepSizeList.clear();
-    delete mpBitmapInUse;
-    delete mpChart;
-    delete mpOutAct;
-    delete pCopyOfE;
-    delete pElement;
 };
 
 sal_uInt32 CGM::GetBackGroundColor()
 {
-    return ( pElement ) ? pElement->aColorTable[ 0 ] : 0;
+    return pElement ? pElement->aColorTable[ 0 ] : 0;
 }
 
 sal_uInt32 CGM::ImplGetUI16()
@@ -615,7 +608,7 @@ void CGM::ImplDefaultReplacement()
 
         for ( size_t i = 0, n = maDefRepList.size(); i < n; ++i )
         {
-            sal_uInt8*  pBuf = maDefRepList[ i ];
+            sal_uInt8*  pBuf = maDefRepList[ i ].get();
             sal_uInt32  nElementSize = maDefRepSizeList[ i ];
             mpEndValidSource = pBuf + nElementSize;
             sal_uInt32  nCount = 0;

@@ -48,7 +48,7 @@ void CGM::ImplDoClass7()
                             throw css::uno::Exception("attempt to read past end of input", nullptr);
 
                         if ( mpChart == nullptr )
-                            mpChart = new CGMChart;
+                            mpChart.reset( new CGMChart );
                         mpChart->mnCurrentFileType = pAppData[ 3 ];
                     }
                     break;
