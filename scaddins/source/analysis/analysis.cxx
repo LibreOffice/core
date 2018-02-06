@@ -73,12 +73,10 @@ void AnalysisAddIn::InitData()
 {
     aResLocale = Translate::Create("sca", LanguageTag(aFuncLoc));
 
-    delete pFD;
-    pFD = new FuncDataList;
+    pFD.reset(new FuncDataList);
     InitFuncDataList(*pFD);
 
-    delete pDefLocales;
-    pDefLocales = nullptr;
+    pDefLocales.reset();
 }
 
 AnalysisAddIn::AnalysisAddIn( const uno::Reference< uno::XComponentContext >& xContext ) :
@@ -92,9 +90,6 @@ AnalysisAddIn::AnalysisAddIn( const uno::Reference< uno::XComponentContext >& xC
 
 AnalysisAddIn::~AnalysisAddIn()
 {
-    delete pCDL;
-    delete pFD;
-    delete[] pDefLocales;
 }
 
 sal_Int32 AnalysisAddIn::getDateMode(
@@ -337,7 +332,7 @@ static const sal_uInt32     nNumOfLoc = SAL_N_ELEMENTS(pLang);
 
 void AnalysisAddIn::InitDefLocales()
 {
-    pDefLocales = new lang::Locale[ nNumOfLoc ];
+    pDefLocales.reset( new lang::Locale[ nNumOfLoc ] );
 
     for( sal_uInt32 n = 0 ; n < nNumOfLoc ; n++ )
     {
@@ -1099,7 +1094,7 @@ OUString SAL_CALL AnalysisAddIn::getComplex( double fR, double fI, const uno::An
 double SAL_CALL AnalysisAddIn::getConvert( double f, const OUString& aFU, const OUString& aTU )
 {
     if( !pCDL )
-        pCDL = new ConvertDataList();
+        pCDL.reset(new ConvertDataList());
 
     double fRet = pCDL->Convert( f, aFU, aTU );
     RETURN_FINITE( fRet );

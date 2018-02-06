@@ -30,6 +30,7 @@
 
 #include <string.h>
 #include <vector>
+#include <memory>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -131,9 +132,9 @@ class ScaPricingAddIn : public ::cppu::WeakImplHelper<
 {
 private:
     css::lang::Locale  aFuncLoc;
-    css::lang::Locale* pDefLocales;
+    std::unique_ptr<css::lang::Locale[]> pDefLocales;
     std::locale        aResLocale;
-    sca::pricing::ScaFuncDataList*            pFuncDataList;
+    std::unique_ptr<sca::pricing::ScaFuncDataList> pFuncDataList;
 
 
     void                        InitDefLocales();

@@ -53,10 +53,10 @@ class AnalysisAddIn : public cppu::WeakImplHelper<
 {
 private:
     css::lang::Locale           aFuncLoc;
-    css::lang::Locale*          pDefLocales;
-    sca::analysis::FuncDataList* pFD;
+    std::unique_ptr<css::lang::Locale[]> pDefLocales;
+    std::unique_ptr<sca::analysis::FuncDataList> pFD;
     std::unique_ptr<double[]>   pFactDoubles;
-    sca::analysis::ConvertDataList* pCDL;
+    std::unique_ptr<sca::analysis::ConvertDataList> pCDL;
     std::locale                 aResLocale;
 
     sca::analysis::ScaAnyConverter aAnyConv;
