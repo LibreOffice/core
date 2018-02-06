@@ -1,3 +1,4 @@
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -17,16 +18,14 @@ def get_url_for_data_file(file_name):
 
 class insertField(UITestCase):
 
-    def test_insert_field(self):
+    def test_insert_field_document_author(self):
 
         writer_doc = self.ui_test.load_file(get_url_for_data_file("insertField.odt"))
         document = self.ui_test.get_component()
 
-#fill the Options-> User data
-
+        #fill the Options-> User data
         self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
         xProperties = self.xUITest.getTopFocusWindow()
-#('OptUserPage', 'OptionsDialog', 'alignment1', 'alignment2', 'apartnum', 'box', 'box2', 'cancel', 'city', 'cityft', 'company', 'companyft', 'country', 'countryft', 'cryptography', 'cryptographylabel', 'dialog-action_area1', 'dialog-vbox1', 'eastfirstname', 'eastlastname', 'eastnameft', 'eastshortname', 'email', 'encryptionkey', 'encryptionkeylabel', 'encrypttoself', 'fax', 'faxft', 'firstname', 'frame1', 'grid1', 'grid10', 'grid11', 'grid12', 'grid13', 'grid14', 'grid2', 'grid3', 'grid4', 'grid5', 'grid6', 'grid7', 'grid8', 'grid9', 'help', 'home', 'icity', 'icityft', 'izip', 'label1', 'lastname', 'nameft', 'ok', 'pages', 'phoneft', 'position', 'revert', 'rusfathersname', 'rusfirstname', 'ruslastname', 'rusnameft', 'russhortname', 'russtreet', 'russtreetft', 'shortname', 'signingkey', 'signingkeylabel', 'state', 'street', 'streetft', 'title', 'titleft', 'usefordocprop', 'work', 'zip')
 
         xCompanyText = xProperties.getChild("company")
         xCompanyText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
@@ -101,7 +100,7 @@ class insertField(UITestCase):
         xOkBtn = xProperties.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())   # save the data in properties dialog
 
-          #check data saved in properties dialog
+        #check data saved in properties dialog
         self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
         xProperties = self.xUITest.getTopFocusWindow()
 
@@ -136,20 +135,16 @@ class insertField(UITestCase):
 
         xCancBtn = xProperties.getChild("cancel")
         xCancBtn.executeAction("CLICK", tuple())   # close the dialog
-#        sleep(1)  # need a sleep here??
-          # Cross reference: .uno:InsertReferenceField
+
+        # Cross reference: .uno:InsertReferenceField
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
-#('FieldDbPage', 'FieldDialog', 'FieldDocInfoPage', 'FieldDocumentPage', 'FieldFuncPage', 'FieldRefPage', 'FieldVarPage', 'add', 'alignment1', 'alignment2', 'alignment3', 'alignment4', 'box1', 'box2', 'box3', 'box4', 'box5', 'browse', 'browseft', 'buttonbox1', 'cancel', 'chapterframe', 'cond1', 'cond1ft', 'cond2', 'cond2ft', 'condgroup', 'condition', 'daysft', 'dialog-action_area1', 'dialog-vbox1', 'down', 'filter', 'fixed', 'format', 'formatframe', 'fromdatabasecb', 'grid1', 'grid2', 'grid3', 'grid4', 'grid5', 'grid6', 'grid7', 'grid8', 'grid9', 'help', 'invisible', 'item', 'itemft', 'label1', 'label2', 'label3', 'label4', 'label5', 'level', 'levelft', 'listgroup', 'listitemft', 'listitems', 'listname', 'listnameft', 'macro', 'minutesft', 'name', 'nameft', 'numformat', 'offset', 'ok', 'recgroup', 'recnumber', 'remove', 'reset', 'select', 'selectframe', 'selecttip', 'separator', 'separatorft', 'standard', 'tabcontrol', 'toolbar', 'type', 'typeframe', 'up', 'userdefinedcb', 'value', 'valueft', 'valuegroup')
-
-#        print(xCrossRef.getChildren())
-
         xTabs = xCrossRef.getChild("tabcontrol")
         select_pos(xTabs, "0")
         xCloseBtn = xCrossRef.getChild("cancel")
         xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
 
-#Author ->Name
+        #Author ->Name
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
         xTabs = xCrossRef.getChild("tabcontrol")
@@ -167,7 +162,7 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Author ->Initials
+        #Author ->Initials
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
         xTypeListbox = xCrossRef.getChild("type")
@@ -182,8 +177,14 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
+        self.ui_test.close_doc()
 
-#Date
+    def test_insert_field_document_date(self):
+        self.ui_test.create_doc_in_start_center("writer")
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        #Date
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
         xTypeListbox = xCrossRef.getChild("type")
@@ -198,14 +199,22 @@ class insertField(UITestCase):
         xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
+        self.ui_test.close_doc()
 
-#File name ->File Name
+    def test_insert_field_document_file_name(self):
+        writer_doc = self.ui_test.load_file(get_url_for_data_file("insertField.odt"))
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+        #File name ->File Name
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
-        sleep(1)
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
+
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "2")
-        xTypeListbox.executeAction("RETURN", tuple())
         xSelectListbox = xCrossRef.getChild("format")
         select_pos(xSelectListbox, "0")
         xAddBtn = xCrossRef.getChild("ok")
@@ -216,9 +225,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#File name ->File Name without extension
+        #File name ->File Name without extension
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "2")
         xSelectListbox = xCrossRef.getChild("format")
@@ -231,9 +242,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#File name ->Path
+        #File name ->Path
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "2")
         xSelectListbox = xCrossRef.getChild("format")
@@ -245,9 +258,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#File name ->Path/file_name
+        #File name ->Path/file_name
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "2")
         xSelectListbox = xCrossRef.getChild("format")
@@ -259,9 +274,19 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Chapter
+        self.ui_test.close_doc()
+
+    def test_insert_field_document_chapter(self):
+        self.ui_test.create_doc_in_start_center("writer")
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        #Chapter
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
+
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "3")
         xSelectListbox = xCrossRef.getChild("format")
@@ -273,10 +298,17 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#アｱaAaA1
-#Page number -> 1,2,3
+    def test_insert_field_document_page(self):
+        self.ui_test.create_doc_in_start_center("writer")
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        #アｱaAaA1
+        #Page number -> 1,2,3
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "4")
         xSelectListbox = xCrossRef.getChild("select")
@@ -291,9 +323,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Page number -> 1,2,3 ｱ
+        #Page number -> 1,2,3 ｱ
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "4")
         xSelectListbox = xCrossRef.getChild("select")
@@ -308,9 +342,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Page number -> a..aa..aaa
+        #Page number -> a..aa..aaa
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "4")
         xSelectListbox = xCrossRef.getChild("select")
@@ -325,9 +361,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Page number -> A..AA..AAA
+        #Page number -> A..AA..AAA
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "4")
         xSelectListbox = xCrossRef.getChild("select")
@@ -342,9 +380,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Page number -> a b c
+        #Page number -> a b c
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "4")
         xSelectListbox = xCrossRef.getChild("select")
@@ -359,9 +399,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Page number -> A B C
+        #Page number -> A B C
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "4")
         xSelectListbox = xCrossRef.getChild("select")
@@ -376,9 +418,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Page number -> Arabic 1,2,3
+        #Page number -> Arabic 1,2,3
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "4")
         xSelectListbox = xCrossRef.getChild("select")
@@ -393,9 +437,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Page number -> Roman
+        #Page number -> Roman
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "4")
         xSelectListbox = xCrossRef.getChild("select")
@@ -410,9 +456,96 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Sender -> Company
+        self.ui_test.close_doc()
+
+    def test_insert_field_document_sender(self):
+        writer_doc = self.ui_test.load_file(get_url_for_data_file("insertField.odt"))
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+        #fill the Options-> User data
+        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
+        xProperties = self.xUITest.getTopFocusWindow()
+
+        xCompanyText = xProperties.getChild("company")
+        xCompanyText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xCompanyText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xCompanyText.executeAction("TYPE", mkPropertyValues({"TEXT":"Documentfoundation"}))
+
+        xfirstnameText = xProperties.getChild("firstname")
+        xfirstnameText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xfirstnameText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xfirstnameText.executeAction("TYPE", mkPropertyValues({"TEXT":"Libre"}))
+
+        xlastnameText = xProperties.getChild("lastname")
+        xlastnameText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xlastnameText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xlastnameText.executeAction("TYPE", mkPropertyValues({"TEXT":"Office"}))
+
+        xstreetText = xProperties.getChild("street")
+        xstreetText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xstreetText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xstreetText.executeAction("TYPE", mkPropertyValues({"TEXT":"Street"}))
+
+        xCityText = xProperties.getChild("city")
+        xCityText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xCityText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xCityText.executeAction("TYPE", mkPropertyValues({"TEXT":"City"}))
+
+        xStateText = xProperties.getChild("state")
+        xStateText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xStateText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xStateText.executeAction("TYPE", mkPropertyValues({"TEXT":"State"}))
+
+        xZIPText = xProperties.getChild("zip")
+        xZIPText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xZIPText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xZIPText.executeAction("TYPE", mkPropertyValues({"TEXT":"0000000"}))
+
+        xCountryText = xProperties.getChild("country")
+        xCountryText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xCountryText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xCountryText.executeAction("TYPE", mkPropertyValues({"TEXT":"Country"}))
+
+        xTitleText = xProperties.getChild("title")
+        xTitleText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xTitleText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xTitleText.executeAction("TYPE", mkPropertyValues({"TEXT":"Title_prop"}))
+
+        xPositionText = xProperties.getChild("position")
+        xPositionText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xPositionText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xPositionText.executeAction("TYPE", mkPropertyValues({"TEXT":"position"}))
+
+        xHomephoneText = xProperties.getChild("home")
+        xHomephoneText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xHomephoneText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xHomephoneText.executeAction("TYPE", mkPropertyValues({"TEXT":"0001"}))
+
+        xWorkphoneText = xProperties.getChild("work")
+        xWorkphoneText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xWorkphoneText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xWorkphoneText.executeAction("TYPE", mkPropertyValues({"TEXT":"0002"}))
+
+        xFaxText = xProperties.getChild("fax")
+        xFaxText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xFaxText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xFaxText.executeAction("TYPE", mkPropertyValues({"TEXT":"0003"}))
+
+        xEmailText = xProperties.getChild("email")
+        xEmailText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xEmailText.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xEmailText.executeAction("TYPE", mkPropertyValues({"TEXT":"email"}))
+
+        xOkBtn = xProperties.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())   # save the data in properties dialog
+
+        #Sender -> Company
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "6")
         xSelectListbox = xCrossRef.getChild("select")
@@ -425,9 +558,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Sender -> firstname
+        #Sender -> firstname
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "6")
         xSelectListbox = xCrossRef.getChild("select")
@@ -440,9 +575,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Sender -> lastname
+        #Sender -> lastname
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "6")
         xSelectListbox = xCrossRef.getChild("select")
@@ -455,9 +592,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Sender -> initials
+        #Sender -> initials
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "6")
         xSelectListbox = xCrossRef.getChild("select")
@@ -470,9 +609,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Sender -> street
+        #Sender -> street
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "6")
         xSelectListbox = xCrossRef.getChild("select")
@@ -485,9 +626,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Sender -> Country
+        #Sender -> Country
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "6")
         xSelectListbox = xCrossRef.getChild("select")
@@ -500,9 +643,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Sender -> Zip
+        #Sender -> Zip
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "6")
         xSelectListbox = xCrossRef.getChild("select")
@@ -515,9 +660,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Sender -> City
+        #Sender -> City
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "6")
         xSelectListbox = xCrossRef.getChild("select")
@@ -530,9 +677,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Sender -> Title
+        #Sender -> Title
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "6")
         xSelectListbox = xCrossRef.getChild("select")
@@ -545,9 +694,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Sender -> position
+        #Sender -> position
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "6")
         xSelectListbox = xCrossRef.getChild("select")
@@ -560,9 +711,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Sender -> home tel
+        #Sender -> home tel
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "6")
         xSelectListbox = xCrossRef.getChild("select")
@@ -576,9 +729,11 @@ class insertField(UITestCase):
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
 
-#Sender -> home work
+        #Sender -> home work
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "6")
         xSelectListbox = xCrossRef.getChild("select")
@@ -591,9 +746,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Sender -> fax
+        #Sender -> fax
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "6")
         xSelectListbox = xCrossRef.getChild("select")
@@ -606,9 +763,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Sender -> email
+        #Sender -> email
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "6")
         xSelectListbox = xCrossRef.getChild("select")
@@ -621,9 +780,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Sender -> state
+        #Sender -> state
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "6")
         xSelectListbox = xCrossRef.getChild("select")
@@ -636,9 +797,19 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Statistics -> Pages
+        self.ui_test.close_doc()
+
+    def test_insert_field_document_statistics(self):
+        writer_doc = self.ui_test.load_file(get_url_for_data_file("insertField.odt"))
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+        #Statistics -> Pages
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "7")
         xSelectListbox = xCrossRef.getChild("select")
@@ -651,9 +822,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Statistics -> Paragraphs
+        #Statistics -> Paragraphs
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "7")
         xSelectListbox = xCrossRef.getChild("select")
@@ -666,9 +839,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Statistics -> Words
+        #Statistics -> Words
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "7")
         xSelectListbox = xCrossRef.getChild("select")
@@ -681,9 +856,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Statistics -> Characters
+        #Statistics -> Characters
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "7")
         xSelectListbox = xCrossRef.getChild("select")
@@ -696,9 +873,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Statistics -> Tables
+        #Statistics -> Tables
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "7")
         xSelectListbox = xCrossRef.getChild("select")
@@ -711,9 +890,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Statistics -> Images
+        #Statistics -> Images
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "7")
         xSelectListbox = xCrossRef.getChild("select")
@@ -726,9 +907,11 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Statistics -> Objects
+        #Statistics -> Objects
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "7")
         xSelectListbox = xCrossRef.getChild("select")
@@ -741,9 +924,19 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Time
+        self.ui_test.close_doc()
+
+    def test_insert_field_document_time(self):
+        writer_doc = self.ui_test.load_file(get_url_for_data_file("insertField.odt"))
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+        #Time
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "0")
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "9")
         xSelectListbox = xCrossRef.getChild("select")
@@ -757,9 +950,16 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Conditional text
-#fldfuncpage.ui
-#https://help.libreoffice.org/Writer/Defining_Conditions
+        self.ui_test.close_doc()
+
+    def test_insert_field_document_functions_conditional_text(self):
+        writer_doc = self.ui_test.load_file(get_url_for_data_file("insertField.odt"))
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        #Conditional text
+        #fldfuncpage.ui
+        #https://help.libreoffice.org/Writer/Defining_Conditions
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
 
@@ -767,15 +967,36 @@ class insertField(UITestCase):
         select_pos(xTabs, "2")  # tab Functions
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "0")  # conditional text
-        xTypeListbox.executeAction("RETURN", tuple())
-        sleep(1)
-        xRefTxt = xCrossRef.getChild("name")
-        xRefTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"1 EQ 1"}))  # don't know which textBox is Condition 
+
+        xRefTxt = xCrossRef.getChild("condFunction")
+        xRefTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"1 EQ 1"}))
         xcond1Txt = xCrossRef.getChild("cond1")
         xcond1Txt.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
         xcond2Txt = xCrossRef.getChild("cond2")
         xcond2Txt.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
-#        sleep(7)
+        xAddBtn = xCrossRef.getChild("ok")
+        xAddBtn.executeAction("CLICK", tuple())   # insert the field
+        xCloseBtn = xCrossRef.getChild("cancel")
+        xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
+        self.assertEqual(document.Text.String[0:1], "1")   # assert the field's text Conditional text
+        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
+        self.xUITest.executeCommand(".uno:Cut")   #cut  text
+
+        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
+        xCrossRef = self.xUITest.getTopFocusWindow()
+
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "2")  # tab Functions
+        xTypeListbox = xCrossRef.getChild("type")
+        select_pos(xTypeListbox, "0")  # conditional text
+
+        xRefTxt = xCrossRef.getChild("condFunction")
+        xRefTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"1 EQ 2"}))
+        xcond1Txt = xCrossRef.getChild("cond1")
+        xcond1Txt.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+        xcond2Txt = xCrossRef.getChild("cond2")
+        xcond2Txt.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
+
         xAddBtn = xCrossRef.getChild("ok")
         xAddBtn.executeAction("CLICK", tuple())   # insert the field
         xCloseBtn = xCrossRef.getChild("cancel")
@@ -784,7 +1005,14 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#input list
+        self.ui_test.close_doc()
+
+    def test_insert_field_document_functions_input_list(self):
+        writer_doc = self.ui_test.load_file(get_url_for_data_file("insertField.odt"))
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        #input list
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
 
@@ -811,33 +1039,48 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#input field /  GtkTextView not supported + inputfielddialog.ui: it doesnt take this top focus dialog
-#        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
-#        xCrossRef = self.xUITest.getTopFocusWindow()
+        self.ui_test.close_doc()
+    def test_insert_field_document_functions_input_field(self):
+        writer_doc = self.ui_test.load_file(get_url_for_data_file("insertField.odt"))
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        #input field
+        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
+        xCrossRef = self.xUITest.getTopFocusWindow()
 
-#        xTabs = xCrossRef.getChild("tabcontrol")
-#        select_pos(xTabs, "2")  # tab Functions
-#        xTypeListbox = xCrossRef.getChild("type")
-#        select_pos(xTypeListbox, "2")  #  input field
-#        xRefTxt = xCrossRef.getChild("value")
-#        xRefTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"reference"}))
-#        xAddBtn = xCrossRef.getChild("ok")
-#        xAddBtn.executeAction("CLICK", tuple())   # insert the field
-#        xRefDlg = self.xUITest.getTopFocusWindow()    #inputfielddialog.ui; it doesnt take this top focus dialog
-#        print(xRefDlg.getChildren())
-#        xRefDTxt = xRefDlg.getChild("text")
-#        xRefDTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"reference"}))
-#        xOKBtn = xCrossRef.getChild("ok")
-#        xOKBtn.executeAction("CLICK", tuple())   # 
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "2")  # tab Functions
+        xTypeListbox = xCrossRef.getChild("type")
+        select_pos(xTypeListbox, "2")  #  input field
+        xRefTxt = xCrossRef.getChild("value")
 
-#        xCrossRef = self.xUITest.getTopFocusWindow()
-#        xCloseBtn = xCrossRef.getChild("cancel")
-#        xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
-#        self.assertEqual(document.Text.String[0:9], "reference")   # assert the field's text input field
-#        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
-#        self.xUITest.executeCommand(".uno:Cut")   #cut  text
+        xRefTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"reference"}))
+        xOKBtn = xCrossRef.getChild("ok")
+        def handle_ok_dlg(dialog):
+            xname = dialog.getChild("name")
+            xText = dialog.getChild("text")  #GtkTextView - markus se na to podiva
+            xsubDOKBtn = dialog.getChild("ok")
+            self.assertEqual(get_state_as_dict(xname)["Text"], "reference")
+            xText.executeAction("TYPE", mkPropertyValues({"TEXT":"reftext"}))
+            self.ui_test.close_dialog_through_button(xsubDOKBtn)
+        self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()),
+            dialog_handler=handle_ok_dlg)
 
-#placehoder
+        xCloseBtn = xCrossRef.getChild("cancel")
+        xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
+        self.assertEqual(document.Text.String[0:7], "reftext")   # assert the field's text input field
+        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
+        self.xUITest.executeCommand(".uno:Cut")   #cut  text
+
+        self.ui_test.close_doc()
+
+    def test_insert_field_document_functions_placeholder(self):
+        writer_doc = self.ui_test.load_file(get_url_for_data_file("insertField.odt"))
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        #placehoder
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
 
@@ -847,19 +1090,115 @@ class insertField(UITestCase):
         select_pos(xTypeListbox, "4")  #  placehoder
         xFormatListbox = xCrossRef.getChild("format")
         select_pos(xFormatListbox, "0")  # format Text
-        xNameTxt = xCrossRef.getChild("name")
-        xNameTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
+        xNameTxt = xCrossRef.getChild("condFunction")
+        xNameTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"AA"}))
         xRefTxt = xCrossRef.getChild("value")
         xRefTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"reference"}))
         xAddBtn = xCrossRef.getChild("ok")
         xAddBtn.executeAction("CLICK", tuple())   # insert the field
         xCloseBtn = xCrossRef.getChild("cancel")
         xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
-        self.assertEqual(document.Text.String[0:4], "<aa>")   # assert the field's text Placeholder
+        self.assertEqual(document.Text.String[0:4], "<AA>")   # assert the field's text Placeholder
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#combine characters
+        #placehoder->table
+        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
+        xCrossRef = self.xUITest.getTopFocusWindow()
+
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "2")  # tab Functions
+        xTypeListbox = xCrossRef.getChild("type")
+        select_pos(xTypeListbox, "4")  #  placehoder
+        xFormatListbox = xCrossRef.getChild("format")
+        select_pos(xFormatListbox, "1")  # format Table
+        xNameTxt = xCrossRef.getChild("condFunction")
+        xNameTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"AA"}))
+        xRefTxt = xCrossRef.getChild("value")
+        xRefTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"reference"}))
+        xAddBtn = xCrossRef.getChild("ok")
+        xAddBtn.executeAction("CLICK", tuple())   # insert the field
+        xCloseBtn = xCrossRef.getChild("cancel")
+        xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
+        self.assertEqual(document.Text.String[0:4], "<AA>")   # assert the field's text Placeholder
+        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
+        self.xUITest.executeCommand(".uno:Cut")   #cut  text
+
+        #placehoder->frame
+        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
+        xCrossRef = self.xUITest.getTopFocusWindow()
+
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "2")  # tab Functions
+        xTypeListbox = xCrossRef.getChild("type")
+        select_pos(xTypeListbox, "4")  #  placehoder
+        xFormatListbox = xCrossRef.getChild("format")
+        select_pos(xFormatListbox, "2")  # format  
+        xNameTxt = xCrossRef.getChild("condFunction")
+        xNameTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"AA"}))
+        xRefTxt = xCrossRef.getChild("value")
+        xRefTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"reference"}))
+        xAddBtn = xCrossRef.getChild("ok")
+        xAddBtn.executeAction("CLICK", tuple())   # insert the field
+        xCloseBtn = xCrossRef.getChild("cancel")
+        xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
+        self.assertEqual(document.Text.String[0:4], "<AA>")   # assert the field's text Placeholder
+        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
+        self.xUITest.executeCommand(".uno:Cut")   #cut  text
+
+        #placehoder->image
+        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
+        xCrossRef = self.xUITest.getTopFocusWindow()
+
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "2")  # tab Functions
+        xTypeListbox = xCrossRef.getChild("type")
+        select_pos(xTypeListbox, "4")  #  placehoder
+        xFormatListbox = xCrossRef.getChild("format")
+        select_pos(xFormatListbox, "3")  # format 
+        xNameTxt = xCrossRef.getChild("condFunction")
+        xNameTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"AA"}))
+        xRefTxt = xCrossRef.getChild("value")
+        xRefTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"reference"}))
+        xAddBtn = xCrossRef.getChild("ok")
+        xAddBtn.executeAction("CLICK", tuple())   # insert the field
+        xCloseBtn = xCrossRef.getChild("cancel")
+        xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
+        self.assertEqual(document.Text.String[0:4], "<AA>")   # assert the field's text Placeholder
+        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
+        self.xUITest.executeCommand(".uno:Cut")   #cut  text
+
+        #placehoder->object
+        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
+        xCrossRef = self.xUITest.getTopFocusWindow()
+
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "2")  # tab Functions
+        xTypeListbox = xCrossRef.getChild("type")
+        select_pos(xTypeListbox, "4")  #  placehoder
+        xFormatListbox = xCrossRef.getChild("format")
+        select_pos(xFormatListbox, "4")  # format Object
+        xNameTxt = xCrossRef.getChild("condFunction")
+        xNameTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"AA"}))
+        xRefTxt = xCrossRef.getChild("value")
+        xRefTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"reference"}))
+        xAddBtn = xCrossRef.getChild("ok")
+        xAddBtn.executeAction("CLICK", tuple())   # insert the field
+        xCloseBtn = xCrossRef.getChild("cancel")
+        xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
+        self.assertEqual(document.Text.String[0:4], "<AA>")   # assert the field's text Placeholder
+        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
+        self.xUITest.executeCommand(".uno:Cut")   #cut  text
+
+        self.ui_test.close_doc()
+
+    def test_insert_field_document_functions_combine_characters(self):
+        writer_doc = self.ui_test.load_file(get_url_for_data_file("insertField.odt"))
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+        #combine characters
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
 
@@ -876,8 +1215,14 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
+        self.ui_test.close_doc()
 
-#hidden text
+    def test_insert_field_document_functions_hidden_text(self):
+        writer_doc = self.ui_test.load_file(get_url_for_data_file("insertField.odt"))
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        #hidden text
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
 
@@ -885,7 +1230,7 @@ class insertField(UITestCase):
         select_pos(xTabs, "2")  # tab Functions
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "6")  #  hidden text
-        xRefTxt = xCrossRef.getChild("name")
+        xRefTxt = xCrossRef.getChild("condFunction")
         xRefTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"1 EQ 1"}))
         xvalTxt = xCrossRef.getChild("value")
         xvalTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"ABC"}))
@@ -896,7 +1241,36 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#hidden paragraph
+        #hidden text
+        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
+        xCrossRef = self.xUITest.getTopFocusWindow()
+
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "2")  # tab Functions
+        xTypeListbox = xCrossRef.getChild("type")
+        select_pos(xTypeListbox, "6")  #  hidden text
+        xRefTxt = xCrossRef.getChild("condFunction")
+        xRefTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"1 EQ 2"}))
+        xvalTxt = xCrossRef.getChild("value")
+        xvalTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"ABC"}))
+        xAddBtn = xCrossRef.getChild("ok")
+        xAddBtn.executeAction("CLICK", tuple())   # insert the field
+        xCloseBtn = xCrossRef.getChild("cancel")
+        xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
+        self.assertEqual(document.Text.String[0:3], "ABC")   # text is not hidden, because condition is false 
+        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
+        self.xUITest.executeCommand(".uno:Cut")   #cut  text
+
+        self.ui_test.close_doc()
+
+    def test_insert_field_document_functions_hidden_paragraph(self):
+        writer_doc = self.ui_test.load_file(get_url_for_data_file("insertField.odt"))
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        #hidden paragraph
+        type_text(xWriterEdit, "Test for hidden paragraph")
+        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
 
@@ -904,7 +1278,7 @@ class insertField(UITestCase):
         select_pos(xTabs, "2")  # tab Functions
         xTypeListbox = xCrossRef.getChild("type")
         select_pos(xTypeListbox, "7")  #  hidden paragraph
-        xRefTxt = xCrossRef.getChild("name")
+        xRefTxt = xCrossRef.getChild("condFunction")
         xRefTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"1 EQ 1"}))
         xAddBtn = xCrossRef.getChild("ok")
         xAddBtn.executeAction("CLICK", tuple())   # insert the field
@@ -913,15 +1287,23 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#DocInformation  flddocinfopage.ui - select_pos doesnt work
-#comments
+        self.ui_test.close_doc()
+
+    def test_insert_field_document_docinformations_comments(self):
+        writer_doc = self.ui_test.load_file(get_url_for_data_file("insertField.odt"))
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        #DocInformation  flddocinfopage.ui
+        #comments
         self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
         xCrossRef = self.xUITest.getTopFocusWindow()
 
         xTabs = xCrossRef.getChild("tabcontrol")
         select_pos(xTabs, "3")  # tab DocInformation
         xTypeListbox = xCrossRef.getChild("type")
-        select_pos(xTypeListbox, "0")  #  Comments
+        xTreeEntry = xTypeListbox.getChild('0')
+        xTreeEntry.executeAction("SELECT", tuple())
         xAddBtn = xCrossRef.getChild("ok")
         xAddBtn.executeAction("CLICK", tuple())   # insert the field
         xCloseBtn = xCrossRef.getChild("cancel")
@@ -929,102 +1311,120 @@ class insertField(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-#Author created - select_pos doesnt work
-#        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
-#        xCrossRef = self.xUITest.getTopFocusWindow()
+        #Author created - select_position doesnt work at my computer,works on Markus computer
+        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
+        xCrossRef = self.xUITest.getTopFocusWindow()
 
-#        xTabs = xCrossRef.getChild("tabcontrol")
-#        select_pos(xTabs, "3")  # tab DocInformation
-#        xTypeListbox = xCrossRef.getChild("type")
-##        xTypeListbox = xTypeListbox.getChild('1')
-##        xTypeListbox.executeAction("EXPAND", tuple())   # try treeview
-
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "3")  # tab DocInformation
+        xTypeListbox = xCrossRef.getChild("type")
+        xTreeEntry = xTypeListbox.getChild('1')
+        xTreeEntry.executeAction("SELECT", tuple())
 #        select_pos(xTypeListbox, "1")  #  Author created
 #        xFormatListbox = xCrossRef.getChild("format")
 #        select_pos(xFormatListbox, "0")  # format Text
-#        sleep(5)
-#        xAddBtn = xCrossRef.getChild("ok")
-#        xAddBtn.executeAction("CLICK", tuple())   # insert the field
-#        xCloseBtn = xCrossRef.getChild("cancel")
-#        xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
-#        self.assertEqual(document.Text.String[0:5], "<AA BB>")   # assert the field's text Author created
-#        sleep(5)
-#        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
-#        self.xUITest.executeCommand(".uno:Cut")   #cut  text
-
-#Variables fldvarpage.ui
-#tdf112526  Set variable : Name = var, Value = some text, Format = Text
-
-#        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
-#        xCrossRef = self.xUITest.getTopFocusWindow()
-#        xTabs = xCrossRef.getChild("tabcontrol")
-#        select_pos(xTabs, "4")  # tab Variables
-#        xTypeListbox = xCrossRef.getChild("type")
-#        select_pos(xTypeListbox, "0")  # set variable
-##        xFormatListbox = xCrossRef.getChild("numformat")  #swlo-NumFormatListBox not supported?
-##        select_pos(xFormatListbox, "0")  # format Text
-
-#        xFormatListbox = xCrossRef.getChild("numformat")
-#        props = {"TEXT": "Text"}
-#        actionProps = mkPropertyValues(props)
-#        xFormatListbox.executeAction("SELECT", actionProps)
-
-
-#        xNameTxt = xCrossRef.getChild("name")
-#        xNameTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"var"}))
-#        xValueTxt = xCrossRef.getChild("value")
-#        xValueTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"some text"}))
-#        sleep(5)
-#        xAddBtn = xCrossRef.getChild("ok")
-#        xAddBtn.executeAction("CLICK", tuple())   # insert the field
-#        xCloseBtn = xCrossRef.getChild("cancel")
-#        xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
-#        self.assertEqual(document.Text.String[0:9], "some text")   # assert the field's text tdf112526  Set variable 
-#        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
-#        self.xUITest.executeCommand(".uno:Cut")   #cut  text
-#  Set variable-Standard
-#        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
-#        xCrossRef = self.xUITest.getTopFocusWindow()
-#        xTabs = xCrossRef.getChild("tabcontrol")
-#        select_pos(xTabs, "4")  # tab Variables
-#        xTypeListbox = xCrossRef.getChild("type")
-#        select_pos(xTypeListbox, "0")  # set variable
-#        xFormatListbox = xCrossRef.getChild("format")
-#        select_pos(xFormatListbox, "0")  # format Standard
-#        xNameTxt = xCrossRef.getChild("name")
-#        xNameTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"var2"}))
-#        xValueTxt = xCrossRef.getChild("value")
-#        xValueTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"some text"}))
-#        sleep(5)
-#        xAddBtn = xCrossRef.getChild("ok")
-#        xAddBtn.executeAction("CLICK", tuple())   # insert the field
-#        xCloseBtn = xCrossRef.getChild("cancel")
-#        xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
-#        self.assertEqual(document.Text.String[0:9], "some text")   # assert the field's text   Set variable Standard
-#        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
-#        self.xUITest.executeCommand(".uno:Cut")   #cut  text
-##  Set variable - numeric
-#        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
-#        xCrossRef = self.xUITest.getTopFocusWindow()
-#        xTabs = xCrossRef.getChild("tabcontrol")
-#        select_pos(xTabs, "4")  # tab Variables
-#        xTypeListbox = xCrossRef.getChild("type")
-#        select_pos(xTypeListbox, "0")  # set variable
-#        xFormatListbox = xCrossRef.getChild("format")
-#        select_pos(xFormatListbox, "0")  # format -12345
-#        xNameTxt = xCrossRef.getChild("name")
-#        xNameTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"var3"}))
-#        xValueTxt = xCrossRef.getChild("value")
-#        xValueTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
-#        sleep(5)
-#        xAddBtn = xCrossRef.getChild("ok")
-#        xAddBtn.executeAction("CLICK", tuple())   # insert the field
-#        xCloseBtn = xCrossRef.getChild("cancel")
-#        xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
-#        self.assertEqual(document.Text.String[0:1], "1")   # assert the field's text  Set variable numeric
-#        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
-#        self.xUITest.executeCommand(".uno:Cut")   #cut  text
-
+        xAddBtn = xCrossRef.getChild("ok")
+        xAddBtn.executeAction("CLICK", tuple())   # insert the field
+        xCloseBtn = xCrossRef.getChild("cancel")
+        xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
+        self.assertEqual(document.Text.String[0:5], "<AA BB>")   # assert the field's text Author created
+        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
+        self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
         self.ui_test.close_doc()
 
+    def test_insert_field_variables(self):
+        self.ui_test.create_doc_in_start_center("writer")
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        #Variables fldvarpage.ui
+        #tdf112526  Set variable : Name = var, Value = some text, Format = Text
+
+        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
+        xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "4")  # tab Variables
+        xTypeListbox = xCrossRef.getChild("type")
+        select_pos(xTypeListbox, "0")  # set variable
+        xFormatListbox = xCrossRef.getChild("numformat")
+        select_pos(xFormatListbox, "0")  # format Text
+
+        xNameTxt = xCrossRef.getChild("name")
+        xNameTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"var"}))
+        xValueTxt = xCrossRef.getChild("value")
+        xValueTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"some text"}))
+        xAddBtn = xCrossRef.getChild("ok")
+        xAddBtn.executeAction("CLICK", tuple())   # insert the field
+        xCloseBtn = xCrossRef.getChild("cancel")
+        xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
+        self.assertEqual(document.Text.String[0:9], "some text")   # assert the field's text tdf112526  Set variable 
+        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
+        self.xUITest.executeCommand(".uno:Cut")   #cut  text
+
+        #  Set variable-Standard
+        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
+        xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "4")  # tab Variables
+        xTypeListbox = xCrossRef.getChild("type")
+        select_pos(xTypeListbox, "0")  # set variable
+        xFormatListbox = xCrossRef.getChild("format")
+        select_pos(xFormatListbox, "1")  # format Standard
+        xNameTxt = xCrossRef.getChild("name")
+        xNameTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"var2"}))
+        xValueTxt = xCrossRef.getChild("value")
+        xValueTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"some text"}))
+        xAddBtn = xCrossRef.getChild("ok")
+        xAddBtn.executeAction("CLICK", tuple())   # insert the field
+        xCloseBtn = xCrossRef.getChild("cancel")
+        xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
+        self.assertEqual(document.Text.String[0:9], "some text")   # assert the field's text   Set variable Standard
+        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
+        self.xUITest.executeCommand(".uno:Cut")   #cut  text
+
+        #  Set variable - numeric
+        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
+        xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "4")  # tab Variables
+        xTypeListbox = xCrossRef.getChild("type")
+        select_pos(xTypeListbox, "0")  # set variable
+        xFormatListbox = xCrossRef.getChild("format")
+        select_pos(xFormatListbox, "2")  # format -12345
+        xNameTxt = xCrossRef.getChild("name")
+        xNameTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"var3"}))
+        xValueTxt = xCrossRef.getChild("value")
+        xValueTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+        xAddBtn = xCrossRef.getChild("ok")
+        xAddBtn.executeAction("CLICK", tuple())   # insert the field
+        xCloseBtn = xCrossRef.getChild("cancel")
+        xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
+        self.assertEqual(document.Text.String[0:1], "1")   # assert the field's text  Set variable numeric
+        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
+        self.xUITest.executeCommand(".uno:Cut")   #cut  text
+
+        #  Set variable - user field
+        self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField")
+        xCrossRef = self.xUITest.getTopFocusWindow()
+        xTabs = xCrossRef.getChild("tabcontrol")
+        select_pos(xTabs, "4")  # tab Variables
+        xTypeListbox = xCrossRef.getChild("type")
+        select_pos(xTypeListbox, "8")  # set variable
+        xFormatListbox = xCrossRef.getChild("format")
+        select_pos(xFormatListbox, "2")  # format -12345
+        xNameTxt = xCrossRef.getChild("name")
+        xNameTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"var4"}))
+        xValueTxt = xCrossRef.getChild("value")
+        xValueTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+        xAddBtn = xCrossRef.getChild("ok")
+        xAddBtn.executeAction("CLICK", tuple())   # insert the field
+        xCloseBtn = xCrossRef.getChild("cancel")
+        xCloseBtn.executeAction("CLICK", tuple())   # close the dialog
+        self.assertEqual(document.Text.String[0:1], "1")   # assert the field's text  Set variable numeric
+        selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
+        self.xUITest.executeCommand(".uno:Cut")   #cut  text
+
+
+        self.ui_test.close_doc()
+# vim: set shiftwidth=4 softtabstop=4 expandtab:
