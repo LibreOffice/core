@@ -35,11 +35,6 @@ HWPFont::HWPFont()
 
 HWPFont::~HWPFont()
 {
-    for (int ii = 0; ii < NLanguage; ii++)
-    {
-        nFonts[ii] = 0;
-        delete[]fontnames[ii];
-    }
 }
 
 
@@ -52,7 +47,7 @@ void HWPFont::AddFont(int lang, const char *font)
     nfonts = nFonts[lang];
     if (MAXFONTS <= nfonts)
         return;
-    strncpy(fontnames[lang] + FONTNAMELEN * nfonts, font, FONTNAMELEN - 1);
+    strncpy(fontnames[lang].get() + FONTNAMELEN * nfonts, font, FONTNAMELEN - 1);
     nFonts[lang]++;
 }
 
@@ -63,7 +58,7 @@ const char *HWPFont::GetFontName(int lang, int id)
         return nullptr;
     if (id < 0 || nFonts[lang] <= id)
         return nullptr;
-    return fontnames[lang] + id * FONTNAMELEN;
+    return fontnames[lang].get() + id * FONTNAMELEN;
 }
 
 
@@ -83,9 +78,9 @@ void HWPFont::Read(HWPFile & hwpf)
             (void)hwpf.SetState(HWP_InvalidFileFormat);
             return;
         }
-        fontnames[lang] = new char[nfonts * FONTNAMELEN];
+        fontnames[lang].reset(new char[nfonts * FONTNAMELEN]);
 
-        memset(fontnames[lang], 0, nfonts * FONTNAMELEN);
+        memset(fontnames[lang].get(), 0, nfonts * FONTNAMELEN);
         for (int jj = 0; jj < nfonts; jj++)
         {
             hwpf.ReadBlock(buffer, FONTNAMELEN);

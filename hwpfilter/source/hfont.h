@@ -22,6 +22,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <memory>
 
 #define MAXFONTS    256
 #define FONTNAMELEN 40
@@ -42,7 +43,7 @@ class DLLEXPORT HWPFont final
 /**
  * list of the font family name
  */
-        char  *fontnames[NLanguage];
+        std::unique_ptr<char[]> fontnames[NLanguage];
 
     public:
         HWPFont(void);
