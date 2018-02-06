@@ -58,7 +58,7 @@ done
 
 files=$(find "${check_path}/program" "${check_path}/sdk/bin" -type f)
 # all RPATHs should point to ${INSTDIR}/program so that's the files they find
-programfiles=$(basename -a $(echo ${files} | grep -o '/program/[^/]* '))
+programfiles=$(echo ${files} | grep -o '/program/[^/]* ' | xargs -n 1 basename)
 
 # whitelists should contain only system libraries that have a good reputation
 # of maintaining ABI stability
