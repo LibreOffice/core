@@ -1587,6 +1587,14 @@ DECLARE_OOXMLIMPORT_TEST(testTdf111550, "tdf111550.docx")
     getCell(innerTable, "A1", "[outer:A2]\n[inner:A1]");
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf114217, "tdf114217.docx")
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    // This was 1, multi-page table was imported as a floating one.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
