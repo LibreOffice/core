@@ -102,6 +102,7 @@
 #define STR_FPICKER_VERSION                          NC_("STR_FPICKER_VERSION", "~Version:")
 #define STR_FPICKER_TEMPLATES                        NC_("STR_FPICKER_TEMPLATES", "S~tyles:")
 #define STR_FPICKER_IMAGE_TEMPLATE                   NC_("STR_FPICKER_IMAGE_TEMPLATE", "Frame Style: ")
+#define STR_FPICKER_IMAGE_ANCHOR                     NC_("STR_FPICKER_IMAGE_ANCHOR", "A~nchor: ")
 #define STR_FPICKER_SELECTION                        NC_("STR_FPICKER_SELECTION", "~Selection")
 #define STR_FPICKER_FOLDER_DEFAULT_TITLE             NC_("STR_FPICKER_FOLDER_DEFAULT_TITLE", "Select Path")
 #define STR_FPICKER_FOLDER_DEFAULT_DESCRIPTION       NC_("STR_FPICKER_FOLDER_DEFAULT_DESCRIPTION", "Please select a folder.")

@@ -205,6 +205,11 @@ void ControlHelper::initialize( sal_Int16 nTemplateId )
             m_bToggleVisibility[PREVIEW] = true;
             m_bListVisibility[IMAGE_TEMPLATE] = true;
             break;
+        case FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR:
+            m_bToggleVisibility[LINK] = true;
+            m_bToggleVisibility[PREVIEW] = true;
+            m_bListVisibility[IMAGE_ANCHOR] = true;
+            break;
         case FILEOPEN_READONLY_VERSION:
             m_bToggleVisibility[READONLY] = true;
             m_bListVisibility[VERSION] = true;
@@ -539,6 +544,7 @@ void ControlHelper::createControls()
                 MAP_LIST_(VERSION);
                 MAP_LIST_(TEMPLATE);
                 MAP_LIST_(IMAGE_TEMPLATE);
+                MAP_LIST_(IMAGE_ANCHOR);
             }
 
             m_aActiveControls.push_back(m_pListControls[i]);
@@ -612,6 +618,7 @@ int ControlHelper::getControlElementName(const Class aClazz, const int nControlI
             LIST_ELEMENT( VERSION );
             LIST_ELEMENT( TEMPLATE );
             LIST_ELEMENT( IMAGE_TEMPLATE );
+            LIST_ELEMENT( IMAGE_ANCHOR );
         }
     }
 
@@ -730,9 +737,11 @@ case ExtendedFilePickerElementIds::LISTBOX_##elem##_LABEL: \
             MAP_LIST( VERSION );
             MAP_LIST( TEMPLATE );
             MAP_LIST( IMAGE_TEMPLATE );
+            MAP_LIST( IMAGE_ANCHOR );
             MAP_LIST_LABEL( VERSION );
             MAP_LIST_LABEL( TEMPLATE );
             MAP_LIST_LABEL( IMAGE_TEMPLATE );
+            MAP_LIST_LABEL( IMAGE_ANCHOR );
         default:
             SAL_INFO("fpicker.aqua","Handle unknown control " << nControlId);
             break;

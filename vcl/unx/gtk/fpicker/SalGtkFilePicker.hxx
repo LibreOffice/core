@@ -181,6 +181,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
             VERSION,
             TEMPLATE,
             IMAGE_TEMPLATE,
+            IMAGE_ANCHOR,
             LIST_LAST
               };
 

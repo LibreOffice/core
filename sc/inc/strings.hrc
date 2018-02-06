@@ -330,6 +330,9 @@
 #define STR_ZTEST_Z_CRITICAL_TWO_TAIL               NC_("STR_ZTEST_Z_CRITICAL_TWO_TAIL", "z Critical two-tail")
 /*infobar for allowing links to update or not*/
 #define STR_ENABLE_CONTENT                          NC_("STR_ENABLE_CONTENT", "Enable Content")
+/*Insert image dialog*/
+#define STR_ANCHOR_TO_CELL                          NC_("STR_ANCHOR_TO_CELL", "To cell")
+#define STR_ANCHOR_TO_PAGE                          NC_("STR_ANCHOR_TO_PAGE", "To page")
 
 #endif
 
