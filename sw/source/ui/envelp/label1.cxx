@@ -265,7 +265,11 @@ SwLabPage::SwLabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pAddrBox->SetClickHdl (LINK(this, SwLabPage, AddrHdl         ));
     m_pDatabaseLB->SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
     m_pTableLB->SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
+    m_pDBFieldLB->SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
     m_pInsertBT->SetClickHdl (LINK(this, SwLabPage, FieldHdl        ));
+    // Disable insert button first,
+    // it'll be enabled if m_pDatabaseLB, m_pTableLB and m_pInsertBT are filled
+    m_pInsertBT->Disable();
     m_pContButton->SetClickHdl (LINK(this, SwLabPage, PageHdl         ));
     m_pSheetButton->SetClickHdl (LINK(this, SwLabPage, PageHdl         ));
     m_pMakeBox->SetSelectHdl(LINK(this, SwLabPage, MakeHdl         ));
@@ -342,7 +346,14 @@ IMPL_LINK( SwLabPage, DatabaseHdl, ListBox&, rListBox, void )
     if (&rListBox == m_pDatabaseLB)
         GetDBManager()->GetTableNames(m_pTableLB, sActDBName);
 
-    GetDBManager()->GetColumnNames(m_pDBFieldLB, sActDBName, m_pTableLB->GetSelectedEntry());
+    if (&rListBox == m_pDatabaseLB || &rListBox == m_pTableLB)
+        GetDBManager()->GetColumnNames(m_pDBFieldLB, sActDBName, m_pTableLB->GetSelectedEntry());
+
+    if (!m_pDatabaseLB->GetSelectedEntry().isEmpty() && !m_pTableLB->GetSelectedEntry().isEmpty()
+            && !m_pDBFieldLB->GetSelectedEntry().isEmpty())
+        m_pInsertBT->Enable(true);
+    else
+        m_pInsertBT->Enable(false);
 }
 
 IMPL_LINK_NOARG(SwLabPage, FieldHdl, Button*, void)
