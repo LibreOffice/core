@@ -22,6 +22,17 @@ BitmapEx VCL_DLLPUBLIC loadFromName(const OUString& rFileName, const ImageLoadFl
 
 void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, double fScaleFactor);
 
+/** Copy block of image data into the bitmap.
+    Assumes that the Bitmap has been constructed with the desired size.
+
+    @param pData
+    The block of data to copy
+    @param nStride
+    The number of bytes in a scanline, must >= width
+*/
+BitmapEx VCL_DLLPUBLIC CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nStride, sal_uInt16 nBitCount );
+
+
 }} // end vcl::bitmap
 
 #endif // INCLUDED_VCL_BITMAP_TOOLS_HXX
