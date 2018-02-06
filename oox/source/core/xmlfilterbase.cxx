@@ -234,6 +234,36 @@ void XmlFilterBase::checkDocumentProperties(const Reference<XDocumentProperties>
     mbMSO2007 = true;
 }
 
+void XmlFilterBase::putPropertiesToDocumentGrabBag(const css::uno::Reference<css::lang::XComponent>& xDstDoc,
+                                                   const comphelper::SequenceAsHashMap& rProperties)
+{
+    try
+    {
+        uno::Reference<beans::XPropertySet> xDocProps(xDstDoc, uno::UNO_QUERY);
+        if (xDocProps.is())
+        {
+            uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
+
+            static const OUString aGrabBagPropName = "InteropGrabBag";
+            if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(aGrabBagPropName))
+            {
+                // get existing grab bag
+                comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(aGrabBagPropName));
+
+                // put the new items
+                aGrabBag.update(rProperties);
+
+                // put it back to the document
+                xDocProps->setPropertyValue(aGrabBagPropName, uno::Any(aGrabBag.getAsConstPropertyValueList()));
+            }
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        SAL_WARN("oox","Failed to save documents grab bag");
+    }
+}
+
 void XmlFilterBase::importDocumentProperties()
 {
     MediaDescriptor aMediaDesc( getMediaDescriptor() );
