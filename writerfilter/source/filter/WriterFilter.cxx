@@ -35,6 +35,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <dmapper/DomainMapperFactory.hxx>
 #include <oox/core/filterdetect.hxx>
+#include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/ole/olestorage.hxx>
 #include <oox/ole/vbaproject.hxx>
@@ -115,10 +116,6 @@ public:
     OUString SAL_CALL getImplementationName() override;
     sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
     uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
-private:
-    void putPropertiesToDocumentGrabBag(const comphelper::SequenceAsHashMap& rProperties);
-
 };
 
 sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& rDescriptor)
@@ -231,7 +228,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& rDesc
         // Adding the saved embedding document to document's grab bag
         aGrabBagProperties["OOXEmbeddings"] <<= pDocument->getEmbeddingsList();
 
-        putPropertiesToDocumentGrabBag(aGrabBagProperties);
+        oox::core::XmlFilterBase::putPropertiesToDocumentGrabBag(m_xDstDoc, aGrabBagProperties);
 
         writerfilter::ooxml::OOXMLStream::Pointer_t  pVBAProjectStream(writerfilter::ooxml::OOXMLDocumentFactory::createStream(pDocStream, writerfilter::ooxml::OOXMLStream::VBAPROJECT));
         oox::StorageRef xVbaPrjStrg(new ::oox::ole::OleStorage(m_xContext, pVBAProjectStream->getDocumentStream(), false));
@@ -334,35 +331,6 @@ uno::Sequence<OUString> WriterFilter::getSupportedServiceNames()
         OUString("com.sun.star.document.ExportFilter")
     };
     return aRet;
-}
-
-void WriterFilter::putPropertiesToDocumentGrabBag(const comphelper::SequenceAsHashMap& rProperties)
-{
-    try
-    {
-        uno::Reference<beans::XPropertySet> xDocProps(m_xDstDoc, uno::UNO_QUERY);
-        if (xDocProps.is())
-        {
-            uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
-
-            const OUString aGrabBagPropName = "InteropGrabBag";
-            if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(aGrabBagPropName))
-            {
-                // get existing grab bag
-                comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(aGrabBagPropName));
-
-                // put the new items
-                aGrabBag.update(rProperties);
-
-                // put it back to the document
-                xDocProps->setPropertyValue(aGrabBagPropName, uno::Any(aGrabBag.getAsConstPropertyValueList()));
-            }
-        }
-    }
-    catch (const uno::Exception&)
-    {
-        SAL_WARN("writerfilter","Failed to save documents grab bag");
-    }
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* com_sun_star_comp_Writer_WriterFilter_get_implementation(uno::XComponentContext* component, uno::Sequence<uno::Any> const& /*rSequence*/)
