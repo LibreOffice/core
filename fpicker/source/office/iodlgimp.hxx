@@ -137,6 +137,9 @@ public:
     VclPtr<FixedText>                      _pFtImageTemplates;
     VclPtr<ListBox>                        _pLbImageTemplates;
 
+    VclPtr<FixedText>                      _pFtImageAnchor;
+    VclPtr<ListBox>                        _pLbImageAnchor;
+
     VclPtr<FixedText>                      _pFtFileType;
     VclPtr<ListBox>                        _pLbFilter;
     VclPtr<PushButton>                     _pBtnFileOpen;

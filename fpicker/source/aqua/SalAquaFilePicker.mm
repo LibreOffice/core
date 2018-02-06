@@ -426,6 +426,9 @@ void SAL_CALL SalAquaFilePicker::initialize( const uno::Sequence<uno::Any>& aArg
         case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
             m_nDialogType = NAVIGATIONSERVICES_OPEN;
             break;
+        case FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR:
+            m_nDialogType = NAVIGATIONSERVICES_OPEN;
+            break;
         case FILEOPEN_PLAY:
             m_nDialogType = NAVIGATIONSERVICES_OPEN;
             break;

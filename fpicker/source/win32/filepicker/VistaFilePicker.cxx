@@ -425,6 +425,15 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
         }
         break;
 
+        case css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR :
+        {
+            bFileOpenDialog  = true;
+            nFeatures        |= FEATURE_LINK;
+            nFeatures        |= FEATURE_PREVIEW;
+            nFeatures        |= FEATURE_IMAGEANCHOR;
+        }
+        break;
+
         case css::ui::dialogs::TemplateDescription::FILEOPEN_PLAY :
         {
             bFileOpenDialog  = true;

@@ -255,9 +255,13 @@ void Gtk3KDE5FilePicker::addCustomControl(sal_Int16 controlId)
         case LISTBOX_IMAGE_TEMPLATE:
             resId = STR_FPICKER_IMAGE_TEMPLATE;
             break;
+        case LISTBOX_IMAGE_ANCHOR:
+            resId = STR_FPICKER_IMAGE_ANCHOR;
+            break;
         case LISTBOX_VERSION_LABEL:
         case LISTBOX_TEMPLATE_LABEL:
         case LISTBOX_IMAGE_TEMPLATE_LABEL:
+        case LISTBOX_IMAGE_ANCHOR_LABEL:
         case LISTBOX_FILTER_SELECTOR:
             break;
     }
@@ -285,9 +289,11 @@ void Gtk3KDE5FilePicker::addCustomControl(sal_Int16 controlId)
         case LISTBOX_VERSION:
         case LISTBOX_TEMPLATE:
         case LISTBOX_IMAGE_TEMPLATE:
+        case LISTBOX_IMAGE_ANCHOR:
         case LISTBOX_VERSION_LABEL:
         case LISTBOX_TEMPLATE_LABEL:
         case LISTBOX_IMAGE_TEMPLATE_LABEL:
+        case LISTBOX_IMAGE_ANCHOR_LABEL:
         case LISTBOX_FILTER_SELECTOR:
             break;
     }
@@ -361,6 +367,12 @@ void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args
             addCustomControl(CHECKBOX_LINK);
             addCustomControl(CHECKBOX_PREVIEW);
             addCustomControl(LISTBOX_IMAGE_TEMPLATE);
+            break;
+
+        case FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR:
+            addCustomControl(CHECKBOX_LINK);
+            addCustomControl(CHECKBOX_PREVIEW);
+            addCustomControl(LISTBOX_IMAGE_ANCHOR);
             break;
 
         case FILEOPEN_PLAY:
