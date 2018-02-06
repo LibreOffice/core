@@ -112,32 +112,6 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
     return bRet;
 }
 
-void Bitmap::SetToData( sal_uInt8 const *pData, sal_Int32 nStride )
-{
-    assert(mxImpBmp);
-    auto nWidth = mxImpBmp->ImplGetSize().getWidth();
-    auto nHeight = mxImpBmp->ImplGetSize().getHeight();
-    assert(nStride >= nWidth);
-
-    BitmapWriteAccess *pWrite = AcquireWriteAccess();
-    assert(pWrite);
-    if( pWrite )
-    {
-        for( long y = 0; y < nHeight; ++y )
-        {
-            sal_uInt8 const *p = pData + y * nStride;
-            Scanline pScanline = pWrite->GetScanline(y);
-            for (long x = 0; x < nWidth; ++x)
-            {
-                BitmapColor col(p[0], p[1], p[2]);
-                pWrite->SetPixelOnData(pScanline, x, col);
-                p += 3;
-            }
-        }
-    }
-    ReleaseAccess( pWrite );
-}
-
 bool Bitmap::ImplConvolute3( const long* pMatrix )
 {
     const long          nDivisor = 8;
