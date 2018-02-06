@@ -23,6 +23,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -200,13 +201,22 @@ ScTransferObj::~ScTransferObj()
 ScTransferObj* ScTransferObj::GetOwnClipboard( vcl::Window* pUIWin )
 {
     ScTransferObj* pObj = nullptr;
-    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pUIWin ) );
-    uno::Reference<XUnoTunnel> xTunnel( aDataHelper.GetTransferable(), uno::UNO_QUERY );
-    if ( xTunnel.is() )
+    uno::Reference<XTransferable> xTransferable;
+    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard;
+
+    if( pUIWin )
+        xClipboard = pUIWin->GetClipboard();
+
+    if( xClipboard.is() )
     {
-        sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
-        if ( nHandle )
-            pObj = dynamic_cast<ScTransferObj*>(reinterpret_cast<TransferableHelper*>( (sal_IntPtr) nHandle ));
+        xTransferable = xClipboard->getContents();
+        uno::Reference<XUnoTunnel> xTunnel( xTransferable, uno::UNO_QUERY );
+        if ( xTunnel.is() )
+        {
+            sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
+            if ( nHandle )
+                pObj = dynamic_cast<ScTransferObj*>(reinterpret_cast<TransferableHelper*>( static_cast<sal_IntPtr>(nHandle) ));
+        }
     }
 
     return pObj;
