@@ -19,10 +19,31 @@
 
 
 #include <svl/PasswordHelper.hxx>
+#include <comphelper/hash.hxx>
 #include <rtl/digest.h>
 #include <memory>
 
 using namespace com::sun::star;
+
+void SvPasswordHelper::GetHashPasswordSHA256(uno::Sequence<sal_Int8>& rPassHash, OUString const& rPassword)
+{
+    OString const tmp(OUStringToOString(rPassword, RTL_TEXTENCODING_UTF8));
+    ::std::vector<unsigned char> const hash(::comphelper::Hash::calculateHash(
+        reinterpret_cast<unsigned char const*>(tmp.getStr()), tmp.getLength(),
+        ::comphelper::HashType::SHA256));
+    rPassHash.realloc(hash.size());
+    ::std::copy(hash.begin(), hash.end(), rPassHash.begin());
+}
+
+void SvPasswordHelper::GetHashPasswordSHA1UTF8(uno::Sequence<sal_Int8>& rPassHash, OUString const& rPassword)
+{
+    OString const tmp(OUStringToOString(rPassword, RTL_TEXTENCODING_UTF8));
+    ::std::vector<unsigned char> const hash(::comphelper::Hash::calculateHash(
+        reinterpret_cast<unsigned char const*>(tmp.getStr()), tmp.getLength(),
+        ::comphelper::HashType::SHA1));
+    rPassHash.realloc(hash.size());
+    ::std::copy(hash.begin(), hash.end(), rPassHash.begin());
+}
 
 void SvPasswordHelper::GetHashPassword(uno::Sequence<sal_Int8>& rPassHash, const sal_Char* pPass, sal_uInt32 nLen)
 {
@@ -74,14 +95,31 @@ bool SvPasswordHelper::CompareHashPassword(const uno::Sequence<sal_Int8>& rOldPa
 {
     bool bResult = false;
 
-    uno::Sequence<sal_Int8> aNewPass(RTL_DIGEST_LENGTH_SHA1);
-    GetHashPasswordLittleEndian(aNewPass, sNewPass);
-    if (aNewPass == rOldPassHash)
-        bResult = true;
-    else
+    if (rOldPassHash.getLength() == RTL_DIGEST_LENGTH_SHA1)
     {
-        GetHashPasswordBigEndian(aNewPass, sNewPass);
-        bResult = (aNewPass == rOldPassHash);
+        uno::Sequence<sal_Int8> aNewPass(RTL_DIGEST_LENGTH_SHA1);
+        GetHashPasswordSHA1UTF8(aNewPass, sNewPass);
+        if (aNewPass == rOldPassHash)
+        {
+            bResult = true;
+        }
+        else
+        {
+            GetHashPasswordLittleEndian(aNewPass, sNewPass);
+            if (aNewPass == rOldPassHash)
+                bResult = true;
+            else
+            {
+                GetHashPasswordBigEndian(aNewPass, sNewPass);
+                bResult = (aNewPass == rOldPassHash);
+            }
+        }
+    }
+    else if (rOldPassHash.getLength() == 32)
+    {
+        uno::Sequence<sal_Int8> aNewPass;
+        GetHashPasswordSHA256(aNewPass, sNewPass);
+        bResult = aNewPass == rOldPassHash;
     }
 
     return bResult;

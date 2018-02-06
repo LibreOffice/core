@@ -28,6 +28,8 @@
 #define DEBUG_TAB_PROTECTION 0
 
 #define URI_SHA1 "http://www.w3.org/2000/09/xmldsig#sha1"
+#define URI_SHA256_ODF12 "http://www.w3.org/2000/09/xmldsig#sha256"
+#define URI_SHA256_W3C "http://www.w3.org/2001/04/xmlenc#sha256"
 #define URI_XLS_LEGACY "http://docs.oasis-open.org/office/ns/table/legacy-hash-excel"
 
 using namespace ::com::sun::star;
@@ -62,6 +64,8 @@ OUString ScPassHashHelper::getHashURI(ScPasswordHash eHash)
 {
     switch (eHash)
     {
+        case PASSHASH_SHA256:
+            return OUString(URI_SHA256_ODF12);
         case PASSHASH_SHA1:
             return OUString(URI_SHA1);
         case PASSHASH_XL:
@@ -75,6 +79,8 @@ OUString ScPassHashHelper::getHashURI(ScPasswordHash eHash)
 
 ScPasswordHash ScPassHashHelper::getHashTypeFromURI(const OUString& rURI)
 {
+    if (rURI == URI_SHA256_ODF12 || rURI == URI_SHA256_W3C)
+        return PASSHASH_SHA256;
     if ( rURI == URI_SHA1 )
         return PASSHASH_SHA1;
     else if ( rURI == URI_XLS_LEGACY )
@@ -139,6 +145,12 @@ Sequence<sal_Int8> ScTableProtectionImpl::hashPassword(const OUString& aPassText
         break;
         case PASSHASH_SHA1:
             SvPasswordHelper::GetHashPassword(aHash, aPassText);
+        break;
+        case PASSHASH_SHA1_UTF8:
+            SvPasswordHelper::GetHashPasswordSHA1UTF8(aHash, aPassText);
+        break;
+        case PASSHASH_SHA256:
+            SvPasswordHelper::GetHashPasswordSHA256(aHash, aPassText);
         break;
         default:
             ;
@@ -320,7 +332,20 @@ bool ScTableProtectionImpl::verifyPassword(const OUString& aPassText) const
     printf("\n");
 #endif
 
-    return aHash == maPassHash;
+    if (aHash == maPassHash)
+    {
+        return true;
+    }
+
+    // tdf#115483 compat hack for ODF 1.2; for now UTF8-SHA1 passwords are only
+    // verified, not generated
+    if (meHash1 == PASSHASH_SHA1 && meHash2 == PASSHASH_UNSPECIFIED)
+    {
+        Sequence<sal_Int8> const aHash2 = hashPassword(aPassText, PASSHASH_SHA1_UTF8);
+        return aHash2 == maPassHash;
+    }
+
+    return false;
 }
 
 bool ScTableProtectionImpl::isOptionEnabled(SCSIZE nOptId) const

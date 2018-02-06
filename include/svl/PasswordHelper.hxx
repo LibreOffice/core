@@ -33,10 +33,15 @@ public:
     SVL_DLLPUBLIC static void     GetHashPassword(css::uno::Sequence <sal_Int8>& rPassHash, const sal_Char* pPass, sal_uInt32 nLen);
 
     SVL_DLLPUBLIC static void     GetHashPassword(css::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
+    SVL_DLLPUBLIC static void     GetHashPasswordSHA1UTF8(css::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
+    SVL_DLLPUBLIC static void     GetHashPasswordSHA256(css::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
     /**
     Use this method to compare a given string with another given Hash value.
     This is necessary, because in older versions exists different hashes of the same string. They were endian dependent.
-    We need this to handle old files. This method will compare against big and little endian. See #101326#
+    We need this to handle old files. This method will compare against big and
+    little endian UTF-16.
+    tdf#115483: also check 2 different new ways of hashing that were added in
+    ODF 1.2, requiring UTF-8 encoding.
     */
     SVL_DLLPUBLIC static bool     CompareHashPassword(const css::uno::Sequence<sal_Int8>& rOldPassHash, const OUString& sNewPass);
 };

@@ -36,6 +36,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/propertysequence.hxx>
 #include <unotools/streamwrap.hxx>
+#include <svl/PasswordHelper.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -745,6 +746,37 @@ DECLARE_ODFEXPORT_TEST(testCharacterBorder, "charborder.odt")
             CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[3], getProperty<table::BorderLine2>(xSet,"CharRightBorder"));
             CPPUNIT_ASSERT_EQUAL(aDistances[3], getProperty<sal_Int32>(xSet,"CharRightBorderDistance"));
         }
+    }
+}
+
+DECLARE_ODFEXPORT_TEST(testProtectionKey, "protection-key.fodt")
+{
+    OUString const password("1012345678901234567890123456789012345678901234567890");
+
+    // check 1 invalid OOo legacy password and 3 valid ODF 1.2 passwords
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSect0(xSections->getByIndex(0), uno::UNO_QUERY);
+    uno::Sequence<sal_Int8> const key0(getProperty<uno::Sequence<sal_Int8>>(xSect0, "ProtectionKey"));
+    CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key0, password));
+    uno::Reference<beans::XPropertySet> xSect1(xSections->getByIndex(1), uno::UNO_QUERY);
+    uno::Sequence<sal_Int8> const key1(getProperty<uno::Sequence<sal_Int8>>(xSect1, "ProtectionKey"));
+    CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key1, password));
+    uno::Reference<beans::XPropertySet> xSect2(xSections->getByIndex(2), uno::UNO_QUERY);
+    uno::Sequence<sal_Int8> const key2(getProperty<uno::Sequence<sal_Int8>>(xSect1, "ProtectionKey"));
+    CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key2, password));
+    uno::Reference<beans::XPropertySet> xSect3(xSections->getByIndex(3), uno::UNO_QUERY);
+    uno::Sequence<sal_Int8> const key3(getProperty<uno::Sequence<sal_Int8>>(xSect1, "ProtectionKey"));
+    CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key3, password));
+
+    // we can't assume that the user entered the password; check that we
+    // round-trip the password as-is
+    if (xmlDocPtr pXmlDoc = parseExport("content.xml"))
+    {
+        assertXPath(pXmlDoc, "//text:section[@text:name='Section0' and @text:protected='true' and @text:protection-key='vbnhxyBKtPHCA1wB21zG1Oha8ZA=']");
+        assertXPath(pXmlDoc, "//text:section[@text:name='Section1' and @text:protected='true' and @text:protection-key='nLHas0RIwepGDaH4c2hpyIUvIS8=']");
+        assertXPath(pXmlDoc, "//text:section[@text:name='Section2' and @text:protected='true' and @text:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256' and @text:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=']");
+        assertXPath(pXmlDoc, "//text:section[@text:name='Section3' and @text:protected='true' and @text:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256' and @text:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=']");
     }
 }
 
