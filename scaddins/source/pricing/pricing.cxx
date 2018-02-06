@@ -133,8 +133,6 @@ ScaPricingAddIn::ScaPricingAddIn() :
 
 ScaPricingAddIn::~ScaPricingAddIn()
 {
-    delete pFuncDataList;
-    delete[] pDefLocales;
 }
 
 static const sal_Char*  pLang[] = { "de", "en" };
@@ -143,7 +141,7 @@ static const sal_uInt32 nNumOfLoc = SAL_N_ELEMENTS( pLang );
 
 void ScaPricingAddIn::InitDefLocales()
 {
-    pDefLocales = new lang::Locale[ nNumOfLoc ];
+    pDefLocales.reset( new lang::Locale[ nNumOfLoc ] );
 
     for( sal_uInt32 nIndex = 0; nIndex < nNumOfLoc; nIndex++ )
     {
@@ -163,16 +161,9 @@ const lang::Locale& ScaPricingAddIn::GetLocale( sal_uInt32 nIndex )
 void ScaPricingAddIn::InitData()
 {
     aResLocale = Translate::Create("sca", LanguageTag(aFuncLoc));
-    delete pFuncDataList;
-
-    pFuncDataList = new ScaFuncDataList;
+    pFuncDataList.reset(new ScaFuncDataList);
     InitScaFuncDataList(*pFuncDataList);
-
-    if( pDefLocales )
-    {
-        delete pDefLocales;
-        pDefLocales = nullptr;
-    }
+    pDefLocales.reset();
 }
 
 OUString ScaPricingAddIn::GetFuncDescrStr(const char** pResId, sal_uInt16 nStrIndex)
