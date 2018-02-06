@@ -180,12 +180,12 @@ void WriteContentSequence(
 
     xWriter->setOutputStream( xOutStream );
 
-    OUString aTypesElement( "Types" );
-    OUString aDefaultElement( "Default" );
-    OUString aOverrideElement( "Override" );
-    OUString aContentTypeAttr( "ContentType" );
-    OUString aCDATAString( "CDATA" );
-    OUString aWhiteSpace( " " );
+    static const OUString aTypesElement("Types");
+    static const OUString aDefaultElement("Default");
+    static const OUString aOverrideElement("Override");
+    static const OUString aContentTypeAttr("ContentType");
+    static const OUString aCDATAString("CDATA");
+    static const OUString aWhiteSpace(" ");
 
     // write the namespace
     AttributeList* pRootAttrList = new AttributeList;
@@ -380,15 +380,15 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
             if ( m_aResultSeq.getLength() != 2 )
                 throw uno::RuntimeException();
 
-            OUString aExtensionValue = xAttribs->getValueByName( m_aExtensionAttr );
+            const OUString aExtensionValue = xAttribs->getValueByName( m_aExtensionAttr );
             if ( aExtensionValue.isEmpty() )
                 throw css::xml::sax::SAXException(); // TODO: the Extension value must present
 
-            OUString aContentTypeValue = xAttribs->getValueByName( m_aContentTypeAttr );
+            const OUString aContentTypeValue = xAttribs->getValueByName( m_aContentTypeAttr );
             if ( aContentTypeValue.isEmpty() )
                 throw css::xml::sax::SAXException(); // TODO: the ContentType value must present
 
-            sal_Int32 nNewResultLen = m_aResultSeq[0].getLength() + 1;
+            const sal_Int32 nNewResultLen = m_aResultSeq[0].getLength() + 1;
             m_aResultSeq[0].realloc( nNewResultLen );
 
             m_aResultSeq[0][nNewResultLen-1].First = aExtensionValue;

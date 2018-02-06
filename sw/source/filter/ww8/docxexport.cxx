@@ -1221,7 +1221,7 @@ void DocxExport::WriteCustomXml()
     uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-    OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    static const OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( !xPropSetInfo->hasPropertyByName( aName ) )
         return;
 
@@ -1231,7 +1231,7 @@ void DocxExport::WriteCustomXml()
     xPropSet->getPropertyValue( aName ) >>= propList;
     for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
     {
-        OUString propName = propList[nProp].Name;
+        const OUString propName = propList[nProp].Name;
         if ( propName == "OOXCustomXml" )
         {
              propList[nProp].Value >>= customXmlDomlist;
@@ -1249,11 +1249,11 @@ void DocxExport::WriteCustomXml()
         }
     }
 
-    for (sal_Int32 j = 0; j < customXmlDomlist.getLength(); j++) {
-
+    for (sal_Int32 j = 0; j < customXmlDomlist.getLength(); j++)
+    {
         uno::Reference<xml::dom::XDocument> customXmlDom = customXmlDomlist[j];
         uno::Reference<xml::dom::XDocument> customXmlDomProps = customXmlDomPropslist[j];
-        if ( customXmlDom.is() )
+        if (customXmlDom.is())
         {
             m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
                     oox::getRelationship(Relationship::CUSTOMXML),
@@ -1267,9 +1267,8 @@ void DocxExport::WriteCustomXml()
                 uno::Sequence< beans::StringPair >() );
         }
 
-        if ( customXmlDomProps.is() )
+        if (customXmlDomProps.is())
         {
-
             uno::Reference< xml::sax::XSAXSerializable > serializer( customXmlDomProps, uno::UNO_QUERY );
             uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
             writer->setOutputStream( GetFilter().openFragmentStream( "customXml/itemProps"+OUString::number((j+1))+".xml",
@@ -1282,7 +1281,6 @@ void DocxExport::WriteCustomXml()
                     "application/xml" ) ,
                     oox::getRelationship(Relationship::CUSTOMXMLPROPS),
                     "itemProps"+OUString::number((j+1))+".xml" );
-
         }
     }
 }

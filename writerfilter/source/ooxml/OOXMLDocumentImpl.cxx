@@ -90,25 +90,21 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
     OOXMLStream::Pointer_t savedStream = mpStream;
     mpStream = pStream;
 
-    uno::Reference< xml::sax::XFastParser > xParser
-        (mpStream->getFastParser());
+    uno::Reference<xml::sax::XFastParser> xParser(mpStream->getFastParser());
 
     if (xParser.is())
     {
         uno::Reference<uno::XComponentContext> xContext(mpStream->getContext());
         OOXMLFastDocumentHandler * pDocHandler =
-            new OOXMLFastDocumentHandler(
-                xContext, &rStreamHandler, this, mnXNoteId );
+                        new OOXMLFastDocumentHandler(xContext, &rStreamHandler, this, mnXNoteId);
 
-        uno::Reference < xml::sax::XFastDocumentHandler > xDocumentHandler
-            (pDocHandler);
-        uno::Reference < xml::sax::XFastTokenHandler > xTokenHandler(mpStream->getFastTokenHandler());
+        uno::Reference<xml::sax::XFastDocumentHandler> xDocumentHandler(pDocHandler);
+        uno::Reference<xml::sax::XFastTokenHandler> xTokenHandler(mpStream->getFastTokenHandler());
 
         xParser->setFastDocumentHandler(xDocumentHandler);
         xParser->setTokenHandler(xTokenHandler);
 
-        uno::Reference<io::XInputStream> xInputStream =
-            pStream->getDocumentStream();
+        uno::Reference<io::XInputStream> xInputStream = pStream->getDocumentStream();
 
         if (xInputStream.is())
         {
@@ -124,8 +120,8 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
 }
 
 void OOXMLDocumentImpl::resolveFastSubStreamWithId(Stream & rStream,
-                                      const writerfilter::Reference<Stream>::Pointer_t& pStream,
-                      sal_uInt32 nId)
+                                    const writerfilter::Reference<Stream>::Pointer_t& pStream,
+                                    sal_uInt32 nId)
 {
     rStream.substream(nId, pStream);
 }
@@ -146,9 +142,7 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
         return xRet;
     }
 
-    uno::Reference<io::XInputStream> xInputStream =
-        pStream->getDocumentStream();
-
+    uno::Reference<io::XInputStream> xInputStream = pStream->getDocumentStream();
     if (xInputStream.is())
     {
         try
@@ -165,11 +159,11 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
         }
     }
 
-    if(OOXMLStream::CUSTOMXML == nType)
+    if (OOXMLStream::CUSTOMXML == nType)
     {
         importSubStreamRelations(pStream, OOXMLStream::CUSTOMXMLPROPS);
     }
-    if(OOXMLStream::CHARTS == nType)
+    else if (OOXMLStream::CHARTS == nType)
     {
         importSubStreamRelations(pStream, OOXMLStream::EMBEDDINGS);
     }
@@ -193,13 +187,12 @@ void OOXMLDocumentImpl::importSubStreamRelations(const OOXMLStream::Pointer_t& p
         return;
     }
 
-    uno::Reference<io::XInputStream> xcpInputStream =
-            cStream->getDocumentStream();
+    uno::Reference<io::XInputStream> xcpInputStream = cStream->getDocumentStream();
 
     if (xcpInputStream.is())
     {
         // importing itemprops files for item.xml from customXml.
-        if(OOXMLStream::CUSTOMXMLPROPS == nType)
+        if (OOXMLStream::CUSTOMXMLPROPS == nType)
         {
             try
             {
@@ -447,8 +440,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         return;
     }
 
-    uno::Reference< xml::sax::XFastParser > xParser
-        (mpStream->getFastParser());
+    uno::Reference<xml::sax::XFastParser> xParser(mpStream->getFastParser());
 
     if (mxModel.is())
     {
@@ -478,11 +470,9 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         uno::Reference<uno::XComponentContext> xContext(mpStream->getContext());
 
         OOXMLFastDocumentHandler * pDocHandler =
-            new OOXMLFastDocumentHandler(
-                xContext, &rStream, this, mnXNoteId );
+                    new OOXMLFastDocumentHandler(xContext, &rStream, this, mnXNoteId);
         pDocHandler->setIsSubstream( mbIsSubstream );
-        uno::Reference < xml::sax::XFastDocumentHandler > xDocumentHandler
-            (pDocHandler);
+        uno::Reference < xml::sax::XFastDocumentHandler > xDocumentHandler(pDocHandler);
         uno::Reference < xml::sax::XFastTokenHandler > xTokenHandler(mpStream->getFastTokenHandler());
 
         resolveFastSubStream(rStream, OOXMLStream::SETTINGS);
@@ -564,39 +554,41 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
         static const char sCustomTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/customXml";
         bool bFound = false;
         sal_Int32 counter = 0;
-        uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs = xRelationshipAccess->getAllRelationships();
-        std::vector< uno::Reference<xml::dom::XDocument> > aCustomXmlDomList;
-        std::vector< uno::Reference<xml::dom::XDocument> > aCustomXmlDomPropsList;
+        uno::Sequence<uno::Sequence< beans::StringPair>> aSeqs = xRelationshipAccess->getAllRelationships();
+        std::vector<uno::Reference<xml::dom::XDocument>> aCustomXmlDomList;
+        std::vector<uno::Reference<xml::dom::XDocument>> aCustomXmlDomPropsList;
         for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
         {
-            uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
+            const uno::Sequence<beans::StringPair>& aSeq = aSeqs[j];
             for (sal_Int32 i = 0; i < aSeq.getLength(); i++)
             {
-                beans::StringPair aPair = aSeq[i];
+                const beans::StringPair& aPair = aSeq[i];
                 // Need to resolve only customxml files from document relationships.
                 // Skipping other files.
                 if (aPair.Second == sCustomType ||
-                        aPair.Second == sCustomTypeStrict)
+                    aPair.Second == sCustomTypeStrict)
                     bFound = true;
-                else if(aPair.First == "Target" && bFound)
+                else if (aPair.First == "Target" && bFound)
                 {
                     // Adding value to extern variable customTarget. It will be used in ooxmlstreamimpl
                     // to ensure customxml target is visited in lcl_getTarget.
                     customTarget = aPair.Second;
                 }
             }
-            if(bFound)
+
+            if (bFound)
             {
                 uno::Reference<xml::dom::XDocument> customXmlTemp = importSubStream(OOXMLStream::CUSTOMXML);
                 // This will add all item[n].xml with its relationship file i.e itemprops.xml to
                 // grabbag list.
-                if(mxCustomXmlProsDom.is() && customXmlTemp.is())
+                if (mxCustomXmlProsDom.is() && customXmlTemp.is())
                 {
                     aCustomXmlDomList.push_back(customXmlTemp);
                     aCustomXmlDomPropsList.push_back(mxCustomXmlProsDom);
                     counter++;
                     resolveFastSubStream(rStream, OOXMLStream::CUSTOMXML);
                 }
+
                 bFound = false;
             }
         }
