@@ -21,8 +21,8 @@
 #define INCLUDED_SOT_SOURCE_SDSTOR_STGSTRMS_HXX
 
 #include <tools/stream.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <rtl/ref.hxx>
-
 #include <vector>
 #include <memory>
 
@@ -61,25 +61,29 @@ public:
 // and accessing the data on a physical basis. It uses the built-in
 // FAT class for the page allocations.
 
-class StgStrm {                         // base class for all streams
+class StgStrm {                           // base class for all streams
+private:
+    sal_Int32 m_nPos;                     // current byte position
+    bool m_bBytePosValid;                 // what Pos2Page returns for m_nPos
 protected:
     StgIo& m_rIo;                         // I/O system
     std::unique_ptr<StgFAT> m_pFat;       // FAT stream for allocations
     StgDirEntry* m_pEntry;                // dir entry (for ownership)
     sal_Int32 m_nStart;                       // 1st data page
     sal_Int32 m_nSize;                        // stream size in bytes
-    sal_Int32 m_nPos;                         // current byte position
     sal_Int32 m_nPage;                        // current logical page
     short m_nOffset;                      // offset into current page
     short m_nPageSize;                    // logical page size
     std::vector<sal_Int32> m_aPagesCache;
+    o3tl::sorted_vector<sal_Int32> m_aUsedPageNumbers;
     sal_Int32 scanBuildPageChainCache();
     bool  Copy( sal_Int32 nFrom, sal_Int32 nBytes );
+    void SetPos(sal_Int32 nPos, bool bValid) { m_nPos = nPos; m_bBytePosValid = bValid; }
     explicit StgStrm( StgIo& );
 public:
     virtual ~StgStrm();
     StgIo&  GetIo()     { return m_rIo;    }
-    sal_Int32   GetPos() const   { return m_nPos;   }
+    sal_Int32   GetPos() const   { return m_nPos; }
     sal_Int32   GetStart() const { return m_nStart; }
     sal_Int32   GetSize() const  { return m_nSize;  }
     sal_Int32   GetPage() const  { return m_nPage;  }
