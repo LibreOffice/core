@@ -256,7 +256,7 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
     m_sCompleted(   SwResId(ST_COMPLETED )),
     m_sFailed(      SwResId(ST_FAILED     )),
     m_bCancel(false),
-    m_bDesctructionEnabled(false),
+    m_bDestructionEnabled(false),
     m_pImpl(new SwSendMailDialog_Impl),
     m_pConfigItem(&rConfigItem),
     m_nSendCount(0),
@@ -384,7 +384,7 @@ IMPL_LINK( SwSendMailDialog, RemoveThis, Timer*, pTimer, void )
             m_pImpl->xMailDispatcher->shutdown();
     }
 
-    if( m_bDesctructionEnabled &&
+    if( m_bDestructionEnabled &&
             (!m_pImpl->xMailDispatcher.is() ||
                     !m_pImpl->xMailDispatcher->isRunning()))
     {
