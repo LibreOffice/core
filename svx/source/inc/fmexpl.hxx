@@ -144,7 +144,8 @@ protected:
     Image               m_aNormalImage;
     OUString            aText;
 
-    FmEntryDataList*    pChildList;
+    std::unique_ptr<FmEntryDataList>
+                        pChildList;
     FmEntryData*        pParent;
 
 protected:
@@ -163,7 +164,7 @@ public:
 
     const OUString& GetText() const { return aText; }
     FmEntryData*    GetParent() const { return pParent; }
-    FmEntryDataList* GetChildList() const { return pChildList; }
+    FmEntryDataList* GetChildList() const { return pChildList.get(); }
 
     virtual bool IsEqualWithoutChildren( FmEntryData* pEntryData );
     virtual FmEntryData* Clone() = 0;

@@ -176,7 +176,7 @@ void FmEntryDataList::clear()
 FmEntryData::FmEntryData( FmEntryData* pParentData, const Reference< XInterface >& _rxIFace )
     :pParent( pParentData )
 {
-    pChildList = new FmEntryDataList();
+    pChildList.reset( new FmEntryDataList() );
 
     newObject( _rxIFace );
 }
@@ -184,8 +184,7 @@ FmEntryData::FmEntryData( FmEntryData* pParentData, const Reference< XInterface 
 
 FmEntryData::~FmEntryData()
 {
-    GetChildList()->clear();
-    delete pChildList;
+    pChildList->clear();
 }
 
 
@@ -200,7 +199,7 @@ void FmEntryData::newObject( const css::uno::Reference< css::uno::XInterface >& 
 
 FmEntryData::FmEntryData( const FmEntryData& rEntryData )
 {
-    pChildList = new FmEntryDataList();
+    pChildList.reset( new FmEntryDataList() );
     aText = rEntryData.GetText();
     m_aNormalImage = rEntryData.GetNormalImage();
     pParent = rEntryData.GetParent();
