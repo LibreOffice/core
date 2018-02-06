@@ -316,7 +316,8 @@ namespace svxform
         friend class NavigatorTree;
         friend class OFormComponentObserver;
 
-        FmEntryDataList*            m_pRootList;
+        std::unique_ptr<FmEntryDataList>
+                                    m_pRootList;
         FmFormShell*                m_pFormShell;
         FmFormPage*                 m_pFormPage;
         FmFormModel*                m_pFormModel;
@@ -361,7 +362,7 @@ namespace svxform
         FmFormPage*         GetFormPage() const { return m_pFormPage; }
         FmEntryData*        FindData( const css::uno::Reference< css::uno::XInterface >& xElement, FmEntryDataList* pDataList, bool bRecurs=true );
         FmEntryData*        FindData( const OUString& rText, FmFormData const * pParentData, bool bRecurs );
-        FmEntryDataList*    GetRootList() const { return m_pRootList; }
+        FmEntryDataList*    GetRootList() const { return m_pRootList.get(); }
         static css::uno::Reference< css::container::XIndexContainer >   GetFormComponents( FmFormData const * pParentFormData );
 
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
