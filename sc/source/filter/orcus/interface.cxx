@@ -54,6 +54,8 @@
 #include <tools/colordata.hxx>
 #include <tools/fontenum.hxx>
 
+#include <stylesbuffer.hxx>
+
 using namespace com::sun::star;
 
 namespace os = orcus::spreadsheet;
@@ -1174,7 +1176,7 @@ ScOrcusStyles::border::border():
 
 ScOrcusStyles::border::border_line::border_line():
     meStyle(SvxBorderLineStyle::SOLID),
-    maColor(COL_WHITE),
+    maColor(COL_BLACK),
     mnWidth(0)
 {
 }
@@ -1617,39 +1619,62 @@ void ScOrcusStyles::set_border_style(
     border::border_line& current_line = maCurrentBorder.border_lines[dir];
     switch (style)
     {
-        case orcus::spreadsheet::border_style_t::unknown:
-        case orcus::spreadsheet::border_style_t::none:
         case orcus::spreadsheet::border_style_t::solid:
+            current_line.meStyle = SvxBorderLineStyle::SOLID;
+            current_line.mnWidth = oox::xls::API_LINE_THIN;
+            break;
         case orcus::spreadsheet::border_style_t::hair:
+            current_line.meStyle = SvxBorderLineStyle::SOLID;
+            current_line.mnWidth = oox::xls::API_LINE_HAIR;
+            break;
         case orcus::spreadsheet::border_style_t::medium:
+            current_line.meStyle = SvxBorderLineStyle::SOLID;
+            current_line.mnWidth = oox::xls::API_LINE_MEDIUM;
+            break;
         case orcus::spreadsheet::border_style_t::thick:
+            current_line.meStyle = SvxBorderLineStyle::SOLID;
+            current_line.mnWidth = oox::xls::API_LINE_THICK;
+            break;
         case orcus::spreadsheet::border_style_t::thin:
             current_line.meStyle = SvxBorderLineStyle::SOLID;
+            current_line.mnWidth = oox::xls::API_LINE_THIN;
             break;
         case orcus::spreadsheet::border_style_t::dash_dot:
             current_line.meStyle = SvxBorderLineStyle::DASH_DOT;
+            current_line.mnWidth = oox::xls::API_LINE_THIN;
             break;
         case orcus::spreadsheet::border_style_t::dash_dot_dot:
             current_line.meStyle = SvxBorderLineStyle::DASH_DOT_DOT;
+            current_line.mnWidth = oox::xls::API_LINE_THIN;
             break;
         case orcus::spreadsheet::border_style_t::dashed:
             current_line.meStyle = SvxBorderLineStyle::DASHED;
+            current_line.mnWidth = oox::xls::API_LINE_THIN;
             break;
         case orcus::spreadsheet::border_style_t::dotted:
             current_line.meStyle = SvxBorderLineStyle::DOTTED;
+            current_line.mnWidth = oox::xls::API_LINE_THIN;
             break;
         case orcus::spreadsheet::border_style_t::double_border:
             current_line.meStyle = SvxBorderLineStyle::DOUBLE;
+            current_line.mnWidth = oox::xls::API_LINE_THICK;
             break;
         case orcus::spreadsheet::border_style_t::medium_dash_dot:
         case orcus::spreadsheet::border_style_t::slant_dash_dot:
             current_line.meStyle = SvxBorderLineStyle::DASH_DOT;
+            current_line.mnWidth = oox::xls::API_LINE_MEDIUM;
             break;
         case orcus::spreadsheet::border_style_t::medium_dash_dot_dot:
             current_line.meStyle = SvxBorderLineStyle::DASH_DOT_DOT;
+            current_line.mnWidth = oox::xls::API_LINE_MEDIUM;
             break;
         case orcus::spreadsheet::border_style_t::medium_dashed:
             current_line.meStyle = SvxBorderLineStyle::DASHED;
+            current_line.mnWidth = oox::xls::API_LINE_MEDIUM;
+            break;
+        case orcus::spreadsheet::border_style_t::unknown:
+        case orcus::spreadsheet::border_style_t::none:
+            current_line.mnWidth = oox::xls::API_LINE_NONE;
             break;
         default:
             ;
@@ -1658,13 +1683,13 @@ void ScOrcusStyles::set_border_style(
 }
 
 void ScOrcusStyles::set_border_color(orcus::spreadsheet::border_direction_t dir,
-            orcus::spreadsheet::color_elem_t alpha,
+            orcus::spreadsheet::color_elem_t /*alpha*/,
             orcus::spreadsheet::color_elem_t red,
             orcus::spreadsheet::color_elem_t green,
             orcus::spreadsheet::color_elem_t blue)
 {
     border::border_line& current_line = maCurrentBorder.border_lines[dir];
-    current_line.maColor = Color(alpha, red, green, blue);
+    current_line.maColor = Color(red, green, blue);
 }
 
 void ScOrcusStyles::set_border_width(orcus::spreadsheet::border_direction_t  dir, double val, orcus::length_unit_t  unit )
