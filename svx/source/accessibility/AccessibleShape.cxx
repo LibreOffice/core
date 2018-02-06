@@ -118,8 +118,8 @@ AccessibleShape::AccessibleShape (
 
 AccessibleShape::~AccessibleShape()
 {
-    delete mpChildrenManager;
-    delete mpText;
+    mpChildrenManager.reset();
+    mpText.reset();
     SAL_INFO("svx", "~AccessibleShape");
 
     // Unregistering from the various broadcasters should be unnecessary
@@ -135,8 +135,8 @@ void AccessibleShape::Init()
     // Create a children manager when this shape has children of its own.
     Reference<drawing::XShapes> xShapes (mxShape, uno::UNO_QUERY);
     if (xShapes.is() && xShapes->getCount() > 0)
-        mpChildrenManager = new ChildrenManager (
-            this, xShapes, maShapeTreeInfo, *this);
+        mpChildrenManager.reset( new ChildrenManager (
+            this, xShapes, maShapeTreeInfo, *this) );
     if (mpChildrenManager != nullptr)
         mpChildrenManager->Update();
 
@@ -174,12 +174,12 @@ void AccessibleShape::Init()
                 if( !pOutlinerParaObject )
                 {
                     // empty text -> use proxy edit source to delay creation of EditEngine
-                    mpText = new AccessibleTextHelper( o3tl::make_unique<AccessibleEmptyEditSource >(*pSdrObject, *pView, *pWindow) );
+                    mpText.reset( new AccessibleTextHelper( o3tl::make_unique<AccessibleEmptyEditSource >(*pSdrObject, *pView, *pWindow) ) );
                 }
                 else
                 {
                     // non-empty text -> use full-fledged edit source right away
-                    mpText = new AccessibleTextHelper( o3tl::make_unique<SvxTextEditSource >(*pSdrObject, nullptr, *pView, *pWindow) );
+                    mpText.reset( new AccessibleTextHelper( o3tl::make_unique<SvxTextEditSource >(*pSdrObject, nullptr, *pView, *pWindow) ) );
                 }
                 if( pWindow->HasFocus() )
                     mpText->SetFocus();
@@ -1195,14 +1195,12 @@ void AccessibleShape::disposing()
     // Release the child containers.
     if (mpChildrenManager != nullptr)
     {
-        delete mpChildrenManager;
-        mpChildrenManager = nullptr;
+        mpChildrenManager.reset();
     }
     if (mpText != nullptr)
     {
         mpText->Dispose();
-        delete mpText;
-        mpText = nullptr;
+        mpText.reset();
     }
 
     // Cleanup.  Remove references to objects to allow them to be
