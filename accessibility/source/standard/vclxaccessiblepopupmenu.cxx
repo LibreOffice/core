@@ -31,17 +31,6 @@ using namespace ::comphelper;
 // class VCLXAccessiblePopupMenu
 
 
-VCLXAccessiblePopupMenu::VCLXAccessiblePopupMenu( Menu* pMenu )
-    :OAccessibleMenuComponent( pMenu )
-{
-}
-
-
-VCLXAccessiblePopupMenu::~VCLXAccessiblePopupMenu()
-{
-}
-
-
 bool VCLXAccessiblePopupMenu::IsFocused()
 {
     return !IsChildHighlighted();

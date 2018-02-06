@@ -45,10 +45,6 @@ AccessibleGridControlTableBase::AccessibleGridControlTableBase(
 {
 }
 
-AccessibleGridControlTableBase::~AccessibleGridControlTableBase()
-{
-}
-
 // XAccessibleContext ---------------------------------------------------------
 
 sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleChildCount()

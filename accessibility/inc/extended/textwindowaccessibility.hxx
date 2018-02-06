@@ -139,7 +139,7 @@ typedef ::cppu::WeakAggComponentImplHelper7<
 // 0 to N - 1), whereas the Paragraph's index is the position within the text
 // view/accessible parent (from 0 to M - 1).  Paragraphs outside the currently
 // visible range have an index of -1.
-class Paragraph:
+class Paragraph final:
     private cppu::BaseMutex, public ParagraphBase, private ::comphelper::OCommonAccessibleText
 {
 public:

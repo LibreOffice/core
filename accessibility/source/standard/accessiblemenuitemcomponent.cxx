@@ -62,11 +62,9 @@ OAccessibleMenuItemComponent::OAccessibleMenuItemComponent( Menu* pParent, sal_u
     m_sItemText = GetItemText();
 }
 
-
 OAccessibleMenuItemComponent::~OAccessibleMenuItemComponent()
 {
 }
-
 
 bool OAccessibleMenuItemComponent::IsEnabled()
 {

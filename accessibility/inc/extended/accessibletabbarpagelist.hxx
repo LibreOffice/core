@@ -46,7 +46,7 @@ namespace accessibility
         css::lang::XServiceInfo > AccessibleTabBarPageList_BASE;
 
     class AccessibleTabBarPageList final : public AccessibleTabBarBase,
-                                        public AccessibleTabBarPageList_BASE
+                                           public AccessibleTabBarPageList_BASE
     {
     private:
         typedef std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
@@ -73,7 +73,6 @@ namespace accessibility
 
     public:
         AccessibleTabBarPageList( TabBar* pTabBar, sal_Int32 nIndexInParent );
-        virtual ~AccessibleTabBarPageList() override;
 
         // XInterface
         DECLARE_XINTERFACE()

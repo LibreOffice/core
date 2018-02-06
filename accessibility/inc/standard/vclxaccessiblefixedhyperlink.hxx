@@ -29,7 +29,7 @@
 class VCLXAccessibleFixedHyperlink : public VCLXAccessibleTextComponent
 {
 protected:
-    virtual ~VCLXAccessibleFixedHyperlink() override;
+    virtual ~VCLXAccessibleFixedHyperlink() override = default;
 
 public:
     VCLXAccessibleFixedHyperlink( VCLXWindow* pVCLXindow );

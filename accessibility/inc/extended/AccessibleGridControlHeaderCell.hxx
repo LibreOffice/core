@@ -23,7 +23,7 @@
 
 namespace accessibility
 {
-    class AccessibleGridControlHeaderCell : public AccessibleGridControlCell, public css::accessibility::XAccessible
+    class AccessibleGridControlHeaderCell final : public AccessibleGridControlCell, public css::accessibility::XAccessible
     {
         sal_Int32   m_nColumnRowId;
     public:

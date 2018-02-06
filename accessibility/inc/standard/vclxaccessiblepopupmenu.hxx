@@ -32,8 +32,7 @@ protected:
     virtual bool        IsFocused() override;
 
 public:
-    VCLXAccessiblePopupMenu( Menu* pMenu );
-    virtual ~VCLXAccessiblePopupMenu() override;
+    using OAccessibleMenuComponent::OAccessibleMenuComponent;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
