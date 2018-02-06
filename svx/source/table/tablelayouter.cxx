@@ -499,7 +499,7 @@ sal_Int32 TableLayouter::distribute( LayoutVector& rLayouts, sal_Int32 nDistribu
 
     sal_Int32 nSize = 0;
     for( nIndex = 0; nIndex < nCount; ++nIndex )
-        nSize += rLayouts[nIndex].mnSize;
+        nSize = o3tl::saturating_add(nSize, rLayouts[nIndex].mnSize);
 
     return nSize;
 }
