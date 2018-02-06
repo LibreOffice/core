@@ -1561,19 +1561,16 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
             {
                 // check if this PNG contains a GIF chunk!
                 const std::vector<vcl::PNGReader::ChunkData>& rChunkData = aPNGReader.GetChunks();
-                std::vector<vcl::PNGReader::ChunkData>::const_iterator aIter(rChunkData.begin());
-                std::vector<vcl::PNGReader::ChunkData>::const_iterator aEnd(rChunkData.end());
-
-                while (aIter != aEnd)
+                for (auto const& chunk : rChunkData)
                 {
                     // Microsoft Office is storing Animated GIFs in following chunk
-                    if (aIter->nType == PMGCHUNG_msOG)
+                    if (chunk.nType == PMGCHUNG_msOG)
                     {
-                        sal_uInt32 nChunkSize = aIter->aData.size();
+                        sal_uInt32 nChunkSize = chunk.aData.size();
 
                         if (nChunkSize > 11)
                         {
-                            const std::vector<sal_uInt8>& rData = aIter->aData;
+                            const std::vector<sal_uInt8>& rData = chunk.aData;
                             nGraphicContentSize = nChunkSize - 11;
                             SvMemoryStream aIStrm(const_cast<sal_uInt8*>(&rData[11]), nGraphicContentSize, StreamMode::READ);
                             pGraphicContent.reset(new sal_uInt8[nGraphicContentSize]);
@@ -1585,7 +1582,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                             break;
                         }
                     }
-                    ++aIter;
                 }
             }
 
