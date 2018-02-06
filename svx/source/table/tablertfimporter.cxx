@@ -81,7 +81,6 @@ class SdrTableRTFParser
 {
 public:
     explicit SdrTableRTFParser( SdrTableObj& rTableObj );
-    ~SdrTableRTFParser();
 
     void Read( SvStream& rStream );
 
@@ -100,7 +99,7 @@ public:
 
 private:
     SdrTableObj&    mrTableObj;
-    SdrOutliner*    mpOutliner;
+    std::unique_ptr<SdrOutliner> mpOutliner;
     SfxItemPool&    mrItemPool;
 
     RTFCellDefaultVector maDefaultList;
@@ -119,7 +118,7 @@ private:
     std::vector< sal_Int32 >::iterator maLastEdge;
     std::vector< RTFColumnVectorPtr > maRows;
 
-    RTFCellDefault* mpInsDefault;
+    std::unique_ptr<RTFCellDefault> mpInsDefault;
     RTFCellDefault* mpActDefault;
     RTFCellDefault* mpDefMerge;
 
@@ -148,13 +147,7 @@ SdrTableRTFParser::SdrTableRTFParser( SdrTableObj& rTableObj )
 {
     mpOutliner->SetUpdateMode(true);
     mpOutliner->SetStyleSheet( 0, mrTableObj.GetStyleSheet() );
-    mpInsDefault = new RTFCellDefault( &mrItemPool );
-}
-
-SdrTableRTFParser::~SdrTableRTFParser()
-{
-    delete mpOutliner;
-    delete mpInsDefault;
+    mpInsDefault.reset( new RTFCellDefault( &mrItemPool ) );
 }
 
 void SdrTableRTFParser::Read( SvStream& rStream )
@@ -402,7 +395,7 @@ void SdrTableRTFParser::ProcToken( RtfImportInfo* pInfo )
         break;
         case RTF_CLMGF:         // The first cell of cells to be merged
         {
-            mpDefMerge = mpInsDefault;
+            mpDefMerge = mpInsDefault.get();
             mnLastToken = pInfo->nToken;
         }
         break;
@@ -431,19 +424,20 @@ void SdrTableRTFParser::ProcToken( RtfImportInfo* pInfo )
         case RTF_CELLX:         // closes cell default
         {
             mbNewDef = true;
-            maDefaultList.push_back( std::shared_ptr< RTFCellDefault >( mpInsDefault ) );
+            std::shared_ptr<RTFCellDefault> pDefault( mpInsDefault.release() );
+            maDefaultList.push_back( pDefault );
 
 
             const sal_Int32 nSize = TwipsToHundMM( pInfo->nTokenValue );
             if ( nSize > mnLastEdge )
                 InsertColumnEdge( nSize );
 
-            mpInsDefault->mnCellX = nSize;
+            pDefault->mnCellX = nSize;
             // Record cellx in the first merged cell.
-            if ( mpDefMerge && mpInsDefault->mnColSpan == 0 )
+            if ( mpDefMerge && pDefault->mnColSpan == 0 )
                 mpDefMerge->mnCellX = nSize;
 
-            mpInsDefault = new RTFCellDefault( &mrItemPool );
+            mpInsDefault.reset( new RTFCellDefault( &mrItemPool ) );
 
             mnLastToken = pInfo->nToken;
         }
@@ -463,7 +457,7 @@ void SdrTableRTFParser::ProcToken( RtfImportInfo* pInfo )
             if ( mbNewDef || !mpActDefault )
                 NewCellRow();
             if ( !mpActDefault )
-                mpActDefault = mpInsDefault;
+                mpActDefault = mpInsDefault.get();
             if ( mpActDefault->mnColSpan > 0 )
             {
                 InsertCell(pInfo);
