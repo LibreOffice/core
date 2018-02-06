@@ -72,7 +72,6 @@ using namespace linguistic;
 
 SpellChecker::SpellChecker() :
     m_aEvtListeners(GetLinguMutex()),
-    m_pPropHelper(nullptr),
     m_bDisposing(false)
 {
 }
@@ -87,7 +86,6 @@ SpellChecker::~SpellChecker()
     if (m_pPropHelper)
     {
         m_pPropHelper->RemoveAsPropListener();
-        delete m_pPropHelper;
     }
 }
 
@@ -97,7 +95,7 @@ PropertyHelper_Spelling & SpellChecker::GetPropHelper_Impl()
     {
         Reference< XLinguProperties >   xPropSet( GetLinguProperties(), UNO_QUERY );
 
-        m_pPropHelper = new PropertyHelper_Spelling( static_cast<XSpellChecker *>(this), xPropSet );
+        m_pPropHelper.reset( new PropertyHelper_Spelling( static_cast<XSpellChecker *>(this), xPropSet ) );
         m_pPropHelper->AddAsPropListener();   //! after a reference is established
     }
     return *m_pPropHelper;
@@ -577,7 +575,7 @@ void SAL_CALL SpellChecker::initialize( const Sequence< Any >& rArguments )
             //! And the reference to the UNO-functions while increasing
             //! the ref-count and will implicitly free the memory
             //! when the object is no longer used.
-            m_pPropHelper = new PropertyHelper_Spelling( static_cast<XSpellChecker *>(this), xPropSet );
+            m_pPropHelper.reset( new PropertyHelper_Spelling( static_cast<XSpellChecker *>(this), xPropSet ) );
             m_pPropHelper->AddAsPropListener();   //! after a reference is established
         }
         else {
@@ -598,8 +596,7 @@ void SAL_CALL SpellChecker::dispose()
         if (m_pPropHelper)
         {
             m_pPropHelper->RemoveAsPropListener();
-            delete m_pPropHelper;
-            m_pPropHelper = nullptr;
+            m_pPropHelper.reset();
         }
     }
 }

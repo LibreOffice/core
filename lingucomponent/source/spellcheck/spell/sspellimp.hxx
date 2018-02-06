@@ -69,7 +69,7 @@ class SpellChecker :
     Sequence< Locale >                 m_aSuppLocales;
 
     ::comphelper::OInterfaceContainerHelper2       m_aEvtListeners;
-    linguistic::PropertyHelper_Spelling*    m_pPropHelper;
+    std::unique_ptr<linguistic::PropertyHelper_Spelling> m_pPropHelper;
     bool                                    m_bDisposing;
 
     SpellChecker(const SpellChecker &) = delete;
