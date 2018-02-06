@@ -41,6 +41,8 @@
 
 #include <osl/file.hxx>
 #include <mythes.hxx>
+#include <memory>
+#include <vector>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -66,12 +68,15 @@ class Thesaurus :
     ::comphelper::OInterfaceContainerHelper2       aEvtListeners;
     linguistic::PropertyHelper_Thesaurus*       pPropHelper;
     bool                                    bDisposing;
-    CharClass **                            aCharSetInfo;
-    MyThes **                               aThes;
-    rtl_TextEncoding *                      aTEncs;
-    Locale *                                aTLocs;
-    OUString *                              aTNames;
-    sal_Int32                               numthes;
+    struct ThesInfo
+    {
+        std::unique_ptr<CharClass> aCharSetInfo;
+        std::unique_ptr<MyThes> aThes;
+        rtl_TextEncoding aEncoding;
+        Locale aLocale;
+        OUString aName;
+    };
+    std::vector<ThesInfo>                   mvThesInfo;
 
     // cache for the Thesaurus dialog
     Sequence < Reference < css::linguistic2::XMeaning > > prevMeanings;
