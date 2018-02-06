@@ -839,7 +839,8 @@ bool StgDirStrm::Store()
     sal_Int32 nOldStart = m_nStart;       // save for later deletion
     sal_Int32 nOldSize  = m_nSize;
     m_nStart = m_nPage = STG_EOF;
-    m_nSize  = m_nPos = 0;
+    m_nSize = 0;
+    SetPos(0, true);
     m_nOffset = 0;
     // Delete all temporary entries
     m_pRoot->DelTemp( false );

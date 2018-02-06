@@ -86,6 +86,11 @@ public:
         m_vector.clear();
     }
 
+    void reserve(size_type size)
+    {
+        m_vector.reserve(size);
+    }
+
     // ACCESSORS
 
     size_type size() const

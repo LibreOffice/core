@@ -63,7 +63,6 @@ namespace
 
             // Read as much as we can, a corrupted FAT chain can cause real grief here
             nReadableSize = xStream->ReadBytes(static_cast<void *>(pData), nSize);
-//            fprintf(stderr, "readable size %d vs size %d remaining %d\n", nReadableSize, nSize, nReadableSize);
         }
         {   // Read the data backwards as well
             tools::SvRef<SotStorageStream> xStream( xObjStor->OpenSotStream( rStreamName ) );
