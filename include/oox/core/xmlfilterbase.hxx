@@ -90,8 +90,7 @@ public:
     virtual             ~XmlFilterBase() override;
 
     /** Has to be implemented by each filter, returns the current theme. */
-    virtual const ::oox::drawingml::Theme*
-                        getCurrentTheme() const = 0;
+    virtual const ::oox::drawingml::Theme* getCurrentTheme() const = 0;
 
     /** Has to be implemented by each filter to return the collection of VML shapes. */
     virtual ::oox::vml::Drawing* getVmlDrawing() = 0;
@@ -101,13 +100,13 @@ public:
     virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() = 0;
 
     /** Helper to switch chart data table - specifically for xlsx imports */
-     virtual void useInternalChartDataTable( bool /*bInternal*/ ) { }
+    virtual void useInternalChartDataTable( bool /*bInternal*/ ) { }
 
     /** Has to be implemented by each filter to return the table style list. */
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() = 0;
 
 
-    OUString     getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rPart );
+    OUString getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rPart );
 
     /** Imports a fragment using the passed fragment handler, which contains
         the full path to the fragment stream.
