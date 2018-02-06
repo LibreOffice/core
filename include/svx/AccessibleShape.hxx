@@ -48,6 +48,7 @@
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <svx/IAccessibleViewForwarderListener.hxx>
 #include <svx/svxdllapi.h>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
     namespace accessibility { class XAccessible; }
@@ -373,7 +374,7 @@ public:
 
 protected:
     /// Children manager. May be empty if there are no children.
-    ChildrenManager* mpChildrenManager;
+    std::unique_ptr<ChildrenManager> mpChildrenManager;
 
     /// Reference to the actual shape.
     css::uno::Reference<
@@ -389,7 +390,7 @@ protected:
 
     /** The accessible text engine.  May be NULL if it can not be created.
     */
-    AccessibleTextHelper* mpText;
+    std::unique_ptr<AccessibleTextHelper> mpText;
 
     /** This object can be used to modify the child list of our parent.
     */
