@@ -118,7 +118,7 @@ void SvxHlmarkTreeLBox::Paint(vcl::RenderContext& rRenderContext, const ::tools:
 //*** Window-Class ***
 // Constructor / Destructor
 SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
-    : ModalDialog(pParent, "HyperlinkMark", "cui/ui/hyperlinkmarkdialog.ui")
+    : FloatingWindow(pParent, "HyperlinkMark", "cui/ui/hyperlinkmarkdialog.ui")
     , mbUserMoved(false)
     , mpParent(pParent)
     , mnError(LERR_NOERROR)
@@ -150,7 +150,7 @@ void SvxHlinkDlgMarkWnd::dispose()
     mpBtClose.clear();
     mpLbTree.clear();
     mpParent.clear();
-    ModalDialog::dispose();
+    FloatingWindow::dispose();
 }
 
 // Set an errorstatus
