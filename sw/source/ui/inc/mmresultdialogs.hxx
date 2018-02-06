@@ -185,7 +185,7 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
     OUString                m_sFailed;
 
     bool                    m_bCancel;
-    bool                    m_bDesctructionEnabled;
+    bool                    m_bDestructionEnabled;
 
     SwSendMailDialog_Impl*  m_pImpl;
     SwMailMergeConfigItem*  m_pConfigItem;
@@ -210,7 +210,7 @@ public:
     virtual void        dispose() override;
 
     void                AddDocument( SwMailDescriptor const & rDesc );
-    void                EnableDestruction() {m_bDesctructionEnabled = true;}
+    void                EnableDestruction() {m_bDestructionEnabled = true;}
     void                ShowDialog();
 
     void                DocumentSent( css::uno::Reference< css::mail::XMailMessage> const & xMessage,
