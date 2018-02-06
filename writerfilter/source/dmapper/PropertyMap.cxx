@@ -37,6 +37,7 @@
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
@@ -1074,6 +1075,10 @@ bool SectionPropertyMap::FloatingTableConversion(DomainMapper_Impl& rDM_Impl, Fl
     sal_Int32 nTextAreaWidth = nPageWidth - GetLeftMargin() - GetRightMargin();
     // Count the layout width of the table.
     sal_Int32 nTableWidth = rInfo.m_nTableWidth;
+    if (rInfo.m_nTableWidthType == text::SizeType::VARIABLE)
+    {
+        nTableWidth *= nTextAreaWidth / 100.0;
+    }
     sal_Int32 nLeftMargin = 0;
     if (rInfo.getPropertyValue("LeftMargin") >>= nLeftMargin)
         nTableWidth += nLeftMargin;
