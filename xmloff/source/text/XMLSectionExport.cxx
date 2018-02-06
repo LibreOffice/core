@@ -398,8 +398,16 @@ void XMLSectionExport::ExportRegularSectionStart(
     {
         OUStringBuffer aBuffer;
         ::sax::Converter::encodeBase64(aBuffer, aPassword);
+        // in ODF 1.0/1.1 the algorithm was left unspecified so we can write anything
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_PROTECTION_KEY,
                                  aBuffer.makeStringAndClear());
+        if (aPassword.getLength() == 32 && GetExport().getDefaultVersion() >= SvtSaveOptions::ODFVER_012)
+        {
+            // attribute exists in ODF 1.2 or later; default is SHA1 so no need to write that
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
+                    // write the URL from ODF 1.2, not the W3C one
+                    "http://www.w3.org/2000/09/xmldsig#sha256");
+        }
     }
 
     // export element

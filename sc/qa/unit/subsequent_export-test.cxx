@@ -96,6 +96,11 @@ public:
     void testConditionalFormatExportODS();
     void testConditionalFormatExportXLSX();
     void testTdf99856_dataValidationTest();
+    void testProtectionKeyODS_UTF16LErtlSHA1();
+    void testProtectionKeyODS_UTF8SHA1();
+    void testProtectionKeyODS_UTF8SHA256ODF12();
+    void testProtectionKeyODS_UTF8SHA256W3C();
+    void testProtectionKeyODS_XL_SHA1();
     void testColorScaleExportODS();
     void testColorScaleExportXLSX();
     void testDataBarExportODS();
@@ -206,6 +211,11 @@ public:
     CPPUNIT_TEST(testConditionalFormatExportODS);
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
     CPPUNIT_TEST(testTdf99856_dataValidationTest);
+    CPPUNIT_TEST(testProtectionKeyODS_UTF16LErtlSHA1);
+    CPPUNIT_TEST(testProtectionKeyODS_UTF8SHA1);
+    CPPUNIT_TEST(testProtectionKeyODS_UTF8SHA256ODF12);
+    CPPUNIT_TEST(testProtectionKeyODS_UTF8SHA256W3C);
+    CPPUNIT_TEST(testProtectionKeyODS_XL_SHA1);
     CPPUNIT_TEST(testColorScaleExportODS);
     CPPUNIT_TEST(testColorScaleExportXLSX);
     CPPUNIT_TEST(testDataBarExportODS);
@@ -328,7 +338,8 @@ void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
         { BAD_CAST("xdr"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing") },
         { BAD_CAST("x"), BAD_CAST("http://schemas.openxmlformats.org/spreadsheetml/2006/main") },
         { BAD_CAST("r"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/relationships") },
-        { BAD_CAST("number"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0") }
+        { BAD_CAST("number"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0") },
+        { BAD_CAST("loext"), BAD_CAST("urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0") },
     };
     for(size_t i = 0; i < SAL_N_ELEMENTS(aNamespaces); ++i)
     {
@@ -493,6 +504,111 @@ void ScExportTest::testTdf99856_dataValidationTest()
     CPPUNIT_ASSERT_EQUAL(OUString("18 Missis"), aList[17].GetString());
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testProtectionKeyODS_UTF16LErtlSHA1()
+{
+    OUString const password("1012345678901234567890123456789012345678901234567890");
+
+    ScDocShellRef xShell = loadDoc("protection-key1.", FORMAT_FODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load doc", xShell.is());
+
+    ScDocument& rDoc = xShell->GetDocument();
+    ScDocProtection *const pDocProt(rDoc.GetDocProtection());
+    CPPUNIT_ASSERT(pDocProt->verifyPassword(password));
+    ScTableProtection *const pTabProt(rDoc.GetTabProtection(0));
+    CPPUNIT_ASSERT(pTabProt->verifyPassword(password));
+
+    // we can't assume that the user entered the password; check that we
+    // round-trip the password as-is
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_ODS);
+    xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
+    assertXPath(pXmlDoc, "//office:spreadsheet[@table:structure-protected='true' and @table:protection-key='vbnhxyBKtPHCA1wB21zG1Oha8ZA=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha1']");
+    assertXPath(pXmlDoc, "//table:table[@table:protected='true' and @table:protection-key='vbnhxyBKtPHCA1wB21zG1Oha8ZA=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha1']");
+}
+
+void ScExportTest::testProtectionKeyODS_UTF8SHA1()
+{
+    OUString const password("1012345678901234567890123456789012345678901234567890");
+
+    ScDocShellRef xShell = loadDoc("protection-key2.", FORMAT_FODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load doc", xShell.is());
+
+    ScDocument& rDoc = xShell->GetDocument();
+    ScDocProtection *const pDocProt(rDoc.GetDocProtection());
+    CPPUNIT_ASSERT(pDocProt->verifyPassword(password));
+    ScTableProtection *const pTabProt(rDoc.GetTabProtection(0));
+    CPPUNIT_ASSERT(pTabProt->verifyPassword(password));
+
+    // we can't assume that the user entered the password; check that we
+    // round-trip the password as-is
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_ODS);
+    xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
+    assertXPath(pXmlDoc, "//office:spreadsheet[@table:structure-protected='true' and @table:protection-key='nLHas0RIwepGDaH4c2hpyIUvIS8=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha1']");
+    assertXPath(pXmlDoc, "//table:table[@table:protected='true' and @table:protection-key='nLHas0RIwepGDaH4c2hpyIUvIS8=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha1']");
+}
+
+void ScExportTest::testProtectionKeyODS_UTF8SHA256ODF12()
+{
+    OUString const password("1012345678901234567890123456789012345678901234567890");
+
+    ScDocShellRef xShell = loadDoc("protection-key3.", FORMAT_FODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load doc", xShell.is());
+
+    ScDocument& rDoc = xShell->GetDocument();
+    ScDocProtection *const pDocProt(rDoc.GetDocProtection());
+    CPPUNIT_ASSERT(pDocProt->verifyPassword(password));
+    ScTableProtection *const pTabProt(rDoc.GetTabProtection(0));
+    CPPUNIT_ASSERT(pTabProt->verifyPassword(password));
+
+    // we can't assume that the user entered the password; check that we
+    // round-trip the password as-is
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_ODS);
+    xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
+    assertXPath(pXmlDoc, "//office:spreadsheet[@table:structure-protected='true' and @table:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256']");
+    assertXPath(pXmlDoc, "//table:table[@table:protected='true' and @table:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256']");
+}
+
+void ScExportTest::testProtectionKeyODS_UTF8SHA256W3C()
+{
+    OUString const password("1012345678901234567890123456789012345678901234567890");
+
+    ScDocShellRef xShell = loadDoc("protection-key4.", FORMAT_FODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load doc", xShell.is());
+
+    ScDocument& rDoc = xShell->GetDocument();
+    ScDocProtection *const pDocProt(rDoc.GetDocProtection());
+    CPPUNIT_ASSERT(pDocProt->verifyPassword(password));
+    ScTableProtection *const pTabProt(rDoc.GetTabProtection(0));
+    CPPUNIT_ASSERT(pTabProt->verifyPassword(password));
+
+    // we can't assume that the user entered the password; check that we
+    // round-trip the password as-is
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_ODS);
+    xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
+    assertXPath(pXmlDoc, "//office:spreadsheet[@table:structure-protected='true' and @table:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256']");
+    assertXPath(pXmlDoc, "//table:table[@table:protected='true' and @table:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256']");
+}
+
+void ScExportTest::testProtectionKeyODS_XL_SHA1()
+{
+    OUString const password("1012345678901234567890123456789012345678901234567890");
+
+    ScDocShellRef xShell = loadDoc("protection-key5.", FORMAT_FODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load doc", xShell.is());
+
+    ScDocument& rDoc = xShell->GetDocument();
+    ScDocProtection *const pDocProt(rDoc.GetDocProtection());
+    CPPUNIT_ASSERT(pDocProt->verifyPassword(password));
+    ScTableProtection *const pTabProt(rDoc.GetTabProtection(0));
+    CPPUNIT_ASSERT(pTabProt->verifyPassword(password));
+
+    // we can't assume that the user entered the password; check that we
+    // round-trip the password as-is
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_ODS);
+    xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
+    assertXPath(pXmlDoc, "//office:spreadsheet[@table:structure-protected='true' and @table:protection-key='OX3WkEe79fv1PE+FUmfOLdwVoqI=' and @table:protection-key-digest-algorithm='http://docs.oasis-open.org/office/ns/table/legacy-hash-excel' and @loext:protection-key-digest-algorithm-2='http://www.w3.org/2000/09/xmldsig#sha1']");
+    assertXPath(pXmlDoc, "//table:table[@table:protected='true' and @table:protection-key='OX3WkEe79fv1PE+FUmfOLdwVoqI=' and @table:protection-key-digest-algorithm='http://docs.oasis-open.org/office/ns/table/legacy-hash-excel' and @loext:protection-key-digest-algorithm-2='http://www.w3.org/2000/09/xmldsig#sha1']");
 }
 
 void ScExportTest::testColorScaleExportODS()
