@@ -65,14 +65,14 @@ class CGM
         bool                mbFirstOutPut;
         bool                mbInDefaultReplacement;
         sal_uInt32          mnAct4PostReset;
-        CGMBitmap*          mpBitmapInUse;
-        CGMChart*           mpChart;                // if sal_True->"SHWSLIDEREC"
+        std::unique_ptr<CGMBitmap> mpBitmapInUse;
+        std::unique_ptr<CGMChart> mpChart;          // if sal_True->"SHWSLIDEREC"
                                                     //  otherwise "BEGINPIC" commands
                                                     // controls page inserting
-        CGMElements*        pElement;
-        CGMElements*        pCopyOfE;
-        CGMImpressOutAct*   mpOutAct;
-        ::std::vector< sal_uInt8 * > maDefRepList;
+        std::unique_ptr<CGMElements> pElement;
+        std::unique_ptr<CGMElements> pCopyOfE;
+        std::unique_ptr<CGMImpressOutAct> mpOutAct;
+        ::std::vector< std::unique_ptr<sal_uInt8[]> > maDefRepList;
         ::std::vector< sal_uInt32  > maDefRepSizeList;
 
         sal_uInt8*              mpSource;         // start of source buffer that is not increased
