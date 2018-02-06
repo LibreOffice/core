@@ -203,6 +203,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
             LABEL_LIST( VERSION );
             LABEL_LIST( TEMPLATE );
             LABEL_LIST( IMAGE_TEMPLATE );
+            LABEL_LIST( IMAGE_ANCHOR );
             default:
                 SAL_WARN( "vcl.gtk", "Handle unknown control " << i);
                 break;
@@ -1080,9 +1081,11 @@ GtkWidget *SalGtkFilePicker::getWidget( sal_Int16 nControlId, GType *pType )
         MAP_LIST( VERSION );
         MAP_LIST( TEMPLATE );
         MAP_LIST( IMAGE_TEMPLATE );
+        MAP_LIST( IMAGE_ANCHOR );
         MAP_LIST_LABEL( VERSION );
         MAP_LIST_LABEL( TEMPLATE );
         MAP_LIST_LABEL( IMAGE_TEMPLATE );
+        MAP_LIST_LABEL( IMAGE_ANCHOR );
     default:
         SAL_WARN( "vcl.gtk", "Handle unknown control " << nControlId);
         break;
@@ -1642,6 +1645,14 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
             mbToggleVisibility[LINK] = true;
             mbToggleVisibility[PREVIEW] = true;
             mbListVisibility[IMAGE_TEMPLATE] = true;
+            // TODO
+                break;
+        case FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR:
+            eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
+            first_button_text = GTK_STOCK_OPEN;
+            mbToggleVisibility[LINK] = true;
+            mbToggleVisibility[PREVIEW] = true;
+            mbListVisibility[IMAGE_ANCHOR] = true;
             // TODO
                 break;
         case FILEOPEN_PLAY:
