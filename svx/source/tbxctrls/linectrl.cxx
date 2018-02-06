@@ -69,8 +69,6 @@ SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( sal_uInt16 nSlotId,
 
 SvxLineStyleToolBoxControl::~SvxLineStyleToolBoxControl()
 {
-    delete pStyleItem;
-    delete pDashItem;
 }
 
 
@@ -95,13 +93,11 @@ void SvxLineStyleToolBoxControl::StateChanged (
         {
             if( nSID == SID_ATTR_LINE_STYLE )
             {
-                delete pStyleItem;
-                pStyleItem = static_cast<XLineStyleItem*>(pState->Clone());
+                pStyleItem.reset( static_cast<XLineStyleItem*>(pState->Clone()) );
             }
             else if( nSID == SID_ATTR_LINE_DASH )
             {
-                delete pDashItem;
-                pDashItem = static_cast<XLineDashItem*>(pState->Clone());
+                pDashItem.reset( static_cast<XLineDashItem*>(pState->Clone()) );
             }
 
             bUpdate = true;
