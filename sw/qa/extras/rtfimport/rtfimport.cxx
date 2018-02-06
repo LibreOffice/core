@@ -1392,7 +1392,7 @@ DECLARE_RTFIMPORT_TEST(testTdf104016, "tdf104016.rtf")
 
 DECLARE_RTFIMPORT_TEST(testTdf115242, "tdf115242.rtf")
 {
-    // This was 0, overriden left margin was lost by too aggressive style
+    // This was 0, overridden left margin was lost by too aggressive style
     // deduplication.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2787),
                          getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
