@@ -356,17 +356,19 @@ struct FloatingTableInfo
     css::uno::Reference<css::text::XTextRange> m_xEnd;
     css::uno::Sequence<css::beans::PropertyValue> m_aFrameProperties;
     sal_Int32 m_nTableWidth;
+    sal_Int32 m_nTableWidthType;
     /// Break type of the section that contains this table.
     sal_Int32 m_nBreakType = -1;
 
     FloatingTableInfo(css::uno::Reference<css::text::XTextRange> const& xStart,
             css::uno::Reference<css::text::XTextRange> const& xEnd,
             const css::uno::Sequence<css::beans::PropertyValue>& aFrameProperties,
-            sal_Int32 nTableWidth)
+            sal_Int32 nTableWidth, sal_Int32 nTableWidthType)
         : m_xStart(xStart),
         m_xEnd(xEnd),
         m_aFrameProperties(aFrameProperties),
-        m_nTableWidth(nTableWidth)
+        m_nTableWidth(nTableWidth),
+        m_nTableWidthType(nTableWidthType)
     {
     }
     css::uno::Any getPropertyValue(const OUString &propertyName);
