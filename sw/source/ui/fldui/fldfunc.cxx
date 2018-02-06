@@ -48,7 +48,7 @@ SwFieldFuncPage::SwFieldFuncPage(vcl::Window* pParent, const SfxItemSet *const p
     get(m_pSelectionLB, "select");
     get(m_pFormatLB, "format");
     get(m_pNameFT, "nameft");
-    get(m_pNameED, "name");
+    get(m_pNameED, "condFunction");
     get(m_pValueGroup, "valuegroup");
     get(m_pValueFT, "valueft");
     get(m_pValueED, "value");
