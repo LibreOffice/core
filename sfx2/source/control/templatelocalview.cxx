@@ -23,7 +23,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/help.hxx>
-#include <vcl/pngread.hxx>
 #include <vcl/layout.hxx>
 
 #include <com/sun/star/embed/ElementModes.hpp>

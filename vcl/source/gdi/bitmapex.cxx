@@ -30,7 +30,6 @@
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/dibtools.hxx>
-#include <vcl/pngread.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
