@@ -152,6 +152,7 @@
 #define STR_FPICKER_OPEN                            10316
 #define STR_FPICKER_SAVE                            10317
 #define STR_FPICKER_TYPE                            10318
+#define STR_FPICKER_IMAGE_ANCHOR                    10319
 
 #define SV_ACCESSERROR_NO_FONTS                     10510
 

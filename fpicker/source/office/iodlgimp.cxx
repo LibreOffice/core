@@ -215,6 +215,8 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl()   :
     _pLbTemplates       ( nullptr ),
     _pFtImageTemplates  ( nullptr ),
     _pLbImageTemplates  ( nullptr ),
+    _pFtImageAnchor     ( nullptr ),
+    _pLbImageAnchor     ( nullptr ),
     _pFtFileType        ( nullptr ),
     _pLbFilter          ( nullptr ),
     _pBtnFileOpen       ( nullptr ),

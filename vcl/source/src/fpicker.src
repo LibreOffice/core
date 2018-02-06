@@ -69,6 +69,11 @@ String STR_FPICKER_IMAGE_TEMPLATE
     Text [ en-US ] = "Frame Style: ";
 };
 
+String STR_FPICKER_IMAGE_ANCHOR
+{
+    Text [ en-US ] = "A~nchor: ";
+};
+
 String STR_FPICKER_SELECTION
 {
     Text [ en-US ] = "~Selection" ;

@@ -82,6 +82,7 @@ public:
         VERSION,
         TEMPLATE,
         IMAGE_TEMPLATE,
+        IMAGE_ANCHOR,
         LIST_LAST
     };
 

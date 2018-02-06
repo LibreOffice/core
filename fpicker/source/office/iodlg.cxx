@@ -561,6 +561,8 @@ void SvtFileDialog::Init_Impl
     get(_pImp->_pLbTemplates, "shared");
     get(_pImp->_pFtImageTemplates, "shared_label");
     get(_pImp->_pLbImageTemplates, "shared");
+    get(_pImp->_pFtImageAnchor, "shared_label");
+    get(_pImp->_pLbImageAnchor, "shared");
 
     _pImp->_pLbImageTemplates->setMaxWidthChars(40);
     _pImp->_pLbFilter->setMaxWidthChars(40);
@@ -2389,6 +2391,12 @@ Control* SvtFileDialog::getControl( sal_Int16 _nControlId, bool _bLabelControl )
                     :   static_cast< Control* >( _pImp->_pLbImageTemplates );
             break;
 
+        case LISTBOX_IMAGE_ANCHOR:
+            pReturn =   _bLabelControl
+                    ?   static_cast< Control* >( _pImp->_pFtImageAnchor )
+                    :   static_cast< Control* >( _pImp->_pLbImageAnchor );
+            break;
+
         case LISTBOX_VERSION_LABEL:
             pReturn = _pImp->_pFtFileVersion;
             break;
@@ -2399,6 +2407,10 @@ Control* SvtFileDialog::getControl( sal_Int16 _nControlId, bool _bLabelControl )
 
         case LISTBOX_IMAGE_TEMPLATE_LABEL:
             pReturn = _pImp->_pFtImageTemplates;
+            break;
+
+        case LISTBOX_IMAGE_ANCHOR_LABEL:
+            pReturn = _pImp->_pFtImageAnchor;
             break;
 
         case PUSHBUTTON_OK:
@@ -2539,6 +2551,14 @@ void SvtFileDialog::AddControls_Impl( )
 
         _pImp->_pLbImageTemplates->SetHelpId( HID_FILEOPEN_IMAGE_TEMPLATE );
         _pImp->_pLbImageTemplates->Show();
+    }
+    else if ( _nPickerFlags & PickerFlags::ImageAnchor )
+    {
+        _pImp->_pFtImageAnchor->SetText( SvtResId( STR_SVT_FILEPICKER_IMAGE_ANCHOR ) );
+        _pImp->_pFtImageAnchor->Show();
+
+        _pImp->_pLbImageAnchor->SetHelpId( HID_FILEOPEN_IMAGE_ANCHOR );
+        _pImp->_pLbImageAnchor->Show();
     }
 
     _pImp->_pPlaces = VclPtr<PlacesListBox>::Create(_pContainer, this, SVT_RESSTR(STR_PLACES_TITLE), WB_BORDER);

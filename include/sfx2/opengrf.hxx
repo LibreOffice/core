@@ -23,12 +23,16 @@
 #include <vcl/graphicfilter.hxx>
 #include <sfx2/dllapi.h>
 
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+
 struct  SvxOpenGrf_Impl;
 
 class SFX2_DLLPUBLIC SvxOpenGraphicDialog
 {
 public:
     SvxOpenGraphicDialog    ( const OUString& rTitle );
+    SvxOpenGraphicDialog(const OUString& rTitle, sal_Int16 nDialogType);
     ~SvxOpenGraphicDialog   ();
 
     short                   Execute();
@@ -45,6 +49,8 @@ public:
 
     OUString                GetCurrentFilter() const;
     void                    SetCurrentFilter(const OUString&);
+
+    css::uno::Reference<css::ui::dialogs::XFilePickerControlAccess> GetFilePickerControlAccess();
 private:
     SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&) = delete;
     SvxOpenGraphicDialog& operator = ( const SvxOpenGraphicDialog & ) = delete;

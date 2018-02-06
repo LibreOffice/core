@@ -114,6 +114,17 @@ published constants TemplateDescription
     */
     const short FILESAVE_AUTOEXTENSION                         = 10;
 
+    /** A FileOpen dialog with additional controls.
+        <ul>
+            <li>A checkbox "Insert as link"
+            <li>A checkbox "Show Preview"
+            <li>A listbox  "Image Anchor" for choosing how to anchor the image in Calc.</li>
+            <li>A window for displaying a file preview</li>
+        </ul>
+
+        @since LibreOffice 6.1
+    */
+    const short FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR             = 13;
 };
 
 

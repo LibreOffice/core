@@ -64,6 +64,11 @@ String STR_SVT_FILEPICKER_TEMPLATES
     Text [ en-US ] = "S~tyles:" ;
 };
 
+String STR_SVT_FILEPICKER_IMAGE_ANCHOR
+{
+    Text [ en-US ] = "A~nchor:" ;
+};
+
 String STR_SVT_FILEPICKER_IMAGE_TEMPLATE
 {
     Text [ en-US ] = "Style:";

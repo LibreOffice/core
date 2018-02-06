@@ -52,9 +52,10 @@ enum class PickerFlags {
     Password          = 0x001000,
     ReadOnly          = 0x002000,
     MultiSelection    = 0x004000,
+    ImageAnchor       = 0x008000,
 };
 namespace o3tl {
-    template<> struct typed_flags<PickerFlags> : is_typed_flags<PickerFlags, 0x007fff> {};
+    template<> struct typed_flags<PickerFlags> : is_typed_flags<PickerFlags, 0x00ffff> {};
 }
 
 #define FILEDIALOG_FILTER_ALL   "*.*"

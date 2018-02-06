@@ -88,6 +88,8 @@ namespace svt
             { "FilterListLabel",        LISTBOX_FILTER_LABEL,           PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
             { "FilterOptionsBox",       CHECKBOX_FILTEROPTIONS,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
             { "HelpButton",             PUSHBUTTON_HELP,                PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
+            { "ImageAnchorList",        LISTBOX_IMAGE_ANCHOR,           PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_LISTBOX      },
+            { "ImageAnchorListLabel",   LISTBOX_IMAGE_ANCHOR_LABEL,     PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
             { "ImageTemplateList",      LISTBOX_IMAGE_TEMPLATE,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_LISTBOX      },
             { "ImageTemplateListLabel", LISTBOX_IMAGE_TEMPLATE_LABEL,   PROPERTY_FLAGS_COMMON | PROPERTY_FLAG_TEXT          },
             { "LevelUpButton",          TOOLBOXBUTOON_LEVEL_UP,         PROPERTY_FLAGS_COMMON                               },
@@ -377,6 +379,7 @@ namespace svt
                     case LISTBOX_VERSION:
                     case LISTBOX_TEMPLATE:
                     case LISTBOX_IMAGE_TEMPLATE:
+                    case LISTBOX_IMAGE_ANCHOR:
                         if ( ControlActions::SET_SELECT_ITEM == _nControlAction )
                         {
                             nPropertyId = PROPERTY_FLAG_SELECTEDITEMINDEX;
@@ -437,6 +440,7 @@ namespace svt
                     case LISTBOX_VERSION:
                     case LISTBOX_TEMPLATE:
                     case LISTBOX_IMAGE_TEMPLATE:
+                    case LISTBOX_IMAGE_ANCHOR:
                         switch ( _nControlAction )
                         {
                             case ControlActions::GET_SELECTED_ITEM:

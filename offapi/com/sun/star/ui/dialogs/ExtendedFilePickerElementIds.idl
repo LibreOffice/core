@@ -94,6 +94,9 @@ published constants ExtendedFilePickerElementIds
     /**
     */
     const short LISTBOX_FILTER_SELECTOR = 210;
+
+    const short LISTBOX_IMAGE_ANCHOR   = 212;
+    const short LISTBOX_IMAGE_ANCHOR_LABEL = 213;
 };
 
 

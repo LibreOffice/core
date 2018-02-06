@@ -904,6 +904,9 @@
 #define SCSTR_UNDO_PAGE_ANCHOR   (STR_START + 221)
 #define SCSTR_UNDO_CELL_ANCHOR   (STR_START + 222)
 
+#define STR_ANCHOR_TO_CELL       (STR_START + 223)
+#define STR_ANCHOR_TO_PAGE       (STR_START + 224)
+
 // navigator - in the same order as SC_CONTENT_...
 #define SCSTR_CONTENT_ROOT      (STR_START + 250)
 #define SCSTR_CONTENT_TABLE     (STR_START + 251)
