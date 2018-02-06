@@ -111,8 +111,8 @@ public:
 
     ~SvLinkSource_Array_Impl()
     {
-        for(std::vector<SvLinkSource_Entry_Impl*>::const_iterator it = mvData.begin(); it != mvData.end(); ++it)
-            delete *it;
+        for (auto const& elem : mvData)
+            delete elem;
     }
 };
 

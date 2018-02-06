@@ -410,8 +410,7 @@ bool TemplateLocalView::removeRegion(const sal_uInt16 nItemId)
     sal_uInt16 nRegionId = USHRT_MAX;
 
     // Remove from the region cache list
-    std::vector<TemplateContainerItem*>::iterator pRegionIt;
-    for ( pRegionIt = maRegions.begin(); pRegionIt != maRegions.end();)
+    for (std::vector<TemplateContainerItem*>::iterator pRegionIt = maRegions.begin(); pRegionIt != maRegions.end();)
     {
         if ( (*pRegionIt)->mnId == nItemId )
         {
@@ -437,11 +436,10 @@ bool TemplateLocalView::removeRegion(const sal_uInt16 nItemId)
         return false;
 
     // Synchronize view regions ids with SfxDocumentTemplates
-    std::vector<TemplateContainerItem*>::iterator pRegionIter = maRegions.begin();
-    for ( ; pRegionIter != maRegions.end(); ++pRegionIter)
+    for (auto const& region : maRegions)
     {
-        if ((*pRegionIter)->mnRegionId > nRegionId)
-            --(*pRegionIter)->mnRegionId;
+        if (region->mnRegionId > nRegionId)
+            --region->mnRegionId;
     }
 
     return true;
@@ -556,11 +554,10 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
             }
 
             // Keep view document id synchronized with SfxDocumentTemplates
-            std::vector<ThumbnailViewItem*>::iterator pItemIter = mItemList.begin();
-            for (; pItemIter != mItemList.end(); ++pItemIter)
+            for (auto const& item : mItemList)
             {
-                if (static_cast<TemplateViewItem*>(*pItemIter)->mnDocId > pViewItem->mnDocId)
-                    --static_cast<TemplateViewItem*>(*pItemIter)->mnDocId;
+                if (static_cast<TemplateViewItem*>(item)->mnDocId > pViewItem->mnDocId)
+                    --static_cast<TemplateViewItem*>(item)->mnDocId;
             }
         }
 
@@ -666,11 +663,10 @@ void TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
                     }
 
                     // Keep view document id synchronized with SfxDocumentTemplates
-                    std::vector<ThumbnailViewItem*>::iterator pItemIter = mItemList.begin();
-                    for (; pItemIter != mItemList.end(); ++pItemIter)
+                    for (auto const& item : mItemList)
                     {
-                        if (static_cast<TemplateViewItem*>(*pItemIter)->mnDocId > pViewItem->mnDocId)
-                            --static_cast<TemplateViewItem*>(*pItemIter)->mnDocId;
+                        if (static_cast<TemplateViewItem*>(item)->mnDocId > pViewItem->mnDocId)
+                            --static_cast<TemplateViewItem*>(item)->mnDocId;
                     }
                 }
             }
@@ -679,8 +675,8 @@ void TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
         }
 
         // Remove items from the current view
-        for (std::vector<sal_uInt16>::iterator it = aItemIds.begin(); it != aItemIds.end(); ++it)
-            RemoveItem(*it);
+        for (auto const& itemId : aItemIds)
+            RemoveItem(itemId);
 
         if (refresh)
         {
@@ -732,12 +728,11 @@ bool TemplateLocalView::exportTo(const sal_uInt16 nItemId, const sal_uInt16 nReg
     {
         if (pRegItem->mnId == nRegionItemId)
         {
-            std::vector<TemplateItemProperties>::iterator aIter;
-            for (aIter = pRegItem->maTemplates.begin(); aIter != pRegItem->maTemplates.end(); ++aIter)
+            for (auto const& elem : pRegItem->maTemplates)
             {
-                if (aIter->nId == nItemId)
+                if (elem.nId == nItemId)
                 {
-                    return mpDocTemplates->CopyTo(pRegItem->mnRegionId,aIter->nDocId,rName);
+                    return mpDocTemplates->CopyTo(pRegItem->mnRegionId,elem.nDocId,rName);
                 }
             }
 

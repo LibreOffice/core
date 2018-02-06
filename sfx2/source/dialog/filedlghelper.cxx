@@ -1319,8 +1319,8 @@ void lcl_saveLastURLs(std::vector<OUString>& rpURLList,
                       ::std::vector< OUString >& lLastURLs )
 {
     lLastURLs.clear();
-    for(std::vector<OUString>::iterator i = rpURLList.begin(); i != rpURLList.end(); ++i)
-        lLastURLs.push_back(*i);
+    for (auto const& url : rpURLList)
+        lLastURLs.push_back(url);
 }
 
 void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterface >& xPicker, std::vector<OUString>& rpURLList, const std::shared_ptr<const SfxFilter>& pFilter)
@@ -2225,11 +2225,11 @@ void FileDialogHelper_Impl::addFilterPair( const OUString& rFilter,
 OUString FileDialogHelper_Impl::getFilterName( const OUString& rFilterWithExtension ) const
 {
     OUString sRet;
-    for( ::std::vector< css::beans::StringPair >::const_iterator pIter = maFilters.begin(); pIter != maFilters.end(); ++pIter )
+    for (auto const& filter : maFilters)
     {
-        if ( (*pIter).Second == rFilterWithExtension )
+        if (filter.Second == rFilterWithExtension)
         {
-            sRet = (*pIter).First;
+            sRet = filter.First;
             break;
         }
     }
@@ -2239,11 +2239,11 @@ OUString FileDialogHelper_Impl::getFilterName( const OUString& rFilterWithExtens
 OUString FileDialogHelper_Impl::getFilterWithExtension( const OUString& rFilter ) const
 {
     OUString sRet;
-    for( ::std::vector< css::beans::StringPair >::const_iterator pIter = maFilters.begin(); pIter != maFilters.end(); ++pIter )
+    for (auto const& filter : maFilters)
     {
-        if ( (*pIter).First == rFilter )
+        if ( filter.First == rFilter )
         {
-            sRet = (*pIter).Second;
+            sRet = filter.Second;
             break;
         }
     }

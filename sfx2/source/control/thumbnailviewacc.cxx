@@ -57,12 +57,11 @@ void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOld
         aEvtObject.NewValue = rNewValue;
         aEvtObject.OldValue = rOldValue;
 
-        for (::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter( aTmpListeners.begin() ), aEnd( aTmpListeners.end() );
-            aIter != aEnd ; ++aIter)
+        for (auto const& tmpListener : aTmpListeners)
         {
             try
             {
-                (*aIter)->notifyEvent( aEvtObject );
+                tmpListener->notifyEvent( aEvtObject );
             }
             catch(const uno::Exception&)
             {
@@ -270,15 +269,15 @@ void SAL_CALL ThumbnailViewAcc::addAccessibleEventListener( const uno::Reference
 
     if( rxListener.is() )
     {
-        std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter = mxEventListeners.begin();
         bool bFound = false;
 
-        while( !bFound && ( aIter != mxEventListeners.end() ) )
+        for (auto const& eventListener : mxEventListeners)
         {
-            if( *aIter == rxListener )
+            if( eventListener == rxListener )
+            {
                 bFound = true;
-            else
-                ++aIter;
+                break;
+            }
         }
 
         if (!bFound)
@@ -514,21 +513,17 @@ void SAL_CALL ThumbnailViewAcc::disposing()
     }
 
     // Inform all listeners that this objects is disposing.
-    ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> >::const_iterator
-          aListenerIterator (aListenerListCopy.begin());
     lang::EventObject aEvent (static_cast<accessibility::XAccessible*>(this));
-    while (aListenerIterator != aListenerListCopy.end())
+    for (auto const& listener : aListenerListCopy)
     {
         try
         {
-            (*aListenerIterator)->disposing (aEvent);
+            listener->disposing (aEvent);
         }
         catch(const uno::Exception&)
         {
             // Ignore exceptions.
         }
-
-        ++aListenerIterator;
     }
 }
 
@@ -579,12 +574,11 @@ void ThumbnailViewItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& 
         aEvtObject.NewValue = rNewValue;
         aEvtObject.OldValue = rOldValue;
 
-        for (::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter( aTmpListeners.begin() ), aEnd( aTmpListeners.end() );
-            aIter != aEnd ; ++aIter)
+        for (auto const& tmpListener : aTmpListeners)
         {
             try
             {
-                (*aIter)->notifyEvent( aEvtObject );
+                tmpListener->notifyEvent( aEvtObject );
             }
             catch(const uno::Exception&)
             {
@@ -778,15 +772,15 @@ void SAL_CALL ThumbnailViewItemAcc::addAccessibleEventListener( const uno::Refer
 
     if( rxListener.is() )
     {
-           ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter = mxEventListeners.begin();
         bool bFound = false;
 
-        while( !bFound && ( aIter != mxEventListeners.end() ) )
+        for (auto const& eventListener : mxEventListeners)
         {
-            if( *aIter == rxListener )
+            if( eventListener == rxListener )
+            {
                 bFound = true;
-            else
-                ++aIter;
+                break;
+            }
         }
 
         if (!bFound)

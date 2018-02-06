@@ -703,10 +703,10 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 rReq.AppendItem(SfxStringItem(SID_DOC_SERVICE, aDocService));
             }
 
-            for(std::vector<OUString>::const_iterator i = aURLList.begin(); i != aURLList.end(); ++i)
+            for (auto const& url : aURLList)
             {
                 rReq.RemoveItem( SID_FILE_NAME );
-                rReq.AppendItem( SfxStringItem( SID_FILE_NAME, *i ) );
+                rReq.AppendItem( SfxStringItem( SID_FILE_NAME, url ) );
 
                 // Run synchronous, so that not the next document is loaded
                 // when rescheduling
