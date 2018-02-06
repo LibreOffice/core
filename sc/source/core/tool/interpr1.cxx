@@ -5803,7 +5803,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                 case svExternalSingleRef:
                 case svExternalDoubleRef:
                     {
-                        pQueryMatrix = PopMatrix();
+                        pQueryMatrix = GetMatrix();
                         if (!pQueryMatrix)
                         {
                             PushError( FormulaError::IllegalParameter);
@@ -6027,7 +6027,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                 case svExternalSingleRef:
                 case svExternalDoubleRef:
                     {
-                        pMainMatrix = PopMatrix();
+                        pMainMatrix = GetMatrix();
                         if (!pMainMatrix)
                         {
                             PushError( FormulaError::IllegalParameter);
