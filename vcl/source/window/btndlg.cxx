@@ -303,6 +303,14 @@ void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
            (eType == StandardButtonType::Cancel && pItem->mpPushButton->GetType() == WindowType::CANCELBUTTON) ||
            (eType == StandardButtonType::Help   && pItem->mpPushButton->GetType() == WindowType::HELPBUTTON)) )
     {
+        std::map<StandardButtonType, OUString> mapButtonTypeToID = {{StandardButtonType::Yes, "yes"},
+            {StandardButtonType::No, "no"}, {StandardButtonType::Retry, "retry"},
+            {StandardButtonType::Close, "close"}, {StandardButtonType::More, "more"},
+            {StandardButtonType::Ignore, "ignore"}, {StandardButtonType::Abort, "abort"},
+            {StandardButtonType::Less, "less"}, {StandardButtonType::Count, "count"}};
+        auto itr = mapButtonTypeToID.find(eType);
+        if (itr != mapButtonTypeToID.end())
+            pItem->mpPushButton->set_id(itr->second);
         pItem->mpPushButton->SetText( Button::GetStandardText( eType ) );
     }
 
