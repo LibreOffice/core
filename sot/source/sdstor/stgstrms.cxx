@@ -353,7 +353,7 @@ void StgStrm::SetEntry( StgDirEntry& r )
  * for this each time build a simple flat in-memory vector list
  * of pages.
  */
-void StgStrm::scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize)
+sal_Int32 StgStrm::scanBuildPageChainCache()
 {
     if (m_nSize > 0)
         m_aPagesCache.reserve(m_nSize/m_nPageSize);
@@ -384,12 +384,10 @@ void StgStrm::scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize)
     if (bError)
     {
         SAL_WARN("sot", "returning wrong format error");
-        if (pOptionalCalcSize)
-            m_rIo.SetError( ERRCODE_IO_WRONGFORMAT );
+        m_rIo.SetError( ERRCODE_IO_WRONGFORMAT );
         m_aPagesCache.clear();
     }
-    if (pOptionalCalcSize)
-        *pOptionalCalcSize = nOptSize;
+    return nOptSize;
 }
 
 // Compute page number and offset for the given byte position.
@@ -851,7 +849,7 @@ void StgDataStrm::Init( sal_Int32 nBgn, sal_Int32 nLen )
     {
         // determine the actual size of the stream by scanning
         // the FAT chain and counting the # of pages allocated
-        scanBuildPageChainCache( &m_nSize );
+        m_nSize = scanBuildPageChainCache();
     }
 }
 

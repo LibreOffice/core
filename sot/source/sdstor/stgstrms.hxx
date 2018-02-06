@@ -73,7 +73,7 @@ protected:
     short m_nOffset;                      // offset into current page
     short m_nPageSize;                    // logical page size
     std::vector<sal_Int32> m_aPagesCache;
-    void scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize);
+    sal_Int32 scanBuildPageChainCache();
     bool  Copy( sal_Int32 nFrom, sal_Int32 nBytes );
     explicit StgStrm( StgIo& );
 public:
