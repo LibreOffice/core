@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_254cf3c6",
+        "filename": "vcl/source/bitmap/BitmapTools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-02-06T19:43:46Z",
+      "side": 1,
+      "message": "aBitmap",
+      "revId": "1e19d5e6bf90c64d2b33cf3b54cf2ecf752df9d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_45c72712",
+        "filename": "vcl/source/bitmap/BitmapTools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-02-06T19:43:46Z",
+      "side": 1,
+      "message": "Please always use Bitmap::ScopedWriteAccess and Bitmap::ScopedReadAccess",
+      "range": {
+        "startLine": 119,
+        "startChar": 37,
+        "endLine": 119,
+        "endChar": 55
+      },
+      "revId": "1e19d5e6bf90c64d2b33cf3b54cf2ecf752df9d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
