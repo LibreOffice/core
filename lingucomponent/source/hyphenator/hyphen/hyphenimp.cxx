@@ -64,28 +64,19 @@ Hyphenator::Hyphenator() :
     aEvtListeners   ( GetLinguMutex() )
 {
     bDisposing = false;
-    pPropHelper = nullptr;
-    aDicts = nullptr;
-    numdict = 0;
 }
 
 Hyphenator::~Hyphenator()
 {
-    if (numdict && aDicts)
+    for (auto & rInfo : mvDicts)
     {
-        for (int i=0; i < numdict; ++i)
-        {
-            delete aDicts[i].apCC;
-            if (aDicts[i].aPtr)
-                hnj_hyphen_free(aDicts[i].aPtr);
-        }
+        if (rInfo.aPtr)
+            hnj_hyphen_free(rInfo.aPtr);
     }
-    delete[] aDicts;
 
     if (pPropHelper)
     {
         pPropHelper->RemoveAsPropListener();
-        delete pPropHelper;
     }
 }
 
@@ -95,7 +86,7 @@ PropertyHelper_Hyphenation& Hyphenator::GetPropHelper_Impl()
     {
         Reference< XLinguProperties >   xPropSet( GetLinguProperties(), UNO_QUERY );
 
-        pPropHelper = new PropertyHelper_Hyphenation (static_cast<XHyphenator *>(this), xPropSet );
+        pPropHelper.reset( new PropertyHelper_Hyphenation (static_cast<XHyphenator *>(this), xPropSet ) );
         pPropHelper->AddAsPropListener();   //! after a reference is established
     }
     return *pPropHelper;
@@ -107,7 +98,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
 
     // this routine should return the locales supported by the installed
     // dictionaries.
-    if (!numdict)
+    if (!mvDicts.size())
     {
         SvtLinguConfig aLinguCfg;
 
@@ -137,7 +128,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
         // is not yet supported by the list od new style dictionaries
         MergeNewStyleDicsAndOldStyleDics( aDics, aOldStyleDics );
 
-        numdict = aDics.size();
+        sal_Int32 numdict = aDics.size();
         if (numdict)
         {
             // get supported locales from the dictionaries-to-use...
@@ -171,7 +162,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                 numdict = numdict + dict.aLocaleNames.getLength();
 
             // add dictionary information
-            aDicts = new HDInfo[numdict];
+            mvDicts.resize(numdict);
 
             k = 0;
             for (auto const& dict :  aDics)
@@ -188,17 +179,17 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                     for (sal_Int32 i = 0;  i < nLocales;  ++i)
                     {
                         LanguageTag aLanguageTag(dict.aLocaleNames[i]);
-                        aDicts[k].aPtr = nullptr;
-                        aDicts[k].eEnc = RTL_TEXTENCODING_DONTKNOW;
-                        aDicts[k].aLoc = aLanguageTag.getLocale();
-                        aDicts[k].apCC = new CharClass( aLanguageTag );
+                        mvDicts[k].aPtr = nullptr;
+                        mvDicts[k].eEnc = RTL_TEXTENCODING_DONTKNOW;
+                        mvDicts[k].aLoc = aLanguageTag.getLocale();
+                        mvDicts[k].apCC.reset( new CharClass( aLanguageTag ) );
                         // also both files have to be in the same directory and the
                         // file names must only differ in the extension (.aff/.dic).
                         // Thus we use the first location only and strip the extension part.
                         OUString aLocation = dict.aLocations[0];
                         sal_Int32 nPos = aLocation.lastIndexOf( '.' );
                         aLocation = aLocation.copy( 0, nPos );
-                        aDicts[k].aName = aLocation;
+                        mvDicts[k].aName = aLocation;
 
                         ++k;
                     }
@@ -210,7 +201,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
         {
             // no dictionary found so register no dictionaries
             numdict = 0;
-            aDicts = nullptr;
+            mvDicts.clear();
             aSuppLocales.realloc(0);
         }
     }
@@ -286,9 +277,9 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
     Reference< XHyphenatedWord > xRes;
 
     k = -1;
-    for (int j = 0; j < numdict; j++)
+    for (size_t j = 0; j < mvDicts.size(); j++)
     {
-        if (aLocale == aDicts[j].aLoc)
+        if (aLocale == mvDicts[j].aLoc)
             k = j;
     }
 
@@ -300,16 +291,16 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         int nHyphenationPosAltHyph = -1;
 
         // if this dictionary has not been loaded yet do that
-        if (!aDicts[k].aPtr)
+        if (!mvDicts[k].aPtr)
         {
-            if (!LoadDictionary(aDicts[k]))
+            if (!LoadDictionary(mvDicts[k]))
                 return nullptr;
         }
 
         // other wise hyphenate the word with that dictionary
-        dict = aDicts[k].aPtr;
-        eEnc = aDicts[k].eEnc;
-        CharClass * pCC =  aDicts[k].apCC;
+        dict = mvDicts[k].aPtr;
+        eEnc = mvDicts[k].eEnc;
+        CharClass * pCC =  mvDicts[k].apCC.get();
 
         // we don't want to work with a default text encoding since following incorrect
         // results may occur only for specific text and thus may be hard to notice.
@@ -529,9 +520,9 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
     }
 
     int k = -1;
-    for (int j = 0; j < numdict; j++)
+    for (size_t j = 0; j < mvDicts.size(); j++)
     {
-        if (aLocale == aDicts[j].aLoc) k = j;
+        if (aLocale == mvDicts[j].aLoc) k = j;
     }
 
     // if we have a hyphenation dictionary matching this locale
@@ -539,16 +530,16 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
     {
         HyphenDict *dict = nullptr;
         // if this dictionary has not been loaded yet do that
-        if (!aDicts[k].aPtr)
+        if (!mvDicts[k].aPtr)
         {
-            if (!LoadDictionary(aDicts[k]))
+            if (!LoadDictionary(mvDicts[k]))
                 return nullptr;
         }
 
         // other wise hyphenate the word with that dictionary
-        dict = aDicts[k].aPtr;
-        rtl_TextEncoding eEnc = aDicts[k].eEnc;
-        CharClass* pCC = aDicts[k].apCC;
+        dict = mvDicts[k].aPtr;
+        rtl_TextEncoding eEnc = mvDicts[k].eEnc;
+        CharClass* pCC = mvDicts[k].apCC.get();
 
         // we don't want to work with a default text encoding since following incorrect
         // results may occur only for specific text and thus may be hard to notice.
@@ -765,7 +756,7 @@ void SAL_CALL Hyphenator::initialize( const Sequence< Any >& rArguments )
             //! And the reference to the UNO-functions while increasing
             //! the ref-count and will implicitly free the memory
             //! when the object is no longer used.
-            pPropHelper = new PropertyHelper_Hyphenation( static_cast<XHyphenator *>(this), xPropSet );
+            pPropHelper.reset( new PropertyHelper_Hyphenation( static_cast<XHyphenator *>(this), xPropSet ) );
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
         else {
@@ -786,8 +777,7 @@ void SAL_CALL Hyphenator::dispose()
         if (pPropHelper)
         {
             pPropHelper->RemoveAsPropListener();
-            delete pPropHelper;
-            pPropHelper = nullptr;
+            pPropHelper.reset();
         }
     }
 }
