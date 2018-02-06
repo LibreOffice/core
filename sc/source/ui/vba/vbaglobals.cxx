@@ -40,12 +40,14 @@ using namespace ::ooo::vba;
 
 ScVbaGlobals::ScVbaGlobals( uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "ExcelDocumentContext" )
 {
-    uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
+    uno::Sequence< beans::PropertyValue > aInitArgs( aArgs.getLength() + 1 );
     aInitArgs[ 0 ].Name = "Application";
     aInitArgs[ 0 ].Value <<= getApplication();
-    aInitArgs[ 1 ].Name = "ExcelDocumentContext";
-    aInitArgs[ 1 ].Value <<= getXSomethingFromArgs< frame::XModel >( aArgs, 0 );
-
+    if ( aArgs.getLength() > 0 )
+    {
+        aInitArgs[ 1 ].Name = "ExcelDocumentContext";
+        aInitArgs[ 1 ].Value <<= getXSomethingFromArgs< frame::XModel >( aArgs, 0 );
+    }
     init( aInitArgs );
 }
 
