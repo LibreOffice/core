@@ -15,7 +15,6 @@
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 
-#include <vcl/pngwrite.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graph.hxx>
 
