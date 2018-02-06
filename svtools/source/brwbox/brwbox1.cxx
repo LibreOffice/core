@@ -2038,7 +2038,8 @@ tools::Rectangle BrowseBox::ImplFieldRectPixel( long nRow, sal_uInt16 nColumnId 
     // assemble the Rectangle relative to DataWin
     return tools::Rectangle(
         Point( nColX + MIN_COLUMNWIDTH, nRowY ),
-        Size( pCols[ nCol ]->Width() - 2*MIN_COLUMNWIDTH,
+        Size( (pCols[nCol]->Width() == LONG_MAX
+               ? LONG_MAX - (nColX + MIN_COLUMNWIDTH) : pCols[ nCol ]->Width() - 2*MIN_COLUMNWIDTH),
               GetDataRowHeight() - 1 ) );
 }
 

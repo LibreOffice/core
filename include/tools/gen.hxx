@@ -482,8 +482,8 @@ inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSize )
 {
     nLeft   = rLT.X();
     nTop    = rLT.Y();
-    nRight  = rSize.Width()  ? nLeft+rSize.Width()-1 : RECT_EMPTY;
-    nBottom = rSize.Height() ? nTop+rSize.Height()-1 : RECT_EMPTY;
+    nRight  = rSize.Width()  ? nLeft+(rSize.Width()-1) : RECT_EMPTY;
+    nBottom = rSize.Height() ? nTop+(rSize.Height()-1) : RECT_EMPTY;
 }
 
 inline bool tools::Rectangle::IsEmpty() const
