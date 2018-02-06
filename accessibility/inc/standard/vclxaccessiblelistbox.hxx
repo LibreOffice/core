@@ -43,7 +43,7 @@ public:
         getSupportedServiceNames() override;
 
 protected:
-    virtual ~VCLXAccessibleListBox() override;
+    virtual ~VCLXAccessibleListBox() override = default;
 
     virtual bool IsValid() const override;
 };

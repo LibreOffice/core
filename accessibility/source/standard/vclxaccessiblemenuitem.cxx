@@ -56,11 +56,6 @@ VCLXAccessibleMenuItem::VCLXAccessibleMenuItem( Menu* pParent, sal_uInt16 nItemP
 }
 
 
-VCLXAccessibleMenuItem::~VCLXAccessibleMenuItem()
-{
-}
-
-
 bool VCLXAccessibleMenuItem::IsFocused()
 {
     return IsHighlighted();
