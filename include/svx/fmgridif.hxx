@@ -48,6 +48,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase10.hxx>
+#include <memory>
 
 class DbGridColumn;
 enum class DbGridControlNavigationBarState;
@@ -359,7 +360,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmXGridPeer:
 
     class GridListenerDelegator;
     friend class GridListenerDelegator;
-    GridListenerDelegator*  m_pGridListener;
+    std::unique_ptr<GridListenerDelegator>  m_pGridListener;
 
 protected:
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;
