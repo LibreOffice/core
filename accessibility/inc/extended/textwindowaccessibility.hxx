@@ -139,7 +139,7 @@ typedef ::cppu::WeakAggComponentImplHelper7<
 // 0 to N - 1), whereas the Paragraph's index is the position within the text
 // view/accessible parent (from 0 to M - 1).  Paragraphs outside the currently
 // visible range have an index of -1.
-class Paragraph:
+class Paragraph final:
     private cppu::BaseMutex, public ParagraphBase, private ::comphelper::OCommonAccessibleText
 {
 public:
@@ -159,14 +159,13 @@ public:
     void notifyEvent(::sal_Int16 nEventId, css::uno::Any const & rOldValue,
                      css::uno::Any const & rNewValue);
 
-protected:
+private:
     // OCommonAccessibleText
     virtual void implGetParagraphBoundary( css::i18n::Boundary& rBoundary,
                                            ::sal_Int32 nIndex ) override;
     virtual void implGetLineBoundary( css::i18n::Boundary& rBoundary,
                                       ::sal_Int32 nIndex ) override;
 
-private:
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
     SAL_CALL getAccessibleContext() override;
 

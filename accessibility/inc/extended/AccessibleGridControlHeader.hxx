@@ -44,7 +44,7 @@ public:
             ::svt::table::AccessibleTableControlObjType  eObjType );
 
 private:
-    virtual ~AccessibleGridControlHeader() override;
+    virtual ~AccessibleGridControlHeader() override = default;
 
 public:
     // XAccessibleContext

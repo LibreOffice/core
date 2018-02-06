@@ -51,10 +51,6 @@ namespace accessibility
     {
     }
 
-    AccessibleIconChoiceCtrl::~AccessibleIconChoiceCtrl()
-    {
-    }
-
     IMPLEMENT_FORWARD_XINTERFACE2(AccessibleIconChoiceCtrl, VCLXAccessibleComponent, AccessibleIconChoiceCtrl_BASE)
     IMPLEMENT_FORWARD_XTYPEPROVIDER2(AccessibleIconChoiceCtrl, VCLXAccessibleComponent, AccessibleIconChoiceCtrl_BASE)
 

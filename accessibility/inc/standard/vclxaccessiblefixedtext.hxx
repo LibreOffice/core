@@ -29,7 +29,7 @@
 class VCLXAccessibleFixedText : public VCLXAccessibleTextComponent
 {
 protected:
-    virtual ~VCLXAccessibleFixedText() override;
+    virtual ~VCLXAccessibleFixedText() override = default;
 
     virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
 

@@ -39,11 +39,6 @@ VCLXAccessibleFixedText::VCLXAccessibleFixedText( VCLXWindow* pVCLWindow )
 }
 
 
-VCLXAccessibleFixedText::~VCLXAccessibleFixedText()
-{
-}
-
-
 void VCLXAccessibleFixedText::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
     VCLXAccessibleTextComponent::FillAccessibleStateSet( rStateSet );

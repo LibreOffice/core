@@ -34,17 +34,6 @@ using namespace ::comphelper;
 // VCLXAccessibleMenu
 
 
-VCLXAccessibleMenu::VCLXAccessibleMenu( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu )
-    :VCLXAccessibleMenuItem( pParent, nItemPos, pMenu )
-{
-}
-
-
-VCLXAccessibleMenu::~VCLXAccessibleMenu()
-{
-}
-
-
 bool VCLXAccessibleMenu::IsFocused()
 {
     bool bFocused = false;
