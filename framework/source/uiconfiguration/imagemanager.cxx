@@ -35,8 +35,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <vcl/pngread.hxx>
-#include <vcl/pngwrite.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::XInterface;
