@@ -29,7 +29,6 @@
 #include <svx/svdpage.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
-#include <vcl/pngwrite.hxx>
 
 namespace sd { namespace slidesorter { namespace view {
 class SlideSorterView;
