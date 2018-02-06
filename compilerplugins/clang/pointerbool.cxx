@@ -93,7 +93,6 @@ bool PointerBool::VisitCallExpr(CallExpr const* callExpr)
             << arg->getSourceRange();
         report(DiagnosticsEngine::Note, "method here", param->getLocation())
             << param->getSourceRange();
-        arg->getType()->dump();
     }
     return true;
 }
