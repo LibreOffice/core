@@ -98,7 +98,7 @@ protected:
 
     oslInterlockedCount m_refCount;
     Reference<XSingleServiceFactory> m_xSingleServiceFactory;
-    GUID                m_guid;
+    const GUID          m_guid;
     DWORD               m_factoryHandle;
     Reference<XBridgeSupplier2> m_bridgeSupplier;
     Reference<XMultiServiceFactory> m_smgr;
@@ -140,7 +140,7 @@ protected:
 
     oslInterlockedCount m_refCount;
     Reference<XInterface>       m_xInst;
-    GUID                m_guid;
+    const GUID          m_guid;
     DWORD               m_factoryHandle;
     Reference<XBridgeSupplier2> m_bridgeSupplier;
     Reference<XMultiServiceFactory> m_smgr;

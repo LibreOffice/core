@@ -46,10 +46,9 @@ DEFINE_GUID(OID_ServiceManager, 0x82154420, 0xfbf, 0x11d4, 0x83, 0x13, 0x0, 0x50
 ProviderOleWrapper::ProviderOleWrapper(const Reference<XMultiServiceFactory>& smgr,
                                        const Reference<XSingleServiceFactory>& xSFact, GUID const * pGuid)
     : m_xSingleServiceFactory(xSFact),
+      m_guid(*pGuid),
       m_smgr( smgr)
 {
-    m_guid = *pGuid;
-
     Reference<XInterface> xInt = smgr->createInstance("com.sun.star.bridge.oleautomation.BridgeSupplier");
 
     if (xInt.is())
@@ -176,11 +175,10 @@ OneInstanceOleWrapper::OneInstanceOleWrapper(  const Reference<XMultiServiceFact
                                                GUID const * pGuid )
     : m_refCount(0)
     , m_xInst(xInst)
+    , m_guid(*pGuid)
     , m_factoryHandle(0)
     , m_smgr(smgr)
 {
-    m_guid = *pGuid;
-
     Reference<XInterface> xInt = m_smgr->createInstance("com.sun.star.bridge.oleautomation.BridgeSupplier");
 
     if (xInt.is())
