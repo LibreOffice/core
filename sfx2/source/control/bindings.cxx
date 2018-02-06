@@ -184,8 +184,8 @@ SfxBindings::~SfxBindings()
     DeleteControllers_Impl();
 
     // Delete Caches
-    for(auto it = pImpl->pCaches.begin(); it != pImpl->pCaches.end(); ++it)
-        delete *it;
+    for (auto const& cache : pImpl->pCaches)
+        delete cache;
 
     DELETEZ( pImpl->pWorkWin );
 }
@@ -298,12 +298,9 @@ void SfxBindings::Update_Impl(SfxStateCache& rCache /*The up to date SfxStatusCa
 
 void SfxBindings::InvalidateSlotsInMap_Impl()
 {
-    InvalidateSlotMap::const_iterator pIter = pImpl->m_aInvalidateSlots.begin();
-    while ( pIter != pImpl->m_aInvalidateSlots.end() )
-    {
-        Invalidate( pIter->first );
-        ++pIter;
-    }
+    for (auto const& slot : pImpl->m_aInvalidateSlots)
+        Invalidate( slot.first );
+
     pImpl->m_aInvalidateSlots.clear();
 }
 

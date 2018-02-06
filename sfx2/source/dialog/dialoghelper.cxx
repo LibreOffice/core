@@ -44,11 +44,10 @@ void setPreviewsToSamePlace(vcl::Window const *pParent, VclBuilderContainer *pPa
     if (aGrids.size() > 1)
     {
         std::shared_ptr<VclSizeGroup> xGroup(std::make_shared<VclSizeGroup>());
-        for (std::vector<vcl::Window*>::iterator aI = aGrids.begin(); aI != aGrids.end(); ++aI)
+        for (auto const& grid : aGrids)
         {
-            vcl::Window *pWindow = *aI;
-            pWindow->remove_from_all_size_groups();
-            pWindow->add_to_size_group(xGroup);
+            grid->remove_from_all_size_groups();
+            grid->add_to_size_group(xGroup);
         }
     }
 }
