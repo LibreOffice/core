@@ -113,8 +113,8 @@ struct SfxDispatcher_Impl
     SfxRequestPtrArray aReqArr;
     ~SfxDispatcher_Impl()
     {
-        for (SfxRequestPtrArray::iterator aI = aReqArr.begin(), aEnd = aReqArr.end(); aI != aEnd; ++aI)
-            delete *aI;
+        for (auto const& req : aReqArr)
+            delete req;
     }
     SfxShellStack_Impl   aStack;        // active functionality
     Idle                 aIdle;        // for Flush
@@ -1549,14 +1549,12 @@ void SfxDispatcher::FlushImpl()
             {
                 //fdo#70703 if there is an outer FlushImpl then inform it that
                 //we have deleted this cluster
-                for (std::deque< std::deque<SfxToDo_Impl> >::iterator aI = xImp->aToDoCopyStack.begin();
-                    aI != xImp->aToDoCopyStack.end(); ++aI)
+                for (auto & elem : xImp->aToDoCopyStack)
                 {
-                    std::deque<SfxToDo_Impl> &v = *aI;
-                    for(std::deque<SfxToDo_Impl>::iterator aJ = v.begin(); aJ != v.end(); ++aJ)
+                    for (auto & subelem : elem)
                     {
-                        if (aJ->pCluster == i->pCluster)
-                            aJ->bDeleted = true;
+                        if (subelem.pCluster == i->pCluster)
+                            subelem.bDeleted = true;
                     }
                 }
             }

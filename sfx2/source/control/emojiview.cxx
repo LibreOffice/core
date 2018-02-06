@@ -117,9 +117,8 @@ void EmojiView::Populate()
     node root = aEmojiInfo.get_document_root();
     std::vector<orcus::pstring> keys = root.keys();
 
-    for (auto it = keys.begin(), ite = keys.end(); it != ite; ++it)
+    for (auto const& key : keys)
     {
-        orcus::pstring key = *it;
         node value = root.child(key);
 
         if(value.type() == orcus::json::node_t::object)
@@ -129,25 +128,24 @@ void EmojiView::Populate()
             OUString sTitle, sCategory, sName;
             bool bDuplicate = false;
 
-            for (auto paramIter = aEmojiParams.begin(); paramIter != aEmojiParams.end(); ++paramIter)
+            for (auto const& emojiParam : aEmojiParams)
             {
-                orcus::pstring paramVal = *paramIter;
-                node prop = value.child(paramVal);
+                node prop = value.child(emojiParam);
 
                 // get values of parameters in AppendItem() function
-                if(paramVal == "unicode")
+                if(emojiParam == "unicode")
                 {
                     sTitle = rtl::OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
                 }
-                else if(paramVal == "category")
+                else if(emojiParam == "category")
                 {
                     sCategory = rtl::OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
                 }
-                else if(paramVal == "name")
+                else if(emojiParam == "name")
                 {
                     sName = rtl::OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
                 }
-                else if(paramVal == "duplicate")
+                else if(emojiParam == "duplicate")
                 {
                     bDuplicate = true;
                 }
