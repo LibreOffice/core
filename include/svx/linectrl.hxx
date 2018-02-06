@@ -25,6 +25,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/xtable.hxx>
+#include <memory>
 
 class XLineStyleItem;
 class XLineDashItem;
@@ -38,8 +39,8 @@ class SvxMetricField;
 class SVX_DLLPUBLIC SvxLineStyleToolBoxControl : public SfxToolBoxControl
 {
 private:
-    XLineStyleItem*     pStyleItem;
-    XLineDashItem*      pDashItem;
+    std::unique_ptr<XLineStyleItem>  pStyleItem;
+    std::unique_ptr<XLineDashItem>   pDashItem;
 
     bool                bUpdate;
 
