@@ -278,11 +278,11 @@ void SfxInfoBarWindow::Resize()
     long nX = m_pCloseBtn->GetPosPixel().getX() - 15 * fScaleFactor;
     long nButtonGap = 5 * fScaleFactor;
 
-    for (auto it = m_aActionBtns.begin(); it != m_aActionBtns.end(); ++it)
+    for (auto const& actionBtn : m_aActionBtns)
     {
-        long nButtonWidth = (*it)->GetSizePixel().getWidth();
+        long nButtonWidth = actionBtn->GetSizePixel().getWidth();
         nX -= nButtonWidth;
-        (*it)->SetPosSizePixel(Point(nX, 5 * fScaleFactor), Size(nButtonWidth, 30 * fScaleFactor));
+        actionBtn->SetPosSizePixel(Point(nX, 5 * fScaleFactor), Size(nButtonWidth, 30 * fScaleFactor));
         nX -= nButtonGap;
     }
 
@@ -314,8 +314,8 @@ SfxInfoBarContainerWindow::~SfxInfoBarContainerWindow()
 
 void SfxInfoBarContainerWindow::dispose()
 {
-    for ( auto it = m_pInfoBars.begin( ); it != m_pInfoBars.end( ); ++it )
-        it->disposeAndClear();
+    for (auto & infoBar : m_pInfoBars)
+        infoBar.disposeAndClear();
     m_pInfoBars.clear( );
     Window::dispose();
 }
@@ -348,10 +348,10 @@ VclPtr<SfxInfoBarWindow> SfxInfoBarContainerWindow::appendInfoBar(const OUString
 
 VclPtr<SfxInfoBarWindow> SfxInfoBarContainerWindow::getInfoBar(const OUString& sId)
 {
-    for (auto it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
+    for (auto const& infoBar : m_pInfoBars)
     {
-        if ((*it)->getId() == sId)
-            return *it;
+        if (infoBar->getId() == sId)
+            return infoBar;
     }
     return nullptr;
 }
@@ -376,10 +376,10 @@ void SfxInfoBarContainerWindow::removeInfoBar(VclPtr<SfxInfoBarWindow> const & p
 
     // Resize
     long nY = 0;
-    for (auto it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
+    for (auto const& infoBar : m_pInfoBars)
     {
-        (*it)->SetPosPixel(Point(0, nY));
-        nY += (*it)->GetSizePixel().getHeight();
+        infoBar->SetPosPixel(Point(0, nY));
+        nY += infoBar->GetSizePixel().getHeight();
     }
 
     Size aSize = GetSizePixel();

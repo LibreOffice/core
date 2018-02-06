@@ -538,8 +538,8 @@ void UsageInfo::save()
     {
         OString aUsageInfoMsg = "Document Type;Command;Count";
 
-        for (UsageMap::const_iterator it = maUsage.begin(); it != maUsage.end(); ++it)
-            aUsageInfoMsg += "\n" + it->first.toUtf8() + ";" + OString::number(it->second);
+        for (auto const& elem : maUsage)
+            aUsageInfoMsg += "\n" + elem.first.toUtf8() + ";" + OString::number(elem.second);
 
         sal_uInt64 written = 0;
         file.write(aUsageInfoMsg.pData->buffer, aUsageInfoMsg.getLength(), written);

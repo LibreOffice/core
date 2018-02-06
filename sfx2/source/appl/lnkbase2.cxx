@@ -158,22 +158,20 @@ static DdeTopic* FindTopic( const OUString & rLinkName, sal_uInt16* pItemStt )
     OUString sService( sNm.getToken( 0, cTokenSeparator, nTokenPos ) );
 
     DdeServices& rSvc = DdeService::GetServices();
-    for (DdeServices::iterator aI = rSvc.begin(); aI != rSvc.end(); ++aI)
+    for (auto const& elem : rSvc)
     {
-        DdeService* pService = *aI;
-        if( pService->GetName() == sService )
+        if(elem->GetName() == sService)
         {
             // then we search for the Topic
             OUString sTopic( sNm.getToken( 0, cTokenSeparator, nTokenPos ) );
             if( pItemStt )
                 *pItemStt = nTokenPos;
 
-            std::vector<DdeTopic*>& rTopics = pService->GetTopics();
+            std::vector<DdeTopic*>& rTopics = elem->GetTopics();
 
-            for( std::vector<DdeTopic*>::iterator iterTopic = rTopics.begin();
-                 iterTopic != rTopics.end(); ++iterTopic )
-                if( (*iterTopic)->GetName() == sTopic )
-                    return *iterTopic;
+            for (auto const& topic : rTopics)
+                if( topic->GetName() == sTopic )
+                    return topic;
             break;
         }
     }
