@@ -156,8 +156,8 @@ class FontPrevWin_Impl
     SvxFont maCTLFont;
     OUString maText;
     OUString maScriptText;
-    Color* mpColor;
-    Color* mpBackColor;
+    std::unique_ptr<Color> mpColor;
+    std::unique_ptr<Color> mpBackColor;
     long mnAscent;
     sal_Unicode mcStartBracket;
     sal_Unicode mcEndBracket;
@@ -182,8 +182,6 @@ public:
     FontPrevWin_Impl() :
         mpPrinter(nullptr),
         mbDelPrinter(false),
-        mpColor(nullptr),
-        mpBackColor(nullptr),
         mnAscent(0),
         mcStartBracket(0),
         mcEndBracket(0),
@@ -204,8 +202,6 @@ public:
 
     ~FontPrevWin_Impl()
     {
-        delete mpColor;
-        delete mpBackColor;
         if (mbDelPrinter)
             mpPrinter.disposeAndClear();
     }
@@ -604,22 +600,19 @@ void SvxFontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& r
 
 void SvxFontPrevWindow::SetColor(const Color &rColor)
 {
-    delete pImpl->mpColor;
-    pImpl->mpColor = new Color(rColor);
+    pImpl->mpColor.reset(new Color(rColor));
     Invalidate();
 }
 
 void SvxFontPrevWindow::ResetColor()
 {
-    delete pImpl->mpColor;
-    pImpl->mpColor = nullptr;
+    pImpl->mpColor.reset();
     Invalidate();
 }
 
 void SvxFontPrevWindow::SetBackColor(const Color &rColor)
 {
-    delete pImpl->mpBackColor;
-    pImpl->mpBackColor = new Color(rColor);
+    pImpl->mpBackColor.reset(new Color(rColor));
     Invalidate();
 }
 
