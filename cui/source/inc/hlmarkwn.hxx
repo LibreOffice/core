@@ -23,6 +23,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
+#include <vcl/floatwin.hxx>
 #include <svtools/treelistbox.hxx>
 
 #include "hlmarkwn_def.hxx"
@@ -59,7 +60,7 @@ public:
 //#                                                                      #
 //# Window-Class                                                         #
 //#                                                                      #
-class SvxHlinkDlgMarkWnd : public ModalDialog //FloatingWindow
+class SvxHlinkDlgMarkWnd : public FloatingWindow //FloatingWindow
 {
 private:
     friend class SvxHlmarkTreeLBox;
