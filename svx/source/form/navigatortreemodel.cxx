@@ -191,7 +191,7 @@ namespace svxform
                     ,m_pFormModel(nullptr)
     {
         m_pPropChangeList = new OFormComponentObserver(this);
-        m_pRootList = new FmEntryDataList();
+        m_pRootList.reset( new FmEntryDataList() );
     }
 
     NavigatorTreeModel::~NavigatorTreeModel()
@@ -209,7 +209,7 @@ namespace svxform
         }
 
         Clear();
-        delete m_pRootList;
+        m_pRootList.reset();
         m_pPropChangeList->ReleaseModel();
     }
 
