@@ -79,19 +79,19 @@ class SmParser
 
     // grammar
     std::unique_ptr<SmTableNode> DoTable();
-    SmLineNode *DoLine();
+    std::unique_ptr<SmNode> DoLine();
     std::unique_ptr<SmNode> DoExpression(bool bUseExtraSpaces = true);
-    SmNode *DoRelation();
-    SmNode *DoSum();
-    SmNode *DoProduct();
-    SmNode *DoSubSup(TG nActiveGroup, SmNode *pGivenNode);
-    SmNode *DoOpSubSup();
-    SmNode *DoPower();
+    std::unique_ptr<SmNode> DoRelation();
+    std::unique_ptr<SmNode> DoSum();
+    std::unique_ptr<SmNode> DoProduct();
+    std::unique_ptr<SmNode> DoSubSup(TG nActiveGroup, SmNode *pGivenNode);
+    std::unique_ptr<SmNode> DoOpSubSup();
+    std::unique_ptr<SmNode> DoPower();
     SmBlankNode *DoBlank();
     SmNode *DoTerm(bool bGroupNumberIdent);
     SmNode *DoEscape();
     SmOperNode *DoOperator();
-    SmNode *DoOper();
+    std::unique_ptr<SmNode> DoOper();
     SmStructureNode *DoUnOper();
     std::unique_ptr<SmNode> DoAlign(bool bUseExtraSpaces = true);
     SmStructureNode *DoFontAttribut();
