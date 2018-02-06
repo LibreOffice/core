@@ -48,10 +48,6 @@ VCLXAccessibleListBox::VCLXAccessibleListBox (VCLXWindow* pVCLWindow)
 }
 
 
-VCLXAccessibleListBox::~VCLXAccessibleListBox()
-{
-}
-
 bool VCLXAccessibleListBox::IsValid() const
 {
     return GetWindow().get() != nullptr;

@@ -33,7 +33,7 @@ namespace accessibility {
 typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleSelection >
             AccessibleTabListBoxTableImplHelper;
 
-class AccessibleTabListBoxTable : public AccessibleBrowseBoxTable, public AccessibleTabListBoxTableImplHelper
+class AccessibleTabListBoxTable final : public AccessibleBrowseBoxTable, public AccessibleTabListBoxTableImplHelper
 {
 private:
     VclPtr<SvHeaderTabListBox>     m_pTabListBox;
