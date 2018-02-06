@@ -225,7 +225,7 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="fldfuncpage|nameft">Na_me</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">name</property>
+                <property name="mnemonic_widget">condFunction</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -235,7 +235,7 @@
               </packing>
             </child>
             <child>
-              <object class="swlo-ConditionEdit" id="name">
+              <object class="swlo-ConditionEdit" id="condFunction">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">•</property>
