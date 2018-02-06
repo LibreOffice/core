@@ -48,7 +48,6 @@ $(eval $(call gb_Library_use_libraries,xmlsecurity,\
 $(eval $(call gb_Library_add_exception_objects,xmlsecurity,\
 	xmlsecurity/source/component/certificatecontainer \
 	xmlsecurity/source/component/documentdigitalsignatures \
-	xmlsecurity/source/component/registerservices \
 	xmlsecurity/source/dialogs/certificatechooser \
 	xmlsecurity/source/dialogs/certificateviewer \
 	xmlsecurity/source/dialogs/digitalsignaturesdialog \

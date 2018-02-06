@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="xmlsecurity" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.security.CertificateContainer">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.security.CertificateContainer"
+      constructor="com_sun_star_security_CertificateContainer_get_implementation">
     <service name="com.sun.star.security.CertificateContainer"/>
   </implementation>
   <implementation name="com.sun.star.security.DocumentDigitalSignatures"
