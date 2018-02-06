@@ -70,7 +70,8 @@ const char* SvxOpenGrfErr2ResId( ErrCode err )
 
 struct SvxOpenGrf_Impl
 {
-    SvxOpenGrf_Impl(const vcl::Window* pPreferredParent);
+    SvxOpenGrf_Impl(const vcl::Window* pPreferredParent,
+                    sal_Int16 nDialogType);
 
     sfx2::FileDialogHelper                  aFileDlg;
     OUString sDetectedFilter;
@@ -78,9 +79,9 @@ struct SvxOpenGrf_Impl
 };
 
 
-SvxOpenGrf_Impl::SvxOpenGrf_Impl(const vcl::Window* pPreferredParent)
-    : aFileDlg(ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
-            FileDialogFlags::Graphic, pPreferredParent)
+SvxOpenGrf_Impl::SvxOpenGrf_Impl(const vcl::Window* pPreferredParent,
+                                 sal_Int16 nDialogType)
+    : aFileDlg(nDialogType, FileDialogFlags::Graphic, pPreferredParent)
 {
     uno::Reference < XFilePicker3 > xFP = aFileDlg.GetFilePicker();
     xCtrlAcc.set(xFP, UNO_QUERY);
@@ -88,7 +89,14 @@ SvxOpenGrf_Impl::SvxOpenGrf_Impl(const vcl::Window* pPreferredParent)
 
 
 SvxOpenGraphicDialog::SvxOpenGraphicDialog(const OUString& rTitle, const vcl::Window* pPreferredParent)
-    : mpImpl(new SvxOpenGrf_Impl(pPreferredParent))
+    : mpImpl(new SvxOpenGrf_Impl(pPreferredParent, ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW))
+{
+    mpImpl->aFileDlg.SetTitle(rTitle);
+}
+
+SvxOpenGraphicDialog::SvxOpenGraphicDialog(const OUString& rTitle, const vcl::Window* pPreferredParent,
+                                           sal_Int16 nDialogType)
+    : mpImpl(new SvxOpenGrf_Impl(pPreferredParent, nDialogType))
 {
     mpImpl->aFileDlg.SetTitle(rTitle);
 }
@@ -267,6 +275,11 @@ void SvxOpenGraphicDialog::SetCurrentFilter(const OUString& rStr)
 void SvxOpenGraphicDialog::SetDetectedFilter(const OUString& rStr)
 {
     mpImpl->sDetectedFilter = rStr;
+}
+
+Reference<ui::dialogs::XFilePickerControlAccess> SvxOpenGraphicDialog::GetFilePickerControlAccess()
+{
+    return mpImpl->xCtrlAcc;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

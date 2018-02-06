@@ -78,6 +78,7 @@ namespace svt
             { "FilterOptionsBox",       CHECKBOX_FILTEROPTIONS,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
             { "GpgPassword",            CHECKBOX_GPGENCRYPTION,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
             { "HelpButton",             PUSHBUTTON_HELP,                PROPERTY_FLAGS_COMMON | PropFlags::Text          },
+            { "ImageAnchor",            LISTBOX_IMAGE_ANCHOR,           PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_LISTBOX      },
             { "ImageTemplateList",      LISTBOX_IMAGE_TEMPLATE,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_LISTBOX      },
             { "ImageTemplateListLabel", LISTBOX_IMAGE_TEMPLATE_LABEL,   PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "LevelUpButton",          TOOLBOXBUTOON_LEVEL_UP,         PROPERTY_FLAGS_COMMON                               },
@@ -428,6 +429,7 @@ namespace svt
                     case LISTBOX_VERSION:
                     case LISTBOX_TEMPLATE:
                     case LISTBOX_IMAGE_TEMPLATE:
+                    case LISTBOX_IMAGE_ANCHOR:
                         switch ( _nControlAction )
                         {
                             case ControlActions::GET_SELECTED_ITEM:

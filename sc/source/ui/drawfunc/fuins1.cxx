@@ -43,7 +43,13 @@
 #include <strings.hrc>
 #include <globstr.hrc>
 
-using namespace ::com::sun::star;
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+
+using namespace css;
+using namespace css::uno;
 
 void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
 {
@@ -258,7 +264,29 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
     }
     else
     {
-        SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC), pWin);
+        SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC), pWin,
+                                  ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR);
+
+        sal_Int16 nSelect = 0;
+        Sequence<OUString> aListBoxEntries {
+            "To Cell", "To Page"
+        };
+        try
+        {
+            Reference<ui::dialogs::XFilePickerControlAccess> xCtrlAcc = aDlg.GetFilePickerControlAccess();
+            Any aTemplates(&aListBoxEntries, cppu::UnoType<decltype(aListBoxEntries)>::get());
+
+            xCtrlAcc->setValue(ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_IMAGE_ANCHOR,
+                ui::dialogs::ListboxControlActions::ADD_ITEMS, aTemplates);
+
+            Any aSelectPos(&nSelect, cppu::UnoType<decltype(nSelect)>::get());
+            xCtrlAcc->setValue(ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_IMAGE_ANCHOR,
+                ui::dialogs::ListboxControlActions::SET_SELECT_ITEM, aSelectPos);
+        }
+        catch (const Exception&)
+        {
+            SAL_WARN("sc", "control access failed");
+        }
 
         if( aDlg.Execute() == ERRCODE_NONE )
         {

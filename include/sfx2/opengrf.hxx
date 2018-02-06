@@ -23,12 +23,17 @@
 #include <vcl/graphicfilter.hxx>
 #include <sfx2/dllapi.h>
 
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+
 struct  SvxOpenGrf_Impl;
 
 class SFX2_DLLPUBLIC SvxOpenGraphicDialog
 {
 public:
     SvxOpenGraphicDialog(const OUString& rTitle, const vcl::Window* pPreferredParent);
+    SvxOpenGraphicDialog(const OUString& rTitle, const vcl::Window* pPreferredParent,
+                         sal_Int16 nDialogType);
     ~SvxOpenGraphicDialog();
 
     ErrCode                 Execute();
@@ -49,6 +54,8 @@ public:
     //what was subsequently found to be the format
     OUString const &        GetDetectedFilter() const;
     void                    SetDetectedFilter(const OUString&);
+
+    css::uno::Reference<css::ui::dialogs::XFilePickerControlAccess> GetFilePickerControlAccess();
 
 private:
     SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&) = delete;
