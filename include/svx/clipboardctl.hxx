@@ -25,6 +25,7 @@
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/vclptr.hxx>
+#include <memory>
 
 class PopupMenu;
 class SfxModule;
@@ -32,7 +33,8 @@ class ToolBox;
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxClipBoardControl : public SfxToolBoxControl
 {
-    SfxPoolItem*            pClipboardFmtItem;
+    std::unique_ptr<SfxPoolItem>
+                            pClipboardFmtItem;
     VclPtr<PopupMenu>       pPopup;
     bool                    bDisabled;
 

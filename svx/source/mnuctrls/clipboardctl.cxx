@@ -42,7 +42,6 @@ SvxClipBoardControl::SvxClipBoardControl(
         sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pClipboardFmtItem( nullptr ),
     pPopup( nullptr ),
     bDisabled( false )
 {
@@ -56,13 +55,12 @@ SvxClipBoardControl::SvxClipBoardControl(
 SvxClipBoardControl::~SvxClipBoardControl()
 {
     DelPopup();
-    delete pClipboardFmtItem;
 }
 
 
 VclPtr<SfxPopupWindow> SvxClipBoardControl::CreatePopupWindow()
 {
-    const SvxClipboardFormatItem* pFmtItem = dynamic_cast<SvxClipboardFormatItem*>( pClipboardFmtItem  );
+    const SvxClipboardFormatItem* pFmtItem = dynamic_cast<SvxClipboardFormatItem*>( pClipboardFmtItem.get()  );
     if ( pFmtItem )
     {
         if (pPopup)
@@ -111,10 +109,10 @@ void SvxClipBoardControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
 {
     if ( SID_CLIPBOARD_FORMAT_ITEMS == nSID )
     {
-        DELETEZ( pClipboardFmtItem );
+        pClipboardFmtItem.reset();
         if ( eState >= SfxItemState::DEFAULT )
         {
-            pClipboardFmtItem = pState->Clone();
+            pClipboardFmtItem.reset( pState->Clone() );
             GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) | ToolBoxItemBits::DROPDOWN );
         }
         else if ( !bDisabled )
