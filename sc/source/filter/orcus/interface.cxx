@@ -1263,8 +1263,10 @@ ScOrcusStyles::xf::xf():
     mnNumberFormatId(0),
     mnStyleXf(0),
     mbAlignment(false),
-    meHor_alignment(SvxCellHorJustify::Right),
-    meVer_alignment(SvxCellVerJustify::Bottom)
+    meHorAlignment(SvxCellHorJustify::Standard),
+    meVerAlignment(SvxCellVerJustify::Standard),
+    meHorAlignMethod(SvxCellJustifyMethod::Auto),
+    meVerAlignMethod(SvxCellJustifyMethod::Auto)
 {
 }
 
@@ -1330,8 +1332,10 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
 
     if(rXf.mbAlignment)
     {
-        rSet.Put(SvxHorJustifyItem(rXf.meHor_alignment, ATTR_HOR_JUSTIFY));
-        rSet.Put(SvxVerJustifyItem(rXf.meVer_alignment, ATTR_VER_JUSTIFY));
+        rSet.Put(SvxHorJustifyItem(rXf.meHorAlignment, ATTR_HOR_JUSTIFY));
+        rSet.Put(SvxVerJustifyItem(rXf.meVerAlignment, ATTR_VER_JUSTIFY));
+        rSet.Put(SvxJustifyMethodItem(rXf.meHorAlignMethod, ATTR_HOR_JUSTIFY_METHOD));
+        rSet.Put(SvxJustifyMethodItem(rXf.meVerAlignMethod, ATTR_VER_JUSTIFY_METHOD));
     }
 }
 
@@ -1813,17 +1817,24 @@ void ScOrcusStyles::set_xf_horizontal_alignment(orcus::spreadsheet::hor_alignmen
     switch (align)
     {
         case os::hor_alignment_t::left:
-            maCurrentXF.meHor_alignment = SvxCellHorJustify::Left;
-        break;
+            maCurrentXF.meHorAlignment = SvxCellHorJustify::Left;
+            break;
         case os::hor_alignment_t::right:
-            maCurrentXF.meHor_alignment = SvxCellHorJustify::Right;
-        break;
+            maCurrentXF.meHorAlignment = SvxCellHorJustify::Right;
+            break;
         case os::hor_alignment_t::center:
-            maCurrentXF.meHor_alignment = SvxCellHorJustify::Center;
-        break;
+            maCurrentXF.meHorAlignment = SvxCellHorJustify::Center;
+            break;
         case os::hor_alignment_t::justified:
-            maCurrentXF.meHor_alignment = SvxCellHorJustify::Standard;
-        break;
+            maCurrentXF.meHorAlignment = SvxCellHorJustify::Block;
+            break;
+        case os::hor_alignment_t::distributed:
+            maCurrentXF.meHorAlignment = SvxCellHorJustify::Block;
+            maCurrentXF.meHorAlignMethod = SvxCellJustifyMethod::Distribute;
+            break;
+        case os::hor_alignment_t::unknown:
+            maCurrentXF.meHorAlignment = SvxCellHorJustify::Standard;
+            break;
         default:
             ;
     }
@@ -1835,17 +1846,24 @@ void ScOrcusStyles::set_xf_vertical_alignment(orcus::spreadsheet::ver_alignment_
     switch (align)
     {
         case os::ver_alignment_t::top:
-            maCurrentXF.meVer_alignment = SvxCellVerJustify::Top;
-        break;
+            maCurrentXF.meVerAlignment = SvxCellVerJustify::Top;
+            break;
         case os::ver_alignment_t::bottom:
-            maCurrentXF.meVer_alignment = SvxCellVerJustify::Bottom;
-        break;
+            maCurrentXF.meVerAlignment = SvxCellVerJustify::Bottom;
+            break;
         case os::ver_alignment_t::middle:
-            maCurrentXF.meVer_alignment = SvxCellVerJustify::Center;
-        break;
+            maCurrentXF.meVerAlignment = SvxCellVerJustify::Center;
+            break;
         case os::ver_alignment_t::justified:
-            maCurrentXF.meVer_alignment = SvxCellVerJustify::Standard;
-        break;
+            maCurrentXF.meVerAlignment = SvxCellVerJustify::Block;
+            break;
+        case os::ver_alignment_t::distributed:
+            maCurrentXF.meVerAlignment = SvxCellVerJustify::Block;
+            maCurrentXF.meVerAlignMethod = SvxCellJustifyMethod::Distribute;
+            break;
+        case os::ver_alignment_t::unknown:
+            maCurrentXF.meVerAlignment = SvxCellVerJustify::Standard;
+            break;
         default:
             ;
     }
