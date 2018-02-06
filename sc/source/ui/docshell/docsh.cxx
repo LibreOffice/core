@@ -1705,6 +1705,10 @@ bool ScDocShell::SaveAs( SfxMedium& rMedium )
     if (bNeedsRehash)
         // legacy xls hash double-hashed by SHA1 is also supported.
         bNeedsRehash = ScPassHashHelper::needsPassHashRegen(aDocument, PASSHASH_XL, PASSHASH_SHA1);
+    if (bNeedsRehash)
+    {   // SHA256 explicitly supported in ODF 1.2, implicitly in ODF 1.1
+        bNeedsRehash = ScPassHashHelper::needsPassHashRegen(aDocument, PASSHASH_SHA256);
+    }
 
     if (pViewShell && bNeedsRehash)
     {

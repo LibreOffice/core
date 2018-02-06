@@ -33,6 +33,8 @@ class ScTableProtectionImpl;
 enum ScPasswordHash
 {
     PASSHASH_SHA1 = 0,
+    PASSHASH_SHA1_UTF8, // tdf#115483 this is UTF8, previous one is wrong UTF16
+    PASSHASH_SHA256,
     PASSHASH_XL,
     PASSHASH_UNSPECIFIED
 };
