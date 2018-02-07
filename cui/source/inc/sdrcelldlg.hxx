@@ -32,6 +32,7 @@ private:
 
     XColorListRef       mpColorTab;
     XGradientListRef    mpGradientList;
+    XPatternListRef     mpPatternList;
     XHatchListRef       mpHatchingList;
     XBitmapListRef      mpBitmapList;
 
