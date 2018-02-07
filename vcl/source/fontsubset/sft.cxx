@@ -1225,6 +1225,12 @@ static void FindCmap(TrueTypeFont *ttf)
 {
     const sal_uInt8* table = getTable(ttf, O_cmap);
     sal_uInt32 table_size = getTableSize(ttf, O_cmap);
+    if (table_size < 4)
+    {
+        SAL_WARN("vcl.fonts", "Parsing error in " << OUString::createFromAscii(ttf->fname) <<
+                 "cmap table size too short");
+        return;
+    }
     sal_uInt16 ncmaps = GetUInt16(table, 2);
     sal_uInt32 AppleUni   = 0;              // Apple Unicode
     sal_uInt32 ThreeZero  = 0;              /* MS Symbol            */
