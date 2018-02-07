@@ -1569,6 +1569,7 @@ void FormulaCompiler::Factor()
                 || (!mbJumpCommandReorder && IsOpCodeJumpCommand(eOp)))
         {
             pFacToken = mpToken;
+            bool bDoIICompute = IsIIOpCode(eOp);
             OpCode eMyLastOp = eOp;
             eOp = NextToken();
             bool bNoParam = false;
@@ -1596,7 +1597,13 @@ void FormulaCompiler::Factor()
             sal_uInt32 nSepCount = 0;
             if( !bNoParam )
             {
+                // Array of FormulaToken double pointers to collect the parameters of II opcodes.
+                FormulaToken** pIndexArray[FORMULA_MAXPARAMSII];
                 nSepCount++;
+
+                if (bDoIICompute)
+                    pIndexArray[nSepCount-1] = pCode - 1; // Add first argument
+
                 while ((eOp == ocSep) && (pArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
                 {
                     NextToken();
@@ -1605,7 +1612,11 @@ void FormulaCompiler::Factor()
                     if (nSepCount > FORMULA_MAXPARAMS)
                         SetError( FormulaError::CodeOverflow);
                     eOp = Expression();
+                    if (bDoIICompute)
+                        pIndexArray[nSepCount - 1] = pCode - 1; // Add rest of the arguments
                 }
+                if (bDoIICompute)
+                    HandleIIOpCode(eMyLastOp, pIndexArray, nSepCount);
             }
             if (bBadName)
                 ;   // nothing, keep current token for return
