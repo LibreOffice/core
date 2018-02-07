@@ -1534,6 +1534,8 @@ int OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, T
 
 static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
 {
+    if (t->fsize < 4)
+        return SF_TTFORMAT;
     int i;
     sal_uInt32 length, tag;
     sal_uInt32 tdoffset = 0;        /* offset to TableDirectory in a TTC file. For TTF files is 0 */
