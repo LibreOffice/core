@@ -1294,4 +1294,32 @@ BitmapEx createBlendFrame(
     return pBlendFrameCache->m_aLastResult;
 }
 
+void BitmapEx::Replace(const Color& rSearchColor,
+                           const Color& rReplaceColor,
+                           sal_uInt8 nTolerance)
+{
+    aBitmap.Replace(rSearchColor, rReplaceColor, nTolerance);
+}
+
+void BitmapEx::setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
+{
+    AlphaMask aAlphaMask(GetAlpha());
+    Bitmap::ScopedWriteAccess pWriteAccess(aAlphaMask);
+    Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+    assert( pReadAccess.get() && pWriteAccess.get() );
+    if ( pReadAccess.get() && pWriteAccess.get() )
+    {
+        for ( long nY = 0; nY < pReadAccess->Height(); nY++ )
+        {
+            Scanline pScanline = pWriteAccess->GetScanline( nY );
+            Scanline pScanlineRead = pReadAccess->GetScanline( nY );
+            for ( long nX = 0; nX < pReadAccess->Width(); nX++ )
+            {
+                const sal_uInt8 cIndex = pReadAccess->GetIndexFromData( pScanlineRead, nX );
+                if ( cIndex == cIndexFrom )
+                    pWriteAccess->SetPixelOnData( pScanline, nX, BitmapColor(nAlphaTo) );
+            }
+        }
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
