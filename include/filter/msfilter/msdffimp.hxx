@@ -91,6 +91,10 @@ public:
 
     explicit DffPropertyReader( const SvxMSDffManager& rManager );
     ~DffPropertyReader();
+
+    DffPropertyReader& operator=( DffPropertyReader const & ) = delete; // MSVC2015 workaround
+    DffPropertyReader( DffPropertyReader const & ) = delete; // MSVC2015 workaround
+
     static sal_Int32 Fix16ToAngle( sal_Int32 nAngle );
 
 #ifdef DBG_CUSTOMSHAPE
@@ -174,10 +178,13 @@ struct SvxMSDffConnectorRule
 
 struct MSFILTER_DLLPUBLIC SvxMSDffSolverContainer
 {
-    ::std::vector< SvxMSDffConnectorRule* > aCList;
+    ::std::vector< std::unique_ptr<SvxMSDffConnectorRule> > aCList;
 
     SvxMSDffSolverContainer();
     ~SvxMSDffSolverContainer();
+
+    SvxMSDffSolverContainer& operator=( SvxMSDffSolverContainer const & ) = delete; // MSVC2015 workaround
+    SvxMSDffSolverContainer( SvxMSDffSolverContainer const & ) = delete; // MSVC2015 workaround
 
     MSFILTER_DLLPUBLIC friend SvStream& ReadSvxMSDffSolverContainer( SvStream& rIn, SvxMSDffSolverContainer& rAtom );
 };
