@@ -189,7 +189,7 @@
         <value>Nachlieli CLM;Alef;Noto Sans Hebrew;Liberation Sans;Arial;Arial Hebrew;Lucida Sans Unicode;Lucida Grande;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>David Libre;David CLM;Frank Ruehl CLM;Liberation Serif;David;Raanana;Lucida Sans Unicode;Lucida Grande;Arial Unicode MS</value>
+        <value>David CLM;David Libre;Frank Ruehl CLM;Liberation Serif;David;Raanana;Lucida Sans Unicode;Lucida Grande;Arial Unicode MS</value>
       </prop>
     </node>
     <node oor:name="th" oor:op="replace">
