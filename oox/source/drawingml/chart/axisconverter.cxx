@@ -273,7 +273,7 @@ void AxisConverter::convertFromModel(
             case cssc2::AxisType::PERCENT:
             {
                 // scaling algorithm
-                bool bLogScale = lclIsLogarithmicScale( mrModel );
+                const bool bLogScale = lclIsLogarithmicScale( mrModel );
                 if( bLogScale )
                     aScaleData.Scaling = LogarithmicScaling::create( comphelper::getProcessComponentContext() );
                 else
@@ -302,6 +302,11 @@ void AxisConverter::convertFromModel(
                     double fCount = mrModel.mofMajorUnit.get() / mrModel.mofMinorUnit.get() + 0.5;
                     if( (1.0 <= fCount) && (fCount < 1001.0) )
                         rIntervalCount <<= static_cast< sal_Int32 >( fCount );
+                }
+                else if( !mrModel.mofMinorUnit.has() )
+                {
+                    // tdf#114168 If minor unit is not set then set interval to 5, as MS Excel do.
+                    rIntervalCount <<= static_cast< sal_Int32 >( 5 );
                 }
             }
             break;
