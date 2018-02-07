@@ -34,6 +34,8 @@ public:
     , mnEnd ( rBuffer.getLength() )
     {
     }
+    MemoryByteGrabber(css::uno::Sequence<sal_Int8> &&) = delete;
+
     const sal_Int8 * getCurrentPos () { return mpBuffer + mnCurrent; }
 
     sal_Int32 remainingSize() const { return mnEnd - mnCurrent; }
