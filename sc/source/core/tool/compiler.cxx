@@ -1731,6 +1731,95 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
     }
 };
 
+bool ScImplicitIntersectionComputer::ShouldHandleOpCode(OpCode nOpCode) const
+{
+    if (nOpCode == ocSumIf || nOpCode == ocAverageIf)
+        return true;
+
+    return false;
+}
+
+void ScImplicitIntersectionComputer::AddArg(FormulaToken** ppTok)
+{
+    maArgs.push_back(ppTok);
+}
+
+void ScImplicitIntersectionComputer::Handle(OpCode nOpCode)
+{
+    switch (nOpCode)
+    {
+        case ocSumIf:
+        case ocAverageIf:
+        {
+
+            if (maArgs.size() != 3)
+                return;
+            if (!(maArgs[0] && maArgs[2] && *maArgs[0] && *maArgs[2]))
+                return;
+
+            ScComplexRefData aSumRange, aBaseRange;
+            if ((*maArgs[2])->GetType() == svSingleRef)
+            {
+                aSumRange.Ref1 = *(*maArgs[2])->GetSingleRef();
+                aSumRange.Ref2 = aSumRange.Ref1;
+            }
+            else if ((*maArgs[2])->GetType() == svDoubleRef)
+                aSumRange = *(*maArgs[2])->GetDoubleRef();
+            else
+                return;
+
+            if ((*maArgs[0])->GetType() == svDoubleRef)
+                aBaseRange = *(*maArgs[0])->GetDoubleRef();
+            else
+                return;
+
+            ComputeImplictIntersection(aBaseRange, aSumRange, maArgs[2]);
+        }
+        break;
+        default:
+            ;
+    }
+}
+
+void ScImplicitIntersectionComputer::ComputeImplictIntersection(ScComplexRefData& rBaseRange,
+                                                                ScComplexRefData& rSumRange,
+                                                                FormulaToken** ppSumRangeToken)
+{
+    ScRange aAbs = rBaseRange.toAbs(mrPos);
+
+    SCCOL nXDelta = aAbs.aEnd.Col() - aAbs.aStart.Col();
+    SCROW nYDelta = aAbs.aEnd.Row() - aAbs.aStart.Row();
+    SCTAB nZDelta = aAbs.aEnd.Tab() - aAbs.aStart.Tab();
+
+    aAbs = rSumRange.toAbs(mrPos);
+
+    SCCOL nXDeltaSum = aAbs.aEnd.Col() - aAbs.aStart.Col();
+    SCROW nYDeltaSum = aAbs.aEnd.Row() - aAbs.aStart.Row();
+    SCTAB nZDeltaSum = aAbs.aEnd.Tab() - aAbs.aStart.Tab();
+
+    if (nXDelta == nXDeltaSum &&
+        nYDelta == nYDeltaSum &&
+        nZDelta == nZDeltaSum)
+        return;  // shapes of base-range match current sum-range
+
+    // Make the sum-range to take the same shape as base-range,
+    // by adjusting Ref2 member of aSumRange.
+    rSumRange.Ref2.IncCol(nXDelta - nXDeltaSum);
+    rSumRange.Ref2.IncRow(nYDelta - nYDeltaSum);
+    rSumRange.Ref2.IncTab(nZDelta - nZDeltaSum);
+
+    FormulaToken* pNewSumRangeTok = new ScDoubleRefToken(rSumRange);
+    (*ppSumRangeToken)->DecRef();
+    *ppSumRangeToken = pNewSumRangeTok;
+    pNewSumRangeTok->IncRef();
+}
+
+ImplicitIntersectionComputerBase* ScImplicitIntersectionComputer::Instantiate() const
+{
+    return (new ScImplicitIntersectionComputer(mrPos));
+}
+
+
 ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr ) :
     FormulaCompiler(rArr),
     pDoc(rCxt.getDoc()),
@@ -1748,6 +1837,7 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, 
     maTabNames(rCxt.getTabNames())
 {
     SetGrammar(rCxt.getGrammar());
+    mpIIComputer.reset(new ScImplicitIntersectionComputer(aPos));
 }
 
 ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos, ScTokenArray& rArr,
@@ -1770,6 +1860,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos, ScTokenArr
     SetGrammar( (eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED) ?
                 pDocument->GetGrammar() :
                 eGrammar );
+    mpIIComputer.reset(new ScImplicitIntersectionComputer(aPos));
 }
 
 ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos ) :
@@ -1788,6 +1879,7 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos )
     maTabNames(rCxt.getTabNames())
 {
     SetGrammar(rCxt.getGrammar());
+    mpIIComputer.reset(new ScImplicitIntersectionComputer(aPos));
 }
 
 ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
@@ -1810,6 +1902,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
     SetGrammar( (eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED) ?
                 (pDocument ? pDocument->GetGrammar() : formula::FormulaGrammar::GRAM_DEFAULT) :
                 eGrammar );
+    mpIIComputer.reset(new ScImplicitIntersectionComputer(aPos));
 }
 
 ScCompiler::~ScCompiler()

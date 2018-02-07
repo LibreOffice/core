@@ -712,7 +712,8 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
         bCorrected( false ),
         glSubTotal( false ),
         mbJumpCommandReorder(true),
-        mbStopOnError(true)
+        mbStopOnError(true),
+        mpIIComputer(nullptr)
 {
 }
 
@@ -734,7 +735,8 @@ FormulaCompiler::FormulaCompiler()
         bCorrected( false ),
         glSubTotal( false ),
         mbJumpCommandReorder(true),
-        mbStopOnError(true)
+        mbStopOnError(true),
+        mpIIComputer(nullptr)
 {
 }
 
@@ -1569,6 +1571,11 @@ void FormulaCompiler::Factor()
                 || (!mbJumpCommandReorder && IsOpCodeJumpCommand(eOp)))
         {
             pFacToken = mpToken;
+            bool bDoIICompute = (mpIIComputer) ? mpIIComputer->ShouldHandleOpCode(eOp) : false;
+            // We need to get a fresh copy of mpIIComputer because of the recursive nature of Factor(),
+            // For example "=SUMIF(base_range, SUMIF(base_range1, expression, sum_range1), sum_range)" will cause problems
+            // if we don't use a fresh instance of mpIIComputer for each level of Factor() call.
+            std::unique_ptr<ImplicitIntersectionComputerBase> pIIC( (bDoIICompute) ? mpIIComputer->Instantiate() : nullptr );
             OpCode eMyLastOp = eOp;
             eOp = NextToken();
             bool bNoParam = false;
@@ -1597,6 +1604,10 @@ void FormulaCompiler::Factor()
             if( !bNoParam )
             {
                 nSepCount++;
+
+                if (pIIC)
+                    pIIC->AddArg(pCode - 1); // Add first argument
+
                 while ((eOp == ocSep) && (pArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
                 {
                     NextToken();
@@ -1605,7 +1616,11 @@ void FormulaCompiler::Factor()
                     if (nSepCount > FORMULA_MAXPARAMS)
                         SetError( FormulaError::CodeOverflow);
                     eOp = Expression();
+                    if (pIIC)
+                        pIIC->AddArg(pCode - 1); // Add rest of the arguments
                 }
+                if (pIIC)
+                    pIIC->Handle(eMyLastOp);
             }
             if (bBadName)
                 ;   // nothing, keep current token for return
