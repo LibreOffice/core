@@ -1564,7 +1564,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         }
         else if( const_cast<sal_uInt8*>(t->tables[i]) + t->tlens[i] > t->ptr + t->fsize )
         {
-            int nMaxLen = (t->ptr + t->fsize) - t->tables[i];
+            sal_PtrDiff nMaxLen = (t->ptr + t->fsize) - t->tables[i];
             if( nMaxLen < 0 )
                 nMaxLen = 0;
             t->tlens[i] = nMaxLen;
