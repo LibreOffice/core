@@ -26,21 +26,27 @@ quartz/
 win/
 	+ Windows backend
 
+qt5/
+	+ Qt5 (under construction)
+
 unx/
 	+ X11 backend and its sub-platforms
 
-	plugadapt/
-		+ pluggable framework to select correct unx backend
 	gtk/
 		+ GTK2 support
 	gtk3/
-		+ GTK3.2+ support
-	kde/
-		+ KDE3 support
+		+ GTK3 support
 	kde4/
 		+ KDE4 support
+	kde5/
+		+ KDE5 support (under construction)
+	gtk3_kde5/
+		+ GTK3 support with KDE5 file pickers (until kde5 is finished)
 	generic/
 		+ raw X11 support
+
+		plugadapt/
+			+ pluggable framework to select correct unx backend
 
 		dtrans/
 			+ "data transfer" - clipboard handling
