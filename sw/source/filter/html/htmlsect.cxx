@@ -199,7 +199,10 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
             aDelPam.GetPoint()->nNode = pStNd->EndOfSectionIndex() - 1;
 
             if (!PendingObjectsInPaM(aDelPam))
+            {
+                ClearFootnotesInRange(aDelPam.GetMark()->nNode, aDelPam.GetPoint()->nNode);
                 m_xDoc->getIDocumentContentOperations().DelFullPara(aDelPam);
+            }
 
             // update page style
             for( size_t i=0; i < m_xDoc->GetPageDescCnt(); i++ )
