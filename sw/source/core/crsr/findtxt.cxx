@@ -758,15 +758,24 @@ OUString *ReplaceBackReferences( const i18nutil::SearchOptions2& rSearchOpt, SwP
         SearchAlgorithms2::REGEXP == rSearchOpt.AlgorithmType2 )
     {
         const SwContentNode* pTextNode = pPam->GetContentNode();
-        if( pTextNode && pTextNode->IsTextNode() && pTextNode == pPam->GetContentNode( false ) )
+        const bool bParaEnd = rSearchOpt.searchString == "$" || rSearchOpt.searchString == "^$" || rSearchOpt.searchString == "$^";
+        if ( pTextNode && pTextNode->IsTextNode() && (bParaEnd || pTextNode == pPam->GetContentNode( false )) )
         {
             utl::TextSearch aSText( utl::TextSearch::UpgradeToSearchOptions2( rSearchOpt) );
             const OUString& rStr = pTextNode->GetTextNode()->GetText();
             sal_Int32 nStart = pPam->Start()->nContent.GetIndex();
             sal_Int32 nEnd = pPam->End()->nContent.GetIndex();
             SearchResult aResult;
-            if( aSText.SearchForward( rStr, &nStart, &nEnd, &aResult ) )
+            if ( bParaEnd || aSText.SearchForward( rStr, &nStart, &nEnd, &aResult ) )
             {
+                if ( bParaEnd )
+                {
+                    aResult.subRegExpressions = 1;
+                    aResult.startOffset.realloc(1);
+                    aResult.endOffset.realloc(1);
+                    aResult.startOffset[0] = 0;
+                    aResult.endOffset[0] = 0;
+                }
                 OUString aReplaceStr( rSearchOpt.replaceString );
                 aSText.ReplaceBackReferences( aReplaceStr, rStr, aResult );
                 pRet = new OUString( aReplaceStr );
