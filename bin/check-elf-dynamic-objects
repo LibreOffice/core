@@ -71,7 +71,8 @@ gstreamerwhitelist="libgstpbutils-1.0.so.0 libgstvideo-1.0.so.0 libgstbase-1.0.s
 gtk2whitelist="libgtk-x11-2.0.so.0 libgdk-x11-2.0.so.0 libpangocairo-1.0.so.0 libatk-1.0.so.0 libcairo.so.2 libgio-2.0.so.0 libpangoft2-1.0.so.0 libpango-1.0.so.0 libfontconfig.so.1 libfreetype.so.6 libgdk_pixbuf-2.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libdbus-glib-1.so.2 libdbus-1.so.3"
 gtk3whitelist="libgtk-3.so.0 libgdk-3.so.0 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libatk-1.0.so.0 libcairo.so.2 libgio-2.0.so.0 libpangoft2-1.0.so.0 libpango-1.0.so.0 libfontconfig.so.1 libfreetype.so.6 libgdk_pixbuf-2.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libdbus-glib-1.so.2 libdbus-1.so.3"
 kde4whitelist="libkio.so.5 libkfile.so.4 libkdeui.so.5 libkdecore.so.5 libQtNetwork.so.4 libQtGui.so.4 libQtCore.so.4 libglib-2.0.so.0"
-qt5whitelist="libQt5Core.so.5 libQt5Gui.so.5 libQt5Network.so.5 libQt5Widgets.so.5 libcairo.so.2 libglib-2.0.so.0"
+qt5whitelist="libQt5Core.so.5 libQt5Gui.so.5 libQt5Network.so.5 libQt5Widgets.so.5 libQt5X11Extras.so.5 libcairo.so.2 libglib-2.0.so.0"
+kf5whitelist="libKF5ConfigCore.so.5 libKF5CoreAddons.so.5 libKF5I18n.so.5 libKF5KIOCore.so.5 libKF5KIOFileWidgets.so.5 libKF5KIOWidgets.so.5 libKF5WindowSystem.so.5"
 avahiwhitelist="libdbus-glib-1.so.2 libdbus-1.so.3 libgobject-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libglib-2.0.so.0 libavahi-common.so.3 libavahi-client.so.3"
 kerberoswhitelist="libgssapi_krb5.so.2 libcom_err.so.2 libkrb5.so.3"
 dconfwhitelist="libdconf.so.1 libgio-2.0.so.0 libglib-2.0.so.0 libgobject-2.0.so.0"
@@ -111,6 +112,17 @@ local file="$1"
         */libvclplug_qt5lo.so)
             if [ "$ENABLE_QT5" = TRUE ]; then
                 whitelist="${whitelist} ${qt5whitelist}"
+            fi
+        ;;
+        */libvclplug_gtk3_kde5lo.so)
+            if [ "$ENABLE_GTK3_KDE5" = TRUE ]; then
+                whitelist="${whitelist} ${x11whitelist} ${gtk3whitelist}"
+            fi
+        ;;
+        */lo_kde5filepicker)
+            if [ "$ENABLE_GTK3_KDE5" = TRUE ]; then
+                whitelist="${whitelist} ${x11whitelist} ${gtk3whitelist} ${qt5whitelist} \
+                    ${kf5whitelist} libxcb.so.1"
             fi
         ;;
         */libdesktop_detectorlo.so|*/ui-previewer|*/oosplash|*/gengal.bin)
