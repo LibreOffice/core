@@ -32,21 +32,18 @@
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/charsetcoloritem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/nhypitem.hxx>
 #include <editeng/blinkitem.hxx>
-#include <editeng/brushitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/twolinesitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/charhiddenitem.hxx>
-#include <editeng/boxitem.hxx>
-#include <editeng/shaditem.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/colritem.hxx>
 
 // implementation of the character attribute methods of SwAttrSet
 

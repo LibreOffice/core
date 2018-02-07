@@ -20,9 +20,7 @@
 #ifndef INCLUDED_SW_INC_DLELSTNR_HXX
 #define INCLUDED_SW_INC_DLELSTNR_HXX
 
-#include <cppuhelper/weak.hxx>
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
-#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <cppuhelper/implbase.hxx>
 

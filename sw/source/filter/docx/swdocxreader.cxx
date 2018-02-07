@@ -29,6 +29,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <doc.hxx>
 #include <docsh.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <ndtxt.hxx>

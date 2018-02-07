@@ -34,6 +34,7 @@
 #include <fmtfld.hxx>
 #include <fldbas.hxx>
 #include <ftninfo.hxx>
+#include <numrule.hxx>
 
 #include <algorithm>
 
