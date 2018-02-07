@@ -4189,13 +4189,121 @@ struct ScDependantsCalculator
         return nRowLen;
     }
 
+    void DeduceImplicitDependencyRange(const ScComplexRefData& rBaseRange, const ScSingleRefData& rSumStartRef,
+                                       ScComplexRefData& rDependencyRange)
+    {
+        // Note that the dependency range calculated by this method (rDependencyRange) is not to be
+        // used as a replacement for sumrange !
+        ScRange aAbs = rBaseRange.toAbs(mrPos);
+        ScAddress aResAbs = rSumStartRef.toAbs(mrPos);
+
+        SCCOL nXDelta = aAbs.aEnd.Col() - aAbs.aStart.Col();
+        SCROW nYDelta = aAbs.aEnd.Row() - aAbs.aStart.Row();
+        SCTAB nZDelta = aAbs.aEnd.Tab() - aAbs.aStart.Tab();
+
+        rDependencyRange.Ref1 = rSumStartRef;
+        rDependencyRange.Ref1.SetAbsRow(aResAbs.Row());
+        rDependencyRange.Ref2 = rSumStartRef;
+        rDependencyRange.Ref2.SetAbsRow(aResAbs.Row());
+
+        rDependencyRange.Ref2.IncCol( nXDelta );
+        rDependencyRange.Ref2.IncTab( nZDelta );
+
+        // Case 1 : Base range is fixed and sumrange start is fixed
+        if (!rBaseRange.Ref1.IsRowRel() && !rBaseRange.Ref2.IsRowRel() && !rSumStartRef.IsRowRel())
+            rDependencyRange.Ref2.IncRow(nYDelta);
+        // Case 2 : Base range is fixed and sumrange start is relative
+        else if (!rBaseRange.Ref1.IsRowRel() && !rBaseRange.Ref2.IsRowRel() && rSumStartRef.IsRowRel())
+            rDependencyRange.Ref2.IncRow(nYDelta + mnLen - 1);
+        // Case 3 : Base range is relative and sumrange start is fixed
+        else if (rBaseRange.Ref1.IsRowRel() && rBaseRange.Ref2.IsRowRel() && !rSumStartRef.IsRowRel())
+            rDependencyRange.Ref2.IncRow(nYDelta);
+        // Case 4 : Base range is relative and sumrange start is relative
+        else if (rBaseRange.Ref1.IsRowRel() && rBaseRange.Ref2.IsRowRel() && rSumStartRef.IsRowRel())
+            rDependencyRange.Ref2.IncRow(nYDelta + mnLen - 1);
+        // Case 5 : Base range is (fixed : relative) and sumrange start is fixed
+        else if (!rBaseRange.Ref1.IsRowRel() && rBaseRange.Ref2.IsRowRel() && !rSumStartRef.IsRowRel())
+            rDependencyRange.Ref2.IncRow(nYDelta + mnLen - 1);
+        // Case 6 : Base range is (fixed : relative) and sumrange start is relative
+        else if (!rBaseRange.Ref1.IsRowRel() && rBaseRange.Ref2.IsRowRel() && rSumStartRef.IsRowRel())
+            rDependencyRange.Ref2.IncRow(nYDelta + 2*(mnLen - 1));
+        // Case 7 : Base range is (relative : fixed) and sumrange start is fixed
+        else if (rBaseRange.Ref1.IsRowRel() && !rBaseRange.Ref2.IsRowRel() && !rSumStartRef.IsRowRel())
+        {
+            if (nYDelta + 1 <= mnLen)
+                rDependencyRange.Ref2.IncRow(std::max(nYDelta, mnLen - (nYDelta + 1)));
+            else
+                rDependencyRange.Ref2.IncRow(nYDelta);
+        }
+        // Case 8 : Base range is (relative : fixed) and sumrange start is relative
+        else if (rBaseRange.Ref1.IsRowRel() && !rBaseRange.Ref2.IsRowRel() && rSumStartRef.IsRowRel())
+        {
+            if (nYDelta + 1 <= mnLen)
+                rDependencyRange.Ref2.IncRow(mnLen - 1 + std::max(nYDelta, mnLen - (nYDelta + 1)));
+            else
+                rDependencyRange.Ref2.IncRow(nYDelta);
+        }
+    }
+
+    void doOpCodeHandler(const FormulaToken* pToken, const std::vector<FormulaToken*>& rTokenStack,
+                         ScRangeList& rRangeList)
+    {
+        switch (pToken->GetOpCode())
+        {
+        case ocSumIf:
+            {
+                if (pToken->GetParamCount() != 3)
+                    return;
+
+                size_t nStackSize = rTokenStack.size();
+                assert( nStackSize >= 3 );
+                if ( !rTokenStack[nStackSize - 1] ||
+                     !rTokenStack[nStackSize - 3] )
+                    return;
+
+                ScSingleRefData aSumStartRef;
+                if (rTokenStack[nStackSize - 1]->GetType() == svSingleRef)
+                    aSumStartRef = *rTokenStack[nStackSize - 1]->GetSingleRef();
+                else if (rTokenStack[nStackSize - 1]->GetType() == svDoubleRef)
+                    aSumStartRef = rTokenStack[nStackSize - 1]->GetDoubleRef()->Ref1;
+                else
+                    return;
+
+                ScComplexRefData aRangeRef;
+                if (rTokenStack[nStackSize - 3]->GetType() == svDoubleRef)
+                    aRangeRef = *rTokenStack[nStackSize - 3]->GetDoubleRef();
+                else
+                    return;
+
+                ScComplexRefData aDependencyRange;
+                DeduceImplicitDependencyRange(aRangeRef, aSumStartRef, aDependencyRange);
+                rRangeList.Join(aDependencyRange.toAbs(mrPos));
+            }
+            break;
+        default:
+            break;
+        }
+    }
+
     bool DoIt()
     {
         // Partially from ScGroupTokenConverter::convert in sc/source/core/data/grouptokenconverter.cxx
-
+        std::vector<FormulaToken*> aTokenStack;
         ScRangeList aRangeList;
-        for (auto p: mrCode.Tokens())
+        for (auto p: mrCode.RPNTokens())
         {
+            if (p->GetOpCode() == ocPush )
+                aTokenStack.push_back(p);
+            else
+            {
+                doOpCodeHandler(p, aTokenStack, aRangeList);
+                sal_uInt8 nParamCount = p->GetParamCount();
+                assert(aTokenStack.size() >= nParamCount);
+                aTokenStack.resize(aTokenStack.size() - nParamCount);
+                // We don't really compute the result of the operations here
+                // so just push back a dummy token to the stack.
+                aTokenStack.push_back(nullptr);
+            }
             switch (p->GetType())
             {
             case svSingleRef:

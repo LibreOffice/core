@@ -27,8 +27,11 @@
 #include <userdat.hxx>
 #include <formulacell.hxx>
 #include <formulagroup.hxx>
+#include <scopetools.hxx>
 
 #include <svx/svdpage.hxx>
+
+#include <officecfg/Office/Calc.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -39,6 +42,7 @@ public:
     ScParallelismTest();
 
     virtual void setUp() override;
+    virtual void tearDown() override;
 
     void getNewDocShell(ScDocShellRef& rDocShellRef);
 
@@ -47,6 +51,7 @@ public:
     void testVLOOKUP();
     void testVLOOKUPSUM();
     void testSingleRef();
+    void testSUMIFImplicitRange();
 
     CPPUNIT_TEST_SUITE(ScParallelismTest);
     CPPUNIT_TEST(testSUMIFS);
@@ -54,17 +59,35 @@ public:
     CPPUNIT_TEST(testVLOOKUP);
     CPPUNIT_TEST(testVLOOKUPSUM);
     CPPUNIT_TEST(testSingleRef);
+    CPPUNIT_TEST(testSUMIFImplicitRange);
     CPPUNIT_TEST_SUITE_END();
 
 private:
+
+    bool getThreadingFlag();
+    void setThreadingFlag(bool bSet);
+
     ScDocument *m_pDoc;
 
     ScDocShellRef m_xDocShell;
+    bool m_bThreadingFlagCfg;
 };
 
 ScParallelismTest::ScParallelismTest()
       : ScBootstrapFixture( "sc/qa/unit/data" )
 {
+}
+
+bool ScParallelismTest::getThreadingFlag()
+{
+    return officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get();
+}
+
+void ScParallelismTest::setThreadingFlag( bool bSet )
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> xBatch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::set(bSet, xBatch);
+    xBatch->commit();
 }
 
 void ScParallelismTest::setUp()
@@ -77,6 +100,19 @@ void ScParallelismTest::setUp()
     m_pDoc = &m_xDocShell->GetDocument();
 
     sc::FormulaGroupInterpreter::disableOpenCL_UnitTestsOnly();
+
+    m_bThreadingFlagCfg = getThreadingFlag();
+    if (!m_bThreadingFlagCfg)
+        setThreadingFlag(true);
+}
+
+void ScParallelismTest::tearDown()
+{
+    // Restore threading flag
+    if (!m_bThreadingFlagCfg)
+        setThreadingFlag(false);
+
+    test::BootstrapFixture::tearDown();
 }
 
 void ScParallelismTest::getNewDocShell( ScDocShellRef& rDocShellRef )
@@ -315,6 +351,49 @@ void ScParallelismTest::testSingleRef()
     {
         OString aMsg = "At row " + OString::number(i);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), i, static_cast<size_t>(m_pDoc->GetValue(1, i, 0)));
+    }
+    m_pDoc->DeleteTab(0);
+}
+
+// Common test setup steps for testSUMIFImplicitRange*()
+void lcl_setupCommon(ScDocument* pDoc, size_t nNumRows, size_t nConstCellValue)
+{
+    pDoc->SetValue(3, 0, 0, static_cast<double>(nConstCellValue));  // D1
+    for (size_t i = 0; i <= (nNumRows*2); ++i)
+    {
+        pDoc->SetValue(0, i, 0, static_cast<double>(i));
+        pDoc->SetFormula(ScAddress(1, i, 0),
+                         "=A" + OUString::number(i+1),
+                         formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+}
+
+void ScParallelismTest::testSUMIFImplicitRange()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
+    m_pDoc->InsertTab(0, "1");
+
+    const size_t nNumRows = 4096;
+    const size_t nConstCellValue = 20;
+    lcl_setupCommon(m_pDoc, nNumRows, nConstCellValue);
+    OUString aSrcRange = "$A$1:$A$" + OUString::number(nNumRows);
+    OUString aFormula;
+    for (size_t i = 0; i < nNumRows; ++i)
+    {
+        aFormula = "=SUMIF(" + aSrcRange + ";$D$1;$B$1)";
+        m_pDoc->SetFormula(ScAddress(2, i, 0),
+                           aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+
+    ScFormulaCell* pCell = m_pDoc->GetFormulaCell(ScAddress(2, 0, 0));
+    sc::AutoCalcSwitch aACSwitch2(*m_pDoc, true);
+    pCell->InterpretFormulaGroup();  // Start calculation on the F.G at C1
+
+    for (size_t i = 0; i < nNumRows; ++i)
+    {
+        OString aMsg = "At row " + OString::number(i);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), nConstCellValue, static_cast<size_t>(m_pDoc->GetValue(2, i, 0)));
     }
     m_pDoc->DeleteTab(0);
 }
