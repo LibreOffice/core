@@ -89,7 +89,7 @@ VbaGlobalsBase::~VbaGlobalsBase()
         uno::Reference< container::XNameContainer > xNameContainer( mxContext, uno::UNO_QUERY );
         if ( xNameContainer.is() )
         {
-            // release document reference ( we don't wan't the component context trying to dispose that )
+            // release document reference (we don't want the component context trying to dispose that)
             xNameContainer->removeByName( msDocCtxName );
             // release application reference, as it is holding onto the context
             xNameContainer->removeByName( msApplication );

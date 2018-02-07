@@ -195,7 +195,7 @@ DECLARE_OOXMLIMPORT_TEST(testN757890, "n757890.docx")
     xPara->getPropertyValue("ParaStyleName") >>= aValue;
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), aValue);
 
-    // This wan't centered
+    // This wasn't centered
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
