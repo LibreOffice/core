@@ -209,7 +209,7 @@ protected:
     bool bIgnoreHTMLComments : 1;
     bool bSkipImages : 1;
 
-    virtual OUString GetTemplateName() const;
+    virtual OUString GetTemplateName(SwDoc& rDoc) const;
 
 public:
     Reader();
@@ -228,7 +228,7 @@ public:
     static void ResetFrameFormats( SwDoc& rDoc );
 
     // Load filter template, set it and release it again.
-    SwDoc* GetTemplateDoc();
+    SwDoc* GetTemplateDoc(SwDoc& rDoc);
     bool SetTemplate( SwDoc& rDoc );
     void ClearTemplate();
     void SetTemplateName( const OUString& rDir );
