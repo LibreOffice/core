@@ -1237,7 +1237,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         }
         if (rPersistEntry.xSolverContainer)
         {
-            for (SvxMSDffConnectorRule* pPtr : rPersistEntry.xSolverContainer->aCList)
+            for (auto & pPtr : rPersistEntry.xSolverContainer->aCList)
             {
                 if ( rObjData.nShapeId == pPtr->nShapeC )
                     pPtr->pCObj = pRet;
@@ -2921,7 +2921,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                             pRet->getSdrPageProperties().PutItemSet(rSlidePersist.pBObj->GetMergedItemSet());
                             if (rSlidePersist.xSolverContainer)
                             {
-                                for (SvxMSDffConnectorRule* pPtr : rSlidePersist.xSolverContainer->aCList)
+                                for (auto & pPtr : rSlidePersist.xSolverContainer->aCList)
                                 {
                                     // check connections to the group object
                                     if (pPtr->pAObj == rSlidePersist.pBObj)
@@ -7659,7 +7659,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, const sal_uInt32
         // possibly connections to the group object have to be removed.
         if ( pSolverContainer )
         {
-            for (SvxMSDffConnectorRule* pPtr : pSolverContainer->aCList)
+            for (auto & pPtr : pSolverContainer->aCList)
             {
                 // check connections to the group object
                 if ( pPtr->pAObj == pGroup )
