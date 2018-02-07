@@ -1522,9 +1522,10 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
             case T_CFF:  nIndex = O_CFF; break;
             default: nIndex = -1; break;
         }
-        if( nIndex >= 0 ) {
-            sal_uInt32 nTableOffset = GetUInt32(t->ptr + tdoffset + 12, 16 * i + 8);
-            length = GetUInt32(t->ptr + tdoffset + 12, 16 * i + 12);
+
+        if ((nIndex >= 0) && (nStart + nOffset + 12 + sizeof(sal_uInt32) <= static_cast<sal_uInt32>(t->fsize))) {
+            sal_uInt32 nTableOffset = GetUInt32(t->ptr + nStart, nOffset + 8);
+            length = GetUInt32(t->ptr + nStart, nOffset + 12);
             t->tables[nIndex] = t->ptr + nTableOffset;
             t->tlens[nIndex] = length;
         }
@@ -1533,8 +1534,10 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     /* Fixup offsets when only a TTC extract was provided */
     if( facenum == sal_uInt32(~0) ) {
         sal_uInt8* pHead = const_cast<sal_uInt8*>(t->tables[O_head]);
-        if( !pHead )
+        if (!pHead) {
+            CloseTTFont(t);
             return SF_TTFORMAT;
+        }
         /* limit Head candidate to TTC extract's limits */
         if( pHead > t->ptr + (t->fsize - 54) )
             pHead = t->ptr + (t->fsize - 54);
@@ -1550,8 +1553,10 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
                 break;
             }
         }
-        if( p <= t->ptr )
+        if (p <= t->ptr) {
+            CloseTTFont(t);
             return SF_TTFORMAT;
+        }
     }
 
     /* Check the table offsets after TTC correction */
