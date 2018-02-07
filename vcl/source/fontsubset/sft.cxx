@@ -1368,7 +1368,7 @@ static void GetKern(TrueTypeFont *ttf)
     if( !table )
         goto badtable;
 
-    if (GetUInt16(table, 0, 1) == 0) {                                /* Traditional Microsoft style table with sal_uInt16 version and nTables fields */
+    if (nTableSize >= 4 && GetUInt16(table, 0, 1) == 0) { /* Traditional Microsoft style table with sal_uInt16 version and nTables fields */
         ttf->nkern = GetUInt16(table, 2, 1);
         ttf->kerntype = KT_MICROSOFT;
         ptr = table + 4;
@@ -1400,7 +1400,7 @@ static void GetKern(TrueTypeFont *ttf)
         return;
     }
 
-    if (GetUInt32(table, 0, 1) == 0x00010000) {                       /* MacOS style kern tables: fixed32 version and sal_uInt32 nTables fields */
+    if (nTableSize >= 8 && GetUInt32(table, 0, 1) == 0x00010000) { /* MacOS style kern tables: fixed32 version and sal_uInt32 nTables fields */
         ttf->nkern = GetUInt32(table, 4, 1);
         ttf->kerntype = KT_APPLE_NEW;
         ptr = table + 8;
