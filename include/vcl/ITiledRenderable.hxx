@@ -110,6 +110,13 @@ public:
     virtual void postKeyEvent(int nType, int nCharCode, int nKeyCode) = 0;
 
     /**
+     * Posts an external text input event
+     *
+     * @see lok::Document::postExtTextInputEvent().
+     */
+    virtual void postExtTextInputEvent(int /*nType*/, const OUString& /*rText*/) {}
+
+    /**
      * Posts a mouse event on the document.
      *
      * @see lok::Document::postMouseEvent().

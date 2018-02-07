@@ -536,6 +536,17 @@ public:
         mpDoc->pClass->setViewLanguage(mpDoc, nId, language);
     }
 
+    /**
+     * Post the text input from external input window, like IME
+     *
+     * @param nType see LibreOfficeKitExtTextInputType
+     * @param pText Text for LOK_EXT_TEXTINPUT
+     */
+    void postExtTextInputEvent(int nType, const char* pText)
+    {
+        mpDoc->pClass->postExtTextInputEvent(mpDoc, nType, pText);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

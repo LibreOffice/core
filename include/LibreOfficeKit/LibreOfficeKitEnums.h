@@ -582,6 +582,17 @@ LibreOfficeKitKeyEventType;
 
 typedef enum
 {
+    /// cf. SalEvent::ExtTextInput
+    LOK_EXT_TEXTINPUT,
+    /// cf. SalEvent::ExtTextInputPos
+    LOK_EXT_TEXTINPUT_POS,
+    /// cf. SalEvent::EndExtTextInput
+    LOK_EXT_TEXTINPUT_END
+}
+LibreOfficeKitExtTextInputType;
+
+typedef enum
+{
     /// A pressed gesture has started.
     LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
     /// A pressed gesture has finished.
