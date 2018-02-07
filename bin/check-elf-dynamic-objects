@@ -73,6 +73,7 @@ gtk3whitelist="libgtk-3.so.0 libgdk-3.so.0 libcairo-gobject.so.2 libpangocairo-1
 kde4whitelist="libkio.so.5 libkfile.so.4 libkdeui.so.5 libkdecore.so.5 libQtNetwork.so.4 libQtGui.so.4 libQtCore.so.4 libglib-2.0.so.0"
 avahiwhitelist="libdbus-glib-1.so.2 libdbus-1.so.3 libgobject-2.0.so.0 libgmodule-2.0.so.0 libgthread-2.0.so.0 libglib-2.0.so.0 libavahi-common.so.3 libavahi-client.so.3"
 kerberoswhitelist="libgssapi_krb5.so.2 libcom_err.so.2 libkrb5.so.3"
+dconfwhitelist="libdconf.so.1 libgio-2.0.so.0 libglib-2.0.so.0 libgobject-2.0.so.0"
 
 check_one_file()
 {
@@ -126,6 +127,11 @@ local file="$1"
         ;;
         */libpostgresql-sdbc-impllo.so)
             whitelist="${whitelist} ${kerberoswhitelist}"
+        ;;
+        */libconfigmgrlo.so)
+            if [ "$ENABLE_DCONF" = TRUE ]; then
+                whitelist="${whitelist} ${dconfwhitelist}"
+            fi
         ;;
         */libmergedlo.so)
             whitelist="${whitelist} ${x11whitelist} ${openglwhitelist} ${giowhitelist} libcups.so.2 libcairo.so.2"
