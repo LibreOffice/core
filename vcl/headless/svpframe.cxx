@@ -388,6 +388,16 @@ void SvpSalFrame::SetInputContext( SalInputContext* )
 
 void SvpSalFrame::EndExtTextInput( EndExtTextInputFlags )
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SalExtTextInputEvent aEmptyEv;
+        aEmptyEv.mpTextAttr         = nullptr;
+        aEmptyEv.maText.clear();
+        aEmptyEv.mnCursorPos        = 0;
+        aEmptyEv.mnCursorFlags      = 0;
+        CallCallback( SalEvent::ExtTextInput, static_cast<void*>(&aEmptyEv) );
+        CallCallback( SalEvent::EndExtTextInput, nullptr );
+    }
 }
 
 OUString SvpSalFrame::GetKeyName( sal_uInt16 )

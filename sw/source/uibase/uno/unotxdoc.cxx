@@ -3429,6 +3429,26 @@ void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     }
 }
 
+void SwXTextDocument::postExtTextInputEvent(int nType, const OUString& rText)
+{
+    SolarMutexGuard aGuard;
+
+    vcl::Window* pWindow = &(pDocShell->GetView()->GetEditWin());
+
+    CommandExtTextInputData aTextInputData(rText, nullptr, 0, 0, false);
+    switch (nType)
+    {
+    case LOK_EXT_TEXTINPUT:
+        pWindow->PostExtTextInputEvent(VCLEVENT_WINDOW_EXTTEXTINPUT, rText);
+        break;
+    case LOK_EXT_TEXTINPUT_END:
+        pWindow->PostExtTextInputEvent(VCLEVENT_WINDOW_EXTTEXTINPUTEND, "");
+        break;
+    default:
+        assert(false && "Unhandled External Text input event!");
+    }
+}
+
 void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;

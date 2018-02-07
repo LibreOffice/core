@@ -2069,9 +2069,28 @@ void Window::SetInputContext( const InputContext& rInputContext )
         ImplNewInputContext();
 }
 
+void Window::PostExtTextInputEvent(int nType, const OUString& rText)
+{
+    switch (nType)
+    {
+    case VCLEVENT_WINDOW_EXTTEXTINPUT:
+    {
+        SalExtTextInputEvent aEvent;
+        aEvent.maText = rText;
+        aEvent.mnCursorPos = rText.getLength();
+        ImplWindowFrameProc(this, SalEvent::ExtTextInput, &aEvent);
+    }
+    break;
+    case VCLEVENT_WINDOW_EXTTEXTINPUTEND:
+        ImplWindowFrameProc(this, SalEvent::EndExtTextInput, nullptr);
+        break;
+    default:
+        assert(false);
+    }
+}
+
 void Window::EndExtTextInput()
 {
-
     if ( mpWindowImpl->mbExtTextInput )
         ImplGetFrame()->EndExtTextInput( EndExtTextInputFlags::Complete );
 }
