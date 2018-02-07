@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_606899f6",
+        "filename": "vcl/source/fontsubset/sft.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1237,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-07T15:04:37Z",
+      "side": 1,
+      "message": "cosmetic,  but i think there should be a space before \"cmap\"",
+      "revId": "60a0af5c21c4d842eae03d1c3dea8d9962b3e7d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
