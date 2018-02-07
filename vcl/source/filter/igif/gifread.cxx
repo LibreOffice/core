@@ -683,8 +683,6 @@ Graphic GIFReader::GetIntermediateGraphic()
     // but graphic still not completely read
     if ( bImGraphicReady && !aAnimation.Count() )
     {
-        Bitmap  aBmp;
-
         pAcc8.reset();
 
         if ( bGCTransparent )
