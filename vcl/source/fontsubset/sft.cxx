@@ -1539,7 +1539,6 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     int i;
     sal_uInt32 length, tag;
     sal_uInt32 tdoffset = 0;        /* offset to TableDirectory in a TTC file. For TTF files is 0 */
-    int indexfmt;
 
     sal_uInt32 TTCTag = GetInt32(t->ptr, 0);
 
@@ -1682,8 +1681,13 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     t->nglyphs = GetUInt16(table, 4);
 
     table = getTable(t, O_head);
+    table_size = getTableSize(t, O_head);
+    if (table_size < 52) {
+        CloseTTFont(t);
+        return SF_TTFORMAT;
+    }
     t->unitsPerEm = GetUInt16(table, 18);
-    indexfmt = GetInt16(table, 50);
+    int indexfmt = GetInt16(table, 50);
 
     if( ((indexfmt != 0) && (indexfmt != 1)) || (t->unitsPerEm <= 0) ) {
         CloseTTFont(t);
