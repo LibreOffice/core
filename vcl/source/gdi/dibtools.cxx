@@ -1128,14 +1128,15 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess const & rAcc, bool bRLE4 )
     {
         sal_uInt8* pTmp = pBuf.get();
         nX = nBufCount = 0;
+        Scanline pScanline = rAcc.GetScanline( nY );
 
         while( nX < nWidth )
         {
             nCount = 1;
-            cPix = rAcc.GetPixelIndex( nY, nX++ );
+            cPix = rAcc.GetIndexFromData( pScanline, nX++ );
 
             while( ( nX < nWidth ) && ( nCount < 255 )
-                && ( cPix == rAcc.GetPixelIndex( nY, nX ) ) )
+                && ( cPix == rAcc.GetIndexFromData( pScanline, nX ) ) )
             {
                 nX++;
                 nCount++;
@@ -1154,7 +1155,7 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess const & rAcc, bool bRLE4 )
                 bFound = false;
 
                 while( ( nX < nWidth ) && ( nCount < 256 )
-                    && ( cPix = rAcc.GetPixelIndex( nY, nX ) ) != cLast )
+                    && ( cPix = rAcc.GetIndexFromData( pScanline, nX ) ) != cLast )
                 {
                     nX++; nCount++;
                     cLast = cPix;
@@ -1173,10 +1174,10 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess const & rAcc, bool bRLE4 )
                     {
                         for ( sal_uLong i = 0; i < nCount; i++, pTmp++ )
                         {
-                            *pTmp = rAcc.GetPixelIndex( nY, nSaveIndex++ ) << 4;
+                            *pTmp = rAcc.GetIndexFromData( pScanline, nSaveIndex++ ) << 4;
 
                             if ( ++i < nCount )
-                                *pTmp |= rAcc.GetPixelIndex( nY, nSaveIndex++ );
+                                *pTmp |= rAcc.GetIndexFromData( pScanline, nSaveIndex++ );
                         }
 
                         nCount = ( nCount + 1 ) >> 1;
@@ -1184,7 +1185,7 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess const & rAcc, bool bRLE4 )
                     else
                     {
                         for( sal_uLong i = 0; i < nCount; i++ )
-                            *pTmp++ = rAcc.GetPixelIndex( nY, nSaveIndex++ );
+                            *pTmp++ = rAcc.GetIndexFromData( pScanline, nSaveIndex++ );
                     }
 
                     if ( nCount & 1 )
@@ -1198,12 +1199,12 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess const & rAcc, bool bRLE4 )
                 else
                 {
                     *pTmp++ = 1;
-                    *pTmp++ = rAcc.GetPixelIndex( nY, nSaveIndex ) << (bRLE4 ? 4 : 0);
+                    *pTmp++ = rAcc.GetIndexFromData( pScanline, nSaveIndex ) << (bRLE4 ? 4 : 0);
 
                     if ( nCount == 3 )
                     {
                         *pTmp++ = 1;
-                        *pTmp++ = rAcc.GetPixelIndex( nY, ++nSaveIndex ) << ( bRLE4 ? 4 : 0 );
+                        *pTmp++ = rAcc.GetIndexFromData( pScanline, ++nSaveIndex ) << ( bRLE4 ? 4 : 0 );
                         nBufCount += 4;
                     }
                     else
@@ -1313,6 +1314,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
                     {
                         sal_uInt8* pTmp = pBuf.get();
                         sal_uInt8 cTmp = 0;
+                        Scanline pScanline = rAcc.GetScanline( nY );
 
                         for( long nX = 0, nShift = 8; nX < nWidth; nX++ )
                         {
@@ -1323,7 +1325,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
                                 cTmp = 0;
                             }
 
-                            cTmp |= rAcc.GetPixelIndex( nY, nX ) << --nShift;
+                            cTmp |= rAcc.GetIndexFromData( pScanline, nX ) << --nShift;
                         }
 
                         *pTmp = cTmp;
@@ -1342,6 +1344,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
                     {
                         sal_uInt8* pTmp = pBuf.get();
                         sal_uInt8 cTmp = 0;
+                        Scanline pScanline = rAcc.GetScanline( nY );
 
                         for( long nX = 0, nShift = 2; nX < nWidth; nX++ )
                         {
@@ -1352,7 +1355,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
                                 cTmp = 0;
                             }
 
-                            cTmp |= rAcc.GetPixelIndex( nY, nX ) << ( --nShift << 2 );
+                            cTmp |= rAcc.GetIndexFromData( pScanline, nX ) << ( --nShift << 2 );
                         }
                         *pTmp = cTmp;
                         rOStm.WriteBytes( pBuf.get(), nAlignedWidth );
@@ -1365,9 +1368,10 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
                     for( long nY = nHeight - 1; nY >= 0; nY-- )
                     {
                         sal_uInt8* pTmp = pBuf.get();
+                        Scanline pScanline = rAcc.GetScanline( nY );
 
                         for( long nX = 0; nX < nWidth; nX++ )
-                            *pTmp++ = rAcc.GetPixelIndex( nY, nX );
+                            *pTmp++ = rAcc.GetIndexFromData( pScanline, nX );
 
                         rOStm.WriteBytes( pBuf.get(), nAlignedWidth );
                     }
@@ -1390,6 +1394,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
                     for( long nY = nHeight - 1; nY >= 0; nY-- )
                     {
                         sal_uInt8* pTmp = pBuf.get();
+                        Scanline pScanlineAlpha = bWriteAlpha ? pAccAlpha->GetScanline( nY ) : nullptr;
 
                         for( long nX = 0; nX < nWidth; nX++ )
                         {
@@ -1403,7 +1408,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
 
                             if(bWriteAlpha)
                             {
-                                *pTmp++ = sal_uInt8(0xff) - pAccAlpha->GetPixelIndex( nY, nX );
+                                *pTmp++ = sal_uInt8(0xff) - pAccAlpha->GetIndexFromData( pScanlineAlpha, nX );
                             }
                         }
 

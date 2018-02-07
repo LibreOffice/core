@@ -377,8 +377,9 @@ void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc 
     {
         // TODO: use fastbmp infrastructure
         Scanline pScanline = GetScanline( nY );
+        Scanline pScanlineRead = rReadAcc.GetScanline(nY);
         for( long nX = 0, nWidth = std::min( mpBuffer->mnWidth, rReadAcc.Width() ); nX < nWidth; nX++ )
-            SetPixelOnData( pScanline, nX, rReadAcc.GetPixel( nY, nX ) );
+            SetPixelOnData( pScanline, nX, rReadAcc.GetPixelFromData( pScanlineRead, nX ) );
     }
 }
 

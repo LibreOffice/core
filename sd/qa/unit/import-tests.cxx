@@ -1856,9 +1856,10 @@ bool checkPatternValues(std::vector<sal_uInt8>& rExpected, Bitmap& rBitmap)
     Bitmap::ScopedReadAccess pAccess(rBitmap);
     for (long y = 0; y < pAccess->Height(); ++y)
     {
+        Scanline pScanline = pAccess->GetScanline( y );
         for (long x = 0; x < pAccess->Width(); ++x)
         {
-            Color aColor = pAccess->GetPixel(y, x).GetColor();
+            Color aColor = pAccess->GetPixelFromData(pScanline, x).GetColor();
             sal_uInt8 aValue = rExpected[y*8+x];
 
             if (aValue == 1 && aColor != aFGColor)

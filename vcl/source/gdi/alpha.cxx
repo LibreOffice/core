@@ -100,8 +100,9 @@ bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
         for( long nY = 0; nY < nHeight; nY++ )
         {
             Scanline pScanline = pAcc->GetScanline(nY);
+            Scanline pScanlineMask = pMaskAcc->GetScanline(nY);
             for( long nX = 0; nX < nWidth; nX++ )
-                if( pMaskAcc->GetPixel( nY, nX ) == aMaskWhite )
+                if( pMaskAcc->GetPixelFromData( pScanlineMask, nX ) == aMaskWhite )
                     pAcc->SetPixelOnData( pScanline, nX, aReplace );
         }
     }
@@ -138,7 +139,7 @@ void AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransp
                 Scanline pScanline = pAcc->GetScanline(nY);
                 for( long nX = 0; nX < nWidth; nX++ )
                 {
-                    if( pAcc->GetPixel( nY, nX ).GetIndex() == cSearchTransparency )
+                    if( pAcc->GetIndexFromData( pScanline, nX ) == cSearchTransparency )
                         pAcc->SetPixelOnData( pScanline, nX, aReplace );
                 }
             }

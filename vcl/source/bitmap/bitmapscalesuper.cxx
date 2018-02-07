@@ -465,9 +465,10 @@ void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
                 long nSumRowB = 0;
                 long nTotalWeightX = 0;
 
+                Scanline pScanlineSrc = rCtx.mpSrc->GetScanline( nLineStart + i );
                 for(long j = 0; j <= nRowRange; j++)
                 {
-                    BitmapColor aCol0 = rCtx.mpSrc->GetPaletteColor ( rCtx.mpSrc->GetPixelIndex( nLineStart + i, nRowStart + j ) );
+                    BitmapColor aCol0 = rCtx.mpSrc->GetPaletteColor ( rCtx.mpSrc->GetIndexFromData( pScanlineSrc, nRowStart + j ) );
 
                     if(nX == nEndX )
                     {
@@ -839,9 +840,10 @@ void scaleNonPalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
                 long nSumRowB = 0;
                 long nTotalWeightX = 0;
 
+                Scanline pScanlineSrc = rCtx.mpSrc->GetScanline( nLineStart + i );
                 for(long j = 0; j <= nRowRange; j++)
                 {
-                    BitmapColor aCol0 = rCtx.mpSrc->GetPixel( nLineStart + i, nRowStart + j );
+                    BitmapColor aCol0 = rCtx.mpSrc->GetPixelFromData( pScanlineSrc, nRowStart + j );
 
                     if(nX == nEndX )
                     {

@@ -1311,10 +1311,12 @@ public:
                 {
                     Scanline pScanlineMask = pMaskAcc->GetScanline( y );
                     Scanline pScanlineRec = pRecAcc->GetScanline( y );
+                    Scanline pScanlineW = pAccW->GetScanline( y );
+                    Scanline pScanlineB = pAccB->GetScanline( y );
                     for (int x = 0; x < nSizeX; x++)
                     {
-                        BitmapColor aColW = pAccW->GetPixel(y,x);
-                        BitmapColor aColB = pAccB->GetPixel(y,x);
+                        BitmapColor aColW = pAccW->GetPixelFromData(pScanlineW,x);
+                        BitmapColor aColB = pAccB->GetPixelFromData(pScanlineB,x);
                         long nAR = static_cast<long>(aColW.GetRed() - aColB.GetRed()); // (1-a)
                         long nAG = static_cast<long>(aColW.GetGreen() - aColB.GetGreen()); // (1-a)
                         long nAB = static_cast<long>(aColW.GetBlue() - aColB.GetBlue()); // (1-a)

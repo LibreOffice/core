@@ -497,6 +497,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
             {
                 nCount2 = 0;
                 char nVal = 0;
+                Scanline pScanline = pAcc->GetScanline( nY );
                 for ( long nX = 0; nX < aSizeBitmap.Width(); nX++ )
                 {
                     if ( !nCount2 )
@@ -506,7 +507,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
                         nCount2 = 312;
                     }
                     nVal <<= 1;
-                    if ( pAcc->GetPixel( nY, nX ) == aBlack )
+                    if ( pAcc->GetPixelFromData( pScanline, nX ) == aBlack )
                         nVal |= 1;
                     if ( ! ( --nCount ) )
                     {
@@ -1756,9 +1757,10 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
             ImplWriteLine( "image" );
             for ( long y = 0; y < nHeight; y++ )
             {
+                Scanline pScanlineRead = pAcc->GetScanline( y );
                 for ( long x = 0; x < nWidth; x++ )
                 {
-                    ImplWriteHexByte( pAcc->GetPixelIndex( y, x ) );
+                    ImplWriteHexByte( pAcc->GetIndexFromData( pScanlineRead, x ) );
                 }
             }
             mpPS->WriteUChar( 10 );
@@ -1794,9 +1796,10 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
                     StartCompression();
                     for ( long y = 0; y < nHeight; y++ )
                     {
+                        Scanline pScanlineRead = pAcc->GetScanline( y );
                         for ( long x = 0; x < nWidth; x++ )
                         {
-                            Compress( pAcc->GetPixelIndex( y, x ) );
+                            Compress( pAcc->GetIndexFromData( pScanlineRead, x ) );
                         }
                     }
                     EndCompression();
@@ -1805,9 +1808,10 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
                 {
                     for ( long y = 0; y < nHeight; y++ )
                     {
+                        Scanline pScanlineRead = pAcc->GetScanline( y );
                         for ( long x = 0; x < nWidth; x++ )
                         {
-                            ImplWriteHexByte( pAcc->GetPixelIndex( y, x ) );
+                            ImplWriteHexByte( pAcc->GetIndexFromData( pScanlineRead, x ) );
                         }
                     }
                 }
@@ -1857,9 +1861,10 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
                         StartCompression();
                         for ( long y = 0; y < nHeight; y++ )
                         {
+                            Scanline pScanlineRead = pAcc->GetScanline( y );
                             for ( long x = 0; x < nWidth; x++ )
                             {
-                                Compress( pAcc->GetPixelIndex( y, x ) );
+                                Compress( pAcc->GetIndexFromData( pScanlineRead, x ) );
                             }
                         }
                         EndCompression();
@@ -1868,9 +1873,10 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
                     {
                         for ( long y = 0; y < nHeight; y++ )
                         {
+                            Scanline pScanlineRead = pAcc->GetScanline( y );
                             for ( long x = 0; x < nWidth; x++ )
                             {
-                                ImplWriteHexByte( pAcc->GetPixelIndex( y, x ) );
+                                ImplWriteHexByte( pAcc->GetIndexFromData( pScanlineRead, x ) );
                             }
                         }
                     }
@@ -1904,9 +1910,10 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
                         StartCompression();
                         for ( long y = 0; y < nHeight; y++ )
                         {
+                            Scanline pScanlineRead = pAcc->GetScanline( y );
                             for ( long x = 0; x < nWidth; x++ )
                             {
-                                const BitmapColor aBitmapColor( pAcc->GetPixel( y, x ) );
+                                const BitmapColor aBitmapColor( pAcc->GetPixelFromData( pScanlineRead, x ) );
                                 Compress( aBitmapColor.GetRed() );
                                 Compress( aBitmapColor.GetGreen() );
                                 Compress( aBitmapColor.GetBlue() );
@@ -1918,9 +1925,10 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
                     {
                         for ( long y = 0; y < nHeight; y++ )
                         {
+                            Scanline pScanline = pAcc->GetScanline( y );
                             for ( long x = 0; x < nWidth; x++ )
                             {
-                                const BitmapColor aBitmapColor( pAcc->GetPixel( y, x ) );
+                                const BitmapColor aBitmapColor( pAcc->GetPixelFromData( pScanline, x ) );
                                 ImplWriteHexByte( aBitmapColor.GetRed() );
                                 ImplWriteHexByte( aBitmapColor.GetGreen() );
                                 ImplWriteHexByte( aBitmapColor.GetBlue() );

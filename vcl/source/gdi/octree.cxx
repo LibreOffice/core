@@ -73,9 +73,10 @@ Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
         {
             for( long nY = 0; nY < nHeight; nY++ )
             {
+                Scanline pScanline = pAcc->GetScanline( nY );
                 for( long nX = 0; nX < nWidth; nX++ )
                 {
-                    pColor = &pAcc->GetPaletteColor( pAcc->GetPixelIndex( nY, nX ) );
+                    pColor = &pAcc->GetPaletteColor( pAcc->GetIndexFromData( pScanline, nX ) );
                     nLevel = 0;
                     ImplAdd( &pTree );
 
@@ -92,9 +93,10 @@ Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
 
             for( long nY = 0; nY < nHeight; nY++ )
             {
+                Scanline pScanline = pAcc->GetScanline( nY );
                 for( long nX = 0; nX < nWidth; nX++ )
                 {
-                    aColor = pAcc->GetPixel( nY, nX );
+                    aColor = pAcc->GetPixelFromData( pScanline, nX );
                     nLevel = 0;
                     ImplAdd( &pTree );
 

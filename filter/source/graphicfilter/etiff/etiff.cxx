@@ -356,9 +356,10 @@ void TIFFWriter::ImplWriteBody()
             for ( y = 0; y < mnHeight; y++, mnCurAllPictHeight++ )
             {
                 ImplCallback( 100 * mnCurAllPictHeight / mnSumOfAllPictHeight );
+                Scanline pScanline = mpAcc->GetScanline( y );
                 for ( x = 0; x < mnWidth; x++ )
                 {
-                    const BitmapColor& rColor = mpAcc->GetPixel( y, x );
+                    const BitmapColor& rColor = mpAcc->GetPixelFromData( pScanline, x );
                     Compress( rColor.GetRed() );
                     Compress( rColor.GetGreen() );
                     Compress( rColor.GetBlue() );
@@ -372,9 +373,10 @@ void TIFFWriter::ImplWriteBody()
             for ( y = 0; y < mnHeight; y++, mnCurAllPictHeight++ )
             {
                 ImplCallback( 100 * mnCurAllPictHeight / mnSumOfAllPictHeight );
+                Scanline pScanline = mpAcc->GetScanline( y );
                 for ( x = 0; x < mnWidth; x++ )
                 {
-                    Compress( mpAcc->GetPixelIndex( y, x ) );
+                    Compress( mpAcc->GetIndexFromData( pScanline, x ) );
                 }
             }
         }
@@ -385,12 +387,13 @@ void TIFFWriter::ImplWriteBody()
             for ( nShift = 0, y = 0; y < mnHeight; y++, mnCurAllPictHeight++ )
             {
                 ImplCallback( 100 * mnCurAllPictHeight / mnSumOfAllPictHeight );
+                Scanline pScanline = mpAcc->GetScanline( y );
                 for ( x = 0; x < mnWidth; x++, nShift++ )
                 {
                     if (!( nShift & 1 ))
-                        nTemp = ( mpAcc->GetPixelIndex( y, x ) << 4 );
+                        nTemp = ( mpAcc->GetIndexFromData( pScanline, x ) << 4 );
                     else
-                        Compress( static_cast<sal_uInt8>( nTemp | ( mpAcc->GetPixelIndex( y, x ) & 0xf ) ) );
+                        Compress( static_cast<sal_uInt8>( nTemp | ( mpAcc->GetIndexFromData( pScanline, x ) & 0xf ) ) );
                 }
                 if ( nShift & 1 )
                     Compress( nTemp );
@@ -404,10 +407,11 @@ void TIFFWriter::ImplWriteBody()
             for ( y = 0; y < mnHeight; y++, mnCurAllPictHeight++ )
             {
                 ImplCallback( 100 * mnCurAllPictHeight / mnSumOfAllPictHeight );
+                Scanline pScanline = mpAcc->GetScanline( y );
                 for ( x = 0; x < mnWidth; x++)
                 {
                     j <<= 1;
-                    j |= ( ( ~mpAcc->GetPixelIndex( y, x ) ) & 1 );
+                    j |= ( ( ~mpAcc->GetIndexFromData( pScanline, x ) ) & 1 );
                     if ( j & 0x100 )
                     {
                         Compress( static_cast<sal_uInt8>(j) );

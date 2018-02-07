@@ -731,7 +731,7 @@ bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam )
                 Scanline pScanline = pWriteAcc->GetScanline(nY);
                 for( long nX = 0; nX < nWidth; nX++ )
                 {
-                    aCol = pWriteAcc->GetPixel( nY, nX );
+                    aCol = pWriteAcc->GetPixelFromData( pScanline, nX );
 
                     if( aCol.GetLuminance() >= cThreshold )
                         pWriteAcc->SetPixelOnData( pScanline, nX, aCol.Invert() );
@@ -787,9 +787,10 @@ bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam )
                 for( long nY = 0; nY < nHeight ; nY++ )
                 {
                     Scanline pScanline = pWriteAcc->GetScanline(nY);
+                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
                     for( long nX = 0; nX < nWidth; nX++ )
                     {
-                        aCol.SetIndex( pIndexMap[ pReadAcc->GetPixel( nY, nX ).GetIndex() ] );
+                        aCol.SetIndex( pIndexMap[ pReadAcc->GetIndexFromData( pScanlineRead, nX ) ] );
                         pWriteAcc->SetPixelOnData( pScanline, nX, aCol );
                     }
                 }
@@ -799,9 +800,10 @@ bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam )
                 for( long nY = 0; nY < nHeight ; nY++ )
                 {
                     Scanline pScanline = pWriteAcc->GetScanline(nY);
+                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
                     for( long nX = 0; nX < nWidth; nX++ )
                     {
-                        aCol.SetIndex( pReadAcc->GetPixel( nY, nX ).GetLuminance() );
+                        aCol.SetIndex( pReadAcc->GetPixelFromData( pScanlineRead, nX ).GetLuminance() );
                         pWriteAcc->SetPixelOnData( pScanline, nX, aCol );
                     }
                 }
@@ -896,9 +898,10 @@ bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam )
                     {
                         for( nY = nY1, nSumR = nSumG = nSumB = 0; nY <= nY2; nY++ )
                         {
+                            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
                             for( nX = nX1; nX <= nX2; nX++ )
                             {
-                                aCol = pReadAcc->GetPixel( nY, nX );
+                                aCol = pReadAcc->GetPixelFromData( pScanlineRead, nX );
                                 nSumR += aCol.GetRed();
                                 nSumG += aCol.GetGreen();
                                 nSumB += aCol.GetBlue();
@@ -932,9 +935,10 @@ bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam )
                     {
                         for( nY = nY1, nSumR = nSumG = nSumB = 0; nY <= nY2; nY++ )
                         {
+                            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
                             for( nX = nX1; nX <= nX2; nX++ )
                             {
-                                const BitmapColor& rCol = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nX ) );
+                                const BitmapColor& rCol = pReadAcc->GetPaletteColor( pReadAcc->GetIndexFromData( pScanlineRead, nX ) );
                                 nSumR += rCol.GetRed();
                                 nSumG += rCol.GetGreen();
                                 nSumB += rCol.GetBlue();
@@ -1048,8 +1052,11 @@ bool Bitmap::ImplPopArt()
 
             // get pixel count for each palette entry
             for( long nY = 0; nY < nHeight ; nY++ )
+            {
+                Scanline pScanline = pWriteAcc->GetScanline(nY);
                 for( long nX = 0; nX < nWidth; nX++ )
-                    pPopArtTable[ pWriteAcc->GetPixel( nY, nX ).GetIndex() ].mnCount++;
+                    pPopArtTable[ pWriteAcc->GetIndexFromData( pScanline, nX ) ].mnCount++;
+            }
 
             // sort table
             qsort( pPopArtTable, nEntryCount, sizeof( PopArtEntry ), ImplPopArtCmpFnc );
@@ -1240,9 +1247,10 @@ bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
     BitmapColor aColor, aColorBlur;
 
     // For all pixels in original image subtract pixels values from blurred image
-    for( long x = 0; x < nWidth; x++ )
+    for( long y = 0; y < nHeight; y++ )
     {
-        for( long y = 0; y < nHeight; y++ )
+        Scanline pScanline = pWriteAcc->GetScanline(y);
+        for( long x = 0; x < nWidth; x++ )
         {
             aColorBlur = pReadAccBlur->GetColor( y , x );
             aColor = pReadAcc->GetColor( y , x );
@@ -1252,7 +1260,7 @@ bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
                 static_cast<sal_uInt8>(MinMax( aColor.GetGreen() + (aColor.GetGreen() - aColorBlur.GetGreen()) * aAmount, 0, 255 )),
                 static_cast<sal_uInt8>(MinMax( aColor.GetBlue()  + (aColor.GetBlue()  - aColorBlur.GetBlue())  * aAmount, 0, 255 )) );
 
-            pWriteAcc->SetPixel( y, x, aResultColor );
+            pWriteAcc->SetPixelOnData( pScanline, x, aResultColor );
         }
     }
 

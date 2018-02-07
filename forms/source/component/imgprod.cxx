@@ -437,13 +437,15 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 
                 for( long nY = nStartY; nY <= nEndY; nY++ )
                 {
+                    Scanline pScanlineMask = pMskAcc->GetScanline( nY );
+                    Scanline pScanline = pBmpAcc->GetScanline( nY );
                     for( long nX = nStartX; nX <= nEndX; nX++ )
                     {
-                        if( pMskAcc->GetPixel( nY, nX ) == aWhite )
+                        if( pMskAcc->GetPixelFromData( pScanlineMask, nX ) == aWhite )
                             *pTmp++ = sal::static_int_cast< sal_Int8 >(
                                 mnTransIndex );
                         else
-                            *pTmp++ = pBmpAcc->GetPixel( nY, nX ).GetIndex();
+                            *pTmp++ = pBmpAcc->GetPixelFromData( pScanline, nX ).GetIndex();
                     }
                 }
 
@@ -458,12 +460,14 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 
                 for( long nY = nStartY; nY <= nEndY; nY++ )
                 {
+                    Scanline pScanlineMask = pMskAcc->GetScanline( nY );
+                    Scanline pScanline = pBmpAcc->GetScanline( nY );
                     for( long nX = nStartX; nX <= nEndX; nX++ )
                     {
-                        if( pMskAcc->GetPixel( nY, nX ) == aWhite )
+                        if( pMskAcc->GetPixelFromData( pScanlineMask, nX ) == aWhite )
                             *pTmp++ = mnTransIndex;
                         else
-                            *pTmp++ = pBmpAcc->GetPixel( nY, nX ).GetIndex();
+                            *pTmp++ = pBmpAcc->GetPixelFromData( pScanline, nX ).GetIndex();
                     }
                 }
 
@@ -480,15 +484,17 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 
             for( long nY = nStartY; nY <= nEndY; nY++ )
             {
+                Scanline pScanlineMask = pMskAcc->GetScanline( nY );
+                Scanline pScanline = pBmpAcc->GetScanline( nY );
                 for( long nX = nStartX; nX <= nEndX; nX++, pTmp++ )
                 {
-                    const BitmapColor aCol( pBmpAcc->GetPixel( nY, nX ) );
+                    const BitmapColor aCol( pBmpAcc->GetPixelFromData( pScanline, nX ) );
 
                     *pTmp = static_cast<sal_Int32>(aCol.GetRed()) << 24;
                     *pTmp |= static_cast<sal_Int32>(aCol.GetGreen()) << 16;
                     *pTmp |= static_cast<sal_Int32>(aCol.GetBlue()) << 8;
 
-                    if( pMskAcc->GetPixel( nY, nX ) != aWhite )
+                    if( pMskAcc->GetPixelFromData( pScanlineMask, nX ) != aWhite )
                         *pTmp |= 0x000000ffUL;
                 }
             }

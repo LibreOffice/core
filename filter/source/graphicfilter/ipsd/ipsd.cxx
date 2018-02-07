@@ -673,11 +673,12 @@ bool PSDReader::ImplReadBody()
                 for ( nY = 0; nY < mpFileHeader->nRows; nY++ )
                 {
                     Scanline pScanline = mpWriteAcc->GetScanline( nY );
+                    Scanline pScanlineRead = mpReadAcc->GetScanline( nY );
                     for ( nX = 0; nX < mpFileHeader->nColumns; nX++ )
                     {
                         sal_Int32 nDAT = pBlack[ nX + nY * mpFileHeader->nColumns ] * ( nBlackMax - 256 ) / 0x1ff;
 
-                        aBitmapColor = mpReadAcc->GetPixel( nY, nX );
+                        aBitmapColor = mpReadAcc->GetPixelFromData( pScanlineRead, nX );
                         sal_uInt8 cR = static_cast<sal_uInt8>(MinMax( aBitmapColor.GetRed() - nDAT, 0L, 255L ));
                         sal_uInt8 cG = static_cast<sal_uInt8>(MinMax( aBitmapColor.GetGreen() - nDAT, 0L, 255L ));
                         sal_uInt8 cB = static_cast<sal_uInt8>(MinMax( aBitmapColor.GetBlue() - nDAT, 0L, 255L ));

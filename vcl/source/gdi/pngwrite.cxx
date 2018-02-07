@@ -495,16 +495,17 @@ sal_uLong PNGWriterImpl::ImplGetFilter (sal_uLong nY, sal_uLong nXStart, sal_uLo
             {
                 case 1:
                 {
+                    Scanline pScanline = mpAccess->GetScanline( nY );
                     sal_uLong nX, nXIndex;
                     for (nX = nXStart, nXIndex = 0; nX < mnWidth; nX += nXAdd, nXIndex++)
                     {
                         sal_uLong nShift = (nXIndex & 7) ^ 7;
                         if (nShift == 7)
-                            *pDest = mpAccess->GetPixelIndex(nY, nX) << nShift;
+                            *pDest = mpAccess->GetIndexFromData(pScanline, nX) << nShift;
                         else if  (nShift == 0)
-                            *pDest++ |= mpAccess->GetPixelIndex(nY, nX) << nShift;
+                            *pDest++ |= mpAccess->GetIndexFromData(pScanline, nX) << nShift;
                         else
-                            *pDest |= mpAccess->GetPixelIndex(nY, nX) << nShift;
+                            *pDest |= mpAccess->GetIndexFromData(pScanline, nX) << nShift;
                     }
                     if ( (nXIndex & 7) != 0 )
                         pDest++;    // byte is not completely used, so the bufferpointer is to correct
@@ -513,13 +514,14 @@ sal_uLong PNGWriterImpl::ImplGetFilter (sal_uLong nY, sal_uLong nXStart, sal_uLo
 
                 case 4:
                 {
+                    Scanline pScanline = mpAccess->GetScanline( nY );
                     sal_uLong nX, nXIndex;
                     for (nX = nXStart, nXIndex = 0; nX < mnWidth; nX += nXAdd, nXIndex++)
                     {
                         if(nXIndex & 1)
-                            *pDest++ |= mpAccess->GetPixelIndex(nY, nX);
+                            *pDest++ |= mpAccess->GetIndexFromData(pScanline, nX);
                         else
-                            *pDest = mpAccess->GetPixelIndex(nY, nX) << 4;
+                            *pDest = mpAccess->GetIndexFromData(pScanline, nX) << 4;
                     }
                     if (nXIndex & 1)
                         pDest++;
@@ -528,9 +530,10 @@ sal_uLong PNGWriterImpl::ImplGetFilter (sal_uLong nY, sal_uLong nXStart, sal_uLo
 
                 case 8:
                 {
+                    Scanline pScanline = mpAccess->GetScanline( nY );
                     for (sal_uLong nX = nXStart; nX < mnWidth; nX += nXAdd)
                     {
-                        *pDest++ = mpAccess->GetPixelIndex( nY, nX );
+                        *pDest++ = mpAccess->GetIndexFromData( pScanline, nX );
                     }
                 }
                 break;
@@ -546,27 +549,31 @@ sal_uLong PNGWriterImpl::ImplGetFilter (sal_uLong nY, sal_uLong nXStart, sal_uLo
             {
                 if (mbTrueAlpha)
                 {
+                    Scanline pScanline = mpAccess->GetScanline( nY );
+                    Scanline pScanlineMask = mpMaskAccess->GetScanline( nY );
                     for (sal_uLong nX = nXStart; nX < mnWidth; nX += nXAdd)
                     {
-                        const BitmapColor& rColor = mpAccess->GetPixel(nY, nX);
+                        const BitmapColor& rColor = mpAccess->GetPixelFromData(pScanline, nX);
                         *pDest++ = rColor.GetRed();
                         *pDest++ = rColor.GetGreen();
                         *pDest++ = rColor.GetBlue();
-                        *pDest++ = 255 - mpMaskAccess->GetPixelIndex(nY, nX);
+                        *pDest++ = 255 - mpMaskAccess->GetIndexFromData(pScanlineMask, nX);
                     }
                 }
                 else
                 {
                     const BitmapColor aTrans(mpMaskAccess->GetBestMatchingColor(Color(COL_WHITE)));
+                    Scanline pScanline = mpAccess->GetScanline( nY );
+                    Scanline pScanlineMask = mpMaskAccess->GetScanline( nY );
 
                     for (sal_uLong nX = nXStart; nX < mnWidth; nX += nXAdd)
                     {
-                        const BitmapColor& rColor = mpAccess->GetPixel(nY, nX);
+                        const BitmapColor& rColor = mpAccess->GetPixelFromData(pScanline, nX);
                         *pDest++ = rColor.GetRed();
                         *pDest++ = rColor.GetGreen();
                         *pDest++ = rColor.GetBlue();
 
-                        if(mpMaskAccess->GetPixel(nY, nX) == aTrans)
+                        if(mpMaskAccess->GetPixelFromData(pScanlineMask, nX) == aTrans)
                             *pDest++ = 0;
                         else
                             *pDest++ = 0xff;
@@ -575,9 +582,10 @@ sal_uLong PNGWriterImpl::ImplGetFilter (sal_uLong nY, sal_uLong nXStart, sal_uLo
             }
             else
             {
+                Scanline pScanline = mpAccess->GetScanline( nY );
                 for (sal_uLong nX = nXStart; nX < mnWidth; nX += nXAdd)
                 {
-                    const BitmapColor& rColor = mpAccess->GetPixel(nY, nX);
+                    const BitmapColor& rColor = mpAccess->GetPixelFromData(pScanline, nX);
                     *pDest++ = rColor.GetRed();
                     *pDest++ = rColor.GetGreen();
                     *pDest++ = rColor.GetBlue();

@@ -1666,17 +1666,22 @@ namespace emfio
                         const long nWidth(std::min(pR->Width(), pW->Width()));
                         const long nHeight(std::min(pR->Height(), pW->Height()));
 
-                        for(long nY(0); nY < nHeight; nY++) for(long nX(0); nX < nWidth; nX++)
+                        for(long nY(0); nY < nHeight; nY++)
                         {
-                            const sal_uInt8 nIndR(pR->GetPixelIndex(nY, nX));
-                            const sal_uInt8 nIndW(pW->GetPixelIndex(nY, nX));
+                            Scanline pScanlineR = pR->GetScanline( nY );
+                            Scanline pScanlineW = pW->GetScanline( nY );
+                            for(long nX(0); nX < nWidth; nX++)
+                            {
+                                const sal_uInt8 nIndR(pR->GetIndexFromData(pScanlineR, nX));
+                                const sal_uInt8 nIndW(pW->GetIndexFromData(pScanlineW, nX));
 
-                            // these values represent transparency (0 == no, 255 == fully transparent),
-                            // so to blend these we have to multiply the inverse (opacity)
-                            // and re-invert the result to transparence
-                            const sal_uInt8 nCombined(0x00ff - (((0x00ff - nIndR) * (0x00ff - nIndW)) >> 8));
+                                // these values represent transparency (0 == no, 255 == fully transparent),
+                                // so to blend these we have to multiply the inverse (opacity)
+                                // and re-invert the result to transparence
+                                const sal_uInt8 nCombined(0x00ff - (((0x00ff - nIndR) * (0x00ff - nIndW)) >> 8));
 
-                            pW->SetPixelIndex(nY, nX, nCombined);
+                                pW->SetPixelOnData(pScanlineW, nX, BitmapColor(nCombined));
+                            }
                         }
                     }
 
