@@ -547,6 +547,9 @@ void LwpTableLayout::RegisterColumns()
         m_aColumns[i] = nullptr;
     }
 
+    if (!pTable)
+        throw std::range_error("corrupt LwpTableLayout");
+
     double dDefaultColumn = pTable->GetWidth();
     sal_uInt16 nJustifiableColumn = nCols;
 
