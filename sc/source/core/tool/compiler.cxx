@@ -5780,4 +5780,82 @@ formula::ParamClass ScCompiler::GetForceArrayParameter( const formula::FormulaTo
     return ScParameterClassification::GetParameterType( pToken, nParam);
 }
 
+bool ScCompiler::IsIIOpCode(OpCode nOpCode) const
+{
+    if (nOpCode == ocSumIf || nOpCode == ocAverageIf)
+        return true;
+
+    return false;
+}
+
+void ScCompiler::HandleIIOpCode(OpCode nOpCode, FormulaToken*** pppToken, sal_uInt8 nNumParams)
+{
+    switch (nOpCode)
+    {
+        case ocSumIf:
+        case ocAverageIf:
+        {
+
+            if (nNumParams != 3)
+                return;
+            if (!(pppToken[0] && pppToken[2] && *pppToken[0] && *pppToken[2]))
+                return;
+
+            ScComplexRefData aSumRange, aBaseRange;
+            if ((*pppToken[2])->GetType() == svSingleRef)
+            {
+                aSumRange.Ref1 = *(*pppToken[2])->GetSingleRef();
+                aSumRange.Ref2 = aSumRange.Ref1;
+            }
+            else if ((*pppToken[2])->GetType() == svDoubleRef)
+                aSumRange = *(*pppToken[2])->GetDoubleRef();
+            else
+                return;
+
+            if ((*pppToken[0])->GetType() == svDoubleRef)
+                aBaseRange = *(*pppToken[0])->GetDoubleRef();
+            else
+                return;
+
+            ComputeImplictIntersection(aBaseRange, aSumRange, pppToken[2]);
+        }
+        break;
+        default:
+            ;
+    }
+}
+
+void ScCompiler::ComputeImplictIntersection(ScComplexRefData& rBaseRange,
+                                            ScComplexRefData& rSumRange,
+                                            FormulaToken** ppSumRangeToken)
+{
+    ScRange aAbs = rBaseRange.toAbs(aPos);
+
+    SCCOL nXDelta = aAbs.aEnd.Col() - aAbs.aStart.Col();
+    SCROW nYDelta = aAbs.aEnd.Row() - aAbs.aStart.Row();
+    SCTAB nZDelta = aAbs.aEnd.Tab() - aAbs.aStart.Tab();
+
+    aAbs = rSumRange.toAbs(aPos);
+
+    SCCOL nXDeltaSum = aAbs.aEnd.Col() - aAbs.aStart.Col();
+    SCROW nYDeltaSum = aAbs.aEnd.Row() - aAbs.aStart.Row();
+    SCTAB nZDeltaSum = aAbs.aEnd.Tab() - aAbs.aStart.Tab();
+
+    if (nXDelta == nXDeltaSum &&
+        nYDelta == nYDeltaSum &&
+        nZDelta == nZDeltaSum)
+        return;  // shapes of base-range match current sum-range
+
+    // Make the sum-range to take the same shape as base-range,
+    // by adjusting Ref2 member of aSumRange.
+    rSumRange.Ref2.IncCol(nXDelta - nXDeltaSum);
+    rSumRange.Ref2.IncRow(nYDelta - nYDeltaSum);
+    rSumRange.Ref2.IncTab(nZDelta - nZDeltaSum);
+
+    FormulaToken* pNewSumRangeTok = new ScDoubleRefToken(rSumRange);
+    (*ppSumRangeToken)->DecRef();
+    *ppSumRangeToken = pNewSumRangeTok;
+    pNewSumRangeTok->IncRef();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
