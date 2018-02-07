@@ -38,7 +38,7 @@
 #include "xlat.hxx"
 #include <rtl/crc.h>
 #include <rtl/ustring.hxx>
-
+#include <o3tl/safeint.hxx>
 #include <osl/endian.h>
 #include <algorithm>
 
@@ -1450,6 +1450,20 @@ int OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, T
     return doOpenTTFont( facenum, *ttf );
 }
 
+namespace {
+
+bool withinBounds(sal_uInt32 tdoffset, sal_uInt32 moreoffset, sal_uInt32 len, sal_uInt32 available)
+{
+    sal_uInt32 result;
+    if (o3tl::checked_add(tdoffset, moreoffset, result))
+        return false;
+    if (o3tl::checked_add(result, len, result))
+        return false;
+    return result <= available;
+}
+
+}
+
 static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
 {
     if (t->fsize < 4) {
@@ -1482,7 +1496,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         return SF_TTFORMAT;
     }
 
-    if (tdoffset + 4 + sizeof(sal_uInt16) <=  static_cast<sal_uInt32>(t->fsize)) {
+    if (withinBounds(tdoffset, 0, 4 + sizeof(sal_uInt16), t->fsize)) {
         t->ntables = GetUInt16(t->ptr + tdoffset, 4);
     }
 
@@ -1501,7 +1515,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         int nIndex;
         const sal_uInt32 nStart = tdoffset + 12;
         const sal_uInt32 nOffset = 16 * i;
-        if (nStart + nOffset + sizeof(sal_uInt32) <=  static_cast<sal_uInt32>(t->fsize))
+        if (withinBounds(nStart, nOffset, sizeof(sal_uInt32), t->fsize))
             tag = GetUInt32(t->ptr + nStart, nOffset);
         else
             tag = static_cast<sal_uInt32>(-1);
@@ -1526,7 +1540,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
             default: nIndex = -1; break;
         }
 
-        if ((nIndex >= 0) && (nStart + nOffset + 12 + sizeof(sal_uInt32) <= static_cast<sal_uInt32>(t->fsize))) {
+        if ((nIndex >= 0) && withinBounds(nStart, nOffset, 12 + sizeof(sal_uInt32), t->fsize)) {
             sal_uInt32 nTableOffset = GetUInt32(t->ptr + nStart, nOffset + 8);
             length = GetUInt32(t->ptr + nStart, nOffset + 12);
             t->tables[nIndex] = t->ptr + nTableOffset;
