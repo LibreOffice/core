@@ -5780,4 +5780,104 @@ formula::ParamClass ScCompiler::GetForceArrayParameter( const formula::FormulaTo
     return ScParameterClassification::GetParameterType( pToken, nParam);
 }
 
+bool ScCompiler::IsIIOpCode(OpCode nOpCode) const
+{
+    if (nOpCode == ocSumIf || nOpCode == ocAverageIf)
+        return true;
+
+    return false;
+}
+
+void ScCompiler::HandleIIOpCode(OpCode nOpCode, FormulaToken*** pppToken, sal_uInt8 nNumParams)
+{
+    switch (nOpCode)
+    {
+        case ocSumIf:
+        case ocAverageIf:
+        {
+            if (nNumParams != 3)
+                return;
+
+            if (!(pppToken[0] && pppToken[2] && *pppToken[0] && *pppToken[2]))
+                return;
+
+            if ((*pppToken[0])->GetType() != svDoubleRef)
+                return;
+
+            const StackVar eSumRangeType = (*pppToken[2])->GetType();
+
+            if ( eSumRangeType != svSingleRef && eSumRangeType != svDoubleRef )
+                return;
+
+            const ScComplexRefData& rBaseRange = *(*pppToken[0])->GetDoubleRef();
+
+            ScComplexRefData aSumRange;
+            if (eSumRangeType == svSingleRef)
+            {
+                aSumRange.Ref1 = *(*pppToken[2])->GetSingleRef();
+                aSumRange.Ref2 = aSumRange.Ref1;
+            }
+            else
+                aSumRange = *(*pppToken[2])->GetDoubleRef();
+
+            CorrectSumRange(rBaseRange, aSumRange, pppToken[2]);
+        }
+        break;
+        default:
+            ;
+    }
+}
+
+static void lcl_GetColRowTabDeltas(const ScRange& rRange, SCCOL& rXDelta, SCROW& rYDelta, SCTAB& rZDelta)
+{
+    rXDelta = rRange.aEnd.Col() - rRange.aStart.Col();
+    rYDelta = rRange.aEnd.Row() - rRange.aStart.Row();
+    rZDelta = rRange.aEnd.Tab() - rRange.aStart.Tab();
+}
+
+bool ScCompiler::AdjustSumRangeShape(const ScComplexRefData& rBaseRange, ScComplexRefData& rSumRange)
+{
+    ScRange aAbs = rBaseRange.toAbs(aPos);
+
+    SCCOL nXDelta = 0;
+    SCROW nYDelta = 0;
+    SCTAB nZDelta = 0;
+
+    lcl_GetColRowTabDeltas(aAbs, nXDelta, nYDelta, nZDelta);
+    aAbs = rSumRange.toAbs(aPos);
+
+    SCCOL nXDeltaSum = 0;
+    SCROW nYDeltaSum = 0;
+    SCTAB nZDeltaSum = 0;
+
+    lcl_GetColRowTabDeltas(aAbs, nXDeltaSum, nYDeltaSum, nZDeltaSum);
+
+    if (nXDelta == nXDeltaSum &&
+        nYDelta == nYDeltaSum &&
+        nZDelta == nZDeltaSum)
+        return false;  // shapes of base-range match current sum-range
+
+    // Make the sum-range to take the same shape as base-range,
+    // by adjusting Ref2 member of rSumRange.
+    rSumRange.Ref2.IncCol(nXDelta - nXDeltaSum);
+    rSumRange.Ref2.IncRow(nYDelta - nYDeltaSum);
+    rSumRange.Ref2.IncTab(nZDelta - nZDeltaSum);
+
+    return true;
+}
+
+void ScCompiler::CorrectSumRange(const ScComplexRefData& rBaseRange,
+                                 ScComplexRefData& rSumRange,
+                                 FormulaToken** ppSumRangeToken)
+{
+    if (!AdjustSumRangeShape(rBaseRange, rSumRange))
+        return;
+
+    // Replace sum-range token
+    FormulaToken* pNewSumRangeTok = new ScDoubleRefToken(rSumRange);
+    (*ppSumRangeToken)->DecRef();
+    *ppSumRangeToken = pNewSumRangeTok;
+    pNewSumRangeTok->IncRef();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
