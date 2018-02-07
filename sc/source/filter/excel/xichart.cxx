@@ -3066,7 +3066,7 @@ void XclImpChValueRange::ReadChValueRange( XclImpStream& rStrm )
 void XclImpChValueRange::Convert( ScaleData& rScaleData, bool bMirrorOrient ) const
 {
     // scaling algorithm
-    bool bLogScale = ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_LOGSCALE );
+    const bool bLogScale = ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_LOGSCALE );
     if( bLogScale )
         rScaleData.Scaling = css::chart2::LogarithmicScaling::create( comphelper::getProcessComponentContext() );
     else
@@ -3092,14 +3092,16 @@ void XclImpChValueRange::Convert( ScaleData& rScaleData, bool bMirrorOrient ) co
         if( !bAutoMinor )
             rIntervalCount <<= sal_Int32( 9 );
     }
-    else
+    else if( !bAutoMajor && !bAutoMinor && (0.0 < maData.mfMinorStep) && (maData.mfMinorStep <= maData.mfMajorStep) )
     {
-        if( !bAutoMajor && !bAutoMinor && (0.0 < maData.mfMinorStep) && (maData.mfMinorStep <= maData.mfMajorStep) )
-        {
-            double fCount = maData.mfMajorStep / maData.mfMinorStep + 0.5;
-            if( (1.0 <= fCount) && (fCount < 1001.0) )
-                rIntervalCount <<= static_cast< sal_Int32 >( fCount );
-        }
+        double fCount = maData.mfMajorStep / maData.mfMinorStep + 0.5;
+        if( (1.0 <= fCount) && (fCount < 1001.0) )
+            rIntervalCount <<= static_cast< sal_Int32 >( fCount );
+    }
+    else if( bAutoMinor )
+    {
+            // tdf#114168 If minor unit is not set then set interval to 5, as MS Excel do.
+            rIntervalCount <<= static_cast< sal_Int32 >( 5 );
     }
 
     // reverse order
