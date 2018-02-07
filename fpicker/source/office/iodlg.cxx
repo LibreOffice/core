@@ -119,7 +119,7 @@ namespace
     OUString getMostCurrentFilter( std::unique_ptr<SvtExpFileDlg_Impl> const & pImpl )
     {
         assert( pImpl && "invalid impl pointer" );
-        const SvtFileDialogFilter_Impl* pFilter = pImpl->_pUserFilter;
+        const SvtFileDialogFilter_Impl* pFilter = pImpl->_pUserFilter.get();
 
         if ( !pFilter )
             pFilter = pImpl->GetCurFilter();
@@ -768,8 +768,7 @@ IMPL_LINK_NOARG( SvtFileDialog, NewFolderHdl_Impl, Button*, void)
 void SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter )
 {
     // delete the old user filter and create a new one
-    DELETEZ( pImpl->_pUserFilter );
-    pImpl->_pUserFilter = new SvtFileDialogFilter_Impl( _rNewFilter, _rNewFilter );
+    pImpl->_pUserFilter.reset( new SvtFileDialogFilter_Impl( _rNewFilter, _rNewFilter ) );
 
     // remember the extension
     bool bIsAllFiles = _rNewFilter == FILEDIALOG_FILTER_ALL;
@@ -910,7 +909,7 @@ void SvtFileDialog::OpenHdl_Impl(void const * pVoid)
     // MBA->PB: ?!
     if ( aFileName.isEmpty() && pVoid == pImpl->_pEdFileName && pImpl->_pUserFilter )
     {
-        DELETEZ( pImpl->_pUserFilter );
+        pImpl->_pUserFilter.reset();
         return;
     }
 
@@ -1181,7 +1180,7 @@ IMPL_LINK_NOARG( SvtFileDialog, FilterSelectHdl_Impl, ListBox&, void )
         {
             // Store the old filter for the auto extension handling
             OUString sLastFilterExt = pImpl->GetCurFilter()->GetExtension();
-            DELETEZ( pImpl->_pUserFilter );
+            pImpl->_pUserFilter.reset();
 
             // if applicable remove filter of the user
             pImpl->SetCurFilter( pSelectedFilter, sSelectedFilterDisplayName );

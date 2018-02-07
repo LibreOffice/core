@@ -123,7 +123,7 @@ private:
 
 public:
     SvtFileDialogFilterList_Impl    m_aFilter;
-    SvtFileDialogFilter_Impl*       _pUserFilter;
+    std::unique_ptr<SvtFileDialogFilter_Impl> _pUserFilter;
 
     VclPtr<FixedText>                      _pFtFileName;
     VclPtr<SvtURLBox>                      _pEdFileName;

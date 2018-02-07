@@ -215,7 +215,7 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl()   :
 SvtExpFileDlg_Impl::~SvtExpFileDlg_Impl()
 {
     _pBtnUp.disposeAndClear();
-    delete _pUserFilter;
+    _pUserFilter.reset();
     _pPlaces.disposeAndClear();
 }
 
