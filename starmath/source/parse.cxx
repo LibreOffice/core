@@ -1500,7 +1500,7 @@ SmNode *SmParser::DoTerm(bool bGroupNumberIdent)
                 bool    bIsAttr;
                 while ( (bIsAttr = TokenInGroup(TG::Attribute))
                        ||  TokenInGroup(TG::FontAttr))
-                    aStack.push(std::unique_ptr<SmStructureNode>(bIsAttr ? DoAttribut() : DoFontAttribut()));
+                    aStack.push(bIsAttr ? DoAttribut() : DoFontAttribut());
 
                 auto xFirstNode = DoPower();
                 while (!aStack.empty())
@@ -1730,7 +1730,7 @@ SmStructureNode *SmParser::DoUnOper()
     return xSNode.release();
 }
 
-SmAttributNode *SmParser::DoAttribut()
+std::unique_ptr<SmStructureNode> SmParser::DoAttribut()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
     if (aDepthGuard.TooDeep())
@@ -1766,10 +1766,10 @@ SmAttributNode *SmParser::DoAttribut()
 
     xSNode->SetSubNodes(xAttr.release(), nullptr); // the body will be filled later
     xSNode->SetScaleMode(eScaleMode);
-    return xSNode.release();
+    return std::move(xSNode); // this explicit move can be omitted since C++14
 }
 
-SmStructureNode *SmParser::DoFontAttribut()
+std::unique_ptr<SmStructureNode> SmParser::DoFontAttribut()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
     if (aDepthGuard.TooDeep())
@@ -1787,7 +1787,7 @@ SmStructureNode *SmParser::DoFontAttribut()
             {
                 auto pNode = o3tl::make_unique<SmFontNode>(m_aCurToken);
                 NextToken();
-                return pNode.release();
+                return std::move(pNode); // this explicit move can be omitted since C++14
             }
 
         case TSIZE :
@@ -1801,11 +1801,11 @@ SmStructureNode *SmParser::DoFontAttribut()
 
         default :
             assert(false);
-            return nullptr;
+            return {};
     }
 }
 
-SmStructureNode *SmParser::DoColor()
+std::unique_ptr<SmStructureNode> SmParser::DoColor()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
     if (aDepthGuard.TooDeep())
@@ -1813,6 +1813,7 @@ SmStructureNode *SmParser::DoColor()
 
     assert(m_aCurToken.eType == TCOLOR);
 
+    std::unique_ptr<SmStructureNode> xNode;
     // last color rules, get that one
     SmToken  aToken;
     do
@@ -1823,13 +1824,17 @@ SmStructureNode *SmParser::DoColor()
             NextToken();
         }
         else
-            return DoError(SmParseError::ColorExpected);
+        {
+            xNode.reset(DoError(SmParseError::ColorExpected));
+            return xNode;
+        }
     } while (m_aCurToken.eType == TCOLOR);
 
-    return new SmFontNode(aToken);
+    xNode.reset(new SmFontNode(aToken));
+    return xNode;
 }
 
-SmStructureNode *SmParser::DoFont()
+std::unique_ptr<SmStructureNode> SmParser::DoFont()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
     if (aDepthGuard.TooDeep())
@@ -1837,6 +1842,7 @@ SmStructureNode *SmParser::DoFont()
 
     assert(m_aCurToken.eType == TFONT);
 
+    std::unique_ptr<SmStructureNode> xNode;
     // last font rules, get that one
     SmToken  aToken;
     do
@@ -1847,10 +1853,14 @@ SmStructureNode *SmParser::DoFont()
             NextToken();
         }
         else
-            return DoError(SmParseError::FontExpected);
+        {
+            xNode.reset(DoError(SmParseError::FontExpected));
+            return xNode;
+        }
     } while (m_aCurToken.eType == TFONT);
 
-    return new SmFontNode(aToken);
+    xNode.reset(new SmFontNode(aToken));
+    return xNode;
 }
 
 
@@ -1876,7 +1886,7 @@ static bool lcl_IsNumber(const OUString& rText)
     return true;
 }
 
-SmStructureNode *SmParser::DoFontSize()
+std::unique_ptr<SmStructureNode> SmParser::DoFontSize()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
     if (aDepthGuard.TooDeep())
@@ -1898,14 +1908,14 @@ SmStructureNode *SmParser::DoFontSize()
         case TDIVIDEBY: Type = FontSizeType::DIVIDE;   break;
 
         default:
-            return DoError(SmParseError::SizeExpected);
+            return std::unique_ptr<SmStructureNode>(DoError(SmParseError::SizeExpected));
     }
 
     if (Type != FontSizeType::ABSOLUT)
     {
         NextToken();
         if (m_aCurToken.eType != TNUMBER)
-            return DoError(SmParseError::SizeExpected);
+            return std::unique_ptr<SmStructureNode>(DoError(SmParseError::SizeExpected));
     }
 
     // get number argument
@@ -1939,7 +1949,7 @@ SmStructureNode *SmParser::DoFontSize()
     NextToken();
 
     pFontNode->SetSizeParameter(aValue, Type);
-    return pFontNode.release();
+    return std::move(pFontNode); // this explicit move can be omitted since C++14
 }
 
 SmStructureNode *SmParser::DoBrace()
