@@ -42,6 +42,8 @@
 #include "docary.hxx"
 #include "pagedesc.hxx"
 #include "tblenum.hxx"
+#include "ndarr.hxx"
+#include "ndtyp.hxx"
 #include <memory>
 #include <set>
 #include <unordered_map>

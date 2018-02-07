@@ -36,6 +36,7 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <poolfmt.hxx>
 #include <calbck.hxx>
+#include <hints.hxx>
 
 SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *const pDoc)
     : SwModify(nullptr)

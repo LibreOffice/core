@@ -21,7 +21,6 @@
 
 #include <svx/svdobj.hxx>
 #include <svx/svdovirt.hxx>
-#include "swtypes.hxx"
 #include "fmtanchr.hxx"
 #include "frmfmt.hxx"
 #include <list>

@@ -19,10 +19,7 @@
 #ifndef INCLUDED_SW_INC_DOCARY_HXX
 #define INCLUDED_SW_INC_DOCARY_HXX
 
-#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <vector>
-#include <set>
-#include <algorithm>
 #include <type_traits>
 #include <o3tl/sorted_vector.hxx>
 
@@ -33,15 +30,13 @@
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/random_access_index.hpp>
 
-#include "swtypes.hxx"
-#include "ndarr.hxx"
 #include "charfmt.hxx"
 #include "fmtcol.hxx"
 #include "frmfmt.hxx"
 #include "section.hxx"
-#include "fldbas.hxx"
 #include "tox.hxx"
 #include "numrule.hxx"
+#include "fldbas.hxx"
 
 class SwRangeRedline;
 class SwExtraRedline;
@@ -50,6 +45,9 @@ class SwOLENode;
 class SwTable;
 class SwTableLine;
 class SwTableBox;
+struct SwPosition;
+class SwContentNode;
+class SwTextNode;
 
 namespace com { namespace sun { namespace star { namespace i18n {
     struct ForbiddenCharacters;    ///< comes from the I18N UNO interface

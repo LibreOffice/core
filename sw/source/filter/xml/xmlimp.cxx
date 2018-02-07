@@ -80,6 +80,7 @@
 
 #include <vcl/svapp.hxx>
 #include <unotxdoc.hxx>
+#include <numrule.hxx>
 
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xformsimport.hxx>
