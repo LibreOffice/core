@@ -407,7 +407,7 @@ void SvtFilePicker::ensureFilterList( const OUString& _rInitialCurrentFilter )
 {
     if ( !m_pFilterList )
     {
-        m_pFilterList = new FilterList;
+        m_pFilterList.reset( new FilterList );
 
         // set the first filter to the current filter
         if ( m_aCurrentFilter.isEmpty() )
@@ -419,22 +419,13 @@ void SvtFilePicker::ensureFilterList( const OUString& _rInitialCurrentFilter )
 // class SvtFilePicker
 
 SvtFilePicker::SvtFilePicker()
-    :m_pFilterList      ( nullptr )
-    ,m_pElemList        ( nullptr )
-    ,m_bMultiSelection  ( false )
+    :m_bMultiSelection  ( false )
     ,m_nServiceType     ( TemplateDescription::FILEOPEN_SIMPLE )
 {
 }
 
 SvtFilePicker::~SvtFilePicker()
 {
-    if ( m_pFilterList && !m_pFilterList->empty() )
-        m_pFilterList->erase( m_pFilterList->begin(), m_pFilterList->end() );
-    delete m_pFilterList;
-
-    if ( m_pElemList && !m_pElemList->empty() )
-        m_pElemList->erase( m_pElemList->begin(), m_pElemList->end() );
-    delete m_pElemList;
 }
 
 
@@ -629,7 +620,7 @@ void SAL_CALL SvtFilePicker::setValue( sal_Int16 nElementID,
     else
     {
         if ( !m_pElemList )
-            m_pElemList = new ElementList;
+            m_pElemList.reset( new ElementList );
 
         bool bFound = false;
         ElementList::iterator aListIter;
@@ -705,7 +696,7 @@ void SAL_CALL SvtFilePicker::setLabel( sal_Int16 nLabelID, const OUString& rValu
     else
     {
         if ( !m_pElemList )
-            m_pElemList = new ElementList;
+            m_pElemList.reset( new ElementList );
 
         bool bFound = false;
         ElementList::iterator aListIter;
@@ -776,7 +767,7 @@ void SAL_CALL SvtFilePicker::enableControl( sal_Int16 nElementID, sal_Bool bEnab
     else
     {
         if ( !m_pElemList )
-            m_pElemList = new ElementList;
+            m_pElemList.reset( new ElementList );
 
         bool bFound = false;
         ElementList::iterator aListIter;

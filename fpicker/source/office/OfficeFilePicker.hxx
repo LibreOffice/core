@@ -61,8 +61,10 @@ class SvtFilePicker :public SvtFilePicker_Base
                     ,public ::svt::IFilePickerListener
 {
 protected:
-    FilterList*         m_pFilterList;
-    ElementList*        m_pElemList;
+    std::unique_ptr<FilterList>
+                        m_pFilterList;
+    std::unique_ptr<ElementList>
+                        m_pElemList;
 
     bool                m_bMultiSelection;
     sal_Int16           m_nServiceType;
