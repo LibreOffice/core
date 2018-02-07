@@ -66,6 +66,15 @@ struct FormulaArrayStack
     bool bTemp;
 };
 
+class ImplicitIntersectionComputerBase
+{
+public:
+    virtual ~ImplicitIntersectionComputerBase() {}
+    virtual bool ShouldHandleOpCode(OpCode nOpCode) const = 0;
+    virtual void AddArg(FormulaToken** ppTok) = 0;
+    virtual void Handle(OpCode nOpCode) = 0;
+    virtual ImplicitIntersectionComputerBase* Instantiate() const = 0;
+};
 
 typedef std::unordered_map< OUString, OpCode > OpCodeHashMap;
 typedef std::unordered_map< OUString, OUString > ExternalHashMap;
@@ -351,6 +360,8 @@ protected:
 
     bool mbJumpCommandReorder; /// Whether or not to reorder RPN for jump commands.
     bool mbStopOnError;        /// Whether to stop compilation on first encountered error.
+
+    std::unique_ptr<ImplicitIntersectionComputerBase> mpIIComputer; // Used to compute implicit intersection of ranges
 
 private:
     void InitSymbolsNative() const;    /// only SymbolsNative, on first document creation

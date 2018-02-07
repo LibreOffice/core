@@ -173,6 +173,25 @@ public:
     static sal_Int32 GetStrLen( const sal_Unicode* pStr ); // as long as a "string" is an array
 };
 
+class ScImplicitIntersectionComputer : public formula::ImplicitIntersectionComputerBase
+{
+public:
+    ScImplicitIntersectionComputer(ScAddress& rPos) : mrPos(rPos) {}
+    ~ScImplicitIntersectionComputer() {}
+    bool ShouldHandleOpCode(OpCode nOpCode) const override;
+    void AddArg(formula::FormulaToken** ppTok) override;
+    void Handle(OpCode nOpCode) override;
+    formula::ImplicitIntersectionComputerBase* Instantiate() const override;
+
+private:
+    void ComputeImplictIntersection(ScComplexRefData& rBaseRange,
+                                    ScComplexRefData& rSumRange,
+                                    formula::FormulaToken** ppSumRangeToken);
+
+    ScAddress& mrPos;
+    std::vector<formula::FormulaToken**> maArgs;
+};
+
 class SC_DLLPUBLIC ScCompiler : public formula::FormulaCompiler
 {
 public:
