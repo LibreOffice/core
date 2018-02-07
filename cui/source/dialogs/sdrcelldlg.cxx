@@ -34,6 +34,7 @@ SvxFormatCellsDialog::SvxFormatCellsDialog( vcl::Window* pParent, const SfxItemS
     , mpGradientList(pModel->GetGradientList())
     , mpHatchingList(pModel->GetHatchList())
     , mpBitmapList(pModel->GetBitmapList())
+    , mpPatternList(pModel->GetPatternList())
     , m_nAreaPageId(0)
 {
     AddTabPage("name", RID_SVXPAGE_CHAR_NAME);
@@ -51,6 +52,7 @@ void SvxFormatCellsDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         rAreaPage.SetGradientList( mpGradientList );
         rAreaPage.SetHatchingList( mpHatchingList );
         rAreaPage.SetBitmapList( mpBitmapList );
+        rAreaPage.SetPatternList( mpPatternList );;
         rAreaPage.ActivatePage( mrOutAttrs );
     }
     else if (nId == m_nBorderPageId)
