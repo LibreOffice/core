@@ -33,6 +33,7 @@ class SwDoc;
 class SW_DLLPUBLIC SwEndNoteInfo : public SwClient
 {
     mutable SwMultiDepend aDepends;
+    mutable SwTextFormatColl* pTextFormatColl;
     mutable SwPageDesc* pPageDesc;
     mutable SwCharFormat* pCharFormat;
     mutable SwCharFormat* pAnchorFormat;
@@ -52,7 +53,7 @@ public:
     bool DependsOn(const SwPageDesc*) const;
 
     void SetFootnoteTextColl(SwTextFormatColl& rColl);
-    SwTextFormatColl* GetFootnoteTextColl() const { return const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(GetRegisteredIn())); } // can be 0.
+    SwTextFormatColl* GetFootnoteTextColl() const { return pTextFormatColl; } // can be 0.
 
     SwCharFormat* GetCharFormat(SwDoc &rDoc) const;
     void SetCharFormat( SwCharFormat* );

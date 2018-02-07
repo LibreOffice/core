@@ -45,9 +45,10 @@ std::unique_ptr<sw::ModifyChangedHint> SwClient::CheckRegistration( const SfxPoo
         return nullptr;
 
     const SwPtrMsgPoolItem* pDead = static_cast<const SwPtrMsgPoolItem*>(pOld);
+    assert(pDead);
     if(!pDead || pDead->pObject != m_pRegisteredIn)
     {
-        assert(false); // we should only received death notes from objects we are following
+        // we should only care received death notes from objects we are following
         return nullptr;
     }
     // I've got a notification from the object I know

@@ -39,11 +39,12 @@
 
 SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 {
-    StartListeningToSameModifyAs(rInfo);
+    pTextFormatColl = rInfo.pTextFormatColl;
     pPageDesc = rInfo.pPageDesc;
     pCharFormat = rInfo.pCharFormat;
     pAnchorFormat = rInfo.pAnchorFormat;
     aDepends.EndListeningAll();
+    aDepends.StartListening(pTextFormatColl);
     aDepends.StartListening(pPageDesc);
     aDepends.StartListening(pCharFormat);
     aDepends.StartListening(pAnchorFormat);
@@ -59,10 +60,10 @@ SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 bool SwEndNoteInfo::operator==( const SwEndNoteInfo& rInfo ) const
 {
     return
+            pTextFormatColl == rInfo.pTextFormatColl &&
             pPageDesc == rInfo.pPageDesc &&
             pCharFormat == rInfo.pCharFormat &&
             pAnchorFormat == rInfo.pAnchorFormat &&
-            GetFootnoteTextColl() == rInfo.GetFootnoteTextColl() &&
             aFormat.GetNumberingType() == rInfo.aFormat.GetNumberingType() &&
             nFootnoteOffset == rInfo.nFootnoteOffset &&
             m_bEndNote == rInfo.m_bEndNote &&
@@ -71,8 +72,9 @@ bool SwEndNoteInfo::operator==( const SwEndNoteInfo& rInfo ) const
 }
 
 SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
-    SwClient( rInfo.GetFootnoteTextColl() ),
+    SwClient(nullptr),
     aDepends(*this),
+    pTextFormatColl(rInfo.pTextFormatColl),
     pPageDesc(rInfo.pPageDesc),
     pCharFormat(rInfo.pCharFormat),
     pAnchorFormat(rInfo.pAnchorFormat),
@@ -82,6 +84,7 @@ SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
     aFormat( rInfo.aFormat ),
     nFootnoteOffset( rInfo.nFootnoteOffset )
 {
+    aDepends.StartListening(pTextFormatColl);
     aDepends.StartListening(pPageDesc);
     aDepends.StartListening(pCharFormat);
     aDepends.StartListening(pAnchorFormat);
@@ -90,6 +93,7 @@ SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
 SwEndNoteInfo::SwEndNoteInfo() :
     SwClient(nullptr),
     aDepends(*this),
+    pTextFormatColl(nullptr),
     pPageDesc(nullptr),
     pCharFormat(nullptr),
     pAnchorFormat(nullptr),
@@ -129,7 +133,9 @@ void SwEndNoteInfo::ChgPageDesc(SwPageDesc* pDesc)
 
 void SwEndNoteInfo::SetFootnoteTextColl(SwTextFormatColl& rFormat)
 {
-    rFormat.Add(this);
+    aDepends.EndListening(pTextFormatColl);
+    pTextFormatColl = &rFormat;
+    aDepends.StartListening(pTextFormatColl);
 }
 
 SwCharFormat* SwEndNoteInfo::GetCharFormat(SwDoc &rDoc) const
@@ -205,6 +211,8 @@ void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
             pAnchorFormat = const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(pModifyChangedHint->m_pNew));
         else if(pPageDesc == &rModify)
             pPageDesc = const_cast<SwPageDesc*>(static_cast<const SwPageDesc*>(pModifyChangedHint->m_pNew));
+        else if(pTextFormatColl == &rModify)
+            pTextFormatColl = const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(pModifyChangedHint->m_pNew));
     }
 }
 
