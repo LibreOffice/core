@@ -325,6 +325,9 @@ public:
     /// @see vcl::ITiledRenderable::postKeyEvent().
     virtual void postKeyEvent(int nType, int nCharCode, int nKeyCode) override;
 
+    /// @see vcl::ITiledRenderable::postExtTextInputEvent().
+    virtual void postExtTextInputEvent(int nType, const OUString& rText) override;
+
     /// @see vcl::ITiledRenderable::postMouseEvent().
     virtual void postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier) override;
 

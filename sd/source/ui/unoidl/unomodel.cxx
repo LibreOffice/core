@@ -45,6 +45,7 @@
 #include "unopool.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -2483,6 +2484,32 @@ void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     default:
         assert(false);
         break;
+    }
+}
+
+void SdXImpressDocument::postExtTextInputEvent(int nType, const OUString& rText)
+{
+    SolarMutexGuard aGuard;
+
+    DrawViewShell* pViewShell = GetViewShell();
+    if (!pViewShell)
+        return;
+
+    vcl::Window* pWindow = pViewShell->GetActiveWindow();
+    if (!pWindow)
+        return;
+
+    CommandExtTextInputData aTextInputData(rText, nullptr, 0, 0, false);
+    switch (nType)
+    {
+    case LOK_EXT_TEXTINPUT:
+        pWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, rText);
+        break;
+    case LOK_EXT_TEXTINPUT_END:
+        pWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+        break;
+    default:
+        assert(false && "Unhandled External Text input event!");
     }
 }
 
