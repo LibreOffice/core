@@ -265,6 +265,24 @@ public:
                             const Color& rSearchColor,
                             const Color& rReplaceColor );
 
+    /** Replace all pixel having the search color with the specified color
+
+        @param rSearchColor
+        Color specifying which pixel should be replaced
+
+        @param rReplaceColor
+        Color to be placed in all changed pixel
+
+        @param nTolerance
+        Tolerance value. Specifies the maximal difference between
+        rSearchColor and the individual pixel values, such that the
+        corresponding pixel is still regarded a match.
+     */
+    void                Replace(
+                            const Color& rSearchColor,
+                            const Color& rReplaceColor,
+                            sal_uInt8 nTolerance );
+
     /** Replace all pixel having one the search colors with the corresponding replace color
 
         @param pSearchColors
@@ -421,6 +439,8 @@ public:
     bool                Create(
                             const css::uno::Reference< css::rendering::XBitmapCanvas > &xBitmapCanvas,
                             const Size &rSize );
+
+    void                setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );
 public:
 
     SAL_DLLPRIVATE std::shared_ptr<ImpBitmap> const & ImplGetBitmapImpBitmap() const { return aBitmap.ImplGetImpBitmap(); }
