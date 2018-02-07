@@ -330,9 +330,8 @@ void LwpSuperTableLayout::ApplyWatermark(XFTableStyle *pTableStyle)
 void LwpSuperTableLayout::ApplyAlignment(XFTableStyle * pTableStyle)
 {
     LwpPoint aPoint;
-    if (GetGeometry())
-        aPoint = GetGeometry()->GetOrigin();
-    //LwpPoint aPoint = GetOrigin();
+    if (LwpLayoutGeometry* pGeometry = GetGeometry())
+        aPoint = pGeometry->GetOrigin();
     double dXOffset = LwpTools::ConvertFromUnitsToMetric(aPoint.GetX());
 
     // add left padding to alignment distance
