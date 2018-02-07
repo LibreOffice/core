@@ -197,7 +197,7 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
                 pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, static_cast<sal_uInt16>(::GetTabDist(rDefTabs))));
         }
         else
-            pRet->Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, static_cast<sal_uInt16>(pPref->GetDefTab())));
+            pRet->Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, static_cast<sal_uInt16>(convertMm100ToTwip(pPref->GetDefTabInMm100()))));
     }
 
     // Options for GridTabPage
@@ -329,7 +329,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     if( SfxItemState::SET == rSet.GetItemState(SID_ATTR_DEFTABSTOP, false, &pItem ) )
     {
         sal_uInt16 nTabDist = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-        pPref->SetDefTab(nTabDist);
+        pPref->SetDefTabInMm100(convertTwipToMm100(nTabDist));
         if(pAppView)
         {
             SvxTabStopItem aDefTabs( 0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
