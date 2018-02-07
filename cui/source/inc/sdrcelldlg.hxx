@@ -34,6 +34,7 @@ private:
     XGradientListRef    mpGradientList;
     XHatchListRef       mpHatchingList;
     XBitmapListRef      mpBitmapList;
+    XPatternListRef     mpPatternList;
 
     sal_uInt16          m_nAreaPageId;
     sal_uInt16          m_nBorderPageId;
