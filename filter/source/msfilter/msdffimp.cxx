@@ -399,10 +399,6 @@ SvxMSDffSolverContainer::SvxMSDffSolverContainer()
 
 SvxMSDffSolverContainer::~SvxMSDffSolverContainer()
 {
-    for(SvxMSDffConnectorRule* i : aCList) {
-        delete i;
-    }
-    aCList.clear();
 }
 
 SvStream& ReadSvxMSDffSolverContainer( SvStream& rIn, SvxMSDffSolverContainer& rContainer )
@@ -419,9 +415,9 @@ SvStream& ReadSvxMSDffSolverContainer( SvStream& rIn, SvxMSDffSolverContainer& r
                 break;
             if ( aCRule.nRecType == DFF_msofbtConnectorRule )
             {
-                SvxMSDffConnectorRule* pRule = new SvxMSDffConnectorRule;
+                std::unique_ptr<SvxMSDffConnectorRule> pRule(new SvxMSDffConnectorRule);
                 rIn >> *pRule;
-                rContainer.aCList.push_back( pRule );
+                rContainer.aCList.push_back( std::move(pRule) );
             }
             if (!aCRule.SeekToEndOfRecord(rIn))
                 break;
@@ -435,7 +431,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
     size_t i, nCnt;
     for ( i = 0, nCnt = rSolver.aCList.size(); i < nCnt; i++ )
     {
-        SvxMSDffConnectorRule* pPtr = rSolver.aCList[ i ];
+        SvxMSDffConnectorRule* pPtr = rSolver.aCList[ i ].get();
         if ( pPtr->pCObj )
         {
             for ( int nN = 0; nN < 2; nN++ )
