@@ -1879,5 +1879,39 @@ DECLARE_ODFEXPORT_TEST(testTdf77961, "tdf77961.odt")
 
 #endif
 
+DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
+{
+    // Test loext:reference-language attribute of reference fields
+    // (used from LibreOffice 6.1, and proposed for next ODF)
+    static const OUString fieldTexts[] = { OUString("A 2"), OUString("Az 50-esek"),
+        OUString("A 2018-asok"), OUString("Az egyebek"), OUString("A fejezetek"),
+        OUString("Az ") + OUString(OUStringLiteral1(0x201E)) + OUString(OUStringLiteral1(0x150)) +
+        OUString("seinket...") + OUString(OUStringLiteral1(0x201D)), OUString("a 2"),
+        OUString("Az v"), OUString("az 1"), OUString("Az e"), OUString("az 1"),
+        OUString("Az (5)"), OUString("az 1"), OUString("A 2"), OUString("az 1") };
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    // update "A (4)" to "Az (5)"
+    uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY)->refresh();
+
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    uno::Any aHu = uno::makeAny(OUString("Hu"));
+    uno::Any ahu = uno::makeAny(OUString("hu"));
+    for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(fieldTexts); i++)
+    {
+        uno::Any aField = xFields->nextElement();
+        uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
+        if (xServiceInfo->supportsService("com.sun.star.text.textfield.GetReference"))
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(aField, uno::UNO_QUERY);
+            uno::Any aLang = xPropertySet->getPropertyValue("ReferenceFieldLanguage");
+            CPPUNIT_ASSERT_EQUAL(true, aLang == aHu || aLang == ahu);
+            uno::Reference<text::XTextContent> xField(aField, uno::UNO_QUERY);
+            CPPUNIT_ASSERT_EQUAL(fieldTexts[i], xField->getAnchor()->getString());
+        }
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
