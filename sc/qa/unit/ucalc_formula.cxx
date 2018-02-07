@@ -1105,6 +1105,132 @@ void Test::testFormulaCompilerJumpReordering()
     }
 }
 
+void Test::testFormulaCompilerImplicitIntersection()
+{
+    struct TestCaseFormula
+    {
+        OUString  aFormula;
+        ScAddress aCellAddress;
+        ScRange   aSumRange;
+        bool      bStartColRel;  // SumRange-StartCol
+        bool      bEndColRel;    // SumRange-EndCol
+    };
+
+    m_pDoc->InsertTab(0, "Formula");
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    {
+        TestCaseFormula aTestCases[] =
+        {
+            // Formula, FormulaCellAddress, SumRange with Implicit Intersection
+
+            // Sumrange is single cell, address is abs
+            {
+                OUString("=SUMIF($B$2:$B$10;F2;$D$5)"),
+                ScAddress(7, 5, 0),
+                ScRange( ScAddress(3, 4, 0), ScAddress(3, 12, 0) ),
+                false,
+                false
+            },
+
+            // Sumrange is single cell, address is relative
+            {
+                OUString("=SUMIF($B$2:$B$10;F2;D5)"),
+                ScAddress(7, 5, 0),
+                ScRange( ScAddress(3, 4, 0), ScAddress(3, 12, 0) ),
+                true,
+                true
+            },
+
+            // Baserange(abs,abs), Sumrange(abs,abs)
+            {
+                OUString("=SUMIF($B$2:$B$10;F2;$D$5:$D$10)"),
+                ScAddress(7, 5, 0),
+                ScRange( ScAddress(3, 4, 0), ScAddress(3, 12, 0) ),
+                false,
+                false
+            },
+
+            // Baserange(abs,rel), Sumrange(abs,abs)
+            {
+                OUString("=SUMIF($B$2:B10;F2;$D$5:$D$10)"),
+                ScAddress(7, 5, 0),
+                ScRange( ScAddress(3, 4, 0), ScAddress(3, 12, 0) ),
+                false,
+                false
+            },
+
+            // Baserange(rel,abs), Sumrange(abs,abs)
+            {
+                OUString("=SUMIF(B2:$B$10;F2;$D$5:$D$10)"),
+                ScAddress(7, 5, 0),
+                ScRange( ScAddress(3, 4, 0), ScAddress(3, 12, 0) ),
+                false,
+                false
+            },
+
+            // Baserange(rel,rel), Sumrange(abs,abs)
+            {
+                OUString("=SUMIF(B2:B10;F2;$D$5:$D$10)"),
+                ScAddress(7, 5, 0),
+                ScRange( ScAddress(3, 4, 0), ScAddress(3, 12, 0) ),
+                false,
+                false
+            },
+
+            // Baserange(abs,abs), Sumrange(abs,rel)
+            {
+                OUString("=SUMIF($B$2:$B$10;F2;$D$5:D10)"),
+                ScAddress(7, 5, 0),
+                ScRange( ScAddress(3, 4, 0), ScAddress(3, 12, 0) ),
+                false,
+                true
+            },
+
+            // Baserange(abs,abs), Sumrange(rel,abs)
+            {
+                OUString("=SUMIF($B$2:$B$10;F2;D5:$D$10)"),
+                ScAddress(7, 5, 0),
+                ScRange( ScAddress(3, 4, 0), ScAddress(3, 12, 0) ),
+                true,
+                false
+            },
+
+            // Baserange(abs,abs), Sumrange(rel,rel)
+            {
+                OUString("=SUMIF($B$2:$B$10;F2;D5:D10)"),
+                ScAddress(7, 5, 0),
+                ScRange( ScAddress(3, 4, 0), ScAddress(3, 12, 0) ),
+                true,
+                true
+            }
+        };
+
+        for (auto& rCase : aTestCases)
+        {
+            m_pDoc->SetString(rCase.aCellAddress, rCase.aFormula);
+            const ScFormulaCell* pCell = m_pDoc->GetFormulaCell(rCase.aCellAddress);
+            const ScTokenArray* pCode = pCell->GetCode();
+            CPPUNIT_ASSERT(pCode);
+
+            sal_uInt16 nLen = pCode->GetCodeLen();
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong RPN token count.", static_cast<sal_uInt16>(4), nLen);
+
+            FormulaToken** ppTokens = pCode->GetCode();
+
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong type of token(first argument to SUMIF)", svDoubleRef, ppTokens[0]->GetType());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong type of token(third argument to SUMIF)", svDoubleRef, ppTokens[2]->GetType());
+
+            ScComplexRefData aSumRangeData = *ppTokens[2]->GetDoubleRef();
+            ScRange aSumRange = aSumRangeData.toAbs(rCase.aCellAddress);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sum-range in RPN array", rCase.aSumRange, aSumRange);
+
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong IsRel type for start column address in sum-range", rCase.bStartColRel, aSumRangeData.Ref1.IsColRel());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong IsRel type for end column address in sum-range", rCase.bEndColRel, aSumRangeData.Ref2.IsColRel());
+        }
+    }
+}
+
 void Test::testFormulaRefUpdate()
 {
     m_pDoc->InsertTab(0, "Formula");

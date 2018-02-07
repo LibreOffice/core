@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sal/macros.h>
+#include <sal/alloca.h>
 #include <formula/FormulaCompiler.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/token.hxx>
@@ -1596,7 +1597,21 @@ void FormulaCompiler::Factor()
             sal_uInt32 nSepCount = 0;
             if( !bNoParam )
             {
+                bool bDoIICompute = IsIIOpCode(eMyLastOp);
+                // Array of FormulaToken double pointers to collect the parameters of II opcodes.
+                FormulaToken*** pArgArray = nullptr;
+                if (bDoIICompute)
+                {
+                    pArgArray = static_cast<FormulaToken***>(alloca(sizeof(FormulaToken**)*FORMULA_MAXPARAMSII));
+                    if (!pArgArray)
+                        bDoIICompute = false;
+                }
+
                 nSepCount++;
+
+                if (bDoIICompute)
+                    pArgArray[nSepCount-1] = pCode - 1; // Add first argument
+
                 while ((eOp == ocSep) && (pArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
                 {
                     NextToken();
@@ -1605,7 +1620,12 @@ void FormulaCompiler::Factor()
                     if (nSepCount > FORMULA_MAXPARAMS)
                         SetError( FormulaError::CodeOverflow);
                     eOp = Expression();
+                    if (bDoIICompute && nSepCount <= FORMULA_MAXPARAMSII)
+                        pArgArray[nSepCount - 1] = pCode - 1; // Add rest of the arguments
                 }
+                if (bDoIICompute)
+                    HandleIIOpCode(eMyLastOp, pArgArray,
+                                   std::min(nSepCount, static_cast<sal_uInt32>(FORMULA_MAXPARAMSII)));
             }
             if (bBadName)
                 ;   // nothing, keep current token for return
