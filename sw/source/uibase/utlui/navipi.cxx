@@ -689,7 +689,7 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     m_aStatusArr[3] = SwResId(STR_ACTIVE_VIEW);
 
     m_aContentTree->SetStyle(m_aContentTree->GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|
-                             WB_CLIPCHILDREN|WB_HSCROLL );
+                             WB_CLIPCHILDREN|WB_HSCROLL|WB_TABSTOP);
     m_aContentTree->SetForceMakeVisible(true);
     m_aContentTree->SetSpaceBetweenEntries(3);
     m_aContentTree->SetSelectionMode(SelectionMode::Single);
@@ -703,7 +703,7 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
 //  TreeListBox for global document
     m_aGlobalTree->SetSelectionMode( SelectionMode::Multiple );
     m_aGlobalTree->SetStyle(m_aGlobalTree->GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|
-                            WB_CLIPCHILDREN|WB_HSCROLL);
+                            WB_CLIPCHILDREN|WB_HSCROLL|WB_TABSTOP);
 
 //  Handler
     Link<ToolBox *, void> aLk = LINK(this, SwNavigationPI, ToolBoxSelectHdl);
