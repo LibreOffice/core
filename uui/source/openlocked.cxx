@@ -37,14 +37,6 @@ OpenLockedQueryBox::OpenLockedQueryBox( vcl::Window* pParent, const std::locale&
     SetButtonHelpText( RET_YES, OUString() );
     SetButtonHelpText( RET_NO, OUString() );
 
-#ifdef _WIN32
-    // bnc#656566
-    // Yes, it is silly to do this only for this dialog but not the
-    // other similar ones. But hey, it was about this dialog that the
-    // customer complained. You who read this and feel the itch, feel
-    // free to fix the problem in a better way.
-    EnableAlwaysOnTop();
-#endif
 }
 
 OpenLockedQueryBox::~OpenLockedQueryBox()
