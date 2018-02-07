@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_3213580f",
+        "filename": "sw/qa/extras/odfexport/odfexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1850,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-02-07T17:09:33Z",
+      "side": 1,
+      "message": "Why is this necessary?",
+      "revId": "0b3ee736c9f62b52af69b5d7083422da524bc264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
