@@ -27,6 +27,7 @@
 #include <vcl/help.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/syschild.hxx>
@@ -2102,9 +2103,26 @@ void Window::SetInputContext( const InputContext& rInputContext )
         ImplNewInputContext();
 }
 
+void Window::PostExtTextInputEvent(VclEventId nType, const OUString& rText)
+{
+    switch (nType)
+    {
+    case VclEventId::ExtTextInput:
+    {
+        SalExtTextInputEvent aEvent { rText, nullptr, rText.getLength(), 0 };
+        ImplWindowFrameProc(this, SalEvent::ExtTextInput, &aEvent);
+    }
+    break;
+    case VclEventId::EndExtTextInput:
+        ImplWindowFrameProc(this, SalEvent::EndExtTextInput, nullptr);
+        break;
+    default:
+        assert(false);
+    }
+}
+
 void Window::EndExtTextInput()
 {
-
     if ( mpWindowImpl->mbExtTextInput )
         ImplGetFrame()->EndExtTextInput( EndExtTextInputFlags::Complete );
 }

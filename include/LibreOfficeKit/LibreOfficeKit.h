@@ -289,6 +289,11 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::setViewLanguage().
     void (*setViewLanguage) (LibreOfficeKitDocument* pThis, int nId, const char* language);
 
+    /// @see lok::Document::postExtTextInputEvent
+    void (*postExtTextInputEvent) (LibreOfficeKitDocument* pThis,
+                                   int nType,
+                                   const char* pText);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

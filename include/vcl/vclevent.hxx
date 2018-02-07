@@ -65,6 +65,8 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_WINDOW_DATACHANGED         1022    // pData = DataChangedEvent*
 #define VCLEVENT_WINDOW_ZOOM                1023    // pData = ZoomEvent*
 #define VCLEVENT_WINDOW_SCROLL              1024    // pData = ScrollEvent*
+#define VCLEVENT_WINDOW_EXTTEXTINPUT        1025
+#define VCLEVENT_WINDOW_ENDEXTTEXTINPUT     1026
 
 // VclWindowEvent
 #define VCLEVENT_CONTROL_GETFOCUS           1100

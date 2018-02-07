@@ -568,6 +568,9 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis,
                              int nType,
                              int nCharCode,
                              int nKeyCode);
+static void doc_postExtTextInputEvent(LibreOfficeKitDocument* pThis,
+                                      int nType,
+                                      const char* pText);
 static void doc_postWindowKeyEvent(LibreOfficeKitDocument* pThis,
                                    unsigned nLOKWindowId,
                                    int nType,
@@ -661,6 +664,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->initializeForRendering = doc_initializeForRendering;
         m_pDocumentClass->registerCallback = doc_registerCallback;
         m_pDocumentClass->postKeyEvent = doc_postKeyEvent;
+        m_pDocumentClass->postExtTextInputEvent = doc_postExtTextInputEvent;
         m_pDocumentClass->postWindowKeyEvent = doc_postWindowKeyEvent;
         m_pDocumentClass->postMouseEvent = doc_postMouseEvent;
         m_pDocumentClass->postWindowMouseEvent = doc_postWindowMouseEvent;
@@ -2277,7 +2281,22 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
         gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
         return;
     }
+
     pDoc->postKeyEvent(nType, nCharCode, nKeyCode);
+}
+
+static void doc_postExtTextInputEvent(LibreOfficeKitDocument* pThis, int nType, const char* pText)
+{
+    SolarMutexGuard aGuard;
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return;
+    }
+
+    pDoc->postExtTextInputEvent(nType, OUString::fromUtf8(OString(pText, strlen(pText))));
 }
 
 static void doc_postWindowKeyEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nCharCode, int nKeyCode)

@@ -95,6 +95,7 @@ public:
     void testPageHeader();
     void testPageFooter();
     void testRedlineField();
+    void testIMESupport();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -145,6 +146,7 @@ public:
     CPPUNIT_TEST(testPageHeader);
     CPPUNIT_TEST(testPageFooter);
     CPPUNIT_TEST(testRedlineField);
+    CPPUNIT_TEST(testIMESupport);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2032,6 +2034,37 @@ void SwTiledRenderingTest::testRedlineField()
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rTable.size());
     SwRangeRedline* pRedline = rTable[0];
     CPPUNIT_ASSERT(pRedline->GetDescr().indexOf(aDate.GetFieldName())!= -1);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testIMESupport()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+
+    SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
+    SwWrtShell* pWrtShell = pView->GetWrtShellPtr();
+
+    // sequence of chineese IME compositions when 'nihao' is typed in an IME
+    const std::vector<OString> aUtf8Inputs{ "年", "你", "你好", "你哈", "你好", "你好" };
+    std::vector<OUString> aInputs;
+    std::transform(aUtf8Inputs.begin(), aUtf8Inputs.end(),
+                   std::back_inserter(aInputs), [](OString aInput) {
+                       return OUString::fromUtf8(aInput);
+                   });
+    for (const auto& aInput: aInputs)
+    {
+        pXTextDocument->postExtTextInputEvent(LOK_EXT_TEXTINPUT, aInput);
+    }
+    pXTextDocument->postExtTextInputEvent(LOK_EXT_TEXTINPUT_END, "");
+
+    // the cursor should be at position 2nd
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), pShellCursor->GetPoint()->nContent.GetIndex());
+
+    // content contains only the last IME composition, not all
+    CPPUNIT_ASSERT_EQUAL(aInputs[aInputs.size() - 1].concat("Aaa bbb."), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
 
     comphelper::LibreOfficeKit::setActive(false);
 }
