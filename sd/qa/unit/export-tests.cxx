@@ -93,6 +93,7 @@ public:
     void testTdf100926();
     void testPageWithTransparentBackground();
     void testTextRotation();
+    void testTdf115394PPT();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -113,6 +114,7 @@ public:
     CPPUNIT_TEST(testTdf100926);
     CPPUNIT_TEST(testPageWithTransparentBackground);
     CPPUNIT_TEST(testTextRotation);
+    CPPUNIT_TEST(testTdf115394PPT);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -839,6 +841,43 @@ void SdExportTest::testTextRotation()
     CPPUNIT_ASSERT(it != aCustomShapeGeometry.end());
 
     CPPUNIT_ASSERT_EQUAL(double(-90), aCustomShapeGeometry["TextRotateAngle"].get<double>());
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf115394PPT()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/ppt/tdf115394.ppt"), PPT);
+
+    // Export the document and import again for a check
+    uno::Reference< lang::XComponent > xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[PPT].pFilterName), RTL_TEXTENCODING_UTF8);
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xComponent.set(xStorable, uno::UNO_QUERY);
+    xComponent->dispose();
+    xDocShRef = loadURL(aTempFile.GetURL(), PPT);
+
+    double fTransitionDuration;
+
+    // Fast
+    SdPage* pPage1 = xDocShRef->GetDoc()->GetSdPage(0, PageKind::Standard);
+    fTransitionDuration = pPage1->getTransitionDuration();
+    CPPUNIT_ASSERT_EQUAL(0.5, fTransitionDuration);
+
+    // Medium
+    SdPage* pPage2 = xDocShRef->GetDoc()->GetSdPage(1, PageKind::Standard);
+    fTransitionDuration = pPage2->getTransitionDuration();
+    CPPUNIT_ASSERT_EQUAL(0.75, fTransitionDuration);
+
+    // Slow
+    SdPage* pPage3 = xDocShRef->GetDoc()->GetSdPage(2, PageKind::Standard);
+    fTransitionDuration = pPage3->getTransitionDuration();
+    CPPUNIT_ASSERT_EQUAL(1.0, fTransitionDuration);
 
     xDocShRef->DoClose();
 }

@@ -241,10 +241,30 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         sal_Int32   nSlideTime = 0;         // still has to !!!
         sal_uInt8   nSpeed = 1;
 
-        if ( GetPropertyValue( aAny, mXPagePropSet, "Speed" ) )
+        if ( GetPropertyValue( aAny, mXPagePropSet, "TransitionDuration" ) )
         {
             css::presentation::AnimationSpeed aAs;
-            aAny >>= aAs;
+            double fTransitionDuration = -1.0;
+            aAny >>= fTransitionDuration;
+
+            if (fTransitionDuration >= 0)
+            {
+                if (fTransitionDuration <= 0.5)
+                {
+                    aAs = css::presentation::AnimationSpeed::AnimationSpeed_FAST;
+                }
+                else if (fTransitionDuration >= 1.0)
+                {
+                    aAs = css::presentation::AnimationSpeed::AnimationSpeed_SLOW;
+                }
+                else
+                {
+                    aAs = css::presentation::AnimationSpeed::AnimationSpeed_MEDIUM;
+                }
+            }
+            else
+                aAs = css::presentation::AnimationSpeed::AnimationSpeed_MEDIUM;
+
             nSpeed = static_cast<sal_uInt8>(aAs);
         }
         sal_Int16 nTT = 0;
