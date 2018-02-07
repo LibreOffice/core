@@ -25,7 +25,9 @@
 #include <AnnotationWin.hxx>
 #include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/image.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
@@ -3490,6 +3492,26 @@ void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     default:
         assert(false);
         break;
+    }
+}
+
+void SwXTextDocument::postExtTextInputEvent(int nType, const OUString& rText)
+{
+    SolarMutexGuard aGuard;
+
+    vcl::Window* pWindow = &(pDocShell->GetView()->GetEditWin());
+
+    CommandExtTextInputData aTextInputData(rText, nullptr, 0, 0, false);
+    switch (nType)
+    {
+    case LOK_EXT_TEXTINPUT:
+        pWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, rText);
+        break;
+    case LOK_EXT_TEXTINPUT_END:
+        pWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+        break;
+    default:
+        assert(false && "Unhandled External Text input event!");
     }
 }
 
