@@ -174,7 +174,7 @@ struct SvxMSDffConnectorRule
 
 struct MSFILTER_DLLPUBLIC SvxMSDffSolverContainer
 {
-    ::std::vector< SvxMSDffConnectorRule* > aCList;
+    ::std::vector< std::unique_ptr<SvxMSDffConnectorRule> > aCList;
 
     SvxMSDffSolverContainer();
     ~SvxMSDffSolverContainer();
