@@ -4278,6 +4278,15 @@ bool ScCompiler::NextNewToken( bool bInArray )
 
         if (IsNamedRange( aUpper ))
             return true;
+
+        // Compiling a named expression during collecting them in import shall
+        // not match arbitrary names that otherwise if all named expressions
+        // were present would be recognized as named expression. Such name will
+        // flag an error below and will be recompiled in a second step later
+        // with ScRangeData::CompileUnresolvedXML()
+        if (meExtendedErrorDetection == EXTENDED_ERROR_DETECTION_NAME_NO_BREAK && pDoc->IsImportingXML())
+            break;  // while
+
         // Preserve case of file names in external references.
         bool bInvalidExternalNameRange;
         if (IsExternalNamedRange( aOrg, bInvalidExternalNameRange ))
