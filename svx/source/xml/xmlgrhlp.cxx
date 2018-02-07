@@ -695,10 +695,12 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
                     // higher PDF version, while aGfxLink still contains the
                     // original data provided by the user.
                     pStream->WriteBytes(rPdfData.getConstArray(), rPdfData.getLength());
-                    bRet = (pStream->GetError() == ERRCODE_NONE);
                 }
                 else
+                {
                     pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
+                }
+                bRet = (pStream->GetError() == ERRCODE_NONE);
             }
             else
             {
@@ -991,7 +993,7 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& r
 }
 
 // XGraphicStorageHandler
-uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicHelper::loadGraphic(const OUString& rURL)
+uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicHelper::loadGraphic(OUString const & rURL)
 {
     osl::MutexGuard aGuard(maMutex);
 
@@ -1023,7 +1025,18 @@ uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicHelper::loadGraphic(const
     return xGraphic;
 }
 
+OUString SAL_CALL SvXMLGraphicHelper::saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString const & rRequestName)
+{
+    return implSaveGraphic(rxGraphic, rRequestName);
+}
+
 OUString SAL_CALL SvXMLGraphicHelper::saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
+{
+    OUString aEmpty;
+    return implSaveGraphic(rxGraphic, aEmpty);
+}
+
+OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString const & rRequestName)
 {
     Graphic aGraphic(rxGraphic);
 
@@ -1037,8 +1050,6 @@ OUString SAL_CALL SvXMLGraphicHelper::saveGraphic(css::uno::Reference<css::graph
 
     if (aGraphicObject.GetType() != GraphicType::NONE)
     {
-        OUString sId = OStringToOUString(aGraphicObject.GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
-
         const GfxLink aGfxLink(aGraphic.GetLink());
         OUString aExtension;
         bool bUseGfxLink = true;
@@ -1101,7 +1112,16 @@ OUString SAL_CALL SvXMLGraphicHelper::saveGraphic(css::uno::Reference<css::graph
             }
         }
 
-        OUString rPictureStreamName = sId + aExtension;
+        OUString rPictureStreamName;
+        if (!rRequestName.isEmpty())
+        {
+            rPictureStreamName = rRequestName + aExtension;
+        }
+        else
+        {
+            OUString sId = OStringToOUString(aGraphicObject.GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
+            rPictureStreamName = sId + aExtension;
+        }
 
         SvxGraphicHelperStream_Impl aStream(ImplGetGraphicStream(XML_GRAPHICSTORAGE_NAME, rPictureStreamName));
 
@@ -1158,10 +1178,12 @@ OUString SAL_CALL SvXMLGraphicHelper::saveGraphic(css::uno::Reference<css::graph
                     // higher PDF version, while aGfxLink still contains the
                     // original data provided by the user.
                     pStream->WriteBytes(rPdfData.getConstArray(), rPdfData.getLength());
-                    bSuccess = (pStream->GetError() == ERRCODE_NONE);
                 }
                 else
+                {
                     pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
+                }
+                bSuccess = (pStream->GetError() == ERRCODE_NONE);
             }
             else
             {
@@ -1364,6 +1386,9 @@ protected:
     virtual OUString SAL_CALL
         saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
 
+    virtual OUString SAL_CALL
+        saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString const & rRequestName) override;
+
     virtual css::uno::Reference<css::io::XInputStream> SAL_CALL
         createInputStream(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
 
@@ -1428,6 +1453,11 @@ uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicImportExportHelper::loadG
 OUString SAL_CALL SvXMLGraphicImportExportHelper::saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
 {
     return m_xGraphicStorageHandler->saveGraphic(rxGraphic);
+}
+
+OUString SAL_CALL SvXMLGraphicImportExportHelper::saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString const & rRequestName)
+{
+    return m_xGraphicStorageHandler->saveGraphicByName(rxGraphic, rRequestName);
 }
 
 uno::Reference<io::XInputStream> SAL_CALL SvXMLGraphicImportExportHelper::createInputStream(uno::Reference<graphic::XGraphic> const & rxGraphic)

@@ -15,14 +15,16 @@
 
 module com {  module sun {  module star {  module document {
 
-/** used to load, save and serialize XGraphic objects
-
+/** used to load, save and serialize XGraphic objects to the document storage
  */
 interface XGraphicStorageHandler : com::sun::star::uno::XInterface
 {
+
     com::sun::star::graphic::XGraphic loadGraphic([in] string aURL);
 
     string saveGraphic([in] com::sun::star::graphic::XGraphic xGraphic);
+
+    string saveGraphicByName([in] com::sun::star::graphic::XGraphic xGraphic, [in] string aRequestedName);
 
     com::sun::star::io::XInputStream createInputStream([in] com::sun::star::graphic::XGraphic xGraphic);
 };
