@@ -892,6 +892,7 @@ public:
 
     void                                SetInputContext( const InputContext& rInputContext );
     const InputContext&                 GetInputContext() const;
+    void                                PostExtTextInputEvent(VclEventId nType, const OUString& rText);
     void                                EndExtTextInput();
     void                                SetCursorRect( const tools::Rectangle* pRect = nullptr, long nExtTextInputWidth = 0 );
     const tools::Rectangle*                    GetCursorRect() const;
