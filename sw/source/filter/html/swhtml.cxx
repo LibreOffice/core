@@ -158,8 +158,12 @@ HTMLReader::HTMLReader()
     bTmplBrowseMode = true;
 }
 
-OUString HTMLReader::GetTemplateName() const
+OUString HTMLReader::GetTemplateName(SwDoc& rDoc) const
 {
+    if (!rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE))
+        // HTML import into Writer, avoid loading the Writer/Web template.
+        return OUString();
+
     const OUString sTemplateWithoutExt("internal/html");
     SvtPathOptions aPathOpt;
 

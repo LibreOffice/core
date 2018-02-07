@@ -271,6 +271,14 @@ DECLARE_HTMLIMPORT_TEST(testTableBorder1px, "table_border_1px.html")
     CPPUNIT_ASSERT_MESSAGE("Missing cell right border", aBorder.InnerLineWidth > 0);
 }
 
+DECLARE_HTMLIMPORT_TEST(testOutlineLevel, "outline-level.html")
+{
+    // This was 0, HTML imported into Writer lost the outline numbering for
+    // Heading 1 styles.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
+                         getProperty<sal_Int32>(getParagraph(1), "OutlineLevel"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
