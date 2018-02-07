@@ -4370,6 +4370,127 @@ public:
 
 }
 
+static void lcl_HandleImplicitIntersection(ScSingleRefData& rSumStartRef, ScSingleRefData& rSumEndRef, bool bSumSingleRef,
+                                           ScComplexRefData& rBaseRange, FormulaToken** ppSumRangeToken)
+{
+    ScRange aAbs = rBaseRange.toAbs(ScAddress(0, 0, 0));
+
+    SCCOL nXDelta = aAbs.aEnd.Col() - aAbs.aStart.Col();
+    SCROW nYDelta = aAbs.aEnd.Row() - aAbs.aStart.Row();
+    SCTAB nZDelta = aAbs.aEnd.Tab() - aAbs.aStart.Tab();
+
+    if (bSumSingleRef)
+        rSumEndRef = rSumStartRef;
+
+    ScComplexRefData aSumRange{rSumStartRef, rSumEndRef};
+    aAbs = aSumRange.toAbs(ScAddress(0, 0, 0));
+
+    SCCOL nXDeltaSum = aAbs.aEnd.Col() - aAbs.aStart.Col();
+    SCROW nYDeltaSum = aAbs.aEnd.Row() - aAbs.aStart.Row();
+    SCTAB nZDeltaSum = aAbs.aEnd.Tab() - aAbs.aStart.Tab();
+
+    if (nXDelta == nXDeltaSum &&
+        nYDelta == nYDeltaSum &&
+        nZDelta == nZDeltaSum)
+        return;  // shapes of base-range match current sum-range
+
+    // Make the sum-range to take the same shape as base-range,
+    // by adjusting Ref2 member of aSumRange.
+    aSumRange.Ref2.IncCol(nXDelta - nXDeltaSum);
+    aSumRange.Ref2.IncRow(nYDelta - nYDeltaSum);
+    aSumRange.Ref2.IncTab(nZDelta - nZDeltaSum);
+
+    FormulaToken* pNewSumRangeTok = new ScDoubleRefToken(aSumRange);
+    (*ppSumRangeToken)->DecRef();
+    *ppSumRangeToken = pNewSumRangeTok;
+    pNewSumRangeTok->IncRef();
+}
+
+static void lcl_OpCodeHandler(const FormulaToken* pToken, std::vector<FormulaToken**>& rTokenStack)
+{
+    switch (pToken->GetOpCode())
+    {
+    case ocSumIf:
+    case ocAverageIf:
+        {
+            if (pToken->GetParamCount() != 3)
+                return;
+
+            size_t nStackSize = rTokenStack.size();
+            if ( nStackSize < 3 )
+                return;
+            if ( !rTokenStack[nStackSize - 1] ||
+                 !rTokenStack[nStackSize - 3] )
+                return;
+
+            ScSingleRefData aSumStartRef;
+            ScSingleRefData aSumEndRef;
+            bool bSumSingleRef = true;
+
+            if ((*rTokenStack[nStackSize - 1])->GetType() == svSingleRef)
+                aSumStartRef = *(*rTokenStack[nStackSize - 1])->GetSingleRef();
+            else if ((*rTokenStack[nStackSize - 1])->GetType() == svDoubleRef)
+            {
+                bSumSingleRef = false;
+                aSumStartRef = (*rTokenStack[nStackSize - 1])->GetDoubleRef()->Ref1;
+                aSumEndRef   = (*rTokenStack[nStackSize - 1])->GetDoubleRef()->Ref2;
+            }
+            else
+                return;
+
+            ScComplexRefData aBaseRange;
+            if ((*rTokenStack[nStackSize - 3])->GetType() == svDoubleRef)
+                aBaseRange = *(*rTokenStack[nStackSize - 3])->GetDoubleRef();
+            else
+                return;
+
+            lcl_HandleImplicitIntersection(aSumStartRef, aSumEndRef, bSumSingleRef,
+                                           aBaseRange, rTokenStack[nStackSize-1]);
+        }
+        break;
+    default:
+        break;
+    }
+}
+
+bool ScCompiler::CompileTokenArray()
+{
+    bool bRet = FormulaCompiler::CompileTokenArray();
+    if (pArr->GetCodeError() != FormulaError::NONE)
+        return bRet;
+
+    std::vector<FormulaToken**> aTokenStack;
+    FormulaToken** ppRPNArr = pArr->GetCode();
+    sal_uInt16 nRPNLen = pArr->GetCodeLen();
+    for (sal_uInt16 nIdx = 0; nIdx < nRPNLen; ++nIdx)
+    {
+        FormulaToken** ppToken = ppRPNArr + nIdx;
+        FormulaToken* pToken = *ppToken;
+        if (pToken->GetOpCode() == ocPush )
+            aTokenStack.push_back(ppToken);
+        else
+        {
+            if (pToken->GetOpCode() == ocIf ||
+                pToken->GetOpCode() == ocIfNA ||
+                pToken->GetOpCode() == ocIfError ||
+                pToken->GetOpCode() == ocChoose)
+                break; // TODO : Handle formulas with jump commands too.
+
+            lcl_OpCodeHandler(pToken, aTokenStack);
+            sal_uInt8 nParamCount = pToken->GetParamCount();
+
+            if (aTokenStack.size() < nParamCount)
+                break;
+            aTokenStack.resize(aTokenStack.size() - nParamCount);
+            // We don't really compute the result of the operations here
+            // so just push back a dummy token to the stack.
+            aTokenStack.push_back(nullptr);
+        }
+    }
+
+    return bRet;
+}
+
 ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
 {
     OSL_ENSURE( meGrammar != FormulaGrammar::GRAM_EXTERNAL, "ScCompiler::CompileString - unexpected grammar GRAM_EXTERNAL" );
