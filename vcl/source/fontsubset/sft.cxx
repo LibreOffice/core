@@ -1576,7 +1576,12 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     /* parse the tables */
     for (i=0; i<(int)t->ntables; i++) {
         int nIndex;
-        tag = GetUInt32(t->ptr + tdoffset + 12, 16 * i);
+        const sal_uInt32 nStart = tdoffset + 12;
+        const sal_uInt32 nOffset = 16 * i;
+        if (nStart + nOffset + sizeof(sal_uInt32) <=  static_cast<sal_uInt32>(t->fsize))
+            tag = GetUInt32(t->ptr + nStart, nOffset);
+        else
+            tag = -1;
         switch( tag ) {
             case T_maxp: nIndex = O_maxp; break;
             case T_glyf: nIndex = O_glyf; break;
