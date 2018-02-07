@@ -1476,8 +1476,10 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     }
 
     t->ntables = GetUInt16(t->ptr + tdoffset, 4);
-    if( t->ntables >= 128 )
+    if (t->ntables >= 128) {
+        CloseTTFont(t);
         return SF_TTFORMAT;
+    }
 
     t->tables = static_cast<const sal_uInt8**>(calloc(NUM_TAGS, sizeof(sal_uInt8 *)));
     assert(t->tables != nullptr);
