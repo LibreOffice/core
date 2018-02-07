@@ -107,7 +107,7 @@ public:
      *
      * @see lok::Document::postExtTextInputEvent().
      */
-    virtual void postExtTextInputEvent(int /*nType*/, const OUString& /*rText*/) {}
+    virtual void postExtTextInputEvent(int nType, const OUString& rText) = 0;
 
     /**
      * Posts a mouse event on the document.
