@@ -2829,9 +2829,20 @@ void ChartExport::_exportAxis(
     {
         double dMinorUnit = 0;
         mAny >>= dMinorUnit;
-        pFS->singleElement( FSNS( XML_c, XML_minorUnit ),
-            XML_val, IS( dMinorUnit ),
-            FSEND );
+        if( (GetProperty( xAxisProp, "StepHelpCount" ) ) )
+        {
+            sal_Int32 dMinorUnitCount = 0;
+            mAny >>= dMinorUnitCount;
+            // tdf#114168 Don't save minor unit if number of step help count is 5 (which is default for MS Excel),
+            // to allow proper .xlsx import. If minorUnit is set and majorUnit not, then it is impossible
+            // to calculate StepHelpCount.
+            if( dMinorUnitCount != 5 )
+            {
+                pFS->singleElement( FSNS( XML_c, XML_minorUnit ),
+                    XML_val, IS( dMinorUnit ),
+                    FSEND );
+            }
+        }
     }
 
     if( nAxisType == XML_valAx && GetProperty( xAxisProp, "DisplayUnits" ) )

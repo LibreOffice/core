@@ -2732,29 +2732,34 @@ XclExpChValueRange::XclExpChValueRange( const XclExpChRoot& rRoot ) :
 void XclExpChValueRange::Convert( const ScaleData& rScaleData )
 {
     // scaling algorithm
-    bool bLogScale = ScfApiHelper::GetServiceName( rScaleData.Scaling ) == "com.sun.star.chart2.LogarithmicScaling";
+    const bool bLogScale = ScfApiHelper::GetServiceName( rScaleData.Scaling ) == "com.sun.star.chart2.LogarithmicScaling";
     ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_LOGSCALE, bLogScale );
 
     // min/max
-    bool bAutoMin = lclIsAutoAnyOrGetScaledValue( maData.mfMin, rScaleData.Minimum, bLogScale );
+    const bool bAutoMin = lclIsAutoAnyOrGetScaledValue( maData.mfMin, rScaleData.Minimum, bLogScale );
     ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOMIN, bAutoMin );
-    bool bAutoMax = lclIsAutoAnyOrGetScaledValue( maData.mfMax, rScaleData.Maximum, bLogScale );
+    const bool bAutoMax = lclIsAutoAnyOrGetScaledValue( maData.mfMax, rScaleData.Maximum, bLogScale );
     ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOMAX, bAutoMax );
 
     // origin
-    bool bAutoCross = lclIsAutoAnyOrGetScaledValue( maData.mfCross, rScaleData.Origin, bLogScale );
+    const bool bAutoCross = lclIsAutoAnyOrGetScaledValue( maData.mfCross, rScaleData.Origin, bLogScale );
     ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOCROSS, bAutoCross );
 
     // major increment
     const IncrementData& rIncrementData = rScaleData.IncrementData;
-    bool bAutoMajor = lclIsAutoAnyOrGetValue( maData.mfMajorStep, rIncrementData.Distance ) || (maData.mfMajorStep <= 0.0);
+    const bool bAutoMajor = lclIsAutoAnyOrGetValue( maData.mfMajorStep, rIncrementData.Distance ) || (maData.mfMajorStep <= 0.0);
     ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOMAJOR, bAutoMajor );
     // minor increment
     const Sequence< SubIncrement >& rSubIncrementSeq = rIncrementData.SubIncrements;
     sal_Int32 nCount = 0;
-    bool bAutoMinor = bLogScale || bAutoMajor || (rSubIncrementSeq.getLength() < 1) ||
-        lclIsAutoAnyOrGetValue( nCount, rSubIncrementSeq[ 0 ].IntervalCount ) || (nCount < 1);
-    if( !bAutoMinor )
+
+    // tdf#114168 If IntervalCount is 5, then enable automatic minor calculation.
+    // During import, if minorUnit is set and majorUnit not, then it is impossible
+    // to calculate IntervalCount.
+    const bool bAutoMinor = bLogScale || bAutoMajor || (rSubIncrementSeq.getLength() < 1) ||
+        lclIsAutoAnyOrGetValue( nCount, rSubIncrementSeq[ 0 ].IntervalCount ) || (nCount < 1) || (nCount == 5);
+
+    if( maData.mfMajorStep && !bAutoMinor )
         maData.mfMinorStep = maData.mfMajorStep / nCount;
     ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOMINOR, bAutoMinor );
 
