@@ -94,7 +94,7 @@ class BibConfig : public utl::ConfigItem
 
     OUString   sQueryField;
     OUString   sQueryText;
-    MappingArray*               pMappingsArr;
+    MappingArray    mvMappings;
     long            nBeamerSize;
     long            nViewSize;
     bool        bShowColumnAssignmentWarning;

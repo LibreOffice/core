@@ -60,7 +60,6 @@ Sequence<OUString> const & BibConfig::GetPropertyNames()
 BibConfig::BibConfig()
     : ConfigItem("Office.DataAccess/Bibliography", ConfigItemMode::DelayedUpdate)
     , nTblOrQuery(0)
-    , pMappingsArr(new MappingArray)
     , nBeamerSize(0)
     , nViewSize(0)
     , bShowColumnAssignmentWarning(false)
@@ -181,7 +180,7 @@ BibConfig::BibConfig()
                     pMapping->aColumnPairs[nSetMapping++].sRealColumnName = sTempReal;
                 }
             }
-            pMappingsArr->push_back(std::unique_ptr<Mapping>(pMapping));
+            mvMappings.push_back(std::unique_ptr<Mapping>(pMapping));
         }
     }
 }
@@ -189,7 +188,6 @@ BibConfig::BibConfig()
 BibConfig::~BibConfig()
 {
     assert(!IsModified()); // should have been committed
-    delete pMappingsArr;
 }
 
 BibDBDescriptor BibConfig::GetBibliographyURL()
@@ -223,13 +221,13 @@ void    BibConfig::ImplCommit()
          css::uno::Any(sQueryField),
          css::uno::Any(bShowColumnAssignmentWarning)});
     ClearNodeSet(cDataSourceHistory);
-    Sequence< PropertyValue > aNodeValues(pMappingsArr->size() * 3);
+    Sequence< PropertyValue > aNodeValues(mvMappings.size() * 3);
     PropertyValue* pNodeValues = aNodeValues.getArray();
 
     sal_Int32 nIndex = 0;
-    for(sal_Int32 i = 0; i < static_cast<sal_Int32>(pMappingsArr->size()); i++)
+    for(sal_Int32 i = 0; i < static_cast<sal_Int32>(mvMappings.size()); i++)
     {
-        const Mapping* pMapping = (*pMappingsArr)[i].get();
+        const Mapping* pMapping = mvMappings[i].get();
         OUString sPrefix(cDataSourceHistory);
         sPrefix += "/_";
         sPrefix += OUString::number(i);
@@ -270,7 +268,7 @@ void    BibConfig::ImplCommit()
 
 const Mapping*  BibConfig::GetMapping(const BibDBDescriptor& rDesc) const
 {
-    for(std::unique_ptr<Mapping> & i : *pMappingsArr)
+    for(std::unique_ptr<Mapping> const & i : mvMappings)
     {
         Mapping& rMapping = *i.get();
         bool bURLEqual = rDesc.sDataSource == rMapping.sURL;
@@ -282,17 +280,17 @@ const Mapping*  BibConfig::GetMapping(const BibDBDescriptor& rDesc) const
 
 void BibConfig::SetMapping(const BibDBDescriptor& rDesc, const Mapping* pSetMapping)
 {
-    for(size_t i = 0; i < pMappingsArr->size(); i++)
+    for(size_t i = 0; i < mvMappings.size(); i++)
     {
-        Mapping& rMapping = *(*pMappingsArr)[i].get();
+        Mapping& rMapping = *mvMappings[i];
         bool bURLEqual = rDesc.sDataSource == rMapping.sURL;
         if(rDesc.sTableOrQuery == rMapping.sTableName && bURLEqual)
         {
-            pMappingsArr->erase(pMappingsArr->begin()+i);
+            mvMappings.erase(mvMappings.begin()+i);
             break;
         }
     }
-    pMappingsArr->push_back(o3tl::make_unique<Mapping>(*pSetMapping));
+    mvMappings.push_back(o3tl::make_unique<Mapping>(*pSetMapping));
     SetModified();
 }
 
