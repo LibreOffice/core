@@ -1656,7 +1656,8 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     }
 
     const sal_uInt8* table = getTable(t, O_maxp);
-    t->nglyphs = GetUInt16(table, 4);
+    sal_uInt32 table_size = getTableSize(t, O_maxp);
+    t->nglyphs = table_size >= 6 ? GetUInt16(table, 4) : 0;
 
     table = getTable(t, O_head);
     t->unitsPerEm = GetUInt16(table, 18);
