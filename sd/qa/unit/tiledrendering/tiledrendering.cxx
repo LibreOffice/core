@@ -101,6 +101,7 @@ public:
     void testDocumentRepair();
     void testLanguageStatus();
     void testDefaultView();
+    void testIMESupport();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -141,6 +142,7 @@ public:
     CPPUNIT_TEST(testDocumentRepair);
     CPPUNIT_TEST(testLanguageStatus);
     CPPUNIT_TEST(testDefaultView);
+    CPPUNIT_TEST(testIMESupport);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1915,6 +1917,46 @@ void SdTiledRenderingTest::testDefaultView()
         CPPUNIT_ASSERT_EQUAL(true, pImpressView->GetValue());
         CPPUNIT_ASSERT_EQUAL(false, pNotesView->GetValue());
     }
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testIMESupport()
+{
+    // Load the document with notes view.
+    comphelper::LibreOfficeKit::setActive();
+
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrObject* pObject = pViewShell->GetActualPage()->GetObj(0);
+    SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObject);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pTextObj, pView->GetSdrPageView());
+    SfxStringItem aInputString(SID_ATTR_CHAR, "x");
+    pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR,
+                                                             SfxCallMode::SYNCHRON, { &aInputString });
+
+    // sequence of chineese IME compositions when 'nihao' is typed in an IME
+    const std::vector<OString> aUtf8Inputs{ "年", "你", "你好", "你哈", "你好", "你好" };
+    std::vector<OUString> aInputs;
+    std::transform(aUtf8Inputs.begin(), aUtf8Inputs.end(),
+                   std::back_inserter(aInputs), [](OString aInput) {
+                       return OUString::fromUtf8(aInput);
+                   });
+    for (const auto& aInput: aInputs)
+    {
+        pXImpressDocument->postExtTextInputEvent(LOK_EXT_TEXTINPUT, aInput);
+    }
+    pXImpressDocument->postExtTextInputEvent(LOK_EXT_TEXTINPUT_END, "");
+
+    // the cursor should be at position 3rd
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), rEditView.GetSelection().nStartPos);
+
+    ESelection aWordSelection(0, 0, 0, 3); // start para, start char, end para, end char.
+    rEditView.SetSelection(aWordSelection);
+    // content contains only the last IME composition, not all
+    CPPUNIT_ASSERT_EQUAL(OUString("x").concat(aInputs[aInputs.size() - 1]), rEditView.GetSelected());
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 
