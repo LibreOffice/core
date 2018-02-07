@@ -5780,4 +5780,124 @@ formula::ParamClass ScCompiler::GetForceArrayParameter( const formula::FormulaTo
     return ScParameterClassification::GetParameterType( pToken, nParam);
 }
 
+bool ScCompiler::IsIIOpCode(OpCode nOpCode) const
+{
+    if (nOpCode == ocSumIf || nOpCode == ocAverageIf)
+        return true;
+
+    return false;
+}
+
+void ScCompiler::HandleIIOpCode(OpCode nOpCode, FormulaToken*** pppToken, sal_uInt8 nNumParams)
+{
+    switch (nOpCode)
+    {
+        case ocSumIf:
+        case ocAverageIf:
+        {
+            if (nNumParams != 3)
+                return;
+
+            if (!(pppToken[0] && pppToken[2] && *pppToken[0] && *pppToken[2]))
+                return;
+
+            if ((*pppToken[0])->GetType() != svDoubleRef)
+                return;
+
+            const StackVar eSumRangeType = (*pppToken[2])->GetType();
+
+            if ( eSumRangeType != svSingleRef && eSumRangeType != svDoubleRef )
+                return;
+
+            const ScComplexRefData& rBaseRange = *(*pppToken[0])->GetDoubleRef();
+
+            ScComplexRefData aSumRange;
+            if (eSumRangeType == svSingleRef)
+            {
+                aSumRange.Ref1 = *(*pppToken[2])->GetSingleRef();
+                aSumRange.Ref2 = aSumRange.Ref1;
+            }
+            else
+                aSumRange = *(*pppToken[2])->GetDoubleRef();
+
+            CorrectSumRange(rBaseRange, aSumRange, pppToken[2]);
+        }
+        break;
+        default:
+            ;
+    }
+}
+
+static void lcl_GetColRowDeltas(const ScRange& rRange, SCCOL& rXDelta, SCROW& rYDelta)
+{
+    rXDelta = rRange.aEnd.Col() - rRange.aStart.Col();
+    rYDelta = rRange.aEnd.Row() - rRange.aStart.Row();
+}
+
+bool ScCompiler::AdjustSumRangeShape(const ScComplexRefData& rBaseRange, ScComplexRefData& rSumRange)
+{
+    ScRange aAbs = rSumRange.toAbs(aPos);
+
+    // Current sum-range end col/row
+    SCCOL nEndCol = aAbs.aEnd.Col();
+    SCROW nEndRow = aAbs.aEnd.Row();
+
+    // Current behaviour is, we will get a #NAME? for the below case, so bail out.
+    // Note that sum-range's End[Col,Row] are same as Start[Col,Row] if the original formula
+    // has a single-ref as the sum-range.
+    if (!ValidCol(nEndCol) || !ValidRow(nEndRow))
+        return false;
+
+    SCCOL nXDeltaSum = 0;
+    SCROW nYDeltaSum = 0;
+
+    lcl_GetColRowDeltas(aAbs, nXDeltaSum, nYDeltaSum);
+
+    aAbs = rBaseRange.toAbs(aPos);
+    SCCOL nXDelta = 0;
+    SCROW nYDelta = 0;
+
+    lcl_GetColRowDeltas(aAbs, nXDelta, nYDelta);
+
+    if (nXDelta == nXDeltaSum &&
+        nYDelta == nYDeltaSum)
+        return false;  // shapes of base-range match current sum-range
+
+    // Try to make the sum-range to take the same shape as base-range,
+    // by adjusting Ref2 member of rSumRange if the resultant sum-range don't
+    // go out-of-bounds.
+
+    SCCOL nXInc = nXDelta - nXDeltaSum;
+    SCROW nYInc = nYDelta - nYDeltaSum;
+
+    // Don't let a valid End[Col,Row] go beyond (MAXCOL,MAXROW) to match
+    // what happens in ScInterpreter::IterateParametersIf(), but there it also shrinks
+    // the base-range by the (out-of-bound)amount clipped off the sum-range.
+    // TODO: Probably we can optimize (from threading perspective) rBaseRange
+    //       by shrinking it here correspondingly (?)
+    if (nEndCol + nXInc > MAXCOL)
+        nXInc = MAXCOL - nEndCol;
+    if (nEndRow + nYInc > MAXROW)
+        nYInc = MAXROW - nEndRow;
+
+    rSumRange.Ref2.IncCol(nXInc);
+    rSumRange.Ref2.IncRow(nYInc);
+
+    return true;
+}
+
+void ScCompiler::CorrectSumRange(const ScComplexRefData& rBaseRange,
+                                 ScComplexRefData& rSumRange,
+                                 FormulaToken** ppSumRangeToken)
+{
+    if (!AdjustSumRangeShape(rBaseRange, rSumRange))
+        return;
+
+    // Replace sum-range token
+    FormulaToken* pNewSumRangeTok = new ScDoubleRefToken(rSumRange);
+    (*ppSumRangeToken)->DecRef();
+    *ppSumRangeToken = pNewSumRangeTok;
+    pNewSumRangeTok->IncRef();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
