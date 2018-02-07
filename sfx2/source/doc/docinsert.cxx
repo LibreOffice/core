@@ -142,10 +142,10 @@ SfxMediumList* DocumentInserter::CreateMediumList()
     SfxMediumList* pMediumList = new SfxMediumList;
     if (!m_nError && m_pItemSet && !m_pURLList.empty())
     {
-        for(std::vector<OUString>::const_iterator i = m_pURLList.begin(); i != m_pURLList.end(); ++i)
+        for (auto const& url : m_pURLList)
         {
             SfxMedium* pMedium = new SfxMedium(
-                    *i, SFX_STREAM_READONLY,
+                    url, SFX_STREAM_READONLY,
                     SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet );
 
             pMedium->UseInteractionHandler( true );

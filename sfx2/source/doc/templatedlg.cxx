@@ -994,10 +994,9 @@ void SfxTemplateManagerDlg::OnTemplateExport()
         {
             sal_uInt16 i = 1;
 
-            std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter = maSelTemplates.begin();
-            for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end(); ++pIter, ++i)
+            for (auto const& selTemplate : maSelTemplates)
             {
-                const TemplateSearchViewItem *pItem = static_cast<const TemplateSearchViewItem*>(*pIter);
+                const TemplateSearchViewItem *pItem = static_cast<const TemplateSearchViewItem*>(selTemplate);
 
                 INetURLObject aItemPath(pItem->getPath());
 
@@ -1015,6 +1014,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
                     else
                         aTemplateList = aTemplateList + "\n" + pItem->maTitle;
                 }
+                ++i;
             }
 
             mpSearchView->deselectItems();
@@ -1025,10 +1025,9 @@ void SfxTemplateManagerDlg::OnTemplateExport()
 
             sal_uInt16 i = 1;
 
-            std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter = maSelTemplates.begin();
-            for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end(); ++pIter, ++i)
+            for (auto const& selTemplate : maSelTemplates)
             {
-                const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(*pIter);
+                const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(selTemplate);
 
                 INetURLObject aItemPath(pItem->getPath());
 
@@ -1048,6 +1047,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
                     else
                         aTemplateList = aTemplateList + "\n" + pItem->maTitle;
                 }
+                ++i;
             }
 
             mpLocalView->deselectItems();
@@ -1199,12 +1199,12 @@ void SfxTemplateManagerDlg::createDefaultTemplateMenu ()
         mpTemplateDefaultMenu->Clear();
 
         sal_uInt16 nItemId = MNI_ACTION_DEFAULT + 1;
-        for( std::vector<OUString>::const_iterator i = aList.begin(); i != aList.end(); ++i )
+        for (auto const& elem : aList)
         {
-            INetURLObject aObj(*i);
+            INetURLObject aObj(elem);
             OUString aTitle = SvFileInformationManager::GetDescription(aObj);
             mpTemplateDefaultMenu->InsertItem(nItemId, aTitle, SvFileInformationManager::GetImage(aObj));
-            mpTemplateDefaultMenu->SetItemCommand(nItemId++, *i);
+            mpTemplateDefaultMenu->SetItemCommand(nItemId++, elem);
         }
 
         mpActionMenu->ShowItem(MNI_ACTION_DEFAULT);
@@ -1229,13 +1229,12 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nItemId)
     {
         // Move templates to desired folder if for some reason move fails
         // try copying them.
-        std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator aIter;
         std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates = maSelTemplates; //Copy to avoid invalidating an iterator
 
-        for (aIter = aSelTemplates.begin(); aIter != aSelTemplates.end(); ++aIter)
+        for (auto const& selTemplate : aSelTemplates)
         {
             const TemplateSearchViewItem *pItem =
-                    static_cast<const TemplateSearchViewItem*>(*aIter);
+                    static_cast<const TemplateSearchViewItem*>(selTemplate);
 
             if(!mpLocalView->moveTemplate(pItem,pItem->mnRegionId,nItemId))
             {

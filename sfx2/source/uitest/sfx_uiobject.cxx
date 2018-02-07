@@ -29,11 +29,10 @@ StringMap SfxTabDialogUIObject::get_state()
     std::vector<sal_uInt16> aPageIds = mxTabDialog->m_pTabCtrl->GetPageIDs();
     OUString aStrIds;
     OUString aStrNames;
-    for (auto itr = aPageIds.begin(), itrEnd = aPageIds.end();
-            itr != itrEnd; ++itr)
+    for (auto const& pageId : aPageIds)
     {
-        aStrIds = aStrIds + OUString::number(*itr) + ";";
-        aStrNames = aStrNames + mxTabDialog->GetPageText(*itr) + ";";
+        aStrIds = aStrIds + OUString::number(pageId) + ";";
+        aStrNames = aStrNames + mxTabDialog->GetPageText(pageId) + ";";
     }
 
     aMap["PageIds"] = aStrIds;
@@ -61,17 +60,14 @@ void SfxTabDialogUIObject::execute(const OUString& rAction,
             auto itr = rParameters.find("NAME");
             OUString aName = itr->second;
             std::vector<sal_uInt16> aIds = mxTabDialog->m_pTabCtrl->GetPageIDs();
-            auto it = aIds.begin(), itEnd = aIds.end();
-            for (; it != itEnd; ++it)
+            for (auto const& elem : aIds)
             {
-                if (mxTabDialog->GetPageText(*it) == aName)
+                if (mxTabDialog->GetPageText(elem) == aName)
+                {
+                    mxTabDialog->ShowPage(elem);
                     break;
+                }
             }
-
-            if (it == aIds.end())
-                return;
-
-            mxTabDialog->ShowPage(*it);
         }
     }
 }

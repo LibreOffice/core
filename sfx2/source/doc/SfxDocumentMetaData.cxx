@@ -794,12 +794,11 @@ SfxDocumentMetaData::setMetaList(const char* i_name,
                 m_xDoc->createTextNode(i_rValue[i]), css::uno::UNO_QUERY_THROW);
             // set attributes
             if (i_pAttrs != nullptr) {
-                for (std::vector<std::pair<const char*, OUString> >
-                                ::const_iterator it = (*i_pAttrs)[i].begin();
-                        it != (*i_pAttrs)[i].end(); ++it) {
-                    xElem->setAttributeNS(getNameSpace(it->first),
-                        OUString::createFromAscii(it->first),
-                        it->second);
+                for (auto const& elem : (*i_pAttrs)[i])
+                {
+                    xElem->setAttributeNS(getNameSpace(elem.first),
+                        OUString::createFromAscii(elem.first),
+                        elem.second);
                 }
             }
             xNode->appendChild(xTextNode);
@@ -939,11 +938,10 @@ SfxDocumentMetaData::updateElement(const char *i_name,
                     css::uno::UNO_QUERY_THROW);
             xNode.set(xElem, css::uno::UNO_QUERY_THROW);
             // set attributes
-            for (std::vector<std::pair<const char *, OUString> >
-                    ::const_iterator it = i_pAttrs->begin();
-                    it != i_pAttrs->end(); ++it) {
-                xElem->setAttributeNS(getNameSpace(it->first),
-                    OUString::createFromAscii(it->first), it->second);
+            for (auto const& elem : *i_pAttrs)
+            {
+                xElem->setAttributeNS(getNameSpace(elem.first),
+                    OUString::createFromAscii(elem.first), elem.second);
             }
             m_xParent->appendChild(xNode);
         }
@@ -1163,14 +1161,14 @@ void SfxDocumentMetaData::init(
     }
 
     // user-defined meta data: initialize PropertySet from DOM nodes
-    for (std::vector<css::uno::Reference<css::xml::dom::XNode> >::iterator
-            it = vec.begin(); it != vec.end(); ++it) {
-        css::uno::Reference<css::xml::dom::XElement> xElem(*it,
+    for (auto const& elem : vec)
+    {
+        css::uno::Reference<css::xml::dom::XElement> xElem(elem,
             css::uno::UNO_QUERY_THROW);
         css::uno::Any any;
         OUString name = xElem->getAttributeNS(s_nsODFMeta, "name");
         OUString type = xElem->getAttributeNS(s_nsODFMeta, "value-type");
-        OUString text = getNodeText(*it);
+        OUString text = getNodeText(elem);
         if ( type == "float" ) {
             double d;
             if (::sax::Converter::convertDouble(d, text)) {

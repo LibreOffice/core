@@ -67,16 +67,16 @@ void FocusManager::ClearPanels()
 {
     std::vector<VclPtr<Panel> > aPanels;
     aPanels.swap(maPanels);
-    for (auto iPanel(aPanels.begin()),iEnd(aPanels.end()); iPanel != iEnd; ++iPanel)
+    for (auto const& panel : aPanels)
     {
-        UnregisterWindow(**iPanel);
-        if ((*iPanel)->GetTitleBar())
+        UnregisterWindow(*panel);
+        if (panel->GetTitleBar())
         {
-            UnregisterWindow(*(*iPanel)->GetTitleBar());
-            UnregisterWindow((*iPanel)->GetTitleBar()->GetToolBox());
+            UnregisterWindow(*panel->GetTitleBar());
+            UnregisterWindow(panel->GetTitleBar()->GetToolBox());
         }
 
-        (*iPanel)->RemoveChildEventListener(LINK(this, FocusManager, ChildEventListener));
+        panel->RemoveChildEventListener(LINK(this, FocusManager, ChildEventListener));
     }
 }
 
@@ -84,9 +84,9 @@ void FocusManager::ClearButtons()
 {
     std::vector<VclPtr<Button> > aButtons;
     aButtons.swap(maButtons);
-    for (auto iButton = aButtons.begin(); iButton != aButtons.end(); ++iButton)
+    for (auto const& button : aButtons)
     {
-        UnregisterWindow(**iButton);
+        UnregisterWindow(*button);
     }
 }
 
@@ -109,29 +109,29 @@ void FocusManager::SetDeckTitle (DeckTitleBar* pDeckTitleBar)
 void FocusManager::SetPanels (const SharedPanelContainer& rPanels)
 {
     ClearPanels();
-    for (auto iPanel = rPanels.begin(); iPanel != rPanels.end(); ++iPanel)
+    for (auto const& panel : rPanels)
     {
-        RegisterWindow(**iPanel);
-        if ((*iPanel)->GetTitleBar())
+        RegisterWindow(*panel);
+        if (panel->GetTitleBar())
         {
-            RegisterWindow(*(*iPanel)->GetTitleBar());
-            RegisterWindow((*iPanel)->GetTitleBar()->GetToolBox());
+            RegisterWindow(*panel->GetTitleBar());
+            RegisterWindow(panel->GetTitleBar()->GetToolBox());
         }
 
         // Register also as child event listener at the panel.
-        (*iPanel)->AddChildEventListener(LINK(this, FocusManager, ChildEventListener));
+        panel->AddChildEventListener(LINK(this, FocusManager, ChildEventListener));
 
-        maPanels.emplace_back(iPanel->get());
+        maPanels.emplace_back(panel.get());
     }
 }
 
 void FocusManager::SetButtons (const ::std::vector<Button*>& rButtons)
 {
     ClearButtons();
-    for (auto iButton = rButtons.begin(); iButton != rButtons.end(); ++iButton)
+    for (auto const& button : rButtons)
     {
-        RegisterWindow(**iButton);
-        maButtons.emplace_back(*iButton);
+        RegisterWindow(*button);
+        maButtons.emplace_back(button);
     }
 }
 

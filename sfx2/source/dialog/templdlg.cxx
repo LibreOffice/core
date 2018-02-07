@@ -522,8 +522,8 @@ public:
 
 StyleTree_Impl::~StyleTree_Impl()
 {
-    for(StyleTreeArr_Impl::const_iterator it = pChildren.begin(); it != pChildren.end(); ++it)
-        delete *it;
+    for (auto const& child : pChildren)
+        delete child;
 }
 
 StyleTreeArr_Impl& MakeTree_Impl(StyleTreeArr_Impl& rArr)
@@ -1898,18 +1898,16 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl()
         // if there are no used styles selected or the user approved the changes
         if ( !bUsedStyle || aApproved )
         {
-            std::vector<SvTreeListEntry*>::const_iterator it = aList.begin(), itEnd = aList.end();
-
-            for (; it != itEnd; ++it)
+            for (auto const& elem : aList)
             {
-                const OUString aTemplName(pTreeBox ? pTreeBox->GetEntryText(*it) : aFmtLb->GetEntryText(*it));
+                const OUString aTemplName(pTreeBox ? pTreeBox->GetEntryText(elem) : aFmtLb->GetEntryText(elem));
                 bDontUpdate = true; // To prevent the Treelistbox to shut down while deleting
                 Execute_Impl( SID_STYLE_DELETE, aTemplName,
                               OUString(), static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()) );
 
                 if ( pTreeBox )
                 {
-                    pTreeBox->RemoveParentKeepChildren( *it );
+                    pTreeBox->RemoveParentKeepChildren(elem);
                     bDontUpdate = false;
                 }
             }

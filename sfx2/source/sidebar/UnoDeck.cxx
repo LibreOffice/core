@@ -192,10 +192,9 @@ void SAL_CALL SfxUnoDeck::moveUp()
     sal_Int32 curOrderIndex = getOrderIndex();
     sal_Int32 previousIndex = GetMinOrderIndex(aDecks);
 
-    ResourceManager::DeckContextDescriptorContainer::const_iterator iDeck;
-    for (iDeck = aDecks.begin(); iDeck != aDecks.end(); ++iDeck)
+    for (auto const& deck : aDecks)
     {
-        sal_Int32 index = pSidebarController->GetResourceManager()->GetDeckDescriptor(iDeck->msId)->mnOrderIndex;
+        sal_Int32 index = pSidebarController->GetResourceManager()->GetDeckDescriptor(deck.msId)->mnOrderIndex;
         if( index < curOrderIndex && index > previousIndex)
             previousIndex = index;
     }
@@ -224,11 +223,9 @@ void SAL_CALL SfxUnoDeck::moveDown()
     sal_Int32 curOrderIndex = getOrderIndex();
     sal_Int32 nextIndex = GetMaxOrderIndex(aDecks);
 
-
-    ResourceManager::DeckContextDescriptorContainer::const_iterator iDeck;
-    for (iDeck = aDecks.begin(); iDeck != aDecks.end(); ++iDeck)
+    for (auto const& deck : aDecks)
     {
-        sal_Int32 index = pSidebarController->GetResourceManager()->GetDeckDescriptor(iDeck->msId)->mnOrderIndex;
+        sal_Int32 index = pSidebarController->GetResourceManager()->GetDeckDescriptor(deck.msId)->mnOrderIndex;
         if( index > curOrderIndex && index < nextIndex)
             nextIndex = index;
     }
@@ -255,9 +252,9 @@ sal_Int32 SfxUnoDeck::GetMinOrderIndex(ResourceManager::DeckContextDescriptorCon
     iDeck = aDecks.begin();
     sal_Int32 minIndex = pSidebarController->GetResourceManager()->GetDeckDescriptor(iDeck->msId)->mnOrderIndex;
 
-    for (iDeck = aDecks.begin(); iDeck != aDecks.end(); ++iDeck)
+    for (auto const& deck : aDecks)
     {
-        sal_Int32 index = pSidebarController->GetResourceManager()->GetDeckDescriptor(iDeck->msId)->mnOrderIndex;
+        sal_Int32 index = pSidebarController->GetResourceManager()->GetDeckDescriptor(deck.msId)->mnOrderIndex;
         if(minIndex > index)
             minIndex = index;
     }
@@ -268,14 +265,11 @@ sal_Int32 SfxUnoDeck::GetMaxOrderIndex(ResourceManager::DeckContextDescriptorCon
 {
     SidebarController* pSidebarController = getSidebarController();
 
-    ResourceManager::DeckContextDescriptorContainer::const_iterator iDeck;
+    sal_Int32 maxIndex = pSidebarController->GetResourceManager()->GetDeckDescriptor(aDecks.begin()->msId)->mnOrderIndex;
 
-    iDeck = aDecks.begin();
-    sal_Int32 maxIndex = pSidebarController->GetResourceManager()->GetDeckDescriptor(iDeck->msId)->mnOrderIndex;
-
-    for (iDeck = aDecks.begin(); iDeck != aDecks.end(); ++iDeck)
+    for (auto const& deck : aDecks)
     {
-        sal_Int32 index = pSidebarController->GetResourceManager()->GetDeckDescriptor(iDeck->msId)->mnOrderIndex;
+        sal_Int32 index = pSidebarController->GetResourceManager()->GetDeckDescriptor(deck.msId)->mnOrderIndex;
         if(maxIndex < index)
             maxIndex = index;
     }

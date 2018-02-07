@@ -155,22 +155,26 @@ void MultiControlWrapperHelper::RegisterControlWrapper( ControlWrapperBase& rWra
 
 void MultiControlWrapperHelper::ModifyControl( TriState eShow )
 {
-    for( ControlWrpVec::iterator aIt = mxImpl->maVec.begin(), aEnd = mxImpl->maVec.end(); aIt != aEnd; ++aIt )
-        (*aIt)->ModifyControl( eShow );
+    for (auto const& elem : mxImpl->maVec)
+        elem->ModifyControl( eShow );
 }
 
 bool MultiControlWrapperHelper::IsControlDontKnow() const
 {
-    bool bIs = !mxImpl->maVec.empty();
-    for( ControlWrpVec::const_iterator aIt = mxImpl->maVec.begin(), aEnd = mxImpl->maVec.end(); bIs && (aIt != aEnd); ++aIt )
-        bIs &= (*aIt)->IsControlDontKnow();
-    return bIs;
+    if (mxImpl->maVec.empty())
+        return false;
+    for (auto const& elem : mxImpl->maVec)
+    {
+        if (!elem->IsControlDontKnow())
+            return false;
+    }
+    return true;
 }
 
 void MultiControlWrapperHelper::SetControlDontKnow( bool bSet )
 {
-    for( ControlWrpVec::iterator aIt = mxImpl->maVec.begin(), aEnd = mxImpl->maVec.end(); aIt != aEnd; ++aIt )
-        (*aIt)->SetControlDontKnow( bSet );
+    for (auto const& elem : mxImpl->maVec)
+        elem->SetControlDontKnow(bSet);
 }
 
 
