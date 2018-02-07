@@ -39,7 +39,7 @@
 #include <set>
 
 ScCondFrmtEntry::ScCondFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos)
-    : VclContainer(pParent, WB_CLIPCHILDREN | WB_BORDER)
+    : VclContainer(pParent, WB_CLIPCHILDREN | WB_BORDER | WB_CHILDDLGCTRL)
     , mbActive(false)
     , maStrCondition(ScResId(SCSTR_CONDITION))
     , mpDoc(pDoc)
