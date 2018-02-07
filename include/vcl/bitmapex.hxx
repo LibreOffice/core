@@ -40,7 +40,7 @@ enum class TransparentType
     Bitmap
 };
 
-class VCL_DLLPUBLIC BitmapEx
+class SAL_WARN_UNUSED VCL_DLLPUBLIC BitmapEx
 {
 public:
 
@@ -371,6 +371,7 @@ public:
         @param bSmooth
         Defines if pixel interpolation is to be used to create the result
     */
+    SAL_WARN_UNUSED_RESULT
     BitmapEx            TransformBitmapEx(
                             double fWidth,
                             double fHeight,
@@ -398,6 +399,7 @@ public:
 
         @return The transformed bitmap
     */
+    SAL_WARN_UNUSED_RESULT
     BitmapEx            getTransformed(
                             const basegfx::B2DHomMatrix& rTransformation,
                             const basegfx::B2DRange& rVisibleRange,
@@ -409,8 +411,10 @@ public:
         @param rBColorModifierStack
         A ColrModifierStack which defines how each pixel has to be modified
     */
+    SAL_WARN_UNUSED_RESULT
     BitmapEx            ModifyBitmapEx( const basegfx::BColorModifierStack& rBColorModifierStack) const;
 
+    SAL_WARN_UNUSED_RESULT
     static BitmapEx     AutoScaleBitmap( BitmapEx const & aBitmap, const long aStandardSize );
 
     /// populate from a canvas implementation

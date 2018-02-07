@@ -133,10 +133,15 @@ void setupMethodStubs( functor_vector_type& res )
 #endif
 
     const BitmapEx    aBitmapEx( aBitmap, aBitmapBW );
+    (void)aBitmapEx;
     const BitmapEx    aBitmapExBW( aBitmapBW, aBitmapBW );
+    (void)aBitmapExBW;
     const BitmapEx    aBitmapExAlien( aBitmapAlien, aBitmapBW );
+    (void)aBitmapExAlien;
     const BitmapEx    aBitmapExAlpha( aBitmap, aBitmapAlien );
+    (void)aBitmapExAlpha;
     const BitmapEx    aBitmapExAlphaAlien( aBitmapAlien, aBitmapAlien );
+    (void)aBitmapExAlphaAlien;
 
 #ifdef NEEDS_QUALITY_PARAMETER
     const Image       aImage( aBitmapEx );

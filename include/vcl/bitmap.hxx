@@ -212,7 +212,7 @@ struct BitmapSystemData
     int mnHeight;
 };
 
-class VCL_DLLPUBLIC Bitmap
+class SAL_WARN_UNUSED VCL_DLLPUBLIC Bitmap
 {
 public:
 
