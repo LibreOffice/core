@@ -423,6 +423,8 @@ public:
     bool            IsCorrected() { return bCorrected; }
     const OUString& GetCorrectedFormula() { return aCorrectedFormula; }
 
+    bool CompileTokenArray();
+
     /**
      * Tokenize formula expression string into an array of tokens.
      *
