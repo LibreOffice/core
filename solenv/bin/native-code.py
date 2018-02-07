@@ -48,7 +48,6 @@ core_factory_list = [
     ("libunordflo.a", "unordf_component_getFactory"),
     ("libunoxmllo.a", "unoxml_component_getFactory"),
     ("libutllo.a", "utl_component_getFactory"),
-    ("libxmlsecurity.a", "xmlsecurity_component_getFactory", "#if HAVE_FEATURE_NSS"),
     ("libxoflo.a", "xof_component_getFactory"),
     ("libxolo.a", "xo_component_getFactory"),
     ("libxsec_xmlsec.a", "xsec_xmlsec_component_getFactory", "#if HAVE_FEATURE_NSS"),
@@ -242,6 +241,9 @@ core_constructor_list = [
     "com_sun_star_comp_xmlscript_XMLBasicImporter",
     "com_sun_star_comp_xmlscript_XMLOasisBasicExporter",
     "com_sun_star_comp_xmlscript_XMLOasisBasicImporter",
+# xmlsecurity/util/xmlsecurity.component
+    "com_sun_star_security_CertificateContainer_get_implementation",
+    "com_sun_star_security_DocumentDigitalSignatures_get_implementation",
     ]
 
 # edit group for apps, where you can edit documents
