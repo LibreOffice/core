@@ -134,7 +134,7 @@ local file="$1"
         */libvcllo.so)
             whitelist="${whitelist} ${x11whitelist} ${openglwhitelist} ${giowhitelist} libcups.so.2"
             if [ "$ENABLE_QT5" = TRUE ]; then
-                #TOOD: is inclusion of vcl/qt5/Qt5Font.cxx in Library_vcl really wanted?
+                #TODO: is inclusion of vcl/qt5/Qt5Font.cxx in Library_vcl really wanted?
                 whitelist="${whitelist} ${qt5whitelist}"
             fi
         ;;
