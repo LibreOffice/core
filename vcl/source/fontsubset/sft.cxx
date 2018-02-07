@@ -2450,7 +2450,8 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
     info->symbolEncoded = (ttf->cmapType == CMAP_MS_Symbol);
 
     const sal_uInt8* table = getTable(ttf, O_OS2);
-    if (table) {
+    sal_uInt32 table_size = getTableSize(ttf, O_OS2);
+    if (table && table_size >= 42) {
         info->weight = GetUInt16(table, 4);
         info->width  = GetUInt16(table, 6);
 
@@ -2458,7 +2459,7 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
          * Microsoft old (78 bytes long) and Microsoft new (86 bytes long,)
          * Apple's documentation recommends looking at the table length.
          */
-        if (getTableSize(ttf, O_OS2) > 68) {
+        if (table_size >= 78) {
             info->typoAscender = XUnits(UPEm,GetInt16(table, 68));
             info->typoDescender = XUnits(UPEm, GetInt16(table, 70));
             info->typoLineGap = XUnits(UPEm, GetInt16(table, 72));
