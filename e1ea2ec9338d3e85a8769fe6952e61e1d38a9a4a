@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_a040d157",
+        "filename": "vcl/Library_vcl.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-07T15:25:37Z",
+      "side": 0,
+      "message": "\u003chttps://lists.freedesktop.org/archives/libreoffice/2018-February/079376.html\u003e \"Re: [Libreoffice-commits] core.git: Fix CustomTarget_postprocess/check_dynamic_objects for --enable-qt5\":\n\n\"please remember to revert the \nrelevant part of [...] bf23fe3a4a3eebe3d08fa26341a486b83d80c1c7 [\u0027Fix CustomTarget_postprocess/check_dynamic_objects for --enable-qt5\u0027]\"",
+      "revId": "e1ea2ec9338d3e85a8769fe6952e61e1d38a9a4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
