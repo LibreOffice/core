@@ -2403,14 +2403,18 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
     }
 
     table = getTable(ttf, O_head);      /* 'head' tables is always there */
-    info->xMin = XUnits(UPEm, GetInt16(table, 36));
-    info->yMin = XUnits(UPEm, GetInt16(table, 38));
-    info->xMax = XUnits(UPEm, GetInt16(table, 40));
-    info->yMax = XUnits(UPEm, GetInt16(table, 42));
-    info->macStyle = GetInt16(table, 44);
+    table_size = getTableSize(ttf, O_head);
+    if (table_size >= 46) {
+        info->xMin = XUnits(UPEm, GetInt16(table, 36));
+        info->yMin = XUnits(UPEm, GetInt16(table, 38));
+        info->xMax = XUnits(UPEm, GetInt16(table, 40));
+        info->yMax = XUnits(UPEm, GetInt16(table, 42));
+        info->macStyle = GetInt16(table, 44);
+    }
 
     table = getTable(ttf, O_hhea);
-    if (table) {
+    table_size = getTableSize(ttf, O_hhea);
+    if (table && table_size >= 10) {
         info->ascender  = XUnits(UPEm, GetInt16(table, 4));
         info->descender = XUnits(UPEm, GetInt16(table, 6));
         info->linegap   = XUnits(UPEm, GetInt16(table, 8));
