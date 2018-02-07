@@ -49,26 +49,6 @@ GraphicTransformer::~GraphicTransformer()
 }
 
 
-void setAlpha( Bitmap& rBitmap, AlphaMask& rAlpha, sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
-{
-    BitmapWriteAccess* pWriteAccess = rAlpha.AcquireWriteAccess();
-    BitmapReadAccess* pReadAccess = rBitmap.AcquireReadAccess();
-    if ( pReadAccess && pWriteAccess )
-    {
-        for ( long nY = 0; nY < pReadAccess->Height(); nY++ )
-        {
-            for ( long nX = 0; nX < pReadAccess->Width(); nX++ )
-            {
-                const sal_uInt8 cIndex = pReadAccess->GetPixelIndex( nY, nX );
-                if ( cIndex == cIndexFrom )
-                    pWriteAccess->SetPixelIndex( nY, nX, nAlphaTo );
-            }
-        }
-    }
-    Bitmap::ReleaseAccess( pReadAccess );
-    rAlpha.ReleaseAccess( pWriteAccess );
-}
-
 // XGraphicTransformer
 uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
     const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nColorFrom, sal_Int8 nTolerance, sal_Int32 nColorTo, sal_Int8 nAlphaTo )
@@ -92,10 +72,9 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
 
         if (aBitmapEx.IsAlpha())
         {
-            AlphaMask aAlphaMask(aBitmapEx.GetAlpha());
-            setAlpha(aBitmap, aAlphaMask, cIndexFrom, nAlphaTo);
-            aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
-            aGraphic = ::Graphic(BitmapEx(aBitmap, aAlphaMask));
+            aBitmapEx.setAlphaFrom( cIndexFrom, nAlphaTo );
+            aBitmapEx.Replace(aColorFrom, aColorTo, nTolerance);
+            aGraphic = ::Graphic(aBitmapEx);
         }
         else if (aBitmapEx.IsTransparent())
         {
@@ -109,10 +88,9 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
             }
             else
             {
-                AlphaMask aAlphaMask(aBitmapEx.GetMask());
-                setAlpha(aBitmap, aAlphaMask, cIndexFrom, 0xff - nAlphaTo);
-                aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
-                aGraphic = ::Graphic(BitmapEx(aBitmap, aAlphaMask));
+                aBitmapEx.setAlphaFrom(cIndexFrom, 0xff - nAlphaTo);
+                aBitmapEx.Replace(aColorFrom, aColorTo, nTolerance);
+                aGraphic = ::Graphic(aBitmapEx);
             }
         }
         else
@@ -125,10 +103,9 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
             }
             else
             {
-                AlphaMask aAlphaMask(aBitmapEx.GetSizePixel());
-                setAlpha(aBitmap, aAlphaMask, cIndexFrom, nAlphaTo);
-                aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
-                aGraphic = ::Graphic(BitmapEx(aBitmap, aAlphaMask));
+                aBitmapEx.setAlphaFrom(cIndexFrom, nAlphaTo);
+                aBitmapEx.Replace(aColorFrom, aColorTo, nTolerance);
+                aGraphic = ::Graphic(aBitmapEx);
             }
         }
     }
