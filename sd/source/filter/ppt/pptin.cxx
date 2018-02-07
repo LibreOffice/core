@@ -1777,11 +1777,11 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
                                 }
 
                                 if ( nSpeed == 0 )
-                                    pPage->setTransitionDuration( 3.0 );    // slow
+                                    pPage->setTransitionDuration( 1.0 );    // slow
                                 else if ( nSpeed == 1 )
-                                    pPage->setTransitionDuration( 2.0 );    // medium
+                                    pPage->setTransitionDuration( 0.75 );    // medium
                                 else if ( nSpeed == 2 )
-                                    pPage->setTransitionDuration( 1.0 );    // fast
+                                    pPage->setTransitionDuration( 0.5 );    // fast
 
                                 if ( nBuildFlags & 0x400 )                      // slidechange by time
                                 {   // time to show (in Ticks)
