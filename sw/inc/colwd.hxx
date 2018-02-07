@@ -20,9 +20,7 @@
 #define INCLUDED_SW_INC_COLWD_HXX
 
 #include <svx/stddlg.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#include <vcl/button.hxx>
 
 class SwTableFUNC;
 

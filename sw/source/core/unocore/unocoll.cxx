@@ -70,6 +70,7 @@
 #include <unometa.hxx>
 #include <docsh.hxx>
 #include <calbck.hxx>
+#include <hints.hxx>
 #include <com/sun/star/document/XCodeNameQuery.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>

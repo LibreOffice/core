@@ -21,7 +21,6 @@
 
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <tools/gen.hxx>
-#include "swtypes.hxx"
 #include "swrect.hxx"
 
 enum SwFillMode
