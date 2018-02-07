@@ -442,17 +442,17 @@ Reader::~Reader()
 {
 }
 
-OUString Reader::GetTemplateName() const
+OUString Reader::GetTemplateName(SwDoc& /*rDoc*/) const
 {
     return OUString();
 }
 
 // load the Filter template, set and release
-SwDoc* Reader::GetTemplateDoc()
+SwDoc* Reader::GetTemplateDoc(SwDoc& rDoc)
 {
     if( !bHasAskTemplateName )
     {
-        SetTemplateName( GetTemplateName() );
+        SetTemplateName( GetTemplateName(rDoc) );
         bHasAskTemplateName = true;
     }
 
@@ -529,7 +529,7 @@ bool Reader::SetTemplate( SwDoc& rDoc )
 {
     bool bRet = false;
 
-    GetTemplateDoc();
+    GetTemplateDoc(rDoc);
     if( mxTemplate.is() )
     {
         rDoc.RemoveAllFormatLanguageDependencies();
@@ -901,7 +901,7 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
 bool SetHTMLTemplate( SwDoc & rDoc )
 {
     // get template name of the Sfx-HTML-Filter !!!
-    if( !ReadHTML->GetTemplateDoc() )
+    if( !ReadHTML->GetTemplateDoc(rDoc) )
         ReadHTML->MakeHTMLDummyTemplateDoc();
 
     bool bRet = ReadHTML->SetTemplate( rDoc );

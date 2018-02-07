@@ -34,7 +34,7 @@ class HTMLReader: public Reader
     // we don't want to have the streams/storages open
     virtual bool SetStrmStgPtr() override;
     virtual ErrCode Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
-    virtual OUString GetTemplateName() const override;
+    virtual OUString GetTemplateName(SwDoc& rDoc) const override;
 public:
     HTMLReader();
 };

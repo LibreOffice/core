@@ -265,7 +265,7 @@ ErrCode SwHTMLWriter::WriteStream()
     SwCharFormats::size_type nOldCharFormatCnt = 0;
 
     OSL_ENSURE( !m_xTemplate.is(), "Where is the HTML template coming from?" );
-    m_xTemplate = static_cast<HTMLReader*>(ReadHTML)->GetTemplateDoc();
+    m_xTemplate = static_cast<HTMLReader*>(ReadHTML)->GetTemplateDoc(*pDoc);
     if( m_xTemplate.is() )
     {
         bOldHTMLMode = m_xTemplate->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE);
