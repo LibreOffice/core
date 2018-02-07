@@ -79,11 +79,9 @@ void SidebarToolBox::dispose()
 
     ControllerContainer aControllers;
     aControllers.swap(maControllers);
-    for (ControllerContainer::iterator iController(aControllers.begin()), iEnd(aControllers.end());
-         iController!=iEnd;
-         ++iController)
+    for (auto const& controller : aControllers)
     {
-        Reference<lang::XComponent> xComponent(iController->second, UNO_QUERY);
+        Reference<lang::XComponent> xComponent(controller.second, UNO_QUERY);
         if (xComponent.is())
             xComponent->dispose();
     }

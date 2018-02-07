@@ -77,11 +77,8 @@ TabBar::~TabBar()
 
 void TabBar::dispose()
 {
-    for(ItemContainer::iterator
-            iItem(maItems.begin()), iEnd(maItems.end());
-        iItem!=iEnd;
-        ++iItem)
-        iItem->mpButton.disposeAndClear();
+    for (auto & item : maItems)
+        item.mpButton.disposeAndClear();
     maItems.clear();
     mpMenuButton.disposeAndClear();
     vcl::Window::dispose();
@@ -108,18 +105,17 @@ void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDe
 {
     // Remove the current buttons.
     {
-        for(ItemContainer::iterator iItem(maItems.begin()); iItem != maItems.end(); ++iItem)
+        for (auto & item : maItems)
         {
-            iItem->mpButton.disposeAndClear();
+            item.mpButton.disposeAndClear();
         }
         maItems.clear();
     }
     maItems.resize(rDecks.size());
     sal_Int32 nIndex (0);
-    for (ResourceManager::DeckContextDescriptorContainer::const_iterator
-             iDeck(rDecks.begin()); iDeck != rDecks.end(); ++iDeck)
+    for (auto const& deck : rDecks)
     {
-        std::shared_ptr<DeckDescriptor> xDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iDeck->msId);
+        std::shared_ptr<DeckDescriptor> xDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(deck.msId);
         if (xDescriptor == nullptr)
         {
             OSL_ASSERT(xDescriptor!=nullptr);
@@ -135,7 +131,7 @@ void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDe
         rItem.mbIsHidden = ! xDescriptor->mbIsEnabled;
         rItem.mbIsHiddenByDefault = rItem.mbIsHidden; // the default is the state while creating
 
-        rItem.mpButton->Enable(iDeck->mbIsEnabled);
+        rItem.mpButton->Enable(deck.mbIsEnabled);
     }
 
     UpdateButtonIcons();
@@ -147,17 +143,14 @@ void TabBar::UpdateButtonIcons()
     Image aImage = Theme::GetImage(Theme::Image_TabBarMenu);
     mpMenuButton->SetModeImage(aImage);
 
-    for(ItemContainer::const_iterator
-            iItem(maItems.begin()), iEnd(maItems.end());
-        iItem!=iEnd;
-        ++iItem)
+    for (auto const& item : maItems)
     {
-        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iItem->msDeckId);
+        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(item.msDeckId);
 
         if (xDeckDescriptor)
         {
             aImage = GetItemImage(*xDeckDescriptor);
-            iItem->mpButton->SetModeImage(aImage);
+            item.mpButton->SetModeImage(aImage);
         }
     }
 
@@ -189,15 +182,12 @@ void TabBar::Layout()
     }
 
     // Place the deck selection buttons.
-    for(ItemContainer::const_iterator
-            iItem(maItems.begin()), iEnd(maItems.end());
-        iItem!=iEnd;
-        ++iItem)
+    for (auto const& item : maItems)
     {
-        Button& rButton (*iItem->mpButton);
-        rButton.Show( ! iItem->mbIsHidden);
+        Button& rButton (*item.mpButton);
+        rButton.Show( ! item.mbIsHidden);
 
-        if (iItem->mbIsHidden)
+        if (item.mbIsHidden)
             continue;
 
         // Place and size the icon.
@@ -213,22 +203,20 @@ void TabBar::Layout()
 
 void TabBar::HighlightDeck (const OUString& rsDeckId)
 {
-    for (ItemContainer::iterator iItem(maItems.begin()); iItem != maItems.end(); ++iItem)
+    for (auto const& item : maItems)
     {
-        if (iItem->msDeckId == rsDeckId)
-            iItem->mpButton->Check();
+        if (item.msDeckId == rsDeckId)
+            item.mpButton->Check();
         else
-            iItem->mpButton->Check(false);
+            item.mpButton->Check(false);
     }
 }
 
 void TabBar::RemoveDeckHighlight ()
 {
-    for (ItemContainer::iterator iItem(maItems.begin()),iEnd(maItems.end());
-         iItem!=iEnd;
-         ++iItem)
+    for (auto const& item : maItems)
     {
-        iItem->mpButton->Check(false);
+        item.mpButton->Check(false);
     }
 }
 
@@ -341,16 +329,16 @@ void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
 void TabBar::RestoreHideFlags()
 {
     bool bNeedsLayout(false);
-    for (ItemContainer::iterator iItem(maItems.begin()); iItem != maItems.end(); ++iItem)
+    for (auto & item : maItems)
     {
-        if (iItem->mbIsHidden != iItem->mbIsHiddenByDefault)
+        if (item.mbIsHidden != item.mbIsHiddenByDefault)
         {
-            iItem->mbIsHidden = iItem->mbIsHiddenByDefault;
+            item.mbIsHidden = item.mbIsHiddenByDefault;
             bNeedsLayout = true;
 
-            std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iItem->msDeckId);
+            std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(item.msDeckId);
             if (xDeckDescriptor)
-                xDeckDescriptor->mbIsEnabled = ! iItem->mbIsHidden;
+                xDeckDescriptor->mbIsEnabled = ! item.mbIsHidden;
 
         }
     }
@@ -364,9 +352,9 @@ void TabBar::UpdateFocusManager(FocusManager& rFocusManager)
     aButtons.reserve(maItems.size()+1);
 
     aButtons.push_back(mpMenuButton.get());
-    for (ItemContainer::const_iterator iItem(maItems.begin()); iItem != maItems.end(); ++iItem)
+    for (auto const& item : maItems)
     {
-        aButtons.push_back(iItem->mpButton.get());
+        aButtons.push_back(item.mpButton.get());
     }
     rFocusManager.SetButtons(aButtons);
 }
@@ -378,18 +366,18 @@ IMPL_LINK_NOARG(TabBar, OnToolboxClicked, Button*, void)
 
     std::vector<DeckMenuData> aMenuData;
 
-    for (ItemContainer::const_iterator iItem(maItems.begin()); iItem != maItems.end(); ++iItem)
+    for (auto const& item : maItems)
     {
-        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iItem->msDeckId);
+        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(item.msDeckId);
 
         if (xDeckDescriptor)
         {
             DeckMenuData aData;
             aData.msDisplayName = xDeckDescriptor->msTitle;
             aData.msDeckId = xDeckDescriptor->msId;
-            aData.mbIsCurrentDeck = iItem->mpButton->IsChecked();
-            aData.mbIsActive = !iItem->mbIsHidden;
-            aData.mbIsEnabled = iItem->mpButton->IsEnabled();
+            aData.mbIsCurrentDeck = item.mpButton->IsChecked();
+            aData.mbIsActive = !item.mbIsHidden;
+            aData.mbIsEnabled = item.mpButton->IsEnabled();
 
             aMenuData.push_back(aData);
         }

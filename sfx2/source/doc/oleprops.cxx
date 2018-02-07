@@ -696,11 +696,11 @@ void SfxOleDictionaryProperty::ImplLoad( SvStream& rStrm )
 void SfxOleDictionaryProperty::ImplSave( SvStream& rStrm )
 {
     // write property ID/name pairs
-    for( SfxOlePropNameMap::const_iterator aIt = maPropNameMap.begin(), aEnd = maPropNameMap.end(); aIt != aEnd; ++aIt )
+    for (auto const& propName : maPropNameMap)
     {
-        rStrm.WriteInt32( aIt->first );
+        rStrm.WriteInt32( propName.first );
         // name always stored as byte string
-        SaveString8( rStrm, aIt->second );
+        SaveString8( rStrm, propName.second );
     }
 }
 
@@ -929,8 +929,8 @@ void SfxOleSection::SetPropertyName( sal_Int32 nPropId, const OUString& rPropNam
 void SfxOleSection::GetPropertyIds( ::std::vector< sal_Int32 >& rPropIds ) const
 {
     rPropIds.clear();
-    for( SfxOlePropMap::const_iterator aIt = maPropMap.begin(), aEnd = maPropMap.end(); aIt != aEnd; ++aIt )
-        rPropIds.push_back( aIt->first );
+    for (auto const& prop : maPropMap)
+        rPropIds.push_back(prop.first);
 }
 
 sal_Int32 SfxOleSection::GetFreePropertyId() const
@@ -989,9 +989,9 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
 
     // read other properties
     maPropMap.clear();
-    for( SfxOlePropPosMap::const_iterator aIt = aPropPosMap.begin(), aEnd = aPropPosMap.end(); aIt != aEnd; ++aIt )
-        if( SeekToPropertyPos( rStrm, aIt->second ) )
-            LoadProperty( rStrm, aIt->first );
+    for (auto const& propPos : aPropPosMap)
+        if( SeekToPropertyPos( rStrm, propPos.second ) )
+            LoadProperty( rStrm, propPos.first );
 }
 
 void SfxOleSection::ImplSave( SvStream& rStrm )
@@ -1017,8 +1017,8 @@ void SfxOleSection::ImplSave( SvStream& rStrm )
     // write codepage property
     SaveProperty( rStrm, maCodePageProp, nPropPosPos );
     // write other properties
-    for( SfxOlePropMap::const_iterator aIt = maPropMap.begin(), aEnd = maPropMap.end(); aIt != aEnd; ++aIt )
-        SaveProperty( rStrm, *aIt->second, nPropPosPos );
+    for (auto const& prop : maPropMap)
+        SaveProperty( rStrm, *prop.second, nPropPosPos );
 
     // write section size (first field in section header)
     rStrm.Seek( STREAM_SEEK_TO_END );
@@ -1207,16 +1207,16 @@ void SfxOlePropertySet::ImplSave( SvStream& rStrm )
     rStrm.SeekRel( static_cast< sal_sSize >( 20 * nSectCount ) );
 
     // write sections
-    for( SfxOleSectionMap::const_iterator aIt = maSectionMap.begin(), aEnd = maSectionMap.end(); aIt != aEnd; ++aIt )
+    for (auto const& section : maSectionMap)
     {
-        SfxOleSection& rSection = *aIt->second;
+        SfxOleSection& rSection = *section.second;
         rStrm.Seek( STREAM_SEEK_TO_END );
         sal_uInt32 nSectPos = static_cast< sal_uInt32 >( rStrm.Tell() );
         // write the section
         SaveObject( rStrm, rSection );
         // write section guid/position pair
         rStrm.Seek( nSectPosPos );
-        WriteSvGlobalName( rStrm, aIt->first );
+        WriteSvGlobalName( rStrm, section.first );
         rStrm.WriteUInt32( nSectPos );
         nSectPosPos = rStrm.Tell();
     }

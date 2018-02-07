@@ -93,13 +93,10 @@ void SAL_CALL SfxUnoPanel::expand( const sal_Bool bCollapseOther )
     if (bCollapseOther)
     {
         SharedPanelContainer aPanels = mpDeck->GetPanels();
-        for ( SharedPanelContainer::iterator iPanel(aPanels.begin()), iEnd(aPanels.end());
-              iPanel!=iEnd; ++iPanel)
+        for (auto const& panel : aPanels)
         {
-            VclPtr<Panel> const & aPanel = *iPanel;
-
-            if (! aPanel->HasIdPredicate(mPanelId))
-                aPanel->SetExpanded(false);
+            if (! panel->HasIdPredicate(mPanelId))
+                panel->SetExpanded(false);
         }
     }
 
@@ -206,10 +203,9 @@ void SAL_CALL SfxUnoPanel::moveUp()
     sal_Int32 curOrderIndex = getOrderIndex();
     sal_Int32 previousIndex = GetMinOrderIndex(aPanels);
 
-    ResourceManager::PanelContextDescriptorContainer::const_iterator iPanel;
-    for (iPanel = aPanels.begin(); iPanel != aPanels.end(); ++iPanel)
+    for (auto const& panel : aPanels)
     {
-        sal_Int32 index = pSidebarController->GetResourceManager()->GetPanelDescriptor(iPanel->msId)->mnOrderIndex;
+        sal_Int32 index = pSidebarController->GetResourceManager()->GetPanelDescriptor(panel.msId)->mnOrderIndex;
         if( index < curOrderIndex && index > previousIndex)
             previousIndex = index;
     }
@@ -238,10 +234,9 @@ void SAL_CALL SfxUnoPanel::moveDown()
     sal_Int32 curOrderIndex = getOrderIndex();
     sal_Int32 nextIndex = GetMaxOrderIndex(aPanels);
 
-    ResourceManager::PanelContextDescriptorContainer::const_iterator iPanel;
-    for (iPanel = aPanels.begin(); iPanel != aPanels.end(); ++iPanel)
+    for (auto const& panel : aPanels)
     {
-        sal_Int32 index = pSidebarController->GetResourceManager()->GetPanelDescriptor(iPanel->msId)->mnOrderIndex;
+        sal_Int32 index = pSidebarController->GetResourceManager()->GetPanelDescriptor(panel.msId)->mnOrderIndex;
         if( index > curOrderIndex && index < nextIndex)
             nextIndex = index;
     }
@@ -263,14 +258,11 @@ sal_Int32 SfxUnoPanel::GetMinOrderIndex(ResourceManager::PanelContextDescriptorC
 {
     SidebarController* pSidebarController = getSidebarController();
 
-    ResourceManager::PanelContextDescriptorContainer::iterator iPanel;
+    sal_Int32 minIndex = pSidebarController->GetResourceManager()->GetPanelDescriptor(aPanels.begin()->msId)->mnOrderIndex;
 
-    iPanel = aPanels.begin();
-    sal_Int32 minIndex = pSidebarController->GetResourceManager()->GetPanelDescriptor(iPanel->msId)->mnOrderIndex;
-
-    for (iPanel = aPanels.begin(); iPanel != aPanels.end(); ++iPanel)
+    for (auto const& panel : aPanels)
     {
-        sal_Int32 index = pSidebarController->GetResourceManager()->GetPanelDescriptor(iPanel->msId)->mnOrderIndex;
+        sal_Int32 index = pSidebarController->GetResourceManager()->GetPanelDescriptor(panel.msId)->mnOrderIndex;
         if(minIndex > index)
             minIndex = index;
     }
@@ -281,14 +273,11 @@ sal_Int32 SfxUnoPanel::GetMaxOrderIndex(ResourceManager::PanelContextDescriptorC
 {
     SidebarController* pSidebarController = getSidebarController();
 
-    ResourceManager::PanelContextDescriptorContainer::iterator iPanel;
+    sal_Int32 maxIndex = pSidebarController->GetResourceManager()->GetPanelDescriptor(aPanels.begin()->msId)->mnOrderIndex;
 
-    iPanel = aPanels.begin();
-    sal_Int32 maxIndex = pSidebarController->GetResourceManager()->GetPanelDescriptor(iPanel->msId)->mnOrderIndex;
-
-    for (iPanel = aPanels.begin(); iPanel != aPanels.end(); ++iPanel)
+    for (auto const& panel : aPanels)
     {
-        sal_Int32 index = pSidebarController->GetResourceManager()->GetPanelDescriptor(iPanel->msId)->mnOrderIndex;
+        sal_Int32 index = pSidebarController->GetResourceManager()->GetPanelDescriptor(panel.msId)->mnOrderIndex;
         if(maxIndex < index)
             maxIndex = index;
     }

@@ -103,9 +103,9 @@ void SfxObjectFactory::RegisterViewFactory
 #if OSL_DEBUG_LEVEL > 0
     {
         const OUString sViewName( rFactory.GetAPIViewName() );
-        for ( SfxViewFactoryArr_Impl::const_iterator it = pImpl->aViewFactoryArr.begin(); it != pImpl->aViewFactoryArr.end(); ++it )
+        for (auto const& viewFactory : pImpl->aViewFactoryArr)
         {
-            if ( (*it)->GetAPIViewName() != sViewName )
+            if ( viewFactory->GetAPIViewName() != sViewName )
                 continue;
             SAL_WARN( "sfx", "SfxObjectFactory::RegisterViewFactory: duplicate view name: " << sViewName );
             break;

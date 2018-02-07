@@ -320,9 +320,9 @@ void Deck::ScrollContainerWindow::Paint(vcl::RenderContext& rRenderContext, cons
     const sal_Int32 nLeft(0);
     const sal_Int32 nRight(GetSizePixel().Width() - 1);
     const sfx2::sidebar::Paint& rHorizontalBorderPaint(Theme::GetPaint(Theme::Paint_HorizontalBorder));
-    for (std::vector<sal_Int32>::const_iterator iY(maSeparators.begin()); iY != maSeparators.end(); ++iY)
+    for (auto const& separator : maSeparators)
     {
-        DrawHelper::DrawHorizontalLine(rRenderContext, nLeft, nRight, *iY,
+        DrawHelper::DrawHorizontalLine(rRenderContext, nLeft, nRight, separator,
                                        nSeparatorHeight, rHorizontalBorderPaint);
     }
 }

@@ -1267,8 +1267,8 @@ void SfxViewShell::PushSubShells_Impl( bool bPush )
     SfxDispatcher *pDisp = pFrame->GetDispatcher();
     if ( bPush )
     {
-        for(SfxShellArr_Impl::const_iterator i = pImpl->aArr.begin(); i != pImpl->aArr.end(); ++i)
-            pDisp->Push(**i);
+        for (auto const& elem : pImpl->aArr)
+            pDisp->Push(*elem);
     }
     else if(!pImpl->aArr.empty())
     {
