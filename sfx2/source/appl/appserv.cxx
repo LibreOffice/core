@@ -281,6 +281,7 @@ namespace
     {
     private:
         DECL_LINK(ShowHdl, Button*, void);
+        DECL_LINK(EulaHdl, Button*, void);
     public:
         explicit LicenseDialog();
     };
@@ -289,12 +290,19 @@ namespace
         : ModalDialog(nullptr, "LicenseDialog", "sfx/ui/licensedialog.ui")
     {
         get<PushButton>("show")->SetClickHdl(LINK(this, LicenseDialog, ShowHdl));
+        get<PushButton>("eula")->SetClickHdl(LINK(this, LicenseDialog, EulaHdl));
     }
 
     IMPL_LINK_NOARG(LicenseDialog, ShowHdl, Button*, void)
     {
         EndDialog(RET_OK);
         showDocument("LICENSE");
+    }
+
+    IMPL_LINK_NOARG(LicenseDialog, EulaHdl, Button*, void)
+    {
+        EndDialog(RET_OK);
+        showDocument("EULA.odt");
     }
 
     class SafeModeQueryDialog : public ModalDialog
