@@ -160,7 +160,8 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             // the main menu just beeps for an unknown or disabled key equivalent
             // and swallows the event wholesale
             NSMenu* pMainMenu = [NSApp mainMenu];
-            if( ! bHandled && (pMainMenu == nullptr || ! [pMainMenu performKeyEquivalent: pEvent]) )
+            if( ! bHandled &&
+                (pMainMenu == nullptr || ! [NSMenu menuBarVisible] || ! [pMainMenu performKeyEquivalent: pEvent]) )
             {
                 [[pKeyWin contentView] keyDown: pEvent];
                 bHandled = GetSalData()->maKeyEventAnswer[ pEvent ];
