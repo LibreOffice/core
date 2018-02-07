@@ -44,6 +44,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/charclass.hxx>
@@ -615,6 +616,30 @@ void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     default:
         assert(false);
         break;
+    }
+}
+
+void ScModelObj::postExtTextInputEvent(int nType, const OUString& rText)
+{
+    SolarMutexGuard aGuard;
+
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    vcl::Window* pWindow = pViewData->GetActiveWin();
+
+    if (!pWindow)
+        return;
+
+    CommandExtTextInputData aTextInputData(rText, nullptr, 0, 0, false);
+    switch (nType)
+    {
+    case LOK_EXT_TEXTINPUT:
+        pWindow->PostExtTextInputEvent(VCLEVENT_WINDOW_EXTTEXTINPUT, rText);
+        break;
+    case LOK_EXT_TEXTINPUT_END:
+        pWindow->PostExtTextInputEvent(VCLEVENT_WINDOW_EXTTEXTINPUTEND, "");
+        break;
+    default:
+        assert(false && "Unhandled External Text input event!");
     }
 }
 
