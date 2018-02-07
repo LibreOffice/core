@@ -2747,14 +2747,19 @@ void XclExpChValueRange::Convert( const ScaleData& rScaleData )
 
     // major increment
     const IncrementData& rIncrementData = rScaleData.IncrementData;
-    bool bAutoMajor = lclIsAutoAnyOrGetValue( maData.mfMajorStep, rIncrementData.Distance ) || (maData.mfMajorStep <= 0.0);
+    const bool bAutoMajor = lclIsAutoAnyOrGetValue( maData.mfMajorStep, rIncrementData.Distance ) || (maData.mfMajorStep <= 0.0);
     ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOMAJOR, bAutoMajor );
     // minor increment
     const Sequence< SubIncrement >& rSubIncrementSeq = rIncrementData.SubIncrements;
     sal_Int32 nCount = 0;
-    bool bAutoMinor = bLogScale || bAutoMajor || (rSubIncrementSeq.getLength() < 1) ||
-        lclIsAutoAnyOrGetValue( nCount, rSubIncrementSeq[ 0 ].IntervalCount ) || (nCount < 1);
-    if( !bAutoMinor )
+
+    // tdf#114168 If IntervalCount is 5, then enable automatic minor calculation.
+    // During import, if minorUnit is set and majorUnit not, then it is impossible
+    // to calculate IntervalCount.
+    const bool bAutoMinor = bLogScale || bAutoMajor || (rSubIncrementSeq.getLength() < 1) ||
+        lclIsAutoAnyOrGetValue( nCount, rSubIncrementSeq[ 0 ].IntervalCount ) || (nCount < 1) || (nCount == 5);
+
+    if( maData.mfMajorStep && !bAutoMinor )
         maData.mfMinorStep = maData.mfMajorStep / nCount;
     ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOMINOR, bAutoMinor );
 
