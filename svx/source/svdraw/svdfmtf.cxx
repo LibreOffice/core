@@ -1588,7 +1588,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
                             Scanline pScanline = pOld->GetScanline( y );
                             for(long x(0); x < pOld->Width(); x++)
                             {
-                                const double fOpOld(1.0 - (pOld->GetPixel(y, x).GetIndex() * fFactor));
+                                const double fOpOld(1.0 - (pOld->GetIndexFromData(pScanline, x) * fFactor));
                                 const sal_uInt8 aCol(basegfx::fround((1.0 - (fOpOld * fOpNew)) * 255.0));
 
                                 pOld->SetPixelOnData(pScanline, x, BitmapColor(aCol));
@@ -1608,8 +1608,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
                                     Scanline pScanline = pOld->GetScanline( y );
                                     for(long x(0); x < pOld->Width(); x++)
                                     {
-                                        const double fOpOld(1.0 - (pOld->GetPixel(y, x).GetIndex() * fFactor));
-                                        const double fOpNew(1.0 - (pNew->GetPixel(y, x).GetIndex() * fFactor));
+                                        const double fOpOld(1.0 - (pOld->GetIndexFromData(pScanline, x) * fFactor));
+                                        const double fOpNew(1.0 - (pNew->GetIndexFromData(pScanline, x) * fFactor));
                                         const sal_uInt8 aCol(basegfx::fround((1.0 - (fOpOld * fOpNew)) * 255.0));
 
                                         pOld->SetPixelOnData(pScanline, x, BitmapColor(aCol));

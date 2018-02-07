@@ -480,22 +480,25 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                 for( long nY = 0, nY1 = 1, nY2 = 2; nY < nHeight2; nY++, nY1++, nY2++ )
                 {
                     Scanline pScanline = pWriteAcc->GetScanline( nY1 );
+                    Scanline pScanlineRead = pReadAcc->GetScanline( nY );
+                    Scanline pScanlineRead1 = pReadAcc->GetScanline( nY1 );
+                    Scanline pScanlineRead2 = pReadAcc->GetScanline( nY2 );
                     for( long nX = 0, nXDst = 1, nXTmp; nX < nWidth2; nX++, nXDst++ )
                     {
                         nXTmp = nX;
 
-                        nSum1 = -( nSum2 = lGray = pReadAcc->GetPixelIndex( nY, nXTmp++ ) );
-                        nSum2 += static_cast<long>(pReadAcc->GetPixelIndex( nY, nXTmp++ )) << 1;
-                        nSum1 += ( lGray = pReadAcc->GetPixelIndex( nY, nXTmp ) );
+                        nSum1 = -( nSum2 = lGray = pReadAcc->GetIndexFromData( pScanlineRead, nXTmp++ ) );
+                        nSum2 += static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead, nXTmp++ )) << 1;
+                        nSum1 += ( lGray = pReadAcc->GetIndexFromData( pScanlineRead, nXTmp ) );
                         nSum2 += lGray;
 
-                        nSum1 += static_cast<long>(pReadAcc->GetPixelIndex( nY1, nXTmp )) << 1;
-                        nSum1 -= static_cast<long>(pReadAcc->GetPixelIndex( nY1, nXTmp -= 2 )) << 1;
+                        nSum1 += static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead1, nXTmp )) << 1;
+                        nSum1 -= static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead1, nXTmp -= 2 )) << 1;
 
-                        nSum1 += ( lGray = -static_cast<long>(pReadAcc->GetPixelIndex( nY2, nXTmp++ )) );
+                        nSum1 += ( lGray = -static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp++ )) );
                         nSum2 += lGray;
-                        nSum2 -= static_cast<long>(pReadAcc->GetPixelIndex( nY2, nXTmp++ )) << 1;
-                        nSum1 += ( lGray = static_cast<long>(pReadAcc->GetPixelIndex( nY2, nXTmp )) );
+                        nSum2 -= static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp++ )) << 1;
+                        nSum1 += ( lGray = static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp )) );
                         nSum2 -= lGray;
 
                         if( ( nSum1 * nSum1 + nSum2 * nSum2 ) < lThres2 )
@@ -583,7 +586,8 @@ tools::Polygon XOutBitmap::GetContour( const Bitmap& rBmp, const XOutFlags nFlag
                     // scan row from left to right
                     while( nY < nEndY1 )
                     {
-                        if( aBlack == pAcc->GetPixel( nY, nX ) )
+                        Scanline pScanline = pAcc->GetScanline( nY );
+                        if( aBlack == pAcc->GetPixelFromData( pScanline, nX ) )
                         {
                             pPoints1[ nPolyPos ] = Point( nX, nY );
                             nY = nStartY2;
@@ -591,7 +595,7 @@ tools::Polygon XOutBitmap::GetContour( const Bitmap& rBmp, const XOutFlags nFlag
                             // this loop always breaks eventually as there is at least one pixel
                             while( true )
                             {
-                                if( aBlack == pAcc->GetPixel( nY, nX ) )
+                                if( aBlack == pAcc->GetPixelFromData( pScanline, nX ) )
                                 {
                                     pPoints2[ nPolyPos ] = Point( nX, nY );
                                     break;
@@ -616,11 +620,12 @@ tools::Polygon XOutBitmap::GetContour( const Bitmap& rBmp, const XOutFlags nFlag
                 for ( nY = nStartY1; nY < nEndY1; nY++ )
                 {
                     nX = nStartX1;
+                    Scanline pScanline = pAcc->GetScanline( nY );
 
                     // scan row from left to right
                     while( nX < nEndX1 )
                     {
-                        if( aBlack == pAcc->GetPixel( nY, nX ) )
+                        if( aBlack == pAcc->GetPixelFromData( pScanline, nX ) )
                         {
                             pPoints1[ nPolyPos ] = Point( nX, nY );
                             nX = nStartX2;
@@ -628,7 +633,7 @@ tools::Polygon XOutBitmap::GetContour( const Bitmap& rBmp, const XOutFlags nFlag
                             // this loop always breaks eventually as there is at least one pixel
                             while( true )
                             {
-                                if( aBlack == pAcc->GetPixel( nY, nX ) )
+                                if( aBlack == pAcc->GetPixelFromData( pScanline, nX ) )
                                 {
                                     pPoints2[ nPolyPos ] = Point( nX, nY );
                                     break;

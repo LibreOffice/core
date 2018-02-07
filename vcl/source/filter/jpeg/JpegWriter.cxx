@@ -147,9 +147,10 @@ void* JPEGWriter::GetScanline( long nY )
 
             if( mpReadAccess->HasPalette() )
             {
+                Scanline pScanlineRead = mpReadAccess->GetScanline( nY );
                 for( long nX = 0; nX < nWidth; nX++ )
                 {
-                    aColor = mpReadAccess->GetPaletteColor( mpReadAccess->GetPixelIndex( nY, nX ) );
+                    aColor = mpReadAccess->GetPaletteColor( mpReadAccess->GetIndexFromData( pScanlineRead, nX ) );
                     *pTmp++ = aColor.GetRed();
                     if ( !mbGreys )
                     {
@@ -160,9 +161,10 @@ void* JPEGWriter::GetScanline( long nY )
             }
             else
             {
+                Scanline pScanlineRead = mpReadAccess->GetScanline( nY );
                 for( long nX = 0; nX < nWidth; nX++ )
                 {
-                    aColor = mpReadAccess->GetPixel( nY, nX );
+                    aColor = mpReadAccess->GetPixelFromData( pScanlineRead, nX );
                     *pTmp++ = aColor.GetRed();
                     if ( !mbGreys )
                     {
@@ -207,10 +209,11 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
             for ( long nY = 0; bIsGrey && ( nY < mpReadAccess->Height() ); nY++ )
             {
                 BitmapColor aColor;
+                Scanline pScanlineRead = mpReadAccess->GetScanline( nY );
                 for( long nX = 0; bIsGrey && ( nX < nWidth ); nX++ )
                 {
-                    aColor = mpReadAccess->HasPalette() ? mpReadAccess->GetPaletteColor( mpReadAccess->GetPixelIndex( nY, nX ) )
-                                                : mpReadAccess->GetPixel( nY, nX );
+                    aColor = mpReadAccess->HasPalette() ? mpReadAccess->GetPaletteColor( mpReadAccess->GetIndexFromData( pScanlineRead, nX ) )
+                                                : mpReadAccess->GetPixelFromData( pScanlineRead, nX );
                     bIsGrey = ( aColor.GetRed() == aColor.GetGreen() ) && ( aColor.GetRed() == aColor.GetBlue() );
                 }
             }

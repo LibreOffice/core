@@ -189,6 +189,11 @@ public:
         return mFncGetPixel( pData, nX, maColorMask );
     }
 
+    sal_uInt8 GetIndexFromData(const sal_uInt8* pData, long nX) const
+    {
+        return GetPixelFromData( pData, nX ).GetIndex();
+    }
+
     void SetPixelOnData(sal_uInt8* pData, long nX, const BitmapColor& rBitmapColor)
     {
         assert(pData && "Access is not valid!");

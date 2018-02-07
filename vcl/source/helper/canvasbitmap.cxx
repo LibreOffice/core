@@ -526,13 +526,14 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
                 const long nNonAlphaBytes( m_nBitsPerInputPixel/8 );
                 const long nScanlineOffsetLeft(aRequestedArea.Left()*nNonAlphaBytes);
                 Scanline  pScan = m_pBmpAcc->GetScanline(y) + nScanlineOffsetLeft;
+                Scanline pScanlineAlpha = m_pAlphaAcc->GetScanline( y );
 
                 // input integer multiple of byte - copy directly
                 for( long x=aRequestedArea.Left(); x<aRequestedArea.Right(); ++x )
                 {
                     for( long i=0; i<nNonAlphaBytes; ++i )
                         *pOutScan++ = *pScan++;
-                    *pOutScan++ = m_pAlphaAcc->GetPixelIndex( y, x );
+                    *pOutScan++ = m_pAlphaAcc->GetIndexFromData( pScanlineAlpha, x );
                 }
             }
 

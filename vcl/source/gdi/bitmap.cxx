@@ -478,9 +478,12 @@ bool Bitmap::Invert()
             const long  nWidth = pAcc->Width();
             const long  nHeight = pAcc->Height();
 
-            for( long nX = 0; nX < nWidth; nX++ )
-                for( long nY = 0; nY < nHeight; nY++ )
-                    pAcc->SetPixel( nY, nX, pAcc->GetPixel( nY, nX ).Invert() );
+            for( long nY = 0; nY < nHeight; nY++ )
+            {
+                Scanline pScanline = pAcc->GetScanline(nY);
+                for( long nX = 0; nX < nWidth; nX++ )
+                    pAcc->SetPixelOnData( pScanline, nX, pAcc->GetPixelFromData( pScanline, nX ).Invert() );
+            }
         }
 
         mxImpBmp->ImplInvalidateChecksum();
@@ -513,9 +516,9 @@ bool Bitmap::Mirror( BmpMirrorFlags nMirrorFlags )
                 Scanline pScanline = pAcc->GetScanline(nY);
                 for( long nX = 0, nOther = nWidth1; nX < nWidth_2; nX++, nOther-- )
                 {
-                    const BitmapColor aTemp( pAcc->GetPixel( nY, nX ) );
+                    const BitmapColor aTemp( pAcc->GetPixelFromData( pScanline, nX ) );
 
-                    pAcc->SetPixelOnData( pScanline, nX, pAcc->GetPixel( nY, nOther ) );
+                    pAcc->SetPixelOnData( pScanline, nX, pAcc->GetPixelFromData( pScanline, nOther ) );
                     pAcc->SetPixelOnData( pScanline, nOther, aTemp );
                 }
             }
@@ -564,9 +567,9 @@ bool Bitmap::Mirror( BmpMirrorFlags nMirrorFlags )
                 Scanline pScanlineOther = pAcc->GetScanline(nOtherY);
                 for( long nX = 0, nOtherX = nWidth1; nX < nWidth; nX++, nOtherX-- )
                 {
-                    const BitmapColor aTemp( pAcc->GetPixel( nY, nX ) );
+                    const BitmapColor aTemp( pAcc->GetPixelFromData( pScanline, nX ) );
 
-                    pAcc->SetPixelOnData( pScanline, nX, pAcc->GetPixel( nOtherY, nOtherX ) );
+                    pAcc->SetPixelOnData( pScanline, nX, pAcc->GetPixelFromData( pScanlineOther, nOtherX ) );
                     pAcc->SetPixelOnData( pScanlineOther, nOtherX, aTemp );
                 }
             }
@@ -577,8 +580,8 @@ bool Bitmap::Mirror( BmpMirrorFlags nMirrorFlags )
                 Scanline pScanline = pAcc->GetScanline(nHeight_2);
                 for( long nX = 0, nOtherX = nWidth1, nWidth_2 = nWidth >> 1; nX < nWidth_2; nX++, nOtherX-- )
                 {
-                    const BitmapColor aTemp( pAcc->GetPixel( nHeight_2, nX ) );
-                    pAcc->SetPixelOnData( pScanline, nX, pAcc->GetPixel( nHeight_2, nOtherX ) );
+                    const BitmapColor aTemp( pAcc->GetPixelFromData( pScanline, nX ) );
+                    pAcc->SetPixelOnData( pScanline, nX, pAcc->GetPixelFromData( pScanline, nOtherX ) );
                     pAcc->SetPixelOnData( pScanline, nOtherX, aTemp );
                 }
             }
@@ -764,8 +767,9 @@ bool Bitmap::Crop( const tools::Rectangle& rRectPixel )
                 for( long nY = 0, nY2 = nOldY; nY < nNewHeight; nY++, nY2++ )
                 {
                     Scanline pScanline = pWriteAcc->GetScanline(nY);
+                    Scanline pScanlineRead = pReadAcc->GetScanline(nY2);
                     for( long nX = 0, nX2 = nOldX; nX < nNewWidth; nX++, nX2++ )
-                        pWriteAcc->SetPixelOnData( pScanline, nX, pReadAcc->GetPixel( nY2, nX2 ) );
+                        pWriteAcc->SetPixelOnData( pScanline, nX, pReadAcc->GetPixelFromData( pScanlineRead, nX2 ) );
                 }
 
                 pWriteAcc.reset();
@@ -881,8 +885,9 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
                             for( long nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
                             {
                                 Scanline pScanline = pWriteAcc->GetScanline(nDstY);
+                                Scanline pScanlineRead = pReadAcc->GetScanline(nSrcY);
                                 for( long nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
-                                    pWriteAcc->SetPixelOnData( pScanline, nDstX, BitmapColor( pMap[ pReadAcc->GetPixelIndex( nSrcY, nSrcX ) ] ));
+                                    pWriteAcc->SetPixelOnData( pScanline, nDstX, BitmapColor( pMap[ pReadAcc->GetIndexFromData( pScanlineRead, nSrcX ) ] ));
                             }
                         }
                         else if( pReadAcc->HasPalette() )
@@ -890,16 +895,18 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
                             for( long nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
                             {
                                 Scanline pScanline = pWriteAcc->GetScanline(nDstY);
+                                Scanline pScanlineRead = pReadAcc->GetScanline(nSrcY);
                                 for( long nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
-                                    pWriteAcc->SetPixelOnData( pScanline, nDstX, pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nSrcY, nSrcX ) ) );
+                                    pWriteAcc->SetPixelOnData( pScanline, nDstX, pReadAcc->GetPaletteColor( pReadAcc->GetIndexFromData( pScanlineRead, nSrcX ) ) );
                             }
                         }
                         else
                             for( long nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
                             {
                                 Scanline pScanline = pWriteAcc->GetScanline(nDstY);
+                                Scanline pScanlineRead = pReadAcc->GetScanline(nSrcY);
                                 for( long nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
-                                    pWriteAcc->SetPixelOnData( pScanline, nDstX, pReadAcc->GetPixel( nSrcY, nSrcX ) );
+                                    pWriteAcc->SetPixelOnData( pScanline, nDstX, pReadAcc->GetPixelFromData( pScanlineRead, nSrcX ) );
                             }
 
                         pWriteAcc.reset();
@@ -938,8 +945,9 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
                         for( long nY = nSrcY, nYN = nDstY; nY <= nSrcEndY1; nY++, nYN++ )
                         {
                             Scanline pScanline = pWriteAcc->GetScanline(nYN);
+                            Scanline pScanlineSrc = pWriteAcc->GetScanline(nY);
                             for( long nX = nSrcX, nXN = nDstX; nX <= nSrcEndX1; nX++, nXN++ )
-                                pWriteAcc->SetPixelOnData( pScanline, nXN, pWriteAcc->GetPixel( nY, nX ) );
+                                pWriteAcc->SetPixelOnData( pScanline, nXN, pWriteAcc->GetPixelFromData( pScanlineSrc, nX ) );
                         }
                     }
                     else if( ( nDstX <= nSrcX ) && ( nDstY >= nSrcY ) )
@@ -947,8 +955,9 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
                         for( long nY = nSrcEndY1, nYN = nDstEndY1; nY >= nSrcY; nY--, nYN-- )
                         {
                             Scanline pScanline = pWriteAcc->GetScanline(nYN);
+                            Scanline pScanlineSrc = pWriteAcc->GetScanline(nY);
                             for( long nX = nSrcX, nXN = nDstX; nX <= nSrcEndX1; nX++, nXN++ )
-                                pWriteAcc->SetPixelOnData( pScanline, nXN, pWriteAcc->GetPixel( nY, nX ) );
+                                pWriteAcc->SetPixelOnData( pScanline, nXN, pWriteAcc->GetPixelFromData( pScanlineSrc, nX ) );
                         }
                     }
                     else if( ( nDstX >= nSrcX ) && ( nDstY <= nSrcY ) )
@@ -956,8 +965,9 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
                         for( long nY = nSrcY, nYN = nDstY; nY <= nSrcEndY1; nY++, nYN++ )
                         {
                             Scanline pScanline = pWriteAcc->GetScanline(nYN);
+                            Scanline pScanlineSrc = pWriteAcc->GetScanline(nY);
                             for( long nX = nSrcEndX1, nXN = nDstEndX1; nX >= nSrcX; nX--, nXN-- )
-                                pWriteAcc->SetPixelOnData( pScanline, nXN, pWriteAcc->GetPixel( nY, nX ) );
+                                pWriteAcc->SetPixelOnData( pScanline, nXN, pWriteAcc->GetPixelFromData( pScanlineSrc, nX ) );
                         }
                     }
                     else
@@ -965,8 +975,9 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
                         for( long nY = nSrcEndY1, nYN = nDstEndY1; nY >= nSrcY; nY--, nYN-- )
                         {
                             Scanline pScanline = pWriteAcc->GetScanline(nYN);
+                            Scanline pScanlineSrc = pWriteAcc->GetScanline(nY);
                             for( long nX = nSrcEndX1, nXN = nDstEndX1; nX >= nSrcX; nX--, nXN-- )
-                                pWriteAcc->SetPixelOnData( pScanline, nXN, pWriteAcc->GetPixel( nY, nX ) );
+                                pWriteAcc->SetPixelOnData( pScanline, nXN, pWriteAcc->GetPixelFromData( pScanlineSrc, nX ) );
                         }
                     }
 
@@ -1020,8 +1031,9 @@ bool Bitmap::CopyPixel_AlphaOptimized( const tools::Rectangle& rRectDst, const t
                         for( long nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++)
                         {
                             Scanline pScanline = pWriteAcc->GetScanline(nDstY);
+                            Scanline pScanlineRead = pReadAcc->GetScanline(nSrcY);
                             for( long nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
-                                pWriteAcc->SetPixelOnData( pScanline, nDstX, pReadAcc->GetPixel( nSrcY, nSrcX ) );
+                                pWriteAcc->SetPixelOnData( pScanline, nDstX, pReadAcc->GetPixelFromData( pScanlineRead, nSrcX ) );
                         }
 
                         pWriteAcc.reset();
@@ -1060,8 +1072,9 @@ bool Bitmap::CopyPixel_AlphaOptimized( const tools::Rectangle& rRectDst, const t
                         for( long nY = nSrcY, nYN = nDstY; nY <= nSrcEndY1; nY++, nYN++ )
                         {
                             Scanline pScanline = pWriteAcc->GetScanline(nYN);
+                            Scanline pScanlineSrc = pWriteAcc->GetScanline(nY);
                             for( long nX = nSrcX, nXN = nDstX; nX <= nSrcEndX1; nX++, nXN++ )
-                                pWriteAcc->SetPixelOnData( pScanline, nXN, pWriteAcc->GetPixel( nY, nX ) );
+                                pWriteAcc->SetPixelOnData( pScanline, nXN, pWriteAcc->GetPixelFromData( pScanlineSrc, nX ) );
                         }
                     }
                     else if( ( nDstX <= nSrcX ) && ( nDstY >= nSrcY ) )
@@ -1069,8 +1082,9 @@ bool Bitmap::CopyPixel_AlphaOptimized( const tools::Rectangle& rRectDst, const t
                         for( long nY = nSrcEndY1, nYN = nDstEndY1; nY >= nSrcY; nY--, nYN-- )
                         {
                             Scanline pScanline = pWriteAcc->GetScanline(nYN);
+                            Scanline pScanlineSrc = pWriteAcc->GetScanline(nY);
                             for( long nX = nSrcX, nXN = nDstX; nX <= nSrcEndX1; nX++, nXN++ )
-                                pWriteAcc->SetPixelOnData( pScanline, nXN, pWriteAcc->GetPixel( nY, nX ) );
+                                pWriteAcc->SetPixelOnData( pScanline, nXN, pWriteAcc->GetPixelFromData( pScanlineSrc, nX ) );
                         }
                     }
                     else if( ( nDstX >= nSrcX ) && ( nDstY <= nSrcY ) )
@@ -1078,8 +1092,9 @@ bool Bitmap::CopyPixel_AlphaOptimized( const tools::Rectangle& rRectDst, const t
                         for( long nY = nSrcY, nYN = nDstY; nY <= nSrcEndY1; nY++, nYN++ )
                         {
                             Scanline pScanline = pWriteAcc->GetScanline(nYN);
+                            Scanline pScanlineSrc = pWriteAcc->GetScanline(nY);
                             for( long nX = nSrcEndX1, nXN = nDstEndX1; nX >= nSrcX; nX--, nXN-- )
-                                pWriteAcc->SetPixelOnData( pScanline, nXN, pWriteAcc->GetPixel( nY, nX ) );
+                                pWriteAcc->SetPixelOnData( pScanline, nXN, pWriteAcc->GetPixelFromData( pScanlineSrc, nX ) );
                         }
                     }
                     else
@@ -1087,8 +1102,9 @@ bool Bitmap::CopyPixel_AlphaOptimized( const tools::Rectangle& rRectDst, const t
                         for( long nY = nSrcEndY1, nYN = nDstEndY1; nY >= nSrcY; nY--, nYN-- )
                         {
                             Scanline pScanline = pWriteAcc->GetScanline(nYN);
+                            Scanline pScanlineSrc = pWriteAcc->GetScanline(nY);
                             for( long nX = nSrcEndX1, nXN = nDstEndX1; nX >= nSrcX; nX--, nXN-- )
-                                pWriteAcc->SetPixelOnData( pScanline, nXN, pWriteAcc->GetPixel( nY, nX ) );
+                                pWriteAcc->SetPixelOnData( pScanline, nXN, pWriteAcc->GetPixelFromData( pScanlineSrc, nX ) );
                         }
                     }
 
@@ -1291,9 +1307,10 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uInt8 nTol ) const
                 for (long nY = 0; nY < nHeight; ++nY)
                 {
                     Scanline pScanline = pWriteAcc->GetScanline( nY );
+                    Scanline pScanlineRead = pReadAcc->GetScanline( nY );
                     for (long nX = 0; nX < nWidth; ++nX)
                     {
-                        if( aTest == pReadAcc->GetPixel( nY, nX ) )
+                        if( aTest == pReadAcc->GetPixelFromData( pScanlineRead, nX ) )
                             pWriteAcc->SetPixelOnData( pScanline, nX, aWhite );
                         else
                             pWriteAcc->SetPixelOnData( pScanline, nX, aBlack );
@@ -1317,9 +1334,10 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uInt8 nTol ) const
                 for( long nY = 0; nY < nHeight; nY++ )
                 {
                     Scanline pScanline = pWriteAcc->GetScanline( nY );
+                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
                     for( long nX = 0; nX < nWidth; nX++ )
                     {
-                        aCol = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nX ) );
+                        aCol = pReadAcc->GetPaletteColor( pReadAcc->GetIndexFromData( pScanlineRead, nX ) );
                         nR = aCol.GetRed();
                         nG = aCol.GetGreen();
                         nB = aCol.GetBlue();
@@ -1340,9 +1358,10 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uInt8 nTol ) const
                 for( long nY = 0; nY < nHeight; nY++ )
                 {
                     Scanline pScanline = pWriteAcc->GetScanline( nY );
+                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
                     for( long nX = 0; nX < nWidth; nX++ )
                     {
-                        aCol = pReadAcc->GetPixel( nY, nX );
+                        aCol = pReadAcc->GetPixelFromData( pScanlineRead, nX );
                         nR = aCol.GetRed();
                         nG = aCol.GetGreen();
                         nB = aCol.GetBlue();
@@ -1406,10 +1425,11 @@ vcl::Region Bitmap::CreateRegion( const Color& rColor, const tools::Rectangle& r
             //aSubRect.Top() = aSubRect.Bottom() = nY;
             std::vector< long > aNewLine;
             long nX(nLeft);
+            Scanline pScanlineRead = pReadAcc->GetScanline(nY);
 
             for( ; nX <= nRight; )
             {
-                while( ( nX <= nRight ) && ( aMatch != pReadAcc->GetPixel( nY, nX ) ) )
+                while( ( nX <= nRight ) && ( aMatch != pReadAcc->GetPixelFromData( pScanlineRead, nX ) ) )
                     nX++;
 
                 if( nX <= nRight )
@@ -1417,7 +1437,7 @@ vcl::Region Bitmap::CreateRegion( const Color& rColor, const tools::Rectangle& r
                     aNewLine.push_back(nX);
                     //aSubRect.Left() = nX;
 
-                    while( ( nX <= nRight ) && ( aMatch == pReadAcc->GetPixel( nY, nX ) ) )
+                    while( ( nX <= nRight ) && ( aMatch == pReadAcc->GetPixelFromData( pScanlineRead, nX ) ) )
                         nX++;
 
                     //aSubRect.Right() = nX - 1;
@@ -1522,8 +1542,11 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
                     std::fill( pFlags.get(), pFlags.get()+nMaxColors, false );
 
                     for( long nY = 0; nY < nHeight; nY++ )
+                    {
+                        Scanline pScanline = pAcc->GetScanline(nY);
                         for( long nX = 0; nX < nWidth; nX++ )
-                            pFlags[ pAcc->GetPixelIndex( nY, nX ) ] = true;
+                            pFlags[ pAcc->GetIndexFromData( pScanline, nX ) ] = true;
+                    }
 
                     for( sal_uInt16 i = 0; i < nMaxColors; i++ )
                     {
@@ -1543,8 +1566,9 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
         for( long nY = 0; nY < nHeight; nY++ )
         {
             Scanline pScanline = pAcc->GetScanline( nY );
+            Scanline pScanlineMask = pMaskAcc->GetScanline( nY );
             for( long nX = 0; nX < nWidth; nX++ )
-                if( pMaskAcc->GetPixel( nY, nX ) == aMaskWhite )
+                if( pMaskAcc->GetPixelFromData( pScanlineMask, nX ) == aMaskWhite )
                     pAcc->SetPixelOnData( pScanline, nX, aReplace );
         }
 
@@ -1571,10 +1595,11 @@ bool Bitmap::Replace( const AlphaMask& rAlpha, const Color& rMergeColor )
         for( long nY = 0; nY < nHeight; nY++ )
         {
             Scanline pScanline = pNewAcc->GetScanline( nY );
+            Scanline pScanlineAlpha = pAlphaAcc->GetScanline( nY );
             for( long nX = 0; nX < nWidth; nX++ )
             {
                 aCol = pAcc->GetColor( nY, nX );
-                pNewAcc->SetPixelOnData( pScanline, nX, aCol.Merge( rMergeColor, 255 - pAlphaAcc->GetPixelIndex( nY, nX ) ) );
+                pNewAcc->SetPixelOnData( pScanline, nX, aCol.Merge( rMergeColor, 255 - pAlphaAcc->GetIndexFromData( pScanlineAlpha, nX ) ) );
             }
         }
 
@@ -1655,7 +1680,7 @@ bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal
                 Scanline pScanline = pAcc->GetScanline( nY );
                 for( long nX = 0, nWidth = pAcc->Width(); nX < nWidth; nX++ )
                 {
-                    aCol = pAcc->GetPixel( nY, nX );
+                    aCol = pAcc->GetPixelFromData( pScanline, nX );
 
                     if( nMinR <= aCol.GetRed() && nMaxR >= aCol.GetRed() &&
                         nMinG <= aCol.GetGreen() && nMaxG >= aCol.GetGreen() &&
@@ -1755,7 +1780,7 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
                 Scanline pScanline = pAcc->GetScanline( nY );
                 for( long nX = 0, nWidth = pAcc->Width(); nX < nWidth; nX++ )
                 {
-                    aCol = pAcc->GetPixel( nY, nX );
+                    aCol = pAcc->GetPixelFromData( pScanline, nX );
 
                     for( sal_uLong i = 0; i < nColorCount; i++ )
                     {
@@ -1818,9 +1843,10 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
                 for( long nY = 0; nY < nHeight; nY++ )
                 {
                     Scanline pScanline = pAcc->GetScanline( nY );
+                    Scanline pScanlineMask = pMaskAcc->GetScanline( nY );
                     for( long nX = 0; nX < nWidth; nX++ )
                     {
-                        if( pMaskAcc->GetPixel( nY, nX ) != aMaskBlack && pAcc->GetPixel( nY, nX ) != aBlack )
+                        if( pMaskAcc->GetPixelFromData( pScanlineMask, nX ) != aMaskBlack && pAcc->GetPixelFromData( pScanline, nX ) != aBlack )
                             pAcc->SetPixelOnData( pScanline, nX, aWhite );
                         else
                             pAcc->SetPixelOnData( pScanline, nX, aBlack );
@@ -1834,9 +1860,10 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
                 for( long nY = 0; nY < nHeight; nY++ )
                 {
                     Scanline pScanline = pAcc->GetScanline( nY );
+                    Scanline pScanlineMask = pMaskAcc->GetScanline( nY );
                     for( long nX = 0; nX < nWidth; nX++ )
                     {
-                        if( pMaskAcc->GetPixel( nY, nX ) != aMaskBlack || pAcc->GetPixel( nY, nX ) != aBlack )
+                        if( pMaskAcc->GetPixelFromData( pScanlineMask, nX ) != aMaskBlack || pAcc->GetPixelFromData( pScanline, nX ) != aBlack )
                             pAcc->SetPixelOnData( pScanline, nX, aWhite );
                         else
                             pAcc->SetPixelOnData( pScanline, nX, aBlack );
@@ -1875,10 +1902,11 @@ bool Bitmap::Blend( const AlphaMask& rAlpha, const Color& rBackgroundColor )
         for( long nY = 0; nY < nHeight; ++nY )
         {
             Scanline pScanline = pAcc->GetScanline( nY );
+            Scanline pScanlineAlpha = pAlphaAcc->GetScanline( nY );
             for( long nX = 0; nX < nWidth; ++nX )
                 pAcc->SetPixelOnData( pScanline, nX,
-                                pAcc->GetPixel( nY, nX ).Merge( rBackgroundColor,
-                                                                255 - pAlphaAcc->GetPixelIndex( nY, nX ) ) );
+                                pAcc->GetPixelFromData( pScanline, nX ).Merge( rBackgroundColor,
+                                                                255 - pAlphaAcc->GetIndexFromData( pScanlineAlpha, nX ) ) );
         }
 
         bRet = true;

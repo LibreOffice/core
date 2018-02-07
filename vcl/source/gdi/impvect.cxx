@@ -646,8 +646,11 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
         }
 
         for( long nY = 0; nY < nHeight; nY++ )
+        {
+            Scanline pScanlineRead = pRAcc->GetScanline( nY );
             for( long nX = 0; nX < nWidth; nX++ )
-                pColorSet[ pRAcc->GetPixel( nY, nX ).GetIndex() ].mbSet = true;
+                pColorSet[ pRAcc->GetIndexFromData( pScanlineRead, nX ) ].mbSet = true;
+        }
 
         qsort( pColorSet, 256, sizeof( ImplColorSet ), ImplColorSetCmpFnc );
 
@@ -769,9 +772,10 @@ ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor )
 
         for( nY = 0, nTmpY = 5; nY < nOldHeight; nY++, nTmpY += 4 )
         {
+            Scanline pScanlineRead = pRAcc->GetScanline( nY );
             for( nX = 0; nX < nOldWidth; )
             {
-                if( pRAcc->GetPixel( nY, nX ) == aTest )
+                if( pRAcc->GetPixelFromData( pScanlineRead, nX ) == aTest )
                 {
                     nTmpX = pMapIn[ nX++ ];
                     nTmpY -= 3;
@@ -781,7 +785,7 @@ ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor )
                     pMap->Set( nTmpY++, nTmpX, VECT_CONT_INDEX );
                     pMap->Set( nTmpY, nTmpX, VECT_CONT_INDEX );
 
-                    while( nX < nOldWidth && pRAcc->GetPixel( nY, nX ) == aTest )
+                    while( nX < nOldWidth && pRAcc->GetPixelFromData( pScanlineRead, nX ) == aTest )
                          nX++;
 
                     nTmpX = pMapOut[ nX - 1 ];

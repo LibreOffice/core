@@ -55,9 +55,10 @@ void setAlpha( Bitmap& rBitmap, AlphaMask& rAlpha, sal_uInt8 cIndexFrom, sal_Int
         for ( long nY = 0; nY < pReadAccess->Height(); nY++ )
         {
             Scanline pScanline = pWriteAccess->GetScanline( nY );
+            Scanline pScanlineRead = pReadAccess->GetScanline( nY );
             for ( long nX = 0; nX < pReadAccess->Width(); nX++ )
             {
-                const sal_uInt8 cIndex = pReadAccess->GetPixelIndex( nY, nX );
+                const sal_uInt8 cIndex = pReadAccess->GetIndexFromData( pScanlineRead, nX );
                 if ( cIndex == cIndexFrom )
                     pWriteAccess->SetPixelOnData( pScanline, nX, BitmapColor(nAlphaTo) );
             }

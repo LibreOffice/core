@@ -428,9 +428,10 @@ void XclExpImgData::Save( XclExpStream& rStrm )
 
             for( sal_Int32 nY = nHeight - 1; nY >= 0; --nY )
             {
+                Scanline pScanline = pAccess->GetScanline( nY );
                 for( sal_Int32 nX = 0; nX < nWidth; ++nX )
                 {
-                    const BitmapColor& rBmpColor = pAccess->GetPixel( nY, nX );
+                    const BitmapColor& rBmpColor = pAccess->GetPixelFromData( pScanline, nX );
                     rStrm << rBmpColor.GetBlue() << rBmpColor.GetGreen() << rBmpColor.GetRed();
                 }
                 rStrm.WriteZeroBytes( nPadding );

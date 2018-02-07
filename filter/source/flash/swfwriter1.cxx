@@ -733,9 +733,10 @@ void getBitmapData( const BitmapEx& aBmpEx, sal_uInt8*& tgadata, sal_uInt8*& tga
             {
                 for( sal_uInt32 nY = 0; nY < nHeight; nY++ )
                 {
+                    Scanline pScanlineAA = pAAcc->GetScanline( nY );
                     for( sal_uInt32 nX = 0; nX < nWidth; nX++ )
                     {
-                        const sal_uInt8     nAlpha = pAAcc->GetPixel( nY, nX ).GetIndex();
+                        const sal_uInt8     nAlpha = pAAcc->GetIndexFromData( pScanlineAA, nX );
                         const BitmapColor   aPixelColor( pRAcc->GetColor( nY, nX ) );
 
                         if( nAlpha == 0xff )

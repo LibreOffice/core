@@ -588,12 +588,13 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
 
                             for (int yIn = yStart; yIn <= yEnd; yIn++)
                             {
+                                Scanline pScanlineRead = pReadAccess->GetScanline( yIn );
                                 for (int xIn = xStart; xIn <= xEnd; xIn++)
                                 {
                                     if( pReadAccess->HasPalette() )
-                                        aColor = pReadAccess->GetPaletteColor( pReadAccess->GetPixelIndex( yIn, xIn ) );
+                                        aColor = pReadAccess->GetPaletteColor( pReadAccess->GetIndexFromData( pScanlineRead, xIn ) );
                                     else
-                                        aColor = pReadAccess->GetPixel( yIn, xIn );
+                                        aColor = pReadAccess->GetPixelFromData( pScanlineRead, xIn );
 
                                     aSumRed   += aColor.GetRed();
                                     aSumGreen += aColor.GetGreen();
@@ -725,9 +726,10 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
 
                                         for (int yIn = yStart; yIn <= yEnd; yIn++)
                                         {
+                                            Scanline pScanlineRead = pReadAccess->GetScanline( yIn );
                                             for (int xIn = xStart; xIn <= xEnd; xIn++)
                                             {
-                                                aSum += pReadAccess->GetPixel( yIn, xIn ).GetIndex();
+                                                aSum += pReadAccess->GetPixelFromData( pScanlineRead, xIn ).GetIndex();
                                                 aCount++;
                                             }
                                         }
@@ -1495,7 +1497,7 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, Gra
                     Scanline pScanline = pA->GetScanline( nY );
                     for( long nX = 0; nX < nWidth; nX++ )
                     {
-                        nNewTrans = nTrans + pA->GetPixel( nY, nX ).GetIndex();
+                        nNewTrans = nTrans + pA->GetIndexFromData( pScanline, nX );
                         aAlphaValue.SetIndex( static_cast<sal_uInt8>( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans ) );
                         pA->SetPixelOnData( pScanline, nX, aAlphaValue );
                     }

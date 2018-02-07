@@ -156,6 +156,7 @@ namespace vclcanvas
              y<aBmpSize.Height() && y<rect.Y2;
              ++y )
         {
+            Scanline pScanlineReadAlpha = pAlphaReadAccess->GetScanline( y );
             if( pAlphaReadAccess.get() != nullptr )
             {
                 for( long x=rect.X1;
@@ -165,7 +166,7 @@ namespace vclcanvas
                     pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
                     pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
                     pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
-                    pRes[ nCurrPos++ ] = pAlphaReadAccess->GetPixel( y, x ).GetIndex();
+                    pRes[ nCurrPos++ ] = pAlphaReadAccess->GetIndexFromData( pScanlineReadAlpha, x );
                 }
             }
             else

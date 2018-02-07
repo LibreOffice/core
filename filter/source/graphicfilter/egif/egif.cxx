@@ -506,8 +506,9 @@ void GIFWriter::WriteAccess()
                 aCompressor.Compress( m_pAcc->GetScanline( nY ), nWidth );
             else
             {
+                Scanline pScanline = m_pAcc->GetScanline( nY );
                 for( long nX = 0; nX < nWidth; nX++ )
-                    pBuffer[ nX ] = m_pAcc->GetPixelIndex( nY, nX );
+                    pBuffer[ nX ] = m_pAcc->GetIndexFromData( pScanline, nX );
 
                 aCompressor.Compress( pBuffer.get(), nWidth );
             }

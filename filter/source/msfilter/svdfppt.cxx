@@ -5686,9 +5686,10 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
                             {
                                 for( long nY = 0; nY < nHeight; nY++ )
                                 {
+                                    Scanline pScanline = pAcc->GetScanline( nY );
                                     for( long nX = 0; nX < nWidth; nX++ )
                                     {
-                                        const BitmapColor& rCol = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nY, nX ) );
+                                        const BitmapColor& rCol = pAcc->GetPaletteColor( pAcc->GetIndexFromData( pScanline, nX ) );
                                         nRt+=rCol.GetRed(); nGn+=rCol.GetGreen(); nBl+=rCol.GetBlue();
                                     }
                                 }
@@ -5697,9 +5698,10 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
                             {
                                 for( long nY = 0; nY < nHeight; nY++ )
                                 {
+                                    Scanline pScanline = pAcc->GetScanline( nY );
                                     for( long nX = 0; nX < nWidth; nX++ )
                                     {
-                                        const BitmapColor aCol( pAcc->GetPixel( nY, nX ) );
+                                        const BitmapColor aCol( pAcc->GetPixelFromData( pScanline, nX ) );
                                         nRt+=aCol.GetRed(); nGn+=aCol.GetGreen(); nBl+=aCol.GetBlue();
                                     }
                                 }

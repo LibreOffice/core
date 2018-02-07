@@ -1528,6 +1528,7 @@ Bitmap OutputDevice::BlendBitmap(
                 int nOutX;
 
                 Scanline pScanline = pW->GetScanline(nY);
+                Scanline pScanlineAlpha = pA->GetScanline(nMapY);
                 for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
                 {
                     long  nMapX = pMapX[ nX ];
@@ -1538,7 +1539,7 @@ Bitmap OutputDevice::BlendBitmap(
                     const sal_uLong nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
 
                     aDstCol = pB->GetColor( nY, nX );
-                    aDstCol.Merge( pP->GetColor( nMapY, nMapX ), pA->GetPixelIndex( nMapY, nMapX ) );
+                    aDstCol.Merge( pP->GetColor( nMapY, nMapX ), pA->GetIndexFromData( pScanlineAlpha, nMapX ) );
                     aIndex.SetIndex( static_cast<sal_uInt8>( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16 ] +
                                               nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16 ] +
                                               nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16 ] ) );
@@ -1592,7 +1593,7 @@ Bitmap OutputDevice::BlendBitmap(
                                 {
                                     nMapX = aBmpRect.Right() - nMapX;
                                 }
-                                aDstCol = pB->GetPixel( nY, nX );
+                                aDstCol = pB->GetPixelFromData( pBScan, nX );
                                 pB->SetPixelOnData( pBScan, nX, aDstCol.Merge( pP->GetPaletteColor( pPScan[ nMapX ] ),
                                                                                 pAScan[ nMapX ] ) );
                             }
@@ -1621,7 +1622,7 @@ Bitmap OutputDevice::BlendBitmap(
                             {
                                 nMapX = aBmpRect.Right() - nMapX;
                             }
-                            aDstCol = pB->GetPixel( nY, nX );
+                            aDstCol = pB->GetPixelFromData( pBScan, nX );
                             pB->SetPixelOnData( pBScan, nX, aDstCol.Merge( pP->GetColor( nMapY, nMapX ),
                                                                  pAScan[ nMapX ] ) );
                         }
