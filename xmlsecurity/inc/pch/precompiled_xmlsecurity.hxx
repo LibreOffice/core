@@ -53,7 +53,6 @@
 #include <utility>
 #include <vector>
 #include <xmlsecuritydllapi.h>
-#include <xsecfwdllapi.h>
 #include <boost/optional/optional.hpp>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>

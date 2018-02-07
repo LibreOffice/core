@@ -35,13 +35,13 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
-#include <xsecfwdllapi.h>
+#include <xmlsecuritydllapi.h>
 #include <framework/securityengine.hxx>
 #include <framework/xmlsignaturetemplateimpl.hxx>
 
 #include <vector>
 
-class XSECFW_DLLPUBLIC SignatureEngine : public cppu::ImplInheritanceHelper
+class XMLSECURITY_DLLPUBLIC SignatureEngine : public cppu::ImplInheritanceHelper
 <
     SecurityEngine,
     css::xml::crypto::sax::XReferenceCollector,

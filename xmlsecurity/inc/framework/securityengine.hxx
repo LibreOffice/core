@@ -29,9 +29,9 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <xsecfwdllapi.h>
+#include <xmlsecuritydllapi.h>
 
-class XSECFW_DLLPUBLIC SecurityEngine : public cppu::WeakImplHelper
+class XMLSECURITY_DLLPUBLIC SecurityEngine : public cppu::WeakImplHelper
 <
     css::xml::crypto::sax::XReferenceResolvedListener,
     css::xml::crypto::sax::XKeyCollector,

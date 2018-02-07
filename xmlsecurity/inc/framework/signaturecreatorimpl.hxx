@@ -40,7 +40,7 @@ typedef cppu::ImplInheritanceHelper
     css::lang::XServiceInfo
 > SignatureCreatorImpl_Base;
 
-class XSECFW_DLLPUBLIC SignatureCreatorImpl : public SignatureCreatorImpl_Base
+class XMLSECURITY_DLLPUBLIC SignatureCreatorImpl : public SignatureCreatorImpl_Base
 /****** SignatureCreatorImpl.hxx/CLASS SignatureCreatorImpl *******************
  *
  *   NAME

@@ -19699,8 +19699,6 @@ xmlsecurity/inc/gpg/xmlsignature_gpgimpl.hxx
 xmlsecurity/inc/macrosecurity.hxx
 xmlsecurity/inc/pch/precompiled_xmlsecurity.cxx
 xmlsecurity/inc/pch/precompiled_xmlsecurity.hxx
-xmlsecurity/inc/pch/precompiled_xsec_fw.cxx
-xmlsecurity/inc/pch/precompiled_xsec_fw.hxx
 xmlsecurity/inc/pch/precompiled_xsec_gpg.cxx
 xmlsecurity/inc/pch/precompiled_xsec_gpg.hxx
 xmlsecurity/inc/pch/precompiled_xsec_xmlsec.cxx
