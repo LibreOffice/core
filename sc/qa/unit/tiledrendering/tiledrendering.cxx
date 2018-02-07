@@ -81,6 +81,7 @@ public:
     void testDocumentRepair();
     void testLanguageStatus();
     void testMultiViewCopyPaste();
+    void testIMESupport();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -111,6 +112,7 @@ public:
     CPPUNIT_TEST(testDocumentRepair);
     CPPUNIT_TEST(testLanguageStatus);
     CPPUNIT_TEST(testMultiViewCopyPaste);
+    CPPUNIT_TEST(testIMESupport);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1555,6 +1557,39 @@ void ScTiledRenderingTest::testMultiViewCopyPaste()
 
     CPPUNIT_ASSERT_EQUAL(OUString("TestCopy1"), pDoc->GetString(ScAddress(0, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("TestCopy2"), pDoc->GetString(ScAddress(1, 1, 0)));
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testIMESupport()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    pView->SetCursor(0, 0);
+    // sequence of chineese IME compositions when 'nihao' is typed in an IME
+    const std::vector<OString> aUtf8Inputs{ "年", "你", "你好", "你哈", "你好", "你好" };
+    std::vector<OUString> aInputs;
+    std::transform(aUtf8Inputs.begin(), aUtf8Inputs.end(),
+                   std::back_inserter(aInputs), [](OString aInput) {
+                       return OUString::fromUtf8(aInput);
+                   });
+    for (const auto& aInput: aInputs)
+    {
+        pModelObj->postExtTextInputEvent(LOK_EXT_TEXTINPUT, aInput);
+    }
+    pModelObj->postExtTextInputEvent(LOK_EXT_TEXTINPUT_END, "");
+
+    // commit the string to the cell
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+
+    CPPUNIT_ASSERT_EQUAL(aInputs[aInputs.size() - 1], pDoc->GetString(ScAddress(0, 0, 0)));
 
     comphelper::LibreOfficeKit::setActive(false);
 }
