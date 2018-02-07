@@ -1482,8 +1482,11 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         return SF_TTFORMAT;
     }
 
-    t->ntables = GetUInt16(t->ptr + tdoffset, 4);
-    if (t->ntables >= 128) {
+    if (tdoffset + 4 + sizeof(sal_uInt16) <=  static_cast<sal_uInt32>(t->fsize)) {
+        t->ntables = GetUInt16(t->ptr + tdoffset, 4);
+    }
+
+    if (t->ntables >= 128 || t->ntables == 0) {
         CloseTTFont(t);
         return SF_TTFORMAT;
     }
