@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <xsecfwdllapi.h>
+#include <xmlsecuritydllapi.h>
 #include <cppuhelper/implbase.hxx>
 
 class BufferNode;
@@ -40,7 +40,7 @@ class ElementCollector;
 #include <vector>
 #include <memory>
 
-class XSECFW_DLLPUBLIC SAXEventKeeperImpl : public cppu::WeakImplHelper
+class XMLSECURITY_DLLPUBLIC SAXEventKeeperImpl : public cppu::WeakImplHelper
 <
     css::xml::crypto::sax::XSecuritySAXEventKeeper,
     css::xml::crypto::sax::XReferenceResolvedBroadcaster,

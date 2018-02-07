@@ -41,7 +41,6 @@ $(eval $(call gb_Library_use_libraries,xmlsecurity,\
 	vcl \
 	xo \
 	i18nlangtag \
-	xsec_fw \
 	xsec_xmlsec \
 ))
 
@@ -53,6 +52,15 @@ $(eval $(call gb_Library_add_exception_objects,xmlsecurity,\
 	xmlsecurity/source/dialogs/digitalsignaturesdialog \
 	xmlsecurity/source/dialogs/macrosecurity \
 	xmlsecurity/source/dialogs/resourcemanager \
+	xmlsecurity/source/framework/buffernode \
+	xmlsecurity/source/framework/elementcollector \
+	xmlsecurity/source/framework/elementmark \
+	xmlsecurity/source/framework/saxeventkeeperimpl \
+	xmlsecurity/source/framework/securityengine \
+	xmlsecurity/source/framework/signaturecreatorimpl \
+	xmlsecurity/source/framework/signatureengine \
+	xmlsecurity/source/framework/signatureverifierimpl \
+	xmlsecurity/source/framework/xmlsignaturetemplateimpl \
 	xmlsecurity/source/helper/documentsignaturehelper \
 	xmlsecurity/source/helper/documentsignaturemanager \
 	xmlsecurity/source/helper/ooxmlsecparser \

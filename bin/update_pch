@@ -123,7 +123,6 @@ DEFAULTS = \
     'xmloff.xof'                        : ( 1, EXCLUDE, EXCLUDE, INCLUDE), #   4.4
     'xmlscript.xmlscript'               : ( 4, EXCLUDE, EXCLUDE, INCLUDE), #   3.6
     'xmlsecurity.xmlsecurity'           : ( 6, EXCLUDE, INCLUDE, INCLUDE), #   5.1
-    'xmlsecurity.xsec_fw'               : ( 2, EXCLUDE, INCLUDE, EXCLUDE), #   2.7
     'xmlsecurity.xsec_xmlsec'           : ( 2, EXCLUDE, INCLUDE, INCLUDE), #   4.4
     'xmlsecurity.xsec_gpg'              : ( 2, EXCLUDE, INCLUDE, INCLUDE), #   ?
 }

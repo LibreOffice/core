@@ -13,7 +13,6 @@ ifeq ($(ENABLE_NSS),TRUE)
 
 $(eval $(call gb_Module_add_targets,xmlsecurity,\
 	Library_xmlsecurity \
-	Library_xsec_fw \
 	Library_xsec_xmlsec \
 	UIConfig_xmlsec \
 ))

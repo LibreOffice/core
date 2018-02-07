@@ -29,7 +29,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
-#include <xsecfwdllapi.h>
+#include <xmlsecuritydllapi.h>
 #include <framework/signatureengine.hxx>
 
 typedef cppu::ImplInheritanceHelper
@@ -40,7 +40,7 @@ typedef cppu::ImplInheritanceHelper
     css::lang::XServiceInfo
 > SignatureVerifierImpl_Base;
 
-class XSECFW_DLLPUBLIC SignatureVerifierImpl : public SignatureVerifierImpl_Base
+class XMLSECURITY_DLLPUBLIC SignatureVerifierImpl : public SignatureVerifierImpl_Base
 /****** SignatureVerifier.hxx/CLASS SignatureVerifierImpl *********************
  *
  *   NAME
