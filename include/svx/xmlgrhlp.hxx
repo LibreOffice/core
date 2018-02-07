@@ -48,6 +48,7 @@ class SVX_DLLPUBLIC SvXMLGraphicHelper final : public cppu::WeakComponentImplHel
                                                                                     css::document::XGraphicStorageHandler,
                                                                                     css::document::XBinaryStreamResolver>
 {
+private:
     typedef ::std::pair< OUString, OUString >                                             URLPair;
     typedef ::std::vector< URLPair >                                                                    URLPairVector;
     typedef ::std::vector< GraphicObject >                                                              GraphicObjectVector;
@@ -94,6 +95,8 @@ class SVX_DLLPUBLIC SvXMLGraphicHelper final : public cppu::WeakComponentImplHel
 
     virtual void SAL_CALL       disposing() override;
 
+    SVX_DLLPRIVATE OUString implSaveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString const & rRequestName);
+
 public:
                                 SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode );
 
@@ -111,10 +114,13 @@ public:
 
     // XGraphicStorageHandler
     virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
-        loadGraphic(const OUString& aURL) override;
+        loadGraphic(OUString const & aURL) override;
 
     virtual OUString SAL_CALL
         saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
+
+    virtual OUString SAL_CALL
+        saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString const & rRequestName) override;
 
     virtual css::uno::Reference<css::io::XInputStream> SAL_CALL
         createInputStream(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
