@@ -4193,9 +4193,8 @@ struct ScDependantsCalculator
     bool DoIt()
     {
         // Partially from ScGroupTokenConverter::convert in sc/source/core/data/grouptokenconverter.cxx
-
         ScRangeList aRangeList;
-        for (auto p: mrCode.Tokens())
+        for (auto p: mrCode.RPNTokens())
         {
             switch (p->GetType())
             {

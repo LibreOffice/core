@@ -472,6 +472,10 @@ private:
     /// Access the CharTable flags
     ScCharFlags GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )
         { return c < 128 ? pConv->getCharTableFlags(c, cLast) : ScCharFlags::NONE; }
+
+    bool IsIIOpCode(OpCode nOpCode) const override;
+    void HandleIIOpCode(OpCode nOpCode, formula::FormulaToken*** pppToken, sal_uInt8 nNumParams) override;
+    void ComputeImplictIntersection(ScComplexRefData& rBaseRange, ScComplexRefData& rSumRange, formula::FormulaToken** ppSumRangeToken);
 };
 
 #endif
