@@ -2711,6 +2711,8 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
 
                 if( pTAFormat == nullptr )
                     rSh.SetTableStyle( SwStyleNameMapper::GetUIName( RES_POOLTABSTYLE_DEFAULT, OUString() ) );
+                else
+                    rSh.SetTableStyle( aAutoName );
 
                 rSh.EndAllAction();
                 rTempView.AutoCaption(TABLE_CAP);
