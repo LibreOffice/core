@@ -1521,8 +1521,10 @@ int OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, T
 
 static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
 {
-    if (t->fsize < 4)
+    if (t->fsize < 4) {
+        CloseTTFont(t);
         return SF_TTFORMAT;
+    }
     int i;
     sal_uInt32 length, tag;
     sal_uInt32 tdoffset = 0;        /* offset to TableDirectory in a TTC file. For TTF files is 0 */
@@ -1699,10 +1701,12 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     }
 
     table = getTable(t, O_hhea);
-    t->numberOfHMetrics = (table != nullptr) ? GetUInt16(table, 34) : 0;
+    table_size = getTableSize(t, O_hhea);
+    t->numberOfHMetrics = (table && table_size >= 36) ? GetUInt16(table, 34) : 0;
 
     table = getTable(t, O_vhea);
-    t->numOfLongVerMetrics = (table != nullptr) ? GetUInt16(table, 34) : 0;
+    table_size = getTableSize(t, O_vhea);
+    t->numOfLongVerMetrics = (table && table_size >= 36) ? GetUInt16(table, 34) : 0;
 
     GetNames(t);
     FindCmap(t);
