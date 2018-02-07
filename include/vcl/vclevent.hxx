@@ -59,6 +59,8 @@ enum class VclEventId
     EditCaretChanged,
     EditModify,
     EditSelectionChanged,
+    ExtTextInput,
+    EndExtTextInput,
     ItemCollapsed,
     ItemExpanded,
     ListboxDoubleClick,
