@@ -351,14 +351,14 @@ void SwLayoutViewConfig::Load()
                     case  8: rParent.SetSmoothScroll(bSet); break;// "Window/SmoothScroll",
                     case  9: rParent.SetZoom( static_cast< sal_uInt16 >(nInt32Val) ); break;// "Zoom/Value",
                     case 10: rParent.SetZoomType( static_cast< SvxZoomType >(nInt32Val) ); break;// "Zoom/Type",
-                    case 11: rParent.SetAlignMathObjectsToBaseline(bSet); break;// "Other/IsAlignMathObjectsToBaseline"
+                    case 11: rParent.SetAlignMathObjectsToBaseline(bSet, true); break;// "Other/IsAlignMathObjectsToBaseline"
                     case 12: rParent.SetMetric(static_cast<FieldUnit>(nInt32Val), true); break;// "Other/MeasureUnit",
                     case 13: rParent.SetDefTab(convertMm100ToTwip(nInt32Val), true); break;// "Other/TabStop",
                     case 14: rParent.SetVRulerRight(bSet); break;// "Window/IsVerticalRulerRight",
                     case 15: rParent.SetViewLayoutColumns( static_cast<sal_uInt16>(nInt32Val) ); break;// "ViewLayout/Columns",
                     case 16: rParent.SetViewLayoutBookMode(bSet); break;// "ViewLayout/BookMode",
                     case 17: rParent.SetDefaultPageMode(bSet,true); break;// "Other/IsSquaredPageMode",
-                    case 18: rParent.SetApplyCharUnit(bSet); break;// "Other/ApplyUserChar"
+                    case 18: rParent.SetApplyCharUnit(bSet, true); break;// "Other/ApplyUserChar"
                     case 19: rParent.SetShowScrollBarTips(bSet); break;// "Window/ShowScrollBarTips",
                 }
             }

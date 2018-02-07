@@ -233,10 +233,12 @@ public:
     {
         return m_bApplyCharUnit;
     }
-    void   SetApplyCharUnit(bool bSet)
+    void   SetApplyCharUnit(bool bSet, bool noModify = false)
     {
         m_bApplyCharUnit = bSet;
-        m_aLayoutConfig.SetModified();
+        if (!noModify) {
+            m_aLayoutConfig.SetModified();
+        }
     }
 
     sal_Int32   GetDefTab() const { return m_nDefTab;}
@@ -257,10 +259,12 @@ public:
                 }
 
     bool        IsAlignMathObjectsToBaseline() const { return m_bIsAlignMathObjectsToBaseline; }
-    void        SetAlignMathObjectsToBaseline( bool bVal )
+    void        SetAlignMathObjectsToBaseline( bool bVal, bool noModify = false )
                 {
                     m_bIsAlignMathObjectsToBaseline = bVal;
-                    m_aLayoutConfig.SetModified();
+                    if (!noModify) {
+                        m_aLayoutConfig.SetModified();
+                    }
                 }
 };
 
