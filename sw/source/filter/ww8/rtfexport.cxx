@@ -52,6 +52,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <fmtfsize.hxx>
 #include <ndtxt.hxx>
+#include <numrule.hxx>
 
 using namespace ::com::sun::star;
 

@@ -39,6 +39,7 @@ class SwFlyFrameFormat;
 class SwDoc;
 class SwNode;
 struct SwPosition;
+enum class SwFieldIds : sal_uInt16;
 
 // Update expression fields
 class SetGetExpField

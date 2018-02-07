@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_CSHTYP_HXX
 #define INCLUDED_SW_INC_CSHTYP_HXX
 
-#include <tools/solar.h>
 #include "swdllapi.h"
 #include <o3tl/typed_flags_set.hxx>
 
