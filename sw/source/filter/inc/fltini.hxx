@@ -34,7 +34,7 @@ class HTMLReader: public Reader
     // wir wollen die Streams / Storages nicht geoeffnet haben
     virtual int SetStrmStgPtr();
     virtual sal_uLong Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
-    virtual String GetTemplateName() const;
+    virtual String GetTemplateName(SwDoc& rDoc) const;
 public:
     HTMLReader();
 };

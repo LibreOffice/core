@@ -220,7 +220,7 @@ protected:
     sal_Bool bHasAskTemplateName : 1;
     sal_Bool bIgnoreHTMLComments : 1;
 
-    virtual String GetTemplateName() const;
+    virtual String GetTemplateName(SwDoc& rDoc) const;
 
 public:
     Reader();
@@ -239,7 +239,7 @@ public:
     static void ResetFrmFmts( SwDoc& rDoc );
 
     // Load filter template, set it and release it again.
-    SwDoc* GetTemplateDoc();
+    SwDoc* GetTemplateDoc(SwDoc& rDoc);
     sal_Bool SetTemplate( SwDoc& rDoc );
     void ClearTemplate();
     void SetTemplateName( const String& rDir );

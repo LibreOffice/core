@@ -146,8 +146,12 @@ HTMLReader::HTMLReader()
     bTmplBrowseMode = sal_True;
 }
 
-String HTMLReader::GetTemplateName() const
+String HTMLReader::GetTemplateName(SwDoc& rDoc) const
 {
+    if (!rDoc.get(IDocumentSettingAccess::HTML_MODE))
+        // HTML import into Writer, avoid loading the Writer/Web template.
+        return String();
+
     String sTemplate(rtl::OUString("internal"));
     sTemplate += INET_PATH_TOKEN;
     sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM("html") );

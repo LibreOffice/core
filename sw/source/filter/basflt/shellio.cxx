@@ -450,17 +450,17 @@ Reader::~Reader()
     delete pTemplate;
 }
 
-String Reader::GetTemplateName() const
+String Reader::GetTemplateName(SwDoc& /*rDoc*/) const
 {
     return aEmptyStr;
 }
 
 // Die Filter-Vorlage laden, setzen und wieder freigeben
-SwDoc* Reader::GetTemplateDoc()
+SwDoc* Reader::GetTemplateDoc(SwDoc& rDoc)
 {
     if( !bHasAskTemplateName )
     {
-        SetTemplateName( GetTemplateName() );
+        SetTemplateName( GetTemplateName(rDoc) );
         bHasAskTemplateName = sal_True;
     }
 
@@ -543,7 +543,7 @@ sal_Bool Reader::SetTemplate( SwDoc& rDoc )
 {
     sal_Bool bRet = sal_False;
 
-    GetTemplateDoc();
+    GetTemplateDoc(rDoc);
     if( pTemplate )
     {
         rDoc.RemoveAllFmtLanguageDependencies();
@@ -955,7 +955,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
 sal_Bool SetHTMLTemplate( SwDoc & rDoc )
 {
     // Vorlagennamen von den Sfx-HTML-Filter besorgen!!!
-    if( !ReadHTML->GetTemplateDoc() )
+    if( !ReadHTML->GetTemplateDoc(rDoc) )
         ReadHTML->MakeHTMLDummyTemplateDoc();
 
     sal_Bool bRet = ReadHTML->SetTemplate( rDoc );
