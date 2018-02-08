@@ -289,6 +289,24 @@ Size ScDataTableView::GetOptimalSize() const
     return Size(600, 200);
 }
 
+void ScDataTableView::getColRange(SCCOL& rStartCol, SCCOL& rEndCol) const
+{
+    SCCOLROW aStart = 0;
+    SCCOLROW aEnd = 0;
+    mpColView->GetMarkRange(aStart, aEnd);
+    rStartCol = static_cast<SCCOL>(aStart);
+    rEndCol = static_cast<SCCOL>(aEnd);
+}
+
+void ScDataTableView::getRowRange(SCROW& rStartCol, SCROW& rEndCol) const
+{
+    SCCOLROW aStart = 0;
+    SCCOLROW aEnd = 0;
+    mpRowView->GetMarkRange(aStart, aEnd);
+    rStartCol = static_cast<SCROW>(aStart);
+    rEndCol = static_cast<SCROW>(aEnd);
+}
+
 IMPL_LINK(ScDataTableView, ScrollHdl, ScrollBar*, pScrollBar, void)
 {
     if (pScrollBar == mpVScroll.get())
