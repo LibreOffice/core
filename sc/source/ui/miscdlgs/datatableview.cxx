@@ -63,7 +63,7 @@ sal_uInt16 ScDataTableColView::GetEntrySize(SCCOLROW nPos) const
 
 OUString ScDataTableColView::GetEntryText(SCCOLROW nPos) const
 {
-    return "Col: " + OUString::number(nPos);
+    return "Col: " + OUString::number(nPos + 1);
 }
 
 bool ScDataTableColView::IsLayoutRTL() const
@@ -114,7 +114,7 @@ sal_uInt16 ScDataTableRowView::GetEntrySize(SCCOLROW nPos) const
 
 OUString ScDataTableRowView::GetEntryText(SCCOLROW nPos) const
 {
-    return OUString::number(nPos);
+    return OUString::number(nPos + 1);
 }
 
 bool ScDataTableRowView::IsLayoutRTL() const
