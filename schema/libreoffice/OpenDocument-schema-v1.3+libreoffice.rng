@@ -18048,6 +18048,21 @@
       <rng:value>bottom</rng:value>
     </rng:choice>
   </rng:define>
+
+  <!-- TODO no proposal -->
+  <rng:define name="text-bookmark-start-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:hidden">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+      <rng:optional>
+        <rng:attribute name="loext:condition">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+    </rng:optional>
+  </rng:define>
+
   <rng:define name="xforms-bind-attlist">
     <rng:optional>
       <rng:attribute name="xforms:bind">
