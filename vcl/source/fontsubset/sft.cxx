@@ -119,7 +119,6 @@ static const sal_uInt32 T_otto = 0x4f54544f;        /* 'OTTO' */
 #define T_vmtx 0x766D7478
 #define T_OS2  0x4F532F32
 #define T_post 0x706F7374
-#define T_kern 0x6B65726E
 #define T_cvt  0x63767420
 #define T_prep 0x70726570
 #define T_fpgm 0x6670676D
@@ -1339,81 +1338,6 @@ static void FindCmap(TrueTypeFont *ttf)
     }
 }
 
-static void GetKern(TrueTypeFont *ttf)
-{
-    const sal_uInt8* table = getTable(ttf, O_kern);
-    int nTableSize = getTableSize(ttf, O_kern);
-    const sal_uInt8 *ptr;
-
-    if( !table )
-        goto badtable;
-
-    if (nTableSize >= 4 && GetUInt16(table, 0) == 0) { /* Traditional Microsoft style table with sal_uInt16 version and nTables fields */
-        ttf->nkern = GetUInt16(table, 2);
-        ptr = table + 4;
-
-        const sal_uInt32 remaining_table_size = nTableSize-4;
-        const sal_uInt32 nMinRecordSize = 2;
-        const sal_uInt32 nMaxRecords = remaining_table_size / nMinRecordSize;
-        if (ttf->nkern > nMaxRecords)
-        {
-            SAL_WARN("vcl.fonts", "Parsing error in " << OUString::createFromAscii(ttf->fname) <<
-                     ": " << nMaxRecords << " max possible entries, but " <<
-                     ttf->nkern << " claimed, truncating");
-            ttf->nkern = nMaxRecords;
-        }
-
-        ttf->kerntables = static_cast<const sal_uInt8**>(calloc(ttf->nkern, sizeof(sal_uInt8 *)));
-        assert(ttf->kerntables != nullptr);
-
-        for( unsigned i = 0; i < ttf->nkern; ++i) {
-            ttf->kerntables[i] = ptr;
-            ptr += GetUInt16(ptr, 2);
-            /* sanity check */
-            if( ptr > ttf->ptr+ttf->fsize )
-            {
-                free( ttf->kerntables );
-                goto badtable;
-            }
-        }
-        return;
-    }
-
-    if (nTableSize >= 8 && GetUInt32(table, 0) == 0x00010000) { /* MacOS style kern tables: fixed32 version and sal_uInt32 nTables fields */
-        ttf->nkern = GetUInt32(table, 4);
-        ptr = table + 8;
-
-        const sal_uInt32 remaining_table_size = nTableSize-8;
-        const sal_uInt32 nMinRecordSize = 4;
-        const sal_uInt32 nMaxRecords = remaining_table_size / nMinRecordSize;
-        if (ttf->nkern > nMaxRecords)
-        {
-            SAL_WARN("vcl.fonts", "Parsing error in " << OUString::createFromAscii(ttf->fname) <<
-                     ": " << nMaxRecords << " max possible entries, but " <<
-                     ttf->nkern << " claimed, truncating");
-            ttf->nkern = nMaxRecords;
-        }
-
-        ttf->kerntables = static_cast<const sal_uInt8**>(calloc(ttf->nkern, sizeof(sal_uInt8 *)));
-        assert(ttf->kerntables != nullptr);
-
-        for( unsigned i = 0; i < ttf->nkern; ++i) {
-            ttf->kerntables[i] = ptr;
-            ptr += GetUInt32(ptr, 0);
-            /* sanity check; there are some fonts that are broken in this regard */
-            if( ptr > ttf->ptr+ttf->fsize )
-            {
-                free( ttf->kerntables );
-                goto badtable;
-            }
-        }
-        return;
-    }
-
-  badtable:
-    ttf->kerntables = nullptr;
-}
-
 /*- Public functions */
 
 int CountTTCFonts(const char* fname)
@@ -1581,7 +1505,6 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
             case T_vmtx: nIndex = O_vmtx; break;
             case T_OS2 : nIndex = O_OS2;  break;
             case T_post: nIndex = O_post; break;
-            case T_kern: nIndex = O_kern; break;
             case T_cvt : nIndex = O_cvt;  break;
             case T_prep: nIndex = O_prep; break;
             case T_fpgm: nIndex = O_fpgm; break;
@@ -1706,7 +1629,6 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
 
     GetNames(t);
     FindCmap(t);
-    GetKern(t);
 
     return SF_OK;
 }
@@ -1728,7 +1650,6 @@ void CloseTTFont(TrueTypeFont *ttf)
         free( ttf->usubfamily );
     free(ttf->tables);
     free(ttf->tlens);
-    free(ttf->kerntables);
 
     free(ttf);
 }

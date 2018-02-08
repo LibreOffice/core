@@ -102,13 +102,6 @@ namespace vcl
         FWIDTH_ULTRA_EXPANDED = 9           /**< 200% of normal                     */
     };
 
-/** Type of the 'kern' table, stored in TrueTypeFont::kerntype */
-    enum KernType {
-        KT_NONE         = 0,                /**< no kern table                      */
-        KT_APPLE_NEW    = 1,                /**< new Apple kern table               */
-        KT_MICROSOFT    = 2                 /**< Microsoft table                    */
-    };
-
 /** Composite glyph flags definition */
     enum CompositeFlags {
         ARG_1_AND_2_ARE_WORDS     = 1,
@@ -189,12 +182,6 @@ namespace vcl
 #define TYPEFLAG_INVALID        0x8000000
 #define TYPEFLAG_COPYRIGHT_MASK 0x000000E
 #define TYPEFLAG_PS_OPENTYPE    0x0010000
-
-/** Structure used by KernGlyphs()      */
-    typedef struct {
-        int x;                    /**< positive: right, negative: left                        */
-        int y;                    /**< positive: up, negative: down                           */
-    } KernData;
 
 /** ControlPoint structure used by GetTTGlyphPoints() */
     typedef struct {
@@ -486,8 +473,6 @@ namespace vcl
         sal_uInt32 (*mapper)(const sal_uInt8 *, sal_uInt32, sal_uInt32); /* character to glyphID translation function                          */
         const sal_uInt8   **tables;                        /* array of pointers to raw subtables in SFNT file                    */
         sal_uInt32  *tlens;                                /* array of table lengths                                             */
-        sal_uInt32  nkern;                                 /* number of kern subtables                                           */
-        const sal_uInt8** kerntables;                      /* array of pointers to kern subtables                                */
     };
 
 /* indexes into TrueTypeFont::tables[] and TrueTypeFont::tlens[] */
@@ -503,7 +488,6 @@ namespace vcl
 #define O_vmtx 9     /* 'vmtx' */
 #define O_OS2  10    /* 'OS/2' */
 #define O_post 11    /* 'post' */
-#define O_kern 12    /* 'kern' */
 #define O_cvt  13    /* 'cvt_' - only used in TT->TT generation */
 #define O_prep 14    /* 'prep' - only used in TT->TT generation */
 #define O_fpgm 15    /* 'fpgm' - only used in TT->TT generation */
