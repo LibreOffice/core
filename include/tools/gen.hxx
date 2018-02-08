@@ -363,6 +363,11 @@ public:
     long&               Top()           { return nTop;    }
     long&               Bottom()        { return nBottom; }
 
+    void                SetLeft(long v)    { nLeft = v;   }
+    void                SetRight(long v)   { nRight = v;  }
+    void                SetTop(long v)     { nTop = v;    }
+    void                SetBottom(long v)  { nBottom = v; }
+
     inline Point        TopLeft() const;
     inline Point        TopRight() const;
     inline Point        TopCenter() const;
