@@ -1395,4 +1395,125 @@ void BitmapEx::createColorSliderImage( ColorSliderMode eMode, Color const & aCol
     }
 }
 
+void BitmapEx::createColorFieldImage( ColorSliderMode eMode, Color const & aColor,
+    std::vector<sal_uInt8>  const & rvRGB_Horiz,
+    std::vector<sal_uInt16> const & rvGrad_Horiz,
+    std::vector<sal_uInt16> const & rvPercent_Horiz,
+    std::vector<sal_uInt8>  const & rvRGB_Vert,
+    std::vector<sal_uInt16> const & rvPercent_Vert )
+{
+    Bitmap::ScopedWriteAccess pWriteAccess(aBitmap);
+    assert( pWriteAccess.get() );
+    if (!pWriteAccess)
+        return;
+
+    sal_uInt8 const * pRGB_Horiz = rvRGB_Horiz.data();
+    sal_uInt16 const * pGrad_Horiz = rvGrad_Horiz.data();
+    sal_uInt16 const * pPercent_Horiz = rvPercent_Horiz.data();
+    sal_uInt8 const * pRGB_Vert = rvRGB_Vert.data();
+    sal_uInt16 const * pPercent_Vert = rvPercent_Vert.data();
+
+    BitmapColor aBitmapColor(aColor);
+
+    sal_uInt16 nHue, nSat, nBri;
+    aColor.RGBtoHSB(nHue, nSat, nBri);
+
+    // this has been unlooped for performance reason, please do not merge back!
+
+    sal_uInt16 y = aBitmapSize.getHeight();
+    sal_uInt16 x;
+    const sal_Int32 nWidth = aBitmapSize.getWidth();
+
+    switch(eMode)
+    {
+    case ColorSliderMode::HUE:
+        while (y--)
+        {
+            Scanline pScanline = pWriteAccess->GetScanline( y );
+            nBri = pPercent_Vert[y];
+            x = nWidth;
+            while (x--)
+            {
+                nSat = pPercent_Horiz[x];
+                pWriteAccess->SetPixelOnData(pScanline, x, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
+            }
+        }
+        break;
+    case ColorSliderMode::SATURATION:
+        while (y--)
+        {
+            Scanline pScanline = pWriteAccess->GetScanline( y );
+            nBri = pPercent_Vert[y];
+            x = nWidth;
+            while (x--)
+            {
+                nHue = pGrad_Horiz[x];
+                pWriteAccess->SetPixelOnData(pScanline, x, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
+            }
+        }
+        break;
+    case ColorSliderMode::BRIGHTNESS:
+        while (y--)
+        {
+            Scanline pScanline = pWriteAccess->GetScanline( y );
+            nSat = pPercent_Vert[y];
+            x = nWidth;
+            while (x--)
+            {
+                nHue = pGrad_Horiz[x];
+                pWriteAccess->SetPixelOnData(pScanline, x, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
+            }
+        }
+        break;
+    case ColorSliderMode::RED:
+        while (y--)
+        {
+            Scanline pScanline = pWriteAccess->GetScanline( y );
+            aBitmapColor.SetGreen(pRGB_Vert[y]);
+            x = nWidth;
+            while (x--)
+            {
+                aBitmapColor.SetBlue(pRGB_Horiz[x]);
+                pWriteAccess->SetPixelOnData(pScanline, x, aBitmapColor);
+            }
+        }
+        break;
+    case ColorSliderMode::GREEN:
+        while (y--)
+        {
+            Scanline pScanline = pWriteAccess->GetScanline( y );
+            aBitmapColor.SetRed(pRGB_Vert[y]);
+            x = nWidth;
+            while (x--)
+            {
+                aBitmapColor.SetBlue(pRGB_Horiz[x]);
+                pWriteAccess->SetPixelOnData(pScanline, x, aBitmapColor);
+            }
+        }
+        break;
+    case ColorSliderMode::BLUE:
+        while (y--)
+        {
+            Scanline pScanline = pWriteAccess->GetScanline( y );
+            aBitmapColor.SetGreen(pRGB_Vert[y]);
+            x = nWidth;
+            while (x--)
+            {
+                aBitmapColor.SetRed(pRGB_Horiz[x]);
+                pWriteAccess->SetPixelOnData(pScanline, x, aBitmapColor);
+            }
+        }
+        break;
+    }
+}
+
+BitmapColor BitmapEx::GetPixel(long nY, long nX)
+{
+    Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+    assert( pReadAccess.get() );
+    if ( !pReadAccess )
+        return BitmapColor();
+    return pReadAccess->GetPixel(nY, nX).GetColor();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

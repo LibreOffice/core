@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/salbtype.hxx>
 #include <tools/color.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 
@@ -80,6 +81,7 @@ public:
     bool                IsAlpha() const;
     AlphaMask           GetAlpha() const;
 
+    /** get/set size of bitmap in pixels */
     const Size&         GetSizePixel() const { return aBitmapSize; }
     void                SetSizePixel( const Size& rNewSize, BmpScaleFlag nScaleFlag = BmpScaleFlag::Default );
 
@@ -447,6 +449,15 @@ public:
     /** Create a color slider image, used from the ColorSliderControl in cui/ */
     void                createColorSliderImage( ColorSliderMode eMode, Color const & aColor );
 
+    /** Create a color field image, used from the ColorFieldControl in cui/ */
+    void                createColorFieldImage( ColorSliderMode eMode, Color const & aColor,
+                            std::vector<sal_uInt8>  const & rvRGB_Horiz,
+                            std::vector<sal_uInt16> const & rvGrad_Horiz,
+                            std::vector<sal_uInt16> const & rvPercent_Horiz,
+                            std::vector<sal_uInt8>  const & rvRGB_Vert,
+                            std::vector<sal_uInt16> const & rvPercent_Vert );
+
+    BitmapColor         GetPixel(long nY, long nX);
 public:
 
     SAL_DLLPRIVATE std::shared_ptr<ImpBitmap> const & ImplGetBitmapImpBitmap() const { return aBitmap.ImplGetImpBitmap(); }

@@ -224,7 +224,7 @@ private:
     double mdX;
     double mdY;
     Point maPosition;
-    Bitmap* mpBitmap;
+    BitmapEx* mpBitmap;
     std::vector<sal_uInt8>  maRGB_Horiz;
     std::vector<sal_uInt16> maGrad_Horiz;
     std::vector<sal_uInt16> maPercent_Horiz;
@@ -279,7 +279,7 @@ void ColorFieldControl::UpdateBitmap()
 
     if (!mpBitmap)
     {
-        mpBitmap = new Bitmap( aSize, 24 );
+        mpBitmap = new BitmapEx(Bitmap( aSize, 24 ));
 
         maRGB_Horiz.resize( nWidth );
         maGrad_Horiz.resize( nWidth );
@@ -310,106 +310,9 @@ void ColorFieldControl::UpdateBitmap()
         }
     }
 
-    sal_uInt8* pRGB_Horiz = maRGB_Horiz.data();
-    sal_uInt16* pGrad_Horiz = maGrad_Horiz.data();
-    sal_uInt16* pPercent_Horiz = maPercent_Horiz.data();
-    sal_uInt8* pRGB_Vert = maRGB_Vert.data();
-    sal_uInt16* pPercent_Vert = maPercent_Vert.data();
-
-    Bitmap::ScopedWriteAccess pWriteAccess(*mpBitmap);
-    if (pWriteAccess)
-    {
-        BitmapColor aBitmapColor(maColor);
-
-        sal_uInt16 nHue, nSat, nBri;
-        maColor.RGBtoHSB(nHue, nSat, nBri);
-
-        // this has been unlooped for performance reason, please do not merge back!
-
-        sal_uInt16 y = nHeight,x;
-
-        switch(meMode)
-        {
-        case ColorSliderMode::HUE:
-            while (y--)
-            {
-                Scanline pScanline = pWriteAccess->GetScanline( y );
-                nBri = pPercent_Vert[y];
-                x = nWidth;
-                while (x--)
-                {
-                    nSat = pPercent_Horiz[x];
-                    pWriteAccess->SetPixelOnData(pScanline, x, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
-                }
-            }
-            break;
-        case ColorSliderMode::SATURATION:
-            while (y--)
-            {
-                Scanline pScanline = pWriteAccess->GetScanline( y );
-                nBri = pPercent_Vert[y];
-                x = nWidth;
-                while (x--)
-                {
-                    nHue = pGrad_Horiz[x];
-                    pWriteAccess->SetPixelOnData(pScanline, x, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
-                }
-            }
-            break;
-        case ColorSliderMode::BRIGHTNESS:
-            while (y--)
-            {
-                Scanline pScanline = pWriteAccess->GetScanline( y );
-                nSat = pPercent_Vert[y];
-                x = nWidth;
-                while (x--)
-                {
-                    nHue = pGrad_Horiz[x];
-                    pWriteAccess->SetPixelOnData(pScanline, x, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
-                }
-            }
-            break;
-        case ColorSliderMode::RED:
-            while (y--)
-            {
-                Scanline pScanline = pWriteAccess->GetScanline( y );
-                aBitmapColor.SetGreen(pRGB_Vert[y]);
-                x = nWidth;
-                while (x--)
-                {
-                    aBitmapColor.SetBlue(pRGB_Horiz[x]);
-                    pWriteAccess->SetPixelOnData(pScanline, x, aBitmapColor);
-                }
-            }
-            break;
-        case ColorSliderMode::GREEN:
-            while (y--)
-            {
-                Scanline pScanline = pWriteAccess->GetScanline( y );
-                aBitmapColor.SetRed(pRGB_Vert[y]);
-                x = nWidth;
-                while (x--)
-                {
-                    aBitmapColor.SetBlue(pRGB_Horiz[x]);
-                    pWriteAccess->SetPixelOnData(pScanline, x, aBitmapColor);
-                }
-            }
-            break;
-        case ColorSliderMode::BLUE:
-            while (y--)
-            {
-                Scanline pScanline = pWriteAccess->GetScanline( y );
-                aBitmapColor.SetGreen(pRGB_Vert[y]);
-                x = nWidth;
-                while (x--)
-                {
-                    aBitmapColor.SetRed(pRGB_Horiz[x]);
-                    pWriteAccess->SetPixelOnData(pScanline, x, aBitmapColor);
-                }
-            }
-            break;
-        }
-    }
+    mpBitmap->createColorFieldImage(meMode, maColor,
+        maRGB_Horiz, maGrad_Horiz, maPercent_Horiz,
+        maRGB_Vert, maPercent_Vert);
 }
 
 void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
@@ -447,15 +350,7 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
     {
         mdX = double(nX) / double(aSize.Width() - 1.0);
         mdY = double(aSize.Height() - 1.0 - nY) / double(aSize.Height() - 1.0);
-
-        BitmapReadAccess* pReadAccess = mpBitmap->AcquireReadAccess();
-        if (pReadAccess != nullptr)
-        {
-            // mpBitmap always has a bit count of 24 => use of GetPixel(...) is safe
-            maColor = pReadAccess->GetPixel(nY, nX).GetColor();
-            Bitmap::ReleaseAccess(pReadAccess);
-            pReadAccess = nullptr;
-        }
+        maColor = mpBitmap->GetPixel(nY, nX).GetColor();
     }
 }
 
@@ -538,7 +433,7 @@ void ColorFieldControl::Paint(vcl::RenderContext& rRenderContext, const ::tools:
 
     if (mpBitmap)
     {
-        Bitmap aOutputBitmap(*mpBitmap);
+        Bitmap aOutputBitmap(mpBitmap->GetBitmap());
 
         if (GetBitCount() <= 8)
             aOutputBitmap.Dither();
