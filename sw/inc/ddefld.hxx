@@ -35,6 +35,15 @@ namespace sw
         LinkAnchorSearchHint(SwNodes& rNodes, const SwNode*& rpFoundNode) : m_rNodes(rNodes), m_rpFoundNode(rpFoundNode) {};
         virtual ~LinkAnchorSearchHint() override;
     };
+    struct InRangeSearchHint final : public SfxHint
+    {
+        SwNodes& m_rNodes;
+        const sal_uLong m_nSttNd, m_nEndNd;
+        const sal_Int32 m_nStt, m_nEnd;
+        bool& m_rIsInRange;
+        InRangeSearchHint(SwNodes& rNodes, const sal_uLong nSttNd, const sal_uLong nEndNd, const sal_Int32 nStt, const sal_Int32 nEnd, bool& rIsInRange)
+            : m_rNodes(rNodes), m_nSttNd(nSttNd), m_nEndNd(nEndNd), m_nStt(nStt), m_nEnd(nEnd), m_rIsInRange(rIsInRange) {}
+    };
 }
 
 // FieldType for DDE

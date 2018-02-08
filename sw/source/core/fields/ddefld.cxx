@@ -181,39 +181,24 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
 bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                                 sal_Int32 nStt, sal_Int32 nEnd ) const
 {
-    // here, any anchor of the normal NodesArray should be sufficient
-    SwNodes* pNds = &rFieldType.GetDoc()->GetNodes();
-    SwIterator<SwClient,SwFieldType> aIter(rFieldType);
-    for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
+    SwIterator<SwDepend,SwFieldType> aIter(rFieldType);
+    for(SwDepend* pLast = aIter.First(); pLast; pLast = aIter.Next())
     {
-        // a DDE table or a DDE field attribute in the text
-        if( dynamic_cast<const SwFormatField *>(pLast) == nullptr)
-        {
-            SwDepend* pDep = static_cast<SwDepend*>(pLast);
-            SwDDETable* pDDETable = static_cast<SwDDETable*>(pDep->GetToTell());
-            const SwTableNode* pTableNd = pDDETable->GetTabSortBoxes()[0]->
-                            GetSttNd()->FindTableNode();
-            if( pTableNd->GetNodes().IsDocNodes() &&
-                nSttNd < pTableNd->EndOfSectionIndex() &&
-                nEndNd > pTableNd->GetIndex() )
-                return true;
-        }
-        else if( static_cast<SwFormatField*>(pLast)->GetTextField() )
-        {
-            const SwTextField* pTField = static_cast<SwFormatField*>(pLast)->GetTextField();
-            const SwTextNode* pNd = pTField->GetpTextNode();
-            if( pNd && pNds == &pNd->GetNodes() )
-            {
-                sal_uLong nNdPos = pNd->GetIndex();
-                if( nSttNd <= nNdPos && nNdPos <= nEndNd &&
-                    ( nNdPos != nSttNd || pTField->GetStart() >= nStt ) &&
-                    ( nNdPos != nEndNd || pTField->GetStart() < nEnd ))
-                    return true;
-            }
-        }
+        SwDepend* pDep = static_cast<SwDepend*>(pLast);
+        SwDDETable* pDDETable = static_cast<SwDDETable*>(pDep->GetToTell());
+        const SwTableNode* pTableNd = pDDETable->GetTabSortBoxes()[0]->
+                        GetSttNd()->FindTableNode();
+        if( pTableNd->GetNodes().IsDocNodes() &&
+            nSttNd < pTableNd->EndOfSectionIndex() &&
+            nEndNd > pTableNd->GetIndex() )
+            return true;
     }
-
-    return false;
+    bool bInRange = false;
+    rFieldType.CallSwClientNotify(sw::InRangeSearchHint(
+        rFieldType.GetDoc()->GetNodes(),
+        nSttNd, nEndNd, nStt, nEnd,
+        bInRange));
+    return bInRange;
 }
 
 SwDDEFieldType::SwDDEFieldType(const OUString& rName,

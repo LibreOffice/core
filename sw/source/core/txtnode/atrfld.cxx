@@ -236,6 +236,21 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
         if(pNode && &pNode->GetNodes() == &pAnchorHint->m_rNodes)
             pAnchorHint->m_rpFoundNode = pNode;
     }
+    else if(const sw::InRangeSearchHint* pInRangeHint = dynamic_cast<const sw::InRangeSearchHint*>(&rHint))
+    {
+        if(pInRangeHint->m_rIsInRange)
+            return;
+        const SwTextField* pTField = GetTextField();
+        const SwTextNode* pNd = pTField->GetpTextNode();
+        if( pNd && &pInRangeHint->m_rNodes == &pNd->GetNodes() )
+        {
+            sal_uLong nNdPos = pNd->GetIndex();
+            if( pInRangeHint->m_nSttNd <= nNdPos && nNdPos <= pInRangeHint->m_nEndNd &&
+                    ( nNdPos != pInRangeHint->m_nSttNd || pTField->GetStart() >= pInRangeHint->m_nStt ) &&
+                    ( nNdPos != pInRangeHint->m_nEndNd || pTField->GetStart() < pInRangeHint->m_nEnd ))
+                pInRangeHint->m_rIsInRange = true;
+        }
+    }
 }
 
 void SwFormatField::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
