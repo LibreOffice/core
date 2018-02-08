@@ -597,6 +597,23 @@ const uno::Sequence<sal_Int8>& Graphic::getPdfData() const
     return mxImpGraphic->maPdfData;
 }
 
+OUString Graphic::getOriginURL() const
+{
+    if (mxImpGraphic)
+    {
+        return mxImpGraphic->getOriginURL();
+    }
+    return OUString();
+}
+
+void Graphic::setOriginURL(OUString const & rOriginURL)
+{
+    if (mxImpGraphic)
+    {
+        mxImpGraphic->setOriginURL(rOriginURL);
+    }
+}
+
 namespace {
 
 struct Id: public rtl::Static<cppu::OImplementationId, Id> {};
