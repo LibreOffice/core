@@ -32,13 +32,10 @@
 #include <itabenum.hxx>
 #include <modcfg.hxx>
 #include <fldupde.hxx>
-#include <unotools/configmgr.hxx>
-#include <unotools/syslocaleoptions.hxx>
 #include <caption.hxx>
 
 #include <unomid.h>
 
-using namespace utl;
 using namespace com::sun::star::uno;
 
 #define GLOB_NAME_CALC      0
@@ -1087,13 +1084,7 @@ void SwInsertConfig::Load()
         }
         else if (nProp == INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST)
         {
-            if (!utl::ConfigManager::IsFuzzing())
-            {
-                //#i61007#  initialize caption order, right now only HUNGARIAN seems to need a different order
-                SvtSysLocaleOptions aSysLocaleOptions;
-                const LanguageTag& rLang = aSysLocaleOptions.GetRealLanguageTag();
-                bCaptionOrderNumberingFirst = (rLang.getLanguage() == "hu");
-            }
+            bCaptionOrderNumberingFirst = false;
         }
 
     }
