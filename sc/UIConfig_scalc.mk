@@ -116,6 +116,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/definedatabaserangedialog \
 	sc/uiconfig/scalc/ui/definename \
 	sc/uiconfig/scalc/ui/deletecells \
+	sc/uiconfig/scalc/ui/deletecolumnentry \
 	sc/uiconfig/scalc/ui/deletecontents \
 	sc/uiconfig/scalc/ui/descriptivestatisticsdialog \
 	sc/uiconfig/scalc/ui/dropmenu \
@@ -152,6 +153,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/notebookbar_groupedbar_compact \
 	sc/uiconfig/scalc/ui/managenamesdialog \
 	sc/uiconfig/scalc/ui/mergecellsdialog \
+	sc/uiconfig/scalc/ui/mergecolumnentry \
 	sc/uiconfig/scalc/ui/movecopysheet \
 	sc/uiconfig/scalc/ui/movingaveragedialog \
 	sc/uiconfig/scalc/ui/multipleoperationsdialog \
