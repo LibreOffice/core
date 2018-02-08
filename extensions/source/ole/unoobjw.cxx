@@ -813,6 +813,17 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
 
                         convertDispparamsArgs(dispidMember, wFlags, pdispparams , params );
 
+                        // Pass missing (hopefully optional) parameters as Any().
+                        InvocationInfo aInvocationInfo;
+                        getInvocationInfoForCall(dispidMember, aInvocationInfo);
+                        if (pdispparams->cArgs < (UINT)aInvocationInfo.aParamTypes.getLength())
+                        {
+                            params.realloc(aInvocationInfo.aParamTypes.getLength());
+                            Any* pParams = params.getArray();
+                            for (int i = pdispparams->cArgs; i < aInvocationInfo.aParamTypes.getLength(); ++i)
+                                pParams[i] = Any();
+                        }
+
                         ret= doInvoke(pdispparams, pvarResult,
                                       pexcepinfo, puArgErr, d.name, params);
                     }
