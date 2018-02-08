@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_3510a2a8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-02-08T14:04:04Z",
+      "side": 1,
+      "message": "If you want to relate this commit with Pardus, why don\u0027t you just use an @pardus email address as others who do this in their work time?\n\nNo need then to add this (even twice) to all commit messages",
+      "revId": "0d6ada5eed8e301629fcc72e6ab04016a17139ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
