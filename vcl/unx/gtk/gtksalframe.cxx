@@ -1051,8 +1051,7 @@ void GtkSalFrame::InitCommon()
 
 static void lcl_set_accept_focus( GtkWindow* pWindow )
 {
-    if (GetGtkSalData()->GetGtkDisplay()->getWMAdaptor()->getWindowManagerName().startsWith("Metacity") ||
-        GetGtkSalData()->GetGtkDisplay()->getWMAdaptor()->getWindowManagerName().endsWith("Muffin)") )
+    if (GetGtkSalData()->GetGtkDisplay()->getWMAdaptor()->getWindowManagerName().startsWith("Metacity"))
     {
        /*  Metacity considers a toolbar type window as should not
         *  have focus on mapping, yet it believes it should unfocus
