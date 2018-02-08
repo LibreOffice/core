@@ -174,16 +174,6 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
 {
     // here, any anchor of the normal NodesArray should be sufficient
     const SwNode* pNd = nullptr;
-    SwIterator<SwDepend,SwFieldType> aIter(rFieldType);
-    for(SwDepend* pLast = aIter.First(); pLast; pLast = aIter.Next())
-    {
-        // a DDE table or a DDE field attribute in the text
-        SwDDETable* pDDETable = static_cast<SwDDETable*>(pLast->GetToTell());
-        pNd = pDDETable->GetTabSortBoxes()[0]->GetSttNd();
-        if( pNd && &rFieldType.GetDoc()->GetNodes() == &pNd->GetNodes() )
-            break;
-        pNd = nullptr;
-    }
     rFieldType.CallSwClientNotify(sw::LinkAnchorSearchHint(rFieldType.GetDoc()->GetNodes(), pNd));
     return pNd;
 }

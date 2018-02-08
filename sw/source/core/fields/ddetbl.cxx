@@ -32,6 +32,7 @@
 #include <fldupde.hxx>
 #include <swtblfmt.hxx>
 #include <fieldhint.hxx>
+#include <ddefld.hxx>
 
 
 /// Ctor moves all lines/boxes from a SwTable into itself.
@@ -93,10 +94,17 @@ void SwDDETable::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 void SwDDETable::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
 {
     SwClient::SwClientNotify(rModify, rHint);
-    const SwFieldHint* pHint = dynamic_cast<const SwFieldHint*>( &rHint );
-    if ( pHint )
+    if(dynamic_cast<const SwFieldHint*>(&rHint))
         // replace DDETable by real table
         NoDDETable();
+    else if(const auto pLinkAnchorHint = dynamic_cast<const sw::LinkAnchorSearchHint*>(&rHint))
+    {
+        if(pLinkAnchorHint->m_rpFoundNode)
+            return;
+        const auto pNd = GetTabSortBoxes()[0]->GetSttNd();
+        if( pNd && &pLinkAnchorHint->m_rNodes == &pNd->GetNodes() )
+            pLinkAnchorHint->m_rpFoundNode = pNd;
+    }
 }
 
 void SwDDETable::ChangeContent()
