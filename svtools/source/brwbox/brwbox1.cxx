@@ -220,11 +220,8 @@ void BrowseBox::InsertHandleColumn( sal_uLong nWidth )
 #if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE( ColCount() == 0 || pCols[0]->GetId() != HandleColumnId , "BrowseBox::InsertHandleColumn: there is already a handle column" );
     {
-        BrowserColumns::iterator iCol = pCols.begin();
-        const BrowserColumns::iterator colsEnd = pCols.end();
-        if ( iCol != colsEnd )
-            for (++iCol; iCol != colsEnd; ++iCol)
-                OSL_ENSURE( (*iCol)->GetId() != HandleColumnId, "BrowseBox::InsertHandleColumn: there is a non-Handle column with handle ID" );
+        for (auto const col : pCols)
+            OSL_ENSURE( col->GetId() != HandleColumnId, "BrowseBox::InsertHandleColumn: there is a non-Handle column with handle ID" );
     }
 #endif
 
@@ -253,9 +250,8 @@ void BrowseBox::InsertDataColumn( sal_uInt16 nItemId, const OUString& rText,
 
 #if OSL_DEBUG_LEVEL > 0
     {
-        const BrowserColumns::iterator colsEnd = pCols.end();
-        for (BrowserColumns::iterator iCol = pCols.begin(); iCol != colsEnd; ++iCol)
-            OSL_ENSURE( (*iCol)->GetId() != nItemId, "BrowseBox::InsertDataColumn: duplicate column Id" );
+        for (auto const& col : pCols)
+            OSL_ENSURE( col->GetId() != nItemId, "BrowseBox::InsertDataColumn: duplicate column Id" );
     }
 #endif
 

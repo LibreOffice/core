@@ -227,13 +227,11 @@ IMPL_LINK_NOARG( SvtMatchContext_Impl, Select_Impl, void*, void )
     // insert all completed strings into the listbox
     pBox->Clear();
 
-    for(std::vector<OUString>::iterator i = aCompletions.begin(); i != aCompletions.end(); ++i)
+    for (auto const& completion : aCompletions)
     {
-        OUString sCompletion(*i);
-
         // convert the file into an URL
         OUString sURL;
-        osl::FileBase::getFileURLFromSystemPath( sCompletion, sURL );
+        osl::FileBase::getFileURLFromSystemPath(completion, sURL);
             // note: if this doesn't work, we're not interested in: we're checking the
             // untouched sCompletion then
 
@@ -250,7 +248,7 @@ IMPL_LINK_NOARG( SvtMatchContext_Impl, Select_Impl, void*, void )
             }
         }
 
-        pBox->InsertEntry( sCompletion );
+        pBox->InsertEntry(completion);
     }
 
     if( !bNoSelection && !aCompletions.empty() && !bValidCompletionsFiltered )

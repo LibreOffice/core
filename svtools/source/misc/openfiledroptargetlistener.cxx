@@ -161,20 +161,16 @@ bool OpenFileDropTargetListener::implts_IsDropFormatSupported( SotClipboardForma
     /* SAFE { */
     SolarMutexGuard aGuard;
 
-    DataFlavorExVector::iterator aIter( m_aFormats.begin() ), aEnd( m_aFormats.end() );
-    bool bRet = false;
-
-    while ( aIter != aEnd )
+    for (auto const& format : m_aFormats)
     {
-        if ( nFormat == (*aIter++).mnSotId )
+        if (nFormat == format.mnSotId)
         {
-            bRet = true;
-            aIter = aEnd;
+            return true;
         }
     }
     /* } SAFE */
 
-    return bRet;
+    return false;
 }
 
 void OpenFileDropTargetListener::implts_OpenFile( const OUString& rFilePath )

@@ -392,30 +392,27 @@ void ExtendedColorConfig_Impl::ImplCommit()
                    + m_sLoadedScheme;
     const OUString s_sSep("/");
 
-    TComponents::iterator aIter = m_aConfigValues.begin();
-    TComponents::iterator aEnd = m_aConfigValues.end();
-    for( ;aIter != aEnd;++aIter )
+    for (auto const& configValue : m_aConfigValues)
     {
-        if ( ConfigItem::AddNode(sBase, aIter->first) )
+        if ( ConfigItem::AddNode(sBase, configValue.first) )
         {
             OUString sNode = sBase
                            + s_sSep
-                           + aIter->first
+                           + configValue.first
             //ConfigItem::AddNode(sNode, sColorEntries);
                            + s_sSep
                            + sColorEntries;
 
-            uno::Sequence < beans::PropertyValue > aPropValues(aIter->second.first.size());
+            uno::Sequence < beans::PropertyValue > aPropValues(configValue.second.first.size());
             beans::PropertyValue* pPropValues = aPropValues.getArray();
-            TConfigValues::iterator aConIter = aIter->second.first.begin();
-            TConfigValues::iterator aConEnd  = aIter->second.first.end();
-            for (; aConIter != aConEnd; ++aConIter,++pPropValues)
+            for (auto const& elem : configValue.second.first)
             {
-                pPropValues->Name = sNode + s_sSep + aConIter->first;
-                ConfigItem::AddNode(sNode, aConIter->first);
+                pPropValues->Name = sNode + s_sSep + elem.first;
+                ConfigItem::AddNode(sNode, elem.first);
                 pPropValues->Name += sColor;
-                pPropValues->Value <<= aConIter->second.getColor();
+                pPropValues->Value <<= elem.second.getColor();
                 // the default color will never be changed
+                ++pPropValues;
             }
             SetSetProperties("ExtendedColorScheme/ColorSchemes", aPropValues);
         }

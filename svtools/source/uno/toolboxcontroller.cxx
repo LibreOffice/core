@@ -243,15 +243,14 @@ void SAL_CALL ToolboxController::dispose()
 
     SolarMutexGuard aSolarMutexGuard;
     Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
-    URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
-    while ( pIter != m_aListenerMap.end() )
+    for (auto const& listener : m_aListenerMap)
     {
         try
         {
-            Reference< XDispatch > xDispatch( pIter->second );
+            Reference< XDispatch > xDispatch( listener.second );
 
             css::util::URL aTargetURL;
-            aTargetURL.Complete = pIter->first;
+            aTargetURL.Complete = listener.first;
             if ( m_xUrlTransformer.is() )
                 m_xUrlTransformer->parseStrict( aTargetURL );
 
@@ -262,7 +261,6 @@ void SAL_CALL ToolboxController::dispose()
         {
         }
 
-        ++pIter;
     }
 
     m_bDisposed = true;
@@ -288,14 +286,12 @@ void SAL_CALL ToolboxController::disposing( const EventObject& Source )
     if ( m_bDisposed )
         return;
 
-    URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
-    while ( pIter != m_aListenerMap.end() )
+    for (auto & listener : m_aListenerMap)
     {
         // Compare references and release dispatch references if they are equal.
-        Reference< XInterface > xIfac( pIter->second, UNO_QUERY );
+        Reference< XInterface > xIfac(listener.second, UNO_QUERY);
         if ( xSource == xIfac )
-            pIter->second.clear();
-        ++pIter;
+            listener.second.clear();
     }
 
     Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
@@ -481,15 +477,14 @@ void ToolboxController::bindListener()
         if ( m_xContext.is() && xDispatchProvider.is() )
         {
             xStatusListener.set( static_cast< OWeakObject* >( this ), UNO_QUERY );
-            URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
-            while ( pIter != m_aListenerMap.end() )
+            for (auto & listener : m_aListenerMap)
             {
                 css::util::URL aTargetURL;
-                aTargetURL.Complete = pIter->first;
+                aTargetURL.Complete = listener.first;
                 if ( m_xUrlTransformer.is() )
                     m_xUrlTransformer->parseStrict( aTargetURL );
 
-                Reference< XDispatch > xDispatch( pIter->second );
+                Reference< XDispatch > xDispatch(listener.second);
                 if ( xDispatch.is() )
                 {
                     // We already have a dispatch object => we have to requery.
@@ -503,7 +498,7 @@ void ToolboxController::bindListener()
                     }
                 }
 
-                pIter->second.clear();
+                listener.second.clear();
                 xDispatch.clear();
 
                 // Query for dispatch object. Old dispatch will be released with this, too.
@@ -514,11 +509,10 @@ void ToolboxController::bindListener()
                 catch ( Exception& )
                 {
                 }
-                pIter->second = xDispatch;
+                listener.second = xDispatch;
 
                 Listener aListener( aTargetURL, xDispatch );
                 aDispatchVector.push_back( aListener );
-                ++pIter;
             }
         }
     }
@@ -570,15 +564,14 @@ void ToolboxController::unbindListener()
         return;
 
     Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
-    URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
-    while ( pIter != m_aListenerMap.end() )
+    for (auto & listener : m_aListenerMap)
     {
         css::util::URL aTargetURL;
-        aTargetURL.Complete = pIter->first;
+        aTargetURL.Complete = listener.first;
         if ( m_xUrlTransformer.is() )
             m_xUrlTransformer->parseStrict( aTargetURL );
 
-        Reference< XDispatch > xDispatch( pIter->second );
+        Reference< XDispatch > xDispatch(listener.second);
         if ( xDispatch.is() )
         {
             // We already have a dispatch object => we have to requery.
@@ -591,8 +584,7 @@ void ToolboxController::unbindListener()
             {
             }
         }
-        pIter->second.clear();
-        ++pIter;
+        listener.second.clear();
     }
 }
 
