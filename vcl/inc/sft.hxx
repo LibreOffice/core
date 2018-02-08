@@ -174,13 +174,9 @@ namespace vcl
         int   winDescent;         /**< descender metric for Windows                            */
         bool  symbolEncoded;      /**< true: MS symbol encoded */
         sal_uInt8  panose[10];    /**< PANOSE classification number                            */
-        sal_uInt32 typeFlags;     /**< type flags (copyright bits + PS-OpenType flag)       */
+        sal_uInt32 typeFlags;     /**< type flags (copyright bits)                             */
         sal_uInt16 fsSelection;   /**< OS/2 fsSelection */
     } TTGlobalFontInfo;
-
-#define TYPEFLAG_INVALID        0x8000000
-#define TYPEFLAG_COPYRIGHT_MASK 0x000000E
-#define TYPEFLAG_PS_OPENTYPE    0x0010000
 
 /** ControlPoint structure used by GetTTGlyphPoints() */
     typedef struct {

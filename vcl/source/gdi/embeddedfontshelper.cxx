@@ -195,7 +195,7 @@ bool EmbeddedFontsHelper::sufficientTTFRights( const void* data, long size, Font
         GetTTGlobalFontInfo( font, &info );
         CloseTTFont( font );
         // https://www.microsoft.com/typography/otspec/os2.htm#fst
-        int copyright = info.typeFlags & TYPEFLAG_COPYRIGHT_MASK;
+        int copyright = info.typeFlags;
         switch( rights )
         {
             case FontRights::ViewingAllowed:
