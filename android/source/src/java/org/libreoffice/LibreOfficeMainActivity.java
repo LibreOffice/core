@@ -118,6 +118,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private boolean isSearchToolbarOpen = false;
     private boolean isDocumentChanged = false;
     public boolean isNewDocument = false;
+    private String cacheFile = "";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.w(LOGTAG, "onCreate..");
@@ -133,7 +134,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             }
         }
         setContentView(R.layout.activity_main);
-
+        getIntent().setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         toolbarTop = findViewById(R.id.toolbar);
         hideBottomToolbar();
 
@@ -245,6 +246,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         bottomToolbarSheetBehavior.setHideable(true);
         toolbarColorPickerBottomSheetBehavior.setHideable(true);
         toolbarBackColorPickerBottomSheetBehavior.setHideable(true);
+        cacheFile = getExternalCacheDir().getPath() + "/" + mInputFile.getName() + "_cached."+ FileUtilities.getExtension(mInputFile.getPath()).substring(1);
+
     }
 
     // Loads a new Document
@@ -319,7 +322,11 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         final Activity activity = LibreOfficeMainActivity.this;
         Toast.makeText(this, R.string.message_saving, Toast.LENGTH_SHORT).show();
         // local save
-        LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Save"));
+        if(checkCacheFileExists()){
+            LOKitShell.sendSaveToCacheEvent(mInputFile.getPath(), FileUtilities.getExtension(mInputFile.getPath()).substring(1));
+        } else {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Save"));
+        }
 
         final AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
@@ -361,6 +368,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             public void run() {
                 if (lastModified < mInputFile.lastModified()) {
                     // we are sure local save is complete, push changes to cloud
+                    if(checkCacheFileExists()){
+                        deleteCacheFile();
+                    }
                     task.execute();
                 }
                 else {
@@ -391,21 +401,51 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     }
 
     @Override
-    protected void onPause() {
-        Log.i(LOGTAG, "onPause..");
-        super.onPause();
+    protected void onSaveInstanceState(Bundle outState) {
+        if(checkCacheFileExists()) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Save"));
+        } else {
+            outState.putString("cacheFile", cacheFile);
+            LOKitShell.sendSaveToCacheEvent(cacheFile, FileUtilities.getExtension(mInputFile.getPath()).substring(1));
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        Log.i(LOGTAG, "onRestoreInstanceState: ");
+        cacheFile = savedInstanceState.getString("cacheFile");
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
     protected void onStart() {
         Log.i(LOGTAG, "onStart..");
+        String documentToLoad = mInputFile.getPath();
+        if(checkCacheFileExists()){
+            documentToLoad = cacheFile;
+        }
         super.onStart();
         if (!isNewDocument){
-            if (partIndex == -1)
-                LOKitShell.sendLoadEvent(mInputFile.getPath());
-            else
-                LOKitShell.sendResumeEvent(mInputFile.getPath(), partIndex);
+            if (partIndex == -1) {
+                LOKitShell.sendLoadEvent(documentToLoad);
+            } else {
+                LOKitShell.sendResumeEvent(documentToLoad, partIndex);
+            }
         }
+    }
+
+    private boolean checkCacheFileExists(){
+        if(cacheFile == null){
+            cacheFile = getExternalCacheDir().getPath() + "/" + mInputFile.getName() + "_cached."+ FileUtilities.getExtension(mInputFile.getPath()).substring(1);
+        }
+        File file = new File(cacheFile);
+        return file.exists();
+    }
+
+    private void deleteCacheFile(){
+        File file = new File(cacheFile);
+        file.delete();
     }
 
     @Override
@@ -436,6 +476,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     @Override
     public void onBackPressed() {
         if (!isDocumentChanged) {
+            if(checkCacheFileExists()){
+                deleteCacheFile();
+            }
             super.onBackPressed();
             return;
         }
@@ -498,7 +541,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
      * Force the request on main thread.
      */
     public void showSoftKeyboard() {
-
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
