@@ -634,10 +634,6 @@ void PowerPointExport::WriteTransition( const FSHelperPtr& pFS )
         }
     }
 
-    // check if we resolved what transition to export
-    if (!nPPTTransitionType && !bOOXmlSpecificTransition)
-        return;
-
     AnimationSpeed animationSpeed = AnimationSpeed_MEDIUM;
     const char* speed = nullptr;
     sal_Int32 advanceTiming = -1;
@@ -695,7 +691,11 @@ void PowerPointExport::WriteTransition( const FSHelperPtr& pFS )
         }
     }
 
-    if( GETA( Change ) )
+    // check if we resolved what transition to export or time is set
+    if (!nPPTTransitionType && !bOOXmlSpecificTransition && !isTransitionDurationSet)
+        return;
+
+    if (GETA(Change))
         mAny >>= changeType;
 
     // 1 means automatic, 2 half automatic - not sure what it means - at least I don't see it in UI

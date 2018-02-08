@@ -126,6 +126,7 @@ public:
     void testAccentColor();
     void testTdf114848();
     void testTdf115394();
+    void testTdf115394Zero();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -173,6 +174,7 @@ public:
     CPPUNIT_TEST(testAccentColor);
     CPPUNIT_TEST(testTdf114848);
     CPPUNIT_TEST(testTdf115394);
+    CPPUNIT_TEST(testTdf115394Zero);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1162,6 +1164,20 @@ void SdOOXMLExportTest2::testTdf115394()
     SdPage* pPage5 = xDocShRef->GetDoc()->GetSdPage(4, PageKind::Standard);
     fTransitionDuration = pPage5->getTransitionDuration();
     CPPUNIT_ASSERT_EQUAL(4.25, fTransitionDuration);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf115394Zero()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf115394-zero.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    double fTransitionDuration;
+
+    SdPage* pPage = xDocShRef->GetDoc()->GetSdPage(0, PageKind::Standard);
+    fTransitionDuration = pPage->getTransitionDuration();
+    CPPUNIT_ASSERT_EQUAL(0.01, fTransitionDuration);
 
     xDocShRef->DoClose();
 }
