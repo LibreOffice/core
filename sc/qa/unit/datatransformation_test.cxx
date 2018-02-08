@@ -53,7 +53,7 @@ void ScDataTransformationTest::testColumnRemove()
         }
     }
 
-    sc::ColumnRemoveTransformation aTransformation(5);
+    sc::ColumnRemoveTransformation aTransformation({5});
     aTransformation.Transform(*m_pDoc);
 
     for (SCROW nRow = 0; nRow < 10; ++nRow)
@@ -109,7 +109,7 @@ void ScDataTransformationTest::testColumnMerge()
     m_pDoc->SetString(4, 2, 0, "France");
     m_pDoc->SetString(4, 3, 0, "China");
 
-    sc::MergeColumnTransformation aTransform(2, 4, ", ");
+    sc::MergeColumnTransformation aTransform({2, 4}, ", ");
     aTransform.Transform(*m_pDoc);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Berlin, Germany"), m_pDoc->GetString(2, 0, 0));

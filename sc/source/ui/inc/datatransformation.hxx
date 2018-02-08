@@ -15,6 +15,8 @@
 
 #include <sortparam.hxx>
 
+#include <set>
+
 class ScDocument;
 
 namespace sc {
@@ -34,11 +36,11 @@ public:
 
 class SC_DLLPUBLIC ColumnRemoveTransformation : public DataTransformation
 {
-    SCCOL mnCol;
+    std::set<SCCOL> maColumns;
 
 public:
 
-    ColumnRemoveTransformation(SCCOL nCol);
+    ColumnRemoveTransformation(const std::set<SCCOL>& rColumns);
     virtual ~ColumnRemoveTransformation() override;
 
     virtual void Transform(ScDocument& rDoc) const override;
@@ -57,13 +59,12 @@ public:
 
 class SC_DLLPUBLIC MergeColumnTransformation : public DataTransformation
 {
-    SCCOL mnCol1;
-    SCCOL mnCol2;
+    std::set<SCCOL> maColumns;
     OUString maMergeString;
 
 public:
 
-    MergeColumnTransformation(SCCOL nCol1, SCCOL nCol2, const OUString& rMergeString);
+    MergeColumnTransformation(const std::set<SCCOL>& rColumns, const OUString& rMergeString);
     virtual void Transform(ScDocument& rDoc) const  override;
 };
 
