@@ -13,6 +13,8 @@
 #include <dataprovider.hxx>
 #include <datatransformation.hxx>
 
+#include <comphelper/string.hxx>
+
 #include <vcl/lstbox.hxx>
 
 constexpr int MENU_START = 0;
@@ -202,7 +204,6 @@ IMPL_LINK_NOARG(ScDataProviderBaseControl, ApplyBtnHdl, Button*, void)
     maImportCallback.Call(this);
 }
 
-
 namespace {
 
 struct MenuData
@@ -275,9 +276,10 @@ class ScSplitColumnTransformationControl : public ScDataTransformationBaseContro
 private:
     VclPtr<Edit> maSeparator;
     VclPtr<NumericField> maNumColumns;
+    SCCOL mnCol;
 
 public:
-    ScSplitColumnTransformationControl(vcl::Window* pParent);
+    ScSplitColumnTransformationControl(vcl::Window* pParent, SCCOL nCol);
     ~ScSplitColumnTransformationControl() override;
 
     virtual void dispose() override;
@@ -285,8 +287,9 @@ public:
     virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
 };
 
-ScSplitColumnTransformationControl::ScSplitColumnTransformationControl(vcl::Window* pParent):
-    ScDataTransformationBaseControl(pParent, "modules/scalc/ui/splitcolumnentry.ui")
+ScSplitColumnTransformationControl::ScSplitColumnTransformationControl(vcl::Window* pParent, SCCOL nCol):
+    ScDataTransformationBaseControl(pParent, "modules/scalc/ui/splitcolumnentry.ui"),
+    mnCol(nCol)
 {
     get(maSeparator, "ed_separator");
     get(maNumColumns, "num_cols");
@@ -307,28 +310,68 @@ void ScSplitColumnTransformationControl::dispose()
 
 std::shared_ptr<sc::DataTransformation> ScSplitColumnTransformationControl::getTransformation()
 {
-    return std::make_shared<sc::SplitColumnTransformation>(0, ',');
+    OUString aSeparator = maSeparator->GetText();
+    sal_Unicode cSeparator = aSeparator.isEmpty() ? ',' : aSeparator[0];
+    return std::make_shared<sc::SplitColumnTransformation>(mnCol, cSeparator);
 }
 
 class ScMergeColumnTransformationControl : public ScDataTransformationBaseControl
 {
 private:
 
+    VclPtr<Edit> mpSeparator;
+    VclPtr<Edit> mpEdColumns;
+
 public:
-    ScMergeColumnTransformationControl(vcl::Window* pParent);
+    ScMergeColumnTransformationControl(vcl::Window* pParent, SCCOL nStartCol, SCCOL nEndCol);
+
+    virtual void dispose() override;
 
     virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
 };
 
-ScMergeColumnTransformationControl::ScMergeColumnTransformationControl(vcl::Window* pParent):
+ScMergeColumnTransformationControl::ScMergeColumnTransformationControl(vcl::Window* pParent, SCCOL nStartCol, SCCOL nEndCol):
     ScDataTransformationBaseControl(pParent, "modules/scalc/ui/mergecolumnentry.ui")
 {
+    get(mpSeparator, "ed_separator");
+    get(mpEdColumns, "ed_columns");
+
+    OUStringBuffer aBuffer;
+
+    // map from zero based to one based column numbers
+    aBuffer.append(OUString::number(nStartCol + 1));
+    for ( SCCOL nCol = nStartCol + 1; nCol <= nEndCol; ++nCol)
+    {
+        aBuffer.append(";").append(OUString::number(nCol + 1));
+    }
+
+    mpEdColumns->SetText(aBuffer.makeStringAndClear());
+}
+
+void ScMergeColumnTransformationControl::dispose()
+{
+    mpSeparator.clear();
+    ScDataTransformationBaseControl::dispose();
 }
 
 std::shared_ptr<sc::DataTransformation> ScMergeColumnTransformationControl::getTransformation()
 {
-    std::set<SCCOL> maColumns = {0, 1};
-    return std::make_shared<sc::MergeColumnTransformation>(maColumns, ",");
+    OUString aColumnString = mpEdColumns->GetText();
+    std::vector<OUString> aSplitColumns = comphelper::string::split(aColumnString, ';');
+    std::set<SCCOL> aMergedColumns;
+    for (auto& rColStr : aSplitColumns)
+    {
+        sal_Int32 nCol = rColStr.toInt32();
+        if (nCol <= 0)
+            continue;
+
+        if (nCol > MAXCOL)
+            continue;
+
+        // translate from 1-based column notations to internal Calc one
+        aMergedColumns.insert(nCol - 1);
+    }
+    return std::make_shared<sc::MergeColumnTransformation>(aMergedColumns, mpSeparator->GetText());
 }
 
 }
@@ -454,13 +497,19 @@ void ScDataProviderDlg::deleteColumn()
 
 void ScDataProviderDlg::splitColumn()
 {
-    VclPtr<ScSplitColumnTransformationControl> pSplitColumnEntry = VclPtr<ScSplitColumnTransformationControl>::Create(mpList);
+    SCCOL nStartCol = -1;
+    SCCOL nEndCol = -1;
+    mpTable->getColRange(nStartCol, nEndCol);
+    VclPtr<ScSplitColumnTransformationControl> pSplitColumnEntry = VclPtr<ScSplitColumnTransformationControl>::Create(mpList, nStartCol);
     mpList->addEntry(pSplitColumnEntry);
 }
 
 void ScDataProviderDlg::mergeColumns()
 {
-    VclPtr<ScMergeColumnTransformationControl> pMergeColumnEntry = VclPtr<ScMergeColumnTransformationControl>::Create(mpList);
+    SCCOL nStartCol = -1;
+    SCCOL nEndCol = -1;
+    mpTable->getColRange(nStartCol, nEndCol);
+    VclPtr<ScMergeColumnTransformationControl> pMergeColumnEntry = VclPtr<ScMergeColumnTransformationControl>::Create(mpList, nStartCol, nEndCol);
     mpList->addEntry(pMergeColumnEntry);
 }
 
