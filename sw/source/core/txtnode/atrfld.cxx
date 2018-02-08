@@ -213,11 +213,10 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     if( !mpTextField )
         return;
 
-    const SwFieldHint* pHint = dynamic_cast<const SwFieldHint*>( &rHint );
-    if ( pHint )
+    if (const SwFieldHint* pFieldHint = dynamic_cast<const SwFieldHint*>( &rHint ))
     {
         // replace field content by text
-        SwPaM* pPaM = pHint->GetPaM();
+        SwPaM* pPaM = pFieldHint->GetPaM();
         SwDoc* pDoc = pPaM->GetDoc();
         const SwTextNode& rTextNode = mpTextField->GetTextNode();
         pPaM->GetPoint()->nNode = rTextNode;
@@ -228,6 +227,14 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
         pPaM->Move( fnMoveForward );
         pDoc->getIDocumentContentOperations().DeleteRange( *pPaM );
         pDoc->getIDocumentContentOperations().InsertString( *pPaM, aEntry );
+    }
+    else if(const sw::LinkAnchorSearchHint* pAnchorHint = dynamic_cast<const sw::LinkAnchorSearchHint*>(&rHint))
+    {
+        if(pAnchorHint->m_rpFoundNode || !GetTextField())
+            return;
+        const auto pNode = GetTextField()->GetpTextNode();
+        if(pNode && &pNode->GetNodes() == &pAnchorHint->m_rNodes)
+            pAnchorHint->m_rpFoundNode = pNode;
     }
 }
 

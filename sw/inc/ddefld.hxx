@@ -20,10 +20,22 @@
 #define INCLUDED_SW_INC_DDEFLD_HXX
 
 #include <sfx2/lnkbase.hxx>
+#include <svl/hint.hxx>
 #include "swdllapi.h"
 #include "fldbas.hxx"
 
 class SwDoc;
+
+namespace sw
+{
+    struct LinkAnchorSearchHint final : public SfxHint
+    {
+        SwNodes& m_rNodes;
+        const SwNode*& m_rpFoundNode;
+        LinkAnchorSearchHint(SwNodes& rNodes, const SwNode*& rpFoundNode) : m_rNodes(rNodes), m_rpFoundNode(rpFoundNode) {};
+        virtual ~LinkAnchorSearchHint() override;
+    };
+}
 
 // FieldType for DDE
 class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType

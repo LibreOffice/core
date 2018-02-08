@@ -168,27 +168,23 @@ void SwIntrnlRefLink::Closed()
     SvBaseLink::Closed();
 }
 
+sw::LinkAnchorSearchHint::~LinkAnchorSearchHint() {};
+
 const SwNode* SwIntrnlRefLink::GetAnchor() const
 {
     // here, any anchor of the normal NodesArray should be sufficient
     const SwNode* pNd = nullptr;
-    SwIterator<SwClient,SwFieldType> aIter(rFieldType);
-    for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
+    SwIterator<SwDepend,SwFieldType> aIter(rFieldType);
+    for(SwDepend* pLast = aIter.First(); pLast; pLast = aIter.Next())
     {
         // a DDE table or a DDE field attribute in the text
-        if( dynamic_cast<const SwFormatField *>(pLast) == nullptr)
-        {
-            SwDepend* pDep = static_cast<SwDepend*>(pLast);
-            SwDDETable* pDDETable = static_cast<SwDDETable*>(pDep->GetToTell());
-            pNd = pDDETable->GetTabSortBoxes()[0]->GetSttNd();
-        }
-        else if( static_cast<SwFormatField*>(pLast)->GetTextField() )
-            pNd = static_cast<SwFormatField*>(pLast)->GetTextField()->GetpTextNode();
-
+        SwDDETable* pDDETable = static_cast<SwDDETable*>(pLast->GetToTell());
+        pNd = pDDETable->GetTabSortBoxes()[0]->GetSttNd();
         if( pNd && &rFieldType.GetDoc()->GetNodes() == &pNd->GetNodes() )
             break;
         pNd = nullptr;
     }
+    rFieldType.CallSwClientNotify(sw::LinkAnchorSearchHint(rFieldType.GetDoc()->GetNodes(), pNd));
     return pNd;
 }
 

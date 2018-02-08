@@ -24,6 +24,8 @@
 class SwNode;
 class SwContentNode;
 
+
+
 class SwBaseLink : public ::sfx2::SvBaseLink
 {
     SwContentNode* m_pContentNode;
