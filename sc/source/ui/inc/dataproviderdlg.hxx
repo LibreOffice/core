@@ -36,8 +36,11 @@ private:
     VclPtr<ListControl> mpList;
     VclPtr<MenuBar> mpBar;
     VclPtr<ScDataProviderBaseControl> mpDataProviderCtrl;
+    VclPtr<ListBox> mpDBRanges;
 
     ScDBData* pDBData;
+
+    ScDocument* mpDocument;
 
     void InitMenu();
 
@@ -47,7 +50,7 @@ private:
 
 public:
 
-    ScDataProviderDlg(vcl::Window* pWindow, std::shared_ptr<ScDocument> pDoc);
+    ScDataProviderDlg(vcl::Window* pWindow, std::shared_ptr<ScDocument> pDoc, ScDocument* pDocument);
 
     virtual ~ScDataProviderDlg() override;
     virtual void dispose() override;
