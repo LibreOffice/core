@@ -20,12 +20,14 @@
 #define INCLUDED_SW_INC_SWDDETBL_HXX
 
 #include "swtable.hxx"
+#include <ddefld.hxx>
 
 class SwDDEFieldType;
 
 class SwDDETable : public SwTable
 {
-    SwDepend aDepend;
+    SwMultiDepend m_aDepends;
+    SwDDEFieldType* m_pDDEType;
 public:
 
     // Ctor moves all lines/boxes from SwTable to it.

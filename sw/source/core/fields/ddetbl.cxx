@@ -38,8 +38,9 @@
 /// Ctor moves all lines/boxes from a SwTable into itself.
 /// Afterwards the SwTable is empty and must be deleted.
 SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType, bool bUpdate )
-    : SwTable( rTable ), aDepend( this, pDDEType )
+    : SwTable(rTable), m_aDepends(*this), m_pDDEType(pDDEType)
 {
+    m_aDepends.StartListening(m_pDDEType);
     // copy the table data
     m_TabSortContentBoxes.insert(rTable.GetTabSortBoxes());
     rTable.GetTabSortBoxes().clear();
@@ -64,22 +65,22 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType, bool bUpdate 
 
 SwDDETable::~SwDDETable()
 {
-    SwDDEFieldType* pFieldTyp = static_cast<SwDDEFieldType*>(aDepend.GetRegisteredIn());
     SwDoc* pDoc = GetFrameFormat()->GetDoc();
     if (!pDoc->IsInDtor() && !m_aLines.empty())
     {
         assert(m_pTableNode);
         if (m_pTableNode->GetNodes().IsDocNodes())
         {
-            pFieldTyp->DecRefCnt();
+            m_pDDEType->DecRefCnt();
         }
     }
 
     // If it is the last dependent of the "deleted field" than delete it finally
-    if( pFieldTyp->IsDeleted() && pFieldTyp->HasOnlyOneListener() )
+    if( m_pDDEType->IsDeleted() && m_pDDEType->HasOnlyOneListener() )
     {
-        pFieldTyp->Remove( &aDepend );
-        delete pFieldTyp;
+        m_aDepends.EndListeningAll();
+        delete m_pDDEType;
+        m_pDDEType = nullptr;
     }
 }
 
@@ -115,6 +116,11 @@ void SwDDETable::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
                 pInRangeHint->m_nEndNd > pTableNd->GetIndex() )
             pInRangeHint->m_rIsInRange = true;
     }
+    else if (auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
+    {
+        if(m_pDDEType == &rModify)
+            m_pDDEType = const_cast<SwDDEFieldType*>(static_cast<const SwDDEFieldType*>(pModifyChangedHint->m_pNew));
+    }
 }
 
 void SwDDETable::ChangeContent()
@@ -128,10 +134,8 @@ void SwDDETable::ChangeContent()
     if( !GetTabSortBoxes()[0]->GetSttNd()->GetNodes().IsDocNodes() )
         return;
 
-    // access to DDEFieldType
-    SwDDEFieldType* pDDEType = static_cast<SwDDEFieldType*>(aDepend.GetRegisteredIn());
 
-    OUString aExpand = pDDEType->GetExpansion().replaceAll("\r", "");
+    OUString aExpand = m_pDDEType->GetExpansion().replaceAll("\r", "");
     sal_Int32 nExpandTokenPos = 0;
 
     for( size_t n = 0; n < m_aLines.size(); ++n )
@@ -165,7 +169,7 @@ void SwDDETable::ChangeContent()
 
 SwDDEFieldType* SwDDETable::GetDDEFieldType()
 {
-    return static_cast<SwDDEFieldType*>(aDepend.GetRegisteredIn());
+    return m_pDDEType;
 }
 
 bool SwDDETable::NoDDETable()
@@ -196,7 +200,7 @@ bool SwDDETable::NoDDETable()
     GetTabLines().clear();
 
     if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
-        static_cast<SwDDEFieldType*>(aDepend.GetRegisteredIn())->DecRefCnt();
+        m_pDDEType->DecRefCnt();
 
     pTableNd->SetNewTable( pNewTable );       // replace table
 
