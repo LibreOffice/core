@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_75c05a7d",
+        "filename": "cui/source/dialogs/colorpicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-02-08T10:43:27Z",
+      "side": 1,
+      "message": "could just use BitmapEx here and not a pointer...",
+      "range": {
+        "startLine": 627,
+        "startChar": 4,
+        "endLine": 627,
+        "endChar": 12
+      },
+      "revId": "b982a3b67a0b6c08dee1121dc6c9f2378950d54f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_d5d02656",
+        "filename": "cui/source/dialogs/colorpicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-02-08T10:43:27Z",
+      "side": 1,
+      "message": "Bitmap will go away eventually.. so you could transform this to BitmapEx",
+      "revId": "b982a3b67a0b6c08dee1121dc6c9f2378950d54f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_f5d36a5d",
+        "filename": "cui/source/dialogs/colorpicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 750,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-02-08T10:43:27Z",
+      "side": 1,
+      "message": "and just use rRenderContext.DrawBitmapEx here",
+      "revId": "b982a3b67a0b6c08dee1121dc6c9f2378950d54f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_35cee2b4",
+        "filename": "include/vcl/bitmapex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-02-08T10:43:27Z",
+      "side": 1,
+      "message": "Please don\u0027t add new complex operation to BitmapEx. Add it to vcl/source/bitmap/BitmapProcessor.cxx or create a new file or a new class if the operation is complex enough.",
+      "range": {
+        "startLine": 448,
+        "startChar": 8,
+        "endLine": 448,
+        "endChar": 24
+      },
+      "revId": "b982a3b67a0b6c08dee1121dc6c9f2378950d54f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
