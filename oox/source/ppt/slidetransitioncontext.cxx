@@ -47,6 +47,7 @@ SlideTransitionContext::SlideTransitionContext( FragmentHandler2 const & rParent
 : FragmentHandler2( rParent )
 , maSlideProperties( aProperties )
 , mbHasTransition( false )
+, mbHasTransitionDuration( false )
 {
     // ST_TransitionSpeed
     maTransition.setOoxTransitionSpeed( rAttribs.getToken( XML_spd, XML_fast ) );
@@ -54,7 +55,13 @@ SlideTransitionContext::SlideTransitionContext( FragmentHandler2 const & rParent
     // p14:dur
     sal_Int32 nDurationInMs = rAttribs.getInteger( P14_TOKEN( dur ), -1 );
     if( nDurationInMs > -1 )
+    {
+        // In MSO 0 is visible as 0.01s
+        if( nDurationInMs == 0.0 )
+            nDurationInMs = 10;
         maTransition.setOoxTransitionSpeed( nDurationInMs / 1000.0 );
+        mbHasTransitionDuration = true;
+    }
 
     // TODO
     rAttribs.getBool( XML_advClick, true );
@@ -182,7 +189,7 @@ void SlideTransitionContext::onEndElement()
 {
     if( isCurrentElement(PPT_TOKEN( transition )) )
     {
-        if( mbHasTransition )
+        if( mbHasTransition || mbHasTransitionDuration )
         {
             maTransition.setSlideProperties( maSlideProperties );
             mbHasTransition = false;

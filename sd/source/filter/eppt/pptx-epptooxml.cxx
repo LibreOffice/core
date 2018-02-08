@@ -641,10 +641,6 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
         }
     }
 
-    // check if we resolved what transition to export
-    if (!nPPTTransitionType && !bOOXmlSpecificTransition)
-        return;
-
     AnimationSpeed animationSpeed = AnimationSpeed_MEDIUM;
     const char* speed = nullptr;
     sal_Int32 advanceTiming = -1;
@@ -702,6 +698,10 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
             break;
         }
     }
+
+    // check if we resolved what transition to export or time is set
+    if (!nPPTTransitionType && !bOOXmlSpecificTransition && !isTransitionDurationSet)
+        return;
 
     if (GETA(Change))
         mAny >>= changeType;
