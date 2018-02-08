@@ -782,10 +782,10 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
                                               REFIID /*riid*/,
                                               LCID /*lcid*/,
                                               unsigned short wFlags,
-                                               DISPPARAMS * pdispparams,
+                                              DISPPARAMS * pdispparams,
                                               VARIANT * pvarResult,
                                               EXCEPINFO * pexcepinfo,
-                                               unsigned int * puArgErr )
+                                              unsigned int * puArgErr )
 {
     comphelper::ProfileZone aZone("COM Bridge");
     HRESULT ret = S_OK;
