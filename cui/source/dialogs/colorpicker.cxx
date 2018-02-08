@@ -37,6 +37,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/virdev.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -625,7 +626,7 @@ private:
     Link<ColorSliderControl&,void> maModifyHdl;
     Color maColor;
     ColorMode meMode;
-    Bitmap* mpBitmap;
+    VclPtr<VirtualDevice> mxBitmap;
     sal_Int16 mnLevel;
     double mdValue;
 };
@@ -633,7 +634,6 @@ private:
 ColorSliderControl::ColorSliderControl( vcl::Window* pParent, WinBits nStyle )
     : Control( pParent, nStyle )
     , meMode( DefaultMode )
-    , mpBitmap( nullptr )
     , mnLevel( 0 )
     , mdValue( -1.0 )
 {
@@ -647,8 +647,7 @@ ColorSliderControl::~ColorSliderControl()
 
 void ColorSliderControl::dispose()
 {
-    delete mpBitmap;
-    mpBitmap = nullptr;
+    mxBitmap.disposeAndClear();
     Control::dispose();
 }
 
@@ -658,84 +657,73 @@ void ColorSliderControl::UpdateBitmap()
 {
     Size aSize(1, GetOutputSizePixel().Height());
 
-    if (mpBitmap && mpBitmap->GetSizePixel() != aSize)
+    if (mxBitmap && mxBitmap->GetOutputSizePixel() == aSize)
+        return;
+
+    mxBitmap.disposeAndClear();
+    mxBitmap->SetOutputSizePixel(aSize);
+
+    const long nY = aSize.Height() - 1;
+
+    Color aBitmapColor(maColor);
+
+    sal_uInt16 nHue, nSat, nBri;
+    maColor.RGBtoHSB(nHue, nSat, nBri);
+
+    // this has been unlooped for performance reason, please do not merge back!
+
+    switch (meMode)
     {
-        delete mpBitmap;
-        mpBitmap = nullptr;
-    }
-
-    if (!mpBitmap)
-        mpBitmap = new Bitmap(aSize, 24);
-
-    BitmapWriteAccess* pWriteAccess = mpBitmap->AcquireWriteAccess();
-
-    if (pWriteAccess)
-    {
-        const long nY = aSize.Height() - 1;
-
-        BitmapColor aBitmapColor(maColor);
-
-        sal_uInt16 nHue, nSat, nBri;
-        maColor.RGBtoHSB(nHue, nSat, nBri);
-
-        // this has been unlooped for performance reason, please do not merge back!
-
-        switch (meMode)
+    case HUE:
+        nSat = 100;
+        nBri = 100;
+        for (long y = 0; y <= nY; y++)
         {
-        case HUE:
-            nSat = 100;
-            nBri = 100;
-            for (long y = 0; y <= nY; y++)
-            {
-                nHue = static_cast<sal_uInt16>((359 * y) / nY);
-                aBitmapColor = BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri)));
-                pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
-            }
-            break;
-
-        case SATURATION:
-            nBri = std::max(sal_uInt16(32), nBri);
-            for (long y = 0; y <= nY; y++)
-            {
-                nSat = static_cast<sal_uInt16>((100 * y) / nY);
-                pWriteAccess->SetPixel(nY - y, 0, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
-            }
-            break;
-
-        case BRIGHTNESS:
-            for (long y = 0; y <= nY; y++)
-            {
-                nBri = static_cast<sal_uInt16>((100 * y) / nY);
-                pWriteAccess->SetPixel(nY - y, 0, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
-            }
-            break;
-
-        case RED:
-            for (long y = 0; y <= nY; y++)
-            {
-                aBitmapColor.SetRed(sal_uInt8((long(255) * y) / nY));
-                pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
-            }
-            break;
-
-        case GREEN:
-            for (long y = 0; y <= nY; y++)
-            {
-                aBitmapColor.SetGreen(sal_uInt8((long(255) * y) / nY));
-                pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
-            }
-            break;
-
-        case BLUE:
-            for (long y = 0; y <= nY; y++)
-            {
-                aBitmapColor.SetBlue(sal_uInt8((long(255) * y) / nY));
-                pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
-            }
-            break;
+            nHue = static_cast<sal_uInt16>((359 * y) / nY);
+            mxBitmap->DrawPixel(Point(0, nY - y), Color(Color::HSBtoRGB(nHue, nSat, nBri)));
         }
+        break;
 
-        Bitmap::ReleaseAccess(pWriteAccess);
+    case SATURATION:
+        nBri = std::max(sal_uInt16(32), nBri);
+        for (long y = 0; y <= nY; y++)
+        {
+            nSat = static_cast<sal_uInt16>((100 * y) / nY);
+            mxBitmap->DrawPixel(Point(0, nY - y), Color(Color::HSBtoRGB(nHue, nSat, nBri)));
+        }
+        break;
+
+    case BRIGHTNESS:
+        for (long y = 0; y <= nY; y++)
+        {
+            nBri = static_cast<sal_uInt16>((100 * y) / nY);
+            mxBitmap->DrawPixel(Point(0, nY - y), Color(Color::HSBtoRGB(nHue, nSat, nBri)));
+        }
+        break;
+
+    case RED:
+        for (long y = 0; y <= nY; y++)
+        {
+            aBitmapColor.SetRed(sal_uInt8((long(255) * y) / nY));
+            mxBitmap->DrawPixel(Point(0, nY - y), aBitmapColor);
+        }
+        break;
+
+    case GREEN:
+        for (long y = 0; y <= nY; y++)
+        {
+            aBitmapColor.SetGreen(sal_uInt8((long(255) * y) / nY));
+            mxBitmap->DrawPixel(Point(0, nY - y), aBitmapColor);
+        }
+        break;
+
+    case BLUE:
+        for (long y = 0; y <= nY; y++)
+        {
+            aBitmapColor.SetBlue(sal_uInt8((long(255) * y) / nY));
+            mxBitmap->DrawPixel(Point(0, nY - y), aBitmapColor);
+        }
+        break;
     }
 }
 
@@ -803,21 +791,16 @@ void ColorSliderControl::KeyInput(const KeyEvent& rKEvt)
 
 void ColorSliderControl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& /*rRect*/)
 {
-    if (!mpBitmap)
+    if (!mxBitmap)
         UpdateBitmap();
 
     const Size aSize(GetOutputSizePixel());
-
-    Bitmap aOutputBitmap(*mpBitmap);
-
-    if (GetBitCount() <= 8)
-        aOutputBitmap.Dither();
 
     Point aPos;
     int x = aSize.Width();
     while (x--)
     {
-        rRenderContext.DrawBitmap(aPos, aOutputBitmap);
+        rRenderContext.DrawOutDev(aPos, aSize, Point(0,0), aSize, *mxBitmap);
         aPos.X() += 1;
     }
 }
