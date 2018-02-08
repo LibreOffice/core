@@ -27,6 +27,12 @@ public interface TileProvider {
     void saveDocumentAs(String filePath, String format);
 
     /**
+    *  Save the current document to cache
+    */
+
+    void saveDocumentToCache(String filePath, String format);
+
+    /**
      * Returns the page width in pixels.
      */
     int getPageWidth();

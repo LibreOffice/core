@@ -40,6 +40,7 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int UPDATE_ZOOM_CONSTRAINTS = 19;
     public static final int UPDATE_CALC_HEADERS = 20;
     public static final int REFRESH = 21;
+    public static final int SAVE_TO_CACHE = 22;
 
     public final int mType;
     public int mPriority = 0;
