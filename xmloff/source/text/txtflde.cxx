@@ -1607,7 +1607,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         {
             // export text:reference-language attribute, if not empty
             ProcessString(XML_REFERENCE_LANGUAGE,
-                    GetStringProperty(sPropertyReferenceFieldLanguage, rPropSet), true);
+                    GetStringProperty(sPropertyReferenceFieldLanguage, rPropSet), true, XML_NAMESPACE_LO_EXT);
         }
         ExportElement(
             MapReferenceSource(
@@ -1629,7 +1629,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         {
             // export text:reference-language attribute, if not empty
             ProcessString(XML_REFERENCE_LANGUAGE,
-                      GetStringProperty(sPropertyReferenceFieldLanguage, rPropSet), true);
+                      GetStringProperty(sPropertyReferenceFieldLanguage, rPropSet), true, XML_NAMESPACE_LO_EXT);
         }
         ExportElement(
             MapReferenceSource(GetInt16Property(
@@ -1654,7 +1654,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         {
             // export text:reference-language attribute, if not empty
             ProcessString(XML_REFERENCE_LANGUAGE,
-                      GetStringProperty(sPropertyReferenceFieldLanguage, rPropSet), true);
+                      GetStringProperty(sPropertyReferenceFieldLanguage, rPropSet), true, XML_NAMESPACE_LO_EXT);
         }
         ExportElement(
             MapReferenceSource(GetInt16Property(
