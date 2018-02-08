@@ -1506,7 +1506,7 @@
             </enumeration>
           </constraints>
         </prop>
-        <prop oor:name="TabStop" oor:type="xs:int" oor:nillable="false">
+        <prop oor:name="TabStop" oor:type="xs:int" oor:nillable="false" oor:localized="true">
           <!-- OldPath: Writer/Layout -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Tab stops -->
