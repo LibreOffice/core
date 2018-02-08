@@ -121,6 +121,7 @@ public:
     long    GetSmallWidth() const               { return nSmallWidth; }
     long    GetBigWidth() const                 { return nBigWidth; }
     void    SetWidth( long nNew );
+    void    GetMarkRange(SCCOLROW& rStart, SCCOLROW& rEnd) const;
 };
 
 #endif

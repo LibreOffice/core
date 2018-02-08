@@ -1032,4 +1032,10 @@ void ScHeaderControl::SetMarking( bool /* bSet */ )
 {
 }
 
+void ScHeaderControl::GetMarkRange(SCCOLROW& rStart, SCCOLROW& rEnd) const
+{
+    rStart = nMarkStart;
+    rEnd = nMarkEnd;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
