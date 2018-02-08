@@ -738,15 +738,21 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
             pFS->endElement( FSNS( XML_c, XML_floor ) );
         }
 
-        // sideWall
-
-        // backWall
-        Reference< beans::XPropertySet > xBackWall( mxNewDiagram->getWall(), uno::UNO_QUERY );
-        if( xBackWall.is() )
+        // LibreOffice doens't distinguish between sideWall and backWall (both are using the same color).
+        // It is controlled by the same Wall property.
+        Reference< beans::XPropertySet > xWall( mxNewDiagram->getWall(), uno::UNO_QUERY );
+        if( xWall.is() )
         {
+            // sideWall
+            pFS->startElement( FSNS( XML_c, XML_sideWall ),
+                FSEND );
+            exportShapeProps( xWall );
+            pFS->endElement( FSNS( XML_c, XML_sideWall ) );
+
+            // backWall
             pFS->startElement( FSNS( XML_c, XML_backWall ),
                 FSEND );
-            exportShapeProps( xBackWall );
+            exportShapeProps( xWall );
             pFS->endElement( FSNS( XML_c, XML_backWall ) );
         }
 
@@ -1160,7 +1166,6 @@ void ChartExport::exportPlotArea( const Reference< css::chart::XChartDocument >&
     // Unfortunately LibreOffice doesn't have Plot Area equivalent for 3D chart.
     // It means that Plot Area couldn't be displayed and changed for 3D chars in LibreOffice.
     // We cannot write Wall attributes into Plot Area for 3D charts, because Wall us used for background wall.
-    //TODO Apply the same for the .xls export
     if( !mbIs3DChart && xWallFloorSupplier.is() )
     {
         Reference< beans::XPropertySet > xWallPropSet( xWallFloorSupplier->getWall(), uno::UNO_QUERY );
