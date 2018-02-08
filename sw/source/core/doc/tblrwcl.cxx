@@ -3435,7 +3435,8 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                 if( GetFrameFormat()->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE) &&
                     !rSz.GetWidthPercent() )
                 {
-                    bRet = rSz.GetWidth() < USHRT_MAX - nRelDiff;
+                    // silence -Wsign-compare on Android with the static cast
+                    bRet = rSz.GetWidth() < static_cast<unsigned short>(USHRT_MAX) - nRelDiff;
                     bChgLRSpace = bLeft ? rLR.GetLeft() >= nAbsDiff
                                         : rLR.GetRight() >= nAbsDiff;
                 }
@@ -3506,7 +3507,8 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                 if( bBigger )
                 {
                     // If the Table does not have any room to grow, we need to create some!
-                    if( aSz.GetWidth() + nRelDiff > USHRT_MAX )
+                    // silence -Wsign-compare on Android with the static cast
+                    if( aSz.GetWidth() + nRelDiff > static_cast<unsigned short>(USHRT_MAX) )
                     {
                         // Break down to USHRT_MAX / 2
                         CR_SetBoxWidth aTmpPara( TableChgWidthHeightType::ColLeft, aSz.GetWidth() / 2,
