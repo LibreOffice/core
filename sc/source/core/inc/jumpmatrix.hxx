@@ -67,6 +67,7 @@ class ScJumpMatrix
     SCSIZE              nCurRow;
     SCSIZE              nResMatCols;
     SCSIZE              nResMatRows;
+    OpCode              meOp;
     bool                bStarted;
 
     // Buffer result ranges to be able to set a range of identically typed
@@ -96,7 +97,7 @@ class ScJumpMatrix
     ScJumpMatrix& operator=( const ScJumpMatrix& ) = delete;
 
 public:
-    ScJumpMatrix( SCSIZE nColsP, SCSIZE nRowsP );
+    ScJumpMatrix( OpCode eOp, SCSIZE nColsP, SCSIZE nRowsP );
     ~ScJumpMatrix();
     void GetDimensions( SCSIZE& rCols, SCSIZE& rRows ) const;
     void SetJump( SCSIZE nCol, SCSIZE nRow, double fBool, short nStart, short nNext );
@@ -111,6 +112,7 @@ public:
     void GetResMatDimensions( SCSIZE& rCols, SCSIZE& rRows );
     void SetNewResMat( SCSIZE nNewCols, SCSIZE nNewRows );
     ScRefList& GetRefList();
+    OpCode GetOpCode() const { return meOp; }
 
     void PutResultDouble( double fVal, SCSIZE nC, SCSIZE nR );
     void PutResultString( const svl::SharedString& rStr, SCSIZE nC, SCSIZE nR );
