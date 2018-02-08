@@ -327,7 +327,8 @@ ScMergeColumnTransformationControl::ScMergeColumnTransformationControl(vcl::Wind
 
 std::shared_ptr<sc::DataTransformation> ScMergeColumnTransformationControl::getTransformation()
 {
-    return std::make_shared<sc::MergeColumnTransformation>(0, 1, ",");
+    std::set<SCCOL> maColumns = {0, 1};
+    return std::make_shared<sc::MergeColumnTransformation>(maColumns, ",");
 }
 
 }

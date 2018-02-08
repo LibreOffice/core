@@ -26,8 +26,8 @@ SCROW DataTransformation::getLastRow(const ScDocument& rDoc, SCCOL nCol)
     return nEndRow;
 }
 
-ColumnRemoveTransformation::ColumnRemoveTransformation(SCCOL nCol):
-    mnCol(nCol)
+ColumnRemoveTransformation::ColumnRemoveTransformation(const std::set<SCCOL>& rColumns):
+    maColumns(rColumns)
 {
 }
 
@@ -37,7 +37,10 @@ ColumnRemoveTransformation::~ColumnRemoveTransformation()
 
 void ColumnRemoveTransformation::Transform(ScDocument& rDoc) const
 {
-    rDoc.DeleteCol(0, 0, MAXROW, 0, mnCol, 1);
+    for (auto& rCol : maColumns)
+    {
+        rDoc.DeleteCol(0, 0, MAXROW, 0, rCol, 1);
+    }
 }
 
 SplitColumnTransformation::SplitColumnTransformation(SCCOL nCol, sal_Unicode cSeparator):
@@ -68,27 +71,46 @@ void SplitColumnTransformation::Transform(ScDocument& rDoc) const
     }
 }
 
-MergeColumnTransformation::MergeColumnTransformation(SCCOL nCol1, SCCOL nCol2, const OUString& rMergeString):
-    mnCol1(nCol1),
-    mnCol2(nCol2),
+MergeColumnTransformation::MergeColumnTransformation(const std::set<SCCOL>& rColumns, const OUString& rMergeString):
+    maColumns(rColumns),
     maMergeString(rMergeString)
 {
 }
 
 void MergeColumnTransformation::Transform(ScDocument& rDoc) const
 {
-    SCROW nEndRow1 = getLastRow(rDoc, mnCol1);
-    SCROW nEndRow2 = getLastRow(rDoc, mnCol2);
-    SCROW nEndRow = std::max(nEndRow1, nEndRow2);
+    if (maColumns.empty())
+        return;
 
-    for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+    SCROW nMaxRow = 0;
+    for (auto& itr : maColumns)
     {
-        OUString aStr1 = rDoc.GetString(mnCol1, nRow, 0);
-        OUString aStr2 = rDoc.GetString(mnCol2, nRow, 0);
-        rDoc.SetString(mnCol1, nRow, 0, aStr1 + maMergeString + aStr2);
+        nMaxRow = getLastRow(rDoc, itr);
     }
 
-    rDoc.DeleteCol(0, 0, MAXROW, 0, mnCol2, 1);
+    SCCOL nTargetCol = *maColumns.begin();
+
+
+    for (SCROW nRow = 0; nRow <= nMaxRow; ++nRow)
+    {
+        OUStringBuffer aStr = rDoc.GetString(nTargetCol, nRow, 0);
+        for (auto& itr : maColumns)
+        {
+            if (itr != nTargetCol)
+            {
+                aStr.append(maMergeString).append(rDoc.GetString(itr, nRow, 0));
+            }
+        }
+        rDoc.SetString(nTargetCol, nRow, 0, aStr.makeStringAndClear());
+    }
+
+    for (auto& itr : maColumns)
+    {
+        if (itr == nTargetCol)
+            continue;
+
+        rDoc.DeleteCol(0, 0, MAXROW, 0, itr, 1);
+    }
 }
 
 SortTransformation::SortTransformation(const ScSortParam& rSortParam):
