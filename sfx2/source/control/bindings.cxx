@@ -1604,6 +1604,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolI
                 }
 
                 xDisp->removeStatusListener( xBind.get(), aURL );
+                xBind->Release();
                 xBind.clear();
                 if ( bDeleteCache )
                     DELETEZ( pCache );
