@@ -393,6 +393,15 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     @Override
     protected void onPause() {
         Log.i(LOGTAG, "onPause..");
+        /*
+            switching to other apps or receiving a phone call forces libreoffice to call onPause method which causes it to lose its unsaved changes.
+            however, we can save the document locally to prevent this from happening
+         */
+        if(isDocumentChanged){
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Save"));
+            setDocumentChanged(false);
+        }
+
         super.onPause();
     }
 
