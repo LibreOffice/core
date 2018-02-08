@@ -181,18 +181,6 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
 bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                                 sal_Int32 nStt, sal_Int32 nEnd ) const
 {
-    SwIterator<SwDepend,SwFieldType> aIter(rFieldType);
-    for(SwDepend* pLast = aIter.First(); pLast; pLast = aIter.Next())
-    {
-        SwDepend* pDep = static_cast<SwDepend*>(pLast);
-        SwDDETable* pDDETable = static_cast<SwDDETable*>(pDep->GetToTell());
-        const SwTableNode* pTableNd = pDDETable->GetTabSortBoxes()[0]->
-                        GetSttNd()->FindTableNode();
-        if( pTableNd->GetNodes().IsDocNodes() &&
-            nSttNd < pTableNd->EndOfSectionIndex() &&
-            nEndNd > pTableNd->GetIndex() )
-            return true;
-    }
     bool bInRange = false;
     rFieldType.CallSwClientNotify(sw::InRangeSearchHint(
         rFieldType.GetDoc()->GetNodes(),

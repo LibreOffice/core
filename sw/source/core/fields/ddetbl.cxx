@@ -105,6 +105,16 @@ void SwDDETable::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
         if( pNd && &pLinkAnchorHint->m_rNodes == &pNd->GetNodes() )
             pLinkAnchorHint->m_rpFoundNode = pNd;
     }
+    else if(const sw::InRangeSearchHint* pInRangeHint = dynamic_cast<const sw::InRangeSearchHint*>(&rHint))
+    {
+        if(pInRangeHint->m_rIsInRange)
+            return;
+        const SwTableNode* pTableNd = GetTabSortBoxes()[0]->GetSttNd()->FindTableNode();
+        if( pTableNd->GetNodes().IsDocNodes() &&
+                pInRangeHint->m_nSttNd < pTableNd->EndOfSectionIndex() &&
+                pInRangeHint->m_nEndNd > pTableNd->GetIndex() )
+            pInRangeHint->m_rIsInRange = true;
+    }
 }
 
 void SwDDETable::ChangeContent()
