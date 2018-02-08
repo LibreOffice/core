@@ -277,7 +277,13 @@ getCurrentWordDoc( const uno::Reference< uno::XComponentContext >& xContext )
     }
     catch (const uno::Exception&)
     {
-        xModel = getThisWordDoc( xContext );
+        try
+        {
+            xModel = getThisWordDoc( xContext );
+        }
+        catch (const uno::Exception&)
+        {
+        }
     }
     return xModel;
 }
