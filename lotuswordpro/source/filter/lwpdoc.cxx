@@ -74,6 +74,7 @@ LwpDocument::LwpDocument(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)
     , m_pOwnedFoundry(nullptr)
     , m_bGettingFirstDivisionWithContentsThatIsNotOLE(false)
+    , m_bGettingPreviousDivisionWithContents(false)
     , m_nFlags(0)
     , m_nPersistentFlags(0)
     , m_pLnOpts(nullptr)
@@ -526,17 +527,20 @@ LwpDocument* LwpDocument::GetPreviousDivision()
 /**
  * @descr    Get previous division which has contents, copy from lwp source code
  */
- LwpDocument* LwpDocument::GetPreviousDivisionWithContents()
+LwpDocument* LwpDocument::GetPreviousDivisionWithContents()
 {
-    if(GetPreviousDivision())
-    {
-        LwpDocument* pDoc = GetPreviousDivision()->GetLastDivisionWithContents();
-        if (pDoc)
-            return pDoc;
-    }
-    if(GetParentDivision())
-        return GetParentDivision()->GetPreviousDivisionWithContents();
-    return nullptr;
+    if (m_bGettingPreviousDivisionWithContents)
+        throw std::runtime_error("recursion in page divisions");
+    m_bGettingPreviousDivisionWithContents = true;
+    LwpDocument* pRet = nullptr;
+
+    if (GetPreviousDivision())
+        pRet = GetPreviousDivision()->GetLastDivisionWithContents();
+    if (!pRet && GetParentDivision())
+        pRet = GetParentDivision()->GetPreviousDivisionWithContents();
+
+    m_bGettingPreviousDivisionWithContents = false;
+    return pRet;
 }
  /**
  * @descr    Get last division which has contents, copy from lwp source code
