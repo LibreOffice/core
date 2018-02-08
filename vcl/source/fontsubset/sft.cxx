@@ -1462,12 +1462,29 @@ bool withinBounds(sal_uInt32 tdoffset, sal_uInt32 moreoffset, sal_uInt32 len, sa
     return result <= available;
 }
 
+class TTFontCloser
+{
+    TrueTypeFont* m_font;
+public:
+    TTFontCloser(TrueTypeFont* t)
+        : m_font(t)
+    {
+    }
+    void clear() { m_font = nullptr; }
+    ~TTFontCloser()
+    {
+        if (m_font)
+            CloseTTFont(m_font);
+    }
+};
+
 }
 
 static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
 {
+    TTFontCloser aCloseGuard(t);
+
     if (t->fsize < 4) {
-        CloseTTFont(t);
         return SF_TTFORMAT;
     }
     int i;
@@ -1483,16 +1500,18 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     } else if (TTCTag == T_ttcf) {                         /* TrueType collection */
         sal_uInt32 Version = GetUInt32(t->ptr, 4);
         if (Version != 0x00010000 && Version != 0x00020000) {
-            CloseTTFont(t);
             return SF_TTFORMAT;
         }
         if (facenum >= GetUInt32(t->ptr, 8)) {
-            CloseTTFont(t);
             return SF_FONTNO;
         }
-        tdoffset = GetUInt32(t->ptr, 12 + 4 * facenum);
+        if (withinBounds(12, 0, 4 * facenum, t->fsize)) {
+            tdoffset = GetUInt32(t->ptr, 12 + 4 * facenum);
+        } else {
+            return SF_FONTNO;
+        }
+
     } else {
-        CloseTTFont(t);
         return SF_TTFORMAT;
     }
 
@@ -1501,7 +1520,6 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     }
 
     if (t->ntables >= 128 || t->ntables == 0) {
-        CloseTTFont(t);
         return SF_TTFORMAT;
     }
 
@@ -1552,7 +1570,6 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     if( facenum == sal_uInt32(~0) ) {
         sal_uInt8* pHead = const_cast<sal_uInt8*>(t->tables[O_head]);
         if (!pHead) {
-            CloseTTFont(t);
             return SF_TTFORMAT;
         }
         /* limit Head candidate to TTC extract's limits */
@@ -1571,7 +1588,6 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
             }
         }
         if (p <= t->ptr) {
-            CloseTTFont(t);
             return SF_TTFORMAT;
         }
     }
@@ -1613,7 +1629,6 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
      */
 
     if( !(getTable(t, O_maxp) && getTable(t, O_head) && getTable(t, O_name) && getTable(t, O_cmap)) ) {
-        CloseTTFont(t);
         return SF_TTFORMAT;
     }
 
@@ -1624,14 +1639,12 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     table = getTable(t, O_head);
     table_size = getTableSize(t, O_head);
     if (table_size < 52) {
-        CloseTTFont(t);
         return SF_TTFORMAT;
     }
     t->unitsPerEm = GetUInt16(table, 18);
     int indexfmt = GetInt16(table, 50);
 
     if( ((indexfmt != 0) && (indexfmt != 1)) || (t->unitsPerEm <= 0) ) {
-        CloseTTFont(t);
         return SF_TTFORMAT;
     }
 
@@ -1655,7 +1668,6 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         /* TODO: implement to get subsetting */
         assert(t->goffsets != nullptr);
     } else {
-        CloseTTFont(t);
         return SF_TTFORMAT;
     }
 
@@ -1669,6 +1681,8 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
 
     GetNames(t);
     FindCmap(t);
+
+    aCloseGuard.clear();
 
     return SF_OK;
 }
