@@ -184,7 +184,9 @@ VbaApplicationBase::~VbaApplicationBase()
 sal_Bool SAL_CALL
 VbaApplicationBase::getScreenUpdating()
 {
-    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XModel > xModel = getCurrentDocument();
+    if (!xModel.is())
+        return false;
     return !xModel->hasControllersLocked();
 }
 
@@ -238,7 +240,9 @@ VbaApplicationBase::setDisplayStatusBar(sal_Bool bDisplayStatusBar)
 
 sal_Bool SAL_CALL VbaApplicationBase::getInteractive()
 {
-    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XModel > xModel = getCurrentDocument();
+    if (!xModel.is())
+        return false;
     uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
     uno::Reference< awt::XWindow2 > xWindow( xFrame->getContainerWindow(), uno::UNO_QUERY_THROW );
 

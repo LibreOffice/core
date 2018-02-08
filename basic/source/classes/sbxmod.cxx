@@ -409,7 +409,10 @@ uno::Reference< vba::XVBACompatibility > getVBACompatibility( const uno::Referen
 
 bool getDefaultVBAMode( StarBASIC* pb )
 {
-    uno::Reference< vba::XVBACompatibility > xVBACompat = getVBACompatibility( getDocumentModel( pb ) );
+    uno::Reference< frame::XModel > xModel( getDocumentModel( pb ) );
+    if (!xModel.is())
+        return false;
+    uno::Reference< vba::XVBACompatibility > xVBACompat = getVBACompatibility( xModel );
     return xVBACompat.is() && xVBACompat->getVBACompatibilityMode();
 }
 
