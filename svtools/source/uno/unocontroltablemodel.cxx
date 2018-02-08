@@ -223,12 +223,9 @@ namespace svt { namespace table
 
         // notify listeners
         ModellListeners aListeners( m_pImpl->m_aListeners );
-        for (   ModellListeners::const_iterator loop = aListeners.begin();
-                loop != aListeners.end();
-                ++loop
-            )
+        for (auto const& listener : aListeners)
         {
-            (*loop)->columnInserted();
+            listener->columnInserted();
         }
     }
 
@@ -246,12 +243,9 @@ namespace svt { namespace table
 
         // notify listeners
         ModellListeners aListeners( m_pImpl->m_aListeners );
-        for (   ModellListeners::const_iterator loop = aListeners.begin();
-                loop != aListeners.end();
-                ++loop
-            )
+        for (auto const& listener : aListeners)
         {
-            (*loop)->columnRemoved();
+            listener->columnRemoved();
         }
 
         // dispose the column
@@ -269,12 +263,9 @@ namespace svt { namespace table
             return;
 
         // dispose the column instances
-        for (   ColumnModels::const_iterator col = m_pImpl->aColumns.begin();
-                col != m_pImpl->aColumns.end();
-                ++col
-            )
+        for (auto const& col : m_pImpl->aColumns)
         {
-            UnoGridColumnFacade* pColumn = dynamic_cast< UnoGridColumnFacade* >( col->get() );
+            UnoGridColumnFacade* pColumn = dynamic_cast< UnoGridColumnFacade* >( col.get() );
             if ( !pColumn )
             {
                 SAL_WARN( "svtools.uno", "UnoControlTableModel::removeAllColumns: illegal column implementation!" );
@@ -287,12 +278,9 @@ namespace svt { namespace table
 
         // notify listeners
         ModellListeners aListeners( m_pImpl->m_aListeners );
-        for (   ModellListeners::const_iterator loop = aListeners.begin();
-                loop != aListeners.end();
-                ++loop
-            )
+        for (auto const& listener : aListeners)
         {
-            (*loop)->allColumnsRemoved();
+            listener->allColumnsRemoved();
         }
     }
 
@@ -300,12 +288,9 @@ namespace svt { namespace table
     void UnoControlTableModel::impl_notifyTableMetricsChanged() const
     {
         ModellListeners aListeners( m_pImpl->m_aListeners );
-        for (   ModellListeners::const_iterator loop = aListeners.begin();
-                loop != aListeners.end();
-                ++loop
-            )
+        for (auto const& listener : aListeners)
         {
-            (*loop)->tableMetricsChanged();
+            listener->tableMetricsChanged();
         }
     }
 
@@ -741,13 +726,12 @@ namespace svt { namespace table
     ColPos UnoControlTableModel::getColumnPos( UnoGridColumnFacade const & i_column ) const
     {
         DBG_CHECK_ME();
-        for (   ColumnModels::const_iterator col = m_pImpl->aColumns.begin();
-                col != m_pImpl->aColumns.end();
-                ++col
-            )
+        ColPos nPos = 0;
+        for (auto const& col : m_pImpl->aColumns)
         {
-            if ( &i_column == col->get() )
-                return col - m_pImpl->aColumns.begin();
+            if ( &i_column == col.get() )
+                return nPos;
+            ++nPos;
         }
         OSL_ENSURE( false, "UnoControlTableModel::getColumnPos: column not found!" );
         return COL_INVALID;
@@ -822,12 +806,9 @@ namespace svt { namespace table
             "UnoControlTableModel::notifyColumnChange: invalid column index!" );
 
         ModellListeners aListeners( m_pImpl->m_aListeners );
-        for (   ModellListeners::const_iterator loop = aListeners.begin();
-                loop != aListeners.end();
-                ++loop
-            )
+        for (auto const& listener : aListeners)
         {
-            (*loop)->columnChanged( i_columnPos, i_attributeGroup );
+            listener->columnChanged( i_columnPos, i_attributeGroup );
         }
     }
 
@@ -859,12 +840,9 @@ namespace svt { namespace table
 
         // multiplex the event to our own listeners
         ModellListeners aListeners( m_pImpl->m_aListeners );
-        for (   ModellListeners::const_iterator loop = aListeners.begin();
-                loop != aListeners.end();
-                ++loop
-            )
+        for (auto const& listener : aListeners)
         {
-            (*loop)->rowsInserted( i_event.FirstRow, i_event.LastRow );
+            listener->rowsInserted( i_event.FirstRow, i_event.LastRow );
         }
     }
 
@@ -872,12 +850,9 @@ namespace svt { namespace table
     void UnoControlTableModel::notifyRowsRemoved( GridDataEvent const & i_event ) const
     {
         ModellListeners aListeners( m_pImpl->m_aListeners );
-        for (   ModellListeners::const_iterator loop = aListeners.begin();
-                loop != aListeners.end();
-                ++loop
-            )
+        for (auto const& listener : aListeners)
         {
-            (*loop)->rowsRemoved( i_event.FirstRow, i_event.LastRow );
+            listener->rowsRemoved( i_event.FirstRow, i_event.LastRow );
         }
     }
 
@@ -888,12 +863,9 @@ namespace svt { namespace table
         RowPos const lastRow = i_event.FirstRow == -1 ? getRowCount() - 1 : i_event.LastRow;
 
         ModellListeners aListeners( m_pImpl->m_aListeners );
-        for (   ModellListeners::const_iterator loop = aListeners.begin();
-                loop != aListeners.end();
-                ++loop
-            )
+        for (auto const& listener : aListeners)
         {
-            (*loop)->cellsUpdated( firstRow, lastRow );
+            listener->cellsUpdated( firstRow, lastRow );
         }
     }
 
@@ -901,12 +873,9 @@ namespace svt { namespace table
     void UnoControlTableModel::notifyAllDataChanged() const
     {
         ModellListeners aListeners( m_pImpl->m_aListeners );
-        for (   ModellListeners::const_iterator loop = aListeners.begin();
-                loop != aListeners.end();
-                ++loop
-            )
+        for (auto const& listener : aListeners)
         {
-            (*loop)->cellsUpdated( 0, getRowCount() - 1 );
+            listener->cellsUpdated( 0, getRowCount() - 1 );
         }
     }
 

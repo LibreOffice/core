@@ -195,14 +195,13 @@ void SAL_CALL StatusbarController::dispose()
     SolarMutexGuard aSolarMutexGuard;
     Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
     Reference< XURLTransformer > xURLTransformer = getURLTransformer();
-    URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
     css::util::URL aTargetURL;
-    while ( pIter != m_aListenerMap.end() )
+    for (auto const& listener : m_aListenerMap)
     {
         try
         {
-            Reference< XDispatch > xDispatch( pIter->second );
-            aTargetURL.Complete = pIter->first;
+            Reference< XDispatch > xDispatch(listener.second);
+            aTargetURL.Complete = listener.first;
             xURLTransformer->parseStrict( aTargetURL );
 
             if ( xDispatch.is() && xStatusListener.is() )
@@ -211,8 +210,6 @@ void SAL_CALL StatusbarController::dispose()
         catch ( Exception& )
         {
         }
-
-        ++pIter;
     }
 
     // clear hash map
@@ -258,13 +255,11 @@ void SAL_CALL StatusbarController::disposing( const EventObject& Source )
     if ( !xDispatch.is() )
         return;
 
-    URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
-    while ( pIter != m_aListenerMap.end() )
+    for (auto & listener : m_aListenerMap)
     {
         // Compare references and release dispatch references if they are equal.
-        if ( xDispatch == pIter->second )
-            pIter->second.clear();
-        ++pIter;
+        if ( xDispatch == listener.second )
+            listener.second.clear();
     }
 }
 
@@ -420,15 +415,14 @@ void StatusbarController::bindListener()
         if ( m_xContext.is() && xDispatchProvider.is() )
         {
             xStatusListener.set( static_cast< OWeakObject* >( this ), UNO_QUERY );
-            URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
-            while ( pIter != m_aListenerMap.end() )
+            for (auto & listener : m_aListenerMap)
             {
                 Reference< XURLTransformer > xURLTransformer = getURLTransformer();
                 css::util::URL aTargetURL;
-                aTargetURL.Complete = pIter->first;
+                aTargetURL.Complete = listener.first;
                 xURLTransformer->parseStrict( aTargetURL );
 
-                Reference< XDispatch > xDispatch( pIter->second );
+                Reference< XDispatch > xDispatch(listener.second);
                 if ( xDispatch.is() )
                 {
                     // We already have a dispatch object => we have to requery.
@@ -442,7 +436,7 @@ void StatusbarController::bindListener()
                     }
                 }
 
-                pIter->second.clear();
+                listener.second.clear();
                 xDispatch.clear();
 
                 // Query for dispatch object. Old dispatch will be released with this, too.
@@ -453,11 +447,10 @@ void StatusbarController::bindListener()
                 catch ( Exception& )
                 {
                 }
-                pIter->second = xDispatch;
+                listener.second = xDispatch;
 
                 Listener aListener( aTargetURL, xDispatch );
                 aDispatchVector.push_back( aListener );
-                ++pIter;
             }
         }
     }

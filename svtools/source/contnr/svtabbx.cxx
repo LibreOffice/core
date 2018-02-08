@@ -1153,10 +1153,12 @@ sal_Int32 SvHeaderTabListBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nC
     MetricVector aRects;
     if ( GetGlyphBoundRects(Point(0,0), sText, 0, sText.getLength(), aRects) )
     {
-        for (MetricVector::iterator aIter = aRects.begin(); aIter != aRects.end(); ++aIter)
+        sal_Int32 nPos = 0;
+        for (auto const& rectangle : aRects)
         {
-            if( aIter->IsInside(_rPoint) )
-                return aIter - aRects.begin();
+            if( rectangle.IsInside(_rPoint) )
+                return nPos;
+            ++nPos;
         }
     }
 

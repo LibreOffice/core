@@ -673,15 +673,11 @@ bool SvUnoImageMap::fillImageMap( ImageMap& rMap ) const
 
     rMap.SetName( maName );
 
-    auto aIter = maObjectList.begin();
-    auto const aEnd = maObjectList.end();
-    while( aIter != aEnd )
+    for (auto const& elem : maObjectList)
     {
-        IMapObject* pNewMapObject = (*aIter)->createIMapObject();
+        IMapObject* pNewMapObject = elem->createIMapObject();
         rMap.InsertIMapObject( *pNewMapObject );
         delete pNewMapObject;
-
-        ++aIter;
     }
 
     return true;

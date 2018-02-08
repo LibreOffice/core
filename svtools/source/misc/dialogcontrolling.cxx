@@ -105,11 +105,8 @@ namespace svt
     {
         if ( !m_pImpl->pEventFilter->payAttentionTo( _rEvent ) )
             return;
-        for ( auto loop = m_pImpl->aConcernedWindows.begin();
-                loop != m_pImpl->aConcernedWindows.end();
-                ++loop
-            )
-            impl_update( _rEvent, *(*loop) );
+        for (auto const& concernedWindow : m_pImpl->aConcernedWindows)
+            impl_update(_rEvent, *concernedWindow);
     }
 
 

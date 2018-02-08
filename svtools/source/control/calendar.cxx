@@ -824,23 +824,21 @@ void Calendar::ImplUpdateSelection( IntDateSet* pOld )
 {
     IntDateSet*  pNew = mpSelectTable;
 
-    for ( IntDateSet::const_iterator it = pOld->begin(); it != pOld->end(); ++it )
+    for (auto const& nKey : *pOld)
     {
-        sal_Int32 nKey = *it;
-        if ( pNew->find( nKey ) == pNew->end() )
+        if ( pNew->find(nKey) == pNew->end() )
         {
-            Date aTempDate( nKey );
-            ImplUpdateDate( aTempDate );
+            Date aTempDate(nKey);
+            ImplUpdateDate(aTempDate);
         }
     }
 
-    for ( IntDateSet::const_iterator it = pNew->begin(); it != pNew->end(); ++it )
+    for (auto const& nKey : *pNew)
     {
-        sal_Int32 nKey = *it;
-        if ( pOld->find( nKey ) == pOld->end() )
+        if ( pOld->find(nKey) == pOld->end() )
         {
-            Date aTempDate( nKey );
-            ImplUpdateDate( aTempDate );
+            Date aTempDate(nKey);
+            ImplUpdateDate(aTempDate);
         }
     }
 }

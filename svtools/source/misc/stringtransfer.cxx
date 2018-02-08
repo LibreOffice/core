@@ -74,12 +74,9 @@ namespace svt
 
         // check for a string format
         const DataFlavorExVector& rFormats = aClipboardData.GetDataFlavorExVector();
-        for (   DataFlavorExVector::const_iterator aSearch = rFormats.begin();
-                aSearch != rFormats.end();
-                ++aSearch
-            )
+        for (auto const& format : rFormats)
         {
-            if (SotClipboardFormatId::STRING == aSearch->mnSotId)
+            if (SotClipboardFormatId::STRING == format.mnSotId)
             {
                 OUString sContent;
                 bool bSuccess = aClipboardData.GetString( SotClipboardFormatId::STRING, sContent );
