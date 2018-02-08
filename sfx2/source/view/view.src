@@ -77,6 +77,18 @@ String STR_QUERY_OPENASTEMPLATE
 {
     Text [ en-US ] = "This document cannot be edited, possibly due to missing access rights. Do you want to edit a copy of the document?" ;
 };
+String STR_QUERY_OPENASTEMPLATE_ALLOW_IGNORE
+{
+    Text [ en-US ] = "This document cannot be edited, because it is locked in another session. Do you want to edit a copy of the document?\n\nYou can also try to ignore the lock and open the file for editing." ;
+};
+String STR_QUERY_OPENASTEMPLATE_OPENCOPY_BTN
+{
+    Text [ en-US ] = "Open ~Copy" ;
+};
+String STR_QUERY_OPENASTEMPLATE_OPEN_BTN
+{
+    Text [ en-US ] = "~Open" ;
+};
 String STR_REPAIREDDOCUMENT
 {
     Text [ en-US ] = " (repaired document)" ;

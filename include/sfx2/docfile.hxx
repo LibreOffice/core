@@ -163,11 +163,13 @@ public:
     bool                Commit();
     bool                IsStorage();
 
-    enum class ShowLockResult { NoLock, Succeeded,Try };
-    ShowLockResult      ShowLockedDocumentDialog( const LockFileEntry& aData, bool bIsLoading, bool bOwnLock, bool bHandleSysLocked);
-    void                LockOrigFileOnDemand( bool bLoading, bool bNoUI );
-    enum class MessageDlg    { LockFileIgnore, LockFileCorrupt };
-    bool                ShowLockFileProblemDialog(MessageDlg nWhichDlg);
+    enum class          LockFileResult
+    {
+        Failed,
+        FailedLockFile, // there was only lock file that prevented success - no syslock or IO error
+        Succeeded,
+    };
+    LockFileResult      LockOrigFileOnDemand( bool bLoading, bool bNoUI, bool bTryIgnoreLockFile = false );
     void                DisableUnlockWebDAV( bool bDisableUnlockWebDAV = true );
     void                UnlockFile( bool bReleaseLockStream );
     /// Lets Transfer_Impl() not fsync the output file.
@@ -275,6 +277,13 @@ public:
 
     static bool         SetWritableForUserOnly( const OUString& aURL );
     static sal_uInt32   CreatePasswordToModifyHash( const OUString& aPasswd, bool bWriter );
+
+private:
+    enum class ShowLockResult { NoLock, Succeeded, Try };
+    ShowLockResult      ShowLockedDocumentDialog(const LockFileEntry& aData, bool bIsLoading, bool bOwnLock, bool bHandleSysLocked);
+    enum class MessageDlg { LockFileIgnore, LockFileCorrupt };
+    bool                ShowLockFileProblemDialog(MessageDlg nWhichDlg);
+
 };
 
 #endif
