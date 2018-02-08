@@ -1957,7 +1957,7 @@ void SdTiledRenderingTest::testIMESupport()
     pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR,
                                                              SfxCallMode::SYNCHRON, { &aInputString });
 
-    // sequence of chineese IME compositions when 'nihao' is typed in an IME
+    // sequence of chinese IME compositions when 'nihao' is typed in an IME
     const std::vector<OString> aUtf8Inputs{ "年", "你", "你好", "你哈", "你好", "你好" };
     std::vector<OUString> aInputs;
     std::transform(aUtf8Inputs.begin(), aUtf8Inputs.end(),
