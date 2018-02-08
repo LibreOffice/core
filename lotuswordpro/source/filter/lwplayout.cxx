@@ -83,6 +83,10 @@ LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader const &objHdr, LwpSvStream* p
     , m_bGettingMarginsValue(false)
     , m_bGettingExtMarginsValue(false)
     , m_bGettingUsePrinterSettings(false)
+    , m_bGettingScaleCenter(false)
+    , m_bGettingBorderStuff(false)
+    , m_bGettingUseWhen(false)
+    , m_bGettingStyleLayout(false)
     , m_nAttributes(0)
     , m_nAttributes2(0)
     , m_nAttributes3(0)
@@ -228,6 +232,12 @@ bool LwpVirtualLayout::IsComplex()
 */
 LwpUseWhen* LwpVirtualLayout::GetUseWhen()
 {
+    if (m_bGettingUseWhen)
+        throw std::runtime_error("recursion in layout");
+    m_bGettingUseWhen= true;
+
+    LwpUseWhen* pRet = nullptr;
+
     /*
         If we have a parent, and I'm not a page layout,
         use my parents information.
@@ -237,11 +247,16 @@ LwpUseWhen* LwpVirtualLayout::GetUseWhen()
         //get parent
         rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
         if (xParent.is() && !xParent->IsHeader() && (xParent->GetLayoutType() != LWP_PAGE_LAYOUT))
-            return xParent->GetUseWhen();
+            pRet = xParent->GetUseWhen();
 
     }
 
-    return VirtualGetUseWhen();
+    if (!pRet)
+        pRet = VirtualGetUseWhen();
+
+    m_bGettingUseWhen = false;
+
+    return pRet;
 }
 /**
  * @descr:  Whether this layout is page layout or not
@@ -353,13 +368,22 @@ bool LwpVirtualLayout::NoContentReference()
 
 bool LwpVirtualLayout::IsStyleLayout()
 {
-    if (m_nAttributes3 & STYLE3_STYLELAYOUT)
-        return true;
+    if (m_bGettingStyleLayout)
+        throw std::runtime_error("recursion in layout");
+    m_bGettingStyleLayout = true;
 
-    rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
-    if (xParent.is())
-        return xParent->IsStyleLayout();
-    return false;
+    bool bRet = false;
+    if (m_nAttributes3 & STYLE3_STYLELAYOUT)
+        bRet = true;
+    else
+    {
+        rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+        if (xParent.is())
+            bRet = xParent->IsStyleLayout();
+    }
+
+    m_bGettingStyleLayout = false;
+    return bRet;
 }
 
 /**
@@ -769,20 +793,28 @@ double LwpMiddleLayout::ExtMarginsValue(sal_uInt8 nWhichSide)
 */
 LwpBorderStuff* LwpMiddleLayout::GetBorderStuff()
 {
+    if (m_bGettingBorderStuff)
+        throw std::runtime_error("recursion in layout");
+    m_bGettingBorderStuff = true;
+
+    LwpBorderStuff* pRet = nullptr;
+
     if(m_nOverrideFlag & OVER_BORDERS)
     {
         LwpLayoutBorder* pLayoutBorder = dynamic_cast<LwpLayoutBorder*>(m_LayBorderStuff.obj().get());
-        return pLayoutBorder ? &pLayoutBorder->GetBorderStuff() : nullptr;
+        pRet = pLayoutBorder ? &pLayoutBorder->GetBorderStuff() : nullptr;
     }
     else
     {
         rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
         if (LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*>(xBase.get()))
         {
-            return pLay->GetBorderStuff();
+            pRet = pLay->GetBorderStuff();
         }
     }
-    return nullptr;
+
+    m_bGettingBorderStuff= false;
+    return pRet;
 }
 
 /**
@@ -935,16 +967,26 @@ sal_uInt16 LwpMiddleLayout::GetScaleTile()
 
 sal_uInt16 LwpMiddleLayout::GetScaleCenter()
 {
+    if (m_bGettingScaleCenter)
+        throw std::runtime_error("recursion in layout");
+    m_bGettingScaleCenter = true;
+
+    sal_uInt16 nRet = 0;
+
     if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is() && GetLayoutScale())
     {
-        return (GetLayoutScale()->GetPlacement() & LwpLayoutScale::CENTERED)
+        nRet = (GetLayoutScale()->GetPlacement() & LwpLayoutScale::CENTERED)
             ? 1 : 0;
     }
-    rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
-    if (xBase.is())
-        return dynamic_cast<LwpMiddleLayout&>(*xBase.get()).GetScaleCenter();
     else
-        return 0;
+    {
+        rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
+        if (xBase.is())
+            nRet = dynamic_cast<LwpMiddleLayout&>(*xBase.get()).GetScaleCenter();
+    }
+
+    m_bGettingScaleCenter = false;
+    return nRet;
 }
 
 sal_uInt32 LwpMiddleLayout::GetScalePercentage()
@@ -1469,9 +1511,12 @@ bool LwpMiddleLayout::HasContent()
     return content.is();
 }
 
-LwpLayout::LwpLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm ) :
-    LwpMiddleLayout(objHdr, pStrm)
-{}
+LwpLayout::LwpLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+    : LwpMiddleLayout(objHdr, pStrm)
+    , m_bGettingShadow(false)
+    , m_bGettingNumCols(false)
+{
+}
 
 LwpLayout::~LwpLayout()
 {
@@ -1518,24 +1563,24 @@ void LwpLayout::Read()
 */
 sal_uInt16 LwpLayout::GetNumCols()
 {
-    if(m_nOverrideFlag & OVER_COLUMNS)
+    if (m_bGettingNumCols)
+        throw std::runtime_error("recursion in layout");
+    m_bGettingNumCols = true;
+
+    sal_uInt16 nRet = 0;
+    LwpLayoutColumns* pLayColumns = (m_nOverrideFlag & OVER_COLUMNS) ? dynamic_cast<LwpLayoutColumns*>(m_LayColumns.obj().get()) : nullptr;
+    if (pLayColumns)
     {
-        LwpLayoutColumns* pLayColumns = dynamic_cast<LwpLayoutColumns*>(m_LayColumns.obj().get());
-        if(pLayColumns)
-        {
-            return pLayColumns->GetNumCols();
-        }
+        nRet = pLayColumns->GetNumCols();
     }
-
-    rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
-    LwpVirtualLayout* pStyle = dynamic_cast<LwpVirtualLayout*>(xBase.get());
-    if (pStyle)
+    else
     {
-        return pStyle->GetNumCols();
+        rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
+        LwpVirtualLayout* pStyle = dynamic_cast<LwpVirtualLayout*>(xBase.get());
+        nRet = pStyle ? pStyle->GetNumCols() : LwpVirtualLayout::GetNumCols();
     }
-
-    return LwpVirtualLayout::GetNumCols();
-
+    m_bGettingNumCols = false;
+    return nRet;
 }
 
 /**
@@ -1860,20 +1905,25 @@ bool LwpLayout::IsUseOnPage()
 */
 LwpShadow* LwpLayout::GetShadow()
 {
+    if (m_bGettingShadow)
+        throw std::runtime_error("recursion in layout");
+    m_bGettingShadow = true;
+    LwpShadow* pRet = nullptr;
     if(m_nOverrideFlag & OVER_SHADOW)
     {
         LwpLayoutShadow* pLayoutShadow = dynamic_cast<LwpLayoutShadow*>(m_LayShadow.obj().get());
-        return pLayoutShadow ? &pLayoutShadow->GetShadow() : nullptr;
+        pRet = pLayoutShadow ? &pLayoutShadow->GetShadow() : nullptr;
     }
     else
     {
         rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
         if (LwpLayout* pLay = dynamic_cast<LwpLayout*>(xBase.get()))
         {
-            return pLay->GetShadow();
+            pRet = pLay->GetShadow();
         }
     }
-    return nullptr;
+    m_bGettingShadow = false;
+    return pRet;
 }
 
 /**
