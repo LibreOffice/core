@@ -348,18 +348,15 @@ void TransferDataContainer::AddSupportedFormats()
 bool TransferDataContainer::GetData(
     const css::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
-    TDataCntnrEntryList::iterator   aIter( pImpl->aFmtList.begin() ),
-                                    aEnd( pImpl->aFmtList.end() );
     bool bFnd = false;
     SotClipboardFormatId nFmtId = SotExchange::GetFormat( rFlavor );
 
     // test first the list
-    for( ; aIter != aEnd; ++aIter )
+    for (auto const& format : pImpl->aFmtList)
     {
-        TDataCntnrEntry_Impl& rEntry = *aIter;
-        if( nFmtId == rEntry.nId )
+        if( nFmtId == format.nId )
         {
-            bFnd = SetAny( rEntry.aAny );
+            bFnd = SetAny( format.aAny );
             break;
         }
     }
@@ -509,7 +506,7 @@ void TransferDataContainer::CopyAny( SotClipboardFormatId nFmt,
 
 bool TransferDataContainer::HasAnyData() const
 {
-    return pImpl->aFmtList.begin() != pImpl->aFmtList.end() ||
+    return !pImpl->aFmtList.empty() ||
             nullptr != pImpl->pBookmk;
 }
 

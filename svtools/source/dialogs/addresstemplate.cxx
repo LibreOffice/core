@@ -565,9 +565,9 @@ void AssignmentPersistentData::ImplCommit()
 
         long nLabelWidth = 0;
         long nListBoxWidth = m_pImpl->pFields[0]->approximate_char_width() * 20;
-        for (auto aI = m_pImpl->aFieldLabels.cbegin(), aEnd = m_pImpl->aFieldLabels.cend(); aI != aEnd; ++aI)
+        for (auto const& fieldLabel : m_pImpl->aFieldLabels)
         {
-            nLabelWidth = std::max(nLabelWidth, FixedText::getTextDimensions(m_pImpl->pFieldLabels[0], *aI, 0x7FFFFFFF).Width());
+            nLabelWidth = std::max(nLabelWidth, FixedText::getTextDimensions(m_pImpl->pFieldLabels[0], fieldLabel, 0x7FFFFFFF).Width());
         }
         for (sal_Int32 row=0; row<FIELD_PAIRS_VISIBLE; ++row)
         {
@@ -649,18 +649,13 @@ void AssignmentPersistentData::ImplCommit()
         _rMapping.realloc( m_pImpl->aLogicalFieldNames.size() );
         AliasProgrammaticPair* pPair = _rMapping.getArray();
 
-        OUString sCurrent;
-        for (   auto aProgrammatic = m_pImpl->aLogicalFieldNames.cbegin();
-                aProgrammatic != m_pImpl->aLogicalFieldNames.cend();
-                ++aProgrammatic
-            )
+        for (auto const& logicalFieldName : m_pImpl->aLogicalFieldNames)
         {
-            sCurrent = *aProgrammatic;
-            if ( m_pImpl->pConfigData->hasFieldAssignment( sCurrent ) )
+            if ( m_pImpl->pConfigData->hasFieldAssignment(logicalFieldName) )
             {
                 // the user gave us an assignment for this field
-                pPair->ProgrammaticName = *aProgrammatic;
-                pPair->Alias = m_pImpl->pConfigData->getFieldAssignment( *aProgrammatic );
+                pPair->ProgrammaticName = logicalFieldName;
+                pPair->Alias = m_pImpl->pConfigData->getFieldAssignment(logicalFieldName);
                 ++pPair;
             }
         }
@@ -687,13 +682,12 @@ void AssignmentPersistentData::ImplCommit()
         // AddressBookSourceDialog::loadConfiguration: inconsistence between field names and field assignments!
         assert(m_pImpl->aLogicalFieldNames.size() == m_pImpl->aFieldAssignments.size());
 
-        auto aLogical = m_pImpl->aLogicalFieldNames.cbegin();
         auto aAssignment = m_pImpl->aFieldAssignments.begin();
-        for (   ;
-                aLogical != m_pImpl->aLogicalFieldNames.end();
-                ++aLogical, ++aAssignment
-            )
-            *aAssignment = m_pImpl->pConfigData->getFieldAssignment(*aLogical);
+        for (auto const& logicalFieldName : m_pImpl->aLogicalFieldNames)
+        {
+            *aAssignment = m_pImpl->pConfigData->getFieldAssignment(logicalFieldName);
+            ++aAssignment;
+        }
     }
 
 
@@ -937,13 +931,10 @@ void AssignmentPersistentData::ImplCommit()
         }
 
         // adjust m_pImpl->aFieldAssignments
-        for (   auto aAdjust = m_pImpl->aFieldAssignments.begin();
-                aAdjust != m_pImpl->aFieldAssignments.end();
-                ++aAdjust
-            )
-            if (!aAdjust->isEmpty())
-                if (aColumnNameSet.end() == aColumnNameSet.find(*aAdjust))
-                    aAdjust->clear();
+        for (auto & fieldAssignment : m_pImpl->aFieldAssignments)
+            if (!fieldAssignment.isEmpty())
+                if (aColumnNameSet.end() == aColumnNameSet.find(fieldAssignment))
+                    fieldAssignment.clear();
     }
 
 
@@ -1127,13 +1118,12 @@ void AssignmentPersistentData::ImplCommit()
         assert(m_pImpl->aLogicalFieldNames.size() == m_pImpl->aFieldAssignments.size());
 
         // set the field assignments
-        auto aLogical = m_pImpl->aLogicalFieldNames.cbegin();
         auto aAssignment = m_pImpl->aFieldAssignments.cbegin();
-        for (   ;
-                aLogical != m_pImpl->aLogicalFieldNames.end();
-                ++aLogical, ++aAssignment
-            )
-            m_pImpl->pConfigData->setFieldAssignment(*aLogical, *aAssignment);
+        for (auto const& logicalFieldName : m_pImpl->aLogicalFieldNames)
+        {
+            m_pImpl->pConfigData->setFieldAssignment(logicalFieldName, *aAssignment);
+            ++aAssignment;
+        }
 
 
         EndDialog(RET_OK);

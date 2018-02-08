@@ -831,26 +831,19 @@ void GraphicCache::AddGraphicObject(
           && !maGraphicCache.empty()
         )
         {
-            GraphicCacheEntryVector::iterator it = maGraphicCache.begin();
-            while(  !bInserted
-                 && ( it != maGraphicCache.end() )
-                 )
+            for (auto const& elem : maGraphicCache)
             {
-                if( (*it)->HasGraphicObjectReference( *pCopyObj ) )
+                if( elem->HasGraphicObjectReference( *pCopyObj ) )
                 {
-                    (*it)->AddGraphicObjectReference( rObj, rSubstitute );
+                    elem->AddGraphicObjectReference( rObj, rSubstitute );
                     bInserted = true;
-                }
-                else
-                {
-                    ++it;
+                    break;
                 }
             }
         }
 
         if( !bInserted )
         {
-            GraphicCacheEntryVector::iterator it = maGraphicCache.begin();
             std::unique_ptr< GraphicID > apID;
 
             if( !pID )
@@ -858,32 +851,28 @@ void GraphicCache::AddGraphicObject(
                 apID.reset( new GraphicID( rObj ) );
             }
 
-            while(  !bInserted
-                 && ( it != maGraphicCache.end() )
-                 )
+            for (auto const& elem : maGraphicCache)
             {
-                const GraphicID& rEntryID = (*it)->GetID();
+                const GraphicID& rEntryID = elem->GetID();
 
                 if( pID )
                 {
                     if( rEntryID.GetIDString() == *pID )
                     {
-                        (*it)->TryToSwapIn();
+                        elem->TryToSwapIn();
 
                         // since pEntry->TryToSwapIn can modify our current list, we have to
                         // iterate from beginning to add a reference to the appropriate
                         // CacheEntry object; after this, quickly jump out of the outer iteration
-                        for( GraphicCacheEntryVector::iterator jt = maGraphicCache.begin();
-                             !bInserted && jt != maGraphicCache.end();
-                             ++jt
-                        )
+                        for (auto const& subelem : maGraphicCache)
                         {
-                            const GraphicID& rID = (*jt)->GetID();
+                            const GraphicID& rID = subelem->GetID();
 
                             if( rID.GetIDString() == *pID )
                             {
-                                (*jt)->AddGraphicObjectReference( rObj, rSubstitute );
+                                subelem->AddGraphicObjectReference( rObj, rSubstitute );
                                 bInserted = true;
+                                break;
                             }
                         }
 
@@ -898,13 +887,13 @@ void GraphicCache::AddGraphicObject(
                 {
                     if( rEntryID == *apID )
                     {
-                        (*it)->AddGraphicObjectReference( rObj, rSubstitute );
+                        elem->AddGraphicObjectReference( rObj, rSubstitute );
                         bInserted = true;
                     }
                 }
 
-                if( !bInserted )
-                    ++it;
+                if(bInserted)
+                    break;
             }
         }
     }
@@ -998,10 +987,9 @@ void GraphicCache::SetCacheTimeout( sal_uLong nTimeoutSeconds )
         aReleaseTime.addTime( ::salhelper::TTimeValue( nTimeoutSeconds, 0 ) );
     }
 
-    for( GraphicDisplayCacheEntryVector::const_iterator it = maDisplayCache.begin();
-         it != maDisplayCache.end(); ++it )
+    for (auto const& elem : maDisplayCache)
     {
-        (*it)->SetReleaseTime( aReleaseTime );
+        elem->SetReleaseTime( aReleaseTime );
     }
 }
 
@@ -1022,11 +1010,13 @@ bool GraphicCache::IsInDisplayCache( OutputDevice const * pOut, const Point& rPt
 
     if( pCacheEntry )
     {
-        for( GraphicDisplayCacheEntryVector::const_iterator it = maDisplayCache.begin();
-             !bFound && ( it != maDisplayCache.end() ); ++it )
+        for (auto const& elem : maDisplayCache)
         {
-            if( (*it)->Matches( pOut, aPtPixel, aSzPixel, pCacheEntry, rAttr ) )
+            if( elem->Matches( pOut, aPtPixel, aSzPixel, pCacheEntry, rAttr ) )
+            {
                 bFound = true;
+                break;
+            }
         }
     }
 
@@ -1188,13 +1178,11 @@ GraphicCacheEntry* GraphicCache::ImplGetCacheEntry( const GraphicObject& rObj )
 {
     GraphicCacheEntry* pRet = nullptr;
 
-    for(
-        GraphicCacheEntryVector::iterator it = maGraphicCache.begin();
-        !pRet && it != maGraphicCache.end();
-        ++it
-    ) {
-        if( (*it)->HasGraphicObjectReference( rObj ) ) {
-            pRet = *it;
+    for (auto const& elem : maGraphicCache)
+    {
+        if( elem->HasGraphicObjectReference( rObj ) )
+        {
+            return elem;
         }
     }
 

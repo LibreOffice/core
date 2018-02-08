@@ -233,9 +233,9 @@ void ORoadmap::dispose()
 {
     HL_Vector aItemsCopy = m_pImpl->getHyperLabels();
     m_pImpl->getHyperLabels().clear();
-    for ( HL_Vector::iterator i = aItemsCopy.begin(); i != aItemsCopy.end(); ++i )
+    for (auto const& itemCopy : aItemsCopy)
     {
-        delete *i;
+        delete itemCopy;
     }
     if ( ! m_pImpl->isComplete() )
         delete m_pImpl->InCompleteHyperLabel;
@@ -295,12 +295,9 @@ void ORoadmap::SetRoadmapInteractive(bool _bInteractive)
     m_pImpl->setInteractive( _bInteractive );
 
     const HL_Vector& rItems = m_pImpl->getHyperLabels();
-    for (   HL_Vector::const_iterator i = rItems.begin();
-            i != rItems.end();
-            ++i
-        )
+    for (auto const& item : rItems)
     {
-        (*i)->SetInteractive( _bInteractive );
+        item->SetInteractive( _bInteractive );
     }
 }
 
@@ -330,15 +327,11 @@ void ORoadmap::UpdatefollowingHyperLabels(ItemIndex _nIndex)
     const HL_Vector& rItems = m_pImpl->getHyperLabels();
     if ( _nIndex < static_cast<ItemIndex>(rItems.size()) )
     {
-        for (   HL_Vector::const_iterator i = rItems.begin() + _nIndex;
-                i != rItems.end();
-                ++i, ++_nIndex
-            )
+        for (auto const& item : rItems)
         {
-            RoadmapItem* pItem = *i;
-
-            pItem->SetIndex( _nIndex );
-            pItem->SetPosition( GetPreviousHyperLabel( _nIndex ) );
+            item->SetIndex( _nIndex );
+            item->SetPosition( GetPreviousHyperLabel( _nIndex ) );
+            ++_nIndex;
         }
     }
     if ( ! m_pImpl->isComplete() )
@@ -410,12 +403,11 @@ void ORoadmap::ChangeRoadmapItemLabel( ItemId _nID, const OUString& _sLabel )
     pItem->Update( pItem->GetIndex(), _sLabel );
 
     const HL_Vector& rItems = m_pImpl->getHyperLabels();
-    for (   HL_Vector::const_iterator i = rItems.begin();
-            i != rItems.end();
-            ++i
-        )
+    size_t nPos = 0;
+    for (auto const& item : rItems)
     {
-        (*i)->SetPosition( GetPreviousHyperLabel( i - rItems.begin() ) );
+        item->SetPosition( GetPreviousHyperLabel(nPos) );
+        ++nPos;
     }
 }
 
@@ -430,14 +422,11 @@ RoadmapItem* ORoadmap::GetByID(ItemId _nID)
 {
     ItemId nLocID = 0;
     const HL_Vector& rItems = m_pImpl->getHyperLabels();
-    for ( HL_Vector::const_iterator i = rItems.begin();
-          i != rItems.end();
-          ++i
-        )
+    for (auto const& item : rItems)
     {
-        nLocID = (*i)->GetID();
+        nLocID = item->GetID();
         if ( nLocID == _nID )
-            return *i;
+            return item;
     }
     return nullptr;
 }
@@ -493,12 +482,9 @@ RoadmapTypes::ItemId ORoadmap::GetPreviousAvailableItemId(ItemIndex _nNewIndex)
 void ORoadmap::DeselectOldRoadmapItems()
 {
     const HL_Vector& rItems = m_pImpl->getHyperLabels();
-    for (   HL_Vector::const_iterator i = rItems.begin();
-            i != rItems.end();
-            ++i
-        )
+    for (auto const& item : rItems)
     {
-        (*i)->ToggleBackgroundColor( COL_TRANSPARENT );
+        item->ToggleBackgroundColor( COL_TRANSPARENT );
     }
 }
 
@@ -586,13 +572,10 @@ void ORoadmap::DrawHeadline(vcl::RenderContext& rRenderContext)
 RoadmapItem* ORoadmap::GetByPointer(vcl::Window const * pWindow)
 {
     const HL_Vector& rItems = m_pImpl->getHyperLabels();
-    for (   HL_Vector::const_iterator i = rItems.begin();
-            i != rItems.end();
-            ++i
-        )
+    for (auto const& item : rItems)
     {
-        if ( (*i)->Contains( pWindow ) )
-            return *i;
+        if ( item->Contains( pWindow ) )
+            return item;
     }
     return nullptr;
 }

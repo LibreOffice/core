@@ -287,14 +287,11 @@ namespace svt { namespace table
         bool lcl_adjustSelectedRows( ::std::vector< RowPos >& io_selectionIndexes, RowPos const i_firstAffectedRowIndex, TableSize const i_offset )
         {
             bool didChanges = false;
-            for (   ::std::vector< RowPos >::iterator selPos = io_selectionIndexes.begin();
-                    selPos != io_selectionIndexes.end();
-                    ++selPos
-                )
+            for (auto & selectionIndex : io_selectionIndexes)
             {
-                if ( *selPos < i_firstAffectedRowIndex )
+                if ( selectionIndex < i_firstAffectedRowIndex )
                     continue;
-                *selPos += i_offset;
+                selectionIndex += i_offset;
                 didChanges = true;
             }
             return didChanges;
@@ -1059,12 +1056,9 @@ namespace svt { namespace table
         if ( m_nLeftColumn > 0 )
         {
             const long offsetPixel = m_aColumnWidths[ 0 ].getStart() - m_aColumnWidths[ m_nLeftColumn ].getStart();
-            for (   ColumnPositions::iterator colPos = m_aColumnWidths.begin();
-                    colPos != m_aColumnWidths.end();
-                    ++colPos
-                 )
+            for (auto & columnWidth : m_aColumnWidths)
             {
-                colPos->move( offsetPixel );
+                columnWidth.move( offsetPixel );
             }
         }
 
@@ -1866,12 +1860,9 @@ namespace svt { namespace table
 
     void TableControl_Impl::invalidateSelectedRows()
     {
-        for (   ::std::vector< RowPos >::iterator selRow = m_aSelectedRows.begin();
-                selRow != m_aSelectedRows.end();
-                ++selRow
-            )
+        for (auto const& selectedRow : m_aSelectedRows)
         {
-            invalidateRow( *selRow );
+            invalidateRow(selectedRow);
         }
     }
 
@@ -2115,12 +2106,9 @@ namespace svt { namespace table
             // update our column positions
             // Do this *before* scrolling, as ScrollFlags::Update will trigger a paint, which already needs the correct
             // information in m_aColumnWidths
-            for (   ColumnPositions::iterator colPos = m_aColumnWidths.begin();
-                    colPos != m_aColumnWidths.end();
-                    ++colPos
-                 )
+            for (auto & columnWidth : m_aColumnWidths)
             {
-                colPos->move( nPixelDelta );
+                columnWidth.move(nPixelDelta);
             }
 
             // scroll the window content (if supported and possible), or invalidate the complete window

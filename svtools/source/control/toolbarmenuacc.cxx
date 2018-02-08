@@ -116,12 +116,11 @@ void ToolbarMenuAcc::FireAccessibleEvent( short nEventId, const Any& rOldValue, 
     aEvtObject.NewValue = rNewValue;
     aEvtObject.OldValue = rOldValue;
 
-    for (EventListenerVector::const_iterator aIter( aTmpListeners.begin() ), aEnd( aTmpListeners.end() );
-        aIter != aEnd ; ++aIter)
+    for (auto const& tmpListener : aTmpListeners)
     {
         try
         {
-            (*aIter)->notifyEvent( aEvtObject );
+            tmpListener->notifyEvent( aEvtObject );
         }
         catch( Exception& )
         {
@@ -276,19 +275,13 @@ void SAL_CALL ToolbarMenuAcc::addAccessibleEventListener( const Reference< XAcce
     if( !rxListener.is() )
            return;
 
-       EventListenerVector::const_iterator aIter = mxEventListeners.begin();
-    bool bFound = false;
-
-    while( !bFound && ( aIter != mxEventListeners.end() ) )
+    for (auto const& eventListener : mxEventListeners)
     {
-        if( *aIter == rxListener )
-            bFound = true;
-        else
-            ++aIter;
+        if( eventListener == rxListener )
+            return;
     }
 
-    if (!bFound)
-        mxEventListeners.push_back( rxListener );
+    mxEventListeners.push_back( rxListener );
 }
 
 
@@ -504,20 +497,18 @@ void SAL_CALL ToolbarMenuAcc::disposing()
     }
 
     // Inform all listeners that this objects is disposing.
-    EventListenerVector::const_iterator aListenerIterator (aListenerListCopy.begin());
     EventObject aEvent (static_cast<XAccessible*>(this));
-    while(aListenerIterator != aListenerListCopy.end())
+    for (auto const& listenerCopy : aListenerListCopy)
     {
         try
         {
-            (*aListenerIterator)->disposing (aEvent);
+            listenerCopy->disposing (aEvent);
         }
         catch( Exception& )
         {
             // Ignore exceptions.
         }
 
-        ++aListenerIterator;
     }
 }
 
@@ -559,20 +550,17 @@ void SAL_CALL ToolbarMenuEntryAcc::disposing()
     }
 
     // Inform all listeners that this objects is disposing.
-    EventListenerVector::const_iterator aListenerIterator (aListenerListCopy.begin());
     EventObject aEvent (static_cast<XAccessible*>(this));
-    while(aListenerIterator != aListenerListCopy.end())
+    for (auto const& listenerCopy : aListenerListCopy)
     {
         try
         {
-            (*aListenerIterator)->disposing (aEvent);
+            listenerCopy->disposing (aEvent);
         }
         catch( Exception& )
         {
             // Ignore exceptions.
         }
-
-        ++aListenerIterator;
     }
 }
 
@@ -725,10 +713,9 @@ void SAL_CALL ToolbarMenuEntryAcc::addAccessibleEventListener( const Reference< 
 
     if( rxListener.is() )
     {
-        for (EventListenerVector::const_iterator aIter( mxEventListeners.begin() ), aEnd( mxEventListeners.end() );
-            aIter != aEnd; ++aIter )
+        for (auto const& eventListener : mxEventListeners)
         {
-            if( *aIter == rxListener )
+            if (eventListener == rxListener)
                 return;
         }
         // listener not found so add it

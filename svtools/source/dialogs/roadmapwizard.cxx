@@ -77,11 +77,17 @@ namespace svt
     sal_Int32 RoadmapWizardImpl::getStateIndexInPath( WizardTypes::WizardState _nState, const WizardPath& _rPath )
     {
         sal_Int32 nStateIndexInPath = 0;
-        WizardPath::const_iterator aPathLoop = _rPath.begin();
-        for ( ; aPathLoop != _rPath.end(); ++aPathLoop, ++nStateIndexInPath )
-            if ( *aPathLoop == _nState )
+        bool bFound = false;
+        for (auto const& path : _rPath)
+        {
+            if (path == _nState)
+            {
+                bFound = true;
                 break;
-        if ( aPathLoop == _rPath.end() )
+            }
+            ++nStateIndexInPath;
+        }
+        if (!bFound)
             nStateIndexInPath = -1;
         return nStateIndexInPath;
     }
@@ -247,16 +253,13 @@ namespace svt
         bool bIncompletePath = false;
         if ( !m_pImpl->bActivePathIsDefinite )
         {
-            for ( Paths::const_iterator aPathPos = m_pImpl->aPaths.begin();
-                  aPathPos != m_pImpl->aPaths.end();
-                  ++aPathPos
-                )
+            for (auto const& path : m_pImpl->aPaths)
             {
-                if ( aPathPos->first == m_pImpl->nActivePath )
+                if ( path.first == m_pImpl->nActivePath )
                     // it's the path we are just activating -> no need to check anything
                     continue;
                 // the index from which on both paths differ
-                sal_Int32 nDivergenceIndex = RoadmapWizardImpl::getFirstDifferentIndex( rActivePath, aPathPos->second );
+                sal_Int32 nDivergenceIndex = RoadmapWizardImpl::getFirstDifferentIndex( rActivePath, path.second );
                 if ( nDivergenceIndex <= nCurrentStatePathIndex )
                     // they differ in an index which we have already left behind us
                     // -> this is no conflict anymore
@@ -379,13 +382,10 @@ namespace svt
             sal_Int32 nCurrentStatePathIndex = RoadmapWizardImpl::getStateIndexInPath( getCurrentState(), rActivePath );
 
             size_t nPossiblePaths(0);
-            for (   Paths::const_iterator aPathPos = m_pImpl->aPaths.begin();
-                    aPathPos != m_pImpl->aPaths.end();
-                    ++aPathPos
-                )
+            for (auto const& path : m_pImpl->aPaths)
             {
                 // the index from which on both paths differ
-                sal_Int32 nDivergenceIndex = RoadmapWizardImpl::getFirstDifferentIndex( rActivePath, aPathPos->second );
+                sal_Int32 nDivergenceIndex = RoadmapWizardImpl::getFirstDifferentIndex( rActivePath, path.second );
 
                 if ( nDivergenceIndex > nCurrentStatePathIndex )
                     // this path is still a possible path
@@ -412,13 +412,13 @@ namespace svt
         ::std::vector< WizardState > aHistory;
         getStateHistory( aHistory );
         bool bHaveEnabledState = false;
-        for (   ::std::vector< WizardState >::const_iterator state = aHistory.begin();
-                state != aHistory.end() && !bHaveEnabledState;
-                ++state
-            )
+        for (auto const& state : aHistory)
         {
-            if ( isStateEnabled( *state ) )
+            if ( isStateEnabled(state) )
+            {
                 bHaveEnabledState = true;
+                break;
+            }
         }
 
         enableButtons( WizardButtonFlags::PREVIOUS, bHaveEnabledState );
@@ -530,17 +530,11 @@ namespace svt
 
     bool RoadmapWizard::knowsState( WizardState i_nState ) const
     {
-        for (   Paths::const_iterator path = m_pImpl->aPaths.begin();
-                path != m_pImpl->aPaths.end();
-                ++path
-            )
+        for (auto const& path : m_pImpl->aPaths)
         {
-            for (   WizardPath::const_iterator state = path->second.begin();
-                    state != path->second.end();
-                    ++state
-                )
+            for (auto const& state : path.second)
             {
-                if ( *state == i_nState )
+                if ( state == i_nState )
                     return true;
             }
         }
