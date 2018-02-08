@@ -511,14 +511,30 @@ namespace emfio
 
             case W_META_TEXTOUT:
             {
+                //record is Recordsize, RecordFunction, StringLength, <String>, YStart, XStart
+                const sal_uInt32 nNonStringLen = sizeof(sal_uInt32) + 4 * sizeof(sal_uInt16);
+                const sal_uInt32 nRecSize = mnRecSize * 2;
                 sal_uInt16 nLength = 0;
-                mpInputStream->ReadUInt16( nLength );
-                if ( nLength )
+                mpInputStream->ReadUInt16(nLength);
+                sal_uInt16 nStoredLength = (nLength + 1) &~ 1;
+
+                if (nRecSize < nNonStringLen)
                 {
-                    std::unique_ptr<char[]> pChar(new char[ ( nLength + 1 ) &~ 1 ]);
-                    nLength = std::min<sal_uInt64>(nLength, mpInputStream->ReadBytes(pChar.get(), (nLength + 1) &~ 1));
-                    OUString aText( pChar.get(), nLength, GetCharSet() );
-                    pChar.reset();
+                    SAL_WARN("vcl.wmf", "W_META_TEXTOUT too short");
+                    break;
+                }
+
+                if (nRecSize - nNonStringLen < nStoredLength)
+                {
+                    SAL_WARN("vcl.wmf", "W_META_TEXTOUT too short, truncating string");
+                    nLength = nStoredLength = nRecSize - nNonStringLen;
+                }
+
+                if (nLength)
+                {
+                    std::vector<char> aChars(nStoredLength);
+                    nLength = std::min<sal_uInt16>(nLength, mpInputStream->ReadBytes(aChars.data(), aChars.size()));
+                    OUString aText(aChars.data(), nLength, GetCharSet());
                     Point aPosition( ReadYX() );
                     DrawText( aPosition, aText );
                 }
