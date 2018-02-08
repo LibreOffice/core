@@ -105,15 +105,11 @@ ScXMLMappingContext::ScXMLMappingContext( ScXMLImport& rImport,
     if (!aProvider.isEmpty())
     {
         ScDocument* pDoc = GetScImport().GetDocument();
-        ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(aDBName));
-        if (pDBData)
-        {
-            auto& rDataMapper = pDoc->GetExternalDataMapper();
-            sc::ExternalDataSource aSource(aURL, aProvider, pDoc);
-            aSource.setID(aID);
-            aSource.setDBData(pDBData);
-            rDataMapper.insertDataSource(aSource);
-        }
+        auto& rDataMapper = pDoc->GetExternalDataMapper();
+        sc::ExternalDataSource aSource(aURL, aProvider, pDoc);
+        aSource.setID(aID);
+        aSource.setDBData(aDBName);
+        rDataMapper.insertDataSource(aSource);
     }
 }
 
