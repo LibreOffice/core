@@ -376,14 +376,23 @@ std::shared_ptr<sc::DataTransformation> ScMergeColumnTransformationControl::getT
 
 }
 
-ScDataProviderDlg::ScDataProviderDlg(vcl::Window* pParent, std::shared_ptr<ScDocument> pDoc):
+ScDataProviderDlg::ScDataProviderDlg(vcl::Window* pParent, std::shared_ptr<ScDocument> pDoc, ScDocument* pDocument):
     ModalDialog(pParent, "dataproviderdlg", "modules/scalc/ui/dataproviderdlg.ui", true),
     mpDoc(pDoc),
-    mpBar(VclPtr<MenuBar>::Create())
+    mpBar(VclPtr<MenuBar>::Create()),
+    mpDocument(pDocument)
 {
     get(mpTable, "data_table");
     get(mpList, "operation_ctrl");
+    get(mpDBRanges, "select_db_range");
     mpTable->Init(mpDoc);
+
+    ScDBCollection* pDBCollection = pDocument->GetDBCollection();
+    auto& rNamedDBs = pDBCollection->getNamedDBs();
+    for (auto& rNamedDB : rNamedDBs)
+    {
+        mpDBRanges->InsertEntry(rNamedDB->GetName());
+    }
 
     mpDataProviderCtrl = VclPtr<ScDataProviderBaseControl>::Create(mpList, LINK(this, ScDataProviderDlg, ImportHdl));
     mpList->addEntry(mpDataProviderCtrl);
