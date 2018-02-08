@@ -242,8 +242,8 @@ core_constructor_list = [
     "com_sun_star_comp_xmlscript_XMLOasisBasicExporter",
     "com_sun_star_comp_xmlscript_XMLOasisBasicImporter",
 # xmlsecurity/util/xmlsecurity.component
-    "com_sun_star_security_CertificateContainer_get_implementation",
-    "com_sun_star_security_DocumentDigitalSignatures_get_implementation",
+    ("com_sun_star_security_CertificateContainer_get_implementation", "#if HAVE_FEATURE_NSS"),
+    ("com_sun_star_security_DocumentDigitalSignatures_get_implementation", "#if HAVE_FEATURE_NSS"),
     ]
 
 # edit group for apps, where you can edit documents
