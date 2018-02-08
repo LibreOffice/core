@@ -1505,7 +1505,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         if (facenum >= GetUInt32(t->ptr, 8)) {
             return SF_FONTNO;
         }
-        if (withinBounds(12, 0, 4 * facenum, t->fsize)) {
+        if (withinBounds(12, 4 * facenum, sizeof(sal_uInt32), t->fsize)) {
             tdoffset = GetUInt32(t->ptr, 12 + 4 * facenum);
         } else {
             return SF_FONTNO;
