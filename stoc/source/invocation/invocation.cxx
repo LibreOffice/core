@@ -590,7 +590,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
         {
             throw IllegalArgumentException(
                 "incorrect number of parameters passed invoking function " + FunctionName +
-                "expected " + OUString::number(nFParamsLen) + ", got " + OUString::number(InParams.getLength()),
+                ": expected " + OUString::number(nFParamsLen) + ", got " + OUString::number(InParams.getLength()),
                 static_cast<OWeakObject *>(this), sal_Int16(1) );
         }
 
