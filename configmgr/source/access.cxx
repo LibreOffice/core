@@ -1430,9 +1430,8 @@ rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
                 }
             }
         }
-        // Defaults are the "en-US" locale, the "en" locale, the empty string
-        // locale, the first child (if any), or a null ChildAccess, in that
-        // order:
+        // Defaults are the "en-US" locale, the "en" locale, the empty string locale, the first child (if
+        // any, and if the property is non-nillable), or a null ChildAccess, in that order:
         rtl::Reference< ChildAccess > child(getChild("en-US"));
         if (child.is()) {
             return child;
@@ -1445,9 +1444,11 @@ rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
         if (child.is()) {
             return child;
         }
-        std::vector< rtl::Reference< ChildAccess > > children(getAllChildren());
-        if (!children.empty()) {
-            return children.front();
+        if (!static_cast<LocalizedPropertyNode *>(getNode().get())->isNillable()) {
+            std::vector< rtl::Reference< ChildAccess > > children(getAllChildren());
+            if (!children.empty()) {
+                return children.front();
+            }
         }
         return rtl::Reference< ChildAccess >();
     }
