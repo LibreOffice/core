@@ -738,15 +738,22 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
             pFS->endElement( FSNS( XML_c, XML_floor ) );
         }
 
-        // sideWall
-
-        // backWall
-        Reference< beans::XPropertySet > xBackWall( mxNewDiagram->getWall(), uno::UNO_QUERY );
-        if( xBackWall.is() )
+        // LibreOffice doens't distinguish between sideWall and backWall.
+        // It is controlled by the same Wall property
+        //TODO Apply similar patch to .xls export
+        Reference< beans::XPropertySet > xWall( mxNewDiagram->getWall(), uno::UNO_QUERY );
+        if( xWall.is() )
         {
+            // sideWall
+            pFS->startElement( FSNS( XML_c, XML_sideWall ),
+                FSEND );
+            exportShapeProps( xWall );
+            pFS->endElement( FSNS( XML_c, XML_sideWall ) );
+
+            // backWall
             pFS->startElement( FSNS( XML_c, XML_backWall ),
                 FSEND );
-            exportShapeProps( xBackWall );
+            exportShapeProps( xWall );
             pFS->endElement( FSNS( XML_c, XML_backWall ) );
         }
 
