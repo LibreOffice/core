@@ -2700,7 +2700,7 @@
         <info>
           <desc>Specifies the settings for inserting captions for various object types.</desc>
         </info>
-        <prop oor:name="CaptionOrderNumberingFirst" oor:type="xs:boolean">
+        <prop oor:name="CaptionOrderNumberingFirst" oor:type="xs:boolean" oor:localized="true">
           <info>
             <desc>Specifies the order of the captions. If true, the number appears in front of the category.</desc>
             <label>Caption order: Numbering first</label>
