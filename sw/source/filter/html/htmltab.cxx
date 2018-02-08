@@ -1602,7 +1602,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                                         nTopRow, nStartCol,
                                         nBottomRow, nSplitCol);
 
-                    if ( 1 != nBoxRowSpan )
+                    if (1 != nBoxRowSpan && pBox)
                         pBox->setRowSpan( nBoxRowSpan );
 
                     bSplitted = true;
