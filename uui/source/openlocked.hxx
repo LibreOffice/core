@@ -24,7 +24,7 @@
 class OpenLockedQueryBox : public MessBox
 {
 public:
-    OpenLockedQueryBox(vcl::Window* pParent, const std::locale& rResLocale, const OUString& rMessage);
+    OpenLockedQueryBox(vcl::Window* pParent, const std::locale& rResLocale, const OUString& rMessage, bool bEnableOverride);
     virtual ~OpenLockedQueryBox() override;
 };
 

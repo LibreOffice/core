@@ -47,7 +47,8 @@
 #define STR_LOCKFAILED_OPENREADONLY_BTN         NC_("STR_LOCKFAILED_OPENREADONLY_BTN", "Open ~Read-Only")
 
 #define STR_OPENLOCKED_TITLE                    NC_("STR_OPENLOCKED_TITLE", "Document in Use")
-#define STR_OPENLOCKED_MSG                      NC_("STR_OPENLOCKED_MSG", "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nOpen document read-only or open a copy of the document for editing.\n\n")
+#define STR_OPENLOCKED_MSG                      NC_("STR_OPENLOCKED_MSG", "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nOpen document read-only or open a copy of the document for editing.\n\n$(ARG3)")
+#define STR_OPENLOCKED_ALLOWIGNORE_MSG          NC_("STR_OPENLOCKED_ALLOWIGNORE_MSG", "You may also ignore the file locking and open the document for editing.\n\n")
 #define STR_OPENLOCKED_OPENREADONLY_BTN         NC_("STR_OPENLOCKED_OPENREADONLY_BTN", "Open ~Read-Only")
 #define STR_OPENLOCKED_OPENCOPY_BTN             NC_("STR_OPENLOCKED_OPENCOPY_BTN", "Open ~Copy")
 #define STR_UNKNOWNUSER                         NC_("STR_UNKNOWNUSER", "Unknown User")
