@@ -2392,8 +2392,6 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
         }
         memcpy(info->panose, table + 32, 10);
         info->typeFlags = GetUInt16( table, 8 );
-        if( getTable(ttf, O_CFF) )
-            info->typeFlags |= TYPEFLAG_PS_OPENTYPE;
     }
 
     table = getTable(ttf, O_post);
