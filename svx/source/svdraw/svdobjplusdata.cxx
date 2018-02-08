@@ -24,7 +24,10 @@ SdrObjPlusData::SdrObjPlusData():
 
 SdrObjPlusData::~SdrObjPlusData()
 {
-    pBroadcast.reset();
+    // HACK: the SdrObject::GetBroadcaster() is called during the destructor
+    // in SdrEdgeObj::Notify() so delete first, then clear the pointer
+    delete pBroadcast.get();
+    (void) pBroadcast.release();
     pUserDataList.reset();
     pGluePoints.reset();
 }
