@@ -171,6 +171,14 @@
             <xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' has unexpected operation '<xsl:value-of select="@oor:op"/>' !</xsl:message>
         </xsl:if>
 
+        <xsl:if test="not($context/@oor:localized='true')">
+            <xsl:for-each select="value">
+                <xsl:if test="@xml:lang">
+                    <xsl:message terminate="yes">ERROR: Non-localized property '<xsl:value-of select="$path"/>' has value for xml:lang='<xsl:value-of select="@xml:lang"/>'!</xsl:message>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:if>
+
         <xsl:call-template name="checkModule"/>
         <xsl:call-template name="checkDuplicates"/>
 
@@ -236,6 +244,13 @@
                 <xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' has unexpected operation '<xsl:value-of select="@oor:op"/>'!</xsl:message>
             </xsl:otherwise>
         </xsl:choose>
+
+        <!-- Extension properties are always non-localized: -->
+        <xsl:for-each select="value">
+            <xsl:if test="@xml:lang">
+                <xsl:message terminate="yes">ERROR: Non-localized extension property '<xsl:value-of select="$path"/>' has value for xml:lang='<xsl:value-of select="@xml:lang"/>'!</xsl:message>
+            </xsl:if>
+        </xsl:for-each>
 
         <xsl:call-template name="checkModule"/>
         <xsl:call-template name="checkDuplicates"/>
