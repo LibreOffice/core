@@ -46,13 +46,13 @@ public:
                                 const css::uno::Reference< css::frame::XDispatch > & rDisp,
                                 const css::util::URL& rURL,
                                 SfxStateCache* pStateCache, const SfxSlot* pSlot );
-                            ~BindDispatch_Impl() override;
 
     virtual void SAL_CALL   statusChanged( const css::frame::FeatureStateEvent& Event ) override;
     virtual void SAL_CALL   disposing( const css::lang::EventObject& Source ) override;
 
     const css::frame::FeatureStateEvent& GetStatus() const { return aStatus;}
     sal_Int16               Dispatch( const css::uno::Sequence < css::beans::PropertyValue >& aProps, bool bForceSynchron );
+    void                    Release();
 };
 
 class SfxStateCache
