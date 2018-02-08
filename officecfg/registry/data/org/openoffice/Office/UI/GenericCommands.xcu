@@ -2638,10 +2638,13 @@
       </node>
       <node oor:name=".uno:ChangeCaseRotateCase" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Cycle Case (Title Case, UPPERCASE, lowercase)</value>
+          <value xml:lang="en-US">Cycle Case</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Cycle Case</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Cycle Case (Title Case, UPPERCASE, lowercase)</value>
         </prop>
       </node>
       <node oor:name=".uno:ChangeCaseToHalfWidth" oor:op="replace">
