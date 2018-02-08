@@ -1156,7 +1156,11 @@ void ChartExport::exportPlotArea( const Reference< css::chart::XChartDocument >&
      * eg: Fill and Outline
      */
     Reference< css::chart::X3DDisplay > xWallFloorSupplier( mxDiagram, uno::UNO_QUERY );
-    if( xWallFloorSupplier.is() )
+    // tdf#114139 For 2D charts Plot Area equivalent is Chart Wall.
+    // Unfortunately LibreOffice doesn't have Plot Area equivalent for 3D charts.
+    // It means that Plot Area couldn't be displayed and changed for 3D chars in LibreOffice.
+    // We cannot write Wall attributes into Plot Area for 3D charts, because Wall us used as background wall.
+    if( !mbIs3DChart && xWallFloorSupplier.is() )
     {
         Reference< beans::XPropertySet > xWallPropSet( xWallFloorSupplier->getWall(), uno::UNO_QUERY );
         if( xWallPropSet.is() )
