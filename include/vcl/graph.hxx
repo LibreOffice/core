@@ -188,6 +188,9 @@ public:
 
     BitmapChecksum  GetChecksum() const;
 
+    OUString getOriginURL() const;
+    void setOriginURL(OUString const & rOriginURL);
+
 public:
 
     std::shared_ptr<GraphicReader>& GetContext();
