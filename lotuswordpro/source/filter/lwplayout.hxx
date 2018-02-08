@@ -237,6 +237,10 @@ protected:
     bool m_bGettingMarginsValue;
     bool m_bGettingExtMarginsValue;
     bool m_bGettingUsePrinterSettings;
+    bool m_bGettingScaleCenter;
+    bool m_bGettingBorderStuff;
+    bool m_bGettingUseWhen;
+    bool m_bGettingStyleLayout;
     sal_uInt32 m_nAttributes;
     sal_uInt32 m_nAttributes2;
     sal_uInt32 m_nAttributes3;
@@ -428,6 +432,9 @@ public:
 
 class LwpLayout : public LwpMiddleLayout
 {
+private:
+    bool m_bGettingShadow;
+    bool m_bGettingNumCols;
 public:
     LwpLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm );
     virtual ~LwpLayout() override;
