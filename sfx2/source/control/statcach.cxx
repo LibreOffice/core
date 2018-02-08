@@ -145,13 +145,14 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
     }
 }
 
-BindDispatch_Impl::~BindDispatch_Impl()
+void BindDispatch_Impl::Release()
 {
     if ( xDisp.is() )
     {
         xDisp->removeStatusListener( static_cast<css::frame::XStatusListener*>(this), aURL );
         xDisp.clear();
     }
+    pCache = nullptr;
 }
 
 
@@ -197,6 +198,8 @@ SfxStateCache::~SfxStateCache()
     DBG_ASSERT( pController == nullptr && pInternalController == nullptr, "there are still Controllers registered" );
     if ( !IsInvalidItem(pLastItem) )
         delete pLastItem;
+    if ( mxDispatch.is() )
+        mxDispatch->Release();
 }
 
 
@@ -208,6 +211,8 @@ void SfxStateCache::Invalidate( bool bWithMsg )
     {
         bSlotDirty = true;
         aSlotServ.SetSlot( nullptr );
+        if ( mxDispatch.is() )
+            mxDispatch->Release();
         mxDispatch.clear();
     }
 }
