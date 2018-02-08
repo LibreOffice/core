@@ -1228,7 +1228,7 @@ public:
     }
 };
 
-#if __cplusplus <= 201402 || (defined __GNUC__ && __GNUC__ == 5 && __GNUC_MINOR__ <= 4)
+#if __cplusplus <= 201402 || (defined __GNUC__ && __GNUC__ <= 6)
 constexpr sal_Int32 SwXMLTableContext::MAX_WIDTH;
 #endif
 
