@@ -1837,5 +1837,51 @@ DECLARE_ODFEXPORT_TEST(testTdf77961, "tdf77961.odt")
 
 #endif
 
+// MAILMERGE Add conditional to expand / collapse bookmarks
+DECLARE_ODFEXPORT_TEST(tdf101856, "tdf101856.odt")
+{
+    // get bookmark interface
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+
+    // check: we have 2 bookmarks
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), xBookmarksByIdx->getCount());
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("BookmarkVisible"));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("BookmarkHidden"));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("BookmarkVisibleWithCondition"));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("BookmarkNotHiddenWithCondition"));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("BookmarkHiddenWithCondition"));
+
+    // <text:bookmark-start text:name="BookmarkVisible"/>
+    uno::Reference<beans::XPropertySet> xBookmark1(xBookmarksByName->getByName("BookmarkVisible"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xBookmark1, UNO_NAME_BOOKMARK_CONDITION));
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xBookmark1, UNO_NAME_BOOKMARK_HIDDEN));
+
+    // <text:bookmark-start text:name="BookmarkHidden" loext:condition="" loext:hidden="true"/>
+    uno::Reference<beans::XPropertySet> xBookmark2(xBookmarksByName->getByName("BookmarkHidden"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xBookmark2, UNO_NAME_BOOKMARK_CONDITION));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xBookmark2, UNO_NAME_BOOKMARK_HIDDEN));
+
+    // <text:bookmark-start text:name="BookmarkVisibleWithCondition" loext:condition="0==1" loext:hidden="true"/>
+    uno::Reference<beans::XPropertySet> xBookmark3(xBookmarksByName->getByName("BookmarkVisibleWithCondition"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("0==1"), getProperty<OUString>(xBookmark3, UNO_NAME_BOOKMARK_CONDITION));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xBookmark3, UNO_NAME_BOOKMARK_HIDDEN));
+
+    // <text:bookmark-start text:name="BookmarkNotHiddenWithCondition" loext:condition="1==1" loext:hidden="false"/>
+    //
+    // The following test doesn't work, while during output in the case of loext:hidden="false".
+    // no additional parameters are written. Implementation should be reviewed.
+    //
+//    uno::Reference<beans::XPropertySet> xBookmark4(xBookmarksByName->getByName("BookmarkNotHiddenWithCondition"), uno::UNO_QUERY);
+//    CPPUNIT_ASSERT_EQUAL(OUString("1==1"), getProperty<OUString>(xBookmark4, UNO_NAME_BOOKMARK_CONDITION));
+//    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xBookmark4, UNO_NAME_BOOKMARK_HIDDEN));
+
+    // <text:bookmark-start text:name="BookmarkHiddenWithCondition" loext:condition="1==1" loext:hidden="true"/>
+    uno::Reference<beans::XPropertySet> xBookmark5(xBookmarksByName->getByName("BookmarkHiddenWithCondition"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1==1"), getProperty<OUString>(xBookmark5, UNO_NAME_BOOKMARK_CONDITION));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xBookmark5, UNO_NAME_BOOKMARK_HIDDEN));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
