@@ -50,6 +50,7 @@ private:
     bool                         mbDummyContext;
     VectorGraphicDataPtr         maVectorGraphicData;
     css::uno::Sequence<sal_Int8> maPdfData;
+    OUString msOriginURL;
 
 private:
 
@@ -69,6 +70,16 @@ private:
     ImpGraphic&         operator=( ImpGraphic&& rImpGraphic );
     bool                operator==( const ImpGraphic& rImpGraphic ) const;
     bool                operator!=( const ImpGraphic& rImpGraphic ) const { return !( *this == rImpGraphic ); }
+
+    OUString getOriginURL() const
+    {
+        return msOriginURL;
+    }
+
+    void setOriginURL(OUString const & rOriginURL)
+    {
+        msOriginURL = rOriginURL;
+    }
 
     void                ImplCreateSwapInfo();
     void                ImplClearGraphics();
