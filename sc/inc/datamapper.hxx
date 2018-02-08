@@ -89,7 +89,7 @@ public:
     const OUString& getID() const;
     double getUpdateFrequency() const;
     OUString getDBName() const;
-    void setDBData(const ScDBData* pDBData);
+    void setDBData(const OUString& rDBName);
     ScDBDataManager* getDBManager();
 
     void refresh(ScDocument* pDoc, bool bDeterministic = false);

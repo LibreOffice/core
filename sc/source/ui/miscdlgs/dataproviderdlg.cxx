@@ -437,14 +437,22 @@ std::shared_ptr<sc::DataTransformation> ScMergeColumnTransformationControl::getT
 
 }
 
-ScDataProviderDlg::ScDataProviderDlg(vcl::Window* pParent, std::shared_ptr<ScDocument> pDoc):
+ScDataProviderDlg::ScDataProviderDlg(vcl::Window* pParent, std::shared_ptr<ScDocument> pDoc, ScDocument* pDocument):
     ModalDialog(pParent, "dataproviderdlg", "modules/scalc/ui/dataproviderdlg.ui", true),
     mpDoc(pDoc),
     mpBar(VclPtr<MenuBar>::Create())
 {
     get(mpTable, "data_table");
     get(mpList, "operation_ctrl");
+    get(mpDBRanges, "select_db_range");
     mpTable->Init(mpDoc);
+
+    ScDBCollection* pDBCollection = pDocument->GetDBCollection();
+    auto& rNamedDBs = pDBCollection->getNamedDBs();
+    for (auto& rNamedDB : rNamedDBs)
+    {
+        mpDBRanges->InsertEntry(rNamedDB->GetName());
+    }
 
     mpDataProviderCtrl = VclPtr<ScDataProviderBaseControl>::Create(mpList, LINK(this, ScDataProviderDlg, ImportHdl));
     mpList->addEntry(mpDataProviderCtrl);
@@ -534,7 +542,7 @@ IMPL_LINK(ScDataProviderDlg, ImportHdl, Window*, pCtrl, void)
 {
     if (pCtrl == mpDataProviderCtrl.get())
     {
-        import(mpDoc.get());
+        import(mpDoc.get(), true);
     }
 }
 
@@ -572,7 +580,7 @@ void ScDataProviderDlg::mergeColumns()
     mpList->addEntry(pMergeColumnEntry);
 }
 
-void ScDataProviderDlg::import(ScDocument* pDoc)
+void ScDataProviderDlg::import(ScDocument* pDoc, bool bInternal)
 {
     sc::ExternalDataSource aSource = mpDataProviderCtrl->getDataSource(pDoc);
     std::vector<VclPtr<vcl::Window>> aListEntries = mpList->getEntries();
@@ -586,7 +594,10 @@ void ScDataProviderDlg::import(ScDocument* pDoc)
         }
         aSource.AddDataTransformation(pTransformationCtrl->getTransformation());
     }
-    aSource.setDBData(pDBData);
+    if (bInternal)
+        aSource.setDBData(pDBData->GetName());
+    else
+        aSource.setDBData(mpDBRanges->GetSelectedEntry());
     aSource.refresh(pDoc, true);
     mpTable->Invalidate();
 }
