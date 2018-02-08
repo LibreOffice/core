@@ -63,6 +63,7 @@ class LOKitThread extends Thread {
         if (mTileProvider == null) {
             return;
         }
+
         List<SubTile> tiles = new ArrayList<SubTile>();
 
         mLayerClient.beginDrawing();
@@ -79,7 +80,7 @@ class LOKitThread extends Thread {
             mLayerClient.endDrawing();
             mLayerClient.forceRender();
         }
-
+        Log.i(LOGTAG, "tileReevaluationRequest: ");
         mLayerClient.beginDrawing();
         composedTileLayer.markTiles();
         composedTileLayer.clearMarkedTiles();
@@ -105,6 +106,7 @@ class LOKitThread extends Thread {
             tile.setImage(image);
             tile.invalidate();
         }
+        Log.i(LOGTAG, "tileInvalidation: ");
         mLayerClient.endDrawing();
         mLayerClient.forceRender();
     }
@@ -284,6 +286,17 @@ class LOKitThread extends Thread {
     }
 
     /**
+     * Save the currently loaded document to cache.
+     */
+    private void saveDocumentToCache(String filePath, String fileType) {
+       if (mTileProvider == null) {
+           Log.e(LOGTAG, "Error in saving, Tile Provider instance is null");
+       } else {
+           mTileProvider.saveDocumentToCache(filePath, fileType);
+       }
+    }
+
+    /**
      * Close the currently loaded document.
      */
     private void closeDocument() {
@@ -306,6 +319,9 @@ class LOKitThread extends Thread {
                 break;
             case LOEvent.SAVE_AS:
                 saveDocumentAs(event.filePath, event.fileType);
+                break;
+                case LOEvent.SAVE_TO_CACHE:
+                saveDocumentToCache(event.filePath, event.fileType);
                 break;
             case LOEvent.RESUME:
                 resumeDocument(event.mString, event.mPartIndex);

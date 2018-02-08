@@ -216,6 +216,37 @@ class LOKitTileProvider implements TileProvider {
         LOKitShell.hideProgressSpinner(mContext);
     }
 
+    @Override
+    public void saveDocumentToCache(String filePath, String format) {
+        final String newFilePath = "file://" + filePath;
+        mDocument.saveAs(newFilePath, format, "");
+        if (!mOffice.getError().isEmpty()){
+            Log.e("Save Error", mOffice.getError());
+            if (format.equals("svg")) {
+                // error in creating temp slideshow svg file
+                Log.d(LOGTAG, "Error in creating temp slideshow svg file");
+            } else {
+                LOKitShell.getMainHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // There was some error
+                        mContext.showSaveStatusMessage(true);
+                    }
+                });
+            }
+        } else {
+            if (format.equals("svg")) {
+                // successfully created temp slideshow svg file
+                LOKitShell.getMainHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mContext.startPresentation(newFilePath);
+                    }
+                });
+            }
+        }
+    }
+
     private void setupDocumentFonts() {
         String values = mDocument.getCommandValues(".uno:CharFontName");
         if (values == null || values.isEmpty())
