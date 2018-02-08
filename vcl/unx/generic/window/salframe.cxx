@@ -698,7 +698,11 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
         int  n = 0;
         a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_DELETE_WINDOW );
 
-#ifndef DBG_UTIL
+// LibreOffice advertises NET_WM_PING atom, so mutter rightfully warns of an unresponsive application during debugging.
+// Hack that out unconditionally for debug builds, as per https://bugzilla.redhat.com/show_bug.cgi?id=981149
+// upstream refuses to make this configurable in any way.
+// NOTE: You need to use the 'gen' backend for this to work (SAL_USE_VCLPLUGIN=gen)
+#ifndef OSL_DEBUG_LEVEL
         if( pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_PING ) )
             a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_PING );
 #endif
