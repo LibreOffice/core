@@ -415,6 +415,8 @@ public:
 
 class LwpLayout : public LwpMiddleLayout
 {
+private:
+    bool m_bGettingShadow;
 public:
     LwpLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm );
     virtual ~LwpLayout() override;

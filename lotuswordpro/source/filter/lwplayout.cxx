@@ -1422,9 +1422,11 @@ bool LwpMiddleLayout::HasContent()
     return content.is();
 }
 
-LwpLayout::LwpLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm ) :
-    LwpMiddleLayout(objHdr, pStrm)
-{}
+LwpLayout::LwpLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
+    : LwpMiddleLayout(objHdr, pStrm)
+    , m_bGettingShadow(false)
+{
+}
 
 LwpLayout::~LwpLayout()
 {
@@ -1813,20 +1815,25 @@ bool LwpLayout::IsUseOnPage()
 */
 LwpShadow* LwpLayout::GetShadow()
 {
+    if (m_bGettingShadow)
+        throw std::runtime_error("recursion in layout");
+    m_bGettingShadow = true;
+    LwpShadow* pRet = nullptr;
     if(m_nOverrideFlag & OVER_SHADOW)
     {
         LwpLayoutShadow* pLayoutShadow = dynamic_cast<LwpLayoutShadow*>(m_LayShadow.obj().get());
-        return pLayoutShadow ? &pLayoutShadow->GetShadow() : nullptr;
+        pRet = pLayoutShadow ? &pLayoutShadow->GetShadow() : nullptr;
     }
     else
     {
         rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
         if (LwpLayout* pLay = dynamic_cast<LwpLayout*>(xBase.get()))
         {
-            return pLay->GetShadow();
+            pRet = pLay->GetShadow();
         }
     }
-    return nullptr;
+    m_bGettingShadow = false;
+    return pRet;
 }
 
 /**
