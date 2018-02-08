@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_9259645d",
+        "filename": "sc/source/core/data/dpsave.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-02-08T08:06:17Z",
+      "side": 1,
+      "message": "Please don\u0027t use tabs but spaces for this line and following",
+      "range": {
+        "startLine": 1211,
+        "startChar": 0,
+        "endLine": 1211,
+        "endChar": 6
+      },
+      "revId": "2c0aa2a163313a73ba009f605200b67406bd44d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_725a3052",
+        "filename": "sc/source/core/data/dpsave.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-02-08T08:06:17Z",
+      "side": 1,
+      "message": "\"fields\"",
+      "range": {
+        "startLine": 1214,
+        "startChar": 70,
+        "endLine": 1214,
+        "endChar": 75
+      },
+      "revId": "2c0aa2a163313a73ba009f605200b67406bd44d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_b254a821",
+        "filename": "sc/source/core/data/dpsave.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1235,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-02-08T08:06:17Z",
+      "side": 1,
+      "message": "no need to add a newline",
+      "revId": "2c0aa2a163313a73ba009f605200b67406bd44d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
