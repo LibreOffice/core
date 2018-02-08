@@ -764,7 +764,8 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                     SetAllFormulasDirty(aFormulaDirtyCxt);
                 }
                 // sheet names of references are not valid until sheet is deleted
-                pChartListenerCollection->UpdateScheduledSeriesRanges();
+                if (pChartListenerCollection)
+                    pChartListenerCollection->UpdateScheduledSeriesRanges();
 
                 if (comphelper::LibreOfficeKit::isActive())
                 {
@@ -864,7 +865,8 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                     SetAllFormulasDirty(aFormulaDirtyCxt);
                 }
                 // sheet names of references are not valid until sheet is deleted
-                pChartListenerCollection->UpdateScheduledSeriesRanges();
+                if (pChartListenerCollection)
+                    pChartListenerCollection->UpdateScheduledSeriesRanges();
 
                 if (comphelper::LibreOfficeKit::isActive())
                 {
@@ -1367,7 +1369,7 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
         bRet = true;
     }
     SetAutoCalc( bOldAutoCalc );
-    if ( bRet )
+    if ( bRet && pChartListenerCollection )
         pChartListenerCollection->UpdateDirtyCharts();
     return bRet;
 }
@@ -1475,7 +1477,8 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
         std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler( this));
     }
 
-    pChartListenerCollection->UpdateDirtyCharts();
+    if (pChartListenerCollection)
+        pChartListenerCollection->UpdateDirtyCharts();
 }
 
 void ScDocument::DeleteRow( const ScRange& rRange )
@@ -1676,7 +1679,8 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
         std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler( this));
     }
 
-    pChartListenerCollection->UpdateDirtyCharts();
+    if (pChartListenerCollection)
+        pChartListenerCollection->UpdateDirtyCharts();
 }
 
 void ScDocument::DeleteCol( const ScRange& rRange )
