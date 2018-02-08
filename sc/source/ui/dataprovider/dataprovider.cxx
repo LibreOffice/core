@@ -111,15 +111,15 @@ OUString ExternalDataSource::getDBName() const
     return OUString();
 }
 
-void ExternalDataSource::setDBData(const ScDBData* pDBData)
+void ExternalDataSource::setDBData(const OUString& rDBName)
 {
     if (!mpDBDataManager)
     {
-        mpDBDataManager.reset(new ScDBDataManager(pDBData->GetName(), false, mpDoc));
+        mpDBDataManager.reset(new ScDBDataManager(rDBName, false, mpDoc));
     }
     else
     {
-        mpDBDataManager->SetDatabase(pDBData->GetName());
+        mpDBDataManager->SetDatabase(rDBName);
     }
 }
 

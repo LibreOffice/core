@@ -36,6 +36,7 @@ private:
     VclPtr<ListControl> mpList;
     VclPtr<MenuBar> mpBar;
     VclPtr<ScDataProviderBaseControl> mpDataProviderCtrl;
+    VclPtr<ListBox> mpDBRanges;
 
     ScDBData* pDBData;
 
@@ -47,7 +48,7 @@ private:
 
 public:
 
-    ScDataProviderDlg(vcl::Window* pWindow, std::shared_ptr<ScDocument> pDoc);
+    ScDataProviderDlg(vcl::Window* pWindow, std::shared_ptr<ScDocument> pDoc, ScDocument* pDocument);
 
     virtual ~ScDataProviderDlg() override;
     virtual void dispose() override;
@@ -61,7 +62,7 @@ public:
     void splitColumn();
     void mergeColumns();
 
-    void import(ScDocument* pDoc);
+    void import(ScDocument* pDoc, bool bInternal = false);
 };
 
 #endif
