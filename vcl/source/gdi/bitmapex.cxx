@@ -1322,4 +1322,77 @@ void BitmapEx::setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
         }
     }
 }
+
+void BitmapEx::createColorSliderImage( ColorSliderMode eMode, Color const & aColor )
+{
+    Bitmap::ScopedWriteAccess pWriteAccess(aBitmap);
+    assert( pWriteAccess.get() );
+    if (pWriteAccess)
+    {
+        const long nY = aBitmapSize.getHeight() - 1;
+
+        BitmapColor aBitmapColor(aColor);
+
+        sal_uInt16 nHue, nSat, nBri;
+        aColor.RGBtoHSB(nHue, nSat, nBri);
+
+        // this has been unlooped for performance reason, please do not merge back!
+
+        switch (eMode)
+        {
+        case ColorSliderMode::HUE:
+            nSat = 100;
+            nBri = 100;
+            for (long y = 0; y <= nY; y++)
+            {
+                nHue = static_cast<sal_uInt16>((359 * y) / nY);
+                aBitmapColor = BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri)));
+                pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
+            }
+            break;
+
+        case ColorSliderMode::SATURATION:
+            nBri = std::max(sal_uInt16(32), nBri);
+            for (long y = 0; y <= nY; y++)
+            {
+                nSat = static_cast<sal_uInt16>((100 * y) / nY);
+                pWriteAccess->SetPixel(nY - y, 0, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
+            }
+            break;
+
+        case ColorSliderMode::BRIGHTNESS:
+            for (long y = 0; y <= nY; y++)
+            {
+                nBri = static_cast<sal_uInt16>((100 * y) / nY);
+                pWriteAccess->SetPixel(nY - y, 0, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
+            }
+            break;
+
+        case ColorSliderMode::RED:
+            for (long y = 0; y <= nY; y++)
+            {
+                aBitmapColor.SetRed(sal_uInt8((long(255) * y) / nY));
+                pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
+            }
+            break;
+
+        case ColorSliderMode::GREEN:
+            for (long y = 0; y <= nY; y++)
+            {
+                aBitmapColor.SetGreen(sal_uInt8((long(255) * y) / nY));
+                pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
+            }
+            break;
+
+        case ColorSliderMode::BLUE:
+            for (long y = 0; y <= nY; y++)
+            {
+                aBitmapColor.SetBlue(sal_uInt8((long(255) * y) / nY));
+                pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
+            }
+            break;
+        }
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

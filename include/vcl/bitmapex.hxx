@@ -40,6 +40,8 @@ enum class TransparentType
     Bitmap
 };
 
+enum class ColorSliderMode { HUE, SATURATION, BRIGHTNESS, RED, GREEN, BLUE };
+
 class SAL_WARN_UNUSED VCL_DLLPUBLIC BitmapEx
 {
 public:
@@ -441,6 +443,10 @@ public:
                             const Size &rSize );
 
     void                setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );
+
+    /** Create a color slider image, used from the ColorSliderControl in cui/ */
+    void                createColorSliderImage( ColorSliderMode eMode, Color const & aColor );
+
 public:
 
     SAL_DLLPRIVATE std::shared_ptr<ImpBitmap> const & ImplGetBitmapImpBitmap() const { return aBitmap.ImplGetImpBitmap(); }

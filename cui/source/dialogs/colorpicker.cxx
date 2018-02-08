@@ -185,8 +185,7 @@ void ColorPreviewControl::Paint(vcl::RenderContext& rRenderContext, const ::tool
     rRenderContext.DrawRect(rRect);
 }
 
-enum ColorMode { HUE, SATURATION, BRIGHTNESS, RED, GREEN, BLUE };
-const ColorMode DefaultMode = HUE;
+const ColorSliderMode DefaultMode = ColorSliderMode::HUE;
 
 class ColorFieldControl : public Control
 {
@@ -210,7 +209,7 @@ public:
     void UpdatePosition();
     void Modify();
 
-    void SetValues(Color aColor, ColorMode eMode, double x, double y);
+    void SetValues(Color aColor, ColorSliderMode eMode, double x, double y);
     double GetX() { return mdX;}
     double GetY() { return mdY;}
 
@@ -220,7 +219,7 @@ public:
 
 private:
     Link<ColorFieldControl&,void> maModifyHdl;
-    ColorMode meMode;
+    ColorSliderMode meMode;
     Color maColor;
     double mdX;
     double mdY;
@@ -331,7 +330,7 @@ void ColorFieldControl::UpdateBitmap()
 
         switch(meMode)
         {
-        case HUE:
+        case ColorSliderMode::HUE:
             while (y--)
             {
                 Scanline pScanline = pWriteAccess->GetScanline( y );
@@ -344,7 +343,7 @@ void ColorFieldControl::UpdateBitmap()
                 }
             }
             break;
-        case SATURATION:
+        case ColorSliderMode::SATURATION:
             while (y--)
             {
                 Scanline pScanline = pWriteAccess->GetScanline( y );
@@ -357,7 +356,7 @@ void ColorFieldControl::UpdateBitmap()
                 }
             }
             break;
-        case BRIGHTNESS:
+        case ColorSliderMode::BRIGHTNESS:
             while (y--)
             {
                 Scanline pScanline = pWriteAccess->GetScanline( y );
@@ -370,7 +369,7 @@ void ColorFieldControl::UpdateBitmap()
                 }
             }
             break;
-        case RED:
+        case ColorSliderMode::RED:
             while (y--)
             {
                 Scanline pScanline = pWriteAccess->GetScanline( y );
@@ -383,7 +382,7 @@ void ColorFieldControl::UpdateBitmap()
                 }
             }
             break;
-        case GREEN:
+        case ColorSliderMode::GREEN:
             while (y--)
             {
                 Scanline pScanline = pWriteAccess->GetScanline( y );
@@ -396,7 +395,7 @@ void ColorFieldControl::UpdateBitmap()
                 }
             }
             break;
-        case BLUE:
+        case ColorSliderMode::BLUE:
             while (y--)
             {
                 Scanline pScanline = pWriteAccess->GetScanline( y );
@@ -570,7 +569,7 @@ void ColorFieldControl::Modify()
     maModifyHdl.Call( *this );
 }
 
-void ColorFieldControl::SetValues( Color aColor, ColorMode eMode, double x, double y )
+void ColorFieldControl::SetValues( Color aColor, ColorSliderMode eMode, double x, double y )
 {
     bool bUpdateBitmap = (maColor!= aColor) || (meMode != eMode);
     if( bUpdateBitmap || (mdX != x) || (mdY != y) )
@@ -612,7 +611,7 @@ public:
     void ChangePosition( long nY );
     void Modify();
 
-    void SetValue( const Color& rColor, ColorMode eMode, double dValue );
+    void SetValue( const Color& rColor, ColorSliderMode eMode, double dValue );
     double GetValue() const { return mdValue; }
 
     void KeyMove( int dy );
@@ -624,8 +623,8 @@ public:
 private:
     Link<ColorSliderControl&,void> maModifyHdl;
     Color maColor;
-    ColorMode meMode;
-    Bitmap* mpBitmap;
+    ColorSliderMode meMode;
+    BitmapEx* mpBitmap;
     sal_Int16 mnLevel;
     double mdValue;
 };
@@ -665,78 +664,9 @@ void ColorSliderControl::UpdateBitmap()
     }
 
     if (!mpBitmap)
-        mpBitmap = new Bitmap(aSize, 24);
+        mpBitmap = new BitmapEx(Bitmap(aSize, 24));
 
-    BitmapWriteAccess* pWriteAccess = mpBitmap->AcquireWriteAccess();
-
-    if (pWriteAccess)
-    {
-        const long nY = aSize.Height() - 1;
-
-        BitmapColor aBitmapColor(maColor);
-
-        sal_uInt16 nHue, nSat, nBri;
-        maColor.RGBtoHSB(nHue, nSat, nBri);
-
-        // this has been unlooped for performance reason, please do not merge back!
-
-        switch (meMode)
-        {
-        case HUE:
-            nSat = 100;
-            nBri = 100;
-            for (long y = 0; y <= nY; y++)
-            {
-                nHue = static_cast<sal_uInt16>((359 * y) / nY);
-                aBitmapColor = BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri)));
-                pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
-            }
-            break;
-
-        case SATURATION:
-            nBri = std::max(sal_uInt16(32), nBri);
-            for (long y = 0; y <= nY; y++)
-            {
-                nSat = static_cast<sal_uInt16>((100 * y) / nY);
-                pWriteAccess->SetPixel(nY - y, 0, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
-            }
-            break;
-
-        case BRIGHTNESS:
-            for (long y = 0; y <= nY; y++)
-            {
-                nBri = static_cast<sal_uInt16>((100 * y) / nY);
-                pWriteAccess->SetPixel(nY - y, 0, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
-            }
-            break;
-
-        case RED:
-            for (long y = 0; y <= nY; y++)
-            {
-                aBitmapColor.SetRed(sal_uInt8((long(255) * y) / nY));
-                pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
-            }
-            break;
-
-        case GREEN:
-            for (long y = 0; y <= nY; y++)
-            {
-                aBitmapColor.SetGreen(sal_uInt8((long(255) * y) / nY));
-                pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
-            }
-            break;
-
-        case BLUE:
-            for (long y = 0; y <= nY; y++)
-            {
-                aBitmapColor.SetBlue(sal_uInt8((long(255) * y) / nY));
-                pWriteAccess->SetPixel(nY - y, 0, aBitmapColor);
-            }
-            break;
-        }
-
-        Bitmap::ReleaseAccess(pWriteAccess);
-    }
+    mpBitmap->createColorSliderImage(meMode, maColor);
 }
 
 void ColorSliderControl::ChangePosition(long nY)
@@ -808,7 +738,7 @@ void ColorSliderControl::Paint(vcl::RenderContext& rRenderContext, const ::tools
 
     const Size aSize(GetOutputSizePixel());
 
-    Bitmap aOutputBitmap(*mpBitmap);
+    Bitmap aOutputBitmap(mpBitmap->GetBitmap());
 
     if (GetBitCount() <= 8)
         aOutputBitmap.Dither();
@@ -833,7 +763,7 @@ void ColorSliderControl::Modify()
     maModifyHdl.Call(*this);
 }
 
-void ColorSliderControl::SetValue(const Color& rColor, ColorMode eMode, double dValue)
+void ColorSliderControl::SetValue(const Color& rColor, ColorSliderMode eMode, double dValue)
 {
     bool bUpdateBitmap = (rColor != maColor) || (eMode != meMode);
     if( bUpdateBitmap || (mdValue != dValue))
@@ -871,7 +801,7 @@ public:
 
 private:
     sal_Int16 mnDialogMode;
-    ColorMode meMode;
+    ColorSliderMode meMode;
 
     double mdRed, mdGreen, mdBlue;
     double mdHue, mdSat, mdBri;
@@ -1084,22 +1014,22 @@ void ColorPickerDialog::update_color( UpdateFlags n )
     {
         switch( meMode )
         {
-        case HUE:
+        case ColorSliderMode::HUE:
             mpColorField->SetValues(aColor, meMode, mdSat, mdBri);
             break;
-        case SATURATION:
+        case ColorSliderMode::SATURATION:
             mpColorField->SetValues(aColor, meMode, mdHue / 360.0, mdBri);
             break;
-        case BRIGHTNESS:
+        case ColorSliderMode::BRIGHTNESS:
             mpColorField->SetValues(aColor, meMode, mdHue / 360.0, mdSat);
             break;
-        case RED:
+        case ColorSliderMode::RED:
             mpColorField->SetValues(aColor, meMode, mdBlue, mdGreen);
             break;
-        case GREEN:
+        case ColorSliderMode::GREEN:
             mpColorField->SetValues(aColor, meMode, mdBlue, mdRed);
             break;
-        case BLUE:
+        case ColorSliderMode::BLUE:
             mpColorField->SetValues(aColor, meMode, mdRed, mdGreen);
             break;
         }
@@ -1109,22 +1039,22 @@ void ColorPickerDialog::update_color( UpdateFlags n )
     {
         switch (meMode)
         {
-        case HUE:
+        case ColorSliderMode::HUE:
             mpColorSlider->SetValue(aColor, meMode, mdHue / 360.0);
             break;
-        case SATURATION:
+        case ColorSliderMode::SATURATION:
             mpColorSlider->SetValue(aColor, meMode, mdSat);
             break;
-        case BRIGHTNESS:
+        case ColorSliderMode::BRIGHTNESS:
             mpColorSlider->SetValue(aColor, meMode, mdBri);
             break;
-        case RED:
+        case ColorSliderMode::RED:
             mpColorSlider->SetValue(aColor, meMode, mdRed);
             break;
-        case GREEN:
+        case ColorSliderMode::GREEN:
             mpColorSlider->SetValue(aColor, meMode, mdGreen);
             break;
-        case BLUE:
+        case ColorSliderMode::BLUE:
             mpColorSlider->SetValue(aColor, meMode, mdBlue);
             break;
         }
@@ -1158,27 +1088,27 @@ IMPL_LINK_NOARG(ColorPickerDialog, ColorFieldControlModifydl, ColorFieldControl&
 
     switch( meMode )
     {
-    case HUE:
+    case ColorSliderMode::HUE:
         mdSat = x;
         setColorComponent( ColorComponent::Brightness, y );
         break;
-    case SATURATION:
+    case ColorSliderMode::SATURATION:
         mdHue = x * 360.0;
         setColorComponent( ColorComponent::Brightness, y );
         break;
-    case BRIGHTNESS:
+    case ColorSliderMode::BRIGHTNESS:
         mdHue = x * 360.0;
         setColorComponent( ColorComponent::Saturation, y );
         break;
-    case RED:
+    case ColorSliderMode::RED:
         mdBlue = x;
         setColorComponent( ColorComponent::Green, y );
         break;
-    case GREEN:
+    case ColorSliderMode::GREEN:
         mdBlue = x;
         setColorComponent( ColorComponent::Red, y );
         break;
-    case BLUE:
+    case ColorSliderMode::BLUE:
         mdRed = x;
         setColorComponent( ColorComponent::Green, y );
         break;
@@ -1192,22 +1122,22 @@ IMPL_LINK_NOARG(ColorPickerDialog, ColorSliderControlModifyHdl, ColorSliderContr
     double dValue = mpColorSlider->GetValue();
     switch (meMode)
     {
-    case HUE:
+    case ColorSliderMode::HUE:
         setColorComponent( ColorComponent::Hue, dValue * 360.0 );
         break;
-    case SATURATION:
+    case ColorSliderMode::SATURATION:
         setColorComponent( ColorComponent::Saturation, dValue );
         break;
-    case BRIGHTNESS:
+    case ColorSliderMode::BRIGHTNESS:
         setColorComponent( ColorComponent::Brightness, dValue );
         break;
-    case RED:
+    case ColorSliderMode::RED:
         setColorComponent( ColorComponent::Red, dValue );
         break;
-    case GREEN:
+    case ColorSliderMode::GREEN:
         setColorComponent( ColorComponent::Green, dValue );
         break;
-    case BLUE:
+    case ColorSliderMode::BLUE:
         setColorComponent( ColorComponent::Blue, dValue );
         break;
     }
@@ -1296,27 +1226,27 @@ IMPL_LINK(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
 
 IMPL_LINK_NOARG(ColorPickerDialog, ModeModifyHdl, RadioButton&, void)
 {
-    ColorMode eMode = HUE;
+    ColorSliderMode eMode = ColorSliderMode::HUE;
 
     if (mpRBRed->IsChecked())
     {
-        eMode = RED;
+        eMode = ColorSliderMode::RED;
     }
     else if (mpRBGreen->IsChecked())
     {
-        eMode = GREEN;
+        eMode = ColorSliderMode::GREEN;
     }
     else if (mpRBBlue->IsChecked())
     {
-        eMode = BLUE;
+        eMode = ColorSliderMode::BLUE;
     }
     else if (mpRBSaturation->IsChecked())
     {
-        eMode = SATURATION;
+        eMode = ColorSliderMode::SATURATION;
     }
     else if (mpRBBrightness->IsChecked())
     {
-        eMode = BRIGHTNESS;
+        eMode = ColorSliderMode::BRIGHTNESS;
     }
 
     if (meMode != eMode)
