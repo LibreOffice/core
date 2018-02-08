@@ -790,10 +790,18 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         {
             std::shared_ptr<ScDocument> xDoc(new ScDocument, o3tl::default_delete<ScDocument>());
             xDoc->InsertTab(0, "test");
-            ScopedVclPtrInstance< ScDataProviderDlg > aDialog( pTabViewShell->GetDialogParent(), xDoc);
+            ScDocument* pDoc = GetViewData()->GetDocument();
+            ScopedVclPtrInstance< ScDataProviderDlg > aDialog( pTabViewShell->GetDialogParent(), xDoc, pDoc);
             if (aDialog->Execute() == RET_OK)
             {
-                // handle the import here
+                sc::ExternalDataSource aDataSource = aDialog->getDataProvider(pDoc);
+                ScDBData* pDBData = aDialog->getDBData();
+                if (pDBData)
+                {
+                    aDataSource.setDBData(pDBData);
+                    pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
+                    pDoc->GetExternalDataMapper().getDataSources().back().refresh(pDoc);
+                }
             }
         }
         break;

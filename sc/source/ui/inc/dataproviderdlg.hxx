@@ -20,6 +20,7 @@
 #include <vcl/button.hxx>
 
 #include "datatableview.hxx"
+#include <datamapper.hxx>
 
 #include <memory>
 
@@ -65,6 +66,9 @@ public:
     void mergeColumns();
 
     void import();
+
+    sc::ExternalDataSource getDataProvider(ScDocument* pDoc);
+    ScDBData* getDBData();
 };
 
 #endif

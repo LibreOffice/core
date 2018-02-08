@@ -12,6 +12,7 @@
 #include <document.hxx>
 #include <dataprovider.hxx>
 #include <datatransformation.hxx>
+#include <datamapper.hxx>
 
 #include <comphelper/string.hxx>
 
@@ -406,6 +407,7 @@ ScDataProviderDlg::ScDataProviderDlg(vcl::Window* pParent, std::shared_ptr<ScDoc
 
 ScDataProviderDlg::~ScDataProviderDlg()
 {
+    delete pDBData;
     disposeOnce();
 }
 
@@ -488,6 +490,7 @@ IMPL_LINK(ScDataProviderDlg, ImportHdl, Window*, pCtrl, void)
 
 void ScDataProviderDlg::applyAndQuit()
 {
+    import();
     EndDialog(RET_OK);
 }
 
@@ -524,7 +527,17 @@ void ScDataProviderDlg::mergeColumns()
 
 void ScDataProviderDlg::import()
 {
-    sc::ExternalDataSource aSource = mpDataProviderCtrl->getDataSource(mpDoc.get());
+    mpDoc->Clear(false);
+    mpDoc->InsertTab(0, "test");
+    sc::ExternalDataSource aSource = getDataProvider(mpDoc.get());
+    aSource.setDBData(pDBData);
+    aSource.refresh(mpDoc.get(), true);
+    mpTable->Invalidate();
+}
+
+sc::ExternalDataSource ScDataProviderDlg::getDataProvider(ScDocument* pDoc)
+{
+    sc::ExternalDataSource aSource = mpDataProviderCtrl->getDataSource(pDoc);
     std::vector<VclPtr<vcl::Window>> aListEntries = mpList->getEntries();
     for (size_t i = 1; i < aListEntries.size(); ++i)
     {
@@ -536,9 +549,13 @@ void ScDataProviderDlg::import()
         }
         aSource.AddDataTransformation(pTransformationCtrl->getTransformation());
     }
-    aSource.setDBData(pDBData);
-    aSource.refresh(mpDoc.get(), true);
-    mpTable->Invalidate();
+
+    return aSource;
+}
+
+ScDBData* ScDataProviderDlg::getDBData()
+{
+    return mpDocument->GetDBCollection()->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(mpDBRanges->GetSelectedEntry()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
