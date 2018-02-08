@@ -401,13 +401,13 @@ static ImplUniToDBCSHighTab const aKSC5601DBCSHighTab[256] =
     { 0x02, 0xFB, aImplUniToDBCSTab_KSC5601_6A },               /* 0x6A */
     { 0x04, 0xEC, aImplUniToDBCSTab_KSC5601_6B },               /* 0x6B */
     { 0x08, 0xF3, aImplUniToDBCSTab_KSC5601_6C },               /* 0x6C */
-    { 0x03, 0xFB, aImplUniToDBCSTab_KSC5601_6D },               /* 0x6D */
+    { 0x0B, 0xFB, aImplUniToDBCSTab_KSC5601_6D },               /* 0x6D */
     { 0x17, 0xFF, aImplUniToDBCSTab_KSC5601_6E },               /* 0x6E */
     { 0x01, 0xFE, aImplUniToDBCSTab_KSC5601_6F },               /* 0x6F */
     { 0x01, 0xFD, aImplUniToDBCSTab_KSC5601_70 },               /* 0x70 */
     { 0x04, 0xFF, aImplUniToDBCSTab_KSC5601_71 },               /* 0x71 */
     { 0x00, 0xFD, aImplUniToDBCSTab_KSC5601_72 },               /* 0x72 */
-    { 0x02, 0xFE, aImplUniToDBCSTab_KSC5601_73 },               /* 0x73 */
+    { 0x0A, 0xFE, aImplUniToDBCSTab_KSC5601_73 },               /* 0x73 */
     { 0x01, 0xF7, aImplUniToDBCSTab_KSC5601_74 },               /* 0x74 */
     { 0x01, 0xFC, aImplUniToDBCSTab_KSC5601_75 },               /* 0x75 */
     { 0x00, 0xFE, aImplUniToDBCSTab_KSC5601_76 },               /* 0x76 */
