@@ -1502,7 +1502,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         if (Version != 0x00010000 && Version != 0x00020000) {
             return SF_TTFORMAT;
         }
-        if (facenum >= GetUInt32(t->ptr, 8)) {
+        if (!withinBounds(8, 0, sizeof(sal_uInt32), t->fsize) || facenum >= GetUInt32(t->ptr, 8)) {
             return SF_FONTNO;
         }
         if (withinBounds(12, 4 * facenum, sizeof(sal_uInt32), t->fsize)) {
