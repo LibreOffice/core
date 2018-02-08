@@ -35,8 +35,8 @@ ScSortParam::ScSortParam()
 ScSortParam::ScSortParam( const ScSortParam& r ) :
         nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),nUserIndex(r.nUserIndex),
         bHasHeader(r.bHasHeader),bByRow(r.bByRow),bCaseSens(r.bCaseSens),
-        bNaturalSort(r.bNaturalSort),bUserDef(r.bUserDef),bIncludeGraphicObjects(r.bIncludeGraphicObjects),
-        bIncludePattern(r.bIncludePattern),bInplace(r.bInplace),
+        bNaturalSort(r.bNaturalSort),bIncludeGraphicObjects(r.bIncludeGraphicObjects),
+        bUserDef(r.bUserDef),bIncludePattern(r.bIncludePattern),bInplace(r.bInplace),
         nDestTab(r.nDestTab),nDestCol(r.nDestCol),nDestRow(r.nDestRow),
         maKeyState( r.maKeyState ),
         aCollatorLocale( r.aCollatorLocale ), aCollatorAlgorithm( r.aCollatorAlgorithm ),
