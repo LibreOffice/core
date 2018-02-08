@@ -134,6 +134,7 @@ using ::com::sun::star::container::XIndexContainer;
 #include <sfx2/minfitem.hxx>
 #include <sfx2/strings.hrc>
 #include "impviewframe.hxx"
+#include <vcl/msgbox.hxx>
 
 #define SfxViewFrame
 #include <sfxslots.hxx>
@@ -151,6 +152,7 @@ void SfxViewFrame::InitInterface_Impl()
 #endif
 }
 
+namespace {
 /// Asks the user if editing a read-only document is really wanted.
 class SfxEditDocumentDialog : public MessageDialog
 {
@@ -183,8 +185,31 @@ void SfxEditDocumentDialog::dispose()
     MessageDialog::dispose();
 }
 
+class SfxQueryOpenAsTemplate : public QueryBox
+{
+public:
+    SfxQueryOpenAsTemplate(vcl::Window* pParent, MessBoxStyle nStyle, bool bAllowIgnoreLock);
+};
+
+SfxQueryOpenAsTemplate::SfxQueryOpenAsTemplate(vcl::Window* pParent, MessBoxStyle nStyle, bool bAllowIgnoreLock)
+    : QueryBox(pParent, nStyle, SfxResId(bAllowIgnoreLock ? STR_QUERY_OPENASTEMPLATE_ALLOW_IGNORE : STR_QUERY_OPENASTEMPLATE))
+{
+    AddButton(SfxResId(STR_QUERY_OPENASTEMPLATE_OPENCOPY_BTN), RET_YES,
+        ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
+    SetButtonHelpText(RET_YES, OUString());
+
+    if (bAllowIgnoreLock)
+    {
+        AddButton(SfxResId(STR_QUERY_OPENASTEMPLATE_OPEN_BTN), RET_IGNORE);
+        SetButtonHelpText(RET_IGNORE, OUString());
+    }
+
+    AddButton(StandardButtonType::Cancel, RET_CANCEL);
+    SetButtonHelpText(RET_CANCEL, OUString());
+}
+
 /// Is this read-only object shell opened via .uno:SignPDF?
-static bool IsSignPDF(const SfxObjectShellRef& xObjSh)
+bool IsSignPDF(const SfxObjectShellRef& xObjSh)
 {
     if (!xObjSh.is())
         return false;
@@ -200,7 +225,7 @@ static bool IsSignPDF(const SfxObjectShellRef& xObjSh)
     return false;
 }
 
-static bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHandler >& xHandler, const OUString& aPath, const std::shared_ptr<const SfxFilter>& pFilter, sal_uInt32 nPasswordHash, const uno::Sequence< beans::PropertyValue >& aInfo )
+bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHandler >& xHandler, const OUString& aPath, const std::shared_ptr<const SfxFilter>& pFilter, sal_uInt32 nPasswordHash, const uno::Sequence< beans::PropertyValue >& aInfo )
 {
     // TODO/LATER: In future the info should replace the direct hash completely
     bool bResult = ( !nPasswordHash && !aInfo.getLength() );
@@ -248,6 +273,7 @@ static bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHa
 
     return bResult;
 }
+}
 
 void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 {
@@ -262,6 +288,23 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             // despite this is not!
             if( !pSh || !pSh->HasName() || !(pSh->Get_Impl()->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ))
                 break;
+
+            // Only change read-only UI and remove info bar when we succeed
+            struct ReadOnlyUIGuard
+            {
+                SfxViewFrame* m_pFrame;
+                SfxObjectShell* m_pSh;
+                bool m_bSetRO;
+                ~ReadOnlyUIGuard()
+                {
+                    if (m_bSetRO != m_pSh->IsReadOnlyUI())
+                    {
+                        m_pSh->SetReadOnlyUI(m_bSetRO);
+                        if (!m_bSetRO)
+                            m_pFrame->RemoveInfoBar("readonly");
+                    }
+                }
+            } aReadOnlyUIGuard{ this, pSh, pSh->IsReadOnlyUI() };
 
             SfxMedium* pMed = pSh->GetMedium();
 
@@ -312,7 +355,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     }
                 }
                 nOpenMode = SFX_STREAM_READONLY;
-                pSh->SetReadOnlyUI();
+                aReadOnlyUIGuard.m_bSetRO = true;
             }
             else
             {
@@ -332,10 +375,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pSh->SetModifyPasswordEntered();
                 }
 
-                // Remove infobar if document was read-only (after password check)
-                RemoveInfoBar("readonly");
-
                 nOpenMode = pSh->IsOriginallyReadOnlyMedium() ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
+                aReadOnlyUIGuard.m_bSetRO = false;
 
                 // if only the view was in the readonly mode then there is no need to do the reload
                 if ( !pSh->IsReadOnlyMedium() )
@@ -344,12 +385,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     // open mode among other things, so call SetOpenMode before
                     // SetReadOnlyUI:
                     pMed->SetOpenMode( nOpenMode );
-                    pSh->SetReadOnlyUI( false );
                     return;
                 }
-
-
-                pSh->SetReadOnlyUI( false );
             }
 
             if ( rReq.IsAPI() )
@@ -396,31 +433,58 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             // <- tdf#82744
             {
                 bool bOK = false;
-                if ( !pVersionItem )
-                {
-                    bool bHasStorage = pMed->HasStorage_Impl();
-                    // switching edit mode could be possible without reload
-                    if ( bHasStorage && pMed->GetStorage() == pSh->GetStorage() )
+                bool bRetryIgnoringLock = false;
+                bool bOpenTemplate = false;
+                do {
+                    if ( !pVersionItem )
                     {
-                        // TODO/LATER: faster creation of copy
-                        if ( !pSh->ConnectTmpStorage_Impl( pMed->GetStorage(), pMed ) )
-                            return;
+                        if (bRetryIgnoringLock)
+                            pMed->ResetError();
+
+                        bool bHasStorage = pMed->HasStorage_Impl();
+                        // switching edit mode could be possible without reload
+                        if ( bHasStorage && pMed->GetStorage() == pSh->GetStorage() )
+                        {
+                            // TODO/LATER: faster creation of copy
+                            if ( !pSh->ConnectTmpStorage_Impl( pMed->GetStorage(), pMed ) )
+                                return;
+                        }
+
+                        pMed->CloseAndRelease();
+                        pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & StreamMode::WRITE ) ) );
+                        pMed->SetOpenMode( nOpenMode );
+
+                        pMed->CompleteReOpen();
+                        if ( nOpenMode & StreamMode::WRITE )
+                        {
+                             auto eResult = pMed->LockOrigFileOnDemand( true, true, bRetryIgnoringLock );
+                             bRetryIgnoringLock = eResult == SfxMedium::LockFileResult::FailedLockFile;
+                        }
+
+                        // LockOrigFileOnDemand might set the readonly flag itself, it should be set back
+                        pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & StreamMode::WRITE ) ) );
+
+                        if ( !pMed->GetErrorCode() )
+                            bOK = true;
                     }
 
-                    pMed->CloseAndRelease();
-                    pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & StreamMode::WRITE ) ) );
-                    pMed->SetOpenMode( nOpenMode );
+                    if( !bOK )
+                    {
+                        if (nOpenMode == SFX_STREAM_READWRITE && !rReq.IsAPI())
+                        {
+                            // css::sdbcx::User offering to open it as a template
+                            ScopedVclPtrInstance<SfxQueryOpenAsTemplate> aBox(&GetWindow(), MessBoxStyle::NONE, bRetryIgnoringLock);
 
-                    pMed->CompleteReOpen();
-                    if ( nOpenMode & StreamMode::WRITE )
-                        pMed->LockOrigFileOnDemand( false, true );
-
-                    // LockOrigFileOnDemand might set the readonly flag itself, it should be set back
-                    pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & StreamMode::WRITE ) ) );
-
-                    if ( !pMed->GetErrorCode() )
-                        bOK = true;
+                            short nUserAnswer = aBox->Execute();
+                            bOpenTemplate = RET_YES == nUserAnswer;
+                            // Always reset this here to avoid infinite loop
+                            bRetryIgnoringLock = RET_IGNORE == nUserAnswer;
+                        }
+                        else
+                            bRetryIgnoringLock = false;
+                    }
                 }
+                while ( !bOK && bRetryIgnoringLock );
 
                 if( !bOK )
                 {
@@ -440,10 +504,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                     if ( nOpenMode == SFX_STREAM_READWRITE && !rReq.IsAPI() )
                     {
-                        // css::sdbcx::User offering to open it as a template
-                        ScopedVclPtrInstance<MessageDialog> aBox(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
-                                           VclMessageType::Question, VclButtonsType::YesNo);
-                        if ( RET_YES == aBox->Execute() )
+                        if ( bOpenTemplate )
                         {
                             SfxApplication* pApp = SfxGetpApp();
                             SfxAllItemSet aSet( pApp->GetPool() );
@@ -466,9 +527,12 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             GetDispatcher()->Execute( SID_OPENDOC, SfxCallMode::ASYNCHRON, aSet );
                             return;
                         }
-                        else
-                            nErr = ERRCODE_NONE;
+
+                        nErr = ERRCODE_NONE;
                     }
+
+                    // Keep the read-only UI
+                    aReadOnlyUIGuard.m_bSetRO = true;
 
                     ErrorHandler::HandleError( nErr );
                     rReq.SetReturnValue(
