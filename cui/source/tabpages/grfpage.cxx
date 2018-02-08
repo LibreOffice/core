@@ -794,10 +794,10 @@ void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
     aSz = rRenderContext.PixelToLogic(aSz);
     rRenderContext.SetFillColor(Color(COL_TRANSPARENT));
     rRenderContext.SetRasterOp(RasterOp::Invert);
-    aRect.Left()    += aTopLeft.Y();
-    aRect.Top()     += aTopLeft.X();
-    aRect.Right()   -= aBottomRight.Y();
-    aRect.Bottom()  -= aBottomRight.X();
+    aRect.SetLeft( aRect.GetLeft() + aTopLeft.Y() );
+    aRect.SetTop( aRect.GetTop() + aTopLeft.X() );
+    aRect.SetRight( aRect.GetRight() - aBottomRight.Y() );
+    aRect.SetBottom( aRect.GetBottom() - aBottomRight.X() );
     rRenderContext.DrawRect(aRect);
 }
 

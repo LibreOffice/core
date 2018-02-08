@@ -1297,7 +1297,7 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
         Size aSz = rModulWindow.GetBreakPointWindow().GetOutputSize();
         tools::Rectangle aInvRect( Point( 0, 0 ), aSz );
         long nY = nPara*nLineHeight - rModulWindow.GetBreakPointWindow().GetCurYOffset();
-        aInvRect.Top() = nY;
+        aInvRect.SetTop( nY );
         rModulWindow.GetBreakPointWindow().Invalidate( aInvRect );
 
         Size aLnSz(rModulWindow.GetLineNumberWindow().GetWidth(),

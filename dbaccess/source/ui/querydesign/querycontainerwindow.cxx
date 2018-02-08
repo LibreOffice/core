@@ -114,7 +114,7 @@ namespace dbaui
             m_pBeamer->SetPosSizePixel( aPlayground.TopLeft(), aBeamerSize );
 
             // shrink the playground by the size which is occupied by the beamer
-            aPlayground.Top() = aSplitPos.Y() + aSplitSize.Height();
+            aPlayground.SetTop( aSplitPos.Y() + aSplitSize.Height() );
         }
 
         ODataView::resizeAll( aPlayground );

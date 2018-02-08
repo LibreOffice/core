@@ -532,8 +532,8 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
 
         // determine rectangle for the corresponding line
         tools::Rectangle aRowRect( Point(0,0), aOutSize );
-        aRowRect.Top() = nRow * ( TABWIN_SPACING_Y + TABWIN_HEIGHT_STD );
-        aRowRect.Bottom() = (nRow+1) * ( TABWIN_SPACING_Y + TABWIN_HEIGHT_STD );
+        aRowRect.SetTop( nRow * ( TABWIN_SPACING_Y + TABWIN_HEIGHT_STD ) );
+        aRowRect.SetBottom( (nRow+1) * ( TABWIN_SPACING_Y + TABWIN_HEIGHT_STD ) );
 
         // check occupied areas of this line
         OTableWindowMap::const_iterator aIter = m_aTableMap.begin();

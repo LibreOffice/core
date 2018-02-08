@@ -158,8 +158,8 @@ namespace dbaui
     void OTableConnection::InvalidateConnection()
     {
         tools::Rectangle rcBounding = GetBoundingRect();
-        rcBounding.Bottom() += 1;
-        rcBounding.Right() += 1;
+        rcBounding.SetBottom( rcBounding.GetBottom() + 1 );
+        rcBounding.SetRight( rcBounding.GetRight() + 1 );
         // I believe Invalidate and Draw(Rectangle) do not behave consistent: in any case it
         // could explain, why without the fake here when deleting a connection a dash remains at the lower end:
         // Invalidate records obviously one pixel line less as Draw.

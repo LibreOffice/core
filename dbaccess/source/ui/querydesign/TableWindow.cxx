@@ -340,33 +340,33 @@ tools::Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOu
     if( m_nSizingFlags & SizingFlags::Top )
     {
         if( _rPos.Y() < 0 )
-            aSizingRect.Top() = 0;
+            aSizingRect.SetTop( 0 );
         else
-            aSizingRect.Top() = _rPos.Y();
+            aSizingRect.SetTop( _rPos.Y() );
     }
 
     if( m_nSizingFlags & SizingFlags::Bottom )
     {
         if( _rPos.Y() > _rOutputSize.Height() )
-            aSizingRect.Bottom() = _rOutputSize.Height();
+            aSizingRect.SetBottom( _rOutputSize.Height() );
         else
-            aSizingRect.Bottom() = _rPos.Y();
+            aSizingRect.SetBottom( _rPos.Y() );
     }
 
     if( m_nSizingFlags & SizingFlags::Right )
     {
         if( _rPos.X() > _rOutputSize.Width() )
-            aSizingRect.Right() = _rOutputSize.Width();
+            aSizingRect.SetRight( _rOutputSize.Width() );
         else
-            aSizingRect.Right() = _rPos.X();
+            aSizingRect.SetRight( _rPos.X() );
     }
 
     if( m_nSizingFlags & SizingFlags::Left )
     {
         if( _rPos.X() < 0 )
-            aSizingRect.Left() = 0;
+            aSizingRect.SetLeft( 0 );
         else
-            aSizingRect.Left() = _rPos.X();
+            aSizingRect.SetLeft( _rPos.X() );
     }
     return aSizingRect;
 }

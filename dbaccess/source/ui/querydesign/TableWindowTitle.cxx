@@ -89,11 +89,11 @@ void OTableWindowTitle::RequestHelp( const HelpEvent& rHEvt )
             tools::Rectangle aItemRect(Point(0,0),GetSizePixel());
             aItemRect = LogicToPixel( aItemRect );
             Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
-            aItemRect.Left()   = aPt.X();
-            aItemRect.Top()    = aPt.Y();
+            aItemRect.SetLeft( aPt.X() );
+            aItemRect.SetTop( aPt.Y() );
             aPt = OutputToScreenPixel( aItemRect.BottomRight() );
-            aItemRect.Right()  = aPt.X();
-            aItemRect.Bottom() = aPt.Y();
+            aItemRect.SetRight( aPt.X() );
+            aItemRect.SetBottom( aPt.Y() );
             if( rHEvt.GetMode() == HelpEventMode::BALLOON )
                 Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aHelpText);
             else

@@ -96,7 +96,7 @@ namespace dbaui
         // position the separator
         const Size aSeparatorSize( aPlayground.GetWidth(), 2 );
         m_aSeparator->SetPosSizePixel( aPlayground.TopLeft(), aSeparatorSize );
-        aPlayground.Top() += aSeparatorSize.Height() + 1;
+        aPlayground.SetTop( aPlayground.GetTop() + aSeparatorSize.Height() + 1 );
 
         // position the controls of the document's view
         resizeDocumentView( aPlayground );

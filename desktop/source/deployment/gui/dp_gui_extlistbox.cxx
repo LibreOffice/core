@@ -1168,7 +1168,7 @@ void ExtensionBox_Impl::DoScroll( long nDelta )
     Point aNewSBPt( m_pScrollBar->GetPosPixel() );
 
     tools::Rectangle aScrRect( Point(), GetOutputSizePixel() );
-    aScrRect.Right() -= m_pScrollBar->GetSizePixel().Width();
+    aScrRect.SetRight( aScrRect.GetRight() - m_pScrollBar->GetSizePixel().Width() );
     Scroll( 0, -nDelta, aScrRect );
 
     m_pScrollBar->SetPosPixel( aNewSBPt );

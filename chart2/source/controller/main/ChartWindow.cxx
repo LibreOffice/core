@@ -348,10 +348,10 @@ void ChartWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
 
             if (!IsMapModeEnabled())
             {
-                aRectangle.Left() /= fXScale;
-                aRectangle.Right() /= fXScale;
-                aRectangle.Top() /= fYScale;
-                aRectangle.Bottom() /= fYScale;
+                aRectangle.SetLeft( aRectangle.GetLeft() / fXScale );
+                aRectangle.SetRight( aRectangle.GetRight() / fXScale );
+                aRectangle.SetTop( aRectangle.GetTop() / fYScale );
+                aRectangle.SetBottom( aRectangle.GetBottom() / fYScale );
             }
 
             Point aOffset = this->GetOffsetPixelFrom(*pEditWin);

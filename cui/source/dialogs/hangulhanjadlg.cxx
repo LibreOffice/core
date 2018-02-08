@@ -141,8 +141,8 @@ namespace svx
         sal_Int32 nCombinedWidth = std::max( aSecondaryRect.GetWidth(), aPrimaryRect.GetWidth() );
             // the rectangle where both texts will reside is as high as possible, and as wide as the
             // widest of both text rects
-        aPrimaryRect.Left() = aSecondaryRect.Left() = _rRect.Left();
-        aPrimaryRect.Right() = aSecondaryRect.Right() = _rRect.Left() + nCombinedWidth;
+        aPrimaryRect.SetLeft( aSaSecondaryRect.SetLeft( _rRect.Left() );
+        aPrimaryRect.SetRight( aSaSecondaryRect.SetRight( _rRect.Left() + nCombinedWidth );
         if (DrawTextFlags::Right & _nTextStyle)
         {
             // move the rectangles to the right
@@ -240,7 +240,7 @@ namespace svx
         aImageSize.Height() = CalcZoom( aImageSize.Height() ) + 2; // appear a bit cut from right and top.
 
         ::tools::Rectangle aOverallRect( Point( 0, 0 ), GetOutputSizePixel() );
-        aOverallRect.Left() += aImageSize.Width() + 4;  // 4 is the separator between the image and the text
+        aOverallRect.SetLeft( aOverallRect.GetLeft() + aImageSize.Width() + 4 );  // 4 is the separator between the image and the text
         // inflate the rect a little bit (because the VCL radio button does the same)
         ::tools::Rectangle aTextRect( aOverallRect );
         ++aTextRect.Left(); --aTextRect.Right();
@@ -283,14 +283,14 @@ namespace svx
         // for this, give it the proper location to paint the image (vertically centered, relative to our text)
         ::tools::Rectangle aImageLocation( Point( 0, 0 ), aImageSize );
         sal_Int32 nTextHeight = aSecondaryTextLocation.Bottom() - aPrimaryTextLocation.Top();
-        aImageLocation.Top() = aPrimaryTextLocation.Top() + ( nTextHeight - aImageSize.Height() ) / 2;
-        aImageLocation.Bottom() = aImageLocation.Top() + aImageSize.Height();
+        aImageLocation.SetTop( aPrimaryTextLocation.Top() + ( nTextHeight - aImageSize.Height() ) / 2 );
+        aImageLocation.SetBottom( aImageLocation.Top() + aImageSize.Height() );
         SetStateRect( aImageLocation );
         DrawRadioButtonState(rRenderContext);
 
         // mouse clicks should be recognized in a rect which is one pixel larger in each direction, plus
         // includes the image
-        aCombinedRect.Left() = aImageLocation.Left();
+        aCombinedRect.SetLeft( aImageLocation.Left() );
         ++aCombinedRect.Right();
         --aCombinedRect.Top();
         ++aCombinedRect.Bottom();

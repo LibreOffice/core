@@ -1466,7 +1466,7 @@ tools::Rectangle OSelectionBrowseBox::GetInvalidRect( sal_uInt16 nColId )
 
     // now update the left side
     tools::Rectangle aFieldRect(GetCellRect( 0, nColId )); // used instead of GetFieldRectPixel
-    aInvalidRect.Left() = aFieldRect.Left();
+    aInvalidRect.SetLeft( aFieldRect.Left() );
 
     return aInvalidRect;
 }

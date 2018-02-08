@@ -594,8 +594,8 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
                                                   aNativeControlRegion, aNativeContentRegion))
         {
               long nProgressHeight = aNativeControlRegion.GetHeight();
-              aDrawRect.Top() -= (nProgressHeight - pSpl->_barheight)/2;
-              aDrawRect.Bottom() += (nProgressHeight - pSpl->_barheight)/2;
+              aDrawRect.SetTop( aDrawRect.GetTop() - (nProgressHeight - pSpl->_barheight)/2 );
+              aDrawRect.SetBottom( aDrawRect.GetBottom() + (nProgressHeight - pSpl->_barheight)/2 );
         }
 
         if (rRenderContext.DrawNativeControl(ControlType::IntroProgress, ControlPart::Entire, aDrawRect,

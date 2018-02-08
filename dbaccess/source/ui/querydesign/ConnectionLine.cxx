@@ -56,17 +56,17 @@ namespace
         if ( pListBox )
         {
             const long nRowHeight = pListBox->GetEntryHeight();
-            aReturn.Top() = _aConnPos.Y() - nRowHeight;
-            aReturn.Bottom() = aReturn.Top() + nRowHeight;
+            aReturn.SetTop( _aConnPos.Y() - nRowHeight );
+            aReturn.SetBottom( aReturn.Top() + nRowHeight );
             if (_aDescrLinePos.X() < _aConnPos.X())
             {
-                aReturn.Left() = _aDescrLinePos.X();
-                aReturn.Right() = aReturn.Left() + _aConnPos.X() - _aDescrLinePos.X();
+                aReturn.SetLeft( _aDescrLinePos.X() );
+                aReturn.SetRight( aReturn.Left() + _aConnPos.X() - _aDescrLinePos.X() );
             }
             else
             {
-                aReturn.Left() = _aConnPos.X();
-                aReturn.Right() = aReturn.Left() + _aDescrLinePos.X() - _aConnPos.X();
+                aReturn.SetLeft( _aConnPos.X() );
+                aReturn.SetRight( aReturn.Left() + _aDescrLinePos.X() - _aConnPos.X() );
             }
         }
 
