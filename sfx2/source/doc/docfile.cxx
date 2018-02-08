@@ -846,6 +846,8 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog( const LockFileEnt
         OUString aInfo;
         ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl;
 
+        sal_Int32 nContinuations = 3;
+
         if ( bOwnLock )
         {
             aInfo = aData[LockFileComponent::EDITTIME];
@@ -869,12 +871,23 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog( const LockFileEnt
 
             xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
                 document::LockedDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo ) ) );
+
+            // Use a fourth continuation in case there's no filesystem lock:
+            // "Ignore lock file and open the document"
+            if (!bHandleSysLocked)
+                nContinuations = 4;
         }
 
-        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
+        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations(nContinuations);
         aContinuations[0] = new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() );
         aContinuations[1] = new ::ucbhelper::InteractionApprove( xInteractionRequestImpl.get() );
         aContinuations[2] = new ::ucbhelper::InteractionDisapprove( xInteractionRequestImpl.get() );
+        if (nContinuations > 3)
+        {
+            // We use InteractionRetry to reflect that user wants to
+            // ignore the (stale?) alien lock file and open the document
+            aContinuations[3] = new ::ucbhelper::InteractionRetry(xInteractionRequestImpl.get());
+        }
         xInteractionRequestImpl->setContinuations( aContinuations );
 
         xHandler->handle( xInteractionRequestImpl.get() );
@@ -890,13 +903,18 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog( const LockFileEnt
             // own lock on saving, user has selected to ignore the lock
             // alien lock on loading, user has selected to edit a copy of document
             // TODO/LATER: alien lock on saving, user has selected to do SaveAs to different location
-            if ( bIsLoading && !bOwnLock )
+            if ( !bOwnLock ) // bIsLoading implied from outermost condition
             {
                 // means that a copy of the document should be opened
                 GetItemSet()->Put( SfxBoolItem( SID_TEMPLATE, true ) );
             }
-            else if ( bOwnLock )
+            else
                 nResult = ShowLockResult::Succeeded;
+        }
+        else if (uno::Reference< task::XInteractionRetry >(xSelected.get(), uno::UNO_QUERY).is())
+        {
+            // User decided to ignore the alien (stale?) lock file without filesystem lock
+            nResult = ShowLockResult::Succeeded;
         }
         else // if ( XSelected == aContinuations[1] )
         {
@@ -992,12 +1010,16 @@ namespace
 
 // sets SID_DOC_READONLY if the document cannot be opened for editing
 // if user cancel the loading the ERROR_ABORT is set
-void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
+SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI, bool bTryIgnoreLockFile )
 {
 #if !HAVE_FEATURE_MULTIUSER_ENVIRONMENT
     (void) bLoading;
     (void) bNoUI;
+    (void) bTryIgnoreLockFile;
+    return LockFileResult::Succeeded;
 #else
+    LockFileResult eResult = LockFileResult::Failed;
+
     // check if path scheme is http:// or https://
     // may be this is better if used always, in Android and iOS as well?
     // if this code should be always there, remember to move the relevant code in UnlockFile method as well !
@@ -1069,7 +1091,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
 
                             if ( !bResult && !bNoUI )
                             {
-                                bUIStatus = ShowLockedDocumentDialog( aLockData, bLoading, false , false );
+                                bUIStatus = ShowLockedDocumentDialog( aLockData, bLoading, false , true );
                             }
                         }
                         catch( ucb::InteractiveNetworkWriteException& )
@@ -1108,23 +1130,28 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
             // when the file is locked, get the current file date
             if ( bResult && DocNeedsFileDateCheck() )
                 GetInitFileDate( true );
+
+            if ( bResult )
+                eResult = LockFileResult::Succeeded;
         }
         catch ( const uno::Exception& )
         {
             SAL_WARN( "sfx.doc", "Locking exception: WebDAV while trying to lock the file" );
         }
-        return;
+        return eResult;
     }
 
-    if (!IsLockingUsed() || GetURLObject().HasError())
-        return;
+    if (!IsLockingUsed())
+        return LockFileResult::Succeeded;
+    if (GetURLObject().HasError())
+        return eResult;
 
     try
     {
         if ( pImpl->m_bLocked && bLoading
              && GetURLObject().GetProtocol() == INetProtocol::File )
         {
-            // if the document is already locked the system locking might be temporarely off after storing
+            // if the document is already locked the system locking might be temporarily off after storing
             // check whether the system file locking should be taken again
             GetLockingStream_Impl();
         }
@@ -1176,7 +1203,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                         // let the stream be opened to check the system file locking
                         GetMedium_Impl();
                         if (GetError() != ERRCODE_NONE) {
-                            return;
+                            return eResult;
                         }
                     }
 
@@ -1201,15 +1228,6 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                                 try
                                 {
                                     bResult = aLockFile.CreateOwnLockFile();
-                                }
-                                catch (const ucb::InteractiveIOException&)
-                                {
-                                    if (bLoading && !bNoUI)
-                                    {
-                                        bIoErr = true;
-                                        ShowLockFileProblemDialog(MessageDlg::LockFileIgnore);
-                                        bResult = true;   // always delete the defect lock-file
-                                    }
                                 }
                                 catch (const uno::Exception&)
                                 {
@@ -1270,14 +1288,20 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                                     }
                                 }
 
-                                if ( !bResult && !bNoUI && !bIoErr)
+                                if ( !bResult && !bIoErr)
                                 {
-                                    bUIStatus = ShowLockedDocumentDialog( aData, bLoading, bOwnLock, bHandleSysLocked );
+                                    if (!bNoUI)
+                                        bUIStatus = ShowLockedDocumentDialog(aData, bLoading, bOwnLock, bHandleSysLocked);
+                                    else if (bLoading && bTryIgnoreLockFile && !bHandleSysLocked)
+                                        bUIStatus = ShowLockResult::Succeeded;
+
                                     if ( bUIStatus == ShowLockResult::Succeeded )
                                     {
                                         // take the ownership over the lock file
                                         bResult = aLockFile.OverwriteOwnLockFile();
                                     }
+                                    else if (bLoading && !bHandleSysLocked)
+                                        eResult = LockFileResult::FailedLockFile;
                                 }
                             }
                         }
@@ -1311,11 +1335,16 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
         // when the file is locked, get the current file date
         if ( bResult && DocNeedsFileDateCheck() )
             GetInitFileDate( true );
+
+        if ( bResult )
+            eResult = LockFileResult::Succeeded;
     }
     catch( const uno::Exception& )
     {
         SAL_WARN( "sfx.doc", "Locking exception: high probability, that the content has not been created" );
     }
+
+    return eResult;
 #endif
 }
 

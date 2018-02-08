@@ -21,7 +21,7 @@
 #include "openlocked.hxx"
 #include <unotools/resmgr.hxx>
 
-OpenLockedQueryBox::OpenLockedQueryBox( vcl::Window* pParent, const std::locale& rResLocale, const OUString& aMessage ) :
+OpenLockedQueryBox::OpenLockedQueryBox( vcl::Window* pParent, const std::locale& rResLocale, const OUString& aMessage, bool bEnableOverride ) :
     MessBox(pParent, MessBoxStyle::NONE, 0,
             Translate::get(STR_OPENLOCKED_TITLE, rResLocale),
             aMessage )
@@ -30,13 +30,19 @@ OpenLockedQueryBox::OpenLockedQueryBox( vcl::Window* pParent, const std::locale&
 
     AddButton(Translate::get(STR_OPENLOCKED_OPENREADONLY_BTN, rResLocale), RET_YES,
             ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
+    SetButtonHelpText(RET_YES, OUString());
 
     AddButton(Translate::get(STR_OPENLOCKED_OPENCOPY_BTN, rResLocale), RET_NO);
+    SetButtonHelpText(RET_NO, OUString());
+
+    if (bEnableOverride)
+    {
+        // Present option to ignore the (stale?) lock file and open the document
+        AddButton(Translate::get(STR_ALREADYOPEN_OPEN_BTN, rResLocale), RET_IGNORE);
+        SetButtonHelpText(RET_IGNORE, OUString());
+    }
 
     AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
-    SetButtonHelpText( RET_YES, OUString() );
-    SetButtonHelpText( RET_NO, OUString() );
-
 }
 
 OpenLockedQueryBox::~OpenLockedQueryBox()
