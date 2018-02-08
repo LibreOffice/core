@@ -29,6 +29,7 @@
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
+#include <com/sun/star/task/XInteractionRetry.hpp>
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -68,7 +69,9 @@ handleLockedDocumentRequest_(
     uno::Reference< task::XInteractionApprove > xApprove;
     uno::Reference< task::XInteractionDisapprove > xDisapprove;
     uno::Reference< task::XInteractionAbort > xAbort;
-    getContinuations(rContinuations, &xApprove, &xDisapprove, &xAbort);
+    // In case an option to ignore lock and open the file is available
+    uno::Reference< task::XInteractionRetry > xRetry;
+    getContinuations(rContinuations, &xApprove, &xDisapprove, &xAbort, &xRetry);
 
     if ( !xApprove.is() || !xDisapprove.is() || !xAbort.is() )
         return;
@@ -91,11 +94,15 @@ handleLockedDocumentRequest_(
                                   ? aInfo
                                   : ResId( STR_UNKNOWNUSER,
                                                *xManager.get() ).toString() );
+            aArguments.push_back( xRetry.is()
+                                  ? ResId( STR_OPENLOCKED_ALLOWIGNORE_MSG,
+                                               *xManager.get() ).toString()
+                                  : "" );
             aMessage = ResId(STR_OPENLOCKED_MSG, *xManager.get()).toString();
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            ScopedVclPtrInstance< OpenLockedQueryBox > xDialog(pParent, xManager.get(), aMessage);
+            ScopedVclPtrInstance< OpenLockedQueryBox > xDialog(pParent, xManager.get(), aMessage, xRetry.is());
             nResult = xDialog->Execute();
         }
         else if ( nMode == UUI_DOC_SAVE_LOCK )
@@ -133,6 +140,8 @@ handleLockedDocumentRequest_(
             xApprove->select();
         else if ( nResult == RET_NO )
             xDisapprove->select();
+        else if ( nResult == RET_IGNORE && xRetry.is() )
+            xRetry->select();
         else
             xAbort->select();
     }

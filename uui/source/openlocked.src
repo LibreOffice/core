@@ -27,7 +27,11 @@ String STR_OPENLOCKED_TITLE
 };
 String STR_OPENLOCKED_MSG
 {
-    Text [ en-US ] = "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nOpen document read-only or open a copy of the document for editing.\n\n";
+    Text [ en-US ] = "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nOpen document read-only or open a copy of the document for editing.\n\n$(ARG3)";
+};
+String STR_OPENLOCKED_ALLOWIGNORE_MSG
+{
+    Text [ en-US ] = "You may also ignore the file locking and open the document for editing.\n\n";
 };
 String STR_OPENLOCKED_OPENREADONLY_BTN
 {

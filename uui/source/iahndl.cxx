@@ -244,10 +244,11 @@ UUIInteractionHelper::replaceMessageWithArguments(
     OUString aMessage = _aMessage;
 
     SAL_WARN_IF(rArguments.size() == 0, "uui", "replaceMessageWithArguments: No arguments passed!");
-    if (rArguments.size() > 0)
-        aMessage = aMessage.replaceAll("$(ARG1)", rArguments[0]);
-    if (rArguments.size() > 1)
-        aMessage = aMessage.replaceAll("$(ARG2)", rArguments[1]);
+    for (size_t i = 0; i < rArguments.size(); ++i)
+    {
+        const OUString sReplaceTemplate = "$(ARG" + OUString::number(i+1) + ")";
+        aMessage = aMessage.replaceAll(sReplaceTemplate, rArguments[i]);
+    }
 
     return aMessage;
 }
