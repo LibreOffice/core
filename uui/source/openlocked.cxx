@@ -20,7 +20,7 @@
 #include "ids.hrc"
 #include "openlocked.hxx"
 
-OpenLockedQueryBox::OpenLockedQueryBox( vcl::Window* pParent, ResMgr* pResMgr, const OUString& aMessage ) :
+OpenLockedQueryBox::OpenLockedQueryBox( vcl::Window* pParent, ResMgr* pResMgr, const OUString& aMessage, bool bEnableOverride ) :
     MessBox(pParent, 0,
             ResId(STR_OPENLOCKED_TITLE, *pResMgr).toString(),
             aMessage )
@@ -29,21 +29,19 @@ OpenLockedQueryBox::OpenLockedQueryBox( vcl::Window* pParent, ResMgr* pResMgr, c
 
     AddButton(ResId(STR_OPENLOCKED_OPENREADONLY_BTN, *pResMgr).toString(), RET_YES,
             ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
+    SetButtonHelpText(RET_YES, OUString());
 
     AddButton(ResId(STR_OPENLOCKED_OPENCOPY_BTN, *pResMgr).toString(), RET_NO);
+    SetButtonHelpText(RET_NO, OUString());
+
+    if (bEnableOverride)
+    {
+        // Present option to ignore the (stale?) lock file and open the document
+        AddButton(ResId(STR_ALREADYOPEN_OPEN_BTN, *pResMgr).toString(), RET_IGNORE);
+        SetButtonHelpText(RET_IGNORE, OUString());
+    }
 
     AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
-    SetButtonHelpText( RET_YES, OUString() );
-    SetButtonHelpText( RET_NO, OUString() );
-
-#ifdef _WIN32
-    // bnc#656566
-    // Yes, it is silly to do this only for this dialog but not the
-    // other similar ones. But hey, it was about this dialog that the
-    // customer complained. You who read this and feel the itch, feel
-    // free to fix the problem in a better way.
-    EnableAlwaysOnTop();
-#endif
 }
 
 OpenLockedQueryBox::~OpenLockedQueryBox()
