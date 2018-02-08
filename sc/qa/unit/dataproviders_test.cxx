@@ -50,7 +50,7 @@ void ScDataProvidersTest::testCSVImport()
     OUString aFileURL;
     createFileURL("test1.", "csv", aFileURL);
     sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.csv", m_pDoc);
-    aDataSource.setDBData(pDBData);
+    aDataSource.setDBData(pDBData->GetName());
 
 
     m_pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
@@ -78,7 +78,7 @@ void ScDataProvidersTest::testDataLargerThanDB()
     OUString aFileURL;
     createFileURL("test1.", "csv", aFileURL);
     sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.csv", m_pDoc);
-    aDataSource.setDBData(pDBData);
+    aDataSource.setDBData(pDBData->GetName());
 
 
     m_pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
@@ -107,7 +107,7 @@ void ScDataProvidersTest::testHTMLImport()
     createFileURL("test1.", "html", aFileURL);
     sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.html", m_pDoc);
     aDataSource.setID("//table");
-    aDataSource.setDBData(pDBData);
+    aDataSource.setDBData(pDBData->GetName());
 
 
     m_pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
