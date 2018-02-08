@@ -1498,19 +1498,17 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     } else if (TTCTag == T_otto) {                         /* PS-OpenType font */
         tdoffset = 0;
     } else if (TTCTag == T_ttcf) {                         /* TrueType collection */
+        if (!withinBounds(12, 4 * facenum, sizeof(sal_uInt32), t->fsize)) {
+            return SF_FONTNO;
+        }
         sal_uInt32 Version = GetUInt32(t->ptr, 4);
         if (Version != 0x00010000 && Version != 0x00020000) {
             return SF_TTFORMAT;
         }
-        if (!withinBounds(8, 0, sizeof(sal_uInt32), t->fsize) || facenum >= GetUInt32(t->ptr, 8)) {
+        if (facenum >= GetUInt32(t->ptr, 8)) {
             return SF_FONTNO;
         }
-        if (withinBounds(12, 4 * facenum, sizeof(sal_uInt32), t->fsize)) {
-            tdoffset = GetUInt32(t->ptr, 12 + 4 * facenum);
-        } else {
-            return SF_FONTNO;
-        }
-
+        tdoffset = GetUInt32(t->ptr, 12 + 4 * facenum);
     } else {
         return SF_TTFORMAT;
     }
