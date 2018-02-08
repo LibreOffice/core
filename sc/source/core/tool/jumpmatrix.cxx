@@ -27,7 +27,7 @@ namespace {
 const SCSIZE kBufferThreshold = 128;
 }
 
-ScJumpMatrix::ScJumpMatrix(SCSIZE nColsP, SCSIZE nRowsP)
+ScJumpMatrix::ScJumpMatrix( OpCode eOp, SCSIZE nColsP, SCSIZE nRowsP )
     : mvJump(nColsP * nRowsP)
     , pMat(new ScFullMatrix(nColsP, nRowsP))
     , pParams(nullptr)
@@ -37,6 +37,7 @@ ScJumpMatrix::ScJumpMatrix(SCSIZE nColsP, SCSIZE nRowsP)
     , nCurRow(0)
     , nResMatCols(nColsP)
     , nResMatRows(nRowsP)
+    , meOp(eOp)
     , bStarted(false)
     , mnBufferCol(0)
     , mnBufferRowStart(0)
