@@ -99,7 +99,7 @@ void ScAnchorTest::testUndoAnchor()
     CPPUNIT_ASSERT(pDrawView->AreObjectsMarked() );
 
     // Set Cell Anchor
-    ScDrawLayer::SetCellAnchoredFromPosition(*pObject, rDoc, 0);
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObject, rDoc, 0, false);
     // Check state
     ScAnchorType oldType = ScDrawLayer::GetAnchorType(*pObject);
     CPPUNIT_ASSERT_EQUAL(SCA_CELL, oldType);
@@ -169,7 +169,7 @@ void ScAnchorTest::testTdf76183()
     SdrCircObj* pObj = new SdrCircObj(OBJ_CIRC, aOrigRect);
     pPage->InsertObject(pObj);
     // Anchor to cell
-    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rDoc, 0);
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rDoc, 0, false);
     const tools::Rectangle& rNewRect = pObj->GetLogicRect();
 
     // Set word wrap to true
