@@ -80,6 +80,7 @@ class ScUndoAnchorData : public SdrUndoObj
 {
 private:
     bool                    mbWasCellAnchored;
+    bool                    mbWasResizeWithCell;
     ScDocument*             mpDoc;
     SCTAB                   mnTab;
 public:
@@ -174,12 +175,13 @@ public:
     void            EnsureGraphicNames();
 
     static bool IsCellAnchored( const SdrObject& rObj );
+    static bool IsResizeWithCell( const SdrObject& rObj );
     static void             SetPageAnchored( SdrObject& );
-    static void             SetCellAnchored( SdrObject&, const ScDrawObjData &rAnchor );
-    static void             SetVisualCellAnchored( SdrObject&, const ScDrawObjData &rAnchor );
+    static void             SetCellAnchored( SdrObject&, const ScDrawObjData &rAnchor, bool bResizeWithCell );
+    static void             SetVisualCellAnchored( SdrObject&, const ScDrawObjData &rAnchor, bool bResizeWithCell );
     // Updates rAnchor based on position of rObj
     static void             GetCellAnchorFromPosition( const SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect = true, bool bHiddenAsZero = true );
-    static void             SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab );
+    static void             SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab, bool bResizeWithCell );
     static void             UpdateCellAnchorFromPositionEnd( const SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect = true );
     static ScAnchorType     GetAnchorType( const SdrObject& );
     std::map<SCROW, std::vector<SdrObject*>> GetObjectsAnchoredToRange(SCTAB nTab, SCCOL nCol, SCROW nStartRow, SCROW nEndRow);

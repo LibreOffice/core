@@ -351,28 +351,41 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             pView->SetPageAnchored();
             rBindings.Invalidate( SID_ANCHOR_PAGE );
             rBindings.Invalidate( SID_ANCHOR_CELL );
+            rBindings.Invalidate( SID_ANCHOR_CELL_RESIZE );
             break;
 
         case SID_ANCHOR_CELL:
-            pView->SetCellAnchored();
+            pView->SetCellAnchored(false);
             rBindings.Invalidate( SID_ANCHOR_PAGE );
             rBindings.Invalidate( SID_ANCHOR_CELL );
+            rBindings.Invalidate( SID_ANCHOR_CELL_RESIZE );
             break;
 
+        case SID_ANCHOR_CELL_RESIZE:
+            pView->SetCellAnchored(true);
+            rBindings.Invalidate( SID_ANCHOR_PAGE );
+            rBindings.Invalidate( SID_ANCHOR_CELL );
+            rBindings.Invalidate( SID_ANCHOR_CELL_RESIZE );
+            break;
+
+        // FIXME: This toggle makes probably no longer sense,
+        //         since we now have three states, not two.
         case SID_ANCHOR_TOGGLE:
             {
                 switch( pView->GetAnchorType() )
                 {
                     case SCA_CELL:
+                    case SCA_CELL_RESIZE:
                     pView->SetPageAnchored();
                     break;
                     default:
-                    pView->SetCellAnchored();
+                    pView->SetCellAnchored(false);
                     break;
                 }
             }
             rBindings.Invalidate( SID_ANCHOR_PAGE );
             rBindings.Invalidate( SID_ANCHOR_CELL );
+            rBindings.Invalidate( SID_ANCHOR_CELL_RESIZE );
             break;
 
         case SID_OBJECT_ROTATE:
