@@ -1203,7 +1203,18 @@ static bool lcl_PutString(
         if ( bUseDocImport )
             rDocImport.setAutoInput(ScAddress(nCol, nRow, nTab), rStr, &aParam);
         else
+        {
             pDoc->SetString( nCol, nRow, nTab, rStr, &aParam );
+            // ScColumn::ParseString() is strict about the first character
+            // having to be '=' for formula, so we can use that here and don't
+            // need to obtain the created cell for each and every value.
+            if (rStr.getLength() > 1 && rStr[0] == '=')
+            {
+                const ScFormulaCell* pFC = pDoc->GetFormulaCell( ScAddress( nCol, nRow, nTab));
+                if (pFC)
+                    pDoc->CheckLinkFormulaNeedingCheck( *pFC->GetCode());
+            }
+        }
     }
     else
     {
