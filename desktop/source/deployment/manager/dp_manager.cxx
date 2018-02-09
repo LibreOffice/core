@@ -346,6 +346,8 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         xComponentContext, context );
     Reference<deployment::XPackageManager> xPackageManager( that );
 
+    SAL_DEBUG("Get package manager: " << context);
+
     OUString logFile, stamp;
     if ( context == "user" ) {
         that->m_activePackages = "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages";

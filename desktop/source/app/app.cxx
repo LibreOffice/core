@@ -1450,7 +1450,7 @@ int Desktop::Main()
         // Check if bundled or shared extensions were added /removed
         // and process those extensions (has to be done before checking
         // the extension dependencies!
-        SynchronizeExtensionRepositories();
+        SynchronizeExtensionRepositories(m_bCleanedExtensionCache, this);
         bool bAbort = CheckExtensionDependencies();
         if ( bAbort )
             return EXIT_FAILURE;

@@ -3792,6 +3792,13 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 std::cerr << "Init vcl\n";
                 InitVCL();
 
+                // (re-)register the bundled extensions - for dictionaries
+                // etc.
+                desktop::Desktop::SynchronizeExtensionRepositories(true);
+                bool bAbort = desktop::Desktop::CheckExtensionDependencies();
+
+                std::cerr << "******************* bAbort == " << bAbort << std::endl;
+
                 // pre-load all component libraries.
                 if (!xContext.is())
                     throw css::uno::DeploymentException("preInit: XComponentContext is not created");
