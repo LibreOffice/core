@@ -226,7 +226,7 @@ private:
     double mdX;
     double mdY;
     Point maPosition;
-    Bitmap* mpBitmap;
+    VclPtr<VirtualDevice> mxBitmap;
     std::vector<sal_uInt8>  maRGB_Horiz;
     std::vector<sal_uInt16> maGrad_Horiz;
     std::vector<sal_uInt16> maPercent_Horiz;
@@ -239,7 +239,6 @@ ColorFieldControl::ColorFieldControl( vcl::Window* pParent, WinBits nStyle )
 , meMode( DefaultMode )
 , mdX( -1.0 )
 , mdY( -1.0 )
-, mpBitmap( nullptr )
 {
     SetControlBackground();
 }
@@ -251,8 +250,7 @@ ColorFieldControl::~ColorFieldControl()
 
 void ColorFieldControl::dispose()
 {
-    delete mpBitmap;
-    mpBitmap = nullptr;
+    mxBitmap.disposeAndClear();
     Control::dispose();
 }
 
@@ -267,43 +265,41 @@ void ColorFieldControl::UpdateBitmap()
 {
     const Size aSize(GetOutputSizePixel());
 
-    if (mpBitmap && mpBitmap->GetSizePixel() != aSize)
-    {
-        delete mpBitmap;
-        mpBitmap = nullptr;
-    }
-
     const sal_Int32 nWidth = aSize.Width();
     const sal_Int32 nHeight = aSize.Height();
 
     if (nWidth == 0 || nHeight == 0)
         return;
 
-    if (!mpBitmap)
+    if (mxBitmap && mxBitmap->GetOutputSizePixel() == aSize)
+        return;
+
+    mxBitmap.disposeAndClear();
+    mxBitmap = VclPtr<VirtualDevice>::Create();
+    mxBitmap->SetOutputSizePixel(aSize);
+
+    maRGB_Horiz.resize( nWidth );
+    maGrad_Horiz.resize( nWidth );
+    maPercent_Horiz.resize( nWidth );
+
+    sal_uInt8* pRGB = maRGB_Horiz.data();
+    sal_uInt16* pGrad = maGrad_Horiz.data();
+    sal_uInt16* pPercent = maPercent_Horiz.data();
+
+    for( sal_Int32 x = 0; x < nWidth; x++ )
     {
-        mpBitmap = new Bitmap( aSize, 24 );
+        *pRGB++ = static_cast<sal_uInt8>((x * 256) / nWidth);
+        *pGrad++ = static_cast<sal_uInt16>((x * 359) / nWidth);
+        *pPercent++ = static_cast<sal_uInt16>((x * 100) / nWidth);
+    }
 
-        maRGB_Horiz.resize( nWidth );
-        maGrad_Horiz.resize( nWidth );
-        maPercent_Horiz.resize( nWidth );
+    maRGB_Vert.resize(nHeight);
+    maPercent_Vert.resize(nHeight);
 
-        sal_uInt8* pRGB = maRGB_Horiz.data();
-        sal_uInt16* pGrad = maGrad_Horiz.data();
-        sal_uInt16* pPercent = maPercent_Horiz.data();
+    pRGB = maRGB_Vert.data();
+    pPercent = maPercent_Vert.data();
 
-        for( sal_Int32 x = 0; x < nWidth; x++ )
-        {
-            *pRGB++ = static_cast<sal_uInt8>((x * 256) / nWidth);
-            *pGrad++ = static_cast<sal_uInt16>((x * 359) / nWidth);
-            *pPercent++ = static_cast<sal_uInt16>((x * 100) / nWidth);
-        }
-
-        maRGB_Vert.resize(nHeight);
-        maPercent_Vert.resize(nHeight);
-
-        pRGB = maRGB_Vert.data();
-        pPercent = maPercent_Vert.data();
-
+    {
         sal_Int32 y = nHeight;
         while (y--)
         {
@@ -318,10 +314,7 @@ void ColorFieldControl::UpdateBitmap()
     sal_uInt8* pRGB_Vert = maRGB_Vert.data();
     sal_uInt16* pPercent_Vert = maPercent_Vert.data();
 
-    Bitmap::ScopedWriteAccess pWriteAccess(*mpBitmap);
-    if (pWriteAccess)
-    {
-        BitmapColor aBitmapColor(maColor);
+        Color aBitmapColor(maColor);
 
         sal_uInt16 nHue, nSat, nBri;
         maColor.RGBtoHSB(nHue, nSat, nBri);
@@ -335,97 +328,90 @@ void ColorFieldControl::UpdateBitmap()
         case HUE:
             while (y--)
             {
-                Scanline pScanline = pWriteAccess->GetScanline( y );
                 nBri = pPercent_Vert[y];
                 x = nWidth;
                 while (x--)
                 {
                     nSat = pPercent_Horiz[x];
-                    pWriteAccess->SetPixelOnData(pScanline, x, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
+                    mxBitmap->DrawPixel(Point(x,y), Color(Color::HSBtoRGB(nHue, nSat, nBri)));
                 }
             }
             break;
         case SATURATION:
             while (y--)
             {
-                Scanline pScanline = pWriteAccess->GetScanline( y );
                 nBri = pPercent_Vert[y];
                 x = nWidth;
                 while (x--)
                 {
                     nHue = pGrad_Horiz[x];
-                    pWriteAccess->SetPixelOnData(pScanline, x, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
+                    mxBitmap->DrawPixel(Point(x,y), Color(Color::HSBtoRGB(nHue, nSat, nBri)));
                 }
             }
             break;
         case BRIGHTNESS:
             while (y--)
             {
-                Scanline pScanline = pWriteAccess->GetScanline( y );
                 nSat = pPercent_Vert[y];
                 x = nWidth;
                 while (x--)
                 {
                     nHue = pGrad_Horiz[x];
-                    pWriteAccess->SetPixelOnData(pScanline, x, BitmapColor(Color(Color::HSBtoRGB(nHue, nSat, nBri))));
+                    mxBitmap->DrawPixel(Point(x,y), Color(Color::HSBtoRGB(nHue, nSat, nBri)));
                 }
             }
             break;
         case RED:
             while (y--)
             {
-                Scanline pScanline = pWriteAccess->GetScanline( y );
                 aBitmapColor.SetGreen(pRGB_Vert[y]);
                 x = nWidth;
                 while (x--)
                 {
                     aBitmapColor.SetBlue(pRGB_Horiz[x]);
-                    pWriteAccess->SetPixelOnData(pScanline, x, aBitmapColor);
+                    mxBitmap->DrawPixel(Point(x,y), aBitmapColor);
                 }
             }
             break;
         case GREEN:
             while (y--)
             {
-                Scanline pScanline = pWriteAccess->GetScanline( y );
                 aBitmapColor.SetRed(pRGB_Vert[y]);
                 x = nWidth;
                 while (x--)
                 {
                     aBitmapColor.SetBlue(pRGB_Horiz[x]);
-                    pWriteAccess->SetPixelOnData(pScanline, x, aBitmapColor);
+                    mxBitmap->DrawPixel(Point(x,y), aBitmapColor);
                 }
             }
             break;
         case BLUE:
             while (y--)
             {
-                Scanline pScanline = pWriteAccess->GetScanline( y );
                 aBitmapColor.SetGreen(pRGB_Vert[y]);
                 x = nWidth;
                 while (x--)
                 {
                     aBitmapColor.SetRed(pRGB_Horiz[x]);
-                    pWriteAccess->SetPixelOnData(pScanline, x, aBitmapColor);
+                    mxBitmap->DrawPixel(Point(x,y), aBitmapColor);
                 }
             }
             break;
         }
-    }
 }
 
 void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
 {
-    if (!mpBitmap)
+    if (!mxBitmap)
     {
         UpdateBitmap();
         Invalidate();
     }
 
-    if (!mpBitmap)
+    if (!mxBitmap)
         return;
 
-    const Size aSize(mpBitmap->GetSizePixel());
+    const Size aSize(mxBitmap->GetOutputSizePixel());
 
     long nX = rPos.X();
     long nY = rPos.Y();
@@ -450,14 +436,7 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
         mdX = double(nX) / double(aSize.Width() - 1.0);
         mdY = double(aSize.Height() - 1.0 - nY) / double(aSize.Height() - 1.0);
 
-        BitmapReadAccess* pReadAccess = mpBitmap->AcquireReadAccess();
-        if (pReadAccess != nullptr)
-        {
-            // mpBitmap always has a bit count of 24 => use of GetPixel(...) is safe
-            maColor = pReadAccess->GetPixel(nY, nX).GetColor();
-            Bitmap::ReleaseAccess(pReadAccess);
-            pReadAccess = nullptr;
-        }
+        maColor = mxBitmap->GetPixel(Point(nX, nY)).GetColor();
     }
 }
 
@@ -535,18 +514,11 @@ void ColorFieldControl::KeyInput( const KeyEvent& rKEvt )
 
 void ColorFieldControl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
 {
-    if (!mpBitmap)
+    if (!mxBitmap)
         UpdateBitmap();
 
-    if (mpBitmap)
-    {
-        Bitmap aOutputBitmap(*mpBitmap);
-
-        if (GetBitCount() <= 8)
-            aOutputBitmap.Dither();
-
-        rRenderContext.DrawBitmap(rRect.TopLeft(), rRect.GetSize(), rRect.TopLeft(), rRect.GetSize(), aOutputBitmap);
-    }
+    if (mxBitmap)
+        rRenderContext.DrawOutDev(rRect.TopLeft(), rRect.GetSize(), rRect.TopLeft(), rRect.GetSize(), *mxBitmap);
 
     // draw circle around current color
     if (maColor.IsDark())
