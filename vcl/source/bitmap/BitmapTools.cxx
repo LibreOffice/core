@@ -135,6 +135,34 @@ BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHe
     return aBmp;
 }
 
+/** Copy block of image data into the bitmap.
+    Assumes that the Bitmap has been constructed with the desired size.
+*/
+BitmapEx CreateFromData( RawBitmap&& rawBitmap )
+{
+    Bitmap aBmp( rawBitmap.maSize, /*nBitCount*/24 );
+
+    Bitmap::ScopedWriteAccess pWrite(aBmp);
+    assert(pWrite.get());
+    if( !pWrite )
+        return BitmapEx();
+
+    auto nHeight = rawBitmap.maSize.getHeight();
+    auto nWidth = rawBitmap.maSize.getWidth();
+    for( long y = 0; y < nHeight; ++y )
+    {
+        sal_uInt8 const *p = rawBitmap.mpData.get() + y * nWidth;
+        Scanline pScanline = pWrite->GetScanline(y);
+        for (long x = 0; x < nWidth; ++x)
+        {
+            BitmapColor col(p[0], p[1], p[2]);
+            pWrite->SetPixelOnData(pScanline, x, col);
+            p += 3;
+        }
+    }
+    return aBmp;
+}
+
 }} // end vcl::bitmap
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
