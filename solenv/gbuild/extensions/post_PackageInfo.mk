@@ -55,7 +55,7 @@ define gb_PackageInfo_emit_l10n_for_one_alllangpackage
 endef
 
 define gb_PackageInfo_emit_l10n_for_one_mo
-@echo "$(patsubst $(INSTDIR)/%,%,$(call gb_MoTarget_get_install_target,$(1)$(2)))" >> $(gb_PackageInfo_get_target)/l10n-$(2).files
+@echo "$(patsubst $(INSTDIR)/%,%,$(call gb_MoTarget_get_install_target,$(shell $(SRCDIR)/solenv/bin/localestr $(2))/LC_MESSAGES/$(1)))" >> $(gb_PackageInfo_get_target)/l10n-$(2).files
 
 endef
 
