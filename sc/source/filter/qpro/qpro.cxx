@@ -32,6 +32,8 @@
 #include <document.hxx>
 #include <formulacell.hxx>
 #include <tools/stream.hxx>
+#include <docoptio.hxx>
+#include <scdll.hxx>
 #include <memory>
 
 ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pStyle )
@@ -154,8 +156,7 @@ ScQProReader::~ScQProReader()
         mpStream->SetBufferSize( 0 );
 }
 
-
-ErrCode ScQProReader::import( ScDocument *pDoc )
+ErrCode ScQProReader::parse( ScDocument *pDoc )
 {
     ErrCode eRet = ERRCODE_NONE;
     sal_uInt16 nVersion;
@@ -223,8 +224,30 @@ ErrCode ScQProReader::import( ScDocument *pDoc )
                 break;
         }
     }
+    return eRet;
+}
+
+ErrCode ScQProReader::import( ScDocument *pDoc )
+{
+    ErrCode eRet = parse(pDoc);
     pDoc->CalcAfterLoad();
     return eRet;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportQPW(SvStream &rStream)
+{
+    ScDLL::Init();
+    ScDocument aDocument;
+    ScDocOptions aDocOpt = aDocument.GetDocOptions();
+    aDocOpt.SetLookUpColRowNames(false);
+    aDocument.SetDocOptions(aDocOpt);
+    aDocument.MakeTable(0);
+    aDocument.EnableExecuteLink(false);
+    aDocument.SetInsertingFromOtherDoc(true);
+
+    ScQProReader aReader(&rStream);
+    ErrCode eRet = aReader.parse(&aDocument);
+    return eRet == ERRCODE_NONE;
 }
 
 bool ScQProReader::recordsLeft()
