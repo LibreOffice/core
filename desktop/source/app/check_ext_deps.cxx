@@ -114,7 +114,8 @@ SilentCommandEnv::SilentCommandEnv(
 
 SilentCommandEnv::~SilentCommandEnv()
 {
-    mpDesktop->SetSplashScreenText( OUString() );
+    if (mpDesktop)
+        mpDesktop->SetSplashScreenText(OUString());
 }
 
 
@@ -184,7 +185,7 @@ void SilentCommandEnv::push( uno::Any const & rStatus )
     OUString sText;
     mnLevel += 1;
 
-    if ( rStatus.hasValue() && ( rStatus >>= sText) )
+    if (mpDesktop && rStatus.hasValue() && (rStatus >>= sText))
     {
         if ( mnLevel <= 3 )
             mpDesktop->SetSplashScreenText( sText );
@@ -197,7 +198,7 @@ void SilentCommandEnv::push( uno::Any const & rStatus )
 void SilentCommandEnv::update( uno::Any const & rStatus )
 {
     OUString sText;
-    if ( rStatus.hasValue() && ( rStatus >>= sText) )
+    if (mpDesktop && rStatus.hasValue() && (rStatus >>= sText))
     {
         mpDesktop->SetSplashScreenText( sText );
     }
@@ -407,13 +408,13 @@ bool Desktop::CheckExtensionDependencies()
         return false;
 }
 
-void Desktop::SynchronizeExtensionRepositories()
+void Desktop::SynchronizeExtensionRepositories(bool bCleanedExtensionCache, Desktop* pDesktop)
 {
     uno::Reference< uno::XComponentContext > context(
         comphelper::getProcessComponentContext());
     uno::Reference< ucb::XCommandEnvironment > silent(
-        new SilentCommandEnv(context, this));
-    if (m_bCleanedExtensionCache) {
+        new SilentCommandEnv(context, pDesktop));
+    if (bCleanedExtensionCache) {
         deployment::ExtensionManager::get(context)->reinstallDeployedExtensions(
             true, "user", Reference<task::XAbortChannel>(), silent);
 #if !HAVE_FEATURE_MACOSX_SANDBOX
