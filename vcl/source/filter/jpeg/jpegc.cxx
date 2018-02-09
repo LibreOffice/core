@@ -35,6 +35,7 @@ extern "C" {
 #include "JpegReader.hxx"
 #include "JpegWriter.hxx"
 #include <memory>
+#include <unotools/configmgr.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graphicfilter.hxx>
 
@@ -202,6 +203,9 @@ void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputStream, 
 
     long nWidth = rContext.cinfo.output_width;
     long nHeight = rContext.cinfo.output_height;
+
+    if (nWidth > 2000 && nHeight > 2000 && utl::ConfigManager::IsFuzzing())
+        return;
 
     bool bGray = (rContext.cinfo.output_components == 1);
 
