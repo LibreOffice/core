@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_7b220b03",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-02-09T14:16:04Z",
+      "side": 1,
+      "message": "This link doesn’t work in HTTPS; remove “services.” from the URL",
+      "revId": "b5aabc2914a45da3bca30de57c1d9be74f9f7834",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
