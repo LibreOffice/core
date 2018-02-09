@@ -517,12 +517,12 @@ IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl, Button*, vo
 
     if ( bSeparate && m_pUserNameED->GetText().isEmpty() )
         m_pUserNameED->SetText( rConfigItem.GetMailAddress() );
-    else if ( m_pUserNameED->GetText() == rConfigItem.GetMailAddress() )
+    else if ( !bSeparate && m_pUserNameED->GetText() == rConfigItem.GetMailAddress() )
         m_pUserNameED->SetText("");
 
     if ( bNotSeparate && m_pInUsernameED->GetText().isEmpty() )
         m_pInUsernameED->SetText( rConfigItem.GetMailAddress() );
-    else if ( m_pInUsernameED->GetText() == rConfigItem.GetMailAddress() )
+    else if ( !bNotSeparate && m_pInUsernameED->GetText() == rConfigItem.GetMailAddress() )
         m_pInUsernameED->SetText("");
 
     m_pOutgoingServerFT->Enable(bSeparate);
