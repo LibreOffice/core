@@ -141,7 +141,11 @@ protected:
     SdrModel* mpModel;
     // translations for writer, which works in TWIPS
     void ForceMetricToItemPoolMetric(Pair& rPoint) const throw();
+    void ForceMetricToItemPoolMetric(Point& rPoint) const throw() { ForceMetricToItemPoolMetric(rPoint.toPair()); }
+    void ForceMetricToItemPoolMetric(Size& rPoint) const throw() { ForceMetricToItemPoolMetric(rPoint.toPair()); }
     void ForceMetricTo100th_mm(Pair& rPoint) const throw();
+    void ForceMetricTo100th_mm(Point& rPoint) const throw() { ForceMetricTo100th_mm(rPoint.toPair()); }
+    void ForceMetricTo100th_mm(Size& rPoint) const throw() { ForceMetricTo100th_mm(rPoint.toPair()); }
     // Dimension arrows change size/position on save/reload (#i59051#)
     void ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const throw();
     void ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) const throw();
