@@ -236,9 +236,22 @@ bool PluginHandler::checkIgnoreLocation(SourceLocation loc)
     return true;
 }
 
-bool PluginHandler::addRemoval( SourceLocation loc )
+// If we overlap with a previous area we modified, we cannot perform this change
+// without corrupting the source
+bool PluginHandler::checkOverlap(SourceRange range)
 {
-    return removals.insert( loc ).second;
+    SourceManager& SM = compiler.getSourceManager();
+    char const  *p1 = SM.getCharacterData( range.getBegin() );
+    char const *p2 = SM.getCharacterData( range.getEnd() );
+    for (std::pair<char const *, char const *> const & rPair : mvModifiedRanges)
+    {
+        if (rPair.first <= p1 && p1 <= rPair.second)
+            return false;
+        if (p1 <= rPair.second && rPair.first <= p2)
+            return false;
+    }
+    mvModifiedRanges.emplace_back(p1, p2);
+    return true;
 }
 
 void PluginHandler::HandleTranslationUnit( ASTContext& context )

@@ -54,10 +54,13 @@ public:
     DiagnosticBuilder report( DiagnosticsEngine::Level level, const char * plugin, StringRef message,
             CompilerInstance& compiler, SourceLocation loc = SourceLocation());
     bool ignoreLocation(SourceLocation loc);
-    bool addRemoval( SourceLocation loc );
     bool isDebugMode() const { return debugMode; }
     bool isLOOLMode() const { return !loolBasePath.empty(); }
     static bool isUnitTestMode();
+    // If we overlap with a previous area we modified, we cannot perform this change
+    // without corrupting the source
+    bool checkOverlap(SourceRange range);
+    bool addSourceModification(SourceRange range);
 private:
     void handleOption( const std::string& option );
     void createPlugins( std::set< std::string > rewriters );
@@ -67,12 +70,12 @@ private:
     StringRef const mainFileName;
     std::unordered_map<SourceLocation, bool> ignored_;
     Rewriter rewriter;
-    std::set< SourceLocation > removals;
     std::string scope;
     std::string warningsOnly;
     std::string loolBasePath;
     bool warningsAsErrors;
     bool debugMode = false;
+    std::vector<std::pair<char const*, char const*>> mvModifiedRanges;
 };
 
 /**

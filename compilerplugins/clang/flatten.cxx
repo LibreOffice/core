@@ -49,13 +49,11 @@ private:
     SourceRange extendOverComments(SourceRange range);
     std::string getSourceAsString(SourceRange range);
     std::string invertCondition(Expr const * condExpr, SourceRange conditionRange);
-    bool checkOverlap(SourceRange);
     bool isLargeCompoundStmt(Stmt const *);
 
     Stmt const * lastStmtInCompoundStmt = nullptr;
     FunctionDecl const * functionDecl = nullptr;
     CompoundStmt const * functionDeclBody = nullptr;
-    std::vector<std::pair<char const *, char const *>> mvModifiedRanges;
     Stmt const * mElseBranch = nullptr;
 };
 
@@ -283,11 +281,6 @@ bool Flatten::rewrite1(IfStmt const * ifStmt)
     if (!rewriter)
         return false;
 
-    // If we overlap with a previous area we modified, we cannot perform this change
-    // without corrupting the source
-    if (!checkOverlap(ifStmt->getSourceRange()))
-        return false;
-
     auto conditionRange = ignoreMacroExpansions(ifStmt->getCond()->getSourceRange());
     if (!conditionRange.isValid()) {
         return false;
@@ -341,11 +334,6 @@ bool Flatten::rewrite2(IfStmt const * ifStmt)
     if (!rewriter)
         return false;
 
-    // If we overlap with a previous area we modified, we cannot perform this change
-    // without corrupting the source
-    if (!checkOverlap(ifStmt->getSourceRange()))
-        return false;
-
     auto conditionRange = ignoreMacroExpansions(ifStmt->getCond()->getSourceRange());
     if (!conditionRange.isValid()) {
         return false;
@@ -388,11 +376,6 @@ bool Flatten::rewriteLargeIf(IfStmt const * ifStmt)
     if (!rewriter)
         return false;
 
-    // If we overlap with a previous area we modified, we cannot perform this change
-    // without corrupting the source
-    if (!checkOverlap(ifStmt->getSourceRange()))
-        return false;
-
     auto conditionRange = ignoreMacroExpansions(ifStmt->getCond()->getSourceRange());
     if (!conditionRange.isValid()) {
         return false;
@@ -425,24 +408,6 @@ bool Flatten::rewriteLargeIf(IfStmt const * ifStmt)
         return false;
     }
 
-    return true;
-}
-
-// If we overlap with a previous area we modified, we cannot perform this change
-// without corrupting the source
-bool Flatten::checkOverlap(SourceRange range)
-{
-    SourceManager& SM = compiler.getSourceManager();
-    char const  *p1 = SM.getCharacterData( range.getBegin() );
-    char const *p2 = SM.getCharacterData( range.getEnd() );
-    for (std::pair<char const *, char const *> const & rPair : mvModifiedRanges)
-    {
-        if (rPair.first <= p1 && p1 <= rPair.second)
-            return false;
-        if (p1 <= rPair.second && rPair.first <= p2)
-            return false;
-    }
-    mvModifiedRanges.emplace_back(p1, p2);
     return true;
 }
 
