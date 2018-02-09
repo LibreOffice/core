@@ -204,6 +204,8 @@ sub check_style($)
             print("and the clang-format rules. Fixing these now automatically.\n");
             print("Running '$clang_format -i " . join(" ", @bad_names) . "' for you...\n");
             system("$clang_format -i " . join(" ", @bad_names));
+            # TODO this stages all local modifications, staging originally
+            # unstaged hunks.
             system("git add " . join(" ", @bad_names));
             print("Done.\n");
         }
