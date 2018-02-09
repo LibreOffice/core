@@ -1320,7 +1320,7 @@ static void FindCmap(TrueTypeFont *ttf)
     }
 
     if (ttf->cmapType != CMAP_NOT_USABLE) {
-        if( (ttf->cmap - ttf->ptr + 2) > static_cast<sal_uInt32>(ttf->fsize) ) {
+        if( (ttf->cmap - ttf->ptr + 2U) > static_cast<sal_uInt32>(ttf->fsize) ) {
             ttf->cmapType = CMAP_NOT_USABLE;
             ttf->cmap = nullptr;
         }
