@@ -26,7 +26,8 @@ ScDrawObjData::ScDrawObjData() :
     SdrObjUserData( SdrInventor::ScOrSwDraw, SC_UD_OBJDATA ),
     maStart( ScAddress::INITIALIZE_INVALID ),
     maEnd( ScAddress::INITIALIZE_INVALID ),
-    meType( DrawingObject )
+    meType( DrawingObject ),
+    mbResizeWithCell( false )
 {
 }
 

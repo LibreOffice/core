@@ -100,7 +100,7 @@ public:
     void            CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const;
 
     void            SetPageAnchored();
-    void            SetCellAnchored();
+    void            SetCellAnchored(bool bResizeWithCell);
     ScAnchorType    GetAnchorType() const;
 
     void            UpdateIMap( SdrObject* pObj );

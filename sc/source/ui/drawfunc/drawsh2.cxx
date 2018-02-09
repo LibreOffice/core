@@ -101,6 +101,7 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Conditions / Toggles
             bDisableAnchor = true;
             rSet.DisableItem( SID_ANCHOR_PAGE );
             rSet.DisableItem( SID_ANCHOR_CELL );
+            rSet.DisableItem( SID_ANCHOR_CELL_RESIZE );
         }
     }
 
@@ -111,16 +112,25 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Conditions / Toggles
         case SCA_PAGE:
             rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, true ) );
             rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, false ) );
+            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL_RESIZE, false ) );
         break;
 
         case SCA_CELL:
-        rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, false ) );
-        rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, true ) );
+            rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, false ) );
+            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, true ) );
+            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL_RESIZE, false ) );
+        break;
+
+        case SCA_CELL_RESIZE:
+            rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, false ) );
+            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, false ) );
+            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL_RESIZE, true ) );
         break;
 
         default:
-        rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, false ) );
-        rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, false ) );
+            rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, false ) );
+            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, false ) );
+            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL_RESIZE, false ) );
         break;
         }
     }

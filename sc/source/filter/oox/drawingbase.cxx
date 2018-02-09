@@ -92,6 +92,8 @@ void ShapeAnchor::importAnchor( sal_Int32 nElement, const AttributeList& rAttrib
                     meEditAs = ANCHOR_ABSOLUTE;
                 else if ( sEditAs.equalsIgnoreAsciiCase("oneCell") )
                     meEditAs = ANCHOR_ONECELL;
+                else if (sEditAs.equalsIgnoreAsciiCase("twoCell") )
+                    meEditAs = ANCHOR_TWOCELL;
             }
         }
         break;

@@ -63,6 +63,7 @@ struct ScMyShape
     ScAddress       aEndAddress;
     sal_Int32       nEndX;
     sal_Int32       nEndY;
+    bool            bResizeWithCell;
     css::uno::Reference<css::drawing::XShape> xShape;
 
     bool operator<(const ScMyShape& aShape) const;
