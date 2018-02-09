@@ -71,8 +71,11 @@ public:
     {
         ANCHOR_INVALID,         /// Anchor type is unknown.
         ANCHOR_ABSOLUTE,        /// Absolute anchor (top-left corner and size in absolute units).
+                                /// Matches our "Page" anchor -> ScAnchorType::SCA_PAGE
         ANCHOR_ONECELL,         /// One-cell anchor (top-left corner at cell, size in absolute units).
+                                /// Matches our "Cell" anchor -> ScAnchorType::SCA_CELL
         ANCHOR_TWOCELL,         /// Two-cell anchor (top-left and bottom-right corner at cell).
+                                /// Matches our "Cell (resize with cell)" anchor -> ScAnchorType::SCA_CELL_RESIZE
         ANCHOR_VML
     };
     explicit            ShapeAnchor( const WorksheetHelper& rHelper );
