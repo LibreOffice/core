@@ -56,6 +56,7 @@
 #include <i18nlangtag/lang.h>
 #include <rtl/ref.hxx>
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
+#include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
@@ -225,7 +226,7 @@ class ImpEditView : public vcl::unohelper::DragAndDropClient
 
 private:
     EditView*                 pEditView;
-    std::unique_ptr<vcl::Cursor>  pCursor;
+    std::unique_ptr<vcl::Cursor, o3tl::default_delete<vcl::Cursor>>  pCursor;
     std::unique_ptr<Color>    pBackgroundColor;
     /// Containing view shell, if any.
     OutlinerViewShell*        mpViewShell;
