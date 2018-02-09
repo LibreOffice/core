@@ -560,7 +560,7 @@ class TopicsControl(ControlScroller):
         self.focus(self.getControl(lowerRow, control))
 
     '''
-    changes the values of the given rows with eachother
+    changes the values of the given rows with each other
     @param row1 one can figure out what this parameter is...
     @param row2 one can figure out what this parameter is...
     '''

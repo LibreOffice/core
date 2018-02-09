@@ -644,7 +644,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     //data is the same as the current one
     if (bNowApo && InEqualApo(nCellLevel))
     {
-        // two bordering eachother
+        // two bordering each other
         if (!TestSameApo(aRet, pTabPos))
             aRet.mbStopApo = aRet.mbStartApo = true;
     }

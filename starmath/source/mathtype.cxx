@@ -2892,7 +2892,7 @@ bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
     if (xfEMBELL(nTag))
     {
         //A bit tricky, the character emblishments for
-        //mathtype can all be listed after eachother, in
+        //mathtype can all be listed after each other, in
         //starmath some must go before the character and some
         //must go after. In addition some of the emblishments
         //may repeated and in starmath some of these groups
