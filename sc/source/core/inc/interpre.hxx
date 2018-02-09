@@ -25,6 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/tokenarray.hxx>
+#include <sfx2/linkmgr.hxx>
 #include "scdll.hxx"
 #include "scdllapi.h"
 #include "types.hxx"
@@ -156,6 +157,7 @@ private:
     ScAddress   aPos;
     ScTokenArray& rArr;
     ScDocument* pDok;
+    sfx2::LinkManager* mpLinkManager;
     svl::SharedStringPool& mrStrPool;
     formula::FormulaTokenRef  xResult;
     ScJumpMatrix*   pJumpMatrix;        // currently active array condition, if any
@@ -896,6 +898,9 @@ public:
 
     void SetError(sal_uInt16 nError)
             { if (nError && !nGlobalError) nGlobalError = nError; }
+
+    void SetLinkManager(sfx2::LinkManager* pLinkMgr)
+            { mpLinkManager = pLinkMgr; }
 
     sal_uInt16                  GetError() const            { return nGlobalError; }
     formula::StackVar           GetResultType() const       { return xResult->GetType(); }
