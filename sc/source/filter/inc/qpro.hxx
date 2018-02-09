@@ -50,7 +50,8 @@ public:
     sal_uInt16 getLength() { return mnLength; }
     OUString readString(sal_uInt16 nLength);
 
-    ErrCode import( ScDocument *pDoc );
+    ErrCode parse( ScDocument *pDoc );
+    ErrCode import( ScDocument *pDoc ); //parse + CalcAfterLoad
     ErrCode readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pStyle );
 };
 #endif

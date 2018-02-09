@@ -222,19 +222,6 @@ ErrCode ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocument
     return eRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportQPW(SvStream &rStream)
-{
-    ScDLL::Init();
-    ScDocument aDocument;
-    ScDocOptions aDocOpt = aDocument.GetDocOptions();
-    aDocOpt.SetLookUpColRowNames(false);
-    aDocument.SetDocOptions(aDocOpt);
-    aDocument.MakeTable(0);
-    aDocument.EnableExecuteLink(false);
-    aDocument.SetInsertingFromOtherDoc(true);
-    return ScFormatFilter::Get().ScImportQuattroPro(&rStream, &aDocument) == ERRCODE_NONE;
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportCalcRTF(SvStream &rStream)
 {
     ScDLL::Init();
