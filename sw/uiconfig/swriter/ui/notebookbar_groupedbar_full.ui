@@ -6105,7 +6105,7 @@
                     </child>
                     <style>
                       <class name="context-Text"/>
-                      <class name="context-Default"/>
+                      <class name="context-default"/>
                     </style>
                   </object>
                   <packing>
