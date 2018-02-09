@@ -60,7 +60,10 @@ sub check_style()
     if (scalar @bad_names)
     {
         print("\nERROR: The above differences were found between the code to commit \n");
-        print("and the clang-format rules.\n");
+        print("and the clang-format rules. Tips:\n");
+        print("\n- You may run '/opt/lo/bin/clang-format -i <problematic file>' to fix up style automatically.\n");
+        print("- See solenv/clang-format/README on where to get the required version of clang-format binaries.\n");
+        print("- If you renamed a blacklisted file, update solenv/clang-format/blacklist accordingly to keep it blacklisted.\n");
         print("\nsolenv/clang-format/check-last-commit: KO\n");
         exit(1);
     }
