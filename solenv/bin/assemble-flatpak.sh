@@ -43,7 +43,7 @@ done
 ## doesn't show more than five screenshots anyway, so restrict to one each from
 ## the five libreoffice-*.appdata.xml: Writer, Calc, Impress, Draw, Base):
 mkdir /app/share/appdata
-cat <<\EOF >/app/share/appdata/org.libreoffice.LibreOffice.appdata.xml
+cat <<EOF >/app/share/appdata/org.libreoffice.LibreOffice.appdata.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
  <id>org.libreoffice.LibreOffice.desktop</id>
@@ -98,6 +98,11 @@ cat <<\EOF >/app/share/appdata/org.libreoffice.LibreOffice.appdata.xml
   <kudo>ModernToolkit</kudo>
   <kudo>UserDocs</kudo>
  </kudos>
+ <releases>
+  <release
+    version="${LIBO_VERSION_MAJOR?}.${LIBO_VERSION_MINOR?}.${LIBO_VERSION_MICRO?}.${LIBO_VERSION_PATCH?}"
+    date="$(date +%Y-%m-%d)"/>
+ </releases>
 </component>
 EOF
 
