@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_863da2bd",
+        "filename": "vcl/source/fontsubset/sft.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1501,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-09T17:04:29Z",
+      "side": 1,
+      "message": "... facenum isn\u0027t read from the file so shoudn\u0027t need to check the multiplication",
+      "revId": "7a5fab92a7eba6b58ba27f08d4f691f55dc4311e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
