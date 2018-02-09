@@ -327,12 +327,17 @@ void ORoadmap::UpdatefollowingHyperLabels(ItemIndex _nIndex)
     const HL_Vector& rItems = m_pImpl->getHyperLabels();
     if ( _nIndex < static_cast<ItemIndex>(rItems.size()) )
     {
-        for (auto const& item : rItems)
+        for ( HL_Vector::const_iterator i = rItems.begin() + _nIndex;
+              i != rItems.end();
+              ++i, ++_nIndex
+            )
         {
-            item->SetIndex( _nIndex );
-            item->SetPosition( GetPreviousHyperLabel( _nIndex ) );
-            ++_nIndex;
+            RoadmapItem* pItem = *i;
+
+            pItem->SetIndex( _nIndex );
+            pItem->SetPosition( GetPreviousHyperLabel( _nIndex ) );
         }
+
     }
     if ( ! m_pImpl->isComplete() )
     {
