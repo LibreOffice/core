@@ -166,7 +166,7 @@ void UnoInterfaceToUniqueIdentifierMapper::insertReference( const OUString& rIde
     // so we make sure we will never generate
     // an integer value like this one
     sal_Int32 nId = rIdentifier.copy(2).toInt32();
-    if( mnNextId <= nId )
+    if (nId > 0 && mnNextId <= static_cast<sal_uInt32>(nId))
         mnNextId = nId + 1;
 }
 
