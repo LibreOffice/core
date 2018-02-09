@@ -20,6 +20,7 @@
 #include <comphelper/string.hxx>
 #include <vcl/builderfactory.hxx>
 #include <actctrl.hxx>
+#include <vcl/toolbox.hxx>
 
 bool NumEditAction::EventNotify( NotifyEvent& rNEvt )
 {
@@ -29,14 +30,24 @@ bool NumEditAction::EventNotify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         const vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
+        const sal_uInt16 aCode = aKeyCode.GetCode();
         const sal_uInt16 nModifier = aKeyCode.GetModifier();
-        if( aKeyCode.GetCode() == KEY_RETURN &&
+        if( aCode == KEY_RETURN &&
                 !nModifier)
         {
             aActionLink.Call( *this );
             bHandled = true;
         }
-
+        else
+        {
+            vcl::Window* pParent = GetParent();
+            if ( pParent != nullptr && aCode == KEY_TAB &&
+                 pParent->GetType() == WindowType::TOOLBOX )
+            {
+                static_cast<ToolBox*>(pParent)->ChangeHighlightUpDn( aKeyCode.IsShift() );
+                bHandled = true;
+            }
+        }
     }
     if(!bHandled)
         NumericField::EventNotify(rNEvt);

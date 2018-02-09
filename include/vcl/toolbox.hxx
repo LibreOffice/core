@@ -510,6 +510,8 @@ public:
     static Size         GetDefaultImageSize(ToolBoxButtonSize eToolBoxButtonSize);
     Size                GetDefaultImageSize() const;
     void                ChangeHighlight( ImplToolItems::size_type nPos );
+    bool                ChangeHighlightUpDn( bool bUp, bool bNoCyle = false );
+
 
     void SetToolbarLayoutMode( ToolBoxLayoutMode eLayout );
     void statusChanged(const css::frame::FeatureStateEvent& rEvent);

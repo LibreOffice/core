@@ -571,12 +571,16 @@ IMPL_LINK(FocusManager, ChildEventListener, VclWindowEvent&, rEvent, void)
                         break;
 
                     case KEY_TAB:
+                        {
+                        WindowType aWindowType = pSource->GetType();
                         if (mpFirstFocusedContentControl!=nullptr
-                            && mpLastFocusedWindow == mpFirstFocusedContentControl)
+                            && ( mpLastFocusedWindow == mpFirstFocusedContentControl
+                                 && !( WindowType::EDIT == aWindowType || WindowType::SPINFIELD == aWindowType ) ))
                         {
                             // Move focus back to panel (or deck)
                             // title.
                             FocusPanel(aLocation.mnIndex, true);
+                        }
                         }
                         break;
 
