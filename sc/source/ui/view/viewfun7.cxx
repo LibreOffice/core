@@ -171,7 +171,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                     pScDrawView->AddUndo(new SdrUndoInsertObj( *pNewObj ));
 
                     if (ScDrawLayer::IsCellAnchored(*pNewObj))
-                        ScDrawLayer::SetCellAnchoredFromPosition(*pNewObj, *GetViewData().GetDocument(), nTab);
+                        ScDrawLayer::SetCellAnchoredFromPosition(*pNewObj, *GetViewData().GetDocument(), nTab,
+                                                                 ScDrawLayer::IsResizeWithCell(*pNewObj));
                 }
             }
 
@@ -238,7 +239,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                     pObject->NbcSetLayer(SC_LAYER_CONTROLS);
 
                 if (ScDrawLayer::IsCellAnchored(*pObject))
-                    ScDrawLayer::SetCellAnchoredFromPosition(*pObject, *GetViewData().GetDocument(), nTab);
+                    ScDrawLayer::SetCellAnchoredFromPosition(*pObject, *GetViewData().GetDocument(), nTab,
+                                                             ScDrawLayer::IsResizeWithCell(*pObject));
 
                 pObject = aIter.Next();
             }
