@@ -290,12 +290,16 @@ void LwpDocument::RegisterStylesInPara()
     if (xContent.is())
     {
         rtl::Reference<LwpStory> xStory(dynamic_cast<LwpStory*>(xContent->GetChildHead().obj(VO_STORY).get()));
+        std::set<LwpStory*> aSeen;
         while (xStory.is())
         {
+            aSeen.insert(xStory.get());
             //Register the child para
             xStory->SetFoundry(m_pFoundry);
             xStory->DoRegisterStyle();
             xStory.set(dynamic_cast<LwpStory*>(xStory->GetNext().obj(VO_STORY).get()));
+            if (aSeen.find(xStory.get()) != aSeen.end())
+                throw std::runtime_error("loop in conversion");
         }
     }
 }
