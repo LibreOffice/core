@@ -4,11 +4,27 @@
     "runtime-version": "3.24",
     "sdk": "org.gnome.Sdk",
     "sdk-extensions": [
+        "org.freedesktop.Sdk.Extension.gcc7",
         "org.freedesktop.Sdk.Extension.openjdk9"
     ],
+    "build-options": {
+        "env": {
+            "CC": "/usr/lib/sdk/gcc7/bin/gcc",
+            "CXX": "/usr/lib/sdk/gcc7/bin/g++",
+            "LD_LIBRARY_PATH": "/usr/lib/sdk/gcc7/lib"
+        }
+    },
     "command": "/app/libreoffice/program/soffice",
     "separate-locales": false,
     "modules": [
+        {
+            "name": "gcc7",
+            "buildsystem": "simple",
+            "build-commands": [
+                "mkdir -p /app/lib",
+                "cp -d /usr/lib/sdk/gcc7/lib/lib{gcc_s.so.1,stdc++.so.6*} /app/lib"
+            ]
+        },
         {
             "name": "openjdk",
             "buildsystem": "simple",
