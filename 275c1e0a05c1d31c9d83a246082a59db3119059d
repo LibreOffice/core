@@ -16,6 +16,24 @@
       "revId": "275c1e0a05c1d31c9d83a246082a59db3119059d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_b82ba993",
+        "filename": "vcl/unx/generic/window/salframe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-02-09T08:42:40Z",
+      "side": 1,
+      "message": "Oh yes, will fix with follow-up commit, thanks for spotting this :)",
+      "parentUuid": "fa31d9ce_b8548921",
+      "revId": "275c1e0a05c1d31c9d83a246082a59db3119059d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
