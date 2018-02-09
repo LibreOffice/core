@@ -161,6 +161,7 @@ interface TableDraw
     SID_ANCHOR_PAGE         [ ExecMethod = ExecDrawFunc; StateMethod = GetState; Export = FALSE; ]
     SID_ANCHOR_TOGGLE       [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
     SID_ANCHOR_CELL         [ ExecMethod = ExecDrawFunc; StateMethod = GetState; Export = FALSE; ]
+    SID_ANCHOR_CELL_RESIZE  [ ExecMethod = ExecDrawFunc; StateMethod = GetState; Export = FALSE; ]
     // FontWork:
     SID_FONTWORK            [ ExecMethod = ExecDrawFunc; StateMethod = GetState; Export = FALSE; ]
     SID_FORMTEXT_STYLE      [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]

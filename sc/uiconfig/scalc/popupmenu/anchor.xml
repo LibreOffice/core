@@ -8,6 +8,7 @@
  *
 -->
 <menu:menupopup xmlns:menu="http://openoffice.org/2001/menu">
-  <menu:menuitem menu:id=".uno:SetAnchorToPage" menu:style="radio"/>
   <menu:menuitem menu:id=".uno:SetAnchorToCell" menu:style="radio"/>
+  <menu:menuitem menu:id=".uno:SetAnchorToCellResize" menu:style="radio"/>
+  <menu:menuitem menu:id=".uno:SetAnchorToPage" menu:style="radio"/>
 </menu:menupopup>
