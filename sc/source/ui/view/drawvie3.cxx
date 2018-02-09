@@ -80,7 +80,7 @@ void ScDrawView::SetPageAnchored()
     }
 }
 
-void ScDrawView::SetCellAnchored()
+void ScDrawView::SetCellAnchored(bool bResizeWithCell)
 {
     if (!pDoc)
         return;
@@ -95,7 +95,7 @@ void ScDrawView::SetCellAnchored()
         {
             SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
             AddUndo (new ScUndoAnchorData( pObj, pDoc, nTab ));
-            ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, nTab);
+            ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, nTab, bResizeWithCell);
         }
         EndUndo();
 
@@ -111,6 +111,7 @@ ScAnchorType ScDrawView::GetAnchorType() const
 {
     bool bPage = false;
     bool bCell = false;
+    bool bCellResize = false;
     if( AreObjectsMarked() )
     {
         const SdrMarkList* pMark = &GetMarkedObjectList();
@@ -118,16 +119,21 @@ ScAnchorType ScDrawView::GetAnchorType() const
         for( size_t i=0; i<nCount; ++i )
         {
             const SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
-            if( ScDrawLayer::GetAnchorType( *pObj ) == SCA_CELL )
+            const ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType( *pObj );
+            if( aAnchorType == SCA_CELL )
                 bCell =true;
+            else if (aAnchorType == SCA_CELL_RESIZE)
+                bCellResize = true;
             else
                 bPage = true;
         }
     }
-    if( bPage && !bCell )
+    if( bPage && !bCell && !bCellResize )
         return SCA_PAGE;
-    if( !bPage && bCell )
+    if( !bPage && bCell && !bCellResize )
         return SCA_CELL;
+    if( !bPage && !bCell && bCellResize )
+        return SCA_CELL_RESIZE;
     return SCA_DONTKNOW;
 }
 
@@ -162,7 +168,7 @@ void adjustAnchoredPosition(const SdrHint& rHint, const ScDocument& rDoc, SCTAB 
         // anchored on all selected sheets.
         return;
 
-    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rDoc, pAnchor->maStart.Tab());
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rDoc, pAnchor->maStart.Tab(), pAnchor->mbResizeWithCell);
 }
 
 }
