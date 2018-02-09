@@ -672,9 +672,9 @@ void AccessibleSlideSorterView::Implementation::UpdateChildren()
         return;
     }
 
-    const Pair aRange (mrSlideSorter.GetView().GetVisiblePageRange());
-    mnFirstVisibleChild = aRange.A();
-    mnLastVisibleChild = aRange.B();
+    const Range aRange (mrSlideSorter.GetView().GetVisiblePageRange());
+    mnFirstVisibleChild = aRange.Min();
+    mnLastVisibleChild = aRange.Max();
 
     // Release all children.
     Clear();

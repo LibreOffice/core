@@ -69,7 +69,7 @@ inline bool equal(Pair const & p1, Pair const & p2)
 
 // Point
 
-class SAL_WARN_UNUSED SAL_DLLPUBLIC_EXPORT Point : public Pair
+class SAL_WARN_UNUSED SAL_DLLPUBLIC_EXPORT Point final : protected Pair
 {
 public:
                         Point() {}
@@ -100,6 +100,11 @@ public:
     long                getY() const { return Y(); }
     void                setX(long nX)  { X() = nX; }
     void                setY(long nY)  { Y() = nY; }
+
+    Pair const &        toPair() const { return *this; }
+    Pair &              toPair() { return *this; }
+
+    using Pair::toString;
 };
 
 inline void Point::Move( long nHorzMove, long nVertMove )
@@ -158,7 +163,7 @@ inline Point operator/( const Point &rVal1, const long nVal2 )
 
 inline bool operator ==(Point const & p1, Point const & p2)
 {
-    return tools::detail::equal(p1, p2);
+    return tools::detail::equal(p1.toPair(), p2.toPair());
 }
 
 inline bool operator !=(Point const & p1, Point const & p2)
@@ -175,7 +180,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
 // Size
 
-class SAL_WARN_UNUSED Size : public Pair
+class SAL_WARN_UNUSED Size final : protected Pair
 {
 public:
                     Size() {}
@@ -191,11 +196,16 @@ public:
     long            getHeight() const { return Height(); }
     void            setWidth(long nWidth)  { Width() = nWidth; }
     void            setHeight(long nHeight)  { Height() = nHeight; }
+
+    Pair const &    toPair() const { return *this; }
+    Pair &          toPair() { return *this; }
+
+    using Pair::toString;
 };
 
 inline bool operator ==(Size const & s1, Size const & s2)
 {
-    return tools::detail::equal(s1, s2);
+    return tools::detail::equal(s1.toPair(), s2.toPair());
 }
 
 inline bool operator !=(Size const & s1, Size const & s2)
@@ -214,7 +224,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
 #define RANGE_MAX   LONG_MAX
 
-class SAL_WARN_UNUSED Range : public Pair
+class SAL_WARN_UNUSED Range final : protected Pair
 {
 public:
                     Range() {}
@@ -230,6 +240,11 @@ public:
     bool            IsInside( long nIs ) const;
 
     void            Justify();
+
+    Pair const &    toPair() const { return *this; }
+    Pair &          toPair() { return *this; }
+
+    using Pair::toString;
 };
 
 inline bool Range::IsInside( long nIs ) const
@@ -249,7 +264,7 @@ inline void Range::Justify()
 
 inline bool operator ==(Range const & r1, Range const & r2)
 {
-    return tools::detail::equal(r1, r2);
+    return tools::detail::equal(r1.toPair(), r2.toPair());
 }
 
 inline bool operator !=(Range const & r1, Range const & r2)
@@ -269,7 +284,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
 #define SELECTION_MIN   LONG_MIN
 #define SELECTION_MAX   LONG_MAX
 
-class SAL_WARN_UNUSED Selection : public Pair
+class SAL_WARN_UNUSED Selection final : protected Pair
 {
 public:
                     Selection() {}
@@ -292,6 +307,11 @@ public:
     long            getMin() const { return Min(); }
     void            setMin(long nMin)  { Min() = nMin; }
     void            setMax(long nMax)  { Max() = nMax; }
+
+    Pair const &    toPair() const { return *this; }
+    Pair &          toPair() { return *this; }
+
+    using Pair::toString;
 };
 
 inline bool Selection::IsInside( long nIs ) const
@@ -311,7 +331,7 @@ inline void Selection::Justify()
 
 inline bool operator ==(Selection const & s1, Selection const & s2)
 {
-    return tools::detail::equal(s1, s2);
+    return tools::detail::equal(s1.toPair(), s2.toPair());
 }
 
 inline bool operator !=(Selection const & s1, Selection const & s2)
@@ -341,7 +361,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
 /// Ok, now is the time for despair.
 namespace tools
 {
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Rectangle
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Rectangle final
 {
     static constexpr short RECT_EMPTY = -32767;
 public:
@@ -713,6 +733,15 @@ inline std::basic_ostream<charT, traits> & operator <<(
         return stream << rectangle.getWidth() << 'x' << rectangle.getHeight()
                       << "@(" << rectangle.getX() << ',' << rectangle.getY() << ")";
 }
+
+inline SvStream& ReadPair( SvStream& rIStream, Point& v ) { return ReadPair(rIStream, v.toPair()); }
+inline SvStream& WritePair( SvStream& rOStream, const Point& v ) { return WritePair(rOStream, v.toPair()); }
+inline SvStream& ReadPair( SvStream& rIStream, Size& v ) { return ReadPair(rIStream, v.toPair()); }
+inline SvStream& WritePair( SvStream& rOStream, const Size& v ) { return WritePair(rOStream, v.toPair()); }
+inline SvStream& ReadPair( SvStream& rIStream, Range& v ) { return ReadPair(rIStream, v.toPair()); }
+inline SvStream& WritePair( SvStream& rOStream, const Range& v ) { return WritePair(rOStream, v.toPair()); }
+inline SvStream& ReadPair( SvStream& rIStream, Selection& v ) { return ReadPair(rIStream, v.toPair()); }
+inline SvStream& WritePair( SvStream& rOStream, const Selection& v ) { return WritePair(rOStream, v.toPair()); }
 
 #endif
 

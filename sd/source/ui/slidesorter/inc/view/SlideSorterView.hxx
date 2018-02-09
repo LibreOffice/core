@@ -152,7 +152,7 @@ public:
             The returned pair of page object indices is empty when the
             second index is lower than the first.
     */
-    Pair const & GetVisiblePageRange();
+    Range const & GetVisiblePageRange();
 
     /** Add a shape to the page.  Typically used from inside
         PostModelChange().
