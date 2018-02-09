@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_9b35ffdb",
+        "filename": "offapi/com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-02-09T09:29:52Z",
+      "side": 1,
+      "message": "This one is since 6.0.",
+      "revId": "9bdf2dc76755ebc182b6815bd21855dae66b1809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
