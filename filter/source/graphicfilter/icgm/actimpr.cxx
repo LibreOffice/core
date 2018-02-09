@@ -545,7 +545,7 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint const & rCenter, FloatPoint
 
 void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
 {
-    if ( pBmpDesc->mbStatus && pBmpDesc->mpBitmap )
+    if ( pBmpDesc->mbStatus && !!pBmpDesc->mxBitmap )
     {
         FloatPoint aOrigin = pBmpDesc->mnOrigin;
         double fdx = pBmpDesc->mndx;
@@ -555,7 +555,7 @@ void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
         if ( pBmpDesc->mbVMirror )
             nMirr |= BmpMirrorFlags::Vertical;
         if ( nMirr != BmpMirrorFlags::NONE )
-            pBmpDesc->mpBitmap->Mirror( nMirr );
+            pBmpDesc->mxBitmap.Mirror( nMirr ); // FIXME
 
         mpCGM->ImplMapPoint( aOrigin );
         mpCGM->ImplMapX( fdx );
@@ -571,9 +571,8 @@ void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
                 ImplSetOrientation( aOrigin, pBmpDesc->mnOrientation );
             }
 
-            uno::Reference< awt::XBitmap > xBitmap( VCLUnoHelper::CreateBitmap( BitmapEx( *( pBmpDesc->mpBitmap ) ) ) );
+            uno::Reference< awt::XBitmap > xBitmap( VCLUnoHelper::CreateBitmap( pBmpDesc->mxBitmap ) );
             maXPropSet->setPropertyValue( "GraphicObjectFillBitmap", uno::Any(xBitmap) );
-
         }
     }
 }

@@ -20,9 +20,9 @@
 #ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_BITMAP_HXX
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_BITMAP_HXX
 
-#include <memory>
 #include "cgm.hxx"
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vector>
 
 class CGM;
 
@@ -30,8 +30,7 @@ class CGMBitmapDescriptor
 {
     public:
         sal_uInt8*              mpBuf;
-        Bitmap*                 mpBitmap;
-        BitmapWriteAccess*      mpAcc;
+        BitmapEx                mxBitmap;
         bool                mbStatus;
         bool                mbVMirror;
         sal_uInt32              mnDstBitsPerPixel;
@@ -48,8 +47,6 @@ class CGMBitmapDescriptor
 
         CGMBitmapDescriptor()
             : mpBuf(nullptr)
-            , mpBitmap(nullptr)
-            , mpAcc(nullptr)
             , mbStatus(false)
             , mbVMirror(false)
             , mnDstBitsPerPixel(0)
@@ -62,12 +59,6 @@ class CGMBitmapDescriptor
             , mnLocalColorPrecision(0)
             , mnCompressionMode(0)
             { };
-        ~CGMBitmapDescriptor()
-        {
-            if ( mpAcc )
-                ::Bitmap::ReleaseAccess( mpAcc );
-            delete mpBitmap;
-        };
 };
 
 class CGMBitmap
@@ -76,7 +67,7 @@ class CGMBitmap
     std::unique_ptr<CGMBitmapDescriptor>
                             pCGMBitmapDescriptor;
     bool                    ImplGetDimensions( CGMBitmapDescriptor& );
-    void                    ImplSetCurrentPalette( CGMBitmapDescriptor& );
+    std::vector<Color>      ImplGeneratePalette( CGMBitmapDescriptor& );
     void                    ImplGetBitmap( CGMBitmapDescriptor& );
     void                    ImplInsert( CGMBitmapDescriptor const & rSource, CGMBitmapDescriptor& rDest );
 public:
