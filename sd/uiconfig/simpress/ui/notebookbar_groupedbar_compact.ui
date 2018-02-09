@@ -3133,7 +3133,7 @@
                                       <object class="GtkToolButton" id="DrawText3">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:DrawText</property>
+                                        <property name="action_name">.uno:Text</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -4462,7 +4462,7 @@
                                       <object class="GtkToolButton" id="DrawText4">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:DrawText</property>
+                                        <property name="action_name">.uno:Text</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -6092,7 +6092,7 @@
                                       <object class="GtkToolButton" id="DrawText2">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:DrawText</property>
+                                        <property name="action_name">.uno:Text</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
