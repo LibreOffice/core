@@ -42,8 +42,8 @@
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
     <Markers>
-      <QuotationStart>‘</QuotationStart>
-      <QuotationEnd>’</QuotationEnd>
+      <QuotationStart>‹</QuotationStart>
+      <QuotationEnd>›</QuotationEnd>
       <DoubleQuotationStart>«</DoubleQuotationStart>
       <DoubleQuotationEnd>»</DoubleQuotationEnd>
     </Markers>
