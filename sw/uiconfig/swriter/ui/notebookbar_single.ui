@@ -20,6 +20,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
+            <property name="margin_top">6</property>
+            <property name="margin_bottom">6</property>
             <property name="spacing">3</property>
             <child>
               <object class="sfxlo-NotebookbarToolBox" id="file">
@@ -761,7 +763,7 @@
               </packing>
             </child>
             <style>
-              <class name="context-Text"/>
+              <class name="context-any"/>
             </style>
           </object>
           <packing>
