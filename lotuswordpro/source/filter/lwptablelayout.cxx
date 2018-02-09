@@ -82,6 +82,7 @@
 #include "lwpframelayout.hxx"
 #include <xfilter/xfparastyle.hxx>
 #include <memory>
+#include <set>
 
 LwpSuperTableLayout::LwpSuperTableLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpPlacableLayout(objHdr, pStrm)
@@ -230,8 +231,10 @@ double LwpSuperTableLayout::GetTableWidth()
             LwpObjectID& rColumnID = pTableLayout->GetColumnLayoutHead();
             LwpColumnLayout * pColumnLayout = dynamic_cast<LwpColumnLayout *>(rColumnID.obj().get());
             double dColumnWidth = dDefaultWidth;
+            std::set<LwpColumnLayout*> aSeen;
             while (pColumnLayout)
             {
+                aSeen.insert(pColumnLayout);
                 if(pColumnLayout->GetColumnID() == i)
                 {
                     dColumnWidth = pColumnLayout->GetWidth();
@@ -239,6 +242,8 @@ double LwpSuperTableLayout::GetTableWidth()
                 }
                 rColumnID = pColumnLayout->GetNext();
                 pColumnLayout = dynamic_cast<LwpColumnLayout *>(rColumnID.obj().get());
+                if (aSeen.find(pColumnLayout) != aSeen.end())
+                    throw std::runtime_error("loop in conversion");
             }
             dWidth += dColumnWidth;
         }
