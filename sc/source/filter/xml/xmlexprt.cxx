@@ -572,6 +572,7 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
                 aMyShape.nEndX = pAnchor->maEndOffset.X();
                 aMyShape.nEndY = pAnchor->maEndOffset.Y();
                 aMyShape.xShape = xShape;
+                aMyShape.bResizeWithCell = ScDrawLayer::IsResizeWithCell(*pSdrObj);
                 pSharedData->AddNewShape(aMyShape);
                 pSharedData->SetLastColumn(nTable, pAnchor->maStart.Col());
                 pSharedData->SetLastRow(nTable, pAnchor->maStart.Row());
@@ -3499,7 +3500,10 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
             {
                 if (bNegativePage)
                     aPoint.X = 2 * aItr->xShape->getPosition().X + aItr->xShape->getSize().Width - aPoint.X;
-                if ( aItr->xShape->getShapeType() != "com.sun.star.drawing.CaptionShape" )
+
+                // We only write the end address if we want the shape to resize with the cell
+                if ( aItr->bResizeWithCell &&
+                    aItr->xShape->getShapeType() != "com.sun.star.drawing.CaptionShape" )
                 {
                     OUString sEndAddress;
                     ScRangeStringConverter::GetStringFromAddress(sEndAddress, aItr->aEndAddress, pDoc, FormulaGrammar::CONV_OOO);

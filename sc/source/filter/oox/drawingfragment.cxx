@@ -295,7 +295,8 @@ void DrawingFragment::onEndElement()
                         SdrObject* pObj = SdrObject::getSdrObjectFromXShape( mxShape->getXShape() );
                         if ( pObj )
                         {
-                             ScDrawLayer::SetCellAnchoredFromPosition( *pObj, getScDocument(), static_cast<SCTAB>( getSheetIndex() ) );
+                            bool bResizeWithCell = mxAnchor->getEditAs() == ShapeAnchor::ANCHOR_TWOCELL;
+                            ScDrawLayer::SetCellAnchoredFromPosition( *pObj, getScDocument(), static_cast<SCTAB>( getSheetIndex() ), bResizeWithCell );
                         }
                     }
                 }

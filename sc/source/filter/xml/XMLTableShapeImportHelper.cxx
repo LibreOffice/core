@@ -92,6 +92,7 @@ void XMLTableShapeImportHelper::finishShape(
             aAnchor.maStart = ScAddress(aStartCell.Column, aStartCell.Row, aStartCell.Sheet);
             awt::Point aStartPoint(rShape->getPosition());
             aAnchor.maStartOffset = Point(aStartPoint.X, aStartPoint.Y);
+            aAnchor.mbResizeWithCell = false;
 
             sal_Int32 nEndX(-1);
             sal_Int32 nEndY(-1);
@@ -115,6 +116,8 @@ void XMLTableShapeImportHelper::finishShape(
                         sal_Int32 nOffset(0);
                         ScRangeStringConverter::GetAddressFromString(aEndCell, rValue, static_cast<ScXMLImport&>(mrImporter).GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset);
                         aAnchor.maEnd = ScAddress(aEndCell.Column, aEndCell.Row, aEndCell.Sheet);
+                        // When the cell end address is set, we let the shape resize with the cell
+                        aAnchor.mbResizeWithCell = true;
                     }
                     else if (IsXMLToken(aLocalName, XML_END_X))
                     {

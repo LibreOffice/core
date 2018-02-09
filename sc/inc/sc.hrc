@@ -448,8 +448,9 @@
 #define DRAW_BAR_START          (RID_INPUTBAR_END)
 #define SID_ANCHOR_PAGE         (DRAW_BAR_START+24)
 #define SID_ANCHOR_CELL         (DRAW_BAR_START+25)
-#define SID_ANCHOR_TOGGLE       (DRAW_BAR_START+26)
-#define SID_ORIGINALSIZE        (DRAW_BAR_START+27)
+#define SID_ANCHOR_CELL_RESIZE  (DRAW_BAR_START+26)
+#define SID_ANCHOR_TOGGLE       (DRAW_BAR_START+27)
+#define SID_ORIGINALSIZE        (DRAW_BAR_START+28)
 
 #define DRAW_BAR_END            (DRAW_BAR_START+50)
 
@@ -906,6 +907,7 @@
 
 #define STR_ANCHOR_TO_CELL       (STR_START + 223)
 #define STR_ANCHOR_TO_PAGE       (STR_START + 224)
+#define STR_ANCHOR_TO_CELL_RESIZE (STR_START + 225)
 
 // navigator - in the same order as SC_CONTENT_...
 #define SCSTR_CONTENT_ROOT      (STR_START + 250)

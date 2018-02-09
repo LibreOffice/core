@@ -53,7 +53,8 @@ ScDrawObjData::ScDrawObjData() :
     SdrObjUserData( SC_DRAWLAYER, SC_UD_OBJDATA ),
     maStart( ScAddress::INITIALIZE_INVALID ),
     maEnd( ScAddress::INITIALIZE_INVALID ),
-    meType( DrawingObject )
+    meType( DrawingObject ),
+    mbResizeWithCell( false )
 {
 }
 

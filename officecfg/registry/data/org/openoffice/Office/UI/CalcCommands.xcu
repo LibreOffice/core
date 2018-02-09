@@ -1894,6 +1894,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">To P~age</value>
         </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Anchor to p~age</value>
+        </prop>
       </node>
       <node oor:name=".uno:SetAnchorToCell" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1901,6 +1904,20 @@
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">To ~Cell</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Anchor to ~cell (move with cell)</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SetAnchorToCellResize" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Anchor: To Cell (~resize with cell)</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">To Cell (~resize with cell)</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Anchor to cell (move and ~resize with cell)</value>
         </prop>
       </node>
       <node oor:name=".uno:SendMailDocAsMS" oor:op="replace">

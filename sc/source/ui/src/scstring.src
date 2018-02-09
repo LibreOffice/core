@@ -921,6 +921,11 @@ String STR_ANCHOR_TO_CELL
     Text [ en-US ] = "To cell" ;
 };
 
+String STR_ANCHOR_TO_CELL_RESIZE
+{
+    Text [ en-US ] = "To cell (resize with cell)" ;
+};
+
 String STR_ANCHOR_TO_PAGE
 {
     Text [ en-US ] = "To page" ;

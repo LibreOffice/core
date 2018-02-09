@@ -1037,11 +1037,15 @@ GetEditAs( XclObjAny& rObj )
 {
     if( const SdrObject* pShape = EscherEx::GetSdrObject( rObj.GetShape() ) )
     {
-        // OOXTODO: returning "twoCell"
         switch( ScDrawLayer::GetAnchorType( *pShape ) )
         {
-            case SCA_CELL:  return "oneCell";
-            default:        break;
+            case SCA_CELL:
+                return "oneCell";
+            case SCA_CELL_RESIZE:
+                return "twoCell";
+            default:
+            case SCA_PAGE:
+                break; // absolute
         }
     }
     return "absolute";

@@ -52,6 +52,7 @@ public:
     Point               maEndOffset;
     Type                meType;
     Rectangle           maLastRect;
+    bool                mbResizeWithCell = false;
 
     explicit            ScDrawObjData();
 

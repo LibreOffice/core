@@ -4808,7 +4808,25 @@ SfxBoolItem SetAnchorToCell SID_ANCHOR_CELL
 ]
 
 
-SfxBoolItem SetAnchorToPage SID_ANCHOR_PAGE
+SfxVoidItem SetAnchorToCellResize SID_ANCHOR_CELL_RESIZE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+
+SfxVoidItem SetAnchorToPage SID_ANCHOR_PAGE
 ()
 [
     AutoUpdate = FALSE,

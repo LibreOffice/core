@@ -3399,7 +3399,8 @@ void ScExportTest::testMoveCellAnchoredShapes()
 
     // Check cell anchor state
     ScAnchorType oldType = ScDrawLayer::GetAnchorType(*pObj);
-    CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL );
+    CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL_RESIZE );
+
 
     // Get anchor data
     ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
@@ -3461,7 +3462,7 @@ void ScExportTest::testMoveCellAnchoredShapes()
 
     // Check cell anchor state
     oldType = ScDrawLayer::GetAnchorType(*pObj);
-    CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL );
+    CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL_RESIZE );
 
     // Get anchor data
     pData = ScDrawLayer::GetObjData(pObj);
@@ -3522,7 +3523,7 @@ void ScExportTest::testMoveCellAnchoredShapes()
 
     // Check cell anchor state
     oldType = ScDrawLayer::GetAnchorType(*pObj);
-    CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL );
+    CPPUNIT_ASSERT_MESSAGE( "Failed to get anchor type", oldType == SCA_CELL_RESIZE );
 
     // Get anchor data
     pData = ScDrawLayer::GetObjData(pObj);

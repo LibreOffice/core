@@ -2577,7 +2577,7 @@ void Test::testGraphicsInGroup()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should not change when page anchored",
                                static_cast<const Rectangle &>(aOrigRect), rNewRect);
 
-        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
+        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, true);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("That shouldn't change size or positioning",
                                static_cast<const Rectangle &>(aOrigRect), rNewRect);
 
@@ -2602,7 +2602,7 @@ void Test::testGraphicsInGroup()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Position and size of the circle shouldn't change when inserted into the page.",
                                static_cast<const Rectangle &>(aOrigRect), rNewRect);
 
-        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
+        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, false);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Size changed when cell anchored. Not good.",
                                static_cast<const Rectangle &>(aOrigRect), rNewRect);
 
@@ -2635,7 +2635,7 @@ void Test::testGraphicsInGroup()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Size differ.",
                                static_cast<const Rectangle &>(aOrigRect), rNewRect);
 
-        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
+        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, false);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Size changed when cell-anchored. Not good.",
                                static_cast<const Rectangle &>(aOrigRect), rNewRect);
 
@@ -2671,7 +2671,7 @@ void Test::testGraphicsOnSheetMove()
     Rectangle aObjRect(2,2,100,100);
     SdrObject* pObj = new SdrRectObj(aObjRect);
     pPage->InsertObject(pObj);
-    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, false);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be one object on the 1st sheet.", static_cast<size_t>(1), pPage->GetObjCount());
 
@@ -5120,7 +5120,7 @@ void Test::testAnchoredRotatedShape()
         double nCos=cos(nAngle*nPi180);
         pObj->Rotate(aRef1,nAngle,nSin,nCos);
 
-        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
+        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, true);
 
         Rectangle aSnap = pObj->GetSnapRect();
         CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.GetHeight(), aSnap.GetHeight(), TOLERANCE ) );
@@ -5889,7 +5889,7 @@ void Test::testUndoDataAnchor()
     Rectangle aObjRect(2,1000,100,1100);
     SdrObject* pObj = new SdrRectObj(aObjRect);
     pPage->InsertObject(pObj);
-    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, false);
 
     // Get anchor data
     ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
