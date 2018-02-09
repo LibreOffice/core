@@ -49,12 +49,11 @@ ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSty
         switch( getId() )
         {
             case 0x000f:{ // Label cell
-                OUString aLabel;
                 mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle ).ReadUChar( nDummy );
                 sal_uInt16 nLen = getLength();
                 if (nLen >= 7)
                 {
-                    readString( aLabel, nLen - 7 );
+                    OUString aLabel(readString(nLen - 7));
                     nStyle = nStyle >> 3;
                     pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
                     pDoc->EnsureTable(nTab);
@@ -215,7 +214,7 @@ ErrCode ScQProReader::import( ScDocument *pDoc )
                 pStyleElement->setFontRecord( j, nFontAttr, nPtSize );
                 sal_uInt16 nLen = getLength();
                 if (nLen >= 4)
-                    readString( aLabel, nLen - 4 );
+                    aLabel = readString(nLen - 4);
                 else
                     eRet = SCERR_IMPORT_FORMAT;
                 pStyleElement->setFontType( j, aLabel );
@@ -275,12 +274,9 @@ bool ScQProReader::nextRecord()
     return true;
 }
 
-void ScQProReader::readString( OUString &rString, sal_uInt16 nLength )
+OUString ScQProReader::readString(sal_uInt16 nLength)
 {
-    std::unique_ptr<sal_Char[]> pText(new sal_Char[ nLength + 1 ]);
-    nLength = mpStream->ReadBytes(pText.get(), nLength);
-    pText[ nLength ] = 0;
-    rString = OUString( pText.get(), strlen(pText.get()), mpStream->GetStreamCharSet() );
+    return read_uInt8s_ToOUString(*mpStream, nLength, mpStream->GetStreamCharSet());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

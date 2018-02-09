@@ -48,7 +48,7 @@ public:
     bool nextRecord();
     sal_uInt16 getId() { return mnId; }
     sal_uInt16 getLength() { return mnLength; }
-    void readString( OUString &rString, sal_uInt16 nLength );
+    OUString readString(sal_uInt16 nLength);
 
     ErrCode import( ScDocument *pDoc );
     ErrCode readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pStyle );
