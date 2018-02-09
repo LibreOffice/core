@@ -99,7 +99,7 @@ void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
 static void lcl_InsertGraphic( const Graphic& rGraphic,
                         const OUString& rFileName, const OUString& rFilterName, bool bAsLink, bool bApi,
                         ScTabViewShell* pViewSh, const vcl::Window* pWindow, SdrView* pView,
-                        bool bAnchorToCell=true )
+                        ScAnchorType aAnchorType = SCA_CELL )
 {
     ScDrawView* pDrawView = pViewSh->GetScDrawView();
 
@@ -171,8 +171,9 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     OUString aName = pLayer->GetNewGraphicName();                 // "Graphics"
     pObj->SetName(aName);
 
-    if (bAnchorToCell)
-        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *(rData.GetDocument()), rData.GetTabNo());
+    if (aAnchorType == SCA_CELL || aAnchorType == SCA_CELL_RESIZE)
+        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *(rData.GetDocument()), rData.GetTabNo(),
+                                                 aAnchorType == SCA_CELL_RESIZE);
 
     //  don't select if from (dispatch) API, to allow subsequent cell operations
     SdrInsertFlags nInsOptions = bApi ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE;
@@ -272,6 +273,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
         sal_Int16 nSelect = 0;
         Sequence<OUString> aListBoxEntries {
             ScResId(STR_ANCHOR_TO_CELL),
+            ScResId(STR_ANCHOR_TO_CELL_RESIZE),
             ScResId(STR_ANCHOR_TO_PAGE)
         };
         try
@@ -314,9 +316,18 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
                     ui::dialogs::ListboxControlActions::GET_SELECTED_ITEM );
                 OUString sAnchor;
                 aAnchorValue >>= sAnchor;
-                bool bAnchorToCell = sAnchor == ScResId(STR_ANCHOR_TO_CELL);
 
-                lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, false, pViewSh, pWindow, pView, bAnchorToCell );
+                ScAnchorType aAnchorType;
+                if (sAnchor == ScResId(STR_ANCHOR_TO_CELL))
+                    aAnchorType = SCA_CELL;
+                else if (sAnchor == ScResId(STR_ANCHOR_TO_CELL_RESIZE))
+                    aAnchorType = SCA_CELL_RESIZE;
+                else if (sAnchor == ScResId(STR_ANCHOR_TO_PAGE))
+                    aAnchorType = SCA_PAGE;
+                else
+                    aAnchorType = SCA_DONTKNOW;
+
+                lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, false, pViewSh, pWindow, pView, aAnchorType );
 
                 //  append items for recording
                 rReq.AppendItem( SfxStringItem( SID_INSERT_GRAPHIC, aFileName ) );

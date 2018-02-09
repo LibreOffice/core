@@ -92,6 +92,7 @@ void XMLTableShapeImportHelper::finishShape(
             aAnchor.maStart = aStartCell;
             awt::Point aStartPoint(rShape->getPosition());
             aAnchor.maStartOffset = Point(aStartPoint.X, aStartPoint.Y);
+            bool bResizeWithCell = false;
 
             sal_Int32 nEndX(-1);
             sal_Int32 nEndY(-1);
@@ -137,6 +138,11 @@ void XMLTableShapeImportHelper::finishShape(
                     if (IsXMLToken(aLocalName, XML_NOTIFY_ON_UPDATE_OF_RANGES))
                         xRangeList.reset(new OUString(rValue));
                 }
+                else if(nPrefix == XML_NAMESPACE_LO_EXT)
+                {
+                    if (IsXMLToken(aLocalName, XML_RESIZE_WITH_CELL))
+                        bResizeWithCell = IsXMLToken(rValue, XML_TRUE);
+                }
             }
             SetLayer(rShape, nLayerID, rShape->getShapeType());
 
@@ -145,7 +151,7 @@ void XMLTableShapeImportHelper::finishShape(
                 if (SdrObject *pSdrObj = pShapeImp->GetSdrObject())
                 {
                     if (!bOnTable)
-                        ScDrawLayer::SetCellAnchored(*pSdrObj, aAnchor);
+                        ScDrawLayer::SetCellAnchored(*pSdrObj, aAnchor, bResizeWithCell);
                     else
                         ScDrawLayer::SetPageAnchored(*pSdrObj);
                 }

@@ -99,7 +99,7 @@ void ScAnchorTest::testUndoAnchor()
     CPPUNIT_ASSERT(pDrawView->AreObjectsMarked() );
 
     // Set Cell Anchor
-    ScDrawLayer::SetCellAnchoredFromPosition(*pObject, rDoc, 0);
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObject, rDoc, 0, false);
     // Check state
     ScAnchorType oldType = ScDrawLayer::GetAnchorType(*pObject);
     CPPUNIT_ASSERT_EQUAL(SCA_CELL, oldType);

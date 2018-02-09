@@ -3294,6 +3294,8 @@ namespace xmloff { namespace token {
         TOKEN( "zeros-denominator-digits",        XML_ZEROS_DENOMINATOR_DIGITS ),
         TOKEN( "integer-fraction-delimiter",      XML_INTEGER_FRACTION_DELIMITER ),
 
+        TOKEN( "resize-with-cell",                XML_RESIZE_WITH_CELL ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, nullptr,                       XML_TOKEN_END }
 #else

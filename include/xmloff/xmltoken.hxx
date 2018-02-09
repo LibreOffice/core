@@ -3300,6 +3300,9 @@ namespace xmloff { namespace token {
         XML_ZEROS_DENOMINATOR_DIGITS,
         XML_INTEGER_FRACTION_DELIMITER,
 
+        // Cell anchored shapes
+        XML_RESIZE_WITH_CELL,
+
         XML_TOKEN_END
     };
 

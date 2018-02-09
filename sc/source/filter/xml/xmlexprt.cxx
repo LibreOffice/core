@@ -557,6 +557,7 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
                 aMyShape.nEndX = pAnchor->maEndOffset.X();
                 aMyShape.nEndY = pAnchor->maEndOffset.Y();
                 aMyShape.xShape = xShape;
+                aMyShape.bResizeWithCell = ScDrawLayer::IsResizeWithCell(*pSdrObj);
                 pSharedData->AddNewShape(aMyShape);
                 pSharedData->SetLastColumn(nTable, pAnchor->maStart.Col());
                 pSharedData->SetLastRow(nTable, pAnchor->maStart.Row());
@@ -3518,6 +3519,8 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                     GetMM100UnitConverter().convertMeasureToXML(
                             sBuffer, aItr->nEndY);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_END_Y, sBuffer.makeStringAndClear());
+                    if (aItr->bResizeWithCell)
+                        AddAttribute(XML_NAMESPACE_LO_EXT, XML_RESIZE_WITH_CELL, XML_TRUE);
                 }
                 ExportShape(aItr->xShape, &aPoint);
             }
