@@ -555,7 +555,7 @@ void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
         if ( pBmpDesc->mbVMirror )
             nMirr |= BmpMirrorFlags::Vertical;
         if ( nMirr != BmpMirrorFlags::NONE )
-            pBmpDesc->mpBitmap->Mirror( nMirr );
+            pBmpDesc->mpBitmap->Mirror( nMirr ); // FIXME
 
         mpCGM->ImplMapPoint( aOrigin );
         mpCGM->ImplMapX( fdx );
@@ -571,9 +571,9 @@ void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
                 ImplSetOrientation( aOrigin, pBmpDesc->mnOrientation );
             }
 
+// FIXME
             uno::Reference< awt::XBitmap > xBitmap( VCLUnoHelper::CreateBitmap( BitmapEx( *( pBmpDesc->mpBitmap ) ) ) );
             maXPropSet->setPropertyValue( "GraphicObjectFillBitmap", uno::Any(xBitmap) );
-
         }
     }
 }

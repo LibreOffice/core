@@ -22,8 +22,8 @@
 
 namespace {
 
-constexpr BitmapColor BMCOL(sal_uInt32 _col) {
-    return BitmapColor( static_cast<sal_Int8>(_col >> 16 ), static_cast<sal_Int8>( _col >> 8 ), static_cast<sal_Int8>(_col) );
+Color BMCOL(sal_uInt32 _col) {
+    return Color( static_cast<sal_Int8>(_col >> 16 ), static_cast<sal_Int8>( _col >> 8 ), static_cast<sal_Int8>(_col) );
 }
 
 }
@@ -66,10 +66,9 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 
     if (ImplGetDimensions(rDesc) && rDesc.mpBuf && isLegalBitsPerPixel(rDesc.mnDstBitsPerPixel))
     {
-        rDesc.mpBitmap = new Bitmap( Size( rDesc.mnX, rDesc.mnY ), static_cast<sal_uInt16>(rDesc.mnDstBitsPerPixel) );
-        if ( ( rDesc.mpAcc = rDesc.mpBitmap->AcquireWriteAccess() ) != nullptr )
+        rDesc.mpBitmap = VclPtr<VirtualDevice>::Create();
+        rDesc.mpBitmap->SetOutputSizePixel( Size( rDesc.mnX, rDesc.mnY ) );
         {
-
             // the picture may either be read from left to right or right to left, from top to bottom ...
 
             long nxCount = rDesc.mnX + 1;   // +1 because we are using prefix decreasing
@@ -80,24 +79,23 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
             {
                 case 1 :
                 {
+                    std::vector<Color> palette(2);
                     if ( rDesc.mnLocalColorPrecision == 1 )
-                        ImplSetCurrentPalette( rDesc );
+                        palette = ImplGeneratePalette( rDesc );
                     else
                     {
-                        rDesc.mpAcc->SetPaletteEntryCount( 2 );
-                        rDesc.mpAcc->SetPaletteColor( 0, BMCOL( mpCGM->pElement->nBackGroundColor ) );
-                        rDesc.mpAcc->SetPaletteColor( 1,
-                            ( mpCGM->pElement->nAspectSourceFlags & ASF_FILLINTERIORSTYLE )
-                                ? BMCOL( mpCGM->pElement->pFillBundle->GetColor() )
-                                    : BMCOL( mpCGM->pElement->aFillBundle.GetColor() ) ) ;
-                    }
+                        palette[0] = BMCOL( mpCGM->pElement->nBackGroundColor );
+                        palette[1] = ( mpCGM->pElement->nAspectSourceFlags & ASF_FILLINTERIORSTYLE )
+                                    ? BMCOL( mpCGM->pElement->pFillBundle->GetColor() )
+                                        : BMCOL( mpCGM->pElement->aFillBundle.GetColor() );
+                    };
                     for ( ny = 0; --nyCount ; ny++, rDesc.mpBuf += rDesc.mnScanSize )
                     {
                         nxC = nxCount;
-                        Scanline pScanline = rDesc.mpAcc->GetScanline( ny );
                         for ( nx = 0; --nxC; nx++ )
                         {   // this is not fast, but a one bit/pixel format is rarely used
-                            rDesc.mpAcc->SetPixelOnData(pScanline, nx, BitmapColor(static_cast<sal_uInt8>( (*( rDesc.mpBuf + (nx >> 3)) >> ((nx & 7)^7))) & 1));
+                            sal_uInt8 colorIndex = static_cast<sal_uInt8>( (*( rDesc.mpBuf + (nx >> 3)) >> ((nx & 7)^7))) & 1;
+                            rDesc.mpBitmap->DrawPixel(Point(nx, ny), palette[colorIndex]);
                         }
                     }
                 }
@@ -105,14 +103,13 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 
                 case 2 :
                 {
-                    ImplSetCurrentPalette( rDesc );
+                    auto palette = ImplGeneratePalette( rDesc );
                     for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
                     {
                         nxC = nxCount;
-                        Scanline pScanline = rDesc.mpAcc->GetScanline( ny );
                         for ( nx = 0; --nxC; nx++ )
                         {   // this is not fast, but a two bits/pixel format is rarely used
-                            rDesc.mpAcc->SetPixelOnData(pScanline, nx, BitmapColor(static_cast<sal_uInt8>( (*(rDesc.mpBuf + (nx >> 2)) >> (((nx & 3)^3) << 1))) & 3));
+                            rDesc.mpBitmap->DrawPixel(Point(nx,ny), palette[static_cast<sal_uInt8>( (*(rDesc.mpBuf + (nx >> 2)) >> (((nx & 3)^3) << 1))) & 3]);
                         }
                     }
                 }
@@ -120,22 +117,21 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 
                 case 4 :
                 {
-                    ImplSetCurrentPalette( rDesc );
+                    auto palette = ImplGeneratePalette( rDesc );
                     for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
                     {
                         nxC = nxCount;
-                        Scanline pScanline = rDesc.mpAcc->GetScanline( ny );
                         sal_Int8  nDat;
                         sal_uInt8* pTemp = rDesc.mpBuf;
                         for ( nx = 0; --nxC; nx++ )
                         {
                             nDat = *pTemp++;
 
-                            rDesc.mpAcc->SetPixelOnData(pScanline, nx, BitmapColor(static_cast<sal_uInt8>(nDat >> 4)));
+                            rDesc.mpBitmap->DrawPixel(Point(nx,ny), palette[static_cast<sal_uInt8>(nDat >> 4)]);
                             if ( --nxC )
                             {
                                 ++nx;
-                                rDesc.mpAcc->SetPixelOnData(pScanline, nx, BitmapColor(static_cast<sal_uInt8>(nDat & 15)));
+                                rDesc.mpBitmap->DrawPixel(Point(nx,ny), palette[static_cast<sal_uInt8>(nDat & 15)]);
                             }
                             else
                                 break;
@@ -146,15 +142,14 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 
                 case 8 :
                 {
-                    ImplSetCurrentPalette( rDesc );
+                    auto palette = ImplGeneratePalette( rDesc );
                     for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
                     {
                         sal_uInt8* pTemp = rDesc.mpBuf;
-                        Scanline pScanline = rDesc.mpAcc->GetScanline( ny );
                         nxC = nxCount;
                         for ( nx = 0; --nxC; nx++ )
                         {
-                            rDesc.mpAcc->SetPixelOnData(pScanline, nx, BitmapColor(*(pTemp++)));
+                            rDesc.mpBitmap->DrawPixel(Point(nx,ny), palette[*(pTemp++)]);
                         }
                     }
                 }
@@ -162,18 +157,17 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 
                 case 24 :
                 {
-                    BitmapColor aBitmapColor;
+                    Color aBitmapColor;
                     for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
                     {
                         sal_uInt8* pTemp = rDesc.mpBuf;
                         nxC = nxCount;
-                        Scanline pScanline = rDesc.mpAcc->GetScanline( ny );
                         for ( nx = 0; --nxC; nx++ )
                         {
                             aBitmapColor.SetRed( *pTemp++ );
                             aBitmapColor.SetGreen( *pTemp++ );
                             aBitmapColor.SetBlue( *pTemp++ );
-                            rDesc.mpAcc->SetPixelOnData(pScanline, nx, aBitmapColor);
+                            rDesc.mpBitmap->DrawPixel(Point(nx,ny), aBitmapColor);
                         }
                     }
                 }
@@ -223,37 +217,27 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                 rDesc.mnOrigin.Y += rDesc.mnQ.Y - rDesc.mnR.Y;
             }
         }
-        else
-            rDesc.mbStatus = false;
     }
     else
         rDesc.mbStatus = false;
 
-    if ( rDesc.mpAcc )
-    {
-        Bitmap::ReleaseAccess( rDesc.mpAcc );
-        rDesc.mpAcc = nullptr;
-    }
     if ( !rDesc.mbStatus )
     {
-        if ( rDesc.mpBitmap )
-        {
-            delete rDesc.mpBitmap;
-            rDesc.mpBitmap = nullptr;
-        }
+        rDesc.mpBitmap.disposeAndClear();
     }
 }
 
 
-void CGMBitmap::ImplSetCurrentPalette( CGMBitmapDescriptor& rDesc )
+std::vector<Color> CGMBitmap::ImplGeneratePalette( CGMBitmapDescriptor& rDesc )
 {
     sal_uInt16 nColors = sal::static_int_cast< sal_uInt16 >(
         1 << rDesc.mnDstBitsPerPixel);
-    rDesc.mpAcc->SetPaletteEntryCount( nColors );
+    std::vector<Color> palette( nColors );
     for ( sal_uInt16 i = 0; i < nColors; i++ )
     {
-        rDesc.mpAcc->SetPaletteColor( i, BMCOL( mpCGM->pElement->aLatestColorTable[ i ] ) );
+        palette[i] = BMCOL( mpCGM->pElement->aLatestColorTable[ i ] );
     }
+    return palette;
 }
 
 
@@ -354,8 +338,9 @@ void CGMBitmap::ImplInsert( CGMBitmapDescriptor const & rSource, CGMBitmapDescri
     {   // Insert on Bottom
         if ( mpCGM->mnVDCYmul == -1 )
             rDest.mnOrigin = rSource.mnOrigin;          // new origin
-        rDest.mpBitmap->Expand( 0, rSource.mnY );
-        rDest.mpBitmap->CopyPixel( tools::Rectangle( Point( 0, rDest.mnY ), Size( rSource.mnX, rSource.mnY ) ),
+        rDest.mpBitmap->SetOutputSizePixel( Size(0, rSource.mnY), /*bErase*/false );
+            // FIXME
+        rDest.mpBitmap->CopyArea( tools::Rectangle( Point( 0, rDest.mnY ), Size( rSource.mnX, rSource.mnY ) ),
             tools::Rectangle( Point( 0, 0 ), Size( rSource.mnX, rSource.mnY ) ), rSource.mpBitmap );
         FloatPoint aFloatPoint;
         aFloatPoint.X = rSource.mnQ.X - rSource.mnR.X;
@@ -369,8 +354,9 @@ void CGMBitmap::ImplInsert( CGMBitmapDescriptor const & rSource, CGMBitmapDescri
     {   // Insert on Top
         if ( mpCGM->mnVDCYmul == 1 )
             rDest.mnOrigin = rSource.mnOrigin;          // new origin
-        rDest.mpBitmap->Expand( 0, rSource.mnY );
-        rDest.mpBitmap->CopyPixel( tools::Rectangle( Point( 0, rDest.mnY ), Size( rSource.mnX, rSource.mnY ) ),
+        rDest.mpBitmap->SetOutputSizePixel( Size(0, rSource.mnY), /*bErase*/false );
+            // FIXME
+        rDest.mpBitmap->CopyArea( tools::Rectangle( Point( 0, rDest.mnY ), Size( rSource.mnX, rSource.mnY ) ),
             tools::Rectangle( Point( 0, 0 ), Size( rSource.mnX, rSource.mnY ) ), rSource.mpBitmap );
         rDest.mnP = rSource.mnP;
         rDest.mnR = rSource.mnR;
