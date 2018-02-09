@@ -293,7 +293,8 @@ void DrawingFragment::onEndElement()
                         SdrObject* pObj = SdrObject::getSdrObjectFromXShape( mxShape->getXShape() );
                         if ( pObj )
                         {
-                             ScDrawLayer::SetCellAnchoredFromPosition( *pObj, getScDocument(), getSheetIndex() );
+                            // TODO: Implement both modes from Excel, resize with cell and just move with cell
+                            ScDrawLayer::SetCellAnchoredFromPosition( *pObj, getScDocument(), getSheetIndex(), false );
                         }
                     }
                 }

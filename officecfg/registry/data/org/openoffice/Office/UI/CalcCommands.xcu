@@ -1970,6 +1970,14 @@
           <value xml:lang="en-US">To ~Cell</value>
         </prop>
       </node>
+      <node oor:name=".uno:SetAnchorToCellResize" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Anchor: To ~Cell (resize with cell)</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">To ~Cell (resize with cell)</value>
+        </prop>
+      </node>
       <node oor:name=".uno:SendMailDocAsMS" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">E-mail as ~Microsoft Excel...</value>

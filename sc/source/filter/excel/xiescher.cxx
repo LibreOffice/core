@@ -3595,8 +3595,9 @@ SdrObject* XclImpDffConverter::FinalizeObj(DffObjData& rDffObjData, SdrObject* p
     if( xSdrObj && xDrawObj )
     {
         // cell anchoring
+        // TODO: Implement both modes from Excel, resize with cell and just move with cell
         if ( !rDffObjData.bPageAnchor )
-            ScDrawLayer::SetCellAnchoredFromPosition( *xSdrObj,  GetDoc(), xDrawObj->GetTab() );
+            ScDrawLayer::SetCellAnchoredFromPosition( *xSdrObj,  GetDoc(), xDrawObj->GetTab(), false );
     }
 
     return xSdrObj.release();
