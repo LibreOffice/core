@@ -100,7 +100,7 @@ InterfaceOleWrapper_Impl::~InterfaceOleWrapper_Impl()
 {
     MutexGuard guard(getBridgeMutex());
     // remove entries in global map
-    IT_Uno it= UnoObjToWrapperMap.find( reinterpret_cast<sal_uIntPtr>(m_xOrigin.get()));
+    auto it = UnoObjToWrapperMap.find( reinterpret_cast<sal_uIntPtr>(m_xOrigin.get()));
     if(it != UnoObjToWrapperMap.end())
         UnoObjToWrapperMap.erase(it);
 }

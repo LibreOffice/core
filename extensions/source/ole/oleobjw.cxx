@@ -115,7 +115,7 @@ IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
         WrapperToAdapterMap.erase( it);
     }
 
-     IT_Com it_c= ComPtrToWrapperMap.find( reinterpret_cast<sal_uIntPtr>(m_spUnknown.p));
+    auto it_c= ComPtrToWrapperMap.find( reinterpret_cast<sal_uIntPtr>(m_spUnknown.p));
     if(it_c != ComPtrToWrapperMap.end())
         ComPtrToWrapperMap.erase(it_c);
 }
