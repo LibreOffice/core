@@ -164,7 +164,9 @@ bool SwCTBWrapper::Read( SvStream& rS )
     std::vector< sal_Int16 >::iterator it_end = dropDownMenuIndices.end();
     for ( std::vector< sal_Int16 >::iterator it = dropDownMenuIndices.begin(); it != it_end; ++it )
     {
-        rCustomizations[ *it ].bIsDroppedMenuTB = true;
+        if (*it < 0 || static_cast<size_t>(*it) >= rCustomizations.size())
+            continue;
+        rCustomizations[*it].bIsDroppedMenuTB = true;
     }
     return rS.good();
 }
