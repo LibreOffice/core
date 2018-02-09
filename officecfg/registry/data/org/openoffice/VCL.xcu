@@ -244,30 +244,37 @@
         <value>hgmincholightj;cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidasanstypewriter;lucidatypewriter;monaco;monospaced</value>
       </prop>
     </node>
+    <!--
+      Traditial Chinese Fonts
+       Linux    : Noto Sans CJK SC, Noto Sans Mono CJK SC, Source Han Sans [思源黑体], Source Han Serif [思源宋体]
+       Windows  : Microsoft YaHei [微软雅黑] (Windows Vista), NSimSun [新宋体] (Windows XP), SimSun [宋体] (Windows 95)
+       Mac OS X : PingFang SC [] (OS X 10.11), Songti SC [] (OS X 10.12), Song
+       Others   : Arial Unicode MS (available with MSO 2000+ and Mac OS X 10.5+)
+    -->
     <node oor:name="zh-cn" oor:op="replace">
-      <prop oor:name="CJK_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>微软雅黑;方正宋体;ZYSong18030;AR PL SungtiL GB;MSung Light SC;SimSun;Song;FZSongYi;FZShuSong;NSimSun;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
-      </prop>
       <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>方正宋体;ZYSong18030;AR PL SungtiL GB;新宋体;NSimSun;文鼎PL细上海宋Uni;AR PL ShanHeiSun Uni;文鼎ＰＬ新宋;AR PL New Sung;MSung Light SC;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>思源黑體 HW;Source Han Sans HW;Noto Sans Mono CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;Liberation Mono;Menlo;Courier New;Monospaced</value>
+      </prop>
+      <prop oor:name="CJK_DISPLAY" oor:type="xs:string" oor:op="replace">
+        <value>思源黑体;Source Han Sans;思源黑体 CN;Source Han Sans CN;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;PingFang SC;Song;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>微软雅黑;方正黑体;方正宋体;ZYSong18030;AR PL SungtiL GB;宋体;SimSun;黑体;文鼎PL中楷Uni;AR PL ZenKai Uni;文鼎PL细上海宋Uni;AR PL ShanHeiSun Uni;文鼎ＰＬ新宋;AR PL New Sung;MSung Light SC;Song;FZSongYi;FZShuSong;NSimSun;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源黑体;Source Han Sans;思源黑体 CN;Source Han Sans CN;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;PingFang SC;Song;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>微软雅黑;方正宋体;ZYSong18030;AR PL SungtiL GB;宋体;SimSun;文鼎PL细上海宋Uni;AR PL ShanHeiSun Uni;文鼎ＰＬ新宋;AR PL New Sung;MSung Light SC;Song;FZSongYi;FZShuSong;NSimSun;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源黑体;Source Han Sans;思源黑体 CN;Source Han Sans CN;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;PingFang SC;Song;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>微软雅黑;方正宋体;ZYSong18030;AR PL SungtiL GB;宋体;SimSun;文鼎PL细上海宋Uni;AR PL ShanHeiSun Uni;文鼎ＰＬ新宋;AR PL New Sung;MSung Light SC;Song;FZSongYi;FZShuSong;NSimSun;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源黑体;Source Han Sans;思源黑体 CN;Source Han Sans CN;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;PingFang SC;Song;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="CJK_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>方正宋体;ZYSong18030;AR PL SungtiL GB;SimSun;文鼎PL细上海宋Uni;AR PL ShanHeiSun Uni;文鼎ＰＬ新宋;AR PL New Sung;MSung Light SC;Song;FZSongYi;FZShuSong;NSimSun;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>思源宋体;Source Han Serif;思源宋体 CN;Source Han Serif CN;Noto Serif CJK SC;新宋体;NSimSun;SimSun;Songti SC;Song;Arial Unicode MS;Liberation Sans;Tahoma</value>
       </prop>
       <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
         <value>方正宋体;ZYSong18030;AR PL SungtiL GB;新宋体;NSimSun;文鼎PL细上海宋Uni;AR PL ShanHeiSun Uni;文鼎ＰＬ新宋;AR PL New Sung;MSung Light SC;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
-        <value>方正宋体;ZYSong18030;AR PL SungtiL GB;新宋体;NSimSun;文鼎PL细上海宋Uni;AR PL ShanHeiSun Uni;文鼎ＰＬ新宋;AR PL New Sung;MSung Light SC;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>思源黑體 HW;Source Han Sans HW;Noto Sans Mono CJK SC;方正宋体;ZYSong18030;AR PL SungtiL GB;新宋体;NSimSun;文鼎PL细上海宋Uni;AR PL ShanHeiSun Uni;文鼎ＰＬ新宋;AR PL New Sung;MSung Light SC;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
         <value>方正宋体;ZYSong18030;AR PL SungtiL GB;SimSun;文鼎PL细上海宋Uni;AR PL ShanHeiSun Uni;文鼎ＰＬ新宋;AR PL New Sung;ZYSong18030;AR PL SungtiL GB;AR PL KaitiM GB;SimSun;Arial Unicode MS;Fangsong;Hei;Song;Kai;Ming;gnu-unifont;Interface User;Geneva;Tahoma;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Helmet;Interface System;Sans Serif</value>
