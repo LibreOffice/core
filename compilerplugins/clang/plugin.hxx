@@ -21,6 +21,7 @@
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Lex/Preprocessor.h>
 #include <unordered_map>
+#include <vector>
 
 #include <clang/Rewrite/Core/Rewriter.h>
 

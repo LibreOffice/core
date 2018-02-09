@@ -77,7 +77,6 @@ public:
 private:
     void checkForFunctionDecl(Expr const*, bool bCheckOnly = false);
     bool rewrite(SourceLocation);
-    bool checkOverlap(SourceRange);
     bool isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation* pLoc = nullptr);
 
     std::set<FunctionDecl const*> m_addressOfSet;
@@ -87,7 +86,6 @@ private:
         Warning
     };
     PluginPhase m_phase;
-    std::vector<std::pair<char const*, char const*>> mvModifiedRanges;
 };
 
 bool SalCall::VisitUnaryAddrOf(UnaryOperator const* op)
@@ -662,32 +660,9 @@ bool SalCall::rewrite(SourceLocation locBegin)
 
     SourceRange range(locBegin, locEnd);
 
-    // If we overlap with a previous area we modified, we cannot perform this change
-    // without corrupting the source
-    if (!checkOverlap(range))
-        return false;
-
     if (!replaceText(locBegin, 9, ""))
         return false;
 
-    return true;
-}
-
-// If we overlap with a previous area we modified, we cannot perform this change
-// without corrupting the source
-bool SalCall::checkOverlap(SourceRange range)
-{
-    SourceManager& SM = compiler.getSourceManager();
-    char const* p1 = SM.getCharacterData(range.getBegin());
-    char const* p2 = SM.getCharacterData(range.getEnd());
-    for (std::pair<char const*, char const*> const& rPair : mvModifiedRanges)
-    {
-        if (rPair.first <= p1 && p1 <= rPair.second)
-            return false;
-        if (p1 <= rPair.second && rPair.first <= p2)
-            return false;
-    }
-    mvModifiedRanges.emplace_back(p1, p2);
     return true;
 }
 
