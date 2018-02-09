@@ -42,10 +42,10 @@
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
     <Markers>
-      <QuotationStart>‚</QuotationStart>
-      <QuotationEnd>‘</QuotationEnd>
-      <DoubleQuotationStart>„</DoubleQuotationStart>
-      <DoubleQuotationEnd>“</DoubleQuotationEnd>
+      <QuotationStart>‹</QuotationStart>
+      <QuotationEnd>›</QuotationEnd>
+      <DoubleQuotationStart>«</DoubleQuotationStart>
+      <DoubleQuotationEnd>»</DoubleQuotationEnd>
     </Markers>
     <TimeAM>vorm.</TimeAM>
     <TimePM>nachm.</TimePM>
