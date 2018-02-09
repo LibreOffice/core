@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_b8548921",
+        "filename": "vcl/unx/generic/window/salframe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-02-09T08:40:46Z",
+      "side": 1,
+      "message": "I\u0027m afraid this always evaluates to true, did you mean \"#if OSL_DEBUG_LEVEL \u003c 1\"?",
+      "revId": "275c1e0a05c1d31c9d83a246082a59db3119059d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
