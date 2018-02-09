@@ -889,6 +889,9 @@ bool SvtLinguConfig::GetElementNamesFor(
         xNA.set( xNA->getByName("ServiceManager"), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rNodeName ), uno::UNO_QUERY_THROW );
         rElementNames = xNA->getElementNames();
+        SAL_DEBUG("GetElementNamesFor:" << rNodeName);
+        for (const auto& s : rElementNames)
+            SAL_DEBUG("GetElementNamesFor -> " << s);
         bSuccess = true;
     }
     catch (uno::Exception &)
@@ -913,6 +916,9 @@ bool SvtLinguConfig::GetSupportedDictionaryFormatsFor(
         xNA.set( xNA->getByName( rSetEntry ), uno::UNO_QUERY_THROW );
         if (xNA->getByName( "SupportedDictionaryFormats" ) >>= rFormatList)
             bSuccess = true;
+        SAL_DEBUG("GetSupportedDictionaryFormatsFor: " << rSetName << ", " << rSetEntry << " -> ");
+        for (const auto& s : rFormatList)
+            SAL_DEBUG("GetSupportedDictionaryFormatsFor -> " << s);
         DBG_ASSERT( rFormatList.getLength(), "supported dictionary format list is empty" );
     }
     catch (uno::Exception &)
@@ -1014,6 +1020,7 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
     if (rFormatName.isEmpty())
         return aRes;
 
+    SAL_DEBUG("GetActiveDictionariesByFormat: 1");
     try
     {
         uno::Sequence< OUString > aElementNames;
@@ -1026,6 +1033,7 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
         SvtLinguConfigDictionaryEntry aDicEntry;
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
+            SAL_DEBUG("GetActiveDictionariesByFormat: " << pElementNames[i]);
             // does dictionary match the format we are looking for?
             if (GetDictionaryEntry( pElementNames[i], aDicEntry ) &&
                 aDicEntry.aFormatName == rFormatName)

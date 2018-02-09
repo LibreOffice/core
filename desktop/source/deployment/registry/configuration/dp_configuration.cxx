@@ -360,6 +360,7 @@ void BackendImpl::configmgrini_verify_init(
     if (transientMode())
         return;
     const ::osl::MutexGuard guard( getMutex() );
+    SAL_DEBUG("Reading configmgr.ini!");
     if (! m_configmgrini_inited)
     {
         // common rc:
@@ -377,6 +378,7 @@ void BackendImpl::configmgrini_verify_init(
                 do {
                     OUString token( line.getToken( 0, ' ', index ).trim() );
                     if (!token.isEmpty()) {
+                        SAL_DEBUG("schema: " << token);
                         //The  file may not exist anymore if a shared or bundled
                         //extension was removed, but it can still be in the configmgrini.
                         //After running XExtensionManager::synchronize, the configmgrini is
@@ -393,6 +395,7 @@ void BackendImpl::configmgrini_verify_init(
                     OUString token( line.getToken( 0, ' ', index ).trim() );
                     if (!token.isEmpty())
                     {
+                        SAL_DEBUG("data: " << token);
                         if (token[ 0 ] == '?')
                             token = token.copy( 1 );
                         //The  file may not exist anymore if a shared or bundled
