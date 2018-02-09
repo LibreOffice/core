@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_b87d69b3",
+        "filename": "sw/qa/extras/odfexport/odfexport.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1882,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-02-09T08:26:09Z",
+      "side": 1,
+      "message": "Add this block inside the #endif, not outside.",
+      "revId": "69cacde86469d06b4ec58b1f25edcc64b69e8bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
