@@ -661,6 +661,7 @@ void ColorSliderControl::UpdateBitmap()
         return;
 
     mxBitmap.disposeAndClear();
+    mxBitmap = VclPtr<VirtualDevice>::Create();
     mxBitmap->SetOutputSizePixel(aSize);
 
     const long nY = aSize.Height() - 1;
