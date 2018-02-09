@@ -379,8 +379,9 @@ enum ScVObjMode                     // output modes of objects on a page
 
 enum ScAnchorType                   // anchor of a character object
 {
-    SCA_CELL,
-    SCA_PAGE,
+    SCA_CELL,                       // anchor to cell, move with cell
+    SCA_CELL_RESIZE,                // anchor to cell, move and resize with cell
+    SCA_PAGE,                       // anchor to page, independent from any cells
     SCA_DONTKNOW                    // for multi selection
 };
 

@@ -3303,6 +3303,9 @@ namespace xmloff { namespace token {
         // tdf#115319
         XML_REFERENCE_LANGUAGE,
 
+        // Cell anchored shapes
+        XML_RESIZE_WITH_CELL,
+
         XML_TOKEN_END
     };
 
