@@ -43,7 +43,7 @@ SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *con
     , m_Left( pDoc->GetAttrPool(), rName, pFormat )
     , m_FirstMaster( pDoc->GetAttrPool(), rName, pFormat )
     , m_FirstLeft( pDoc->GetAttrPool(), rName, pFormat )
-    , m_Depend( this, nullptr )
+    , m_aDepends(*this)
     , m_pFollow( this )
     , m_nRegHeight( 0 )
     , m_nRegAscent( 0 )
@@ -63,7 +63,8 @@ SwPageDesc::SwPageDesc( const SwPageDesc &rCpy )
     , m_Left( rCpy.GetLeft() )
     , m_FirstMaster( rCpy.GetFirstMaster() )
     , m_FirstLeft( rCpy.GetFirstLeft() )
-    , m_Depend( this, const_cast<SwModify*>(rCpy.m_Depend.GetRegisteredIn()) )
+    , m_aDepends(*this)
+    , m_pTextFormatColl(nullptr)
     , m_pFollow( rCpy.m_pFollow )
     , m_nRegHeight( rCpy.GetRegHeight() )
     , m_nRegAscent( rCpy.GetRegAscent() )
@@ -74,6 +75,11 @@ SwPageDesc::SwPageDesc( const SwPageDesc &rCpy )
     , m_IsFootnoteInfo( rCpy.GetFootnoteInfo() )
     , m_pdList( nullptr )
 {
+    if(rCpy.m_pTextFormatColl && const_cast<SwMultiDepend*>(&rCpy.m_aDepends)->IsListeningTo(rCpy.m_pTextFormatColl))
+    {
+        m_pTextFormatColl = rCpy.m_pTextFormatColl;
+        m_aDepends.StartListening(const_cast<SwTextFormatColl*>(m_pTextFormatColl));
+    }
 }
 
 SwPageDesc & SwPageDesc::operator = (const SwPageDesc & rSrc)
@@ -84,6 +90,14 @@ SwPageDesc & SwPageDesc::operator = (const SwPageDesc & rSrc)
     m_Left = rSrc.m_Left;
     m_FirstMaster = rSrc.m_FirstMaster;
     m_FirstLeft = rSrc.m_FirstLeft;
+    m_aDepends.EndListeningAll();
+    if(rSrc.m_pTextFormatColl && const_cast<SwMultiDepend*>(&rSrc.m_aDepends)->IsListeningTo(rSrc.m_pTextFormatColl))
+    {
+        m_pTextFormatColl = rSrc.m_pTextFormatColl;
+        m_aDepends.StartListening(const_cast<SwTextFormatColl*>(m_pTextFormatColl));
+    }
+    else
+        m_pTextFormatColl = nullptr;
 
     if (rSrc.m_pFollow == &rSrc)
         m_pFollow = this;
@@ -165,15 +179,13 @@ bool SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
 }
 
 /// set the style for the grid alignment
-void SwPageDesc::SetRegisterFormatColl( const SwTextFormatColl* pFormat )
+void SwPageDesc::SetRegisterFormatColl(const SwTextFormatColl* pFormat)
 {
-    if( pFormat != GetRegisterFormatColl() )
+    if(pFormat != m_pTextFormatColl)
     {
-        if( pFormat )
-            const_cast<SwTextFormatColl*>(pFormat)->Add(&m_Depend);
-        else
-            const_cast<SwTextFormatColl*>(GetRegisterFormatColl())->Remove(&m_Depend);
-
+        m_aDepends.EndListeningAll();
+        m_pTextFormatColl = pFormat;
+        m_aDepends.StartListening(const_cast<SwTextFormatColl*>(m_pTextFormatColl));
         RegisterChange();
     }
 }
@@ -181,8 +193,9 @@ void SwPageDesc::SetRegisterFormatColl( const SwTextFormatColl* pFormat )
 /// retrieve the style for the grid alignment
 const SwTextFormatColl* SwPageDesc::GetRegisterFormatColl() const
 {
-    const SwModify* pReg = m_Depend.GetRegisteredIn();
-    return static_cast<const SwTextFormatColl*>(pReg);
+    if(!const_cast<SwMultiDepend*>(&m_aDepends)->IsListeningTo(m_pTextFormatColl))
+        m_pTextFormatColl = nullptr;
+    return m_pTextFormatColl;
 }
 
 /// notify all affected page frames
@@ -238,15 +251,28 @@ void SwPageDesc::RegisterChange()
 }
 
 /// special handling if the style of the grid alignment changes
-void SwPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
+void SwPageDesc::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    NotifyClients( pOld, pNew );
-
-    if ( (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich)
-        || isCHRATR(nWhich) || (RES_PARATR_LINESPACING == nWhich) )
+    if(auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        RegisterChange();
+        const sal_uInt16 nWhich = pLegacyHint->m_pOld
+                ? pLegacyHint->m_pOld->Which()
+                : pLegacyHint->m_pNew
+                ? pLegacyHint->m_pNew->Which()
+                : 0;
+        NotifyClients(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+        if((RES_ATTRSET_CHG == nWhich)
+                || (RES_FMT_CHG == nWhich)
+                || isCHRATR(nWhich)
+                || (RES_PARATR_LINESPACING == nWhich))
+            RegisterChange();
+    }
+    else if (auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
+    {
+        if(m_pTextFormatColl == &rModify)
+            m_pTextFormatColl = static_cast<const SwTextFormatColl*>(pModifyChangedHint->m_pNew);
+        else
+            assert(false);
     }
 }
 
