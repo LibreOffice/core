@@ -168,19 +168,12 @@ namespace vcl
         int   descender;          /**< typographic descent.                                    */
         int   linegap;            /**< typographic line gap.\ Negative values are treated as
                                      zero in Win 3.1, System 6 and System 7.                 */
-        int   vascent;            /**< typographic ascent for vertical writing mode            */
-        int   vdescent;           /**< typographic descent for vertical writing mode           */
         int   typoAscender;       /**< OS/2 portable typographic ascender                      */
         int   typoDescender;      /**< OS/2 portable typographic descender                     */
         int   typoLineGap;        /**< OS/2 portable typographic line gap                       */
         int   winAscent;          /**< ascender metric for Windows                             */
         int   winDescent;         /**< descender metric for Windows                            */
         bool  symbolEncoded;      /**< true: MS symbol encoded */
-        int   rangeFlag;          /**< if set to 1 Unicode Range flags are applicable          */
-        sal_uInt32 ur1;           /**< bits 0 - 31 of Unicode Range flags                      */
-        sal_uInt32 ur2;           /**< bits 32 - 63 of Unicode Range flags                     */
-        sal_uInt32 ur3;           /**< bits 64 - 95 of Unicode Range flags                     */
-        sal_uInt32 ur4;           /**< bits 96 - 127 of Unicode Range flags                    */
         sal_uInt8  panose[10];    /**< PANOSE classification number                            */
         sal_uInt32 typeFlags;     /**< type flags (copyright bits + PS-OpenType flag)       */
         sal_uInt16 fsSelection;   /**< OS/2 fsSelection */
@@ -459,8 +452,6 @@ namespace vcl
 /*- private definitions */
 
     struct TrueTypeFont {
-        sal_uInt32 tag;
-
         char        *fname;
         sal_Int32   fsize;
         sal_uInt8   *ptr;
