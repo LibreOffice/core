@@ -702,7 +702,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
 // Hack that out unconditionally for debug builds, as per https://bugzilla.redhat.com/show_bug.cgi?id=981149
 // upstream refuses to make this configurable in any way.
 // NOTE: You need to use the 'gen' backend for this to work (SAL_USE_VCLPLUGIN=gen)
-#ifndef OSL_DEBUG_LEVEL
+#if OSL_DEBUG_LEVEL < 1
         if( pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_PING ) )
             a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_PING );
 #endif
