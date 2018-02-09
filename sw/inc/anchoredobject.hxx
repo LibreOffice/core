@@ -38,7 +38,7 @@ class SwFormatAnchor;
 
     Purpose of this class is to provide a unified interface for the positioning
     of Writer fly frames (derived classes of <SwFlyFrame>) and of drawing objects
-    (derived classes of <SwDrawFrame>).
+    (derived classes of <SwAnchoredDrawObject>).
 
     @author OD
 */
