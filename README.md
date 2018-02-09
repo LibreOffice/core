@@ -16,8 +16,8 @@ A quick overview of the LibreOffice code structure.
 You can develop for LibreOffice in one of two ways, one
 recommended and one much less so. First the somewhat less recommended
 way: it is possible to use the SDK to develop an extension,
-for which you can read the API docs [here](http://api.libreoffice.org/)
-and [here](http://wiki.services.openoffice.org/wiki/Documentation/DevGuide).
+for which you can read the API docs [here](https://api.libreoffice.org/)
+and [here](https://wiki.openoffice.org/wiki/Documentation/DevGuide).
 This re-uses the (extremely generic) UNO APIs that are also used by
 macro scripting in StarBasic.
 
@@ -68,7 +68,7 @@ Each module should have a `README` file inside it which has some
 degree of documentation for that module; patches are most welcome to
 improve those. We have those turned into a web page here:
 
-http://docs.libreoffice.org/
+https://docs.libreoffice.org/
 
 However, there are two hundred modules, many of them of only
 peripheral interest for a specialist audience. So - where is the
