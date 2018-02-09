@@ -75,7 +75,7 @@ ErrorBox MSG_ERR_NO_WEBBROWSER_FOUND
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message[ en-US ] = "%PRODUCTNAME could not find a web browser on your system. Please check your Desktop Preferences or install a web browser (for example, Mozilla) in the default  location requested during the browser installation." ;
+    Message[ en-US ] = "%PRODUCTNAME could not find a web browser on your system. Please check your desktop preferences or install a web browser (for example, Mozilla) in the default location requested during the browser installation." ;
 };
 
 Resource SID_UNKNOWN
