@@ -146,6 +146,7 @@ ScUndoAnchorData::ScUndoAnchorData( SdrObject* pObjP, ScDocument* pDoc, SCTAB nT
     mnTab( nTab )
 {
     mbWasCellAnchored = ScDrawLayer::IsCellAnchored( *pObjP );
+    mbWasResizeWithCell = ScDrawLayer::IsResizeWithCell( *pObjP );
 }
 
 ScUndoAnchorData::~ScUndoAnchorData()
@@ -162,7 +163,7 @@ void ScUndoAnchorData::Undo()
     }
 
     if (mbWasCellAnchored)
-        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *mpDoc, mnTab);
+        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *mpDoc, mnTab, mbWasResizeWithCell);
     else
         ScDrawLayer::SetPageAnchored( *pObj );
 }
@@ -172,7 +173,7 @@ void ScUndoAnchorData::Redo()
     if (mbWasCellAnchored)
         ScDrawLayer::SetPageAnchored( *pObj );
     else
-        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *mpDoc, mnTab);
+        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *mpDoc, mnTab, mbWasResizeWithCell);
 
     // Trigger Object Change
     if (pObj->IsInserted() && pObj->GetPage() && pObj->GetModel())
@@ -826,7 +827,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         // Prevent multiple broadcasts during the series of changes.
         SdrDelayBroadcastObjectChange aDelayBroadcastObjectChange(*pObj);
 
-        bool bCanResize = bValid2 && !pObj->IsResizeProtect();
+        bool bCanResize = bValid2 && !pObj->IsResizeProtect() && rData.mbResizeWithCell;
 
         //First time positioning, must be able to at least move it
         ScDrawObjData& rNoRotatedAnchor = *GetNonRotatedObjData( pObj, true );
@@ -1891,36 +1892,39 @@ namespace
     }
 }
 
-void ScDrawLayer::SetVisualCellAnchored( SdrObject &rObj, const ScDrawObjData &rAnchor )
+void ScDrawLayer::SetVisualCellAnchored( SdrObject &rObj, const ScDrawObjData &rAnchor, bool bResizeWithCell )
 {
     ScDrawObjData* pAnchor = GetNonRotatedObjData( &rObj, true );
     pAnchor->maStart = rAnchor.maStart;
     pAnchor->maEnd = rAnchor.maEnd;
     pAnchor->maStartOffset = rAnchor.maStartOffset;
     pAnchor->maEndOffset = rAnchor.maEndOffset;
+    pAnchor->mbResizeWithCell = bResizeWithCell;
 }
 
-void ScDrawLayer::SetCellAnchored( SdrObject &rObj, const ScDrawObjData &rAnchor )
+void ScDrawLayer::SetCellAnchored( SdrObject &rObj, const ScDrawObjData &rAnchor, bool bResizeWithCell )
 {
     ScDrawObjData* pAnchor = GetObjData( &rObj, true );
     pAnchor->maStart = rAnchor.maStart;
     pAnchor->maEnd = rAnchor.maEnd;
     pAnchor->maStartOffset = rAnchor.maStartOffset;
     pAnchor->maEndOffset = rAnchor.maEndOffset;
+    pAnchor->mbResizeWithCell = bResizeWithCell;
 }
 
-void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab )
+void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab,
+                                               bool bResizeWithCell )
 {
     ScDrawObjData aAnchor;
     // set anchor in terms of the visual ( SnapRect )
     // object ( e.g. for when object is rotated )
     GetCellAnchorFromPosition( rObj, aAnchor, rDoc, nTab, false );
-    SetCellAnchored( rObj, aAnchor );
+    SetCellAnchored( rObj, aAnchor, bResizeWithCell );
     // - keep also an anchor in terms of the Logic ( untransformed ) object
     // because that's what we stored ( and still do ) to xml
     ScDrawObjData aVisAnchor;
     GetCellAnchorFromPosition( rObj, aVisAnchor, rDoc, nTab );
-    SetVisualCellAnchored( rObj, aVisAnchor );
+    SetVisualCellAnchored( rObj, aVisAnchor, bResizeWithCell );
     // absolutely necessary to set flag that in order to prevent ScDrawLayer::RecalcPos
     // doing an initialisation hack
     if ( ScDrawObjData* pAnchor = GetObjData( &rObj ) )
@@ -1981,6 +1985,17 @@ bool ScDrawLayer::IsCellAnchored( const SdrObject& rObj )
     return GetFirstUserDataOfType(&rObj, SC_UD_OBJDATA) != nullptr;
 }
 
+bool ScDrawLayer::IsResizeWithCell( const SdrObject& rObj )
+{
+    // Cell anchored object always has a user data, to store the anchor cell
+    // info. If it doesn't then it's page-anchored.
+    ScDrawObjData* pDrawObjData = GetObjData(const_cast<SdrObject*>(&rObj));
+    if (!pDrawObjData)
+        return false;
+
+    return pDrawObjData->mbResizeWithCell;
+}
+
 void ScDrawLayer::SetPageAnchored( SdrObject &rObj )
 {
     DeleteFirstUserDataOfType(&rObj, SC_UD_OBJDATA);
@@ -1991,7 +2006,17 @@ ScAnchorType ScDrawLayer::GetAnchorType( const SdrObject &rObj )
 {
     //If this object has a cell anchor associated with it
     //then its cell-anchored, otherwise its page-anchored
-    return ScDrawLayer::GetObjData(const_cast<SdrObject*>(&rObj)) ? SCA_CELL : SCA_PAGE;
+    const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(const_cast<SdrObject*>(&rObj));
+
+    // When there is no cell anchor, it is page anchored.
+    if (!pObjData)
+        return SCA_PAGE;
+
+    // It's cell-anchored, check if the object resizes with the cell
+    if (IsResizeWithCell(rObj))
+        return SCA_CELL_RESIZE;
+
+    return SCA_CELL;
 }
 
 std::map<SCROW, std::vector<SdrObject*>>

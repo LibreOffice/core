@@ -421,7 +421,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
                                     //shape. #TODO think about changing the anchoring behaviour here too
                                     //Currently we've only got a start anchor, not an end-anchor, so generate that now
                                     ScDrawLayer::UpdateCellAnchorFromPositionEnd(*pObj, aAnchor, *pDoc, aAddress.Sheet);
-                                    ScDrawLayer::SetCellAnchored(*pObj, aAnchor);
+                                    ScDrawLayer::SetCellAnchored(*pObj, aAnchor, false);
                                 }
                             }
                         }

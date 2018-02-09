@@ -3296,6 +3296,9 @@ namespace xmloff { namespace token {
 
         // for optional language-dependent reference formats
         TOKEN( "reference-language",              XML_REFERENCE_LANGUAGE ),
+
+        TOKEN( "resize-with-cell",                XML_RESIZE_WITH_CELL ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, nullptr,                       XML_TOKEN_END }
 #else

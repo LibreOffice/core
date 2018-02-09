@@ -3596,7 +3596,7 @@ SdrObject* XclImpDffConverter::FinalizeObj(DffObjData& rDffObjData, SdrObject* p
     {
         // cell anchoring
         if ( !rDffObjData.bPageAnchor )
-            ScDrawLayer::SetCellAnchoredFromPosition( *xSdrObj,  GetDoc(), xDrawObj->GetTab() );
+            ScDrawLayer::SetCellAnchoredFromPosition( *xSdrObj,  GetDoc(), xDrawObj->GetTab(), false );
     }
 
     return xSdrObj.release();
