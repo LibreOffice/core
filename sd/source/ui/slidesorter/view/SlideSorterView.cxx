@@ -703,7 +703,7 @@ std::shared_ptr<cache::PageCache> const & SlideSorterView::GetPreviewCache()
     return mpPreviewCache;
 }
 
-Pair const & SlideSorterView::GetVisiblePageRange()
+Range const & SlideSorterView::GetVisiblePageRange()
 {
     if ( ! mbPageObjectVisibilitiesValid)
         DeterminePageObjectVisibilities();
