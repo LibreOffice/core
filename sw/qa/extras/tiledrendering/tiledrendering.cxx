@@ -2096,6 +2096,7 @@ void SwTiledRenderingTest::testIMESupport()
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
 
     SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
+    assert(pView);
     SwWrtShell* pWrtShell = pView->GetWrtShellPtr();
 
     // sequence of chinese IME compositions when 'nihao' is typed in an IME
