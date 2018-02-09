@@ -1916,7 +1916,7 @@ void Test::testSortImages()
     CPPUNIT_ASSERT(pPage);
     pPage->InsertObject(pObj);
     // Anchor to cell
-    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, false);
     // Move to cell B2
     ScAddress aCellPos(1, 1, 0);
     pDrawLayer->MoveObject(pObj, aCellPos);
