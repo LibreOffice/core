@@ -570,16 +570,6 @@ IMPL_LINK(FocusManager, ChildEventListener, VclWindowEvent&, rEvent, void)
                         FocusPanel(aLocation.mnIndex, true);
                         break;
 
-                    case KEY_TAB:
-                        if (mpFirstFocusedContentControl!=nullptr
-                            && mpLastFocusedWindow == mpFirstFocusedContentControl)
-                        {
-                            // Move focus back to panel (or deck)
-                            // title.
-                            FocusPanel(aLocation.mnIndex, true);
-                        }
-                        break;
-
                     default:
                         break;
                 }
