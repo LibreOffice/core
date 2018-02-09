@@ -75,7 +75,7 @@ private:
     void insertReference( const OUString& rIdentifier, const css::uno::Reference< css::uno::XInterface >& rInterface );
 
     IdMap_t maEntries;
-    sal_Int32 mnNextId;
+    sal_uInt32 mnNextId;
 };
 
 }
