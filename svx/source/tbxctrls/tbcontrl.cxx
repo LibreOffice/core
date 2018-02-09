@@ -1968,14 +1968,6 @@ void SvxFrameWindow_Impl::InitImageList()
     aImgVec.emplace_back(RID_SVXBMP_FRAME10);
     aImgVec.emplace_back(RID_SVXBMP_FRAME11);
     aImgVec.emplace_back(RID_SVXBMP_FRAME12);
-
-    if (GetParent()->GetDPIScaleFactor() > 1)
-    {
-        for (size_t i = 0; i < aImgVec.size(); ++i)
-        {
-            aImgVec[i].Scale(GetParent()->GetDPIScaleFactor(), GetParent()->GetDPIScaleFactor());
-        }
-    }
 }
 
 static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
