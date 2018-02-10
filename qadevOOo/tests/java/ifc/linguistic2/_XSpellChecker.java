@@ -50,7 +50,7 @@ public class _XSpellChecker extends MultiMethodTest {
 
     /**
     * Test calls the method for a correctly spelled word and
-    * for a uncorrectly spelled word and checks returned values. <p>
+    * for a incorrectly spelled word and checks returned values. <p>
     * Has <b> OK </b> status if returned value is equal to true in first case,
     * if returned value is equal to false in second case and no exceptions
     * were thrown. <p>
@@ -75,7 +75,7 @@ public class _XSpellChecker extends MultiMethodTest {
     }
 
     /**
-    * Test calls the method for a uncorrectly spelled word
+    * Test calls the method for a incorrectly spelled word
     * and checks returned values. <p>
     * Has <b> OK </b> status if at least one spell alternative exists
     * and no exceptions were thrown. <p>
