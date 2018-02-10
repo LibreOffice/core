@@ -106,6 +106,7 @@
 #include <dwfunctr.hxx>
 #include <acredlin.hxx>
 #include <o3tl/make_unique.hxx>
+#include <filter.hxx>
 #include <scabstdlg.hxx>
 
 OUString ScResId(const char* pId)
@@ -265,5 +266,15 @@ void ScDLL::Init()
 
     //  StarOne Services are now handled in the registry
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT
+void lok_preload_hook()
+{
+    // scfilt
+    ScFormatFilter::Get();
+    // scui
+    ScAbstractDialogFactory::Create();
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

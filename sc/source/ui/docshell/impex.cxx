@@ -2334,7 +2334,9 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
 #ifndef DISABLE_DYNLOADING
     OUString sFilterLib(SVLIBRARY("scfilt"));
     static ::osl::Module aModule;
-    bool bLoaded = aModule.loadRelative(&thisModule, sFilterLib);
+    bool bLoaded = aModule.is();
+    if (!bLoaded)
+        bLoaded = aModule.loadRelative(&thisModule, sFilterLib);
     if (!bLoaded)
         bLoaded = aModule.load(sFilterLib);
     if (bLoaded)
