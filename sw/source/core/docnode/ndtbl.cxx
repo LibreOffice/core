@@ -3941,10 +3941,10 @@ SwTableFormat* SwDoc::FindTableFormatByName( const OUString& rName, bool bAll ) 
     return const_cast<SwTableFormat*>(static_cast<const SwTableFormat*>(pRet));
 }
 
-bool SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, TableChgWidthHeightType eType,
+bool SwDoc::SetColRowWidthHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eType,
                                     SwTwips nAbsDiff, SwTwips nRelDiff )
 {
-    SwTableNode* pTableNd = const_cast<SwTableNode*>(rAktBox.GetSttNd()->FindTableNode());
+    SwTableNode* pTableNd = const_cast<SwTableNode*>(rCurrentBox.GetSttNd()->FindTableNode());
     SwUndo* pUndo = nullptr;
 
     if( (TableChgWidthHeightType::InsertDeleteMode & eType) && dynamic_cast<const SwDDETable*>( &pTableNd->GetTable()) !=  nullptr)
@@ -3963,7 +3963,7 @@ bool SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, TableChgWidthHeightType e
     case TableChgWidthHeightType::CellLeft:
     case TableChgWidthHeightType::CellRight:
         {
-             bRet = pTableNd->GetTable().SetColWidth( rAktBox,
+             bRet = pTableNd->GetTable().SetColWidth( rCurrentBox,
                                 eType, nAbsDiff, nRelDiff,
                                 bUndo ? &pUndo : nullptr );
         }
@@ -3972,7 +3972,7 @@ bool SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, TableChgWidthHeightType e
     case TableChgWidthHeightType::RowBottom:
     case TableChgWidthHeightType::CellTop:
     case TableChgWidthHeightType::CellBottom:
-        bRet = pTableNd->GetTable().SetRowHeight( rAktBox,
+        bRet = pTableNd->GetTable().SetRowHeight( rCurrentBox,
                             eType, nAbsDiff, nRelDiff,
                             bUndo ? &pUndo : nullptr );
         break;

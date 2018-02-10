@@ -1254,7 +1254,7 @@ public:
 
     void AppendUndoForInsertFromDB( const SwPaM& rPam, bool bIsTable );
 
-    bool SetColRowWidthHeight( SwTableBox& rAktBox, TableChgWidthHeightType eType,
+    bool SetColRowWidthHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eType,
                                 SwTwips nAbsDiff, SwTwips nRelDiff );
     SwTableBoxFormat* MakeTableBoxFormat();
     SwTableLineFormat* MakeTableLineFormat();
@@ -1262,7 +1262,7 @@ public:
     // helper function: cleanup before checking number value
     bool IsNumberFormat( const OUString& rString, sal_uInt32& F_Index, double& fOutNumber);
     // Check if box has numerical value. Change format of box if required.
-    void ChkBoxNumFormat( SwTableBox& rAktBox, bool bCallUpdate );
+    void ChkBoxNumFormat( SwTableBox& rCurrentBox, bool bCallUpdate );
     void SetTableBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet );
     void ClearBoxNumAttrs( const SwNodeIndex& rNode );
     void ClearLineNumAttrs( SwPosition const & rPos );

@@ -332,9 +332,9 @@ public:
     TableChgMode GetTableChgMode() const        { return m_eTableChgMode; }
     void SetTableChgMode( TableChgMode eMode )  { m_eTableChgMode = eMode; }
 
-    bool SetColWidth( SwTableBox& rAktBox, TableChgWidthHeightType eType,
+    bool SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
-    bool SetRowHeight( SwTableBox& rAktBox, TableChgWidthHeightType eType,
+    bool SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
     void RegisterToFormat( SwFormat& rFormat );
 #ifdef DBG_UTIL
