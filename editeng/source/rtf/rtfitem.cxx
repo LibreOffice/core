@@ -214,36 +214,36 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 if( !bChkStkPos )
                     break;
 
-                SvxRTFItemStackType* pAkt = aAttrStack.empty() ? nullptr : aAttrStack.back();
-                if( !pAkt || (pAkt->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
-                    pAkt->nSttCnt == pInsPos->GetCntIdx() ))
+                SvxRTFItemStackType* pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back();
+                if( !pCurrent || (pCurrent->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
+                    pCurrent->nSttCnt == pInsPos->GetCntIdx() ))
                     break;
 
                 int nLastToken = GetStackPtr(-1)->nTokenId;
                 if( RTF_PARD == nLastToken || RTF_PLAIN == nLastToken )
                     break;
 
-                if (pAkt->aAttrSet.Count() || pAkt->m_pChildList ||
-                    pAkt->nStyleNo )
+                if (pCurrent->aAttrSet.Count() || pCurrent->m_pChildList ||
+                    pCurrent->nStyleNo )
                 {
                     // Open a new Group
                     SvxRTFItemStackType* pNew = new SvxRTFItemStackType(
-                                                *pAkt, *pInsPos, true );
+                                                *pCurrent, *pInsPos, true );
                     pNew->SetRTFDefaults( GetRTFDefaults() );
 
                     // "Set" all valid attributes up until this point
                     AttrGroupEnd();
-                    pAkt = aAttrStack.empty() ? nullptr : aAttrStack.back();  // can be changed after AttrGroupEnd!
-                    pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : nullptr );
+                    pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back();  // can be changed after AttrGroupEnd!
+                    pNew->aAttrSet.SetParent( pCurrent ? &pCurrent->aAttrSet : nullptr );
 
                     aAttrStack.push_back( pNew );
-                    pAkt = pNew;
+                    pCurrent = pNew;
                 }
                 else
                     // continue to use this entry as a new one
-                    pAkt->SetStartPos( *pInsPos );
+                    pCurrent->SetStartPos( *pInsPos );
 
-                pSet = &pAkt->aAttrSet;
+                pSet = &pCurrent->aAttrSet;
             } while( false );
 
             switch( nToken )
@@ -268,11 +268,11 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 {
                     sal_uInt16 nStyleNo = -1 == nTokenValue ? 0 : sal_uInt16(nTokenValue);
                     // set StyleNo to the current style on the AttrStack
-                    SvxRTFItemStackType* pAkt = aAttrStack.empty() ? nullptr : aAttrStack.back();
-                    if( !pAkt )
+                    SvxRTFItemStackType* pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back();
+                    if( !pCurrent )
                         break;
 
-                    pAkt->nStyleNo = nStyleNo;
+                    pCurrent->nStyleNo = nStyleNo;
                 }
                 break;
 
@@ -1689,7 +1689,7 @@ void SvxRTFParser::RTFPardPlain( bool const bPard, SfxItemSet** ppSet )
 {
     if( !bNewGroup && !aAttrStack.empty() ) // not at the beginning of a new group
     {
-        SvxRTFItemStackType* pAkt = aAttrStack.back();
+        SvxRTFItemStackType* pCurrent = aAttrStack.back();
 
         int nLastToken = GetStackPtr(-1)->nTokenId;
         bool bNewStkEntry = true;
@@ -1697,30 +1697,30 @@ void SvxRTFParser::RTFPardPlain( bool const bPard, SfxItemSet** ppSet )
             RTF_PLAIN != nLastToken &&
             BRACELEFT != nLastToken )
         {
-            if (pAkt->aAttrSet.Count() || pAkt->m_pChildList || pAkt->nStyleNo)
+            if (pCurrent->aAttrSet.Count() || pCurrent->m_pChildList || pCurrent->nStyleNo)
             {
                 // open a new group
-                SvxRTFItemStackType* pNew = new SvxRTFItemStackType( *pAkt, *pInsPos, true );
+                SvxRTFItemStackType* pNew = new SvxRTFItemStackType( *pCurrent, *pInsPos, true );
                 pNew->SetRTFDefaults( GetRTFDefaults() );
 
                 // Set all until here valid attributes
                 AttrGroupEnd();
-                pAkt = aAttrStack.empty() ? nullptr : aAttrStack.back();  // can be changed after AttrGroupEnd!
-                pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : nullptr );
+                pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back();  // can be changed after AttrGroupEnd!
+                pNew->aAttrSet.SetParent( pCurrent ? &pCurrent->aAttrSet : nullptr );
                 aAttrStack.push_back( pNew );
-                pAkt = pNew;
+                pCurrent = pNew;
             }
             else
             {
                 // continue to use this entry as new
-                pAkt->SetStartPos( *pInsPos );
+                pCurrent->SetStartPos( *pInsPos );
                 bNewStkEntry = false;
             }
         }
 
         // now reset all to default
         if( bNewStkEntry &&
-            ( pAkt->aAttrSet.GetParent() || pAkt->aAttrSet.Count() ))
+            ( pCurrent->aAttrSet.GetParent() || pCurrent->aAttrSet.Count() ))
         {
             const SfxPoolItem *pItem, *pDef;
             const sal_uInt16* pPtr;
@@ -1728,7 +1728,7 @@ void SvxRTFParser::RTFPardPlain( bool const bPard, SfxItemSet** ppSet )
             const SfxItemSet* pDfltSet = &GetRTFDefaults();
             if( bPard )
             {
-                pAkt->nStyleNo = 0;
+                pCurrent->nStyleNo = 0;
                 pPtr = reinterpret_cast<sal_uInt16*>(&aPardMap);
                 nCnt = sizeof(aPardMap) / sizeof(sal_uInt16);
             }
@@ -1744,35 +1744,35 @@ void SvxRTFParser::RTFPardPlain( bool const bPard, SfxItemSet** ppSet )
                 if( !*pPtr )
                     ;
                 else if (SfxItemPool::IsSlot(*pPtr))
-                    pAkt->aAttrSet.ClearItem( *pPtr );
+                    pCurrent->aAttrSet.ClearItem( *pPtr );
                 else if( IsChkStyleAttr() )
-                    pAkt->aAttrSet.Put( pDfltSet->Get( *pPtr ) );
-                else if( !pAkt->aAttrSet.GetParent() )
+                    pCurrent->aAttrSet.Put( pDfltSet->Get( *pPtr ) );
+                else if( !pCurrent->aAttrSet.GetParent() )
                 {
                     if( SfxItemState::SET ==
                         pDfltSet->GetItemState( *pPtr, false, &pDef ))
-                        pAkt->aAttrSet.Put( *pDef );
+                        pCurrent->aAttrSet.Put( *pDef );
                     else
-                        pAkt->aAttrSet.ClearItem( *pPtr );
+                        pCurrent->aAttrSet.ClearItem( *pPtr );
                 }
-                else if( SfxItemState::SET == pAkt->aAttrSet.GetParent()->
+                else if( SfxItemState::SET == pCurrent->aAttrSet.GetParent()->
                             GetItemState( *pPtr, true, &pItem ) &&
                         *( pDef = &pDfltSet->Get( *pPtr )) != *pItem )
-                    pAkt->aAttrSet.Put( *pDef );
+                    pCurrent->aAttrSet.Put( *pDef );
                 else
                 {
                     if( SfxItemState::SET ==
                         pDfltSet->GetItemState( *pPtr, false, &pDef ))
-                        pAkt->aAttrSet.Put( *pDef );
+                        pCurrent->aAttrSet.Put( *pDef );
                     else
-                        pAkt->aAttrSet.ClearItem( *pPtr );
+                        pCurrent->aAttrSet.ClearItem( *pPtr );
                 }
             }
         }
         else if( bPard )
-            pAkt->nStyleNo = 0;     // reset Style number
+            pCurrent->nStyleNo = 0;     // reset Style number
 
-        *ppSet = &pAkt->aAttrSet;
+        *ppSet = &pCurrent->aAttrSet;
 
         if (!bPard)
         {
