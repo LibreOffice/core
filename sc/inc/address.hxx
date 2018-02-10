@@ -149,7 +149,7 @@ enum class ScRefFlags : sal_uInt16
     ROW_VALID     = 0x0100,
     COL_VALID     = 0x0200,
     TAB_VALID     = 0x0400,
-    // BITS for convience
+    // BITS for convenience
     BITS          = COL_ABS | ROW_ABS | TAB_ABS | TAB_3D
                     | ROW_VALID | COL_VALID | TAB_VALID,
     // somewhat cheesy kludge to force the display of the document name even for
