@@ -4877,7 +4877,8 @@ void ToolBox::ImplChangeHighlight( ImplToolItem const * pItem, bool bNoGrabFocus
 // check for keyboard accessible items
 static bool ImplIsValidItem( const ImplToolItem* pItem, bool bNotClipped )
 {
-    bool bValid = (pItem && pItem->meType == ToolBoxItemType::BUTTON && pItem->mbVisible && !ImplIsFixedControl( pItem ));
+    bool bValid = (pItem && pItem->meType == ToolBoxItemType::BUTTON && pItem->mbVisible && !ImplIsFixedControl( pItem )
+                   && pItem->mbEnabled);
     if( bValid && bNotClipped && pItem->IsClipped() )
         bValid = false;
     return bValid;
