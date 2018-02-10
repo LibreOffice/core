@@ -450,6 +450,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
             {
                 aRefData.Ref1.SetFlag3D(true);
                 aRefData.Ref1.SetTabRel(false);     // pointer-selected => absolute sheet reference
+                aRefData.Ref1.SetAbsTab( rRef.aStart.Tab() ); // set reference tdf#72440
             }
             if (bSingle)
                 aArray.AddSingleReference(aRefData.Ref1);
