@@ -269,12 +269,12 @@ class WW8SprmIter
 private:
     const wwSprmParser &mrSprmParser;
     // these members will be updated
-    const sal_uInt8* pSprms; // remaining part of the SPRMs ( == start of akt. SPRM)
-    const sal_uInt8* pAktParams; // start of akt. SPRM's parameters
-    sal_uInt16 nAktId;
-    sal_uInt16 nAktSize;
+    const sal_uInt8* pSprms; // remaining part of the SPRMs ( == start of current SPRM)
+    const sal_uInt8* pCurrentParams; // start of current SPRM's parameters
+    sal_uInt16 nCurrentId;
+    sal_uInt16 nCurrentSize;
 
-    sal_Int32 nRemLen;   // length of remaining SPRMs (including akt. SPRM)
+    sal_Int32 nRemLen;   // length of remaining SPRMs (including current SPRM)
 
     void UpdateMyMembers();
 
@@ -286,8 +286,8 @@ public:
     void  advance();
     const sal_uInt8* GetSprms() const
         { return ( pSprms && (0 < nRemLen) ) ? pSprms : nullptr; }
-    const sal_uInt8* GetAktParams() const { return pAktParams; }
-    sal_uInt16 GetAktId() const { return nAktId; }
+    const sal_uInt8* GetAktParams() const { return pCurrentParams; }
+    sal_uInt16 GetAktId() const { return nCurrentId; }
     sal_Int32 GetRemLen() const { return nRemLen; }
 
 private:
@@ -855,7 +855,7 @@ struct WW8PLCFManResult
     WW8_CP nCpPos;      // attribute starting position
     long nMemLen;       // length for previous
     long nCp2OrIdx;     // footnote-textpos or index in PLCF
-    WW8_CP nAktCp;      // only used by caller
+    WW8_CP nCurrentCp;  // only used by caller
     const sal_uInt8* pMemPos;// Mem-Pos for Sprms
     sal_uInt16 nSprmId;     // Sprm-Id ( 0 = invalid Id -> skip! )
                         // (2..255) or pseudo-Sprm-Id (256..260)
@@ -1092,7 +1092,7 @@ public:
     WW8_FC WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode = nullptr,
         WW8_CP* pNextPieceCp = nullptr, bool* pTestFlag = nullptr) const;
 
-    sal_Int32 WW8ReadString(SvStream& rStrm, OUString& rStr, WW8_CP nAktStartCp,
+    sal_Int32 WW8ReadString(SvStream& rStrm, OUString& rStr, WW8_CP nCurrentStartCp,
         long nTotalLen, rtl_TextEncoding eEnc ) const;
 
 };
