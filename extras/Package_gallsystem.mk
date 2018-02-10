@@ -13,9 +13,6 @@ $(eval $(call gb_Package_add_files,extras_gallsystem,$(LIBO_SHARE_FOLDER)/galler
 	sg1.sdg \
 	sg1.sdv \
 	sg1.thm \
-	sg3.sdg \
-	sg3.sdv \
-	sg3.thm \
 	sg4.sdg \
 	sg4.sdv \
 	sg4.thm \
