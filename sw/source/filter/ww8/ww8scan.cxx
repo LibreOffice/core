@@ -886,7 +886,7 @@ void WW8SprmIter::advance()
 {
     if (nRemLen > 0 )
     {
-        sal_uInt16 nSize = nAktSize;
+        sal_uInt16 nSize = nCurrentSize;
         if (nSize > nRemLen)
             nSize = nRemLen;
         pSprms += nSize;
@@ -901,18 +901,18 @@ void WW8SprmIter::UpdateMyMembers()
 
     if (bValid)
     {
-        nAktId = mrSprmParser.GetSprmId(pSprms);
-        nAktSize = mrSprmParser.GetSprmSize(nAktId, pSprms, nRemLen);
-        pAktParams = pSprms + mrSprmParser.DistanceToData(nAktId);
-        bValid = nAktSize <= nRemLen;
+        nCurrentId = mrSprmParser.GetSprmId(pSprms);
+        nCurrentSize = mrSprmParser.GetSprmSize(nCurrentId, pSprms, nRemLen);
+        pCurrentParams = pSprms + mrSprmParser.DistanceToData(nCurrentId);
+        bValid = nCurrentSize <= nRemLen;
         SAL_WARN_IF(!bValid, "sw.ww8", "sprm longer than remaining bytes, doc or parser is wrong");
     }
 
     if (!bValid)
     {
-        nAktId = 0;
-        pAktParams = nullptr;
-        nAktSize = 0;
+        nCurrentId = 0;
+        pCurrentParams = nullptr;
+        nCurrentSize = 0;
         nRemLen = 0;
     }
 }
@@ -2031,21 +2031,21 @@ OUString read_uInt16_BeltAndBracesString(SvStream& rStrm)
 }
 
 sal_Int32 WW8ScannerBase::WW8ReadString( SvStream& rStrm, OUString& rStr,
-    WW8_CP nAktStartCp, long nTotalLen, rtl_TextEncoding eEnc ) const
+    WW8_CP nCurrentStartCp, long nTotalLen, rtl_TextEncoding eEnc ) const
 {
     // Read in plain text, which can extend over several pieces
     rStr.clear();
 
-    if (nAktStartCp < 0 || nTotalLen < 0)
+    if (nCurrentStartCp < 0 || nTotalLen < 0)
         return 0;
 
-    WW8_CP nBehindTextCp = nAktStartCp + nTotalLen;
+    WW8_CP nBehindTextCp = nCurrentStartCp + nTotalLen;
     WW8_CP nNextPieceCp  = nBehindTextCp; // Initialization, important for Ver6
     long nTotalRead = 0;
     do
     {
         bool bIsUnicode(false), bPosOk(false);
-        WW8_FC fcAct = WW8Cp2Fc(nAktStartCp,&bIsUnicode,&nNextPieceCp,&bPosOk);
+        WW8_FC fcAct = WW8Cp2Fc(nCurrentStartCp,&bIsUnicode,&nNextPieceCp,&bPosOk);
 
         // Probably aimed beyond file end, doesn't matter!
         if( !bPosOk )
@@ -2058,7 +2058,7 @@ sal_Int32 WW8ScannerBase::WW8ReadString( SvStream& rStrm, OUString& rStr,
         WW8_CP nEnd = (nNextPieceCp < nBehindTextCp) ? nNextPieceCp
             : nBehindTextCp;
         WW8_CP nLen;
-        const bool bFail = o3tl::checked_sub(nEnd, nAktStartCp, nLen);
+        const bool bFail = o3tl::checked_sub(nEnd, nCurrentStartCp, nLen);
         if (bFail)
             break;
 
@@ -2070,7 +2070,7 @@ sal_Int32 WW8ScannerBase::WW8ReadString( SvStream& rStrm, OUString& rStr,
              : read_uInt8s_ToOUString(rStrm, nLen, eEnc);
 
         nTotalRead  += nLen;
-        nAktStartCp += nLen;
+        nCurrentStartCp += nLen;
         if ( nTotalRead != rStr.getLength() )
             break;
     }
@@ -3027,8 +3027,8 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
     long nPo = SVBT16ToShort( static_cast<sal_uInt8 *>(pPage) );
     nPo <<= 9;                                  // shift as LONG
 
-    long nAktFkpFilePos = pFkp ? pFkp->GetFilePos() : -1;
-    if (nAktFkpFilePos == nPo)
+    long nCurrentFkpFilePos = pFkp ? pFkp->GetFilePos() : -1;
+    if (nCurrentFkpFilePos == nPo)
         pFkp->Reset(GetStartFc());
     else
     {
@@ -3763,9 +3763,9 @@ bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,s
     while (i + maSprmParser.MinSprmLen() <= nSprmSiz)
     {
         // Sprm found?
-        const sal_uInt16 nAktId = maSprmParser.GetSprmId(pSp);
+        const sal_uInt16 nCurrentId = maSprmParser.GetSprmId(pSp);
         sal_Int32 nRemLen = nSprmSiz - i;
-        const sal_uInt16 x = maSprmParser.GetSprmSize(nAktId, pSp, nRemLen);
+        const sal_uInt16 x = maSprmParser.GetSprmSize(nCurrentId, pSp, nRemLen);
         bool bValid = x <= nRemLen;
         if (!bValid)
         {
@@ -3773,22 +3773,22 @@ bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,s
             break;
         }
         bool bOk = true;
-        if( nAktId  == nId1 )
+        if( nCurrentId  == nId1 )
         {
             sal_uInt16 nFixedLen = maSprmParser.DistanceToData(nId1);
             r1 = SprmResult(pSp + nFixedLen, x - nFixedLen);
         }
-        else if( nAktId  == nId2 )
+        else if( nCurrentId  == nId2 )
         {
             sal_uInt16 nFixedLen = maSprmParser.DistanceToData(nId2);
             r2 = SprmResult(pSp + nFixedLen, x - nFixedLen);
         }
-        else if( nAktId  == nId3 )
+        else if( nCurrentId  == nId3 )
         {
             sal_uInt16 nFixedLen = maSprmParser.DistanceToData(nId3);
             r3 = SprmResult(pSp + nFixedLen, x - nFixedLen);
         }
-        else if( nAktId  == nId4 )
+        else if( nCurrentId  == nId4 )
         {
             sal_uInt16 nFixedLen = maSprmParser.DistanceToData(nId4);
             r4 = SprmResult(pSp + nFixedLen, x - nFixedLen);
@@ -3813,9 +3813,9 @@ SprmResult WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const
     while (i + maSprmParser.MinSprmLen() <= nSprmSiz)
     {
         // Sprm found?
-        const sal_uInt16 nAktId = maSprmParser.GetSprmId(pSp);
-        const sal_uInt16 x = maSprmParser.GetSprmSize(nAktId, pSp, nSprmSiz - i);
-        if (nAktId == nId)
+        const sal_uInt16 nCurrentId = maSprmParser.GetSprmId(pSp);
+        const sal_uInt16 x = maSprmParser.GetSprmSize(nCurrentId, pSp, nSprmSiz - i);
+        if (nCurrentId == nId)
         {
             sal_uInt16 nFixedLen =  maSprmParser.DistanceToData(nId);
             const sal_uInt8 *pRet = pSp + nFixedLen;
@@ -4412,13 +4412,13 @@ OUString WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex)
     sal_uInt16 i = 0;
     if (pBook[0] && pBook[1])
     {
-        WW8_CP nStartAkt, nEndAkt;
+        WW8_CP nStartCurrent, nEndCurrent;
         while (sal::static_int_cast<decltype(aBookNames)::size_type>(i) < aBookNames.size())
         {
             void* p;
             sal_uInt16 nEndIdx;
 
-            if( pBook[0]->GetData( i, nStartAkt, p ) && p )
+            if( pBook[0]->GetData( i, nStartCurrent, p ) && p )
                 nEndIdx = SVBT16ToShort( *static_cast<SVBT16*>(p) );
             else
             {
@@ -4426,9 +4426,9 @@ OUString WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex)
                 nEndIdx = i;
             }
 
-            nEndAkt = pBook[1]->GetPos( nEndIdx );
+            nEndCurrent = pBook[1]->GetPos( nEndIdx );
 
-            if ((nStartAkt >= nStart) && (nEndAkt <= nEnd))
+            if ((nStartCurrent >= nStart) && (nEndCurrent <= nEnd))
             {
                 nIndex = i;
                 bFound=true;
@@ -8335,17 +8335,17 @@ SprmResult wwSprmParser::findSprmData(sal_uInt16 nId, sal_uInt8* pSprms,
 {
     while (nLen >= MinSprmLen())
     {
-        const sal_uInt16 nAktId = GetSprmId(pSprms);
+        const sal_uInt16 nCurrentId = GetSprmId(pSprms);
         // set pointer to data
-        sal_uInt16 nSize = GetSprmSize(nAktId, pSprms, nLen);
+        sal_uInt16 nSize = GetSprmSize(nCurrentId, pSprms, nLen);
 
         bool bValid = nSize <= nLen;
 
         SAL_WARN_IF(!bValid, "sw.ww8",
-            "sprm 0x" << std::hex << nAktId << std::dec << " longer than remaining bytes, " <<
+            "sprm 0x" << std::hex << nCurrentId << std::dec << " longer than remaining bytes, " <<
             nSize << " vs " << nLen << "doc or parser is wrong");
 
-        if (nAktId == nId && bValid) // Sprm found
+        if (nCurrentId == nId && bValid) // Sprm found
         {
             sal_uInt16 nFixedLen = DistanceToData(nId);
             return SprmResult(pSprms + nFixedLen, nSize - nFixedLen);

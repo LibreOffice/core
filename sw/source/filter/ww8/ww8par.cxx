@@ -3728,7 +3728,7 @@ void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
     {
         bool bReSync;
         // Frame/Table/Autonumbering List Level
-        bTabRowEnd = ProcessSpecial(bReSync, rRes.nAktCp + m_xPlcxMan->GetCpOfs());
+        bTabRowEnd = ProcessSpecial(bReSync, rRes.nCurrentCp + m_xPlcxMan->GetCpOfs());
         if( bReSync )
             *pStartAttr = m_xPlcxMan->Get( &rRes ); // Get Attribut-Pos again
     }
@@ -3749,7 +3749,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStar
 
     OSL_ENSURE(m_pPaM->GetNode().GetTextNode(), "Missing txtnode");
     bool bStartAttr = m_xPlcxMan->Get(&aRes); // Get Attribute position again
-    aRes.nAktCp = rTextPos;                  // Current Cp position
+    aRes.nCurrentCp = rTextPos;                  // Current Cp position
 
     bool bNewSection = (aRes.nFlags & MAN_MASK_NEW_SEP) && !m_bIgnoreText;
     if ( bNewSection ) // New Section
