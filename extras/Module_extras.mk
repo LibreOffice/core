@@ -25,7 +25,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_gallmytheme \
 	Package_gallroot \
 	Package_gallsystem \
-	Package_gallwwwback \
 	Package_gallwwwgraf \
 	Package_glade \
 	Package_labels \
@@ -54,6 +53,7 @@ $(eval $(call gb_Module_add_l10n_targets,extras,\
 ifneq ($(WITH_GALLERY_BUILD),)
 $(eval $(call gb_Module_add_targets,extras,\
 	Gallery_arrows \
+	Gallery_backgrounds \
 	Gallery_computers \
 	Gallery_diagrams \
 	Gallery_education \
