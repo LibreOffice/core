@@ -22,7 +22,7 @@ Option Explicit
 Public Const SBMAXTEXTSIZE = 50
 
 
-Function SetProgressValue(iValue as Integer)	
+Function SetProgressValue(iValue as Integer)
 	If iValue = 0 Then
 		oProgressbar.End
 	End If
@@ -84,7 +84,7 @@ Dim NullValue
 		Else
 			oControl.Model.EffectiveValue = oControl.Model.EffectiveMax
 		End If
-		GetPeerSize() = oPeer.PreferredSize()	
+		GetPeerSize() = oPeer.PreferredSize()
 		oControl.Model.EffectiveValue = NullValue
 	ElseIf Not IsMissing(LocText) Then
 		oControl.Text = LocText
@@ -106,7 +106,7 @@ Dim NullValue
 			oControl.Text = Mid(SBSIZETEXT,1, SBMAXTEXTSIZE)
 		Else
 			oControl.Text = Mid(SBSIZETEXT,1, oControl.MaxTextLen)
-		End If		
+		End If
 		GetPeerSize() = oPeer.PreferredSize()
 		oControl.Text = &quot;&quot;
 	End If
@@ -140,7 +140,7 @@ Function PixelTo100thMMY(oControl as Object) as long
 	oPeer = oControl.GetPeer()
 	PixelTo100mmX = Clng(Peer.GetInfo.PixelPerMeterY/100000)
 
-&apos;	 PixelTo100thMM = nValue * 28					&apos; not an exact calculation 
+&apos;	 PixelTo100thMM = nValue * 28					&apos; not an exact calculation
 End function
 
 
@@ -167,25 +167,25 @@ Dim OldIndex as Integer
 	End If
 	OldIndex = CurIndex
 	CurIndex = GetCurIndex(DialogModel.lstStyles, Styles(),8)
-	If CurIndex &lt;&gt; OldIndex Then	
+	If CurIndex &lt;&gt; OldIndex Then
 		ToggleLayoutPage(False)
 		Dim sImportPath as String
 		sImportPath = Styles(CurIndex, 8)
 		bWithBackGraphic = LoadNewStyles(oDocument, DialogModel, CurIndex, sImportPath, Styles(), TexturePath)
 		ControlCaptionsToStandardLayout()
-		ToggleLayoutPage(True, &quot;lstStyles&quot;)	
+		ToggleLayoutPage(True, &quot;lstStyles&quot;)
 	End If
 WIZARDERROR:
-	If Err &lt;&gt; 0 Then	
+	If Err &lt;&gt; 0 Then
 		Msgbox(sMsgErrMsg, 16, GetProductName())
 		Resume LOCERROR
-		LOCERROR:		
+		LOCERROR:
 	End If
 End Sub
 
 
 
-Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Object	
+Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Object
 	If CurControlType = cNumericBox Then
 		oLocObject.TreatAsNumber = True
 		Select Case iLocFieldType
@@ -325,7 +325,7 @@ Function GetFormWizardPaths() as Boolean
 	If FormPath &lt;&gt; &quot;&quot; Then
 		WizardPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/&quot;)
 		If Wizardpath &lt;&gt; &quot;&quot; Then
-			TexturePath = GetOfficeSubPath(&quot;Gallery&quot;, &quot;www-back/&quot;)
+			TexturePath = GetOfficeSubPath(&quot;Gallery&quot;, &quot;backgrounds/&quot;)
 			If TexturePath &lt;&gt; &quot;&quot; Then
 				WorkPath = GetPathSettings(&quot;Work&quot;)
 				If WorkPath &lt;&gt; &quot;&quot; Then

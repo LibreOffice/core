@@ -95,7 +95,7 @@ class WriterPageDialog(UITestCase):
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillBitmapSizeY, 0)
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.FillBitmapName, 'Sky')
+                document.StyleFamilies.PageStyles.Standard.FillBitmapName, 'Paper graph')
         elif btn == 'btnpattern':
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillBitmapMode, REPEAT)
