@@ -1589,7 +1589,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
     const SalColor aKeepBrushColor = mnBrushColor;
     mnBrushColor = mnPenColor;
 
-    // #i11575#desc5#b adjust B2D tesselation result to raster positions
+    // #i11575#desc5#b adjust B2D tessellation result to raster positions
     basegfx::B2DPolygon aPolygon = rPolygon;
     const double fHalfWidth = 0.5 * rLineWidth.getX();
 
@@ -1601,12 +1601,12 @@ bool X11SalGraphicsImpl::drawPolyLine(
     bool bDrawnOk = true;
     if( bIsHairline )
     {
-        // hairlines can benefit from a simplified tesselation
+        // hairlines can benefit from a simplified tessellation
         // e.g. for hairlines the linejoin style can be ignored
         basegfx::B2DTrapezoidVector aB2DTrapVector;
         basegfx::utils::createLineTrapezoidFromB2DPolygon( aB2DTrapVector, aPolygon, rLineWidth.getX() );
 
-        // draw tesselation result
+        // draw tessellation result
         const int nTrapCount = aB2DTrapVector.size();
         if( nTrapCount > 0 )
             bDrawnOk = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
