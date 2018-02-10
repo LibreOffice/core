@@ -98,6 +98,8 @@
 #include <svl/undo.hxx>
 #include <unotools/datetime.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <vcl/builder.hxx>
+#include <vcl/abstdlg.hxx>
 
 #include <app.hxx>
 
@@ -3811,7 +3813,9 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 // 2) comphelper::setProcessServiceFactory(xSFactory);
                 // 3) InitVCL()
                 aService->initialize({css::uno::makeAny<OUString>("preload")});
-
+                // Force load some modules
+                VclBuilder::preload();
+                VclAbstractDialogFactory::Create();
                 preloadData();
 
                 // Release Solar Mutex, lo_startmain thread should acquire it.
