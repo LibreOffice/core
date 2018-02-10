@@ -96,9 +96,9 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
     ScPatternAttr*  pNewPatt = new ScPatternAttr(pDocPool);
 
     SfxItemSet&     rItemSet = pNewPatt->GetItemSet();
-    ENTRY *pAkt = new ENTRY( pNewPatt );
+    ENTRY *pCurrent = new ENTRY( pNewPatt );
 
-    pAkt->nHash0 = nRefHash;
+    pCurrent->nHash0 = nRefHash;
 
     mpLotusRoot->maFontBuff.Fill( rAttr.nFont, rItemSet );
 
@@ -144,7 +144,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
         rItemSet.Put( aHorJustify );
     }
 
-    aEntries.push_back(std::unique_ptr<ENTRY>(pAkt));
+    aEntries.push_back(std::unique_ptr<ENTRY>(pCurrent));
 
     return *pNewPatt;
 }
@@ -198,21 +198,21 @@ void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
             (*iterLast)->nLastRow = nRow;
         else
         {
-            ENTRY *pAkt = new ENTRY;
+            ENTRY *pCurrent = new ENTRY;
 
-            pAkt->pPattAttr = &rAttr;
-            pAkt->nFirstRow = pAkt->nLastRow = nRow;
+            pCurrent->pPattAttr = &rAttr;
+            pCurrent->nFirstRow = pCurrent->nLastRow = nRow;
 
-            aEntries.push_back(std::unique_ptr<ENTRY>(pAkt));
+            aEntries.push_back(std::unique_ptr<ENTRY>(pCurrent));
         }
     }
     else
     {   // first entry
-        ENTRY *pAkt = new ENTRY;
-        pAkt->pPattAttr = &rAttr;
-        pAkt->nFirstRow = pAkt->nLastRow = nRow;
+        ENTRY *pCurrent = new ENTRY;
+        pCurrent->pPattAttr = &rAttr;
+        pCurrent->nFirstRow = pCurrent->nLastRow = nRow;
 
-        aEntries.push_back(std::unique_ptr<ENTRY>(pAkt));
+        aEntries.push_back(std::unique_ptr<ENTRY>(pCurrent));
     }
 }
 
