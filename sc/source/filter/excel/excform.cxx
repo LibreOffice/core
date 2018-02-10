@@ -378,7 +378,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pResult, XclImpStream& aIn, std
             }
             case 0x19: // Special Attribute                     [327 279]
             {
-                sal_uInt16  nData(0), nFakt(0);
+                sal_uInt16  nData(0), nFactor(0);
                 sal_uInt8   nOpt(0);
 
                 nOpt = aIn.ReaduInt8();
@@ -386,19 +386,19 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pResult, XclImpStream& aIn, std
                 if( meBiff == EXC_BIFF2 )
                 {
                     nData = aIn.ReaduInt8();
-                    nFakt = 1;
+                    nFactor = 1;
                 }
                 else
                 {
                     nData = aIn.ReaduInt16();
-                    nFakt = 2;
+                    nFactor = 2;
                 }
 
                 if( nOpt & 0x04 )
                 {
-                    // nFakt -> skip bytes or words    AttrChoose
+                    // nFactor -> skip bytes or words    AttrChoose
                     ++nData;
-                    aIn.Ignore(static_cast<std::size_t>(nData) * nFakt);
+                    aIn.Ignore(static_cast<std::size_t>(nData) * nFactor);
                 }
                 else if( nOpt & 0x10 )                      // AttrSum
                     DoMulArgs( ocSum, 1 );
@@ -970,7 +970,7 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
                 break;
             case 0x19: // Special Attribute                     [327 279]
             {
-                sal_uInt16 nData(0), nFakt(0);
+                sal_uInt16 nData(0), nFactor(0);
                 sal_uInt8 nOpt(0);
 
                 nOpt = aIn.ReaduInt8();
@@ -978,19 +978,19 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
                 if( meBiff == EXC_BIFF2 )
                 {
                     nData = aIn.ReaduInt8();
-                    nFakt = 1;
+                    nFactor = 1;
                 }
                 else
                 {
                     nData = aIn.ReaduInt16();
-                    nFakt = 2;
+                    nFactor = 2;
                 }
 
                 if( nOpt & 0x04 )
                 {
-                    // nFakt -> skip bytes or words    AttrChoose
+                    // nFactor -> skip bytes or words    AttrChoose
                     ++nData;
-                    aIn.Ignore(static_cast<std::size_t>(nData) * nFakt);
+                    aIn.Ignore(static_cast<std::size_t>(nData) * nFactor);
                 }
             }
                 break;
