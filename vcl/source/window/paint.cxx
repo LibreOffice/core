@@ -1189,7 +1189,7 @@ void Window::Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags )
 
 void Window::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
-    if (comphelper::LibreOfficeKit::isDialogPainting())
+    if (comphelper::LibreOfficeKit::isDialogPainting() || !comphelper::LibreOfficeKit::isActive())
         return;
 
     if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
@@ -1200,6 +1200,12 @@ void Window::LogicInvalidate(const tools::Rectangle* pRectangle)
             aPayload.push_back(std::make_pair(OString("rectangle"), pRectangle->toString()));
 
         pNotifier->notifyWindow(GetLOKWindowId(), "invalidate", aPayload);
+    }
+    // Added for dialog items. Pass invalidation to the parent window.
+    else if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
+    {
+        const tools::Rectangle aRect(Point(GetOutOffXPixel(), GetOutOffYPixel()), Size(GetOutputWidthPixel(), GetOutputHeightPixel()));
+        pParent->LogicInvalidate(&aRect);
     }
 }
 
