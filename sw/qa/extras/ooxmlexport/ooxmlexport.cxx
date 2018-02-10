@@ -346,6 +346,23 @@ DECLARE_OOXMLEXPORT_TEST(testNumberingFont, "numbering-font.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Verdana"), getProperty<OUString>(xStyle, "CharFontName"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf106541_noinheritChapterNumbering, "tdf106541_noinheritChapterNumbering.odt")
+{
+    // in LO, it appears that styles based on the Chapter Numbering style explicitly sets the
+    // numbering style/outline level to 0 by default, and prevents inheriting directly from "Outline" style.
+    // Adding this preventative unit test to ensure that any fix for tdf106541 doesn't make incorrect assumptions.
+    CPPUNIT_ASSERT_EQUAL(OUString("Outline"), getProperty<OUString>(getParagraph(1), "NumberingStyleName"));
+    OUString sPara3NumberingStyle = getProperty<OUString>(getParagraph(3), "NumberingStyleName");
+    CPPUNIT_ASSERT_EQUAL(sPara3NumberingStyle, getProperty<OUString>(getParagraph(4), "NumberingStyleName"));
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//body/txt/Special", 3);  //three of the four paragraphs have numbering
+    assertXPath(pXmlDoc, "//body/txt[1]/Special", "rText", "1");
+    assertXPath(pXmlDoc, "//body/txt[2]/Special", 0); //second paragraph style disables numbering
+    assertXPath(pXmlDoc, "//body/txt[3]/Special", "rText", "I.");
+    assertXPath(pXmlDoc, "//body/txt[4]/Special", "rText", "II.");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf53856_conflictingStyle, "tdf53856_conflictingStyle.docx")
 {
     // The "Text" style conflicted with builtin paragraph style Caption -> Text
