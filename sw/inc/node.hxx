@@ -348,9 +348,8 @@ private:
 class SW_DLLPUBLIC SwContentNode: public SwModify, public SwNode, public SwIndexReg
 {
 
-//FEATURE::CONDCOLL
-    SwDepend* m_pCondColl;
-//FEATURE::CONDCOLL
+    SwMultiDepend m_aDepends;
+    SwFormatColl* m_pCondFormatColl;
     mutable bool mbSetModifyAtAttr;
 
 protected:
@@ -371,8 +370,8 @@ protected:
        SwAttrSet (handle): */
     sal_uInt16 ClearItemsFromAttrSet( const std::vector<sal_uInt16>& rWhichIds );
 
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
+    virtual void SwClientNotify( const SwModify&, const SfxHint& rHint) override;
 public:
 
     /** MakeFrame will be called for a certain layout
@@ -449,14 +448,12 @@ public:
     virtual SwFormatColl* ChgFormatColl( SwFormatColl* );
     SwFormatColl* GetFormatColl() const { return const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(GetRegisteredIn())); }
 
-//FEATURE::CONDCOLL
     inline SwFormatColl& GetAnyFormatColl() const;
     void SetCondFormatColl( SwFormatColl* );
     inline SwFormatColl* GetCondFormatColl() const;
 
     bool IsAnyCondition( SwCollCondition& rTmp ) const;
     void ChkCondColl();
-//FEATURE::CONDCOLL
 
     /** Invalidates NumRule at the node. NumRule is updated
        on EndAction of a Shell at the latest. */
@@ -708,22 +705,18 @@ inline const SwDoc* SwNode::GetDoc() const
 
 inline SwFormatColl* SwContentNode::GetCondFormatColl() const
 {
-    return m_pCondColl ? static_cast<SwFormatColl*>(m_pCondColl->GetRegisteredIn()) : nullptr;
+    return m_pCondFormatColl;
 }
 
 inline SwFormatColl& SwContentNode::GetAnyFormatColl() const
 {
-    return m_pCondColl && m_pCondColl->GetRegisteredIn()
-                ? *static_cast<SwFormatColl*>(m_pCondColl->GetRegisteredIn())
-                : *const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(GetRegisteredIn()));
+    return m_pCondFormatColl ? *m_pCondFormatColl : *const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(GetRegisteredIn()));
 }
 
 inline const SwAttrSet& SwContentNode::GetSwAttrSet() const
 {
     return mpAttrSet ? *GetpSwAttrSet() : GetAnyFormatColl().GetAttrSet();
 }
-
-//FEATURE::CONDCOLL
 
 inline const SfxPoolItem& SwContentNode::GetAttr( sal_uInt16 nWhich,
                                                 bool bInParents ) const

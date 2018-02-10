@@ -3597,7 +3597,7 @@ void SwTextNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVa
         HandleModifyAtTextNode( *this, pOldValue, pNewValue );
     }
 
-    SwContentNode::Modify( pOldValue, pNewValue );
+    SwContentNode::SwClientNotify(*this, sw::LegacyModifyHint(pOldValue, pNewValue));
 
     SwDoc * pDoc = GetDoc();
     // #125329# - assure that text node is in document nodes array
