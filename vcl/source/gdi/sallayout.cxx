@@ -1213,12 +1213,17 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     for( n = 0; n < nLevel; ++n )
         maFallbackRuns[n].ResetPos();
     // get the next codepoint index that needs fallback
-    int nActiveCharPos = pGlyphs[0]->mnCharPos;
+        int nFirstValid = 0;
+        for (; nValid[nFirstValid] < 1; ++nFirstValid)
+        {
+                assert(nFirstValid != MAX_FALLBACK - 1 || nValid[nFirstValid] == 1);
+        }
+    int nActiveCharPos = pGlyphs[nFirstValid]->mnCharPos;
     int nActiveCharIndex = nActiveCharPos - mnMinCharPos;
     // get the end index of the active run
     int nLastRunEndChar = (nActiveCharIndex >= 0 && vRtl[nActiveCharIndex]) ?
         rArgs.mnEndCharPos : rArgs.mnMinCharPos - 1;
-    int nRunVisibleEndChar = pGlyphs[0]->mnCharPos;
+    int nRunVisibleEndChar = pGlyphs[nFirstValid]->mnCharPos;
     // merge the fallback levels
     while( nValid[0] && (nLevel > 0))
     {
@@ -1247,13 +1252,13 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         {
             // drop the NotDef glyphs in the base layout run if a fallback run exists
             while (
-                    (maFallbackRuns[n-1].PosIsInRun(pGlyphs[0]->mnCharPos)) &&
-                    (!maFallbackRuns[n].PosIsInAnyRun(pGlyphs[0]->mnCharPos))
+                    (maFallbackRuns[n-1].PosIsInRun(pGlyphs[nFirstValid]->mnCharPos)) &&
+                    (!maFallbackRuns[n].PosIsInAnyRun(pGlyphs[nFirstValid]->mnCharPos))
                   )
             {
                 mpLayouts[0]->DropGlyph( nStartOld[0] );
                 nStartOld[0] = nStartNew[0];
-                nValid[0] = mpLayouts[0]->GetNextGlyphs(1, &pGlyphs[0], aPos, nStartNew[0]);
+                nValid[nFirstValid] = mpLayouts[0]->GetNextGlyphs(1, &pGlyphs[nFirstValid], aPos, nStartNew[0]);
 
                 if( !nValid[0] )
                    break;
@@ -1307,9 +1312,9 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             else
             {
                 // break when a fallback is needed and available
-                bool bNeedFallback = maFallbackRuns[0].PosIsInRun(pGlyphs[0]->mnCharPos);
+                bool bNeedFallback = maFallbackRuns[0].PosIsInRun(pGlyphs[nFirstValid]->mnCharPos);
                 if( bNeedFallback )
-                    if (!maFallbackRuns[nLevel-1].PosIsInRun(pGlyphs[0]->mnCharPos))
+                    if (!maFallbackRuns[nLevel-1].PosIsInRun(pGlyphs[nFirstValid]->mnCharPos))
                         break;
                 // break when change from resolved to unresolved base layout run
                 if( bKeepNotDef && !bNeedFallback )
@@ -1362,7 +1367,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                   nRunAdvance -= aMultiArgs.mpDXArray[nLastRunEndChar - mnMinCharPos];
             }
             nLastRunEndChar = nRunVisibleEndChar;
-            nRunVisibleEndChar = pGlyphs[0]->mnCharPos;
+            nRunVisibleEndChar = pGlyphs[nFirstValid]->mnCharPos;
             // the requested width is still in pixel units
             // => convert it to base level font units
             nRunAdvance *= mnUnitsPerPixel;
@@ -1379,7 +1384,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         nXPos += nRunAdvance;
 
         // prepare for next fallback run
-        nActiveCharPos = pGlyphs[0]->mnCharPos;
+        nActiveCharPos = pGlyphs[nFirstValid]->mnCharPos;
         // it essential that the runs don't get ahead of themselves and in the
         // if( bKeepNotDef && !bNeedFallback ) statement above, the next run may
         // have already been reached on the base level
