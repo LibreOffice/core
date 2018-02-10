@@ -1975,6 +1975,19 @@ void cppuhelper::ServiceManager::preloadImplementations() {
                 iterator->second->status = Data::Implementation::STATUS_LOADED;
 
             }
+
+            // Some libraries use other (non-UNO) libraries requiring preinit
+            oslGenericFunction fpPreload = aModule.getFunctionSymbol( "lok_preload_hook" );
+            if (fpPreload)
+            {
+                static std::vector<oslGenericFunction> aPreloaded;
+                if (std::find(aPreloaded.begin(), aPreloaded.end(), fpPreload) == aPreloaded.end())
+                {
+                    aPreloaded.push_back(fpPreload);
+                    fpPreload();
+                }
+            }
+
             // leak aModule
             aModule.release();
         }
