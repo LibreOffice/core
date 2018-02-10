@@ -431,8 +431,9 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
             bool bSingle = aRefData.Ref1 == aRefData.Ref2;
             if (m_CursorPos.Tab() != rRef.aStart.Tab())
             {
+                // pointer-selected => absolute sheet reference
+                aRefData.Ref1.SetAbsTab( rRef.aStart.Tab() );
                 aRefData.Ref1.SetFlag3D(true);
-                aRefData.Ref1.SetTabRel(false);     // pointer-selected => absolute sheet reference
             }
             if (bSingle)
                 aArray.AddSingleReference(aRefData.Ref1);
