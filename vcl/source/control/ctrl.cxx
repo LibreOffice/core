@@ -416,24 +416,6 @@ void Control::ImplInitSettings()
     ApplySettings(*this);
 }
 
-void Control::LogicInvalidate(const tools::Rectangle* /*pRectangle*/)
-{
-    // Several repaint, resize invalidations are emitted when we are painting,
-    // ignore all of those
-    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isDialogPainting())
-    {
-        if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
-        {
-            // invalidate the complete floating window for now
-            if (pParent->ImplIsFloatingWindow())
-                return pParent->LogicInvalidate(nullptr);
-
-            const tools::Rectangle aRect(Point(GetOutOffXPixel(), GetOutOffYPixel()), Size(GetOutputWidthPixel(), GetOutputHeightPixel()));
-            pParent->LogicInvalidate(&aRect);
-        }
-    }
-}
-
 tools::Rectangle Control::DrawControlText( OutputDevice& _rTargetDevice, const tools::Rectangle& rRect, const OUString& _rStr,
     DrawTextFlags _nStyle, MetricVector* _pVector, OUString* _pDisplayText, const Size* i_pDeviceSize ) const
 {
