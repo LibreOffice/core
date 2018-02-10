@@ -25,8 +25,8 @@
 #include <osl/diagnose.h>
 
 // Default values
-const sal_uInt8 nDezStd = 0;        // Decimal points for standard cells
-const sal_uInt8 nDezFloat = 2;      //        "         " float cells
+const sal_uInt8 nFractionalStd = 0;        // Number of digits in fractional part for standard cells
+const sal_uInt8 nFractionalFloat = 2;      //        "         "         "         "  float cells
 
 struct LotusContext;
 

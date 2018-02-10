@@ -82,7 +82,7 @@ void OP_Integer(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
         rContext.pDoc->EnsureTable(0);
         rContext.pDoc->SetValue(ScAddress(nCol, nRow, 0), static_cast<double>(nValue));
 
-        // 0 decimal places!
+        // 0 digits in fractional part!
         SetFormat(rContext, nCol, nRow, 0, nFormat, 0);
     }
 }
@@ -102,7 +102,7 @@ void OP_Number(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
         rContext.pDoc->EnsureTable(0);
         rContext.pDoc->SetValue(ScAddress(nCol, nRow, 0), fValue);
 
-        SetFormat(rContext, nCol, nRow, 0, nFormat, nDezFloat);
+        SetFormat(rContext, nCol, nRow, 0, nFormat, nFractionalFloat);
     }
 }
 
@@ -127,7 +127,7 @@ void OP_Label(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
         PutFormString(rContext, nCol, nRow, 0, pText.get());
 
-        SetFormat(rContext, nCol, nRow, 0, nFormat, nDezStd);
+        SetFormat(rContext, nCol, nRow, 0, nFormat, nFractionalStd);
     }
 }
 
@@ -143,26 +143,26 @@ void OP_Formula(LotusContext &rContext, SvStream& r, sal_uInt16 /*n*/)
     SCCOL nCol(static_cast<SCCOL>(nTmpCol));
     SCROW nRow(static_cast<SCROW>(nTmpRow));
 
-    const ScTokenArray* pErg;
+    const ScTokenArray* pResult;
     sal_Int32 nBytesLeft = nFormulaSize;
     ScAddress aAddress(nCol, nRow, 0);
 
     svl::SharedStringPool& rSPool = rContext.pLotusRoot->pDoc->GetSharedStringPool();
     LotusToSc aConv(rContext, r, rSPool, rContext.pLotusRoot->eCharsetQ, false);
     aConv.Reset( aAddress );
-    aConv.Convert( pErg, nBytesLeft );
+    aConv.Convert( pResult, nBytesLeft );
     if (!aConv.good())
         return;
 
     if (ValidColRow(nCol, nRow))
     {
-        ScFormulaCell* pCell = new ScFormulaCell(rContext.pLotusRoot->pDoc, aAddress, *pErg);
+        ScFormulaCell* pCell = new ScFormulaCell(rContext.pLotusRoot->pDoc, aAddress, *pResult);
         pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
         rContext.pDoc->EnsureTable(0);
         rContext.pDoc->SetFormulaCell(ScAddress(nCol, nRow, 0), pCell);
 
-        // nFormat = Default -> decimal places like Float
-        SetFormat(rContext, nCol, nRow, 0, nFormat, nDezFloat);
+        // nFormat = Default -> number of digits in fractional part like Float
+        SetFormat(rContext, nCol, nRow, 0, nFormat, nFractionalFloat);
     }
 }
 
@@ -286,22 +286,22 @@ void OP_HiddenCols(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 {
     sal_uInt16      nByte, nBit;
     SCCOL       nCount;
-    sal_uInt8       nAkt;
+    sal_uInt8       nCurrent;
     nCount = 0;
 
     for( nByte = 0 ; nByte < 32 ; nByte++ ) // 32 Bytes with ...
     {
-        r.ReadUChar( nAkt );
+        r.ReadUChar( nCurrent );
         for( nBit = 0 ; nBit < 8 ; nBit++ ) // ...each 8 Bits = 256 Bits
         {
-            if( nAkt & 0x01 )   // is lowest Bit set?
+            if( nCurrent & 0x01 )   // is lowest Bit set?
             {
                 // -> Hidden Col
                 rContext.pDoc->SetColHidden(nCount, nCount, 0, true);
             }
 
             nCount++;
-            nAkt = nAkt / 2;    // the next please...
+            nCurrent = nCurrent / 2;    // the next please...
         }
     }
 }
@@ -334,7 +334,7 @@ void OP_Blank(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     SCCOL nCol(static_cast<SCCOL>(nTmpCol));
     SCROW nRow(static_cast<SCROW>(nTmpRow));
 
-    SetFormat(rContext, nCol, nRow, 0, nFormat, nDezFloat);
+    SetFormat(rContext, nCol, nRow, 0, nFormat, nFractionalFloat);
 }
 
 void OP_BOF123(LotusContext& /*rContext*/, SvStream& r, sal_uInt16 /*n*/)
@@ -393,20 +393,20 @@ void OP_Formula123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     SCROW nRow(static_cast<SCROW>(nTmpRow));
     r.SeekRel( 8 );    // skip Result
 
-    const ScTokenArray* pErg;
+    const ScTokenArray* pResult;
     sal_Int32 nBytesLeft = (n > 12) ? n - 12 : 0;
     ScAddress aAddress( nCol, nRow, nTab );
 
     svl::SharedStringPool& rSPool = rContext.pLotusRoot->pDoc->GetSharedStringPool();
     LotusToSc aConv(rContext, r, rSPool, rContext.pLotusRoot->eCharsetQ, true);
     aConv.Reset( aAddress );
-    aConv.Convert( pErg, nBytesLeft );
+    aConv.Convert( pResult, nBytesLeft );
     if (!aConv.good())
         return;
 
     if (ValidColRow(nCol, nRow) && nTab <= rContext.pDoc->GetMaxTableNumber())
     {
-        ScFormulaCell* pCell = new ScFormulaCell(rContext.pLotusRoot->pDoc, aAddress, *pErg);
+        ScFormulaCell* pCell = new ScFormulaCell(rContext.pLotusRoot->pDoc, aAddress, *pResult);
         pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
         rContext.pDoc->EnsureTable(nTab);
         rContext.pDoc->SetFormulaCell(ScAddress(nCol,nRow,nTab), pCell);
