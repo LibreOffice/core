@@ -163,11 +163,11 @@ void SdrMarkList::ImpForceSort()
         {
             for(std::vector<SdrMark*>::iterator it = maList.begin(); it != maList.end(); )
             {
-                SdrMark* pAkt = *it;
-                if(pAkt->GetMarkedSdrObj() == nullptr)
+                SdrMark* pCurrent = *it;
+                if(pCurrent->GetMarkedSdrObj() == nullptr)
                 {
                     it = maList.erase( it );
-                    delete pAkt;
+                    delete pCurrent;
                 }
                 else
                     ++it;
@@ -182,20 +182,20 @@ void SdrMarkList::ImpForceSort()
             // remove duplicates
             if(maList.size() > 1)
             {
-                SdrMark* pAkt = maList.back();
+                SdrMark* pCurrent = maList.back();
                 for (size_t count = maList.size() - 1; count; --count)
                 {
                     size_t i = count - 1;
                     SdrMark* pCmp = maList[i];
-                    assert(pAkt->GetMarkedSdrObj());
-                    if(pAkt->GetMarkedSdrObj() == pCmp->GetMarkedSdrObj())
+                    assert(pCurrent->GetMarkedSdrObj());
+                    if(pCurrent->GetMarkedSdrObj() == pCmp->GetMarkedSdrObj())
                     {
                         // Con1/Con2 Merging
                         if(pCmp->IsCon1())
-                            pAkt->SetCon1(true);
+                            pCurrent->SetCon1(true);
 
                         if(pCmp->IsCon2())
-                            pAkt->SetCon2(true);
+                            pCurrent->SetCon2(true);
 
                         // delete pCmp
                         maList.erase(maList.begin() + i);
@@ -204,7 +204,7 @@ void SdrMarkList::ImpForceSort()
                     }
                     else
                     {
-                        pAkt = pCmp;
+                        pCurrent = pCmp;
                     }
                 }
             }
@@ -230,8 +230,8 @@ SdrMarkList& SdrMarkList::operator=(const SdrMarkList& rLst)
     for(size_t i = 0; i < rLst.GetMarkCount(); ++i)
     {
         SdrMark* pMark = rLst.GetMark(i);
-        SdrMark* pNeuMark = new SdrMark(*pMark);
-        maList.push_back(pNeuMark);
+        SdrMark* pNewMark = new SdrMark(*pMark);
+        maList.push_back(pNewMark);
     }
 
     maMarkName = rLst.maMarkName;
@@ -303,14 +303,14 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, bool bChkSort)
         }
         else
         {
-            SdrMark* pKopie = new SdrMark(rMark);
-            maList.push_back(pKopie);
+            SdrMark* pCopy = new SdrMark(rMark);
+            maList.push_back(pCopy);
 
             // now check if the sort is ok
             const SdrObjList* pLastOL = pLastObj!=nullptr ? pLastObj->GetObjList() : nullptr;
-            const SdrObjList* pNeuOL = pNewObj !=nullptr ? pNewObj ->GetObjList() : nullptr;
+            const SdrObjList* pNewOL = pNewObj !=nullptr ? pNewObj ->GetObjList() : nullptr;
 
-            if(pLastOL == pNeuOL)
+            if(pLastOL == pNewOL)
             {
                 const sal_uLong nLastNum(pLastObj!=nullptr ? pLastObj->GetOrdNum() : 0);
                 const sal_uLong nNewNum(pNewObj !=nullptr ? pNewObj ->GetOrdNum() : 0);
@@ -354,8 +354,8 @@ void SdrMarkList::ReplaceMark(const SdrMark& rNewMark, size_t nNum)
     {
         delete pMark;
         SetNameDirty();
-        SdrMark* pKopie = new SdrMark(rNewMark);
-        maList[nNum] = pKopie;
+        SdrMark* pCopy = new SdrMark(rNewMark);
+        maList[nNum] = pCopy;
         mbSorted = false;
     }
 }
