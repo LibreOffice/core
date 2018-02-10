@@ -54,16 +54,7 @@
 #include <vcl/builderfactory.hxx>
 #include "dlgunit.hxx"
 #include <memory>
-
-#define SELF_TARGET         "_self"
-#define IMAP_ALL_FILTER     OUString("<Alle>")
-#define IMAP_CERN_FILTER    "MAP - CERN"
-#define IMAP_NCSA_FILTER    "MAP - NCSA"
-#define IMAP_BINARY_FILTER  "SIP - StarView ImageMap"
-#define IMAP_ALL_TYPE       "*.*"
-#define IMAP_BINARY_TYPE    "*.sip"
-#define IMAP_CERN_TYPE      "*.map"
-#define IMAP_NCSA_TYPE      "*.map"
+#include <strings.hxx>
 
 SFX_IMPL_MODELESSDIALOG_WITHID( SvxIMapDlgChildWindow, SID_IMAP );
 
@@ -452,12 +443,12 @@ void SvxIMapDlg::DoOpen()
         FileDialogFlags::NONE, this);
 
     ImageMap        aLoadIMap;
-    const OUString  aFilter( IMAP_ALL_FILTER );
+    const OUString  aFilter(RID_SVXSTR_IMAP_ALL_FILTER);
 
-    aDlg.AddFilter( aFilter, IMAP_ALL_TYPE );
-    aDlg.AddFilter( IMAP_CERN_FILTER, IMAP_CERN_TYPE );
-    aDlg.AddFilter( IMAP_NCSA_FILTER, IMAP_NCSA_TYPE );
-    aDlg.AddFilter( IMAP_BINARY_FILTER, IMAP_BINARY_TYPE );
+    aDlg.AddFilter( aFilter, RID_SVXSTR_IMAP_ALL_TYPE );
+    aDlg.AddFilter( RID_SVXSTR_IMAP_CERN_FILTER, RID_SVXSTR_IMAP_CERN_TYPE );
+    aDlg.AddFilter( RID_SVXSTR_IMAP_NCSA_FILTER, RID_SVXSTR_IMAP_NCSA_TYPE );
+    aDlg.AddFilter( RID_SVXSTR_IMAP_BINARY_FILTER, RID_SVXSTR_IMAP_BINARY_TYPE );
 
     aDlg.SetCurrentFilter( aFilter );
     aDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
@@ -491,16 +482,16 @@ bool SvxIMapDlg::DoSave()
         css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE,
         FileDialogFlags::NONE, this);
 
-    const OUString    aBinFilter( IMAP_BINARY_FILTER );
-    const OUString    aCERNFilter( IMAP_CERN_FILTER );
-    const OUString    aNCSAFilter( IMAP_NCSA_FILTER );
+    const OUString    aBinFilter( RID_SVXSTR_IMAP_BINARY_FILTER );
+    const OUString    aCERNFilter( RID_SVXSTR_IMAP_CERN_FILTER );
+    const OUString    aNCSAFilter( RID_SVXSTR_IMAP_NCSA_FILTER );
     SdrModel*       pModel = pIMapWnd->GetSdrModel();
     const bool bChanged = pModel->IsChanged();
     bool            bRet = false;
 
-    aDlg.AddFilter( aCERNFilter, IMAP_CERN_TYPE );
-    aDlg.AddFilter( aNCSAFilter, IMAP_NCSA_TYPE );
-    aDlg.AddFilter( aBinFilter, IMAP_BINARY_TYPE );
+    aDlg.AddFilter( aCERNFilter, RID_SVXSTR_IMAP_CERN_TYPE );
+    aDlg.AddFilter( aNCSAFilter, RID_SVXSTR_IMAP_NCSA_TYPE );
+    aDlg.AddFilter( aBinFilter, RID_SVXSTR_IMAP_BINARY_TYPE );
 
     aDlg.SetCurrentFilter( aCERNFilter );
     aDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
@@ -599,7 +590,7 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow&, rWnd, void )
         m_pEdtText->SetText( rInfo.aMarkAltText );
 
         if ( rInfo.aMarkTarget.isEmpty() )
-            m_pCbbTarget->SetText( SELF_TARGET );
+            m_pCbbTarget->SetText( RID_SVXSTR_IMAP_SELF_TARGET );
         else
             m_pCbbTarget->SetText( rInfo.aMarkTarget );
     }
@@ -645,7 +636,7 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow&, rWnd, void )
             m_pEdtText->SetText( rInfo.aMarkAltText );
 
         if ( rInfo.aMarkTarget.isEmpty() )
-            m_pCbbTarget->SetText( SELF_TARGET );
+            m_pCbbTarget->SetText( RID_SVXSTR_IMAP_SELF_TARGET );
         else
             m_pCbbTarget->SetText(  rInfo.aMarkTarget );
     }
@@ -712,7 +703,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, URLLoseFocusHdl, Control&, void)
     aNewInfo.aMarkAltText = m_pEdtText->GetText();
 
     if ( aTargetText.isEmpty() )
-        aNewInfo.aMarkTarget = SELF_TARGET;
+        aNewInfo.aMarkTarget = RID_SVXSTR_IMAP_SELF_TARGET;
     else
         aNewInfo.aMarkTarget = aTargetText;
 

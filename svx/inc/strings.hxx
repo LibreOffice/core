@@ -285,6 +285,18 @@
 #define RID_SVXSTR_DASH10_DEF                       "Dashed (var)"
 #define RID_SVXSTR_DASH11_DEF                       "Dash"
 #define RID_SVXSTR_DASH12_DEF                       "Line Style"
+
+// Reference-strings for Image map dialog
+#define RID_SVXSTR_IMAP_ALL_FILTER                  "All"
+#define RID_SVXSTR_IMAP_SELF_TARGET                 "_self"
+#define RID_SVXSTR_IMAP_CERN_FILTER                 "MAP - CERN"
+#define RID_SVXSTR_IMAP_NCSA_FILTER                 "MAP - NCSA"
+#define RID_SVXSTR_IMAP_BINARY_FILTER               "SIP - StarView ImageMap"
+#define RID_SVXSTR_IMAP_ALL_TYPE                    "*.*"
+#define RID_SVXSTR_IMAP_BINARY_TYPE                 "*.sip"
+#define RID_SVXSTR_IMAP_CERN_TYPE                   "*.map"
+#define RID_SVXSTR_IMAP_NCSA_TYPE                   "*.map"
+
 // Reference-strings for standard-line-end-table
 #define RID_SVXSTR_LEND0_DEF                        "Arrow concave"
 #define RID_SVXSTR_LEND1_DEF                        "Square 45"
