@@ -255,9 +255,8 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
         AddBreakBefore(pCont);
 
     //Create an XFPara for this VO_PARA
-    XFParagraph *pPara = new XFParagraph;
-    rtl::Reference<XFContentContainer> xHolder(pPara);
-    pPara->SetStyleName(m_StyleName);
+    rtl::Reference<XFParagraph> xPara(new XFParagraph);
+    xPara->SetStyleName(m_StyleName);
 
     if(!m_SectionStyleName.isEmpty())
     {
@@ -272,7 +271,7 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
         rtl::Reference<XFContentContainer> xListItem = AddBulletList(m_xXFContainer.get());
         if (xListItem)
         {
-            xListItem->Add(pPara);
+            xListItem->Add(xPara.get());
         }
     }
     else if (m_xXFContainer)
@@ -283,10 +282,10 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
             pBulletStyleMgr->SetCurrentSilverBullet(LwpObjectID());
             pBulletStyleMgr->SetContinueFlag(false);
         }
-        m_xXFContainer->Add(pPara);
+        m_xXFContainer->Add(xPara.get());
     }
 
-    m_Fribs.SetXFPara(pPara);
+    m_Fribs.SetXFPara(xPara.get());
     m_Fribs.XFConvert();
 
     if (m_pBreaks && m_xXFContainer)
@@ -308,14 +307,14 @@ void LwpPara::RegisterMasterPage(XFParaStyle const * pBaseStyle)
         }
 
         //register master page style
-        XFParaStyle* pOverStyle = new XFParaStyle();
-        *pOverStyle = *pBaseStyle;
-        pOverStyle->SetStyleName( "");
-        pOverStyle->SetMasterPage(pLayout->GetStyleName());
+        std::unique_ptr<XFParaStyle> xOverStyle(new XFParaStyle);
+        *xOverStyle = *pBaseStyle;
+        xOverStyle->SetStyleName( "");
+        xOverStyle->SetMasterPage(pLayout->GetStyleName());
         if (!m_ParentStyleName.isEmpty())
-                    pOverStyle->SetParentStyleName(m_ParentStyleName);
+            xOverStyle->SetParentStyleName(m_ParentStyleName);
         XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-        m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
+        m_StyleName = pXFStyleManager->AddStyle(xOverStyle.release()).m_pStyle->GetStyleName();
     }
 }
 /**

@@ -87,10 +87,10 @@ void LwpFribTable::RegisterNewStyle()
             m_StyleName = pOldStyle->GetStyleName();
         else
         {
-            XFParaStyle* pParaStyle = new XFParaStyle;
-            *pParaStyle = *pOldStyle;
+            std::unique_ptr<XFParaStyle> xParaStyle(new XFParaStyle);
+            *xParaStyle = *pOldStyle;
             XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-            m_StyleName = pXFStyleManager->AddStyle(pParaStyle).m_pStyle->GetStyleName();
+            m_StyleName = pXFStyleManager->AddStyle(xParaStyle.release()).m_pStyle->GetStyleName();
         }
     }
 }
