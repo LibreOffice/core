@@ -45,6 +45,7 @@
 
 #include <swacorr.hxx>
 #include <unomid.h>
+#include <swabstdlg.hxx>
 
 #include "swdllimpl.hxx"
 #include <o3tl/make_unique.hxx>
@@ -169,6 +170,12 @@ sw::Filters & SwDLL::getFilters()
 {
     assert(filters_);
     return *filters_.get();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT
+void lok_preload_hook()
+{
+    SwAbstractDialogFactory::Create();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
