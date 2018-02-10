@@ -188,7 +188,10 @@ void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
         if( RES_ATTRSET_CHG == nWhich ||
             RES_FMT_CHG == nWhich )
         {
-            SwDoc* pDoc = GetCurrentCharFormat(pCharFormat)->GetDoc();
+            auto pFormat = GetCurrentCharFormat(pCharFormat);
+            if(!aDepends.IsListeningTo(pFormat) || pFormat->IsFormatInDTOR())
+                return;
+            SwDoc* pDoc = pFormat->GetDoc();
             SwFootnoteIdxs& rFootnoteIdxs = pDoc->GetFootnoteIdxs();
             for( size_t nPos = 0; nPos < rFootnoteIdxs.size(); ++nPos )
             {
