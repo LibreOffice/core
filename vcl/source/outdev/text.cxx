@@ -895,6 +895,8 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStrModifiable, nIndex, nLen,
                 0, nullptr);
 
+        // position, justify, etc. the layout
+        pLayoutCache->AdjustLayout( aLayoutArgs );
         pLayoutCache->DrawBase() = ImplLogicToDevicePixel( rStartPt );
 
         ImplDrawText( *pLayoutCache );
