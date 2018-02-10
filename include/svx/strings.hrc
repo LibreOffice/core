@@ -859,6 +859,7 @@
 #define RID_SVXSTR_DASH10                                   NC_("RID_SVXSTR_DASH10", "Dashed")
 #define RID_SVXSTR_DASH11                                   NC_("RID_SVXSTR_DASH11", "Dashed")
 #define RID_SVXSTR_DASH12                                   NC_("RID_SVXSTR_DASH12", "Line Style")
+#define RID_SVXSTR_IMAP_ALL_FILTER                          NC_("RID_SVXSTR_IMAP_ALL_FILTER", "All formats")
 #define RID_SVXSTR_LEND0                                    NC_("RID_SVXSTR_LEND0", "Arrow concave")
 #define RID_SVXSTR_LEND1                                    NC_("RID_SVXSTR_LEND1", "Square 45")
 #define RID_SVXSTR_LEND2                                    NC_("RID_SVXSTR_LEND2", "Small arrow")

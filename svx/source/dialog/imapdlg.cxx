@@ -54,9 +54,9 @@
 #include <vcl/builderfactory.hxx>
 #include "dlgunit.hxx"
 #include <memory>
+#include <strings.hxx>
 
 #define SELF_TARGET         "_self"
-#define IMAP_ALL_FILTER     OUString("<Alle>")
 #define IMAP_CERN_FILTER    "MAP - CERN"
 #define IMAP_NCSA_FILTER    "MAP - NCSA"
 #define IMAP_BINARY_FILTER  "SIP - StarView ImageMap"
@@ -452,7 +452,7 @@ void SvxIMapDlg::DoOpen()
         FileDialogFlags::NONE, this);
 
     ImageMap        aLoadIMap;
-    const OUString  aFilter( IMAP_ALL_FILTER );
+    const OUString  aFilter(RID_SVXSTR_IMAP_ALL_FILTER_DEF);
 
     aDlg.AddFilter( aFilter, IMAP_ALL_TYPE );
     aDlg.AddFilter( IMAP_CERN_FILTER, IMAP_CERN_TYPE );

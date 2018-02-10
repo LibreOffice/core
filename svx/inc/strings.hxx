@@ -285,6 +285,10 @@
 #define RID_SVXSTR_DASH10_DEF                       "Dashed (var)"
 #define RID_SVXSTR_DASH11_DEF                       "Dash"
 #define RID_SVXSTR_DASH12_DEF                       "Line Style"
+
+// Reference-string for Image map dialog
+#define RID_SVXSTR_IMAP_ALL_FILTER_DEF              "All formats"
+
 // Reference-strings for standard-line-end-table
 #define RID_SVXSTR_LEND0_DEF                        "Arrow concave"
 #define RID_SVXSTR_LEND1_DEF                        "Square 45"
