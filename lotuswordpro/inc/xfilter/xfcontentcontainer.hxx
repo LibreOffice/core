@@ -92,7 +92,7 @@ public:
     rtl::Reference<XFContent> GetLastContent();
     void    RemoveLastContent();
     /**
-     * @descr   convience function for add text content.
+     * @descr   convenience function for add text content.
      */
     void    Add(const OUString& text);
 
