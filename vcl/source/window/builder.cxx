@@ -1099,6 +1099,45 @@ void VclBuilder::cleanupWidgetOwnScrolling(vcl::Window *pScrollParent, vcl::Wind
 extern "C" { static void thisModule() {} }
 #endif
 
+// We store these forever, closing modules is non-ideal from a performance
+// perspective, code pages will be freed up by the OS anyway if unused for
+// a while in many cases, and this helps us pre-init.
+typedef std::map<OUString, std::unique_ptr<osl::Module>> ModuleMap;
+static ModuleMap g_aModuleMap;
+static osl::Module g_aMergedLib;
+
+void VclBuilder::preload()
+{
+#ifndef DISABLE_DYNLOADING
+
+#if ENABLE_MERGELIBS
+    g_aMergedLibs->loadRelative(&thisModule, SVLIBRARY("merged"));
+#endif
+// find -name '*ui*' | xargs grep 'class=".*lo-' | \
+//     sed 's/.*class="//' | sed 's/-.*$//' | sort | uniq
+    static const char *aWidgetLibs[] = {
+        "sfxlo",  "svtlo",     "svxcorelo", "foruilo",
+        "vcllo",  "svxlo",     "cuilo",     "swlo",
+        "swuilo", "sclo",      "sdlo",      "chartcontrollerlo",
+        "smlo",   "scuilo",    "basctllo",  "sduilo",
+        "scnlo",  "xsltdlglo", "pcrlo" // "dbulo"
+    };
+    for (auto & lib : aWidgetLibs)
+    {
+        OUStringBuffer sModuleBuf;
+        sModuleBuf.append(SAL_DLLPREFIX);
+        sModuleBuf.append(OUString::createFromAscii(lib));
+        sModuleBuf.append(SAL_DLLEXTENSION);
+        osl::Module* pModule = new osl::Module;
+        OUString sModule = sModuleBuf.makeStringAndClear();
+        if (pModule->loadRelative(&thisModule, sModule))
+            g_aModuleMap.insert(std::make_pair(sModule, std::unique_ptr<osl::Module>(pModule)));
+        else
+            delete pModule;
+    }
+#endif // DISABLE_DYNLOADING
+}
+
 VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &name, const OString &id,
     stringmap &rMap)
 {
@@ -1587,34 +1626,29 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         sal_Int32 nDelim = name.indexOf('-');
         if (nDelim != -1)
         {
+            OUString sFunction(OStringToOUString(OString("make") + name.copy(nDelim+1), RTL_TEXTENCODING_UTF8));
+
 #ifndef DISABLE_DYNLOADING
             OUStringBuffer sModuleBuf;
             sModuleBuf.append(SAL_DLLPREFIX);
             sModuleBuf.append(OStringToOUString(name.copy(0, nDelim), RTL_TEXTENCODING_UTF8));
             sModuleBuf.append(SAL_DLLEXTENSION);
-#endif
-            OUString sFunction(OStringToOUString(OString("make") + name.copy(nDelim+1), RTL_TEXTENCODING_UTF8));
-#ifndef DISABLE_DYNLOADING
+
             OUString sModule = sModuleBuf.makeStringAndClear();
-            ModuleMap::iterator aI = m_aModuleMap.find(sModule);
-            if (aI == m_aModuleMap.end())
+            ModuleMap::iterator aI = g_aModuleMap.find(sModule);
+            if (aI == g_aModuleMap.end())
             {
                 osl::Module* pModule = new osl::Module;
+                bool ok = false;
 #if ENABLE_MERGELIBS
-                sModuleBuf.append(SAL_DLLPREFIX);
-                sModuleBuf.append("mergedlo");
-                sModuleBuf.append(SAL_DLLEXTENSION);
-                OUString sMergedModule = sModuleBuf.makeStringAndClear();
-                bool ok = pModule->loadRelative(&thisModule, sMergedModule);
-                if (!pModule->getFunctionSymbol(sFunction))
-                {
-                    ok = pModule->loadRelative(&thisModule, sModule);
-                }
-#else
-                bool ok = pModule->loadRelative(&thisModule, sModule);
+                if (!g_aMergedLib.is())
+                    g_aMergedLib->loadRelative(&thisModule, SVLIBRARY("merged"));
+                ok = g_aMergedLib->getFunctionSymbol(sFunction);
 #endif
-                assert(ok && "bad module name in .ui"); (void)ok;
-                aI = m_aModuleMap.insert(std::make_pair(sModule, std::unique_ptr<osl::Module>(pModule))).first;
+                if (!ok)
+                    ok = pModule->loadRelative(&thisModule, sModule);
+                assert(ok && "bad module name in .ui");
+                aI = g_aModuleMap.insert(std::make_pair(sModule, std::unique_ptr<osl::Module>(pModule))).first;
             }
             customMakeWidget pFunction = reinterpret_cast<customMakeWidget>(aI->second->getFunctionSymbol(sFunction));
 #else
