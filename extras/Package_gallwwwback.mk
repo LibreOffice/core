@@ -10,68 +10,51 @@
 $(eval $(call gb_Package_Package,extras_gallwwwback,$(SRCDIR)/extras/source/gallery/www-back))
 
 $(eval $(call gb_Package_add_files,extras_gallwwwback,$(LIBO_SHARE_FOLDER)/gallery/www-back,\
-	aqua.jpg \
-	bathroom.jpg \
-	blocks.jpg \
-	blow_green.jpg \
-	blueblop.jpg \
-	bulging.jpg \
-	canvas_blue.jpg \
-	cheese.jpg \
-	chocolate.jpg \
-	citrus.jpg \
-	confetti.jpg \
-	daisy.jpg \
-	fluffy-grey.jpg \
-	fluffy.jpg \
-	fuzzy-blue.jpg \
+	brick-wall.png \
+	cardboard.jpg \
+	circuit-board.jpg \
+	cloud.jpg \
+	coffee.jpg \
+	color-stripes.png \
+	concrete.jpg \
+	crumpled-paper.jpg \
+	fence.jpg \
+	floral.png \
 	fuzzy-darkgrey.jpg \
 	fuzzy-grey.jpg \
 	fuzzy-lightgrey.jpg \
-	fuzzy_light.jpg \
-	gregre.gif \
-	grey.gif \
-	grypaws.gif \
-	ice-blue.jpg \
+	giraffe.png \
+	graph-paper.png \
 	ice-light.jpg \
-	imitation_leather.jpg \
-	interstices.jpg \
-	jeansblk.jpg \
-	jeans.jpg \
-	lawn-artificial.jpg \
-	lawn.jpg \
-	lightblue-wet.jpg \
-	linen-fine.jpg \
-	lino-green.jpg \
-	liquid-blue.jpg \
-	marble_dark.jpg \
+	invoiced-paper.jpg \
+	leaf.jpg \
+	maple-leaves.jpg \
 	marble.jpg \
-	mazes.jpg \
-	mint.gif \
-	notes.gif \
-	pattern.jpg \
+	painted-white.jpg \
+	parchment-paper.jpg \
+	painted-wood.jpg \
 	pebble-light.jpg \
-	pink.gif \
 	pool.jpg \
-	popcorn.jpg \
-	purple.jpg \
-	reddark.jpg \
-	rings-green.jpg \
-	rings-orange.jpg \
-	roses.jpg \
-	sand.jpg \
+	rock-wall.jpg \
 	sand-light.jpg \
+	sand.jpg \
 	sky.jpg \
-	soft-structure_grey.jpg \
-	space.jpg \
-	stone-dark.jpg \
+	space.png \
+	stone-gray.jpg \
+	stone-wall.jpg \
 	stone.jpg \
-	structure_darkgreen.gif \
-	structure_green.jpg \
-	structure.jpg \
-	wall-grey.jpg \
-	wet-turquoise.jpg \
+	stones.jpg \
+	studio.jpg \
+	surface-black.jpg \
+	surface.jpg \
+	texture-paper.jpg \
+	tiger.jpg \
+	tiles.jpg \
+	white-diffusion.jpg \
 	wood.jpg \
+	wooden-board.jpg \
+	wooden-fence.jpg \
+	zebra.png \
 ))
 
 # vim: set noet sw=4 ts=4:
