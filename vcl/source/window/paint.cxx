@@ -1214,7 +1214,7 @@ void Window::Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags )
 
 void Window::LogicInvalidate(const Rectangle* pRectangle)
 {
-    if (comphelper::LibreOfficeKit::isDialogPainting())
+    if (comphelper::LibreOfficeKit::isDialogPainting() || !comphelper::LibreOfficeKit::isActive())
         return;
 
     if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
@@ -1225,6 +1225,12 @@ void Window::LogicInvalidate(const Rectangle* pRectangle)
             aPayload.push_back(std::make_pair(OString("rectangle"), pRectangle->toString()));
 
         pNotifier->notifyWindow(GetLOKWindowId(), "invalidate", aPayload);
+    }
+    // Added for dialog items. Pass invalidation to the parent window.
+    else if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
+    {
+        const Rectangle aRect(Point(GetOutOffXPixel(), GetOutOffYPixel()), Size(GetOutputWidthPixel(), GetOutputHeightPixel()));
+        pParent->LogicInvalidate(&aRect);
     }
 }
 
@@ -1350,9 +1356,29 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     bool bOutput = IsOutputEnabled();
     EnableOutput();
 
-    SAL_WARN_IF( GetMapMode().GetMapUnit() != MapUnit::MapPixel, "vcl", "MapMode must be PIXEL based" );
-    if ( GetMapMode().GetMapUnit() != MapUnit::MapPixel )
-        return;
+    double fScaleX = 1;
+    double fScaleY = 1;
+    bool bNeedsScaling = false;
+    if(comphelper::LibreOfficeKit::isActive())
+    {
+        if(GetMapMode().GetMapUnit() != MapUnit::MapPixel &&
+        // Some of the preview windows (SvxPreviewBase) uses different painting (drawinglayer primitives)
+        // For these preview we don't need to scale even tough the unit is not pixel.
+        GetMapMode().GetMapUnit() != MapUnit::Map100thMM)
+        {
+            bNeedsScaling = true;
+            // 1000.0 is used to reduce rounding imprecision (Size uses integers)
+            Size aLogicSize = PixelToLogic(Size(1000.0, 1000.0));
+            fScaleX = aLogicSize.Width() / 1000.0;
+            fScaleY = aLogicSize.Height() / 1000.0;
+        }
+    }
+    else
+    {   // TODO: Above scaling was added for LOK only, would be good to check how it works in other use cases
+        SAL_WARN_IF( GetMapMode().GetMapUnit() != MapUnit::MapPixel, "vcl", "MapMode must be PIXEL based" );
+        if ( GetMapMode().GetMapUnit() != MapUnit::MapPixel )
+            return;
+    }
 
     // preserve graphicsstate
     Push();
@@ -1402,7 +1428,17 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
         SetRefPoint();
     SetLayoutMode( GetLayoutMode() );
     SetDigitLanguage( GetDigitLanguage() );
-    Rectangle aPaintRect( Point( 0, 0 ), GetOutputSizePixel() );
+
+    Rectangle aPaintRect;
+    if(bNeedsScaling)
+    {
+        aPaintRect = Rectangle( Point( 0, 0 ),
+            Size(GetOutputSizePixel().Width() * fScaleX, GetOutputSizePixel().Height() * fScaleY)  );
+    }
+    else
+    {
+        aPaintRect = Rectangle( Point( 0, 0 ), GetOutputSizePixel() );
+    }
     aClipRegion.Intersect( aPaintRect );
     SetClipRegion( aClipRegion );
 
@@ -1410,7 +1446,11 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
 
     // background
     if( ! IsPaintTransparent() && IsBackground() && ! (GetParentClipMode() & ParentClipMode::NoClip ) )
+    {
         Erase(*this);
+        if(bNeedsScaling)
+            aMtf.Scale(fScaleX, fScaleY);
+    }
     // foreground
     Paint(*this, aPaintRect);
     // put a pop action to metafile
@@ -1424,11 +1464,14 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     VclPtrInstance<VirtualDevice> pMaskedDevice(*i_pTargetOutDev,
                                                 DeviceFormat::DEFAULT,
                                                 DeviceFormat::DEFAULT);
+
+    if(bNeedsScaling)
+        pMaskedDevice->SetMapMode( GetMapMode() );
     pMaskedDevice->SetOutputSizePixel( GetOutputSizePixel() );
     pMaskedDevice->EnableRTL( IsRTLEnabled() );
     aMtf.WindStart();
     aMtf.Play( pMaskedDevice );
-    BitmapEx aBmpEx( pMaskedDevice->GetBitmapEx( Point( 0, 0 ), pMaskedDevice->GetOutputSizePixel() ) );
+    BitmapEx aBmpEx( pMaskedDevice->GetBitmapEx( Point( 0, 0 ), aPaintRect.GetSize() ) );
     i_pTargetOutDev->DrawBitmapEx( i_rPos, aBmpEx );
     // get rid of virtual device now so they don't pile up during recursive calls
     pMaskedDevice.disposeAndClear();
@@ -1461,8 +1504,6 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
 
 void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /*rSize*/ )
 {
-    // FIXME: scaling: currently this is for pixel copying only
-
     SAL_WARN_IF(  pDev->HasMirroredGraphics(), "vcl", "PaintToDevice to mirroring graphics" );
     SAL_WARN_IF(  pDev->IsRTLEnabled(), "vcl", "PaintToDevice to mirroring device" );
 

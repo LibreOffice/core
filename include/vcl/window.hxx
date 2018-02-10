@@ -560,7 +560,7 @@ public:
 
     SAL_DLLPRIVATE bool                 ImplIsWindowOrChild( const vcl::Window* pWindow, bool bSystemWindow = false ) const;
     SAL_DLLPRIVATE bool                 ImplIsChild( const vcl::Window* pWindow, bool bSystemWindow = false ) const;
-                   bool                 ImplIsFloatingWindow() const;
+    SAL_DLLPRIVATE bool                 ImplIsFloatingWindow() const;
     SAL_DLLPRIVATE bool                 ImplIsPushButton() const;
     SAL_DLLPRIVATE bool                 ImplIsSplitter() const;
     SAL_DLLPRIVATE bool                 ImplIsOverlapWindow() const;
