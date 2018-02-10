@@ -375,18 +375,18 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 break;
             case 0x19: // Special Attribute                     [327 279]
             {
-                sal_uInt16 nData(0), nFakt(0);
+                sal_uInt16 nData(0), nFactor(0);
                 sal_uInt8 nOpt(0);
 
                 nOpt = aIn.ReaduInt8();
                 nData = aIn.ReaduInt16();
-                nFakt = 2;
+                nFactor = 2;
 
                 if( nOpt & 0x04 )
                 {
-                    // nFakt -> skip bytes or words    AttrChoose
+                    // nFactor -> skip bytes or words    AttrChoose
                     nData++;
-                    aIn.Ignore(static_cast<std::size_t>(nData) * nFakt);
+                    aIn.Ignore(static_cast<std::size_t>(nData) * nFactor);
                 }
                 else if( nOpt & 0x10 )                      // AttrSum
                     DoMulArgs( ocSum, 1 );
@@ -1023,18 +1023,18 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
                 break;
             case 0x19: // Special Attribute                     [327 279]
             {
-                sal_uInt16 nData(0), nFakt(0);
+                sal_uInt16 nData(0), nFactor(0);
                 sal_uInt8 nOpt(0);
 
                 nOpt = aIn.ReaduInt8();
                 nData = aIn.ReaduInt16();
-                nFakt = 2;
+                nFactor = 2;
 
                 if( nOpt & 0x04 )
                 {
-                    // nFakt -> skip bytes or words    AttrChoose
+                    // nFactor -> skip bytes or words    AttrChoose
                     ++nData;
-                    aIn.Ignore(static_cast<std::size_t>(nData) * nFakt);
+                    aIn.Ignore(static_cast<std::size_t>(nData) * nFactor);
                 }
             }
                 break;
@@ -1668,7 +1668,7 @@ void ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, std::size_t nLen
                 nOpt = aIn.ReaduInt8();
                 nData = aIn.ReaduInt16();
                 if( nOpt & 0x04 )
-                {// nFakt -> skip bytes or words    AttrChoose
+                {// nFactor -> skip bytes or words    AttrChoose
                     nData++;
                     nSeek = nData * 2;
             }
