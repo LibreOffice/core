@@ -1,0 +1,44 @@
+diff --git a/src/dsm.cpp b/src/dsm.cpp
+index 1b74285c5d72..efd8f443ca02 100755
+--- a/src/dsm.cpp
++++ b/src/dsm.cpp
+@@ -1,7 +1,7 @@
+ /***************************************************************************
+  * TWAIN Data Source Manager version 2.1
+  * Manages image acquisition data sources used by a machine. 
+- * Copyright © 2007 TWAIN Working Group:  
++ * Copyright (C) 2007 TWAIN Working Group:  
+  * Adobe Systems Incorporated,AnyDoc Software Inc., Eastman Kodak Company, 
+  * Fujitsu Computer Products of America, JFL Peripheral Solutions Inc., 
+  * Ricoh Corporation, and Xerox Corporation.
+@@ -38,7 +38,7 @@
+ /*! \mainpage Data Source Manager
+  *
+  * The Source Manager provides the communication path between the 
+- * Application and the Source, supports the user’s selection of a  
++ * Application and the Source, supports the user's selection of a  
+  * Source, and loads the Source for access by the Application.   
+  * Communications from Application to Source Manager or the Source
+  * to Source Manager (via DAT_NULL) arrive in exclusively through
+@@ -51,7 +51,7 @@
+  *
+  *
+  *
+- * Copyright © 2007 TWAIN Working Group:  Adobe Systems Incorporated,
++ * Copyright (C) 2007 TWAIN Working Group:  Adobe Systems Incorporated,
+  * AnyDoc Software Inc., Eastman Kodak Company, 
+  * Fujitsu Computer Products of America, JFL Peripheral Solutions Inc., 
+  * Ricoh Corporation, and Xerox Corporation.
+diff --git a/src/dsm.h b/src/dsm.h
+index f7afb316d3de..c156d3843a9e 100755
+--- a/src/dsm.h
++++ b/src/dsm.h
+@@ -1,7 +1,7 @@
+ /***************************************************************************
+  * TWAIN Data Source Manager version 2.1
+  * Manages image acquisition data sources used by a machine. 
+- * Copyright © 2007 TWAIN Working Group:
++ * Copyright (C) 2007 TWAIN Working Group:
+  * Adobe Systems Incorporated,AnyDoc Software Inc., Eastman Kodak Company, 
+  * Fujitsu Computer Products of America, JFL Peripheral Solutions Inc., 
+  * Ricoh Corporation, and Xerox Corporation.
