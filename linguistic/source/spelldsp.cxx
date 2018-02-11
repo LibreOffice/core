@@ -178,8 +178,6 @@ bool SvcListHasLanguage(
 SpellCheckerDispatcher::SpellCheckerDispatcher( LngSvcMgr &rLngSvcMgr ) :
     m_rMgr    (rLngSvcMgr)
 {
-    m_pCache = nullptr;
-    m_pCharClass = nullptr;
 }
 
 
