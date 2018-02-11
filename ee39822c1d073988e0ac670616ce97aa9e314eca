@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_616ed830",
+        "filename": "sw/inc/calbck.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-02-11T19:19:04Z",
+      "side": 1,
+      "message": "why not just return by value? since it\u0027s such a small object, doesn\u0027t seem worth it to put it on the heap?",
+      "revId": "ee39822c1d073988e0ac670616ce97aa9e314eca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
