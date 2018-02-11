@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_e179e8fd",
+        "filename": "sw/qa/python/check_table.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2018-02-11T19:03:51Z",
+      "side": 1,
+      "message": "those are nice!",
+      "revId": "e3ae6f3bc15e711d079bd3c4decf5387f1539105",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_017d1ce7",
+        "filename": "sw/qa/python/check_table.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2018-02-11T19:03:51Z",
+      "side": 1,
+      "message": "Hmmm, these are neither making the testdata more obvious, nor shorter, thus in doubt, I would personally stick with simply stating the data.\nNot blocking on this though...",
+      "revId": "e3ae6f3bc15e711d079bd3c4decf5387f1539105",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
