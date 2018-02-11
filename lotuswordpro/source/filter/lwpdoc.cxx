@@ -75,6 +75,7 @@ LwpDocument::LwpDocument(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     , m_pOwnedFoundry(nullptr)
     , m_bGettingFirstDivisionWithContentsThatIsNotOLE(false)
     , m_bGettingPreviousDivisionWithContents(false)
+    , m_bGettingGetLastDivisionWithContents(false)
     , m_nFlags(0)
     , m_nPersistentFlags(0)
     , m_pLnOpts(nullptr)
@@ -546,30 +547,39 @@ LwpDocument* LwpDocument::GetPreviousDivisionWithContents()
     m_bGettingPreviousDivisionWithContents = false;
     return pRet;
 }
- /**
- * @descr    Get last division which has contents, copy from lwp source code
- */
- LwpDocument* LwpDocument::GetLastDivisionWithContents()
+
+/**
+* @descr    Get last division which has contents, copy from lwp source code
+*/
+LwpDocument* LwpDocument::GetLastDivisionWithContents()
 {
+    if (m_bGettingGetLastDivisionWithContents)
+        throw std::runtime_error("recursion in page divisions");
+    m_bGettingGetLastDivisionWithContents = true;
+    LwpDocument* pRet = nullptr;
+
     LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(GetDivInfoID().obj().get());
-    if(pDivInfo && pDivInfo->HasContents())
-    {
-        return this;
-    }
+    if (pDivInfo && pDivInfo->HasContents())
+        pRet = this;
 
-    LwpDocument* pDivision = GetLastDivision();
-
-    while (pDivision && pDivision != this)
+    if (!pRet)
     {
-        LwpDocument* pContentDivision = pDivision->GetLastDivisionWithContents();
-        if(pContentDivision)
+        LwpDocument* pDivision = GetLastDivision();
+
+        while (pDivision && pDivision != this)
         {
-            return pContentDivision;
+            LwpDocument* pContentDivision = pDivision->GetLastDivisionWithContents();
+            if (pContentDivision)
+            {
+                pRet = pContentDivision;
+                break;
+            }
+            pDivision = pDivision->GetPreviousDivision();
         }
-        pDivision = pDivision->GetPreviousDivision();
     }
 
-    return nullptr;
+    m_bGettingGetLastDivisionWithContents = false;
+    return pRet;
 }
  /**
  * @descr    Get last division in group  which has contents, copy from lwp source code
