@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_21cb00a7",
+        "filename": "vcl/source/gdi/sallayout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1220,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2018-02-11T03:47:05Z",
+      "side": 1,
+      "message": "Why is there more indention here?\nElements of nValid is filled in line 1189, I suppose it should be sufficient to check n \u003c mnLevel in the for codition instead of asserting nFirstValid!\u003d MAX_FALLBACK-1. \nAnd 1 seems to be a valid return value returned from GetNextGlyphs(), why assert nValid[nFirstValid] \u003d\u003d 1?",
+      "range": {
+        "startLine": 1216,
+        "startChar": 0,
+        "endLine": 1220,
+        "endChar": 9
+      },
+      "revId": "0bbbcda158ca406bb44ff75b40a5b21ce0f3fcf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
