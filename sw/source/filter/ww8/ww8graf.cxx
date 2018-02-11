@@ -606,7 +606,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
 
         // get position of next SPRM
         bool bStartAttr = m_xPlcxMan->Get(&aRes);
-        m_nAktColl = m_xPlcxMan->GetColl();
+        m_nCurrentColl = m_xPlcxMan->GetColl();
         if (aRes.nSprmId)
         {
             if( bONLYnPicLocFc )
@@ -717,7 +717,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                 }
             }
             // Fill in the remainder from the style
-            InsertTxbxStyAttrs(*pS, m_nAktColl);
+            InsertTxbxStyAttrs(*pS, m_nCurrentColl);
 
             if( pS->Count() )
             {

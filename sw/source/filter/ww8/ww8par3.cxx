@@ -1705,8 +1705,8 @@ void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat)
     }
 }
 
-void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
-    sal_uInt8 nActLevel)
+void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nCurrentLFO,
+    sal_uInt8 nCurrentLevel)
 {
     if (nStyle >= m_vColl.size())
         return;
@@ -1721,24 +1721,24 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
             // only save the Parameters for now. The actual List will be appended
             // at a later point, when the Listdefinitions is read...
             if (
-                 (USHRT_MAX > nActLFO) &&
-                 (WW8ListManager::nMaxLevel > nActLevel)
+                 (USHRT_MAX > nCurrentLFO) &&
+                 (WW8ListManager::nMaxLevel > nCurrentLevel)
                )
             {
-                rStyleInf.m_nLFOIndex  = nActLFO;
-                rStyleInf.m_nListLevel = nActLevel;
+                rStyleInf.m_nLFOIndex  = nCurrentLFO;
+                rStyleInf.m_nListLevel = nCurrentLevel;
 
                 if (
-                    (USHRT_MAX > nActLFO) &&
-                    (WW8ListManager::nMaxLevel > nActLevel)
+                    (USHRT_MAX > nCurrentLFO) &&
+                    (WW8ListManager::nMaxLevel > nCurrentLevel)
                    )
                 {
                     std::vector<sal_uInt8> aParaSprms;
                     SwNumRule *pNmRule =
-                        m_xLstManager->GetNumRuleForActivation(nActLFO,
-                            nActLevel, aParaSprms);
+                        m_xLstManager->GetNumRuleForActivation(nCurrentLFO,
+                            nCurrentLevel, aParaSprms);
                     if (pNmRule)
-                        UseListIndent(rStyleInf, pNmRule->Get(nActLevel));
+                        UseListIndent(rStyleInf, pNmRule->Get(nCurrentLevel));
                 }
             }
         }
@@ -1792,8 +1792,8 @@ void SwWW8ImplReader::RegisterNumFormatOnStyle(sal_uInt16 nStyle)
     }
 }
 
-void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nActLFO,
-                                              sal_uInt8 nActLevel,
+void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nCurrentLFO,
+                                              sal_uInt8 nCurrentLevel,
                                               const bool bSetAttr)
 {
     // Note: the method appends NumRule to the Text Node if
@@ -1810,7 +1810,7 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nActLFO,
 
         std::vector<sal_uInt8> aParaSprms;
         const SwNumRule* pRule = bSetAttr ?
-            m_xLstManager->GetNumRuleForActivation( nActLFO, nActLevel,
+            m_xLstManager->GetNumRuleForActivation( nCurrentLFO, nCurrentLevel,
                 aParaSprms, pTextNd) : nullptr;
 
         if (pRule != nullptr || !bSetAttr)
@@ -1820,10 +1820,10 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nActLFO,
             {
                 pTextNd->SetAttr(SwNumRuleItem(pRule->GetName()));
             }
-            pTextNd->SetAttrListLevel(nActLevel);
+            pTextNd->SetAttrListLevel(nCurrentLevel);
 
             // <IsCounted()> state of text node has to be adjusted accordingly.
-            if ( /*nActLevel >= 0 &&*/ nActLevel < MAXLEVEL )
+            if ( /*nCurrentLevel >= 0 &&*/ nCurrentLevel < MAXLEVEL )
             {
                 pTextNd->SetCountedInList( true );
             }
@@ -1833,9 +1833,9 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nActLFO,
             // needed for list levels of mode LABEL_ALIGNMENT
             bool bApplyListLevelIndentDirectlyAtPara(true);
             {
-                if (pTextNd->GetNumRule() && nActLevel < MAXLEVEL)
+                if (pTextNd->GetNumRule() && nCurrentLevel < MAXLEVEL)
                 {
-                    const SwNumFormat& rFormat = pTextNd->GetNumRule()->Get(nActLevel);
+                    const SwNumFormat& rFormat = pTextNd->GetNumRule()->Get(nCurrentLevel);
                     if (rFormat.GetPositionAndSpaceMode()
                         == SvxNumberFormat::LABEL_ALIGNMENT)
                     {
@@ -1884,13 +1884,13 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nActLFO,
     }
 }
 
-void SwWW8ImplReader::RegisterNumFormat(sal_uInt16 nActLFO, sal_uInt8 nActLevel)
+void SwWW8ImplReader::RegisterNumFormat(sal_uInt16 nCurrentLFO, sal_uInt8 nCurrentLevel)
 {
     // Are we reading the StyleDef ?
     if (m_pAktColl)
-        SetStylesList( m_nAktColl , nActLFO, nActLevel);
+        SetStylesList( m_nCurrentColl , nCurrentLFO, nCurrentLevel);
     else
-        RegisterNumFormatOnTextNode(nActLFO, nActLevel);
+        RegisterNumFormatOnTextNode(nCurrentLFO, nCurrentLevel);
 }
 
 void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
@@ -1901,7 +1901,7 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
 
     if( nLen < 0 )
     {
-        // the actual level is finished, what should we do ?
+        // the current level is finished, what should we do ?
         m_nListLevel = WW8ListManager::nMaxLevel;
         if (m_xStyles && !m_bVer67)
             m_xStyles->nWwNumLevel = 0;
@@ -1949,7 +1949,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
 
     if( nLen < 0 )
     {
-        // the actual level is finished, what should we do ?
+        // the current level is finished, what should we do ?
         m_nLFOPosition = USHRT_MAX;
         m_nListLevel = WW8ListManager::nMaxLevel;
     }
@@ -2020,8 +2020,8 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             indentation.  Setting this flag will allow us to recover from this
             braindeadness
             */
-            if (m_pAktColl && (m_nLFOPosition == 2047-1) && m_nAktColl < m_vColl.size())
-                m_vColl[m_nAktColl].m_bHasBrokenWW6List = true;
+            if (m_pAktColl && (m_nLFOPosition == 2047-1) && m_nCurrentColl < m_vColl.size())
+                m_vColl[m_nCurrentColl].m_bHasBrokenWW6List = true;
 
             // here the stream data is 1-based, we subtract ONE
             if (USHRT_MAX > m_nLFOPosition)

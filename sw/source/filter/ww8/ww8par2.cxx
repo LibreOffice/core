@@ -880,7 +880,7 @@ void SwWW8ImplReader::Read_ANLevelNo( sal_uInt16, const sal_uInt8* pData, short 
     {
         // only for SwTextFormatColl, not CharFormat
         // WW: 0 = no Numbering
-        SwWW8StyInf * pColl = GetStyle(m_nAktColl);
+        SwWW8StyInf * pColl = GetStyle(m_nCurrentColl);
         if (pColl != nullptr && pColl->m_bColl && *pData)
         {
             // Range WW:1..9 -> SW:0..8 no bullets / numbering
@@ -914,7 +914,7 @@ void SwWW8ImplReader::Read_ANLevelNo( sal_uInt16, const sal_uInt8* pData, short 
 
 void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, short nLen ) // Sprm 12
 {
-    SwWW8StyInf * pStyInf = GetStyle(m_nAktColl);
+    SwWW8StyInf * pStyInf = GetStyle(m_nCurrentColl);
     if( !m_pAktColl || nLen <= 0                       // only for Styledef
         || (pStyInf && !pStyInf->m_bColl)              // ignore  CharFormat ->
         || ( m_nIniFlags & WW8FL_NO_OUTLINE ) )
@@ -951,7 +951,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
         SetAnld(pNR, reinterpret_cast<WW8_ANLD const *>(pData), 0, false);
         m_pAktColl->SetFormatAttr( SwNumRuleItem( pNR->GetName() ) );
 
-        pStyInf = GetStyle(m_nAktColl);
+        pStyInf = GetStyle(m_nCurrentColl);
         if (pStyInf != nullptr)
             pStyInf->m_bHasStyNumRule = true;
     }
@@ -1066,7 +1066,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
         }
     }
 
-    SwWW8StyInf * pStyInf = GetStyle(m_nAktColl);
+    SwWW8StyInf * pStyInf = GetStyle(m_nCurrentColl);
     if (sNumRule.isEmpty() && pStyInf != nullptr &&  pStyInf->m_bHasStyNumRule)
     {
         sNumRule = pStyInf->m_pFormat->GetNumRule().GetValue();
@@ -3527,9 +3527,9 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
         }
     }
     // if first paragraph in table has break-before-page, transfer that setting to the table itself.
-    else if( StyleExists(m_nAktColl) )
+    else if( StyleExists(m_nCurrentColl) )
     {
-        const SwFormat* pStyleFormat = m_vColl[m_nAktColl].m_pFormat;
+        const SwFormat* pStyleFormat = m_vColl[m_nCurrentColl].m_pFormat;
         if( pStyleFormat && pStyleFormat->GetBreak().GetBreak() == SvxBreak::PageBefore )
             NewAttr( pStyleFormat->GetBreak() );
     }
