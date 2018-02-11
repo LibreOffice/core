@@ -21,6 +21,7 @@ interface XGraphicStorageHandler : com::sun::star::uno::XInterface
 {
 
     com::sun::star::graphic::XGraphic loadGraphic([in] string aURL);
+    com::sun::star::graphic::XGraphic loadGraphicFromOutputStream([in] com::sun::star::io::XOutputStream xOutputStream);
 
     string saveGraphic([in] com::sun::star::graphic::XGraphic xGraphic);
 

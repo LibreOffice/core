@@ -116,6 +116,9 @@ public:
     virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
         loadGraphic(OUString const & aURL) override;
 
+    virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
+        loadGraphicFromOutputStream(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream) override;
+
     virtual OUString SAL_CALL
         saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
 
