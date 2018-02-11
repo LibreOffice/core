@@ -2705,10 +2705,10 @@ const SfxPoolItem* SwWW8ImplReader::GetFormatAttr( sal_uInt16 nWhich )
         pRet = m_xCtrlStck->GetStackAttr(*m_pPaM->GetPoint(), nWhich);
         if (!pRet)
         {
-            if (m_nAktColl < m_vColl.size() && m_vColl[m_nAktColl].m_pFormat &&
-                m_vColl[m_nAktColl].m_bColl)
+            if (m_nCurrentColl < m_vColl.size() && m_vColl[m_nCurrentColl].m_pFormat &&
+                m_vColl[m_nCurrentColl].m_bColl)
             {
-                pRet = &(m_vColl[m_nAktColl].m_pFormat->GetFormatAttr(nWhich));
+                pRet = &(m_vColl[m_nCurrentColl].m_pFormat->GetFormatAttr(nWhich));
             }
         }
         if (!pRet)
@@ -2784,7 +2784,7 @@ void SwWW8ImplReader::Read_POutLvl(sal_uInt16, const sal_uInt8* pData, short nLe
 
     if (m_pAktColl != nullptr)
     {
-        SwWW8StyInf* pSI = GetStyle(m_nAktColl);
+        SwWW8StyInf* pSI = GetStyle(m_nCurrentColl);
         if (pSI && pSI->m_bColl && pSI->m_pFormat)
         {
             pSI->mnWW8OutlineLevel =
@@ -2916,7 +2916,7 @@ void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, shor
     }
     // value: 0 = off, 1 = on, 128 = like style, 129 contrary to style
     bool bOn = *pData & 1;
-    SwWW8StyInf* pSI = GetStyle(m_nAktColl);
+    SwWW8StyInf* pSI = GetStyle(m_nCurrentColl);
     if (m_xPlcxMan && eVersion > ww::eWW2)
     {
         SprmResult aCharIstd =
@@ -3083,7 +3083,7 @@ void SwWW8ImplReader::Read_BoldBiDiUsw(sal_uInt16 nId, const sal_uInt8* pData,
         return;
     }
     bool bOn = *pData & 1;
-    SwWW8StyInf* pSI = GetStyle(m_nAktColl);
+    SwWW8StyInf* pSI = GetStyle(m_nCurrentColl);
     if (m_xPlcxMan)
     {
         SprmResult aCharIstd =
@@ -3661,19 +3661,19 @@ bool SwWW8ImplReader::SetNewFontAttr(sal_uInt16 nFCode, bool bSetEnums,
 
     if( bSetEnums )
     {
-        if( m_pAktColl && m_nAktColl < m_vColl.size() ) // StyleDef
+        if( m_pAktColl && m_nCurrentColl < m_vColl.size() ) // StyleDef
         {
             switch(nWhich)
             {
                 default:
                 case RES_CHRATR_FONT:
-                    m_vColl[m_nAktColl].m_eLTRFontSrcCharSet = eSrcCharSet;
+                    m_vColl[m_nCurrentColl].m_eLTRFontSrcCharSet = eSrcCharSet;
                     break;
                 case RES_CHRATR_CTL_FONT:
-                    m_vColl[m_nAktColl].m_eRTLFontSrcCharSet = eSrcCharSet;
+                    m_vColl[m_nCurrentColl].m_eRTLFontSrcCharSet = eSrcCharSet;
                     break;
                 case RES_CHRATR_CJK_FONT:
-                    m_vColl[m_nAktColl].m_eCJKFontSrcCharSet = eSrcCharSet;
+                    m_vColl[m_nCurrentColl].m_eCJKFontSrcCharSet = eSrcCharSet;
                     break;
             }
         }
@@ -4114,9 +4114,9 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         case NS_sprm::sprmPDxaLeft80:
         case NS_sprm::sprmPDxaLeft:
             aLR.SetTextLeft( nPara );
-            if (m_pAktColl && m_nAktColl < m_vColl.size())
+            if (m_pAktColl && m_nCurrentColl < m_vColl.size())
             {
-                m_vColl[m_nAktColl].m_bListReleventIndentSet = true;
+                m_vColl[m_nCurrentColl].m_bListReleventIndentSet = true;
             }
             bLeftIndentSet = true;  // #i105414#
             break;
@@ -4135,13 +4135,13 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             been removed then we will factor the original list applied hanging
             into our calculation.
             */
-            if (m_xPlcxMan && m_nAktColl < m_vColl.size() && m_vColl[m_nAktColl].m_bHasBrokenWW6List)
+            if (m_xPlcxMan && m_nCurrentColl < m_vColl.size() && m_vColl[m_nCurrentColl].m_bHasBrokenWW6List)
             {
                 SprmResult aIsZeroed = m_xPlcxMan->GetPapPLCF()->HasSprm(NS_sprm::sprmPIlfo);
                 if (aIsZeroed.pSprm && aIsZeroed.nRemainingData >= 1 && *aIsZeroed.pSprm == 0)
                 {
                     const SvxLRSpaceItem &rLR =
-                        ItemGet<SvxLRSpaceItem>(*(m_vColl[m_nAktColl].m_pFormat),
+                        ItemGet<SvxLRSpaceItem>(*(m_vColl[m_nCurrentColl].m_pFormat),
                         RES_LR_SPACE);
                     nPara = nPara - rLR.GetTextFirstLineOfst();
                 }
@@ -4167,9 +4167,9 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
                     }
                 }
             }
-            if (m_pAktColl && m_nAktColl < m_vColl.size())
+            if (m_pAktColl && m_nCurrentColl < m_vColl.size())
             {
-                m_vColl[m_nAktColl].m_bListReleventIndentSet = true;
+                m_vColl[m_nCurrentColl].m_bListReleventIndentSet = true;
             }
             bFirstLinOfstSet = true; // #i103711#
             break;
@@ -4274,15 +4274,15 @@ void SwWW8ImplReader::Read_ParaAutoBefore(sal_uInt16, const sal_uInt8 *pData, sh
         SvxULSpaceItem aUL(*static_cast<const SvxULSpaceItem*>(GetFormatAttr(RES_UL_SPACE)));
         aUL.SetUpper(GetParagraphAutoSpace(m_xWDop->fDontUseHTMLAutoSpacing));
         NewAttr(aUL);
-        if (m_pAktColl && m_nAktColl < m_vColl.size())
-            m_vColl[m_nAktColl].m_bParaAutoBefore = true;
+        if (m_pAktColl && m_nCurrentColl < m_vColl.size())
+            m_vColl[m_nCurrentColl].m_bParaAutoBefore = true;
         else
             m_bParaAutoBefore = true;
     }
     else
     {
-        if (m_pAktColl && m_nAktColl < m_vColl.size())
-            m_vColl[m_nAktColl].m_bParaAutoBefore = false;
+        if (m_pAktColl && m_nCurrentColl < m_vColl.size())
+            m_vColl[m_nCurrentColl].m_bParaAutoBefore = false;
         else
             m_bParaAutoBefore = false;
     }
@@ -4301,15 +4301,15 @@ void SwWW8ImplReader::Read_ParaAutoAfter(sal_uInt16, const sal_uInt8 *pData, sho
         SvxULSpaceItem aUL(*static_cast<const SvxULSpaceItem*>(GetFormatAttr(RES_UL_SPACE)));
         aUL.SetLower(GetParagraphAutoSpace(m_xWDop->fDontUseHTMLAutoSpacing));
         NewAttr(aUL);
-        if (m_pAktColl && m_nAktColl < m_vColl.size())
-            m_vColl[m_nAktColl].m_bParaAutoAfter = true;
+        if (m_pAktColl && m_nCurrentColl < m_vColl.size())
+            m_vColl[m_nCurrentColl].m_bParaAutoAfter = true;
         else
             m_bParaAutoAfter = true;
     }
     else
     {
-        if (m_pAktColl && m_nAktColl < m_vColl.size())
-            m_vColl[m_nAktColl].m_bParaAutoAfter = false;
+        if (m_pAktColl && m_nCurrentColl < m_vColl.size())
+            m_vColl[m_nCurrentColl].m_bParaAutoAfter = false;
         else
             m_bParaAutoAfter = false;
     }
@@ -5081,15 +5081,15 @@ void SwWW8ImplReader::Read_BreakBefore( sal_uInt16, const sal_uInt8* pData, shor
 
 void SwWW8ImplReader::Read_ApoPPC( sal_uInt16, const sal_uInt8* pData, short )
 {
-    if (m_pAktColl && m_nAktColl < m_vColl.size()) // only for Styledef, otherwise solved differently
+    if (m_pAktColl && m_nCurrentColl < m_vColl.size()) // only for Styledef, otherwise solved differently
     {
-        SwWW8StyInf& rSI = m_vColl[m_nAktColl];
+        SwWW8StyInf& rSI = m_vColl[m_nCurrentColl];
         if (!rSI.m_xWWFly)
             rSI.m_xWWFly.reset(new WW8FlyPara(m_bVer67));
         rSI.m_xWWFly->Read(*pData, m_xStyles.get());
         if (rSI.m_xWWFly->IsEmpty())
         {
-            m_vColl[m_nAktColl].m_xWWFly.reset();
+            m_vColl[m_nCurrentColl].m_xWWFly.reset();
         }
     }
 }

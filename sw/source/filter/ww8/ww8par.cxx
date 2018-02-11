@@ -1441,8 +1441,8 @@ const SfxPoolItem* SwWW8FltControlStack::GetFormatAttr(const SwPosition& rPos,
                 SfxItemState eState = SfxItemState::DEFAULT;
                 if (const SfxItemSet *pSet = pNd->GetpSwAttrSet())
                     eState = pSet->GetItemState(RES_LR_SPACE, false);
-                if (eState != SfxItemState::SET && rReader.m_nAktColl < rReader.m_vColl.size())
-                    pItem = &(rReader.m_vColl[rReader.m_nAktColl].maWordLR);
+                if (eState != SfxItemState::SET && rReader.m_nCurrentColl < rReader.m_vColl.size())
+                    pItem = &(rReader.m_vColl[rReader.m_nCurrentColl].maWordLR);
             }
 
             /*
@@ -1619,17 +1619,17 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
 
     const SwFormat * pSty = nullptr;
     sal_uInt16 nTabBase;
-    if (m_pAktColl && m_nAktColl < m_vColl.size()) // StyleDef
+    if (m_pAktColl && m_nCurrentColl < m_vColl.size()) // StyleDef
     {
-        nTabBase = m_vColl[m_nAktColl].m_nBase;
+        nTabBase = m_vColl[m_nCurrentColl].m_nBase;
         if (nTabBase < m_vColl.size())  // Based On
             pSty = m_vColl[nTabBase].m_pFormat;
     }
     else
     { // Text
-        nTabBase = m_nAktColl;
-        if (m_nAktColl < m_vColl.size())
-            pSty = m_vColl[m_nAktColl].m_pFormat;
+        nTabBase = m_nCurrentColl;
+        if (m_nCurrentColl < m_vColl.size())
+            pSty = m_vColl[m_nCurrentColl].m_pFormat;
         //TODO: figure out else here
     }
 
@@ -1941,7 +1941,7 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
     mpPrevNumRule(pRdr->m_pPrevNumRule),
     mpTableDesc(pRdr->m_pTableDesc),
     mnInTable(pRdr->m_nInTable),
-    mnAktColl(pRdr->m_nAktColl),
+    mnCurrentColl(pRdr->m_nCurrentColl),
     mcSymbol(pRdr->m_cSymbol),
     mbIgnoreText(pRdr->m_bIgnoreText),
     mbSymbol(pRdr->m_bSymbol),
@@ -1963,7 +1963,7 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
     pRdr->m_pPreviousNumPaM = nullptr;
     pRdr->m_pPrevNumRule = nullptr;
     pRdr->m_pTableDesc = nullptr;
-    pRdr->m_nAktColl = 0;
+    pRdr->m_nCurrentColl = 0;
 
     pRdr->m_xCtrlStck.reset(new SwWW8FltControlStack(&pRdr->m_rDoc, pRdr->m_nFieldFlags,
         *pRdr));
@@ -2005,7 +2005,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->m_bInHyperlink = mbInHyperlink;
     pRdr->m_bWasParaEnd = mbWasParaEnd;
     pRdr->m_bPgSecBreak = mbPgSecBreak;
-    pRdr->m_nAktColl = mnAktColl;
+    pRdr->m_nCurrentColl = mnCurrentColl;
     pRdr->m_bHasBorder = mbHasBorder;
     pRdr->m_bFirstPara = mbFirstPara;
 
@@ -2770,8 +2770,8 @@ rtl_TextEncoding SwWW8ImplReader::GetCurrentCharSet()
             eSrcCharSet = m_aFontSrcCharSets.top();
         if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && m_nCharFormat >= 0 && static_cast<size_t>(m_nCharFormat) < m_vColl.size() )
             eSrcCharSet = m_vColl[m_nCharFormat].GetCharSet();
-        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && StyleExists(m_nAktColl) && m_nAktColl < m_vColl.size())
-            eSrcCharSet = m_vColl[m_nAktColl].GetCharSet();
+        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && StyleExists(m_nCurrentColl) && m_nCurrentColl < m_vColl.size())
+            eSrcCharSet = m_vColl[m_nCurrentColl].GetCharSet();
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
             eSrcCharSet = GetCharSetFromLanguage();
     }
@@ -2794,8 +2794,8 @@ rtl_TextEncoding SwWW8ImplReader::GetCurrentCJKCharSet()
             eSrcCharSet = m_aFontSrcCJKCharSets.top();
         if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && m_nCharFormat >= 0 && static_cast<size_t>(m_nCharFormat) < m_vColl.size() )
             eSrcCharSet = m_vColl[m_nCharFormat].GetCJKCharSet();
-        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW && StyleExists(m_nAktColl) && m_nAktColl < m_vColl.size())
-            eSrcCharSet = m_vColl[m_nAktColl].GetCJKCharSet();
+        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW && StyleExists(m_nCurrentColl) && m_nCurrentColl < m_vColl.size())
+            eSrcCharSet = m_vColl[m_nCurrentColl].GetCJKCharSet();
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
             eSrcCharSet = GetCJKCharSetFromLanguage();
     }
@@ -3704,20 +3704,20 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
 void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
     bool* pStartAttr, bool bCallProcessSpecial)
 {
-    sal_uInt16 nOldColl = m_nAktColl;
-    m_nAktColl = m_xPlcxMan->GetColl();
+    sal_uInt16 nOldColl = m_nCurrentColl;
+    m_nCurrentColl = m_xPlcxMan->GetColl();
 
     // Invalid Style-Id
-    if (m_nAktColl >= m_vColl.size() || !m_vColl[m_nAktColl].m_pFormat || !m_vColl[m_nAktColl].m_bColl)
+    if (m_nCurrentColl >= m_vColl.size() || !m_vColl[m_nCurrentColl].m_pFormat || !m_vColl[m_nCurrentColl].m_bColl)
     {
-        m_nAktColl = 0;
+        m_nCurrentColl = 0;
         m_bParaAutoBefore = false;
         m_bParaAutoAfter = false;
     }
     else
     {
-        m_bParaAutoBefore = m_vColl[m_nAktColl].m_bParaAutoBefore;
-        m_bParaAutoAfter = m_vColl[m_nAktColl].m_bParaAutoAfter;
+        m_bParaAutoBefore = m_vColl[m_nCurrentColl].m_bParaAutoBefore;
+        m_bParaAutoAfter = m_vColl[m_nCurrentColl].m_bParaAutoAfter;
     }
 
     if (nOldColl >= m_vColl.size())
@@ -3733,12 +3733,12 @@ void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
             *pStartAttr = m_xPlcxMan->Get( &rRes ); // Get Attribut-Pos again
     }
 
-    if (!bTabRowEnd && StyleExists(m_nAktColl))
+    if (!bTabRowEnd && StyleExists(m_nCurrentColl))
     {
-        SetTextFormatCollAndListLevel( *m_pPaM, m_vColl[ m_nAktColl ]);
-        ChkToggleAttr(m_vColl[ nOldColl ].m_n81Flags, m_vColl[ m_nAktColl ].m_n81Flags);
+        SetTextFormatCollAndListLevel( *m_pPaM, m_vColl[ m_nCurrentColl ]);
+        ChkToggleAttr(m_vColl[ nOldColl ].m_n81Flags, m_vColl[ m_nCurrentColl ].m_n81Flags);
         ChkToggleBiDiAttr(m_vColl[nOldColl].m_n81BiDiFlags,
-            m_vColl[m_nAktColl].m_n81BiDiFlags);
+            m_vColl[m_nCurrentColl].m_n81BiDiFlags);
     }
 }
 
@@ -3817,7 +3817,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStar
         m_xCtrlStck->MarkAllAttrsOld();
     bool bOldIgnoreText = m_bIgnoreText;
     m_bIgnoreText = true;
-    sal_uInt16 nOldColl = m_nAktColl;
+    sal_uInt16 nOldColl = m_nCurrentColl;
     bool bDoPlcxManPlusPLus = true;
     long nNext;
     do
@@ -3908,8 +3908,8 @@ void SwWW8ImplReader::ReadAttrs(WW8_CP& rTextPos, WW8_CP& rNext, long nTextEnd, 
      * is false.
      * Due to this we need to set the template here as a kind of special treatment.
      */
-    if (!m_bCpxStyle && m_nAktColl < m_vColl.size())
-            SetTextFormatCollAndListLevel(*m_pPaM, m_vColl[m_nAktColl]);
+    if (!m_bCpxStyle && m_nCurrentColl < m_vColl.size())
+            SetTextFormatCollAndListLevel(*m_pPaM, m_vColl[m_nCurrentColl]);
         rbStartLine = false;
     }
 }
@@ -3946,7 +3946,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
     short nDistance = 0;
 
     m_bWasParaEnd = false;
-    m_nAktColl    =  0;
+    m_nCurrentColl    =  0;
     m_xAktItemSet.reset();
     m_nCharFormat    = -1;
     m_bSpec = false;
@@ -4189,7 +4189,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_eStructCharSet(RTL_TEXTENCODING_ASCII_US)
     , m_eHardCharSet(RTL_TEXTENCODING_DONTKNOW)
     , m_nProgress(0)
-    , m_nAktColl(0)
+    , m_nCurrentColl(0)
     , m_nFieldNum(0)
     , m_nLFOPosition(USHRT_MAX)
     , m_nCharFormat(0)

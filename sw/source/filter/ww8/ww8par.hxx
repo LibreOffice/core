@@ -595,7 +595,7 @@ private:
     const SwNumRule* mpPrevNumRule;
     WW8TabDesc* mpTableDesc;
     int mnInTable;
-    sal_uInt16 mnAktColl;
+    sal_uInt16 mnCurrentColl;
     sal_Unicode mcSymbol;
     bool mbIgnoreText;
     bool mbSymbol;
@@ -1269,7 +1269,7 @@ private:
     rtl_TextEncoding m_eStructCharSet;  // rtl_TextEncoding for structures
     rtl_TextEncoding m_eHardCharSet;    // Hard rtl_TextEncoding-Attribute
     sal_uInt16 m_nProgress;           // percentage for Progressbar
-    sal_uInt16 m_nAktColl;            // per WW-count
+    sal_uInt16 m_nCurrentColl;          // per WW-count
     sal_uInt16 m_nFieldNum;             // serial nummer for that
     sal_uInt16 m_nLFOPosition;
 
@@ -1618,13 +1618,13 @@ private:
 
 // Ver8 lists
 
-    void RegisterNumFormatOnTextNode(sal_uInt16 nActLFO, sal_uInt8 nActLevel,
+    void RegisterNumFormatOnTextNode(sal_uInt16 nCurrentLFO, sal_uInt8 nCurrentLevel,
                                  const bool bSetAttr = true);
 
     void RegisterNumFormatOnStyle(sal_uInt16 nStyle);
-    void SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
-        sal_uInt8 nActLevel);
-    void RegisterNumFormat(sal_uInt16 nActLFO, sal_uInt8 nActLevel);
+    void SetStylesList(sal_uInt16 nStyle, sal_uInt16 nCurrentLFO,
+        sal_uInt8 nCurrentLevel);
+    void RegisterNumFormat(sal_uInt16 nCurrentLFO, sal_uInt8 nCurrentLevel);
 
 // to be replaced by calls in the appropriate extended SvxMSDffManager
 
@@ -1863,8 +1863,8 @@ public:     // really private, but can only be done public
 
     const WW8Fib& GetFib() const    { return *m_xWwFib; }
     SwDoc& GetDoc() const           { return m_rDoc; }
-    sal_uInt16 GetNAktColl()  const     { return m_nAktColl; }
-    void SetNAktColl( sal_uInt16 nColl ) { m_nAktColl = nColl;    }
+    sal_uInt16 GetNAktColl()  const     { return m_nCurrentColl; }
+    void SetNAktColl( sal_uInt16 nColl ) { m_nCurrentColl = nColl;    }
     std::unique_ptr<SfxItemSet> SetAktItemSet(SfxItemSet* pItemSet);
     sal_uInt16 StyleUsingLFO( sal_uInt16 nLFOIndex ) const ;
     const SwFormat* GetStyleWithOrgWWName( OUString const & rName ) const ;
