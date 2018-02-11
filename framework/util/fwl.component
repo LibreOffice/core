@@ -67,9 +67,6 @@
   <implementation name="com.sun.star.comp.framework.ToolBarsMenuController">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.NotebookbarMenuController">
-    <service name="com.sun.star.frame.PopupMenuController"/>
-  </implementation>
   <implementation name="com.sun.star.comp.framework.UriAbbreviation">
     <service name="com.sun.star.util.UriAbbreviation"/>
   </implementation>

@@ -86,6 +86,7 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ToolbarMode"/>
             <menu:menuitem menu:id=".uno:AvailableToolbars"/>
             <menu:menuitem menu:id=".uno:StatusBarVisible"/>
             <menu:menuitem menu:id=".uno:DBPreview"/>

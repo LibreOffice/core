@@ -165,6 +165,12 @@ namespace
             case vcl::EnumContext::Application::Draw:
                 return OUString( "Draw" );
                 break;
+            case vcl::EnumContext::Application::Formula:
+                return OUString( "Formula" );
+                break;
+            case vcl::EnumContext::Application::Base:
+                return OUString( "Base" );
+                break;
             default:
                 return OUString();
                 break;
