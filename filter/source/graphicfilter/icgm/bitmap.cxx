@@ -115,10 +115,9 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
         auto palette = ImplGeneratePalette( rDesc );
         for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize ) {
             nxC = nxCount;
-            sal_Int8  nDat;
             sal_uInt8* pTemp = rDesc.mpBuf;
             for ( nx = 0; --nxC; nx++ ) {
-                nDat = *pTemp++;
+                sal_uInt8 nDat = *pTemp++;
 
                 aBitmap.SetPixel(ny, nx, palette[static_cast<sal_uInt8>(nDat >> 4)]);
                 if ( --nxC ) {
