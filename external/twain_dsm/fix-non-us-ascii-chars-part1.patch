@@ -1,0 +1,26 @@
+diff --git a/src/apps.cpp b/src/apps.cpp
+index 54c6347573fa..45d169d5b148 100755
+--- a/src/apps.cpp
++++ b/src/apps.cpp
+@@ -1,7 +1,7 @@
+ /***************************************************************************
+  * TWAIN Data Source Manager version 2.1
+  * Manages image acquisition data sources used by a machine. 
+- * Copyright © 2007 TWAIN Working Group:  
++ * Copyright (C) 2007 TWAIN Working Group:  
+  * Adobe Systems Incorporated,AnyDoc Software Inc., Eastman Kodak Company, 
+  * Fujitsu Computer Products of America, JFL Peripheral Solutions Inc., 
+  * Ricoh Corporation, and Xerox Corporation.
+diff --git a/src/log.cpp b/src/log.cpp
+index 496e9d9c52a1..3b05307981ad 100755
+--- a/src/log.cpp
++++ b/src/log.cpp
+@@ -1,7 +1,7 @@
+ /***************************************************************************
+  * TWAIN Data Source Manager version 2.1
+  * Manages image acquisition data sources used by a machine. 
+- * Copyright © 2007 TWAIN Working Group:  
++ * Copyright (C) 2007 TWAIN Working Group:  
+  * Adobe Systems Incorporated,AnyDoc Software Inc., Eastman Kodak Company, 
+  * Fujitsu Computer Products of America, JFL Peripheral Solutions Inc., 
+  * Ricoh Corporation, and Xerox Corporation.

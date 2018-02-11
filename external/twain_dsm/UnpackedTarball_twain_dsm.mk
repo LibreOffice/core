@@ -16,6 +16,8 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,twain_dsm,1))
 $(eval $(call gb_UnpackedTarball_add_patches,twain_dsm, \
     external/twain_dsm/TWAIN_DSM_VS2015.vcxproj.patch \
     external/twain_dsm/TWAIN_DSM_VS2015.vcxproj.filters.patch \
+    external/twain_dsm/fix-non-us-ascii-chars-part1.patch \
+    external/twain_dsm/fix-non-us-ascii-chars-part2.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
