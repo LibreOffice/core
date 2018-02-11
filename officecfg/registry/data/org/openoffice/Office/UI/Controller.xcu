@@ -355,7 +355,7 @@
           <value/>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.comp.framework.NotebookbarMenuController</value>
+          <value>com.sun.star.comp.framework.ToolbarModeMenuController</value>
         </prop>
       </node>
       <node oor:name="c30" oor:op="replace">
