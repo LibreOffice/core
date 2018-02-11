@@ -1,0 +1,7 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+2: Stephan Bergmann <sbergman@redhat.com>
+Submitted-by: Stephan Bergmann <sbergman@redhat.com>
+Submitted-at: Sun, 11 Feb 2018 15:30:54 +0100
+Reviewed-on: https://gerrit.libreoffice.org/49473
+Project: core
+Branch: refs/heads/master
