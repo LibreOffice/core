@@ -43,6 +43,8 @@ public:
         Chart,
         Draw,
         Impress,
+        Formula,
+        Base,
 
         // For your convenience to avoid duplicate code in the common
         // case that Draw and Impress use identical context configurations.

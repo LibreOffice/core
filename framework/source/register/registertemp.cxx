@@ -64,7 +64,6 @@ COMPONENTGETFACTORY ( fwl,
                         IFFACTORY( ::framework::DispatchRecorderSupplier                )   else
                         IFFACTORY( ::framework::ToolbarModeMenuController               )   else
                         IFFACTORY( ::framework::ToolbarsMenuController                  )   else
-                        IFFACTORY( ::framework::NotebookbarMenuController               )   else
                         IFFACTORY( ::framework::FontMenuController                      )   else
                         IFFACTORY( ::framework::MacrosMenuController                    )   else
                         IFFACTORY( ::framework::NewMenuController                       )   else
