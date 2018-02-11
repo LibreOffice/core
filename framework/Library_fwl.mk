@@ -69,6 +69,7 @@ $(eval $(call gb_Library_add_exception_objects,fwl,\
     framework/source/uielement/macrosmenucontroller \
     framework/source/uielement/newmenucontroller \
     framework/source/uielement/toolbarmodemenucontroller \
+    framework/source/uielement/toolbarlayoutcontroller \
     framework/source/uielement/toolbarsmenucontroller \
     framework/source/uielement/notebookbarmenucontroller \
 ))

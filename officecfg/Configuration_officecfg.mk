@@ -176,5 +176,6 @@ $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/d
 	org/openoffice/Office/UI/WriterCommands.xcu \
 	org/openoffice/Office/UI/GenericCategories.xcu \
 	org/openoffice/Office/UI/ToolbarMode.xcu \
+	org/openoffice/Office/UI/ToolbarLayout.xcu \
 ))
 
