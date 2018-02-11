@@ -102,6 +102,8 @@
 #include "lwpcelllayout.hxx"
 #include "lwpframelayout.hxx"
 
+#include <set>
+
 // boost::polymorphic_downcast checks and reports (using assert), if the
 // cast is incorrect (in debug builds).
 using boost::polymorphic_downcast;
@@ -166,12 +168,16 @@ LwpPara* LwpPara::GetParent()
     if (level != 1)
     {
         pPara = dynamic_cast<LwpPara*>(GetPrevious().obj().get());
+        std::set<LwpPara*> aSeen;
         while (pPara)
         {
+            aSeen.insert(pPara);
             otherlevel = pPara->GetLevel();
             if ((otherlevel < level) || (otherlevel && (level == 0)))
                 return pPara;
             pPara = dynamic_cast<LwpPara*>(pPara->GetPrevious().obj().get());
+            if (aSeen.find(pPara) != aSeen.end())
+                throw std::runtime_error("loop in conversion");
         }
     }
     return nullptr;
