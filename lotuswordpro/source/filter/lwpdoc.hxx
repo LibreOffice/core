@@ -86,6 +86,7 @@ private:
     LwpFoundry* m_pOwnedFoundry;
     bool m_bGettingFirstDivisionWithContentsThatIsNotOLE;
     bool m_bGettingPreviousDivisionWithContents;
+    bool m_bGettingGetLastDivisionWithContents;
 
     //Data members in file format
     LwpObjectID m_DocSockID;
