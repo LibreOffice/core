@@ -71,14 +71,11 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     pEditView           = pView;
     pEditEngine         = pEng;
     pOutWin             = pWindow;
-    pPointer            = nullptr;
-    pBackgroundColor    = nullptr;
     mpViewShell         = nullptr;
     mpOtherShell        = nullptr;
     nScrollDiffX        = 0;
     nExtraCursorFlags   = GetCursorFlags::NONE;
     nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
-    pCursor             = nullptr;
     bReadOnly           = false;
     bClickedInSelection = false;
     eSelectionMode      = EESelectionMode::Std;

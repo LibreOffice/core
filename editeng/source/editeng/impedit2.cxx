@@ -111,18 +111,12 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     mbNbspRunNext(false)
 {
     pEditEngine         = pEE;
-    pRefDev             = nullptr;
-    pVirtDev            = nullptr;
     pActiveView         = nullptr;
-    pSpellInfo          = nullptr;
     pConvInfo           = nullptr;
     pTextObjectPool     = nullptr;
-    mpIMEInfos          = nullptr;
     pStylePool          = nullptr;
     pUndoManager        = nullptr;
     pUndoMarkSelection  = nullptr;
-    pTextRanger         = nullptr;
-    pCTLOptions         = nullptr;
 
     nCurTextHeight      = 0;
     nCurTextHeightNTP   = 0;

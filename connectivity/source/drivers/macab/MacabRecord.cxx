@@ -37,7 +37,6 @@ using namespace ::dbtools;
 MacabRecord::MacabRecord()
 {
     size = 0;
-    fields = nullptr;
 }
 
 
