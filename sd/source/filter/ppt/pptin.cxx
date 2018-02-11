@@ -68,7 +68,6 @@
 #include <svx/svdogrp.hxx>
 #include "propread.hxx"
 #include <cusshow.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <xmloff/autolayout.hxx>
 
 #include <customshowlist.hxx>
