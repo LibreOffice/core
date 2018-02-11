@@ -16,6 +16,24 @@
       "revId": "ee39822c1d073988e0ac670616ce97aa9e314eca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e1600838",
+        "filename": "sw/inc/calbck.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2018-02-11T19:51:19Z",
+      "side": 1,
+      "message": "Because it can be nullptr. In the mid-term CheckRegistration should be a private insanity anyway (can be inlined then), not a public function. In the long run, this default behaviour should just removed or replaced by another implementation with an default behaviour closer to expectations.",
+      "parentUuid": "fa31d9ce_616ed830",
+      "revId": "ee39822c1d073988e0ac670616ce97aa9e314eca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
