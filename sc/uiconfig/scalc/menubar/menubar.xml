@@ -143,7 +143,6 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ToolbarMode"/>
             <menu:menuitem menu:id=".uno:AvailableToolbars"/>
-            <menu:menuitem menu:id=".uno:Notebookbar"/>
             <menu:menuitem menu:id=".uno:InputLineVisible"/>
             <menu:menuitem menu:id=".uno:StatusBarVisible"/>
             <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
