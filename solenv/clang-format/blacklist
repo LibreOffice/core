@@ -5282,7 +5282,6 @@ framework/inc/uielement/menubarmanager.hxx
 framework/inc/uielement/menubarmerger.hxx
 framework/inc/uielement/menubarwrapper.hxx
 framework/inc/uielement/newmenucontroller.hxx
-framework/inc/uielement/notebookbarmenucontroller.hxx
 framework/inc/uielement/progressbarwrapper.hxx
 framework/inc/uielement/rootitemcontainer.hxx
 framework/inc/uielement/spinfieldtoolbarcontroller.hxx
@@ -5478,7 +5477,6 @@ framework/source/uielement/menubarmanager.cxx
 framework/source/uielement/menubarmerger.cxx
 framework/source/uielement/menubarwrapper.cxx
 framework/source/uielement/newmenucontroller.cxx
-framework/source/uielement/notebookbarmenucontroller.cxx
 framework/source/uielement/objectmenucontroller.cxx
 framework/source/uielement/popuptoolbarcontroller.cxx
 framework/source/uielement/progressbarwrapper.cxx
