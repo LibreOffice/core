@@ -53,7 +53,6 @@ namespace framework{
 #define IMPLEMENTATIONNAME_NEWMENUCONTROLLER                    "com.sun.star.comp.framework.NewMenuController"
 #define IMPLEMENTATIONNAME_TOOLBARMODEMENUCONTROLLER            "com.sun.star.comp.framework.ToolbarModeMenuController"
 #define IMPLEMENTATIONNAME_TOOLBARSMENUCONTROLLER               "com.sun.star.comp.framework.ToolBarsMenuController"
-#define IMPLEMENTATIONNAME_NOTEBOOKBARMENUCONTROLLER            "com.sun.star.comp.framework.NotebookbarMenuController"
 #define IMPLEMENTATIONNAME_HELPONSTARTUP                        "com.sun.star.comp.framework.HelpOnStartup"
 #define IMPLEMENTATIONNAME_SHELLJOB                             "com.sun.star.comp.framework.ShellJob"
 #define IMPLEMENTATIONNAME_FWK_TASKCREATOR                      "com.sun.star.comp.framework.TaskCreator"
