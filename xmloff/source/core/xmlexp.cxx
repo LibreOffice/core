@@ -1882,7 +1882,7 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
     return sRet;
 }
 
-OUString SvXMLExport::AddEmbeddedXGraphic(uno::Reference<graphic::XGraphic> const & rxGraphic)
+OUString SvXMLExport::AddEmbeddedXGraphic(uno::Reference<graphic::XGraphic> const & rxGraphic, OUString const & rRequestedName)
 {
     OUString sInternalURL;
 
@@ -1892,7 +1892,7 @@ OUString SvXMLExport::AddEmbeddedXGraphic(uno::Reference<graphic::XGraphic> cons
     {
         if (!(getExportFlags() & SvXMLExportFlags::EMBEDDED))
         {
-            sInternalURL = xGraphicStorageHandler->saveGraphic(rxGraphic);
+            sInternalURL = xGraphicStorageHandler->saveGraphicByName(rxGraphic, rRequestedName);
         }
     }
 
