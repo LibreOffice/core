@@ -22,7 +22,7 @@
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <officecfg/Office/UI/Notebookbar.hxx>
+#include <officecfg/Office/UI/ToolbarMode.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <unotools/confignode.hxx>
@@ -82,13 +82,13 @@ static void lcl_setNotebookbarFileName( vcl::EnumContext::Application eApp, cons
     switch ( eApp )
     {
         case vcl::EnumContext::Application::Writer:
-            officecfg::Office::UI::Notebookbar::ActiveWriter::set( sFileName, aBatch );
+            officecfg::Office::UI::ToolbarMode::ActiveWriter::set( sFileName, aBatch );
             break;
         case vcl::EnumContext::Application::Calc:
-            officecfg::Office::UI::Notebookbar::ActiveCalc::set( sFileName, aBatch );
+            officecfg::Office::UI::ToolbarMode::ActiveCalc::set( sFileName, aBatch );
             break;
         case vcl::EnumContext::Application::Impress:
-            officecfg::Office::UI::Notebookbar::ActiveImpress::set( sFileName, aBatch );
+            officecfg::Office::UI::ToolbarMode::ActiveImpress::set( sFileName, aBatch );
             break;
         default:
             break;
@@ -101,13 +101,13 @@ static OUString lcl_getNotebookbarFileName( vcl::EnumContext::Application eApp )
     switch ( eApp )
     {
         case vcl::EnumContext::Application::Writer:
-            return officecfg::Office::UI::Notebookbar::ActiveWriter::get();
+            return officecfg::Office::UI::ToolbarMode::ActiveWriter::get();
             break;
         case vcl::EnumContext::Application::Calc:
-            return officecfg::Office::UI::Notebookbar::ActiveCalc::get();
+            return officecfg::Office::UI::ToolbarMode::ActiveCalc::get();
             break;
         case vcl::EnumContext::Application::Impress:
-            return officecfg::Office::UI::Notebookbar::ActiveImpress::get();
+            return officecfg::Office::UI::ToolbarMode::ActiveImpress::get();
             break;
         default:
             break;
@@ -118,7 +118,7 @@ static OUString lcl_getNotebookbarFileName( vcl::EnumContext::Application eApp )
 static utl::OConfigurationTreeRoot lcl_getCurrentImplConfigRoot()
 {
     return utl::OConfigurationTreeRoot(::comphelper::getProcessComponentContext(),
-                                       "org.openoffice.Office.UI.Notebookbar/",
+                                       "org.openoffice.Office.UI.ToolbarMode/",
                                        true);
 }
 
@@ -133,7 +133,7 @@ static const utl::OConfigurationNode lcl_getCurrentImplConfigNode(const Referenc
     vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( xModuleManager->identify( xFrame ) );
     OUString aActive = lcl_getNotebookbarFileName( eApp );
 
-    const utl::OConfigurationNode aImplsNode = rNotebookbarNode.openNode("Applications/" + lcl_getAppName( eApp) + "/Implementations");
+    const utl::OConfigurationNode aImplsNode = rNotebookbarNode.openNode("Applications/" + lcl_getAppName( eApp) + "/Modes");
     const Sequence<OUString> aModeNodeNames( aImplsNode.getNodeNames() );
     const sal_Int32 nCount( aModeNodeNames.getLength() );
 
@@ -143,7 +143,7 @@ static const utl::OConfigurationNode lcl_getCurrentImplConfigNode(const Referenc
         if ( !aImplNode.isValid() )
             continue;
 
-        OUString aCommandArg = comphelper::getString( aImplNode.getNodeValue( "File" ) );
+        OUString aCommandArg = comphelper::getString( aImplNode.getNodeValue( "CommandArg" ) );
 
         if ( aCommandArg == aActive )
         {
