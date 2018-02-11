@@ -74,6 +74,12 @@
           </desc>
         </info>
       </prop>
+      <prop oor:name="HasMenubar" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines if menubar is visible.</desc>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
     <group oor:name="Application">
       <info>
@@ -92,6 +98,21 @@
     </group>
   </templates>
   <component>
+    <prop oor:name="ActiveWriter" oor:type="xs:string" oor:nillable="false">
+      <info>
+        <desc>Contains name of currently used implementation in the Writer module.</desc>
+      </info>
+    </prop>
+    <prop oor:name="ActiveCalc" oor:type="xs:string" oor:nillable="false">
+      <info>
+        <desc>Contains name of currently used implementation in the Calc module.</desc>
+      </info>
+    </prop>
+    <prop oor:name="ActiveImpress" oor:type="xs:string" oor:nillable="false">
+      <info>
+        <desc>Contains name of currently used implementation in the Impress module.</desc>
+      </info>
+    </prop>
     <set oor:name="Applications" oor:node-type="Application">
       <info>
         <desc>Contains list of toolbar mode settings for each application.</desc>

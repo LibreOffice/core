@@ -124,7 +124,8 @@ void EnumContext::ProvideApplicationContainers()
     AddEntry("com.sun.star.chart2.ChartDocument", EnumContext::Application::Chart);
     AddEntry("com.sun.star.drawing.DrawingDocument", EnumContext::Application::Draw);
     AddEntry("com.sun.star.presentation.PresentationDocument", EnumContext::Application::Impress);
-
+    AddEntry("com.sun.star.formula.FormulaProperties", EnumContext::Application::Formula);
+    AddEntry("com.sun.star.sdb.OfficeDatabaseDocument", EnumContext::Application::Base);
     AddEntry("any", EnumContext::Application::Any);
     AddEntry("none", EnumContext::Application::NONE);
 

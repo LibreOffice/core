@@ -79,7 +79,6 @@ officecfg_XCSFILES := \
     Office/UI/ImpressWindowState \
     Office/UI/MathCommands \
     Office/UI/MathWindowState \
-    Office/UI/Notebookbar \
     Office/UI/ReportCommands \
     Office/UI/Sidebar \
     Office/UI/StartModuleCommands \
