@@ -161,9 +161,14 @@
       <menu:menuitem menu:id=".uno:PrintLayout" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:BrowseView" menu:style="radio"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ToolbarMode"/>
+      <menu:menu menu:id=".uno:ToolbarLayout">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:ToolbarMode"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:Notebookbar"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menuitem menu:id=".uno:AvailableToolbars"/>
-      <menu:menuitem menu:id=".uno:Notebookbar"/>
       <menu:menuitem menu:id=".uno:StatusBarVisible"/>
       <menu:menu menu:id=".uno:RulerMenu">
         <menu:menupopup>
