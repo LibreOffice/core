@@ -70,7 +70,6 @@ $(eval $(call gb_Library_add_exception_objects,fwl,\
     framework/source/uielement/newmenucontroller \
     framework/source/uielement/toolbarmodemenucontroller \
     framework/source/uielement/toolbarsmenucontroller \
-    framework/source/uielement/notebookbarmenucontroller \
 ))
 
 # vim: set noet sw=4 ts=4:

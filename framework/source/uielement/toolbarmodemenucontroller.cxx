@@ -18,7 +18,6 @@
  */
 
 #include <uielement/toolbarmodemenucontroller.hxx>
-
 #include <services.h>
 #include <framework/sfxhelperfunctions.hxx>
 
@@ -116,6 +115,7 @@ void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
     const Sequence<OUString> aModeNodeNames (aModesNode.getNodeNames());
     const sal_Int32 nCount(aModeNodeNames.getLength());
     SvtMiscOptions aMiscOptions;
+    long nCountToolbar = 0;
 
     for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
     {
@@ -131,10 +131,13 @@ void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         // Allow Notebookbar only in experimental mode
         if ( isExperimental && !aMiscOptions.IsExperimentalMode() )
             continue;
+        if ( !isExperimental )
+            nCountToolbar++;
 
         m_xPopupMenu->insertItem( nReadIndex+1, aLabel, css::awt::MenuItemStyle::RADIOCHECK, nPosition );
         rPopupMenu->setCommand( nReadIndex+1, aCommandArg );
     }
+    rPopupMenu->insertSeparator(nCountToolbar);
 }
 
 // XEventListener
@@ -223,8 +226,30 @@ void SAL_CALL ToolbarModeMenuController::itemSelected( const css::awt::MenuEvent
         {
             SolarMutexGuard aSolarMutexGuard;
             PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
-
             OUString aCmd( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ));
+
+            {
+                OUStringBuffer aBuf(".uno:Notebookbar?File:string=");
+                aBuf.append( aCmd );
+                URL aTargetURL;
+                Sequence<PropertyValue> aArgs;
+
+                aTargetURL.Complete = aBuf.makeStringAndClear();
+                xURLTransformer->parseStrict( aTargetURL );
+                Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+                if ( xDispatchProvider.is() )
+                {
+                    Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch(
+                                                        aTargetURL, OUString(), 0 );
+
+                    ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+                    pExecuteInfo->xDispatch     = xDispatch;
+                    pExecuteInfo->aTargetURL    = aTargetURL;
+                    pExecuteInfo->aArgs         = aArgs;
+                    Application::PostUserEvent( LINK(nullptr,ToolbarModeMenuController, ExecuteHdl_Impl), pExecuteInfo );
+                }
+            }
+
             OUStringBuffer aBuf(".uno:ToolbarMode?Mode:string=");
             aBuf.append( aCmd );
             URL aTargetURL;

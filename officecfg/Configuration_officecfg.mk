@@ -164,7 +164,6 @@ $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/d
 	org/openoffice/Office/UI/DrawWindowState.xcu \
 	org/openoffice/Office/UI/ImpressWindowState.xcu \
 	org/openoffice/Office/UI/MathWindowState.xcu \
-	org/openoffice/Office/UI/Notebookbar.xcu \
 	org/openoffice/Office/UI/ReportCommands.xcu \
 	org/openoffice/Office/UI/Sidebar.xcu \
 	org/openoffice/Office/UI/StartModuleWindowState.xcu \
