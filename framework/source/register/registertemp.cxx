@@ -50,6 +50,7 @@
 #include <uielement/macrosmenucontroller.hxx>
 #include <uielement/newmenucontroller.hxx>
 #include <uielement/toolbarmodemenucontroller.hxx>
+#include <uielement/toolbarlayoutcontroller.hxx>
 #include <uielement/toolbarsmenucontroller.hxx>
 #include <uielement/notebookbarmenucontroller.hxx>
 
@@ -63,6 +64,7 @@ COMPONENTGETFACTORY ( fwl,
                         IFFACTORY( ::framework::DispatchRecorder                        )   else
                         IFFACTORY( ::framework::DispatchRecorderSupplier                )   else
                         IFFACTORY( ::framework::ToolbarModeMenuController               )   else
+                        IFFACTORY( ::framework::ToolbarLayoutController                 )   else
                         IFFACTORY( ::framework::ToolbarsMenuController                  )   else
                         IFFACTORY( ::framework::NotebookbarMenuController               )   else
                         IFFACTORY( ::framework::FontMenuController                      )   else

@@ -5309,6 +5309,7 @@ framework/inc/uielement/togglebuttontoolbarcontroller.hxx
 framework/inc/uielement/toolbarmanager.hxx
 framework/inc/uielement/toolbarmerger.hxx
 framework/inc/uielement/toolbarmodemenucontroller.hxx
+framework/inc/uielement/toolbarlayoutcontroller.hxx
 framework/inc/uielement/toolbarsmenucontroller.hxx
 framework/inc/uielement/toolbarwrapper.hxx
 framework/inc/uielement/uicommanddescription.hxx
@@ -5510,6 +5511,7 @@ framework/source/uielement/togglebuttontoolbarcontroller.cxx
 framework/source/uielement/toolbarmanager.cxx
 framework/source/uielement/toolbarmerger.cxx
 framework/source/uielement/toolbarmodemenucontroller.cxx
+framework/source/uielement/toolbarlayoutcontroller.cxx
 framework/source/uielement/toolbarsmenucontroller.cxx
 framework/source/uielement/toolbarwrapper.cxx
 framework/source/uielement/uicommanddescription.cxx

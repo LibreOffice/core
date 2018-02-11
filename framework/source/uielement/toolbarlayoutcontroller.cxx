@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <uielement/toolbarlayoutcontroller.hxx>
 #include <uielement/toolbarmodemenucontroller.hxx>
 #include <uielement/notebookbarmenucontroller.hxx>
 #include <services.h>
@@ -40,7 +41,7 @@
 #include <vcl/window.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>
-#include <officecfg/Office/UI/ToolbarMode.hxx>
+#include <officecfg/Office/UI/ToolbarLayout.hxx>
 #include <unotools/confignode.hxx>
 
 //  Defines
@@ -57,25 +58,25 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ToolbarModeMenuController                  ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ToolbarLayoutController                  ,
                                             OWeakObject                             ,
                                             SERVICENAME_POPUPMENUCONTROLLER         ,
-                                            IMPLEMENTATIONNAME_TOOLBARMODEMENUCONTROLLER
+                                            IMPLEMENTATIONNAME_TOOLBARLAYOUTCONTROLLER
                                         )
 
-DEFINE_INIT_SERVICE                     (   ToolbarModeMenuController, {} )
+DEFINE_INIT_SERVICE                     (   ToolbarLayoutController, {} )
 
-ToolbarModeMenuController::ToolbarModeMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
+ToolbarLayoutController::ToolbarLayoutController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
     m_xContext( xContext )
 {
 }
 
-ToolbarModeMenuController::~ToolbarModeMenuController()
+ToolbarLayoutController::~ToolbarLayoutController()
 {
 }
 
-void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
+void ToolbarLayoutController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     if ( SvtMiscOptions().DisableUICustomization() )
         return;
@@ -87,7 +88,7 @@ void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
     const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
     vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(m_xFrame));
 
-    OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarMode/Applications/");
+    OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarLayout/Applications/");
     switch ( eApp )
     {
         case vcl::EnumContext::Application::Writer:
@@ -139,7 +140,7 @@ void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 }
 
 // XEventListener
-void SAL_CALL ToolbarModeMenuController::disposing( const EventObject& )
+void SAL_CALL ToolbarLayoutController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(static_cast<OWeakObject *>(this), UNO_QUERY );
 
@@ -153,7 +154,7 @@ void SAL_CALL ToolbarModeMenuController::disposing( const EventObject& )
 }
 
 // XStatusListener
-void SAL_CALL ToolbarModeMenuController::statusChanged( const FeatureStateEvent& Event )
+void SAL_CALL ToolbarLayoutController::statusChanged( const FeatureStateEvent& Event )
 {
     OUString aFeatureURL( Event.FeatureURL.Complete );
 
@@ -205,7 +206,7 @@ void SAL_CALL ToolbarModeMenuController::statusChanged( const FeatureStateEvent&
 }
 
 // XMenuListener
-void SAL_CALL ToolbarModeMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
+void SAL_CALL ToolbarLayoutController::itemSelected( const css::awt::MenuEvent& rEvent )
 {
     Reference< css::awt::XPopupMenu >   xPopupMenu;
     Reference< XURLTransformer >        xURLTransformer;
@@ -226,7 +227,29 @@ void SAL_CALL ToolbarModeMenuController::itemSelected( const css::awt::MenuEvent
             PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
             OUString aCmd( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ));
 
-            OUStringBuffer aBuf(".uno:ToolbarMode?Mode:string=");
+            {
+                OUStringBuffer aBuf(".uno:Notebookbar?File:string=");
+                aBuf.append( aCmd );
+                URL aTargetURL;
+                Sequence<PropertyValue> aArgs;
+
+                aTargetURL.Complete = aBuf.makeStringAndClear();
+                xURLTransformer->parseStrict( aTargetURL );
+                Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+                if ( xDispatchProvider.is() )
+                {
+                    Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch(
+                                                        aTargetURL, OUString(), 0 );
+
+                    ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+                    pExecuteInfo->xDispatch     = xDispatch;
+                    pExecuteInfo->aTargetURL    = aTargetURL;
+                    pExecuteInfo->aArgs         = aArgs;
+                    Application::PostUserEvent( LINK(nullptr, NotebookbarMenuController, ExecuteHdl_Impl), pExecuteInfo );
+                }
+            }
+
+            OUStringBuffer aBuf(".uno:ToolbarLayout?Mode:string=");
             aBuf.append( aCmd );
             URL aTargetURL;
             Sequence<PropertyValue> aArgs;
@@ -243,18 +266,18 @@ void SAL_CALL ToolbarModeMenuController::itemSelected( const css::awt::MenuEvent
                 pExecuteInfo->xDispatch     = xDispatch;
                 pExecuteInfo->aTargetURL    = aTargetURL;
                 pExecuteInfo->aArgs         = aArgs;
-                Application::PostUserEvent( LINK(nullptr, ToolbarModeMenuController, ExecuteHdl_Impl), pExecuteInfo );
+                Application::PostUserEvent( LINK(nullptr, ToolbarLayoutController, ExecuteHdl_Impl), pExecuteInfo );
             }
         }
     }
 }
 
-void SAL_CALL ToolbarModeMenuController::itemActivated( const css::awt::MenuEvent& )
+void SAL_CALL ToolbarLayoutController::itemActivated( const css::awt::MenuEvent& )
 {
     const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( m_xContext );
     vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(m_xFrame));
 
-    OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarMode/Applications/");
+    OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarLayout/Applications/");
     switch ( eApp )
     {
         case vcl::EnumContext::Application::Writer:
@@ -287,7 +310,7 @@ void SAL_CALL ToolbarModeMenuController::itemActivated( const css::awt::MenuEven
 }
 
 // XPopupMenuController
-void SAL_CALL ToolbarModeMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu )
+void SAL_CALL ToolbarLayoutController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu )
 {
     osl::MutexGuard aLock( m_aMutex );
 
@@ -304,7 +327,7 @@ void SAL_CALL ToolbarModeMenuController::setPopupMenu( const Reference< css::awt
     }
 }
 
-IMPL_STATIC_LINK( ToolbarModeMenuController, ExecuteHdl_Impl, void*, p, void )
+IMPL_STATIC_LINK( ToolbarLayoutController, ExecuteHdl_Impl, void*, p, void )
 {
     ExecuteInfo* pExecuteInfo = static_cast<ExecuteInfo*>(p);
     try

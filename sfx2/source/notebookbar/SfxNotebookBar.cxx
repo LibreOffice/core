@@ -198,7 +198,7 @@ bool SfxNotebookBar::IsActive()
         eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xFrame));
     }
 
-    OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarMode/Applications/");
+    OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarLayout/Applications/");
     aPath.append( lcl_getAppName( eApp ) );
 
     const utl::OConfigurationTreeRoot aAppNode(
