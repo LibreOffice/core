@@ -1483,8 +1483,20 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
             if (nFcPos >= nFcStart)
             {
                 // found
-                WW8_CP nTempCp =
-                    nCpStart + ((nFcPos - nFcStart) / (bIsUnicode ? 2 : 1));
+                WW8_FC nFcDiff;
+                if (o3tl::checked_sub(nFcPos, nFcStart, nFcDiff))
+                {
+                    SAL_WARN("sw.ww8", "broken offset, ignoring");
+                    return WW8_CP_MAX;
+                }
+                if (bIsUnicode)
+                    nFcDiff /= 2;
+                WW8_CP nTempCp;
+                if (o3tl::checked_add(nCpStart, nFcDiff, nTempCp))
+                {
+                    SAL_WARN("sw.ww8", "broken offset, ignoring");
+                    return WW8_CP_MAX;
+                }
                 if (nFcPos < nFcStart + nLen)
                 {
                     m_pPieceIter->SetIdx( nOldPos );
