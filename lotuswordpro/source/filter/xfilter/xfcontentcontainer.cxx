@@ -73,11 +73,11 @@ void    XFContentContainer::Add(XFContent *pContent)
     m_aContents.emplace_back(pContent);
 }
 
-void    XFContentContainer::Add(const OUString& text)
+void XFContentContainer::Add(const OUString& text)
 {
-    XFTextContent *pTC = new XFTextContent();
-    pTC->SetText(text);
-    Add(pTC);
+    rtl::Reference<XFTextContent> xTC(new XFTextContent);
+    xTC->SetText(text);
+    Add(xTC.get());
 }
 
 int     XFContentContainer::GetCount() const
