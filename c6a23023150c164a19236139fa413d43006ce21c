@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_c1edc4f0",
+        "filename": "vcl/inc/impgraph.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2018-02-11T11:37:12Z",
+      "side": 1,
+      "message": "This looks like a mistake. Tomaž, are you sure you wanted to place the function definitions into the header file instead of the cxx file?",
+      "revId": "c6a23023150c164a19236139fa413d43006ce21c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
