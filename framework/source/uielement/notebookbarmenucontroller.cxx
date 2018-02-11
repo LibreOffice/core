@@ -272,7 +272,7 @@ void SAL_CALL NotebookbarMenuController::itemActivated( const css::awt::MenuEven
         return;
 
     // Entries are enabled only when Notebookbar mode is active
-    bool bActive = comphelper::getString( aModesNode.getNodeValue( "Active" ) ) == "Notebookbar";
+    bool bActive = true;//comphelper::getString( aModesNode.getNodeValue( "Active" ) ) == "Notebookbar";
 
     for ( int i = 0; i < m_xPopupMenu->getItemCount(); ++i )
     {

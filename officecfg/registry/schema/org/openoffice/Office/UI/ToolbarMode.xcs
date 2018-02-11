@@ -74,6 +74,11 @@
           </desc>
         </info>
       </prop>
+      <prop oor:name="HasMenubar" oor:type="xs:boolean" oor:nillable="true">
+        <info>
+          <desc>Determines if menubar is visible.</desc>
+        </info>
+      </prop>
     </group>
     <group oor:name="Application">
       <info>
