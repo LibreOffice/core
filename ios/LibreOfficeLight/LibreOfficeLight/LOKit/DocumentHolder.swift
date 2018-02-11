@@ -166,6 +166,10 @@ public class DocumentHolder
                 // TODO: callback?
             }
 
+        case LOK_CALLBACK_STATE_CHANGED:
+            // TODO: call backback
+            print("onDocumentEvent type: LOK_CALLBACK_STATE_CHANGED: \(payload ?? "")")
+
         default:
             print("onDocumentEvent type:\(type) not handled!")
         }
