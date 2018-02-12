@@ -26,6 +26,8 @@
 #include "ModifyListenerHelper.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/XFormattedString2.hpp>
+#include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
+#include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -35,7 +37,7 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakImplHelper<
-    css::chart2::XFormattedString2,
+    css::chart2::XDataPointCustomLabelField, // inherits from XFormattedString2
     css::lang::XServiceInfo,
     css::util::XCloneable,
     css::util::XModifyBroadcaster,
@@ -88,6 +90,16 @@ protected:
     virtual void SAL_CALL setString( const OUString& String )
         throw (css::uno::RuntimeException, std::exception) override;
 
+    // ____ XDataPointCustomLabelField ____
+    virtual css::chart2::DataPointCustomLabelFieldType SAL_CALL getFieldType()
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setFieldType( const css::chart2::DataPointCustomLabelFieldType FieldType )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getGuid()
+        throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setGuid( const OUString& guid )
+        throw (css::uno::RuntimeException, std::exception) override;
+
     // ____ OPropertySet ____
     virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
         throw (css::beans::UnknownPropertyException,
@@ -130,7 +142,12 @@ protected:
     void fireModifyEvent();
 
 private:
+    // ____ XFormattedString ____
     OUString m_aString;
+
+    // ____ XDataPointCustomLabelField ____
+    css::chart2::DataPointCustomLabelFieldType m_aType;
+    OUString m_aGuid;
 
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
 };
