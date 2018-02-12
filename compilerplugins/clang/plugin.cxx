@@ -397,9 +397,15 @@ bool RewritePlugin::insertText( SourceLocation Loc, StringRef Str, bool InsertAf
     assert( rewriter );
     if (wouldRewriteWorkdir(Loc))
         return false;
+    SourceRange Range(SourceRange(Loc, Loc.getLocWithOffset(Str.size())));
+    if( !handler.checkOverlap( Range ) )
+    {
+        report( DiagnosticsEngine::Warning, "double code removal, possible plugin error", Range.getBegin());
+        return false;
+    }
     if( rewriter->InsertText( Loc, Str, InsertAfter, indentNewLines ))
         return reportEditFailure( Loc );
-    handler.addSourceModification(SourceRange(Loc, Loc.getLocWithOffset(Str.size())));
+    handler.addSourceModification(Range);
     return true;
 }
 
@@ -408,9 +414,15 @@ bool RewritePlugin::insertTextAfter( SourceLocation Loc, StringRef Str )
     assert( rewriter );
     if (wouldRewriteWorkdir(Loc))
         return false;
+    SourceRange Range(SourceRange(Loc, Loc.getLocWithOffset(Str.size())));
+    if( !handler.checkOverlap( Range ) )
+    {
+        report( DiagnosticsEngine::Warning, "double code removal, possible plugin error", Range.getBegin());
+        return false;
+    }
     if( rewriter->InsertTextAfter( Loc, Str ))
         return reportEditFailure( Loc );
-    handler.addSourceModification(SourceRange(Loc, Loc.getLocWithOffset(Str.size())));
+    handler.addSourceModification(Range);
     return true;
 }
 
@@ -419,9 +431,15 @@ bool RewritePlugin::insertTextAfterToken( SourceLocation Loc, StringRef Str )
     assert( rewriter );
     if (wouldRewriteWorkdir(Loc))
         return false;
+    SourceRange Range(SourceRange(Loc, Loc.getLocWithOffset(Str.size())));
+    if( !handler.checkOverlap( Range ) )
+    {
+        report( DiagnosticsEngine::Warning, "double code removal, possible plugin error", Range.getBegin());
+        return false;
+    }
     if( rewriter->InsertTextAfterToken( Loc, Str ))
         return reportEditFailure( Loc );
-    handler.addSourceModification(SourceRange(Loc, Loc.getLocWithOffset(Str.size())));
+    handler.addSourceModification(Range);
     return true;
 }
 
@@ -430,9 +448,15 @@ bool RewritePlugin::insertTextBefore( SourceLocation Loc, StringRef Str )
     assert( rewriter );
     if (wouldRewriteWorkdir(Loc))
         return false;
+    SourceRange Range(SourceRange(Loc, Loc.getLocWithOffset(Str.size())));
+    if( !handler.checkOverlap( Range ) )
+    {
+        report( DiagnosticsEngine::Warning, "double code removal, possible plugin error", Range.getBegin());
+        return false;
+    }
     if( rewriter->InsertTextBefore( Loc, Str ))
         return reportEditFailure( Loc );
-    handler.addSourceModification(SourceRange(Loc, Loc.getLocWithOffset(Str.size())));
+    handler.addSourceModification(Range);
     return true;
 }
 
@@ -457,7 +481,7 @@ bool RewritePlugin::removeText( CharSourceRange range, RewriteOptions opts )
     if( !handler.checkOverlap( range.getAsRange() ) )
     {
         report( DiagnosticsEngine::Warning, "double code removal, possible plugin error", range.getBegin());
-        return true;
+        return false;
     }
     if( opts.flags & RemoveWholeStatement || opts.flags & RemoveAllWhitespace )
     {
@@ -520,7 +544,7 @@ bool RewritePlugin::replaceText( SourceLocation Start, unsigned OrigLength, Stri
     if( OrigLength != 0 && !handler.checkOverlap( Range ) )
     {
         report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", Start );
-        return true;
+        return false;
     }
     if( rewriter->ReplaceText( Start, OrigLength, NewStr ))
         return reportEditFailure( Start );
@@ -538,7 +562,7 @@ bool RewritePlugin::replaceText( SourceRange range, StringRef NewStr )
     if( !handler.checkOverlap( range ) )
     {
         report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", range.getBegin());
-        return true;
+        return false;
     }
     if( rewriter->ReplaceText( range, NewStr ))
         return reportEditFailure( range.getBegin());
@@ -556,7 +580,7 @@ bool RewritePlugin::replaceText( SourceRange range, SourceRange replacementRange
     if( !handler.checkOverlap( range ) )
     {
         report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", range.getBegin());
-        return true;
+        return false;
     }
     if( rewriter->ReplaceText( range, replacementRange ))
         return reportEditFailure( range.getBegin());

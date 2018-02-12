@@ -250,8 +250,15 @@ bool PluginHandler::checkOverlap(SourceRange range)
         if (p1 <= rPair.second && rPair.first <= p2)
             return false;
     }
-    mvModifiedRanges.emplace_back(p1, p2);
     return true;
+}
+
+void PluginHandler::addSourceModification(SourceRange range)
+{
+    SourceManager& SM = compiler.getSourceManager();
+    char const  *p1 = SM.getCharacterData( range.getBegin() );
+    char const *p2 = SM.getCharacterData( range.getEnd() );
+    mvModifiedRanges.emplace_back(p1, p2);
 }
 
 void PluginHandler::HandleTranslationUnit( ASTContext& context )

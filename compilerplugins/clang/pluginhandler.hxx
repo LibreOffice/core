@@ -60,7 +60,7 @@ public:
     // If we overlap with a previous area we modified, we cannot perform this change
     // without corrupting the source
     bool checkOverlap(SourceRange range);
-    bool addSourceModification(SourceRange range);
+    void addSourceModification(SourceRange range);
 private:
     void handleOption( const std::string& option );
     void createPlugins( std::set< std::string > rewriters );
