@@ -11,6 +11,8 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
+#include <com/sun/star/chart2/DataPointCustomLabelField.hpp>
+#include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -105,6 +107,9 @@ public:
 
     void testInternalDataProvider();
 
+    void testTdf115107(); // import complex data point labels
+    void testTdf115107_2(); // import complex data point labels in cobo charts with multiple data series
+
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
     CPPUNIT_TEST(testSteppedLines);
@@ -164,6 +169,9 @@ public:
     CPPUNIT_TEST(testTdf116163);
 
     CPPUNIT_TEST(testInternalDataProvider);
+
+    CPPUNIT_TEST(testTdf115107);
+    CPPUNIT_TEST(testTdf115107_2);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1412,6 +1420,151 @@ void Chart2ImportTest::testTdf116163()
     CPPUNIT_ASSERT_EQUAL(OUString("Ccc"), xLabel2->getString());
     uno::Reference<text::XTextRange> xLabel3(xIndexAccess->getByIndex(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Dddd..."), xLabel3->getString());
+}
+
+void Chart2ImportTest::testTdf115107()
+{
+    load("/chart2/qa/extras/data/pptx/", "tdf115107.pptx");
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+    float nFontSize;
+    sal_Int64 nFontColor;
+    sal_Int32 nCharUnderline;
+    uno::Reference<beans::XPropertySet> xPropertySet;
+    uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
+
+    // 1
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aFields.getLength());
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[0]->getFieldType());
+    CPPUNIT_ASSERT_EQUAL(OUString("90.0 = "), aFields[0]->getString());
+    aFields[0]->getPropertyValue("CharHeight") >>= nFontSize;
+    aFields[0]->getPropertyValue("CharColor") >>= nFontColor;
+    CPPUNIT_ASSERT_EQUAL(static_cast<float>(18), nFontSize);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(0xed7d31), nFontColor);
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_VALUE, aFields[1]->getFieldType());
+    CPPUNIT_ASSERT_EQUAL(OUString("90"), aFields[1]->getString());
+
+    // 2
+    xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8), aFields.getLength());
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[0]->getFieldType());
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), aFields[0]->getString());
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[1]->getFieldType());
+    CPPUNIT_ASSERT_EQUAL(OUString(" : "), aFields[1]->getString());
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CATEGORYNAME, aFields[2]->getFieldType());
+    CPPUNIT_ASSERT_EQUAL(OUString("B"), aFields[2]->getString());
+    aFields[2]->getPropertyValue("CharHeight") >>= nFontSize;
+    aFields[2]->getPropertyValue("CharColor") >>= nFontColor;
+    CPPUNIT_ASSERT_EQUAL(static_cast<float>(16), nFontSize);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(0xed7d31), nFontColor);
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_NEWLINE, aFields[3]->getFieldType());
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[4]->getFieldType());
+    CPPUNIT_ASSERT_EQUAL(OUString("Multi"), aFields[4]->getString());
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[5]->getFieldType());
+    CPPUNIT_ASSERT_EQUAL(OUString("line"), aFields[5]->getString());
+    aFields[5]->getPropertyValue("CharHeight") >>= nFontSize;
+    aFields[5]->getPropertyValue("CharColor") >>= nFontColor;
+    CPPUNIT_ASSERT_EQUAL(static_cast<float>(13), nFontSize);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(0xbf9000), nFontColor);
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_NEWLINE, aFields[6]->getFieldType());
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[7]->getFieldType());
+    CPPUNIT_ASSERT_EQUAL(OUString("Abc"), aFields[7]->getString());
+    aFields[7]->getPropertyValue("CharHeight") >>= nFontSize;
+    aFields[7]->getPropertyValue("CharColor") >>= nFontColor;
+    aFields[7]->getPropertyValue("CharUnderline") >>= nCharUnderline;
+    CPPUNIT_ASSERT_EQUAL(static_cast<float>(12), nFontSize);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(0xa9d18e), nFontColor);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nCharUnderline);
+
+    // 3
+    xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aFields.getLength());
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_SERIESNAME, aFields[0]->getFieldType());
+    CPPUNIT_ASSERT_EQUAL(OUString("DATA"), aFields[0]->getString());
+
+    // 4
+    xPropertySet.set(xDataSeries->getDataPointByIndex(3), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aFields.getLength());
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLREF, aFields[0]->getFieldType());
+    //CPPUNIT_ASSERT_EQUAL(OUString("70"), aFields[0]->getString()); TODO: Not implemented yet
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[1]->getFieldType());
+    CPPUNIT_ASSERT_EQUAL(OUString(" <CELLREF"), aFields[1]->getString());
+}
+
+void Chart2ImportTest::testTdf115107_2()
+{
+    load("/chart2/qa/extras/data/pptx/", "tdf115107-2.pptx");
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+    float nFontSize;
+    sal_Int64 nFontColor;
+    uno::Reference<beans::XPropertySet> xPropertySet;
+    uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
+
+    // First series
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aFields.getLength());
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_VALUE, aFields[0]->getFieldType());
+    CPPUNIT_ASSERT_EQUAL(OUString("4.3"), aFields[0]->getString());
+    aFields[0]->getPropertyValue("CharHeight") >>= nFontSize;
+    aFields[0]->getPropertyValue("CharColor") >>= nFontColor;
+    CPPUNIT_ASSERT_EQUAL(static_cast<float>(18), nFontSize);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(0xc00000), nFontColor);
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[1]->getFieldType());
+    CPPUNIT_ASSERT_EQUAL(OUString(" "), aFields[1]->getString());
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_SERIESNAME, aFields[2]->getFieldType());
+    CPPUNIT_ASSERT_EQUAL(OUString("Bars"), aFields[2]->getString());
+
+    // Second series
+    xDataSeries = uno::Reference<chart2::XDataSeries>(getDataSeriesFromDoc(xChartDoc, 0, 1));
+    CPPUNIT_ASSERT(xDataSeries.is());
+
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aFields.getLength());
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_VALUE, aFields[0]->getFieldType());
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), aFields[0]->getString());
+    aFields[0]->getPropertyValue("CharHeight") >>= nFontSize;
+    aFields[0]->getPropertyValue("CharColor") >>= nFontColor;
+    CPPUNIT_ASSERT_EQUAL(static_cast<float>(18), nFontSize);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(0xffd966), nFontColor);
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[1]->getFieldType());
+    CPPUNIT_ASSERT_EQUAL(OUString(" "), aFields[1]->getString());
+
+    CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_SERIESNAME, aFields[2]->getFieldType());
+    CPPUNIT_ASSERT_EQUAL(OUString("Line"), aFields[2]->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);

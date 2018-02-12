@@ -167,13 +167,13 @@ public:
     void testTdf109187();
     void testTdf108926();
     void testTdf100065();
-    void testTdf114821();
     void testTdf51340();
     void testTdf115394();
     void testTdf115394PPT();
     void testTdf115639();
     void testTdf116899();
     void testTdf116266();
+    void testTdf114821();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -246,13 +246,13 @@ public:
     CPPUNIT_TEST(testTdf109187);
     CPPUNIT_TEST(testTdf108926);
     CPPUNIT_TEST(testTdf100065);
-    CPPUNIT_TEST(testTdf114821);
     CPPUNIT_TEST(testTdf51340);
     CPPUNIT_TEST(testTdf115394);
     CPPUNIT_TEST(testTdf115394PPT);
     CPPUNIT_TEST(testTdf115639);
     CPPUNIT_TEST(testTdf116899);
     CPPUNIT_TEST(testTdf116266);
+    CPPUNIT_TEST(testTdf114821);
 
     CPPUNIT_TEST_SUITE_END();
 };

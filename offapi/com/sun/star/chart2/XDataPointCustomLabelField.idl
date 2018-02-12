@@ -1,0 +1,43 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef com_sun_star_chart2_DataPointCustomLabelField_idl
+#define com_sun_star_chart2_DataPointCustomLabelField_idl
+
+#include <com/sun/star/chart2/XFormattedString2.idl>
+#include <com/sun/star/chart2/DataPointCustomLabelFieldType.idl>
+
+module com { module sun { module star { module chart2 {
+
+/**
+    Provides interface for DataPointCustomLabelField service.
+
+    @since LibreOffice 6.1
+*/
+interface XDataPointCustomLabelField : XFormattedString2
+{
+    DataPointCustomLabelFieldType getFieldType();
+
+    void setFieldType( [in] DataPointCustomLabelFieldType fieldType );
+
+    string getGuid();
+
+    void setGuid( [in] string guid );
+
+};
+
+
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
