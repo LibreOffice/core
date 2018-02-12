@@ -57,9 +57,6 @@ using namespace ::com::sun::star;
 
 #define JSCRIPT_ID_PROPERTY L"_environment"
 #define JSCRIPT_ID          L"jscript"
-namespace ole_adapter
-{
-
 
 // key: XInterface pointer created by Invocation Adapter Factory
 // value: XInterface pointer to the wrapper class.
@@ -2495,7 +2492,5 @@ ITypeInfo* IUnknownWrapper_Impl::getTypeInfo()
     }
     return m_spTypeInfo;
 }
-
-} // end namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

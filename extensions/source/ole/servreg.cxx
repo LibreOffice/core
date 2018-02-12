@@ -22,12 +22,8 @@
 #include "servprov.hxx"
 #include <rtl/ustring.hxx>
 #include <cppuhelper/factory.hxx>
-using namespace ole_adapter;
+
 using namespace cppu;
-
-
-namespace ole_adapter
-{
 
 Reference<XInterface> ConverterProvider_CreateInstance2(   const Reference<XMultiServiceFactory> & xSMgr)
 {
@@ -52,7 +48,6 @@ Reference<XInterface> OleServer_CreateInstance( const Reference<XMultiServiceFac
     Reference<XInterface > xService = *new OleServer_Impl(xSMgr);
     return xService;
 }
-} // end namespace
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * oleautobridge_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
