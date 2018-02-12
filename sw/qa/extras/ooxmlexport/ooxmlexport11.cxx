@@ -220,6 +220,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf114703, "tdf114703.docx")
         comphelper::SequenceAsHashMap(xRules->getByIndex(0))["FirstLineIndent"].get<sal_Int32>());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf113258, "tdf113258.docx")
+{
+    uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
+    // This was 494, i.e. automatic spacing resulted in non-zero paragraph top
+    // margin for the first paragraph in a shape.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                         getProperty<sal_Int32>(xShape->getStart(), "ParaTopMargin"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
