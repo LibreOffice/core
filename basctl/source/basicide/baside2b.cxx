@@ -372,8 +372,8 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                     {
                         aTopLeft = GetEditView()->GetTextEngine()->PaMtoEditCursor( aStartOfWord ).BottomLeft();
                         aTopLeft = GetEditView()->GetWindowPos( aTopLeft );
-                        aTopLeft.X() += 5;
-                        aTopLeft.Y() += 5;
+                        aTopLeft.setX( aTopLeft.X() + 5 );
+                        aTopLeft.setY( aTopLeft.Y() + 5 );
                         aTopLeft = OutputToScreenPixel( aTopLeft );
                     }
                 }
@@ -403,7 +403,7 @@ void EditorWindow::Resize()
         if ( pEditView->GetStartDocPos().Y() > nMaxVisAreaStart )
         {
             Point aStartDocPos( pEditView->GetStartDocPos() );
-            aStartDocPos.Y() = nMaxVisAreaStart;
+            aStartDocPos.setY( nMaxVisAreaStart );
             pEditView->SetStartDocPos( aStartDocPos );
             pEditView->ShowCursor();
             rModulWindow.GetBreakPointWindow().GetCurYOffset() = aStartDocPos.Y();
@@ -1297,7 +1297,7 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
         Size aSz = rModulWindow.GetBreakPointWindow().GetOutputSize();
         tools::Rectangle aInvRect( Point( 0, 0 ), aSz );
         long nY = nPara*nLineHeight - rModulWindow.GetBreakPointWindow().GetCurYOffset();
-        aInvRect.Top() = nY;
+        aInvRect.SetTop( nY );
         rModulWindow.GetBreakPointWindow().Invalidate( aInvRect );
 
         Size aLnSz(rModulWindow.GetLineNumberWindow().GetWidth(),
@@ -1383,8 +1383,8 @@ void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
     Size aMarkerSz(aMarker.GetSizePixel());
     aMarkerSz = rRenderContext.PixelToLogic(aMarkerSz);
     Point aMarkerOff(0, 0);
-    aMarkerOff.X() = (aOutSz.Width() - aMarkerSz.Width()) / 2;
-    aMarkerOff.Y() = (nLineHeight - aMarkerSz.Height()) / 2;
+    aMarkerOff.setX( (aOutSz.Width() - aMarkerSz.Width()) / 2 );
+    aMarkerOff.setY( (nLineHeight - aMarkerSz.Height()) / 2 );
 
     sal_uLong nY = nMarkerPos * nLineHeight - nCurYOffset;
     Point aPos(0, nY);
@@ -1571,8 +1571,8 @@ WatchWindow::WatchWindow (Layout* pParent)
     aRemoveWatchButton->SetModeImage(Image(BitmapEx(RID_BMP_REMOVEWATCH)));
     aRemoveWatchButton->SetQuickHelpText(IDEResId(RID_STR_REMOVEWATCHTIP));
     Size aSz( aRemoveWatchButton->GetModeImage().GetSizePixel() );
-    aSz.Width() += 6;
-    aSz.Height() += 6;
+    aSz.setWidth( aSz.Width() + 6 );
+    aSz.setHeight( aSz.Height() + 6 );
     aRemoveWatchButton->SetSizePixel( aSz );
     aRemoveWatchButton->Show();
 
@@ -1652,15 +1652,15 @@ void WatchWindow::Resize()
     Size aBoxSz( aSz.Width() - 2*DWBORDER, aSz.Height() - nVirtToolBoxHeight - DWBORDER );
 
     if ( aBoxSz.Width() < 4 )
-        aBoxSz.Width() = 0;
+        aBoxSz.setWidth( 0 );
     if ( aBoxSz.Height() < 4 )
-        aBoxSz.Height() = 0;
+        aBoxSz.setHeight( 0 );
 
-    aBoxSz.Height() -= nHeaderBarHeight;
+    aBoxSz.setHeight( aBoxSz.Height() - nHeaderBarHeight );
     aTreeListBox->SetSizePixel( aBoxSz );
     aTreeListBox->GetHScroll()->SetPageSize( aTreeListBox->GetHScroll()->GetVisibleSize() );
 
-    aBoxSz.Height() = nHeaderBarHeight;
+    aBoxSz.setHeight( nHeaderBarHeight );
     aHeaderBar->SetSizePixel( aBoxSz );
 
     Invalidate();
@@ -1873,9 +1873,9 @@ void StackWindow::Resize()
     Size aBoxSz(aSz.Width() - 2*DWBORDER, aSz.Height() - nVirtToolBoxHeight - DWBORDER);
 
     if ( aBoxSz.Width() < 4 )
-        aBoxSz.Width() = 0;
+        aBoxSz.setWidth( 0 );
     if ( aBoxSz.Height() < 4 )
-        aBoxSz.Height() = 0;
+        aBoxSz.setHeight( 0 );
 
     aTreeListBox->SetSizePixel( aBoxSz );
 
@@ -1991,8 +1991,8 @@ void ComplexEditorWindow::Resize()
 {
     Size aOutSz = GetOutputSizePixel();
     Size aSz(aOutSz);
-    aSz.Width() -= 2*DWBORDER;
-    aSz.Height() -= 2*DWBORDER;
+    aSz.setWidth( aSz.Width() - 2*DWBORDER );
+    aSz.setHeight( aSz.Height() - 2*DWBORDER );
     long nBrkWidth = 20;
     long nSBWidth = aEWVScrollBar->GetSizePixel().Width();
 
@@ -2817,7 +2817,7 @@ void CodeCompleteWindow::ResizeAndPositionListBox()
         tools::Rectangle aRect = static_cast<TextEngine*>(pParent->GetEditEngine())->PaMtoEditCursor( pParent->GetEditView()->GetSelection().GetEnd() );
         long nViewYOffset = pParent->GetEditView()->GetStartDocPos().Y();
         Point aPos = aRect.BottomRight();// this variable will be used later (if needed)
-        aPos.Y() = (aPos.Y() - nViewYOffset) + nBasePad;
+        aPos.setY( (aPos.Y() - nViewYOffset) + nBasePad );
 
         OUString aLongestEntry = pListBox->GetEntry( 0 );// grab the longest one: max search
         for( sal_Int32 i=1; i< pListBox->GetEntryCount(); ++i )
@@ -2844,12 +2844,12 @@ void CodeCompleteWindow::ResizeAndPositionListBox()
         if( aVisArea.TopRight().getY() + aPos.getY() + aSize.getHeight() > aBottomPoint.getY() )
         {//clipped at the bottom: move it up
             const long& nParentFontHeight = pParent->GetEditEngine()->GetFont().GetFontHeight(); //parent's font (in the IDE): needed for height
-            aPos.Y() -= aSize.getHeight() + nParentFontHeight + nCursorPad;
+            aPos.setY( aPos.Y() - aSize.getHeight() + nParentFontHeight + nCursorPad );
         }
 
         if( aVisArea.TopLeft().getX() + aPos.getX() + aSize.getWidth() > aBottomPoint.getX() )
         {//clipped at the right side, move it a bit left
-            aPos.X() -= aSize.getWidth() + aVisArea.TopLeft().getX();
+            aPos.setX( aPos.X() - aSize.getWidth() + aVisArea.TopLeft().getX() );
         }
         //set the position
         SetPosPixel( aPos );

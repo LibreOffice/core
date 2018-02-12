@@ -296,8 +296,8 @@ Size MediaWindowImpl::getPreferredSize() const
     {
         awt::Size aPrefSize( mxPlayer->getPreferredPlayerWindowSize() );
 
-        aRet.Width() = aPrefSize.Width;
-        aRet.Height() = aPrefSize.Height;
+        aRet.setWidth( aPrefSize.Width );
+        aRet.setHeight( aPrefSize.Height );
     }
 
     return aRet;
@@ -532,7 +532,7 @@ void MediaWindowImpl::Resize()
         const sal_Int32 nControlHeight = mpMediaWindowControl->GetSizePixel().Height();
         const sal_Int32 nControlY = std::max(aCurSize.Height() - nControlHeight - nOffset, 0L);
 
-        aPlayerWindowSize.Height() = (nControlY - (nOffset << 1));
+        aPlayerWindowSize.setHeight( nControlY - (nOffset << 1) );
         mpMediaWindowControl->SetPosSizePixel(Point(nOffset, nControlY ), Size(aCurSize.Width() - (nOffset << 1), nControlHeight));
     }
     if (mpChildWindow)
@@ -613,13 +613,13 @@ void MediaWindowImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
 
             if (fLogoWH < (double(aVideoRect.GetWidth()) / aVideoRect.GetHeight()))
             {
-                aLogoSize.Width() = long(aVideoRect.GetHeight() * fLogoWH);
-                aLogoSize.Height() = aVideoRect.GetHeight();
+                aLogoSize.setWidth( long(aVideoRect.GetHeight() * fLogoWH) );
+                aLogoSize.setHeight( aVideoRect.GetHeight() );
             }
             else
             {
-                aLogoSize.Width() = aVideoRect.GetWidth();
-                aLogoSize.Height()= long(aVideoRect.GetWidth() / fLogoWH);
+                aLogoSize.setWidth( aVideoRect.GetWidth() );
+                aLogoSize.setHeight( long(aVideoRect.GetWidth() / fLogoWH) );
             }
         }
 

@@ -44,7 +44,7 @@ Layout::Layout (vcl::Window* pParent) :
 
     vcl::Font aFont = GetFont();
     Size aSz = aFont.GetFontSize();
-    aSz.Height() *= 1.5;
+    aSz.setHeight( aSz.Height() * 1.5 );
     aFont.SetFontSize(aSz);
     aFont.SetWeight(WEIGHT_BOLD);
     aFont.SetColor(GetSettings().GetStyleSettings().GetWindowTextColor());
