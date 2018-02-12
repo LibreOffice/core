@@ -464,6 +464,10 @@ void DomainMapper_Impl::SetIsFirstParagraphInSection( bool bIsFirst )
     m_bIsFirstParaInSection = bIsFirst;
 }
 
+void DomainMapper_Impl::SetIsFirstParagraphInShape(bool bIsFirst)
+{
+    m_bIsFirstParaInShape = bIsFirst;
+}
 
 void DomainMapper_Impl::SetIsDummyParaAddedForTableInSection( bool bIsAdded )
 {
@@ -1297,6 +1301,9 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
         SetIsFirstParagraphInSection(false);
         SetIsLastParagraphInSection(false);
     }
+
+    if (m_bIsFirstParaInShape)
+        m_bIsFirstParaInShape = false;
 
     if (pParaContext)
     {

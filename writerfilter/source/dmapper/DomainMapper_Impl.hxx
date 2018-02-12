@@ -490,6 +490,7 @@ private:
     /// If the current paragraph has any runs.
     bool                            m_bParaChanged;
     bool                            m_bIsFirstParaInSection;
+    bool                            m_bIsFirstParaInShape = false;
     bool                            m_bDummyParaAddedForTableInSection;
     bool                            m_bTextFrameInserted;
     bool                            m_bIsPreviousParagraphFramed;
@@ -580,6 +581,8 @@ public:
     bool GetIsLastSectionGroup() { return m_bIsLastSectionGroup;}
     void SetIsFirstParagraphInSection( bool bIsFirst );
     bool GetIsFirstParagraphInSection() { return m_bIsFirstParaInSection;}
+    void SetIsFirstParagraphInShape(bool bIsFirst);
+    bool GetIsFirstParagraphInShape() { return m_bIsFirstParaInShape; }
     void SetIsDummyParaAddedForTableInSection( bool bIsAdded );
     bool GetIsDummyParaAddedForTableInSection() { return m_bDummyParaAddedForTableInSection;}
     void SetIsTextFrameInserted( bool bIsInserted );

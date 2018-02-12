@@ -2170,7 +2170,27 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         StyleSheetTablePtr pStyleTable = m_pImpl->GetStyleSheetTable();
         const OUString sConvertedStyleName = pStyleTable->ConvertStyleName( sStringValue, true );
         if (m_pImpl->GetTopContext() && m_pImpl->GetTopContextType() != CONTEXT_SECTION)
+        {
             m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::makeAny( sConvertedStyleName ));
+
+            if (m_pImpl->GetIsFirstParagraphInShape())
+            {
+                // First paragraph in shape: see if we need to disable
+                // paragraph top margin from style.
+                StyleSheetEntryPtr pEntry
+                    = m_pImpl->GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(
+                        sConvertedStyleName);
+                if (pEntry)
+                {
+                    boost::optional<PropertyMap::Property> pParaAutoBefore
+                        = pEntry->pProperties->getProperty(
+                            PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING);
+                    if (pParaAutoBefore)
+                        m_pImpl->GetTopContext()->Insert(PROP_PARA_TOP_MARGIN,
+                                                         uno::makeAny(static_cast<sal_Int32>(0)));
+                }
+            }
+        }
         //apply numbering to paragraph if it was set at the style, but only if the paragraph itself
         //does not specify the numbering
         if( !rContext->isSet(PROP_NUMBERING_RULES) ) // !contains
@@ -3080,6 +3100,8 @@ void DomainMapper::lcl_startShape(uno::Reference<drawing::XShape> const& xShape)
         // No context? Then this image should not appear directly inside the
         // document, just save it for later usage.
         m_pImpl->PushPendingShape(xShape);
+
+    m_pImpl->SetIsFirstParagraphInShape(true);
 }
 
 void DomainMapper::lcl_endShape( )
