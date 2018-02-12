@@ -98,8 +98,8 @@ using namespace nsSwDocInfoSubType;
 
 SwPageNumberFieldType::SwPageNumberFieldType()
     : SwFieldType( SwFieldIds::PageNumber ),
-    nNumberingType( SVX_NUM_ARABIC ),
-    bVirtuell( false )
+    m_nNumberingType( SVX_NUM_ARABIC ),
+    m_bVirtual( false )
 {
 }
 
@@ -107,10 +107,10 @@ OUString SwPageNumberFieldType::Expand( SvxNumType nFormat, short nOff,
          sal_uInt16 const nPageNumber, sal_uInt16 const nMaxPage,
          const OUString& rUserStr ) const
 {
-    SvxNumType nTmpFormat = (SVX_NUM_PAGEDESC == nFormat) ? nNumberingType : nFormat;
+    SvxNumType nTmpFormat = (SVX_NUM_PAGEDESC == nFormat) ? m_nNumberingType : nFormat;
     int const nTmp = nPageNumber + nOff;
 
-    if (0 > nTmp || SVX_NUM_NUMBER_NONE == nTmpFormat || (!bVirtuell && nTmp > nMaxPage))
+    if (0 > nTmp || SVX_NUM_NUMBER_NONE == nTmpFormat || (!m_bVirtual && nTmp > nMaxPage))
         return OUString();
 
     if( SVX_NUM_CHAR_SPECIAL == nTmpFormat )
@@ -123,8 +123,8 @@ SwFieldType* SwPageNumberFieldType::Copy() const
 {
     SwPageNumberFieldType *pTmp = new SwPageNumberFieldType();
 
-    pTmp->nNumberingType = nNumberingType;
-    pTmp->bVirtuell  = bVirtuell;
+    pTmp->m_nNumberingType = m_nNumberingType;
+    pTmp->m_bVirtual  = m_bVirtual;
 
     return pTmp;
 }
@@ -134,9 +134,9 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
                                             const SvxNumType* pNumFormat )
 {
     if( pNumFormat )
-        nNumberingType = *pNumFormat;
+        m_nNumberingType = *pNumFormat;
 
-    bVirtuell = false;
+    m_bVirtual = false;
     if (bVirt && pDoc)
     {
         // check the flag since the layout NEVER sets it back
@@ -152,12 +152,12 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
                 if( pNd )
                 {
                     if ( SwIterator<SwFrame,SwContentNode>(*pNd).First() )
-                        bVirtuell = true;
+                        m_bVirtual = true;
                 }
                 else if( dynamic_cast< const SwFormat* >(pDesc->GetDefinedIn()) !=  nullptr)
                 {
                     SwAutoFormatGetDocNode aGetHt( &pDoc->GetNodes() );
-                    bVirtuell = !pDesc->GetDefinedIn()->GetInfo( aGetHt );
+                    m_bVirtual = !pDesc->GetDefinedIn()->GetInfo( aGetHt );
                     break;
                 }
             }
@@ -168,7 +168,7 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
 SwPageNumberField::SwPageNumberField(SwPageNumberFieldType* pTyp,
           sal_uInt16 nSub, sal_uInt32 nFormat, short nOff,
           sal_uInt16 const nPageNumber, sal_uInt16 const nMaxPage)
-    : SwField(pTyp, nFormat), nSubType(nSub), nOffset(nOff)
+    : SwField(pTyp, nFormat), m_nSubType(nSub), m_nOffset(nOff)
     , m_nPageNumber(nPageNumber)
     , m_nMaxPage(nMaxPage)
 {
@@ -186,50 +186,50 @@ OUString SwPageNumberField::Expand() const
     OUString sRet;
     SwPageNumberFieldType* pFieldType = static_cast<SwPageNumberFieldType*>(GetTyp());
 
-    if( PG_NEXT == nSubType && 1 != nOffset )
+    if( PG_NEXT == m_nSubType && 1 != m_nOffset )
     {
-        sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), 1, m_nPageNumber, m_nMaxPage, sUserStr);
+        sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), 1, m_nPageNumber, m_nMaxPage, m_sUserStr);
         if (!sRet.isEmpty())
         {
-            sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
+            sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), m_nOffset, m_nPageNumber, m_nMaxPage, m_sUserStr);
         }
     }
-    else if( PG_PREV == nSubType && -1 != nOffset )
+    else if( PG_PREV == m_nSubType && -1 != m_nOffset )
     {
-        sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), -1, m_nPageNumber, m_nMaxPage, sUserStr);
+        sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), -1, m_nPageNumber, m_nMaxPage, m_sUserStr);
         if (!sRet.isEmpty())
         {
-            sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
+            sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), m_nOffset, m_nPageNumber, m_nMaxPage, m_sUserStr);
         }
     }
     else
-        sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
+        sRet = pFieldType->Expand(static_cast<SvxNumType>(GetFormat()), m_nOffset, m_nPageNumber, m_nMaxPage, m_sUserStr);
     return sRet;
 }
 
 SwField* SwPageNumberField::Copy() const
 {
     SwPageNumberField *pTmp = new SwPageNumberField(
-                static_cast<SwPageNumberFieldType*>(GetTyp()), nSubType,
-                GetFormat(), nOffset, m_nPageNumber, m_nMaxPage);
+                static_cast<SwPageNumberFieldType*>(GetTyp()), m_nSubType,
+                GetFormat(), m_nOffset, m_nPageNumber, m_nMaxPage);
     pTmp->SetLanguage( GetLanguage() );
-    pTmp->SetUserString( sUserStr );
+    pTmp->SetUserString( m_sUserStr );
     return pTmp;
 }
 
 OUString SwPageNumberField::GetPar2() const
 {
-    return OUString::number(nOffset);
+    return OUString::number(m_nOffset);
 }
 
 void SwPageNumberField::SetPar2(const OUString& rStr)
 {
-    nOffset = static_cast<short>(rStr.toInt32());
+    m_nOffset = static_cast<short>(rStr.toInt32());
 }
 
 sal_uInt16 SwPageNumberField::GetSubType() const
 {
-    return nSubType;
+    return m_nSubType;
 }
 
 bool SwPageNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -240,21 +240,21 @@ bool SwPageNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= static_cast<sal_Int16>(GetFormat());
         break;
     case FIELD_PROP_USHORT1:
-        rAny <<= nOffset;
+        rAny <<= m_nOffset;
         break;
     case FIELD_PROP_SUBTYPE:
         {
              text::PageNumberType eType;
             eType = text::PageNumberType_CURRENT;
-            if(nSubType == PG_PREV)
+            if(m_nSubType == PG_PREV)
                 eType = text::PageNumberType_PREV;
-            else if(nSubType == PG_NEXT)
+            else if(m_nSubType == PG_NEXT)
                 eType = text::PageNumberType_NEXT;
             rAny <<= eType;
         }
         break;
     case FIELD_PROP_PAR1:
-        rAny <<= sUserStr;
+        rAny <<= m_sUserStr;
         break;
 
     default:
@@ -278,26 +278,26 @@ bool SwPageNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_USHORT1:
         rAny >>= nSet;
-        nOffset = nSet;
+        m_nOffset = nSet;
         break;
     case FIELD_PROP_SUBTYPE:
         switch( static_cast<text::PageNumberType>(SWUnoHelper::GetEnumAsInt32( rAny )) )
         {
             case text::PageNumberType_CURRENT:
-                nSubType = PG_RANDOM;
+                m_nSubType = PG_RANDOM;
             break;
             case text::PageNumberType_PREV:
-                nSubType = PG_PREV;
+                m_nSubType = PG_PREV;
             break;
             case text::PageNumberType_NEXT:
-                nSubType = PG_NEXT;
+                m_nSubType = PG_NEXT;
             break;
             default:
                 bRet = false;
         }
         break;
     case FIELD_PROP_PAR1:
-        rAny >>= sUserStr;
+        rAny >>= m_sUserStr;
         break;
 
     default:
@@ -2393,22 +2393,22 @@ bool SwRefPageGetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 // field type to jump to and edit
 
 SwJumpEditFieldType::SwJumpEditFieldType( SwDoc* pD )
-    : SwFieldType( SwFieldIds::JumpEdit ), pDoc( pD ), aDep( this, nullptr )
+    : SwFieldType( SwFieldIds::JumpEdit ), m_pDoc( pD ), m_aDep( this, nullptr )
 {
 }
 
 SwFieldType* SwJumpEditFieldType::Copy() const
 {
-    return new SwJumpEditFieldType( pDoc );
+    return new SwJumpEditFieldType( m_pDoc );
 }
 
 SwCharFormat* SwJumpEditFieldType::GetCharFormat()
 {
-    SwCharFormat* pFormat = pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( RES_POOLCHR_JUMPEDIT );
+    SwCharFormat* pFormat = m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( RES_POOLCHR_JUMPEDIT );
 
     // not registered yet?
-    if( !aDep.GetRegisteredIn() )
-        pFormat->Add( &aDep );     // register
+    if( !m_aDep.GetRegisteredIn() )
+        pFormat->Add( &m_aDep );     // register
 
     return pFormat;
 }

@@ -29,54 +29,54 @@ using namespace ::com::sun::star;
 
 SwMacroFieldType::SwMacroFieldType(SwDoc* pDocument)
     : SwFieldType( SwFieldIds::Macro ),
-      pDoc(pDocument)
+      m_pDoc(pDocument)
 {
 }
 
 SwFieldType* SwMacroFieldType::Copy() const
 {
-    SwMacroFieldType* pType = new SwMacroFieldType(pDoc);
+    SwMacroFieldType* pType = new SwMacroFieldType(m_pDoc);
     return pType;
 }
 
 SwMacroField::SwMacroField(SwMacroFieldType* pInitType,
                            const OUString& rLibAndName, const OUString& rText) :
-    SwField(pInitType), aMacro(rLibAndName), aText(rText), bIsScriptURL(false)
+    SwField(pInitType), m_aMacro(rLibAndName), m_aText(rText), m_bIsScriptURL(false)
 {
-    bIsScriptURL = isScriptURL(aMacro);
+    m_bIsScriptURL = isScriptURL(m_aMacro);
 }
 
 OUString SwMacroField::Expand() const
 {
-    return aText ;
+    return m_aText ;
 }
 
 SwField* SwMacroField::Copy() const
 {
-    return new SwMacroField(static_cast<SwMacroFieldType*>(GetTyp()), aMacro, aText);
+    return new SwMacroField(static_cast<SwMacroFieldType*>(GetTyp()), m_aMacro, m_aText);
 }
 
 OUString SwMacroField::GetFieldName() const
 {
-    return GetTyp()->GetName() + " " + aMacro;
+    return GetTyp()->GetName() + " " + m_aMacro;
 }
 
 OUString SwMacroField::GetLibName() const
 {
     // if it is a Scripting Framework macro return an empty string
-    if (bIsScriptURL)
+    if (m_bIsScriptURL)
     {
         return OUString();
     }
 
-    if (!aMacro.isEmpty())
+    if (!m_aMacro.isEmpty())
     {
-        sal_Int32 nPos = aMacro.getLength();
+        sal_Int32 nPos = m_aMacro.getLength();
 
         for (sal_Int32 i = 0; i < 3 && nPos > 0; i++)
-            while (aMacro[--nPos] != '.' && nPos > 0) ;
+            while (m_aMacro[--nPos] != '.' && nPos > 0) ;
 
-        return aMacro.copy(0, nPos);
+        return m_aMacro.copy(0, nPos);
     }
 
     OSL_FAIL("No LibName");
@@ -85,20 +85,20 @@ OUString SwMacroField::GetLibName() const
 
 OUString SwMacroField::GetMacroName() const
 {
-    if (!aMacro.isEmpty())
+    if (!m_aMacro.isEmpty())
     {
-        if (bIsScriptURL)
+        if (m_bIsScriptURL)
         {
-            return aMacro;
+            return m_aMacro;
         }
         else
         {
-            sal_Int32 nPos = aMacro.getLength();
+            sal_Int32 nPos = m_aMacro.getLength();
 
             for (sal_Int32 i = 0; i < 3 && nPos > 0; i++)
-                while (aMacro[--nPos] != '.' && nPos > 0) ;
+                while (m_aMacro[--nPos] != '.' && nPos > 0) ;
 
-            return aMacro.copy( ++nPos );
+            return m_aMacro.copy( ++nPos );
         }
     }
 
@@ -108,9 +108,9 @@ OUString SwMacroField::GetMacroName() const
 
 SvxMacro SwMacroField::GetSvxMacro() const
 {
-    if (bIsScriptURL)
+    if (m_bIsScriptURL)
     {
-        return SvxMacro(aMacro, OUString(), EXTENDED_STYPE);
+        return SvxMacro(m_aMacro, OUString(), EXTENDED_STYPE);
     }
     else
     {
@@ -121,26 +121,26 @@ SvxMacro SwMacroField::GetSvxMacro() const
 /// LibName and MacroName
 void SwMacroField::SetPar1(const OUString& rStr)
 {
-    aMacro = rStr;
-    bIsScriptURL = isScriptURL(aMacro);
+    m_aMacro = rStr;
+    m_bIsScriptURL = isScriptURL(m_aMacro);
 }
 
 /// Get macro
 OUString SwMacroField::GetPar1() const
 {
-    return aMacro;
+    return m_aMacro;
 }
 
 /// set macro text
 void SwMacroField::SetPar2(const OUString& rStr)
 {
-    aText = rStr;
+    m_aText = rStr;
 }
 
 /// get macro text
 OUString SwMacroField::GetPar2() const
 {
-    return aText;
+    return m_aText;
 }
 
 bool SwMacroField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -151,13 +151,13 @@ bool SwMacroField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= GetMacroName();
         break;
     case FIELD_PROP_PAR2:
-        rAny <<= aText;
+        rAny <<= m_aText;
         break;
     case FIELD_PROP_PAR3:
         rAny <<= GetLibName();
         break;
     case FIELD_PROP_PAR4:
-        rAny <<= bIsScriptURL ? GetMacroName() : OUString();
+        rAny <<= m_bIsScriptURL ? GetMacroName() : OUString();
         break;
     default:
         assert(false);
@@ -172,18 +172,18 @@ bool SwMacroField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     {
     case FIELD_PROP_PAR1:
         rAny >>= sTmp;
-        CreateMacroString( aMacro, sTmp, GetLibName());
+        CreateMacroString( m_aMacro, sTmp, GetLibName());
         break;
     case FIELD_PROP_PAR2:
-        rAny >>= aText;
+        rAny >>= m_aText;
         break;
     case FIELD_PROP_PAR3:
         rAny >>= sTmp;
-        CreateMacroString(aMacro, GetMacroName(), sTmp );
+        CreateMacroString(m_aMacro, GetMacroName(), sTmp );
         break;
     case FIELD_PROP_PAR4:
-        rAny >>= aMacro;
-        bIsScriptURL = isScriptURL(aMacro);
+        rAny >>= m_aMacro;
+        m_bIsScriptURL = isScriptURL(m_aMacro);
         break;
     default:
         assert(false);

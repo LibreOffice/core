@@ -124,8 +124,8 @@ enum SwJumpEditFormat
 
 class SwPageNumberFieldType : public SwFieldType
 {
-    SvxNumType      nNumberingType;
-    bool            bVirtuell;
+    SvxNumType      m_nNumberingType;
+    bool            m_bVirtual;
 
 public:
     SwPageNumberFieldType();
@@ -140,9 +140,9 @@ public:
 // Page numbering.
 class SW_DLLPUBLIC SwPageNumberField : public SwField
 {
-    OUString sUserStr;
-    sal_uInt16  nSubType;
-    short   nOffset;
+    OUString m_sUserStr;
+    sal_uInt16  m_nSubType;
+    short   m_nOffset;
     // fdo#58074 store page number in SwField, not SwFieldType
     sal_uInt16 m_nPageNumber;
     sal_uInt16 m_nMaxPage;
@@ -166,8 +166,8 @@ public:
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
-    const OUString& GetUserString() const            { return sUserStr; }
-    void SetUserString( const OUString& rS )  { sUserStr = rS; }
+    const OUString& GetUserString() const            { return m_sUserStr; }
+    void SetUserString( const OUString& rS )  { m_sUserStr = rS; }
 };
 
 class SwAuthorFieldType : public SwFieldType
@@ -376,7 +376,7 @@ public:
 
 class SwMacroFieldType : public SwFieldType
 {
-    SwDoc* pDoc;
+    SwDoc* m_pDoc;
 
 public:
     SwMacroFieldType(SwDoc*);
@@ -386,9 +386,9 @@ public:
 
 class SW_DLLPUBLIC SwMacroField : public SwField
 {
-    OUString aMacro;
-    OUString aText;
-    bool      bIsScriptURL;
+    OUString m_aMacro;
+    OUString m_aText;
+    bool      m_bIsScriptURL;
 
     virtual OUString Expand() const override;
     virtual SwField* Copy() const override;
@@ -398,7 +398,7 @@ public:
     SwMacroField( SwMacroFieldType*, const OUString& rLibAndName,
                   const OUString& rText);
 
-    const OUString&  GetMacro() const { return aMacro; }
+    const OUString&  GetMacro() const { return m_aMacro; }
     OUString         GetLibName() const;
     OUString         GetMacroName() const;
     SvxMacro         GetSvxMacro() const;
@@ -631,8 +631,8 @@ public:
 // Field to jump to and edit.
 class SwJumpEditFieldType : public SwFieldType
 {
-    SwDoc* pDoc;
-    SwDepend aDep;
+    SwDoc* m_pDoc;
+    SwDepend m_aDep;
 
 public:
     SwJumpEditFieldType( SwDoc* pDoc );
