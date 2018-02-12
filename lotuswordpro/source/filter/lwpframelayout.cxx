@@ -1242,7 +1242,7 @@ void LwpRubyLayout::RegisterStyle()
     if (!pMarker)
         throw std::runtime_error("missing Ruby Marker");
 
-    XFRubyStyle* pRubyStyle = new XFRubyStyle;
+    std::unique_ptr<XFRubyStyle> xRubyStyle(new XFRubyStyle);
 
     enumXFRubyPosition eType = enumXFRubyLeft;
     if (m_nAlignment == LEFT)
@@ -1257,7 +1257,7 @@ void LwpRubyLayout::RegisterStyle()
     {
         eType =  enumXFRubyCenter;
     }
-    pRubyStyle->SetAlignment(eType);
+    xRubyStyle->SetAlignment(eType);
 
     eType = enumXFRubyTop;
     if (m_nPlacement == TOP)
@@ -1268,10 +1268,10 @@ void LwpRubyLayout::RegisterStyle()
     {
         eType =  enumXFRubyBottom;
     }
-    pRubyStyle->SetPosition(eType);
+    xRubyStyle->SetPosition(eType);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    OUString rubyStyle = pXFStyleManager->AddStyle(pRubyStyle).m_pStyle->GetStyleName();
+    OUString rubyStyle = pXFStyleManager->AddStyle(xRubyStyle.release()).m_pStyle->GetStyleName();
     pMarker->SetRubyStyleName(rubyStyle);
 
     LwpStory* pStory = GetContentStory();

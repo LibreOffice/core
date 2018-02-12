@@ -83,7 +83,7 @@ public:
     virtual ~LwpDocument() override;
 
 private:
-    LwpFoundry* m_pOwnedFoundry;
+    std::unique_ptr<LwpFoundry> m_xOwnedFoundry;
     bool m_bGettingFirstDivisionWithContentsThatIsNotOLE;
     bool m_bGettingPreviousDivisionWithContents;
     bool m_bGettingGetLastDivisionWithContents;
@@ -98,13 +98,7 @@ private:
         DOC_CHILDDOC =  0x00000800UL
     };
 
-    //Code cleaning by change some members to local variables in Read()
-    //Reserve the comments for future use
-    //LwpSortOption* m_pDocSort;
-    //LwpUIDocument* m_pUIDoc;
-    LwpLineNumberOptions* m_pLnOpts;
-    //LwpUserDictFiles* m_pUsrDicts;
-    //LwpPrinterInfo* m_pPrtInfo;
+    std::unique_ptr<LwpLineNumberOptions> m_xLnOpts;
 
     LwpObjectID m_DivOpts;
     LwpObjectID m_FootnoteOpts;
