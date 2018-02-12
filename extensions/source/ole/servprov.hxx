@@ -62,49 +62,6 @@ protected:
 
 /*****************************************************************************
 
-    ProviderOleWrapper
-
-    Provides an UNO service provider as OLE class factory. Handle the
-    OLE registration by overriding the abstract methods from
-    IClassFactoryWrapper.
-
-    Acts as a COM class factory. When IClassFactory::CreateInstance is being called
-    then it creates an service by help of the XSingleServiceFactory member and maps
-    maps it to a COM object.
-
-*****************************************************************************/
-
-class ProviderOleWrapper : public IClassFactoryWrapper
-{
-public:
-
-    ProviderOleWrapper( const Reference<XMultiServiceFactory>& smgr,
-                        const Reference<XSingleServiceFactory>& xSFactory);
-    virtual ~ProviderOleWrapper();
-
-    bool registerClass(GUID const * pGuid) override;
-    bool deregisterClass() override;
-
-    /* IUnknown methods */
-    STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj) override;
-    STDMETHOD_(ULONG, AddRef)() override;
-    STDMETHOD_(ULONG, Release)() override;
-
-    /* IClassFactory methods */
-    STDMETHOD(CreateInstance)(IUnknown FAR* punkOuter, REFIID riid, void FAR* FAR* ppv) override;
-    STDMETHOD(LockServer)(int fLock) override;
-
-protected:
-
-    oslInterlockedCount m_refCount;
-    Reference<XSingleServiceFactory> m_xSingleServiceFactory;
-    DWORD               m_factoryHandle;
-    Reference<XBridgeSupplier2> m_bridgeSupplier;
-    Reference<XMultiServiceFactory> m_smgr;
-};
-
-/*****************************************************************************
-
     OneInstanceOleWrapper
 
     Provides an single UNO object as OLE object. Handle the
@@ -239,8 +196,6 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 protected:
-
-    bool provideService(const Reference<XSingleServiceFactory>& xMulFact, GUID const * guid);
     bool provideInstance(const Reference<XInterface>& xInst, GUID const * guid);
 
     list< IClassFactoryWrapper* > m_wrapperList;
