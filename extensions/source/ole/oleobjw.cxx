@@ -79,11 +79,6 @@ std::unordered_map<sal_uIntPtr, sal_uIntPtr> AdapterToWrapperMap;
 std::unordered_map<sal_uIntPtr,sal_uIntPtr> WrapperToAdapterMap;
 
 std::unordered_map<sal_uIntPtr, WeakReference<XInterface> > ComPtrToWrapperMap;
-/*****************************************************************************
-
-    class implementation IUnknownWrapper_Impl
-
-*****************************************************************************/
 
 IUnknownWrapper_Impl::IUnknownWrapper_Impl( Reference<XMultiServiceFactory> const & xFactory,
                                            sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass):
