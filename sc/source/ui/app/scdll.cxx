@@ -267,6 +267,8 @@ void ScDLL::Init()
     //  StarOne Services are now handled in the registry
 }
 
+#ifndef DISABLE_DYNLOADING
+
 extern "C" SAL_DLLPUBLIC_EXPORT
 void lok_preload_hook()
 {
@@ -276,5 +278,6 @@ void lok_preload_hook()
     ScAbstractDialogFactory::Create();
 }
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
