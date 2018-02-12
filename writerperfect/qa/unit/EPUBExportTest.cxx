@@ -874,6 +874,11 @@ void EPUBExportTest::testSVG()
     // one, causing a validation error.
     OString aActual(static_cast<const char *>(aMemoryStream.GetBuffer()), aExpected.getLength());
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+
+    // This failed, we used the xlink attribute namespace, but we did not
+    // define its URL.
+    mpXmlDoc = parseExport("OEBPS/images/image0001.svg");
+    assertXPathNSDef(mpXmlDoc, "/svg:svg", "xlink", "http://www.w3.org/1999/xlink");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
