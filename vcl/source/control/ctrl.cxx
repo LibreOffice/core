@@ -404,8 +404,7 @@ void Control::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    vcl::Font rFont(GetCanonicalFont(rStyleSettings));
-    ApplyControlFont(rRenderContext, rFont);
+    ApplyControlFont(rRenderContext, GetCanonicalFont(rStyleSettings));
 
     ApplyControlForeground(rRenderContext, GetCanonicalTextColor(rStyleSettings));
     rRenderContext.SetTextFillColor();
