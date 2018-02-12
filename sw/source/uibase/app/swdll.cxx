@@ -172,10 +172,14 @@ sw::Filters & SwDLL::getFilters()
     return *filters_.get();
 }
 
+#ifndef DISABLE_DYNLOADING
+
 extern "C" SAL_DLLPUBLIC_EXPORT
 void lok_preload_hook()
 {
     SwAbstractDialogFactory::Create();
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
