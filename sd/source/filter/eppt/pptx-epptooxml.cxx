@@ -705,7 +705,6 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
 
     if (GETA(Change))
         mAny >>= changeType;
-    bool isAdvanceTimingSet = advanceTiming != -1;
 
     // 1 means automatic, 2 half automatic - not sure what it means - at least I don't see it in UI
     if (changeType == 1 && GETA(Duration))
@@ -804,6 +803,7 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
         }
     }
 
+    bool isAdvanceTimingSet = advanceTiming != -1;
     if (nTransition14 || pPresetTransition || isTransitionDurationSet)
     {
         const char* pRequiresNS = (nTransition14 || isTransitionDurationSet) ? "p14" : "p15";
