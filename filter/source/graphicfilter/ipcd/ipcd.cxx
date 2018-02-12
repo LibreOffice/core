@@ -20,7 +20,7 @@
 
 #include <rtl/alloc.h>
 #include <vcl/graph.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/fltcall.hxx>
 #include <svl/solar.hrc>
@@ -46,7 +46,7 @@ private:
     bool bStatus;
 
     SvStream &m_rPCD;
-    BitmapWriteAccess*  mpAcc;
+    std::unique_ptr<vcl::bitmap::RawBitmap> mpBitmap;
 
     sal_uInt8               nOrientation;   // orientation of the picture within the PCD file:
                                         // 0 - spire point up
@@ -77,7 +77,6 @@ public:
     explicit PCDReader(SvStream &rStream)
         : bStatus(false)
         , m_rPCD(rStream)
-        , mpAcc(nullptr)
         , nOrientation(0)
         , eResolution(PCDRES_BASE16)
         , nWidth(0)
@@ -95,8 +94,6 @@ public:
 
 bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
 {
-    Bitmap       aBmp;
-
     bStatus      = true;
 
     // is it a PCD file with a picture? ( sets bStatus == sal_False, if that's not the case):
@@ -151,15 +148,11 @@ bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
             nBMPWidth = nHeight;
             nBMPHeight = nWidth;
         }
-        aBmp = Bitmap( Size( nBMPWidth, nBMPHeight ), 24 );
-        if ( ( mpAcc = aBmp.AcquireWriteAccess() ) == nullptr )
-            return false;
+        mpBitmap.reset(new vcl::bitmap::RawBitmap( Size( nBMPWidth, nBMPHeight ) ));
 
         ReadImage();
 
-        Bitmap::ReleaseAccess( mpAcc );
-        mpAcc = nullptr;
-        rGraphic = aBmp;
+        rGraphic = vcl::bitmap::CreateFromData(std::move(*mpBitmap));
     }
     return bStatus;
 }
@@ -328,16 +321,16 @@ void PCDReader::ReadImage()
                 if ( nOrientation < 2 )
                 {
                     if ( nOrientation == 0 )
-                        mpAcc->SetPixel( ny, nx, BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
+                        mpBitmap->SetPixel( ny, nx, Color( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
                     else
-                        mpAcc->SetPixel( nWidth - 1 - nx, ny, BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
+                        mpBitmap->SetPixel( nWidth - 1 - nx, ny, Color( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
                 }
                 else
                 {
                     if ( nOrientation == 2 )
-                        mpAcc->SetPixel( nHeight - 1 - ny, ( nWidth - 1 - nx ), BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
+                        mpBitmap->SetPixel( nHeight - 1 - ny, ( nWidth - 1 - nx ), Color( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
                     else
-                        mpAcc->SetPixel( nx, ( nHeight - 1 - ny ), BitmapColor( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
+                        mpBitmap->SetPixel( nx, ( nHeight - 1 - ny ), Color( static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue) ) );
                 }
             }
         }
