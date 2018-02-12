@@ -514,15 +514,16 @@ namespace emfio
                 //record is Recordsize, RecordFunction, StringLength, <String>, YStart, XStart
                 const sal_uInt32 nNonStringLen = sizeof(sal_uInt32) + 4 * sizeof(sal_uInt16);
                 const sal_uInt32 nRecSize = mnRecSize * 2;
-                sal_uInt16 nLength = 0;
-                mpInputStream->ReadUInt16(nLength);
-                sal_uInt16 nStoredLength = (nLength + 1) &~ 1;
 
                 if (nRecSize < nNonStringLen)
                 {
                     SAL_WARN("vcl.wmf", "W_META_TEXTOUT too short");
                     break;
                 }
+
+                sal_uInt16 nLength = 0;
+                mpInputStream->ReadUInt16(nLength);
+                sal_uInt16 nStoredLength = (nLength + 1) &~ 1;
 
                 if (nRecSize - nNonStringLen < nStoredLength)
                 {
@@ -543,14 +544,36 @@ namespace emfio
 
             case W_META_EXTTEXTOUT:
             {
-                mpInputStream->SeekRel(-6);
-                auto nRecordPos = mpInputStream->Tell();
-                sal_Int32 nRecordSize = 0;
-                mpInputStream->ReadInt32( nRecordSize );
-                mpInputStream->SeekRel(2);
+                //record is Recordsize, RecordFunction, Y, X, StringLength, options, maybe rectangle, <String>
+                sal_uInt32 nNonStringLen = sizeof(sal_uInt32) + 5 * sizeof(sal_uInt16);
+                const sal_uInt32 nRecSize = mnRecSize * 2;
+
+                if (nRecSize < nNonStringLen)
+                {
+                    SAL_WARN("vcl.wmf", "W_META_EXTTEXTOUT too short");
+                    break;
+                }
+
+                auto nRecordPos = mpInputStream->Tell() - 6;
                 Point aPosition = ReadYX();
                 sal_uInt16 nLen = 0, nOptions = 0;
                 mpInputStream->ReadUInt16( nLen ).ReadUInt16( nOptions );
+
+                tools::Rectangle aRect;
+                if (nOptions & ETO_CLIPPED)
+                {
+                    nNonStringLen += 2 * sizeof(sal_uInt16);
+
+                    if (nRecSize < nNonStringLen)
+                    {
+                        SAL_WARN("vcl.wmf", "W_META_TEXTOUT too short");
+                        break;
+                    }
+
+                    const Point aPt1( ReadPoint() );
+                    const Point aPt2( ReadPoint() );
+                    aRect = tools::Rectangle( aPt1, aPt2 );
+                }
 
                 ComplexTextLayoutFlags nTextLayoutMode = ComplexTextLayoutFlags::Default;
                 if ( nOptions & ETO_RTLREADING )
@@ -559,19 +582,12 @@ namespace emfio
                 SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "vcl.wmf", "SJ: ETO_PDY || ETO_GLYPH_INDEX in WMF" );
 
                 // output only makes sense if the text contains characters
-                if (nLen && nRecordSize >= 0)
+                if (nLen)
                 {
                     sal_Int32 nOriginalTextLen = nLen;
                     sal_Int32 nOriginalBlockLen = ( nOriginalTextLen + 1 ) &~ 1;
-                    tools::Rectangle aRect;
-                    if( nOptions & ETO_CLIPPED )
-                    {
-                        const Point aPt1( ReadPoint() );
-                        const Point aPt2( ReadPoint() );
-                        aRect = tools::Rectangle( aPt1, aPt2 );
-                    }
 
-                    auto nMaxStreamPos = nRecordPos + (nRecordSize << 1);
+                    auto nMaxStreamPos = nRecordPos + nRecSize;
                     auto nRemainingSize = std::min(mpInputStream->remainingSize(), nMaxStreamPos - mpInputStream->Tell());
                     if (nRemainingSize < static_cast<sal_uInt32>(nOriginalBlockLen))
                     {
