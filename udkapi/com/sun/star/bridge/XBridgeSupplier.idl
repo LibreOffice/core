@@ -57,9 +57,6 @@
 
         <dt>JAVA:   </dt>
         <dd>not yet specified.  </dd>
-
-        <dt>CORBA: </dt>
-        <dd>not yet specified.  </dd>
     </dl>
 
     <p>Any implementation can supply its own bridges to other object
