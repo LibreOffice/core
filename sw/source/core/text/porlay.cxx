@@ -2142,15 +2142,22 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode, MultiSelect
         }
     }
 
-    const SwIndex* next;
-    for (const SwIndex* pIndex = rNode.GetFirstIndex(); pIndex; pIndex = next)
+    for (const SwIndex* pIndex = rNode.GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
     {
-        next = pIndex->GetNext();
         const sw::mark::IMark* pMark = pIndex->GetMark();
         const sw::mark::IBookmark* pBookmark = dynamic_cast<const sw::mark::IBookmark*>(pMark);
         if (pBookmark && pBookmark->IsHidden())
         {
-            // intersect bookmark range with textnode range and add the intersection to rHiddenMulti?
+            // intersect bookmark range with textnode range and add the intersection to rHiddenMulti
+
+            const sal_Int32 nSt =  pBookmark->GetMarkStart().nContent.GetIndex();
+            const sal_Int32 nEnd = pBookmark->GetMarkEnd().nContent.GetIndex();
+
+            if( nEnd > nSt )
+            {
+                Range aTmp( nSt, nEnd - 1 );
+                rHiddenMulti.Select(aTmp, true);
+            }
         }
     }
 
