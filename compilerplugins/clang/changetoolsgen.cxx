@@ -14,21 +14,20 @@
 #include <regex>
 
 /**
- * Changes calls to tools::Rectangle methods that return a ref to instead call the setter methods.
+ * Changes calls to tools::Rectangle/Point/Size methods that return a ref to instead call the setter methods.
  *
  * run as:
- *   make COMPILER_PLUGIN_TOOL=changerectanglegetref UPDATE_FILES=all FORCE_COMPILE_ALL=1
+ *   make COMPILER_PLUGIN_TOOL=changetoolsgen UPDATE_FILES=all FORCE_COMPILE_ALL=1
  * or
- *   make <module> COMPILER_PLUGIN_TOOL=changerectanglegetref FORCE_COMPILE_ALL=1
+ *   make <module> COMPILER_PLUGIN_TOOL=changetoolsgen FORCE_COMPILE_ALL=1
  */
 
 namespace
 {
-class ChangeRectangleGetRef : public RecursiveASTVisitor<ChangeRectangleGetRef>,
-                              public loplugin::RewritePlugin
+class ChangeToolsGen : public RecursiveASTVisitor<ChangeToolsGen>, public loplugin::RewritePlugin
 {
 public:
-    explicit ChangeRectangleGetRef(loplugin::InstantiationData const& data)
+    explicit ChangeToolsGen(loplugin::InstantiationData const& data)
         : RewritePlugin(data)
     {
     }
@@ -45,12 +44,9 @@ private:
     std::string extractCode(SourceLocation startLoc, SourceLocation endLoc);
 };
 
-void ChangeRectangleGetRef::run()
-{
-    TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
-}
+void ChangeToolsGen::run() { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
-bool ChangeRectangleGetRef::VisitCXXMemberCallExpr(CXXMemberCallExpr const* call)
+bool ChangeToolsGen::VisitCXXMemberCallExpr(CXXMemberCallExpr const* call)
 {
     if (ignoreLocation(call))
         return true;
@@ -140,8 +136,8 @@ bool ChangeRectangleGetRef::VisitCXXMemberCallExpr(CXXMemberCallExpr const* call
     return true;
 }
 
-bool ChangeRectangleGetRef::ChangeAssignment(Stmt const* parent, std::string const& methodName,
-                                             std::string const& setPrefix)
+bool ChangeToolsGen::ChangeAssignment(Stmt const* parent, std::string const& methodName,
+                                      std::string const& setPrefix)
 {
     // Look for expressions like
     //    aRect.Left() = ...;
@@ -167,10 +163,10 @@ bool ChangeRectangleGetRef::ChangeAssignment(Stmt const* parent, std::string con
     return replaceText(startLoc, originalLength, newText);
 }
 
-bool ChangeRectangleGetRef::ChangeBinaryOperator(BinaryOperator const* binaryOp,
-                                                 CXXMemberCallExpr const* call,
-                                                 std::string const& methodName,
-                                                 std::string const& setPrefix)
+bool ChangeToolsGen::ChangeBinaryOperator(BinaryOperator const* binaryOp,
+                                          CXXMemberCallExpr const* call,
+                                          std::string const& methodName,
+                                          std::string const& setPrefix)
 {
     // Look for expressions like
     //    aRect.Left() += ...;
@@ -231,10 +227,10 @@ bool ChangeRectangleGetRef::ChangeBinaryOperator(BinaryOperator const* binaryOp,
     return replaceText(startLoc, originalLength, newText);
 }
 
-bool ChangeRectangleGetRef::ChangeUnaryOperator(UnaryOperator const* unaryOp,
-                                                CXXMemberCallExpr const* call,
-                                                std::string const& methodName,
-                                                std::string const& setPrefix)
+bool ChangeToolsGen::ChangeUnaryOperator(UnaryOperator const* unaryOp,
+                                         CXXMemberCallExpr const* call,
+                                         std::string const& methodName,
+                                         std::string const& setPrefix)
 {
     // Look for expressions like
     //    aRect.Left()++;
@@ -289,7 +285,7 @@ bool ChangeRectangleGetRef::ChangeUnaryOperator(UnaryOperator const* unaryOp,
     }
 }
 
-std::string ChangeRectangleGetRef::extractCode(SourceLocation startLoc, SourceLocation endLoc)
+std::string ChangeToolsGen::extractCode(SourceLocation startLoc, SourceLocation endLoc)
 {
     SourceManager& SM = compiler.getSourceManager();
     const char* p1 = SM.getCharacterData(startLoc);
@@ -298,7 +294,7 @@ std::string ChangeRectangleGetRef::extractCode(SourceLocation startLoc, SourceLo
     return std::string(p1, p2 - p1 + n);
 }
 
-static loplugin::Plugin::Registration<ChangeRectangleGetRef> X("changerectanglegetref", false);
+static loplugin::Plugin::Registration<ChangeToolsGen> X("changetoolsgen", false);
 
 } // namespace
 
