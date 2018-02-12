@@ -387,6 +387,8 @@ protected:
 
     VDataSeries* getFirstSeries() const;
 
+    OUString getCategoryName( sal_Int32 nPointIndex ) const;
+
 protected:
     PlottingPositionHelper*    m_pMainPosHelper;
 

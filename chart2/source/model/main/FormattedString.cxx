@@ -97,6 +97,8 @@ FormattedString::FormattedString(
         uno::Reference< uno::XComponentContext > const & /* xContext */ ) :
         ::property::OPropertySet( m_aMutex ),
     m_aString(),
+    m_aType(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT),
+    m_aGuid(),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
@@ -105,6 +107,8 @@ FormattedString::FormattedString( const FormattedString & rOther ) :
         impl::FormattedString_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_aString( rOther.m_aString ),
+    m_aType(rOther.m_aType),
+    m_aGuid(rOther.m_aGuid),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
@@ -132,6 +136,45 @@ void SAL_CALL FormattedString::setString( const OUString& String )
     {
         MutexGuard aGuard( GetMutex());
         m_aString = String;
+    }
+    //don't keep the mutex locked while calling out
+    fireModifyEvent();
+
+}
+
+// ____ XDataPointCustomLabelField ____
+css::chart2::DataPointCustomLabelFieldType SAL_CALL FormattedString::getFieldType()
+    throw (uno::RuntimeException, std::exception)
+{
+    MutexGuard aGuard(GetMutex());
+    return m_aType;
+}
+
+void SAL_CALL
+FormattedString::setFieldType(const css::chart2::DataPointCustomLabelFieldType Type)
+    throw (uno::RuntimeException, std::exception)
+{
+    {
+        MutexGuard aGuard(GetMutex());
+        m_aType = Type;
+    }
+    //don't keep the mutex locked while calling out
+    fireModifyEvent();
+}
+
+OUString SAL_CALL FormattedString::getGuid()
+    throw (uno::RuntimeException, std::exception)
+{
+    MutexGuard aGuard( GetMutex());
+    return m_aGuid;
+}
+
+void SAL_CALL FormattedString::setGuid( const OUString& guid )
+    throw (uno::RuntimeException, std::exception)
+{
+    {
+        MutexGuard aGuard( GetMutex());
+        m_aGuid= guid;
     }
     //don't keep the mutex locked while calling out
     fireModifyEvent();
@@ -240,6 +283,7 @@ css::uno::Sequence< OUString > SAL_CALL FormattedString::getSupportedServiceName
     throw( css::uno::RuntimeException, std::exception )
 {
     return {
+        "com.sun.star.chart2.DataPointCustomLabelField",
         "com.sun.star.chart2.FormattedString",
         "com.sun.star.beans.PropertySet" };
 }

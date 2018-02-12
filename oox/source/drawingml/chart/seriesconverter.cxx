@@ -22,11 +22,16 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
+#include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
+#include <com/sun/star/chart2/DataPointCustomLabelField.hpp>
+#include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
+#include <com/sun/star/chart2/XFormattedString2.hpp>
+#include <com/sun/star/chart2/FormattedString.hpp>
 #include <osl/diagnose.h>
 #include <basegfx/numeric/ftools.hxx>
 #include "drawingml/chart/datasourceconverter.hxx"
@@ -41,6 +46,10 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/lineproperties.hxx>
+#include <drawingml/textparagraph.hxx>
+#include <drawingml/textrun.hxx>
+#include <drawingml/textfield.hxx>
+#include <drawingml/textbody.hxx>
 
 namespace oox {
 namespace drawingml {
@@ -54,13 +63,30 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-/** nested-up sgn function - employs some gratuity around 0 - values
-   smaller than 0.33 are clamped to 0
+/** Function to get vertical position of label from chart height factor.
+    Value can be negative, prefer top placement.
  */
-int lclSgn( double nVal )
+int lclGetPositionY( double nVal )
 {
-    const int intVal=nVal*3;
-    return intVal == 0 ? 0 : (intVal < 0 ? -1 : 1);
+    if( nVal <= 0.1 )
+        return -1;
+    else if( nVal <= 0.6 )
+        return 0;
+    else
+        return 1;
+}
+
+/** Function to get horizontal position of label from chart width factor.
+    Value can be negative, prefer center placement.
+*/
+int lclGetPositionX( double nVal )
+{
+    if( nVal <= -0.2 )
+        return -1;
+    else if( nVal <= 0.2 )
+        return 0;
+    else
+        return 1;
 }
 
 Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
@@ -193,6 +219,20 @@ void importBorderProperties( PropertySet& rPropSet, Shape& rShape, const Graphic
     rPropSet.setProperty(PROP_LabelBorderColor, uno::makeAny(nColor));
 }
 
+DataPointCustomLabelFieldType lcl_ConvertFieldNameToFieldEnum( const OUString& rField )
+{
+    if (rField == "VALUE")
+        return DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_VALUE;
+    else if (rField == "SERIESNAME")
+        return DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_SERIESNAME;
+    else if (rField == "CATEGORYNAME")
+        return DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CATEGORYNAME;
+    else if (rField == "CELLREF")
+        return DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLREF;
+    else
+        return DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT;
+}
+
 } // namespace
 
 DataLabelConverter::DataLabelConverter( const ConverterRoot& rParent, DataLabelModel& rModel ) :
@@ -228,17 +268,69 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                     csscd::LEFT,        csscd::CENTER, csscd::RIGHT,
                     csscd::BOTTOM_LEFT, csscd::BOTTOM, csscd::BOTTOM_RIGHT
                 };
-            const double nMax=std::max(
-                fabs(mrModel.mxLayout->mfX),
-                fabs(mrModel.mxLayout->mfY));
-            const int simplifiedX=lclSgn(mrModel.mxLayout->mfX/nMax);
-            const int simplifiedY=lclSgn(mrModel.mxLayout->mfY/nMax);
+            const int simplifiedX = lclGetPositionX(mrModel.mxLayout->mfX);
+            const int simplifiedY = lclGetPositionY(mrModel.mxLayout->mfY);
             aPropSet.setProperty( PROP_LabelPlacement,
                                   aPositionsLookupTable[ simplifiedX+1 + 3*(simplifiedY+1) ] );
         }
 
         if (mrModel.mxShapeProp)
             importBorderProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper());
+
+        if( mrModel.mxText && mrModel.mxText->mxTextBody && mrModel.mxText->mxTextBody->getParagraphs().size() )
+        {
+            css::uno::Reference< XComponentContext > xContext = getComponentContext();
+            uno::Sequence< css::uno::Reference< XDataPointCustomLabelField > > aSequence;
+
+            auto& rParagraphs = mrModel.mxText->mxTextBody->getParagraphs();
+
+            int nSequenceSize = 0;
+            for( auto& pParagraph : rParagraphs )
+                nSequenceSize += pParagraph->getRuns().size();
+
+            int nParagraphs = rParagraphs.size();
+            if( nParagraphs > 1 )
+                nSequenceSize += nParagraphs - 1;
+
+            aSequence.realloc( nSequenceSize );
+
+            int nPos = 0;
+            for( auto& pParagraph : rParagraphs )
+            {
+                for( auto& pRun : pParagraph->getRuns() )
+                {
+                    css::uno::Reference< XDataPointCustomLabelField > xCustomLabel = DataPointCustomLabelField::create( xContext );
+
+                    // Store properties
+                    oox::PropertySet aPropertySet( xCustomLabel );
+                    pRun->getTextCharacterProperties().pushToPropSet( aPropertySet, getFilter() );
+
+                    TextField* pField = nullptr;
+                    if( ( pField = dynamic_cast< TextField* >( pRun.get() ) ) )
+                    {
+                        xCustomLabel->setString( pField->getText() );
+                        xCustomLabel->setFieldType( lcl_ConvertFieldNameToFieldEnum( pField->getType() ) );
+                        xCustomLabel->setGuid( pField->getUuid() );
+                    }
+                    else if( pRun.get() )
+                    {
+                        xCustomLabel->setString( pRun->getText() );
+                        xCustomLabel->setFieldType( DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT );
+                    }
+                    aSequence[ nPos++ ] = xCustomLabel;
+                }
+
+                if( nParagraphs > 1 && nPos < nSequenceSize )
+                {
+                    css::uno::Reference< XDataPointCustomLabelField > xCustomLabel = DataPointCustomLabelField::create( xContext );
+                    xCustomLabel->setFieldType( DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_NEWLINE );
+                    xCustomLabel->setString("\n");
+                    aSequence[ nPos++ ] = xCustomLabel;
+                }
+            }
+
+            aPropSet.setProperty( PROP_CustomLabelFields, makeAny( aSequence ) );
+        }
     }
     catch( Exception& )
     {
