@@ -151,7 +151,7 @@ BitmapEx CreateFromData( RawBitmap&& rawBitmap )
     auto nWidth = rawBitmap.maSize.getWidth();
     for( long y = 0; y < nHeight; ++y )
     {
-        sal_uInt8 const *p = rawBitmap.mpData.get() + y * nWidth;
+        sal_uInt8 const *p = rawBitmap.mpData.get() + (y * nWidth * 3);
         Scanline pScanline = pWrite->GetScanline(y);
         for (long x = 0; x < nWidth; ++x)
         {

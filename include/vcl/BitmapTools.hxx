@@ -19,7 +19,7 @@ namespace vcl {
 namespace bitmap {
 
 /**
- * intended to be used to feed into CreateFromData to create a BitmapEx
+ * Intended to be used to feed into CreateFromData to create a BitmapEx. RGB data format.
  */
 class VCL_DLLPUBLIC RawBitmap
 {
@@ -34,7 +34,7 @@ public:
     }
     void SetPixel(long nY, long nX, BitmapColor nColor)
     {
-        long p = nY * maSize.getWidth() + nX;
+        long p = (nY * maSize.getWidth() + nX) * 3;
         mpData[ p++ ] = nColor.GetRed();
         mpData[ p++ ] = nColor.GetGreen();
         mpData[ p   ] = nColor.GetBlue();
