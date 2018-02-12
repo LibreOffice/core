@@ -46,23 +46,6 @@ using namespace cppu;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::script;
 
-struct hash_IUnknown_Impl
-{
-    size_t operator()(const IUnknown* p) const
-    {
-        return reinterpret_cast<size_t>(p);
-    }
-};
-
-struct equal_to_IUnknown_Impl
-{
-    bool operator()(const IUnknown* s1, const IUnknown* s2) const
-    {
-        return s1 == s2;
-    }
-};
-
-
 struct MemberInfo
 {
     MemberInfo() : flags(0), name() {}
@@ -90,16 +73,16 @@ typedef std::unordered_map
     MemberInfo
 > IdToMemberInfoMap;
 
-class InterfaceOleWrapper_Impl : public WeakImplHelper<XBridgeSupplier2, XInitialization>,
-                                 public IDispatchEx,
-                                 public UnoConversionUtilities<InterfaceOleWrapper_Impl>,
-                                 public IUnoObjectWrapper
+class InterfaceOleWrapper : public WeakImplHelper<XBridgeSupplier2, XInitialization>,
+                            public IDispatchEx,
+                            public UnoConversionUtilities<InterfaceOleWrapper>,
+                            public IUnoObjectWrapper
 {
 public:
 
 
-    InterfaceOleWrapper_Impl(Reference<XMultiServiceFactory> const & xFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
-    ~InterfaceOleWrapper_Impl() override;
+    InterfaceOleWrapper(Reference<XMultiServiceFactory> const & xFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
+    ~InterfaceOleWrapper() override;
 
     /* IUnknown methods */
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj) override;
@@ -205,7 +188,7 @@ protected:
     // and put a wrapped object on index null. The array object tries
     // to detect the default value. The wrapped object must then return
     // its own IDispatch* otherwise we cannot access it within the script.
-    // see InterfaceOleWrapper_Impl::Invoke
+    // see InterfaceOleWrapper::Invoke
     VARTYPE                         m_defaultValueType;
 
 };
@@ -223,7 +206,7 @@ protected:
     in a MemberInfo structure hold by a IdToMemberInfoMap stl map.
 
 *****************************************************************************/
-class UnoObjectWrapperRemoteOpt: public InterfaceOleWrapper_Impl
+class UnoObjectWrapperRemoteOpt: public InterfaceOleWrapper
 {
 public:
     UnoObjectWrapperRemoteOpt( Reference<XMultiServiceFactory> const & aFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);

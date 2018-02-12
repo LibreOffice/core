@@ -87,14 +87,14 @@ static void writeExcepinfo(EXCEPINFO * pInfo, const OUString& message)
     }
 }
 
-InterfaceOleWrapper_Impl::InterfaceOleWrapper_Impl( Reference<XMultiServiceFactory> const & xFactory,
-                                                    sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass):
-        UnoConversionUtilities<InterfaceOleWrapper_Impl>( xFactory, unoWrapperClass, comWrapperClass),
+InterfaceOleWrapper::InterfaceOleWrapper( Reference<XMultiServiceFactory> const & xFactory,
+                                          sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass):
+        UnoConversionUtilities<InterfaceOleWrapper>( xFactory, unoWrapperClass, comWrapperClass),
         m_defaultValueType( 0)
 {
 }
 
-InterfaceOleWrapper_Impl::~InterfaceOleWrapper_Impl()
+InterfaceOleWrapper::~InterfaceOleWrapper()
 {
     MutexGuard guard(getBridgeMutex());
     // remove entries in global map
@@ -103,7 +103,7 @@ InterfaceOleWrapper_Impl::~InterfaceOleWrapper_Impl()
         UnoObjToWrapperMap.erase(it);
 }
 
-STDMETHODIMP InterfaceOleWrapper_Impl::QueryInterface(REFIID riid, LPVOID FAR * ppv)
+STDMETHODIMP InterfaceOleWrapper::QueryInterface(REFIID riid, LPVOID FAR * ppv)
 {
     HRESULT ret= S_OK;
 
@@ -130,7 +130,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::QueryInterface(REFIID riid, LPVOID FAR * 
     return ret;
 }
 
-STDMETHODIMP_(ULONG) InterfaceOleWrapper_Impl::AddRef()
+STDMETHODIMP_(ULONG) InterfaceOleWrapper::AddRef()
 {
     acquire();
     // does not need to guard because one should not rely on the return value of
@@ -138,7 +138,7 @@ STDMETHODIMP_(ULONG) InterfaceOleWrapper_Impl::AddRef()
     return m_refCount;
 }
 
-STDMETHODIMP_(ULONG) InterfaceOleWrapper_Impl::Release()
+STDMETHODIMP_(ULONG) InterfaceOleWrapper::Release()
 {
     ULONG n= m_refCount;
     release();
@@ -146,17 +146,17 @@ STDMETHODIMP_(ULONG) InterfaceOleWrapper_Impl::Release()
 }
 
 // IUnoObjectWrapper --------------------------------------------------------
-STDMETHODIMP InterfaceOleWrapper_Impl::getWrapperXInterface( Reference<XInterface>* pXInt)
+STDMETHODIMP InterfaceOleWrapper::getWrapperXInterface( Reference<XInterface>* pXInt)
 {
     pXInt->set( static_cast<XWeak*>( this), UNO_QUERY);
     return pXInt->is() ? S_OK : E_FAIL;
 }
-STDMETHODIMP InterfaceOleWrapper_Impl::getOriginalUnoObject( Reference<XInterface>* pXInt)
+STDMETHODIMP InterfaceOleWrapper::getOriginalUnoObject( Reference<XInterface>* pXInt)
 {
     *pXInt= m_xOrigin;
     return m_xOrigin.is() ? S_OK : E_FAIL;
 }
-STDMETHODIMP  InterfaceOleWrapper_Impl::getOriginalUnoStruct( Any * pStruct)
+STDMETHODIMP  InterfaceOleWrapper::getOriginalUnoStruct( Any * pStruct)
 {
     HRESULT ret= E_FAIL;
     if( !m_xOrigin.is())
@@ -175,21 +175,21 @@ STDMETHODIMP  InterfaceOleWrapper_Impl::getOriginalUnoStruct( Any * pStruct)
     return ret;
 }
 
-STDMETHODIMP InterfaceOleWrapper_Impl::GetTypeInfoCount( unsigned int * /*pctinfo*/ )
+STDMETHODIMP InterfaceOleWrapper::GetTypeInfoCount( unsigned int * /*pctinfo*/ )
 {
     return E_NOTIMPL ;
 }
 
-STDMETHODIMP InterfaceOleWrapper_Impl::GetTypeInfo(unsigned int /*itinfo*/, LCID /*lcid*/, ITypeInfo ** /*pptinfo*/)
+STDMETHODIMP InterfaceOleWrapper::GetTypeInfo(unsigned int /*itinfo*/, LCID /*lcid*/, ITypeInfo ** /*pptinfo*/)
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
-                                                     OLECHAR ** rgszNames,
-                                                     unsigned int cNames,
-                                                     LCID /*lcid*/,
-                                                     DISPID * rgdispid )
+STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
+                                                OLECHAR ** rgszNames,
+                                                unsigned int cNames,
+                                                LCID /*lcid*/,
+                                                DISPID * rgdispid )
 {
     HRESULT ret = DISP_E_UNKNOWNNAME;
     try
@@ -312,7 +312,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
 // A JScriptValue (ValueObject) object is a COM object in that it implements IDispatch and the
 // IJScriptValue object interface. Such objects are provided by all UNO wrapper
 // objects used within a JScript script. To obtain an instance one has to call
-// "_GetValueObject() or Bridge_GetValueObject()" on an UNO wrapper object (class InterfaceOleWrapper_Impl).
+// "_GetValueObject() or Bridge_GetValueObject()" on an UNO wrapper object (class InterfaceOleWrapper).
 // A value object is appropriately initialized within the script and passed as
 // parameter to an UNO object method or property. The convertDispparamsArgs function
 // can easily find out that a param is such an object by querying for the
@@ -324,7 +324,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
 // Normal JScript object parameter can be mixed with JScriptValue object. If an
 // VARIANT contains an VT_DISPATCH that is no JScriptValue than the type information
 // is used to find out about the required type.
-void InterfaceOleWrapper_Impl::convertDispparamsArgs(DISPID id,
+void InterfaceOleWrapper::convertDispparamsArgs(DISPID id,
     unsigned short /*wFlags*/, DISPPARAMS* pdispparams, Sequence<Any>& rSeq)
 {
     HRESULT hr= S_OK;
@@ -341,7 +341,7 @@ void InterfaceOleWrapper_Impl::convertDispparamsArgs(DISPID id,
     InvocationInfo info;
     if( ! getInvocationInfoForCall( id, info))
         throw BridgeRuntimeError(
-                  "[automation bridge]InterfaceOleWrapper_Impl::convertDispparamsArgs \n"
+                  "[automation bridge]InterfaceOleWrapper::convertDispparamsArgs \n"
                   "Could not obtain type information for current call.");
 
     for (int i = 0; i < countArgs; i++)
@@ -406,7 +406,7 @@ void InterfaceOleWrapper_Impl::convertDispparamsArgs(DISPID id,
     }// end for / iterating over all parameters
 }
 
-bool  InterfaceOleWrapper_Impl::getInvocationInfoForCall( DISPID id, InvocationInfo& info)
+bool  InterfaceOleWrapper::getInvocationInfoForCall( DISPID id, InvocationInfo& info)
 {
     bool bTypesAvailable= false;
 
@@ -463,11 +463,11 @@ bool  InterfaceOleWrapper_Impl::getInvocationInfoForCall( DISPID id, InvocationI
 }
 
 // XBridgeSupplier2 ---------------------------------------------------
-// only bridges itself ( this instance of InterfaceOleWrapper_Impl)from UNO to IDispatch
-// If sourceModelType is UNO than any UNO interface implemented by InterfaceOleWrapper_Impl
+// only bridges itself ( this instance of InterfaceOleWrapper)from UNO to IDispatch
+// If sourceModelType is UNO than any UNO interface implemented by InterfaceOleWrapper
 // can bridged to IDispatch ( if destModelType == OLE). The IDispatch is
 // implemented by this class.
-Any SAL_CALL InterfaceOleWrapper_Impl::createBridge(const Any& modelDepObject,
+Any SAL_CALL InterfaceOleWrapper::createBridge(const Any& modelDepObject,
                                 const Sequence<sal_Int8>& /*ProcessId*/,
                                 sal_Int16 sourceModelType,
                                 sal_Int16 destModelType)
@@ -499,7 +499,7 @@ Any SAL_CALL InterfaceOleWrapper_Impl::createBridge(const Any& modelDepObject,
 }
 
 // XInitialization --------------------------------------------------
-void SAL_CALL InterfaceOleWrapper_Impl::initialize( const Sequence< Any >& aArguments )
+void SAL_CALL InterfaceOleWrapper::initialize( const Sequence< Any >& aArguments )
 {
     switch( aArguments.getLength() )
     {
@@ -517,16 +517,16 @@ void SAL_CALL InterfaceOleWrapper_Impl::initialize( const Sequence< Any >& aArgu
     m_xExactName.set( m_xInvocation, UNO_QUERY);
 }
 
-Reference< XInterface > InterfaceOleWrapper_Impl::createUnoWrapperInstance()
+Reference< XInterface > InterfaceOleWrapper::createUnoWrapperInstance()
 {
-    Reference<XWeak> xWeak= static_cast<XWeak*>( new InterfaceOleWrapper_Impl(
+    Reference<XWeak> xWeak= static_cast<XWeak*>( new InterfaceOleWrapper(
                             m_smgr, m_nUnoWrapperClass, m_nComWrapperClass));
     return Reference<XInterface>( xWeak, UNO_QUERY);
 }
 
-Reference<XInterface> InterfaceOleWrapper_Impl::createComWrapperInstance()
+Reference<XInterface> InterfaceOleWrapper::createComWrapperInstance()
 {
-    Reference<XWeak> xWeak= static_cast<XWeak*>( new IUnknownWrapper_Impl(
+    Reference<XWeak> xWeak= static_cast<XWeak*>( new IUnknownWrapper(
                             m_smgr, m_nUnoWrapperClass, m_nComWrapperClass));
     return Reference<XInterface>( xWeak, UNO_QUERY);
 }
@@ -776,14 +776,14 @@ static bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource)
     return ret;
 }
 
-STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
-                                              REFIID /*riid*/,
-                                              LCID /*lcid*/,
-                                              unsigned short wFlags,
-                                              DISPPARAMS * pdispparams,
-                                              VARIANT * pvarResult,
-                                              EXCEPINFO * pexcepinfo,
-                                              unsigned int * puArgErr )
+STDMETHODIMP InterfaceOleWrapper::Invoke(DISPID dispidMember,
+                                         REFIID /*riid*/,
+                                         LCID /*lcid*/,
+                                         unsigned short wFlags,
+                                         DISPPARAMS * pdispparams,
+                                         VARIANT * pvarResult,
+                                         EXCEPINFO * pexcepinfo,
+                                         unsigned int * puArgErr )
 {
     comphelper::ProfileZone aZone("COM Bridge");
     HRESULT ret = S_OK;
@@ -861,14 +861,14 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
     }
     catch(const Exception& e)
     {
-        OUString message= "InterfaceOleWrapper_Impl::Invoke : \n" +
+        OUString message= "InterfaceOleWrapper::Invoke : \n" +
                                 e.Message;
         writeExcepinfo(pexcepinfo, message);
         ret = DISP_E_EXCEPTION;
     }
     catch(...)
     {
-        OUString message= "InterfaceOleWrapper_Impl::Invoke : \n"
+        OUString message= "InterfaceOleWrapper::Invoke : \n"
                           "Unexpected exception";
         writeExcepinfo(pexcepinfo, message);
          ret = DISP_E_EXCEPTION;
@@ -877,7 +877,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
     return ret;
 }
 
-HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * pvarResult,
+HRESULT InterfaceOleWrapper::doInvoke( DISPPARAMS * pdispparams, VARIANT * pvarResult,
                               EXCEPINFO * pexcepinfo, unsigned int * puArgErr, OUString& name, Sequence<Any>& params)
 {
 
@@ -954,14 +954,14 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
     }
     catch(const Exception & e)
     {
-        OUString message= "InterfaceOleWrapper_Impl::doInvoke : \n" +
+        OUString message= "InterfaceOleWrapper::doInvoke : \n" +
                                 e.Message;
         writeExcepinfo(pexcepinfo, message);
         ret = DISP_E_EXCEPTION;
     }
     catch( ... )
      {
-        OUString message= "InterfaceOleWrapper_Impl::doInvoke : \n"
+        OUString message= "InterfaceOleWrapper::doInvoke : \n"
                           "Unexpected exception";
         writeExcepinfo(pexcepinfo, message);
          ret = DISP_E_EXCEPTION;
@@ -969,8 +969,8 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
     return ret;
 }
 
-HRESULT InterfaceOleWrapper_Impl::doGetProperty( DISPPARAMS * /*pdispparams*/, VARIANT * pvarResult,
-                                                EXCEPINFO * pexcepinfo, OUString& name)
+HRESULT InterfaceOleWrapper::doGetProperty( DISPPARAMS * /*pdispparams*/, VARIANT * pvarResult,
+                                            EXCEPINFO * pexcepinfo, OUString& name)
 {
     HRESULT ret= S_OK;
 
@@ -993,13 +993,13 @@ HRESULT InterfaceOleWrapper_Impl::doGetProperty( DISPPARAMS * /*pdispparams*/, V
     }
     catch(const Exception& e)
     {
-        OUString message= "InterfaceOleWrapper_Impl::doGetProperty : \n" +
+        OUString message= "InterfaceOleWrapper::doGetProperty : \n" +
                                 e.Message;
         writeExcepinfo(pexcepinfo, message);
     }
     catch( ... )
     {
-        OUString message= "InterfaceOleWrapper_Impl::doInvoke : \n"
+        OUString message= "InterfaceOleWrapper::doInvoke : \n"
                           "Unexpected exception";
         writeExcepinfo(pexcepinfo, message);
          ret = DISP_E_EXCEPTION;
@@ -1007,7 +1007,7 @@ HRESULT InterfaceOleWrapper_Impl::doGetProperty( DISPPARAMS * /*pdispparams*/, V
     return  ret;
 }
 
-HRESULT InterfaceOleWrapper_Impl::doSetProperty( DISPPARAMS * /*pdispparams*/, VARIANT * /*pvarResult*/,
+HRESULT InterfaceOleWrapper::doSetProperty( DISPPARAMS * /*pdispparams*/, VARIANT * /*pvarResult*/,
                                         EXCEPINFO * pexcepinfo, unsigned int * puArgErr, OUString& name, Sequence<Any> const & params)
 {
     HRESULT ret= S_OK;
@@ -1044,7 +1044,7 @@ HRESULT InterfaceOleWrapper_Impl::doSetProperty( DISPPARAMS * /*pdispparams*/, V
     return ret;
 }
 
-HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned short wFlags,
+HRESULT InterfaceOleWrapper::InvokeGeneral( DISPID dispidMember, unsigned short wFlags,
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,
                          unsigned int * /*puArgErr*/, bool& bHandled)
 {
@@ -1135,7 +1135,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
 
             if (!createUnoTypeWrapper(arg.bstrVal, pvarResult))
             {
-                writeExcepinfo(pexcepinfo, "[automation bridge] InterfaceOleWrapper_Impl::InvokeGeneral\n"
+                writeExcepinfo(pexcepinfo, "[automation bridge] InterfaceOleWrapper::InvokeGeneral\n"
                                            "Could not initialize UnoTypeWrapper object!");
                 return DISP_E_EXCEPTION;
             }
@@ -1148,14 +1148,14 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
     }
     catch(const Exception & e)
     {
-        OUString message= "InterfaceOleWrapper_Impl::InvokeGeneral : \n" +
+        OUString message= "InterfaceOleWrapper::InvokeGeneral : \n" +
                                 e.Message;
         writeExcepinfo(pexcepinfo, message);
         ret = DISP_E_EXCEPTION;
     }
     catch( ... )
      {
-        OUString message= "InterfaceOleWrapper_Impl::InvokeGeneral : \n"
+        OUString message= "InterfaceOleWrapper::InvokeGeneral : \n"
                           "Unexpected exception";
         writeExcepinfo(pexcepinfo, message);
          ret = DISP_E_EXCEPTION;
@@ -1163,12 +1163,12 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
     return ret;
 }
 
-STDMETHODIMP InterfaceOleWrapper_Impl::GetDispID(BSTR /*bstrName*/, DWORD /*grfdex*/, DISPID __RPC_FAR* /*pid*/)
+STDMETHODIMP InterfaceOleWrapper::GetDispID(BSTR /*bstrName*/, DWORD /*grfdex*/, DISPID __RPC_FAR* /*pid*/)
 {
     return ResultFromScode(E_NOTIMPL);
 }
 
-STDMETHODIMP InterfaceOleWrapper_Impl::InvokeEx(
+STDMETHODIMP InterfaceOleWrapper::InvokeEx(
     /* [in] */ DISPID /*id*/,
     /* [in] */ LCID /*lcid*/,
     /* [in] */ WORD /*wFlags*/,
@@ -1180,19 +1180,19 @@ STDMETHODIMP InterfaceOleWrapper_Impl::InvokeEx(
     return ResultFromScode(E_NOTIMPL);
 }
 
-STDMETHODIMP InterfaceOleWrapper_Impl::DeleteMemberByName(
+STDMETHODIMP InterfaceOleWrapper::DeleteMemberByName(
     /* [in] */ BSTR /*bstr*/,
     /* [in] */ DWORD /*grfdex*/)
 {
     return ResultFromScode(E_NOTIMPL);
 }
 
-STDMETHODIMP InterfaceOleWrapper_Impl::DeleteMemberByDispID(DISPID /*id*/)
+STDMETHODIMP InterfaceOleWrapper::DeleteMemberByDispID(DISPID /*id*/)
 {
     return ResultFromScode(E_NOTIMPL);
 }
 
-STDMETHODIMP InterfaceOleWrapper_Impl::GetMemberProperties(
+STDMETHODIMP InterfaceOleWrapper::GetMemberProperties(
     /* [in] */ DISPID /*id*/,
     /* [in] */ DWORD /*grfdexFetch*/,
     /* [out] */ DWORD __RPC_FAR* /*pgrfdex*/)
@@ -1200,14 +1200,14 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetMemberProperties(
     return ResultFromScode(E_NOTIMPL);
 }
 
-STDMETHODIMP InterfaceOleWrapper_Impl::GetMemberName(
+STDMETHODIMP InterfaceOleWrapper::GetMemberName(
     /* [in] */ DISPID /*id*/,
     /* [out] */ BSTR __RPC_FAR* /*pbstrName*/)
 {
     return ResultFromScode(E_NOTIMPL);
 }
 
-STDMETHODIMP InterfaceOleWrapper_Impl::GetNextDispID(
+STDMETHODIMP InterfaceOleWrapper::GetNextDispID(
     /* [in] */ DWORD /*grfdex*/,
     /* [in] */ DISPID /*id*/,
     /* [out] */ DISPID __RPC_FAR* /*pid*/)
@@ -1215,7 +1215,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetNextDispID(
     return ResultFromScode(E_NOTIMPL);
 }
 
-STDMETHODIMP InterfaceOleWrapper_Impl::GetNameSpaceParent(
+STDMETHODIMP InterfaceOleWrapper::GetNameSpaceParent(
     /* [out] */ IUnknown __RPC_FAR *__RPC_FAR* /*ppunk*/)
 {
     return ResultFromScode(E_NOTIMPL);
@@ -1225,7 +1225,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetNameSpaceParent(
 
 UnoObjectWrapperRemoteOpt::UnoObjectWrapperRemoteOpt( Reference<XMultiServiceFactory> const & aFactory,
                                                      sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass):
-InterfaceOleWrapper_Impl( aFactory, unoWrapperClass, comWrapperClass),
+InterfaceOleWrapper( aFactory, unoWrapperClass, comWrapperClass),
 m_currentId(1)
 
 {
@@ -1600,7 +1600,7 @@ static HRESULT mapCannotConvertException(const CannotConvertException &e, unsign
 // object. If a client asks the object for DISPID_VALUE and this
 // function returned VT_DISPATCH then the IDispatch of the same
 // object is being returned.
-// See InterfaceOleWrapper_Impl::Invoke, InterfaceOleWrapper_Impl::m_defaultValueType
+// See InterfaceOleWrapper::Invoke, InterfaceOleWrapper::m_defaultValueType
 VARTYPE getVarType( const Any& value)
 {
     VARTYPE ret= VT_EMPTY;

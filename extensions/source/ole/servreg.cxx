@@ -27,25 +27,25 @@ using namespace cppu;
 
 Reference<XInterface> SAL_CALL ConverterProvider_CreateInstance2(   const Reference<XMultiServiceFactory> & xSMgr)
 {
-    Reference<XInterface> xService = *new OleConverter_Impl2( xSMgr);
+    Reference<XInterface> xService = *new OleConverter( xSMgr);
     return xService;
 }
 
 Reference<XInterface> SAL_CALL ConverterProvider_CreateInstanceVar1(    const Reference<XMultiServiceFactory> & xSMgr)
 {
-    Reference<XInterface> xService = *new OleConverter_Impl2( xSMgr, UNO_OBJECT_WRAPPER_REMOTE_OPT, IUNKNOWN_WRAPPER_IMPL);
+    Reference<XInterface> xService = *new OleConverter( xSMgr, UNO_OBJECT_WRAPPER_REMOTE_OPT, IUNKNOWN_WRAPPER_IMPL);
     return xService;
 }
 
 Reference<XInterface> SAL_CALL OleClient_CreateInstance( const Reference<XMultiServiceFactory> & xSMgr)
 {
-    Reference<XInterface> xService = *new OleClient_Impl( xSMgr);
+    Reference<XInterface> xService = *new OleClient( xSMgr);
     return xService;
 }
 
 Reference<XInterface> SAL_CALL OleServer_CreateInstance( const Reference<XMultiServiceFactory> & xSMgr)
 {
-    Reference<XInterface > xService = *new OleServer_Impl(xSMgr);
+    Reference<XInterface > xService = *new OleServer(xSMgr);
     return xService;
 }
 

@@ -44,7 +44,7 @@ Reference<XInterface> SAL_CALL OleServer_CreateInstance( const Reference<XMultiS
     IClassFactoryWrapper
 
     Specify abstract helper methods on class factories, which provide
-    UNO objects. These methods are used by objects of class OleServer_Impl,
+    UNO objects. These methods are used by objects of class OleServer,
     to handle the OLE registration of different class factories.
 
 *****************************************************************************/
@@ -62,7 +62,7 @@ protected:
 
 /*****************************************************************************
 
-    ProviderOleWrapper_Impl
+    ProviderOleWrapper
 
     Provides an UNO service provider as OLE class factory. Handle the
     OLE registration by overriding the abstract methods from
@@ -74,13 +74,13 @@ protected:
 
 *****************************************************************************/
 
-class ProviderOleWrapper_Impl : public IClassFactoryWrapper
+class ProviderOleWrapper : public IClassFactoryWrapper
 {
 public:
 
-    ProviderOleWrapper_Impl( const Reference<XMultiServiceFactory>& smgr,
-                             const Reference<XSingleServiceFactory>& xSFactory, GUID const * pGuid);
-    virtual ~ProviderOleWrapper_Impl();
+    ProviderOleWrapper( const Reference<XMultiServiceFactory>& smgr,
+                        const Reference<XSingleServiceFactory>& xSFactory, GUID const * pGuid);
+    virtual ~ProviderOleWrapper();
 
     bool registerClass() override;
     bool deregisterClass() override;
@@ -106,7 +106,7 @@ protected:
 
 /*****************************************************************************
 
-    OneInstanceOleWrapper_Impl
+    OneInstanceOleWrapper
 
     Provides an single UNO object as OLE object. Handle the
     OLE registration by overriding the abstract methods from
@@ -117,12 +117,12 @@ protected:
 
 *****************************************************************************/
 
-class OneInstanceOleWrapper_Impl : public IClassFactoryWrapper
+class OneInstanceOleWrapper : public IClassFactoryWrapper
 {
 public:
 
-    OneInstanceOleWrapper_Impl( const Reference<XMultiServiceFactory>& smgr, const Reference<XInterface>& xInst, GUID const * pGuid );
-    virtual ~OneInstanceOleWrapper_Impl();
+    OneInstanceOleWrapper( const Reference<XMultiServiceFactory>& smgr, const Reference<XInterface>& xInst, GUID const * pGuid );
+    virtual ~OneInstanceOleWrapper();
 
     bool registerClass() override;
     bool deregisterClass() override;
@@ -149,22 +149,21 @@ protected:
 // Implementation of the UNO service com.sun.star.bridge.OleBridgeSupplier2.
 
 // This class realizes the service com.sun.star.bridge.OleBridgeSupplier2 and
-// com.sun.star.bridge.OleBridgeSupplierVar1. The class implements XBridgeSupplier2
-// instead of XBridgeSuppplier as done by class OleConverter_Impl. The XBridgeSupplier2
+// com.sun.star.bridge.OleBridgeSupplierVar1. The class implements XBridgeSupplier2 which
 // interface does not need a Maschine Id in its createBridge function anymore,
 // If an UNO interface is to be converted then the member m_nUnoWrapperClass determines
-// what wrapper class is to be used. There are currently InterfaceOleWrapper_Impl and
+// what wrapper class is to be used. There are currently InterfaceOleWrapper and
 // UnoObjectWrapperRemoteOpt. The first is used for the OleBridgeSupplier2 and the
 // latter for OleBridgeSupplierVar1.
 // The m_nComWrapperClass specifies the class which is used as wrapper for COM interfaces.
-// Currently there is only one class available ( IUnknownWrapper_Impl).
-class OleConverter_Impl2 : public WeakImplHelper<XBridgeSupplier2, XInitialization, css::lang::XServiceInfo>,
-                            public UnoConversionUtilities<OleConverter_Impl2>
+// Currently there is only one class available (IUnknownWrapper).
+class OleConverter : public WeakImplHelper<XBridgeSupplier2, XInitialization, css::lang::XServiceInfo>,
+                            public UnoConversionUtilities<OleConverter>
 {
 public:
-    explicit OleConverter_Impl2( const Reference<XMultiServiceFactory>& smgr);
-    OleConverter_Impl2( const  Reference<XMultiServiceFactory>& smgr, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass );
-    virtual ~OleConverter_Impl2() override;
+    explicit OleConverter( const Reference<XMultiServiceFactory>& smgr);
+    OleConverter( const  Reference<XMultiServiceFactory>& smgr, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass );
+    virtual ~OleConverter() override;
 
     // XBridgeSupplier2 ---------------------------------------------------
 
@@ -191,12 +190,12 @@ protected:
 
 // Implementation of the UNO service com.sun.star.bridge.OleObjectFactory.
 
-class OleClient_Impl : public WeakImplHelper<XMultiServiceFactory, css::lang::XServiceInfo>,
-                       public UnoConversionUtilities<OleClient_Impl>
+class OleClient : public WeakImplHelper<XMultiServiceFactory, css::lang::XServiceInfo>,
+                  public UnoConversionUtilities<OleClient>
 {
 public:
-    explicit OleClient_Impl( const Reference<XMultiServiceFactory>& smgr);
-    ~OleClient_Impl() override;
+    explicit OleClient( const Reference<XMultiServiceFactory>& smgr);
+    ~OleClient() override;
 
     // XMultiServiceFactory
     Reference<XInterface> SAL_CALL createInstance(const OUString& ServiceSpecifier) override;
@@ -219,7 +218,7 @@ protected:
 
 /*****************************************************************************
 
-    OleServer_Impl
+    OleServer
 
     Implementation of the UNO service com.sun.star.bridge.OleApplicationRegistration.
     Register the calling application as OLE automation server for
@@ -228,11 +227,11 @@ protected:
 
 *****************************************************************************/
 
-class OleServer_Impl : public cppu::WeakImplHelper<css::lang::XServiceInfo>
+class OleServer : public cppu::WeakImplHelper<css::lang::XServiceInfo>
 {
 public:
-    explicit OleServer_Impl( const Reference<XMultiServiceFactory> &smgr);
-    ~OleServer_Impl() override;
+    explicit OleServer( const Reference<XMultiServiceFactory> &smgr);
+    ~OleServer() override;
 
     OUString SAL_CALL getImplementationName() override;
 
