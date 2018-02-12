@@ -19,7 +19,7 @@
 
 #include <string.h>
 #include <osl/thread.h>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <vcl/graph.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
@@ -223,7 +223,7 @@ private:
 
     sal_uLong ReadAndDrawText();
 
-    sal_uLong ReadPixMapEtc(Bitmap & rBitmap, bool bBaseAddr, bool bColorTable,
+    sal_uLong ReadPixMapEtc(BitmapEx & rBitmap, bool bBaseAddr, bool bColorTable,
                         tools::Rectangle * pSrcRect, tools::Rectangle * pDestRect,
                         bool bMode, bool bMaskRgn);
 
@@ -259,52 +259,45 @@ public:
 
 };
 
-static void SetByte(sal_uInt16& nx, Scanline pScanline, BitmapWriteAccess* pAcc, sal_uInt16 nPixelSize, sal_uInt8 nDat, sal_uInt16 nWidth)
+static void SetByte(sal_uInt16& nx, sal_uInt16 ny, vcl::bitmap::RawBitmap& rBitmap, sal_uInt16 nPixelSize, sal_uInt8 nDat, sal_uInt16 nWidth, std::vector<Color> const & rvPalette)
 {
     switch (nPixelSize)
     {
         case 1:
-            pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(nDat >> 7));
+            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat >> 7) & 1]);
             if ( nx == nWidth ) break;
-            pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(nDat >> 6));
+            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat >> 6) & 1]);
             if ( nx == nWidth ) break;
-            pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(nDat >> 5));
+            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat >> 5) & 1]);
             if ( nx == nWidth ) break;
-            pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(nDat >> 4));
+            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat >> 4) & 1]);
             if ( nx == nWidth ) break;
-            pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(nDat >> 3));
+            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat >> 3) & 1]);
             if ( nx == nWidth ) break;
-            pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(nDat >> 2));
+            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat >> 2) & 1]);
             if ( nx == nWidth ) break;
-            pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(nDat >> 1));
+            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat >> 1) & 1]);
             if ( nx == nWidth ) break;
-            pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(nDat));
+            rBitmap.SetPixel(ny, nx++, rvPalette[nDat & 1]);
             break;
         case 2:
-            pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(nDat >> 6));
+            rBitmap.SetPixel(ny, nx++, rvPalette[nDat >> 6]);
             if ( nx == nWidth ) break;
-            pAcc->SetPixelOnData(pScanline, nx++, BitmapColor((nDat>>4)&3));
+            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat>>4)&3]);
             if ( nx == nWidth ) break;
-            pAcc->SetPixelOnData(pScanline, nx++, BitmapColor((nDat>>2)&3));
+            rBitmap.SetPixel(ny, nx++, rvPalette[(nDat>>2)&3]);
             if ( nx == nWidth ) break;
-            pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(nDat & 3));
+            rBitmap.SetPixel(ny, nx++, rvPalette[nDat & 3]);
             break;
         case 4:
-            pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(nDat >> 4));
+            rBitmap.SetPixel(ny, nx++, rvPalette[nDat >> 4]);
             if ( nx == nWidth ) break;
-            pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(nDat));
+            rBitmap.SetPixel(ny, nx++, rvPalette[nDat & 0x0f]);
             break;
         case 8:
-            pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(nDat));
+            rBitmap.SetPixel(ny, nx++, rvPalette[nDat]);
             break;
     }
-}
-
-#define BITMAPERROR                                     \
-{                                                       \
-    if ( pAcc )                                         \
-        Bitmap::ReleaseAccess( pAcc );                  \
-    return 0xffffffff;                                  \
 }
 
 //=================== methods of PictReader ==============================
@@ -490,7 +483,7 @@ sal_uLong PictReader::ReadPixPattern(PictReader::Pattern &pattern)
 
     sal_uLong nDataSize;
     sal_uInt16 nPatType;
-    Bitmap aBMP;
+    BitmapEx aBMP;
 
     pPict->ReadUInt16( nPatType );
     if (nPatType==1) {
@@ -709,23 +702,10 @@ sal_uLong PictReader::ReadAndDrawText()
     return nDataLen;
 }
 
-namespace
-{
-    BitmapWriteAccess* initBitmap(Bitmap &rBitmap, sal_uInt16 nWidth, sal_uInt16 nHeight, sal_uInt16 nDstBitCount, const BitmapPalette &rPalette)
-    {
-        rBitmap = Bitmap(Size(nWidth, nHeight), nDstBitCount);
-        BitmapWriteAccess* pAcc = rBitmap.AcquireWriteAccess();
-        if (!pAcc)
-            return nullptr;
-        pAcc->SetPalette(rPalette);
-        return pAcc;
-    }
-}
-
-sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColorTable, tools::Rectangle* pSrcRect,
+sal_uLong PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bColorTable, tools::Rectangle* pSrcRect,
                                     tools::Rectangle* pDestRect, bool bMode, bool bMaskRgn )
 {
-    Bitmap     aBitmap;
+    std::unique_ptr<vcl::bitmap::RawBitmap> pBitmap;
     sal_uInt16 nPackType(0), nPixelSize(0), nCmpCount(0), nCmpSize(0);
     sal_uInt8  nDat(0), nRed(0), nGreen(0), nBlue(0);
 
@@ -754,7 +734,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         return 0xffffffff;
     sal_uInt16 nDstBitCount = 1;
 
-    BitmapPalette aPalette;
+    std::vector<Color> aPalette;
     const bool bNotMonoChrome = (nRowBytes & 0x8000) != 0;
     if (bNotMonoChrome)
     {   // it is a PixMap
@@ -786,14 +766,14 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
 
             ++nColTabSize;
 
-            aPalette = BitmapPalette(nColTabSize);
+            aPalette.resize(nColTabSize);
 
             for (size_t i = 0; i < nColTabSize; ++i)
             {
                 pPict->SeekRel(2);
                 sal_uInt8 nDummy;
                 pPict->ReadUChar( nRed ).ReadUChar( nDummy ).ReadUChar( nGreen ).ReadUChar( nDummy ).ReadUChar( nBlue ).ReadUChar( nDummy );
-                aPalette[i] = BitmapColor(nRed, nGreen, nBlue);
+                aPalette[i] = Color(nRed, nGreen, nBlue);
             }
 
             nDataSize += 8 + nColTabSize * 8;
@@ -804,9 +784,9 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         nRowBytes &= 0x3fff;
         nPixelSize = nCmpCount = nCmpSize = 1;
         nDataSize += 10;
-        aPalette = BitmapPalette(2);
-        aPalette[0] = BitmapColor(0xff, 0xff, 0xff);
-        aPalette[1] = BitmapColor(0, 0, 0);
+        aPalette.resize(2);
+        aPalette[0] = Color(0xff, 0xff, 0xff);
+        aPalette[1] = Color(0, 0, 0);
     }
 
     // conditionally read source rectangle:
@@ -844,8 +824,6 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         nDataSize += static_cast<sal_uLong>(nSize);
     }
 
-    BitmapWriteAccess*  pAcc = nullptr;
-
     // read and write Bitmap bits:
     if ( nPixelSize == 1 || nPixelSize == 2 || nPixelSize == 4 || nPixelSize == 8 )
     {
@@ -872,12 +850,10 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                 return 0xffffffff;
         }
 
-        if ( ( pAcc = initBitmap(aBitmap, nWidth, nHeight, nDstBitCount, aPalette) ) == nullptr )
-            return 0xffffffff;
+        pBitmap.reset(new vcl::bitmap::RawBitmap( Size(nWidth, nHeight) ));
 
         for (sal_uInt16 ny = 0; ny < nHeight; ++ny)
         {
-            Scanline pScanline = pAcc->GetScanline(ny);
             sal_uInt16 nx = 0;
             if ( nRowBytes < 8 || nPackType == 1 )
             {
@@ -885,7 +861,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                 {
                     pPict->ReadUChar( nDat );
                     if ( nx < nWidth )
-                        SetByte(nx, pScanline, pAcc, nPixelSize, nDat, nWidth);
+                        SetByte(nx, ny, *pBitmap, nPixelSize, nDat, nWidth, aPalette);
                 }
                 nDataSize += nRowBytes;
             }
@@ -916,7 +892,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                         {
                             pPict->ReadUChar( nDat );
                             if ( nx < nWidth )
-                                SetByte(nx, pScanline, pAcc, nPixelSize, nDat, nWidth);
+                                SetByte(nx, ny, *pBitmap, nPixelSize, nDat, nWidth, aPalette);
                         }
                         nByteCount -= 1 + nCount;
                     }
@@ -927,7 +903,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                         for (size_t i = 0; i < nCount; ++i)
                         {
                             if ( nx < nWidth )
-                                SetByte(nx, pScanline, pAcc, nPixelSize, nDat, nWidth);
+                                SetByte(nx, ny, *pBitmap, nPixelSize, nDat, nWidth, aPalette);
                         }
                         nByteCount -= 2;
                     }
@@ -956,12 +932,10 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                 return 0xffffffff;
         }
 
-        if ( ( pAcc = initBitmap(aBitmap, nWidth, nHeight, nDstBitCount, aPalette) ) == nullptr )
-            return 0xffffffff;
+        pBitmap.reset(new vcl::bitmap::RawBitmap( Size(nWidth, nHeight) ));
 
         for (sal_uInt16 ny = 0; ny < nHeight; ++ny)
         {
-            Scanline pScanline = pAcc->GetScanline( ny );
             sal_uInt16 nx = 0;
             if ( nRowBytes < 8 || nPackType == 1 )
             {
@@ -971,7 +945,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                     nRed = static_cast<sal_uInt8>( nD >> 7 );
                     nGreen = static_cast<sal_uInt8>( nD >> 2 );
                     nBlue = static_cast<sal_uInt8>( nD << 3 );
-                    pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(nRed, nGreen, nBlue));
+                    pBitmap->SetPixel(ny, nx++, Color(nRed, nGreen, nBlue));
                 }
                 nDataSize += static_cast<sal_uLong>(nWidth) * 2;
             }
@@ -998,7 +972,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                         if ( nCount + nx > nWidth)
                             nCount = nWidth - nx;
                         if (pPict->remainingSize() < sizeof(sal_uInt16) * nCount)
-                            BITMAPERROR;
+                            return 0xffffffff;
                         /* SJ: the RLE decoding seems not to be correct here,
                            I don't want to change this until I have a bugdoc for
                            this case. Have a look at 32bit, there I changed the
@@ -1010,13 +984,13 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                             nRed = static_cast<sal_uInt8>( nD >> 7 );
                             nGreen = static_cast<sal_uInt8>( nD >> 2 );
                             nBlue = static_cast<sal_uInt8>( nD << 3 );
-                            pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(nRed, nGreen, nBlue));
+                            pBitmap->SetPixel(ny, nx++, Color(nRed, nGreen, nBlue));
                         }
                     }
                     else
                     {
                         if (pPict->remainingSize() < sizeof(sal_uInt16))
-                            BITMAPERROR;
+                            return 0xffffffff;
                         nCount=(1-sal_Int16(static_cast<sal_uInt16>(nFlagCounterByte)|0xff00));
                         if ( nCount + nx > nWidth )
                             nCount = nWidth - nx;
@@ -1026,7 +1000,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                         nBlue = static_cast<sal_uInt8>( nD << 3 );
                         for (size_t i = 0; i < nCount; ++i)
                         {
-                            pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(nRed, nGreen, nBlue));
+                            pBitmap->SetPixel(ny, nx++, Color(nRed, nGreen, nBlue));
                         }
                     }
                 }
@@ -1040,7 +1014,6 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         sal_uInt16          nByteCount;
         size_t              nCount;
         sal_uLong           nSrcBitsPos;
-        BitmapColor         aBitmapColor;
         if ( nRowBytes != 4*nWidth )
             return 0xffffffff;
 
@@ -1054,17 +1027,15 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
             if (nWidth > nMaxCols)
                 return 0xffffffff;
 
-            if ( ( pAcc = initBitmap(aBitmap, nWidth, nHeight, nDstBitCount, aPalette) ) == nullptr )
-                return 0xffffffff;
+            pBitmap.reset(new vcl::bitmap::RawBitmap( Size(nWidth, nHeight) ));
 
             for (sal_uInt16 ny = 0; ny < nHeight; ++ny)
             {
-                Scanline pScanline = pAcc->GetScanline(ny);
                 for (sal_uInt16 nx = 0; nx < nWidth; ++nx)
                 {
                     sal_uInt8 nDummy;
                     pPict->ReadUChar( nDummy ).ReadUChar( nRed ).ReadUChar( nGreen ).ReadUChar( nBlue );
-                    pAcc->SetPixelOnData(pScanline, nx, BitmapColor(nRed, nGreen, nBlue));
+                    pBitmap->SetPixel(ny, nx, Color(nRed, nGreen, nBlue));
                 }
                 nDataSize += static_cast<sal_uLong>(nWidth) * 4;
             }
@@ -1079,16 +1050,14 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
             if (nWidth > nMaxCols)
                 return 0xffffffff;
 
-            if ( ( pAcc = initBitmap(aBitmap, nWidth, nHeight, nDstBitCount, aPalette) ) == nullptr )
-                return 0xffffffff;
+            pBitmap.reset(new vcl::bitmap::RawBitmap( Size(nWidth, nHeight) ));
 
             for (sal_uInt16 ny = 0; ny < nHeight; ++ny)
             {
-                Scanline pScanline = pAcc->GetScanline(ny);
                 for (sal_uInt16 nx = 0; nx < nWidth; ++nx)
                 {
                     pPict->ReadUChar( nRed ).ReadUChar( nGreen ).ReadUChar( nBlue );
-                    pAcc->SetPixelOnData(pScanline, nx, BitmapColor(nRed, nGreen, nBlue));
+                    pBitmap->SetPixel(ny, nx, Color(nRed, nGreen, nBlue));
                 }
                 nDataSize += static_cast<sal_uLong>(nWidth) * 3;
             }
@@ -1103,8 +1072,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                 if (nHeight > pPict->remainingSize() / nByteCountSize)
                     return 0xffffffff;
 
-                if ( ( pAcc = initBitmap(aBitmap, nWidth, nHeight, nDstBitCount, aPalette) ) == nullptr )
-                    return 0xffffffff;
+                pBitmap.reset(new vcl::bitmap::RawBitmap( Size(nWidth, nHeight) ));
 
                 size_t nByteWidth = static_cast<size_t>(nWidth) * nCmpCount;
                 std::vector<sal_uInt8> aScanline(nByteWidth);
@@ -1132,7 +1100,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                             if ((i + nCount) > nByteWidth)
                                 nCount = nByteWidth - i;
                             if (pPict->remainingSize() < nCount)
-                                BITMAPERROR;
+                                return 0xffffffff;
                             while( nCount-- )
                             {
                                 pPict->ReadUChar( nDat );
@@ -1142,7 +1110,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                         else
                         {
                             if (pPict->remainingSize() < 1)
-                                BITMAPERROR;
+                                return 0xffffffff;
                             nCount = ( 1 - sal_Int16( static_cast<sal_uInt16>(nFlagCounterByte) | 0xff00 ) );
                             if (( i + nCount) > nByteWidth)
                                 nCount = nByteWidth - i;
@@ -1154,9 +1122,8 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                     sal_uInt8* pTmp = aScanline.data();
                     if ( nCmpCount == 4 )
                         pTmp += nWidth;
-                    Scanline pScanline = pAcc->GetScanline(ny);
                     for (sal_uInt16 nx = 0; nx < nWidth; pTmp++)
-                        pAcc->SetPixelOnData(pScanline, nx++, BitmapColor(*pTmp, pTmp[ nWidth ], pTmp[ 2 * nWidth ]));
+                        pBitmap->SetPixel(ny, nx++, Color(*pTmp, pTmp[ nWidth ], pTmp[ 2 * nWidth ]));
                     nDataSize += static_cast<sal_uLong>(nByteCount);
                     pPict->Seek( nSrcBitsPos + static_cast<sal_uLong>(nByteCount) );
                 }
@@ -1165,9 +1132,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
     }
     else
         return 0xffffffff;
-    if (pAcc)
-        Bitmap::ReleaseAccess(pAcc);
-    rBitmap = aBitmap;
+    rBitmap = vcl::bitmap::CreateFromData(std::move(*pBitmap));
     return nDataSize;
 }
 
@@ -1820,19 +1785,19 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         break;
 
     case 0x0090: { // BitsRect
-        Bitmap aBmp;
+        BitmapEx aBmp;
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, false);
         DrawingMethod( PictDrawingMethod::PAINT );
-        pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
+        pVirDev->DrawBitmapEx(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
     case 0x0091: { // BitsRgn
-        Bitmap aBmp;
+        BitmapEx aBmp;
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, true);
         DrawingMethod( PictDrawingMethod::PAINT );
-        pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
+        pVirDev->DrawBitmapEx(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
     case 0x0092:   // Reserved (n Bytes)
@@ -1845,35 +1810,35 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         break;
 
     case 0x0098: { // PackBitsRect
-        Bitmap aBmp;
+        BitmapEx aBmp;
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, false);
         DrawingMethod( PictDrawingMethod::PAINT );
-        pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
+        pVirDev->DrawBitmapEx(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
     case 0x0099: { // PackBitsRgn
-        Bitmap aBmp;
+        BitmapEx aBmp;
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, true);
         DrawingMethod( PictDrawingMethod::PAINT );
-        pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
+        pVirDev->DrawBitmapEx(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
     case 0x009a: { // DirectBitsRect
-        Bitmap aBmp;
+        BitmapEx aBmp;
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, true, false, &aSrcRect, &aDestRect, true, false);
         DrawingMethod( PictDrawingMethod::PAINT );
-        pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
+        pVirDev->DrawBitmapEx(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
     case 0x009b: { // DirectBitsRgn
-        Bitmap aBmp;
+        BitmapEx aBmp;
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, true, false, &aSrcRect, &aDestRect, true, true);
         DrawingMethod( PictDrawingMethod::PAINT );
-        pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
+        pVirDev->DrawBitmapEx(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
     case 0x009c:   // Reserved (n Bytes)
