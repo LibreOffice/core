@@ -408,6 +408,18 @@ uno::Reference< drawing::XShape >
 }
 
 uno::Reference< drawing::XShape >
+        OpenglShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget
+                    , uno::Sequence< uno::Reference< chart2::XFormattedString > >& rFormattedString
+                    , const tNameSequence& rPropNames
+                    , const tAnySequence& rPropValues
+                    , const uno::Any& rATransformation )
+{
+    dummy::DummyText* pText = new dummy::DummyText( rFormattedString[0]->getString(), rPropNames, rPropValues,
+            rATransformation, xTarget, 0 );
+    return pText;
+}
+
+uno::Reference< drawing::XShape >
         OpenglShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget,
                 const awt::Size& , const awt::Point& rPos,
                 uno::Sequence< uno::Reference< chart2::XFormattedString > >& rFormattedString,

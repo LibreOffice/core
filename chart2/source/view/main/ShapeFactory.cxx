@@ -2266,6 +2266,100 @@ uno::Reference< drawing::XShape >
 }
 
 uno::Reference< drawing::XShape >
+    ShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget
+                , uno::Sequence< uno::Reference< chart2::XFormattedString > >& xFormattedString
+                , const tNameSequence& rPropNames
+                , const tAnySequence& rPropValues
+                , const uno::Any& rATransformation )
+{
+    if( !xTarget.is() )
+        return nullptr;
+
+    if( !xFormattedString.hasElements() )
+        return nullptr;
+
+    sal_Int32 nNumberOfParagraphs = xFormattedString.getLength();
+
+    bool bNotEmpty = false;
+    for( sal_Int32 nN = 0; nN < nNumberOfParagraphs; ++nN )
+    {
+        if( !xFormattedString[nN]->getString().isEmpty() )
+        {
+            bNotEmpty = true;
+            break;
+        }
+    }
+    if( !bNotEmpty )
+        return nullptr;
+
+    //create shape and add to page
+    uno::Reference< drawing::XShape > xShape(
+            m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.TextShape" ), uno::UNO_QUERY );
+    xTarget->add(xShape);
+
+    //set paragraph properties
+    bNotEmpty = false;
+    Reference< text::XText > xText( xShape, uno::UNO_QUERY );
+    if( xText.is() )
+    {
+        // the first cursor is used for appending the next paragraph,
+        // after a new string has been inserted the cursor is moved at the end
+        // of the inserted string
+        // the second cursor is used for selecting the paragraph and apply the
+        // passed text properties
+        Reference< text::XTextCursor > xInsertCursor = xText->createTextCursor();
+        Reference< text::XTextCursor > xSelectionCursor = xText->createTextCursor();
+        if( xInsertCursor.is() && xSelectionCursor.is() )
+        {
+            uno::Reference< beans::XPropertySet > xSelectionProp( xSelectionCursor, uno::UNO_QUERY );
+            if( xSelectionProp.is() )
+            {
+                for( sal_Int32 nN = 0; nN < nNumberOfParagraphs; ++nN )
+                {
+                    if( !xFormattedString[nN]->getString().isEmpty() )
+                    {
+                        xInsertCursor->gotoEnd( false );
+                        xSelectionCursor->gotoEnd( false );
+                        xText->insertString( xInsertCursor, xFormattedString[nN]->getString(), false );
+                        bNotEmpty = true;
+                        xSelectionCursor->gotoEnd( true ); // select current paragraph
+                        uno::Reference< beans::XPropertySet > xStringProperties( xFormattedString[nN], uno::UNO_QUERY );
+                        PropertyMapper::setMappedProperties( xSelectionProp, xStringProperties,
+                            PropertyMapper::getPropertyNameMapForTextShapeProperties() );
+                    }
+                }
+            }
+        }
+    }
+
+    if( !bNotEmpty )
+        return nullptr;
+
+    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
+    if( xProp.is() )
+    {
+        //set whole text shape properties
+        PropertyMapper::setMultiProperties( rPropNames, rPropValues, xProp );
+
+        if( rATransformation.hasValue() )
+        {
+            //set position matrix
+            //the matrix needs to be set at the end behind autogrow and such position influencing properties
+            try
+            {
+                xProp->setPropertyValue( "Transformation", rATransformation );
+            }
+            catch( const uno::Exception& e )
+            {
+                SAL_WARN("chart2", "Exception caught. " << e );
+            }
+        }
+    }
+    return xShape;
+}
+
+uno::Reference< drawing::XShape >
         ShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget,
                 const awt::Size& rSize,
                 const awt::Point& rPos,

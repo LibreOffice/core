@@ -60,6 +60,8 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
+#include <com/sun/star/chart2/DataPointCustomLabelField.hpp>
+#include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
@@ -2901,17 +2903,111 @@ const char* toOOXMLPlacement( sal_Int32 nPlacement )
     return "outEnd";
 }
 
-void writeLabelProperties(
-    const FSHelperPtr& pFS, const uno::Reference<beans::XPropertySet>& xPropSet, const LabelPlacementParam& rLabelParam )
+OUString getFieldTypeString( const chart2::DataPointCustomLabelFieldType aType )
+{
+    switch (aType)
+    {
+    case chart2::DataPointCustomLabelFieldType_CATEGORYNAME:
+        return OUString("CATEGORYNAME");
+
+    case chart2::DataPointCustomLabelFieldType_SERIESNAME:
+        return OUString("SERIESNAME");
+
+    case chart2::DataPointCustomLabelFieldType_VALUE:
+        return OUString("VALUE");
+
+    case chart2::DataPointCustomLabelFieldType_CELLREF:
+        return OUString("CELLREF");
+
+    default:
+        break;
+    }
+    return OUString();
+}
+
+void writeRunProperties( ChartExport* pChartExport, Reference<XPropertySet>& xPropertySet )
+{
+    bool bDummy = false;
+    sal_Int32 nDummy;
+    pChartExport->WriteRunProperties(xPropertySet, false, XML_rPr, true, bDummy, nDummy);
+}
+
+void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
+                       const Sequence<Reference<chart2::XDataPointCustomLabelField>>& rCustomLabelFields )
+{
+    pFS->startElement(FSNS(XML_c, XML_tx), FSEND);
+    pFS->startElement(FSNS(XML_c, XML_rich), FSEND);
+
+    // TODO: body properties?
+    pFS->singleElement(FSNS(XML_a, XML_bodyPr), FSEND);
+
+    OUString sFieldType;
+    bool bNewParagraph;
+    pFS->startElement(FSNS(XML_a, XML_p), FSEND);
+
+    for (auto& rField : rCustomLabelFields)
+    {
+        Reference<XPropertySet> xPropertySet(rField, UNO_QUERY);
+        chart2::DataPointCustomLabelFieldType aType = rField->getFieldType();
+        sFieldType.clear();
+        bNewParagraph = false;
+
+        if (aType == chart2::DataPointCustomLabelFieldType_NEWLINE)
+            bNewParagraph = true;
+        else if (aType != chart2::DataPointCustomLabelFieldType_TEXT)
+            sFieldType = getFieldTypeString(aType);
+
+        if (bNewParagraph)
+        {
+            pFS->endElement(FSNS(XML_a, XML_p));
+            pFS->startElement(FSNS(XML_a, XML_p), FSEND);
+            continue;
+        }
+
+        if (sFieldType.isEmpty())
+        {
+            // Normal text run
+            pFS->startElement(FSNS(XML_a, XML_r), FSEND);
+            writeRunProperties(pChartExport, xPropertySet);
+
+            pFS->startElement(FSNS(XML_a, XML_t), FSEND);
+            pFS->writeEscaped(rField->getString());
+            pFS->endElement(FSNS(XML_a, XML_t));
+
+            pFS->endElement(FSNS(XML_a, XML_r));
+        }
+        else
+        {
+            // Field
+            pFS->startElement(FSNS(XML_a, XML_fld), XML_id, USS(rField->getGuid()), XML_type, USS(sFieldType), FSEND);
+            writeRunProperties(pChartExport, xPropertySet);
+
+            pFS->startElement(FSNS(XML_a, XML_t), FSEND);
+            pFS->writeEscaped(rField->getString());
+            pFS->endElement(FSNS(XML_a, XML_t));
+
+            pFS->endElement(FSNS(XML_a, XML_fld));
+        }
+    }
+
+    pFS->endElement(FSNS(XML_a, XML_p));
+    pFS->endElement(FSNS(XML_c, XML_rich));
+    pFS->endElement(FSNS(XML_c, XML_tx));
+}
+
+void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
+    const uno::Reference<beans::XPropertySet>& xPropSet, const LabelPlacementParam& rLabelParam )
 {
     if (!xPropSet.is())
         return;
 
     chart2::DataPointLabel aLabel;
+    Sequence<Reference<chart2::XDataPointCustomLabelField>> aCustomLabelFields;
     sal_Int32 nLabelBorderWidth = 0;
     sal_Int32 nLabelBorderColor = 0x00FFFFFF;
 
     xPropSet->getPropertyValue("Label") >>= aLabel;
+    xPropSet->getPropertyValue("CustomLabelFields") >>= aCustomLabelFields;
     xPropSet->getPropertyValue("LabelBorderWidth") >>= nLabelBorderWidth;
     xPropSet->getPropertyValue("LabelBorderColor") >>= nLabelBorderColor;
 
@@ -2931,6 +3027,9 @@ void writeLabelProperties(
         pFS->endElement(FSNS(XML_a, XML_ln));
         pFS->endElement(FSNS(XML_c, XML_spPr));
     }
+
+    if (aCustomLabelFields.getLength() > 0)
+        writeCustomLabel(pFS, pChartExport, aCustomLabelFields);
 
     if (rLabelParam.mbExport)
     {
@@ -3045,12 +3144,12 @@ void ChartExport::exportDataLabels(
         // Individual label property that overwrites the baseline.
         pFS->startElement(FSNS(XML_c, XML_dLbl), FSEND);
         pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, I32S(nIdx), FSEND);
-        writeLabelProperties(pFS, xLabelPropSet, aParam);
+        writeLabelProperties(pFS, this, xLabelPropSet, aParam);
         pFS->endElement(FSNS(XML_c, XML_dLbl));
     }
 
     // Baseline label properties for all labels.
-    writeLabelProperties(pFS, xPropSet, aParam);
+    writeLabelProperties(pFS, this, xPropSet, aParam);
 
     pFS->singleElement(FSNS(XML_c, XML_showLeaderLines),
             XML_val, "0",
