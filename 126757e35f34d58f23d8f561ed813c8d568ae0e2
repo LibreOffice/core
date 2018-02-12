@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa31d9ce_27107001",
+        "filename": "sc/inc/orcusfilters.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-02-12T21:42:23Z",
+      "side": 1,
+      "message": "That should be fine. If I need it I can easily add it back.",
+      "revId": "126757e35f34d58f23d8f561ed813c8d568ae0e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_a44ba558",
         "filename": "sc/source/core/tool/interpr3.cxx",
         "patchSetId": 1
