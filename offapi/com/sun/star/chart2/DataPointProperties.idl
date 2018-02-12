@@ -31,6 +31,7 @@
 #include <com/sun/star/drawing/RectanglePoint.idl>
 #include <com/sun/star/chart2/DataPointLabel.idl>
 #include <com/sun/star/chart2/Symbol.idl>
+#include <com/sun/star/chart2/XFormattedString2.idl>
 
 module com
 {
@@ -257,6 +258,13 @@ service DataPointProperties
     [optional, property] long                         Geometry3D;
 
     [property] DataPointLabel                         Label;
+
+    /** specifies a text with possible fields that is used as a data point label,
+        if set then Label property is ignored
+
+        @since LibreOffice 6.1
+    */
+    [optional, property] sequence<XDataPointCustomLabelField>  CustomLabelFields;
 
     /** specifies a string that is used to separate the parts of a data label (caption)
      */

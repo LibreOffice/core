@@ -26,6 +26,8 @@
 #include <ModifyListenerHelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/XFormattedString2.hpp>
+#include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
+#include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -35,7 +37,7 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakImplHelper<
-    css::chart2::XFormattedString2,
+    css::chart2::XDataPointCustomLabelField, // inherits from XFormattedString2
     css::lang::XServiceInfo,
     css::util::XCloneable,
     css::util::XModifyBroadcaster,
@@ -82,6 +84,12 @@ private:
     virtual OUString SAL_CALL getString() override;
     virtual void SAL_CALL setString( const OUString& String ) override;
 
+    // ____ XDataPointCustomLabelField ____
+    virtual css::chart2::DataPointCustomLabelFieldType SAL_CALL getFieldType() override;
+    virtual void SAL_CALL setFieldType( const css::chart2::DataPointCustomLabelFieldType FieldType ) override;
+    virtual OUString SAL_CALL getGuid() override;
+    void SAL_CALL setGuid( const OUString& guid ) override;
+
     // ____ OPropertySet ____
     virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const override;
 
@@ -115,7 +123,13 @@ private:
 
     void fireModifyEvent();
 
+private:
+    // ____ XFormattedString ____
     OUString m_aString;
+
+    // ____ XDataPointCustomLabelField ____
+    css::chart2::DataPointCustomLabelFieldType m_aType;
+    OUString m_aGuid;
 
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
 };
