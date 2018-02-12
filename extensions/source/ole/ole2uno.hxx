@@ -20,11 +20,6 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_OLE2UNO_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_OLE_OLE2UNO_HXX
 
-
-#ifdef _MSC_VER
-#pragma once
-#endif
-
 #include "wincrap.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
