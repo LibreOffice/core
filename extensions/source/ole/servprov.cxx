@@ -488,12 +488,12 @@ css::uno::Sequence<OUString> OleServer::getSupportedServiceNames()
 
 bool OleServer::provideInstance(const Reference<XInterface>& xInst, GUID const * guid)
 {
-    IClassFactoryWrapper* pFac = new OneInstanceOleWrapper( m_smgr, xInst );
+    OneInstanceOleWrapper* pWrapper = new OneInstanceOleWrapper( m_smgr, xInst );
 
-    pFac->AddRef();
-    m_wrapperList.push_back(pFac);
+    pWrapper->AddRef();
+    m_wrapperList.push_back(pWrapper);
 
-    return pFac->registerClass(guid);
+    return pWrapper->registerClass(guid);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
