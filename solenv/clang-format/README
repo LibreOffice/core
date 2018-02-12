@@ -7,8 +7,8 @@ Style enforcing code.
   - Built from source on openSUSE Leap 42.3
   - get <http://releases.llvm.org/5.0.0/llvm-5.0.0.src.tar.xz>
   - get <http://releases.llvm.org/5.0.0/cfe-5.0.0.src.tar.xz>  and extract this as tools/clang/ in the LLVM source code
-  - mkdir workdir; cd workdir; cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=$PWD/../instdir -DCMAKE_BUILD_TYPE=Release ..; make -j8 clang-format
-  - this produces a binary that is dynamically linked, but all LLVM/clang libs are linked in statically
+  - mkdir workdir; cd workdir; cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=$PWD/../instdir -DCMAKE_BUILD_TYPE=Release -DLLVM_BUILD_STATIC=true ..; make -j8 clang-format
+  - this produces a binary that is statically linked
 
 - macOS:
 
