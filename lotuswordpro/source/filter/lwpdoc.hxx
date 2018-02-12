@@ -191,7 +191,7 @@ inline LwpObjectID& LwpDocument::GetSocket()
 }
 inline LwpFoundry* LwpDocument::GetFoundry()
 {
-    return m_pFoundry;
+    return m_xOwnedFoundry.get();
 }
 inline LwpObjectID& LwpDocument::GetDivInfoID()
 {
