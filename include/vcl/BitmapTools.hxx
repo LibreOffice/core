@@ -39,6 +39,8 @@ public:
         mpData[ p++ ] = nColor.GetGreen();
         mpData[ p   ] = nColor.GetBlue();
     }
+    long Height() { return maSize.Height(); }
+    long Width() { return maSize.Width(); }
 };
 
 BitmapEx VCL_DLLPUBLIC loadFromName(const OUString& rFileName, const ImageLoadFlags eFlags = ImageLoadFlags::NONE);

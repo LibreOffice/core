@@ -42,6 +42,7 @@
 #include <vcl/wmf.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/BitmapTools.hxx>
 #include "viscache.hxx"
 
 // SvxItem-Mapping. Is needed to successfully include the SvxItem-Header
@@ -1111,164 +1112,160 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
         double fFocusX = rManager.GetPropertyValue( DFF_Prop_fillToRight, 0 ) / 65536.0;
         double fFocusY = rManager.GetPropertyValue( DFF_Prop_fillToBottom, 0 ) / 65536.0;
 
-        Bitmap aBitmap( aBitmapSizePixel, 24 );
-        BitmapWriteAccess* pAcc = aBitmap.AcquireWriteAccess();
-        if ( pAcc )
-        {
-            for ( long nY = 0; nY < aBitmapSizePixel.Height(); nY++ )
-            {
-                Scanline pScanline = pAcc->GetScanline(nY);
-                for ( long nX = 0; nX < aBitmapSizePixel.Width(); nX++ )
-                {
-                    double fX = static_cast< double >( nX ) / aBitmapSizePixel.Width();
-                    double fY = static_cast< double >( nY ) / aBitmapSizePixel.Height();
+        vcl::bitmap::RawBitmap aBitmap(aBitmapSizePixel);
 
-                    double fD, fDist;
-                    if ( fX < fFocusX )
+        for ( long nY = 0; nY < aBitmapSizePixel.Height(); nY++ )
+        {
+            for ( long nX = 0; nX < aBitmapSizePixel.Width(); nX++ )
+            {
+                double fX = static_cast< double >( nX ) / aBitmapSizePixel.Width();
+                double fY = static_cast< double >( nY ) / aBitmapSizePixel.Height();
+
+                double fD, fDist;
+                if ( fX < fFocusX )
+                {
+                    if ( fY < fFocusY )
                     {
-                        if ( fY < fFocusY )
+                        if ( fX > fY )
                         {
-                            if ( fX > fY )
-                            {
-                                fDist = fY;
-                                fD = fFocusY;
-                            }
-                            else
-                            {
-                                fDist = fX;
-                                fD = fFocusX;
-                            }
+                            fDist = fY;
+                            fD = fFocusY;
                         }
                         else
                         {
-                            if ( fX > ( 1 - fY ) )
-                            {
-                                fDist = 1 - fY;
-                                fD = 1 - fFocusY;
-                            }
-                            else
-                            {
-                                fDist = fX;
-                                fD = fFocusX;
-                            }
+                            fDist = fX;
+                            fD = fFocusX;
                         }
                     }
                     else
                     {
-                        if ( fY < fFocusY )
+                        if ( fX > ( 1 - fY ) )
                         {
-                            if ( ( 1 - fX ) > fY )
-                            {
-                                fDist = fY;
-                                fD = fFocusY;
-                            }
-                            else
-                            {
-                                fDist = 1 - fX;
-                                fD = 1 - fFocusX;
-                            }
+                            fDist = 1 - fY;
+                            fD = 1 - fFocusY;
                         }
                         else
                         {
-                            if ( ( 1 - fX ) > ( 1 - fY ) )
-                            {
-                                fDist = 1 - fY;
-                                fD = 1 - fFocusY;
-                            }
-                            else
-                            {
-                                fDist = 1 - fX;
-                                fD = 1 - fFocusX;
-                            }
+                            fDist = fX;
+                            fD = fFocusX;
                         }
                     }
-                    if ( fD != 0.0 )
-                        fDist /= fD;
-
-                    std::vector< ShadeColor >::const_iterator aIter( rShadeColors.begin() );
-                    double fA = 0.0;
-                    Color aColorA = aIter->aColor;
-                    double fB = 1.0;
-                    Color aColorB( aColorA );
-                    while ( aIter != rShadeColors.end() )
-                    {
-                        if ( aIter->fDist <= fDist )
-                        {
-                            if ( aIter->fDist >= fA )
-                            {
-                                fA = aIter->fDist;
-                                aColorA = aIter->aColor;
-                            }
-                        }
-                        if ( aIter->fDist > fDist )
-                        {
-                            if ( aIter->fDist <= fB )
-                            {
-                                fB = aIter->fDist;
-                                aColorB = aIter->aColor;
-                            }
-                        }
-                        ++aIter;
-                    }
-                    double fRed = aColorA.GetRed(), fGreen = aColorA.GetGreen(), fBlue = aColorA.GetBlue();
-                    double fD1 = fB - fA;
-                    if ( fD1 != 0.0 )
-                    {
-                        fRed   += ( ( ( fDist - fA ) * ( aColorB.GetRed() - aColorA.GetRed() ) ) / fD1 );       // + aQuantErrCurrScan[ nX ].fRed;
-                        fGreen += ( ( ( fDist - fA ) * ( aColorB.GetGreen() - aColorA.GetGreen() ) ) / fD1 );   // + aQuantErrCurrScan[ nX ].fGreen;
-                        fBlue  += ( ( ( fDist - fA ) * ( aColorB.GetBlue() - aColorA.GetBlue() ) ) / fD1 );     // + aQuantErrCurrScan[ nX ].fBlue;
-                    }
-                    sal_Int16 nRed   = static_cast< sal_Int16 >( fRed   + 0.5 );
-                    sal_Int16 nGreen = static_cast< sal_Int16 >( fGreen + 0.5 );
-                    sal_Int16 nBlue  = static_cast< sal_Int16 >( fBlue  + 0.5 );
-                    if ( nRed < 0 )
-                        nRed = 0;
-                    if ( nRed > 255 )
-                        nRed = 255;
-                    if ( nGreen < 0 )
-                        nGreen = 0;
-                    if ( nGreen > 255 )
-                        nGreen = 255;
-                    if ( nBlue < 0 )
-                        nBlue = 0;
-                    if ( nBlue > 255 )
-                        nBlue = 255;
-
-                    pAcc->SetPixelOnData(pScanline, nX, BitmapColor(static_cast<sal_Int8>(nRed), static_cast<sal_Int8>(nGreen), static_cast<sal_Int8>(nBlue)));
                 }
-            }
-            Bitmap::ReleaseAccess( pAcc );
-
-            if ( nFix16Angle )
-            {
-                bool bRotateWithShape = true;   // sal_True seems to be default
-                sal_uInt32 nPos = rIn.Tell();
-                if ( const_cast< SvxMSDffManager& >( rManager ).maShapeRecords.SeekToContent( rIn, DFF_msofbtUDefProp, SEEK_FROM_CURRENT_AND_RESTART ) )
+                else
                 {
-                    const_cast< SvxMSDffManager& >( rManager ).maShapeRecords.Current()->SeekToBegOfRecord( rIn );
-                    DffPropertyReader aSecPropSet( rManager );
-                    aSecPropSet.ReadPropSet( rIn, nullptr );
-                    sal_Int32 nSecFillProperties = aSecPropSet.GetPropertyValue( DFF_Prop_fNoFillHitTest, 0x200020 );
-                    bRotateWithShape = ( nSecFillProperties & 0x0020 );
+                    if ( fY < fFocusY )
+                    {
+                        if ( ( 1 - fX ) > fY )
+                        {
+                            fDist = fY;
+                            fD = fFocusY;
+                        }
+                        else
+                        {
+                            fDist = 1 - fX;
+                            fD = 1 - fFocusX;
+                        }
+                    }
+                    else
+                    {
+                        if ( ( 1 - fX ) > ( 1 - fY ) )
+                        {
+                            fDist = 1 - fY;
+                            fD = 1 - fFocusY;
+                        }
+                        else
+                        {
+                            fDist = 1 - fX;
+                            fD = 1 - fFocusX;
+                        }
+                    }
                 }
-                rIn.Seek( nPos );
-                if ( bRotateWithShape )
+                if ( fD != 0.0 )
+                    fDist /= fD;
+
+                std::vector< ShadeColor >::const_iterator aIter( rShadeColors.begin() );
+                double fA = 0.0;
+                Color aColorA = aIter->aColor;
+                double fB = 1.0;
+                Color aColorB( aColorA );
+                while ( aIter != rShadeColors.end() )
                 {
-                    aBitmap.Rotate( nFix16Angle / 10, rShadeColors[ 0 ].aColor );
-
-                    BmpMirrorFlags nMirrorFlags = BmpMirrorFlags::NONE;
-                    if ( rObjData.nSpFlags & ShapeFlag::FlipV )
-                        nMirrorFlags |= BmpMirrorFlags::Vertical;
-                    if ( rObjData.nSpFlags & ShapeFlag::FlipH )
-                        nMirrorFlags |= BmpMirrorFlags::Horizontal;
-                    if ( nMirrorFlags != BmpMirrorFlags::NONE )
-                        aBitmap.Mirror( nMirrorFlags );
+                    if ( aIter->fDist <= fDist )
+                    {
+                        if ( aIter->fDist >= fA )
+                        {
+                            fA = aIter->fDist;
+                            aColorA = aIter->aColor;
+                        }
+                    }
+                    if ( aIter->fDist > fDist )
+                    {
+                        if ( aIter->fDist <= fB )
+                        {
+                            fB = aIter->fDist;
+                            aColorB = aIter->aColor;
+                        }
+                    }
+                    ++aIter;
                 }
-            }
+                double fRed = aColorA.GetRed(), fGreen = aColorA.GetGreen(), fBlue = aColorA.GetBlue();
+                double fD1 = fB - fA;
+                if ( fD1 != 0.0 )
+                {
+                    fRed   += ( ( ( fDist - fA ) * ( aColorB.GetRed() - aColorA.GetRed() ) ) / fD1 );       // + aQuantErrCurrScan[ nX ].fRed;
+                    fGreen += ( ( ( fDist - fA ) * ( aColorB.GetGreen() - aColorA.GetGreen() ) ) / fD1 );   // + aQuantErrCurrScan[ nX ].fGreen;
+                    fBlue  += ( ( ( fDist - fA ) * ( aColorB.GetBlue() - aColorA.GetBlue() ) ) / fD1 );     // + aQuantErrCurrScan[ nX ].fBlue;
+                }
+                sal_Int16 nRed   = static_cast< sal_Int16 >( fRed   + 0.5 );
+                sal_Int16 nGreen = static_cast< sal_Int16 >( fGreen + 0.5 );
+                sal_Int16 nBlue  = static_cast< sal_Int16 >( fBlue  + 0.5 );
+                if ( nRed < 0 )
+                    nRed = 0;
+                if ( nRed > 255 )
+                    nRed = 255;
+                if ( nGreen < 0 )
+                    nGreen = 0;
+                if ( nGreen > 255 )
+                    nGreen = 255;
+                if ( nBlue < 0 )
+                    nBlue = 0;
+                if ( nBlue > 255 )
+                    nBlue = 255;
 
-            rSet.Put(XFillBmpTileItem(false));
-            rSet.Put(XFillBitmapItem(OUString(), Graphic(aBitmap)));
+                aBitmap.SetPixel(nY, nX, Color(static_cast<sal_Int8>(nRed), static_cast<sal_Int8>(nGreen), static_cast<sal_Int8>(nBlue)));
+            }
         }
+        BitmapEx aBitmapEx = vcl::bitmap::CreateFromData( std::move(aBitmap) );
+
+        if ( nFix16Angle )
+        {
+            bool bRotateWithShape = true;   // sal_True seems to be default
+            sal_uInt32 nPos = rIn.Tell();
+            if ( const_cast< SvxMSDffManager& >( rManager ).maShapeRecords.SeekToContent( rIn, DFF_msofbtUDefProp, SEEK_FROM_CURRENT_AND_RESTART ) )
+            {
+                const_cast< SvxMSDffManager& >( rManager ).maShapeRecords.Current()->SeekToBegOfRecord( rIn );
+                DffPropertyReader aSecPropSet( rManager );
+                aSecPropSet.ReadPropSet( rIn, nullptr );
+                sal_Int32 nSecFillProperties = aSecPropSet.GetPropertyValue( DFF_Prop_fNoFillHitTest, 0x200020 );
+                bRotateWithShape = ( nSecFillProperties & 0x0020 );
+            }
+            rIn.Seek( nPos );
+            if ( bRotateWithShape )
+            {
+                aBitmapEx.Rotate( nFix16Angle / 10, rShadeColors[ 0 ].aColor );
+
+                BmpMirrorFlags nMirrorFlags = BmpMirrorFlags::NONE;
+                if ( rObjData.nSpFlags & ShapeFlag::FlipV )
+                    nMirrorFlags |= BmpMirrorFlags::Vertical;
+                if ( rObjData.nSpFlags & ShapeFlag::FlipH )
+                    nMirrorFlags |= BmpMirrorFlags::Horizontal;
+                if ( nMirrorFlags != BmpMirrorFlags::NONE )
+                    aBitmapEx.Mirror( nMirrorFlags );
+            }
+        }
+
+        rSet.Put(XFillBmpTileItem(false));
+        rSet.Put(XFillBitmapItem(OUString(), Graphic(aBitmapEx)));
     }
 }
 
@@ -1370,16 +1367,14 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                                 aCol2 = rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillBackColor, 0 ), DFF_Prop_fillBackColor );
 
                             // Create a bitmap for the pattern with expected colors
-                            Bitmap aResult(Size(8, 8), 24);
+                            vcl::bitmap::RawBitmap aResult(Size(8, 8));
                             {
                                 Bitmap::ScopedReadAccess pRead(aBmp);
-                                Bitmap::ScopedWriteAccess pWrite(aResult);
 
-                                for (long y = 0; y < pWrite->Height(); ++y)
+                                for (long y = 0; y < aResult.Height(); ++y)
                                 {
-                                    Scanline pScanline = pWrite->GetScanline(y);
                                     Scanline pScanlineRead = pRead->GetScanline( y );
-                                    for (long x = 0; x < pWrite->Width(); ++x)
+                                    for (long x = 0; x < aResult.Width(); ++x)
                                     {
                                         Color aReadColor;
                                         if (pRead->HasPalette())
@@ -1388,13 +1383,13 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                                             aReadColor = pRead->GetPixelFromData(pScanlineRead, x).GetColor();
 
                                         if (aReadColor.GetColor() == 0)
-                                            pWrite->SetPixelOnData(pScanline, x, aCol2);
+                                            aResult.SetPixel(y, x, aCol2);
                                         else
-                                            pWrite->SetPixelOnData(pScanline, x, aCol1);
+                                            aResult.SetPixel(y, x, aCol1);
                                     }
                                 }
                             }
-                            aGraf = Graphic(aResult);
+                            aGraf = Graphic(vcl::bitmap::CreateFromData(std::move(aResult)));
                         }
 
                         rSet.Put(XFillBitmapItem(OUString(), aGraf));
