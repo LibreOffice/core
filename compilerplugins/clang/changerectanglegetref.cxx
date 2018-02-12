@@ -36,11 +36,12 @@ public:
     bool VisitCXXMemberCallExpr(CXXMemberCallExpr const* call);
 
 private:
-    bool ChangeAssignment(Stmt const* parent, std::string const& methodName);
+    bool ChangeAssignment(Stmt const* parent, std::string const& methodName,
+                          std::string const& setPrefix);
     bool ChangeBinaryOperator(BinaryOperator const* parent, CXXMemberCallExpr const* call,
-                              std::string const& methodName);
+                              std::string const& methodName, std::string const& setPrefix);
     bool ChangeUnaryOperator(UnaryOperator const* parent, CXXMemberCallExpr const* call,
-                             std::string const& methodName);
+                             std::string const& methodName, std::string const& setPrefix);
     std::string extractCode(SourceLocation startLoc, SourceLocation endLoc);
 };
 
@@ -60,14 +61,47 @@ bool ChangeRectangleGetRef::VisitCXXMemberCallExpr(CXXMemberCallExpr const* call
         return true;
     auto dc = loplugin::DeclCheck(func);
     std::string methodName;
+    std::string setPrefix;
     if (dc.Function("Top").Class("Rectangle").Namespace("tools").GlobalNamespace())
+    {
         methodName = "Top";
+        setPrefix = "Set";
+    }
     else if (dc.Function("Bottom").Class("Rectangle").Namespace("tools").GlobalNamespace())
+    {
         methodName = "Bottom";
+        setPrefix = "Set";
+    }
     else if (dc.Function("Left").Class("Rectangle").Namespace("tools").GlobalNamespace())
+    {
         methodName = "Left";
+        setPrefix = "Set";
+    }
     else if (dc.Function("Right").Class("Rectangle").Namespace("tools").GlobalNamespace())
+    {
         methodName = "Right";
+        setPrefix = "Set";
+    }
+    else if (dc.Function("X").Class("Point").GlobalNamespace())
+    {
+        methodName = "X";
+        setPrefix = "set";
+    }
+    else if (dc.Function("Y").Class("Point").GlobalNamespace())
+    {
+        methodName = "Y";
+        setPrefix = "set";
+    }
+    else if (dc.Function("Width").Class("Size").GlobalNamespace())
+    {
+        methodName = "Width";
+        setPrefix = "set";
+    }
+    else if (dc.Function("Height").Class("Size").GlobalNamespace())
+    {
+        methodName = "Height";
+        setPrefix = "set";
+    }
     else
         return true;
     if (!loplugin::TypeCheck(func->getReturnType()).LvalueReference())
@@ -78,7 +112,7 @@ bool ChangeRectangleGetRef::VisitCXXMemberCallExpr(CXXMemberCallExpr const* call
         return true;
     if (auto unaryOp = dyn_cast<UnaryOperator>(parent))
     {
-        if (!ChangeUnaryOperator(unaryOp, call, methodName))
+        if (!ChangeUnaryOperator(unaryOp, call, methodName, setPrefix))
             report(DiagnosticsEngine::Warning, "Could not fix this one1", call->getLocStart());
         return true;
     }
@@ -92,21 +126,22 @@ bool ChangeRectangleGetRef::VisitCXXMemberCallExpr(CXXMemberCallExpr const* call
     auto opcode = binaryOp->getOpcode();
     if (opcode == BO_Assign)
     {
-        if (!ChangeAssignment(parent, methodName))
+        if (!ChangeAssignment(parent, methodName, setPrefix))
             report(DiagnosticsEngine::Warning, "Could not fix this one4", call->getLocStart());
         return true;
     }
     if (opcode == BO_RemAssign || opcode == BO_AddAssign || opcode == BO_SubAssign
         || opcode == BO_MulAssign || opcode == BO_DivAssign)
     {
-        if (!ChangeBinaryOperator(binaryOp, call, methodName))
+        if (!ChangeBinaryOperator(binaryOp, call, methodName, setPrefix))
             report(DiagnosticsEngine::Warning, "Could not fix this one5", call->getLocStart());
         return true;
     }
     return true;
 }
 
-bool ChangeRectangleGetRef::ChangeAssignment(Stmt const* parent, std::string const& methodName)
+bool ChangeRectangleGetRef::ChangeAssignment(Stmt const* parent, std::string const& methodName,
+                                             std::string const& setPrefix)
 {
     // Look for expressions like
     //    aRect.Left() = ...;
@@ -124,7 +159,7 @@ bool ChangeRectangleGetRef::ChangeAssignment(Stmt const* parent, std::string con
     auto originalLength = callText.size();
 
     auto newText = std::regex_replace(callText, std::regex(methodName + "\\(\\) *="),
-                                      "Set" + methodName + "(");
+                                      setPrefix + methodName + "(");
     if (newText == callText)
         return false;
     newText += " )";
@@ -134,7 +169,8 @@ bool ChangeRectangleGetRef::ChangeAssignment(Stmt const* parent, std::string con
 
 bool ChangeRectangleGetRef::ChangeBinaryOperator(BinaryOperator const* binaryOp,
                                                  CXXMemberCallExpr const* call,
-                                                 std::string const& methodName)
+                                                 std::string const& methodName,
+                                                 std::string const& setPrefix)
 {
     // Look for expressions like
     //    aRect.Left() += ...;
@@ -182,14 +218,14 @@ bool ChangeRectangleGetRef::ChangeBinaryOperator(BinaryOperator const* binaryOp,
     auto implicitObjectText = extractCode(call->getImplicitObjectArgument()->getExprLoc(),
                                           call->getImplicitObjectArgument()->getExprLoc());
     auto newText = std::regex_replace(callText, std::regex(methodName + "\\(\\) *" + regexOpname),
-                                      "Set" + methodName + "( " + implicitObjectText + ".Get"
+                                      setPrefix + methodName + "( " + implicitObjectText + "."
                                           + methodName + "() " + replaceOpname + " ");
     if (newText == callText)
         return false;
     // sometimes we end up with duplicate spaces after the opname
-    newText = std::regex_replace(
-        newText, std::regex("Get" + methodName + "\\(\\) \\" + replaceOpname + "  "),
-        "Get" + methodName + "() " + replaceOpname + " ");
+    newText
+        = std::regex_replace(newText, std::regex(methodName + "\\(\\) \\" + replaceOpname + "  "),
+                             methodName + "() " + replaceOpname + " ");
     newText += " )";
 
     return replaceText(startLoc, originalLength, newText);
@@ -197,7 +233,8 @@ bool ChangeRectangleGetRef::ChangeBinaryOperator(BinaryOperator const* binaryOp,
 
 bool ChangeRectangleGetRef::ChangeUnaryOperator(UnaryOperator const* unaryOp,
                                                 CXXMemberCallExpr const* call,
-                                                std::string const& methodName)
+                                                std::string const& methodName,
+                                                std::string const& setPrefix)
 {
     // Look for expressions like
     //    aRect.Left()++;
@@ -238,16 +275,16 @@ bool ChangeRectangleGetRef::ChangeUnaryOperator(UnaryOperator const* unaryOp,
     {
         auto newText
             = std::regex_replace(callText, std::regex(methodName + "\\(\\) *" + regexOpname),
-                                 "Set" + methodName + "( " + replaceOpname + implicitObjectText
-                                     + ".Get" + methodName + "()");
+                                 setPrefix + methodName + "( " + replaceOpname + implicitObjectText
+                                     + "." + methodName + "()");
         return replaceText(startLoc, originalLength, newText);
     }
     else
     {
         auto newText
             = std::regex_replace(callText, std::regex(regexOpname + " *" + methodName + "\\(\\)"),
-                                 "Set" + methodName + "( " + replaceOpname + implicitObjectText
-                                     + ".Get" + methodName + "()");
+                                 setPrefix + methodName + "( " + replaceOpname + implicitObjectText
+                                     + "." + methodName + "()");
         return replaceText(startLoc, originalLength, newText);
     }
 }
