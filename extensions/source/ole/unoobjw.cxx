@@ -69,8 +69,6 @@ using namespace com::sun::star::reflection;
 extern "C" const GUID IID_IDispatchEx;
 #endif
 
-namespace ole_adapter
-{
 std::unordered_map<sal_uIntPtr, WeakReference<XInterface> > UnoObjToWrapperMap;
 static bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource);
 static bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource);
@@ -1604,7 +1602,5 @@ VARTYPE getVarType( const Any& value)
     }
     return ret;
 }
-
-} // end namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

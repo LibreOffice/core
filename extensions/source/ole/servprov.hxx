@@ -31,8 +31,6 @@ using namespace com::sun::star::bridge;
 using namespace cppu;
 using namespace std;
 
-namespace ole_adapter
-{
 /// @throws Exception
 Reference< XInterface> ConverterProvider_CreateInstance2(  const Reference<XMultiServiceFactory> & xSMgr);
 /// @throws Exception
@@ -253,7 +251,6 @@ protected:
     Reference<XMultiServiceFactory> m_smgr;
 };
 
-} // end namespace
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

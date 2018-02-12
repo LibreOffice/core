@@ -45,9 +45,6 @@ using namespace std;
 using namespace cppu;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::script;
-namespace ole_adapter
-{
-
 
 struct hash_IUnknown_Impl
 {
@@ -267,8 +264,6 @@ protected:
 
 
 };
-
-} // end namespace
 
 #endif
 

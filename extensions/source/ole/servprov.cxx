@@ -37,10 +37,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::bridge::ModelDependent;
 
-
-namespace ole_adapter
-{
-
 #include <initguid.h>
 
 // GUID used since 5.2 ( src569 m)
@@ -640,8 +636,5 @@ bool OleServer_Impl::provideInstance(const Reference<XInterface>& xInst, GUID co
 
     return pFac->registerClass();
 }
-
-
-} // end namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

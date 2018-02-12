@@ -53,9 +53,6 @@ using namespace com::sun::star::beans;
 using namespace osl;
 using namespace std;
 
-namespace ole_adapter
-{
-
 VARTYPE getVarType( const Any& val);
 /* creates a Type object for a given type name.
 
@@ -77,9 +74,6 @@ public:
 
 
 Mutex* getBridgeMutex();
-
-} // end namespace
-
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_OLE_OLE2UNO_HXX
 

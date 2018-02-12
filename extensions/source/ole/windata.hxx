@@ -41,8 +41,6 @@
 
 #include <osl/diagnose.h>
 
-namespace ole_adapter
-{
 //Wrapper for VARDESC
 class VarDesc
 {
@@ -195,9 +193,6 @@ public:
       return m_pTypeAttr;
    }
 };
-
-
-}
 
 #endif
 
