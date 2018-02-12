@@ -114,7 +114,7 @@ public:
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    // Abstract struct UnoConversionUtilities
+    // UnoConversionUtilities
     Reference< XInterface > createUnoWrapperInstance() override;
     Reference< XInterface > createComWrapperInstance() override;
 protected:
@@ -141,7 +141,7 @@ public:
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    // Abstract struct UnoConversionUtilities
+    // UnoConversionUtilities
     Reference< XInterface > createUnoWrapperInstance() override;
     Reference< XInterface > createComWrapperInstance() override;
 
