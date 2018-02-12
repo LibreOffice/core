@@ -1242,16 +1242,16 @@ void Shell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
         return;
 
     Size aTabBarSize;
-    aTabBarSize.Height() = GetViewFrame()->GetWindow().GetFont().GetFontHeight() + 4;
-    aTabBarSize.Width() = rSize.Width();
+    aTabBarSize.setHeight( GetViewFrame()->GetWindow().GetFont().GetFontHeight() + 4 );
+    aTabBarSize.setWidth( rSize.Width() );
 
     Size aSz( rSize );
     Size aScrollBarBoxSz( aScrollBarBox->GetSizePixel() );
-    aSz.Height() -= aScrollBarBoxSz.Height();
-    aSz.Height() -= aTabBarSize.Height();
+    aSz.setHeight( aSz.Height() - aScrollBarBoxSz.Height() );
+    aSz.setHeight( aSz.Height() - aTabBarSize.Height() );
 
     Size aOutSz( aSz );
-    aSz.Width() -= aScrollBarBoxSz.Width();
+    aSz.setWidth( aSz.Width() - aScrollBarBoxSz.Width() );
     aScrollBarBox->SetPosPixel( Point( rSize.Width() - aScrollBarBoxSz.Width(), rSize.Height() - aScrollBarBoxSz.Height() ) );
     aVScrollBar->SetPosSizePixel( Point( rPos.X()+aSz.Width(), rPos.Y() ), Size( aScrollBarBoxSz.Width(), aSz.Height() ) );
     aHScrollBar->SetPosSizePixel( Point( rPos.X(), rPos.Y()+aSz.Height() ), Size( aSz.Width(), aScrollBarBoxSz.Height() ) );

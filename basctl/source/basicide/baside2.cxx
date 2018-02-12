@@ -131,7 +131,7 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
     {
         aFont.SetWeight( WEIGHT_NORMAL );
         pPrinter->SetFont( aFont );
-        aPos.X() += pPrinter->GetTextWidth( rTitle );
+        aPos.setX( aPos.X() + pPrinter->GetTextWidth( rTitle ) );
 
         if( bOutput )
         {
@@ -810,8 +810,8 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     }
 
     Size aPaperSz = pPrinter->GetOutputSize();
-    aPaperSz.Width() -= (Print::nLeftMargin + Print::nRightMargin);
-    aPaperSz.Height() -= (Print::nTopMargin + Print::nBottomMargin);
+    aPaperSz.setWidth( aPaperSz.Width() - (Print::nLeftMargin + Print::nRightMargin) );
+    aPaperSz.setHeight( aPaperSz.Height() - (Print::nTopMargin + Print::nBottomMargin) );
 
     // nLinepPage is not correct if there's a line break
     sal_Int32 nLinespPage = aPaperSz.Height()/nLineHeight;
@@ -835,7 +835,7 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
             sal_Int32 nBeginIndex = nLine*nCharspLine;
             sal_Int32 nCopyCount = std::min<sal_Int32>(nCharspLine, aLine.getLength()-nBeginIndex);
             OUString aTmpLine = aLine.copy(nBeginIndex, nCopyCount);
-            aPos.Y() += nLineHeight;
+            aPos.setY( aPos.Y() + nLineHeight );
             if ( aPos.Y() > ( aPaperSz.Height() + Print::nTopMargin ) )
             {
                 nCurPage++;
@@ -845,7 +845,7 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
             if( nCurPage-1 == nPrintPage )
                 pPrinter->DrawText( aPos, aTmpLine );
         }
-        aPos.Y() += 10; // nParaSpace
+        aPos.setY( aPos.Y() + 10 ); // nParaSpace
     }
 
     pPrinter->SetFont( aOldFont );

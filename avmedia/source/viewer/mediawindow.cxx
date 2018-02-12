@@ -328,8 +328,8 @@ bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bo
                     {
                         const awt::Size aAwtSize( xPlayer->getPreferredPlayerWindowSize() );
 
-                        pPreferredSizePixel->Width() = aAwtSize.Width;
-                        pPreferredSizePixel->Height() = aAwtSize.Height;
+                        pPreferredSizePixel->setWidth( aAwtSize.Width );
+                        pPreferredSizePixel->setHeight( aAwtSize.Height );
                     }
                 }
             }

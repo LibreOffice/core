@@ -58,8 +58,8 @@ ObjectCatalog::ObjectCatalog (vcl::Window* pParent)
         Point aPos = rParent.OutputToScreenPixel(Point(0, 0));
         Size const aParentSize = rParent.GetSizePixel();
         Size const aSize = GetSizePixel();
-        aPos.X() += (aParentSize.Width() - aSize.Width()) / 2;
-        aPos.Y() += (aParentSize.Height() - aSize.Height()) / 2;
+        aPos.setX( aPos.X() + (aParentSize.Width() - aSize.Width()) / 2 );
+        aPos.setY( aPos.Y() + (aParentSize.Height() - aSize.Height()) / 2 );
         SetPosPixel(aPos);
     }
 
@@ -113,7 +113,7 @@ void ObjectCatalog::ArrangeWindows()
     else
     {
         Size aTitleSize = LogicToPixel(Size(3, 10), MapMode(MapUnit::MapAppFont));
-        aTitleSize.Width() = aSize.Width() - 2*aTitleSize.Width();
+        aTitleSize.setWidth( aSize.Width() - 2*aTitleSize.Width() );
         aTitle->SetPosPixel(LogicToPixel(Point(3, 3), MapMode(MapUnit::MapAppFont)));
         aTitle->SetSizePixel(aTitleSize);
         aTitle->Show();

@@ -92,7 +92,7 @@ void SvRTLInputBox::InitButtons( const Size& rDlgSize )
     aCancel->SetSizePixel( LogicToPixel( Size( 45, 15) ));
     Point aPos( rDlgSize.Width()-45-10, 5 );
     aOk->SetPosPixel( LogicToPixel( aPos ));
-    aPos.Y() += 16;
+    aPos.setY( aPos.Y() + 16 );
     aCancel->SetPosPixel( LogicToPixel( aPos ));
     aOk->SetClickHdl(LINK(this,SvRTLInputBox, OkHdl));
     aCancel->SetClickHdl(LINK(this,SvRTLInputBox,CancelHdl));
@@ -123,8 +123,8 @@ void SvRTLInputBox::PositionPrompt(const OUString& rPrompt,const Size& rDlgSize)
     aPromptText->SetPosPixel( LogicToPixel(Point(5,5)));
     aPromptText->SetText( aText_ );
     Size aSize( rDlgSize );
-    aSize.Width() -= 70;
-    aSize.Height() -= 50;
+    aSize.setWidth( aSize.Width() - 70 );
+    aSize.setHeight( aSize.Height() - 50 );
     aPromptText->SetSizePixel( LogicToPixel(aSize));
 }
 

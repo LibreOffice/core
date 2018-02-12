@@ -493,25 +493,25 @@ void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
 
                 // align with grid
                 Size aGridSize_(long(pDlgEdView->GetSnapGridWidthX()), long(pDlgEdView->GetSnapGridWidthY()));
-                aSize.Width()  -= aSize.Width()  % aGridSize_.Width();
-                aSize.Height() -= aSize.Height() % aGridSize_.Height();
+                aSize.setWidth( aSize.Width() - aSize.Width()  % aGridSize_.Width() );
+                aSize.setHeight( aSize.Height() - aSize.Height() % aGridSize_.Height() );
 
                 Point  aPos;
                 Size   aOutSize = rRenderContext.GetOutputSize();
-                aPos.X() = (aOutSize.Width()>>1)  -  (aSize.Width()>>1);
-                aPos.Y() = (aOutSize.Height()>>1) -  (aSize.Height()>>1);
+                aPos.setX( (aOutSize.Width()>>1)  -  (aSize.Width()>>1) );
+                aPos.setY( (aOutSize.Height()>>1) -  (aSize.Height()>>1) );
 
                 // align with grid
-                aPos.X() -= aPos.X() % aGridSize_.Width();
-                aPos.Y() -= aPos.Y() % aGridSize_.Height();
+                aPos.setX( aPos.X() - aPos.X() % aGridSize_.Width() );
+                aPos.setY( aPos.Y() - aPos.Y() % aGridSize_.Height() );
 
                 // don't put in the corner
                 Point aMinPos = rRenderContext.PixelToLogic( Point( 30, 20 ) );
                 if( (aPos.X() < aMinPos.X()) || (aPos.Y() < aMinPos.Y()) )
                 {
                     aPos = aMinPos;
-                    aPos.X() -= aPos.X() % aGridSize_.Width();
-                    aPos.Y() -= aPos.Y() % aGridSize_.Height();
+                    aPos.setX( aPos.X() - aPos.X() % aGridSize_.Width() );
+                    aPos.setY( aPos.Y() - aPos.Y() % aGridSize_.Height() );
                 }
 
                 // set dialog position and size
@@ -617,8 +617,8 @@ void DlgEditor::CreateDefaultObject()
         // set position and size
         Size aSize = rWindow.PixelToLogic( Size( 96, 24 ) );
         Point aPoint = pDlgEdForm->GetSnapRect().Center();
-        aPoint.X() -= aSize.Width() / 2;
-        aPoint.Y() -= aSize.Height() / 2;
+        aPoint.setX( aPoint.X() - aSize.Width() / 2 );
+        aPoint.setY( aPoint.Y() - aSize.Height() / 2 );
         pDlgEdObj->SetSnapRect( tools::Rectangle( aPoint, aSize ) );
 
         // set default property values
@@ -1156,8 +1156,8 @@ void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not wor
     pPrinter->SetFont( aFont );
 
     Size aPaperSz = pPrinter->GetOutputSize();
-    aPaperSz.Width() -= (Print::nLeftMargin + Print::nRightMargin);
-    aPaperSz.Height() -= (Print::nTopMargin + Print::nBottomMargin);
+    aPaperSz.setWidth( aPaperSz.Width() - (Print::nLeftMargin + Print::nRightMargin) );
+    aPaperSz.setHeight( aPaperSz.Height() - (Print::nTopMargin + Print::nBottomMargin) );
 
     lcl_PrintHeader( pPrinter, rTitle );
 
@@ -1173,21 +1173,21 @@ void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not wor
     Size aOutputSz;
     if( nBmpSzHeight * nScaleX <= nPaperSzHeight )
     {
-        aOutputSz.Width() = static_cast<long>(nBmpSzWidth * nScaleX);
-        aOutputSz.Height() = static_cast<long>(nBmpSzHeight * nScaleX);
+        aOutputSz.setWidth( static_cast<long>(nBmpSzWidth * nScaleX) );
+        aOutputSz.setHeight( static_cast<long>(nBmpSzHeight * nScaleX) );
     }
     else
     {
-        aOutputSz.Width() = static_cast<long>(nBmpSzWidth * nScaleY);
-        aOutputSz.Height() = static_cast<long>(nBmpSzHeight * nScaleY);
+        aOutputSz.setWidth( static_cast<long>(nBmpSzWidth * nScaleY) );
+        aOutputSz.setHeight( static_cast<long>(nBmpSzHeight * nScaleY) );
     }
 
     Point aPosOffs(
         (aPaperSz.Width() / 2) - (aOutputSz.Width() / 2),
         (aPaperSz.Height()/ 2) - (aOutputSz.Height() / 2));
 
-    aPosOffs.X() += Print::nLeftMargin;
-    aPosOffs.Y() += Print::nTopMargin;
+    aPosOffs.setX( aPosOffs.X() + Print::nLeftMargin );
+    aPosOffs.setY( aPosOffs.Y() + Print::nTopMargin );
 
     pPrinter->DrawBitmap( aPosOffs, aOutputSz, aDlg );
 
