@@ -189,8 +189,8 @@ protected:
     // This member determines what class is used to convert a UNO object
     // or struct to a COM object. It is passed along to the o2u_anyToVariant
     // function in the createBridge function implementation
-    sal_uInt8 m_nUnoWrapperClass;
-    sal_uInt8 m_nComWrapperClass;
+    const sal_uInt8 m_nUnoWrapperClass;
+    const sal_uInt8 m_nComWrapperClass;
 
     // The servicemanager is either a local smgr or remote when the service
     // com.sun.star.bridge.OleBridgeSupplierVar1 is used. This service can be
