@@ -24,7 +24,7 @@ See udkapi/com/sun/star/bridge/oleautomation/ApplicationRegistration.idl
 
 This is initialized in Desktop::Main() in Desktop::OpenClients_Impl()
 by creating the service "com.sun.star.bridge.OleApplicationRegistration",
-which is implemented by ole_adapter::OleServer_Impl.
+which is implemented by OleServer_Impl.
 
 See extensions/source/ole/
 

@@ -24,9 +24,6 @@
 
 using namespace std;
 
-namespace ole_adapter
-{
-
 void o2u_attachCurrentThread()
 {
     static osl::ThreadData oleThreadData;
@@ -43,7 +40,5 @@ void o2u_attachCurrentThread()
         oleThreadData.setData(reinterpret_cast<void*>(true));
     }
 }
-
-} // end namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,8 +23,6 @@
 #include "ole2uno.hxx"
 
 using namespace osl;
-namespace ole_adapter
-{
 
 struct MutexInit
 {
@@ -41,9 +39,6 @@ Mutex * getBridgeMutex()
     return rtl_Instance< Mutex, MutexInit, ::osl::MutexGuard,
         ::osl::GetGlobalMutex >::create(
             MutexInit(), ::osl::GetGlobalMutex());
-}
-
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

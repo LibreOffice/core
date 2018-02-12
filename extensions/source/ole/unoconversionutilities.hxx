@@ -59,8 +59,7 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::bridge::oleautomation;
-namespace ole_adapter
-{
+
 extern std::unordered_map<sal_uIntPtr, sal_uIntPtr> AdapterToWrapperMap;
 extern std::unordered_map<sal_uIntPtr, sal_uIntPtr> WrapperToAdapterMap;
 
@@ -2361,7 +2360,6 @@ inline void reduceRange( Any& any)
     }
 }
 
-} // end namespace
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,10 +46,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::bridge::oleautomation;
 
-namespace ole_adapter
-{
-
-
 typedef std::unordered_map<OUString, pair<DISPID, unsigned short>> DispIdMap;
 
 typedef std::unordered_multimap<OUString, unsigned int> TLBFuncIndexMap;
@@ -245,8 +241,6 @@ protected:
     bool m_bHasDfltMethod;
     bool m_bHasDfltProperty;
 };
-
-} // end namespace
 
 #endif
 
