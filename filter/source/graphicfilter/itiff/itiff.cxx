@@ -513,6 +513,10 @@ sal_uInt8* TIFFReader::getMapData(sal_uInt32 np)
 
 bool TIFFReader::ReadMap()
 {
+    //when fuzzing with a max len set, max decompress to 2000 times that limit
+    static size_t nMaxAllowedDecompression = [](const char* pEnv) { size_t nRet = pEnv ? std::atoi(pEnv) : 0; return nRet * 2000; }(std::getenv("FUZZ_MAX_INPUT_LEN"));
+    size_t nTotalDataRead = 0;
+
     if ( nCompression == 1 || nCompression == 32771 )
     {
         sal_uInt32 nStripBytesPerRow;
@@ -603,6 +607,9 @@ bool TIFFReader::ReadMap()
                 bDifferentToPrev |= !aResult.m_bBufferUnchanged;
                 if ( pTIFF->GetError() )
                     return false;
+                nTotalDataRead += nBytesPerRow;
+                if (nMaxAllowedDecompression && nTotalDataRead > nMaxAllowedDecompression)
+                    return false;
             }
             if (!bDifferentToPrev)
             {
@@ -645,6 +652,11 @@ bool TIFFReader::ReadMap()
                 if ( ( aLZWDecom.Decompress(getMapData(np), nBytesPerRow) != nBytesPerRow ) || pTIFF->GetError() )
                     return false;
             }
+
+            nTotalDataRead += nBytesPerRow;
+            if (nMaxAllowedDecompression && nTotalDataRead > nMaxAllowedDecompression)
+                return false;
+
             if ( !ConvertScanline( ny ) )
                 return false;
         }
