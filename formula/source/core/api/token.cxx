@@ -1224,7 +1224,7 @@ bool FormulaMissingContext::AddMissing( FormulaTokenArray *pNewArr, const Missin
                         // --- more complex cases ---
 
                     case ocOffset:
-                        // FIXME: rather tough.
+                        // FIXME: rather though
                         // if arg 3 (height) omitted, export arg1 (rows)
                         break;
                     default:
