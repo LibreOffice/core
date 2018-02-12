@@ -65,10 +65,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge::ModelDependent;
 using namespace com::sun::star::reflection;
 
-#ifndef _MSC_VER
-extern "C" const GUID IID_IDispatchEx;
-#endif
-
 std::unordered_map<sal_uIntPtr, WeakReference<XInterface> > UnoObjToWrapperMap;
 static bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource);
 static bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource);
