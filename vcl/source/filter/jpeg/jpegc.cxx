@@ -39,8 +39,6 @@ extern "C" {
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graphicfilter.hxx>
 
-#define WarningLimit 1000
-
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning (disable: 4324) /* disable to __declspec(align()) aligned warning */
@@ -72,6 +70,11 @@ extern "C" void outputMessage (j_common_ptr cinfo)
     SAL_WARN("vcl.filter", "failure reading JPEG: " << buffer);
 }
 
+static int GetWarningLimit()
+{
+    return utl::ConfigManager::IsFuzzing() ? 100 : 1000;
+}
+
 extern "C" void emitMessage (j_common_ptr cinfo, int msg_level)
 {
     if (msg_level < 0)
@@ -80,7 +83,7 @@ extern "C" void emitMessage (j_common_ptr cinfo, int msg_level)
         // reasonable limit (initially using ImageMagick's current limit of
         // 1000), then bail.
         // https://libjpeg-turbo.org/pmwiki/uploads/About/TwoIssueswiththeJPEGStandard.pdf
-        if (cinfo->err->num_warnings++ > WarningLimit)
+        if (++cinfo->err->num_warnings > GetWarningLimit())
             cinfo->err->error_exit(cinfo);
         else
             cinfo->err->output_message(cinfo);
