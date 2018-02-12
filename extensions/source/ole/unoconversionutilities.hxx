@@ -187,7 +187,7 @@ protected:
     Reference<XTypeConverter> getTypeConverter();
 
     // This member determines what class is used to convert a UNO object
-    // or struct to a COM object. It is passed along to the o2u_anyToVariant
+    // or struct to a COM object. It is passed along to the anyToVariant
     // function in the createBridge function implementation
     const sal_uInt8 m_nUnoWrapperClass;
     const sal_uInt8 m_nComWrapperClass;
