@@ -3987,7 +3987,7 @@ StackVar ScInterpreter::Interpret()
             nCurFmtType = SvNumFormatType::UNDEFINED;
         }
         else if (pTokenMatrixMap &&
-                 !(eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChoose) &&
+                 !FormulaCompiler::IsOpCodeJumpCommand( eOp ) &&
                 ((aTokenMatrixMapIter = pTokenMatrixMap->find( pCur)) !=
                  pTokenMatrixMap->end()) &&
                 (*aTokenMatrixMapIter).second->GetType() != svJumpMatrix)
@@ -4008,7 +4008,7 @@ StackVar ScInterpreter::Interpret()
             nFuncFmtType = SvNumFormatType::NUMBER;
             nFuncFmtIndex = 0;
 
-            if ( eOp == ocIf || eOp == ocChoose || eOp == ocIfError || eOp == ocIfNA )
+            if (FormulaCompiler::IsOpCodeJumpCommand( eOp ))
                 nStackBase = sp;        // don't mess around with the jumps
             else
             {
