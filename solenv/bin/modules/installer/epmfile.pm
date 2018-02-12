@@ -789,17 +789,6 @@ sub set_patch_state
 }
 
 #################################################
-# LD_PRELOAD string for Debian packages
-#################################################
-
-sub get_ld_preload_string
-{
-    my $getuidlibrary = $ENV{'WORKDIR'} . '/LinkTarget/Library/libgetuid.so';
-    if ( ! -e $getuidlibrary ) { installer::exiter::exit_program("File $getuidlibrary does not exist!", "get_ld_preload_string"); }
-    return 'LD_PRELOAD=' . $getuidlibrary;
-}
-
-#################################################
 # Calling epm to create the installation sets
 #################################################
 
@@ -818,11 +807,11 @@ sub call_epm
     my $outdirstring = "";
     if ( $installer::globals::epmoutpath ne "" ) { $outdirstring = " --output-dir $installer::globals::epmoutpath"; }
 
-    # Debian package build needs a LD_PRELOAD for correct rights
+    # Debian package build needs to be run with fakeroot for correct ownerships/permissions
 
-    my $ldpreloadstring = "";
+    my $fakerootstring = "";
 
-    if ( $installer::globals::debian ) { $ldpreloadstring = get_ld_preload_string($includepatharrayref) . " "; }
+    if ( $installer::globals::debian ) { $fakerootstring = "fakeroot "; }
 
     my $extraflags = "";
         if ($ENV{'EPM_FLAGS'}) { $extraflags = $ENV{'EPM_FLAGS'}; }
@@ -832,7 +821,7 @@ sub call_epm
     my $verboseflag = "-v";
     if ( ! $installer::globals::quiet ) { $verboseflag = "-v2"; };
 
-    my $systemcall = $ldpreloadstring . $epmname . " -f " . $packageformat . " " . $extraflags . " " . $localpackagename . " " . $epmlistfilename . $outdirstring . " " . $verboseflag . " " . " 2\>\&1 |";
+    my $systemcall = $fakerootstring . $epmname . " -f " . $packageformat . " " . $extraflags . " " . $localpackagename . " " . $epmlistfilename . $outdirstring . " " . $verboseflag . " " . " 2\>\&1 |";
 
     installer::logger::print_message( "... $systemcall ...\n" );
 

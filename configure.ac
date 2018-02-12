@@ -7296,6 +7296,10 @@ if test "$enable_epm" = "yes"; then
         if test "$DPKG" = "no"; then
             AC_MSG_ERROR([dpkg needed for deb creation. Install dpkg.])
         fi
+        AC_PATH_PROG(FAKEROOT, fakeroot, no)
+        if test "$FAKEROOT" = "no"; then
+            AC_MSG_ERROR([fakeroot needed for deb creation. Install fakeroot.])
+        fi
     fi
     if echo "$PKGFORMAT" | $EGREP rpm 2>&1 >/dev/null || \
        echo "$PKGFORMAT" | $EGREP pkg 2>&1 >/dev/null; then
