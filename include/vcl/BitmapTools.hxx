@@ -39,6 +39,11 @@ public:
         mpData[ p++ ] = nColor.GetGreen();
         mpData[ p   ] = nColor.GetBlue();
     }
+    Color GetPixel(long nY, long nX) const
+    {
+        long p = (nY * maSize.getWidth() + nX) * 3;
+        return Color( mpData[p], mpData[p+1], mpData[p+2]);
+    }
     // so we don't accidentally leave any code in that uses palette color indexes
     void SetPixel(long nY, long nX, BitmapColor nColor) = delete;
     long Height() { return maSize.Height(); }
