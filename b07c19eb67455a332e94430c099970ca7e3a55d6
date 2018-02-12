@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_cc1c1bc4",
+        "filename": "formula/source/core/api/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1227,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-02-12T14:37:47Z",
+      "side": 1,
+      "message": "I think it\u0027s indeed \"tough\" here in the sense of \"difficult\"",
+      "range": {
+        "startLine": 1227,
+        "startChar": 41,
+        "endLine": 1227,
+        "endChar": 47
+      },
+      "revId": "b07c19eb67455a332e94430c099970ca7e3a55d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
