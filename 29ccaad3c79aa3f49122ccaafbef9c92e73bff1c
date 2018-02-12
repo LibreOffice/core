@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_a76d409a",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4300,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-12T22:52:07Z",
+      "side": 1,
+      "message": "Caveat, for all jump commands (IF,IFERROR,IFNA,CHOOSE) GetParamCount() returns 1, because only the condition counts as parameter. I didn\u0027t investigate how this may confuse SUMIF contained in IF (or vice versa) here.",
+      "revId": "29ccaad3c79aa3f49122ccaafbef9c92e73bff1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
