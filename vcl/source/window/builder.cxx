@@ -1115,7 +1115,7 @@ void VclBuilder::preload()
 #ifndef DISABLE_DYNLOADING
 
 #if ENABLE_MERGELIBS
-    g_aMergedLibs->loadRelative(&thisModule, SVLIBRARY("merged"));
+    g_aMergedLib.loadRelative(&thisModule, SVLIBRARY("merged"));
 #endif
 // find -name '*ui*' | xargs grep 'class=".*lo-' |
 //     sed 's/.*class="//' | sed 's/-.*$//' | sort | uniq
@@ -1643,8 +1643,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                 bool ok = false;
 #if ENABLE_MERGELIBS
                 if (!g_aMergedLib.is())
-                    g_aMergedLib->loadRelative(&thisModule, SVLIBRARY("merged"));
-                ok = g_aMergedLib->getFunctionSymbol(sFunction);
+                    g_aMergedLib.loadRelative(&thisModule, SVLIBRARY("merged"));
+                ok = g_aMergedLib.getFunctionSymbol(sFunction);
 #endif
                 if (!ok)
                     ok = pModule->loadRelative(&thisModule, sModule);
