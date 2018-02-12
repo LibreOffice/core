@@ -75,6 +75,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	JunitTest_sc_unoapi_5 \
 	JunitTest_sc_unoapi_6 \
 	JunitTest_sc_unoapi_7 \
+	CppunitTest_sc_anchor_test \
 	CppunitTest_sc_annotationshapeobj \
 	CppunitTest_sc_outlineobj \
 	CppunitTest_sc_styleloaderobj \
