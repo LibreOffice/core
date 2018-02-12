@@ -1885,6 +1885,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_PODF_A1;
                             ScCompiler aComp( pDoc, aPos, eGrammar);
                             ScTokenArray* pCode = aComp.CompileString( aText );
+                            pDoc->CheckLinkFormulaNeedingCheck( *pCode);
                             if ( ch == 'M' )
                             {
                                 ScMarkData aMark;
