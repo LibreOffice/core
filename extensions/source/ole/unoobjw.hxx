@@ -93,12 +93,6 @@ typedef std::unordered_map
     MemberInfo
 > IdToMemberInfoMap;
 
-/*****************************************************************************
-
-    class declaration: InterfaceOleWrapper_Impl
-
-*****************************************************************************/
-
 class InterfaceOleWrapper_Impl : public WeakImplHelper<XBridgeSupplier2, XInitialization>,
                                  public IDispatchEx,
                                  public UnoConversionUtilities<InterfaceOleWrapper_Impl>,
@@ -221,8 +215,8 @@ protected:
 
 /*****************************************************************************
 
-    class declaration: UnoObjectWrapperRemoteOpt
-    ( Uno Object Wrapper Remote Optimized)
+    UnoObjectWrapperRemoteOpt = Uno Object Wrapper Remote Optimized
+
     This is the UNO wrapper used in the service com.sun.star.bridge.OleBridgeSupplierVar1.
     Key features:
     DISPIDs are passed out blindly. That is in GetIDsOfNames is no name checking carried out.

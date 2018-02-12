@@ -47,12 +47,6 @@ namespace ole_adapter
 // {82154420-0FBF-11d4-8313-005004526AB4}
 DEFINE_GUID(OID_ServiceManager, 0x82154420, 0xfbf, 0x11d4, 0x83, 0x13, 0x0, 0x50, 0x4, 0x52, 0x6a, 0xb4);
 
-/*****************************************************************************
-
-    class implementation ProviderOleWrapper_Impl
-
-*****************************************************************************/
-
 ProviderOleWrapper_Impl::ProviderOleWrapper_Impl(const Reference<XMultiServiceFactory>& smgr,
                                                  const Reference<XSingleServiceFactory>& xSFact, GUID const * pGuid)
     : m_xSingleServiceFactory(xSFact),
@@ -180,12 +174,6 @@ STDMETHODIMP ProviderOleWrapper_Impl::LockServer(int /*fLock*/)
     return NOERROR;
 }
 
-/*****************************************************************************
-
-    class implementation OneInstanceOleWrapper_Impl
-
-*****************************************************************************/
-
 OneInstanceOleWrapper_Impl::OneInstanceOleWrapper_Impl(  const Reference<XMultiServiceFactory>& smgr,
                                                          const Reference<XInterface>& xInst,
                                                          GUID const * pGuid )
@@ -304,13 +292,6 @@ STDMETHODIMP OneInstanceOleWrapper_Impl::LockServer(int /*fLock*/)
 {
     return NOERROR;
 }
-
-
-/*****************************************************************************
-
-    class implementation OleConverter_Impl2
-
-*****************************************************************************/
 
 OleConverter_Impl2::OleConverter_Impl2( const Reference<XMultiServiceFactory> &smgr):
     UnoConversionUtilities<OleConverter_Impl2>( smgr)
@@ -479,13 +460,6 @@ Reference< XInterface > OleConverter_Impl2::createComWrapperInstance()
     return Reference<XInterface>( xWeak, UNO_QUERY);
 }
 
-
-/*****************************************************************************
-
-    class implementation OleClient_Impl
-
-*****************************************************************************/
-
 OleClient_Impl::OleClient_Impl( const Reference<XMultiServiceFactory>& smgr):
     UnoConversionUtilities<OleClient_Impl>( smgr)
 {
@@ -603,13 +577,6 @@ Reference< XInterface > OleClient_Impl::createComWrapperInstance( )
                             m_smgr, m_nUnoWrapperClass, m_nComWrapperClass));
     return Reference<XInterface>( xWeak, UNO_QUERY);
 }
-
-
-/*****************************************************************************
-
-    class implementation OleServer_Impl
-
-*****************************************************************************/
 
 OleServer_Impl::OleServer_Impl( const Reference<XMultiServiceFactory>& smgr):
     m_smgr( smgr)

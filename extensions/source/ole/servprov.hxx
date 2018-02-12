@@ -43,7 +43,7 @@ Reference<XInterface> OleClient_CreateInstance( const Reference<XMultiServiceFac
 Reference<XInterface> OleServer_CreateInstance( const Reference<XMultiServiceFactory> & xSMgr);
 /*****************************************************************************
 
-    class declaration IClassFactoryWrapper
+    IClassFactoryWrapper
 
     Specify abstract helper methods on class factories, which provide
     UNO objects. These methods are used by objects of class OleServer_Impl,
@@ -64,7 +64,7 @@ protected:
 
 /*****************************************************************************
 
-    class declaration ProviderOleWrapper_Impl
+    ProviderOleWrapper_Impl
 
     Provides an UNO service provider as OLE class factory. Handle the
     OLE registration by overriding the abstract methods from
@@ -108,7 +108,7 @@ protected:
 
 /*****************************************************************************
 
-    class declaration OneInstanceOleWrapper_Impl
+    OneInstanceOleWrapper_Impl
 
     Provides an single UNO object as OLE object. Handle the
     OLE registration by overriding the abstract methods from
@@ -148,13 +148,7 @@ protected:
     Reference<XMultiServiceFactory> m_smgr;
 };
 
-/*****************************************************************************
-
-    class declaration OleConverter_Impl2
-
-    Implementation of the UNO service com.sun.star.bridge.OleBridgeSupplier2.
-
-*****************************************************************************/
+// Implementation of the UNO service com.sun.star.bridge.OleBridgeSupplier2.
 
 // This class realizes the service com.sun.star.bridge.OleBridgeSupplier2 and
 // com.sun.star.bridge.OleBridgeSupplierVar1. The class implements XBridgeSupplier2
@@ -197,15 +191,7 @@ protected:
 
 };
 
-
-/*****************************************************************************
-
-    class declaration OleClient_Impl
-
-    Implementation of the UNO service com.sun.star.bridge.OleObjectFactory.
-
-*****************************************************************************/
-
+// Implementation of the UNO service com.sun.star.bridge.OleObjectFactory.
 
 class OleClient_Impl : public WeakImplHelper<XMultiServiceFactory, css::lang::XServiceInfo>,
                        public UnoConversionUtilities<OleClient_Impl>
@@ -235,7 +221,7 @@ protected:
 
 /*****************************************************************************
 
-    class declaration OleServer_Impl
+    OleServer_Impl
 
     Implementation of the UNO service com.sun.star.bridge.OleApplicationRegistration.
     Register the calling application as OLE automation server for
