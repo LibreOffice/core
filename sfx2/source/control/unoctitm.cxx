@@ -970,12 +970,10 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
             InterceptLOKStateChangeEvent(pDispatcher->GetFrame(), aEvent, pState);
         }
 
-        Sequence< OUString > seqNames = pDispatch->GetListeners().getContainedTypes();
-        sal_Int32 nLength = seqNames.getLength();
-        for (sal_Int32 i = 0; i < nLength; ++i)
+        for (const OUString& rName: pDispatch->GetListeners().getContainedTypes())
         {
-            if (seqNames[i] == aDispatchURL.Main || seqNames[i] == aDispatchURL.Complete)
-                sendStatusChanged(seqNames[i], aEvent);
+            if (rName == aDispatchURL.Main || rName == aDispatchURL.Complete)
+                sendStatusChanged(rName, aEvent);
         }
     }
 }
