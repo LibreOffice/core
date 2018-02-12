@@ -114,7 +114,6 @@ void LwpDocument::Read()
     }
 
     m_xOwnedFoundry.reset(new LwpFoundry(m_pObjStrm.get(), this));
-    m_pFoundry = m_xOwnedFoundry.get();
 
     m_DivOpts.ReadIndexed(m_pObjStrm.get());
 
@@ -229,8 +228,8 @@ void LwpDocument::RegisterStyle()
 void LwpDocument::RegisterTextStyles()
 {
     //Register all text styles: para styles, character styles
-    LwpDLVListHeadHolder* pParaStyleHolder = m_pFoundry
-        ? dynamic_cast<LwpDLVListHeadHolder*>(m_pFoundry->GetTextStyleHead().obj().get())
+    LwpDLVListHeadHolder* pParaStyleHolder = m_xOwnedFoundry
+        ? dynamic_cast<LwpDLVListHeadHolder*>(m_xOwnedFoundry->GetTextStyleHead().obj().get())
         : nullptr;
     if(pParaStyleHolder)
     {
@@ -239,7 +238,7 @@ void LwpDocument::RegisterTextStyles()
         {
             if (pParaStyle->GetFoundry())
                 throw std::runtime_error("loop in register text style");
-            pParaStyle->SetFoundry(m_pFoundry);
+            pParaStyle->SetFoundry(m_xOwnedFoundry.get());
             pParaStyle->RegisterStyle();
             pParaStyle = dynamic_cast<LwpParaStyle*>(pParaStyle->GetNext().obj().get());
         }
@@ -252,10 +251,10 @@ void LwpDocument::RegisterTextStyles()
  */
 void LwpDocument::RegisterLayoutStyles()
 {
-    if (m_pFoundry)
+    if (m_xOwnedFoundry)
     {
         //Register all layout styles, before register all styles in para
-        m_pFoundry->RegisterAllLayouts();
+        m_xOwnedFoundry->RegisterAllLayouts();
     }
 
     //set initial pagelayout in story for parsing pagelayout
@@ -282,8 +281,8 @@ void LwpDocument::RegisterLayoutStyles()
 void LwpDocument::RegisterStylesInPara()
 {
     //Register all automatic styles in para
-    rtl::Reference<LwpHeadContent> xContent(m_pFoundry
-        ? dynamic_cast<LwpHeadContent*> (m_pFoundry->GetContentManager().GetContentList().obj().get())
+    rtl::Reference<LwpHeadContent> xContent(m_xOwnedFoundry
+        ? dynamic_cast<LwpHeadContent*> (m_xOwnedFoundry->GetContentManager().GetContentList().obj().get())
         : nullptr);
     if (xContent.is())
     {
@@ -293,7 +292,7 @@ void LwpDocument::RegisterStylesInPara()
         {
             aSeen.insert(xStory.get());
             //Register the child para
-            xStory->SetFoundry(m_pFoundry);
+            xStory->SetFoundry(m_xOwnedFoundry.get());
             xStory->DoRegisterStyle();
             xStory.set(dynamic_cast<LwpStory*>(xStory->GetNext().obj(VO_STORY).get()));
             if (aSeen.find(xStory.get()) != aSeen.end())
@@ -306,11 +305,11 @@ void LwpDocument::RegisterStylesInPara()
  */
 void LwpDocument::RegisterBulletStyles()
 {
-    if (!m_pFoundry)
+    if (!m_xOwnedFoundry)
         return;
     //Register bullet styles
     LwpDLVListHeadHolder* pBulletHead = dynamic_cast<LwpDLVListHeadHolder*>
-        (m_pFoundry->GetBulletManagerID().obj(VO_HEADHOLDER).get());
+        (m_xOwnedFoundry->GetBulletManagerID().obj(VO_HEADHOLDER).get());
     if (!pBulletHead)
         return;
     LwpSilverBullet* pBullet = dynamic_cast<LwpSilverBullet*>
@@ -319,7 +318,7 @@ void LwpDocument::RegisterBulletStyles()
     while (pBullet)
     {
         aSeen.insert(pBullet);
-        pBullet->SetFoundry(m_pFoundry);
+        pBullet->SetFoundry(m_xOwnedFoundry.get());
         pBullet->RegisterStyle();
         pBullet = dynamic_cast<LwpSilverBullet*> (pBullet->GetNext().obj().get());
         if (aSeen.find(pBullet) != aSeen.end())
@@ -331,13 +330,13 @@ void LwpDocument::RegisterBulletStyles()
  */
 void LwpDocument::RegisterGraphicsStyles()
 {
-    if (!m_pFoundry)
+    if (!m_xOwnedFoundry)
         return;
     //Register all graphics styles, the first object should register the next;
-    rtl::Reference<LwpObject> pGraphic = m_pFoundry->GetGraphicListHead().obj(VO_GRAPHIC);
+    rtl::Reference<LwpObject> pGraphic = m_xOwnedFoundry->GetGraphicListHead().obj(VO_GRAPHIC);
     if (!pGraphic.is())
         return;
-    pGraphic->SetFoundry(m_pFoundry);
+    pGraphic->SetFoundry(m_xOwnedFoundry.get());
     pGraphic->DoRegisterStyle();
 }
 /**
@@ -425,7 +424,7 @@ void LwpDocument::ParseDocContent(IXFStream* pOutputStream)
         //master document not supported now.
         return;
     }
-    pLayoutObj->SetFoundry(m_pFoundry);
+    pLayoutObj->SetFoundry(m_xOwnedFoundry.get());
     pLayoutObj->DoParse(pOutputStream);
 }
 
