@@ -87,6 +87,15 @@ void CommonInitialize(int *argc, char ***argv)
     setenv("SAL_DISABLE_DEFAULTPRINTER", "1", 1);
     setenv("SAL_NO_FONT_LOOKUP", "1", 1);
 
+    //allow bubbling of max input len to fuzzer targets
+    int nMaxLen = 0;
+    for (int i = 0; i < *argc; ++i)
+    {
+        if (strncmp((*argv)[i], "-max_len=", 9) == 0)
+            nMaxLen = atoi((*argv)[i] + 9);
+    }
+    setenv("FUZZ_MAX_INPUT_LEN", "1", nMaxLen);
+
     osl_setCommandArgs(*argc, *argv);
 
     OUString sExecDir = getExecutableDir();
