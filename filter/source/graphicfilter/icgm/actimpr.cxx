@@ -555,7 +555,7 @@ void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
         if ( pBmpDesc->mbVMirror )
             nMirr |= BmpMirrorFlags::Vertical;
         if ( nMirr != BmpMirrorFlags::NONE )
-            pBmpDesc->mxBitmap.Mirror( nMirr ); // FIXME
+            pBmpDesc->mxBitmap.Mirror( nMirr );
 
         mpCGM->ImplMapPoint( aOrigin );
         mpCGM->ImplMapX( fdx );
