@@ -2333,6 +2333,8 @@ void SVGExport::writeMtf( const GDIMetaFile& rMtf )
          AddAttribute( XML_NAMESPACE_NONE, "baseProfile", "tiny" );
 
     AddAttribute( XML_NAMESPACE_NONE, "xmlns", constSvgNamespace );
+    // For <image xlink:href="...">.
+    AddAttribute(XML_NAMESPACE_XMLNS, "xlink", "http://www.w3.org/1999/xlink");
     AddAttribute( XML_NAMESPACE_NONE, "stroke-width", OUString::number( 28.222 ) );
     AddAttribute( XML_NAMESPACE_NONE, "stroke-linejoin", "round" );
     AddAttribute( XML_NAMESPACE_NONE, "xml:space", "preserve" );
