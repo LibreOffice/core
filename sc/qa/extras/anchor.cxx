@@ -38,10 +38,12 @@ public:
 
     void testUndoAnchor();
     void testTdf76183();
+    void testODFAnchorTypes();
 
     CPPUNIT_TEST_SUITE(ScAnchorTest);
     CPPUNIT_TEST(testUndoAnchor);
     CPPUNIT_TEST(testTdf76183);
+    CPPUNIT_TEST(testODFAnchorTypes);
     CPPUNIT_TEST_SUITE_END();
 private:
 
@@ -185,6 +187,48 @@ void ScAnchorTest::testTdf76183()
     CPPUNIT_ASSERT(aOrigRect.Top() < rNewRect.Top());
 
     pDocSh->DoClose();
+}
+
+void ScAnchorTest::testODFAnchorTypes()
+{
+    OUString aFileURL;
+    createFileURL("3AnchorTypes.ods", aFileURL);
+    // open the document with graphic included
+    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Check whether graphic imported well
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT(pDrawLayer);
+
+    const SdrPage *pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT(pPage);
+
+    // Check 1st object: Page anchored
+    SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pObject);
+    ScAnchorType anchorType = ScDrawLayer::GetAnchorType(*pObject);
+    CPPUNIT_ASSERT_EQUAL(SCA_PAGE, anchorType);
+
+    // Check 2nd object: Cell anchored, resize with cell
+    pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(1));
+    CPPUNIT_ASSERT(pObject);
+    anchorType = ScDrawLayer::GetAnchorType(*pObject);
+    CPPUNIT_ASSERT_EQUAL(SCA_CELL_RESIZE, anchorType);
+
+     // Check 3rd object: Cell anchored
+    pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(2));
+    CPPUNIT_ASSERT(pObject);
+    anchorType = ScDrawLayer::GetAnchorType(*pObject);
+    CPPUNIT_ASSERT_EQUAL(SCA_CELL, anchorType);
 }
 
 void ScAnchorTest::tearDown()
