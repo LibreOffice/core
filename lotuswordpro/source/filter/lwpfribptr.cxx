@@ -162,20 +162,9 @@ void LwpFribPtr::XFConvert()
                 sChangeID = pChangeMgr->GetChangeID(pFrib);
                 if (!sChangeID.isEmpty())
                 {
-                /// if (nRevisionType == LwpFrib::REV_INSERT)
-                /// {
-                        XFChangeStart* pChangeStart = new XFChangeStart;
-                        pChangeStart->SetChangeID(sChangeID);
-                        m_pXFPara->Add(pChangeStart);
-                /// }
-                /// else if (nRevisionType == LwpFrib::REV_DELETE)
-                /// {
-                ///     XFChange* pChange = new XFChange;
-                ///     pChange->SetChangeID(sChangeID);
-                ///     m_pXFPara->Add(pChange);
-                ///     pFrib = pFrib->GetNext();
-                ///     continue;
-                /// }
+                    rtl::Reference<XFChangeStart> xChangeStart(new XFChangeStart);
+                    xChangeStart->SetChangeID(sChangeID);
+                    m_pXFPara->Add(xChangeStart.get());
                 }
             }
         }
@@ -193,16 +182,16 @@ void LwpFribPtr::XFConvert()
             LwpFribTab* tabFrib = static_cast<LwpFribTab*>(pFrib);
             if (pFrib->m_ModFlag)
             {
-                XFTextSpan *pSpan = new XFTextSpan();
-                pSpan->SetStyleName(tabFrib->GetStyleName());
-                XFTabStop *pTab = new XFTabStop;
-                pSpan->Add(pTab);
-                m_pXFPara->Add(pSpan);
+                rtl::Reference<XFTextSpan> xSpan(new XFTextSpan);
+                xSpan->SetStyleName(tabFrib->GetStyleName());
+                rtl::Reference<XFTabStop> xTab(new XFTabStop);
+                xSpan->Add(xTab.get());
+                m_pXFPara->Add(xSpan.get());
             }
             else
             {
-                XFTabStop *pTab = new XFTabStop;
-                m_pXFPara->Add(pTab);
+                rtl::Reference<XFTabStop> xTab(new XFTabStop);
+                m_pXFPara->Add(xTab.get());
             }
             break;
         }
@@ -248,8 +237,8 @@ void LwpFribPtr::XFConvert()
         }
         case FRIB_TAG_LINEBREAK:
         {
-            XFLineBreak *pLineBreak = new XFLineBreak;
-            m_pXFPara->Add(pLineBreak);
+            rtl::Reference<XFLineBreak> xLineBreak(new XFLineBreak);
+            m_pXFPara->Add(xLineBreak.get());
             break;
         }
         case FRIB_TAG_UNICODE: //fall through
@@ -363,9 +352,9 @@ void LwpFribPtr::XFConvert()
             {
                 if (!sChangeID.isEmpty())
                 {
-                    XFChangeEnd* pChangeEnd = new XFChangeEnd;
-                    pChangeEnd->SetChangeID(sChangeID);
-                    m_pXFPara->Add(pChangeEnd);
+                    rtl::Reference<XFChangeEnd> xChangeEnd(new XFChangeEnd);
+                    xChangeEnd->SetChangeID(sChangeID);
+                    m_pXFPara->Add(xChangeEnd.get());
                 }
             }
         }

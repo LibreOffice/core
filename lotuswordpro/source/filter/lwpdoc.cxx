@@ -72,20 +72,16 @@
 
 LwpDocument::LwpDocument(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)
-    , m_pOwnedFoundry(nullptr)
     , m_bGettingFirstDivisionWithContentsThatIsNotOLE(false)
     , m_bGettingPreviousDivisionWithContents(false)
     , m_bGettingGetLastDivisionWithContents(false)
     , m_nFlags(0)
     , m_nPersistentFlags(0)
-    , m_pLnOpts(nullptr)
 {
 }
 
 LwpDocument::~LwpDocument()
 {
-    delete m_pLnOpts;
-    delete m_pOwnedFoundry;
 }
 /**
  * @descr   Read VO_Document from object stream
@@ -104,7 +100,7 @@ void LwpDocument::Read()
         LwpUIDocument aUIDoc( m_pObjStrm.get() );
     }
 
-    m_pLnOpts = new LwpLineNumberOptions(m_pObjStrm.get());
+    m_xLnOpts.reset(new LwpLineNumberOptions(m_pObjStrm.get()));
 
     //Skip LwpUserDictFiles
     {
@@ -117,7 +113,8 @@ void LwpDocument::Read()
         LwpPrinterInfo aPrtInfo( m_pObjStrm.get() );
     }
 
-    m_pFoundry = m_pOwnedFoundry = new LwpFoundry(m_pObjStrm.get(), this);
+    m_xOwnedFoundry.reset(new LwpFoundry(m_pObjStrm.get(), this));
+    m_pFoundry = m_xOwnedFoundry.get();
 
     m_DivOpts.ReadIndexed(m_pObjStrm.get());
 
@@ -348,9 +345,9 @@ void LwpDocument::RegisterGraphicsStyles()
  */
 void LwpDocument::RegisterLinenumberStyles()
 {
-    if (!m_pLnOpts)
+    if (!m_xLnOpts)
         return;
-    m_pLnOpts->RegisterStyle();
+    m_xLnOpts->RegisterStyle();
 }
 
 /**

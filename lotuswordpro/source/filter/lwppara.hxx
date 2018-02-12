@@ -274,7 +274,7 @@ private:
     rtl::Reference<XFContentContainer> AddBulletList(XFContentContainer* pCont);
     void AddBreakAfter(XFContentContainer* pCont);
     void AddBreakBefore(XFContentContainer* pCont);
-    XFSection* CreateXFSection();
+    rtl::Reference<XFSection> CreateXFSection();
 
     void ReadPropertyList(LwpObjectStream* pFile);
 };
