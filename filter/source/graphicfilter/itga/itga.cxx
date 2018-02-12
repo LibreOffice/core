@@ -660,7 +660,7 @@ bool TGAReader::ImplReadBody()
                             m_rTGA.ReadUChar( nBlue ).ReadUChar( nGreen ).ReadUChar( nRed );
                             if ( !m_rTGA.good())
                                 return false;
-                            mpBitmap->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
+                            mpBitmap->SetPixel( nY, nX, Color( nRed, nGreen, nBlue ) );
                         }
                         break;
 

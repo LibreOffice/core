@@ -32,13 +32,15 @@ public:
           maSize(rSize)
     {
     }
-    void SetPixel(long nY, long nX, BitmapColor nColor)
+    void SetPixel(long nY, long nX, Color nColor)
     {
         long p = (nY * maSize.getWidth() + nX) * 3;
         mpData[ p++ ] = nColor.GetRed();
         mpData[ p++ ] = nColor.GetGreen();
         mpData[ p   ] = nColor.GetBlue();
     }
+    // so we don't accidentally leave any code in that uses palette color indexes
+    void SetPixel(long nY, long nX, BitmapColor nColor) = delete;
     long Height() { return maSize.Height(); }
     long Width() { return maSize.Width(); }
 };
