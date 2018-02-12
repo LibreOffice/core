@@ -183,8 +183,7 @@ void FindXMPMetadata(const uno::Reference<uno::XComponentContext> &xContext, con
         return;
 
     OUString aMediaDir = FindMediaDir(rDocumentBaseURL, rFilterData);
-    INetURLObject aDocumentBaseURL(rDocumentBaseURL);
-    OUString aURL = aMediaDir + aDocumentBaseURL.GetBase() + ".xmp";
+    OUString aURL = aMediaDir + "metadata.xmp";
     SvFileStream aStream(aURL, StreamMode::READ);
     if (!aStream.IsOpen())
         return;
