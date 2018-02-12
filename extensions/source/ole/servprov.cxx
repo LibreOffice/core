@@ -44,9 +44,8 @@ using namespace com::sun::star::bridge::ModelDependent;
 DEFINE_GUID(OID_ServiceManager, 0x82154420, 0xfbf, 0x11d4, 0x83, 0x13, 0x0, 0x50, 0x4, 0x52, 0x6a, 0xb4);
 
 ProviderOleWrapper::ProviderOleWrapper(const Reference<XMultiServiceFactory>& smgr,
-                                       const Reference<XSingleServiceFactory>& xSFact, GUID const * pGuid)
+                                       const Reference<XSingleServiceFactory>& xSFact)
     : m_xSingleServiceFactory(xSFact),
-      m_guid(*pGuid),
       m_smgr( smgr)
 {
     Reference<XInterface> xInt = smgr->createInstance("com.sun.star.bridge.oleautomation.BridgeSupplier");
@@ -63,14 +62,14 @@ ProviderOleWrapper::~ProviderOleWrapper()
 {
 }
 
-bool ProviderOleWrapper::registerClass()
+bool ProviderOleWrapper::registerClass(GUID const * pGuid)
 {
     HRESULT hresult;
 
     o2u_attachCurrentThread();
 
     hresult = CoRegisterClassObject(
-            m_guid,
+            *pGuid,
             this,
             CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER,
             REGCLS_MULTIPLEUSE,
@@ -171,11 +170,9 @@ STDMETHODIMP ProviderOleWrapper::LockServer(int /*fLock*/)
 }
 
 OneInstanceOleWrapper::OneInstanceOleWrapper(  const Reference<XMultiServiceFactory>& smgr,
-                                               const Reference<XInterface>& xInst,
-                                               GUID const * pGuid )
+                                               const Reference<XInterface>& xInst )
     : m_refCount(0)
     , m_xInst(xInst)
-    , m_guid(*pGuid)
     , m_factoryHandle(0)
     , m_smgr(smgr)
 {
@@ -192,14 +189,14 @@ OneInstanceOleWrapper::~OneInstanceOleWrapper()
 {
 }
 
-bool OneInstanceOleWrapper::registerClass()
+bool OneInstanceOleWrapper::registerClass(GUID const * pGuid)
 {
     HRESULT hresult;
 
     o2u_attachCurrentThread();
 
     hresult = CoRegisterClassObject(
-            m_guid,
+            *pGuid,
             this,
             CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER,
             REGCLS_MULTIPLEUSE,
@@ -617,24 +614,22 @@ css::uno::Sequence<OUString> OleServer::getSupportedServiceNames()
 
 bool OleServer::provideService(const Reference<XSingleServiceFactory>& xSFact, GUID const * guid)
 {
-    IClassFactoryWrapper* pFac = new ProviderOleWrapper( m_smgr, xSFact, guid);
+    IClassFactoryWrapper* pFac = new ProviderOleWrapper( m_smgr, xSFact );
 
     pFac->AddRef();
-
     m_wrapperList.push_back(pFac);
 
-    return pFac->registerClass();
+    return pFac->registerClass(guid);
 }
 
 bool OleServer::provideInstance(const Reference<XInterface>& xInst, GUID const * guid)
 {
-    IClassFactoryWrapper* pFac =
-        new OneInstanceOleWrapper( m_smgr, xInst, guid );
+    IClassFactoryWrapper* pFac = new OneInstanceOleWrapper( m_smgr, xInst );
 
     pFac->AddRef();
     m_wrapperList.push_back(pFac);
 
-    return pFac->registerClass();
+    return pFac->registerClass(guid);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

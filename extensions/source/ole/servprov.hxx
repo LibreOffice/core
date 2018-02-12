@@ -53,7 +53,7 @@ class IClassFactoryWrapper : public IClassFactory
 {
 public:
 
-    virtual bool registerClass() = 0;
+    virtual bool registerClass(GUID const * pGuid) = 0;
     virtual bool deregisterClass() = 0;
 
 protected:
@@ -79,10 +79,10 @@ class ProviderOleWrapper : public IClassFactoryWrapper
 public:
 
     ProviderOleWrapper( const Reference<XMultiServiceFactory>& smgr,
-                        const Reference<XSingleServiceFactory>& xSFactory, GUID const * pGuid);
+                        const Reference<XSingleServiceFactory>& xSFactory);
     virtual ~ProviderOleWrapper();
 
-    bool registerClass() override;
+    bool registerClass(GUID const * pGuid) override;
     bool deregisterClass() override;
 
     /* IUnknown methods */
@@ -98,7 +98,6 @@ protected:
 
     oslInterlockedCount m_refCount;
     Reference<XSingleServiceFactory> m_xSingleServiceFactory;
-    const GUID          m_guid;
     DWORD               m_factoryHandle;
     Reference<XBridgeSupplier2> m_bridgeSupplier;
     Reference<XMultiServiceFactory> m_smgr;
@@ -121,10 +120,11 @@ class OneInstanceOleWrapper : public IClassFactoryWrapper
 {
 public:
 
-    OneInstanceOleWrapper( const Reference<XMultiServiceFactory>& smgr, const Reference<XInterface>& xInst, GUID const * pGuid );
+    OneInstanceOleWrapper( const Reference<XMultiServiceFactory>& smgr,
+                           const Reference<XInterface>& xInst );
     virtual ~OneInstanceOleWrapper();
 
-    bool registerClass() override;
+    bool registerClass(GUID const * pGuid) override;
     bool deregisterClass() override;
 
     /* IUnknown methods */
@@ -140,7 +140,6 @@ protected:
 
     oslInterlockedCount m_refCount;
     Reference<XInterface>       m_xInst;
-    const GUID          m_guid;
     DWORD               m_factoryHandle;
     Reference<XBridgeSupplier2> m_bridgeSupplier;
     Reference<XMultiServiceFactory> m_smgr;
