@@ -12,8 +12,9 @@
 
 #include <tunables/global>
 
-profile libreoffice-senddoc INSTDIR-/usr/lib{,32,64}/libreoffice/program/senddoc {
+profile libreoffice-senddoc INSTDIR-program/senddoc {
   #include <abstractions/base>
+  #include <abstractions/ubuntu-helpers>
 
   owner /tmp/lu**       rw,    #makes files like luRRRRR.tmp/lubRRRR.tmp where R is random
                                #Note, usually it's lub or luc, don't know why.
@@ -26,6 +27,7 @@ profile libreoffice-senddoc INSTDIR-/usr/lib{,32,64}/libreoffice/program/senddoc
   /bin/grep             rmix,
   /bin/uname            rmix,
   /usr/bin/xdg-open     Cxr -> sanitized_helper,
+  /usr/bin/xdg-email    Cxr -> sanitized_helper,
   /dev/null             rw,
   INSTDIR-program/uri-encode rmpux,
   /usr/share/libreoffice/share/config/* r,
