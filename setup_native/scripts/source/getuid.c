@@ -139,6 +139,29 @@ int __lxstat(int n, const char *path, struct stat *buf)
     buf->st_gid = 0; /* root */
     return ret;
 }
+
+/* This is to fool tar, version >= 1.24 */
+int __fxstat(int n, int fd, struct stat *buf) {
+    int ret = 0;
+    static int (*p_fstat) (int n, int fd, struct stat *buf) = NULL;
+    if (p_fstat == NULL)
+        p_fstat = (int (*)(int n, int fd, struct stat *buf))
+            dlsym (RTLD_NEXT, "__fxstat");
+    ret = (*p_fstat)(n, fd, buf);
+#if defined __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnonnull"
+    // __fxstat may be declared in system headers as taking nonnull argument
+#endif
+    assert(buf != NULL);
+#if defined __GNUC__
+#pragma GCC diagnostic pop
+#endif
+    buf->st_uid = 0; /* root */
+    buf->st_gid = 0; /* root */
+    return ret;
+}
+
 #else
 int __lxstat64(int n, const char *path, struct stat64 *buf)
 {
@@ -151,6 +174,28 @@ int __lxstat64(int n, const char *path, struct stat64 *buf)
     assert(buf != NULL);
     buf->st_uid = 0;
     buf->st_gid = 0;
+    return ret;
+}
+
+/* This is to fool tar, version >= 1.24 */
+int __fxstat64(int n, int fd, struct stat64 *buf) {
+    int ret = 0;
+    static int (*p_fstat) (int n, int fd, struct stat64 *buf) = NULL;
+    if (p_fstat == NULL)
+        p_fstat = (int (*)(int n, int fd, struct stat64 *buf))
+            dlsym (RTLD_NEXT, "__fxstat64");
+    ret = (*p_fstat)(n, fd, buf);
+#if defined __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnonnull"
+    // __fxstat may be declared in system headers as taking nonnull argument
+#endif
+    assert(buf != NULL);
+#if defined __GNUC__
+#pragma GCC diagnostic pop
+#endif
+    buf->st_uid = 0; /* root */
+    buf->st_gid = 0; /* root */
     return ret;
 }
 #endif
