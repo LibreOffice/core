@@ -1315,7 +1315,7 @@ void BitmapEx::setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
             Scanline pScanlineRead = pReadAccess->GetScanline( nY );
             for ( long nX = 0; nX < pReadAccess->Width(); nX++ )
             {
-                const sal_uInt8 cIndex = pReadAccess->GetIndexFromData( pScanlineRead, nX );
+                const sal_uInt8 cIndex = pReadAccess->GetPixelFromData( pScanlineRead, nX ).GetBlueOrIndex();
                 if ( cIndex == cIndexFrom )
                     pWriteAccess->SetPixelOnData( pScanline, nX, BitmapColor(nAlphaTo) );
             }
