@@ -60,13 +60,12 @@ $(deb_WORKDIR)/%/DEBIAN/control: $(deb_SRCDIR)/control $(call gb_CustomTarget_ge
 	echo "Version: $(PKGVERSION)-$(LIBO_VERSION_PATCH)" >>$@
 	du -k -s $(deb_WORKDIR)/$* | $(gb_AWK) -F ' ' '{ printf "Installed-Size: %s\n", $$1 ; }' >>$@
 
-$(deb_WORKDIR)/%$(PKGVERSIONSHORT)-debian-menus_$(PKGVERSION)-$(LIBO_VERSION_PATCH)_all.deb: $(deb_WORKDIR)/%/DEBIAN/postrm $(deb_WORKDIR)/%/DEBIAN/postinst $(deb_WORKDIR)/%/DEBIAN/prerm $(deb_WORKDIR)/%/DEBIAN/control $(call gb_Library_get_target,getuid)
+$(deb_WORKDIR)/%$(PKGVERSIONSHORT)-debian-menus_$(PKGVERSION)-$(LIBO_VERSION_PATCH)_all.deb: $(deb_WORKDIR)/%/DEBIAN/postrm $(deb_WORKDIR)/%/DEBIAN/postinst $(deb_WORKDIR)/%/DEBIAN/prerm $(deb_WORKDIR)/%/DEBIAN/control
 
 	chmod -R g-w $(deb_WORKDIR)/$*
 	chmod a+rx $(deb_WORKDIR)/$*/DEBIAN \
 		$(deb_WORKDIR)/$*/DEBIAN/pre* $(deb_WORKDIR)/$*/DEBIAN/post*
 	chmod g-s $(deb_WORKDIR)/$*/DEBIAN
-	LD_PRELOAD=$(call gb_Library_get_target,getuid) \
-		   dpkg-deb --build $(deb_WORKDIR)/$* $@
+	fakeroot dpkg-deb --build $(deb_WORKDIR)/$* $@
 
 # vim: set noet sw=4 ts=4:
