@@ -105,6 +105,7 @@ public:
 protected:
     XFContent()
         : m_bDoingToXml(false)
+        , m_bInserted(false)
     {
     }
 
@@ -115,6 +116,8 @@ protected:
     OUString m_strStyleName;
 private:
     bool m_bDoingToXml;
+public:
+    bool m_bInserted;
 };
 
 #endif

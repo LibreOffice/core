@@ -68,8 +68,11 @@ XFContentContainer::~XFContentContainer()
 {
 }
 
-void    XFContentContainer::Add(XFContent *pContent)
+void XFContentContainer::Add(XFContent *pContent)
 {
+    if (pContent->m_bInserted)
+        throw std::runtime_error("already inserted");
+    pContent->m_bInserted = true;
     m_aContents.emplace_back(pContent);
 }
 
@@ -80,12 +83,12 @@ void XFContentContainer::Add(const OUString& text)
     Add(xTC.get());
 }
 
-int     XFContentContainer::GetCount() const
+int XFContentContainer::GetCount() const
 {
     return m_aContents.size();
 }
 
-void    XFContentContainer::Reset()
+void XFContentContainer::Reset()
 {
     m_aContents.clear();
 }
