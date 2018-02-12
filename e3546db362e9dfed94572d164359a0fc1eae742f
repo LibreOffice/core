@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_073b6c9d",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-12T20:46:23Z",
+      "side": 0,
+      "message": "Please no unrelated cosmetic changes. And actually this empty line provides a visual aid between sc/ project headers and the formula/ header.",
+      "revId": "e3546db362e9dfed94572d164359a0fc1eae742f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

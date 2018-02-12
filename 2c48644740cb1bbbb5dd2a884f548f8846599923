@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_67dee86e",
+        "filename": "sc/inc/table.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-12T20:46:23Z",
+      "side": 1,
+      "message": "A plain data type (SCCOL is just a typedef for sal_Int16) doesn\u0027t need to be passed as const reference. So then consequently also name it nCol.",
+      "range": {
+        "startLine": 594,
+        "startChar": 25,
+        "endLine": 594,
+        "endChar": 42
+      },
+      "revId": "2c48644740cb1bbbb5dd2a884f548f8846599923",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_87d91c86",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1324,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-12T20:46:23Z",
+      "side": 1,
+      "message": "If this is not a valid row, bail out early with false instead of trying to operate on an invalid row with the following code.",
+      "revId": "2c48644740cb1bbbb5dd2a884f548f8846599923",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e7d01856",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1326,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-12T20:46:23Z",
+      "side": 1,
+      "message": "Hidden and overlapped need only to be asked if the cell is not protected, otherwise if it is protected it will be skipped anyway.",
+      "range": {
+        "startLine": 1325,
+        "startChar": 0,
+        "endLine": 1326,
+        "endChar": 108
+      },
+      "revId": "2c48644740cb1bbbb5dd2a884f548f8846599923",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_c7e31432",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1327,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-12T20:46:23Z",
+      "side": 1,
+      "message": "Asking for the protected attribute is only necessary if bSheetProtected\u003d\u003dtrue",
+      "range": {
+        "startLine": 1327,
+        "startChar": 0,
+        "endLine": 1327,
+        "endChar": 107
+      },
+      "revId": "2c48644740cb1bbbb5dd2a884f548f8846599923",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_a7e8e011",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-12T20:46:23Z",
+      "side": 1,
+      "message": "Nitpick: for better readability to indicate this loop is actually doing something but has no body, better write it as\n\n while (SkipRow( nCol, nRow, nMovY, rMark, bUp, bSheetProtected))\n     ;",
+      "range": {
+        "startLine": 1373,
+        "startChar": 8,
+        "endLine": 1373,
+        "endChar": 75
+      },
+      "revId": "2c48644740cb1bbbb5dd2a884f548f8846599923",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e73738ae",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-12T20:46:23Z",
+      "side": 1,
+      "message": "Same here,\n\n while (...)\n    ;",
+      "revId": "2c48644740cb1bbbb5dd2a884f548f8846599923",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
