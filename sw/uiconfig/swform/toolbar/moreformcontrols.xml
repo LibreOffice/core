@@ -27,6 +27,8 @@
  <toolbar:toolbaritem xlink:href=".uno:ImageControl"/>
  <toolbar:toolbaritem xlink:href=".uno:FileControl"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:SpinButton" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ScrollBar" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpinButton"/>
+ <toolbar:toolbaritem xlink:href=".uno:ScrollBar"/>
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:Grid"/>
 </toolbar:toolbar>
