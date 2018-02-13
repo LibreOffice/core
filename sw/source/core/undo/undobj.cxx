@@ -1181,19 +1181,19 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
 
 // save a complete section into UndoNodes array
 SwUndoSaveSection::SwUndoSaveSection()
-    : pMvStt( nullptr ), pRedlSaveData( nullptr ), nMvLen( 0 ), nStartPos( ULONG_MAX )
+    : pRedlSaveData( nullptr ), nMvLen( 0 ), nStartPos( ULONG_MAX )
 {
 }
 
 SwUndoSaveSection::~SwUndoSaveSection()
 {
-    if( pMvStt )        // delete also the section from UndoNodes array
+    if (m_pMovedStart) // delete also the section from UndoNodes array
     {
         // SaveSection saves the content in the PostIt section.
-        SwNodes& rUNds = pMvStt->GetNode().GetNodes();
-        rUNds.Delete( *pMvStt, nMvLen );
+        SwNodes& rUNds = m_pMovedStart->GetNode().GetNodes();
+        rUNds.Delete( *m_pMovedStart, nMvLen );
 
-        delete pMvStt;
+        m_pMovedStart.reset();
     }
     delete pRedlSaveData;
 }
@@ -1239,9 +1239,9 @@ void SwUndoSaveSection::SaveSection(
 
     // Keep positions as SwIndex so that this section can be deleted in DTOR
     sal_uLong nEnd;
-    pMvStt = new SwNodeIndex( rRange.aStart );
-    MoveToUndoNds(aPam, pMvStt, &nEnd);
-    nMvLen = nEnd - pMvStt->GetIndex() + 1;
+    m_pMovedStart.reset(new SwNodeIndex(rRange.aStart));
+    MoveToUndoNds(aPam, m_pMovedStart.get(), &nEnd);
+    nMvLen = nEnd - m_pMovedStart->GetIndex() + 1;
 }
 
 void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
@@ -1268,11 +1268,11 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos 
     if( ULONG_MAX != nStartPos )        // was there any content?
     {
         SwPosition aInsPos( rInsPos );
-        sal_uLong nEnd = pMvStt->GetIndex() + nMvLen - 1;
-        MoveFromUndoNds(*pDoc, pMvStt->GetIndex(), aInsPos, &nEnd);
+        sal_uLong nEnd = m_pMovedStart->GetIndex() + nMvLen - 1;
+        MoveFromUndoNds(*pDoc, m_pMovedStart->GetIndex(), aInsPos, &nEnd);
 
         // destroy indices again, content was deleted from UndoNodes array
-        DELETEZ( pMvStt );
+        m_pMovedStart.reset();
         nMvLen = 0;
 
         if( pRedlSaveData )
