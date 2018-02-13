@@ -541,7 +541,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                pHelp->Start( ".uno:HelpIndex", nullptr ); // show start page
+                pHelp->Start(".uno:HelpIndex", static_cast<vcl::Window*>(nullptr)); // show start page
                 bDone = true;
             }
             break;
