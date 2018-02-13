@@ -819,7 +819,8 @@ void LwpTableLayout::Read()
  */
 void LwpTableLayout::XFConvert(XFContentContainer* pCont)
 {
-
+    if (!m_pXFTable)
+        throw std::runtime_error("missing table");
     pCont->Add(m_pXFTable.get());
 }
 /**
@@ -1141,8 +1142,7 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
                         }
                         else
                         {
-                            //Hidden cell would not be in cellsmap
-                            assert(false);
+                            throw std::runtime_error("Hidden cell would not be in cellsmap");
                         }
                     }
                     pCellList = dynamic_cast<LwpCellList*>(pCellList->GetNextID().obj().get());
@@ -1152,7 +1152,7 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
         }
 
     }catch (...) {
-        assert(false);
+        SAL_WARN("lwp", "bad PutCellVals");
     }
 }
 
