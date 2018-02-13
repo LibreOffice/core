@@ -285,6 +285,8 @@ void ScDocumentImport::setFormulaCell(
     std::unique_ptr<ScFormulaCell> pFC =
         o3tl::make_unique<ScFormulaCell>(&mpImpl->mrDoc, rPos, rFormula, eGrammar);
 
+    mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *pFC->GetCode());
+
     if (pResult)
     {
         // Set cached result to this formula cell.
