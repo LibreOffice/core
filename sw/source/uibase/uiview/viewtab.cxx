@@ -300,7 +300,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 }
 
                 SwFormatFrameSize aSize( pFormat->GetFrameSize() );
-                long nOldWidth = static_cast<long>(aSize.GetWidth());
+                long nOldWidth = aSize.GetWidth();
 
                 if(aSize.GetWidthPercent())
                 {
@@ -317,7 +317,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 {
                     SwFormatCol aCol(pFormat->GetCol());
 
-                    ::ResizeFrameCols(aCol, nOldWidth, static_cast<long>(aSize.GetWidth()), nDeltaX );
+                    ::ResizeFrameCols(aCol, nOldWidth, aSize.GetWidth(), nDeltaX );
                     aSet.Put(aCol);
                 }
 

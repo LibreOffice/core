@@ -201,7 +201,7 @@ SvxSizeItem::SvxSizeItem( const sal_uInt16 nId, const Size& rSize ) :
 
     SfxPoolItem( nId ),
 
-    aSize( rSize )
+    m_aSize( rSize )
 {
 }
 
@@ -211,7 +211,7 @@ bool SvxSizeItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
-    awt::Size aTmp(aSize.Width(), aSize.Height());
+    awt::Size aTmp(m_aSize.Width(), m_aSize.Height());
     if( bConvert )
     {
         aTmp.Height = convertTwipToMm100(aTmp.Height);
@@ -247,7 +247,7 @@ bool SvxSizeItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     aTmp.Height = convertMm100ToTwip(aTmp.Height);
                     aTmp.Width = convertMm100ToTwip(aTmp.Width);
                 }
-                aSize = Size( aTmp.Width, aTmp.Height );
+                m_aSize = Size( aTmp.Width, aTmp.Height );
             }
             else
             {
@@ -261,7 +261,7 @@ bool SvxSizeItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= nVal ))
                 return false;
 
-            aSize.setWidth( bConvert ? convertMm100ToTwip(nVal) : nVal );
+            m_aSize.setWidth( bConvert ? convertMm100ToTwip(nVal) : nVal );
         }
         break;
         case MID_SIZE_HEIGHT:
@@ -270,7 +270,7 @@ bool SvxSizeItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= nVal))
                 return true;
 
-            aSize.setHeight( bConvert ? convertMm100ToTwip(nVal) : nVal );
+            m_aSize.setHeight( bConvert ? convertMm100ToTwip(nVal) : nVal );
         }
         break;
         default: OSL_FAIL("Wrong MemberId!");
@@ -291,7 +291,7 @@ bool SvxSizeItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
 
-    return ( aSize == static_cast<const SvxSizeItem&>( rAttr ).GetSize() );
+    return ( m_aSize == static_cast<const SvxSizeItem&>( rAttr ).GetSize() );
 }
 
 
@@ -313,18 +313,18 @@ bool SvxSizeItem::GetPresentation
     switch ( ePres )
     {
         case SfxItemPresentation::Nameless:
-            rText = GetMetricText( aSize.Width(), eCoreUnit, ePresUnit, &rIntl ) +
+            rText = GetMetricText( m_aSize.Width(), eCoreUnit, ePresUnit, &rIntl ) +
                     cpDelimTmp +
-                    GetMetricText( aSize.Height(), eCoreUnit, ePresUnit, &rIntl );
+                    GetMetricText( m_aSize.Height(), eCoreUnit, ePresUnit, &rIntl );
             return true;
 
         case SfxItemPresentation::Complete:
             rText = EditResId(RID_SVXITEMS_SIZE_WIDTH) +
-                    GetMetricText( aSize.Width(), eCoreUnit, ePresUnit, &rIntl ) +
+                    GetMetricText( m_aSize.Width(), eCoreUnit, ePresUnit, &rIntl ) +
                     " " + EditResId(GetMetricId(ePresUnit)) +
                     cpDelimTmp +
                     EditResId(RID_SVXITEMS_SIZE_HEIGHT) +
-                    GetMetricText( aSize.Height(), eCoreUnit, ePresUnit, &rIntl ) +
+                    GetMetricText( m_aSize.Height(), eCoreUnit, ePresUnit, &rIntl ) +
                     " " + EditResId(GetMetricId(ePresUnit));
             return true;
         // no break necessary
@@ -337,8 +337,8 @@ bool SvxSizeItem::GetPresentation
 
 void SvxSizeItem::ScaleMetrics( long nMult, long nDiv )
 {
-    aSize.setWidth( Scale( aSize.Width(), nMult, nDiv ) );
-    aSize.setHeight( Scale( aSize.Height(), nMult, nDiv ) );
+    m_aSize.setWidth( Scale( m_aSize.Width(), nMult, nDiv ) );
+    m_aSize.setHeight( Scale( m_aSize.Height(), nMult, nDiv ) );
 }
 
 
