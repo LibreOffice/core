@@ -111,7 +111,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
             sal_Int32 nL,
             const SwInsertFlags nInsertFlags,
             bool bWDelim )
-    : SwUndo(SwUndoId::TYPING, rNd.GetNode().GetDoc()), pText( nullptr ), pRedlData( nullptr ),
+    : SwUndo(SwUndoId::TYPING, rNd.GetNode().GetDoc()), pRedlData( nullptr ),
         nNode( rNd.GetIndex() ), nContent(nCnt), nLen(nL),
         bIsWordDelim( bWDelim ), bIsAppend( false )
     , m_bWithRsid(false)
@@ -121,7 +121,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
 }
 
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
-    : SwUndo(SwUndoId::SPLITNODE, rNd.GetNode().GetDoc()), pText( nullptr ),
+    : SwUndo(SwUndoId::SPLITNODE, rNd.GetNode().GetDoc()),
         pRedlData( nullptr ), nNode( rNd.GetIndex() ), nContent(0), nLen(1),
         bIsWordDelim( false ), bIsAppend( true )
     , m_bWithRsid(false)
@@ -202,7 +202,9 @@ SwUndoInsert::~SwUndoInsert()
         m_pUndoNodeIndex.reset();
     }
     else     // the inserted text
-        delete pText;
+    {
+        m_pText.reset();
+    }
     delete pRedlData;
 }
 
@@ -258,7 +260,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
                         aPaM.GetMark()->nContent.GetIndex());
                 }
                 RemoveIdxFromRange( aPaM, false );
-                pText = new OUString( pTextNode->GetText().copy(nContent-nLen, nLen) );
+                m_pText.reset(new OUString(pTextNode->GetText().copy(nContent-nLen, nLen)));
                 pTextNode->EraseText( aPaM.GetPoint()->nContent, nLen );
             }
             else                // otherwise Graphics/OLE/Text/...
@@ -272,7 +274,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
             nNd = aPaM.GetPoint()->nNode.GetIndex();
             nCnt = aPaM.GetPoint()->nContent.GetIndex();
 
-            if( !pText )
+            if (!m_pText)
             {
                 m_pUndoNodeIndex.reset(
                         new SwNodeIndex(pDoc->GetNodes().GetEndOfContent()));
@@ -332,15 +334,15 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
         {
             const bool bMvBkwrd = MovePtBackward( *pPam );
 
-            if( pText )
+            if (m_pText)
             {
                 SwTextNode *const pTextNode = pCNd->GetTextNode();
                 OSL_ENSURE( pTextNode, "where is my textnode ?" );
                 OUString const ins(
-                    pTextNode->InsertText( *pText, pPam->GetMark()->nContent,
+                    pTextNode->InsertText( *m_pText, pPam->GetMark()->nContent,
                     m_nInsertFlags) );
-                assert(ins.getLength() == pText->getLength()); // must succeed
-                DELETEZ( pText );
+                assert(ins.getLength() == m_pText->getLength()); // must succeed
+                m_pText.reset();
                 if (m_bWithRsid) // re-insert RSID
                 {
                     SwPaM pam(*pPam->GetMark(), nullptr); // mark -> point
@@ -459,8 +461,8 @@ SwRewriter SwUndoInsert::GetRewriter() const
     OUString * pStr = nullptr;
     bool bDone = false;
 
-    if (pText)
-        pStr = pText;
+    if (m_pText)
+        pStr = m_pText.get();
     else if (pUndoText)
         pStr = pUndoText.get();
 
