@@ -426,8 +426,8 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
         nY = aSize.Height() - 1;
 
     Point aPos = maPosition;
-    maPosition.X() = nX - 5;
-    maPosition.Y() = nY - 5;
+    maPosition.setX( nX - 5 );
+    maPosition.setY( nY - 5 );
     Invalidate(::tools::Rectangle(aPos, Size(11, 11)));
     Invalidate(::tools::Rectangle(maPosition, Size(11, 11)));
 
@@ -469,17 +469,17 @@ void ColorFieldControl::KeyMove( int dx, int dy )
 {
     Size aSize(GetOutputSizePixel());
     Point aPos(static_cast<long>(mdX * aSize.Width()), static_cast<long>((1.0 - mdY) * aSize.Height()));
-    aPos.X() += dx;
+    aPos.setX( aPos.X() + dx );
     aPos.Y() += dy;
     if( aPos.X() < 0 )
-        aPos.X() += aSize.Width();
+        aPos.setX( aPos.X() + aSize.Width() );
     else if( aPos.X() >= aSize.Width() )
-        aPos.X() -= aSize.Width();
+        aPos.setX( aPos.X() - aSize.Width() );
 
     if( aPos.Y() < 0 )
-        aPos.Y() += aSize.Height();
+        aPos.setY( aPos.Y() + aSize.Height() );
     else if( aPos.Y() >= aSize.Height() )
-        aPos.Y() -= aSize.Height();
+        aPos.setY( aPos.Y() - aSize.Height() );
 
     ShowPosition( aPos, true );
     Modify();
@@ -774,7 +774,7 @@ void ColorSliderControl::Paint(vcl::RenderContext& rRenderContext, const ::tools
     while (x--)
     {
         rRenderContext.DrawOutDev(aPos, aSize, Point(0,0), aSize, *mxBitmap);
-        aPos.X() += 1;
+        aPos.setX( aPos.X() + 1 );
     }
 }
 
@@ -941,11 +941,11 @@ ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sa
 
     Point aPos( mpColorSlider->GetPosPixel() );
 
-    aPos.X() -= aSize.Width();
+    aPos.setX( aPos.X() - aSize.Width() );
     aPos.Y() -= aSize.Height() / 2;
     mpFISliderLeft->SetPosPixel( aPos );
 
-    aPos.X() += aSize.Width() + mpColorSlider->GetSizePixel().Width();
+    aPos.setX( aPos.X() + aSize.Width() + mpColorSlider->GetSizePixel().Width() );
     mpFISliderRight->SetPosPixel( aPos );
 
     Color aColor( nColor );
@@ -1094,12 +1094,12 @@ void ColorPickerDialog::update_color( UpdateFlags n )
     {
         Point aPos(0, mpColorSlider->GetLevel() + mpColorSlider->GetPosPixel().Y() - 1);
 
-        aPos.X() = mpFISliderLeft->GetPosPixel().X();
+        aPos.setX( mpFISliderLeft->GetPosPixel().X() );
         if (aPos != mpFISliderLeft->GetPosPixel())
         {
             mpFISliderLeft->SetPosPixel(aPos);
 
-            aPos.X() = mpFISliderRight->GetPosPixel().X();
+            aPos.setX( mpFISliderRight->GetPosPixel().X() );
             mpFISliderRight->SetPosPixel(aPos);
         }
     }

@@ -348,15 +348,15 @@ void ChartWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
 
             if (!IsMapModeEnabled())
             {
-                aRectangle.Left() /= fXScale;
-                aRectangle.Right() /= fXScale;
-                aRectangle.Top() /= fYScale;
-                aRectangle.Bottom() /= fYScale;
+                aRectangle.SetLeft( aRectangle.Left() / fXScale );
+                aRectangle.SetRight( aRectangle.Right() / fXScale );
+                aRectangle.SetTop( aRectangle.Top() / fYScale );
+                aRectangle.SetBottom( aRectangle.Bottom() / fYScale );
             }
 
             Point aOffset = this->GetOffsetPixelFrom(*pEditWin);
-            aOffset.X() *= (TWIPS_PER_PIXEL / fXScale);
-            aOffset.Y() *= (TWIPS_PER_PIXEL / fYScale);
+            aOffset.setX( aOffset.X() * (TWIPS_PER_PIXEL / fXScale) );
+            aOffset.setY( aOffset.Y() * (TWIPS_PER_PIXEL / fYScale) );
 
             aRectangle = tools::Rectangle(aRectangle.TopLeft() + aOffset, aRectangle.GetSize());
         }
@@ -413,11 +413,11 @@ tools::Rectangle ChartWindow::GetBoundingBox()
         double fXScale( aCWMapMode.GetScaleX() );
         double fYScale( aCWMapMode.GetScaleY() );
         Point aOffset = GetOffsetPixelFrom(*pRootWin);
-        aOffset.X() *= (TWIPS_PER_PIXEL / fXScale);
-        aOffset.Y() *= (TWIPS_PER_PIXEL / fYScale);
+        aOffset.setX( aOffset.X() * (TWIPS_PER_PIXEL / fXScale) );
+        aOffset.setY( aOffset.Y() * (TWIPS_PER_PIXEL / fYScale) );
         Size aSize = GetSizePixel();
-        aSize.Width() *= (TWIPS_PER_PIXEL / fXScale);
-        aSize.Height() *= (TWIPS_PER_PIXEL / fYScale);
+        aSize.setWidth( aSize.Width() * (TWIPS_PER_PIXEL / fXScale) );
+        aSize.setHeight( aSize.Height() * (TWIPS_PER_PIXEL / fYScale) );
         aBBox = tools::Rectangle(aOffset, aSize);
     }
     return aBBox;

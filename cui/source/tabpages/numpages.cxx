@@ -2126,10 +2126,10 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, Edit&, rField, void)
                 if(bWidth)
                 {
                     long nDelta = nWidthVal - aInitSize[i].Width();
-                    aSize.Width() = nWidthVal;
+                    aSize.setWidth( nWidthVal );
                     if (bRatio)
                     {
-                        aSize.Height() = aInitSize[i].Height() + static_cast<long>(static_cast<double>(nDelta) / fSizeRatio);
+                        aSize.setHeight( aInitSize[i].Height() + static_cast<long>(static_cast<double>(nDelta) / fSizeRatio) );
                         m_pHeightMF->SetUserValue(m_pHeightMF->Normalize(
                             OutputDevice::LogicToLogic( aSize.Height(), eCoreUnit, MapUnit::Map100thMM )),
                                 FUNIT_100TH_MM);
@@ -2138,10 +2138,10 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, Edit&, rField, void)
                 else
                 {
                     long nDelta = nHeightVal - aInitSize[i].Height();
-                    aSize.Height() = nHeightVal;
+                    aSize.setHeight( nHeightVal );
                     if (bRatio)
                     {
-                        aSize.Width() = aInitSize[i].Width() + static_cast<long>(static_cast<double>(nDelta) * fSizeRatio);
+                        aSize.setWidth( aInitSize[i].Width() + static_cast<long>(static_cast<double>(nDelta) * fSizeRatio) );
                         m_pWidthMF->SetUserValue(m_pWidthMF->Normalize(
                             OutputDevice::LogicToLogic( aSize.Width(), eCoreUnit, MapUnit::Map100thMM )),
                                 FUNIT_100TH_MM);
@@ -2239,9 +2239,9 @@ static long lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &rFmt, l
         if(pGrf)
         {
             Size aGSize( rFmt.GetGraphicSize() );
-            aGSize.Width() /= nDivision;
+            aGSize.setWidth( aGSize.Width() / nDivision );
             nRet = aGSize.Width();
-            aGSize.Height() /= nDivision;
+            aGSize.setHeight( aGSize.Height() / nDivision );
             pGrf->Draw( pVDev, Point(nXStart,nYMiddle - ( aGSize.Height() / 2) ),
                     pVDev->PixelToLogic( aGSize ) );
         }
@@ -2259,13 +2259,13 @@ static long lcl_DrawBullet(VirtualDevice* pVDev,
     // via Uno it's possible that no font has been set!
     vcl::Font aFont(rFmt.GetBulletFont() ? *rFmt.GetBulletFont() : aTmpFont);
     Size aTmpSize(rSize);
-    aTmpSize.Width() *= rFmt.GetBulletRelSize();
+    aTmpSize.setWidth( aTmpSize.Width() * rFmt.GetBulletRelSize() );
     aTmpSize.Width() /= 100 ;
-    aTmpSize.Height() *= rFmt.GetBulletRelSize();
+    aTmpSize.setHeight( aTmpSize.Height() * rFmt.GetBulletRelSize() );
     aTmpSize.Height() /= 100 ;
     // in case of a height of zero it is drawed in original height
     if(!aTmpSize.Height())
-        aTmpSize.Height() = 1;
+        aTmpSize.setHeight( 1 );
     aFont.SetFontSize(aTmpSize);
     aFont.SetTransparent(true);
     Color aBulletColor = rFmt.GetBulletColor();

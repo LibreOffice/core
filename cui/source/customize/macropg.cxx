@@ -106,7 +106,7 @@ IMPL_LINK( MacroEventListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
             for( sal_uInt16 i = 1 ; i < _nTabs ; ++i )
             {
                 long _nWidth = maHeaderBar->GetItemSize( i );
-                aSz.Width() =  _nWidth + nTmpSz;
+                aSz.setWidth(  _nWidth + nTmpSz );
                 nTmpSz += _nWidth;
                 maListBox->SetTab( i, PixelToLogic( aSz, MapMode( MapUnit::MapAppFont ) ).Width() );
             }
@@ -166,11 +166,11 @@ void MacroEventListBox::Resize()
     Point    aPnt( 0, 0 );
     Size    aSize( maHeaderBar->CalcWindowSizePixel() );
     Size    aCtrlSize( GetOutputSizePixel() );
-    aSize.Width() = aCtrlSize.Width();
+    aSize.setWidth( aCtrlSize.Width() );
     maHeaderBar->SetPosSizePixel( aPnt, aSize );
 
     // calc pos and size of ListBox
-    aPnt.Y() += aSize.Height();
+    aPnt.setY( aPnt.Y() + aSize.Height() );
     aSize.Height() = aCtrlSize.Height() - aSize.Height();
     maListBox->SetPosSizePixel( aPnt, aSize );
 }
@@ -473,7 +473,7 @@ void IconLBoxString::Paint(const Point& aPos, SvTreeListBox& /*aDevice*/, vcl::R
         }
 
         Point aPnt(aPos);
-        aPnt.X() += 20;
+        aPnt.setX( aPnt.X() + 20 );
         rRenderContext.DrawText(aPnt, aPureMethod);
     }
 }
@@ -713,7 +713,7 @@ void SvxMacroTabPage_::InitAndSetHandler( const Reference< container::XNameRepla
     rListBox.SetTabs( &nTabs[0] );
     Size aSize( nTabs[ 2 ], 0 );
     rHeaderBar.InsertItem( ITEMID_EVENT, mpImpl->sStrEvent, LogicToPixel( aSize, MapMode( MapUnit::MapAppFont ) ).Width() );
-    aSize.Width() = 1764;        // don't know what, so 42^2 is best to use...
+    aSize.setWidth( 1764 );        // don't know what, so 42^2 is best to use...
     rHeaderBar.InsertItem( ITMEID_ASSMACRO, mpImpl->sAssignedMacro, LogicToPixel( aSize, MapMode( MapUnit::MapAppFont ) ).Width() );
     rListBox.SetSpaceBetweenEntries( 0 );
 

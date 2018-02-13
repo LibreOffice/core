@@ -73,7 +73,7 @@ CreationWizard::CreationWizard(vcl::Window* pParent, const uno::Reference<frame:
 
     Size aAdditionalRoadmapSize(LogicToPixel(Size(85, 0), MapMode(MapUnit::MapAppFont)));
     Size aSize(LogicToPixel(Size(CHART_WIZARD_PAGEWIDTH, CHART_WIZARD_PAGEHEIGHT), MapMode(MapUnit::MapAppFont)));
-    aSize.Width() += aAdditionalRoadmapSize.Width();
+    aSize.setWidth( aSize.Width() + aAdditionalRoadmapSize.Width() );
     SetSizePixel(aSize);
 
     if (!m_pDialogModel->getModel().isDataFromSpreadsheet())

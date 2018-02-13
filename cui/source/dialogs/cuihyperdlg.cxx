@@ -132,16 +132,16 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     Size aMaxPrefSize(pBox->get_preferred_size());
     ShowPage(HyperLinkPageType::Document);
     Size aSize(pBox->get_preferred_size());
-    aMaxPrefSize.Width() = std::max(aMaxPrefSize.Width(), aSize.Width());
-    aMaxPrefSize.Height() = std::max(aMaxPrefSize.Height(), aSize.Height());
+    aMaxPrefSize.setWidth( std::max(aMaxPrefSize.Width(), aSize.Width()) );
+    aMaxPrefSize.setHeight( std::max(aMaxPrefSize.Height(), aSize.Height()) );
     ShowPage(HyperLinkPageType::Mail);
     aSize = pBox->get_preferred_size();
-    aMaxPrefSize.Width() = std::max(aMaxPrefSize.Width(), aSize.Width());
-    aMaxPrefSize.Height() = std::max(aMaxPrefSize.Height(), aSize.Height());
+    aMaxPrefSize.setWidth( std::max(aMaxPrefSize.Width(), aSize.Width()) );
+    aMaxPrefSize.setHeight( std::max(aMaxPrefSize.Height(), aSize.Height()) );
     ShowPage(HyperLinkPageType::Internet);
     aSize = pBox->get_preferred_size();
-    aMaxPrefSize.Width() = std::max(aMaxPrefSize.Width(), aSize.Width());
-    aMaxPrefSize.Height() = std::max(aMaxPrefSize.Height(), aSize.Height());
+    aMaxPrefSize.setWidth( std::max(aMaxPrefSize.Width(), aSize.Width()) );
+    aMaxPrefSize.setHeight( std::max(aMaxPrefSize.Height(), aSize.Height()) );
     pBox->set_width_request(aMaxPrefSize.Width());
     pBox->set_height_request(aMaxPrefSize.Height());
 
