@@ -1338,7 +1338,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     {
         if(GetMapMode().GetMapUnit() != MapUnit::MapPixel &&
         // Some of the preview windows (SvxPreviewBase) uses different painting (drawinglayer primitives)
-        // For these preview we don't need to scale even tough the unit is not pixel.
+        // For these preview we don't need to scale even though the unit is not pixel.
         GetMapMode().GetMapUnit() != MapUnit::Map100thMM)
         {
             bNeedsScaling = true;
