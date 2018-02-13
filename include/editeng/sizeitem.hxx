@@ -33,7 +33,7 @@
 class EDITENG_DLLPUBLIC SvxSizeItem : public SfxPoolItem
 {
 
-    Size aSize;
+    Size m_aSize;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -57,13 +57,18 @@ public:
     virtual void             ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool             HasMetrics() const override;
 
-    const Size& GetSize() const { return aSize; }
-    void        SetSize(const Size& rSize) { aSize = rSize; }
+    const Size& GetSize() const { return m_aSize; }
+    void        SetSize(const Size& rSize) { m_aSize = rSize; }
+
+    long GetWidth() const { return m_aSize.getWidth();  }
+    long GetHeight() const { return m_aSize.getHeight(); }
+    void SetWidth(long n) { m_aSize.setWidth(n); }
+    void SetHeight(long n) { m_aSize.setHeight(n); }
 };
 
 inline SvxSizeItem& SvxSizeItem::operator=( const SvxSizeItem &rCpy )
 {
-    aSize = rCpy.aSize;
+    m_aSize = rCpy.m_aSize;
     return *this;
 }
 
