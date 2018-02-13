@@ -47,6 +47,13 @@
 
 
 class BitmapEx;
+namespace weld
+{
+    class Builder;
+    class Container;
+    class MessageDialog;
+    class Widget;
+}
 class AllSettings;
 class DataChangedEvent;
 class Accelerator;
@@ -1384,6 +1391,10 @@ public:
     // For vclbootstrapprotector:
     static void setDeInitHook(Link<LinkParamNone*,void> const & hook);
 
+    static weld::Builder* CreateBuilder(weld::Widget* pParent, const OUString &rUIFile);
+
+    static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
+                                                    VclButtonsType eButtonType, const OUString& rPrimaryMessage);
 private:
     DECL_STATIC_LINK( Application, PostEventHandler, void*, void );
 };
