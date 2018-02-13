@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 #include <rtl/uuid.h>
-#include "xmlsignature_nssimpl.hxx"
 
 #include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
 #include <xmlsec/xmlelementwrapper_xmlsecimpl.hxx>
@@ -31,7 +30,9 @@
 #include "xmlsecuritycontext_nssimpl.hxx"
 
 #include <xmlsec-wrapper.h>
+#include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;
 using ::com::sun::star::lang::XMultiServiceFactory ;
@@ -45,10 +46,30 @@ using ::com::sun::star::xml::crypto::XXMLSignatureTemplate ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 using ::com::sun::star::xml::crypto::XUriBinding ;
 
-XMLSignature_NssImpl::XMLSignature_NssImpl() {
-}
+class XMLSignature_NssImpl
+    : public ::cppu::WeakImplHelper<xml::crypto::XXMLSignature, lang::XServiceInfo>
+{
+public:
+    explicit XMLSignature_NssImpl();
 
-XMLSignature_NssImpl::~XMLSignature_NssImpl() {
+    //Methods from XXMLSignature
+    virtual uno::Reference<xml::crypto::XXMLSignatureTemplate> SAL_CALL
+    generate(const uno::Reference<xml::crypto::XXMLSignatureTemplate>& aTemplate,
+             const uno::Reference<xml::crypto::XSecurityEnvironment>& aEnvironment) override;
+
+    virtual uno::Reference<xml::crypto::XXMLSignatureTemplate> SAL_CALL
+    validate(const uno::Reference<xml::crypto::XXMLSignatureTemplate>& aTemplate,
+             const uno::Reference<xml::crypto::XXMLSecurityContext>& aContext) override;
+
+    //Methods from XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+
+    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+};
+
+XMLSignature_NssImpl::XMLSignature_NssImpl() {
 }
 
 /* XXMLSignature */
@@ -267,7 +288,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
 
 /* XServiceInfo */
 OUString SAL_CALL XMLSignature_NssImpl::getImplementationName() {
-    return impl_getImplementationName() ;
+    return OUString("com.sun.star.xml.crypto.XMLSignature");
 }
 
 /* XServiceInfo */
@@ -283,27 +304,15 @@ sal_Bool SAL_CALL XMLSignature_NssImpl::supportsService( const OUString& service
 
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL XMLSignature_NssImpl::getSupportedServiceNames() {
-    return impl_getSupportedServiceNames() ;
-}
-
-//Helper for XServiceInfo
-Sequence< OUString > XMLSignature_NssImpl::impl_getSupportedServiceNames() {
-    ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence<OUString> seqServiceNames { "com.sun.star.xml.crypto.XMLSignature" };
     return seqServiceNames ;
 }
 
-OUString XMLSignature_NssImpl::impl_getImplementationName() {
-    return OUString("com.sun.star.xml.security.bridge.xmlsec.XMLSignature_NssImpl") ;
-}
-
-//Helper for registry
-Reference< XInterface > SAL_CALL XMLSignature_NssImpl::impl_createInstance( const Reference< XMultiServiceFactory >& ) {
-    return Reference< XInterface >( *new XMLSignature_NssImpl ) ;
-}
-
-Reference< XSingleServiceFactory > XMLSignature_NssImpl::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_xml_crypto_XMLSignature_get_implementation(uno::XComponentContext* /*pCtx*/,
+                                                        uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new XMLSignature_NssImpl);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
