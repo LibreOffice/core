@@ -114,25 +114,45 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
 BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nStride, sal_uInt16 nBitCount )
 {
     assert(nStride >= nWidth);
+    assert( nBitCount == 24 || nBitCount == 32);
     Bitmap aBmp( Size( nWidth, nHeight ), nBitCount );
 
     Bitmap::ScopedWriteAccess pWrite(aBmp);
     assert(pWrite.get());
-    if( pWrite.get() )
+    if( !pWrite )
+        return BitmapEx();
+    std::unique_ptr<AlphaMask> pAlphaMask;
+    AlphaMask::ScopedWriteAccess xMaskAcc;
+    if (nBitCount == 32)
     {
-        for( long y = 0; y < nHeight; ++y )
+        pAlphaMask.reset( new AlphaMask( Size(nWidth, nHeight) ) );
+        xMaskAcc = AlphaMask::ScopedWriteAccess(*pAlphaMask);
+    }
+    for( long y = 0; y < nHeight; ++y )
+    {
+        sal_uInt8 const *p = pData + y * nStride;
+        Scanline pScanline = pWrite->GetScanline(y);
+        for (long x = 0; x < nWidth; ++x)
         {
-            sal_uInt8 const *p = pData + y * nStride;
-            Scanline pScanline = pWrite->GetScanline(y);
+            BitmapColor col(p[0], p[1], p[2]);
+            pWrite->SetPixelOnData(pScanline, x, col);
+            p += nBitCount/8;
+        }
+        if (nBitCount == 32)
+        {
+            p = pData + y * nStride + 3;
+            Scanline pMaskScanLine = xMaskAcc->GetScanline(y);
             for (long x = 0; x < nWidth; ++x)
             {
-                BitmapColor col(p[0], p[1], p[2]);
-                pWrite->SetPixelOnData(pScanline, x, col);
-                p += 3;
+                xMaskAcc->SetPixelOnData(pMaskScanLine, x, BitmapColor(*p));
+                p += 4;
             }
-        }
+         }
     }
-    return aBmp;
+    if (nBitCount == 32)
+        return BitmapEx(aBmp, *pAlphaMask);
+    else
+        return aBmp;
 }
 
 /** Copy block of image data into the bitmap.
