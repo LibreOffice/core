@@ -187,17 +187,6 @@ sub call_sum
 }
 
 #########################################################
-# Searching for the getuid.so
-#########################################################
-
-sub get_path_for_library
-{
-    my $getuidlibrary = $ENV{'WORKDIR'} . '/LinkTarget/Library/libgetuid.so';
-    if ( ! -e $getuidlibrary ) { installer::exiter::exit_program("File $getuidlibrary does not exist!", "get_path_for_library"); }
-    return $getuidlibrary;
-}
-
-#########################################################
 # Include the tar file into the script
 #########################################################
 
@@ -230,12 +219,12 @@ sub include_tar_into_script
 
 sub tar_package
 {
-    my ( $installdir, $tarfilename, $getuidlibrary) = @_;
+    my ( $installdir, $tarfilename, $usefakeroot) = @_;
 
-    my $ldpreloadstring = "";
-    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+    my $fakerootstring = "";
+    if ( $usefakeroot ) { $fakerootstring = "fakeroot"; }
 
-    my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - * > $tarfilename";
+    my $systemcall = "cd $installdir; $fakerootstring tar -cf - * > $tarfilename";
 
     my $returnvalue = system($systemcall);
 
@@ -505,7 +494,7 @@ sub set_download_filename
 
 sub create_tar_gz_file_from_directory
 {
-    my ($installdir, $getuidlibrary, $downloaddir, $downloadfilename) = @_;
+    my ($installdir, $usefakeroot, $downloaddir, $downloadfilename) = @_;
 
     my $infoline = "";
 
@@ -514,8 +503,8 @@ sub create_tar_gz_file_from_directory
     my $changedir = $installdir;
     installer::pathanalyzer::get_path_from_fullqualifiedname(\$changedir);
 
-    my $ldpreloadstring = "";
-    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+    my $fakerootstring = "";
+    if ( $usefakeroot ) { $fakerootstring = "fakeroot"; }
 
     $installer::globals::downloadfileextension = ".tar.gz";
     $installer::globals::downloadfilename = $downloadfilename . $installer::globals::downloadfileextension;
@@ -527,7 +516,7 @@ sub create_tar_gz_file_from_directory
         unlink("$installdir/install");
     }
 
-    my $systemcall = "cd $changedir; $ldpreloadstring tar -cf - $packdir | gzip > $targzname";
+    my $systemcall = "cd $changedir; $fakerootstring tar -cf - $packdir | gzip > $targzname";
 
     my $returnvalue = system($systemcall);
 
@@ -714,13 +703,13 @@ sub create_download_sets
     if ( ! $installer::globals::iswindowsbuild )    # Unix specific part
     {
 
-        # getting the path of the getuid.so (only required for Solaris and Linux)
-        my $getuidlibrary = "";
-        if (( $installer::globals::issolarisbuild ) || ( $installer::globals::islinuxbuild )) { $getuidlibrary = get_path_for_library(); }
+        # whether to use fakeroot (only required for Solaris and Linux)
+        my $usefakeroot = 0;
+        if (( $installer::globals::issolarisbuild ) || ( $installer::globals::islinuxbuild )) { $usefakeroot = 1; }
 
         if ( $allvariableshashref->{'OOODOWNLOADNAME'} )
         {
-            my $downloadfile = create_tar_gz_file_from_directory($installationdir, $getuidlibrary, $downloaddir, $downloadname);
+            my $downloadfile = create_tar_gz_file_from_directory($installationdir, $usefakeroot, $downloaddir, $downloadname);
         }
         else
         {
@@ -741,7 +730,7 @@ sub create_download_sets
 
             # create tar file
             my $temporary_tarfile_name = $downloaddir . $installer::globals::separator . 'installset.tar';
-            my $size = tar_package($installationdir, $temporary_tarfile_name, $getuidlibrary);
+            my $size = tar_package($installationdir, $temporary_tarfile_name, $usefakeroot);
             installer::exiter::exit_program("ERROR: Could not create tar file $temporary_tarfile_name!", "create_download_sets") unless $size;
 
             # calling sum to determine checksum and size of the tar file
