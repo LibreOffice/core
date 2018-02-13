@@ -305,7 +305,9 @@ void GraphicCacheEntry::AddGraphicObjectReference( const GraphicObject& rObj, Gr
     if( mbSwappedAll )
         mbSwappedAll = !ImplInit( rObj );
 
+    OUString rOriginURL = rObj.GetGraphic().getOriginURL();
     ImplFillSubstitute( rSubstitute );
+    rSubstitute.setOriginURL(rOriginURL);
     maGraphicObjectList.push_back( const_cast<GraphicObject*>(&rObj) );
 }
 
