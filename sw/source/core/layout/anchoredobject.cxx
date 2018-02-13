@@ -626,8 +626,9 @@ void SwAnchoredObject::UpdateObjInSortedList()
             {
                 const SwSortedObjs* pObjs = GetAnchorFrame()->GetDrawObjs();
                 // determine start index
-                for (SwAnchoredObject* pAnchoredObj : *pObjs)
+                for (auto it = pObjs->begin(); it != pObjs->end(); ++it)
                 {
+                    SwAnchoredObject* pAnchoredObj = *it;
                     if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() )
                         pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence();
                     else
