@@ -1259,6 +1259,69 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
     }
 }
 
+double SdrTextObj::GetFontScaleY() const
+{
+    SdrText* pText = getActiveText();
+    if (pText == nullptr || !pText->GetOutlinerParaObject() || pModel == nullptr)
+        return 1.0;
+
+    SdrOutliner& rOutliner = ImpGetDrawOutliner();
+    const Size aShapeSize = GetSnapRect().GetSize();
+    const Size aSize = Size(aShapeSize.Width() - GetTextLeftDistance() - GetTextRightDistance(),
+        aShapeSize.Height() - GetTextUpperDistance() - GetTextLowerDistance());
+
+    rOutliner.SetPaperSize(aSize);
+    rOutliner.SetUpdateMode(true);
+    rOutliner.SetText(*pText->GetOutlinerParaObject());
+    bool bIsVerticalWriting = IsVerticalWriting();
+
+    // Algorithm from SdrTextObj::ImpAutoFitText
+
+    sal_uInt16 nMinStretchX = 0, nMinStretchY = 0;
+    sal_uInt16 nCurrStretchX = 100, nCurrStretchY = 100;
+    sal_uInt16 aOldStretchXVals[] = { 0,0,0 };
+    const size_t aStretchArySize = SAL_N_ELEMENTS(aOldStretchXVals);
+    for (unsigned int i = 0; i<aStretchArySize; ++i)
+    {
+        const Size aCurrTextSize = rOutliner.CalcTextSizeNTP();
+        double fFactor(1.0);
+        if (bIsVerticalWriting)
+        {
+            if (aCurrTextSize.Width() != 0)
+            {
+                fFactor = double(aSize.Width()) / aCurrTextSize.Width();
+            }
+        }
+        else if (aCurrTextSize.Height() != 0)
+        {
+            fFactor = double(aSize.Height()) / aCurrTextSize.Height();
+        }
+        fFactor = std::sqrt(fFactor);
+
+        rOutliner.GetGlobalCharStretching(nCurrStretchX, nCurrStretchY);
+
+        if (fFactor >= 1.0)
+        {
+            nMinStretchX = std::max(nMinStretchX, nCurrStretchX);
+            nMinStretchY = std::max(nMinStretchY, nCurrStretchY);
+        }
+
+        aOldStretchXVals[i] = nCurrStretchX;
+        if (std::find(aOldStretchXVals, aOldStretchXVals + i, nCurrStretchX) != aOldStretchXVals + i)
+            break; // same value already attained once; algo is looping, exit
+
+        if (fFactor < 1.0 || nCurrStretchX != 100)
+        {
+            nCurrStretchX = sal::static_int_cast<sal_uInt16>(nCurrStretchX*fFactor);
+            nCurrStretchY = sal::static_int_cast<sal_uInt16>(nCurrStretchY*fFactor);
+            rOutliner.SetGlobalCharStretching(std::min(sal_uInt16(100), nCurrStretchX),
+                std::min(sal_uInt16(100), nCurrStretchY));
+        }
+    }
+
+    return std::min(sal_uInt16(100), nCurrStretchY) / 100.0;
+}
+
 void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner ) const
 {
     const Size aShapeSize=GetSnapRect().GetSize();
