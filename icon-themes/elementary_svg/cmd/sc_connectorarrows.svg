@@ -1,4 +1,5 @@
 <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
 
-     /&gt;
- <g fill-rule="evenodd"><path d="m3 2.5v2h4.5v9h5.5v-2h-3.5v-9z" fill="#fff" stroke="#8c8c8c" stroke-linejoin="round"/><path d="m11.472656 9a .50005.50005 0 0 0 -.472656.5v2.5h1v-1.5l2.666016 2-2.666016 2v-1.5h-1v2.5a.50005.50005 0 0 0  .800781.400391l4-3a .50005.50005 0 0 0 0-.800782l-4-2.9999996a.50005.50005 0 0 0 -.328125-.0996094z" fill="#8c8c8c"/><path d="m12 10.5 2.666016 2-2.666016 2z" fill="#fff"/></g><g transform="matrix(-1 0 0 1 16.00127 -9.000928)"><path d="m11.472656 9a .50005.50005 0 0 0 -.472656.5v2.5h1v-1.5l2.666016 2-2.666016 2v-1.5h-1v2.5a.50005.50005 0 0 0  .800781.400391l4-3a .50005.50005 0 0 0 0-.800782l-4-2.9999996a.50005.50005 0 0 0 -.328125-.0996094z" fill="#8c8c8c" fill-rule="evenodd"/><path d="m12 10.5 2.666016 2-2.666016 2z" fill="#fff" fill-rule="evenodd"/></g></svg>
+
+     /&amp;gt;
+ <g fill="#ce5c00"><path d="m4 3v1h4v8 1h5v-1h-4v-8-1z"/><g fill-rule="evenodd"><path d="m11 15 4-2.5-4-2.5z"/><path d="m5 6-4-2.5 4-2.50000001z"/></g></g></svg>
