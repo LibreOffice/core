@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_39425811",
+        "filename": "sysui/desktop/apparmor/program.senddoc",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2018-02-13T15:19:08Z",
+      "side": 1,
+      "message": "why do we need to allow dbus, chrome, .. here?\n\nSee https://sources.debian.org/src/apparmor/2.12-2/profiles/apparmor.d/abstractions/ubuntu-helpers/.\n\n(Besides that I don\u0027t like the \"ubuntu\" there at all, but that is an other story)",
+      "revId": "939a8058bd820109f6e5b2c3617811c83ec944cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
