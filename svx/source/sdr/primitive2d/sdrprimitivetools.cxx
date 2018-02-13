@@ -21,6 +21,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/lazydelete.hxx>
+#include <vcl/virdev.hxx>
 
 
 // helper methods
@@ -43,32 +44,26 @@ namespace drawinglayer
                 aColor = rBColor;
 
                 // create bitmap
-                Bitmap aContent(Size(3, 3), 24);
-                Bitmap aMask(Size(3, 3), 1);
-                BitmapWriteAccess* pWContent = aContent.AcquireWriteAccess();
-                BitmapWriteAccess* pWMask = aMask.AcquireWriteAccess();
-                OSL_ENSURE(pWContent && pWMask, "No WriteAccess to bitmap (!)");
-                const Color aVCLColor(aColor);
-                const BitmapColor aPixColor(aVCLColor);
-                const BitmapColor aMaskColor(0x01);
+                VclPtr<VirtualDevice> pContent(VclPtr<VirtualDevice>::Create());
+                pContent->SetOutputSizePixel(Size(3, 3));
 
                 // Y,X unusual order (!)
-                pWContent->SetPixel(0, 1, aPixColor);
-                pWContent->SetPixel(1, 0, aPixColor);
-                pWContent->SetPixel(1, 1, aPixColor);
-                pWContent->SetPixel(1, 2, aPixColor);
-                pWContent->SetPixel(2, 1, aPixColor);
+                pContent->SetLineColor(Color(aColor));
+                pContent->DrawPixel(Point(1,0));
+                pContent->DrawPixel(Point(0,1));
+                pContent->DrawPixel(Point(1,1));
+                pContent->DrawPixel(Point(2,1));
+                pContent->DrawPixel(Point(1,2));
 
-                pWMask->SetPixel(0, 0, aMaskColor);
-                pWMask->SetPixel(0, 2, aMaskColor);
-                pWMask->SetPixel(2, 0, aMaskColor);
-                pWMask->SetPixel(2, 2, aMaskColor);
-
-                Bitmap::ReleaseAccess(pWContent);
-                Bitmap::ReleaseAccess(pWMask);
+// FIXME how do I draw a mask via VirtualDevice?
+                pContent->SetLineColor(Color(0x01));
+                pContent->DrawPixel(Point(0, 0));
+                pContent->DrawPixel(Point(2, 0));
+                pContent->DrawPixel(Point(0, 2));
+                pContent->DrawPixel(Point(2, 2));
 
                 // create and exchange at aRetVal
-                delete aRetVal.set(new BitmapEx(aContent, aMask));
+                delete aRetVal.set(new BitmapEx(pContent->GetBitmapEx(Point(0,0), pContent->GetOutputSizePixel())));
             }
 
             return aRetVal.get() ? *aRetVal.get() : BitmapEx();
