@@ -1517,7 +1517,7 @@ SwTwips SwFrame::Shrink( SwTwips nDist, bool bTst, bool bInfo )
  * size changes. There is always a frame that takes the maximum possible space (the frame that
  * contains the Body text) and zero or more frames which only take the space needed (header/footer
  * area, footnote container). If one of these frames changes, the body-text-frame has to grow or
- * shrink accordingly, even tough it's fixed.
+ * shrink accordingly, even though it's fixed.
  *
  * !! Is it possible to do this in a generic way and not restrict it to the page and a distinct
  * frame which takes the maximum space (controlled using the FrameSize attribute)?
