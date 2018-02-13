@@ -1314,18 +1314,17 @@ bool LwpMiddleLayout::IsProtected()
 rtl::Reference<LwpVirtualLayout> LwpMiddleLayout::GetWaterMarkLayout()
 {
     rtl::Reference<LwpVirtualLayout> xLay(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    std::set<LwpVirtualLayout*> aSeen;
     while (xLay.is())
     {
+        aSeen.insert(xLay.get());
         if (xLay->IsForWaterMark())
         {
             return xLay;
         }
         rtl::Reference<LwpVirtualLayout> xNext(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
-        if (xNext == xLay)
-        {
-            SAL_WARN("lwp", "loop in layout");
-            break;
-        }
+        if (aSeen.find(xNext.get()) != aSeen.end())
+            throw std::runtime_error("loop in conversion");
         xLay = xNext;
     }
     return rtl::Reference<LwpVirtualLayout>();
