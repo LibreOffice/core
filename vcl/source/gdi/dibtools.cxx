@@ -827,14 +827,21 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
         rIStm.ReadUInt32( nCodedSize ).ReadUInt32( nUncodedSize ).ReadUInt32( aHeader.nCompression );
         if (nCodedSize > rIStm.remainingSize())
            nCodedSize = sal_uInt32(rIStm.remainingSize());
-        size_t nSizeInc(4 * rIStm.remainingSize());
+
+        pMemStm.reset(new SvMemoryStream);
+        // There may be bytes left over or the codec might read more than
+        // necessary. So to preserve the correctness of the source stream copy
+        // the encoded block
+        pMemStm->WriteStream(rIStm, nCodedSize);
+        pMemStm->Seek(0);
+
+        size_t nSizeInc(4 * pMemStm->remainingSize());
         if (nUncodedSize < nSizeInc)
             nSizeInc = nUncodedSize;
 
         if (nSizeInc > 0)
         {
             // decode buffer
-            const sal_uLong nCodedPos = rIStm.Tell();
             ZCodec aCodec;
             aCodec.BeginCompression();
             aData.resize(nSizeInc);
@@ -845,7 +852,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
                 const size_t nToRead(std::min<size_t>(nUncodedSize - nDataPos, aData.size() - nDataPos));
                 assert(nToRead > 0);
                 assert(!aData.empty());
-                const long nRead = aCodec.Read(rIStm, aData.data() + nDataPos, sal_uInt32(nToRead));
+                const long nRead = aCodec.Read(*pMemStm, aData.data() + nDataPos, sal_uInt32(nToRead));
                 if (nRead > 0)
                 {
                     nDataPos += static_cast<unsigned long>(nRead);
@@ -863,9 +870,6 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
             // set the real uncoded size
             nUncodedSize = sal_uInt32(aData.size());
             aCodec.EndCompression();
-
-            // Seek behind the encoded block. There might have been bytes left or the codec might have read more than necessary.
-            rIStm.Seek(nCodedSize + nCodedPos);
         }
 
         if (aData.empty())
