@@ -20,6 +20,8 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_SERVPROV_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_OLE_SERVPROV_HXX
 
+#include <functional>
+
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -56,7 +58,7 @@ class OneInstanceOleWrapper : public IClassFactory
 public:
 
     OneInstanceOleWrapper( const Reference<XMultiServiceFactory>& smgr,
-                           const Reference<XInterface>& xInst );
+                           std::function<const Reference<XInterface>()> xInstFunction );
     virtual ~OneInstanceOleWrapper();
 
     bool registerClass(GUID const * pGuid);
@@ -73,7 +75,7 @@ public:
 
 protected:
     oslInterlockedCount m_refCount;
-    Reference<XInterface>       m_xInst;
+    std::function<const Reference<XInterface>()> m_xInstFunction;
     DWORD               m_factoryHandle;
     Reference<XBridgeSupplier2> m_bridgeSupplier;
     Reference<XMultiServiceFactory> m_smgr;
@@ -173,7 +175,7 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 protected:
-    bool provideInstance(const Reference<XInterface>& xInst, GUID const * guid);
+    bool provideInstance(std::function<const Reference<XInterface>()> xInstFunction, GUID const * guid);
 
     list< OneInstanceOleWrapper* > m_wrapperList;
     Reference< XBridgeSupplier2 >   m_bridgeSupplier;

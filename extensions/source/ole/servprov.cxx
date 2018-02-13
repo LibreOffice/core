@@ -29,6 +29,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <ooo/vba/XHelperInterface.hpp>
 
 using namespace cppu;
 using namespace osl;
@@ -43,10 +44,14 @@ using namespace com::sun::star::bridge::ModelDependent;
 // {82154420-0FBF-11d4-8313-005004526AB4}
 DEFINE_GUID(OID_ServiceManager, 0x82154420, 0xfbf, 0x11d4, 0x83, 0x13, 0x0, 0x50, 0x4, 0x52, 0x6a, 0xb4);
 
+// FIXME: This GUID is just the above with the initial part bumped by one. Is that good enough?
+// {82154421-0FBF-11d4-8313-005004526AB4}
+DEFINE_GUID(OID_LibreOfficeWriterApplication, 0x82154421, 0xfbf, 0x11d4, 0x83, 0x13, 0x0, 0x50, 0x4, 0x52, 0x6a, 0xb4);
+
 OneInstanceOleWrapper::OneInstanceOleWrapper(  const Reference<XMultiServiceFactory>& smgr,
-                                               const Reference<XInterface>& xInst )
+                                               std::function<const Reference<XInterface>()> xInstFunction )
     : m_refCount(0)
-    , m_xInst(xInst)
+    , m_xInstFunction(xInstFunction)
     , m_factoryHandle(0)
     , m_smgr(smgr)
 {
@@ -127,9 +132,10 @@ STDMETHODIMP OneInstanceOleWrapper::CreateInstance(IUnknown FAR* punkOuter,
     HRESULT ret = ResultFromScode(E_UNEXPECTED);
     punkOuter = nullptr;
 
-    if (m_xInst.is())
+    const Reference<XInterface>& xInst = m_xInstFunction();
+    if (xInst.is())
     {
-        Any usrAny(&m_xInst, cppu::UnoType<decltype(m_xInst)>::get());
+        Any usrAny(&xInst, cppu::UnoType<decltype(xInst)>::get());
         sal_uInt8 arId[16];
         rtl_getGlobalProcessId( arId);
         Any oleAny = m_bridgeSupplier->createBridge(usrAny,
@@ -456,7 +462,23 @@ OleServer::OleServer( const Reference<XMultiServiceFactory>& smgr):
         a >>= m_bridgeSupplier;
     }
 
-    (void) provideInstance( m_smgr, &OID_ServiceManager );
+    (void) provideInstance( [&]
+                            {
+                                return m_smgr;
+                            },
+                            &OID_ServiceManager );
+
+    (void) provideInstance( [&]
+                            {
+                                const Reference<XInterface> xWordGlobals = m_smgr->createInstance("ooo.vba.word.Globals");
+                                xWordGlobals->acquire();
+                                const Reference<ooo::vba::XHelperInterface> xHelperInterface(xWordGlobals, UNO_QUERY);
+                                Any aApplication = xHelperInterface->Application();
+                                Reference<XInterface> xApplication;
+                                aApplication >>= xApplication;
+                                return xApplication;
+                            },
+                            &OID_LibreOfficeWriterApplication );
 }
 
 OleServer::~OleServer()
@@ -486,9 +508,9 @@ css::uno::Sequence<OUString> OleServer::getSupportedServiceNames()
         "com.sun.star.bridge.oleautomation.ApplicationRegistration"};
 }
 
-bool OleServer::provideInstance(const Reference<XInterface>& xInst, GUID const * guid)
+bool OleServer::provideInstance(std::function<const Reference<XInterface>()> xInstFunction, GUID const * guid)
 {
-    OneInstanceOleWrapper* pWrapper = new OneInstanceOleWrapper( m_smgr, xInst );
+    OneInstanceOleWrapper* pWrapper = new OneInstanceOleWrapper( m_smgr, xInstFunction );
 
     pWrapper->AddRef();
     m_wrapperList.push_back(pWrapper);
