@@ -425,7 +425,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     std::shared_ptr<HTMLTable> m_xTable; // current "outermost" table
     SwHTMLForm_Impl *m_pFormImpl;   // current form
     SdrObject       *m_pMarquee;    // current marquee
-    SwField         *m_pField;      // current field
+    std::unique_ptr<SwField> m_xField; // current field
     ImageMap        *m_pImageMap;   // current image map
     ImageMaps       *m_pImageMaps;  ///< all Image-Maps that have been read
     SwHTMLFootEndNote_Impl *m_pFootEndNoteImpl;

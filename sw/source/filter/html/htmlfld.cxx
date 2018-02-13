@@ -281,7 +281,7 @@ void SwHTMLParser::NewField()
         nWhich = SwFieldIds::DateTime;
 
     SwFieldType* pType = m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( nWhich );
-    SwField *pNewField = nullptr;
+    std::unique_ptr<SwField> xNewField;
     bool bInsOnEndTag = false;
 
     switch( nType )
@@ -297,7 +297,7 @@ void SwHTMLParser::NewField()
                 bInsOnEndTag = true;
             }
             if( pSubOption->GetEnum( nSub, aHTMLExtUsrFieldSubTable ) )
-                pNewField = new SwExtUserField(static_cast<SwExtUserFieldType*>(pType), nSub, nFormat);
+                xNewField.reset(new SwExtUserField(static_cast<SwExtUserFieldType*>(pType), nSub, nFormat));
         }
         break;
 
@@ -312,7 +312,7 @@ void SwHTMLParser::NewField()
                 bInsOnEndTag = true;
             }
 
-            pNewField = new SwAuthorField(static_cast<SwAuthorFieldType*>(pType), nFormat);
+            xNewField.reset(new SwAuthorField(static_cast<SwAuthorFieldType*>(pType), nFormat));
         }
         break;
 
@@ -362,10 +362,10 @@ void SwHTMLParser::NewField()
                 nNumFormat = pFormatter->GetFormatIndex( pFormatTable[i].eFormat,
                                                       LANGUAGE_SYSTEM);
 
-            pNewField = new SwDateTimeField(static_cast<SwDateTimeFieldType *>(pType), nSub, nNumFormat);
+            xNewField.reset(new SwDateTimeField(static_cast<SwDateTimeFieldType *>(pType), nSub, nNumFormat));
 
             if (nSub & FIXEDFLD)
-                static_cast<SwDateTimeField *>(pNewField)->SetDateTime(DateTime(Date(nDate), tools::Time(nTime)));
+                static_cast<SwDateTimeField *>(xNewField.get())->SetDateTime(DateTime(Date(nDate), tools::Time(nTime)));
         }
         break;
 
@@ -393,9 +393,9 @@ void SwHTMLParser::NewField()
                 if( bHasNumValue )
                     nSub |= FIXEDFLD;
 
-                pNewField = new SwDateTimeField(static_cast<SwDateTimeFieldType *>(pType), nSub, nNumFormat);
+                xNewField.reset(new SwDateTimeField(static_cast<SwDateTimeFieldType *>(pType), nSub, nNumFormat));
                 if (bHasNumValue)
-                    static_cast<SwDateTimeField *>(pNewField)->SetValue(dValue);
+                    static_cast<SwDateTimeField*>(xNewField.get())->SetValue(dValue);
             }
         }
         break;
@@ -423,9 +423,9 @@ void SwHTMLParser::NewField()
                     nSub==PG_RANDOM )
                     nFormat = SVX_NUM_PAGEDESC;
 
-                pNewField = new SwPageNumberField(static_cast<SwPageNumberFieldType*>(pType), nSub, nFormat, nOff);
+                xNewField.reset(new SwPageNumberField(static_cast<SwPageNumberFieldType*>(pType), nSub, nFormat, nOff));
                 if (nFormat == SVX_NUM_CHAR_SPECIAL)
-                    static_cast<SwPageNumberField *>(pNewField)->SetUserString(aValue);
+                    static_cast<SwPageNumberField*>(xNewField.get())->SetUserString(aValue);
             }
         }
         break;
@@ -473,9 +473,9 @@ void SwHTMLParser::NewField()
                     bInsOnEndTag = true;
                 }
 
-                pNewField = new SwDocInfoField(static_cast<SwDocInfoFieldType *>(pType), nSub, aName, nNumFormat);
+                xNewField.reset(new SwDocInfoField(static_cast<SwDocInfoFieldType *>(pType), nSub, aName, nNumFormat));
                 if (bHasNumValue)
-                    static_cast<SwDocInfoField*>(pNewField)->SetValue(dValue);
+                    static_cast<SwDocInfoField*>(xNewField.get())->SetValue(dValue);
             }
         }
         break;
@@ -489,7 +489,7 @@ void SwHTMLParser::NewField()
                 SvxNumType nFormat = SVX_NUM_ARABIC;
                 if( pFormatOption )
                     pFormatOption->GetEnum( nFormat, aHTMLPageNumFieldFormatTable );
-                pNewField = new SwDocStatField(static_cast<SwDocStatFieldType*>(pType), nSub, nFormat);
+                xNewField.reset(new SwDocStatField(static_cast<SwDocStatFieldType*>(pType), nSub, nFormat));
                 m_bUpdateDocStat |= (DS_PAGE != nSub);
             }
         }
@@ -506,23 +506,23 @@ void SwHTMLParser::NewField()
                 bInsOnEndTag = true;
             }
 
-            pNewField = new SwFileNameField(static_cast<SwFileNameFieldType*>(pType), nFormat);
+            xNewField.reset(new SwFileNameField(static_cast<SwFileNameFieldType*>(pType), nFormat));
         }
         break;
     default:
         ;
     }
 
-    if (pNewField)
+    if (xNewField)
     {
         if (bInsOnEndTag)
         {
-            m_pField = pNewField;
+            m_xField = std::move(xNewField);
         }
         else
         {
-            m_xDoc->getIDocumentContentOperations().InsertPoolItem(*m_pPam, SwFormatField(*pNewField));
-            delete pNewField;
+            m_xDoc->getIDocumentContentOperations().InsertPoolItem(*m_pPam, SwFormatField(*xNewField));
+            xNewField.reset();
         }
         m_bInField = true;
     }
@@ -530,39 +530,38 @@ void SwHTMLParser::NewField()
 
 void SwHTMLParser::EndField()
 {
-    if( m_pField )
+    if (m_xField)
     {
-        switch( m_pField->Which() )
+        switch (m_xField->Which())
         {
         case SwFieldIds::DocInfo:
-            OSL_ENSURE( static_cast<SwDocInfoField*>(m_pField)->IsFixed(),
+            OSL_ENSURE( static_cast<SwDocInfoField*>(m_xField.get())->IsFixed(),
                     "Field DocInfo should not have been saved" );
-            static_cast<SwDocInfoField*>(m_pField)->SetExpansion( m_aContents );
+            static_cast<SwDocInfoField*>(m_xField.get())->SetExpansion( m_aContents );
             break;
 
         case SwFieldIds::ExtUser:
-            OSL_ENSURE( static_cast<SwExtUserField*>(m_pField)->IsFixed(),
+            OSL_ENSURE( static_cast<SwExtUserField*>(m_xField.get())->IsFixed(),
                     "Field ExtUser should not have been saved" );
-            static_cast<SwExtUserField*>(m_pField)->SetExpansion( m_aContents );
+            static_cast<SwExtUserField*>(m_xField.get())->SetExpansion( m_aContents );
             break;
 
         case SwFieldIds::Author:
-            OSL_ENSURE( static_cast<SwAuthorField*>(m_pField)->IsFixed(),
+            OSL_ENSURE( static_cast<SwAuthorField*>(m_xField.get())->IsFixed(),
                     "Field Author should not have been saved" );
-            static_cast<SwAuthorField*>(m_pField)->SetExpansion( m_aContents );
+            static_cast<SwAuthorField*>(m_xField.get())->SetExpansion( m_aContents );
             break;
 
         case SwFieldIds::Filename:
-            OSL_ENSURE( static_cast<SwFileNameField*>(m_pField)->IsFixed(),
+            OSL_ENSURE( static_cast<SwFileNameField*>(m_xField.get())->IsFixed(),
                     "Field FileName should not have been saved" );
-            static_cast<SwFileNameField*>(m_pField)->SetExpansion( m_aContents );
+            static_cast<SwFileNameField*>(m_xField.get())->SetExpansion( m_aContents );
             break;
         default: break;
         }
 
-        m_xDoc->getIDocumentContentOperations().InsertPoolItem( *m_pPam, SwFormatField(*m_pField) );
-        delete m_pField;
-        m_pField = nullptr;
+        m_xDoc->getIDocumentContentOperations().InsertPoolItem( *m_pPam, SwFormatField(*m_xField) );
+        m_xField.reset();
     }
 
     m_bInField = false;
@@ -571,7 +570,7 @@ void SwHTMLParser::EndField()
 
 void SwHTMLParser::InsertFieldText()
 {
-    if( m_pField )
+    if (m_xField)
     {
         // append the current text part to the text
         m_aContents += aToken;
