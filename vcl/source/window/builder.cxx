@@ -11,7 +11,9 @@
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <i18nutil/unicode.hxx>
 #include <osl/module.hxx>
+#include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/builder.hxx>
@@ -37,12 +39,14 @@
 #include <vcl/settings.hxx>
 #include <vcl/slider.hxx>
 #include <vcl/listctrl.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <svdata.hxx>
 #include <bitmaps.hlst>
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
 #include <desktop/crashreport.hxx>
+#include <salinst.hxx>
 #include <strings.hrc>
 #include <tools/svlibrary.h>
 
@@ -119,6 +123,114 @@ namespace
     }
 }
 #endif
+
+weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile)
+{
+    return ImplGetSVData()->mpDefInst->CreateBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile);
+}
+
+weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
+                                                      VclButtonsType eButtonType, const OUString& rPrimaryMessage)
+{
+    return ImplGetSVData()->mpDefInst->CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage);
+}
+
+namespace
+{
+    const OUString MetricToString(FieldUnit rUnit)
+    {
+        FieldUnitStringList* pList = ImplGetFieldUnits();
+        if (pList)
+        {
+            // return unit's default string (ie, the first one )
+            for (auto it = pList->begin(); it != pList->end(); ++it)
+            {
+                if (it->second == rUnit)
+                    return it->first;
+            }
+        }
+
+        return OUString();
+    }
+}
+
+namespace weld
+{
+    IMPL_LINK_NOARG(MetricSpinButton, spin_button_value_changed, SpinButton&, void)
+    {
+        signal_value_changed();
+    }
+
+    IMPL_LINK(MetricSpinButton, spin_button_output, SpinButton&, rSpinButton, void)
+    {
+        rSpinButton.set_text(format_number(rSpinButton.get_value()));
+    }
+
+    void MetricSpinButton::update_width_chars()
+    {
+        int min, max;
+        m_xSpinButton->get_range(min, max);
+        auto width = std::max(m_xSpinButton->get_pixel_size(format_number(min)).Width(),
+                              m_xSpinButton->get_pixel_size(format_number(max)).Width());
+        int chars = ceil(width / m_xSpinButton->approximate_char_width());
+        m_xSpinButton->set_width_chars(chars);
+    }
+
+    unsigned int SpinButton::Power10(unsigned int n)
+    {
+        unsigned int nValue = 1;
+        for (unsigned int i = 0; i < n; ++i)
+            nValue *= 10;
+        return nValue;
+    }
+
+    int SpinButton::denormalize(int nValue) const
+    {
+        const int nFactor = Power10(get_digits());
+
+        if ((nValue < (SAL_MIN_INT32 + nFactor)) || (nValue > (SAL_MAX_INT32 - nFactor)))
+        {
+            return nValue / nFactor;
+        }
+
+        const int nHalf = nFactor / 2;
+
+        if (nValue < 0)
+            return (nValue - nHalf) / nFactor;
+        return (nValue + nHalf) / nFactor;
+    }
+
+    OUString MetricSpinButton::format_number(int nValue) const
+    {
+        OUString aStr;
+
+        unsigned int nDecimalDigits = m_xSpinButton->get_digits();
+        //pawn percent off to icu to decide whether percent is separated from its number for this locale
+        if (m_eSrcUnit == FUNIT_PERCENT)
+        {
+            double fValue = nValue;
+            fValue /= SpinButton::Power10(nDecimalDigits);
+            aStr = unicode::formatPercent(fValue, Application::GetSettings().GetUILanguageTag());
+        }
+        else
+        {
+            const SvtSysLocale aSysLocale;
+            const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
+            aStr = rLocaleData.getNum(nValue, nDecimalDigits, true, true);
+            if (m_eSrcUnit != FUNIT_NONE && m_eSrcUnit != FUNIT_DEGREE)
+                aStr += " ";
+            assert(m_eSrcUnit != FUNIT_PERCENT);
+            aStr += MetricToString(m_eSrcUnit);
+        }
+
+        return aStr;
+    }
+
+    int MetricSpinButton::ConvertValue(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit) const
+    {
+        return MetricField::ConvertValue(nValue, 0, m_xSpinButton->get_digits(), eInUnit, eOutUnit);
+    }
+}
 
 VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUString& sUIFile, const OString& sID, const css::uno::Reference<css::frame::XFrame>& rFrame)
     : m_sID(sID)
@@ -1189,7 +1301,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         WinBits nBits = WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
-        xWindow = VclPtr<Dialog>::Create(pParent, nBits);
+        xWindow = VclPtr<Dialog>::Create(pParent, nBits, !pParent ? Dialog::InitFlag::NoParent : Dialog::InitFlag::Default);
     }
     else if (name == "GtkMessageDialog")
     {
@@ -1515,7 +1627,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     else if (name == "GtkDrawingArea")
     {
         OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-        xWindow = VclPtr<vcl::Window>::Create(pParent, sBorder.isEmpty() ? 0 : WB_BORDER);
+        xWindow = VclPtr<VclDrawingArea>::Create(pParent, sBorder.isEmpty() ? 0 : WB_BORDER);
     }
     else if (name == "GtkTextView")
     {

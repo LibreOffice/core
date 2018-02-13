@@ -58,6 +58,11 @@ bool Help::Start( const OUString&, const vcl::Window* )
     return false;
 }
 
+bool Help::Start(const OUString&, weld::Widget*)
+{
+    return false;
+}
+
 void Help::SearchKeyword( const OUString& )
 {
 }
