@@ -183,6 +183,28 @@ BitmapEx CreateFromData( RawBitmap&& rawBitmap )
     return aBmp;
 }
 
+BitmapEx CreateFromData( Color const *pData, sal_uInt8 const * pMask, Size size )
+{
+    Bitmap aContent(size, 24);
+    Bitmap aMask(size, 1);
+    Bitmap::ScopedWriteAccess pWContent(aContent);
+    Bitmap::ScopedWriteAccess pWMask(aMask);
+    assert(pWContent && pWMask);
+
+    Color const * p = pData;
+    sal_uInt8 const * m = pMask;
+    for(long y = 0; y < size.Height(); ++y)
+        for(long x = 0; y < size.Width(); ++x)
+        {
+            pWContent->SetPixel(0, 1, *p);
+            pWMask->SetPixel(y, x, Color(*m));
+            ++p;
+            ++m;
+        }
+
+    return BitmapEx(aContent, aMask);
+}
+
 }} // end vcl::bitmap
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

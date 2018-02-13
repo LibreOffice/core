@@ -18,9 +18,9 @@
  */
 
 #include <sdr/primitive2d/sdrprimitivetools.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/lazydelete.hxx>
+#include <vcl/BitmapTools.hxx>
 
 
 // helper methods
@@ -32,43 +32,32 @@ namespace drawinglayer
         BitmapEx createDefaultCross_3x3(const basegfx::BColor& rBColor)
         {
             static vcl::DeleteOnDeinit< BitmapEx > aRetVal(nullptr);
-            static basegfx::BColor aColor;
+            static basegfx::BColor aBColor;
             static ::osl::Mutex aMutex;
 
             ::osl::MutexGuard aGuard(aMutex);
 
-            if(!aRetVal.get() || rBColor != aColor)
+            if(!aRetVal.get() || rBColor != aBColor)
             {
                 // copy values
-                aColor = rBColor;
+                aBColor = rBColor;
 
                 // create bitmap
-                Bitmap aContent(Size(3, 3), 24);
-                Bitmap aMask(Size(3, 3), 1);
-                BitmapWriteAccess* pWContent = aContent.AcquireWriteAccess();
-                BitmapWriteAccess* pWMask = aMask.AcquireWriteAccess();
-                OSL_ENSURE(pWContent && pWMask, "No WriteAccess to bitmap (!)");
-                const Color aVCLColor(aColor);
-                const BitmapColor aPixColor(aVCLColor);
-                const BitmapColor aMaskColor(0x01);
-
-                // Y,X unusual order (!)
-                pWContent->SetPixel(0, 1, aPixColor);
-                pWContent->SetPixel(1, 0, aPixColor);
-                pWContent->SetPixel(1, 1, aPixColor);
-                pWContent->SetPixel(1, 2, aPixColor);
-                pWContent->SetPixel(2, 1, aPixColor);
-
-                pWMask->SetPixel(0, 0, aMaskColor);
-                pWMask->SetPixel(0, 2, aMaskColor);
-                pWMask->SetPixel(2, 0, aMaskColor);
-                pWMask->SetPixel(2, 2, aMaskColor);
-
-                Bitmap::ReleaseAccess(pWContent);
-                Bitmap::ReleaseAccess(pWMask);
+                Color c(aBColor);
+                const Color cross[] = {
+                   0, c, 0,
+                   c, c, c,
+                   0, c, 0
+                };
+                static const sal_uInt8 mask[] = {
+                   1, 0, 1,
+                   0, 0, 0,
+                   1, 0, 1
+                };
+                BitmapEx aBitmap = vcl::bitmap::CreateFromData(cross, mask, Size(3,3));
 
                 // create and exchange at aRetVal
-                delete aRetVal.set(new BitmapEx(aContent, aMask));
+                delete aRetVal.set(new BitmapEx(aBitmap));
             }
 
             return aRetVal.get() ? *aRetVal.get() : BitmapEx();
