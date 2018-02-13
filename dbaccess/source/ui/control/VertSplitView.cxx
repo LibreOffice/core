@@ -115,14 +115,14 @@ void OSplitterView::Resize()
     {
         aSplitPos   = m_pSplitter->GetPosPixel();
         aSplitSize  = m_pSplitter->GetOutputSizePixel();
-        aSplitPos.X() = aPlaygroundPos.X();
-        aSplitSize.Width() = aPlaygroundSize.Width();
+        aSplitPos.setX( aPlaygroundPos.X() );
+        aSplitSize.setWidth( aPlaygroundSize.Width() );
 
         if( ( aSplitPos.Y() + aSplitSize.Height() ) > ( aPlaygroundSize.Height() ))
-            aSplitPos.Y() = aPlaygroundSize.Height() - aSplitSize.Height();
+            aSplitPos.setY( aPlaygroundSize.Height() - aSplitSize.Height() );
 
         if( aSplitPos.Y() <= aPlaygroundPos.Y() )
-            aSplitPos.Y() = aPlaygroundPos.Y() + sal_Int32(aPlaygroundSize.Height() * 0.3);
+            aSplitPos.setY( aPlaygroundPos.Y() + sal_Int32(aPlaygroundSize.Height() * 0.3) );
 
         // the tree pos and size
         Point   aTreeViewPos( aPlaygroundPos );

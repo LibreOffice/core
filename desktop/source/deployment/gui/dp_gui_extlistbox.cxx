@@ -298,10 +298,10 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
     // calc description height
     Size aSize = GetOutputSizePixel();
     if ( m_bHasScrollBar )
-        aSize.Width() -= m_pScrollBar->GetSizePixel().Width();
+        aSize.setWidth( aSize.Width() - m_pScrollBar->GetSizePixel().Width() );
 
     aSize.Width() -= ICON_OFFSET;
-    aSize.Height() = 10000;
+    aSize.setHeight( 10000 );
 
     OUString aText( m_vEntries[ nPos ]->m_sErrorText );
     if ( !aText.isEmpty() )
@@ -328,16 +328,16 @@ tools::Rectangle ExtensionBox_Impl::GetEntryRect( const long nPos ) const
     Size aSize( GetOutputSizePixel() );
 
     if ( m_bHasScrollBar )
-        aSize.Width() -= m_pScrollBar->GetSizePixel().Width();
+        aSize.setWidth( aSize.Width() - m_pScrollBar->GetSizePixel().Width() );
 
     if ( m_vEntries[ nPos ]->m_bActive )
-        aSize.Height() = m_nActiveHeight;
+        aSize.setHeight( m_nActiveHeight );
     else
-        aSize.Height() = m_nStdHeight;
+        aSize.setHeight( m_nStdHeight );
 
     Point aPos( 0, -m_nTopIndex + nPos * m_nStdHeight );
     if ( m_bHasActive && ( nPos < m_nActive ) )
-        aPos.Y() += m_nActiveHeight - m_nStdHeight;
+        aPos.setY( aPos.Y() + m_nActiveHeight - m_nStdHeight );
 
     return tools::Rectangle( aPos, aSize );
 }
@@ -527,7 +527,7 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
     else
         sDescription = rEntry->m_sDescription;
 
-    aPos.Y() += aTextHeight;
+    aPos.setY( aPos.Y() + aTextHeight );
     if (rEntry->m_bActive)
     {
         long nExtraHeight = 0;
@@ -684,17 +684,17 @@ void ExtensionBox_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::R
     Size aSize(GetOutputSizePixel());
 
     if ( m_bHasScrollBar )
-        aSize.Width() -= m_pScrollBar->GetSizePixel().Width();
+        aSize.setWidth( aSize.Width() - m_pScrollBar->GetSizePixel().Width() );
 
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
     typedef std::vector< TEntry_Impl >::iterator ITER;
     for (ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex)
     {
-        aSize.Height() = (*iIndex)->m_bActive ? m_nActiveHeight : m_nStdHeight;
+        aSize.setHeight( (*iIndex)->m_bActive ? m_nActiveHeight : m_nStdHeight );
         tools::Rectangle aEntryRect( aStart, aSize );
         DrawRow(rRenderContext, aEntryRect, *iIndex);
-        aStart.Y() += aSize.Height();
+        aStart.setY( aStart.Y() + aSize.Height() );
     }
 }
 
@@ -1168,7 +1168,7 @@ void ExtensionBox_Impl::DoScroll( long nDelta )
     Point aNewSBPt( m_pScrollBar->GetPosPixel() );
 
     tools::Rectangle aScrRect( Point(), GetOutputSizePixel() );
-    aScrRect.Right() -= m_pScrollBar->GetSizePixel().Width();
+    aScrRect.SetRight( aScrRect.Right() - m_pScrollBar->GetSizePixel().Width() );
     Scroll( 0, -nDelta, aScrRect );
 
     m_pScrollBar->SetPosPixel( aNewSBPt );

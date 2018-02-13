@@ -192,7 +192,7 @@ void OJoinController::SaveTabWinPosSize(OTableWindow const * pTabWin, long nOffs
 
     // set Position & Size of data anew (with current window parameters)
     Point aPos = pTabWin->GetPosPixel();
-    aPos.X() += nOffsetX;
+    aPos.setX( aPos.X() + nOffsetX );
     aPos.Y() += nOffsetY;
     pData->SetPosition(aPos);
     pData->SetSize(pTabWin->GetSizePixel());
@@ -378,9 +378,9 @@ void OJoinController::loadTableWindow( const ::comphelper::NamedValueCollection&
         pData->ShowAll(bShowAll);
         m_vTableData.push_back(pData);
         if ( m_aMinimumTableViewSize.X() < (nX+nWidth) )
-            m_aMinimumTableViewSize.X() = (nX+nWidth);
+            m_aMinimumTableViewSize.setX( nX+nWidth );
         if ( m_aMinimumTableViewSize.Y() < (nY+nHeight) )
-            m_aMinimumTableViewSize.Y() = (nY+nHeight);
+            m_aMinimumTableViewSize.setY( nY+nHeight );
     }
 }
 

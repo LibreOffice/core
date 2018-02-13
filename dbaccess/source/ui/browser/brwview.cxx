@@ -198,15 +198,15 @@ void UnoDataBrowserView::resizeDocumentView(tools::Rectangle& _rPlayground)
     {
         // calculate the splitter pos and size
         aSplitPos   = m_pSplitter->GetPosPixel();
-        aSplitPos.Y() = aPlaygroundPos.Y();
+        aSplitPos.setY( aPlaygroundPos.Y() );
         aSplitSize  = m_pSplitter->GetOutputSizePixel();
-        aSplitSize.Height() = aPlaygroundSize.Height();
+        aSplitSize.setHeight( aPlaygroundSize.Height() );
 
         if( ( aSplitPos.X() + aSplitSize.Width() ) > ( aPlaygroundSize.Width() ))
-            aSplitPos.X() = aPlaygroundSize.Width() - aSplitSize.Width();
+            aSplitPos.setX( aPlaygroundSize.Width() - aSplitSize.Width() );
 
         if( aSplitPos.X() <= aPlaygroundPos.X() )
-            aSplitPos.X() = aPlaygroundPos.X() + sal_Int32(aPlaygroundSize.Width() * 0.2);
+            aSplitPos.setX( aPlaygroundPos.X() + sal_Int32(aPlaygroundSize.Width() * 0.2) );
 
         // the tree pos and size
         Point   aTreeViewPos( aPlaygroundPos );
@@ -217,11 +217,11 @@ void UnoDataBrowserView::resizeDocumentView(tools::Rectangle& _rPlayground)
         {
             Size aStatusSize(aPlaygroundPos.X(), GetTextHeight() + 2);
             aStatusSize = LogicToPixel(aStatusSize, MapMode(MapUnit::MapAppFont));
-            aStatusSize.Width() = aTreeViewSize.Width() - 2 - 2;
+            aStatusSize.setWidth( aTreeViewSize.Width() - 2 - 2 );
 
             Point aStatusPos( aPlaygroundPos.X() + 2, aTreeViewPos.Y() + aTreeViewSize.Height() - aStatusSize.Height() );
             m_pStatus->SetPosSizePixel( aStatusPos, aStatusSize );
-            aTreeViewSize.Height() -= aStatusSize.Height();
+            aTreeViewSize.setHeight( aTreeViewSize.Height() - aStatusSize.Height() );
         }
 
         // set the size of treelistbox

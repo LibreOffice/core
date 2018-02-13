@@ -150,7 +150,7 @@ void OCreationList::ExecuteSearchEntry( const void* _pEntry ) const
 tools::Rectangle OCreationList::GetFocusRect( SvTreeListEntry* _pEntry, long _nLine )
 {
     tools::Rectangle aRect = SvTreeListBox::GetFocusRect( _pEntry, _nLine );
-    aRect.Left() = 0;
+    aRect.SetLeft( 0 );
 
     // try to let the focus rect start before the bitmap item - this looks better
     SvLBoxItem* pBitmapItem = _pEntry->GetFirstItem(SvLBoxItemType::ContextBmp);
@@ -158,11 +158,11 @@ tools::Rectangle OCreationList::GetFocusRect( SvTreeListEntry* _pEntry, long _nL
     SvViewDataItem* pItemData = pBitmapItem ? GetViewDataItem( _pEntry, pBitmapItem ) : nullptr;
     OSL_ENSURE( pTab && pItemData, "OCreationList::GetFocusRect: could not find the first bitmap item!" );
     if ( pTab && pItemData )
-        aRect.Left() = pTab->GetPos() - pItemData->maSize.Width() / 2;
+        aRect.SetLeft( pTab->GetPos() - pItemData->maSize.Width() / 2 );
 
     // inflate the rectangle a little bit - looks better, too
-    aRect.Left() = std::max< long >( 0, aRect.Left() - 2 );
-    aRect.Right() = std::min< long >( GetOutputSizePixel().Width() - 1, aRect.Right() + 2 );
+    aRect.SetLeft( std::max< long >( 0, aRect.Left() - 2 ) );
+    aRect.SetRight( std::min< long >( GetOutputSizePixel().Width() - 1, aRect.Right() + 2 ) );
 
     return aRect;
 }

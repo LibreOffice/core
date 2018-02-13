@@ -217,8 +217,8 @@ void OJoinTableView::Resize()
         return;
 
     // we have at least one table so resize it
-    m_aScrollOffset.X() = GetHScrollBar().GetThumbPos();
-    m_aScrollOffset.Y() = GetVScrollBar().GetThumbPos();
+    m_aScrollOffset.setX( GetHScrollBar().GetThumbPos() );
+    m_aScrollOffset.setY( GetVScrollBar().GetThumbPos() );
 
     VclPtr<OTableWindow> pCheck = m_aTableMap.begin()->second;
     Point aRealPos = pCheck->GetPosPixel();
@@ -532,8 +532,8 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
 
         // determine rectangle for the corresponding line
         tools::Rectangle aRowRect( Point(0,0), aOutSize );
-        aRowRect.Top() = nRow * ( TABWIN_SPACING_Y + TABWIN_HEIGHT_STD );
-        aRowRect.Bottom() = (nRow+1) * ( TABWIN_SPACING_Y + TABWIN_HEIGHT_STD );
+        aRowRect.SetTop( nRow * ( TABWIN_SPACING_Y + TABWIN_HEIGHT_STD ) );
+        aRowRect.SetBottom( (nRow+1) * ( TABWIN_SPACING_Y + TABWIN_HEIGHT_STD ) );
 
         // check occupied areas of this line
         OTableWindowMap::const_iterator aIter = m_aTableMap.begin();
@@ -567,7 +567,7 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
                 // insert it in the first row
                 sal_Int32 nCount = m_aTableMap.size() % (nRow+1);
                 ++nCount;
-                aNewPos.Y() = nCount * TABWIN_SPACING_Y + (nCount-1)*CalcZoom(TABWIN_HEIGHT_STD);
+                aNewPos.setY( nCount * TABWIN_SPACING_Y + (nCount-1)*CalcZoom(TABWIN_HEIGHT_STD) );
                 bEnd = true;
             }
             else
@@ -581,7 +581,7 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
 
     // check if the new position in inside the scrollbars ranges
     Point aBottom(aNewPos);
-    aBottom.X() += aNewSize.Width();
+    aBottom.setX( aBottom.X() + aNewSize.Width() );
     aBottom.Y() += aNewSize.Height();
 
     if(!GetHScrollBar().GetRange().IsInside(aBottom.X()))
@@ -692,9 +692,9 @@ bool OJoinTableView::ScrollPane( long nDelta, bool bHoriz, bool bPaintScrollBars
 
     // set ScrollOffset anew
     if (bHoriz)
-        m_aScrollOffset.X() = GetHScrollBar().GetThumbPos();
+        m_aScrollOffset.setX( GetHScrollBar().GetThumbPos() );
     else
-        m_aScrollOffset.Y() = GetVScrollBar().GetThumbPos();
+        m_aScrollOffset.setY( GetVScrollBar().GetThumbPos() );
 
     // move all windows
     OTableWindow* pTabWin;
@@ -708,8 +708,8 @@ bool OJoinTableView::ScrollPane( long nDelta, bool bHoriz, bool bPaintScrollBars
         aPos = pTabWin->GetPosPixel();
 
         if( bHoriz )
-            aPos.X() -= nDelta;
-        else aPos.Y() -= nDelta;
+            aPos.setX( aPos.X() - nDelta );
+        else aPos.setY( aPos.Y() - nDelta );
 
         pTabWin->SetPosPixel( aPos );
     }
@@ -735,17 +735,17 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
             Point aDragWinPos = rTEvt.GetMouseEvent().GetPosPixel() - m_aDragOffset;
             Size aDragWinSize = m_pDragWin->GetSizePixel();
             if( aDragWinPos.X() < 0 )
-                aDragWinPos.X() = 0;
+                aDragWinPos.setX( 0 );
             if( aDragWinPos.Y() < 0 )
-                aDragWinPos.Y() = 0;
+                aDragWinPos.setY( 0 );
             if( (aDragWinPos.X() + aDragWinSize.Width()) > m_aOutputSize.Width() )
-                aDragWinPos.X() = m_aOutputSize.Width() - aDragWinSize.Width() - 1;
+                aDragWinPos.setX( m_aOutputSize.Width() - aDragWinSize.Width() - 1 );
             if( (aDragWinPos.Y() + aDragWinSize.Height()) > m_aOutputSize.Height() )
-                aDragWinPos.Y() = m_aOutputSize.Height() - aDragWinSize.Height() - 1;
+                aDragWinPos.setY( m_aOutputSize.Height() - aDragWinSize.Height() - 1 );
             if( aDragWinPos.X() < 0 )
-                aDragWinPos.X() = 0;
+                aDragWinPos.setX( 0 );
             if( aDragWinPos.Y() < 0 )
-                aDragWinPos.Y() = 0;
+                aDragWinPos.setY( 0 );
             // TODO : don't position window anew, if it is leaving range, but just expand the range
 
             // position window
@@ -1026,7 +1026,7 @@ void OJoinTableView::ScrollWhileDragging()
     {
         bScrolling = ScrollPane( -LINE_SIZE, true, true );
         if( !bScrolling && (aDragWinPos.X()<0) )
-            aDragWinPos.X() = 0;
+            aDragWinPos.setX( 0 );
 
         // do I need further (timer controlled) scrolling ?
         bNeedScrollTimer = bScrolling && (aDragWinPos.X() < 5);
@@ -1036,7 +1036,7 @@ void OJoinTableView::ScrollWhileDragging()
     {
         bScrolling = ScrollPane( LINE_SIZE, true, true ) ;
         if( !bScrolling && ( aLowerRight.X() > m_aOutputSize.Width() ) )
-            aDragWinPos.X() = m_aOutputSize.Width() - aDragWinSize.Width();
+            aDragWinPos.setX( m_aOutputSize.Width() - aDragWinSize.Width() );
 
         // do I need further (timer controlled) scrolling ?
         bNeedScrollTimer = bScrolling && (aLowerRight.X() > m_aOutputSize.Width() - 5);
@@ -1046,7 +1046,7 @@ void OJoinTableView::ScrollWhileDragging()
     {
         bScrolling = ScrollPane( -LINE_SIZE, false, true );
         if( !bScrolling && (aDragWinPos.Y()<0) )
-            aDragWinPos.Y() = 0;
+            aDragWinPos.setY( 0 );
 
         bNeedScrollTimer = bScrolling && (aDragWinPos.Y() < 5);
     }
@@ -1055,7 +1055,7 @@ void OJoinTableView::ScrollWhileDragging()
     {
         bScrolling = ScrollPane( LINE_SIZE, false, true );
         if( !bScrolling && ( (aDragWinPos.Y() + aDragWinSize.Height()) > m_aOutputSize.Height() ) )
-            aDragWinPos.Y() =  m_aOutputSize.Height() - aDragWinSize.Height();
+            aDragWinPos.setY(  m_aOutputSize.Height() - aDragWinSize.Height() );
 
         bNeedScrollTimer = bScrolling && (aLowerRight.Y() > m_aOutputSize.Height() - 5);
     }

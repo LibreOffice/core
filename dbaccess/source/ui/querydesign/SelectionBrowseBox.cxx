@@ -345,7 +345,7 @@ void OSelectionBrowseBox::Init()
     {
         const Size aTemp(pControl->GetOptimalSize());
         if ( aTemp.Height() > aHeight.Height() )
-            aHeight.Height() = aTemp.Height();
+            aHeight.setHeight( aTemp.Height() );
     }
     SetDataRowHeight(aHeight.Height());
     SetTitleLines(1);
@@ -1231,7 +1231,7 @@ void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const tools::Rectangle& 
 void OSelectionBrowseBox::PaintStatusCell(OutputDevice& rDev, const tools::Rectangle& rRect) const
 {
     tools::Rectangle aRect(rRect);
-    aRect.TopLeft().Y() -= 2;
+    aRect.TopLeft().setY( aRect.TopLeft().Y() - 2 );
     OUString  aLabel(DBA_RES(STR_QUERY_HANDLETEXT));
 
    // from BROW_CRIT2_ROW onwards all rows are shown "or"
@@ -1466,7 +1466,7 @@ tools::Rectangle OSelectionBrowseBox::GetInvalidRect( sal_uInt16 nColId )
 
     // now update the left side
     tools::Rectangle aFieldRect(GetCellRect( 0, nColId )); // used instead of GetFieldRectPixel
-    aInvalidRect.Left() = aFieldRect.Left();
+    aInvalidRect.SetLeft( aFieldRect.Left() );
 
     return aInvalidRect;
 }
@@ -1896,7 +1896,7 @@ Size OSelectionBrowseBox::CalcOptimalSize( const Size& _rAvailable )
 {
     Size aReturn( _rAvailable.Width(), GetTitleHeight() );
 
-    aReturn.Height() += ( m_nVisibleCount ? m_nVisibleCount : 15 ) * GetDataRowHeight();
+    aReturn.setHeight( aReturn.Height() + ( m_nVisibleCount ? m_nVisibleCount : 15 ) * GetDataRowHeight() );
     aReturn.Height() += 40; // just some space
 
     return aReturn;
