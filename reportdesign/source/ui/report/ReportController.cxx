@@ -2328,14 +2328,14 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         { XATTR_FILLBMP_POS,        true },
         { XATTR_FILLBMP_SIZEX,      true },
         { XATTR_FILLBMP_SIZEY,      true },
+        { XATTR_FILLFLOATTRANSPARENCE,  true },
+        { XATTR_SECONDARYFILLCOLOR,     true },
         { XATTR_FILLBMP_SIZELOG,        true },
         { XATTR_FILLBMP_TILEOFFSETX,    true },
         { XATTR_FILLBMP_TILEOFFSETY,    true },
         { XATTR_FILLBMP_STRETCH,        true },
         { XATTR_FILLBMP_POSOFFSETX,     true },
         { XATTR_FILLBMP_POSOFFSETY,     true },
-        { XATTR_FILLFLOATTRANSPARENCE,  true },
-        { XATTR_SECONDARYFILLCOLOR,     true },
         { XATTR_FILLBACKGROUND,     true },
         { SID_ATTR_METRIC,      true }
     };
@@ -2377,14 +2377,14 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         new XFillBmpPosItem,
         new XFillBmpSizeXItem,
         new XFillBmpSizeYItem,
+        new XFillFloatTransparenceItem(aNullGrad, false),
+        new XSecondaryFillColorItem("", aNullFillCol),
         new XFillBmpSizeLogItem,
         new XFillBmpTileOffsetXItem,
         new XFillBmpTileOffsetYItem,
         new XFillBmpStretchItem,
         new XFillBmpPosOffsetXItem,
         new XFillBmpPosOffsetYItem,
-        new XFillFloatTransparenceItem(aNullGrad, false),
-        new XSecondaryFillColorItem("", aNullFillCol),
         new XFillBackgroundItem,
         new SfxUInt16Item(RPTUI_ID_METRIC,static_cast<sal_uInt16>(eUserMetric))
     };
