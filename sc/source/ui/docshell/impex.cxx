@@ -848,6 +848,9 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
     pSeps[0] = cSep;
     pSeps[1] = 0;
 
+    ScSetStringParam aSetStringParam;
+    aSetStringParam.mbCheckLinkFormula = true;
+
     SCCOL nStartCol = aRange.aStart.Col();
     SCROW nStartRow = aRange.aStart.Row();
     SCCOL nEndCol = aRange.aEnd.Col();
@@ -897,7 +900,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
                         if (nRow>nEndRow) nEndRow = nRow;
                     }
                     if( bData && nCol <= nEndCol && nRow <= nEndRow )
-                        pDoc->SetString( nCol, nRow, aRange.aStart.Tab(), aCell );
+                        pDoc->SetString( nCol, nRow, aRange.aStart.Tab(), aCell, &aSetStringParam );
                 }
                 else                            // too many columns/rows
                 {
