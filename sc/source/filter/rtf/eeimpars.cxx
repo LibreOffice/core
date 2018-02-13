@@ -341,6 +341,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                 aParam.mbDetectNumberFormat = true;
                 aParam.meSetTextNumFormat = ScSetStringParam::SpecialNumberOnly;
                 aParam.mbHandleApostrophe = false;
+                aParam.mbCheckLinkFormula = true;
 
                 if (!aValStr.isEmpty())
                     mpDoc->SetValue( nCol, nRow, nTab, fVal );
