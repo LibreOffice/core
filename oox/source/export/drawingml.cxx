@@ -2553,8 +2553,25 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
             TextFitToSizeType eFit = TextFitToSizeType_NONE;
             if (GETA(TextFitToSize))
                 mAny >>= eFit;
+
             if (eFit == TextFitToSizeType_AUTOFIT)
-                mpFS->singleElementNS(XML_a, XML_normAutofit, FSEND);
+            {
+                const sal_Int32 MAX_SCALE_VAL = 100000;
+                sal_Int32 nFontScale = MAX_SCALE_VAL;
+                SvxShapeText* pTextShape = dynamic_cast<SvxShapeText*>(rXIface.get());
+                if (pTextShape)
+                {
+                    SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pTextShape->GetSdrObject());
+                    if (pTextObject)
+                    {
+                        double fScaleY = pTextObject->GetFontScaleY();
+                        nFontScale = static_cast<sal_uInt32>(fScaleY * 100) * 1000;
+                    }
+                }
+
+                mpFS->singleElementNS(XML_a, XML_normAutofit, XML_fontScale,
+                    ( nFontScale < MAX_SCALE_VAL && nFontScale > 0 ) ? I32S(nFontScale) : nullptr, FSEND);
+            }
         }
         mpFS->endElementNS((nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr);
     }
