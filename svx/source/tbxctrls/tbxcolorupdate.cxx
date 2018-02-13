@@ -96,54 +96,29 @@ namespace svx
 
         aBmpEx.CopyPixel( aRect, aRect, &aSource );
 
-        Bitmap              aBmp( aBmpEx.GetBitmap() );
-        BitmapWriteAccess*  pBmpAcc = aBmp.IsEmpty() ? nullptr : aBmp.AcquireWriteAccess();
-
-        maBmpSize = aBmp.GetSizePixel();
-
-        if (!pBmpAcc)
+        if (aBmpEx.IsEmpty())
             return;
 
-        Bitmap              aMsk;
-        BitmapWriteAccess*  pMskAcc;
-
-        if (aBmpEx.IsAlpha())
-        {
-            aMsk = aBmpEx.GetAlpha().GetBitmap();
-            pMskAcc = aMsk.AcquireWriteAccess();
-        }
-        else if (aBmpEx.IsTransparent())
-        {
-            aMsk = aBmpEx.GetMask();
-            pMskAcc = aMsk.AcquireWriteAccess();
-        }
-        else
-        {
-            pMskAcc = nullptr;
-        }
+        maBmpSize = aBmpEx.GetSizePixel();
 
         mbWasHiContrastMode = mpTbx->GetSettings().GetStyleSettings().GetHighContrastMode();
 
+        Color lineColor;
         if ((COL_TRANSPARENT != aColor.GetColor()) && (maBmpSize.Width() == maBmpSize.Height()))
-            pBmpAcc->SetLineColor(aColor);
+            lineColor = aColor;
         else if( mpTbx->GetBackground().GetColor().IsDark() )
-            pBmpAcc->SetLineColor(Color(COL_WHITE));
+            lineColor = Color(COL_WHITE);
         else
-            pBmpAcc->SetLineColor(Color(COL_BLACK));
+            lineColor = Color(COL_BLACK);
 
         // use not only COL_TRANSPARENT for detection of transparence,
         // but the method/way which is designed to do that
         const bool bIsTransparent(0xff == aColor.GetTransparency());
         maCurColor = aColor;
 
-        if (bIsTransparent)
-        {
-            pBmpAcc->SetFillColor();
-        }
-        else
-        {
-            pBmpAcc->SetFillColor(maCurColor);
-        }
+        Color fillColor;
+        if (!bIsTransparent)
+            fillColor = maCurColor;
 
         if (maBmpSize.Width() == maBmpSize.Height())
             // tdf#84985 align color bar with icon bottom edge; integer arithmetic e.g. 26 - 26/4 <> 26 * 3/4
@@ -151,32 +126,19 @@ namespace svx
         else
             maUpdRect = tools::Rectangle(Point( maBmpSize.Height() + 2, 2), Point(maBmpSize.Width() - 3, maBmpSize.Height() - 3));
 
-        pBmpAcc->DrawRect(maUpdRect);
-
-        if (pMskAcc)
+        Color alphaLineColor;
+        Color alphaFillColor;
+        if (aBmpEx.IsAlpha())
         {
             if (bIsTransparent)
             {
-                pMskAcc->SetLineColor(COL_BLACK);
-                pMskAcc->SetFillColor(COL_WHITE);
+                alphaLineColor = COL_BLACK;
+                alphaFillColor = COL_WHITE;
             }
             else
-                pMskAcc->SetFillColor(COL_BLACK);
-
-            pMskAcc->DrawRect(maUpdRect);
+                alphaFillColor = COL_BLACK;
         }
-
-        Bitmap::ReleaseAccess(pBmpAcc);
-
-        if (pMskAcc)
-            Bitmap::ReleaseAccess(pMskAcc);
-
-        if (aBmpEx.IsAlpha())
-            aBmpEx = BitmapEx(aBmp, AlphaMask(aMsk));
-        else if (aBmpEx.IsTransparent())
-            aBmpEx = BitmapEx(aBmp, aMsk);
-        else
-            aBmpEx = aBmp;
+        aBmpEx.DrawRect(maUpdRect, lineColor, fillColor, alphaLineColor, alphaFillColor);
 
         mpTbx->SetItemImage(mnBtnId, Image(aBmpEx));
     }

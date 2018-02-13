@@ -441,6 +441,9 @@ public:
                             const Size &rSize );
 
     void                setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );
+
+    void                DrawRect( const tools::Rectangle& rRectPixel, Color lineColor, Color fillColor,
+                                  Color alphaLineColor, Color alphaFillColor );
 public:
 
     SAL_DLLPRIVATE std::shared_ptr<ImpBitmap> const & ImplGetBitmapImpBitmap() const { return aBitmap.ImplGetImpBitmap(); }

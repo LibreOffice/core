@@ -1322,4 +1322,33 @@ void BitmapEx::setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
         }
     }
 }
+
+void BitmapEx::DrawRect( const tools::Rectangle& rRectPixel, Color lineColor, Color fillColor, Color alphaLineColor, Color alphaFillColor )
+{
+    Bitmap::ScopedWriteAccess pBmpAcc(aBitmap);
+    Bitmap              aMsk;
+    BitmapWriteAccess* pMskAcc = nullptr;
+
+    if (IsAlpha())
+    {
+        aMsk = GetAlpha().GetBitmap();
+        pMskAcc = aMsk.AcquireWriteAccess();
+    }
+    else if (IsTransparent())
+    {
+        aMsk = GetMask();
+        pMskAcc = aMsk.AcquireWriteAccess();
+    }
+    pBmpAcc->SetLineColor(lineColor);
+    pBmpAcc->SetFillColor(fillColor);
+    pBmpAcc->DrawRect(rRectPixel);
+    if (pMskAcc)
+    {
+        pMskAcc->SetLineColor(alphaLineColor);
+        pMskAcc->SetFillColor(alphaFillColor);
+        pMskAcc->DrawRect(rRectPixel);
+        Bitmap::ReleaseAccess(pMskAcc);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
