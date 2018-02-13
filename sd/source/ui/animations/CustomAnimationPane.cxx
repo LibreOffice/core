@@ -2116,6 +2116,8 @@ IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
         if ( !pPreset && ( ePathKind == PathKind::NONE ) )
             return;
 
+        VclPtr<vcl::Window> xSaveFocusId = Window::SaveFocus();
+
         EffectSequence::iterator aIter( maListSelection.begin() );
         const EffectSequence::iterator aEnd( maListSelection.end() );
 
@@ -2140,6 +2142,7 @@ IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
 
            createPath( ePathKind, aTargets, 0.0 );
            updateMotionPathTags();
+           Window::EndSaveFocus(xSaveFocusId);
            return;
         }
 
@@ -2160,6 +2163,7 @@ IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
         }
 
         onPreview(false);
+        Window::EndSaveFocus(xSaveFocusId);
     }
 }
 
