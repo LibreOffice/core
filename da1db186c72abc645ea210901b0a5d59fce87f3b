@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_07e1acd0",
+        "filename": "vcl/source/gdi/sallayout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-13T10:19:14Z",
+      "side": 1,
+      "message": "also here it\u0027s nValid[0] ?",
+      "revId": "da1db186c72abc645ea210901b0a5d59fce87f3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_27b150e2",
+        "filename": "vcl/source/gdi/sallayout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-13T10:19:14Z",
+      "side": 1,
+      "message": "here you change to nValid[nFirstValid]",
+      "revId": "da1db186c72abc645ea210901b0a5d59fce87f3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_47b484d0",
+        "filename": "vcl/source/gdi/sallayout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-13T10:19:14Z",
+      "side": 1,
+      "message": "but here sill nValid[0]\n\n- is that intentional?",
+      "revId": "da1db186c72abc645ea210901b0a5d59fce87f3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
