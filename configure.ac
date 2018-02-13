@@ -4359,6 +4359,15 @@ msi - Windows .msi
             ;;
         esac
     done
+    # fakeroot is needed to ensure correct file ownerships/permissions
+    # inside deb packages and tar archives created on Linux and Solaris.
+    if test "$OS" = "LINUX" || test "$OS" = "SOLARIS"; then
+        AC_PATH_PROG(FAKEROOT, fakeroot, no)
+        if test "$FAKEROOT" = "no"; then
+            AC_MSG_ERROR(
+                [--with-package-format='$with_package_format' requires fakeroot. Install fakeroot.])
+        fi
+    fi
     PKGFORMAT="$with_package_format"
     AC_MSG_RESULT([$PKGFORMAT])
 else
@@ -7295,10 +7304,6 @@ if test "$enable_epm" = "yes"; then
         AC_PATH_PROG(DPKG, dpkg, no)
         if test "$DPKG" = "no"; then
             AC_MSG_ERROR([dpkg needed for deb creation. Install dpkg.])
-        fi
-        AC_PATH_PROG(FAKEROOT, fakeroot, no)
-        if test "$FAKEROOT" = "no"; then
-            AC_MSG_ERROR([fakeroot needed for deb creation. Install fakeroot.])
         fi
     fi
     if echo "$PKGFORMAT" | $EGREP rpm 2>&1 >/dev/null || \
