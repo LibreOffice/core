@@ -93,6 +93,13 @@ struct SAL_WARN_UNUSED SC_DLLPUBLIC ScSetStringParam
 
     sc::StartListeningType meStartListening;
 
+    /** When true and the string results in a compiled formula, check the
+        formula tokens for presence of functions that could trigger access to
+        external resources. This is to be set to true in import filter code,
+        but not for user input.
+     */
+    bool mbCheckLinkFormula;
+
     ScSetStringParam();
 
     /**
