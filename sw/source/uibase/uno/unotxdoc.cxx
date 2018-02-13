@@ -3511,10 +3511,10 @@ void SwXTextDocument::postExtTextInputEvent(int nType, const OUString& rText)
     switch (nType)
     {
     case LOK_EXT_TEXTINPUT:
-        pWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, rText);
+        pWindow->PostExtTextInputEvent(VCLEVENT_WINDOW_EXTTEXTINPUT, rText);
         break;
     case LOK_EXT_TEXTINPUT_END:
-        pWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+        pWindow->PostExtTextInputEvent(VCLEVENT_WINDOW_ENDEXTTEXTINPUT, "");
         break;
     default:
         assert(false && "Unhandled External Text input event!");
