@@ -24,6 +24,10 @@
 #include <unordered_map>
 #include <vector>
 
+#include <atlbase.h>
+#include <atlcom.h>
+#include <comdef.h>
+
 #include <osl/diagnose.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ustring.hxx>
@@ -36,6 +40,8 @@
 #include <com/sun/star/reflection/ParamInfo.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/script/XInvocation2.hpp>
@@ -1040,6 +1046,92 @@ HRESULT InterfaceOleWrapper::doSetProperty( DISPPARAMS * /*pdispparams*/, VARIAN
     return ret;
 }
 
+class CXEnumVariant : public IEnumVARIANT,
+                      public CComObjectRoot
+{
+public:
+    CXEnumVariant()
+    {
+    }
+
+    ~CXEnumVariant()
+    {
+    }
+
+    BEGIN_COM_MAP(CXEnumVariant)
+        COM_INTERFACE_ENTRY(IEnumVARIANT)
+    END_COM_MAP()
+
+    DECLARE_NOT_AGGREGATABLE(CXEnumVariant)
+
+    // Creates and intializes the enumerator
+    void Init(InterfaceOleWrapper* pInterfaceOleWrapper,
+              const Reference< XEnumeration > xEnumeration)
+    {
+        mpInterfaceOleWrapper = pInterfaceOleWrapper;
+        mxEnumeration = xEnumeration;
+    }
+
+    // IEnumVARIANT
+    virtual HRESULT STDMETHODCALLTYPE Clone(IEnumVARIANT **ppEnum) override
+    {
+        (void) ppEnum;
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE Next(ULONG celt,
+                                           VARIANT *rgVar,
+                                           ULONG *pCeltFetched) override
+    {
+        if (pCeltFetched)
+            *pCeltFetched = 0;
+
+        if (celt == 0)
+            return E_INVALIDARG;
+
+        if (rgVar == NULL || (celt != 1 && pCeltFetched == NULL))
+            return E_FAIL;
+
+        for (ULONG i = 0; i < celt; i++)
+            VariantInit(&rgVar[i]);
+
+        while (celt > 0)
+        {
+           if (!mxEnumeration->hasMoreElements())
+                return S_FALSE;
+            Any aElement = mxEnumeration->nextElement();
+            mpInterfaceOleWrapper->anyToVariant(rgVar, aElement);
+            // rgVar->pdispVal->AddRef(); ??
+            if (pCeltFetched)
+                (*pCeltFetched)++;
+            rgVar++;
+            celt--;
+        }
+        return S_OK;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE Reset() override
+    {
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE STDMETHODCALLTYPE Skip(ULONG celt) override
+    {
+        while (celt > 0)
+        {
+            if (!mxEnumeration->hasMoreElements())
+                return S_FALSE;
+            mxEnumeration->nextElement();
+            celt--;
+        }
+        return S_OK;
+    }
+
+private:
+    InterfaceOleWrapper* mpInterfaceOleWrapper;
+    Reference<XEnumeration> mxEnumeration;
+};
+
 HRESULT InterfaceOleWrapper::InvokeGeneral( DISPID dispidMember, unsigned short wFlags,
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,
                          unsigned int * /*puArgErr*/, bool& bHandled)
@@ -1134,6 +1226,38 @@ HRESULT InterfaceOleWrapper::InvokeGeneral( DISPID dispidMember, unsigned short 
                 writeExcepinfo(pexcepinfo, "[automation bridge] InterfaceOleWrapper::InvokeGeneral\n"
                                            "Could not initialize UnoTypeWrapper object!");
                 return DISP_E_EXCEPTION;
+            }
+        }
+        else if (dispidMember == DISPID_NEWENUM)
+        {
+            bHandled = true;
+            if( !pvarResult)
+                return E_POINTER;
+
+            Reference< XEnumerationAccess > xEnumerationAccess(m_xOrigin, UNO_QUERY_THROW);
+            if (!xEnumerationAccess.is())
+                return DISP_E_MEMBERNOTFOUND;
+
+            Reference< XEnumeration > xEnumeration = xEnumerationAccess->createEnumeration();
+
+            CComObject<CXEnumVariant>* pEnumVar;
+
+            ret = CComObject<CXEnumVariant>::CreateInstance(&pEnumVar);
+            if (FAILED(ret))
+                return ret;
+
+            pEnumVar->AddRef();
+
+            pEnumVar->Init(this, xEnumeration);
+
+            pvarResult->vt = VT_UNKNOWN;
+            pvarResult->punkVal = NULL;
+
+            ret = pEnumVar->QueryInterface(IID_IUnknown, (void**)&pvarResult->punkVal);
+            if (FAILED(ret))
+            {
+                pEnumVar->Release();
+                return ret;
             }
         }
     }
