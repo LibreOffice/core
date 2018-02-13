@@ -295,7 +295,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 SfxViewFrame* m_pFrame;
                 SfxObjectShell* m_pSh;
                 bool m_bSetRO;
-                ~ReadOnlyUIGuard()
+                ~ReadOnlyUIGuard() COVERITY_NOEXCEPT_FALSE
                 {
                     if (m_bSetRO != m_pSh->IsReadOnlyUI())
                     {
