@@ -30,7 +30,8 @@ ScSetStringParam::ScSetStringParam() :
     mbDetectNumberFormat(true),
     meSetTextNumFormat(Never),
     mbHandleApostrophe(true),
-    meStartListening(sc::SingleCellListening)
+    meStartListening(sc::SingleCellListening),
+    mbCheckLinkFormula(false)
 {
 }
 
