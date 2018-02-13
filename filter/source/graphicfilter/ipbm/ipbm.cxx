@@ -18,7 +18,7 @@
  */
 
 #include <sal/config.h>
-
+#include <o3tl/safeint.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
@@ -84,9 +84,11 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
     {
         case 0:
         {
-            const size_t nRemainingSize = mrPBM.remainingSize();
-            const size_t nDataRequired = static_cast<size_t>(mnWidth) * (mnHeight / 8);
-            if (nRemainingSize < nDataRequired)
+            sal_uInt32 nDataRequired;
+            if (o3tl::checked_multiply<sal_uInt32>(mnWidth, mnHeight, nDataRequired))
+                return false;
+            const auto nRemainingSize = mrPBM.remainingSize();
+            if (nRemainingSize < nDataRequired / 8)
                 return false;
 
             mpRawBmp.reset( new vcl::bitmap::RawBitmap( Size( mnWidth, mnHeight ) ) );
