@@ -25,6 +25,7 @@
 
 #include <svl/sharedstringpool.hxx>
 #include <svl/languageoptions.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <memory>
 #include <vector>
@@ -278,9 +279,14 @@ void ScDocumentImport::setFormulaCell(
     if (!pBlockPos)
         return;
 
+    std::unique_ptr<ScFormulaCell> pFC =
+        o3tl::make_unique<ScFormulaCell>(&mpImpl->mrDoc, rPos, rFormula, eGrammar);
+
+    mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *pFC->GetCode());
+
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
     pBlockPos->miCellPos =
-        rCells.set(pBlockPos->miCellPos, rPos.Row(), new ScFormulaCell(&mpImpl->mrDoc, rPos, rFormula, eGrammar));
+        rCells.set(pBlockPos->miCellPos, rPos.Row(), pFC.release());
 }
 
 void ScDocumentImport::setFormulaCell(const ScAddress& rPos, ScTokenArray* pArray)
@@ -294,9 +300,14 @@ void ScDocumentImport::setFormulaCell(const ScAddress& rPos, ScTokenArray* pArra
     if (!pBlockPos)
         return;
 
+    std::unique_ptr<ScFormulaCell> pFC =
+        o3tl::make_unique<ScFormulaCell>(&mpImpl->mrDoc, rPos, pArray);
+
+    mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *pFC->GetCode());
+
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
     pBlockPos->miCellPos =
-        rCells.set(pBlockPos->miCellPos, rPos.Row(), new ScFormulaCell(&mpImpl->mrDoc, rPos, pArray));
+        rCells.set(pBlockPos->miCellPos, rPos.Row(), pFC.release());
 }
 
 void ScDocumentImport::setFormulaCell(const ScAddress& rPos, ScFormulaCell* pCell)
@@ -309,6 +320,9 @@ void ScDocumentImport::setFormulaCell(const ScAddress& rPos, ScFormulaCell* pCel
 
     if (!pBlockPos)
         return;
+
+    if (pCell)
+        mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *pCell->GetCode());
 
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
     pBlockPos->miCellPos =
@@ -333,6 +347,8 @@ void ScDocumentImport::setMatrixCells(
 
     // Set the master cell.
     ScFormulaCell* pCell = new ScFormulaCell(&mpImpl->mrDoc, rBasePos, rArray, eGram, ScMatrixMode::Formula);
+
+    mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *pCell->GetCode());
 
     pBlockPos->miCellPos =
         rCells.set(pBlockPos->miCellPos, rBasePos.Row(), pCell);
