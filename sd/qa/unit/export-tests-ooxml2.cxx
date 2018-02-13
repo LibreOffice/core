@@ -128,6 +128,7 @@ public:
     void testTdf90626();
     void testTdf107608();
     void testTdf111786();
+    void testFontScale();
     void testTdf115394();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
@@ -182,6 +183,7 @@ public:
     CPPUNIT_TEST(testTdf90626);
     CPPUNIT_TEST(testTdf107608);
     CPPUNIT_TEST(testTdf111786);
+    CPPUNIT_TEST(testFontScale);
     CPPUNIT_TEST(testTdf115394);
 
     CPPUNIT_TEST_SUITE_END();
@@ -1400,6 +1402,18 @@ void SdOOXMLExportTest2::testTdf111786()
     sal_Int16 nTransparency;
     xPropSet->getPropertyValue("LineTransparence") >>= nTransparency;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(33), nTransparency);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testFontScale()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/font-scale.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:normAutofit", "fontScale", "73000");
 
     xDocShRef->DoClose();
 }
