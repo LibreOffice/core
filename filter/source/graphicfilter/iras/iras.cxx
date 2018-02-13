@@ -167,10 +167,11 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     //for the sake of simplicity we'll assume that RAS_TYPE_BYTE_ENCODED can
     //describe data 255 times larger than the data stored
     size_t nMaxCompression = mnType != RAS_TYPE_BYTE_ENCODED ? 1 : 255;
-    if (m_rRAS.remainingSize() * nMaxCompression < static_cast<sal_uInt64>(mnHeight) * mnWidth * mnDepth / 8)
-    {
+    sal_uInt32 nBitSize;
+    if (o3tl::checked_multiply<sal_uInt32>(mnWidth, mnHeight, nBitSize) || o3tl::checked_multiply<sal_uInt32>(nBitSize, mnDepth, nBitSize))
         return false;
-    }
+    if (m_rRAS.remainingSize() * nMaxCompression < nBitSize / 8)
+        return false;
 
     vcl::bitmap::RawBitmap aBmp(Size(mnWidth, mnHeight));
 
