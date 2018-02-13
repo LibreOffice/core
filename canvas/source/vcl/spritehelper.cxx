@@ -196,8 +196,8 @@ namespace vclcanvas
                                                                                         rOrigOutputSize.getY()),
                                                                 aTransform );
 
-                    aOutPos.X() = ::basegfx::fround( aDestRect.getMinX() );
-                    aOutPos.Y() = ::basegfx::fround( aDestRect.getMinY() );
+                    aOutPos.setX( ::basegfx::fround( aDestRect.getMinX() ) );
+                    aOutPos.setY( ::basegfx::fround( aDestRect.getMinY() ) );
 
                     // TODO(P3): Use optimized bitmap transformation here.
 
@@ -217,8 +217,8 @@ namespace vclcanvas
                     aOutputSize.setHeight(
                         ::basegfx::fround( rOrigOutputSize.getY() * aTransform.get(1,1) ) );
 
-                    aOutPos.X() = ::basegfx::fround( aTransform.get(0,2) );
-                    aOutPos.Y() = ::basegfx::fround( aTransform.get(1,2) );
+                    aOutPos.setX( ::basegfx::fround( aTransform.get(0,2) ) );
+                    aOutPos.setY( ::basegfx::fround( aTransform.get(1,2) ) );
                 }
             }
 

@@ -237,36 +237,36 @@ void BackgroundPreviewImpl::recalcDrawPos()
         Size aSize = GetOutputSizePixel();
         // InnerSize == Size without one pixel border
         Size aInnerSize = aSize;
-        aInnerSize.Width() -= 2;
+        aInnerSize.setWidth( aInnerSize.Width() - 2 );
         aInnerSize.Height() -= 2;
         aDrawSize = pBitmap->GetSizePixel();
 
         // bitmap bigger than preview window?
         if (aDrawSize.Width() > aInnerSize.Width())
         {
-            aDrawSize.Height() = aDrawSize.Height() * aInnerSize.Width() / aDrawSize.Width();
+            aDrawSize.setHeight( aDrawSize.Height() * aInnerSize.Width() / aDrawSize.Width() );
             if (aDrawSize.Height() > aInnerSize.Height())
             {
-                aDrawSize.Width() = aDrawSize.Height();
-                aDrawSize.Height() = aInnerSize.Height();
+                aDrawSize.setWidth( aDrawSize.Height() );
+                aDrawSize.setHeight( aInnerSize.Height() );
             }
             else
-                aDrawSize.Width() = aInnerSize.Width();
+                aDrawSize.setWidth( aInnerSize.Width() );
         }
         else if (aDrawSize.Height() > aInnerSize.Height())
         {
-            aDrawSize.Width() = aDrawSize.Width() * aInnerSize.Height() / aDrawSize.Height();
+            aDrawSize.setWidth( aDrawSize.Width() * aInnerSize.Height() / aDrawSize.Height() );
             if (aDrawSize.Width() > aInnerSize.Width())
             {
-                aDrawSize.Height() = aDrawSize.Width();
-                aDrawSize.Width() = aInnerSize.Width();
+                aDrawSize.setHeight( aDrawSize.Width() );
+                aDrawSize.setWidth( aInnerSize.Width() );
             }
             else
-                aDrawSize.Height() = aInnerSize.Height();
+                aDrawSize.setHeight( aInnerSize.Height() );
         }
 
-        aDrawPos.X() = (aSize.Width()  - aDrawSize.Width())  / 2;
-        aDrawPos.Y() = (aSize.Height() - aDrawSize.Height()) / 2;
+        aDrawPos.setX( (aSize.Width()  - aDrawSize.Width())  / 2 );
+        aDrawPos.setY( (aSize.Height() - aDrawSize.Height()) / 2 );
     }
 }
 
