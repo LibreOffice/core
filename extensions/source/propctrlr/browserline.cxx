@@ -210,8 +210,8 @@ namespace pcr
             if ( m_bIndentTitle )
             {
                 Size aIndent( m_pTheParent->LogicToPixel(Size(8, 0), MapMode(MapUnit::MapAppFont)) );
-                aTitlePos.X() += aIndent.Width();
-                aTitleSize.Width() -= aIndent.Width();
+                aTitlePos.setX( aTitlePos.X() + aIndent.Width() );
+                aTitleSize.setWidth( aTitleSize.Width() - aIndent.Width() );
             }
             m_aFtTitle->SetPosSizePixel( aTitlePos, aTitleSize );
         }
@@ -225,7 +225,7 @@ namespace pcr
 
             Size aControlSize( m_aOutputSize.Width() - 4 - m_nNameWidth - nBrowseButtonSize - 4, m_pControlWindow->GetSizePixel().Height() );
             if ( m_pAdditionalBrowseButton )
-                aControlSize.Width() -= nBrowseButtonSize + 4;
+                aControlSize.setWidth( aControlSize.Width() - nBrowseButtonSize + 4 );
             m_pControlWindow->SetSizePixel( aControlSize );
         }
 
@@ -237,7 +237,7 @@ namespace pcr
 
             if ( m_pAdditionalBrowseButton )
             {
-                aButtonPos.X() -= nBrowseButtonSize + 4;
+                aButtonPos.setX( aButtonPos.X() - nBrowseButtonSize + 4 );
                 m_pAdditionalBrowseButton->SetPosSizePixel( aButtonPos, aButtonSize );
             }
         }

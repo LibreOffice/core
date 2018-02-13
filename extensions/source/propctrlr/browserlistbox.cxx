@@ -426,7 +426,7 @@ namespace pcr
         tools::Rectangle aLinesArea( aPlayground );
         if ( bPositionHelpWindow )
         {
-            aLinesArea.Bottom() -= nHelpWindowHeight;
+            aLinesArea.SetBottom( aLinesArea.Bottom() - nHelpWindowHeight );
             aLinesArea.Bottom() -= aHelpWindowDistance.Height();
         }
         m_aLinesPlayground->SetPosSizePixel( aLinesArea.TopLeft(), aLinesArea.GetSize() );
@@ -447,11 +447,11 @@ namespace pcr
             Size aVScrollSize( m_aVScroll->GetSizePixel() );
 
             // adjust the playground's width
-            aLinesArea.Right() -= aVScrollSize.Width();
+            aLinesArea.SetRight( aLinesArea.Right() - aVScrollSize.Width() );
             m_aLinesPlayground->SetPosSizePixel( aLinesArea.TopLeft(), aLinesArea.GetSize() );
 
             // position the scrollbar
-            aVScrollSize.Height() = aLinesArea.GetHeight();
+            aVScrollSize.setHeight( aLinesArea.GetHeight() );
             Point aVScrollPos( aLinesArea.GetWidth(), 0 );
             m_aVScroll->SetPosSizePixel( aVScrollPos, aVScrollSize );
         }
@@ -472,7 +472,7 @@ namespace pcr
         if ( bPositionHelpWindow )
         {
             tools::Rectangle aHelpArea( aPlayground );
-            aHelpArea.Top() = aLinesArea.Bottom() + aHelpWindowDistance.Height();
+            aHelpArea.SetTop( aLinesArea.Bottom() + aHelpWindowDistance.Height() );
             m_pHelpWindow->SetPosSizePixel( aHelpArea.TopLeft(), aHelpArea.GetSize() );
         }
     }
@@ -554,9 +554,9 @@ namespace pcr
         Size aSize(m_aLinesPlayground->GetOutputSizePixel());
         Point aPos(0, m_nYOffset);
 
-        aSize.Height() = m_nRowHeight;
+        aSize.setHeight( m_nRowHeight );
 
-        aPos.Y() += _nIndex * m_nRowHeight;
+        aPos.setY( aPos.Y() + _nIndex * m_nRowHeight );
 
         if ( _nIndex < m_aLines.size() )
         {

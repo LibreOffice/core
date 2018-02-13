@@ -288,12 +288,12 @@ namespace emfio
             if (nHeight)
             {
                 double fHeight = (static_cast<double>(aFontSize.Height()) * rFont.lfHeight ) / nHeight;
-                aFontSize.Height() = static_cast<sal_Int32>( fHeight + 0.5 );
+                aFontSize.setHeight( static_cast<sal_Int32>( fHeight + 0.5 ) );
             }
         }
 
         // Convert height to positive
-        aFontSize.Height() = std::abs(aFontSize.Height());
+        aFontSize.setHeight( std::abs(aFontSize.Height()) );
 
         aFont.SetFontSize(aFontSize);
     };
@@ -511,7 +511,7 @@ namespace emfio
 
         const auto nHeight = aFontSize.Height();
         if (nHeight < 0)
-            aFontSize.Height() = o3tl::saturating_toggle_sign(nHeight);
+            aFontSize.setHeight( o3tl::saturating_toggle_sign(nHeight) );
 
         rFont.SetFontSize( aFontSize );
 
@@ -755,7 +755,7 @@ namespace emfio
 
                     if ( pLineStyle->aLineInfo.GetStyle() == LineStyle::Dash )
                     {
-                        aSize.Width() += 1;
+                        aSize.setWidth( aSize.Width() + 1 );
                         long nDotLen = ImplMap( aSize ).Width();
                         pLineStyle->aLineInfo.SetDistance( nDotLen );
                         pLineStyle->aLineInfo.SetDotLen( nDotLen );
@@ -1517,8 +1517,8 @@ namespace emfio
             // check whether there is a font rotation applied via transformation
             Point aP1( ImplMap( Point() ) );
             Point aP2( ImplMap( Point( 0, 100 ) ) );
-            aP2.X() -= aP1.X();
-            aP2.Y() -= aP1.Y();
+            aP2.setX( aP2.X() - aP1.X() );
+            aP2.setY( aP2.Y() - aP1.Y() );
             double fX = aP2.X();
             double fY = aP2.Y();
             if ( fX )
@@ -1549,16 +1549,16 @@ namespace emfio
                 if( nLen > 1 )
                     nTextWidth += pDXArry[ nLen - 2 ];
                 // tdf#39894: We should consider the distance to next character cell origin
-                aActPosDelta.X() = pDXArry[ nLen - 1 ];
+                aActPosDelta.setX( pDXArry[ nLen - 1 ] );
                 if ( pDYArry )
                 {
-                    aActPosDelta.Y() = pDYArry[ nLen - 1 ];
+                    aActPosDelta.setY( pDYArry[ nLen - 1 ] );
                 }
             }
             else
             {
                 nTextWidth = pVDev->GetTextWidth( rText );
-                aActPosDelta.X() = nTextWidth;
+                aActPosDelta.setX( nTextWidth );
             }
 
             if( mnTextAlign & TA_UPDATECP )

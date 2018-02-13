@@ -130,11 +130,11 @@ namespace pcr
         tools::Rectangle aPlayground( Point( 0, 0 ), GetOutputSizePixel() );
 
         tools::Rectangle aSeparatorArea( aPlayground );
-        aSeparatorArea.Bottom() = aSeparatorArea.Top() + LogicToPixel(Size(0, 8), MapMode(MapUnit::MapAppFont)).Height();
+        aSeparatorArea.SetBottom( aSeparatorArea.Top() + LogicToPixel(Size(0, 8), MapMode(MapUnit::MapAppFont)).Height() );
         m_aSeparator->SetPosSizePixel( aSeparatorArea.TopLeft(), aSeparatorArea.GetSize() );
 
         tools::Rectangle aTextArea( aPlayground );
-        aTextArea.Top() = aSeparatorArea.Bottom() + a3AppFont.Height();
+        aTextArea.SetTop( aSeparatorArea.Bottom() + a3AppFont.Height() );
         m_aHelpText->SetPosSizePixel( aTextArea.TopLeft(), aTextArea.GetSize() );
     }
 

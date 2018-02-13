@@ -120,15 +120,15 @@ namespace
     {
         Point aSource(rSource);
         if (nMapMode == MM_HIMETRIC)
-            aSource.Y() = -rSource.Y();
+            aSource.setY( -rSource.Y() );
         if (aSource.X() < rPlaceableBound.Left())
-            rPlaceableBound.Left() = aSource.X();
+            rPlaceableBound.SetLeft( aSource.X() );
         if (aSource.X() > rPlaceableBound.Right())
-            rPlaceableBound.Right() = aSource.X();
+            rPlaceableBound.SetRight( aSource.X() );
         if (aSource.Y() < rPlaceableBound.Top())
-            rPlaceableBound.Top() = aSource.Y();
+            rPlaceableBound.SetTop( aSource.Y() );
         if (aSource.Y() > rPlaceableBound.Bottom())
-            rPlaceableBound.Bottom() = aSource.Y();
+            rPlaceableBound.SetBottom( aSource.Y() );
     }
 
     void GetWinExtMax(const tools::Rectangle& rSource, tools::Rectangle& rPlaceableBound, const sal_Int16 nMapMode)
@@ -160,7 +160,7 @@ namespace emfio
         Point aBR, aTL;
         aBR = ReadYX();
         aTL = ReadYX();
-        aBR.X()--;
+        aBR.setX( --aBR.X() );
         aBR.Y()--;
         return tools::Rectangle( aTL, aBR );
     }
@@ -1111,8 +1111,8 @@ namespace emfio
                                                     aMemoryStream.ReadInt32( nTmpX )
                                                                  .ReadInt32( nTmpY )
                                                                  .ReadUInt32( nStringLen );
-                                                     aPt.X() = nTmpX;
-                                                     aPt.Y() = nTmpY;
+                                                     aPt.setX( nTmpX );
+                                                     aPt.setY( nTmpY );
 
                                                     if ( ( static_cast< sal_uInt64 >( nStringLen ) * sizeof( sal_Unicode ) ) < ( nEscLen - aMemoryStream.Tell() ) )
                                                     {
@@ -1257,13 +1257,13 @@ namespace emfio
 
             // BoundRect
             mpInputStream->ReadInt16( nVal );
-            aPlaceableBound.Left() = nVal;
+            aPlaceableBound.SetLeft( nVal );
             mpInputStream->ReadInt16( nVal );
-            aPlaceableBound.Top() = nVal;
+            aPlaceableBound.SetTop( nVal );
             mpInputStream->ReadInt16( nVal );
-            aPlaceableBound.Right() = nVal;
+            aPlaceableBound.SetRight( nVal );
             mpInputStream->ReadInt16( nVal );
-            aPlaceableBound.Bottom() = nVal;
+            aPlaceableBound.SetBottom( nVal );
 
             // inch
             mpInputStream->ReadUInt16( mnUnitsPerInch );
@@ -1839,10 +1839,10 @@ namespace emfio
             }
             else
             {
-                rPlaceableBound.Left() = 0;
-                rPlaceableBound.Top() = 0;
-                rPlaceableBound.Right() = aMaxWidth;
-                rPlaceableBound.Bottom() = aMaxWidth;
+                rPlaceableBound.SetLeft( 0 );
+                rPlaceableBound.SetTop( 0 );
+                rPlaceableBound.SetRight( aMaxWidth );
+                rPlaceableBound.SetBottom( aMaxWidth );
                 SAL_INFO("vcl.wmf", "Default dimension "
                            " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
                         << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());

@@ -837,12 +837,12 @@ void BubbleWindow::Show( bool bVisible, ShowFlags nFlags )
 
     Point aPos;
     aPos.X() = maTipPos.X() - aWindowSize.Width() + TIP_RIGHT_OFFSET;
-    aPos.Y() = maTipPos.Y();
+    aPos.setY( maTipPos.Y() );
     Point aScreenPos = GetParent()->OutputToAbsoluteScreenPixel( aPos );
     if ( aScreenPos.X() < 0 )
     {
         mnTipOffset = aScreenPos.X();
-        aPos.X() -= mnTipOffset;
+        aPos.setX( aPos.X() - mnTipOffset );
     }
     SetPosSizePixel( aPos, aWindowSize );
 
@@ -881,8 +881,8 @@ void BubbleWindow::RecalcTextRects()
                               3 * BUBBLE_BORDER + TIP_HEIGHT );
         if ( aTotalSize.Height() > maMaxTextSize.Height() )
         {
-            maMaxTextSize.Width() = maMaxTextSize.Width() * 3 / 2;
-            maMaxTextSize.Height() = maMaxTextSize.Height() * 3 / 2;
+            maMaxTextSize.setWidth( maMaxTextSize.Width() * 3 / 2 );
+            maMaxTextSize.setHeight( maMaxTextSize.Height() * 3 / 2 );
         }
         else
             bFinished = true;

@@ -501,7 +501,7 @@ void Outliner::SetGlobalCharStretching( sal_uInt16 nX, sal_uInt16 nY )
     {
         Paragraph* pPara = pParaList->GetParagraph( nPara );
         if ( pPara )
-            pPara->aBulSize.Width() = -1;
+            pPara->aBulSize.setWidth( -1 );
     }
 
     pEditEngine->SetGlobalCharStretching( nX, nY );

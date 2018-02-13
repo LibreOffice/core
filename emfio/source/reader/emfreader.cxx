@@ -927,8 +927,8 @@ namespace emfio
                             sal_Int32 nTmpW(0), nTmpH(0);
 
                             mpInputStream->ReadUInt32( nStyle ).ReadInt32( nTmpW ).ReadInt32( nTmpH );
-                            aSize.Width() = nTmpW;
-                            aSize.Height() = nTmpH;
+                            aSize.setWidth( nTmpW );
+                            aSize.setHeight( nTmpH );
 
                             if ( aSize.Width() )
                                 aLineInfo.SetWidth( aSize.Width() );

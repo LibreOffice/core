@@ -154,25 +154,25 @@ public:
     {
         Point aPoint(0, Y);
         aPoint = GetPixelPos(aPoint);
-        maTopLeft.Y() = aPoint.Y();
+        maTopLeft.setY( aPoint.Y() );
     }
     void ChangePreviewLogicTopLeftX(long X)
     {
         Point aPoint(X, 0);
         aPoint = GetPixelPos(aPoint);
-        maTopLeft.X() = aPoint.X();
+        maTopLeft.setX( aPoint.X() );
     }
     void ChangePreviewLogicBottomRightY(long Y)
     {
         Point aPoint(0, Y);
         aPoint = GetPixelPos(aPoint);
-        maBottomRight.Y() = aPoint.Y();
+        maBottomRight.setY( aPoint.Y() );
     }
     void ChangePreviewLogicBottomRightX(long X)
     {
         Point aPoint(X, 0);
         aPoint = GetPixelPos(aPoint);
-        maBottomRight.X() = aPoint.X();
+        maBottomRight.setX( aPoint.X() );
     }
     void SetPreviewLogicRect(const Point& rTopLeft, const Point &rBottomRight)
     {
@@ -477,10 +477,10 @@ void SaneDlg::InitFields()
                     pField->SetCustomUnitText("Pixel");
                 }
                 switch( i ) {
-                    case 0: aTopLeft.X() = static_cast<int>(fValue);break;
-                    case 1: aTopLeft.Y() = static_cast<int>(fValue);break;
-                    case 2: aBottomRight.X() = static_cast<int>(fValue);break;
-                    case 3: aBottomRight.Y() = static_cast<int>(fValue);break;
+                    case 0: aTopLeft.setX( static_cast<int>(fValue) );break;
+                    case 1: aTopLeft.setY( static_cast<int>(fValue) );break;
+                    case 2: aBottomRight.setX( static_cast<int>(fValue) );break;
+                    case 3: aBottomRight.setY( static_cast<int>(fValue) );break;
                 }
             }
             double *pDouble = nullptr;
@@ -497,19 +497,19 @@ void SaneDlg::InitFields()
                     delete [] pDouble;
                 }
                 switch( i ) {
-                    case 0: aMinTopLeft.X() = pField->GetMin();break;
-                    case 1: aMinTopLeft.Y() = pField->GetMin();break;
-                    case 2: aMaxBottomRight.X() = pField->GetMax();break;
-                    case 3: aMaxBottomRight.Y() = pField->GetMax();break;
+                    case 0: aMinTopLeft.setX( pField->GetMin() );break;
+                    case 1: aMinTopLeft.setY( pField->GetMin() );break;
+                    case 2: aMaxBottomRight.setX( pField->GetMax() );break;
+                    case 3: aMaxBottomRight.setY( pField->GetMax() );break;
                 }
             }
             else
             {
                 switch( i ) {
-                    case 0: aMinTopLeft.X() = static_cast<int>(fValue);break;
-                    case 1: aMinTopLeft.Y() = static_cast<int>(fValue);break;
-                    case 2: aMaxBottomRight.X() = static_cast<int>(fValue);break;
-                    case 3: aMaxBottomRight.Y() = static_cast<int>(fValue);break;
+                    case 0: aMinTopLeft.setX( static_cast<int>(fValue) );break;
+                    case 1: aMinTopLeft.setY( static_cast<int>(fValue) );break;
+                    case 2: aMaxBottomRight.setX( static_cast<int>(fValue) );break;
+                    case 3: aMaxBottomRight.setY( static_cast<int>(fValue) );break;
                 }
             }
             pField->Enable();
@@ -520,14 +520,14 @@ void SaneDlg::InitFields()
             pField->SetMin( 0 );
             switch( i ) {
                 case 0:
-                    aMinTopLeft.X() = 0;
-                    aTopLeft.X() = 0;
+                    aMinTopLeft.setX( 0 );
+                    aTopLeft.setX( 0 );
                     pField->SetMax( PREVIEW_WIDTH );
                     pField->SetValue( 0 );
                     break;
                 case 1:
-                    aMinTopLeft.Y() = 0;
-                    aTopLeft.Y() = 0;
+                    aMinTopLeft.setY( 0 );
+                    aTopLeft.setY( 0 );
                     pField->SetMax( PREVIEW_HEIGHT );
                     pField->SetValue( 0 );
                     break;
@@ -1096,33 +1096,33 @@ void ScanPreview::MouseMove(const MouseEvent& rMEvt)
         switch( meDragDirection )
         {
             case TopLeft:       maTopLeft = aMousePos; break;
-            case Top:           maTopLeft.Y() = aMousePos.Y(); break;
+            case Top:           maTopLeft.setY( aMousePos.Y() ); break;
             case TopRight:
-                maTopLeft.Y() = aMousePos.Y();
-                maBottomRight.X() = aMousePos.X();
+                maTopLeft.setY( aMousePos.Y() );
+                maBottomRight.setX( aMousePos.X() );
                 break;
-            case Right:         maBottomRight.X() = aMousePos.X(); break;
+            case Right:         maBottomRight.setX( aMousePos.X() ); break;
             case BottomRight:   maBottomRight = aMousePos; break;
-            case Bottom:        maBottomRight.Y() = aMousePos.Y(); break;
+            case Bottom:        maBottomRight.setY( aMousePos.Y() ); break;
             case BottomLeft:
-                maTopLeft.X() = aMousePos.X();
-                maBottomRight.Y() = aMousePos.Y();
+                maTopLeft.setX( aMousePos.X() );
+                maBottomRight.setY( aMousePos.Y() );
                 break;
-            case Left:          maTopLeft.X() = aMousePos.X(); break;
+            case Left:          maTopLeft.setX( aMousePos.X() ); break;
             default: break;
         }
         int nSwap;
         if( maTopLeft.X() > maBottomRight.X() )
         {
             nSwap = maTopLeft.X();
-            maTopLeft.X() = maBottomRight.X();
-            maBottomRight.X() = nSwap;
+            maTopLeft.setX( maBottomRight.X() );
+            maBottomRight.setX( nSwap );
         }
         if( maTopLeft.Y() > maBottomRight.Y() )
         {
             nSwap = maTopLeft.Y();
-            maTopLeft.Y() = maBottomRight.Y();
-            maBottomRight.Y() = nSwap;
+            maTopLeft.setY( maBottomRight.Y() );
+            maBottomRight.setY( nSwap );
         }
         Invalidate();
         mpParentDialog->UpdateScanArea(false);
@@ -1152,7 +1152,7 @@ void ScanPreview::MouseButtonDown( const MouseEvent& rMEvt )
                      aMousePixel.X() < nMiddleX + RECT_SIZE_PIX )
             {
                 meDragDirection = Top;
-                aMousePixel.Y() = maTopLeft.Y();
+                aMousePixel.setY( maTopLeft.Y() );
                 mbIsDragging = true;
             }
             else if( aMousePixel.X() > maBottomRight.X() - RECT_SIZE_PIX &&
@@ -1170,14 +1170,14 @@ void ScanPreview::MouseButtonDown( const MouseEvent& rMEvt )
                 aMousePixel.X() < maTopLeft.X() + RECT_SIZE_PIX )
             {
                 meDragDirection = Left;
-                aMousePixel.X() = maTopLeft.X();
+                aMousePixel.setX( maTopLeft.X() );
                 mbIsDragging = true;
             }
             else if( aMousePixel.X() > maBottomRight.X() - RECT_SIZE_PIX &&
                      aMousePixel.X() <= maBottomRight.X() )
             {
                 meDragDirection = Right;
-                aMousePixel.X() = maBottomRight.X();
+                aMousePixel.setX( maBottomRight.X() );
                 mbIsDragging = true;
             }
         }
@@ -1195,7 +1195,7 @@ void ScanPreview::MouseButtonDown( const MouseEvent& rMEvt )
                      aMousePixel.X() < nMiddleX + RECT_SIZE_PIX )
             {
                 meDragDirection = Bottom;
-                aMousePixel.Y() = maBottomRight.Y();
+                aMousePixel.setY( maBottomRight.Y() );
                 mbIsDragging = true;
             }
             else if( aMousePixel.X() > maBottomRight.X() - RECT_SIZE_PIX &&
@@ -1266,17 +1266,17 @@ Point ScanPreview::GetLogicPos(const Point& rIn) const
 {
     Point aConvert = PixelToLogic(rIn, MapMode(MapUnit::MapAppFont));
     if( aConvert.X() < 0 )
-        aConvert.X() = 0;
+        aConvert.setX( 0 );
     if( aConvert.X() >= PREVIEW_WIDTH )
-        aConvert.X() = PREVIEW_WIDTH-1;
+        aConvert.setX( PREVIEW_WIDTH-1 );
     if( aConvert.Y() < 0 )
-        aConvert.Y() = 0;
+        aConvert.setY( 0 );
     if( aConvert.Y() >= PREVIEW_HEIGHT )
-        aConvert.Y() = PREVIEW_HEIGHT-1;
+        aConvert.setY( PREVIEW_HEIGHT-1 );
 
-    aConvert.X() *= ( maMaxBottomRight.X() - maMinTopLeft.X() );
+    aConvert.setX( aConvert.X() * ( maMaxBottomRight.X() - maMinTopLeft.X() ) );
     aConvert.X() /= PREVIEW_WIDTH;
-    aConvert.Y() *= ( maMaxBottomRight.Y() - maMinTopLeft.Y() );
+    aConvert.setY( aConvert.Y() * ( maMaxBottomRight.Y() - maMinTopLeft.Y() ) );
     aConvert.Y() /= PREVIEW_HEIGHT;
     return aConvert;
 }
