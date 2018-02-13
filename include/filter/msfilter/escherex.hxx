@@ -590,7 +590,7 @@ public:
     void        WriteBlibStoreEntry(SvStream& rStrm, sal_uInt32 nBlipId, sal_uInt32 nResize);
     sal_uInt32  GetBlibID(
                     SvStream& rPicOutStream,
-                    const OString& rGraphicId,
+                    GraphicObject const & pGraphicObject,
                     const css::awt::Rectangle* pVisArea = nullptr,
                     const GraphicAttr* pGrafikAttr = nullptr,
                     const bool ooxmlExport = false

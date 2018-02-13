@@ -140,7 +140,7 @@ sal_uInt16 PPTExBulletProvider::GetId( const OString& rUniqueId, Size& rGraphicS
                 xGraphicObject.reset(new GraphicObject(aMappedGraphic));
             }
         }
-        sal_uInt32 nId = pGraphicProv->GetBlibID(aBuExPictureStream, xGraphicObject->GetUniqueID());
+        sal_uInt32 nId = pGraphicProv->GetBlibID(aBuExPictureStream, *xGraphicObject.get());
 
         if ( nId && ( nId < 0x10000 ) )
             nRetValue = static_cast<sal_uInt16>(nId) - 1;

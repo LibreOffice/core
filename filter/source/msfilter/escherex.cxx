@@ -1278,7 +1278,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<drawi
                 pVisArea.reset(new awt::Rectangle);
                 aAny >>= (*pVisArea);
             }
-            sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, pVisArea.get() );
+            sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, rGraphicObj, pVisArea.get() );
             if ( nBlibId )
             {
                 AddOpt( ESCHER_Prop_pib, nBlibId, true );
@@ -1311,7 +1311,10 @@ bool EscherPropertyContainer::ImplCreateEmbeddedBmp( const OString& rUniqueId )
     {
         EscherGraphicProvider aProvider;
         SvMemoryStream aMemStrm;
-        if ( aProvider.GetBlibID( aMemStrm, rUniqueId ) )
+        // TODO: Get rid of UniqueID
+
+        GraphicObject aGraphicObject(rUniqueId);
+        if ( aProvider.GetBlibID( aMemStrm, aGraphicObject ) )
         {
             // grab BLIP from stream and insert directly as complex property
             // ownership of stream memory goes to complex property
@@ -1346,7 +1349,6 @@ void EscherPropertyContainer::CreateEmbeddedBitmapProperties(
         }
     }
 }
-
 
 namespace {
 
@@ -1678,7 +1680,8 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                 // write out embedded graphic
                 if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
                 {
-                    const sal_uInt32 nBlibId(pGraphicProvider->GetBlibID(*pPicOutStrm, aUniqueId, nullptr, pGraphicAttr.get()));
+                    GraphicObject aGraphicObject(aUniqueId);
+                    const sal_uInt32 nBlibId(pGraphicProvider->GetBlibID(*pPicOutStrm, aGraphicObject, nullptr, pGraphicAttr.get()));
 
                     if(nBlibId)
                     {
@@ -1700,7 +1703,9 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                     EscherGraphicProvider aProvider;
                     SvMemoryStream aMemStrm;
 
-                    if ( aProvider.GetBlibID( aMemStrm, aUniqueId, nullptr, pGraphicAttr.get(), bOOxmlExport ) )
+                    GraphicObject aGraphicObject(aUniqueId);
+
+                    if ( aProvider.GetBlibID( aMemStrm, aGraphicObject, nullptr, pGraphicAttr.get(), bOOxmlExport ) )
                     {
                         // grab BLIP from stream and insert directly as complex property
                         // ownership of stream memory goes to complex property
@@ -3789,13 +3794,12 @@ bool EscherPropertyContainer::CreateBlipPropertiesforOLEControl(const uno::Refer
         SdrModel* pMod = pShape->GetModel();
         Graphic aGraphic(SdrExchangeView::GetObjGraphic( pMod, pShape));
 
-        std::unique_ptr<GraphicObject> xGraphicObject(new GraphicObject(aGraphic));
-        OString aUniqueId = xGraphicObject->GetUniqueID();
-        if ( aUniqueId.getLength() )
+        GraphicObject aGraphicObject(aGraphic);
+        if (!aGraphicObject.GetUniqueID().isEmpty())
         {
             if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
             {
-                sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId );
+                sal_uInt32 nBlibId = pGraphicProvider->GetBlibID(*pPicOutStrm, aGraphicObject);
                 if ( nBlibId )
                 {
                     AddOpt( ESCHER_Prop_pib, nBlibId, true );
@@ -4149,14 +4153,13 @@ bool EscherGraphicProvider::GetPrefSize( const sal_uInt32 nBlibId, Size& rPrefSi
     return bInRange;
 }
 
-sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OString& rId,
+sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, GraphicObject const & rGraphicObject,
                                             const awt::Rectangle* pVisArea,
                                             const GraphicAttr* pGraphicAttr, const bool bOOxmlExport )
 {
     sal_uInt32 nBlibId = 0;
-    std::unique_ptr<GraphicObject> xGraphicObject(new GraphicObject(rId));
 
-    std::unique_ptr<EscherBlibEntry> p_EscherBlibEntry( new EscherBlibEntry( rPicOutStrm.Tell(), *xGraphicObject, rId, pGraphicAttr ) );
+    std::unique_ptr<EscherBlibEntry> p_EscherBlibEntry( new EscherBlibEntry( rPicOutStrm.Tell(), rGraphicObject, rGraphicObject.GetUniqueID(), pGraphicAttr ) );
     if ( !p_EscherBlibEntry->IsEmpty() )
     {
         for ( size_t i = 0; i < mvBlibEntrys.size(); i++ )
@@ -4170,7 +4173,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
 
         bool            bUseNativeGraphic( false );
 
-        Graphic             aGraphic(xGraphicObject->GetTransformedGraphic(pGraphicAttr));
+        Graphic             aGraphic(rGraphicObject.GetTransformedGraphic(pGraphicAttr));
         GfxLink             aGraphicLink;
         SvMemoryStream      aStream;
 
