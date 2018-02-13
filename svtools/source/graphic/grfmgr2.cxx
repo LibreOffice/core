@@ -1452,63 +1452,10 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, Gra
         rBmpEx.Rotate( aAttr.GetRotation(), Color( COL_TRANSPARENT ) );
     }
 
-    if( !(( nAdjustmentFlags & GraphicAdjustmentFlags::TRANSPARENCY ) && aAttr.IsTransparent()) )
-        return;
-
-    AlphaMask   aAlpha;
-    sal_uInt8       cTrans = aAttr.GetTransparency();
-
-    if( !rBmpEx.IsTransparent() )
-        aAlpha = AlphaMask( rBmpEx.GetSizePixel(), &cTrans );
-    else if( !rBmpEx.IsAlpha() )
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::TRANSPARENCY ) && aAttr.IsTransparent() )
     {
-        aAlpha = rBmpEx.GetMask();
-        aAlpha.Replace( 0, cTrans );
+        rBmpEx.AdjustTransparency(aAttr.GetTransparency());
     }
-    else
-    {
-        aAlpha = rBmpEx.GetAlpha();
-        BitmapWriteAccess* pA = aAlpha.AcquireWriteAccess();
-
-        if( pA )
-        {
-            sal_uLong       nTrans = cTrans, nNewTrans;
-            const long  nWidth = pA->Width(), nHeight = pA->Height();
-
-            if( pA->GetScanlineFormat() == ScanlineFormat::N8BitPal )
-            {
-                for( long nY = 0; nY < nHeight; nY++ )
-                {
-                    Scanline pAScan = pA->GetScanline( nY );
-
-                    for( long nX = 0; nX < nWidth; nX++ )
-                    {
-                        nNewTrans = nTrans + *pAScan;
-                        *pAScan++ = static_cast<sal_uInt8>( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans );
-                    }
-                }
-            }
-            else
-            {
-                BitmapColor aAlphaValue( 0 );
-
-                for( long nY = 0; nY < nHeight; nY++ )
-                {
-                    Scanline pScanline = pA->GetScanline( nY );
-                    for( long nX = 0; nX < nWidth; nX++ )
-                    {
-                        nNewTrans = nTrans + pA->GetIndexFromData( pScanline, nX );
-                        aAlphaValue.SetIndex( static_cast<sal_uInt8>( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans ) );
-                        pA->SetPixelOnData( pScanline, nX, aAlphaValue );
-                    }
-                }
-            }
-
-            aAlpha.ReleaseAccess( pA );
-        }
-    }
-
-    rBmpEx = BitmapEx( rBmpEx.GetBitmap(), aAlpha );
 }
 
 void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, GraphicAdjustmentFlags nAdjustmentFlags )
