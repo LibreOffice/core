@@ -189,6 +189,10 @@ void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr,
     if (!pBlockPos)
         return;
 
+    // If ScSetStringParam was given, ScColumn::ParseString() shall take care
+    // of checking. Ensure caller said so.
+    assert(!pStringParam || pStringParam->mbCheckLinkFormula);
+
     ScCellValue aCell;
     pTab->aCol[rPos.Col()].ParseString(
         aCell, rPos.Row(), rPos.Tab(), rStr, mpImpl->mrDoc.GetAddressConvention(), pStringParam);
@@ -209,7 +213,8 @@ void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr,
             pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.mfValue);
         break;
         case CELLTYPE_FORMULA:
-            mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *aCell.mpFormula->GetCode());
+            if (!pStringParam)
+                mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *aCell.mpFormula->GetCode());
             // This formula cell instance is directly placed in the document without copying.
             pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.mpFormula);
             aCell.mpFormula = nullptr;
