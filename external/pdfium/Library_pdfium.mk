@@ -24,6 +24,7 @@ $(eval $(call gb_Library_add_defs,pdfium,\
     -DUSE_SYSTEM_LCMS2 \
     -DUSE_SYSTEM_LIBJPEG \
     -DUSE_SYSTEM_ZLIB \
+    -DMEMORY_TOOL_REPLACES_ALLOCATOR \
     -DUNICODE \
 ))
 
