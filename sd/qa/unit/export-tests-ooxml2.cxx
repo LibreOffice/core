@@ -125,6 +125,7 @@ public:
     void testGroupsRotatedPosition();
     void testAccentColor();
     void testTdf114848();
+    void testFontScale();
     void testTdf115394();
     void testTdf115394Zero();
 
@@ -173,6 +174,7 @@ public:
     CPPUNIT_TEST(testGroupsRotatedPosition);
     CPPUNIT_TEST(testAccentColor);
     CPPUNIT_TEST(testTdf114848);
+    CPPUNIT_TEST(testFontScale);
     CPPUNIT_TEST(testTdf115394);
     CPPUNIT_TEST(testTdf115394Zero);
 
@@ -1132,6 +1134,21 @@ void SdOOXMLExportTest2::testGroupRotation()
     assertXPathNoAttribute(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:grpSpPr/a:xfrm", "rot");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[1]/p:spPr/a:xfrm", "rot", "20400000");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[2]/p:spPr/a:xfrm", "rot", "20400000");
+}
+
+void SdOOXMLExportTest2::testFontScale()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/font-scale.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+    // Rounding errors possible, approximate value
+    OUString sScale = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:normAutofit", "fontScale");
+    if (sScale != "73000" && sScale != "72000" && sScale != "74000")
+        CPPUNIT_ASSERT_EQUAL(OUString("73000"), sScale);
+
+    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf115394()
