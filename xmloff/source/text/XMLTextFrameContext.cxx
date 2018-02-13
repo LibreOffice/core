@@ -877,12 +877,22 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             }
             break;
         case XML_TOK_TEXT_FRAME_X:
-            GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    nX, rValue);
+            {
+                sal_Int32 nTmp;
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    nTmp, rValue);
+                // there might be a value already from transformation, therefore add
+                nX += nTmp;
+            }
             break;
         case XML_TOK_TEXT_FRAME_Y:
-            GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    nY, rValue );
+            {
+                sal_Int32 nTmp;
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    nTmp, rValue );
+                // there might be a value already from transformation, therefore add
+                nY += nTmp;
+            }
             break;
         case XML_TOK_TEXT_FRAME_WIDTH:
             // relative widths are obsolete since SRC617. Remove them some day!
@@ -984,8 +994,8 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         case XML_TOK_TEXT_FRAME_TRANSFORM:
             {
                 // RotateFlyFrameFix: im/export full 'draw:transform' using existing tooling
-                // Currently only rotation is used, but combinations with 'draw:transform'
-                // may be necessary in the future, so that svg:x/svg:y/svg:width/svg:height
+                // Currently only rotation and translation is used, but combinations with 'draw:transform'
+                // may be necessary in the future, so that svg:width/svg:height
                 // may be extended/replaced with 'draw:transform' (see draw objects)
                 SdXMLImExTransform2D aSdXMLImExTransform2D;
                 basegfx::B2DHomMatrix aFullTransform;
@@ -993,8 +1003,9 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                 // Use SdXMLImExTransform2D to convert to transformation
                 // Note: using GetTwipUnitConverter instead of GetMM100UnitConverter may be needed,
                 // but is not generally available (as it should be, a 'current' UnitConverter should
-                // be available at GetExport() - and maybe was once). May have to be addressed as soon
-                // as translate transformations are used here.
+                // be available at GetExport() - and maybe was once). Currently svg:x svg:y and translate
+                // use the same GetMM100UnitConverter, so that values can be added without additional
+                // convert.
                 aSdXMLImExTransform2D.SetString(rValue, GetImport().GetMM100UnitConverter());
                 aSdXMLImExTransform2D.GetFullTransform(aFullTransform);
 
@@ -1002,13 +1013,13 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                 {
                     const basegfx::utils::B2DHomMatrixBufferedDecompose aDecomposedTransform(aFullTransform);
 
-                    // currently we *only* use rotation (and translation indirectly), so warn if *any*
+                    // currently we *only* use rotation and translation, so warn if *any*
                     // of the other transform parts is used
                     SAL_WARN_IF(!basegfx::fTools::equal(1.0, aDecomposedTransform.getScale().getX()), "xmloff.text", "draw:transform uses scaleX" );
                     SAL_WARN_IF(!basegfx::fTools::equal(1.0, aDecomposedTransform.getScale().getY()), "xmloff.text", "draw:transform uses scaleY" );
                     SAL_WARN_IF(!basegfx::fTools::equalZero(aDecomposedTransform.getShearX()), "xmloff.text", "draw:transform uses shearX" );
 
-                    // Translation comes from the translate to RotCenter, rot and BackTranslate.
+                    // In LO translation comes from the translate to RotCenter, rot and BackTranslate.
                     // This means that it represents the translation between unrotated TopLeft
                     // and rotated TopLeft. This may be checked here now, but currently we only
                     // use rotation around center and assume that this *was* a rotation around
@@ -1017,6 +1028,9 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                     // The definition contains implicitly the RotationCenter absolute
                     // to the scaled and translated object, so this may be used if needed (see
                     // _exportTextGraphic how the -trans/rot/trans is composed)
+                    // MS Word puts the object position not in svg:x and svg:y but sets the
+                    // translations accordingly. For import those files, the translation has
+                    // to be evaluated too, although in LO it sums up to zero.
 
                     if(!basegfx::fTools::equalZero(aDecomposedTransform.getRotate()))
                     {
@@ -1028,6 +1042,10 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                         const double fRotate(aDecomposedTransform.getRotate() * (1800.0/M_PI));
                         nRotation = static_cast< sal_Int16 >(basegfx::fround(fRotate) % 3600);
                     }
+
+                    // There might already be values from svg:x and svg:y, therefore add.
+                    nX += aDecomposedTransform.getTranslate().getX();
+                    nY += aDecomposedTransform.getTranslate().getY();
                 }
             }
             break;
