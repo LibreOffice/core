@@ -244,6 +244,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportQPW(SvStream &rStream)
     aDocument.MakeTable(0);
     aDocument.EnableExecuteLink(false);
     aDocument.SetInsertingFromOtherDoc(true);
+    aDocument.SetImportingXML(true);
+    aDocument.EnableUndo(false);
 
     ScQProReader aReader(&rStream);
     ErrCode eRet = aReader.parse(&aDocument);
