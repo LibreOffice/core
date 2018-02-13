@@ -1259,6 +1259,26 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
     }
 }
 
+double SdrTextObj::GetFontScaleY() const
+{
+    SdrText* pText = getActiveText();
+    if (pText == nullptr || !pText->GetOutlinerParaObject() || pModel == nullptr)
+        return 1.0;
+
+    SdrOutliner& rOutliner = ImpGetDrawOutliner();
+    const Size aShapeSize = GetSnapRect().GetSize();
+    const Size aSize = Size(aShapeSize.Width() - GetTextLeftDistance() - GetTextRightDistance(),
+        aShapeSize.Height() - GetTextUpperDistance() - GetTextLowerDistance());
+
+    rOutliner.SetPaperSize(aSize);
+    rOutliner.SetUpdateMode(true);
+    rOutliner.SetText(*pText->GetOutlinerParaObject());
+    Size aNewSize(rOutliner.CalcTextSizeNTP());
+    Size aOldSize(rOutliner.CalcTextSize());
+
+    return static_cast<double>(aNewSize.getHeight()) / aOldSize.getHeight();
+}
+
 void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner ) const
 {
     const Size aShapeSize=GetSnapRect().GetSize();
