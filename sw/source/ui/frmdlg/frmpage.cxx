@@ -1812,7 +1812,7 @@ void SwFramePage::RangeModifyHdl()
     SwWrtShell* pSh = m_bFormat ? ::GetActiveWrtShell()
                         : getFrameDlgParentShell();
     OSL_ENSURE(pSh , "shell not found");
-    SwFlyFrameAttrMgr aMgr( m_bNew, pSh, static_cast<const SwAttrSet&>(GetItemSet()) );
+    SwFlyFrameAttrMgr aMgr( m_bNew, pSh, GetItemSet() );
     SvxSwFrameValidation        aVal;
 
     aVal.nAnchorType = GetAnchor();

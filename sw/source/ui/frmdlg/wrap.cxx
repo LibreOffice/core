@@ -390,7 +390,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
     if (!m_bDrawMode)
     {
         SwWrtShell* pSh = m_bFormat ? ::GetActiveWrtShell() : m_pWrtSh;
-        SwFlyFrameAttrMgr aMgr( m_bNew, pSh, static_cast<const SwAttrSet&>(GetItemSet()) );
+        SwFlyFrameAttrMgr aMgr( m_bNew, pSh, GetItemSet() );
         SvxSwFrameValidation aVal;
 
         // size
