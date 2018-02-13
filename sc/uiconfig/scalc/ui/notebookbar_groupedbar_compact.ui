@@ -4588,6 +4588,140 @@
             <property name="margin_right">5</property>
             <property name="baseline_position">bottom</property>
             <child>
+              <object class="sfxlo-DropdownBox" id="ToolsSection">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="margin_right">5</property>
+                <child>
+                  <object class="GtkBox" id="Ext2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkBox" id="Section2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">end</property>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom2">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="toolbar_style">icons</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="SearchDialog">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="action_name">.uno:SearchDialog</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="svtlo-ManagedMenuButton" id="menub:MenuSettings">
+                            <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|menub">_Menu</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
+                            <property name="relief">none</property>
+                            <property name="use_underline">True</property>
+                            <property name="focus_on_click">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="box34">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="thirdExt2">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="hexpand">True</property>
+                            <property name="toolbar_style">icons</property>
+                            <property name="show_arrow">False</property>
+                            <property name="icon_size">1</property>
+                            <child>
+                              <object class="GtkToolButton" id="HelpIndex1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="action_name">.uno:HelpIndex</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="svtlo-ManagedMenuButton" id="toolsb:MenuTools">
+                            <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|toolsb">_Tools</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="relief">none</property>
+                            <property name="use_underline">True</property>
+                            <property name="focus_on_click">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="pack_type">end</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="sfxlo-DropdownBox" id="FileSection">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -4643,12 +4777,12 @@
                             <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|fileb">_File</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
+                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -4701,7 +4835,22 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparator" id="separator122">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="orientation">vertical</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="padding">5</property>
+                <property name="pack_type">end</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -4783,12 +4932,12 @@
                             <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|editb">_Edit</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
+                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -4852,7 +5001,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -4861,10 +5010,10 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="sfxlo-PriorityHBox" id="DefaultContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="DefaultContainer">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="StylesSection">
+                      <object class="sfxlo-OptionalBox" id="StylesSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -4941,10 +5090,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|paragraphstyleb">St_yles</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -4983,6 +5132,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-8"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -4991,7 +5143,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="FontSection">
+                      <object class="sfxlo-OptionalBox" id="FontSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -5095,10 +5247,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|formatb">F_ont</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -5202,7 +5354,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="NumberSection">
+                      <object class="sfxlo-OptionalBox" id="NumberSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -5250,7 +5402,6 @@
                                     </child>
                                     <child>
                                       <object class="GtkToolButton" id="NumberFormatPercent">
-                                        <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">center</property>
                                         <property name="hexpand">True</property>
@@ -5319,10 +5470,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|numberb">_Number</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -5344,6 +5495,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-7"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -5352,7 +5506,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="AlignmentSection">
+                      <object class="sfxlo-OptionalBox" id="AlignmentSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -5475,10 +5629,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|paragraphb">_Alignment</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -5527,6 +5681,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-6"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -5535,7 +5692,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="CellSection">
+                      <object class="sfxlo-OptionalBox" id="CellSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -5639,10 +5796,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|cellb">_Cells</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -5694,6 +5851,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-5"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -5702,7 +5862,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="InsertSection">
+                      <object class="sfxlo-OptionalBox" id="InsertSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -5779,12 +5939,12 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|insertb">_Insert</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="valign">center</property>
                                     <property name="vexpand">True</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -5822,6 +5982,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-4"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -5830,7 +5993,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="DataSection">
+                      <object class="sfxlo-OptionalBox" id="DataSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -5909,10 +6072,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|datab">_Data</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                     <property name="yalign">0.49000000953674316</property>
                                   </object>
                                   <packing>
@@ -5935,6 +6098,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-3"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -5943,117 +6109,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ViewSection">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
-                        <child>
-                          <object class="GtkSeparator" id="separator24">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="orientation">vertical</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="padding">5</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox" id="Section8">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="orientation">vertical</property>
-                            <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="SectionBottom8">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="toolbar_style">icons</property>
-                                <property name="show_arrow">False</property>
-                                <child>
-                                  <object class="GtkToolButton" id="FreezePanes">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="action_name">.uno:FreezePanes</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkToolButton" id="PrintPreview">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:PrintPreview</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkToolButton" id="Zoom2">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:Zoom</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkBox" id="box10">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <child>
-                                  <object class="svtlo-ManagedMenuButton" id="viewb:MenuView">
-                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|viewb">_View</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="relief">none</property>
-                                    <property name="use_underline">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">7</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="sfxlo-DropdownBox" id="ReviewSection">
+                      <object class="sfxlo-OptionalBox" id="ReviewSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -6130,12 +6186,12 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|reviewb">_Review</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="valign">center</property>
                                     <property name="vexpand">True</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -6157,6 +6213,122 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-2"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">7</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="sfxlo-OptionalBox" id="ViewSection">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="baseline_position">bottom</property>
+                        <child>
+                          <object class="GtkSeparator" id="separator24">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="padding">5</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="Section8">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="sfxlo-NotebookbarToolBox" id="SectionBottom8">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="toolbar_style">icons</property>
+                                <property name="show_arrow">False</property>
+                                <child>
+                                  <object class="GtkToolButton" id="FreezePanes">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="action_name">.uno:FreezePanes</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="PrintPreview">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:PrintPreview</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="Zoom2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:Zoom</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="box10">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="svtlo-ManagedMenuButton" id="viewb:MenuView">
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|viewb">_View</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="relief">none</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <style>
+                          <class name="priority-1"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6166,7 +6338,7 @@
                     </child>
                     <style>
                       <class name="context-Cell"/>
-                      <class name="context-Default"/>
+                      <class name="context-default"/>
                       <class name="context-Empty"/>
                       <class name="context-EditCell"/>
                     </style>
@@ -6178,13 +6350,10 @@
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <object class="sfxlo-PriorityHBox" id="GraphicContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="GraphicContainer">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="GraphicSection">
+                      <object class="sfxlo-OptionalBox" id="GraphicSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -6273,11 +6442,11 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|graphicB">_Graphic</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -6323,7 +6492,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ColorSection">
+                      <object class="sfxlo-OptionalBox" id="ColorSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -6378,11 +6547,11 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|colorb">C_olor</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -6459,7 +6628,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ColorSectionExt">
+                      <object class="sfxlo-OptionalBox" id="ColorSectionExt">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -6552,6 +6721,9 @@
                             <property name="position">0</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-3"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6560,7 +6732,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ArrangeSection">
+                      <object class="sfxlo-OptionalBox" id="ArrangeSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -6718,11 +6890,11 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|arrange">_Arrange</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -6793,6 +6965,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-2"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6801,7 +6976,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="GridSection">
+                      <object class="sfxlo-OptionalBox" id="GridSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -6879,11 +7054,11 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|GridB">_Grid</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -6905,6 +7080,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-1"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6919,14 +7097,17 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-PriorityHBox" id="ReviewContainer">
+                  <placeholder/>
+                </child>
+                <child>
+                  <object class="sfxlo-PriorityMergedHBox" id="ReviewContainer">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="LanguageSection">
+                      <object class="sfxlo-OptionalBox" id="LanguageSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -7000,11 +7181,11 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|languageb">_Language</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="halign">start</property>
                                 <property name="relief">none</property>
                                 <property name="use_underline">True</property>
+                                <property name="focus_on_click">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -7019,6 +7200,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-3"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -7027,7 +7211,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ReviewSectio">
+                      <object class="sfxlo-OptionalBox" id="ReviewSectio">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -7127,11 +7311,11 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|revieb">_Review</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -7188,23 +7372,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-NotebookbarToolBox" id="ExtBottom19">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="valign">end</property>
-                        <property name="toolbar_style">icons</property>
-                        <property name="show_arrow">False</property>
-                        <property name="icon_size">3</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="sfxlo-DropdownBox" id="CommentsSection">
+                      <object class="sfxlo-OptionalBox" id="CommentsSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -7278,11 +7446,11 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|commentsb">_Comments</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="halign">start</property>
                                 <property name="relief">none</property>
                                 <property name="use_underline">True</property>
+                                <property name="focus_on_click">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -7305,7 +7473,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="FilesSectionsRev">
+                      <object class="sfxlo-OptionalBox" id="FilesSectionsRev">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -7379,11 +7547,11 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|compareb">Com_pare</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="halign">start</property>
                                 <property name="relief">none</property>
                                 <property name="use_underline">True</property>
+                                <property name="focus_on_click">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -7398,6 +7566,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-2"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -7406,7 +7577,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ViewSection2">
+                      <object class="sfxlo-OptionalBox" id="ViewSection2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -7480,10 +7651,10 @@
                                 <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|viewA">_View</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="relief">none</property>
                                 <property name="use_underline">True</property>
+                                <property name="focus_on_click">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -7498,6 +7669,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-1"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -7516,10 +7690,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-PriorityHBox" id="DrawContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="DrawContainer">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="EditSection">
+                      <object class="sfxlo-OptionalBox" id="EditSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -7654,10 +7828,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|editdrawb">_Styles</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -7725,7 +7899,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="DrawSelect">
+                      <object class="sfxlo-OptionalBox" id="DrawSelect">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -7871,10 +8045,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|drawb">D_raw</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -7953,7 +8127,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ArrangeSection2">
+                      <object class="sfxlo-OptionalBox" id="ArrangeSection2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8062,10 +8236,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|arrangeD">_Arrange</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -8087,6 +8261,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-4"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -8095,7 +8272,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="GridSection2">
+                      <object class="sfxlo-OptionalBox" id="GridSection2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8172,10 +8349,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|Grid">_Grid</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -8197,6 +8374,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-3"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -8205,7 +8385,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="GroupSection2">
+                      <object class="sfxlo-OptionalBox" id="GroupSection2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8282,10 +8462,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|viewDrawb">Grou_p</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -8307,6 +8487,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-2"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -8315,7 +8498,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="3DSection">
+                      <object class="sfxlo-OptionalBox" id="3DSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8391,10 +8574,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|3Db">3_D</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -8454,6 +8637,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-1"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -8472,10 +8658,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-PriorityHBox" id="OLEContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="OLEContainer">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="EditSection1">
+                      <object class="sfxlo-OptionalBox" id="EditSection1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8575,11 +8761,11 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|oleB">F_rame</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="halign">start</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -8637,7 +8823,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ArrangeSection1">
+                      <object class="sfxlo-OptionalBox" id="ArrangeSection1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8783,10 +8969,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|arrangeO">_Arrange</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -8808,6 +8994,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-3"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -8816,7 +9005,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="GridSection1">
+                      <object class="sfxlo-OptionalBox" id="GridSection1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8893,10 +9082,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|GridO">_Grid</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -8918,6 +9107,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-2"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -8926,7 +9118,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ViewSection1">
+                      <object class="sfxlo-OptionalBox" id="ViewSection1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -9004,10 +9196,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|viewO">_View</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -9029,6 +9221,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-1"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -9048,10 +9243,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-PriorityHBox" id="DrawTextContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="DrawTextContainer">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="StylesSection2">
+                      <object class="sfxlo-OptionalBox" id="StylesSection2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -9110,10 +9305,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|paragraphstyles">_Styles</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -9182,7 +9377,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="FormatSection2">
+                      <object class="sfxlo-OptionalBox" id="FormatSection2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -9286,10 +9481,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|formats">F_ormat</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -9393,6 +9588,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-3"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -9401,7 +9599,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ParagraphSection1">
+                      <object class="sfxlo-OptionalBox" id="ParagraphSection1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -9559,10 +9757,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|paragraphS">_Paragraph</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -9633,6 +9831,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-2"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -9641,7 +9842,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ViewSection3">
+                      <object class="sfxlo-OptionalBox" id="ViewSection3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -9718,10 +9919,10 @@
                                     <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|viewS">_View</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
+                                    <property name="focus_on_click">False</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -9743,6 +9944,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-1"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -9765,156 +9969,9 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSeparator" id="separator122">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="hexpand">True</property>
-                <property name="orientation">vertical</property>
-              </object>
-              <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="padding">5</property>
-                <property name="position">5</property>
-              </packing>
-            </child>
-            <child>
-              <object class="sfxlo-DropdownBox" id="ToolsSection">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_right">5</property>
-                <child>
-                  <object class="GtkBox" id="Ext2">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkBox" id="Section2">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">end</property>
-                        <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom2">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="toolbar_style">icons</property>
-                            <property name="show_arrow">False</property>
-                            <child>
-                              <object class="GtkToolButton" id="SearchDialog">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="action_name">.uno:SearchDialog</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="svtlo-ManagedMenuButton" id="menub:MenuSettings">
-                            <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|menub">_Menu</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="focus_on_click">False</property>
-                            <property name="receives_default">False</property>
-                            <property name="valign">center</property>
-                            <property name="vexpand">True</property>
-                            <property name="relief">none</property>
-                            <property name="use_underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="box34">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="thirdExt2">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="hexpand">True</property>
-                            <property name="toolbar_style">icons</property>
-                            <property name="show_arrow">False</property>
-                            <property name="icon_size">1</property>
-                            <child>
-                              <object class="GtkToolButton" id="HelpIndex1">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="action_name">.uno:HelpIndex</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="svtlo-ManagedMenuButton" id="toolsb:MenuTools">
-                            <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|toolsb">_Tools</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="focus_on_click">False</property>
-                            <property name="receives_default">False</property>
-                            <property name="relief">none</property>
-                            <property name="use_underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">6</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </object>
