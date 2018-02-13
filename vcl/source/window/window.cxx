@@ -2103,17 +2103,17 @@ void Window::SetInputContext( const InputContext& rInputContext )
         ImplNewInputContext();
 }
 
-void Window::PostExtTextInputEvent(VclEventId nType, const OUString& rText)
+void Window::PostExtTextInputEvent(int nType, const OUString& rText)
 {
     switch (nType)
     {
-    case VclEventId::ExtTextInput:
+    case VCLEVENT_WINDOW_EXTTEXTINPUT:
     {
         SalExtTextInputEvent aEvent { rText, nullptr, rText.getLength(), 0 };
         ImplWindowFrameProc(this, SalEvent::ExtTextInput, &aEvent);
     }
     break;
-    case VclEventId::EndExtTextInput:
+    case VCLEVENT_WINDOW_ENDEXTTEXTINPUT:
         ImplWindowFrameProc(this, SalEvent::EndExtTextInput, nullptr);
         break;
     default:
