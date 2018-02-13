@@ -445,7 +445,7 @@ Reference<XInterface> resolveUnoURL(
     Reference<bridge::XUnoUrlResolver> xUnoUrlResolver(
         bridge::UnoUrlResolver::create( xLocalContext ) );
 
-    for (int i = 0; i <= 20; ++i) // 10 seconds
+    for (int i = 0; i <= 40; ++i) // 20 seconds
     {
         if (abortChannel != nullptr && abortChannel->isAborted()) {
             throw ucb::CommandAbortedException( "abort!" );
@@ -454,7 +454,7 @@ Reference<XInterface> resolveUnoURL(
             return xUnoUrlResolver->resolve( connectString );
         }
         catch (const connection::NoConnectException &) {
-            if (i < 20)
+            if (i < 40)
             {
                 ::osl::Thread::wait( std::chrono::milliseconds(500) );
             }
