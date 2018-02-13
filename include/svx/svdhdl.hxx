@@ -255,7 +255,7 @@ class SVX_DLLPUBLIC SdrHdlColor : public SdrHdl
     SVX_DLLPRIVATE virtual void CreateB2dIAObject() override;
 
     // help functions
-    SVX_DLLPRIVATE Bitmap CreateColorDropper(Color aCol);
+    SVX_DLLPRIVATE BitmapEx CreateColorDropper(Color aCol);
     SVX_DLLPRIVATE static Color GetLuminance(const Color& rCol);
 
 public:
