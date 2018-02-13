@@ -67,6 +67,7 @@
 #include <fmtflcnt.hxx>
 #include <docedt.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/configmgr.hxx>
 #include <sfx2/Metadatable.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemiter.hxx>
@@ -3079,6 +3080,9 @@ bool DocumentContentOperationsManager::InsertPoolItem(
     const SetAttrMode nFlags,
     const bool bExpandCharToPara)
 {
+    if (utl::ConfigManager::IsFuzzing())
+        return false;
+
     SwDataChanged aTmp( rRg );
     SwUndoAttr* pUndoAttr = nullptr;
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
