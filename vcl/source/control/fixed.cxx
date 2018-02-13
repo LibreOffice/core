@@ -183,14 +183,8 @@ void FixedText::ApplySettings(vcl::RenderContext& rRenderContext)
     Control::ApplySettings(rRenderContext);
 
     vcl::Window* pParent = GetParent();
-    if (pParent->IsChildTransparentModeEnabled() && !IsControlBackground())
-    {
-        EnableChildTransparentMode();
-        SetParentClipMode(ParentClipMode::NoClip);
-        SetPaintTransparent(true);
-        rRenderContext.SetBackground();
-    }
-    else
+    bool bEnableTransparent = true;
+    if (!pParent->IsChildTransparentModeEnabled() || IsControlBackground())
     {
         EnableChildTransparentMode(false);
         SetParentClipMode();
@@ -200,6 +194,17 @@ void FixedText::ApplySettings(vcl::RenderContext& rRenderContext)
             rRenderContext.SetBackground(GetControlBackground());
         else
             rRenderContext.SetBackground(pParent->GetBackground());
+
+        if (rRenderContext.IsBackground())
+            bEnableTransparent = false;
+    }
+
+    if (bEnableTransparent)
+    {
+        EnableChildTransparentMode();
+        SetParentClipMode(ParentClipMode::NoClip);
+        SetPaintTransparent(true);
+        rRenderContext.SetBackground();
     }
 }
 
