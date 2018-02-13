@@ -78,8 +78,8 @@ namespace vclcanvas
 
             for( nY=0; nY < nTilesY; ++nY )
             {
-                aCurrPos.X() = rPosPixel.X() + nY*rNextTileY.Width();
-                aCurrPos.Y() = rPosPixel.Y() + nY*rNextTileY.Height();
+                aCurrPos.setX( rPosPixel.X() + nY*rNextTileY.Width() );
+                aCurrPos.setY( rPosPixel.Y() + nY*rNextTileY.Height() );
 
                 for( nX=0; nX < nTilesX; ++nX )
                 {
@@ -90,8 +90,8 @@ namespace vclcanvas
                                            rTileSize,
                                            &rAttr );
 
-                    aCurrPos.X() += rNextTileX.Width();
-                    aCurrPos.Y() += rNextTileX.Height();
+                    aCurrPos.setX( aCurrPos.X() + rNextTileX.Width() );
+                    aCurrPos.setY( aCurrPos.Y() + rNextTileX.Height() );
                 }
             }
 

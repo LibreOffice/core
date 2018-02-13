@@ -1175,7 +1175,7 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
         if (nAvailWidth > nTextWidth)
             break;
         vcl::Font aFont(aOrigFont);
-        aFontSize.Height() = nFontHeight;
+        aFontSize.setHeight( nFontHeight );
         aFont.SetFontSize(aFontSize);
         rRenderContext.SetFont(aFont);
         mnY = (nWinHeight - GetTextHeight()) / 2;
@@ -1185,7 +1185,7 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
     Point aPoint(2, mnY);
     // adjust position using ink boundary if possible
     if (!bGotBoundary)
-        aPoint.X() = (aSize.Width() - rRenderContext.GetTextWidth(aText)) / 2;
+        aPoint.setX( (aSize.Width() - rRenderContext.GetTextWidth(aText)) / 2 );
     else
     {
         // adjust position before it gets out of bounds
@@ -1195,14 +1195,14 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
         int nYLDelta = aBoundRect.Top();
         int nYHDelta = aSize.Height() - aBoundRect.Bottom();
         if( nYLDelta <= 0 )
-            aPoint.Y() -= nYLDelta - 1;
+            aPoint.setY( aPoint.Y() - nYLDelta - 1 );
         else if( nYHDelta <= 0 )
-            aPoint.Y() += nYHDelta - 1;
+            aPoint.setY( aPoint.Y() + nYHDelta - 1 );
 
         if (mbCenter)
         {
             // move glyph to middle of cell
-            aPoint.X() = -aBoundRect.Left() + (aSize.Width() - aBoundRect.GetWidth()) / 2;
+            aPoint.setX( -aBoundRect.Left() + (aSize.Width() - aBoundRect.GetWidth()) / 2 );
         }
         else
         {
@@ -1210,9 +1210,9 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
             int nXLDelta = aBoundRect.Left();
             int nXHDelta = aSize.Width() - aBoundRect.Right();
             if( nXLDelta <= 0 )
-                aPoint.X() -= nXLDelta - 1;
+                aPoint.setX( aPoint.X() - nXLDelta - 1 );
             else if( nXHDelta <= 0 )
-                aPoint.X() += nXHDelta - 1;
+                aPoint.setX( aPoint.X() + nXHDelta - 1 );
         }
     }
 

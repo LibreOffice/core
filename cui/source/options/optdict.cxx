@@ -508,7 +508,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
         if(!pReplaceFT->IsVisible())
         {
             Size aSize=pWordED->GetSizePixel();
-            aSize.Width()=nWidth;
+            aSize.setWidth(nWidth );
             pWordED->SetSizePixel(aSize);
             pReplaceFT->Show();
             pReplaceED->Show();
@@ -522,7 +522,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
         if(pReplaceFT->IsVisible())
         {
             Size aSize=pWordED->GetSizePixel();
-            aSize.Width()=pWordsLB->GetSizePixel().Width();
+            aSize.setWidth(pWordsLB->GetSizePixel().Width() );
             pWordED->SetSizePixel(aSize);
             pReplaceFT->Hide();
             pReplaceED->Hide();

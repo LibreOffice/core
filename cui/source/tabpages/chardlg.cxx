@@ -465,7 +465,7 @@ namespace
                     sal_uInt16 _nFontHeightWhich)
     {
         Size aSize = _rFont.GetFontSize();
-        aSize.Width() = 0;
+        aSize.setWidth( 0 );
         FontMetric aFontMetrics;
         OUString sFontName(_pFontNameLB->GetText());
         bool bFontAvailable = _pFontList->IsAvailable( sFontName );
@@ -498,13 +498,13 @@ namespace
                 nHeight = static_cast<long>(rOldItem.GetHeight() * _pFontSizeLB->GetValue() / 100);
 
             // conversion twips for the example-window
-            aSize.Height() =
-                ItemToControl( nHeight, _pPage->GetItemSet().GetPool()->GetMetric( _nFontHeightWhich ), FUNIT_TWIP );
+            aSize.setHeight(
+                ItemToControl( nHeight, _pPage->GetItemSet().GetPool()->GetMetric( _nFontHeightWhich ), FUNIT_TWIP ) );
         }
         else if ( !_pFontSizeLB->GetText().isEmpty() )
-            aSize.Height() = PointToTwips( static_cast<long>(_pFontSizeLB->GetValue() / 10) );
+            aSize.setHeight( PointToTwips( static_cast<long>(_pFontSizeLB->GetValue() / 10) ) );
         else
-            aSize.Height() = 200;   // default 10pt
+            aSize.setHeight( 200 );   // default 10pt
         aFontMetrics.SetFontSize( aSize );
 
         _rFont.SetLanguage(_pLanguageLB->GetSelectLanguage());
@@ -530,11 +530,11 @@ void SvxCharNamePage::UpdatePreview_Impl()
     SvxFont& rCTLFont = GetPreviewCTLFont();
     // Size
     Size aSize = rFont.GetFontSize();
-    aSize.Width() = 0;
+    aSize.setWidth( 0 );
     Size aCJKSize = rCJKFont.GetFontSize();
-    aCJKSize.Width() = 0;
+    aCJKSize.setWidth( 0 );
     Size aCTLSize = rCTLFont.GetFontSize();
-    aCTLSize.Width() = 0;
+    aCTLSize.setWidth( 0 );
     // Font
     const FontList* pFontList = GetFontList();
 

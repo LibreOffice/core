@@ -362,7 +362,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar, void
         for ( sal_uInt16 i = 1; i <= nTabs; ++i )
         {
             long _nWidth = pBar->GetItemSize(i);
-            aSz.Width() =  _nWidth + nTmpSz;
+            aSz.setWidth(  _nWidth + nTmpSz );
             nTmpSz += _nWidth;
             m_pPathBox->SetTab( i, PixelToLogic( aSz, MapMode(MapUnit::MapAppFont) ).Width() );
         }

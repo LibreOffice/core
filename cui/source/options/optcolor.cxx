@@ -472,7 +472,7 @@ void ColorConfigWindow_Impl::setAllocation(const Size &rAllocation)
 {
     Point aChildPos(0, 0);
     Size aChildSize(getLayoutRequisition(*m_pGrid));
-    aChildSize.Width() = rAllocation.Width();
+    aChildSize.setWidth( rAllocation.Width() );
     setLayoutPosSize(*m_pGrid, aChildPos, aChildSize);
     AdjustScrollBar();
     AdjustHeaderBar();

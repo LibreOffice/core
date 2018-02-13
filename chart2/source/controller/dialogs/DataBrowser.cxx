@@ -1006,7 +1006,7 @@ void DataBrowser::PaintCell(
     OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId ) const
 {
     Point aPos( rRect.TopLeft());
-    aPos.X() += 1;
+    aPos.setX( aPos.X() + 1 );
 
     OUString aText = GetCellText( m_nSeekRow, nColumnId );
     Size TxtSize( GetDataWindow().GetTextWidth( aText ), GetDataWindow().GetTextHeight());

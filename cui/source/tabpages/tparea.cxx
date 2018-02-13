@@ -70,9 +70,9 @@ namespace
 void lclExtendSize(Size& rSize, const Size& rInputSize)
 {
     if (rSize.Width() < rInputSize.Width())
-        rSize.Width() = rInputSize.Width();
+        rSize.setWidth( rInputSize.Width() );
     if (rSize.Height() < rInputSize.Height())
-        rSize.Height() = rInputSize.Height();
+        rSize.setHeight( rInputSize.Height() );
 }
 
 } // end anonymous namespace

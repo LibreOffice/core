@@ -1719,22 +1719,22 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, Edit&, rField, void)
     if(bWidth)
     {
         long nDelta = nWidthVal - m_aSymbolLastSize.Width();
-        m_aSymbolSize.Width() = nWidthVal;
+        m_aSymbolSize.setWidth( nWidthVal );
         if (bRatio)
         {
-            m_aSymbolSize.Height() = m_aSymbolLastSize.Height() + static_cast<long>(static_cast<double>(nDelta) / fSizeRatio);
-            m_aSymbolSize.Height() = OutputDevice::LogicToLogic( m_aSymbolSize.Height(), m_ePoolUnit, MapUnit::Map100thMM );
+            m_aSymbolSize.setHeight( m_aSymbolLastSize.Height() + static_cast<long>(static_cast<double>(nDelta) / fSizeRatio) );
+            m_aSymbolSize.setHeight( OutputDevice::LogicToLogic( m_aSymbolSize.Height(), m_ePoolUnit, MapUnit::Map100thMM ) );
             m_pSymbolHeightMF->SetUserValue(m_pSymbolHeightMF->Normalize(m_aSymbolSize.Height()), FUNIT_100TH_MM);
         }
     }
     else
     {
         long nDelta = nHeightVal - m_aSymbolLastSize.Height();
-        m_aSymbolSize.Height() = nHeightVal;
+        m_aSymbolSize.setHeight( nHeightVal );
         if (bRatio)
         {
-            m_aSymbolSize.Width() = m_aSymbolLastSize.Width() + static_cast<long>(static_cast<double>(nDelta) * fSizeRatio);
-            m_aSymbolSize.Width() = OutputDevice::LogicToLogic( m_aSymbolSize.Width(), m_ePoolUnit, MapUnit::Map100thMM );
+            m_aSymbolSize.setWidth( m_aSymbolLastSize.Width() + static_cast<long>(static_cast<double>(nDelta) * fSizeRatio) );
+            m_aSymbolSize.setWidth( OutputDevice::LogicToLogic( m_aSymbolSize.Width(), m_ePoolUnit, MapUnit::Map100thMM ) );
             m_pSymbolWidthMF->SetUserValue(m_pSymbolWidthMF->Normalize(m_aSymbolSize.Width()), FUNIT_100TH_MM);
         }
     }

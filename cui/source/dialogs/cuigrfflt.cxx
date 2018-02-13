@@ -96,13 +96,13 @@ void GraphicPreviewWindow::ScaleImageToFit()
 
         if( fGrfWH < fPreWH )
         {
-            aGrfSize.Width()  = static_cast<long>( aPreviewSize.Height() * fGrfWH );
-            aGrfSize.Height() = aPreviewSize.Height();
+            aGrfSize.setWidth( static_cast<long>( aPreviewSize.Height() * fGrfWH ) );
+            aGrfSize.setHeight( aPreviewSize.Height() );
         }
         else
         {
-            aGrfSize.Width()  = aPreviewSize.Width();
-            aGrfSize.Height() = static_cast<long>( aPreviewSize.Width() / fGrfWH );
+            aGrfSize.setWidth( aPreviewSize.Width() );
+            aGrfSize.setHeight( static_cast<long>( aPreviewSize.Width() / fGrfWH ) );
         }
 
         mfScaleX = static_cast<double>(aGrfSize.Width()) / aSizePixel.Width();
