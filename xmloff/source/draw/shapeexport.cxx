@@ -2307,6 +2307,33 @@ void XMLShapeExport::ImpExportPolygonShape(
 
 }
 
+namespace
+{
+
+OUString getNameFromStreamURL(OUString rURL)
+{
+    const OUString sPackageURL("vnd.sun.star.Package:");
+
+    OUString sResult;
+
+    if (rURL.match(sPackageURL))
+    {
+        OUString sRequestedName = rURL.copy(sPackageURL.getLength());
+        sal_Int32 nLastIndex = sRequestedName.lastIndexOf('/') + 1;
+        if ((nLastIndex > 0) && (nLastIndex < sRequestedName.getLength()))
+            sRequestedName = sRequestedName.copy(nLastIndex);
+        nLastIndex = sRequestedName.lastIndexOf('.');
+        if (nLastIndex >= 0)
+            sRequestedName = sRequestedName.copy(0, nLastIndex);
+        if (!sRequestedName.isEmpty())
+            sResult = sRequestedName;
+    }
+
+    return sResult;
+}
+
+} // end anonymous namespace
+
 void XMLShapeExport::ImpExportGraphicObjectShape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
@@ -2320,8 +2347,6 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
     // Transformation
     ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
-    OUString sImageURL;
-
     if(eShapeType == XmlShapeTypePresGraphicObjectShape)
         bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_GRAPHIC) );
 
@@ -2331,53 +2356,56 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
 
     const bool bSaveBackwardsCompatible = bool( mrExport.getExportFlags() & SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE );
 
+    OUString sImageURL;
+    uno::Reference<graphic::XGraphic> xGraphic;
+
     if( !bIsEmptyPresObj || bSaveBackwardsCompatible )
     {
         if( !bIsEmptyPresObj )
         {
             OUString aStreamURL;
-
             xPropSet->getPropertyValue("GraphicStreamURL") >>= aStreamURL;
+
+            OUString sRequestedName = getNameFromStreamURL(aStreamURL);
+
             xPropSet->getPropertyValue("GraphicURL") >>= sImageURL;
 
-            OUString aResolveURL( sImageURL );
-            const OUString sPackageURL( "vnd.sun.star.Package:" );
+            uno::Any aGraphicAny = xPropSet->getPropertyValue("Graphic");
+            if (aGraphicAny.has<uno::Reference<graphic::XGraphic>>())
+                xGraphic = aGraphicAny.get<uno::Reference<graphic::XGraphic>>();
 
-            // trying to preserve the filename for embedded images which already have its stream inside the package
-            bool bIsEmbeddedImageWithExistingStreamInPackage = false;
-            if ( aStreamURL.match( sPackageURL ) )
+            OUString aStoredURL;
+
+            if (xGraphic.is())
             {
-                bIsEmbeddedImageWithExistingStreamInPackage = true;
-
-                OUString sRequestedName = aStreamURL.copy( sPackageURL.getLength() );
-                sal_Int32 nLastIndex = sRequestedName.lastIndexOf( '/' ) + 1;
-                if ( ( nLastIndex > 0 ) && ( nLastIndex < sRequestedName.getLength() ) )
-                    sRequestedName = sRequestedName.copy( nLastIndex );
-                nLastIndex = sRequestedName.lastIndexOf( '.' );
-                if ( nLastIndex >= 0 )
-                    sRequestedName = sRequestedName.copy( 0, nLastIndex );
-                if ( !sRequestedName.isEmpty() )
-                {
+                aStoredURL = mrExport.AddEmbeddedXGraphic(xGraphic, sRequestedName);
+            }
+            else
+            {
+                OUString aResolveURL(sImageURL);
+                if (!sRequestedName.isEmpty())
                     aResolveURL += "?requestedName=" + sRequestedName;
-                }
+
+                aStoredURL = mrExport.AddEmbeddedGraphicObject(aResolveURL);
             }
 
-            const OUString aStr = mrExport.AddEmbeddedGraphicObject( aResolveURL );
-            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr );
+            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStoredURL);
 
-            if( !aStr.isEmpty() )
+            if (!aStoredURL.isEmpty())
             {
+                const OUString sPackageURL("vnd.sun.star.Package:");
+
                 // apply possible changed stream URL to embedded image object
-                if ( bIsEmbeddedImageWithExistingStreamInPackage )
+                if (!sRequestedName.isEmpty())
                 {
                     OUString newStreamURL = sPackageURL;
-                    if ( aStr[0] == '#' )
+                    if (aStoredURL[0] == '#')
                     {
-                        newStreamURL += aStr.copy( 1, aStr.getLength() - 1 );
+                        newStreamURL += aStoredURL.copy(1, aStoredURL.getLength() - 1);
                     }
                     else
                     {
-                        newStreamURL += aStr;
+                        newStreamURL += aStoredURL;
                     }
 
                     if (newStreamURL != aStreamURL)

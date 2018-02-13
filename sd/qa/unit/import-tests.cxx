@@ -2319,10 +2319,12 @@ void SdImportTest::testTdf114488()
     // This doc has two images - one WMF and the other PNG (fallback image).
     // When loading this doc, the WMF image should be preferred over the PNG image.
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odg/tdf114488.fodg"), FODG);
-    uno::Reference< beans::XPropertySet > xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
-    OUString sGraphicUrl;
-    xShape->getPropertyValue("GraphicURL") >>= sGraphicUrl;
-    OUString sMimeType(comphelper::GraphicMimeTypeHelper::GetMimeTypeForImageUrl(sGraphicUrl));
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xShape->getPropertyValue("Graphic") >>= xGraphic;
+    CPPUNIT_ASSERT(xGraphic.is());
+    Graphic aGraphic(xGraphic);
+    OUString sMimeType(comphelper::GraphicMimeTypeHelper::GetMimeTypeForXGraphic(xGraphic));
     CPPUNIT_ASSERT_EQUAL(OUString("image/x-wmf"), sMimeType);
 }
 

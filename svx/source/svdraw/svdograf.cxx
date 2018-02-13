@@ -676,9 +676,8 @@ void SdrGrafObj::ReleaseGraphicLink()
 
 bool SdrGrafObj::IsLinkedGraphic() const
 {
-    return !aFileName.isEmpty();
+    return !mpGraphicObject->GetGraphic().getOriginURL().isEmpty();
 }
-
 
 void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {

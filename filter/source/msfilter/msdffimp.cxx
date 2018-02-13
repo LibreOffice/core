@@ -4010,7 +4010,11 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
     if ( dynamic_cast<const SdrGrafObj* >(pRet) !=  nullptr )
     {
         if( aLinkFileName.getLength() )
+        {
             static_cast<SdrGrafObj*>(pRet)->SetGraphicLink( aLinkFileName, ""/*TODO?*/, aLinkFilterName );
+            Graphic aGraphic(static_cast<SdrGrafObj*>(pRet)->GetGraphic());
+            aGraphic.setOriginURL(aLinkFileName);
+        }
 
         if ( bLinkGrf && !bGrfRead )
         {

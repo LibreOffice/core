@@ -2219,7 +2219,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         ImplCreateShape( ESCHER_ShpInst_Rectangle,
                                          ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
                                          aSolverContainer );
-                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, "GraphicURL", true, true, false ) )
+                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, "Graphic", true, true, false ) )
                         {
                             aPropOpt.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
                             aPropOpt.AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
@@ -2236,7 +2236,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                          ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
                                          aSolverContainer );
 
-                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, "GraphicURL", false, true ) )
+                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, "Graphic", false, true ) )
                         {
                             aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                         }

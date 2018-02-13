@@ -289,24 +289,29 @@ void Test::testImageWithSpecialID()
 /// Gives the first embedded or linked image in a document.
 uno::Reference<drawing::XShape> lcl_getShape(const uno::Reference<lang::XComponent>& xComponent, bool bEmbedded)
 {
-    uno::Reference<drawing::XShape> xRet;
+    uno::Reference<drawing::XShape> xShape;
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
     {
-        uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(i), uno::UNO_QUERY);
-        OUString sURL;
-        xShape->getPropertyValue("GraphicURL") >>= sURL;
-        // Linked image: working starts with file://, broken is e.g. 'vnd.sun.star.GraphicObject:3000000000000000000000000000000000000000'.
-        if ((sURL.startsWith("file://") || sURL.endsWith("0000000000000000")) != bEmbedded)
+        uno::Reference<beans::XPropertySet> xShapeProperties(xDrawPage->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<graphic::XGraphic> xGraphic;
+        xShapeProperties->getPropertyValue("Graphic") >>= xGraphic;
+        if (xGraphic.is())
         {
-            xRet.set(xShape, uno::UNO_QUERY);
-            break;
+            Graphic aGraphic(xGraphic);
+
+            if ((bEmbedded  && aGraphic.getOriginURL().isEmpty()) ||
+                (!bEmbedded && !aGraphic.getOriginURL().isEmpty()))
+            {
+                xShape.set(xShapeProperties, uno::UNO_QUERY);
+                return xShape;
+            }
         }
     }
 
-    return xRet;
+    return xShape;
 }
 
 void Test::testGraphicShape()
@@ -353,18 +358,14 @@ void Test::testGraphicShape()
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDraws->getCount());
 
         uno::Reference<drawing::XShape> xImage = lcl_getShape(mxComponent, true);
-        uno::Reference< beans::XPropertySet > XPropSet( xImage, uno::UNO_QUERY_THROW );
+        CPPUNIT_ASSERT_MESSAGE("Couldn't load the shape/image", xImage.is());
+        uno::Reference< beans::XPropertySet > XPropSet( xImage, uno::UNO_QUERY );
         // First image is embedded
-        // Check URL
-        {
-            OUString sURL;
-            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
-        }
         // Check size
         {
             uno::Reference<graphic::XGraphic> xGraphic;
             XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
             uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610), xBitmap->getSize().Width );
@@ -377,17 +378,20 @@ void Test::testGraphicShape()
 
         // Second image is a linked one
         xImage = lcl_getShape(mxComponent, false);
-        XPropSet.set( xImage, uno::UNO_QUERY_THROW );
-        // Check URL
-        {
-            OUString sURL;
-            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL.endsWith("linked_graphic.jpg"));
-        }
+        XPropSet.set( xImage, uno::UNO_QUERY );
+        const OString sFailedImageLoad = OString("Couldn't load the shape/image for ") + aFilterNames[nFilter];
+        CPPUNIT_ASSERT_MESSAGE(sFailedImageLoad.getStr(), xImage.is());
+
         // Check size
         {
             uno::Reference<graphic::XGraphic> xGraphic;
             XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+
+            Graphic aGraphic(xGraphic);
+            OUString sURL = aGraphic.getOriginURL();
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL.endsWith("linked_graphic.jpg"));
+
             uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(620), xBitmap->getSize().Width );

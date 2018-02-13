@@ -26,7 +26,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    sal_uInt32 getQualityIndex(const OUString& rString)
+    OUString getMimeTypeForURL(const OUString& rString)
     {
         OUString sMimeType;
         if (rString.startsWith("vnd.sun.star.GraphicObject"))
@@ -42,45 +42,48 @@ namespace
         else
         {
             SAL_WARN("xmloff", "Unknown image source: " << rString);
-            return 0;
         }
+        return sMimeType;
+    }
 
+    sal_uInt32 getQualityIndex(const OUString& rMimeType)
+    {
         // pixel formats first
-        if(sMimeType == "image/bmp")
+        if (rMimeType == "image/bmp")
         {
             return 10;
         }
-        if(sMimeType == "image/gif")
+        if (rMimeType == "image/gif")
         {
             return 20;
         }
-        if(sMimeType == "image/jpeg")
+        if (rMimeType == "image/jpeg")
         {
             return 30;
         }
-        if(sMimeType == "image/png")
+        if (rMimeType == "image/png")
         {
             return 40;
         }
 
         // vector formats, prefer always
-        if(sMimeType == "image/x-svm")
+        if (rMimeType == "image/x-svm")
         {
             return 1000;
         }
-        if(sMimeType == "image/x-wmf")
+        if (rMimeType == "image/x-wmf")
         {
             return 1010;
         }
-        if(sMimeType == "image/x-emf")
+        if (rMimeType == "image/x-emf")
         {
             return 1020;
         }
-        if(sMimeType == "application/pdf")
+        if (rMimeType == "application/pdf")
         {
             return 1030;
         }
-        if(sMimeType == "image/svg+xml")
+        if (rMimeType == "image/svg+xml")
         {
             return 1040;
         }
@@ -111,10 +114,26 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
 
         for(std::vector<SvXMLImportContextRef>::size_type a = 0; a < maImplContextVector.size(); a++)
         {
-            const OUString aStreamURL(getGraphicURLFromImportContext(*maImplContextVector[a].get()));
-            const sal_uInt32 nNewQuality(getQualityIndex(aStreamURL));
+            const SvXMLImportContext& rContext = *maImplContextVector[a].get();
 
-            if(nNewQuality > nBestQuality)
+            sal_uInt32 nNewQuality = 0;
+
+            uno::Reference<graphic::XGraphic> xGraphic(getGraphicFromImportContext(rContext));
+            if (xGraphic.is())
+            {
+                OUString sMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForXGraphic(xGraphic);
+                nNewQuality = getQualityIndex(sMimeType);
+            }
+            else
+            {
+                const OUString aStreamURL(getGraphicURLFromImportContext(rContext));
+                if (!aStreamURL.isEmpty())
+                {
+                    nNewQuality = getQualityIndex(getMimeTypeForURL(aStreamURL));
+        }
+            }
+
+            if (nNewQuality > nBestQuality)
             {
                 nBestQuality = nNewQuality;
                 nIndexOfPreferred = a;
@@ -154,6 +173,11 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
 void MultiImageImportHelper::addContent(const SvXMLImportContext& rSvXMLImportContext)
 {
     maImplContextVector.emplace_back(const_cast< SvXMLImportContext* >(&rSvXMLImportContext));
+}
+
+uno::Reference<graphic::XGraphic> MultiImageImportHelper::getGraphicFromImportContext(const SvXMLImportContext& /*rContext*/) const
+{
+    return uno::Reference<graphic::XGraphic>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
