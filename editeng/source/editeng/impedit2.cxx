@@ -1395,11 +1395,11 @@ EditPaM ImpEditEngine::PageUp( const EditPaM& rPaM, EditView const * pView )
 {
     tools::Rectangle aRect = PaMtoEditCursor( rPaM );
     Point aTopLeft = aRect.TopLeft();
-    aTopLeft.Y() -= pView->GetVisArea().GetHeight() *9/10;
+    aTopLeft.setY( aTopLeft.Y() - pView->GetVisArea().GetHeight() *9/10 );
     aTopLeft.X() += nOnePixelInRef;
     if ( aTopLeft.Y() < 0 )
     {
-        aTopLeft.Y() = 0;
+        aTopLeft.setY( 0 );
     }
     return GetPaM( aTopLeft );
 }
@@ -1408,12 +1408,12 @@ EditPaM ImpEditEngine::PageDown( const EditPaM& rPaM, EditView const * pView )
 {
     tools::Rectangle aRect = PaMtoEditCursor( rPaM );
     Point aBottomRight = aRect.BottomRight();
-    aBottomRight.Y() += pView->GetVisArea().GetHeight() *9/10;
+    aBottomRight.setY( aBottomRight.Y() + pView->GetVisArea().GetHeight() *9/10 );
     aBottomRight.X() += nOnePixelInRef;
     long nHeight = GetTextHeight();
     if ( aBottomRight.Y() > nHeight )
     {
-        aBottomRight.Y() = nHeight-2;
+        aBottomRight.setY( nHeight-2 );
     }
     return GetPaM( aBottomRight );
 }
@@ -3030,7 +3030,7 @@ tools::Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nF
         else
         {
             aEditCursor = GetEditCursor( pPortion, aPaM.GetIndex(), nFlags );
-            aEditCursor.Top() += nY;
+            aEditCursor.SetTop( aEditCursor.Top() + nY );
             aEditCursor.Bottom() += nY;
             return aEditCursor;
         }
@@ -3054,7 +3054,7 @@ EditPaM ImpEditEngine::GetPaM( Point aDocPos, bool bSmart )
         if ( nY > aDocPos.Y() )
         {
             nY -= nTmpHeight;
-            aDocPos.Y() -= nY;
+            aDocPos.setY( aDocPos.Y() - nY );
             // Skip invisible Portions:
             while ( pPortion && !pPortion->IsVisible() )
             {
@@ -4219,9 +4219,9 @@ tools::Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 
 
     tools::Rectangle aEditCursor;
 
-    aEditCursor.Top() = nY;
+    aEditCursor.SetTop( nY );
     nY += pLine->GetHeight();
-    aEditCursor.Bottom() = nY-1;
+    aEditCursor.SetBottom( nY-1 );
 
     // Search within the line...
     long nX;
@@ -4241,12 +4241,12 @@ tools::Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 
         nX = GetXPos( pPortion, pLine, nIndex, bool( nFlags & GetCursorFlags::PreferPortionStart ) );
     }
 
-    aEditCursor.Left() = aEditCursor.Right() = nX;
+    aEditCursor.SetLeft( aEditCursor.Right() = nX );
 
     if ( nFlags & GetCursorFlags::TextOnly )
-        aEditCursor.Top() = aEditCursor.Bottom() - pLine->GetTxtHeight() + 1;
+        aEditCursor.SetTop( aEditCursor.Bottom() - pLine->GetTxtHeight() + 1 );
     else
-        aEditCursor.Top() = aEditCursor.Bottom() - std::min( pLine->GetTxtHeight(), pLine->GetHeight() ) + 1;
+        aEditCursor.SetTop( aEditCursor.Bottom() - std::min( pLine->GetTxtHeight(), pLine->GetHeight() ) + 1 );
 
     return aEditCursor;
 }
@@ -4262,15 +4262,15 @@ void ImpEditEngine::SetValidPaperSize( const Size& rNewSz )
 
     // Minimum/Maximum width:
     if ( aPaperSize.Width() < nMinWidth )
-        aPaperSize.Width() = nMinWidth;
+        aPaperSize.setWidth( nMinWidth );
     else if ( aPaperSize.Width() > nMaxWidth )
-        aPaperSize.Width() = nMaxWidth;
+        aPaperSize.setWidth( nMaxWidth );
 
     // Minimum/Maximum height:
     if ( aPaperSize.Height() < nMinHeight )
-        aPaperSize.Height() = nMinHeight;
+        aPaperSize.setHeight( nMinHeight );
     else if ( aPaperSize.Height() > nMaxHeight )
-        aPaperSize.Height() = nMaxHeight;
+        aPaperSize.setHeight( nMaxHeight );
 }
 
 void ImpEditEngine::IndentBlock( EditView* pEditView, bool bRight )

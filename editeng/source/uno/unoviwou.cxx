@@ -88,7 +88,7 @@ Point SvxDrawOutlinerViewForwarder::LogicToPixel( const Point& rPoint, const Map
         Point aPoint1( rPoint );
         Point aTextOffset( GetTextOffset() );
 
-        aPoint1.X() += aTextOffset.X();
+        aPoint1.setX( aPoint1.X() + aTextOffset.X() );
         aPoint1.Y() += aTextOffset.Y();
 
         MapMode aMapMode(pOutDev->GetMapMode());
@@ -115,7 +115,7 @@ Point SvxDrawOutlinerViewForwarder::PixelToLogic( const Point& rPoint, const Map
                                                    rMapMode ) );
         Point aTextOffset( GetTextOffset() );
 
-        aPoint2.X() -= aTextOffset.X();
+        aPoint2.setX( aPoint2.X() - aTextOffset.X() );
         aPoint2.Y() -= aTextOffset.Y();
 
         return aPoint2;

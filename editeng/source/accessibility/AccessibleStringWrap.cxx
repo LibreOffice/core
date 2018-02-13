@@ -48,16 +48,16 @@ void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, tools::Rectangl
     {
         // create a caret bounding rect that has the height of the
         // current font and is one pixel wide.
-        rRect.Left() = mrDev.GetTextWidth(maText);
-        rRect.Top() = 0;
+        rRect.SetLeft( mrDev.GetTextWidth(maText) );
+        rRect.SetTop( 0 );
         rRect.SetSize( Size(mrDev.GetTextHeight(), 1) );
     }
     else
     {
         long aXArray[2];
         mrDev.GetCaretPositions( maText, aXArray, nIndex, 1 );
-        rRect.Left() = 0;
-        rRect.Top() = 0;
+        rRect.SetLeft( 0 );
+        rRect.SetTop( 0 );
         rRect.SetSize( Size(mrDev.GetTextHeight(), labs(aXArray[0] - aXArray[1])) );
         rRect.Move( std::min(aXArray[0], aXArray[1]), 0 );
     }

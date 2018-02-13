@@ -315,13 +315,13 @@ Point GridWindow::transform( double x, double y )
 {
     Point aRet;
 
-    aRet.X() = static_cast<long>( ( x - m_fMinX ) *
+    aRet.setX( static_cast<long>( ( x - m_fMinX ) *
         static_cast<double>(m_aGridArea.GetWidth()) / ( m_fMaxX - m_fMinX )
-        + m_aGridArea.Left() );
-    aRet.Y() = static_cast<long>(
+        + m_aGridArea.Left() ) );
+    aRet.setY( static_cast<long>(
         m_aGridArea.Bottom() -
         ( y - m_fMinY ) *
-        static_cast<double>(m_aGridArea.GetHeight()) / ( m_fMaxY - m_fMinY ) );
+        static_cast<double>(m_aGridArea.GetHeight()) / ( m_fMaxY - m_fMinY ) ) );
     return aRet;
 }
 
@@ -465,7 +465,7 @@ void GridWindow::drawGrid(vcl::RenderContext& rRenderContext)
         std::sprintf(pBuf, "%g", fX);
         OUString aMark(pBuf, strlen(pBuf), osl_getThreadTextEncoding());
         Size aTextSize(rRenderContext.GetTextWidth(aMark), rRenderContext.GetTextHeight());
-        aPt.X() -= aTextSize.Width() / 2;
+        aPt.setX( aPt.X() - aTextSize.Width() / 2 );
         aPt.Y() += aTextSize.Height() / 2;
         rRenderContext.DrawText(aPt, aMark);
     }
@@ -478,7 +478,7 @@ void GridWindow::drawGrid(vcl::RenderContext& rRenderContext)
         std::sprintf(pBuf, "%g", fY);
         OUString aMark(pBuf, strlen(pBuf), osl_getThreadTextEncoding());
         Size aTextSize(rRenderContext.GetTextWidth(aMark), rRenderContext.GetTextHeight());
-        aPt.X() -= aTextSize.Width() + 2;
+        aPt.setX( aPt.X() - aTextSize.Width() + 2 );
         aPt.Y() -= aTextSize.Height() / 2;
         rRenderContext.DrawText(aPt, aMark);
     }
@@ -545,20 +545,20 @@ void GridWindow::MouseMove( const MouseEvent& rEvt )
 
         if( m_nDragIndex == 0 || m_nDragIndex == m_aHandles.size() - 1)
         {
-            aPoint.X() = m_aHandles[m_nDragIndex].maPos.X();
+            aPoint.setX( m_aHandles[m_nDragIndex].maPos.X() );
         }
         else
         {
             if(aPoint.X() < m_aGridArea.Left())
-                aPoint.X() = m_aGridArea.Left();
+                aPoint.setX( m_aGridArea.Left() );
             else if(aPoint.X() > m_aGridArea.Right())
-                aPoint.X() = m_aGridArea.Right();
+                aPoint.setX( m_aGridArea.Right() );
         }
 
         if( aPoint.Y() < m_aGridArea.Top() )
-            aPoint.Y() = m_aGridArea.Top();
+            aPoint.setY( m_aGridArea.Top() );
         else if( aPoint.Y() > m_aGridArea.Bottom() )
-            aPoint.Y() = m_aGridArea.Bottom();
+            aPoint.setY( m_aGridArea.Bottom() );
 
         if( aPoint != m_aHandles[m_nDragIndex].maPos )
         {

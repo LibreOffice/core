@@ -2360,10 +2360,10 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                     tools::Rectangle aStartCursor( PaMtoEditCursor( aStartPaM ) );
                     tools::Rectangle aEndCursor( PaMtoEditCursor( aEndPaM ) );
                     DBG_ASSERT( aInvalidRect.IsEmpty(), "InvalidRect set!" );
-                    aInvalidRect.Left() = 0;
-                    aInvalidRect.Right() = GetPaperSize().Width();
-                    aInvalidRect.Top() = aStartCursor.Top();
-                    aInvalidRect.Bottom() = aEndCursor.Bottom();
+                    aInvalidRect.SetLeft( 0 );
+                    aInvalidRect.SetRight( GetPaperSize().Width() );
+                    aInvalidRect.SetTop( aStartCursor.Top() );
+                    aInvalidRect.SetBottom( aEndCursor.Bottom() );
                     if ( pActiveView && pActiveView->HasSelection() )
                     {
                         // Then no output through VDev.

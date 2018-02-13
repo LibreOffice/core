@@ -55,9 +55,9 @@ static inline void lcl_AllignToPixel( Point& rPoint, OutputDevice const * pOutDe
     rPoint = pOutDev->LogicToPixel( rPoint );
 
     if ( nDiffX )
-        rPoint.X() += nDiffX;
+        rPoint.setX( rPoint.X() + nDiffX );
     if ( nDiffY )
-        rPoint.Y() += nDiffY;
+        rPoint.setY( rPoint.Y() + nDiffY );
 
     rPoint = pOutDev->PixelToLogic( rPoint );
 }
@@ -251,7 +251,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
         // Text > Paper width ( over large fields )
         tools::Rectangle aTmpOutArea( aOutArea );
         if ( aTmpOutArea.GetWidth() > pEditEngine->pImpEditEngine->GetPaperSize().Width() )
-            aTmpOutArea.Right() = aTmpOutArea.Left() + pEditEngine->pImpEditEngine->GetPaperSize().Width();
+            aTmpOutArea.SetRight( aTmpOutArea.Left() + pEditEngine->pImpEditEngine->GetPaperSize().Width() );
         pTarget->IntersectClipRegion( aTmpOutArea );
 
         if ( pOutWin->GetCursor() )
@@ -322,7 +322,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
             Point aTopLeft( aTmpRect.TopLeft() );
             Point aBottomRight( aTmpRect.BottomRight() );
 
-            aTopLeft.Y() += nParaStart;
+            aTopLeft.setY( aTopLeft.Y() + nParaStart );
             aBottomRight.Y() += nParaStart;
 
             // Only paint if in the visible range ...
@@ -336,8 +336,8 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
             if ( !bPartOfLine )
             {
                 Range aLineXPosStartEnd = pEditEngine->GetLineXPosStartEnd(pTmpPortion, &rLine);
-                aTopLeft.X() = aLineXPosStartEnd.Min();
-                aBottomRight.X() = aLineXPosStartEnd.Max();
+                aTopLeft.setX( aLineXPosStartEnd.Min() );
+                aBottomRight.setX( aLineXPosStartEnd.Max() );
                 ImplDrawHighlightRect( pTarget, aTopLeft, aBottomRight, pPolyPoly );
             }
             else
@@ -558,20 +558,20 @@ Point ImpEditView::GetDocPos( const Point& rWindowPos ) const
 
     if ( !pEditEngine->pImpEditEngine->IsVertical() )
     {
-        aPoint.X() = rWindowPos.X() - aOutArea.Left() + GetVisDocLeft();
-        aPoint.Y() = rWindowPos.Y() - aOutArea.Top() + GetVisDocTop();
+        aPoint.setX( rWindowPos.X() - aOutArea.Left() + GetVisDocLeft() );
+        aPoint.setY( rWindowPos.Y() - aOutArea.Top() + GetVisDocTop() );
     }
     else
     {
         if (pEditEngine->pImpEditEngine->IsTopToBottom())
         {
-            aPoint.X() = rWindowPos.Y() - aOutArea.Top() + GetVisDocLeft();
-            aPoint.Y() = aOutArea.Right() - rWindowPos.X() + GetVisDocTop();
+            aPoint.setX( rWindowPos.Y() - aOutArea.Top() + GetVisDocLeft() );
+            aPoint.setY( aOutArea.Right() - rWindowPos.X() + GetVisDocTop() );
         }
         else
         {
-            aPoint.X() = aOutArea.Bottom() - rWindowPos.Y() + GetVisDocLeft();
-            aPoint.Y() = rWindowPos.X() - aOutArea.Left() + GetVisDocTop();
+            aPoint.setX( aOutArea.Bottom() - rWindowPos.Y() + GetVisDocLeft() );
+            aPoint.setY( rWindowPos.X() - aOutArea.Left() + GetVisDocTop() );
         }
     }
 
@@ -585,20 +585,20 @@ Point ImpEditView::GetWindowPos( const Point& rDocPos ) const
 
     if ( !pEditEngine->pImpEditEngine->IsVertical() )
     {
-        aPoint.X() = rDocPos.X() + aOutArea.Left() - GetVisDocLeft();
-        aPoint.Y() = rDocPos.Y() + aOutArea.Top() - GetVisDocTop();
+        aPoint.setX( rDocPos.X() + aOutArea.Left() - GetVisDocLeft() );
+        aPoint.setY( rDocPos.Y() + aOutArea.Top() - GetVisDocTop() );
     }
     else
     {
         if (pEditEngine->pImpEditEngine->IsTopToBottom())
         {
-            aPoint.X() = aOutArea.Right() - rDocPos.Y() + GetVisDocTop();
-            aPoint.Y() = rDocPos.X() + aOutArea.Top() - GetVisDocLeft();
+            aPoint.setX( aOutArea.Right() - rDocPos.Y() + GetVisDocTop() );
+            aPoint.setY( rDocPos.X() + aOutArea.Top() - GetVisDocLeft() );
         }
         else
         {
-            aPoint.X() = aOutArea.Left() + rDocPos.Y() - GetVisDocTop();
-            aPoint.Y() = aOutArea.Bottom() - rDocPos.X() + GetVisDocLeft();
+            aPoint.setX( aOutArea.Left() + rDocPos.Y() - GetVisDocTop() );
+            aPoint.setY( aOutArea.Bottom() - rDocPos.X() + GetVisDocLeft() );
         }
     }
 
@@ -640,9 +640,9 @@ void ImpEditView::SetOutputArea( const tools::Rectangle& rRect )
     aNewRect = pOutWin->PixelToLogic( aNewRect );
     aOutArea = aNewRect;
     if ( aOutArea.Right() < aOutArea.Left() )
-        aOutArea.Right() = aOutArea.Left();
+        aOutArea.SetRight( aOutArea.Left() );
     if ( aOutArea.Bottom() < aOutArea.Top() )
-        aOutArea.Bottom() = aOutArea.Top();
+        aOutArea.SetBottom( aOutArea.Top() );
 
     if ( DoBigScroll() )
         SetScrollDiffX( static_cast<sal_uInt16>(aOutArea.GetWidth()) * 3 / 10 );
@@ -736,28 +736,28 @@ void ImpEditView::RecalcOutputArea()
     if ( DoAutoWidth() )
     {
         if ( pEditEngine->pImpEditEngine->GetStatus().AutoPageWidth() )
-            aNewSz.Width() = pEditEngine->pImpEditEngine->GetPaperSize().Width();
+            aNewSz.setWidth( pEditEngine->pImpEditEngine->GetPaperSize().Width() );
         switch ( eAnchorMode )
         {
             case EEAnchorMode::TopLeft:
             case EEAnchorMode::VCenterLeft:
             case EEAnchorMode::BottomLeft:
             {
-                aNewTopLeft.X() = aAnchorPoint.X();
+                aNewTopLeft.setX( aAnchorPoint.X() );
             }
             break;
             case EEAnchorMode::TopHCenter:
             case EEAnchorMode::VCenterHCenter:
             case EEAnchorMode::BottomHCenter:
             {
-                aNewTopLeft.X() = aAnchorPoint.X() - aNewSz.Width() / 2;
+                aNewTopLeft.setX( aAnchorPoint.X() - aNewSz.Width() / 2 );
             }
             break;
             case EEAnchorMode::TopRight:
             case EEAnchorMode::VCenterRight:
             case EEAnchorMode::BottomRight:
             {
-                aNewTopLeft.X() = aAnchorPoint.X() - aNewSz.Width() - 1;
+                aNewTopLeft.setX( aAnchorPoint.X() - aNewSz.Width() - 1 );
             }
             break;
         }
@@ -767,28 +767,28 @@ void ImpEditView::RecalcOutputArea()
     if ( DoAutoHeight() )
     {
         if ( pEditEngine->pImpEditEngine->GetStatus().AutoPageHeight() )
-            aNewSz.Height() = pEditEngine->pImpEditEngine->GetPaperSize().Height();
+            aNewSz.setHeight( pEditEngine->pImpEditEngine->GetPaperSize().Height() );
         switch ( eAnchorMode )
         {
             case EEAnchorMode::TopLeft:
             case EEAnchorMode::TopHCenter:
             case EEAnchorMode::TopRight:
             {
-                aNewTopLeft.Y() = aAnchorPoint.Y();
+                aNewTopLeft.setY( aAnchorPoint.Y() );
             }
             break;
             case EEAnchorMode::VCenterLeft:
             case EEAnchorMode::VCenterHCenter:
             case EEAnchorMode::VCenterRight:
             {
-                aNewTopLeft.Y() = aAnchorPoint.Y() - aNewSz.Height() / 2;
+                aNewTopLeft.setY( aAnchorPoint.Y() - aNewSz.Height() / 2 );
             }
             break;
             case EEAnchorMode::BottomLeft:
             case EEAnchorMode::BottomHCenter:
             case EEAnchorMode::BottomRight:
             {
-                aNewTopLeft.Y() = aAnchorPoint.Y() - aNewSz.Height() - 1;
+                aNewTopLeft.setY( aAnchorPoint.Y() - aNewSz.Height() - 1 );
             }
             break;
         }
@@ -813,21 +813,21 @@ void ImpEditView::CalcAnchorPoint()
         case EEAnchorMode::VCenterLeft:
         case EEAnchorMode::BottomLeft:
         {
-            aAnchorPoint.X() = aOutArea.Left();
+            aAnchorPoint.setX( aOutArea.Left() );
         }
         break;
         case EEAnchorMode::TopHCenter:
         case EEAnchorMode::VCenterHCenter:
         case EEAnchorMode::BottomHCenter:
         {
-            aAnchorPoint.X() = aOutArea.Left() + (aOutArea.GetWidth()-1) / 2;
+            aAnchorPoint.setX( aOutArea.Left() + (aOutArea.GetWidth()-1) / 2 );
         }
         break;
         case EEAnchorMode::TopRight:
         case EEAnchorMode::VCenterRight:
         case EEAnchorMode::BottomRight:
         {
-            aAnchorPoint.X() = aOutArea.Right();
+            aAnchorPoint.setX( aOutArea.Right() );
         }
         break;
     }
@@ -839,21 +839,21 @@ void ImpEditView::CalcAnchorPoint()
         case EEAnchorMode::TopHCenter:
         case EEAnchorMode::TopRight:
         {
-            aAnchorPoint.Y() = aOutArea.Top();
+            aAnchorPoint.setY( aOutArea.Top() );
         }
         break;
         case EEAnchorMode::VCenterLeft:
         case EEAnchorMode::VCenterHCenter:
         case EEAnchorMode::VCenterRight:
         {
-            aAnchorPoint.Y() = aOutArea.Top() + (aOutArea.GetHeight()-1) / 2;
+            aAnchorPoint.setY( aOutArea.Top() + (aOutArea.GetHeight()-1) / 2 );
         }
         break;
         case EEAnchorMode::BottomLeft:
         case EEAnchorMode::BottomHCenter:
         case EEAnchorMode::BottomRight:
         {
-            aAnchorPoint.Y() = aOutArea.Bottom() - 1;
+            aAnchorPoint.setY( aOutArea.Bottom() - 1 );
         }
         break;
     }
@@ -907,13 +907,13 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         if ( aPaM.GetNode()->Len() && ( aPaM.GetIndex() < aPaM.GetNode()->Len() ) )
         {
             // If we are behind a portion, and the next portion has other direction, we must change position...
-            aEditCursor.Left() = aEditCursor.Right() = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly|GetCursorFlags::PreferPortionStart ).Left();
+            aEditCursor.SetLeft( aEditCursor.Right() = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly|GetCursorFlags::PreferPortionStart ).Left() );
 
             sal_Int32 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, true );
             const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
             if ( rTextPortion.GetKind() == PortionKind::TAB )
             {
-                aEditCursor.Right() += rTextPortion.GetSize().Width();
+                aEditCursor.SetRight( aEditCursor.Right() + rTextPortion.GetSize().Width() );
             }
             else
             {
@@ -921,14 +921,14 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 tools::Rectangle aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GetCursorFlags::TextOnly );
                 if ( aTmpRect.Top() != aEditCursor.Top() )
                     aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GetCursorFlags::TextOnly|GetCursorFlags::EndOfLine );
-                aEditCursor.Right() = aTmpRect.Left();
+                aEditCursor.SetRight( aTmpRect.Left() );
             }
         }
     }
     long nMaxHeight = !IsVertical() ? aOutArea.GetHeight() : aOutArea.GetWidth();
     if ( aEditCursor.GetHeight() > nMaxHeight )
     {
-        aEditCursor.Bottom() = aEditCursor.Top() + nMaxHeight - 1;
+        aEditCursor.SetBottom( aEditCursor.Top() + nMaxHeight - 1 );
     }
     if ( bGotoCursor  ) // && (!pEditEngine->pImpEditEngine->GetStatus().AutoPageSize() ) )
     {
@@ -942,7 +942,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         // Text > Paper width ( over large fields )
         long nMaxTextWidth = !IsVertical() ? pEditEngine->pImpEditEngine->GetPaperSize().Width() : pEditEngine->pImpEditEngine->GetPaperSize().Height();
         if ( aTmpVisArea.GetWidth() > nMaxTextWidth )
-            aTmpVisArea.Right() = aTmpVisArea.Left() + nMaxTextWidth;
+            aTmpVisArea.SetRight( aTmpVisArea.Left() + nMaxTextWidth );
 
         if ( aEditCursor.Bottom() > aTmpVisArea.Bottom() )
         {   // Scroll up, here positive
@@ -1032,9 +1032,9 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
          ( aEditCursor.Top() < GetVisDocBottom() ) )
     {
         if ( aEditCursor.Bottom() > GetVisDocBottom() )
-            aEditCursor.Bottom() = GetVisDocBottom();
+            aEditCursor.SetBottom( GetVisDocBottom() );
         if ( aEditCursor.Top() < GetVisDocTop() )
-            aEditCursor.Top() = GetVisDocTop();
+            aEditCursor.SetTop( GetVisDocTop() );
     }
 
     long nOnePixel = pOutWin->PixelToLogic( Size( 1, 0 ) ).Width();
@@ -1048,23 +1048,23 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         GetCursor()->SetPos( aCursorRect.TopLeft() );
         Size aCursorSz( aCursorRect.GetSize() );
         // Rectangle is inclusive
-        aCursorSz.Width()--;
+        aCursorSz.setWidth( --aCursorSz.Width() );
         aCursorSz.Height()--;
         if ( !aCursorSz.Width() || !aCursorSz.Height() )
         {
             long nCursorSz = pOutWin->GetSettings().GetStyleSettings().GetCursorSize();
             nCursorSz = pOutWin->PixelToLogic( Size( nCursorSz, 0 ) ).Width();
             if ( !aCursorSz.Width() )
-                aCursorSz.Width() = nCursorSz;
+                aCursorSz.setWidth( nCursorSz );
             if ( !aCursorSz.Height() )
-                aCursorSz.Height() = nCursorSz;
+                aCursorSz.setHeight( nCursorSz );
         }
         // #111036# Let VCL do orientation for cursor, otherwise problem when cursor has direction flag
         if ( IsVertical() )
         {
             Size aOldSz( aCursorSz );
-            aCursorSz.Width() = aOldSz.Height();
-            aCursorSz.Height() = aOldSz.Width();
+            aCursorSz.setWidth( aOldSz.Height() );
+            aCursorSz.setHeight( aOldSz.Width() );
             GetCursor()->SetPos( aCursorRect.TopRight() );
             GetCursor()->SetOrientation( IsTopToBottom() ? 2700 : 900 );
         }
@@ -1166,19 +1166,19 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
     // Vertical:
     if ( !IsVertical() )
     {
-        aNewVisArea.Top() -= ndY;
+        aNewVisArea.SetTop( aNewVisArea.Top() - ndY );
         aNewVisArea.Bottom() -= ndY;
     }
     else
     {
         if( IsTopToBottom() )
         {
-            aNewVisArea.Top() += ndX;
+            aNewVisArea.SetTop( aNewVisArea.Top() + ndX );
             aNewVisArea.Bottom() += ndX;
         }
         else
         {
-            aNewVisArea.Top() -= ndX;
+            aNewVisArea.SetTop( aNewVisArea.Top() - ndX );
             aNewVisArea.Bottom() -= ndX;
         }
     }
@@ -1194,19 +1194,19 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
     // Horizontal:
     if ( !IsVertical() )
     {
-        aNewVisArea.Left() -= ndX;
+        aNewVisArea.SetLeft( aNewVisArea.Left() - ndX );
         aNewVisArea.Right() -= ndX;
     }
     else
     {
         if (IsTopToBottom())
         {
-            aNewVisArea.Left() -= ndY;
+            aNewVisArea.SetLeft( aNewVisArea.Left() - ndY );
             aNewVisArea.Right() -= ndY;
         }
         else
         {
-            aNewVisArea.Left() += ndY;
+            aNewVisArea.SetLeft( aNewVisArea.Left() + ndY );
             aNewVisArea.Right() += ndY;
         }
     }
@@ -1787,7 +1787,7 @@ void ImpEditView::ShowDDCursor( const tools::Rectangle& rRect )
         // Save background ...
         tools::Rectangle aSaveRect( GetWindow()->LogicToPixel( rRect ) );
         // prefer to save some more ...
-        aSaveRect.Right() += 1;
+        aSaveRect.SetRight( aSaveRect.Right() + 1 );
         aSaveRect.Bottom() += 1;
 
 #ifdef DBG_UTIL
@@ -2212,20 +2212,20 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
                     aEditCursor = GetWindow()->LogicToPixel( tools::Rectangle( aStartPos, aEndPos ) );
                     if ( !pEditEngine->IsVertical() )
                     {
-                        aEditCursor.Top()--;
-                        aEditCursor.Bottom()++;
+                        aEditCursor.SetTop( --aEditCursor.Top() );
+                        aEditCursor.SetBottom( ++aEditCursor.Bottom() );
                     }
                     else
                     {
                         if( IsTopToBottom() )
                         {
-                            aEditCursor.Left()--;
-                            aEditCursor.Right()++;
+                            aEditCursor.SetLeft( --aEditCursor.Left() );
+                            aEditCursor.SetRight( ++aEditCursor.Right() );
                         }
                         else
                         {
-                            aEditCursor.Left()++;
-                            aEditCursor.Right()--;
+                            aEditCursor.SetLeft( ++aEditCursor.Left() );
+                            aEditCursor.SetRight( --aEditCursor.Right() );
                         }
                     }
                     aEditCursor = GetWindow()->PixelToLogic( aEditCursor );
@@ -2235,7 +2235,7 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
                     aEditCursor = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM );
                     Point aTopLeft( GetWindowPos( aEditCursor.TopLeft() ) );
                     aEditCursor.SetPos( aTopLeft );
-                    aEditCursor.Right() = aEditCursor.Left() + pDragAndDropInfo->nCursorWidth;
+                    aEditCursor.SetRight( aEditCursor.Left() + pDragAndDropInfo->nCursorWidth );
                     aEditCursor = GetWindow()->LogicToPixel( aEditCursor );
                     aEditCursor = GetWindow()->PixelToLogic( aEditCursor );
                 }

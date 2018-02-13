@@ -196,9 +196,9 @@ tools::Rectangle EditView::GetInvalidateRect() const
     {
         tools::Rectangle aRect( pImpEditView->aOutArea );
         long nMore = pImpEditView->GetWindow()->PixelToLogic( Size( pImpEditView->GetInvalidateMore(), 0 ) ).Width();
-        aRect.Left() -= nMore;
+        aRect.SetLeft( aRect.Left() - nMore );
         aRect.Right() += nMore;
-        aRect.Top() -= nMore;
+        aRect.SetTop( aRect.Top() - nMore );
         aRect.Bottom() += nMore;
         return aRect;
     }

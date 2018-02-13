@@ -261,7 +261,7 @@ bool SvxSizeItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= nVal ))
                 return false;
 
-            aSize.Width() = bConvert ? convertMm100ToTwip(nVal) : nVal;
+            aSize.setWidth( bConvert ? convertMm100ToTwip(nVal) : nVal );
         }
         break;
         case MID_SIZE_HEIGHT:
@@ -270,7 +270,7 @@ bool SvxSizeItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= nVal))
                 return true;
 
-            aSize.Height() = bConvert ? convertMm100ToTwip(nVal) : nVal;
+            aSize.setHeight( bConvert ? convertMm100ToTwip(nVal) : nVal );
         }
         break;
         default: OSL_FAIL("Wrong MemberId!");
@@ -337,8 +337,8 @@ bool SvxSizeItem::GetPresentation
 
 void SvxSizeItem::ScaleMetrics( long nMult, long nDiv )
 {
-    aSize.Width() = Scale( aSize.Width(), nMult, nDiv );
-    aSize.Height() = Scale( aSize.Height(), nMult, nDiv );
+    aSize.setWidth( Scale( aSize.Width(), nMult, nDiv ) );
+    aSize.setHeight( Scale( aSize.Height(), nMult, nDiv ) );
 }
 
 
