@@ -1118,7 +1118,8 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
 {
     Size aBitmapSizePixel( static_cast< sal_Int32 >( ( rObjData.aBoundRect.GetWidth() / 2540.0 ) * 90.0 ),      // we will create a bitmap with 90 dpi
                            static_cast< sal_Int32 >( ( rObjData.aBoundRect.GetHeight() / 2540.0 ) * 90.0 ) );
-    if ( aBitmapSizePixel.Width() && aBitmapSizePixel.Height() && ( aBitmapSizePixel.Width() <= 1024 ) && ( aBitmapSizePixel.Height() <= 1024 ) )
+    if (aBitmapSizePixel.Width() > 0 && aBitmapSizePixel.Height() > 0 &&
+        aBitmapSizePixel.Width() <= 1024 && aBitmapSizePixel.Height() <= 1024)
     {
         double fFocusX = rManager.GetPropertyValue( DFF_Prop_fillToRight, 0 ) / 65536.0;
         double fFocusY = rManager.GetPropertyValue( DFF_Prop_fillToBottom, 0 ) / 65536.0;
