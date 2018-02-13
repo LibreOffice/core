@@ -1114,12 +1114,12 @@ void SdrHdlColor::CreateB2dIAObject()
                         rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
                         if (xManager.is())
                         {
-                            Bitmap aBmpCol(CreateColorDropper(aMarkerColor));
+                            BitmapEx aBmpCol(CreateColorDropper(aMarkerColor));
                             basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
                             sdr::overlay::OverlayObject* pNewOverlayObject = new
                                 sdr::overlay::OverlayBitmapEx(
                                     aPosition,
-                                    BitmapEx(aBmpCol),
+                                    aBmpCol,
                                     static_cast<sal_uInt16>(aBmpCol.GetSizePixel().Width() - 1) >> 1,
                                     static_cast<sal_uInt16>(aBmpCol.GetSizePixel().Height() - 1) >> 1
                                 );
@@ -1135,49 +1135,44 @@ void SdrHdlColor::CreateB2dIAObject()
     }
 }
 
-Bitmap SdrHdlColor::CreateColorDropper(Color aCol)
+BitmapEx SdrHdlColor::CreateColorDropper(Color aCol)
 {
     // get the Bitmap
-    Bitmap aRetval(aMarkerSize, 24);
-    aRetval.Erase(aCol);
+    VclPtr<VirtualDevice> pWrite(VclPtr<VirtualDevice>::Create());
+    pWrite->SetOutputSizePixel(aMarkerSize);
+    pWrite->SetBackground(aCol);
+    pWrite->Erase();
 
-    // get write access
-    std::unique_ptr<BitmapWriteAccess> pWrite(aRetval.AcquireWriteAccess());
-    DBG_ASSERT(pWrite, "Got NO write access to a new Bitmap!");
+    // draw outer border
+    sal_Int32 nWidth = aMarkerSize.Width();
+    sal_Int32 nHeight = aMarkerSize.Height();
 
-    if(pWrite)
-    {
-        // draw outer border
-        sal_Int32 nWidth = aMarkerSize.Width();
-        sal_Int32 nHeight = aMarkerSize.Height();
+    pWrite->SetLineColor(Color(COL_LIGHTGRAY));
+    pWrite->DrawLine(Point(0, 0), Point(0, nHeight - 1));
+    pWrite->DrawLine(Point(1, 0), Point(nWidth - 1, 0));
+    pWrite->SetLineColor(Color(COL_GRAY));
+    pWrite->DrawLine(Point(1, nHeight - 1), Point(nWidth - 1, nHeight - 1));
+    pWrite->DrawLine(Point(nWidth - 1, 1), Point(nWidth - 1, nHeight - 2));
 
-        pWrite->SetLineColor(Color(COL_LIGHTGRAY));
-        pWrite->DrawLine(Point(0, 0), Point(0, nHeight - 1));
-        pWrite->DrawLine(Point(1, 0), Point(nWidth - 1, 0));
-        pWrite->SetLineColor(Color(COL_GRAY));
-        pWrite->DrawLine(Point(1, nHeight - 1), Point(nWidth - 1, nHeight - 1));
-        pWrite->DrawLine(Point(nWidth - 1, 1), Point(nWidth - 1, nHeight - 2));
+    // draw lighter UpperLeft
+    const Color aLightColor(
+        static_cast<sal_uInt8>(::std::min(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetRed()) + sal_Int16(0x0040)), sal_Int16(0x00ff))),
+        static_cast<sal_uInt8>(::std::min(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetGreen()) + sal_Int16(0x0040)), sal_Int16(0x00ff))),
+        static_cast<sal_uInt8>(::std::min(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetBlue()) + sal_Int16(0x0040)), sal_Int16(0x00ff))));
+    pWrite->SetLineColor(aLightColor);
+    pWrite->DrawLine(Point(1, 1), Point(1, nHeight - 2));
+    pWrite->DrawLine(Point(2, 1), Point(nWidth - 2, 1));
 
-        // draw lighter UpperLeft
-        const Color aLightColor(
-            static_cast<sal_uInt8>(::std::min(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetRed()) + sal_Int16(0x0040)), sal_Int16(0x00ff))),
-            static_cast<sal_uInt8>(::std::min(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetGreen()) + sal_Int16(0x0040)), sal_Int16(0x00ff))),
-            static_cast<sal_uInt8>(::std::min(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetBlue()) + sal_Int16(0x0040)), sal_Int16(0x00ff))));
-        pWrite->SetLineColor(aLightColor);
-        pWrite->DrawLine(Point(1, 1), Point(1, nHeight - 2));
-        pWrite->DrawLine(Point(2, 1), Point(nWidth - 2, 1));
+    // draw darker LowerRight
+    const Color aDarkColor(
+        static_cast<sal_uInt8>(::std::max(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetRed()) - sal_Int16(0x0040)), sal_Int16(0x0000))),
+        static_cast<sal_uInt8>(::std::max(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetGreen()) - sal_Int16(0x0040)), sal_Int16(0x0000))),
+        static_cast<sal_uInt8>(::std::max(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetBlue()) - sal_Int16(0x0040)), sal_Int16(0x0000))));
+    pWrite->SetLineColor(aDarkColor);
+    pWrite->DrawLine(Point(2, nHeight - 2), Point(nWidth - 2, nHeight - 2));
+    pWrite->DrawLine(Point(nWidth - 2, 2), Point(nWidth - 2, nHeight - 3));
 
-        // draw darker LowerRight
-        const Color aDarkColor(
-            static_cast<sal_uInt8>(::std::max(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetRed()) - sal_Int16(0x0040)), sal_Int16(0x0000))),
-            static_cast<sal_uInt8>(::std::max(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetGreen()) - sal_Int16(0x0040)), sal_Int16(0x0000))),
-            static_cast<sal_uInt8>(::std::max(static_cast<sal_Int16>(static_cast<sal_Int16>(aCol.GetBlue()) - sal_Int16(0x0040)), sal_Int16(0x0000))));
-        pWrite->SetLineColor(aDarkColor);
-        pWrite->DrawLine(Point(2, nHeight - 2), Point(nWidth - 2, nHeight - 2));
-        pWrite->DrawLine(Point(nWidth - 2, 2), Point(nWidth - 2, nHeight - 3));
-    }
-
-    return aRetval;
+    return pWrite->GetBitmapEx(Point(0,0), aMarkerSize);
 }
 
 Color SdrHdlColor::GetLuminance(const Color& rCol)
