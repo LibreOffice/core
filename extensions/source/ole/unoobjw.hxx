@@ -73,6 +73,9 @@ typedef std::unordered_map
     MemberInfo
 > IdToMemberInfoMap;
 
+// An InterfaceOleWrapper object can wrap either a UNO struct or a UNO
+// interface as a COM IDispatchEx and IUnoObjectWrapper.
+
 class InterfaceOleWrapper : public WeakImplHelper<XBridgeSupplier2, XInitialization>,
                             public IDispatchEx,
                             public UnoConversionUtilities<InterfaceOleWrapper>,
