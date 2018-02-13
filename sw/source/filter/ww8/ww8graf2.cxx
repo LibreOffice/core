@@ -29,6 +29,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <unotools/configmgr.hxx>
 #include <grfatr.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
@@ -267,11 +268,18 @@ bool SwWW8ImplReader::ReadGrafFile(OUString& rFileName, Graphic*& rpGraphic,
     }
 
     GDIMetaFile aWMF;
-    pSt->Seek( nPosFc );
-    bool bOk = ReadWindowMetafile( *pSt, aWMF );
+    bool bOk = checkSeek(*pSt, nPosFc) && ReadWindowMetafile( *pSt, aWMF );
 
     if (!bOk || pSt->GetError() || !aWMF.GetActionSize())
         return false;
+
+    //skip duplicate graphics when fuzzing
+    if (utl::ConfigManager::IsFuzzing())
+    {
+        if (m_aGrafPosSet.find(nPosFc) != m_aGrafPosSet.end())
+            return false;
+        m_aGrafPosSet.insert(nPosFc);
+    }
 
     if (m_xWwFib->m_envr != 1) // !MAC as creator
     {
