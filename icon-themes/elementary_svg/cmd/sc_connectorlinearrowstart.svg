@@ -1,4 +1,5 @@
 <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
 
-     /&gt;
- <path d="m .5.5v5l1.8181939-1.864804 10.4494851 10.908316 1.538545-1.619179-10.4337399-10.7417324 1.6275159-1.6826006z" fill="#fff" stroke="#8c8c8c" stroke-linejoin="round"/></svg>
+
+     /&amp;gt;
+ <path d="m2.0606602 5.5961941-1.0606602-4.5961941 4.5961941 1.0606602z" fill="#ce5c00" fill-rule="evenodd"/><path d="m3 3 10 10" fill="none" stroke="#ce5c00"/></svg>
