@@ -1228,7 +1228,7 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
                                                tools::Rectangle&       rTextRect,
                                                tools::Rectangle&       rAnchorRect,
                                                tools::Rectangle&       rPaintRect,
-                                               Fraction&        rFitXCorrection ) const
+                                               Fraction&        rFitXCorrection )
 {
     if (!bContourFrame)
     {
@@ -1259,7 +1259,7 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
     }
 }
 
-void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner ) const
+void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner )
 {
     const Size aShapeSize=GetSnapRect().GetSize();
     ImpAutoFitText( rOutliner,
@@ -1320,6 +1320,7 @@ void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner, const Size& rTextSize, 
             nCurrStretchY = sal::static_int_cast<sal_uInt16>(nCurrStretchY*fFactor);
             rOutliner.SetGlobalCharStretching(std::min(sal_uInt16(100),nCurrStretchX),
                                               std::min(sal_uInt16(100),nCurrStretchY));
+            SetStretchY(nCurrStretchY);
             SAL_INFO("svx", "zoom is " << nCurrStretchX);
         }
     }
@@ -1329,13 +1330,13 @@ void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner, const Size& rTextSize, 
                                       std::min(sal_uInt16(100),nMinStretchY));
 }
 
-void SdrTextObj::SetupOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle& rPaintRect ) const
+void SdrTextObj::SetupOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle& rPaintRect )
 {
     ImpInitDrawOutliner( rOutl );
     UpdateOutlinerFormatting( rOutl, rPaintRect );
 }
 
-void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle& rPaintRect ) const
+void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle& rPaintRect )
 {
     tools::Rectangle aTextRect;
     tools::Rectangle aAnchorRect;

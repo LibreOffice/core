@@ -213,6 +213,8 @@ protected:
 
     virtual SdrObject* getFullDragClone() const override;
 
+    double mnStretchY;
+
 public:
     const Point& GetTextEditOffset() const { return maTextEditOffset; }
     void SetTextEditOffset(const Point& rNew) { maTextEditOffset = rNew; }
@@ -264,9 +266,9 @@ private:
                                        tools::Rectangle&       rTextRect,
                                        tools::Rectangle&       rAnchorRect,
                                        tools::Rectangle&       rPaintRect,
-                                       Fraction&        aFitXCorrection ) const;
-    void ImpAutoFitText( SdrOutliner& rOutliner ) const;
-    static void ImpAutoFitText( SdrOutliner& rOutliner, const Size& rShapeSize, bool bIsVerticalWriting );
+                                       Fraction&        aFitXCorrection );
+    void ImpAutoFitText( SdrOutliner& rOutliner );
+    void ImpAutoFitText( SdrOutliner& rOutliner, const Size& rShapeSize, bool bIsVerticalWriting );
     SVX_DLLPRIVATE SdrObject* ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const;
     SVX_DLLPRIVATE void ImpRegisterLink();
     SVX_DLLPRIVATE void ImpDeregisterLink();
@@ -385,6 +387,10 @@ public:
     // FitToSize and Fontwork are not taken into account in GetTextSize()!
     virtual const Size& GetTextSize() const;
     void FitFrameToTextSize();
+
+    // Get Stretch calculated for FitToSize
+    double GetStretchY() { return mnStretchY; }
+    void SetStretchY(double nStretchY) { mnStretchY = nStretchY; }
 
     // Simultaneously sets the text into the Outliner (possibly
     // the one of the EditOutliner) and sets the PaperSize.
@@ -513,7 +519,7 @@ public:
         The region to paint the outliner content into. This is useful
         to e.g. determine the top, left position of text in shapes.
      */
-    void SetupOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle& rPaintRect ) const;
+    void SetupOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle& rPaintRect );
 
     /** Update given Outliner equivalently to SdrTextObj::Paint()
 
@@ -527,7 +533,7 @@ public:
         The region to paint the outliner content into. This is useful
         to e.g. determine the top, left position of text in shapes.
      */
-    void UpdateOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle& rPaintRect ) const;
+    void UpdateOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle& rPaintRect );
     void ForceOutlinerParaObject();
     virtual bool IsVerticalWriting() const;
     virtual void SetVerticalWriting(bool bVertical);
@@ -589,7 +595,7 @@ public:
     void impDecomposeAutoFitTextPrimitive(
         drawinglayer::primitive2d::Primitive2DContainer& rTarget,
         const drawinglayer::primitive2d::SdrAutoFitTextPrimitive2D& rSdrAutofitTextPrimitive,
-        const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
+        const drawinglayer::geometry::ViewInformation2D& aViewInformation);
     void impDecomposeStretchTextPrimitive(
         drawinglayer::primitive2d::Primitive2DContainer& rTarget,
         const drawinglayer::primitive2d::SdrStretchTextPrimitive2D& rSdrStretchTextPrimitive,
