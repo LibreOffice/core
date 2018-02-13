@@ -1098,13 +1098,20 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     SAL_INFO("oox.shape", "graphicObject without text");
 
     OUString sGraphicURL;
+    uno::Reference<graphic::XGraphic> xGraphic;
     OUString sMediaURL;
+
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
 
     bool bHasGraphicURL = xShapeProps.is() && xShapeProps->getPropertySetInfo()->hasPropertyByName("GraphicURL") && (xShapeProps->getPropertyValue("GraphicURL") >>= sGraphicURL);
+
+    if (xShapeProps.is() && xShapeProps->getPropertySetInfo()->hasPropertyByName("Graphic"))
+        xShapeProps->getPropertyValue("Graphic") >>= xGraphic;
+
+    bool bHasAnyGraphic = bHasGraphicURL || xGraphic.is();
     bool bHasMediaURL = xShapeProps.is() && xShapeProps->getPropertySetInfo()->hasPropertyByName("MediaURL") && (xShapeProps->getPropertyValue("MediaURL") >>= sMediaURL);
 
-    if (!pGraphic && !bHasGraphicURL && !bHasMediaURL)
+    if (!pGraphic && !bHasAnyGraphic && !bHasMediaURL)
     {
         SAL_INFO("oox.shape", "no graphic or media URL found");
         return;
@@ -1158,8 +1165,14 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
 
     pFS->startElementNS( mnXmlNamespace, XML_blipFill, FSEND );
 
-    if (pGraphic || bHasGraphicURL)
+    if (xGraphic.is())
+    {
+        WriteXGraphicBlip(xShapeProps, xGraphic, false);
+    }
+    else if (pGraphic || bHasGraphicURL)
+    {
         WriteBlip(xShapeProps, sGraphicURL, false, pGraphic);
+    }
     else if (bHasMediaURL)
     {
         Reference<graphic::XGraphic> rGraphic;
@@ -1172,6 +1185,8 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
 
     if (bHasGraphicURL)
         WriteSrcRect(xShapeProps, sGraphicURL);
+    else if (xGraphic.is())
+        WriteSrcRectXGraphic(xShapeProps, xGraphic);
 
     // now we stretch always when we get pGraphic (when changing that
     // behavior, test n#780830 for regression, where the OLE sheet might get tiled

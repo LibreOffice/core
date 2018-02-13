@@ -499,21 +499,42 @@ void RtfSdrExport::impl_writeGraphic()
     uno::Reference<drawing::XShape> xShape
         = GetXShapeForSdrObject(const_cast<SdrObject*>(m_pSdrObject));
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-    OUString sGraphicURL;
+
+    uno::Reference<graphic::XGraphic> xGraphic;
+
+    Graphic aGraphic;
+
     try
     {
-        xPropertySet->getPropertyValue("GraphicURL") >>= sGraphicURL;
+        xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
     }
     catch (beans::UnknownPropertyException& rException)
     {
-        // ATM groupshapes are not supported, just make sure we don't crash on them.
         SAL_WARN("sw.rtf", "failed. Message: " << rException);
-        return;
     }
-    OString aURLBS(OUStringToOString(sGraphicURL, RTL_TEXTENCODING_UTF8));
-    Graphic aGraphic
-        = GraphicObject(aURLBS.copy(RTL_CONSTASCII_LENGTH("vnd.sun.star.GraphicObject:")))
-              .GetTransformedGraphic();
+
+    if (xGraphic.is())
+    {
+        aGraphic = Graphic(xGraphic);
+    }
+    else
+    {
+        OUString sGraphicURL;
+        try
+        {
+            xPropertySet->getPropertyValue("GraphicURL") >>= sGraphicURL;
+        }
+        catch (beans::UnknownPropertyException& rException)
+        {
+            // ATM groupshapes are not supported, just make sure we don't crash on them.
+            SAL_WARN("sw.rtf", "failed. Message: " << rException);
+            return;
+        }
+
+        OString aURLBS(OUStringToOString(sGraphicURL, RTL_TEXTENCODING_UTF8));
+        OString aUrl = aURLBS.copy(RTL_CONSTASCII_LENGTH("vnd.sun.star.GraphicObject:"));
+        aGraphic = GraphicObject(aUrl).GetTransformedGraphic();
+    }
 
     // Export it to a stream.
     SvMemoryStream aStream;

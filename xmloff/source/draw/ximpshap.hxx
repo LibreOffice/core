@@ -550,6 +550,8 @@ protected:
     virtual OUString getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const override;
     virtual void removeGraphicFromImportContext(const SvXMLImportContext& rContext) override;
 
+    css::uno::Reference<css::graphic::XGraphic> getGraphicFromImportContext(const SvXMLImportContext& rContext) const override;
+
 public:
 
     SdXMLFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,

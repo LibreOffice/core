@@ -1325,18 +1325,16 @@ void DrawingML::WritePattFill(const Reference<XPropertySet>& rXPropSet, const cs
         mpFS->endElementNS( XML_a , XML_pattFill );
 }
 
-void DrawingML::WriteSrcRect( const Reference< XPropertySet >& rXPropSet, const OUString& rURL )
+void DrawingML::WriteGraphicCropProperties(uno::Reference<beans::XPropertySet> const & rXPropSet, Size const & rOriginalSize, MapMode const & rMapMode)
 {
-    GraphicObject aGraphicObject = GraphicObject::CreateGraphicObjectFromURL(rURL);
-    Size aOriginalSize = aGraphicObject.GetPrefSize();
-    const MapMode& rMapMode = aGraphicObject.GetPrefMapMode();
-
-    // GraphicCrop is in mm100, so in case the original size is in pixels, convert it over.
-    if (rMapMode.GetMapUnit() == MapUnit::MapPixel)
-        aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize, MapMode(MapUnit::Map100thMM));
-
-    if ( GetProperty( rXPropSet, "GraphicCrop" ) )
+    if (GetProperty(rXPropSet, "GraphicCrop"))
     {
+        Size aOriginalSize(rOriginalSize);
+
+        // GraphicCrop is in mm100, so in case the original size is in pixels, convert it over.
+        if (rMapMode.GetMapUnit() == MapUnit::MapPixel)
+            aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize, MapMode(MapUnit::Map100thMM));
+
         css::text::GraphicCrop aGraphicCropStruct;
         mAny >>= aGraphicCropStruct;
 
@@ -1350,6 +1348,23 @@ void DrawingML::WriteSrcRect( const Reference< XPropertySet >& rXPropSet, const 
                           FSEND );
         }
     }
+}
+
+void DrawingML::WriteSrcRect(const uno::Reference<beans::XPropertySet>& rxPropertySet, const OUString& rURL)
+{
+    GraphicObject aGraphicObject = GraphicObject::CreateGraphicObjectFromURL(rURL);
+    Size aOriginalSize = aGraphicObject.GetPrefSize();
+    const MapMode& rMapMode = aGraphicObject.GetPrefMapMode();
+    WriteGraphicCropProperties(rxPropertySet, aOriginalSize, rMapMode);
+}
+
+void DrawingML::WriteSrcRectXGraphic(uno::Reference<beans::XPropertySet> const & rxPropertySet,
+                                     uno::Reference<graphic::XGraphic> const & rxGraphic)
+{
+    Graphic aGraphic(rxGraphic);
+    Size aOriginalSize = aGraphic.GetPrefSize();
+    const MapMode& rMapMode = aGraphic.GetPrefMapMode();
+    WriteGraphicCropProperties(rxPropertySet, aOriginalSize, rMapMode);
 }
 
 void DrawingML::WriteStretch( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, const OUString& rURL )
