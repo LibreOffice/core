@@ -65,6 +65,7 @@
 #include <svl/asiancfg.hxx>
 #include <o3tl/make_unique.hxx>
 #include <comphelper/lok.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <unicode/ubidi.h>
 #include <algorithm>
@@ -2698,7 +2699,9 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
     if ( GetStatus().DoOnlineSpelling() )
         aCurWord = SelectWord( aCurPaM, i18n::WordType::DICTIONARY_WORD );
 
-    const OUString aText(convertLineEnd(rStr, LINEEND_LF));
+    OUString aText(convertLineEnd(rStr, LINEEND_LF));
+    if (utl::ConfigManager::IsFuzzing())    //tab expansion performance in editeng is appalling
+        aText = aText.replaceAll("\t","-");
     SfxVoidItem aTabItem( EE_FEATURE_TAB );
 
     // Converts to linesep = \n
