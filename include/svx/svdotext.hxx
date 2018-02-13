@@ -213,6 +213,7 @@ protected:
 
     virtual SdrObject* getFullDragClone() const override;
 
+
 public:
     const Point& GetTextEditOffset() const { return maTextEditOffset; }
     void SetTextEditOffset(const Point& rNew) { maTextEditOffset = rNew; }
@@ -385,6 +386,7 @@ public:
     // FitToSize and Fontwork are not taken into account in GetTextSize()!
     virtual const Size& GetTextSize() const;
     void FitFrameToTextSize();
+    double GetFontScaleY() const;
 
     // Simultaneously sets the text into the Outliner (possibly
     // the one of the EditOutliner) and sets the PaperSize.
