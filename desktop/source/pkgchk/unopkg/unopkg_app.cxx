@@ -229,20 +229,20 @@ extern "C" int unopkg_main()
             dp_misc::writeConsole("\n" APP_NAME " Version 3.3\n");
             return 0;
         }
-        //consume all bootstrap variables which may occur before the subcommand
+        //consume all bootstrap variables which may occur before the sub-command
         while(isBootstrapVariable(&nPos))
             ;
 
         if(nPos >= nCount)
             return 0;
-        //get the sub command
+        //get the sub-command
         osl_getCommandArg( nPos, &subCommand.pData );
         ++nPos;
         subCommand = subCommand.trim();
         bool subcmd_add = subCommand == "add";
         subcmd_gui = subCommand == "gui";
 
-        // sun-command options and packages:
+        // sub-command options and packages:
         while (nPos < nCount)
         {
             if (readArgument( &cmdArg, info_log, &nPos )) {
