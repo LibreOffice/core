@@ -732,14 +732,14 @@ void PdfExportTest::testTdf108963()
             CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, FPDFPathSegment_GetType(pSegment));
             FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
             CPPUNIT_ASSERT_EQUAL(275102, static_cast<int>(round(fX * 1000)));
-            CPPUNIT_ASSERT_EQUAL(267590, static_cast<int>(round(fY * 1000)));
+            CPPUNIT_ASSERT_EQUAL(267591, static_cast<int>(round(fY * 1000)));
             CPPUNIT_ASSERT(!FPDFPathSegment_GetClose(pSegment));
 
             pSegment = FPDFPath_GetPathSegment(pPdfPageObject, 2);
             CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, FPDFPathSegment_GetType(pSegment));
             FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
             CPPUNIT_ASSERT_EQUAL(287518, static_cast<int>(round(fX * 1000)));
-            CPPUNIT_ASSERT_EQUAL(251801, static_cast<int>(round(fY * 1000)));
+            CPPUNIT_ASSERT_EQUAL(251802, static_cast<int>(round(fY * 1000)));
             CPPUNIT_ASSERT(!FPDFPathSegment_GetClose(pSegment));
 
             pSegment = FPDFPath_GetPathSegment(pPdfPageObject, 3);

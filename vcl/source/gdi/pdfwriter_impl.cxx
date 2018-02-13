@@ -505,8 +505,8 @@ void doTestCode()
 }
 #endif
 
-static const sal_Int32 nLog10Divisor = 3;
-static const double fDivisor = 1000.0;
+static const sal_Int32 nLog10Divisor = 5;
+static const double fDivisor = 100000.0;
 
 static inline double pixelToPoint( double px ) { return px/fDivisor; }
 static inline sal_Int32 pointToPixel( double pt ) { return sal_Int32(pt*fDivisor); }
