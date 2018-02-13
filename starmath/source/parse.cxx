@@ -2418,14 +2418,10 @@ const SmErrorDesc *SmParser::PrevError()
 }
 
 
-const SmErrorDesc *SmParser::GetError(size_t i)
+const SmErrorDesc *SmParser::GetError()
 {
-    if ( i < m_aErrDescList.size() )
-        return m_aErrDescList[ i ].get();
-
-    if ( static_cast<size_t>(m_nCurError) < m_aErrDescList.size() )
-        return m_aErrDescList[ m_nCurError ].get();
-
+    if ( !m_aErrDescList.empty() )
+        return m_aErrDescList.front().get();
     return nullptr;
 }
 

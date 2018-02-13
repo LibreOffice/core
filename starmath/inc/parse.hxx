@@ -128,7 +128,7 @@ public:
     void        AddError(SmParseError Type, SmNode *pNode);
     const SmErrorDesc*  NextError();
     const SmErrorDesc*  PrevError();
-    const SmErrorDesc*  GetError(size_t i);
+    const SmErrorDesc*  GetError();
     static const SmTokenTableEntry* GetTokenTableEntry( const OUString &rName );
     const std::set< OUString >&   GetUsedSymbols() const      { return m_aUsedSymbols; }
 };
