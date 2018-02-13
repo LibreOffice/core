@@ -1727,11 +1727,15 @@ bool ScColumn::ParseString(
             rCell.set(rPool.intern(rString));
         }
         else // = Formula
-            rCell.set(
-                new ScFormulaCell(
+        {
+            ScFormulaCell* pFormulaCell = new ScFormulaCell(
                     GetDoc(), ScAddress(nCol, nRow, nTabP), rString,
                     formula::FormulaGrammar::mergeToGrammar(formula::FormulaGrammar::GRAM_DEFAULT, eConv),
-                    ScMatrixMode::NONE));
+                    ScMatrixMode::NONE);
+            if (aParam.mbCheckLinkFormula)
+                GetDoc()->CheckLinkFormulaNeedingCheck( *pFormulaCell->GetCode());
+            rCell.set( pFormulaCell);
+        }
     }
     else if ( cFirstChar == '\'') // 'Text
     {
