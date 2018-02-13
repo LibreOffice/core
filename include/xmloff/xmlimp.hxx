@@ -400,7 +400,8 @@ public:
         mxNumberFormatsSupplier = _xNumberFormatSupplier;
     }
 
-    css::uno::Reference<css::graphic::XGraphic> loadGraphicByURL(const OUString& rURL);
+    css::uno::Reference<css::graphic::XGraphic> loadGraphicByURL(OUString const & rURL);
+    css::uno::Reference<css::graphic::XGraphic> loadGraphicFromBase64(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream);
 
     // Convert a local package URL into either a graphic manager or a
     // internal package URL. The later one happens only if bLoadURL is true

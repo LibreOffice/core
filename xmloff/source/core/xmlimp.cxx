@@ -23,6 +23,7 @@
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <tools/urlobj.hxx>
+#include <vcl/graph.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -45,6 +46,7 @@
 #include <com/sun/star/document/XBinaryStreamResolver.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/document/XGraphicStorageHandler.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
@@ -57,6 +59,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <unotools/fontcvt.hxx>
 #include <o3tl/make_unique.hxx>
 #include <xmloff/fasttokenhandler.hxx>
@@ -1353,14 +1356,47 @@ bool SvXMLImport::IsPackageURL( const OUString& rURL ) const
     return true;
 }
 
-css::uno::Reference<css::graphic::XGraphic> SvXMLImport::loadGraphicByURL(const OUString& rURL)
+uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicByURL(OUString const & rURL)
 {
-    css::uno::Reference<css::graphic::XGraphic> xGraphic;
+    uno::Reference<graphic::XGraphic> xGraphic;
     uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler(mxGraphicResolver, uno::UNO_QUERY);
 
-    if (IsPackageURL(rURL) && xGraphicStorageHandler.is())
+    if (xGraphicStorageHandler.is())
     {
-        xGraphic = xGraphicStorageHandler->loadGraphic(rURL);
+        if (IsPackageURL(rURL))
+        {
+            xGraphic = xGraphicStorageHandler->loadGraphic(rURL);
+        }
+        else
+        {
+            uno::Reference<graphic::XGraphicProvider> xProvider(graphic::GraphicProvider::create(GetComponentContext()));
+            OUString const & rAbsoluteURL = GetAbsoluteReference(rURL);
+            uno::Sequence<beans::PropertyValue> aLoadProperties(comphelper::InitPropertySequence(
+            {
+                { "URL", uno::makeAny(rAbsoluteURL) }
+            }));
+
+            xGraphic = xProvider->queryGraphic(aLoadProperties);
+            if (xGraphic.is())
+            {
+                Graphic aGraphic(xGraphic);
+                aGraphic.setOriginURL(rAbsoluteURL);
+                printf ("URL %s\n", rAbsoluteURL.toUtf8().getStr());
+            }
+        }
+    }
+
+    return xGraphic;
+}
+
+uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicFromBase64(uno::Reference<io::XOutputStream> const & rxOutputStream)
+{
+    uno::Reference<graphic::XGraphic> xGraphic;
+    uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler(mxGraphicResolver, uno::UNO_QUERY);
+
+    if (xGraphicStorageHandler.is())
+    {
+        xGraphic = xGraphicStorageHandler->loadGraphicFromOutputStream(rxOutputStream);
     }
 
     return xGraphic;

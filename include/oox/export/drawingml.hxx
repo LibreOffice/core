@@ -38,6 +38,8 @@
 #include <sax/fshelper.hxx>
 #include <svx/msdffdef.hxx>
 #include <vcl/checksum.hxx>
+#include <tools/gen.hxx>
+#include <vcl/mapmod.hxx>
 
 #ifndef OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY
 // Our rotation is counter-clockwise and is in 100ths of a degree.
@@ -198,7 +200,14 @@ public:
     void WritePattFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WritePattFill(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
             const css::drawing::Hatch& rHatch);
+
+    void WriteGraphicCropProperties(css::uno::Reference<css::beans::XPropertySet> const & rxPropertySet,
+                                    Size const & rOriginalSize, MapMode const & rMapMode);
+
     void WriteSrcRect( const css::uno::Reference< css::beans::XPropertySet >&, const OUString& );
+    void WriteSrcRectXGraphic(css::uno::Reference<css::beans::XPropertySet> const & rxPropertySet,
+                              css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
+
     void WriteOutline( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteStretch( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, const OUString& rURL );
 

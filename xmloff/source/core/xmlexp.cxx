@@ -27,6 +27,7 @@
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/graph.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -1884,19 +1885,27 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
 
 OUString SvXMLExport::AddEmbeddedXGraphic(uno::Reference<graphic::XGraphic> const & rxGraphic, OUString const & rRequestedName)
 {
-    OUString sInternalURL;
+    OUString sURL;
 
-    uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler(mxGraphicResolver, uno::UNO_QUERY);
+    Graphic aGraphic(rxGraphic);
+    OUString aOriginURL = aGraphic.getOriginURL();
 
-    if (mxGraphicResolver.is() && xGraphicStorageHandler.is())
+    if (!aOriginURL.isEmpty())
     {
-        if (!(getExportFlags() & SvXMLExportFlags::EMBEDDED))
+        sURL = GetRelativeReference(aOriginURL);
+    }
+    else
+    {
+        uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler(mxGraphicResolver, uno::UNO_QUERY);
+        if (mxGraphicResolver.is() && xGraphicStorageHandler.is())
         {
-            sInternalURL = xGraphicStorageHandler->saveGraphicByName(rxGraphic, rRequestedName);
+            if (!(getExportFlags() & SvXMLExportFlags::EMBEDDED))
+            {
+                sURL = xGraphicStorageHandler->saveGraphicByName(rxGraphic, rRequestedName);
+            }
         }
     }
-
-    return sInternalURL;
+    return sURL;
 }
 
 Reference< XInputStream > SvXMLExport::GetEmbeddedGraphicObjectStream( const OUString& rGraphicObjectURL )

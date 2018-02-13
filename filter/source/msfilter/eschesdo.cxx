@@ -549,7 +549,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                        have to create a simple Rectangle with fill bitmap instead (while not allowing BitmapMode_Repeat).
                     */
                     addShape( ESCHER_ShpInst_Rectangle, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );
-                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "GraphicURL", true, true, false ) )
+                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "Graphic", true, true, false ) )
                     {
                         aPropOpt.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
                         aPropOpt.AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
@@ -565,7 +565,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 else
                 {
                     addShape( ESCHER_ShpInst_PictureFrame, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );
-                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "GraphicURL", false, true, true, bOOxmlExport ) )
+                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "Graphic", false, true, true, bOOxmlExport ) )
                         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 }
             }
