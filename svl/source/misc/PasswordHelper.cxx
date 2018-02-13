@@ -33,6 +33,7 @@ void SvPasswordHelper::GetHashPasswordSHA256(uno::Sequence<sal_Int8>& rPassHash,
         ::comphelper::HashType::SHA256));
     rPassHash.realloc(hash.size());
     ::std::copy(hash.begin(), hash.end(), rPassHash.begin());
+    rtl_secureZeroMemory(const_cast<sal_Char *>(tmp.getStr()), tmp.getLength());
 }
 
 void SvPasswordHelper::GetHashPasswordSHA1UTF8(uno::Sequence<sal_Int8>& rPassHash, OUString const& rPassword)
@@ -43,6 +44,7 @@ void SvPasswordHelper::GetHashPasswordSHA1UTF8(uno::Sequence<sal_Int8>& rPassHas
         ::comphelper::HashType::SHA1));
     rPassHash.realloc(hash.size());
     ::std::copy(hash.begin(), hash.end(), rPassHash.begin());
+    rtl_secureZeroMemory(const_cast<sal_Char *>(tmp.getStr()), tmp.getLength());
 }
 
 void SvPasswordHelper::GetHashPassword(uno::Sequence<sal_Int8>& rPassHash, const sal_Char* pPass, sal_uInt32 nLen)
@@ -69,6 +71,7 @@ void SvPasswordHelper::GetHashPasswordLittleEndian(uno::Sequence<sal_Int8>& rPas
     }
 
     GetHashPassword(rPassHash, pCharBuffer.get(), nSize * sizeof(sal_Unicode));
+    rtl_secureZeroMemory(pCharBuffer.get(), nSize * sizeof(sal_Unicode));
 }
 
 void SvPasswordHelper::GetHashPasswordBigEndian(uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass)
@@ -84,6 +87,7 @@ void SvPasswordHelper::GetHashPasswordBigEndian(uno::Sequence<sal_Int8>& rPassHa
     }
 
     GetHashPassword(rPassHash, pCharBuffer.get(), nSize * sizeof(sal_Unicode));
+    rtl_secureZeroMemory(pCharBuffer.get(), nSize * sizeof(sal_Unicode));
 }
 
 void SvPasswordHelper::GetHashPassword(uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass)
