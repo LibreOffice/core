@@ -276,7 +276,7 @@ namespace dbaui
         const long _nIndentAppFont )
     {
         Point aReference = _rReference.GetPosPixel();
-        aReference.Y() += _rReference.GetSizePixel().Height();
+        aReference.setY( aReference.Y() + _rReference.GetSizePixel().Height() );
 
         const vcl::Window* pConverter = _rControl.GetParent();
         Size aOffset = pConverter->LogicToPixel(Size(_nIndentAppFont, 3), MapMode(MapUnit::MapAppFont));

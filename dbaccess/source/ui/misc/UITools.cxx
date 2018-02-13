@@ -965,9 +965,9 @@ void adjustToolBoxSize(ToolBox* _pToolBox)
     Size aOldSize = _pToolBox->GetSizePixel();
     Size aSize = _pToolBox->CalcWindowSizePixel();
     if ( !aSize.Width() )
-        aSize.Width() = aOldSize.Width();
+        aSize.setWidth( aOldSize.Width() );
     else if ( !aSize.Height() )
-        aSize.Height() = aOldSize.Height();
+        aSize.setHeight( aOldSize.Height() );
 
     Size aTbSize = _pToolBox->GetSizePixel();
     if ( (aSize.Width() && aSize.Width() != aTbSize.Width()) ||

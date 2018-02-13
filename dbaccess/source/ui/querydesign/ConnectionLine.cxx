@@ -56,17 +56,17 @@ namespace
         if ( pListBox )
         {
             const long nRowHeight = pListBox->GetEntryHeight();
-            aReturn.Top() = _aConnPos.Y() - nRowHeight;
-            aReturn.Bottom() = aReturn.Top() + nRowHeight;
+            aReturn.SetTop( _aConnPos.Y() - nRowHeight );
+            aReturn.SetBottom( aReturn.Top() + nRowHeight );
             if (_aDescrLinePos.X() < _aConnPos.X())
             {
-                aReturn.Left() = _aDescrLinePos.X();
-                aReturn.Right() = aReturn.Left() + _aConnPos.X() - _aDescrLinePos.X();
+                aReturn.SetLeft( _aDescrLinePos.X() );
+                aReturn.SetRight( aReturn.Left() + _aConnPos.X() - _aDescrLinePos.X() );
             }
             else
             {
-                aReturn.Left() = _aConnPos.X();
-                aReturn.Right() = aReturn.Left() + _aDescrLinePos.X() - _aConnPos.X();
+                aReturn.SetLeft( _aConnPos.X() );
+                aReturn.SetRight( aReturn.Left() + _aDescrLinePos.X() - _aConnPos.X() );
             }
         }
 
@@ -81,29 +81,29 @@ namespace
     void calcPointsYValue(const OTableWindow* _pWin,SvTreeListEntry* _pEntry,Point& _rNewConPos,Point& _rNewDescrPos)
     {
         const OTableWindowListBox* pListBox = _pWin->GetListBox();
-        _rNewConPos.Y() = _pWin->GetPosPixel().Y();
+        _rNewConPos.setY( _pWin->GetPosPixel().Y() );
         if ( _pEntry )
         {
             const long nRowHeight = pListBox->GetEntryHeight();
-            _rNewConPos.Y() += pListBox->GetPosPixel().Y();
+            _rNewConPos.setY( _rNewConPos.Y() + pListBox->GetPosPixel().Y() );
             long nEntryPos = pListBox->GetEntryPosition( _pEntry ).Y();
 
             if( nEntryPos >= 0 )
             {
-                _rNewConPos.Y() += nEntryPos;
+                _rNewConPos.setY( _rNewConPos.Y() + nEntryPos );
                 _rNewConPos.Y() += static_cast<long>( 0.5 * nRowHeight );
             }
             else
-                _rNewConPos.Y() -= static_cast<long>( 0.5 * nRowHeight );
+                _rNewConPos.setY( _rNewConPos.Y() - static_cast<long>( 0.5 * nRowHeight ) );
 
             long nListBoxBottom = _pWin->GetPosPixel().Y()
                                     + pListBox->GetPosPixel().Y()
                                     + pListBox->GetSizePixel().Height();
             if( _rNewConPos.Y() > nListBoxBottom )
-                _rNewConPos.Y() = nListBoxBottom + 2;
+                _rNewConPos.setY( nListBoxBottom + 2 );
         }
         else
-            _rNewConPos.Y() += static_cast<sal_Int32>(pListBox->GetPosPixel().Y()*0.5);
+            _rNewConPos.setY( _rNewConPos.Y() + static_cast<sal_Int32>(pListBox->GetPosPixel().Y()*0.5) );
 
         _rNewDescrPos.Y() = _rNewConPos.Y();
     }
@@ -157,24 +157,24 @@ tools::Rectangle OConnectionLine::GetBoundingRect()
 
     if( m_aSourceDescrLinePos.Y() <= m_aDestDescrLinePos.Y() )
     {
-        aTopLeft.Y() = m_aSourceDescrLinePos.Y();
-        aBottomRight.Y() = m_aDestDescrLinePos.Y();
+        aTopLeft.setY( m_aSourceDescrLinePos.Y() );
+        aBottomRight.setY( m_aDestDescrLinePos.Y() );
     }
     else
     {
-        aTopLeft.Y() = m_aDestDescrLinePos.Y();
-        aBottomRight.Y() = m_aSourceDescrLinePos.Y();
+        aTopLeft.setY( m_aDestDescrLinePos.Y() );
+        aBottomRight.setY( m_aSourceDescrLinePos.Y() );
     }
 
     if( m_aSourceDescrLinePos.X() <= m_aDestDescrLinePos.X() )
     {
-        aTopLeft.X() = m_aSourceDescrLinePos.X();
-        aBottomRight.X() = m_aDestDescrLinePos.X();
+        aTopLeft.setX( m_aSourceDescrLinePos.X() );
+        aBottomRight.setX( m_aDestDescrLinePos.X() );
     }
     else
     {
-        aTopLeft.X() = m_aDestDescrLinePos.X();
-        aBottomRight.X() = m_aSourceDescrLinePos.X();
+        aTopLeft.setX( m_aDestDescrLinePos.X() );
+        aBottomRight.setX( m_aSourceDescrLinePos.X() );
     }
 
     const OTableWindow* pSourceWin = m_pTabConn->GetSourceWin();
@@ -182,7 +182,7 @@ tools::Rectangle OConnectionLine::GetBoundingRect()
     // line proceeds in z-Form
     if( pSourceWin == pDestWin || std::abs(m_aSourceConnPos.X() - m_aDestConnPos.X()) > std::abs(m_aSourceDescrLinePos.X() - m_aDestDescrLinePos.X()) )
     {
-        aTopLeft.X() -= DESCRIPT_LINE_WIDTH;
+        aTopLeft.setX( aTopLeft.X() - DESCRIPT_LINE_WIDTH );
         aBottomRight.X() += DESCRIPT_LINE_WIDTH;
     }
 
@@ -193,16 +193,16 @@ tools::Rectangle OConnectionLine::GetBoundingRect()
 
 void calcPointX1(const OTableWindow* _pWin,Point& _rNewConPos,Point& _rNewDescrPos)
 {
-    _rNewConPos.X() = _pWin->GetPosPixel().X() + _pWin->GetSizePixel().Width();
-    _rNewDescrPos.X() = _rNewConPos.X();
-    _rNewConPos.X() += DESCRIPT_LINE_WIDTH;
+    _rNewConPos.setX( _pWin->GetPosPixel().X() + _pWin->GetSizePixel().Width() );
+    _rNewDescrPos.setX( _rNewConPos.X() );
+    _rNewConPos.setX( _rNewConPos.X() + DESCRIPT_LINE_WIDTH );
 }
 
 void calcPointX2(const OTableWindow* _pWin,Point& _rNewConPos,Point& _rNewDescrPos)
 {
-    _rNewConPos.X() = _pWin->GetPosPixel().X();
-    _rNewDescrPos.X() = _rNewConPos.X();
-    _rNewConPos.X() -= DESCRIPT_LINE_WIDTH;
+    _rNewConPos.setX( _pWin->GetPosPixel().X() );
+    _rNewDescrPos.setX( _rNewConPos.X() );
+    _rNewConPos.setX( _rNewConPos.X() - DESCRIPT_LINE_WIDTH );
 }
 
 bool OConnectionLine::RecalcLine()
@@ -221,8 +221,8 @@ bool OConnectionLine::RecalcLine()
     Point aSourceCenter( 0, 0 );
     Point aDestCenter( 0, 0 );
 
-    aSourceCenter.X() = pSourceWin->GetPosPixel().X() + static_cast<long>( 0.5*pSourceWin->GetSizePixel().Width() );
-    aDestCenter.X() = pDestWin->GetPosPixel().X() + static_cast<long>( 0.5*pDestWin->GetSizePixel().Width() );
+    aSourceCenter.setX( pSourceWin->GetPosPixel().X() + static_cast<long>( 0.5*pSourceWin->GetSizePixel().Width() ) );
+    aDestCenter.setX( pDestWin->GetPosPixel().X() + static_cast<long>( 0.5*pDestWin->GetSizePixel().Width() ) );
 
     const OTableWindow* pFirstWin   = pDestWin;
     const OTableWindow* pSecondWin  = pSourceWin;
@@ -300,8 +300,8 @@ double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Point& q)
     double l = (v.X() * w.Y() - v.Y() * w.X()) / a;
     double a2 = w.X()*v.X()+w.Y()*v.Y();
     a = a2 / (a * a);
-    q.X() = long(p1.X() + a * v.X());
-    q.Y() = long(p1.Y() + a * v.Y());
+    q.setX( long(p1.X() + a * v.X()) );
+    q.setY( long(p1.Y() + a * v.Y()) );
     return l;
 }
 
@@ -336,7 +336,7 @@ tools::Rectangle OConnectionLine::GetDestTextPos() const
 Point OConnectionLine::getMidPoint() const
 {
     Point aDest = m_aDestConnPos - m_aSourceConnPos;
-    aDest.X() /= 2;
+    aDest.setX( aDest.X() / 2 );
     aDest.Y() /= 2;
 
     return m_aSourceConnPos + aDest;

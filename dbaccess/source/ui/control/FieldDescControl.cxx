@@ -415,7 +415,7 @@ sal_Int32 OFieldDescControl::GetMaxControlHeight() const
         {
             const Size aTemp(pAggregate->GetOptimalSize());
             if ( aTemp.Height() > aHeight.Height() )
-                aHeight.Height() = aTemp.Height();
+                aHeight.setHeight( aTemp.Height() );
         }
     }
 
@@ -996,7 +996,7 @@ void OFieldDescControl::SetPosSize( VclPtr<Control> const & rControl, long nRow,
     const sal_Int32 nControlHeight = GetMaxControlHeight();
     Size aSize(0,nControlHeight);
     if ( isRightAligned() && nCol )
-        aSize.Width() = LogicToPixel(Size(m_nWidth, 0), MapMode(MapUnit::MapAppFont)).Width();
+        aSize.setWidth( LogicToPixel(Size(m_nWidth, 0), MapMode(MapUnit::MapAppFont)).Width() );
     else
     {
         switch( nCol )
@@ -1022,8 +1022,8 @@ void OFieldDescControl::SetPosSize( VclPtr<Control> const & rControl, long nRow,
     switch( nCol )
     {
     case 0:
-        aPosition.X() = 0;
-        aPosition.Y() = 1;
+        aPosition.setX( 0 );
+        aPosition.setY( 1 );
         break;
     case 1:
     case 3:
@@ -1031,21 +1031,21 @@ void OFieldDescControl::SetPosSize( VclPtr<Control> const & rControl, long nRow,
         if ( isRightAligned() )
         {
             Size aOwnSize = GetSizePixel();
-            aPosition.X() = aOwnSize.Width() - aSize.Width();
+            aPosition.setX( aOwnSize.Width() - aSize.Width() );
         }
         else
             aPosition.X() = CONTROL_WIDTH_1 + CONTROL_SPACING_X;
         break;
     default:
-        aPosition.X() = 0;
+        aPosition.setX( 0 );
     }
 
     rControl->SetSizePixel( aSize );
     aSize = rControl->GetSizePixel( );
 
     const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y), MapMode(MapUnit::MapAppFont)).Height();
-    aPosition.Y() += ((nRow+1)*nControl_Spacing_y) +
-                    (nRow*nControlHeight);
+    aPosition.setY( aPosition.Y() + ((nRow+1)*nControl_Spacing_y) +
+                    (nRow*nControlHeight) );
 
     // Display Control
     rControl->SetPosSizePixel( aPosition, aSize );

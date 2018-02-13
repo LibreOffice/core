@@ -2530,10 +2530,10 @@ void OQueryDesignView::resizeDocumentView(tools::Rectangle& _rPlayground)
     Size    aSplitSize( _rPlayground.GetSize().Width(), m_aSplitter->GetSizePixel().Height() );
 
     if( ( aSplitPos.Y() + aSplitSize.Height() ) > ( aPlaygroundSize.Height() ))
-        aSplitPos.Y() = aPlaygroundSize.Height() - aSplitSize.Height();
+        aSplitPos.setY( aPlaygroundSize.Height() - aSplitSize.Height() );
 
     if( aSplitPos.Y() <= aPlaygroundPos.Y() )
-        aSplitPos.Y() = aPlaygroundPos.Y() + sal_Int32(aPlaygroundSize.Height() * 0.2);
+        aSplitPos.setY( aPlaygroundPos.Y() + sal_Int32(aPlaygroundSize.Height() * 0.2) );
 
     // position the table
     Size aTableViewSize(aPlaygroundSize.Width(), aSplitPos.Y() - aPlaygroundPos.Y());

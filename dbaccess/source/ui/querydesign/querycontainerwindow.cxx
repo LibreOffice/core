@@ -97,13 +97,13 @@ namespace dbaui
             // calc pos and size of the splitter
             Point aSplitPos     = m_pSplitter->GetPosPixel();
             Size aSplitSize     = m_pSplitter->GetOutputSizePixel();
-            aSplitSize.Width() = aPlayground.GetWidth();
+            aSplitSize.setWidth( aPlayground.GetWidth() );
 
             if ( aSplitPos.Y() <= aPlayground.Top() )
-                aSplitPos.Y() = aPlayground.Top() + sal_Int32( aPlayground.GetHeight() * 0.2 );
+                aSplitPos.setY( aPlayground.Top() + sal_Int32( aPlayground.GetHeight() * 0.2 ) );
 
             if ( aSplitPos.Y() + aSplitSize.Height() > aPlayground.GetHeight() )
-                aSplitPos.Y() = aPlayground.GetHeight() - aSplitSize.Height();
+                aSplitPos.setY( aPlayground.GetHeight() - aSplitSize.Height() );
 
             // set pos and size of the splitter
             m_pSplitter->SetPosSizePixel( aSplitPos, aSplitSize );
@@ -114,7 +114,7 @@ namespace dbaui
             m_pBeamer->SetPosSizePixel( aPlayground.TopLeft(), aBeamerSize );
 
             // shrink the playground by the size which is occupied by the beamer
-            aPlayground.Top() = aSplitPos.Y() + aSplitSize.Height();
+            aPlayground.SetTop( aSplitPos.Y() + aSplitSize.Height() );
         }
 
         ODataView::resizeAll( aPlayground );
