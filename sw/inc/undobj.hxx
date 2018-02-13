@@ -185,13 +185,13 @@ public:
 // Save a complete section in nodes-array.
 class SwUndoSaveSection : private SwUndoSaveContent
 {
-    SwNodeIndex *pMvStt;
+    std::unique_ptr<SwNodeIndex> m_pMovedStart;
     SwRedlineSaveDatas* pRedlSaveData;
     sal_uLong nMvLen;           // Index into UndoNodes-Array.
     sal_uLong nStartPos;
 
 protected:
-    SwNodeIndex* GetMvSttIdx() const { return pMvStt; }
+    SwNodeIndex* GetMvSttIdx() const { return m_pMovedStart.get(); }
     sal_uLong GetMvNodeCnt() const { return nMvLen; }
 
 public:
