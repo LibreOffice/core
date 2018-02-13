@@ -267,7 +267,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
     } catch (const css::uno::Exception & e) {
         SAL_INFO(
             "desktop.test",
-            "active_native component_writeInfo: " << e);
+            "active_native component_writeInfo exception: " << e.Message);
         return false;
     }
     return true;
