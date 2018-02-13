@@ -1292,6 +1292,8 @@ void ToolBox::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
                 SetParentClipMode();
             }
         }
+
+        EnableChildTransparentMode(IsPaintTransparent());
     }
 }
 
