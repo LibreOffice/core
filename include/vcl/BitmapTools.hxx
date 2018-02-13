@@ -64,6 +64,8 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
 */
 BitmapEx VCL_DLLPUBLIC CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nStride, sal_uInt16 nBitCount );
 
+BitmapEx VCL_DLLPUBLIC CreateFromData( Color const *pData, sal_uInt8 const * pMask, Size size );
+
 BitmapEx VCL_DLLPUBLIC CreateFromData( RawBitmap && data );
 
 }} // end vcl::bitmap
