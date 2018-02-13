@@ -30,6 +30,7 @@ class SwPageDesc;
 class SvxTabStopItem;
 class SwWrtShell;
 class ListBox;
+namespace weld { class ComboBoxText; }
 class SwDocShell;
 class SwFrameFormat;
 class SwTabCols;
@@ -94,6 +95,7 @@ SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, boo
 
 //inserts a string sorted into a ListBox,
 SW_DLLPUBLIC sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32 nOffset);
+SW_DLLPUBLIC void InsertStringSorted(const OUString& rEntry, weld::ComboBoxText& rToFill, int nOffset);
 
 // Get table width and alignment
 SwTwips GetTableWidth( SwFrameFormat const * pFormat, SwTabCols const & rCols, sal_uInt16 *pPercent,

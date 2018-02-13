@@ -55,6 +55,7 @@
 #include <rtl/uri.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <openuriexternally.hxx>
@@ -82,23 +83,48 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::system;
 
-class NoHelpErrorBox : public MessageDialog
+namespace old
 {
-public:
-    explicit NoHelpErrorBox( vcl::Window* _pParent );
+    class NoHelpErrorBox : public MessageDialog
+    {
+    public:
+        explicit NoHelpErrorBox(vcl::Window* _pParent)
+            : MessageDialog(_pParent, SfxResId(RID_STR_HLPFILENOTEXIST))
+        {
+            // Error message: "No help available"
+        }
 
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
-};
-
-NoHelpErrorBox::NoHelpErrorBox( vcl::Window* _pParent )
-    : MessageDialog(_pParent, SfxResId(RID_STR_HLPFILENOTEXIST))
-{
-    // Error message: "No help available"
+        virtual void RequestHelp( const HelpEvent& ) override
+        {
+            // do nothing, because no help available
+        }
+    };
 }
 
-void NoHelpErrorBox::RequestHelp( const HelpEvent& )
+class NoHelpErrorBox
+{
+private:
+    std::unique_ptr<weld::MessageDialog> m_xErrBox;
+public:
+    DECL_STATIC_LINK(NoHelpErrorBox, HelpRequestHdl, weld::Widget&, bool);
+public:
+    explicit NoHelpErrorBox(weld::Widget* pParent)
+        : m_xErrBox(Application::CreateMessageDialog(pParent, VclMessageType::Error, VclButtonsType::Ok,
+                                                     SfxResId(RID_STR_HLPFILENOTEXIST)))
+    {
+        // Error message: "No help available"
+        m_xErrBox->connect_help(LINK(nullptr, NoHelpErrorBox, HelpRequestHdl));
+    }
+    void run()
+    {
+        m_xErrBox->run();
+    }
+};
+
+IMPL_STATIC_LINK_NOARG(NoHelpErrorBox, HelpRequestHdl, weld::Widget&, bool)
 {
     // do nothing, because no help available
+    return false;
 }
 
 static OUString HelpLocaleString();
@@ -625,12 +651,17 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* p
 
 void SfxHelp::SearchKeyword( const OUString& rKeyword )
 {
-    Start_Impl( OUString(), nullptr, rKeyword );
+    Start_Impl(OUString(), static_cast<vcl::Window*>(nullptr), rKeyword);
 }
 
 bool SfxHelp::Start( const OUString& rURL, const vcl::Window* pWindow )
 {
     return Start_Impl( rURL, pWindow, OUString() );
+}
+
+bool SfxHelp::Start(const OUString& rURL, weld::Widget* pWidget)
+{
+    return Start_Impl(rURL, pWidget, OUString());
 }
 
 /// Redirect the vnd.sun.star.help:// urls to http://help.libreoffice.org
@@ -708,7 +739,6 @@ static bool impl_showOfflineHelp( const OUString& rURL )
     aTempFile.EnableKillingFile();
     return false;
 }
-
 
 bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const OUString& rKeyword)
 {
@@ -821,7 +851,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
                 return true;
             else
             {
-                ScopedVclPtrInstance< NoHelpErrorBox > aErrBox(const_cast< vcl::Window* >( pWindow ));
+                ScopedVclPtrInstance< old::NoHelpErrorBox > aErrBox(const_cast< vcl::Window* >( pWindow ));
                 aErrBox->Execute();
                 return false;
             }
@@ -865,7 +895,151 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
         xTopWindow->toFront();
 
     return true;
+}
 
+bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUString& rKeyword)
+{
+    OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
+    AppendConfigToken(aHelpRootURL, true);
+    SfxContentHelper::GetResultSet(aHelpRootURL.makeStringAndClear());
+
+    /* rURL may be
+     *       - a "real" URL
+     *       - a HelpID (formerly a long, now a string)
+     *      If rURL is a URL, CreateHelpURL should be called for this URL
+     *      If rURL is an arbitrary string, the same should happen, but the URL should be tried out
+     *      if it delivers real help content. In case only the Help Error Document is returned, the
+     *      parent of the window for that help was called, is asked for its HelpID.
+     *      For compatibility reasons this upward search is not implemented for "real" URLs.
+     *      Help keyword search now is implemented as own method; in former versions it
+     *      was done via Help::Start, but this implementation conflicted with the upward search.
+     */
+    OUString aHelpURL;
+    INetURLObject aParser( rURL );
+    INetProtocol nProtocol = aParser.GetProtocol();
+
+    switch ( nProtocol )
+    {
+        case INetProtocol::VndSunStarHelp:
+            // already a vnd.sun.star.help URL -> nothing to do
+            aHelpURL = rURL;
+            break;
+        default:
+        {
+            OUString aHelpModuleName(GetHelpModuleName_Impl(rURL));
+            OUString aRealCommand;
+
+            if ( nProtocol == INetProtocol::Uno )
+                // Command can be just an alias to another command.
+                aRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand( rURL, getCurrentModuleIdentifier_Impl() );
+
+            // no URL, just a HelpID (maybe empty in case of keyword search)
+            aHelpURL = CreateHelpURL_Impl( aRealCommand.isEmpty() ? rURL : aRealCommand, aHelpModuleName );
+
+            if ( impl_hasHelpInstalled() && pWidget && SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
+            {
+                // no help found -> try with parent help id.
+                std::unique_ptr<weld::Widget> xParent(pWidget->weld_parent());
+                while (xParent)
+                {
+                    OString aHelpId = xParent->get_help_id();
+                    aHelpURL = CreateHelpURL( OStringToOUString(aHelpId, RTL_TEXTENCODING_UTF8), aHelpModuleName );
+
+                    if ( !SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        xParent.reset(xParent->weld_parent());
+                        if (!xParent)
+                        {
+                            // create help url of start page ( helpid == 0 -> start page)
+                            aHelpURL = CreateHelpURL( OUString(), aHelpModuleName );
+                        }
+                    }
+                }
+            }
+            break;
+        }
+    }
+
+    if ( comphelper::LibreOfficeKit::isActive() )
+    {
+        impl_showOnlineHelp( aHelpURL );
+        return true;
+    }
+
+    if ( impl_hasHTMLHelpInstalled() )
+    {
+        impl_showOfflineHelp(aHelpURL);
+        return true;
+    }
+
+    if ( !impl_hasHelpInstalled() )
+    {
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWidget, "sfx/ui/helpmanual.ui"));
+        std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("onlinehelpmanual"));
+
+        LanguageTag aLangTag = Application::GetSettings().GetUILanguageTag();
+        OUString sLocaleString = SvtLanguageTable::GetLanguageString( aLangTag.getLanguageType() );
+        OUString sPrimText = xQueryBox->get_primary_text();
+        xQueryBox->set_primary_text(Translate::GetReadStringHook()(sPrimText).replaceAll("$UILOCALE", sLocaleString));
+        xQueryBox->set_title(Translate::GetReadStringHook()(xQueryBox->get_title()));
+        xQueryBox->connect_help(LINK(nullptr, NoHelpErrorBox, HelpRequestHdl));
+        short OnlineHelpBox = xQueryBox->run();
+        xQueryBox->hide();
+        if (OnlineHelpBox == RET_OK)
+        {
+            if (impl_showOnlineHelp( aHelpURL ) )
+                return true;
+            else
+            {
+                NoHelpErrorBox aErrBox(pWidget);
+                aErrBox.run();
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+    // old-help to display
+    Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
+
+    // check if help window is still open
+    // If not, create a new one and return access directly to the internal sub frame showing the help content
+    // search must be done here; search one desktop level could return an arbitrary frame
+    Reference< XFrame2 > xHelp(
+        xDesktop->findFrame( "OFFICE_HELP_TASK", FrameSearchFlag::CHILDREN),
+                               UNO_QUERY);
+    Reference< XFrame > xHelpContent = xDesktop->findFrame(
+        "OFFICE_HELP",
+        FrameSearchFlag::CHILDREN);
+
+    SfxHelpWindow_Impl* pHelpWindow = nullptr;
+    if (!xHelp.is())
+        pHelpWindow = impl_createHelp(xHelp, xHelpContent);
+    else
+        pHelpWindow = static_cast<SfxHelpWindow_Impl*>(VCLUnoHelper::GetWindow(xHelp->getComponentWindow()).get());
+    if (!xHelp.is() || !xHelpContent.is() || !pHelpWindow)
+        return false;
+
+    SAL_INFO("sfx.appl", "HelpId = " << aHelpURL);
+
+    pHelpWindow->SetHelpURL( aHelpURL );
+    pHelpWindow->loadHelpContent(aHelpURL);
+    if (!rKeyword.isEmpty())
+        pHelpWindow->OpenKeyword( rKeyword );
+
+    Reference < css::awt::XTopWindow > xTopWindow( xHelp->getContainerWindow(), UNO_QUERY );
+    if ( xTopWindow.is() )
+        xTopWindow->toFront();
+
+    return true;
 }
 
 OUString SfxHelp::CreateHelpURL(const OUString& aCommandURL, const OUString& rModuleName)
