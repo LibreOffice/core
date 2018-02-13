@@ -198,6 +198,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
         case FN_REPEAT_SEARCH:
         case FID_SEARCH_NOW:
         {
+            sal_uInt16 nMoveType = SwView::GetMoveType();
             {
                 if(FID_SEARCH_NOW == nSlot && !rReq.IsAPI())
                     SwView::SetMoveType(NID_SRCH_REP);
@@ -396,6 +397,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                         }
 #endif
                         m_bFound = false;
+                        SwView::SetMoveType(nMoveType);
                         return;
                     }
 
@@ -425,6 +427,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
 
             rReq.Done();
             m_eLastSearchCommand = m_pSrchItem->GetCommand();
+            SwView::SetMoveType(nMoveType);
         }
         break;
         case FID_SEARCH_SEARCHSET:
