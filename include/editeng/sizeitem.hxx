@@ -59,6 +59,11 @@ public:
 
     const Size& GetSize() const { return aSize; }
     void        SetSize(const Size& rSize) { aSize = rSize; }
+
+    long GetWidth() const { return aSize.getWidth();  }
+    long GetHeight() const { return aSize.getHeight(); }
+    void SetWidth(long n) { aSize.setWidth(n); }
+    void SetHeight(long n) { aSize.setHeight(n); }
 };
 
 inline SvxSizeItem& SvxSizeItem::operator=( const SvxSizeItem &rCpy )

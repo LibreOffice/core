@@ -19,6 +19,9 @@
 #ifndef INCLUDED_SW_INC_FMTFSIZE_HXX
 #define INCLUDED_SW_INC_FMTFSIZE_HXX
 
+#include <sal/config.h>
+
+#include <editeng/sizeitem.hxx>
 #include <tools/gen.hxx>
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"
@@ -38,9 +41,8 @@ enum SwFrameSize
                          (can be exceeded but not be less). */
 };
 
-class SW_DLLPUBLIC SwFormatFrameSize: public SfxPoolItem
+class SW_DLLPUBLIC SwFormatFrameSize: public SvxSizeItem
 {
-    Size      m_aSize;
     SwFrameSize m_eFrameHeightType;
     SwFrameSize m_eFrameWidthType;
     sal_uInt8 m_nWidthPercent;
@@ -59,12 +61,14 @@ class SW_DLLPUBLIC SwFormatFrameSize: public SfxPoolItem
     // the object is placed (PrtArea) and to the screen width
     // minus borders in BrowseView if the environment is the page.
 
+    void ScaleMetrics(long lMult, long lDiv) override;
+    bool HasMetrics() const override;
+
 public:
     SwFormatFrameSize( SwFrameSize eSize = ATT_VAR_SIZE,
                   SwTwips nWidth = 0, SwTwips nHeight = 0 );
     SwFormatFrameSize& operator=( const SwFormatFrameSize& rCpy );
 
-    /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -80,14 +84,6 @@ public:
 
     SwFrameSize GetWidthSizeType() const { return m_eFrameWidthType; }
     void SetWidthSizeType( SwFrameSize eSize ) { m_eFrameWidthType = eSize; }
-
-    const Size& GetSize() const { return m_aSize; }
-          void  SetSize( const Size &rNew ) { m_aSize = rNew; }
-
-    SwTwips GetHeight() const { return m_aSize.Height(); }
-    SwTwips GetWidth()  const { return m_aSize.Width();  }
-    void    SetHeight( const SwTwips nNew ) { m_aSize.Height() = nNew; }
-    void    SetWidth ( const SwTwips nNew ) { m_aSize.Width()  = nNew; }
 
     enum PercentFlags { SYNCED = 0xff };
     //0xff is reserved to indicate height is synced to width
