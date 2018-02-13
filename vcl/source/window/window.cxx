@@ -3139,6 +3139,9 @@ const OUString& Window::GetHelpText() const
         mpWindowImpl->mbHelpTextDynamic = false;
     }
 
+    //Fallback to Window::GetAccessibleDescription without reentry to GetHelpText()
+    if (mpWindowImpl->maHelpText.isEmpty() && mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pAccessibleDescription)
+        return *mpWindowImpl->mpAccessibleInfos->pAccessibleDescription;
     return mpWindowImpl->maHelpText;
 }
 
