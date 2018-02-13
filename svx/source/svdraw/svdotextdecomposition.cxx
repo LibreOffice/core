@@ -717,7 +717,7 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
 void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     drawinglayer::primitive2d::Primitive2DContainer& rTarget,
     const drawinglayer::primitive2d::SdrAutoFitTextPrimitive2D& rSdrAutofitTextPrimitive,
-    const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
+    const drawinglayer::geometry::ViewInformation2D& aViewInformation)
 {
     // decompose matrix to have position and size of text
     basegfx::B2DVector aScale, aTranslate;
