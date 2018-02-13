@@ -60,7 +60,8 @@ using namespace com::sun::star;
 
 struct ImpSwapFile
 {
-    INetURLObject   aSwapURL;
+    INetURLObject aSwapURL;
+    OUString maOriginURL;
     ~ImpSwapFile();
 };
 
@@ -1174,6 +1175,7 @@ bool ImpGraphic::ImplSwapOut()
                 {
                     mpSwapFile = o3tl::make_unique<ImpSwapFile>();
                     mpSwapFile->aSwapURL = aTmpURL;
+                    mpSwapFile->maOriginURL = getOriginURL();
                 }
                 else
                 {
@@ -1271,7 +1273,7 @@ bool ImpGraphic::ImplSwapIn()
 
                 bRet = ImplSwapIn( xIStm.get() );
                 xIStm.reset();
-
+                setOriginURL(mpSwapFile->maOriginURL);
                 mpSwapFile.reset();
             }
         }
