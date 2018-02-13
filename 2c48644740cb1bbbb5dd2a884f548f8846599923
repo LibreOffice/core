@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_e7c73810",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-13T12:10:32Z",
+      "side": 1,
+      "message": "What is missing here is that looking for unprotected cells should only be done if the caller says so, so the bUnprotected needs to be passed and evaluated before looking for protected flags and skipping such cells. Probably bSheetProtected is not needed then because it was evaluated by the caller and bUnprotected adjusted to false if the sheet is not protected.",
+      "revId": "2c48644740cb1bbbb5dd2a884f548f8846599923",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_87d91c86",
         "filename": "sc/source/core/data/table1.cxx",
         "patchSetId": 5
@@ -82,6 +99,46 @@
         "endLine": 1327,
         "endChar": 107
       },
+      "revId": "2c48644740cb1bbbb5dd2a884f548f8846599923",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_87691c28",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1334,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-13T12:10:32Z",
+      "side": 1,
+      "message": "I forgot to comment on this yesterday, this is not only unnecessary but (in other context) could also be dangerous.\n\n0. the sheet ScTable this function operates on is already pDocument-\u003emaTabs[nTab], trying to obtain that again is unnecessary.\n\n1. pDocument-\u003emaTabs[nTab]-\u003e should be avoided anyway because without a previous check maTabs[nTab] is not guaranteed to exist. Well, it does here because we are on it, but..\n\n2. ScTable::aCol[rCol] is also not guaranteed to exist, the column may be \"virtual\" (i.e. not physically existing because no data/attribution yet, which is a future feature, but we are preparing). Though in this context an existing column is operated on.",
+      "range": {
+        "startLine": 1334,
+        "startChar": 29,
+        "endLine": 1334,
+        "endChar": 65
+      },
+      "revId": "2c48644740cb1bbbb5dd2a884f548f8846599923",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e7601838",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-13T12:10:32Z",
+      "side": 1,
+      "message": "3. accessing private member ScColumn::pAttrArray is ugly and only possible because ScTable is friend for some reason, which should not be extended.\n\nIn other words, better implement a new function at ScColumn, something like\n\n bool GetProtectedRowSpan( SCROW\u0026 rStartRow, SCROW\u0026 rEndRow, SCROW nRow ) const;\n\nto obtain the first and last protected row of a range pointed into, returning false if nRow is not protected. See ScColumn::GetUnprotectedCells() for how to query the ScPatternAttr for the protection attribute.",
       "revId": "2c48644740cb1bbbb5dd2a884f548f8846599923",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
