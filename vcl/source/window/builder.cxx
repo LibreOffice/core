@@ -44,6 +44,7 @@
 #include <xmlreader/xmlreader.hxx>
 #include <desktop/crashreport.hxx>
 #include <strings.hrc>
+#include <tools/svlibrary.h>
 
 #ifdef DISABLE_DYNLOADING
 #include <dlfcn.h>
