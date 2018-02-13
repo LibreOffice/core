@@ -986,7 +986,7 @@ void ComboBox::SetDoubleClickHdl(const Link<ComboBox&,void>& rLink) { m_pImpl->m
 
 const Link<ComboBox&,void>& ComboBox::GetDoubleClickHdl() const { return m_pImpl->m_DoubleClickHdl; }
 
-long ComboBox::CalcWindowSizePixel( sal_uInt16 nLines ) const
+long ComboBox::CalcWindowSizePixel(sal_uInt16 nLines) const
 {
     return m_pImpl->m_pImplLB->GetEntryHeight() * nLines;
 }

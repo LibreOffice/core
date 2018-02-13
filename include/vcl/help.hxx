@@ -55,6 +55,10 @@ namespace o3tl
 
 #define OOO_HELP_INDEX          ".help:index"
 
+namespace weld
+{
+    class Widget;
+}
 
 class VCL_DLLPUBLIC Help
 {
@@ -62,7 +66,8 @@ public:
                         Help();
     virtual             ~Help();
 
-    virtual bool        Start( const OUString& rHelpId, const vcl::Window* pWindow );
+    virtual bool        Start(const OUString& rHelpId, const vcl::Window* pWindow);
+    virtual bool        Start(const OUString& rHelpId, weld::Widget* pWidget);
     virtual void        SearchKeyword( const OUString& rKeyWord );
     virtual OUString    GetHelpText( const OUString& aHelpURL, const vcl::Window* pWindow );
 

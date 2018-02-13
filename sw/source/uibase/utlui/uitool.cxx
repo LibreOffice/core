@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 #include <tools/datetime.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/stritem.hxx>
@@ -711,6 +712,19 @@ sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32
         ++nOffset;
     }
     return rToFill.InsertEntry(rEntry, nOffset);
+}
+
+void InsertStringSorted(const OUString& rEntry, weld::ComboBoxText& rToFill, int nOffset)
+{
+    CollatorWrapper& rCaseColl = ::GetAppCaseCollator();
+    const int nCount = rToFill.get_count();
+    while (nOffset < nCount)
+    {
+        if (0 < rCaseColl.compareString(rToFill.get_text(nOffset), rEntry))
+            break;
+        ++nOffset;
+    }
+    rToFill.insert_text(nOffset, rEntry);
 }
 
 void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bool bWithDefault)
