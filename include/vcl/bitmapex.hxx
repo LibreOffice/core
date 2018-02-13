@@ -446,6 +446,9 @@ public:
                             const Size &rSize );
 
     void                setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );
+
+    void                AdjustTransparency( sal_uInt8 cTrans );
+
 public:
 
     SAL_DLLPRIVATE  std::shared_ptr<ImpBitmap>  ImplGetBitmapImpBitmap() const { return aBitmap.ImplGetImpBitmap(); }
