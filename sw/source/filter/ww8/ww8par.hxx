@@ -1198,6 +1198,11 @@ private:
     */
     std::vector<const SwCharFormat*> m_aRubyCharFormats;
 
+    /*
+    For fuzzing keep track of source offset of inserted graphics
+    */
+    std::set<sal_uLong> m_aGrafPosSet;
+
     WW8PostProcessAttrsInfo * m_pPostProcessAttrsInfo;
 
     std::shared_ptr<WW8Fib> m_xWwFib;
