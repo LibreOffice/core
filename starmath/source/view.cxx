@@ -1295,7 +1295,7 @@ void SmViewShell::SetStatusText(const OUString& rText)
 void SmViewShell::ShowError(const SmErrorDesc* pErrorDesc)
 {
     assert(GetDoc());
-    if (pErrorDesc || nullptr != (pErrorDesc = GetDoc()->GetParser().GetError(0)) )
+    if (pErrorDesc || nullptr != (pErrorDesc = GetDoc()->GetParser().GetError()) )
     {
         SetStatusText( pErrorDesc->m_aText );
         GetEditWindow()->MarkError( Point( pErrorDesc->m_pNode->GetColumn(),
