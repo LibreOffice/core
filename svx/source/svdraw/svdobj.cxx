@@ -843,7 +843,7 @@ const tools::Rectangle& SdrObject::GetLastBoundRect() const
 void SdrObject::RecalcBoundRect()
 {
     // #i101680# suppress BoundRect calculations on import(s)
-    if(pModel && pModel->isLocked())
+    if ((pModel && pModel->isLocked()) || utl::ConfigManager::IsFuzzing())
         return;
 
     // central new method which will calculate the BoundRect using primitive geometry
@@ -873,7 +873,7 @@ void SdrObject::RecalcBoundRect()
 
 void SdrObject::BroadcastObjectChange() const
 {
-    if( pModel && pModel->isLocked() )
+    if ((pModel && pModel->isLocked()) || utl::ConfigManager::IsFuzzing())
         return;
 
     if (mbDelayBroadcastObjectChange)
