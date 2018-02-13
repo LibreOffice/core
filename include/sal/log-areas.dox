@@ -229,6 +229,7 @@ certain functionality.
 @li @c filter.os2met
 @li @c filter.pdf
 @li @c filter.pict
+@li @c filter.ras
 @li @c filter.svg
 @li @c filter.tiff
 @li @c filter.xmlfa
