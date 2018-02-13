@@ -307,7 +307,7 @@ class SW_DLLPUBLIC SwDoc final
     // Hash map to find numrules by name
     mutable std::unordered_map<OUString, SwNumRule *> maNumRuleMap;
 
-    SwPagePreviewPrtData *mpPgPViewPrtData;        //< Indenting / spacing for printing of page view.
+    std::unique_ptr<SwPagePreviewPrtData> m_pPgPViewPrtData; //< Indenting / spacing for printing of page view.
     SwPaM           *mpExtInputRing;
 
     IStyleAccess    *mpStyleAccess;                //< handling of automatic styles
@@ -1446,7 +1446,7 @@ public:
     void ClearDoc();        // Deletes all content!
 
     // Query /set data for PagePreview.
-    const SwPagePreviewPrtData* GetPreviewPrtData() const { return mpPgPViewPrtData; }
+    const SwPagePreviewPrtData* GetPreviewPrtData() const { return m_pPgPViewPrtData.get(); }
 
     // If pointer == 0 destroy pointer in document.
     // Else copy object.

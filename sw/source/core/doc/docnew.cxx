@@ -252,7 +252,6 @@ SwDoc::SwDoc()
     mpURLStateChgd( nullptr ),
     mpNumberFormatter( nullptr ),
     mpNumRuleTable( new SwNumRuleTable ),
-    mpPgPViewPrtData( nullptr ),
     mpExtInputRing( nullptr ),
     mpStyleAccess( nullptr ),
     mpLayoutCache( nullptr ),
@@ -406,7 +405,7 @@ SwDoc::~SwDoc()
         ClrContourCache();
     }
 
-    delete mpPgPViewPrtData;
+    m_pPgPViewPrtData.reset();
 
     mbDtor = true;
 
@@ -752,13 +751,19 @@ void SwDoc::SetPreviewPrtData( const SwPagePreviewPrtData* pNew )
 {
     if( pNew )
     {
-        if( mpPgPViewPrtData )
-            *mpPgPViewPrtData = *pNew;
+        if (m_pPgPViewPrtData)
+        {
+            *m_pPgPViewPrtData = *pNew;
+        }
         else
-            mpPgPViewPrtData = new SwPagePreviewPrtData( *pNew );
+        {
+            m_pPgPViewPrtData.reset(new SwPagePreviewPrtData(*pNew));
+        }
     }
-    else if( mpPgPViewPrtData )
-        DELETEZ( mpPgPViewPrtData );
+    else if (m_pPgPViewPrtData)
+    {
+        m_pPgPViewPrtData.reset();
+    }
     getIDocumentState().SetModified();
 }
 
