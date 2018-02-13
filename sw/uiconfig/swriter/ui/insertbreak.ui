@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.2 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -104,6 +104,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">pagerb</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="linerb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|linerb-atkobject">Ends the current line, and moves the text found to the right of the cursor to the next line, without creating a new paragraph.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -120,6 +125,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">pagerb</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="columnrb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|columnrb-atkobject">Inserts a manual column break (in a multiple column layout), and moves the text found to the right of the cursor to the beginning of the next column. A manual column break is indicated by a nonprinting border at the top of the new column.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -136,6 +146,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="pagerb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|pagerb-atkobject">Inserts a manual page break, and moves the text found to the right of the cursor to the beginning of the next page. The inserted page break is indicated by a nonprinting border at the top of the new page.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -167,6 +182,11 @@
                         <items>
                           <item translatable="yes" context="insertbreak|liststore1">[None]</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="stylelb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|stylelb-atkobject">Select the page style for the page that follows the manual page break.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -183,6 +203,11 @@
                         <property name="margin_top">6</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="pagenumcb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|pagenumcb-atkobject">Assigns the page number that you specify to the page that follows the manual page break. This option is only available if you assign a different page style to the page that follows manual page break.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -202,7 +227,7 @@
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="pagenumsb-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="insertbreak|pagenumsb-atkobject">Change page number</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|pagenumsb-atkobject">Enter the new page number for the page that follows the manual page break.</property>
                           </object>
                         </child>
                       </object>
