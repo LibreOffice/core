@@ -310,11 +310,11 @@ class CheckTable(unittest.TestCase):
         xTable.ChartColumnAsLabel = False
         xTable.ChartRowAsLabel = False
         # roundtrip
-        xTable.Data = ((y for y in range(3*x+1,3*x+4)) for x in range(4))
+        xTable.Data = ((1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12))
         self.assertEqual(xTable.Data, ((1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12)))
         # missing row
         with self.assertRaises(Exception):
-            xTable.Data = ((y for y in range(3*x+1,3*x+4)) for x in range(3))
+            xTable.Data = ((1, 2, 3), (4, 5, 6), (7, 8, 9))
         # missing column
         with self.assertRaises(Exception):
             xTable.Data = ((1, 2), (4, 5), (7, 8), (10, 11))
@@ -342,7 +342,7 @@ class CheckTable(unittest.TestCase):
         xDoc.Text.insertTextContent(xCursor, xTable, False)
         xTable.ChartColumnAsLabel = False
         xTable.ChartRowAsLabel = False
-        xTable.Data = ((y for y in range(3*x+1,3*x+4)) for x in range(4))
+        xTable.Data = ((1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12))
         xRows = xTable.Rows
         self.assertEqual(xRows.ImplementationName, 'SwXTableRows')
         self.assertTrue(xRows.supportsService('com.sun.star.text.TableRows'))
@@ -369,7 +369,7 @@ class CheckTable(unittest.TestCase):
         xDoc.Text.insertTextContent(xCursor, xTable, False)
         xTable.ChartColumnAsLabel = False
         xTable.ChartRowAsLabel = False
-        xTable.Data = ((y for y in range(3*x+1,3*x+4)) for x in range(4))
+        xTable.Data = ((1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12))
         xRows = xTable.Rows
         xRows.insertByIndex(1, 2)
         nan = float('nan')
@@ -411,7 +411,7 @@ class CheckTable(unittest.TestCase):
         xDoc.Text.insertTextContent(xCursor, xTable, False)
         xTable.ChartColumnAsLabel = False
         xTable.ChartRowAsLabel = False
-        xTable.Data = ((y for y in range(3*x+1,3*x+4)) for x in range(4))
+        xTable.Data = ((1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12))
         self.assertTrue(xTable.Name == 'Table1')
         self.assertIn('com.sun.star.text.GenericTextDocument', xDoc.SupportedServiceNames)
         xChartdataprovider = xDoc.createInstance('com.sun.star.chart2.data.DataProvider')
@@ -568,7 +568,8 @@ class CheckTable(unittest.TestCase):
         xDoc.Text.insertTextContent(xCursor, xTable, False)
         xTable.ChartColumnAsLabel = False
         xTable.ChartRowAsLabel = False
-        xTable.Data = ((y for y in range(3*x+1,3*x+4)) for x in range(4))
+        xTable.Data = ((1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12))
+
         xChartDataProvider = xDoc.createInstance('com.sun.star.chart2.data.DataProvider')
 
         self.assertEqual('', xChartDataProvider.convertRangeToXML(''))
@@ -607,7 +608,7 @@ class CheckTable(unittest.TestCase):
         xText = xDoc.getText()
         xCursor = xText.createTextCursor()
         xText.insertTextContent(xCursor, xTable, False)
-        xTable.Data = ((y for y in range(3*x+1,3*x+4)) for x in range(3))
+        xTable.Data = ((1, 2, 3), (4, 5, 6), (7, 8, 9))
         xCursor = xTable.createCursorByCellName("A1")
         xCursor.goDown(1, True)
         xCursor.mergeRange()
