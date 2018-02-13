@@ -1322,4 +1322,59 @@ void BitmapEx::setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
         }
     }
 }
+
+void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
+{
+    AlphaMask   aAlpha;
+
+    if( !IsTransparent() )
+        aAlpha = AlphaMask( GetSizePixel(), &cTrans );
+    else if( !IsAlpha() )
+    {
+        aAlpha = GetMask();
+        aAlpha.Replace( 0, cTrans );
+    }
+    else
+    {
+        aAlpha = GetAlpha();
+        Bitmap::ScopedWriteAccess pA(aAlpha);
+        assert(pA);
+
+        if( !pA )
+            return;
+
+        sal_uLong       nTrans = cTrans, nNewTrans;
+        const long  nWidth = pA->Width(), nHeight = pA->Height();
+
+        if( pA->GetScanlineFormat() == ScanlineFormat::N8BitPal )
+        {
+            for( long nY = 0; nY < nHeight; nY++ )
+            {
+                Scanline pAScan = pA->GetScanline( nY );
+
+                for( long nX = 0; nX < nWidth; nX++ )
+                {
+                    nNewTrans = nTrans + *pAScan;
+                    *pAScan++ = static_cast<sal_uInt8>( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans );
+                }
+            }
+        }
+        else
+        {
+            BitmapColor aAlphaValue( 0 );
+
+            for( long nY = 0; nY < nHeight; nY++ )
+            {
+                Scanline pScanline = pA->GetScanline( nY );
+                for( long nX = 0; nX < nWidth; nX++ )
+                {
+                    nNewTrans = nTrans + pA->GetIndexFromData( pScanline, nX );
+                    aAlphaValue.SetIndex( static_cast<sal_uInt8>( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans ) );
+                    pA->SetPixelOnData( pScanline, nX, aAlphaValue );
+                }
+            }
+        }
+    }
+    *this = BitmapEx( GetBitmap(), aAlpha );
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
