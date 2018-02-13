@@ -220,6 +220,22 @@ bool RASReader::ImplReadHeader()
     return mbStatus;
 }
 
+namespace
+{
+    const Color& SanitizePaletteIndex(std::vector<Color> const & rvPalette, sal_uInt8 nIndex)
+    {
+        if (nIndex >= rvPalette.size())
+        {
+            auto nSanitizedIndex = nIndex % rvPalette.size();
+            SAL_WARN_IF(nIndex != nSanitizedIndex, "filter", "invalid colormap index: "
+                        << static_cast<unsigned int>(nIndex) << ", colormap len is: "
+                        << rvPalette.size());
+            nIndex = nSanitizedIndex;
+        }
+        return rvPalette[nIndex];
+    }
+}
+
 bool RASReader::ImplReadBody(vcl::bitmap::RawBitmap& rBitmap, std::vector<Color> const & rvPalette)
 {
     sal_Int32 x, y;
@@ -239,9 +255,9 @@ bool RASReader::ImplReadBody(vcl::bitmap::RawBitmap& rBitmap, std::vector<Color>
                         if (!m_rRAS.good())
                             mbStatus = false;
                     }
-                    rBitmap.SetPixel(y, x, rvPalette[
+                    rBitmap.SetPixel(y, x, SanitizePaletteIndex(rvPalette,
                         sal::static_int_cast< sal_uInt8 >(
-                            nDat >> ( ( x & 7 ) ^ 7 ))] );
+                            nDat >> ( ( x & 7 ) ^ 7 ))));
                 }
                 if (!( ( x - 1 ) & 0x8 ) )
                 {
@@ -259,7 +275,7 @@ bool RASReader::ImplReadBody(vcl::bitmap::RawBitmap& rBitmap, std::vector<Color>
                 for (x = 0; x < mnWidth && mbStatus; ++x)
                 {
                     sal_uInt8 nDat = ImplGetByte();
-                    rBitmap.SetPixel(y, x, rvPalette[nDat]);
+                    rBitmap.SetPixel(y, x, SanitizePaletteIndex(rvPalette, nDat));
                     if (!m_rRAS.good())
                         mbStatus = false;
                 }
