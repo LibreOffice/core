@@ -1339,8 +1339,8 @@ Size SvxPathControl::GetOptimalSize() const
     Size aDefSize(LogicToPixel(Size(150, 0), MapMode(MapUnit::MapAppFont)));
     Size aOptSize(m_pVBox->GetOptimalSize());
     long nRowHeight(GetTextHeight());
-    aOptSize.Height() = nRowHeight * 10;
-    aOptSize.Width() = std::max(aDefSize.Width(), aOptSize.Width());
+    aOptSize.setHeight( nRowHeight * 10 );
+    aOptSize.setWidth( std::max(aDefSize.Width(), aOptSize.Width()) );
     return aOptSize;
 }
 
@@ -1434,7 +1434,7 @@ IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
         for ( sal_uInt16 i = 1; i <= nTabs; ++i )
         {
             long nW = m_pHeaderBar->GetItemSize(i);
-            aSz.Width() =  nW + nTmpSz;
+            aSz.setWidth(  nW + nTmpSz );
             nTmpSz += nW;
             SetTab( i, PixelToLogic( aSz, MapMode(MapUnit::MapAppFont) ).Width() );
         }

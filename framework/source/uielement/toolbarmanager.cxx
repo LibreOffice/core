@@ -1563,7 +1563,7 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar, void )
 
     ::Size aActSize( pOverflowToolBar->GetSizePixel() );
     ::Size aSize( pOverflowToolBar->CalcWindowSizePixel() );
-    aSize.Width() = aActSize.Width();
+    aSize.setWidth( aActSize.Width() );
     pOverflowToolBar->SetOutputSizePixel( aSize );
 
     aSize = pOverflowToolBar->CalcPopupWindowSizePixel();

@@ -63,7 +63,7 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
     sal_uInt16 nCount = GetImageCount();
     if( !nCount )
         return BitmapEx();
-    aSize.Width() *= nCount;
+    aSize.setWidth( aSize.Width() * nCount );
 
     // Load any stragglers
     for (sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++)
@@ -106,7 +106,7 @@ void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
     Size aSize( rBitmapEx.GetSizePixel() );
     DBG_ASSERT (rBitmapEx.GetSizePixel().Width() % nItems == 0,
                 "ImageList::InsertFromHorizontalStrip - very odd size");
-    aSize.Width() /= nItems;
+    aSize.setWidth( aSize.Width() / nItems );
     ImplInit( nItems, aSize );
 
     for (sal_uInt16 nIdx = 0; nIdx < nItems; nIdx++)

@@ -391,7 +391,7 @@ public:
 
         // Resize the Splitter to fit the height
         Size splitterNewSize = _pSplitter->GetSizePixel( );
-        splitterNewSize.Height() = aSize.Height();
+        splitterNewSize.setHeight( aSize.Height() );
         _pSplitter->SetSizePixel( splitterNewSize );
         sal_Int32 nMinX = pImpl->_pPlaces->GetPosPixel( ).X( );
         sal_Int32 nMaxX = _pFileView->GetPosPixel( ).X( ) + _pFileView->GetSizePixel( ).Width() - nMinX;
@@ -399,7 +399,7 @@ public:
 
         // Resize the places list box to fit the height of the FileView
         Size placesNewSize(pImpl->_pPlaces->GetSizePixel());
-        placesNewSize.Height() = aSize.Height();
+        placesNewSize.setHeight( aSize.Height() );
         pImpl->_pPlaces->SetSizePixel( placesNewSize );
     }
 
@@ -2746,16 +2746,16 @@ IMPL_LINK_NOARG( SvtFileDialog, Split_Hdl, Splitter*, void )
     // Resize the places list
     sal_Int32 nPlaceX = pImpl->_pPlaces->GetPosPixel( ).X();
     Size placeSize = pImpl->_pPlaces->GetSizePixel( );
-    placeSize.Width() = nSplitPos - nPlaceX;
+    placeSize.setWidth( nSplitPos - nPlaceX );
     pImpl->_pPlaces->SetSizePixel( placeSize );
 
     // Change Pos and size of the fileview
     Point fileViewPos = _pFileView->GetPosPixel();
     sal_Int32 nOldX = fileViewPos.X();
     sal_Int32 nNewX = nSplitPos + _pSplitter->GetSizePixel().Width();
-    fileViewPos.X() = nNewX;
+    fileViewPos.setX( nNewX );
     Size fileViewSize = _pFileView->GetSizePixel();
-    fileViewSize.Width() -= ( nNewX - nOldX );
+    fileViewSize.setWidth( fileViewSize.Width() - ( nNewX - nOldX ) );
     _pFileView->SetPosSizePixel( fileViewPos, fileViewSize );
 
     _pSplitter->SetPosPixel( Point( placeSize.Width(), _pSplitter->GetPosPixel().Y() ) );

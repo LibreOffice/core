@@ -1140,7 +1140,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                         MapMode aMapMode( aSubstitute.GetPrefMapMode() );
                         Size aOutSize( OutputDevice::LogicToLogic( aSize, rVDev.GetMapMode(), aMapMode ) );
                         Point aOrigin( OutputDevice::LogicToLogic( aPoint, rVDev.GetMapMode(), aMapMode ) );
-                        aOrigin.Y() += aOutSize.Height();
+                        aOrigin.setY( aOrigin.Y() + aOutSize.Height() );
                         aMapMode.SetOrigin( aOrigin );
                         aMapMode.SetScaleX( Fraction(aOutSize.Width() / ( nBoundingBox[ 2 ] - nBoundingBox[ 0 ] )) );
                         aMapMode.SetScaleY( Fraction(aOutSize.Height() / ( nBoundingBox[ 3 ] - nBoundingBox[ 1 ] )) );
@@ -1182,8 +1182,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                 {
                     aTmpMtf.Scale( fScaleX, fScaleY );
-                    aSrcPt.X() = FRound( aSrcPt.X() * fScaleX );
-                    aSrcPt.Y() = FRound( aSrcPt.Y() * fScaleY );
+                    aSrcPt.setX( FRound( aSrcPt.X() * fScaleX ) );
+                    aSrcPt.setY( FRound( aSrcPt.Y() * fScaleY ) );
                 }
 
                 nMoveX = aDestPt.X() - aSrcPt.X();
@@ -1949,7 +1949,7 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
         if ( nHeightLeft )
         {
             nHeightLeft++;
-            aSourcePos.Y() = static_cast<long>( rPoint.Y() + ( nYHeightOrg * ( nHeightOrg - nHeightLeft ) ) / nHeightOrg );
+            aSourcePos.setY( static_cast<long>( rPoint.Y() + ( nYHeightOrg * ( nHeightOrg - nHeightLeft ) ) / nHeightOrg ) );
         }
     }
 }
@@ -2083,9 +2083,9 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
     if ( eTextAlign != ALIGN_BASELINE )
     {                                                       // PostScript does not know about FontAlignment
         if ( eTextAlign == ALIGN_TOP )                      // -> so I assume that
-            aPoint.Y() += ( aSize.Height() * 4 / 5 );       // the area under the baseline
+            aPoint.setY( aPoint.Y() + ( aSize.Height() * 4 / 5 ) );       // the area under the baseline
         else if ( eTextAlign == ALIGN_BOTTOM )              // is about 20% of the font size
-            aPoint.Y() -= ( aSize.Height() / 5 );
+            aPoint.setY( aPoint.Y() - ( aSize.Height() / 5 ) );
     }
     ImplMoveTo( aPoint );
     if ( nRotation )

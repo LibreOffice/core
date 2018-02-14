@@ -283,11 +283,11 @@ SvStream& ReadPptDocumentAtom(SvStream& rIn, PptDocumentAtom& rAtom)
        .ReadSChar( nShowComments );
     // clamp dodgy data to avoid overflow in later calculations
     const sal_Int32 nPageClamp = SAL_MAX_INT32/5;
-    rAtom.aSlidesPageSize.Width() = basegfx::clamp<sal_Int32>(nSlideX, -nPageClamp, nPageClamp);
-    rAtom.aSlidesPageSize.Height() = basegfx::clamp<sal_Int32>(nSlideY, -nPageClamp, nPageClamp);
+    rAtom.aSlidesPageSize.setWidth( basegfx::clamp<sal_Int32>(nSlideX, -nPageClamp, nPageClamp) );
+    rAtom.aSlidesPageSize.setHeight( basegfx::clamp<sal_Int32>(nSlideY, -nPageClamp, nPageClamp) );
     const sal_Int32 nNoteClamp = 65536;
-    rAtom.aNotesPageSize.Width() = basegfx::clamp<sal_Int32>(nNoticeX, -nNoteClamp, nNoteClamp);
-    rAtom.aNotesPageSize.Height() = basegfx::clamp<sal_Int32>(nNoticeY, -nNoteClamp, nNoteClamp);
+    rAtom.aNotesPageSize.setWidth( basegfx::clamp<sal_Int32>(nNoticeX, -nNoteClamp, nNoteClamp) );
+    rAtom.aNotesPageSize.setHeight( basegfx::clamp<sal_Int32>(nNoticeY, -nNoteClamp, nNoteClamp) );
     rAtom.eSlidesPageFormat = static_cast<PptPageFormat>(nSlidePageFormat);
     rAtom.bEmbeddedTrueType = nEmbeddedTrueType;
     rAtom.bTitlePlaceholdersOmitted = nTitlePlaceHoldersOmitted;
@@ -1143,8 +1143,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                 if ( eTVA == SDRTEXTVERTADJUST_BLOCK )
                                 {
                                     Size aTextSize( pText->GetTextSize() );
-                                    aTextSize.Width() += nTextLeft + nTextRight;
-                                    aTextSize.Height() += nTextTop + nTextBottom;
+                                    aTextSize.setWidth( aTextSize.Width() + nTextLeft + nTextRight );
+                                    aTextSize.setHeight( aTextSize.Height() + nTextTop + nTextBottom );
                                     if ( rTextRect.GetHeight() < aTextSize.Height() )
                                         pTObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
                                 }
@@ -1154,8 +1154,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                 if ( eTHA == SDRTEXTHORZADJUST_BLOCK )
                                 {
                                     Size aTextSize( pText->GetTextSize() );
-                                    aTextSize.Width() += nTextLeft + nTextRight;
-                                    aTextSize.Height() += nTextTop + nTextBottom;
+                                    aTextSize.setWidth( aTextSize.Width() + nTextLeft + nTextRight );
+                                    aTextSize.setHeight( aTextSize.Height() + nTextTop + nTextBottom );
                                     if ( rTextRect.GetWidth() < aTextSize.Width() )
                                         pTObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_CENTER ) );
                                 }
@@ -2500,15 +2500,15 @@ Size SdrPowerPointImport::GetPageSize() const
             Fraction aFact(GetMapFactor(eMap,MapUnit::Map100thMM).X());
             nInchMul = aFact.GetNumerator();
             nInchDiv = aFact.GetDenominator();
-            aRet.Width() = BigMulDiv( aRet.Width(), nInchMul, nInchDiv );
-            aRet.Height() = BigMulDiv( aRet.Height(), nInchMul, nInchDiv );
+            aRet.setWidth( BigMulDiv( aRet.Width(), nInchMul, nInchDiv ) );
+            aRet.setHeight( BigMulDiv( aRet.Height(), nInchMul, nInchDiv ) );
         }
-        aRet.Width() += 5; aRet.Width() /= 10; aRet.Width()*=10;
-        aRet.Height() += 5; aRet.Height() /= 10; aRet.Height()*=10;
+        aRet.setWidth( aRet.Width() + 5 ); aRet.setWidth( aRet.Width() / 10 ); aRet.setWidth( aRet.Width() * 10 );
+        aRet.setHeight( aRet.Height() + 5 ); aRet.setHeight( aRet.Height() / 10 ); aRet.setHeight( aRet.Height() * 10 );
         if ( bInch )
         {
-            aRet.Width() = BigMulDiv( aRet.Width(), nInchDiv, nInchMul );
-            aRet.Height() = BigMulDiv( aRet.Height(), nInchDiv, nInchMul );
+            aRet.setWidth( BigMulDiv( aRet.Width(), nInchDiv, nInchMul ) );
+            aRet.setHeight( BigMulDiv( aRet.Height(), nInchDiv, nInchMul ) );
         }
     }
     return aRet;
@@ -5673,7 +5673,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
                         if ( aSize.Width () > 64 )
                             aSize.Width () = 64;
                         if ( aSize.Height() > 64 )
-                            aSize.Height() = 64;
+                            aSize.setHeight( 64 );
 
                         Bitmap::ScopedReadAccess pAcc(aBmp);
                         if( pAcc )

@@ -2020,8 +2020,8 @@ bool EscherPropertyContainer::CreatePolygonProperties(
                 for (sal_uInt16 i = 0; i < nPoints; ++i)             // write points from polygon to buffer
                 {
                     Point aPoint = aPolygon[ i ];
-                    aPoint.X() -= rGeoRect.X;
-                    aPoint.Y() -= rGeoRect.Y;
+                    aPoint.setX( aPoint.X() - rGeoRect.X );
+                    aPoint.setY( aPoint.Y() - rGeoRect.Y );
 
                     *pPtr++ = static_cast<sal_uInt8>( aPoint.X() );
                     *pPtr++ = static_cast<sal_uInt8>( aPoint.X() >> 8 );
@@ -2128,9 +2128,9 @@ sal_Int32 lcl_GetConnectorAdjustValue ( const XPolygon& rPoly, sal_uInt16 nIndex
     Point aStart = rPoly[0];
     Point aEnd = rPoly[k-1];
     if ( aEnd.Y() == aStart.Y() )
-        aEnd.Y() = aStart.Y() +4;
+        aEnd.setY( aStart.Y() +4 );
     if ( aEnd.X() == aStart.X() )
-        aEnd.X() = aStart.X() +4;
+        aEnd.setX( aStart.X() +4 );
 
     bool bVertical = ( rPoly[1].X()-aStart.X() ) == 0 ;
     // vertical and horizon alternate
@@ -2179,8 +2179,8 @@ void lcl_Rotate(sal_Int32 nAngle, Point center, Point& pt)
     }
     sal_Int32 x0 =pt.X()-center.X();
     sal_Int32 y0 =pt.Y()-center.Y();
-    pt.X()=center.X()+ x0*cs-y0*sn;
-    pt.Y()=center.Y()+ y0*cs+x0*sn;
+    pt.setX(center.X()+ x0*cs-y0*sn );
+    pt.setY(center.Y()+ y0*cs+x0*sn );
 }
 /*
  FlipV defines that the shape will be flipped vertically about the center of its bounding box.

@@ -409,8 +409,8 @@ namespace frm
         // the size of the viewport - note that the viewport does *not* occupy all the place
         // which is left when subtracting the scrollbar width/height
         Size aViewportPlaygroundPixel( aPlaygroundSizePixel );
-        aViewportPlaygroundPixel.Width() = ::std::max( long( 10 ), long( aViewportPlaygroundPixel.Width() - nScrollBarWidth ) );
-        aViewportPlaygroundPixel.Height() = ::std::max( long( 10 ), long( aViewportPlaygroundPixel.Height() - nScrollBarHeight ) );
+        aViewportPlaygroundPixel.setWidth( ::std::max( long( 10 ), long( aViewportPlaygroundPixel.Width() - nScrollBarWidth ) ) );
+        aViewportPlaygroundPixel.setHeight( ::std::max( long( 10 ), long( aViewportPlaygroundPixel.Height() - nScrollBarHeight ) ) );
         Size aViewportPlaygroundLogic( m_pViewport->PixelToLogic( aViewportPlaygroundPixel ) );
 
         const long nOffset = 2;
@@ -545,10 +545,10 @@ namespace frm
     {
         void lcl_inflate( tools::Rectangle& _rRect, long _nInflateX, long _nInflateY )
         {
-            _rRect.Left() -= _nInflateX;
-            _rRect.Right() += _nInflateX;
-            _rRect.Top() -= _nInflateY;
-            _rRect.Bottom() += _nInflateY;
+            _rRect.SetLeft( _rRect.Left() - _nInflateX );
+            _rRect.SetRight( _rRect.Right() + _nInflateX );
+            _rRect.SetTop( _rRect.Top() - _nInflateY );
+            _rRect.SetBottom( _rRect.Bottom() + _nInflateY );
         }
     }
 
@@ -594,8 +594,8 @@ namespace frm
 
         tools::Rectangle aPlayground( aPos, aSize );
         Size aOnePixel( _pDev->PixelToLogic( Size( 1, 1 ) ) );
-        aPlayground.Right() -= aOnePixel.Width();
-        aPlayground.Bottom() -= aOnePixel.Height();
+        aPlayground.SetRight( aPlayground.Right() - aOnePixel.Width() );
+        aPlayground.SetBottom( aPlayground.Bottom() - aOnePixel.Height() );
 
         // background
         _pDev->SetLineColor();
