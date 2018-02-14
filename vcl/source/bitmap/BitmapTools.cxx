@@ -26,6 +26,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmapaccess.hxx>
+#if ENABLE_CAIRO_CANVAS
+#include <cairo.h>
+#endif
 
 using namespace css;
 
@@ -198,6 +201,80 @@ BitmapEx CreateFromData( RawBitmap&& rawBitmap )
     }
     return aBmp;
 }
+
+#if ENABLE_CAIRO_CANVAS
+BitmapEx* CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
+{
+    // FIXME: if we could teach VCL/ about cairo handles, life could
+    // be significantly better here perhaps.
+    cairo_surface_t *pPixels = cairo_image_surface_create( CAIRO_FORMAT_ARGB32,
+                                              aSize.Width(), aSize.Height() );
+    cairo_t *pCairo = cairo_create( pPixels );
+    if( !pPixels || !pCairo || cairo_status(pCairo) != CAIRO_STATUS_SUCCESS )
+        return nullptr;
+
+    // suck ourselves from the X server to this buffer so then we can fiddle with
+    // Alpha to turn it into the ultra-lame vcl required format and then push it
+    // all back again later at vast expense [ urgh ]
+    cairo_set_source_surface( pCairo, pSurface, 0, 0 );
+    cairo_set_operator( pCairo, CAIRO_OPERATOR_SOURCE );
+    cairo_paint( pCairo );
+
+    ::Bitmap aRGB( aSize, 24 );
+    ::AlphaMask aMask( aSize );
+
+    Bitmap::ScopedWriteAccess pRGBWrite(aRGB);
+    assert(pRGBWrite);
+    if (!pRGBWrite)
+        return nullptr;
+
+    AlphaMask::ScopedWriteAccess pMaskWrite(aMask);
+    assert(pMaskWrite);
+    if (!pMaskWrite)
+        return nullptr;
+
+    cairo_surface_flush(pPixels);
+    unsigned char *pSrc = cairo_image_surface_get_data( pPixels );
+    unsigned int nStride = cairo_image_surface_get_stride( pPixels );
+    for( unsigned long y = 0; y < static_cast<unsigned long>(aSize.Height()); y++ )
+    {
+        sal_uInt32 *pPix = reinterpret_cast<sal_uInt32 *>(pSrc + nStride * y);
+        for( unsigned long x = 0; x < static_cast<unsigned long>(aSize.Width()); x++ )
+        {
+#if defined OSL_BIGENDIAN
+            sal_uInt8 nB = (*pPix >> 24);
+            sal_uInt8 nG = (*pPix >> 16) & 0xff;
+            sal_uInt8 nR = (*pPix >> 8) & 0xff;
+            sal_uInt8 nAlpha = *pPix & 0xff;
+#else
+            sal_uInt8 nAlpha = (*pPix >> 24);
+            sal_uInt8 nR = (*pPix >> 16) & 0xff;
+            sal_uInt8 nG = (*pPix >> 8) & 0xff;
+            sal_uInt8 nB = *pPix & 0xff;
+#endif
+            if( nAlpha != 0 && nAlpha != 255 )
+            {
+                // Cairo uses pre-multiplied alpha - we do not => re-multiply
+                nR = static_cast<sal_uInt8>(MinMax( (static_cast<sal_uInt32>(nR) * 255) / nAlpha, 0, 255 ));
+                nG = static_cast<sal_uInt8>(MinMax( (static_cast<sal_uInt32>(nG) * 255) / nAlpha, 0, 255 ));
+                nB = static_cast<sal_uInt8>(MinMax( (static_cast<sal_uInt32>(nB) * 255) / nAlpha, 0, 255 ));
+            }
+            pRGBWrite->SetPixel( y, x, BitmapColor( nR, nG, nB ) );
+            pMaskWrite->SetPixelIndex( y, x, 255 - nAlpha );
+            pPix++;
+        }
+    }
+
+    // ignore potential errors above. will get caller a
+    // uniformly white bitmap, but not that there would
+    // be error handling in calling code ...
+    ::BitmapEx *pBitmapEx = new ::BitmapEx( aRGB, aMask );
+
+    cairo_destroy( pCairo );
+    cairo_surface_destroy( pPixels );
+    return pBitmapEx;
+}
+#endif
 
 }} // end vcl::bitmap
 
