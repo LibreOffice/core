@@ -834,8 +834,8 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
                                                    pDXF->aBoundingBox.fMaxY*fScale,
                                                   -pDXF->aBoundingBox.fMinZ*fScale));
             }
-            aPrefSize.Width() =static_cast<long>(fWidth*fScale+1.5);
-            aPrefSize.Height()=static_cast<long>(fHeight*fScale+1.5);
+            aPrefSize.setWidth(static_cast<long>(fWidth*fScale+1.5) );
+            aPrefSize.setHeight(static_cast<long>(fHeight*fScale+1.5) );
         }
     }
     else {
@@ -856,8 +856,8 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
                 )
             );
         }
-        aPrefSize.Width() =static_cast<long>(fWidth*fScale+1.5);
-        aPrefSize.Height()=static_cast<long>(fHeight*fScale+1.5);
+        aPrefSize.setWidth(static_cast<long>(fWidth*fScale+1.5) );
+        aPrefSize.setHeight(static_cast<long>(fHeight*fScale+1.5) );
     }
 
     if (bStatus)

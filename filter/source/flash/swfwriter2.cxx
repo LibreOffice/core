@@ -438,8 +438,8 @@ sal_uInt16 FlashFont::getGlyph( sal_uInt16 nChar, VirtualDevice* pVDev )
             for( n = 0; n < nSize; n++ )
             {
                 Point aPoint( rPoly[n] );
-                aPoint.X() = static_cast<long>((double(aPoint.X()) * 1024.0 ) / double(aOldFont.GetFontHeight()));
-                aPoint.Y() = static_cast<long>((double(aPoint.Y()) * 1024.0 ) / double(aOldFont.GetFontHeight()));
+                aPoint.setX( static_cast<long>((double(aPoint.X()) * 1024.0 ) / double(aOldFont.GetFontHeight())) );
+                aPoint.setY( static_cast<long>((double(aPoint.Y()) * 1024.0 ) / double(aOldFont.GetFontHeight())) );
                 rPoly[n] = aPoint;
             }
             Writer::Impl_addPolygon( maGlyphData, rPoly, true );

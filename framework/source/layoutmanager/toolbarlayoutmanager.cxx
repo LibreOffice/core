@@ -334,13 +334,13 @@ tools::Rectangle ToolbarLayoutManager::implts_calcDockingArea()
                 nSize += aRowColumnSizes[i][j];
 
             if ( i == sal_Int32(ui::DockingArea_DOCKINGAREA_TOP) )
-                aBorderSpace.Top() = nSize;
+                aBorderSpace.SetTop( nSize );
             else if ( i == sal_Int32(ui::DockingArea_DOCKINGAREA_BOTTOM) )
-                aBorderSpace.Bottom() = nSize;
+                aBorderSpace.SetBottom( nSize );
             else if ( i == sal_Int32(ui::DockingArea_DOCKINGAREA_LEFT) )
-                aBorderSpace.Left() = nSize;
+                aBorderSpace.SetLeft( nSize );
             else
-                aBorderSpace.Right() = nSize;
+                aBorderSpace.SetRight( nSize );
         }
     }
 
@@ -1834,9 +1834,9 @@ void ToolbarLayoutManager::implts_getUIElementVectorCopy( UIElementVector& rCopy
     aReadLock.clear();
 
     if ( xTopDockingAreaWindow.is() )
-        aSize.Width() = xTopDockingAreaWindow->getPosSize().Height;
+        aSize.setWidth( xTopDockingAreaWindow->getPosSize().Height );
     if ( xBottomDockingAreaWindow.is() )
-        aSize.Height() = xBottomDockingAreaWindow->getPosSize().Height;
+        aSize.setHeight( xBottomDockingAreaWindow->getPosSize().Height );
 
     return aSize;
 }
@@ -2576,10 +2576,10 @@ void ToolbarLayoutManager::implts_setLayoutInProgress( bool bInProgress )
 {
     ::tools::Rectangle aRect( rRect );
 
-    aRect.Left() -= nHotZoneOffset;
-    aRect.Top() -= nHotZoneOffset;
-    aRect.Right() += nHotZoneOffset;
-    aRect.Bottom() += nHotZoneOffset;
+    aRect.SetLeft( aRect.Left() - nHotZoneOffset );
+    aRect.SetTop( aRect.Top() - nHotZoneOffset );
+    aRect.SetRight( aRect.Right() + nHotZoneOffset );
+    aRect.SetBottom( aRect.Bottom() + nHotZoneOffset );
 
     return aRect;
 }
@@ -3087,9 +3087,9 @@ void ToolbarLayoutManager::implts_setTrackingRect( ui::DockingArea eDockingArea,
 {
     ::Point aPoint( rTrackingRect.TopLeft());
     if ( isHorizontalDockingArea( eDockingArea ))
-        aPoint.X() = rMousePos.X();
+        aPoint.setX( rMousePos.X() );
     else
-        aPoint.Y() = rMousePos.Y();
+        aPoint.setY( rMousePos.Y() );
     rTrackingRect.SetPos( aPoint );
 }
 

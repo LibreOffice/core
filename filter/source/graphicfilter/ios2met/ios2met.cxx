@@ -894,8 +894,8 @@ void OS2METReader::ReadRelLine(bool bGivenPos, sal_uInt16 nOrderLen)
     tools::Polygon aPolygon(nPolySize);
     for (i=0; i<nPolySize; i++) {
         sal_Int8 nsignedbyte;
-        pOS2MET->ReadSChar( nsignedbyte ); aP0.X()+=static_cast<sal_Int32>(nsignedbyte);
-        pOS2MET->ReadSChar( nsignedbyte ); aP0.Y()-=static_cast<sal_Int32>(nsignedbyte);
+        pOS2MET->ReadSChar( nsignedbyte ); aP0.setX( aP0.X() + static_cast<sal_Int32>(nsignedbyte) );
+        pOS2MET->ReadSChar( nsignedbyte ); aP0.setY( aP0.Y() - static_cast<sal_Int32>(nsignedbyte) );
         aCalcBndRect.Union(tools::Rectangle(aP0,Size(1,1)));
         aPolygon.SetPoint(aP0,i);
     }
@@ -979,8 +979,8 @@ void OS2METReader::ReadBitBlt()
     pOS2MET->ReadUInt32( nID );
     pOS2MET->SeekRel(4);
     aP1=ReadPoint(); aP2=ReadPoint();
-    if (aP1.X() > aP2.X()) { auto nt=aP1.X(); aP1.X()=aP2.X(); aP2.X()=nt; }
-    if (aP1.Y() > aP2.Y()) { auto nt=aP1.Y(); aP1.Y()=aP2.Y(); aP2.Y()=nt; }
+    if (aP1.X() > aP2.X()) { auto nt=aP1.X(); aP1.setX(aP2.X() ); aP2.setX(nt ); }
+    if (aP1.Y() > aP2.Y()) { auto nt=aP1.Y(); aP1.setY(aP2.Y() ); aP2.setY(nt ); }
     aSize=Size(aP2.X()-aP1.X(),aP2.Y()-aP1.Y());
 
     pB=pBitmapList;
@@ -2102,8 +2102,8 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdSMkCel: {
             sal_uInt8 nbyte;
             sal_uInt16 nLen=nOrderLen;
-            aAttr.aMrkCellSize.Width()=ReadCoord(bCoord32);
-            aAttr.aMrkCellSize.Height()=ReadCoord(bCoord32);
+            aAttr.aMrkCellSize.setWidth(ReadCoord(bCoord32) );
+            aAttr.aMrkCellSize.setHeight(ReadCoord(bCoord32) );
             if (bCoord32) nLen-=8; else nLen-=4;
             if (nLen>=2) {
                 pOS2MET->ReadUChar( nbyte );
@@ -2217,10 +2217,10 @@ void OS2METReader::ReadDsc(sal_uInt16 nDscID)
                 y2=nt;
             }
 
-            aBoundingRect.Left() = x1;
-            aBoundingRect.Right() = x2;
-            aBoundingRect.Top() = y1;
-            aBoundingRect.Bottom() = y2;
+            aBoundingRect.SetLeft( x1 );
+            aBoundingRect.SetRight( x2 );
+            aBoundingRect.SetTop( y1 );
+            aBoundingRect.SetBottom( y2 );
 
             // no output beside this bounding rect
             pVirDev->IntersectClipRegion( tools::Rectangle( Point(), aBoundingRect.GetSize() ) );

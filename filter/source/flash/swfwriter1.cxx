@@ -57,8 +57,8 @@ Point Writer::map( const Point& rPoint ) const
 
     // AS: Produces a 'possible loss of data' warning that we can't fix without
     //  hurting code readability.
-    retPoint.X() = static_cast<long>( retPoint.X() * mnDocXScale );
-    retPoint.Y() = static_cast<long>( retPoint.Y() * mnDocYScale );
+    retPoint.setX( static_cast<long>( retPoint.X() * mnDocXScale ) );
+    retPoint.setY( static_cast<long>( retPoint.Y() * mnDocYScale ) );
 
     return retPoint;
 }
@@ -72,8 +72,8 @@ Size Writer::map( const Size& rSize ) const
 
     // AS: Produces a 'possible loss of data' warning that we can't fix without
     //  hurting code readability.
-    retSize.Width() = static_cast<long>( retSize.Width() * mnDocXScale );
-    retSize.Height() = static_cast<long>( retSize.Height() * mnDocYScale );
+    retSize.setWidth( static_cast<long>( retSize.Width() * mnDocXScale ) );
+    retSize.setHeight( static_cast<long>( retSize.Height() * mnDocYScale ) );
 
     return retSize;
 }
@@ -521,7 +521,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
 
         if( nLen > 1 )
         {
-            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( OUString(rText[nLen - 1]) );
+            aNormSize.setWidth( pDX[ nLen - 2 ] + mpVDev->GetTextWidth( OUString(rText[nLen - 1]) ) );
 
             if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
             {
@@ -550,11 +550,11 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
         switch( aOldFont.GetAlignment() )
         {
             case ALIGN_TOP:
-                aBaseLinePos.Y() += aMetric.GetAscent();
+                aBaseLinePos.setY( aBaseLinePos.Y() + aMetric.GetAscent() );
             break;
 
             case ALIGN_BOTTOM:
-                aBaseLinePos.Y() -= aMetric.GetDescent();
+                aBaseLinePos.setY( aBaseLinePos.Y() - aMetric.GetDescent() );
             break;
 
             default:
@@ -664,14 +664,14 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
 
             if( aOldFont.GetStrikeout() != STRIKEOUT_NONE )
             {
-                aPoly[ 0 ].X() = aBaseLinePos.X();
-                aPoly[ 0 ].Y() = aBaseLinePos.Y() - FRound( aMetric.GetAscent() * 0.26 ) - nLineHeight;
-                aPoly[ 1 ].X() = aPoly[ 0 ].X() + aNormSize.Width() - 1;
-                aPoly[ 1 ].Y() = aPoly[ 0 ].Y();
-                aPoly[ 2 ].X() = aPoly[ 1 ].X();
-                aPoly[ 2 ].Y() = aPoly[ 1 ].Y() + nLineHeight - 1;
-                aPoly[ 3 ].X() = aPoly[ 0 ].X();
-                aPoly[ 3 ].Y() = aPoly[ 2 ].Y();
+                aPoly[ 0 ].setX( aBaseLinePos.X() );
+                aPoly[ 0 ].setY( aBaseLinePos.Y() - FRound( aMetric.GetAscent() * 0.26 ) - nLineHeight );
+                aPoly[ 1 ].setX( aPoly[ 0 ].X() + aNormSize.Width() - 1 );
+                aPoly[ 1 ].setY( aPoly[ 0 ].Y() );
+                aPoly[ 2 ].setX( aPoly[ 1 ].X() );
+                aPoly[ 2 ].setY( aPoly[ 1 ].Y() + nLineHeight - 1 );
+                aPoly[ 3 ].setX( aPoly[ 0 ].X() );
+                aPoly[ 3 ].setY( aPoly[ 2 ].Y() );
 
                 Impl_writePolygon( aPoly, true, aTextColor, aTextColor );
             }
@@ -680,14 +680,14 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
             //  but it looks good to me.
             if( aOldFont.GetUnderline() != LINESTYLE_NONE )
             {
-                aPoly[ 0 ].X() = aBaseLinePos.X();
-                aPoly[ 0 ].Y() = static_cast<long>(aBaseLinePos.Y() + 1.5*nLineHeight);
-                aPoly[ 1 ].X() = aPoly[ 0 ].X() + aNormSize.Width() - 1;
-                aPoly[ 1 ].Y() = aPoly[ 0 ].Y();
-                aPoly[ 2 ].X() = aPoly[ 1 ].X();
-                aPoly[ 2 ].Y() = aPoly[ 1 ].Y() + nLineHeight - 1;
-                aPoly[ 3 ].X() = aPoly[ 0 ].X();
-                aPoly[ 3 ].Y() = aPoly[ 2 ].Y();
+                aPoly[ 0 ].setX( aBaseLinePos.X() );
+                aPoly[ 0 ].setY( static_cast<long>(aBaseLinePos.Y() + 1.5*nLineHeight) );
+                aPoly[ 1 ].setX( aPoly[ 0 ].X() + aNormSize.Width() - 1 );
+                aPoly[ 1 ].setY( aPoly[ 0 ].Y() );
+                aPoly[ 2 ].setX( aPoly[ 1 ].X() );
+                aPoly[ 2 ].setY( aPoly[ 1 ].Y() + nLineHeight - 1 );
+                aPoly[ 3 ].setX( aPoly[ 0 ].X() );
+                aPoly[ 3 ].setY( aPoly[ 2 ].Y() );
 
                 Impl_writePolygon( aPoly, true, aTextColor, aTextColor );
             }
@@ -1540,8 +1540,8 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                 {
                     aTmpMtf.Scale( fScaleX, fScaleY );
-                    aSrcPt.X() = FRound( aSrcPt.X() * fScaleX );
-                    aSrcPt.Y() = FRound( aSrcPt.Y() * fScaleY );
+                    aSrcPt.setX( FRound( aSrcPt.X() * fScaleX ) );
+                    aSrcPt.setY( FRound( aSrcPt.Y() * fScaleY ) );
                 }
 
                 nMoveX = aDestPt.X() - aSrcPt.X();

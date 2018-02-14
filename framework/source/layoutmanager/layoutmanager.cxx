@@ -2336,7 +2336,7 @@ bool LayoutManager::implts_doLayout( bool bForceRequestBorderSpace, bool bOuterR
             // don't contain the status bar!
             aStatusBarSize = implts_getStatusBarSize();
             aContainerSize = implts_getContainerWindowOutputSize();
-            aContainerSize.Height() -= aStatusBarSize.Height();
+            aContainerSize.setHeight( aContainerSize.Height() - aStatusBarSize.Height() );
 
             if ( m_xToolbarManager.is() )
                 m_xToolbarManager->doLayout(aContainerSize);

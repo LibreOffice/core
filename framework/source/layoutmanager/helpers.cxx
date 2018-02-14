@@ -236,10 +236,10 @@ css::awt::Rectangle putRectangleValueToAWT( const ::tools::Rectangle& rRect )
 ::tools::Rectangle putAWTToRectangle( const css::awt::Rectangle& rRect )
 {
     ::tools::Rectangle aRect;
-    aRect.Left() = rRect.X;
-    aRect.Top() = rRect.Y;
-    aRect.Right() = rRect.Width;
-    aRect.Bottom() = rRect.Height;
+    aRect.SetLeft( rRect.X );
+    aRect.SetTop( rRect.Y );
+    aRect.SetRight( rRect.Width );
+    aRect.SetBottom( rRect.Height );
 
     return aRect;
 }

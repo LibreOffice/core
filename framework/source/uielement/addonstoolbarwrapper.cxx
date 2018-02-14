@@ -130,7 +130,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
                     pToolBar->EnableCustomize();
                     ::Size aActSize( pToolBar->GetSizePixel() );
                     ::Size aSize( pToolBar->CalcWindowSizePixel() );
-                    aSize.Width() = aActSize.Width();
+                    aSize.setWidth( aActSize.Width() );
                     pToolBar->SetSizePixel( aSize );
                 }
             }

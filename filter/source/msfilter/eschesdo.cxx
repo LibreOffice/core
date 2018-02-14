@@ -88,9 +88,9 @@ Size ImplEESdrWriter::ImplMapSize( const Size& rSize )
     Size aRetSize( OutputDevice::LogicToLogic( rSize, maMapModeSrc, maMapModeDest ) );
 
     if ( !aRetSize.Width() )
-        aRetSize.Width()++;
+        aRetSize.setWidth( ++aRetSize.Width() );
     if ( !aRetSize.Height() )
-        aRetSize.Height()++;
+        aRetSize.setHeight( ++aRetSize.Height() );
     return aRetSize;
 }
 
@@ -371,17 +371,17 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 nEndAngle = *o3tl::doAccess<sal_Int32>(rObj.GetUsrAny());
 
                 Point aStart, aEnd, aCenter;
-                aStart.X() = static_cast<sal_Int32>( cos( nStartAngle * F_PI18000 ) * 100.0 );
-                aStart.Y() = - static_cast<sal_Int32>( sin( nStartAngle * F_PI18000 ) * 100.0 );
-                aEnd.X() = static_cast<sal_Int32>( cos( nEndAngle * F_PI18000 ) * 100.0 );
-                aEnd.Y() = - static_cast<sal_Int32>( sin( nEndAngle * F_PI18000 ) * 100.0 );
+                aStart.setX( static_cast<sal_Int32>( cos( nStartAngle * F_PI18000 ) * 100.0 ) );
+                aStart.setY( - static_cast<sal_Int32>( sin( nStartAngle * F_PI18000 ) * 100.0 ) );
+                aEnd.setX( static_cast<sal_Int32>( cos( nEndAngle * F_PI18000 ) * 100.0 ) );
+                aEnd.setY( - static_cast<sal_Int32>( sin( nEndAngle * F_PI18000 ) * 100.0 ) );
                 const tools::Rectangle& rRect = aRect100thmm;
-                aCenter.X() = rRect.Left() + ( rRect.GetWidth() / 2 );
-                aCenter.Y() = rRect.Top() + ( rRect.GetHeight() / 2 );
-                aStart.X() += aCenter.X();
-                aStart.Y() += aCenter.Y();
-                aEnd.X() += aCenter.X();
-                aEnd.Y() += aCenter.Y();
+                aCenter.setX( rRect.Left() + ( rRect.GetWidth() / 2 ) );
+                aCenter.setY( rRect.Top() + ( rRect.GetHeight() / 2 ) );
+                aStart.setX( aStart.X() + aCenter.X() );
+                aStart.setY( aStart.Y() + aCenter.Y() );
+                aEnd.setX( aEnd.X() + aCenter.X() );
+                aEnd.setY( aEnd.Y() + aCenter.Y() );
                 tools::Polygon aPolygon( rRect, aStart, aEnd, ePolyKind );
                 if( rObj.GetAngle() )
                 {

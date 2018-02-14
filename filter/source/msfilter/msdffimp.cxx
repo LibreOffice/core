@@ -3108,12 +3108,12 @@ void SvxMSDffManager::Scale( sal_Int32& rVal ) const
 
 void SvxMSDffManager::Scale( Point& rPos ) const
 {
-    rPos.X() += nMapXOfs;
-    rPos.Y() += nMapYOfs;
+    rPos.setX( rPos.X() + nMapXOfs );
+    rPos.setY( rPos.Y() + nMapYOfs );
     if ( bNeedMap )
     {
-        rPos.X() = BigMulDiv( rPos.X(), nMapMul, nMapDiv );
-        rPos.Y() = BigMulDiv( rPos.Y(), nMapMul, nMapDiv );
+        rPos.setX( BigMulDiv( rPos.X(), nMapMul, nMapDiv ) );
+        rPos.setY( BigMulDiv( rPos.Y(), nMapMul, nMapDiv ) );
     }
 }
 
@@ -3121,8 +3121,8 @@ void SvxMSDffManager::Scale( Size& rSiz ) const
 {
     if ( bNeedMap )
     {
-        rSiz.Width() = BigMulDiv( rSiz.Width(), nMapMul, nMapDiv );
-        rSiz.Height() = BigMulDiv( rSiz.Height(), nMapMul, nMapDiv );
+        rSiz.setWidth( BigMulDiv( rSiz.Width(), nMapMul, nMapDiv ) );
+        rSiz.setHeight( BigMulDiv( rSiz.Height(), nMapMul, nMapDiv ) );
     }
 }
 
@@ -4542,8 +4542,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 sal_Int32 nX = 0, nY = 0;
                                 seqCoordinates[ nPtNum ].First.Value >>= nX;
                                 seqCoordinates[ nPtNum ].Second.Value >>= nY;
-                                aP.X() = nX;
-                                aP.Y() = nY;
+                                aP.setX( nX );
+                                aP.setY( nY );
                                 aXP[ static_cast<sal_uInt16>(nPtNum) ] = aP;
                             }
                             aPolyBoundRect = tools::Rectangle( aXP.GetBoundRect() );
@@ -4620,8 +4620,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
                             Point aP( aObjData.aBoundRect.Center() );
                             Size aS( aObjData.aBoundRect.GetSize() );
-                            aP.X() -= aS.Width() / 2;
-                            aP.Y() -= aS.Height() / 2;
+                            aP.setX( aP.X() - aS.Width() / 2 );
+                            aP.setY( aP.Y() - aS.Height() / 2 );
                             tools::Rectangle aLogicRect( aP, aS );
 
                             fYOfs = fXOfs = 0.0;
@@ -4773,8 +4773,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         if ( nSpFlags & ShapeFlag::FlipH )
                         {
                             sal_Int32 n = aPoint1.X();
-                            aPoint1.X() = aPoint2.X();
-                            aPoint2.X() = n;
+                            aPoint1.setX( aPoint2.X() );
+                            aPoint2.setX( n );
 
                             // #i120437# reset hor filp
                             nSpFlags &= ~ShapeFlag::FlipH;
@@ -4782,8 +4782,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         if ( nSpFlags & ShapeFlag::FlipV )
                         {
                             sal_Int32 n = aPoint1.Y();
-                            aPoint1.Y() = aPoint2.Y();
-                            aPoint2.Y() = n;
+                            aPoint1.setY( aPoint2.Y() );
+                            aPoint2.setY( n );
 
                             // #i120437# reset ver filp
                             nSpFlags &= ~ShapeFlag::FlipV;
@@ -5201,8 +5201,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     case 9000:
                         {
                             long nWidth = rTextRect.GetWidth();
-                            rTextRect.Right() = rTextRect.Left() + rTextRect.GetHeight();
-                            rTextRect.Bottom() = rTextRect.Top() + nWidth;
+                            rTextRect.SetRight( rTextRect.Left() + rTextRect.GetHeight() );
+                            rTextRect.SetBottom( rTextRect.Top() + nWidth );
 
                             sal_Int32 nOldTextLeft = nTextLeft;
                             sal_Int32 nOldTextRight = nTextRight;
@@ -5218,8 +5218,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     case 27000:
                         {
                             long nWidth = rTextRect.GetWidth();
-                            rTextRect.Right() = rTextRect.Left() + rTextRect.GetHeight();
-                            rTextRect.Bottom() = rTextRect.Top() + nWidth;
+                            rTextRect.SetRight( rTextRect.Left() + rTextRect.GetHeight() );
+                            rTextRect.SetBottom( rTextRect.Top() + nWidth );
 
                             sal_Int32 nOldTextLeft = nTextLeft;
                             sal_Int32 nOldTextRight = nTextRight;
@@ -5242,8 +5242,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             // the vertical paragraph indents are part of the BoundRect,
             // here we 'remove' them by calculating
             tools::Rectangle aNewRect(rTextRect);
-            aNewRect.Bottom() -= nTextTop + nTextBottom;
-            aNewRect.Right() -= nTextLeft + nTextRight;
+            aNewRect.SetBottom( aNewRect.Bottom() - nTextTop + nTextBottom );
+            aNewRect.SetRight( aNewRect.Right() - nTextLeft + nTextRight );
 
             // Only if it's a simple textbox may Writer replace
             // the object with a frame, otherwise
@@ -5375,8 +5375,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     rTextRect.GetWidth() : rTextRect.GetHeight();
                 nMinWH /= 2;
                 Point aPivot(rTextRect.TopLeft());
-                aPivot.X() += nMinWH;
-                aPivot.Y() += nMinWH;
+                aPivot.setX( aPivot.X() + nMinWH );
+                aPivot.setY( aPivot.Y() + nMinWH );
                 double a = nTextRotationAngle * nPi180;
                 pTextObj->NbcRotate(aPivot, nTextRotationAngle, sin(a), cos(a));
             }
@@ -5481,8 +5481,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                         nX = nSmallX;
                         nY = nSmallY;
                     }
-                    (*(pTextImpRec->pWrapPolygon))[i].X() = nX;
-                    (*(pTextImpRec->pWrapPolygon))[i].Y() = nY;
+                    (*(pTextImpRec->pWrapPolygon))[i].setX( nX );
+                    (*(pTextImpRec->pWrapPolygon))[i].setY( nY );
                 }
             }
         }
@@ -6413,12 +6413,12 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
                 // read in size of metafile in EMUS
                 sal_Int32 width(0), height(0);
                 rBLIPStream.ReadInt32( width ).ReadInt32( height );
-                aMtfSize100.Width() = width;
-                aMtfSize100.Height() = height;
+                aMtfSize100.setWidth( width );
+                aMtfSize100.setHeight( height );
 
                 // scale to 1/100mm
-                aMtfSize100.Width() /= 360;
-                aMtfSize100.Height() /= 360;
+                aMtfSize100.setWidth( aMtfSize100.Width() / 360 );
+                aMtfSize100.setHeight( aMtfSize100.Height() / 360 );
 
                 if ( pVisArea )     // seem that we currently are skipping the visarea position
                     *pVisArea = tools::Rectangle( Point(), aMtfSize100 );

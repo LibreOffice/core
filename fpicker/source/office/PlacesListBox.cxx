@@ -160,7 +160,7 @@ void PlacesListBox::SetSizePixel( const Size& rNewSize )
 {
     Control::SetSizePixel( rNewSize );
     Size aListSize( rNewSize );
-    aListSize.Height() -= 26 + 18;
+    aListSize.setHeight( aListSize.Height() - 26 + 18 );
     mpImpl->SetSizePixel( aListSize );
 
     sal_Int32 nBtnY = rNewSize.Height() - 26;

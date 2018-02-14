@@ -83,7 +83,7 @@ class FileViewContainer : public vcl::Window
 
         // Resize the Splitter to fit the height
         Size splitterNewSize = m_pSplitter->GetSizePixel();
-        splitterNewSize.Height() = aSize.Height();
+        splitterNewSize.setHeight( aSize.Height() );
         m_pSplitter->SetSizePixel( splitterNewSize );
         sal_Int32 nMinX = m_pTreeView->GetPosPixel().X();
         sal_Int32 nMaxX = m_pFileView->GetPosPixel().X() + m_pFileView->GetSizePixel().Width() - nMinX;
@@ -91,7 +91,7 @@ class FileViewContainer : public vcl::Window
 
         // Resize the tree list box to fit the height of the FileView
         Size placesNewSize( m_pTreeView->GetSizePixel() );
-        placesNewSize.Height() = aSize.Height();
+        placesNewSize.setHeight( aSize.Height() );
         m_pTreeView->SetSizePixel( placesNewSize );
     }
 
@@ -1024,16 +1024,16 @@ IMPL_LINK_NOARG( RemoteFilesDialog, SplitHdl, Splitter*, void )
     // Resize the tree list box
     sal_Int32 nPlaceX = m_pTreeView->GetPosPixel().X();
     Size placeSize = m_pTreeView->GetSizePixel();
-    placeSize.Width() = nSplitPos - nPlaceX;
+    placeSize.setWidth( nSplitPos - nPlaceX );
     m_pTreeView->SetSizePixel( placeSize );
 
     // Change Pos and size of the fileview
     Point fileViewPos = m_pFileView->GetPosPixel();
     sal_Int32 nOldX = fileViewPos.X();
     sal_Int32 nNewX = nSplitPos + m_pSplitter->GetSizePixel().Width();
-    fileViewPos.X() = nNewX;
+    fileViewPos.setX( nNewX );
     Size fileViewSize = m_pFileView->GetSizePixel();
-    fileViewSize.Width() -= ( nNewX - nOldX );
+    fileViewSize.setWidth( fileViewSize.Width() - ( nNewX - nOldX ) );
     m_pFileView->SetPosSizePixel( fileViewPos, fileViewSize );
 
     m_pSplitter->SetPosPixel( Point( placeSize.Width(), m_pSplitter->GetPosPixel().Y() ) );

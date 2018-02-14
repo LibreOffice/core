@@ -170,7 +170,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
                     pToolBar->EnableCustomize();
                     ::Size aActSize( pToolBar->GetSizePixel() );
                     ::Size aSize( pToolBar->CalcWindowSizePixel() );
-                    aSize.Width() = aActSize.Width();
+                    aSize.setWidth( aActSize.Width() );
                     pToolBar->SetOutputSizePixel( aSize );
                 }
             }
@@ -185,7 +185,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
                     pToolBar->EnableCustomize();
                     ::Size aActSize( pToolBar->GetSizePixel() );
                     ::Size aSize( pToolBar->CalcWindowSizePixel() );
-                    aSize.Width() = aActSize.Width();
+                    aSize.setWidth( aActSize.Width() );
                     pToolBar->SetOutputSizePixel( aSize );
                 }
             }
