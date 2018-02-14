@@ -1774,10 +1774,12 @@ ScTabViewShell::~ScTabViewShell()
     // all to NULL, in case the TabView-dtor tries to access them
     //! (should not really! ??!?!)
     if (mpInputHandler)
+    {
         mpInputHandler->SetDocumentDisposing(true);
-    // We end edit mode, before destroying the input handler and the edit engine
-    // and before end listening (in order to call ScTabViewShell::KillEditView())
-    mpInputHandler->EnterHandler();
+        // We end edit mode, before destroying the input handler and the edit engine
+        // and before end listening (in order to call ScTabViewShell::KillEditView())
+        mpInputHandler->EnterHandler();
+    }
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     EndListening(*pDocSh);
