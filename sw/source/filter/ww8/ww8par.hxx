@@ -593,7 +593,7 @@ private:
     WW8SwFlyPara* mpSFlyPara;
     SwPaM* mpPreviousNumPaM;
     const SwNumRule* mpPrevNumRule;
-    WW8TabDesc* mpTableDesc;
+    std::unique_ptr<WW8TabDesc> mxTableDesc;
     int mnInTable;
     sal_uInt16 mnCurrentColl;
     sal_Unicode mcSymbol;
@@ -1230,9 +1230,9 @@ private:
     std::unique_ptr<WW8FlyPara> m_xWFlyPara;      // WW-parameter
     std::unique_ptr<WW8SwFlyPara> m_xSFlyPara;    // Sw parameters created from previous
 
-    WW8TabDesc* m_pTableDesc;     // description of table properties
+    std::unique_ptr<WW8TabDesc> m_xTableDesc;     // description of table properties
     //Keep track of tables within tables
-    std::stack<WW8TabDesc*> m_aTableStack;
+    std::stack<std::unique_ptr<WW8TabDesc>> m_aTableStack;
 
     ANLDRuleMap m_aANLDRules;
     std::unique_ptr<WW8_OLST> m_xNumOlst;         // position in text
