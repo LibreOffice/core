@@ -235,8 +235,9 @@ public:
 
     using   SmNode::GetSubNode;
     virtual SmNode *    GetSubNode(size_t nIndex) override;
+    void ClearSubNodes();
             void SetSubNodes(SmNode *pFirst, SmNode *pSecond, SmNode *pThird = nullptr);
-            void SetSubNodes(const SmNodeArray &rNodeArray);
+            void SetSubNodes(SmNodeArray&& rNodeArray);
 
     virtual void  GetAccessibleText( OUStringBuffer &rText ) const override;
 

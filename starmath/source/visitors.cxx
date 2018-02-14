@@ -1630,7 +1630,7 @@ void SmCloningVisitor::CloneKids( SmStructureNode* pSource, SmStructureNode* pTa
     }
 
     //Set subnodes of pTarget
-    pTarget->SetSubNodes( aNodes );
+    pTarget->SetSubNodes( std::move(aNodes) );
 
     //Restore result as where prior to call
     mpResult = pCurrResult;
