@@ -703,6 +703,13 @@ DECLARE_OOXMLEXPORT_TEST(testGraphicObjectFliph, "graphic-object-fliph.docx")
     CPPUNIT_ASSERT(getProperty<bool>(getShape(1), "HoriMirroredOnOddPages"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf115719, "tdf115719.docx")
+{
+    // This was a single page, instead of pushing the textboxes to the second
+    // page.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
