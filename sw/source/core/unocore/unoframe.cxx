@@ -1199,7 +1199,6 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
     , m_pDoc(pDoc)
     , eType(eSet)
     , bIsDescriptor(true)
-    , m_pCopySource(nullptr)
     , m_nDrawAspect(embed::Aspects::MSOLE_CONTENT)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
@@ -1253,7 +1252,6 @@ SwXFrame::SwXFrame(SwFrameFormat& rFrameFormat, FlyCntType eSet, const ::SfxItem
     , m_pDoc(nullptr)
     , eType(eSet)
     , bIsDescriptor(false)
-    , m_pCopySource(nullptr)
     , m_nDrawAspect(embed::Aspects::MSOLE_CONTENT)
 {
 }
@@ -1261,7 +1259,7 @@ SwXFrame::SwXFrame(SwFrameFormat& rFrameFormat, FlyCntType eSet, const ::SfxItem
 SwXFrame::~SwXFrame()
 {
     SolarMutexGuard aGuard;
-    delete m_pCopySource;
+    m_pCopySource.reset();
     m_pProps.reset();
     EndListeningAll();
 }
@@ -1352,8 +1350,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXFrame::getPropertySetInfo()
 
 void SwXFrame::SetSelection(SwPaM& rCopySource)
 {
-    delete m_pCopySource;
-    m_pCopySource = new SwPaM( *rCopySource.Start() );
+    m_pCopySource.reset(new SwPaM(*rCopySource.Start()));
     m_pCopySource->SetMark();
     *m_pCopySource->GetMark() = *rCopySource.End();
 }
@@ -2785,7 +2782,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 pDoc->SetFlyFrameAttr( *pFormat, aAnchorSet );
                 delete pAnchorItem;
             }
-            DELETEZ( m_pCopySource );
+            m_pCopySource.reset();
         }
         else
         {

@@ -71,7 +71,7 @@ private:
     bool bIsDescriptor;
     OUString                        m_sName;
 
-    SwPaM*                          m_pCopySource;
+    std::unique_ptr<SwPaM>          m_pCopySource;
 
     sal_Int64                       m_nDrawAspect;
 
