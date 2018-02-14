@@ -56,7 +56,6 @@
 #include <oox/token/tokens.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
-#include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <comphelper/processfactory.hxx>
 #include <oox/core/filterdetect.hxx>
