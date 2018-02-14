@@ -156,6 +156,7 @@ public:
     void testChineseConversionSimplifiedToTraditional();
     void testFdo85554();
     void testAutoCorr();
+    void testTdf83260();
     void testMergeDoc();
     void testCreatePortions();
     void testBookmarkUndo();
@@ -337,6 +338,7 @@ public:
     CPPUNIT_TEST(testChineseConversionSimplifiedToTraditional);
     CPPUNIT_TEST(testFdo85554);
     CPPUNIT_TEST(testAutoCorr);
+    CPPUNIT_TEST(testTdf83260);
     CPPUNIT_TEST(testMergeDoc);
     CPPUNIT_TEST(testCreatePortions);
     CPPUNIT_TEST(testBookmarkUndo);
@@ -1422,6 +1424,39 @@ void SwUiWriterTest::testAutoCorr()
     const uno::Reference< text::XTextTable > xTable(getParagraphOrTable(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
+}
+
+void SwUiWriterTest::testTdf83260()
+{
+    SwDoc* const pDoc(createDoc("tdf83260-1.odt"));
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+
+    // enabled but not shown
+    CPPUNIT_ASSERT(IDocumentRedlineAccess::IsHideChanges(
+            pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+    CPPUNIT_ASSERT(IDocumentRedlineAccess::IsRedlineOn(
+            pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+    CPPUNIT_ASSERT(!pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty());
+
+    // the document contains redlines that are combined with CompressRedlines()
+    // if that happens during AutoCorrect then indexes in Undo are off -> crash
+    pWrtShell->Insert("tset");
+    pWrtShell->AutoCorrect(corr, u' ');
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    auto const nActions(rUndoManager.GetUndoActionCount());
+    for (auto i = nActions; 0 < i; --i)
+    {
+        rUndoManager.Undo();
+    }
+    for (auto i = nActions; 0 < i; --i)
+    {
+        rUndoManager.Redo();
+    }
+    for (auto i = nActions; 0 < i; --i)
+    {
+        rUndoManager.Undo();
+    }
 }
 
 void SwUiWriterTest::testMergeDoc()

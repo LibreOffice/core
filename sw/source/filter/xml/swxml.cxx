@@ -885,6 +885,11 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     // (First set bogus mode to make sure the mode in getIDocumentRedlineAccess().SetRedlineFlags()
     //  is different from its previous mode.)
     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( ~nRedlineFlags );
+    // must set flags to show delete so that CompressRedlines works
+    rDoc.getIDocumentRedlineAccess().SetRedlineFlags(nRedlineFlags|RedlineFlags::ShowDelete);
+    // tdf#83260 ensure that the first call of CompressRedlines after loading
+    // the document is a no-op by calling it now
+    rDoc.getIDocumentRedlineAccess().CompressRedlines();
     rDoc.getIDocumentRedlineAccess().SetRedlineFlags(  nRedlineFlags );
 
     lcl_EnsureValidPam( rPaM ); // move Pam into valid content
