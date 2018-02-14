@@ -139,6 +139,11 @@ bool TGAReader::ReadTGA(Graphic & rGraphic)
         mbStatus = ImplReadHeader();
         if ( mbStatus )
         {
+            sal_Size nSize = mpFileHeader->nImageWidth;
+            nSize *= mpFileHeader->nImageHeight;
+            if (nSize > SAL_MAX_INT32/2)
+                return false;
+
             mpBitmap.reset( new vcl::bitmap::RawBitmap( Size( mpFileHeader->nImageWidth, mpFileHeader->nImageHeight ) ) );
             if ( mbIndexing )
                 mbStatus = ImplReadPalette();
