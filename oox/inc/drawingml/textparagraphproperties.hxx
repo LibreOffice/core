@@ -97,6 +97,9 @@ public:
     boost::optional< css::style::ParagraphAdjust >&       getParaAdjust() { return moParaAdjust; }
     void                                setParaAdjust( css::style::ParagraphAdjust nParaAdjust ) { moParaAdjust = nParaAdjust; }
 
+    TextSpacing&                        getLineSpacing() { return maLineSpacing; }
+    void                                setLineSpacing( const TextSpacing& rLineSpacing ) { maLineSpacing = rLineSpacing; }
+
     void                                apply( const TextParagraphProperties& rSourceProps );
     void                                pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
                                                 const css::uno::Reference < css::beans::XPropertySet > & xPropSet,
@@ -126,6 +129,7 @@ protected:
     boost::optional< sal_Int32 >    moFirstLineIndentation;
     boost::optional< css::style::ParagraphAdjust >    moParaAdjust;
     sal_Int16                       mnLevel;
+    TextSpacing                     maLineSpacing;
 };
 
 } }
