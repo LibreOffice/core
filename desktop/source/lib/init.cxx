@@ -543,6 +543,7 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis,
                              int nCharCode,
                              int nKeyCode);
 static void doc_postExtTextInputEvent(LibreOfficeKitDocument* pThis,
+                                      unsigned nWindowId,
                                       int nType,
                                       const char* pText);
 static void doc_postWindowKeyEvent(LibreOfficeKitDocument* pThis,
@@ -2298,18 +2299,43 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
     pDoc->postKeyEvent(nType, nCharCode, nKeyCode);
 }
 
-static void doc_postExtTextInputEvent(LibreOfficeKitDocument* pThis, int nType, const char* pText)
+static void doc_postExtTextInputEvent(LibreOfficeKitDocument* pThis, unsigned nWindowId, int nType, const char* pText)
 {
     SolarMutexGuard aGuard;
-
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
-    if (!pDoc)
+    VclPtr<vcl::Window> pWindow;
+    if (nWindowId == 0)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        ITiledRenderable* pDoc = getTiledRenderable(pThis);
+        if (!pDoc)
+        {
+            gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+            return;
+        }
+        pWindow = pDoc->getDocWindow();
+    }
+    else
+    {
+        pWindow = vcl::Window::FindLOKWindow(nWindowId);
+    }
+
+    if (!pWindow)
+    {
+        gImpl->maLastExceptionMsg = "No window found for window id: " + OUString::number(nWindowId);
         return;
     }
 
-    pDoc->postExtTextInputEvent(nType, OUString::fromUtf8(OString(pText, strlen(pText))));
+    switch (nType)
+    {
+    case LOK_EXT_TEXTINPUT:
+        pWindow->PostExtTextInputEvent(VclEventId::ExtTextInput,
+                                       OUString::fromUtf8(OString(pText, strlen(pText))));
+        break;
+    case LOK_EXT_TEXTINPUT_END:
+        pWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+        break;
+    default:
+        assert(false && "Unhandled External Text input event!");
+    }
 }
 
 static void doc_postWindowKeyEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nCharCode, int nKeyCode)

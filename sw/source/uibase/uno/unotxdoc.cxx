@@ -3399,6 +3399,16 @@ OUString SwXTextDocument::getPartHash(int nPart)
     return OUString::number(sPart.hashCode());
 }
 
+VclPtr<vcl::Window> SwXTextDocument::getDocWindow()
+{
+    SolarMutexGuard aGuard;
+    VclPtr<vcl::Window> pWindow;
+    SwView* pView = pDocShell->GetView();
+    if (pView)
+        pWindow = &(pView->GetEditWin());
+    return pWindow;
+}
+
 void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {
     SolarMutexGuard aGuard;
@@ -3492,26 +3502,6 @@ void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     default:
         assert(false);
         break;
-    }
-}
-
-void SwXTextDocument::postExtTextInputEvent(int nType, const OUString& rText)
-{
-    SolarMutexGuard aGuard;
-
-    vcl::Window* pWindow = &(pDocShell->GetView()->GetEditWin());
-
-    CommandExtTextInputData aTextInputData(rText, nullptr, 0, 0, false);
-    switch (nType)
-    {
-    case LOK_EXT_TEXTINPUT:
-        pWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, rText);
-        break;
-    case LOK_EXT_TEXTINPUT_END:
-        pWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
-        break;
-    default:
-        assert(false && "Unhandled External Text input event!");
     }
 }
 

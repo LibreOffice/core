@@ -49,6 +49,7 @@
 #include <DrawViewShell.hxx>
 #include <pres.hxx>
 #include <vcl/scheduler.hxx>
+#include <vcl/vclevent.hxx>
 
 #include <chrono>
 
@@ -1948,6 +1949,7 @@ void SdTiledRenderingTest::testIMESupport()
     comphelper::LibreOfficeKit::setActive();
 
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    VclPtr<vcl::Window> pDocWindow = pXImpressDocument->getDocWindow();
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdrObject* pObject = pViewShell->GetActualPage()->GetObj(0);
     SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObject);
@@ -1966,9 +1968,9 @@ void SdTiledRenderingTest::testIMESupport()
                    });
     for (const auto& aInput: aInputs)
     {
-        pXImpressDocument->postExtTextInputEvent(LOK_EXT_TEXTINPUT, aInput);
+        pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, aInput);
     }
-    pXImpressDocument->postExtTextInputEvent(LOK_EXT_TEXTINPUT_END, "");
+    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
 
     // the cursor should be at position 3rd
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();

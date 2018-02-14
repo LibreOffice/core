@@ -302,6 +302,7 @@ struct _LibreOfficeKitDocumentClass
 
     /// @see lok::Document::postExtTextInputEvent
     void (*postExtTextInputEvent) (LibreOfficeKitDocument* pThis,
+                                   unsigned nWindowId,
                                    int nType,
                                    const char* pText);
 
