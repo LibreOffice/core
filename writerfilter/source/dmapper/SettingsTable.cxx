@@ -617,6 +617,33 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
     }
 }
 
+sal_Int32 SettingsTable::GetWordCompatibilityMode() const
+{
+    for (const auto& rProp : m_pImpl->m_aCompatSettings)
+    {
+        if (rProp.Name == "compatSetting")
+        {
+            css::uno::Sequence<css::beans::PropertyValue> aCurrentCompatSettings;
+            rProp.Value >>= aCurrentCompatSettings;
+
+            OUString sName;
+            OUString sUri;
+            OUString sVal;
+
+            aCurrentCompatSettings[0].Value >>= sName;
+            aCurrentCompatSettings[1].Value >>= sUri;
+            aCurrentCompatSettings[2].Value >>= sVal;
+
+            if (sName == "compatibilityMode" && sUri == "http://schemas.microsoft.com/office/word")
+            {
+                return sVal.toInt32();
+            }
+        }
+    }
+
+    return -1; // Word compatibility mode not found
+}
+
 }//namespace dmapper
 } //namespace writerfilter
 
