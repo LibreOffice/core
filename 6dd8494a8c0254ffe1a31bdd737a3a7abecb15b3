@@ -16,6 +16,24 @@
       "revId": "6dd8494a8c0254ffe1a31bdd737a3a7abecb15b3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_dcedaaf0",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 4364,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2018-02-14T07:32:59Z",
+      "side": 1,
+      "message": "That\u0027s actually what I had in mind first.\nHowever, this wouldn\u0027t match what is actually done during the tar archive creation, since fakeroot is only used for Linux and Solaris there right now,\ns. solenv/bin/modules/installer/download.pm (line 708ff) and solenv/bin/modules/installer/simplepackage.pm (line 443ff).\n\nHonestly, I\u0027m not sure know why it states \"only required for Solaris and Linux\", but I left that unchanged from the previous version where libgetuid was used.\n\nIf it\u0027s needed for other Unix systems as well, that should possibly be extended, but I\u0027d rather see this as a separate change, since it changes the semantics.\n\n(See also function \u0027setglobalvariables()\u0027 in solenv/bin/modules/installer/parameter.pm, where the mapping for package formats is done based on the operating system as well.)",
+      "parentUuid": "fa31d9ce_5cf7faf4",
+      "revId": "6dd8494a8c0254ffe1a31bdd737a3a7abecb15b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
