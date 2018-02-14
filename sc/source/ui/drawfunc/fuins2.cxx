@@ -325,8 +325,8 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
                 if (aSize.Height() == 0 || aSize.Width() == 0)
                 {
                     // rectangle with balanced edge ratio
-                    aSize.Width() = 5000;
-                    aSize.Height() = 5000;
+                    aSize.setWidth( 5000 );
+                    aSize.setHeight( 5000 );
                     Size aTmp = OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(aMapUnit));
                     aSz.Width = aTmp.Width();
                     aSz.Height = aTmp.Height();
@@ -349,7 +349,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
 
             Point aPnt = pViewSh->GetInsertPos();
             if ( rData.GetDocument()->IsNegativePage( rData.GetTabNo() ) )
-                aPnt.X() -= aSize.Width();      // move position to left edge
+                aPnt.setX( aPnt.X() - aSize.Width() );      // move position to left edge
             tools::Rectangle aRect (aPnt, aSize);
             SdrOle2Obj* pObj = new SdrOle2Obj( aObjRef, aName, aRect);
             SdrPageView* pPV = pView->GetSdrPageView();
@@ -506,8 +506,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
     bool bSizeCh = false;
     if (aSize.Height() <= 0 || aSize.Width() <= 0)
     {
-        aSize.Width() = 5000;
-        aSize.Height() = 5000;
+        aSize.setWidth( 5000 );
+        aSize.setHeight( 5000 );
         bSizeCh = true;
     }
     if (bSizeCh)

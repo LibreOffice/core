@@ -59,16 +59,16 @@ static void lcl_AdjustInsertPos( ScViewData* pData, Point& rPos, Size& rSize )
     OSL_ENSURE(pPage,"pPage ???");
     Size aPgSize( pPage->GetSize() );
     if (aPgSize.Width() < 0)
-        aPgSize.Width() = -aPgSize.Width();
+        aPgSize.setWidth( -aPgSize.Width() );
     long x = aPgSize.Width() - rPos.X() - rSize.Width();
     long y = aPgSize.Height() - rPos.Y() - rSize.Height();
     // if necessary: adjustments (80/200) for pixel approx. errors
     if( x < 0 )
-        rPos.X() += x + 80;
+        rPos.setX( rPos.X() + x + 80 );
     if( y < 0 )
-        rPos.Y() += y + 200;
-    rPos.X() += rSize.Width() / 2;          // position at paste is center
-    rPos.Y() += rSize.Height() / 2;
+        rPos.setY( rPos.Y() + y + 200 );
+    rPos.setX( rPos.X() + rSize.Width() / 2 );          // position at paste is center
+    rPos.setY( rPos.Y() + rSize.Height() / 2 );
 }
 
 void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
@@ -102,13 +102,13 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         aPos -= aDragStartDiff;
         if ( bNegativePage )
         {
-            if (aPos.X() > 0) aPos.X() = 0;
+            if (aPos.X() > 0) aPos.setX( 0 );
         }
         else
         {
-            if (aPos.X() < 0) aPos.X() = 0;
+            if (aPos.X() < 0) aPos.setX( 0 );
         }
-        if (aPos.Y() < 0) aPos.Y() = 0;
+        if (aPos.Y() < 0) aPos.setY( 0 );
     }
 
     ScDrawView* pScDrawView = GetScDrawView();
@@ -335,8 +335,8 @@ bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
             if( aSize.Height() == 0 || aSize.Width() == 0 )
             {
                 OSL_FAIL("SvObjectDescriptor::GetSize == 0");
-                aSize.Width() = 5000;
-                aSize.Height() = 5000;
+                aSize.setWidth( 5000 );
+                aSize.setHeight( 5000 );
                 aSize = OutputDevice::LogicToLogic(aSize, MapMode(aMap100), MapMode(aMapObj));
                 aSz.Width = aSize.Width();
                 aSz.Height = aSize.Height();
@@ -347,7 +347,7 @@ bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
         // don't call AdjustInsertPos
         Point aInsPos = rPos;
         if ( GetViewData().GetDocument()->IsNegativePage( GetViewData().GetTabNo() ) )
-            aInsPos.X() -= aSize.Width();
+            aInsPos.setX( aInsPos.X() - aSize.Width() );
         tools::Rectangle aRect( aInsPos, aSize );
 
         ScDrawView* pDrView = GetScDrawView();
@@ -426,7 +426,7 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     Size aSize = pWin->LogicToLogic( rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );
 
     if ( GetViewData().GetDocument()->IsNegativePage( GetViewData().GetTabNo() ) )
-        aPos.X() -= aSize.Width();
+        aPos.setX( aPos.X() - aSize.Width() );
 
     GetViewData().GetViewShell()->SetDrawShell( true );
     tools::Rectangle aRect(aPos, aSize);

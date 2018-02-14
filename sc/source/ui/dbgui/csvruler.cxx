@@ -545,8 +545,8 @@ void ScCsvRuler::ImplDrawArea( sal_Int32 nPosX, sal_Int32 nWidth )
     maBackgrDev->DrawRect( aRect );
 
     aRect = maActiveRect;
-    aRect.Left() = std::max( GetFirstX(), nPosX );
-    aRect.Right() = std::min( std::min( GetX( GetPosCount() ), GetLastX() ), nPosX + nWidth - sal_Int32( 1 ) );
+    aRect.SetLeft( std::max( GetFirstX(), nPosX ) );
+    aRect.SetRight( std::min( std::min( GetX( GetPosCount() ), GetLastX() ), nPosX + nWidth - sal_Int32( 1 ) ) );
     if( aRect.Left() <= aRect.Right() )
     {
         maBackgrDev->SetFillColor( maActiveColor );

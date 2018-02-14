@@ -128,7 +128,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
         const drawinglayer::primitive2d::Primitive2DReference aMessage(pMessage);
         aSeq.push_back(aMessage);
 
-        aLineStart.Y() += nLineHeight;
+        aLineStart.setY( aLineStart.Y() + nLineHeight );
     }
 
     rRange.expand(basegfx::B2DTuple(rRange.getMaxX() + aHintMargin.Width(),

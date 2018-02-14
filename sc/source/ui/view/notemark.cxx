@@ -54,9 +54,9 @@ ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window*
 {
     Size aSizePixel = pWindow->GetOutputSizePixel();
     if( pRightWin )
-        aSizePixel.Width() += pRightWin->GetOutputSizePixel().Width();
+        aSizePixel.setWidth( aSizePixel.Width() + pRightWin->GetOutputSizePixel().Width() );
     if( pBottomWin )
-        aSizePixel.Height() += pBottomWin->GetOutputSizePixel().Height();
+        aSizePixel.setHeight( aSizePixel.Height() + pBottomWin->GetOutputSizePixel().Height() );
     tools::Rectangle aVisPixel( Point( 0, 0 ), aSizePixel );
     aVisRect = pWindow->PixelToLogic( aVisPixel, aMapMode );
 
@@ -144,8 +144,8 @@ static MapMode lcl_MoveMapMode( const MapMode& rMap, const Size& rMove )
 {
     MapMode aNew = rMap;
     Point aOrigin = aNew.GetOrigin();
-    aOrigin.X() -= rMove.Width();
-    aOrigin.Y() -= rMove.Height();
+    aOrigin.setX( aOrigin.X() - rMove.Width() );
+    aOrigin.setY( aOrigin.Y() - rMove.Height() );
     aNew.SetOrigin(aOrigin);
     return aNew;
 }

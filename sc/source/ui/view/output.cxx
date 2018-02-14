@@ -831,10 +831,10 @@ void drawDataBars(vcl::RenderContext& rRenderContext, const ScDataBarInfo* pOldD
 {
     long nPosZero = 0;
     tools::Rectangle aPaintRect = rRect;
-    aPaintRect.Top() += 2 * nOneY;
-    aPaintRect.Bottom() -= 2 * nOneY;
-    aPaintRect.Left() += 2 * nOneX;
-    aPaintRect.Right() -= 2 * nOneX;
+    aPaintRect.SetTop( aPaintRect.Top() + 2 * nOneY );
+    aPaintRect.SetBottom( aPaintRect.Bottom() - 2 * nOneY );
+    aPaintRect.SetLeft( aPaintRect.Left() + 2 * nOneX );
+    aPaintRect.SetRight( aPaintRect.Right() - 2 * nOneX );
     if(pOldDataBarInfo->mnZero)
     {
         // need to calculate null point in cell
@@ -848,15 +848,15 @@ void drawDataBars(vcl::RenderContext& rRenderContext, const ScDataBarInfo* pOldD
 
     if(pOldDataBarInfo->mnLength < 0)
     {
-        aPaintRect.Right() = nPosZero;
+        aPaintRect.SetRight( nPosZero );
         long nLength = nPosZero - aPaintRect.Left();
-        aPaintRect.Left() = nPosZero + static_cast<long>(nLength * pOldDataBarInfo->mnLength/100.0);
+        aPaintRect.SetLeft( nPosZero + static_cast<long>(nLength * pOldDataBarInfo->mnLength/100.0) );
     }
     else if(pOldDataBarInfo->mnLength > 0)
     {
-        aPaintRect.Left() = nPosZero;
+        aPaintRect.SetLeft( nPosZero );
         long nLength = aPaintRect.Right() - nPosZero;
-        aPaintRect.Right() = nPosZero + static_cast<long>(nLength * pOldDataBarInfo->mnLength/100.0);
+        aPaintRect.SetRight( nPosZero + static_cast<long>(nLength * pOldDataBarInfo->mnLength/100.0) );
     }
     else
         return;
@@ -926,7 +926,7 @@ void drawCells(vcl::RenderContext& rRenderContext, const Color* pColor, const Sv
     // we can here fall back to pointer comparison
     if (pOldColor && (pBackground || pOldColor != pColor || pOldDataBarInfo || pDataBarInfo || pIconSetInfo || pOldIconSetInfo))
     {
-        rRect.Right() = nPosX-nSignedOneX;
+        rRect.SetRight( nPosX-nSignedOneX );
         if( !pOldColor->GetTransparency() )
         {
             rRenderContext.SetFillColor( *pOldColor );
@@ -937,12 +937,12 @@ void drawCells(vcl::RenderContext& rRenderContext, const Color* pColor, const Sv
         if( pOldIconSetInfo )
             drawIconSets(rRenderContext, pOldIconSetInfo, rRect, nOneX, nOneY, rIconSetBitmapMap);
 
-        rRect.Left() = nPosX - nSignedOneX;
+        rRect.SetLeft( nPosX - nSignedOneX );
     }
 
     if ( pOldBackground && (pColor ||pBackground != pOldBackground || pOldDataBarInfo || pDataBarInfo || pIconSetInfo || pOldIconSetInfo) )
     {
-        rRect.Right() = nPosX-nSignedOneX;
+        rRect.SetRight( nPosX-nSignedOneX );
         if (pOldBackground)             // ==0 if hidden
         {
             Color aBackCol = pOldBackground->GetColor();
@@ -957,13 +957,13 @@ void drawCells(vcl::RenderContext& rRenderContext, const Color* pColor, const Sv
         if( pOldIconSetInfo )
             drawIconSets(rRenderContext, pOldIconSetInfo, rRect, nOneX, nOneY, rIconSetBitmapMap);
 
-        rRect.Left() = nPosX - nSignedOneX;
+        rRect.SetLeft( nPosX - nSignedOneX );
     }
 
     if (!pOldBackground && !pOldColor && (pDataBarInfo || pIconSetInfo))
     {
-        rRect.Right() = nPosX -nSignedOneX;
-        rRect.Left() = nPosX - nSignedOneX;
+        rRect.SetRight( nPosX -nSignedOneX );
+        rRect.SetLeft( nPosX - nSignedOneX );
     }
 
     if(pColor)
@@ -1252,31 +1252,31 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
                                 ePart == SC_SHADOW_CORNER)
                             {
                                 if (eLoc == SvxShadowLocation::TopLeft || eLoc == SvxShadowLocation::TopRight)
-                                    aRect.Top() = aRect.Bottom() - nSizeY;
+                                    aRect.SetTop( aRect.Bottom() - nSizeY );
                                 else
-                                    aRect.Bottom() = aRect.Top() + nSizeY;
+                                    aRect.SetBottom( aRect.Top() + nSizeY );
                             }
                             if (ePart == SC_SHADOW_VERT || ePart == SC_SHADOW_VSTART ||
                                 ePart == SC_SHADOW_CORNER)
                             {
                                 if (eLoc == SvxShadowLocation::TopLeft || eLoc == SvxShadowLocation::BottomLeft)
-                                    aRect.Left() = aRect.Right() - nSizeX;
+                                    aRect.SetLeft( aRect.Right() - nSizeX );
                                 else
-                                    aRect.Right() = aRect.Left() + nSizeX;
+                                    aRect.SetRight( aRect.Left() + nSizeX );
                             }
                             if (ePart == SC_SHADOW_HSTART)
                             {
                                 if (eLoc == SvxShadowLocation::TopLeft || eLoc == SvxShadowLocation::BottomLeft)
-                                    aRect.Right() -= nSizeX;
+                                    aRect.SetRight( aRect.Right() - nSizeX );
                                 else
-                                    aRect.Left() += nSizeX;
+                                    aRect.SetLeft( aRect.Left() + nSizeX );
                             }
                             if (ePart == SC_SHADOW_VSTART)
                             {
                                 if (eLoc == SvxShadowLocation::TopLeft || eLoc == SvxShadowLocation::TopRight)
-                                    aRect.Bottom() -= nSizeY;
+                                    aRect.SetBottom( aRect.Bottom() - nSizeY );
                                 else
-                                    aRect.Top() += nSizeY;
+                                    aRect.SetTop( aRect.Top() + nSizeY );
                             }
 
                             //! merge rectangles?
@@ -1711,8 +1711,8 @@ vcl::Region ScOutputData::GetChangedAreaRegion()
     long nPosY = nScrY;
     SCSIZE nArrY;
 
-    aDrawingRect.Left() = nScrX;
-    aDrawingRect.Right() = nScrX+nScrW-1;
+    aDrawingRect.SetLeft( nScrX );
+    aDrawingRect.SetRight( nScrX+nScrW-1 );
 
     for(nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -1722,11 +1722,11 @@ vcl::Region ScOutputData::GetChangedAreaRegion()
         {
             if(!bHad)
             {
-                aDrawingRect.Top() = nPosY;
+                aDrawingRect.SetTop( nPosY );
                 bHad = true;
             }
 
-            aDrawingRect.Bottom() = nPosY + pRowInfo[nArrY].nHeight - 1;
+            aDrawingRect.SetBottom( nPosY + pRowInfo[nArrY].nHeight - 1 );
         }
         else if(bHad)
         {
@@ -1750,8 +1750,8 @@ bool ScOutputData::SetChangedClip()
     tools::PolyPolygon aPoly;
 
     tools::Rectangle aDrawingRect;
-    aDrawingRect.Left() = nScrX;
-    aDrawingRect.Right() = nScrX+nScrW-1;
+    aDrawingRect.SetLeft( nScrX );
+    aDrawingRect.SetRight( nScrX+nScrW-1 );
 
     bool    bHad    = false;
     long    nPosY   = nScrY;
@@ -1764,10 +1764,10 @@ bool ScOutputData::SetChangedClip()
         {
             if (!bHad)
             {
-                aDrawingRect.Top() = nPosY;
+                aDrawingRect.SetTop( nPosY );
                 bHad = true;
             }
-            aDrawingRect.Bottom() = nPosY + pRowInfo[nArrY].nHeight - 1;
+            aDrawingRect.SetBottom( nPosY + pRowInfo[nArrY].nHeight - 1 );
         }
         else if (bHad)
         {
@@ -2405,11 +2405,11 @@ void ScOutputData::DrawClipMarks()
                                                Point( nStartPosX+nOutWidth-1, nPosY+nOutHeight-1 ) );
                     }
 
-                    aCellRect.Bottom() -= 1;    // don't paint over the cell grid
+                    aCellRect.SetBottom( aCellRect.Bottom() - 1 );    // don't paint over the cell grid
                     if ( bLayoutRTL )
-                        aCellRect.Left() += 1;
+                        aCellRect.SetLeft( aCellRect.Left() + 1 );
                     else
-                        aCellRect.Right() -= 1;
+                        aCellRect.SetRight( aCellRect.Right() - 1 );
 
                     long nMarkPixel = static_cast<long>( SC_CLIPMARK_SIZE * mnPPTX );
                     Size aMarkSize( nMarkPixel, (nMarkPixel-1)*2 );
@@ -2418,14 +2418,14 @@ void ScOutputData::DrawClipMarks()
                     {
                         //  visually left
                         tools::Rectangle aMarkRect = aCellRect;
-                        aMarkRect.Right() = aCellRect.Left()+nMarkPixel-1;
+                        aMarkRect.SetRight( aCellRect.Left()+nMarkPixel-1 );
                         SvxFont::DrawArrow( *mpDev, aMarkRect, aMarkSize, aArrowFillCol, true );
                     }
                     if ( pInfo->nClipMark & ( bLayoutRTL ? ScClipMark::Left : ScClipMark::Right ) )
                     {
                         //  visually right
                         tools::Rectangle aMarkRect = aCellRect;
-                        aMarkRect.Left() = aCellRect.Right()-nMarkPixel+1;
+                        aMarkRect.SetLeft( aCellRect.Right()-nMarkPixel+1 );
                         SvxFont::DrawArrow( *mpDev, aMarkRect, aMarkSize, aArrowFillCol, false );
                     }
                 }

@@ -451,7 +451,7 @@ void ScInputWindow::Resize()
 
     aTextWindow.Resize();
     Size aSize = GetSizePixel();
-    aSize.Height() = CalcWindowSizePixel().Height() + ADDITIONAL_BORDER;
+    aSize.setHeight( CalcWindowSizePixel().Height() + ADDITIONAL_BORDER );
     ScInputBarGroup* pGroupBar = dynamic_cast<ScInputBarGroup*>(pRuntimeWindow.get());
     if (pGroupBar)
     {
@@ -462,7 +462,7 @@ void ScInputWindow::Resize()
         // then the largest item ( e.g. the GroupBar window ) will actually be
         // positioned such that the toolbar will cut off the bottom of that item
         if (pGroupBar->GetNumLines() > 1)
-            aSize.Height() += pGroupBar->GetVertOffset() + ADDITIONAL_SPACE;
+            aSize.setHeight( aSize.Height() + pGroupBar->GetVertOffset() + ADDITIONAL_SPACE );
     }
     SetSizePixel(aSize);
     Invalidate();
@@ -686,7 +686,7 @@ void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
         if (aPosPixel.Y() >= mnMaxY)
         {
             bResetPointerPos = true;
-            aPosPixel.Y() = mnMaxY;
+            aPosPixel.setY( mnMaxY );
         } // or expanding down
         else if (GetOutputSizePixel().Height() - aPosPixel.Y() < -nResizeThreshold)
         {
@@ -701,7 +701,7 @@ void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
 
         if (bResetPointerPos)
         {
-            aPosPixel.Y() =  GetOutputSizePixel().Height();
+            aPosPixel.setY(  GetOutputSizePixel().Height() );
             SetPointerPosPixel(aPosPixel);
         }
     }
@@ -817,17 +817,17 @@ void ScInputBarGroup::Resize()
     long nLeft  = GetPosPixel().X();
 
     Size aSize  = GetSizePixel();
-    aSize.Width() = std::max(long(nWidth - nLeft - LEFT_OFFSET), long(0));
+    aSize.setWidth( std::max(long(nWidth - nLeft - LEFT_OFFSET), long(0)) );
 
     maScrollbar->SetPosPixel(Point( aSize.Width() - maButton->GetSizePixel().Width(), maButton->GetSizePixel().Height() ) );
 
     Size aTmpSize( aSize );
-    aTmpSize.Width() = aTmpSize.Width() - maButton->GetSizePixel().Width() - BUTTON_OFFSET;
+    aTmpSize.setWidth( aTmpSize.Width() - maButton->GetSizePixel().Width() - BUTTON_OFFSET );
     maTextWnd->SetSizePixel(aTmpSize);
 
     maTextWnd->Resize();
 
-    aSize.Height() = maTextWnd->GetSizePixel().Height();
+    aSize.setHeight( maTextWnd->GetSizePixel().Height() );
 
     SetSizePixel(aSize);
 
@@ -836,7 +836,7 @@ void ScInputBarGroup::Resize()
         maButton->SetSymbol( SymbolType::SPIN_UP  );
         maButton->SetQuickHelpText( ScResId( SCSTR_QHELP_COLLAPSE_FORMULA ) );
         Size scrollSize = maButton->GetSizePixel();
-        scrollSize.Height() = maTextWnd->GetSizePixel().Height() - maButton->GetSizePixel().Height();
+        scrollSize.setHeight( maTextWnd->GetSizePixel().Height() - maButton->GetSizePixel().Height() );
         maScrollbar->SetSizePixel( scrollSize );
 
         Size aOutSz = maTextWnd->GetOutputSize();
@@ -1047,7 +1047,7 @@ void ScTextWnd::Resize()
     // parent/container window
     Size aTextBoxSize = GetSizePixel();
 
-    aTextBoxSize.Height() = GetPixelHeightForLines( mnLines );
+    aTextBoxSize.setHeight( GetPixelHeightForLines( mnLines ) );
     SetSizePixel( aTextBoxSize );
 
     if (mpEditView)
@@ -1173,8 +1173,8 @@ static void lcl_ModifyRTLVisArea( EditView* pEditView )
     tools::Rectangle aVisArea = pEditView->GetVisArea();
     Size aPaper = pEditView->GetEditEngine()->GetPaperSize();
     long nDiff = aPaper.Width() - aVisArea.Right();
-    aVisArea.Left()  += nDiff;
-    aVisArea.Right() += nDiff;
+    aVisArea.SetLeft( aVisArea.Left() + nDiff );
+    aVisArea.SetRight( aVisArea.Right() + nDiff );
     pEditView->SetVisArea(aVisArea);
 }
 
@@ -1295,7 +1295,7 @@ ScTextWnd::ScTextWnd(ScInputBarGroup* pParent, ScTabViewShell* pViewSh)
     Size aSize(1,TBX_WINDOW_HEIGHT);
     Size aMinEditSize( Edit::GetMinimumEditSize() );
     if( aMinEditSize.Height() > aSize.Height() )
-        aSize.Height() = aMinEditSize.Height();
+        aSize.setHeight( aMinEditSize.Height() );
 
     SetSizePixel(aSize);
     SetBackground(aBgColor);
@@ -1789,8 +1789,8 @@ ScPosWnd::ScPosWnd( vcl::Window* pParent ) :
     set_id("pos_window");
     Size aSize( GetTextWidth( "GW99999:GW99999" ),
                 GetTextHeight() );
-    aSize.Width() += 25;    // FIXME: ??
-    aSize.Height() = CalcWindowSizePixel(11); // Functions: 10 MRU + "others..."
+    aSize.setWidth( aSize.Width() + 25 );    // FIXME: ??
+    aSize.setHeight( CalcWindowSizePixel(11) ); // Functions: 10 MRU + "others..."
     SetSizePixel( aSize );
 
     FillRangeNames();

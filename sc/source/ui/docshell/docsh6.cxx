@@ -64,10 +64,10 @@ void ScDocShell::SetVisArea( const tools::Rectangle & rVisArea )
 static void lcl_SetTopRight( tools::Rectangle& rRect, const Point& rPos )
 {
     Size aSize = rRect.GetSize();
-    rRect.Right() = rPos.X();
-    rRect.Left() = rPos.X() - aSize.Width() + 1;
-    rRect.Top() = rPos.Y();
-    rRect.Bottom() = rPos.Y() + aSize.Height() - 1;
+    rRect.SetRight( rPos.X() );
+    rRect.SetLeft( rPos.X() - aSize.Width() + 1 );
+    rRect.SetTop( rPos.Y() );
+    rRect.SetBottom( rPos.Y() + aSize.Height() - 1 );
 }
 
 void ScDocShell::SetVisAreaOrSize( const tools::Rectangle& rVisArea )
@@ -88,12 +88,12 @@ void ScDocShell::SetVisAreaOrSize( const tools::Rectangle& rVisArea )
             Point aNewPos( 0, std::max( aArea.Top(), long(0) ) );
             if ( bNegativePage )
             {
-                aNewPos.X() = std::min( aArea.Right(), long(0) );
+                aNewPos.setX( std::min( aArea.Right(), long(0) ) );
                 lcl_SetTopRight( aArea, aNewPos );
             }
             else
             {
-                aNewPos.X() = std::max( aArea.Left(), long(0) );
+                aNewPos.setX( std::max( aArea.Left(), long(0) ) );
                 aArea.SetPos( aNewPos );
             }
         }

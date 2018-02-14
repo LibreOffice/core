@@ -106,17 +106,17 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
             Point aRectPos(aRect.X, aRect.Y);
             bool bLayoutRTL = rDoc.IsLayoutRTL(m_nTab);
             if ((aRectPos.X() < 0 && !bLayoutRTL) || (aRectPos.X() > 0 && bLayoutRTL))
-                aRectPos.X() = 0;
+                aRectPos.setX( 0 );
 
             if (aRectPos.Y() < 0)
-                aRectPos.Y() = 0;
+                aRectPos.setY( 0 );
 
             Size aRectSize(aRect.Width, aRect.Height);
             if (aRectSize.Width() <= 0)
-                aRectSize.Width() = 5000; // default size
+                aRectSize.setWidth( 5000 ); // default size
 
             if (aRectSize.Height() <= 0)
-                aRectSize.Height() = 5000;
+                aRectSize.setHeight( 5000 );
 
             ::tools::Rectangle aInsRect(aRectPos, aRectSize);
 

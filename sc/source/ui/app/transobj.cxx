@@ -740,8 +740,8 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         nPosX = static_cast<long>( nPosX * HMM_PER_TWIPS );
         nPosY = static_cast<long>( nPosY * HMM_PER_TWIPS );
 
-        aPaperSize.Width()  *= 2;       // limit OLE object to double of page size
-        aPaperSize.Height() *= 2;
+        aPaperSize.setWidth( aPaperSize.Width() * 2 );       // limit OLE object to double of page size
+        aPaperSize.setHeight( aPaperSize.Height() * 2 );
 
         long nSizeX = 0;
         long nSizeY = 0;

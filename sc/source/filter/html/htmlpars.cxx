@@ -281,7 +281,7 @@ ErrCode ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL )
     Size aSize;
     for ( sal_uInt16 j = 1; j < nCount; j++ )
     {
-        aSize.Width() = maColOffset[j] - nOff;
+        aSize.setWidth( maColOffset[j] - nOff );
         aSize = pDefaultDev->PixelToLogic( aSize, MapMode( MapUnit::MapTwip ) );
         maColWidths[ j-1 ] = aSize.Width();
         nOff = maColOffset[j];
@@ -763,7 +763,7 @@ void ScHTMLLayoutParser::SetWidths()
     {
         sal_uInt16 nMax = static_cast<sal_uInt16>(pLocalColOffset->back());
         if ( aPageSize.Width() < nMax )
-            aPageSize.Width() = nMax;
+            aPageSize.setWidth( nMax );
     }
     for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
     {
@@ -1319,22 +1319,22 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
             break;
             case HtmlOptionId::WIDTH:
             {
-                pImage->aSize.Width() = static_cast<long>(rOption.GetNumber());
+                pImage->aSize.setWidth( static_cast<long>(rOption.GetNumber()) );
             }
             break;
             case HtmlOptionId::HEIGHT:
             {
-                pImage->aSize.Height() = static_cast<long>(rOption.GetNumber());
+                pImage->aSize.setHeight( static_cast<long>(rOption.GetNumber()) );
             }
             break;
             case HtmlOptionId::HSPACE:
             {
-                pImage->aSpace.X() = static_cast<long>(rOption.GetNumber());
+                pImage->aSpace.setX( static_cast<long>(rOption.GetNumber()) );
             }
             break;
             case HtmlOptionId::VSPACE:
             {
-                pImage->aSpace.Y() = static_cast<long>(rOption.GetNumber());
+                pImage->aSpace.setY( static_cast<long>(rOption.GetNumber()) );
             }
             break;
             default: break;

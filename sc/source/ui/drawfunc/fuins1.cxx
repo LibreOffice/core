@@ -61,8 +61,8 @@ void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
     if ( bNegative )
     {
         //  make everything positive temporarily
-        aPageSize.Width() = -aPageSize.Width();
-        rPos.X() = -rPos.X() - rSize.Width();
+        aPageSize.setWidth( -aPageSize.Width() );
+        rPos.setX( -rPos.X() - rSize.Width() );
     }
 
     if ( rSize.Width() > aPageSize.Width() || rSize.Height() > aPageSize.Height() )
@@ -72,28 +72,28 @@ void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
 
         if ( fX < fY )
         {
-            rSize.Width()  = aPageSize.Width();
-            rSize.Height() = static_cast<long>( rSize.Height() * fX );
+            rSize.setWidth( aPageSize.Width() );
+            rSize.setHeight( static_cast<long>( rSize.Height() * fX ) );
         }
         else
         {
-            rSize.Height() = aPageSize.Height();
-            rSize.Width()  = static_cast<long>( rSize.Width() * fY );
+            rSize.setHeight( aPageSize.Height() );
+            rSize.setWidth( static_cast<long>( rSize.Width() * fY ) );
         }
 
         if (!rSize.Width())
-            rSize.Width() = 1;
+            rSize.setWidth( 1 );
         if (!rSize.Height())
-            rSize.Height() = 1;
+            rSize.setHeight( 1 );
     }
 
     if ( rPos.X() + rSize.Width() > aPageSize.Width() )
-        rPos.X() = aPageSize.Width() - rSize.Width();
+        rPos.setX( aPageSize.Width() - rSize.Width() );
     if ( rPos.Y() + rSize.Height() > aPageSize.Height() )
-        rPos.Y() = aPageSize.Height() - rSize.Height();
+        rPos.setY( aPageSize.Height() - rSize.Height() );
 
     if ( bNegative )
-        rPos.X() = -rPos.X() - rSize.Width();       // back to real position
+        rPos.setX( -rPos.X() - rSize.Width() );       // back to real position
 }
 
 static void lcl_InsertGraphic( const Graphic& rGraphic,
@@ -155,7 +155,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 
     ScViewData& rData = pViewSh->GetViewData();
     if ( rData.GetDocument()->IsNegativePage( rData.GetTabNo() ) )
-        aInsertPos.X() -= aLogicSize.Width();       // move position to left edge
+        aInsertPos.setX( aInsertPos.X() - aLogicSize.Width() );       // move position to left edge
 
     ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
 
@@ -208,7 +208,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
     ScLimitSizeOnDrawPage( aSize, aInsertPos, pPage->GetSize() );
 
     if( rData.GetDocument()->IsNegativePage( rData.GetTabNo() ) )
-        aInsertPos.X() -= aSize.Width();
+        aInsertPos.setX( aInsertPos.X() - aSize.Width() );
 
     OUString realURL;
     if (bLink)

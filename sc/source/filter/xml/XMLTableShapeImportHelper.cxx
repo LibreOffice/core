@@ -119,14 +119,14 @@ void XMLTableShapeImportHelper::finishShape(
                         static_cast<ScXMLImport&>(mrImporter).
                             GetMM100UnitConverter().convertMeasureToCore(
                                     nEndX, rValue);
-                        aAnchor.maEndOffset.X() = nEndX;
+                        aAnchor.maEndOffset.setX( nEndX );
                     }
                     else if (IsXMLToken(aLocalName, XML_END_Y))
                     {
                         static_cast<ScXMLImport&>(mrImporter).
                             GetMM100UnitConverter().convertMeasureToCore(
                                     nEndY, rValue);
-                        aAnchor.maEndOffset.Y() = nEndY;
+                        aAnchor.maEndOffset.setY( nEndY );
                     }
                     else if (IsXMLToken(aLocalName, XML_TABLE_BACKGROUND))
                         if (IsXMLToken(rValue, XML_TRUE))

@@ -2056,8 +2056,8 @@ tools::Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
         tools::Rectangle aArea( 0,0, SC_PREVIEW_SIZE_X, SC_PREVIEW_SIZE_Y);
         if (aSize.Width() > aSize.Height())
         {
-            aArea.Right() = SC_PREVIEW_SIZE_Y;
-            aArea.Bottom() = SC_PREVIEW_SIZE_X;
+            aArea.SetRight( SC_PREVIEW_SIZE_Y );
+            aArea.SetBottom( SC_PREVIEW_SIZE_X );
         }
 
         bool bNegativePage = aDocument.IsNegativePage( aDocument.GetVisibleTab() );

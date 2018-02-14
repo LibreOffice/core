@@ -65,8 +65,8 @@ void ScInvertMerger::Flush()
                 {
                     // extend first rectangle
                     nBottom = aOtherRect.Bottom();
-                    aCompRect.Bottom() = nBottom;
-                    (*pRects)[nComparePos].Bottom() = nBottom;
+                    aCompRect.SetBottom( nBottom );
+                    (*pRects)[nComparePos].SetBottom( nBottom );
 
                     // remove second rectangle
                     pRects->erase( pRects->begin() + nOtherPos );
@@ -109,7 +109,7 @@ void ScInvertMerger::FlushLine()
              aLineRect.Top()   == aTotalRect.Bottom() + 1 )
         {
             // extend total rect
-            aTotalRect.Bottom() = aLineRect.Bottom();
+            aTotalRect.SetBottom( aLineRect.Bottom() );
         }
         else
         {
@@ -126,8 +126,8 @@ void ScInvertMerger::AddRect( const tools::Rectangle& rRect )
     tools::Rectangle aJustified = rRect;
     if ( rRect.Left() > rRect.Right() )     // switch for RTL layout
     {
-        aJustified.Left() = rRect.Right();
-        aJustified.Right() = rRect.Left();
+        aJustified.SetLeft( rRect.Right() );
+        aJustified.SetRight( rRect.Left() );
     }
 
     if ( aLineRect.IsEmpty() )
@@ -143,12 +143,12 @@ void ScInvertMerger::AddRect( const tools::Rectangle& rRect )
             // try to extend line rect
             if ( aJustified.Left() == aLineRect.Right() + 1 )
             {
-                aLineRect.Right() = aJustified.Right();
+                aLineRect.SetRight( aJustified.Right() );
                 bDone = true;
             }
             else if ( aJustified.Right() + 1 == aLineRect.Left() )  // for RTL layout
             {
-                aLineRect.Left() = aJustified.Left();
+                aLineRect.SetLeft( aJustified.Left() );
                 bDone = true;
             }
         }

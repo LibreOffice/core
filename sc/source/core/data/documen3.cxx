@@ -1698,18 +1698,18 @@ tools::Rectangle ScDocument::GetEmbeddedRect() const // 1/100 mm
         SCCOL i;
 
         for (i=0; i<aEmbedRange.aStart.Col(); i++)
-            aRect.Left() += pTable->GetColWidth(i);
-        aRect.Top() += pTable->GetRowHeight( 0, aEmbedRange.aStart.Row() - 1);
-        aRect.Right() = aRect.Left();
+            aRect.SetLeft( aRect.Left() + pTable->GetColWidth(i) );
+        aRect.SetTop( aRect.Top() + pTable->GetRowHeight( 0, aEmbedRange.aStart.Row() - 1) );
+        aRect.SetRight( aRect.Left() );
         for (i=aEmbedRange.aStart.Col(); i<=aEmbedRange.aEnd.Col(); i++)
-            aRect.Right() += pTable->GetColWidth(i);
-        aRect.Bottom() = aRect.Top();
-        aRect.Bottom() += pTable->GetRowHeight( aEmbedRange.aStart.Row(), aEmbedRange.aEnd.Row());
+            aRect.SetRight( aRect.Right() + pTable->GetColWidth(i) );
+        aRect.SetBottom( aRect.Top() );
+        aRect.SetBottom( aRect.Bottom() + pTable->GetRowHeight( aEmbedRange.aStart.Row(), aEmbedRange.aEnd.Row()) );
 
-        aRect.Left()   = static_cast<long>( aRect.Left()   * HMM_PER_TWIPS );
-        aRect.Right()  = static_cast<long>( aRect.Right()  * HMM_PER_TWIPS );
-        aRect.Top()    = static_cast<long>( aRect.Top()    * HMM_PER_TWIPS );
-        aRect.Bottom() = static_cast<long>( aRect.Bottom() * HMM_PER_TWIPS );
+        aRect.SetLeft( static_cast<long>( aRect.Left()   * HMM_PER_TWIPS ) );
+        aRect.SetRight( static_cast<long>( aRect.Right()  * HMM_PER_TWIPS ) );
+        aRect.SetTop( static_cast<long>( aRect.Top()    * HMM_PER_TWIPS ) );
+        aRect.SetBottom( static_cast<long>( aRect.Bottom() * HMM_PER_TWIPS ) );
     }
     return aRect;
 }
@@ -1970,20 +1970,20 @@ tools::Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow, SCCOL 
     tools::Rectangle aRect;
 
     for (i=0; i<nStartCol; i++)
-        aRect.Left() += GetColWidth(i,nTab, bHiddenAsZero );
-    aRect.Top() += GetRowHeight( 0, nStartRow-1, nTab, bHiddenAsZero );
+        aRect.SetLeft( aRect.Left() + GetColWidth(i,nTab, bHiddenAsZero ) );
+    aRect.SetTop( aRect.Top() + GetRowHeight( 0, nStartRow-1, nTab, bHiddenAsZero ) );
 
-    aRect.Right()  = aRect.Left();
-    aRect.Bottom() = aRect.Top();
+    aRect.SetRight( aRect.Left() );
+    aRect.SetBottom( aRect.Top() );
 
     for (i=nStartCol; i<=nEndCol; i++)
-        aRect.Right() += GetColWidth(i,nTab, bHiddenAsZero);
-    aRect.Bottom() += GetRowHeight( nStartRow, nEndRow, nTab, bHiddenAsZero );
+        aRect.SetRight( aRect.Right() + GetColWidth(i,nTab, bHiddenAsZero) );
+    aRect.SetBottom( aRect.Bottom() + GetRowHeight( nStartRow, nEndRow, nTab, bHiddenAsZero ) );
 
-    aRect.Left()    = static_cast<long>(aRect.Left()   * HMM_PER_TWIPS);
-    aRect.Right()   = static_cast<long>(aRect.Right()  * HMM_PER_TWIPS);
-    aRect.Top()     = static_cast<long>(aRect.Top()    * HMM_PER_TWIPS);
-    aRect.Bottom()  = static_cast<long>(aRect.Bottom() * HMM_PER_TWIPS);
+    aRect.SetLeft( static_cast<long>(aRect.Left()   * HMM_PER_TWIPS) );
+    aRect.SetRight( static_cast<long>(aRect.Right()  * HMM_PER_TWIPS) );
+    aRect.SetTop( static_cast<long>(aRect.Top()    * HMM_PER_TWIPS) );
+    aRect.SetBottom( static_cast<long>(aRect.Bottom() * HMM_PER_TWIPS) );
 
     if ( IsNegativePage( nTab ) )
         ScDrawLayer::MirrorRectRTL( aRect );
