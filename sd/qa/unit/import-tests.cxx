@@ -2466,14 +2466,14 @@ void SdImportTest::testTdf51340()
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(css::style::LineSpacingMode::PROP), aSpacing.Mode );
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(125), aSpacing.Height );
 
-    // Third paragraph has a 70% line spacing set directly on normal slide (master slide property ir overriden)
+    // Third paragraph has a 70% line spacing set directly on normal slide (master slide property is overridden)
     xParagraph.set( getParagraphFromShape( 2, xShape ) );
     xPropSet.set( xParagraph, uno::UNO_QUERY_THROW );
     xPropSet->getPropertyValue( "ParaLineSpacing" ) >>= aSpacing;
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(css::style::LineSpacingMode::PROP), aSpacing.Mode );
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(70), aSpacing.Height );
 
-    // Fourth paragraph has a 190% line spacing set directly on normal slide (slide layout property is overriden)
+    // Fourth paragraph has a 190% line spacing set directly on normal slide (slide layout property is overridden)
     xParagraph.set( getParagraphFromShape( 3, xShape ) );
     xPropSet.set( xParagraph, uno::UNO_QUERY_THROW );
     xPropSet->getPropertyValue( "ParaLineSpacing" ) >>= aSpacing;

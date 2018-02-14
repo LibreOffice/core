@@ -1110,7 +1110,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
         {
             // only nonempty type makes sense here
             ( *aIter )[PKG_MNFST_FULLPATH].Value >>= aPath;
-            //FIXME: For now we have no way of deferentiating defaults from others.
+            //FIXME: For now we have no way of differentiating defaults from others.
             aOverridesSequence[nOverSeqLength].First = "/" + aPath;
             aOverridesSequence[nOverSeqLength].Second = aType;
             ++nOverSeqLength;
