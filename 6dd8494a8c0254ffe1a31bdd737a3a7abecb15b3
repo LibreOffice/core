@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_5cf7faf4",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 4364,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-02-14T04:00:03Z",
+      "side": 1,
+      "message": "I\u0027d perhaps change that to test for target package format - so you capture other unixes as well?",
+      "revId": "6dd8494a8c0254ffe1a31bdd737a3a7abecb15b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
