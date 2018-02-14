@@ -30,12 +30,12 @@ void XFunctionDescriptions::testGetById()
     uno::Reference<sheet::XFunctionDescriptions> xFD(init(), UNO_QUERY_THROW);
 
     const sal_Int32 nCount = xFD->getCount();
-    CPPUNIT_ASSERT_MESSAGE("No FunctionDescriptions available", 0 != nCount);
+    CPPUNIT_ASSERT_MESSAGE("No FunctionDescriptions available", 0 < nCount);
 
     // first grab a random function descriptions
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distr(1, nCount);
+    std::uniform_int_distribution<> distr(0, nCount - 1);
     int nNumber = distr(gen);
 
     sal_Int32 aId1 = 0;
