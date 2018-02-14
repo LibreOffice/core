@@ -14,6 +14,9 @@
 #include <vcl/ImageTree.hxx>
 #include <vcl/salbtype.hxx>
 #include <tools/stream.hxx>
+#ifndef IOS
+#include <vcl/cairo.hxx>
+#endif
 
 namespace vcl {
 namespace bitmap {
@@ -65,6 +68,10 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
 BitmapEx VCL_DLLPUBLIC CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nStride, sal_uInt16 nBitCount );
 
 BitmapEx VCL_DLLPUBLIC CreateFromData( RawBitmap && data );
+
+#ifndef IOS
+VCL_DLLPUBLIC BitmapEx* CreateFromCairoSurface(Size size, cairo_surface_t* pSurface);
+#endif
 
 }} // end vcl::bitmap
 
