@@ -287,9 +287,9 @@ Size ScHTMLExport::MMToPixel( const Size& rSize )
     aSize = pAppWin->LogicToPixel( rSize, MapMode( MapUnit::Map100thMM ) );
     // If there's something there should also be a Pixel
     if ( !aSize.Width() && rSize.Width() )
-        aSize.Width() = 1;
+        aSize.setWidth( 1 );
     if ( !aSize.Height() && rSize.Height() )
-        aSize.Height() = 1;
+        aSize.setHeight( 1 );
     return aSize;
 }
 

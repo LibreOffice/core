@@ -303,9 +303,9 @@ void ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDon
 
     Point aEffPos = rPointPixel;
     if ( aEffPos.X() == 0 )
-        aEffPos.X() = -1;
+        aEffPos.setX( -1 );
     if ( aEffPos.Y() == 0 )
-        aEffPos.Y() = -1;
+        aEffPos.setY( -1 );
 
     //  Scrolling
     Size aWinSize = pEngine->GetWindow()->GetOutputSizePixel();

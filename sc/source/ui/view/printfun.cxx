@@ -1092,17 +1092,17 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 Size ScPrintFunc::GetDataSize() const
 {
     Size aSize = aPageSize;
-    aSize.Width()  -= nLeftMargin + nRightMargin;
-    aSize.Height() -= nTopMargin + nBottomMargin;
-    aSize.Height() -= aHdr.nHeight + aFtr.nHeight;
+    aSize.setWidth( aSize.Width() - nLeftMargin + nRightMargin );
+    aSize.setHeight( aSize.Height() - nTopMargin + nBottomMargin );
+    aSize.setHeight( aSize.Height() - aHdr.nHeight + aFtr.nHeight );
     return aSize;
 }
 
 void ScPrintFunc::GetScaleData( Size& rPhysSize, long& rDocHdr, long& rDocFtr )
 {
     rPhysSize = aPageSize;
-    rPhysSize.Width()  -= nLeftMargin + nRightMargin;
-    rPhysSize.Height() -= nTopMargin + nBottomMargin;
+    rPhysSize.setWidth( rPhysSize.Width() - nLeftMargin + nRightMargin );
+    rPhysSize.setHeight( rPhysSize.Height() - nTopMargin + nBottomMargin );
 
     rDocHdr = aHdr.nHeight;
     rDocFtr = aFtr.nHeight;
@@ -1158,31 +1158,31 @@ static void lcl_DrawGraphic( const SvxBrushItem &rBrush, vcl::RenderContext *pOu
     {
         case GPOS_LT: aPos = rOrg.TopLeft();
                       break;
-        case GPOS_MT: aPos.Y() = rOrg.Top();
-                      aPos.X() = rOrg.Left() + rOrg.GetSize().Width()/2 - aGrfSize.Width()/2;
+        case GPOS_MT: aPos.setY( rOrg.Top() );
+                      aPos.setX( rOrg.Left() + rOrg.GetSize().Width()/2 - aGrfSize.Width()/2 );
                       break;
-        case GPOS_RT: aPos.Y() = rOrg.Top();
-                      aPos.X() = rOrg.Right() - aGrfSize.Width();
-                      break;
-
-        case GPOS_LM: aPos.Y() = rOrg.Top() + rOrg.GetSize().Height()/2 - aGrfSize.Height()/2;
-                      aPos.X() = rOrg.Left();
-                      break;
-        case GPOS_MM: aPos.Y() = rOrg.Top() + rOrg.GetSize().Height()/2 - aGrfSize.Height()/2;
-                      aPos.X() = rOrg.Left() + rOrg.GetSize().Width()/2 - aGrfSize.Width()/2;
-                      break;
-        case GPOS_RM: aPos.Y() = rOrg.Top() + rOrg.GetSize().Height()/2 - aGrfSize.Height()/2;
-                      aPos.X() = rOrg.Right() - aGrfSize.Width();
+        case GPOS_RT: aPos.setY( rOrg.Top() );
+                      aPos.setX( rOrg.Right() - aGrfSize.Width() );
                       break;
 
-        case GPOS_LB: aPos.Y() = rOrg.Bottom() - aGrfSize.Height();
-                      aPos.X() = rOrg.Left();
+        case GPOS_LM: aPos.setY( rOrg.Top() + rOrg.GetSize().Height()/2 - aGrfSize.Height()/2 );
+                      aPos.setX( rOrg.Left() );
                       break;
-        case GPOS_MB: aPos.Y() = rOrg.Bottom() - aGrfSize.Height();
-                      aPos.X() = rOrg.Left() + rOrg.GetSize().Width()/2 - aGrfSize.Width()/2;
+        case GPOS_MM: aPos.setY( rOrg.Top() + rOrg.GetSize().Height()/2 - aGrfSize.Height()/2 );
+                      aPos.setX( rOrg.Left() + rOrg.GetSize().Width()/2 - aGrfSize.Width()/2 );
                       break;
-        case GPOS_RB: aPos.Y() = rOrg.Bottom() - aGrfSize.Height();
-                      aPos.X() = rOrg.Right() - aGrfSize.Width();
+        case GPOS_RM: aPos.setY( rOrg.Top() + rOrg.GetSize().Height()/2 - aGrfSize.Height()/2 );
+                      aPos.setX( rOrg.Right() - aGrfSize.Width() );
+                      break;
+
+        case GPOS_LB: aPos.setY( rOrg.Bottom() - aGrfSize.Height() );
+                      aPos.setX( rOrg.Left() );
+                      break;
+        case GPOS_MB: aPos.setY( rOrg.Bottom() - aGrfSize.Height() );
+                      aPos.setX( rOrg.Left() + rOrg.GetSize().Width()/2 - aGrfSize.Width()/2 );
+                      break;
+        case GPOS_RB: aPos.setY( rOrg.Bottom() - aGrfSize.Height() );
+                      aPos.setX( rOrg.Right() - aGrfSize.Width() );
                       break;
 
         case GPOS_AREA:
@@ -1537,12 +1537,12 @@ void ScPrintFunc::LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     SCCOL nCol;
     Point aTwipOffset;
     for (nCol=0; nCol<nX1; nCol++)
-        aTwipOffset.X() -= pDoc->GetColWidth( nCol, nPrintTab );
-    aTwipOffset.Y() -= pDoc->GetRowHeight( 0, nY1-1, nPrintTab );
+        aTwipOffset.setX( aTwipOffset.X() - pDoc->GetColWidth( nCol, nPrintTab ) );
+    aTwipOffset.setY( aTwipOffset.Y() - pDoc->GetRowHeight( 0, nY1-1, nPrintTab ) );
 
     Point aMMOffset( aTwipOffset );
-    aMMOffset.X() = static_cast<long>(aMMOffset.X() * HMM_PER_TWIPS);
-    aMMOffset.Y() = static_cast<long>(aMMOffset.Y() * HMM_PER_TWIPS);
+    aMMOffset.setX( static_cast<long>(aMMOffset.X() * HMM_PER_TWIPS) );
+    aMMOffset.setY( static_cast<long>(aMMOffset.Y() * HMM_PER_TWIPS) );
     aMMOffset += Point( nLogStX, nLogStY );
     MapMode aDrawMapMode( MapUnit::Map100thMM, aMMOffset, aLogicMode.GetScaleX(), aLogicMode.GetScaleY() );
 
@@ -1763,20 +1763,20 @@ void ScPrintFunc::PrintHF( long nPageNo, bool bHeader, long nStartY,
     {
         long nLeft = lcl_LineTotal( rParam.pBorder->GetLeft() ) + rParam.pBorder->GetDistance(SvxBoxItemLine::LEFT);
         long nTop = lcl_LineTotal( rParam.pBorder->GetTop() ) + rParam.pBorder->GetDistance(SvxBoxItemLine::TOP);
-        aStart.X() += nLeft;
-        aStart.Y() += nTop;
-        aPaperSize.Width() -= nLeft + lcl_LineTotal( rParam.pBorder->GetRight() ) + rParam.pBorder->GetDistance(SvxBoxItemLine::RIGHT);
-        aPaperSize.Height() -= nTop + lcl_LineTotal( rParam.pBorder->GetBottom() ) + rParam.pBorder->GetDistance(SvxBoxItemLine::BOTTOM);
+        aStart.setX( aStart.X() + nLeft );
+        aStart.setY( aStart.Y() + nTop );
+        aPaperSize.setWidth( aPaperSize.Width() - nLeft + lcl_LineTotal( rParam.pBorder->GetRight() ) + rParam.pBorder->GetDistance(SvxBoxItemLine::RIGHT) );
+        aPaperSize.setHeight( aPaperSize.Height() - nTop + lcl_LineTotal( rParam.pBorder->GetBottom() ) + rParam.pBorder->GetDistance(SvxBoxItemLine::BOTTOM) );
     }
 
     if ( rParam.pShadow && rParam.pShadow->GetLocation() != SvxShadowLocation::NONE )
     {
         long nLeft  = rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::LEFT);
         long nTop   = rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::TOP);
-        aStart.X() += nLeft;
-        aStart.Y() += nTop;
-        aPaperSize.Width() -= nLeft + rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::RIGHT);
-        aPaperSize.Height() -= nTop + rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::BOTTOM);
+        aStart.setX( aStart.X() + nLeft );
+        aStart.setY( aStart.Y() + nTop );
+        aPaperSize.setWidth( aPaperSize.Width() - nLeft + rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::RIGHT) );
+        aPaperSize.setHeight( aPaperSize.Height() - nTop + rParam.pShadow->CalcShadowSpace(SvxShadowItemSide::BOTTOM) );
     }
 
     aFieldData.nPageNo = nPageNo+aTableParam.nFirstPageNo;
@@ -1809,7 +1809,7 @@ void ScPrintFunc::PrintHF( long nPageNo, bool bHeader, long nStartY,
         if (nMaxHeight < rParam.nManHeight-rParam.nDistance)
             nMaxHeight = rParam.nManHeight-rParam.nDistance;        // configured Minimum
 
-        aBorderSize.Height() = nMaxHeight;
+        aBorderSize.setHeight( nMaxHeight );
     }
 
     if ( bDoPrint )
@@ -1836,7 +1836,7 @@ void ScPrintFunc::PrintHF( long nPageNo, bool bHeader, long nStartY,
             Point aDraw = aStart;
             long nDif = aPaperSize.Height() - static_cast<long>(pEditEngine->GetTextHeight());
             if (nDif > 0)
-                aDraw.Y() += nDif / 2;
+                aDraw.setY( aDraw.Y() + nDif / 2 );
             pEditEngine->Draw( pDev, aDraw );
         }
 
@@ -1850,7 +1850,7 @@ void ScPrintFunc::PrintHF( long nPageNo, bool bHeader, long nStartY,
             Point aDraw = aStart;
             long nDif = aPaperSize.Height() - static_cast<long>(pEditEngine->GetTextHeight());
             if (nDif > 0)
-                aDraw.Y() += nDif / 2;
+                aDraw.setY( aDraw.Y() + nDif / 2 );
             pEditEngine->Draw( pDev, aDraw );
         }
 
@@ -1864,7 +1864,7 @@ void ScPrintFunc::PrintHF( long nPageNo, bool bHeader, long nStartY,
             Point aDraw = aStart;
             long nDif = aPaperSize.Height() - static_cast<long>(pEditEngine->GetTextHeight());
             if (nDif > 0)
-                aDraw.Y() += nDif / 2;
+                aDraw.setY( aDraw.Y() + nDif / 2 );
             pEditEngine->Draw( pDev, aDraw );
         }
 
@@ -1897,7 +1897,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, bool bDoPrint, ScPreviewLocationData
     Size aDataSize = aPageRect.GetSize();
     if ( nMarkLen > aDataSize.Width() / 2 )     // everything much too small?
         nMarkLen = aDataSize.Width() / 2;       // split the page appropriately
-    aDataSize.Width() -= nMarkLen;
+    aDataSize.setWidth( aDataSize.Width() - nMarkLen );
 
     pEditEngine->SetPaperSize( aDataSize );
     long nPosX = aPageRect.Left() + nMarkLen;
@@ -1979,13 +1979,13 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, bool bDoPrint, ScPr
     tools::Rectangle aTempRect = tools::Rectangle( Point(), aPageSize );
     if (IsMirror(nPageNo))
     {
-        aPageRect.Left()  = ( aTempRect.Left()  + nRightMargin ) * 100 / nZoom;
-        aPageRect.Right() = ( aTempRect.Right() - nLeftMargin  ) * 100 / nZoom;
+        aPageRect.SetLeft( ( aTempRect.Left()  + nRightMargin ) * 100 / nZoom );
+        aPageRect.SetRight( ( aTempRect.Right() - nLeftMargin  ) * 100 / nZoom );
     }
     else
     {
-        aPageRect.Left()  = ( aTempRect.Left()  + nLeftMargin  ) * 100 / nZoom;
-        aPageRect.Right() = ( aTempRect.Right() - nRightMargin ) * 100 / nZoom;
+        aPageRect.SetLeft( ( aTempRect.Left()  + nLeftMargin  ) * 100 / nZoom );
+        aPageRect.SetRight( ( aTempRect.Right() - nRightMargin ) * 100 / nZoom );
     }
 
     if ( pPrinter && bDoPrint )
@@ -2048,13 +2048,13 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
     tools::Rectangle aTempRect = tools::Rectangle( Point(), aPageSize );
     if (IsMirror(nPageNo))
     {
-        aPageRect.Left()  = ( aTempRect.Left()  + nRightMargin ) * 100 / nZoom;
-        aPageRect.Right() = ( aTempRect.Right() - nLeftMargin  ) * 100 / nZoom;
+        aPageRect.SetLeft( ( aTempRect.Left()  + nRightMargin ) * 100 / nZoom );
+        aPageRect.SetRight( ( aTempRect.Right() - nLeftMargin  ) * 100 / nZoom );
     }
     else
     {
-        aPageRect.Left()  = ( aTempRect.Left()  + nLeftMargin  ) * 100 / nZoom;
-        aPageRect.Right() = ( aTempRect.Right() - nRightMargin ) * 100 / nZoom;
+        aPageRect.SetLeft( ( aTempRect.Left()  + nLeftMargin  ) * 100 / nZoom );
+        aPageRect.SetRight( ( aTempRect.Right() - nRightMargin ) * 100 / nZoom );
     }
 
     if ( aAreaParam.bRepeatCol )
@@ -2617,8 +2617,8 @@ void ScPrintFunc::ApplyPrintSettings()
                 // this leads to non WYSIWIG but at least it prints!
                 // #i21775#
                 long nTemp = aEnumSize.Width();
-                aEnumSize.Width() = aEnumSize.Height();
-                aEnumSize.Height() = nTemp;
+                aEnumSize.setWidth( aEnumSize.Height() );
+                aEnumSize.setHeight( nTemp );
         }
         Paper ePaper = SvxPaperInfo::GetSvxPaper( aEnumSize, MapUnit::MapTwip );
         sal_uInt16 nPaperBin = pParamSet->Get(ATTR_PAGE_PAPERBIN).GetValue();
@@ -2936,34 +2936,34 @@ Size ScPrintFunc::GetDocPageSize()
                         //  Calculating Left / Right also in PrintPage
 
     aPageRect = tools::Rectangle( Point(), aPageSize );
-    aPageRect.Left()   = ( aPageRect.Left()   + nLeftMargin                  ) * 100 / nZoom;
-    aPageRect.Right()  = ( aPageRect.Right()  - nRightMargin                 ) * 100 / nZoom;
-    aPageRect.Top()    = ( aPageRect.Top()    + nTopMargin    ) * 100 / nZoom + aHdr.nHeight;
-    aPageRect.Bottom() = ( aPageRect.Bottom() - nBottomMargin ) * 100 / nZoom - aFtr.nHeight;
+    aPageRect.SetLeft( ( aPageRect.Left()   + nLeftMargin                  ) * 100 / nZoom );
+    aPageRect.SetRight( ( aPageRect.Right()  - nRightMargin                 ) * 100 / nZoom );
+    aPageRect.SetTop( ( aPageRect.Top()    + nTopMargin    ) * 100 / nZoom + aHdr.nHeight );
+    aPageRect.SetBottom( ( aPageRect.Bottom() - nBottomMargin ) * 100 / nZoom - aFtr.nHeight );
 
     Size aDocPageSize = aPageRect.GetSize();
     if (aTableParam.bHeaders)
     {
-        aDocPageSize.Width()  -= long(PRINT_HEADER_WIDTH);
-        aDocPageSize.Height() -= long(PRINT_HEADER_HEIGHT);
+        aDocPageSize.setWidth( aDocPageSize.Width() - long(PRINT_HEADER_WIDTH) );
+        aDocPageSize.setHeight( aDocPageSize.Height() - long(PRINT_HEADER_HEIGHT) );
     }
     if (pBorderItem)
     {
-        aDocPageSize.Width()  -= lcl_LineTotal(pBorderItem->GetLeft()) +
+        aDocPageSize.setWidth( aDocPageSize.Width() - lcl_LineTotal(pBorderItem->GetLeft()) +
                                  lcl_LineTotal(pBorderItem->GetRight()) +
                                  pBorderItem->GetDistance(SvxBoxItemLine::LEFT) +
-                                 pBorderItem->GetDistance(SvxBoxItemLine::RIGHT);
-        aDocPageSize.Height() -= lcl_LineTotal(pBorderItem->GetTop()) +
+                                 pBorderItem->GetDistance(SvxBoxItemLine::RIGHT) );
+        aDocPageSize.setHeight( aDocPageSize.Height() - lcl_LineTotal(pBorderItem->GetTop()) +
                                  lcl_LineTotal(pBorderItem->GetBottom()) +
                                  pBorderItem->GetDistance(SvxBoxItemLine::TOP) +
-                                 pBorderItem->GetDistance(SvxBoxItemLine::BOTTOM);
+                                 pBorderItem->GetDistance(SvxBoxItemLine::BOTTOM) );
     }
     if (pShadowItem && pShadowItem->GetLocation() != SvxShadowLocation::NONE)
     {
-        aDocPageSize.Width()  -= pShadowItem->CalcShadowSpace(SvxShadowItemSide::LEFT) +
-                                 pShadowItem->CalcShadowSpace(SvxShadowItemSide::RIGHT);
-        aDocPageSize.Height() -= pShadowItem->CalcShadowSpace(SvxShadowItemSide::TOP) +
-                                 pShadowItem->CalcShadowSpace(SvxShadowItemSide::BOTTOM);
+        aDocPageSize.setWidth( aDocPageSize.Width() - pShadowItem->CalcShadowSpace(SvxShadowItemSide::LEFT) +
+                                 pShadowItem->CalcShadowSpace(SvxShadowItemSide::RIGHT) );
+        aDocPageSize.setHeight( aDocPageSize.Height() - pShadowItem->CalcShadowSpace(SvxShadowItemSide::TOP) +
+                                 pShadowItem->CalcShadowSpace(SvxShadowItemSide::BOTTOM) );
     }
     return aDocPageSize;
 }

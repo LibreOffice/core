@@ -246,8 +246,8 @@ bool ScPreviewShell::GetPageSize( Size& aPageSize )
     const SfxItemSet* pParamSet = &pStyleSheet->GetItemSet();
 
     aPageSize = pParamSet->Get(ATTR_PAGE_SIZE).GetSize();
-    aPageSize.Width()  = static_cast<long>(aPageSize.Width()  * HMM_PER_TWIPS );
-    aPageSize.Height() = static_cast<long>(aPageSize.Height() * HMM_PER_TWIPS );
+    aPageSize.setWidth( static_cast<long>(aPageSize.Width()  * HMM_PER_TWIPS ) );
+    aPageSize.setHeight( static_cast<long>(aPageSize.Height() * HMM_PER_TWIPS ) );
     return true;
 }
 
@@ -278,13 +278,13 @@ void ScPreviewShell::UpdateNeededScrollBars( bool bFromZoom )
     {
         if ( bVert )
         {
-            aWindowPixelSize.Width() += nBarH;
-            aWindowSize.Width() += aHeightOffSet;
+            aWindowPixelSize.setWidth( aWindowPixelSize.Width() + nBarH );
+            aWindowSize.setWidth( aWindowSize.Width() + aHeightOffSet );
         }
         if ( bHori )
         {
-            aWindowPixelSize.Height() += nBarW;
-            aWindowSize.Height() += aWidthOffSet;
+            aWindowPixelSize.setHeight( aWindowPixelSize.Height() + nBarW );
+            aWindowSize.setHeight( aWindowSize.Height() + aWidthOffSet );
         }
     }
 
@@ -308,9 +308,9 @@ void ScPreviewShell::UpdateNeededScrollBars( bool bFromZoom )
     // make room for needed scrollbars ( and reduce the size
     // of the preview appropriately )
     if ( bHori )
-        aWindowPixelSize.Height() -= nBarW;
+        aWindowPixelSize.setHeight( aWindowPixelSize.Height() - nBarW );
     if ( bVert )
-        aWindowPixelSize.Width() -= nBarH;
+        aWindowPixelSize.setWidth( aWindowPixelSize.Width() - nBarH );
 
     pPreview->SetSizePixel( aWindowPixelSize );
     pHorScroll->SetPosSizePixel( Point( aPos.X(), aPos.Y() + aWindowPixelSize.Height() ),
@@ -344,19 +344,19 @@ void ScPreviewShell::UpdateScrollBars()
         if ( nMaxPos<0 )
         {
             //  page smaller than window -> center (but put scrollbar to 0)
-            aOfs.X() = 0;
+            aOfs.setX( 0 );
             pPreview->SetXOffset( nMaxPos / 2 );
         }
         else if (aOfs.X() < 0)
         {
             //  page larger than window -> never use negative offset
-            aOfs.X() = 0;
+            aOfs.setX( 0 );
             pPreview->SetXOffset( 0 );
         }
         else if (aOfs.X() > nMaxPos)
         {
             //  limit offset to align with right edge of window
-            aOfs.X() = nMaxPos;
+            aOfs.setX( nMaxPos );
             pPreview->SetXOffset(nMaxPos);
         }
         pHorScroll->SetThumbPos( aOfs.X() );
@@ -374,7 +374,7 @@ void ScPreviewShell::UpdateScrollBars()
         if ( nMaxVertPos < 0 )
         {
             //  page smaller than window -> center (but put scrollbar to 0)
-            aOfs.Y() = 0;
+            aOfs.setY( 0 );
             pPreview->SetYOffset( nMaxVertPos / 2 );
             pVerScroll->SetThumbPos( nPageNo * aWindowSize.Height() );
             pVerScroll->SetRange( Range( 0, aWindowSize.Height() * nTotalPages ));
@@ -383,7 +383,7 @@ void ScPreviewShell::UpdateScrollBars()
         {
             //  page larger than window -> never use negative offset
             pVerScroll->SetRange( Range( 0, aPageSize.Height() ) );
-            aOfs.Y() = 0;
+            aOfs.setY( 0 );
             pPreview->SetYOffset( 0 );
             pVerScroll->SetThumbPos( aOfs.Y() );
         }
@@ -391,7 +391,7 @@ void ScPreviewShell::UpdateScrollBars()
         {
             //  limit offset to align with window bottom
             pVerScroll->SetRange( Range( 0, aPageSize.Height() ) );
-            aOfs.Y() = nMaxVertPos;
+            aOfs.setY( nMaxVertPos );
             pPreview->SetYOffset( nMaxVertPos );
             pVerScroll->SetThumbPos( aOfs.Y() );
         }
@@ -459,10 +459,10 @@ IMPL_LINK( ScPreviewShell, ScrollHandler, ScrollBar*, pScroll, void )
                            " / "  + OUString::number( nTotalPages );
             }
 
-            aRect.Left()    = aPos.X() - 8;
-            aRect.Top()     = aMousePos.Y();
-            aRect.Right()   = aRect.Left();
-            aRect.Bottom()  = aRect.Top();
+            aRect.SetLeft( aPos.X() - 8 );
+            aRect.SetTop( aMousePos.Y() );
+            aRect.SetRight( aRect.Left() );
+            aRect.SetBottom( aRect.Top() );
             nAlign          = QuickHelpFlags::Bottom|QuickHelpFlags::Center;
             Help::ShowQuickHelp( pScroll->GetParent(), aRect, aHelpStr, nAlign );
         }
@@ -975,8 +975,8 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
     long nVLine     = pVerScroll->GetLineSize();
     long nVPage     = pVerScroll->GetPageSize();
 
-    aCurPos.X() = pHorScroll->GetThumbPos();
-    aCurPos.Y() = pVerScroll->GetThumbPos();
+    aCurPos.setX( pHorScroll->GetThumbPos() );
+    aCurPos.setY( pVerScroll->GetThumbPos() );
     aPrevPos = aCurPos;
 
     long nThumbPos  = pVerScroll->GetThumbPos();
@@ -997,7 +997,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
                 }
             }
             else
-                aCurPos.Y() -= nVLine;
+                aCurPos.setY( aCurPos.Y() - nVLine );
             break;
         case SID_CURSORDOWN:
             if( nMaxVertPos<0 )
@@ -1020,13 +1020,13 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
                 }
             }
             else
-                aCurPos.Y() += nVLine;
+                aCurPos.setY( aCurPos.Y() + nVLine );
             break;
         case SID_CURSORLEFT:
-            aCurPos.X() -= nHLine;
+            aCurPos.setX( aCurPos.X() - nHLine );
             break;
         case SID_CURSORRIGHT:
-            aCurPos.X() += nHLine;
+            aCurPos.setX( aCurPos.X() + nHLine );
             break;
         case SID_CURSORPAGEUP:
             if( nThumbPos==0 || nMaxVertPos<0 )
@@ -1038,11 +1038,11 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
                     SfxViewFrame* pSfxViewFrame = GetViewFrame();
                     SfxRequest aSfxRequest( pSfxViewFrame, SID_PREVIEW_PREVIOUS );
                     Execute( aSfxRequest );
-                    aCurPos.Y() = nVRange;
+                    aCurPos.setY( nVRange );
                 }
             }
             else
-                aCurPos.Y() -= nVPage;
+                aCurPos.setY( aCurPos.Y() - nVPage );
             break;
         case SID_CURSORPAGEDOWN:
             if( (std::abs(nVPage+nThumbPos-nRangeMax)<10) || nMaxVertPos<0 )
@@ -1061,11 +1061,11 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
                     SfxViewFrame* pSfxViewFrame = GetViewFrame();
                     SfxRequest aSfxRequest( pSfxViewFrame, SID_PREVIEW_NEXT );
                     Execute( aSfxRequest );
-                    aCurPos.Y() = 0;
+                    aCurPos.setY( 0 );
                 }
             }
             else
-                aCurPos.Y() += nVPage;
+                aCurPos.setY( aCurPos.Y() + nVPage );
             break;
         case SID_CURSORHOME:
             if( nMaxVertPos<0 )
@@ -1081,8 +1081,8 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
             }
             else
             {
-                aCurPos.Y() = 0;
-                aCurPos.X() = 0;
+                aCurPos.setY( 0 );
+                aCurPos.setX( 0 );
             }
             break;
         case SID_CURSOREND:
@@ -1101,8 +1101,8 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
             }
             else
             {
-                aCurPos.Y() = nVRange;
-                aCurPos.X() = nHRange;
+                aCurPos.setY( nVRange );
+                aCurPos.setX( nHRange );
             }
             break;
     }
@@ -1110,13 +1110,13 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
         // nHRange-nHPage might be negative, that's why we check for < 0 afterwards
 
     if( aCurPos.Y() > (nVRange-nVPage) )
-        aCurPos.Y() = (nVRange-nVPage);
+        aCurPos.setY( nVRange-nVPage );
     if( aCurPos.Y() < 0 )
-        aCurPos.Y() = 0;
+        aCurPos.setY( 0 );
     if( aCurPos.X() > (nHRange-nHPage) )
-        aCurPos.X() = (nHRange-nHPage);
+        aCurPos.setX( nHRange-nHPage );
     if( aCurPos.X() < 0 )
-        aCurPos.X() = 0;
+        aCurPos.setX( 0 );
 
     if( nMaxVertPos>=0 )
     {

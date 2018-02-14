@@ -460,8 +460,8 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         if (nPrinted)   // if not, draw everything grey
         {
             aLocalPageSize = pPrintFunc->GetPageSize();
-            aLocalPageSize.Width()  = static_cast<long>(aLocalPageSize.Width()  * HMM_PER_TWIPS );
-            aLocalPageSize.Height() = static_cast<long>(aLocalPageSize.Height() * HMM_PER_TWIPS );
+            aLocalPageSize.setWidth( static_cast<long>(aLocalPageSize.Width()  * HMM_PER_TWIPS ) );
+            aLocalPageSize.setHeight( static_cast<long>(aLocalPageSize.Height() * HMM_PER_TWIPS ) );
 
             nLeftMargin = static_cast<long>( nLeftMargin * HMM_PER_TWIPS );
             nRightMargin = static_cast<long>( nRightMargin * HMM_PER_TWIPS );
@@ -610,14 +610,14 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
             aPixel = LogicToPixel( tools::Rectangle( nPageEndX, -aOffset.Y(), nPageEndX, nPageEndY ) );
             aPixel.Top() += SC_PREVIEW_SHADOWSIZE;
-            aPixel.Right() += SC_PREVIEW_SHADOWSIZE - 1;
-            aPixel.Bottom() += SC_PREVIEW_SHADOWSIZE - 1;
+            aPixel.SetRight( aPixel.Right() + SC_PREVIEW_SHADOWSIZE - 1 );
+            aPixel.SetBottom( aPixel.Bottom() + SC_PREVIEW_SHADOWSIZE - 1 );
             DrawRect( PixelToLogic( aPixel ) );
 
             aPixel = LogicToPixel( tools::Rectangle( -aOffset.X(), nPageEndY, nPageEndX, nPageEndY ) );
             aPixel.Left() += SC_PREVIEW_SHADOWSIZE;
-            aPixel.Right() += SC_PREVIEW_SHADOWSIZE - 1;
-            aPixel.Bottom() += SC_PREVIEW_SHADOWSIZE - 1;
+            aPixel.SetRight( aPixel.Right() + SC_PREVIEW_SHADOWSIZE - 1 );
+            aPixel.SetBottom( aPixel.Bottom() + SC_PREVIEW_SHADOWSIZE - 1 );
             DrawRect( PixelToLogic( aPixel ) );
         }
     }
@@ -815,8 +815,8 @@ sal_uInt16 ScPreview::GetOptimalZoom(bool bWidthOnly)
     //  but some additional margin is introduced by integer scale values
     //  -> add only 0.10cm, so there is some margin in all cases.
     Size aMarginSize( LogicToPixel(Size(100, 100), MapMode(MapUnit::Map100thMM)) );
-    aWinSize.Width()  -= 2 * aMarginSize.Width();
-    aWinSize.Height() -= 2 * aMarginSize.Height();
+    aWinSize.setWidth( aWinSize.Width() - 2 * aMarginSize.Width() );
+    aWinSize.setHeight( aWinSize.Height() - 2 * aMarginSize.Height() );
 
     Size aLocalPageSize = lcl_GetDocPageSize( &pDocShell->GetDocument(), nTab );
     if ( aLocalPageSize.Width() && aLocalPageSize.Height() )
@@ -847,7 +847,7 @@ void ScPreview::SetXOffset( long nX )
     if (bValid)
     {
         long nDif = LogicToPixel(aOffset).X() - LogicToPixel(Point(nX,0)).X();
-        aOffset.X() = nX;
+        aOffset.setX( nX );
         if (nDif && !bInSetZoom)
         {
             MapMode aOldMode = GetMapMode();
@@ -858,7 +858,7 @@ void ScPreview::SetXOffset( long nX )
     }
     else
     {
-        aOffset.X() = nX;
+        aOffset.setX( nX );
         if (!bInSetZoom)
             Invalidate();
     }
@@ -874,7 +874,7 @@ void ScPreview::SetYOffset( long nY )
     if (bValid)
     {
         long nDif = LogicToPixel(aOffset).Y() - LogicToPixel(Point(0,nY)).Y();
-        aOffset.Y() = nY;
+        aOffset.setY( nY );
         if (nDif && !bInSetZoom)
         {
             MapMode aOldMode = GetMapMode();
@@ -885,7 +885,7 @@ void ScPreview::SetYOffset( long nY )
     }
     else
     {
-        aOffset.Y() = nY;
+        aOffset.setY( nY );
         if (!bInSetZoom)
             Invalidate();
     }
@@ -1192,8 +1192,8 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                         {
                             const SfxItemSet& rHeaderSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
                             Size  aHeaderSize = rHeaderSet.Get(ATTR_PAGE_SIZE).GetSize();
-                            aHeaderSize.Height() = static_cast<long>( aButtonUpPt.Y() / HMM_PER_TWIPS + aOffset.Y() / HMM_PER_TWIPS - aULItem.GetUpper());
-                            aHeaderSize.Height() = aHeaderSize.Height() * 100 / mnScale;
+                            aHeaderSize.setHeight( static_cast<long>( aButtonUpPt.Y() / HMM_PER_TWIPS + aOffset.Y() / HMM_PER_TWIPS - aULItem.GetUpper()) );
+                            aHeaderSize.setHeight( aHeaderSize.Height() * 100 / mnScale );
                             SvxSetItem  aNewHeader( rStyleSet.Get(ATTR_PAGE_HEADERSET) );
                             aNewHeader.GetItemSet().Put( SvxSizeItem( ATTR_PAGE_SIZE, aHeaderSize ) );
                             rStyleSet.Put( aNewHeader );
@@ -1207,8 +1207,8 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                         {
                             const SfxItemSet& rFooterSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
                             Size aFooterSize = rFooterSet.Get(ATTR_PAGE_SIZE).GetSize();
-                            aFooterSize.Height() = static_cast<long>( nHeight - aButtonUpPt.Y() / HMM_PER_TWIPS - aOffset.Y() / HMM_PER_TWIPS - aULItem.GetLower() );
-                            aFooterSize.Height() = aFooterSize.Height() * 100 / mnScale;
+                            aFooterSize.setHeight( static_cast<long>( nHeight - aButtonUpPt.Y() / HMM_PER_TWIPS - aOffset.Y() / HMM_PER_TWIPS - aULItem.GetLower() ) );
+                            aFooterSize.setHeight( aFooterSize.Height() * 100 / mnScale );
                             SvxSetItem  aNewFooter( rStyleSet.Get(ATTR_PAGE_FOOTERSET) );
                             aNewFooter.GetItemSet().Put( SvxSizeItem( ATTR_PAGE_SIZE, aFooterSize ) );
                             rStyleSet.Put( aNewFooter );
@@ -1546,7 +1546,7 @@ void ScPreview::DragMove( long nDragMovePos, PointerStyle nFlags )
         if( nDragMovePos != aButtonDownChangePoint.X() )
         {
             DrawInvert( aButtonDownChangePoint.X(), nFlags );
-            aButtonDownChangePoint.X() = nPos;
+            aButtonDownChangePoint.setX( nPos );
             DrawInvert( aButtonDownChangePoint.X(), nFlags );
         }
     }
@@ -1555,7 +1555,7 @@ void ScPreview::DragMove( long nDragMovePos, PointerStyle nFlags )
         if( nDragMovePos != aButtonDownChangePoint.Y() )
         {
             DrawInvert( aButtonDownChangePoint.Y(), nFlags );
-            aButtonDownChangePoint.Y() = nPos;
+            aButtonDownChangePoint.setY( nPos );
             DrawInvert( aButtonDownChangePoint.Y(), nFlags );
         }
     }

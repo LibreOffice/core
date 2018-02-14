@@ -115,7 +115,7 @@ void ScCondFrmtEntry::SetHeight()
     {
         Size aSize = GetSizePixel();
         const long nPad = LogicToPixel(Size(0, 2), MapMode(MapUnit::MapAppFont)).getHeight();
-        aSize.Height() = nMaxHeight + nPad;
+        aSize.setHeight( nMaxHeight + nPad );
         SetSizePixel(aSize);
     }
 }

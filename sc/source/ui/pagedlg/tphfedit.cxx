@@ -79,7 +79,7 @@ ScEditWindow::ScEditWindow( vcl::Window* pParent, WinBits nBits, ScEditWindowLoc
     SetBackground( aBgColor );
 
     Size aSize( GetOutputSize() );
-    aSize.Height() *= 4;
+    aSize.setHeight( aSize.Height() * 4 );
 
     pEdEngine = new ScHeaderEditEngine( EditEngine::CreatePool() );
     pEdEngine->SetPaperSize( aSize );
@@ -106,7 +106,7 @@ void ScEditWindow::Resize()
 {
     Size aOutputSize(GetOutputSize());
     Size aSize(aOutputSize);
-    aSize.Height() *= 4;
+    aSize.setHeight( aSize.Height() * 4 );
     pEdEngine->SetPaperSize(aSize);
     pEdView->SetOutputArea(tools::Rectangle(Point(0,0), aOutputSize));
     Control::Resize();
@@ -399,7 +399,7 @@ void ScExtIButton::StartPopup()
         SetPressed( true );
         EndSelection();
         Point aPoint(0,0);
-        aPoint.Y()=GetOutputSizePixel().Height();
+        aPoint.setY(GetOutputSizePixel().Height() );
 
         nSelected = pPopupMenu->Execute( this, aPoint );
 

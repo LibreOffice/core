@@ -884,7 +884,7 @@ IMPL_LINK( ScAcceptChgDlg, RefInfoHandle, const OUString*, pResult, void)
         {
             vcl::Window* pWin=pWnd->GetWindow();
             Size aWinSize=pWin->GetSizePixel();
-            aWinSize.Width()=GetSizePixel().Width();
+            aWinSize.setWidth(GetSizePixel().Width() );
             SetPosSizePixel(pWin->GetPosPixel(),aWinSize);
             Invalidate();
         }

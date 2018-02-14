@@ -122,8 +122,8 @@ void lclGetRowFromY(
 void lclMirrorRectangle( tools::Rectangle& rRect )
 {
     long nLeft = rRect.Left();
-    rRect.Left() = -rRect.Right();
-    rRect.Right() = -nLeft;
+    rRect.SetLeft( -rRect.Right() );
+    rRect.SetRight( -nLeft );
 }
 
 sal_uInt16 lclGetEmbeddedScale( long nPageSize, sal_Int32 nPageScale, long nPos, double fPosScale )

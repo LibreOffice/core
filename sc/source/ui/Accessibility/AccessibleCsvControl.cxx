@@ -1525,11 +1525,11 @@ tools::Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
     tools::Rectangle aClipRect( Point( 0, 0 ), rGrid.GetSizePixel() );
     if( mnColumn != CSV_COLUMN_HEADER )
     {
-        aClipRect.Left() = rGrid.GetFirstX();
-        aClipRect.Right() = rGrid.GetLastX();
+        aClipRect.SetLeft( rGrid.GetFirstX() );
+        aClipRect.SetRight( rGrid.GetLastX() );
     }
     if( mnLine != CSV_LINE_HEADER )
-         aClipRect.Top() = rGrid.GetHdrHeight();
+         aClipRect.SetTop( rGrid.GetHdrHeight() );
 
     tools::Rectangle aRect( implGetRealPos(), implGetRealSize() );
     aRect.Intersection( aClipRect );

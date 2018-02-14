@@ -667,10 +667,10 @@ void ScTabView::OnLOKNoteStateChanged(const ScPostIt* pNote)
     // placed, invalidated.
     const int nBorderSize = 200;
     tools::Rectangle aInvalidRect = aRect;
-    aInvalidRect.Left() -= nBorderSize;
-    aInvalidRect.Right() += nBorderSize;
-    aInvalidRect.Top() -= nBorderSize;
-    aInvalidRect.Bottom() += nBorderSize;
+    aInvalidRect.SetLeft( aInvalidRect.Left() - nBorderSize );
+    aInvalidRect.SetRight( aInvalidRect.Right() + nBorderSize );
+    aInvalidRect.SetTop( aInvalidRect.Top() - nBorderSize );
+    aInvalidRect.SetBottom( aInvalidRect.Bottom() + nBorderSize );
 
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)

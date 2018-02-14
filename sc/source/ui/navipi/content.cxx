@@ -735,7 +735,7 @@ void ScContentTree::RequestHelp( const HelpEvent& rHEvt )
                 if( pItem )
                 {
                     aPos = GetEntryPosition( pEntry );
-                    aPos.X() = GetTabPos( pEntry, pTab );
+                    aPos.setX( GetTabPos( pEntry, pTab ) );
                     aPos = OutputToScreenPixel(aPos);
                     Size aSize( pItem->GetSize( this, pEntry ) );
 

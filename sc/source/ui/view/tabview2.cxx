@@ -1245,9 +1245,9 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                         //  for frozen panes, use sum of both parts for calculation
 
                         if ( nFixPosX != 0 )
-                            aWinSize.Width() += GetGridWidth( SC_SPLIT_LEFT );
+                            aWinSize.setWidth( aWinSize.Width() + GetGridWidth( SC_SPLIT_LEFT ) );
                         if ( nFixPosY != 0 )
-                            aWinSize.Height() += GetGridHeight( SC_SPLIT_TOP );
+                            aWinSize.setHeight( aWinSize.Height() + GetGridHeight( SC_SPLIT_TOP ) );
 
                         ScDocShell* pDocSh = aViewData.GetDocShell();
                         double nPPTX = ScGlobal::nScreenPPTX / pDocSh->GetOutputFactor();
@@ -1321,13 +1321,13 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                                                         GetOutputSizePixel().Width();
                             if ( eHMode == SC_SPLIT_FIX )
                             {
-                                aWinSize.Width() += nOtherWidth;
+                                aWinSize.setWidth( aWinSize.Width() + nOtherWidth );
                                 for ( SCCOL nCol = aViewData.GetPosX(SC_SPLIT_LEFT);
                                         nCol < aViewData.GetFixPosX(); nCol++ )
-                                    aPageSize.Width() += pDoc->GetColWidth( nCol, nCurTab );
+                                    aPageSize.setWidth( aPageSize.Width() + pDoc->GetColWidth( nCol, nCurTab ) );
                             }
                             else if ( nOtherWidth > aWinSize.Width() )
-                                aWinSize.Width() = nOtherWidth;
+                                aWinSize.setWidth( nOtherWidth );
                         }
                         ScSplitMode eVMode = aViewData.GetVSplitMode();
                         if ( eVMode != SC_SPLIT_NONE && pGridWin[SC_SPLIT_TOPLEFT] )
@@ -1336,13 +1336,13 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                                                         GetOutputSizePixel().Height();
                             if ( eVMode == SC_SPLIT_FIX )
                             {
-                                aWinSize.Height() += nOtherHeight;
-                                aPageSize.Height() += pDoc->GetRowHeight(
+                                aWinSize.setHeight( aWinSize.Height() + nOtherHeight );
+                                aPageSize.setHeight( aPageSize.Height() + pDoc->GetRowHeight(
                                         aViewData.GetPosY(SC_SPLIT_TOP),
-                                        aViewData.GetFixPosY()-1, nCurTab);
+                                        aViewData.GetFixPosY()-1, nCurTab) );
                             }
                             else if ( nOtherHeight > aWinSize.Height() )
-                                aWinSize.Height() = nOtherHeight;
+                                aWinSize.setHeight( nOtherHeight );
                         }
 
                         double nPPTX = ScGlobal::nScreenPPTX / aViewData.GetDocShell()->GetOutputFactor();

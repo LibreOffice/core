@@ -282,8 +282,8 @@ long ScColumn::GetNeededSize(
             if ( eOrient != SvxCellOrientation::Standard )
             {
                 long nTemp = aSize.Width();
-                aSize.Width() = aSize.Height();
-                aSize.Height() = nTemp;
+                aSize.setWidth( aSize.Height() );
+                aSize.setHeight( nTemp );
             }
             else if ( nRotate )
             {
@@ -398,7 +398,7 @@ long ScColumn::GetNeededSize(
 
         Size aPaper = Size( 1000000, 1000000 );
         if ( eOrient==SvxCellOrientation::Stacked && !bAsianVertical )
-            aPaper.Width() = 1;
+            aPaper.setWidth( 1 );
         else if (bBreak)
         {
             double fWidthFactor = nPPTX;
@@ -427,7 +427,7 @@ long ScColumn::GetNeededSize(
             if ( pFlag->HasAutoFilter() && !bTextWysiwyg )
                 nDocWidth -= long(rZoomX*20);
 
-            aPaper.Width() = nDocWidth;
+            aPaper.setWidth( nDocWidth );
 
             if ( !bTextWysiwyg )
                 aPaper = pDev->PixelToLogic( aPaper, aHMMMode );

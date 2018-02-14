@@ -44,34 +44,36 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
     long nLayoutSign(bLayoutRTL ? -1 : 1);
 
     for (nCol=0; nCol<nX1; nCol++)
-        aOffset.X() -= mpDoc->GetColWidth( nCol, nTab ) * nLayoutSign;
-    aOffset.Y() -= mpDoc->GetRowHeight( 0, nY1-1, nTab );
+        aOffset.setX( aOffset.X() - mpDoc->GetColWidth( nCol, nTab ) * nLayoutSign );
+    aOffset.setY( aOffset.Y() - mpDoc->GetRowHeight( 0, nY1-1, nTab ) );
 
     long nDataWidth = 0;
     for (nCol=nX1; nCol<=nX2; nCol++)
         nDataWidth += mpDoc->GetColWidth( nCol, nTab );
 
     if ( bLayoutRTL )
-        aOffset.X() += nDataWidth;
+        aOffset.setX( aOffset.X() + nDataWidth );
 
-    aRect.Left() = aRect.Right()  = -aOffset.X();
-    aRect.Top()  = aRect.Bottom() = -aOffset.Y();
+    aRect.SetLeft( -aOffset.X() );
+    aRect.SetRight( -aOffset.X() );
+    aRect.SetTop( -aOffset.Y() );
+    aRect.SetBottom( -aOffset.Y() );
 
     Point aMMOffset( aOffset );
-    aMMOffset.X() = static_cast<long>(aMMOffset.X() * HMM_PER_TWIPS);
-    aMMOffset.Y() = static_cast<long>(aMMOffset.Y() * HMM_PER_TWIPS);
+    aMMOffset.setX( static_cast<long>(aMMOffset.X() * HMM_PER_TWIPS) );
+    aMMOffset.setY( static_cast<long>(aMMOffset.Y() * HMM_PER_TWIPS) );
 
     if (!bMetaFile)
         aMMOffset += Point( nLogStX, nLogStY );
 
     for (nCol=nX1; nCol<=nX2; nCol++)
-        aRect.Right() += mpDoc->GetColWidth( nCol, nTab );
-    aRect.Bottom() += mpDoc->GetRowHeight( nY1, nY2, nTab );
+        aRect.SetRight( aRect.Right() + mpDoc->GetColWidth( nCol, nTab ) );
+    aRect.SetBottom( aRect.Bottom() + mpDoc->GetRowHeight( nY1, nY2, nTab ) );
 
-    aRect.Left()   = static_cast<long>(aRect.Left()   * HMM_PER_TWIPS);
-    aRect.Top()    = static_cast<long>(aRect.Top()    * HMM_PER_TWIPS);
-    aRect.Right()  = static_cast<long>(aRect.Right()  * HMM_PER_TWIPS);
-    aRect.Bottom() = static_cast<long>(aRect.Bottom() * HMM_PER_TWIPS);
+    aRect.SetLeft( static_cast<long>(aRect.Left()   * HMM_PER_TWIPS) );
+    aRect.SetTop( static_cast<long>(aRect.Top()    * HMM_PER_TWIPS) );
+    aRect.SetRight( static_cast<long>(aRect.Right()  * HMM_PER_TWIPS) );
+    aRect.SetBottom( static_cast<long>(aRect.Bottom() * HMM_PER_TWIPS) );
 
     if(pViewShell || pDrawView)
     {
