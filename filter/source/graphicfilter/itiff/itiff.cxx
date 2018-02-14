@@ -584,6 +584,7 @@ bool TIFFReader::ReadMap()
 
         aCCIDecom.StartDecompression( *pTIFF );
 
+        const bool bHasAlphaChannel = HasAlphaChannel();
         for (sal_Int32 ny = 0; ny < nImageLength; ++ny)
         {
             bool bDifferentToPrev = ny == 0;
@@ -617,9 +618,10 @@ bool TIFFReader::ReadMap()
                 //if the buffer for this line didn't change, then just copy the
                 //previous scanline instead of painfully decoding and setting
                 //each pixel one by one again
-                memcpy( mpBitmap.get() + (ny * maBitmapPixelSize.Width()) * 4,
-                        mpBitmap.get() + ((ny-1) * maBitmapPixelSize.Width()) * 4,
-                        maBitmapPixelSize.Width() * 4);
+                const int nColorSize = bHasAlphaChannel ? 4 : 3;
+                memcpy( mpBitmap.get() + (ny * maBitmapPixelSize.Width()) * nColorSize,
+                        mpBitmap.get() + ((ny-1) * maBitmapPixelSize.Width()) * nColorSize,
+                        maBitmapPixelSize.Width() * nColorSize);
             }
             else
             {
