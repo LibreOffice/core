@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <utility>
 #include <helper/statusindicatorfactory.hxx>
 #include <helper/statusindicator.hxx>
 #include <helper/vclstatusindicator.hxx>
@@ -547,7 +548,7 @@ void StatusIndicatorFactory::impl_stopWakeUpThread()
     rtl::Reference<WakeUpThread> wakeUp;
     {
         osl::MutexGuard g(m_mutex);
-        wakeUp = m_pWakeUp;
+        std::swap(wakeUp, m_pWakeUp);
     }
     if (wakeUp.is())
     {
