@@ -1191,7 +1191,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
             css::uno::Sequence< OUString > aSeq;
             if (aEvent.State >>= aSeq)
             {
-                aBuffer.append(u'{');
+                aBuffer.append(static_cast<sal_Unicode>('{'));
                 for (sal_Int32 itSeq = 0; itSeq < aSeq.getLength(); itSeq++)
                 {
                     aBuffer.append("\"" + aSeq[itSeq]);
@@ -1200,7 +1200,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
                     else
                         aBuffer.append("\":true");
                 }
-                aBuffer.append(u'}');
+                aBuffer.append(static_cast<sal_Unicode>('}'));
             }
         }
     }
