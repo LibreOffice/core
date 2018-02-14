@@ -2870,7 +2870,9 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
                 else
                     bIsPhysical = false;
             }
-            aValues.add_child("HeaderFooter", aChildren);
+
+            if (aChildren.size() > 0)
+                aValues.add_child("HeaderFooter", aChildren);
         }
     }
 
