@@ -42,7 +42,6 @@ public:
 
 private:
     TextParagraphProperties& mrTextParagraphProperties;
-    TextSpacing     maLineSpacing;
     BulletList&     mrBulletList;
     std::vector< css::style::TabStop >  maTabList;
     std::shared_ptr< BlipFillProperties > mxBlipProps;
