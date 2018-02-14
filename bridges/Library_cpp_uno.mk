@@ -21,6 +21,12 @@ $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,gcc3_uno)) : \
 	EXTRAOBJECTLISTS += $(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_linux_arm)/armhelper.objectlist
 endif
 
+else ifeq ($(CPUNAME),ARM64)
+
+bridges_SELECTED_BRIDGE := gcc3_ios
+bridge_noopt_objects := abi call callvirtualmethod cpp2uno except uno2cpp
+bridge_asm_objects := ios64_helper
+
 else ifeq ($(CPUNAME),AARCH64)
 
 ifneq ($(filter ANDROID DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
