@@ -1228,6 +1228,7 @@ OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc const & rDoc, sal_Int32 nInsPo
     return sRet;
 }
 
+// WARNING: rText may become invalid, see comment below
 void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                     sal_Int32 nInsPos, sal_Unicode cChar,
                                     bool bInsert, bool& io_bNbspRunNext, vcl::Window const * pFrameWin )
@@ -1338,6 +1339,9 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
 
         if( IsAutoCorrFlag( Autocorrect ) )
         {
+            // WARNING ATTENTION: rTxt is an alias of the text node's OUString
+            // and becomes INVALID if ChgAutoCorrWord returns true!
+            // => use aPara/pPara to create a valid copy of the string!
             OUString aPara;
             OUString* pPara = IsAutoCorrFlag(CapitalStartSentence) ? &aPara : nullptr;
 
