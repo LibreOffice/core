@@ -44,7 +44,7 @@ struct ScRawToken;
 struct ScSingleRefData;
 struct ScComplexRefData;
 
-class SC_DLLPUBLIC ScTokenArray : public formula::FormulaTokenArray
+class SAL_WARN_UNUSED SC_DLLPUBLIC ScTokenArray : public formula::FormulaTokenArray
 {
     friend class ScCompiler;
 
