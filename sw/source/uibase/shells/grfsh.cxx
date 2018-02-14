@@ -528,7 +528,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 // RotGrfFlyFrame: Get and process evtl. changed RotationAngle
                 if ( SfxItemState::SET == pSet->GetItemState(SID_ATTR_TRANSFORM_ANGLE, false, &pItem ))
                 {
-                    const sal_uInt32 aNewRotation((static_cast<const SfxUInt32Item*>(pItem)->GetValue() / 10) % 3600);
+                    const sal_Int32 aNewRotation((static_cast<const SfxInt32Item*>(pItem)->GetValue() / 10) % 3600);
 
                     // RotGrfFlyFrame: Possible rotation change here, SwFlyFrameAttrMgr aMgr is available
                     aMgr.SetRotation(nCurrentRotation, aNewRotation, aUnrotatedSize);
