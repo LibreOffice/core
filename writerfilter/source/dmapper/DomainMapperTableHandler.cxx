@@ -312,34 +312,6 @@ void lcl_DecrementHoriOrientPosition(std::vector<beans::PropertyValue>& rFramePr
     }
 }
 
-sal_Int32 lcl_getWordCompatibilityMode( const css::uno::Sequence< css::beans::PropertyValue >& rCompatSettings )
-{
-    for ( int i = 0; i < rCompatSettings.getLength(); ++i )
-    {
-        const css::beans::PropertyValue& rProp = rCompatSettings[i];
-        if ( rProp.Name == "compatSetting" )
-        {
-            css::uno::Sequence< css::beans::PropertyValue > aCurrentCompatSettings;
-            rProp.Value >>= aCurrentCompatSettings;
-
-            OUString sName;
-            OUString sUri;
-            OUString sVal;
-
-            aCurrentCompatSettings[0].Value >>= sName;
-            aCurrentCompatSettings[1].Value >>= sUri;
-            aCurrentCompatSettings[2].Value >>= sVal;
-
-            if ( sName == "compatibilityMode" && sUri == "http://schemas.microsoft.com/office/word" )
-            {
-                return sVal.toInt32();
-            }
-        }
-    }
-
-    return -1; // Word compatibility mode not found
-}
-
 TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo & rInfo, std::vector<beans::PropertyValue>& rFrameProperties)
 {
     // will receive the table style if any
@@ -574,7 +546,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         // tdf#106742: since MS Word 2013 (compatibilityMode >= 15), top-level tables are handled the same as nested tables;
         // this is also the default behavior in LO when DOCX doesn't define "compatibilityMode" option
-        sal_Int32 nMode = lcl_getWordCompatibilityMode( m_rDMapper_Impl.GetSettingsTable()->GetCompatSettings() );
+        sal_Int32 nMode = m_rDMapper_Impl.GetSettingsTable()->GetWordCompatibilityMode();
 
         if ( nMode > 0 && nMode <= 14 && rInfo.nNestLevel == 1 )
         {
