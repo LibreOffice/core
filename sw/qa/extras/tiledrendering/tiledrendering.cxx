@@ -39,6 +39,7 @@
 #include <redline.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <vcl/scheduler.hxx>
+#include <vcl/vclevent.hxx>
 #include <flddat.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/tiledrendering/data/";
@@ -2054,6 +2055,7 @@ void SwTiledRenderingTest::testIMESupport()
 {
     comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    VclPtr<vcl::Window> pDocWindow = pXTextDocument->getDocWindow();
 
     SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
     SwWrtShell* pWrtShell = pView->GetWrtShellPtr();
@@ -2067,9 +2069,9 @@ void SwTiledRenderingTest::testIMESupport()
                    });
     for (const auto& aInput: aInputs)
     {
-        pXTextDocument->postExtTextInputEvent(LOK_EXT_TEXTINPUT, aInput);
+        pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, aInput);
     }
-    pXTextDocument->postExtTextInputEvent(LOK_EXT_TEXTINPUT_END, "");
+    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
 
     // the cursor should be at position 2nd
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);

@@ -549,6 +549,16 @@ OUString ScModelObj::getPartHash( int nPart )
     return (pViewData->GetDocument()->GetHashCode(nPart, nHashCode) ? OUString::number(nHashCode) : OUString());
 }
 
+VclPtr<vcl::Window> ScModelObj::getDocWindow()
+{
+    SolarMutexGuard aGuard;
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    VclPtr<vcl::Window> pWindow;
+    if (pViewData)
+        pWindow = pViewData->GetActiveWin();
+    return pWindow;
+}
+
 Size ScModelObj::getDocumentSize()
 {
     Size aSize(10, 10); // minimum size
@@ -616,30 +626,6 @@ void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     default:
         assert(false);
         break;
-    }
-}
-
-void ScModelObj::postExtTextInputEvent(int nType, const OUString& rText)
-{
-    SolarMutexGuard aGuard;
-
-    ScViewData* pViewData = ScDocShell::GetViewData();
-    vcl::Window* pWindow = pViewData->GetActiveWin();
-
-    if (!pWindow)
-        return;
-
-    CommandExtTextInputData aTextInputData(rText, nullptr, 0, 0, false);
-    switch (nType)
-    {
-    case LOK_EXT_TEXTINPUT:
-        pWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, rText);
-        break;
-    case LOK_EXT_TEXTINPUT_END:
-        pWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
-        break;
-    default:
-        assert(false && "Unhandled External Text input event!");
     }
 }
 
