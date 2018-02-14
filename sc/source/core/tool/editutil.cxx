@@ -310,7 +310,7 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
                 SvxCellHorJustify::Left )
         nIndent = pPattern->GetItem(ATTR_INDENT).GetValue();
     long nPixDifX   = static_cast<long>( ( pMargin->GetLeftMargin() + nIndent ) * nPPTX );
-    aStartPos.X()   += nPixDifX * nLayoutSign;
+    aStartPos.setX( aStartPos.X() + nPixDifX * nLayoutSign );
     nCellX          -= nPixDifX + static_cast<long>( pMargin->GetRightMargin() * nPPTX );     // due to line feed, etc.
 
     //  align vertical position to the one in the table
@@ -356,11 +356,11 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
         }
     }
 
-    aStartPos.Y() += nPixDifY;
+    aStartPos.setY( aStartPos.Y() + nPixDifY );
     nCellY      -= nPixDifY;
 
     if ( bLayoutRTL )
-        aStartPos.X() -= nCellX - 2;    // excluding grid on both sides
+        aStartPos.setX( aStartPos.X() - nCellX - 2 );    // excluding grid on both sides
 
                                                         //  -1 -> don't overwrite grid
     return tools::Rectangle( aStartPos, Size(nCellX-1,nCellY-1) );

@@ -82,8 +82,8 @@ ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelect
     Size aSize = LogicToPixel( Size(
         GetTextWidth("8888"),
         GetTextHeight() ) );
-    aSize.Width()  += 4;    // place for highlight border
-    aSize.Height() += 3;
+    aSize.setWidth( aSize.Width() + 4 );    // place for highlight border
+    aSize.setHeight( aSize.Height() + 3 );
     SetSizePixel( aSize );
 
     nWidth = nSmallWidth = aSize.Width();
@@ -118,13 +118,13 @@ void ScHeaderControl::DoPaint( SCCOLROW nStart, SCCOLROW nEnd )
     tools::Rectangle aRect( Point(0,0), GetOutputSizePixel() );
     if ( bVertical )
     {
-        aRect.Top() = GetScrPos( nStart )-nLayoutSign;      // extra pixel for line at top of selection
-        aRect.Bottom() = GetScrPos( nEnd+1 )-nLayoutSign;
+        aRect.SetTop( GetScrPos( nStart )-nLayoutSign );      // extra pixel for line at top of selection
+        aRect.SetBottom( GetScrPos( nEnd+1 )-nLayoutSign );
     }
     else
     {
-        aRect.Left() = GetScrPos( nStart )-nLayoutSign;     // extra pixel for line left of selection
-        aRect.Right() = GetScrPos( nEnd+1 )-nLayoutSign;
+        aRect.SetLeft( GetScrPos( nStart )-nLayoutSign );     // extra pixel for line left of selection
+        aRect.SetRight( GetScrPos( nEnd+1 )-nLayoutSign );
     }
     Invalidate(aRect);
 }
@@ -533,21 +533,21 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                                     bBoldSet = bMark;
                                 }
                                 aString = GetEntryText( nEntryNo );
-                                aTextSize.Width() = GetTextWidth( aString );
-                                aTextSize.Height() = GetTextHeight();
+                                aTextSize.setWidth( GetTextWidth( aString ) );
+                                aTextSize.setHeight( GetTextHeight() );
 
                                 Point aTxtPos(aScrPos);
                                 if (bVertical)
                                 {
-                                    aTxtPos.X() += (nBarSize-aTextSize.Width())/2;
-                                    aTxtPos.Y() += (nSizePix*nLayoutSign-aTextSize.Height())/2;
+                                    aTxtPos.setX( aTxtPos.X() + (nBarSize-aTextSize.Width())/2 );
+                                    aTxtPos.setY( aTxtPos.Y() + (nSizePix*nLayoutSign-aTextSize.Height())/2 );
                                     if ( bMirrored )
-                                        aTxtPos.X() += 1;   // dark border is left instead of right
+                                        aTxtPos.setX( aTxtPos.X() + 1 );   // dark border is left instead of right
                                 }
                                 else
                                 {
-                                    aTxtPos.X() += (nSizePix*nLayoutSign-aTextSize.Width()+1)/2;
-                                    aTxtPos.Y() += (nBarSize-aTextSize.Height())/2;
+                                    aTxtPos.setX( aTxtPos.X() + (nSizePix*nLayoutSign-aTextSize.Width()+1)/2 );
+                                    aTxtPos.setY( aTxtPos.Y() + (nBarSize-aTextSize.Height())/2 );
                                 }
                                 DrawText( aTxtPos, aString );
                             }
@@ -954,20 +954,20 @@ void ScHeaderControl::ShowDragHelp()
         if (!bVertical)
         {
             // above
-            aRect.Left() = aMousePos.X();
-            aRect.Top()  = aPos.Y() - 4;
+            aRect.SetLeft( aMousePos.X() );
+            aRect.SetTop( aPos.Y() - 4 );
             nAlign       = QuickHelpFlags::Bottom|QuickHelpFlags::Center;
         }
         else
         {
             // top right
-            aRect.Left() = aPos.X() + aSize.Width() + 8;
-            aRect.Top()  = aMousePos.Y() - 2;
+            aRect.SetLeft( aPos.X() + aSize.Width() + 8 );
+            aRect.SetTop( aMousePos.Y() - 2 );
             nAlign       = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
         }
 
-        aRect.Right()   = aRect.Left();
-        aRect.Bottom()  = aRect.Top();
+        aRect.SetRight( aRect.Left() );
+        aRect.SetBottom( aRect.Top() );
 
         Help::ShowQuickHelp(this, aRect, aHelpStr, nAlign);
     }

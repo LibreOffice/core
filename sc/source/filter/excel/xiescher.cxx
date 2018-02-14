@@ -1257,26 +1257,26 @@ SdrObjectPtr XclImpArcObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const t
         case EXC_OBJ_ARC_TR:
             nStartAngle = 0;
             nEndAngle = 9000;
-            aNewRect.Left() -= rAnchorRect.GetWidth();
-            aNewRect.Bottom() += rAnchorRect.GetHeight();
+            aNewRect.SetLeft( aNewRect.Left() - rAnchorRect.GetWidth() );
+            aNewRect.SetBottom( aNewRect.Bottom() + rAnchorRect.GetHeight() );
         break;
         case EXC_OBJ_ARC_TL:
             nStartAngle = 9000;
             nEndAngle = 18000;
-            aNewRect.Right() += rAnchorRect.GetWidth();
-            aNewRect.Bottom() += rAnchorRect.GetHeight();
+            aNewRect.SetRight( aNewRect.Right() + rAnchorRect.GetWidth() );
+            aNewRect.SetBottom( aNewRect.Bottom() + rAnchorRect.GetHeight() );
         break;
         case EXC_OBJ_ARC_BL:
             nStartAngle = 18000;
             nEndAngle = 27000;
-            aNewRect.Right() += rAnchorRect.GetWidth();
-            aNewRect.Top() -= rAnchorRect.GetHeight();
+            aNewRect.SetRight( aNewRect.Right() + rAnchorRect.GetWidth() );
+            aNewRect.SetTop( aNewRect.Top() - rAnchorRect.GetHeight() );
         break;
         case EXC_OBJ_ARC_BR:
             nStartAngle = 27000;
             nEndAngle = 0;
-            aNewRect.Left() -= rAnchorRect.GetWidth();
-            aNewRect.Top() -= rAnchorRect.GetHeight();
+            aNewRect.SetLeft( aNewRect.Left() - rAnchorRect.GetWidth() );
+            aNewRect.SetTop( aNewRect.Top() - rAnchorRect.GetHeight() );
         break;
     }
     SdrObjKind eObjKind = maFillData.IsFilled() ? OBJ_SECT : OBJ_CARC;

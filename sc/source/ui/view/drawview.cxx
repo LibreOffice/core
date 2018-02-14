@@ -270,8 +270,8 @@ void ScDrawView::UpdateWorkArea()
         if ( aPageSize.Width() < 0 )
         {
             //  RTL: from max.negative (left) to zero (right)
-            aNewArea.Right() = 0;
-            aNewArea.Left() = aPageSize.Width() + 1;
+            aNewArea.SetRight( 0 );
+            aNewArea.SetLeft( aPageSize.Width() + 1 );
         }
         SetWorkArea( aNewArea );
     }
@@ -950,8 +950,8 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
         MapMode aDrawMode = pGridWin->GetDrawMapMode();
         // find pos anchor position
         Point aOldPos( pDoc->GetColOffset( aOldStt.Col(), aOldStt.Tab()  ), pDoc->GetRowOffset( aOldStt.Row(), aOldStt.Tab() ) );
-        aOldPos.X() = sc::TwipsToHMM( aOldPos.X() );
-        aOldPos.Y() = sc::TwipsToHMM( aOldPos.Y() );
+        aOldPos.setX( sc::TwipsToHMM( aOldPos.X() ) );
+        aOldPos.setY( sc::TwipsToHMM( aOldPos.Y() ) );
         // find position of same point on the screen ( e.g. grid )
         Point aCurPos =  pViewData->GetScrPos(  aOldStt.Col(), aOldStt.Row(), eWhich, true );
         Point aCurPosHmm = pGridWin->PixelToLogic(aCurPos, aDrawMode );

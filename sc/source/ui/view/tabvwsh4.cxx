@@ -348,8 +348,8 @@ void ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize, boo
         Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
 
           Size aSize( rSize );
-        aSize.Width() -= (aBorder.Left() + aBorder.Right());
-        aSize.Height() -= (aBorder.Top() + aBorder.Bottom());
+        aSize.setWidth( aSize.Width() - (aBorder.Left() + aBorder.Right()) );
+        aSize.setHeight( aSize.Height() - (aBorder.Top() + aBorder.Bottom()) );
 
         if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
         {
@@ -359,8 +359,8 @@ void ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize, boo
         }
 
         Point aPos( rOfs );
-        aPos.X() += aBorder.Left();
-        aPos.Y() += aBorder.Top();
+        aPos.setX( aPos.X() + aBorder.Left() );
+        aPos.setY( aPos.Y() + aBorder.Top() );
         GetWindow()->SetPosSizePixel( aPos, aSize );
     }
     else
@@ -368,8 +368,8 @@ void ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize, boo
         SvBorder aBorder;
         GetBorderSize( aBorder, rSize );
         SetBorderPixel( aBorder );
-        aNewSize.Width()  += aBorder.Left() + aBorder.Right();
-        aNewSize.Height() += aBorder.Top() + aBorder.Bottom();
+        aNewSize.setWidth( aNewSize.Width() + aBorder.Left() + aBorder.Right() );
+        aNewSize.setHeight( aNewSize.Height() + aBorder.Top() + aBorder.Bottom() );
     }
 
     DoResize( rOfs, aNewSize, true );                   // rSize = size of gridwin
@@ -444,7 +444,7 @@ void ScTabViewShell::QueryObjAreaPixel( tools::Rectangle& rRect ) const
     if ( bNegativePage )
     {
         // use right edge of aLogicRect, and aLogicSize
-        aLogicRect.Left() = aLogicRect.Right() - aLogicSize.Width() + 1;    // Right() is set below
+        aLogicRect.SetLeft( aLogicRect.Right() - aLogicSize.Width() + 1 );    // Right() is set below
     }
     aLogicRect.SetSize( aLogicSize );
 

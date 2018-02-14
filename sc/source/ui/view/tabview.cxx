@@ -290,7 +290,7 @@ static void lcl_SetPosSize( vcl::Window& rWindow, const Point& rPos, const Size&
     Point aNewPos = rPos;
     if ( bLayoutRTL )
     {
-        aNewPos.X() = nTotalWidth - rPos.X() - rSize.Width();
+        aNewPos.setX( nTotalWidth - rPos.X() - rSize.Width() );
         if ( aNewPos == rWindow.GetPosPixel() && rSize.Width() != rWindow.GetSizePixel().Width() )
         {
             //  Document windows are manually painted right-to-left, so they need to
@@ -566,7 +566,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         if( bVScroll )
         {
             Size aVScrSize = aVScrollBottom->GetSizePixel();
-            aVScrSize.Height() -= nBarY;
+            aVScrSize.setHeight( aVScrSize.Height() - nBarY );
             aVScrollBottom->SetSizePixel( aVScrSize );
         }
     }
@@ -882,7 +882,7 @@ void ScTabView::SetTabBarWidth( long nNewWidth )
 
     if ( aSize.Width() != nNewWidth )
     {
-        aSize.Width() = nNewWidth;
+        aSize.setWidth( nNewWidth );
         pTabControl->SetSizePixel( aSize );
     }
 }
@@ -954,16 +954,16 @@ Point ScTabView::GetGridOffset() const
 
     // Outline-Controls
     if (bVOutline && pRowOutline[SC_SPLIT_BOTTOM])
-        aPos.X() += pRowOutline[SC_SPLIT_BOTTOM]->GetDepthSize();
+        aPos.setX( aPos.X() + pRowOutline[SC_SPLIT_BOTTOM]->GetDepthSize() );
     if (bHOutline && pColOutline[SC_SPLIT_LEFT])
-        aPos.Y() += pColOutline[SC_SPLIT_LEFT]->GetDepthSize();
+        aPos.setY( aPos.Y() + pColOutline[SC_SPLIT_LEFT]->GetDepthSize() );
 
     if (bHeaders)                               // column/row headers
     {
         if (pRowBar[SC_SPLIT_BOTTOM])
-            aPos.X() += pRowBar[SC_SPLIT_BOTTOM]->GetSizePixel().Width();
+            aPos.setX( aPos.X() + pRowBar[SC_SPLIT_BOTTOM]->GetSizePixel().Width() );
         if (pColBar[SC_SPLIT_LEFT])
-            aPos.Y() += pColBar[SC_SPLIT_LEFT]->GetSizePixel().Height();
+            aPos.setY( aPos.Y() + pColBar[SC_SPLIT_LEFT]->GetSizePixel().Height() );
     }
 
     return aPos;
@@ -1067,7 +1067,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
                 the child position. Need to mirror mouse position before. */
             Point aMousePos = pScroll->GetPointerPosPixel();
             if( pScroll->IsRTLEnabled() != pScroll->GetParent()->IsRTLEnabled() )
-                aMousePos.X() = aSize.Width() - aMousePos.X() - 1;
+                aMousePos.setX( aSize.Width() - aMousePos.X() - 1 );
             aMousePos = pScroll->OutputToNormalizedScreenPixel( aMousePos );
 
             // convert top-left position of scrollbar to screen position
@@ -1089,8 +1089,8 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
                 aHelpStr = ScGlobal::GetRscString(STR_COLUMN) +
                            " " + ScColToAlpha(static_cast<SCCOL>(nScrollPos));
 
-                aRect.Left() = aMousePos.X();
-                aRect.Top()  = aPos.Y() - 4;
+                aRect.SetLeft( aMousePos.X() );
+                aRect.SetTop( aPos.Y() - 4 );
                 nAlign       = QuickHelpFlags::Bottom|QuickHelpFlags::Center;
             }
             else
@@ -1099,12 +1099,12 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
                            " " + OUString::number(nScrollPos + 1);
 
                 // show quicktext always inside sheet area
-                aRect.Left() = bLayoutRTL ? (aPos.X() + aSize.Width() + 8) : (aPos.X() - 8);
-                aRect.Top()  = aMousePos.Y();
+                aRect.SetLeft( bLayoutRTL ? (aPos.X() + aSize.Width() + 8) : (aPos.X() - 8) );
+                aRect.SetTop( aMousePos.Y() );
                 nAlign       = (bLayoutRTL ? QuickHelpFlags::Left : QuickHelpFlags::Right) | QuickHelpFlags::VCenter;
             }
-            aRect.Right()   = aRect.Left();
-            aRect.Bottom()  = aRect.Top();
+            aRect.SetRight( aRect.Left() );
+            aRect.SetBottom( aRect.Top() );
 
             Help::ShowQuickHelp(pScroll->GetParent(), aRect, aHelpStr, nAlign);
         }
@@ -1741,13 +1741,13 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
         long nDocY = static_cast<long>( static_cast<double>(pDoc->GetRowOffset( MAXROW + 1, nTab )) * HMM_PER_TWIPS );
 
         if ( aVisible.Left() * nLayoutSign > nDocX * nLayoutSign )
-            aVisible.Left() = nDocX;
+            aVisible.SetLeft( nDocX );
         if ( aVisible.Right() * nLayoutSign > nDocX * nLayoutSign )
-            aVisible.Right() = nDocX;
+            aVisible.SetRight( nDocX );
         if ( aVisible.Top() > nDocY )
-            aVisible.Top() = nDocY;
+            aVisible.SetTop( nDocY );
         if ( aVisible.Bottom() > nDocY )
-            aVisible.Bottom() = nDocY;
+            aVisible.SetBottom( nDocY );
 
         //  get the logic position of the selection
 
@@ -1770,57 +1770,57 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
             bool bPutLeft = bFitLeft && ( bLayoutRTL || !bFitRight );
 
             if ( bPutLeft )
-                aInsertPos.X() = aSelection.Left() - nNeededWidth;
+                aInsertPos.setX( aSelection.Left() - nNeededWidth );
             else
-                aInsertPos.X() = aSelection.Right() + 1;
+                aInsertPos.setX( aSelection.Right() + 1 );
 
             // align with top of selection (is moved again if it doesn't fit)
-            aInsertPos.Y() = std::max( aSelection.Top(), aVisible.Top() );
+            aInsertPos.setY( std::max( aSelection.Top(), aVisible.Top() ) );
         }
         else if ( nTopSpace >= nNeededHeight || nBottomSpace >= nNeededHeight )
         {
             // second preference: completely above or below the selection
 
             if ( nBottomSpace > nNeededHeight )             // bottom is preferred
-                aInsertPos.Y() = aSelection.Bottom() + 1;
+                aInsertPos.setY( aSelection.Bottom() + 1 );
             else
-                aInsertPos.Y() = aSelection.Top() - nNeededHeight;
+                aInsertPos.setY( aSelection.Top() - nNeededHeight );
 
             // align with (logic) left edge of selection (moved again if it doesn't fit)
             if ( bLayoutRTL )
-                aInsertPos.X() = std::min( aSelection.Right(), aVisible.Right() ) - nNeededWidth + 1;
+                aInsertPos.setX( std::min( aSelection.Right(), aVisible.Right() ) - nNeededWidth + 1 );
             else
-                aInsertPos.X() = std::max( aSelection.Left(), aVisible.Left() );
+                aInsertPos.setX( std::max( aSelection.Left(), aVisible.Left() ) );
         }
         else
         {
             // place to the (logic) right of the selection and move so it fits
 
             if ( bLayoutRTL )
-                aInsertPos.X() = aSelection.Left() - nNeededWidth;
+                aInsertPos.setX( aSelection.Left() - nNeededWidth );
             else
-                aInsertPos.X() = aSelection.Right() + 1;
-            aInsertPos.Y() = std::max( aSelection.Top(), aVisible.Top() );
+                aInsertPos.setX( aSelection.Right() + 1 );
+            aInsertPos.setY( std::max( aSelection.Top(), aVisible.Top() ) );
         }
 
         // move the position if the object doesn't fit in the screen
 
         tools::Rectangle aCompareRect( aInsertPos, Size( nNeededWidth, nNeededHeight ) );
         if ( aCompareRect.Right() > aVisible.Right() )
-            aInsertPos.X() -= aCompareRect.Right() - aVisible.Right();
+            aInsertPos.setX( aInsertPos.X() - aCompareRect.Right() - aVisible.Right() );
         if ( aCompareRect.Bottom() > aVisible.Bottom() )
-            aInsertPos.Y() -= aCompareRect.Bottom() - aVisible.Bottom();
+            aInsertPos.setY( aInsertPos.Y() - aCompareRect.Bottom() - aVisible.Bottom() );
 
         if ( aInsertPos.X() < aVisible.Left() )
-            aInsertPos.X() = aVisible.Left();
+            aInsertPos.setX( aVisible.Left() );
         if ( aInsertPos.Y() < aVisible.Top() )
-            aInsertPos.Y() = aVisible.Top();
+            aInsertPos.setY( aVisible.Top() );
 
         // nNeededWidth / nNeededHeight includes all borders - move aInsertPos to the
         // object position, inside the border
 
-        aInsertPos.X() += nBorder;
-        aInsertPos.Y() += nBorder;
+        aInsertPos.setX( aInsertPos.X() + nBorder );
+        aInsertPos.setY( aInsertPos.Y() + nBorder );
     }
     return aInsertPos;
 }
@@ -1860,14 +1860,14 @@ Point ScTabView::GetChartDialogPos( const Size& rDialogSize, const tools::Rectan
         {
             // first preference: below the chart
 
-            aRet.Y() = aObjAbs.Bottom() + aSpace.Height();
+            aRet.setY( aObjAbs.Bottom() + aSpace.Height() );
             bCenterHor = true;
         }
         else if ( aObjAbs.Top() - aDesktop.Top() >= rDialogSize.Height() + aSpace.Height() )
         {
             // second preference: above the chart
 
-            aRet.Y() = aObjAbs.Top() - rDialogSize.Height() - aSpace.Height();
+            aRet.setY( aObjAbs.Top() - rDialogSize.Height() - aSpace.Height() );
             bCenterHor = true;
         }
         else
@@ -1880,32 +1880,32 @@ Point ScTabView::GetChartDialogPos( const Size& rDialogSize, const tools::Rectan
                 // if both fit, prefer right in RTL mode, left otherwise
                 bool bPutRight = bFitRight && ( bLayoutRTL || !bFitLeft );
                 if ( bPutRight )
-                    aRet.X() = aObjAbs.Right() + aSpace.Width();
+                    aRet.setX( aObjAbs.Right() + aSpace.Width() );
                 else
-                    aRet.X() = aObjAbs.Left() - rDialogSize.Width() - aSpace.Width();
+                    aRet.setX( aObjAbs.Left() - rDialogSize.Width() - aSpace.Width() );
 
                 // center vertically
-                aRet.Y() = aObjAbs.Top() + ( aObjAbs.GetHeight() - rDialogSize.Height() ) / 2;
+                aRet.setY( aObjAbs.Top() + ( aObjAbs.GetHeight() - rDialogSize.Height() ) / 2 );
             }
             else
             {
                 // doesn't fit on any edge - put at the bottom of the screen
-                aRet.Y() = aDesktop.Bottom() - rDialogSize.Height();
+                aRet.setY( aDesktop.Bottom() - rDialogSize.Height() );
                 bCenterHor = true;
             }
         }
         if ( bCenterHor )
-            aRet.X() = aObjAbs.Left() + ( aObjAbs.GetWidth() - rDialogSize.Width() ) / 2;
+            aRet.setX( aObjAbs.Left() + ( aObjAbs.GetWidth() - rDialogSize.Width() ) / 2 );
 
         // limit to screen (centering might lead to invalid positions)
         if ( aRet.X() + rDialogSize.Width() - 1 > aDesktop.Right() )
-            aRet.X() = aDesktop.Right() - rDialogSize.Width() + 1;
+            aRet.setX( aDesktop.Right() - rDialogSize.Width() + 1 );
         if ( aRet.X() < aDesktop.Left() )
-            aRet.X() = aDesktop.Left();
+            aRet.setX( aDesktop.Left() );
         if ( aRet.Y() + rDialogSize.Height() - 1 > aDesktop.Bottom() )
-            aRet.Y() = aDesktop.Bottom() - rDialogSize.Height() + 1;
+            aRet.setY( aDesktop.Bottom() - rDialogSize.Height() + 1 );
         if ( aRet.Y() < aDesktop.Top() )
-            aRet.Y() = aDesktop.Top();
+            aRet.setY( aDesktop.Top() );
     }
 
     return aRet;
@@ -1956,14 +1956,14 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMetod)
         if (eOldV != SC_SPLIT_NONE || eOldH != SC_SPLIT_NONE)
         {
             if ( eOldV != SC_SPLIT_NONE && (eSplitMetod == SC_SPLIT_METHOD_FIRST_ROW || eSplitMetod == SC_SPLIT_METHOD_CURSOR))
-                aSplit.Y() = aViewData.GetVSplitPos() - aWinStart.Y();
+                aSplit.setY( aViewData.GetVSplitPos() - aWinStart.Y() );
 
             if ( eOldH != SC_SPLIT_NONE && (eSplitMetod == SC_SPLIT_METHOD_FIRST_COL || eSplitMetod == SC_SPLIT_METHOD_CURSOR))
             {
                 long nSplitPos = aViewData.GetHSplitPos();
                 if ( bLayoutRTL )
                     nSplitPos = pFrameWin->GetOutputSizePixel().Width() - nSplitPos - 1;
-                aSplit.X() = nSplitPos - aWinStart.X();
+                aSplit.setX( nSplitPos - aWinStart.X() );
             }
 
             aViewData.GetPosFromPixel( aSplit.X(), aSplit.Y(), ePos, nPosX, nPosY );

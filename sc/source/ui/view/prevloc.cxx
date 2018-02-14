@@ -476,32 +476,32 @@ void ScPreviewLocationData::GetTableInfo( const tools::Rectangle& rVisiblePixel,
                 bHasRepCols = true;
                 nRepeatColStart = it->aCellRange.aStart.Col();
                 nRepeatColEnd = it->aCellRange.aEnd.Col();
-                aRepeatRect.Left() = it->aPixelRect.Left();
-                aRepeatRect.Right() = it->aPixelRect.Right();
+                aRepeatRect.SetLeft( it->aPixelRect.Left() );
+                aRepeatRect.SetRight( it->aPixelRect.Right() );
             }
             else
             {
                 bHasMainCols = true;
                 nMainColStart = it->aCellRange.aStart.Col();
                 nMainColEnd = it->aCellRange.aEnd.Col();
-                aMainRect.Left() = it->aPixelRect.Left();
-                aMainRect.Right() = it->aPixelRect.Right();
+                aMainRect.SetLeft( it->aPixelRect.Left() );
+                aMainRect.SetRight( it->aPixelRect.Right() );
             }
             if ( it->bRepeatRow )
             {
                 bHasRepRows = true;
                 nRepeatRowStart = it->aCellRange.aStart.Row();
                 nRepeatRowEnd = it->aCellRange.aEnd.Row();
-                aRepeatRect.Top() = it->aPixelRect.Top();
-                aRepeatRect.Bottom() = it->aPixelRect.Bottom();
+                aRepeatRect.SetTop( it->aPixelRect.Top() );
+                aRepeatRect.SetBottom( it->aPixelRect.Bottom() );
             }
             else
             {
                 bHasMainRows = true;
                 nMainRowStart = it->aCellRange.aStart.Row();
                 nMainRowEnd = it->aCellRange.aEnd.Row();
-                aMainRect.Top() = it->aPixelRect.Top();
-                aMainRect.Bottom() = it->aPixelRect.Bottom();
+                aMainRect.SetTop( it->aPixelRect.Top() );
+                aMainRect.SetBottom( it->aPixelRect.Bottom() );
             }
             nTab = it->aCellRange.aStart.Tab();     //! store separately?
         }
@@ -509,15 +509,15 @@ void ScPreviewLocationData::GetTableInfo( const tools::Rectangle& rVisiblePixel,
         {
             // row headers result in an additional column
             bHasHeaderCol = true;
-            aHeaderRect.Left() = it->aPixelRect.Left();
-            aHeaderRect.Right() = it->aPixelRect.Right();
+            aHeaderRect.SetLeft( it->aPixelRect.Left() );
+            aHeaderRect.SetRight( it->aPixelRect.Right() );
         }
         else if ( it->eType == SC_PLOC_COLHEADER )
         {
             // column headers result in an additional row
             bHasHeaderRow = true;
-            aHeaderRect.Top() = it->aPixelRect.Top();
-            aHeaderRect.Bottom() = it->aPixelRect.Bottom();
+            aHeaderRect.SetTop( it->aPixelRect.Top() );
+            aHeaderRect.SetBottom( it->aPixelRect.Bottom() );
         }
     }
 

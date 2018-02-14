@@ -235,21 +235,21 @@ void ScCaptionCreator::FitCaptionToRect( const tools::Rectangle* pVisRect )
 
     // tail position
     Point aTailPos = mxCaption->GetTailPos();
-    aTailPos.X() = ::std::max( ::std::min( aTailPos.X(), rVisRect.Right() ), rVisRect.Left() );
-    aTailPos.Y() = ::std::max( ::std::min( aTailPos.Y(), rVisRect.Bottom() ), rVisRect.Top() );
+    aTailPos.setX( ::std::max( ::std::min( aTailPos.X(), rVisRect.Right() ), rVisRect.Left() ) );
+    aTailPos.setY( ::std::max( ::std::min( aTailPos.Y(), rVisRect.Bottom() ), rVisRect.Top() ) );
     mxCaption->SetTailPos( aTailPos );
 
     // caption rectangle
     tools::Rectangle aCaptRect = mxCaption->GetLogicRect();
     Point aCaptPos = aCaptRect.TopLeft();
     // move textbox inside right border of visible area
-    aCaptPos.X() = ::std::min< long >( aCaptPos.X(), rVisRect.Right() - aCaptRect.GetWidth() );
+    aCaptPos.setX( ::std::min< long >( aCaptPos.X(), rVisRect.Right() - aCaptRect.GetWidth() ) );
     // move textbox inside left border of visible area (this may move it outside on right side again)
-    aCaptPos.X() = ::std::max< long >( aCaptPos.X(), rVisRect.Left() );
+    aCaptPos.setX( ::std::max< long >( aCaptPos.X(), rVisRect.Left() ) );
     // move textbox inside bottom border of visible area
-    aCaptPos.Y() = ::std::min< long >( aCaptPos.Y(), rVisRect.Bottom() - aCaptRect.GetHeight() );
+    aCaptPos.setY( ::std::min< long >( aCaptPos.Y(), rVisRect.Bottom() - aCaptRect.GetHeight() ) );
     // move textbox inside top border of visible area (this may move it outside on bottom side again)
-    aCaptPos.Y() = ::std::max< long >( aCaptPos.Y(), rVisRect.Top() );
+    aCaptPos.setY( ::std::max< long >( aCaptPos.Y(), rVisRect.Top() ) );
     // update caption
     aCaptRect.SetPos( aCaptPos );
     mxCaption->SetLogicRect( aCaptRect );
@@ -299,21 +299,21 @@ void ScCaptionCreator::AutoPlaceCaption( const tools::Rectangle* pVisRect )
         bool bPreferRight = bFitsRight && (!mbNegPage || !bFitsLeft);
         // move to left, if left is preferred, or if neither left nor right fit and there is more space to the left
         if( bPreferLeft || (!bPreferRight && (nLeftSpace > nRightSpace)) )
-            aCaptPos.X() = maCellRect.Left() - SC_NOTECAPTION_CELLDIST - nWidth;
+            aCaptPos.setX( maCellRect.Left() - SC_NOTECAPTION_CELLDIST - nWidth );
         else // to right
-            aCaptPos.X() = maCellRect.Right() + SC_NOTECAPTION_CELLDIST;
+            aCaptPos.setX( maCellRect.Right() + SC_NOTECAPTION_CELLDIST );
         // Y position according to top cell border
-        aCaptPos.Y() = maCellRect.Top() + SC_NOTECAPTION_OFFSET_Y;
+        aCaptPos.setY( maCellRect.Top() + SC_NOTECAPTION_OFFSET_Y );
     }
     else    // top or bottom placement
     {
         // X position
-        aCaptPos.X() = maCellRect.Left() + SC_NOTECAPTION_OFFSET_X;
+        aCaptPos.setX( maCellRect.Left() + SC_NOTECAPTION_OFFSET_X );
         // top placement, if possible
         if( bFitsTop )
-            aCaptPos.Y() = maCellRect.Top() - SC_NOTECAPTION_CELLDIST - nHeight;
+            aCaptPos.setY( maCellRect.Top() - SC_NOTECAPTION_CELLDIST - nHeight );
         else    // bottom placement
-            aCaptPos.Y() = maCellRect.Bottom() + SC_NOTECAPTION_CELLDIST;
+            aCaptPos.setY( maCellRect.Bottom() + SC_NOTECAPTION_CELLDIST );
     }
 
     // update textbox position in note caption object
@@ -365,8 +365,8 @@ Point ScCaptionCreator::CalcTailPos( bool bTailFront )
     bool bTailLeft = bTailFront != mbNegPage;
     Point aTailPos = bTailLeft ? maCellRect.TopLeft() : maCellRect.TopRight();
     // move caption point 1/10 mm inside cell
-    if( bTailLeft ) aTailPos.X() += 10; else aTailPos.X() -= 10;
-    aTailPos.Y() += 10;
+    if( bTailLeft ) aTailPos.setX( aTailPos.X() + 10 ); else aTailPos.setX( aTailPos.X() - 10 );
+    aTailPos.setY( aTailPos.Y() + 10 );
     return aTailPos;
 }
 
@@ -1253,8 +1253,8 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
     {
         tools::Rectangle aCellRect = ScDrawLayer::GetCellRect( rDoc, rPos, true );
         bool bNegPage = rDoc.IsNegativePage( rPos.Tab() );
-        rInitData.maCaptionOffset.X() = bNegPage ? (aCellRect.Left() - rCaptionRect.Right()) : (rCaptionRect.Left() - aCellRect.Right());
-        rInitData.maCaptionOffset.Y() = rCaptionRect.Top() - aCellRect.Top();
+        rInitData.maCaptionOffset.setX( bNegPage ? (aCellRect.Left() - rCaptionRect.Right()) : (rCaptionRect.Left() - aCellRect.Right()) );
+        rInitData.maCaptionOffset.setY( rCaptionRect.Top() - aCellRect.Top() );
         rInitData.maCaptionSize = rCaptionRect.GetSize();
     }
 

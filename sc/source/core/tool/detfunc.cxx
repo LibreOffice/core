@@ -316,20 +316,20 @@ Point ScDetectiveFunc::GetDrawPos( SCCOL nCol, SCROW nRow, DrawPosMode eMode ) c
             ++nRow;
         break;
         case DrawPosMode::DetectiveArrow:
-            aPos.X() += pDoc->GetColWidth( nCol, nTab ) / 4;
-            aPos.Y() += pDoc->GetRowHeight( nRow, nTab ) / 2;
+            aPos.setX( aPos.X() + pDoc->GetColWidth( nCol, nTab ) / 4 );
+            aPos.setY( aPos.Y() + pDoc->GetRowHeight( nRow, nTab ) / 2 );
         break;
     }
 
     for ( SCCOL i = 0; i < nCol; ++i )
-        aPos.X() += pDoc->GetColWidth( i, nTab );
-    aPos.Y() += pDoc->GetRowHeight( 0, nRow - 1, nTab );
+        aPos.setX( aPos.X() + pDoc->GetColWidth( i, nTab ) );
+    aPos.setY( aPos.Y() + pDoc->GetRowHeight( 0, nRow - 1, nTab ) );
 
-    aPos.X() = static_cast< long >( aPos.X() * HMM_PER_TWIPS );
-    aPos.Y() = static_cast< long >( aPos.Y() * HMM_PER_TWIPS );
+    aPos.setX( static_cast< long >( aPos.X() * HMM_PER_TWIPS ) );
+    aPos.setY( static_cast< long >( aPos.Y() * HMM_PER_TWIPS ) );
 
     if ( pDoc->IsNegativePage( nTab ) )
-        aPos.X() *= -1;
+        aPos.setX( aPos.X() * -1 );
 
     return aPos;
 }
@@ -476,9 +476,9 @@ bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
 
         aStartPos = Point( aEndPos.X() - 1000 * nPageSign, aEndPos.Y() - 1000 );
         if (aStartPos.X() * nPageSign < 0)
-            aStartPos.X() += 2000 * nPageSign;
+            aStartPos.setX( aStartPos.X() + 2000 * nPageSign );
         if (aStartPos.Y() < 0)
-            aStartPos.Y() += 2000;
+            aStartPos.setY( aStartPos.Y() + 2000 );
     }
 
     SfxItemSet& rAttrSet = bFromOtherTab ? rData.GetFromTabSet() : rData.GetArrowSet();
@@ -545,7 +545,7 @@ bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     Point aStartPos = GetDrawPos( nStartCol, nStartRow, DrawPosMode::DetectiveArrow );
     Point aEndPos   = Point( aStartPos.X() + 1000 * nPageSign, aStartPos.Y() - 1000 );
     if (aEndPos.Y() < 0)
-        aEndPos.Y() += 2000;
+        aEndPos.setY( aEndPos.Y() + 2000 );
 
     SfxItemSet& rAttrSet = rData.GetToTabSet();
     if (bArea)
@@ -620,10 +620,10 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
 
     tools::Rectangle aRect = GetDrawRect( nCol, nRow );
-    aRect.Left()    -= 250;
-    aRect.Right()   += 250;
-    aRect.Top()     -= 70;
-    aRect.Bottom()  += 70;
+    aRect.SetLeft( aRect.Left() - 250 );
+    aRect.SetRight( aRect.Right() + 250 );
+    aRect.SetTop( aRect.Top() - 70 );
+    aRect.SetBottom( aRect.Bottom() + 70 );
 
     SdrCircObj* pCircle = new SdrCircObj( OBJ_CIRC, aRect );
     SfxItemSet& rAttrSet = rData.GetCircleSet();

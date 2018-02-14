@@ -308,7 +308,7 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
 
         // vertical (always center):
 
-        aPos.Y() += (mnRowHeight - static_cast<sal_uInt16>(aStrSize.Height())) / 2;
+        aPos.setY( aPos.Y() + (mnRowHeight - static_cast<sal_uInt16>(aStrSize.Height())) / 2 );
 
         // horizontal
 
@@ -323,12 +323,12 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
                     aPos.X() += FRAME_OFFSET;
                     break;
                 case SvxCellHorJustify::Right:
-                    aPos.X() += nRightX;
+                    aPos.setX( aPos.X() + nRightX );
                     break;
                 case SvxCellHorJustify::Block:
                 case SvxCellHorJustify::Repeat:
                 case SvxCellHorJustify::Center:
-                    aPos.X() += nHorPos;
+                    aPos.setX( aPos.X() + nHorPos );
                     break;
                 // coverity[dead_error_line] - following conditions exist to avoid compiler warning
                 case SvxCellHorJustify::Standard:
@@ -350,7 +350,7 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
             else
             {
                  // Numbers/Dates right adjusted
-                aPos.X() += nRightX;
+                aPos.setX( aPos.X() + nRightX );
             }
         }
         aScriptedText.DrawText(aPos);
@@ -448,8 +448,8 @@ void ScAutoFmtPreview::CalcCellArray( bool bFitWidthP )
     maArray.SetYOffset( 2 );
     maArray.SetAllRowHeights( mnRowHeight );
 
-    aPrvSize.Width() = maArray.GetWidth() + 4;
-    aPrvSize.Height() = maArray.GetHeight() + 4;
+    aPrvSize.setWidth( maArray.GetWidth() + 4 );
+    aPrvSize.setHeight( maArray.GetHeight() + 4 );
 }
 
 inline void lclSetStyleFromBorder( svx::frame::Style& rStyle, const ::editeng::SvxBorderLine* pBorder )
@@ -525,7 +525,7 @@ void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext)
 
     Point aPos((aWndSize.Width() - aPrvSize.Width()) / 2, (aWndSize.Height() - aPrvSize.Height()) / 2);
     if (AllSettings::GetLayoutRTL())
-       aPos.X() = -aPos.X();
+       aPos.setX( -aPos.X() );
     rRenderContext.DrawOutDev(aPos, aWndSize, Point(), aWndSize, *aVD.get());
     aVD->SetDrawMode(nOldDrawMode);
 }

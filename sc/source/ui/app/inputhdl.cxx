@@ -1097,7 +1097,7 @@ void ScInputHandler::ShowTipBelow( const OUString& rText )
         if ( pCur )
         {
             Point aLogicPos = pCur->GetPos();
-            aLogicPos.Y() += pCur->GetHeight();
+            aLogicPos.setY( aLogicPos.Y() + pCur->GetHeight() );
             aPos = pTipVisibleSecParent->LogicToPixel( aLogicPos );
         }
         aPos = pTipVisibleSecParent->OutputToScreenPixel( aPos );

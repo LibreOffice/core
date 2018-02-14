@@ -105,35 +105,35 @@ void ScClient::RequestNewObjectArea( tools::Rectangle& aLogicRect )
         Size aSize = pPage->GetSize();
         if ( aSize.Width() < 0 )
         {
-            aPos.X() = aSize.Width() + 1;       // negative
-            aSize.Width() = -aSize.Width();     // positive
+            aPos.setX( aSize.Width() + 1 );       // negative
+            aSize.setWidth( -aSize.Width() );     // positive
         }
         tools::Rectangle aPageRect( aPos, aSize );
 
         if (aLogicRect.Right() > aPageRect.Right())
         {
             long nDiff = aLogicRect.Right() - aPageRect.Right();
-            aLogicRect.Left() -= nDiff;
-            aLogicRect.Right() -= nDiff;
+            aLogicRect.SetLeft( aLogicRect.Left() - nDiff );
+            aLogicRect.SetRight( aLogicRect.Right() - nDiff );
         }
         if (aLogicRect.Bottom() > aPageRect.Bottom())
         {
             long nDiff = aLogicRect.Bottom() - aPageRect.Bottom();
-            aLogicRect.Top() -= nDiff;
-            aLogicRect.Bottom() -= nDiff;
+            aLogicRect.SetTop( aLogicRect.Top() - nDiff );
+            aLogicRect.SetBottom( aLogicRect.Bottom() - nDiff );
         }
 
         if (aLogicRect.Left() < aPageRect.Left())
         {
             long nDiff = aLogicRect.Left() - aPageRect.Left();
-            aLogicRect.Right() -= nDiff;
-            aLogicRect.Left() -= nDiff;
+            aLogicRect.SetRight( aLogicRect.Right() - nDiff );
+            aLogicRect.SetLeft( aLogicRect.Left() - nDiff );
         }
         if (aLogicRect.Top() < aPageRect.Top())
         {
             long nDiff = aLogicRect.Top() - aPageRect.Top();
-            aLogicRect.Bottom() -= nDiff;
-            aLogicRect.Top() -= nDiff;
+            aLogicRect.SetBottom( aLogicRect.Bottom() - nDiff );
+            aLogicRect.SetTop( aLogicRect.Top() - nDiff );
         }
     }
 }

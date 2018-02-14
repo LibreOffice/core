@@ -66,8 +66,8 @@ Point FuConstruct::CurrentGridSyncOffsetAndPos( Point& rInOutPos )
         ScRange aRange = pDoc->GetRange( pView->GetTab(), aObjRect );
         ScAddress aOldStt = aRange.aStart;
         Point aOldPos( pDoc->GetColOffset( aOldStt.Col(), aOldStt.Tab()  ), pDoc->GetRowOffset( aOldStt.Row(), aOldStt.Tab() ) );
-        aOldPos.X() = sc::TwipsToHMM( aOldPos.X() );
-        aOldPos.Y() = sc::TwipsToHMM( aOldPos.Y() );
+        aOldPos.setX( sc::TwipsToHMM( aOldPos.X() ) );
+        aOldPos.setY( sc::TwipsToHMM( aOldPos.Y() ) );
         ScSplitPos eWhich = rViewData.GetActivePart();
         ScGridWindow* pGridWin = rViewData.GetActiveWin();
         // and equiv screen pos

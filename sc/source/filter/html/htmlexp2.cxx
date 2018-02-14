@@ -101,10 +101,10 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
                     aSpace = MMToPixel( Size(
                         aCellRect.GetWidth() - aObjRect.GetWidth(),
                         aCellRect.GetHeight() - aObjRect.GetHeight() ));
-                    aSpace.Width() += (nCol2-nCol1) * (nCellSpacing+1);
-                    aSpace.Height() += (nRow2-nRow1) * (nCellSpacing+1);
-                    aSpace.Width() /= 2;
-                    aSpace.Height() /= 2;
+                    aSpace.setWidth( aSpace.Width() + (nCol2-nCol1) * (nCellSpacing+1) );
+                    aSpace.setHeight( aSpace.Height() + (nRow2-nRow1) * (nCellSpacing+1) );
+                    aSpace.setWidth( aSpace.Width() / 2 );
+                    aSpace.setHeight( aSpace.Height() / 2 );
                 }
                 aGraphList.emplace_back( pObject,
                     aR, aSize, bInCell, aSpace );

@@ -115,7 +115,7 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
     aDiffPix -= aScrPos;
     bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
     if ( bLayoutRTL )
-        aDiffPix.X() = -aDiffPix.X();
+        aDiffPix.setX( -aDiffPix.X() );
 
     long nSizeX, nSizeY;
     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );

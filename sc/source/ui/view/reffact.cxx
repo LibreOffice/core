@@ -154,10 +154,10 @@ ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( vcl::Window* pParentP,
 
     if(pInfo!=nullptr && bScSimpleRefFlag)
     {
-        pInfo->aPos.X()=nScSimpleRefX;
-        pInfo->aPos.Y()=nScSimpleRefY;
-        pInfo->aSize.Height()=nScSimpleRefHeight;
-        pInfo->aSize.Width()=nScSimpleRefWidth;
+        pInfo->aPos.setX(nScSimpleRefX );
+        pInfo->aPos.setY(nScSimpleRefY );
+        pInfo->aSize.setHeight(nScSimpleRefHeight );
+        pInfo->aSize.setWidth(nScSimpleRefWidth );
     }
     SetWindow(nullptr);
 

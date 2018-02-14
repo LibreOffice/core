@@ -1195,7 +1195,7 @@ void ScCsvGrid::ImplDrawRowHeaders()
     mpBackgrDev->DrawRect( aRect );
 
     mpBackgrDev->SetFillColor( maHeaderBackColor );
-    aRect.Bottom() = GetY( GetLastVisLine() + 1 );
+    aRect.SetBottom( GetY( GetLastVisLine() + 1 ) );
     mpBackgrDev->DrawRect( aRect );
 
     // line numbers
@@ -1219,7 +1219,7 @@ void ScCsvGrid::ImplDrawRowHeaders()
     }
     else
         mpBackgrDev->DrawLine( aRect.TopRight(), aRect.BottomRight() );
-    aRect.Top() = GetHdrHeight();
+    aRect.SetTop( GetHdrHeight() );
     mpBackgrDev->DrawGrid( aRect, Size( 1, GetLineHeight() ), DrawGridFlags::HorzLines );
 }
 
@@ -1351,8 +1351,8 @@ void ScCsvGrid::ImplInvertCursor( sal_Int32 nPos )
         sal_Int32 nX = GetX( nPos ) - 1;
         tools::Rectangle aRect( Point( nX, 0 ), Size( 3, GetHdrHeight() ) );
         ImplInvertRect( *mpGridDev.get(), aRect );
-        aRect.Top() = GetHdrHeight() + 1;
-        aRect.Bottom() = GetY( GetLastVisLine() + 1 );
+        aRect.SetTop( GetHdrHeight() + 1 );
+        aRect.SetBottom( GetY( GetLastVisLine() + 1 ) );
         ImplInvertRect( *mpGridDev.get(), aRect );
     }
 }
