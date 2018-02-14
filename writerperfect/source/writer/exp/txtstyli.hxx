@@ -39,6 +39,7 @@ public:
     librevenge::RVNGPropertyList &GetTablePropertyList();
     librevenge::RVNGPropertyList &GetGraphicPropertyList();
     librevenge::RVNGPropertyList &GetPageLayoutPropertyList();
+    librevenge::RVNGPropertyList &GetMasterPagePropertyList();
 
 private:
     OUString m_aName;
@@ -51,6 +52,7 @@ private:
     librevenge::RVNGPropertyList m_aTablePropertyList;
     librevenge::RVNGPropertyList m_aGraphicPropertyList;
     librevenge::RVNGPropertyList m_aPageLayoutPropertyList;
+    librevenge::RVNGPropertyList m_aMasterPagePropertyList;
     XMLStylesContext &m_rStyles;
 };
 
