@@ -59,6 +59,7 @@ namespace dmapper {
 
 class  DomainMapper_Impl;
 struct FloatingTableInfo;
+struct AnchoredObjectInfo;
 
 enum BorderPosition
 {
@@ -279,6 +280,9 @@ private:
 
     // Determines if conversion of a given floating table is wanted or not.
     bool FloatingTableConversion( DomainMapper_Impl& rDM_Impl, FloatingTableInfo& rInfo );
+
+    /// Increases paragraph spacing according to Word 2013+ needs if necessary.
+    void HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl& rDM_Impl);
 
 public:
     enum PageType

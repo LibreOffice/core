@@ -1127,6 +1127,72 @@ void SectionPropertyMap::InheritOrFinalizePageStyles( DomainMapper_Impl& rDM_Imp
     }
 }
 
+void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl& rDM_Impl)
+{
+    // Ignore Word 2010 and older.
+    if (rDM_Impl.GetSettingsTable()->GetWordCompatibilityMode() < 15)
+        return;
+
+    sal_Int32 nPageWidth = GetPageWidth();
+    sal_Int32 nTextAreaWidth = nPageWidth - GetLeftMargin() - GetRightMargin();
+
+    std::vector<AnchoredObjectInfo>& rAnchoredObjectAnchors = rDM_Impl.m_aAnchoredObjectAnchors;
+    for (auto& rAnchor : rAnchoredObjectAnchors)
+    {
+        // Analyze the anchored objects of this paragraph, now that we know the
+        // page width.
+        sal_Int32 nShapesWidth = 0;
+        for (const auto& rAnchored : rAnchor.m_aAnchoredObjects)
+        {
+            uno::Reference<drawing::XShape> xShape(rAnchored, uno::UNO_QUERY);
+            if (!xShape.is())
+                continue;
+
+            uno::Reference<beans::XPropertySet> xPropertySet(rAnchored, uno::UNO_QUERY);
+            if (!xPropertySet.is())
+                continue;
+
+            // Ignore objects with no wrapping.
+            text::WrapTextMode eWrap = text::WrapTextMode_THROUGH;
+            xPropertySet->getPropertyValue("Surround") >>= eWrap;
+            if (eWrap == text::WrapTextMode_THROUGH)
+                continue;
+
+            sal_Int32 nLeftMargin = 0;
+            xPropertySet->getPropertyValue("LeftMargin") >>= nLeftMargin;
+            sal_Int32 nRightMargin = 0;
+            xPropertySet->getPropertyValue("RightMargin") >>= nRightMargin;
+            nShapesWidth += xShape->getSize().Width + nLeftMargin + nRightMargin;
+        }
+
+        // Ignore cases when we have enough horizontal space for the shapes.
+        if (nTextAreaWidth > nShapesWidth)
+            continue;
+
+        sal_Int32 nHeight = 0;
+        for (const auto& rAnchored : rAnchor.m_aAnchoredObjects)
+        {
+            uno::Reference<drawing::XShape> xShape(rAnchored, uno::UNO_QUERY);
+            if (!xShape.is())
+                continue;
+
+            nHeight += xShape->getSize().Height;
+        }
+
+        uno::Reference<beans::XPropertySet> xParagraph(rAnchor.m_xParagraph, uno::UNO_QUERY);
+        if (xParagraph.is())
+        {
+            sal_Int32 nTopMargin = 0;
+            xParagraph->getPropertyValue("ParaTopMargin") >>= nTopMargin;
+            // Increase top spacing of the paragraph to match Word layout
+            // behavior.
+            nTopMargin = std::max(nTopMargin, nHeight);
+            xParagraph->setPropertyValue("ParaTopMargin", uno::makeAny(nTopMargin));
+        }
+    }
+    rAnchoredObjectAnchors.clear();
+}
+
 void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 {
     // The default section type is nextPage.
@@ -1143,6 +1209,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             xBodyText->convertToTextFrame( rInfo.m_xStart, rInfo.m_xEnd, rInfo.m_aFrameProperties );
     }
     rPendingFloatingTables.clear();
+
+    HandleIncreasedAnchoredObjectSpacing(rDM_Impl);
 
     if ( m_nLnnMod )
     {

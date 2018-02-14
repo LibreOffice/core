@@ -1330,6 +1330,17 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
 
                     xTextRange = xTextAppend->finishParagraph( comphelper::containerToSequence(aProperties) );
                     m_xPreviousParagraph.set(xTextRange, uno::UNO_QUERY);
+
+                    if (!rAppendContext.m_aAnchoredObjects.empty())
+                    {
+                        // Remember what objects are anchored to this paragraph.
+                        AnchoredObjectInfo aInfo;
+                        aInfo.m_xParagraph = xTextRange;
+                        aInfo.m_aAnchoredObjects = rAppendContext.m_aAnchoredObjects;
+                        m_aAnchoredObjectAnchors.push_back(aInfo);
+                        rAppendContext.m_aAnchoredObjects.clear();
+                    }
+
                     // We're no longer right after a table conversion.
                     m_bConvertedTable = false;
 
@@ -5222,7 +5233,13 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
     //insert it into the document at the current cursor position
     OSL_ENSURE( xTextContent.is(), "DomainMapper_Impl::ImportGraphic");
     if( xTextContent.is())
+    {
         appendTextContent( xTextContent, uno::Sequence< beans::PropertyValue >() );
+
+        if (eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR && !m_aTextAppendStack.empty())
+            // Remember this object is anchored to the current paragraph.
+            m_aTextAppendStack.top().m_aAnchoredObjects.push_back(xTextContent);
+    }
 
     // Clear the reference, so in case the embedded object is inside a
     // TextFrame, we won't try to resize it (to match the size of the
