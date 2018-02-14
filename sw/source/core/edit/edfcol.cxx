@@ -480,12 +480,20 @@ bool lcl_DoUpdateParagraphSignatureField(SwDoc* pDoc,
         pDoc->GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
     });
 
-    uno::Reference<css::text::XTextRange> xText(xField, uno::UNO_QUERY);
-    const OUString curText = xText->getString();
-    if (curText != sDisplayText)
+    try
     {
-        xText->setString(sDisplayText);
-        return true;
+        uno::Reference<css::text::XTextRange> xText(xField, uno::UNO_QUERY);
+        const OUString curText = xText->getString();
+        if (curText != sDisplayText)
+        {
+            xText->setString(sDisplayText);
+            return true;
+        }
+    }
+    catch (const uno::Exception& ex)
+    {
+        // We failed; avoid crashing.
+        SAL_WARN("sw.uno", "Failed to update paragraph signature: " << ex);
     }
 
     return false;
@@ -1722,6 +1730,18 @@ void SwUndoParagraphSigning::Remove()
     lcl_RemoveParagraphMetadataField(m_xField);
 }
 
+/// Text within tables not supported; validation and undo seg-fault.
+bool lcl_isNodeInTable(SwTextNode* pNode)
+{
+    SwStartNode* pSttNode = pNode->StartOfSectionNode();
+    while (pSttNode && pSttNode->IsSectionNode())
+    {
+        pSttNode = pSttNode->StartOfSectionNode();
+    }
+
+    return (pSttNode != nullptr && pSttNode->GetStartNodeType() == SwTableBoxStartNode);
+}
+
 void SwEditShell::SignParagraph()
 {
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
@@ -1732,6 +1752,10 @@ void SwEditShell::SignParagraph()
         return;
     SwTextNode* pNode = pPosStart->nNode.GetNode().GetTextNode();
     if (!pNode)
+        return;
+
+    // Table text signing is not supported.
+    if (lcl_isNodeInTable(pNode))
         return;
 
     // 1. Get the text (without fields).
@@ -1808,7 +1832,12 @@ void SwEditShell::ValidateCurrentParagraphSignatures(bool updateDontRemove)
             SetParagraphSignatureValidation(bOldValidationFlag);
         });
 
-    lcl_ValidateParagraphSignatures(GetDoc(), SwXParagraph::CreateXParagraph(*pNode->GetDoc(), pNode), updateDontRemove);
+    // Table text signing is not supported.
+    if (lcl_isNodeInTable(pNode))
+        return;
+
+    uno::Reference<text::XTextContent> xParentText = SwXParagraph::CreateXParagraph(*pNode->GetDoc(), pNode);
+    lcl_ValidateParagraphSignatures(GetDoc(), xParentText, updateDontRemove);
 }
 
 void SwEditShell::ValidateAllParagraphSignatures(bool updateDontRemove)
