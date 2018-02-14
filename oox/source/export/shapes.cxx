@@ -386,9 +386,9 @@ awt::Size ShapeExport::MapSize( const awt::Size& rSize ) const
     Size aRetSize( OutputDevice::LogicToLogic( Size( rSize.Width, rSize.Height ), maMapModeSrc, maMapModeDest ) );
 
     if ( !aRetSize.Width() )
-        aRetSize.Width()++;
+        aRetSize.setWidth( ++aRetSize.Width() );
     if ( !aRetSize.Height() )
-        aRetSize.Height()++;
+        aRetSize.setHeight( ++aRetSize.Height() );
     return awt::Size( aRetSize.Width(), aRetSize.Height() );
 }
 

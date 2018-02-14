@@ -114,7 +114,7 @@ void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     {
         const long nVRulerWidth = m_aVRuler->GetSizePixel().Width();
         long nSize = aSize.Width() - nVRulerWidth;
-        aSize.Width() += nCornerWidth;
+        aSize.setWidth( aSize.Width() + nCornerWidth );
         rRenderContext.SetClipRegion(vcl::Region(rRenderContext.PixelToLogic(tools::Rectangle(Point(),
                                                                              Size(nSize, aSize.Height())))));
     }
@@ -230,8 +230,8 @@ void OStartMarker::Resize()
 
     Size aImageSize = m_aImage->GetImage().GetSizePixel();
     const MapMode& rMapMode = GetMapMode();
-    aImageSize.Width() = long(aImageSize.Width() * static_cast<double>(rMapMode.GetScaleX()));
-    aImageSize.Height() = long(aImageSize.Height() * static_cast<double>(rMapMode.GetScaleY()));
+    aImageSize.setWidth( long(aImageSize.Width() * static_cast<double>(rMapMode.GetScaleX())) );
+    aImageSize.setHeight( long(aImageSize.Height() * static_cast<double>(rMapMode.GetScaleY())) );
 
     long nExtraWidth = long(REPORT_EXTRA_SPACE * rMapMode.GetScaleX());
 
@@ -239,8 +239,8 @@ void OStartMarker::Resize()
     const long nHeight = ::std::max<sal_Int32>(nOutputHeight - 2*aPos.Y(),LogicToPixel(Size(0,m_aText->GetTextHeight())).Height());
     m_aText->SetPosSizePixel(aPos,Size(aRulerPos.X() - aPos.X(),nHeight));
 
-    aPos.X() = nExtraWidth;
-    aPos.Y() += static_cast<sal_Int32>((LogicToPixel(Size(0,m_aText->GetTextHeight())).Height() - aImageSize.Height()) * 0.5) ;
+    aPos.setX( nExtraWidth );
+    aPos.setY( aPos.Y() + static_cast<sal_Int32>((LogicToPixel(Size(0,m_aText->GetTextHeight())).Height() - aImageSize.Height()) * 0.5) ) ;
     m_aImage->SetPosSizePixel(aPos,aImageSize);
 }
 
@@ -272,11 +272,11 @@ void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
         // show help
         tools::Rectangle aItemRect(rHEvt.GetMousePosPixel(),Size(GetSizePixel().Width(),getMinHeight()));
         Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
-        aItemRect.Left()   = aPt.X();
-        aItemRect.Top()    = aPt.Y();
+        aItemRect.SetLeft( aPt.X() );
+        aItemRect.SetTop( aPt.Y() );
         aPt = OutputToScreenPixel( aItemRect.BottomRight() );
-        aItemRect.Right()  = aPt.X();
-        aItemRect.Bottom() = aPt.Y();
+        aItemRect.SetRight( aPt.X() );
+        aItemRect.SetBottom( aPt.Y() );
         if( rHEvt.GetMode() == HelpEventMode::BALLOON )
             Help::ShowBalloon( this, aItemRect.Center(), aItemRect, m_aText->GetText());
         else
