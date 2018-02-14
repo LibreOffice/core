@@ -2850,11 +2850,12 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
         OUString sName;
         bool bIsPhysical;
         boost::property_tree::ptree aChild;
-        uno::Reference<beans::XPropertySet> xProperty;
         boost::property_tree::ptree aChildren;
+        const OUString sPageStyles("PageStyles");
+        uno::Reference<beans::XPropertySet> xProperty;
         uno::Reference<container::XNameContainer> xContainer;
 
-        if (xStyleFamilies->getByName("PageStyles") >>= xContainer)
+        if (xStyleFamilies->hasByName(sPageStyles) && (xStyleFamilies->getByName(sPageStyles) >>= xContainer))
         {
             uno::Sequence<OUString> aSeqNames = xContainer->getElementNames();
             for (sal_Int32 itName = 0; itName < aSeqNames.getLength(); itName++)
