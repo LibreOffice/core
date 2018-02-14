@@ -40,7 +40,7 @@ private:
     sal_uLong           nPlanes;            // no of planes
     sal_uLong           nBytesPerPlaneLin;  // bytes per plane line
 
-    sal_uLong           nWidth, nHeight;    // dimension in pixel
+    sal_uInt32          nWidth, nHeight;    // dimension in pixel
     sal_uInt16          nResX, nResY;       // resolution in pixel per inch or 0,0
     sal_uInt16          nDestBitsPerPixel;  // bits per pixel in destination bitmap 1,4,8 or 24
     std::unique_ptr<sal_uInt8[]>
@@ -94,6 +94,12 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
     if (bStatus && nBytesPerPlaneLin > m_rPCX.remainingSize() / nPlanes)
     {
         bStatus = false;
+    }
+
+    if (bStatus)
+    {
+        sal_uInt32 nResult;
+        bStatus = !o3tl::checked_multiply(nWidth, nHeight, nResult) && nResult <= SAL_MAX_INT32/2/3;
     }
 
     // Write BMP header and conditionally (maybe invalid for now) color palette:
