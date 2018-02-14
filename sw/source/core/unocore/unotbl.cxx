@@ -110,6 +110,7 @@
 #include <swtable.hxx>
 #include <docsh.hxx>
 #include <fesh.hxx>
+#include <itabenum.hxx>
 
 using namespace ::com::sun::star;
 using ::editeng::SvxBorderLine;

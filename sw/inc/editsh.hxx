@@ -21,27 +21,16 @@
 
 #include "crsrsh.hxx"
 
-#include "IMark.hxx"
 #include "charfmt.hxx"
 #include "fldupde.hxx"
 #include "frmfmt.hxx"
-#include "itabenum.hxx"
-#include "swdbdata.hxx"
 #include "swdllapi.h"
 #include "swundo.hxx"
 #include "tblenum.hxx"
 #include "tox.hxx"
-#include <svtools/embedhlp.hxx>
 
-#include <editeng/swafopt.hxx>
-#include <svx/ClassificationField.hxx>
-
-#include <vcl/font.hxx>
-
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
-#include <com/sun/star/text/HoriOrientation.hpp>
 
 #include <memory>
 #include <vector>
@@ -102,6 +91,9 @@ class SwAuthEntry;
 class SwRewriter;
 class SwView;
 struct SwConversionArgs;
+struct SvxSwAutoFormatFlags;
+struct SwInsertTableOptions;
+struct SwDBData;
 enum class SvtScriptType;
 enum class SfxClassificationPolicyType;
 enum class RedlineFlags;
@@ -114,6 +106,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 namespace svx{
     struct SpellPortion;
     typedef std::vector<SpellPortion> SpellPortions;
+    class ClassificationResult;
 }
 
 namespace sfx2{

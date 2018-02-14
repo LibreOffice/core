@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_FESH_HXX
 
 #include <com/sun/star/text/RelOrientation.hpp>
-#include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <svx/svdobj.hxx>
@@ -31,7 +30,6 @@
 #include <svx/svdtypes.hxx>
 #include <sot/formats.hxx>
 #include <rtl/ustring.hxx>
-#include <svtools/embedhlp.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <vector>

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_FLDDROPDOWN_HXX
 #define INCLUDED_SW_INC_FLDDROPDOWN_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Sequence.h>
 #include "swdllapi.h"
 #include "fldbas.hxx"
 
