@@ -231,6 +231,7 @@ certain functionality.
 @li @c filter.pict
 @li @c filter.ras
 @li @c filter.svg
+@li @c filter.tga
 @li @c filter.tiff
 @li @c filter.xmlfa
 @li @c filter.xslt - xslt import/export
