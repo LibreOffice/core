@@ -37,7 +37,7 @@
 
 SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
                                     bool bChkTable )
-    : SwUndo( SwUndoId::SPLITNODE, pDoc ), pHistory( nullptr ), pRedlData( nullptr ), nNode( rPos.nNode.GetIndex() ),
+    : SwUndo( SwUndoId::SPLITNODE, pDoc ), pRedlData( nullptr ), nNode( rPos.nNode.GetIndex() ),
         nContent( rPos.nContent.GetIndex() ),
         bTableFlag( false ), bChkTableStt( bChkTable )
 {
@@ -45,11 +45,13 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
     OSL_ENSURE( pTextNd, "only for TextNode" );
     if( pTextNd->GetpSwpHints() )
     {
-        pHistory = new SwHistory;
-        pHistory->CopyAttr( pTextNd->GetpSwpHints(), nNode, 0,
+        m_pHistory.reset(new SwHistory);
+        m_pHistory->CopyAttr(pTextNd->GetpSwpHints(), nNode, 0,
                             pTextNd->GetText().getLength(), false );
-        if( !pHistory->Count() )
-            DELETEZ( pHistory );
+        if (!m_pHistory->Count())
+        {
+            m_pHistory.reset();
+        }
     }
     // consider Redline
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
@@ -63,7 +65,7 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
 
 SwUndoSplitNode::~SwUndoSplitNode()
 {
-    delete pHistory;
+    m_pHistory.reset();
     delete pRedlData;
 }
 
@@ -126,14 +128,14 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
             RemoveIdxRel( nNode+1, *rPam.GetPoint() );
 
             pTNd->JoinNext();
-            if( pHistory )
+            if (m_pHistory)
             {
                 rPam.GetPoint()->nContent = 0;
                 rPam.SetMark();
                 rPam.GetPoint()->nContent = pTNd->GetText().getLength();
 
                 pDoc->RstTextAttrs( rPam, true );
-                pHistory->TmpRollback( pDoc, 0, false );
+                m_pHistory->TmpRollback( pDoc, 0, false );
             }
 
             pDoc->UpdateParRsid( pTNd, nParRsid );
@@ -159,8 +161,10 @@ void SwUndoSplitNode::RedoImpl(::sw::UndoRedoContext & rContext)
         SwDoc* pDoc = rPam.GetDoc();
         pDoc->getIDocumentContentOperations().SplitNode( *rPam.GetPoint(), bChkTableStt );
 
-        if( pHistory )
-            pHistory->SetTmpEnd( pHistory->Count() );
+        if (m_pHistory)
+        {
+            m_pHistory->SetTmpEnd(m_pHistory->Count());
+        }
 
         if( ( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() )) ||
             ( !( RedlineFlags::Ignore & GetRedlineFlags() ) &&
