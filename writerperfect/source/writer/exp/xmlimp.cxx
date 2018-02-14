@@ -526,6 +526,11 @@ std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetGraphicStyles()
     return maGraphicStyles;
 }
 
+std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetPageLayouts()
+{
+    return maPageLayouts;
+}
+
 void XMLImport::startDocument()
 {
     mrGenerator.startDocument(librevenge::RVNGPropertyList());
