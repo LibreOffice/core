@@ -32,6 +32,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <svx/svdpage.hxx>
+#include <vcl/vclevent.hxx>
 
 #include <chrono>
 #include <tabvwsh.hxx>
@@ -1566,6 +1567,7 @@ void ScTiledRenderingTest::testIMESupport()
     comphelper::LibreOfficeKit::setActive();
 
     ScModelObj* pModelObj = createDoc("empty.ods");
+    VclPtr<vcl::Window> pDocWindow = pModelObj->getDocWindow();
     ScDocument* pDoc = pModelObj->GetDocument();
 
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
@@ -1581,9 +1583,9 @@ void ScTiledRenderingTest::testIMESupport()
                    });
     for (const auto& aInput: aInputs)
     {
-        pModelObj->postExtTextInputEvent(LOK_EXT_TEXTINPUT, aInput);
+        pDocWindow->PostExtTextInputEvent(VCLEVENT_WINDOW_EXTTEXTINPUT, aInput);
     }
-    pModelObj->postExtTextInputEvent(LOK_EXT_TEXTINPUT_END, "");
+    pDocWindow->PostExtTextInputEvent(VCLEVENT_WINDOW_ENDEXTTEXTINPUT, "");
 
     // commit the string to the cell
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);

@@ -85,6 +85,11 @@ public:
     }
 
     /**
+     * Get the vcl::Window for the document being edited
+     */
+    virtual VclPtr<vcl::Window> getDocWindow() = 0;
+
+    /**
      * Get the hash of the currently displayed part, i.e. sheet in a spreadsheet
      * or slide in a presentation.
      */
@@ -108,13 +113,6 @@ public:
      * @see lok::Document::postKeyEvent().
      */
     virtual void postKeyEvent(int nType, int nCharCode, int nKeyCode) = 0;
-
-    /**
-     * Posts an external text input event
-     *
-     * @see lok::Document::postExtTextInputEvent().
-     */
-    virtual void postExtTextInputEvent(int nType, const OUString& rText) = 0;
 
     /**
      * Posts a mouse event on the document.

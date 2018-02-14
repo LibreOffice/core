@@ -2367,6 +2367,16 @@ OUString SdXImpressDocument::getPartHash( int nPart )
     return OUString::number(pPage->GetHashCode());
 }
 
+VclPtr<vcl::Window> SdXImpressDocument::getDocWindow()
+{
+    SolarMutexGuard aGuard;
+    DrawViewShell* pViewShell = GetViewShell();
+    VclPtr<vcl::Window> pWindow;
+    if (pViewShell)
+        pWindow = pViewShell->GetActiveWindow();
+    return pWindow;
+}
+
 void SdXImpressDocument::setPartMode( int nPartMode )
 {
     DrawViewShell* pViewSh = GetViewShell();
@@ -2514,32 +2524,6 @@ void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     default:
         assert(false);
         break;
-    }
-}
-
-void SdXImpressDocument::postExtTextInputEvent(int nType, const OUString& rText)
-{
-    SolarMutexGuard aGuard;
-
-    DrawViewShell* pViewShell = GetViewShell();
-    if (!pViewShell)
-        return;
-
-    vcl::Window* pWindow = pViewShell->GetActiveWindow();
-    if (!pWindow)
-        return;
-
-    CommandExtTextInputData aTextInputData(rText, nullptr, 0, 0, false);
-    switch (nType)
-    {
-    case LOK_EXT_TEXTINPUT:
-        pWindow->PostExtTextInputEvent(VCLEVENT_WINDOW_EXTTEXTINPUT, rText);
-        break;
-    case LOK_EXT_TEXTINPUT_END:
-        pWindow->PostExtTextInputEvent(VCLEVENT_WINDOW_ENDEXTTEXTINPUT, "");
-        break;
-    default:
-        assert(false && "Unhandled External Text input event!");
     }
 }
 
