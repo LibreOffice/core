@@ -79,16 +79,17 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
     if ( ( mnMaxVal == 0 ) || ( mnWidth <= 0 ) || ( mnHeight <= 0 ) )
         return false;
 
+    sal_uInt32 nPixelsRequired;
+    if (o3tl::checked_multiply<sal_uInt32>(mnWidth, mnHeight, nPixelsRequired))
+        return false;
+    const auto nRemainingSize = mrPBM.remainingSize();
+
     // 0->PBM, 1->PGM, 2->PPM
     switch ( mnMode )
     {
         case 0:
         {
-            sal_uInt32 nDataRequired;
-            if (o3tl::checked_multiply<sal_uInt32>(mnWidth, mnHeight, nDataRequired))
-                return false;
-            const auto nRemainingSize = mrPBM.remainingSize();
-            if (nRemainingSize < nDataRequired / 8)
+            if (nRemainingSize < nPixelsRequired / 8)
                 return false;
 
             mpRawBmp.reset( new vcl::bitmap::RawBitmap( Size( mnWidth, mnHeight ) ) );
@@ -98,6 +99,9 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
             break;
         }
         case 1 :
+            if (nRemainingSize < nPixelsRequired)
+                return false;
+
             mpRawBmp.reset( new vcl::bitmap::RawBitmap( Size( mnWidth, mnHeight ) ) );
             mnCol = static_cast<sal_uInt16>(mnMaxVal) + 1;
             if ( mnCol > 256 )
@@ -111,6 +115,9 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
             }
             break;
         case 2 :
+            if (nRemainingSize / 3 < nPixelsRequired)
+                return false;
+
             mpRawBmp.reset( new vcl::bitmap::RawBitmap( Size( mnWidth, mnHeight ) ) );
             break;
     }
