@@ -1,0 +1,8 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+2: Justin Luth <justin_luth@sil.org>
+Code-Review+2: Michael Stahl <mstahl@redhat.com>
+Submitted-by: Michael Stahl <mstahl@redhat.com>
+Submitted-at: Wed, 14 Feb 2018 10:40:34 +0100
+Reviewed-on: https://gerrit.libreoffice.org/49679
+Project: core
+Branch: refs/heads/libreoffice-6-0
