@@ -34,6 +34,24 @@
       "revId": "6dd8494a8c0254ffe1a31bdd737a3a7abecb15b3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_fcb6eeda",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 4364,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-02-14T08:55:12Z",
+      "side": 1,
+      "message": "Right, I see the point. What I had in mind with the suggestion, is to get a hard error for all the other systems that are not regularly built, hopefully with an easy way to discover this commit - rather than something that fails to set the correct owner silently...",
+      "parentUuid": "fa31d9ce_dcedaaf0",
+      "revId": "6dd8494a8c0254ffe1a31bdd737a3a7abecb15b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
