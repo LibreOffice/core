@@ -28,13 +28,14 @@ XMLStylesContext::XMLStylesContext(XMLImport &rImport, StyleType eType)
       m_rColumnStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticColumnStyles() : mrImport.GetColumnStyles()),
       m_rRowStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticRowStyles() : mrImport.GetRowStyles()),
       m_rTableStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticTableStyles() : mrImport.GetTableStyles()),
-      m_rGraphicStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticGraphicStyles() : mrImport.GetGraphicStyles())
+      m_rGraphicStyles(eType == StyleType_AUTOMATIC ? mrImport.GetAutomaticGraphicStyles() : mrImport.GetGraphicStyles()),
+      m_rPageLayouts(mrImport.GetPageLayouts())
 {
 }
 
 rtl::Reference<XMLImportContext> XMLStylesContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
-    if (rName == "style:style")
+    if (rName == "style:style" || rName == "style:page-layout")
         return new XMLStyleContext(mrImport, *this);
     return nullptr;
 }
@@ -72,6 +73,11 @@ std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentTa
 std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentGraphicStyles()
 {
     return m_rGraphicStyles;
+}
+
+std::map<OUString, librevenge::RVNGPropertyList> &XMLStylesContext::GetCurrentPageLayouts()
+{
+    return m_rPageLayouts;
 }
 
 /// Handler for <style:font-face>.
