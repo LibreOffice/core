@@ -2886,7 +2886,23 @@ IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, const NamedColor&, rColor, void)
 {
     m_xBtnUpdater->Update(rColor.first);
     if (m_xPaletteManager)
+    {
         m_xPaletteManager->SetLastColor(rColor.first);
+
+        // Also show the current color as QuickHelpText
+        OUString colorHelpText;
+        if (m_nSlotId == SID_ATTR_CHAR_COLOR)
+            colorHelpText = "Font Color (" + rColor.second + ")";
+        else
+            colorHelpText = "Highlight Color (" + rColor.second + ")";
+
+        ToolBox* pToolBox = nullptr;
+        sal_uInt16 nId = 0;
+        if ( !getToolboxId( nId, &pToolBox ) )
+            return;
+
+       pToolBox->SetQuickHelpText(nId, colorHelpText);
+    }
 }
 
 void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
