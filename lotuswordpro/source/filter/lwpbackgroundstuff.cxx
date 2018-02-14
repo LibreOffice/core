@@ -65,7 +65,7 @@
 
 #include <tools/stream.hxx>
 #include <vcl/dibtools.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <svx/xbitmap.hxx>
 
 void LwpBackgroundStuff::Read(LwpObjectStream* pStrm)
@@ -114,11 +114,7 @@ XFBGImage* LwpBackgroundStuff::GetFillPattern()
     GetPattern(m_nID, aPttnArray);
 
     // create bitmap object from the pattern array
-    Bitmap aBmp( Size(8, 8), 1 );
-    BitmapWriteAccess* pWA = aBmp.AcquireWriteAccess();
-    sal_uInt8* pBuf = pWA->GetBuffer();
-    memcpy(pBuf, aPttnArray, 32);
-    Bitmap::ReleaseAccess(pWA);
+    BitmapEx aBmp = vcl::bitmap::CreateFromData( aPttnArray, 8, 8, 8, 1 );
 
     // create XOBitmap object from bitmap object
     XOBitmap aXOBitmap( aBmp );
