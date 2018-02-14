@@ -8360,6 +8360,36 @@ void Test::testFuncRefListArraySUBTOTAL()
     m_pDoc->DeleteTab(0);
 }
 
+// tdf#115493 jump commands return the matrix result instead of the reference
+// list array.
+void Test::testFuncJumpMatrixArrayIF()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetString(0,0,0, "a");  // A1
+    std::vector<std::vector<const char*>> aData = {
+        { "a", "1" },
+        { "b", "2" },
+        { "a", "4" }
+    };                              // A7:B9
+    insertRangeData(m_pDoc, ScAddress(0,6,0), aData);
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+
+    // Matrix in C10, summing B7,B9
+    m_pDoc->InsertMatrixFormula( 2,9, 2,9, aMark, "=SUM(IF(EXACT(A7:A9;A$1);B7:B9;0))");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula C10 failed", 5.0, m_pDoc->GetValue(ScAddress(2,9,0)));
+
+    // Matrix in C11, summing B7,B9
+    m_pDoc->InsertMatrixFormula( 2,10, 2,10, aMark,
+            "=SUM(IF(EXACT(OFFSET(A7;0;0):OFFSET(A7;2;0);A$1);OFFSET(A7;0;1):OFFSET(A7;2;1);0))");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula C11 failed", 5.0, m_pDoc->GetValue(ScAddress(2,10,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 // Test iterations with circular chain of references.
 void Test::testIterations()
 {
