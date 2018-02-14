@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_ef638e18",
+        "filename": "test/source/sheet/xfunctiondescriptions.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-14T21:47:14Z",
+      "side": 1,
+      "message": "see \u003chttps://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d09fcdbd5e0ae35fb7db8c8784329035edd82573b\u003e \"Fix random range for XFunctionDescriptions::testGetById\"\n\nthis test using random values is very problematic (even if the original Java code wasn\u0027t any better), making the test effectively un-debuggable",
+      "revId": "eff70347190a6642fd62a9e0b20e4366c39fbc7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
