@@ -44,7 +44,7 @@
 
 using namespace ::com::sun::star;
 
-XOBitmap::XOBitmap( const Bitmap& rBmp ) :
+XOBitmap::XOBitmap( const BitmapEx& rBmp ) :
     xGraphicObject  (new GraphicObject(rBmp)),
     bGraphicDirty   ( false )
 {
@@ -54,9 +54,9 @@ XOBitmap::~XOBitmap()
 {
 }
 
-Bitmap XOBitmap::GetBitmap() const
+BitmapEx XOBitmap::GetBitmap() const
 {
-    return GetGraphicObject().GetGraphic().GetBitmap();
+    return GetGraphicObject().GetGraphic().GetBitmapEx();
 }
 
 const GraphicObject& XOBitmap::GetGraphicObject() const
@@ -71,14 +71,14 @@ void XOBitmap::Bitmap2Array()
 {
     ScopedVclPtrInstance< VirtualDevice > pVDev;
     bool            bPixelColor = false;
-    const Bitmap    aBitmap( GetBitmap() );
+    const BitmapEx  aBitmap( GetBitmap() );
     const sal_Int32 nLines = 8; // type dependent
 
     if( !pPixelArray )
         pPixelArray.reset( new sal_uInt16[ nLines * nLines ] );
 
     pVDev->SetOutputSizePixel( aBitmap.GetSizePixel() );
-    pVDev->DrawBitmap( Point(), aBitmap );
+    pVDev->DrawBitmapEx( Point(), aBitmap );
     aPixelColor = aBckgrColor = pVDev->GetPixel( Point() );
 
     // create array and determine foreground and background color
