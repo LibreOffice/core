@@ -3093,7 +3093,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                 aColumns.emplace_back( nPosition, aM.Width );
                 nPosition += aM.Width;
                 if ( x == nColumnCount - 1  && nPosition != maRect.Right() )
-                    maRect.Right() = nPosition;
+                    maRect.SetRight( nPosition );
             }
 
             nPosition = aPosition.Y;
@@ -3106,7 +3106,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                 aRows.emplace_back( nPosition, aM.Height );
                 nPosition += aM.Height;
                 if ( y == nRowCount - 1 && nPosition != maRect.Bottom())
-                    maRect.Bottom() = nPosition;
+                    maRect.SetBottom( nPosition );
             }
             std::unique_ptr<ContainerGuard> xSpgrContainer(new ContainerGuard(mpPptEscherEx, ESCHER_SpgrContainer));
             std::unique_ptr<ContainerGuard> xSpContainer(new ContainerGuard(mpPptEscherEx, ESCHER_SpContainer));

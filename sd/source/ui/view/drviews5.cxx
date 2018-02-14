@@ -108,7 +108,7 @@ void DrawViewShell::ArrangeGUIElements()
     maScrBarWH = Size (nScrollBarSize, nScrollBarSize);
 
     Point aHPos = maViewPos;
-    aHPos.Y() += maViewSize.Height();
+    aHPos.setY( aHPos.Y() + maViewSize.Height() );
 
     ViewShell::ArrangeGUIElements ();
 

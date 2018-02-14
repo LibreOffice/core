@@ -124,22 +124,22 @@ void ImpCheckInsertPos(Point& rPos, const Size& rSize, const ::tools::Rectangle&
         {
             if(aMarkRect.Left() < rWorkArea.Left())
             {
-                rPos.X() += rWorkArea.Left() - aMarkRect.Left();
+                rPos.setX( rPos.X() + rWorkArea.Left() - aMarkRect.Left() );
             }
 
             if(aMarkRect.Right() > rWorkArea.Right())
             {
-                rPos.X() -= aMarkRect.Right() - rWorkArea.Right();
+                rPos.setX( rPos.X() - aMarkRect.Right() - rWorkArea.Right() );
             }
 
             if(aMarkRect.Top() < rWorkArea.Top())
             {
-                rPos.Y() += rWorkArea.Top() - aMarkRect.Top();
+                rPos.setY( rPos.Y() + rWorkArea.Top() - aMarkRect.Top() );
             }
 
             if(aMarkRect.Bottom() > rWorkArea.Bottom())
             {
-                rPos.Y() -= aMarkRect.Bottom() - rWorkArea.Bottom();
+                rPos.setY( rPos.Y() - aMarkRect.Bottom() - rWorkArea.Bottom() );
             }
         }
     }
@@ -545,8 +545,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                                         {
                                                             const SdrGluePoint& rGluePoint = (*pGlueList)[nInd];
                                                             Point aPosition = rGluePoint.GetAbsolutePos(*pConnObj);
-                                                            aPosition.X() += aVector.Width();
-                                                            aPosition.Y() += aVector.Height();
+                                                            aPosition.setX( aPosition.X() + aVector.Width() );
+                                                            aPosition.setY( aPosition.Y() + aVector.Height() );
                                                             pCloneEdge->SetTailPoint(false, aPosition);
                                                         }
                                                     }
@@ -577,8 +577,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                                         {
                                                             const SdrGluePoint& rGluePoint = (*pGlueList)[nInd];
                                                             Point aPosition = rGluePoint.GetAbsolutePos(*pConnObj);
-                                                            aPosition.X() += aVector.Width();
-                                                            aPosition.Y() += aVector.Height();
+                                                            aPosition.setX( aPosition.X() + aVector.Width() );
+                                                            aPosition.setY( aPosition.Y() + aVector.Height() );
                                                             pCloneEdge->SetTailPoint(true, aPosition);
                                                         }
                                                     }
@@ -651,8 +651,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             // #i120393# Clipboard data uses full object geometry range
             const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
-            maDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
-            maDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
+            maDropPos.setX( pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 ) );
+            maDropPos.setY( pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 ) );
 
             // delete pages, that are not of any interest for us
             for( long i = ( pWorkModel->GetPageCount() - 1 ); i >= 0; i-- )
@@ -819,8 +819,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         // #i120393# Clipboard data uses full object geometry range
                         const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
-                        maDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
-                        maDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
+                        maDropPos.setX( pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 ) );
+                        maDropPos.setY( pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 ) );
                     }
 
                     bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions);
@@ -844,8 +844,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 ::tools::Rectangle   aRect( pObj->GetLogicRect() );
                 Size        aSize( aRect.GetSize() );
 
-                maDropPos.X() -= ( aSize.Width() >> 1 );
-                maDropPos.Y() -= ( aSize.Height() >> 1 );
+                maDropPos.setX( maDropPos.X() - ( aSize.Width() >> 1 ) );
+                maDropPos.setY( maDropPos.Y() - ( aSize.Height() >> 1 ) );
 
                 aRect.SetPos( maDropPos );
                 pObj->SetLogicRect( aRect );
@@ -893,8 +893,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         // #i120393# Clipboard data uses full object geometry range
                         const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
-                        maDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
-                        maDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
+                        maDropPos.setX( pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 ) );
+                        maDropPos.setY( pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 ) );
                     }
 
                     // delete pages, that are not of any interest for us
@@ -978,8 +978,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                         if( !aSize.Width() || !aSize.Height() )
                         {
-                            aSize.Width()  = 14100;
-                            aSize.Height() = 10000;
+                            aSize.setWidth( 14100 );
+                            aSize.setHeight( 10000 );
                             aSize = OutputDevice::LogicToLogic(Size(14100, 10000), MapMode(MapUnit::Map100thMM), MapMode(aMapUnit));
                             aSz.Width = aSize.Width();
                             aSz.Height = aSize.Height();
@@ -991,8 +991,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     Size aMaxSize( mrDoc.GetMaxObjSize() );
 
-                    maDropPos.X() -= std::min( aSize.Width(), aMaxSize.Width() ) >> 1;
-                    maDropPos.Y() -= std::min( aSize.Height(), aMaxSize.Height() ) >> 1;
+                    maDropPos.setX( maDropPos.X() - (std::min( aSize.Width(), aMaxSize.Width() ) >> 1) );
+                    maDropPos.setY( maDropPos.Y() - (std::min( aSize.Height(), aMaxSize.Height() ) >> 1) );
 
                     ::tools::Rectangle       aRect( maDropPos, aSize );
                     SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );
@@ -1161,8 +1161,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     Size aMaxSize( mrDoc.GetMaxObjSize() );
 
-                    maDropPos.X() -= std::min( aSize.Width(), aMaxSize.Width() ) >> 1;
-                    maDropPos.Y() -= std::min( aSize.Height(), aMaxSize.Height() ) >> 1;
+                    maDropPos.setX( maDropPos.X() - (std::min( aSize.Width(), aMaxSize.Width() ) >> 1) );
+                    maDropPos.setY( maDropPos.Y() - (std::min( aSize.Height(), aMaxSize.Height() ) >> 1) );
 
                     ::tools::Rectangle       aRect( maDropPos, aSize );
                     SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );
@@ -1221,8 +1221,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 // #i120393# Clipboard data uses full object geometry range
                 const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
-                aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
-                aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
+                aInsertPos.setX( pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 ) );
+                aInsertPos.setY( pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 ) );
             }
 
             // restrict movement to WorkArea
@@ -1253,8 +1253,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             // #i120393# Clipboard data uses full object geometry range
             const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
-            aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
-            aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
+            aInsertPos.setX( pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 ) );
+            aInsertPos.setY( pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 ) );
         }
 
         bReturn = InsertMetaFile( aDataHelper, aInsertPos, pImageMap.get(), nFormat == SotClipboardFormatId::NONE );
@@ -1302,8 +1302,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 // #i120393# Clipboard data uses full object geometry range
                 const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
-                aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
-                aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
+                aInsertPos.setX( pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 ) );
+                aInsertPos.setY( pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 ) );
             }
 
             // restrict movement to WorkArea
@@ -1353,10 +1353,10 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 Point                   aHitPosB( rPos );
                 const SdrLayerIDSet*        pVisiLayer = &GetSdrPageView()->GetVisibleLayers();
 
-                aHitPosR.X() += n2HitLog;
-                aHitPosL.X() -= n2HitLog;
-                aHitPosT.Y() += n2HitLog;
-                aHitPosB.Y() -= n2HitLog;
+                aHitPosR.setX( aHitPosR.X() + n2HitLog );
+                aHitPosL.setX( aHitPosL.X() - n2HitLog );
+                aHitPosT.setY( aHitPosT.Y() + n2HitLog );
+                aHitPosB.setY( aHitPosB.Y() - n2HitLog );
 
                 if( bClosed &&
                     SdrObjectPrimitiveHit(*pPickObj, aHitPosR, nHitLog, *GetSdrPageView(), pVisiLayer, false) &&

@@ -1939,8 +1939,8 @@ private:
                     && aPageWidth > aPageHeight ) )
             {
                 const sal_Int32 nTmp (rInfo.maPrintSize.Width());
-                rInfo.maPrintSize.Width() = rInfo.maPrintSize.Height();
-                rInfo.maPrintSize.Height() = nTmp;
+                rInfo.maPrintSize.setWidth( rInfo.maPrintSize.Height() );
+                rInfo.maPrintSize.setHeight( nTmp );
             }
 
             if (mpOptions->IsTilePage()
@@ -1979,13 +1979,13 @@ private:
 
         if( fPageWH < fPrintWH )
         {
-            aPageSize_2.Width() = static_cast<long>( aPrintSize_2.Height() * fPageWH );
-            aPageSize_2.Height()= aPrintSize_2.Height();
+            aPageSize_2.setWidth( static_cast<long>( aPrintSize_2.Height() * fPageWH ) );
+            aPageSize_2.setHeight( aPrintSize_2.Height() );
         }
         else
         {
-            aPageSize_2.Width() = aPrintSize_2.Width();
-            aPageSize_2.Height() = static_cast<long>( aPrintSize_2.Width() / fPageWH );
+            aPageSize_2.setWidth( aPrintSize_2.Width() );
+            aPageSize_2.setHeight( static_cast<long>( aPrintSize_2.Width() / fPageWH ) );
         }
 
         MapMode aMap (rInfo.maMap);
@@ -2000,13 +2000,13 @@ private:
 
         if (rInfo.meOrientation == Orientation::Landscape)
         {
-            aOffset.X() = ( ( aAdjustedPrintSize.Width() >> 1 ) - rInfo.maPageSize.Width() ) >> 1;
-            aOffset.Y() = ( aAdjustedPrintSize.Height() - rInfo.maPageSize.Height() ) >> 1;
+            aOffset.setX( ( ( aAdjustedPrintSize.Width() >> 1 ) - rInfo.maPageSize.Width() ) >> 1 );
+            aOffset.setY( ( aAdjustedPrintSize.Height() - rInfo.maPageSize.Height() ) >> 1 );
         }
         else
         {
-            aOffset.X() = ( aAdjustedPrintSize.Width() - rInfo.maPageSize.Width() ) >> 1;
-            aOffset.Y() = ( ( aAdjustedPrintSize.Height() >> 1 ) - rInfo.maPageSize.Height() ) >> 1;
+            aOffset.setX( ( aAdjustedPrintSize.Width() - rInfo.maPageSize.Width() ) >> 1 );
+            aOffset.setY( ( ( aAdjustedPrintSize.Height() >> 1 ) - rInfo.maPageSize.Height() ) >> 1 );
         }
 
         // create vector of pages to print
@@ -2059,9 +2059,9 @@ private:
                 const std::pair<sal_uInt16, sal_uInt16> aPair (aPairVector[nIndex]);
                 Point aSecondOffset (aOffset);
                 if (rInfo.meOrientation == Orientation::Landscape)
-                    aSecondOffset.X() += aAdjustedPrintSize.Width() / 2;
+                    aSecondOffset.setX( aSecondOffset.X() + aAdjustedPrintSize.Width() / 2 );
                 else
-                    aSecondOffset.Y() += aAdjustedPrintSize.Height() / 2;
+                    aSecondOffset.setY( aSecondOffset.Y() + aAdjustedPrintSize.Height() / 2 );
                 maPrinterPages.push_back(
                     std::shared_ptr<PrinterPage>(
                         new BookletPrinterPage(
@@ -2171,11 +2171,11 @@ private:
 
             for (Point aPageOrigin = aOrigin;
                  -aPageOrigin.Y()<nPageHeight;
-                 aPageOrigin.Y() -= rInfo.maPrintSize.Height())
+                 aPageOrigin.setY( aPageOrigin.Y() - rInfo.maPrintSize.Height() ))
             {
-                for (aPageOrigin.X()=aOrigin.X();
+                for (aPageOrigin.setX(aOrigin.X() );
                      -aPageOrigin.X()<nPageWidth;
-                     aPageOrigin.X() -= rInfo.maPrintSize.Width())
+                     aPageOrigin.setX( aPageOrigin.X() - rInfo.maPrintSize.Width() ))
                 {
                     aMap.SetOrigin(aPageOrigin);
                     maPrinterPages.push_back(

@@ -113,13 +113,13 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
             if(aInnerRectangle.Left() > rRect.Right())
             {
                 // object moves out to the left
-                aNewPos.X() -= aVisAreaSize.Width() / 2;
+                aNewPos.setX( aNewPos.X() - aVisAreaSize.Width() / 2 );
             }
 
             if(aInnerRectangle.Right() < rRect.Left())
             {
                 // object moves out to the right
-                aNewPos.X() += aVisAreaSize.Width() / 2;
+                aNewPos.setX( aNewPos.X() + aVisAreaSize.Width() / 2 );
             }
         }
         else
@@ -140,7 +140,7 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
                 if(distRight > 0)
                 {
                     long mult = (distRight / nFreeSpaceX) + 1;
-                    aNewPos.X() += mult * nFreeSpaceX;
+                    aNewPos.setX( aNewPos.X() + mult * nFreeSpaceX );
                 }
 
                 const long distLeft(aNewPos.X() - rRect.Left());
@@ -148,7 +148,7 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
                 if(distLeft > 0)
                 {
                     long mult = (distLeft / nFreeSpaceX) + 1;
-                    aNewPos.X() -= mult * nFreeSpaceX;
+                    aNewPos.setX( aNewPos.X() - mult * nFreeSpaceX );
                 }
             }
         }
@@ -158,13 +158,13 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
             if(aInnerRectangle.Top() > rRect.Bottom())
             {
                 // object moves out to the top
-                aNewPos.Y() -= aVisAreaSize.Height() / 2;
+                aNewPos.setY( aNewPos.Y() - aVisAreaSize.Height() / 2 );
             }
 
             if(aInnerRectangle.Bottom() < rRect.Top())
             {
                 // object moves out to the right
-                aNewPos.Y() += aVisAreaSize.Height() / 2;
+                aNewPos.setY( aNewPos.Y() + aVisAreaSize.Height() / 2 );
             }
         }
         else
@@ -185,7 +185,7 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
                 if(distBottom > 0)
                 {
                     long mult = (distBottom / nFreeSpaceY) + 1;
-                    aNewPos.Y() += mult * nFreeSpaceY;
+                    aNewPos.setY( aNewPos.Y() + mult * nFreeSpaceY );
                 }
 
                 const long distTop(aNewPos.Y() - rRect.Top());
@@ -193,7 +193,7 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
                 if(distTop > 0)
                 {
                     long mult = (distTop / nFreeSpaceY) + 1;
-                    aNewPos.Y() -= mult * nFreeSpaceY;
+                    aNewPos.setY( aNewPos.Y() - mult * nFreeSpaceY );
                 }
             }
         }

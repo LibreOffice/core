@@ -1076,7 +1076,7 @@ void ViewShell::ArrangeGUIElements()
         if (mpHorizontalRuler.get() != nullptr)
         {
             Size aRulerSize = mpHorizontalRuler->GetSizePixel();
-            aRulerSize.Width() = nRight - nLeft;
+            aRulerSize.setWidth( nRight - nLeft );
             mpHorizontalRuler->SetPosSizePixel (
                 Point(nLeft,nTop), aRulerSize);
             if (mpVerticalRuler.get() != nullptr)
@@ -1087,7 +1087,7 @@ void ViewShell::ArrangeGUIElements()
         if (mpVerticalRuler.get() != nullptr)
         {
             Size aRulerSize = mpVerticalRuler->GetSizePixel();
-            aRulerSize.Height() = nBottom  - nTop;
+            aRulerSize.setHeight( nBottom  - nTop );
             mpVerticalRuler->SetPosSizePixel (
                 Point (nLeft,nTop), aRulerSize);
             nLeft += aRulerSize.Width();

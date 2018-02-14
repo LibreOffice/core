@@ -193,8 +193,8 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         pNewGrafObj = new SdrGrafObj( rGraphic, ::tools::Rectangle( rPos, aSize ) );
         SdrPage* pPage = pPV->GetPage();
         Size aPageSize( pPage->GetSize() );
-        aPageSize.Width()  -= pPage->GetLeftBorder() + pPage->GetRightBorder();
-        aPageSize.Height() -= pPage->GetUpperBorder() + pPage->GetLowerBorder();
+        aPageSize.setWidth( aPageSize.Width() - pPage->GetLeftBorder() + pPage->GetRightBorder() );
+        aPageSize.setHeight( aPageSize.Height() - pPage->GetUpperBorder() + pPage->GetLowerBorder() );
         pNewGrafObj->AdjustToMaxRect( ::tools::Rectangle( Point(), aPageSize ), true );
 
         SdrInsertFlags nOptions = SdrInsertFlags::SETDEFLAYER;
@@ -524,8 +524,8 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
 
                             if (!aSize.Width() || !aSize.Height())
                             {
-                                aSize.Width()   = 1410;
-                                aSize.Height()  = 1000;
+                                aSize.setWidth( 1410 );
+                                aSize.setHeight( 1000 );
                             }
 
                             aRect = ::tools::Rectangle( maDropPos, aSize );

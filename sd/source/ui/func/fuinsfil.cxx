@@ -516,15 +516,15 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                    limit object size if necessary */
                 Size aSize(pOutliner->CalcTextSize());
                 Size aMaxSize = mpDoc->GetMaxObjSize();
-                aSize.Height() = std::min(aSize.Height(), aMaxSize.Height());
-                aSize.Width()  = std::min(aSize.Width(), aMaxSize.Width());
+                aSize.setHeight( std::min(aSize.Height(), aMaxSize.Height()) );
+                aSize.setWidth( std::min(aSize.Width(), aMaxSize.Width()) );
                 aSize = mpWindow->LogicToPixel(aSize);
 
                 // put it at the center of the window
                 Size aTemp(mpWindow->GetOutputSizePixel());
                 Point aPos(aTemp.Width() / 2, aTemp.Height() / 2);
-                aPos.X() -= aSize.Width() / 2;
-                aPos.Y() -= aSize.Height() / 2;
+                aPos.setX( aPos.X() - aSize.Width() / 2 );
+                aPos.setY( aPos.Y() - aSize.Height() / 2 );
                 aSize = mpWindow->PixelToLogic(aSize);
                 aPos = mpWindow->PixelToLogic(aPos);
                 pTO->SetLogicRect(::tools::Rectangle(aPos, aSize));

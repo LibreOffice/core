@@ -337,9 +337,9 @@ void ScrollBarManager::SetWindowOrigin (
     // Adapt the remaining space accordingly.
     ::tools::Rectangle aRemainingSpace (rAvailableArea);
     if (bShowVertical)
-        aRemainingSpace.Right() -= mpVerticalScrollBar->GetSizePixel().Width();
+        aRemainingSpace.SetRight( aRemainingSpace.Right() - mpVerticalScrollBar->GetSizePixel().Width() );
     if (bShowHorizontal)
-        aRemainingSpace.Bottom() -= mpHorizontalScrollBar->GetSizePixel().Height();
+        aRemainingSpace.SetBottom( aRemainingSpace.Bottom() - mpHorizontalScrollBar->GetSizePixel().Height() );
 
     return aRemainingSpace;
 }
@@ -355,9 +355,9 @@ bool ScrollBarManager::TestScrollBarVisibilities (
     // visible in this combination.
     Size aBrowserSize (rAvailableArea.GetSize());
     if (bHorizontalScrollBarVisible)
-        aBrowserSize.Height() -= mpHorizontalScrollBar->GetSizePixel().Height();
+        aBrowserSize.setHeight( aBrowserSize.Height() - mpHorizontalScrollBar->GetSizePixel().Height() );
     if (bVerticalScrollBarVisible)
-        aBrowserSize.Width() -= mpVerticalScrollBar->GetSizePixel().Width();
+        aBrowserSize.setWidth( aBrowserSize.Width() - mpVerticalScrollBar->GetSizePixel().Width() );
 
     // Tell the view to rearrange its page objects and check whether the
     // page objects can be shown without clipping.
@@ -560,9 +560,9 @@ void ScrollBarManager::Scroll(
 
     // Calculate estimate of new location.
     if (bIsVertical)
-        aNewTopLeft.Y() += nDistance * rLayouter.GetPageObjectSize().Height();
+        aNewTopLeft.setY( aNewTopLeft.Y() + nDistance * rLayouter.GetPageObjectSize().Height() );
     else
-        aNewTopLeft.X() += nDistance * rLayouter.GetPageObjectSize().Width();
+        aNewTopLeft.setX( aNewTopLeft.X() + nDistance * rLayouter.GetPageObjectSize().Width() );
 
     // Adapt location to show whole slides.
     if (bIsVertical)
@@ -571,15 +571,15 @@ void ScrollBarManager::Scroll(
             const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
                 Point(aNewTopLeft.X(), aNewTopLeft.Y()+mpVerticalScrollBar->GetVisibleSize()),
                 true));
-            aNewTopLeft.Y() = rLayouter.GetPageObjectBox(nIndex,true).Bottom()
-                - mpVerticalScrollBar->GetVisibleSize();
+            aNewTopLeft.setY( rLayouter.GetPageObjectBox(nIndex,true).Bottom()
+                - mpVerticalScrollBar->GetVisibleSize() );
         }
         else
         {
             const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
                 Point(aNewTopLeft.X(), aNewTopLeft.Y()),
                 true));
-            aNewTopLeft.Y() = rLayouter.GetPageObjectBox(nIndex,true).Top();
+            aNewTopLeft.setY( rLayouter.GetPageObjectBox(nIndex,true).Top() );
         }
     else
         if (nDistance > 0)
@@ -587,15 +587,15 @@ void ScrollBarManager::Scroll(
             const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
                 Point(aNewTopLeft.X()+mpVerticalScrollBar->GetVisibleSize(), aNewTopLeft.Y()),
                 true));
-            aNewTopLeft.X() = rLayouter.GetPageObjectBox(nIndex,true).Right()
-                - mpVerticalScrollBar->GetVisibleSize();
+            aNewTopLeft.setX( rLayouter.GetPageObjectBox(nIndex,true).Right()
+                - mpVerticalScrollBar->GetVisibleSize() );
         }
         else
         {
             const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
                 Point(aNewTopLeft.X(), aNewTopLeft.Y()),
                     true));
-            aNewTopLeft.X() = rLayouter.GetPageObjectBox(nIndex,true).Left();
+            aNewTopLeft.setX( rLayouter.GetPageObjectBox(nIndex,true).Left() );
         }
 
     mrSlideSorter.GetController().GetVisibleAreaManager().DeactivateCurrentSlideTracking();

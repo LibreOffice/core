@@ -585,8 +585,8 @@ void SlideSorterViewShell::SetZoomRect (const ::tools::Rectangle& rZoomRect)
     {
         long nWidthDiff  = (aPageSize.Width() - aRect.GetWidth()) / 2;
 
-        aRect.Left() -= nWidthDiff;
-        aRect.Right() += nWidthDiff;
+        aRect.SetLeft( aRect.Left() - nWidthDiff );
+        aRect.SetRight( aRect.Right() + nWidthDiff );
 
         if (aRect.Left() < 0)
         {
@@ -598,8 +598,8 @@ void SlideSorterViewShell::SetZoomRect (const ::tools::Rectangle& rZoomRect)
     {
         long nHeightDiff  = (aPageSize.Height() - aRect.GetHeight()) / 2;
 
-        aRect.Top() -= nHeightDiff;
-        aRect.Bottom() += nHeightDiff;
+        aRect.SetTop( aRect.Top() - nHeightDiff );
+        aRect.SetBottom( aRect.Bottom() + nHeightDiff );
 
         if (aRect.Top() < 0)
         {

@@ -756,13 +756,13 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
                         //move the point into the visible window area
                         if( aMenuPos.X() < 0 )
-                            aMenuPos.X() = 0;
+                            aMenuPos.setX( 0 );
                         if( aMenuPos.Y() < 0 )
-                            aMenuPos.Y() = 0;
+                            aMenuPos.setY( 0 );
                         if( aMenuPos.X() > GetActiveWindow()->GetSizePixel().Width() )
-                            aMenuPos.X() = GetActiveWindow()->GetSizePixel().Width();
+                            aMenuPos.setX( GetActiveWindow()->GetSizePixel().Width() );
                         if( aMenuPos.Y() > GetActiveWindow()->GetSizePixel().Height() )
-                            aMenuPos.Y() = GetActiveWindow()->GetSizePixel().Height();
+                            aMenuPos.setY( GetActiveWindow()->GetSizePixel().Height() );
                     }
 
                     //open context menu at that point

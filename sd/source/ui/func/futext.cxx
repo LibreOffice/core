@@ -784,8 +784,8 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             if (bSnapEnabled)
                 mpView->SetSnapEnabled(false);
 
-            aPnt.X() += nDrgLog + nDrgLog;
-            aPnt.Y() += nDrgLog + nDrgLog;
+            aPnt.setX( aPnt.X() + nDrgLog + nDrgLog );
+            aPnt.setY( aPnt.Y() + nDrgLog + nDrgLog );
             mpView->MovAction(aPnt);
 
             mxTextObj.reset( dynamic_cast< SdrTextObj* >( mpView->GetCreateObj() ) );

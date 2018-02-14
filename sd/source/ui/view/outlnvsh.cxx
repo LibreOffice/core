@@ -271,7 +271,7 @@ void OutlineViewShell::ArrangeGUIElements ()
             Size(pOlView->GetPaperWidth(),
                 pOlView->GetOutliner().GetTextHeight()));
         if (aWin.GetHeight() > aText.Bottom())
-            aText.Bottom() = aWin.GetHeight();
+            aText.SetBottom( aWin.GetHeight() );
 
         if (!aWin.IsEmpty())            // not when opening
         {

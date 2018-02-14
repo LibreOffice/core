@@ -529,8 +529,8 @@ public:
             ::tools::Rectangle aRectangle(Point(), pMasterPage->GetSize());
             Point aPosition(aRectangle.Center().X(), aRectangle.Bottom());
 
-            aPosition.X() -= aTextSize.Width() / 2;
-            aPosition.Y() -= aTextSize.Height();
+            aPosition.setX( aPosition.X() - aTextSize.Width() / 2 );
+            aPosition.setY( aPosition.Y() - aTextSize.Height() );
 
             pObject->SetLogicRect(::tools::Rectangle(aPosition, aTextSize));
         }
@@ -2331,15 +2331,15 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 pOutl->UpdateFields();
                 pOutl->SetUpdateMode( true );
                 Size aSize( pOutl->CalcTextSize() );
-                aSize.Width() *= nMul;
+                aSize.setWidth( aSize.Width() * nMul );
                 pOutl->SetUpdateMode( false );
 
                 Point aPos;
                 ::tools::Rectangle aRect( aPos, GetActiveWindow()->GetOutputSizePixel() );
                 aPos = aRect.Center();
                 aPos = GetActiveWindow()->PixelToLogic(aPos);
-                aPos.X() -= aSize.Width() / 2;
-                aPos.Y() -= aSize.Height() / 2;
+                aPos.setX( aPos.X() - aSize.Width() / 2 );
+                aPos.setY( aPos.Y() - aSize.Height() / 2 );
 
                 ::tools::Rectangle aLogicRect(aPos, aSize);
                 pRectObj->SetLogicRect(aLogicRect);

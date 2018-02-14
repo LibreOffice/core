@@ -235,16 +235,16 @@ VisibleAreaScroller::VisibleAreaScroller (
     if (std::abs(rStart.X()-rEnd.X()) > gnMaxScrollDistance)
     {
         if (rStart.X() < rEnd.X())
-            maStart.X() = rEnd.X()-gnMaxScrollDistance;
+            maStart.setX( rEnd.X()-gnMaxScrollDistance );
         else
-            maStart.X() = rEnd.X()+gnMaxScrollDistance;
+            maStart.setX( rEnd.X()+gnMaxScrollDistance );
     }
     if (std::abs(rStart.Y()-rEnd.Y()) > gnMaxScrollDistance)
     {
         if (rStart.Y() < rEnd.Y())
-            maStart.Y() = rEnd.Y()-gnMaxScrollDistance;
+            maStart.setY( rEnd.Y()-gnMaxScrollDistance );
         else
-            maStart.Y() = rEnd.Y()+gnMaxScrollDistance;
+            maStart.setY( rEnd.Y()+gnMaxScrollDistance );
     }
 }
 

@@ -750,10 +750,10 @@ void SdPhotoAlbumDialog::createCaption(const awt::Size& aPageSize )
     Point CapPos;
     Size CapSize;
 
-    CapSize.Width() = aPageSize.Width;
-    CapSize.Height() = aPageSize.Height/6;
-    CapPos.X() = 0;
-    CapPos.Y() = aPageSize.Height - CapSize.Height();
+    CapSize.setWidth( aPageSize.Width );
+    CapSize.setHeight( aPageSize.Height/6 );
+    CapPos.setX( 0 );
+    CapPos.setY( aPageSize.Height - CapSize.Height() );
     SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PageKind::Standard)-1, PageKind::Standard );
 
     // try to get existing PresObj

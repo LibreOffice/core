@@ -74,8 +74,8 @@ void GraphicViewShell::ArrangeGUIElements()
         Size aSize = mpLayerTabBar->GetSizePixel();
         const Size aFrameSize (GetViewFrame()->GetWindow().GetOutputSizePixel());
 
-        aSize.Height() = GetParentWindow()->GetFont().GetFontHeight() + 4;
-        aSize.Width() = aFrameSize.Width();
+        aSize.setHeight( GetParentWindow()->GetFont().GetFontHeight() + 4 );
+        aSize.setWidth( aFrameSize.Width() );
 
         Point aPos (0, maViewSize.Height() - aSize.Height());
 

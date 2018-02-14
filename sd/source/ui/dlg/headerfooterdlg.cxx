@@ -781,10 +781,10 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools:
         nWidth = maPageSize.Height() == 0 ? 0 : long( static_cast<double>(nHeight * maPageSize.Width()) / static_cast<double>(maPageSize.Height()) );
     }
 
-    maOutRect.Left() += (maOutRect.GetWidth() - nWidth) >> 1;
-    maOutRect.Right() = maOutRect.Left() + nWidth - 1;
-    maOutRect.Top() += (maOutRect.GetHeight() - nHeight) >> 1;
-    maOutRect.Bottom() = maOutRect.Top() + nHeight - 1;
+    maOutRect.SetLeft( maOutRect.Left() + ((maOutRect.GetWidth() - nWidth) >> 1) );
+    maOutRect.SetRight( maOutRect.Left() + nWidth - 1 );
+    maOutRect.SetTop( maOutRect.Top() + ((maOutRect.GetHeight() - nHeight) >> 1) );
+    maOutRect.SetBottom( maOutRect.Top() + nHeight - 1 );
 
     // draw decoration frame
     DecorationView aDecoView(&rRenderContext);

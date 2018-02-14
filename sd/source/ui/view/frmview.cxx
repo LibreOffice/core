@@ -495,11 +495,11 @@ static void createHelpLinesFromString( const OUString& rLines, SdrHelpLineList& 
 
         if( aNewHelpLine.GetKind() == SdrHelpLineKind::Horizontal )
         {
-            aPoint.Y() = nValue;
+            aPoint.setY( nValue );
         }
         else
         {
-            aPoint.X() = nValue;
+            aPoint.setX( nValue );
 
             if( aNewHelpLine.GetKind() == SdrHelpLineKind::Point )
             {
@@ -511,7 +511,7 @@ static void createHelpLinesFromString( const OUString& rLines, SdrHelpLineList& 
                     sBuffer.append( *pStr++ );
                 }
 
-                aPoint.Y() = sBuffer.makeStringAndClear().toInt32();
+                aPoint.setY( sBuffer.makeStringAndClear().toInt32() );
 
             }
         }
@@ -657,8 +657,8 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
                 if( pValue->Value >>= nTop )
                 {
                     ::tools::Rectangle aVisArea( GetVisArea() );
-                    aVisArea.Bottom() += nTop - aVisArea.Top();
-                    aVisArea.Top() = nTop;
+                    aVisArea.SetBottom( aVisArea.Bottom() + nTop - aVisArea.Top() );
+                    aVisArea.SetTop( nTop );
                     SetVisArea( aVisArea );
                 }
             }
@@ -668,8 +668,8 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
                 if( pValue->Value >>= nLeft )
                 {
                     ::tools::Rectangle aVisArea( GetVisArea() );
-                    aVisArea.Right() += nLeft - aVisArea.Left();
-                    aVisArea.Left() = nLeft;
+                    aVisArea.SetRight( aVisArea.Right() + nLeft - aVisArea.Left() );
+                    aVisArea.SetLeft( nLeft );
                     SetVisArea( aVisArea );
                 }
             }
@@ -679,7 +679,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
                 if( pValue->Value >>= nWidth )
                 {
                     ::tools::Rectangle aVisArea( GetVisArea() );
-                    aVisArea.Right() = aVisArea.Left() + nWidth - 1;
+                    aVisArea.SetRight( aVisArea.Left() + nWidth - 1 );
                     SetVisArea( aVisArea );
                 }
             }
@@ -689,7 +689,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
                 if( pValue->Value >>= nHeight )
                 {
                     ::tools::Rectangle aVisArea( GetVisArea() );
-                    aVisArea.Bottom() = nHeight + aVisArea.Top() - 1;
+                    aVisArea.SetBottom( nHeight + aVisArea.Top() - 1 );
                     SetVisArea( aVisArea );
                 }
             }

@@ -582,8 +582,8 @@ void MasterPageContainer::Implementation::UpdatePreviewSizePixel()
             break;
         }
 
-    maSmallPreviewSizePixel.Width() = SMALL_PREVIEW_WIDTH;
-    maLargePreviewSizePixel.Width() = LARGE_PREVIEW_WIDTH;
+    maSmallPreviewSizePixel.setWidth( SMALL_PREVIEW_WIDTH );
+    maLargePreviewSizePixel.setWidth( LARGE_PREVIEW_WIDTH );
 
     int nNewSmallHeight ((maSmallPreviewSizePixel.Width()-2) * nHeight / nWidth + 2);
     int nNewLargeHeight ((maLargePreviewSizePixel.Width()-2) * nHeight / nWidth + 2);
@@ -591,8 +591,8 @@ void MasterPageContainer::Implementation::UpdatePreviewSizePixel()
     if (nNewSmallHeight!=maSmallPreviewSizePixel.Height()
         || nNewLargeHeight!=maLargePreviewSizePixel.Height())
     {
-        maSmallPreviewSizePixel.Height() = nNewSmallHeight;
-        maLargePreviewSizePixel.Height() = nNewLargeHeight;
+        maSmallPreviewSizePixel.setHeight( nNewSmallHeight );
+        maLargePreviewSizePixel.setHeight( nNewLargeHeight );
         FireContainerChange(
             MasterPageContainerChangeEvent::EventType::SIZE_CHANGED,
             NIL_TOKEN);

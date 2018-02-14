@@ -568,8 +568,8 @@ void AnnotationTag::OpenPopup( bool bEdit )
             RealPoint2D aPosition( mxAnnotation->getPosition() );
             Point aPos( pWindow->OutputToScreenPixel( pWindow->LogicToPixel( Point( static_cast<long>(aPosition.X * 100.0), static_cast<long>(aPosition.Y * 100.0) ) ) ) );
 
-            aPos.X() += 4; // magic!
-            aPos.Y() += 1;
+            aPos.setX( aPos.X() + 4 ); // magic!
+            aPos.setY( aPos.Y() + 1 );
 
             ::tools::Rectangle aRect( aPos, maSize );
 

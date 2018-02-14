@@ -777,7 +777,7 @@ IMPL_LINK_NOARG(OutlineView, StatusEventHdl, EditStatus&, void)
     if (!aVis.IsEmpty())        // not when opening
     {
         if (aWin.GetHeight() > aText.Bottom())
-            aText.Bottom() = aWin.GetHeight();
+            aText.SetBottom( aWin.GetHeight() );
 
         mrOutlineViewShell.InitWindows(Point(0,0), aText.GetSize(), aVis.TopLeft());
         mrOutlineViewShell.UpdateScrollBars();
@@ -1628,13 +1628,13 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
         if (aImageSize.Width() != 0)
         {
             const float fImageRatio  = static_cast<float>(aImageSize.Height()) / static_cast<float>(aImageSize.Width());
-            aImageSize.Width() = static_cast<long>( fImageRatio * fImageHeight );
+            aImageSize.setWidth( static_cast<long>( fImageRatio * fImageHeight ) );
         }
-        aImageSize.Height() = static_cast<long>(fImageHeight);
+        aImageSize.setHeight( static_cast<long>(fImageHeight) );
 
         Point aImagePos( pInfo->mrStartPos );
-        aImagePos.X() += aOutSize.Width() - aImageSize.Width() - aOffset.Width() ;
-        aImagePos.Y() += (aOutSize.Height() - aImageSize.Height()) / 2;
+        aImagePos.setX( aImagePos.X() + aOutSize.Width() - aImageSize.Width() - aOffset.Width() ) ;
+        aImagePos.setY( aImagePos.Y() + (aOutSize.Height() - aImageSize.Height()) / 2 );
 
         pInfo->mpOutDev->DrawImage( aImagePos, aImageSize, maSlideImage );
 
@@ -1652,24 +1652,24 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
         pInfo->mpOutDev->SetFont( aNewFont );
         OUString aPageText = OUString::number( nPage );
         Size aTextSz;
-        aTextSz.Width() = pInfo->mpOutDev->GetTextWidth( aPageText );
-        aTextSz.Height() = pInfo->mpOutDev->GetTextHeight();
+        aTextSz.setWidth( pInfo->mpOutDev->GetTextWidth( aPageText ) );
+        aTextSz.setHeight( pInfo->mpOutDev->GetTextHeight() );
         if ( !bVertical )
         {
-            aTextPos.Y() += (aOutSize.Height() - aTextSz.Height()) / 2;
+            aTextPos.setY( aTextPos.Y() + (aOutSize.Height() - aTextSz.Height()) / 2 );
             if ( !bRightToLeftPara )
             {
-                aTextPos.X() -= aTextSz.Width();
+                aTextPos.setX( aTextPos.X() - aTextSz.Width() );
             }
             else
             {
-                aTextPos.X() += aTextSz.Width();
+                aTextPos.setX( aTextPos.X() + aTextSz.Width() );
             }
         }
         else
         {
-            aTextPos.Y() -= aTextSz.Width();
-            aTextPos.X() += nBulletHeight / 2;
+            aTextPos.setY( aTextPos.Y() - aTextSz.Width() );
+            aTextPos.setX( aTextPos.X() + nBulletHeight / 2 );
         }
         pInfo->mpOutDev->DrawText( aTextPos, aPageText );
     }

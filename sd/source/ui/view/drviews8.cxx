@@ -74,8 +74,8 @@ void DrawViewShell::ScannerEvent()
                     else
                         aBmpSize = OutputDevice::LogicToLogic( aBmpSize, aScanBmp.GetPrefMapMode(), aMap100 );
 
-                    aPageSize.Width() -= pPage->GetLeftBorder() + pPage->GetRightBorder();
-                    aPageSize.Height() -= pPage->GetUpperBorder() + pPage->GetLowerBorder();
+                    aPageSize.setWidth( aPageSize.Width() - pPage->GetLeftBorder() + pPage->GetRightBorder() );
+                    aPageSize.setHeight( aPageSize.Height() - pPage->GetUpperBorder() + pPage->GetLowerBorder() );
 
                     if( ( ( aBmpSize.Height() > aPageSize.Height() ) || ( aBmpSize.Width() > aPageSize.Width() ) ) && aBmpSize.Height() && aPageSize.Height() )
                     {
@@ -84,13 +84,13 @@ void DrawViewShell::ScannerEvent()
 
                         if( fGrfWH < fWinWH )
                         {
-                            aBmpSize.Width() = FRound( aPageSize.Height() * fGrfWH );
-                            aBmpSize.Height()= aPageSize.Height();
+                            aBmpSize.setWidth( FRound( aPageSize.Height() * fGrfWH ) );
+                            aBmpSize.setHeight( aPageSize.Height() );
                         }
                         else if( fGrfWH > 0.F )
                         {
-                            aBmpSize.Width() = aPageSize.Width();
-                            aBmpSize.Height()= FRound( aPageSize.Width() / fGrfWH );
+                            aBmpSize.setWidth( aPageSize.Width() );
+                            aBmpSize.setHeight( FRound( aPageSize.Width() / fGrfWH ) );
                         }
                     }
 

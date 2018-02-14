@@ -178,8 +178,8 @@ bool SdGRFFilter::Import()
             Size        aGrfSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
                                   aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)));
 
-            aPagSize.Width() -= pPage->GetLeftBorder() + pPage->GetRightBorder();
-            aPagSize.Height() -= pPage->GetUpperBorder() + pPage->GetLowerBorder();
+            aPagSize.setWidth( aPagSize.Width() - pPage->GetLeftBorder() + pPage->GetRightBorder() );
+            aPagSize.setHeight( aPagSize.Height() - pPage->GetUpperBorder() + pPage->GetLowerBorder() );
 
             // scale to fit page
             if ( ( ( aGrfSize.Height() > aPagSize.Height() ) || ( aGrfSize.Width() > aPagSize.Width() ) ) &&
@@ -191,19 +191,19 @@ bool SdGRFFilter::Import()
                 // adjust graphic to page size (scales)
                 if( fGrfWH < fWinWH )
                 {
-                    aGrfSize.Width() = static_cast<long>( aPagSize.Height() * fGrfWH );
-                    aGrfSize.Height() = aPagSize.Height();
+                    aGrfSize.setWidth( static_cast<long>( aPagSize.Height() * fGrfWH ) );
+                    aGrfSize.setHeight( aPagSize.Height() );
                 }
                 else if( fGrfWH > 0.F )
                 {
-                    aGrfSize.Width() = aPagSize.Width();
-                    aGrfSize.Height()= static_cast<long>( aPagSize.Width() / fGrfWH );
+                    aGrfSize.setWidth( aPagSize.Width() );
+                    aGrfSize.setHeight( static_cast<long>( aPagSize.Width() / fGrfWH ) );
                 }
             }
 
             // set output rectangle for graphic
-            aPos.X() = ( ( aPagSize.Width() - aGrfSize.Width() ) >> 1 ) + pPage->GetLeftBorder();
-            aPos.Y() = ( ( aPagSize.Height() - aGrfSize.Height() ) >> 1 )  + pPage->GetUpperBorder();
+            aPos.setX( ( ( aPagSize.Width() - aGrfSize.Width() ) >> 1 ) + pPage->GetLeftBorder() );
+            aPos.setY( ( ( aPagSize.Height() - aGrfSize.Height() ) >> 1 )  + pPage->GetUpperBorder() );
 
             pPage->InsertObject( new SdrGrafObj( aGraphic, ::tools::Rectangle( aPos, aGrfSize ) ) );
             bRet = true;

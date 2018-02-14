@@ -124,8 +124,8 @@ static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info* pIn
 
         pValue->InsertItem(pInfo->mnId, Image(aBmp), aText);
 
-        aLayoutItemSize.Width()  = std::max( aLayoutItemSize.Width(),  aBmp.GetSizePixel().Width()  );
-        aLayoutItemSize.Height() = std::max( aLayoutItemSize.Height(), aBmp.GetSizePixel().Height() );
+        aLayoutItemSize.setWidth( std::max( aLayoutItemSize.Width(),  aBmp.GetSizePixel().Width()  ) );
+        aLayoutItemSize.setHeight( std::max( aLayoutItemSize.Height(), aBmp.GetSizePixel().Height() ) );
     }
 
     aLayoutItemSize = pValue->CalcItemSizePixel( aLayoutItemSize );
@@ -153,8 +153,8 @@ DisplayModeToolbarMenu::DisplayModeToolbarMenu( DisplayModeController& rControll
     fillLayoutValueSet( mpDisplayModeSet1, &editmodes[0] );
 
     Size aSize( mpDisplayModeSet1->GetOutputSizePixel() );
-    aSize.Width() += (mpDisplayModeSet1->GetColCount() + 1) * LAYOUT_BORDER_PIX;
-    aSize.Height() += (mpDisplayModeSet1->GetLineCount() +1) * LAYOUT_BORDER_PIX;
+    aSize.setWidth( aSize.Width() + (mpDisplayModeSet1->GetColCount() + 1) * LAYOUT_BORDER_PIX );
+    aSize.setHeight( aSize.Height() + (mpDisplayModeSet1->GetLineCount() +1) * LAYOUT_BORDER_PIX );
     mpDisplayModeSet1->SetOutputSizePixel( aSize );
 
     appendEntry( -1, aTitle1 );
@@ -168,8 +168,8 @@ DisplayModeToolbarMenu::DisplayModeToolbarMenu( DisplayModeController& rControll
     fillLayoutValueSet( mpDisplayModeSet2, &mastermodes[0] );
 
     aSize = mpDisplayModeSet2->GetOutputSizePixel();
-    aSize.Width() += (mpDisplayModeSet2->GetColCount() + 1) * LAYOUT_BORDER_PIX;
-    aSize.Height() += (mpDisplayModeSet2->GetLineCount() + 1) * LAYOUT_BORDER_PIX;
+    aSize.setWidth( aSize.Width() + (mpDisplayModeSet2->GetColCount() + 1) * LAYOUT_BORDER_PIX );
+    aSize.setHeight( aSize.Height() + (mpDisplayModeSet2->GetLineCount() + 1) * LAYOUT_BORDER_PIX );
     mpDisplayModeSet2->SetOutputSizePixel( aSize );
 
     appendEntry( -1, aTitle2 );

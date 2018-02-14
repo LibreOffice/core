@@ -103,8 +103,8 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
         {
             MapMode aMapMode = aOldMapMode;
             Point aOrigin = aMapMode.GetOrigin();
-            aOrigin.X() += 1;
-            aOrigin.Y() += 1;
+            aOrigin.setX( aOrigin.X() + 1 );
+            aOrigin.setY( aOrigin.Y() + 1 );
             aMapMode.SetOrigin(aOrigin);
             pOut->SetMapMode(aMapMode);
         }
