@@ -144,6 +144,154 @@ public:
         long nWidth, long nHeight);
 };
 
+// Gets filled in WW8TabDesc::MergeCells().
+// Algorithm must ensure proper row and column order in WW8SelBoxInfo!
+class WW8SelBoxInfo
+{
+private:
+    std::vector<std::vector<SwTableBox*> > m_vRows;
+
+    WW8SelBoxInfo(WW8SelBoxInfo const&) = delete;
+    WW8SelBoxInfo& operator=(WW8SelBoxInfo const&) = delete;
+
+public:
+    short nGroupXStart;
+    short nGroupWidth;
+    bool bGroupLocked;
+
+    WW8SelBoxInfo(short nXCenter, short nWidth)
+        : nGroupXStart( nXCenter ), nGroupWidth( nWidth ), bGroupLocked(false)
+    {}
+
+    size_t size() const
+    {
+        size_t nResult = 0;
+        for (auto& it : m_vRows)
+            nResult += it.size();
+        return nResult;
+    }
+
+    size_t rowsCount() const { return m_vRows.size(); }
+
+    const std::vector<SwTableBox*>& row( size_t nIndex ) { return m_vRows[nIndex]; }
+
+    void push_back( SwTableBox* pBox )
+    {
+        bool bDone = false;
+        for (auto& iRow : m_vRows)
+            if (iRow[0]->GetUpper() == pBox->GetUpper())
+            {
+                iRow.push_back(pBox);
+                bDone = true;
+                break;
+            }
+        if (!bDone)
+        {
+            const size_t sz = m_vRows.size();
+            m_vRows.resize(sz+1);
+            m_vRows[sz].push_back(pBox);
+        }
+    }
+};
+
+class WW8TabDesc
+{
+    std::vector<OUString> m_aNumRuleNames;
+    std::unique_ptr<sw::util::RedlineStack> mxOldRedlineStack;
+
+    SwWW8ImplReader* m_pIo;
+
+    WW8TabBandDesc* m_pFirstBand;
+    WW8TabBandDesc* m_pActBand;
+
+    SwPosition* m_pTmpPos;
+
+    SwTableNode* m_pTableNd;          // table node
+    const SwTableLines* m_pTabLines;  // row array of node
+    SwTableLine* m_pTabLine;          // current row
+    SwTableBoxes* m_pTabBoxes;        // boxes array in current row
+    SwTableBox* m_pTabBox;            // current cell
+
+    std::vector<std::unique_ptr<WW8SelBoxInfo>> m_MergeGroups;   // list of all cells to be merged
+
+    WW8_TCell* m_pAktWWCell;
+
+    short m_nRows;
+    short m_nDefaultSwCols;
+    short m_nBands;
+    short m_nMinLeft;
+    short m_nConvertedLeft;
+    short m_nMaxRight;
+    short m_nSwWidth;
+    short m_nPreferredWidth;
+    short m_nPercentWidth;
+
+    bool m_bOk;
+    bool m_bClaimLineFormat;
+    sal_Int16 m_eOri;
+    bool m_bIsBiDi;
+                                // 2. common admin info
+    short m_nAktRow;
+    short m_nAktBandRow;          // SW: row of current band
+                                // 3. admin info for writer
+    short m_nAktCol;
+
+    sal_uInt16 m_nRowsToRepeat;
+
+    // 4. methods
+
+    sal_uInt16 GetLogicalWWCol() const;
+    void SetTabBorders( SwTableBox* pBox, short nIdx );
+    void SetTabShades( SwTableBox* pBox, short nWwIdx );
+    void SetTabVertAlign( SwTableBox* pBox, short nWwIdx );
+    void SetTabDirection( SwTableBox* pBox, short nWwIdx );
+    void CalcDefaults();
+    void SetPamInCell(short nWwCol, bool bPam);
+    void InsertCells( short nIns );
+    void AdjustNewBand();
+
+    WW8SelBoxInfo* FindMergeGroup(short nX1, short nWidth, bool bExact);
+
+    // single box - maybe used in a merge group
+    // (the merge groups are processed later at once)
+    void UpdateTableMergeGroup(WW8_TCell const & rCell,
+        WW8SelBoxInfo* pActGroup, SwTableBox* pActBox, sal_uInt16 nCol  );
+    void StartMiserableHackForUnsupportedDirection(short nWwCol);
+    void EndMiserableHackForUnsupportedDirection(short nWwCol);
+
+    WW8TabDesc(WW8TabDesc const&) = delete;
+    WW8TabDesc& operator=(WW8TabDesc const&) = delete;
+
+public:
+    const SwTable* m_pTable;          // table
+    SwPosition* m_pParentPos;
+    SwFlyFrameFormat* m_pFlyFormat;
+    SfxItemSet m_aItemSet;
+    bool IsValidCell(short nCol) const;
+    bool InFirstParaInCell() const;
+
+    WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp );
+    bool Ok() const { return m_bOk; }
+    void CreateSwTable();
+    void UseSwTable();
+    void SetSizePosition(SwFrameFormat* pFrameFormat);
+    void TableCellEnd();
+    void MoveOutsideTable();
+    void ParkPaM();
+    void FinishSwTable();
+    void MergeCells();
+    short GetMinLeft() const { return m_nConvertedLeft; }
+    ~WW8TabDesc();
+
+    const WW8_TCell* GetAktWWCell() const { return m_pAktWWCell; }
+    short GetAktCol() const { return m_nAktCol; }
+    // find name of numrule valid for current WW-COL
+    OUString GetNumRuleName() const;
+    void SetNumRuleName( const OUString& rName );
+
+    sw::util::RedlineStack* getOldRedlineStack() { return mxOldRedlineStack.get(); }
+};
+
 enum WW8LvlType {WW8_None, WW8_Outline, WW8_Numbering, WW8_Sequence, WW8_Pause};
 
 WW8LvlType GetNumType(sal_uInt8 nWwLevelNo);

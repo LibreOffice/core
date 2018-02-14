@@ -1939,7 +1939,7 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
     mpSFlyPara(pRdr->m_xSFlyPara.release()),
     mpPreviousNumPaM(pRdr->m_pPreviousNumPaM),
     mpPrevNumRule(pRdr->m_pPrevNumRule),
-    mpTableDesc(pRdr->m_pTableDesc),
+    mxTableDesc(std::move(pRdr->m_xTableDesc)),
     mnInTable(pRdr->m_nInTable),
     mnCurrentColl(pRdr->m_nCurrentColl),
     mcSymbol(pRdr->m_cSymbol),
@@ -1962,7 +1962,6 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
     pRdr->m_nInTable = 0;
     pRdr->m_pPreviousNumPaM = nullptr;
     pRdr->m_pPrevNumRule = nullptr;
-    pRdr->m_pTableDesc = nullptr;
     pRdr->m_nCurrentColl = 0;
 
     pRdr->m_xCtrlStck.reset(new SwWW8FltControlStack(&pRdr->m_rDoc, pRdr->m_nFieldFlags,
@@ -1994,7 +1993,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->m_xSFlyPara.reset(mpSFlyPara);
     pRdr->m_pPreviousNumPaM = mpPreviousNumPaM;
     pRdr->m_pPrevNumRule = mpPrevNumRule;
-    pRdr->m_pTableDesc = mpTableDesc;
+    pRdr->m_xTableDesc = std::move(mxTableDesc);
     pRdr->m_cSymbol = mcSymbol;
     pRdr->m_bSymbol = mbSymbol;
     pRdr->m_bIgnoreText = mbIgnoreText;
@@ -4168,7 +4167,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pAktColl(nullptr)
     , m_pDfltTextFormatColl(nullptr)
     , m_pStandardFormatColl(nullptr)
-    , m_pTableDesc(nullptr)
     , m_pDrawModel(nullptr)
     , m_pDrawPg(nullptr)
     , m_pDrawEditEngine(nullptr)

@@ -507,7 +507,7 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
     }
 
     if (nLen < 0)
-        m_xRedlineStack->close(*m_pPaM->GetPoint(), eType, m_pTableDesc );
+        m_xRedlineStack->close(*m_pPaM->GetPoint(), eType, m_xTableDesc.get());
     else
     {
         // start of new revision mark, if not there default to first entry
