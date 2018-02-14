@@ -758,12 +758,12 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         m_pView->UnmarkAll();
         const tools::Rectangle& rRect = m_pView->GetWorkArea();
         if ( aDropPos.X() < rRect.Left() )
-            aDropPos.X() = rRect.Left();
+            aDropPos.setX( rRect.Left() );
         else if ( aDropPos.X() > rRect.Right() )
-            aDropPos.X() = rRect.Right();
+            aDropPos.setX( rRect.Right() );
 
         if ( aDropPos.Y() > rRect.Bottom() )
-            aDropPos.Y() = rRect.Bottom();
+            aDropPos.setY( rRect.Bottom() );
 
         uno::Sequence<beans::PropertyValue> aValues;
         if ( !bMultipleFormat )

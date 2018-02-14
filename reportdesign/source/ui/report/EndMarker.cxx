@@ -48,7 +48,7 @@ void OEndMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     const long nCornerSpace = long(aCornerSpace);
 
     Size aSize = GetSizePixel();
-    aSize.Width() += nCornerSpace;
+    aSize.setWidth( aSize.Width() + nCornerSpace );
     tools::Rectangle aWholeRect(Point(-nCornerSpace,0),aSize);
     tools::PolyPolygon aPoly;
     aPoly.Insert( tools::Polygon(aWholeRect,nCornerSpace,nCornerSpace));
