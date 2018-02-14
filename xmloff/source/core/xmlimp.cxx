@@ -988,10 +988,9 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
 
     try
     {
-        uno::Reference<document::XStorageBasedDocument> const xSBDoc(mxModel,
-                uno::UNO_QUERY_THROW);
-        uno::Reference<embed::XStorage> const xStor(
-                xSBDoc->getDocumentStorage());
+        uno::Reference<document::XStorageBasedDocument> const xSBDoc(mxModel, uno::UNO_QUERY);
+        uno::Reference<embed::XStorage> const xStor(xSBDoc.is() ? xSBDoc->getDocumentStorage()
+                                                                : nullptr);
         if (xStor.is())
         {
             mpImpl->mbIsOOoXML =
