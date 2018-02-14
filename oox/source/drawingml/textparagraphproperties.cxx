@@ -387,6 +387,8 @@ void TextParagraphProperties::apply( const TextParagraphProperties& rSourceProps
         mnLevel = rSourceProps.mnLevel;
     if( rSourceProps.moParaAdjust )
         moParaAdjust = rSourceProps.moParaAdjust;
+    if( rSourceProps.maLineSpacing.bHasValue )
+        maLineSpacing = rSourceProps.maLineSpacing;
 }
 
 void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
@@ -492,6 +494,15 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
     else
     {
         aPropSet.setProperty( PROP_ParaAdjust, css::style::ParagraphAdjust_LEFT);
+    }
+
+    if ( maLineSpacing.bHasValue )
+    {
+        aPropSet.setProperty( PROP_ParaLineSpacing, maLineSpacing.toLineSpacing());
+    }
+    else
+    {
+        aPropSet.setProperty( PROP_ParaLineSpacing, css::style::LineSpacing( css::style::LineSpacingMode::PROP, 100 ));
     }
 }
 
