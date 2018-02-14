@@ -29,8 +29,6 @@
 #include "shellid.hxx"
 
 #include <svl/lstner.hxx>
-#include <svtools/embedhlp.hxx>
-#include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 #include <sfx2/StyleManager.hxx>
 
@@ -55,6 +53,10 @@ class IDocumentSettingAccess;
 class IDocumentChartDataProviderAccess;
 class SwDocShell;
 class SwDrawModel;
+namespace svt
+{
+class EmbeddedObjectRef;
+}
 
 // initialize DrawModel (in form of a SwDrawModel) and DocShell (in form of a SwDocShell)
 // as needed, one or both parameters may be zero

@@ -65,6 +65,7 @@
 #include <strings.hrc>
 #include <comcore.hxx>
 #include <numrule.hxx>
+#include <itabenum.hxx>
 
 #include <memory>
 

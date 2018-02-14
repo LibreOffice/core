@@ -124,6 +124,7 @@
 #include <swserv.hxx>
 #include <calbck.hxx>
 #include <fmtmeta.hxx>
+#include <itabenum.hxx>
 
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>

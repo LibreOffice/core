@@ -25,13 +25,13 @@
 #include <svl/macitem.hxx>
 
 #include "fldbas.hxx"
-#include "numrule.hxx"
 
 class SetGetExpFields;
 class SwTextField;
 class SwFrame;
 class OutlinerParaObject;
 class SwTextAPIObject;
+class SwCharFormat;
 
 enum SwAuthorFormat
 {

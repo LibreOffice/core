@@ -48,6 +48,7 @@
 #include <swddetbl.hxx>
 #include <mdiexp.hxx>
 #include <unochart.hxx>
+#include <itabenum.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
