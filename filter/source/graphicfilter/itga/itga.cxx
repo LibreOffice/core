@@ -137,7 +137,9 @@ bool TGAReader::ReadTGA(Graphic & rGraphic)
     if ( !m_rTGA.GetError() )
     {
         mbStatus = ImplReadHeader();
-        if ( mbStatus )
+        if (mbStatus)
+            mbStatus = mpFileHeader->nImageWidth && mpFileHeader->nImageHeight;
+        if (mbStatus)
         {
             sal_Size nSize = mpFileHeader->nImageWidth;
             nSize *= mpFileHeader->nImageHeight;
