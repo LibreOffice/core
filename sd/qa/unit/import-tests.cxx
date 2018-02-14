@@ -68,6 +68,8 @@
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
@@ -176,6 +178,7 @@ public:
     void testTdf114821();
     void testTdf115394();
     void testTdf115394PPT();
+    void testTdf51340();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -255,6 +258,7 @@ public:
     CPPUNIT_TEST(testTdf114821);
     CPPUNIT_TEST(testTdf115394);
     CPPUNIT_TEST(testTdf115394PPT);
+    CPPUNIT_TEST(testTdf51340);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2435,6 +2439,44 @@ void SdImportTest::testTdf115394PPT()
     SdPage* pPage3 = xDocShRef->GetDoc()->GetSdPage(2, PageKind::Standard);
     fTransitionDuration = pPage3->getTransitionDuration();
     CPPUNIT_ASSERT_EQUAL(1.0, fTransitionDuration);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf51340()
+{
+    // Line spacing was not inherited from upper levels (slide layout, master slide)
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf51340.pptx"), PPTX);
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 1, 0, xDocShRef ) );
+
+    // First paragraph has a 90% line spacing set on master slide
+    uno::Reference<text::XTextRange> xParagraph( getParagraphFromShape( 0, xShape ) );
+    uno::Reference< beans::XPropertySet > xPropSet( xParagraph, uno::UNO_QUERY_THROW );
+    css::style::LineSpacing aSpacing;
+    xPropSet->getPropertyValue( "ParaLineSpacing" ) >>= aSpacing;
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(css::style::LineSpacingMode::PROP), aSpacing.Mode );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(90), aSpacing.Height );
+
+    // Second paragraph has a 125% line spacing set on slide layout
+    xParagraph.set( getParagraphFromShape( 1, xShape ) );
+    xPropSet.set( xParagraph, uno::UNO_QUERY_THROW );
+    xPropSet->getPropertyValue( "ParaLineSpacing" ) >>= aSpacing;
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(css::style::LineSpacingMode::PROP), aSpacing.Mode );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(125), aSpacing.Height );
+
+    // Third paragraph has a 70% line spacing set directly on normal slide (master slide property ir overriden)
+    xParagraph.set( getParagraphFromShape( 2, xShape ) );
+    xPropSet.set( xParagraph, uno::UNO_QUERY_THROW );
+    xPropSet->getPropertyValue( "ParaLineSpacing" ) >>= aSpacing;
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(css::style::LineSpacingMode::PROP), aSpacing.Mode );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(70), aSpacing.Height );
+
+    // Fourth paragraph has a 190% line spacing set directly on normal slide (slide layout property is overriden)
+    xParagraph.set( getParagraphFromShape( 3, xShape ) );
+    xPropSet.set( xParagraph, uno::UNO_QUERY_THROW );
+    xPropSet->getPropertyValue( "ParaLineSpacing" ) >>= aSpacing;
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(css::style::LineSpacingMode::PROP), aSpacing.Mode );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(190), aSpacing.Height );
 
     xDocShRef->DoClose();
 }
