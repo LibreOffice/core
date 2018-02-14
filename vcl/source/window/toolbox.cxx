@@ -2793,6 +2793,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     if ( bImage )
     {
         const Image* pImage = &(pItem->maImage);
+        const Image& rOverlayImage = pItem->maOverlayImage;
         aImageSize = pImage->GetSizePixel();
 
         // determine drawing flags
@@ -2837,6 +2838,8 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
             }
         }
         rRenderContext.DrawImage(Point( nImageOffX, nImageOffY ), *pImage, nImageStyle);
+        if (!!rOverlayImage)
+            rRenderContext.DrawImage(Point( nImageOffX, nImageOffY ), rOverlayImage, nImageStyle);
     }
 
     // draw the text

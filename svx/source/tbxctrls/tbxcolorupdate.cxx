@@ -23,7 +23,7 @@
 #include <svx/xdef.hxx>
 
 #include <vcl/toolbox.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 #include <tools/debug.hxx>
 
@@ -82,54 +82,21 @@ namespace svx
 
         if ((maCurColor == aColor) && !bSizeChanged && !bDisplayModeChanged && !bForceUpdate)
             return;
-
-        // create an empty bitmap, and copy the original bitmap inside
-        // (so that it grows in case the original bitmap was smaller)
-        sal_uInt8 nAlpha = 255;
-        BitmapEx aBmpEx(Bitmap(aItemSize, 24), AlphaMask(aItemSize, &nAlpha));
-
-        BitmapEx aSource(aImage.GetBitmapEx());
-        long nWidth = std::min(aItemSize.Width(), aSource.GetSizePixel().Width());
-        long nHeight = std::min(aItemSize.Height(), aSource.GetSizePixel().Height());
-
-        tools::Rectangle aRect(Point(0, 0), Size(nWidth, nHeight));
-
-        aBmpEx.CopyPixel( aRect, aRect, &aSource );
-
-        Bitmap              aBmp( aBmpEx.GetBitmap() );
-        BitmapWriteAccess*  pBmpAcc = aBmp.IsEmpty() ? nullptr : aBmp.AcquireWriteAccess();
-
-        maBmpSize = aBmp.GetSizePixel();
-
-        if (!pBmpAcc)
+        if (!aItemSize.Width() || !aItemSize.Height())
             return;
 
-        Bitmap              aMsk;
-        BitmapWriteAccess*  pMskAcc;
-
-        if (aBmpEx.IsAlpha())
-        {
-            aMsk = aBmpEx.GetAlpha().GetBitmap();
-            pMskAcc = aMsk.AcquireWriteAccess();
-        }
-        else if (aBmpEx.IsTransparent())
-        {
-            aMsk = aBmpEx.GetMask();
-            pMskAcc = aMsk.AcquireWriteAccess();
-        }
-        else
-        {
-            pMskAcc = nullptr;
-        }
+        ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
+        pVirDev->SetOutputSizePixel(aItemSize);
+        maBmpSize = aItemSize;
 
         mbWasHiContrastMode = mpTbx->GetSettings().GetStyleSettings().GetHighContrastMode();
 
         if ((COL_TRANSPARENT != aColor.GetColor()) && (maBmpSize.Width() == maBmpSize.Height()))
-            pBmpAcc->SetLineColor(aColor);
+            pVirDev->SetLineColor(aColor);
         else if( mpTbx->GetBackground().GetColor().IsDark() )
-            pBmpAcc->SetLineColor(Color(COL_WHITE));
+            pVirDev->SetLineColor(Color(COL_WHITE));
         else
-            pBmpAcc->SetLineColor(Color(COL_BLACK));
+            pVirDev->SetLineColor(Color(COL_BLACK));
 
         // use not only COL_TRANSPARENT for detection of transparence,
         // but the method/way which is designed to do that
@@ -138,11 +105,11 @@ namespace svx
 
         if (bIsTransparent)
         {
-            pBmpAcc->SetFillColor();
+            pVirDev->SetFillColor(Color(255, 0, 0, 0));
         }
         else
         {
-            pBmpAcc->SetFillColor(maCurColor);
+            pVirDev->SetFillColor(maCurColor);
         }
 
         if (maBmpSize.Width() == maBmpSize.Height())
@@ -151,34 +118,9 @@ namespace svx
         else
             maUpdRect = tools::Rectangle(Point( maBmpSize.Height() + 2, 2), Point(maBmpSize.Width() - 3, maBmpSize.Height() - 3));
 
-        pBmpAcc->DrawRect(maUpdRect);
+        pVirDev->DrawRect(maUpdRect);
 
-        if (pMskAcc)
-        {
-            if (bIsTransparent)
-            {
-                pMskAcc->SetLineColor(COL_BLACK);
-                pMskAcc->SetFillColor(COL_WHITE);
-            }
-            else
-                pMskAcc->SetFillColor(COL_BLACK);
-
-            pMskAcc->DrawRect(maUpdRect);
-        }
-
-        Bitmap::ReleaseAccess(pBmpAcc);
-
-        if (pMskAcc)
-            Bitmap::ReleaseAccess(pMskAcc);
-
-        if (aBmpEx.IsAlpha())
-            aBmpEx = BitmapEx(aBmp, AlphaMask(aMsk));
-        else if (aBmpEx.IsTransparent())
-            aBmpEx = BitmapEx(aBmp, aMsk);
-        else
-            aBmpEx = aBmp;
-
-        mpTbx->SetItemImage(mnBtnId, Image(aBmpEx));
+        mpTbx->SetItemOverlayImage(mnBtnId, Image(pVirDev->GetBitmapEx(Point(0,0), aItemSize)));
     }
 }
 

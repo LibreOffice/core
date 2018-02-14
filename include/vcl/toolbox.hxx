@@ -373,6 +373,7 @@ public:
     void                SetItemData( sal_uInt16 nItemId, void* pNewData );
     void*               GetItemData( sal_uInt16 nItemId ) const;
     void                SetItemImage( sal_uInt16 nItemId, const Image& rImage );
+    void                SetItemOverlayImage( sal_uInt16 nItemId, const Image& rImage );
     Image               GetItemImage( sal_uInt16 nItemId ) const;
     void                SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 );
     void                SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror );
