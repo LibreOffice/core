@@ -965,6 +965,28 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
     }
 }
 
+void ToolBox::SetItemOverlayImage( sal_uInt16 nItemId, const Image& rImage )
+{
+    ImplToolItems::size_type nPos = GetItemPos( nItemId );
+
+    if ( nPos != ITEM_NOTFOUND )
+    {
+        ImplToolItem* pItem = &mpData->m_aItems[nPos];
+        Size aOldSize = pItem->maOverlayImage.GetSizePixel();
+
+        pItem->maOverlayImage = rImage;
+
+        // only once all is calculated, do extra work
+        if (!mbCalc)
+        {
+            if (aOldSize != pItem->maOverlayImage.GetSizePixel())
+                ImplInvalidate( true );
+            else
+                ImplUpdateItem( nPos );
+        }
+    }
+}
+
 static Image ImplRotImage( const Image& rImage, long nAngle10 )
 {
     BitmapEx    aRotBitmapEx( rImage.GetBitmapEx() );
