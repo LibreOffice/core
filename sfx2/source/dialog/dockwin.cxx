@@ -697,7 +697,7 @@ bool SfxDockingWindow::Docking( const Point& rPos, tools::Rectangle& rRect )
             case SfxChildAlignment::LASTLEFT:
                 aPos = aInnerRect.TopLeft();
                 if ( pImpl->GetDockAlignment() == GetAlignment() )
-                    aPos.X() -= aSize.Width();
+                    aPos.setX( aPos.X() - aSize.Width() );
                 break;
 
             case SfxChildAlignment::TOP:
@@ -705,7 +705,7 @@ bool SfxDockingWindow::Docking( const Point& rPos, tools::Rectangle& rRect )
             case SfxChildAlignment::HIGHESTTOP:
                 aPos = Point(aOuterRect.Left(), aInnerRect.Top());
                 if ( pImpl->GetDockAlignment() == GetAlignment() )
-                    aPos.Y() -= aSize.Height();
+                    aPos.setY( aPos.Y() - aSize.Height() );
                 break;
 
             case SfxChildAlignment::RIGHT:
@@ -714,7 +714,7 @@ bool SfxDockingWindow::Docking( const Point& rPos, tools::Rectangle& rRect )
                 aPos = Point(aInnerRect.Right() - rRect.GetSize().Width(),
                             aInnerRect.Top());
                 if ( pImpl->GetDockAlignment() == GetAlignment() )
-                    aPos.X() += aSize.Width();
+                    aPos.setX( aPos.X() + aSize.Width() );
                 break;
 
             case SfxChildAlignment::BOTTOM:
@@ -723,7 +723,7 @@ bool SfxDockingWindow::Docking( const Point& rPos, tools::Rectangle& rRect )
                 aPos = Point(aOuterRect.Left(),
                         aInnerRect.Bottom() - rRect.GetSize().Height());
                 if ( pImpl->GetDockAlignment() == GetAlignment() )
-                    aPos.Y() += aSize.Height();
+                    aPos.setY( aPos.Y() + aSize.Height() );
                 break;
                      default:
                          break;
@@ -862,9 +862,9 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
         Size aMinSize( GetMinOutputSizePixel() );
         SetFloatingSize( pImpl->aSplitSize );
         if ( pImpl->aSplitSize.Width() < aMinSize.Width() )
-            pImpl->aSplitSize.Width() = aMinSize.Width();
+            pImpl->aSplitSize.setWidth( aMinSize.Width() );
         if ( pImpl->aSplitSize.Height() < aMinSize.Height() )
-            pImpl->aSplitSize.Height() = aMinSize.Height();
+            pImpl->aSplitSize.setHeight( aMinSize.Height() );
     }
 
     bool bVertHorzRead( false );
@@ -1162,9 +1162,9 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
         // take the smaller size of docked and floating mode
         Size aSize = pImpl->aSplitSize;
         if ( GetFloatingSize().Height() < aSize.Height() )
-            aSize.Height() = GetFloatingSize().Height();
+            aSize.setHeight( GetFloatingSize().Height() );
         if ( GetFloatingSize().Width() < aSize.Width() )
-            aSize.Width() = GetFloatingSize().Width();
+            aSize.setWidth( GetFloatingSize().Width() );
 
         nLRBorder = aSize.Width();
         nTBBorder = aSize.Height();
@@ -1184,13 +1184,13 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
     // shrink area for floating mode if possible
     tools::Rectangle aInRect = GetInnerRect();
     if ( aInRect.GetWidth() > nLRBorder )
-        aInRect.Left()   += nLRBorder/2;
+        aInRect.SetLeft( aInRect.Left() + nLRBorder/2 );
     if ( aInRect.GetWidth() > nLRBorder )
-        aInRect.Right()  -= nLRBorder/2;
+        aInRect.SetRight( aInRect.Right() - nLRBorder/2 );
     if ( aInRect.GetHeight() > nTBBorder )
-        aInRect.Top()    += nTBBorder/2;
+        aInRect.SetTop( aInRect.Top() + nTBBorder/2 );
     if ( aInRect.GetHeight() > nTBBorder )
-        aInRect.Bottom() -= nTBBorder/2;
+        aInRect.SetBottom( aInRect.Bottom() - nTBBorder/2 );
 
     // calculate alignment resulting from docking rectangle
     bool bBecomesFloating = false;
@@ -1220,8 +1220,8 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
         tools::Rectangle aSmallDockingRect;
         aSmallDockingRect.SetSize( Size( MAX_TOGGLEAREA_WIDTH, MAX_TOGGLEAREA_HEIGHT ) );
         Point aNewPos(rPos);
-        aNewPos.X() -= aSmallDockingRect.GetWidth()/2;
-        aNewPos.Y() -= aSmallDockingRect.GetHeight()/2;
+        aNewPos.setX( aNewPos.X() - aSmallDockingRect.GetWidth()/2 );
+        aNewPos.setY( aNewPos.Y() - aSmallDockingRect.GetHeight()/2 );
         aSmallDockingRect.SetPos(rPos);
         tools::Rectangle aIntersectRect = aInRect.GetIntersection( aSmallDockingRect );
         if ( aIntersectRect == aSmallDockingRect )
@@ -1384,8 +1384,8 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
             if ( pImpl->bNewLine )
             {
                 // set height to height of free area
-                aSize.Height() = aInnerSize.Height();
-                aSize.Width() = pImpl->nHorizontalSize;
+                aSize.setHeight( aInnerSize.Height() );
+                aSize.setWidth( pImpl->nHorizontalSize );
                 if ( eDockAlign == SfxChildAlignment::LEFT )
                 {
                     aPoint = aInnerRect.TopLeft();
@@ -1393,14 +1393,14 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
                 else
                 {
                     aPoint = aInnerRect.TopRight();
-                    aPoint.X() -= aSize.Width();
+                    aPoint.setX( aPoint.X() - aSize.Width() );
                 }
             }
             else
             {
                 // get width from splitwindow
-                aSize.Width() = pSplitWin->GetLineSize(nLine);
-                aSize.Height() = pImpl->aSplitSize.Height();
+                aSize.setWidth( pSplitWin->GetLineSize(nLine) );
+                aSize.setHeight( pImpl->aSplitSize.Height() );
             }
         }
         else
@@ -1408,8 +1408,8 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
             if ( pImpl->bNewLine )
             {
                 // set width to width of free area
-                aSize.Width() = aInnerSize.Width();
-                aSize.Height() = pImpl->nVerticalSize;
+                aSize.setWidth( aInnerSize.Width() );
+                aSize.setHeight( pImpl->nVerticalSize );
                 if ( eDockAlign == SfxChildAlignment::TOP )
                 {
                     aPoint = aInnerRect.TopLeft();
@@ -1417,14 +1417,14 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
                 else
                 {
                     aPoint = aInnerRect.BottomLeft();
-                    aPoint.Y() -= aSize.Height();
+                    aPoint.setY( aPoint.Y() - aSize.Height() );
                 }
             }
             else
             {
                 // get height from splitwindow
-                aSize.Height() = pSplitWin->GetLineSize(nLine);
-                aSize.Width() = pImpl->aSplitSize.Width();
+                aSize.setHeight( pSplitWin->GetLineSize(nLine) );
+                aSize.setWidth( pImpl->aSplitSize.Width() );
             }
         }
 
@@ -1450,7 +1450,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
                 case SfxChildAlignment::LASTRIGHT:
                 {
                     Point aPt( aInnerRect.TopRight() );
-                    aPt.X() -= aDockingRect.GetWidth();
+                    aPt.setX( aPt.X() - aDockingRect.GetWidth() );
                     aDockingRect.SetPos( aPt );
                     aDockingRect.SetSize( aVerticalSize );
                     break;
@@ -1467,7 +1467,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
                 case SfxChildAlignment::HIGHESTBOTTOM:
                 {
                     Point aPt( aInnerRect.BottomLeft() );
-                    aPt.Y() -= aDockingRect.GetHeight();
+                    aPt.setY( aPt.Y() - aDockingRect.GetHeight() );
                     aDockingRect.SetPos( aPt );
                     aDockingRect.SetSize( aHorizontalSize );
                     break;
@@ -1506,7 +1506,7 @@ Size SfxDockingWindow::CalcDockingSize(SfxChildAlignment eAlign)
         case SfxChildAlignment::HIGHESTTOP:
         case SfxChildAlignment::LOWESTBOTTOM:
         case SfxChildAlignment::HIGHESTBOTTOM:
-            aSize.Width() = aOuterRect.Right() - aOuterRect.Left();
+            aSize.setWidth( aOuterRect.Right() - aOuterRect.Left() );
             break;
         case SfxChildAlignment::LEFT:
         case SfxChildAlignment::RIGHT:
@@ -1514,7 +1514,7 @@ Size SfxDockingWindow::CalcDockingSize(SfxChildAlignment eAlign)
         case SfxChildAlignment::LASTLEFT:
         case SfxChildAlignment::FIRSTRIGHT:
         case SfxChildAlignment::LASTRIGHT:
-            aSize.Height() = aInnerRect.Bottom() - aInnerRect.Top();
+            aSize.setHeight( aInnerRect.Bottom() - aInnerRect.Top() );
             break;
         case SfxChildAlignment::NOALIGNMENT:
             break;
@@ -1567,28 +1567,28 @@ void SfxDockingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Re
         case SfxChildAlignment::TOP:
         {
             rRenderContext.DrawLine(aRect.BottomLeft(), aRect.BottomRight());
-            aRect.Bottom()--;
+            aRect.SetBottom( --aRect.Bottom() );
             break;
         }
 
         case SfxChildAlignment::BOTTOM:
         {
             rRenderContext.DrawLine(aRect.TopLeft(), aRect.TopRight());
-            aRect.Top()++;
+            aRect.SetTop( ++aRect.Top() );
             break;
         }
 
         case SfxChildAlignment::LEFT:
         {
             rRenderContext.DrawLine(aRect.TopRight(), aRect.BottomRight());
-            aRect.Right()--;
+            aRect.SetRight( --aRect.Right() );
             break;
         }
 
         case SfxChildAlignment::RIGHT:
         {
             rRenderContext.DrawLine(aRect.TopLeft(), aRect.BottomLeft());
-            aRect.Left()++;
+            aRect.SetLeft( ++aRect.Left() );
             break;
         }
 

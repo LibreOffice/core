@@ -89,8 +89,8 @@ awt::Size impl_Size_Object2Struct( const Size& aSize )
 Size impl_Size_Struct2Object( const awt::Size& aSize )
 {
     Size aReturnValue;
-    aReturnValue.Width()  = aSize.Width  ;
-    aReturnValue.Height() = aSize.Height ;
+    aReturnValue.setWidth( aSize.Width )  ;
+    aReturnValue.setHeight( aSize.Height ) ;
     return aReturnValue ;
 }
 

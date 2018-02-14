@@ -134,11 +134,11 @@ void SfxEmptySplitWin_Impl::Actualize()
     {
         case WindowAlign::Left:
         case WindowAlign::Right:
-            aSize.Width() = GetFadeInSize();
+            aSize.setWidth( GetFadeInSize() );
             break;
         case WindowAlign::Top:
         case WindowAlign::Bottom:
-            aSize.Height() = GetFadeInSize();
+            aSize.setHeight( GetFadeInSize() );
             break;
     }
 
@@ -397,13 +397,13 @@ void SfxSplitWindow::Split()
 
             if ( IsHorizontal() )
             {
-                aSize.Width()  = nSize;
-                aSize.Height() = nSetSize;
+                aSize.setWidth( nSize );
+                aSize.setHeight( nSetSize );
             }
             else
             {
-                aSize.Width()  = nSetSize;
-                aSize.Height() = nSize;
+                aSize.setWidth( nSetSize );
+                aSize.setHeight( nSize );
             }
 
             rD.pWin->SetItemSize_Impl( aSize );

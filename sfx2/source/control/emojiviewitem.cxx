@@ -53,8 +53,8 @@ void EmojiViewItem::calculateItemsPosition (const long /*nThumbnailHeight*/, con
     Point aPos = maDrawArea.TopLeft();
 
     // Calculate text position
-    aPos.Y() = maDrawArea.getY() + (aRectSize.Height() - aTextDev.getTextHeight())/3;
-    aPos.X() = maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maTitle,0,nMaxTextLength))/2;
+    aPos.setY( maDrawArea.getY() + (aRectSize.Height() - aTextDev.getTextHeight())/3 );
+    aPos.setX( maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maTitle,0,nMaxTextLength))/2 );
     maTextPos = aPos;
 }
 

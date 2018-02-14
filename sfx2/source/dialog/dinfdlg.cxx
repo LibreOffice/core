@@ -1393,7 +1393,7 @@ void CustomPropertiesYesNoButton::Resize()
     Size aSize(nNewWidth, m_aYesButton->get_preferred_size().Height());
     Point aPos(n1Width, (aParentSize.Height() - aSize.Height()) / 2);
     m_aYesButton->SetPosSizePixel(aPos, aSize);
-    aPos.X() += aSize.Width() + n3Width;
+    aPos.setX( aPos.X() + aSize.Width() + n3Width );
     m_aNoButton->SetPosSizePixel(aPos, aSize);
 }
 

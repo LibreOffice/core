@@ -67,17 +67,17 @@ void SfxFrameHTMLParser::ParseFrameOptions(
             pFrame->SetName( rOption.GetString() );
             break;
         case HtmlOptionId::MARGINWIDTH:
-            aMargin.Width() = rOption.GetNumber();
+            aMargin.setWidth( rOption.GetNumber() );
 
             if( !bMarginHeight )
-                aMargin.Height() = 0;
+                aMargin.setHeight( 0 );
             bMarginWidth = true;
             break;
         case HtmlOptionId::MARGINHEIGHT:
-            aMargin.Height() = rOption.GetNumber();
+            aMargin.setHeight( rOption.GetNumber() );
 
             if( !bMarginWidth )
-                aMargin.Width() = 0;
+                aMargin.setWidth( 0 );
             bMarginHeight = true;
             break;
         case HtmlOptionId::SCROLLING:

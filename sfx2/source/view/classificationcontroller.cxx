@@ -258,7 +258,7 @@ ClassificationControl::ClassificationControl(vcl::Window* pParent)
     Size aTextSize(m_pLabel->GetTextWidth(aText), m_pLabel->GetTextHeight());
 
     // Padding.
-    aTextSize.Width() += 12;
+    aTextSize.setWidth( aTextSize.Width() + 12 );
     m_pLabel->SetText(aText);
     m_pLabel->SetSizePixel(aTextSize);
     m_pLabel->Show();
@@ -306,10 +306,10 @@ void ClassificationControl::SetOptimalSize()
 
     Point aPosition = m_pCategory->GetPosPixel();
 
-    aSize.Height() = std::max(aSize.Height(), m_pLabel->get_preferred_size().Height());
-    aSize.Height() = std::max(aSize.Height(), m_pCategory->get_preferred_size().Height());
+    aSize.setHeight( std::max(aSize.Height(), m_pLabel->get_preferred_size().Height()) );
+    aSize.setHeight( std::max(aSize.Height(), m_pCategory->get_preferred_size().Height()) );
 
-    aSize.Width() = aPosition.X() + aSize.Width();
+    aSize.setWidth( aPosition.X() + aSize.Width() );
 
     SetSizePixel(aSize);
 }

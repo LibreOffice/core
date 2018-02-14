@@ -488,8 +488,8 @@ void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
     {
         // indent sub entries
         Point aPos( rUDEvt.GetRect().TopLeft() );
-        aPos.X() += 8;
-        aPos.Y() += (rUDEvt.GetRect().GetHeight() - rUDEvt.GetRenderContext()->GetTextHeight()) / 2;
+        aPos.setX( aPos.X() + 8 );
+        aPos.setY( aPos.Y() + (rUDEvt.GetRect().GetHeight() - rUDEvt.GetRenderContext()->GetTextHeight()) / 2 );
         OUString aEntry( GetEntry( rUDEvt.GetItemId() ) );
         sal_Int32 nPos = aEntry.indexOf( ';' );
         rUDEvt.GetRenderContext()->DrawText(aPos, (nPos !=-1) ? aEntry.copy(nPos + 1) : aEntry);
@@ -2063,7 +2063,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
             sCBText += aOnStartupCB->GetText();
             long nTextWidth = aOnStartupCB->GetTextWidth( sCBText );
             Size aSize = aOnStartupCB->GetSizePixel();
-            aSize.Width() = nTextWidth;
+            aSize.setWidth( nTextWidth );
             aOnStartupCB->SetSizePixel( aSize );
             SetOnStartupBoxPosition();
         }
@@ -2073,8 +2073,8 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
         Size aTBSize = aToolBox->GetSizePixel();
         Size aCBSize = aOnStartupCB->GetSizePixel();
         Point aPnt = aToolBox->GetPosPixel();
-        aPnt.X() += aTBSize.Width() + a3Size.Width();
-        aPnt.Y() += ( ( aTBSize.Height() - aCBSize.Height() ) / 2 );
+        aPnt.setX( aPnt.X() + aTBSize.Width() + a3Size.Width() );
+        aPnt.setY( aPnt.Y() + ( ( aTBSize.Height() - aCBSize.Height() ) / 2 ) );
         aOnStartupCB->SetPosPixel( aPnt );
         nMinPos = aPnt.X();
     }
@@ -2085,7 +2085,7 @@ void SfxHelpTextWindow_Impl::SetOnStartupBoxPosition()
 {
     long nX = std::max( GetOutputSizePixel().Width() - aOnStartupCB->GetSizePixel().Width(), nMinPos );
     Point aPos = aOnStartupCB->GetPosPixel();
-    aPos.X() = nX;
+    aPos.setX( nX );
     aOnStartupCB->SetPosPixel( aPos );
 }
 
@@ -2312,7 +2312,7 @@ void SfxHelpTextWindow_Impl::Resize()
 {
     Size aSize = GetOutputSizePixel();
     long nToolBoxHeight = aToolBox->GetSizePixel().Height() + TOOLBOX_OFFSET;
-    aSize.Height() -= nToolBoxHeight;
+    aSize.setHeight( aSize.Height() - nToolBoxHeight );
     pTextWin->SetPosSizePixel( Point( 0, nToolBoxHeight  ), aSize );
     SetOnStartupBoxPosition();
 }
@@ -2334,7 +2334,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 aPos = pCmdEvt->GetMousePosPixel();
             else
                 aPos = Point( pTextWin->GetPosPixel().X() + 20, 20 );
-            aPos.Y() += pTextWin->GetPosPixel().Y();
+            aPos.setY( aPos.Y() + pTextWin->GetPosPixel().Y() );
             ScopedVclPtrInstance<PopupMenu> aMenu;
             if ( bIsIndexOn )
                 aMenu->InsertItem(TBI_INDEX, aIndexOffText, Image(BitmapEx(BMP_HELP_TOOLBOX_INDEX_OFF)));
@@ -2667,7 +2667,7 @@ void SfxHelpWindow_Impl::MakeLayout()
             tools::Rectangle aScreenRect = pScreenWin->GetClientWindowExtentsRelative();
             Point aNewPos = aScreenRect.TopLeft();
             sal_Int32 nDiffWidth = nOldWidth - nWidth;
-            aNewPos.X() += nDiffWidth;
+            aNewPos.setX( aNewPos.X() + nDiffWidth );
             pScreenWin->SetPosPixel( aNewPos );
         }
         else if ( aWinPos.X() > 0 && aWinPos.Y() > 0 )
@@ -2731,8 +2731,8 @@ void SfxHelpWindow_Impl::LoadConfig()
             nTextSize = aUserData.getToken( 0, ';', nIdx ).toInt32();
             sal_Int32 nWidth = aUserData.getToken( 0, ';', nIdx ).toInt32();
             nHeight = aUserData.getToken( 0, ';', nIdx ).toInt32();
-            aWinPos.X() = aUserData.getToken( 0, ';', nIdx ).toInt32();
-            aWinPos.Y() = aUserData.getToken( 0, ';', nIdx ).toInt32();
+            aWinPos.setX( aUserData.getToken( 0, ';', nIdx ).toInt32() );
+            aWinPos.setY( aUserData.getToken( 0, ';', nIdx ).toInt32() );
             if ( bIndex )
             {
                 nExpandWidth = nWidth;

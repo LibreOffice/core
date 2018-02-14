@@ -278,12 +278,12 @@ Size NotebookbarTabControl::calculateRequisition() const
             Size aChildSize = VclAlignment::getLayoutRequisition(*pChild);
 
             if (aChildSize.getWidth() < aSize.getWidth())
-                aSize.Width() = aChildSize.Width();
+                aSize.setWidth( aChildSize.Width() );
         }
     }
 
     if (aSize.Width() < 400)
-        aSize.Width() = 400;
+        aSize.setWidth( 400 );
 
     return aSize;
 }

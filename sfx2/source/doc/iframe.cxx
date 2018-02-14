@@ -297,7 +297,7 @@ void SAL_CALL IFrameObject::setPropertyValue(const OUString& aPropertyName, cons
         Size aSize = maFrmDescr.GetMargin();
         if ( aAny >>= nMargin )
         {
-            aSize.Width() = nMargin;
+            aSize.setWidth( nMargin );
             maFrmDescr.SetMargin( aSize );
         }
     }
@@ -308,7 +308,7 @@ void SAL_CALL IFrameObject::setPropertyValue(const OUString& aPropertyName, cons
         Size aSize = maFrmDescr.GetMargin();
         if ( aAny >>= nMargin )
         {
-            aSize.Height() = nMargin;
+            aSize.setHeight( nMargin );
             maFrmDescr.SetMargin( aSize );
         }
     }
