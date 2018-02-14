@@ -2044,7 +2044,9 @@ void Desktop::OpenClients()
         bool bCrashed            = false;
         bool bExistsRecoveryData = false;
         bool bExistsSessionData  = false;
-        bool const bDisableRecovery = getenv("OOO_DISABLE_RECOVERY") != nullptr;
+        bool const bDisableRecovery
+            = getenv("OOO_DISABLE_RECOVERY") != nullptr
+              || !officecfg::Office::Recovery::RecoveryInfo::Enabled::get();
 
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
 
