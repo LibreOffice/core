@@ -20,12 +20,23 @@
 
 #include <pdfparse.hxx>
 
+// boost using obsolete stuff
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable:4996)
+#endif
+
 // workaround windows compiler: do not include multi_pass.hpp
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_utility.hpp>
 #include <boost/spirit/include/classic_error_handling.hpp>
 #include <boost/spirit/include/classic_file_iterator.hpp>
 #include <boost/bind.hpp>
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
+
 #include <string.h>
 
 #include <rtl/strbuf.hxx>
