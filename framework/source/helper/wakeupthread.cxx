@@ -53,6 +53,7 @@ void framework::WakeUpThread::stop() {
         osl::MutexGuard g(mutex_);
         terminate_ = true;
     }
+    condition_.set();
     join();
 }
 
