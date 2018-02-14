@@ -134,13 +134,13 @@ void ThumbnailViewItem::calculateItemsPosition (const long nThumbnailHeight, con
 
     // Calculate thumbnail position
     Point aPos = maDrawArea.TopLeft();
-    aPos.X() = maDrawArea.getX() + (aRectSize.Width()-aImageSize.Width())/2;
-    aPos.Y() = maDrawArea.getY() + nPadding + (nThumbnailHeight-aImageSize.Height())/2;
+    aPos.setX( maDrawArea.getX() + (aRectSize.Width()-aImageSize.Width())/2 );
+    aPos.setY( maDrawArea.getY() + nPadding + (nThumbnailHeight-aImageSize.Height())/2 );
     maPrev1Pos = aPos;
 
     // Calculate text position
-    aPos.Y() = maDrawArea.getY() + nThumbnailHeight + nPadding * 2;
-    aPos.X() = maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maTitle,0,nMaxTextLength))/2;
+    aPos.setY( maDrawArea.getY() + nThumbnailHeight + nPadding * 2 );
+    aPos.setX( maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maTitle,0,nMaxTextLength))/2 );
     maTextPos = aPos;
 }
 

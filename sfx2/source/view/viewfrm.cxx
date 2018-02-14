@@ -1160,8 +1160,8 @@ void SfxViewFrame::SetBorderPixelImpl
         Size aSize = pVSh->GetWindow()->GetOutputSizePixel();
         if ( aSize.Width() && aSize.Height() )
         {
-            aSize.Width() += rBorder.Left() + rBorder.Right();
-            aSize.Height() += rBorder.Top() + rBorder.Bottom();
+            aSize.setWidth( aSize.Width() + rBorder.Left() + rBorder.Right() );
+            aSize.setHeight( aSize.Height() + rBorder.Top() + rBorder.Bottom() );
 
             Size aOldSize = GetWindow().GetOutputSizePixel();
             GetWindow().SetOutputSizePixel( aSize );
@@ -1169,8 +1169,8 @@ void SfxViewFrame::SetBorderPixelImpl
             while ( pParent->GetParent() )
                 pParent = pParent->GetParent();
             Size aOuterSize = pParent->GetOutputSizePixel();
-            aOuterSize.Width() += ( aSize.Width() - aOldSize.Width() );
-            aOuterSize.Height() += ( aSize.Height() - aOldSize.Height() );
+            aOuterSize.setWidth( aOuterSize.Width() + ( aSize.Width() - aOldSize.Width() ) );
+            aOuterSize.setHeight( aOuterSize.Height() + ( aSize.Height() - aOldSize.Height() ) );
             pParent->SetOutputSizePixel( aOuterSize );
         }
     }
@@ -1178,10 +1178,10 @@ void SfxViewFrame::SetBorderPixelImpl
     {
         Point aPoint;
         tools::Rectangle aEditArea( aPoint, GetWindow().GetOutputSizePixel() );
-        aEditArea.Left() += rBorder.Left();
-        aEditArea.Right() -= rBorder.Right();
-        aEditArea.Top() += rBorder.Top();
-        aEditArea.Bottom() -= rBorder.Bottom();
+        aEditArea.SetLeft( aEditArea.Left() + rBorder.Left() );
+        aEditArea.SetRight( aEditArea.Right() - rBorder.Right() );
+        aEditArea.SetTop( aEditArea.Top() + rBorder.Top() );
+        aEditArea.SetBottom( aEditArea.Bottom() - rBorder.Bottom() );
         pVSh->GetWindow()->SetPosSizePixel( aEditArea.TopLeft(), aEditArea.GetSize() );
     }
 }

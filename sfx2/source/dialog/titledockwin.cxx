@@ -122,7 +122,7 @@ namespace sfx2
         // Place the content window.
         if ( m_nTitleBarHeight < aToolBoxSize.Height() )
             m_nTitleBarHeight = aToolBoxSize.Height();
-        aWindowSize.Height() -= m_nTitleBarHeight;
+        aWindowSize.setHeight( aWindowSize.Height() - m_nTitleBarHeight );
         m_aContentWindow->SetPosSizePixel(
             Point( m_aBorder.Left(), m_nTitleBarHeight + m_aBorder.Top() ),
             Size(
@@ -200,7 +200,7 @@ namespace sfx2
 
         // Paint title bar text.
         rRenderContext.SetLineColor(rStyleSettings.GetActiveTextColor());
-        aTitleBarBox.Left() += 3;
+        aTitleBarBox.SetLeft( aTitleBarBox.Left() + 3 );
         rRenderContext.DrawText(aTitleBarBox,
                                 !m_sTitle.isEmpty() ? m_sTitle : GetText(),
                                 DrawTextFlags::Left | DrawTextFlags::VCenter | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak);

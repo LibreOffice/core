@@ -113,10 +113,10 @@ bool GetPosSizeFromString( const OUString& rStr, Point& rPos, Size& rSize )
         return false;
 
     sal_Int32 nIdx = 0;
-    rPos.X() = rStr.getToken(0, '/', nIdx).toInt32();
-    rPos.Y() = rStr.getToken(0, '/', nIdx).toInt32();
-    rSize.Width() = rStr.getToken(0, '/', nIdx).toInt32();
-    rSize.Height() = rStr.getToken(0, '/', nIdx).toInt32();
+    rPos.setX( rStr.getToken(0, '/', nIdx).toInt32() );
+    rPos.setY( rStr.getToken(0, '/', nIdx).toInt32() );
+    rSize.setWidth( rStr.getToken(0, '/', nIdx).toInt32() );
+    rSize.setHeight( rStr.getToken(0, '/', nIdx).toInt32() );
 
     // negative sizes are invalid
     return !(rSize.Width() < 0 || rSize.Height() < 0);
@@ -133,8 +133,8 @@ bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
         if ( nCount != 2 )
             return false;
 
-        rSize.Width() = aStr.getToken(0, ';' ).toInt32();
-        rSize.Height() = aStr.getToken(1, ';' ).toInt32();
+        rSize.setWidth( aStr.getToken(0, ';' ).toInt32() );
+        rSize.setHeight( aStr.getToken(1, ';' ).toInt32() );
 
         // negative sizes are invalid
         return !(rSize.Width() < 0 || rSize.Height() < 0);

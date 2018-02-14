@@ -951,10 +951,10 @@ BitmapEx TemplateLocalView::scaleImg (const BitmapEx &rImg, long width, long hei
         Size aSize = rImg.GetSizePixel();
 
         if (aSize.Width() == 0)
-            aSize.Width() = 1;
+            aSize.setWidth( 1 );
 
         if (aSize.Height() == 0)
-            aSize.Height() = 1;
+            aSize.setHeight( 1 );
 
         // make the picture fit the given width/height constraints
         double nRatio = std::min(double(width)/double(aSize.Width()), double(height)/double(aSize.Height()));

@@ -230,23 +230,23 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
 
                 Size aParentSize = GetParent()->GetOutputSizePixel();
                 Size aDlgSize = GetSizePixel();
-                aPos.X() += ( aParentSize.Width() - aDlgSize.Width() ) / 2;
-                aPos.Y() += ( aParentSize.Height() - aDlgSize.Height() ) / 2;
+                aPos.setX( aPos.X() + ( aParentSize.Width() - aDlgSize.Width() ) / 2 );
+                aPos.setY( aPos.Y() + ( aParentSize.Height() - aDlgSize.Height() ) / 2 );
 
                 Point aPoint;
                 tools::Rectangle aRect = GetDesktopRectPixel();
-                aPoint.X() = aRect.Right() - aDlgSize.Width();
-                aPoint.Y() = aRect.Bottom() - aDlgSize.Height();
+                aPoint.setX( aRect.Right() - aDlgSize.Width() );
+                aPoint.setY( aRect.Bottom() - aDlgSize.Height() );
 
                 aPoint = OutputToScreenPixel( aPoint );
 
                 if ( aPos.X() > aPoint.X() )
-                    aPos.X() = aPoint.X() ;
+                    aPos.setX( aPoint.X() ) ;
                 if ( aPos.Y() > aPoint.Y() )
-                    aPos.Y() = aPoint.Y();
+                    aPos.setY( aPoint.Y() );
 
-                if ( aPos.X() < 0 ) aPos.X() = 0;
-                if ( aPos.Y() < 0 ) aPos.Y() = 0;
+                if ( aPos.X() < 0 ) aPos.setX( 0 );
+                if ( aPos.Y() < 0 ) aPos.setY( 0 );
 
                 SetPosPixel( aPos );
             }
