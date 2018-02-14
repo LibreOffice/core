@@ -188,4 +188,13 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
 
     owner @{HOME}/.gnupg/* r,
   }
+
+  # probably should become a subprofile like gpg above, but then it doesn't
+  # work either as it tries to access stuff only allowed above...
+  owner @{HOME}/.config/kdeglobals r,
+  /usr/lib/libreoffice/program/lo_kde5filepicker rPUx,
+  /usr/share/qt5/translations/* r,
+  /usr/lib/*/qt5/plugins/** rm,
+  /usr/share/plasma/look-and-feel/**/contents/defaults r,
+
 }
