@@ -107,6 +107,13 @@ bool PSDReader::ReadPSD(Graphic & rGraphic )
     if ( !ImplReadHeader() )
         return false;
 
+    if (mbStatus)
+    {
+        sal_uInt32 nResult;
+        if (o3tl::checked_multiply(mpFileHeader->nColumns, mpFileHeader->nRows, nResult) || nResult > SAL_MAX_INT32/2/3)
+            return false;
+    }
+
     Size aBitmapSize( mpFileHeader->nColumns, mpFileHeader->nRows );
     mpBitmap.reset( new vcl::bitmap::RawBitmap( aBitmapSize ) );
     if ( mpPalette && mbStatus )
