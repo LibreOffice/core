@@ -75,6 +75,7 @@ class XMLImport : public cppu::WeakImplHelper
     std::map<OUString, librevenge::RVNGPropertyList> maTableStyles;
     std::map<OUString, librevenge::RVNGPropertyList> maAutomaticGraphicStyles;
     std::map<OUString, librevenge::RVNGPropertyList> maGraphicStyles;
+    std::map<OUString, librevenge::RVNGPropertyList> maPageLayouts;
     librevenge::RVNGPropertyListVector maCoverImages;
     /// Author, date, etc -- overwrites what would be from the document out of the box.
     librevenge::RVNGPropertyList maMetaData;
@@ -103,6 +104,7 @@ public:
     std::map<OUString, librevenge::RVNGPropertyList> &GetRowStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetTableStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetGraphicStyles();
+    std::map<OUString, librevenge::RVNGPropertyList> &GetPageLayouts();
     const librevenge::RVNGPropertyListVector &GetCoverImages();
     const librevenge::RVNGPropertyList &GetMetaData();
     PopupState FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList &rPropList);
