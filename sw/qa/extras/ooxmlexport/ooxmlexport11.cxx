@@ -101,6 +101,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf67207_MERGEFIELD, "mailmerge.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.text.fieldmaster.DataBase.Name"), sValue);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf115719, "tdf115719.docx")
+{
+    // This was a single page, instead of pushing the textboxes to the second
+    // page.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testParagraphSplitOnSectionBorder, "parasplit-on-section-border.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
