@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_8fc69247",
+        "filename": "cui/source/options/optcolor.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-02-14T17:47:43Z",
+      "side": 1,
+      "message": "This comparison does not make any sense to me. Bellow you set nThumbPos dividing aCtrlPosY with 40. So I guess these two variables are not have the same unit, so it\u0027s not a good idea to compare them.",
+      "range": {
+        "startLine": 948,
+        "startChar": 12,
+        "endLine": 948,
+        "endChar": 33
+      },
+      "revId": "11fab5c7f49192c8c41895a0a5a4961ba682b977",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_afc5163d",
+        "filename": "cui/source/options/optcolor.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-02-14T17:47:43Z",
+      "side": 1,
+      "message": "Would be good to know what is this 40 number. Add a comment at least to explain the logic behind that number.",
+      "range": {
+        "startLine": 951,
+        "startChar": 24,
+        "endLine": 951,
+        "endChar": 33
+      },
+      "revId": "11fab5c7f49192c8c41895a0a5a4961ba682b977",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
