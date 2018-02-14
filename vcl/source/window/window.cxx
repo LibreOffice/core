@@ -2076,8 +2076,16 @@ void Window::PostExtTextInputEvent(VclEventId nType, const OUString& rText)
     {
     case VclEventId::ExtTextInput:
     {
-        SalExtTextInputEvent aEvent { rText, nullptr, rText.getLength(), 0 };
+        std::unique_ptr<ExtTextInputAttr[]> pAttr;
+        pAttr.reset(new ExtTextInputAttr[rText.getLength()]);
+        for (int i = 0; i < rText.getLength(); ++i) {
+            pAttr[i] = ExtTextInputAttr::NONE;
+        }
+        SalExtTextInputEvent aEvent { rText, pAttr.get(), rText.getLength(), EXTTEXTINPUT_CURSOR_OVERWRITE };
         ImplWindowFrameProc(this, SalEvent::ExtTextInput, &aEvent);
+        SalExtTextInputPosEvent evt;
+        ImplWindowFrameProc(this, SalEvent::ExtTextInputPos, &evt);
+        SAL_DEBUG("evet : " << evt.mnX << " " << evt.mnY);
     }
     break;
     case VclEventId::EndExtTextInput:
