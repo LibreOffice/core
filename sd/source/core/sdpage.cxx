@@ -997,14 +997,14 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind)
             Point aPos ( nLftBorder, nUppBorder );
             Size aSize ( GetSize() );
 
-            aSize.Width()  -= nLftBorder + GetRightBorder();
-            aSize.Height() -= nUppBorder + GetLowerBorder();
+            aSize.setWidth( aSize.Width() - nLftBorder + GetRightBorder() );
+            aSize.setHeight( aSize.Height() - nUppBorder + GetLowerBorder() );
 
             getPresObjProp( *this, sObjKind, sPageKind, propvalue);
-            aPos.X() += long( aSize.Width() * propvalue[2] );
-            aPos.Y() += long( aSize.Height() * propvalue[3] );
-            aSize.Width() = long( aSize.Width() * propvalue[1] );
-            aSize.Height() = long( aSize.Height() * propvalue[0] );
+            aPos.setX( aPos.X() + long( aSize.Width() * propvalue[2] ) );
+            aPos.setY( aPos.Y() + long( aSize.Height() * propvalue[3] ) );
+            aSize.setWidth( long( aSize.Width() * propvalue[1] ) );
+            aSize.setHeight( long( aSize.Height() * propvalue[0] ) );
 
             if(eObjKind == PRESOBJ_HEADER )
             {
@@ -1021,8 +1021,8 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind)
         {
             // create header&footer objects for handout and notes master
             Size aPageSize ( GetSize() );
-            aPageSize.Width()  -= GetLeftBorder() + GetRightBorder();
-            aPageSize.Height() -= GetUpperBorder() + GetLowerBorder();
+            aPageSize.setWidth( aPageSize.Width() - GetLeftBorder() + GetRightBorder() );
+            aPageSize.setHeight( aPageSize.Height() - GetUpperBorder() + GetLowerBorder() );
 
             Point aPosition ( GetLeftBorder(), GetUpperBorder() );
 
@@ -1032,13 +1032,13 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind)
             Size aSize( NOTES_HEADER_FOOTER_WIDTH, NOTES_HEADER_FOOTER_HEIGHT );
             Point aPos ( 0 ,0 );
             if( propvalue[2] == 0 )
-                aPos.X() = aPosition.X();
+                aPos.setX( aPosition.X() );
             else
-                aPos.X() = aPosition.X() + long( aPageSize.Width() - NOTES_HEADER_FOOTER_WIDTH );
+                aPos.setX( aPosition.X() + long( aPageSize.Width() - NOTES_HEADER_FOOTER_WIDTH ) );
             if( propvalue[3] == 0 )
-                aPos.Y() = aPosition.Y();
+                aPos.setY( aPosition.Y() );
             else
-                aPos.Y() = aPosition.Y() + long( aPageSize.Height() - NOTES_HEADER_FOOTER_HEIGHT );
+                aPos.setY( aPosition.Y() + long( aPageSize.Height() - NOTES_HEADER_FOOTER_HEIGHT ) );
 
             ::tools::Rectangle aRect( aPos, aSize );
             return CreatePresObj( eObjKind, false, aRect );
@@ -1089,28 +1089,28 @@ void SdPage::DestroyDefaultPresObj(PresObjKind eObjKind)
         ******************************************************************/
         Point aTitlePos ( GetLeftBorder(), GetUpperBorder() );
         Size aTitleSize ( GetSize() );
-        aTitleSize.Width()  -= GetLeftBorder() + GetRightBorder();
-        aTitleSize.Height() -= GetUpperBorder() + GetLowerBorder();
+        aTitleSize.setWidth( aTitleSize.Width() - GetLeftBorder() + GetRightBorder() );
+        aTitleSize.setHeight( aTitleSize.Height() - GetUpperBorder() + GetLowerBorder() );
         const char* sPageKind = PageKindVector[mePageKind];
 
         if (mePageKind == PageKind::Standard)
          {
             getPresObjProp( *this , "PRESOBJ_TITLE" ,sPageKind, propvalue);
-            aTitlePos.X() += long( aTitleSize.Width() * propvalue[2] );
-            aTitlePos.Y() += long( aTitleSize.Height() * propvalue[3] );
-            aTitleSize.Width() = long( aTitleSize.Width() * propvalue[1] );
-            aTitleSize.Height() = long( aTitleSize.Height() * propvalue[0] );
+            aTitlePos.setX( aTitlePos.X() + long( aTitleSize.Width() * propvalue[2] ) );
+            aTitlePos.setY( aTitlePos.Y() + long( aTitleSize.Height() * propvalue[3] ) );
+            aTitleSize.setWidth( long( aTitleSize.Width() * propvalue[1] ) );
+            aTitleSize.setHeight( long( aTitleSize.Height() * propvalue[0] ) );
         }
         else if (mePageKind == PageKind::Notes)
         {
             Point aPos = aTitlePos;
             getPresObjProp( *this, "PRESOBJ_TITLE" ,sPageKind, propvalue);
-            aPos.X() += long( aTitleSize.Width() * propvalue[2] );
-            aPos.Y() += long( aTitleSize.Height() * propvalue[3] );
+            aPos.setX( aPos.X() + long( aTitleSize.Width() * propvalue[2] ) );
+            aPos.setY( aPos.Y() + long( aTitleSize.Height() * propvalue[3] ) );
 
             // limit height
-            aTitleSize.Height() = long( aTitleSize.Height() * propvalue[0] );
-            aTitleSize.Width() = long( aTitleSize.Width() * propvalue[1] );
+            aTitleSize.setHeight( long( aTitleSize.Height() * propvalue[0] ) );
+            aTitleSize.setWidth( long( aTitleSize.Width() * propvalue[1] ) );
 
             Size aPartArea = aTitleSize;
             Size aSize;
@@ -1138,11 +1138,11 @@ void SdPage::DestroyDefaultPresObj(PresObjKind eObjKind)
 
                 if ( fH > fV )
                     fH = fV;
-                aSize.Width()  = static_cast<long>(fH * pRefPage->GetWidth());
-                aSize.Height() = static_cast<long>(fH * pRefPage->GetHeight());
+                aSize.setWidth( static_cast<long>(fH * pRefPage->GetWidth()) );
+                aSize.setHeight( static_cast<long>(fH * pRefPage->GetHeight()) );
 
-                aPos.X() += (aPartArea.Width() - aSize.Width()) / 2;
-                aPos.Y() += (aPartArea.Height()- aSize.Height())/ 2;
+                aPos.setX( aPos.X() + (aPartArea.Width() - aSize.Width()) / 2 );
+                aPos.setY( aPos.Y() + (aPartArea.Height()- aSize.Height())/ 2 );
             }
 
             aTitlePos = aPos;
@@ -1172,27 +1172,27 @@ void SdPage::DestroyDefaultPresObj(PresObjKind eObjKind)
 
         Point aLayoutPos ( GetLeftBorder(), GetUpperBorder() );
         Size aLayoutSize ( GetSize() );
-        aLayoutSize.Width()  -= GetLeftBorder() + GetRightBorder();
-        aLayoutSize.Height() -= GetUpperBorder() + GetLowerBorder();
+        aLayoutSize.setWidth( aLayoutSize.Width() - GetLeftBorder() + GetRightBorder() );
+        aLayoutSize.setHeight( aLayoutSize.Height() - GetUpperBorder() + GetLowerBorder() );
         const char* sPageKind = PageKindVector[mePageKind];
 
         if (mePageKind == PageKind::Standard)
         {
             getPresObjProp( *this ,"PRESOBJ_OUTLINE", sPageKind, propvalue);
-            aLayoutPos.X() += long( aLayoutSize.Width() * propvalue[2] );
-            aLayoutPos.Y() += long( aLayoutSize.Height() * propvalue[3] );
-            aLayoutSize.Width() = long( aLayoutSize.Width() * propvalue[1] );
-            aLayoutSize.Height() = long( aLayoutSize.Height() * propvalue[0] );
+            aLayoutPos.setX( aLayoutPos.X() + long( aLayoutSize.Width() * propvalue[2] ) );
+            aLayoutPos.setY( aLayoutPos.Y() + long( aLayoutSize.Height() * propvalue[3] ) );
+            aLayoutSize.setWidth( long( aLayoutSize.Width() * propvalue[1] ) );
+            aLayoutSize.setHeight( long( aLayoutSize.Height() * propvalue[0] ) );
             aLayoutRect.SetPos(aLayoutPos);
             aLayoutRect.SetSize(aLayoutSize);
         }
         else if (mePageKind == PageKind::Notes)
         {
             getPresObjProp( *this, "PRESOBJ_NOTES", sPageKind, propvalue);
-            aLayoutPos.X() += long( aLayoutSize.Width() * propvalue[2] );
-            aLayoutPos.Y() += long( aLayoutSize.Height() * propvalue[3] );
-            aLayoutSize.Width() = long( aLayoutSize.Width() * propvalue[1] );
-            aLayoutSize.Height() = long( aLayoutSize.Height() * propvalue[0] );
+            aLayoutPos.setX( aLayoutPos.X() + long( aLayoutSize.Width() * propvalue[2] ) );
+            aLayoutPos.setY( aLayoutPos.Y() + long( aLayoutSize.Height() * propvalue[3] ) );
+            aLayoutSize.setWidth( long( aLayoutSize.Width() * propvalue[1] ) );
+            aLayoutSize.setHeight( long( aLayoutSize.Height() * propvalue[0] ) );
             aLayoutRect.SetPos(aLayoutPos);
             aLayoutRect.SetSize(aLayoutSize);
         }
@@ -1419,8 +1419,8 @@ static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* r
                     if(count == 0)
                     {
                         Size aSize ( aTitleRect.GetSize() );
-                        aSize.Height() = basegfx::fround(aSize.Height() * propvalue[0]);
-                        aSize.Width() = basegfx::fround(aSize.Width() * propvalue[1]);
+                        aSize.setHeight( basegfx::fround(aSize.Height() * propvalue[0]) );
+                        aSize.setWidth( basegfx::fround(aSize.Width() * propvalue[1]) );
                         Point aPos( basegfx::fround(aTitlePos.X() +(aSize.Width() * propvalue[2])),
                                     basegfx::fround(aTitlePos.Y() + (aSize.Height() * propvalue[3])) );
                         rRectangle[count] = ::tools::Rectangle(aPos, aSize);
@@ -1856,11 +1856,11 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
     // -> use up to date values
     if (aNewPageSize.Width() < 0)
     {
-        aNewPageSize.Width() = GetWidth();
+        aNewPageSize.setWidth( GetWidth() );
     }
     if (aNewPageSize.Height() < 0)
     {
-        aNewPageSize.Height() = GetHeight();
+        aNewPageSize.setHeight( GetHeight() );
     }
     if (nLeft < 0)
     {
@@ -1885,8 +1885,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
 
     if (mbScaleObjects)
     {
-        aBackgroundSize.Width()  -= nLeft  + nRight;
-        aBackgroundSize.Height() -= nUpper + nLower;
+        aBackgroundSize.setWidth( aBackgroundSize.Width() - nLeft  + nRight );
+        aBackgroundSize.setHeight( aBackgroundSize.Height() - nUpper + nLower );
         aBorderRect.SetSize(aBackgroundSize);
         aNewPageSize = aBackgroundSize;
     }
@@ -2082,8 +2082,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
 
                 // corrected scaling; only distances may be scaled
                 // use aTopLeft as original TopLeft
-                aNewPos.X() = long((aTopLeft.X() - GetLeftBorder()) * static_cast<double>(aFractX)) + nLeft;
-                aNewPos.Y() = long((aTopLeft.Y() - GetUpperBorder()) * static_cast<double>(aFractY)) + nUpper;
+                aNewPos.setX( long((aTopLeft.X() - GetLeftBorder()) * static_cast<double>(aFractX)) + nLeft );
+                aNewPos.setY( long((aTopLeft.Y() - GetUpperBorder()) * static_cast<double>(aFractY)) + nUpper );
 
                 Size aVec(aNewPos.X() - aTopLeft.X(), aNewPos.Y() - aTopLeft.Y());
 
@@ -2985,8 +2985,8 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
         long nX = nGapW + nLeftBorder;
         long nY = nGapH + nTopBorder;
 
-        aArea.Width() -= nGapW * 2 + nLeftBorder + nRightBorder;
-        aArea.Height() -= nGapH * 2 + nTopBorder + nBottomBorder;
+        aArea.setWidth( aArea.Width() - nGapW * 2 + nLeftBorder + nRightBorder );
+        aArea.setHeight( aArea.Height() - nGapH * 2 + nTopBorder + nBottomBorder );
 
         const bool bLandscape = aArea.Width() > aArea.Height();
 
@@ -3060,8 +3060,8 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
         rAreas.resize(static_cast<size_t>(nColCnt) * nRowCnt);
 
         Size aPartArea, aSize;
-        aPartArea.Width()  = ((aArea.Width()  - ((nColCnt-1) * nGapW) ) / nColCnt);
-        aPartArea.Height() = ((aArea.Height() - ((nRowCnt-1) * nGapH) ) / nRowCnt);
+        aPartArea.setWidth( (aArea.Width()  - ((nColCnt-1) * nGapW) ) / nColCnt );
+        aPartArea.setHeight( (aArea.Height() - ((nRowCnt-1) * nGapH) ) / nRowCnt );
 
         SdrPage* pFirstPage = rModel.GetMasterSdPage(0, PageKind::Standard);
         if (pFirstPage && pFirstPage->GetWidth() && pFirstPage->GetHeight())
@@ -3069,16 +3069,16 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
             // scale actual size into handout rect
             double fScale = static_cast<double>(aPartArea.Width()) / static_cast<double>(pFirstPage->GetWidth());
 
-            aSize.Height() = static_cast<long>(fScale * pFirstPage->GetHeight() );
+            aSize.setHeight( static_cast<long>(fScale * pFirstPage->GetHeight() ) );
             if( aSize.Height() > aPartArea.Height() )
             {
                 fScale = static_cast<double>(aPartArea.Height()) / static_cast<double>(pFirstPage->GetHeight());
-                aSize.Height() = aPartArea.Height();
-                aSize.Width() = static_cast<long>(fScale * pFirstPage->GetWidth());
+                aSize.setHeight( aPartArea.Height() );
+                aSize.setWidth( static_cast<long>(fScale * pFirstPage->GetWidth()) );
             }
             else
             {
-                aSize.Width() = aPartArea.Width();
+                aSize.setWidth( aPartArea.Width() );
             }
 
             nX += (aPartArea.Width() - aSize.Width()) / 2;
@@ -3099,14 +3099,14 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
 
         for(sal_uInt16 nRow = 0; nRow < nRowCnt; nRow++)
         {
-            aPos.X() = nStartX;
+            aPos.setX( nStartX );
             for(sal_uInt16 nCol = 0; nCol < nColCnt; nCol++)
             {
                 rAreas[*pOffsets++] = ::tools::Rectangle(aPos, aSize);
-                aPos.X() += nOffsetX;
+                aPos.setX( aPos.X() + nOffsetX );
             }
 
-            aPos.Y() += nOffsetY;
+            aPos.setY( aPos.Y() + nOffsetY );
         }
     }
 }

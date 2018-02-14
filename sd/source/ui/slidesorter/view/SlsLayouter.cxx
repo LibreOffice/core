@@ -927,21 +927,21 @@ sal_Int32 Layouter::Implementation::GetIndex (
     ::tools::Rectangle aBoundingBox (rBoundingBox);
 
     if (nColumn == 0)
-        aBoundingBox.Left() = 0;
+        aBoundingBox.SetLeft( 0 );
     else
-        aBoundingBox.Left() -= mnHorizontalGap/2;
+        aBoundingBox.SetLeft( aBoundingBox.Left() - mnHorizontalGap/2 );
     if (nColumn == mnColumnCount-1)
-        aBoundingBox.Right() += mnRightBorder;
+        aBoundingBox.SetRight( aBoundingBox.Right() + mnRightBorder );
     else
-        aBoundingBox.Right() += mnHorizontalGap/2;
+        aBoundingBox.SetRight( aBoundingBox.Right() + mnHorizontalGap/2 );
     if (nRow == 0)
-        aBoundingBox.Top() = 0;
+        aBoundingBox.SetTop( 0 );
     else
-        aBoundingBox.Top() -= mnVerticalGap/2;
+        aBoundingBox.SetTop( aBoundingBox.Top() - mnVerticalGap/2 );
     if (nRow == mnRowCount-1)
-        aBoundingBox.Bottom() += mnBottomBorder;
+        aBoundingBox.SetBottom( aBoundingBox.Bottom() + mnBottomBorder );
     else
-        aBoundingBox.Bottom() += mnVerticalGap/2;
+        aBoundingBox.SetBottom( aBoundingBox.Bottom() + mnVerticalGap/2 );
     return aBoundingBox;
 }
 

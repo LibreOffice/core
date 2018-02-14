@@ -102,13 +102,13 @@ void SdVectorizeDlg::dispose()
 
         if( fGrfWH < fWinWH )
         {
-            aBmpSize.Width() = static_cast<long>( rDispSize.Height() * fGrfWH );
-            aBmpSize.Height()= rDispSize.Height();
+            aBmpSize.setWidth( static_cast<long>( rDispSize.Height() * fGrfWH ) );
+            aBmpSize.setHeight( rDispSize.Height() );
         }
         else
         {
-            aBmpSize.Width() = rDispSize.Width();
-            aBmpSize.Height()= static_cast<long>( rDispSize.Width() / fGrfWH);
+            aBmpSize.setWidth( rDispSize.Width() );
+            aBmpSize.setHeight( static_cast<long>( rDispSize.Width() / fGrfWH) );
         }
 
         const Point aBmpPos( ( rDispSize.Width()  - aBmpSize.Width() ) >> 1,
@@ -250,10 +250,10 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
     aRect = PixelToLogic( aRect, rMtf.GetPrefMapMode() );
 
     if( aRect.Right() > ( rMaxSize.Width() - 1 ) )
-        aRect.Right() = rMaxSize.Width() - 1;
+        aRect.SetRight( rMaxSize.Width() - 1 );
 
     if( aRect.Bottom() > ( rMaxSize.Height() - 1 ) )
-        aRect.Bottom() = rMaxSize.Height() - 1;
+        aRect.SetBottom( rMaxSize.Height() - 1 );
 
     rMtf.AddAction( new MetaLineColorAction( aColor, true ) );
     rMtf.AddAction( new MetaFillColorAction( aColor, true ) );

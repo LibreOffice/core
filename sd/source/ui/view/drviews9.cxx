@@ -97,8 +97,8 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
         // constrain size to page size if necessary
         SdrPage* pPage = mpDrawView->GetSdrPageView()->GetPage();
         Size aPageSize = pPage->GetSize();
-        aPageSize.Width() -= pPage->GetLeftBorder() + pPage->GetRightBorder();
-        aPageSize.Height() -= pPage->GetUpperBorder() + pPage->GetLowerBorder();
+        aPageSize.setWidth( aPageSize.Width() - pPage->GetLeftBorder() + pPage->GetRightBorder() );
+        aPageSize.setHeight( aPageSize.Height() - pPage->GetUpperBorder() + pPage->GetLowerBorder() );
 
         // If the image is too large we make it fit into the page
         if ( ( ( aSize.Height() > aPageSize.Height() ) || ( aSize.Width()   > aPageSize.Width() ) ) &&
@@ -112,13 +112,13 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
             // constrain size to page size if necessary
             if ((fGrfWH != 0.F) && (fGrfWH < fWinWH))
             {
-                aSize.Width() = static_cast<long>(aPageSize.Height() * fGrfWH);
-                aSize.Height()= aPageSize.Height();
+                aSize.setWidth( static_cast<long>(aPageSize.Height() * fGrfWH) );
+                aSize.setHeight( aPageSize.Height() );
             }
             else
             {
-                aSize.Width() = aPageSize.Width();
-                aSize.Height()= static_cast<long>(aPageSize.Width() / fGrfWH);
+                aSize.setWidth( aPageSize.Width() );
+                aSize.setHeight( static_cast<long>(aPageSize.Width() / fGrfWH) );
             }
         }
 

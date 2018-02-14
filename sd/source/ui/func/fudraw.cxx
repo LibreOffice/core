@@ -599,10 +599,10 @@ bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
         Point aHitPosT(rPos);
         Point aHitPosB(rPos);
 
-        aHitPosR.X() += n2HitLog;
-        aHitPosL.X() -= n2HitLog;
-        aHitPosT.Y() += n2HitLog;
-        aHitPosB.Y() -= n2HitLog;
+        aHitPosR.setX( aHitPosR.X() + n2HitLog );
+        aHitPosL.setX( aHitPosL.X() - n2HitLog );
+        aHitPosT.setY( aHitPosT.Y() + n2HitLog );
+        aHitPosB.setY( aHitPosB.Y() - n2HitLog );
 
         if ( !pObj->IsClosedObj() ||
             ( SdrObjectPrimitiveHit(*pObj, aHitPosR, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false) &&

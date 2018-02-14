@@ -312,7 +312,7 @@ void TableValueSet::Resize()
         Image aImage = GetItemImage(GetItemId(0));
         Size aItemSize = aImage.GetSizePixel();
 
-        aItemSize.Height() += 10;
+        aItemSize.setHeight( aItemSize.Height() + 10 );
         int nColumnCount = (aValueSetSize.Width() - GetScrollWidth()) / aItemSize.Width();
         if (nColumnCount < 1)
             nColumnCount = 1;
@@ -761,8 +761,8 @@ void TableDesignWidget::FillDesignPreviewControl()
         WinBits nStyle = m_pValueSet->GetStyle() & ~WB_VSCROLL;
         m_pValueSet->SetStyle(nStyle);
         Size aSize(m_pValueSet->GetOptimalSize());
-        aSize.Width() += (10 * nCols);
-        aSize.Height() += (10 * nRows);
+        aSize.setWidth( aSize.Width() + (10 * nCols) );
+        aSize.setHeight( aSize.Height() + (10 * nRows) );
         m_pValueSet->set_width_request(aSize.Width());
         m_pValueSet->set_height_request(aSize.Height());
         m_pValueSet->Resize();

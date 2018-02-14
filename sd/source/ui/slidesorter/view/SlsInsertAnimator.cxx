@@ -338,9 +338,9 @@ void PageObjectRun::UpdateOffsets(
                 ? rInsertPosition.GetLeadingOffset()
                 : rInsertPosition.GetTrailingOffset();
             if (bIsVertical)
-                maEndOffset[nIndex].X() = 0;
+                maEndOffset[nIndex].setX( 0 );
             else
-                maEndOffset[nIndex].Y() = 0;
+                maEndOffset[nIndex].setY( 0 );
         }
         RestartAnimation();
     }

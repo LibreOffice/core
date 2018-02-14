@@ -503,8 +503,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 {
                     ::tools::Rectangle aRect = maMarkRect;
                     aRect.SetPos(aRect.TopLeft() + aPagePos);
-                    aRect.Left()  = rLRSpace.GetLeft();
-                    aRect.Right() = aViewSize.Width() - rLRSpace.GetRight();
+                    aRect.SetLeft( rLRSpace.GetLeft() );
+                    aRect.SetRight( aViewSize.Width() - rLRSpace.GetRight() );
                     aRect.SetPos(aRect.TopLeft() - aPagePos);
                     if ( aRect != maMarkRect)
                     {
@@ -568,8 +568,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 {
                     ::tools::Rectangle aRect = maMarkRect;
                     aRect.SetPos(aRect.TopLeft() + aPagePos);
-                    aRect.Top()  = rULSpace.GetUpper();
-                    aRect.Bottom() = aViewSize.Height() - rULSpace.GetLower();
+                    aRect.SetTop( rULSpace.GetUpper() );
+                    aRect.SetBottom( aViewSize.Height() - rULSpace.GetLower() );
                     aRect.SetPos(aRect.TopLeft() - aPagePos);
 
                     if ( aRect != maMarkRect)
@@ -632,13 +632,13 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 
                 if ( rOI.GetStartX() != rOI.GetEndX() )
                 {
-                    aRect.Left()  = rOI.GetStartX();
-                    aRect.Right() = rOI.GetEndX();
+                    aRect.SetLeft( rOI.GetStartX() );
+                    aRect.SetRight( rOI.GetEndX() );
                 }
                 if ( rOI.GetStartY() != rOI.GetEndY() )
                 {
-                    aRect.Top()    = rOI.GetStartY();
-                    aRect.Bottom() = rOI.GetEndY();
+                    aRect.SetTop( rOI.GetStartY() );
+                    aRect.SetBottom( rOI.GetEndY() );
                 }
                 aRect.SetPos(aRect.TopLeft() - aPagePos);
                 if ( aRect != maMarkRect)
@@ -926,7 +926,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     {
                         const SdrMetricItem& rTLDItem = aEditAttr.Get( SDRATTR_TEXT_LEFTDIST );
                         long nLD = rTLDItem.GetValue();
-                        aPos.X() += nLD;
+                        aPos.setX( aPos.X() + nLD );
                     }
 
                     aPointItem.SetValue( aPos );

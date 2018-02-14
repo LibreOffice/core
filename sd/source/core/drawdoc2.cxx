@@ -1057,7 +1057,7 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject const * pObj,
 
             // Undo mirroring
             if ( pGeoData->bMirrored )
-                aRelPoint.X() = rRect.Right() + rRect.Left() - aRelPoint.X();
+                aRelPoint.setX( rRect.Right() + rRect.Left() - aRelPoint.X() );
 
             // Undo shearing
             if ( rGeo.nShearAngle )

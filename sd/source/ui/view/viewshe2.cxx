@@ -390,8 +390,8 @@ void ViewShell::SetZoomRect(const ::tools::Rectangle& rZoomRect)
     if (mpContentWindow.get() != nullptr)
     {
         Point aNewPos = mpContentWindow->GetWinViewPos();
-        aNewPos.X() = aPos.X();
-        aNewPos.Y() = aPos.Y();
+        aNewPos.setX( aPos.X() );
+        aNewPos.setY( aPos.Y() );
         mpContentWindow->SetZoomIntegral(nZoom);
         mpContentWindow->SetWinViewPos(aNewPos);
         mpContentWindow->UpdateMapOrigin();

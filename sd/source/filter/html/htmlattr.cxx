@@ -46,7 +46,7 @@ void SdHtmlAttrPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools:
     rRenderContext.SetFillColor();
 
     int nHeight = (aTextRect.Bottom() - aTextRect.Top()) >> 2;
-    aTextRect.Bottom() =  nHeight + aTextRect.Top();
+    aTextRect.SetBottom(  nHeight + aTextRect.Top() );
 
     rRenderContext.SetTextColor(m_aTextColor);
     rRenderContext.DrawText(aTextRect, SdResId(STR_HTMLATTR_TEXT), DrawTextFlags::Center | DrawTextFlags::VCenter);

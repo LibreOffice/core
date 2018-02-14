@@ -117,8 +117,8 @@ bool FuZoom::MouseMove(const MouseEvent& rMEvt)
             {
                 Size aWorkSize = mpView->GetWorkArea().GetSize();
                 Size aPageSize = mpView->GetSdrPageView()->GetPage()->GetSize();
-                aScroll.X() /= aWorkSize.Width()  / aPageSize.Width();
-                aScroll.Y() /= aWorkSize.Height() / aPageSize.Height();
+                aScroll.setX( aScroll.X() / aWorkSize.Width()  / aPageSize.Width() );
+                aScroll.setY( aScroll.Y() / aWorkSize.Height() / aPageSize.Height() );
                 mpViewShell->Scroll(aScroll.X(), aScroll.Y());
                 aBeginPosPix = aPosPix;
             }
@@ -163,16 +163,16 @@ bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
             Size aSize = mpWindow->PixelToLogic(mpWindow->GetOutputSizePixel());
             if ( rMEvt.IsMod1() )
             {
-                aSize.Width() *= 2;
-                aSize.Height() *= 2;
+                aSize.setWidth( aSize.Width() * 2 );
+                aSize.setHeight( aSize.Height() * 2 );
             }
             else
             {
-                aSize.Width() /= 2;
-                aSize.Height() /= 2;
+                aSize.setWidth( aSize.Width() / 2 );
+                aSize.setHeight( aSize.Height() / 2 );
             }
-            aPos.X() -= aSize.Width() / 2;
-            aPos.Y() -= aSize.Height() / 2;
+            aPos.setX( aPos.X() - aSize.Width() / 2 );
+            aPos.setY( aPos.Y() - aSize.Height() / 2 );
             aZoomRect.SetPos(aPos);
             aZoomRect.SetSize(aSize);
         }

@@ -210,13 +210,13 @@ bool ButtonSetImpl::getPreview( int nSet, const std::vector< OUString >& rButton
             aGraphics.push_back(aGraphic);
 
             Size aGraphicSize( aGraphic.GetSizePixel( pDev ) );
-            aSize.Width() += aGraphicSize.Width();
+            aSize.setWidth( aSize.Width() + aGraphicSize.Width() );
 
             if( aSize.Height() < aGraphicSize.Height() )
-                aSize.Height() = aGraphicSize.Height();
+                aSize.setHeight( aGraphicSize.Height() );
 
             if( aIter != rButtons.end() )
-                aSize.Width() += 3;
+                aSize.setWidth( aSize.Width() + 3 );
         }
 
         pDev->SetOutputSizePixel( aSize );
@@ -230,7 +230,7 @@ bool ButtonSetImpl::getPreview( int nSet, const std::vector< OUString >& rButton
 
             aGraphic.Draw( pDev, aPos );
 
-            aPos.X() += aGraphic.GetSizePixel().Width() + 3;
+            aPos.setX( aPos.X() + aGraphic.GetSizePixel().Width() + 3 );
         }
 
         rImage = Image( pDev->GetBitmapEx( Point(), aSize ) );

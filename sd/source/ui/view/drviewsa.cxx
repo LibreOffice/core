@@ -574,14 +574,14 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
                 Point aPagePos(0, 0);
                 Size aPageSize = pPageView->GetPage()->GetSize();
 
-                aPagePos.X() += aPageSize.Width()  / 2;
-                aPageSize.Width() = static_cast<long>(aPageSize.Width() * 1.03);
+                aPagePos.setX( aPagePos.X() + aPageSize.Width()  / 2 );
+                aPageSize.setWidth( static_cast<long>(aPageSize.Width() * 1.03) );
 
-                aPagePos.Y() += aPageSize.Height() / 2;
-                aPageSize.Height() = static_cast<long>(aPageSize.Height() * 1.03);
-                aPagePos.Y() -= aPageSize.Height() / 2;
+                aPagePos.setY( aPagePos.Y() + aPageSize.Height() / 2 );
+                aPageSize.setHeight( static_cast<long>(aPageSize.Height() * 1.03) );
+                aPagePos.setY( aPagePos.Y() - aPageSize.Height() / 2 );
 
-                aPagePos.X() -= aPageSize.Width()  / 2;
+                aPagePos.setX( aPagePos.X() - aPageSize.Width()  / 2 );
 
                 ::tools::Rectangle aFullPageZoomRect( aPagePos, aPageSize );
                 aZoomItem.AddSnappingPoint( pActiveWindow->GetZoomForRect( aFullPageZoomRect ) );
@@ -597,8 +597,8 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         Point aPos = GetActiveWindow()->PixelToLogic(maMousePos);
         pPageView->LogicToPagePos(aPos);
         Fraction aUIScale(GetDoc()->GetUIScale());
-        aPos.X() = long(aPos.X() / aUIScale);
-        aPos.Y() = long(aPos.Y() / aUIScale);
+        aPos.setX( long(aPos.X() / aUIScale) );
+        aPos.setY( long(aPos.Y() / aUIScale) );
 
         // position- and size items
         if ( mpDrawView->IsAction() )
@@ -612,12 +612,12 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             {
                 pPageView->LogicToPagePos(aRect);
                 aPos = aRect.TopLeft();
-                aPos.X() = long(aPos.X() / aUIScale);
-                aPos.Y() = long(aPos.Y() / aUIScale);
+                aPos.setX( long(aPos.X() / aUIScale) );
+                aPos.setY( long(aPos.Y() / aUIScale) );
                 rSet.Put( SfxPointItem( SID_ATTR_POSITION, aPos) );
                 Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
-                aSize.Height() = long(aSize.Height() / aUIScale);
-                aSize.Width()  = long(aSize.Width()  / aUIScale);
+                aSize.setHeight( long(aSize.Height() / aUIScale) );
+                aSize.setWidth( long(aSize.Width()  / aUIScale) );
                 rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize) );
             }
         }
@@ -630,13 +630,13 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 
                 // Show the position of the selected shape(s)
                 Point aShapePosition (aRect.TopLeft());
-                aShapePosition.X() = long(aShapePosition.X() / aUIScale);
-                aShapePosition.Y() = long(aShapePosition.Y() / aUIScale);
+                aShapePosition.setX( long(aShapePosition.X() / aUIScale) );
+                aShapePosition.setY( long(aShapePosition.Y() / aUIScale) );
                 rSet.Put (SfxPointItem(SID_ATTR_POSITION, aShapePosition));
 
                 Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
-                aSize.Height() = long(aSize.Height() / aUIScale);
-                aSize.Width()  = long(aSize.Width()  / aUIScale);
+                aSize.setHeight( long(aSize.Height() / aUIScale) );
+                aSize.setWidth( long(aSize.Width()  / aUIScale) );
                 rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize) );
             }
             else
