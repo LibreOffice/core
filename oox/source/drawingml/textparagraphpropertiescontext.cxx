@@ -133,8 +133,8 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
 TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
 {
     PropertyMap& rPropertyMap( mrTextParagraphProperties.getTextParagraphPropertyMap() );
-    if ( maLineSpacing.bHasValue )
-        rPropertyMap.setProperty( PROP_ParaLineSpacing, maLineSpacing.toLineSpacing());
+    if ( mrTextParagraphProperties.getLineSpacing().bHasValue )
+        rPropertyMap.setProperty( PROP_ParaLineSpacing, mrTextParagraphProperties.getLineSpacing().toLineSpacing());
     else
         rPropertyMap.setProperty( PROP_ParaLineSpacing, css::style::LineSpacing( css::style::LineSpacingMode::PROP, 100 ));
 
@@ -166,7 +166,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
     switch( aElementToken )
     {
         case A_TOKEN( lnSpc ):          // CT_TextSpacing
-            return new TextSpacingContext( *this, maLineSpacing );
+            return new TextSpacingContext( *this, mrTextParagraphProperties.getLineSpacing() );
         case A_TOKEN( spcBef ):         // CT_TextSpacing
             return new TextSpacingContext( *this, mrTextParagraphProperties.getParaTopMargin() );
         case A_TOKEN( spcAft ):         // CT_TextSpacing
@@ -315,17 +315,18 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                 OptValue<sal_Int32> oLineSpacing = rAttribs.getInteger(W_TOKEN(line));
                 if (oLineSpacing.has())
                 {
+                    TextSpacing& rLineSpacing = mrTextParagraphProperties.getLineSpacing();
                     if( !oLineRule.has() || oLineRule.get() == "auto" )
                     {
-                        maLineSpacing.nUnit = TextSpacing::Unit::Percent;
-                        maLineSpacing.nValue = oLineSpacing.get() * MAX_PERCENT / 240;
+                        rLineSpacing.nUnit = TextSpacing::Unit::Percent;
+                        rLineSpacing.nValue = oLineSpacing.get() * MAX_PERCENT / 240;
                     }
                     else
                     {
-                        maLineSpacing.nUnit = TextSpacing::Unit::Points;
-                        maLineSpacing.nValue = TWIPS_TO_MM(oLineSpacing.get());
+                        rLineSpacing.nUnit = TextSpacing::Unit::Points;
+                        rLineSpacing.nValue = TWIPS_TO_MM(oLineSpacing.get());
                     }
-                    maLineSpacing.bHasValue = true;
+                    rLineSpacing.bHasValue = true;
                 }
             }
             break;
