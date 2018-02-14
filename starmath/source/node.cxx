@@ -378,6 +378,11 @@ SmStructureNode::~SmStructureNode()
 }
 
 
+void SmStructureNode::ClearSubNodes()
+{
+    maSubNodes.clear();
+}
+
 void SmStructureNode::SetSubNodes(SmNode *pFirst, SmNode *pSecond, SmNode *pThird)
 {
     size_t nSize = pThird ? 3 : (pSecond ? 2 : (pFirst ? 1 : 0));
@@ -392,9 +397,9 @@ void SmStructureNode::SetSubNodes(SmNode *pFirst, SmNode *pSecond, SmNode *pThir
     ClaimPaternity();
 }
 
-void SmStructureNode::SetSubNodes(const SmNodeArray &rNodeArray)
+void SmStructureNode::SetSubNodes(SmNodeArray&& rNodeArray)
 {
-    maSubNodes = rNodeArray;
+    maSubNodes = std::move(rNodeArray);
     ClaimPaternity();
 }
 

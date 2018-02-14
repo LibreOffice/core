@@ -219,7 +219,7 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
             else if(i > nLineOffset)
                 lines[i-1] = pLineParent->GetSubNode(i);
         }
-        pLineParent->SetSubNodes(lines);
+        pLineParent->SetSubNodes(std::move(lines));
         //Rebuild graph
         mpAnchor = nullptr;
         mpPosition = nullptr;
@@ -1147,8 +1147,7 @@ SmNodeList* SmCursor::LineToList(SmStructureNode* pLine, SmNodeList* list){
                 list->push_back(pChild);
         }
     }
-    SmNodeArray emptyArray(0);
-    pLine->SetSubNodes(emptyArray);
+    pLine->ClearSubNodes();
     delete pLine;
     return list;
 }
@@ -1436,7 +1435,7 @@ SmNode* SmNodeListParser::Expression(){
 
     //Create SmExpressionNode, I hope SmToken() will do :)
     SmStructureNode* pExpr = new SmExpressionNode(SmToken());
-    pExpr->SetSubNodes(NodeArray);
+    pExpr->SetSubNodes(std::move(NodeArray));
     return pExpr;
 }
 

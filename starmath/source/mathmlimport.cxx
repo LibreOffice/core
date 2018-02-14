@@ -1168,7 +1168,7 @@ void SmXMLFencedContext_Impl::EndElement()
 
     SmToken aDummy;
     SmStructureNode *pBody = new SmExpressionNode(aDummy);
-    pBody->SetSubNodes(aRelationArray);
+    pBody->SetSubNodes(std::move(aRelationArray));
 
 
     pSNode->SetSubNodes(pLeft,pBody,pRight);
@@ -1613,7 +1613,7 @@ void SmXMLSubContext_Impl::GenericEndElement(SmTokenType eType, SmSubSup eSubSup
 
     aSubNodes[eSubSup+1] = popOrZero(rNodeStack);
     aSubNodes[0] = popOrZero(rNodeStack);
-    pNode->SetSubNodes(aSubNodes);
+    pNode->SetSubNodes(std::move(aSubNodes));
     rNodeStack.push_front(std::move(pNode));
 }
 
@@ -1672,7 +1672,7 @@ void SmXMLSubSupContext_Impl::GenericEndElement(SmTokenType eType,
     aSubNodes[aSup+1] = popOrZero(rNodeStack);
     aSubNodes[aSub+1] = popOrZero(rNodeStack);
     aSubNodes[0] =  popOrZero(rNodeStack);
-    pNode->SetSubNodes(aSubNodes);
+    pNode->SetSubNodes(std::move(aSubNodes));
     rNodeStack.push_front(std::move(pNode));
 }
 
@@ -2318,7 +2318,7 @@ void SmXMLDocContext_Impl::EndElement()
         LineArray[n - (j + 1)] = pNode.release();
     }
     std::unique_ptr<SmStructureNode> pSNode2(new SmTableNode(aDummy));
-    pSNode2->SetSubNodes(LineArray);
+    pSNode2->SetSubNodes(std::move(LineArray));
     rNodeStack.push_front(std::move(pSNode2));
 }
 
@@ -2454,7 +2454,7 @@ void SmXMLRowContext_Impl::EndElement()
             SmToken aDummy;
             std::unique_ptr<SmStructureNode> pSNode(new SmBraceNode(aToken));
             SmStructureNode *pBody = new SmExpressionNode(aDummy);
-            pBody->SetSubNodes(aRelationArray2);
+            pBody->SetSubNodes(std::move(aRelationArray2));
 
             pSNode->SetSubNodes(pLeft,pBody,pRight);
             pSNode->SetScaleMode(SmScaleMode::Height);
@@ -2489,7 +2489,7 @@ void SmXMLRowContext_Impl::EndElement()
 
     SmToken aDummy;
     std::unique_ptr<SmStructureNode> pSNode(new SmExpressionNode(aDummy));
-    pSNode->SetSubNodes(aRelationArray);
+    pSNode->SetSubNodes(std::move(aRelationArray));
     rNodeStack.push_front(std::move(pSNode));
 }
 
@@ -2635,7 +2635,7 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
                 (!pScriptNode->GetToken().aText.isEmpty())))
                 aSubNodes[eSup+1] = pScriptNode;
 
-            pNode->SetSubNodes(aSubNodes);
+            pNode->SetSubNodes(std::move(aSubNodes));
             aReverseStack.push_front(std::move(pNode));
         }
         assert(!aReverseStack.empty());
@@ -2683,7 +2683,7 @@ void SmXMLTableContext_Impl::EndElement()
             aRelationArray[0] = pArray;
             SmToken aDummy;
             SmExpressionNode* pExprNode = new SmExpressionNode(aDummy);
-            pExprNode->SetSubNodes(aRelationArray);
+            pExprNode->SetSubNodes(std::move(aRelationArray));
             pArray = pExprNode;
         }
 
@@ -2701,7 +2701,7 @@ void SmXMLTableContext_Impl::EndElement()
         std::unique_ptr<SmStructureNode> xArray(static_cast<SmStructureNode*>(elem.release()));
         for (size_t i = 0; i < xArray->GetNumSubNodes(); ++i)
             aExpressionArray[j++] = xArray->GetSubNode(i);
-        xArray->SetSubNodes(SmNodeArray());
+        xArray->ClearSubNodes();
     }
     aReverseStack.clear();
 
@@ -2709,7 +2709,7 @@ void SmXMLTableContext_Impl::EndElement()
     aToken.cMathChar = '\0';
     aToken.eType = TMATRIX;
     std::unique_ptr<SmMatrixNode> pSNode(new SmMatrixNode(aToken));
-    pSNode->SetSubNodes(aExpressionArray);
+    pSNode->SetSubNodes(std::move(aExpressionArray));
     pSNode->SetRowCol(nRows, nCols);
     rNodeStack.push_front(std::move(pSNode));
 }
