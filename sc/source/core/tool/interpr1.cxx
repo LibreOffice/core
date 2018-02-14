@@ -542,7 +542,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
             aCode.Pop();    // pop what Jump() pushed
         else
         {
-            OSL_FAIL( "ScInterpreter::JumpMatrix: pop goes the weasel" );
+            assert(!"pop goes the weasel");
         }
 
         if ( !bHasResMat )
