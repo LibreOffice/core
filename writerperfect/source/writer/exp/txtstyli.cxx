@@ -102,6 +102,38 @@ void XMLGraphicPropertiesContext::startElement(const OUString &/*rName*/, const 
     }
 }
 
+/// Handler for <style:page-layout-properties>.
+class XMLPageLayoutPropertiesContext : public XMLImportContext
+{
+public:
+    XMLPageLayoutPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle);
+
+    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+
+private:
+    XMLStyleContext &mrStyle;
+};
+
+XMLPageLayoutPropertiesContext::XMLPageLayoutPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle)
+    : XMLImportContext(rImport)
+    , mrStyle(rStyle)
+{
+}
+
+void XMLPageLayoutPropertiesContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+{
+    for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
+    {
+        OString sName = OUStringToOString(xAttribs->getNameByIndex(i), RTL_TEXTENCODING_UTF8);
+        OString sValue = OUStringToOString(xAttribs->getValueByIndex(i), RTL_TEXTENCODING_UTF8);
+        // We only care about writing-mode for now.
+        if (sName != "style:writing-mode")
+            continue;
+
+        mrStyle.GetPageLayoutPropertyList().insert(sName.getStr(), sValue.getStr());
+    }
+}
+
 /// Handler for <style:table-properties>.
 class XMLTablePropertiesContext : public XMLImportContext
 {
@@ -240,6 +272,8 @@ rtl::Reference<XMLImportContext> XMLStyleContext::CreateChildContext(const OUStr
         return new XMLTablePropertiesContext(mrImport, *this);
     if (rName == "style:graphic-properties")
         return new XMLGraphicPropertiesContext(mrImport, *this);
+    if (rName == "style:page-layout-properties")
+        return new XMLPageLayoutPropertiesContext(mrImport, *this);
     return nullptr;
 }
 
@@ -260,10 +294,11 @@ void XMLStyleContext::startElement(const OUString &/*rName*/, const css::uno::Re
         m_aTextPropertyList.insert(sName.getStr(), sValue.getStr());
         m_aParagraphPropertyList.insert(sName.getStr(), sValue.getStr());
         m_aGraphicPropertyList.insert(sName.getStr(), sValue.getStr());
+        m_aPageLayoutPropertyList.insert(sName.getStr(), sValue.getStr());
     }
 }
 
-void XMLStyleContext::endElement(const OUString &/*rName*/)
+void XMLStyleContext::endElement(const OUString &rName)
 {
     if (m_aName.isEmpty())
         return;
@@ -282,6 +317,8 @@ void XMLStyleContext::endElement(const OUString &/*rName*/)
         m_rStyles.GetCurrentTableStyles()[m_aName] = m_aTablePropertyList;
     else if (m_aFamily == "graphic")
         m_rStyles.GetCurrentGraphicStyles()[m_aName] = m_aGraphicPropertyList;
+    else if (rName == "style:page-layout")
+        m_rStyles.GetCurrentPageLayouts()[m_aName] = m_aPageLayoutPropertyList;
 }
 
 librevenge::RVNGPropertyList &XMLStyleContext::GetTextPropertyList()
@@ -317,6 +354,11 @@ librevenge::RVNGPropertyList &XMLStyleContext::GetTablePropertyList()
 librevenge::RVNGPropertyList &XMLStyleContext::GetGraphicPropertyList()
 {
     return m_aGraphicPropertyList;
+}
+
+librevenge::RVNGPropertyList &XMLStyleContext::GetPageLayoutPropertyList()
+{
+    return m_aPageLayoutPropertyList;
 }
 
 } // namespace exp
