@@ -45,6 +45,7 @@ public:
     std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentTableStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentGraphicStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentPageLayouts();
+    std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentMasterStyles();
 private:
     std::map<OUString, librevenge::RVNGPropertyList> &m_rParagraphStyles;
     std::map<OUString, librevenge::RVNGPropertyList> &m_rTextStyles;
@@ -54,6 +55,7 @@ private:
     std::map<OUString, librevenge::RVNGPropertyList> &m_rTableStyles;
     std::map<OUString, librevenge::RVNGPropertyList> &m_rGraphicStyles;
     std::map<OUString, librevenge::RVNGPropertyList> &m_rPageLayouts;
+    std::map<OUString, librevenge::RVNGPropertyList> &m_rMasterStyles;
 };
 
 /// Handler for <office:font-face-decls>.

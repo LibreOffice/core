@@ -295,6 +295,7 @@ void XMLStyleContext::startElement(const OUString &/*rName*/, const css::uno::Re
         m_aParagraphPropertyList.insert(sName.getStr(), sValue.getStr());
         m_aGraphicPropertyList.insert(sName.getStr(), sValue.getStr());
         m_aPageLayoutPropertyList.insert(sName.getStr(), sValue.getStr());
+        m_aMasterPagePropertyList.insert(sName.getStr(), sValue.getStr());
     }
 }
 
@@ -319,6 +320,8 @@ void XMLStyleContext::endElement(const OUString &rName)
         m_rStyles.GetCurrentGraphicStyles()[m_aName] = m_aGraphicPropertyList;
     else if (rName == "style:page-layout")
         m_rStyles.GetCurrentPageLayouts()[m_aName] = m_aPageLayoutPropertyList;
+    else if (rName == "style:master-page")
+        m_rStyles.GetCurrentMasterStyles()[m_aName] = m_aMasterPagePropertyList;
 }
 
 librevenge::RVNGPropertyList &XMLStyleContext::GetTextPropertyList()
@@ -359,6 +362,11 @@ librevenge::RVNGPropertyList &XMLStyleContext::GetGraphicPropertyList()
 librevenge::RVNGPropertyList &XMLStyleContext::GetPageLayoutPropertyList()
 {
     return m_aPageLayoutPropertyList;
+}
+
+librevenge::RVNGPropertyList &XMLStyleContext::GetMasterPagePropertyList()
+{
+    return m_aMasterPagePropertyList;
 }
 
 } // namespace exp

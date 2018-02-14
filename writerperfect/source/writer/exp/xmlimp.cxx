@@ -253,6 +253,8 @@ rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const O
         return new XMLStylesContext(mrImport, XMLStylesContext::StyleType_AUTOMATIC);
     if (rName == "office:styles")
         return new XMLStylesContext(mrImport, XMLStylesContext::StyleType_NONE);
+    if (rName == "office:master-styles")
+        return new XMLStylesContext(mrImport, XMLStylesContext::StyleType_NONE);
     if (rName == "office:font-face-decls")
         return new XMLFontFaceDeclsContext(mrImport);
     if (rName == "office:body")
@@ -529,6 +531,11 @@ std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetGraphicStyles()
 std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetPageLayouts()
 {
     return maPageLayouts;
+}
+
+std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetMasterStyles()
+{
+    return maMasterStyles;
 }
 
 void XMLImport::startDocument()
