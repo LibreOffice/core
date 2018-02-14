@@ -11,7 +11,7 @@ Option Explicit
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Sub DebugPrint(ParamArray pvArgs() As Variant)
 
-&apos;Print arguments unconditionnally in console
+&apos;Print arguments unconditionally in console
 &apos;Arguments are separated by a TAB (simulated by spaces)
 &apos;Some pvArgs might be missing: a TAB is still generated
 
