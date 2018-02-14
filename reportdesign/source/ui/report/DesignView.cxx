@@ -237,11 +237,11 @@ void ODesignView::resizeDocumentView(tools::Rectangle& _rPlayground)
             Point aTaskPanePos(nSplitPos + nSplitterWidth, _rPlayground.Top());
             if (m_pTaskPane && m_pTaskPane->IsVisible() && m_pPropWin)
             {
-                aTaskPanePos.X() = aPlaygroundSize.Width() - m_pTaskPane->GetSizePixel().Width();
+                aTaskPanePos.setX( aPlaygroundSize.Width() - m_pTaskPane->GetSizePixel().Width() );
                 sal_Int32 nMinWidth = m_pPropWin->getMinimumSize().Width();
                 if ( nMinWidth > (aPlaygroundSize.Width() - aTaskPanePos.X()) )
                 {
-                    aTaskPanePos.X() = aPlaygroundSize.Width() - nMinWidth;
+                    aTaskPanePos.setX( aPlaygroundSize.Width() - nMinWidth );
                 }
                 nSplitPos = aTaskPanePos.X() - nSplitterWidth;
                 getController().setSplitPos(nSplitPos);

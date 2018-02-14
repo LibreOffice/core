@@ -77,16 +77,16 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
     aStartWidth *= m_pParent->GetMapMode().GetScaleX();
 
-    aOut.Width() -= static_cast<long>(aStartWidth);
+    aOut.setWidth( aOut.Width() - static_cast<long>(aStartWidth) );
     aOut.Height() = m_pParent->GetOutputSizePixel().Height();
 
     Point aPos = pScrollWindow->getThumbPos();
-    aPos.X() *= 0.5;
+    aPos.setX( aPos.X() * 0.5 );
     aPos.Y() *= 0.5;
     tools::Rectangle aOutRect( aPos, aOut );
     aOutRect = m_pParent->PixelToLogic( aOutRect );
     tools::Rectangle aWorkArea(Point(), pScrollWindow->getTotalSize());
-    aWorkArea.Right() -= static_cast<long>(aStartWidth);
+    aWorkArea.SetRight( aWorkArea.Right() - static_cast<long>(aStartWidth) );
     aWorkArea = pScrollWindow->PixelToLogic( aWorkArea );
     if( !aOutRect.IsInside( rPos ) && aWorkArea.IsInside( rPos ) )
     {
@@ -520,14 +520,14 @@ void DlgEdFunc::checkMovementAllowed(const MouseEvent& rMEvt)
             // Don't allow points smaller 0
             if (bControlKeyPressed && (aPnt.Y() < 0))
             {
-                aPnt.Y() = 0;
+                aPnt.setY( 0 );
             }
             if (m_rView.IsDragResize())
             {
                 // we resize the object don't resize to above sections
                 if ( aPnt.Y() < 0 )
                 {
-                    aPnt.Y() = 0;
+                    aPnt.setY( 0 );
                 }
             }
             m_pParent->getSectionWindow()->getViewsWindow()->EndDragObj( bControlKeyPressed, &m_rView, aPnt );
@@ -758,7 +758,7 @@ bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
             // we resize the object don't resize to above sections
             if ( aPos.Y() < 0 )
             {
-                aPos.Y() = 0;
+                aPos.setY( 0 );
             }
         }
         bIsSetPoint = setMovementPointer(rMEvt);
@@ -876,7 +876,7 @@ bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
                 // we resize the object don't resize to above sections
                 if ( aPnt.Y() < 0 )
                 {
-                    aPnt.Y() = 0;
+                    aPnt.setY( 0 );
                 }
             }
             // drag or resize an object

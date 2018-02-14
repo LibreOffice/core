@@ -681,7 +681,7 @@ void OUnoObject::NbcMove( const Size& rSize )
             int nNewY = m_xReportComponent->getPositionY() + rSize.Height();
             if (nNewY < 0 && !bUndoMode)
             {
-                aUndoSize.Height() = abs(nNewY);
+                aUndoSize.setHeight( abs(nNewY) );
                 bPositionFixed = true;
                 nNewY = 0;
             }
@@ -961,7 +961,7 @@ void OOle2Obj::NbcMove( const Size& rSize )
             int nNewY = m_xReportComponent->getPositionY() + rSize.Height();
             if (nNewY < 0 && !bUndoMode)
             {
-                aUndoSize.Height() = abs(nNewY);
+                aUndoSize.setHeight( abs(nNewY) );
                 bPositionFixed = true;
                 nNewY = 0;
             }
