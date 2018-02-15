@@ -262,7 +262,7 @@ void SwSrcView::Init()
     }
 
     SetNewWindowAllowed( false );
-    StartListening(*pDocShell,true);
+    StartListening(*pDocShell, DuplicateHandling::Prevent);
 }
 
 SwDocShell*     SwSrcView::GetDocShell()

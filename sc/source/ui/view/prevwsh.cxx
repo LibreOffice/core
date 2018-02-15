@@ -134,8 +134,8 @@ void ScPreviewShell::Construct( vcl::Window* pParent )
 
     SetPool( &SC_MOD()->GetPool() );
     SetWindow( pPreview );
-    StartListening(*pDocShell,true);
-    StartListening(*SfxGetpApp(),true);        // #i62045# #i62046# application is needed for Calc's own hints
+    StartListening(*pDocShell, DuplicateHandling::Prevent);
+    StartListening(*SfxGetpApp(), DuplicateHandling::Prevent); // #i62045# #i62046# application is needed for Calc's own hints
     SfxBroadcaster* pDrawBC = pDocShell->GetDocument().GetDrawBroadcaster();
     if (pDrawBC)
         StartListening(*pDrawBC);

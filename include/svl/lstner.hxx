@@ -25,6 +25,16 @@
 class SfxBroadcaster;
 class SfxHint;
 
+//StartListening duplicate handling options
+//Prevent only adds the listener if its not already added
+//Allow allows duplicate listeners
+//Unexpected, the default, is for the usual case where the
+//listener should only be added once and duplicates are
+//unexpected. In dbgutil mode this tracks where the original
+//listener was added from and reports the duplicate addition
+//as an error
+enum class DuplicateHandling { Unexpected, Prevent, Allow };
+
 class SVL_DLLPUBLIC SfxListener
 {
     struct Impl;
@@ -39,7 +49,7 @@ public:
                         SfxListener( const SfxListener &rCopy );
     virtual             ~SfxListener() COVERITY_NOEXCEPT_FALSE;
 
-    void                StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDuplicates = false );
+    void                StartListening(SfxBroadcaster& rBroadcaster, DuplicateHandling eDuplicateHanding = DuplicateHandling::Unexpected);
     void                EndListening( SfxBroadcaster& rBroadcaster, bool bRemoveAllDuplicates = false );
     void                EndListeningAll();
     bool                IsListening( SfxBroadcaster& rBroadcaster ) const;

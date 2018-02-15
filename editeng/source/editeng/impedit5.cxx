@@ -92,7 +92,7 @@ void ImpEditEngine::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
             EndListening( *pCurStyle );
         pNode->SetStyleSheet( pStyle, aStatus.UseCharAttribs() );
         if ( pStyle )
-            StartListening( *pStyle, true );
+            StartListening(*pStyle, DuplicateHandling::Prevent);
         ParaAttribsChanged( pNode );
     }
     FormatAndUpdate();

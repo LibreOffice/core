@@ -38,7 +38,7 @@ void SfxListenerGuard::startListening(::SfxBroadcaster & rNotifier)
 {
     assert(m_pNotifier == nullptr && "called more than once");
     m_pNotifier = &rNotifier;
-    m_rListener.StartListening(*m_pNotifier, true);
+    m_rListener.StartListening(*m_pNotifier, DuplicateHandling::Prevent);
 }
 
 void SfxListenerGuard::endListening()

@@ -62,7 +62,7 @@ SfxBroadcasterTest::AddingListenersIncreasesCount()
 
     CPPUNIT_ASSERT_EQUAL(size_t(0), sb.GetListenerCount());
 
-    sl.StartListening(sb, true);
+    sl.StartListening(sb, DuplicateHandling::Prevent);
     CPPUNIT_ASSERT_EQUAL(size_t(1), sb.GetListenerCount());
 }
 
@@ -73,7 +73,7 @@ SfxBroadcasterTest::RemovingListenersDecreasesCount()
     MockedSfxListener sl;
 
     CPPUNIT_ASSERT_EQUAL(size_t(0), sb.GetListenerCount());
-    sl.StartListening(sb, true);
+    sl.StartListening(sb, DuplicateHandling::Prevent);
     CPPUNIT_ASSERT_EQUAL(size_t(1), sb.GetListenerCount());
     sl.EndListening(sb, true);
     CPPUNIT_ASSERT_EQUAL(size_t(0), sb.GetListenerCount());
@@ -87,8 +87,8 @@ SfxBroadcasterTest::HintsAreNotForwardedToRemovedListeners()
     MockedSfxListener sl2;
     SfxHint hint;
 
-    sl1.StartListening(sb, true);
-    sl2.StartListening(sb, true);
+    sl1.StartListening(sb, DuplicateHandling::Prevent);
+    sl2.StartListening(sb, DuplicateHandling::Prevent);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("All listeners were added.", size_t(2), sb.GetListenerCount());
     sl1.EndListening(sb, true);
     sb.Forward(sb, hint);
