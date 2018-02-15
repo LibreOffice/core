@@ -21,10 +21,9 @@
 #include <pdfparse.hxx>
 
 // boost using obsolete stuff
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && _MSC_VER >= 1900
 #pragma warning(push)
 #pragma warning(disable:4996)
-#pragma warning(disable:4503)
 #endif
 
 // workaround windows compiler: do not include multi_pass.hpp
@@ -678,9 +677,8 @@ PDFEntry* PDFReader::read( const char* pFileName )
 #endif // WIN32
 }
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && _MSC_VER >= 1900
 #pragma warning(pop)
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
