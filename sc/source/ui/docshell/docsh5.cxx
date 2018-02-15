@@ -222,8 +222,10 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
             // other ranges, use the document global temporary anonymous range
             // instead. But, if AutoFilter is to be toggled then do use the
             // sheet-local DB range.
+            bool bSheetLocal = true;
             if (eMode != SC_DB_AUTOFILTER && pNoNameData->HasAutoFilter())
             {
+                bSheetLocal = false;
                 pNoNameData = aDocument.GetAnonymousDBData();
                 if (!pNoNameData)
                 {
@@ -231,13 +233,23 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                             nTab, nStartCol, nStartRow, nEndCol, nEndRow, true, bHasHeader);
                     aDocument.SetAnonymousDBData( pNoNameData);
                 }
+                // ScDocShell::CancelAutoDBRange() would restore the
+                // sheet-local anonymous DBData from pOldAutoDBRange, unset so
+                // that won't happen with data of a previous sheet-local
+                // DBData.
+                delete pOldAutoDBRange;
+                pOldAutoDBRange = nullptr;
             }
-
-            if ( !pOldAutoDBRange )
+            else if (!pOldAutoDBRange)
             {
                 // store the old unnamed database range with its settings for undo
                 // (store at the first change, get the state before all changes)
                 pOldAutoDBRange = new ScDBData( *pNoNameData );
+            }
+            else if (pOldAutoDBRange->GetTab() != pNoNameData->GetTab())
+            {
+                // Different sheet-local unnamed DB range than the previous one.
+                *pOldAutoDBRange = *pNoNameData;
             }
 
             SCCOL nOldX1;                                   // take old range away cleanly
@@ -255,7 +267,10 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                     nStartCol <= nOldY2 && nOldY1 <= nEndCol)
                 bHasHeader = true;
 
-            DBAreaDeleted( nOldTab, nOldX1, nOldY1, nOldX2 );
+            // Remove AutoFilter button flags only for sheet-local DB range,
+            // not if a temporary is used.
+            if (bSheetLocal)
+                DBAreaDeleted( nOldTab, nOldX1, nOldY1, nOldX2 );
 
             pNoNameData->SetSortParam( ScSortParam() );             // reset parameter
             pNoNameData->SetQueryParam( ScQueryParam() );
