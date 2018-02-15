@@ -3899,7 +3899,12 @@ void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
         return;
     }
 
-    p->nEndPos = p->nStartPos + 1;
+    if (o3tl::checked_add<WW8_CP>(p->nStartPos, 1, p->nEndPos))
+    {
+        SAL_WARN("sw.ww8", "broken offset, ignoring");
+        p->nEndPos = p->nStartPos = WW8_CP_MAX;
+        return;
+    }
 
     if (!pText)
         return;
