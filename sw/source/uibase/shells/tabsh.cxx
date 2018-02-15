@@ -605,6 +605,10 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 pDlg->StartExecuteAsync([pDlg, pRequest, pTableRep, &rBindings, &rSh](sal_Int32 nResult){
                     if (RET_OK == nResult)
                     {
+                        SwTableNode *pTableNode = const_cast<SwTableNode*>(rSh.IsCursorInTable());
+                        if (pTableNode)
+                            pTableNode->GetTable().SetTableStyleName(OUString());
+
                         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
 
                         //to record FN_INSERT_TABLE correctly
