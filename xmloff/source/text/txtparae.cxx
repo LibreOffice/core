@@ -3078,13 +3078,14 @@ void XMLTextParagraphExport::_exportTextGraphic(
         // we have a right-handed coordinate system, so need to correct this by mirroring
         // the rotation to get the correct transformation. See also case XML_TOK_TEXT_FRAME_TRANSFORM
         // in XMLTextFrameContext_Impl::XMLTextFrameContext_Impl and #i78696#
-        const double fRotate(static_cast< double >(-nRotation) * (M_PI/1800.0));
+        const double fRotate(static_cast< double >(-nRotation) * (F_PI/1800.0));
 
         // transform to rotation center which is the object's center
         aSdXMLImExTransform2D.AddTranslate(-aCenter);
 
         // add rotation itself
-        aSdXMLImExTransform2D.AddRotate(fRotate);
+        // tdf#115529 but correct value modulo 2PI to have it positive and in the range of [0.0 .. 2PI[
+        aSdXMLImExTransform2D.AddRotate(basegfx::normalizeToRange(fRotate, F_2PI));
 
         // back-transform after rotation
         aSdXMLImExTransform2D.AddTranslate(aCenter);

@@ -87,14 +87,18 @@ public:
 
 class SwRotationGrf : public SfxUInt16Item
 {
+private:
     Size aUnrotatedSize;
+
+    // tdf#15529 check and evtl. correct value, it is in 10th
+    // degrees and *has* to be in the range [0 .. 3600[
+    sal_Int16 checkAndCorrectValue(sal_Int16 nValue);
+
 public:
     SwRotationGrf()
         : SfxUInt16Item( RES_GRFATR_ROTATION, 0 )
     {}
-    SwRotationGrf( sal_Int16 nVal, const Size& rSz )
-        : SfxUInt16Item( RES_GRFATR_ROTATION, nVal ), aUnrotatedSize( rSz )
-    {}
+    SwRotationGrf( sal_Int16 nVal, const Size& rSz );
 
     // pure virtual methods from SfxInt16Item
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
