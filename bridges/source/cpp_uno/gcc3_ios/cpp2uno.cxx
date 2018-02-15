@@ -17,6 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifdef __arm64
+
+// For iOS devices (64-bit ARM). Originally a copy of
+// ../gcc3_linux_arm/cpp2uno.cxx.
+
+// No attempts at factoring out the large amounts of more or less
+// common code in this, cpp2uno-arm.cxx and cpp2uno-i386.cxx have been
+// done. Which is sad. But then the whole bridges/source/cpp_uno is
+// full of copy/paste. So I continue in that tradition...
+
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <sal/log.hxx>
 #include <uno/data.h>
@@ -29,7 +39,6 @@
 
 #include "share.hxx"
 
-#ifdef __arm64
 extern "C" {
     extern int nFunIndexes, nVtableOffsets;
     extern int codeSnippets[];
@@ -290,6 +299,7 @@ namespace
         }
     }
 
+
     static typelib_TypeClass cpp_mediate( sal_Int32 nFunctionIndex,
                                           sal_Int32 nVtableOffset,
                                           void ** pCallStack,
@@ -544,6 +554,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     }
     return code;
 }
+
 #endif
 
 
@@ -552,5 +563,6 @@ void bridges::cpp_uno::shared::VtableFactory::flushCode(
 {
     // No dynamic code generation so nothing to flush
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

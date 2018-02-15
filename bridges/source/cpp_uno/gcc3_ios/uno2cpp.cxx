@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifdef __arm64
+
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include "bridge.hxx"
@@ -28,7 +30,6 @@
 
 using namespace ::com::sun::star::uno;
 
-#ifdef __arm64
 namespace arm
 {
     bool is_hfa_struct(const typelib_TypeDescription * type)
