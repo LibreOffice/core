@@ -3092,6 +3092,17 @@ void XMLTextParagraphExport::_exportTextGraphic(
     rPropSet->getPropertyValue( sGraphicRotation ) >>= nVal;
     if( nVal != 0 )
     {
+        // tdf#115519 may be bigger 3600 or negative,
+        // correct to range [0 .. 3600[
+        if(nVal > 0)
+        {
+            nVal %= 3600;
+        }
+        else if(nVal < 0)
+        {
+            nVal = (nVal % 3600) + 3600;
+        }
+
         OUStringBuffer sRet( GetXMLToken(XML_ROTATE).getLength()+4 );
         sRet.append( GetXMLToken(XML_ROTATE));
         sRet.append( '(' );
