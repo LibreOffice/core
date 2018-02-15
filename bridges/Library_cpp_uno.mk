@@ -24,7 +24,7 @@ endif
 else ifeq ($(CPUNAME),ARM64)
 
 bridges_SELECTED_BRIDGE := gcc3_ios
-bridge_noopt_objects := abi call callvirtualmethod cpp2uno except uno2cpp
+bridge_noopt_objects := cpp2uno except uno2cpp
 bridge_asm_objects := ios64_helper
 
 else ifeq ($(CPUNAME),AARCH64)
