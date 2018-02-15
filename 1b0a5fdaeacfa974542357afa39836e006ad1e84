@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_52b441d0",
+        "filename": "vcl/source/bitmap/BitmapTools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-02-15T11:31:16Z",
+      "side": 1,
+      "message": "presumably this line is dead code now",
+      "revId": "1b0a5fdaeacfa974542357afa39836e006ad1e84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
