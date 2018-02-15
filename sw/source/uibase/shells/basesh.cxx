@@ -2710,7 +2710,12 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                     rSh.GetTableFormat()->SetName( aTableName );
 
                 if( pTAFormat == nullptr )
+                {
                     rSh.SetTableStyle( SwStyleNameMapper::GetUIName( RES_POOLTABSTYLE_DEFAULT, OUString() ) );
+                    SwTableNode *pTableNode = const_cast<SwTableNode*>(rSh.IsCursorInTable());
+                    if (pTableNode)
+                        pTableNode->GetTable().SetTableStyleName(OUString());
+                }
                 else
                     rSh.SetTableStyle( aAutoName );
 
