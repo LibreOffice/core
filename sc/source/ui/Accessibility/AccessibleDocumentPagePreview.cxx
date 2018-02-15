@@ -681,7 +681,7 @@ void ScShapeChildren::SetDrawBroadcaster()
     {
         SfxBroadcaster* pDrawBC = mpViewShell->GetDocument().GetDrawBroadcaster();
         if (pDrawBC)
-            StartListening(*pDrawBC, true);
+            StartListening(*pDrawBC, DuplicateHandling::Prevent);
     }
 }
 
