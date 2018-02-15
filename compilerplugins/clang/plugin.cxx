@@ -543,7 +543,7 @@ bool RewritePlugin::replaceText( SourceLocation Start, unsigned OrigLength, Stri
     SourceRange Range(Start, Start.getLocWithOffset(std::max<size_t>(OrigLength, NewStr.size())));
     if( OrigLength != 0 && !handler.checkOverlap( Range ) )
     {
-        report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", Start );
+        report( DiagnosticsEngine::Warning, "overlapping code replacement, possible plugin error", Start );
         return false;
     }
     if( rewriter->ReplaceText( Start, OrigLength, NewStr ))
@@ -561,7 +561,7 @@ bool RewritePlugin::replaceText( SourceRange range, StringRef NewStr )
         return reportEditFailure( range.getBegin());
     if( !handler.checkOverlap( range ) )
     {
-        report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", range.getBegin());
+        report( DiagnosticsEngine::Warning, "overlapping code replacement, possible plugin error", range.getBegin());
         return false;
     }
     if( rewriter->ReplaceText( range, NewStr ))
@@ -579,7 +579,7 @@ bool RewritePlugin::replaceText( SourceRange range, SourceRange replacementRange
         return reportEditFailure( range.getBegin());
     if( !handler.checkOverlap( range ) )
     {
-        report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", range.getBegin());
+        report( DiagnosticsEngine::Warning, "overlapping code replacement, possible plugin error", range.getBegin());
         return false;
     }
     if( rewriter->ReplaceText( range, replacementRange ))
