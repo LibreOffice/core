@@ -2822,7 +2822,7 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
         nChgColors ^= 1;
     else if ( nFocus < 0 )//If it is a negative focus, the color will be swapped
     {
-        nFocus = -nFocus;
+        nFocus = o3tl::saturating_toggle_sign(nFocus);
         nChgColors ^= 1;
     }
 
