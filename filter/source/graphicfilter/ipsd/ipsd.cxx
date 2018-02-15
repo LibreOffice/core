@@ -125,7 +125,7 @@ bool PSDReader::ReadPSD(Graphic & rGraphic )
         }
     }
 
-    if ((mnDestBitDepth == 1 || mnDestBitDepth == 8) && mvPalette.empty())
+    if ((mnDestBitDepth == 1 || mnDestBitDepth == 8 || mbTransparent) && mvPalette.empty())
     {
         mbStatus = false;
         return mbStatus;
