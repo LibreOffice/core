@@ -37,10 +37,12 @@ public:
 private:
     bool ChangeAssignment(Stmt const* parent, std::string const& methodName,
                           std::string const& setPrefix);
-    bool ChangeBinaryOperator(BinaryOperator const* parent, CXXMemberCallExpr const* call,
-                              std::string const& methodName, std::string const& setPrefix);
+    bool ChangeBinaryOperatorPlusMinus(BinaryOperator const* parent, CXXMemberCallExpr const* call,
+                                       std::string const& methodName);
+    bool ChangeBinaryOperatorOther(BinaryOperator const* parent, CXXMemberCallExpr const* call,
+                                   std::string const& methodName, std::string const& setPrefix);
     bool ChangeUnaryOperator(UnaryOperator const* parent, CXXMemberCallExpr const* call,
-                             std::string const& methodName, std::string const& setPrefix);
+                             std::string const& methodName);
     std::string extractCode(SourceLocation startLoc, SourceLocation endLoc);
 };
 
@@ -108,31 +110,58 @@ bool ChangeToolsGen::VisitCXXMemberCallExpr(CXXMemberCallExpr const* call)
         return true;
     if (auto unaryOp = dyn_cast<UnaryOperator>(parent))
     {
-        if (!ChangeUnaryOperator(unaryOp, call, methodName, setPrefix))
-            report(DiagnosticsEngine::Warning, "Could not fix this one1", call->getLocStart());
+        if (!ChangeUnaryOperator(unaryOp, call, methodName))
+            report(DiagnosticsEngine::Warning, "Could not fix, unary", call->getLocStart());
         return true;
     }
     auto binaryOp = dyn_cast<BinaryOperator>(parent);
     if (!binaryOp)
     {
-        //        parent->dump();
-        //        report(DiagnosticsEngine::Warning, "Could not fix this one3", call->getLocStart());
+        // normal getter
         return true;
     }
     auto opcode = binaryOp->getOpcode();
     if (opcode == BO_Assign)
     {
+        // Check for assignments embedded inside other expressions
+        auto parent2 = getParentStmt(parent);
+        if (dyn_cast_or_null<ExprWithCleanups>(parent2))
+            parent2 = getParentStmt(parent2);
+        if (parent2 && isa<Expr>(parent2))
+        {
+            report(DiagnosticsEngine::Warning, "Could not fix, embedded assign",
+                   call->getLocStart());
+            return true;
+        }
+        // Check for
+        //   X.Width() = X.Height() = 1;
+        if (auto rhs = dyn_cast<BinaryOperator>(binaryOp->getRHS()->IgnoreParenImpCasts()))
+            if (rhs->getOpcode() == BO_Assign)
+            {
+                report(DiagnosticsEngine::Warning, "Could not fix, double assign",
+                       call->getLocStart());
+                return true;
+            }
         if (!ChangeAssignment(parent, methodName, setPrefix))
-            report(DiagnosticsEngine::Warning, "Could not fix this one4", call->getLocStart());
+            report(DiagnosticsEngine::Warning, "Could not fix, assign", call->getLocStart());
         return true;
     }
-    if (opcode == BO_RemAssign || opcode == BO_AddAssign || opcode == BO_SubAssign
-        || opcode == BO_MulAssign || opcode == BO_DivAssign)
+    if (opcode == BO_AddAssign || opcode == BO_SubAssign)
     {
-        if (!ChangeBinaryOperator(binaryOp, call, methodName, setPrefix))
-            report(DiagnosticsEngine::Warning, "Could not fix this one5", call->getLocStart());
+        if (!ChangeBinaryOperatorPlusMinus(binaryOp, call, methodName))
+            report(DiagnosticsEngine::Warning, "Could not fix, assign-and-change",
+                   call->getLocStart());
         return true;
     }
+    else if (opcode == BO_RemAssign || opcode == BO_MulAssign || opcode == BO_DivAssign)
+    {
+        if (!ChangeBinaryOperatorOther(binaryOp, call, methodName, setPrefix))
+            report(DiagnosticsEngine::Warning, "Could not fix, assign-and-change",
+                   call->getLocStart());
+        return true;
+    }
+    else
+        assert(false);
     return true;
 }
 
@@ -144,8 +173,8 @@ bool ChangeToolsGen::ChangeAssignment(Stmt const* parent, std::string const& met
     // and replace with
     //    aRect.SetLeft( ... );
     SourceManager& SM = compiler.getSourceManager();
-    SourceLocation startLoc = parent->getLocStart();
-    SourceLocation endLoc = parent->getLocEnd();
+    SourceLocation startLoc = SM.getExpansionLoc(parent->getLocStart());
+    SourceLocation endLoc = SM.getExpansionLoc(parent->getLocEnd());
     const char* p1 = SM.getCharacterData(startLoc);
     const char* p2 = SM.getCharacterData(endLoc);
     unsigned n = Lexer::MeasureTokenLength(endLoc, SM, compiler.getLangOpts());
@@ -154,7 +183,7 @@ bool ChangeToolsGen::ChangeAssignment(Stmt const* parent, std::string const& met
     std::string callText(p1, p2 - p1 + n);
     auto originalLength = callText.size();
 
-    auto newText = std::regex_replace(callText, std::regex(methodName + "\\(\\) *="),
+    auto newText = std::regex_replace(callText, std::regex(methodName + " *\\( *\\) *="),
                                       setPrefix + methodName + "(");
     if (newText == callText)
         return false;
@@ -163,18 +192,61 @@ bool ChangeToolsGen::ChangeAssignment(Stmt const* parent, std::string const& met
     return replaceText(startLoc, originalLength, newText);
 }
 
-bool ChangeToolsGen::ChangeBinaryOperator(BinaryOperator const* binaryOp,
-                                          CXXMemberCallExpr const* call,
-                                          std::string const& methodName,
-                                          std::string const& setPrefix)
+bool ChangeToolsGen::ChangeBinaryOperatorPlusMinus(BinaryOperator const* binaryOp,
+                                                   CXXMemberCallExpr const* call,
+                                                   std::string const& methodName)
+{
+    // Look for expressions like
+    //    aRect.Left() += ...;
+    // and replace with
+    //    aRect.MoveLeft( ... );
+    SourceManager& SM = compiler.getSourceManager();
+    SourceLocation startLoc = SM.getExpansionLoc(binaryOp->getLocStart());
+    SourceLocation endLoc = SM.getExpansionLoc(binaryOp->getLocEnd());
+    const char* p1 = SM.getCharacterData(startLoc);
+    const char* p2 = SM.getCharacterData(endLoc);
+    if (p2 < p1) // clang is misbehaving, appears to be macro constant related
+        return false;
+    unsigned n = Lexer::MeasureTokenLength(endLoc, SM, compiler.getLangOpts());
+    std::string callText(p1, p2 - p1 + n);
+    auto originalLength = callText.size();
+
+    std::string newText;
+    if (binaryOp->getOpcode() == BO_AddAssign)
+    {
+        newText = std::regex_replace(callText, std::regex(methodName + " *\\( *\\) +\\+= *"),
+                                     "Adjust" + methodName + "(");
+        newText += " )";
+    }
+    else
+    {
+        newText = std::regex_replace(callText, std::regex(methodName + " *\\( *\\) +\\-= *"),
+                                     "Adjust" + methodName + "( -(");
+        newText += ") )";
+    }
+
+    if (newText == callText)
+    {
+        report(DiagnosticsEngine::Warning, "binaryop-plusminus regex match failed",
+               call->getLocStart());
+        return false;
+    }
+
+    return replaceText(startLoc, originalLength, newText);
+}
+
+bool ChangeToolsGen::ChangeBinaryOperatorOther(BinaryOperator const* binaryOp,
+                                               CXXMemberCallExpr const* call,
+                                               std::string const& methodName,
+                                               std::string const& setPrefix)
 {
     // Look for expressions like
     //    aRect.Left() += ...;
     // and replace with
     //    aRect.SetLeft( aRect.GetLeft() + ... );
     SourceManager& SM = compiler.getSourceManager();
-    SourceLocation startLoc = binaryOp->getLocStart();
-    SourceLocation endLoc = binaryOp->getLocEnd();
+    SourceLocation startLoc = SM.getExpansionLoc(binaryOp->getLocStart());
+    SourceLocation endLoc = SM.getExpansionLoc(binaryOp->getLocEnd());
     const char* p1 = SM.getCharacterData(startLoc);
     const char* p2 = SM.getCharacterData(endLoc);
     if (p2 < p1) // clang is misbehaving, appears to be macro constant related
@@ -191,14 +263,6 @@ bool ChangeToolsGen::ChangeBinaryOperator(BinaryOperator const* binaryOp,
             regexOpname = "\\%=";
             replaceOpname = "%";
             break;
-        case BO_AddAssign:
-            regexOpname = "\\+=";
-            replaceOpname = "+";
-            break;
-        case BO_SubAssign:
-            regexOpname = "\\-=";
-            replaceOpname = "-";
-            break;
         case BO_MulAssign:
             regexOpname = "\\*=";
             replaceOpname = "*";
@@ -213,32 +277,39 @@ bool ChangeToolsGen::ChangeBinaryOperator(BinaryOperator const* binaryOp,
 
     auto implicitObjectText = extractCode(call->getImplicitObjectArgument()->getExprLoc(),
                                           call->getImplicitObjectArgument()->getExprLoc());
-    auto newText = std::regex_replace(callText, std::regex(methodName + "\\(\\) *" + regexOpname),
+    std::string reString(methodName + " *\\( *\\) *" + regexOpname);
+    auto newText = std::regex_replace(callText, std::regex(reString),
                                       setPrefix + methodName + "( " + implicitObjectText + "."
-                                          + methodName + "() " + replaceOpname + " ");
+                                          + methodName + "() " + replaceOpname + " (");
     if (newText == callText)
+    {
+        report(DiagnosticsEngine::Warning, "binaryop-other regex match failed %0",
+               call->getLocStart())
+            << reString;
         return false;
+    }
     // sometimes we end up with duplicate spaces after the opname
     newText
         = std::regex_replace(newText, std::regex(methodName + "\\(\\) \\" + replaceOpname + "  "),
                              methodName + "() " + replaceOpname + " ");
-    newText += " )";
+    newText += ") )";
 
     return replaceText(startLoc, originalLength, newText);
 }
 
 bool ChangeToolsGen::ChangeUnaryOperator(UnaryOperator const* unaryOp,
                                          CXXMemberCallExpr const* call,
-                                         std::string const& methodName,
-                                         std::string const& setPrefix)
+                                         std::string const& methodName)
 {
     // Look for expressions like
     //    aRect.Left()++;
+    //    ++aRect.Left();
     // and replace with
-    //    aRect.SetLeft( ++aRect.GetLeft() );
+    //    aRect.MoveLeft( 1 );
+
     SourceManager& SM = compiler.getSourceManager();
-    SourceLocation startLoc = unaryOp->getLocStart();
-    SourceLocation endLoc = unaryOp->getLocEnd();
+    SourceLocation startLoc = SM.getExpansionLoc(unaryOp->getLocStart());
+    SourceLocation endLoc = SM.getExpansionLoc(unaryOp->getLocEnd());
     const char* p1 = SM.getCharacterData(startLoc);
     const char* p2 = SM.getCharacterData(endLoc);
     if (p2 < p1) // clang is misbehaving, appears to be macro constant related
@@ -251,45 +322,49 @@ bool ChangeToolsGen::ChangeUnaryOperator(UnaryOperator const* unaryOp,
                                           call->getImplicitObjectArgument()->getExprLoc());
     auto op = unaryOp->getOpcode();
     std::string regexOpname;
-    std::string replaceOpname;
+    std::string replaceOp;
     switch (op)
     {
         case UO_PostInc:
         case UO_PreInc:
-            replaceOpname = "++";
+            replaceOp = "1";
             regexOpname = "\\+\\+";
             break;
         case UO_PostDec:
         case UO_PreDec:
-            replaceOpname = "--";
+            replaceOp = "-1";
             regexOpname = "\\-\\-";
             break;
         default:
             assert(false);
     }
+    std::string newText;
+    std::string reString;
     if (op == UO_PostInc || op == UO_PostDec)
     {
-        auto newText
-            = std::regex_replace(callText, std::regex(methodName + "\\(\\) *" + regexOpname),
-                                 setPrefix + methodName + "( " + replaceOpname + implicitObjectText
-                                     + "." + methodName + "()");
-        return replaceText(startLoc, originalLength, newText);
+        reString = methodName + " *\\( *\\) *" + regexOpname;
+        newText = std::regex_replace(callText, std::regex(reString),
+                                     "Adjust" + methodName + "( " + replaceOp);
     }
     else
     {
-        auto newText
-            = std::regex_replace(callText, std::regex(regexOpname + " *" + methodName + "\\(\\)"),
-                                 setPrefix + methodName + "( " + replaceOpname + implicitObjectText
-                                     + "." + methodName + "()");
-        return replaceText(startLoc, originalLength, newText);
+        newText = implicitObjectText + "." + "Adjust" + methodName + "( " + replaceOp;
     }
+    if (newText == callText)
+    {
+        report(DiagnosticsEngine::Warning, "unaryop regex match failed %0", call->getLocStart())
+            << reString;
+        return false;
+    }
+    newText += " )";
+    return replaceText(startLoc, originalLength, newText);
 }
 
 std::string ChangeToolsGen::extractCode(SourceLocation startLoc, SourceLocation endLoc)
 {
     SourceManager& SM = compiler.getSourceManager();
-    const char* p1 = SM.getCharacterData(startLoc);
-    const char* p2 = SM.getCharacterData(endLoc);
+    const char* p1 = SM.getCharacterData(SM.getExpansionLoc(startLoc));
+    const char* p2 = SM.getCharacterData(SM.getExpansionLoc(endLoc));
     unsigned n = Lexer::MeasureTokenLength(endLoc, SM, compiler.getLangOpts());
     return std::string(p1, p2 - p1 + n);
 }
