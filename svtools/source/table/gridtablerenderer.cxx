@@ -129,16 +129,16 @@ namespace svt { namespace table
             tools::Rectangle aContentArea( i_cellArea );
             if ( i_impl.bUseGridLines )
             {
-                --aContentArea.Right();
-                --aContentArea.Bottom();
+                aContentArea.MoveRight(-1);
+                aContentArea.MoveBottom(-1);
             }
             return aContentArea;
         }
         tools::Rectangle lcl_getTextRenderingArea( tools::Rectangle const & i_contentArea )
         {
             tools::Rectangle aTextArea( i_contentArea );
-            aTextArea.Left() += 2; aTextArea.Right() -= 2;
-            ++aTextArea.Top(); --aTextArea.Bottom();
+            aTextArea.MoveLeft(2); aTextArea.MoveRight( -2 );
+            aTextArea.MoveTop(1); aTextArea.MoveBottom(-1);
             return aTextArea;
         }
 
@@ -456,10 +456,10 @@ namespace svt { namespace table
             switch ( eHorzAlign )
             {
             case HorizontalAlignment_CENTER:
-                imagePos.X() += ( i_context.aContentArea.GetWidth() - imageSize.Width() ) / 2;
+                imagePos.MoveX(( i_context.aContentArea.GetWidth() - imageSize.Width() ) / 2);
                 break;
             case HorizontalAlignment_RIGHT:
-                imagePos.X() = i_context.aContentArea.Right() - imageSize.Width();
+                imagePos.setX(i_context.aContentArea.Right() - imageSize.Width());
                 break;
             default:
                 break;
@@ -467,7 +467,7 @@ namespace svt { namespace table
 
         }
         else
-            imageSize.Width() = i_context.aContentArea.GetWidth();
+            imageSize.setWidth(i_context.aContentArea.GetWidth());
 
         if ( i_context.aContentArea.GetHeight() > imageSize.Height() )
         {
@@ -475,17 +475,17 @@ namespace svt { namespace table
             switch ( eVertAlign )
             {
             case VerticalAlignment_MIDDLE:
-                imagePos.Y() += ( i_context.aContentArea.GetHeight() - imageSize.Height() ) / 2;
+                imagePos.MoveY(( i_context.aContentArea.GetHeight() - imageSize.Height() ) / 2);
                 break;
             case VerticalAlignment_BOTTOM:
-                imagePos.Y() = i_context.aContentArea.Bottom() - imageSize.Height();
+                imagePos.setY(i_context.aContentArea.Bottom() - imageSize.Height());
                 break;
             default:
                 break;
             }
         }
         else
-            imageSize.Height() = i_context.aContentArea.GetHeight() - 1;
+            imageSize.setHeight(i_context.aContentArea.GetHeight() - 1);
         DrawImageFlags const nStyle = m_pImpl->rModel.isEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable;
         i_context.rDevice.DrawImage( imagePos, imageSize, i_image, nStyle );
     }

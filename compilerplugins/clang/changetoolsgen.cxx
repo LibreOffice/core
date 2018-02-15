@@ -186,11 +186,11 @@ bool ChangeToolsGen::ChangeAssignment(Stmt const* parent, std::string const& met
     std::string callText(p1, p2 - p1 + n);
     auto originalLength = callText.size();
 
-    auto newText = std::regex_replace(callText, std::regex(methodName + " *\\( *\\) *="),
+    auto newText = std::regex_replace(callText, std::regex(methodName + " *\\( *\\) *= *"),
                                       setPrefix + methodName + "(");
     if (newText == callText)
         return false;
-    newText += " )";
+    newText += ")";
 
     return replaceText(startLoc, originalLength, newText);
 }
@@ -218,13 +218,13 @@ bool ChangeToolsGen::ChangeBinaryOperatorPlusMinus(BinaryOperator const* binaryO
     std::string newText;
     if (binaryOp->getOpcode() == BO_AddAssign)
     {
-        newText = std::regex_replace(callText, std::regex(methodName + " *\\( *\\) +\\+= *"),
+        newText = std::regex_replace(callText, std::regex(methodName + " *\\( *\\) *\\+= *"),
                                      setPrefix + methodName + "(");
-        newText += " )";
+        newText += ")";
     }
     else
     {
-        newText = std::regex_replace(callText, std::regex(methodName + " *\\( *\\) +\\-= *"),
+        newText = std::regex_replace(callText, std::regex(methodName + " *\\( *\\) *\\-= *"),
                                      setPrefix + methodName + "( -(");
         newText += ") )";
     }
@@ -349,11 +349,11 @@ bool ChangeToolsGen::ChangeUnaryOperator(UnaryOperator const* unaryOp,
     {
         reString = methodName + " *\\( *\\) *" + regexOpname;
         newText = std::regex_replace(callText, std::regex(reString),
-                                     unarySetPrefix + methodName + "( " + replaceOp);
+                                     unarySetPrefix + methodName + "(" + replaceOp);
     }
     else
     {
-        newText = implicitObjectText + "." + unarySetPrefix + methodName + "( " + replaceOp;
+        newText = implicitObjectText + "." + unarySetPrefix + methodName + "(" + replaceOp;
     }
     if (newText == callText)
     {
@@ -361,7 +361,7 @@ bool ChangeToolsGen::ChangeUnaryOperator(UnaryOperator const* unaryOp,
             << reString;
         return false;
     }
-    newText += " )";
+    newText += ")";
     return replaceText(startLoc, originalLength, newText);
 }
 

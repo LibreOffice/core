@@ -144,14 +144,14 @@ void SvSimpleTable::UpdateViewSize()
     Size theWinSize=m_rParentTableContainer.GetOutputSizePixel();
     Size HbSize=aHeaderBar->GetSizePixel();
 
-    HbSize.Width()=theWinSize.Width();
-    theWinSize.Height()-=HbSize.Height();
+    HbSize.setWidth(theWinSize.Width());
+    theWinSize.AdjustHeight( -(HbSize.Height()) );
     Point thePos(0,0);
 
     aHeaderBar->SetPosPixel(thePos);
     aHeaderBar->SetSizePixel(HbSize);
 
-    thePos.Y()+=HbSize.Height();
+    thePos.MoveY(HbSize.Height());
     SvHeaderTabListBox::SetPosPixel(thePos);
     SvHeaderTabListBox::SetSizePixel(theWinSize);
     Invalidate();
@@ -346,8 +346,8 @@ void SvSimpleTable::HBarDrag()
     {
         tools::Rectangle aSizeRect(Point(0,0),
             SvHeaderTabListBox::GetOutputSizePixel());
-        aSizeRect.Left()=-GetXOffset()+aHeaderBar->GetDragPos();
-        aSizeRect.Right()=-GetXOffset()+aHeaderBar->GetDragPos();
+        aSizeRect.SetLeft(-GetXOffset()+aHeaderBar->GetDragPos());
+        aSizeRect.SetRight(-GetXOffset()+aHeaderBar->GetDragPos());
         ShowTracking( aSizeRect, ShowTrackFlags::Split );
     }
 }
@@ -391,8 +391,8 @@ IMPL_LINK( SvSimpleTable, StartDragHdl, HeaderBar*, pCtr, void)
         {
             tools::Rectangle aSizeRect(Point(0,0),
                 SvHeaderTabListBox::GetOutputSizePixel());
-            aSizeRect.Left()=-GetXOffset()+aHeaderBar->GetDragPos();
-            aSizeRect.Right()=-GetXOffset()+aHeaderBar->GetDragPos();
+            aSizeRect.SetLeft(-GetXOffset()+aHeaderBar->GetDragPos());
+            aSizeRect.SetRight(-GetXOffset()+aHeaderBar->GetDragPos());
             ShowTracking( aSizeRect, ShowTrackFlags::Split );
         }
     }
