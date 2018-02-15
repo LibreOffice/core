@@ -44,6 +44,7 @@
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/postitem.hxx>
+#include <o3tl/safeint.hxx>
 #include <unotextrange.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
@@ -131,13 +132,20 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
             WW8_CP currentCP=pF->nSCode;
             WW8_CP currentLen=pF->nLen;
 
-            sal_uInt16 bkmFindIdx;
-            OUString aBookmarkFind=pB->GetBookmark(currentCP-1, currentCP+currentLen-1, bkmFindIdx);
+            WW8_CP nEnd;
+            if (o3tl::checked_add(currentCP, currentLen-1, nEnd)) {
+                SAL_WARN("sw.ww8", "broken offset, ignoring");
+            }
+            else
+            {
+                sal_uInt16 bkmFindIdx;
+                OUString aBookmarkFind=pB->GetBookmark(currentCP-1, nEnd, bkmFindIdx);
 
-            if (!aBookmarkFind.isEmpty()) {
-                pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark bookmark as consumed, such that tl'll not get inserted as a "normal" bookmark again
                 if (!aBookmarkFind.isEmpty()) {
-                    aBookmarkName=aBookmarkFind;
+                    pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark bookmark as consumed, such that tl'll not get inserted as a "normal" bookmark again
+                    if (!aBookmarkFind.isEmpty()) {
+                        aBookmarkName=aBookmarkFind;
+                    }
                 }
             }
         }
