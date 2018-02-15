@@ -312,8 +312,8 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
 
 /* testcode
             const OUString aURL( "file:///e:/test.xml" );
-            SfxMedium aMedium( aURL, StreamMode::WRITE | StreamMode::TRUNC, sal_True );
-            uno::Reference<io::XOutputStream> xOut( new utl::OOutputStreamWrapper( *aMedium.GetOutStream() ) );
+            SvFileStream aStream(aURL, StreamMode::WRITE | StreamMode::TRUNC);
+            xOut = new utl::OOutputStreamWrapper(aStream);
 */
 
 
@@ -329,7 +329,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
             xExporter->exportDoc();
 
 /* testcode
-            aMedium.Commit();
+            aStream.Close();
 */
 
         }
