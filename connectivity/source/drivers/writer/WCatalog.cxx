@@ -24,6 +24,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
 #include <connectivity/sdbcx/VCollection.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <writer/WConnection.hxx>
 
@@ -54,7 +55,7 @@ void OWriterCatalog::refreshTables()
     if (m_pTables)
         m_pTables->reFill(aVector);
     else
-        m_pTables.reset(new OWriterTables(m_xMetaData, *this, m_aMutex, aVector));
+        m_pTables = o3tl::make_unique<OWriterTables>(m_xMetaData, *this, m_aMutex, aVector);
 }
 
 } // namespace writer

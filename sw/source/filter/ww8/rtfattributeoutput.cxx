@@ -63,7 +63,6 @@
 #include <fmtclds.hxx>
 #include <fmtrowsplt.hxx>
 #include <fmtline.hxx>
-#include <breakit.hxx>
 #include <fmtanchr.hxx>
 #include <ftninfo.hxx>
 #include <htmltbl.hxx>
