@@ -25,7 +25,7 @@ $(foreach product,$(PRODUCTLIST),\
 ))
 
 $(deb_WORKDIR)/%-desktop-integration.tar.gz: $(deb_WORKDIR)/%$(PKGVERSIONSHORT)-debian-menus_$(PKGVERSION)-$(LIBO_VERSION_PATCH)_all.deb
-	$(GNUTAR) -C $(deb_WORKDIR) -cf - $(notdir $<) | gzip > $@
+	fakeroot $(GNUTAR) -C $(deb_WORKDIR) -cf - $(notdir $<) | gzip > $@
 
 $(deb_WORKDIR)/%/DEBIAN/postrm: $(deb_SRCDIR)/postrm
 	cat $< | tr -d "\015" | \
