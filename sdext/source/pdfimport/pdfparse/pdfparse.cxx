@@ -21,9 +21,10 @@
 #include <pdfparse.hxx>
 
 // boost using obsolete stuff
-#if defined(_MSC_VER) && _MSC_VER >= 1900
+#if defined(_MSC_VER)
 #pragma warning(push)
 #pragma warning(disable:4996)
+#pragma warning(disable:4503)
 #endif
 
 // workaround windows compiler: do not include multi_pass.hpp
@@ -37,6 +38,15 @@
 
 #include <rtl/strbuf.hxx>
 #include <rtl/alloc.h>
+
+// disable warnings again because someone along the line has enabled them
+// (we have  included boost headers, what did you expect?)
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable:4996)
+#pragma warning(disable:4503)
+#endif
+
 
 using namespace boost::spirit;
 using namespace pdfparse;
@@ -677,7 +687,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
 #endif // WIN32
 }
 
-#if defined(_MSC_VER) && _MSC_VER >= 1900
+#if defined(_MSC_VER)
 #pragma warning(pop)
 #endif
 
