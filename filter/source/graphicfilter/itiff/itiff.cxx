@@ -1520,10 +1520,21 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 }
             }
 
+            sal_Int32 nImageDataSize(0);
+            if (bStatus)
+            {
+                if (o3tl::checked_multiply<sal_Int32>(nImageWidth, nImageLength, nImageDataSize) ||
+                    o3tl::checked_multiply<sal_Int32>(nImageDataSize, (HasAlphaChannel() ? 4 : 3), nImageDataSize) ||
+                    nImageDataSize > SAL_MAX_INT32/2)
+                {
+                    bStatus = false;
+                }
+            }
+
             if ( bStatus )
             {
                 maBitmapPixelSize = Size(nImageWidth, nImageLength);
-                mpBitmap.reset(new sal_uInt8[nImageWidth * nImageLength * (HasAlphaChannel() ? 4 : 3)]);
+                mpBitmap.reset(new sal_uInt8[nImageDataSize]);
 
                 if (bStatus && ReadMap())
                 {
