@@ -53,7 +53,7 @@ namespace drawinglayer
                    r, g, b, 0,   r, g, b, 0,   r, g, b, 0,
                    0, 0, 0, a,   r, g, b, 0,   0, 0, 0, a
                 };
-                BitmapEx aBitmap = vcl::bitmap::CreateFromData(cross, 3, 3, 3, 32);
+                BitmapEx aBitmap = vcl::bitmap::CreateFromData(cross, 3, 3, 12, 32);
 
                 // create and exchange at aRetVal
                 delete aRetVal.set(new BitmapEx(aBitmap));

@@ -145,7 +145,7 @@ public:
     }
 
 private:
-    static void GetPattern(sal_uInt16 btPttnIndex, sal_uInt8* pPttnArray);
+    static void GetPattern(sal_uInt16 btPttnIndex, sal_uInt8 (&pPttnArray)[8]);
 
 public:
     void    Read(LwpObjectStream *pStrm);
