@@ -34,10 +34,6 @@
 #include <boost/spirit/include/classic_file_iterator.hpp>
 #include <boost/bind.hpp>
 
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
-
 #include <string.h>
 
 #include <rtl/strbuf.hxx>
@@ -681,6 +677,10 @@ PDFEntry* PDFReader::read( const char* pFileName )
     return pRet;
 #endif // WIN32
 }
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
