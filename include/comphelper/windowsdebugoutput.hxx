@@ -19,6 +19,7 @@
 #include <iomanip>
 #include <ostream>
 #include <string>
+#include <vector>
 
 #ifdef LIBO_INTERNAL_ONLY
 #include <prewin.h>
@@ -35,11 +36,41 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
     if (StringFromIID(rIid, &pRiid) != S_OK)
         return stream << "?";
 
-    // TODO: Maybe look up a descriptive name for the service or interface, from HKCR\CLSID or
-    // HKCR\Interface?
-
     stream << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(
         std::wstring(pRiid));
+
+    DWORD nSize;
+    if (RegGetValueW(HKEY_CLASSES_ROOT, std::wstring(L"CLSID\\").append(pRiid).data(), NULL,
+                     RRF_RT_REG_SZ, NULL, NULL, &nSize)
+        == ERROR_SUCCESS)
+    {
+        std::vector<wchar_t> sValue(nSize / 2);
+        if (RegGetValueW(HKEY_CLASSES_ROOT, std::wstring(L"CLSID\\").append(pRiid).data(), NULL,
+                         RRF_RT_REG_SZ, NULL, sValue.data(), &nSize)
+            == ERROR_SUCCESS)
+        {
+            stream << "=\""
+                   << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(
+                          std::wstring(sValue.data()))
+                   << "\"";
+        }
+    }
+    else if (RegGetValueW(HKEY_CLASSES_ROOT, std::wstring(L"Interface\\").append(pRiid).data(),
+                          NULL, RRF_RT_REG_SZ, NULL, NULL, &nSize)
+             == ERROR_SUCCESS)
+    {
+        std::vector<wchar_t> sValue(nSize / 2);
+        if (RegGetValueW(HKEY_CLASSES_ROOT, std::wstring(L"Interface\\").append(pRiid).data(), NULL,
+                         RRF_RT_REG_SZ, NULL, sValue.data(), &nSize)
+            == ERROR_SUCCESS)
+        {
+            stream << "=\""
+                   << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(
+                          std::wstring(sValue.data()))
+                   << "\"";
+        }
+    }
+
     CoTaskMemFree(pRiid);
     return stream;
 }
