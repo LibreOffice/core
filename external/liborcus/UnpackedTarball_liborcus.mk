@@ -18,10 +18,6 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,liborcus))
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/0001-workaround-a-linking-problem-on-windows.patch \
 	external/liborcus/rpath.patch.0 \
-	external/liborcus/0001-Alpha-value-of-0-means-fully-transparent.-I-m-sure-2.patch \
-	external/liborcus/0002-We-are-supposed-to-use-the-foreground-color-for-soli.patch \
-	external/liborcus/0001-xls-xml-Pick-up-border-colors.patch \
-	external/liborcus/0001-xls-xml-Import-hidden-row-and-column-flags.patch \
 ))
 
 ifeq ($(OS),WNT)
