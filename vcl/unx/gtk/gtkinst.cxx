@@ -179,7 +179,9 @@ void GtkInstance::EnsureInit()
 
     ImplSVData* pSVData = ImplGetSVData();
     delete pSVData->maAppData.mpToolkitName;
-#if GTK_CHECK_VERSION(3,0,0)
+#ifdef GTK_TOOLKIT_NAME
+    pSVData->maAppData.mpToolkitName = new OUString(GTK_TOOLKIT_NAME);
+#elif GTK_CHECK_VERSION(3,0,0)
     pSVData->maAppData.mpToolkitName = new OUString("gtk3");
 #else
     pSVData->maAppData.mpToolkitName = new OUString("gtk2");
