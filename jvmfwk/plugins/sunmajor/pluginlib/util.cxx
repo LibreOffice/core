@@ -576,35 +576,6 @@ bool decodeOutput(const OString& s, OUString* out)
 
 
 #if defined(_WIN32)
-void addJavaInfoFromWinReg(
-    std::vector<rtl::Reference<VendorBase> > & allInfos,
-    std::vector<rtl::Reference<VendorBase> > & addedInfos)
-{
-        // Get Java s from registry
-    std::vector<OUString> vecJavaHome;
-    if(getSDKInfoFromRegistry(vecJavaHome))
-    {
-        // create impl objects
-        typedef std::vector<OUString>::iterator ItHome;
-        for(ItHome it_home= vecJavaHome.begin(); it_home != vecJavaHome.end();
-            ++it_home)
-        {
-            getAndAddJREInfoByPath(*it_home, allInfos, addedInfos);
-        }
-    }
-
-    vecJavaHome.clear();
-    if(getJREInfoFromRegistry(vecJavaHome))
-    {
-        typedef std::vector<OUString>::iterator ItHome;
-        for(ItHome it_home= vecJavaHome.begin(); it_home != vecJavaHome.end();
-            ++it_home)
-        {
-            getAndAddJREInfoByPath(*it_home, allInfos, addedInfos);
-        }
-   }
-}
-
 
 bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
                              vector<OUString>& vecJavaHome)
@@ -684,6 +655,49 @@ bool getSDKInfoFromRegistry(vector<OUString> & vecHome)
 bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome)
 {
     return getJavaInfoFromRegistry(HKEY_SUN_JRE, vecJavaHome);
+}
+
+void addJavaInfoFromWinReg(
+    std::vector<rtl::Reference<VendorBase> > & allInfos,
+    std::vector<rtl::Reference<VendorBase> > & addedInfos)
+{
+        // Get Java s from registry
+    std::vector<OUString> vecJavaHome;
+    if(getSDKInfoFromRegistry(vecJavaHome))
+    {
+        // create impl objects
+        typedef std::vector<OUString>::iterator ItHome;
+        for(ItHome it_home= vecJavaHome.begin(); it_home != vecJavaHome.end();
+            ++it_home)
+        {
+            getAndAddJREInfoByPath(*it_home, allInfos, addedInfos);
+        }
+    }
+
+    vecJavaHome.clear();
+    if(getJREInfoFromRegistry(vecJavaHome))
+    {
+        typedef std::vector<OUString>::iterator ItHome;
+        for(ItHome it_home= vecJavaHome.begin(); it_home != vecJavaHome.end();
+            ++it_home)
+        {
+            getAndAddJREInfoByPath(*it_home, allInfos, addedInfos);
+        }
+   }
+
+    vecJavaHome.clear();
+    if (getJavaInfoFromRegistry(L"Software\\JavaSoft\\JDK", vecJavaHome)) {
+        for (auto const & javaHome: vecJavaHome) {
+            getAndAddJREInfoByPath(javaHome, allInfos, addedInfos);
+        }
+    }
+
+    vecJavaHome.clear();
+    if (getJavaInfoFromRegistry(L"Software\\JavaSoft\\JRE", vecJavaHome)) {
+        for (auto const & javaHome: vecJavaHome) {
+            getAndAddJREInfoByPath(javaHome, allInfos, addedInfos);
+        }
+    }
 }
 
 #endif // WNT
