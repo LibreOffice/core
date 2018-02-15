@@ -35,24 +35,4 @@ $(scripts_WORKDIR)/uninstall: $(SRCDIR)/setup_native/scripts/uninstall_linux.sh
 endif
 endif
 
-ifeq ($(OS),SOLARIS)
-$(eval $(call gb_CustomTarget_register_targets,setup_native/scripts,\
-	install \
-	uninstall \
-	getuid.so.stripped \
-))
-
-$(scripts_WORKDIR)/getuid.so.stripped: $(call gb_Library_get_target,getuid)
-	cp $< $@
-	/usr/ccs/bin/strip $@
-
-$(scripts_WORKDIR)/install: $(SRCDIR)/setup_native/scripts/install_solaris.sh $(scripts_WORKDIR)/getuid.so.stripped
-	$(PERL) -w $(SRCDIR)/setup_native/scripts/install_create.pl $^ $@
-	chmod 775 $@
-
-$(scripts_WORKDIR)/uninstall: $(SRCDIR)/setup_native/scripts/uninstall_solaris.sh $(scripts_WORKDIR)/getuid.so.stripped
-	$(PERL) -w $(SRCDIR)/setup_native/scripts/install_create.pl $^ $@
-	chmod 775 $@
-endif
-
 # vim: set noet sw=4 ts=4:
