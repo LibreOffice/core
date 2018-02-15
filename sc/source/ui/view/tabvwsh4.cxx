@@ -1451,9 +1451,9 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
 
     pCurFrameLine   = new ::editeng::SvxBorderLine(&aColBlack, 20, SvxBorderLineStyle::SOLID);
     pPivotSource    = new ScArea;
-    StartListening(*GetViewData().GetDocShell(),true);
-    StartListening(*GetViewFrame(),true);
-    StartListening(*pSfxApp,true);              // #i62045# #i62046# application is needed for Calc's own hints
+    StartListening(*GetViewData().GetDocShell(), DuplicateHandling::Prevent);
+    StartListening(*GetViewFrame(), DuplicateHandling::Prevent);
+    StartListening(*pSfxApp, DuplicateHandling::Prevent); // #i62045# #i62046# application is needed for Calc's own hints
 
     SfxViewFrame* pFirst = SfxViewFrame::GetFirst(pDocSh);
     bool bFirstView = !pFirst

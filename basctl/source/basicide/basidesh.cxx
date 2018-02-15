@@ -633,7 +633,7 @@ void Shell::UpdateWindows()
             ++doc
         )
     {
-        StartListening( *doc->getBasicManager(), true /* log on only once */ );
+        StartListening(*doc->getBasicManager(), DuplicateHandling::Prevent /* log on only once */);
 
         // libraries
         Sequence< OUString > aLibNames( doc->getLibraryNames() );
@@ -669,7 +669,7 @@ void Shell::UpdateWindows()
                     {
                         StarBASIC* pLib = doc->getBasicManager()->GetLib( aLibName );
                         if ( pLib )
-                            StartListening( pLib->GetBroadcaster(), true /* log on only once */ );
+                            StartListening(pLib->GetBroadcaster(), DuplicateHandling::Prevent /* log on only once */);
 
                         try
                         {

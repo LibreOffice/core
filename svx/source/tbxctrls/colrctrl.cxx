@@ -230,7 +230,7 @@ SvxColorDockingWindow::SvxColorDockingWindow
     SetSize();
     aColorSet->Show();
     if (_pBindings != nullptr)
-        StartListening( *_pBindings, true );
+        StartListening(*_pBindings, DuplicateHandling::Prevent);
 }
 
 SvxColorDockingWindow::~SvxColorDockingWindow()

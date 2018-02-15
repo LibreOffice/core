@@ -392,7 +392,7 @@ void ScChildrenShapes::SetDrawBroadcaster()
         SfxBroadcaster* pDrawBC = rViewData.GetDocument()->GetDrawBroadcaster();
         if (pDrawBC)
         {
-            StartListening(*pDrawBC, true);
+            StartListening(*pDrawBC, DuplicateHandling::Prevent);
 
             maShapeTreeInfo.SetModelBroadcaster( new ScDrawModelBroadcaster(rViewData.GetDocument()->GetDrawLayer()) );
             maShapeTreeInfo.SetSdrView(rViewData.GetScDrawView());

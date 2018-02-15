@@ -88,20 +88,20 @@ void SfxListener::RemoveBroadcaster_Impl( SfxBroadcaster& rBroadcaster )
  Some code uses duplicates as a kind of ref-counting thing i.e. they add and remove listeners
  on different code paths, and they only really stop listening when the last EndListening() is called.
 */
-void SfxListener::StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDuplicates )
+void SfxListener::StartListening(SfxBroadcaster& rBroadcaster, DuplicateHandling eDuplicateHanding)
 {
     bool bListeningAlready = IsListening( rBroadcaster );
 
 #ifdef DBG_UTIL
-    if (bListeningAlready && !bPreventDuplicates)
+    if (bListeningAlready && eDuplicateHanding == DuplicateHandling::Unexpected)
     {
         auto f = mpImpl->maCallStacks.find( &rBroadcaster );
         SAL_WARN("svl", "previous StartListening call came from: " << sal::backtrace_to_string(f->second.get()));
     }
 #endif
-    assert(!(bListeningAlready && !bPreventDuplicates) && "duplicate listener, try building with DBG_UTIL to find the other insert site.");
+    assert(!(bListeningAlready && eDuplicateHanding == DuplicateHandling::Unexpected) && "duplicate listener, try building with DBG_UTIL to find the other insert site.");
 
-    if ( !bListeningAlready || !bPreventDuplicates )
+    if (!bListeningAlready || eDuplicateHanding != DuplicateHandling::Prevent)
     {
         rBroadcaster.AddListener(*this);
         mpImpl->maBCs.push_back( &rBroadcaster );

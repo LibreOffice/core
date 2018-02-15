@@ -298,8 +298,8 @@ ViewShellBase::~ViewShellBase()
 
 void ViewShellBase::LateInit (const OUString& rsDefaultView)
 {
-    StartListening(*GetViewFrame(),true);
-    StartListening(*GetDocShell(),true);
+    StartListening(*GetViewFrame(), DuplicateHandling::Prevent);
+    StartListening(*GetDocShell(), DuplicateHandling::Prevent);
     mpImpl->LateInit();
     InitializeFramework();
 

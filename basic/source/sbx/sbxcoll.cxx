@@ -47,7 +47,7 @@ SbxCollection::SbxCollection()
     }
     Initialize();
     // For Access on itself
-    StartListening( GetBroadcaster(), true );
+    StartListening(GetBroadcaster(), DuplicateHandling::Prevent);
 }
 
 SbxCollection::SbxCollection( const SbxCollection& rColl )
