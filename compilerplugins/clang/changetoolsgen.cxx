@@ -126,6 +126,8 @@ bool ChangeToolsGen::VisitCXXMemberCallExpr(CXXMemberCallExpr const* call)
         // Check for
         //   X.Width() = X.Height() = 1;
         auto parent2 = getParentStmt(parent);
+        while (parent2 && (isa<ParenExpr>(parent2) || isa<ImplicitCastExpr>(parent2)))
+            parent2 = getParentStmt(parent2);
         if (parent2)
             if (auto binaryOp2 = dyn_cast<BinaryOperator>(parent2))
                 if (binaryOp2->getOpcode() == BO_Assign)
@@ -134,7 +136,7 @@ bool ChangeToolsGen::VisitCXXMemberCallExpr(CXXMemberCallExpr const* call)
                            call->getLocStart());
                     return true;
                 }
-        if (auto rhs = dyn_cast<BinaryOperator>(binaryOp->getRHS()))
+        if (auto rhs = dyn_cast<BinaryOperator>(binaryOp->getRHS()->IgnoreParenImpCasts()))
             if (rhs->getOpcode() == BO_Assign)
             {
                 report(DiagnosticsEngine::Warning, "Could not fix this one, double assign",
@@ -176,7 +178,7 @@ bool ChangeToolsGen::ChangeAssignment(Stmt const* parent, std::string const& met
     std::string callText(p1, p2 - p1 + n);
     auto originalLength = callText.size();
 
-    auto newText = std::regex_replace(callText, std::regex(methodName + "\\(\\) *="),
+    auto newText = std::regex_replace(callText, std::regex(methodName + "\\( *\\) *="),
                                       setPrefix + methodName + "(");
     if (newText == callText)
         return false;
@@ -235,7 +237,7 @@ bool ChangeToolsGen::ChangeBinaryOperator(BinaryOperator const* binaryOp,
 
     auto implicitObjectText = extractCode(call->getImplicitObjectArgument()->getExprLoc(),
                                           call->getImplicitObjectArgument()->getExprLoc());
-    std::string reString(methodName + "\\(\\) *" + regexOpname);
+    std::string reString(methodName + "\\( *\\) *" + regexOpname);
     auto newText = std::regex_replace(callText, std::regex(reString),
                                       setPrefix + methodName + "( " + implicitObjectText + "."
                                           + methodName + "() " + replaceOpname + " ");
@@ -304,7 +306,7 @@ bool ChangeToolsGen::ChangeUnaryOperator(UnaryOperator const* unaryOp,
     std::string reString;
     if (op == UO_PostInc || op == UO_PostDec)
     {
-        reString = methodName + "\\(\\) *" + regexOpname;
+        reString = methodName + "\\( *\\) *" + regexOpname;
         newText = std::regex_replace(callText, std::regex(reString),
                                      setPrefix + methodName + "( " + implicitObjectText + "."
                                          + methodName + "() " + replaceOp);

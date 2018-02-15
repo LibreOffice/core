@@ -1156,11 +1156,11 @@ void SmShowSymbolSetWindow::MouseButtonDown(const MouseEvent& rMEvt)
     GrabFocus();
 
     Size aOutputSize(nColumns * nLen, nRows * nLen);
-    aOutputSize.Width() += nXOffset;
-    aOutputSize.Height() += nYOffset;
+    aOutputSize.setWidth( aOutputSize.Width() + nXOffset );
+    aOutputSize.setHeight( aOutputSize.Height() + nYOffset );
     Point aPoint(rMEvt.GetPosPixel());
-    aPoint.X() -= nXOffset;
-    aPoint.Y() -= nYOffset;
+    aPoint.setX( aPoint.X() - nXOffset );
+    aPoint.setY( aPoint.Y() - nYOffset );
 
     if (rMEvt.IsLeft() && tools::Rectangle(Point(0, 0), aOutputSize).IsInside(rMEvt.GetPosPixel()))
     {
