@@ -15,10 +15,16 @@
 #ifndef INCLUDED_COMPHELPER_WINDOWSDEBUGOUTPUT_HXX
 #define INCLUDED_COMPHELPER_WINDOWSDEBUGOUTPUT_HXX
 
+#include <codecvt>
 #include <ostream>
+#include <string>
+
+#ifdef LIBO_INTERNAL_ONLY
 #include <prewin.h>
 #include <postwin.h>
-#include <rtl/ustring.hxx>
+#else
+#include <windows.h>
+#endif
 
 template <typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
@@ -31,7 +37,7 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
     // TODO: Maybe look up a descriptive name for the service or interface, from HKCR\CLSID or
     // HKCR\Interface?
 
-    stream << OUString(reinterpret_cast<sal_Unicode*>(pRiid));
+    stream << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(std::wstring(pRiid));
     CoTaskMemFree(pRiid);
     return stream;
 }
