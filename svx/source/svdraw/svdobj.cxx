@@ -590,7 +590,7 @@ void SdrObject::AddListener(SfxListener& rListener)
     // SdrEdgeObj may be connected to same SdrObject on both ends so allow it
     // to listen twice
     SdrEdgeObj const*const pEdge(dynamic_cast<SdrEdgeObj const*>(&rListener));
-    rListener.StartListening(*pPlusData->pBroadcast, pEdge != nullptr);
+    rListener.StartListening(*pPlusData->pBroadcast, pEdge ? DuplicateHandling::Allow : DuplicateHandling::Unexpected);
 }
 
 void SdrObject::RemoveListener(SfxListener& rListener)

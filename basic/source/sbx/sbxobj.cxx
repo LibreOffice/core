@@ -413,7 +413,7 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
     pArray->Put( pVar, pArray->Count() );
     SetModified( true );
     // The object listen always
-    StartListening( pVar->GetBroadcaster(), true );
+    StartListening(pVar->GetBroadcaster(), DuplicateHandling::Prevent);
     return pVar;
 }
 
@@ -450,7 +450,7 @@ void SbxObject::Insert( SbxVariable* pVar )
                 }
             }
         }
-        StartListening( pVar->GetBroadcaster(), true );
+        StartListening(pVar->GetBroadcaster(), DuplicateHandling::Prevent);
         pArray->Put( pVar, nIdx );
         if( pVar->GetParent() != this )
         {
@@ -494,7 +494,7 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
     }
     if( pArray )
     {
-        StartListening( pVar->GetBroadcaster(), true );
+        StartListening(pVar->GetBroadcaster(), DuplicateHandling::Prevent);
         pArray->Put( pVar, pArray->Count() );
         if( pVar->GetParent() != this )
         {
@@ -573,7 +573,7 @@ static bool LoadArray( SvStream& rStrm, SbxObject* pThis, SbxArray* pArray )
         if( pVar )
         {
             pVar->SetParent( pThis );
-            pThis->StartListening( pVar->GetBroadcaster(), true );
+            pThis->StartListening(pVar->GetBroadcaster(), DuplicateHandling::Prevent);
         }
     }
     pArray->Merge( p.get() );
