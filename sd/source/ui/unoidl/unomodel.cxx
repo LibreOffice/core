@@ -577,7 +577,7 @@ void SdXImpressDocument::SetModified() throw()
 }
 
 // XModel
-void SAL_CALL SdXImpressDocument    ::lockControllers(  )
+void SAL_CALL SdXImpressDocument::lockControllers(  )
 {
     ::SolarMutexGuard aGuard;
 
