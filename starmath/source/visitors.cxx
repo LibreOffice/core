@@ -456,10 +456,10 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
 
     // get rectangle and remove borderspace
     tools::Rectangle  aTmp ( pNode->AsRectangle( ) + maPosition - pNode->GetTopLeft( ) );
-    aTmp.Left( )   += nTmpBorderWidth;
-    aTmp.Right( )  -= nTmpBorderWidth;
-    aTmp.Top( )    += nTmpBorderWidth;
-    aTmp.Bottom( ) -= nTmpBorderWidth;
+    aTmp.MoveLeft(nTmpBorderWidth );
+    aTmp.MoveRight( -nTmpBorderWidth );
+    aTmp.MoveTop(nTmpBorderWidth );
+    aTmp.MoveBottom( -nTmpBorderWidth );
 
     SAL_WARN_IF( aTmp.GetHeight() == 0 || aTmp.GetWidth() == 0,
                 "starmath", "Empty rectangle" );
@@ -483,7 +483,7 @@ void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
     aTmpDev.SetFont( pNode->GetFont( ) );
 
     Point  aPos ( maPosition );
-    aPos.Y( ) += pNode->GetBaselineOffset( );
+    aPos.MoveY(pNode->GetBaselineOffset( ) );
     // round to pixel coordinate
     aPos = mrDev.PixelToLogic( mrDev.LogicToPixel( aPos ) );
 
