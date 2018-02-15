@@ -28,7 +28,7 @@
 
 class QFileDialog;
 class QWidget;
-class QFormLayout;
+class QGridLayout;
 
 class KDE5FilePicker : public QObject
 {
@@ -51,7 +51,7 @@ protected:
     QWidget* _extraControls;
 
     //layout for extra custom controls
-    QFormLayout* _layout;
+    QGridLayout* _layout;
 
     sal_uIntPtr _winId;
 
