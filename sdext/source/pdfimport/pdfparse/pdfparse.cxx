@@ -24,6 +24,7 @@
 #if defined(_MSC_VER)
 #pragma warning(push)
 #pragma warning(disable:4996)
+#pragma warning(disable:4503)
 #endif
 
 // workaround windows compiler: do not include multi_pass.hpp
