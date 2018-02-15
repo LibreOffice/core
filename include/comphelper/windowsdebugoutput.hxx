@@ -16,6 +16,7 @@
 #define INCLUDED_COMPHELPER_WINDOWSDEBUGOUTPUT_HXX
 
 #include <codecvt>
+#include <iomanip>
 #include <ostream>
 #include <string>
 
@@ -39,6 +40,201 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
 
     stream << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(std::wstring(pRiid));
     CoTaskMemFree(pRiid);
+    return stream;
+}
+
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                     const VARIANT& rVariant)
+{
+    if (rVariant.vt & VT_VECTOR)
+        stream << "VECTOR:";
+    if (rVariant.vt & VT_ARRAY)
+        stream << "ARRAY:";
+    if (rVariant.vt & VT_BYREF)
+        stream << "BYREF:";
+
+    switch (rVariant.vt)
+    {
+    case VT_EMPTY: stream << "EMPTY"; break;
+    case VT_NULL: stream << "NULL"; break;
+    case VT_I2: stream << "I2"; break;
+    case VT_I4: stream << "I4"; break;
+    case VT_R4: stream << "R4"; break;
+    case VT_R8: stream << "R8"; break;
+    case VT_CY: stream << "CY"; break;
+    case VT_DATE: stream << "DATE"; break;
+    case VT_BSTR: stream << "BSTR"; break;
+    case VT_DISPATCH: stream << "DISPATCH"; break;
+    case VT_ERROR: stream << "ERROR"; break;
+    case VT_BOOL: stream << "BOOL"; break;
+    case VT_VARIANT: stream << "VARIANT"; break;
+    case VT_UNKNOWN: stream << "UNKNOWN"; break;
+    case VT_DECIMAL: stream << "DECIMAL"; break;
+    case VT_I1: stream << "I1"; break;
+    case VT_UI1: stream << "UI1"; break;
+    case VT_UI2: stream << "UI2"; break;
+    case VT_UI4: stream << "UI4"; break;
+    case VT_I8: stream << "I8"; break;
+    case VT_UI8: stream << "UI8"; break;
+    case VT_INT: stream << "INT"; break;
+    case VT_UINT: stream << "UINT"; break;
+    case VT_VOID: stream << "VOID"; break;
+    case VT_HRESULT: stream << "HRESULT"; break;
+    case VT_PTR: stream << "PTR"; break;
+    case VT_SAFEARRAY: stream << "SAFEARRAY"; break;
+    case VT_CARRAY: stream << "CARRAY"; break;
+    case VT_USERDEFINED: stream << "USERDEFINED"; break;
+    case VT_LPSTR: stream << "LPSTR"; break;
+    case VT_LPWSTR: stream << "LPWSTR"; break;
+    case VT_RECORD: stream << "RECORD"; break;
+    case VT_INT_PTR: stream << "INT_PTR"; break;
+    case VT_UINT_PTR: stream << "UINT_PTR"; break;
+    case VT_FILETIME: stream << "FILETIME"; break;
+    case VT_BLOB: stream << "BLOB"; break;
+    case VT_STREAM: stream << "STREAM"; break;
+    case VT_STORAGE: stream << "STORAGE"; break;
+    case VT_STREAMED_OBJECT: stream << "STREAMED_OBJECT"; break;
+    case VT_STORED_OBJECT: stream << "STORED_OBJECT"; break;
+    case VT_BLOB_OBJECT: stream << "BLOB_OBJECT"; break;
+    case VT_CF: stream << "CF"; break;
+    case VT_CLSID: stream << "CLSID"; break;
+    case VT_VERSIONED_STREAM: stream << "VERSIONED_STREAM"; break;
+    case VT_BSTR_BLOB: stream << "BSTR_BLOB"; break;
+    default: stream << rVariant.vt; break;
+    }
+    if (rVariant.vt == VT_EMPTY || rVariant.vt == VT_NULL || rVariant.vt == VT_VOID)
+        return stream;
+    stream << ":";
+
+    std::ios_base::fmtflags flags;
+    std::streamsize width;
+    charT fill;
+
+    if (rVariant.vt & VT_BYREF)
+    {
+        stream << rVariant.byref << ":";
+        if (rVariant.byref == nullptr)
+            return stream;
+        if ((rVariant.vt & VT_TYPEMASK) == VT_VOID ||
+            (rVariant.vt & VT_TYPEMASK) == VT_USERDEFINED)
+            return stream;
+        stream << ":";
+        switch (rVariant.vt & VT_TYPEMASK)
+        {
+        case VT_I2: stream << *(short*)rVariant.byref; break;
+        case VT_I4: stream << *(int*)rVariant.byref; break;
+        case VT_R4: stream << *(float*)rVariant.byref; break;
+        case VT_R8: stream << *(double*)rVariant.byref; break;
+        case VT_CY: stream << ((CY*)rVariant.byref)->int64; break;
+        case VT_DATE: stream << *(double*)rVariant.byref; break; // FIXME
+        case VT_BSTR: stream << (OLECHAR*)rVariant.byref; break;
+        case VT_DISPATCH: stream << rVariant.byref; break;
+        case VT_ERROR:
+        case VT_HRESULT:
+            flags = stream.flags();
+            stream << std::hex << *(int*)rVariant.byref;
+            stream.setf(flags);
+            break;
+        case VT_BOOL: stream << (*(VARIANT_BOOL*)rVariant.byref?"YES":"NO"); break;
+        case VT_VARIANT: stream << *(VARIANT*)rVariant.byref; break;
+        case VT_UNKNOWN: stream << *(IUnknown**)rVariant.byref; break;
+        case VT_DECIMAL:
+            flags = stream.flags();
+            width = stream.width();
+            fill = stream.fill();
+            stream << std::hex << std::setw(8) << std::setfill('0') << ((DECIMAL*)rVariant.byref)->Hi32;
+            stream << std::setw(16) << ((DECIMAL*)rVariant.byref)->Lo64;
+            stream.setf(flags);
+            stream << std::setw(width) << std::setfill(fill);
+            break;
+        case VT_I1: stream << (int)*(char*)rVariant.byref; break;
+        case VT_UI1: stream << (unsigned int)*(unsigned char*)rVariant.byref; break;
+        case VT_UI2: stream << *(unsigned short*)rVariant.byref; break;
+        case VT_UI4: stream << *(unsigned int*)rVariant.byref; break;
+        case VT_I8: stream << *(long long*)rVariant.byref; break;
+        case VT_UI8: stream << *(unsigned long long*)rVariant.byref; break;
+        case VT_INT: stream << *(int*)rVariant.byref; break;
+        case VT_UINT: stream << *(unsigned int*)rVariant.byref; break;
+        case VT_INT_PTR: stream << *(intptr_t*)rVariant.byref; break;
+        case VT_UINT_PTR: stream << *(uintptr_t*)rVariant.byref; break;
+        case VT_PTR:
+        case VT_CARRAY:
+            stream << *(void**)rVariant.byref; break;
+        case VT_SAFEARRAY: break; // FIXME
+        case VT_LPSTR: stream << *(char**)rVariant.byref; break;
+        case VT_LPWSTR: stream << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(std::wstring(*(wchar_t**)rVariant.byref)); break;
+        case VT_FILETIME: break; // FIXME
+        case VT_BLOB: break; // FIXME
+        case VT_STREAM: break; // FIXME
+        case VT_STORAGE: break; // FIXME
+        case VT_STREAMED_OBJECT: break; // FIXME
+        case VT_STORED_OBJECT: break; // FIXME
+        case VT_BLOB_OBJECT: break; // FIXME
+        case VT_CF: break; // FIXME
+        case VT_CLSID: stream << *(IID*)rVariant.byref; break;
+        case VT_VERSIONED_STREAM: break; // FIXME
+        case VT_BSTR_BLOB: break; // FIXME
+        default: stream << "?(" << (rVariant.vt & VT_TYPEMASK) << ")"; break;
+        }
+        return stream;
+    }
+
+    switch (rVariant.vt & VT_TYPEMASK)
+    {
+    case VT_I2: stream << rVariant.iVal; break;
+    case VT_I4: stream << rVariant.lVal; break;
+    case VT_R4: stream << rVariant.fltVal; break;
+    case VT_R8: stream << rVariant.dblVal; break;
+    case VT_CY: stream << rVariant.cyVal.int64; break;
+    case VT_DATE: stream << (double)rVariant.date; break; // FIXME
+    case VT_BSTR: stream << rVariant.bstrVal; break;
+    case VT_DISPATCH: stream << rVariant.pdispVal; break;
+    case VT_ERROR:
+    case VT_HRESULT:
+        flags = stream.flags();
+        stream << std::hex << rVariant.lVal;
+        stream.setf(flags);
+        break;
+    case VT_BOOL: stream << (rVariant.boolVal?"YES":"NO"); break;
+    case VT_UNKNOWN: stream << rVariant.punkVal; break;
+    case VT_DECIMAL:
+        flags = stream.flags();
+        width = stream.width();
+        fill = stream.fill();
+        stream << std::hex << std::setw(8) << std::setfill('0') << rVariant.decVal.Hi32;
+        stream << std::setw(16) << rVariant.decVal.Lo64;
+        stream.setf(flags);
+        stream << std::setw(width) << std::setfill(fill);
+        break;
+    case VT_I1: stream << (int)rVariant.bVal; break;
+    case VT_UI1: stream << (unsigned int)rVariant.bVal; break;
+    case VT_UI2: stream << (unsigned short)rVariant.iVal; break;
+    case VT_UI4: stream << (unsigned int)rVariant.lVal; break;
+    case VT_I8: stream << rVariant.llVal; break;
+    case VT_UI8: stream << (unsigned long long)rVariant.llVal; break;
+    case VT_INT: stream << rVariant.lVal; break;
+    case VT_UINT: stream << (unsigned int)rVariant.lVal; break;
+    case VT_INT_PTR: stream << (intptr_t)rVariant.plVal; break;
+    case VT_UINT_PTR: stream << (uintptr_t)rVariant.plVal; break;
+    case VT_PTR:
+    case VT_CARRAY:
+        stream << rVariant.byref; break;
+    case VT_SAFEARRAY: break; // FIXME
+    case VT_LPSTR: stream << rVariant.bstrVal; break;
+    case VT_LPWSTR: stream << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(std::wstring((wchar_t*)rVariant.byref)); break;
+    case VT_FILETIME: break; // FIXME
+    case VT_BLOB: break; // FIXME
+    case VT_STREAM: break; // FIXME
+    case VT_STORAGE: break; // FIXME
+    case VT_STREAMED_OBJECT: break; // FIXME
+    case VT_STORED_OBJECT: break; // FIXME
+    case VT_BLOB_OBJECT: break; // FIXME
+    case VT_CF: break; // FIXME
+    case VT_VERSIONED_STREAM: break; // FIXME
+    case VT_BSTR_BLOB: break; // FIXME
+    default: stream << "?(" << (rVariant.vt & VT_TYPEMASK) << ")"; break;
+    }
     return stream;
 }
 
