@@ -657,7 +657,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                 pNewMethod->pMod = this;
                 pNewMethod->SetParent( this );
                 pMethods->PutDirect( pNewMethod, i );
-                StartListening( pNewMethod->GetBroadcaster(), true );
+                StartListening(pNewMethod->GetBroadcaster(), DuplicateHandling::Prevent);
             }
         }
     }
@@ -709,7 +709,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             pNewProp->ResetFlag( SbxFlagBits::NoBroadcast ); // except the Broadcast if it was set
             pProcedureProp->SetFlags( nFlags_ );
             pProps->PutDirect( pNewProp, i );
-            StartListening( pNewProp->GetBroadcaster(), true );
+            StartListening(pNewProp->GetBroadcaster(), DuplicateHandling::Prevent);
         }
         else
         {
@@ -1068,7 +1068,7 @@ void StarBASIC::Insert( SbxVariable* pVar )
     {
         pModules.emplace_back(static_cast<SbModule*>(pVar));
         pVar->SetParent( this );
-        StartListening( pVar->GetBroadcaster(), true );
+        StartListening(pVar->GetBroadcaster(), DuplicateHandling::Prevent);
     }
     else
     {
