@@ -112,11 +112,11 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
     @param pData
     The block of data to copy
     @param nStride
-    The number of bytes in a scanline, must >= width
+    The number of bytes in a scanline, must >= (width * nBitCount / 8)
 */
 BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nStride, sal_uInt16 nBitCount )
 {
-    assert(nStride >= nWidth);
+    assert(nStride >= (nWidth * nBitCount / 8));
     assert( nBitCount == 1 || nBitCount == 24 || nBitCount == 32);
     Bitmap aBmp( Size( nWidth, nHeight ), nBitCount );
 
@@ -135,12 +135,12 @@ BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHe
     {
         for( long y = 0; y < nHeight; ++y )
         {
-            sal_uInt8 const *p = pData + y * nStride;
             Scanline pScanline = pWrite->GetScanline(y);
             for (long x = 0; x < nWidth; ++x)
             {
-                pWrite->SetPixelOnData(pScanline, x, BitmapColor(*p));
-                ++p;
+                sal_uInt8 const *p = pData + y * nStride / 8;
+                int bitIndex = (y * nStride) % 8;
+                pWrite->SetPixelOnData(pScanline, x, BitmapColor((*p >> bitIndex) & 1));
             }
         }
     }
