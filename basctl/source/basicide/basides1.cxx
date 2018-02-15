@@ -282,7 +282,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
 
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
 
-            StartListening( *pBasMgr, true /* log on only once */ );
+            StartListening(*pBasMgr, DuplicateHandling::Prevent /* log on only once */);
             OUString aLibName( rInfo.GetLib() );
             if ( aLibName.isEmpty() )
                 aLibName = "Standard" ;
@@ -1229,7 +1229,7 @@ VclPtr<ModulWindow> Shell::ShowActiveModuleWindow( StarBASIC const * pBasic )
         else
             SAL_WARN( "basctl.basicide", "No BASIC!");
         if (BasicManager* pBasicMgr = FindBasicManager(pBasic))
-            StartListening( *pBasicMgr, true /* log on only once */ );
+            StartListening(*pBasicMgr, DuplicateHandling::Prevent /* log on only once */);
         return pWin;
     }
     return nullptr;

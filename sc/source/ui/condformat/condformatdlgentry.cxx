@@ -207,7 +207,7 @@ ScConditionFrmtEntry::ScConditionFrmtEntry(vcl::Window* pParent, ScDocument* pDo
 
     Init(pDialogParent);
 
-    StartListening(*pDoc->GetStyleSheetPool(), true);
+    StartListening(*pDoc->GetStyleSheetPool(), DuplicateHandling::Prevent);
 
     if(pFormatEntry)
     {
@@ -1230,7 +1230,7 @@ ScDateFrmtEntry::ScDateFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, const S
 
     Init();
 
-    StartListening(*pDoc->GetStyleSheetPool(), true);
+    StartListening(*pDoc->GetStyleSheetPool(), DuplicateHandling::Prevent);
 
     if(pFormat)
     {

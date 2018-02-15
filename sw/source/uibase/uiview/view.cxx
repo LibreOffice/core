@@ -866,8 +866,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     SfxViewFrame* pViewFrame = GetViewFrame();
 
-    StartListening(*pViewFrame, true);
-    StartListening(rDocSh, true);
+    StartListening(*pViewFrame, DuplicateHandling::Prevent);
+    StartListening(rDocSh, DuplicateHandling::Prevent);
 
     // Set Zoom-factor from HRuler
     Fraction aZoomFract( aUsrPref.GetZoom(), 100 );
