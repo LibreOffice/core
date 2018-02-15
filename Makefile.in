@@ -162,7 +162,7 @@ gbuild_TARGETS := AllLangHelp \
 	Zip \
 
 # build a generic gbuild target
-$(foreach target,$(gbuild_TARGETS),$(target)_% $(foreach module,$(gbuild_modules),$(target)_$(module)/%)) %.genpatch: bootstrap fetch
+$(foreach target,$(gbuild_TARGETS),$(target)_% $(foreach module,$(gbuild_modules),$(target)_$(module)/%)) UIConfig_modules/% %.genpatch: bootstrap fetch
 	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
 #
