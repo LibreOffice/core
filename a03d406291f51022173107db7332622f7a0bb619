@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_4dde6240",
+        "filename": "jvmfwk/plugins/sunmajor/pluginlib/util.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-15T20:43:18Z",
+      "side": 1,
+      "message": "this brace is incorrectly indented",
+      "revId": "a03d406291f51022173107db7332622f7a0bb619",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
