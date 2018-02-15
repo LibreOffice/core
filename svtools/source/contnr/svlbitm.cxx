@@ -194,7 +194,7 @@ void SvLBoxString::Paint(
     if (rDev.TextCenterAndClipEnabled())
     {
         nStyle |= DrawTextFlags::PathEllipsis | DrawTextFlags::Center;
-        aSize.Width() = rDev.GetEntryWidth();
+        aSize.setWidth( rDev.GetEntryWidth() );
     }
     rRenderContext.DrawText(tools::Rectangle(rPos, aSize), maText, nStyle);
 }
@@ -338,9 +338,9 @@ void SvLBoxButton::ImplAdjustBoxSize(Size& io_rSize, ControlType i_eType, vcl::R
         Size aContentSize( aNativeContent.GetSize() );
         // leave a little space around the box image (looks better)
         if( aContentSize.Height() + 2 > io_rSize.Height() )
-            io_rSize.Height() = aContentSize.Height() + 2;
+            io_rSize.setHeight( aContentSize.Height() + 2 );
         if( aContentSize.Width() + 2 > io_rSize.Width() )
-            io_rSize.Width() = aContentSize.Width() + 2;
+            io_rSize.setWidth( aContentSize.Width() + 2 );
     }
 }
 

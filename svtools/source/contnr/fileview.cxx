@@ -569,7 +569,7 @@ void ViewTabListBox_Impl::Resize()
     if ( mbShowHeader )
     {
         aBarSize = mpHeaderBar->GetSizePixel();
-        aBarSize.Width() = mbAutoResize ? aBoxSize.Width() : GetSizePixel().Width();
+        aBarSize.setWidth( mbAutoResize ? aBoxSize.Width() : GetSizePixel().Width() );
         mpHeaderBar->SetSizePixel( aBarSize );
     }
 
@@ -1299,7 +1299,7 @@ IMPL_LINK( SvtFileView, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
     for ( sal_uInt16 i = 1; i <= nTabs; ++i )
     {
         long nWidth = pBar->GetItemSize(i);
-        aSize.Width() =  nWidth + nTmpSize;
+        aSize.setWidth(  nWidth + nTmpSize );
         nTmpSize += nWidth;
         mpImpl->mpView->SetTab( i, aSize.Width(), MapUnit::MapPixel );
     }

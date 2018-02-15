@@ -102,7 +102,8 @@ const vcl::Font& SvtScriptedTextHelper_Impl::GetFont( sal_uInt16 _nScript ) cons
 
 void SvtScriptedTextHelper_Impl::CalculateSizes()
 {
-    maTextSize.Width() = maTextSize.Height() = 0;
+    maTextSize.setWidth( 0 );
+    maTextSize.setHeight( 0 );
     mrOutDevice.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
 
     // calculate text portion widths and total width
@@ -130,18 +131,18 @@ void SvtScriptedTextHelper_Impl::CalculateSizes()
             SetOutDevFont( nScript );
             nCurrWidth = mrOutDevice.GetTextWidth( maText, nThisPos, nNextPos - nThisPos );
             maWidthVec.push_back( nCurrWidth );
-            maTextSize.Width() += nCurrWidth;
+            maTextSize.setWidth( maTextSize.Width() + nCurrWidth );
             nThisPos = nNextPos;
         }
     }
 
     // calculate maximum font height
     SetOutDevFont( i18n::ScriptType::LATIN );
-    maTextSize.Height() = std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() );
+    maTextSize.setHeight( std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() ) );
     SetOutDevFont( i18n::ScriptType::ASIAN );
-    maTextSize.Height() = std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() );
+    maTextSize.setHeight( std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() ) );
     SetOutDevFont( i18n::ScriptType::COMPLEX );
-    maTextSize.Height() = std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() );
+    maTextSize.setHeight( std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() ) );
 
     mrOutDevice.Pop();
 }
@@ -263,8 +264,8 @@ void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
 
         SetOutDevFont( nScript );
         mrOutDevice.DrawText( aCurrPos, maText, nThisPos, nNextPos - nThisPos );
-        aCurrPos.X() += maWidthVec[ nVecIndex++ ];
-        aCurrPos.X() += mrOutDevice.GetTextHeight() / 5;   // add 20% of font height as portion spacing
+        aCurrPos.setX( aCurrPos.X() + maWidthVec[ nVecIndex++ ] );
+        aCurrPos.setX( aCurrPos.X() + mrOutDevice.GetTextHeight() / 5 );   // add 20% of font height as portion spacing
         nThisPos = nNextPos;
     }
 
