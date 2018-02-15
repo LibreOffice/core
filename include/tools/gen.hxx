@@ -82,6 +82,8 @@ public:
     long&               Y() { return nB; }
 
     void                Move( long nHorzMove, long nVertMove );
+    void                MoveX( long nHorzMove ) { nA += nHorzMove; }
+    void                MoveY( long nVertMove ) { nB += nVertMove; }
 
     void                RotateAround( long& rX, long& rY, short nOrientation ) const;
 
@@ -191,6 +193,8 @@ public:
 
     long&           Width()  { return nA; }
     long&           Height() { return nB; }
+    void            AdjustWidth( long n ) { nA += n; }
+    void            AdjustHeight( long n ) { nB += n; }
 
     long            getWidth() const { return Width(); }
     long            getHeight() const { return Height(); }
@@ -400,6 +404,10 @@ public:
 
     /// Move the top and left edges by a delta, preserving width and height
     inline void         Move( long nHorzMoveDelta, long nVertMoveDelta );
+    void                MoveLeft( long nHorzMoveDelta ) { nLeft += nHorzMoveDelta; }
+    void                MoveRight( long nHorzMoveDelta ) { nRight += nHorzMoveDelta; }
+    void                MoveTop( long nVertMoveDelta ) { nTop += nVertMoveDelta; }
+    void                MoveBottom( long nVertMoveDelta ) { nBottom += nVertMoveDelta; }
     inline void         SetPos( const Point& rPoint );
     void                SetSize( const Size& rSize );
     inline Size         GetSize() const;
