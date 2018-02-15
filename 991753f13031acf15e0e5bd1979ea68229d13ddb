@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_52f7e1f4",
+        "filename": "sw/source/core/edit/edfcol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1736,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-02-15T08:42:06Z",
+      "side": 1,
+      "message": "Would it make sense to drop this local function and just check if SwNode::FindTableNode() returns nullptr instead?",
+      "revId": "991753f13031acf15e0e5bd1979ea68229d13ddb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
