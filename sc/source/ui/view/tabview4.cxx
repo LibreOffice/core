@@ -86,7 +86,7 @@ void ScTabView::ShowRefTip()
                         nEndY+1 == aViewData.GetEditViewRow() )
                 {
                     //  then align at the upper border of edited cell
-                    aPos.setY( aPos.Y() - 2 );      // the three from above
+                    aPos.AdjustY( -2 );      // the three from above
                     nFlags = ( nFlags & ~QuickHelpFlags::Top ) | QuickHelpFlags::Bottom;
                 }
 
@@ -282,8 +282,8 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
                 SCCOL nAddX = ( nEndX >= aMarkRange.aEnd.Col() ) ? 1 : 0;
                 SCROW nAddY = ( nEndY >= aMarkRange.aEnd.Row() ) ? 1 : 0;
                 Point aPos = aViewData.GetScrPos( nEndX+nAddX, nEndY+nAddY, aViewData.GetActivePart() );
-                aPos.setX( aPos.X() + 8 );
-                aPos.setY( aPos.Y() + 4 );
+                aPos.AdjustX(8 );
+                aPos.AdjustY(4 );
                 aPos = pWin->OutputToScreenPixel( aPos );
                 tools::Rectangle aRect( aPos, aPos );
                 QuickHelpFlags nAlign = QuickHelpFlags::Left|QuickHelpFlags::Top;

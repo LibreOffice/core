@@ -90,7 +90,7 @@ void ScSolverOptionsString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vc
     rRenderContext.DrawText(rPos, aNormalStr);
 
     Point aNewPos(rPos);
-    aNewPos.setX( aNewPos.X() + rRenderContext.GetTextWidth(aNormalStr) );
+    aNewPos.AdjustX(rRenderContext.GetTextWidth(aNormalStr) );
     vcl::Font aOldFont(rRenderContext.GetFont());
     vcl::Font aFont(aOldFont);
     aFont.SetWeight(WEIGHT_BOLD);

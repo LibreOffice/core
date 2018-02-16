@@ -1524,7 +1524,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     //  when right-aligned, leave space for the cursor
     //  in vertical mode, editing is always right-aligned
     if ( GetEditAdjust() == SvxAdjust::Right || bAsianVertical )
-        aPixRect.SetRight( aPixRect.Right() + 1 );
+        aPixRect.AdjustRight(1 );
 
     tools::Rectangle aOutputArea = pWin->PixelToLogic( aPixRect, GetLogicMode() );
     pEditView[eWhich]->SetOutputArea( aOutputArea );
@@ -1744,8 +1744,8 @@ void ScViewData::EditGrowX()
                 nLogicRight = pWin->PixelToLogic(Size(nRightPix,0)).Width();
             }
 
-            aArea.SetLeft( aArea.Left() - (bLayoutRTL ? nLogicRight : nLogicLeft) );
-            aArea.SetRight( aArea.Right() + (bLayoutRTL ? nLogicLeft : nLogicRight) );
+            aArea.AdjustLeft( -(bLayoutRTL ? nLogicRight : nLogicLeft) );
+            aArea.AdjustRight(bLayoutRTL ? nLogicLeft : nLogicRight );
 
             if ( aArea.Right() > aArea.Left() + aSize.Width() - 1 )
             {
@@ -1768,9 +1768,9 @@ void ScViewData::EditGrowX()
             long nPix = ToPixel( pLocalDoc->GetColWidth( nEditStartCol, nTabNo ), nPPTX );
             long nLogicWidth = pWin->PixelToLogic(Size(nPix,0)).Width();
             if ( !bLayoutRTL )
-                aArea.SetLeft( aArea.Left() - nLogicWidth );
+                aArea.AdjustLeft( -nLogicWidth );
             else
-                aArea.SetRight( aArea.Right() + nLogicWidth );
+                aArea.AdjustRight(nLogicWidth );
 
             if ( aArea.Right() > aArea.Left() + aSize.Width() - 1 )
             {
@@ -1791,9 +1791,9 @@ void ScViewData::EditGrowX()
             long nPix = ToPixel( pLocalDoc->GetColWidth( nEditEndCol, nTabNo ), nPPTX );
             long nLogicWidth = pWin->PixelToLogic(Size(nPix,0)).Width();
             if ( bLayoutRTL )
-                aArea.SetLeft( aArea.Left() - nLogicWidth );
+                aArea.AdjustLeft( -nLogicWidth );
             else
-                aArea.SetRight( aArea.Right() + nLogicWidth );
+                aArea.AdjustRight(nLogicWidth );
 
             if ( aArea.Right() > aArea.Left() + aSize.Width() - 1 )
             {
@@ -1841,7 +1841,7 @@ void ScViewData::EditGrowX()
 
                 long nMove = aVis.Left();
                 aVis.SetLeft( 0 );
-                aVis.SetRight( aVis.Right() - nMove );
+                aVis.AdjustRight( -nMove );
             }
             pCurView->SetVisArea( aVis );
             bMoveArea = false;
@@ -1925,7 +1925,7 @@ void ScViewData::EditGrowY( bool bInitial )
         ++nEditEndRow;
         ScDocument* pLocalDoc = GetDocument();
         long nPix = ToPixel( pLocalDoc->GetRowHeight( nEditEndRow, nTabNo ), nPPTY );
-        aArea.SetBottom( aArea.Bottom() + pWin->PixelToLogic(Size(0,nPix)).Height() );
+        aArea.AdjustBottom(pWin->PixelToLogic(Size(0,nPix)).Height() );
 
         if ( aArea.Bottom() > aArea.Top() + aSize.Height() - 1 )
         {
