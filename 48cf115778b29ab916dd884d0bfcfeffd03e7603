@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_4d0d828f",
+        "filename": "include/vcl/salbtype.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-02-16T07:25:37Z",
+      "side": 0,
+      "message": "Honestly, it\u0027s a pain to read diffs when there are that many noise that is unrelated to the actual change! Is it really necessary to change these spaces?",
+      "range": {
+        "startLine": 481,
+        "startChar": 11,
+        "endLine": 481,
+        "endChar": 12
+      },
+      "revId": "48cf115778b29ab916dd884d0bfcfeffd03e7603",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
