@@ -1,0 +1,5 @@
+#!/usr/bin/env python
+
+import lxml.etree as ET
+
+print("OK")
