@@ -100,6 +100,7 @@ public:
     void testTdf105502();
     void testCommentCallbacks();
     void testMultiViewInsertDeletePage();
+    void testTdf115783();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -136,6 +137,7 @@ public:
     CPPUNIT_TEST(testTdf105502);
     CPPUNIT_TEST(testCommentCallbacks);
     CPPUNIT_TEST(testMultiViewInsertDeletePage);
+    CPPUNIT_TEST(testTdf115783);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1758,6 +1760,81 @@ void SdTiledRenderingTest::testMultiViewInsertDeletePage()
 
     mxComponent->dispose();
     mxComponent.clear();
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testTdf115783()
+{
+    // Load the document.
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("tdf115783.fodp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
+    CPPUNIT_ASSERT(pTableObject);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pTableObject, pView->GetSdrPageView());
+
+    // Create a cell selection and set font height.
+    // Go to the end of the B1 cell.
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT);
+    // Create a B1->C1 cell selection.
+    const int nShiftRight = KEY_SHIFT + KEY_RIGHT;
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, nShiftRight);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, nShiftRight);
+    uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence({
+        { "FontHeight.Height", uno::makeAny(static_cast<float>(12)) },
+    });
+    comphelper::dispatchCommand(".uno:FontHeight", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // Create a text selection on the B1 cell.
+    pTableObject->setActiveCell(sdr::table::CellPos(1, 0));
+    pView->SdrBeginTextEdit(pTableObject);
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    // Start para, start char, end para, end char.
+    rEditView.SetSelection(ESelection(0, 0, 0, 5));
+    CPPUNIT_ASSERT_EQUAL(OUString("hello"), rEditView.GetSelected());
+
+    // Copy selection, paste at the start of the cell.
+    aArgs = {};
+    comphelper::dispatchCommand(".uno:Copy", aArgs);
+    Scheduler::ProcessEventsToIdle();
+    rEditView.SetSelection(ESelection(0, 0, 0, 0));
+    aArgs = {};
+    comphelper::dispatchCommand(".uno:Paste", aArgs);
+    Scheduler::ProcessEventsToIdle();
+    pView->SdrEndTextEdit();
+
+    // And now verify that the cell has the correct font size.
+    uno::Reference<table::XCellRange> xTable(pTableObject->getTable(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTable.is());
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByPosition(1, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCell.is());
+    uno::Reference<container::XEnumerationAccess> xText(xCell->getText(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xText.is());
+    uno::Reference<container::XEnumerationAccess> xParagraph(
+        xText->createEnumeration()->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xParagraph.is());
+    uno::Reference<text::XTextRange> xPortion(xParagraph->createEnumeration()->nextElement(),
+                                              uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPortion.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("hello"), xPortion->getString());
+    uno::Reference<beans::XPropertySet> xPropertySet(xPortion, uno::UNO_QUERY);
+    int nHeight = xPropertySet->getPropertyValue("CharHeight").get<float>();
+    // This was 18.
+    CPPUNIT_ASSERT_EQUAL(12, nHeight);
+
+    xPortion.set(xParagraph->createEnumeration()->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPortion.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("hello"), xPortion->getString());
+    xPropertySet.set(xPortion, uno::UNO_QUERY);
+    nHeight = xPropertySet->getPropertyValue("CharHeight").get<float>();
+    // This was also 18.
+    CPPUNIT_ASSERT_EQUAL(12, nHeight);
 
     comphelper::LibreOfficeKit::setActive(false);
 }

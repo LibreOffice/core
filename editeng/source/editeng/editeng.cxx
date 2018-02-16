@@ -1738,6 +1738,13 @@ const SfxPoolItem& EditEngine::GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich
     return pImpEditEngine->GetParaAttrib( nPara, nWhich );
 }
 
+void EditEngine::SetCharAttribs(sal_Int32 nPara, const SfxItemSet& rSet)
+{
+    EditSelection aSel(pImpEditEngine->ConvertSelection(nPara, 0, nPara, GetTextLen(nPara)));
+    pImpEditEngine->SetAttribs(aSel, rSet);
+    pImpEditEngine->FormatAndUpdate();
+}
+
 void EditEngine::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const
 {
     pImpEditEngine->GetCharAttribs( nPara, rLst );

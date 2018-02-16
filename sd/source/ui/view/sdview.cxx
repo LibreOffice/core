@@ -95,6 +95,8 @@
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include "DrawController.hxx"
+#include <svl/itemiter.hxx>
+#include <editeng/editeng.hxx>
 
 #include <memory>
 #include <numeric>
@@ -1191,8 +1193,17 @@ void View::CheckPossibilities()
     maSmartTags.CheckPossibilities();
 }
 
-void View::OnBeginPasteOrDrop( PasteOrDropInfos* /*pInfo*/ )
+void View::OnBeginPasteOrDrop( PasteOrDropInfos* pInfo )
 {
+    SdrOutliner* pOutliner = GetTextEditOutliner();
+    if (!pOutliner)
+        return;
+
+    // Turn character attributes of the paragraph of the insert position into
+    // character-level attributes, so they are not lost when OnEndPasteOrDrop()
+    // sets the paragraph stylesheet.
+    SfxItemSet aSet(pOutliner->GetParaAttribs(pInfo->nStartPara));
+    pOutliner->SetCharAttribs(pInfo->nStartPara, aSet);
 }
 
 /** this is called after a paste or drop operation, make sure that the newly inserted paragraphs
