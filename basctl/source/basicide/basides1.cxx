@@ -1247,11 +1247,11 @@ void Shell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
 
     Size aSz( rSize );
     Size aScrollBarBoxSz( aScrollBarBox->GetSizePixel() );
-    aSz.setHeight( aSz.Height() - aScrollBarBoxSz.Height() );
-    aSz.setHeight( aSz.Height() - aTabBarSize.Height() );
+    aSz.AdjustHeight( -(aScrollBarBoxSz.Height()) );
+    aSz.AdjustHeight( -(aTabBarSize.Height()) );
 
     Size aOutSz( aSz );
-    aSz.setWidth( aSz.Width() - aScrollBarBoxSz.Width() );
+    aSz.AdjustWidth( -(aScrollBarBoxSz.Width()) );
     aScrollBarBox->SetPosPixel( Point( rSize.Width() - aScrollBarBoxSz.Width(), rSize.Height() - aScrollBarBoxSz.Height() ) );
     aVScrollBar->SetPosSizePixel( Point( rPos.X()+aSz.Width(), rPos.Y() ), Size( aScrollBarBoxSz.Width(), aSz.Height() ) );
     aHScrollBar->SetPosSizePixel( Point( rPos.X(), rPos.Y()+aSz.Height() ), Size( aSz.Width(), aScrollBarBoxSz.Height() ) );

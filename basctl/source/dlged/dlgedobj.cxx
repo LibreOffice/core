@@ -140,8 +140,8 @@ bool DlgEdObj::TransformSdrToControlCoordinates(
     aFormPos = pDevice->LogicToPixel( aFormPos, MapMode( MapUnit::Map100thMM ) );
 
     // subtract form position
-    aPos.setWidth( aPos.Width() - aFormPos.Width() );
-    aPos.setHeight( aPos.Height() - aFormPos.Height() );
+    aPos.AdjustWidth( -(aFormPos.Width()) );
+    aPos.AdjustHeight( -(aFormPos.Height()) );
 
     // take window borders into account
     Reference< beans::XPropertySet > xPSetForm( pForm->GetUnoControlModel(), UNO_QUERY );
@@ -153,8 +153,8 @@ bool DlgEdObj::TransformSdrToControlCoordinates(
     if( bDecoration )
     {
         awt::DeviceInfo aDeviceInfo = pForm->getDeviceInfo();
-        aPos.setWidth( aPos.Width() - aDeviceInfo.LeftInset );
-        aPos.setHeight( aPos.Height() - aDeviceInfo.TopInset );
+        aPos.AdjustWidth( -(aDeviceInfo.LeftInset) );
+        aPos.AdjustHeight( -(aDeviceInfo.TopInset) );
     }
 
     // convert pixel to logic units
@@ -201,8 +201,8 @@ bool DlgEdObj::TransformSdrToFormCoordinates(
     if( bDecoration )
     {
         awt::DeviceInfo aDeviceInfo = pForm->getDeviceInfo();
-        aSize.setWidth( aSize.Width() - aDeviceInfo.LeftInset + aDeviceInfo.RightInset );
-        aSize.setHeight( aSize.Height() - aDeviceInfo.TopInset + aDeviceInfo.BottomInset );
+        aSize.AdjustWidth( -(aDeviceInfo.LeftInset + aDeviceInfo.RightInset) );
+        aSize.AdjustHeight( -(aDeviceInfo.TopInset + aDeviceInfo.BottomInset) );
     }
     // convert pixel to logic units
     aPos = pDevice->PixelToLogic(aPos, MapMode(MapUnit::MapAppFont));
@@ -251,8 +251,8 @@ bool DlgEdObj::TransformControlToSdrCoordinates(
     aFormPos = pDevice->LogicToPixel(aFormPos, MapMode(MapUnit::MapAppFont));
 
     // add form position
-    aPos.setWidth( aPos.Width() + aFormPos.Width() );
-    aPos.setHeight( aPos.Height() + aFormPos.Height() );
+    aPos.AdjustWidth(aFormPos.Width() );
+    aPos.AdjustHeight(aFormPos.Height() );
 
     // take window borders into account
     bool bDecoration = true;
@@ -260,8 +260,8 @@ bool DlgEdObj::TransformControlToSdrCoordinates(
     if( bDecoration )
     {
         awt::DeviceInfo aDeviceInfo = pForm->getDeviceInfo();
-        aPos.setWidth( aPos.Width() + aDeviceInfo.LeftInset );
-        aPos.setHeight( aPos.Height() + aDeviceInfo.TopInset );
+        aPos.AdjustWidth(aDeviceInfo.LeftInset );
+        aPos.AdjustHeight(aDeviceInfo.TopInset );
     }
 
     // convert pixel to 100th_mm
@@ -309,8 +309,8 @@ bool DlgEdObj::TransformFormToSdrCoordinates(
     if( bDecoration )
     {
         awt::DeviceInfo aDeviceInfo = pForm->getDeviceInfo();
-        aSize.setWidth( aSize.Width() + aDeviceInfo.LeftInset + aDeviceInfo.RightInset );
-        aSize.setHeight( aSize.Height() + aDeviceInfo.TopInset + aDeviceInfo.BottomInset );
+        aSize.AdjustWidth(aDeviceInfo.LeftInset + aDeviceInfo.RightInset );
+        aSize.AdjustHeight(aDeviceInfo.TopInset + aDeviceInfo.BottomInset );
     }
 
     // convert pixel to 100th_mm

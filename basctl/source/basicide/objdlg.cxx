@@ -58,8 +58,8 @@ ObjectCatalog::ObjectCatalog (vcl::Window* pParent)
         Point aPos = rParent.OutputToScreenPixel(Point(0, 0));
         Size const aParentSize = rParent.GetSizePixel();
         Size const aSize = GetSizePixel();
-        aPos.setX( aPos.X() + (aParentSize.Width() - aSize.Width()) / 2 );
-        aPos.setY( aPos.Y() + (aParentSize.Height() - aSize.Height()) / 2 );
+        aPos.AdjustX((aParentSize.Width() - aSize.Width()) / 2 );
+        aPos.AdjustY((aParentSize.Height() - aSize.Height()) / 2 );
         SetPosPixel(aPos);
     }
 

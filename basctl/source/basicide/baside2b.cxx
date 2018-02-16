@@ -372,8 +372,8 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                     {
                         aTopLeft = GetEditView()->GetTextEngine()->PaMtoEditCursor( aStartOfWord ).BottomLeft();
                         aTopLeft = GetEditView()->GetWindowPos( aTopLeft );
-                        aTopLeft.setX( aTopLeft.X() + 5 );
-                        aTopLeft.setY( aTopLeft.Y() + 5 );
+                        aTopLeft.AdjustX(5 );
+                        aTopLeft.AdjustY(5 );
                         aTopLeft = OutputToScreenPixel( aTopLeft );
                     }
                 }
@@ -1571,8 +1571,8 @@ WatchWindow::WatchWindow (Layout* pParent)
     aRemoveWatchButton->SetModeImage(Image(BitmapEx(RID_BMP_REMOVEWATCH)));
     aRemoveWatchButton->SetQuickHelpText(IDEResId(RID_STR_REMOVEWATCHTIP));
     Size aSz( aRemoveWatchButton->GetModeImage().GetSizePixel() );
-    aSz.setWidth( aSz.Width() + 6 );
-    aSz.setHeight( aSz.Height() + 6 );
+    aSz.AdjustWidth(6 );
+    aSz.AdjustHeight(6 );
     aRemoveWatchButton->SetSizePixel( aSz );
     aRemoveWatchButton->Show();
 
@@ -1656,7 +1656,7 @@ void WatchWindow::Resize()
     if ( aBoxSz.Height() < 4 )
         aBoxSz.setHeight( 0 );
 
-    aBoxSz.setHeight( aBoxSz.Height() - nHeaderBarHeight );
+    aBoxSz.AdjustHeight( -nHeaderBarHeight );
     aTreeListBox->SetSizePixel( aBoxSz );
     aTreeListBox->GetHScroll()->SetPageSize( aTreeListBox->GetHScroll()->GetVisibleSize() );
 
@@ -1991,8 +1991,8 @@ void ComplexEditorWindow::Resize()
 {
     Size aOutSz = GetOutputSizePixel();
     Size aSz(aOutSz);
-    aSz.setWidth( aSz.Width() - 2*DWBORDER );
-    aSz.setHeight( aSz.Height() - 2*DWBORDER );
+    aSz.AdjustWidth( -(2*DWBORDER) );
+    aSz.AdjustHeight( -(2*DWBORDER) );
     long nBrkWidth = 20;
     long nSBWidth = aEWVScrollBar->GetSizePixel().Width();
 
@@ -2844,12 +2844,12 @@ void CodeCompleteWindow::ResizeAndPositionListBox()
         if( aVisArea.TopRight().getY() + aPos.getY() + aSize.getHeight() > aBottomPoint.getY() )
         {//clipped at the bottom: move it up
             const long& nParentFontHeight = pParent->GetEditEngine()->GetFont().GetFontHeight(); //parent's font (in the IDE): needed for height
-            aPos.setY( aPos.Y() - aSize.getHeight() + nParentFontHeight + nCursorPad );
+            aPos.AdjustY( -(aSize.getHeight() + nParentFontHeight + nCursorPad) );
         }
 
         if( aVisArea.TopLeft().getX() + aPos.getX() + aSize.getWidth() > aBottomPoint.getX() )
         {//clipped at the right side, move it a bit left
-            aPos.setX( aPos.X() - aSize.getWidth() + aVisArea.TopLeft().getX() );
+            aPos.AdjustX( -(aSize.getWidth() + aVisArea.TopLeft().getX()) );
         }
         //set the position
         SetPosPixel( aPos );
