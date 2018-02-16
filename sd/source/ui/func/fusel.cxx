@@ -1220,10 +1220,10 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
     Point aHitPosT(rPos);
     Point aHitPosB(rPos);
 
-    aHitPosR.setX( aHitPosR.X() + n2HitLog );
-    aHitPosL.setX( aHitPosL.X() - n2HitLog );
-    aHitPosT.setY( aHitPosT.Y() + n2HitLog );
-    aHitPosB.setY( aHitPosB.Y() - n2HitLog );
+    aHitPosR.AdjustX(n2HitLog );
+    aHitPosL.AdjustX( -n2HitLog );
+    aHitPosT.Y() += n2HitLog;
+    aHitPosB.AdjustY( -n2HitLog );
 
     if ( !bClosed                                      ||
          !bFilled                                      ||

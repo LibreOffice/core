@@ -574,14 +574,14 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
                 Point aPagePos(0, 0);
                 Size aPageSize = pPageView->GetPage()->GetSize();
 
-                aPagePos.setX( aPagePos.X() + aPageSize.Width()  / 2 );
+                aPagePos.AdjustX(aPageSize.Width()  / 2 );
                 aPageSize.setWidth( static_cast<long>(aPageSize.Width() * 1.03) );
 
-                aPagePos.setY( aPagePos.Y() + aPageSize.Height() / 2 );
+                aPagePos.AdjustY(aPageSize.Height() / 2 );
                 aPageSize.setHeight( static_cast<long>(aPageSize.Height() * 1.03) );
-                aPagePos.setY( aPagePos.Y() - aPageSize.Height() / 2 );
+                aPagePos.AdjustY( -(aPageSize.Height() / 2) );
 
-                aPagePos.setX( aPagePos.X() - aPageSize.Width()  / 2 );
+                aPagePos.AdjustX( -(aPageSize.Width()  / 2) );
 
                 ::tools::Rectangle aFullPageZoomRect( aPagePos, aPageSize );
                 aZoomItem.AddSnappingPoint( pActiveWindow->GetZoomForRect( aFullPageZoomRect ) );

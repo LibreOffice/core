@@ -277,12 +277,12 @@ void CustomAnimationListEntryItem::Paint(const Point& rPos, SvTreeListBox& rDev,
         //FIXME With previous image not defined in CustomAnimation.src
     }
 
-    aPos.setX( aPos.X() + nIconWidth );
+    aPos.AdjustX(nIconWidth );
 
 
     rRenderContext.DrawText(aPos, rRenderContext.GetEllipsisString(msDescription, rDev.GetOutputSizePixel().Width() - aPos.X()));
 
-    aPos.setY( aPos.Y() + nIconWidth );
+    aPos.AdjustY(nIconWidth );
 
     OUString sImage;
     switch (mpEffect->getPresetClass())
@@ -318,12 +318,12 @@ void CustomAnimationListEntryItem::Paint(const Point& rPos, SvTreeListBox& rDev,
         BitmapEx aBitmap(sImage);
         Image aImage(aBitmap);
         Point aImagePos(aPos);
-        aImagePos.setY( aImagePos.Y() + ((aSize.Height()/2 - aImage.GetSizePixel().Height()) >> 1) );
+        aImagePos.AdjustY((aSize.Height()/2 - aImage.GetSizePixel().Height()) >> 1 );
         rRenderContext.DrawImage(aImagePos, aImage);
     }
 
-    aPos.setX( aPos.X() + nIconWidth );
-    aPos.setY( aPos.Y() + ((aSize.Height()/2 - rDev.GetTextHeight()) >> 1) );
+    aPos.AdjustX(nIconWidth );
+    aPos.AdjustY((aSize.Height()/2 - rDev.GetTextHeight()) >> 1 );
 
     rRenderContext.DrawText(aPos, rRenderContext.GetEllipsisString(msEffectName, rDev.GetOutputSizePixel().Width() - aPos.X()));
 }
@@ -419,10 +419,10 @@ void CustomAnimationTriggerEntryItem::Paint(const Point& rPos, SvTreeListBox& rD
     int nVertBorder = ((aSize.Height() - rDev.GetTextHeight()) >> 1);
     int nHorzBorder = rRenderContext.LogicToPixel(Size(3, 3), MapMode(MapUnit::MapAppFont)).Width();
 
-    aOutRect.SetLeft( aOutRect.Left() + nHorzBorder );
-    aOutRect.SetRight( aOutRect.Right() - nHorzBorder );
-    aOutRect.SetTop( aOutRect.Top() + nVertBorder );
-    aOutRect.SetBottom( aOutRect.Bottom() - nVertBorder );
+    aOutRect.AdjustLeft(nHorzBorder );
+    aOutRect.AdjustRight( -nHorzBorder );
+    aOutRect.Top() += nVertBorder;
+    aOutRect.AdjustBottom( -nVertBorder );
 
     rRenderContext.DrawText(aOutRect, rRenderContext.GetEllipsisString(msDescription, aOutRect.GetWidth()));
     rRenderContext.Pop();
@@ -950,10 +950,10 @@ void CustomAnimationList::Paint(vcl::RenderContext& rRenderContext, const ::tool
 
         ::tools::Rectangle aRect(Point(0,0), GetOutputSizePixel());
 
-        aRect.SetLeft( aRect.Left() + aOffset.X() );
-        aRect.SetTop( aRect.Top() + aOffset.Y() );
-        aRect.SetRight( aRect.Right() - aOffset.X() );
-        aRect.SetBottom( aRect.Bottom() - aOffset.Y() );
+        aRect.AdjustLeft(aOffset.X() );
+        aRect.AdjustTop(aOffset.Y() );
+        aRect.AdjustRight( -(aOffset.X()) );
+        aRect.AdjustBottom( -(aOffset.Y()) );
 
         rRenderContext.DrawText(aRect, SdResId(STR_CUSTOMANIMATION_LIST_HELPTEXT),
                                 DrawTextFlags::MultiLine | DrawTextFlags::WordBreak | DrawTextFlags::Center | DrawTextFlags::VCenter );

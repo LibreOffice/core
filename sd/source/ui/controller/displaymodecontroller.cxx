@@ -153,8 +153,8 @@ DisplayModeToolbarMenu::DisplayModeToolbarMenu( DisplayModeController& rControll
     fillLayoutValueSet( mpDisplayModeSet1, &editmodes[0] );
 
     Size aSize( mpDisplayModeSet1->GetOutputSizePixel() );
-    aSize.setWidth( aSize.Width() + (mpDisplayModeSet1->GetColCount() + 1) * LAYOUT_BORDER_PIX );
-    aSize.setHeight( aSize.Height() + (mpDisplayModeSet1->GetLineCount() +1) * LAYOUT_BORDER_PIX );
+    aSize.AdjustWidth((mpDisplayModeSet1->GetColCount() + 1) * LAYOUT_BORDER_PIX );
+    aSize.AdjustHeight((mpDisplayModeSet1->GetLineCount() +1) * LAYOUT_BORDER_PIX );
     mpDisplayModeSet1->SetOutputSizePixel( aSize );
 
     appendEntry( -1, aTitle1 );
@@ -168,8 +168,8 @@ DisplayModeToolbarMenu::DisplayModeToolbarMenu( DisplayModeController& rControll
     fillLayoutValueSet( mpDisplayModeSet2, &mastermodes[0] );
 
     aSize = mpDisplayModeSet2->GetOutputSizePixel();
-    aSize.setWidth( aSize.Width() + (mpDisplayModeSet2->GetColCount() + 1) * LAYOUT_BORDER_PIX );
-    aSize.setHeight( aSize.Height() + (mpDisplayModeSet2->GetLineCount() + 1) * LAYOUT_BORDER_PIX );
+    aSize.AdjustWidth((mpDisplayModeSet2->GetColCount() + 1) * LAYOUT_BORDER_PIX );
+    aSize.AdjustHeight((mpDisplayModeSet2->GetLineCount() + 1) * LAYOUT_BORDER_PIX );
     mpDisplayModeSet2->SetOutputSizePixel( aSize );
 
     appendEntry( -1, aTitle2 );

@@ -74,8 +74,8 @@ void DrawViewShell::ScannerEvent()
                     else
                         aBmpSize = OutputDevice::LogicToLogic( aBmpSize, aScanBmp.GetPrefMapMode(), aMap100 );
 
-                    aPageSize.setWidth( aPageSize.Width() - pPage->GetLeftBorder() + pPage->GetRightBorder() );
-                    aPageSize.setHeight( aPageSize.Height() - pPage->GetUpperBorder() + pPage->GetLowerBorder() );
+                    aPageSize.AdjustWidth( -(pPage->GetLeftBorder() + pPage->GetRightBorder()) );
+                    aPageSize.AdjustHeight( -(pPage->GetUpperBorder() + pPage->GetLowerBorder()) );
 
                     if( ( ( aBmpSize.Height() > aPageSize.Height() ) || ( aBmpSize.Width() > aPageSize.Width() ) ) && aBmpSize.Height() && aPageSize.Height() )
                     {
