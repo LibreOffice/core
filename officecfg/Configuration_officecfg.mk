@@ -159,7 +159,6 @@ $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/d
 	org/openoffice/Office/UI/Effects.xcu \
 	org/openoffice/Office/UI/GenericCommands.xcu \
 	org/openoffice/Office/UI/MathCommands.xcu \
-	org/openoffice/Office/UI/StartModuleCommands.xcu \
 	org/openoffice/Office/UI/BasicIDEWindowState.xcu \
 	org/openoffice/Office/UI/CalcWindowState.xcu \
 	org/openoffice/Office/UI/DrawWindowState.xcu \
