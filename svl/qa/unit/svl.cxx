@@ -1171,9 +1171,10 @@ void Test::testIsNumberFormat()
 namespace {
 struct FormatInputOutput
 {
-    const char* mpInput;
-    const bool  mbNumber;
-    const char* mpOutput;
+    const char*      mpInput;
+    const bool       mbNumber;
+    const char*      mpOutput;
+    const sal_uInt32 mnOutputIndex;
 };
 }
 
@@ -1192,6 +1193,8 @@ void checkSpecificNumberFormats( SvNumberFormatter& rFormatter,
                     OUStringToOString( aString, RTL_TEXTENCODING_UTF8)).getStr(), rVec[i].mbNumber, bIsNumber);
         if (bIsNumber)
         {
+            if (rVec[i].mnOutputIndex)
+                nIndex = rVec[i].mnOutputIndex;
             Color* pColor;
             rFormatter.GetOutputString( fNumber, nIndex, aString, &pColor);
             CPPUNIT_ASSERT_EQUAL_MESSAGE( OString( OString(pName) + " " + OString::number(i)  + " mismatch").getStr(),
@@ -1208,8 +1211,8 @@ void Test::testIsNumberFormatSpecific()
         SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_US);
 
         std::vector<FormatInputOutput> aIO = {
-            {  "5-12-14", false, "" },
-            { "32-12-14",  true, "1932-12-14" }
+            {  "5-12-14", false, "", 0 },
+            { "32-12-14",  true, "1932-12-14", 0 }
         };
 
         checkSpecificNumberFormats( aFormatter, aIO, "[en-US] date");
@@ -1221,8 +1224,8 @@ void Test::testIsNumberFormatSpecific()
         SvNumberFormatter aFormatter(m_xContext, LANGUAGE_GERMAN);
 
         std::vector<FormatInputOutput> aIO = {
-            {  "5-12-14", false, "" },
-            { "32-12-14",  true, "1932-12-14" }
+            {  "5-12-14", false, "", 0 },
+            { "32-12-14",  true, "1932-12-14", 0 }
         };
 
         checkSpecificNumberFormats( aFormatter, aIO, "[de-DE] date");
@@ -1234,10 +1237,10 @@ void Test::testIsNumberFormatSpecific()
         SvNumberFormatter aFormatter(m_xContext, LANGUAGE_DUTCH);
 
         std::vector<FormatInputOutput> aIO = {
-            { "22-11-1999", true, "22-11-99" },    // if default YY changes to YYYY adapt this
-            { "1999-11-22", true, "1999-11-22" },
-            { "1-2-11",     true, "01-02-11" },    // if default YY changes to YYYY adapt this
-            { "99-2-11",    true, "1999-02-11" }
+            { "22-11-1999", true, "22-11-99", 0 },      // if default YY changes to YYYY adapt this
+            { "1999-11-22", true, "1999-11-22", 0 },
+            { "1-2-11",     true, "01-02-11", 0 },      // if default YY changes to YYYY adapt this
+            { "99-2-11",    true, "1999-02-11", 0 }
         };
 
         checkSpecificNumberFormats( aFormatter, aIO, "[nl-NL] date");
@@ -1249,11 +1252,11 @@ void Test::testIsNumberFormatSpecific()
         SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_SAFRICA);
 
         std::vector<FormatInputOutput> aIO = {
-            { "1999/11/22", true, "99/11/22" },     // if default YY changes to YYYY adapt this
-            { "1999-11-22", true, "1999-11-22" },
-            { "11/2/1",     true, "11/02/01" },     // if default YY changes to YYYY adapt this
-            { "99-2-11",    true, "1999-02-11" },
-            { "22-2-11",    true, "2022-02-11" }
+            { "1999/11/22", true, "99/11/22", 0 },      // if default YY changes to YYYY adapt this
+            { "1999-11-22", true, "1999-11-22", 0 },
+            { "11/2/1",     true, "11/02/01", 0 },      // if default YY changes to YYYY adapt this
+            { "99-2-11",    true, "1999-02-11", 0 },
+            { "22-2-11",    true, "2022-02-11", 0 }
         };
 
         checkSpecificNumberFormats( aFormatter, aIO, "[en-ZA] date");
@@ -1265,12 +1268,12 @@ void Test::testIsNumberFormatSpecific()
         SvNumberFormatter aFormatter(m_xContext, LANGUAGE_FRENCH);
 
         std::vector<FormatInputOutput> aIO = {
-            { "22/11/1999", true, "22/11/99" },     // if default YY changes to YYYY adapt this
-            { "1999-11-22", true, "1999-11-22" },
-            { "1/2/11",     true, "01/02/11" },     // if default YY changes to YYYY adapt this
-            { "99-2-11",    true, "1999-02-11" },
-            { "22-2-11",    true, "22/02/11" },     // if default YY changes to YYYY adapt this
-            { "22.2.11",    true, "22/02/11" }      // if default YY changes to YYYY adapt this
+            { "22/11/1999", true, "22/11/99", 0 },      // if default YY changes to YYYY adapt this
+            { "1999-11-22", true, "1999-11-22", 0 },
+            { "1/2/11",     true, "01/02/11", 0 },      // if default YY changes to YYYY adapt this
+            { "99-2-11",    true, "1999-02-11", 0 },
+            { "22-2-11",    true, "22/02/11", 0 },      // if default YY changes to YYYY adapt this
+            { "22.2.11",    true, "22/02/11", 0 }       // if default YY changes to YYYY adapt this
         };
 
         checkSpecificNumberFormats( aFormatter, aIO, "[fr-FR] date");
