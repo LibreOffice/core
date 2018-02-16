@@ -462,7 +462,7 @@ void ScInputWindow::Resize()
         // then the largest item ( e.g. the GroupBar window ) will actually be
         // positioned such that the toolbar will cut off the bottom of that item
         if (pGroupBar->GetNumLines() > 1)
-            aSize.setHeight( aSize.Height() + pGroupBar->GetVertOffset() + ADDITIONAL_SPACE );
+            aSize.AdjustHeight(pGroupBar->GetVertOffset() + ADDITIONAL_SPACE );
     }
     SetSizePixel(aSize);
     Invalidate();
@@ -1173,8 +1173,8 @@ static void lcl_ModifyRTLVisArea( EditView* pEditView )
     tools::Rectangle aVisArea = pEditView->GetVisArea();
     Size aPaper = pEditView->GetEditEngine()->GetPaperSize();
     long nDiff = aPaper.Width() - aVisArea.Right();
-    aVisArea.SetLeft( aVisArea.Left() + nDiff );
-    aVisArea.SetRight( aVisArea.Right() + nDiff );
+    aVisArea.AdjustLeft(nDiff );
+    aVisArea.AdjustRight(nDiff );
     pEditView->SetVisArea(aVisArea);
 }
 
@@ -1789,7 +1789,7 @@ ScPosWnd::ScPosWnd( vcl::Window* pParent ) :
     set_id("pos_window");
     Size aSize( GetTextWidth( "GW99999:GW99999" ),
                 GetTextHeight() );
-    aSize.setWidth( aSize.Width() + 25 );    // FIXME: ??
+    aSize.AdjustWidth(25 );    // FIXME: ??
     aSize.setHeight( CalcWindowSizePixel(11) ); // Functions: 10 MRU + "others..."
     SetSizePixel( aSize );
 

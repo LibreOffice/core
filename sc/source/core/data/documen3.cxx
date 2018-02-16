@@ -1698,13 +1698,13 @@ tools::Rectangle ScDocument::GetEmbeddedRect() const // 1/100 mm
         SCCOL i;
 
         for (i=0; i<aEmbedRange.aStart.Col(); i++)
-            aRect.SetLeft( aRect.Left() + pTable->GetColWidth(i) );
-        aRect.SetTop( aRect.Top() + pTable->GetRowHeight( 0, aEmbedRange.aStart.Row() - 1) );
+            aRect.AdjustLeft(pTable->GetColWidth(i) );
+        aRect.AdjustTop(pTable->GetRowHeight( 0, aEmbedRange.aStart.Row() - 1) );
         aRect.SetRight( aRect.Left() );
         for (i=aEmbedRange.aStart.Col(); i<=aEmbedRange.aEnd.Col(); i++)
-            aRect.SetRight( aRect.Right() + pTable->GetColWidth(i) );
+            aRect.AdjustRight(pTable->GetColWidth(i) );
         aRect.SetBottom( aRect.Top() );
-        aRect.SetBottom( aRect.Bottom() + pTable->GetRowHeight( aEmbedRange.aStart.Row(), aEmbedRange.aEnd.Row()) );
+        aRect.AdjustBottom(pTable->GetRowHeight( aEmbedRange.aStart.Row(), aEmbedRange.aEnd.Row()) );
 
         aRect.SetLeft( static_cast<long>( aRect.Left()   * HMM_PER_TWIPS ) );
         aRect.SetRight( static_cast<long>( aRect.Right()  * HMM_PER_TWIPS ) );
@@ -1970,15 +1970,15 @@ tools::Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow, SCCOL 
     tools::Rectangle aRect;
 
     for (i=0; i<nStartCol; i++)
-        aRect.SetLeft( aRect.Left() + GetColWidth(i,nTab, bHiddenAsZero ) );
-    aRect.SetTop( aRect.Top() + GetRowHeight( 0, nStartRow-1, nTab, bHiddenAsZero ) );
+        aRect.AdjustLeft(GetColWidth(i,nTab, bHiddenAsZero ) );
+    aRect.AdjustTop(GetRowHeight( 0, nStartRow-1, nTab, bHiddenAsZero ) );
 
     aRect.SetRight( aRect.Left() );
     aRect.SetBottom( aRect.Top() );
 
     for (i=nStartCol; i<=nEndCol; i++)
-        aRect.SetRight( aRect.Right() + GetColWidth(i,nTab, bHiddenAsZero) );
-    aRect.SetBottom( aRect.Bottom() + GetRowHeight( nStartRow, nEndRow, nTab, bHiddenAsZero ) );
+        aRect.AdjustRight(GetColWidth(i,nTab, bHiddenAsZero) );
+    aRect.AdjustBottom(GetRowHeight( nStartRow, nEndRow, nTab, bHiddenAsZero ) );
 
     aRect.SetLeft( static_cast<long>(aRect.Left()   * HMM_PER_TWIPS) );
     aRect.SetRight( static_cast<long>(aRect.Right()  * HMM_PER_TWIPS) );

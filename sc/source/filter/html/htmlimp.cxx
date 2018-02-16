@@ -82,8 +82,8 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const S
             OSL_FAIL("PageSize Null ?!?!?");
             aPageSize = SvxPaperInfo::GetPaperSize( PAPER_A4 );
         }
-        aPageSize.setWidth( aPageSize.Width() - nLeftMargin + nRightMargin );
-        aPageSize.setHeight( aPageSize.Height() - nTopMargin + nBottomMargin );
+        aPageSize.AdjustWidth( -(nLeftMargin + nRightMargin) );
+        aPageSize.AdjustHeight( -(nTopMargin + nBottomMargin) );
         aPageSize = pDefaultDev->LogicToPixel( aPageSize, MapMode( MapUnit::MapTwip ) );
     }
     else

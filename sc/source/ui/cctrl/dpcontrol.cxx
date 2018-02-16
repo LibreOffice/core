@@ -64,7 +64,7 @@ void ScDPFieldButton::setBoundingBox(const Point& rPos, const Size& rSize, bool 
     if (bLayoutRTL)
     {
         // rPos is the logical-left position, adjust maPos to visual-left (inside the cell border)
-        maPos.setX( maPos.X() - maSize.Width() - 1 );
+        maPos.AdjustX( -(maSize.Width() - 1) );
     }
 }
 

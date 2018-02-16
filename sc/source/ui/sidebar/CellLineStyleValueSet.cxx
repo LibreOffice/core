@@ -94,8 +94,8 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     {
         Color aBackColor(50,107,197);
         tools::Rectangle aBackRect = aRect;
-        aBackRect.SetTop( aBackRect.Top() + 3 );
-        aBackRect.SetBottom( aBackRect.Bottom() - 2 );
+        aBackRect.AdjustTop(3 );
+        aBackRect.AdjustBottom( -2 );
         pDev->SetFillColor(aBackColor);
         pDev->DrawRect(aBackRect);
     }

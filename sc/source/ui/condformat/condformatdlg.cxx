@@ -237,7 +237,7 @@ void ScCondFormatList::RecalcAll()
             aSize.setWidth( aCtrlSize.Width() );
         item->SetSizePixel(aSize);
 
-        aPoint.setY( aPoint.Y() + item->GetSizePixel().Height() );
+        aPoint.AdjustY(item->GetSizePixel().Height() );
     }
 }
 
@@ -245,7 +245,7 @@ void ScCondFormatList::DoScroll(long nDelta)
 {
     Point aNewPoint = mpScrollBar->GetPosPixel();
     tools::Rectangle aRect(Point(), GetOutputSize());
-    aRect.SetRight( aRect.Right() - mpScrollBar->GetSizePixel().Width() );
+    aRect.AdjustRight( -(mpScrollBar->GetSizePixel().Width()) );
     Scroll( 0, -nDelta, aRect );
     mpScrollBar->SetPosPixel(aNewPoint);
 }

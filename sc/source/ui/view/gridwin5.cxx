@@ -200,9 +200,9 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
             Size aLeftSize = pLeft->PixelToLogic( pLeft->GetOutputSizePixel(), aMapMode );
             Point aOrigin = aMapMode.GetOrigin();
             if( (this == pRight) || (this == pDiagonal) )
-                aOrigin.setX( aOrigin.X() + aLeftSize.Width() );
+                aOrigin.AdjustX(aLeftSize.Width() );
             if( (this == pBottom) || (this == pDiagonal) )
-                aOrigin.setY( aOrigin.Y() + aLeftSize.Height() );
+                aOrigin.AdjustY(aLeftSize.Height() );
             aMapMode.SetOrigin( aOrigin );
 
             mpNoteMarker.reset(new ScNoteMarker(pLeft, pRight, pBottom, pDiagonal,

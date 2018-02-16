@@ -715,10 +715,10 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         Size aSize( TwipsToHmm( pDoc->GetColWidth( nCol1, nTab1) ),
                     TwipsToHmm( pDoc->GetRowHeight( nRow1, nTab1) ) );
         tools::Rectangle aRect( aPos, aSize );
-        aRect.SetLeft( aRect.Left() - 250 );
-        aRect.SetRight( aRect.Right() + 250 );
-        aRect.SetTop( aRect.Top() - 70 );
-        aRect.SetBottom( aRect.Bottom() + 70 );
+        aRect.AdjustLeft( -250 );
+        aRect.AdjustRight(250 );
+        aRect.AdjustTop( -70 );
+        aRect.AdjustBottom(70 );
         if ( bNegativePage )
             MirrorRectRTL( aRect );
 
@@ -746,9 +746,9 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         {
             Point aPos( pDoc->GetColOffset( nCol1, nTab1 ), pDoc->GetRowOffset( nRow1, nTab1 ) );
             if (!pDoc->ColHidden(nCol1, nTab1, nullptr, &nLastCol))
-                aPos.setX( aPos.X() + pDoc->GetColWidth( nCol1, nTab1 ) / 4 );
+                aPos.AdjustX(pDoc->GetColWidth( nCol1, nTab1 ) / 4 );
             if (!pDoc->RowHidden(nRow1, nTab1, nullptr, &nLastRow))
-                aPos.setY( aPos.Y() + pDoc->GetRowHeight( nRow1, nTab1 ) / 2 );
+                aPos.AdjustY(pDoc->GetRowHeight( nRow1, nTab1 ) / 2 );
             TwipsToMM( aPos.X() );
             TwipsToMM( aPos.Y() );
             Point aStartPos = aPos;
@@ -767,7 +767,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
             {
                 Point aEndPos( aPos.X() + DET_ARROW_OFFSET, aPos.Y() - DET_ARROW_OFFSET );
                 if (aEndPos.Y() < 0)
-                    aEndPos.setY( aEndPos.Y() + (2 * DET_ARROW_OFFSET) );
+                    aEndPos.AdjustY(2 * DET_ARROW_OFFSET);
                 if ( bNegativePage )
                     aEndPos.setX( -aEndPos.X() );
                 if ( pObj->GetPoint( 1 ) != aEndPos )
@@ -784,9 +784,9 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         {
             Point aPos( pDoc->GetColOffset( nCol2, nTab2 ), pDoc->GetRowOffset( nRow2, nTab2 ) );
             if (!pDoc->ColHidden(nCol2, nTab2, nullptr, &nLastCol))
-                aPos.setX( aPos.X() + pDoc->GetColWidth( nCol2, nTab2 ) / 4 );
+                aPos.AdjustX(pDoc->GetColWidth( nCol2, nTab2 ) / 4 );
             if (!pDoc->RowHidden(nRow2, nTab2, nullptr, &nLastRow))
-                aPos.setY( aPos.Y() + pDoc->GetRowHeight( nRow2, nTab2 ) / 2 );
+                aPos.AdjustY(pDoc->GetRowHeight( nRow2, nTab2 ) / 2 );
             TwipsToMM( aPos.X() );
             TwipsToMM( aPos.Y() );
             Point aEndPos = aPos;
@@ -805,9 +805,9 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
             {
                 Point aStartPos( aPos.X() - DET_ARROW_OFFSET, aPos.Y() - DET_ARROW_OFFSET );
                 if (aStartPos.X() < 0)
-                    aStartPos.setX( aStartPos.X() + (2 * DET_ARROW_OFFSET) );
+                    aStartPos.AdjustX(2 * DET_ARROW_OFFSET);
                 if (aStartPos.Y() < 0)
-                    aStartPos.setY( aStartPos.Y() + (2 * DET_ARROW_OFFSET) );
+                    aStartPos.AdjustY(2 * DET_ARROW_OFFSET);
                 if ( bNegativePage )
                     aStartPos.setX( -aStartPos.X() );
                 if ( pObj->GetPoint( 0 ) != aStartPos )
@@ -1174,14 +1174,14 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
 
     if (nDx > 0)
         for (SCCOL s=0; s<nDx; s++)
-            aMove.setX( aMove.X() + pDoc->GetColWidth(s+nCol1,nTab) );
+            aMove.AdjustX(pDoc->GetColWidth(s+nCol1,nTab) );
     else
         for (SCCOL s=-1; s>=nDx; s--)
-            aMove.setX( aMove.X() - pDoc->GetColWidth(s+nCol1,nTab) );
+            aMove.AdjustX( -(pDoc->GetColWidth(s+nCol1,nTab)) );
     if (nDy > 0)
-        aMove.setY( aMove.Y() + pDoc->GetRowHeight( nRow1, nRow1+nDy-1, nTab) );
+        aMove.AdjustY(pDoc->GetRowHeight( nRow1, nRow1+nDy-1, nTab) );
     else
-        aMove.setY( aMove.Y() - pDoc->GetRowHeight( nRow1+nDy, nRow1-1, nTab) );
+        aMove.AdjustY( -sal_Int16(pDoc->GetRowHeight( nRow1+nDy, nRow1-1, nTab)) );
 
     if ( bNegativePage )
         aMove.setX( -aMove.X() );
@@ -1190,9 +1190,9 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
     if (bInsDel)
     {
         if ( aMove.X() != 0 && nDx < 0 )    // nDx counts cells, sign is independent of RTL
-            aTopLeft.setX( aTopLeft.X() + aMove.X() );
+            aTopLeft.AdjustX(aMove.X() );
         if ( aMove.Y() < 0 )
-            aTopLeft.setY( aTopLeft.Y() + aMove.Y() );
+            aTopLeft.AdjustY(aMove.Y() );
     }
 
         //      Detectiv arrows: Adjust cell position
@@ -1217,21 +1217,21 @@ bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
 
     tools::Rectangle aTestRect;
 
-    aTestRect.SetTop( aTestRect.Top() + pDoc->GetRowHeight( 0, nStartRow-1, nTab) );
+    aTestRect.AdjustTop(pDoc->GetRowHeight( 0, nStartRow-1, nTab) );
 
     if (nEndRow==MAXROW)
-        aTestRect.Bottom() = MAXMM;
+        aTestRect.SetBottom( MAXMM );
     else
     {
         aTestRect.SetBottom( aTestRect.Top() );
-        aTestRect.SetBottom( aTestRect.Bottom() + pDoc->GetRowHeight( nStartRow, nEndRow, nTab) );
+        aTestRect.AdjustBottom(pDoc->GetRowHeight( nStartRow, nEndRow, nTab) );
         TwipsToMM( aTestRect.Bottom() );
     }
 
     TwipsToMM( aTestRect.Top() );
 
     aTestRect.SetLeft( 0 );
-    aTestRect.Right() = MAXMM;
+    aTestRect.SetRight( MAXMM );
 
     bool bNegativePage = pDoc->IsNegativePage( nTab );
     if ( bNegativePage )
@@ -1727,9 +1727,9 @@ tools::Rectangle ScDrawLayer::GetCellRect( const ScDocument& rDoc, const ScAddre
         // find top left position of passed cell address
         Point aTopLeft;
         for( SCCOL nCol = 0; nCol < rPos.Col(); ++nCol )
-            aTopLeft.setX( aTopLeft.X() + rDoc.GetColWidth( nCol, rPos.Tab() ) );
+            aTopLeft.AdjustX(rDoc.GetColWidth( nCol, rPos.Tab() ) );
         if( rPos.Row() > 0 )
-            aTopLeft.setY( aTopLeft.Y() + rDoc.GetRowHeight( 0, rPos.Row() - 1, rPos.Tab() ) );
+            aTopLeft.AdjustY(rDoc.GetRowHeight( 0, rPos.Row() - 1, rPos.Tab() ) );
 
         // find bottom-right position of passed cell address
         ScAddress aEndPos = rPos;
@@ -1743,8 +1743,8 @@ tools::Rectangle ScDrawLayer::GetCellRect( const ScDocument& rDoc, const ScAddre
         }
         Point aBotRight = aTopLeft;
         for( SCCOL nCol = rPos.Col(); nCol <= aEndPos.Col(); ++nCol )
-            aBotRight.setX( aBotRight.X() + rDoc.GetColWidth( nCol, rPos.Tab() ) );
-        aBotRight.setY( aBotRight.Y() + rDoc.GetRowHeight( rPos.Row(), aEndPos.Row(), rPos.Tab() ) );
+            aBotRight.AdjustX(rDoc.GetColWidth( nCol, rPos.Tab() ) );
+        aBotRight.AdjustY(rDoc.GetRowHeight( rPos.Row(), aEndPos.Row(), rPos.Tab() ) );
 
         // twips -> 1/100 mm
         aTopLeft.setX( static_cast< long >( aTopLeft.X() * HMM_PER_TWIPS ) );

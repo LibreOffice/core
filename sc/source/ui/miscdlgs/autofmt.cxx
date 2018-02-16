@@ -272,8 +272,8 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
             MakeFonts( nFmtIndex, aFont, aCJKFont, aCTLFont );
 
             theMaxStrSize = Size(basegfx::fround(cellRange.getWidth()), basegfx::fround(cellRange.getHeight()));
-            theMaxStrSize.Width()  -= FRAME_OFFSET;
-            theMaxStrSize.Height() -= FRAME_OFFSET;
+            theMaxStrSize.AdjustWidth( -(FRAME_OFFSET) );
+            theMaxStrSize.AdjustHeight( -(FRAME_OFFSET) );
 
             aScriptedText.SetFonts( &aFont, &aCJKFont, &aCTLFont );
             aScriptedText.SetText(cellString, xBreakIter);
@@ -308,7 +308,7 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
 
         // vertical (always center):
 
-        aPos.setY( aPos.Y() + (mnRowHeight - static_cast<sal_uInt16>(aStrSize.Height())) / 2 );
+        aPos.AdjustY((mnRowHeight - static_cast<sal_uInt16>(aStrSize.Height())) / 2 );
 
         // horizontal
 
@@ -320,15 +320,15 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
             switch (eJustification)
             {
                 case SvxCellHorJustify::Left:
-                    aPos.X() += FRAME_OFFSET;
+                    aPos.AdjustX(FRAME_OFFSET );
                     break;
                 case SvxCellHorJustify::Right:
-                    aPos.setX( aPos.X() + nRightX );
+                    aPos.AdjustX(nRightX );
                     break;
                 case SvxCellHorJustify::Block:
                 case SvxCellHorJustify::Repeat:
                 case SvxCellHorJustify::Center:
-                    aPos.setX( aPos.X() + nHorPos );
+                    aPos.AdjustX(nHorPos );
                     break;
                 // coverity[dead_error_line] - following conditions exist to avoid compiler warning
                 case SvxCellHorJustify::Standard:
@@ -345,12 +345,12 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
             if (nCol == 0 || nRow == 0)
             {
                 // Text label to the left or sum left adjusted
-                aPos.X() += FRAME_OFFSET;
+                aPos.AdjustX(FRAME_OFFSET );
             }
             else
             {
                  // Numbers/Dates right adjusted
-                aPos.setX( aPos.X() + nRightX );
+                aPos.AdjustX(nRightX );
             }
         }
         aScriptedText.DrawText(aPos);

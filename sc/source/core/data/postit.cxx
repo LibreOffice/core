@@ -365,8 +365,8 @@ Point ScCaptionCreator::CalcTailPos( bool bTailFront )
     bool bTailLeft = bTailFront != mbNegPage;
     Point aTailPos = bTailLeft ? maCellRect.TopLeft() : maCellRect.TopRight();
     // move caption point 1/10 mm inside cell
-    if( bTailLeft ) aTailPos.setX( aTailPos.X() + 10 ); else aTailPos.setX( aTailPos.X() - 10 );
-    aTailPos.setY( aTailPos.Y() + 10 );
+    if( bTailLeft ) aTailPos.AdjustX(10 ); else aTailPos.AdjustX( -10 );
+    aTailPos.Y() += 10;
     return aTailPos;
 }
 

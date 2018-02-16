@@ -542,8 +542,8 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
             long nOffset = 0;
             if (pRefBtn)
             {
-                aNewEditSize.setWidth( aNewEditSize.Width() - pRefBtn->GetSizePixel().Width() );
-                aNewEditSize.setWidth( aNewEditSize.Width() - aOldButtonPos.X() - (aOldEditPos.X()+aOldEditSize.Width()) );
+                aNewEditSize.AdjustWidth( -(pRefBtn->GetSizePixel().Width()) );
+                aNewEditSize.AdjustWidth( -(aOldButtonPos.X() - (aOldEditPos.X()+aOldEditSize.Width())) );
 
                 long nHeight = pRefBtn->GetSizePixel().Height();
                 if ( nHeight > aOldEditSize.Height() )
@@ -551,7 +551,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
                     aNewDlgSize.setHeight( nHeight );
                     nOffset = (nHeight-aOldEditSize.Height()) / 2;
                 }
-                aNewEditSize.setWidth( aNewEditSize.Width() - nOffset );
+                aNewEditSize.AdjustWidth( -nOffset );
             }
             pRefEdit->SetPosSizePixel(Point(nOffset, nOffset), aNewEditSize);
 
