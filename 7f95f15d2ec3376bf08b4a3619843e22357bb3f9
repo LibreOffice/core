@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_8896884a",
+        "filename": "include/vcl/salbtype.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-02-16T14:37:46Z",
+      "side": 1,
+      "message": "so, these (and below) most be simplified, too.",
+      "range": {
+        "startLine": 355,
+        "startChar": 30,
+        "endLine": 355,
+        "endChar": 39
+      },
+      "revId": "7f95f15d2ec3376bf08b4a3619843e22357bb3f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
