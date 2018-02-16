@@ -344,8 +344,8 @@ Size ScMenuFloatingWindow::getMenuSize() const
     Point aPos;
     Size aSize;
     getMenuItemPosSize(nLastPos, aPos, aSize);
-    aPos.setX( aPos.X() + nTextWidth + 15 );
-    aPos.setY( aPos.Y() + aSize.Height() + 5 );
+    aPos.AdjustX(nTextWidth + 15 );
+    aPos.AdjustY(aSize.Height() + 5 );
     return Size(aPos.X(), aPos.Y());
 }
 
@@ -369,8 +369,8 @@ void ScMenuFloatingWindow::drawMenuItem(vcl::RenderContext& rRenderContext, size
     {
         long nFontHeight = maLabelFont.GetFontHeight();
         Point aMarkerPos = aPos;
-        aMarkerPos.setY( aMarkerPos.Y() + aSize.Height() / 2 - nFontHeight / 4 + 1 );
-        aMarkerPos.setX( aMarkerPos.X() + aSize.Width() - nFontHeight + nFontHeight / 4 );
+        aMarkerPos.AdjustY(aSize.Height() / 2 - nFontHeight / 4 + 1 );
+        aMarkerPos.AdjustX(aSize.Width() - nFontHeight + nFontHeight / 4 );
         Size aMarkerSize(nFontHeight / 2, nFontHeight / 2);
         aDecoView.DrawSymbol(tools::Rectangle(aMarkerPos, aMarkerSize), SymbolType::SPIN_RIGHT, GetTextColor());
     }
@@ -410,10 +410,10 @@ void ScMenuFloatingWindow::drawSeparator(vcl::RenderContext& rRenderContext, siz
     {
         const StyleSettings& rStyle = rRenderContext.GetSettings().GetStyleSettings();
         Point aTmpPos = aPos;
-        aTmpPos.setY( aTmpPos.Y() + aSize.Height() / 2 );
+        aTmpPos.AdjustY(aSize.Height() / 2 );
         rRenderContext.SetLineColor(rStyle.GetShadowColor());
         rRenderContext.DrawLine(aTmpPos, Point(aSize.Width() + aTmpPos.X(), aTmpPos.Y()));
-        ++aTmpPos.Y();
+        aTmpPos.AdjustY( 1 );
         rRenderContext.SetLineColor(rStyle.GetLightColor());
         rRenderContext.DrawLine(aTmpPos, Point(aSize.Width() + aTmpPos.X(), aTmpPos.Y()));
         rRenderContext.SetLineColor();
@@ -728,7 +728,7 @@ void ScMenuFloatingWindow::getMenuItemPosSize(size_t nPos, Point& rPos, Size& rS
     Point aPos1(nLeftMargin, nTopMargin);
     rPos = aPos1;
     for (size_t i = 0; i < nPos; ++i)
-        rPos.setY( rPos.Y() + (maMenuItems[i].mbSeparator ? nSepHeight : nMenuItemHeight) );
+        rPos.AdjustY(maMenuItems[i].mbSeparator ? nSepHeight : nMenuItemHeight );
 
     Size aWndSize = GetSizePixel();
     sal_uInt16 nH = maMenuItems[nPos].mbSeparator ? nSepHeight : nMenuItemHeight;
@@ -979,12 +979,12 @@ void ScCheckListMenuWindow::getSectionPosSize(
         case LISTBOX_AREA_INNER:
         {
             rPos = Point(nListBoxMargin, nTopMargin + nMenuHeight + nMenuListMargin + nSearchBoxHeight + nSearchBoxMargin);
-            rPos.setX( rPos.X() + nListBoxInnerPadding );
-            rPos.setY( rPos.Y() + nListBoxInnerPadding );
+            rPos.AdjustX(nListBoxInnerPadding );
+            rPos.AdjustY(nListBoxInnerPadding );
 
             rSize = Size(nListBoxWidth, nListBoxHeight);
-            rSize.setWidth( rSize.Width() - nListBoxInnerPadding*2 );
-            rSize.setHeight( rSize.Height() - nListBoxInnerPadding*2 );
+            rSize.AdjustWidth( -(nListBoxInnerPadding*2) );
+            rSize.AdjustHeight( -(nListBoxInnerPadding*2) );
         }
         break;
         case SINGLE_BTN_AREA:
@@ -997,8 +997,8 @@ void ScCheckListMenuWindow::getSectionPosSize(
         {
             long h = std::min(maChkToggleAll->CalcMinimumSize().Height(), 26L);
             rPos = Point(nListBoxMargin, nSingleBtnAreaY);
-            rPos.setX( rPos.X() + 5 );
-            rPos.setY( rPos.Y() + (nSingleItemBtnAreaHeight - h)/2 );
+            rPos.AdjustX(5 );
+            rPos.AdjustY((nSingleItemBtnAreaHeight - h)/2 );
             rSize = Size(70, h);
         }
         break;
@@ -1006,8 +1006,8 @@ void ScCheckListMenuWindow::getSectionPosSize(
         {
             long h = 26 * fScaleFactor;
             rPos = Point(nListBoxMargin, nSingleBtnAreaY);
-            rPos.setX( rPos.X() + nListBoxWidth - h - 10 - h - 10 );
-            rPos.setY( rPos.Y() + (nSingleItemBtnAreaHeight - h)/2 );
+            rPos.AdjustX(nListBoxWidth - h - 10 - h - 10 );
+            rPos.AdjustY((nSingleItemBtnAreaHeight - h)/2 );
             rSize = Size(h, h);
         }
         break;
@@ -1015,8 +1015,8 @@ void ScCheckListMenuWindow::getSectionPosSize(
         {
             long h = 26 * fScaleFactor;
             rPos = Point(nListBoxMargin, nSingleBtnAreaY);
-            rPos.setX( rPos.X() + nListBoxWidth - h - 10 );
-            rPos.setY( rPos.Y() + (nSingleItemBtnAreaHeight - h)/2 );
+            rPos.AdjustX(nListBoxWidth - h - 10 );
+            rPos.AdjustY((nSingleItemBtnAreaHeight - h)/2 );
             rSize = Size(h, h);
         }
         break;
@@ -1996,7 +1996,7 @@ void ScCheckListMenuWindow::launch(const tools::Rectangle& rRect)
         // Simulate right-aligned launch by modifying the target rectangle
         // size.
         long nDiff = aRect.GetWidth() - maWndSize.Width();
-        aRect.SetLeft( aRect.Left() + nDiff );
+        aRect.AdjustLeft(nDiff );
     }
 
     StartPopupMode(aRect, (FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus));

@@ -82,8 +82,8 @@ ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelect
     Size aSize = LogicToPixel( Size(
         GetTextWidth("8888"),
         GetTextHeight() ) );
-    aSize.setWidth( aSize.Width() + 4 );    // place for highlight border
-    aSize.setHeight( aSize.Height() + 3 );
+    aSize.AdjustWidth(4 );    // place for highlight border
+    aSize.AdjustHeight(3 );
     SetSizePixel( aSize );
 
     nWidth = nSmallWidth = aSize.Width();
@@ -539,15 +539,15 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                                 Point aTxtPos(aScrPos);
                                 if (bVertical)
                                 {
-                                    aTxtPos.setX( aTxtPos.X() + (nBarSize-aTextSize.Width())/2 );
-                                    aTxtPos.setY( aTxtPos.Y() + (nSizePix*nLayoutSign-aTextSize.Height())/2 );
+                                    aTxtPos.AdjustX((nBarSize-aTextSize.Width())/2 );
+                                    aTxtPos.AdjustY((nSizePix*nLayoutSign-aTextSize.Height())/2 );
                                     if ( bMirrored )
-                                        aTxtPos.setX( aTxtPos.X() + 1 );   // dark border is left instead of right
+                                        aTxtPos.AdjustX(1 );   // dark border is left instead of right
                                 }
                                 else
                                 {
-                                    aTxtPos.setX( aTxtPos.X() + (nSizePix*nLayoutSign-aTextSize.Width()+1)/2 );
-                                    aTxtPos.setY( aTxtPos.Y() + (nBarSize-aTextSize.Height())/2 );
+                                    aTxtPos.AdjustX((nSizePix*nLayoutSign-aTextSize.Width()+1)/2 );
+                                    aTxtPos.AdjustY((nBarSize-aTextSize.Height())/2 );
                                 }
                                 DrawText( aTxtPos, aString );
                             }
@@ -711,13 +711,13 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
         tools::Rectangle aVis( aPoint,GetOutputSizePixel() );
         if (bVertical)
         {
-            aVis.Left() = LONG_MIN;
-            aVis.Right() = LONG_MAX;
+            aVis.SetLeft( LONG_MIN );
+            aVis.SetRight( LONG_MAX );
         }
         else
         {
-            aVis.Top() = LONG_MIN;
-            aVis.Bottom() = LONG_MAX;
+            aVis.SetTop( LONG_MIN );
+            aVis.SetBottom( LONG_MAX );
         }
         pSelEngine->SetVisibleArea( aVis );
 

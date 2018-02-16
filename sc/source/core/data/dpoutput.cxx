@@ -1665,17 +1665,17 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
         {
             if (!bBeforeDrag)
             {
-                ++rPosRect.Bottom();
+                rPosRect.AdjustBottom( 1 );
                 if (bAfterDrag)
-                    ++rPosRect.Top();
+                    rPosRect.AdjustTop( 1 );
             }
         }
         else
         {
             if ( !bMouseTop )
             {
-                ++rPosRect.Top();
-                ++rPosRect.Bottom();
+                rPosRect.AdjustTop( 1 );
+                rPosRect.AdjustBottom( 1 );
                 ++nField;
             }
         }
@@ -1719,17 +1719,17 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
         {
             if (!bBeforeDrag)
             {
-                ++rPosRect.Right();
+                rPosRect.AdjustRight( 1 );
                 if (bAfterDrag)
-                    ++rPosRect.Left();
+                    rPosRect.AdjustLeft( 1 );
             }
         }
         else
         {
             if ( !bMouseLeft )
             {
-                ++rPosRect.Left();
-                ++rPosRect.Right();
+                rPosRect.AdjustLeft( 1 );
+                rPosRect.AdjustRight( 1 );
                 ++nField;
             }
         }
@@ -1775,17 +1775,17 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
         {
             if (!bBeforeDrag)
             {
-                ++rPosRect.Bottom();
+                rPosRect.AdjustBottom( 1 );
                 if (bAfterDrag)
-                    ++rPosRect.Top();
+                    rPosRect.AdjustTop( 1 );
             }
         }
         else
         {
             if ( !bMouseTop )
             {
-                ++rPosRect.Top();
-                ++rPosRect.Bottom();
+                rPosRect.AdjustTop( 1 );
+                rPosRect.AdjustBottom( 1 );
                 ++nField;
             }
         }

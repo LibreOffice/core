@@ -399,10 +399,10 @@ void ScZoomSliderWnd::DoPaint(vcl::RenderContext& rRenderContext)
 
     tools::Rectangle aSlider = aRect;
 
-    aSlider.SetTop( aSlider.Top() + (aSliderWindowSize.Height() - nSliderHeight) / 2 - 1 );
+    aSlider.AdjustTop((aSliderWindowSize.Height() - nSliderHeight) / 2 - 1 );
     aSlider.SetBottom( aSlider.Top() + nSliderHeight );
-    aSlider.SetLeft( aSlider.Left() + nSliderXOffset );
-    aSlider.SetRight( aSlider.Right() - nSliderXOffset );
+    aSlider.AdjustLeft(nSliderXOffset );
+    aSlider.AdjustRight( -nSliderXOffset );
 
     tools::Rectangle aFirstLine(aSlider);
     aFirstLine.SetBottom( aFirstLine.Top() );
@@ -450,26 +450,26 @@ void ScZoomSliderWnd::DoPaint(vcl::RenderContext& rRenderContext)
         tools::Rectangle aSnapping(aRect);
         aSnapping.SetBottom( aSlider.Top() );
         aSnapping.SetTop( aSnapping.Bottom() - nSnappingHeight );
-        aSnapping.SetLeft( aSnapping.Left() + *aSnappingPointIter );
+        aSnapping.AdjustLeft(*aSnappingPointIter );
         aSnapping.SetRight( aSnapping.Left() );
         pVDev->DrawRect(aSnapping);
 
-        aSnapping.SetTop( aSnapping.Top() + nSnappingHeight + nSliderHeight );
-        aSnapping.SetBottom( aSnapping.Bottom() + nSnappingHeight + nSliderHeight );
+        aSnapping.AdjustTop(nSnappingHeight + nSliderHeight );
+        aSnapping.AdjustBottom(nSnappingHeight + nSliderHeight );
         pVDev->DrawRect(aSnapping);
     }
 
     // draw slider button
     Point aImagePoint = aRect.TopLeft();
-    aImagePoint.setX( aImagePoint.X() + Zoom2Offset(mpImpl->mnCurrentZoom) );
-    aImagePoint.setX( aImagePoint.X() - nButtonWidth / 2 );
-    aImagePoint.setY( aImagePoint.Y() + (aSliderWindowSize.Height() - nButtonHeight) / 2 );
+    aImagePoint.AdjustX(Zoom2Offset(mpImpl->mnCurrentZoom) );
+    aImagePoint.AdjustX( -(nButtonWidth / 2) );
+    aImagePoint.Y() += (aSliderWindowSize.Height() - nButtonHeight) / 2;
     pVDev->DrawImage(aImagePoint, mpImpl->maSliderButton);
 
     // draw decrease button
     aImagePoint = aRect.TopLeft();
-    aImagePoint.setX( aImagePoint.X() + (nSliderXOffset - nIncDecWidth) / 2 );
-    aImagePoint.setY( aImagePoint.Y() + (aSliderWindowSize.Height() - nIncDecHeight) / 2 );
+    aImagePoint.AdjustX((nSliderXOffset - nIncDecWidth) / 2 );
+    aImagePoint.AdjustY((aSliderWindowSize.Height() - nIncDecHeight) / 2 );
     pVDev->DrawImage(aImagePoint, mpImpl->maDecreaseButton);
 
     // draw increase button

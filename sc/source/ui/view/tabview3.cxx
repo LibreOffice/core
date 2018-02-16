@@ -606,7 +606,7 @@ Point calcHintWindowPosition(
         {
             // The frame has enough height.  Take it.
             Point aPos = rCellPos;
-            aPos.setX( aPos.X() + rCellSize.Width() + nMargin );
+            aPos.AdjustX(rCellSize.Width() + nMargin );
             if (aPos.Y() + rHintWndSize.Height() > rFrameWndSize.Height())
             {
                 // Push the hint window up a bit to make it fit.
@@ -623,7 +623,7 @@ Point calcHintWindowPosition(
         {
             // The frame has enough width.  Take it.
             Point aPos = rCellPos;
-            aPos.setY( aPos.Y() + rCellSize.Height() + nMargin );
+            aPos.AdjustY(rCellSize.Height() + nMargin );
             if (aPos.X() + rHintWndSize.Width() > rFrameWndSize.Width())
             {
                 // Move the hint window to the left to make it fit.
@@ -640,7 +640,7 @@ Point calcHintWindowPosition(
         {
             // The frame is high enough.  Take it.
             Point aPos = rCellPos;
-            aPos.setX( aPos.X() - rHintWndSize.Width() + nMargin );
+            aPos.AdjustX( -(rHintWndSize.Width() + nMargin) );
             if (aPos.Y() + rHintWndSize.Height() > rFrameWndSize.Height())
             {
                 // Push the hint window up a bit to make it fit.
@@ -657,7 +657,7 @@ Point calcHintWindowPosition(
         {
             // The frame is wide enough.  Take it.
             Point aPos = rCellPos;
-            aPos.setY( aPos.Y() - rHintWndSize.Height() + nMargin );
+            aPos.AdjustY( -(rHintWndSize.Height() + nMargin) );
             if (aPos.X() + rHintWndSize.Width() > rFrameWndSize.Width())
             {
                 // Move the hint window to the left to make it fit.
@@ -673,7 +673,7 @@ Point calcHintWindowPosition(
     {
         // Right margin is good enough.
         Point aPos = rCellPos;
-        aPos.setX( aPos.X() + nMargin + rCellSize.Width() );
+        aPos.AdjustX(nMargin + rCellSize.Width() );
         aPos.setY( 0 );
         return aPos;
     }
@@ -682,7 +682,7 @@ Point calcHintWindowPosition(
     {
         // Bottom margin is good enough.
         Point aPos = rCellPos;
-        aPos.setY( aPos.Y() + nMargin + rCellSize.Height() );
+        aPos.AdjustY(nMargin + rCellSize.Height() );
         aPos.setX( 0 );
         return aPos;
     }
@@ -691,7 +691,7 @@ Point calcHintWindowPosition(
     {
         // Left margin is good enough.
         Point aPos = rCellPos;
-        aPos.setX( aPos.X() - rHintWndSize.Width() + nMargin );
+        aPos.AdjustX( -(rHintWndSize.Width() + nMargin) );
         aPos.setY( 0 );
         return aPos;
     }
@@ -700,7 +700,7 @@ Point calcHintWindowPosition(
     {
         // Top margin is good enough.
         Point aPos = rCellPos;
-        aPos.setY( aPos.Y() - rHintWndSize.Height() + nMargin );
+        aPos.AdjustY( -(rHintWndSize.Height() + nMargin) );
         aPos.setX( 0 );
         return aPos;
     }
@@ -708,7 +708,7 @@ Point calcHintWindowPosition(
     // None of the above.  Hopeless.  At least try not to cover the current
     // cell.
     Point aPos = rCellPos;
-    aPos.setX( aPos.X() + rCellSize.Width() );
+    aPos.AdjustX(rCellSize.Width() );
     return aPos;
 }
 
@@ -2324,15 +2324,15 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
                 aEnd.setX( bLayoutRTL ? 0 : pGridWin[i]->GetOutputSizePixel().Width() );
             }
         }
-        aEnd.setX( aEnd.X() - nLayoutSign );
-        aEnd.setY( aEnd.Y() - 1 );
+        aEnd.AdjustX( -nLayoutSign );
+        aEnd.AdjustY( -1 );
 
         // #i85232# include area below cells (could be done in GetScrPos?)
         if ( eMode == ScUpdateMode::All && nRow2 >= MAXROW && !bIsTiledRendering )
             aEnd.setY( pGridWin[i]->GetOutputSizePixel().Height() );
 
-        aStart.setX( aStart.X() - nLayoutSign );      // include change marks
-        aStart.setY( aStart.Y() - 1 );
+        aStart.AdjustX( -nLayoutSign );      // include change marks
+        aStart.AdjustY( -1 );
 
         bool bMarkClipped = aViewData.GetOptions().GetOption( VOPT_CLIPMARKS );
         if (bMarkClipped)
@@ -2343,7 +2343,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
             //!                     aViewData.GetTabNo(),
             //!                     0, nRow1, nCol1-1, nRow2 ) )
             long nMarkPixel = static_cast<long>( SC_CLIPMARK_SIZE * aViewData.GetPPTX() );
-            aStart.setX( aStart.X() - nMarkPixel * nLayoutSign );
+            aStart.AdjustX( -(nMarkPixel * nLayoutSign) );
         }
 
         pGridWin[i]->Invalidate( pGridWin[i]->PixelToLogic( tools::Rectangle( aStart,aEnd ) ) );

@@ -1245,9 +1245,9 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                         //  for frozen panes, use sum of both parts for calculation
 
                         if ( nFixPosX != 0 )
-                            aWinSize.setWidth( aWinSize.Width() + GetGridWidth( SC_SPLIT_LEFT ) );
+                            aWinSize.AdjustWidth(GetGridWidth( SC_SPLIT_LEFT ) );
                         if ( nFixPosY != 0 )
-                            aWinSize.setHeight( aWinSize.Height() + GetGridHeight( SC_SPLIT_TOP ) );
+                            aWinSize.AdjustHeight(GetGridHeight( SC_SPLIT_TOP ) );
 
                         ScDocShell* pDocSh = aViewData.GetDocShell();
                         double nPPTX = ScGlobal::nScreenPPTX / pDocSh->GetOutputFactor();
@@ -1321,10 +1321,10 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                                                         GetOutputSizePixel().Width();
                             if ( eHMode == SC_SPLIT_FIX )
                             {
-                                aWinSize.setWidth( aWinSize.Width() + nOtherWidth );
+                                aWinSize.AdjustWidth(nOtherWidth );
                                 for ( SCCOL nCol = aViewData.GetPosX(SC_SPLIT_LEFT);
                                         nCol < aViewData.GetFixPosX(); nCol++ )
-                                    aPageSize.setWidth( aPageSize.Width() + pDoc->GetColWidth( nCol, nCurTab ) );
+                                    aPageSize.AdjustWidth(pDoc->GetColWidth( nCol, nCurTab ) );
                             }
                             else if ( nOtherWidth > aWinSize.Width() )
                                 aWinSize.setWidth( nOtherWidth );
@@ -1336,8 +1336,8 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                                                         GetOutputSizePixel().Height();
                             if ( eVMode == SC_SPLIT_FIX )
                             {
-                                aWinSize.setHeight( aWinSize.Height() + nOtherHeight );
-                                aPageSize.setHeight( aPageSize.Height() + pDoc->GetRowHeight(
+                                aWinSize.AdjustHeight(nOtherHeight );
+                                aPageSize.AdjustHeight(pDoc->GetRowHeight(
                                         aViewData.GetPosY(SC_SPLIT_TOP),
                                         aViewData.GetFixPosY()-1, nCurTab) );
                             }

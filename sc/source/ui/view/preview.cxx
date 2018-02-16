@@ -596,8 +596,8 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
                 SetFillColor();
 
                 tools::Rectangle aPixel( LogicToPixel( tools::Rectangle( -aOffset.X(), -aOffset.Y(), nPageEndX, nPageEndY ) ) );
-                --aPixel.Right();
-                --aPixel.Bottom();
+                aPixel.AdjustRight( -1 );
+                aPixel.AdjustBottom( -1 );
                 DrawRect( PixelToLogic( aPixel ) );
             }
 
@@ -609,15 +609,15 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             tools::Rectangle aPixel;
 
             aPixel = LogicToPixel( tools::Rectangle( nPageEndX, -aOffset.Y(), nPageEndX, nPageEndY ) );
-            aPixel.Top() += SC_PREVIEW_SHADOWSIZE;
-            aPixel.SetRight( aPixel.Right() + SC_PREVIEW_SHADOWSIZE - 1 );
-            aPixel.SetBottom( aPixel.Bottom() + SC_PREVIEW_SHADOWSIZE - 1 );
+            aPixel.AdjustTop(SC_PREVIEW_SHADOWSIZE );
+            aPixel.AdjustRight(SC_PREVIEW_SHADOWSIZE - 1 );
+            aPixel.AdjustBottom(SC_PREVIEW_SHADOWSIZE - 1 );
             DrawRect( PixelToLogic( aPixel ) );
 
             aPixel = LogicToPixel( tools::Rectangle( -aOffset.X(), nPageEndY, nPageEndX, nPageEndY ) );
-            aPixel.Left() += SC_PREVIEW_SHADOWSIZE;
-            aPixel.SetRight( aPixel.Right() + SC_PREVIEW_SHADOWSIZE - 1 );
-            aPixel.SetBottom( aPixel.Bottom() + SC_PREVIEW_SHADOWSIZE - 1 );
+            aPixel.AdjustLeft(SC_PREVIEW_SHADOWSIZE );
+            aPixel.AdjustRight(SC_PREVIEW_SHADOWSIZE - 1 );
+            aPixel.AdjustBottom(SC_PREVIEW_SHADOWSIZE - 1 );
             DrawRect( PixelToLogic( aPixel ) );
         }
     }
@@ -815,8 +815,8 @@ sal_uInt16 ScPreview::GetOptimalZoom(bool bWidthOnly)
     //  but some additional margin is introduced by integer scale values
     //  -> add only 0.10cm, so there is some margin in all cases.
     Size aMarginSize( LogicToPixel(Size(100, 100), MapMode(MapUnit::Map100thMM)) );
-    aWinSize.setWidth( aWinSize.Width() - 2 * aMarginSize.Width() );
-    aWinSize.setHeight( aWinSize.Height() - 2 * aMarginSize.Height() );
+    aWinSize.AdjustWidth( -(2 * aMarginSize.Width()) );
+    aWinSize.Height() -= 2 * aMarginSize.Height();
 
     Size aLocalPageSize = lcl_GetDocPageSize( &pDocShell->GetDocument(), nTab );
     if ( aLocalPageSize.Width() && aLocalPageSize.Height() )
