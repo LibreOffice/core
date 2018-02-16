@@ -91,7 +91,6 @@ SwViewShellImp::SwViewShellImp( SwViewShell *pParent ) :
     m_pDrawView( nullptr ),
     m_pSdrPageView( nullptr ),
     m_pFirstVisiblePage( nullptr ),
-    m_pRegion( nullptr ),
     m_pLayAction( nullptr ),
     m_pIdleAct( nullptr ),
     m_pAccessibleMap( nullptr ),
@@ -124,7 +123,7 @@ SwViewShellImp::~SwViewShellImp()
 
 void SwViewShellImp::DelRegion()
 {
-    DELETEZ(m_pRegion);
+    m_pRegion.reset();
 }
 
 bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
@@ -137,7 +136,7 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
             // In case of normal rendering, this makes sure only visible rectangles are painted.
             // Otherwise get the rectangle of the full document, so all paint rectangles are invalidated.
             const SwRect& rArea = comphelper::LibreOfficeKit::isActive() ? m_pShell->GetLayout()->getFrameArea() : m_pShell->VisArea();
-            m_pRegion = new SwRegionRects( rArea );
+            m_pRegion.reset(new SwRegionRects(rArea));
         }
         (*m_pRegion) -= rRect;
         return true;

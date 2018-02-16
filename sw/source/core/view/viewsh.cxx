@@ -320,7 +320,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
             {
                 SwRootFrame* pCurrentLayout = GetLayout();
 
-                Imp()->m_pRegion = nullptr;
+                (void) Imp()->m_pRegion.release(); // pRegion owns it now
 
                 //First Invert then Compress, never the other way round!
                 pRegion->Invert();

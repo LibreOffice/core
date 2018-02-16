@@ -26,6 +26,7 @@
 #include <swrect.hxx>
 #include <swtypes.hxx>
 #include <vector>
+#include <memory>
 
 class SwViewShell;
 class SwFlyFrame;
@@ -68,7 +69,7 @@ class SwViewShellImp
     SdrPageView *m_pSdrPageView;  // Exactly one Page for our DrawView
 
     SwPageFrame     *m_pFirstVisiblePage; // Always points to the first visible Page
-    SwRegionRects *m_pRegion;       // Collector of Paintrects from the LayAction
+    std::unique_ptr<SwRegionRects> m_pRegion; // Collector of Paintrects from the LayAction
 
     SwLayAction   *m_pLayAction;      // Is set if an Action object exists
                                  // Is registered by the SwLayAction ctor and deregistered by the dtor
@@ -150,7 +151,7 @@ public:
     void SetFirstVisPageInvalid() { m_bFirstPageInvalid = true; }
 
     bool AddPaintRect( const SwRect &rRect );
-    SwRegionRects *GetRegion()      { return m_pRegion; }
+    SwRegionRects *GetRegion()      { return m_pRegion.get(); }
     void DelRegion();
 
     /// New Interface for StarView Drawing
