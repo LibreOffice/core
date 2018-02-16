@@ -93,6 +93,7 @@
 #include <svx/hlnkitem.hxx>
 #include <svl/whiter.hxx>
 #include <o3tl/enumrange.hxx>
+#include <o3tl/safeint.hxx>
 #include <memory>
 #include <filter/msfilter/escherex.hxx>
 #include "sprmids.hxx"
@@ -2319,7 +2320,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         // floating screen objects, which are imported.
         {
             // Miserable miserable hack.
-            SwTwips nWidth = (pFSPA->nXaRight - pFSPA->nXaLeft);
+            SwTwips nWidth = o3tl::saturating_sub(pFSPA->nXaRight, pFSPA->nXaLeft);
             SwTwips nLeft = pFSPA->nXaLeft;
             if (MiserableRTLGraphicsHack(nLeft, nWidth, eHoriOri,
                 eHoriRel))
