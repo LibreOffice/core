@@ -1195,9 +1195,9 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
         int nYLDelta = aBoundRect.Top();
         int nYHDelta = aSize.Height() - aBoundRect.Bottom();
         if( nYLDelta <= 0 )
-            aPoint.setY( aPoint.Y() - nYLDelta - 1 );
+            aPoint.AdjustY( -(nYLDelta - 1) );
         else if( nYHDelta <= 0 )
-            aPoint.setY( aPoint.Y() + nYHDelta - 1 );
+            aPoint.AdjustY(nYHDelta - 1 );
 
         if (mbCenter)
         {
@@ -1210,9 +1210,9 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
             int nXLDelta = aBoundRect.Left();
             int nXHDelta = aSize.Width() - aBoundRect.Right();
             if( nXLDelta <= 0 )
-                aPoint.setX( aPoint.X() - nXLDelta - 1 );
+                aPoint.AdjustX( -(nXLDelta - 1) );
             else if( nXHDelta <= 0 )
-                aPoint.setX( aPoint.X() + nXHDelta - 1 );
+                aPoint.AdjustX(nXHDelta - 1 );
         }
     }
 

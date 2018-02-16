@@ -247,7 +247,7 @@ void BrwStringDic_Impl::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::R
         aPos.setX( 0 );
     }
     else
-        aPos.setX( aPos.X() + 5 );
+        aPos.AdjustX(5 );
     rRenderContext.DrawText(aPos, GetText());
     rRenderContext.Pop();
 }
@@ -406,12 +406,12 @@ void BrwString_Impl::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::Rend
                            const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
     Point aPos(rPos);
-    aPos.setX( aPos.X() + 20 );
+    aPos.AdjustX(20 );
     rRenderContext.DrawText(aPos, GetText());
     if (rEntry.GetUserData())
     {
         Point aNewPos(aPos);
-        aNewPos.setX( aNewPos.X() + rRenderContext.GetTextWidth(GetText()) );
+        aNewPos.AdjustX(rRenderContext.GetTextWidth(GetText()) );
         rRenderContext.Push(PushFlags::FONT);
         vcl::Font aFont(rRenderContext.GetFont());
         aFont.SetWeight(WEIGHT_BOLD);

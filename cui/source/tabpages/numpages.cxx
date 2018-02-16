@@ -2259,10 +2259,10 @@ static long lcl_DrawBullet(VirtualDevice* pVDev,
     // via Uno it's possible that no font has been set!
     vcl::Font aFont(rFmt.GetBulletFont() ? *rFmt.GetBulletFont() : aTmpFont);
     Size aTmpSize(rSize);
-    aTmpSize.setWidth( aTmpSize.Width() * rFmt.GetBulletRelSize() );
-    aTmpSize.Width() /= 100 ;
-    aTmpSize.setHeight( aTmpSize.Height() * rFmt.GetBulletRelSize() );
-    aTmpSize.Height() /= 100 ;
+    aTmpSize.setWidth( aTmpSize.Width() * ( rFmt.GetBulletRelSize()) );
+    aTmpSize.setWidth( aTmpSize.Width() / 100 ) ;
+    aTmpSize.setHeight( aTmpSize.Height() * ( rFmt.GetBulletRelSize()) );
+    aTmpSize.setHeight( aTmpSize.Height() / 100 ) ;
     // in case of a height of zero it is drawed in original height
     if(!aTmpSize.Height())
         aTmpSize.setHeight( 1 );

@@ -133,11 +133,11 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
     rBar.SetSelectHdl( LINK( this, DbRegistrationOptionsPage, HeaderSelect_Impl ) );
     rBar.SetEndDragHdl( LINK( this, DbRegistrationOptionsPage, HeaderEndDrag_Impl ) );
     Size aSz;
-    aSz.Width() = TAB_WIDTH1;
+    aSz.setWidth( TAB_WIDTH1 );
     rBar.InsertItem( ITEMID_TYPE, m_aTypeText,
                             LogicToPixel( aSz, MapMode( MapUnit::MapAppFont ) ).Width(),
                             HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::UPARROW );
-    aSz.Width() = TAB_WIDTH2;
+    aSz.setWidth( TAB_WIDTH2 );
     rBar.InsertItem( ITEMID_PATH, m_aPathText,
                             LogicToPixel( aSz, MapMode( MapUnit::MapAppFont ) ).Width(),
                             HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
