@@ -145,6 +145,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_48b73086",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2018-02-16T20:57:10Z",
+      "side": 1,
+      "message": "I have an incorrect range what function ScAttrArray::GetPatternRange returns. For example, http://bugs.documentfoundation.org/attachment.cgi?id\u003d84291\nIf you put cursor to I6 and press Enter, you see that function GetPatternRange return StartRow \u003d 2 and EndRow \u003d 14, but form this https://opengrok.libreoffice.org/xref/core/sc/inc/attarray.hxx#126 It should be StartRow \u003d 6 and EndRow \u003d 7.\nAnd I try to solve this problem now.\nIf I have to return a range with a loop, checking each line, then this was already implemented in the first patch. I can return to him and bring him to order. The idea was that there should be an opportunity to avoid checking cell protected in a loop and thereby increase the speed.",
+      "parentUuid": "fa31d9ce_e7601838",
+      "revId": "2c48644740cb1bbbb5dd2a884f548f8846599923",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_a7e8e011",
         "filename": "sc/source/core/data/table1.cxx",
         "patchSetId": 5
