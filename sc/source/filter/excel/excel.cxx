@@ -271,22 +271,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLS(SvStream& rStream)
     return bRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWKS(SvStream& rStream)
-{
-    ScDLL::Init();
-    SfxMedium aMedium;
-    css::uno::Reference<css::io::XInputStream> xStm(new utl::OInputStreamWrapper(rStream));
-    aMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_INPUTSTREAM, css::uno::makeAny(xStm)));
-    ScDocument aDocument;
-    ScDocOptions aDocOpt = aDocument.GetDocOptions();
-    aDocOpt.SetLookUpColRowNames(false);
-    aDocument.SetDocOptions(aDocOpt);
-    aDocument.MakeTable(0);
-    aDocument.EnableExecuteLink(false);
-    aDocument.SetInsertingFromOtherDoc(true);
-    return ScFormatFilter::Get().ScImportLotus123(aMedium, &aDocument, RTL_TEXTENCODING_ASCII_US) == ERRCODE_NONE;
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDIF(SvStream &rStream)
 {
     ScDLL::Init();

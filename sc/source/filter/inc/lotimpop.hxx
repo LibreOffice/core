@@ -79,6 +79,7 @@ public:
 
     virtual             ~ImportLotus() override;
 
+    ErrCode             parse(); //parse + CalcAfterLoad
     ErrCode             Read() override;
     ErrCode             Read( SvStream& );                  // special for *.fm3 files
 };
