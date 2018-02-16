@@ -247,7 +247,6 @@ OUString SwFormatFootnote::GetViewNumStr( const SwDoc& rDoc, bool bInclStrings )
 
 SwTextFootnote::SwTextFootnote( SwFormatFootnote& rAttr, sal_Int32 nStartPos )
     : SwTextAttr( rAttr, nStartPos )
-    , m_pStartNode( nullptr )
     , m_pTextNode( nullptr )
     , m_nSeqNo( USHRT_MAX )
 {
@@ -266,7 +265,7 @@ void SwTextFootnote::SetStartNode( const SwNodeIndex *pNewNode, bool bDelNode )
     {
         if ( !m_pStartNode )
         {
-            m_pStartNode = new SwNodeIndex( *pNewNode );
+            m_pStartNode.reset(new SwNodeIndex(*pNewNode));
         }
         else
         {
@@ -308,7 +307,7 @@ void SwTextFootnote::SetStartNode( const SwNodeIndex *pNewNode, bool bDelNode )
                 // them (particularly not Undo)
                 DelFrames( nullptr );
         }
-        DELETEZ( m_pStartNode );
+        m_pStartNode.reset();
 
         // remove the footnote from the SwDoc's array
         for( size_t n = 0; n < pDoc->GetFootnoteIdxs().size(); ++n )
@@ -423,7 +422,7 @@ void SwTextFootnote::MakeNewTextSection( SwNodes& rNodes )
 
     SwStartNode* pSttNd = rNodes.MakeTextSection( SwNodeIndex( rNodes.GetEndOfInserts() ),
                                         SwFootnoteStartNode, pFormatColl );
-    m_pStartNode = new SwNodeIndex( *pSttNd );
+    m_pStartNode.reset(new SwNodeIndex(*pSttNd));
 }
 
 void SwTextFootnote::DelFrames( const SwFrame* pSib )
