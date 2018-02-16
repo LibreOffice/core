@@ -119,8 +119,4 @@ endif
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_bugfix_test))
 
-$(eval $(call gb_CppunitTest_use_packages,sc_bugfix_test,\
-	filter_xslt \
-))
-
 # vim: set noet sw=4 ts=4:

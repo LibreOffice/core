@@ -235,6 +235,8 @@ public:
     void testUnicodeFileNameGnumeric();
 #endif
 
+    void testMergedCellsXLSXML();
+
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
     CPPUNIT_TEST(testBasicCellContentODS);
@@ -356,6 +358,7 @@ public:
 #ifdef UNX
     CPPUNIT_TEST(testUnicodeFileNameGnumeric);
 #endif
+    CPPUNIT_TEST(testMergedCellsXLSXML);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3497,6 +3500,40 @@ void ScFiltersTest::testUnicodeFileNameGnumeric()
     xDocSh->DoClose();
 }
 #endif
+
+void ScFiltersTest::testMergedCellsXLSXML()
+{
+    ScDocShellRef xDocSh = loadDoc("merged-cells.", FORMAT_XLS_XML);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load merged-cells.xml", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // B1:C1 is merged.
+    ScRange aMergedRange(1,0,0); // B1
+    rDoc.ExtendTotalMerge(aMergedRange);
+    CPPUNIT_ASSERT_EQUAL(ScRange(1,0,0,2,0,0), aMergedRange);
+
+    // D1:F1 is merged.
+    aMergedRange = ScRange(3,0,0); // D1
+    rDoc.ExtendTotalMerge(aMergedRange);
+    CPPUNIT_ASSERT_EQUAL(ScRange(3,0,0,5,0,0), aMergedRange);
+
+    // A2:A3 is merged.
+    aMergedRange = ScRange(0,1,0); // A2
+    rDoc.ExtendTotalMerge(aMergedRange);
+    CPPUNIT_ASSERT_EQUAL(ScRange(0,1,0,0,2,0), aMergedRange);
+
+    // A4:A6 is merged.
+    aMergedRange = ScRange(0,3,0); // A4
+    rDoc.ExtendTotalMerge(aMergedRange);
+    CPPUNIT_ASSERT_EQUAL(ScRange(0,3,0,0,5,0), aMergedRange);
+
+    // C3:F6 is merged.
+    aMergedRange = ScRange(2,2,0); // C3
+    rDoc.ExtendTotalMerge(aMergedRange);
+    CPPUNIT_ASSERT_EQUAL(ScRange(2,2,0,5,5,0), aMergedRange);
+
+    xDocSh->DoClose();
+}
 
 void ScFiltersTest::testCondFormatXLSB()
 {
