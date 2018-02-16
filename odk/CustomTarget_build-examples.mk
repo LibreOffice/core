@@ -93,6 +93,7 @@ ifneq ($(gb_SUPPRESS_TESTS),)
 	@true
 else
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CHK,1)
+	rm -fr $(call gb_CustomTarget_get_workdir,odk/build-examples)/{out,user}
 ifeq (MACOSX,$(OS))
 	$(eval ODK_BUILD_SHELL := $(shell $(gb_MKTEMP)))
 	cp /bin/sh "$(ODK_BUILD_SHELL)"
