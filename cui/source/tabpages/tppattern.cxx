@@ -72,9 +72,9 @@ public:
     // BitmapCtl: Returns the Bitmap
     BitmapEx GetBitmapEx()
     {
-        const Bitmap aRetval(createHistorical8x8FromArray(pBmpArray, aPixelColor, aBackgroundColor));
-
-        return (pBmpArray != nullptr) ? BitmapEx(aRetval) : BitmapEx();
+        if (!pBmpArray)
+            return BitmapEx();
+        return createHistorical8x8FromArray(pBmpArray, aPixelColor, aBackgroundColor);
     }
 
     void SetBmpArray( const sal_uInt16* pPixel ) { pBmpArray = pPixel; }
