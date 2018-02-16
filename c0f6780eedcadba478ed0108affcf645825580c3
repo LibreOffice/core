@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_4db74286",
+        "filename": "compilerplugins/clang/reservedid.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-16T09:29:07Z",
+      "side": 1,
+      "message": "this now misses a closing \")\"",
+      "revId": "c0f6780eedcadba478ed0108affcf645825580c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
