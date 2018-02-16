@@ -600,8 +600,8 @@ void SbaGridHeader::ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMouseP
     if (HEADERBAR_ITEM_NOTFOUND != nId)
     {
         tools::Rectangle aColRect = GetItemRect(nId);
-        aColRect.SetLeft( aColRect.Left() + nId ? 3 : 0 ); // the handle col (nId == 0) does not have a left margin for resizing
-        aColRect.SetRight( aColRect.Right() - 3 );
+        aColRect.AdjustLeft(nId ? 3 : 0 ); // the handle col (nId == 0) does not have a left margin for resizing
+        aColRect.AdjustRight( -3 );
         bResizingCol = !aColRect.IsInside(_rMousePos);
     }
     if (!bResizingCol)

@@ -527,8 +527,8 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
     while( !bEnd )
     {
         // Set new position to start of line
-        aNewPos.X() = TABWIN_SPACING_X;
-        aNewPos.Y() = (nRow+1) * TABWIN_SPACING_Y;
+        aNewPos.setX( TABWIN_SPACING_X );
+        aNewPos.setY( (nRow+1) * TABWIN_SPACING_Y );
 
         // determine rectangle for the corresponding line
         tools::Rectangle aRowRect( Point(0,0), aOutSize );
@@ -550,14 +550,14 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
             {
                 // TabWin is in the line
                 if( aOtherTabWinRect.Right()>aNewPos.X() )
-                    aNewPos.X() = aOtherTabWinRect.Right() + TABWIN_SPACING_X;
+                    aNewPos.setX( aOtherTabWinRect.Right() + TABWIN_SPACING_X );
             }
         }
 
         // Is there space left in this line?
         if( (aNewPos.X()+TABWIN_WIDTH_STD)<aRowRect.Right() )
         {
-            aNewPos.Y() = aRowRect.Top() + TABWIN_SPACING_Y;
+            aNewPos.setY( aRowRect.Top() + TABWIN_SPACING_Y );
             bEnd = true;
         }
         else
@@ -581,8 +581,8 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
 
     // check if the new position in inside the scrollbars ranges
     Point aBottom(aNewPos);
-    aBottom.setX( aBottom.X() + aNewSize.Width() );
-    aBottom.Y() += aNewSize.Height();
+    aBottom.AdjustX(aNewSize.Width() );
+    aBottom.AdjustY(aNewSize.Height() );
 
     if(!GetHScrollBar().GetRange().IsInside(aBottom.X()))
         GetHScrollBar().SetRange( Range(0, aBottom.X()) );
@@ -708,8 +708,8 @@ bool OJoinTableView::ScrollPane( long nDelta, bool bHoriz, bool bPaintScrollBars
         aPos = pTabWin->GetPosPixel();
 
         if( bHoriz )
-            aPos.setX( aPos.X() - nDelta );
-        else aPos.setY( aPos.Y() - nDelta );
+            aPos.AdjustX( -nDelta );
+        else aPos.AdjustY( -nDelta );
 
         pTabWin->SetPosPixel( aPos );
     }

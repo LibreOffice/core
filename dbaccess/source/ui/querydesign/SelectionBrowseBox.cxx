@@ -1231,7 +1231,7 @@ void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const tools::Rectangle& 
 void OSelectionBrowseBox::PaintStatusCell(OutputDevice& rDev, const tools::Rectangle& rRect) const
 {
     tools::Rectangle aRect(rRect);
-    aRect.TopLeft().setY( aRect.TopLeft().Y() - 2 );
+    aRect.TopLeft().AdjustY( -2 );
     OUString  aLabel(DBA_RES(STR_QUERY_HANDLETEXT));
 
    // from BROW_CRIT2_ROW onwards all rows are shown "or"
@@ -1896,8 +1896,8 @@ Size OSelectionBrowseBox::CalcOptimalSize( const Size& _rAvailable )
 {
     Size aReturn( _rAvailable.Width(), GetTitleHeight() );
 
-    aReturn.setHeight( aReturn.Height() + ( m_nVisibleCount ? m_nVisibleCount : 15 ) * GetDataRowHeight() );
-    aReturn.Height() += 40; // just some space
+    aReturn.AdjustHeight(( m_nVisibleCount ? m_nVisibleCount : 15 ) * GetDataRowHeight() );
+    aReturn.AdjustHeight(40 ); // just some space
 
     return aReturn;
 }
