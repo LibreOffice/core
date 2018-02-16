@@ -40,6 +40,7 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyleLoader.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
@@ -48,6 +49,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/pathoptions.hxx>
 
@@ -130,6 +132,15 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
 
     Reference< XImportFilter > xConverter( xConvBridge, UNO_QUERY );
 
+    // prevent unnecessary broadcasting when loading
+    Reference< XModel > xModel( mxDoc, UNO_QUERY );
+    if( xModel.is() )
+        xModel->lockControllers();
+    comphelper::ScopeGuard guard([&]() {
+        // cleanup when leaving
+        if( xModel.is() )
+            xModel->unlockControllers();
+    });
 
     //Template Loading if Required
 
