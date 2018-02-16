@@ -407,7 +407,7 @@ void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
     if(pSize)
         aGraphicSize = *pSize;
     else
-        aGraphicSize.setWidth( aGraphicSize.Height() = 0 );
+        aGraphicSize.Width() = aGraphicSize.Height() = 0;
 }
 
 void SvxNumberFormat::SetGraphic( const OUString& rName )
@@ -419,7 +419,7 @@ void SvxNumberFormat::SetGraphic( const OUString& rName )
     if( eVertOrient == text::VertOrientation::NONE )
         eVertOrient = text::VertOrientation::TOP;
 
-    aGraphicSize.setWidth( aGraphicSize.Height() = 0 );
+    aGraphicSize.Width() = aGraphicSize.Height() = 0;
 }
 
 sal_Int16    SvxNumberFormat::GetVertOrient() const

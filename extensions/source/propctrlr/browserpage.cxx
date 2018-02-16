@@ -49,8 +49,8 @@ namespace pcr
     void OBrowserPage::Resize()
     {
         Size aSize( GetOutputSizePixel() );
-        aSize.Width() -= LAYOUT_BORDER_LEFT + LAYOUT_BORDER_RIGHT;
-        aSize.Height() -= LAYOUT_BORDER_TOP + LAYOUT_BORDER_BOTTOM;
+        aSize.AdjustWidth( -(LAYOUT_BORDER_LEFT + LAYOUT_BORDER_RIGHT) );
+        aSize.AdjustHeight( -(LAYOUT_BORDER_TOP + LAYOUT_BORDER_BOTTOM) );
         m_aListBox->SetPosSizePixel( Point( LAYOUT_BORDER_LEFT, LAYOUT_BORDER_TOP ), aSize );
     }
 

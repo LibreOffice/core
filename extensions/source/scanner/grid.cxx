@@ -465,8 +465,8 @@ void GridWindow::drawGrid(vcl::RenderContext& rRenderContext)
         std::sprintf(pBuf, "%g", fX);
         OUString aMark(pBuf, strlen(pBuf), osl_getThreadTextEncoding());
         Size aTextSize(rRenderContext.GetTextWidth(aMark), rRenderContext.GetTextHeight());
-        aPt.setX( aPt.X() - aTextSize.Width() / 2 );
-        aPt.Y() += aTextSize.Height() / 2;
+        aPt.AdjustX( -(aTextSize.Width() / 2) );
+        aPt.AdjustY(aTextSize.Height() / 2 );
         rRenderContext.DrawText(aPt, aMark);
     }
     // draw horizontal lines
@@ -478,8 +478,8 @@ void GridWindow::drawGrid(vcl::RenderContext& rRenderContext)
         std::sprintf(pBuf, "%g", fY);
         OUString aMark(pBuf, strlen(pBuf), osl_getThreadTextEncoding());
         Size aTextSize(rRenderContext.GetTextWidth(aMark), rRenderContext.GetTextHeight());
-        aPt.setX( aPt.X() - aTextSize.Width() + 2 );
-        aPt.Y() -= aTextSize.Height() / 2;
+        aPt.AdjustX( -(aTextSize.Width() + 2) );
+        aPt.AdjustY( -(aTextSize.Height() / 2) );
         rRenderContext.DrawText(aPt, aMark);
     }
 

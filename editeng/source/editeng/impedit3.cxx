@@ -187,8 +187,8 @@ static void lcl_DrawRedLines( OutputDevice* pOutDev,
                 // the positions a little bit in y direction...
                 long nOnePixel = pOutDev->PixelToLogic( Size( 0, 1 ) ).Height();
                 long nCorrect = 2*nOnePixel;
-                aPnt1.setY( aPnt1.Y() - nCorrect );
-                aPnt1.setX( aPnt1.X() - nCorrect );
+                aPnt1.AdjustY( -nCorrect );
+                aPnt1.AdjustX( -nCorrect );
             }
             if ( nStart > nIndex )
             {
@@ -197,10 +197,10 @@ static void lcl_DrawRedLines( OutputDevice* pOutDev,
                     // since for RTL portions rPnt is on the visual right end of the portion
                     // (i.e. at the start of the first RTL char) we need to subtract the offset
                     // for RTL portions...
-                    aPnt1.setX( aPnt1.X() + (bIsRightToLeft ? -1 : 1) * pDXArray[ nStart - nIndex - 1 ] );
+                    aPnt1.AdjustX((bIsRightToLeft ? -1 : 1) * pDXArray[ nStart - nIndex - 1 ] );
                 }
                 else
-                    aPnt1.setY( aPnt1.Y() + pDXArray[ nStart - nIndex - 1 ] );
+                    aPnt1.AdjustY(pDXArray[ nStart - nIndex - 1 ] );
             }
             Point aPnt2( rPnt );
             DBG_ASSERT( nEnd > nIndex, "RedLine: aPnt2?" );
@@ -209,10 +209,10 @@ static void lcl_DrawRedLines( OutputDevice* pOutDev,
                 // since for RTL portions rPnt is on the visual right end of the portion
                 // (i.e. at the start of the first RTL char) we need to subtract the offset
                 // for RTL portions...
-                aPnt2.setX( aPnt2.X() + (bIsRightToLeft ? -1 : 1) * pDXArray[ nEnd - nIndex - 1 ] );
+                aPnt2.AdjustX((bIsRightToLeft ? -1 : 1) * pDXArray[ nEnd - nIndex - 1 ] );
             }
             else
-                aPnt2.setY( aPnt2.Y() + pDXArray[ nEnd - nIndex - 1 ] );
+                aPnt2.AdjustY(pDXArray[ nEnd - nIndex - 1 ] );
             if ( nOrientation )
             {
                 aPnt1 = Rotate( aPnt1, nOrientation, rOrigin );
@@ -1159,7 +1159,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     {
                          Size aSize( aTmpFont.QuickGetTextSize( GetRefDevice(),
                                 pParaPortion->GetNode()->GetString(), nTmpPos, nPortionLen, pBuf.get() ));
-                         pPortion->GetSize().setWidth( pPortion->GetSize().Width() + aSize.Width() );
+                         pPortion->GetSize().AdjustWidth(aSize.Width() );
                          if (pPortion->GetSize().Height() < aSize.Height())
                              pPortion->GetSize().setHeight( aSize.Height() );
                     }
@@ -1171,7 +1171,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
                     // #i9050# Do Kerning also behind portions...
                     if ( ( aTmpFont.GetFixKerning() > 0 ) && ( ( nTmpPos + nPortionLen ) < pNode->Len() ) )
-                        pPortion->GetSize().setWidth( pPortion->GetSize().Width() + aTmpFont.GetFixKerning() );
+                        pPortion->GetSize().AdjustWidth(aTmpFont.GetFixKerning() );
                     if ( IsFixedCellHeight() )
                         pPortion->GetSize().setHeight( ImplCalculateFontIndependentLineSpacing( aTmpFont.GetFontHeight() ) );
                 }
@@ -1209,7 +1209,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     {
                         long nExtraSpace = pPortion->GetSize().Height()/5;
                         nExtraSpace = GetXValue( nExtraSpace );
-                        pPortion->GetSize().setWidth( pPortion->GetSize().Width() + nExtraSpace );
+                        pPortion->GetSize().AdjustWidth(nExtraSpace );
                         nTmpWidth += nExtraSpace;
                     }
                 }
@@ -1505,7 +1505,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             sal_Int32 nPosInArray = pLine->GetEnd()-1-pLine->GetStart();
             long nNewValue = ( nPosInArray ? pLine->GetCharPosArray()[ nPosInArray-1 ] : 0 ) + n;
             pLine->GetCharPosArray()[ nPosInArray ] = nNewValue;
-            rTP.GetSize().setWidth( rTP.GetSize().Width() + n );
+            rTP.GetSize().AdjustWidth(n );
         }
 
         pLine->SetTextWidth( aTextSize.Width() );
@@ -2169,7 +2169,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
             // For the last character the portion must stop behind the blank
             // => Simplify correction:
             DBG_ASSERT( ( nPortionStart + rLastPortion.GetLen() ) == ( nLastChar+1 ), "Blank actually not at the end of the portion!?");
-            rLastPortion.GetSize().setWidth( rLastPortion.GetSize().Width() - nBlankWidth );
+            rLastPortion.GetSize().AdjustWidth( -nBlankWidth );
             nRemainingSpace += nBlankWidth;
         }
         pLine->GetCharPosArray()[nLastChar-nFirstChar] -= nBlankWidth;
@@ -2194,9 +2194,9 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
             TextPortion& rLastPortion = pParaPortion->GetTextPortions()[ nPortion ];
 
             // The width of the portion:
-            rLastPortion.GetSize().setWidth( rLastPortion.GetSize().Width() + nMore4Everyone );
+            rLastPortion.GetSize().AdjustWidth(nMore4Everyone );
             if ( nSomeExtraSpace )
-                rLastPortion.GetSize().setWidth( ++rLastPortion.GetSize().Width() );
+                rLastPortion.GetSize().AdjustWidth( 1 );
 
             // Correct positions in array
             // Even for kashidas just change positions, VCL will then draw the kashida automatically
@@ -2781,8 +2781,8 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         {
             if ( nStretchY != 100 )
             {
-                aRealSz.setHeight( aRealSz.Height() * nStretchY );
-                aRealSz.Height() /= 100;
+                aRealSz.setHeight( aRealSz.Height() * ( nStretchY) );
+                aRealSz.setHeight( aRealSz.Height() / 100 );
             }
             if ( nStretchX != 100 )
             {
@@ -2793,7 +2793,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
                 }
                 else
                 {
-                    aRealSz.setWidth( aRealSz.Width() * nStretchX );
+                    aRealSz.setWidth( aRealSz.Width() * ( nStretchX) );
                     aRealSz.setWidth( aRealSz.Width() / 100 );
 
                     // Also the Kerning: (long due to handle Interim results)
@@ -2828,7 +2828,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         if ( nRelWidth != 100 )
         {
             aRealSz.setWidth( aRealSz.Width() * nRelWidth );
-            aRealSz.Width() /= 100;
+            aRealSz.setWidth( aRealSz.Width() / 100 );
         }
         rFont.SetFontSize( aRealSz );
         // Font is not restored ...
@@ -3023,13 +3023,13 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
             bool bEndOfParagraphWritten(false);
 
             if ( !IsVertical() )
-                aStartPos.setY( aStartPos.Y() + pPortion->GetFirstLineOffset() );
+                aStartPos.AdjustY(pPortion->GetFirstLineOffset() );
             else
             {
                 if( IsTopToBottom() )
-                    aStartPos.setX( aStartPos.X() - pPortion->GetFirstLineOffset() );
+                    aStartPos.AdjustX( -(pPortion->GetFirstLineOffset()) );
                 else
-                    aStartPos.setX( aStartPos.X() + pPortion->GetFirstLineOffset() );
+                    aStartPos.AdjustX(pPortion->GetFirstLineOffset() );
             }
 
             Point aParaStart( aStartPos );
@@ -3047,29 +3047,29 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                 aTmpPos = aStartPos;
                 if ( !IsVertical() )
                 {
-                    aTmpPos.setX( aTmpPos.X() + pLine->GetStartPosX() );
-                    aTmpPos.setY( aTmpPos.Y() + pLine->GetMaxAscent() );
-                    aStartPos.setY( aStartPos.Y() + pLine->GetHeight() );
+                    aTmpPos.AdjustX(pLine->GetStartPosX() );
+                    aTmpPos.AdjustY(pLine->GetMaxAscent() );
+                    aStartPos.AdjustY(pLine->GetHeight() );
                     if (nLine != nLastLine)
-                        aStartPos.setY( aStartPos.Y() + nVertLineSpacing );
+                        aStartPos.AdjustY(nVertLineSpacing );
                 }
                 else
                 {
                     if ( IsTopToBottom() )
                     {
-                        aTmpPos.setY( aTmpPos.Y() + pLine->GetStartPosX() );
-                        aTmpPos.setX( aTmpPos.X() - pLine->GetMaxAscent() );
-                        aStartPos.setX( aStartPos.X() - pLine->GetHeight() );
+                        aTmpPos.AdjustY(pLine->GetStartPosX() );
+                        aTmpPos.AdjustX( -(pLine->GetMaxAscent()) );
+                        aStartPos.AdjustX( -(pLine->GetHeight()) );
                         if (nLine != nLastLine)
-                            aStartPos.setX( aStartPos.X() - nVertLineSpacing );
+                            aStartPos.AdjustX( -nVertLineSpacing );
                     }
                     else
                     {
-                        aTmpPos.setY( aTmpPos.Y() - pLine->GetStartPosX() );
-                        aTmpPos.setX( aTmpPos.X() + pLine->GetMaxAscent() );
-                        aStartPos.setX( aStartPos.X() + pLine->GetHeight() );
+                        aTmpPos.AdjustY( -(pLine->GetStartPosX()) );
+                        aTmpPos.AdjustX(pLine->GetMaxAscent() );
+                        aStartPos.AdjustX(pLine->GetHeight() );
                         if (nLine != nLastLine)
-                            aStartPos.setX( aStartPos.X() + nVertLineSpacing );
+                            aStartPos.AdjustX(nVertLineSpacing );
                     }
                 }
 
@@ -3209,40 +3209,40 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                                 Point aTopLeftRectPos( aTmpPos );
                                                 if ( !IsVertical() )
                                                 {
-                                                    aTopLeftRectPos.setX( aTopLeftRectPos.X() + nAdvanceX );
-                                                    aTopLeftRectPos.setY( aTopLeftRectPos.Y() + nAdvanceY );
+                                                    aTopLeftRectPos.AdjustX(nAdvanceX );
+                                                    aTopLeftRectPos.AdjustY(nAdvanceY );
                                                 }
                                                 else
                                                 {
                                                     if( IsTopToBottom() )
                                                     {
-                                                        aTopLeftRectPos.setY( aTopLeftRectPos.Y() - nAdvanceX );
-                                                        aTopLeftRectPos.setX( aTopLeftRectPos.X() + nAdvanceY );
+                                                        aTopLeftRectPos.AdjustY( -nAdvanceX );
+                                                        aTopLeftRectPos.AdjustX(nAdvanceY );
                                                     }
                                                     else
                                                     {
-                                                        aTopLeftRectPos.setY( aTopLeftRectPos.Y() + nAdvanceX );
-                                                        aTopLeftRectPos.setX( aTopLeftRectPos.X() - nAdvanceY );
+                                                        aTopLeftRectPos.AdjustY(nAdvanceX );
+                                                        aTopLeftRectPos.AdjustX( -nAdvanceY );
                                                     }
                                                 }
 
                                                 Point aBottomRightRectPos( aTopLeftRectPos );
                                                 if ( !IsVertical() )
                                                 {
-                                                    aBottomRightRectPos.setX( aBottomRightRectPos.X() + 2 * nHalfBlankWidth );
-                                                    aBottomRightRectPos.setY( aBottomRightRectPos.Y() + pLine->GetHeight() );
+                                                    aBottomRightRectPos.AdjustX(2 * nHalfBlankWidth );
+                                                    aBottomRightRectPos.AdjustY(pLine->GetHeight() );
                                                 }
                                                 else
                                                 {
                                                     if (IsTopToBottom())
                                                     {
-                                                        aBottomRightRectPos.setX( aBottomRightRectPos.X() + pLine->GetHeight() );
-                                                        aBottomRightRectPos.setY( aBottomRightRectPos.Y() - 2 * nHalfBlankWidth );
+                                                        aBottomRightRectPos.AdjustX(pLine->GetHeight() );
+                                                        aBottomRightRectPos.AdjustY( -(2 * nHalfBlankWidth) );
                                                     }
                                                     else
                                                     {
-                                                        aBottomRightRectPos.setX( aBottomRightRectPos.X() - pLine->GetHeight() );
-                                                        aBottomRightRectPos.setY( aBottomRightRectPos.Y() + 2 * nHalfBlankWidth );
+                                                        aBottomRightRectPos.AdjustX( -(pLine->GetHeight()) );
+                                                        aBottomRightRectPos.AdjustY(2 * nHalfBlankWidth );
                                                     }
                                                 }
 
@@ -3326,20 +3326,20 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
 
                                             if ( !IsVertical() )
                                             {
-                                                aStartPos.setY( aStartPos.Y() + nMaxAscent );
-                                                aTmpPos.setY( aTmpPos.Y() + nMaxAscent );
+                                                aStartPos.AdjustY(nMaxAscent );
+                                                aTmpPos.AdjustY(nMaxAscent );
                                             }
                                             else
                                             {
                                                 if (IsTopToBottom())
                                                 {
-                                                    aTmpPos.setX( aTmpPos.X() - nMaxAscent );
-                                                    aStartPos.setX( aStartPos.X() - nMaxAscent );
+                                                    aTmpPos.AdjustX( -nMaxAscent );
+                                                    aStartPos.AdjustX( -nMaxAscent );
                                                 }
                                                 else
                                                 {
-                                                    aTmpPos.setX( aTmpPos.X() + nMaxAscent );
-                                                    aStartPos.setX( aStartPos.X() + nMaxAscent );
+                                                    aTmpPos.AdjustX(nMaxAscent );
+                                                    aStartPos.AdjustX(nMaxAscent );
                                                 }
                                             }
                                         }
@@ -3404,7 +3404,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                 // In RTL portions spell markup pos should be at the start of the
                                 // first chara as well. That is on the right end of the portion
                                 if (rTextPortion.IsRightToLeft())
-                                    aRedLineTmpPos.setX( aRedLineTmpPos.X() + rTextPortion.GetSize().Width() );
+                                    aRedLineTmpPos.AdjustX(rTextPortion.GetSize().Width() );
 
                                 if ( bStripOnly )
                                 {
@@ -3515,13 +3515,13 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                         {
                                             long nDiff = aTmpFont.GetFontSize().Height() * aTmpFont.GetEscapement() / 100L;
                                             if ( !IsVertical() )
-                                                aOutPos.setY( aOutPos.Y() - nDiff );
+                                                aOutPos.AdjustY( -nDiff );
                                             else
                                             {
                                                 if (IsTopToBottom())
-                                                    aOutPos.setX( aOutPos.X() + nDiff );
+                                                    aOutPos.AdjustX(nDiff );
                                                 else
-                                                    aOutPos.setX( aOutPos.X() - nDiff );
+                                                    aOutPos.AdjustX( -nDiff );
                                             }
                                             aRedLineTmpPos = aOutPos;
                                             aTmpFont.SetEscapement( 0 );
@@ -3590,7 +3590,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                                && rTextPortion.GetExtraInfos() && rTextPortion.GetExtraInfos()->bCompressed
                                                && rTextPortion.GetExtraInfos()->bFirstCharIsRightPunktuation )
                                         {
-                                            aRealOutPos.setX( aRealOutPos.X() + rTextPortion.GetExtraInfos()->nPortionOffsetX );
+                                            aRealOutPos.AdjustX(rTextPortion.GetExtraInfos()->nPortionOffsetX );
                                         }
 
                                         // RTL portions with (#i37132#)
@@ -3607,7 +3607,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                         if ( bDrawFrame )
                                         {
                                             Point aTopLeft( aTmpPos );
-                                            aTopLeft.setY( aTopLeft.Y() - pLine->GetMaxAscent() );
+                                            aTopLeft.AdjustY( -(pLine->GetMaxAscent()) );
                                             if ( nOrientation )
                                                 aTopLeft = lcl_ImplCalcRotatedPos( aTopLeft, aOrigin, nSin, nCos );
                                             tools::Rectangle aRect( aTopLeft, rTextPortion.GetSize() );
@@ -3627,7 +3627,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                                     if ( auto pUrlField = dynamic_cast< const SvxURLField* >( pFieldData ) )
                                                     {
                                                         Point aTopLeft( aTmpPos );
-                                                        aTopLeft.setY( aTopLeft.Y() - pLine->GetMaxAscent() );
+                                                        aTopLeft.AdjustY( -(pLine->GetMaxAscent()) );
 
                                                         tools::Rectangle aRect( aTopLeft, rTextPortion.GetSize() );
                                                         vcl::PDFExtOutDevBookmarkEntry aBookmark;
@@ -3650,12 +3650,12 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                             {
                                                 long nShift = (_nEsc * aTmpFont.GetFontSize().Height()) / 100L;
                                                 if( !IsVertical() )
-                                                    aRedLineTmpPos.setY( aRedLineTmpPos.Y() - nShift );
+                                                    aRedLineTmpPos.AdjustY( -nShift );
                                                 else
                                                     if (IsTopToBottom())
-                                                        aRedLineTmpPos.setX( aRedLineTmpPos.X() + nShift );
+                                                        aRedLineTmpPos.AdjustX(nShift );
                                                     else
-                                                        aRedLineTmpPos.setX( aRedLineTmpPos.X() - nShift );
+                                                        aRedLineTmpPos.AdjustX( -nShift );
                                             }
                                         }
                                         Color aOldColor( pOutDev->GetLineColor() );
@@ -3770,13 +3770,13 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                 if ( ( nLine != nLastLine ) && !aStatus.IsOutliner() )
                 {
                     if ( !IsVertical() )
-                        aStartPos.setY( aStartPos.Y() + nSBL );
+                        aStartPos.AdjustY(nSBL );
                     else
                     {
                         if( IsTopToBottom() )
-                            aStartPos.setX( aStartPos.X() - nSBL );
+                            aStartPos.AdjustX( -nSBL );
                         else
-                            aStartPos.setX( aStartPos.X() + nSBL );
+                            aStartPos.AdjustX(nSBL );
                     }
                 }
 
@@ -3794,13 +3794,13 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                 const SvxULSpaceItem& rULItem = pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
                 long nUL = GetYValue( rULItem.GetLower() );
                 if ( !IsVertical() )
-                    aStartPos.setY( aStartPos.Y() + nUL );
+                    aStartPos.AdjustY(nUL );
                 else
                 {
                     if (IsTopToBottom())
-                        aStartPos.setX( aStartPos.X() - nUL );
+                        aStartPos.AdjustX( -nUL );
                     else
-                        aStartPos.setX( aStartPos.X() + nUL );
+                        aStartPos.AdjustX(nUL );
                 }
             }
 
@@ -3828,13 +3828,13 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
         else
         {
             if ( !IsVertical() )
-                aStartPos.setY( aStartPos.Y() + nParaHeight );
+                aStartPos.AdjustY(nParaHeight );
             else
             {
                 if (IsTopToBottom())
-                    aStartPos.setX( aStartPos.X() - nParaHeight );
+                    aStartPos.AdjustX( -nParaHeight );
                 else
-                    aStartPos.setX( aStartPos.X() + nParaHeight );
+                    aStartPos.AdjustX(nParaHeight );
             }
         }
 
@@ -3870,22 +3870,22 @@ void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, Ou
     if ( !IsVertical() )
     {
         aStartPos = pView->GetOutputArea().TopLeft();
-        aStartPos.setX( aStartPos.X() - pView->GetVisDocLeft() );
-        aStartPos.Y() -= pView->GetVisDocTop();
+        aStartPos.AdjustX( -(pView->GetVisDocLeft()) );
+        aStartPos.AdjustY( -(pView->GetVisDocTop()) );
     }
     else
     {
         if( IsTopToBottom() )
         {
             aStartPos = pView->GetOutputArea().TopRight();
-            aStartPos.setX( aStartPos.X() + pView->GetVisDocTop() );
-            aStartPos.Y() -= pView->GetVisDocLeft();
+            aStartPos.AdjustX(pView->GetVisDocTop() );
+            aStartPos.AdjustY( -(pView->GetVisDocLeft()) );
         }
         else
         {
             aStartPos = pView->GetOutputArea().BottomLeft();
-            aStartPos.setX( aStartPos.X() - pView->GetVisDocTop() );
-            aStartPos.Y() += pView->GetVisDocLeft();
+            aStartPos.AdjustX( -(pView->GetVisDocTop()) );
+            aStartPos.AdjustY(pView->GetVisDocLeft() );
         }
     }
 
@@ -4183,9 +4183,9 @@ long ImpEditEngine::CalcVertLineSpacing(Point& rStartPos) const
     {
         if( IsTopToBottom() )
             // Shift the text to the right for the asian layout mode.
-            rStartPos.setX( rStartPos.X() + nTotalSpace );
+            rStartPos.AdjustX(nTotalSpace );
         else
-            rStartPos.setX( rStartPos.X() - nTotalSpace );
+            rStartPos.AdjustX( -nTotalSpace );
     }
 
     return nTotalSpace / (nTotalLineCount-1);

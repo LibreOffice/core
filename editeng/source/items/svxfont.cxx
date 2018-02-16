@@ -372,7 +372,7 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
     }
 
     if( IsKern() && ( nLen > 1 ) )
-        aTxtSize.setWidth( aTxtSize.Width() + ( ( nLen-1 ) * long( nKern ) ) );
+        aTxtSize.AdjustWidth( ( nLen-1 ) * long( nKern ) );
 
     return aTxtSize;
 }
@@ -409,7 +409,7 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
 
     if( IsKern() && ( nLen > 1 ) )
     {
-        aTxtSize.setWidth( aTxtSize.Width() + ( ( nLen-1 ) * long( nKern ) ) );
+        aTxtSize.AdjustWidth( ( nLen-1 ) * long( nKern ) );
 
         if ( pDXArray )
         {
@@ -462,9 +462,9 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
         nDiff /= 100;
 
         if ( !IsVertical() )
-            aPos.setY( aPos.Y() - nDiff );
+            aPos.AdjustY( -nDiff );
         else
-            aPos.setX( aPos.X() + nDiff );
+            aPos.AdjustX(nDiff );
     }
 
     if( IsCapital() )
@@ -516,7 +516,7 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
         else
             nTmpEsc = nEsc;
         Size aSize = GetFontSize();
-        aPos.setY( aPos.Y() - ( nTmpEsc * aSize.Height() ) / 100 );
+        aPos.AdjustY( -(( nTmpEsc * aSize.Height() ) / 100) );
     }
     Font aOldFont( ChgPhysFont( pOut ) );
     Font aOldPrnFont( ChgPhysFont( pPrinter ) );
@@ -611,8 +611,8 @@ void SvxDoGetCapitalSize::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
         aPartSize.setWidth( pOut->GetTextWidth( _rTxt, _nIdx, _nLen ) );
         aPartSize.setHeight( pOut->GetTextHeight() );
     }
-    aTxtSize.setWidth( aTxtSize.Width() + aPartSize.Width() );
-    aTxtSize.Width() += ( _nLen * long( nKern ) );
+    aTxtSize.AdjustWidth(aPartSize.Width() );
+    aTxtSize.AdjustWidth( _nLen * long( nKern ) );
 }
 
 Size SvxFont::GetCapitalSize( const OutputDevice *pOut, const OUString &rTxt,
@@ -704,7 +704,7 @@ void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
     long nWidth = aPartSize.Width();
     if ( nKern )
     {
-        aPos.setX( aPos.X() + (nKern/2) );
+        aPos.AdjustX(nKern/2);
         if ( _nLen ) nWidth += (_nLen*long(nKern));
     }
     pOut->DrawStretchText(aPos,nWidth-nKern,_rTxt,_nIdx,_nLen);
@@ -716,7 +716,7 @@ void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
         pFont->SetPropr( nProp );
     pFont->SetPhysFont( pOut );
 
-    aPos.setX( aPos.X() + nWidth-(nKern/2) );
+    aPos.AdjustX(nWidth-(nKern/2) );
 }
 
 /*************************************************************************

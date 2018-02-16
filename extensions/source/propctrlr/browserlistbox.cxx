@@ -426,8 +426,8 @@ namespace pcr
         tools::Rectangle aLinesArea( aPlayground );
         if ( bPositionHelpWindow )
         {
-            aLinesArea.SetBottom( aLinesArea.Bottom() - nHelpWindowHeight );
-            aLinesArea.Bottom() -= aHelpWindowDistance.Height();
+            aLinesArea.AdjustBottom( -nHelpWindowHeight );
+            aLinesArea.AdjustBottom( -(aHelpWindowDistance.Height()) );
         }
         m_aLinesPlayground->SetPosSizePixel( aLinesArea.TopLeft(), aLinesArea.GetSize() );
 
@@ -447,7 +447,7 @@ namespace pcr
             Size aVScrollSize( m_aVScroll->GetSizePixel() );
 
             // adjust the playground's width
-            aLinesArea.SetRight( aLinesArea.Right() - aVScrollSize.Width() );
+            aLinesArea.AdjustRight( -(aVScrollSize.Width()) );
             m_aLinesPlayground->SetPosSizePixel( aLinesArea.TopLeft(), aLinesArea.GetSize() );
 
             // position the scrollbar
@@ -556,7 +556,7 @@ namespace pcr
 
         aSize.setHeight( m_nRowHeight );
 
-        aPos.setY( aPos.Y() + _nIndex * m_nRowHeight );
+        aPos.AdjustY(_nIndex * m_nRowHeight );
 
         if ( _nIndex < m_aLines.size() )
         {

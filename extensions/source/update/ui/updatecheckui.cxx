@@ -836,13 +836,13 @@ void BubbleWindow::Show( bool bVisible, ShowFlags nFlags )
         aWindowSize.setHeight( aImgSize.Height() + TIP_HEIGHT + 2 * BUBBLE_BORDER );
 
     Point aPos;
-    aPos.X() = maTipPos.X() - aWindowSize.Width() + TIP_RIGHT_OFFSET;
+    aPos.setX( maTipPos.X() - aWindowSize.Width() + TIP_RIGHT_OFFSET );
     aPos.setY( maTipPos.Y() );
     Point aScreenPos = GetParent()->OutputToAbsoluteScreenPixel( aPos );
     if ( aScreenPos.X() < 0 )
     {
         mnTipOffset = aScreenPos.X();
-        aPos.setX( aPos.X() - mnTipOffset );
+        aPos.AdjustX( -(mnTipOffset) );
     }
     SetPosSizePixel( aPos, aWindowSize );
 

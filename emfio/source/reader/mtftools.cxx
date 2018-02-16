@@ -755,7 +755,7 @@ namespace emfio
 
                     if ( pLineStyle->aLineInfo.GetStyle() == LineStyle::Dash )
                     {
-                        aSize.setWidth( aSize.Width() + 1 );
+                        aSize.AdjustWidth(1 );
                         long nDotLen = ImplMap( aSize ).Width();
                         pLineStyle->aLineInfo.SetDistance( nDotLen );
                         pLineStyle->aLineInfo.SetDotLen( nDotLen );
@@ -1517,8 +1517,8 @@ namespace emfio
             // check whether there is a font rotation applied via transformation
             Point aP1( ImplMap( Point() ) );
             Point aP2( ImplMap( Point( 0, 100 ) ) );
-            aP2.setX( aP2.X() - aP1.X() );
-            aP2.setY( aP2.Y() - aP1.Y() );
+            aP2.AdjustX( -(aP1.X()) );
+            aP2.AdjustY( -(aP1.Y()) );
             double fX = aP2.X();
             double fY = aP2.Y();
             if ( fX )
