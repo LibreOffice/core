@@ -23,7 +23,7 @@
                 <value>com.sun.star.comp.framework.java.services.AsyncJob</value>
             </prop>
             <node oor:name="Arguments">
-                <prop oor:name="arg_1" oor:type="xs:string">
+                <prop oor:name="arg_1" oor:op="replace" oor:type="xs:string">
                     <value>val_1</value>
                 </prop>
             </node>
