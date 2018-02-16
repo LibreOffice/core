@@ -1186,13 +1186,12 @@ sal_uInt64 SvStream::WriteStream( SvStream& rStream, sal_uInt64 nSize )
     sal_uInt32 nCount;
     sal_uInt64 nWriteSize = nSize;
 
-    do {
-        if ( nSize >= nCurBufLen )
-            nWriteSize -= nCurBufLen;
-        else
-            nCurBufLen = nWriteSize;
-        nCount = rStream.ReadBytes( pBuf.get(), nCurBufLen );
+    do
+    {
+        nCurBufLen = std::min<sal_uInt64>(nCurBufLen, nWriteSize);
+        nCount = rStream.ReadBytes(pBuf.get(), nCurBufLen);
         WriteBytes( pBuf.get(), nCount );
+        nWriteSize -= nCount;
     }
     while( nWriteSize && nCount == nCurBufLen );
 
