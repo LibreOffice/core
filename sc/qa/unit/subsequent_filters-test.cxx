@@ -236,6 +236,7 @@ public:
 #endif
 
     void testMergedCellsXLSXML();
+    void testBackgroundColorStandardXLSXML();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -359,6 +360,7 @@ public:
     CPPUNIT_TEST(testUnicodeFileNameGnumeric);
 #endif
     CPPUNIT_TEST(testMergedCellsXLSXML);
+    CPPUNIT_TEST(testBackgroundColorStandardXLSXML);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3531,6 +3533,53 @@ void ScFiltersTest::testMergedCellsXLSXML()
     aMergedRange = ScRange(2,2,0); // C3
     rDoc.ExtendTotalMerge(aMergedRange);
     CPPUNIT_ASSERT_EQUAL(ScRange(2,2,0,5,5,0), aMergedRange);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testBackgroundColorStandardXLSXML()
+{
+    ScDocShellRef xDocSh = loadDoc("background-color-standard.", FORMAT_XLS_XML);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load background-color-standard.xml", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    struct Check
+    {
+        OUString aCellValue;
+        Color aFontColor;
+        Color aBgColor;
+    };
+
+    const std::vector<Check> aChecks =
+    {
+        { OUString("Background Color"), Color(COL_BLACK), Color(COL_TRANSPARENT) },
+        { OUString("Dark Red"),         Color(COL_WHITE), Color(192,  0,    0)   },
+        { OUString("Red"),              Color(COL_WHITE), Color(255,  0,    0)   },
+        { OUString("Orange"),           Color(COL_WHITE), Color(255, 192,   0)   },
+        { OUString("Yellow"),           Color(COL_WHITE), Color(255, 255,   0)   },
+        { OUString("Light Green"),      Color(COL_WHITE), Color(146, 208,  80)   },
+        { OUString("Green"),            Color(COL_WHITE), Color(  0, 176,  80)   },
+        { OUString("Light Blue"),       Color(COL_WHITE), Color(  0, 176, 240)   },
+        { OUString("Blue"),             Color(COL_WHITE), Color(  0, 112, 192)   },
+        { OUString("Dark Blue"),        Color(COL_WHITE), Color(  0,  32,  96)   },
+        { OUString("Purple"),           Color(COL_WHITE), Color(112,  48, 160)   },
+    };
+
+    for (size_t nRow = 0; nRow < aChecks.size(); ++nRow)
+    {
+        ScAddress aPos(0, nRow, 0);
+        OUString aStr = rDoc.GetString(aPos);
+        CPPUNIT_ASSERT_EQUAL(aChecks[nRow].aCellValue, aStr);
+
+        const ScPatternAttr* pPat = rDoc.GetPattern(aPos);
+        CPPUNIT_ASSERT(pPat);
+
+        const SvxColorItem& rColor = pPat->GetItem(ATTR_FONT_COLOR);
+        CPPUNIT_ASSERT_EQUAL(aChecks[nRow].aFontColor, rColor.GetValue());
+
+        const SvxBrushItem& rBgColor = pPat->GetItem(ATTR_BACKGROUND);
+        CPPUNIT_ASSERT_EQUAL(aChecks[nRow].aBgColor, rBgColor.GetColor());
+    }
 
     xDocSh->DoClose();
 }
