@@ -74,7 +74,7 @@ uno::Reference< XAccessibleContext > SvxPixelCtlAccessible::getAccessibleContext
 sal_Int32 SvxPixelCtlAccessible::getAccessibleChildCount(  )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    return mrPixelCtl.GetSquares();
+    return SvxPixelCtl::GetSquares();
 }
 uno::Reference< XAccessible > SvxPixelCtlAccessible::getAccessibleChild( sal_Int32 i )
 {
@@ -450,7 +450,7 @@ void SvxPixelCtlAccessible::NotifyChild(long nIndex,bool bSelect ,bool bCheck)
 uno::Reference<XAccessible> SvxPixelCtlAccessible::CreateChild (long nIndex,Point mPoint)
 {
     bool bPixelColorOrBG = mrPixelCtl.GetBitmapPixel(sal_uInt16(nIndex)) != 0;
-    Size size(mrPixelCtl.GetWidth() / mrPixelCtl.GetLineCount(),mrPixelCtl.GetHeight() / mrPixelCtl.GetLineCount());
+    Size size(mrPixelCtl.GetWidth() / SvxPixelCtl::GetLineCount(), mrPixelCtl.GetHeight() / SvxPixelCtl::GetLineCount());
     uno::Reference<XAccessible> xChild;
     xChild = new SvxPixelCtlAccessibleChild(mrPixelCtl,
                 bPixelColorOrBG,
@@ -794,8 +794,8 @@ tools::Rectangle const & SvxPixelCtlAccessibleChild::GetBoundingBox()
 
 OUString SvxPixelCtlAccessibleChild::GetName()
 {
-    sal_Int32 nXIndex = mnIndexInParent % mrParentWindow.GetLineCount();
-    sal_Int32 nYIndex = mnIndexInParent / mrParentWindow.GetLineCount();
+    sal_Int32 nXIndex = mnIndexInParent % SvxPixelCtl::GetLineCount();
+    sal_Int32 nYIndex = mnIndexInParent / SvxPixelCtl::GetLineCount();
 
     OUString str = "("
                  + OUString::number(nXIndex)
