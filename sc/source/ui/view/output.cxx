@@ -831,10 +831,10 @@ void drawDataBars(vcl::RenderContext& rRenderContext, const ScDataBarInfo* pOldD
 {
     long nPosZero = 0;
     tools::Rectangle aPaintRect = rRect;
-    aPaintRect.SetTop( aPaintRect.Top() + 2 * nOneY );
-    aPaintRect.SetBottom( aPaintRect.Bottom() - 2 * nOneY );
-    aPaintRect.SetLeft( aPaintRect.Left() + 2 * nOneX );
-    aPaintRect.SetRight( aPaintRect.Right() - 2 * nOneX );
+    aPaintRect.AdjustTop(2 * nOneY );
+    aPaintRect.AdjustBottom( -(2 * nOneY) );
+    aPaintRect.Left() += 2 * nOneX;
+    aPaintRect.AdjustRight( -(2 * nOneX) );
     if(pOldDataBarInfo->mnZero)
     {
         // need to calculate null point in cell
@@ -1267,16 +1267,16 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
                             if (ePart == SC_SHADOW_HSTART)
                             {
                                 if (eLoc == SvxShadowLocation::TopLeft || eLoc == SvxShadowLocation::BottomLeft)
-                                    aRect.SetRight( aRect.Right() - nSizeX );
+                                    aRect.AdjustRight( -nSizeX );
                                 else
-                                    aRect.SetLeft( aRect.Left() + nSizeX );
+                                    aRect.AdjustLeft(nSizeX );
                             }
                             if (ePart == SC_SHADOW_VSTART)
                             {
                                 if (eLoc == SvxShadowLocation::TopLeft || eLoc == SvxShadowLocation::TopRight)
-                                    aRect.SetBottom( aRect.Bottom() - nSizeY );
+                                    aRect.AdjustBottom( -nSizeY );
                                 else
-                                    aRect.SetTop( aRect.Top() + nSizeY );
+                                    aRect.AdjustTop(nSizeY );
                             }
 
                             //! merge rectangles?
@@ -2405,11 +2405,11 @@ void ScOutputData::DrawClipMarks()
                                                Point( nStartPosX+nOutWidth-1, nPosY+nOutHeight-1 ) );
                     }
 
-                    aCellRect.SetBottom( aCellRect.Bottom() - 1 );    // don't paint over the cell grid
+                    aCellRect.AdjustBottom( -1 );    // don't paint over the cell grid
                     if ( bLayoutRTL )
-                        aCellRect.SetLeft( aCellRect.Left() + 1 );
+                        aCellRect.AdjustLeft(1 );
                     else
-                        aCellRect.SetRight( aCellRect.Right() - 1 );
+                        aCellRect.AdjustRight( -1 );
 
                     long nMarkPixel = static_cast<long>( SC_CLIPMARK_SIZE * mnPPTX );
                     Size aMarkSize( nMarkPixel, (nMarkPixel-1)*2 );

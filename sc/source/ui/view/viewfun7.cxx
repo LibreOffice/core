@@ -64,11 +64,11 @@ static void lcl_AdjustInsertPos( ScViewData* pData, Point& rPos, Size& rSize )
     long y = aPgSize.Height() - rPos.Y() - rSize.Height();
     // if necessary: adjustments (80/200) for pixel approx. errors
     if( x < 0 )
-        rPos.setX( rPos.X() + x + 80 );
+        rPos.AdjustX(x + 80 );
     if( y < 0 )
-        rPos.setY( rPos.Y() + y + 200 );
-    rPos.setX( rPos.X() + rSize.Width() / 2 );          // position at paste is center
-    rPos.setY( rPos.Y() + rSize.Height() / 2 );
+        rPos.AdjustY(y + 200 );
+    rPos.AdjustX(rSize.Width() / 2 );          // position at paste is center
+    rPos.AdjustY(rSize.Height() / 2 );
 }
 
 void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
@@ -347,7 +347,7 @@ bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
         // don't call AdjustInsertPos
         Point aInsPos = rPos;
         if ( GetViewData().GetDocument()->IsNegativePage( GetViewData().GetTabNo() ) )
-            aInsPos.setX( aInsPos.X() - aSize.Width() );
+            aInsPos.AdjustX( -(aSize.Width()) );
         tools::Rectangle aRect( aInsPos, aSize );
 
         ScDrawView* pDrView = GetScDrawView();
@@ -426,7 +426,7 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     Size aSize = pWin->LogicToLogic( rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );
 
     if ( GetViewData().GetDocument()->IsNegativePage( GetViewData().GetTabNo() ) )
-        aPos.setX( aPos.X() - aSize.Width() );
+        aPos.AdjustX( -(aSize.Width()) );
 
     GetViewData().GetViewShell()->SetDrawShell( true );
     tools::Rectangle aRect(aPos, aSize);

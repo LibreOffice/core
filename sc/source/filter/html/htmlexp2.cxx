@@ -101,8 +101,8 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
                     aSpace = MMToPixel( Size(
                         aCellRect.GetWidth() - aObjRect.GetWidth(),
                         aCellRect.GetHeight() - aObjRect.GetHeight() ));
-                    aSpace.setWidth( aSpace.Width() + (nCol2-nCol1) * (nCellSpacing+1) );
-                    aSpace.setHeight( aSpace.Height() + (nRow2-nRow1) * (nCellSpacing+1) );
+                    aSpace.AdjustWidth((nCol2-nCol1) * (nCellSpacing+1) );
+                    aSpace.AdjustHeight((nRow2-nRow1) * (nCellSpacing+1) );
                     aSpace.setWidth( aSpace.Width() / 2 );
                     aSpace.setHeight( aSpace.Height() / 2 );
                 }

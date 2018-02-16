@@ -68,10 +68,10 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
 
     tools::Rectangle aInnerRect=aDecoView.DrawButton( aBtnRect, DrawButtonFlags::Default );
 
-    aInnerRect.SetLeft( aInnerRect.Left() + 1 );
-    aInnerRect.SetTop( aInnerRect.Top() + 1 );
-    aInnerRect.SetRight( aInnerRect.Right() - 1 );
-    aInnerRect.SetBottom( aInnerRect.Bottom() - 1 );
+    aInnerRect.AdjustLeft(1 );
+    aInnerRect.AdjustTop(1 );
+    aInnerRect.AdjustRight( -1 );
+    aInnerRect.Bottom() -= 1;
 
     Size  aInnerSize   = aInnerRect.GetSize();
     Point aInnerCenter = aInnerRect.Center();
@@ -128,10 +128,8 @@ void ScDDComboBoxButton::ImpDrawArrow( const tools::Rectangle& rRect )
     while( aPos1.X() <= aPos2.X() )
     {
         pOut->DrawLine( aPos1, aPos2 );
-        aPos1.setX( ++aPos1.X() );
-        aPos2.setX( --aPos2.X() );
-        aPos1.setY( ++aPos1.Y() );
-        aPos2.setY( ++aPos2.Y() );
+        aPos1.AdjustX( 1 ); aPos2.X()--;
+        aPos1.AdjustY( 1 ); aPos2.Y()++;
     }
 
     pOut->DrawLine( Point( aCenter.X() - aSize3.Width(), aPos1.Y()+1 ),

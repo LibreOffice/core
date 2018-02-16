@@ -398,7 +398,7 @@ awt::Rectangle ScViewPaneBase::GetVisArea() const
             if ( pDoc->IsLayoutRTL( aCell.Tab() ) )
             {
                 aVisPos = aCellRect.TopRight();
-                aVisPos.setX( aVisPos.X() - aVisSize.Width() );
+                aVisPos.AdjustX( -(aVisSize.Width()) );
             }
             tools::Rectangle aVisRect( aVisPos, aVisSize );
             aVisArea = AWTRectangle(aVisRect);

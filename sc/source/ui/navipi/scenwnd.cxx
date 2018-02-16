@@ -278,7 +278,7 @@ void ScScenarioWindow::Resize()
     aSize.setHeight( nHeight );
     aLbScenario->SetSizePixel(aSize);
 
-    aSize.setHeight( aSize.Height() - 4 );
+    aSize.AdjustHeight( -4 );
     aEdComment->SetPosSizePixel(Point(0, nHeight + 4), aSize);
 }
 

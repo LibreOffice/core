@@ -99,10 +99,10 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
     tools::Rectangle aOuter = aInner;
     long nHor = static_cast<long>( SC_SCENARIO_HSPACE * nPPTX );
     long nVer = static_cast<long>( SC_SCENARIO_VSPACE * nPPTY );
-    aOuter.SetLeft( aOuter.Left() - nHor );
-    aOuter.SetRight( aOuter.Right() + nHor );
-    aOuter.SetTop( aOuter.Top() - nVer );
-    aOuter.SetBottom( aOuter.Bottom() + nVer );
+    aOuter.AdjustLeft( -nHor );
+    aOuter.AdjustRight(nHor );
+    aOuter.AdjustTop( -nVer );
+    aOuter.AdjustBottom(nVer );
 
     //  use ScPatternAttr::GetFont only for font size
     vcl::Font aAttrFont;
@@ -119,9 +119,9 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
     Size aTextSize( pDev->GetTextWidth( rTitle ), pDev->GetTextHeight() );
 
     if ( bTextBelow )
-        aOuter.SetBottom( aOuter.Bottom() + aTextSize.Height() );
+        aOuter.AdjustBottom(aTextSize.Height() );
     else
-        aOuter.SetTop( aOuter.Top() - aTextSize.Height() );
+        aOuter.AdjustTop( -(aTextSize.Height()) );
 
     pDev->SetLineColor();
     pDev->SetFillColor( rColor );
@@ -220,10 +220,10 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
                 Point aEndPos = pViewData->GetScrPos(
                                     aRange.aEnd.Col()+1, aRange.aEnd.Row()+1, eWhich, true );
                 //  on the grid:
-                aStartPos.setX( aStartPos.X() - nLayoutSign );
-                aStartPos.setY( aStartPos.Y() - 1 );
-                aEndPos.setX( aEndPos.X() - nLayoutSign );
-                aEndPos.setY( aEndPos.Y() - 1 );
+                aStartPos.AdjustX( -nLayoutSign );
+                aStartPos.AdjustY( -1 );
+                aEndPos.AdjustX( -nLayoutSign );
+                aEndPos.AdjustY( -1 );
 
                 bool bTextBelow = ( aRange.aStart.Row() == 0 );
 
@@ -928,8 +928,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
                             // don't overwrite grid
                             long nLayoutSign = bLayoutRTL ? -1 : 1;
-                            aEnd.setX( aEnd.X() - 2 * nLayoutSign );
-                            aEnd.setY( aEnd.Y() - 2 );
+                            aEnd.AdjustX( -(2 * nLayoutSign) );
+                            aEnd.AdjustY( -2 );
 
                             tools::Rectangle aBackground(aStart, aEnd);
 
@@ -982,8 +982,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
         // don't overwrite grid
         long nLayoutSign = bLayoutRTL ? -1 : 1;
-        aEnd.setX( aEnd.X() - 2 * nLayoutSign );
-        aEnd.setY( aEnd.Y() - 2 );
+        aEnd.AdjustX( -(2 * nLayoutSign) );
+        aEnd.AdjustY( -2 );
 
         // toggle the cursor off if its on to ensure the cursor invert
         // background logic remains valid after the background is cleared on
@@ -1385,8 +1385,8 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                     aRange.aStart.Col(), aRange.aStart.Row(), eWhich, true );
                 Point aEnd = pViewData->GetScrPos(
                                     aRange.aEnd.Col() + 1, aRange.aEnd.Row() + 1, eWhich, true );
-                aStart.setX( aStart.X() - 2 );
-                aStart.setY( aStart.Y() - 2 );
+                aStart.AdjustX( -2 );
+                aStart.AdjustY( -2 );
 
                 // Prevent overflows:
                 if ( aStart.X() < -10 ) aStart.setX( -10 );
@@ -1714,14 +1714,14 @@ tools::Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos
         aBtnSize.setHeight( nCellSizeY );
 
     Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich, true );
-    aPos.setX( aPos.X() + nCellSizeX * nLayoutSign );               // start of next cell
+    aPos.AdjustX(nCellSizeX * nLayoutSign );               // start of next cell
     if (!bNextCell)
-        aPos.setX( aPos.X() - aBtnSize.Width() * nLayoutSign );     // right edge of cell if next cell not available
-    aPos.setY( aPos.Y() + nCellSizeY - aBtnSize.Height() );
+        aPos.AdjustX( -(aBtnSize.Width() * nLayoutSign) );     // right edge of cell if next cell not available
+    aPos.AdjustY(nCellSizeY - aBtnSize.Height() );
     // X remains at the left edge
 
     if ( bLayoutRTL )
-        aPos.setX( aPos.X() - aBtnSize.Width()-1 );     // align right edge of button with cell border
+        aPos.AdjustX( -(aBtnSize.Width()-1) );     // align right edge of button with cell border
 
     return tools::Rectangle( aPos, aBtnSize );
 }

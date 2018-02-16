@@ -278,13 +278,13 @@ void ScPreviewShell::UpdateNeededScrollBars( bool bFromZoom )
     {
         if ( bVert )
         {
-            aWindowPixelSize.setWidth( aWindowPixelSize.Width() + nBarH );
-            aWindowSize.setWidth( aWindowSize.Width() + aHeightOffSet );
+            aWindowPixelSize.AdjustWidth(nBarH );
+            aWindowSize.AdjustWidth(aHeightOffSet );
         }
         if ( bHori )
         {
-            aWindowPixelSize.setHeight( aWindowPixelSize.Height() + nBarW );
-            aWindowSize.setHeight( aWindowSize.Height() + aWidthOffSet );
+            aWindowPixelSize.AdjustHeight(nBarW );
+            aWindowSize.AdjustHeight(aWidthOffSet );
         }
     }
 
@@ -308,9 +308,9 @@ void ScPreviewShell::UpdateNeededScrollBars( bool bFromZoom )
     // make room for needed scrollbars ( and reduce the size
     // of the preview appropriately )
     if ( bHori )
-        aWindowPixelSize.setHeight( aWindowPixelSize.Height() - nBarW );
+        aWindowPixelSize.AdjustHeight( -nBarW );
     if ( bVert )
-        aWindowPixelSize.setWidth( aWindowPixelSize.Width() - nBarH );
+        aWindowPixelSize.AdjustWidth( -nBarH );
 
     pPreview->SetSizePixel( aWindowPixelSize );
     pHorScroll->SetPosSizePixel( Point( aPos.X(), aPos.Y() + aWindowPixelSize.Height() ),
@@ -997,7 +997,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
                 }
             }
             else
-                aCurPos.setY( aCurPos.Y() - nVLine );
+                aCurPos.AdjustY( -nVLine );
             break;
         case SID_CURSORDOWN:
             if( nMaxVertPos<0 )
@@ -1020,13 +1020,13 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
                 }
             }
             else
-                aCurPos.setY( aCurPos.Y() + nVLine );
+                aCurPos.AdjustY(nVLine );
             break;
         case SID_CURSORLEFT:
-            aCurPos.setX( aCurPos.X() - nHLine );
+            aCurPos.AdjustX( -nHLine );
             break;
         case SID_CURSORRIGHT:
-            aCurPos.setX( aCurPos.X() + nHLine );
+            aCurPos.AdjustX(nHLine );
             break;
         case SID_CURSORPAGEUP:
             if( nThumbPos==0 || nMaxVertPos<0 )
@@ -1042,7 +1042,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
                 }
             }
             else
-                aCurPos.setY( aCurPos.Y() - nVPage );
+                aCurPos.AdjustY( -nVPage );
             break;
         case SID_CURSORPAGEDOWN:
             if( (std::abs(nVPage+nThumbPos-nRangeMax)<10) || nMaxVertPos<0 )
@@ -1065,7 +1065,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
                 }
             }
             else
-                aCurPos.setY( aCurPos.Y() + nVPage );
+                aCurPos.AdjustY(nVPage );
             break;
         case SID_CURSORHOME:
             if( nMaxVertPos<0 )
