@@ -18,7 +18,7 @@
 
 // Scans list of properties for certain URL properties that could refer
 // to internal objects, and initializes from these.
-class DocumentSettingsSerializer {
+class SAL_DLLPUBLIC_RTTI DocumentSettingsSerializer {
 public:
   // Import objects and update properties (eliding URLs)
   virtual css::uno::Sequence<css::beans::PropertyValue>
