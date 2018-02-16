@@ -55,9 +55,9 @@ static inline void lcl_AllignToPixel( Point& rPoint, OutputDevice const * pOutDe
     rPoint = pOutDev->LogicToPixel( rPoint );
 
     if ( nDiffX )
-        rPoint.setX( rPoint.X() + nDiffX );
+        rPoint.AdjustX(nDiffX );
     if ( nDiffY )
-        rPoint.setY( rPoint.Y() + nDiffY );
+        rPoint.AdjustY(nDiffY );
 
     rPoint = pOutDev->PixelToLogic( rPoint );
 }
@@ -322,8 +322,8 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
             Point aTopLeft( aTmpRect.TopLeft() );
             Point aBottomRight( aTmpRect.BottomRight() );
 
-            aTopLeft.setY( aTopLeft.Y() + nParaStart );
-            aBottomRight.Y() += nParaStart;
+            aTopLeft.AdjustY(nParaStart );
+            aBottomRight.AdjustY(nParaStart );
 
             // Only paint if in the visible range ...
             if ( aTopLeft.Y() > GetVisDocBottom() )
@@ -907,13 +907,13 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         if ( aPaM.GetNode()->Len() && ( aPaM.GetIndex() < aPaM.GetNode()->Len() ) )
         {
             // If we are behind a portion, and the next portion has other direction, we must change position...
-            aEditCursor.SetLeft( aEditCursor.Right() = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly|GetCursorFlags::PreferPortionStart ).Left() );
+            aEditCursor.Left() = aEditCursor.Right() = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly|GetCursorFlags::PreferPortionStart ).Left();
 
             sal_Int32 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, true );
             const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
             if ( rTextPortion.GetKind() == PortionKind::TAB )
             {
-                aEditCursor.SetRight( aEditCursor.Right() + rTextPortion.GetSize().Width() );
+                aEditCursor.AdjustRight(rTextPortion.GetSize().Width() );
             }
             else
             {
@@ -1048,8 +1048,8 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         GetCursor()->SetPos( aCursorRect.TopLeft() );
         Size aCursorSz( aCursorRect.GetSize() );
         // Rectangle is inclusive
-        aCursorSz.setWidth( --aCursorSz.Width() );
-        aCursorSz.Height()--;
+        aCursorSz.AdjustWidth( -1 );
+        aCursorSz.AdjustHeight( -1 );
         if ( !aCursorSz.Width() || !aCursorSz.Height() )
         {
             long nCursorSz = pOutWin->GetSettings().GetStyleSettings().GetCursorSize();
@@ -1166,20 +1166,20 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
     // Vertical:
     if ( !IsVertical() )
     {
-        aNewVisArea.SetTop( aNewVisArea.Top() - ndY );
-        aNewVisArea.Bottom() -= ndY;
+        aNewVisArea.AdjustTop( -ndY );
+        aNewVisArea.AdjustBottom( -ndY );
     }
     else
     {
         if( IsTopToBottom() )
         {
-            aNewVisArea.SetTop( aNewVisArea.Top() + ndX );
-            aNewVisArea.Bottom() += ndX;
+            aNewVisArea.AdjustTop(ndX );
+            aNewVisArea.AdjustBottom(ndX );
         }
         else
         {
-            aNewVisArea.SetTop( aNewVisArea.Top() - ndX );
-            aNewVisArea.Bottom() -= ndX;
+            aNewVisArea.AdjustTop( -ndX );
+            aNewVisArea.AdjustBottom( -ndX );
         }
     }
     if ( ( nRangeCheck == ScrollRangeCheck::PaperWidthTextSize ) && ( aNewVisArea.Bottom() > static_cast<long>(pEditEngine->pImpEditEngine->GetTextHeight()) ) )
@@ -1194,20 +1194,20 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
     // Horizontal:
     if ( !IsVertical() )
     {
-        aNewVisArea.SetLeft( aNewVisArea.Left() - ndX );
-        aNewVisArea.Right() -= ndX;
+        aNewVisArea.AdjustLeft( -ndX );
+        aNewVisArea.AdjustRight( -ndX );
     }
     else
     {
         if (IsTopToBottom())
         {
-            aNewVisArea.SetLeft( aNewVisArea.Left() - ndY );
-            aNewVisArea.Right() -= ndY;
+            aNewVisArea.AdjustLeft( -ndY );
+            aNewVisArea.AdjustRight( -ndY );
         }
         else
         {
-            aNewVisArea.SetLeft( aNewVisArea.Left() + ndY );
-            aNewVisArea.Right() += ndY;
+            aNewVisArea.AdjustLeft(ndY );
+            aNewVisArea.AdjustRight(ndY );
         }
     }
     if ( ( nRangeCheck == ScrollRangeCheck::PaperWidthTextSize ) && ( aNewVisArea.Right() > static_cast<long>(pEditEngine->pImpEditEngine->CalcTextWidth( false )) ) )
@@ -1787,8 +1787,8 @@ void ImpEditView::ShowDDCursor( const tools::Rectangle& rRect )
         // Save background ...
         tools::Rectangle aSaveRect( GetWindow()->LogicToPixel( rRect ) );
         // prefer to save some more ...
-        aSaveRect.SetRight( aSaveRect.Right() + 1 );
-        aSaveRect.Bottom() += 1;
+        aSaveRect.AdjustRight(1 );
+        aSaveRect.AdjustBottom(1 );
 
 #ifdef DBG_UTIL
         Size aNewSzPx( aSaveRect.GetSize() );
@@ -2212,20 +2212,20 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
                     aEditCursor = GetWindow()->LogicToPixel( tools::Rectangle( aStartPos, aEndPos ) );
                     if ( !pEditEngine->IsVertical() )
                     {
-                        aEditCursor.SetTop( --aEditCursor.Top() );
-                        aEditCursor.SetBottom( ++aEditCursor.Bottom() );
+                        aEditCursor.AdjustTop( -1 );
+                        aEditCursor.AdjustBottom( 1 );
                     }
                     else
                     {
                         if( IsTopToBottom() )
                         {
-                            aEditCursor.SetLeft( --aEditCursor.Left() );
-                            aEditCursor.SetRight( ++aEditCursor.Right() );
+                            aEditCursor.AdjustLeft( -1 );
+                            aEditCursor.AdjustRight( 1 );
                         }
                         else
                         {
-                            aEditCursor.SetLeft( ++aEditCursor.Left() );
-                            aEditCursor.SetRight( --aEditCursor.Right() );
+                            aEditCursor.AdjustLeft( 1 );
+                            aEditCursor.AdjustRight( -1 );
                         }
                     }
                     aEditCursor = GetWindow()->PixelToLogic( aEditCursor );

@@ -160,8 +160,8 @@ namespace emfio
         Point aBR, aTL;
         aBR = ReadYX();
         aTL = ReadYX();
-        aBR.setX( --aBR.X() );
-        aBR.Y()--;
+        aBR.AdjustX( -1 );
+        aBR.AdjustY( -1 );
         return tools::Rectangle( aTL, aBR );
     }
 
@@ -1479,10 +1479,10 @@ namespace emfio
         bool bRet = true;
 
         tools::Rectangle aBound;
-        aBound.Left()   = RECT_MAX;
-        aBound.Top()    = RECT_MAX;
-        aBound.Right()  = RECT_MIN;
-        aBound.Bottom() = RECT_MIN;
+        aBound.SetLeft( RECT_MAX );
+        aBound.SetTop( RECT_MAX );
+        aBound.SetRight( RECT_MIN );
+        aBound.SetBottom( RECT_MIN );
         bool bBoundsDetermined = false;
 
         auto nPos = pStm->Tell();

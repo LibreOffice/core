@@ -1396,8 +1396,8 @@ EditPaM ImpEditEngine::PageUp( const EditPaM& rPaM, EditView const * pView )
 {
     tools::Rectangle aRect = PaMtoEditCursor( rPaM );
     Point aTopLeft = aRect.TopLeft();
-    aTopLeft.setY( aTopLeft.Y() - pView->GetVisArea().GetHeight() *9/10 );
-    aTopLeft.X() += nOnePixelInRef;
+    aTopLeft.AdjustY( -(pView->GetVisArea().GetHeight() *9/10) );
+    aTopLeft.AdjustX(nOnePixelInRef );
     if ( aTopLeft.Y() < 0 )
     {
         aTopLeft.setY( 0 );
@@ -1409,8 +1409,8 @@ EditPaM ImpEditEngine::PageDown( const EditPaM& rPaM, EditView const * pView )
 {
     tools::Rectangle aRect = PaMtoEditCursor( rPaM );
     Point aBottomRight = aRect.BottomRight();
-    aBottomRight.setY( aBottomRight.Y() + pView->GetVisArea().GetHeight() *9/10 );
-    aBottomRight.X() += nOnePixelInRef;
+    aBottomRight.AdjustY(pView->GetVisArea().GetHeight() *9/10 );
+    aBottomRight.AdjustX(nOnePixelInRef );
     long nHeight = GetTextHeight();
     if ( aBottomRight.Y() > nHeight )
     {
@@ -3033,8 +3033,8 @@ tools::Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nF
         else
         {
             aEditCursor = GetEditCursor( pPortion, aPaM.GetIndex(), nFlags );
-            aEditCursor.SetTop( aEditCursor.Top() + nY );
-            aEditCursor.Bottom() += nY;
+            aEditCursor.AdjustTop(nY );
+            aEditCursor.AdjustBottom(nY );
             return aEditCursor;
         }
     }
@@ -3057,7 +3057,7 @@ EditPaM ImpEditEngine::GetPaM( Point aDocPos, bool bSmart )
         if ( nY > aDocPos.Y() )
         {
             nY -= nTmpHeight;
-            aDocPos.setY( aDocPos.Y() - nY );
+            aDocPos.AdjustY( -nY );
             // Skip invisible Portions:
             while ( pPortion && !pPortion->IsVisible() )
             {
@@ -4244,7 +4244,7 @@ tools::Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 
         nX = GetXPos( pPortion, pLine, nIndex, bool( nFlags & GetCursorFlags::PreferPortionStart ) );
     }
 
-    aEditCursor.SetLeft( aEditCursor.Right() = nX );
+    aEditCursor.Left() = aEditCursor.Right() = nX;
 
     if ( nFlags & GetCursorFlags::TextOnly )
         aEditCursor.SetTop( aEditCursor.Bottom() - pLine->GetTxtHeight() + 1 );

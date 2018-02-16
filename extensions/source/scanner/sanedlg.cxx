@@ -532,14 +532,14 @@ void SaneDlg::InitFields()
                     pField->SetValue( 0 );
                     break;
                 case 2:
-                    aMaxBottomRight.X() = PREVIEW_WIDTH;
-                    aBottomRight.X() = PREVIEW_WIDTH;
+                    aMaxBottomRight.setX( PREVIEW_WIDTH );
+                    aBottomRight.setX( PREVIEW_WIDTH );
                     pField->SetMax( PREVIEW_WIDTH );
                     pField->SetValue( PREVIEW_WIDTH );
                     break;
                 case 3:
-                    aMaxBottomRight.Y() = PREVIEW_HEIGHT;
-                    aBottomRight.Y() = PREVIEW_HEIGHT;
+                    aMaxBottomRight.setY( PREVIEW_HEIGHT );
+                    aBottomRight.setY( PREVIEW_HEIGHT );
                     pField->SetMax( PREVIEW_HEIGHT );
                     pField->SetValue( PREVIEW_HEIGHT );
                     break;
@@ -1275,9 +1275,9 @@ Point ScanPreview::GetLogicPos(const Point& rIn) const
         aConvert.setY( PREVIEW_HEIGHT-1 );
 
     aConvert.setX( aConvert.X() * ( maMaxBottomRight.X() - maMinTopLeft.X() ) );
-    aConvert.X() /= PREVIEW_WIDTH;
+    aConvert.setX( aConvert.X() / ( PREVIEW_WIDTH) );
     aConvert.setY( aConvert.Y() * ( maMaxBottomRight.Y() - maMinTopLeft.Y() ) );
-    aConvert.Y() /= PREVIEW_HEIGHT;
+    aConvert.setY( aConvert.Y() / ( PREVIEW_HEIGHT) );
     return aConvert;
 }
 

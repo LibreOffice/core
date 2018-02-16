@@ -368,7 +368,7 @@ namespace pcr
         if ( impl_textHitTest( rMEvt.GetPosPixel() ) )
             m_aMouseButtonDownPos = rMEvt.GetPosPixel();
         else
-            m_aMouseButtonDownPos.setX( m_aMouseButtonDownPos.Y() = -1 );
+            m_aMouseButtonDownPos.X() = m_aMouseButtonDownPos.Y() = -1;
     }
 
 
@@ -1101,7 +1101,7 @@ namespace pcr
             aMePos = GetParent()->OutputToScreenPixel( aMePos );
             ::Size aSize=GetSizePixel();
             ::tools::Rectangle aRect(aMePos,aSize);
-            aSize.Height() = STD_HEIGHT;
+            aSize.setHeight( STD_HEIGHT );
             m_pFloatingEdit->SetOutputSizePixel(aSize);
             m_pFloatingEdit->StartPopupMode( aRect, FloatWinPopupFlags::Down );
 

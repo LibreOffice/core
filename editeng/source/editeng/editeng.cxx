@@ -222,7 +222,7 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOri
     Point aStartPos( rStartPos );
     if ( IsVertical() )
     {
-        aStartPos.setX( aStartPos.X() + GetPaperSize().Width() );
+        aStartPos.AdjustX(GetPaperSize().Width() );
         aStartPos = Rotate( aStartPos, nOrientation, rStartPos );
     }
     pImpEditEngine->Paint( pOutDev, aBigRect, aStartPos, false, nOrientation );
@@ -283,8 +283,8 @@ void EditEngine::Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect, 
             {
                 Size aPixSz( 1, 0 );
                 aPixSz = pOutDev->PixelToLogic( aPixSz );
-                aClipRect.SetRight( aClipRect.Right() + aPixSz.Width() );
-                aClipRect.Bottom() += aPixSz.Width();
+                aClipRect.AdjustRight(aPixSz.Width() );
+                aClipRect.AdjustBottom(aPixSz.Width() );
             }
             pOutDev->IntersectClipRegion( aClipRect );
         }
@@ -1024,12 +1024,12 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                         long nH = GetTextHeight( n );
                         Point P1( aViewStart.X() + n20 + n20*(n%2), aViewStart.Y() + aPos.Y() );
                         Point P2( P1 );
-                        P2.setX( P2.X() + n20 );
-                        P2.setY( P2.Y() + nH );
+                        P2.AdjustX(n20 );
+                        P2.AdjustY(nH );
                         pEditView->GetWindow()->SetLineColor();
                         pEditView->GetWindow()->SetFillColor( Color( (n%2) ? COL_YELLOW : COL_LIGHTGREEN ) );
                         pEditView->GetWindow()->DrawRect( tools::Rectangle( P1, P2 ) );
-                        aPos.setY( aPos.Y() + nH );
+                        aPos.AdjustY(nH );
                     }
                 }
                 bDone = false;
@@ -1346,7 +1346,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                                     aPos = pEditView->pImpEditView->GetWindowPos( aPos );
                                     aPos = pEditView->pImpEditView->GetWindow()->LogicToPixel( aPos );
                                     aPos = pEditView->GetWindow()->OutputToScreenPixel( aPos );
-                                    aPos.setY( aPos.Y() - 3 );
+                                    aPos.AdjustY( -3 );
                                     Help::ShowQuickHelp( pEditView->GetWindow(), tools::Rectangle( aPos, Size( 1, 1 ) ), aComplete, QuickHelpFlags::Bottom|QuickHelpFlags::Left );
                                 }
                             }

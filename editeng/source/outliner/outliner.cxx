@@ -967,7 +967,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                     {
                         // aTextPos is Bottom, go to Baseline
                         FontMetric aMetric(pOutDev->GetFontMetric());
-                        aTextPos.setY( aTextPos.Y() - aMetric.GetDescent() );
+                        aTextPos.AdjustY( -(aMetric.GetDescent()) );
                     }
 
                     DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), pBuf.get(),
@@ -1047,14 +1047,14 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                 else
                     aStartPos.setX( rStartPos.X() + GetPaperSize().Width() - aBulletArea.Left() );
                 aEndPos = aStartPos;
-                aEndPos.setX( aEndPos.X() + nWidth );
+                aEndPos.AdjustX(nWidth );
             }
             else
             {
                 aStartPos.setX( rStartPos.X() - aBulletArea.Bottom() );
                 aStartPos.setY( rStartPos.Y() + aBulletArea.Right() );
                 aEndPos = aStartPos;
-                aEndPos.setY( aEndPos.Y() + nWidth );
+                aEndPos.AdjustY(nWidth );
             }
 
             const Color& rOldLineColor = pOutDev->GetLineColor();
@@ -1075,7 +1075,7 @@ void Outliner::InvalidateBullet(sal_Int32 nPara)
         aRect.SetRight( aPos.X() );
         aRect.SetTop( aPos.Y() );
         aRect.SetBottom( aPos.Y() );
-        aRect.SetBottom( aRect.Bottom() + nLineHeight );
+        aRect.AdjustBottom(nLineHeight );
 
         pView->GetWindow()->Invalidate( aRect );
     }
@@ -1547,7 +1547,7 @@ tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, boo
                     FontMetric aMetric( pRefDev->GetFontMetric() );
                     // Leading on the first line ...
                     aTopLeft.setY( /* aInfos.nFirstLineOffset + */ aInfos.nFirstLineMaxAscent );
-                    aTopLeft.setY( aTopLeft.Y() - aMetric.GetAscent() );
+                    aTopLeft.AdjustY( -(aMetric.GetAscent()) );
                     pRefDev->SetFont( aOldFont );
                 }
             }
@@ -1556,11 +1556,11 @@ tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, boo
         // Horizontal:
         if( pFmt->GetNumAdjust() == SvxAdjust::Right )
         {
-            aTopLeft.setX( aTopLeft.X() + nBulletWidth - aBulletSize.Width() );
+            aTopLeft.AdjustX(nBulletWidth - aBulletSize.Width() );
         }
         else if( pFmt->GetNumAdjust() == SvxAdjust::Center )
         {
-            aTopLeft.setX( aTopLeft.X() + ( nBulletWidth - aBulletSize.Width() ) / 2 );
+            aTopLeft.AdjustX(( nBulletWidth - aBulletSize.Width() ) / 2 );
         }
 
         if ( aTopLeft.X() < 0 )     // then push
@@ -1572,7 +1572,7 @@ tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, boo
     {
         Size aBulletSize( aBulletArea.GetSize() );
         Point aBulletDocPos( aBulletArea.TopLeft() );
-        aBulletDocPos.setY( aBulletDocPos.Y() + pEditEngine->GetDocPosTopLeft( nPara ).Y() );
+        aBulletDocPos.AdjustY(pEditEngine->GetDocPosTopLeft( nPara ).Y() );
         Point aBulletPos( aBulletDocPos );
 
         if ( IsVertical() )
@@ -1580,7 +1580,7 @@ tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, boo
             aBulletPos.setY( aBulletDocPos.X() );
             aBulletPos.setX( GetPaperSize().Width() - aBulletDocPos.Y() );
             // Rotate:
-            aBulletPos.setX( aBulletPos.X() - aBulletSize.Height() );
+            aBulletPos.AdjustX( -(aBulletSize.Height()) );
             Size aSz( aBulletSize );
             aBulletSize.setWidth( aSz.Height() );
             aBulletSize.setHeight( aSz.Width() );
