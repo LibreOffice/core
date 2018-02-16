@@ -1344,7 +1344,7 @@ REM ----------------------------------------------------------------------------
 Private Function _OutputBooleanToHTML(ByVal pbBool As Boolean) As String
 &apos;	Converts input boolean value to HTML compatible string
 
-	_OutputBooleanToHTML = Iif(pbBool, &quot;&amp;#9745;&quot;, &quot;&amp;#9746;&quot;)
+	_OutputBooleanToHTML = Iif(pbBool, &quot;&amp;#x2714;&quot;, &quot;&amp;#x2716;&quot;)		&apos;	✔ and ✖
 
 End Function	&apos;	_OutputBooleanToHTML	V1.4.0
 
@@ -1454,6 +1454,7 @@ Const cstMaxRows = 200
 								Print #piFile, &quot;     &lt;td&quot; &amp; _OutputClassToHTML(vTdClass) &amp; &quot;&gt;&quot; &amp; _OutputNumberToHTML(vDataCell) &amp; &quot;&lt;/td&gt;&quot;
 							Case vbBoolean
 								vTdClass() = _AddArray(vTdClass, &quot;bool&quot;)
+								If vDataCell = False Then vTdClass() = _AddArray(vTdClass, &quot;false&quot;)
 								Print #piFile, &quot;     &lt;td&quot; &amp; _OutputClassToHTML(vTdClass) &amp; &quot;&gt;&quot; &amp; _OutputBooleanToHTML(vDataCell) &amp; &quot;&lt;/td&gt;&quot;
 							Case vbDate
 								vTdClass() = _AddArray(vTdClass, &quot;date&quot;)
