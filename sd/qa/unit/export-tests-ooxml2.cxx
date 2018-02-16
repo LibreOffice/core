@@ -1415,7 +1415,10 @@ void SdOOXMLExportTest2::testFontScale()
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
 
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:normAutofit", "fontScale", "73000");
+    // Rounding errors possible, approximate value
+    OUString sScale = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:normAutofit", "fontScale");
+    if (sScale != "73000" && sScale != "72000" && sScale != "74000")
+        CPPUNIT_ASSERT_EQUAL(OUString("73000"), sScale);
 
     xDocShRef->DoClose();
 }
