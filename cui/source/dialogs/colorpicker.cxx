@@ -469,17 +469,17 @@ void ColorFieldControl::KeyMove( int dx, int dy )
 {
     Size aSize(GetOutputSizePixel());
     Point aPos(static_cast<long>(mdX * aSize.Width()), static_cast<long>((1.0 - mdY) * aSize.Height()));
-    aPos.setX( aPos.X() + dx );
-    aPos.Y() += dy;
+    aPos.AdjustX(dx );
+    aPos.AdjustY(dy );
     if( aPos.X() < 0 )
-        aPos.setX( aPos.X() + aSize.Width() );
+        aPos.AdjustX(aSize.Width() );
     else if( aPos.X() >= aSize.Width() )
-        aPos.setX( aPos.X() - aSize.Width() );
+        aPos.AdjustX( -(aSize.Width()) );
 
     if( aPos.Y() < 0 )
-        aPos.setY( aPos.Y() + aSize.Height() );
+        aPos.AdjustY(aSize.Height() );
     else if( aPos.Y() >= aSize.Height() )
-        aPos.setY( aPos.Y() - aSize.Height() );
+        aPos.AdjustY( -(aSize.Height()) );
 
     ShowPosition( aPos, true );
     Modify();
@@ -774,7 +774,7 @@ void ColorSliderControl::Paint(vcl::RenderContext& rRenderContext, const ::tools
     while (x--)
     {
         rRenderContext.DrawOutDev(aPos, aSize, Point(0,0), aSize, *mxBitmap);
-        aPos.setX( aPos.X() + 1 );
+        aPos.AdjustX(1 );
     }
 }
 
@@ -941,11 +941,11 @@ ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sa
 
     Point aPos( mpColorSlider->GetPosPixel() );
 
-    aPos.setX( aPos.X() - aSize.Width() );
-    aPos.Y() -= aSize.Height() / 2;
+    aPos.AdjustX( -(aSize.Width()) );
+    aPos.AdjustY( -(aSize.Height() / 2) );
     mpFISliderLeft->SetPosPixel( aPos );
 
-    aPos.setX( aPos.X() + aSize.Width() + mpColorSlider->GetSizePixel().Width() );
+    aPos.AdjustX(aSize.Width() + mpColorSlider->GetSizePixel().Width() );
     mpFISliderRight->SetPosPixel( aPos );
 
     Color aColor( nColor );

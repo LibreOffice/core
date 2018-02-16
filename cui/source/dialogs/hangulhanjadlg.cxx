@@ -236,15 +236,15 @@ namespace svx
         // calculate the size of the radio image - we're to paint our text _after_ this image
         DBG_ASSERT( !GetModeRadioImage(), "RubyRadioButton::Paint: images not supported!" );
         Size aImageSize = GetRadioImage(rRenderContext.GetSettings(), DrawButtonFlags::NONE).GetSizePixel();
-        aImageSize.Width() = CalcZoom( aImageSize.Width() ) + 2;   // + 2 because otherwise the radiobuttons
-        aImageSize.Height() = CalcZoom( aImageSize.Height() ) + 2; // appear a bit cut from right and top.
+        aImageSize.setWidth( CalcZoom( aImageSize.Width() ) + 2 );   // + 2 because otherwise the radiobuttons
+        aImageSize.setHeight( CalcZoom( aImageSize.Height() ) + 2 ); // appear a bit cut from right and top.
 
         ::tools::Rectangle aOverallRect( Point( 0, 0 ), GetOutputSizePixel() );
-        aOverallRect.Left() += aImageSize.Width() + 4;  // 4 is the separator between the image and the text
+        aOverallRect.AdjustLeft(aImageSize.Width() + 4 );  // 4 is the separator between the image and the text
         // inflate the rect a little bit (because the VCL radio button does the same)
         ::tools::Rectangle aTextRect( aOverallRect );
-        ++aTextRect.Left(); --aTextRect.Right();
-        ++aTextRect.Top(); --aTextRect.Bottom();
+        aTextRect.AdjustLeft( 1 ); aTextRect.AdjustRight( -1 );
+        aTextRect.AdjustTop( 1 ); aTextRect.AdjustBottom( -1 );
 
         // calculate the text flags for the painting
         DrawTextFlags nTextStyle = DrawTextFlags::Mnemonic;
@@ -283,17 +283,17 @@ namespace svx
         // for this, give it the proper location to paint the image (vertically centered, relative to our text)
         ::tools::Rectangle aImageLocation( Point( 0, 0 ), aImageSize );
         sal_Int32 nTextHeight = aSecondaryTextLocation.Bottom() - aPrimaryTextLocation.Top();
-        aImageLocation.Top() = aPrimaryTextLocation.Top() + ( nTextHeight - aImageSize.Height() ) / 2;
-        aImageLocation.Bottom() = aImageLocation.Top() + aImageSize.Height();
+        aImageLocation.SetTop( aPrimaryTextLocation.Top() + ( nTextHeight - aImageSize.Height() ) / 2 );
+        aImageLocation.SetBottom( aImageLocation.Top() + aImageSize.Height() );
         SetStateRect( aImageLocation );
         DrawRadioButtonState(rRenderContext);
 
         // mouse clicks should be recognized in a rect which is one pixel larger in each direction, plus
         // includes the image
-        aCombinedRect.Left() = aImageLocation.Left();
-        ++aCombinedRect.Right();
-        --aCombinedRect.Top();
-        ++aCombinedRect.Bottom();
+        aCombinedRect.SetLeft( aImageLocation.Left() );
+        aCombinedRect.AdjustRight( 1 );
+        aCombinedRect.AdjustTop( -1 );
+        aCombinedRect.AdjustBottom( 1 );
 
         SetMouseRect(aCombinedRect);
 
@@ -316,8 +316,8 @@ namespace svx
         }
 
         Size minimumSize =  CalcMinimumSize();
-        minimumSize.Height() = aPrimarySize.Height() + aSecondarySize.Height() + 5;
-        minimumSize.Width() = aPrimarySize.Width() + aSecondarySize.Width() + 5;
+        minimumSize.setHeight( aPrimarySize.Height() + aSecondarySize.Height() + 5 );
+        minimumSize.setWidth( aPrimarySize.Width() + aSecondarySize.Width() + 5 );
         return minimumSize;
     }
 

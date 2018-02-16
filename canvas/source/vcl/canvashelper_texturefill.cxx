@@ -90,8 +90,8 @@ namespace vclcanvas
                                            rTileSize,
                                            &rAttr );
 
-                    aCurrPos.setX( aCurrPos.X() + rNextTileX.Width() );
-                    aCurrPos.setY( aCurrPos.Y() + rNextTileX.Height() );
+                    aCurrPos.AdjustX(rNextTileX.Width() );
+                    aCurrPos.AdjustY(rNextTileX.Height() );
                 }
             }
 

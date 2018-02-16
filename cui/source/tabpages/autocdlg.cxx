@@ -345,7 +345,7 @@ void OfaImpBrwString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::Ren
     {
         ImpUserData* pUserData = static_cast<ImpUserData*>(rEntry.GetUserData());
         Point aNewPos(rPos);
-        aNewPos.setX( aNewPos.X() + rRenderContext.GetTextWidth(GetText()) );
+        aNewPos.AdjustX(rRenderContext.GetTextWidth(GetText()) );
         vcl::Font aOldFont(rRenderContext.GetFont());
         vcl::Font aFont(aOldFont);
         if (pUserData->pFont)
@@ -367,7 +367,7 @@ void OfaImpBrwString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::Ren
             rRenderContext.DrawText(aNewPos, sTxt);
 
             if (-1 != nPos)
-                aNewPos.setX( aNewPos.X() + rRenderContext.GetTextWidth(sTxt) );
+                aNewPos.AdjustX(rRenderContext.GetTextWidth(sTxt) );
 
             if (bFett)
                 rRenderContext.SetFont(aOldFont);

@@ -106,9 +106,9 @@ Size GetMinBorderSpace_Impl( const SvxShadowItem& rShadow, const SvxBoxItem& rBo
 {
     Size aSz;
     aSz.setHeight( rShadow.CalcShadowSpace( SvxShadowItemSide::BOTTOM ) + rBox.CalcLineSpace( SvxBoxItemLine::BOTTOM ) );
-    aSz.setHeight( aSz.Height() + rShadow.CalcShadowSpace( SvxShadowItemSide::TOP ) + rBox.CalcLineSpace( SvxBoxItemLine::TOP ) );
-    aSz.Width() = rShadow.CalcShadowSpace( SvxShadowItemSide::LEFT ) + rBox.CalcLineSpace( SvxBoxItemLine::LEFT );
-    aSz.setWidth( aSz.Width() + rShadow.CalcShadowSpace( SvxShadowItemSide::RIGHT ) + rBox.CalcLineSpace( SvxBoxItemLine::RIGHT ) );
+    aSz.AdjustHeight(rShadow.CalcShadowSpace( SvxShadowItemSide::TOP ) + rBox.CalcLineSpace( SvxBoxItemLine::TOP ) );
+    aSz.setWidth( rShadow.CalcShadowSpace( SvxShadowItemSide::LEFT ) + rBox.CalcLineSpace( SvxBoxItemLine::LEFT ) );
+    aSz.AdjustWidth(rShadow.CalcShadowSpace( SvxShadowItemSide::RIGHT ) + rBox.CalcLineSpace( SvxBoxItemLine::RIGHT ) );
     return aSz;
 }
 
