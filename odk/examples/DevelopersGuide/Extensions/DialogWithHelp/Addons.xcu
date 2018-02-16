@@ -24,12 +24,6 @@
           <value/>
           <value xml:lang="en">Foo E~xtension</value>
         </prop>
-        <prop oor:name="Target" oor:type="xs:string">
-          <value>_self</value>
-        </prop>
-        <prop oor:name="ImageIdentifier" oor:type="xs:string">
-          <value/>
-        </prop>
         <node oor:name="Submenu">
           <node oor:name="m1" oor:op="replace">
             <prop oor:name="URL" oor:type="xs:string">
