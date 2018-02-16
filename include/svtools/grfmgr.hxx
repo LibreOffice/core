@@ -74,7 +74,6 @@ enum class GraphicDrawMode
 
 class GraphicManager;
 class SvStream;
-class BitmapWriteAccess;
 class GraphicCache;
 class VirtualDevice;
 struct GrfSimpleCacheObj;

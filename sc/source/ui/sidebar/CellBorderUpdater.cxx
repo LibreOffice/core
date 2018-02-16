@@ -18,7 +18,7 @@
  */
 
 #include "CellBorderUpdater.hxx"
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -38,85 +38,30 @@ CellBorderUpdater::~CellBorderUpdater()
 
 void CellBorderUpdater::UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool bRight, Image const & aImg, bool bVer, bool bHor)
 {
-    BitmapEx            aBmpEx( aImg.GetBitmapEx() );
-    Bitmap              aBmp( aBmpEx.GetBitmap() );
-    BitmapWriteAccess*  pBmpAcc = aBmp.AcquireWriteAccess();
-    const Size aBmpSize = aBmp.GetSizePixel();
+    const Size aBmpSize = aImg.GetBitmapEx().GetSizePixel();
+    if(aBmpSize.Width() != 43 || aBmpSize.Height() != 43)
+        return;
 
-    if( pBmpAcc )
-    {
-        Bitmap              aMsk;
-        BitmapWriteAccess*  pMskAcc;
+    ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
+    pVirDev->SetOutputSizePixel(aBmpSize);
+    pVirDev->SetLineColor( ::Application::GetSettings().GetStyleSettings().GetFieldTextColor() ) ;
+    pVirDev->SetFillColor( COL_BLACK);
 
-        if( aBmpEx.IsAlpha() )
-            pMskAcc = ( aMsk = aBmpEx.GetAlpha().GetBitmap() ).AcquireWriteAccess();
-        else if( aBmpEx.IsTransparent() )
-            pMskAcc = ( aMsk = aBmpEx.GetMask() ).AcquireWriteAccess();
-        else
-            pMskAcc = nullptr;
+    Point aTL(2, 1), aTR(42,1), aBL(2, 41), aBR(42, 41), aHL(2,21), aHR(42, 21), aVT(22,1), aVB(22, 41);
+    if(bLeft)
+        pVirDev->DrawLine( aTL,aBL );
+    if(bRight)
+        pVirDev->DrawLine( aTR,aBR );
+    if(bTop)
+        pVirDev->DrawLine( aTL,aTR );
+    if(bBot)
+        pVirDev->DrawLine( aBL,aBR );
+    if(bVer)
+        pVirDev->DrawLine( aVT,aVB );
+    if(bHor)
+        pVirDev->DrawLine( aHL,aHR );
 
-        pBmpAcc->SetLineColor( ::Application::GetSettings().GetStyleSettings().GetFieldTextColor() ) ;
-        pBmpAcc->SetFillColor( COL_BLACK);
-
-        if(aBmpSize.Width() == 43 && aBmpSize.Height() == 43)
-        {
-            Point aTL(2, 1), aTR(42,1), aBL(2, 41), aBR(42, 41), aHL(2,21), aHR(42, 21), aVT(22,1), aVB(22, 41);
-            if( pMskAcc )
-            {
-                pMskAcc->SetLineColor( COL_BLACK );
-                pMskAcc->SetFillColor( COL_BLACK );
-            }
-            if(bLeft)
-            {
-                pBmpAcc->DrawLine( aTL,aBL );
-                if( pMskAcc )
-                    pMskAcc->DrawLine( aTL,aBL );
-            }
-            if(bRight)
-            {
-                pBmpAcc->DrawLine( aTR,aBR );
-                if( pMskAcc )
-                    pMskAcc->DrawLine( aTR,aBR );
-            }
-            if(bTop)
-            {
-                pBmpAcc->DrawLine( aTL,aTR );
-                if( pMskAcc )
-                    pMskAcc->DrawLine( aTL,aTR );
-            }
-            if(bBot)
-            {
-                pBmpAcc->DrawLine( aBL,aBR );
-                if( pMskAcc )
-                    pMskAcc->DrawLine( aBL,aBR );
-            }
-            if(bVer)
-            {
-                pBmpAcc->DrawLine( aVT,aVB );
-                if( pMskAcc )
-                    pMskAcc->DrawLine( aVT,aVB );
-            }
-            if(bHor)
-            {
-                pBmpAcc->DrawLine( aHL,aHR );
-                if( pMskAcc )
-                    pMskAcc->DrawLine( aHL,aHR );
-            }
-        }
-
-        Bitmap::ReleaseAccess( pBmpAcc );
-        if( pMskAcc )
-                Bitmap::ReleaseAccess( pMskAcc );
-
-        if( aBmpEx.IsAlpha() )
-            aBmpEx = BitmapEx( aBmp, AlphaMask( aMsk ) );
-        else if( aBmpEx.IsTransparent() )
-            aBmpEx = BitmapEx( aBmp, aMsk );
-        else
-            aBmpEx = aBmp;
-
-        mrTbx.SetItemImage( mnBtnId, Image( aBmpEx ) );
-    }
+    mrTbx.SetItemOverlayImage( mnBtnId, Image( pVirDev->GetBitmapEx(Point(0,0), aBmpSize) ) );
 }
 
 } } // end of namespace svx::sidebar
