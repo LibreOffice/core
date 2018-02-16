@@ -1,0 +1,216 @@
+#!/usr/bin/env python
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Copyright (c) 2018 Martin Pieuchot
+#   Copyright (c) 2018 Samuel Thibault <sthibault@hypra.fr>
+#
+#   Permission to use, copy, modify, and distribute this software for any
+#   purpose with or without fee is hereby granted, provided that the above
+#   copyright notice and this permission notice appear in all copies.
+#
+#   THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+#   WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+#   MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+#   ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+#   WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+#   ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+#   OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+#
+# vim: set shiftwidth=4 softtabstop=4 expandtab:
+
+# Take LibreOffice (glade) .ui files and check for non accessible widgets
+
+from __future__ import print_function
+
+import os
+import sys
+import getopt
+import lxml.etree as ET
+
+progname = os.path.basename(sys.argv[0])
+Werror = False
+Wnone = False
+errors = 0
+warnings = 0
+
+
+def errstr(elm):
+    """
+    Print the line number of the element
+    """
+
+    return str(elm.sourceline)
+
+def err(filename, elm, msg):
+    global errors
+
+    if elm == None:
+        prefix = "%s:" % filename
+    else:
+        prefix = "%s:%s" % (filename, errstr(elm))
+
+    errors += 1
+    msg = "%s ERROR: %s" % (prefix, msg)
+    print(msg.encode('ascii', 'ignore'))
+
+
+def warn(filename, elm, msg):
+    global Werror, Wnone, errors, warnings
+
+    if Wnone:
+        return
+
+    prefix = "%s:%s" % (filename, errstr(elm))
+
+    if Werror:
+        errors += 1
+    else:
+        warnings += 1
+
+    msg = "%s WARNING: %s" % (prefix,  msg)
+    print(msg.encode('ascii', 'ignore'))
+
+
+def check_objects(filename, elm, objects, target):
+    """
+    Check that objects contains exactly one object
+    """
+    length = len(list(objects))
+    if length == 0:
+        err(filename, elm, "use of undeclared target '%s'" % target)
+    elif length > 1:
+        err(filename, elm, "sevral targets are named '%s'" % target)
+
+def check_props(filename, root, props):
+    """
+    Check the given list of relation properties
+    """
+    for prop in props:
+        objects = root.iterfind(".//object[@id='%s']" % prop.text)
+        check_objects(filename, prop, objects, prop.text)
+
+def check_rels(filename, root, rels):
+    """
+    Check the given list of relations
+    """
+    for rel in rels:
+        target = rel.attrib['target']
+        targets = root.iterfind(".//object[@id='%s']" % target)
+        check_objects(filename, rel, targets, target)
+
+def check_a11y_relation(filename, root):
+    """
+    Emit an error message if any of the 'object' elements of the XML
+    document represented by `root' doesn't comply with Accessibility
+    rules.
+    """
+
+    for obj in root.iter('object'):
+
+        label_for = obj.findall("accessibility/relation[@type='label-for']")
+        check_rels(filename, root, label_for)
+
+        labelled_by = obj.findall("accessibility/relation[@type='labelled-by']")
+        check_rels(filename, root, labelled_by)
+
+        member_of = obj.findall("accessibility/relation[@type='member-of']")
+        check_rels(filename, root, member_of)
+
+        if obj.attrib['class'] == 'GtkLabel':
+            # Case 0: A 'GtkLabel' must contain one or more "label-for"
+            # pointing to existing elements or...
+            if len(label_for) > 0:
+                continue
+
+            # ...a single "mnemonic_widget"
+            properties = obj.findall("property[@name='mnemonic_widget']")
+            check_props(filename, root, properties)
+            if len(properties) > 1:
+                # It does not make sense for a label to be a mnemonic for
+                # several actions.
+                lines = ', '.join([str(p.sourceline) for p in properties])
+                err(filename, obj, "too many sub-elements"
+                    ", expected single <property name='mnemonic_widgets'>"
+                    ": lines %s" % lines)
+                continue
+            if len(properties) == 1:
+                continue
+            # TODO: warn that it is a label for nothing
+            continue
+
+        # Case 1: has a <child internal-child="accessible"> sub-element
+        children = obj.findall("child[@internal-child='accessible']")
+        if children:
+            if len(children) > 1:
+                lines = ', '.join([str(c.sourceline) for c in children])
+                err(filename, obj, "too many sub-elements"
+                    ", expected single <child internal-child='accessible'>"
+                    ": lines %s" % lines)
+            continue
+
+        # Case 2: has an <accessibility> sub-element with a "labelled-by"
+        # <relation> pointing to an existing element.
+        if len(labelled_by) > 0:
+            continue
+
+        # TODO: after a few more checks and false-positives filtering, warn
+        # that this does not have a label
+
+
+def usage():
+    print("%s [-W error|none] [file ...]" % progname,
+          file=sys.stderr)
+    sys.exit(2)
+
+
+def main():
+    global Werror, Wnone, errors
+
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "pW:")
+    except getopt.GetoptError:
+        usage()
+
+    for o, a in opts:
+        if o == "-W":
+            if a == "error":
+                Werror = True
+            elif a == "none":
+                Wnone = True
+
+    if not args:
+        sys.exit("%s: no input files" % progname)
+
+    for filename in args:
+        try:
+            tree = ET.parse(filename)
+        except ET.ParseError:
+            err(filename, None, "malformatted xml file")
+        except IOError:
+            err(filename, None, "unable to read file")
+
+        try:
+            check_a11y_relation(filename, tree.getroot())
+        except Exception as error:
+            import traceback
+            traceback.print_exc()
+            err(filename, None, "error parsing file")
+
+
+    if errors > 0:
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass
