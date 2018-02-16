@@ -237,8 +237,8 @@ void BackgroundPreviewImpl::recalcDrawPos()
         Size aSize = GetOutputSizePixel();
         // InnerSize == Size without one pixel border
         Size aInnerSize = aSize;
-        aInnerSize.setWidth( aInnerSize.Width() - 2 );
-        aInnerSize.Height() -= 2;
+        aInnerSize.AdjustWidth( -2 );
+        aInnerSize.AdjustHeight( -2 );
         aDrawSize = pBitmap->GetSizePixel();
 
         // bitmap bigger than preview window?

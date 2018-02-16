@@ -158,7 +158,7 @@ void AlternativesString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::
         aPos.setX( 0 );
     }
     else
-        aPos.setX( aPos.X() + 5 );
+        aPos.AdjustX(5 );
     rRenderContext.DrawText(aPos, GetText());
     rRenderContext.Pop();
 }
@@ -262,8 +262,8 @@ void ThesaurusAlternativesCtrl::Paint(vcl::RenderContext& rRenderContext, const 
         Size aTextSize(rRenderContext.GetTextWidth(m_pDialog->getErrStr()), rRenderContext.GetTextHeight());
         aTextSize  = rRenderContext.LogicToPixel(aTextSize);
         Point aPos;
-        aPos.setX( aPos.X() + GetSizePixel().Width() / 2  - aTextSize.Width() / 2 );
-        aPos.Y() += GetSizePixel().Height() / 2;
+        aPos.AdjustX(GetSizePixel().Width() / 2  - aTextSize.Width() / 2 );
+        aPos.AdjustY(GetSizePixel().Height() / 2 );
         aPos = rRenderContext.PixelToLogic(aPos);
         rRenderContext.DrawText(aPos, m_pDialog->getErrStr());
     }

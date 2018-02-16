@@ -170,8 +170,8 @@ void MacroEventListBox::Resize()
     maHeaderBar->SetPosSizePixel( aPnt, aSize );
 
     // calc pos and size of ListBox
-    aPnt.setY( aPnt.Y() + aSize.Height() );
-    aSize.Height() = aCtrlSize.Height() - aSize.Height();
+    aPnt.AdjustY(aSize.Height() );
+    aSize.setHeight( aCtrlSize.Height() - aSize.Height() );
     maListBox->SetPosSizePixel( aPnt, aSize );
 }
 
@@ -473,7 +473,7 @@ void IconLBoxString::Paint(const Point& aPos, SvTreeListBox& /*aDevice*/, vcl::R
         }
 
         Point aPnt(aPos);
-        aPnt.setX( aPnt.X() + 20 );
+        aPnt.AdjustX(20 );
         rRenderContext.DrawText(aPnt, aPureMethod);
     }
 }
