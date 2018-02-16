@@ -27,6 +27,7 @@
 #include <svx/xtable.hxx>
 #include <rtl/ref.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <array>
 
 class XOBitmap;
 class XOutdevItemPool;
@@ -147,11 +148,12 @@ public:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxPixelCtl final : public Control
 {
 private:
-    sal_uInt16      nLines, nSquares;
+    static sal_uInt16 constexpr nLines = 8;
+    static sal_uInt16 constexpr nSquares = nLines * nLines;
     Color       aPixelColor;
     Color       aBackgroundColor;
     Size        aRectSize;
-    sal_uInt16* pPixel;
+    std::array<sal_uInt8,nSquares> maPixelData;
     bool        bPaintable;
     //Add member identifying position
     Point       aFocusPosition;
@@ -163,10 +165,9 @@ private:
     void    ChangePixel( sal_uInt16 nPixel );
 
 public:
-    SvxPixelCtl( vcl::Window* pParent, sal_uInt16 nNumber = 8 );
+    SvxPixelCtl( vcl::Window* pParent );
 
     virtual ~SvxPixelCtl() override;
-    virtual void dispose() override;
 
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
@@ -178,15 +179,15 @@ public:
     void    SetPixelColor( const Color& rCol ) { aPixelColor = rCol; }
     void    SetBackgroundColor( const Color& rCol ) { aBackgroundColor = rCol; }
 
-    sal_uInt16  GetLineCount() const { return nLines; }
+    static sal_uInt16 GetLineCount() { return nLines; }
 
-    sal_uInt16  GetBitmapPixel( const sal_uInt16 nPixelNumber );
-    sal_uInt16* GetBitmapPixelPtr() { return pPixel; }
+    sal_uInt8  GetBitmapPixel( const sal_uInt16 nPixelNumber ) const;
+    std::array<sal_uInt8,64> const & GetBitmapPixelPtr() const { return maPixelData; }
 
     void    SetPaintable( bool bTmp ) { bPaintable = bTmp; }
     void    Reset();
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
-    long GetSquares() const { return nSquares ; }
+    static long GetSquares() { return nSquares ; }
     long GetWidth() const { return aRectSize.getWidth() ; }
     long GetHeight() const { return aRectSize.getHeight() ; }
 
