@@ -4120,6 +4120,8 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                             if (nShapeId)
                                 insertShapeId(nShapeId, pTmp);
                         }
+                        else
+                            SdrObject::Free(pTmp);
                     }
                 }
                 else if ( aRecHd2.nRecType == DFF_msofbtSpContainer )
