@@ -270,16 +270,32 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
     // find total size of source area
     SCCOL nWidth = 0;
     SCROW nHeight = 0;
+    ScRangeList aSourceRanges;
+
+    if (rNewFilter == "Text - txt - csv (StarCalc)" && aTempArea == "CSV_all")
+    {
+        // The dummy All range. All data, including top/left empty
+        // rows/columns.
+        aTempArea.clear();
+        SCCOL nEndCol = 0;
+        SCROW nEndRow = 0;
+        if (rSrcDoc.GetCellArea( 0, nEndCol, nEndRow))
+        {
+            aSourceRanges.Append( ScRange( 0,0,0, nEndCol, nEndRow, 0));
+            nWidth = nEndCol + 1;
+            nHeight = nEndRow + 2;
+        }
+    }
+
     sal_Int32 nTokenCnt = comphelper::string::getTokenCount(aTempArea, ';');
     sal_Int32 nStringIx = 0;
-    sal_Int32 nToken;
-
-    for( nToken = 0; nToken < nTokenCnt; nToken++ )
+    for (sal_Int32 nToken = 0; nToken < nTokenCnt; ++nToken)
     {
         OUString aToken( aTempArea.getToken( 0, ';', nStringIx ) );
         ScRange aTokenRange;
         if( FindExtRange( aTokenRange, &rSrcDoc, aToken ) )
         {
+            aSourceRanges.Append( aTokenRange);
             // columns: find maximum
             nWidth = std::max( nWidth, static_cast<SCCOL>(aTokenRange.aEnd.Col() - aTokenRange.aStart.Col() + 1) );
             // rows: add row range + 1 empty row
@@ -355,40 +371,35 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
         {
             ScDocument aClipDoc( SCDOCMODE_CLIP );
             ScRange aNewTokenRange( aNewRange.aStart );
-            nStringIx = 0;
-            for( nToken = 0; nToken < nTokenCnt; nToken++ )
+            for (size_t nRange = 0; nRange < aSourceRanges.size(); ++nRange)
             {
-                OUString aToken( aTempArea.getToken( 0, ';', nStringIx ) );
-                ScRange aTokenRange;
-                if( FindExtRange( aTokenRange, &rSrcDoc, aToken ) )
+                ScRange aTokenRange( *aSourceRanges[nRange]);
+                SCTAB nSrcTab = aTokenRange.aStart.Tab();
+                ScMarkData aSourceMark;
+                aSourceMark.SelectOneTable( nSrcTab );      // selecting for CopyToClip
+                aSourceMark.SetMarkArea( aTokenRange );
+
+                ScClipParam aClipParam(aTokenRange, false);
+                rSrcDoc.CopyToClip(aClipParam, &aClipDoc, &aSourceMark, false, false);
+
+                if ( aClipDoc.HasAttrib( 0,0,nSrcTab, MAXCOL,MAXROW,nSrcTab,
+                            HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
                 {
-                    SCTAB nSrcTab = aTokenRange.aStart.Tab();
-                    ScMarkData aSourceMark;
-                    aSourceMark.SelectOneTable( nSrcTab );      // selecting for CopyToClip
-                    aSourceMark.SetMarkArea( aTokenRange );
+                    //! ResetAttrib at document !!!
 
-                    ScClipParam aClipParam(aTokenRange, false);
-                    rSrcDoc.CopyToClip(aClipParam, &aClipDoc, &aSourceMark, false, false);
-
-                    if ( aClipDoc.HasAttrib( 0,0,nSrcTab, MAXCOL,MAXROW,nSrcTab,
-                                            HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
-                    {
-                        //! ResetAttrib at document !!!
-
-                        ScPatternAttr aPattern( rSrcDoc.GetPool() );
-                        aPattern.GetItemSet().Put( ScMergeAttr() );             // Defaults
-                        aPattern.GetItemSet().Put( ScMergeFlagAttr() );
-                        aClipDoc.ApplyPatternAreaTab( 0,0, MAXCOL,MAXROW, nSrcTab, aPattern );
-                    }
-
-                    aNewTokenRange.aEnd.SetCol( aNewTokenRange.aStart.Col() + (aTokenRange.aEnd.Col() - aTokenRange.aStart.Col()) );
-                    aNewTokenRange.aEnd.SetRow( aNewTokenRange.aStart.Row() + (aTokenRange.aEnd.Row() - aTokenRange.aStart.Row()) );
-                    ScMarkData aDestMark;
-                    aDestMark.SelectOneTable( nDestTab );
-                    aDestMark.SetMarkArea( aNewTokenRange );
-                    rDoc.CopyFromClip( aNewTokenRange, aDestMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc, false );
-                    aNewTokenRange.aStart.SetRow( aNewTokenRange.aEnd.Row() + 2 );
+                    ScPatternAttr aPattern( rSrcDoc.GetPool() );
+                    aPattern.GetItemSet().Put( ScMergeAttr() );             // Defaults
+                    aPattern.GetItemSet().Put( ScMergeFlagAttr() );
+                    aClipDoc.ApplyPatternAreaTab( 0,0, MAXCOL,MAXROW, nSrcTab, aPattern );
                 }
+
+                aNewTokenRange.aEnd.SetCol( aNewTokenRange.aStart.Col() + (aTokenRange.aEnd.Col() - aTokenRange.aStart.Col()) );
+                aNewTokenRange.aEnd.SetRow( aNewTokenRange.aStart.Row() + (aTokenRange.aEnd.Row() - aTokenRange.aStart.Row()) );
+                ScMarkData aDestMark;
+                aDestMark.SelectOneTable( nDestTab );
+                aDestMark.SetMarkArea( aNewTokenRange );
+                rDoc.CopyFromClip( aNewTokenRange, aDestMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc, false );
+                aNewTokenRange.aStart.SetRow( aNewTokenRange.aEnd.Row() + 2 );
             }
         }
         else
