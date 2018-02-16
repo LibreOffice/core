@@ -22,10 +22,7 @@
 #include <com/sun/star/container/XIndexReplace.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 
-
-
- module com {  module sun {  module star {  module text {
-
+module com {  module sun {  module star {  module text {
 
 /** provides access to the numbering rules.
     <p> Numbering rules may be set at a Paragraph object.  The numbering rules are
@@ -65,17 +62,17 @@ published service NumberingRules
      */
     [optional, readonly, property] string Name;
 
-        /** This numbering is used in the outline of the document (e.g. headings).
-         */
-        [optional, property] boolean    NumberingIsOutline;
+    /** This numbering is used in the outline of the document (e.g. headings).
+     */
+    [optional, property] boolean    NumberingIsOutline;
 
-        /** the type of numbering (Arabic, characters, roman numbers, etc.).
-         */
-        [optional, property] short    NumberingType;
+    /** the type of numbering (Arabic, characters, roman numbers, etc.).
+     */
+    [optional, property] short    NumberingType;
 
-        /** id of default list for the numbering rules instance
-         */
-        [optional, readonly, property] string DefaultListId;
+    /** id of default list for the numbering rules instance
+     */
+    [optional, readonly, property] string DefaultListId;
 };
 
 
