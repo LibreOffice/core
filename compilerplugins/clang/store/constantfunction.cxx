@@ -84,11 +84,6 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
     if (aFileName.startswith(SRCDIR "/basegfx/test/")) {
         return true;
     }
-    // some stuff is just stubs under Linux, although this appears to be a SOLARIS-specific hack, so it
-    // should probably not even be compiling under Linux.
-    if (aFileName == SRCDIR "/setup_native/scripts/source/getuid.c") {
-        return true;
-    }
     // bridges has some weird stuff in it....
     if (aFileName.startswith(SRCDIR "/bridges/")) {
         return true;
