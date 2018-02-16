@@ -193,8 +193,8 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         pNewGrafObj = new SdrGrafObj( rGraphic, ::tools::Rectangle( rPos, aSize ) );
         SdrPage* pPage = pPV->GetPage();
         Size aPageSize( pPage->GetSize() );
-        aPageSize.setWidth( aPageSize.Width() - pPage->GetLeftBorder() + pPage->GetRightBorder() );
-        aPageSize.setHeight( aPageSize.Height() - pPage->GetUpperBorder() + pPage->GetLowerBorder() );
+        aPageSize.AdjustWidth( -(pPage->GetLeftBorder() + pPage->GetRightBorder()) );
+        aPageSize.AdjustHeight( -(pPage->GetUpperBorder() + pPage->GetLowerBorder()) );
         pNewGrafObj->AdjustToMaxRect( ::tools::Rectangle( Point(), aPageSize ), true );
 
         SdrInsertFlags nOptions = SdrInsertFlags::SETDEFLAYER;

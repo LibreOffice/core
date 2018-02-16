@@ -657,8 +657,8 @@ Fraction AnimationWindow::GetScale()
             aBmpSize.setHeight( std::max( aBmpSize.Height(), aTempSize.Height() ) );
         }
 
-        aBmpSize.setWidth( aBmpSize.Width() + 10 );
-        aBmpSize.setHeight( aBmpSize.Height() + 10 );
+        aBmpSize.AdjustWidth(10 );
+        aBmpSize.AdjustHeight(10 );
 
         Size aDisplaySize(m_pCtlDisplay->GetOutputSize());
 

@@ -926,7 +926,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     {
                         const SdrMetricItem& rTLDItem = aEditAttr.Get( SDRATTR_TEXT_LEFTDIST );
                         long nLD = rTLDItem.GetValue();
-                        aPos.setX( aPos.X() + nLD );
+                        aPos.AdjustX(nLD );
                     }
 
                     aPointItem.SetValue( aPos );

@@ -384,8 +384,8 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
         long all_height = nRows * aButtonSize.Height();
 
         Point aPos( rSnapRect.Center() );
-        aPos.setX( aPos.X() - (all_width >> 1) );
-        aPos.setY( aPos.Y() - (all_height >> 1) );
+        aPos.X() -= all_width >> 1;
+        aPos.Y() -= all_height >> 1;
 
         ImageButtonHdl* pHdl = new ImageButtonHdl( xThis, aPoint );
         pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );

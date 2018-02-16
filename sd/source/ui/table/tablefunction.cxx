@@ -181,8 +181,8 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
             }
 
             aPos = aWinRect.Center();
-            aPos.setX( aPos.X() - aSize.Width() / 2 );
-            aPos.setY( aPos.Y() - aSize.Height() / 2 );
+            aPos.AdjustX( -(aSize.Width() / 2) );
+            aPos.AdjustY( -(aSize.Height() / 2) );
             aRect = ::tools::Rectangle(aPos, aSize);
         }
 
