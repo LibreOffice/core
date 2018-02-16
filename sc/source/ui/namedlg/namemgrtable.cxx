@@ -297,7 +297,7 @@ IMPL_LINK_NOARG(ScRangeManagerTable, HeaderEndDragHdl, HeaderBar*, void)
 
     SetTab(0, 0);
     SetTab(1, PixelToLogic( aSz, MapMode(MapUnit::MapAppFont) ).Width() );
-    aSz.setWidth( aSz.Width() + nItemRangeSize );
+    aSz.AdjustWidth(nItemRangeSize );
     SetTab(2, PixelToLogic( aSz, MapMode(MapUnit::MapAppFont) ).Width() );
 }
 

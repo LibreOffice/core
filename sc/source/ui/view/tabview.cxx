@@ -566,7 +566,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         if( bVScroll )
         {
             Size aVScrSize = aVScrollBottom->GetSizePixel();
-            aVScrSize.setHeight( aVScrSize.Height() - nBarY );
+            aVScrSize.AdjustHeight( -nBarY );
             aVScrollBottom->SetSizePixel( aVScrSize );
         }
     }
@@ -954,16 +954,16 @@ Point ScTabView::GetGridOffset() const
 
     // Outline-Controls
     if (bVOutline && pRowOutline[SC_SPLIT_BOTTOM])
-        aPos.setX( aPos.X() + pRowOutline[SC_SPLIT_BOTTOM]->GetDepthSize() );
+        aPos.AdjustX(pRowOutline[SC_SPLIT_BOTTOM]->GetDepthSize() );
     if (bHOutline && pColOutline[SC_SPLIT_LEFT])
-        aPos.setY( aPos.Y() + pColOutline[SC_SPLIT_LEFT]->GetDepthSize() );
+        aPos.AdjustY(pColOutline[SC_SPLIT_LEFT]->GetDepthSize() );
 
     if (bHeaders)                               // column/row headers
     {
         if (pRowBar[SC_SPLIT_BOTTOM])
-            aPos.setX( aPos.X() + pRowBar[SC_SPLIT_BOTTOM]->GetSizePixel().Width() );
+            aPos.AdjustX(pRowBar[SC_SPLIT_BOTTOM]->GetSizePixel().Width() );
         if (pColBar[SC_SPLIT_LEFT])
-            aPos.setY( aPos.Y() + pColBar[SC_SPLIT_LEFT]->GetSizePixel().Height() );
+            aPos.AdjustY(pColBar[SC_SPLIT_LEFT]->GetSizePixel().Height() );
     }
 
     return aPos;
@@ -1807,9 +1807,9 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
 
         tools::Rectangle aCompareRect( aInsertPos, Size( nNeededWidth, nNeededHeight ) );
         if ( aCompareRect.Right() > aVisible.Right() )
-            aInsertPos.setX( aInsertPos.X() - aCompareRect.Right() - aVisible.Right() );
+            aInsertPos.AdjustX( -(aCompareRect.Right() - aVisible.Right()) );
         if ( aCompareRect.Bottom() > aVisible.Bottom() )
-            aInsertPos.setY( aInsertPos.Y() - aCompareRect.Bottom() - aVisible.Bottom() );
+            aInsertPos.AdjustY( -(aCompareRect.Bottom() - aVisible.Bottom()) );
 
         if ( aInsertPos.X() < aVisible.Left() )
             aInsertPos.setX( aVisible.Left() );
@@ -1819,8 +1819,8 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
         // nNeededWidth / nNeededHeight includes all borders - move aInsertPos to the
         // object position, inside the border
 
-        aInsertPos.setX( aInsertPos.X() + nBorder );
-        aInsertPos.setY( aInsertPos.Y() + nBorder );
+        aInsertPos.AdjustX(nBorder );
+        aInsertPos.AdjustY(nBorder );
     }
     return aInsertPos;
 }

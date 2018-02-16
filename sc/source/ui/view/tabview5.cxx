@@ -457,7 +457,7 @@ void ScTabView::ViewOptionsHasChanged( bool bHScrollChanged, bool bGraphicsChang
     if ( bGrow || bShrink )
     {
         Size aSize = pTabControl->GetSizePixel();
-        aSize.Width() = SC_TABBAR_DEFWIDTH;             // initial size
+        aSize.setWidth( SC_TABBAR_DEFWIDTH );             // initial size
         pTabControl->SetSizePixel(aSize);               // DoResize is called later...
     }
 }
@@ -667,10 +667,10 @@ void ScTabView::OnLOKNoteStateChanged(const ScPostIt* pNote)
     // placed, invalidated.
     const int nBorderSize = 200;
     tools::Rectangle aInvalidRect = aRect;
-    aInvalidRect.SetLeft( aInvalidRect.Left() - nBorderSize );
-    aInvalidRect.SetRight( aInvalidRect.Right() + nBorderSize );
-    aInvalidRect.SetTop( aInvalidRect.Top() - nBorderSize );
-    aInvalidRect.SetBottom( aInvalidRect.Bottom() + nBorderSize );
+    aInvalidRect.AdjustLeft( -nBorderSize );
+    aInvalidRect.Right() += nBorderSize;
+    aInvalidRect.AdjustTop( -nBorderSize );
+    aInvalidRect.Bottom() += nBorderSize;
 
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)

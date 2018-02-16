@@ -909,10 +909,10 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     nSizeY = ScViewData::ToPixel(pDoc->GetRowHeight(nRow, nTab), pViewData->GetPPTY());
     Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich );
     if ( bLayoutRTL )
-        aPos.setX( aPos.X() - nSizeX );
+        aPos.AdjustX( -nSizeX );
     tools::Rectangle aCellRect( OutputToScreenPixel(aPos), Size(nSizeX,nSizeY) );
-    aCellRect.SetTop( aCellRect.Top() - nSizeY );
-    aCellRect.SetBottom( aCellRect.Bottom() - nSizeY - 1 );
+    aCellRect.AdjustTop( -nSizeY );
+    aCellRect.AdjustBottom( -(nSizeY - 1) );
     //  Place the ListBox directly below the black line of the cell grid
     //  (It looks odd if the line gets hidden...)
 
@@ -1033,12 +1033,12 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
     Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich );
     if ( bLayoutRTL )
-        aPos.setX( aPos.X() - nSizeX );
+        aPos.AdjustX( -nSizeX );
 
     tools::Rectangle aCellRect( OutputToScreenPixel(aPos), Size(nSizeX,nSizeY) );
 
-    aPos.setX( aPos.X() - 1 );
-    aPos.setY( aPos.Y() + nSizeY - 1 );
+    aPos.AdjustX( -1 );
+    aPos.Y() += nSizeY - 1;
 
     mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this, WinBits(WB_BORDER)));
     mpFilterFloat->SetPopupModeEndHdl(LINK( this, ScGridWindow, PopupModeEndHdl));
@@ -1299,8 +1299,8 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
                 Point aMousePos = rMEvt.GetPosPixel();
                 if ( bLayoutRTL )
                 {
-                    aStartPos.setX( aStartPos.X() + 2 );
-                    aEndPos.setX( aEndPos.X() + 2 );
+                    aStartPos.AdjustX(2 );
+                    aEndPos.AdjustX(2 );
                 }
                 bool bTop = ( aMousePos.X() >= aStartPos.X()-3 && aMousePos.X() <= aStartPos.X()+1 &&
                               aMousePos.Y() >= aStartPos.Y()-3 && aMousePos.Y() <= aStartPos.Y()+1 );
@@ -2852,8 +2852,8 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
                     Point aLogicPos = pCur->GetPos();
                     //  use the position right of the cursor (spell popup is opened if
                     //  the cursor is before the word, but not if behind it)
-                    aLogicPos.setX( aLogicPos.X() + pCur->GetWidth() );
-                    aLogicPos.setY( aLogicPos.Y() + pCur->GetHeight() / 2 );     // center vertically
+                    aLogicPos.AdjustX(pCur->GetWidth() );
+                    aLogicPos.AdjustY(pCur->GetHeight() / 2 );     // center vertically
                     aMenuPos = LogicToPixel( aLogicPos );
                 }
             }
@@ -2893,8 +2893,8 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             long nSizeYPix;
             pViewData->GetMergeSizePixel( nCurX, nCurY, nSizeXPix, nSizeYPix );
             // fdo#55432 take the correct position for RTL sheet
-            aMenuPos.setX( aMenuPos.X() + (bLayoutIsRTL ? -nSizeXPix : nSizeXPix) );
-            aMenuPos.setY( aMenuPos.Y() + nSizeYPix );
+            aMenuPos.AdjustX(bLayoutIsRTL ? -nSizeXPix : nSizeXPix );
+            aMenuPos.AdjustY(nSizeYPix );
 
             ScTabViewShell* pViewSh = pViewData->GetViewShell();
             if (pViewSh)
@@ -4632,8 +4632,8 @@ bool ScGridWindow::HitRangeFinder( const Point& rMouse, RfCorner& rCorner,
             long nSizeYPix;
             pViewData->GetMergeSizePixel( nPosX, nPosY, nSizeXPix, nSizeYPix );
 
-            aCellEnd.setX( aCellEnd.X() + nSizeXPix * nLayoutSign );
-            aCellEnd.setY( aCellEnd.Y() + nSizeYPix );
+            aCellEnd.AdjustX(nSizeXPix * nLayoutSign );
+            aCellEnd.AdjustY(nSizeYPix );
 
             bool bCornerHorizontalRight;
             bool bCornerHorizontalLeft;
@@ -5272,12 +5272,12 @@ bool ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRang
             {
                 aButtonPos = pViewData->GetScrPos( aRange.aEnd.Col()+1, aRange.aStart.Row(),
                                                     eWhich, true );
-                aButtonPos.setY( aButtonPos.Y() - nBHeight );
+                aButtonPos.AdjustY( -nBHeight );
             }
             if ( bLayoutRTL )
-                aButtonPos.setX( aButtonPos.X() - nHSpace - 1 );
+                aButtonPos.AdjustX( -(nHSpace - 1) );
             else
-                aButtonPos.setX( aButtonPos.X() - nBWidth - nHSpace );    // same for top or bottom
+                aButtonPos.AdjustX( -(nBWidth - nHSpace) );    // same for top or bottom
 
             tools::Rectangle aButRect( aButtonPos, Size(nBWidth,nBHeight) );
             if ( aButRect.IsInside( rPosPixel ) )
@@ -5740,8 +5740,8 @@ static void updateLibreOfficeKitSelection(const ScViewData* pViewData, const std
         // We explicitly create a copy, since we need to expand
         // the rectangle before coordinate conversion
         tools::Rectangle aRectangle(rRectangle);
-        aRectangle.SetRight( aRectangle.Right() + 1 );
-        aRectangle.SetBottom( aRectangle.Bottom() + 1 );
+        aRectangle.AdjustRight(1 );
+        aRectangle.AdjustBottom(1 );
 
         aBoundingBox.Union(aRectangle);
 
@@ -5858,7 +5858,7 @@ void ScGridWindow::UpdateCursorOverlay()
             pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
 
             if (bLayoutRTL)
-                aScrPos.setX( aScrPos.X() - nSizeXPix - 2 );       // move instead of mirroring
+                aScrPos.AdjustX( -(nSizeXPix - 2) );       // move instead of mirroring
 
             // show the cursor as 4 (thin) rectangles
             tools::Rectangle aRect(aScrPos, Size(nSizeXPix - 1, nSizeYPix - 1));
@@ -5868,24 +5868,24 @@ void ScGridWindow::UpdateCursorOverlay()
             long aCursorWidth = 1 * fScaleFactor;
 
             tools::Rectangle aLeft = aRect;
-            aLeft.SetTop( aLeft.Top() - aCursorWidth );
-            aLeft.SetBottom( aLeft.Bottom() + aCursorWidth );
+            aLeft.AdjustTop( -aCursorWidth );
+            aLeft.AdjustBottom(aCursorWidth );
             aLeft.SetRight( aLeft.Left() );
-            aLeft.SetLeft( aLeft.Left() - aCursorWidth );
+            aLeft.AdjustLeft( -aCursorWidth );
 
             tools::Rectangle aRight = aRect;
-            aRight.SetTop( aRight.Top() - aCursorWidth );
-            aRight.SetBottom( aRight.Bottom() + aCursorWidth );
+            aRight.AdjustTop( -aCursorWidth );
+            aRight.AdjustBottom(aCursorWidth );
             aRight.SetLeft( aRight.Right() );
-            aRight.SetRight( aRight.Right() + aCursorWidth );
+            aRight.AdjustRight(aCursorWidth );
 
             tools::Rectangle aTop = aRect;
             aTop.SetBottom( aTop.Top() );
-            aTop.SetTop( aTop.Top() - aCursorWidth );
+            aTop.AdjustTop( -aCursorWidth );
 
             tools::Rectangle aBottom = aRect;
             aBottom.SetTop( aBottom.Bottom() );
-            aBottom.SetBottom( aBottom.Bottom() + aCursorWidth );
+            aBottom.AdjustBottom(aCursorWidth );
 
             aPixelRects.push_back(aLeft);
             aPixelRects.push_back(aRight);
@@ -6062,12 +6062,12 @@ void ScGridWindow::UpdateAutoFillOverlay()
         pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
 
         if (bLayoutRTL)
-            aFillPos.setX( aFillPos.X() - nSizeXPix - 2 + (aFillHandleSize.Width() / 2) );
+            aFillPos.AdjustX( -(nSizeXPix - 2 + (aFillHandleSize.Width() / 2)) );
         else
-            aFillPos.setX( aFillPos.X() + nSizeXPix - (aFillHandleSize.Width() / 2) );
+            aFillPos.AdjustX(nSizeXPix - (aFillHandleSize.Width() / 2) );
 
-        aFillPos.setY( aFillPos.Y() + nSizeYPix );
-        aFillPos.setY( aFillPos.Y() - (aFillHandleSize.Height() / 2) );
+        aFillPos.AdjustY(nSizeYPix );
+        aFillPos.AdjustY( -(aFillHandleSize.Height() / 2) );
 
         tools::Rectangle aFillRect(aFillPos, aFillHandleSize);
 
@@ -6160,7 +6160,7 @@ void ScGridWindow::UpdateDragRectOverlay()
                 nSizeXPix += ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(i), nTab ), nPPTX );
         else
         {
-            aScrPos.setX( aScrPos.X() - nLayoutSign );
+            aScrPos.AdjustX( -nLayoutSign );
             nSizeXPix   += 2;
         }
 
@@ -6169,12 +6169,12 @@ void ScGridWindow::UpdateDragRectOverlay()
                 nSizeYPix += ScViewData::ToPixel( pDoc->GetRowHeight( i, nTab ), nPPTY );
         else
         {
-            aScrPos.setY( aScrPos.Y() - 1 );
+            aScrPos.AdjustY( -1 );
             nSizeYPix   += 2;
         }
 
-        aScrPos.setX( aScrPos.X() - 2 * nLayoutSign );
-        aScrPos.setY( aScrPos.Y() - 2 );
+        aScrPos.AdjustX( -(2 * nLayoutSign) );
+        aScrPos.AdjustY( -2 );
         tools::Rectangle aRect( aScrPos.X(), aScrPos.Y(),
                          aScrPos.X() + ( nSizeXPix + 2 ) * nLayoutSign, aScrPos.Y() + nSizeYPix + 2 );
         if ( bLayoutRTL )
@@ -6312,8 +6312,8 @@ void ScGridWindow::UpdateShrinkOverlay()
                                                  aRange.aStart.Row(), eWhich );
             Point aEnd = pViewData->GetScrPos( aRange.aEnd.Col()+1,
                                                aRange.aEnd.Row()+1, eWhich );
-            aEnd.setX( aEnd.X() - 1 );
-            aEnd.setY( aEnd.Y() - 1 );
+            aEnd.AdjustX( -1 );
+            aEnd.AdjustY( -1 );
 
             aPixRect = tools::Rectangle( aStart,aEnd );
         }

@@ -435,8 +435,8 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                             tools::Rectangle aVisArea = pWin->PixelToLogic(tools::Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
                             Point aObjPos(aVisArea.Center());
                             Size aObjSize(pNewDBField->GetLogicRect().GetSize());
-                            aObjPos.setX( aObjPos.X() - aObjSize.Width() / 2 );
-                            aObjPos.setY( aObjPos.Y() - aObjSize.Height() / 2 );
+                            aObjPos.AdjustX( -(aObjSize.Width() / 2) );
+                            aObjPos.AdjustY( -(aObjSize.Height() / 2) );
                             tools::Rectangle aNewObjectRectangle(aObjPos, aObjSize);
 
                             pNewDBField->SetLogicRect(aNewObjectRectangle);

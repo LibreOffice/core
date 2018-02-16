@@ -1286,7 +1286,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
                 ++nRightX;
                 long nAdd = static_cast<long>( mpDoc->GetColWidth( nRightX, nTab ) * mnPPTX );
                 nRightMissing -= nAdd;
-                rParam.maClipRect.SetRight( rParam.maClipRect.Right() + nAdd * nLayoutSign );
+                rParam.maClipRect.AdjustRight(nAdd * nLayoutSign );
 
                 if ( rThisRowInfo.nRowNo == nCellY && nRightX >= nX1 && nRightX <= nX2 )
                     rThisRowInfo.pCellInfo[nRightX].bHideGrid = true;
@@ -1300,7 +1300,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
                 --nLeftX;
                 long nAdd = static_cast<long>( mpDoc->GetColWidth( nLeftX, nTab ) * mnPPTX );
                 nLeftMissing -= nAdd;
-                rParam.maClipRect.SetLeft( rParam.maClipRect.Left() - nAdd * nLayoutSign );
+                rParam.maClipRect.AdjustLeft( -(nAdd * nLayoutSign) );
             }
         }
 
@@ -1311,14 +1311,14 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
             rThisRowInfo.pCellInfo[nRightX+1].nClipMark |= ScClipMark::Right;
             bAnyClipped = true;
             long nMarkPixel = static_cast<long>( SC_CLIPMARK_SIZE * mnPPTX );
-            rParam.maClipRect.SetRight( rParam.maClipRect.Right() - nMarkPixel * nLayoutSign );
+            rParam.maClipRect.AdjustRight( -(nMarkPixel * nLayoutSign) );
         }
         if ( nLeftMissing > 0 && bMarkClipped && nLeftX >= nX1 && nLeftX <= nX2 && !bBreak && !bCellIsValue )
         {
             rThisRowInfo.pCellInfo[nLeftX+1].nClipMark |= ScClipMark::Left;
             bAnyClipped = true;
             long nMarkPixel = static_cast<long>( SC_CLIPMARK_SIZE * mnPPTX );
-            rParam.maClipRect.SetLeft( rParam.maClipRect.Left() + nMarkPixel * nLayoutSign );
+            rParam.maClipRect.AdjustLeft(nMarkPixel * nLayoutSign );
         }
 
         rParam.mbLeftClip = ( nLeftMissing > 0 );
@@ -1345,8 +1345,8 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
                 // content fits even in the remaining area without the filter button
                 // -> align within that remaining area
 
-                rParam.maAlignRect.SetRight( rParam.maAlignRect.Right() - nFilter * nLayoutSign );
-                rParam.maClipRect.SetRight( rParam.maClipRect.Right() - nFilter * nLayoutSign );
+                rParam.maAlignRect.AdjustRight( -(nFilter * nLayoutSign) );
+                rParam.maClipRect.AdjustRight( -(nFilter * nLayoutSign) );
 
                 // if a number doesn't fit, don't hide part of the number behind the button
                 // -> set clip flags, so "###" replacement is used (but also within the smaller area)
@@ -1983,13 +1983,13 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                         {
                             //  undo text width adjustment in pixels
                             if (bRightAdjusted)
-                                aDrawTextPos.setX( aDrawTextPos.X() + aVars.GetTextSize().Width() );
+                                aDrawTextPos.AdjustX(aVars.GetTextSize().Width() );
 
                             aDrawTextPos = mpRefDevice->PixelToLogic( aDrawTextPos );
 
                             //  redo text width adjustment in logic units
                             if (bRightAdjusted)
-                                aDrawTextPos.setX( aDrawTextPos.X() - aVars.GetOriginalWidth() );
+                                aDrawTextPos.AdjustX( -(aVars.GetOriginalWidth()) );
                         }
 
                         // in Metafiles always use DrawTextArray to ensure that positions are
@@ -2483,7 +2483,7 @@ void ScOutputData::DrawEditParam::calcPaperSize(
         // Subtract some extra value from the height or else the text would go
         // outside the cell area.  The value of 5 is arbitrary, and is based
         // entirely on heuristics.
-        rPaperSize.setHeight( rPaperSize.Height() - 5 );
+        rPaperSize.AdjustHeight( -5 );
     }
 }
 
@@ -2539,17 +2539,17 @@ void ScOutputData::DrawEditParam::calcStartPosForVertical(
     {
         // vertical adjustment is within the EditEngine
         if (mbPixelToLogic)
-            rLogicStart.setY( rLogicStart.Y() + pRefDevice->PixelToLogic(Size(0,nTopM)).Height() );
+            rLogicStart.AdjustY(pRefDevice->PixelToLogic(Size(0,nTopM)).Height() );
         else
-            rLogicStart.setY( rLogicStart.Y() + nTopM );
+            rLogicStart.AdjustY(nTopM );
 
         switch (meHorJustResult)
         {
             case SvxCellHorJustify::Center:
-                rLogicStart.setX( rLogicStart.X() + (nCellWidth - nEngineWidth) / 2 );
+                rLogicStart.AdjustX((nCellWidth - nEngineWidth) / 2 );
             break;
             case SvxCellHorJustify::Right:
-                rLogicStart.setX( rLogicStart.X() + nCellWidth - nEngineWidth );
+                rLogicStart.AdjustX(nCellWidth - nEngineWidth );
             break;
             default:
                 ; // do nothing
@@ -2701,7 +2701,7 @@ void ScOutputData::DrawEditParam::adjustForHyperlinkInPDF(Point aURLStart, const
     if (isVerticallyOriented())
         std::swap( nURLWidth, nURLHeight );
     else if (mbAsianVertical)
-        aURLStart.setX( aURLStart.X() - nURLWidth );
+        aURLStart.AdjustX( -nURLWidth );
 
     tools::Rectangle aURLRect( aURLStart, Size( nURLWidth, nURLHeight ) );
     lcl_DoHyperlinkResult(pDev, aURLRect, maCell);
@@ -3064,7 +3064,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
             long nMarkPixel = static_cast<long>( SC_CLIPMARK_SIZE * mnPPTX );
             if ( aAreaParam.maClipRect.Right() - nMarkPixel > aAreaParam.maClipRect.Left() )
-                aAreaParam.maClipRect.SetRight( aAreaParam.maClipRect.Right() - nMarkPixel );
+                aAreaParam.maClipRect.AdjustRight( -nMarkPixel );
         }
     }
 
@@ -3095,29 +3095,29 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             //! only converting margin?
 
             if (rParam.mbPixelToLogic)
-                aLogicStart.setY( aLogicStart.Y() + mpRefDevice->PixelToLogic( Size(0, nTopM +
+                aLogicStart.AdjustY(mpRefDevice->PixelToLogic( Size(0, nTopM +
                                 mpRefDevice->LogicToPixel(aCellSize).Height() -
                                 mpRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height()
                                 )).Height() );
             else
-                aLogicStart.setY( aLogicStart.Y() + nTopM + aCellSize.Height() - nEngineHeight );
+                aLogicStart.AdjustY(nTopM + aCellSize.Height() - nEngineHeight );
         }
         else if (rParam.meVerJust==SvxCellVerJustify::Center)
         {
             if (rParam.mbPixelToLogic)
-                aLogicStart.setY( aLogicStart.Y() + mpRefDevice->PixelToLogic( Size(0, nTopM + (
+                aLogicStart.AdjustY(mpRefDevice->PixelToLogic( Size(0, nTopM + (
                                 mpRefDevice->LogicToPixel(aCellSize).Height() -
                                 mpRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height() )
                                 / 2)).Height() );
             else
-                aLogicStart.setY( aLogicStart.Y() + nTopM + (aCellSize.Height() - nEngineHeight) / 2 );
+                aLogicStart.AdjustY(nTopM + (aCellSize.Height() - nEngineHeight) / 2 );
         }
         else        // top
         {
             if (rParam.mbPixelToLogic)
-                aLogicStart.setY( aLogicStart.Y() + mpRefDevice->PixelToLogic(Size(0,nTopM)).Height() );
+                aLogicStart.AdjustY(mpRefDevice->PixelToLogic(Size(0,nTopM)).Height() );
             else
-                aLogicStart.setY( aLogicStart.Y() + nTopM );
+                aLogicStart.AdjustY(nTopM );
         }
 
         aURLStart = aLogicStart;      // copy before modifying for orientation
@@ -3169,7 +3169,7 @@ void ScOutputData::ShowClipMarks( DrawEditParam& rParam, long nEngineHeight, con
 
         const long nMarkPixel = static_cast<long>( SC_CLIPMARK_SIZE * mnPPTX );
         if ( aAreaParam.maClipRect.Right() - nMarkPixel > aAreaParam.maClipRect.Left() )
-            aAreaParam.maClipRect.SetRight( aAreaParam.maClipRect.Right() - nMarkPixel );
+            aAreaParam.maClipRect.AdjustRight( -nMarkPixel );
     }
 }
 
@@ -3392,8 +3392,8 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
             Size aPSize = rParam.mpEngine->GetPaperSize();
             aPSize.setWidth( aCellSize.Height() );
             rParam.mpEngine->SetPaperSize(aPSize);
-            aLogicStart.setY( aLogicStart.Y() +
-                (rParam.mbBreak ? aPSize.Width() : nEngineHeight) );
+            aLogicStart.AdjustY(
+                rParam.mbBreak ? aPSize.Width() : nEngineHeight );
         }
         else
         {
@@ -3421,8 +3421,8 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
             }
 
             // First, align text to bottom.
-            aLogicStart.setY( aLogicStart.Y() + aCellSize.Height() );
-            aLogicStart.setY( aLogicStart.Y() + nTopOffset );
+            aLogicStart.AdjustY(aCellSize.Height() );
+            aLogicStart.AdjustY(nTopOffset );
 
             switch (rParam.meVerJust)
             {
@@ -3432,12 +3432,12 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
                 break;
                 case SvxCellVerJustify::Center:
                     // center it.
-                    aLogicStart.setY( aLogicStart.Y() - nGap / 2 );
+                    aLogicStart.AdjustY( -(nGap / 2) );
                 break;
                 case SvxCellVerJustify::Block:
                 case SvxCellVerJustify::Top:
                     // align to top
-                    aLogicStart.setY( aLogicStart.Y() - nGap );
+                    aLogicStart.AdjustY( -nGap );
                 break;
                 default:
                     ;
@@ -3635,7 +3635,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
 
         if (rParam.meHorJustResult != SvxCellHorJustify::Block)
         {
-            aLogicStart.setX( aLogicStart.X() + nEngineWidth );
+            aLogicStart.AdjustX(nEngineWidth );
             if (!rParam.mbBreak)
             {
                 // Set the paper width to text size.
@@ -3656,18 +3656,18 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
                     nGap = aPSize.Width() - aCellSize.Height();
                     nTopOffset = nTopM;
                 }
-                aLogicStart.setY( aLogicStart.Y() + nTopOffset );
+                aLogicStart.AdjustY(nTopOffset );
 
                 switch (rParam.meVerJust)
                 {
                     case SvxCellVerJustify::Standard:
                     case SvxCellVerJustify::Bottom:
                         // align to bottom
-                        aLogicStart.setY( aLogicStart.Y() - nGap );
+                        aLogicStart.AdjustY( -nGap );
                     break;
                     case SvxCellVerJustify::Center:
                         // center it.
-                        aLogicStart.setY( aLogicStart.Y() - nGap / 2 );
+                        aLogicStart.AdjustY( -(nGap / 2) );
                     break;
                     case SvxCellVerJustify::Block:
                     case SvxCellVerJustify::Top:
@@ -3897,7 +3897,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
 
             long nMarkPixel = static_cast<long>( SC_CLIPMARK_SIZE * mnPPTX );
             if ( aAreaParam.maClipRect.Right() - nMarkPixel > aAreaParam.maClipRect.Left() )
-                aAreaParam.maClipRect.SetRight( aAreaParam.maClipRect.Right() - nMarkPixel );
+                aAreaParam.maClipRect.AdjustRight( -nMarkPixel );
         }
     }
 
@@ -3920,29 +3920,29 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
             //! only converting margin?
 
             if (rParam.mbPixelToLogic)
-                aLogicStart.setY( aLogicStart.Y() + mpRefDevice->PixelToLogic( Size(0, nTopM +
+                aLogicStart.AdjustY(mpRefDevice->PixelToLogic( Size(0, nTopM +
                                 mpRefDevice->LogicToPixel(aCellSize).Height() -
                                 mpRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height()
                                 )).Height() );
             else
-                aLogicStart.setY( aLogicStart.Y() + nTopM + aCellSize.Height() - nEngineHeight );
+                aLogicStart.AdjustY(nTopM + aCellSize.Height() - nEngineHeight );
         }
         else if (rParam.meVerJust==SvxCellVerJustify::Center)
         {
             if (rParam.mbPixelToLogic)
-                aLogicStart.setY( aLogicStart.Y() + mpRefDevice->PixelToLogic( Size(0, nTopM + (
+                aLogicStart.AdjustY(mpRefDevice->PixelToLogic( Size(0, nTopM + (
                                 mpRefDevice->LogicToPixel(aCellSize).Height() -
                                 mpRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height() )
                                 / 2)).Height() );
             else
-                aLogicStart.setY( aLogicStart.Y() + nTopM + (aCellSize.Height() - nEngineHeight) / 2 );
+                aLogicStart.AdjustY(nTopM + (aCellSize.Height() - nEngineHeight) / 2 );
         }
         else        // top
         {
             if (rParam.mbPixelToLogic)
-                aLogicStart.setY( aLogicStart.Y() + mpRefDevice->PixelToLogic(Size(0,nTopM)).Height() );
+                aLogicStart.AdjustY(mpRefDevice->PixelToLogic(Size(0,nTopM)).Height() );
             else
-                aLogicStart.setY( aLogicStart.Y() + nTopM );
+                aLogicStart.AdjustY(nTopM );
         }
 
         aURLStart = aLogicStart;      // copy before modifying for orientation
@@ -4184,7 +4184,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
             long nMarkPixel = static_cast<long>( SC_CLIPMARK_SIZE * mnPPTX );
             if ( aAreaParam.maClipRect.Right() - nMarkPixel > aAreaParam.maClipRect.Left() )
-                aAreaParam.maClipRect.SetRight( aAreaParam.maClipRect.Right() - nMarkPixel );
+                aAreaParam.maClipRect.AdjustRight( -nMarkPixel );
         }
     }
 
@@ -4206,18 +4206,18 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
         //  horizontal alignment
 
         if (rParam.meHorJustResult==SvxCellHorJustify::Right)
-            aLogicStart.setX( aLogicStart.X() + nAvailWidth - nEngineWidth );
+            aLogicStart.AdjustX(nAvailWidth - nEngineWidth );
         else if (rParam.meHorJustResult==SvxCellHorJustify::Center)
-            aLogicStart.setX( aLogicStart.X() + (nAvailWidth - nEngineWidth) / 2 );
+            aLogicStart.AdjustX((nAvailWidth - nEngineWidth) / 2 );
 
         // paper size is subtracted below
-        aLogicStart.setX( aLogicStart.X() + nEngineWidth );
+        aLogicStart.AdjustX(nEngineWidth );
 
         // vertical adjustment is within the EditEngine
         if (rParam.mbPixelToLogic)
-            aLogicStart.setY( aLogicStart.Y() + mpRefDevice->PixelToLogic(Size(0,nTopM)).Height() );
+            aLogicStart.AdjustY(mpRefDevice->PixelToLogic(Size(0,nTopM)).Height() );
         else
-            aLogicStart.setY( aLogicStart.Y() + nTopM );
+            aLogicStart.AdjustY(nTopM );
 
         aURLStart = aLogicStart;      // copy before modifying for orientation
 
@@ -4226,7 +4226,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
         // with SetVertical, the start position is top left of
         // the whole output area, not the text itself
-        aLogicStart.setX( aLogicStart.X() - rParam.mpEngine->GetPaperSize().Width() );
+        aLogicStart.AdjustX( -(rParam.mpEngine->GetPaperSize().Width()) );
 
         rParam.mpEngine->Draw(mpDev, aLogicStart);
     }
@@ -4859,7 +4859,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     {
                                         long nDif = nScrX - nStartX;
                                         nClipStartX = nScrX;
-                                        aClipSize.setWidth( aClipSize.Width() - nDif );
+                                        aClipSize.AdjustWidth( -nDif );
                                     }
                                 }
 
@@ -4870,7 +4870,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     {
                                         long nDif = nRowPosY - nClipStartY;
                                         nClipStartY = nRowPosY;
-                                        aClipSize.setHeight( aClipSize.Height() - nDif );
+                                        aClipSize.AdjustHeight( -nDif );
                                     }
                                 }
 
@@ -4945,20 +4945,20 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     {
                                         // rotated text is centered by default
                                         if (eHorJust==SvxCellHorJustify::Right)
-                                            aLogicStart.setX( aLogicStart.X() + nAvailWidth - nEngineWidth );
+                                            aLogicStart.AdjustX(nAvailWidth - nEngineWidth );
                                         else if (eHorJust==SvxCellHorJustify::Center ||
                                                  eHorJust==SvxCellHorJustify::Standard)
-                                            aLogicStart.setX( aLogicStart.X() + (nAvailWidth - nEngineWidth) / 2 );
+                                            aLogicStart.AdjustX((nAvailWidth - nEngineWidth) / 2 );
                                     }
                                 }
 
                                 if ( bLayoutRTL )
                                 {
                                     if (bPixelToLogic)
-                                        aLogicStart.setX( aLogicStart.X() - mpRefDevice->PixelToLogic(
-                                                        Size( nCellWidth, 0 ) ).Width() );
+                                        aLogicStart.AdjustX( -(mpRefDevice->PixelToLogic(
+                                                        Size( nCellWidth, 0 ) ).Width()) );
                                     else
-                                        aLogicStart.setX( aLogicStart.X() - nCellWidth );
+                                        aLogicStart.AdjustX( -nCellWidth );
                                 }
 
                                 if ( eOrient==SvxCellOrientation::Standard ||
@@ -4968,23 +4968,23 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                         eVerJust==SvxCellVerJustify::Standard)
                                     {
                                         if (bPixelToLogic)
-                                            aLogicStart.setY( aLogicStart.Y() + mpRefDevice->PixelToLogic( Size(0,
+                                            aLogicStart.AdjustY(mpRefDevice->PixelToLogic( Size(0,
                                                             mpRefDevice->LogicToPixel(aCellSize).Height() -
                                                             mpRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height()
                                                             )).Height() );
                                         else
-                                            aLogicStart.setY( aLogicStart.Y() + aCellSize.Height() - nEngineHeight );
+                                            aLogicStart.AdjustY(aCellSize.Height() - nEngineHeight );
                                     }
 
                                     else if (eVerJust==SvxCellVerJustify::Center)
                                     {
                                         if (bPixelToLogic)
-                                            aLogicStart.setY( aLogicStart.Y() + mpRefDevice->PixelToLogic( Size(0,(
+                                            aLogicStart.AdjustY(mpRefDevice->PixelToLogic( Size(0,(
                                                             mpRefDevice->LogicToPixel(aCellSize).Height() -
                                                             mpRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height())
                                                             / 2)).Height() );
                                         else
-                                            aLogicStart.setY( aLogicStart.Y() + (aCellSize.Height() - nEngineHeight) / 2 );
+                                            aLogicStart.AdjustY((aCellSize.Height() - nEngineHeight) / 2 );
                                     }
                                 }
 
@@ -5042,8 +5042,8 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                             nAddX += ( nUp * nCos / fabs(nSin) );
                                     }
 
-                                    aLogicStart.setX( aLogicStart.X() + static_cast<long>(nAddX) );
-                                    aLogicStart.setY( aLogicStart.Y() + static_cast<long>(nAddY) );
+                                    aLogicStart.AdjustX(static_cast<long>(nAddX) );
+                                    aLogicStart.AdjustY(static_cast<long>(nAddY) );
                                 }
 
                                 //  bSimClip is not used here (because nOriVal is set)
