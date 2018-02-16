@@ -22,10 +22,22 @@ $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,gcc3_uno)) : \
 endif
 
 else ifeq ($(CPUNAME),ARM64)
-
 bridges_SELECTED_BRIDGE := gcc3_ios
 bridge_noopt_objects := cpp2uno except uno2cpp
 bridge_asm_objects := ios64_helper
+
+#HACK
+$(SRCDIR)/bridges/source/cpp_uno/gcc3_ios/ios64_helper.s: \
+	$(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_ios)/codesnippets.S
+
+$(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_ios)/codesnippets.S: \
+	$(SRCDIR)/bridges/source/cpp_uno/gcc3_ios/generate-snippets.pl \
+        | $(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_ios)/.dir
+	$(PERL) $< > $@
+
+$(call gb_Library_get_clean_target,$(gb_CPPU_ENV)_uno) :
+	rm -f $(WORKDIR)/CustomTarget/bridges/source/cpp_uno/gcc3_ios/codesnippets.S
+
 
 else ifeq ($(CPUNAME),AARCH64)
 
