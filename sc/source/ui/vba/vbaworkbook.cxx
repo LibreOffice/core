@@ -103,7 +103,7 @@ bool ScVbaWorkbook::setFilterPropsFromFormat( sal_Int32 nFormat, uno::Sequence< 
             switch( nFormat )
             {
                 case excel::XlFileFormat::xlCSV:
-                    rProps[ index ].Value <<= OUString("Text - txt - csv (StarCalc)");
+                    rProps[ index ].Value <<= OUString(SC_TEXT_CSV_FILTER_NAME);
                     break;
                 case excel::XlFileFormat::xlDBF4:
                     rProps[ index ].Value <<= OUString("DBF");
@@ -150,7 +150,7 @@ ScVbaWorkbook::getFileFormat(  )
            aArgs[1].Value >>= aFilterName;
         }
 
-        if (aFilterName == "Text - txt - csv (StarCalc)") {
+        if (aFilterName == SC_TEXT_CSV_FILTER_NAME) {
             aFileFormat = excel::XlFileFormat::xlCSV; //xlFileFormat.
         }
 

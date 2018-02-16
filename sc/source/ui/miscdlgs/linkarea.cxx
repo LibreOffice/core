@@ -258,7 +258,7 @@ void ScLinkedAreaDlg::UpdateSourceRanges()
     if ( pSourceShell )
     {
         std::shared_ptr<const SfxFilter> pFilter = pSourceShell->GetMedium()->GetFilter();
-        if (pFilter && pFilter->GetFilterName() == "Text - txt - csv (StarCalc)")
+        if (pFilter && pFilter->GetFilterName() == SC_TEXT_CSV_FILTER_NAME)
         {
             // Insert dummy All range to have something selectable.
             m_pLbRanges->InsertEntry("CSV_all");

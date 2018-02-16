@@ -272,7 +272,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
     SCROW nHeight = 0;
     ScRangeList aSourceRanges;
 
-    if (rNewFilter == "Text - txt - csv (StarCalc)" && aTempArea == "CSV_all")
+    if (rNewFilter == SC_TEXT_CSV_FILTER_NAME && aTempArea == "CSV_all")
     {
         // The dummy All range. All data, including top/left empty
         // rows/columns.

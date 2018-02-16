@@ -50,6 +50,9 @@ enum class SvNumFormatType : sal_Int16;
 
 #define STRING_STANDARD "Standard"
 
+// Have the dreaded programmatic filter name defined in one place.
+#define SC_TEXT_CSV_FILTER_NAME "Text - txt - csv (StarCalc)"
+
 // characters
 
 const sal_Unicode CHAR_NBSP     = 0x00A0;

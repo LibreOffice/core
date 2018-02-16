@@ -254,7 +254,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
         sFormat = OUString::number( nDelim ) + ",34,0,1";
         sProps[ nIndex++ ].Value <<= sFormat;
         sProps[ nIndex ].Name = "FilterName";
-        sProps[ nIndex++ ].Value <<= OUString( "Text - txt - csv (StarCalc)" );
+        sProps[ nIndex++ ].Value <<= OUString( SC_TEXT_CSV_FILTER_NAME );
         // Ensure WORKAROUND_CSV_TXT_BUG_i60158 gets called in typedetection.cxx so
         // csv is forced for deep detected 'writerxxx' types
         sProps[ nIndex ].Name = "DocumentService";

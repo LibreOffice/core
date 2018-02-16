@@ -145,7 +145,7 @@ using ::std::vector;
 
 static const sal_Char pFilterSc50[]     = "StarCalc 5.0";
 static const sal_Char pFilterXML[]      = "StarOffice XML (Calc)";
-static const sal_Char pFilterAscii[]    = "Text - txt - csv (StarCalc)";
+static const sal_Char pFilterAscii[]    = SC_TEXT_CSV_FILTER_NAME;
 static const sal_Char pFilterLotus[]    = "Lotus";
 static const sal_Char pFilterQPro6[]    = "Quattro Pro 6.0";
 static const sal_Char pFilterExcel4[]   = "MS Excel 4.0";
