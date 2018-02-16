@@ -204,7 +204,7 @@ class WW8TabDesc
     WW8TabBandDesc* m_pFirstBand;
     WW8TabBandDesc* m_pActBand;
 
-    SwPosition* m_pTmpPos;
+    std::unique_ptr<SwPosition> m_xTmpPos;
 
     SwTableNode* m_pTableNd;          // table node
     const SwTableLines* m_pTabLines;  // row array of node
