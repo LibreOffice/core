@@ -493,8 +493,8 @@ void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
 
                 // align with grid
                 Size aGridSize_(long(pDlgEdView->GetSnapGridWidthX()), long(pDlgEdView->GetSnapGridWidthY()));
-                aSize.setWidth( aSize.Width() - aSize.Width()  % aGridSize_.Width() );
-                aSize.setHeight( aSize.Height() - aSize.Height() % aGridSize_.Height() );
+                aSize.AdjustWidth( -(aSize.Width()  % aGridSize_.Width()) );
+                aSize.AdjustHeight( -(aSize.Height() % aGridSize_.Height()) );
 
                 Point  aPos;
                 Size   aOutSize = rRenderContext.GetOutputSize();
@@ -502,16 +502,16 @@ void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
                 aPos.setY( (aOutSize.Height()>>1) -  (aSize.Height()>>1) );
 
                 // align with grid
-                aPos.setX( aPos.X() - aPos.X() % aGridSize_.Width() );
-                aPos.setY( aPos.Y() - aPos.Y() % aGridSize_.Height() );
+                aPos.AdjustX( -(aPos.X() % aGridSize_.Width()) );
+                aPos.AdjustY( -(aPos.Y() % aGridSize_.Height()) );
 
                 // don't put in the corner
                 Point aMinPos = rRenderContext.PixelToLogic( Point( 30, 20 ) );
                 if( (aPos.X() < aMinPos.X()) || (aPos.Y() < aMinPos.Y()) )
                 {
                     aPos = aMinPos;
-                    aPos.setX( aPos.X() - aPos.X() % aGridSize_.Width() );
-                    aPos.setY( aPos.Y() - aPos.Y() % aGridSize_.Height() );
+                    aPos.AdjustX( -(aPos.X() % aGridSize_.Width()) );
+                    aPos.AdjustY( -(aPos.Y() % aGridSize_.Height()) );
                 }
 
                 // set dialog position and size
@@ -617,8 +617,8 @@ void DlgEditor::CreateDefaultObject()
         // set position and size
         Size aSize = rWindow.PixelToLogic( Size( 96, 24 ) );
         Point aPoint = pDlgEdForm->GetSnapRect().Center();
-        aPoint.setX( aPoint.X() - aSize.Width() / 2 );
-        aPoint.setY( aPoint.Y() - aSize.Height() / 2 );
+        aPoint.AdjustX( -(aSize.Width() / 2) );
+        aPoint.AdjustY( -(aSize.Height() / 2) );
         pDlgEdObj->SetSnapRect( tools::Rectangle( aPoint, aSize ) );
 
         // set default property values
@@ -1156,8 +1156,8 @@ void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not wor
     pPrinter->SetFont( aFont );
 
     Size aPaperSz = pPrinter->GetOutputSize();
-    aPaperSz.setWidth( aPaperSz.Width() - (Print::nLeftMargin + Print::nRightMargin) );
-    aPaperSz.setHeight( aPaperSz.Height() - (Print::nTopMargin + Print::nBottomMargin) );
+    aPaperSz.AdjustWidth( -(Print::nLeftMargin + Print::nRightMargin) );
+    aPaperSz.AdjustHeight( -(Print::nTopMargin + Print::nBottomMargin) );
 
     lcl_PrintHeader( pPrinter, rTitle );
 
@@ -1186,8 +1186,8 @@ void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not wor
         (aPaperSz.Width() / 2) - (aOutputSz.Width() / 2),
         (aPaperSz.Height()/ 2) - (aOutputSz.Height() / 2));
 
-    aPosOffs.setX( aPosOffs.X() + Print::nLeftMargin );
-    aPosOffs.setY( aPosOffs.Y() + Print::nTopMargin );
+    aPosOffs.AdjustX(Print::nLeftMargin );
+    aPosOffs.AdjustY(Print::nTopMargin );
 
     pPrinter->DrawBitmap( aPosOffs, aOutputSz, aDlg );
 

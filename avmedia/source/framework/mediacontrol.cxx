@@ -71,22 +71,22 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     mpTimeSlider->SetEndSlideHdl( LINK( this, MediaControl, implTimeEndHdl ) );
     mpTimeSlider->SetSizePixel( Size( 128, mpPlayToolBox->GetSizePixel().Height() ) );
     mpTimeSlider->Show();
-    maMinSize.Width() += mpTimeSlider->GetSizePixel().Width();
+    maMinSize.AdjustWidth(mpTimeSlider->GetSizePixel().Width() );
 
     const OUString aTimeText( " 00:00:00/00:00:00 " );
     mpTimeEdit->SetSizePixel( Size( mpTimeEdit->GetTextWidth( aTimeText ) + 8, mpPlayToolBox->GetSizePixel().Height() ) );
     mpTimeEdit->SetControlBackground( Application::GetSettings().GetStyleSettings().GetWindowColor() );
-    maMinSize.Width() += mpTimeEdit->GetSizePixel().Width();
+    maMinSize.AdjustWidth(mpTimeEdit->GetSizePixel().Width() );
 
     mpMuteToolBox->SetSelectHdl( LINK( this, MediaControl, implSelectHdl ) );
     mpMuteToolBox->SetSizePixel( mpMuteToolBox->CalcWindowSizePixel() );
     mpMuteToolBox->Show();
-    maMinSize.Width() += mpMuteToolBox->GetSizePixel().Width();
+    maMinSize.AdjustWidth(mpMuteToolBox->GetSizePixel().Width() );
 
     mpVolumeSlider->SetSlideHdl( LINK( this, MediaControl, implVolumeHdl ) );
     mpVolumeSlider->SetSizePixel( Size( 48, mpPlayToolBox->GetSizePixel().Height() ) );
     mpVolumeSlider->Show();
-    maMinSize.Width() += mpVolumeSlider->GetSizePixel().Width();
+    maMinSize.AdjustWidth(mpVolumeSlider->GetSizePixel().Width() );
 
     mpZoomListBox->SetSizePixel( Size( mpTimeEdit->GetSizePixel().Width(), 260 ) );
     mpZoomListBox->SetSelectHdl( LINK( this, MediaControl, implZoomSelectHdl ) );
@@ -98,7 +98,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     mpZoomToolBox->SetSelectHdl( LINK( this, MediaControl, implSelectHdl ) );
     mpZoomToolBox->SetSizePixel( mpZoomToolBox->CalcWindowSizePixel() );
     mpZoomToolBox->Show();
-    maMinSize.Width() += mpZoomToolBox->GetSizePixel().Width();
+    maMinSize.AdjustWidth(mpZoomToolBox->GetSizePixel().Width() );
 
     const OUString aMediaPath( AvmResId( AVMEDIA_MEDIA_PATH_DEFAULT ) );
     mpMediaPath->SetText(aMediaPath);
@@ -106,12 +106,12 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     mpMediaPath->SetSizePixel( Size( mpMediaPath->GetTextWidth( aMediaPath ) + 400, mpPlayToolBox->GetSizePixel().Height() ) ); // maybe extend the no. 400 to span the screen width
     mpMediaPath->SetControlBackground( Application::GetSettings().GetStyleSettings().GetWindowColor() );
     mpMediaPath->Show();
-    maMinSize.Width() += mpMediaPath->GetSizePixel().Width();
+    maMinSize.AdjustWidth(mpMediaPath->GetSizePixel().Width() );
 
     if( meControlStyle == MEDIACONTROLSTYLE_MULTILINE )
     {
-        maMinSize.Width() = 256;
-        maMinSize.Height() = ( maMinSize.Height() << 1 ) + AVMEDIA_CONTROLOFFSET;
+        maMinSize.setWidth( 256 );
+        maMinSize.setHeight( ( maMinSize.Height() << 1 ) + AVMEDIA_CONTROLOFFSET );
         mpZoomToolBox->SetBackground();
         mpZoomToolBox->SetPaintTransparent( true );
     }
@@ -178,7 +178,7 @@ void MediaControl::UpdateURLField(MediaItem const & tempItem)
     mpMediaPath->SetSizePixel( Size( mpMediaPath->GetTextWidth( aURL ) + 8, mpPlayToolBox->GetSizePixel().Height() ) );
     mpMediaPath->SetControlBackground( Application::GetSettings().GetStyleSettings().GetWindowColor() );
     mpMediaPath->Show();
-    maMinSize.Width() += mpMediaPath->GetSizePixel().Width();
+    maMinSize.AdjustWidth(mpMediaPath->GetSizePixel().Width() );
 }
 
 void MediaControl::Resize()
@@ -199,22 +199,22 @@ void MediaControl::Resize()
 
         mpPlayToolBox->SetPosSizePixel( aPos, mpPlayToolBox->GetSizePixel() );
 
-        aPos.X() += nPlayToolBoxWidth;
+        aPos.AdjustX(nPlayToolBoxWidth );
         mpTimeSlider->SetPosSizePixel( aPos, Size( nTimeSliderWidth, nTimeSliderHeight ) );
 
-        aPos.X() += nTimeSliderWidth + AVMEDIA_CONTROLOFFSET;
+        aPos.AdjustX(nTimeSliderWidth + AVMEDIA_CONTROLOFFSET );
         mpTimeEdit->SetPosSizePixel( aPos, mpTimeEdit->GetSizePixel() );
 
-        aPos.X() += nTimeEditWidth + AVMEDIA_CONTROLOFFSET;
+        aPos.AdjustX(nTimeEditWidth + AVMEDIA_CONTROLOFFSET );
         mpMuteToolBox->SetPosSizePixel( aPos, mpMuteToolBox->GetSizePixel() );
 
-        aPos.X() += nMuteToolBoxWidth;
+        aPos.AdjustX(nMuteToolBoxWidth );
         mpVolumeSlider->SetPosSizePixel( aPos, mpVolumeSlider->GetSizePixel() );
 
-        aPos.X() += nVolumeSliderWidth + AVMEDIA_CONTROLOFFSET;
+        aPos.AdjustX(nVolumeSliderWidth + AVMEDIA_CONTROLOFFSET );
         mpZoomToolBox->SetPosSizePixel( aPos, mpZoomToolBox->GetSizePixel() );
 
-        aPos.X() += nZoomToolBoxWidth + AVMEDIA_CONTROLOFFSET;
+        aPos.AdjustX(nZoomToolBoxWidth + AVMEDIA_CONTROLOFFSET );
         mpMediaPath->SetPosSizePixel( aPos, mpMediaPath->GetSizePixel() );
     }
     else
@@ -223,20 +223,20 @@ void MediaControl::Resize()
 
         mpTimeSlider->SetPosSizePixel( aPos, Size( nTimeSliderWidth, nTimeSliderHeight ) );
 
-        aPos.X() += nTimeSliderWidth + AVMEDIA_CONTROLOFFSET;
+        aPos.AdjustX(nTimeSliderWidth + AVMEDIA_CONTROLOFFSET );
         mpTimeEdit->SetPosSizePixel( aPos, mpTimeEdit->GetSizePixel() );
 
-        aPos.X() = 0;
-        aPos.Y() += nTimeSliderHeight + AVMEDIA_CONTROLOFFSET;
+        aPos.setX( 0 );
+        aPos.AdjustY(nTimeSliderHeight + AVMEDIA_CONTROLOFFSET );
         mpPlayToolBox->SetPosSizePixel( aPos, mpPlayToolBox->GetSizePixel() );
 
-        aPos.X() = GetSizePixel().Width() - nVolumeSliderWidth - nMuteToolBoxWidth - nZoomToolBoxWidth - AVMEDIA_CONTROLOFFSET;
+        aPos.setX( GetSizePixel().Width() - nVolumeSliderWidth - nMuteToolBoxWidth - nZoomToolBoxWidth - AVMEDIA_CONTROLOFFSET );
         mpMuteToolBox->SetPosSizePixel( aPos, mpMuteToolBox->GetSizePixel() );
 
-        aPos.X() += nMuteToolBoxWidth;
+        aPos.AdjustX(nMuteToolBoxWidth );
         mpVolumeSlider->SetPosSizePixel( aPos, mpVolumeSlider->GetSizePixel() );
 
-        aPos.X() = GetSizePixel().Width() - nZoomToolBoxWidth;
+        aPos.setX( GetSizePixel().Width() - nZoomToolBoxWidth );
         mpZoomToolBox->SetPosSizePixel( aPos, mpZoomToolBox->GetSizePixel() );
     }
 }
