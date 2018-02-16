@@ -374,8 +374,8 @@ void SfxTemplatePanelControl::StateChanged( StateChangedType nStateChange )
         Point aPoint = pEditWin->OutputToScreenPixel( pEditWin->GetPosPixel() );
         aPoint = GetParent()->ScreenToOutputPixel( aPoint );
         Size aWinSize = GetSizePixel();
-        aPoint.setX( aPoint.X() + aSize.Width() - aWinSize.Width() - 20 );
-        aPoint.setY( aPoint.Y() + aSize.Height() / 2 - aWinSize.Height() / 2 );
+        aPoint.AdjustX(aSize.Width() - aWinSize.Width() - 20 );
+        aPoint.AdjustY(aSize.Height() / 2 - aWinSize.Height() / 2 );
         // SetFloatingPos( aPoint );
     }
 
@@ -2310,7 +2310,7 @@ void SfxTemplateDialog_Impl::Resize()
             pTreeBox->SetPosPixel(aFmtPos);
     }
     else
-        aFmtSize.setHeight( aFmtSize.Height() + aFilterSize.Height() );
+        aFmtSize.AdjustHeight(aFilterSize.Height() );
 
     aFilterLb->SetSizePixel(aFilterSize);
     aFmtLb->SetSizePixel( aFmtSize );

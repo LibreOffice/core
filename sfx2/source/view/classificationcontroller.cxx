@@ -258,7 +258,7 @@ ClassificationControl::ClassificationControl(vcl::Window* pParent)
     Size aTextSize(m_pLabel->GetTextWidth(aText), m_pLabel->GetTextHeight());
 
     // Padding.
-    aTextSize.setWidth( aTextSize.Width() + 12 );
+    aTextSize.AdjustWidth(12 );
     m_pLabel->SetText(aText);
     m_pLabel->SetSizePixel(aTextSize);
     m_pLabel->Show();

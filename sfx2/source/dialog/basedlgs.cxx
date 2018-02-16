@@ -230,8 +230,8 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
 
                 Size aParentSize = GetParent()->GetOutputSizePixel();
                 Size aDlgSize = GetSizePixel();
-                aPos.setX( aPos.X() + ( aParentSize.Width() - aDlgSize.Width() ) / 2 );
-                aPos.setY( aPos.Y() + ( aParentSize.Height() - aDlgSize.Height() ) / 2 );
+                aPos.AdjustX(( aParentSize.Width() - aDlgSize.Width() ) / 2 );
+                aPos.AdjustY(( aParentSize.Height() - aDlgSize.Height() ) / 2 );
 
                 Point aPoint;
                 tools::Rectangle aRect = GetDesktopRectPixel();

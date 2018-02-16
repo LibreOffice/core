@@ -234,7 +234,7 @@ tools::Rectangle LayoutPanels (
         SetupVerticalScrollBar(rVerticalScrollBar, nContentHeight, aBox.GetHeight());
 
     const sal_Int32 nUsedHeight (PlacePanels(rLayoutItems, nWidth, eMode, rScrollContainer));
-    aBox.SetTop( aBox.Top() + nUsedHeight );
+    aBox.AdjustTop(nUsedHeight );
     return aBox;
 }
 

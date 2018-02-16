@@ -2287,8 +2287,8 @@ WaitWindow_Impl::WaitWindow_Impl() : WorkWindow(nullptr, WB_BORDER | WB_3DLOOK)
     maText = SfxResId(RID_CNT_STR_WAITING);
     maRect = GetTextRect(aRect, maText, mnTextStyle);
     aRect = maRect;
-    aRect.Right() += 2 * X_OFFSET;
-    aRect.Bottom() += 2 * Y_OFFSET;
+    aRect.AdjustRight(2 * X_OFFSET );
+    aRect.AdjustBottom(2 * Y_OFFSET );
     maRect.SetPos(Point(X_OFFSET, Y_OFFSET));
     SetOutputSizePixel(aRect.GetSize());
 
