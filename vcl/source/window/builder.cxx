@@ -3388,6 +3388,30 @@ short VclBuilder::get_response(const vcl::Window *pWindow) const
 
 void VclBuilder::set_response(const OString& sID, short nResponse)
 {
+    switch (nResponse)
+    {
+        case -5:
+            nResponse = RET_OK;
+            break;
+        case -6:
+            nResponse = RET_CANCEL;
+            break;
+        case -7:
+            nResponse = RET_CLOSE;
+            break;
+        case -8:
+            nResponse = RET_YES;
+            break;
+        case -9:
+            nResponse = RET_NO;
+            break;
+        case -11:
+            nResponse = RET_HELP;
+            break;
+    };
+
+    assert(nResponse >= 0);
+
     for (auto & child : m_aChildren)
     {
         if (child.m_sID == sID)
