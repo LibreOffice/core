@@ -22,7 +22,6 @@
 
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/configmgr.hxx>
 
 #include <scerrors.hxx>
 #include <root.hxx>
@@ -43,9 +42,8 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
 
     ImportLotus aLotusImport(aContext, *pStream, pDocument, eSrc);
 
-    const bool bWithWK3 = utl::ConfigManager::IsFuzzing() || ScFilterOptions().GetWK3Flag();
     ErrCode eRet;
-    if (bWithWK3)
+    if (ScFilterOptions().GetWK3Flag())
         eRet = aLotusImport.Read();
     else
         eRet = ErrCode(0xFFFFFFFF);  // force WK1 /WKS

@@ -18,7 +18,9 @@
  */
 
 #include <document.hxx>
+#include <docoptio.hxx>
 
+#include <scdll.hxx>
 #include <scerrors.hxx>
 #include <root.hxx>
 #include "lotfilter.hxx"
@@ -28,7 +30,7 @@
 
 class ScFormulaCell;
 
-ErrCode ImportLotus::Read()
+ErrCode ImportLotus::parse()
 {
     enum STATE
     {
@@ -223,8 +225,13 @@ ErrCode ImportLotus::Read()
         }
     }
 
-    pD->CalcAfterLoad();
+    return eRet;
+}
 
+ErrCode ImportLotus::Read()
+{
+    ErrCode eRet = parse();
+    pD->CalcAfterLoad();
     return eRet;
 }
 
@@ -305,6 +312,30 @@ ErrCode ImportLotus::Read(SvStream& rIn)
     rContext.pLotusRoot->maAttrTable.Apply(rContext.pLotusRoot, static_cast<SCTAB>(nExtTab));
 
     return eRet;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWKS(SvStream& rStream)
+{
+    ScDLL::Init();
+    ScDocument aDocument;
+    ScDocOptions aDocOpt = aDocument.GetDocOptions();
+    aDocOpt.SetLookUpColRowNames(false);
+    aDocument.SetDocOptions(aDocOpt);
+    aDocument.MakeTable(0);
+    aDocument.EnableExecuteLink(false);
+    aDocument.SetInsertingFromOtherDoc(true);
+
+    LotusContext aContext;
+    ImportLotus aLotusImport(aContext, rStream, &aDocument, RTL_TEXTENCODING_ASCII_US);
+
+    ErrCode eRet = aLotusImport.parse();
+    if (eRet == ErrCode(0xFFFFFFFF))
+    {
+        rStream.Seek(0);
+        eRet = ScImportLotus123old(aContext, rStream, &aDocument, RTL_TEXTENCODING_ASCII_US);
+    }
+
+    return eRet == ERRCODE_NONE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
