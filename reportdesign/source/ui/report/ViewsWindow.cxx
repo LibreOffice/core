@@ -204,12 +204,12 @@ void OViewsWindow::impl_resizeSectionWindow(OSectionWindow& _rSectionWindow,Poin
         aSectionSize.setHeight( nMinHeight );
     }
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-    aSectionSize.setHeight( aSectionSize.Height() + static_cast<long>(rSettings.GetSplitSize() * static_cast<double>(_rSectionWindow.GetMapMode().GetScaleY())) );
+    aSectionSize.AdjustHeight(static_cast<long>(rSettings.GetSplitSize() * static_cast<double>(_rSectionWindow.GetMapMode().GetScaleY())) );
 
     if ( _bSet )
         _rSectionWindow.SetPosSizePixel(_rStartPoint,aSectionSize);
 
-    _rStartPoint.setY( _rStartPoint.Y() + aSectionSize.Height() );
+    _rStartPoint.AdjustY(aSectionSize.Height() );
 }
 
 
@@ -261,7 +261,7 @@ void OViewsWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     Size aOut(GetOutputSizePixel());
     long nStartWidth = long(REPORT_STARTMARKER_WIDTH * rRenderContext.GetMapMode().GetScaleX());
 
-    aOut.setWidth( aOut.Width() - nStartWidth );
+    aOut.AdjustWidth( -nStartWidth );
     aOut = rRenderContext.PixelToLogic(aOut);
 
     tools::Rectangle aRect(rRenderContext.PixelToLogic(Point(nStartWidth,0)), aOut);
@@ -1023,7 +1023,7 @@ void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const tools::Recta
             rView.MarkObj( pNewObj, rView.GetSdrPageView() );
         }
         const long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
-        aNewPos.setY( aNewPos.Y() - nSectionHeight );
+        aNewPos.AdjustY( -nSectionHeight );
     }
 }
 
@@ -1045,7 +1045,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
         if (pView == _pSection)
             break;
         const long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
-        aAbsolutePnt.setY( aAbsolutePnt.Y() +  nSectionHeight );
+        aAbsolutePnt.AdjustY(nSectionHeight );
     }
     m_aDragDelta = Point(SAL_MAX_INT32, SAL_MAX_INT32);
     SAL_INFO(
@@ -1096,7 +1096,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
         rView.SetWorkArea( aClipRect );
 
         const long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
-        aNewObjPos.setY( aNewObjPos.Y() + nSectionHeight );
+        aNewObjPos.AdjustY(nSectionHeight );
     }
 
     const sal_Int32 nDeltaX = std::abs(aLeftTop.X() - aAbsolutePnt.X());
@@ -1128,7 +1128,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
         rReportSection.getSectionView().BegDragObj(aNewPos, nullptr, pHdl, nDrgLog);
 
         const long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
-        aNewPos.setY( aNewPos.Y() - nSectionHeight );
+        aNewPos.AdjustY( -nSectionHeight );
     }
 }
 
@@ -1157,11 +1157,11 @@ void OViewsWindow::BegMarkObj(const Point& _aPnt,const OSectionView* _pSection)
         else if ( bAdd )
         {
             const long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
-            aNewPos.setY( aNewPos.Y() + nSectionHeight );
+            aNewPos.AdjustY(nSectionHeight );
         }
         else
         {
-            aNewPos.setY( aNewPos.Y() - nLastSectionHeight );
+            aNewPos.AdjustY( -nLastSectionHeight );
         }
         rReportSection.getSectionView().BegMarkObj ( aNewPos );
         nLastSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
@@ -1189,7 +1189,7 @@ OSectionView* OViewsWindow::getSectionRelativeToPosition(const OSectionView* _pS
         {
             OReportSection& rReportSection = (*aIter)->getReportSection();
             const sal_Int32 nHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
-            _rPnt.setY( _rPnt.Y() + nHeight );
+            _rPnt.AdjustY(nHeight );
             if ( (nCount -1) > 0 && (_rPnt.Y() < 0) )
                 --aIter;
         }
@@ -1206,7 +1206,7 @@ OSectionView* OViewsWindow::getSectionRelativeToPosition(const OSectionView* _pS
             const long nHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
             if ( (_rPnt.Y() - nHeight) < 0  )
                 break;
-            _rPnt.setY( _rPnt.Y() - nHeight );
+            _rPnt.AdjustY( -nHeight );
         }
         if ( aIter != aEnd )
             pSection = &(*aIter)->getReportSection().getSectionView();
@@ -1361,7 +1361,7 @@ void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection, b
         if ( &rReportSection.getSectionView() == _pSection )
             break;
         const long nSectionHeight = (*aIter)->PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
-        aCurrentSectionPos.setY( aCurrentSectionPos.Y() + nSectionHeight );
+        aCurrentSectionPos.AdjustY(nSectionHeight );
     }
     aRealMousePos += aCurrentSectionPos;
 
@@ -1386,7 +1386,7 @@ void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection, b
             aClipRect.SetTop( -aPosForWorkArea.Y() );
             rView.SetWorkArea( aClipRect );
         }
-        aPosForWorkArea.setY( aPosForWorkArea.Y() + nSectionHeight );
+        aPosForWorkArea.AdjustY(nSectionHeight );
     }
 
 
@@ -1401,7 +1401,7 @@ void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection, b
         }
         rReportSection.getSectionView().MovAction ( aRealMousePos );
         const long nSectionHeight = (*aIter)->PixelToLogic((*aIter)->GetOutputSizePixel()).Height();
-        aRealMousePos.setY( aRealMousePos.Y() - nSectionHeight );
+        aRealMousePos.AdjustY( -nSectionHeight );
     }
 }
 
@@ -1491,7 +1491,7 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
                 {
                     // restrict movement to work area
                     tools::Rectangle rWorkArea = rView.GetWorkArea();
-                    rWorkArea.SetRight( ++rWorkArea.Right() );
+                    rWorkArea.AdjustRight( 1 );
 
                     if ( !rWorkArea.IsEmpty() )
                     {
@@ -1618,8 +1618,8 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
                             case SdrHdlKind::UpperLeft:
                             case SdrHdlKind::LowerLeft:
                             case SdrHdlKind::Upper:
-                                aNewRect.SetLeft( aNewRect.Left() + nX );
-                                aNewRect.SetTop( aNewRect.Top() + nY );
+                                aNewRect.AdjustLeft(nX );
+                                aNewRect.AdjustTop(nY );
                                 break;
                             case SdrHdlKind::UpperRight:
                             case SdrHdlKind::Right:

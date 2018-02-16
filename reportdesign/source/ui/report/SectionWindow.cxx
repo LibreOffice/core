@@ -231,7 +231,7 @@ void OSectionWindow::Resize()
     long nEndWidth = long(REPORT_ENDMARKER_WIDTH * GetMapMode().GetScaleX());
 
     const Point aThumbPos = m_pParent->getView()->getThumbPos();
-    aOutputSize.setWidth( aOutputSize.Width() - aThumbPos.X() );
+    aOutputSize.AdjustWidth( -(aThumbPos.X()) );
     aOutputSize.Height() -=  m_aSplitter->GetSizePixel().Height();
 
     if ( m_aStartMarker->isCollapsed() )
@@ -254,19 +254,19 @@ void OSectionWindow::Resize()
         Point aReportPos(nStartWidth,0);
         aSectionSize.setWidth( aOutputSize.Width() - nStartWidth );
         if ( bShowEndMarker )
-            aSectionSize.setWidth( aSectionSize.Width() - nEndWidth );
+            aSectionSize.AdjustWidth( -nEndWidth );
 
         m_aReportSection->SetPosSizePixel(aReportPos,aSectionSize);
 
         // set splitter
-        aReportPos.setY( aReportPos.Y() + aSectionSize.Height() );
+        aReportPos.AdjustY(aSectionSize.Height() );
         m_aSplitter->SetPosSizePixel(aReportPos,Size(aSectionSize.Width(),m_aSplitter->GetSizePixel().Height()));
         aSectionSize.setHeight( static_cast<long>(1000 * static_cast<double>(GetMapMode().GetScaleY())) );
         m_aSplitter->SetDragRectPixel( tools::Rectangle(Point(nStartWidth,0),aSectionSize));
 
         // set end marker
-        aReportPos.setX( aReportPos.X() + aSectionSize.Width() );
-        aReportPos.Y() = 0;
+        aReportPos.AdjustX(aSectionSize.Width() );
+        aReportPos.setY( 0 );
         m_aEndMarker->Show(bShowEndMarker);
         m_aEndMarker->SetPosSizePixel(aReportPos,Size(nEndWidth,aOutputSize.Height()));
     }

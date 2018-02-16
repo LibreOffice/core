@@ -125,7 +125,7 @@ Size OScrollWindowHelper::ResizeScrollBars()
     if ( aOutPixSz.Width() == 0 || aOutPixSz.Height() == 0 )
         return aOutPixSz;
 
-    aOutPixSz.setHeight( aOutPixSz.Height() - m_aReportWindow->getRulerHeight() );
+    aOutPixSz.AdjustHeight( -(m_aReportWindow->getRulerHeight()) );
     // determine the size of the output-area and if we need scrollbars
     const long nScrSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     bool bVVisible = false; // by default no vertical-ScrollBar
@@ -139,7 +139,7 @@ Size OScrollWindowHelper::ResizeScrollBars()
         if ( aOutPixSz.Width() < m_aTotalPixelSize.Width() && !bHVisible )
         {
             bHVisible = true;
-            aOutPixSz.setHeight( aOutPixSz.Height() - nScrSize );
+            aOutPixSz.AdjustHeight( -nScrSize );
             bChanged = true;
         }
 
@@ -147,14 +147,14 @@ Size OScrollWindowHelper::ResizeScrollBars()
         if ( aOutPixSz.Height() < m_aTotalPixelSize.Height() && !bVVisible )
         {
             bVVisible = true;
-            aOutPixSz.setWidth( aOutPixSz.Width() - nScrSize );
+            aOutPixSz.AdjustWidth( -nScrSize );
             bChanged = true;
         }
 
     }
     while ( bChanged );   // until no visibility has changed
 
-    aOutPixSz.setHeight( aOutPixSz.Height() + m_aReportWindow->getRulerHeight() );
+    aOutPixSz.AdjustHeight(m_aReportWindow->getRulerHeight() );
 
     // show or hide scrollbars
     m_aVScroll->Show( bVVisible );
