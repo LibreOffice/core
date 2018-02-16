@@ -1695,7 +1695,6 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     m_pIo(pIoClass),
     m_pFirstBand(nullptr),
     m_pActBand(nullptr),
-    m_pTmpPos(nullptr),
     m_pTableNd(nullptr),
     m_pTabLines(nullptr),
     m_pTabLine(nullptr),
@@ -2362,7 +2361,7 @@ void WW8TabDesc::CreateSwTable()
     if (bInsNode)
         m_pIo->AppendTextNode(*pPoint);
 
-    m_pTmpPos = new SwPosition( *m_pIo->m_pPaM->GetPoint() );
+    m_xTmpPos.reset(new SwPosition(*m_pIo->m_pPaM->GetPoint()));
 
     // The table is small: The number of columns is the lowest count of
     // columns of the origin, because inserting is faster than deleting.
@@ -2370,7 +2369,7 @@ void WW8TabDesc::CreateSwTable()
     // rows of a band can be duplicated easy.
     m_pTable = m_pIo->m_rDoc.InsertTable(
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 0 ),
-            *m_pTmpPos, m_nBands, m_nDefaultSwCols, m_eOri );
+            *m_xTmpPos, m_nBands, m_nDefaultSwCols, m_eOri );
 
     OSL_ENSURE(m_pTable && m_pTable->GetFrameFormat(), "insert table failed");
     if (!m_pTable || !m_pTable->GetFrameFormat())
@@ -2388,7 +2387,7 @@ void WW8TabDesc::CreateSwTable()
     // contains a Pagedesc. If so that Pagedesc would be moved to the
     // row after the table, that would be wrong. So delete and
     // set later to the table format.
-    if (SwTextNode *const pNd = m_pTmpPos->nNode.GetNode().GetTextNode())
+    if (SwTextNode *const pNd = m_xTmpPos->nNode.GetNode().GetTextNode())
     {
         if (const SfxItemSet* pSet = pNd->GetpSwAttrSet())
         {
@@ -2673,9 +2672,9 @@ void WW8TabDesc::ParkPaM()
 
 void WW8TabDesc::MoveOutsideTable()
 {
-    OSL_ENSURE(m_pTmpPos && m_pIo, "I've forgotten where the table is anchored");
-    if (m_pTmpPos && m_pIo)
-        *m_pIo->m_pPaM->GetPoint() = *m_pTmpPos;
+    OSL_ENSURE(m_xTmpPos.get() && m_pIo, "I've forgotten where the table is anchored");
+    if (m_xTmpPos && m_pIo)
+        *m_pIo->m_pPaM->GetPoint() = *m_xTmpPos;
 }
 
 void WW8TabDesc::FinishSwTable()
@@ -2687,8 +2686,7 @@ void WW8TabDesc::FinishSwTable()
     m_pIo->m_xCtrlStck->SetAttr( *m_pIo->m_pPaM->GetPoint(), 0, false);
 
     MoveOutsideTable();
-    delete m_pTmpPos;
-    m_pTmpPos = nullptr;
+    m_xTmpPos.reset();
 
     aDup.Insert(*m_pIo->m_pPaM->GetPoint());
 
