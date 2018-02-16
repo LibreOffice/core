@@ -489,7 +489,7 @@ void Window::dispose()
     if ( pSVData->maWinData.mpLastDeacWin == this )
         pSVData->maWinData.mpLastDeacWin = nullptr;
 
-    if ( mpWindowImpl->mpFrameData )
+    if ( mpWindowImpl->mbFrame && mpWindowImpl->mpFrameData )
     {
         if ( mpWindowImpl->mpFrameData->mnFocusId )
             Application::RemoveUserEvent( mpWindowImpl->mpFrameData->mnFocusId );
