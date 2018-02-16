@@ -1633,8 +1633,8 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
         aImageSize.setHeight( static_cast<long>(fImageHeight) );
 
         Point aImagePos( pInfo->mrStartPos );
-        aImagePos.setX( aImagePos.X() + aOutSize.Width() - aImageSize.Width() - aOffset.Width() ) ;
-        aImagePos.setY( aImagePos.Y() + (aOutSize.Height() - aImageSize.Height()) / 2 );
+        aImagePos.AdjustX(aOutSize.Width() - aImageSize.Width() - aOffset.Width() ) ;
+        aImagePos.AdjustY((aOutSize.Height() - aImageSize.Height()) / 2 );
 
         pInfo->mpOutDev->DrawImage( aImagePos, aImageSize, maSlideImage );
 
@@ -1656,20 +1656,20 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
         aTextSz.setHeight( pInfo->mpOutDev->GetTextHeight() );
         if ( !bVertical )
         {
-            aTextPos.setY( aTextPos.Y() + (aOutSize.Height() - aTextSz.Height()) / 2 );
+            aTextPos.AdjustY((aOutSize.Height() - aTextSz.Height()) / 2 );
             if ( !bRightToLeftPara )
             {
-                aTextPos.setX( aTextPos.X() - aTextSz.Width() );
+                aTextPos.AdjustX( -(aTextSz.Width()) );
             }
             else
             {
-                aTextPos.setX( aTextPos.X() + aTextSz.Width() );
+                aTextPos.AdjustX(aTextSz.Width() );
             }
         }
         else
         {
-            aTextPos.setY( aTextPos.Y() - aTextSz.Width() );
-            aTextPos.setX( aTextPos.X() + nBulletHeight / 2 );
+            aTextPos.AdjustY( -(aTextSz.Width()) );
+            aTextPos.AdjustX(nBulletHeight / 2 );
         }
         pInfo->mpOutDev->DrawText( aTextPos, aPageText );
     }

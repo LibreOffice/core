@@ -603,7 +603,7 @@ IMPL_LINK( DrawViewShell, TabSplitHdl, TabBar *, pTab, void )
     }
 
     Point aPos = maTabControl->GetPosPixel();
-    aPos.setX( aPos.X() + aTabSize.Width() );
+    aPos.AdjustX(aTabSize.Width() );
 
     Size aScrSize(nMax - aTabSize.Width(), maScrBarWH.Height());
     mpHorizontalScrollBar->SetPosSizePixel(aPos, aScrSize);

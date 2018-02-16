@@ -354,8 +354,8 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  )
     // Reduce available width by one, as the slides might actually
     // render one pixel wider and higher as aPageSize below specifies
     // (when shapes of page size have visible border lines)
-    aOutputSize.setWidth( --aOutputSize.Width() );
-    aOutputSize.setHeight( --aOutputSize.Height() );
+    aOutputSize.AdjustWidth( -1 );
+    aOutputSize.Height() --;
 
     // Record mTranslationOffset
     mTranslationOffset.Height = aOutputOffset.Y();

@@ -124,22 +124,22 @@ void ImpCheckInsertPos(Point& rPos, const Size& rSize, const ::tools::Rectangle&
         {
             if(aMarkRect.Left() < rWorkArea.Left())
             {
-                rPos.setX( rPos.X() + rWorkArea.Left() - aMarkRect.Left() );
+                rPos.AdjustX(rWorkArea.Left() - aMarkRect.Left() );
             }
 
             if(aMarkRect.Right() > rWorkArea.Right())
             {
-                rPos.setX( rPos.X() - aMarkRect.Right() - rWorkArea.Right() );
+                rPos.AdjustX( -(aMarkRect.Right() - rWorkArea.Right()) );
             }
 
             if(aMarkRect.Top() < rWorkArea.Top())
             {
-                rPos.setY( rPos.Y() + rWorkArea.Top() - aMarkRect.Top() );
+                rPos.AdjustY(rWorkArea.Top() - aMarkRect.Top() );
             }
 
             if(aMarkRect.Bottom() > rWorkArea.Bottom())
             {
-                rPos.setY( rPos.Y() - aMarkRect.Bottom() - rWorkArea.Bottom() );
+                rPos.AdjustY( -(aMarkRect.Bottom() - rWorkArea.Bottom()) );
             }
         }
     }
@@ -545,8 +545,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                                         {
                                                             const SdrGluePoint& rGluePoint = (*pGlueList)[nInd];
                                                             Point aPosition = rGluePoint.GetAbsolutePos(*pConnObj);
-                                                            aPosition.setX( aPosition.X() + aVector.Width() );
-                                                            aPosition.setY( aPosition.Y() + aVector.Height() );
+                                                            aPosition.AdjustX(aVector.Width() );
+                                                            aPosition.AdjustY(aVector.Height() );
                                                             pCloneEdge->SetTailPoint(false, aPosition);
                                                         }
                                                     }
@@ -577,8 +577,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                                         {
                                                             const SdrGluePoint& rGluePoint = (*pGlueList)[nInd];
                                                             Point aPosition = rGluePoint.GetAbsolutePos(*pConnObj);
-                                                            aPosition.setX( aPosition.X() + aVector.Width() );
-                                                            aPosition.setY( aPosition.Y() + aVector.Height() );
+                                                            aPosition.AdjustX(aVector.Width() );
+                                                            aPosition.AdjustY(aVector.Height() );
                                                             pCloneEdge->SetTailPoint(true, aPosition);
                                                         }
                                                     }
@@ -844,8 +844,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 ::tools::Rectangle   aRect( pObj->GetLogicRect() );
                 Size        aSize( aRect.GetSize() );
 
-                maDropPos.setX( maDropPos.X() - ( aSize.Width() >> 1 ) );
-                maDropPos.setY( maDropPos.Y() - ( aSize.Height() >> 1 ) );
+                maDropPos.AdjustX( -( aSize.Width() >> 1 ) );
+                maDropPos.AdjustY( -( aSize.Height() >> 1 ) );
 
                 aRect.SetPos( maDropPos );
                 pObj->SetLogicRect( aRect );
@@ -991,8 +991,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     Size aMaxSize( mrDoc.GetMaxObjSize() );
 
-                    maDropPos.setX( maDropPos.X() - (std::min( aSize.Width(), aMaxSize.Width() ) >> 1) );
-                    maDropPos.setY( maDropPos.Y() - (std::min( aSize.Height(), aMaxSize.Height() ) >> 1) );
+                    maDropPos.AdjustX( -(std::min( aSize.Width(), aMaxSize.Width() ) >> 1) );
+                    maDropPos.AdjustY( -(std::min( aSize.Height(), aMaxSize.Height() ) >> 1) );
 
                     ::tools::Rectangle       aRect( maDropPos, aSize );
                     SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );
@@ -1161,8 +1161,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     Size aMaxSize( mrDoc.GetMaxObjSize() );
 
-                    maDropPos.setX( maDropPos.X() - (std::min( aSize.Width(), aMaxSize.Width() ) >> 1) );
-                    maDropPos.setY( maDropPos.Y() - (std::min( aSize.Height(), aMaxSize.Height() ) >> 1) );
+                    maDropPos.AdjustX( -(std::min( aSize.Width(), aMaxSize.Width() ) >> 1) );
+                    maDropPos.AdjustY( -(std::min( aSize.Height(), aMaxSize.Height() ) >> 1) );
 
                     ::tools::Rectangle       aRect( maDropPos, aSize );
                     SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );
@@ -1353,10 +1353,10 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 Point                   aHitPosB( rPos );
                 const SdrLayerIDSet*        pVisiLayer = &GetSdrPageView()->GetVisibleLayers();
 
-                aHitPosR.setX( aHitPosR.X() + n2HitLog );
-                aHitPosL.setX( aHitPosL.X() - n2HitLog );
-                aHitPosT.setY( aHitPosT.Y() + n2HitLog );
-                aHitPosB.setY( aHitPosB.Y() - n2HitLog );
+                aHitPosR.AdjustX(n2HitLog );
+                aHitPosL.AdjustX( -n2HitLog );
+                aHitPosT.AdjustY(n2HitLog );
+                aHitPosB.AdjustY( -n2HitLog );
 
                 if( bClosed &&
                     SdrObjectPrimitiveHit(*pPickObj, aHitPosR, nHitLog, *GetSdrPageView(), pVisiLayer, false) &&
