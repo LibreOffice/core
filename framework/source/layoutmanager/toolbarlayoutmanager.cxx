@@ -2576,10 +2576,10 @@ void ToolbarLayoutManager::implts_setLayoutInProgress( bool bInProgress )
 {
     ::tools::Rectangle aRect( rRect );
 
-    aRect.SetLeft( aRect.Left() - nHotZoneOffset );
-    aRect.SetTop( aRect.Top() - nHotZoneOffset );
-    aRect.SetRight( aRect.Right() + nHotZoneOffset );
-    aRect.SetBottom( aRect.Bottom() + nHotZoneOffset );
+    aRect.AdjustLeft( -nHotZoneOffset );
+    aRect.AdjustTop( -nHotZoneOffset );
+    aRect.AdjustRight(nHotZoneOffset );
+    aRect.AdjustBottom(nHotZoneOffset );
 
     return aRect;
 }

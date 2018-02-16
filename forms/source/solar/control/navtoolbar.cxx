@@ -634,7 +634,7 @@ namespace frm
         }
 
         Size aSize( _pItemWindow->GetTextWidth( sItemText ), /* _pItemWindow->GetSizePixel( ).Height() */ _pItemWindow->GetTextHeight() + 4 );
-        aSize.setWidth( aSize.Width() + 6 );
+        aSize.AdjustWidth(6 );
         _pItemWindow->SetSizePixel( aSize );
 
         m_pToolbar->SetItemWindow( _nItemId, _pItemWindow );

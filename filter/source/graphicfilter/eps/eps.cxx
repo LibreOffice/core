@@ -1140,7 +1140,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                         MapMode aMapMode( aSubstitute.GetPrefMapMode() );
                         Size aOutSize( OutputDevice::LogicToLogic( aSize, rVDev.GetMapMode(), aMapMode ) );
                         Point aOrigin( OutputDevice::LogicToLogic( aPoint, rVDev.GetMapMode(), aMapMode ) );
-                        aOrigin.setY( aOrigin.Y() + aOutSize.Height() );
+                        aOrigin.AdjustY(aOutSize.Height() );
                         aMapMode.SetOrigin( aOrigin );
                         aMapMode.SetScaleX( Fraction(aOutSize.Width() / ( nBoundingBox[ 2 ] - nBoundingBox[ 0 ] )) );
                         aMapMode.SetScaleY( Fraction(aOutSize.Height() / ( nBoundingBox[ 3 ] - nBoundingBox[ 1 ] )) );
@@ -2083,9 +2083,9 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
     if ( eTextAlign != ALIGN_BASELINE )
     {                                                       // PostScript does not know about FontAlignment
         if ( eTextAlign == ALIGN_TOP )                      // -> so I assume that
-            aPoint.setY( aPoint.Y() + ( aSize.Height() * 4 / 5 ) );       // the area under the baseline
+            aPoint.AdjustY( aSize.Height() * 4 / 5 );       // the area under the baseline
         else if ( eTextAlign == ALIGN_BOTTOM )              // is about 20% of the font size
-            aPoint.setY( aPoint.Y() - ( aSize.Height() / 5 ) );
+            aPoint.AdjustY( -( aSize.Height() / 5 ) );
     }
     ImplMoveTo( aPoint );
     if ( nRotation )

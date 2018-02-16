@@ -1033,7 +1033,7 @@ IMPL_LINK_NOARG( RemoteFilesDialog, SplitHdl, Splitter*, void )
     sal_Int32 nNewX = nSplitPos + m_pSplitter->GetSizePixel().Width();
     fileViewPos.setX( nNewX );
     Size fileViewSize = m_pFileView->GetSizePixel();
-    fileViewSize.setWidth( fileViewSize.Width() - ( nNewX - nOldX ) );
+    fileViewSize.AdjustWidth( -( nNewX - nOldX ) );
     m_pFileView->SetPosSizePixel( fileViewPos, fileViewSize );
 
     m_pSplitter->SetPosPixel( Point( placeSize.Width(), m_pSplitter->GetPosPixel().Y() ) );

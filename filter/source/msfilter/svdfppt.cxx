@@ -1143,8 +1143,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                 if ( eTVA == SDRTEXTVERTADJUST_BLOCK )
                                 {
                                     Size aTextSize( pText->GetTextSize() );
-                                    aTextSize.setWidth( aTextSize.Width() + nTextLeft + nTextRight );
-                                    aTextSize.setHeight( aTextSize.Height() + nTextTop + nTextBottom );
+                                    aTextSize.AdjustWidth(nTextLeft + nTextRight );
+                                    aTextSize.AdjustHeight(nTextTop + nTextBottom );
                                     if ( rTextRect.GetHeight() < aTextSize.Height() )
                                         pTObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
                                 }
@@ -1154,8 +1154,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                 if ( eTHA == SDRTEXTHORZADJUST_BLOCK )
                                 {
                                     Size aTextSize( pText->GetTextSize() );
-                                    aTextSize.setWidth( aTextSize.Width() + nTextLeft + nTextRight );
-                                    aTextSize.setHeight( aTextSize.Height() + nTextTop + nTextBottom );
+                                    aTextSize.AdjustWidth(nTextLeft + nTextRight );
+                                    aTextSize.AdjustHeight(nTextTop + nTextBottom );
                                     if ( rTextRect.GetWidth() < aTextSize.Width() )
                                         pTObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_CENTER ) );
                                 }
@@ -2503,8 +2503,8 @@ Size SdrPowerPointImport::GetPageSize() const
             aRet.setWidth( BigMulDiv( aRet.Width(), nInchMul, nInchDiv ) );
             aRet.setHeight( BigMulDiv( aRet.Height(), nInchMul, nInchDiv ) );
         }
-        aRet.setWidth( aRet.Width() + 5 ); aRet.setWidth( aRet.Width() / 10 ); aRet.setWidth( aRet.Width() * 10 );
-        aRet.setHeight( aRet.Height() + 5 ); aRet.setHeight( aRet.Height() / 10 ); aRet.setHeight( aRet.Height() * 10 );
+        aRet.AdjustWidth(5 ); aRet.setWidth( aRet.Width() / 10 ); aRet.setWidth( aRet.Width() * 10 );
+        aRet.AdjustHeight(5 ); aRet.setHeight( aRet.Height() / 10 ); aRet.setHeight( aRet.Height() * 10 );
         if ( bInch )
         {
             aRet.setWidth( BigMulDiv( aRet.Width(), nInchDiv, nInchMul ) );
@@ -5671,7 +5671,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
                     if ( aSize.Width() && aSize.Height() )
                     {
                         if ( aSize.Width () > 64 )
-                            aSize.Width () = 64;
+                            aSize.setWidth( 64 );
                         if ( aSize.Height() > 64 )
                             aSize.setHeight( 64 );
 

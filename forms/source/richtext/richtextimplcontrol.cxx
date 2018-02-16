@@ -545,10 +545,10 @@ namespace frm
     {
         void lcl_inflate( tools::Rectangle& _rRect, long _nInflateX, long _nInflateY )
         {
-            _rRect.SetLeft( _rRect.Left() - _nInflateX );
-            _rRect.SetRight( _rRect.Right() + _nInflateX );
-            _rRect.SetTop( _rRect.Top() - _nInflateY );
-            _rRect.SetBottom( _rRect.Bottom() + _nInflateY );
+            _rRect.AdjustLeft( -_nInflateX );
+            _rRect.AdjustRight(_nInflateX );
+            _rRect.AdjustTop( -_nInflateY );
+            _rRect.AdjustBottom(_nInflateY );
         }
     }
 
@@ -594,8 +594,8 @@ namespace frm
 
         tools::Rectangle aPlayground( aPos, aSize );
         Size aOnePixel( _pDev->PixelToLogic( Size( 1, 1 ) ) );
-        aPlayground.SetRight( aPlayground.Right() - aOnePixel.Width() );
-        aPlayground.SetBottom( aPlayground.Bottom() - aOnePixel.Height() );
+        aPlayground.AdjustRight( -(aOnePixel.Width()) );
+        aPlayground.AdjustBottom( -(aOnePixel.Height()) );
 
         // background
         _pDev->SetLineColor();

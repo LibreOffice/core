@@ -2020,8 +2020,8 @@ bool EscherPropertyContainer::CreatePolygonProperties(
                 for (sal_uInt16 i = 0; i < nPoints; ++i)             // write points from polygon to buffer
                 {
                     Point aPoint = aPolygon[ i ];
-                    aPoint.setX( aPoint.X() - rGeoRect.X );
-                    aPoint.setY( aPoint.Y() - rGeoRect.Y );
+                    aPoint.AdjustX( -(rGeoRect.X) );
+                    aPoint.AdjustY( -(rGeoRect.Y) );
 
                     *pPtr++ = static_cast<sal_uInt8>( aPoint.X() );
                     *pPtr++ = static_cast<sal_uInt8>( aPoint.X() >> 8 );
