@@ -128,7 +128,7 @@ void TitleBar::PaintTitle(vcl::RenderContext& rRenderContext, const tools::Recta
         rRenderContext.DrawImage(Point(aTitleBox.Left() + gnLeftIconSpace,
                                        aTitleBox.Top() + (aTitleBox.GetHeight() - maIcon.GetSizePixel().Height()) / 2),
                                  maIcon);
-        aTitleBox.SetLeft( aTitleBox.Left() + gnLeftIconSpace + maIcon.GetSizePixel().Width() + gnRightIconSpace );
+        aTitleBox.AdjustLeft(gnLeftIconSpace + maIcon.GetSizePixel().Width() + gnRightIconSpace );
     }
 
     vcl::Font aFont(rRenderContext.GetFont());

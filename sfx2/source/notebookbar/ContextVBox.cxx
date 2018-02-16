@@ -53,7 +53,7 @@ public:
                 if ( pChild->HasContext( eContext ) || pChild->HasContext( vcl::EnumContext::Context::Any ) )
                 {
                     Size aSize( pChild->GetOptimalSize() );
-                    aSize.setHeight( aSize.Height() + 6 );
+                    aSize.AdjustHeight(6 );
                     pChild->Show();
                     pChild->SetSizePixel( aSize );
                 }
@@ -65,7 +65,7 @@ public:
             }
         }
         Size aSize( GetOptimalSize() );
-        aSize.setWidth( aSize.Width() + 6 );
+        aSize.AdjustWidth(6 );
         SetSizePixel( aSize );
     }
 };

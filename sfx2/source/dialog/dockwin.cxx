@@ -697,7 +697,7 @@ bool SfxDockingWindow::Docking( const Point& rPos, tools::Rectangle& rRect )
             case SfxChildAlignment::LASTLEFT:
                 aPos = aInnerRect.TopLeft();
                 if ( pImpl->GetDockAlignment() == GetAlignment() )
-                    aPos.setX( aPos.X() - aSize.Width() );
+                    aPos.AdjustX( -(aSize.Width()) );
                 break;
 
             case SfxChildAlignment::TOP:
@@ -705,7 +705,7 @@ bool SfxDockingWindow::Docking( const Point& rPos, tools::Rectangle& rRect )
             case SfxChildAlignment::HIGHESTTOP:
                 aPos = Point(aOuterRect.Left(), aInnerRect.Top());
                 if ( pImpl->GetDockAlignment() == GetAlignment() )
-                    aPos.setY( aPos.Y() - aSize.Height() );
+                    aPos.AdjustY( -(aSize.Height()) );
                 break;
 
             case SfxChildAlignment::RIGHT:
@@ -714,7 +714,7 @@ bool SfxDockingWindow::Docking( const Point& rPos, tools::Rectangle& rRect )
                 aPos = Point(aInnerRect.Right() - rRect.GetSize().Width(),
                             aInnerRect.Top());
                 if ( pImpl->GetDockAlignment() == GetAlignment() )
-                    aPos.setX( aPos.X() + aSize.Width() );
+                    aPos.AdjustX(aSize.Width() );
                 break;
 
             case SfxChildAlignment::BOTTOM:
@@ -723,7 +723,7 @@ bool SfxDockingWindow::Docking( const Point& rPos, tools::Rectangle& rRect )
                 aPos = Point(aOuterRect.Left(),
                         aInnerRect.Bottom() - rRect.GetSize().Height());
                 if ( pImpl->GetDockAlignment() == GetAlignment() )
-                    aPos.setY( aPos.Y() + aSize.Height() );
+                    aPos.AdjustY(aSize.Height() );
                 break;
                      default:
                          break;
@@ -1184,13 +1184,13 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
     // shrink area for floating mode if possible
     tools::Rectangle aInRect = GetInnerRect();
     if ( aInRect.GetWidth() > nLRBorder )
-        aInRect.SetLeft( aInRect.Left() + nLRBorder/2 );
+        aInRect.AdjustLeft(nLRBorder/2 );
     if ( aInRect.GetWidth() > nLRBorder )
-        aInRect.SetRight( aInRect.Right() - nLRBorder/2 );
+        aInRect.AdjustRight( -(nLRBorder/2) );
     if ( aInRect.GetHeight() > nTBBorder )
-        aInRect.SetTop( aInRect.Top() + nTBBorder/2 );
+        aInRect.AdjustTop(nTBBorder/2 );
     if ( aInRect.GetHeight() > nTBBorder )
-        aInRect.SetBottom( aInRect.Bottom() - nTBBorder/2 );
+        aInRect.AdjustBottom( -(nTBBorder/2) );
 
     // calculate alignment resulting from docking rectangle
     bool bBecomesFloating = false;
@@ -1220,8 +1220,8 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
         tools::Rectangle aSmallDockingRect;
         aSmallDockingRect.SetSize( Size( MAX_TOGGLEAREA_WIDTH, MAX_TOGGLEAREA_HEIGHT ) );
         Point aNewPos(rPos);
-        aNewPos.setX( aNewPos.X() - aSmallDockingRect.GetWidth()/2 );
-        aNewPos.setY( aNewPos.Y() - aSmallDockingRect.GetHeight()/2 );
+        aNewPos.AdjustX( -(aSmallDockingRect.GetWidth()/2) );
+        aNewPos.AdjustY( -(aSmallDockingRect.GetHeight()/2) );
         aSmallDockingRect.SetPos(rPos);
         tools::Rectangle aIntersectRect = aInRect.GetIntersection( aSmallDockingRect );
         if ( aIntersectRect == aSmallDockingRect )
@@ -1393,7 +1393,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
                 else
                 {
                     aPoint = aInnerRect.TopRight();
-                    aPoint.setX( aPoint.X() - aSize.Width() );
+                    aPoint.AdjustX( -(aSize.Width()) );
                 }
             }
             else
@@ -1417,7 +1417,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
                 else
                 {
                     aPoint = aInnerRect.BottomLeft();
-                    aPoint.setY( aPoint.Y() - aSize.Height() );
+                    aPoint.AdjustY( -(aSize.Height()) );
                 }
             }
             else
@@ -1450,7 +1450,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
                 case SfxChildAlignment::LASTRIGHT:
                 {
                     Point aPt( aInnerRect.TopRight() );
-                    aPt.setX( aPt.X() - aDockingRect.GetWidth() );
+                    aPt.AdjustX( -(aDockingRect.GetWidth()) );
                     aDockingRect.SetPos( aPt );
                     aDockingRect.SetSize( aVerticalSize );
                     break;
@@ -1467,7 +1467,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
                 case SfxChildAlignment::HIGHESTBOTTOM:
                 {
                     Point aPt( aInnerRect.BottomLeft() );
-                    aPt.setY( aPt.Y() - aDockingRect.GetHeight() );
+                    aPt.AdjustY( -(aDockingRect.GetHeight()) );
                     aDockingRect.SetPos( aPt );
                     aDockingRect.SetSize( aHorizontalSize );
                     break;
@@ -1567,28 +1567,28 @@ void SfxDockingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Re
         case SfxChildAlignment::TOP:
         {
             rRenderContext.DrawLine(aRect.BottomLeft(), aRect.BottomRight());
-            aRect.SetBottom( --aRect.Bottom() );
+            aRect.AdjustBottom( -1 );
             break;
         }
 
         case SfxChildAlignment::BOTTOM:
         {
             rRenderContext.DrawLine(aRect.TopLeft(), aRect.TopRight());
-            aRect.SetTop( ++aRect.Top() );
+            aRect.AdjustTop( 1 );
             break;
         }
 
         case SfxChildAlignment::LEFT:
         {
             rRenderContext.DrawLine(aRect.TopRight(), aRect.BottomRight());
-            aRect.SetRight( --aRect.Right() );
+            aRect.AdjustRight( -1 );
             break;
         }
 
         case SfxChildAlignment::RIGHT:
         {
             rRenderContext.DrawLine(aRect.TopLeft(), aRect.BottomLeft());
-            aRect.SetLeft( ++aRect.Left() );
+            aRect.AdjustLeft( 1 );
             break;
         }
 

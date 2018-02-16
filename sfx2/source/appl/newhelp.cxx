@@ -488,8 +488,8 @@ void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
     {
         // indent sub entries
         Point aPos( rUDEvt.GetRect().TopLeft() );
-        aPos.setX( aPos.X() + 8 );
-        aPos.setY( aPos.Y() + (rUDEvt.GetRect().GetHeight() - rUDEvt.GetRenderContext()->GetTextHeight()) / 2 );
+        aPos.AdjustX(8 );
+        aPos.AdjustY((rUDEvt.GetRect().GetHeight() - rUDEvt.GetRenderContext()->GetTextHeight()) / 2 );
         OUString aEntry( GetEntry( rUDEvt.GetItemId() ) );
         sal_Int32 nPos = aEntry.indexOf( ';' );
         rUDEvt.GetRenderContext()->DrawText(aPos, (nPos !=-1) ? aEntry.copy(nPos + 1) : aEntry);
@@ -1983,7 +1983,7 @@ void SfxHelpTextWindow_Impl::InitToolBoxImages()
     );
 
     Size aSize = aToolBox->CalcWindowSizePixel();
-    aSize.Height() += TOOLBOX_OFFSET;
+    aSize.AdjustHeight(TOOLBOX_OFFSET );
     aToolBox->SetPosSizePixel( Point( 0, TOOLBOX_OFFSET ), aSize );
 
     SvtMiscOptions aMiscOptions;
@@ -2073,8 +2073,8 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
         Size aTBSize = aToolBox->GetSizePixel();
         Size aCBSize = aOnStartupCB->GetSizePixel();
         Point aPnt = aToolBox->GetPosPixel();
-        aPnt.setX( aPnt.X() + aTBSize.Width() + a3Size.Width() );
-        aPnt.setY( aPnt.Y() + ( ( aTBSize.Height() - aCBSize.Height() ) / 2 ) );
+        aPnt.AdjustX(aTBSize.Width() + a3Size.Width() );
+        aPnt.AdjustY( ( aTBSize.Height() - aCBSize.Height() ) / 2 );
         aOnStartupCB->SetPosPixel( aPnt );
         nMinPos = aPnt.X();
     }
@@ -2312,7 +2312,7 @@ void SfxHelpTextWindow_Impl::Resize()
 {
     Size aSize = GetOutputSizePixel();
     long nToolBoxHeight = aToolBox->GetSizePixel().Height() + TOOLBOX_OFFSET;
-    aSize.setHeight( aSize.Height() - nToolBoxHeight );
+    aSize.AdjustHeight( -nToolBoxHeight );
     pTextWin->SetPosSizePixel( Point( 0, nToolBoxHeight  ), aSize );
     SetOnStartupBoxPosition();
 }
@@ -2334,7 +2334,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 aPos = pCmdEvt->GetMousePosPixel();
             else
                 aPos = Point( pTextWin->GetPosPixel().X() + 20, 20 );
-            aPos.setY( aPos.Y() + pTextWin->GetPosPixel().Y() );
+            aPos.AdjustY(pTextWin->GetPosPixel().Y() );
             ScopedVclPtrInstance<PopupMenu> aMenu;
             if ( bIsIndexOn )
                 aMenu->InsertItem(TBI_INDEX, aIndexOffText, Image(BitmapEx(BMP_HELP_TOOLBOX_INDEX_OFF)));
@@ -2667,7 +2667,7 @@ void SfxHelpWindow_Impl::MakeLayout()
             tools::Rectangle aScreenRect = pScreenWin->GetClientWindowExtentsRelative();
             Point aNewPos = aScreenRect.TopLeft();
             sal_Int32 nDiffWidth = nOldWidth - nWidth;
-            aNewPos.setX( aNewPos.X() + nDiffWidth );
+            aNewPos.AdjustX(nDiffWidth );
             pScreenWin->SetPosPixel( aNewPos );
         }
         else if ( aWinPos.X() > 0 && aWinPos.Y() > 0 )

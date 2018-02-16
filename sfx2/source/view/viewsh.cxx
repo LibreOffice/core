@@ -1707,9 +1707,9 @@ void SfxViewShell::SetMargin( const Size& rSize )
     // the default margin was verified using www.apple.com !!
     Size aMargin = rSize;
     if ( aMargin.Width() == -1 )
-        aMargin.Width() = DEFAULT_MARGIN_WIDTH;
+        aMargin.setWidth( DEFAULT_MARGIN_WIDTH );
     if ( aMargin.Height() == -1 )
-        aMargin.Height() = DEFAULT_MARGIN_HEIGHT;
+        aMargin.setHeight( DEFAULT_MARGIN_HEIGHT );
 
     if ( aMargin != pImpl->aMargin )
     {

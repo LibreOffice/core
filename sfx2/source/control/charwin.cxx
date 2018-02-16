@@ -180,9 +180,9 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
         int nYLDelta = aBoundRect.Top();
         int nYHDelta = aSize.Height() - aBoundRect.Bottom();
         if( nYLDelta <= 0 )
-            aPoint.setY( aPoint.Y() - nYLDelta - 1 );
+            aPoint.AdjustY( -(nYLDelta - 1) );
         else if( nYHDelta <= 0 )
-            aPoint.setY( aPoint.Y() + nYHDelta - 1 );
+            aPoint.AdjustY(nYHDelta - 1 );
 
         // centrally align glyph
         aPoint.setX( -aBoundRect.Left() + (aSize.Width() - aBoundRect.GetWidth()) / 2 );
