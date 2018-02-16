@@ -249,7 +249,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCU)/Office/UI/GenericCommands.xcu \
 	$(postprocess_XCU)/Office/UI/Notebookbar.xcu \
 	$(postprocess_XCU)/Office/UI/Sidebar.xcu \
-	$(postprocess_XCU)/Office/UI/StartModuleCommands.xcu \
 	$(postprocess_XCU)/Office/UI/StartModuleWindowState.xcu \
 	$(postprocess_XCU)/Office/UI/ToolbarMode.xcu \
 	$(postprocess_XCU)/Office/UI.xcu \
