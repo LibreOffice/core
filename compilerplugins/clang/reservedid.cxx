@@ -168,8 +168,6 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
                 // xmlsecurity/source/xmlsec/nss/nssrenam.h
             && s != "__current_exception" // bridges/inc/except.hxx, Windows
             && s != "__data_start" // sal/osl/unx/system.cxx
-            && s != "__lxstat64" // setup_native/scripts/source/getuid.c
-            && s != "__lxstat") // setup_native/scripts/source/getuid.c
         {
             report(
                 DiagnosticsEngine::Warning,

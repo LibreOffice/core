@@ -530,7 +530,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,writer, \
 
 # cli_cppuhelper is NONE even though it is actually in URE because it is CliNativeLibrary
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
-	getuid \
 	smoketest \
 	subsequenttest \
 	test \

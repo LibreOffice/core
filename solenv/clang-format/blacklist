@@ -12802,7 +12802,6 @@ sdext/source/presenter/PresenterViewFactory.cxx
 sdext/source/presenter/PresenterViewFactory.hxx
 sdext/source/presenter/PresenterWindowManager.cxx
 sdext/source/presenter/PresenterWindowManager.hxx
-setup_native/scripts/source/getuid.c
 setup_native/source/win32/customactions/indexingfilter/restartindexingservice.cxx
 setup_native/source/win32/customactions/quickstarter/quickstarter.cxx
 setup_native/source/win32/customactions/quickstarter/quickstarter.hxx
