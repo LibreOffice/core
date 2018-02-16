@@ -31,7 +31,7 @@ class SwFrame;
 
 class SW_DLLPUBLIC SwTextFootnote : public SwTextAttr
 {
-    SwNodeIndex * m_pStartNode;
+    std::unique_ptr<SwNodeIndex> m_pStartNode;
     SwTextNode * m_pTextNode;
     sal_uInt16 m_nSeqNo;
 
@@ -39,7 +39,7 @@ public:
     SwTextFootnote( SwFormatFootnote& rAttr, sal_Int32 nStart );
     virtual ~SwTextFootnote() override;
 
-    SwNodeIndex *GetStartNode() const { return m_pStartNode; }
+    SwNodeIndex *GetStartNode() const { return m_pStartNode.get(); }
     void SetStartNode( const SwNodeIndex *pNode, bool bDelNodes = true );
     void SetNumber( const sal_uInt16 nNumber, const OUString &sNumStr );
     void CopyFootnote(SwTextFootnote & rDest, SwTextNode & rDestNode) const;
