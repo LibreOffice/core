@@ -1131,41 +1131,6 @@ void Test::testIsNumberFormat()
         CPPUNIT_ASSERT_EQUAL_MESSAGE(aTests[i].pFormat, aTests[i].bIsNumber, bIsNumber);
 
     }
-
-    // Test Spanish "mar" short name ambiguity, day "martes" or month "marzo".
-    // Day of week names are only parsed away, not evaluated if they actually
-    // correspond to the date given.
-    struct SpanishDate
-    {
-        const char* mpInput;
-        bool mbNumber;
-        const char* mpOutput;
-    } aSpanishTests[] = {
-        { "22/11/1999", true, "22/11/1999" },
-        { "Lun 22/11/1999", true, "22/11/1999" },
-        { "Mar 22/11/1999", true, "22/11/1999" },
-        { "Abr 22/11/1999", false, "" },            // month name AND numeric month don't go along
-        { "Lun Mar 22/11/1999", false, "" },        // month name AND numeric month don't go along
-        { "Mar Mar 22/11/1999", false, "" },        // month name AND numeric month don't go along
-        { "Lun Mar 22 1999", true, "22/03/1999" },
-        { "Mar Mar 22 1999", true, "22/03/1999" },
-        { "Mar Lun 22 1999", false, "" }            // day name only at the beginning (could change?)
-    };
-
-    sal_uInt32 nIndex = aFormatter.GetFormatIndex( NF_DATE_SYS_DDMMYYYY, LANGUAGE_SPANISH);
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aSpanishTests); ++i)
-    {
-        double fNumber = 0;
-        OUString aString = OUString::createFromAscii( aSpanishTests[i].mpInput);
-        bool bIsNumber = aFormatter.IsNumberFormat( aString, nIndex, fNumber);
-        CPPUNIT_ASSERT_EQUAL( aSpanishTests[i].mbNumber, bIsNumber);
-        if (aSpanishTests[i].mbNumber)
-        {
-            Color* pColor;
-            aFormatter.GetOutputString( fNumber, nIndex, aString, &pColor);
-            CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aSpanishTests[i].mpOutput), aString);
-        }
-    }
 }
 
 namespace {
@@ -1277,6 +1242,28 @@ void Test::testIsNumberFormatSpecific()
         };
 
         checkSpecificNumberFormats( aFormatter, aIO, "[fr-FR] date");
+    }
+
+    {
+        // Test Spanish "mar" short name ambiguity, day "martes" or month "marzo".
+        // Day of week names are only parsed away, not evaluated if they actually
+        // correspond to the date given.
+        SvNumberFormatter aFormatter(m_xContext, LANGUAGE_SPANISH);
+
+        const sal_uInt32 n = aFormatter.GetFormatIndex( NF_DATE_SYS_DDMMYYYY, LANGUAGE_SPANISH);
+        std::vector<FormatInputOutput> aIO = {
+            { "22/11/1999", true, "22/11/1999", n },
+            { "Lun 22/11/1999", true, "22/11/1999", n },
+            { "Mar 22/11/1999", true, "22/11/1999", n },
+            { "Abr 22/11/1999", false, "", n },             // month name AND numeric month don't go along
+            { "Lun Mar 22/11/1999", false, "", n },         // month name AND numeric month don't go along
+            { "Mar Mar 22/11/1999", false, "", n },         // month name AND numeric month don't go along
+            { "Lun Mar 22 1999", true, "22/03/1999", n },
+            { "Mar Mar 22 1999", true, "22/03/1999", n },
+            { "Mar Lun 22 1999", false, "", n }             // day name only at the beginning (could change?)
+        };
+
+        checkSpecificNumberFormats( aFormatter, aIO, "[es-ES] date");
     }
 }
 
