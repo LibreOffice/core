@@ -195,7 +195,7 @@ public:
 
     void WriteXGraphicBlipFill(css::uno::Reference<css::beans::XPropertySet> const & rXPropSet,
                                css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
-                               sal_Int32 nXmlNamespace, bool bWriteMode, bool bRelPathToMedia);
+                               sal_Int32 nXmlNamespace, bool bWriteMode, bool bRelPathToMedia = false);
 
     void WritePattFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WritePattFill(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
