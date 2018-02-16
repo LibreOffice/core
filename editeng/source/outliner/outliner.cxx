@@ -746,6 +746,11 @@ void Outliner::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
     pEditEngine->SetParaAttribs( nPara, rSet );
 }
 
+void Outliner::SetCharAttribs(sal_Int32 nPara, const SfxItemSet& rSet)
+{
+    pEditEngine->SetCharAttribs(nPara, rSet);
+}
+
 bool Outliner::Expand( Paragraph const * pPara )
 {
     if ( pParaList->HasHiddenChildren( pPara ) )
