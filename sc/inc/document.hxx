@@ -1196,7 +1196,7 @@ public:
                                    SCCOL& rEndCol, SCROW& rEndRow, SCTAB nTab,
                                    bool bRefresh = false );
     bool              ExtendMerge( ScRange& rRange, bool bRefresh = false );
-    void              ExtendTotalMerge( ScRange& rRange ) const;
+    SC_DLLPUBLIC void ExtendTotalMerge( ScRange& rRange ) const;
     SC_DLLPUBLIC void ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                                         SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const;
     SC_DLLPUBLIC void ExtendOverlapped( ScRange& rRange ) const;

@@ -113,8 +113,4 @@ $(eval $(call gb_CppunitTest_use_components,sc_filters_test,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_filters_test))
 
-$(eval $(call gb_CppunitTest_use_packages,sc_filters_test,\
-	filter_xslt \
-))
-
 # vim: set noet sw=4 ts=4:

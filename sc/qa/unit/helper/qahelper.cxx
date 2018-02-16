@@ -78,7 +78,7 @@ const FileFormat ScBootstrapFixture::aFileFormats[] = {
     { "html" , "calc_HTML_WebQuery", "generic_HTML", HTML_FORMAT_TYPE },
     { "123" , "Lotus", "calc_Lotus", LOTUS123_FORMAT_TYPE },
     { "dif", "DIF", "calc_DIF", DIF_FORMAT_TYPE },
-    { "xml", "MS Excel 2003 XML", "calc_MS_Excel_2003_XML", XLS_XML_FORMAT_TYPE },
+    { "xml", "MS Excel 2003 XML Orcus", "calc_MS_Excel_2003_XML", XLS_XML_FORMAT_TYPE },
     { "xlsb", "Calc MS Excel 2007 Binary", "MS Excel 2007 Binary", XLSB_XML_FORMAT_TYPE },
     { "fods", "OpenDocument Spreadsheet Flat XML", "calc_ODS_FlatXML", FODS_FORMAT_TYPE },
     { "gnumeric", "Gnumeric Spreadsheet", "Gnumeric XML", GNUMERIC_FORMAT_TYPE }
