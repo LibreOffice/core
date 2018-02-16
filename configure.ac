@@ -8148,9 +8148,18 @@ if test $enable_python = system; then
 fi
 
 dnl By now enable_python should be "system", "internal" or "no"
+PYTHON_LXML=
 case $enable_python in
 system)
     SYSTEM_PYTHON=TRUE
+
+    AC_MSG_CHECKING([for python lxml])
+    if $PYTHON -c "import lxml.etree as ET" ; then
+        PYTHON_LXML=TRUE
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no, will not be able to check UI accessibility])
+    fi
 
     dnl Check if the headers really work
     save_CPPFLAGS="$CPPFLAGS"
@@ -8213,6 +8222,7 @@ AC_SUBST(DISABLE_PYTHON)
 AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
+AC_SUBST(PYTHON_LXML)
 AC_SUBST(PYTHON_VERSION)
 AC_SUBST(PYTHON_VERSION_MAJOR)
 AC_SUBST(PYTHON_VERSION_MINOR)

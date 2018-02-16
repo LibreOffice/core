@@ -156,6 +156,7 @@ gb_ScpTemplateTarget_get_target = $(abspath $(WORKDIR)/ScpTemplateTarget/$(dir $
 gb_SdiTarget_get_target = $(WORKDIR)/SdiTarget/$(1)
 gb_ThesaurusIndexTarget_get_target = $(WORKDIR)/ThesaurusIndexTarget/$(basename $(1)).idx
 gb_UIConfig_get_imagelist_target = $(WORKDIR)/UIConfig/$(1).ilst
+gb_UIConfig_get_a11yerrors_target = $(WORKDIR)/UIConfig/$(1).a11yerrors
 gb_UIConfig_get_target = $(WORKDIR)/UIConfig/$(1).done
 gb_UIImageListTarget_get_target = $(WORKDIR)/UIImageListTarget/$(1).ilst
 gb_UIMenubarTarget_get_target = $(WORKDIR)/UIMenubarTarget/$(1).xml
@@ -280,6 +281,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	CppunitTestFakeExecutable \
 	CustomTarget \
 	ExternalProject \
+	UIA11YErrorsTarget \
 	UIConfig \
 	UIImageListTarget \
 	UIMenubarTarget \
