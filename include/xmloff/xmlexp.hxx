@@ -465,6 +465,7 @@ public:
 
     OUString AddEmbeddedXGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString const & rRequestedName = OUString());
     bool AddEmbeddedXGraphicAsBase64(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
+    css::uno::Reference<css::io::XInputStream> GetEmbeddedXGraphicStream(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
 
     css::uno::Reference<css::io::XInputStream> GetEmbeddedGraphicObjectStream(
         const OUString& rGraphicObjectURL);
