@@ -4137,6 +4137,8 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                             if (nShapeId)
                                 insertShapeId(nShapeId, pTmp);
                         }
+                        else
+                            SdrObject::Free(pTmp);
                     }
                 }
                 if (!aRecHd2.SeekToEndOfRecord(rSt))
