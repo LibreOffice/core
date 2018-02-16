@@ -192,7 +192,7 @@ void OReportWindow::Resize()
         m_aHRuler->SetMargin1(0);
         m_aHRuler->SetMargin2(aPageSize.Width() - nLeftMargin - nRightMargin);
 
-        aStartPoint.setY( aStartPoint.Y() + aPageSize.Height() );
+        aStartPoint.AdjustY(aPageSize.Height() );
         nSectionsHeight -= aStartPoint.Y();
 
         aStartPoint.setX( aOffset.X() );
