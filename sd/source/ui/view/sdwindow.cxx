@@ -374,8 +374,8 @@ void Window::SetZoomIntegral(long nZoom)
     Size aSize = PixelToLogic(GetOutputSizePixel());
     long nW = aSize.Width()  * GetZoom() / nZoom;
     long nH = aSize.Height() * GetZoom() / nZoom;
-    maWinPos.setX( maWinPos.X() + (aSize.Width()  - nW) / 2 );
-    maWinPos.setY( maWinPos.Y() + (aSize.Height() - nH) / 2 );
+    maWinPos.AdjustX((aSize.Width()  - nW) / 2 );
+    maWinPos.AdjustY((aSize.Height() - nH) / 2 );
     if ( maWinPos.X() < 0 ) maWinPos.setX( 0 );
     if ( maWinPos.Y() < 0 ) maWinPos.setY( 0 );
 
@@ -507,9 +507,9 @@ long Window::SetZoomRect (const ::tools::Rectangle& rZoomRect)
             maWinPos = maViewOrigin + aPos;
 
             aWinSize.setWidth( static_cast<long>(static_cast<double>(aWinSize.Width()) * double(ZOOM_MULTIPLICATOR) / static_cast<double>(nFact)) );
-            maWinPos.setX( maWinPos.X() + (rZoomRect.GetWidth() - aWinSize.Width()) / 2 );
+            maWinPos.AdjustX((rZoomRect.GetWidth() - aWinSize.Width()) / 2 );
             aWinSize.setHeight( static_cast<long>(static_cast<double>(aWinSize.Height()) * double(ZOOM_MULTIPLICATOR) / static_cast<double>(nFact)) );
-            maWinPos.setY( maWinPos.Y() + (rZoomRect.GetHeight() - aWinSize.Height()) / 2 );
+            maWinPos.AdjustY((rZoomRect.GetHeight() - aWinSize.Height()) / 2 );
 
             if ( maWinPos.X() < 0 ) maWinPos.setX( 0 );
             if ( maWinPos.Y() < 0 ) maWinPos.setY( 0 );
@@ -543,8 +543,8 @@ void Window::UpdateMapOrigin(bool bInvalidate)
         {
             // keep view centered around current pos, when window
             // resizes
-            maWinPos.setX( maWinPos.X() - (aWinSize.Width() - maPrevSize.Width()) / 2 );
-            maWinPos.setY( maWinPos.Y() - (aWinSize.Height() - maPrevSize.Height()) / 2 );
+            maWinPos.AdjustX( -((aWinSize.Width() - maPrevSize.Width()) / 2) );
+            maWinPos.AdjustY( -((aWinSize.Height() - maPrevSize.Height()) / 2) );
             bChanged = true;
         }
 
@@ -598,14 +598,14 @@ void Window::UpdateMapMode()
             // #i2237#
             // Since BRUSH_SIZE alignment is outdated now, i use the
             // former constant here directly
-            aPix.setWidth( aPix.Width() - 8 );
+            aPix.AdjustWidth( -8 );
         }
         if (aPix.Height() == 0)
         {
             // #i2237#
             // Since BRUSH_SIZE alignment is outdated now, i use the
             // former constant here directly
-            aPix.setHeight( aPix.Height() - 8 );
+            aPix.AdjustHeight( -8 );
         }
     }
 

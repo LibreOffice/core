@@ -337,9 +337,9 @@ void ScrollBarManager::SetWindowOrigin (
     // Adapt the remaining space accordingly.
     ::tools::Rectangle aRemainingSpace (rAvailableArea);
     if (bShowVertical)
-        aRemainingSpace.SetRight( aRemainingSpace.Right() - mpVerticalScrollBar->GetSizePixel().Width() );
+        aRemainingSpace.AdjustRight( -(mpVerticalScrollBar->GetSizePixel().Width()) );
     if (bShowHorizontal)
-        aRemainingSpace.SetBottom( aRemainingSpace.Bottom() - mpHorizontalScrollBar->GetSizePixel().Height() );
+        aRemainingSpace.AdjustBottom( -(mpHorizontalScrollBar->GetSizePixel().Height()) );
 
     return aRemainingSpace;
 }
@@ -355,9 +355,9 @@ bool ScrollBarManager::TestScrollBarVisibilities (
     // visible in this combination.
     Size aBrowserSize (rAvailableArea.GetSize());
     if (bHorizontalScrollBarVisible)
-        aBrowserSize.setHeight( aBrowserSize.Height() - mpHorizontalScrollBar->GetSizePixel().Height() );
+        aBrowserSize.AdjustHeight( -(mpHorizontalScrollBar->GetSizePixel().Height()) );
     if (bVerticalScrollBarVisible)
-        aBrowserSize.setWidth( aBrowserSize.Width() - mpVerticalScrollBar->GetSizePixel().Width() );
+        aBrowserSize.AdjustWidth( -(mpVerticalScrollBar->GetSizePixel().Width()) );
 
     // Tell the view to rearrange its page objects and check whether the
     // page objects can be shown without clipping.
@@ -560,9 +560,9 @@ void ScrollBarManager::Scroll(
 
     // Calculate estimate of new location.
     if (bIsVertical)
-        aNewTopLeft.setY( aNewTopLeft.Y() + nDistance * rLayouter.GetPageObjectSize().Height() );
+        aNewTopLeft.AdjustY(nDistance * rLayouter.GetPageObjectSize().Height() );
     else
-        aNewTopLeft.setX( aNewTopLeft.X() + nDistance * rLayouter.GetPageObjectSize().Width() );
+        aNewTopLeft.AdjustX(nDistance * rLayouter.GetPageObjectSize().Width() );
 
     // Adapt location to show whole slides.
     if (bIsVertical)

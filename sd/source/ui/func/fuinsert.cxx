@@ -384,8 +384,8 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 ::tools::Rectangle aWinRect(aPos, mpWindow->GetOutputSizePixel() );
                 aPos = aWinRect.Center();
                 aPos = mpWindow->PixelToLogic(aPos);
-                aPos.setX( aPos.X() - aSize.Width() / 2 );
-                aPos.setY( aPos.Y() - aSize.Height() / 2 );
+                aPos.AdjustX( -(aSize.Width() / 2) );
+                aPos.AdjustY( -(aSize.Height() / 2) );
                 aRect = ::tools::Rectangle(aPos, aSize);
             }
 
@@ -747,8 +747,8 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
             if( mpWindow )
             {
                 aPos = mpWindow->PixelToLogic( ::tools::Rectangle( aPos, mpWindow->GetOutputSizePixel() ).Center() );
-                aPos.setX( aPos.X() - (aSize.Width() >> 1) );
-                aPos.setY( aPos.Y() - (aSize.Height() >> 1) );
+                aPos.AdjustX( -(aSize.Width() >> 1) );
+                aPos.AdjustY( -(aSize.Height() >> 1) );
             }
 
             mpView->InsertMediaURL( aURL, nAction, aPos, aSize, bLink ) ;

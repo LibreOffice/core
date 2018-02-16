@@ -97,8 +97,8 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
         // constrain size to page size if necessary
         SdrPage* pPage = mpDrawView->GetSdrPageView()->GetPage();
         Size aPageSize = pPage->GetSize();
-        aPageSize.setWidth( aPageSize.Width() - pPage->GetLeftBorder() + pPage->GetRightBorder() );
-        aPageSize.setHeight( aPageSize.Height() - pPage->GetUpperBorder() + pPage->GetLowerBorder() );
+        aPageSize.AdjustWidth( -(pPage->GetLeftBorder() + pPage->GetRightBorder()) );
+        aPageSize.AdjustHeight( -(pPage->GetUpperBorder() + pPage->GetLowerBorder()) );
 
         // If the image is too large we make it fit into the page
         if ( ( ( aSize.Height() > aPageSize.Height() ) || ( aSize.Width()   > aPageSize.Width() ) ) &&

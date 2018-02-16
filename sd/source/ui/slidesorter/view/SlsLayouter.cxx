@@ -929,19 +929,19 @@ sal_Int32 Layouter::Implementation::GetIndex (
     if (nColumn == 0)
         aBoundingBox.SetLeft( 0 );
     else
-        aBoundingBox.SetLeft( aBoundingBox.Left() - mnHorizontalGap/2 );
+        aBoundingBox.AdjustLeft( -(mnHorizontalGap/2) );
     if (nColumn == mnColumnCount-1)
-        aBoundingBox.SetRight( aBoundingBox.Right() + mnRightBorder );
+        aBoundingBox.AdjustRight(mnRightBorder );
     else
-        aBoundingBox.SetRight( aBoundingBox.Right() + mnHorizontalGap/2 );
+        aBoundingBox.AdjustRight(mnHorizontalGap/2 );
     if (nRow == 0)
         aBoundingBox.SetTop( 0 );
     else
-        aBoundingBox.SetTop( aBoundingBox.Top() - mnVerticalGap/2 );
+        aBoundingBox.AdjustTop( -(mnVerticalGap/2) );
     if (nRow == mnRowCount-1)
-        aBoundingBox.SetBottom( aBoundingBox.Bottom() + mnBottomBorder );
+        aBoundingBox.AdjustBottom(mnBottomBorder );
     else
-        aBoundingBox.SetBottom( aBoundingBox.Bottom() + mnVerticalGap/2 );
+        aBoundingBox.AdjustBottom(mnVerticalGap/2 );
     return aBoundingBox;
 }
 

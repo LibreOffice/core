@@ -238,8 +238,8 @@ ui::LayoutSize LayoutMenu::GetHeightForWidth (const sal_Int32 nWidth)
         Size aItemSize = CalcItemSizePixel (aImage.GetSizePixel());
         if (nWidth>0 && aItemSize.Width()>0)
         {
-            aItemSize.setWidth( aItemSize.Width() + 8 );
-            aItemSize.setHeight( aItemSize.Height() + 8 );
+            aItemSize.AdjustWidth(8 );
+            aItemSize.AdjustHeight(8 );
             int nColumnCount = nWidth / aItemSize.Width();
             if (nColumnCount <= 0)
                 nColumnCount = 1;
@@ -263,8 +263,8 @@ void LayoutMenu::Resize()
             Image aImage = GetItemImage(GetItemId(0));
             Size aItemSize = CalcItemSizePixel (
                 aImage.GetSizePixel());
-            aItemSize.setWidth( aItemSize.Width() + 8 );
-            aItemSize.setHeight( aItemSize.Height() + 8 );
+            aItemSize.AdjustWidth(8 );
+            aItemSize.AdjustHeight(8 );
             int nColumnCount = aWindowSize.Width() / aItemSize.Width();
             if (nColumnCount < 1)
                 nColumnCount = 1;

@@ -669,9 +669,9 @@ awt::Size PPTWriterBase::MapSize( const awt::Size& rSize )
     Size aRetSize( OutputDevice::LogicToLogic( Size( rSize.Width, rSize.Height ), maMapModeSrc, maMapModeDest ) );
 
     if ( !aRetSize.Width() )
-        aRetSize.setWidth( ++aRetSize.Width() );
+        aRetSize.AdjustWidth( 1 );
     if ( !aRetSize.Height() )
-        aRetSize.setHeight( ++aRetSize.Height() );
+        aRetSize.AdjustHeight( 1 );
     return awt::Size( aRetSize.Width(), aRetSize.Height() );
 }
 

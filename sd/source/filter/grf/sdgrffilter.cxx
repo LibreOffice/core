@@ -178,8 +178,8 @@ bool SdGRFFilter::Import()
             Size        aGrfSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
                                   aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)));
 
-            aPagSize.setWidth( aPagSize.Width() - pPage->GetLeftBorder() + pPage->GetRightBorder() );
-            aPagSize.setHeight( aPagSize.Height() - pPage->GetUpperBorder() + pPage->GetLowerBorder() );
+            aPagSize.AdjustWidth( -(pPage->GetLeftBorder() + pPage->GetRightBorder()) );
+            aPagSize.AdjustHeight( -(pPage->GetUpperBorder() + pPage->GetLowerBorder()) );
 
             // scale to fit page
             if ( ( ( aGrfSize.Height() > aPagSize.Height() ) || ( aGrfSize.Width() > aPagSize.Width() ) ) &&

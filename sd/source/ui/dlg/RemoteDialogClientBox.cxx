@@ -150,7 +150,7 @@ void ClientBox::CalcActiveHeight()
     // Text entry height
     Size aSize = GetOutputSizePixel();
     if ( m_bHasScrollBar )
-        aSize.setWidth( aSize.Width() - m_aScrollBar->GetSizePixel().Width() );
+        aSize.AdjustWidth( -(m_aScrollBar->GetSizePixel().Width()) );
 
     aSize.Width() -= ICON_OFFSET;
 
@@ -171,7 +171,7 @@ void ClientBox::CalcActiveHeight()
     Size aSize( GetOutputSizePixel() );
 
     if ( m_bHasScrollBar )
-        aSize.setWidth( aSize.Width() - m_aScrollBar->GetSizePixel().Width() );
+        aSize.AdjustWidth( -(m_aScrollBar->GetSizePixel().Width()) );
 
     if ( m_vEntries[ nPos ]->m_bActive )
         aSize.setHeight( m_nActiveHeight );
@@ -180,7 +180,7 @@ void ClientBox::CalcActiveHeight()
 
     Point aPos( 0, -m_nTopIndex + nPos * m_nStdHeight );
     if ( m_bHasActive && ( nPos < m_nActive ) )
-        aPos.setY( aPos.Y() + m_nActiveHeight - m_nStdHeight );
+        aPos.AdjustY(m_nActiveHeight - m_nStdHeight );
 
     return ::tools::Rectangle( aPos, aSize );
 }
@@ -321,7 +321,7 @@ void ClientBox::DrawRow(vcl::RenderContext& rRenderContext, const ::tools::Recta
 
     SetFont(aStdFont);
 
-    aPos.setY( aPos.Y() + aTextHeight );
+    aPos.AdjustY(aTextHeight );
     if (rEntry->m_bActive)
     {
       OUString sPinText(SdResId(STR_ENTER_PIN));
@@ -479,7 +479,7 @@ void ClientBox::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectang
     Size aSize(GetOutputSizePixel());
 
     if (m_bHasScrollBar)
-        aSize.setWidth( aSize.Width() - m_aScrollBar->GetSizePixel().Width() );
+        aSize.AdjustWidth( -(m_aScrollBar->GetSizePixel().Width()) );
 
     const ::osl::MutexGuard aGuard(m_entriesMutex);
 
@@ -489,7 +489,7 @@ void ClientBox::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectang
         aSize.setHeight( (*iIndex)->m_bActive ? m_nActiveHeight : m_nStdHeight );
         ::tools::Rectangle aEntryRect(aStart, aSize);
         DrawRow(rRenderContext, aEntryRect, *iIndex);
-        aStart.setY( aStart.Y() + aSize.Height() );
+        aStart.AdjustY(aSize.Height() );
     }
 }
 
@@ -688,7 +688,7 @@ void ClientBox::DoScroll( long nDelta )
     Point aNewSBPt( m_aScrollBar->GetPosPixel() );
 
     ::tools::Rectangle aScrRect( Point(), GetOutputSizePixel() );
-    aScrRect.SetRight( aScrRect.Right() - m_aScrollBar->GetSizePixel().Width() );
+    aScrRect.AdjustRight( -(m_aScrollBar->GetSizePixel().Width()) );
     Scroll( 0, -nDelta, aScrRect );
 
     m_aScrollBar->SetPosPixel( aNewSBPt );
