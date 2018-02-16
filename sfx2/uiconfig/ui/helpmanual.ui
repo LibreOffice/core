@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.2 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkMessageDialog" id="onlinehelpmanual">
@@ -15,12 +15,9 @@
       <object class="GtkBox" id="internal_box">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="btnbox">
             <property name="can_focus">False</property>
-            <property name="homogeneous">True</property>
-            <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="website">
                 <property name="label" translatable="yes" context="helpmanual|website">Read Help Online</property>
@@ -62,6 +59,7 @@
     </child>
     <action-widgets>
       <action-widget response="1">website</action-widget>
+      <action-widget response="-6">cancel</action-widget>
     </action-widgets>
   </object>
 </interface>
