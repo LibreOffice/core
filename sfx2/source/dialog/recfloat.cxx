@@ -108,8 +108,8 @@ void SfxRecordingFloat_Impl::StateChanged( StateChangedType nStateChange )
 
         Point aPoint = pEditWin->OutputToScreenPixel( pEditWin->GetPosPixel() );
         aPoint = GetParent()->ScreenToOutputPixel( aPoint );
-        aPoint.setX( aPoint.X() + 20 );
-        aPoint.setY( aPoint.Y() + 10 );
+        aPoint.AdjustX(20 );
+        aPoint.AdjustY(10 );
         SetPosPixel( aPoint );
     }
 

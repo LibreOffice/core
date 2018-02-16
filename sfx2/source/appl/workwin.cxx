@@ -754,9 +754,9 @@ SvBorder SfxWorkWindow::Arrange_Impl()
                 bAllowHiding = false;
                 aBorder.Top() += aSize.Height();
                 aPos = aTmp.TopLeft();
-                aTmp.SetTop( aTmp.Top() + aSize.Height() );
+                aTmp.AdjustTop(aSize.Height() );
                 if ( pCli->eAlign == SfxChildAlignment::HIGHESTTOP )
-                    aUpperClientArea.SetTop( aUpperClientArea.Top() + aSize.Height() );
+                    aUpperClientArea.AdjustTop(aSize.Height() );
                 break;
 
             case SfxChildAlignment::LOWESTBOTTOM:
@@ -768,10 +768,10 @@ SvBorder SfxWorkWindow::Arrange_Impl()
                     aSize = static_cast<SplitWindow *>(pCli->pWin.get())->CalcLayoutSizePixel( aSize );
                 aBorder.Bottom() += aSize.Height();
                 aPos = aTmp.BottomLeft();
-                aPos.setY( aPos.Y() - (aSize.Height()-1) );
-                aTmp.SetBottom( aTmp.Bottom() - aSize.Height() );
+                aPos.AdjustY( -(aSize.Height()-1) );
+                aTmp.AdjustBottom( -(aSize.Height()) );
                 if ( pCli->eAlign == SfxChildAlignment::LOWESTBOTTOM )
-                    aUpperClientArea.SetBottom( aUpperClientArea.Bottom() - aSize.Height() );
+                    aUpperClientArea.AdjustBottom( -(aSize.Height()) );
                 break;
 
             case SfxChildAlignment::FIRSTLEFT:
@@ -784,9 +784,9 @@ SvBorder SfxWorkWindow::Arrange_Impl()
                 bAllowHiding = false;
                 aBorder.Left() += aSize.Width();
                 aPos = aTmp.TopLeft();
-                aTmp.SetLeft( aTmp.Left() + aSize.Width() );
+                aTmp.AdjustLeft(aSize.Width() );
                 if ( pCli->eAlign != SfxChildAlignment::TOOLBOXLEFT )
-                    aUpperClientArea.SetLeft( aUpperClientArea.Left() + aSize.Width() );
+                    aUpperClientArea.AdjustLeft(aSize.Width() );
                 break;
 
             case SfxChildAlignment::FIRSTRIGHT:
@@ -798,10 +798,10 @@ SvBorder SfxWorkWindow::Arrange_Impl()
                     aSize = static_cast<SplitWindow *>(pCli->pWin.get())->CalcLayoutSizePixel( aSize );
                 aBorder.Right() += aSize.Width();
                 aPos = aTmp.TopRight();
-                aPos.setX( aPos.X() - (aSize.Width()-1) );
-                aTmp.SetRight( aTmp.Right() - aSize.Width() );
+                aPos.AdjustX( -(aSize.Width()-1) );
+                aTmp.AdjustRight( -(aSize.Width()) );
                 if ( pCli->eAlign != SfxChildAlignment::TOOLBOXRIGHT )
-                    aUpperClientArea.SetRight( aUpperClientArea.Right() - aSize.Width() );
+                    aUpperClientArea.AdjustRight( -(aSize.Width()) );
                 break;
 
             default:
@@ -822,28 +822,26 @@ SvBorder SfxWorkWindow::Arrange_Impl()
 
     if ( aClientArea.GetWidth() >= aBorder.Left() + aBorder.Right() )
     {
-        aClientArea.SetLeft( aClientArea.Left() + aBorder.Left() );
-        aClientArea.SetRight( aClientArea.Right() - aBorder.Right() );
+        aClientArea.AdjustLeft(aBorder.Left() );
+        aClientArea.AdjustRight( -(aBorder.Right()) );
     }
     else
     {
         aBorder.Left() = aClientArea.Left();
         aBorder.Right() = aClientArea.Right();
-        aClientArea.SetRight( aTmp.Left() );
-        aClientArea.SetLeft( aTmp.Left() );
+        aClientArea.Right() = aClientArea.Left() = aTmp.Left();
     }
 
     if ( aClientArea.GetHeight() >= aBorder.Top() + aBorder.Bottom() )
     {
-        aClientArea.SetTop( aClientArea.Top() + aBorder.Top() );
-        aClientArea.SetBottom( aClientArea.Bottom() - aBorder.Bottom() );
+        aClientArea.AdjustTop(aBorder.Top() );
+        aClientArea.AdjustBottom( -(aBorder.Bottom()) );
     }
     else
     {
         aBorder.Top() = aClientArea.Top();
         aBorder.Bottom() = aClientArea.Bottom();
-        aClientArea.SetTop( aTmp.Top() );
-        aClientArea.SetBottom( aTmp.Top() );
+        aClientArea.Top() = aClientArea.Bottom() = aTmp.Top();
     }
 
     return IsDockingAllowed() ? aBorder : SvBorder();
@@ -1596,66 +1594,66 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                     {
                         case SfxChildAlignment::TOP:
                             // Object-Toolboxes come always last
-                                aInnerRect.SetTop( aInnerRect.Top() + pCli->aSize.Height() );
+                                aInnerRect.AdjustTop(pCli->aSize.Height() );
                             break;
 
                         case SfxChildAlignment::HIGHESTTOP:
                             // Always performed first
-                            aInnerRect.SetTop( aInnerRect.Top() + pCli->aSize.Height() );
+                            aInnerRect.AdjustTop(pCli->aSize.Height() );
                             break;
 
                         case SfxChildAlignment::LOWESTTOP:
                             // Is only counted if it is the current window
                             if ( i == nPos )
-                                aInnerRect.SetTop( aInnerRect.Top() + pCli->aSize.Height() );
+                                aInnerRect.AdjustTop(pCli->aSize.Height() );
                             break;
 
                         case SfxChildAlignment::BOTTOM:
                             // Object-Toolboxes come always last
-                                aInnerRect.SetBottom( aInnerRect.Bottom() - pCli->aSize.Height() );
+                                aInnerRect.AdjustBottom( -(pCli->aSize.Height()) );
                             break;
 
                         case SfxChildAlignment::LOWESTBOTTOM:
                             // Always performed first
-                            aInnerRect.SetBottom( aInnerRect.Bottom() - pCli->aSize.Height() );
+                            aInnerRect.AdjustBottom( -(pCli->aSize.Height()) );
                             break;
 
                         case SfxChildAlignment::HIGHESTBOTTOM:
                             // Is only counted if it is the current window
                             if ( i == nPos )
-                                aInnerRect.SetBottom( aInnerRect.Bottom() - pCli->aSize.Height() );
+                                aInnerRect.AdjustBottom( -(pCli->aSize.Height()) );
                             break;
 
                         case SfxChildAlignment::LEFT:
                             // Toolboxes come always last
-                                aInnerRect.SetLeft( aInnerRect.Left() + pCli->aSize.Width() );
+                                aInnerRect.AdjustLeft(pCli->aSize.Width() );
                             break;
 
                         case SfxChildAlignment::FIRSTLEFT:
                             // Always performed first
-                            aInnerRect.SetLeft( aInnerRect.Left() + pCli->aSize.Width() );
+                            aInnerRect.AdjustLeft(pCli->aSize.Width() );
                             break;
 
                         case SfxChildAlignment::LASTLEFT:
                             // Is only counted if it is the current window
                             if (i == nPos)
-                                aInnerRect.SetLeft( aInnerRect.Left() + pCli->aSize.Width() );
+                                aInnerRect.AdjustLeft(pCli->aSize.Width() );
                             break;
 
                         case SfxChildAlignment::RIGHT:
                             // Toolboxes come always last
-                                aInnerRect.SetRight( aInnerRect.Right() - pCli->aSize.Width() );
+                                aInnerRect.AdjustRight( -(pCli->aSize.Width()) );
                             break;
 
                         case SfxChildAlignment::FIRSTRIGHT:
                             // Is only counted if it is the current window
                             if (i == nPos)
-                                aInnerRect.SetRight( aInnerRect.Right() - pCli->aSize.Width() );
+                                aInnerRect.AdjustRight( -(pCli->aSize.Width()) );
                             break;
 
                         case SfxChildAlignment::LASTRIGHT:
                             // Always performed first
-                            aInnerRect.SetRight( aInnerRect.Right() - pCli->aSize.Width() );
+                            aInnerRect.AdjustRight( -(pCli->aSize.Width()) );
                             break;
 
                         default:
@@ -2373,13 +2371,13 @@ void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
             {
                 // Right SplitWindow
                 // Position to correct the difference of the widths
-                aPos.setX( aPos.X() + aSize.Width() );
+                aPos.AdjustX(aSize.Width() );
 
                 // Get the width of the Window yourself, if no DummyWindow
                 if ( !bDummyWindow )
                     aSize.setWidth( pSplitWin->GetSizePixel().Width() );
 
-                aPos.setX( aPos.X() - aSize.Width() );
+                aPos.AdjustX( -(aSize.Width()) );
 
                 // If already a window is opened at the left side, then the
                 // right is not allowed to overlap this one.
@@ -2420,13 +2418,13 @@ void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
             {
                 // The bottom SplitWindow
                 // Position to correct the difference of the heights
-                aPos.setY( aPos.Y() + aSize.Height() );
+                aPos.AdjustY(aSize.Height() );
 
                 // Get the height of the Window yourself, if no DummyWindow
                 if ( !bDummyWindow )
                     aSize.setHeight( pSplitWin->GetSizePixel().Height() );
 
-                aPos.setY( aPos.Y() - aSize.Height() );
+                aPos.AdjustY( -(aSize.Height()) );
 
                 // Adjust width with regard to if a Window is already open
                 // to the left or right.
@@ -2469,16 +2467,16 @@ tools::Rectangle SfxWorkWindow::GetFreeArea( bool bAutoHide ) const
             switch ( n )
             {
                 case 0 :
-                    aArea.SetLeft( aArea.Left() + aSize.Width() );
+                    aArea.AdjustLeft(aSize.Width() );
                     break;
                 case 1 :
-                    aArea.SetRight( aArea.Right() - aSize.Width() );
+                    aArea.AdjustRight( -(aSize.Width()) );
                     break;
                 case 2 :
-                    aArea.SetTop( aArea.Top() + aSize.Height() );
+                    aArea.AdjustTop(aSize.Height() );
                     break;
                 case 3 :
-                    aArea.SetBottom( aArea.Bottom() - aSize.Height() );
+                    aArea.AdjustBottom( -(aSize.Height()) );
                     break;
             }
         }

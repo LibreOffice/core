@@ -986,10 +986,10 @@ bool SfxSplitWindow::CursorIsOverRect() const
         Size aVisSize = GetSizePixel();
 
         // Extend with +/- a few pixels, otherwise it is too nervous
-        aVisPos.X() -= nPixel;
-        aVisPos.Y() -= nPixel;
-        aVisSize.Width() += 2 * nPixel;
-        aVisSize.Height() += 2 * nPixel;
+        aVisPos.AdjustX( -(nPixel) );
+        aVisPos.AdjustY( -(nPixel) );
+        aVisSize.AdjustWidth(2 * nPixel );
+        aVisSize.AdjustHeight(2 * nPixel );
 
         tools::Rectangle aVisRect( aVisPos, aVisSize );
         aRect = aRect.GetUnion( aVisRect );
