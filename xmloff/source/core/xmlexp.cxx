@@ -1926,6 +1926,23 @@ Reference< XInputStream > SvXMLExport::GetEmbeddedGraphicObjectStream( const OUS
     return nullptr;
 }
 
+uno::Reference<io::XInputStream> SvXMLExport::GetEmbeddedXGraphicStream(uno::Reference<graphic::XGraphic> const & rxGraphic)
+{
+    uno::Reference<io::XInputStream> xInputStream;
+
+    if ((getExportFlags() & SvXMLExportFlags::EMBEDDED) && mxGraphicResolver.is())
+    {
+        uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler(mxGraphicResolver, uno::UNO_QUERY);
+
+        if (xGraphicStorageHandler.is())
+        {
+            xInputStream = xGraphicStorageHandler->createInputStream(rxGraphic);
+        }
+    }
+
+    return xInputStream;
+}
+
 bool SvXMLExport::AddEmbeddedXGraphicAsBase64(uno::Reference<graphic::XGraphic> const & rxGraphic)
 {
     if ((getExportFlags() & SvXMLExportFlags::EMBEDDED) &&
