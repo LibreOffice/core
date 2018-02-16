@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_0d61ca39",
+        "filename": "include/vcl/salbtype.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-02-16T07:49:56Z",
+      "side": 1,
+      "message": "Was added in b76f96a520ec71308529802442aafe9364edde23, and related to the initial warning there (see https://opengrok.libreoffice.org/xref/core/include/vcl/salbtype.hxx?r\u003db76f96a5 for translated warning).\n\nThe warning had gone in 193ec57c899c6941675a86b7a24d6af60e410938.",
+      "range": {
+        "startLine": 92,
+        "startChar": 33,
+        "endLine": 92,
+        "endChar": 73
+      },
+      "revId": "de87955e1dad4dd3e75da60cc9599c415dc716dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
