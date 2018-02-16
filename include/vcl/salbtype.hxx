@@ -93,7 +93,7 @@ private:
     sal_uInt8               mcBlueOrIndex;
     sal_uInt8               mcGreen;
     sal_uInt8               mcRed;
-    sal_uInt8               mbIndex; // should be bool, but see above warning
+    bool                    mbIndex;
 
 public:
 
