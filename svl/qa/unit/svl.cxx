@@ -64,6 +64,7 @@ public:
     void testTdf103060();
     void testDateInput();
     void testIsNumberFormat();
+    void testIsNumberFormatSpecific();
     void testUserDefinedNumberFormats();
     void testNfEnglishKeywordsIntegrity();
     void testStandardColorIntegrity();
@@ -79,6 +80,7 @@ public:
     CPPUNIT_TEST(testTdf103060);
     CPPUNIT_TEST(testDateInput);
     CPPUNIT_TEST(testIsNumberFormat);
+    CPPUNIT_TEST(testIsNumberFormatSpecific);
     CPPUNIT_TEST(testUserDefinedNumberFormats);
     CPPUNIT_TEST(testNfEnglishKeywordsIntegrity);
     CPPUNIT_TEST(testStandardColorIntegrity);
@@ -1163,6 +1165,115 @@ void Test::testIsNumberFormat()
             aFormatter.GetOutputString( fNumber, nIndex, aString, &pColor);
             CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aSpanishTests[i].mpOutput), aString);
         }
+    }
+}
+
+namespace {
+struct FormatInputOutput
+{
+    const char* mpInput;
+    const bool  mbNumber;
+    const char* mpOutput;
+};
+}
+
+static void checkSpecificNumberFormats( SvNumberFormatter& rFormatter,
+        const std::vector<FormatInputOutput>& rVec, const char* pName )
+{
+
+    for (size_t i = 0; i < rVec.size(); ++i)
+    {
+        sal_uInt32 nIndex = 0;
+        double fNumber = 0;
+        OUString aString( OUString::createFromAscii( rVec[i].mpInput));
+        const bool bIsNumber = rFormatter.IsNumberFormat( aString, nIndex, fNumber);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( OString( OString(pName) + " " + OString::number(i) +
+                    (rVec[i].mbNumber ? " not recognized: " : " should not be recognized: ") +
+                    OUStringToOString( aString, RTL_TEXTENCODING_UTF8)).getStr(), rVec[i].mbNumber, bIsNumber);
+        if (bIsNumber)
+        {
+            Color* pColor;
+            rFormatter.GetOutputString( fNumber, nIndex, aString, &pColor);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( OString( OString(pName) + " " + OString::number(i)  + " mismatch").getStr(),
+                    OUString::createFromAscii( rVec[i].mpOutput), aString);
+        }
+    }
+}
+
+void Test::testIsNumberFormatSpecific()
+{
+    {
+        // en-US uses M/D/Y format, test that a-b-c input with a<=31 and b<=12
+        // does not lead to a/b/c date output
+        SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_US);
+
+        std::vector<FormatInputOutput> aIO = {
+            {  "5-12-14", false, "" },
+            { "32-12-14",  true, "1932-12-14" }
+        };
+
+        checkSpecificNumberFormats( aFormatter, aIO, "[en-US] date");
+    }
+
+    {
+        // de-DE uses D.M.Y format, test that a-b-c input with a<=31 and b<=12
+        // does not lead to a.b.c date output
+        SvNumberFormatter aFormatter(m_xContext, LANGUAGE_GERMAN);
+
+        std::vector<FormatInputOutput> aIO = {
+            {  "5-12-14", false, "" },
+            { "32-12-14",  true, "1932-12-14" }
+        };
+
+        checkSpecificNumberFormats( aFormatter, aIO, "[de-DE] date");
+    }
+
+    {
+        // nl-NL uses D-M-Y format, test that D-M-Y input leads to D-M-Y output
+        // and ISO Y-M-D input leads to Y-M-D output.
+        SvNumberFormatter aFormatter(m_xContext, LANGUAGE_DUTCH);
+
+        std::vector<FormatInputOutput> aIO = {
+            { "22-11-1999", true, "22-11-99" },    // if default YY changes to YYYY adapt this
+            { "1999-11-22", true, "1999-11-22" },
+            { "1-2-11",     true, "01-02-11" },    // if default YY changes to YYYY adapt this
+            { "99-2-11",    true, "1999-02-11" }
+        };
+
+        checkSpecificNumberFormats( aFormatter, aIO, "[nl-NL] date");
+    }
+
+    {
+        // en-ZA uses Y/M/D format, test that Y/M/D input leads to Y/M/D output
+        // and ISO Y-M-D input leads to Y-M-D output.
+        SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_SAFRICA);
+
+        std::vector<FormatInputOutput> aIO = {
+            { "1999/11/22", true, "99/11/22" },     // if default YY changes to YYYY adapt this
+            { "1999-11-22", true, "1999-11-22" },
+            { "11/2/1",     true, "11/02/01" },     // if default YY changes to YYYY adapt this
+            { "99-2-11",    true, "1999-02-11" },
+            { "22-2-11",    true, "2022-02-11" }
+        };
+
+        checkSpecificNumberFormats( aFormatter, aIO, "[en-ZA] date");
+    }
+
+    {
+        // fr-FR uses D/M/Y format with additional D.M.Y and D-M-Y date
+        // acceptance patterns, test combinations.
+        SvNumberFormatter aFormatter(m_xContext, LANGUAGE_FRENCH);
+
+        std::vector<FormatInputOutput> aIO = {
+            { "22/11/1999", true, "22/11/99" },     // if default YY changes to YYYY adapt this
+            { "1999-11-22", true, "1999-11-22" },
+            { "1/2/11",     true, "01/02/11" },     // if default YY changes to YYYY adapt this
+            { "99-2-11",    true, "1999-02-11" },
+            { "22-2-11",    true, "22/02/11" },     // if default YY changes to YYYY adapt this
+            { "22.2.11",    true, "22/02/11" }      // if default YY changes to YYYY adapt this
+        };
+
+        checkSpecificNumberFormats( aFormatter, aIO, "[fr-FR] date");
     }
 }
 
