@@ -23,6 +23,7 @@
 #include <svx/svxdllapi.h>
 #include <svx/xit.hxx>
 #include <svtools/grfmgr.hxx>
+#include <array>
 
 class SdrModel;
 class BitmapColor;
@@ -30,7 +31,7 @@ class BitmapColor;
 
 // helper to construct historical 8x8 bitmaps with two colors
 
-BitmapEx SVX_DLLPUBLIC createHistorical8x8FromArray(sal_uInt16 const * pArray, Color aColorPix, Color aColorBack);
+BitmapEx SVX_DLLPUBLIC createHistorical8x8FromArray(std::array<sal_uInt8,64> const & pArray, Color aColorPix, Color aColorBack);
 bool SVX_DLLPUBLIC isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBack, BitmapColor& o_rFront);
 
 

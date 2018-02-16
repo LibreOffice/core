@@ -144,7 +144,7 @@ XFillBitmapItem::XFillBitmapItem(const XFillBitmapItem& rItem)
 {
 }
 
-BitmapEx createHistorical8x8FromArray(sal_uInt16 const *pArray, Color aColorPix, Color aColorBack)
+BitmapEx createHistorical8x8FromArray(std::array<sal_uInt8,64> const & pArray, Color aColorPix, Color aColorBack)
 {
     vcl::bitmap::RawBitmap aBitmap(Size(8, 8));
 

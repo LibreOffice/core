@@ -48,11 +48,11 @@ uno::Reference< container::XNameContainer > XPatternList::createInstance()
 bool XPatternList::Create()
 {
     OUStringBuffer aStr(SvxResId(RID_SVXSTR_PATTERN));
-    sal_uInt16 aArray[64];
+    std::array<sal_uInt8,64> aArray;
     BitmapEx aBitmap;
     const sal_Int32 nLen(aStr.getLength() - 1);
 
-    memset(aArray, 0, sizeof(aArray));
+    aArray.fill(0);
 
     // white/white bitmap
     aStr.append(" 1");

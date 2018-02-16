@@ -722,20 +722,15 @@ long SvxPixelCtl::ShowPosition( const Point &pt)
 
 }
 
-SvxPixelCtl::SvxPixelCtl(vcl::Window* pParent, sal_uInt16 nNumber)
+SvxPixelCtl::SvxPixelCtl(vcl::Window* pParent)
     : Control(pParent, WB_BORDER)
-    , nLines(nNumber)
     , bPaintable(true)
     , aFocusPosition(0,0)
 {
-    assert(nLines); // can't have no lines
     SetPixelColor( Color( COL_BLACK ) );
     SetBackgroundColor( Color( COL_WHITE ) );
     SetLineColor( Color( COL_LIGHTGRAY ) );
-
-    nSquares = nLines * nLines;
-    pPixel = new sal_uInt16[ nSquares ];
-    memset(pPixel, 0, nSquares * sizeof(sal_uInt16));
+    maPixelData.fill(0);
 }
 
 void SvxPixelCtl::Resize()
@@ -749,27 +744,21 @@ Size SvxPixelCtl::GetOptimalSize() const
     return LogicToPixel(Size(72, 72), MapMode(MapUnit::MapAppFont));
 }
 
-VCL_BUILDER_FACTORY_ARGS(SvxPixelCtl, 8)
+VCL_BUILDER_FACTORY(SvxPixelCtl)
 
 SvxPixelCtl::~SvxPixelCtl( )
 {
     disposeOnce();
 }
 
-void SvxPixelCtl::dispose()
-{
-    delete []pPixel;
-    Control::dispose();
-}
-
 // Changes the foreground or Background color
 
 void SvxPixelCtl::ChangePixel( sal_uInt16 nPixel )
 {
-    if( *( pPixel + nPixel) == 0 )
-        *( pPixel + nPixel) = 1; //  could be extended to more colors
+    if( maPixelData[nPixel] == 0 )
+        maPixelData[nPixel] = 1; //  could be extended to more colors
     else
-        *( pPixel + nPixel) = 0;
+        maPixelData[nPixel] = 0;
 }
 
 // The clicked rectangle is identified, to change its color
@@ -819,7 +808,7 @@ void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectan
 
         //Draw Rectangles (squares)
         rRenderContext.SetLineColor();
-        sal_uInt16 nLastPixel = *pPixel ? 0 : 1;
+        sal_uInt16 nLastPixel = maPixelData[0];
 
         for (i = 0; i < nLines; i++)
         {
@@ -831,9 +820,9 @@ void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectan
                 aPtTl.X() = aRectSize.Width() * j / nLines + 1;
                 aPtBr.X() = aRectSize.Width() * (j + 1) / nLines - 1;
 
-                if (*(pPixel + i * nLines + j) != nLastPixel)
+                if (maPixelData[i * nLines + j] != nLastPixel)
                 {
-                    nLastPixel = *(pPixel + i * nLines + j);
+                    nLastPixel = maPixelData[i * nLines + j];
                     // Change color: 0 -> Background color
                     rRenderContext.SetFillColor(nLastPixel ? aPixelColor : aBackgroundColor);
                 }
@@ -996,18 +985,18 @@ void SvxPixelCtl::SetXBitmap(const BitmapEx& rBitmapEx)
             const BitmapColor aColor(pRead->GetColor(i/8, i%8));
 
             if (aColor == aBack)
-                *(pPixel + i) = 0;
+                maPixelData[i] = 0;
             else
-                *(pPixel + i) = 1;
+                maPixelData[i] = 1;
         }
     }
 }
 
 // Returns a specific pixel
 
-sal_uInt16 SvxPixelCtl::GetBitmapPixel( const sal_uInt16 nPixel )
+sal_uInt8 SvxPixelCtl::GetBitmapPixel( const sal_uInt16 nPixel ) const
 {
-    return *( pPixel + nPixel );
+    return maPixelData[nPixel];
 }
 
 // Resets to the original state of the control
@@ -1015,7 +1004,7 @@ sal_uInt16 SvxPixelCtl::GetBitmapPixel( const sal_uInt16 nPixel )
 void SvxPixelCtl::Reset()
 {
     // clear pixel area
-    memset(pPixel, 0, nSquares * sizeof(sal_uInt16));
+    maPixelData.fill(0);
     Invalidate();
 }
 

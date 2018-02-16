@@ -60,7 +60,7 @@ class SvxBitmapCtl
 {
 private:
     Color           aPixelColor, aBackgroundColor;
-    const sal_uInt16*   pBmpArray;
+    std::array<sal_uInt8,64> const * pBmpArray;
 
 public:
     // Constructor: BitmapCtl for SvxPixelCtl
@@ -74,10 +74,10 @@ public:
     {
         if (!pBmpArray)
             return BitmapEx();
-        return createHistorical8x8FromArray(pBmpArray, aPixelColor, aBackgroundColor);
+        return createHistorical8x8FromArray(*pBmpArray, aPixelColor, aBackgroundColor);
     }
 
-    void SetBmpArray( const sal_uInt16* pPixel ) { pBmpArray = pPixel; }
+    void SetBmpArray( std::array<sal_uInt8,64> const & pPixel ) { pBmpArray = &pPixel; }
     void SetPixelColor( Color aColor ) { aPixelColor = aColor; }
     void SetBackgroundColor( Color aColor ) { aBackgroundColor = aColor; }
 };
