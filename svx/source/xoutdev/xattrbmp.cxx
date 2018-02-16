@@ -38,6 +38,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <vcl/dibtools.hxx>
 
 #include <libxml/xmlwriter.h>
@@ -143,37 +144,26 @@ XFillBitmapItem::XFillBitmapItem(const XFillBitmapItem& rItem)
 {
 }
 
-Bitmap createHistorical8x8FromArray(const sal_uInt16* pArray, Color aColorPix, Color aColorBack)
+BitmapEx createHistorical8x8FromArray(sal_uInt16 const *pArray, Color aColorPix, Color aColorBack)
 {
-    BitmapPalette aPalette(2);
+    vcl::bitmap::RawBitmap aBitmap(Size(8, 8));
 
-    aPalette[0] = BitmapColor(aColorBack);
-    aPalette[1] = BitmapColor(aColorPix);
-
-    Bitmap aBitmap(Size(8, 8), 1, &aPalette);
-    Bitmap::ScopedWriteAccess pContent(aBitmap);
-
-    if(pContent)
+    for(sal_uInt16 a(0); a < 8; a++)
     {
-        for(sal_uInt16 a(0); a < 8; a++)
+        for(sal_uInt16 b(0); b < 8; b++)
         {
-            for(sal_uInt16 b(0); b < 8; b++)
+            if(pArray[(a * 8) + b])
             {
-                if(pArray[(a * 8) + b])
-                {
-                    pContent->SetPixelIndex(a, b, 1);
-                }
-                else
-                {
-                    pContent->SetPixelIndex(a, b, 0);
-                }
+                aBitmap.SetPixel(a, b, aColorBack);
+            }
+            else
+            {
+                aBitmap.SetPixel(a, b, aColorPix);
             }
         }
-
-        pContent.reset();
     }
 
-    return aBitmap;
+    return vcl::bitmap::CreateFromData(std::move(aBitmap));
 }
 
 bool isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBack, BitmapColor& o_rFront)
