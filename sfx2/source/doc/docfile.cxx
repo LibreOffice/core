@@ -2595,7 +2595,7 @@ void SfxMedium::Init_Impl()
         INetProtocol eProt = aUrl.GetProtocol();
         if ( eProt == INetProtocol::NotValid )
         {
-            SAL_WARN( "sfx.doc", "Unknown protocol!" );
+            SAL_WARN( "sfx.doc", "URL <" << pImpl->m_aLogicName << "> with unknown protocol" );
         }
         else
         {
