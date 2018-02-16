@@ -2111,7 +2111,7 @@ void Window::PostExtTextInputEvent(int nType, const OUString& rText)
     {
         std::unique_ptr<ExtTextInputAttr[]> pAttr(new ExtTextInputAttr[rText.getLength()]);
         for (int i = 0; i < rText.getLength(); ++i) {
-            pAttr[i] = ExtTextInputAttr::NONE;
+            pAttr[i] = ExtTextInputAttr::Underline;
         }
         SalExtTextInputEvent aEvent { rText, pAttr.get(), rText.getLength(), EXTTEXTINPUT_CURSOR_OVERWRITE };
         ImplWindowFrameProc(this, SalEvent::ExtTextInput, &aEvent);
