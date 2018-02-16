@@ -221,7 +221,7 @@ void UnoDataBrowserView::resizeDocumentView(tools::Rectangle& _rPlayground)
 
             Point aStatusPos( aPlaygroundPos.X() + 2, aTreeViewPos.Y() + aTreeViewSize.Height() - aStatusSize.Height() );
             m_pStatus->SetPosSizePixel( aStatusPos, aStatusSize );
-            aTreeViewSize.setHeight( aTreeViewSize.Height() - aStatusSize.Height() );
+            aTreeViewSize.AdjustHeight( -(aStatusSize.Height()) );
         }
 
         // set the size of treelistbox

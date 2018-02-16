@@ -167,9 +167,9 @@ void OTableWindow::SetSizePixel( const Size& rNewSize )
 {
     Size aOutSize(rNewSize);
     if( aOutSize.Width() < TABWIN_WIDTH_MIN )
-        aOutSize.Width() = TABWIN_WIDTH_MIN;
+        aOutSize.setWidth( TABWIN_WIDTH_MIN );
     if( aOutSize.Height() < TABWIN_HEIGHT_MIN )
-        aOutSize.Height() = TABWIN_HEIGHT_MIN;
+        aOutSize.setHeight( TABWIN_HEIGHT_MIN );
 
     GetData()->SetSize( aOutSize );
     Window::SetSizePixel( aOutSize );
@@ -617,19 +617,19 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
                 {
                     case KEY_DOWN:
                         bHandled = true;
-                        aStartPoint.setY( aStartPoint.Y() + m_nMoveIncrement );
+                        aStartPoint.AdjustY(m_nMoveIncrement );
                         break;
                     case KEY_UP:
                         bHandled = true;
-                        aStartPoint.setY( aStartPoint.Y() + -m_nMoveIncrement );
+                        aStartPoint.AdjustY(-m_nMoveIncrement );
                         break;
                     case KEY_LEFT:
                         bHandled = true;
-                        aStartPoint.setX( aStartPoint.X() + -m_nMoveIncrement );
+                        aStartPoint.AdjustX(-m_nMoveIncrement );
                         break;
                     case KEY_RIGHT:
                         bHandled = true;
-                        aStartPoint.setX( aStartPoint.X() + m_nMoveIncrement );
+                        aStartPoint.AdjustX(m_nMoveIncrement );
                         break;
                 }
                 if ( bHandled )
@@ -644,9 +644,9 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
                             && ((ptOld.Y() + aNewSize.Height()) <= aSize.Height()) )
                         {
                             if ( aNewSize.Width() < TABWIN_WIDTH_MIN )
-                                aNewSize.Width() = TABWIN_WIDTH_MIN;
+                                aNewSize.setWidth( TABWIN_WIDTH_MIN );
                             if ( aNewSize.Height() < TABWIN_HEIGHT_MIN )
-                                aNewSize.Height() = TABWIN_HEIGHT_MIN;
+                                aNewSize.setHeight( TABWIN_HEIGHT_MIN );
 
                             Size szOld = GetSizePixel();
 

@@ -192,8 +192,8 @@ void OJoinController::SaveTabWinPosSize(OTableWindow const * pTabWin, long nOffs
 
     // set Position & Size of data anew (with current window parameters)
     Point aPos = pTabWin->GetPosPixel();
-    aPos.setX( aPos.X() + nOffsetX );
-    aPos.Y() += nOffsetY;
+    aPos.AdjustX(nOffsetX );
+    aPos.AdjustY(nOffsetY );
     pData->SetPosition(aPos);
     pData->SetSize(pTabWin->GetSizePixel());
 

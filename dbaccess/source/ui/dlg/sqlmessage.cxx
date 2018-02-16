@@ -498,7 +498,7 @@ void OSQLMessageBox::impl_positionControls()
         // also, if it's not as high as the image ...
         if ( aPrimaryRect.GetHeight() < m_aInfoImage->GetSizePixel().Height() )
         {   // ... make it fit the image height
-            aPrimaryRect.SetBottom( aPrimaryRect.Bottom() + aInfoRect.GetHeight() - aPrimaryRect.GetHeight() );
+            aPrimaryRect.AdjustBottom(aInfoRect.GetHeight() - aPrimaryRect.GetHeight() );
             // and center it vertically
             m_aTitle->SetStyle( m_aTitle->GetStyle() | WB_VCENTER );
         }

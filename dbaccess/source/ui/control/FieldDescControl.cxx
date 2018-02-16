@@ -1003,16 +1003,16 @@ void OFieldDescControl::SetPosSize( VclPtr<Control> const & rControl, long nRow,
         {
         case 0:
         default:
-            aSize.Width()  = CONTROL_WIDTH_1;
+            aSize.setWidth( CONTROL_WIDTH_1 );
             break;
         case 1:
-            aSize.Width()  = CONTROL_WIDTH_2;
+            aSize.setWidth( CONTROL_WIDTH_2 );
             break;
         case 3:
-            aSize.Width()  = CONTROL_WIDTH_3;
+            aSize.setWidth( CONTROL_WIDTH_3 );
             break;
         case 4:
-            aSize.Width()  = CONTROL_WIDTH_4;
+            aSize.setWidth( CONTROL_WIDTH_4 );
             break;
         }
     }
@@ -1034,7 +1034,7 @@ void OFieldDescControl::SetPosSize( VclPtr<Control> const & rControl, long nRow,
             aPosition.setX( aOwnSize.Width() - aSize.Width() );
         }
         else
-            aPosition.X() = CONTROL_WIDTH_1 + CONTROL_SPACING_X;
+            aPosition.setX( CONTROL_WIDTH_1 + CONTROL_SPACING_X );
         break;
     default:
         aPosition.setX( 0 );
@@ -1044,7 +1044,7 @@ void OFieldDescControl::SetPosSize( VclPtr<Control> const & rControl, long nRow,
     aSize = rControl->GetSizePixel( );
 
     const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y), MapMode(MapUnit::MapAppFont)).Height();
-    aPosition.setY( aPosition.Y() + ((nRow+1)*nControl_Spacing_y) +
+    aPosition.AdjustY(((nRow+1)*nControl_Spacing_y) +
                     (nRow*nControlHeight) );
 
     // Display Control
