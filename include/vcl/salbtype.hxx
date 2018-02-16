@@ -93,7 +93,7 @@ private:
     sal_uInt8               mcBlueOrIndex;
     sal_uInt8               mcGreen;
     sal_uInt8               mcRed;
-    sal_uInt8               mbIndex; // should be bool, but see above warning
+    bool                    mbIndex;
 
 public:
 
@@ -352,7 +352,7 @@ inline BitmapColor::BitmapColor() :
             mcBlueOrIndex   ( 0 ),
             mcGreen         ( 0 ),
             mcRed           ( 0 ),
-            mbIndex         ( sal_uInt8(false) )
+            mbIndex         (false)
 {
 }
 
@@ -360,7 +360,7 @@ constexpr BitmapColor::BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 
             mcBlueOrIndex   ( cBlue ),
             mcGreen         ( cGreen ),
             mcRed           ( cRed ),
-            mbIndex         ( sal_uInt8(false) )
+            mbIndex         (false)
 {
 }
 
@@ -368,7 +368,7 @@ inline BitmapColor::BitmapColor( const Color& rColor ) :
             mcBlueOrIndex   ( rColor.GetBlue() ),
             mcGreen         ( rColor.GetGreen() ),
             mcRed           ( rColor.GetRed() ),
-            mbIndex         ( sal_uInt8(false) )
+            mbIndex         (false)
 {
 }
 
@@ -376,14 +376,14 @@ inline BitmapColor::BitmapColor( sal_uInt8 cIndex ) :
             mcBlueOrIndex   ( cIndex ),
             mcGreen         ( 0 ),
             mcRed           ( 0 ),
-            mbIndex         ( sal_uInt8(true) )
+            mbIndex         (true)
 {
 }
 
 inline bool BitmapColor::operator==( const BitmapColor& rBitmapColor ) const
 {
     return( ( mcBlueOrIndex == rBitmapColor.mcBlueOrIndex ) &&
-            ( mbIndex ? bool(rBitmapColor.mbIndex) :
+            ( mbIndex ? rBitmapColor.mbIndex :
             ( mcGreen == rBitmapColor.mcGreen && mcRed == rBitmapColor.mcRed ) ) );
 }
 
