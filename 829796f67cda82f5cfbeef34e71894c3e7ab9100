@@ -16,6 +16,24 @@
       "revId": "829796f67cda82f5cfbeef34e71894c3e7ab9100",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_084b7888",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 4364,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2018-02-16T21:56:07Z",
+      "side": 1,
+      "message": "You\u0027re right.\nAs I wrote in my reply to Thorsten\u0027s comment, fakeroot is currently only used for the packaging on Linux and Solaris and I have no idea what made me write \"OPENBSD\" instead of \"SOLARIS\" here...\nFixed now.",
+      "parentUuid": "fa31d9ce_486f30c5",
+      "revId": "829796f67cda82f5cfbeef34e71894c3e7ab9100",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
