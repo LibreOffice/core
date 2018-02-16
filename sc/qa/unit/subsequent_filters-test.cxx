@@ -237,6 +237,7 @@ public:
 
     void testMergedCellsXLSXML();
     void testBackgroundColorStandardXLSXML();
+    void testNamedExpressionsXLSXML();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -361,6 +362,7 @@ public:
 #endif
     CPPUNIT_TEST(testMergedCellsXLSXML);
     CPPUNIT_TEST(testBackgroundColorStandardXLSXML);
+    CPPUNIT_TEST(testNamedExpressionsXLSXML);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3582,6 +3584,49 @@ void ScFiltersTest::testBackgroundColorStandardXLSXML()
     }
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testNamedExpressionsXLSXML()
+{
+    {
+        // global named expressions
+
+        ScDocShellRef xDocSh = loadDoc("named-exp-global.", FORMAT_XLS_XML);
+        CPPUNIT_ASSERT_MESSAGE("Failed to load named-exp-global.xml", xDocSh.is());
+        ScDocument& rDoc = xDocSh->GetDocument();
+
+        // A7
+        ScAddress aPos(0,6,0);
+        CPPUNIT_ASSERT_EQUAL(15.0, rDoc.GetValue(aPos));
+        ASSERT_FORMULA_EQUAL(rDoc, aPos, "SUM(MyRange)", nullptr);
+
+        // B7
+        aPos.IncCol();
+        CPPUNIT_ASSERT_EQUAL(55.0, rDoc.GetValue(aPos));
+        ASSERT_FORMULA_EQUAL(rDoc, aPos, "SUM(MyRange2)", nullptr);
+
+        xDocSh->DoClose();
+    }
+
+    {
+        // sheet-local named expressions
+
+        ScDocShellRef xDocSh = loadDoc("named-exp-local.", FORMAT_XLS_XML);
+        CPPUNIT_ASSERT_MESSAGE("Failed to load named-exp-local.xml", xDocSh.is());
+        ScDocument& rDoc = xDocSh->GetDocument();
+
+        // A7 on Sheet1
+        ScAddress aPos(0,6,0);
+        CPPUNIT_ASSERT_EQUAL(27.0, rDoc.GetValue(aPos));
+        ASSERT_FORMULA_EQUAL(rDoc, aPos, "SUM(MyRange)", nullptr);
+
+        // A7 on Sheet2
+        aPos.IncTab();
+        CPPUNIT_ASSERT_EQUAL(74.0, rDoc.GetValue(aPos));
+        ASSERT_FORMULA_EQUAL(rDoc, aPos, "SUM(MyRange)", nullptr);
+
+        xDocSh->DoClose();
+    }
 }
 
 void ScFiltersTest::testCondFormatXLSB()
