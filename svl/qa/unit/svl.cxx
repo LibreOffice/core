@@ -1177,7 +1177,7 @@ struct FormatInputOutput
 };
 }
 
-static void checkSpecificNumberFormats( SvNumberFormatter& rFormatter,
+void checkSpecificNumberFormats( SvNumberFormatter& rFormatter,
         const std::vector<FormatInputOutput>& rVec, const char* pName )
 {
 
