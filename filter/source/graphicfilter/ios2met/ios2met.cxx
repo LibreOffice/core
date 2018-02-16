@@ -894,8 +894,8 @@ void OS2METReader::ReadRelLine(bool bGivenPos, sal_uInt16 nOrderLen)
     tools::Polygon aPolygon(nPolySize);
     for (i=0; i<nPolySize; i++) {
         sal_Int8 nsignedbyte;
-        pOS2MET->ReadSChar( nsignedbyte ); aP0.setX( aP0.X() + static_cast<sal_Int32>(nsignedbyte) );
-        pOS2MET->ReadSChar( nsignedbyte ); aP0.setY( aP0.Y() - static_cast<sal_Int32>(nsignedbyte) );
+        pOS2MET->ReadSChar( nsignedbyte ); aP0.X()+=static_cast<sal_Int32>(nsignedbyte);
+        pOS2MET->ReadSChar( nsignedbyte ); aP0.Y()-=static_cast<sal_Int32>(nsignedbyte);
         aCalcBndRect.Union(tools::Rectangle(aP0,Size(1,1)));
         aPolygon.SetPoint(aP0,i);
     }

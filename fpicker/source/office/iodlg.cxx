@@ -2755,7 +2755,7 @@ IMPL_LINK_NOARG( SvtFileDialog, Split_Hdl, Splitter*, void )
     sal_Int32 nNewX = nSplitPos + _pSplitter->GetSizePixel().Width();
     fileViewPos.setX( nNewX );
     Size fileViewSize = _pFileView->GetSizePixel();
-    fileViewSize.setWidth( fileViewSize.Width() - ( nNewX - nOldX ) );
+    fileViewSize.AdjustWidth( -( nNewX - nOldX ) );
     _pFileView->SetPosSizePixel( fileViewPos, fileViewSize );
 
     _pSplitter->SetPosPixel( Point( placeSize.Width(), _pSplitter->GetPosPixel().Y() ) );

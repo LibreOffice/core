@@ -550,11 +550,11 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
         switch( aOldFont.GetAlignment() )
         {
             case ALIGN_TOP:
-                aBaseLinePos.setY( aBaseLinePos.Y() + aMetric.GetAscent() );
+                aBaseLinePos.AdjustY(aMetric.GetAscent() );
             break;
 
             case ALIGN_BOTTOM:
-                aBaseLinePos.setY( aBaseLinePos.Y() - aMetric.GetDescent() );
+                aBaseLinePos.AdjustY( -(aMetric.GetDescent()) );
             break;
 
             default:

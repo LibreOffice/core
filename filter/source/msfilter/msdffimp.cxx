@@ -3108,8 +3108,8 @@ void SvxMSDffManager::Scale( sal_Int32& rVal ) const
 
 void SvxMSDffManager::Scale( Point& rPos ) const
 {
-    rPos.setX( rPos.X() + nMapXOfs );
-    rPos.setY( rPos.Y() + nMapYOfs );
+    rPos.AdjustX(nMapXOfs );
+    rPos.AdjustY(nMapYOfs );
     if ( bNeedMap )
     {
         rPos.setX( BigMulDiv( rPos.X(), nMapMul, nMapDiv ) );
@@ -4624,8 +4624,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
                             Point aP( aObjData.aBoundRect.Center() );
                             Size aS( aObjData.aBoundRect.GetSize() );
-                            aP.setX( aP.X() - aS.Width() / 2 );
-                            aP.setY( aP.Y() - aS.Height() / 2 );
+                            aP.AdjustX( -(aS.Width() / 2) );
+                            aP.AdjustY( -(aS.Height() / 2) );
                             tools::Rectangle aLogicRect( aP, aS );
 
                             fYOfs = fXOfs = 0.0;
@@ -5246,8 +5246,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             // the vertical paragraph indents are part of the BoundRect,
             // here we 'remove' them by calculating
             tools::Rectangle aNewRect(rTextRect);
-            aNewRect.SetBottom( aNewRect.Bottom() - nTextTop + nTextBottom );
-            aNewRect.SetRight( aNewRect.Right() - nTextLeft + nTextRight );
+            aNewRect.AdjustBottom( -(nTextTop + nTextBottom) );
+            aNewRect.AdjustRight( -(nTextLeft + nTextRight) );
 
             // Only if it's a simple textbox may Writer replace
             // the object with a frame, otherwise
@@ -5379,8 +5379,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     rTextRect.GetWidth() : rTextRect.GetHeight();
                 nMinWH /= 2;
                 Point aPivot(rTextRect.TopLeft());
-                aPivot.setX( aPivot.X() + nMinWH );
-                aPivot.setY( aPivot.Y() + nMinWH );
+                aPivot.AdjustX(nMinWH );
+                aPivot.AdjustY(nMinWH );
                 double a = nTextRotationAngle * nPi180;
                 pTextObj->NbcRotate(aPivot, nTextRotationAngle, sin(a), cos(a));
             }

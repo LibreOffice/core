@@ -1612,9 +1612,9 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     const vcl::Font&                        rFont = mpVDev->GetFont();
 
     if( rFont.GetAlignment() == ALIGN_TOP )
-        aBaseLinePos.setY( aBaseLinePos.Y() + aMetric.GetAscent() );
+        aBaseLinePos.AdjustY(aMetric.GetAscent() );
     else if( rFont.GetAlignment() == ALIGN_BOTTOM )
-        aBaseLinePos.setY( aBaseLinePos.Y() - aMetric.GetDescent() );
+        aBaseLinePos.AdjustY( -(aMetric.GetDescent()) );
 
     implMap( rPos, aPos );
 
@@ -2250,8 +2250,7 @@ void SVGActionWriter::ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPo
                 // Setting x value of a gradient vector to rotation center to
                 // place a gradient vector in a target polygon.
                 // This would help editing it in SVG editors like inkscape.
-                aPoly[ 0 ].setX( aCenter.X() );
-                aPoly[ 1 ].setX( aCenter.X() );
+                aPoly[ 0 ].X() = aPoly[ 1 ].X() = aCenter.X();
                 aPoly[ 0 ].setY( aRect.Top() );
                 aPoly[ 1 ].setY( aRect.Bottom() );
                 aPoly.Rotate( aCenter, nAngle );
@@ -2543,9 +2542,9 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     const vcl::Font&                        rFont = mpVDev->GetFont();
 
     if( rFont.GetAlignment() == ALIGN_TOP )
-        aBaseLinePos.setY( aBaseLinePos.Y() + aMetric.GetAscent() );
+        aBaseLinePos.AdjustY(aMetric.GetAscent() );
     else if( rFont.GetAlignment() == ALIGN_BOTTOM )
-        aBaseLinePos.setY( aBaseLinePos.Y() - aMetric.GetDescent() );
+        aBaseLinePos.AdjustY( -(aMetric.GetDescent()) );
 
     ImplMap( rPos, aPos );
 

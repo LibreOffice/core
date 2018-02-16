@@ -88,9 +88,9 @@ Size ImplEESdrWriter::ImplMapSize( const Size& rSize )
     Size aRetSize( OutputDevice::LogicToLogic( rSize, maMapModeSrc, maMapModeDest ) );
 
     if ( !aRetSize.Width() )
-        aRetSize.setWidth( ++aRetSize.Width() );
+        aRetSize.AdjustWidth( 1 );
     if ( !aRetSize.Height() )
-        aRetSize.setHeight( ++aRetSize.Height() );
+        aRetSize.AdjustHeight( 1 );
     return aRetSize;
 }
 
@@ -378,10 +378,10 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 const tools::Rectangle& rRect = aRect100thmm;
                 aCenter.setX( rRect.Left() + ( rRect.GetWidth() / 2 ) );
                 aCenter.setY( rRect.Top() + ( rRect.GetHeight() / 2 ) );
-                aStart.setX( aStart.X() + aCenter.X() );
-                aStart.setY( aStart.Y() + aCenter.Y() );
-                aEnd.setX( aEnd.X() + aCenter.X() );
-                aEnd.setY( aEnd.Y() + aCenter.Y() );
+                aStart.AdjustX(aCenter.X() );
+                aStart.AdjustY(aCenter.Y() );
+                aEnd.AdjustX(aCenter.X() );
+                aEnd.AdjustY(aCenter.Y() );
                 tools::Polygon aPolygon( rRect, aStart, aEnd, ePolyKind );
                 if( rObj.GetAngle() )
                 {
