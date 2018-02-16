@@ -114,7 +114,7 @@ void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     {
         const long nVRulerWidth = m_aVRuler->GetSizePixel().Width();
         long nSize = aSize.Width() - nVRulerWidth;
-        aSize.setWidth( aSize.Width() + nCornerWidth );
+        aSize.AdjustWidth(nCornerWidth );
         rRenderContext.SetClipRegion(vcl::Region(rRenderContext.PixelToLogic(tools::Rectangle(Point(),
                                                                              Size(nSize, aSize.Height())))));
     }
@@ -240,7 +240,7 @@ void OStartMarker::Resize()
     m_aText->SetPosSizePixel(aPos,Size(aRulerPos.X() - aPos.X(),nHeight));
 
     aPos.setX( nExtraWidth );
-    aPos.setY( aPos.Y() + static_cast<sal_Int32>((LogicToPixel(Size(0,m_aText->GetTextHeight())).Height() - aImageSize.Height()) * 0.5) ) ;
+    aPos.AdjustY(static_cast<sal_Int32>((LogicToPixel(Size(0,m_aText->GetTextHeight())).Height() - aImageSize.Height()) * 0.5) ) ;
     m_aImage->SetPosSizePixel(aPos,aImageSize);
 }
 
