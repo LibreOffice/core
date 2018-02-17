@@ -220,15 +220,15 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
 
     {
         const SvxBrushItem* pBrush = rFmt.GetBrush();
-        if(pBrush && pBrush->GetGraphicObject())
+        const Graphic* pGraphic = nullptr;
+        if (pBrush)
+            pGraphic = pBrush->GetGraphic();
+        if (pGraphic)
         {
-            const GraphicObject* pGrafObj = pBrush->GetGraphicObject();
-            OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
-            aURL += OStringToOUString(pGrafObj->GetUniqueID(),
-                RTL_TEXTENCODING_ASCII_US);
+            uno::Reference<awt::XBitmap> xBitmap = VCLUnoHelper::CreateBitmap(pGraphic->GetBitmapEx());
+            aVal <<= xBitmap;
 
-            aVal <<= aURL;
-            const beans::PropertyValue aGraphicProp( "GraphicURL", -1, aVal, beans::PropertyState_DIRECT_VALUE);
+            const beans::PropertyValue aGraphicProp("GraphicBitmap", -1, aVal, beans::PropertyState_DIRECT_VALUE);
             pArray[nIdx++] = aGraphicProp;
         }
     }
