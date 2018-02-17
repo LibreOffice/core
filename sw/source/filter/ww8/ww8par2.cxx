@@ -1700,7 +1700,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     m_pTabLine(nullptr),
     m_pTabBoxes(nullptr),
     m_pTabBox(nullptr),
-    m_pAktWWCell(nullptr),
+    m_pCurrentWWCell(nullptr),
     m_nRows(0),
     m_nDefaultSwCols(0),
     m_nBands(0),
@@ -1714,9 +1714,9 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     m_bClaimLineFormat(false),
     m_eOri(text::HoriOrientation::NONE),
     m_bIsBiDi(false),
-    m_nAktRow(0),
-    m_nAktBandRow(0),
-    m_nAktCol(0),
+    m_nCurrentRow(0),
+    m_nCurrentBandRow(0),
+    m_nCurrentCol(0),
     m_nRowsToRepeat(0),
     m_pTable(nullptr),
     m_pParentPos(nullptr),
@@ -2289,7 +2289,7 @@ void WW8TabDesc::CalcDefaults()
     if( m_nDefaultSwCols == 0 )
         m_bOk = false;
     m_pActBand = m_pFirstBand;
-    m_nAktBandRow = 0;
+    m_nCurrentBandRow = 0;
     OSL_ENSURE( m_pActBand, "pActBand is 0" );
 }
 
@@ -2474,7 +2474,7 @@ void WW8TabDesc::UseSwTable()
 {
     // init global Vars
     m_pTabLines = &m_pTable->GetTabLines();
-    m_nAktRow = m_nAktCol = m_nAktBandRow = 0;
+    m_nCurrentRow = m_nCurrentCol = m_nCurrentBandRow = 0;
 
     m_pTableNd  = const_cast<SwTableNode*>((*m_pTabLines)[0]->GetTabBoxes()[0]->
         GetSttNd()->FindTableNode());
@@ -2492,7 +2492,7 @@ void WW8TabDesc::UseSwTable()
     m_pIo->m_xCtrlStck->SetAttr(*m_pIo->m_pPaM->GetPoint(), 0, false);
 
     // now set the correct PaM and prepare first merger group if any
-    SetPamInCell(m_nAktCol, true);
+    SetPamInCell(m_nCurrentCol, true);
     aDup.Insert(*m_pIo->m_pPaM->GetPoint());
 
     m_pIo->m_bWasTabRowEnd = false;
@@ -2638,7 +2638,7 @@ void WW8TabDesc::MergeCells()
 void WW8TabDesc::ParkPaM()
 {
     SwTableBox *pTabBox2 = nullptr;
-    short nRow = m_nAktRow + 1;
+    short nRow = m_nCurrentRow + 1;
     if (nRow < static_cast<sal_uInt16>(m_pTabLines->size()))
     {
         if (SwTableLine *pLine = (*m_pTabLines)[nRow])
@@ -2799,7 +2799,7 @@ bool WW8TabDesc::IsValidCell(short nCol) const
 {
     return (static_cast<size_t>(nCol) < SAL_N_ELEMENTS(m_pActBand->bExist)) &&
            m_pActBand->bExist[nCol] &&
-           static_cast<sal_uInt16>(m_nAktRow) < m_pTabLines->size();
+           static_cast<sal_uInt16>(m_nCurrentRow) < m_pTabLines->size();
 }
 
 bool WW8TabDesc::InFirstParaInCell() const
@@ -2842,7 +2842,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 
     sal_uInt16 nCol = m_pActBand->transCell(nWwCol);
 
-    if (static_cast<sal_uInt16>(m_nAktRow) >= m_pTabLines->size())
+    if (static_cast<sal_uInt16>(m_nCurrentRow) >= m_pTabLines->size())
     {
         OSL_ENSURE(false, "Actual row bigger than expected." );
         if (bPam)
@@ -2850,7 +2850,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
         return;
     }
 
-    m_pTabLine = (*m_pTabLines)[m_nAktRow];
+    m_pTabLine = (*m_pTabLines)[m_nCurrentRow];
     m_pTabBoxes = &m_pTabLine->GetTabBoxes();
 
     if (nCol >= m_pTabBoxes->size())
@@ -2886,7 +2886,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     }
     if (bPam)
     {
-        m_pAktWWCell = &m_pActBand->pTCs[ nWwCol ];
+        m_pCurrentWWCell = &m_pActBand->pTCs[ nWwCol ];
 
        // The first paragraph in a cell with upper autospacing has upper spacing set to 0
         if(m_pIo->m_bParaAutoBefore && m_pIo->m_bFirstPara && !m_pIo->m_xWDop->fDontUseHTMLAutoSpacing)
@@ -2944,7 +2944,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 
 void WW8TabDesc::InsertCells( short nIns )
 {
-    m_pTabLine = (*m_pTabLines)[m_nAktRow];
+    m_pTabLine = (*m_pTabLines)[m_nCurrentRow];
     m_pTabBoxes = &m_pTabLine->GetTabBoxes();
     m_pTabBox = (*m_pTabBoxes)[0];
 
@@ -3207,7 +3207,7 @@ void WW8TabDesc::TableCellEnd()
 {
     ::SetProgressState(m_pIo->m_nProgress, m_pIo->m_pDocShell);   // Update
 
-    EndMiserableHackForUnsupportedDirection(m_nAktCol);
+    EndMiserableHackForUnsupportedDirection(m_nCurrentCol);
 
     // new line/row
     if( m_pIo->m_bWasTabRowEnd )
@@ -3222,20 +3222,20 @@ void WW8TabDesc::TableCellEnd()
                 m_aNumRuleNames.end());
         }
 
-        m_nAktCol = 0;
-        m_nAktRow++;
-        m_nAktBandRow++;
+        m_nCurrentCol = 0;
+        m_nCurrentRow++;
+        m_nCurrentBandRow++;
         OSL_ENSURE( m_pActBand , "pActBand is 0" );
         if( m_pActBand )
         {
-            if( m_nAktRow >= m_nRows )  // nothing to at end of table
+            if( m_nCurrentRow >= m_nRows )  // nothing to at end of table
                 return;
 
-            bool bNewBand = m_nAktBandRow >= m_pActBand->nRows;
+            bool bNewBand = m_nCurrentBandRow >= m_pActBand->nRows;
             if( bNewBand )
             {                       // new band needed ?
                 m_pActBand = m_pActBand->pNextBand;
-                m_nAktBandRow = 0;
+                m_nCurrentBandRow = 0;
                 OSL_ENSURE( m_pActBand, "pActBand is 0" );
                 AdjustNewBand();
             }
@@ -3249,13 +3249,13 @@ void WW8TabDesc::TableCellEnd()
     }
     else
     {                       // new column ( cell )
-        m_nAktCol++;
+        m_nCurrentCol++;
     }
-    SetPamInCell(m_nAktCol, true);
+    SetPamInCell(m_nCurrentCol, true);
 
     // finish Annotated Level Numbering ?
     if (m_pIo->m_bAnl && !m_pIo->m_bAktAND_fNumberAcross && m_pActBand)
-        m_pIo->StopAllAnl(IsValidCell(m_nAktCol));
+        m_pIo->StopAllAnl(IsValidCell(m_nCurrentCol));
 }
 
 // if necessary register the box for the merge group for this column
@@ -3299,7 +3299,7 @@ sal_uInt16 WW8TabDesc::GetLogicalWWCol() const // returns number of col as INDIC
     sal_uInt16 nCol = 0;
     if( m_pActBand && m_pActBand->pTCs)
     {
-        for( sal_uInt16 iCol = 1; iCol <= m_nAktCol && iCol <= m_pActBand->nWwCols; ++iCol )
+        for( sal_uInt16 iCol = 1; iCol <= m_nCurrentCol && iCol <= m_pActBand->nWwCols; ++iCol )
         {
             if( !m_pActBand->pTCs[ iCol-1 ].bMerged )
                 ++nCol;
