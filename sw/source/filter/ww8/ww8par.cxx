@@ -1619,7 +1619,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
 
     const SwFormat * pSty = nullptr;
     sal_uInt16 nTabBase;
-    if (m_pAktColl && m_nCurrentColl < m_vColl.size()) // StyleDef
+    if (m_pCurrentColl && m_nCurrentColl < m_vColl.size()) // StyleDef
     {
         nTabBase = m_vColl[m_nCurrentColl].m_nBase;
         if (nTabBase < m_vColl.size())  // Based On
@@ -1735,7 +1735,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
         // text SwWW8ImplReader::Read_Tab is called at the begin and end of
         // the range the attrib affects, and ignoring it would upset the
         // balance
-        if (!m_pAktColl) // not importing into a style
+        if (!m_pCurrentColl) // not importing into a style
         {
             SvxTabStopItem aOrig = pSty ?
             ItemGet<SvxTabStopItem>(*pSty, RES_PARATR_TABSTOP) :
@@ -4164,7 +4164,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pPostProcessAttrsInfo(nullptr)
     , m_aTextNodesHavingFirstLineOfstSet()
     , m_aTextNodesHavingLeftIndentSet()
-    , m_pAktColl(nullptr)
+    , m_pCurrentColl(nullptr)
     , m_pDfltTextFormatColl(nullptr)
     , m_pStandardFormatColl(nullptr)
     , m_pDrawModel(nullptr)

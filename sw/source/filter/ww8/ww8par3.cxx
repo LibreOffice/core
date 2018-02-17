@@ -1722,9 +1722,9 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nCurrentLFO,
     SwWW8StyInf &rStyleInf = m_vColl[nStyle];
     if (rStyleInf.m_bValid)
     {
-        OSL_ENSURE(m_pAktColl, "Cannot be called outside of style import");
+        OSL_ENSURE(m_pCurrentColl, "Cannot be called outside of style import");
         // Phase 1: Numbering attributes when reading a StyleDef
-        if( m_pAktColl )
+        if( m_pCurrentColl )
         {
             // only save the Parameters for now. The actual List will be appended
             // at a later point, when the Listdefinitions is read...
@@ -1895,7 +1895,7 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nCurrentLFO,
 void SwWW8ImplReader::RegisterNumFormat(sal_uInt16 nCurrentLFO, sal_uInt8 nCurrentLevel)
 {
     // Are we reading the StyleDef ?
-    if (m_pAktColl)
+    if (m_pCurrentColl)
         SetStylesList( m_nCurrentColl , nCurrentLFO, nCurrentLevel);
     else
         RegisterNumFormatOnTextNode(nCurrentLFO, nCurrentLevel);
@@ -1982,15 +1982,15 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             ww8par6.cxx#SwWW8ImplReader::Read_LR
             */
 
-            if (m_pAktColl)
+            if (m_pCurrentColl)
             {
                 // here a "named" style is being configured
 
                 // disable the numbering/list in the style currently configured
-                m_pAktColl->SetFormatAttr(*GetDfltAttr(RES_PARATR_NUMRULE));
+                m_pCurrentColl->SetFormatAttr(*GetDfltAttr(RES_PARATR_NUMRULE));
 
                 // reset/blank the indent
-                m_pAktColl->SetFormatAttr(SvxLRSpaceItem(RES_LR_SPACE));
+                m_pCurrentColl->SetFormatAttr(SvxLRSpaceItem(RES_LR_SPACE));
             }
             else if (SwTextNode* pTextNode = m_pPaM->GetNode().GetTextNode())
             {
@@ -2028,7 +2028,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             indentation.  Setting this flag will allow us to recover from this
             braindeadness
             */
-            if (m_pAktColl && (m_nLFOPosition == 2047-1) && m_nCurrentColl < m_vColl.size())
+            if (m_pCurrentColl && (m_nLFOPosition == 2047-1) && m_nCurrentColl < m_vColl.size())
                 m_vColl[m_nCurrentColl].m_bHasBrokenWW6List = true;
 
             // here the stream data is 1-based, we subtract ONE

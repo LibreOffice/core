@@ -728,7 +728,7 @@ void SwWW8ImplReader::Read_ANLevelNo( sal_uInt16, const sal_uInt8* pData, short 
         return;
 
     // StyleDef ?
-    if( m_pAktColl )
+    if( m_pCurrentColl )
     {
         // only for SwTextFormatColl, not CharFormat
         // WW: 0 = no Numbering
@@ -741,7 +741,7 @@ void SwWW8ImplReader::Read_ANLevelNo( sal_uInt16, const sal_uInt8* pData, short 
             {
                 m_nSwNumLevel = *pData - 1;
                 if (!m_bNoAttrImport)
-                    static_cast<SwTextFormatColl*>(m_pAktColl)->AssignToListLevelOfOutlineStyle( m_nSwNumLevel );
+                    static_cast<SwTextFormatColl*>(m_pCurrentColl)->AssignToListLevelOfOutlineStyle( m_nSwNumLevel );
                     // For WW-NoNumbering also NO_NUMBERING could be used.
                     // ( For normal numberierung NO_NUM has to be used:
                     //   NO_NUM : pauses numbering,
@@ -767,7 +767,7 @@ void SwWW8ImplReader::Read_ANLevelNo( sal_uInt16, const sal_uInt8* pData, short 
 void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, short nLen ) // Sprm 12
 {
     SwWW8StyInf * pStyInf = GetStyle(m_nCurrentColl);
-    if( !m_pAktColl || nLen <= 0                       // only for Styledef
+    if( !m_pCurrentColl || nLen <= 0                       // only for Styledef
         || (pStyInf && !pStyInf->m_bColl)              // ignore  CharFormat ->
         || ( m_nIniFlags & WW8FL_NO_OUTLINE ) )
     {
@@ -786,7 +786,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
         && m_nSwNumLevel <= 9 ){          // No Bullets or Numbering
 
         // If NumRuleItems were set, either directly or through inheritance, disable them now
-        m_pAktColl->SetFormatAttr( SwNumRuleItem() );
+        m_pCurrentColl->SetFormatAttr( SwNumRuleItem() );
 
         const OUString aName("Outline");
         SwNumRule aNR( m_rDoc.GetUniqueNumRuleName( &aName ),
@@ -801,7 +801,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
     }else if( m_xStyles->nWwNumLevel == 10 || m_xStyles->nWwNumLevel == 11 ){
         SwNumRule* pNR = GetStyRule();
         SetAnld(pNR, reinterpret_cast<WW8_ANLD const *>(pData), 0, false);
-        m_pAktColl->SetFormatAttr( SwNumRuleItem( pNR->GetName() ) );
+        m_pCurrentColl->SetFormatAttr( SwNumRuleItem( pNR->GetName() ) );
 
         pStyInf = GetStyle(m_nCurrentColl);
         if (pStyInf != nullptr)
@@ -3709,15 +3709,15 @@ void WW8RStyle::Set1StyleDefaults()
     {
         // Style has no text color set, winword default is auto
         if ( !bTextColChanged )
-            pIo->m_pAktColl->SetFormatAttr(SvxColorItem(Color(COL_AUTO), RES_CHRATR_COLOR));
+            pIo->m_pCurrentColl->SetFormatAttr(SvxColorItem(Color(COL_AUTO), RES_CHRATR_COLOR));
 
         // Style has no FontSize ? WinWord Default is 10pt for western and asian
         if( !bFSizeChanged )
         {
             SvxFontHeightItem aAttr(200, 100, RES_CHRATR_FONTSIZE);
-            pIo->m_pAktColl->SetFormatAttr(aAttr);
+            pIo->m_pCurrentColl->SetFormatAttr(aAttr);
             aAttr.SetWhich(RES_CHRATR_CJK_FONTSIZE);
-            pIo->m_pAktColl->SetFormatAttr(aAttr);
+            pIo->m_pCurrentColl->SetFormatAttr(aAttr);
         }
 
         // Style has no FontSize ? WinWord Default is 10pt for western and asian
@@ -3725,13 +3725,13 @@ void WW8RStyle::Set1StyleDefaults()
         {
             SvxFontHeightItem aAttr(200, 100, RES_CHRATR_FONTSIZE);
             aAttr.SetWhich(RES_CHRATR_CTL_FONTSIZE);
-            pIo->m_pAktColl->SetFormatAttr(aAttr);
+            pIo->m_pCurrentColl->SetFormatAttr(aAttr);
         }
 
         if( !bWidowsChanged )  // Widows ?
         {
-            pIo->m_pAktColl->SetFormatAttr( SvxWidowsItem( 2, RES_PARATR_WIDOWS ) );
-            pIo->m_pAktColl->SetFormatAttr( SvxOrphansItem( 2, RES_PARATR_ORPHANS ) );
+            pIo->m_pCurrentColl->SetFormatAttr( SvxWidowsItem( 2, RES_PARATR_WIDOWS ) );
+            pIo->m_pCurrentColl->SetFormatAttr( SvxOrphansItem( 2, RES_PARATR_ORPHANS ) );
         }
     }
 }
@@ -3777,7 +3777,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
         }
         pColl->SetAuto(false);          // suggested by JP
     }                                   // but changes the UI
-    pIo->m_pAktColl = pColl;
+    pIo->m_pCurrentColl = pColl;
     rSI.m_pFormat = pColl;                  // remember translation WW->SW
     rSI.m_bImportSkipped = !bImport;
 
@@ -4502,7 +4502,7 @@ void WW8RStyle::Import()
     }
 
     // we do not read styles anymore:
-    pIo->m_pAktColl = nullptr;
+    pIo->m_pCurrentColl = nullptr;
 }
 
 rtl_TextEncoding SwWW8StyInf::GetCharSet() const
