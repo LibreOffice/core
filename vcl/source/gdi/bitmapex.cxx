@@ -314,6 +314,7 @@ BitmapChecksum BitmapEx::GetChecksum() const
         nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
     }
 
+    SAL_INFO("vcl.gdi.checksum", "BitmapEx::GetChecksum() returns " << nCrc);
     return nCrc;
 }
 
