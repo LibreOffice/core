@@ -257,12 +257,12 @@ struct ImpPathCreateUser  : public SdrDragStatUserData
     bool                    bMixedCreate;
     sal_uInt16                  nBezierStartPoint;
     SdrObjKind              eStartKind;
-    SdrObjKind              eAktKind;
+    SdrObjKind              eCurrentKind;
 
 public:
     ImpPathCreateUser(): nCircRadius(0),nCircStAngle(0),nCircRelAngle(0),
         bBezier(false),bBezHasCtrl0(false),bCircle(false),bAngleSnap(false),bLine(false),bLine90(false),bRect(false),
-        bMixedCreate(false),nBezierStartPoint(0),eStartKind(OBJ_NONE),eAktKind(OBJ_NONE) { }
+        bMixedCreate(false),nBezierStartPoint(0),eStartKind(OBJ_NONE),eCurrentKind(OBJ_NONE) { }
 
     void ResetFormFlags() { bBezier=false; bCircle=false; bLine=false; bRect=false; }
     bool IsFormFlag() const { return bBezier || bCircle || bLine || bRect; }
@@ -922,7 +922,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
         // #i103058# re-add old creation comment mode
         const ImpPathCreateUser* pU = static_cast<const ImpPathCreateUser*>(rDrag.GetUser());
         const SdrObjKind eKindMerk(meObjectKind);
-        mrSdrPathObject.meKind = pU->eAktKind;
+        mrSdrPathObject.meKind = pU->eCurrentKind;
         OUString aTmp;
         mrSdrPathObject.ImpTakeDescriptionStr(STR_ViewCreateObj, aTmp);
         aStr = aTmp;
@@ -1248,7 +1248,7 @@ bool ImpPathForDragAndCreate::BegCreate(SdrDragStat& rStat)
     }
     std::unique_ptr<ImpPathCreateUser> pU(new ImpPathCreateUser);
     pU->eStartKind=meObjectKind;
-    pU->eAktKind=meObjectKind;
+    pU->eCurrentKind=meObjectKind;
     rStat.SetUser(std::move(pU));
     return true;
 }
@@ -1263,7 +1263,7 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
         sal_uInt16 nIdent;
         SdrInventor nInvent;
         pView->TakeCurrentObj(nIdent,nInvent);
-        if (nInvent==SdrInventor::Default && pU->eAktKind!=static_cast<SdrObjKind>(nIdent)) {
+        if (nInvent==SdrInventor::Default && pU->eCurrentKind!=static_cast<SdrObjKind>(nIdent)) {
             SdrObjKind eNewKind=static_cast<SdrObjKind>(nIdent);
             switch (eNewKind) {
                 case OBJ_CARC:
@@ -1282,7 +1282,7 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
                 case OBJ_FREEFILL:
                 case OBJ_SPLNLINE:
                 case OBJ_SPLNFILL: {
-                    pU->eAktKind=eNewKind;
+                    pU->eCurrentKind=eNewKind;
                     pU->bMixedCreate=true;
                     pU->nBezierStartPoint=rXPoly.GetPointCount();
                     if (pU->nBezierStartPoint>0) pU->nBezierStartPoint--;
@@ -1300,9 +1300,9 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
     if (nActPoint==0) {
         rXPoly[0]=rStat.GetPos0();
     } else nActPoint--;
-    bool bFreeHand=IsFreeHand(pU->eAktKind);
+    bool bFreeHand=IsFreeHand(pU->eCurrentKind);
     rStat.SetNoSnap(bFreeHand);
-    rStat.SetOrtho8Possible(pU->eAktKind!=OBJ_CARC && pU->eAktKind!=OBJ_RECT && (!pU->bMixedCreate || pU->eAktKind!=OBJ_LINE));
+    rStat.SetOrtho8Possible(pU->eCurrentKind!=OBJ_CARC && pU->eCurrentKind!=OBJ_RECT && (!pU->bMixedCreate || pU->eCurrentKind!=OBJ_LINE));
     rXPoly[nActPoint]=rStat.GetNow();
     if (!pU->bMixedCreate && pU->eStartKind==OBJ_LINE && rXPoly.GetPointCount()>=1) {
         Point aPt(rStat.GetStart());
@@ -1349,20 +1349,20 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
     }
 
     pU->ResetFormFlags();
-    if (IsBezier(pU->eAktKind)) {
+    if (IsBezier(pU->eCurrentKind)) {
         if (nActPoint>=2) {
             pU->CalcBezier(rXPoly[nActPoint-1],rXPoly[nActPoint],rXPoly[nActPoint-1]-rXPoly[nActPoint-2],rStat.IsMouseDown());
         } else if (pU->bBezHasCtrl0) {
             pU->CalcBezier(rXPoly[nActPoint-1],rXPoly[nActPoint],pU->aBezControl0-rXPoly[nActPoint-1],rStat.IsMouseDown());
         }
     }
-    if (pU->eAktKind==OBJ_CARC && nActPoint>=2) {
+    if (pU->eCurrentKind==OBJ_CARC && nActPoint>=2) {
         pU->CalcCircle(rXPoly[nActPoint-1],rXPoly[nActPoint],rXPoly[nActPoint-1]-rXPoly[nActPoint-2],pView);
     }
-    if (pU->eAktKind==OBJ_LINE && nActPoint>=2) {
+    if (pU->eCurrentKind==OBJ_LINE && nActPoint>=2) {
         pU->CalcLine(rXPoly[nActPoint-1],rXPoly[nActPoint],rXPoly[nActPoint-1]-rXPoly[nActPoint-2],pView);
     }
-    if (pU->eAktKind==OBJ_RECT && nActPoint>=2) {
+    if (pU->eCurrentKind==OBJ_RECT && nActPoint>=2) {
         pU->CalcRect(rXPoly[nActPoint-1],rXPoly[nActPoint],rXPoly[nActPoint-1]-rXPoly[nActPoint-2],pView);
     }
 
@@ -1402,7 +1402,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
         if (nActPoint==0 || rStat.GetNow()!=rXPoly[nActPoint-1]) {
             if (bIncomp) {
                 if (pU->nBezierStartPoint>nActPoint) pU->nBezierStartPoint=nActPoint;
-                if (IsBezier(pU->eAktKind) && nActPoint-pU->nBezierStartPoint>=3 && ((nActPoint-pU->nBezierStartPoint)%3)==0) {
+                if (IsBezier(pU->eCurrentKind) && nActPoint-pU->nBezierStartPoint>=3 && ((nActPoint-pU->nBezierStartPoint)%3)==0) {
                     rXPoly.PointsToBezier(nActPoint-3);
                     rXPoly.SetFlags(nActPoint-1,PolyFlags::Control);
                     rXPoly.SetFlags(nActPoint-2,PolyFlags::Control);
@@ -1413,7 +1413,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
                     }
                 }
             } else {
-                if (nActPoint==1 && IsBezier(pU->eAktKind) && !pU->bBezHasCtrl0) {
+                if (nActPoint==1 && IsBezier(pU->eCurrentKind) && !pU->bBezHasCtrl0) {
                     pU->aBezControl0=rStat.GetNow();
                     pU->bBezHasCtrl0=true;
                     nActPoint--;
