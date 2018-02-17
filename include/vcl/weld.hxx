@@ -461,9 +461,9 @@ public:
             m_sHelpRoot = m_sHelpRoot.copy(0, nIdx);
         m_sHelpRoot = m_sHelpRoot + OString('/');
     }
-    virtual MessageDialog* weld_message_dialog(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual Dialog* weld_dialog(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual Window* weld_window(const OString& id, bool bTakeOwnership = false) = 0;
+    virtual MessageDialog* weld_message_dialog(const OString& id, bool bTakeOwnership = true) = 0;
+    virtual Dialog* weld_dialog(const OString& id, bool bTakeOwnership = true) = 0;
+    virtual Window* weld_window(const OString& id, bool bTakeOwnership = true) = 0;
     virtual Widget* weld_widget(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Container* weld_container(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Button* weld_button(const OString& id, bool bTakeOwnership = false) = 0;
