@@ -16,6 +16,24 @@
       "revId": "991753f13031acf15e0e5bd1979ea68229d13ddb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e32ba592",
+        "filename": "sw/source/core/edit/edfcol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1736,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2018-02-17T20:20:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa31d9ce_52f7e1f4",
+      "revId": "991753f13031acf15e0e5bd1979ea68229d13ddb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
