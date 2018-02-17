@@ -1513,7 +1513,11 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         {
             case SvxAdjust::Center:
             {
-                long n = ( nMaxLineWidth - aTextSize.Width() ) / 2;
+                long n;
+                if(IsHoriAlignIgnoreTrailingWhitespace())
+                    n = ( nMaxLineWidth - CalcTextWidth( true, true ) ) / 2;
+                else
+                    n = ( nMaxLineWidth - aTextSize.Width() ) / 2;
                 n += nStartX;  // Indentation is kept.
                 pLine->SetStartPosX( n );
             }
@@ -1522,7 +1526,11 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             {
                 // For automatically wrapped lines, which has a blank at the end
                 // the blank must not be displayed!
-                long n = nMaxLineWidth - aTextSize.Width();
+                long n;
+                if(IsHoriAlignIgnoreTrailingWhitespace())
+                    n = nMaxLineWidth - CalcTextWidth( true, true );
+                else
+                    n = nMaxLineWidth - aTextSize.Width();
                 n += nStartX;  // Indentation is kept.
                 pLine->SetStartPosX( n );
             }
