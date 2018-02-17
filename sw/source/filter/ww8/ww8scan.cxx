@@ -921,11 +921,11 @@ SprmResult WW8SprmIter::FindSprm(sal_uInt16 nId)
 {
     while (GetSprms())
     {
-        if (GetAktId() == nId)
+        if (GetCurrentId() == nId)
         {
             sal_uInt16 nFixedLen =  mrSprmParser.DistanceToData(nId);
             sal_uInt16 nL = mrSprmParser.GetSprmSize(nId, GetSprms(), GetRemLen());
-            return SprmResult(GetAktParams(), nL - nFixedLen); // SPRM found!
+            return SprmResult(GetCurrentParams(), nL - nFixedLen); // SPRM found!
         }
         advance();
     }
@@ -1181,14 +1181,14 @@ void WW8PLCFx_PCD::advance()
         pPcdI->advance();
 }
 
-WW8_FC WW8PLCFx_PCD::AktPieceStartCp2Fc( WW8_CP nCp )
+WW8_FC WW8PLCFx_PCD::CurrentPieceStartCp2Fc( WW8_CP nCp )
 {
     WW8_CP nCpStart, nCpEnd;
     void* pData;
 
     if ( !pPcdI->Get(nCpStart, nCpEnd, pData) )
     {
-        OSL_ENSURE( false, "AktPieceStartCp2Fc() with false Cp found (1)" );
+        OSL_ENSURE( false, "CurrentPieceStartCp2Fc() with false Cp found (1)" );
         return WW8_FC_MAX;
     }
 
@@ -1234,7 +1234,7 @@ WW8_FC WW8PLCFx_PCD::AktPieceStartCp2Fc( WW8_CP nCp )
     return nRet;
 }
 
-void WW8PLCFx_PCD::AktPieceFc2Cp( WW8_CP& rStartPos, WW8_CP& rEndPos,
+void WW8PLCFx_PCD::CurrentPieceFc2Cp( WW8_CP& rStartPos, WW8_CP& rEndPos,
     const WW8ScannerBase *pSBase )
 {
     //No point going anywhere with this
@@ -1245,13 +1245,13 @@ void WW8PLCFx_PCD::AktPieceFc2Cp( WW8_CP& rStartPos, WW8_CP& rEndPos,
     rEndPos = pSBase->WW8Fc2Cp( rEndPos );
 }
 
-WW8_CP WW8PLCFx_PCD::AktPieceStartFc2Cp( WW8_FC nStartPos )
+WW8_CP WW8PLCFx_PCD::CurrentPieceStartFc2Cp( WW8_FC nStartPos )
 {
     WW8_CP nCpStart, nCpEnd;
     void* pData;
     if ( !pPcdI->Get( nCpStart, nCpEnd, pData ) )
     {
-        OSL_ENSURE( false, "AktPieceStartFc2Cp() - error" );
+        OSL_ENSURE( false, "CurrentPieceStartFc2Cp() - error" );
         return WW8_CP_MAX;
     }
     bool bIsUnicode = false;
@@ -2772,7 +2772,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
             WW8SprmIter aIter(pSprms, nLen, maSprmParser);
             while (aIter.GetSprms())
             {
-                fprintf(stderr, "id is %x\n", aIter.GetAktId());
+                fprintf(stderr, "id is %x\n", aIter.GetCurrentId());
                 aIter.advance();
             }
         }
@@ -2932,11 +2932,11 @@ void WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(sal_uInt16 nId,
 
     while(aIter.GetSprms())
     {
-        if (aIter.GetAktId() == nId)
+        if (aIter.GetCurrentId() == nId)
         {
             sal_uInt16 nFixedLen = maSprmParser.DistanceToData(nId);
             sal_uInt16 nL = maSprmParser.GetSprmSize(nId, aIter.GetSprms(), aIter.GetRemLen());
-            rResult.emplace_back(aIter.GetAktParams(), nL - nFixedLen);
+            rResult.emplace_back(aIter.GetCurrentParams(), nL - nFixedLen);
         }
         aIter.advance();
     };
@@ -3269,11 +3269,11 @@ void WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult)
         WW8SprmIter aIter(aDesc.pMemPos, aDesc.nSprmsLen, rSprmParser);
         while(aIter.GetSprms())
         {
-            if (aIter.GetAktId() == nId)
+            if (aIter.GetCurrentId() == nId)
             {
                 sal_uInt16 nFixedLen = rSprmParser.DistanceToData(nId);
                 sal_uInt16 nL = rSprmParser.GetSprmSize(nId, aIter.GetSprms(), aIter.GetRemLen());
-                rResult.emplace_back(aIter.GetAktParams(), nL - nFixedLen);
+                rResult.emplace_back(aIter.GetCurrentParams(), nL - nFixedLen);
             }
             aIter.advance();
         };
@@ -3331,7 +3331,7 @@ bool WW8PLCFx_Cp_FKP::SeekPos(WW8_CP nCpPos)
             return false;
         if (pPCDAttrs && !pPCDAttrs->GetIter()->SeekPos(nCpPos))
             return false;
-        return WW8PLCFx_Fc_FKP::SeekPos(pPcd->AktPieceStartCp2Fc(nCpPos));
+        return WW8PLCFx_Fc_FKP::SeekPos(pPcd->CurrentPieceStartCp2Fc(nCpPos));
     }
                                     // NO piece table !!!
     return WW8PLCFx_Fc_FKP::SeekPos( rSBase.WW8Cp2Fc(nCpPos) );
@@ -3341,7 +3341,7 @@ WW8_CP WW8PLCFx_Cp_FKP::Where()
 {
     WW8_FC nFc = WW8PLCFx_Fc_FKP::Where();
     if( pPcd )
-        return pPcd->AktPieceStartFc2Cp( nFc ); // identify piece
+        return pPcd->CurrentPieceStartFc2Cp( nFc ); // identify piece
     return rSBase.WW8Fc2Cp( nFc );      // NO piece table !!!
 }
 
@@ -3604,7 +3604,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                 pPieceIter->SetIdx( nOldPos );
             }
             else
-                WW8PLCFx_PCD::AktPieceFc2Cp( p->nStartPos, p->nEndPos,&rSBase );
+                WW8PLCFx_PCD::CurrentPieceFc2Cp( p->nStartPos, p->nEndPos,&rSBase );
         }
         else
         {
@@ -3638,7 +3638,7 @@ void WW8PLCFx_Cp_FKP::advance()
     // get Fkp entry
     WW8PLCFx_Fc_FKP::GetSprmsAndPos(nAttrStart, nAttrEnd, nFkpLen);
 
-    WW8PLCFx_PCD::AktPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
+    WW8PLCFx_PCD::CurrentPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
     bLineEnd = (ePLCF == PAP);
 }
 

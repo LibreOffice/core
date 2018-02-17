@@ -1772,9 +1772,9 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         for (int nLoop = 0; nLoop < 2; ++nLoop)
         {
             const sal_uInt8* pParams;
-            while (aSprmIter.GetSprms() && nullptr != (pParams = aSprmIter.GetAktParams()))
+            while (aSprmIter.GetSprms() && nullptr != (pParams = aSprmIter.GetCurrentParams()))
             {
-                sal_uInt16 nId = aSprmIter.GetAktId();
+                sal_uInt16 nId = aSprmIter.GetCurrentId();
                 sal_uInt16 nFixedLen = aSprmParser.DistanceToData(nId);
                 sal_uInt16 nL = aSprmParser.GetSprmSize(nId, aSprmIter.GetSprms(), aSprmIter.GetRemLen());
                 sal_uInt16 nLen = nL - nFixedLen;
@@ -3571,9 +3571,9 @@ void WW8RStyle::ImportSprms(sal_uInt8 *pSprms, short nLen, bool bPap)
     while (const sal_uInt8* pSprm = aSprmIter.GetSprms())
     {
 #ifdef DEBUGSPRMREADER
-        fprintf(stderr, "id is %x\n", aIter.GetAktId());
+        fprintf(stderr, "id is %x\n", aIter.GetCurrentId());
 #endif
-        pIo->ImportSprm(pSprm, aSprmIter.GetRemLen(), aSprmIter.GetAktId());
+        pIo->ImportSprm(pSprm, aSprmIter.GetRemLen(), aSprmIter.GetCurrentId());
         aSprmIter.advance();
     }
 

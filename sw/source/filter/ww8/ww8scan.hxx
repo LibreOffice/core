@@ -286,8 +286,8 @@ public:
     void  advance();
     const sal_uInt8* GetSprms() const
         { return ( pSprms && (0 < nRemLen) ) ? pSprms : nullptr; }
-    const sal_uInt8* GetAktParams() const { return pCurrentParams; }
-    sal_uInt16 GetAktId() const { return nCurrentId; }
+    const sal_uInt8* GetCurrentParams() const { return pCurrentParams; }
+    sal_uInt16 GetCurrentId() const { return nCurrentId; }
     sal_Int32 GetRemLen() const { return nRemLen; }
 
 private:
@@ -481,9 +481,9 @@ public:
     virtual WW8_FC Where() override;
     virtual long GetNoSprms( WW8_CP& rStart, WW8_CP&, sal_Int32& rLen ) override;
     virtual void advance() override;
-    WW8_CP AktPieceStartFc2Cp( WW8_FC nStartPos );
-    WW8_FC AktPieceStartCp2Fc( WW8_CP nCp );
-    static void AktPieceFc2Cp(WW8_CP& rStartPos, WW8_CP& rEndPos,
+    WW8_CP CurrentPieceStartFc2Cp( WW8_FC nStartPos );
+    WW8_FC CurrentPieceStartCp2Fc( WW8_CP nCp );
+    static void CurrentPieceFc2Cp(WW8_CP& rStartPos, WW8_CP& rEndPos,
         const WW8ScannerBase *pSBase);
     WW8PLCFpcd_Iter* GetPLCFIter() { return pPcdI.get(); }
     void SetClipStart(WW8_CP nIn) { nClipStart = nIn; }
