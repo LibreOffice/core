@@ -1047,10 +1047,10 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                         {
                             while (aSprmIter.GetSprms())
                             {
-                                const sal_uInt8 *const pParams(aSprmIter.GetAktParams());
+                                const sal_uInt8 *const pParams(aSprmIter.GetCurrentParams());
                                 if (nullptr == pParams)
                                     break;
-                                sal_uInt16 nAktId = aSprmIter.GetAktId();
+                                sal_uInt16 nAktId = aSprmIter.GetCurrentId();
                                 switch( nAktId )
                                 {
                                     case     75:
