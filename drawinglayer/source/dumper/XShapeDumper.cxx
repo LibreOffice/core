@@ -50,7 +50,6 @@ void dumpFillGradientAsElement(const css::awt::Gradient& rGradient, xmlTextWrite
 void dumpFillHatchAsElement(const css::drawing::Hatch& rHatch, xmlTextWriterPtr xmlWriter);
 void dumpFillBackgroundAsAttribute(bool bBackground, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapAsElement(const css::uno::Reference<css::awt::XBitmap>& xBitmap, xmlTextWriterPtr xmlWriter);
-void dumpFillBitmapURLAsAttribute(const OUString& sBitmapURL, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapPositionOffsetXAsAttribute(sal_Int32 aBitmapPositionOffsetX, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapPositionOffsetYAsAttribute(sal_Int32 aBitmapPositionOffsetY, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapOffsetXAsAttribute(sal_Int32 aBitmapOffsetX, xmlTextWriterPtr xmlWriter);
@@ -315,12 +314,6 @@ void dumpFillBitmapAsElement(const uno::Reference<awt::XBitmap>& xBitmap, xmlTex
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("height"), "%" SAL_PRIdINT32, aSize.Height);
     }
     xmlTextWriterEndElement( xmlWriter );
-}
-
-void dumpFillBitmapURLAsAttribute(const OUString& sBitmapURL, xmlTextWriterPtr xmlWriter)
-{
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapURL"), "%s",
-        OUStringToOString(sBitmapURL, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void dumpFillBitmapPositionOffsetXAsAttribute(sal_Int32 aBitmapPositionOffsetX, xmlTextWriterPtr xmlWriter)
@@ -1449,12 +1442,6 @@ void dumpFillPropertiesService(const uno::Reference< beans::XPropertySet >& xPro
         uno::Reference<awt::XBitmap> xBitmap;
         if(anotherAny >>= xBitmap)
             dumpFillBitmapAsElement(xBitmap, xmlWriter);
-    }
-    {
-        uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapURL");
-        OUString sBitmapURL;
-        if(anotherAny >>= sBitmapURL)
-            dumpFillBitmapURLAsAttribute(sBitmapURL, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapPositionOffsetX");
