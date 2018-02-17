@@ -47,7 +47,7 @@ class SwASC_AttrIter
 {
     SwASCWriter& rWrt;
     const SwTextNode& rNd;
-    sal_Int32 nAktSwPos;
+    sal_Int32 nCurrentSwPos;
 
     sal_Int32 SearchNext( sal_Int32 nStartPos );
 
@@ -56,12 +56,12 @@ public:
 
     void NextPos()
     {
-        nAktSwPos = SearchNext( nAktSwPos + 1 );
+        nCurrentSwPos = SearchNext( nCurrentSwPos + 1 );
     }
 
     sal_Int32 WhereNext() const
     {
-        return nAktSwPos;
+        return nCurrentSwPos;
     }
 
     bool OutAttr( sal_Int32 nSwPos );
@@ -73,9 +73,9 @@ SwASC_AttrIter::SwASC_AttrIter(
     sal_Int32 nStt )
     : rWrt( rWr )
     , rNd( rTextNd )
-    , nAktSwPos( 0 )
+    , nCurrentSwPos( 0 )
 {
-    nAktSwPos = SearchNext( nStt + 1 );
+    nCurrentSwPos = SearchNext( nStt + 1 );
 }
 
 sal_Int32 SwASC_AttrIter::SearchNext( sal_Int32 nStartPos )
