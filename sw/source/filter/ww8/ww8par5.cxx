@@ -3628,7 +3628,7 @@ void SwWW8ImplReader::ImportTox( int nFieldId, const OUString& aStr )
 void SwWW8ImplReader::Read_FieldVanish( sal_uInt16, const sal_uInt8*, short nLen )
 {
     //Meaningless in a style
-    if (m_pAktColl || !m_xPlcxMan)
+    if (m_pCurrentColl || !m_xPlcxMan)
         return;
 
     const int nChunk = 64;  //number of characters to read at one time

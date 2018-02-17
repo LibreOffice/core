@@ -2651,10 +2651,10 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
 {
     if( !m_bNoAttrImport ) // for ignoring styles during doc inserts
     {
-        if (m_pAktColl)
+        if (m_pCurrentColl)
         {
             OSL_ENSURE(rAttr.Which() != RES_FLTR_REDLINE, "redline in style!");
-            m_pAktColl->SetFormatAttr(rAttr);
+            m_pCurrentColl->SetFormatAttr(rAttr);
         }
         else if (m_xAktItemSet)
         {
@@ -2690,8 +2690,8 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
 const SfxPoolItem* SwWW8ImplReader::GetFormatAttr( sal_uInt16 nWhich )
 {
     const SfxPoolItem* pRet = nullptr;
-    if (m_pAktColl)
-        pRet = &(m_pAktColl->GetFormatAttr(nWhich));
+    if (m_pCurrentColl)
+        pRet = &(m_pCurrentColl->GetFormatAttr(nWhich));
     else if (m_xAktItemSet)
     {
         pRet = m_xAktItemSet->GetItem(nWhich);
@@ -2782,7 +2782,7 @@ void SwWW8ImplReader::Read_POutLvl(sal_uInt16, const sal_uInt8* pData, short nLe
         return;
     }
 
-    if (m_pAktColl != nullptr)
+    if (m_pCurrentColl != nullptr)
     {
         SwWW8StyInf* pSI = GetStyle(m_nCurrentColl);
         if (pSI && pSI->m_bColl && pSI->m_pFormat)
@@ -2925,7 +2925,7 @@ void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, shor
             pSI = GetStyle(SVBT16ToShort(aCharIstd.pSprm));
     }
 
-    if( m_pAktColl )                          // StyleDef -> remember flags
+    if( m_pCurrentColl )                          // StyleDef -> remember flags
     {
         if (pSI)
         {
@@ -3092,7 +3092,7 @@ void SwWW8ImplReader::Read_BoldBiDiUsw(sal_uInt16 nId, const sal_uInt8* pData,
             pSI = GetStyle(SVBT16ToShort(aCharIstd.pSprm));
     }
 
-    if (m_pAktColl && eVersion > ww::eWW2)        // StyleDef -> remember flags
+    if (m_pCurrentColl && eVersion > ww::eWW2)        // StyleDef -> remember flags
     {
         if (pSI)
         {
@@ -3473,7 +3473,7 @@ void SwWW8ImplReader::Read_TextColor( sal_uInt16, const sal_uInt8* pData, short 
             b = 0;
 
         NewAttr( SvxColorItem(Color(GetCol(b)), RES_CHRATR_COLOR));
-        if (m_pAktColl && m_xStyles)
+        if (m_pCurrentColl && m_xStyles)
             m_xStyles->bTextColChanged = true;
     }
 }
@@ -3486,7 +3486,7 @@ void SwWW8ImplReader::Read_TextForeColor(sal_uInt16, const sal_uInt8* pData, sho
     {
         Color aColor(msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)));
         NewAttr(SvxColorItem(aColor, RES_CHRATR_COLOR));
-        if (m_pAktColl && m_xStyles)
+        if (m_pCurrentColl && m_xStyles)
             m_xStyles->bTextColChanged = true;
     }
 }
@@ -3503,17 +3503,17 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
     }
     else
     {
-        if ( m_pAktColl ) //importing style
+        if ( m_pCurrentColl ) //importing style
         {
-            if( SfxItemState::SET == m_pAktColl->GetItemState( RES_CHRATR_UNDERLINE, false ) )
+            if( SfxItemState::SET == m_pCurrentColl->GetItemState( RES_CHRATR_UNDERLINE, false ) )
             {
-                const SwAttrSet& aSet = m_pAktColl->GetAttrSet();
+                const SwAttrSet& aSet = m_pCurrentColl->GetAttrSet();
                 SvxUnderlineItem *pUnderline
                     = static_cast<SvxUnderlineItem *>(aSet.Get( RES_CHRATR_UNDERLINE, false ).Clone());
                 if (pUnderline && nLen >= 4)
                 {
                     pUnderline->SetColor( Color( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) ) );
-                    m_pAktColl->SetFormatAttr( *pUnderline );
+                    m_pCurrentColl->SetFormatAttr( *pUnderline );
                     delete pUnderline;
                 }
             }
@@ -3623,7 +3623,7 @@ bool SwWW8ImplReader::SetNewFontAttr(sal_uInt16 nFCode, bool bSetEnums,
         //If we fail (and are not doing a style) then put something into the
         //character encodings stack anyway so that the property end that pops
         //off the stack will keep in sync
-        if (!m_pAktColl && IsListOrDropcap())
+        if (!m_pCurrentColl && IsListOrDropcap())
         {
             if (nWhich == RES_CHRATR_CJK_FONT)
             {
@@ -3661,7 +3661,7 @@ bool SwWW8ImplReader::SetNewFontAttr(sal_uInt16 nFCode, bool bSetEnums,
 
     if( bSetEnums )
     {
-        if( m_pAktColl && m_nCurrentColl < m_vColl.size() ) // StyleDef
+        if( m_pCurrentColl && m_nCurrentColl < m_vColl.size() ) // StyleDef
         {
             switch(nWhich)
             {
@@ -3708,7 +3708,7 @@ void SwWW8ImplReader::ResetCJKCharSetVars()
 
 void SwWW8ImplReader::openFont(sal_uInt16 nFCode, sal_uInt16 nId)
 {
-    if (SetNewFontAttr(nFCode, true, nId) && m_pAktColl && m_xStyles)
+    if (SetNewFontAttr(nFCode, true, nId) && m_pCurrentColl && m_xStyles)
     {
         // remember for simulating default font
         if (RES_CHRATR_CJK_FONT == nId)
@@ -3826,7 +3826,7 @@ void SwWW8ImplReader::Read_FontSize( sal_uInt16 nId, const sal_uInt8* pData, sho
             aSz.SetWhich( RES_CHRATR_CTL_FONTSIZE );
             NewAttr( aSz );
         }
-        if (m_pAktColl && m_xStyles)            // Style-Def ?
+        if (m_pCurrentColl && m_xStyles)            // Style-Def ?
         {
             // remember for simulating default font size
             if (nId == RES_CHRATR_CTL_FONTSIZE)
@@ -4114,7 +4114,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         case NS_sprm::sprmPDxaLeft80:
         case NS_sprm::sprmPDxaLeft:
             aLR.SetTextLeft( nPara );
-            if (m_pAktColl && m_nCurrentColl < m_vColl.size())
+            if (m_pCurrentColl && m_nCurrentColl < m_vColl.size())
             {
                 m_vColl[m_nCurrentColl].m_bListReleventIndentSet = true;
             }
@@ -4149,7 +4149,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
 
             aLR.SetTextFirstLineOfst(nPara);
 
-            if (!m_pAktColl)
+            if (!m_pCurrentColl)
             {
                 if (const SwTextNode* pNode = m_pPaM->GetNode().GetTextNode())
                 {
@@ -4167,7 +4167,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
                     }
                 }
             }
-            if (m_pAktColl && m_nCurrentColl < m_vColl.size())
+            if (m_pCurrentColl && m_nCurrentColl < m_vColl.size())
             {
                 m_vColl[m_nCurrentColl].m_bListReleventIndentSet = true;
             }
@@ -4274,14 +4274,14 @@ void SwWW8ImplReader::Read_ParaAutoBefore(sal_uInt16, const sal_uInt8 *pData, sh
         SvxULSpaceItem aUL(*static_cast<const SvxULSpaceItem*>(GetFormatAttr(RES_UL_SPACE)));
         aUL.SetUpper(GetParagraphAutoSpace(m_xWDop->fDontUseHTMLAutoSpacing));
         NewAttr(aUL);
-        if (m_pAktColl && m_nCurrentColl < m_vColl.size())
+        if (m_pCurrentColl && m_nCurrentColl < m_vColl.size())
             m_vColl[m_nCurrentColl].m_bParaAutoBefore = true;
         else
             m_bParaAutoBefore = true;
     }
     else
     {
-        if (m_pAktColl && m_nCurrentColl < m_vColl.size())
+        if (m_pCurrentColl && m_nCurrentColl < m_vColl.size())
             m_vColl[m_nCurrentColl].m_bParaAutoBefore = false;
         else
             m_bParaAutoBefore = false;
@@ -4301,14 +4301,14 @@ void SwWW8ImplReader::Read_ParaAutoAfter(sal_uInt16, const sal_uInt8 *pData, sho
         SvxULSpaceItem aUL(*static_cast<const SvxULSpaceItem*>(GetFormatAttr(RES_UL_SPACE)));
         aUL.SetLower(GetParagraphAutoSpace(m_xWDop->fDontUseHTMLAutoSpacing));
         NewAttr(aUL);
-        if (m_pAktColl && m_nCurrentColl < m_vColl.size())
+        if (m_pCurrentColl && m_nCurrentColl < m_vColl.size())
             m_vColl[m_nCurrentColl].m_bParaAutoAfter = true;
         else
             m_bParaAutoAfter = true;
     }
     else
     {
-        if (m_pAktColl && m_nCurrentColl < m_vColl.size())
+        if (m_pCurrentColl && m_nCurrentColl < m_vColl.size())
             m_vColl[m_nCurrentColl].m_bParaAutoAfter = false;
         else
             m_bParaAutoAfter = false;
@@ -4870,7 +4870,7 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
         WW8_BRCVer9_5 aBrcs;   // Top, Left, Bottom, Right, Between
         sal_uInt8 nBorder;
 
-        if( m_pAktColl )
+        if( m_pCurrentColl )
             nBorder = ::lcl_ReadBorders(m_bVer67, aBrcs, nullptr, m_xStyles.get());
         else
             nBorder = ::lcl_ReadBorders(m_bVer67, aBrcs, m_xPlcxMan ? m_xPlcxMan->GetPapPLCF() : nullptr);
@@ -5001,7 +5001,7 @@ void SwWW8ImplReader::Read_WidowControl( sal_uInt16, const sal_uInt8* pData, sho
         NewAttr( SvxWidowsItem( nL, RES_PARATR_WIDOWS ) );     // Off -> nLines = 0
         NewAttr( SvxOrphansItem( nL, RES_PARATR_ORPHANS ) );
 
-        if( m_pAktColl && m_xStyles )           // Style-Def ?
+        if( m_pCurrentColl && m_xStyles )           // Style-Def ?
             m_xStyles->bWidowsChanged = true; // save for simulation
                                             // Default-Widows
     }
@@ -5081,7 +5081,7 @@ void SwWW8ImplReader::Read_BreakBefore( sal_uInt16, const sal_uInt8* pData, shor
 
 void SwWW8ImplReader::Read_ApoPPC( sal_uInt16, const sal_uInt8* pData, short )
 {
-    if (m_pAktColl && m_nCurrentColl < m_vColl.size()) // only for Styledef, otherwise solved differently
+    if (m_pCurrentColl && m_nCurrentColl < m_vColl.size()) // only for Styledef, otherwise solved differently
     {
         SwWW8StyInf& rSI = m_vColl[m_nCurrentColl];
         if (!rSI.m_xWWFly)

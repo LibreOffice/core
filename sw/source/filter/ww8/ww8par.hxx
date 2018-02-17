@@ -1217,7 +1217,7 @@ private:
     std::set<const SwNode*> m_aTextNodesHavingLeftIndentSet; // #i105414#
 
     std::unique_ptr<WW8RStyle> m_xStyles;     // pointer to the style reading class
-    SwFormat* m_pAktColl;        // collection to be created now
+    SwFormat* m_pCurrentColl;        // collection to be created now
                             // ( always 0 outside of a Style-Def )
     std::unique_ptr<SfxItemSet> m_xAktItemSet;// character attributes to be read in now
                             // (always 0 outside of the WW8ListManager Ctor)
