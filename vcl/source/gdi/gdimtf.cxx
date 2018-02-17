@@ -348,7 +348,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
         pOut->SetLayoutMode( ComplexTextLayoutFlags::Default );
         pOut->SetDigitLanguage( LANGUAGE_SYSTEM );
 
-        SAL_INFO( "vcl.gdi", "GDIMetaFile::Play on device of size: " << pOut->GetOutputSizePixel().Width() << " " << pOut->GetOutputSizePixel().Height());
+        SAL_INFO( "vcl.gdi.checksum", "GDIMetaFile::Play on device of size: " << pOut->GetOutputSizePixel().Width() << " " << pOut->GetOutputSizePixel().Height());
 
         if( !ImplPlayWithRenderer( pOut, Point(0,0), pOut->GetOutputSize() ) ) {
             size_t  i  = 0;
@@ -436,7 +436,7 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
     catch (const uno::Exception& e)
     {
         // ignore errors, no way of reporting them here
-        SAL_WARN("vcl.gdi", "GDIMetaFile::ImplPlayWithRenderer: " << e);
+        SAL_WARN("vcl.gdi.checksum", "GDIMetaFile::ImplPlayWithRenderer: " << e);
     }
 
     return false;
@@ -2572,6 +2572,7 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
         }
     }
 
+    SAL_INFO("vcl.gdi.checksum", "GDIMetaFile::GetChecksum() returns " << nCrc);
     return nCrc;
 }
 
@@ -2636,7 +2637,7 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
 {
     if (rIStm.GetError())
     {
-        SAL_WARN("vcl.gdi", "Stream error: " << rIStm.GetError());
+        SAL_WARN("vcl.gdi.checksum", "Stream error: " << rIStm.GetError());
         return rIStm;
     }
 

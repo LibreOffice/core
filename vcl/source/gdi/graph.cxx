@@ -562,7 +562,9 @@ bool Graphic::IsLink() const
 
 BitmapChecksum Graphic::GetChecksum() const
 {
-    return mxImpGraphic->ImplGetChecksum();
+    BitmapCheckum nChecksum = mxImpGraphic->ImplGetChecksum();
+    SAL_INFO("vcl.gdi.checksum", "Graphic::GetChecksum() returns " << nChecksum);
+    return nChecksum;
 }
 
 bool Graphic::ExportNative( SvStream& rOStream ) const
