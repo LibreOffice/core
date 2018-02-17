@@ -977,15 +977,15 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge )
                 for ( sal_Int32 j = 0; j < xSeq.getLength(); j++ )
                 {
                     sal_Int16 nIdx = xSeq[j].formatIndex;
-                    OUStringBuffer aDupes;
+                    OUString aDupes;
                     for ( sal_Int32 i = 0; i < xSeq.getLength(); i++ )
                     {
                         if ( i != j && xSeq[i].formatIndex == nIdx )
                         {
-                            aDupes.append(OUString::number( i ));
-                            aDupes.append("(");
-                            aDupes.append(xSeq[i].formatKey);
-                            aDupes.append( ") ");
+                            aDupes+=(OUString::number( i ))
+                                  +"("
+                                  +(xSeq[i].formatKey)
+                                  +") ";
                         }
                     }
                     if ( !aDupes.isEmpty() )
@@ -997,7 +997,7 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge )
                                       + "("
                                       + xSeq[j].formatKey
                                       + ") "
-                                      + aDupes.makeStringAndClear();
+                                      + aDupes;
                         LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg ));
                     }
                 }
