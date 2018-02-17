@@ -232,12 +232,14 @@ namespace weld
     }
 }
 
-VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUString& sUIFile, const OString& sID, const css::uno::Reference<css::frame::XFrame>& rFrame)
+VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUString& sUIFile, const OString& sID,
+                       const css::uno::Reference<css::frame::XFrame>& rFrame, bool bLegacy)
     : m_sID(sID)
     , m_sHelpRoot(OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
     , m_pStringReplace(Translate::GetReadStringHook())
     , m_pParent(pParent)
     , m_bToplevelParentFound(false)
+    , m_bLegacy(bLegacy)
     , m_pParserState(new ParserState)
     , m_xFrame(rFrame)
 {
@@ -869,7 +871,7 @@ namespace
         pButton->SetCommandHandler(aCommand);
     }
 
-    VclPtr<Button> extractStockAndBuildPushButton(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+    VclPtr<Button> extractStockAndBuildPushButton(vcl::Window *pParent, VclBuilder::stringmap &rMap, bool bLegacy)
     {
         WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER;
 
@@ -880,15 +882,18 @@ namespace
         if (extractStock(rMap))
         {
             OUString sType = extractLabel(rMap);
-            if (sType == "gtk-ok")
-                xWindow = VclPtr<OKButton>::Create(pParent, nBits);
-            else if (sType == "gtk-cancel")
-                xWindow = VclPtr<CancelButton>::Create(pParent, nBits);
-            else if (sType == "gtk-close")
-                xWindow = VclPtr<CloseButton>::Create(pParent, nBits);
-            else if (sType == "gtk-help")
-                xWindow = VclPtr<HelpButton>::Create(pParent, nBits);
-            else
+            if (bLegacy)
+            {
+                if (sType == "gtk-ok")
+                    xWindow = VclPtr<OKButton>::Create(pParent, nBits);
+                else if (sType == "gtk-cancel")
+                    xWindow = VclPtr<CancelButton>::Create(pParent, nBits);
+                else if (sType == "gtk-close")
+                    xWindow = VclPtr<CloseButton>::Create(pParent, nBits);
+                else if (sType == "gtk-help")
+                    xWindow = VclPtr<HelpButton>::Create(pParent, nBits);
+            }
+            if (!xWindow)
             {
                 xWindow = VclPtr<PushButton>::Create(pParent, nBits);
                 xWindow->SetText(getStockText(sType));
@@ -1305,7 +1310,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "GtkMessageDialog")
     {
-        WinBits nBits = WB_CLIPCHILDREN|WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
+        WinBits nBits = WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
         xWindow = VclPtr<MessageDialog>::Create(pParent, nBits);
@@ -1357,7 +1362,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         VclPtr<Button> xButton;
         OUString sMenu = BuilderUtils::extractCustomProperty(rMap);
         if (sMenu.isEmpty())
-            xButton = extractStockAndBuildPushButton(pParent, rMap);
+            xButton = extractStockAndBuildPushButton(pParent, rMap, m_bLegacy);
         else
         {
             xButton = extractStockAndBuildMenuButton(pParent, rMap);
@@ -3386,6 +3391,23 @@ short VclBuilder::get_response(const vcl::Window *pWindow) const
     return RET_CANCEL;
 }
 
+IMPL_LINK(VclBuilder, ResponseHdl, ::Button*, pButton, void)
+{
+    short nResponse = get_response(pButton);
+    Dialog* pDialog = pButton->GetParentDialog();
+    assert(pDialog && "who puts a response without a dialog");
+    if (nResponse == RET_HELP)
+    {
+        vcl::Window* pFocusWin = Application::GetFocusWindow();
+        if (!pFocusWin)
+            pFocusWin = pButton;
+        HelpEvent aEvt(pFocusWin->GetPointerPosPixel(), HelpEventMode::CONTEXT);
+        pFocusWin->RequestHelp(aEvt);
+    }
+    else
+        pDialog->EndDialog(nResponse);
+}
+
 void VclBuilder::set_response(const OString& sID, short nResponse)
 {
     switch (nResponse)
@@ -3412,17 +3434,27 @@ void VclBuilder::set_response(const OString& sID, short nResponse)
 
     assert(nResponse >= 0);
 
+    bool bFound = false;
+
     for (auto & child : m_aChildren)
     {
         if (child.m_sID == sID)
         {
             child.m_nResponseId = nResponse;
-            return;
+            bFound = true;
+            break;
         }
     }
 
+    if (!m_bLegacy)
+    {
+        PushButton* pPushButton = get<PushButton>(sID);
+        assert(pPushButton);
+        pPushButton->SetClickHdl(LINK(this, VclBuilder, ResponseHdl));
+    }
+
     //how did we not find sID ?
-    assert(false);
+    assert(bFound); (void)bFound;
 }
 
 void VclBuilder::delete_by_name(const OString& sID)
