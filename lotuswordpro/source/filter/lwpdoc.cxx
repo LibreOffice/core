@@ -562,8 +562,10 @@ LwpDocument* LwpDocument::GetLastDivisionWithContents()
     {
         LwpDocument* pDivision = GetLastDivision();
 
+        std::set<LwpDocument*> aSeen;
         while (pDivision && pDivision != this)
         {
+            aSeen.insert(pDivision);
             LwpDocument* pContentDivision = pDivision->GetLastDivisionWithContents();
             if (pContentDivision)
             {
@@ -571,6 +573,8 @@ LwpDocument* LwpDocument::GetLastDivisionWithContents()
                 break;
             }
             pDivision = pDivision->GetPreviousDivision();
+            if (aSeen.find(pDivision) != aSeen.end())
+                throw std::runtime_error("loop in conversion");
         }
     }
 
