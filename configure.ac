@@ -168,7 +168,7 @@ if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
 fi
 AC_MSG_RESULT([$PRODUCTNAME])
 AC_SUBST(PRODUCTNAME)
-PRODUCTNAME_WITHOUT_SPACES=${PRODUCTNAME// /}
+PRODUCTNAME_WITHOUT_SPACES=$(echo "$PRODUCTNAME" | sed 's/ //g')
 AC_SUBST(PRODUCTNAME_WITHOUT_SPACES)
 
 dnl ===================================================================
