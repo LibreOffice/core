@@ -3605,6 +3605,11 @@ void ScFiltersTest::testNamedExpressionsXLSXML()
         CPPUNIT_ASSERT_EQUAL(55.0, rDoc.GetValue(aPos));
         ASSERT_FORMULA_EQUAL(rDoc, aPos, "SUM(MyRange2)", nullptr);
 
+        const ScRangeData* pRD = rDoc.GetRangeName()->findByUpperName("MYRANGE");
+        CPPUNIT_ASSERT(pRD);
+        pRD = rDoc.GetRangeName()->findByUpperName("MYRANGE2");
+        CPPUNIT_ASSERT(pRD);
+
         xDocSh->DoClose();
     }
 
@@ -3624,6 +3629,11 @@ void ScFiltersTest::testNamedExpressionsXLSXML()
         aPos.IncTab();
         CPPUNIT_ASSERT_EQUAL(74.0, rDoc.GetValue(aPos));
         ASSERT_FORMULA_EQUAL(rDoc, aPos, "SUM(MyRange)", nullptr);
+
+        const ScRangeData* pRD = rDoc.GetRangeName(0)->findByUpperName("MYRANGE");
+        CPPUNIT_ASSERT(pRD);
+        pRD = rDoc.GetRangeName(1)->findByUpperName("MYRANGE");
+        CPPUNIT_ASSERT(pRD);
 
         xDocSh->DoClose();
     }
