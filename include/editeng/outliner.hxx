@@ -1006,6 +1006,10 @@ public:
 
     // convenient method to determine the bullets/numbering status for all paragraphs
     sal_Int32 GetBulletsNumberingStatus() const;
+
+    // tdf#115639 compatibility flag
+    void SetHoriAlignIgnoreTrailingWhitespace(bool bEnabled);
+    bool IsHoriAlignIgnoreTrailingWhitespace() const;
 };
 
 #endif
