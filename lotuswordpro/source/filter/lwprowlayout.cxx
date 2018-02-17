@@ -68,6 +68,7 @@
 #include <xfilter/xftable.hxx>
 #include <xfilter/xfcell.hxx>
 #include <xfilter/xfcellstyle.hxx>
+#include <set>
 
 LwpRowLayout::LwpRowLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpVirtualLayout(objHdr, pStrm)
@@ -95,12 +96,16 @@ void LwpRowLayout::SetRowMap()
     LwpObjectID& rCellID= GetChildHead();
     LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
 
+    std::set<LwpCellLayout*> aSeen;
     while(pCellLayout)
     {
+        aSeen.insert(pCellLayout);
         pCellLayout->SetCellMap();
 
         rCellID = pCellLayout->GetNext();
         pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
+        if (aSeen.find(pCellLayout) != aSeen.end())
+            throw std::runtime_error("loop in conversion");
     }
 }
 /**
