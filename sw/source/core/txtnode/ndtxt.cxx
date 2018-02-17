@@ -2034,10 +2034,10 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
                         && (*pEndIdx == pHt->GetStart()) )
                 {
                     pHt->GetStart() = pHt->GetStart() - nLen;
-                    const size_t nAktLen = m_pSwpHints->Count();
+                    const size_t nCurrentLen = m_pSwpHints->Count();
                     m_pSwpHints->DeleteAtPos(i);
                     InsertHint( pHt/* AUTOSTYLES:, SetAttrMode::NOHINTADJUST*/ );
-                    if ( nAktLen > m_pSwpHints->Count() && i )
+                    if ( nCurrentLen > m_pSwpHints->Count() && i )
                     {
                         --i;
                     }
