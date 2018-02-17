@@ -123,7 +123,7 @@ sub register_extensions
 
         if ( ! -f $unopkgfile ) { installer::exiter::exit_program("ERROR: $unopkgfile not found!", "register_extensions"); }
 
-        my $systemcall = $unopkgfile . " sync --verbose" . " -env:UNO_JAVA_JFW_ENV_JREHOME=true 2\>\&1 |";
+        my $systemcall = $programdir . $installer::globals::separator . $unopkgfile . " sync --verbose" . " -env:UNO_JAVA_JFW_ENV_JREHOME=true 2\>\&1 |";
 
         $installer::logger::Info->printf("... %s ...\n", $systemcall);
 
