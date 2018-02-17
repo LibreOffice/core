@@ -238,6 +238,7 @@ public:
     void testMergedCellsXLSXML();
     void testBackgroundColorStandardXLSXML();
     void testNamedExpressionsXLSXML();
+    void testEmptyRowsXLSXML();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -363,6 +364,7 @@ public:
     CPPUNIT_TEST(testMergedCellsXLSXML);
     CPPUNIT_TEST(testBackgroundColorStandardXLSXML);
     CPPUNIT_TEST(testNamedExpressionsXLSXML);
+    CPPUNIT_TEST(testEmptyRowsXLSXML);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3641,6 +3643,39 @@ void ScFiltersTest::testNamedExpressionsXLSXML()
 
         xDocSh->DoClose();
     }
+}
+
+void ScFiltersTest::testEmptyRowsXLSXML()
+{
+    ScDocShellRef xDocSh = loadDoc("empty-rows.", FORMAT_XLS_XML);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load empty-rows.xml", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    {
+        // Expected output table content.  0 = empty cell
+        std::vector<std::vector<const char*>> aOutputCheck = {
+            { "Top row, followed by 2 empty rows.", nullptr },
+            { nullptr, nullptr },
+            { nullptr, nullptr },
+            { nullptr,     "1" },
+            { nullptr,     "2" },
+            { nullptr,     "3" },
+            { nullptr,     "4" },
+            { nullptr,     "5" },
+            { nullptr,    "15" },
+        };
+
+        ScRange aDataRange;
+        aDataRange.Parse("A1:B9");
+        bool bSuccess = checkOutput(&rDoc, aDataRange, aOutputCheck, "Expected output");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    ScAddress aPos;
+    aPos.Parse("B9");
+    ASSERT_FORMULA_EQUAL(rDoc, aPos, "SUM(B4:B8)", nullptr);
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testCondFormatXLSB()
