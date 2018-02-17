@@ -27,7 +27,7 @@ class formatBulletsNumbering(UITestCase):
         xWriterEntry = xPages.getChild('3')                 # Writer
         xWriterEntry.executeAction("EXPAND", tuple())
         xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General - set milimeters
+        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General - set millimeters
         xMetric = xDialog.getChild("metric")
         props = {"TEXT": "Millimeter"}
         actionProps = mkPropertyValues(props)
@@ -163,7 +163,7 @@ class formatBulletsNumbering(UITestCase):
         select_pos(xTabs, "5")
 
         xremovebtn = xDialog.getChild("user")
-        self.ui_test.close_dialog_through_button(xremovebtn)  #remove new settings, back to deafult
+        self.ui_test.close_dialog_through_button(xremovebtn)  #remove new settings, back to default
 
         self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog")
         xDialog = self.xUITest.getTopFocusWindow()
@@ -200,7 +200,7 @@ class formatBulletsNumbering(UITestCase):
         xWriterEntry = xPages.getChild('3')                 # Writer
         xWriterEntry.executeAction("EXPAND", tuple())
         xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General - set milimeters
+        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General - set millimeters
         xMetric = xDialog.getChild("metric")
         props = {"TEXT": "Millimeter"}
         actionProps = mkPropertyValues(props)
@@ -254,7 +254,7 @@ class formatBulletsNumbering(UITestCase):
         xWriterEntry = xPages.getChild('3')                 # Writer
         xWriterEntry.executeAction("EXPAND", tuple())
         xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General - set milimeters
+        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General - set millimeters
         xMetric = xDialog.getChild("metric")
         props = {"TEXT": "Millimeter"}
         actionProps = mkPropertyValues(props)
