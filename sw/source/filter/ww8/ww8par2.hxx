@@ -214,7 +214,7 @@ class WW8TabDesc
 
     std::vector<std::unique_ptr<WW8SelBoxInfo>> m_MergeGroups;   // list of all cells to be merged
 
-    WW8_TCell* m_pAktWWCell;
+    WW8_TCell* m_pCurrentWWCell;
 
     short m_nRows;
     short m_nDefaultSwCols;
@@ -231,10 +231,10 @@ class WW8TabDesc
     sal_Int16 m_eOri;
     bool m_bIsBiDi;
                                 // 2. common admin info
-    short m_nAktRow;
-    short m_nAktBandRow;          // SW: row of current band
+    short m_nCurrentRow;
+    short m_nCurrentBandRow;    // SW: row of current band
                                 // 3. admin info for writer
-    short m_nAktCol;
+    short m_nCurrentCol;
 
     sal_uInt16 m_nRowsToRepeat;
 
@@ -283,8 +283,8 @@ public:
     short GetMinLeft() const { return m_nConvertedLeft; }
     ~WW8TabDesc();
 
-    const WW8_TCell* GetAktWWCell() const { return m_pAktWWCell; }
-    short GetAktCol() const { return m_nAktCol; }
+    const WW8_TCell* GetAktWWCell() const { return m_pCurrentWWCell; }
+    short GetAktCol() const { return m_nCurrentCol; }
     // find name of numrule valid for current WW-COL
     OUString GetNumRuleName() const;
     void SetNumRuleName( const OUString& rName );
