@@ -34,9 +34,11 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+class Button;
 class ListBox;
 class NumericFormatter;
 class PopupMenu;
+class SalInstanceBuilder;
 class ScrollBar;
 class Slider;
 class DateField;
@@ -59,7 +61,8 @@ public:
             const OUString& sUIRootDir,
             const OUString& sUIFile,
             const OString& sID = OString(),
-            const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
+            const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>(),
+            bool bLegacy = true);
     ~VclBuilder();
 
     ///releases references and disposes all children.
@@ -289,6 +292,7 @@ private:
     bool        m_bToplevelHasDeferredInit;
     bool        m_bToplevelHasDeferredProperties;
     bool        m_bToplevelParentFound;
+    bool        m_bLegacy;
     std::unique_ptr<ParserState> m_pParserState;
 
     vcl::Window *get_by_name(const OString& sID);
@@ -309,6 +313,7 @@ private:
     /// XFrame to be able to extract labels and other properties of the UNO commands (like of .uno:Bold).
     css::uno::Reference<css::frame::XFrame> m_xFrame;
 
+    DECL_LINK(ResponseHdl, ::Button*, void);
 private:
     VclPtr<vcl::Window> insertObject(vcl::Window *pParent,
                     const OString &rClass, const OString &rID,
@@ -478,6 +483,8 @@ public:
 
 protected:
     std::unique_ptr<VclBuilder> m_pUIBuilder;
+
+    friend class ::SalInstanceBuilder;
 };
 
 /*

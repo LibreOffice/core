@@ -1581,6 +1581,8 @@ public:
     virtual FactoryFunction GetUITestFactory() const;
 
     virtual bool IsChart() const { return false; }
+
+    void SetHelpHdl(const Link<vcl::Window&, bool>& rLink);
 };
 
 }
