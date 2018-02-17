@@ -1851,6 +1851,11 @@ void Window::LoseFocus()
     CompatNotify( aNEvt );
 }
 
+void Window::SetHelpHdl(const Link<vcl::Window&, bool>& rLink)
+{
+    mpWindowImpl->maHelpRequestHdl = rLink;
+}
+
 void Window::RequestHelp( const HelpEvent& rHEvt )
 {
     // if Balloon-Help is requested, show the balloon
@@ -1889,7 +1894,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
             Help::ShowQuickHelp( this, aRect, rStr, aHelpText, QuickHelpFlags::CtrlText );
         }
     }
-    else
+    else if (!mpWindowImpl->maHelpRequestHdl.IsSet() || mpWindowImpl->maHelpRequestHdl.Call(*this))
     {
         OUString aStrHelpId( OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
         if ( aStrHelpId.isEmpty() && ImplGetParent() )
