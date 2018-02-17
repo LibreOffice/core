@@ -688,7 +688,7 @@ void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD const * pAD, sal_uInt8 
     SwNumFormat aNF;
     if (pAD)
     {                                                       // there is a Anld-Sprm
-        m_bAktAND_fNumberAcross = 0 != pAD->fNumberAcross;
+        m_bCurrentAND_fNumberAcross = 0 != pAD->fNumberAcross;
         WW8_ANLV const &rAV = pAD->eAnlv;
         SetBaseAnlv(aNF, rAV, nSwLevel);                    // set the base format
         SetAnlvStrings(aNF, rAV, pAD->rgchAnld, 0, SAL_N_ELEMENTS(pAD->rgchAnld), bOutLine); // set the rest
@@ -887,7 +887,7 @@ void ANLDRuleMap::SetNumRule(const SwNumRule *pRule, sal_uInt8 nNumType)
 // outline / numbering / bullets
 void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
 {
-    m_bAktAND_fNumberAcross = false;
+    m_bCurrentAND_fNumberAcross = false;
 
     sal_uInt8 nT = static_cast< sal_uInt8 >(GetNumType(*pSprm13));
     if (nT == WW8_Pause || nT == WW8_None)
@@ -1700,7 +1700,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     m_pTabLine(nullptr),
     m_pTabBoxes(nullptr),
     m_pTabBox(nullptr),
-    m_pAktWWCell(nullptr),
+    m_pCurrentWWCell(nullptr),
     m_nRows(0),
     m_nDefaultSwCols(0),
     m_nBands(0),
@@ -1723,7 +1723,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     m_pFlyFormat(nullptr),
     m_aItemSet(m_pIo->m_rDoc.GetAttrPool(),svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END-1>{})
 {
-    m_pIo->m_bAktAND_fNumberAcross = false;
+    m_pIo->m_bCurrentAND_fNumberAcross = false;
 
     static const sal_Int16 aOriArr[] =
     {
@@ -2886,7 +2886,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     }
     if (bPam)
     {
-        m_pAktWWCell = &m_pActBand->pTCs[ nWwCol ];
+        m_pCurrentWWCell = &m_pActBand->pTCs[ nWwCol ];
 
        // The first paragraph in a cell with upper autospacing has upper spacing set to 0
         if(m_pIo->m_bParaAutoBefore && m_pIo->m_bFirstPara && !m_pIo->m_xWDop->fDontUseHTMLAutoSpacing)
@@ -3254,7 +3254,7 @@ void WW8TabDesc::TableCellEnd()
     SetPamInCell(m_nAktCol, true);
 
     // finish Annotated Level Numbering ?
-    if (m_pIo->m_bAnl && !m_pIo->m_bAktAND_fNumberAcross && m_pActBand)
+    if (m_pIo->m_bAnl && !m_pIo->m_bCurrentAND_fNumberAcross && m_pActBand)
         m_pIo->StopAllAnl(IsValidCell(m_nAktCol));
 }
 
