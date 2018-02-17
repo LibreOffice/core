@@ -293,6 +293,7 @@ BitmapChecksum Bitmap::GetChecksum() const
         }
     }
 
+    SAL_INFO("vcl.gdi.checksum", "Bitmap::GetChecksum() returns " << nRet);
     return nRet;
 }
 
