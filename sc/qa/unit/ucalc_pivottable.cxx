@@ -76,10 +76,11 @@ ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef aFields[], size_t nField
     return aSrcRange;
 }
 
-template<size_t Size>
-bool checkDPTableOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* aOutputCheck[][Size], const char* pCaption)
+bool checkDPTableOutput(
+    ScDocument* pDoc, const ScRange& aOutRange,
+    const std::vector<std::vector<const char*>>& aOutputCheck, const char* pCaption )
 {
-    return checkOutput<Size>(pDoc, aOutRange, aOutputCheck, pCaption);
+    return checkOutput(pDoc, aOutRange, aOutputCheck, pCaption);
 }
 
 ScDPObject* createDPFromSourceDesc(
@@ -235,7 +236,7 @@ void Test::testPivotTable()
     aOutRange = pDPObj->GetOutRange();
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][5] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Sum - Score", "Group", nullptr, nullptr, nullptr },
             { "Name", "A", "B", "C", "Total Result" },
             { "Andy", "30", nullptr, nullptr, "30" },
@@ -247,7 +248,7 @@ void Test::testPivotTable()
             { "Total Result", "50", "57", "23", "130" }
         };
 
-        bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be only one data cache.", size_t(1), pDPs->GetSheetCaches().size());
@@ -273,7 +274,7 @@ void Test::testPivotTable()
     pDPObj2->Output(aOutRange.aStart);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][5] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Sum - Score", "Group", nullptr, nullptr, nullptr },
             { "Name", "A", "B", "C", "Total Result" },
             { "Andy", "30", nullptr, nullptr, "30" },
@@ -285,7 +286,7 @@ void Test::testPivotTable()
             { "Total Result", "50", "57", "23", "130" }
         };
 
-        bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (from old cache)");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (from old cache)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -310,7 +311,7 @@ void Test::testPivotTable()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][5] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Sum - Score", "Group", nullptr, nullptr, nullptr },
             { "Name", "A", "B", "C", "Total Result" },
             { "Andy", "100", nullptr, nullptr, "100" },
@@ -322,7 +323,7 @@ void Test::testPivotTable()
             { "Total Result", "300", "700", "1100", "2100" }
         };
 
-        bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (refreshed)");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (refreshed)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -411,14 +412,14 @@ void Test::testPivotTableLabels()
     ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][5] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Sum - 1.2.3", "Version", nullptr, nullptr, nullptr },
             { "Software", "3.3.0", "3.3.1", "3.4.0", "Total Result" },
             { "LibreOffice", "30", "20", "45", "95" },
             { "Total Result", "30", "20", "45", "95" }
         };
 
-        bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -467,7 +468,7 @@ void Test::testPivotTableDateLabels()
     ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][5] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Sum - Value", "Date", nullptr, nullptr, nullptr },
             { "Name", "2011-01-01", "2011-01-02", "2011-01-03", "Total Result" },
             { "Xavior",  nullptr, nullptr, "45", "45" },
@@ -476,7 +477,7 @@ void Test::testPivotTableDateLabels()
             { "Total Result", "30", "20", "45", "95" }
         };
 
-        bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -550,7 +551,7 @@ void Test::testPivotTableFilters()
     ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Filter", nullptr },
             { "Group2", "- all -" },
             { nullptr, nullptr },
@@ -559,7 +560,7 @@ void Test::testPivotTableFilters()
             { "Sum - Val2", "80" }
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (unfiltered)");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (unfiltered)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -584,7 +585,7 @@ void Test::testPivotTableFilters()
     aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Filter", nullptr },
             { "Group2", "A" },
             { nullptr, nullptr },
@@ -593,7 +594,7 @@ void Test::testPivotTableFilters()
             { "Sum - Val2", "40" }
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by page)");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by page)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -613,7 +614,7 @@ void Test::testPivotTableFilters()
     aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Filter", nullptr },
             { "Group2", "A" },
             { nullptr, nullptr },
@@ -622,7 +623,7 @@ void Test::testPivotTableFilters()
             { "Sum - Val2", "20" }
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by query)");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by query)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -636,7 +637,7 @@ void Test::testPivotTableFilters()
     aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Filter", nullptr },
             { "Group2", "- all -" },
             { nullptr, nullptr },
@@ -645,7 +646,7 @@ void Test::testPivotTableFilters()
             { "Sum - Val2", "40" }
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by page)");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (filtered by page)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -710,7 +711,7 @@ void Test::testPivotTableNamedSource()
     ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][5] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Sum - Score", "Group", nullptr, nullptr, nullptr },
             { "Name", "A", "B", "C", "Total Result" },
             { "Andy", "30", nullptr, nullptr, "30" },
@@ -722,7 +723,7 @@ void Test::testPivotTableNamedSource()
             { "Total Result", "50", "57", "23", "130" }
         };
 
-        bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -987,7 +988,7 @@ void Test::testPivotTableDuplicateDataFields()
     ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][3] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name", "Data", nullptr },
             { "A", "Sum - Value", "144" },
             { nullptr, "Count - Value", "5" },
@@ -997,7 +998,7 @@ void Test::testPivotTableDuplicateDataFields()
             { "Total Count - Value", nullptr, "10" },
         };
 
-        bSuccess = checkDPTableOutput<3>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1013,7 +1014,7 @@ void Test::testPivotTableDuplicateDataFields()
     aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][3] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { nullptr, "Data", nullptr },
             { "Name", "Sum - Value", "Count - Value" },
             { "A", "144", "5" },
@@ -1021,7 +1022,7 @@ void Test::testPivotTableDuplicateDataFields()
             { "Total Result", "411", "10" }
         };
 
-        bSuccess = checkDPTableOutput<3>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1080,7 +1081,7 @@ void Test::testPivotTableNormalGrouping()
     ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name", "Sum - Value" },
             { "A", "1" },
             { "B", "2" },
@@ -1092,7 +1093,7 @@ void Test::testPivotTableNormalGrouping()
             { "Total Result", "28" }
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Initial output without grouping");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Initial output without grouping");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1128,7 +1129,7 @@ void Test::testPivotTableNormalGrouping()
     aOutRange = refreshGroups(pDPs, pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][3] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name2", "Name", "Sum - Value" },
             { "D", "D", "4" },
             { "E", "E", "5" },
@@ -1140,7 +1141,7 @@ void Test::testPivotTableNormalGrouping()
             { "Total Result", nullptr, "28" }
         };
 
-        bSuccess = checkDPTableOutput<3>(m_pDoc, aOutRange, aOutputCheck, "A, B, C grouped by Group1.");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "A, B, C grouped by Group1.");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1165,7 +1166,7 @@ void Test::testPivotTableNormalGrouping()
     aOutRange = refreshGroups(pDPs, pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][3] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name2", "Name", "Sum - Value" },
             { "G", "G", "7" },
             { "Group1", "A", "1" },
@@ -1177,7 +1178,7 @@ void Test::testPivotTableNormalGrouping()
             { "Total Result", nullptr, "28" }
         };
 
-        bSuccess = checkDPTableOutput<3>(m_pDoc, aOutRange, aOutputCheck, "D, E, F grouped by Group2.");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "D, E, F grouped by Group2.");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1262,7 +1263,7 @@ void Test::testPivotTableNumberGrouping()
     ScRange aOutRange = refreshGroups(pDPs, pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Order", "Sum - Score" },
             { "<30",   "423" },
             { "30-39", "87"  },
@@ -1272,7 +1273,7 @@ void Test::testPivotTableNumberGrouping()
             { "Total Result", "1389" }
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Order grouped by numbers");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Order grouped by numbers");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1377,7 +1378,7 @@ void Test::testPivotTableDateGrouping()
     ScRange aOutRange = refreshGroups(pDPs, pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][4] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Years", "Quarters", "Date", "Sum - Value" },
             { "2011", "Q1", "Jan", "1" },
             { nullptr, nullptr,         "Mar", "2" },
@@ -1389,7 +1390,7 @@ void Test::testPivotTableDateGrouping()
             { "Total Result", nullptr, nullptr, "36" },
         };
 
-        bSuccess = checkDPTableOutput<4>(m_pDoc, aOutRange, aOutputCheck, "Years, quarters and months date groups.");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Years, quarters and months date groups.");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1409,7 +1410,7 @@ void Test::testPivotTableDateGrouping()
     aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][4] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Years", "Quarters", "Date", "Sum - Value" },
             { "2011", "Q1", "Jan", "1" },
             { nullptr, nullptr,         "Mar", "2" },
@@ -1417,7 +1418,7 @@ void Test::testPivotTableDateGrouping()
             { "Total Result", nullptr, nullptr, "10" },
         };
 
-        bSuccess = checkDPTableOutput<4>(m_pDoc, aOutRange, aOutputCheck, "Year 2012 data now hidden");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Year 2012 data now hidden");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1433,7 +1434,7 @@ void Test::testPivotTableDateGrouping()
     aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Date", "Sum - Value" },
             { "2011-01-01", "1" },
             { "2011-03-02", "2" },
@@ -1446,7 +1447,7 @@ void Test::testPivotTableDateGrouping()
             { "Total Result", "36" }
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Remove all date grouping.");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Remove all date grouping.");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1501,7 +1502,7 @@ void Test::testPivotTableEmptyRows()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name", "Sum - Value" },
             { "A", "1" },
             { "B", "2" },
@@ -1511,7 +1512,7 @@ void Test::testPivotTableEmptyRows()
             { "Total Result", "10" },
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Include empty rows");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Include empty rows");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1524,7 +1525,7 @@ void Test::testPivotTableEmptyRows()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name", "Sum - Value" },
             { "A", "1" },
             { "B", "2" },
@@ -1533,7 +1534,7 @@ void Test::testPivotTableEmptyRows()
             { "Total Result", "10" },
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Ignore empty rows");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Ignore empty rows");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1551,7 +1552,7 @@ void Test::testPivotTableEmptyRows()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name", "Sum - Value" },
             { "B", "3" },
             { "C", "3" },
@@ -1559,7 +1560,7 @@ void Test::testPivotTableEmptyRows()
             { "Total Result", "10" },
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Ignore empty rows");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Ignore empty rows");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1628,7 +1629,7 @@ void Test::testPivotTableTextNumber()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name", "Sum - Value" },
             { "0001", "1" },
             { "0002", "2" },
@@ -1637,7 +1638,7 @@ void Test::testPivotTableTextNumber()
             { "Total Result", "10" },
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Text number field members");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Text number field members");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1655,14 +1656,14 @@ void Test::testPivotTableTextNumber()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name", "0004" },
             {  nullptr, nullptr },
             { "Sum - Value", nullptr },
             { "4", nullptr }
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Text number field members");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Text number field members");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1712,13 +1713,13 @@ void Test::testPivotTableCaseInsensitiveStrings()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name", "Sum - Value" },
             { "A", "3" },
             { "Total Result", "3" },
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Case insensitive strings");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Case insensitive strings");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1875,7 +1876,7 @@ void Test::testPivotTableFieldReference()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name", "Sum - Value" },
             { "A", "1" },
             { "B", "2" },
@@ -1884,7 +1885,7 @@ void Test::testPivotTableFieldReference()
             { "Total Result", "15" },
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Field reference (none)");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Field reference (none)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1902,7 +1903,7 @@ void Test::testPivotTableFieldReference()
     aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name", "Sum - Value" },
             { "A", nullptr },
             { "B", "1" },
@@ -1911,7 +1912,7 @@ void Test::testPivotTableFieldReference()
             { "Total Result", nullptr },
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Field reference (difference from)");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Field reference (difference from)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1922,7 +1923,7 @@ void Test::testPivotTableFieldReference()
     aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name", "Sum - Value" },
             { "A", "100.00%" },
             { "B", "200.00%" },
@@ -1931,7 +1932,7 @@ void Test::testPivotTableFieldReference()
             { "Total Result", nullptr },
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Field reference (% of)");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Field reference (% of)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1942,7 +1943,7 @@ void Test::testPivotTableFieldReference()
     aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name", "Sum - Value" },
             { "A", nullptr },
             { "B", "100.00%" },
@@ -1951,7 +1952,7 @@ void Test::testPivotTableFieldReference()
             { "Total Result", nullptr },
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Field reference (% difference from)");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Field reference (% difference from)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1962,7 +1963,7 @@ void Test::testPivotTableFieldReference()
     aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name", "Sum - Value" },
             { "A", "1" },
             { "B", "3" },
@@ -1971,7 +1972,7 @@ void Test::testPivotTableFieldReference()
             { "Total Result", nullptr },
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Field reference (Running total)");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Field reference (Running total)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -1982,7 +1983,7 @@ void Test::testPivotTableFieldReference()
     aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name", "Sum - Value" },
             { "A", "6.67%" },
             { "B", "13.33%" },
@@ -1991,7 +1992,7 @@ void Test::testPivotTableFieldReference()
             { "Total Result", "100.00%" },
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Field reference (% of column)");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Field reference (% of column)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -2046,7 +2047,7 @@ void Test::testPivotTableDocFunc()
     ScRange aOutRange = pDPObject->GetOutRange();
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name", "Sum - Value" },
             { "Apple", "16" },
             { "Microsoft", "32" },
@@ -2057,7 +2058,7 @@ void Test::testPivotTableDocFunc()
             { "Total Result", "63" },
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Pivot table created via ScDBDocFunc");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Pivot table created via ScDBDocFunc");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -2115,14 +2116,14 @@ void Test::testFuncGETPIVOTDATA()
     ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name", "Sum - Value" },
             { "A", "6" },
             { "B", "15" },
             { "Total Result", "21" },
         };
 
-        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Pivot table created for GETPIVOTDATA");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Pivot table created for GETPIVOTDATA");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -2174,7 +2175,7 @@ void Test::testFuncGETPIVOTDATA()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][3] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name",                "Data",           nullptr   },
             { "A",                   "Sum - Value",   "6"  },
             {  nullptr,                    "Count - Value", "3"  },
@@ -2184,7 +2185,7 @@ void Test::testFuncGETPIVOTDATA()
             { "Total Count - Value", nullptr,               "6"  },
         };
 
-        bSuccess = checkDPTableOutput<3>(m_pDoc, aOutRange, aOutputCheck, "Pivot table refreshed");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Pivot table refreshed");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -2274,7 +2275,7 @@ void Test::testFuncGETPIVOTDATALeafAccess()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][3] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Type",         "Member",   "Sum - Value" },
             { "A",            "Anna",     "1"           },
             {  nullptr,             "Cecilia",  "3"           },
@@ -2283,7 +2284,7 @@ void Test::testFuncGETPIVOTDATALeafAccess()
             { "Total Result",  nullptr,         "10"          },
         };
 
-        bSuccess = checkDPTableOutput<3>(m_pDoc, aOutRange, aOutputCheck, "Pivot table refreshed");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Pivot table refreshed");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -2375,7 +2376,7 @@ void Test::testPivotTableRepeatItemLabels()
     aOutRange = pDPObj->GetOutRange();
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][4] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Name",         "Country", "Year", "Sum - Score" },
             { "Andy",         "US",      "1999", "30"          },
             { "Andy",         nullptr,         "2002", "20"          },
@@ -2388,7 +2389,7 @@ void Test::testPivotTableRepeatItemLabels()
             { "Total Result", nullptr,         nullptr,      "220"         }
         };
 
-        bSuccess = checkDPTableOutput<4>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -2545,7 +2546,7 @@ void Test::testPivotTableMedianFunc()
     ScRange aOutRange = pDPObject->GetOutRange();
     {
         // Expected output table content.  0 = empty cell
-       const char* aOutputCheck[][4] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "Condition", "Data", nullptr },
             { "Control", "Median - Day1Hit", "10" },
             { nullptr, "Median - Day1Miss", "0" },
@@ -2558,7 +2559,7 @@ void Test::testPivotTableMedianFunc()
             { "Total Median - Day1FalseAlarm", nullptr, "0.5", nullptr }
         };
 
-        bSuccess = checkDPTableOutput<4>(m_pDoc, aOutRange, aOutputCheck, "Pivot table created via ScDBDocFunc");
+        bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Pivot table created via ScDBDocFunc");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
