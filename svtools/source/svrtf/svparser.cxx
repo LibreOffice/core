@@ -517,28 +517,28 @@ T SvParser<T>::SkipToken( short nCnt )       // "skip" n Tokens backward
 template<typename T>
 typename SvParser<T>::TokenStackType* SvParser<T>::GetStackPtr( short nCnt )
 {
-    sal_uInt8 nAktPos = sal_uInt8(pTokenStackPos - pTokenStack );
+    sal_uInt8 nCurrentPos = sal_uInt8(pTokenStackPos - pTokenStack );
     if( nCnt > 0 )
     {
         if( nCnt >= nTokenStackSize )
             nCnt = (nTokenStackSize-1);
-        if( nAktPos + nCnt < nTokenStackSize )
-            nAktPos = sal::static_int_cast< sal_uInt8 >(nAktPos + nCnt);
+        if( nCurrentPos + nCnt < nTokenStackSize )
+            nCurrentPos = sal::static_int_cast< sal_uInt8 >(nCurrentPos + nCnt);
         else
-            nAktPos = sal::static_int_cast< sal_uInt8 >(
-                nAktPos + (nCnt - nTokenStackSize));
+            nCurrentPos = sal::static_int_cast< sal_uInt8 >(
+                nCurrentPos + (nCnt - nTokenStackSize));
     }
     else if( nCnt < 0 )
     {
         if( -nCnt >= nTokenStackSize )
             nCnt = -nTokenStackSize+1;
-        if( -nCnt <= nAktPos )
-            nAktPos = sal::static_int_cast< sal_uInt8 >(nAktPos + nCnt);
+        if( -nCnt <= nCurrentPos )
+            nCurrentPos = sal::static_int_cast< sal_uInt8 >(nCurrentPos + nCnt);
         else
-            nAktPos = sal::static_int_cast< sal_uInt8 >(
-                nAktPos + (nCnt + nTokenStackSize));
+            nCurrentPos = sal::static_int_cast< sal_uInt8 >(
+                nCurrentPos + (nCnt + nTokenStackSize));
     }
-    return pTokenStack + nAktPos;
+    return pTokenStack + nCurrentPos;
 }
 
 // to read asynchronous from SvStream
