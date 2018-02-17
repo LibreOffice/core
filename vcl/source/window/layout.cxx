@@ -339,6 +339,18 @@ void VclContainer::Command(const CommandEvent& rCEvt)
     Window::Command(rCEvt);
 }
 
+void VclContainer::dispose()
+{
+    vcl::Window* pChild = GetWindow(GetWindowType::FirstChild);
+    while (pChild)
+    {
+        vcl::Window* pNextChild = pChild->GetWindow(GetWindowType::Next);
+        pChild->disposeOnce();
+        pChild = pNextChild;
+    }
+    vcl::Window::dispose();
+}
+
 void VclBox::accumulateMaxes(const Size &rChildSize, Size &rSize) const
 {
     long nSecondaryChildDimension = getSecondaryDimension(rChildSize);

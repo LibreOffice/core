@@ -58,6 +58,7 @@ public:
     virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize) override;
     virtual void SetPosPixel(const Point& rAllocPos) override;
     virtual void SetSizePixel(const Size& rAllocation) override;
+    virtual void dispose() override;
 private:
     bool m_bLayoutDirty;
 };
