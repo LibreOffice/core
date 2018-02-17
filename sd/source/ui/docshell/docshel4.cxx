@@ -406,6 +406,14 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         mpDoc->SetSummationOfParagraphs();
     }
 
+    // Set this flag for MSO formats
+    if (aFilterName.startsWith("MS PowerPoint 97") ||
+        aFilterName.startsWith("Impress MS PowerPoint 2007 XML") ||
+        aFilterName.startsWith("Impress Office Open XML"))
+    {
+        mpDoc->SetHoriAlignIgnoreTrailingWhitespace(true);
+    }
+
     const bool bRet = SfxObjectShell::ImportFrom(rMedium, xInsertPosition);
 
     SfxItemSet* pSet = rMedium.GetItemSet();
@@ -493,6 +501,14 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         mpDoc->CreateFirstPages();
         mpDoc->StopWorkStartupDelay();
         bRet = SdGRFFilter( rMedium, *this ).Import();
+    }
+
+    // Set this flag for MSO formats
+    if (aFilterName.startsWith("MS PowerPoint 97") ||
+        aFilterName.startsWith("Impress MS PowerPoint 2007 XML") ||
+        aFilterName.startsWith("Impress Office Open XML"))
+    {
+        mpDoc->SetHoriAlignIgnoreTrailingWhitespace(true);
     }
 
     FinishedLoading();
