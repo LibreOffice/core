@@ -102,7 +102,8 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bImpConvertFirstCall(false),
     bFirstWordCapitalization(true),
     mbLastTryMerge(false),
-    mbReplaceLeadingSingleQuotationMark(true)
+    mbReplaceLeadingSingleQuotationMark(true),
+    mbHoriAlignIgnoreTrailingWhitespace(false)
 {
     pEditEngine         = pEE;
     pRefDev             = nullptr;
@@ -3038,7 +3039,7 @@ sal_uInt32 ImpEditEngine::GetTextHeight() const
     return nCurTextHeight;
 }
 
-sal_uInt32 ImpEditEngine::CalcTextWidth( bool bIgnoreExtraSpace )
+sal_uInt32 ImpEditEngine::CalcTextWidth( bool bIgnoreExtraSpace, bool bIgnoreTrailingWhiteSpaces )
 {
     // If still not formatted and not in the process.
     // Will be brought in the formatting for AutoPageSize.
@@ -3085,7 +3086,7 @@ sal_uInt32 ImpEditEngine::CalcTextWidth( bool bIgnoreExtraSpace )
                     }
                 }
                 nCurWidth += GetXValue( rLRItem.GetRight() );
-                nCurWidth += CalcLineWidth( pPortion, &rLine, bIgnoreExtraSpace );
+                nCurWidth += CalcLineWidth( pPortion, &rLine, bIgnoreExtraSpace, bIgnoreTrailingWhiteSpaces );
                 if ( nCurWidth > nMaxWidth )
                 {
                     nMaxWidth = nCurWidth;
@@ -3098,7 +3099,7 @@ sal_uInt32 ImpEditEngine::CalcTextWidth( bool bIgnoreExtraSpace )
     return (sal_uInt32)nMaxWidth;
 }
 
-sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, bool bIgnoreExtraSpace )
+sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, bool bIgnoreExtraSpace, bool bIgnoreTrailingWhiteSpaces )
 {
     sal_Int32 nPara = GetEditDoc().GetPos( pPortion->GetNode() );
 
@@ -3127,7 +3128,7 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
             break;
             case PortionKind::TEXT:
             {
-                if ( ( eJustification != SVX_ADJUST_BLOCK ) || ( !bIgnoreExtraSpace ) )
+                if ( (( eJustification != SVX_ADJUST_BLOCK ) || ( !bIgnoreExtraSpace )) && !bIgnoreTrailingWhiteSpaces )
                 {
                     nWidth += rTextPortion.GetSize().Width();
                 }
@@ -3137,7 +3138,10 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
                     SeekCursor( pPortion->GetNode(), nPos+1, aTmpFont );
                     aTmpFont.SetPhysFont( GetRefDevice() );
                     ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
-                    nWidth += aTmpFont.QuickGetTextSize( GetRefDevice(), pPortion->GetNode()->GetString(), nPos, rTextPortion.GetLen() ).Width();
+                    if (bIgnoreTrailingWhiteSpaces)
+                        nWidth += aTmpFont.QuickGetTextSize( GetRefDevice(), pPortion->GetNode()->GetString().trim(), nPos, rTextPortion.GetLen() ).Width();
+                    else
+                        nWidth += aTmpFont.QuickGetTextSize( GetRefDevice(), pPortion->GetNode()->GetString(), nPos, rTextPortion.GetLen() ).Width();
                 }
             }
             break;
