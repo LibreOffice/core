@@ -164,7 +164,9 @@ public:
 
     BitmapChecksum GetChecksum() const
     {
-        return vcl_get_checksum(0, maBitmapColor.data(), maBitmapColor.size() * sizeof(BitmapColor));
+        BitmapChecksum nChecksum = vcl_get_checksum(0, maBitmapColor.data(), maBitmapColor.size() * sizeof(BitmapColor));
+        SAL_INFO("vcl.gdi.checksum", "BitmapPalette::GetChecksum() returns " << nChecksum);
+        return nChecksum;
     }
 
 public:
