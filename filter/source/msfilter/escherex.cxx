@@ -587,7 +587,7 @@ void EscherPropertyContainer::CreateFillProperties(
 
             case drawing::FillStyle_BITMAP :
             {
-                CreateGraphicProperties( rXPropSet, "FillBitmapURL", true );
+                CreateGraphicProperties(rXPropSet, "FillBitmap", true);
                 AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
                 AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor  );
             }
@@ -1445,7 +1445,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
                 }
             }
         }
-        else if ( rSource == "Bitmap" )
+        else if (rSource == "Bitmap" || rSource == "FillBitmap")
         {
             uno::Reference<awt::XBitmap> xBitmap(aAny, uno::UNO_QUERY);
             if (xBitmap.is())
@@ -1460,10 +1460,6 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
                     bIsGraphicMtf = xGraphicObject->GetType() == GraphicType::GdiMetafile;
                 }
             }
-        }
-        else if ( rSource == "FillBitmapURL" )
-        {
-            aGraphicUrl = *o3tl::doAccess<OUString>(aAny);
         }
         else if ( rSource == "GraphicURL" )
         {

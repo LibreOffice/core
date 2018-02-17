@@ -274,8 +274,7 @@ bool XFillBitmapItem::QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId) const
         aInternalName = GetName();
     }
 
-    if( nMemberId == MID_GRAFURL ||
-        nMemberId == 0 )
+    if (nMemberId == MID_GRAFURL)
     {
         aURL = UNO_NAME_GRAPHOBJ_URLPREFIX;
         aURL += OStringToOUString(
@@ -302,10 +301,8 @@ bool XFillBitmapItem::QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId) const
 
         aPropSeq[0].Name  = "Name";
         aPropSeq[0].Value <<= aInternalName;
-        aPropSeq[1].Name  = "FillBitmapURL";
-        aPropSeq[1].Value <<= aURL;
-        aPropSeq[2].Name  = "Bitmap";
-        aPropSeq[2].Value <<= xBmp;
+        aPropSeq[1].Name  = "Bitmap";
+        aPropSeq[1].Value <<= xBmp;
 
         rVal <<= aPropSeq;
     }
@@ -328,8 +325,6 @@ bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 
     if( nMemberId == MID_NAME )
         bSetName = (rVal >>= aName);
-    else if( nMemberId == MID_GRAFURL )
-        bSetURL = (rVal >>= aURL);
     else if( nMemberId == MID_BITMAP )
     {
         bSetBitmap = (rVal >>= xBmp);
@@ -346,8 +341,6 @@ bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 if ( aPropSeq[n].Name == "Name" )
                     bSetName = (aPropSeq[n].Value >>= aName);
-                else if ( aPropSeq[n].Name == "FillBitmapURL" )
-                    bSetURL = (aPropSeq[n].Value >>= aURL);
                 else if ( aPropSeq[n].Name == "Bitmap" )
                     bSetBitmap = (aPropSeq[n].Value >>= xBmp);
             }

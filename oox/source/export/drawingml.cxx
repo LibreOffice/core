@@ -1220,12 +1220,25 @@ void DrawingML::WriteBlipFill( const Reference< XPropertySet >& rXPropSet, const
 {
     if ( GetProperty( rXPropSet, sURLPropName ) )
     {
-        OUString aURL;
-        mAny >>= aURL;
-        bool bWriteMode = false;
-        if( sURLPropName == "FillBitmapURL" || sURLPropName == "BackGraphicURL")
-            bWriteMode = true;
-        WriteBlipFill( rXPropSet, aURL, nXmlNamespace, bWriteMode );
+        if (mAny.has<uno::Reference<awt::XBitmap>>())
+        {
+            uno::Reference<awt::XBitmap> xBitmap;
+            xBitmap = mAny.get<uno::Reference<awt::XBitmap>>();
+            uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
+            if (xBitmap.is() && xGraphic.is())
+            {
+                WriteXGraphicBlipFill(rXPropSet, xGraphic, nXmlNamespace, true);
+            }
+        }
+        else
+        {
+            OUString aURL;
+            mAny >>= aURL;
+            bool bWriteMode = false;
+            if( sURLPropName == "FillBitmapURL" || sURLPropName == "BackGraphicURL")
+                bWriteMode = true;
+            WriteBlipFill( rXPropSet, aURL, nXmlNamespace, bWriteMode );
+        }
     }
 }
 
@@ -3135,7 +3148,7 @@ void DrawingML::WriteFill( const Reference< XPropertySet >& xPropSet )
         WriteGradientFill( xPropSet );
         break;
     case FillStyle_BITMAP :
-        WriteBlipFill( xPropSet, "FillBitmapURL" );
+        WriteBlipFill( xPropSet, "FillBitmap" );
         break;
     case FillStyle_HATCH :
         WritePattFill( xPropSet );
