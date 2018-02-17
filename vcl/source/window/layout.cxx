@@ -2252,7 +2252,8 @@ void MessageDialog::setButtonHandlers(VclButtonBox const *pButtonBox)
             case WindowType::PUSHBUTTON:
             {
                 PushButton* pButton = static_cast<PushButton*>(pChild);
-                pButton->SetClickHdl(LINK(this, MessageDialog, ButtonHdl));
+                if (!pButton->GetClickHdl().IsSet())
+                    pButton->SetClickHdl(LINK(this, MessageDialog, ButtonHdl));
                 break;
             }
             //insist that the response ids match the default actions for those

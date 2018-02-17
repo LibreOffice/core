@@ -2416,14 +2416,6 @@ namespace
             }
         }
     }
-
-    void destroy_toplevels(gpointer data, gpointer /*user_data*/)
-    {
-        GObject* pObject = static_cast<GObject*>(data);
-        if (!GTK_IS_WINDOW(pObject))
-            return;
-        gtk_widget_destroy(GTK_WIDGET(pObject));
-    }
 }
 
 class GtkInstanceBuilder : public weld::Builder
@@ -2456,7 +2448,6 @@ public:
 
     virtual ~GtkInstanceBuilder() override
     {
-        g_slist_foreach(m_pObjectList, destroy_toplevels, nullptr);
         g_slist_free(m_pObjectList);
         g_object_unref(m_pBuilder);
     }
@@ -2638,9 +2629,7 @@ void GtkInstanceWindow::help()
     }
     std::unique_ptr<weld::Widget> xTemp(pWidget != m_pWidget ? new GtkInstanceWidget(pWidget, false) : nullptr);
     weld::Widget* pSource = xTemp ? xTemp.get() : this;
-    bool bRunNormalHelpRequest = true;
-    if (m_aHelpRequestHdl.IsSet())
-        bRunNormalHelpRequest = m_aHelpRequestHdl.Call(*pSource);
+    bool bRunNormalHelpRequest = !m_aHelpRequestHdl.IsSet() || m_aHelpRequestHdl.Call(*pSource);
     Help* pHelp = bRunNormalHelpRequest ? Application::GetHelp() : nullptr;
     if (pHelp)
         pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), pSource);

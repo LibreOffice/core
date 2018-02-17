@@ -27,6 +27,7 @@
 #include <salbmp.hxx>
 #include <salobj.hxx>
 #include <salmenu.hxx>
+#include <svdata.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
@@ -296,11 +297,28 @@ class SalInstanceWindow : public SalInstanceContainer, public virtual weld::Wind
 private:
     VclPtr<SystemWindow> m_xWindow;
 
+    DECL_LINK(HelpHdl, vcl::Window&, bool);
+
+    void override_child_help(vcl::Window* pParent)
+    {
+        for (vcl::Window *pChild = pParent->GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
+            override_child_help(pChild);
+        pParent->SetHelpHdl(LINK(this, SalInstanceWindow, HelpHdl));
+    }
+
+    void clear_child_help(vcl::Window* pParent)
+    {
+        for (vcl::Window *pChild = pParent->GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
+            clear_child_help(pChild);
+        pParent->SetHelpHdl(Link<vcl::Window&,bool>());
+    }
+
 public:
     SalInstanceWindow(SystemWindow* pWindow, bool bTakeOwnership)
         : SalInstanceContainer(pWindow, bTakeOwnership)
         , m_xWindow(pWindow)
     {
+        override_child_help(m_xWindow);
     }
 
     virtual void set_title(const OUString& rTitle) override
@@ -312,7 +330,40 @@ public:
     {
         return m_xWindow->GetText();
     }
+
+    bool help()
+    {
+        //show help for widget with keyboard focus
+        vcl::Window* pWidget = ImplGetSVData()->maWinData.mpFocusWin;
+        if (!pWidget)
+            pWidget = m_xWindow;
+        OString sHelpId = pWidget->GetHelpId();
+        while (sHelpId.isEmpty())
+        {
+            pWidget = pWidget->GetParent();
+            if (!pWidget)
+                break;
+            sHelpId = pWidget->GetHelpId();
+        }
+        std::unique_ptr<weld::Widget> xTemp(pWidget != m_xWindow ? new SalInstanceWidget(pWidget, false) : nullptr);
+        weld::Widget* pSource = xTemp ? xTemp.get() : this;
+        bool bRunNormalHelpRequest = !m_aHelpRequestHdl.IsSet() || m_aHelpRequestHdl.Call(*pSource);
+        Help* pHelp = bRunNormalHelpRequest ? Application::GetHelp() : nullptr;
+        if (pHelp)
+            pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), pSource);
+        return false;
+    }
+
+    virtual ~SalInstanceWindow() override
+    {
+        clear_child_help(m_xWindow);
+    }
 };
+
+IMPL_LINK_NOARG(SalInstanceWindow, HelpHdl, vcl::Window&, bool)
+{
+    return help();
+}
 
 class SalInstanceDialog : public SalInstanceWindow, public virtual weld::Dialog
 {
@@ -328,7 +379,6 @@ public:
 
     virtual int run() override
     {
-        m_xDialog->Show();
         return m_xDialog->Execute();
     }
 
@@ -1108,7 +1158,7 @@ private:
 public:
     SalInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile)
         : weld::Builder(rUIFile)
-        , m_aBuilder(pParent, rUIRoot, rUIFile)
+        , m_aBuilder(pParent, rUIRoot, rUIFile, OString(), css::uno::Reference<css::frame::XFrame>(), false)
     {
     }
 
