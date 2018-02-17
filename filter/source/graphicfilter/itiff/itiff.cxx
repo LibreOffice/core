@@ -50,7 +50,7 @@ private:
     Animation               aAnimation;
 
     SvStream*               pTIFF;                      // the TIFF file that should be read
-    std::unique_ptr<sal_uInt8[]> mpBitmap;
+    std::vector<sal_uInt8>  maBitmap;
     Size                    maBitmapPixelSize;
     std::vector<Color>      mvPalette;
     MapMode                 maBitmapPrefMapMode;
@@ -619,8 +619,8 @@ bool TIFFReader::ReadMap()
                 //previous scanline instead of painfully decoding and setting
                 //each pixel one by one again
                 const int nColorSize = bHasAlphaChannel ? 4 : 3;
-                memcpy( mpBitmap.get() + (ny * maBitmapPixelSize.Width()) * nColorSize,
-                        mpBitmap.get() + ((ny-1) * maBitmapPixelSize.Width()) * nColorSize,
+                memcpy( maBitmap.data() + (ny * maBitmapPixelSize.Width()) * nColorSize,
+                        maBitmap.data() + ((ny-1) * maBitmapPixelSize.Width()) * nColorSize,
                         maBitmapPixelSize.Width() * nColorSize);
             }
             else
@@ -785,13 +785,13 @@ sal_uInt32 TIFFReader::GetBits( const sal_uInt8 * pSrc, sal_uInt32 nBitsPos, sal
 
 void TIFFReader::SetPixel(long nY, long nX, sal_uInt8 cIndex)
 {
-    mpBitmap[(maBitmapPixelSize.Width() * nY + nX) * (HasAlphaChannel() ? 4 : 3)] = cIndex;
+    maBitmap[(maBitmapPixelSize.Width() * nY + nX) * (HasAlphaChannel() ? 4 : 3)] = cIndex;
     nLargestPixelIndex = std::max<int>(nLargestPixelIndex, cIndex);
 }
 
 void TIFFReader::SetPixel(long nY, long nX, Color c)
 {
-    auto p = mpBitmap.get() + ((maBitmapPixelSize.Width() * nY + nX) * (HasAlphaChannel() ? 4 : 3));
+    auto p = maBitmap.data() + ((maBitmapPixelSize.Width() * nY + nX) * (HasAlphaChannel() ? 4 : 3));
     *p = c.GetRed();
     p++;
     *p = c.GetGreen();
@@ -807,7 +807,7 @@ void TIFFReader::SetPixel(long nY, long nX, Color c)
 void TIFFReader::SetPixelAlpha(long nY, long nX, sal_uInt8 nAlpha)
 {
     assert(HasAlphaChannel());
-    mpBitmap[((maBitmapPixelSize.Width() * nY + nX) * 4) + 3] = nAlpha;
+    maBitmap[((maBitmapPixelSize.Width() * nY + nX) * 4) + 3] = nAlpha;
 }
 
 bool TIFFReader::ConvertScanline(sal_Int32 nY)
@@ -1121,7 +1121,6 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
         return false;
     return true;
 }
-
 
 void TIFFReader::MakePalCol()
 {
@@ -1534,7 +1533,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
             if ( bStatus )
             {
                 maBitmapPixelSize = Size(nImageWidth, nImageLength);
-                mpBitmap.reset(new sal_uInt8[nImageDataSize]);
+                maBitmap.resize(nImageDataSize, 0);
 
                 if (bStatus && ReadMap())
                 {
@@ -1543,10 +1542,12 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     nMaxPos = std::max( pTIFF->Tell(), nMaxPos );
                     // convert palette-ized images to 24-bit color
                     if (!mvPalette.empty())
-                        for (long nY = 0; nY < nImageLength; ++nY)
-                            for (long nX = 0; nX < nImageWidth; ++nX)
+                    {
+                        for (sal_Int32 nY = 0; nY < nImageLength; ++nY)
+                        {
+                            for (sal_Int32 nX = 0; nX < nImageWidth; ++nX)
                             {
-                                auto p = mpBitmap.get() + ((maBitmapPixelSize.Width() * nY + nX) * 3);
+                                auto p = maBitmap.data() + ((maBitmapPixelSize.Width() * nY + nX) * 3);
                                 auto c = mvPalette[*p];
                                 *p = c.GetRed();
                                 p++;
@@ -1554,13 +1555,15 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                                 p++;
                                 *p = c.GetBlue();
                             }
+                        }
+                    }
                 }
                 else
                     bStatus = false;
 
                 if ( bStatus )
                 {
-                    BitmapEx aImage = vcl::bitmap::CreateFromData(mpBitmap.get(), nImageWidth, nImageLength,
+                    BitmapEx aImage = vcl::bitmap::CreateFromData(maBitmap.data(), nImageWidth, nImageLength,
                             nImageWidth * (HasAlphaChannel() ? 4 : 3), // scanline bytes
                             HasAlphaChannel() ? 32 : 24);
                     aImage.SetPrefMapMode(maBitmapPrefMapMode);
