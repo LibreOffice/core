@@ -2368,7 +2368,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
     if (IsDropCap())
     {
         m_bDropCap = true;
-        m_xAktItemSet.reset(new SfxItemSet(m_rDoc.GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_PARATR_END - 1>{}));
+        m_xCurrentItemSet.reset(new SfxItemSet(m_rDoc.GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_PARATR_END - 1>{}));
         return false;
     }
 
@@ -2656,9 +2656,9 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
             OSL_ENSURE(rAttr.Which() != RES_FLTR_REDLINE, "redline in style!");
             m_pCurrentColl->SetFormatAttr(rAttr);
         }
-        else if (m_xAktItemSet)
+        else if (m_xCurrentItemSet)
         {
-            m_xAktItemSet->Put(rAttr);
+            m_xCurrentItemSet->Put(rAttr);
         }
         else if (rAttr.Which() == RES_FLTR_REDLINE)
         {
@@ -2692,9 +2692,9 @@ const SfxPoolItem* SwWW8ImplReader::GetFormatAttr( sal_uInt16 nWhich )
     const SfxPoolItem* pRet = nullptr;
     if (m_pCurrentColl)
         pRet = &(m_pCurrentColl->GetFormatAttr(nWhich));
-    else if (m_xAktItemSet)
+    else if (m_xCurrentItemSet)
     {
-        pRet = m_xAktItemSet->GetItem(nWhich);
+        pRet = m_xCurrentItemSet->GetItem(nWhich);
         if (!pRet)
             pRet = m_pStandardFormatColl ? &(m_pStandardFormatColl->GetFormatAttr(nWhich)) : nullptr;
         if (!pRet)
@@ -3518,16 +3518,16 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
                 }
             }
         }
-        else if (m_xAktItemSet)
+        else if (m_xCurrentItemSet)
         {
-            if ( SfxItemState::SET == m_xAktItemSet->GetItemState( RES_CHRATR_UNDERLINE, false ) )
+            if ( SfxItemState::SET == m_xCurrentItemSet->GetItemState( RES_CHRATR_UNDERLINE, false ) )
             {
                 SvxUnderlineItem *pUnderline
-                    = static_cast<SvxUnderlineItem*>(m_xAktItemSet->Get(RES_CHRATR_UNDERLINE, false).Clone());
+                    = static_cast<SvxUnderlineItem*>(m_xCurrentItemSet->Get(RES_CHRATR_UNDERLINE, false).Clone());
                 if (pUnderline && nLen >= 4)
                 {
                     pUnderline->SetColor( Color( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) ) );
-                    m_xAktItemSet->Put( *pUnderline );
+                    m_xCurrentItemSet->Put( *pUnderline );
                     delete pUnderline;
                 }
             }

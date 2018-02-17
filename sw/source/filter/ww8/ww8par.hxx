@@ -1219,7 +1219,7 @@ private:
     std::unique_ptr<WW8RStyle> m_xStyles;     // pointer to the style reading class
     SwFormat* m_pCurrentColl;        // collection to be created now
                             // ( always 0 outside of a Style-Def )
-    std::unique_ptr<SfxItemSet> m_xAktItemSet;// character attributes to be read in now
+    std::unique_ptr<SfxItemSet> m_xCurrentItemSet;// character attributes to be read in now
                             // (always 0 outside of the WW8ListManager Ctor)
     std::vector<SwWW8StyInf> m_vColl;
     const SwTextFormatColl* m_pDfltTextFormatColl;    // Default
@@ -1332,7 +1332,7 @@ private:
 
     bool m_bEmbeddObj;        // EmbeddField is being read
 
-    bool m_bAktAND_fNumberAcross; // current active Annotated List Deskriptor - ROW flag
+    bool m_bCurrentAND_fNumberAcross; // current active Annotated List Deskriptor - ROW flag
 
     bool m_bNoLnNumYet;       // no Line Numbering has been activated yet (we import
                             //     the very 1st Line Numbering and ignore the rest)
@@ -1478,7 +1478,7 @@ private:
             SwFrameFormat const *pFlyFormat, WW8_FSPA const *pF);
 
     bool IsDropCap();
-    bool IsListOrDropcap() { return (!m_xAktItemSet  || m_bDropCap); };
+    bool IsListOrDropcap() { return (!m_xCurrentItemSet  || m_bDropCap); };
 
     //Apo == Absolutely Positioned Object, MSWord's old-style frames
     WW8FlyPara *ConstructApo(const ApoTestResults &rApo,
