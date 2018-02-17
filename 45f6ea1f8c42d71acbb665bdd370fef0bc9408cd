@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_23d77d24",
+        "filename": "include/vcl/salbtype.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-02-17T09:24:25Z",
+      "side": 1,
+      "message": "You decided not to change this?",
+      "range": {
+        "startLine": 386,
+        "startChar": 24,
+        "endLine": 386,
+        "endChar": 28
+      },
+      "revId": "45f6ea1f8c42d71acbb665bdd370fef0bc9408cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
