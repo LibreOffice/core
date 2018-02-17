@@ -5683,7 +5683,7 @@ void Test::testFormulaDepTrackingDeleteCol()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "#REF!", "#REF!" },
             { nullptr,  nullptr },
             { "#REF!", "#REF!" },
@@ -5691,7 +5691,7 @@ void Test::testFormulaDepTrackingDeleteCol()
         };
 
         ScRange aCheckRange(0,0,0,1,3,0);
-        bool bSuccess = checkOutput<2>(m_pDoc, aCheckRange, aOutputCheck, "Check after deleting column A");
+        bool bSuccess = checkOutput(m_pDoc, aCheckRange, aOutputCheck, "Check after deleting column A");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -5702,7 +5702,7 @@ void Test::testFormulaDepTrackingDeleteCol()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][3] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "2", "2", "2" },
             { nullptr,  nullptr, nullptr },
             { "3", "3", "3" },
@@ -5710,7 +5710,7 @@ void Test::testFormulaDepTrackingDeleteCol()
         };
 
         ScRange aCheckRange(0,0,0,2,3,0);
-        bool bSuccess = checkOutput<3>(m_pDoc, aCheckRange, aOutputCheck, "Check after undo");
+        bool bSuccess = checkOutput(m_pDoc, aCheckRange, aOutputCheck, "Check after undo");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -5718,7 +5718,7 @@ void Test::testFormulaDepTrackingDeleteCol()
     pUndoMgr->Redo();
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "#REF!", "#REF!" },
             { nullptr, nullptr },
             { "#REF!", "#REF!" },
@@ -5726,7 +5726,7 @@ void Test::testFormulaDepTrackingDeleteCol()
         };
 
         ScRange aCheckRange(0,0,0,1,3,0);
-        bool bSuccess = checkOutput<2>(m_pDoc, aCheckRange, aOutputCheck, "Check after redo");
+        bool bSuccess = checkOutput(m_pDoc, aCheckRange, aOutputCheck, "Check after redo");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -5738,7 +5738,7 @@ void Test::testFormulaDepTrackingDeleteCol()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][3] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "22", "22", "22" },
             { nullptr, nullptr, nullptr },
             { "23", "23", "23" },
@@ -5746,7 +5746,7 @@ void Test::testFormulaDepTrackingDeleteCol()
         };
 
         ScRange aCheckRange(0,0,0,2,3,0);
-        bool bSuccess = checkOutput<3>(m_pDoc, aCheckRange, aOutputCheck, "Check after undo & value change in column A");
+        bool bSuccess = checkOutput(m_pDoc, aCheckRange, aOutputCheck, "Check after undo & value change in column A");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -6203,7 +6203,7 @@ void Test::testExternalRefUnresolved()
     ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
     CPPUNIT_ASSERT_EQUAL(aPos, aRange.aStart);
 
-    const char* aOutputCheck[][1] = {
+    std::vector<std::vector<const char*>> aOutputCheck = {
         { "#REF!" },    // plain single ref
         { "#REF!" },    // +23
         { "#REF!" },    // &"W"
@@ -6234,7 +6234,7 @@ void Test::testExternalRefUnresolved()
         { "#REF!" },    // INDIRECT
     };
 
-    bool bSuccess = checkOutput<1>(m_pDoc, aRange, aOutputCheck, "Check unresolved external reference.");
+    bool bSuccess = checkOutput(m_pDoc, aRange, aOutputCheck, "Check unresolved external reference.");
     CPPUNIT_ASSERT_MESSAGE("Unresolved reference check failed", bSuccess);
 
     m_pDoc->DeleteTab(0);
