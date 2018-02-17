@@ -6028,7 +6028,7 @@ void Test::testFormulaToValue()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][3] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "1",  "2", "TRUE" },
             { "2",  "4", "TRUE" },
             { "3",  "6", "TRUE" },
@@ -6037,7 +6037,7 @@ void Test::testFormulaToValue()
             { "6", "12", "TRUE" },
         };
 
-        bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "Initial value");
+        bool bSuccess = checkOutput(m_pDoc, aDataRange, aOutputCheck, "Initial value");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -6048,7 +6048,7 @@ void Test::testFormulaToValue()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][3] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "1",  "2",  "TRUE" },
             { "2",  "4",  "TRUE" },
             { "3",  "6", "FALSE" },
@@ -6057,7 +6057,7 @@ void Test::testFormulaToValue()
             { "6", "12",  "TRUE" },
         };
 
-        bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "Converted");
+        bool bSuccess = checkOutput(m_pDoc, aDataRange, aOutputCheck, "Converted");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -6090,7 +6090,7 @@ void Test::testFormulaToValue()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][3] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "1",  "2", "TRUE" },
             { "2",  "4", "TRUE" },
             { "3",  "6", "TRUE" },
@@ -6099,7 +6099,7 @@ void Test::testFormulaToValue()
             { "6", "12", "TRUE" },
         };
 
-        bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "After undo");
+        bool bSuccess = checkOutput(m_pDoc, aDataRange, aOutputCheck, "After undo");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -6121,7 +6121,7 @@ void Test::testFormulaToValue()
     pUndoMgr->Redo();
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][3] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "1",  "2",  "TRUE" },
             { "2",  "4",  "TRUE" },
             { "3",  "6", "FALSE" },
@@ -6130,7 +6130,7 @@ void Test::testFormulaToValue()
             { "6", "12",  "TRUE" },
         };
 
-        bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "Converted");
+        bool bSuccess = checkOutput(m_pDoc, aDataRange, aOutputCheck, "Converted");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
