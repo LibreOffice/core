@@ -538,6 +538,10 @@ public:
     void SetAnchoredTextOverflowLegacy(bool bEnabled);
     bool IsAnchoredTextOverflowLegacy() const;
 
+    // tdf#115639 compatibility flag
+    void SetHoriAlignIgnoreTrailingWhitespace(bool bEnabled);
+    bool IsHoriAlignIgnoreTrailingWhitespace() const;
+
     void ReformatAllTextObjects();
 
     SdrOutliner* createOutliner( OutlinerMode nOutlinerMode );
