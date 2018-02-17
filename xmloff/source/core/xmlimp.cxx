@@ -1380,7 +1380,6 @@ uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicByURL(OUString const &
             {
                 Graphic aGraphic(xGraphic);
                 aGraphic.setOriginURL(rAbsoluteURL);
-                printf ("URL %s\n", rAbsoluteURL.toUtf8().getStr());
             }
         }
     }
