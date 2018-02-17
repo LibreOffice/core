@@ -226,6 +226,7 @@ SdOutliner::SdOutliner( SdDrawDocument* pDoc, OutlinerMode nMode )
         SetHyphenator( xHyphenator );
 
     SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
+    SetHoriAlignIgnoreTrailingWhitespace( pDoc->IsHoriAlignIgnoreTrailingWhitespace() );
 }
 
 /// Nothing spectacular in the destructor.
