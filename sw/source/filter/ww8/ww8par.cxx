@@ -3946,7 +3946,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
 
     m_bWasParaEnd = false;
     m_nCurrentColl    =  0;
-    m_xAktItemSet.reset();
+    m_xCurrentItemSet.reset();
     m_nCharFormat    = -1;
     m_bSpec = false;
     m_bPgSecBreak = false;
@@ -4067,21 +4067,21 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
 
             const SwFormatCharFormat *pSwFormatCharFormat = nullptr;
 
-            if (m_xAktItemSet)
-                pSwFormatCharFormat = &(ItemGet<SwFormatCharFormat>(*m_xAktItemSet, RES_TXTATR_CHARFMT));
+            if (m_xCurrentItemSet)
+                pSwFormatCharFormat = &(ItemGet<SwFormatCharFormat>(*m_xCurrentItemSet, RES_TXTATR_CHARFMT));
 
             if (pSwFormatCharFormat)
                 pFormat = pSwFormatCharFormat->GetCharFormat();
 
-            if (m_xAktItemSet && !pFormat)
+            if (m_xCurrentItemSet && !pFormat)
             {
                 OUString sPrefix = "WW8Dropcap" + OUString::number(m_nDropCap++);
                 pNewSwCharFormat = m_rDoc.MakeCharFormat(sPrefix, m_rDoc.GetDfltCharFormat());
-                m_xAktItemSet->ClearItem(RES_CHRATR_ESCAPEMENT);
-                pNewSwCharFormat->SetFormatAttr(*m_xAktItemSet);
+                m_xCurrentItemSet->ClearItem(RES_CHRATR_ESCAPEMENT);
+                pNewSwCharFormat->SetFormatAttr(*m_xCurrentItemSet);
             }
 
-            m_xAktItemSet.reset();
+            m_xCurrentItemSet.reset();
             m_bDropCap=false;
         }
 
@@ -4230,7 +4230,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_bVer7(false)
     , m_bVer8(false)
     , m_bEmbeddObj(false)
-    , m_bAktAND_fNumberAcross(false)
+    , m_bCurrentAND_fNumberAcross(false)
     , m_bNoLnNumYet(true)
     , m_bFirstPara(true)
     , m_bFirstParaOfPage(false)
@@ -6504,8 +6504,8 @@ SdrObjUserData* SwMacroInfo::Clone( SdrObject* /*pObj*/ ) const
 
 std::unique_ptr<SfxItemSet> SwWW8ImplReader::SetAktItemSet(SfxItemSet* pItemSet)
 {
-    std::unique_ptr<SfxItemSet> xRet(std::move(m_xAktItemSet));
-    m_xAktItemSet.reset(pItemSet);
+    std::unique_ptr<SfxItemSet> xRet(std::move(m_xCurrentItemSet));
+    m_xCurrentItemSet.reset(pItemSet);
     return xRet;
 }
 
