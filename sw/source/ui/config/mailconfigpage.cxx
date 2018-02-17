@@ -383,10 +383,10 @@ void SwTestAccountSettingsDialog::Test()
 
     if (!bIsServer || !bIsLoggedIn)
     {
-        OUStringBuffer aErrorMessage(m_sErrorServer);
+        OUString aErrorMessage(m_sErrorServer);
         if (!sException.isEmpty())
-            aErrorMessage.append("\n--\n").append(sException);
-        m_pErrorsED->SetText(aErrorMessage.makeStringAndClear());
+            aErrorMessage += "\n--\n" + sException;
+        m_pErrorsED->SetText(aErrorMessage);
     }
 }
 
