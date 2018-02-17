@@ -1083,7 +1083,7 @@ void ScPivotTableFiltersTest::testPivotTableXLSX()
             pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aDims);
             if (aDims.size() != 1 || aDims[0]->GetName() != "F1")
             {
-                cerr << "Pivot table should have one row field labeld 'F1'" << endl;
+                cerr << "Pivot table should have one row field labelled 'F1'" << endl;
                 return false;
             }
 
@@ -1091,7 +1091,7 @@ void ScPivotTableFiltersTest::testPivotTableXLSX()
                                                      aDims);
             if (aDims.size() != 1 || aDims[0]->GetName() != "F4")
             {
-                cerr << "Pivot table should have one column field labeld 'F4'" << endl;
+                cerr << "Pivot table should have one column field labelled 'F4'" << endl;
                 return false;
             }
 
@@ -1099,7 +1099,7 @@ void ScPivotTableFiltersTest::testPivotTableXLSX()
             if (aDims.size() != 2 || aDims[0]->GetName() != "F7" || aDims[1]->GetName() != "F6")
             {
                 cerr
-                    << "Pivot table should have two page fields labeld 'F7' and 'F6' in this order."
+                    << "Pivot table should have two page fields labelled 'F7' and 'F6' in this order."
                     << endl;
                 return false;
             }
@@ -1107,7 +1107,7 @@ void ScPivotTableFiltersTest::testPivotTableXLSX()
             pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_DATA, aDims);
             if (aDims.size() != 1 || aDims[0]->GetName() != "F10")
             {
-                cerr << "Pivot table should have one data field labeld 'F10'" << endl;
+                cerr << "Pivot table should have one data field labelled 'F10'" << endl;
                 return false;
             }
 
@@ -1206,7 +1206,7 @@ void ScPivotTableFiltersTest::testPivotTableTwoDataFieldsXLSX()
             pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aDims);
             if (aDims.size() != 1 || aDims[0]->GetName() != "Name")
             {
-                cerr << "Pivot table should have one row field labeld 'Name'" << endl;
+                cerr << "Pivot table should have one row field labelled 'Name'" << endl;
                 return false;
             }
 
