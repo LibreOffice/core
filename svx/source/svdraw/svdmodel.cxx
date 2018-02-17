@@ -108,6 +108,7 @@ struct SdrModelImpl
     SdrUndoFactory* mpUndoFactory;
 
     bool mbAnchoredTextOverflowLegacy; // tdf#99729 compatibility flag
+    bool mbHoriAlignIgnoreTrailingWhitespace; // tdf#115639 compatibility flag
 };
 
 
@@ -118,6 +119,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mpImpl->mpUndoManager=nullptr;
     mpImpl->mpUndoFactory=nullptr;
     mpImpl->mbAnchoredTextOverflowLegacy = false;
+    mpImpl->mbHoriAlignIgnoreTrailingWhitespace = false;
     mbInDestruction = false;
     aObjUnit=SdrEngineDefaults::GetMapFraction();
     eObjUnit=SdrEngineDefaults::GetMapUnit();
@@ -1833,6 +1835,17 @@ bool SdrModel::IsAnchoredTextOverflowLegacy() const
     return mpImpl->mbAnchoredTextOverflowLegacy;
 }
 
+void SdrModel::SetHoriAlignIgnoreTrailingWhitespace(bool bEnabled)
+{
+    mpImpl->mbHoriAlignIgnoreTrailingWhitespace = bEnabled;
+    pDrawOutliner->SetHoriAlignIgnoreTrailingWhitespace(bEnabled);
+}
+
+bool SdrModel::IsHoriAlignIgnoreTrailingWhitespace() const
+{
+    return mpImpl->mbHoriAlignIgnoreTrailingWhitespace;
+}
+
 void SdrModel::ReformatAllTextObjects()
 {
     ImpReformatAllTextObjects();
@@ -1882,6 +1895,13 @@ void SdrModel::ReadUserDataSequenceValue(const css::beans::PropertyValue* pValue
             mpImpl->mbAnchoredTextOverflowLegacy = bBool;
         }
     }
+    if (pValue->Name == "HoriAlignIgnoreTrailingWhitespace")
+    {
+        if (pValue->Value >>= bBool)
+        {
+            SetHoriAlignIgnoreTrailingWhitespace(bBool);
+        }
+    }
 }
 
 template <typename T>
@@ -1894,6 +1914,8 @@ void SdrModel::WriteUserDataSequence(css::uno::Sequence < css::beans::PropertyVa
 {
     std::vector< std::pair< OUString, Any > > aUserData;
     addPair(aUserData, "AnchoredTextOverflowLegacy", IsAnchoredTextOverflowLegacy());
+    if (IsHoriAlignIgnoreTrailingWhitespace())
+        addPair(aUserData, "HoriAlignIgnoreTrailingWhitespace", IsHoriAlignIgnoreTrailingWhitespace());
 
     const sal_Int32 nOldLength = rValues.getLength();
     rValues.realloc(nOldLength + aUserData.size());

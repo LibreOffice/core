@@ -1433,13 +1433,13 @@ sal_uInt32 EditEngine::GetTextHeightNTP() const
     return pImpEditEngine->GetTextHeightNTP();
 }
 
-sal_uInt32 EditEngine::CalcTextWidth()
+sal_uInt32 EditEngine::CalcTextWidth(bool bIgnoreTrailingWhiteSpaces)
 {
 
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
 
-    sal_uInt32 nWidth = !IsVertical() ? pImpEditEngine->CalcTextWidth( true ) : pImpEditEngine->GetTextHeight();
+    sal_uInt32 nWidth = !IsVertical() ? pImpEditEngine->CalcTextWidth( true, bIgnoreTrailingWhiteSpaces ) : pImpEditEngine->GetTextHeight();
      return nWidth;
 }
 
@@ -2803,6 +2803,16 @@ void EditEngine::ClearOverflowingParaNum() {
 bool EditEngine::IsPageOverflow() {
     pImpEditEngine->CheckPageOverflow();
     return pImpEditEngine->IsPageOverflow();
+}
+
+void EditEngine::SetHoriAlignIgnoreTrailingWhitespace(bool bEnabled)
+{
+    pImpEditEngine->SetHoriAlignIgnoreTrailingWhitespace(bEnabled);
+}
+
+bool EditEngine::IsHoriAlignIgnoreTrailingWhitespace() const
+{
+    return pImpEditEngine->IsHoriAlignIgnoreTrailingWhitespace();
 }
 
 EFieldInfo::EFieldInfo()
