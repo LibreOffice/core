@@ -614,6 +614,8 @@ void SvxSearchDialog::Activate()
         m_pMatchCaseCB->Check( pSearchItem->GetExact() );
         m_pJapMatchFullHalfWidthCB->Check( !pSearchItem->IsMatchFullHalfWidthForms() );
     }
+
+    SfxModelessDialog::Activate();
 }
 
 
