@@ -1304,7 +1304,15 @@ sal_uInt16 SdrEdgeKindItem::GetValueCount() const { return 4; }
 
 OUString SdrEdgeKindItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
-    return ImpGetResStr(STR_ItemValEDGE_ORTHOLINES+nPos);
+    static const char* ITEMVALEDGES[] =
+    {
+        STR_ItemValEDGE_ORTHOLINES,
+        STR_ItemValEDGE_THREELINES,
+        STR_ItemValEDGE_ONELINE,
+        STR_ItemValEDGE_BEZIER
+    };
+    assert(nPos < SAL_N_ELEMENTS(ITEMVALEDGES) && "wrong pos!");
+    return ImpGetResStr(ITEMVALEDGES[nPos]);
 }
 
 bool SdrEdgeKindItem::GetPresentation(SfxItemPresentation ePres,
