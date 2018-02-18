@@ -266,12 +266,13 @@ public:
         {
             //Resize subnodes array
             maSubNodes.resize(nIndex + 1);
-            //Set new slots to NULL
-            for (size_t i = size; i < nIndex+1; i++)
+            //Set new slots to NULL except at nIndex
+            for (size_t i = size; i < nIndex; i++)
                 maSubNodes[i] = nullptr;
         }
         maSubNodes[nIndex] = pNode;
-        ClaimPaternity();
+        if (pNode)
+            pNode->SetParent(this);
     }
 
 private:
