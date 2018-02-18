@@ -345,7 +345,8 @@ bool Scheduler::ProcessTaskScheduling()
         return false;
 
     sal_uInt64 nTime = tools::Time::GetSystemTicks();
-    if ( nTime < rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod )
+    // Allow for decimals, so subtract in the compare (needed at least on iOS)
+    if ( nTime < rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod -1)
     {
         SAL_WARN( "vcl.schedule", "we're too early - restart the timer!" );
         UpdateSystemTimer( rSchedCtx,
