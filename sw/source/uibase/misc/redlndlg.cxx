@@ -112,10 +112,12 @@ void SwModelessRedlineAcceptDlg::Activate()
         if (!bMod)
             pSh->ResetModified();
         pImplDlg->Init();
+        SfxModelessDialog::Activate();
 
         return;
     }
 
+    SfxModelessDialog::Activate();
     pImplDlg->Activate();
 }
 
