@@ -1060,10 +1060,6 @@ void CondFormat::finalizeImport()
     // probably some error in the xml if we are not ready
     if ( !mbReadyForFinalize )
         return;
-    ScDocument& rDoc = getScDocument();
-    maRules.forEachMem( &CondFormatRule::finalizeImport );
-    SCTAB nTab = maModel.maRanges.getBaseAddress().Tab();
-    sal_Int32 nIndex = getScDocument().AddCondFormat(mpFormat, nTab);
 
     ScRangeList aList;
     for( ::std::vector< CellRangeAddress >::const_iterator itr = maModel.maRanges.begin(); itr != maModel.maRanges.end(); ++itr)
@@ -1072,8 +1068,14 @@ void CondFormat::finalizeImport()
         ScUnoConversion::FillScRange(aRange, *itr);
         aList.Append(aRange);
     }
-    rDoc.AddCondFormatData( aList, nTab, nIndex );
     mpFormat->SetRange(aList);
+
+    ScDocument& rDoc = getScDocument();
+    maRules.forEachMem( &CondFormatRule::finalizeImport );
+    SCTAB nTab = maModel.maRanges.getBaseAddress().Tab();
+    sal_Int32 nIndex = getScDocument().AddCondFormat(mpFormat, nTab);
+
+    rDoc.AddCondFormatData( aList, nTab, nIndex );
 }
 
 CondFormatRuleRef CondFormat::createRule()
