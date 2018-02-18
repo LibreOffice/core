@@ -731,17 +731,6 @@ void Dialog::StateChanged( StateChangedType nType )
         ImplInitSettings();
         Invalidate();
     }
-
-    if (!mbModalMode && nType == StateChangedType::Visible)
-    {
-        css::uno::Reference< css::uno::XComponentContext > xContext(
-                            comphelper::getProcessComponentContext() );
-        css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
-        css::document::DocumentEvent aObject;
-        aObject.EventName = "ModelessDialogVisible";
-        xEventBroadcaster->documentEventOccured(aObject);
-        UITestLogger::getInstance().log("Modeless Dialog Visible");
-    }
 }
 
 void Dialog::DataChanged( const DataChangedEvent& rDCEvt )
@@ -1300,6 +1289,18 @@ ModalDialog::ModalDialog( vcl::Window* pParent, WinBits nStyle ) :
 ModalDialog::ModalDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, bool bBorder ) :
     Dialog(pParent, rID, rUIXMLDescription, WindowType::MODALDIALOG, InitFlag::Default, bBorder)
 {
+}
+
+void ModelessDialog::Activate()
+{
+    css::uno::Reference< css::uno::XComponentContext > xContext(
+            comphelper::getProcessComponentContext() );
+    css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
+    css::document::DocumentEvent aObject;
+    aObject.EventName = "ModelessDialogVisible";
+    xEventBroadcaster->documentEventOccured(aObject);
+    UITestLogger::getInstance().log("Modeless Dialog Visible");
+    Dialog::Activate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -176,6 +176,8 @@ class VCL_DLLPUBLIC ModelessDialog : public Dialog
 
 public:
     explicit        ModelessDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );
+
+    void            Activate() override;
 };
 
 class VCL_DLLPUBLIC ModalDialog : public Dialog
