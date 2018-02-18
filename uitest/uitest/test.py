@@ -178,7 +178,7 @@ class UITest(object):
                 time.sleep(DEFAULT_SLEEP)
 
     def execute_blocking_action(self, action, dialog_element=None,
-            args=(), dialog_handler=None):
+            args=(), dialog_handler=None, dialog_timeout=30):
         """Executes an action which blocks while a dialog is shown.
 
         Click a button or perform some other action on the dialog when it
@@ -192,6 +192,8 @@ class UITest(object):
             args(tuple, optional): The arguments to be passed to `action`
             dialog_handler(callable, optional): Will be called when the dialog
                 is shown, with the dialog object passed as a parameter.
+            timeout(optional): The maximum time the thread will wait for the
+                dialog actions to happen. None means wait forever.
         """
 
         thread = threading.Thread(target=action, args=args)
@@ -207,7 +209,9 @@ class UITest(object):
                         xUIElement.executeAction("CLICK", tuple())
                     if dialog_handler:
                         dialog_handler(xDlg)
-                    thread.join()
+                    thread.join(dialog_timeout)
+                    if thread.isAlive():
+                        raise DialogNotClosedException()
                     return
 
                 time_ += DEFAULT_SLEEP
