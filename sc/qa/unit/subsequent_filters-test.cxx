@@ -64,6 +64,7 @@
 #include <formula/errorcodes.hxx>
 #include <externalrefmgr.hxx>
 #include <stlpool.hxx>
+#include <hints.hxx>
 
 #include <orcusfiltersimpl.hxx>
 #include <orcusfilters.hxx>
@@ -234,6 +235,7 @@ public:
 #ifdef UNX
     void testUnicodeFileNameGnumeric();
 #endif
+    void testCondFormatFormulaListenerXLSX();
 
     void testMergedCellsXLSXML();
     void testBackgroundColorStandardXLSXML();
@@ -365,6 +367,7 @@ public:
     CPPUNIT_TEST(testBackgroundColorStandardXLSXML);
     CPPUNIT_TEST(testNamedExpressionsXLSXML);
     CPPUNIT_TEST(testEmptyRowsXLSXML);
+    CPPUNIT_TEST(testCondFormatFormulaListenerXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3745,6 +3748,47 @@ void ScFiltersTest::testActiveXCheckboxXLSX()
     sal_Int16 nState;
     xPropertySet->getPropertyValue("State") >>= nState;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nState);
+
+    xDocSh->DoClose();
+}
+
+namespace {
+
+struct PaintListener : public SfxListener
+{
+    bool mbCalled = false;
+    virtual void Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint) override
+    {
+        const ScPaintHint* pPaintHint = dynamic_cast<const ScPaintHint*>(&rHint);
+        if (pPaintHint)
+        {
+            if (pPaintHint->GetStartCol() <= 0 && pPaintHint->GetEndCol() >= 0
+                    && pPaintHint->GetStartRow() <= 9 && pPaintHint->GetEndRow() >= 9)
+            {
+                mbCalled = true;
+            }
+        }
+    }
+};
+
+}
+
+void ScFiltersTest::testCondFormatFormulaListenerXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("cond_format_formula_listener.", FORMAT_XLSX);
+    PaintListener aListener;
+    aListener.StartListening(*xDocSh);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScConditionalFormatList* pList = rDoc.GetCondFormList(0);
+    CPPUNIT_ASSERT(pList);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pList->size());
+    ScConditionalFormat* pFormat = pList->begin()->get();
+    CPPUNIT_ASSERT(pFormat);
+    rDoc.SetDocVisible(true);
+    rDoc.SetValue(0, 0, 0, 2.0);
+
+    CPPUNIT_ASSERT(aListener.mbCalled);
 
     xDocSh->DoClose();
 }

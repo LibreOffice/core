@@ -1455,7 +1455,7 @@ public:
     void                         SetClipArea( const ScRange& rArea, bool bCut = false );
 
     SC_DLLPUBLIC bool            IsDocVisible() const                        { return bIsVisible; }
-    void                         SetDocVisible( bool bSet );
+    SC_DLLPUBLIC void            SetDocVisible( bool bSet );
 
     bool                         HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* pTabMark = nullptr );
 
