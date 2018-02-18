@@ -142,7 +142,7 @@ using namespace ::sfx2;
 // create DocInfo (virtual)
 VclPtr<SfxDocumentInfoDialog> SwDocShell::CreateDocumentInfoDialog(const SfxItemSet &rSet)
 {
-    VclPtr<SfxDocumentInfoDialog> pDlg = VclPtr<SfxDocumentInfoDialog>::Create(nullptr, rSet);
+    VclPtr<SfxDocumentInfoDialog> pDlg = VclPtr<SfxDocumentInfoDialog>::Create(&GetView()->GetViewFrame()->GetWindow(), rSet);
     //only with statistics, when this document is being shown, not
     //from within the Doc-Manager
     SwDocShell* pDocSh = static_cast<SwDocShell*>( SfxObjectShell::Current());
