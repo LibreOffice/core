@@ -78,7 +78,7 @@
 #include <vcl/svapp.hxx>
 
 #define SELF_TARGET         "_self"
-#define IMAP_ALL_FILTER     "<Alle>"
+#define IMAP_ALL_FILTER     "*"
 #define IMAP_CERN_FILTER    "MAP - CERN"
 #define IMAP_NCSA_FILTER    "MAP - NCSA"
 #define IMAP_BINARY_FILTER  "SIP - StarView ImageMap"
