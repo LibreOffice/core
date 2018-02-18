@@ -90,6 +90,8 @@ private:
     /** the owner frame of this component. */
     css::uno::Reference< css::frame::XFrame > m_xFrame;
 
+    osl::Mutex m_aTypeProviderMutex;
+
 public:
 
     explicit BackingComp();
@@ -235,7 +237,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
     if (!pTypeCollection)
     {
         /* GLOBAL SAFE { */
-        ::osl::MutexGuard aGlobalLock(::osl::Mutex::getGlobalMutex());
+        ::osl::MutexGuard aGlobalLock(m_aTypeProviderMutex);
         // Control these pointer again ... it can be, that another instance will be faster then this one!
         if (!pTypeCollection)
         {
