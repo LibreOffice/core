@@ -81,7 +81,7 @@ endif
 
 else ifeq ($(CPUNAME),INTEL)
 
-ifneq ($(filter ANDROID DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
+ifneq ($(filter ANDROID DRAGONFLY FREEBSD LINUX NETBSD OPENBSD HAIKU,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_intel
 bridge_asm_objects := call
 bridge_exception_objects := cpp2uno except uno2cpp
@@ -176,7 +176,7 @@ bridge_exception_objects := except
 
 else ifeq ($(CPUNAME),X86_64)
 
-ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
+ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD HAIKU,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_x86-64
 bridge_asm_objects := call
 bridge_noncallexception_noopt_objects := callvirtualmethod
@@ -223,7 +223,7 @@ $(eval $(call gb_Library_add_cxxflags,gcc3_uno,\
 	$(if $(filter TRUE,$(HAVE_GCC_AVX)),-mno-avx) \
 ))
 
-ifeq ($(filter ANDROID WNT DRAGONFLY FREEBSD NETBSD OPENBSD MACOSX IOS,$(OS)),)
+ifeq ($(filter ANDROID WNT DRAGONFLY FREEBSD NETBSD OPENBSD MACOSX IOS HAIKU,$(OS)),)
 $(eval $(call gb_Library_add_libs,gcc3_uno,\
 	-ldl \
 ))

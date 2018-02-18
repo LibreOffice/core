@@ -252,6 +252,8 @@ else ifeq ($(OS_FOR_BUILD),WNT)
 # In theory possible if cross-compiling to some Unix from Windows,
 # in practice strongly discouraged to even try that
 gb_Helper_LIBRARY_PATH_VAR := PATH
+else ifeq ($(OS_FOR_BUILD),HAIKU)
+gb_Helper_LIBRARY_PATH_VAR := LIBRARY_PATH
 else
 gb_Helper_LIBRARY_PATH_VAR := LD_LIBRARY_PATH
 endif
