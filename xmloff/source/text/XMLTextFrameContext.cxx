@@ -1028,7 +1028,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                         const double fRotate(aDecomposedTransform.getRotate() * (1800.0/M_PI));
                         nRotation = static_cast< sal_Int16 >(basegfx::fround(fRotate) % 3600);
 
-                        // tdf#115519 may be negative, with the above modulo maximal -3599, so
+                        // tdf#115529 may be negative, with the above modulo maximal -3599, so
                         // no loop needed here. nRotation is used in setPropertyValue("GraphicRotation")
                         // and *has* to be in the range [0 .. 3600[
                         if(nRotation < 0)

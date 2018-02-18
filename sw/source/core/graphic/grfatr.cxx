@@ -166,7 +166,7 @@ sal_Int16 SwRotationGrf::checkAndCorrectValue(sal_Int16 nValue)
 }
 
 SwRotationGrf::SwRotationGrf( sal_Int16 nVal, const Size& rSz )
-    // tdf#15529 check and evtl. correct value
+    // tdf#115529 check and evtl. correct value
 :   SfxUInt16Item( RES_GRFATR_ROTATION, checkAndCorrectValue(nVal) ),
     aUnrotatedSize( rSz )
 {
@@ -199,7 +199,7 @@ bool SwRotationGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
     if (rVal >>= nValue)
     {
         // sal_uInt16 argument needed
-        // tdf#15529 check and evtl. correct value
+        // tdf#115529 check and evtl. correct value
         SetValue(static_cast<sal_uInt16>(checkAndCorrectValue(nValue)));
         return true;
     }
