@@ -874,13 +874,12 @@ SwNumRule *ANLDRuleMap::GetNumRule(const SwDoc& rDoc, sal_uInt8 nNumType)
     return rDoc.FindNumRulePtr(rNumRule);
 }
 
-void ANLDRuleMap::SetNumRule(const SwNumRule *pRule, sal_uInt8 nNumType)
+void ANLDRuleMap::SetNumRule(const OUString& rNumRule, sal_uInt8 nNumType)
 {
-    OUString sNumRule = pRule ? pRule->GetName() : OUString();
     if (WW8_Numbering == nNumType)
-        msNumberingNumRule = sNumRule;
+        msNumberingNumRule = rNumRule;
     else
-        msOutlineNumRule = sNumRule;
+        msOutlineNumRule = rNumRule;
 }
 
 // StartAnl is called at the beginning of a row area that contains
@@ -952,7 +951,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
     m_xCtrlStck->NewAttr(*m_pPaM->GetPoint(),
         SfxStringItem(RES_FLTR_NUMRULE, sNumRule));
 
-    m_aANLDRules.SetNumRule(pNumRule, m_nWwNumType);
+    m_aANLDRules.SetNumRule(sNumRule, m_nWwNumType);
 }
 
 // NextAnlLine() is called once for every row of a
