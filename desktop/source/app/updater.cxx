@@ -152,7 +152,7 @@ void createStr(const OUString& rStr, CharT** pArgs, size_t i)
 #error "Need an implementation"
 #endif
     CharT* pStr = new CharT[aStr.getLength() + 1];
-    tstrncpy(pStr, aStr.getStr(), aStr.getLength());
+    tstrncpy(pStr, (CharT*)aStr.getStr(), aStr.getLength());
     pStr[aStr.getLength()] = '\0';
     pArgs[i] = pStr;
 }
