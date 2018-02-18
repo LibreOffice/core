@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_5e728aae",
+        "filename": "bin/gla11y",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-02-18T01:16:16Z",
+      "side": 1,
+      "message": "please add suitable license header",
+      "revId": "95a11ae62d05fa6aa73fe1c9f69b36172dab8d34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
