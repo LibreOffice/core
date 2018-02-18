@@ -77,7 +77,7 @@ void Ocr::ReadBitmap()
             }
             else
             {
-                Color c = r->GetPixel (j, i);
+                BitmapColor c = r->GetPixel (j, i);
                 if (c.GetRed () == 0 && c.GetGreen () == 0 && c.GetBlue () == 0)
                 {
                     data[j*w_+i] = 1;
@@ -235,7 +235,7 @@ void Ocr::ToFann(fann_type *out_data)
             }
             else
             {
-                Color c = r->GetPixel(j, i);
+                BitmapColor c = r->GetPixel(j, i);
                 if (c.GetRed () == 255 && c.GetGreen () == 255 && c.GetBlue () == 255)
                 {
                     out_data[idata] = 0.;
@@ -1232,7 +1232,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, DrawToggleHdl, Button*, void)
                 {
                     for (long k = 0; k < w; k++)
                     {
-                        Color c = r->GetPixel(j, k);
+                        BitmapColor c = r->GetPixel(j, k);
                         if (c.GetRed () == 0 && c.GetGreen () == 0 && c.GetBlue () == 0)
                         {
                             std::cout << "1";
@@ -1306,15 +1306,16 @@ IMPL_LINK_NOARG(SvxCharacterMap, DrawToggleHdl, Button*, void)
             delete ann;
         }
 
-        fann_type *calc_out;
         fann_type input[Ocr::SIZE*Ocr::SIZE];
 
         std::cout << "Starting loading fann" << std::endl;
         AbstractNeuralNetwork * ann = AbstractNeuralNetwork::CreateFactory("/tmp/fann.net");
 
+        fann_type calc_out[ann->GetNumOutput()];
+
         o.ToFann(&input[0]);
         std::cout << "Starting finding best result" << std::endl;
-        calc_out = ann->Run(input);
+        ann->Run(input, &calc_out[0]);
         std::cout << "End of fann" << std::endl;
 
         std::multimap<float, sal_UCS4> sorted_results;

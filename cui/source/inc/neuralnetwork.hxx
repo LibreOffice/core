@@ -26,7 +26,7 @@ class AbstractNeuralNetwork
 {
 public:
     enum class ActivationFunction {
-        SIGMOID
+        SIGMOID, SIGMOID_SYMMETRIC
     };
     enum class TrainingAlgorithm {
         INCREMENTAL
@@ -44,7 +44,7 @@ public:
     virtual float* GetOutput(sal_uInt32 nIeme) = 0;
 
     virtual void Train(sal_uInt32 nEpochs, float error) = 0;
-    virtual float* Run(float *data_input) = 0;
+    virtual void Run(float *data_input, float* result) = 0;
     virtual void Save(const OUString& file) = 0;
 
     virtual ~AbstractNeuralNetwork(){}
