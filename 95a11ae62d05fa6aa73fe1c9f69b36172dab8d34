@@ -16,6 +16,24 @@
       "revId": "95a11ae62d05fa6aa73fe1c9f69b36172dab8d34",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_9e6402e6",
+        "filename": "bin/gla11y",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2018-02-18T02:13:30Z",
+      "side": 1,
+      "message": "Well, there is not really something to be licensed here :)\n\nMy following patches, which actually put useful code, will contain the license header.",
+      "parentUuid": "fa31d9ce_5e728aae",
+      "revId": "95a11ae62d05fa6aa73fe1c9f69b36172dab8d34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
