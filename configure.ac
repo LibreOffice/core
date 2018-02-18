@@ -786,6 +786,29 @@ linux-android*)
     BUILD_TYPE="$BUILD_TYPE CAIRO FONTCONFIG FREETYPE"
     ;;
 
+haiku*)
+    test_cups=no
+    test_dbus=no
+    test_randr=no
+    test_xrender=no
+    test_freetype=yes
+    test_cairo=yes
+    enable_java=no
+    enable_opengl=no
+    enable_odk=no
+    enable_gconf=no
+    enable_gnome_vfs=no
+    enable_gstreamer=no
+    enable_vlc=no
+    enable_gltf=no
+    enable_collada=no
+    enable_coinmp=no
+    enable_pdfimport=no
+    enable_postgresql_sdbc=no
+    enable_firebird_sdbc=no
+    _os=Haiku
+    ;;
+
 *)
     AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice for!])
     ;;
@@ -4013,6 +4036,31 @@ freebsd*)
         CPUNAME=X86_64
         RTL_ARCH=X86_64
         PLATFORMID=freebsd_x86_64
+        ;;
+    *)
+        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
+        ;;
+    esac
+    ;;
+
+haiku*)
+    COM=GCC
+    USING_X11=
+    GUIBASE=haiku
+    RTL_OS=Haiku
+    OS=HAIKU
+    P_SEP=:
+
+    case "$host_cpu" in
+    i*86)
+        CPUNAME=INTEL
+        RTL_ARCH=x86
+        PLATFORMID=haiku_x86
+        ;;
+    x86_64|amd64)
+        CPUNAME=X86_64
+        RTL_ARCH=X86_64
+        PLATFORMID=haiku_x86_64
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])

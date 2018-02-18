@@ -53,6 +53,28 @@ elif [ $(uname) = Darwin ]; then
 
     exec ${LO_TRACE} "${exedir}/$@"
 
+elif [ $(uname) = Haiku ]; then
+
+    dir=$(readlink -f "$(pwd)")
+
+    while test ! -d "${dir}/instdir/program" ; do
+        if test "${dir}" = "/"; then
+            echo "error: cannot find \"program\" dir from \"$(pwd)\""
+            exit 1
+        fi
+        dir=$(readlink -f "${dir}/..")
+    done
+
+    exedir="${dir}"/workdir/LinkTarget/Executable
+    export URE_BOOTSTRAP=file://"${dir}"/instdir/program/fundamentalrc
+    export LIBRARY_PATH=${LIBRARY_PATH:+$LIBRARY_PATH:}"${dir}"/instdir/program
+
+#    echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
+#    echo "setting search path to: ${LIBRARY_PATH}"
+#    echo "execing: ${exedir}/$1"
+
+    exec ${LO_TRACE} "${exedir}/$@"
+
 else
 
     dir=$(readlink -f "$(pwd)")
