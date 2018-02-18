@@ -24,7 +24,7 @@
 #include "address.hxx"
 #include <svl/hint.hxx>
 
-class ScPaintHint : public SfxHint
+class SC_DLLPUBLIC ScPaintHint : public SfxHint
 {
     ScRange         aRange;
     PaintPartFlags  nParts;
