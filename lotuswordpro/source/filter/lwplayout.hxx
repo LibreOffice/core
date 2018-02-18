@@ -417,6 +417,7 @@ class LwpLayout : public LwpMiddleLayout
 {
 private:
     bool m_bGettingShadow;
+    bool m_bGettingNumCols;
 public:
     LwpLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm );
     virtual ~LwpLayout() override;

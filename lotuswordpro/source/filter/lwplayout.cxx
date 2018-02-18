@@ -1424,6 +1424,7 @@ bool LwpMiddleLayout::HasContent()
 LwpLayout::LwpLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpMiddleLayout(objHdr, pStrm)
     , m_bGettingShadow(false)
+    , m_bGettingNumCols(false)
 {
 }
 
@@ -1472,24 +1473,24 @@ void LwpLayout::Read()
 */
 sal_uInt16 LwpLayout::GetNumCols()
 {
-    if(m_nOverrideFlag & OVER_COLUMNS)
+    if (m_bGettingNumCols)
+        throw std::runtime_error("recursion in layout");
+    m_bGettingNumCols = true;
+
+    sal_uInt16 nRet = 0;
+    LwpLayoutColumns* pLayColumns = (m_nOverrideFlag & OVER_COLUMNS) ? dynamic_cast<LwpLayoutColumns*>(m_LayColumns.obj().get()) : nullptr;
+    if (pLayColumns)
     {
-        LwpLayoutColumns* pLayColumns = dynamic_cast<LwpLayoutColumns*>(m_LayColumns.obj().get());
-        if(pLayColumns)
-        {
-            return pLayColumns->GetNumCols();
-        }
+        nRet = pLayColumns->GetNumCols();
     }
-
-    rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
-    LwpVirtualLayout* pStyle = dynamic_cast<LwpVirtualLayout*>(xBase.get());
-    if (pStyle)
+    else
     {
-        return pStyle->GetNumCols();
+        rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
+        LwpVirtualLayout* pStyle = dynamic_cast<LwpVirtualLayout*>(xBase.get());
+        nRet = pStyle ? pStyle->GetNumCols() : LwpVirtualLayout::GetNumCols();
     }
-
-    return LwpVirtualLayout::GetNumCols();
-
+    m_bGettingNumCols = false;
+    return nRet;
 }
 
 /**
