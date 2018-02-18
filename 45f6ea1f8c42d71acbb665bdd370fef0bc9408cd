@@ -22,6 +22,30 @@
       "revId": "45f6ea1f8c42d71acbb665bdd370fef0bc9408cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_3e7dd66e",
+        "filename": "include/vcl/salbtype.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2018-02-18T05:04:40Z",
+      "side": 1,
+      "message": "Oops, missed it! Sorry.",
+      "parentUuid": "fa31d9ce_23d77d24",
+      "range": {
+        "startLine": 386,
+        "startChar": 24,
+        "endLine": 386,
+        "endChar": 28
+      },
+      "revId": "45f6ea1f8c42d71acbb665bdd370fef0bc9408cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
