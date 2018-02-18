@@ -979,7 +979,7 @@ struct ANLDRuleMap
     OUString msOutlineNumRule;    // WinWord 6 numbering, variant 1
     OUString msNumberingNumRule;  // WinWord 6 numbering, variant 2
     SwNumRule* GetNumRule(const SwDoc& rDoc, sal_uInt8 nNumType);
-    void SetNumRule(const SwNumRule*, sal_uInt8 nNumType);
+    void SetNumRule(const OUString& rNumRule, sal_uInt8 nNumType);
 };
 
 struct SprmReadInfo;
