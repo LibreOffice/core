@@ -1055,12 +1055,12 @@ void CondFormat::finalizeImport()
     if ( !mbReadyForFinalize )
         return;
     ScDocument& rDoc = getScDocument();
+    mpFormat->SetRange(maModel.maRanges);
     maRules.forEachMem( &CondFormatRule::finalizeImport );
     SCTAB nTab = maModel.maRanges.GetTopLeftCorner().Tab();
     sal_Int32 nIndex = getScDocument().AddCondFormat(mpFormat, nTab);
 
     rDoc.AddCondFormatData( maModel.maRanges, nTab, nIndex );
-    mpFormat->SetRange(maModel.maRanges);
 }
 
 CondFormatRuleRef CondFormat::createRule()
