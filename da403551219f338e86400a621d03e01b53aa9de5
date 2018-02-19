@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_60e88811",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-02-19T06:02:38Z",
+      "side": 1,
+      "message": "This task was originally not intended for string processing in loops, so not sure if we should do the change. But not objecting atm.",
+      "range": {
+        "startLine": 977,
+        "startChar": 16,
+        "endLine": 981,
+        "endChar": 70
+      },
+      "revId": "da403551219f338e86400a621d03e01b53aa9de5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_40d9c482",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-02-19T06:02:38Z",
+      "side": 1,
+      "message": "There should be space before and after the assignment. Like this:\naDupes +\u003d (OUString::number( i ))\n\nAnd the same also applies to the following lines with +.",
+      "range": {
+        "startLine": 985,
+        "startChar": 34,
+        "endLine": 985,
+        "endChar": 36
+      },
+      "revId": "da403551219f338e86400a621d03e01b53aa9de5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_80e3bc32",
+        "filename": "sw/source/ui/config/mailconfigpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-02-19T06:02:38Z",
+      "side": 1,
+      "message": "I think this would be better on a single line.",
+      "range": {
+        "startLine": 388,
+        "startChar": 12,
+        "endLine": 389,
+        "endChar": 38
+      },
+      "revId": "da403551219f338e86400a621d03e01b53aa9de5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
