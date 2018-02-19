@@ -1503,8 +1503,8 @@ void UnoTreeListItem::Paint(
     {
         rRenderContext.DrawImage(aPos, maImage, rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable);
         int nWidth = maImage.GetSizePixel().Width() + 6;
-        aPos.X() += nWidth;
-        aSize.Width() -= nWidth;
+        aPos.AdjustX(nWidth );
+        aSize.AdjustWidth( -nWidth );
     }
     rRenderContext.DrawText(tools::Rectangle(aPos,aSize),maText, rDev.IsEnabled() ? DrawTextFlags::NONE : DrawTextFlags::Disable);
 }
@@ -1549,9 +1549,9 @@ void UnoTreeListItem::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry
     const Size aTextSize(pView->GetTextWidth( maText ), pView->GetTextHeight());
     if( pViewData->maSize.Width() )
     {
-        pViewData->maSize.Width() += 6 + aTextSize.Width();
+        pViewData->maSize.AdjustWidth(6 + aTextSize.Width() );
         if( pViewData->maSize.Height() < aTextSize.Height() )
-            pViewData->maSize.Height() = aTextSize.Height();
+            pViewData->maSize.setHeight( aTextSize.Height() );
     }
     else
     {

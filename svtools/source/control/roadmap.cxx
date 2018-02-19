@@ -187,8 +187,8 @@ public:
 void RoadmapImpl::initItemSize()
 {
     Size aLabelSize( m_rAntiImpl.GetOutputSizePixel() );
-    aLabelSize.Height() = m_rAntiImpl.LogicToPixel(Size(0, LABELBASEMAPHEIGHT), MapMode(MapUnit::MapAppFont)).Height();
-    aLabelSize.Width() -= m_rAntiImpl.LogicToPixel(Size(2 * ROADMAP_INDENT_X, 0), MapMode(MapUnit::MapAppFont)).Width();
+    aLabelSize.setHeight( m_rAntiImpl.LogicToPixel(Size(0, LABELBASEMAPHEIGHT), MapMode(MapUnit::MapAppFont)).Height() );
+    aLabelSize.AdjustWidth( -(m_rAntiImpl.LogicToPixel(Size(2 * ROADMAP_INDENT_X, 0), MapMode(MapUnit::MapAppFont)).Width()) );
     m_aItemSizePixel = aLabelSize;
 }
 
@@ -737,8 +737,8 @@ void RoadmapItem::SetPosition(RoadmapItem const * _pOldItem)
         Size aOldSize = _pOldItem->mpDescription->GetSizePixel();
 
         aIDPos = _pOldItem->mpID->GetPosPixel();
-        aIDPos.Y() += aOldSize.Height();
-        aIDPos.Y() += mpID->GetParent()->LogicToPixel( Size( 0, ROADMAP_ITEM_DISTANCE_Y ) ).Height();
+        aIDPos.AdjustY(aOldSize.Height() );
+        aIDPos.AdjustY(mpID->GetParent()->LogicToPixel( Size( 0, ROADMAP_ITEM_DISTANCE_Y ) ).Height() );
     }
     mpID->SetPosPixel( aIDPos );
 
