@@ -273,7 +273,7 @@ public:
     sal_uInt32      GetTextLen() const;
     sal_uInt32      GetTextHeight() const;
     sal_uInt32      GetTextHeightNTP() const;
-    sal_uInt32      CalcTextWidth( bool bIgnoreTrailingWhiteSpaces = false );
+    sal_uInt32      CalcTextWidth();
 
     OUString        GetText( sal_Int32 nParagraph ) const;
     sal_Int32       GetTextLen( sal_Int32 nParagraph ) const;
