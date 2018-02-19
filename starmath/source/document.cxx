@@ -385,8 +385,8 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
     // VisArea (i.e. the size within the client) and the current size.
     // Idea: The difference could be adapted with SmNod::SetSize (no long-term solution)
 
-    rPosition.X() += maFormat.GetDistance( DIS_LEFTSPACE );
-    rPosition.Y() += maFormat.GetDistance( DIS_TOPSPACE  );
+    rPosition.AdjustX(maFormat.GetDistance( DIS_LEFTSPACE ) );
+    rPosition.AdjustY(maFormat.GetDistance( DIS_TOPSPACE  ) );
 
     //! in case of high contrast-mode (accessibility option!)
     //! the draw mode needs to be set to default, because when imbedding
@@ -439,15 +439,15 @@ Size SmDocShell::GetSize()
         aRet = mpTree->GetSize();
 
         if ( !aRet.Width() )
-            aRet.Width() = 2000;
+            aRet.setWidth( 2000 );
         else
-            aRet.Width()  += maFormat.GetDistance( DIS_LEFTSPACE ) +
-                             maFormat.GetDistance( DIS_RIGHTSPACE );
+            aRet.AdjustWidth(maFormat.GetDistance( DIS_LEFTSPACE ) +
+                             maFormat.GetDistance( DIS_RIGHTSPACE ) );
         if ( !aRet.Height() )
-            aRet.Height() = 1000;
+            aRet.setHeight( 1000 );
         else
-            aRet.Height() += maFormat.GetDistance( DIS_TOPSPACE ) +
-                             maFormat.GetDistance( DIS_BOTTOMSPACE );
+            aRet.AdjustHeight(maFormat.GetDistance( DIS_TOPSPACE ) +
+                             maFormat.GetDistance( DIS_BOTTOMSPACE ) );
     }
 
     return aRet;
@@ -489,8 +489,8 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
                 MapMode aMap( pPrinter->GetMapMode() );
                 aMap.SetMapUnit( MapUnit::Map100thMM );
                 Point aTmp( aMap.GetOrigin() );
-                aTmp.X() = OutputDevice::LogicToLogic( aTmp.X(), eOld, MapUnit::Map100thMM );
-                aTmp.Y() = OutputDevice::LogicToLogic( aTmp.Y(), eOld, MapUnit::Map100thMM );
+                aTmp.setX( OutputDevice::LogicToLogic( aTmp.X(), eOld, MapUnit::Map100thMM ) );
+                aTmp.setY( OutputDevice::LogicToLogic( aTmp.Y(), eOld, MapUnit::Map100thMM ) );
                 aMap.SetOrigin( aTmp );
                 pPrinter->SetMapMode( aMap );
             }
@@ -514,8 +514,8 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
                 MapMode aMap( pRefDev->GetMapMode() );
                 aMap.SetMapUnit( MapUnit::Map100thMM );
                 Point aTmp( aMap.GetOrigin() );
-                aTmp.X() = OutputDevice::LogicToLogic( aTmp.X(), eOld, MapUnit::Map100thMM );
-                aTmp.Y() = OutputDevice::LogicToLogic( aTmp.Y(), eOld, MapUnit::Map100thMM );
+                aTmp.setX( OutputDevice::LogicToLogic( aTmp.X(), eOld, MapUnit::Map100thMM ) );
+                aTmp.setY( OutputDevice::LogicToLogic( aTmp.Y(), eOld, MapUnit::Map100thMM ) );
                 aMap.SetOrigin( aTmp );
                 pRefDev->SetMapMode( aMap );
             }
@@ -1220,8 +1220,8 @@ void SmDocShell::SetVisArea(const tools::Rectangle & rVisArea)
 
     aNewRect.SetPos(Point());
 
-    if (! aNewRect.Right()) aNewRect.Right() = 2000;
-    if (! aNewRect.Bottom()) aNewRect.Bottom() = 1000;
+    if (! aNewRect.Right()) aNewRect.SetRight( 2000 );
+    if (! aNewRect.Bottom()) aNewRect.SetBottom( 1000 );
 
     bool bIsEnabled = IsEnableSetModified();
     if ( bIsEnabled )

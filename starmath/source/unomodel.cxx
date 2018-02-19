@@ -490,7 +490,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 if(nVal < 1)
                     throw IllegalArgumentException();
                 Size aSize = aFormat.GetBaseSize();
-                aSize.Height() = SmPtsTo100th_mm(nVal);
+                aSize.setHeight( SmPtsTo100th_mm(nVal) );
                 aFormat.SetBaseSize(aSize);
 
                 // apply base size to fonts
@@ -903,15 +903,15 @@ static Size lcl_GuessPaperSize()
     {
         // in 100th mm
         PaperInfo aInfo( PAPER_A4 );
-        aRes.Width()  = aInfo.getWidth();
-        aRes.Height() = aInfo.getHeight();
+        aRes.setWidth( aInfo.getWidth() );
+        aRes.setHeight( aInfo.getHeight() );
     }
     else
     {
         // in 100th mm
         PaperInfo aInfo( PAPER_LETTER );
-        aRes.Width()  = aInfo.getWidth();
-        aRes.Height() = aInfo.getHeight();
+        aRes.setWidth( aInfo.getWidth() );
+        aRes.setHeight( aInfo.getHeight() );
     }
     return aRes;
 }
@@ -1021,17 +1021,17 @@ void SAL_CALL SmModel::render(
 
                 // set minimum top and bottom border
                 if (aPrtPageOffset.Y() < 2000)
-                    OutputRect.Top() += 2000 - aPrtPageOffset.Y();
+                    OutputRect.AdjustTop(2000 - aPrtPageOffset.Y() );
                 if ((aPrtPaperSize.Height() - (aPrtPageOffset.Y() + OutputRect.Bottom())) < 2000)
-                    OutputRect.Bottom() -= 2000 - (aPrtPaperSize.Height() -
-                                                (aPrtPageOffset.Y() + OutputRect.Bottom()));
+                    OutputRect.AdjustBottom( -(2000 - (aPrtPaperSize.Height() -
+                                                (aPrtPageOffset.Y() + OutputRect.Bottom()))) );
 
                 // set minimum left and right border
                 if (aPrtPageOffset.X() < 2500)
-                    OutputRect.Left() += 2500 - aPrtPageOffset.X();
+                    OutputRect.AdjustLeft(2500 - aPrtPageOffset.X() );
                 if ((aPrtPaperSize.Width() - (aPrtPageOffset.X() + OutputRect.Right())) < 1500)
-                    OutputRect.Right() -= 1500 - (aPrtPaperSize.Width() -
-                                                (aPrtPageOffset.X() + OutputRect.Right()));
+                    OutputRect.AdjustRight( -(1500 - (aPrtPaperSize.Width() -
+                                                (aPrtPageOffset.X() + OutputRect.Right()))) );
 
                 if (!m_pPrintUIOptions)
                     m_pPrintUIOptions.reset(new SmPrintUIOptions);

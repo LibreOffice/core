@@ -91,8 +91,8 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
             if (nGDTextWidth != 0  &&
                 nTextWidth != nGDTextWidth)
             {
-                aResult.Right() *= nTextWidth;
-                aResult.Right() /= nGDTextWidth * nScaleFactor;
+                aResult.SetRight( aResult.Right() * nTextWidth );
+                aResult.SetRight( aResult.Right() / ( nGDTextWidth * nScaleFactor) );
             }
         }
     }
@@ -285,8 +285,8 @@ SmRect::SmRect(long nWidth, long nHeight)
 void SmRect::SetLeft(long nLeft)
 {
     if (nLeft <= GetRight())
-    {   aSize.Width() = GetRight() - nLeft + 1;
-        aTopLeft.X()  = nLeft;
+    {   aSize.setWidth( GetRight() - nLeft + 1 );
+        aTopLeft.setX( nLeft );
     }
 }
 
@@ -294,22 +294,22 @@ void SmRect::SetLeft(long nLeft)
 void SmRect::SetRight(long nRight)
 {
     if (nRight >= GetLeft())
-        aSize.Width() = nRight - GetLeft() + 1;
+        aSize.setWidth( nRight - GetLeft() + 1 );
 }
 
 
 void SmRect::SetBottom(long nBottom)
 {
     if (nBottom >= GetTop())
-        aSize.Height() = nBottom - GetTop() + 1;
+        aSize.setHeight( nBottom - GetTop() + 1 );
 }
 
 
 void SmRect::SetTop(long nTop)
 {
     if (nTop <= GetBottom())
-    {   aSize.Height()   = GetBottom() - nTop + 1;
-        aTopLeft.Y() = nTop;
+    {   aSize.setHeight( GetBottom() - nTop + 1 );
+        aTopLeft.setY( nTop );
     }
 }
 
@@ -339,21 +339,21 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
     // set horizontal or vertical new rectangle position depending on ePos
     switch (ePos)
     {   case RectPos::Left:
-            aPos.X() = rRect.GetItalicLeft() - GetItalicRightSpace()
-                       - GetWidth();
+            aPos.setX( rRect.GetItalicLeft() - GetItalicRightSpace()
+                       - GetWidth() );
             break;
         case RectPos::Right:
-            aPos.X() = rRect.GetItalicRight() + 1 + GetItalicLeftSpace();
+            aPos.setX( rRect.GetItalicRight() + 1 + GetItalicLeftSpace() );
             break;
         case RectPos::Top:
-            aPos.Y() = rRect.GetTop() - GetHeight();
+            aPos.setY( rRect.GetTop() - GetHeight() );
             break;
         case RectPos::Bottom:
-            aPos.Y() = rRect.GetBottom() + 1;
+            aPos.setY( rRect.GetBottom() + 1 );
             break;
         case RectPos::Attribute:
-            aPos.X() = rRect.GetItalicCenterX() - GetItalicWidth() / 2
-                       + GetItalicLeftSpace();
+            aPos.setX( rRect.GetItalicCenterX() - GetItalicWidth() / 2
+                       + GetItalicLeftSpace() );
             break;
         default:
             assert(false);
@@ -364,33 +364,33 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
         // correct error in current vertical position
         switch (eVer)
         {   case RectVerAlign::Top :
-                aPos.Y() += rRect.GetAlignT() - GetAlignT();
+                aPos.AdjustY(rRect.GetAlignT() - GetAlignT() );
                 break;
             case RectVerAlign::Mid :
-                aPos.Y() += rRect.GetAlignM() - GetAlignM();
+                aPos.AdjustY(rRect.GetAlignM() - GetAlignM() );
                 break;
             case RectVerAlign::Baseline :
                 // align baselines if possible else align mid's
                 if (HasBaseline() && rRect.HasBaseline())
-                    aPos.Y() += rRect.GetBaseline() - GetBaseline();
+                    aPos.AdjustY(rRect.GetBaseline() - GetBaseline() );
                 else
-                    aPos.Y() += rRect.GetAlignM() - GetAlignM();
+                    aPos.AdjustY(rRect.GetAlignM() - GetAlignM() );
                 break;
             case RectVerAlign::Bottom :
-                aPos.Y() += rRect.GetAlignB() - GetAlignB();
+                aPos.AdjustY(rRect.GetAlignB() - GetAlignB() );
                 break;
             case RectVerAlign::CenterY :
-                aPos.Y() += rRect.GetCenterY() - GetCenterY();
+                aPos.AdjustY(rRect.GetCenterY() - GetCenterY() );
                 break;
             case RectVerAlign::AttributeHi:
-                aPos.Y() += rRect.GetHiAttrFence() - GetBottom();
+                aPos.AdjustY(rRect.GetHiAttrFence() - GetBottom() );
                 break;
             case RectVerAlign::AttributeMid :
-                aPos.Y() += SmFromTo(rRect.GetAlignB(), rRect.GetAlignT(), 0.4)
-                            - GetCenterY();
+                aPos.AdjustY(SmFromTo(rRect.GetAlignB(), rRect.GetAlignT(), 0.4)
+                            - GetCenterY() );
                 break;
             case RectVerAlign::AttributeLo :
-                aPos.Y() += rRect.GetLoAttrFence() - GetTop();
+                aPos.AdjustY(rRect.GetLoAttrFence() - GetTop() );
                 break;
         default :
                 assert(false);
@@ -401,13 +401,13 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
         // correct error in current horizontal position
         switch (eHor)
         {   case RectHorAlign::Left:
-                aPos.X() += rRect.GetItalicLeft() - GetItalicLeft();
+                aPos.AdjustX(rRect.GetItalicLeft() - GetItalicLeft() );
                 break;
             case RectHorAlign::Center:
-                aPos.X() += rRect.GetItalicCenterX() - GetItalicCenterX();
+                aPos.AdjustX(rRect.GetItalicCenterX() - GetItalicCenterX() );
                 break;
             case RectHorAlign::Right:
-                aPos.X() += rRect.GetItalicRight() - GetItalicRight();
+                aPos.AdjustX(rRect.GetItalicRight() - GetItalicRight() );
                 break;
             default:
                 assert(false);
@@ -562,25 +562,25 @@ long SmRect::OrientedDist(const Point &rPoint) const
     if (bIsInside)
     {   Point  aIC (GetItalicCenterX(), GetCenterY());
 
-        aRef.X() = rPoint.X() >= aIC.X() ? GetItalicRight() : GetItalicLeft();
-        aRef.Y() = rPoint.Y() >= aIC.Y() ? GetBottom() : GetTop();
+        aRef.setX( rPoint.X() >= aIC.X() ? GetItalicRight() : GetItalicLeft() );
+        aRef.setY( rPoint.Y() >= aIC.Y() ? GetBottom() : GetTop() );
     }
     else
     {
         // x-coordinate
         if (rPoint.X() > GetItalicRight())
-            aRef.X() = GetItalicRight();
+            aRef.setX( GetItalicRight() );
         else if (rPoint.X() < GetItalicLeft())
-            aRef.X() = GetItalicLeft();
+            aRef.setX( GetItalicLeft() );
         else
-            aRef.X() = rPoint.X();
+            aRef.setX( rPoint.X() );
         // y-coordinate
         if (rPoint.Y() > GetBottom())
-            aRef.Y() = GetBottom();
+            aRef.setY( GetBottom() );
         else if (rPoint.Y() < GetTop())
-            aRef.Y() = GetTop();
+            aRef.setY( GetTop() );
         else
-            aRef.Y() = rPoint.Y();
+            aRef.setY( rPoint.Y() );
     }
 
     // build distance vector
