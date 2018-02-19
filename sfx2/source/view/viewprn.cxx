@@ -101,7 +101,7 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
                                             SfxViewShell* pView,
                                             const uno::Sequence< beans::PropertyValue >& rProps
                                           )
-    : PrinterController( i_rPrinter)
+    : PrinterController(i_rPrinter, pView ? pView->GetWindow() : nullptr)
     , maCompleteSelection( i_rComplete )
     , maSelection( i_rSelection )
     , mxRenderable( i_xRender )

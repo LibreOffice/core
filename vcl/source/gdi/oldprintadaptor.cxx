@@ -44,9 +44,9 @@ namespace vcl
     };
 }
 
-OldStylePrintAdaptor::OldStylePrintAdaptor( const VclPtr< Printer >& i_xPrinter )
-    : PrinterController( i_xPrinter )
-    , mpData( new ImplOldStyleAdaptorData )
+OldStylePrintAdaptor::OldStylePrintAdaptor(const VclPtr<Printer>& i_xPrinter, const VclPtr<vcl::Window>& i_xWindow)
+    : PrinterController(i_xPrinter, i_xWindow)
+    , mpData(new ImplOldStyleAdaptorData)
 {
 }
 
