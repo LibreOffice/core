@@ -32,6 +32,7 @@
 #include <tools/fract.hxx>
 #include <o3tl/make_unique.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <osl/thread.h>
 
 // MS Windows defines
@@ -714,39 +715,34 @@ namespace emfio
                 }
                 if (bOk)
                 {
-                    Bitmap aBmp( Size( nWidth, nHeight ), nBitCount );
-                    Bitmap::ScopedWriteAccess pAcc(aBmp);
-                    if ( pAcc )
+                    vcl::bitmap::RawBitmap aBmp( Size( nWidth, nHeight ) );
+                    for (sal_uInt16 y = 0; y < nHeight && mpInputStream->good(); ++y)
                     {
-                        for (sal_uInt16 y = 0; y < nHeight && mpInputStream->good(); ++y)
+                        sal_uInt16 x = 0;
+                        for (sal_uInt16 scan = 0; scan < nBytesPerScan; scan++ )
                         {
-                            Scanline pScanline = pAcc->GetScanline( y );
-                            sal_uInt16 x = 0;
-                            for (sal_uInt16 scan = 0; scan < nBytesPerScan; scan++ )
+                            sal_Int8 nEightPixels = 0;
+                            mpInputStream->ReadSChar( nEightPixels );
+                            for (sal_Int8 i = 7; i >= 0; i-- )
                             {
-                                sal_Int8 nEightPixels = 0;
-                                mpInputStream->ReadSChar( nEightPixels );
-                                for (sal_Int8 i = 7; i >= 0; i-- )
+                                if ( x < nWidth )
                                 {
-                                    if ( x < nWidth )
-                                    {
-                                        pAcc->SetPixelOnData( pScanline, x, BitmapColor((nEightPixels>>i)&1) );
-                                    }
-                                    x++;
+                                    aBmp.SetPixel( y, x, Color(((nEightPixels>>i)&1) ? COL_BLACK : COL_WHITE) );
                                 }
+                                x++;
                             }
                         }
-                        pAcc.reset();
-                        if ( nSye && nSxe &&
-                             ( nSx + nSxe <= aBmp.GetSizePixel().Width() ) &&
-                             ( nSy + nSye <= aBmp.GetSizePixel().Height() ) )
-                        {
-                            tools::Rectangle aCropRect( Point( nSx, nSy ), Size( nSxe, nSye ) );
-                            aBmp.Crop( aCropRect );
-                        }
-                        tools::Rectangle aDestRect( aPoint, Size( nSxe, nSye ) );
-                        maBmpSaveList.emplace_back(new BSaveStruct(aBmp, aDestRect, nWinROP));
                     }
+                    BitmapEx aBitmap = vcl::bitmap::CreateFromData(std::move(aBmp));
+                    if ( nSye && nSxe &&
+                         ( nSx + nSxe <= nWidth ) &&
+                         ( nSy + nSye <= nHeight ) )
+                    {
+                        tools::Rectangle aCropRect( Point( nSx, nSy ), Size( nSxe, nSye ) );
+                        aBitmap.Crop( aCropRect );
+                    }
+                    tools::Rectangle aDestRect( aPoint, Size( nSxe, nSye ) );
+                    maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aDestRect, nWinROP));
                 }
             }
             break;
