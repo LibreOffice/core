@@ -1232,7 +1232,7 @@ public:
         return Size(size.width, size.height);
     }
 
-    virtual float approximate_char_width() const override
+    virtual float get_approximate_char_width() const override
     {
         PangoContext* pContext = gtk_widget_get_pango_context(m_pWidget);
         PangoFontMetrics* pMetrics = pango_context_get_metrics(pContext,
@@ -1243,6 +1243,17 @@ public:
         pango_font_metrics_unref(pMetrics);
 
         return std::max(nCharWidth, nDigitWidth) / PANGO_SCALE;
+    }
+
+    virtual int get_text_height() const override
+    {
+        PangoContext* pContext = gtk_widget_get_pango_context(m_pWidget);
+        PangoFontMetrics* pMetrics = pango_context_get_metrics(pContext,
+                                         pango_context_get_font_description(pContext),
+                                         pango_context_get_language(pContext));
+        int nLineHeight = pango_font_metrics_get_ascent(pMetrics) + pango_font_metrics_get_descent(pMetrics);
+        pango_font_metrics_unref(pMetrics);
+        return nLineHeight / PANGO_SCALE;
     }
 
     virtual Size get_pixel_size(const OUString& rText) const override
@@ -1375,6 +1386,10 @@ public:
                 ret = RET_OK;
             else if (ret == GTK_RESPONSE_CANCEL)
                 ret = RET_CANCEL;
+            else if (ret == GTK_RESPONSE_YES)
+                ret = RET_YES;
+            else if (ret == GTK_RESPONSE_NO)
+                ret = RET_NO;
             break;
         }
         hide();
@@ -1387,6 +1402,10 @@ public:
             nResponse = GTK_RESPONSE_OK;
         else if (nResponse == RET_CANCEL)
             nResponse = GTK_RESPONSE_CANCEL;
+        else if (nResponse == RET_YES)
+            nResponse = GTK_RESPONSE_YES;
+        else if (nResponse == RET_NO)
+            nResponse = GTK_RESPONSE_NO;
         else if (nResponse == RET_HELP)
             nResponse = GTK_RESPONSE_HELP;
         gtk_dialog_response(m_pDialog, nResponse);

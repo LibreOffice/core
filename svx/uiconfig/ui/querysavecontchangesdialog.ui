@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.2 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkMessageDialog" id="QuerySaveContourChangesDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">6</property>
     <property name="title" translatable="yes" context="querysavecontchangesdialog|QuerySaveContourChangesDialog">Save contour changes?</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
@@ -21,7 +20,6 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="messagedialog-action_area">
             <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
@@ -47,7 +45,10 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">cancel</action-widget>
+      <action-widget response="-6">cancel</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>

@@ -90,6 +90,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 namespace vcl { class Window; }
+namespace weld { class Window; }
 class NotifyEvent;
 
 namespace dbaui
@@ -415,6 +416,7 @@ namespace dbaui
     public:
         const css::uno::Reference< css::uno::XComponentContext >& getORB() const { return m_xContext; }
         ODataView*  getView() const { return m_pView; }
+        weld::Window* getFrameWeld() const;
         void        setView( const VclPtr<ODataView>& i_rView );
         void        clearView();
         // shows a error box if the SQLExceptionInfo is valid

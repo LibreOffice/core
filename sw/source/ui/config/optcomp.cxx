@@ -28,7 +28,7 @@
 
 #include <globals.hrc>
 #include <unotools/configmgr.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -260,9 +260,9 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, SelectHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl, Button*, void)
 {
-    ScopedVclPtrInstance<MessageDialog> aQuery(this, "QueryDefaultCompatDialog",
-                                               "modules/swriter/ui/querydefaultcompatdialog.ui");
-    if (aQuery->Execute() == RET_YES)
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/querydefaultcompatdialog.ui"));
+    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryDefaultCompatDialog"));
+    if (xQueryBox->run() == RET_YES)
     {
         for ( vector< SvtCompatibilityEntry >::iterator pItem = m_pImpl->m_aList.begin();
               pItem != m_pImpl->m_aList.end(); ++pItem )

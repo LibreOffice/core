@@ -1,0 +1,63 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_VCL_INC_MESSAGEDIALOG_HXX
+#define INCLUDED_VCL_INC_MESSAGEDIALOG_HXX
+
+#include <vcl/dllapi.h>
+
+#include <vcl/dialog.hxx>
+#include <vcl/layout.hxx>
+
+class VCL_DLLPUBLIC MessageDialog : public Dialog
+{
+private:
+    VclButtonsType m_eButtonsType;
+    VclMessageType m_eMessageType;
+    VclPtr<VclBox> m_pOwnedContentArea;
+    VclPtr<VclButtonBox> m_pOwnedActionArea;
+    VclPtr<VclGrid> m_pGrid;
+    VclPtr<FixedImage> m_pImage;
+    VclPtr<VclMultiLineEdit> m_pPrimaryMessage;
+    VclPtr<VclMultiLineEdit> m_pSecondaryMessage;
+    std::vector<VclPtr<PushButton>> m_aOwnedButtons;
+    std::map<VclPtr<const vcl::Window>, short> m_aResponses;
+    OUString m_sPrimaryString;
+    OUString m_sSecondaryString;
+    DECL_DLLPRIVATE_LINK(ButtonHdl, Button*, void);
+    void setButtonHandlers(VclButtonBox const* pButtonBox);
+    short get_response(const vcl::Window* pWindow) const;
+    void create_owned_areas();
+
+    friend class VclPtr<MessageDialog>;
+    MessageDialog(vcl::Window* pParent, WinBits nStyle);
+
+public:
+    MessageDialog(vcl::Window* pParent, const OUString& rMessage,
+                  VclMessageType eMessageType = VclMessageType::Error,
+                  VclButtonsType eButtonsType = VclButtonsType::Ok);
+    MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
+    virtual bool set_property(const OString& rKey, const OUString& rValue) override;
+    virtual short Execute() override;
+    ///Emitted when an action widget is clicked
+    virtual void response(short nResponseId);
+    OUString const& get_primary_text() const;
+    OUString const& get_secondary_text() const;
+    void set_primary_text(const OUString& rPrimaryString);
+    void set_secondary_text(const OUString& rSecondaryString);
+    virtual ~MessageDialog() override;
+    virtual void dispose() override;
+
+    static void SetMessagesWidths(vcl::Window const* pParent, VclMultiLineEdit* pPrimaryMessage,
+                                  VclMultiLineEdit* pSecondaryMessage);
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,6 +27,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
 class SfxStyleSheetBasePool;
 
@@ -36,7 +37,7 @@ private:
     VclPtr<ComboBox> m_pColBox;
     VclPtr<OKButton> m_pOKBtn;
 
-    VclPtr<MessageDialog> aQueryOverwriteBox;
+    std::unique_ptr<weld::MessageDialog> xQueryOverwriteBox;
     SfxStyleSheetBasePool&  rPool;
 
     DECL_DLLPRIVATE_LINK( OKHdl, ComboBox&, void );

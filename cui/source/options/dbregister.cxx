@@ -27,7 +27,7 @@
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <vcl/field.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <svl/eitem.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -275,8 +275,9 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl, Button*, void)
     SvTreeListEntry* pEntry = m_pPathBox->FirstSelected();
     if ( pEntry )
     {
-        ScopedVclPtrInstance< MessageDialog > aQuery(this, CuiResId(RID_SVXSTR_QUERY_DELETE_CONFIRM), VclMessageType::Question, VclButtonsType::YesNo);
-        if ( aQuery->Execute() == RET_YES )
+        std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(GetFrameWeld(),
+                                                    VclMessageType::Question, VclButtonsType::YesNo, CuiResId(RID_SVXSTR_QUERY_DELETE_CONFIRM)));
+        if (xQuery->run() == RET_YES)
             m_pPathBox->GetModel()->Remove(pEntry);
     }
 }

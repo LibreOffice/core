@@ -28,6 +28,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svtools/colrdlg.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svx/ofaitem.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -365,7 +366,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
-    ScopedVclPtr<MessageDialog> pWarnBox;
     sal_uInt16 nError = 1;
 
     while (pDlg->Execute() == RET_OK)
@@ -379,19 +379,13 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
             break;
         }
 
-        if( !pWarnBox )
-        {
-            pWarnBox.disposeAndReset(VclPtr<MessageDialog>::Create( GetParentDialog()
-                                        ,"DuplicateNameDialog"
-                                        ,"cui/ui/queryduplicatedialog.ui"));
-        }
-
-        if( pWarnBox->Execute() != RET_OK )
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+        if (xWarnBox->run() != RET_OK)
             break;
     }
 
     pDlg.disposeAndClear();
-    pWarnBox.disposeAndClear();
 
     if (!nError)
     {

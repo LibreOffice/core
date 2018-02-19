@@ -73,7 +73,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <osl/mutex.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
@@ -1340,10 +1340,11 @@ void ChartController::executeDispatch_SourceData()
 
         SolarMutexGuard aSolarGuard;
 
-        ScopedVclPtrInstance< MessageDialog > aQueryBox( GetChartWindow(), SchResId( STR_DLG_REMOVE_DATA_TABLE ), VclMessageType::Question, VclButtonsType::YesNo);
-
+        VclPtr<ChartWindow> xChartWindow(GetChartWindow());
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(xChartWindow ? xChartWindow->GetFrameWeld() : nullptr,
+                                                       VclMessageType::Question, VclButtonsType::YesNo, SchResId(STR_DLG_REMOVE_DATA_TABLE)));
         // If "No" then just return
-        if (aQueryBox->Execute() == RET_NO)
+        if (xQueryBox->run() == RET_NO)
             return;
 
         // Remove data table

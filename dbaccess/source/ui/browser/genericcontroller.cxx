@@ -22,6 +22,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <browserids.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <dbaccess/dataview.hxx>
 #include <tools/diagnose_ex.h>
@@ -204,7 +205,7 @@ bool OGenericUnoController::Construct(vcl::Window* /*pParent*/)
     {
         SAL_WARN("dbaccess.ui","OGenericUnoController::Construct: could not create (or start listening at) the database context!");
         // at least notify the user. Though the whole component does not make any sense without the database context ...
-        ShowServiceNotAvailableError(getView(), "com.sun.star.sdb.DatabaseContext", true);
+        ShowServiceNotAvailableError(getFrameWeld(), "com.sun.star.sdb.DatabaseContext", true);
     }
 
     return true;
@@ -1271,6 +1272,11 @@ void SAL_CALL OGenericUnoController::dispose()
 {
     SolarMutexGuard aSolarGuard;
     OGenericUnoController_Base::dispose();
+}
+
+weld::Window* OGenericUnoController::getFrameWeld() const
+{
+    return m_pView ? m_pView->GetFrameWeld() : nullptr;
 }
 
 }   // namespace dbaui

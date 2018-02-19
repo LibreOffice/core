@@ -23,9 +23,9 @@
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
 
-namespace vcl { class Window; }
+namespace weld { class Widget; }
 
-void VCL_DLLPUBLIC ShowServiceNotAvailableError(vcl::Window* pParent, const OUString& rServiceName, bool bError);
+void VCL_DLLPUBLIC ShowServiceNotAvailableError(weld::Widget* pParent, const OUString& rServiceName, bool bError);
 
 #endif // INCLUDED_VCL_STDTEXT_HXX
 

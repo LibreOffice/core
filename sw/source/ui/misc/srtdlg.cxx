@@ -23,6 +23,7 @@
 
 #include <vcl/lstbox.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
@@ -366,7 +367,13 @@ void SwSortDlg::Apply()
     }
 
     if( !bRet )
-        ScopedVclPtrInstance<MessageDialog>(GetParent(), SwResId(STR_SRTERR), VclMessageType::Info)->Execute();
+    {
+        vcl::Window* pWin = GetParent();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      SwResId(STR_SRTERR)));
+        xInfoBox->run();
+    }
 }
 
 IMPL_LINK( SwSortDlg, DelimHdl, Button*, pButton, void )

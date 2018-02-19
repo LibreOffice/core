@@ -20,7 +20,7 @@
 #define INCLUDED_UUI_SOURCE_UNKNOWNAUTHDLG_HXX
 
 #include <vcl/button.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/messagedialog.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

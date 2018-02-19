@@ -39,6 +39,9 @@ namespace i18n {
     class XBreakIterator;
     class XExtendedInputSequenceChecker;
 }}}}
+namespace weld {
+    class Widget;
+}
 
 class VclBuilder;
 struct DDInfo;
@@ -249,7 +252,7 @@ public:
     sal_Int32           GetCharPos( const Point& rWindowPos ) const;
 
     // shows a warning box saying "text too long, truncated"
-    static void         ShowTruncationWarning( vcl::Window* pParent );
+    static void         ShowTruncationWarning(weld::Widget* pParent);
 
     static void                 SetGetSpecialCharsFunction( FncGetSpecialChars fn );
     static FncGetSpecialChars   GetGetSpecialCharsFunction();

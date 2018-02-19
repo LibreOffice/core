@@ -32,7 +32,7 @@
 #include <svl/intitem.hxx>
 #include <dsitems.hxx>
 #include "dbfindex.hxx"
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>
 #if HAVE_FEATURE_JAVA
@@ -309,7 +309,10 @@ namespace dbaui
         }
         else
             return true;
-        ScopedVclPtrInstance<MessageDialog>(nullptr, MnemonicGenerator::EraseAllMnemonicChars(aErrorText))->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  MnemonicGenerator::EraseAllMnemonicChars(aErrorText)));
+        xBox->run();
         pErrorWin->GrabFocus();
         return false;
     }

@@ -27,6 +27,7 @@
 #include <vcl/layout.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -515,7 +516,9 @@ bool SvBaseLink::ExecuteEdit( const OUString& _rNewName )
             else
                 return false;
 
-            ScopedVclPtrInstance<MessageDialog>(pImpl->m_pParentWin, sError)->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pImpl->m_pParentWin->GetFrameWeld(),
+                                                                     VclMessageType::Warning, VclButtonsType::Ok, sError));
+            xBox->run();
         }
     }
     else if( !pImpl->m_bIsConnect )

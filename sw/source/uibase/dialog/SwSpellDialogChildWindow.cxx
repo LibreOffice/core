@@ -19,7 +19,8 @@
 
 #include <memory>
 #include <SwSpellDialogChildWindow.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <svx/svxids.hrc>
@@ -386,9 +387,10 @@ The code below would only be part of the solution.
             if(m_pSpellState->m_xStartRange.is())
             {
                 LockFocusNotification( true );
-                sal_uInt16 nRet = ScopedVclPtrInstance<MessageDialog>(GetWindow(), SwResId(STR_QUERY_SPELL_CONTINUE),
-                                                VclMessageType::Question, VclButtonsType::YesNo)->Execute();
-                if(RET_YES == nRet)
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetWindow()->GetFrameWeld(),
+                                                                                        VclMessageType::Question, VclButtonsType::YesNo, SwResId(STR_QUERY_SPELL_CONTINUE)));
+                sal_uInt16 nRet = xBox->run();
+                if (RET_YES == nRet)
                 {
                     SwUnoInternalPaM aPam(*pWrtShell->GetDoc());
                     if (::sw::XTextRangeToSwPaM(aPam,
@@ -415,8 +417,9 @@ The code below would only be part of the solution.
                 LockFocusNotification( true );
                 OUString sInfo(SwResId(STR_SPELLING_COMPLETED));
                 // #i84610#
-                vcl::Window* pTemp = GetWindow();    // temporary needed for g++ 3.3.5
-                ScopedVclPtrInstance<MessageDialog>(pTemp, sInfo, VclMessageType::Info)->Execute();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetWindow()->GetFrameWeld(),
+                                                                                           VclMessageType::Info, VclButtonsType::Ok, sInfo));
+                xBox->run();
                 LockFocusNotification( false );
                 // take care that the now valid selection is stored
                 LoseFocus();

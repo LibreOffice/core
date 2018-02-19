@@ -21,6 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld.hxx>
 #include <svl/zforlist.hxx>
 #include <opencl/openclconfig.hxx>
 #include <opencl/openclwrapper.hxx>
@@ -101,8 +102,10 @@ bool SvxOpenCLTabPage::FillItemSet( SfxItemSet* )
 
     if (bModified)
     {
-        ScopedVclPtrInstance<MessageDialog> aWarnBox(this, CuiResId(RID_SVXSTR_OPTIONS_RESTART), VclMessageType::Info);
-        aWarnBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xWarnBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      CuiResId(RID_SVXSTR_OPTIONS_RESTART)));
+        xWarnBox->run();
         batch->commit();
     }
 

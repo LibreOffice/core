@@ -15,7 +15,7 @@
 
 class ScDocument;
 class SfxObjectShell;
-namespace vcl { class Window; }
+namespace weld { class Window; }
 
 namespace sfx2 {
 
@@ -57,7 +57,7 @@ public:
     bool hasDdeLinks() const;
     bool hasDdeOrOleOrWebServiceLinks() const;
 
-    bool updateDdeOrOleOrWebServiceLinks(vcl::Window* pWin);
+    bool updateDdeOrOleOrWebServiceLinks(weld::Window* pWin);
 
     void updateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem );
 

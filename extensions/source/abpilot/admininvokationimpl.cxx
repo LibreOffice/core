@@ -28,6 +28,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <strings.hrc>
 #include <componentmodule.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 
 
@@ -51,7 +52,7 @@ namespace abp
     {
         DBG_ASSERT(m_xContext.is(), "OAdminDialogInvokation::OAdminDialogInvokation: invalid service factory!");
         DBG_ASSERT(m_xDataSource.is(), "OAdminDialogInvokation::OAdminDialogInvokation: invalid preferred name!");
-        DBG_ASSERT(m_pMessageParent, "OAdminDialogInvokation::OAdminDialogInvokation: invalid message parent!");
+        assert(m_pMessageParent && "OAdminDialogInvokation::OAdminDialogInvokation: invalid message parent!");
     }
 
 
@@ -101,7 +102,7 @@ namespace abp
                     return true;
             }
             else
-                ShowServiceNotAvailableError(m_pMessageParent, s_sAdministrationServiceName, true);
+                ShowServiceNotAvailableError(m_pMessageParent->GetFrameWeld(), s_sAdministrationServiceName, true);
         }
         catch(const Exception&)
         {

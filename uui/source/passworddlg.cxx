@@ -22,7 +22,8 @@
 
 #include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 using namespace ::com::sun::star;
 
@@ -46,8 +47,9 @@ PasswordDialog::PasswordDialog(vcl::Window* _pParent,
         const char* pOpenToModifyErrStrId = bOpenToModify ? STR_ERROR_PASSWORD_TO_MODIFY_WRONG : STR_ERROR_PASSWORD_TO_OPEN_WRONG;
         const char* pErrStrId = bIsSimplePasswordRequest ? STR_ERROR_SIMPLE_PASSWORD_WRONG : pOpenToModifyErrStrId;
         OUString aErrorMsg(Translate::get(pErrStrId, rResLocale));
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(GetParent(), aErrorMsg);
-        aErrorBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(_pParent ? _pParent->GetFrameWeld() : nullptr,
+                                                  VclMessageType::Warning, VclButtonsType::Ok, aErrorMsg));
+        xBox->run();
     }
 
     // default settings for enter password or reenter passwd...
@@ -112,8 +114,10 @@ IMPL_LINK_NOARG(PasswordDialog, OKHdl_Impl, Button*, void)
 
     if (m_pEDConfirmPassword->IsVisible() && bPasswdMismatch)
     {
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(this, aPasswdMismatch);
-        aErrorBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  aPasswdMismatch));
+        xBox->run();
     }
     else if (bValid)
         EndDialog( RET_OK );

@@ -24,6 +24,8 @@
 #include <unotools/datetime.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <ucbhelper/content.hxx>
 #include <sfx2/app.hxx>
 #include <helpids.h>
@@ -358,7 +360,9 @@ void GalleryBrowser1::ImplExecute(const OString &rIdent)
     }
     else if (rIdent == "delete")
     {
-        if( ScopedVclPtrInstance<MessageDialog>(nullptr, "QueryDeleteThemeDialog","svx/ui/querydeletethemedialog.ui")->Execute() == RET_YES )
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "svx/ui/querydeletethemedialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryDeleteThemeDialog"));
+        if (xQuery->run() == RET_YES)
             mpGallery->RemoveTheme( mpThemes->GetSelectedEntry() );
     }
     else if (rIdent == "rename")

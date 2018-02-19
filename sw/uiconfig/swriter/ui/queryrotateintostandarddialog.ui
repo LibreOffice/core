@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.2 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkMessageDialog" id="QueryRotateIntoStandardOrientationDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="queryrotateintostandarddialog|QueryRotateIntoStandardOrientationDialog">Rotate into standard orientation?</property>
+    <property name="title" translatable="yes" context="queryrotateintostandarddialog|QueryRotateIntoStandardOrientationDialog">Rotate into standard orientation?`</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
@@ -20,8 +19,6 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="messagedialog-action_area4">
             <property name="can_focus">False</property>
-            <property name="halign">end</property>
-            <property name="layout_style">center</property>
           </object>
           <packing>
             <property name="expand">False</property>

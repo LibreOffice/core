@@ -22,7 +22,7 @@
 #include <tools/config.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/dibtools.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
@@ -330,8 +330,10 @@ short SaneDlg::Execute()
 {
     if( ! Sane::IsSane() )
     {
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, SaneResId(STR_COULD_NOT_BE_INIT));
-        aErrorBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(nullptr,
+                                                       VclMessageType::Warning, VclButtonsType::Ok,
+                                                       SaneResId(STR_COULD_NOT_BE_INIT)));
+        xErrorBox->run();
         return RET_CANCEL;
     }
     LoadState();
@@ -610,8 +612,10 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton, void )
             aString = aString.replaceFirst( "%s", Sane::GetVendor( mrSane.GetDeviceNumber() ) );
             aString = aString.replaceFirst( "%s", Sane::GetModel( mrSane.GetDeviceNumber() ) );
             aString = aString.replaceFirst( "%s", Sane::GetType( mrSane.GetDeviceNumber() ) );
-            ScopedVclPtrInstance< MessageDialog > aInfoBox(this, aString, VclMessageType::Info);
-            aInfoBox->Execute();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          aString));
+            xInfoBox->run();
         }
         else if( pButton == mpPreviewButton )
             AcquirePreview();
@@ -881,8 +885,10 @@ void SaneDlg::AcquirePreview()
     if( nOption == -1 )
     {
         OUString aString(SaneResId(STR_SLOW_PREVIEW));
-        ScopedVclPtrInstance< MessageDialog > aBox(this, aString, VclMessageType::Warning, VclButtonsType::OkCancel);
-        if (aBox->Execute() == RET_CANCEL)
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                  VclMessageType::Warning, VclButtonsType::OkCancel,
+                                                  aString));
+        if (xBox->run() == RET_CANCEL)
             return;
     }
     else
@@ -891,8 +897,10 @@ void SaneDlg::AcquirePreview()
     rtl::Reference<BitmapTransporter> xTransporter(new BitmapTransporter);
     if( ! mrSane.Start( *xTransporter.get() ) )
     {
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(this, SaneResId(STR_ERROR_SCAN));
-        aErrorBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                       VclMessageType::Warning, VclButtonsType::Ok,
+                                                       SaneResId(STR_ERROR_SCAN)));
+        xErrorBox->run();
     }
     else
     {

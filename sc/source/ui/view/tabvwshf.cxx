@@ -30,6 +30,7 @@
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/svxdlg.hxx>
 #include <editeng/colritem.hxx>
@@ -428,9 +429,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 }
                                 else
                                 {
-                                    nRet = ScopedVclPtrInstance<MessageDialog>(GetDialogParent(),
-                                                     aErrMsg
-                                                   )->Execute();
+                                    vcl::Window* pWin = GetDialogParent();
+                                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                              VclMessageType::Warning, VclButtonsType::Ok, aErrMsg));
+                                    nRet = xBox->run();
                                 }
                             }
                         }

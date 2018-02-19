@@ -26,7 +26,8 @@
 #include <svx/graphichelper.hxx>
 #include <svx/strings.hrc>
 
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
@@ -416,11 +417,12 @@ void GraphicHelper::SaveShapeAsGraphic(const vcl::Window* pParent,  const Refere
     }
 }
 
-short GraphicHelper::HasToSaveTransformedImage(vcl::Window* pWin)
+short GraphicHelper::HasToSaveTransformedImage(weld::Widget* pWin)
 {
     OUString aMsg(SvxResId(RID_SVXSTR_SAVE_MODIFIED_IMAGE));
-    ScopedVclPtrInstance< MessageDialog > aBox(pWin, aMsg, VclMessageType::Question, VclButtonsType::YesNo);
-    return aBox->Execute();
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin,
+                                              VclMessageType::Question, VclButtonsType::YesNo, aMsg));
+    return xBox->run();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

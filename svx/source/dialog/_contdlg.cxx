@@ -44,7 +44,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include "dlgunit.hxx"
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 
 SFX_IMPL_FLOATINGWINDOW_WITHID( SvxContourDlgChildWindow, SID_CONTOUR_DLG );
 
@@ -317,8 +317,9 @@ bool SvxSuperContourDlg::Close()
 
     if (m_pTbx1->IsItemEnabled(mnApplyId))
     {
-        ScopedVclPtrInstance< MessageDialog > aQBox( this,"QuerySaveContourChangesDialog","svx/ui/querysavecontchangesdialog.ui");
-        const long  nRet = aQBox->Execute();
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "svx/ui/querysavecontchangesdialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("QuerySaveContourChangesDialog"));
+        const short nRet = xQBox->run();
 
         if ( nRet == RET_YES )
         {
@@ -438,9 +439,10 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx, void )
     {
         if (m_pTbx1->IsItemChecked(mnWorkSpaceId))
         {
-            ScopedVclPtrInstance< MessageDialog > aQBox( this,"QueryDeleteContourDialog","svx/ui/querydeletecontourdialog.ui" );
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "svx/ui/querydeletecontourdialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("QueryDeleteContourDialog"));
 
-            if ( !m_pContourWnd->IsContourChanged() || ( aQBox->Execute() == RET_YES ) )
+            if (!m_pContourWnd->IsContourChanged() || (xQBox->run() == RET_YES))
                 m_pContourWnd->SetWorkplaceMode( true );
             else
                 m_pTbx1->CheckItem(mnWorkSpaceId, false);
@@ -512,9 +514,10 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx, void )
             m_pStbStatus->Invalidate();
         else if ( bGraphicLinked )
         {
-            ScopedVclPtrInstance<MessageDialog> aQBox(this, "QueryUnlinkGraphicsDialog",
-                                                      "svx/ui/queryunlinkgraphicsdialog.ui");
-            if (aQBox->Execute() != RET_YES)
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "svx/ui/queryunlinkgraphicsdialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("QueryUnlinkGraphicsDialog"));
+
+            if (xQBox->run() != RET_YES)
             {
                 bPipette = false;
                 m_pTbx1->CheckItem(mnPipetteId, bPipette);
@@ -694,7 +697,9 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
 
             if( !!aMask )
             {
-                ScopedVclPtrInstance< MessageDialog > aQBox( this,"QueryNewContourDialog","svx/ui/querynewcontourdialog.ui" );
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "svx/ui/querynewcontourdialog.ui"));
+                std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("QueryNewContourDialog"));
+
                 bool        bNewContour;
 
                 aRedoGraphic = Graphic();
@@ -702,7 +707,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
                 aGraphic = Graphic( BitmapEx( aBmp, aMask ) );
                 mnGrfChanged++;
 
-                bNewContour = ( aQBox->Execute() == RET_YES );
+                bNewContour = (xQBox->run() == RET_YES);
                 rWnd.SetGraphic( aGraphic, bNewContour );
 
                 if( bNewContour )

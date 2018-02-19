@@ -22,6 +22,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <uiitems.hxx>
 #include <reffact.hxx>
@@ -33,9 +34,12 @@
 
 namespace
 {
-    void lclErrorDialog( vcl::Window* pParent, const OUString& aString )
+    void lclErrorDialog(weld::Window* pParent, const OUString& rString)
     {
-        ScopedVclPtrInstance<MessageDialog>(pParent, aString)->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  rString));
+        xBox->run();
     }
 }
 
@@ -163,22 +167,22 @@ void ScSolverDlg::RaiseError( ScSolverErr eError )
     switch ( eError )
     {
         case SOLVERR_NOFORMULA:
-            lclErrorDialog( this, errMsgNoFormula );
+            lclErrorDialog(GetFrameWeld() , errMsgNoFormula);
             m_pEdFormulaCell->GrabFocus();
             break;
 
         case SOLVERR_INVALID_FORMULA:
-            lclErrorDialog( this, errMsgInvalidForm );
+            lclErrorDialog(GetFrameWeld(), errMsgInvalidForm);
             m_pEdFormulaCell->GrabFocus();
             break;
 
         case SOLVERR_INVALID_VARIABLE:
-            lclErrorDialog( this, errMsgInvalidVar );
+            lclErrorDialog(GetFrameWeld(), errMsgInvalidVar);
             m_pEdVariableCell->GrabFocus();
             break;
 
         case SOLVERR_INVALID_TARGETVALUE:
-            lclErrorDialog( this, errMsgInvalidVal );
+            lclErrorDialog(GetFrameWeld(), errMsgInvalidVal);
             m_pEdTargetVal->GrabFocus();
             break;
     }

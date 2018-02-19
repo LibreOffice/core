@@ -28,7 +28,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
 
 // class SvtFileView -----------------------------------------------------
@@ -209,17 +209,19 @@ enum QueryDeleteResult_Impl
     QUERYDELETE_ALL = 101
 };
 
-class SVT_DLLPUBLIC QueryDeleteDlg_Impl : public MessageDialog
+class SVT_DLLPUBLIC QueryDeleteDlg_Impl
 {
 private:
-    VclPtr<PushButton> m_pAllButton;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::MessageDialog> m_xDialog;
+    std::unique_ptr<weld::Button> m_xAllButton;
 public:
 
-    QueryDeleteDlg_Impl(vcl::Window* pParent, const OUString& rName);
-    virtual ~QueryDeleteDlg_Impl() override;
-    virtual void dispose() override;
+    QueryDeleteDlg_Impl(weld::Widget* pParent, const OUString& rName);
+    short run() { return m_xDialog->run(); }
+    ~QueryDeleteDlg_Impl();
 
-    void EnableAllButton() { m_pAllButton->Enable(); }
+    void EnableAllButton() { m_xAllButton->set_sensitive(true); }
 };
 
 }

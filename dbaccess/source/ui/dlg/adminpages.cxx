@@ -37,8 +37,8 @@
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <algorithm>
 #include <stdlib.h>
@@ -129,8 +129,10 @@ namespace dbaui
             // show an error message
             OUString sError(DBA_RES(STR_COULD_NOT_LOAD_ODBC_LIB));
             sError = sError.replaceFirst("#lib#", aEnumeration.getLibraryName());
-            ScopedVclPtrInstance< MessageDialog > aDialog(this, sError);
-            aDialog->Execute();
+            std::unique_ptr<weld::MessageDialog> xDialog(Application::CreateMessageDialog(GetFrameWeld(),
+                                                         VclMessageType::Warning, VclButtonsType::Ok,
+                                                         sError));
+            xDialog->run();
             return false;
         }
         else

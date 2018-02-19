@@ -51,6 +51,7 @@
 #include <comphelper/types.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
+#include <vcl/weld.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <osl/file.hxx>
@@ -1540,10 +1541,10 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                         }
                         catch( const IllegalArgumentException& )
                         {
-                            ScopedVclPtrInstance< MessageDialog > aBox(
-                                mpPreferredParentWindow,
-                                SfxResId(RID_SVXSTR_GPG_ENCRYPT_FAILURE));
-                            aBox->Execute();
+                            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(mpPreferredParentWindow ? mpPreferredParentWindow->GetFrameWeld() : nullptr,
+                                                                                     VclMessageType::Warning, VclButtonsType::Ok,
+                                                                                     SfxResId(RID_SVXSTR_GPG_ENCRYPT_FAILURE)));
+                            xBox->run();
                         }
                     }
 

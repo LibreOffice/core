@@ -26,7 +26,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 
 struct PasswordToOpenModifyDialog_Impl
@@ -91,16 +91,17 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
         m_pOptionsExpander->Hide();
 }
 
-IMPL_LINK_NOARG( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, Button *, void )
+IMPL_LINK(PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, Button *, pButton, void)
 {
     bool bInvalidState = !m_pOpenReadonlyCB->IsChecked() &&
             m_pPasswdToOpenED->GetText().isEmpty() &&
             m_pPasswdToModifyED->GetText().isEmpty();
     if (bInvalidState)
     {
-        ScopedVclPtrInstance<MessageDialog> aErrorBox(m_pParent,
-            m_bIsPasswordToModify? m_aInvalidStateForOkButton : m_aInvalidStateForOkButton_v2);
-        aErrorBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pButton->GetFrameWeld(),
+                                                       VclMessageType::Warning, VclButtonsType::Ok,
+                                                       m_bIsPasswordToModify? m_aInvalidStateForOkButton : m_aInvalidStateForOkButton_v2));
+        xErrorBox->run();
     }
     else // check for mismatched passwords...
     {
@@ -109,8 +110,10 @@ IMPL_LINK_NOARG( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, Button *, void 
         const int nMismatch = (bToOpenMatch? 0 : 1) + (bToModifyMatch? 0 : 1);
         if (nMismatch > 0)
         {
-            ScopedVclPtrInstance< MessageDialog > aErrorBox(m_pParent, nMismatch == 1 ? m_aOneMismatch : m_aTwoMismatch);
-            aErrorBox->Execute();
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pButton->GetFrameWeld(),
+                                                           VclMessageType::Warning, VclButtonsType::Ok,
+                                                           nMismatch == 1 ? m_aOneMismatch : m_aTwoMismatch));
+            xErrorBox->run();
 
             Edit* pEdit = !bToOpenMatch ? m_pPasswdToOpenED.get() : m_pPasswdToModifyED.get();
             Edit* pRepeatEdit = !bToOpenMatch? m_pReenterPasswdToOpenED.get() : m_pReenterPasswdToModifyED.get();

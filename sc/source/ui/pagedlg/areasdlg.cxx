@@ -23,6 +23,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
 
@@ -51,7 +52,16 @@ enum {
 };
 
 #define HDL(hdl)            LINK( this, ScPrintAreasDlg, hdl )
-#define ERRORBOX(nId)       ScopedVclPtrInstance<MessageDialog>(this, ScGlobal::GetRscString(nId))->Execute()
+namespace
+{
+    void ERRORBOX(weld::Window* pParent, const char* rId)
+    {
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  ScGlobal::GetRscString(rId)));
+        xBox->run();
+    }
+}
 
 // global functions (->at the end of the file):
 
@@ -381,7 +391,7 @@ bool ScPrintAreasDlg::Impl_CheckRefStrings()
         else if ( !bRepeatRowOk ) pEd = pEdRepeatRow;
         else if ( !bRepeatColOk ) pEd = pEdRepeatCol;
 
-        ERRORBOX( STR_INVALID_TABREF );
+        ERRORBOX(GetFrameWeld(), STR_INVALID_TABREF);
 
         OSL_ASSERT(pEd);
 

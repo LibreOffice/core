@@ -48,7 +48,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 namespace dbaui
 {
@@ -303,8 +304,10 @@ namespace dbaui
         bool bReConnect = true;
         if ( _bUI )
         {
-            ScopedVclPtrInstance< MessageDialog > aQuery(getView(), DBA_RES(STR_QUERY_CONNECTION_LOST), VclMessageType::Question, VclButtonsType::YesNo);
-            bReConnect = ( RET_YES == aQuery->Execute() );
+            std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(getFrameWeld(),
+                                                        VclMessageType::Question, VclButtonsType::YesNo,
+                                                        DBA_RES(STR_QUERY_CONNECTION_LOST)));
+            bReConnect = (RET_YES == xQuery->run());
         }
 
         // now really reconnect ...
@@ -452,7 +455,9 @@ namespace dbaui
         if ( !pWin )
             pWin = getView()->Window::GetParent();
 
-        ScopedVclPtrInstance<MessageDialog>(pWin, aMessage, VclMessageType::Info)->Execute();
+        std::unique_ptr<weld::MessageDialog> xInfo(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                   VclMessageType::Info, VclButtonsType::Ok, aMessage));
+        xInfo->run();
     }
     const Reference< XConnection >& DBSubComponentController::getConnection() const
     {

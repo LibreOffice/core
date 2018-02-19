@@ -540,9 +540,15 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, Button *, pButton, void )
         {
             short nResult;
             if (nId == SID_ATTR_PAGE_HEADERSET)
-                nResult = ScopedVclPtrInstance<DeleteHeaderDialog>(this)->Execute();
+            {
+                DeleteHeaderDialog aDlg(GetFrameWeld());
+                nResult = aDlg.run();
+            }
             else
-                nResult = ScopedVclPtrInstance<DeleteFooterDialog>(this)->Execute();
+            {
+                DeleteFooterDialog aDlg(GetFrameWeld());
+                nResult = aDlg.run();
+            }
             bDelete = nResult == RET_YES;
         }
 

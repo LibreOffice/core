@@ -17,18 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/layout.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/weld.hxx>
 
 #include <strings.hrc>
 #include <svdata.hxx>
 
-void ShowServiceNotAvailableError(vcl::Window* pParent,
+void ShowServiceNotAvailableError(weld::Widget* pParent,
     const OUString& rServiceName, bool bError)
 {
     OUString aText = VclResId(SV_STDTEXT_SERVICENOTAVAILABLE).replaceAll("%s", rServiceName);
-    ScopedVclPtrInstance< MessageDialog > aBox( pParent, aText, bError ? VclMessageType::Error : VclMessageType::Warning );
-    aBox->Execute();
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+        bError ? VclMessageType::Error : VclMessageType::Warning, VclButtonsType::Ok, aText));
+    xBox->run();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

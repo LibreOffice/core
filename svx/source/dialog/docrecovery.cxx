@@ -33,7 +33,7 @@
 #include <vcl/xtextedt.hxx>
 #include <vcl/settings.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/scrbar.hxx>
@@ -828,10 +828,11 @@ void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
 }
 
 
-short impl_askUserForWizardCancel(vcl::Window* pParent, const char* pRes)
+short impl_askUserForWizardCancel(weld::Widget* pParent, const char* pRes)
 {
-    ScopedVclPtrInstance< MessageDialog > aQuery(pParent, SvxResId(pRes), VclMessageType::Question, VclButtonsType::YesNo);
-    if (aQuery->Execute() == RET_YES)
+    std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(pParent,
+                                                VclMessageType::Question, VclButtonsType::YesNo, SvxResId(pRes)));
+    if (xQuery->run() == RET_YES)
         return DLG_RET_OK;
     else
         return DLG_RET_CANCEL;
@@ -1161,7 +1162,7 @@ IMPL_LINK_NOARG(RecoveryDialog, CancelButtonHdl, Button*, void)
     switch (m_eRecoveryState)
     {
         case RecoveryDialog::E_RECOVERY_PREPARED:
-            if (impl_askUserForWizardCancel(this, RID_SVXSTR_QUERY_EXIT_RECOVERY) != DLG_RET_CANCEL)
+            if (impl_askUserForWizardCancel(GetFrameWeld(), RID_SVXSTR_QUERY_EXIT_RECOVERY) != DLG_RET_CANCEL)
             {
                 m_eRecoveryState = RecoveryDialog::E_RECOVERY_CANCELED;
                 execute();

@@ -84,7 +84,7 @@
 #include <svx/svxdlg.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 
 using namespace ::com::sun::star;
@@ -1372,9 +1372,11 @@ void SbaXDataBrowserController::resetted(const css::lang::EventObject& rEvent)
 
 sal_Bool SbaXDataBrowserController::confirmDelete(const css::sdb::RowChangeEvent& /*aEvent*/)
 {
-    if (ScopedVclPtrInstance<MessageDialog>(getBrowserView(), DBA_RES(STR_QUERY_BRW_DELETE_ROWS), VclMessageType::Question, VclButtonsType::YesNo)->Execute() != RET_YES)
+    std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(getFrameWeld(),
+                                                VclMessageType::Question, VclButtonsType::YesNo,
+                                                DBA_RES(STR_QUERY_BRW_DELETE_ROWS)));
+    if (xQuery->run() != RET_YES)
         return false;
-
     return true;
 }
 
@@ -2145,11 +2147,9 @@ bool SbaXDataBrowserController::SaveModified(bool bAskFor)
     {
         getBrowserView()->getVclControl()->GrabFocus();
 
-        ScopedVclPtrInstance<MessageDialog> aQry( getBrowserView()->getVclControl(),
-                                                  "SaveModifiedDialog",
-                                                  "dbaccess/ui/savemodifieddialog.ui" );
-
-        switch (aQry->Execute())
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(getFrameWeld(), "dbaccess/ui/savemodifieddialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xQry(xBuilder->weld_message_dialog("SaveModifiedDialog"));
+        switch (xQry->run())
         {
             case RET_NO:
                 Execute(ID_BROWSER_UNDORECORD,Sequence<PropertyValue>());

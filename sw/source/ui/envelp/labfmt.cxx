@@ -18,7 +18,7 @@
  */
 
 #include <tools/poly.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 
@@ -639,19 +639,20 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl, Button*, void)
         if ( rCfg.IsPredefinedLabel(sMake, sType) )
         {
             SAL_WARN( "sw.envelp", "label is predefined and cannot be overwritten" );
-            ScopedVclPtrInstance<MessageDialog>(this, "CannotSaveLabelDialog", "modules/swriter/ui/cannotsavelabeldialog.ui")->Execute();
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/cannotsavelabeldialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("CannotSaveLabelDialog"));
+            xBox->run();
             return;
         }
 
-        ScopedVclPtrInstance<MessageDialog> aQuery(this, "QuerySaveLabelDialog",
-                                                   "modules/swriter/ui/querysavelabeldialog.ui");
-
-        aQuery->set_primary_text(aQuery->get_primary_text().
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/querysavelabeldialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QuerySaveLabelDialog"));
+        xQuery->set_primary_text(xQuery->get_primary_text().
             replaceAll("%1", sMake).replaceAll("%2", sType));
-        aQuery->set_secondary_text(aQuery->get_secondary_text().
+        xQuery->set_secondary_text(xQuery->get_secondary_text().
             replaceAll("%1", sMake).replaceAll("%2", sType));
 
-        if (RET_YES != aQuery->Execute())
+        if (RET_YES != xQuery->run())
             return;
     }
     rLabRec.m_aType = sType;

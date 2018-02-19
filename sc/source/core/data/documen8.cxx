@@ -45,6 +45,7 @@
 
 #include <vcl/virdev.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <inputopt.hxx>
 #include <global.hxx>
@@ -864,8 +865,10 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
         aBuf.append(ScResId(SCSTR_EXTDOC_NOT_LOADED));
         aBuf.append("\n\n");
         aBuf.append(aFile);
-        ScopedVclPtrInstance< MessageDialog > aBox(pWin, aBuf.makeStringAndClear());
-        aBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  aBuf.makeStringAndClear()));
+        xBox->run();
     }
 
     pExternalRefMgr->enableDocTimer(true);

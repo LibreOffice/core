@@ -27,7 +27,7 @@
 #include <comphelper/string.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <svx/dialogs.hrc>
@@ -151,7 +151,10 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
     if ( bFound )
     {
         // duplicate names?
-        ScopedVclPtrInstance<MessageDialog>(this, CuiResId(RID_SVXSTR_OPT_DOUBLE_DICTS), VclMessageType::Info)->Execute();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      CuiResId(RID_SVXSTR_OPT_DOUBLE_DICTS)));
+        xInfoBox->run();
         pNameEdit->GrabFocus();
         return;
     }
@@ -450,12 +453,14 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl, ListBox&, void)
 
     if ( nLang != nOldLang )
     {
-        ScopedVclPtrInstance< MessageDialog > aBox(this, CuiResId( RID_SVXSTR_CONFIRM_SET_LANGUAGE), VclMessageType::Question, VclButtonsType::YesNo);
-        OUString sTxt(aBox->get_primary_text());
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Question, VclButtonsType::YesNo,
+                                                      CuiResId(RID_SVXSTR_CONFIRM_SET_LANGUAGE)));
+        OUString sTxt(xBox->get_primary_text());
         sTxt = sTxt.replaceFirst( "%1", pAllDictsLB->GetSelectedEntry() );
-        aBox->set_primary_text(sTxt);
+        xBox->set_primary_text(sTxt);
 
-        if ( aBox->Execute() == RET_YES )
+        if (xBox->run() == RET_YES)
         {
             xDic->setLocale( LanguageTag::convertToLocale( nLang ) );
             bool bNegativ = xDic->getDictionaryType() == DictionaryType_NEGATIVE;

@@ -28,6 +28,7 @@
 #include <editeng/langitem.hxx>
 #include <editeng/editdata.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <editeng/svxenum.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
@@ -230,7 +231,10 @@ void SdModule::Execute(SfxRequest& rReq)
             }
             else
             {
-                ScopedVclPtrInstance<MessageDialog>(nullptr, SdResId(STR_CANT_PERFORM_IN_LIVEMODE))->Execute();
+                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(nullptr,
+                                                               VclMessageType::Warning, VclButtonsType::Ok, SdResId(STR_CANT_PERFORM_IN_LIVEMODE)));
+
+                xErrorBox->run();
 
                 const SfxLinkItem* pLinkItem = rReq.GetArg<SfxLinkItem>(SID_DONELINK);
                 if( pLinkItem )

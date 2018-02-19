@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
@@ -305,10 +305,10 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     {
         if (xController->isShowDialogs())
         {
-            ScopedVclPtrInstance<MessageDialog> aBox(
-                xController->getWindow(), "ErrorNoPrinterDialog",
-                "vcl/ui/errornoprinterdialog.ui");
-            aBox->Execute();
+            VclPtr<vcl::Window> xParent = xController->getWindow();
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(xParent ? xParent->GetFrameWeld() : nullptr, "vcl/ui/errornoprinterdialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("ErrorNoPrinterDialog"));
+            xBox->run();
         }
         xController->setValue( "IsDirect",
                                css::uno::makeAny( false ) );
@@ -456,10 +456,10 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     {
         if( xController->getFilteredPageCount() == 0 )
         {
-            ScopedVclPtrInstance<MessageDialog> aBox(
-                xController->getWindow(), "ErrorNoContentDialog",
-                "vcl/ui/errornocontentdialog.ui");
-            aBox->Execute();
+            VclPtr<vcl::Window> xParent = xController->getWindow();
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(xParent ? xParent->GetFrameWeld() : nullptr, "vcl/ui/errornocontentdialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("ErrorNoContentDialog"));
+            xBox->run();
             return false;
         }
     }

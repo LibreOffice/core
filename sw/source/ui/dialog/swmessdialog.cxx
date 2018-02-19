@@ -11,7 +11,7 @@
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/messagedialog.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/vclmedit.hxx>
 

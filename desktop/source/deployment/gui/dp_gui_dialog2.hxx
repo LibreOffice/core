@@ -29,6 +29,7 @@
 #include <vcl/prgsbar.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld.hxx>
 
 #include <svtools/svmedit.hxx>
 
@@ -68,6 +69,7 @@ public:
 
     void            openWebBrowser( const OUString & sURL, const OUString & sTitle ) const;
     Dialog*         getWindow() const { return m_pVCLWindow; };
+    weld::Window*   getFrameWeld() const { return m_pVCLWindow ? m_pVCLWindow->GetFrameWeld() : nullptr; }
     void            PostUserEvent( const Link<void*,void>& rLink, void* pCaller );
     void            clearEventID() { m_nEventID = nullptr; }
 
@@ -85,7 +87,7 @@ public:
 
     static bool     IsSharedPkgMgr( const css::uno::Reference< css::deployment::XPackage > &);
     static bool     continueOnSharedExtension( const css::uno::Reference< css::deployment::XPackage > &,
-                                               vcl::Window *pParent,
+                                               weld::Widget* pParent,
                                                const char* pResID,
                                                bool &bHadWarning );
 

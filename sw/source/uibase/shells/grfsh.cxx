@@ -161,7 +161,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 vcl::Window* pWin = GetView().GetWindow();
                 if (pWin)
                 {
-                    nState = GraphicHelper::HasToSaveTransformedImage(pWin);
+                    nState = GraphicHelper::HasToSaveTransformedImage(pWin->GetFrameWeld());
                 }
             }
             else

@@ -4,7 +4,6 @@
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkMessageDialog" id="QueryDeleteDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">6</property>
     <property name="title" translatable="yes" context="querydeletedialog|QueryDeleteDialog">Confirm Delete</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
@@ -20,7 +19,6 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="messagedialog-action_area">
             <property name="can_focus">False</property>
-            <property name="layout_style">center</property>
             <child>
               <object class="GtkButton" id="yes">
                 <property name="label" translatable="yes" context="querydeletedialog|yes">_Delete</property>
@@ -91,10 +89,10 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="2">yes</action-widget>
+      <action-widget response="-8">yes</action-widget>
       <action-widget response="101">all</action-widget>
-      <action-widget response="3">no</action-widget>
-      <action-widget response="0">cancel</action-widget>
+      <action-widget response="-9">no</action-widget>
+      <action-widget response="-6">cancel</action-widget>
     </action-widgets>
   </object>
 </interface>
