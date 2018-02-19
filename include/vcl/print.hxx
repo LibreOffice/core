@@ -394,7 +394,7 @@ class VCL_DLLPUBLIC PrinterController
 {
     ImplPrinterControllerData*          mpImplData;
 protected:
-                                        PrinterController( const VclPtr<Printer>& );
+                                        PrinterController( const VclPtr<Printer>&, const VclPtr<vcl::Window>& );
 public:
     struct MultiPageSetup
     {
@@ -436,6 +436,7 @@ public:
     virtual ~PrinterController();
 
     const VclPtr<Printer>&              getPrinter() const;
+    const VclPtr<vcl::Window>&          getWindow() const;
 
     /** For implementations: get current job properties as changed by e.g. print dialog
 

@@ -82,7 +82,6 @@ class SwAccessibleMap;
 namespace vcl
 {
     typedef OutputDevice RenderContext;
-    class OldStylePrintAdaptor;
 }
 
 // Define for flags needed in ctor or layers below.

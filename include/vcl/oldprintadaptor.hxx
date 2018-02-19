@@ -29,7 +29,7 @@ namespace vcl
     {
         ImplOldStyleAdaptorData*    mpData;
     public:
-        OldStylePrintAdaptor( const VclPtr< Printer >& );
+        OldStylePrintAdaptor(const VclPtr<Printer>&, const VclPtr<vcl::Window>&);
         virtual ~OldStylePrintAdaptor() override;
 
         void StartPage();

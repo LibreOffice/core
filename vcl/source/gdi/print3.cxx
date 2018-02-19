@@ -139,6 +139,7 @@ public:
     typedef std::unordered_map< OUString, css::uno::Sequence< sal_Bool >, OUStringHash > ChoiceDisableMap;
 
     VclPtr< Printer >                                           mxPrinter;
+    VclPtr<vcl::Window>                                         mxWindow;
     css::uno::Sequence< css::beans::PropertyValue >             maUIOptions;
     std::vector< css::beans::PropertyValue >                    maUIProperties;
     std::vector< bool >                                         maUIPropertyEnabled;
@@ -206,10 +207,11 @@ public:
     void resetPaperToLastConfigured();
 };
 
-PrinterController::PrinterController( const VclPtr<Printer>& i_xPrinter )
+PrinterController::PrinterController(const VclPtr<Printer>& i_xPrinter, const VclPtr<vcl::Window>& i_xWindow)
     : mpImplData( new ImplPrinterControllerData )
 {
     mpImplData->mxPrinter = i_xPrinter;
+    mpImplData->mxWindow = i_xWindow;
 }
 
 static OUString queryFile( Printer* pPrinter )
@@ -303,7 +305,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
         if (xController->isShowDialogs())
         {
             ScopedVclPtrInstance<MessageDialog> aBox(
-                nullptr, "ErrorNoPrinterDialog",
+                xController->getWindow(), "ErrorNoPrinterDialog",
                 "vcl/ui/errornoprinterdialog.ui");
             aBox->Execute();
         }
@@ -453,7 +455,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
         if( xController->getFilteredPageCount() == 0 )
         {
             ScopedVclPtrInstance<MessageDialog> aBox(
-                nullptr, "ErrorNoContentDialog",
+                xController->getWindow(), "ErrorNoContentDialog",
                 "vcl/ui/errornocontentdialog.ui");
             aBox->Execute();
             return false;
@@ -773,6 +775,11 @@ void PrinterController::setJobState( css::view::PrintableState i_eState )
 const VclPtr<Printer>& PrinterController::getPrinter() const
 {
     return mpImplData->mxPrinter;
+}
+
+const VclPtr<vcl::Window>& PrinterController::getWindow() const
+{
+    return mpImplData->mxWindow;
 }
 
 void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
