@@ -316,6 +316,8 @@ void OP_Window1(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     r.SeekRel( 1 );    // skip 'unused'
 
     r.ReadUInt16( nDefWidth );
+    if (!r.good())
+        return;
 
     r.SeekRel( n - 8 );  // skip the rest
 
