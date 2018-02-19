@@ -28,7 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/unwrapargs.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -214,9 +214,10 @@ void ServiceImpl::startExecuteModal(
         catch (const Exception & exc) {
             if (bAppUp) {
                 const SolarMutexGuard guard;
-                ScopedVclPtrInstance<MessageDialog> box(
-                        Application::GetActiveTopWindow(), exc.Message);
-                box->Execute();
+                vcl::Window* pWin = Application::GetActiveTopWindow();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                          VclMessageType::Warning, VclButtonsType::Ok, exc.Message));
+                xBox->run();
             }
             throw;
         }

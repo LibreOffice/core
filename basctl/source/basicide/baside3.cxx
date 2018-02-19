@@ -49,7 +49,7 @@
 #include <svx/svxids.hrc>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
@@ -534,7 +534,7 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
             break;
 
         case SID_BASICIDE_DELETECURRENT:
-            if (QueryDelDialog(m_aName, this))
+            if (QueryDelDialog(m_aName, GetFrameWeld()))
             {
                 if (RemoveDialog(m_aDocument, m_aLibName, m_aName))
                 {
@@ -571,7 +571,7 @@ Reference< container::XNameContainer > const & DialogWindow::GetDialog() const
 
 bool DialogWindow::RenameDialog( const OUString& rNewName )
 {
-    if ( !basctl::RenameDialog( this, GetDocument(), GetLibName(), GetName(), rNewName ) )
+    if (!basctl::RenameDialog(GetFrameWeld(), GetDocument(), GetLibName(), GetName(), rNewName))
         return false;
 
     if (SfxBindings* pBindings = GetBindingsPtr())
@@ -739,7 +739,11 @@ void DialogWindow::SaveDialog()
             }
         }
         else
-            ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_COULDNTWRITE))->Execute();
+        {
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_COULDNTWRITE)));
+            xBox->run();
+        }
     }
 }
 

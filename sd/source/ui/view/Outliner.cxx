@@ -29,7 +29,7 @@
 #include <vcl/outdev.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/xtable.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
@@ -1208,8 +1208,9 @@ void SdOutliner::ShowEndOfSearchDialog()
 
     // Show the message in an info box that is modal with respect to the
     // whole application.
-    ScopedVclPtrInstance< MessageDialog > aInfoBox(nullptr, aString, VclMessageType::Info);
-    ShowModalMessageBox (*aInfoBox.get());
+    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                                                  VclMessageType::Info, VclButtonsType::Ok, aString));
+    ShowModalMessageBox(*xInfoBox.get());
 }
 
 bool SdOutliner::ShowWrapArroundDialog()
@@ -1247,9 +1248,9 @@ bool SdOutliner::ShowWrapArroundDialog()
 
     // Pop up question box that asks the user whether to wrap around.
     // The dialog is made modal with respect to the whole application.
-    ScopedVclPtrInstance<QueryBox> aQuestionBox(nullptr, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, SdResId(pStringId));
-    aQuestionBox->SetImage(QueryBox::GetStandardImage());
-    sal_uInt16 nBoxResult = ShowModalMessageBox(*aQuestionBox.get());
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
+                                                   VclMessageType::Question, VclButtonsType::YesNo, SdResId(pStringId)));
+    sal_uInt16 nBoxResult = ShowModalMessageBox(*xQueryBox.get());
 
     return (nBoxResult == RET_YES);
 }
@@ -1685,7 +1686,7 @@ bool SdOutliner::ConvertNextDocument()
     return !mbEndOfSearch;
 }
 
-sal_uInt16 SdOutliner::ShowModalMessageBox (Dialog& rMessageBox)
+sal_uInt16 SdOutliner::ShowModalMessageBox(weld::MessageDialog& rMessageBox)
 {
     // We assume that the parent of the given message box is NULL, i.e. it is
     // modal with respect to the top application window. However, this
@@ -1718,7 +1719,7 @@ sal_uInt16 SdOutliner::ShowModalMessageBox (Dialog& rMessageBox)
     if (pSearchDialog != nullptr)
         pSearchDialog->EnableInput(false);
 
-    sal_uInt16 nResult = rMessageBox.Execute();
+    sal_uInt16 nResult = rMessageBox.run();
 
     // Unlock the search dialog.
     if (pSearchDialog != nullptr)

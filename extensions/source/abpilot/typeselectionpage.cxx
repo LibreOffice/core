@@ -20,7 +20,8 @@
 #include "typeselectionpage.hxx"
 #include "addresssettings.hxx"
 #include "abspilot.hxx"
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <comphelper/processfactory.hxx>
@@ -228,8 +229,10 @@ namespace abp
 
         if (AST_INVALID == getSelectedType( ))
         {
-            ScopedVclPtrInstance< MessageDialog > aError(this, compmodule::ModuleRes(RID_STR_NEEDTYPESELECTION));
-            aError->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Warning, VclButtonsType::Ok,
+                                                      compmodule::ModuleRes(RID_STR_NEEDTYPESELECTION)));
+            xBox->run();
             return false;
         }
 

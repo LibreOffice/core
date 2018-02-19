@@ -21,6 +21,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/lingucfg.hxx>
 #include <editeng/unolingu.hxx>
@@ -1553,9 +1554,9 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
     }
     else if (m_pLinguDicsDelPB == pBtn)
     {
-        ScopedVclPtrInstance<MessageDialog> aQuery(this, "QueryDeleteDictionaryDialog",
-                                                   "cui/ui/querydeletedictionarydialog.ui");
-        if (RET_NO == aQuery->Execute())
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletedictionarydialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryDeleteDictionaryDialog"));
+        if (RET_NO == xQuery->run())
             return;
 
         SvTreeListEntry *pEntry = m_pLinguDicsCLB->GetCurEntry();

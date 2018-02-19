@@ -26,9 +26,10 @@
 #include "typeselectionpage.hxx"
 #include "admininvokationpage.hxx"
 #include "tableselectionpage.hxx"
-#include <vcl/waitobj.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/waitobj.hxx>
+#include <vcl/weld.hxx>
 #include "abpfinalpage.hxx"
 #include "fieldmappingpage.hxx"
 #include "fieldmappingimpl.hxx"
@@ -263,7 +264,11 @@ namespace abp
 
             if ( aTables.empty() )
             {
-                if (RET_YES != ScopedVclPtrInstance<MessageDialog>(this, compmodule::ModuleRes(getSettings().eType == AST_EVOLUTION_GROUPWISE ? RID_STR_QRY_NO_EVO_GW : RID_STR_QRY_NOTABLES), VclMessageType::Question, VclButtonsType::YesNo)->Execute())
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                          VclMessageType::Question, VclButtonsType::YesNo,
+                                                          compmodule::ModuleRes(getSettings().eType == AST_EVOLUTION_GROUPWISE ? RID_STR_QRY_NO_EVO_GW : RID_STR_QRY_NOTABLES)));
+
+                if (RET_YES != xBox->run())
                 {
                     // cannot ask the user, or the user chose to use this data source, though there are no tables
                     bAllow = false;
@@ -383,7 +388,7 @@ namespace abp
         if ( _bForceReConnect && m_aNewDataSource.isConnected( ) )
             m_aNewDataSource.disconnect( );
 
-        return m_aNewDataSource.connect( this );
+        return m_aNewDataSource.connect(GetFrameWeld());
     }
 
 

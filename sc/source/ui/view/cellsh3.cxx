@@ -26,6 +26,7 @@
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/app.hxx>
 #include <globstr.hrc>
 #include <scmod.hxx>
@@ -429,9 +430,11 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     }
                     else if( ! rReq.IsAPI() )
                     {
-                        ScopedVclPtrInstance<MessageDialog> aErrorBox(pTabViewShell->GetDialogParent(),
-                                            ScGlobal::GetRscString(STR_NOAREASELECTED));
-                        aErrorBox->Execute();
+                        vcl::Window* pWin = pTabViewShell->GetDialogParent();
+                        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                       VclMessageType::Warning, VclButtonsType::Ok,
+                                                                       ScGlobal::GetRscString(STR_NOAREASELECTED)));
+                        xErrorBox->run();
                     }
                 }
                 else
@@ -883,8 +886,12 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     }
                 }
                 else
-                    ScopedVclPtrInstance<MessageDialog>(pDlgParent,
-                              ScGlobal::GetRscString(STR_INVALID_AFAREA) )->Execute();
+                {
+                    std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pDlgParent ? pDlgParent->GetFrameWeld() : nullptr,
+                                                                   VclMessageType::Warning, VclButtonsType::Ok,
+                                                                   ScGlobal::GetRscString(STR_INVALID_AFAREA)));
+                    xErrorBox->run();
+                }
             }
             break;
 

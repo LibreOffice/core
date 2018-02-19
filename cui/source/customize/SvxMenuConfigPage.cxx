@@ -26,7 +26,7 @@
 
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/help.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/toolbox.hxx>
@@ -450,12 +450,13 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, ResetMenuHdl, Button *, void )
 {
     SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
-    ScopedVclPtrInstance<MessageDialog> qbox(this,
-        CuiResId(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT_MENU), VclMessageType::Question, VclButtonsType::YesNo);
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                   VclMessageType::Question, VclButtonsType::YesNo,
+                                                   CuiResId(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT_MENU)));
 
     // Resetting individual top-level menus is not possible at the moment.
     // So we are resetting only if it is a context menu
-    if (!m_bIsMenuBar && qbox->Execute() == RET_YES)
+    if (!m_bIsMenuBar && xQueryBox->run() == RET_YES)
     {
         sal_Int32 nPos = m_pTopLevelListBox->GetSelectedEntryPos();
         ContextMenuSaveInData* pSaveInData = static_cast< ContextMenuSaveInData* >(GetSaveInData());

@@ -26,7 +26,7 @@
 
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/help.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/toolbox.hxx>
@@ -252,10 +252,10 @@ void SvxToolbarConfigPage::DeleteSelectedContent()
         if ( m_pContentsListBox->GetEntryCount() == 0 &&
              GetTopLevelSelection()->IsDeletable() )
         {
-            ScopedVclPtrInstance<MessageDialog> qbox(this,
-                CuiResId(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR), VclMessageType::Question, VclButtonsType::YesNo);
-
-            if ( qbox->Execute() == RET_YES )
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                           CuiResId(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR)));
+            if (xQueryBox->run() == RET_YES)
             {
                 DeleteSelectedTopLevel();
             }
@@ -683,10 +683,10 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, ResetToolbarHdl, Button *, void )
     SvxConfigEntry* pToolbar =
         static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData( nSelectionPos ));
 
-    ScopedVclPtrInstance<MessageDialog> qbox(this,
-        CuiResId(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VclMessageType::Question, VclButtonsType::YesNo);
-
-    if ( qbox->Execute() == RET_YES )
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                   VclMessageType::Question, VclButtonsType::YesNo,
+                                                   CuiResId(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT)));
+    if (xQueryBox->run() == RET_YES)
     {
         ToolbarSaveInData* pSaveInData =
             static_cast<ToolbarSaveInData*>(GetSaveInData());

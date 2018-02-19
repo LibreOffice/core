@@ -20,19 +20,20 @@
 #ifndef INCLUDED_SVX_LINKWARN_HXX
 #define INCLUDED_SVX_LINKWARN_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SvxLinkWarningDialog : public MessageDialog
+class SVX_DLLPUBLIC SvxLinkWarningDialog
 {
 private:
-    VclPtr<CheckBox> m_pWarningOnBox;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::MessageDialog> m_xDialog;
+    std::unique_ptr<weld::CheckButton> m_xWarningOnBox;
 
 public:
-    SvxLinkWarningDialog(vcl::Window* pParent, const OUString& _rFileName);
-    virtual ~SvxLinkWarningDialog() override;
-    virtual void dispose() override;
+    SvxLinkWarningDialog(weld::Widget* pParent, const OUString& _rFileName);
+    short run() { return m_xDialog->run(); }
+    ~SvxLinkWarningDialog();
 };
 
 #endif // INCLUDED_SVX_LINKWARN_HXX

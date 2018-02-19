@@ -35,7 +35,7 @@
 #include <svx/langbox.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 
 namespace basctl
@@ -162,8 +162,9 @@ IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl, Button*, void)
 
 IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl, Button*, void)
 {
-    ScopedVclPtrInstance< MessageDialog > aQBox(this, "DeleteLangDialog", "modules/BasicIDE/ui/deletelangdialog.ui");
-    if ( aQBox->Execute() == RET_OK )
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/BasicIDE/ui/deletelangdialog.ui"));
+    std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("DeleteLangDialog"));
+    if (xQBox->run() == RET_OK)
     {
         sal_Int32 nCount = m_pLanguageLB->GetSelectedEntryCount();
         sal_Int32 nPos = m_pLanguageLB->GetSelectedEntryPos();

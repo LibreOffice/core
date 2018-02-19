@@ -26,7 +26,7 @@
 
 #include <unotools/localfilehelper.hxx>
 #include <vcl/errinf.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -149,8 +149,9 @@ void SdGRFFilter::HandleGraphicFilterError( ErrCode nFilterError, ErrCode nStrea
         ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
     else
     {
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, pId ? SdResId(pId) : OUString());
-        aErrorBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(nullptr,
+                                                       VclMessageType::Warning, VclButtonsType::Ok, pId ? SdResId(pId) : OUString()));
+        xErrorBox->run();
     }
 }
 

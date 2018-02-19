@@ -12,7 +12,8 @@
 #include <sfx2/templatelocalview.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <sfx2/strings.hrc>
 #include <bitmaps.hlst>
@@ -60,9 +61,9 @@ void TemplateSearchView::KeyInput( const KeyEvent& rKEvt )
     }
     else if( aKeyCode == KEY_DELETE && !mFilteredItemList.empty())
     {
-        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VclButtonsType::YesNo);
-
-        if ( aQueryDlg->Execute() != RET_YES )
+        std::unique_ptr<weld::MessageDialog> xQueryDlg(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
+                                                       SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE)));
+        if (xQueryDlg->run() != RET_YES)
             return;
 
         //copy to avoid changing filtered item list during deletion
@@ -159,8 +160,9 @@ IMPL_LINK(TemplateSearchView, ContextMenuSelectHdl, Menu*, pMenu, bool)
         break;
     case MNI_DELETE:
     {
-        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VclButtonsType::YesNo);
-        if ( aQueryDlg->Execute() != RET_YES )
+        std::unique_ptr<weld::MessageDialog> xQueryDlg(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
+                                                       SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE)));
+        if (xQueryDlg->run() != RET_YES)
             break;
 
         maDeleteTemplateHdl.Call(maSelectedItem);

@@ -24,7 +24,8 @@
 #include <sfx2/strings.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/awt/XControl.hpp>
@@ -624,7 +625,9 @@ namespace dlgprov
             aOUFinal += aQuoteChar;
             aOUFinal += aRes.copy( nIndex + 2 );
 
-            ScopedVclPtrInstance<MessageDialog>(nullptr, aOUFinal)->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                      VclMessageType::Warning, VclButtonsType::Ok, aOUFinal));
+            xBox->run();
         }
     }
 

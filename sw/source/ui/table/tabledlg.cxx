@@ -19,7 +19,7 @@
 
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
@@ -633,7 +633,10 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
     OUString sTableName = m_pNameED->GetText();
     if(sTableName.indexOf(' ') != -1)
     {
-        ScopedVclPtrInstance<MessageDialog>(this, SwResId(STR_WRONG_TABLENAME), VclMessageType::Info)->Execute();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      SwResId(STR_WRONG_TABLENAME)));
+        xInfoBox->run();
         m_pNameED->GrabFocus();
         return DeactivateRC::KeepPage;
     }

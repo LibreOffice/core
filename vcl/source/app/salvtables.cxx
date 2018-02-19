@@ -28,6 +28,7 @@
 #include <salobj.hxx>
 #include <salmenu.hxx>
 #include <svdata.hxx>
+#include <vcl/messagedialog.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
@@ -236,9 +237,14 @@ public:
         return m_xWidget->get_preferred_size();
     }
 
-    virtual float approximate_char_width() const override
+    virtual float get_approximate_char_width() const override
     {
         return m_xWidget->approximate_char_width();
+    }
+
+    virtual int get_text_height() const override
+    {
+        return m_xWidget->GetTextHeight();
     }
 
     virtual Size get_pixel_size(const OUString& rText) const override

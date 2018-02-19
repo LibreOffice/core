@@ -18,10 +18,10 @@
  */
 
 #include <sfx2/QuerySaveDocument.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
-short ExecuteQuerySaveDocument(vcl::Window* _pParent, const OUString& _rTitle)
+short ExecuteQuerySaveDocument(weld::Widget* _pParent, const OUString& _rTitle)
 {
     if (Application::IsHeadlessModeEnabled())
     {
@@ -29,9 +29,10 @@ short ExecuteQuerySaveDocument(vcl::Window* _pParent, const OUString& _rTitle)
         return RET_NO;
     }
 
-    ScopedVclPtrInstance< MessageDialog > aQBox(_pParent, "QuerySaveDialog", "sfx/ui/querysavedialog.ui");
-    aQBox->set_primary_text(aQBox->get_primary_text().replaceFirst("$(DOC)", _rTitle));
-    return aQBox->Execute();
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(_pParent, "sfx/ui/querysavedialog.ui"));
+    std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("QuerySaveDialog"));
+    xQBox->set_primary_text(xQBox->get_primary_text().replaceFirst("$(DOC)", _rTitle));
+    return xQBox->run();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

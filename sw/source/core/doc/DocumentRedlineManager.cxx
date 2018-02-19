@@ -29,7 +29,8 @@
 #include <strings.hrc>
 #include <swmodule.hxx>
 #include <editsh.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <comphelper/flagguard.hxx>
 
 using namespace com::sun::star;
@@ -2709,8 +2710,9 @@ void DocumentRedlineManager::checkRedlining(RedlineFlags& _rReadlineMode)
     if ( pParent && !mbReadlineChecked && rRedlineTable.size() > MAX_REDLINE_COUNT
         && ((_rReadlineMode & RedlineFlags::ShowDelete) != RedlineFlags::ShowDelete) )
     {
-        ScopedVclPtrInstance< MessageDialog > aQuery(pParent, "QueryShowChangesDialog", "modules/swriter/ui/queryshowchangesdialog.ui");
-        sal_uInt16 nResult = aQuery->Execute();
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pParent->GetFrameWeld(), "modules/swriter/ui/queryshowchangesdialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryShowChangesDialog"));
+        sal_uInt16 nResult = xQuery->run();
         mbReadlineChecked = true;
         if ( nResult == RET_YES )
         {

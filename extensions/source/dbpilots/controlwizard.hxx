@@ -30,6 +30,7 @@
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/weld.hxx>
 #include "dbptypes.hxx"
 #include <strings.hrc>
 #include <componentmodule.hxx>
@@ -119,7 +120,7 @@ namespace dbp
         /** returns the com.sun.star.task.InteractionHandler
             @param  _pWindow    The window will be used when an error message has to be shown.
         */
-        css::uno::Reference< css::task::XInteractionHandler > getInteractionHandler(vcl::Window* _pWindow) const;
+        css::uno::Reference< css::task::XInteractionHandler > getInteractionHandler(weld::Window* _pWindow) const;
 
     protected:
         // initialize the derivees settings (which have to be derived from OControlWizardSettings)

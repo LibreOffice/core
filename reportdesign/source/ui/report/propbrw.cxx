@@ -35,6 +35,7 @@
 #include <com/sun/star/report/inspection/DefaultComponentInspectorModel.hpp>
 #include <svx/svxids.hrc>
 #include <vcl/stdtext.hxx>
+#include <vcl/weld.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
@@ -136,7 +137,7 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pPare
             if ( !m_xBrowserController.is() )
             {
                 const OUString sServiceName( "com.sun.star.inspection.ObjectInspector" );
-                ShowServiceNotAvailableError(pParent, sServiceName, true);
+                ShowServiceNotAvailableError(pParent ? pParent->GetFrameWeld() : nullptr, sServiceName, true);
             }
             else
             {

@@ -37,6 +37,7 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/weld.hxx>
 
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
@@ -265,7 +266,9 @@ bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
     OUString aLibName = GetEntryText( pEntry, 0 );
     if ( aLibName.equalsIgnoreAsciiCase( "Standard" ) )
     {
-        ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_CANNOTCHANGENAMESTDLIB))->Execute();
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                       VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_CANNOTCHANGENAMESTDLIB)));
+        xErrorBox->run();
         return false;
     }
 
@@ -275,7 +278,9 @@ bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
     if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) && !xModLibContainer->isLibraryLink( aLibName ) ) ||
          ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
     {
-        ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_LIBISREADONLY))->Execute();
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                       VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_LIBISREADONLY)));
+        xErrorBox->run();
         return false;
     }
 
@@ -325,7 +330,9 @@ bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewName )
         }
         catch (const container::ElementExistException& )
         {
-            ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_SBXNAMEALLREADYUSED))->Execute();
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                           VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_SBXNAMEALLREADYUSED)));
+            xErrorBox->run();
             return false;
         }
         catch (const container::NoSuchElementException& )
@@ -337,10 +344,11 @@ bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewName )
 
     if ( !bValid )
     {
-        if ( rNewName.getLength() > 30 )
-            ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_LIBNAMETOLONG))->Execute();
-        else
-            ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_BADSBXNAME))->Execute();
+        OUString sWarning(rNewName.getLength() > 30 ? IDEResId(RID_STR_LIBNAMETOLONG) : IDEResId(RID_STR_BADSBXNAME));
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                       VclMessageType::Warning, VclButtonsType::Ok, sWarning));
+        xErrorBox->run();
+
     }
 
     return bValid;
@@ -353,7 +361,9 @@ IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler, Button*, void)
         EndDialog(1);
     else
     {
-        ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_BADSBXNAME))->Execute();
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                       VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_BADSBXNAME)));
+        xErrorBox->run();
         m_pEdit->GrabFocus();
     }
 }
@@ -840,7 +850,11 @@ void LibPage::InsertLib()
             }
 
             if ( !pLibDlg )
-                ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_NOLIBINSTORAGE), VclMessageType::Info)->Execute();
+            {
+                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                               VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_NOLIBINSTORAGE)));
+                xErrorBox->run();
+            }
             else
             {
                 bool bChanges = false;
@@ -877,7 +891,9 @@ void LibPage::InsertLib()
                                     // check, if the library is the Standard library
                                     if ( aLibName == "Standard" )
                                     {
-                                        ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_REPLACESTDLIB))->Execute();
+                                        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                                       VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_REPLACESTDLIB)));
+                                        xErrorBox->run();
                                         continue;
                                     }
 
@@ -887,7 +903,9 @@ void LibPage::InsertLib()
                                     {
                                         OUString aErrStr( IDEResId(RID_STR_REPLACELIB) );
                                         aErrStr = aErrStr.replaceAll("XX", aLibName) + "\n" + IDEResId(RID_STR_LIBISREADONLY);
-                                        ScopedVclPtrInstance<MessageDialog>(this, aErrStr)->Execute();
+                                        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                                       VclMessageType::Warning, VclButtonsType::Ok, aErrStr));
+                                        xErrorBox->run();
                                         continue;
                                     }
 
@@ -902,7 +920,9 @@ void LibPage::InsertLib()
                                     else
                                         aErrStr = IDEResId(RID_STR_IMPORTNOTPOSSIBLE);
                                     aErrStr = aErrStr.replaceAll("XX", aLibName) + "\n" +IDEResId(RID_STR_SBXNAMEALLREADYUSED);
-                                    ScopedVclPtrInstance<MessageDialog>(this, aErrStr)->Execute();
+                                    std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                                   VclMessageType::Warning, VclButtonsType::Ok, aErrStr));
+                                    xErrorBox->run();
                                     continue;
                                 }
                             }
@@ -921,7 +941,9 @@ void LibPage::InsertLib()
                                     {
                                         OUString aErrStr( IDEResId(RID_STR_NOIMPORT) );
                                         aErrStr = aErrStr.replaceAll("XX", aLibName);
-                                        ScopedVclPtrInstance<MessageDialog>(this, aErrStr)->Execute();
+                                        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                                       VclMessageType::Warning, VclButtonsType::Ok, aErrStr));
+                                        xErrorBox->run();
                                         continue;
                                     }
                                 }
@@ -1337,7 +1359,7 @@ void LibPage::DeleteCurrent()
         bIsLibraryLink = true;
     }
 
-    if ( QueryDelLib( aLibName, bIsLibraryLink, this ) )
+    if (QueryDelLib(aLibName, bIsLibraryLink, GetFrameWeld()))
     {
         // inform BasicIDE
         SfxUnoAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, Any( m_aCurDocument.getDocumentOrNull() ) );
@@ -1488,15 +1510,21 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
 
         if ( aLibName.getLength() > 30 )
         {
-            ScopedVclPtrInstance<MessageDialog>(pWin, IDEResId(RID_STR_LIBNAMETOLONG))->Execute();
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                           VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_LIBNAMETOLONG)));
+            xErrorBox->run();
         }
         else if ( !IsValidSbxName( aLibName ) )
         {
-            ScopedVclPtrInstance<MessageDialog>(pWin, IDEResId(RID_STR_BADSBXNAME))->Execute();
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                           VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_BADSBXNAME)));
+            xErrorBox->run();
         }
         else if ( rDocument.hasLibrary( E_SCRIPTS, aLibName ) || rDocument.hasLibrary( E_DIALOGS, aLibName ) )
         {
-            ScopedVclPtrInstance<MessageDialog>(pWin, IDEResId(RID_STR_SBXNAMEALLREADYUSED2))->Execute();
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                           VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_SBXNAMEALLREADYUSED2)));
+            xErrorBox->run();
         }
         else
         {

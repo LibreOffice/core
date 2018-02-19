@@ -37,7 +37,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/app.hxx>
@@ -250,10 +250,9 @@ bool FmFormShell::PrepareClose(bool bUI)
 
                     if ( bModified && bUI )
                     {
-                        ScopedVclPtrInstance<MessageDialog> aQry(
-                            nullptr, "SaveModifiedDialog",
-                            "svx/ui/savemodifieddialog.ui");
-                        switch (aQry->Execute())
+                        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "svx/ui/savemodifieddialog.ui"));
+                        std::unique_ptr<weld::MessageDialog> xQry(xBuilder->weld_message_dialog("SaveModifiedDialog"));
+                        switch (xQry->run())
                         {
                             case RET_YES:
                                 bResult = rController->commitCurrentRecord( );

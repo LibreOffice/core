@@ -38,7 +38,7 @@
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ucb/Command.hpp>
 #include <com/sun/star/uno/SecurityException.hpp>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <unotools/securityoptions.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <comphelper/documentconstants.hxx>
@@ -343,8 +343,10 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
     }
     else
     {
-        ScopedVclPtrInstance< MessageDialog > aBox(nullptr, XsResId(RID_XMLSECWB_NO_MOZILLA_PROFILE), VclMessageType::Warning);
-        aBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  XsResId(RID_XMLSECWB_NO_MOZILLA_PROFILE)));
+        xBox->run();
     }
 
     return bChanges;

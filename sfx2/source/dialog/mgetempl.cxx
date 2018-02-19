@@ -18,7 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
 #include <svl/eitem.hxx>
@@ -602,8 +602,10 @@ DeactivateRC SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 
         if (!pStyle->SetName(comphelper::string::stripStart(m_pNameRw->GetText(), ' ')))
         {
-            ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_TABPAGE_INVALIDNAME ), VclMessageType::Info);
-            aBox->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                     VclMessageType::Info, VclButtonsType::Ok,
+                                                                     SfxResId(STR_TABPAGE_INVALIDNAME)));
+            xBox->run();
             m_pNameRw->GrabFocus();
             m_pNameRw->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
             return DeactivateRC::KeepPage;
@@ -619,8 +621,10 @@ DeactivateRC SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
         {
             if ( !pStyle->SetFollow( aFollowEntry ) )
             {
-                ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_TABPAGE_INVALIDSTYLE ), VclMessageType::Info);
-                aBox->Execute();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                         VclMessageType::Info, VclButtonsType::Ok,
+                                                                         SfxResId(STR_TABPAGE_INVALIDSTYLE)));
+                xBox->run();
                 m_pFollowLb->GrabFocus();
                 return DeactivateRC::KeepPage;
             }
@@ -639,8 +643,10 @@ DeactivateRC SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
         {
             if ( !pStyle->SetParent( aParentEntry ) )
             {
-                ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_TABPAGE_INVALIDPARENT ), VclMessageType::Info);
-                aBox->Execute();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                         VclMessageType::Info, VclButtonsType::Ok,
+                                                                         SfxResId(STR_TABPAGE_INVALIDPARENT)));
+                xBox->run();
                 m_pBaseLb->GrabFocus();
                 return DeactivateRC::KeepPage;
             }

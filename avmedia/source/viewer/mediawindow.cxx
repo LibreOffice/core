@@ -23,7 +23,8 @@
 #include <bitmaps.hlst>
 #include <strings.hrc>
 #include <tools/urlobj.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -295,15 +296,12 @@ bool MediaWindow::executeMediaURLDialog(const vcl::Window* pParent, OUString& rU
     return !rURL.isEmpty();
 }
 
-
-void MediaWindow::executeFormatErrorBox( vcl::Window* pParent )
+void MediaWindow::executeFormatErrorBox(weld::Widget* pParent)
 {
-    ScopedVclPtrInstance< MessageDialog > aErrBox( pParent, AvmResId( AVMEDIA_STR_ERR_URL ) );
-
-    aErrBox->Execute();
-    aErrBox.disposeAndClear();
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                                              VclMessageType::Warning, VclButtonsType::Ok, AvmResId(AVMEDIA_STR_ERR_URL)));
+    xBox->run();
 }
-
 
 bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bool bDeep, Size* pPreferredSizePixel )
 {

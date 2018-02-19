@@ -25,6 +25,7 @@
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 
 // Private methods ------------------------------------------------------
 
@@ -40,11 +41,14 @@ IMPL_LINK_NOARG( SfxNewStyleDlg, OKHdl, ComboBox&, void )
     {
         if ( !pStyle->IsUserDefined() )
         {
-            ScopedVclPtrInstance<MessageDialog>( this, SfxResId( STR_POOL_STYLE_NAME ), VclMessageType::Info )->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                     VclMessageType::Info, VclButtonsType::Ok,
+                                                                     SfxResId(STR_POOL_STYLE_NAME)));
+            xBox->run();
             return;
         }
 
-        if ( RET_YES == aQueryOverwriteBox->Execute() )
+        if (RET_YES == xQueryOverwriteBox->run())
             EndDialog( RET_OK );
     }
     else
@@ -58,8 +62,8 @@ IMPL_LINK( SfxNewStyleDlg, ModifyHdl, Edit&, rBox, void )
 
 SfxNewStyleDlg::SfxNewStyleDlg( vcl::Window* pParent, SfxStyleSheetBasePool& rInPool )
     : ModalDialog(pParent, "CreateStyleDialog", "sfx/ui/newstyle.ui")
-    , aQueryOverwriteBox(VclPtr<MessageDialog>::Create(this, SfxResId(STR_QUERY_OVERWRITE),
-                                           VclMessageType::Question, VclButtonsType::YesNo))
+    , xQueryOverwriteBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
+                                                                     SfxResId(STR_QUERY_OVERWRITE)))
     , rPool(rInPool)
 {
     get(m_pColBox, "stylename");
@@ -86,7 +90,7 @@ SfxNewStyleDlg::~SfxNewStyleDlg()
 
 void SfxNewStyleDlg::dispose()
 {
-    aQueryOverwriteBox.disposeAndClear();
+    xQueryOverwriteBox.reset();
     m_pColBox.clear();
     m_pOKBtn.clear();
     ModalDialog::dispose();

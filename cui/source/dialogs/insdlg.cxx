@@ -44,7 +44,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/classids.hxx>
@@ -267,7 +267,10 @@ short SvInsertOleDlg::Execute()
                         // global Resource from svtools (former so3 resource)
                         OUString aErr(SvtResId(STR_ERROR_OBJNOCREATE_FROM_FILE));
                         aErr = aErr.replaceFirst( "%", aFileName );
-                        ScopedVclPtrInstance<MessageDialog>(this, aErr)->Execute();
+
+                        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                  VclMessageType::Warning, VclButtonsType::Ok, aErr));
+                        xBox->run();
                     }
                     else
                     {
@@ -275,7 +278,10 @@ short SvInsertOleDlg::Execute()
                         // global Resource from svtools (former so3 resource)
                         OUString aErr(SvtResId(STR_ERROR_OBJNOCREATE));
                         aErr = aErr.replaceFirst( "%", aServerName );
-                        ScopedVclPtrInstance<MessageDialog>(this, aErr)->Execute();
+
+                        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                  VclMessageType::Warning, VclButtonsType::Ok, aErr));
+                        xBox->run();
                     }
                 }
             }
@@ -316,7 +322,10 @@ short SvInsertOleDlg::Execute()
                 // global Resource from svtools (former so3 resource)
                 OUString aErr(SvtResId(STR_ERROR_OBJNOCREATE_FROM_FILE));
                 aErr = aErr.replaceFirst( "%", aFileName );
-                ScopedVclPtrInstance<MessageDialog>(this, aErr)->Execute();
+
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                          VclMessageType::Warning, VclButtonsType::Ok, aErr));
+                xBox->run();
             }
             else
             {

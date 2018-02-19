@@ -21,7 +21,7 @@
 #include <mailmergewizard.hxx>
 #include <swtypes.hxx>
 #include "addresslistdialog.hxx"
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/builderfactory.hxx>
@@ -183,7 +183,9 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl, Button*, void)
     catch (const uno::Exception& e)
     {
         SAL_WARN("sw", e);
-        ScopedVclPtrInstance<MessageDialog>(this, e.Message)->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                  VclMessageType::Warning, VclButtonsType::Ok, e.Message));
+        xBox->run();
     }
 }
 

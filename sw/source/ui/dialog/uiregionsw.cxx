@@ -22,7 +22,7 @@
 #include <svl/urihelper.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/passwd.hxx>
@@ -422,7 +422,10 @@ bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
                 }
                 else
                 {
-                    ScopedVclPtrInstance<MessageDialog>(this, SwResId(STR_WRONG_PASSWORD), VclMessageType::Info)->Execute();
+                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                                  SwResId(STR_WRONG_PASSWORD)));
+                    xInfoBox->run();
                 }
             }
         }
@@ -989,7 +992,10 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, Button *, pButton, void )
             bool bContent = pSectRepr->IsContent();
             if( pBox->IsChecked() && bContent && rSh.HasSelection() )
             {
-                if (RET_NO == ScopedVclPtrInstance<MessageDialog>(this, SwResId(STR_QUERY_CONNECT), VclMessageType::Question, VclButtonsType::YesNo)->Execute())
+                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                               VclMessageType::Question, VclButtonsType::YesNo,
+                                                               SwResId(STR_QUERY_CONNECT)));
+                if (RET_NO == xQueryBox->run())
                     pBox->Check( false );
             }
             if( bFile )
@@ -1265,7 +1271,10 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox, void )
                     }
                     else
                     {
-                        ScopedVclPtrInstance<MessageDialog>(pBox, SwResId(STR_WRONG_PASSWD_REPEAT), VclMessageType::Info)->Execute();
+                        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pBox->GetFrameWeld(),
+                                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                                      SwResId(STR_WRONG_PASSWD_REPEAT)));
+                        xInfoBox->run();
                         ChangePasswdHdl(pBox);
                         break;
                     }
@@ -1702,7 +1711,10 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton, void )
                 }
                 else
                 {
-                    ScopedVclPtrInstance<MessageDialog>(pButton, SwResId(STR_WRONG_PASSWD_REPEAT), VclMessageType::Info)->Execute();
+                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pButton->GetFrameWeld(),
+                                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                                  SwResId(STR_WRONG_PASSWD_REPEAT)));
+                    xInfoBox->run();
                 }
             }
             else if(!bChange)
@@ -1725,9 +1737,14 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, Button *, pButton, void )
     CheckBox* pBox = static_cast<CheckBox*>(pButton);
     if( pBox->IsChecked() )
     {
-        if( m_pWrtSh->HasSelection() &&
-            RET_NO == ScopedVclPtrInstance<MessageDialog>(this, SwResId(STR_QUERY_CONNECT), VclMessageType::Question, VclButtonsType::YesNo)->Execute())
-            pBox->Check( false );
+        if (m_pWrtSh->HasSelection())
+        {
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                           SwResId(STR_QUERY_CONNECT)));
+            if (RET_NO == xQueryBox->run())
+                pBox->Check( false );
+        }
     }
 
     bool bFile = pBox->IsChecked();

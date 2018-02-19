@@ -64,7 +64,8 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <tools/diagnose_ex.h>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -435,8 +436,10 @@ void OTableController::doEditIndexes()
     // table needs to be saved before editing indexes
     if (m_bNew || isModified())
     {
-        ScopedVclPtrInstance< MessageDialog > aAsk(getView(), DBA_RES(STR_QUERY_SAVE_TABLE_EDIT_INDEXES), VclMessageType::Question, VclButtonsType::YesNo);
-        if (RET_YES != aAsk->Execute())
+        std::unique_ptr<weld::MessageDialog> xAsk(Application::CreateMessageDialog(getFrameWeld(),
+                                                  VclMessageType::Question, VclButtonsType::YesNo,
+                                                  DBA_RES(STR_QUERY_SAVE_TABLE_EDIT_INDEXES)));
+        if (RET_YES != xAsk->run())
             return;
 
         if (!doSaveDoc(false))
@@ -550,9 +553,9 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/)
         if ( std::any_of(m_vRowList.begin(),m_vRowList.end(),
                            std::mem_fn(&OTableRow::isValid)) )
         {
-            ScopedVclPtrInstance<MessageDialog> aQry(getView(), "TableDesignSaveModifiedDialog",
-                                                     "dbaccess/ui/tabledesignsavemodifieddialog.ui");
-            switch (aQry->Execute())
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(getFrameWeld(), "dbaccess/ui/tabledesignsavemodifieddialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("TableDesignSaveModifiedDialog"));
+            switch (xQuery->run())
             {
                 case RET_YES:
                     Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());
@@ -568,9 +571,9 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/)
         }
         else if ( !m_bNew )
         {
-            ScopedVclPtrInstance<MessageDialog> aQry(getView(), "DeleteAllRowsDialog",
-                                                     "dbaccess/ui/deleteallrowsdialog.ui");
-            switch (aQry->Execute())
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(getFrameWeld(), "dbaccess/ui/deleteallrowsdialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("DeleteAllRowsDialog"));
+            switch (xQuery->run())
             {
                 case RET_YES:
                     {

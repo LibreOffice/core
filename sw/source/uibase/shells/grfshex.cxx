@@ -35,6 +35,7 @@
 #include <frmfmt.hxx>
 #include <frmmgr.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
@@ -87,7 +88,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
                 pWindow->LeaveWait();
 
             if( !bAPI )
-                ::avmedia::MediaWindow::executeFormatErrorBox( pWindow );
+                ::avmedia::MediaWindow::executeFormatErrorBox(pWindow ? pWindow->GetFrameWeld() : nullptr);
         }
         else
         {

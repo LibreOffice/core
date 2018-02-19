@@ -32,6 +32,11 @@ class SdrObject;
 class SdrTextObj;
 class SdDrawDocument;
 
+namespace weld
+{
+class MessageDialog;
+}
+
 namespace sd {
 
 class View;
@@ -521,7 +526,7 @@ private:
         window.  This function makes sure that the otherwise non-modal
         search dialog, if visible, is locked, too.
     */
-    sal_uInt16 ShowModalMessageBox (Dialog& rMessageBox);
+    sal_uInt16 ShowModalMessageBox(weld::MessageDialog& rMessageBox);
 };
 
 #endif

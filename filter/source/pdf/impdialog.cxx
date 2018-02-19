@@ -23,9 +23,9 @@
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <officecfg/Office/Common.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/passwd.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/resmgr.hxx>
@@ -869,8 +869,10 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, CheckBox&, void)
     // if a password was set, inform the user that this will not be used in PDF/A case
     if( mpCbPDFA1b->IsChecked() && pSecPage && pSecPage->hasPassword() )
     {
-        ScopedVclPtrInstance< MessageDialog > aBox(this, PDFFilterResId(STR_WARN_PASSWORD_PDFA), VclMessageType::Warning);
-        aBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  PDFFilterResId(STR_WARN_PASSWORD_PDFA)));
+        xBox->run();
     }
 }
 

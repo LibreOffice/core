@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.2 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkMessageDialog" id="LinkWarnDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">6</property>
     <property name="title" translatable="yes" context="linkwarndialog|LinkWarnDialog">Confirm Linked Graphic</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
@@ -21,7 +20,6 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="messagedialog-action_area">
             <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="linkwarndialog|ok">_Keep Link</property>
@@ -83,8 +81,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="1">ok</action-widget>
-      <action-widget response="0">cancel</action-widget>
+      <action-widget response="-5">ok</action-widget>
+      <action-widget response="-6">cancel</action-widget>
     </action-widgets>
   </object>
 </interface>

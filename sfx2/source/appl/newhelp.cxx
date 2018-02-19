@@ -89,10 +89,11 @@
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
 #include <vcl/builderfactory.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/i18nhelp.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld.hxx>
 
 #include <ucbhelper/content.hxx>
 #include <vcl/msgbox.hxx>
@@ -1046,8 +1047,10 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl, LinkParamNone*, void)
 
         if ( aFactories.empty() )
         {
-            ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_INFO_NOSEARCHRESULTS ), VclMessageType::Info);
-            aBox->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                     VclMessageType::Info, VclButtonsType::Ok,
+                                                                     SfxResId(STR_INFO_NOSEARCHRESULTS)));
+            xBox->run();
         }
     }
 }
@@ -2265,9 +2268,10 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
                 }
                 else
                 {
-                    DBG_ASSERT( pSrchDlg, "no search dialog" );
-                    ScopedVclPtrInstance< MessageDialog > aBox(pSrchDlg, SfxResId( STR_INFO_NOSEARCHTEXTFOUND ), VclMessageType::Info);
-                    aBox->Execute();
+                    assert(pSrchDlg && "no search dialog");
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pSrchDlg->GetFrameWeld(),
+                                                              VclMessageType::Info, VclButtonsType::Ok, SfxResId(STR_INFO_NOSEARCHTEXTFOUND)));
+                    xBox->run();
                     pSrchDlg->SetFocusOnEdit();
                 }
             }
