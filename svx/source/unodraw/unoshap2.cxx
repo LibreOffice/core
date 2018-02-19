@@ -1579,15 +1579,13 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
         break;
     }
 
-    case OWN_ATTR_REPLACEMENTGRAFURL:
+    case OWN_ATTR_REPLACEMENT_GRAPHIC:
     {
         const GraphicObject* pGrafObj = static_cast< SdrGrafObj* >(mpObj.get())->GetReplacementGraphicObject();
 
-        if(pGrafObj)
+        if (pGrafObj)
         {
-            OUString aURL(UNO_NAME_GRAPHOBJ_URLPREFIX);
-            aURL += OStringToOUString(pGrafObj->GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
-            rValue <<= aURL;
+            rValue <<= pGrafObj->GetGraphic().GetXGraphic();
         }
 
         break;
