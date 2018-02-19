@@ -272,8 +272,8 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
                 pTextNode->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() ) &&
                 pTextNode->GetNodes().IsDocNodes() )
             {
-                SwTOXAuthority* pNew = new SwTOXAuthority( *pTextNode,
-                                                            *pFormatField, aIntl );
+                std::unique_ptr<SwTOXAuthority> pNew(
+                    new SwTOXAuthority(*pTextNode, *pFormatField, aIntl));
 
                 for(SwTOXSortTabBases::size_type i = 0; i < aSortArr.size(); ++i)
                 {
@@ -283,7 +283,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
                         //only the first occurrence in the document
                         //has to be in the array
                         if(*pOld < *pNew)
-                            DELETEZ(pNew);
+                            pNew.reset();
                         else // remove the old content
                         {
                             aSortArr.erase(aSortArr.begin() + i);
@@ -304,7 +304,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
                             break;
                         ++j;
                     }
-                    aSortArr.insert(aSortArr.begin() + j, pNew);
+                    aSortArr.insert(aSortArr.begin() + j, pNew.release());
                 }
             }
         }
