@@ -2454,34 +2454,33 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
         //fallback here
         if( !bIsEmptyPresObj )
         {
-            OUString aReplacementUrl;
-            xPropSet->getPropertyValue("ReplacementGraphicURL") >>= aReplacementUrl;
+            uno::Reference<graphic::XGraphic> xReplacementGraphic;
+            xPropSet->getPropertyValue("ReplacementGraphic") >>= xReplacementGraphic;
 
             // If there is no url, then the graphic is empty
-            if(!aReplacementUrl.isEmpty())
+            if (xReplacementGraphic.is())
             {
-                const OUString aStr = mrExport.AddEmbeddedGraphicObject(aReplacementUrl);
+                OUString aMimeType;
+                const OUString aHref = mrExport.AddEmbeddedXGraphic(xReplacementGraphic, aMimeType);
 
-                if(!aStr.isEmpty())
+                if (aMimeType.isEmpty())
+                    mrExport.GetGraphicMimeTypeFromStream(xReplacementGraphic, aMimeType);
+
+                if (!aHref.isEmpty())
                 {
-                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr);
+                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aHref);
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
                 }
 
-                uno::Reference<io::XInputStream> xInputStream(
-                    mrExport.GetEmbeddedGraphicObjectStream(aReplacementUrl));
-                OUString aMimeType(
-                    comphelper::GraphicMimeTypeHelper::GetMimeTypeForImageStream(xInputStream));
                 if (!aMimeType.isEmpty())
-                    GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aMimeType);
+                    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aMimeType);
 
-                SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
+                SvXMLElementExport aElement(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
 
                 // optional office:binary-data
-                mrExport.AddEmbeddedGraphicObjectAsBase64(aReplacementUrl);
-
+                mrExport.AddEmbeddedXGraphicAsBase64(xReplacementGraphic);
             }
         }
     }

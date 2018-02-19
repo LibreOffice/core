@@ -1194,7 +1194,6 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sGraphicFilter("GraphicFilter"),
     sGraphicRotation("GraphicRotation"),
     sGraphicURL("GraphicURL"),
-    sReplacementGraphicURL("ReplacementGraphicURL"),
     sHeight("Height"),
     sHoriOrient("HoriOrient"),
     sHoriOrientPosition("HoriOrientPosition"),
@@ -3107,8 +3106,8 @@ void XMLTextParagraphExport::_exportTextGraphic(
 
     // replacement graphic for backwards compatibility, but
     // only for SVG and metafiles currently
-    OUString sReplacementOrigURL;
-    rPropSet->getPropertyValue( sReplacementGraphicURL ) >>= sReplacementOrigURL;
+    uno::Reference<graphic::XGraphic> xReplacementGraphic;
+    rPropSet->getPropertyValue("ReplacementGraphic") >>= xReplacementGraphic;
 
     // xlink:href
     OUString sOrigURL;
@@ -3159,30 +3158,30 @@ void XMLTextParagraphExport::_exportTextGraphic(
 
     //Resolves: fdo#62461 put preferred image first above, followed by
     //fallback here
-    if (!sReplacementOrigURL.isEmpty())
+    if (xReplacementGraphic.is())
     {
-        const OUString sReplacementURL(GetExport().AddEmbeddedGraphicObject( sReplacementOrigURL ));
+        OUString aMimeType;
+        const OUString sHref = GetExport().AddEmbeddedXGraphic(xReplacementGraphic, aMimeType);
+
+        if (aMimeType.isEmpty())
+            GetExport().GetGraphicMimeTypeFromStream(xReplacementGraphic, aMimeType);
 
         // If there is no url, then graphic is empty
-        if(!sReplacementURL.isEmpty())
+        if (!sHref.isEmpty())
         {
-            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sReplacementURL);
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sHref);
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED);
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD);
         }
 
-        uno::Reference<io::XInputStream> xInputStream(
-            GetExport().GetEmbeddedGraphicObjectStream(sReplacementOrigURL));
-        OUString aMimeType(
-            comphelper::GraphicMimeTypeHelper::GetMimeTypeForImageStream(xInputStream));
         if (!aMimeType.isEmpty())
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aMimeType);
 
         SvXMLElementExport aElement(GetExport(), XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
 
         // optional office:binary-data
-        GetExport().AddEmbeddedGraphicObjectAsBase64(sReplacementOrigURL);
+        GetExport().AddEmbeddedXGraphicAsBase64(xReplacementGraphic);
     }
 
     // script:events

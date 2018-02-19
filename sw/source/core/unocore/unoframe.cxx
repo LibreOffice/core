@@ -2107,6 +2107,27 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
 
             aAny <<= sGrfName;
         }
+        else if (FN_UNO_REPLACEMENT_GRAPHIC == pEntry->nWID)
+        {
+            const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
+            uno::Reference<graphic::XGraphic> xGraphic;
+
+            if (pIdx)
+            {
+                SwNodeIndex aIdx(*pIdx, 1);
+                SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
+                if (!pGrfNode)
+                    throw uno::RuntimeException();
+
+                const GraphicObject* pGraphicObject = pGrfNode->GetReplacementGrfObj();
+
+                if (pGraphicObject)
+                {
+                    xGraphic = pGraphicObject->GetGraphic().GetXGraphic();
+                }
+            }
+            aAny <<= xGraphic;
+        }
         else if( FN_UNO_GRAPHIC_FILTER == pEntry->nWID )
         {
             OUString sFltName;
