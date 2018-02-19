@@ -1515,7 +1515,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             {
                 long n;
                 if(IsHoriAlignIgnoreTrailingWhitespace())
-                    n = ( nMaxLineWidth - CalcTextWidth( true, true ) ) / 2;
+                    n = ( nMaxLineWidth - CalcLineWidth( pParaPortion, pLine, false, true ) ) / 2;
                 else
                     n = ( nMaxLineWidth - aTextSize.Width() ) / 2;
                 n += nStartX;  // Indentation is kept.
@@ -1528,7 +1528,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 // the blank must not be displayed!
                 long n;
                 if(IsHoriAlignIgnoreTrailingWhitespace())
-                    n = nMaxLineWidth - CalcTextWidth( true, true );
+                    n = nMaxLineWidth - CalcLineWidth( pParaPortion, pLine, false, true );
                 else
                     n = nMaxLineWidth - aTextSize.Width();
                 n += nStartX;  // Indentation is kept.
