@@ -916,7 +916,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 
                 pObj->BroadcastObjectChange();
                 if ( pModel )
-                    pModel->setLock(bLock);
+                    bLock ? pModel->setLock(bLock) : pModel->setLockSimple(bLock);
             }
         }
 

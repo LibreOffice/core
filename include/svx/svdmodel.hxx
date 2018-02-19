@@ -565,6 +565,7 @@ public:
     // set of api calls.
     bool isLocked() const { return mbModelLocked; }
     void setLock( bool bLock );
+    void setLockSimple( bool bLock ) { mbModelLocked = bLock; }
 
     void            SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharactersTable>& xForbiddenChars );
     rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const { return mpForbiddenCharactersTable;}
