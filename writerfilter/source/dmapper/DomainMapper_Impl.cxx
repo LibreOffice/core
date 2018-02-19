@@ -1739,17 +1739,6 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
                         getPropertyName(ePropIsOn),
                         uno::makeAny(true));
 
-                if (bFirst)
-                {
-                    OUString aFollowStyle = xPageStyle->getPropertyValue("FollowStyle").get<OUString>();
-                    if (GetPageStyles()->hasByName(aFollowStyle))
-                    {
-                        // This is a first page and has a follow style, then enable the header/footer there as well to be consistent.
-                        uno::Reference<beans::XPropertySet> xFollowStyle(GetPageStyles()->getByName(aFollowStyle), uno::UNO_QUERY);
-                        xFollowStyle->setPropertyValue(getPropertyName(ePropIsOn), uno::makeAny(true));
-                    }
-                }
-
                 // If the 'Different Even & Odd Pages' flag is turned on - do not ignore it
                 // Even if the 'Even' header/footer is blank - the flag should be imported (so it would look in LO like in Word)
                 if (!bFirst && GetSettingsTable()->GetEvenAndOddHeaders())
