@@ -312,7 +312,7 @@ void SmGraphicWindow::SetCursor(const SmNode *pNode)
     // get appropriate rectangle
     Point aOffset (pNode->GetTopLeft() - pTree->GetTopLeft()),
           aTLPos  (GetFormulaDrawPos() + aOffset);
-    aTLPos.X() -= pNode->GetItalicLeftSpace();
+    aTLPos.AdjustX( -(pNode->GetItalicLeftSpace()) );
     Size  aSize   (pNode->GetItalicSize());
 
     SetCursor(tools::Rectangle(aTLPos, aSize));
@@ -696,10 +696,10 @@ SmViewShell * SmCmdBoxWindow::GetView()
 void SmCmdBoxWindow::Resize()
 {
      tools::Rectangle aRect(Point(0, 0), GetOutputSizePixel());
-     aRect.Left()   += CMD_BOX_PADDING;
-     aRect.Top()    += CMD_BOX_PADDING_TOP;
-     aRect.Right()  -= CMD_BOX_PADDING;
-     aRect.Bottom() -= CMD_BOX_PADDING;
+     aRect.AdjustLeft(CMD_BOX_PADDING );
+     aRect.AdjustTop(CMD_BOX_PADDING_TOP );
+     aRect.AdjustRight( -(CMD_BOX_PADDING) );
+     aRect.AdjustBottom( -(CMD_BOX_PADDING) );
 
     DecorationView aView(this);
     aRect = aView.DrawFrame(aRect, DrawFrameStyle::In, DrawFrameFlags::NoDraw);
@@ -712,10 +712,10 @@ void SmCmdBoxWindow::Resize()
 void SmCmdBoxWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     tools::Rectangle aRect(Point(0, 0), GetOutputSizePixel());
-    aRect.Left()   += CMD_BOX_PADDING;
-    aRect.Top()    += CMD_BOX_PADDING_TOP;
-    aRect.Right()  -= CMD_BOX_PADDING;
-    aRect.Bottom() -= CMD_BOX_PADDING;
+    aRect.AdjustLeft(CMD_BOX_PADDING );
+    aRect.AdjustTop(CMD_BOX_PADDING_TOP );
+    aRect.AdjustRight( -(CMD_BOX_PADDING) );
+    aRect.AdjustBottom( -(CMD_BOX_PADDING) );
 
     aEdit->SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
 
@@ -815,9 +815,9 @@ void SmCmdBoxWindow::AdjustPosition()
                            aRect.Bottom() - GetSizePixel().Height() ) );
     Point aPos( GetParent()->OutputToScreenPixel( aTopLeft ) );
     if (aPos.X() < 0)
-        aPos.X() = 0;
+        aPos.setX( 0 );
     if (aPos.Y() < 0)
-        aPos.Y() = 0;
+        aPos.setY( 0 );
     SetPosPixel( aPos );
 }
 
@@ -927,15 +927,15 @@ Size SmViewShell::GetTextLineSize(OutputDevice const & rDevice, const OUString& 
 
     if (nTabPos)
     {
-        aSize.Width() = 0;
+        aSize.setWidth( 0 );
         sal_Int32 nPos = 0;
         do
         {
             if (nPos > 0)
-                aSize.Width() = ((aSize.Width() / nTabPos) + 1) * nTabPos;
+                aSize.setWidth( ((aSize.Width() / nTabPos) + 1) * nTabPos );
 
             const OUString aText = rLine.getToken(0, '\t', nPos);
-            aSize.Width() += rDevice.GetTextWidth(aText);
+            aSize.AdjustWidth(rDevice.GetTextWidth(aText) );
         }
         while (nPos >= 0);
     }
@@ -982,8 +982,8 @@ Size SmViewShell::GetTextSize(OutputDevice const & rDevice, const OUString& rTex
                 aText = aLine.copy(0, m);
                 aLine = aLine.replaceAt(0, m, "");
                 aSize = GetTextLineSize(rDevice, aText);
-                aTextSize.Height() += aSize.Height();
-                aTextSize.Width() = std::max(aTextSize.Width(), std::min(aSize.Width(), MaxWidth));
+                aTextSize.AdjustHeight(aSize.Height() );
+                aTextSize.setWidth( std::max(aTextSize.Width(), std::min(aSize.Width(), MaxWidth)) );
 
                 aLine = comphelper::string::stripStart(aLine, ' ');
                 aLine = comphelper::string::stripStart(aLine, '\t');
@@ -993,8 +993,8 @@ Size SmViewShell::GetTextSize(OutputDevice const & rDevice, const OUString& rTex
         }
         else
         {
-            aTextSize.Height() += aSize.Height();
-            aTextSize.Width() = std::max(aTextSize.Width(), aSize.Width());
+            aTextSize.AdjustHeight(aSize.Height() );
+            aTextSize.setWidth( std::max(aTextSize.Width(), aSize.Width()) );
         }
     }
     while (nPos >= 0);
@@ -1013,11 +1013,11 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
         do
         {
             if (nPos > 0)
-                aPoint.X() = ((aPoint.X() / nTabPos) + 1) * nTabPos;
+                aPoint.setX( ((aPoint.X() / nTabPos) + 1) * nTabPos );
 
             OUString aText = rLine.getToken(0, '\t', nPos);
             rDevice.DrawText(aPoint, aText);
-            aPoint.X() += rDevice.GetTextWidth(aText);
+            aPoint.AdjustX(rDevice.GetTextWidth(aText) );
         }
         while ( nPos >= 0 );
     }
@@ -1064,7 +1064,7 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
                 aLine = aLine.replaceAt(0, m, "");
 
                 DrawTextLine(rDevice, aPoint, aText);
-                aPoint.Y() += aSize.Height();
+                aPoint.AdjustY(aSize.Height() );
 
                 aLine = comphelper::string::stripStart(aLine, ' ');
                 aLine = comphelper::string::stripStart(aLine, '\t');
@@ -1076,13 +1076,13 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
             if (!aLine.isEmpty())
             {
                 DrawTextLine(rDevice, aPoint, aLine);
-                aPoint.Y() += aSize.Height();
+                aPoint.AdjustY(aSize.Height() );
             }
         }
         else
         {
             DrawTextLine(rDevice, aPoint, aLine);
-            aPoint.Y() += aSize.Height();
+            aPoint.AdjustY(aSize.Height() );
         }
     }
     while ( nPos >= 0 );
@@ -1123,7 +1123,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
         if (bIsPrintFrame)
             rOutDev.DrawRect(tools::Rectangle(aOutRect.TopLeft(),
                                Size(aOutRect.GetWidth(), 100 + aTitleSize.Height() + 200 + aDescSize.Height() + 100)));
-        aOutRect.Top() += 200;
+        aOutRect.AdjustTop(200 );
 
         // output title
         aFont.SetWeight(WEIGHT_BOLD);
@@ -1133,17 +1133,17 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
                      aOutRect.Top());
         DrawText(rOutDev, aPoint, GetDoc()->GetTitle(),
                  sal::static_int_cast< sal_uInt16 >(aOutRect.GetWidth() - 200));
-        aOutRect.Top() += aTitleSize.Height() + 200;
+        aOutRect.AdjustTop(aTitleSize.Height() + 200 );
 
         // output description
         aFont.SetWeight(WEIGHT_NORMAL);
         aFont.SetFontSize(aSize600);
         rOutDev.SetFont(aFont);
-        aPoint.X() = aOutRect.Left() + (aOutRect.GetWidth()  - aDescSize.Width())  / 2;
-        aPoint.Y() = aOutRect.Top();
+        aPoint.setX( aOutRect.Left() + (aOutRect.GetWidth()  - aDescSize.Width())  / 2 );
+        aPoint.setY( aOutRect.Top() );
         DrawText(rOutDev, aPoint, GetDoc()->GetComment(),
                  sal::static_int_cast< sal_uInt16 >(aOutRect.GetWidth() - 200));
-        aOutRect.Top() += aDescSize.Height() + 300;
+        aOutRect.AdjustTop(aDescSize.Height() + 300 );
     }
 
     // output text on bottom
@@ -1158,7 +1158,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
 
         Size aSize (GetTextSize(rOutDev, GetDoc()->GetText(), aOutRect.GetWidth() - 200));
 
-        aOutRect.Bottom() -= aSize.Height() + 600;
+        aOutRect.AdjustBottom( -(aSize.Height() + 600) );
 
         if (bIsPrintFrame)
             rOutDev.DrawRect(tools::Rectangle(aOutRect.BottomLeft(),
@@ -1168,16 +1168,16 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
                       aOutRect.Bottom() + 300);
         DrawText(rOutDev, aPoint, GetDoc()->GetText(),
                  sal::static_int_cast< sal_uInt16 >(aOutRect.GetWidth() - 200));
-        aOutRect.Bottom() -= 200;
+        aOutRect.AdjustBottom( -200 );
     }
 
     if (bIsPrintFrame)
         rOutDev.DrawRect(aOutRect);
 
-    aOutRect.Top()    += 100;
-    aOutRect.Left()   += 100;
-    aOutRect.Bottom() -= 100;
-    aOutRect.Right()  -= 100;
+    aOutRect.AdjustTop(100 );
+    aOutRect.AdjustLeft(100 );
+    aOutRect.AdjustBottom( -100 );
+    aOutRect.AdjustRight( -100 );
 
     Size aSize (GetDoc()->GetSize());
 
