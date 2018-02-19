@@ -1108,7 +1108,7 @@ bool SwFormatCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 m_bOrtho = pSwColums->IsAutomaticWidth();
                 m_nLineWidth = pSwColums->GetSepLineWidth();
-                m_aLineColor.SetColor(pSwColums->GetSepLineColor());
+                m_aLineColor = pSwColums->GetSepLineColor();
                 m_nLineHeight = pSwColums->GetSepLineHeightRelative();
                 switch ( pSwColums->GetSepLineStyle() )
                 {

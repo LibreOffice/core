@@ -560,7 +560,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
         Color aColor;
         bool bColorEq = m_pFrameSel->GetVisibleColor( aColor );
         if( !bColorEq )
-            aColor.SetColor( COL_BLACK );
+            aColor = COL_BLACK;
 
         m_pLbLineColor->SelectEntry(aColor);
         m_pLbLineStyle->SetColor(aColor);

@@ -1667,7 +1667,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
                         "Not a foreground color, after all" );
                 Color aColor( static_cast<const SvxColorItem&>(rItem).GetValue() );
                 if( COL_AUTO == aColor.GetColor() )
-                    aColor.SetColor( COL_BLACK );
+                    aColor = COL_BLACK;
                 bSet = !bParaAttrs || !pDfltColor ||
                        !pDfltColor->IsRGBEqual( aColor );
             }
@@ -2618,7 +2618,7 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
     {
         Color aColor( static_cast<const SvxColorItem&>(rHt).GetValue() );
         if( COL_AUTO == aColor.GetColor() )
-            aColor.SetColor( COL_BLACK );
+            aColor = COL_BLACK;
 
         OString sOut = "<" OOO_STRING_SVTOOLS_HTML_font " "
             OOO_STRING_SVTOOLS_HTML_O_color "=";

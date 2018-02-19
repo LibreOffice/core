@@ -2435,9 +2435,9 @@ void XclImpChChart3d::Convert( ScfPropertySet& rPropSet, bool b3dWallChart ) con
         bool bParallel = bRightAngled || (nPerspective == 0);
         eProjMode = bParallel ? cssd::ProjectionMode_PARALLEL : cssd::ProjectionMode_PERSPECTIVE;
         // ambient color (Gray 20%)
-        aAmbientColor.SetColor( RGB_COLORDATA( 204, 204, 204 ) );
+        aAmbientColor = RGB_COLORDATA( 204, 204, 204 );
         // light color (Gray 60%)
-        aLightColor.SetColor( RGB_COLORDATA( 102, 102, 102 ) );
+        aLightColor = RGB_COLORDATA( 102, 102, 102 );
     }
     else
     {
@@ -2452,9 +2452,9 @@ void XclImpChChart3d::Convert( ScfPropertySet& rPropSet, bool b3dWallChart ) con
         bRightAngled = false;
         eProjMode = cssd::ProjectionMode_PARALLEL;
         // ambient color (Gray 30%)
-        aAmbientColor.SetColor( RGB_COLORDATA( 179, 179, 179 ) );
+        aAmbientColor = RGB_COLORDATA( 179, 179, 179 );
         // light color (Gray 70%)
-        aLightColor.SetColor( RGB_COLORDATA( 76, 76, 76 ) );
+        aLightColor = RGB_COLORDATA( 76, 76, 76 );
     }
 
     // properties

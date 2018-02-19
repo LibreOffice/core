@@ -324,9 +324,9 @@ IMPL_LINK(SvxColorTabPage, ModifiedHdl_Impl, Edit&, rEdit, void)
             aCurrentColor = Color(m_pHexcustom->GetColor());
         else
         {
-            aCurrentColor.SetColor ( Color( static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pRcustom->GetValue()) )),
+            aCurrentColor = Color( static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pRcustom->GetValue()) )),
                                             static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pGcustom->GetValue()) )),
-                                            static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pBcustom->GetValue()) )) ).GetColor() );
+                                            static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pBcustom->GetValue()) )) );
 
         }
         UpdateColorValues();
@@ -334,10 +334,10 @@ IMPL_LINK(SvxColorTabPage, ModifiedHdl_Impl, Edit&, rEdit, void)
     else
     {
         // read current MtrFields, if cmyk, then k-value as transparency
-        aCurrentColor.SetColor ( Color( static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pKcustom->GetValue()) )),
+        aCurrentColor = Color( static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pKcustom->GetValue()) )),
                                         static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pCcustom->GetValue()) )),
                                         static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pYcustom->GetValue()) )),
-                                        static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pMcustom->GetValue()) )) ).GetColor() );
+                                        static_cast<sal_uInt8>(PercentToColor_Impl( static_cast<sal_uInt16>(m_pMcustom->GetValue()) )) );
         ConvertColorValues (aCurrentColor, ColorModel::RGB);
     }
 

@@ -3224,7 +3224,7 @@ bool XclImpSimpleDffConverter::GetColorFromPalette( sal_uInt16 nIndex, Color& rC
     if( nColor == COL_AUTO )
         return false;
 
-    rColor.SetColor( nColor );
+    rColor = nColor;
     return true;
 }
 

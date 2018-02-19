@@ -79,10 +79,6 @@ public:
         return COLORDATA_TRANSPARENCY(mnColor);
     }
 
-    void SetColor(ColorData nColor)
-    {
-        mnColor = nColor;
-    }
     ColorData GetColor() const
     {
         return mnColor;

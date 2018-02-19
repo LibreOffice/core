@@ -68,7 +68,7 @@ bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
             if( !bRet )
                 return false;
 
-            aColor.SetColor(nColor);
+            aColor = nColor;
             bColorFound = true;
         }
         else if( !bOffsetFound )

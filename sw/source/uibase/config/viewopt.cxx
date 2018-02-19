@@ -443,73 +443,73 @@ Color& SwViewOption::GetHeaderFooterMarkColor()
 
 void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
 {
-    m_aDocColor.SetColor(rConfig.GetColorValue(svtools::DOCCOLOR).nColor);
+    m_aDocColor = rConfig.GetColorValue(svtools::DOCCOLOR).nColor;
 
     svtools::ColorConfigValue aValue = rConfig.GetColorValue(svtools::DOCBOUNDARIES);
-    m_aDocBoundColor.SetColor(aValue.nColor);
+    m_aDocBoundColor = aValue.nColor;
     m_nAppearanceFlags = ViewOptFlags::NONE;
     if(aValue.bIsVisible)
         m_nAppearanceFlags |= ViewOptFlags::DocBoundaries;
 
-    m_aAppBackgroundColor.SetColor(rConfig.GetColorValue(svtools::APPBACKGROUND).nColor);
+    m_aAppBackgroundColor = rConfig.GetColorValue(svtools::APPBACKGROUND).nColor;
 
     aValue = rConfig.GetColorValue(svtools::OBJECTBOUNDARIES);
-    m_aObjectBoundColor.SetColor(aValue.nColor);
+    m_aObjectBoundColor = aValue.nColor;
     if(aValue.bIsVisible)
         m_nAppearanceFlags |= ViewOptFlags::ObjectBoundaries;
 
     aValue = rConfig.GetColorValue(svtools::TABLEBOUNDARIES);
-    m_aTableBoundColor.SetColor(aValue.nColor);
+    m_aTableBoundColor = aValue.nColor;
     if(aValue.bIsVisible)
         m_nAppearanceFlags |= ViewOptFlags::TableBoundaries;
 
     aValue = rConfig.GetColorValue(svtools::WRITERIDXSHADINGS);
-    m_aIndexShadingsColor.SetColor(aValue.nColor);
+    m_aIndexShadingsColor = aValue.nColor;
     if(aValue.bIsVisible)
         m_nAppearanceFlags |= ViewOptFlags::IndexShadings;
 
     aValue = rConfig.GetColorValue(svtools::LINKS);
-    m_aLinksColor.SetColor(aValue.nColor);
+    m_aLinksColor = aValue.nColor;
     if(aValue.bIsVisible)
         m_nAppearanceFlags |= ViewOptFlags::Links;
 
     aValue = rConfig.GetColorValue(svtools::LINKSVISITED);
-    m_aVisitedLinksColor.SetColor(aValue.nColor);
+    m_aVisitedLinksColor = aValue.nColor;
     if(aValue.bIsVisible)
         m_nAppearanceFlags |= ViewOptFlags::VisitedLinks;
 
     aValue = rConfig.GetColorValue(svtools::SHADOWCOLOR);
-    m_aShadowColor.SetColor(aValue.nColor);
+    m_aShadowColor = aValue.nColor;
     if(aValue.bIsVisible)
         m_nAppearanceFlags |= ViewOptFlags::Shadow;
 
-    m_aDirectCursorColor.SetColor(rConfig.GetColorValue(svtools::WRITERDIRECTCURSOR).nColor);
+    m_aDirectCursorColor = rConfig.GetColorValue(svtools::WRITERDIRECTCURSOR).nColor;
 
-    m_aTextGridColor.SetColor(rConfig.GetColorValue(svtools::WRITERTEXTGRID).nColor);
+    m_aTextGridColor = rConfig.GetColorValue(svtools::WRITERTEXTGRID).nColor;
 
-    m_aSpellColor.SetColor(rConfig.GetColorValue(svtools::SPELL).nColor);
+    m_aSpellColor = rConfig.GetColorValue(svtools::SPELL).nColor;
 
-    m_aSmarttagColor.SetColor(rConfig.GetColorValue(svtools::SMARTTAGS).nColor);
+    m_aSmarttagColor = rConfig.GetColorValue(svtools::SMARTTAGS).nColor;
 
-    m_aFontColor.SetColor(rConfig.GetColorValue(svtools::FONTCOLOR).nColor);
+    m_aFontColor = rConfig.GetColorValue(svtools::FONTCOLOR).nColor;
 
     aValue = rConfig.GetColorValue(svtools::WRITERFIELDSHADINGS);
-    m_aFieldShadingsColor.SetColor(aValue.nColor);
+    m_aFieldShadingsColor = aValue.nColor;
     if(aValue.bIsVisible)
         m_nAppearanceFlags |= ViewOptFlags::FieldShadings;
 
     aValue = rConfig.GetColorValue(svtools::WRITERSECTIONBOUNDARIES);
-    m_aSectionBoundColor.SetColor(aValue.nColor);
+    m_aSectionBoundColor = aValue.nColor;
     if(aValue.bIsVisible)
         m_nAppearanceFlags |= ViewOptFlags::SectionBoundaries;
 
     aValue = rConfig.GetColorValue(svtools::WRITERPAGEBREAKS);
-    m_aPageBreakColor.SetColor(aValue.nColor);
+    m_aPageBreakColor = aValue.nColor;
 
     aValue = rConfig.GetColorValue(svtools::WRITERHEADERFOOTERMARK);
-    m_aHeaderFooterMarkColor.SetColor(aValue.nColor);
+    m_aHeaderFooterMarkColor = aValue.nColor;
 
-    m_aScriptIndicatorColor.SetColor(rConfig.GetColorValue(svtools::WRITERSCRIPTINDICATOR).nColor);
+    m_aScriptIndicatorColor = rConfig.GetColorValue(svtools::WRITERSCRIPTINDICATOR).nColor;
 }
 
 void SwViewOption::SetAppearanceFlag(ViewOptFlags nFlag, bool bSet, bool bSaveInConfig )

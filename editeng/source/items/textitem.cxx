@@ -1713,7 +1713,7 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
     if(!(rVal >>= nColor))
         return false;
 
-    mColor.SetColor( nColor );
+    mColor = nColor;
     return true;
 }
 

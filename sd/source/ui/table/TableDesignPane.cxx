@@ -467,14 +467,14 @@ CellInfo::CellInfo( const Reference< XStyle >& xStyle )
 
         // get style fill color
         if( !GetDraftFillColor(rSet, maCellColor) )
-            maCellColor.SetColor( COL_TRANSPARENT );
+            maCellColor = COL_TRANSPARENT;
 
         // get style text color
         const SvxColorItem* pTextColor = rSet.GetItem(EE_CHAR_COLOR);
         if( pTextColor )
             maTextColor = pTextColor->GetValue();
         else
-            maTextColor.SetColor( COL_TRANSPARENT );
+            maTextColor = COL_TRANSPARENT;
 
         // get border
         const SvxBoxItem* pBoxItem = rSet.GetItem( SDRATTR_TABLE_BORDER );

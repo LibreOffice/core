@@ -484,7 +484,7 @@ static void lcl_FillAuthorAttr( std::size_t nAuthor, SfxItemSet &rSet,
     Color aCol( rAttr.m_nColor );
 
     if( COL_TRANSPARENT == rAttr.m_nColor )
-        aCol.SetColor(lcl_GetAuthorColor(nAuthor));
+        aCol = lcl_GetAuthorColor(nAuthor);
 
     bool bBackGr = COL_NONE_COLOR == rAttr.m_nColor;
 

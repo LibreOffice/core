@@ -343,8 +343,8 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     {
         bWorksInPixels = true;
         const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
-        aPageColor.SetColor( rColorCfg.GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor );
-        aManualColor.SetColor( rColorCfg.GetColorValue(svtools::CALCPAGEBREAKMANUAL).nColor );
+        aPageColor = rColorCfg.GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
+        aManualColor = rColorCfg.GetColorValue(svtools::CALCPAGEBREAKMANUAL).nColor;
     }
     else
     {
@@ -1160,7 +1160,7 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
     bool bCellContrast = mbUseStyleColor && rStyleSettings.GetHighContrastMode();
     Color aAutoTextColor;
     if ( bCellContrast )
-        aAutoTextColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+        aAutoTextColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
 
     long nInitPosX = nScrX;
     if ( bLayoutRTL )
@@ -1370,7 +1370,7 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
     if ( ( nOldDrawMode & DrawModeFlags::WhiteFill ) && ( nOldDrawMode & DrawModeFlags::BlackLine ) )
     {
         rRenderContext.SetDrawMode( nOldDrawMode & (~DrawModeFlags::WhiteFill) );
-        aSingleColor.SetColor( COL_BLACK );
+        aSingleColor = COL_BLACK;
         bUseSingleColor = true;
     }
     else if ( ( nOldDrawMode & DrawModeFlags::SettingsFill ) && ( nOldDrawMode & DrawModeFlags::SettingsLine ) )
@@ -1381,7 +1381,7 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
     }
     else if ( bCellContrast )
     {
-        aSingleColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+        aSingleColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
         bUseSingleColor = true;
     }
 
@@ -2320,7 +2320,7 @@ void ScOutputData::DrawClipMarks()
         //  use DrawMode to change the arrow's outline color
         mpDev->SetDrawMode( nOldDrawMode | DrawModeFlags::SettingsLine );
         //  use text color also for the fill color
-        aArrowFillCol.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+        aArrowFillCol = SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
     }
 
     long nInitPosX = nScrX;
