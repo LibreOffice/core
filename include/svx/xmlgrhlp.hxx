@@ -95,7 +95,8 @@ private:
 
     virtual void SAL_CALL       disposing() override;
 
-    SVX_DLLPRIVATE OUString implSaveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString const & rRequestName);
+    SVX_DLLPRIVATE OUString implSaveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
+                                            OUString & rOutMimeType, OUString const & rRequestName);
 
 public:
                                 SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode );
@@ -123,7 +124,7 @@ public:
         saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
 
     virtual OUString SAL_CALL
-        saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString const & rRequestName) override;
+        saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString & rOutSavedMimeType, OUString const & rRequestName) override;
 
     virtual css::uno::Reference<css::io::XInputStream> SAL_CALL
         createInputStream(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;

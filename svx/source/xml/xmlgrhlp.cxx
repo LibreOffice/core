@@ -1052,18 +1052,21 @@ uno::Reference<graphic::XGraphic> SAL_CALL SvXMLGraphicHelper::loadGraphicFromOu
     return xGraphic;
 }
 
-OUString SAL_CALL SvXMLGraphicHelper::saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString const & rRequestName)
+OUString SAL_CALL SvXMLGraphicHelper::saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
+                                                        OUString & rOutSavedMimeType, OUString const & rRequestName)
 {
-    return implSaveGraphic(rxGraphic, rRequestName);
+    return implSaveGraphic(rxGraphic, rOutSavedMimeType, rRequestName);
 }
 
 OUString SAL_CALL SvXMLGraphicHelper::saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
 {
     OUString aEmpty;
-    return implSaveGraphic(rxGraphic, aEmpty);
+    OUString aOutMimeType;
+    return implSaveGraphic(rxGraphic, aOutMimeType, aEmpty);
 }
 
-OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString const & rRequestName)
+OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
+                                             OUString & rOutSavedMimeType, OUString const & rRequestName)
 {
     Graphic aGraphic(rxGraphic);
 
@@ -1210,6 +1213,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                 {
                     pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
                 }
+                rOutSavedMimeType = aMimeType;
                 bSuccess = (pStream->GetError() == ERRCODE_NONE);
             }
             else
@@ -1220,9 +1224,14 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                     OUString aFormat;
 
                     if (aGraphic.IsAnimated())
+                    {
                         aFormat = "gif";
+                    }
                     else
+                    {
                         aFormat = "png";
+                    }
+                    rOutSavedMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension(aFormat.toUtf8());
 
                     bSuccess = (rFilter.ExportGraphic(aGraphic, "", *pStream, rFilter.GetExportFormatNumberForShortName(aFormat)) == ERRCODE_NONE);
                 }
@@ -1230,6 +1239,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                 {
                     pStream->SetVersion(SOFFICE_FILEFORMAT_8);
                     pStream->SetCompressMode(SvStreamCompressFlags::ZBITMAP);
+                    rOutSavedMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension("svm");
 
                     // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
                     GDIMetaFile& rMtf(const_cast<GDIMetaFile&>(aGraphic.GetGDIMetaFile()));
@@ -1247,11 +1257,14 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                         pStream->WriteBytes(rLink.GetData(), rLink.GetDataSize());
                     }
                     else
+                    {
                         rMtf.Write(*pStream);
+                    }
 
                     bSuccess = (pStream->GetError() == ERRCODE_NONE);
                 }
             }
+
             if (!bSuccess)
                 return OUString();
 
@@ -1417,7 +1430,7 @@ protected:
         saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
 
     virtual OUString SAL_CALL
-        saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString const & rRequestName) override;
+        saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString & rOutSavedMimeType, OUString const & rRequestName) override;
 
     virtual css::uno::Reference<css::io::XInputStream> SAL_CALL
         createInputStream(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
@@ -1490,9 +1503,10 @@ OUString SAL_CALL SvXMLGraphicImportExportHelper::saveGraphic(css::uno::Referenc
     return m_xGraphicStorageHandler->saveGraphic(rxGraphic);
 }
 
-OUString SAL_CALL SvXMLGraphicImportExportHelper::saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString const & rRequestName)
+OUString SAL_CALL SvXMLGraphicImportExportHelper::saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
+                                                                    OUString & rOutSavedMimeType, OUString const & rRequestName)
 {
-    return m_xGraphicStorageHandler->saveGraphicByName(rxGraphic, rRequestName);
+    return m_xGraphicStorageHandler->saveGraphicByName(rxGraphic, rOutSavedMimeType, rRequestName);
 }
 
 uno::Reference<io::XInputStream> SAL_CALL SvXMLGraphicImportExportHelper::createInputStream(uno::Reference<graphic::XGraphic> const & rxGraphic)
