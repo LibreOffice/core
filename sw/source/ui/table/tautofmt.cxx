@@ -20,10 +20,10 @@
 #include <memory>
 #include <vcl/edit.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/weld.hxx>
 #include <svl/zforlist.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
@@ -370,8 +370,8 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl, Button*, void)
 
             if( !bFormatInserted )
             {
-                bOk = RET_CANCEL == ScopedVclPtrInstance<MessageDialog>(this, aStrInvalidFormat, VclMessageType::Error, VclButtonsType::OkCancel)
-                                    ->Execute();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Error, VclButtonsType::OkCancel, aStrInvalidFormat));
+                bOk = RET_CANCEL == xBox->run();
             }
         }
         else
@@ -386,10 +386,11 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl, Button*, void)
     aMessage += m_pLbFormat->GetSelectedEntry();
     aMessage += "\n";
 
-    VclPtrInstance<MessBox> pBox( this, MessBoxStyle::OkCancel, 0,
-                                  aStrDelTitle, aMessage );
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Question,
+                                              VclButtonsType::OkCancel, aStrDelTitle));
+    xBox->set_secondary_text(aMessage);
 
-    if ( pBox->Execute() == RET_OK )
+    if (xBox->run() == RET_OK)
     {
         m_pLbFormat->RemoveEntry( nDfltStylePos + nIndex );
         m_pLbFormat->SelectEntryPos( nDfltStylePos + nIndex-1 );
@@ -409,7 +410,6 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl, Button*, void)
             bCoreDataChanged = true;
         }
     }
-    pBox.reset();
 
     SelFormatHdl( *m_pLbFormat );
 }
@@ -468,8 +468,8 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl, Button*, void)
 
             if( !bFormatRenamed )
             {
-                bOk = RET_CANCEL == ScopedVclPtrInstance<MessageDialog>(this, aStrInvalidFormat, VclMessageType::Error, VclButtonsType::OkCancel)
-                                    ->Execute();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Error, VclButtonsType::OkCancel, aStrInvalidFormat));
+                bOk = RET_CANCEL == xBox->run();
             }
         }
         else
