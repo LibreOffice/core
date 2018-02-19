@@ -188,12 +188,6 @@ extern "C" void *__cxa_allocate_dependent_exception() throw();
 extern "C" void __cxa_free_dependent_exception(void *thrown_exception) throw();
 #pragma GCC visibility pop
 
-// Throw the exception.
-extern "C" void __cxa_throw (void *thrown_exception,
-			     std::type_info *tinfo,
-			     void (*dest) (void *))
-     __attribute__((noreturn));
-
 // Used to implement exception handlers.
 extern "C" void *__cxa_get_exception_ptr (void *) throw();
 extern "C" void *__cxa_begin_catch (void *) throw();
