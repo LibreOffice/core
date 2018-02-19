@@ -19,8 +19,8 @@
 #include <sfx2/doctempl.hxx>
 #include <sfx2/docfilt.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <sot/storage.hxx>
 
 #include <com/sun/star/frame/DocumentTemplates.hpp>
@@ -77,15 +77,15 @@ void SfxSaveAsTemplateDialog::setDocumentModel(const uno::Reference<frame::XMode
 
 IMPL_LINK_NOARG(SfxSaveAsTemplateDialog, OkClickHdl, Button*, void)
 {
-    ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, OUString(), VclMessageType::Question, VclButtonsType::YesNo);
-
+    std::unique_ptr<weld::MessageDialog> xQueryDlg(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
+                                                   OUString()));
     if(!IsTemplateNameUnique())
     {
         OUString sQueryMsg(SfxResId(STR_QMSG_TEMPLATE_OVERWRITE));
         sQueryMsg = sQueryMsg.replaceFirst("$1",msTemplateName);
-        aQueryDlg->set_primary_text(sQueryMsg.replaceFirst("$2", msSelectedCategory));
+        xQueryDlg->set_primary_text(sQueryMsg.replaceFirst("$2", msSelectedCategory));
 
-        if( aQueryDlg->Execute() == RET_NO )
+        if (xQueryDlg->run() == RET_NO)
             return;
     }
 
@@ -94,7 +94,9 @@ IMPL_LINK_NOARG(SfxSaveAsTemplateDialog, OkClickHdl, Button*, void)
     else
     {
         OUString sText( SfxResId(STR_ERROR_SAVEAS) );
-        ScopedVclPtrInstance<MessageDialog>(this, sText.replaceFirst("$1", msTemplateName))->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
+                                                  sText.replaceFirst("$1", msTemplateName)));
+        xBox->run();
     }
 }
 

@@ -65,6 +65,7 @@
 #include <unotools/extendedsecurityoptions.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
@@ -837,11 +838,10 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 SolarMutexGuard aGuard;
                 vcl::Window *pWindow = SfxGetpApp()->GetTopWindow();
 
-                ScopedVclPtrInstance<MessageDialog> aSecurityWarningBox(pWindow,
-                                                  SfxResId(STR_SECURITY_WARNING_NO_HYPERLINKS),
-                                                  VclMessageType::Warning);
-                aSecurityWarningBox->SetText( SfxResId(RID_SECURITY_WARNING_TITLE) );
-                aSecurityWarningBox->Execute();
+                std::unique_ptr<weld::MessageDialog> xSecurityWarningBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                                         VclMessageType::Warning, VclButtonsType::Ok, SfxResId(STR_SECURITY_WARNING_NO_HYPERLINKS)));
+                xSecurityWarningBox->set_title(SfxResId(RID_SECURITY_WARNING_TITLE));
+                xSecurityWarningBox->run();
                 return;
             }
 

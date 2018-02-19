@@ -19,7 +19,8 @@
 
 #include <sal/macros.h>
 #include <unotools/resmgr.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <strings.hrc>
 #include "masterpasscrtdlg.hxx"
 
@@ -39,8 +40,10 @@ IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl, Button*, void)
     else
     {
         OUString aErrorMsg(Translate::get(STR_ERROR_PASSWORDS_NOT_IDENTICAL, rResLocale));
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(this, aErrorMsg);
-        aErrorBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  aErrorMsg));
+        xErrorBox->run();
         m_pEDMasterPasswordCrt->SetText( OUString() );
         m_pEDMasterPasswordRepeat->SetText( OUString() );
         m_pEDMasterPasswordCrt->GrabFocus();

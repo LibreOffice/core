@@ -61,7 +61,7 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <unotools/bootstrap.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
@@ -518,8 +518,10 @@ void OApplicationController::askToReconnect()
         bool bClear = true;
         if ( !m_pSubComponentManager->empty() )
         {
-            ScopedVclPtrInstance< MessageDialog > aQry(getView(), DBA_RES(STR_QUERY_CLOSEDOCUMENTS), VclMessageType::Question, VclButtonsType::YesNo);
-            switch (aQry->Execute())
+            std::unique_ptr<weld::MessageDialog> xQry(Application::CreateMessageDialog(getFrameWeld(),
+                                                      VclMessageType::Question, VclButtonsType::YesNo,
+                                                      DBA_RES(STR_QUERY_CLOSEDOCUMENTS)));
+            switch (xQry->run())
             {
                 case RET_YES:
                     closeSubComponents();

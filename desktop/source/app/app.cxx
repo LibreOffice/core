@@ -103,7 +103,7 @@
 #include <svtools/menuoptions.hxx>
 #include <rtl/bootstrap.hxx>
 #include <vcl/help.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
@@ -634,9 +634,10 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
 
         OUString const aMessage(aDiagnosticMessage + "\n");
 
-        ScopedVclPtrInstance< MessageDialog > aBootstrapFailedBox(nullptr, aMessage);
-        aBootstrapFailedBox->SetText( aProductKey );
-        aBootstrapFailedBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xBootstrapFailedBox(Application::CreateMessageDialog(nullptr,
+                                                                 VclMessageType::Warning, VclButtonsType::Ok, aMessage));
+        xBootstrapFailedBox->set_title(aProductKey);
+        xBootstrapFailedBox->run();
     }
 }
 
@@ -1049,8 +1050,9 @@ void restartOnMac(bool passArguments) {
     (void) passArguments; // avoid warnings
     OUString aMessage = DpResId(STR_LO_MUST_BE_RESTARTED);
 
-    MessageDialog aRestartBox(NULL, aMessage);
-    aRestartBox.Execute();
+    std::unique_ptr<weld::MessageDialog> xRestartBox(Application::CreateMessageDialog(nullptr,
+                                                     VclMessageType::Warning, VclButtonsType::Ok, aMessage));
+    xRestartBox->Execute();
 #else
     OUString execUrl;
     OSL_VERIFY(osl_getExecutableFile(&execUrl.pData) == osl_Process_E_None);
@@ -2153,8 +2155,10 @@ void Desktop::OpenClients()
         {
             aRequest.aPrintList.clear();
             aRequest.aPrintToList.clear();
-            ScopedVclPtrInstance< MessageDialog > aBox(nullptr, DpResId(STR_ERR_PRINTDISABLED));
-            aBox->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                      VclMessageType::Warning, VclButtonsType::Ok,
+                                                      DpResId(STR_ERR_PRINTDISABLED)));
+            xBox->run();
         }
 
         // Process request

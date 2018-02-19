@@ -45,10 +45,10 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <tools/urlobj.hxx>
 #include <svl/whiter.hxx>
-#include <vcl/layout.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/visitem.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
@@ -319,8 +319,9 @@ void SfxObjectShell::CheckOut( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        ScopedVclPtrInstance< MessageDialog > pErrorBox( &GetFrame()->GetWindow(), e.Message );
-        pErrorBox->Execute( );
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrame()->GetWindow().GetFrameWeld(),
+                                                  VclMessageType::Warning, VclButtonsType::Ok, e.Message));
+        xBox->run();
     }
 }
 
@@ -337,8 +338,9 @@ void SfxObjectShell::CancelCheckOut( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        ScopedVclPtrInstance< MessageDialog > pErrorBox(&GetFrame()->GetWindow(), e.Message);
-        pErrorBox->Execute( );
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrame()->GetWindow().GetFrameWeld(),
+                                                  VclMessageType::Warning, VclButtonsType::Ok, e.Message));
+        xBox->run();
     }
 }
 
@@ -359,8 +361,9 @@ void SfxObjectShell::CheckIn( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        ScopedVclPtrInstance< MessageDialog > pErrorBox(&GetFrame()->GetWindow(), e.Message);
-        pErrorBox->Execute( );
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrame()->GetWindow().GetFrameWeld(),
+                                                  VclMessageType::Warning, VclButtonsType::Ok, e.Message));
+        xBox->run();
     }
 }
 
@@ -373,8 +376,9 @@ uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        ScopedVclPtrInstance< MessageDialog > pErrorBox(&GetFrame()->GetWindow(), e.Message);
-        pErrorBox->Execute( );
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrame()->GetWindow().GetFrameWeld(),
+                                                  VclMessageType::Warning, VclButtonsType::Ok, e.Message));
+        xBox->run();
     }
     return uno::Sequence< document::CmisVersion > ( );
 }
@@ -795,7 +799,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         }
         case SID_CANCELCHECKOUT:
         {
-            if (ScopedVclPtrInstance<MessageDialog>(nullptr, SfxResId(STR_QUERY_CANCELCHECKOUT), VclMessageType::Question, VclButtonsType::YesNo)->Execute() == RET_YES)
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                      VclMessageType::Question, VclButtonsType::YesNo, SfxResId(STR_QUERY_CANCELCHECKOUT)));
+            if (xBox->run() == RET_YES)
             {
                 CancelCheckOut( );
 
@@ -1344,7 +1350,10 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
         )
     {
         // Only OASIS and OOo6.x formats will be handled further
-        ScopedVclPtrInstance<MessageDialog>( nullptr, SfxResId( STR_INFO_WRONGDOCFORMAT ), VclMessageType::Info )->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                  VclMessageType::Info, VclButtonsType::Ok, SfxResId(STR_INFO_WRONGDOCFORMAT)));
+
+        xBox->run();
         return;
     }
 
@@ -1388,9 +1397,12 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
 
         if ( nVersion >= SvtSaveOptions::ODFVER_012 )
         {
+            OUString sQuestion(bHasSign ? SfxResId(STR_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN) : SfxResId(RID_SVXSTR_XMLSEC_QUERY_SAVEBEFORESIGN));
+            std::unique_ptr<weld::MessageDialog> xQuestion(Application::CreateMessageDialog(nullptr,
+                                                           VclMessageType::Question, VclButtonsType::YesNo, sQuestion));
 
-            if ( (bHasSign && ScopedVclPtrInstance<MessageDialog>(nullptr, SfxResId(STR_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN), VclMessageType::Question, VclButtonsType::YesNo)->Execute() == RET_YES)
-              || (!bHasSign && ScopedVclPtrInstance<MessageDialog>(nullptr, SfxResId(RID_SVXSTR_XMLSEC_QUERY_SAVEBEFORESIGN), VclMessageType::Question, VclButtonsType::YesNo)->Execute() == RET_YES) )
+
+            if (xQuestion->run() == RET_YES)
             {
                 sal_uInt16 nId = SID_SAVEDOC;
                 if ( !GetMedium() || GetMedium()->GetName().isEmpty() )
@@ -1406,7 +1418,9 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
                     || SotStorage::GetVersion( GetMedium()->GetStorage() ) <= SOFFICE_FILEFORMAT_60 ) )
                 {
                     // Only OASIS format will be handled further
-                    ScopedVclPtrInstance<MessageDialog>( nullptr, SfxResId( STR_INFO_WRONGDOCFORMAT ), VclMessageType::Info )->Execute();
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok, SfxResId(STR_INFO_WRONGDOCFORMAT)));
+                    xBox->run();
                     return;
                 }
             }
@@ -1421,7 +1435,9 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
         }
         else
         {
-            ScopedVclPtrInstance<MessageDialog>(nullptr, SfxResId(STR_XMLSEC_ODF12_EXPECTED))->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                      VclMessageType::Warning, VclButtonsType::Ok, SfxResId(STR_XMLSEC_ODF12_EXPECTED)));
+            xBox->run();
             return;
         }
 

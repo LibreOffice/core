@@ -36,7 +36,7 @@
 #include <strings.hrc>
 
 #include <filtdlg.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <svl/sharedstringpool.hxx>
 
 #include <o3tl/make_unique.hxx>
@@ -680,7 +680,10 @@ IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn, void )
                 if (!pExpander->get_expanded())
                   pExpander->set_expanded(true);
 
-                ScopedVclPtrInstance<MessageDialog>(this, ScGlobal::GetRscString(STR_INVALID_TABREF))->Execute();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                          VclMessageType::Warning, VclButtonsType::Ok,
+                                                          ScGlobal::GetRscString(STR_INVALID_TABREF)));
+                xBox->run();
                 pEdCopyArea->GrabFocus();
                 bAreaInputOk = false;
             }

@@ -68,6 +68,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/waitobj.hxx>
+#include <vcl/weld.hxx>
 
 #include <algorithm>
 #include <iterator>
@@ -204,7 +205,8 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     }
     catch(const Exception&)
     {
-        ShowServiceNotAvailableError(_pParent->GetParent(), "com.sun.star.sdb.DatabaseContext", true);
+        vcl::Window* pTopParent = _pParent->GetParent();
+        ShowServiceNotAvailableError(pTopParent ? pTopParent->GetFrameWeld() : nullptr, "com.sun.star.sdb.DatabaseContext", true);
     }
 }
 

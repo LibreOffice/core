@@ -21,8 +21,8 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <openuriexternally.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -57,24 +57,27 @@ bool sfx2::openUriExternally(
                 "unexpected IllegalArgumentException: " + e.Message);
         }
         SolarMutexGuard g;
-        ScopedVclPtrInstance<MessageDialog> eb(
-            SfxGetpApp()->GetTopWindow(), SfxResId(STR_NO_ABS_URI_REF));
+        vcl::Window *pWindow = SfxGetpApp()->GetTopWindow();
+        std::unique_ptr<weld::MessageDialog> eb(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                                 VclMessageType::Warning, VclButtonsType::Ok,
+                                                                 SfxResId(STR_NO_ABS_URI_REF)));
         eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", uri));
-        eb->Execute();
+        eb->run();
     } catch (css::system::SystemShellExecuteException & e) {
         if (!handleSystemShellExecuteException) {
             throw;
         }
         SolarMutexGuard g;
-        ScopedVclPtrInstance<MessageDialog> eb(
-            SfxGetpApp()->GetTopWindow(),
-            SfxResId(STR_NO_WEBBROWSER_FOUND));
+        vcl::Window *pWindow = SfxGetpApp()->GetTopWindow();
+        std::unique_ptr<weld::MessageDialog> eb(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                                 VclMessageType::Warning, VclButtonsType::Ok,
+                                                                 SfxResId(STR_NO_WEBBROWSER_FOUND)));
         eb->set_primary_text(
             eb->get_primary_text().replaceFirst("$(ARG1)", uri)
             .replaceFirst("$(ARG2)", OUString::number(e.PosixError))
             .replaceFirst("$(ARG3)", e.Message));
             //TODO: avoid subsequent replaceFirst acting on previous replacement
-        eb->Execute();
+        eb->run();
     }
     return false;
 }

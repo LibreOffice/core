@@ -28,6 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <unotools/syslocale.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <math.h>
@@ -299,7 +300,7 @@ IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p, void )
              if (MediaWindow::executeMediaURLDialog(this, aURL, nullptr))
              {
                  if( !MediaWindow::isMediaURL( aURL, ""/*TODO?*/, true ) )
-                    MediaWindow::executeFormatErrorBox( this );
+                    MediaWindow::executeFormatErrorBox(GetFrameWeld());
                 else
                 {
                     aExecItem.setURL( aURL, "", ""/*TODO?*/ );

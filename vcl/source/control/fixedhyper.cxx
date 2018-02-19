@@ -19,7 +19,7 @@
 
 #include <vcl/fixedhyper.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -149,7 +149,7 @@ bool FixedHyperlink::set_property(const OString &rKey, const OUString &rValue)
     return true;
 }
 
-IMPL_STATIC_LINK(FixedHyperlink, HandleClick, FixedHyperlink&, rHyperlink, void)
+IMPL_LINK(FixedHyperlink, HandleClick, FixedHyperlink&, rHyperlink, void)
 {
     if ( rHyperlink.m_sURL.isEmpty() ) // Nothing to do, when the URL is empty
         return;
@@ -165,10 +165,10 @@ IMPL_STATIC_LINK(FixedHyperlink, HandleClick, FixedHyperlink&, rHyperlink, void)
     {
         uno::Any exc(cppu::getCaughtException());
         OUString msg(comphelper::anyToString(exc));
-        const SolarMutexGuard guard;
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, msg);
-        aErrorBox->SetText( rHyperlink.GetText() );
-        aErrorBox->Execute();
+        SolarMutexGuard g;
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Error, VclButtonsType::Ok, msg));
+        xErrorBox->set_title(rHyperlink.GetText());
+        xErrorBox->run();
     }
 }
 

@@ -48,8 +48,9 @@
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svxids.hrc>
-#include <vcl/xtextedt.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld.hxx>
+#include <vcl/xtextedt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cassert>
 
@@ -301,7 +302,9 @@ void ModulWindow::BasicExecute()
     {
         if ( !aDocument.allowMacros() )
         {
-            ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_CANNOTRUNMACRO), VclMessageType::Warning)->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_CANNOTRUNMACRO)));
+            xBox->run();
             return;
         }
     }
@@ -431,7 +434,11 @@ void ModulWindow::LoadBasic()
                 ErrorHandler::HandleError( nError );
         }
         else
-            ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_COULDNTREAD))->Execute();
+        {
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_COULDNTREAD)));
+            xBox->run();
+        }
     }
 }
 
@@ -472,7 +479,11 @@ void ModulWindow::SaveBasicSource()
                 ErrorHandler::HandleError( nError );
         }
         else
-            ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_COULDNTWRITE))->Execute();
+        {
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                           VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_COULDNTWRITE)));
+            xErrorBox->run();
+        }
     }
 }
 
@@ -989,7 +1000,7 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
         break;
         case SID_BASICIDE_DELETECURRENT:
         {
-            if (QueryDelModule(m_aName, this))
+            if (QueryDelModule(m_aName, GetFrameWeld()))
                 if (m_aDocument.removeModule(m_aLibName, m_aName))
                     MarkDocumentModified(m_aDocument);
         }

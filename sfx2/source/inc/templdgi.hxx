@@ -28,6 +28,7 @@ class SfxTemplateControllerItem;
 #include <vcl/button.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/treelistbox.hxx>
 #include <svl/eitem.hxx>
@@ -314,6 +315,11 @@ public:
     vcl::Window* GetWindow()
     {
         return pWindow;
+    }
+
+    weld::Widget* GetFrameWeld()
+    {
+        return pWindow ? pWindow->GetFrameWeld() : nullptr;
     }
 
     void EnableTreeDrag(bool b);

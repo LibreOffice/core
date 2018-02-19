@@ -42,7 +42,7 @@
 #include <svl/filenotation.hxx>
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/content.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 
 #include <vector>
 
@@ -384,8 +384,9 @@ namespace dbmm
             // check that the backup location isn't the same as the document itself
             if ( lcl_equalURLs_nothrow( m_pData->aContext, sBackupLocation, m_pData->xDocumentModel->getURL() ) )
             {
-                ScopedVclPtrInstance< MessageDialog > aErrorBox( const_cast< MacroMigrationDialog* >( this ), DBA_RES( STR_INVALID_BACKUP_LOCATION ) );
-                aErrorBox->Execute();
+                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                               VclMessageType::Warning, VclButtonsType::Ok, DBA_RES(STR_INVALID_BACKUP_LOCATION)));
+                xErrorBox->run();
                 rBackupPage.grabLocationFocus();
                 return false;
             }

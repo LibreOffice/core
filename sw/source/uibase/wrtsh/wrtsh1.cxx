@@ -1782,12 +1782,12 @@ void SwWrtShell::ChangeHeaderOrFooter(
                 //Actions have to be closed while the dialog is showing
                 EndAllAction();
 
-                vcl::Window* pParent = &GetView().GetViewFrame()->GetWindow();
+                weld::Window* pParent = GetView().GetViewFrame()->GetWindow().GetFrameWeld();
                 short nResult;
                 if (bHeader) {
-                    nResult = ScopedVclPtrInstance<DeleteHeaderDialog>(pParent)->Execute();
+                    nResult = DeleteHeaderDialog(pParent).run();
                 } else {
-                    nResult = ScopedVclPtrInstance<DeleteFooterDialog>(pParent)->Execute();
+                    nResult = DeleteFooterDialog(pParent).run();
                 }
 
                 bExecute = nResult == RET_YES;

@@ -18,7 +18,7 @@
  */
 
 #include <tools/debug.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/tabdlg.hxx>
@@ -728,7 +728,9 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProgress, 
             const char* pErrorId = (FmSearchProgress::State::Error == pProgress->aSearchState)
                 ? RID_STR_SEARCH_GENERAL_ERROR
                 : RID_STR_SEARCH_NORECORD;
-            ScopedVclPtrInstance<MessageDialog>(this, CuiResId(pErrorId))->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Warning, VclButtonsType::Ok, CuiResId(pErrorId)));
+            xBox->run();
             SAL_FALLTHROUGH;
         }
         case FmSearchProgress::State::Canceled:

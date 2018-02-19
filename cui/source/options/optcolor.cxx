@@ -34,6 +34,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/weld.hxx>
 #include <svx/svxdlg.hxx>
 #include <helpids.h>
 #include <dialmgr.hxx>
@@ -1130,9 +1131,11 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, Button*, pButton, void )
     else
     {
         DBG_ASSERT(m_pColorSchemeLB->GetEntryCount() > 1, "don't delete the last scheme");
-        ScopedVclPtrInstance< MessageDialog > aQuery(pButton, CuiResId(RID_SVXSTR_COLOR_CONFIG_DELETE), VclMessageType::Question, VclButtonsType::YesNo);
-        aQuery->SetText(CuiResId(RID_SVXSTR_COLOR_CONFIG_DELETE_TITLE));
-        if(RET_YES == aQuery->Execute())
+        std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(pButton->GetFrameWeld(),
+                                                    VclMessageType::Question, VclButtonsType::YesNo,
+                                                    CuiResId(RID_SVXSTR_COLOR_CONFIG_DELETE)));
+        xQuery->set_title(CuiResId(RID_SVXSTR_COLOR_CONFIG_DELETE_TITLE));
+        if (RET_YES == xQuery->run())
         {
             OUString sDeleteScheme(m_pColorSchemeLB->GetSelectedEntry());
             m_pColorSchemeLB->RemoveEntry(m_pColorSchemeLB->GetSelectedEntryPos());

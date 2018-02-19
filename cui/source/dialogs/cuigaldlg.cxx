@@ -26,6 +26,7 @@
 #include <ucbhelper/content.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/opengrf.hxx>
@@ -949,7 +950,6 @@ void TPGalleryThemeProperties::FillFilterList()
     m_pCbbFileType->SetText( pFilterEntry->aFilterName );
 }
 
-
 IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl, ComboBox&, void)
 {
     OUString aText( m_pCbbFileType->GetText() );
@@ -958,11 +958,12 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl, ComboBox&, void)
     {
         aLastFilterName = aText;
 
-        if( ScopedVclPtrInstance<MessageDialog>( this, "QueryUpdateFileListDialog","cui/ui/queryupdategalleryfilelistdialog.ui" )->Execute() == RET_YES )
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryupdategalleryfilelistdialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryUpdateFileListDialog"));
+        if (xQuery->run() == RET_YES)
             SearchFiles();
     }
 }
-
 
 void TPGalleryThemeProperties::SearchFiles()
 {

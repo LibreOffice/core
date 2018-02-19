@@ -21,7 +21,7 @@
 
 #include <o3tl/any.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/help.hxx>
 #include <vcl/builderfactory.hxx>
 #include <svl/stritem.hxx>
@@ -461,7 +461,10 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
         const OUString aShortName(m_pShortNameEdit->GetText());
         if(pGlossaryHdl->HasShortName(aShortName))
         {
-            ScopedVclPtrInstance<MessageDialog>(this, SwResId(STR_DOUBLE_SHORTNAME), VclMessageType::Info)->Execute();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          SwResId(STR_DOUBLE_SHORTNAME)));
+            xInfoBox->run();
             m_pShortNameEdit->SetSelection(Selection(0, SELECTION_MAX));
             m_pShortNameEdit->GrabFocus();
             return true;
@@ -589,7 +592,10 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
                 Init();
             else
             {
-                ScopedVclPtrInstance<MessageDialog>(this, SwResId( STR_NO_GLOSSARIES ), VclMessageType::Info)->Execute();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SwResId(STR_NO_GLOSSARIES)));
+                xInfoBox->run();
             }
         }
     }
@@ -668,9 +674,10 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl, Button*, void)
         }
         else
         {
-            ScopedVclPtrInstance< MessageDialog > aBox(this, sReadonlyPath, VclMessageType::Question, VclButtonsType::YesNo);
-
-            if(RET_YES == aBox->Execute())
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Question, VclButtonsType::YesNo,
+                                                      sReadonlyPath));
+            if (RET_YES == xBox->run())
                 PathHdl(m_pPathBtn);
         }
     }
@@ -802,7 +809,10 @@ IMPL_LINK_NOARG(SwNewGlosNameDlg, Rename, Button*, void)
     if( pDlg->pGlossaryHdl->HasShortName(m_pNewShort->GetText())
         && sNew != m_pOldShort->GetText() )
     {
-        ScopedVclPtrInstance<MessageDialog>(this, SwResId(STR_DOUBLE_SHORTNAME), VclMessageType::Info)->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                  SwResId(STR_DOUBLE_SHORTNAME)));
+        xBox->run();
         m_pNewShort->GrabFocus();
     }
     else
@@ -1138,8 +1148,10 @@ void SwGlossaryDlg::DeleteEntry()
     const bool bExists = nullptr != pChild;
     const bool bIsGroup = pEntry && !pParent;
 
-    ScopedVclPtrInstance< MessageDialog > aQuery(this, SwResId(STR_QUERY_DELETE), VclMessageType::Question, VclButtonsType::YesNo);
-    if (bExists && !bIsGroup && RET_YES == aQuery->Execute())
+    std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(GetFrameWeld(),
+                                                VclMessageType::Question, VclButtonsType::YesNo,
+                                                SwResId(STR_QUERY_DELETE)));
+    if (bExists && !bIsGroup && RET_YES == xQuery->run())
     {
         if (!aTitle.isEmpty() && pGlossaryHdl->DelGlossary(aShortName))
         {

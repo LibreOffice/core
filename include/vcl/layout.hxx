@@ -610,50 +610,6 @@ public:
     void set_property(const OString &rKey, const OUString &rValue);
 };
 
-class VCL_DLLPUBLIC MessageDialog : public Dialog
-{
-private:
-    VclButtonsType m_eButtonsType;
-    VclMessageType m_eMessageType;
-    VclPtr<VclBox> m_pOwnedContentArea;
-    VclPtr<VclButtonBox> m_pOwnedActionArea;
-    VclPtr<VclGrid> m_pGrid;
-    VclPtr<FixedImage> m_pImage;
-    VclPtr<VclMultiLineEdit> m_pPrimaryMessage;
-    VclPtr<VclMultiLineEdit> m_pSecondaryMessage;
-    std::vector<VclPtr<PushButton> > m_aOwnedButtons;
-    std::map< VclPtr<const vcl::Window>, short> m_aResponses;
-    OUString m_sPrimaryString;
-    OUString m_sSecondaryString;
-    DECL_DLLPRIVATE_LINK(ButtonHdl, Button *, void);
-    void setButtonHandlers(VclButtonBox const *pButtonBox);
-    short get_response(const vcl::Window *pWindow) const;
-    void create_owned_areas();
-
-    friend class VclPtr<MessageDialog>;
-    MessageDialog(vcl::Window* pParent, WinBits nStyle);
-public:
-
-    MessageDialog(vcl::Window* pParent,
-        const OUString &rMessage,
-        VclMessageType eMessageType = VclMessageType::Error,
-        VclButtonsType eButtonsType = VclButtonsType::Ok);
-    MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
-    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
-    virtual short Execute() override;
-    ///Emitted when an action widget is clicked
-    virtual void response(short nResponseId);
-    OUString const & get_primary_text() const;
-    OUString const & get_secondary_text() const;
-    void set_primary_text(const OUString &rPrimaryString);
-    void set_secondary_text(const OUString &rSecondaryString);
-    virtual ~MessageDialog() override;
-    virtual void dispose() override;
-
-    static void SetMessagesWidths(vcl::Window const *pParent, VclMultiLineEdit *pPrimaryMessage,
-        VclMultiLineEdit *pSecondaryMessage);
-};
-
 class VCL_DLLPUBLIC VclDrawingArea : public vcl::Window
 {
 private:

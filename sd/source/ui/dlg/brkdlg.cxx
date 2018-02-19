@@ -24,6 +24,7 @@
 #include <svx/svdetc.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <sdattr.hxx>
 #include <sdresid.hxx>
@@ -107,8 +108,10 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit, bool )
     // update status bar or show a error message?
     if(nInit == reinterpret_cast<void*>(1))
     {
-        ScopedVclPtrInstance< MessageDialog > aErrBox(this, SdResId(STR_BREAK_FAIL));
-        aErrBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xErrBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                     VclMessageType::Warning, VclButtonsType::Ok,
+                                                     SdResId(STR_BREAK_FAIL)));
+        xErrBox->run();
     }
     else
     {

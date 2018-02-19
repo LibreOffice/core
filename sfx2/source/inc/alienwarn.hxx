@@ -20,7 +20,7 @@
 #define INCLUDED_SFX2_SOURCE_INC_ALIENWARN_HXX
 
 #include <vcl/button.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/messagedialog.hxx>
 
 class SfxAlienWarningDialog : public MessageDialog
 {

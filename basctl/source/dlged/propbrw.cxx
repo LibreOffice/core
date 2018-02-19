@@ -39,6 +39,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/stdtext.hxx>
+#include <vcl/weld.hxx>
 
 #include <memory>
 
@@ -135,7 +136,8 @@ void PropBrw::ImplReCreateController()
         m_xBrowserController.set( xFactory->createInstanceWithContext( s_sControllerServiceName, xInspectorContext ), UNO_QUERY );
         if ( !m_xBrowserController.is() )
         {
-            ShowServiceNotAvailableError( GetParent(), s_sControllerServiceName, true );
+            vcl::Window* pWin = GetParent();
+            ShowServiceNotAvailableError(pWin ? pWin->GetFrameWeld() : nullptr, s_sControllerServiceName, true);
         }
         else
         {

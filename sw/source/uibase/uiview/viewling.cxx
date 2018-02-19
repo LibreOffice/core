@@ -31,6 +31,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/ehdl.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
@@ -445,8 +446,10 @@ void SwView::HyphenateDocument()
         // turned on no special area
         {
             // I want also in special areas hyphenation
-            ScopedVclPtrInstance< MessageDialog > aBox(&GetEditWin(), SwResId(STR_QUERY_SPECIAL_FORCED), VclMessageType::Question, VclButtonsType::YesNo);
-            if( aBox->Execute() == RET_YES )
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetEditWin().GetFrameWeld(),
+                                                      VclMessageType::Question, VclButtonsType::YesNo,
+                                                      SwResId(STR_QUERY_SPECIAL_FORCED)));
+            if (xBox->run() == RET_YES)
             {
                 bOther = true;
                 if (xProp.is())

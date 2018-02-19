@@ -27,7 +27,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/messagedialog.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/group.hxx>

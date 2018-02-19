@@ -1076,8 +1076,9 @@ void SvtFileDialog::OpenHdl_Impl(void const * pVoid)
                     "$filename$",
                     aFileObj.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset)
                 );
-                ScopedVclPtrInstance< MessageDialog > aBox(this, aMsg, VclMessageType::Question, VclButtonsType::YesNo);
-                if ( aBox->Execute() != RET_YES )
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                          VclMessageType::Question, VclButtonsType::YesNo, aMsg));
+                if (xBox->run() != RET_YES)
                     return;
             }
             else
@@ -1121,8 +1122,9 @@ void SvtFileDialog::OpenHdl_Impl(void const * pVoid)
                     }
                     sError = sError.replaceFirst( "$name$", sInvalidFile );
 
-                    ScopedVclPtrInstance< MessageDialog > aError(this, sError);
-                    aError->Execute();
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                              VclMessageType::Warning, VclButtonsType::Ok, sError));
+                    xBox->run();
                     return;
                 }
             }
@@ -1834,8 +1836,10 @@ short SvtFileDialog::PrepareExecute()
 
                 if ( bEmpty )
                 {
-                    ScopedVclPtrInstance< MessageDialog > aBox(this, FpsResId(STR_SVT_NOREMOVABLEDEVICE));
-                    aBox->Execute();
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                              VclMessageType::Warning, VclButtonsType::Ok,
+                                                              FpsResId(STR_SVT_NOREMOVABLEDEVICE)));
+                    xBox->run();
                     return 0;
                 }
             }

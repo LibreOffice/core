@@ -37,7 +37,7 @@
 #include <strings.hxx>
 #include <core_resource.hxx>
 #include <dbadmin.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/passwd.hxx>
 
 using namespace ::com::sun::star::container;
@@ -103,8 +103,10 @@ IMPL_LINK_NOARG(OPasswordDialog, OKHdl_Impl, Button*, void)
     else
     {
         OUString aErrorMsg( DBA_RES( STR_ERROR_PASSWORDS_NOT_IDENTICAL));
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(this, aErrorMsg);
-        aErrorBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                       VclMessageType::Warning, VclButtonsType::Ok,
+                                                       aErrorMsg));
+        xErrorBox->run();
         m_pEDPassword->SetText( OUString() );
         m_pEDPasswordRepeat->SetText( OUString() );
         m_pEDPassword->GrabFocus();
@@ -258,8 +260,10 @@ IMPL_LINK( OUserAdmin, UserHdl, Button *, pButton, void )
                 Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
                 if(xDrop.is())
                 {
-                    ScopedVclPtrInstance< MessageDialog > aQry(this, DBA_RES(STR_QUERY_USERADMIN_DELETE_USER), VclMessageType::Question, VclButtonsType::YesNo);
-                    if(aQry->Execute() == RET_YES)
+                    std::unique_ptr<weld::MessageDialog> xQry(Application::CreateMessageDialog(GetFrameWeld(),
+                                                              VclMessageType::Question, VclButtonsType::YesNo,
+                                                              DBA_RES(STR_QUERY_USERADMIN_DELETE_USER)));
+                    if (xQry->run() == RET_YES)
                         xDrop->dropByName(GetUser());
                 }
             }

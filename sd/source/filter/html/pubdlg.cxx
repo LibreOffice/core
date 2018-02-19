@@ -30,6 +30,7 @@
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/valueset.hxx>
 #include <vcl/graph.hxx>
 #include <svl/eitem.hxx>
@@ -1153,9 +1154,10 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl, Button*, void)
 
                 if (iter != m_aDesignList.end())
                 {
-                    ScopedVclPtrInstance<MessageDialog> aErrorBox(this, SdResId(STR_PUBDLG_SAMENAME),
-                        VclMessageType::Error, VclButtonsType::YesNo);
-                    bRetry = aErrorBox->Execute() == RET_NO;
+                    std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                   VclMessageType::Error, VclButtonsType::YesNo,
+                                                                   SdResId(STR_PUBDLG_SAMENAME)));
+                    bRetry = xErrorBox->run() == RET_NO;
 
                     if(!bRetry)
                         m_aDesignList.erase(iter);

@@ -23,7 +23,7 @@
 #include <com/sun/star/view/XRenderable.hpp>
 
 #include <svl/itempool.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/prnsetup.hxx>
 #include <svl/flagitem.hxx>
 #include <svl/stritem.hxx>
@@ -333,7 +333,13 @@ void SfxPrinterController::jobFinished( css::view::PrintableState nState )
                 // "real" problem (not simply printing cancelled by user)
                 OUString aMsg( SfxResId(STR_NOSTARTPRINTER) );
                 if ( !m_bApi )
-                    ScopedVclPtrInstance<MessageDialog>(mpViewShell->GetWindow(), aMsg)->Execute();
+                {
+                    vcl::Window* pWindow = mpViewShell->GetWindow();
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                                             VclMessageType::Warning, VclButtonsType::Ok,
+                                                                             aMsg));
+                    xBox->run();
+                }
                 SAL_FALLTHROUGH;
             }
             case view::PrintableState_JOB_ABORTED :
@@ -505,11 +511,16 @@ void SfxViewShell::SetPrinter_Impl( VclPtr<SfxPrinter>& pNewPrinter )
     SfxPrinterChangeFlags nChangedFlags = SfxPrinterChangeFlags::NONE;
 
     // Ask if possible, if page format should be taken over from printer.
-    if ( ( bOriChg  || bPgSzChg ) &&
-        RET_YES == ScopedVclPtrInstance<MessageDialog>(nullptr, aMsg, VclMessageType::Question, VclButtonsType::YesNo)->Execute() )
+    if (bOriChg || bPgSzChg)
     {
-        // Flags with changes for  <SetPrinter(SfxPrinter*)> are maintained
-        nChangedFlags |= nNewOpt;
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                                 VclMessageType::Question, VclButtonsType::YesNo,
+                                                                 aMsg));
+        if (RET_YES == xBox->run())
+        {
+            // Flags with changes for  <SetPrinter(SfxPrinter*)> are maintained
+            nChangedFlags |= nNewOpt;
+        }
     }
 
     // For the MAC to have its "temporary of class String" in next if()
@@ -778,7 +789,12 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             {
                 // no valid printer either in ItemSet or at the document
                 if ( !bSilent )
-                    ScopedVclPtrInstance<MessageDialog>(nullptr, SfxResId(STR_NODEFPRINTER))->Execute();
+                {
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                                             VclMessageType::Warning, VclButtonsType::Ok,
+                                                                             SfxResId(STR_NODEFPRINTER)));
+                    xBox->run();
+                }
 
                 rReq.SetReturnValue(SfxBoolItem(0,false));
 
@@ -790,7 +806,12 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             {
                 // if printer is busy, abort configuration
                 if ( !bSilent )
-                    ScopedVclPtrInstance<MessageDialog>(nullptr, SfxResId(STR_ERROR_PRINTER_BUSY), VclMessageType::Info)->Execute();
+                {
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                                             VclMessageType::Info, VclButtonsType::Ok,
+                                                                             SfxResId(STR_ERROR_PRINTER_BUSY)));
+                    xBox->run();
+                }
                 rReq.SetReturnValue(SfxBoolItem(0,false));
 
                 return;

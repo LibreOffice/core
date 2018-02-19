@@ -25,7 +25,7 @@
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <comphelper/processfactory.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
@@ -172,7 +172,10 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
 
             if( !bDone )
             {
-                ScopedVclPtrInstance<MessageDialog>(nullptr, SwResId(STR_SCAN_NOSOURCE), VclMessageType::Info)->Execute();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          SwResId(STR_SCAN_NOSOURCE)));
+                xBox->run();
                 rReq.Ignore();
             }
             else

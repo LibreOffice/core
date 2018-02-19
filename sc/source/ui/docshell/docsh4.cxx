@@ -119,9 +119,10 @@ void ScDocShell::ReloadAllLinks()
     getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
 
     ReloadTabLinks();
-    aDocument.UpdateExternalRefLinks(GetActiveDialogParent());
+    vcl::Window *pDialogParent = GetActiveDialogParent();
+    aDocument.UpdateExternalRefLinks(pDialogParent);
 
-    bool bAnyDde = aDocument.GetDocLinkManager().updateDdeOrOleOrWebServiceLinks(GetActiveDialogParent());
+    bool bAnyDde = aDocument.GetDocLinkManager().updateDdeOrOleOrWebServiceLinks(pDialogParent ? pDialogParent->GetFrameWeld() : nullptr);
 
     if (bAnyDde)
     {

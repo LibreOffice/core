@@ -43,6 +43,7 @@
 #include <galbrws2.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svxdlg.hxx>
@@ -1099,10 +1100,14 @@ void GalleryBrowser2::Execute(const OString &rIdent)
             SetMode( ( GALLERYBROWSERMODE_PREVIEW != GetMode() ) ? GALLERYBROWSERMODE_PREVIEW : meLastMode );
         else if (rIdent == "delete")
         {
-            if( !mpCurTheme->IsReadOnly() &&
-                ScopedVclPtrInstance<MessageDialog>(nullptr, "QueryDeleteObjectDialog","svx/ui/querydeleteobjectdialog.ui")->Execute() == RET_YES )
+            if (!mpCurTheme->IsReadOnly())
             {
-                mpCurTheme->RemoveObject( mnCurActionPos );
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "svx/ui/querydeleteobjectdialog.ui"));
+                std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryDeleteObjectDialog"));
+                if (xQuery->run() == RET_YES)
+                {
+                    mpCurTheme->RemoveObject( mnCurActionPos );
+                }
             }
         }
         else if (rIdent == "title")

@@ -19,7 +19,8 @@
 
 #include <osl/file.hxx>
 #include <unotools/resmgr.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <strings.hrc>
 #include "nameclashdlg.hxx"
@@ -35,8 +36,10 @@ IMPL_LINK( NameClashDialog, ButtonHdl_Impl, Button *, pBtn, void )
         OUString aNewName = m_pEDNewName->GetText();
         if ( ( aNewName == maNewName ) || aNewName.isEmpty() )
         {
-            ScopedVclPtrInstance< MessageDialog > aError(nullptr, maSameName);
-            aError->Execute();
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Warning, VclButtonsType::Ok,
+                                                      maSameName));
+            xErrorBox->run();
             return;
         }
         maNewName = aNewName;

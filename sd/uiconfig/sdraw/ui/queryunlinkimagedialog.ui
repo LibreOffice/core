@@ -4,7 +4,6 @@
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkMessageDialog" id="QueryUnlinkImageDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">6</property>
     <property name="title" translatable="yes" context="queryunlinkimagedialog|QueryUnlinkImageDialog">Release image's link?</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
@@ -21,7 +20,6 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="messagedialog-action_area4">
             <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
           </object>
           <packing>
             <property name="expand">False</property>

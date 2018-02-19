@@ -29,6 +29,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/inettbc.hxx>
 #include <svtools/simptabl.hxx>
 #include <svtools/svmedit.hxx>
@@ -632,13 +633,15 @@ namespace svxform
     };
 
 
-    class LinkedInstanceWarningBox : public MessageDialog
+    class LinkedInstanceWarningBox
     {
+    private:
+        std::unique_ptr<weld::Builder> m_xBuilder;
+        std::unique_ptr<weld::MessageDialog> m_xDialog;
     public:
-        LinkedInstanceWarningBox( vcl::Window* pParent );
+        LinkedInstanceWarningBox(weld::Widget* pParent);
+        short run() { return m_xDialog->run(); }
     };
-
-
 }
 
 

@@ -24,9 +24,19 @@
 #include <docsh.hxx>
 #include <crnrdlg.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <memory>
 
-#define ERRORBOX(s) ScopedVclPtrInstance<MessageDialog>(this, s)->Execute()
+namespace
+{
+    void ERRORBOX(weld::Window* pParent, const OUString& rString)
+    {
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  rString));
+    }
+}
+
 #define QUERYBOX(m) ScopedVclPtrInstance<QueryBox>(this, MessBoxStyle::YesNo|MessBoxStyle::DefaultYes, m)->Execute()
 
 const sal_uLong nEntryDataCol = 0;
@@ -563,7 +573,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl, Button*, void)
         }
         else
         {
-            ERRORBOX( ScGlobal::GetRscString(STR_INVALIDTABNAME) );
+            ERRORBOX(GetFrameWeld(), ScGlobal::GetRscString(STR_INVALIDTABNAME));
             if ( !bOk1 )
                 pEdAssign->GrabFocus();
             else

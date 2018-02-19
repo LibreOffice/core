@@ -52,8 +52,8 @@
 #include <strings.hrc>
 #include <resourcemanager.hxx>
 
-#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <unotools/configitem.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -281,8 +281,10 @@ bool DigitalSignaturesDialog::canAddRemove()
     if ( (!bSave1_1  && bDoc1_1) || (bSave1_1 && bDoc1_1) )
     {
         //#4
-        ScopedVclPtrInstance< MessageDialog > err(nullptr, XsResId(STR_XMLSECDLG_OLD_ODF_FORMAT));
-        err->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  XsResId(STR_XMLSECDLG_OLD_ODF_FORMAT)));
+        xBox->run();
         ret = false;
     }
 
@@ -299,8 +301,10 @@ bool DigitalSignaturesDialog::canAddRemove()
             //It the user presses 'Add' or 'Remove' several times then, then the warning
             //is shown every time until the user presses 'OK'. From then on, the warning
             //is not displayed anymore as long as the signatures dialog is alive.
-            if (ScopedVclPtrInstance<MessageDialog>(
-                  nullptr, XsResId(STR_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN), VclMessageType::Question, VclButtonsType::YesNo)->Execute() == RET_NO)
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Question, VclButtonsType::YesNo,
+                                                      XsResId(STR_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN)));
+            if (xBox->run() == RET_NO)
                 ret = false;
             else
                 m_bWarningShowSignMacro = true;
@@ -321,8 +325,10 @@ bool DigitalSignaturesDialog::canRemove()
 
     if ( maSignatureManager.meSignatureMode == DocumentSignatureMode::Content )
     {
-        short nDlgRet = ScopedVclPtrInstance<MessageDialog>(
-              nullptr, XsResId(STR_XMLSECDLG_QUERY_REALLYREMOVE), VclMessageType::Question, VclButtonsType::YesNo)->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                  VclMessageType::Question, VclButtonsType::YesNo,
+                                                  XsResId(STR_XMLSECDLG_QUERY_REALLYREMOVE)));
+        short nDlgRet = xBox->run();
         bRet = ( nDlgRet == RET_YES );
     }
 

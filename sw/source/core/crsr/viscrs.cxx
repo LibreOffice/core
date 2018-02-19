@@ -20,7 +20,8 @@
 #include <config_features.h>
 
 #include <vcl/dialog.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/settings.hxx>
 #include <viewopt.hxx>
@@ -691,8 +692,9 @@ short SwShellCursor::MaxReplaceArived()
             }
             vActionCounts.push_back(nActCnt);
         }
-        nRet = ScopedVclPtrInstance<MessageDialog>(pDlg, "AskSearchDialog",
-                "modules/swriter/ui/asksearchdialog.ui")->Execute();
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDlg->GetFrameWeld(), "modules/swriter/ui/asksearchdialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xDialog(xBuilder->weld_message_dialog("AskSearchDialog"));
+        nRet = xDialog->run();
         auto pActionCount = vActionCounts.begin();
         for(SwViewShell& rShell : const_cast< SwCursorShell* >( GetShell() )->GetRingContainer())
         {

@@ -20,6 +20,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <svtools/collatorres.hxx>
 #include <unotools/collatorwrapper.hxx>
@@ -810,7 +811,10 @@ DeactivateRC ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 
         if ( !bPosInputOk )
         {
-            ScopedVclPtrInstance<MessageDialog>(this, ScGlobal::GetRscString( STR_INVALID_TABREF))->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Warning, VclButtonsType::Ok,
+                                                      ScGlobal::GetRscString(STR_INVALID_TABREF)));
+            xBox->run();
             m_pEdOutPos->GrabFocus();
             m_pEdOutPos->SetSelection( Selection( 0, SELECTION_MAX ) );
             theOutPos.Set(0,0,0);

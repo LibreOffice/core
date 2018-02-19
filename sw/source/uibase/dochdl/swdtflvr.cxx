@@ -42,7 +42,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
@@ -378,10 +378,9 @@ namespace
             sal_uInt16 aRotation = aMetadata.getRotation();
             if (aRotation != 0)
             {
-                ScopedVclPtrInstance< MessageDialog > aQueryBox(
-                        nullptr, "QueryRotateIntoStandardOrientationDialog",
-                        "modules/swriter/ui/queryrotateintostandarddialog.ui");
-                if (aQueryBox->Execute() == RET_YES)
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/queryrotateintostandarddialog.ui"));
+                std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryRotateIntoStandardOrientationDialog"));
+                if (xQueryBox->run() == RET_YES)
                 {
                     GraphicNativeTransform aTransform( aGraphic );
                     aTransform.rotate( aRotation );
@@ -1700,7 +1699,10 @@ bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
 
     if (bMsg && pResId)
     {
-        ScopedVclPtrInstance<MessageDialog>(nullptr, SwResId(pResId), VclMessageType::Info)->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                  SwResId(pResId)));
+        xBox->run();
     }
     return bRet;
 }
@@ -1774,7 +1776,12 @@ bool SwTransferable::PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         if( ! aReader.Read( *pRead ).IsError() )
             bRet = true;
         else if( bMsg )
-            ScopedVclPtrInstance<MessageDialog>(nullptr, SwResId(STR_ERROR_CLPBRD_READ), VclMessageType::Info)->Execute();
+        {
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      SwResId(STR_ERROR_CLPBRD_READ)));
+            xBox->run();
+        }
     }
     else
     {
@@ -2152,7 +2159,12 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
                 if (nRows > SAL_MAX_UINT16 || nCols > SAL_MAX_UINT16)
                 {
                     if( bMsg )
-                        ScopedVclPtrInstance<MessageDialog>(nullptr, SwResId(STR_TABLE_TOO_LARGE), VclMessageType::Info)->Execute();
+                    {
+                        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                                  SwResId(STR_TABLE_TOO_LARGE)));
+                        xBox->run();
+                    }
                     pDDETyp = nullptr;
                     break;
                 }
@@ -2161,7 +2173,12 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
                 if( !nRows || !nCols )
                 {
                     if( bMsg )
-                        ScopedVclPtrInstance<MessageDialog>(nullptr, SwResId(STR_NO_TABLE), VclMessageType::Info)->Execute();
+                    {
+                        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                                  SwResId(STR_NO_TABLE)));
+                        xBox->run();
+                    }
                     pDDETyp = nullptr;
                     break;
                 }
@@ -2707,7 +2724,10 @@ bool SwTransferable::PasteDBData( TransferableDataHelper& rData,
     }
     else if( bMsg )
     {
-        ScopedVclPtrInstance<MessageDialog>(nullptr, SwResId(STR_CLPBRD_FORMAT_ERROR), VclMessageType::Info)->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                  SwResId(STR_CLPBRD_FORMAT_ERROR)));
+        xBox->run();
     }
     return bRet;
 }
@@ -2746,7 +2766,10 @@ bool SwTransferable::PasteFileList( TransferableDataHelper& rData,
     }
     else if( bMsg )
     {
-        ScopedVclPtrInstance<MessageDialog>(nullptr, SwResId(STR_CLPBRD_FORMAT_ERROR), VclMessageType::Info)->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                  SwResId(STR_CLPBRD_FORMAT_ERROR)));
+        xBox->run();
     }
     return bRet;
 }
