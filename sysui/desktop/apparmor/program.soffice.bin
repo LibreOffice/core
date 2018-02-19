@@ -177,7 +177,10 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
 
   owner @{HOME}/.mozilla/firefox/profiles.ini r,
   owner @{HOME}/.mozilla/firefox/*/secmod.db r,
+  # firefox < 58
   owner @{HOME}/.mozilla/firefox/*/cert8.db r,
+  # firefox >= 58
+  owner @{HOME}/.mozilla/firefox/*/cert9.db r,
   # there is abstractions/gnupg but that's just for gpg1...
   profile gpg {
     #include <abstractions/base>
