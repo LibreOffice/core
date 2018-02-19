@@ -829,6 +829,7 @@
 #define UNO_NAME_INITIALS "Initials"
 #define UNO_NAME_TABLE_BORDER2 "TableBorder2"
 #define UNO_NAME_REPLACEMENT_GRAPHIC_URL "ReplacementGraphicURL"
+#define UNO_NAME_REPLACEMENT_GRAPHIC "ReplacementGraphic"
 #define UNO_NAME_HIDDEN "Hidden"
 #define UNO_NAME_DEFAULT_PAGE_MODE "DefaultPageMode"
 #define UNO_NAME_CHAR_SHADING_VALUE "CharShadingValue"

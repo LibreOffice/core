@@ -115,7 +115,7 @@
 #define OWN_ATTR_BASE_GEOMETRY                  (OWN_ATTR_VALUE_START+47)
 
 /// reuse attr slots for GraphicObject which will never be used together with graphic object
-#define OWN_ATTR_REPLACEMENTGRAFURL             (OWN_ATTR_VALUE_START+14)
+#define OWN_ATTR_REPLACEMENT_GRAPHIC            (OWN_ATTR_VALUE_START+14)
 
 #define OWN_ATTR_APPLET_DOCBASE                 (OWN_ATTR_VALUE_START+48)
 #define OWN_ATTR_APPLET_CODEBASE                (OWN_ATTR_VALUE_START+49)
@@ -428,7 +428,7 @@
     SPECIAL_GRAPHOBJ_PROPERTIES_DEFAULTS \
     { OUString(UNO_NAME_GRAPHIC_GRAPHICCROP),           SDRATTR_GRAFCROP            , ::cppu::UnoType<css::text::GraphicCrop>::get(),        0,  0 }, \
     { OUString(UNO_NAME_GRAPHOBJ_GRAFURL),              OWN_ATTR_GRAFURL            , ::cppu::UnoType<OUString>::get(), 0, 0 }, \
-    { OUString(UNO_NAME_GRAPHOBJ_REPLACEMENTGRAFURL),   OWN_ATTR_REPLACEMENTGRAFURL , ::cppu::UnoType<OUString>::get(), 0, 0 }, \
+    { OUString(UNO_NAME_GRAPHOBJ_REPLACEMENT_GRAPHIC),  OWN_ATTR_REPLACEMENT_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get()  ,   0,     0}, \
     { OUString(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL),        OWN_ATTR_GRAFSTREAMURL      , ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 }, \
     { OUString(UNO_NAME_GRAPHOBJ_FILLBITMAP),           OWN_ATTR_VALUE_FILLBITMAP   , cppu::UnoType<css::awt::XBitmap>::get()  ,    0,     0},    \
     { OUString(UNO_NAME_GRAPHOBJ_GRAPHIC),              OWN_ATTR_VALUE_GRAPHIC      , cppu::UnoType<css::graphic::XGraphic>::get()  ,   0,     0}, \
