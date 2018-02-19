@@ -33,7 +33,7 @@
 #include <drawinglayer/processor3d/geometry2dextractor.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <basegfx/raster/bzpixelraster.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <comphelper/threadpool.hxx>
 
 using namespace com::sun::star;
@@ -49,83 +49,68 @@ namespace
         if(nWidth && nHeight)
         {
             const Size aDestSize(nWidth, nHeight);
-            sal_uInt8 nInitAlpha(255);
-            Bitmap aContent(aDestSize, 24);
-            AlphaMask aAlpha(aDestSize, &nInitAlpha);
-            Bitmap::ScopedWriteAccess pContent(aContent);
-            AlphaMask::ScopedWriteAccess pAlpha(aAlpha);
+            vcl::bitmap::RawBitmap aContent(aDestSize);
 
-            if (pContent && pAlpha)
+            if(mnAntiAlialize)
             {
-                if(mnAntiAlialize)
+                const sal_uInt16 nDivisor(mnAntiAlialize * mnAntiAlialize);
+
+                for(sal_uInt32 y(0); y < nHeight; y++)
                 {
-                    const sal_uInt16 nDivisor(mnAntiAlialize * mnAntiAlialize);
-
-                    for(sal_uInt32 y(0); y < nHeight; y++)
+                    for(sal_uInt32 x(0); x < nWidth; x++)
                     {
-                        Scanline pScanlineContent = pContent->GetScanline( y );
-                        Scanline pScanlineAlpha = pAlpha->GetScanline( y );
-                        for(sal_uInt32 x(0); x < nWidth; x++)
+                        sal_uInt16 nRed(0);
+                        sal_uInt16 nGreen(0);
+                        sal_uInt16 nBlue(0);
+                        sal_uInt16 nOpacity(0);
+                        sal_uInt32 nIndex(rRaster.getIndexFromXY(x * mnAntiAlialize, y * mnAntiAlialize));
+
+                        for(sal_uInt32 c(0); c < mnAntiAlialize; c++)
                         {
-                            sal_uInt16 nRed(0);
-                            sal_uInt16 nGreen(0);
-                            sal_uInt16 nBlue(0);
-                            sal_uInt16 nOpacity(0);
-                            sal_uInt32 nIndex(rRaster.getIndexFromXY(x * mnAntiAlialize, y * mnAntiAlialize));
-
-                            for(sal_uInt32 c(0); c < mnAntiAlialize; c++)
+                            for(sal_uInt32 d(0); d < mnAntiAlialize; d++)
                             {
-                                for(sal_uInt32 d(0); d < mnAntiAlialize; d++)
-                                {
-                                    const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
-                                    nRed = nRed + rPixel.getRed();
-                                    nGreen = nGreen + rPixel.getGreen();
-                                    nBlue = nBlue + rPixel.getBlue();
-                                    nOpacity = nOpacity + rPixel.getOpacity();
-                                }
-
-                                nIndex += rRaster.getWidth() - mnAntiAlialize;
+                                const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
+                                nRed = nRed + rPixel.getRed();
+                                nGreen = nGreen + rPixel.getGreen();
+                                nBlue = nBlue + rPixel.getBlue();
+                                nOpacity = nOpacity + rPixel.getOpacity();
                             }
 
-                            nOpacity = nOpacity / nDivisor;
+                            nIndex += rRaster.getWidth() - mnAntiAlialize;
+                        }
 
-                            if(nOpacity)
-                            {
-                                pContent->SetPixelOnData(pScanlineContent, x, BitmapColor(
-                                    static_cast<sal_uInt8>(nRed / nDivisor),
-                                    static_cast<sal_uInt8>(nGreen / nDivisor),
-                                    static_cast<sal_uInt8>(nBlue / nDivisor)));
-                                pAlpha->SetPixelOnData(pScanlineAlpha, x, BitmapColor(255 - static_cast<sal_uInt8>(nOpacity)));
-                            }
+                        nOpacity = nOpacity / nDivisor;
+
+                        if(nOpacity)
+                        {
+                            aContent.SetPixel(y, x, Color(
+                                static_cast<sal_uInt8>(nRed / nDivisor),
+                                static_cast<sal_uInt8>(nGreen / nDivisor),
+                                static_cast<sal_uInt8>(nBlue / nDivisor),
+                                255 - static_cast<sal_uInt8>(nOpacity)));
                         }
                     }
                 }
-                else
+            }
+            else
+            {
+                sal_uInt32 nIndex(0);
+
+                for(sal_uInt32 y(0); y < nHeight; y++)
                 {
-                    sal_uInt32 nIndex(0);
-
-                    for(sal_uInt32 y(0); y < nHeight; y++)
+                    for(sal_uInt32 x(0); x < nWidth; x++)
                     {
-                        Scanline pScanlineContent = pContent->GetScanline( y );
-                        Scanline pScanlineAlpha = pAlpha->GetScanline( y );
-                        for(sal_uInt32 x(0); x < nWidth; x++)
-                        {
-                            const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
+                        const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
 
-                            if(rPixel.getOpacity())
-                            {
-                                pContent->SetPixelOnData(pScanlineContent, x, BitmapColor(rPixel.getRed(), rPixel.getGreen(), rPixel.getBlue()));
-                                pAlpha->SetPixelOnData(pScanlineAlpha, x, BitmapColor(255 - rPixel.getOpacity()));
-                            }
+                        if(rPixel.getOpacity())
+                        {
+                            aContent.SetPixel(y, x, Color(rPixel.getRed(), rPixel.getGreen(), rPixel.getBlue(), 255 - rPixel.getOpacity()));
                         }
                     }
                 }
             }
 
-            pAlpha.reset();
-            pContent.reset();
-
-            aRetval = BitmapEx(aContent, aAlpha);
+            aRetval = vcl::bitmap::CreateFromData(std::move(aContent));
 
             // #i101811# set PrefMapMode and PrefSize at newly created Bitmap
             aRetval.SetPrefMapMode(MapMode(MapUnit::MapPixel));
