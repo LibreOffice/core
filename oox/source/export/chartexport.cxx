@@ -3093,6 +3093,24 @@ void ChartExport::exportDataLabels(
     FSHelperPtr pFS = GetFS();
     pFS->startElement(FSNS(XML_c, XML_dLbls), FSEND);
 
+    bool bLinkedNumFmt = true;
+    if (GetProperty(xPropSet, "LinkNumberFormatToSource"))
+        mAny >>= bLinkedNumFmt;
+
+    if (GetProperty(xPropSet, "NumberFormat"))
+    {
+        sal_Int32 nKey = 0;
+        mAny >>= nKey;
+
+        OUString aNumberFormatString = getNumberFormatCode(nKey);
+        OString sNumberFormatString = OUStringToOString(aNumberFormatString, RTL_TEXTENCODING_UTF8);
+
+        pFS->singleElement(FSNS(XML_c, XML_numFmt),
+            XML_formatCode, sNumberFormatString.getStr(),
+            XML_sourceLinked, bLinkedNumFmt ? "1" : "0",
+            FSEND);
+    }
+
     uno::Sequence<sal_Int32> aAttrLabelIndices;
     xPropSet->getPropertyValue("AttributedDataPoints") >>= aAttrLabelIndices;
 
