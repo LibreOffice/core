@@ -736,9 +736,9 @@ void SdExportTest::testEmbeddedPdf()
     xShell = saveAndReload( xShell.get(), ODP );
     uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
-    OUString aReplacementGraphicURL;
-    xShape->getPropertyValue("ReplacementGraphicURL") >>= aReplacementGraphicURL;
-    CPPUNIT_ASSERT(!aReplacementGraphicURL.isEmpty());
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xShape->getPropertyValue("ReplacementGraphic") >>= xGraphic;
+    CPPUNIT_ASSERT(xGraphic.is());
     xShell->DoClose();
 #endif
 }
