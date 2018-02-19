@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.20.2 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="WordCountDialog">
@@ -22,6 +22,8 @@
                 <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
+                <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
@@ -68,42 +70,36 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="wordcount|label1">Words</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="wordcount|label2">Characters including spaces</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">2</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="wordcount|label3">Characters excluding spaces</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">3</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -112,15 +108,13 @@
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
-                <property name="xalign">1</property>
                 <property name="label">            0</property>
                 <property name="justify">right</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -129,15 +123,13 @@
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
-                <property name="xalign">1</property>
                 <property name="label">            0</property>
                 <property name="justify">right</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">2</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -146,15 +138,13 @@
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
-                <property name="xalign">1</property>
                 <property name="label">            0</property>
                 <property name="justify">right</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">3</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -170,8 +160,6 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -187,8 +175,6 @@
               <packing>
                 <property name="left_attach">2</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -197,15 +183,13 @@
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
-                <property name="xalign">1</property>
                 <property name="label">            0</property>
                 <property name="justify">right</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
                 <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -214,15 +198,13 @@
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
-                <property name="xalign">1</property>
                 <property name="label">            0</property>
                 <property name="justify">right</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
                 <property name="top_attach">2</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -231,29 +213,25 @@
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
-                <property name="xalign">1</property>
                 <property name="label">            0</property>
                 <property name="justify">right</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
                 <property name="top_attach">3</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="cjkcharsft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="wordcount|cjkcharsft">Asian characters and Korean syllables</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">4</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -262,15 +240,13 @@
                 <property name="no_show_all">True</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
-                <property name="xalign">1</property>
                 <property name="label">            0</property>
                 <property name="justify">right</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">4</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -279,29 +255,25 @@
                 <property name="no_show_all">True</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
-                <property name="xalign">1</property>
                 <property name="label">            0</property>
                 <property name="justify">right</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
                 <property name="top_attach">4</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="standardizedpages">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="wordcount|standardizedpages">Standardized pages</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">5</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -310,15 +282,13 @@
                 <property name="no_show_all">True</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
-                <property name="xalign">1</property>
                 <property name="label">            0</property>
                 <property name="justify">right</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">5</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -327,15 +297,13 @@
                 <property name="no_show_all">True</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
-                <property name="xalign">1</property>
                 <property name="label">            0</property>
                 <property name="justify">right</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
                 <property name="top_attach">5</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -351,8 +319,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">close</action-widget>
-      <action-widget response="0">help</action-widget>
+      <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

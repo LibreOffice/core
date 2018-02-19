@@ -153,7 +153,6 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
     Initialize(pInfo);
 
     m_pClosePB->SetClickHdl(LINK(this, SwWordCountFloatDlg, CloseHdl));
-    m_pClosePB->GrabFocus();
 }
 
 void SwWordCountFloatDlg::UpdateCounts()
