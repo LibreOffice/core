@@ -68,10 +68,10 @@ bool INetImage::Read( SvStream& rIStm, SotClipboardFormatId nFormat )
             aTargetURL = sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
             aTargetFrame = sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
             /*aAlternateText =*/ sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
-            aSizePixel.Width() = sINetImg.getToken( 0, TOKEN_SEPARATOR,
-                                                    nStart ).toInt32();
-            aSizePixel.Height() = sINetImg.getToken( 0, TOKEN_SEPARATOR,
-                                                    nStart ).toInt32();
+            aSizePixel.setWidth( sINetImg.getToken( 0, TOKEN_SEPARATOR,
+                                                    nStart ).toInt32() );
+            aSizePixel.setHeight( sINetImg.getToken( 0, TOKEN_SEPARATOR,
+                                                    nStart ).toInt32() );
             bRet = !sINetImg.isEmpty();
         }
         break;
@@ -100,8 +100,8 @@ bool INetImage::Read( SvStream& rIStm, SotClipboardFormatId nFormat )
             nFilePos = rIStm.Tell();
             // skip over iSize (int), bIsMao ( sal_Bool ) alignment of 4 !!!!
             rIStm.SeekRel( 8 );
-            rIStm.ReadInt32( nVal );  aSizePixel.Width() = nVal;
-            rIStm.ReadInt32( nVal );  aSizePixel.Height() = nVal;
+            rIStm.ReadInt32( nVal );  aSizePixel.setWidth( nVal );
+            rIStm.ReadInt32( nVal );  aSizePixel.setHeight( nVal );
             // skip over iHSpace, iVSpace, iBorder, iLowResOffset
             rIStm.SeekRel( 3 * sizeof( sal_Int32 ) + sizeof( int ) );
             rIStm.ReadInt32( nAltOffset );

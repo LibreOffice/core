@@ -742,7 +742,7 @@ css::awt::Size VCLXFileControl::getMinimumSize()
     if ( pControl )
     {
         Size aTmpSize = pControl->GetEdit().CalcMinimumSize();
-        aTmpSize.Width() += pControl->GetButton().CalcMinimumSize().Width();
+        aTmpSize.AdjustWidth(pControl->GetButton().CalcMinimumSize().Width() );
         aSz = AWTSize(pControl->CalcWindowSize( aTmpSize ));
     }
     return aSz;

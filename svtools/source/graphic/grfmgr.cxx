@@ -274,16 +274,16 @@ bool GraphicObject::ImplGetCropParams( OutputDevice const * pOut, Point& rPt, Si
             const long nNewRight = nNewLeft + FRound( aSize100.Width() * fScale ) - 1;
 
             fScale = static_cast<double>(rSz.Width()) / aSize100.Width();
-            rPt.X() += FRound( nNewLeft * fScale );
-            rSz.Width() = FRound( ( nNewRight - nNewLeft + 1 ) * fScale );
+            rPt.AdjustX(FRound( nNewLeft * fScale ) );
+            rSz.setWidth( FRound( ( nNewRight - nNewLeft + 1 ) * fScale ) );
 
             fScale = static_cast<double>(aSize100.Height()) / nTotalHeight;
             const long nNewTop = -FRound( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Vertical ) ? pAttr->GetBottomCrop() : pAttr->GetTopCrop() ) * fScale );
             const long nNewBottom = nNewTop + FRound( aSize100.Height() * fScale ) - 1;
 
             fScale = static_cast<double>(rSz.Height()) / aSize100.Height();
-            rPt.Y() += FRound( nNewTop * fScale );
-            rSz.Height() = FRound( ( nNewBottom - nNewTop + 1 ) * fScale );
+            rPt.AdjustY(FRound( nNewTop * fScale ) );
+            rSz.setHeight( FRound( ( nNewBottom - nNewTop + 1 ) * fScale ) );
 
             if( nRot10 )
             {
@@ -464,16 +464,16 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     // mirrored horizontically
     if( aSz.Width() < 0 )
     {
-        aPt.X() += aSz.Width() + 1;
-        aSz.Width() = -aSz.Width();
+        aPt.AdjustX(aSz.Width() + 1 );
+        aSz.setWidth( -aSz.Width() );
         aAttr.SetMirrorFlags( aAttr.GetMirrorFlags() ^ BmpMirrorFlags::Horizontal );
     }
 
     // mirrored vertically
     if( aSz.Height() < 0 )
     {
-        aPt.Y() += aSz.Height() + 1;
-        aSz.Height() = -aSz.Height();
+        aPt.AdjustY(aSz.Height() + 1 );
+        aSz.setHeight( -aSz.Height() );
         aAttr.SetMirrorFlags( aAttr.GetMirrorFlags() ^ BmpMirrorFlags::Vertical );
     }
 
@@ -786,10 +786,10 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
                 const double fFactorX(static_cast<double>(aBitmapEx.GetSizePixel().Width()) / aSrcSizePixel.Width());
                 const double fFactorY(static_cast<double>(aBitmapEx.GetSizePixel().Height()) / aSrcSizePixel.Height());
 
-                aCropLeftTop.Width() = basegfx::fround(aCropLeftTop.Width() * fFactorX);
-                aCropLeftTop.Height() = basegfx::fround(aCropLeftTop.Height() * fFactorY);
-                aCropRightBottom.Width() = basegfx::fround(aCropRightBottom.Width() * fFactorX);
-                aCropRightBottom.Height() = basegfx::fround(aCropRightBottom.Height() * fFactorY);
+                aCropLeftTop.setWidth( basegfx::fround(aCropLeftTop.Width() * fFactorX) );
+                aCropLeftTop.setHeight( basegfx::fround(aCropLeftTop.Height() * fFactorY) );
+                aCropRightBottom.setWidth( basegfx::fround(aCropRightBottom.Width() * fFactorX) );
+                aCropRightBottom.setHeight( basegfx::fround(aCropRightBottom.Height() * fFactorY) );
 
                 aSrcSizePixel = aBitmapEx.GetSizePixel();
             }
@@ -834,10 +834,10 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
                 aCropRightBottom.Height() < 0 )
             {
                 Size aNewSize( aAnim.GetDisplaySizePixel() );
-                aNewSize.Width() += aCropRightBottom.Width() < 0 ? -aCropRightBottom.Width() : 0;
-                aNewSize.Width() += aCropLeftTop.Width() < 0 ? -aCropLeftTop.Width() : 0;
-                aNewSize.Height() += aCropRightBottom.Height() < 0 ? -aCropRightBottom.Height() : 0;
-                aNewSize.Height() += aCropLeftTop.Height() < 0 ? -aCropLeftTop.Height() : 0;
+                aNewSize.AdjustWidth(aCropRightBottom.Width() < 0 ? -aCropRightBottom.Width() : 0 );
+                aNewSize.AdjustWidth(aCropLeftTop.Width() < 0 ? -aCropLeftTop.Width() : 0 );
+                aNewSize.AdjustHeight(aCropRightBottom.Height() < 0 ? -aCropRightBottom.Height() : 0 );
+                aNewSize.AdjustHeight(aCropLeftTop.Height() < 0 ? -aCropLeftTop.Height() : 0 );
                 aAnim.SetDisplaySizePixel( aNewSize );
             }
 

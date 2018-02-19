@@ -59,8 +59,8 @@ namespace svt
         m_pImpl->m_aMinSize = FixedText::CalcMinimumSize( nMaxWidth );
         // the MinimumSize is used to size the FocusRectangle
         // and for the MouseMove method
-        m_pImpl->m_aMinSize.Height() += 2;
-        m_pImpl->m_aMinSize.Width() += 1;
+        m_pImpl->m_aMinSize.AdjustHeight(2 );
+        m_pImpl->m_aMinSize.AdjustWidth(1 );
         return m_pImpl->m_aMinSize;
     }
 

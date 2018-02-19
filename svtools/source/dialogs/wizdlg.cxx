@@ -88,20 +88,20 @@ void WizardDialog::ImplCalcSize( Size& rSize )
     }
     if ( nMaxHeight )
         nMaxHeight += WIZARDDIALOG_BUTTON_OFFSET_Y*2;
-    rSize.Height() += nMaxHeight;
+    rSize.AdjustHeight(nMaxHeight );
 
     // View-Window-Groesse dazurechnen
     if ( mpViewWindow && mpViewWindow->IsVisible() )
     {
         Size aViewSize = mpViewWindow->GetSizePixel();
         if ( meViewAlign == WindowAlign::Top )
-            rSize.Height() += aViewSize.Height();
+            rSize.AdjustHeight(aViewSize.Height() );
         else if ( meViewAlign == WindowAlign::Left )
-            rSize.Width() += aViewSize.Width();
+            rSize.AdjustWidth(aViewSize.Width() );
         else if ( meViewAlign == WindowAlign::Bottom )
-            rSize.Height() += aViewSize.Height();
+            rSize.AdjustHeight(aViewSize.Height() );
         else if ( meViewAlign == WindowAlign::Right )
-            rSize.Width() += aViewSize.Width();
+            rSize.AdjustWidth(aViewSize.Width() );
     }
 }
 
@@ -264,7 +264,7 @@ void WizardDialog::ImplPosTabPage()
 
     // position TabPage
     Size aDlgSize = GetOutputSizePixel();
-    aDlgSize.Height() -= nMaxHeight;
+    aDlgSize.AdjustHeight( -nMaxHeight );
     long nOffX = 0;
     long nOffY = 0;
     if ( mpViewWindow && mpViewWindow->IsVisible() )
@@ -273,18 +273,18 @@ void WizardDialog::ImplPosTabPage()
         if ( meViewAlign == WindowAlign::Top )
         {
             nOffY += aViewSize.Height()+WIZARDDIALOG_VIEW_DLGOFFSET_Y;
-            aDlgSize.Height() -= aViewSize.Height()+WIZARDDIALOG_VIEW_DLGOFFSET_Y;
+            aDlgSize.AdjustHeight( -(aViewSize.Height()+WIZARDDIALOG_VIEW_DLGOFFSET_Y) );
         }
         else if ( meViewAlign == WindowAlign::Left )
         {
             long nViewOffset = mbEmptyViewMargin ? 0 : WIZARDDIALOG_VIEW_DLGOFFSET_X;
             nOffX += aViewSize.Width() + nViewOffset;
-            aDlgSize.Width() -= nOffX;
+            aDlgSize.AdjustWidth( -nOffX );
         }
         else if ( meViewAlign == WindowAlign::Bottom )
-            aDlgSize.Height() -= aViewSize.Height()+WIZARDDIALOG_VIEW_DLGOFFSET_Y;
+            aDlgSize.AdjustHeight( -(aViewSize.Height()+WIZARDDIALOG_VIEW_DLGOFFSET_Y) );
         else if ( meViewAlign == WindowAlign::Right )
-            aDlgSize.Width() -= aViewSize.Width()+WIZARDDIALOG_VIEW_DLGOFFSET_X;
+            aDlgSize.AdjustWidth( -(aViewSize.Width()+WIZARDDIALOG_VIEW_DLGOFFSET_X) );
     }
     Point aPos( nOffX, nOffY );
     mpCurTabPage->SetPosSizePixel( aPos, aDlgSize );
@@ -397,9 +397,9 @@ void WizardDialog::StateChanged( StateChangedType nType )
                     {
                         Size aPageSize = pPageData->mpPage->GetSizePixel();
                         if ( aPageSize.Width() > aDlgSize.Width() )
-                            aDlgSize.Width() = aPageSize.Width();
+                            aDlgSize.setWidth( aPageSize.Width() );
                         if ( aPageSize.Height() > aDlgSize.Height() )
-                            aDlgSize.Height() = aPageSize.Height();
+                            aDlgSize.setHeight( aPageSize.Height() );
                     }
 
                     pPageData = pPageData->mpNext;

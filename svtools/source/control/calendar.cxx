@@ -252,14 +252,14 @@ void Calendar::ImplFormat()
 
         // calculate spinfields
         long nSpinSize      = nTextHeight+TITLE_BORDERY-SPIN_OFFY;
-        maPrevRect.Left()   = SPIN_OFFX;
-        maPrevRect.Top()    = SPIN_OFFY;
-        maPrevRect.Right()  = maPrevRect.Left()+nSpinSize;
-        maPrevRect.Bottom() = maPrevRect.Top()+nSpinSize;
-        maNextRect.Left()   = aOutSize.Width()-SPIN_OFFX-nSpinSize-1;
-        maNextRect.Top()    = SPIN_OFFY;
-        maNextRect.Right()  = maNextRect.Left()+nSpinSize;
-        maNextRect.Bottom() = maNextRect.Top()+nSpinSize;
+        maPrevRect.SetLeft( SPIN_OFFX );
+        maPrevRect.SetTop( SPIN_OFFY );
+        maPrevRect.SetRight( maPrevRect.Left()+nSpinSize );
+        maPrevRect.SetBottom( maPrevRect.Top()+nSpinSize );
+        maNextRect.SetLeft( aOutSize.Width()-SPIN_OFFX-nSpinSize-1 );
+        maNextRect.SetTop( SPIN_OFFY );
+        maNextRect.SetRight( maNextRect.Left()+nSpinSize );
+        maNextRect.SetBottom( maNextRect.Top()+nSpinSize );
 
         // Calculate DayOfWeekText (gets displayed in a narrow font)
         maDayOfWeekText.clear();
@@ -498,8 +498,8 @@ void ImplDrawSpinArrow(vcl::RenderContext& rRenderContext, const tools::Rectangl
                      Size(1, 1));
     if (!bPrev)
     {
-        aRect.Left()  += nLines;
-        aRect.Right() += nLines;
+        aRect.AdjustLeft(nLines );
+        aRect.AdjustRight(nLines );
     }
 
     rRenderContext.DrawRect(aRect);
@@ -507,16 +507,16 @@ void ImplDrawSpinArrow(vcl::RenderContext& rRenderContext, const tools::Rectangl
     {
         if (bPrev)
         {
-            aRect.Left()++;
-            aRect.Right()++;
+            aRect.AdjustLeft( 1 );
+            aRect.AdjustRight( 1 );
         }
         else
         {
-            aRect.Left()--;
-            aRect.Right()--;
+            aRect.AdjustLeft( -1 );
+            aRect.AdjustRight( -1 );
         }
-        aRect.Top()--;
-        aRect.Bottom()++;
+        aRect.AdjustTop( -1 );
+        aRect.AdjustBottom( 1 );
         rRenderContext.DrawRect(aRect);
     }
 }
@@ -528,16 +528,16 @@ void Calendar::ImplDrawSpin(vcl::RenderContext& rRenderContext )
     rRenderContext.SetLineColor();
     rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetButtonTextColor());
     tools::Rectangle aOutRect = maPrevRect;
-    aOutRect.Left()   += 3;
-    aOutRect.Top()    += 3;
-    aOutRect.Right()  -= 3;
-    aOutRect.Bottom() -= 3;
+    aOutRect.AdjustLeft(3 );
+    aOutRect.AdjustTop(3 );
+    aOutRect.AdjustRight( -3 );
+    aOutRect.AdjustBottom( -3 );
     ImplDrawSpinArrow(rRenderContext, aOutRect, true);
     aOutRect = maNextRect;
-    aOutRect.Left()   += 3;
-    aOutRect.Top()    += 3;
-    aOutRect.Right()  -= 3;
-    aOutRect.Bottom() -= 3;
+    aOutRect.AdjustLeft(3 );
+    aOutRect.AdjustTop(3 );
+    aOutRect.AdjustRight( -3 );
+    aOutRect.AdjustBottom( -3 );
     ImplDrawSpinArrow(rRenderContext, aOutRect, false);
 }
 
@@ -677,12 +677,12 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
         Point aSepPos2(0, aTitleRect.Bottom() - TITLE_BORDERY);
         for (j = 0; j < mnMonthPerLine-1; j++)
         {
-            aSepPos1.X() += mnMonthWidth-1;
-            aSepPos2.X() = aSepPos1.X();
+            aSepPos1.AdjustX(mnMonthWidth-1 );
+            aSepPos2.setX( aSepPos1.X() );
             rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
             rRenderContext.DrawLine(aSepPos1, aSepPos2);
-            aSepPos1.X()++;
-            aSepPos2.X() = aSepPos1.X();
+            aSepPos1.AdjustX( 1 );
+            aSepPos2.setX( aSepPos1.X() );
             rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
             rRenderContext.DrawLine(aSepPos1, aSepPos2);
         }
@@ -901,8 +901,8 @@ void Calendar::ImplUpdate( bool bCalcNew )
 void Calendar::ImplInvertDropPos()
 {
     tools::Rectangle aRect = GetDateRect( maDropDate );//this is one Pixel to width and one to height
-    aRect.Bottom() = aRect.Top()+mnDayHeight-1;
-    aRect.Right() = aRect.Left()+mnDayWidth-1;
+    aRect.SetBottom( aRect.Top()+mnDayHeight-1 );
+    aRect.SetRight( aRect.Left()+mnDayWidth-1 );
     Invert( aRect );
 }
 
@@ -1227,11 +1227,11 @@ void Calendar::RequestHelp( const HelpEvent& rHEvt )
         {
             tools::Rectangle aDateRect = GetDateRect( aDate );
             Point aPt = OutputToScreenPixel( aDateRect.TopLeft() );
-            aDateRect.Left()   = aPt.X();
-            aDateRect.Top()    = aPt.Y();
+            aDateRect.SetLeft( aPt.X() );
+            aDateRect.SetTop( aPt.Y() );
             aPt = OutputToScreenPixel( aDateRect.BottomRight() );
-            aDateRect.Right()  = aPt.X();
-            aDateRect.Bottom() = aPt.Y();
+            aDateRect.SetRight( aPt.X() );
+            aDateRect.SetBottom( aPt.Y() );
 
             if ( rHEvt.GetMode() & HelpEventMode::QUICK )
             {
@@ -1469,8 +1469,8 @@ tools::Rectangle Calendar::GetDateRect( const Date& rDate ) const
         aRect = GetDateRect( aDate );
         nDaysOff = aDate-rDate;
         nX = nDaysOff*mnDayWidth;
-        aRect.Left() -= nX;
-        aRect.Right() -= nX;
+        aRect.AdjustLeft( -nX );
+        aRect.AdjustRight( -nX );
         return aRect;
     }
     else
@@ -1488,15 +1488,15 @@ tools::Rectangle Calendar::GetDateRect( const Date& rDate ) const
             {
                 if ( aLastDate == rDate )
                 {
-                    aRect.Left() += nDayIndex*mnDayWidth;
-                    aRect.Right() = aRect.Left()+mnDayWidth;
+                    aRect.AdjustLeft(nDayIndex*mnDayWidth );
+                    aRect.SetRight( aRect.Left()+mnDayWidth );
                     return aRect;
                 }
                 if ( nDayIndex == 6 )
                 {
                     nDayIndex = 0;
-                    aRect.Top() += mnDayHeight;
-                    aRect.Bottom() += mnDayHeight;
+                    aRect.AdjustTop(mnDayHeight );
+                    aRect.AdjustBottom(mnDayHeight );
                 }
                 else
                     nDayIndex++;
@@ -1525,10 +1525,10 @@ tools::Rectangle Calendar::GetDateRect( const Date& rDate ) const
                 {
                     if ( nDay == rDate.GetDay() )
                     {
-                        aRect.Left()    = nDayX + (nDayIndex*mnDayWidth);
-                        aRect.Top()     = nDayY;
-                        aRect.Right()   = aRect.Left()+mnDayWidth;
-                        aRect.Bottom()  = aRect.Top()+mnDayHeight;
+                        aRect.SetLeft( nDayX + (nDayIndex*mnDayWidth) );
+                        aRect.SetTop( nDayY );
+                        aRect.SetRight( aRect.Left()+mnDayWidth );
+                        aRect.SetBottom( aRect.Top()+mnDayHeight );
                         break;
                     }
                     if ( nDayIndex == 6 )
@@ -1584,13 +1584,13 @@ Size Calendar::CalcWindowSizePixel() const
     long    n99TextWidth = GetTextWidth( a99Text );
     long    nTextHeight = GetTextHeight();
 
-    aSize.Width()  += ((n99TextWidth+DAY_OFFX)*7);
-    aSize.Width()  += MONTH_BORDERX*2;
+    aSize.AdjustWidth((n99TextWidth+DAY_OFFX)*7);
+    aSize.AdjustWidth(MONTH_BORDERX*2 );
 
-    aSize.Height()  = nTextHeight + TITLE_OFFY + (TITLE_BORDERY*2);
-    aSize.Height() += nTextHeight + WEEKDAY_OFFY;
-    aSize.Height() += ((nTextHeight+DAY_OFFY)*6);
-    aSize.Height() += MONTH_OFFY;
+    aSize.setHeight( nTextHeight + TITLE_OFFY + (TITLE_BORDERY*2) );
+    aSize.AdjustHeight(nTextHeight + WEEKDAY_OFFY );
+    aSize.AdjustHeight((nTextHeight+DAY_OFFY)*6);
+    aSize.AdjustHeight(MONTH_OFFY );
 
     return aSize;
 }
@@ -1658,10 +1658,10 @@ PushButton* ImplCFieldFloatWin::EnableTodayBtn( bool bEnable )
             OUString aTodayText(SvtResId(STR_SVT_CALENDAR_TODAY));
             mpTodayBtn->SetText( aTodayText );
             Size aSize;
-            aSize.Width()   = mpTodayBtn->GetCtrlTextWidth( mpTodayBtn->GetText() );
-            aSize.Height()  = mpTodayBtn->GetTextHeight();
-            aSize.Width()  += CALFIELD_EXTRA_BUTTON_WIDTH;
-            aSize.Height() += CALFIELD_EXTRA_BUTTON_HEIGHT;
+            aSize.setWidth( mpTodayBtn->GetCtrlTextWidth( mpTodayBtn->GetText() ) );
+            aSize.setHeight( mpTodayBtn->GetTextHeight() );
+            aSize.AdjustWidth(CALFIELD_EXTRA_BUTTON_WIDTH );
+            aSize.AdjustHeight(CALFIELD_EXTRA_BUTTON_HEIGHT );
             mpTodayBtn->SetSizePixel( aSize );
             mpTodayBtn->Show();
         }
@@ -1684,10 +1684,10 @@ PushButton* ImplCFieldFloatWin::EnableNoneBtn( bool bEnable )
             OUString aNoneText(SvtResId(STR_SVT_CALENDAR_NONE));
             mpNoneBtn->SetText( aNoneText );
             Size aSize;
-            aSize.Width()   = mpNoneBtn->GetCtrlTextWidth( mpNoneBtn->GetText() );
-            aSize.Height()  = mpNoneBtn->GetTextHeight();
-            aSize.Width()  += CALFIELD_EXTRA_BUTTON_WIDTH;
-            aSize.Height() += CALFIELD_EXTRA_BUTTON_HEIGHT;
+            aSize.setWidth( mpNoneBtn->GetCtrlTextWidth( mpNoneBtn->GetText() ) );
+            aSize.setHeight( mpNoneBtn->GetTextHeight() );
+            aSize.AdjustWidth(CALFIELD_EXTRA_BUTTON_WIDTH );
+            aSize.AdjustHeight(CALFIELD_EXTRA_BUTTON_HEIGHT );
             mpNoneBtn->SetSizePixel( aSize );
             mpNoneBtn->Show();
         }
@@ -1710,13 +1710,13 @@ void ImplCFieldFloatWin::ArrangeButtons()
         Size aTodayBtnSize = mpTodayBtn->GetSizePixel();
         Size aNoneBtnSize  = mpNoneBtn->GetSizePixel();
         if ( aTodayBtnSize.Width() < aNoneBtnSize.Width() )
-            aTodayBtnSize.Width() = aNoneBtnSize.Width();
+            aTodayBtnSize.setWidth( aNoneBtnSize.Width() );
         else
-            aNoneBtnSize.Width() = aTodayBtnSize.Width();
+            aNoneBtnSize.setWidth( aTodayBtnSize.Width() );
         if ( aTodayBtnSize.Height() < aNoneBtnSize.Height() )
-            aTodayBtnSize.Height() = aNoneBtnSize.Height();
+            aTodayBtnSize.setHeight( aNoneBtnSize.Height() );
         else
-            aNoneBtnSize.Height() = aTodayBtnSize.Height();
+            aNoneBtnSize.setHeight( aTodayBtnSize.Height() );
 
         nBtnWidth  = aTodayBtnSize.Width() + aNoneBtnSize.Width() + CALFIELD_SEP_X;
         nBtnHeight = aTodayBtnSize.Height();
@@ -1751,7 +1751,7 @@ void ImplCFieldFloatWin::ArrangeButtons()
         long nLineWidth = aOutSize.Width()-(CALFIELD_BORDERLINE_X*2);
         mpFixedLine->setPosSizePixel( (aOutSize.Width()-nLineWidth)/2, aOutSize.Height()+((CALFIELD_BORDER_YTOP-2)/2),
                                       nLineWidth, 2 );
-        aOutSize.Height() += nBtnHeight + (CALFIELD_BORDER_Y*2) + CALFIELD_BORDER_YTOP;
+        aOutSize.AdjustHeight(nBtnHeight + (CALFIELD_BORDER_Y*2) + CALFIELD_BORDER_YTOP );
         SetOutputSizePixel( aOutSize );
     }
     else
@@ -1867,7 +1867,7 @@ bool CalendarField::ShowDropDown( bool bShow )
         pCalendar->SetCurDate( aDate );
         Point       aPos( GetParent()->OutputToScreenPixel( GetPosPixel() ) );
         tools::Rectangle   aRect( aPos, GetSizePixel() );
-        aRect.Bottom() -= 1;
+        aRect.AdjustBottom( -1 );
         mpCalendar->SetOutputSizePixel( mpCalendar->CalcWindowSizePixel() );
         mpFloatWin->SetOutputSizePixel( mpCalendar->GetSizePixel() );
         mpFloatWin->SetCalendar( mpCalendar );
