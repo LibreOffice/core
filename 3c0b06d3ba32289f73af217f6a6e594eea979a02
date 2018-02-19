@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_639412e2",
+        "filename": "bin/gla11y",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-02-19T22:53:39Z",
+      "side": 1,
+      "message": "please use suitable section from TEMPLATE.SOURCECODE.HEADER for new files",
+      "revId": "3c0b06d3ba32289f73af217f6a6e594eea979a02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
