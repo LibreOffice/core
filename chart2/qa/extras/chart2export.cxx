@@ -106,6 +106,7 @@ public:
     void testPieChartDataPointExplosionXLSX();
     void testCustomDataLabel();
     void testCustomDataLabelMultipleSeries();
+    void testNumberFormatExportPPTX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -174,6 +175,7 @@ public:
     CPPUNIT_TEST(testPieChartDataPointExplosionXLSX);
     CPPUNIT_TEST(testCustomDataLabel);
     CPPUNIT_TEST(testCustomDataLabelMultipleSeries);
+    CPPUNIT_TEST(testNumberFormatExportPPTX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1729,6 +1731,16 @@ void Chart2ExportTest::testCustomDataLabelMultipleSeries()
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_SERIESNAME, aFields[2]->getFieldType());
     CPPUNIT_ASSERT_EQUAL(OUString("Line"), aFields[2]->getString());
 
+}
+
+void Chart2ExportTest::testNumberFormatExportPPTX()
+{
+    load("/chart2/qa/extras/data/pptx/", "tdf115859.pptx");
+    xmlDocPtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:numFmt", "formatCode", "#,##0.00,\\K");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:numFmt", "sourceLinked", "0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
