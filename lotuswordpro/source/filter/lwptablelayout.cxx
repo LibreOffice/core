@@ -451,8 +451,11 @@ void LwpTableLayout::TraverseTable()
     // set value
     LwpObjectID& rRowID = GetChildHead();
     LwpRowLayout * pRowLayout = dynamic_cast<LwpRowLayout *>(rRowID.obj().get());
+    std::set<LwpRowLayout*> aSeen;
     while (pRowLayout)
     {
+        aSeen.insert(pRowLayout);
+
         pRowLayout->SetRowMap();
 
         // for 's analysis job
@@ -462,6 +465,8 @@ void LwpTableLayout::TraverseTable()
 
         rRowID = pRowLayout->GetNext();
         pRowLayout = dynamic_cast<LwpRowLayout *>(rRowID.obj().get());
+        if (aSeen.find(pRowLayout) != aSeen.end())
+            throw std::runtime_error("loop in conversion");
     }
 }
 
@@ -563,8 +568,11 @@ void LwpTableLayout::RegisterColumns()
     // NOTICE: all default columns are regarded as justifiable columns
     LwpObjectID& rColumnID = GetColumnLayoutHead();
     LwpColumnLayout * pColumnLayout = dynamic_cast<LwpColumnLayout *>(rColumnID.obj().get());
+    std::set<LwpColumnLayout*> aSeen;
     while (pColumnLayout)
     {
+        aSeen.insert(pColumnLayout);
+
         auto nColId = pColumnLayout->GetColumnID();
         if (nColId >= nCols)
         {
@@ -580,6 +588,9 @@ void LwpTableLayout::RegisterColumns()
 
         rColumnID = pColumnLayout->GetNext();
         pColumnLayout = dynamic_cast<LwpColumnLayout *>(rColumnID.obj().get());
+
+        if (aSeen.find(pColumnLayout) != aSeen.end())
+            throw std::runtime_error("loop in conversion");
     }
 
     // if all columns are not justifiable, the rightmost column will be changed to justifiable
