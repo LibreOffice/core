@@ -467,14 +467,14 @@ CellInfo::CellInfo( const Reference< XStyle >& xStyle )
 
         // get style fill color
         if( !GetDraftFillColor(rSet, maCellColor) )
-            maCellColor.SetColor( COL_TRANSPARENT );
+            maCellColor = COL_TRANSPARENT;
 
         // get style text color
         const SvxColorItem* pTextColor = rSet.GetItem(EE_CHAR_COLOR);
         if( pTextColor )
             maTextColor = pTextColor->GetValue();
         else
-            maTextColor.SetColor( COL_TRANSPARENT );
+            maTextColor = COL_TRANSPARENT;
 
         // get border
         const SvxBoxItem* pBoxItem = rSet.GetItem( SDRATTR_TABLE_BORDER );
@@ -649,7 +649,7 @@ const BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle
 
             // draw text preview line
             if( aTextColor.GetColor() == COL_AUTO )
-                aTextColor.SetColor( bIsPageDark ? COL_WHITE : COL_BLACK );
+                aTextColor = bIsPageDark ? COL_WHITE : COL_BLACK;
             pVirDev->SetLineColor( aTextColor );
             const Point aPnt1( nX + 2, nY + ((nCellHeight - 1 ) >> 1) );
             const Point aPnt2( nX + nCellWidth - 3, aPnt1.Y() );

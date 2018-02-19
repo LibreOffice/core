@@ -92,7 +92,7 @@ public:
         }
         else
         {
-            aColor.SetColor(COL_BLACK);
+            aColor = COL_BLACK;
         }
         return aColor;
     }

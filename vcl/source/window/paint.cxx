@@ -338,7 +338,7 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
         aSelectionFillColor.RGBtoHSB( h, s, b );
         if( b > 50 )    b -= 40;
         else            b += 40;
-        aSelectionFillColor.SetColor( Color::HSBtoRGB( h, s, b ) );
+        aSelectionFillColor = Color::HSBtoRGB( h, s, b );
         aSelectionBorderColor = aSelectionFillColor;
     }
 

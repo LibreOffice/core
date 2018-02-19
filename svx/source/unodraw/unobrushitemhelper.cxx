@@ -199,7 +199,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
 
         // for writerfilter: when fill style is none, then don't allow anything other than 0 or auto.
         if (!bXMLImportHack && aFillColor.GetColor() != 0)
-            aFillColor.SetColor(COL_AUTO);
+            aFillColor = COL_AUTO;
 
         aFillColor.SetTransparency(0xff);
 

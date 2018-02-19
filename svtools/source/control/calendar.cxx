@@ -315,7 +315,7 @@ void Calendar::ImplFormat()
     // determine colours
     maOtherColor = Color( COL_LIGHTGRAY );
     if ( maOtherColor.IsRGBEqual( GetBackground().GetColor() ) )
-        maOtherColor.SetColor( COL_GRAY );
+        maOtherColor = COL_GRAY;
 
     Date aLastDate = GetLastDate();
     if ( (maOldFormatLastDate != aLastDate) ||

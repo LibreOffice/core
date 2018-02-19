@@ -854,11 +854,11 @@ static void OutBodyColor( const sal_Char* pTag, const SwFormat *pFormat,
         {
             Color aColor( pCItem->GetValue() );
             if( COL_AUTO == aColor.GetColor() )
-                aColor.SetColor( COL_BLACK );
+                aColor = COL_BLACK;
 
             Color aRefColor( static_cast<const SvxColorItem*>(pRefItem)->GetValue() );
             if( COL_AUTO == aRefColor.GetColor() )
-                aRefColor.SetColor( COL_BLACK );
+                aRefColor = COL_BLACK;
 
             if( !aColor.IsRGBEqual( aRefColor ) )
                 pColorItem = pCItem;
@@ -877,7 +877,7 @@ static void OutBodyColor( const sal_Char* pTag, const SwFormat *pFormat,
         rHWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         Color aColor( pColorItem->GetValue() );
         if( COL_AUTO == aColor.GetColor() )
-            aColor.SetColor( COL_BLACK );
+            aColor = COL_BLACK;
         HTMLOutFuncs::Out_Color( rHWrt.Strm(), aColor );
         if( RES_POOLCOLL_STANDARD==pFormat->GetPoolFormatId() )
             rHWrt.m_pDfltColor = new Color( aColor );

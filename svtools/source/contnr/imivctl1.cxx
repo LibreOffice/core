@@ -2713,9 +2713,9 @@ void SvxIconChoiceCtrl_Impl::ShowFocus ( tools::Rectangle const & rRect )
     Color aPenColor;
     sal_uInt16 nColor = ( aBkgColor.GetRed() + aBkgColor.GetGreen() + aBkgColor.GetBlue() ) / 3;
     if (nColor > 128)
-        aPenColor.SetColor(COL_BLACK);
+        aPenColor = COL_BLACK;
     else
-        aPenColor.SetColor(COL_WHITE);
+        aPenColor = COL_WHITE;
 
     aFocus.aPenColor = aPenColor;
     aFocus.aRect = rRect;
