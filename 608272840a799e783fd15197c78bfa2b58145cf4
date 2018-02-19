@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_00b8ace4",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3413,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-19T08:05:39Z",
+      "side": 1,
+      "message": "This causes CppunitTest_svtools_dialogs_test (run as part of `make screenshot`) fail because svtools/uiconfig/ui/querydeletedialog.ui contains\n\n  \u003caction-widget response\u003d\"-1\"\u003eall\u003c/action-widget\u003e",
+      "revId": "608272840a799e783fd15197c78bfa2b58145cf4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
