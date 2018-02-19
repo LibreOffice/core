@@ -75,7 +75,7 @@
     <action-widgets>
       <action-widget response="1">ok</action-widget>
       <action-widget response="0">cancel</action-widget>
-      <action-widget response="-1">view</action-widget>
+      <action-widget response="101">view</action-widget>
     </action-widgets>
   </object>
 </interface>
