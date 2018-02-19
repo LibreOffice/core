@@ -140,12 +140,18 @@ void LwpRowLayout::RegisterStyle()
     LwpObjectID& rCellID= GetChildHead();
     LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
 
-    while(pCellLayout)
+    std::set<LwpCellLayout*> aSeen;
+    while (pCellLayout)
     {
+        aSeen.insert(pCellLayout);
+
         pCellLayout->SetFoundry(m_pFoundry);
         pCellLayout->RegisterStyle();
         rCellID = pCellLayout->GetNext();
         pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
+
+        if (aSeen.find(pCellLayout) != aSeen.end())
+            throw std::runtime_error("loop in conversion");
     }
 
 }
