@@ -27,7 +27,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
@@ -599,7 +599,7 @@ static void FillCellInfoMatrix( const CellInfoVector& rStyle, const TableStyleSe
     }
 }
 
-const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, const TableStyleSettings& rSettings, bool bIsPageDark )
+const BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, const TableStyleSettings& rSettings, bool bIsPageDark )
 {
     CellInfoVector aCellInfoVector(sdr::table::style_count);
     FillCellInfoVector( xTableStyle, aCellInfoVector );
@@ -615,104 +615,102 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
     // bccccccccccb
     // bbbbbbbbbbbb
 
-    Bitmap aPreviewBmp( Size( nBitmapWidth, nBitmapHeight), 24, nullptr );
-    Bitmap::ScopedWriteAccess pAccess(aPreviewBmp);
-    if( pAccess )
+    ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
+    Size aBmpSize(nBitmapWidth, nBitmapHeight);
+    pVirDev->SetOutputSizePixel(aBmpSize);
+
+    pVirDev->SetBackground( Color( bIsPageDark ? COL_BLACK : COL_WHITE ) );
+    pVirDev->Erase();
+
+    // first draw cell background and text line previews
+    sal_Int32 nY = 0;
+    sal_Int32 nRow;
+    for( nRow = 0; nRow < nPreviewRows; ++nRow, nY += nCellHeight-1 )
     {
-        pAccess->Erase( Color( bIsPageDark ? COL_BLACK : COL_WHITE ) );
-
-        // first draw cell background and text line previews
-        sal_Int32 nY = 0;
-        sal_Int32 nRow;
-        for( nRow = 0; nRow < nPreviewRows; ++nRow, nY += nCellHeight-1 )
+        sal_Int32 nX = 0;
+        for( sal_Int32 nCol = 0; nCol < nPreviewColumns; ++nCol, nX += nCellWidth-1 )
         {
-            sal_Int32 nX = 0;
-            for( sal_Int32 nCol = 0; nCol < nPreviewColumns; ++nCol, nX += nCellWidth-1 )
+            std::shared_ptr< CellInfo > xCellInfo(aMatrix[(nCol * nPreviewColumns) + nRow]);
+
+            Color aTextColor( COL_AUTO );
+            if( xCellInfo.get() )
             {
-                std::shared_ptr< CellInfo > xCellInfo(aMatrix[(nCol * nPreviewColumns) + nRow]);
+                // fill cell background
+                const ::tools::Rectangle aRect( nX, nY, nX + nCellWidth - 1, nY + nCellHeight - 1 );
 
-                Color aTextColor( COL_AUTO );
-                if( xCellInfo.get() )
+                if( xCellInfo->maCellColor.GetColor() != COL_TRANSPARENT )
                 {
-                    // fill cell background
-                    const ::tools::Rectangle aRect( nX, nY, nX + nCellWidth - 1, nY + nCellHeight - 1 );
-
-                    if( xCellInfo->maCellColor.GetColor() != COL_TRANSPARENT )
-                    {
-                        pAccess->SetFillColor( xCellInfo->maCellColor );
-                        pAccess->FillRect( aRect );
-                    }
-
-                    aTextColor = xCellInfo->maTextColor;
+                    pVirDev->SetFillColor( xCellInfo->maCellColor );
+                    pVirDev->DrawRect( aRect );
                 }
 
-                // draw text preview line
-                if( aTextColor.GetColor() == COL_AUTO )
-                    aTextColor.SetColor( bIsPageDark ? COL_WHITE : COL_BLACK );
-                pAccess->SetLineColor( aTextColor );
-                const Point aPnt1( nX + 2, nY + ((nCellHeight - 1 ) >> 1) );
-                const Point aPnt2( nX + nCellWidth - 3, aPnt1.Y() );
-                pAccess->DrawLine( aPnt1, aPnt2 );
+                aTextColor = xCellInfo->maTextColor;
             }
+
+            // draw text preview line
+            if( aTextColor.GetColor() == COL_AUTO )
+                aTextColor.SetColor( bIsPageDark ? COL_WHITE : COL_BLACK );
+            pVirDev->SetLineColor( aTextColor );
+            const Point aPnt1( nX + 2, nY + ((nCellHeight - 1 ) >> 1) );
+            const Point aPnt2( nX + nCellWidth - 3, aPnt1.Y() );
+            pVirDev->DrawLine( aPnt1, aPnt2 );
         }
-
-        // second draw border lines
-        nY = 0;
-        for( nRow = 0; nRow < nPreviewRows; ++nRow, nY += nCellHeight-1 )
-        {
-            sal_Int32 nX = 0;
-            for( sal_Int32 nCol = 0; nCol < nPreviewColumns; ++nCol, nX += nCellWidth-1 )
-            {
-                std::shared_ptr< CellInfo > xCellInfo(aMatrix[(nCol * nPreviewColumns) + nRow]);
-
-                if( xCellInfo.get() )
-                {
-                    const Point aPntTL( nX, nY );
-                    const Point aPntTR( nX + nCellWidth - 1, nY );
-                    const Point aPntBL( nX, nY + nCellHeight - 1 );
-                    const Point aPntBR( nX + nCellWidth - 1, nY + nCellHeight - 1 );
-
-                    sal_Int32 border_diffs[8] = { 0,-1, 0,1, -1,0, 1,0 };
-                    sal_Int32* pDiff = &border_diffs[0];
-
-                    // draw top border
-                    for( SvxBoxItemLine nLine : o3tl::enumrange<SvxBoxItemLine>() )
-                    {
-                        const ::editeng::SvxBorderLine* pBorderLine = xCellInfo->maBorder.GetLine(nLine);
-                        if( !pBorderLine || ((pBorderLine->GetOutWidth() == 0) && (pBorderLine->GetInWidth()==0)) )
-                            continue;
-
-                        sal_Int32 nBorderCol = nCol + *pDiff++;
-                        sal_Int32 nBorderRow = nRow + *pDiff++;
-                        if( (nBorderCol >= 0) && (nBorderCol < nPreviewColumns) && (nBorderRow >= 0) && (nBorderRow < nPreviewRows) )
-                        {
-                            // check border
-                            std::shared_ptr< CellInfo > xBorderInfo(aMatrix[(nBorderCol * nPreviewColumns) + nBorderRow]);
-                            if( xBorderInfo.get() )
-                            {
-                                const ::editeng::SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder.GetLine(static_cast<SvxBoxItemLine>(static_cast<int>(nLine)^1));
-                                if( pBorderLine2 && pBorderLine2->HasPriority(*pBorderLine) )
-                                    continue; // other border line wins
-                            }
-                        }
-
-                        pAccess->SetLineColor( pBorderLine->GetColor() );
-                        switch( nLine )
-                        {
-                        case SvxBoxItemLine::TOP: pAccess->DrawLine( aPntTL, aPntTR ); break;
-                        case SvxBoxItemLine::BOTTOM: pAccess->DrawLine( aPntBL, aPntBR ); break;
-                        case SvxBoxItemLine::LEFT: pAccess->DrawLine( aPntTL, aPntBL ); break;
-                        case SvxBoxItemLine::RIGHT: pAccess->DrawLine( aPntTR, aPntBR ); break;
-                        }
-                    }
-                }
-            }
-        }
-
-        pAccess.reset();
     }
 
-    return aPreviewBmp;
+    // second draw border lines
+    nY = 0;
+    for( nRow = 0; nRow < nPreviewRows; ++nRow, nY += nCellHeight-1 )
+    {
+        sal_Int32 nX = 0;
+        for( sal_Int32 nCol = 0; nCol < nPreviewColumns; ++nCol, nX += nCellWidth-1 )
+        {
+            std::shared_ptr< CellInfo > xCellInfo(aMatrix[(nCol * nPreviewColumns) + nRow]);
+
+            if( xCellInfo.get() )
+            {
+                const Point aPntTL( nX, nY );
+                const Point aPntTR( nX + nCellWidth - 1, nY );
+                const Point aPntBL( nX, nY + nCellHeight - 1 );
+                const Point aPntBR( nX + nCellWidth - 1, nY + nCellHeight - 1 );
+
+                sal_Int32 border_diffs[8] = { 0,-1, 0,1, -1,0, 1,0 };
+                sal_Int32* pDiff = &border_diffs[0];
+
+                // draw top border
+                for( SvxBoxItemLine nLine : o3tl::enumrange<SvxBoxItemLine>() )
+                {
+                    const ::editeng::SvxBorderLine* pBorderLine = xCellInfo->maBorder.GetLine(nLine);
+                    if( !pBorderLine || ((pBorderLine->GetOutWidth() == 0) && (pBorderLine->GetInWidth()==0)) )
+                        continue;
+
+                    sal_Int32 nBorderCol = nCol + *pDiff++;
+                    sal_Int32 nBorderRow = nRow + *pDiff++;
+                    if( (nBorderCol >= 0) && (nBorderCol < nPreviewColumns) && (nBorderRow >= 0) && (nBorderRow < nPreviewRows) )
+                    {
+                        // check border
+                        std::shared_ptr< CellInfo > xBorderInfo(aMatrix[(nBorderCol * nPreviewColumns) + nBorderRow]);
+                        if( xBorderInfo.get() )
+                        {
+                            const ::editeng::SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder.GetLine(static_cast<SvxBoxItemLine>(static_cast<int>(nLine)^1));
+                            if( pBorderLine2 && pBorderLine2->HasPriority(*pBorderLine) )
+                                continue; // other border line wins
+                        }
+                    }
+
+                    pVirDev->SetLineColor( pBorderLine->GetColor() );
+                    switch( nLine )
+                    {
+                    case SvxBoxItemLine::TOP: pVirDev->DrawLine( aPntTL, aPntTR ); break;
+                    case SvxBoxItemLine::BOTTOM: pVirDev->DrawLine( aPntBL, aPntBR ); break;
+                    case SvxBoxItemLine::LEFT: pVirDev->DrawLine( aPntTL, aPntBL ); break;
+                    case SvxBoxItemLine::RIGHT: pVirDev->DrawLine( aPntTR, aPntBR ); break;
+                    }
+                }
+            }
+        }
+    }
+
+    return pVirDev->GetBitmapEx(Point(0,0), aBmpSize);
 }
 
 void TableDesignWidget::FillDesignPreviewControl()
