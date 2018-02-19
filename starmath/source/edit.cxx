@@ -284,7 +284,7 @@ void SmEditWindow::Resize()
         if (pEditView->GetVisArea().Top() > nMaxVisAreaStart)
         {
             tools::Rectangle aVisArea(pEditView->GetVisArea() );
-            aVisArea.Top() = std::max<long>(nMaxVisAreaStart, 0);
+            aVisArea.SetTop( std::max<long>(nMaxVisAreaStart, 0) );
             aVisArea.SetSize(pEditView->GetOutputArea().GetSize());
             pEditView->SetVisArea(aVisArea);
             pEditView->ShowCursor();
@@ -560,18 +560,18 @@ tools::Rectangle SmEditWindow::AdjustScrollBars()
     if (pVScrollBar && pHScrollBar && pScrollBox)
     {
         const long nTmp = GetSettings().GetStyleSettings().GetScrollBarSize();
-        Point aPt( aRect.TopRight() ); aPt.X() -= nTmp -1;
+        Point aPt( aRect.TopRight() ); aPt.AdjustX( -(nTmp -1) );
         pVScrollBar->SetPosSizePixel( aPt, Size(nTmp, aOut.Height() - nTmp));
 
-        aPt = aRect.BottomLeft(); aPt.Y() -= nTmp - 1;
+        aPt = aRect.BottomLeft(); aPt.AdjustY( -(nTmp - 1) );
         pHScrollBar->SetPosSizePixel( aPt, Size(aOut.Width() - nTmp, nTmp));
 
-        aPt.X() = pHScrollBar->GetSizePixel().Width();
-        aPt.Y() = pVScrollBar->GetSizePixel().Height();
+        aPt.setX( pHScrollBar->GetSizePixel().Width() );
+        aPt.setY( pVScrollBar->GetSizePixel().Height() );
         pScrollBox->SetPosSizePixel(aPt, Size(nTmp, nTmp ));
 
-        aRect.Right()  = aPt.X() - 2;
-        aRect.Bottom() = aPt.Y() - 2;
+        aRect.SetRight( aPt.X() - 2 );
+        aRect.SetBottom( aPt.Y() - 2 );
     }
     return aRect;
 }

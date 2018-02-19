@@ -429,11 +429,11 @@ void SmElementsControl::RequestHelp(const HelpEvent& rHEvt)
 
         tools::Rectangle aHelpRect(pHelpElement->mBoxLocation, pHelpElement->mBoxSize);
         Point aPt = OutputToScreenPixel( aHelpRect.TopLeft() );
-        aHelpRect.Left() = aPt.X();
-        aHelpRect.Top()= aPt.Y();
+        aHelpRect.SetLeft( aPt.X() );
+        aHelpRect.SetTop( aPt.Y() );
         aPt = OutputToScreenPixel( aHelpRect.BottomRight() );
-        aHelpRect.Right() = aPt.X();
-        aHelpRect.Bottom() = aPt.Y();
+        aHelpRect.SetRight( aPt.X() );
+        aHelpRect.SetBottom( aPt.Y() );
 
         // get text and display it
         OUString aStr = pHelpElement->getHelpText();
@@ -514,7 +514,7 @@ void SmElementsControl::DoScroll(long nDelta)
 {
     Point aNewPoint = mxScroll->GetPosPixel();
     tools::Rectangle aRect(Point(), GetOutputSize());
-    aRect.Right() -= mxScroll->GetSizePixel().Width();
+    aRect.AdjustRight( -(mxScroll->GetSizePixel().Width()) );
     Scroll( 0, -nDelta, aRect );
     mxScroll->SetPosPixel(aNewPoint);
     LayoutOrPaintContents();
@@ -531,11 +531,11 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
 
     Size aSizePixel = LogicToPixel(Size(pNode->GetWidth(), pNode->GetHeight()), MapMode(MapUnit::Map100thMM));
     if (aSizePixel.Width() > maMaxElementDimensions.Width()) {
-        maMaxElementDimensions.Width() = aSizePixel.Width();
+        maMaxElementDimensions.setWidth( aSizePixel.Width() );
     }
 
     if (aSizePixel.Height() > maMaxElementDimensions.Height()) {
-        maMaxElementDimensions.Height() = aSizePixel.Height();
+        maMaxElementDimensions.setHeight( aSizePixel.Height() );
     }
 
     maElementList.push_back(o3tl::make_unique<SmElement>(std::move(pNode), aElementSource, aHelpText));

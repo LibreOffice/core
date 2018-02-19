@@ -3078,14 +3078,14 @@ void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
         {
             pValue->Value >>= nTmp;
             Size aSize( aRect.GetSize() );
-            aSize.Width() = nTmp;
+            aSize.setWidth( nTmp );
             aRect.SaturatingSetSize(aSize);
         }
         else if (pValue->Name == "ViewAreaHeight" )
         {
             pValue->Value >>= nTmp;
             Size aSize( aRect.GetSize() );
-            aSize.Height() = nTmp;
+            aSize.setHeight( nTmp );
             aRect.SaturatingSetSize(aSize);
         }
         pValue++;

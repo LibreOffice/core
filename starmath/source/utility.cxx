@@ -203,7 +203,7 @@ void SmFace::SetSize(const Size& rSize)
     static int const    nMinVal = SmPtsTo100th_mm(2);
 
     if (aSize.Height() < nMinVal)
-        aSize.Height() = nMinVal;
+        aSize.setHeight( nMinVal );
 
     //! we don't force a maximum value here because this may prevent eg the
     //! parentheses in "left ( ... right )" from matching up with large
