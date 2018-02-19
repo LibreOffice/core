@@ -1121,14 +1121,18 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
         LwpRowList* pRowList = dynamic_cast<LwpRowList*>(aRowListID.obj().get());
 
         //loop the rowlist
-        while( nullptr!=pRowList)
+        std::set<LwpRowList*> aOuterSeen;
+        while (pRowList)
         {
+            aOuterSeen.insert(pRowList);
             sal_uInt16 nRowID =  pRowList->GetRowID();
             {
                 LwpCellList* pCellList = dynamic_cast<LwpCellList*>(pRowList->GetChildHeadID().obj().get());
                 //loop the cellList
-                while( nullptr!=pCellList)
+                std::set<LwpCellList*> aSeen;
+                while (pCellList)
                 {
+                    aSeen.insert(pCellList);
                     {//put cell
                         sal_uInt16 nColID = pCellList->GetColumnID();
 
@@ -1146,9 +1150,13 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
                         }
                     }
                     pCellList = dynamic_cast<LwpCellList*>(pCellList->GetNextID().obj().get());
+                    if (aSeen.find(pCellList) != aSeen.end())
+                        throw std::runtime_error("loop in conversion");
                 }
             }
             pRowList = dynamic_cast<LwpRowList*>(pRowList->GetNextID().obj().get());
+            if (aOuterSeen.find(pRowList) != aOuterSeen.end())
+                throw std::runtime_error("loop in conversion");
         }
 
     }catch (...) {
