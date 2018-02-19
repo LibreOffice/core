@@ -738,7 +738,7 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
             pFS->endElement( FSNS( XML_c, XML_floor ) );
         }
 
-        // LibreOffice doens't distinguish between sideWall and backWall (both are using the same color).
+        // LibreOffice doesn't distinguish between sideWall and backWall (both are using the same color).
         // It is controlled by the same Wall property.
         Reference< beans::XPropertySet > xWall( mxNewDiagram->getWall(), uno::UNO_QUERY );
         if( xWall.is() )
