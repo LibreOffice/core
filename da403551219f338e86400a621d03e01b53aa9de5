@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_83ee66b2",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-19T19:36:35Z",
+      "side": 1,
+      "message": "Please do *not* replace OUStringBuffer with OUString if it is appended to in loops or a lot of multiple appends happen. Otherwise a reallocation would be done for each.",
+      "parentUuid": "fa31d9ce_60e88811",
+      "range": {
+        "startLine": 977,
+        "startChar": 16,
+        "endLine": 981,
+        "endChar": 70
+      },
+      "revId": "da403551219f338e86400a621d03e01b53aa9de5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_40d9c482",
         "filename": "svl/source/numbers/zforlist.cxx",
         "patchSetId": 1
