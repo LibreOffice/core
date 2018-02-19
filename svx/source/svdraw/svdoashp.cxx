@@ -76,6 +76,7 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/virdev.hxx>
 #include <svx/svdview.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -354,45 +355,25 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 
                 if(pReadAccess)
                 {
-                    Bitmap aDestBitmap(aBitmap.GetSizePixel(), 24L);
-                    Bitmap::ScopedWriteAccess pWriteAccess(aDestBitmap);
+                    ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
+                    pVirDev->SetOutputSizePixel(aBitmap.GetSizePixel());
 
-                    if(pWriteAccess)
+                    for(long y(0); y < pReadAccess->Height(); y++)
                     {
-                        for(long y(0); y < pReadAccess->Height(); y++)
+                        for(long x(0); x < pReadAccess->Width(); x++)
                         {
-                            Scanline pScanline = pWriteAccess->GetScanline( y );
-                            for(long x(0); x < pReadAccess->Width(); x++)
-                            {
-                                sal_uInt16 nLuminance(static_cast<sal_uInt16>(pReadAccess->GetLuminance(y, x)) + 1);
-                                const BitmapColor aDestColor(
-                                    static_cast<sal_uInt8>((nLuminance * static_cast<sal_uInt16>(aShadowColor.GetRed())) >> 8),
-                                    static_cast<sal_uInt8>((nLuminance * static_cast<sal_uInt16>(aShadowColor.GetGreen())) >> 8),
-                                    static_cast<sal_uInt8>((nLuminance * static_cast<sal_uInt16>(aShadowColor.GetBlue())) >> 8));
-                                pWriteAccess->SetPixelOnData(pScanline, x, aDestColor);
-                            }
+                            sal_uInt16 nLuminance(static_cast<sal_uInt16>(pReadAccess->GetLuminance(y, x)) + 1);
+                            const Color aDestColor(
+                                static_cast<sal_uInt8>((nLuminance * static_cast<sal_uInt16>(aShadowColor.GetRed())) >> 8),
+                                static_cast<sal_uInt8>((nLuminance * static_cast<sal_uInt16>(aShadowColor.GetGreen())) >> 8),
+                                static_cast<sal_uInt8>((nLuminance * static_cast<sal_uInt16>(aShadowColor.GetBlue())) >> 8));
+                            pVirDev->DrawPixel(Point(x,y), aDestColor);
                         }
-
-                        pWriteAccess.reset();
                     }
 
                     pReadAccess.reset();
 
-                    if(aBitmapEx.IsTransparent())
-                    {
-                        if(aBitmapEx.IsAlpha())
-                        {
-                            aGraphicObject.SetGraphic(Graphic(BitmapEx(aDestBitmap, aBitmapEx.GetAlpha())));
-                        }
-                        else
-                        {
-                            aGraphicObject.SetGraphic(Graphic(BitmapEx(aDestBitmap, aBitmapEx.GetMask())));
-                        }
-                    }
-                    else
-                    {
-                        aGraphicObject.SetGraphic(Graphic(aDestBitmap));
-                    }
+                    aGraphicObject.SetGraphic(Graphic(pVirDev->GetBitmapEx(Point(0,0), aBitmap.GetSizePixel())));
                 }
             }
 
