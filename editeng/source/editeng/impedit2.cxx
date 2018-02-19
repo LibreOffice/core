@@ -3090,7 +3090,7 @@ sal_uInt32 ImpEditEngine::GetTextHeight() const
     return nCurTextHeight;
 }
 
-sal_uInt32 ImpEditEngine::CalcTextWidth( bool bIgnoreExtraSpace, bool bIgnoreTrailingWhiteSpaces )
+sal_uInt32 ImpEditEngine::CalcTextWidth( bool bIgnoreExtraSpace )
 {
     // If still not formatted and not in the process.
     // Will be brought in the formatting for AutoPageSize.
@@ -3137,7 +3137,7 @@ sal_uInt32 ImpEditEngine::CalcTextWidth( bool bIgnoreExtraSpace, bool bIgnoreTra
                     }
                 }
                 nCurWidth += GetXValue( rLRItem.GetRight() );
-                nCurWidth += CalcLineWidth( pPortion, &rLine, bIgnoreExtraSpace, bIgnoreTrailingWhiteSpaces );
+                nCurWidth += CalcLineWidth( pPortion, &rLine, bIgnoreExtraSpace );
                 if ( nCurWidth > nMaxWidth )
                 {
                     nMaxWidth = nCurWidth;
