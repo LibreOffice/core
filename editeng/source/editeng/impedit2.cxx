@@ -3165,7 +3165,7 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
     // Calculation of the width without the Indents ...
     sal_uInt32 nWidth = 0;
     sal_Int32 nPos = pLine->GetStart();
-    for ( sal_Int32 nTP = pLine->GetStartPortion(); nTP <= pLine->GetEndPortion(); nTP++ )
+    for ( sal_Int32 nTP = pLine->GetStartPortion(); nTP <= pLine->GetEndPortion() && nTP < pPortion->GetTextPortions().Count(); nTP++ )
     {
         const TextPortion& rTextPortion = pPortion->GetTextPortions()[nTP];
         switch ( rTextPortion.GetKind() )
