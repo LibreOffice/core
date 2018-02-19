@@ -439,11 +439,11 @@ public:
 
 class SW_DLLPUBLIC SwPostItField : public SwField
 {
-    OUString sText;
-    OUString sAuthor;
-    OUString sInitials; ///< Initials of the author.
-    OUString sName;     ///< Name of the comment.
-    DateTime    aDateTime;
+    OUString m_sText;
+    OUString m_sAuthor;
+    OUString m_sInitials; ///< Initials of the author.
+    OUString m_sName;     ///< Name of the comment.
+    DateTime    m_aDateTime;
     OutlinerParaObject* mpText;
     rtl::Reference<SwTextAPIObject> m_xTextObject;
     sal_uInt32 m_nPostItId;
@@ -467,9 +467,9 @@ public:
     virtual OUString        Expand() const override;
     virtual SwField*        Copy() const override;
 
-    const DateTime&         GetDateTime() const             { return aDateTime; }
-    const Date       GetDate() const                 { return Date(aDateTime.GetDate()); }
-    const tools::Time GetTime() const                 { return tools::Time(aDateTime.GetTime()); }
+    const DateTime&         GetDateTime() const             { return m_aDateTime; }
+    const Date       GetDate() const                 { return Date(m_aDateTime.GetDate()); }
+    const tools::Time GetTime() const                 { return tools::Time(m_aDateTime.GetTime()); }
     sal_uInt32 GetPostItId() const             { return m_nPostItId; }
 
     /// Author
@@ -479,10 +479,10 @@ public:
     /// Text
     virtual OUString   GetPar2() const override;
     virtual void            SetPar2(const OUString& rStr) override;
-    const OUString&         GetText() const { return sText; }
-    const OUString&         GetInitials() const { return sInitials;}
+    const OUString&         GetText() const { return m_sText; }
+    const OUString&         GetInitials() const { return m_sInitials;}
     void                    SetName(const OUString& rStr);
-    const OUString&         GetName() const { return sName;}
+    const OUString&         GetName() const { return m_sName;}
 
     const OutlinerParaObject* GetTextObject() const { return mpText;}
     void SetTextObject( OutlinerParaObject* pText );
@@ -574,8 +574,8 @@ protected:
 // Relative page numbering.
 class SwRefPageSetField : public SwField
 {
-    short   nOffset;
-    bool    bOn;
+    short   m_nOffset;
+    bool    m_bOn;
 
 public:
     SwRefPageSetField( SwRefPageSetFieldType*, short nOff, bool bOn );
@@ -586,10 +586,10 @@ public:
     virtual OUString  GetPar2() const override;
     virtual void    SetPar2(const OUString& rStr) override;
 
-    bool IsOn() const               { return bOn; }
+    bool IsOn() const               { return m_bOn; }
 
-    short GetOffset() const         { return nOffset; }
-    void SetOffset( short nOff )    { nOffset = nOff; }
+    short GetOffset() const         { return m_nOffset; }
+    void SetOffset( short nOff )    { m_nOffset = nOff; }
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
@@ -597,8 +597,8 @@ public:
 // Relative page numbers - query field.
 class SwRefPageGetFieldType : public SwFieldType
 {
-    SwDoc*          pDoc;
-    sal_Int16       nNumberingType;
+    SwDoc*          m_pDoc;
+    sal_Int16       m_nNumberingType;
 
     void UpdateField( SwTextField const * pTextField, SetGetExpFields const & rSetList );
 protected:
@@ -608,20 +608,20 @@ public:
     SwRefPageGetFieldType( SwDoc* pDoc );
     virtual SwFieldType*    Copy() const override;
     bool MakeSetList( SetGetExpFields& rTmpLst );
-    SwDoc*  GetDoc() const                  { return pDoc; }
+    SwDoc*  GetDoc() const                  { return m_pDoc; }
 };
 
 // Query relative page numbering.
 class SwRefPageGetField : public SwField
 {
-    OUString sText;
+    OUString m_sText;
 public:
     SwRefPageGetField( SwRefPageGetFieldType*, sal_uInt32 nFormat );
 
     virtual OUString    Expand() const override;
     virtual SwField*    Copy() const override;
 
-    void SetText( const OUString& rText )      { sText = rText; }
+    void SetText( const OUString& rText )      { m_sText = rText; }
 
     void ChangeExpansion( const SwFrame* pFrame, const SwTextField* pField );
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
