@@ -1433,13 +1433,13 @@ sal_uInt32 EditEngine::GetTextHeightNTP() const
     return pImpEditEngine->GetTextHeightNTP();
 }
 
-sal_uInt32 EditEngine::CalcTextWidth(bool bIgnoreTrailingWhiteSpaces)
+sal_uInt32 EditEngine::CalcTextWidth()
 {
 
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
 
-    sal_uInt32 nWidth = !IsVertical() ? pImpEditEngine->CalcTextWidth( true, bIgnoreTrailingWhiteSpaces ) : pImpEditEngine->GetTextHeight();
+    sal_uInt32 nWidth = !IsVertical() ? pImpEditEngine->CalcTextWidth( true ) : pImpEditEngine->GetTextHeight();
      return nWidth;
 }
 
