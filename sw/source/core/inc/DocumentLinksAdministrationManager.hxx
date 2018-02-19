@@ -22,6 +22,7 @@
 
 #include <IDocumentLinksAdministration.hxx>
 
+#include <memory>
 
 namespace sfx2 { class LinkManager; }
 class SwDoc;
@@ -71,7 +72,7 @@ private:
 
     bool mbVisibleLinks; //< TRUE: Links are inserted visibly.
     bool mbLinksUpdated; //< #i38810# flag indicating, that the links have been updated.
-    sfx2::LinkManager *mpLinkMgr; //< List of linked stuff (graphics/DDE/OLE).
+    std::unique_ptr<sfx2::LinkManager> m_pLinkMgr; //< List of linked stuff (graphics/DDE/OLE).
 
     SwDoc& m_rDoc;
 };

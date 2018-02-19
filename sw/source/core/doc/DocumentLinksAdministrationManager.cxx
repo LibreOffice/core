@@ -169,10 +169,11 @@ namespace
 namespace sw
 {
 
-DocumentLinksAdministrationManager::DocumentLinksAdministrationManager( SwDoc& i_rSwdoc ) : mbVisibleLinks(true),
-                                                                                            mbLinksUpdated( false ), //#i38810#
-                                                                                            mpLinkMgr( new sfx2::LinkManager( nullptr ) ),
-                                                                                            m_rDoc( i_rSwdoc )
+DocumentLinksAdministrationManager::DocumentLinksAdministrationManager( SwDoc& i_rSwdoc )
+    : mbVisibleLinks(true)
+    , mbLinksUpdated( false ) //#i38810#
+    , m_pLinkMgr( new sfx2::LinkManager(nullptr) )
+    , m_rDoc( i_rSwdoc )
 {
 }
 
@@ -188,12 +189,12 @@ void DocumentLinksAdministrationManager::SetVisibleLinks(bool bFlag)
 
 sfx2::LinkManager& DocumentLinksAdministrationManager::GetLinkManager()
 {
-    return *mpLinkMgr;
+    return *m_pLinkMgr;
 }
 
 const sfx2::LinkManager& DocumentLinksAdministrationManager::GetLinkManager() const
 {
-    return *mpLinkMgr;
+    return *m_pLinkMgr;
 }
 
 // #i42634# Moved common code of SwReader::Read() and SwDocShell::UpdateLinks()
@@ -439,7 +440,6 @@ bool DocumentLinksAdministrationManager::LinksUpdated() const
 
 DocumentLinksAdministrationManager::~DocumentLinksAdministrationManager()
 {
-    DELETEZ( mpLinkMgr );
 }
 
 bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, SwPaM*& rpPam, SwNodeRange*& rpRange ) const
