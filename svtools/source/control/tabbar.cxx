@@ -119,8 +119,8 @@ public:
         long nTextWidth = mrRenderContext.GetTextWidth(aText);
         long nTextHeight = mrRenderContext.GetTextHeight();
         Point aPos = aRect.TopLeft();
-        aPos.X() += (aRect.getWidth()  - nTextWidth) / 2;
-        aPos.Y() += (aRect.getHeight() - nTextHeight) / 2;
+        aPos.AdjustX((aRect.getWidth()  - nTextWidth) / 2 );
+        aPos.AdjustY((aRect.getHeight() - nTextHeight) / 2 );
 
         if (mbEnabled)
             mrRenderContext.DrawText(aPos, aText);
@@ -143,7 +143,7 @@ public:
         mrRenderContext.SetLineColor(maCustomColor);
 
         tools::Rectangle aLineRect(maRect.BottomLeft(), maRect.BottomRight());
-        aLineRect.Top() -= 3;
+        aLineRect.AdjustTop( -3 );
 
         mrRenderContext.DrawRect(aLineRect);
     }
@@ -714,20 +714,20 @@ void TabBar::ImplFormat()
             // Slightly before the tab before the first visible page
             // should also be visible
             if (n + 1 == mnFirstPos)
-                pItem->maRect.Left() = x-pItem->mnWidth;
+                pItem->maRect.SetLeft( x-pItem->mnWidth );
             else
             {
-                pItem->maRect.Left() = x;
+                pItem->maRect.SetLeft( x );
                 x += pItem->mnWidth;
             }
-            pItem->maRect.Right() = x;
-            pItem->maRect.Bottom() = maWinSize.Height() - 1;
+            pItem->maRect.SetRight( x );
+            pItem->maRect.SetBottom( maWinSize.Height() - 1 );
 
             if (mbMirrored)
             {
                 long nTmp = mnOffX + mnLastOffX - pItem->maRect.Right();
-                pItem->maRect.Right() = mnOffX + mnLastOffX - pItem->maRect.Left();
-                pItem->maRect.Left() = nTmp;
+                pItem->maRect.SetRight( mnOffX + mnLastOffX - pItem->maRect.Left() );
+                pItem->maRect.SetLeft( nTmp );
             }
         }
 
@@ -1380,11 +1380,11 @@ void TabBar::RequestHelp(const HelpEvent& rHEvt)
             {
                 tools::Rectangle aItemRect = GetPageRect(nItemId);
                 Point aPt = OutputToScreenPixel(aItemRect.TopLeft());
-                aItemRect.Left()   = aPt.X();
-                aItemRect.Top()    = aPt.Y();
+                aItemRect.SetLeft( aPt.X() );
+                aItemRect.SetTop( aPt.Y() );
                 aPt = OutputToScreenPixel(aItemRect.BottomRight());
-                aItemRect.Right()  = aPt.X();
-                aItemRect.Bottom() = aPt.Y();
+                aItemRect.SetRight( aPt.X() );
+                aItemRect.SetBottom( aPt.Y() );
                 Help::ShowBalloon(this, aItemRect.Center(), aItemRect, aStr);
                 return;
             }
@@ -1412,11 +1412,11 @@ void TabBar::RequestHelp(const HelpEvent& rHEvt)
             {
                 tools::Rectangle aItemRect = GetPageRect(nItemId);
                 Point aPt = OutputToScreenPixel(aItemRect.TopLeft());
-                aItemRect.Left()   = aPt.X();
-                aItemRect.Top()    = aPt.Y();
+                aItemRect.SetLeft( aPt.X() );
+                aItemRect.SetTop( aPt.Y() );
                 aPt = OutputToScreenPixel(aItemRect.BottomRight());
-                aItemRect.Right()  = aPt.X();
-                aItemRect.Bottom() = aPt.Y();
+                aItemRect.SetRight( aPt.X() );
+                aItemRect.SetBottom( aPt.Y() );
                 OUString aStr = mpImpl->mpItemList[nPos]->maText;
                 if (!aStr.isEmpty())
                 {

@@ -140,7 +140,7 @@ namespace svt
         m_pImpl->pRoadmap->SetItemSelectHdl( LINK( this, RoadmapWizard, OnRoadmapItemSelected ) );
 
         Size aRoadmapSize = LogicToPixel(Size(85, 0), MapMode(MapUnit::MapAppFont));
-        aRoadmapSize.Height() = GetSizePixel().Height();
+        aRoadmapSize.setHeight( GetSizePixel().Height() );
         m_pImpl->pRoadmap->SetSizePixel( aRoadmapSize );
 
         SetViewWindow( m_pImpl->pRoadmap );

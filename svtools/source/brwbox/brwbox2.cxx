@@ -279,10 +279,10 @@ void BrowseBox::ToggleSelection()
         tools::Rectangle aRect( GetFieldRectPixel(nCurRow,
                                            pCols[ nColId ]->GetId(),
                                            false ) );
-        aRect.Left() -= MIN_COLUMNWIDTH;
-        aRect.Right() += MIN_COLUMNWIDTH;
-        aRect.Top() = 0;
-        aRect.Bottom() = pDataWin->GetOutputSizePixel().Height();
+        aRect.AdjustLeft( -(MIN_COLUMNWIDTH) );
+        aRect.AdjustRight(MIN_COLUMNWIDTH );
+        aRect.SetTop( 0 );
+        aRect.SetBottom( pDataWin->GetOutputSizePixel().Height() );
         pDataWin->Invalidate( aRect );
     }
 
@@ -319,9 +319,9 @@ void BrowseBox::DrawCursor()
     if ( bColumnCursor )
     {
         aCursor = GetFieldRectPixel( nCurRow, nCurColId, false );
-        aCursor.Left() -= MIN_COLUMNWIDTH;
-        aCursor.Right() += 1;
-        aCursor.Bottom() += 1;
+        aCursor.AdjustLeft( -(MIN_COLUMNWIDTH) );
+        aCursor.AdjustRight(1 );
+        aCursor.AdjustBottom(1 );
     }
     else
         aCursor = tools::Rectangle(
@@ -333,8 +333,8 @@ void BrowseBox::DrawCursor()
     if ( bHLines )
     {
         if ( !bMultiSelection )
-            --aCursor.Top();
-        --aCursor.Bottom();
+            aCursor.AdjustTop( -1 );
+        aCursor.AdjustBottom( -1 );
     }
 
     if (m_aCursorColor == COL_TRANSPARENT)
@@ -520,8 +520,8 @@ void BrowseBox::Resize()
 
     // Control-Area
     tools::Rectangle aInvalidArea( GetControlArea() );
-    aInvalidArea.Right() = GetOutputSizePixel().Width();
-    aInvalidArea.Left() = 0;
+    aInvalidArea.SetRight( GetOutputSizePixel().Width() );
+    aInvalidArea.SetLeft( 0 );
     Invalidate( aInvalidArea );
 
     // external header-bar
@@ -690,10 +690,10 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
     }
 
     // a smaller area for the content
-    ++aRealPos.X();
-    ++aRealPos.Y();
-    aRealSize.Width() -= 2;
-    aRealSize.Height() -= 2;
+    aRealPos.AdjustX( 1 );
+    aRealPos.AdjustY( 1 );
+    aRealSize.AdjustWidth( -2 );
+    aRealSize.AdjustHeight( -2 );
 
     // let the header bar draw itself
     if ( pBar )
@@ -735,8 +735,8 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
             pDev->Pop();
         }
 
-        aRealPos.Y() += aHeaderSize.Height();
-        aRealSize.Height() -= aHeaderSize.Height();
+        aRealPos.AdjustY(aHeaderSize.Height() );
+        aRealSize.AdjustHeight( -(aHeaderSize.Height()) );
     }
 
     // draw our own content (with clipping)
@@ -807,7 +807,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
     // redraw the invalid fields
     for ( sal_uLong nRelRow = nRelTopRow;
           nRelRow <= nRelBottomRow && static_cast<sal_uLong>(nTopRow)+nRelRow < static_cast<sal_uLong>(nRowCount);
-          ++nRelRow, aPos.Y() += nDataRowHeigt )
+          ++nRelRow, aPos.AdjustY(nDataRowHeigt ) )
     {
         // get row
         // check valid area, to be on the safe side:
@@ -821,7 +821,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
             OSL_FAIL("BrowseBox::ImplPaintData: SeekRow failed");
         }
         _rOut.SetClipRegion();
-        aPos.X() = aOverallAreaPos.X();
+        aPos.setX( aOverallAreaPos.X() );
 
 
         // #73325# don't paint the row outside the painting rectangle (DG)
@@ -893,14 +893,14 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
                     Size aFieldSize(pCol->Width(), nDataRowHeigt);
 
                     if (aPos.X() + aFieldSize.Width() > aOverallAreaBRPos.X())
-                        aFieldSize.Width() = aOverallAreaBRPos.X() - aPos.X();
+                        aFieldSize.setWidth( aOverallAreaBRPos.X() - aPos.X() );
 
                     if (aPos.Y() + aFieldSize.Height() > aOverallAreaBRPos.Y() + 1)
                     {
                         // for non-handle cols we don't clip vertically : we just don't draw the cell if the line isn't completely visible
                         if (pCol->GetId() != 0)
                             continue;
-                        aFieldSize.Height() = aOverallAreaBRPos.Y() + 1 - aPos.Y();
+                        aFieldSize.setHeight( aOverallAreaBRPos.Y() + 1 - aPos.Y() );
                     }
 
                     vcl::Region aClipToField(tools::Rectangle(aPos, aFieldSize));
@@ -920,7 +920,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
             }
 
             // skip column
-            aPos.X() += pCol->Width();
+            aPos.AdjustX(pCol->Width() );
         }
 
         // reset auto-highlight
@@ -949,7 +949,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
     }
 
     if (aPos.Y() > aOverallAreaBRPos.Y() + 1)
-        aPos.Y() = aOverallAreaBRPos.Y() + 1;
+        aPos.setY( aOverallAreaBRPos.Y() + 1 );
         // needed for some of the following drawing
 
     // retouching
@@ -996,7 +996,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
             }
 
             // skip column
-            aVertPos.X() += pCol->Width();
+            aVertPos.AdjustX(pCol->Width() );
 
             // at end of invalid area
             // invalid area is first reached when X > Right
@@ -1067,14 +1067,14 @@ void BrowseBox::UpdateScrollbars()
         {
             pVScroll->Hide();
             Size aNewSize( aDataWinSize );
-            aNewSize.Width() = GetOutputSizePixel().Width();
+            aNewSize.setWidth( GetOutputSizePixel().Width() );
             aDataWinSize = aNewSize;
         }
     }
     else if ( !pVScroll->IsVisible() )
     {
         Size aNewSize( aDataWinSize );
-        aNewSize.Width() = GetOutputSizePixel().Width() - nCornerSize;
+        aNewSize.setWidth( GetOutputSizePixel().Width() - nCornerSize );
         aDataWinSize = aNewSize;
     }
 
@@ -1091,14 +1091,14 @@ void BrowseBox::UpdateScrollbars()
         {
             aHScroll->Hide();
         }
-        aDataWinSize.Height() = GetOutputSizePixel().Height() - GetTitleHeight();
+        aDataWinSize.setHeight( GetOutputSizePixel().Height() - GetTitleHeight() );
         if ( nControlAreaWidth != USHRT_MAX )
-            aDataWinSize.Height() -= nCornerSize;
+            aDataWinSize.AdjustHeight( -sal_Int32(nCornerSize) );
     }
     else if ( !aHScroll->IsVisible() )
     {
         Size aNewSize( aDataWinSize );
-        aNewSize.Height() = GetOutputSizePixel().Height() - GetTitleHeight() - nCornerSize;
+        aNewSize.setHeight( GetOutputSizePixel().Height() - GetTitleHeight() - nCornerSize );
         aDataWinSize = aNewSize;
     }
 
@@ -1941,7 +1941,7 @@ tools::Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
     }
     else
     {
-        aTopLeft.Y() = GetDataRowHeight();
+        aTopLeft.setY( GetDataRowHeight() );
         nWidth = GetColumnWidth(0);
         nHeight = GetWindowExtentsRelative( pParent ).GetHeight() - aTopLeft.Y() - GetControlArea().GetSize().Height();
     }

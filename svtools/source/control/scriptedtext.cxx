@@ -130,18 +130,18 @@ void SvtScriptedTextHelper_Impl::CalculateSizes()
             SetOutDevFont( nScript );
             nCurrWidth = mrOutDevice.GetTextWidth( maText, nThisPos, nNextPos - nThisPos );
             maWidthVec.push_back( nCurrWidth );
-            maTextSize.Width() += nCurrWidth;
+            maTextSize.AdjustWidth(nCurrWidth );
             nThisPos = nNextPos;
         }
     }
 
     // calculate maximum font height
     SetOutDevFont( i18n::ScriptType::LATIN );
-    maTextSize.Height() = std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() );
+    maTextSize.setHeight( std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() ) );
     SetOutDevFont( i18n::ScriptType::ASIAN );
-    maTextSize.Height() = std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() );
+    maTextSize.setHeight( std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() ) );
     SetOutDevFont( i18n::ScriptType::COMPLEX );
-    maTextSize.Height() = std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() );
+    maTextSize.setHeight( std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() ) );
 
     mrOutDevice.Pop();
 }
@@ -263,8 +263,8 @@ void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
 
         SetOutDevFont( nScript );
         mrOutDevice.DrawText( aCurrPos, maText, nThisPos, nNextPos - nThisPos );
-        aCurrPos.X() += maWidthVec[ nVecIndex++ ];
-        aCurrPos.X() += mrOutDevice.GetTextHeight() / 5;   // add 20% of font height as portion spacing
+        aCurrPos.AdjustX(maWidthVec[ nVecIndex++ ] );
+        aCurrPos.AdjustX(mrOutDevice.GetTextHeight() / 5 );   // add 20% of font height as portion spacing
         nThisPos = nNextPos;
     }
 
