@@ -50,7 +50,7 @@ void SSLWarnDialog::response(short nResponseId)
 {
     switch (nResponseId)
     {
-        case -1:
+        case 101:
             ViewCert();
             break;
         default:
