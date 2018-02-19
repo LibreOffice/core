@@ -93,6 +93,7 @@
 #include <RDFaExportHelper.hxx>
 
 #include <comphelper/xmltools.hxx>
+#include <comphelper/graphicmimetype.hxx>
 
 using namespace ::osl;
 using namespace ::com::sun::star;
@@ -1883,7 +1884,7 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
     return sRet;
 }
 
-OUString SvXMLExport::AddEmbeddedXGraphic(uno::Reference<graphic::XGraphic> const & rxGraphic, OUString const & rRequestedName)
+OUString SvXMLExport::AddEmbeddedXGraphic(uno::Reference<graphic::XGraphic> const & rxGraphic, OUString & rOutMimeType, OUString const & rRequestedName)
 {
     OUString sURL;
 
@@ -1900,9 +1901,7 @@ OUString SvXMLExport::AddEmbeddedXGraphic(uno::Reference<graphic::XGraphic> cons
         if (mxGraphicResolver.is() && xGraphicStorageHandler.is())
         {
             if (!(getExportFlags() & SvXMLExportFlags::EMBEDDED))
-            {
-                sURL = xGraphicStorageHandler->saveGraphicByName(rxGraphic, rRequestedName);
-            }
+                sURL = xGraphicStorageHandler->saveGraphicByName(rxGraphic, rOutMimeType, rRequestedName);
         }
     }
     return sURL;
@@ -1926,21 +1925,24 @@ Reference< XInputStream > SvXMLExport::GetEmbeddedGraphicObjectStream( const OUS
     return nullptr;
 }
 
-uno::Reference<io::XInputStream> SvXMLExport::GetEmbeddedXGraphicStream(uno::Reference<graphic::XGraphic> const & rxGraphic)
+bool SvXMLExport::GetGraphicMimeTypeFromStream(uno::Reference<graphic::XGraphic> const & rxGraphic, OUString & rOutMimeType)
 {
-    uno::Reference<io::XInputStream> xInputStream;
-
-    if ((getExportFlags() & SvXMLExportFlags::EMBEDDED) && mxGraphicResolver.is())
+    if (mxGraphicResolver.is())
     {
         uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler(mxGraphicResolver, uno::UNO_QUERY);
 
         if (xGraphicStorageHandler.is())
         {
-            xInputStream = xGraphicStorageHandler->createInputStream(rxGraphic);
+            Reference<XInputStream> xInputStream(xGraphicStorageHandler->createInputStream(rxGraphic));
+            if (xInputStream.is())
+            {
+                rOutMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForImageStream(xInputStream);
+                return true;
+            }
         }
     }
 
-    return xInputStream;
+    return false;
 }
 
 bool SvXMLExport::AddEmbeddedXGraphicAsBase64(uno::Reference<graphic::XGraphic> const & rxGraphic)
