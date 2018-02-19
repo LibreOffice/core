@@ -451,8 +451,11 @@ void LwpTableLayout::TraverseTable()
     // set value
     LwpObjectID& rRowID = GetChildHead();
     LwpRowLayout * pRowLayout = dynamic_cast<LwpRowLayout *>(rRowID.obj().get());
+    std::set<LwpRowLayout*> aSeen;
     while (pRowLayout)
     {
+        aSeen.insert(pRowLayout);
+
         pRowLayout->SetRowMap();
 
         // for 's analysis job
@@ -462,6 +465,8 @@ void LwpTableLayout::TraverseTable()
 
         rRowID = pRowLayout->GetNext();
         pRowLayout = dynamic_cast<LwpRowLayout *>(rRowID.obj().get());
+        if (aSeen.find(pRowLayout) != aSeen.end())
+            throw std::runtime_error("loop in conversion");
     }
 }
 
