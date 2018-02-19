@@ -897,19 +897,12 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
             if (mbHasOnlineSpellErrors)
             {
                 sd::ModifyGuard aGuard( this );
-                SdrModel* pModel = pObj->GetModel();
-                bool bLock = false;
-                if ( pModel )
-                {
-                    bLock = pModel->isLocked();
-                    pModel->setLock(true);
-                }
+
+                // FIXME: call SetOPO only when changes happened
                 // taking text from the outliner
                 pObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
-
+                // FIXME: Don't broadcast twice
                 pObj->BroadcastObjectChange();
-                if ( pModel )
-                    pModel->setLock(bLock);
             }
         }
 
