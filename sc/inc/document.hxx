@@ -243,7 +243,8 @@ enum ScDocumentMode
 {
     SCDOCMODE_DOCUMENT,
     SCDOCMODE_CLIP,
-    SCDOCMODE_UNDO
+    SCDOCMODE_UNDO,
+    SCDOCMODE_FUNCTIONACCESS
 };
 
 enum CommentCaptionState
@@ -480,6 +481,7 @@ private:
     bool                bCalculatingFormulaTree;
     bool                bIsClip;
     bool                bIsUndo;
+    bool                bIsFunctionAccess;
     bool                bIsVisible;                     // set from view ctor
 
     bool                bIsEmbedded;                    // display/adjust Embedded area?
@@ -1433,6 +1435,7 @@ public:
     bool               IsClipboard() const                         { return bIsClip; }
     bool               IsUndoEnabled() const                       { return mbUndoEnabled; }
     SC_DLLPUBLIC void  EnableUndo( bool bVal );
+    bool                IsFunctionAccess() const        { return bIsFunctionAccess; }
 
     bool                         IsAdjustHeightLocked() const               { return nAdjustHeightLock != 0; }
     void                         LockAdjustHeight()                          { ++nAdjustHeightLock; }

@@ -183,12 +183,13 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         eHardRecalcState(HardRecalcState::OFF),
         nVisibleTab( 0 ),
         eLinkMode(LM_UNKNOWN),
-        bAutoCalc( eMode == SCDOCMODE_DOCUMENT ),
+        bAutoCalc( eMode == SCDOCMODE_DOCUMENT || eMode == SCDOCMODE_FUNCTIONACCESS ),
         bAutoCalcShellDisabled( false ),
         bForcedFormulaPending( false ),
         bCalculatingFormulaTree( false ),
         bIsClip( eMode == SCDOCMODE_CLIP ),
         bIsUndo( eMode == SCDOCMODE_UNDO ),
+        bIsFunctionAccess( eMode == SCDOCMODE_FUNCTIONACCESS ),
         bIsVisible( false ),
         bIsEmbedded( false ),
         bInsertingFromOtherDoc( false ),
@@ -228,7 +229,9 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
 
     eSrcSet = osl_getThreadTextEncoding();
 
-    if ( eMode == SCDOCMODE_DOCUMENT )
+    /* TODO: for SCDOCMODE_FUNCTIONACCESS it might not even be necessary to
+     * have all of these available. */
+    if ( eMode == SCDOCMODE_DOCUMENT || eMode == SCDOCMODE_FUNCTIONACCESS )
     {
         mxPoolHelper = new ScPoolHelper( this );
 
