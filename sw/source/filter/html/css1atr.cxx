@@ -2388,7 +2388,7 @@ static Writer& OutCSS1_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
 
     Color aColor( static_cast<const SvxColorItem&>(rHt).GetValue() );
     if( COL_AUTO == aColor.GetColor() )
-        aColor.SetColor( COL_BLACK );
+        aColor = COL_BLACK;
 
     rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_color, lclGetCSS1Color(aColor));
 

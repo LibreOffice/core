@@ -1137,7 +1137,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
             //  always export automatic text color as black
             if ( aColor.GetColor() == COL_AUTO )
-                aColor.SetColor( COL_BLACK );
+                aColor = COL_BLACK;
 
             aStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_color).
                 append('=').append(lcl_makeHTMLColorTriplet(aColor));

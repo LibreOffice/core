@@ -62,7 +62,7 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
                 {
                     sal_Int32 nColor(0);
                     ::sax::Converter::convertColor(nColor, aIter.toString());
-                    aBorderColor.SetColor(nColor);
+                    aBorderColor = nColor;
                 }
                 break;
             case XML_ELEMENT( TABLE, XML_COPY_BACK ):

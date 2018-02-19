@@ -3412,7 +3412,7 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
         aSelectionFillCol.RGBtoHSB( h, s, b );
         if( b > 50 )    b -= 40;
         else            b += 40;
-        aSelectionFillCol.SetColor( Color::HSBtoRGB( h, s, b ) );
+        aSelectionFillCol = Color::HSBtoRGB( h, s, b );
         aSelectionBorderCol = aSelectionFillCol;
     }
 

@@ -217,8 +217,8 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, bool bPTL) :
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
     const svtools::ColorConfig& rColorConfig = pScMod->GetColorConfig();
-    aBackConfigColor.SetColor( rColorConfig.GetColorValue(svtools::DOCCOLOR).nColor );
-    aTextConfigColor.SetColor( rColorConfig.GetColorValue(svtools::FONTCOLOR).nColor );
+    aBackConfigColor = rColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+    aTextConfigColor = rColorConfig.GetColorValue(svtools::FONTCOLOR).nColor;
 }
 
 void ScDrawStringsVars::SetShrinkScale( long nScale, SvtScriptType nScript )
@@ -2437,7 +2437,7 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
 
     Color aBackCol = mpPattern->GetItem( ATTR_BACKGROUND, mpCondSet ).GetColor();
     if ( bUseStyleColor && ( aBackCol.GetTransparency() > 0 || bCellContrast ) )
-        aBackCol.SetColor( nConfBackColor );
+        aBackCol = nConfBackColor;
     mpEngine->SetBackgroundColor( aBackCol );
 }
 
@@ -4596,7 +4596,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 Color aBackCol =
                                     pPattern->GetItem( ATTR_BACKGROUND, pCondSet ).GetColor();
                                 if ( mbUseStyleColor && ( aBackCol.GetTransparency() > 0 || bCellContrast ) )
-                                    aBackCol.SetColor( nConfBackColor );
+                                    aBackCol = nConfBackColor;
                                 pEngine->SetBackgroundColor( aBackCol );
                             }
 

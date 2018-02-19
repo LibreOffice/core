@@ -259,7 +259,7 @@ Color SwViewShellImp::GetRetoucheColor() const
             aRet = rSh.GetViewOptions()->GetRetoucheColor();
         else if(rSh.GetViewOptions()->IsPagePreview()  &&
                     !SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews())
-            aRet.SetColor(COL_WHITE);
+            aRet = COL_WHITE;
         else
             aRet = SwViewOption::GetDocColor();
     }

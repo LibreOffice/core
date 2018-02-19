@@ -263,7 +263,7 @@ void XclImpTabViewSettings::Finalize()
 
     // grid color
     if( maData.mbDefGridColor )
-        rTabSett.maGridColor.SetColor( COL_AUTO );
+        rTabSett.maGridColor = COL_AUTO;
     else
         rTabSett.maGridColor = maData.maGridColor;
 

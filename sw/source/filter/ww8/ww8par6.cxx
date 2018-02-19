@@ -4750,7 +4750,7 @@ void SwWW8Shade::SetShade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex)
     switch (nWW8BrushStyle)
     {
         case 0: // Null-Brush
-            aColor.SetColor( nBack );
+            aColor = nBack;
             break;
         default:
             {
@@ -4764,8 +4764,7 @@ void SwWW8Shade::SetShade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex)
                 nGreen += aBackColor.GetGreen()* (1000 - nWW8BrushStyle);
                 nBlue += aBackColor.GetBlue() * (1000 - nWW8BrushStyle);
 
-                aColor.SetColor( RGB_COLORDATA( nRed/1000, nGreen/1000,
-                    nBlue/1000 ) );
+                aColor = RGB_COLORDATA( nRed/1000, nGreen/1000, nBlue/1000 );
             }
             break;
     }
