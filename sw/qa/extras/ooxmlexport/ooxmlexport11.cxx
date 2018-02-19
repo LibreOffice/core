@@ -75,6 +75,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82065_Ind_start_strict, "tdf82065_Ind_start_stri
     CPPUNIT_ASSERT_EQUAL_MESSAGE("IndentAt defined", true, bFoundIndentAt);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf112694, "tdf112694.docx")
+{
+    uno::Any aPageStyle = getStyles("PageStyles")->getByName("Standard");
+    // Header was on when header for file was for explicit first pages only
+    // (marked via <w:titlePg>).
+    CPPUNIT_ASSERT(!getProperty<bool>(aPageStyle, "HeaderIsOn"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf67207_MERGEFIELD, "mailmerge.docx")
 {
     uno::Reference<beans::XPropertySet> xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField");
