@@ -144,10 +144,10 @@ long HeaderBar::ImplGetItemPos( sal_uInt16 nPos ) const
 tools::Rectangle HeaderBar::ImplGetItemRect( sal_uInt16 nPos ) const
 {
     tools::Rectangle aRect( ImplGetItemPos( nPos ), 0, 0, mnDY-1 );
-    aRect.Right() = aRect.Left() + mvItemList[ nPos ]->mnSize - 1;
+    aRect.SetRight( aRect.Left() + mvItemList[ nPos ]->mnSize - 1 );
     // check for overflow on various systems
     if ( aRect.Right() > 16000 )
-        aRect.Right() = 16000;
+        aRect.SetRight( 16000 );
     return aRect;
 }
 
@@ -221,13 +221,13 @@ void HeaderBar::ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos )
 
     if ( nEndPos > nStartPos )
     {
-        aStartPos.X() += 3;
-        aEndPos.X() = aRect2.Right()-6;
+        aStartPos.AdjustX(3 );
+        aEndPos.setX( aRect2.Right()-6 );
     }
     else
     {
-        aStartPos.X() -= 3;
-        aEndPos.X() = aRect2.Left()+6;
+        aStartPos.AdjustX( -3 );
+        aEndPos.setX( aRect2.Left()+6 );
     }
 
     SetRasterOp( RasterOp::Invert );
@@ -299,8 +299,8 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     else
     {
         // do not draw border
-        aRect.Top()     += mnBorderOff1;
-        aRect.Bottom()  -= mnBorderOff2;
+        aRect.AdjustTop(mnBorderOff1 );
+        aRect.AdjustBottom( -(mnBorderOff2) );
 
         // delete background
         if ( !pRect )
@@ -344,7 +344,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     Size aImageSize = pItem->maImage.GetSizePixel();
     Size aTxtSize(rRenderContext.GetTextWidth(pItem->maOutText), 0);
     if (!pItem->maOutText.isEmpty())
-        aTxtSize.Height() = rRenderContext.GetTextHeight();
+        aTxtSize.setHeight( rRenderContext.GetTextHeight() );
     long nArrowWidth = 0;
     if (nBits & (HeaderBarItemBits::UPARROW | HeaderBarItemBits::DOWNARROW))
         nArrowWidth = HEAD_ARROWSIZE2 + HEADERBAR_ARROWOFF;
@@ -355,8 +355,8 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
         nTestHeight += aTxtSize.Height();
     if ((aImageSize.Width() > aRect.GetWidth()) || (nTestHeight > aRect.GetHeight()))
     {
-        aImageSize.Width() = 0;
-        aImageSize.Height() = 0;
+        aImageSize.setWidth( 0 );
+        aImageSize.setHeight( 0 );
     }
 
     // cut text to correct length
@@ -605,14 +605,14 @@ void HeaderBar::ImplUpdate(sal_uInt16 nPos, bool bEnd)
         aRect = ImplGetItemRect(nPos);
     else
     {
-        aRect.Bottom() = mnDY - 1;
+        aRect.SetBottom( mnDY - 1 );
         if (nItemCount)
-            aRect.Left() = ImplGetItemRect(nItemCount - 1).Right();
+            aRect.SetLeft( ImplGetItemRect(nItemCount - 1).Right() );
     }
     if (bEnd)
-        aRect.Right() = mnDX - 1;
-    aRect.Top() += mnBorderOff1;
-    aRect.Bottom() -= mnBorderOff2;
+        aRect.SetRight( mnDX - 1 );
+    aRect.AdjustTop(mnBorderOff1 );
+    aRect.AdjustBottom( -(mnBorderOff2) );
     Invalidate(aRect);
 }
 
@@ -952,11 +952,11 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     size_t nItemCount = mvItemList.size();
     for ( size_t i = 0; i < nItemCount; i++ )
     {
-        aItemRect.Left() = aRect.Left()+ImplGetItemPos( i );
-        aItemRect.Right() = aItemRect.Left() + mvItemList[ i ]->mnSize - 1;
+        aItemRect.SetLeft( aRect.Left()+ImplGetItemPos( i ) );
+        aItemRect.SetRight( aItemRect.Left() + mvItemList[ i ]->mnSize - 1 );
         // check for overflow on some systems
         if ( aItemRect.Right() > 16000 )
-            aItemRect.Right() = 16000;
+            aItemRect.SetRight( 16000 );
         vcl::Region aRegion( aRect );
         pDev->SetClipRegion( aRegion );
         ImplDrawItem(*pDev, i, false, aItemRect, &aRect );
@@ -995,11 +995,11 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
         {
             tools::Rectangle aItemRect = GetItemRect( nItemId );
             Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
-            aItemRect.Left()   = aPt.X();
-            aItemRect.Top()    = aPt.Y();
+            aItemRect.SetLeft( aPt.X() );
+            aItemRect.SetTop( aPt.Y() );
             aPt = OutputToScreenPixel( aItemRect.BottomRight() );
-            aItemRect.Right()  = aPt.X();
-            aItemRect.Bottom() = aPt.Y();
+            aItemRect.SetRight( aPt.X() );
+            aItemRect.SetBottom( aPt.Y() );
 
             OUString aStr = GetHelpText( nItemId );
             if ( aStr.isEmpty() || !(rHEvt.GetMode() & HelpEventMode::BALLOON) )
@@ -1316,18 +1316,18 @@ Size HeaderBar::CalcWindowSizePixel() const
             nMaxImageSize = nImageHeight;
 
         // add width
-        aSize.Width() += pItem->mnSize;
+        aSize.AdjustWidth(pItem->mnSize );
     }
 
     if ( nMaxImageSize > aSize.Height() )
-        aSize.Height() = nMaxImageSize;
+        aSize.setHeight( nMaxImageSize );
 
     // add border
     if ( mbButtonStyle )
-        aSize.Height() += 4;
+        aSize.AdjustHeight(4 );
     else
-        aSize.Height() += 2;
-    aSize.Height() += mnBorderOff1+mnBorderOff2;
+        aSize.AdjustHeight(2 );
+    aSize.AdjustHeight(mnBorderOff1+mnBorderOff2 );
 
     return aSize;
 }

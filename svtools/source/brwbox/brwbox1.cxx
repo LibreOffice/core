@@ -377,10 +377,10 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
     // determine old column area
     Size aDataWinSize( pDataWin->GetSizePixel() );
     if ( pDataWin->pHeaderBar )
-        aDataWinSize.Height() += pDataWin->pHeaderBar->GetSizePixel().Height();
+        aDataWinSize.AdjustHeight(pDataWin->pHeaderBar->GetSizePixel().Height() );
 
     tools::Rectangle aFromRect( GetFieldRect( nColumnId) );
-    aFromRect.Right() += 2*MIN_COLUMNWIDTH;
+    aFromRect.AdjustRight(2*MIN_COLUMNWIDTH );
 
     sal_uInt16 nNextPos = nOldPos + 1;
     if ( nOldPos > nPos )
@@ -402,7 +402,7 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
 
     // determine new column area
     tools::Rectangle aToRect( GetFieldRect( nColumnId ) );
-    aToRect.Right() += 2*MIN_COLUMNWIDTH;
+    aToRect.AdjustRight(2*MIN_COLUMNWIDTH );
 
     // do scroll, let redraw
     if( pDataWin->GetBackground().IsScrollable() )
@@ -413,7 +413,7 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
         {
             long nFrozenWidth = GetFrozenWidth();
             if ( aToRect.Left() < nFrozenWidth )
-                aToRect.Left() = nFrozenWidth;
+                aToRect.SetLeft( nFrozenWidth );
             aScrollArea = tools::Rectangle(Point(aToRect.Left(),0),
                                     Point(aNextRect.Right(),aDataWinSize.Height()));
             nScroll *= -1; // reverse direction
@@ -423,8 +423,8 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
                                     Point(aToRect.Right(),aDataWinSize.Height()));
 
         pDataWin->Scroll( nScroll, 0, aScrollArea );
-        aToRect.Top() = 0;
-        aToRect.Bottom() = aScrollArea.Bottom();
+        aToRect.SetTop( 0 );
+        aToRect.SetBottom( aScrollArea.Bottom() );
         Invalidate( aToRect );
     }
     else
@@ -588,7 +588,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
                                 GetSizePixel().Width() , // the header is longer than the datawin
                                 pDataWin->GetPosPixel().Y() - 1 );
             Control::Scroll( nWidth-nOldWidth, 0, aScrRect, SCROLL_FLAGS );
-            aScrRect.Bottom() = pDataWin->GetSizePixel().Height();
+            aScrRect.SetBottom( pDataWin->GetSizePixel().Height() );
             pDataWin->Scroll( nWidth-nOldWidth, 0, aScrRect, SCROLL_FLAGS );
             tools::Rectangle aInvRect( nX, 0, nX + std::max( nWidth, static_cast<sal_uLong>(nOldWidth) ), USHRT_MAX );
             Control::Invalidate( aInvRect, InvalidateFlags::NoChildren );
@@ -875,20 +875,20 @@ long BrowseBox::ScrollColumns( long nCols )
 
                 // invalidate the area of the column which was scrolled out to the left hand side
                 tools::Rectangle aInvalidateRect( aScrollRect );
-                aInvalidateRect.Left() = nFrozenWidth;
-                aInvalidateRect.Right() = nFrozenWidth + nDelta - 1;
+                aInvalidateRect.SetLeft( nFrozenWidth );
+                aInvalidateRect.SetRight( nFrozenWidth + nDelta - 1 );
                 Invalidate( aInvalidateRect );
             }
 
             // scroll the data-area
-            aScrollRect.Bottom() = pDataWin->GetOutputSizePixel().Height();
+            aScrollRect.SetBottom( pDataWin->GetOutputSizePixel().Height() );
 
             // actually scroll
             pDataWin->Scroll( -nDelta, 0, aScrollRect, SCROLL_FLAGS );
 
             // invalidate the area of the column which was scrolled out to the left hand side
-            aScrollRect.Left() = nFrozenWidth;
-            aScrollRect.Right() = nFrozenWidth + nDelta - 1;
+            aScrollRect.SetLeft( nFrozenWidth );
+            aScrollRect.SetRight( nFrozenWidth + nDelta - 1 );
             pDataWin->Invalidate( aScrollRect );
         }
     }
@@ -920,7 +920,7 @@ long BrowseBox::ScrollColumns( long nCols )
             }
 
             // scroll the data-area
-            aScrollRect.Bottom() = pDataWin->GetOutputSizePixel().Height();
+            aScrollRect.SetBottom( pDataWin->GetOutputSizePixel().Height() );
             pDataWin->Scroll( nDelta, 0, aScrollRect, SCROLL_FLAGS );
         }
     }

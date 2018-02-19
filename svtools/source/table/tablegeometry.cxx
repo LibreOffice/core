@@ -37,8 +37,8 @@ namespace svt { namespace table
     {
         if ( m_nRowPos == ROW_COL_HEADERS )
         {
-            m_aRect.Top() = 0;
-            m_aRect.Bottom() = m_rControl.m_nColHeaderHeightPixel - 1;
+            m_aRect.SetTop( 0 );
+            m_aRect.SetBottom( m_rControl.m_nColHeaderHeightPixel - 1 );
         }
         else
         {
@@ -51,8 +51,8 @@ namespace svt { namespace table
     {
         if ( ( m_nRowPos >= m_rControl.m_nTopRow ) && impl_isValidRow( m_nRowPos ) )
         {
-            m_aRect.Top() = m_rControl.m_nColHeaderHeightPixel + ( m_nRowPos - m_rControl.m_nTopRow ) * m_rControl.m_nRowHeightPixel;
-            m_aRect.Bottom() = m_aRect.Top() + m_rControl.m_nRowHeightPixel - 1;
+            m_aRect.SetTop( m_rControl.m_nColHeaderHeightPixel + ( m_nRowPos - m_rControl.m_nTopRow ) * m_rControl.m_nRowHeightPixel );
+            m_aRect.SetBottom( m_aRect.Top() + m_rControl.m_nRowHeightPixel - 1 );
         }
         else
             m_aRect.SetEmpty();
@@ -93,8 +93,8 @@ namespace svt { namespace table
     {
         if ( m_nColPos == COL_ROW_HEADERS )
         {
-            m_aRect.Left() = 0;
-            m_aRect.Right() = m_rControl.m_nRowHeaderWidthPixel - 1;
+            m_aRect.SetLeft( 0 );
+            m_aRect.SetRight( m_rControl.m_nRowHeaderWidthPixel - 1 );
         }
         else
         {
@@ -108,12 +108,12 @@ namespace svt { namespace table
         ColPos nLeftColumn = m_rControl.m_nLeftColumn;
         if ( ( m_nColPos >= nLeftColumn ) && impl_isValidColumn( m_nColPos ) )
         {
-            m_aRect.Left() = m_rControl.m_nRowHeaderWidthPixel;
+            m_aRect.SetLeft( m_rControl.m_nRowHeaderWidthPixel );
             // TODO: take into account any possibly frozen columns
 
             for ( ColPos col = nLeftColumn; col < m_nColPos; ++col )
-                m_aRect.Left() += m_rControl.m_aColumnWidths[ col ].getWidth();
-            m_aRect.Right() = m_aRect.Left() + m_rControl.m_aColumnWidths[ m_nColPos ].getWidth() - 1;
+                m_aRect.AdjustLeft(m_rControl.m_aColumnWidths[ col ].getWidth() );
+            m_aRect.SetRight( m_aRect.Left() + m_rControl.m_aColumnWidths[ m_nColPos ].getWidth() - 1 );
         }
         else
             m_aRect.SetEmpty();
@@ -137,8 +137,8 @@ namespace svt { namespace table
         {
             if ( impl_isValidColumn( ++m_nColPos ) )
             {
-                m_aRect.Left() = m_aRect.Right() + 1;
-                m_aRect.Right() += m_rControl.m_aColumnWidths[ m_nColPos ].getWidth();
+                m_aRect.SetLeft( m_aRect.Right() + 1 );
+                m_aRect.AdjustRight(m_rControl.m_aColumnWidths[ m_nColPos ].getWidth() );
             }
             else
                 m_aRect.SetEmpty();

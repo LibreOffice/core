@@ -362,7 +362,7 @@ void BrowserDataWin::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
     if ( !GetParent()->bRowDividerDrag )
     {
         Point aEventPos( _rPosPixel );
-        aEventPos.Y() += GetParent()->GetTitleHeight();
+        aEventPos.AdjustY(GetParent()->GetTitleHeight() );
         GetParent()->StartDrag( _nAction, aEventPos );
     }
 }
@@ -394,7 +394,7 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
         bInCommand = false;
     }
 
-    aEventPos.Y() += GetParent()->GetTitleHeight();
+    aEventPos.AdjustY(GetParent()->GetTitleHeight() );
     CommandEvent aEvt( aEventPos, rEvt.GetCommand(),
                         rEvt.IsMouseEvent(), rEvt.GetEventData() );
     bInCommand = true;
@@ -528,7 +528,7 @@ void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
     Point aMousePos = rTEvt.GetMouseEvent().GetPosPixel();
     // stop resizing at our bottom line
     if ( aMousePos.Y() > GetOutputSizePixel().Height() )
-        aMousePos.Y() = GetOutputSizePixel().Height();
+        aMousePos.setY( GetOutputSizePixel().Height() );
 
     if ( rTEvt.IsTrackingEnded() )
     {

@@ -415,10 +415,10 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     //line within that
     long nMinWidth = GetTextWidth("----------");
     Size aSize = CalcSubEditSize();
-    aSize.Width() = std::max(nMinWidth, aSize.Width());
-    aSize.Width() -= aTxtSize.Width();
-    aSize.Width() -= 6;
-    aSize.Height() = aTxtSize.Height();
+    aSize.setWidth( std::max(nMinWidth, aSize.Width()) );
+    aSize.AdjustWidth( -(aTxtSize.Width()) );
+    aSize.AdjustWidth( -6 );
+    aSize.setHeight( aTxtSize.Height() );
 
     // SourceUnit to Twips
     if ( eSourceUnit == FUNIT_POINT )
@@ -445,7 +445,7 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     }
     long nVirHeight = n1+nDist+n2;
     if ( nVirHeight > aSize.Height() )
-        aSize.Height() = nVirHeight;
+        aSize.setHeight( nVirHeight );
     // negative width should not be drawn
     if ( aSize.Width() <= 0 )
         return;
@@ -478,8 +478,8 @@ LineListBox::LineListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     aColor( COL_BLACK ),
     maPaintCol( COL_BLACK )
 {
-    aTxtSize.Width()  = GetTextWidth( " " );
-    aTxtSize.Height() = GetTextHeight();
+    aTxtSize.setWidth( GetTextWidth( " " ) );
+    aTxtSize.setHeight( GetTextHeight() );
     eSourceUnit = FUNIT_POINT;
 
     aVirDev->SetLineColor();
@@ -820,8 +820,8 @@ void FontNameBox::ImplCalcUserItemSize()
     if ( mbWYSIWYG && mpFontList )
     {
         aUserItemSz = Size(MAXPREVIEWWIDTH, GetTextHeight() );
-        aUserItemSz.Height() *= 16;
-        aUserItemSz.Height() /= 10;
+        aUserItemSz.setHeight( aUserItemSz.Height() * 16 );
+        aUserItemSz.setHeight( aUserItemSz.Height() / 10 );
     }
     SetUserItemSize( aUserItemSz );
 }
@@ -845,7 +845,7 @@ namespace
                 break;
             }
 
-            aSize.Height() -= EXTRAFONTSIZE;
+            aSize.AdjustHeight( -(EXTRAFONTSIZE) );
             rFont.SetFontSize(aSize);
             rDevice.SetFont(rFont);
         }
@@ -873,7 +873,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         Color aTextColor = pRenderContext->GetTextColor();
         vcl::Font aOldFont(pRenderContext->GetFont());
         Size aSize( aOldFont.GetFontSize() );
-        aSize.Height() += EXTRAFONTSIZE;
+        aSize.AdjustHeight(EXTRAFONTSIZE );
         vcl::Font aFont( rFontMetric );
         aFont.SetFontSize( aSize );
         pRenderContext->SetFont(aFont);

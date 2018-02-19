@@ -223,14 +223,14 @@ void SvImpLBox::CalcCellFocusRect( SvTreeListEntry const * pEntry, tools::Rectan
     if ( nCurTabPos > FIRST_ENTRY_TAB )
     {
         SvLBoxItem& rItem = pCursor->GetItem( nCurTabPos );
-        rRect.Left() = pView->GetTab( pCursor, &rItem )->GetPos();
+        rRect.SetLeft( pView->GetTab( pCursor, &rItem )->GetPos() );
     }
     if (pCursor->ItemCount() > static_cast<size_t>(nCurTabPos+1))
     {
         SvLBoxItem& rNextItem = pCursor->GetItem( nCurTabPos + 1 );
         long nRight = pView->GetTab( pCursor, &rNextItem )->GetPos() - 1;
         if ( nRight < rRect.Right() )
-            rRect.Right() = nRight;
+            rRect.SetRight( nRight );
     }
 }
 
@@ -379,7 +379,7 @@ void SvImpLBox::CursorUp()
     pView->Update();
     pStartEntry = pPrevFirstToDraw;
     tools::Rectangle aArea( GetVisibleArea() );
-    aArea.Bottom() -= nEntryHeight;
+    aArea.AdjustBottom( -nEntryHeight );
     pView->Scroll( 0, nEntryHeight, aArea, ScrollFlags::NoChildren );
     pView->Update();
     ShowCursor( true );
@@ -533,7 +533,7 @@ void SvImpLBox::InvalidateEntriesFrom( long nY ) const
     if( !(nFlags & LBoxFlags::InPaint ))
     {
         tools::Rectangle aRect( GetVisibleArea() );
-        aRect.Top() = nY;
+        aRect.SetTop( nY );
         pView->Invalidate( aRect );
     }
 }
@@ -544,12 +544,12 @@ void SvImpLBox::InvalidateEntry( long nY ) const
     {
         tools::Rectangle aRect( GetVisibleArea() );
         long nMaxBottom = aRect.Bottom();
-        aRect.Top() = nY;
-        aRect.Bottom() = nY; aRect.Bottom() += pView->GetEntryHeight();
+        aRect.SetTop( nY );
+        aRect.SetBottom( nY ); aRect.AdjustBottom(pView->GetEntryHeight() );
         if( aRect.Top() > nMaxBottom )
             return;
         if( aRect.Bottom() > nMaxBottom )
-            aRect.Bottom() = nMaxBottom;
+            aRect.SetBottom( nMaxBottom );
         pView->Invalidate( aRect );
     }
 }
@@ -783,11 +783,11 @@ bool SvImpLBox::EntryReallyHit(SvTreeListEntry* pEntry, const Point& rPosPixel, 
         return true;
 
     tools::Rectangle aRect( pView->GetFocusRect( pEntry, nLine ));
-    aRect.Right() = GetOutputSize().Width() - pView->GetMapMode().GetOrigin().X();
+    aRect.SetRight( GetOutputSize().Width() - pView->GetMapMode().GetOrigin().X() );
 
     SvLBoxContextBmp* pBmp = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
-    aRect.Left() -= pBmp->GetSize(pView,pEntry).Width();
-    aRect.Left() -= 4; // a little tolerance
+    aRect.AdjustLeft( -(pBmp->GetSize(pView,pEntry).Width()) );
+    aRect.AdjustLeft( -4 ); // a little tolerance
 
     Point aPos( rPosPixel );
     aPos -= pView->GetMapMode().GetOrigin();
@@ -858,9 +858,9 @@ SvTreeListEntry* SvImpLBox::MakePointVisible(const Point& rPoint)
 tools::Rectangle SvImpLBox::GetClipRegionRect() const
 {
     Point aOrigin( pView->GetMapMode().GetOrigin() );
-    aOrigin.X() *= -1; // conversion document coordinates
+    aOrigin.setX( aOrigin.X() * -1 ); // conversion document coordinates
     tools::Rectangle aClipRect( aOrigin, aOutputSize );
-    aClipRect.Bottom()++;
+    aClipRect.AdjustBottom( 1 );
     return aClipRect;
 }
 
@@ -1067,21 +1067,21 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
     {
         if (pView->IsExpanded(pEntry))
         {
-            aPos1.X() = pView->GetTabPos(pEntry, pFirstDynamicTab);
+            aPos1.setX( pView->GetTabPos(pEntry, pFirstDynamicTab) );
             // if it is not a context bitmap, go a little to the right below the
             // first text (node bitmap, too)
             if (!pView->nContextBmpWidthMax)
-                aPos1.X() += rExpandedNodeBitmap.GetSizePixel().Width() / 2;
+                aPos1.AdjustX(rExpandedNodeBitmap.GetSizePixel().Width() / 2 );
 
-            aPos1.Y() = nY;
-            aPos1.Y() += nEntryHeightDIV2;
+            aPos1.setY( nY );
+            aPos1.AdjustY(nEntryHeightDIV2 );
 
             pChild = pView->FirstChild( pEntry );
             DBG_ASSERT(pChild,"Child?");
             pChild = SvTreeList::LastSibling( pChild );
             nDistance = static_cast<sal_uInt16>(pView->GetVisiblePos(pChild) - pView->GetVisiblePos(pEntry));
             aPos2 = aPos1;
-            aPos2.Y() += nDistance * nEntryHeight;
+            aPos2.AdjustY(nDistance * nEntryHeight );
             rRenderContext.DrawLine(aPos1, aPos2);
         }
         // visible in control?
@@ -1091,17 +1091,17 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
             if (!pView->IsExpanded(pEntry))
             {
                 // nope
-                aPos1.X() = pView->GetTabPos(pEntry, pFirstDynamicTab);
+                aPos1.setX( pView->GetTabPos(pEntry, pFirstDynamicTab) );
                 // if it is not a context bitmap, go a little to the right below
                 // the first text (node bitmap, too)
                 if (!pView->nContextBmpWidthMax)
-                    aPos1.X() += rExpandedNodeBitmap.GetSizePixel().Width() / 2;
-                aPos1.Y() = nY;
-                aPos1.Y() += nEntryHeightDIV2;
-                aPos2.X() = aPos1.X();
+                    aPos1.AdjustX(rExpandedNodeBitmap.GetSizePixel().Width() / 2 );
+                aPos1.setY( nY );
+                aPos1.AdjustY(nEntryHeightDIV2 );
+                aPos2.setX( aPos1.X() );
             }
-            aPos2.Y() = aPos1.Y();
-            aPos2.X() -= pView->GetIndent();
+            aPos2.setY( aPos1.Y() );
+            aPos2.AdjustX( -(pView->GetIndent()) );
             rRenderContext.DrawLine(aPos1, aPos2);
         }
         nY += nEntryHeight;
@@ -1110,18 +1110,18 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
     if (m_nStyle & WB_HASLINESATROOT)
     {
         pEntry = pView->First();
-        aPos1.X() = pView->GetTabPos(pEntry, pFirstDynamicTab);
+        aPos1.setX( pView->GetTabPos(pEntry, pFirstDynamicTab) );
         // if it is not a context bitmap, go a little to the right below the
         // first text (node bitmap, too)
         if (!pView->nContextBmpWidthMax)
-            aPos1.X() += rExpandedNodeBitmap.GetSizePixel().Width() / 2;
-        aPos1.X() -=  pView->GetIndent();
-        aPos1.Y() = GetEntryLine( pEntry );
-        aPos1.Y() += nEntryHeightDIV2;
+            aPos1.AdjustX(rExpandedNodeBitmap.GetSizePixel().Width() / 2 );
+        aPos1.AdjustX( -(pView->GetIndent()) );
+        aPos1.setY( GetEntryLine( pEntry ) );
+        aPos1.AdjustY(nEntryHeightDIV2 );
         pChild = SvTreeList::LastSibling( pEntry );
-        aPos2.X() = aPos1.X();
-        aPos2.Y() = GetEntryLine( pChild );
-        aPos2.Y() += nEntryHeightDIV2;
+        aPos2.setX( aPos1.X() );
+        aPos2.setY( GetEntryLine( pChild ) );
+        aPos2.AdjustY(nEntryHeightDIV2 );
         rRenderContext.DrawLine(aPos1, aPos2);
     }
     rRenderContext.Pop();
@@ -1135,23 +1135,23 @@ void SvImpLBox::PositionScrollBars( Size& rSize, sal_uInt16 nMask )
     Size aHorSize( rSize.Width(), nHorSBarHeight );
 
     if( nMask & 0x0001 )
-        aHorSize.Width() -= nVerSBarWidth;
+        aHorSize.AdjustWidth( -(nVerSBarWidth) );
     if( nMask & 0x0002 )
-        aVerSize.Height() -= nHorSBarHeight;
+        aVerSize.AdjustHeight( -(nHorSBarHeight) );
 
-    aVerSize.Height() += 2 * nOverlap;
+    aVerSize.AdjustHeight(2 * nOverlap );
     Point aVerPos( rSize.Width() - aVerSize.Width() + nOverlap, -nOverlap );
     aVerSBar->SetPosSizePixel( aVerPos, aVerSize );
 
-    aHorSize.Width() += 2 * nOverlap;
+    aHorSize.AdjustWidth(2 * nOverlap );
     Point aHorPos( -nOverlap, rSize.Height() - aHorSize.Height() + nOverlap );
 
     aHorSBar->SetPosSizePixel( aHorPos, aHorSize );
 
     if( nMask & 0x0001 )
-        rSize.Width() = aVerPos.X();
+        rSize.setWidth( aVerPos.X() );
     if( nMask & 0x0002 )
-        rSize.Height() = aHorPos.Y();
+        rSize.setHeight( aHorPos.Y() );
 
     if( (nMask & (0x0001|0x0002)) == (0x0001|0x0002) )
         aScrBarBox->Show();
@@ -1174,7 +1174,7 @@ void SvImpLBox::AdjustScrollBars( Size& rSize )
     bool bHorBar = false;
     long nMaxRight = aOSize.Width(); //GetOutputSize().Width();
     Point aOrigin( pView->GetMapMode().GetOrigin() );
-    aOrigin.X() *= -1;
+    aOrigin.setX( aOrigin.X() * -1 );
     nMaxRight += aOrigin.X() - 1;
     long nVis = nMostRight - aOrigin.X();
     if( (nWindowStyle & WB_HSCROLL) &&
@@ -1379,7 +1379,7 @@ void SvImpLBox::ShowVerSBar()
 
     long nMaxRight = GetOutputSize().Width();
     Point aPos( pView->GetMapMode().GetOrigin() );
-    aPos.X() *= -1; // convert document coordinates
+    aPos.setX( aPos.X() * -1 ); // convert document coordinates
     nMaxRight = nMaxRight + aPos.X() - 1;
     if( nMaxRight < nMostRight  )
     {
@@ -3045,7 +3045,7 @@ void SvImpLBox::EndScroll()
 tools::Rectangle SvImpLBox::GetVisibleArea() const
 {
     Point aPos( pView->GetMapMode().GetOrigin() );
-    aPos.X() *= -1;
+    aPos.setX( aPos.X() * -1 );
     tools::Rectangle aRect( aPos, aOutputSize );
     return aRect;
 }
@@ -3112,14 +3112,14 @@ bool SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
                 return false;
 
             aPos = GetEntryPosition( pEntry );
-            aPos.X() = pView->GetTabPos( pEntry, pTab ); //pTab->GetPos();
+            aPos.setX( pView->GetTabPos( pEntry, pTab ) ); //pTab->GetPos();
             Size aSize( pItem->GetSize( pView, pEntry ) );
             SvLBoxTab* pNextTab = NextTab( pTab );
             bool bItemClipped = false;
             // is the item cut off by its right neighbor?
             if( pNextTab && pView->GetTabPos(pEntry,pNextTab) < aPos.X()+aSize.Width() )
             {
-                aSize.Width() = pNextTab->GetPos() - pTab->GetPos();
+                aSize.setWidth( pNextTab->GetPos() - pTab->GetPos() );
                 bItemClipped = true;
             }
             tools::Rectangle aItemRect( aPos, aSize );
@@ -3133,11 +3133,11 @@ bool SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
                 //  aItemRect.Right() = aViewRect.Right();
 
                 Point aPt = pView->OutputToScreenPixel( aItemRect.TopLeft() );
-                aItemRect.Left()   = aPt.X();
-                aItemRect.Top()    = aPt.Y();
+                aItemRect.SetLeft( aPt.X() );
+                aItemRect.SetTop( aPt.Y() );
                 aPt = pView->OutputToScreenPixel( aItemRect.BottomRight() );
-                aItemRect.Right()  = aPt.X();
-                aItemRect.Bottom() = aPt.Y();
+                aItemRect.SetRight( aPt.X() );
+                aItemRect.SetBottom( aPt.Y() );
 
                 Help::ShowQuickHelp( pView, aItemRect,
                                      static_cast<SvLBoxString*>(pItem)->GetText(), QuickHelpFlags::Left | QuickHelpFlags::VCenter );
@@ -3200,7 +3200,7 @@ bool SvImpLBox::SetMostRight( SvTreeListEntry* pEntry )
 
         long nMaxRight = GetOutputSize().Width();
         Point aPos( pView->GetMapMode().GetOrigin() );
-        aPos.X() *= -1; // conversion document coordinates
+        aPos.setX( aPos.X() * -1 ); // conversion document coordinates
         nMaxRight = nMaxRight + aPos.X() - 1;
 
         long nNextTab = nTabPos < nMaxRight ? nMaxRight : nMaxRight + 50;

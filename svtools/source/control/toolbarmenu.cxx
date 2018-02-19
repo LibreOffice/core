@@ -571,7 +571,7 @@ Size ToolbarMenu::implCalcSize()
             {
                 Size aImgSz( pEntry->maImage.GetSizePixel() );
                 nMinMenuItemHeight = std::max( nMinMenuItemHeight, aImgSz.Height() + 6 );
-                aMaxImgSz.Width() = std::max( aMaxImgSz.Width(), aImgSz.Width() );
+                aMaxImgSz.setWidth( std::max( aMaxImgSz.Width(), aImgSz.Width() ) );
             }
         }
     }
@@ -591,7 +591,7 @@ Size ToolbarMenu::implCalcSize()
             // Text:
             if( pEntry->mbHasText || pEntry->mbHasImage )
             {
-                pEntry->maSize.Height() = nMinMenuItemHeight;
+                pEntry->maSize.setHeight( nMinMenuItemHeight );
 
                 if( pEntry->mbHasText )
                 {
@@ -605,7 +605,7 @@ Size ToolbarMenu::implCalcSize()
                 Size aControlSize( pEntry->mpControl->GetOutputSizePixel() );
 
                 nMaxTextWidth = std::max( aControlSize.Width(), nMaxTextWidth );
-                pEntry->maSize.Height() = aControlSize.Height() + 1;
+                pEntry->maSize.setHeight( aControlSize.Height() + 1 );
             }
 
             if( pEntry->HasCheck() && !pEntry->mbHasImage )
@@ -632,7 +632,7 @@ Size ToolbarMenu::implCalcSize()
         }
     }
 
-    aSz.Width() = nMaxTextWidth + (BORDER_X<<1);
+    aSz.setWidth( nMaxTextWidth + (BORDER_X<<1) );
 
     // positionate controls
     int nY = BORDER_Y;
@@ -640,7 +640,7 @@ Size ToolbarMenu::implCalcSize()
     {
         if (pEntry)
         {
-            pEntry->maSize.Width() = nMaxTextWidth;
+            pEntry->maSize.setWidth( nMaxTextWidth );
 
             if( pEntry->mpControl )
             {
@@ -664,7 +664,7 @@ Size ToolbarMenu::implCalcSize()
         }
     }
 
-    aSz.Height() += nY + BORDER_Y;
+    aSz.AdjustHeight(nY + BORDER_Y );
 
     return aSz;
 }
@@ -779,7 +779,7 @@ void ToolbarMenu::implHighlightEntry(vcl::RenderContext& rRenderContext, int nHi
             if (pEntry->mnBits & MenuItemBits::POPUPSELECT)
             {
                 long nFontHeight = GetTextHeight();
-                aItemRect.Right() -= nFontHeight + nFontHeight / 4;
+                aItemRect.AdjustRight( -(nFontHeight + nFontHeight / 4) );
             }
 
             if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::Entire))
@@ -1180,11 +1180,11 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
         if ((pEntry == nullptr) && !pThisOnly)
         {
             // Separator
-            aTmpPos.Y() = aPos.Y() + ((SEPARATOR_HEIGHT - 2) / 2);
-            aTmpPos.X() = aPos.X() + 2 + nOuterSpace;
+            aTmpPos.setY( aPos.Y() + ((SEPARATOR_HEIGHT - 2) / 2) );
+            aTmpPos.setX( aPos.X() + 2 + nOuterSpace );
             rRenderContext.SetLineColor(rSettings.GetShadowColor());
             rRenderContext.DrawLine(aTmpPos, Point(aOutSz.Width() - 3 - 2 * nOuterSpace, aTmpPos.Y()));
-            aTmpPos.Y()++;
+            aTmpPos.AdjustY( 1 );
             rRenderContext.SetLineColor(rSettings.GetLightColor());
             rRenderContext.DrawLine(aTmpPos, Point( aOutSz.Width() - 3 - 2 * nOuterSpace, aTmpPos.Y()));
             rRenderContext.SetLineColor();
@@ -1213,10 +1213,10 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
 
                 tools::Rectangle aOuterCheckRect(Point(aPos.X() + mpImpl->mnCheckPos, aPos.Y()),
                                           Size(pEntry->maSize.Height(), pEntry->maSize.Height()));
-                aOuterCheckRect.Left()   += 1;
-                aOuterCheckRect.Right()  -= 1;
-                aOuterCheckRect.Top()    += 1;
-                aOuterCheckRect.Bottom() -= 1;
+                aOuterCheckRect.AdjustLeft(1 );
+                aOuterCheckRect.AdjustRight( -1 );
+                aOuterCheckRect.AdjustTop(1 );
+                aOuterCheckRect.AdjustBottom( -1 );
 
                 if (bTitle)
                 {
@@ -1263,8 +1263,8 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
                                 nState |= ControlState::SELECTED;
 
                             long nCtrlHeight = (pEntry->mnBits & MenuItemBits::RADIOCHECK) ? nCheckHeight : nRadioHeight;
-                            aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - nCtrlHeight) / 2;
-                            aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - nCtrlHeight) / 2;
+                            aTmpPos.setX( aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - nCtrlHeight) / 2 );
+                            aTmpPos.setY( aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - nCtrlHeight) / 2 );
 
                             tools::Rectangle aCheckRect(aTmpPos, Size(nCtrlHeight, nCtrlHeight));
                             rRenderContext.DrawNativeControl(ControlType::MenuPopup, nPart, aCheckRect,
@@ -1287,8 +1287,8 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
                                 eSymbol = SymbolType::CHECKMARK;
                                 aSymbolSize = Size((nFontHeight * 25) / 40, nFontHeight / 2);
                             }
-                            aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - aSymbolSize.Width())/2;
-                            aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - aSymbolSize.Height())/2;
+                            aTmpPos.setX( aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - aSymbolSize.Width())/2 );
+                            aTmpPos.setY( aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - aSymbolSize.Height())/2 );
                             tools::Rectangle aRect( aTmpPos, aSymbolSize );
                             aDecoView.DrawSymbol(aRect, eSymbol, GetTextColor(), nSymbolStyle);
                             aPos.setX(aPos.getX() + aSymbolSize.getWidth( ) + gfxExtra);
@@ -1302,17 +1302,17 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
                     if (pEntry->mbChecked)
                         ImplPaintCheckBackground(rRenderContext, *this, aOuterCheckRect, pThisOnly && bHighlighted);
                     aTmpPos = aOuterCheckRect.TopLeft();
-                    aTmpPos.X() += (aOuterCheckRect.GetWidth()-pEntry->maImage.GetSizePixel().Width())/2;
-                    aTmpPos.Y() += (aOuterCheckRect.GetHeight()-pEntry->maImage.GetSizePixel().Height())/2;
+                    aTmpPos.AdjustX((aOuterCheckRect.GetWidth()-pEntry->maImage.GetSizePixel().Width())/2 );
+                    aTmpPos.AdjustY((aOuterCheckRect.GetHeight()-pEntry->maImage.GetSizePixel().Height())/2 );
                     rRenderContext.DrawImage( aTmpPos, pEntry->maImage, nImageStyle );
                 }
 
                 // Text:
                 if (pEntry->mbHasText)
                 {
-                    aTmpPos.X() = aPos.X() + (bTitle ? 4 : mpImpl->mnTextPos);
-                    aTmpPos.Y() = aPos.Y();
-                    aTmpPos.Y() += nTextOffsetY;
+                    aTmpPos.setX( aPos.X() + (bTitle ? 4 : mpImpl->mnTextPos) );
+                    aTmpPos.setY( aPos.Y() );
+                    aTmpPos.AdjustY(nTextOffsetY );
                     DrawTextFlags nStyle = nTextStyle|DrawTextFlags::Mnemonic;
 
                     rRenderContext.DrawCtrlText(aTmpPos, pEntry->maText, 0, pEntry->maText.getLength(), nStyle);
@@ -1327,7 +1327,7 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
             }
         }
 
-        aTopLeft.Y() += pEntry ? pEntry->maSize.Height() : SEPARATOR_HEIGHT;
+        aTopLeft.AdjustY(pEntry ? pEntry->maSize.Height() : SEPARATOR_HEIGHT );
     }
 }
 

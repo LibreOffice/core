@@ -53,7 +53,7 @@ void BrowserHeader::Command( const CommandEvent& rCEvt )
     {
         Point aPos( rCEvt.GetMousePosPixel() );
         if ( _pBrowseBox->IsFrozen(0) )
-            aPos.X() += _pBrowseBox->GetColumnWidth(0);
+            aPos.AdjustX(_pBrowseBox->GetColumnWidth(0) );
         _pBrowseBox->GetDataWindow().Command( CommandEvent(
                 Point( aPos.X(), aPos.Y() - GetSizePixel().Height() ),
                 CommandEventId::ContextMenu, rCEvt.IsMouseEvent() ) );

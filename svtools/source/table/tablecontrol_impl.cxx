@@ -503,7 +503,7 @@ namespace svt { namespace table
 
         // determine the right-most border of the last column which is
         // at least partially visible
-        aArea.Right() = m_nRowHeaderWidthPixel;
+        aArea.SetRight( m_nRowHeaderWidthPixel );
         if ( !m_aColumnWidths.empty() )
         {
             // the number of pixels which are scrolled out of the left hand
@@ -513,7 +513,7 @@ namespace svt { namespace table
             ColumnPositions::const_reverse_iterator loop = m_aColumnWidths.rbegin();
             do
             {
-                aArea.Right() = loop->getEnd() - nScrolledOutLeft + m_nRowHeaderWidthPixel;
+                aArea.SetRight( loop->getEnd() - nScrolledOutLeft + m_nRowHeaderWidthPixel );
                 ++loop;
             }
             while ( (   loop != m_aColumnWidths.rend() )
@@ -521,13 +521,13 @@ namespace svt { namespace table
                  );
         }
         // so far, aArea.Right() denotes the first pixel *after* the cell area
-        --aArea.Right();
+        aArea.AdjustRight( -1 );
 
         // determine the last row which is at least partially visible
-        aArea.Bottom() =
+        aArea.SetBottom(
                 m_nColHeaderHeightPixel
             +   impl_getVisibleRows( true ) * m_nRowHeightPixel
-            -   1;
+            -   1 );
 
         return aArea;
     }
@@ -536,8 +536,8 @@ namespace svt { namespace table
     tools::Rectangle TableControl_Impl::impl_getAllVisibleDataCellArea() const
     {
         tools::Rectangle aArea( impl_getAllVisibleCellsArea() );
-        aArea.Left() = m_nRowHeaderWidthPixel;
-        aArea.Top() = m_nColHeaderHeightPixel;
+        aArea.SetLeft( m_nRowHeaderWidthPixel );
+        aArea.SetTop( m_nColHeaderHeightPixel );
         return aArea;
     }
 
@@ -969,8 +969,8 @@ namespace svt { namespace table
         // determine the playground for the data cells (excluding headers)
         // TODO: what if the control is smaller than needed for the headers/scrollbars?
         tools::Rectangle aDataCellPlayground( Point( 0, 0 ), m_rAntiImpl.GetOutputSizePixel() );
-        aDataCellPlayground.Left() = m_nRowHeaderWidthPixel;
-        aDataCellPlayground.Top() = m_nColHeaderHeightPixel;
+        aDataCellPlayground.SetLeft( m_nRowHeaderWidthPixel );
+        aDataCellPlayground.SetTop( m_nColHeaderHeightPixel );
 
         OSL_ENSURE( ( m_nRowCount == m_pModel->getRowCount() ) && ( m_nColumnCount == m_pModel->getColumnCount() ),
             "TableControl_Impl::impl_ni_relayout: how is this expected to work with invalid data?" );
@@ -985,7 +985,7 @@ namespace svt { namespace table
         bool bFirstRoundVScrollNeed = false;
         if ( bNeedVerticalScrollbar )
         {
-            aDataCellPlayground.Right() -= nScrollbarMetrics;
+            aDataCellPlayground.AdjustRight( -nScrollbarMetrics );
             bFirstRoundVScrollNeed = true;
         }
 
@@ -994,7 +994,7 @@ namespace svt { namespace table
             m_nLeftColumn, eHorzScrollbar, aDataCellPlayground.GetWidth(), nAllColumnsWidth );
         if ( bNeedHorizontalScrollbar )
         {
-            aDataCellPlayground.Bottom() -= nScrollbarMetrics;
+            aDataCellPlayground.AdjustBottom( -nScrollbarMetrics );
 
             // now that we just found that we need a horizontal scrollbar,
             // the need for a vertical one may have changed, since the horizontal
@@ -1006,7 +1006,7 @@ namespace svt { namespace table
                     m_nTopRow, eVertScrollbar, aDataCellPlayground.GetHeight(), m_nRowHeightPixel * m_nRowCount );
                 if ( bNeedVerticalScrollbar )
                 {
-                    aDataCellPlayground.Right() -= nScrollbarMetrics;
+                    aDataCellPlayground.AdjustRight( -nScrollbarMetrics );
                 }
             }
         }
@@ -1205,13 +1205,13 @@ namespace svt { namespace table
         if (m_pModel->hasRowHeaders())
         {
             aRowHeaderArea = aAllCellsWithHeaders;
-            aRowHeaderArea.Right() = m_nRowHeaderWidthPixel - 1;
+            aRowHeaderArea.SetRight( m_nRowHeaderWidthPixel - 1 );
 
             TableSize const nVisibleRows = impl_getVisibleRows(true);
             TableSize nActualRows = nVisibleRows;
             if (m_nTopRow + nActualRows > m_nRowCount)
                 nActualRows = m_nRowCount - m_nTopRow;
-            aRowHeaderArea.Bottom() = m_nColHeaderHeightPixel + m_nRowHeightPixel * nActualRows - 1;
+            aRowHeaderArea.SetBottom( m_nColHeaderHeightPixel + m_nRowHeightPixel * nActualRows - 1 );
 
             pRenderer->PaintHeaderArea(rRenderContext, aRowHeaderArea, false, true, rStyle);
             // Note that strictly, aRowHeaderArea also contains the intersection between column
@@ -1819,33 +1819,33 @@ namespace svt { namespace table
         tools::Rectangle const aAllCells( impl_getAllVisibleCellsArea() );
 
         tools::Rectangle aInvalidateRect;
-        aInvalidateRect.Left() = aAllCells.Left();
-        aInvalidateRect.Right() = aAllCells.Right();
+        aInvalidateRect.SetLeft( aAllCells.Left() );
+        aInvalidateRect.SetRight( aAllCells.Right() );
         // if only one row is selected
         if ( _nPrevRow == _nCurRow )
         {
             tools::Rectangle aCellRect;
             impl_getCellRect( m_nCurColumn, _nCurRow, aCellRect );
-            aInvalidateRect.Top() = aCellRect.Top();
-            aInvalidateRect.Bottom() = aCellRect.Bottom();
+            aInvalidateRect.SetTop( aCellRect.Top() );
+            aInvalidateRect.SetBottom( aCellRect.Bottom() );
         }
         //if the region is above the current row
         else if(_nPrevRow < _nCurRow )
         {
             tools::Rectangle aCellRect;
             impl_getCellRect( m_nCurColumn, _nPrevRow, aCellRect );
-            aInvalidateRect.Top() = aCellRect.Top();
+            aInvalidateRect.SetTop( aCellRect.Top() );
             impl_getCellRect( m_nCurColumn, _nCurRow, aCellRect );
-            aInvalidateRect.Bottom() = aCellRect.Bottom();
+            aInvalidateRect.SetBottom( aCellRect.Bottom() );
         }
         //if the region is beneath the current row
         else
         {
             tools::Rectangle aCellRect;
             impl_getCellRect( m_nCurColumn, _nCurRow, aCellRect );
-            aInvalidateRect.Top() = aCellRect.Top();
+            aInvalidateRect.SetTop( aCellRect.Top() );
             impl_getCellRect( m_nCurColumn, _nPrevRow, aCellRect );
-            aInvalidateRect.Bottom() = aCellRect.Bottom();
+            aInvalidateRect.SetBottom( aCellRect.Bottom() );
         }
 
         invalidateRect(aInvalidateRect);
@@ -1884,7 +1884,7 @@ namespace svt { namespace table
         }
 
         if ( i_lastRow == ROW_INVALID )
-            aInvalidateRect.Bottom() = m_pDataWindow->GetOutputSizePixel().Height();
+            aInvalidateRect.SetBottom( m_pDataWindow->GetOutputSizePixel().Height() );
 
         invalidateRect(aInvalidateRect);
     }

@@ -88,16 +88,16 @@ void SvResizeHelper::FillMoveRectsPixel( tools::Rectangle aRects[ 4 ] ) const
 {
     // upper
     aRects[ 0 ] = aOuter;
-    aRects[ 0 ].Bottom() = aRects[ 0 ].Top() + aBorder.Height() -1;
+    aRects[ 0 ].SetBottom( aRects[ 0 ].Top() + aBorder.Height() -1 );
     // right
     aRects[ 1 ] = aOuter;
-    aRects[ 1 ].Left() = aRects[ 1 ].Right() - aBorder.Width() -1;
+    aRects[ 1 ].SetLeft( aRects[ 1 ].Right() - aBorder.Width() -1 );
     // lower
     aRects[ 2 ] = aOuter;
-    aRects[ 2 ].Top() = aRects[ 2 ].Bottom() - aBorder.Height() -1;
+    aRects[ 2 ].SetTop( aRects[ 2 ].Bottom() - aBorder.Height() -1 );
     // left
     aRects[ 3 ] = aOuter;
-    aRects[ 3 ].Right() = aRects[ 3 ].Left() + aBorder.Width() -1;
+    aRects[ 3 ].SetRight( aRects[ 3 ].Left() + aBorder.Width() -1 );
 }
 
 /*************************************************************************
@@ -214,7 +214,7 @@ Point SvResizeHelper::GetTrackPosPixel( const tools::Rectangle & rRect ) const
             aPos = aRect.TopLeft() - aOuter.TopLeft();
             break;
         case 1:
-            aPos.Y() =  aRect.Top() - aOuter.Top();
+            aPos.setY(  aRect.Top() - aOuter.Top() );
             break;
         case 2:
             // FIXME: disable it for RTL because it's wrong calculations
@@ -224,9 +224,9 @@ Point SvResizeHelper::GetTrackPosPixel( const tools::Rectangle & rRect ) const
             break;
         case 3:
             if( bRTL )
-                aPos.X() = aRect.Left() - aTR.X();
+                aPos.setX( aRect.Left() - aTR.X() );
             else
-                aPos.X() = aRect.Right() - aTR.X();
+                aPos.setX( aRect.Right() - aTR.X() );
             break;
         case 4:
             // FIXME: disable it for RTL because it's wrong calculations
@@ -235,7 +235,7 @@ Point SvResizeHelper::GetTrackPosPixel( const tools::Rectangle & rRect ) const
             aPos =  aRect.BottomRight() - aBR;
             break;
         case 5:
-            aPos.Y() = aRect.Bottom() - aBR.Y();
+            aPos.setY( aRect.Bottom() - aBR.Y() );
             break;
         case 6:
             // FIXME: disable it for RTL because it's wrong calculations
@@ -245,9 +245,9 @@ Point SvResizeHelper::GetTrackPosPixel( const tools::Rectangle & rRect ) const
             break;
         case 7:
             if( bRTL )
-                aPos.X() = aRect.Right() + aOuter.Right() - aOuter.TopRight().X();
+                aPos.setX( aRect.Right() + aOuter.Right() - aOuter.TopRight().X() );
             else
-                aPos.X() = aRect.Left() - aOuter.Left();
+                aPos.setX( aRect.Left() - aOuter.Left() );
             break;
         case 8:
             aPos = aRect.TopLeft() - aOuter.TopLeft();
@@ -273,60 +273,60 @@ tools::Rectangle SvResizeHelper::GetTrackRectPixel( const Point & rTrackPos ) co
         switch( nGrab )
         {
             case 0:
-                aTrackRect.Top() += aDiff.Y();
+                aTrackRect.AdjustTop(aDiff.Y() );
                 // ugly solution for resizing OLE objects in RTL
                 if( bRTL )
-                    aTrackRect.Right() = aBR.X() - aDiff.X();
+                    aTrackRect.SetRight( aBR.X() - aDiff.X() );
                 else
-                    aTrackRect.Left() += aDiff.X();
+                    aTrackRect.AdjustLeft(aDiff.X() );
                 break;
             case 1:
-                aTrackRect.Top() += aDiff.Y();
+                aTrackRect.AdjustTop(aDiff.Y() );
                 break;
             case 2:
-                aTrackRect.Top() += aDiff.Y();
+                aTrackRect.AdjustTop(aDiff.Y() );
                 // ugly solution for resizing OLE objects in RTL
                 if( bRTL )
-                    aTrackRect.Left() -= aDiff.X();
+                    aTrackRect.AdjustLeft( -(aDiff.X()) );
                 else
-                    aTrackRect.Right() = aBR.X() + aDiff.X();
+                    aTrackRect.SetRight( aBR.X() + aDiff.X() );
                 break;
             case 3:
                 // ugly solution for resizing OLE objects in RTL
                 if( bRTL )
-                    aTrackRect.Left() -= aDiff.X();
+                    aTrackRect.AdjustLeft( -(aDiff.X()) );
                 else
-                    aTrackRect.Right() = aBR.X() + aDiff.X();
+                    aTrackRect.SetRight( aBR.X() + aDiff.X() );
                 break;
             case 4:
-                aTrackRect.Bottom() = aBR.Y() + aDiff.Y();
+                aTrackRect.SetBottom( aBR.Y() + aDiff.Y() );
                 // ugly solution for resizing OLE objects in RTL
                 if( bRTL )
-                    aTrackRect.Left() -= aDiff.X();
+                    aTrackRect.AdjustLeft( -(aDiff.X()) );
                 else
-                    aTrackRect.Right() = aBR.X() + aDiff.X();
+                    aTrackRect.SetRight( aBR.X() + aDiff.X() );
                 break;
             case 5:
-                aTrackRect.Bottom() = aBR.Y() + aDiff.Y();
+                aTrackRect.SetBottom( aBR.Y() + aDiff.Y() );
                 break;
             case 6:
-                aTrackRect.Bottom() = aBR.Y() + aDiff.Y();
+                aTrackRect.SetBottom( aBR.Y() + aDiff.Y() );
                 // ugly solution for resizing OLE objects in RTL
                 if( bRTL )
-                    aTrackRect.Right() = aBR.X() - aDiff.X();
+                    aTrackRect.SetRight( aBR.X() - aDiff.X() );
                 else
-                    aTrackRect.Left() += aDiff.X();
+                    aTrackRect.AdjustLeft(aDiff.X() );
                 break;
             case 7:
                 // ugly solution for resizing OLE objects in RTL
                 if( bRTL )
-                    aTrackRect.Right() = aBR.X() - aDiff.X();
+                    aTrackRect.SetRight( aBR.X() - aDiff.X() );
                 else
-                    aTrackRect.Left() += aDiff.X();
+                    aTrackRect.AdjustLeft(aDiff.X() );
                 break;
             case 8:
                 if( bRTL )
-                    aDiff.X() = -aDiff.X(); // workaround for move in RTL mode
+                    aDiff.setX( -aDiff.X() ); // workaround for move in RTL mode
                 aTrackRect.SetPos( aTrackRect.TopLeft() + aDiff );
                 break;
         }
@@ -340,51 +340,51 @@ void SvResizeHelper::ValidateRect( tools::Rectangle & rValidate ) const
     {
         case 0:
             if( rValidate.Top() > rValidate.Bottom() )
-                rValidate.Top() = rValidate.Bottom();
+                rValidate.SetTop( rValidate.Bottom() );
             if( rValidate.Left() > rValidate.Right() )
-                rValidate.Left() = rValidate.Right();
+                rValidate.SetLeft( rValidate.Right() );
             break;
         case 1:
             if( rValidate.Top() > rValidate.Bottom() )
-                rValidate.Top() = rValidate.Bottom();
+                rValidate.SetTop( rValidate.Bottom() );
             break;
         case 2:
             if( rValidate.Top() > rValidate.Bottom() )
-                rValidate.Top() = rValidate.Bottom();
+                rValidate.SetTop( rValidate.Bottom() );
             if( rValidate.Left() > rValidate.Right() )
-                rValidate.Right() = rValidate.Left();
+                rValidate.SetRight( rValidate.Left() );
             break;
         case 3:
             if( rValidate.Left() > rValidate.Right() )
-                rValidate.Right() = rValidate.Left();
+                rValidate.SetRight( rValidate.Left() );
             break;
         case 4:
             if( rValidate.Top() > rValidate.Bottom() )
-                rValidate.Bottom() = rValidate.Top();
+                rValidate.SetBottom( rValidate.Top() );
             if( rValidate.Left() > rValidate.Right() )
-                rValidate.Right() = rValidate.Left();
+                rValidate.SetRight( rValidate.Left() );
             break;
         case 5:
             if( rValidate.Top() > rValidate.Bottom() )
-                rValidate.Bottom() = rValidate.Top();
+                rValidate.SetBottom( rValidate.Top() );
             break;
         case 6:
             if( rValidate.Top() > rValidate.Bottom() )
-                rValidate.Bottom() = rValidate.Top();
+                rValidate.SetBottom( rValidate.Top() );
             if( rValidate.Left() > rValidate.Right() )
-                rValidate.Left() = rValidate.Right();
+                rValidate.SetLeft( rValidate.Right() );
             break;
         case 7:
             if( rValidate.Left() > rValidate.Right() )
-                rValidate.Left() = rValidate.Right();
+                rValidate.SetLeft( rValidate.Right() );
             break;
     }
 
     // Mindestgr"osse 5 x 5
     if( rValidate.Left() + 5 > rValidate.Right() )
-        rValidate.Right() = rValidate.Left() + 5;
+        rValidate.SetRight( rValidate.Left() + 5 );
     if( rValidate.Top() + 5 > rValidate.Bottom() )
-        rValidate.Bottom() = rValidate.Top() + 5;
+        rValidate.SetBottom( rValidate.Top() + 5 );
 }
 
 /*************************************************************************

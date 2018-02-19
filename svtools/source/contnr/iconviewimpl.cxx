@@ -45,7 +45,7 @@ void IconViewImpl::CursorUp()
     pView->Update();
     pStartEntry = pPrevFirstToDraw;
     tools::Rectangle aArea( GetVisibleArea() );
-    aArea.Bottom() -= nEntryHeight;
+    aArea.AdjustBottom( -nEntryHeight );
     pView->Scroll( 0, nEntryHeight, aArea, ScrollFlags::NoChildren );
     pView->Update();
     ShowCursor( true );
@@ -445,13 +445,13 @@ void IconViewImpl::InvalidateEntry( long nId ) const
 
     tools::Rectangle aRect( GetVisibleArea() );
     long nMaxBottom = aRect.Bottom();
-    aRect.Top() = nId / pView->GetColumnsCount() * pView->GetEntryHeight();
-    aRect.Bottom() = aRect.Top(); aRect.Bottom() += pView->GetEntryHeight();
+    aRect.SetTop( nId / pView->GetColumnsCount() * pView->GetEntryHeight() );
+    aRect.SetBottom( aRect.Top() ); aRect.AdjustBottom(pView->GetEntryHeight() );
 
     if( aRect.Top() > nMaxBottom )
         return;
     if( aRect.Bottom() > nMaxBottom )
-        aRect.Bottom() = nMaxBottom;
+        aRect.SetBottom( nMaxBottom );
     pView->Invalidate( aRect );
 }
 

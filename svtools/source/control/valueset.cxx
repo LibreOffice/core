@@ -206,19 +206,19 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
     WinBits nStyle = GetStyle();
     if (nStyle & WB_ITEMBORDER)
     {
-        aRect.Left()   += 1;
-        aRect.Top()    += 1;
-        aRect.Right()  -= 1;
-        aRect.Bottom() -= 1;
+        aRect.AdjustLeft(1 );
+        aRect.AdjustTop(1 );
+        aRect.AdjustRight( -1 );
+        aRect.AdjustBottom( -1 );
 
         if (nStyle & WB_FLATVALUESET)
         {
             sal_Int32 nBorder = (nStyle & WB_DOUBLEBORDER) ? 2 : 1;
 
-            aRect.Left()   += nBorder;
-            aRect.Top()    += nBorder;
-            aRect.Right()  -= nBorder;
-            aRect.Bottom() -= nBorder;
+            aRect.AdjustLeft(nBorder );
+            aRect.AdjustTop(nBorder );
+            aRect.AdjustRight( -nBorder );
+            aRect.AdjustBottom( -nBorder );
         }
         else
         {
@@ -280,10 +280,10 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
             Size aImageSize = pItem->maImage.GetSizePixel();
             Size  aRectSize = aRect.GetSize();
             Point aPos(aRect.Left(), aRect.Top());
-            aPos.X() += (aRectSize.Width() - aImageSize.Width()) / 2;
+            aPos.AdjustX((aRectSize.Width() - aImageSize.Width()) / 2 );
 
             if (pItem->meType != VALUESETITEM_IMAGE_AND_TEXT)
-                aPos.Y() += (aRectSize.Height() - aImageSize.Height()) / 2;
+                aPos.AdjustY((aRectSize.Height() - aImageSize.Height()) / 2 );
 
             DrawImageFlags  nImageStyle  = DrawImageFlags::NONE;
             if (!IsEnabled())
@@ -377,12 +377,12 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     if (nStyle & WB_NAMEFIELD)
     {
         mnTextOffset = aWinSize.Height() - nTxtHeight - NAME_OFFSET;
-        aWinSize.Height() -= nTxtHeight + NAME_OFFSET;
+        aWinSize.AdjustHeight( -(nTxtHeight + NAME_OFFSET) );
 
         if (!(nStyle & WB_FLATVALUESET))
         {
             mnTextOffset -= NAME_LINE_HEIGHT + NAME_LINE_OFF_Y;
-            aWinSize.Height() -= NAME_LINE_HEIGHT + NAME_LINE_OFF_Y;
+            aWinSize.AdjustHeight( -(NAME_LINE_HEIGHT + NAME_LINE_OFF_Y) );
         }
     }
     else
@@ -583,10 +583,10 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
             mpNoneItem->mnId = 0;
             mpNoneItem->meType = VALUESETITEM_NONE;
             mpNoneItem->mbVisible = true;
-            maNoneItemRect.Left() = x;
-            maNoneItemRect.Top()  = y;
-            maNoneItemRect.Right() = maNoneItemRect.Left() + aWinSize.Width() - x - 1;
-            maNoneItemRect.Bottom() = y + nNoneHeight - 1;
+            maNoneItemRect.SetLeft( x );
+            maNoneItemRect.SetTop( y );
+            maNoneItemRect.SetRight( maNoneItemRect.Left() + aWinSize.Width() - x - 1 );
+            maNoneItemRect.SetBottom( y + nNoneHeight - 1 );
 
             ImplFormatItem(rRenderContext, mpNoneItem.get(), maNoneItemRect);
 
@@ -597,10 +597,10 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
         sal_uLong nFirstItem = static_cast<sal_uLong>(mnFirstLine) * mnCols;
         sal_uLong nLastItem = nFirstItem + (mnVisLines * mnCols);
 
-        maItemListRect.Left() = x;
-        maItemListRect.Top() = y;
-        maItemListRect.Right() = x + mnCols * (mnItemWidth + mnSpacing) - mnSpacing - 1;
-        maItemListRect.Bottom() = y + mnVisLines * (mnItemHeight + mnSpacing) - mnSpacing - 1;
+        maItemListRect.SetLeft( x );
+        maItemListRect.SetTop( y );
+        maItemListRect.SetRight( x + mnCols * (mnItemWidth + mnSpacing) - mnSpacing - 1 );
+        maItemListRect.SetBottom( y + mnVisLines * (mnItemHeight + mnSpacing) - mnSpacing - 1 );
 
         if (!mbFullMode)
         {
@@ -609,7 +609,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
             // visible
             if (y + (mnVisLines * (mnItemHeight + mnSpacing)) < aWinSize.Height())
                 nLastItem += mnCols;
-            maItemListRect.Bottom() = aWinSize.Height() - y;
+            maItemListRect.SetBottom( aWinSize.Height() - y );
         }
         for (size_t i = 0; i < nItemCount; i++)
         {
@@ -660,8 +660,8 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
             // If a none field is visible, then we center the scrollbar
             if (nStyle & WB_NONEFIELD)
             {
-                aPos.Y() = nStartY + nNoneHeight + 1;
-                aSize.Height() = ((mnItemHeight + mnSpacing) * mnVisLines) - 2 - mnSpacing;
+                aPos.setY( nStartY + nNoneHeight + 1 );
+                aSize.setHeight( ((mnItemHeight + mnSpacing) * mnVisLines) - 2 - mnSpacing );
             }
             mxScrollBar->SetPosSizePixel(aPos, aSize);
             mxScrollBar->SetRangeMax(mnLines);
@@ -805,30 +805,30 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
         }
         if (mbDoubleSel)
         {
-            aRect.Left()++;
-            aRect.Top()++;
-            aRect.Right()--;
-            aRect.Bottom()--;
+            aRect.AdjustLeft( 1 );
+            aRect.AdjustTop( 1 );
+            aRect.AdjustRight( -1 );
+            aRect.AdjustBottom( -1 );
             if (bDrawSel)
                 rRenderContext.DrawRect(aRect);
         }
-        aRect.Left()++;
-        aRect.Top()++;
-        aRect.Right()--;
-        aRect.Bottom()--;
+        aRect.AdjustLeft( 1 );
+        aRect.AdjustTop( 1 );
+        aRect.AdjustRight( -1 );
+        aRect.AdjustBottom( -1 );
         tools::Rectangle aRect2 = aRect;
-        aRect.Left()++;
-        aRect.Top()++;
-        aRect.Right()--;
-        aRect.Bottom()--;
+        aRect.AdjustLeft( 1 );
+        aRect.AdjustTop( 1 );
+        aRect.AdjustRight( -1 );
+        aRect.AdjustBottom( -1 );
         if (bDrawSel)
             rRenderContext.DrawRect(aRect);
         if (mbDoubleSel)
         {
-            aRect.Left()++;
-            aRect.Top()++;
-            aRect.Right()--;
-            aRect.Bottom()--;
+            aRect.AdjustLeft( 1 );
+            aRect.AdjustTop( 1 );
+            aRect.AdjustRight( -1 );
+            aRect.AdjustBottom( -1 );
             if (bDrawSel)
                 rRenderContext.DrawRect(aRect);
         }
@@ -915,12 +915,12 @@ void ValueSet::ImplDraw(vcl::RenderContext& rRenderContext)
         Size aTempSize(aSize.Width(), aScrPos.Y());
 
         rRenderContext.DrawOutDev(aDefPos, aTempSize, aDefPos, aTempSize, *maVirDev.get());
-        aTempSize.Width()   = aScrPos.X() - 1;
-        aTempSize.Height()  = aScrSize.Height();
+        aTempSize.setWidth( aScrPos.X() - 1 );
+        aTempSize.setHeight( aScrSize.Height() );
         rRenderContext.DrawOutDev(aTempPos, aTempSize, aTempPos, aTempSize, *maVirDev.get());
-        aTempPos.Y()        = aScrPos.Y() + aScrSize.Height();
-        aTempSize.Width()   = aSize.Width();
-        aTempSize.Height()  = aSize.Height() - aTempPos.Y();
+        aTempPos.setY( aScrPos.Y() + aScrSize.Height() );
+        aTempSize.setWidth( aSize.Width() );
+        aTempSize.setHeight( aSize.Height() - aTempPos.Y() );
         rRenderContext.DrawOutDev(aTempPos, aTempSize, aTempPos, aTempSize, *maVirDev.get());
     }
     else
@@ -939,8 +939,8 @@ void ValueSet::ImplDraw(vcl::RenderContext& rRenderContext)
             {
                 rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
                 rRenderContext.DrawLine(aPos1, aPos2);
-                aPos1.Y()++;
-                aPos2.Y()++;
+                aPos1.AdjustY( 1 );
+                aPos2.AdjustY( 1 );
                 rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
             }
             else
@@ -1434,11 +1434,11 @@ void ValueSet::RequestHelp( const HelpEvent& rHelpEvent )
         {
             tools::Rectangle aItemRect = ImplGetItemRect( nItemPos );
             Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
-            aItemRect.Left()   = aPt.X();
-            aItemRect.Top()    = aPt.Y();
+            aItemRect.SetLeft( aPt.X() );
+            aItemRect.SetTop( aPt.Y() );
             aPt = OutputToScreenPixel( aItemRect.BottomRight() );
-            aItemRect.Right()  = aPt.X();
-            aItemRect.Bottom() = aPt.Y();
+            aItemRect.SetRight( aPt.X() );
+            aItemRect.SetBottom( aPt.Y() );
             Help::ShowQuickHelp( this, aItemRect, GetItemText( ImplGetItem( nItemPos )->mnId ) );
             return;
         }
@@ -2151,32 +2151,32 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
         else
             n = ITEM_OFFSET;
 
-        aSize.Width()  += n * nCalcCols;
-        aSize.Height() += n * nCalcLines;
+        aSize.AdjustWidth(n * nCalcCols );
+        aSize.AdjustHeight(n * nCalcLines );
     }
     else
         n = 0;
 
     if ( mnSpacing )
     {
-        aSize.Width()  += mnSpacing * (nCalcCols - 1);
-        aSize.Height() += mnSpacing * (nCalcLines - 1);
+        aSize.AdjustWidth(mnSpacing * (nCalcCols - 1) );
+        aSize.AdjustHeight(mnSpacing * (nCalcLines - 1) );
     }
 
     if ( nStyle & WB_NAMEFIELD )
     {
-        aSize.Height() += nTxtHeight + NAME_OFFSET;
+        aSize.AdjustHeight(nTxtHeight + NAME_OFFSET );
         if ( !(nStyle & WB_FLATVALUESET) )
-            aSize.Height() += NAME_LINE_HEIGHT + NAME_LINE_OFF_Y;
+            aSize.AdjustHeight(NAME_LINE_HEIGHT + NAME_LINE_OFF_Y );
     }
 
     if ( nStyle & WB_NONEFIELD )
     {
-        aSize.Height() += nTxtHeight + n + mnSpacing;
+        aSize.AdjustHeight(nTxtHeight + n + mnSpacing );
     }
 
     // sum possible ScrollBar width
-    aSize.Width() += GetScrollWidth();
+    aSize.AdjustWidth(GetScrollWidth() );
 
     return aSize;
 }
@@ -2195,8 +2195,8 @@ Size ValueSet::CalcItemSizePixel( const Size& rItemSize) const
         else
             n = ITEM_OFFSET;
 
-        aSize.Width()  += n;
-        aSize.Height() += n;
+        aSize.AdjustWidth(n );
+        aSize.AdjustHeight(n );
     }
 
     return aSize;
@@ -2242,14 +2242,14 @@ Size ValueSet::GetLargestItemSize()
         Size aSize = pItem->maImage.GetSizePixel();
         if (pItem->meType == VALUESETITEM_IMAGE_AND_TEXT)
         {
-            aSize.Height() += 3 * NAME_LINE_HEIGHT +
-                maVirDev->GetTextHeight();
-            aSize.Width() = std::max(aSize.Width(),
-                                     maVirDev->GetTextWidth(pItem->maText) + NAME_OFFSET);
+            aSize.AdjustHeight(3 * NAME_LINE_HEIGHT +
+                maVirDev->GetTextHeight() );
+            aSize.setWidth( std::max(aSize.Width(),
+                                     maVirDev->GetTextWidth(pItem->maText) + NAME_OFFSET) );
         }
 
-        aLargestItem.Width() = std::max(aLargestItem.Width(), aSize.Width());
-        aLargestItem.Height() = std::max(aLargestItem.Height(), aSize.Height());
+        aLargestItem.setWidth( std::max(aLargestItem.Width(), aSize.Width()) );
+        aLargestItem.setHeight( std::max(aLargestItem.Height(), aSize.Height()) );
     }
 
     return aLargestItem;

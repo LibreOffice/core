@@ -203,22 +203,22 @@ static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, cons
 
             if( xMimeType->hasParameter( aWidthString ) )
             {
-                rObjDesc.maSize.Width() = xMimeType->getParameterValue( aWidthString ).toInt32();
+                rObjDesc.maSize.setWidth( xMimeType->getParameterValue( aWidthString ).toInt32() );
             }
 
             if( xMimeType->hasParameter( aHeightString ) )
             {
-                rObjDesc.maSize.Height() = xMimeType->getParameterValue( aHeightString ).toInt32();
+                rObjDesc.maSize.setHeight( xMimeType->getParameterValue( aHeightString ).toInt32() );
             }
 
             if( xMimeType->hasParameter( aPosXString ) )
             {
-                rObjDesc.maDragStartPos.X() = xMimeType->getParameterValue( aPosXString ).toInt32();
+                rObjDesc.maDragStartPos.setX( xMimeType->getParameterValue( aPosXString ).toInt32() );
             }
 
             if( xMimeType->hasParameter( aPosYString ) )
             {
-                rObjDesc.maDragStartPos.Y() = xMimeType->getParameterValue( aPosYString ).toInt32();
+                rObjDesc.maDragStartPos.setY( xMimeType->getParameterValue( aPosYString ).toInt32() );
             }
         }
     }

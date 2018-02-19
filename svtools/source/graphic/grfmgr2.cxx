@@ -1733,7 +1733,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
                 if (!pTileGraphic->Draw(&rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags))
                     return false;
 
-                aCurrPos.X() += aTileInfo.aTileSizePixel.Width();
+                aCurrPos.AdjustX(aTileInfo.aTileSizePixel.Width() );
             }
 
 #ifdef DBG_TEST
@@ -1747,14 +1747,14 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
 
             // now fill one column from aTileInfo.aNextTileTopLeft.Y() all
             // the way to the bottom
-            aCurrPos.X() = aTileInfo.aTileTopLeft.X();
-            aCurrPos.Y() = aTileInfo.aNextTileTopLeft.Y();
+            aCurrPos.setX( aTileInfo.aTileTopLeft.X() );
+            aCurrPos.setY( aTileInfo.aNextTileTopLeft.Y() );
             for (int nY=0; nY < aTileInfo.nTilesEmptyY; nY += nMSBFactor)
             {
                 if (!pTileGraphic->Draw(&rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags))
                     return false;
 
-                aCurrPos.Y() += aTileInfo.aTileSizePixel.Height();
+                aCurrPos.AdjustY(aTileInfo.aTileSizePixel.Height() );
             }
 
 #ifdef DBG_TEST
@@ -1805,7 +1805,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
     // we don't draw beyond the right or bottom border.
     for (int nY=0; nY < aTileInfo.nTilesEmptyY && nY < nExponent*nMSBFactor; nY += nMSBFactor)
     {
-        aCurrPos.X() = aTileInfo.aNextTileTopLeft.X();
+        aCurrPos.setX( aTileInfo.aNextTileTopLeft.X() );
 
         for (int nX=0; nX < aTileInfo.nTilesEmptyX && nX < nExponent*nMSBFactor; nX += nMSBFactor)
         {
@@ -1814,10 +1814,10 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
             else if (!pTileGraphic->Draw(&rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags))
                 return false;
 
-            aCurrPos.X() += aTileInfo.aTileSizePixel.Width();
+            aCurrPos.AdjustX(aTileInfo.aTileSizePixel.Width() );
         }
 
-        aCurrPos.Y() += aTileInfo.aTileSizePixel.Height();
+        aCurrPos.AdjustY(aTileInfo.aTileSizePixel.Height() );
     }
 
 #ifdef DBG_TEST
@@ -1959,7 +1959,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
 
     for( nY=0; nY < nNumTilesY; ++nY )
     {
-        aCurrPos.X() = rPosPixel.X();
+        aCurrPos.setX( rPosPixel.X() );
 
         for( nX=0; nX < nNumTilesX; ++nX )
         {
@@ -1974,10 +1974,10 @@ bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
                           bDrawInPixel ? rTileSizePixel : aTileSizeLogic,
                           pAttr, nFlags );
 
-            aCurrPos.X() += rTileSizePixel.Width();
+            aCurrPos.AdjustX(rTileSizePixel.Width() );
         }
 
-        aCurrPos.Y() += rTileSizePixel.Height();
+        aCurrPos.AdjustY(rTileSizePixel.Height() );
     }
 
     if( bDrawInPixel )

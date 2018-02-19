@@ -317,18 +317,18 @@ namespace svt
             Image aImage(GetImage(eStatus));
             // calc the image position
             Size aImageSize(aImage.GetSizePixel());
-            aImageSize.Width() = CalcZoom(aImageSize.Width());
-            aImageSize.Height() = CalcZoom(aImageSize.Height());
+            aImageSize.setWidth( CalcZoom(aImageSize.Width()) );
+            aImageSize.setHeight( CalcZoom(aImageSize.Height()) );
             Point aPos( rRect.TopLeft() );
 
             if ( ( aImageSize.Width() > rRect.GetWidth() ) || ( aImageSize.Height() > rRect.GetHeight() ) )
                 rDev.SetClipRegion(vcl::Region(rRect));
 
             if ( aImageSize.Width() < rRect.GetWidth() )
-                aPos.X() += ( rRect.GetWidth() - aImageSize.Width() ) / 2;
+                aPos.AdjustX(( rRect.GetWidth() - aImageSize.Width() ) / 2 );
 
             if ( aImageSize.Height() < rRect.GetHeight() )
-                aPos.Y() += ( rRect.GetHeight() - aImageSize.Height() ) / 2;
+                aPos.AdjustY(( rRect.GetHeight() - aImageSize.Height() ) / 2 );
 
             if ( IsZoom() )
                 rDev.DrawImage( aPos, aImageSize, aImage );
@@ -1019,8 +1019,8 @@ return;
         tools::Rectangle aRect( GetFieldRectPixel(nRow, nColId, bRel));
         if ((GetMode()  & BrowserMode::CURSOR_WO_FOCUS) == BrowserMode::CURSOR_WO_FOCUS)
         {
-            aRect.Top() += 1;
-            aRect.Bottom() -= 1;
+            aRect.AdjustTop(1 );
+            aRect.AdjustBottom( -1 );
         }
         return aRect;
     }
@@ -1193,7 +1193,7 @@ return;
     {
         tools::Rectangle aHdlFieldRect( GetFieldRectPixel( 0, 0 ));
         tools::Rectangle aInvalidRect( Point(0,0), GetOutputSizePixel() );
-        aInvalidRect.Right() = aHdlFieldRect.Right();
+        aInvalidRect.SetRight( aHdlFieldRect.Right() );
         Invalidate( aInvalidRect );
     }
 

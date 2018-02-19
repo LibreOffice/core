@@ -638,19 +638,19 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
     // We start with the default size and decrease 1-AppFont
     for( sal_uInt16 i = 8; i > 2; i-- )
     {
-        aPt.X() = (rRect.GetWidth()  - pOut->GetTextWidth( rText )) / 2;
-        aPt.Y() = (rRect.GetHeight() - pOut->GetTextHeight()) / 2;
+        aPt.setX( (rRect.GetWidth()  - pOut->GetTextWidth( rText )) / 2 );
+        aPt.setY( (rRect.GetHeight() - pOut->GetTextHeight()) / 2 );
 
         bool bTiny = false;
         if( aPt.X() < 0 )
         {
             bTiny = true;
-            aPt.X() = 0;
+            aPt.setX( 0 );
         }
         if( aPt.Y() < 0 )
         {
             bTiny = true;
-            aPt.Y() = 0;
+            aPt.setY( 0 );
         }
         if( bTiny )
         {
@@ -667,7 +667,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
     long nWidth = rRect.GetWidth();
     if(nHeight > 0 && nWidth > 0 && aBmp.GetSizePixel().Width() > 0)
     {
-        aPt.Y() = nHeight;
+        aPt.setY( nHeight );
         Point   aP = rRect.TopLeft();
         Size    aBmpSize = aBmp.GetSizePixel();
         // fit bitmap in
@@ -678,7 +678,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
             // keep proportions
             long nH = nWidth * aBmpSize.Height() / aBmpSize.Width();
             // center
-            aP.Y() += (nHeight - nH) / 2;
+            aP.AdjustY((nHeight - nH) / 2 );
             nHeight = nH;
         }
         else
@@ -687,7 +687,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
             // keep proportions
             long nW = nHeight * aBmpSize.Width() / aBmpSize.Height();
             // center
-            aP.X() += (nWidth - nW) / 2;
+            aP.AdjustX((nWidth - nW) / 2 );
             nWidth = nW;
         }
 
@@ -710,8 +710,8 @@ void EmbeddedObjectRef::DrawShading( const tools::Rectangle &rRect, OutputDevice
     pOut->SetLineColor( Color( COL_BLACK ) );
 
     Size aPixSize = pOut->LogicToPixel( rRect.GetSize() );
-    aPixSize.Width() -= 1;
-    aPixSize.Height() -= 1;
+    aPixSize.AdjustWidth( -1 );
+    aPixSize.AdjustHeight( -1 );
     Point aPixViewPos = pOut->LogicToPixel( rRect.TopLeft() );
     sal_Int32 nMax = aPixSize.Width() + aPixSize.Height();
     for( sal_Int32 i = 5; i < nMax; i += 5 )

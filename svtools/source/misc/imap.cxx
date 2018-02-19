@@ -776,10 +776,10 @@ IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
     if ( nFlags )
     {
         if ( nFlags & IMAP_MIRROR_HORZ )
-            aRelPoint.X() = rTotalSize.Width() - aRelPoint.X();
+            aRelPoint.setX( rTotalSize.Width() - aRelPoint.X() );
 
         if ( nFlags & IMAP_MIRROR_VERT )
-            aRelPoint.Y() = rTotalSize.Height() - aRelPoint.Y();
+            aRelPoint.setY( rTotalSize.Height() - aRelPoint.Y() );
     }
 
     // walk over all objects and execute HitTest

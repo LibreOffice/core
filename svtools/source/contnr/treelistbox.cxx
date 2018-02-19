@@ -2479,8 +2479,8 @@ void SvTreeListBox::EditItemText(SvTreeListEntry* pEntry, SvLBoxString* pItem, c
 
     Size aItemSize( pItem->GetSize(this, pEntry) );
     Point aPos = GetEntryPosition( pEntry );
-    aPos.Y() += ( nEntryHeight - aItemSize.Height() ) / 2;
-    aPos.X() = GetTabPos( pEntry, pTab );
+    aPos.AdjustY(( nEntryHeight - aItemSize.Height() ) / 2 );
+    aPos.setX( GetTabPos( pEntry, pTab ) );
     long nOutputWidth = pImpl->GetOutputSize().Width();
     Size aSize( nOutputWidth - aPos.X(), aItemSize.Height() );
     sal_uInt16 nPos = std::find( aTabs.begin(), aTabs.end(), pTab ) - aTabs.begin();
@@ -2489,11 +2489,11 @@ void SvTreeListBox::EditItemText(SvTreeListEntry* pEntry, SvLBoxString* pItem, c
         SvLBoxTab* pRightTab = aTabs[ nPos + 1 ];
         long nRight = GetTabPos( pEntry, pRightTab );
         if( nRight <= nOutputWidth )
-            aSize.Width() = nRight - aPos.X();
+            aSize.setWidth( nRight - aPos.X() );
     }
     Point aOrigin( GetMapMode().GetOrigin() );
     aPos += aOrigin; // convert to win coordinates
-    aSize.Width() -= aOrigin.X();
+    aSize.AdjustWidth( -(aOrigin.X()) );
     tools::Rectangle aRect( aPos, aSize );
     EditText( pItem->GetText(), aRect, rSelection );
 }
@@ -2679,7 +2679,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         rRenderContext.SetClipRegion(vcl::Region(pImpl->GetClipRegionRect()));
 
     Point aEntryPos(rRenderContext.GetMapMode().GetOrigin());
-    aEntryPos.X() *= -1; // conversion document coordinates
+    aEntryPos.setX( aEntryPos.X() * -1 ); // conversion document coordinates
     long nMaxRight = nWidth + aEntryPos.X() - 1;
 
     Color aBackupTextColor(rRenderContext.GetTextColor());
@@ -2734,8 +2734,8 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         else
             nX = nTabPos + pTab->CalcOffset(aSize.Width(), nNextTabPos - nTabPos);
 
-        aEntryPos.X() = nX;
-        aEntryPos.Y() = nLine;
+        aEntryPos.setX( nX );
+        aEntryPos.setY( nLine );
 
         // set background pattern/color
 
@@ -2788,7 +2788,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         if (!(nTreeFlags & SvTreeFlags::USESEL))
         {
             // only draw the area that is used by the item
-            aRectSize.Width() = aSize.Width();
+            aRectSize.setWidth( aSize.Width() );
             aRect.SetPos(aEntryPos);
             aRect.SetSize(aRectSize);
         }
@@ -2796,24 +2796,24 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         {
             // draw from the current to the next tab
             if (nCurTab != 0)
-                aRect.Left() = nTabPos;
+                aRect.SetLeft( nTabPos );
             else
                 // if we're in the 0th tab, always draw from column 0 --
                 // else we get problems with centered tabs
-                aRect.Left() = 0;
-            aRect.Top() = nLine;
-            aRect.Bottom() = nLine + nTempEntryHeight - 1;
+                aRect.SetLeft( 0 );
+            aRect.SetTop( nLine );
+            aRect.SetBottom( nLine + nTempEntryHeight - 1 );
             if (pNextTab)
             {
                 long nRight;
                 nRight = GetTabPos(&rEntry, pNextTab) - 1;
                 if (nRight > nMaxRight)
                     nRight = nMaxRight;
-                aRect.Right() = nRight;
+                aRect.SetRight( nRight );
             }
             else
             {
-                aRect.Right() = nMaxRight;
+                aRect.SetRight( nMaxRight );
             }
         }
         // A custom selection that starts at a tab position > 0, do not fill
@@ -2832,7 +2832,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         }
         // draw item
         // center vertically
-        aEntryPos.Y() += (nTempEntryHeight - aSize.Height()) / 2;
+        aEntryPos.AdjustY((nTempEntryHeight - aSize.Height()) / 2 );
         pViewDataEntry->SetPaintRectangle(aRect);
 
         pItem->Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
@@ -2842,7 +2842,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
             // not at the right edge of the window!
             aRect.Right() < nMaxRight)
         {
-            aRect.Left() = aRect.Right() - SV_TAB_BORDER;
+            aRect.SetLeft( aRect.Right() - SV_TAB_BORDER );
             rRenderContext.DrawRect(aRect);
         }
 
@@ -2887,7 +2887,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         return;
 
     Point aPos(GetTabPos(&rEntry, pFirstDynamicTab), nLine);
-    aPos.X() += pImpl->nNodeBmpTabDistance;
+    aPos.AdjustX(pImpl->nNodeBmpTabDistance );
 
     const Image* pImg = nullptr;
 
@@ -2906,7 +2906,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
             pImg = &pImpl->GetCollapsedNodeBmp( );
         }
     }
-    aPos.Y() += (nTempEntryHeight - pImg->GetSizePixel().Height()) / 2;
+    aPos.AdjustY((nTempEntryHeight - pImg->GetSizePixel().Height()) / 2 );
 
     DrawImageFlags nStyle = DrawImageFlags::NONE;
     if (!IsEnabled())
@@ -2958,8 +2958,8 @@ tools::Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLin
 
     Size aSize;
     tools::Rectangle aRect;
-    aRect.Top() = nLine;
-    aSize.Height() = GetEntryHeight();
+    aRect.SetTop( nLine );
+    aSize.setHeight( GetEntryHeight() );
 
     long nRealWidth = pImpl->GetOutputSize().Width();
     nRealWidth -= GetMapMode().GetOrigin().X();
@@ -2988,18 +2988,18 @@ tools::Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLin
         if( pTab && nCurTab < pEntry->ItemCount() )
         {
             SvLBoxItem& rItem = pEntry->GetItem( nCurTab );
-            aSize.Width() = rItem.GetSize( this, pEntry ).Width();
+            aSize.setWidth( rItem.GetSize( this, pEntry ).Width() );
             if( !aSize.Width() )
-                aSize.Width() = 15;
+                aSize.setWidth( 15 );
             long nX = nTabPos; //GetTabPos( pEntry, pTab );
             // alignment
             nX += pTab->CalcOffset( aSize.Width(), nNextTabPos - nTabPos );
-            aRect.Left() = nX;
+            aRect.SetLeft( nX );
             // make sure that first and last letter aren't cut off slightly
             aRect.SetSize( aSize );
             if( aRect.Left() > 0 )
-                aRect.Left()--;
-            aRect.Right()++;
+                aRect.AdjustLeft( -1 );
+            aRect.AdjustRight( 1 );
         }
     }
     else
@@ -3015,34 +3015,34 @@ tools::Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLin
             if( nLastTab < aTabs.size() ) // is there another one?
                 pLastTab = aTabs[ nLastTab ];
 
-            aSize.Width() = pLastTab ? pLastTab->GetPos() : 0x0fffffff;
+            aSize.setWidth( pLastTab ? pLastTab->GetPos() : 0x0fffffff );
             nFocusWidth = static_cast<short>(aSize.Width());
             if( pTab )
                 nFocusWidth = nFocusWidth - static_cast<short>(nTabPos); //pTab->GetPos();
         }
         else
         {
-            aSize.Width() = nFocusWidth;
+            aSize.setWidth( nFocusWidth );
             if( pTab )
             {
                 if( nCurTab )
-                    aSize.Width() += nTabPos;
+                    aSize.AdjustWidth(nTabPos );
                 else
-                    aSize.Width() += pTab->GetPos(); // Tab0 always from the leftmost position
+                    aSize.AdjustWidth(pTab->GetPos() ); // Tab0 always from the leftmost position
             }
         }
         // if selection starts with 0th tab, draw from column 0 on
         if( nCurTab != 0 )
         {
-            aRect.Left() = nTabPos;
-            aSize.Width() -= nTabPos;
+            aRect.SetLeft( nTabPos );
+            aSize.AdjustWidth( -nTabPos );
         }
         aRect.SetSize( aSize );
     }
     // adjust right edge because of clipping
     if( aRect.Right() >= nRealWidth )
     {
-        aRect.Right() = nRealWidth-1;
+        aRect.SetRight( nRealWidth-1 );
         nFocusWidth = static_cast<short>(aRect.GetWidth());
     }
     return aRect;
@@ -3152,15 +3152,15 @@ Size SvTreeListBox::GetOptimalSize() const
     std::vector<long> aWidths;
     Size aRet(0, getPreferredDimensions(aWidths));
     for (long aWidth : aWidths)
-        aRet.Width() += aWidth;
+        aRet.AdjustWidth(aWidth );
     if (GetStyle() & WB_BORDER)
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        aRet.Width() += rStyleSettings.GetBorderSize() * 2;
-        aRet.Height() += rStyleSettings.GetBorderSize() * 2;
+        aRet.AdjustWidth(rStyleSettings.GetBorderSize() * 2 );
+        aRet.AdjustHeight(rStyleSettings.GetBorderSize() * 2 );
     }
     long nMinWidth = nMinWidthInChars * approximate_char_width();
-    aRet.Width() = std::max(aRet.Width(), nMinWidth);
+    aRet.setWidth( std::max(aRet.Width(), nMinWidth) );
     return aRet;
 }
 

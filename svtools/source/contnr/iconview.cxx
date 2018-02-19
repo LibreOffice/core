@@ -50,12 +50,12 @@ void IconView::Resize()
 tools::Rectangle IconView::GetFocusRect( SvTreeListEntry*, long nEntryPos )
 {
     Size aSize;
-    aSize.Height() = nEntryHeight;
-    aSize.Width() = nEntryWidth;
+    aSize.setHeight( nEntryHeight );
+    aSize.setWidth( nEntryWidth );
 
     Point aPos;
-    aPos.X() = 0;
-    aPos.Y() = 0;
+    aPos.setX( 0 );
+    aPos.setY( 0 );
 
     tools::Rectangle aRect;
 
@@ -63,8 +63,8 @@ tools::Rectangle IconView::GetFocusRect( SvTreeListEntry*, long nEntryPos )
 
     if(nCols)
     {
-        aPos.Y() = ( nEntryPos / nCols ) * nEntryHeight;
-        aPos.X() = ( nEntryPos % nCols ) * nEntryWidth;
+        aPos.setY( ( nEntryPos / nCols ) * nEntryHeight );
+        aPos.setX( ( nEntryPos % nCols ) * nEntryWidth );
     }
 
     aRect.SetPos( aPos );
@@ -132,8 +132,8 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
 
         Size aSize(SvLBoxItem::GetSize(pViewDataEntry, nCurItem));
 
-        aEntryPos.X() = nX;
-        aEntryPos.Y() = nY;
+        aEntryPos.setX( nX );
+        aEntryPos.setY( nY );
 
         // set background pattern/color
 
@@ -192,12 +192,12 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
         }
 
         // center vertically
-        aEntryPos.Y() += (nTempEntryHeight - aSize.Height()) / 2;
+        aEntryPos.AdjustY((nTempEntryHeight - aSize.Height()) / 2 );
 
         // draw item
         pViewDataEntry->SetPaintRectangle(aRect);
 
-        aEntryPos.Y() += 15;
+        aEntryPos.AdjustY(15 );
 
         pItem->Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
 
@@ -211,15 +211,15 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
     {
         Size aSize(SvLBoxItem::GetSize(pViewDataEntry, nIconItem));
 
-        aEntryPos.X() = nX;
-        aEntryPos.Y() = nY;
+        aEntryPos.setX( nX );
+        aEntryPos.setY( nY );
 
         // center horizontally
-        aEntryPos.X() += (nTempEntryWidth - aSize.Width()) / 2;
+        aEntryPos.AdjustX((nTempEntryWidth - aSize.Width()) / 2 );
         // center vertically
-        aEntryPos.Y() += (nTempEntryHeight - aSize.Height()) / 2;
+        aEntryPos.AdjustY((nTempEntryHeight - aSize.Height()) / 2 );
 
-        aEntryPos.Y() -= 10;
+        aEntryPos.AdjustY( -10 );
 
         SvLBoxItem* pItem = &rEntry.GetItem(nIconItem);
 
