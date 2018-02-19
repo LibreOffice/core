@@ -206,7 +206,7 @@ namespace svtools {
 enum QueryDeleteResult_Impl
 {
     QUERYDELETE_YES = RET_YES,
-    QUERYDELETE_ALL = -1
+    QUERYDELETE_ALL = 101
 };
 
 class SVT_DLLPUBLIC QueryDeleteDlg_Impl : public MessageDialog
