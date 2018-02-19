@@ -482,14 +482,14 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
             // get appropriate rectangle
             Point aOffset(pNode->GetTopLeft() - pTree->GetTopLeft());
             Point aTLPos (pWin->GetFormulaDrawPos() + aOffset);
-            aTLPos.X() -= 0;
+            aTLPos.AdjustX( -0 );
             Size  aSize (pNode->GetSize());
 
             long* pXAry = new long[ aNodeText.getLength() ];
             pWin->SetFont( pNode->GetFont() );
             pWin->GetTextArray( aNodeText, pXAry, 0, aNodeText.getLength() );
-            aTLPos.X()    += nNodeIndex > 0 ? pXAry[nNodeIndex - 1] : 0;
-            aSize.Width()  = nNodeIndex > 0 ? pXAry[nNodeIndex] - pXAry[nNodeIndex - 1] : pXAry[nNodeIndex];
+            aTLPos.AdjustX(nNodeIndex > 0 ? pXAry[nNodeIndex - 1] : 0 );
+            aSize.setWidth( nNodeIndex > 0 ? pXAry[nNodeIndex] - pXAry[nNodeIndex - 1] : pXAry[nNodeIndex] );
             delete[] pXAry;
 
             aTLPos = pWin->LogicToPixel( aTLPos );
@@ -542,7 +542,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
             // get appropriate rectangle
             Point   aOffset( pNode->GetTopLeft() - pTree->GetTopLeft() );
             Point   aTLPos ( aOffset );
-            aTLPos.X() -= 0;
+            aTLPos.AdjustX( -0 );
             Size  aSize( pNode->GetSize() );
 
             tools::Rectangle aRect( aTLPos, aSize );
