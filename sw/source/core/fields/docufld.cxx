@@ -1742,11 +1742,11 @@ SwPostItField::SwPostItField( SwPostItFieldType* pT,
         const DateTime& rDateTime,
         const sal_uInt32 nPostItId)
     : SwField( pT )
-    , sText( rText )
-    , sAuthor( rAuthor )
-    , sInitials( rInitials )
-    , sName( rName )
-    , aDateTime( rDateTime )
+    , m_sText( rText )
+    , m_sAuthor( rAuthor )
+    , m_sInitials( rInitials )
+    , m_sName( rName )
+    , m_aDateTime( rDateTime )
     , mpText( nullptr )
 {
     m_nPostItId = nPostItId == 0 ? m_nLastPostItId++ : nPostItId;
@@ -1774,8 +1774,8 @@ OUString SwPostItField::GetDescription() const
 
 SwField* SwPostItField::Copy() const
 {
-    SwPostItField* pRet = new SwPostItField( static_cast<SwPostItFieldType*>(GetTyp()), sAuthor, sText, sInitials, sName,
-                                             aDateTime, m_nPostItId);
+    SwPostItField* pRet = new SwPostItField( static_cast<SwPostItFieldType*>(GetTyp()), m_sAuthor, m_sText, m_sInitials, m_sName,
+                                             m_aDateTime, m_nPostItId);
     if (mpText)
         pRet->SetTextObject( new OutlinerParaObject(*mpText) );
 
@@ -1787,31 +1787,31 @@ SwField* SwPostItField::Copy() const
 /// set author
 void SwPostItField::SetPar1(const OUString& rStr)
 {
-    sAuthor = rStr;
+    m_sAuthor = rStr;
 }
 
 /// get author
 OUString SwPostItField::GetPar1() const
 {
-    return sAuthor;
+    return m_sAuthor;
 }
 
 /// set the PostIt's text
 void SwPostItField::SetPar2(const OUString& rStr)
 {
-    sText = rStr;
+    m_sText = rStr;
 }
 
 /// get the PostIt's text
 OUString SwPostItField::GetPar2() const
 {
-    return sText;
+    return m_sText;
 }
 
 
 void SwPostItField::SetName(const OUString& rName)
 {
-    sName = rName;
+    m_sName = rName;
 }
 
 
@@ -1831,18 +1831,18 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        rAny <<= sAuthor;
+        rAny <<= m_sAuthor;
         break;
     case FIELD_PROP_PAR2:
         {
-        rAny <<= sText;
+        rAny <<= m_sText;
         break;
         }
     case FIELD_PROP_PAR3:
-        rAny <<= sInitials;
+        rAny <<= m_sInitials;
         break;
     case FIELD_PROP_PAR4:
-        rAny <<= sName;
+        rAny <<= m_sName;
         break;
     case FIELD_PROP_TEXT:
         {
@@ -1857,7 +1857,7 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             if ( mpText )
                 m_xTextObject->SetText( *mpText );
             else
-                m_xTextObject->SetString( sText );
+                m_xTextObject->SetString( m_sText );
 
             uno::Reference < text::XText > xText( m_xTextObject.get() );
             rAny <<= xText;
@@ -1865,12 +1865,12 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
     case FIELD_PROP_DATE:
         {
-            rAny <<= aDateTime.GetUNODate();
+            rAny <<= m_aDateTime.GetUNODate();
         }
         break;
     case FIELD_PROP_DATE_TIME:
         {
-            rAny <<= aDateTime.GetUNODateTime();
+            rAny <<= m_aDateTime.GetUNODateTime();
         }
         break;
     default:
@@ -1884,10 +1884,10 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        rAny >>= sAuthor;
+        rAny >>= m_sAuthor;
         break;
     case FIELD_PROP_PAR2:
-        rAny >>= sText;
+        rAny >>= m_sText;
         //#i100374# new string via api, delete complex text object so SwPostItNote picks up the new string
         if (mpText)
         {
@@ -1896,10 +1896,10 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
     case FIELD_PROP_PAR3:
-        rAny >>= sInitials;
+        rAny >>= m_sInitials;
         break;
     case FIELD_PROP_PAR4:
-        rAny >>= sName;
+        rAny >>= m_sName;
         break;
     case FIELD_PROP_TEXT:
         OSL_FAIL("Not implemented!");
@@ -1907,7 +1907,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     case FIELD_PROP_DATE:
         if( auto aSetDate = o3tl::tryAccess<util::Date>(rAny) )
         {
-            aDateTime = Date(aSetDate->Day, aSetDate->Month, aSetDate->Year);
+            m_aDateTime = Date(aSetDate->Day, aSetDate->Month, aSetDate->Year);
         }
         break;
     case FIELD_PROP_DATE_TIME:
@@ -1915,7 +1915,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         util::DateTime aDateTimeValue;
         if(!(rAny >>= aDateTimeValue))
             return false;
-        aDateTime = DateTime(aDateTimeValue);
+        m_aDateTime = DateTime(aDateTimeValue);
     }
     break;
     default:
@@ -2091,7 +2091,7 @@ void SwRefPageSetFieldType::Modify( const SfxPoolItem*, const SfxPoolItem * )
 
 SwRefPageSetField::SwRefPageSetField( SwRefPageSetFieldType* pTyp,
                     short nOff, bool bFlag )
-    : SwField( pTyp ), nOffset( nOff ), bOn( bFlag )
+    : SwField( pTyp ), m_nOffset( nOff ), m_bOn( bFlag )
 {
 }
 
@@ -2102,7 +2102,7 @@ OUString SwRefPageSetField::Expand() const
 
 SwField* SwRefPageSetField::Copy() const
 {
-    return new SwRefPageSetField( static_cast<SwRefPageSetFieldType*>(GetTyp()), nOffset, bOn );
+    return new SwRefPageSetField( static_cast<SwRefPageSetFieldType*>(GetTyp()), m_nOffset, m_bOn );
 }
 
 OUString SwRefPageSetField::GetPar2() const
@@ -2120,10 +2120,10 @@ bool SwRefPageSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
-        rAny <<= bOn;
+        rAny <<= m_bOn;
         break;
     case FIELD_PROP_USHORT1:
-        rAny <<= static_cast<sal_Int16>(nOffset);
+        rAny <<= static_cast<sal_Int16>(m_nOffset);
         break;
     default:
         assert(false);
@@ -2136,10 +2136,10 @@ bool SwRefPageSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
-        bOn = *o3tl::doAccess<bool>(rAny);
+        m_bOn = *o3tl::doAccess<bool>(rAny);
         break;
     case FIELD_PROP_USHORT1:
-        rAny >>=nOffset;
+        rAny >>=m_nOffset;
         break;
     default:
         assert(false);
@@ -2150,14 +2150,14 @@ bool SwRefPageSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 // relative page numbers - query field
 
 SwRefPageGetFieldType::SwRefPageGetFieldType( SwDoc* pDc )
-    : SwFieldType( SwFieldIds::RefPageGet ), pDoc( pDc ), nNumberingType( SVX_NUM_ARABIC )
+    : SwFieldType( SwFieldIds::RefPageGet ), m_pDoc( pDc ), m_nNumberingType( SVX_NUM_ARABIC )
 {
 }
 
 SwFieldType* SwRefPageGetFieldType::Copy() const
 {
-    SwRefPageGetFieldType* pNew = new SwRefPageGetFieldType( pDoc );
-    pNew->nNumberingType = nNumberingType;
+    SwRefPageGetFieldType* pNew = new SwRefPageGetFieldType( m_pDoc );
+    pNew->m_nNumberingType = m_nNumberingType;
     return pNew;
 }
 
@@ -2184,7 +2184,7 @@ void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
 
 bool SwRefPageGetFieldType::MakeSetList( SetGetExpFields& rTmpLst )
 {
-    SwIterator<SwFormatField,SwFieldType> aIter(*pDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::RefPageSet));
+    SwIterator<SwFormatField,SwFieldType> aIter(*m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::RefPageSet));
     for ( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
     {
             // update only the GetRef fields
@@ -2212,8 +2212,8 @@ bool SwRefPageGetFieldType::MakeSetList( SetGetExpFields& rTmpLst )
                 else
                 {
                     //  create index for determination of the TextNode
-                    SwPosition aPos( pDoc->GetNodes().GetEndOfPostIts() );
-                    bool const bResult = GetBodyTextNode( *pDoc, aPos, *pFrame );
+                    SwPosition aPos( m_pDoc->GetNodes().GetEndOfPostIts() );
+                    bool const bResult = GetBodyTextNode( *m_pDoc, aPos, *pFrame );
                     OSL_ENSURE(bResult, "where is the Field?");
                     pNew = new SetGetExpField( aPos.nNode, pTField,
                                                 &aPos.nContent );
@@ -2236,7 +2236,7 @@ void SwRefPageGetFieldType::UpdateField( SwTextField const * pTextField,
     // then search the correct RefPageSet field
     SwTextNode* pTextNode = &pTextField->GetTextNode();
     if( pTextNode->StartOfSectionIndex() >
-        pDoc->GetNodes().GetEndOfExtras().GetIndex() )
+        m_pDoc->GetNodes().GetEndOfExtras().GetIndex() )
     {
         SwNodeIndex aIdx( *pTextNode );
         SetGetExpField aEndField( aIdx, pTextField );
@@ -2285,14 +2285,14 @@ SwRefPageGetField::SwRefPageGetField( SwRefPageGetFieldType* pTyp,
 
 OUString SwRefPageGetField::Expand() const
 {
-    return sText;
+    return m_sText;
 }
 
 SwField* SwRefPageGetField::Copy() const
 {
     SwRefPageGetField* pCpy = new SwRefPageGetField(
                         static_cast<SwRefPageGetFieldType*>(GetTyp()), GetFormat() );
-    pCpy->SetText( sText );
+    pCpy->SetText( m_sText );
     return pCpy;
 }
 
@@ -2306,7 +2306,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrame* pFrame,
         pDoc->GetNodes().GetEndOfExtras().GetIndex() )
         return;
 
-    sText.clear();
+    m_sText.clear();
 
     OSL_ENSURE( !pFrame->IsInDocBody(), "Flag incorrect, frame is in DocBody" );
 
@@ -2361,7 +2361,7 @@ bool SwRefPageGetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             rAny <<= static_cast<sal_Int16>(GetFormat());
         break;
         case FIELD_PROP_PAR1:
-            rAny <<= sText;
+            rAny <<= m_sText;
         break;
         default:
             assert(false);
@@ -2382,7 +2382,7 @@ bool SwRefPageGetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
         case FIELD_PROP_PAR1:
-            rAny >>= sText;
+            rAny >>= m_sText;
         break;
     default:
         assert(false);
