@@ -896,20 +896,16 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 
             if (mbHasOnlineSpellErrors)
             {
-                sd::ModifyGuard aGuard( this );
-                SdrModel* pModel = pObj->GetModel();
-                bool bLock = false;
-                if ( pModel )
+                OutlinerParaObject* pOPO =  pOutl->CreateParaObject();
+                if ( !( *pOPO == *pObj->GetOutlinerParaObject() ) ||
+                     !pObj->GetOutlinerParaObject()->isWrongListEqual( *pOPO ) )
                 {
-                    bLock = pModel->isLocked();
-                    pModel->setLock(true);
-                }
-                // taking text from the outliner
-                pObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
+                    sd::ModifyGuard aGuard( this );
 
-                pObj->BroadcastObjectChange();
-                if ( pModel )
-                    pModel->setLock(bLock);
+                    // taking text from the outliner
+                    pObj->SetOutlinerParaObject( pOPO );
+                    // SetOPO takes care of broadcasting object change
+                }
             }
         }
 
