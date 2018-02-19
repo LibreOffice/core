@@ -43,6 +43,16 @@ template<typename T> struct default_delete
     }
 };
 
+template<typename uniqueptr> void reset_preserve_ptr_during(uniqueptr& ptr)
+{
+    // HACK: for the case where the dtor of the obj held by ptr will trigger
+    // functions which expect ptr to still be set during the dtor.
+    // e.g. SdrObject::GetBroadcaster() is called during the destructor
+    // in SdrEdgeObj::Notify(). So delete first, then clear the pointer
+    delete ptr.get();
+    (void)ptr.release();
+}
+
 }
 
 #endif

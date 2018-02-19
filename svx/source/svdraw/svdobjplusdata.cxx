@@ -9,9 +9,8 @@
 
 #include <svdobjplusdata.hxx>
 #include <svdobjuserdatalist.hxx>
-
+#include <o3tl/deleter.hxx>
 #include <svx/svdglue.hxx>
-
 #include <svl/SfxBroadcaster.hxx>
 #include <vcl/outdev.hxx>
 
@@ -24,10 +23,7 @@ SdrObjPlusData::SdrObjPlusData():
 
 SdrObjPlusData::~SdrObjPlusData()
 {
-    // HACK: the SdrObject::GetBroadcaster() is called during the destructor
-    // in SdrEdgeObj::Notify() so delete first, then clear the pointer
-    delete pBroadcast.get();
-    (void) pBroadcast.release();
+    o3tl::reset_preserve_ptr_during(pBroadcast);
     pUserDataList.reset();
     pGluePoints.reset();
 }

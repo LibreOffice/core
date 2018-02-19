@@ -39,6 +39,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/outlobj.hxx>
+#include <o3tl/deleter.hxx>
 #include <math.h>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
@@ -358,7 +359,7 @@ SdrObject::~SdrObject()
     }
 
     SendUserCall(SdrUserCallType::Delete, GetLastBoundRect());
-    pPlusData.reset();
+    o3tl::reset_preserve_ptr_during(pPlusData);
 
     pGrabBagItem.reset();
     mpProperties.reset();
