@@ -101,6 +101,7 @@ public:
     void testMultipleAxisXLSX();
     void testAxisTitleRotationXLSX();
     void testAxisCrossBetweenXSLX();
+    void testNumberFormatExportPPTX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -166,6 +167,7 @@ public:
     CPPUNIT_TEST(testMultipleAxisXLSX);
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
     CPPUNIT_TEST(testAxisCrossBetweenXSLX);
+    CPPUNIT_TEST(testNumberFormatExportPPTX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1559,6 +1561,16 @@ void Chart2ExportTest::testAxisCrossBetweenXSLX()
     load("/chart2/qa/extras/data/odt/", "axis-position.odt");
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     assertXPath(pXmlDoc, "(//c:crossBetween)[1]", "val", "midCat");
+}
+
+void Chart2ExportTest::testNumberFormatExportPPTX()
+{
+    load("/chart2/qa/extras/data/pptx/", "tdf115859.pptx");
+    xmlDocPtr pXmlDoc = parseExport("ppt/charts/chart1", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:numFmt", "formatCode", "#,##0.00,\\K");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:numFmt", "sourceLinked", "0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
