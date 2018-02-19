@@ -82,7 +82,7 @@ class SW_DLLPUBLIC SwTextNode: public SwContentNode, public ::sfx2::Metadatable
 
     /** May be 0. It is only then not 0 if it contains hard attributes.
        Therefore: never access directly! */
-    SwpHints    *m_pSwpHints;
+    std::unique_ptr<SwpHints> m_pSwpHints;
 
     mutable SwNodeNum* mpNodeNum;  ///< Numbering for this paragraph.
 
@@ -213,8 +213,8 @@ public:
     /// getters for SwpHints
     inline       SwpHints &GetSwpHints();
     inline const SwpHints &GetSwpHints() const;
-    SwpHints *GetpSwpHints()       { return m_pSwpHints; }
-    const SwpHints *GetpSwpHints() const { return m_pSwpHints; }
+          SwpHints *GetpSwpHints()       { return m_pSwpHints.get(); }
+    const SwpHints *GetpSwpHints() const { return m_pSwpHints.get(); }
     bool   HasHints() const { return m_pSwpHints != nullptr; }
     inline       SwpHints &GetOrCreateSwpHints();
 
@@ -810,7 +810,7 @@ inline SwpHints& SwTextNode::GetOrCreateSwpHints()
 {
     if ( !m_pSwpHints )
     {
-        m_pSwpHints = new SwpHints;
+        m_pSwpHints.reset(new SwpHints);
     }
     return *m_pSwpHints;
 }
@@ -819,7 +819,7 @@ inline void SwTextNode::TryDeleteSwpHints()
 {
     if ( m_pSwpHints && m_pSwpHints->CanBeDeleted() )
     {
-        DELETEZ( m_pSwpHints );
+        m_pSwpHints.reset();
     }
 }
 
