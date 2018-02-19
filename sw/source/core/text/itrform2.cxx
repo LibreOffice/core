@@ -1307,7 +1307,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                 pPor = new SwSoftHyphPortion; break;
 
             case CHAR_HARDBLANK:                    // no-break space
-                pPor = new SwBlankPortion( ' ' ); break;
+                pPor = new SwBlankPortion( cChar ); break;
 
             case CHAR_HARDHYPHEN:               // non-breaking hyphen
                 pPor = new SwBlankPortion( '-' ); break;
