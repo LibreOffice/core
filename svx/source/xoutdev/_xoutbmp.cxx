@@ -453,33 +453,30 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
         {
             bool bRet = false;
 
-            Bitmap              aDstBmp( aSize, 1 );
+            ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
+            pVirDev->SetOutputSizePixel(aSize);
             Bitmap::ScopedReadAccess pReadAcc(aWorkBmp);
-            Bitmap::ScopedWriteAccess pWriteAcc(aDstBmp);
 
-            if( pReadAcc && pWriteAcc )
+            if( pReadAcc )
             {
                 const long          nWidth = aSize.Width();
                 const long          nWidth2 = nWidth - 2;
                 const long          nHeight = aSize.Height();
                 const long          nHeight2 = nHeight - 2;
                 const long          lThres2 = static_cast<long>(cThreshold) * cThreshold;
-                const sal_uInt8 nWhitePalIdx(static_cast< sal_uInt8 >(pWriteAcc->GetBestPaletteIndex(Color(COL_WHITE))));
-                const sal_uInt8 nBlackPalIdx(static_cast< sal_uInt8 >(pWriteAcc->GetBestPaletteIndex(Color(COL_BLACK))));
                 long                nSum1;
                 long                nSum2;
                 long                lGray;
 
                 // initialize border with white pixels
-                pWriteAcc->SetLineColor( Color( COL_WHITE) );
-                pWriteAcc->DrawLine( Point(), Point( nWidth - 1, 0L ) );
-                pWriteAcc->DrawLine( Point( nWidth - 1, 0L ), Point( nWidth - 1, nHeight - 1 ) );
-                pWriteAcc->DrawLine( Point( nWidth - 1, nHeight - 1 ), Point( 0L, nHeight - 1 ) );
-                pWriteAcc->DrawLine( Point( 0, nHeight - 1 ), Point() );
+                pVirDev->SetLineColor( Color( COL_WHITE) );
+                pVirDev->DrawLine( Point(), Point( nWidth - 1, 0L ) );
+                pVirDev->DrawLine( Point( nWidth - 1, 0L ), Point( nWidth - 1, nHeight - 1 ) );
+                pVirDev->DrawLine( Point( nWidth - 1, nHeight - 1 ), Point( 0L, nHeight - 1 ) );
+                pVirDev->DrawLine( Point( 0, nHeight - 1 ), Point() );
 
                 for( long nY = 0, nY1 = 1, nY2 = 2; nY < nHeight2; nY++, nY1++, nY2++ )
                 {
-                    Scanline pScanline = pWriteAcc->GetScanline( nY1 );
                     Scanline pScanlineRead = pReadAcc->GetScanline( nY );
                     Scanline pScanlineRead1 = pReadAcc->GetScanline( nY1 );
                     Scanline pScanlineRead2 = pReadAcc->GetScanline( nY2 );
@@ -502,9 +499,9 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                         nSum2 -= lGray;
 
                         if( ( nSum1 * nSum1 + nSum2 * nSum2 ) < lThres2 )
-                            pWriteAcc->SetPixelOnData( pScanline, nXDst, BitmapColor(nWhitePalIdx) );
+                            pVirDev->DrawPixel( Point(nXDst, nY), Color(COL_WHITE) );
                         else
-                            pWriteAcc->SetPixelOnData( pScanline, nXDst, BitmapColor(nBlackPalIdx) );
+                            pVirDev->DrawPixel( Point(nXDst, nY), Color(COL_BLACK) );
                     }
                 }
 
@@ -512,10 +509,9 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
             }
 
             pReadAcc.reset();
-            pWriteAcc.reset();
 
             if( bRet )
-                aRetBmp = aDstBmp;
+                aRetBmp = pVirDev->GetBitmap(Point(0,0), aSize);
         }
     }
 
