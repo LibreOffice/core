@@ -22,7 +22,6 @@
 
 #include <utility.hxx>
 
-#include <deque>
 #include <vector>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -67,7 +66,7 @@ struct SmFntFmtListEntry
 
 class SmFontFormatList
 {
-    std::deque<SmFntFmtListEntry> aEntries;
+    std::vector<SmFntFmtListEntry> aEntries;
     bool                    bModified;
 
     SmFontFormatList(const SmFontFormatList&) = delete;
