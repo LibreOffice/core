@@ -74,7 +74,7 @@ public:
 
 ScDocument* ScTempDocSource::CreateDocument()
 {
-    ScDocument* pDoc = new ScDocument;                  // SCDOCMODE_DOCUMENT
+    ScDocument* pDoc = new ScDocument( SCDOCMODE_FUNCTIONACCESS );
     pDoc->MakeTable( 0 );
     return pDoc;
 }

@@ -256,6 +256,21 @@ static ScWebServiceLink* lcl_GetWebServiceLink(const sfx2::LinkManager* pLinkMgr
     return nullptr;
 }
 
+static bool lcl_FunctionAccessLoadWebServiceLink( OUString& rResult, ScDocument* pDoc, const OUString& rURI )
+{
+    // For FunctionAccess service always force a changed data update.
+    ScWebServiceLink aLink( pDoc, rURI);
+    if (aLink.DataChanged( OUString(), css::uno::Any()) != sfx2::SvBaseLink::UpdateResult::SUCCESS)
+        return false;
+
+    if (!aLink.HasResult())
+        return false;
+
+    rResult = aLink.GetResult();
+
+    return true;
+}
+
 void ScInterpreter::ScWebservice()
 {
     sal_uInt8 nParamCount = GetByte();
@@ -279,7 +294,18 @@ void ScInterpreter::ScWebservice()
 
         if (!mpLinkManager)
         {
-            PushError(FormulaError::NoValue);
+            if (!pDok->IsFunctionAccess() || pDok->HasLinkFormulaNeedingCheck())
+            {
+                PushError( FormulaError::NoValue);
+            }
+            else
+            {
+                OUString aResult;
+                if (lcl_FunctionAccessLoadWebServiceLink( aResult, pDok, aURI))
+                    PushString( aResult);
+                else
+                    PushError( FormulaError::NoValue);
+            }
             return;
         }
 
