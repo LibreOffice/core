@@ -92,7 +92,7 @@ short SvColorDialog::Execute()
                     sal_Int32 nColor = 0;
                     if( props[n].Value >>= nColor )
                     {
-                        maColor.SetColor( nColor );
+                        maColor = nColor;
                     }
 
                 }

@@ -4407,7 +4407,7 @@ void Test::testSetBackgroundColor()
                            aColor, m_pDoc->GetTabBgColor(0));
 
     Color aOldTabBgColor=m_pDoc->GetTabBgColor(0);
-    aColor.SetColor(COL_BLUE);//set BLUE
+    aColor = COL_BLUE;
     getDocShell().GetDocFunc().SetTabBgColor(0,aColor,false, true);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("the correct color is not set the second time",
                            aColor, m_pDoc->GetTabBgColor(0));

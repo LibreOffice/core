@@ -114,7 +114,7 @@ bool sw_frmitems_parseXMLBorder( const OUString& rValue,
         }
         else if (!rHasColor && ::sax::Converter::convertColor(nTemp, aToken))
         {
-            rColor.SetColor(nTemp);
+            rColor = nTemp;
             rHasColor = true;
         }
         else if( !rHasWidth &&

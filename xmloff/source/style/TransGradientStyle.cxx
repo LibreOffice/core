@@ -248,14 +248,14 @@ void XMLTransGradientStyleExport::exportXML(
                 Color aColor;
 
                 // Transparency start
-                aColor.SetColor( aGradient.StartColor );
+                aColor = aGradient.StartColor;
                 sal_Int32 aStartValue = 100 - static_cast<sal_Int32>(((aColor.GetRed() + 1) * 100) / 255);
                 ::sax::Converter::convertPercent( aOut, aStartValue );
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_START, aStrValue );
 
                 // Transparency end
-                aColor.SetColor( aGradient.EndColor );
+                aColor = aGradient.EndColor;
                 sal_Int32 aEndValue = 100 - static_cast<sal_Int32>(((aColor.GetRed() + 1) * 100) / 255);
                 ::sax::Converter::convertPercent( aOut, aEndValue );
                 aStrValue = aOut.makeStringAndClear();

@@ -50,7 +50,7 @@ XclTabViewData::~XclTabViewData()
 void XclTabViewData::SetDefaults()
 {
     maSelMap.clear();
-    maGridColor.SetColor( COL_AUTO );
+    maGridColor = COL_AUTO;
     maFirstXclPos.Set( 0, 0 );
     maSecondXclPos.Set( 0, 0 );
     mnSplitX = mnSplitY = 0;
@@ -65,7 +65,7 @@ void XclTabViewData::SetDefaults()
     mbDefGridColor = true;
     mbShowFormulas = false;
     mbShowGrid = mbShowHeadings = mbShowZeros = mbShowOutline = true;
-    maTabBgColor.SetColor( COL_AUTO );
+    maTabBgColor = COL_AUTO;
     mnTabBgColorId = 0;
 }
 

@@ -3324,7 +3324,7 @@ bool SvxMSDffManager::GetColorFromPalette( sal_uInt16 /* nNum */, Color& rColor 
 {
     // This method has to be overwritten in the class
     // derived for the excel export
-    rColor.SetColor( COL_WHITE );
+    rColor = COL_WHITE;
     return true;
 }
 

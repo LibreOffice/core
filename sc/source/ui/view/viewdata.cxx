@@ -1647,7 +1647,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     ScModule* pScMod = SC_MOD();
     if ( aBackCol.GetTransparency() > 0 )
     {
-        aBackCol.SetColor( pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
+        aBackCol = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
     }
     pEditView[eWhich]->SetBackgroundColor( aBackCol );
 
@@ -3073,7 +3073,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
             rMarkData.FillRangeListWithMarks( &rTabSett.maSelection, true );
 
             // grid color
-            rTabSett.maGridColor.SetColor( COL_AUTO );
+            rTabSett.maGridColor = COL_AUTO;
             if( pOptions )
             {
                 const Color& rGridColor = pOptions->GetGridColor();
@@ -3239,7 +3239,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
                 {
                     Color aGridColor( rTabSett.maGridColor );
                     if( aGridColor.GetColor() == COL_AUTO )
-                        aGridColor.SetColor( SC_STD_GRIDCOLOR );
+                        aGridColor = SC_STD_GRIDCOLOR;
                     pOptions->SetGridColor( aGridColor, EMPTY_OUSTRING );
                 }
 
@@ -3460,7 +3460,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                 Color aColor(static_cast<sal_uInt32>(nColor));
                 // #i47435# set automatic grid color explicitly
                 if( aColor.GetColor() == COL_AUTO )
-                    aColor.SetColor( SC_STD_GRIDCOLOR );
+                    aColor = SC_STD_GRIDCOLOR;
                 pOptions->SetGridColor(aColor, OUString());
             }
         }

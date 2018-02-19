@@ -5271,7 +5271,7 @@ void SwHTMLParser::InsertHorzRule()
     {
         // set line colour and/or width
         if( !bColor )
-            aColor.SetColor( COL_GRAY );
+            aColor = COL_GRAY;
 
         SvxBorderLine aBorderLine( &aColor );
         if( nSize )

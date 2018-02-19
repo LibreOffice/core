@@ -379,7 +379,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                     if( !bOk )
                         return false;
 
-                    aColor.SetColor(nColor);
+                    aColor = nColor;
                     bColorFound = true;
                 }
                 else if( !bOffsetFound )

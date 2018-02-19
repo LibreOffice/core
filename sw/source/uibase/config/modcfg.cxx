@@ -362,7 +362,7 @@ void SwRevisionConfig::Load()
                 case 4 : lcl_ConvertCfgToAttr(nVal, aFormatAttr); break;
                 case 5 : aFormatAttr.m_nColor     = nVal; break;
                 case 6 : nMarkAlign = sal::static_int_cast< sal_uInt16, sal_Int32>(nVal); break;
-                case 7 : aMarkColor.SetColor(nVal); break;
+                case 7 : aMarkColor = nVal; break;
                 case 8 : bShowInlineTooltip = *o3tl::doAccess<bool>(pValues[nProp]);
             }
         }

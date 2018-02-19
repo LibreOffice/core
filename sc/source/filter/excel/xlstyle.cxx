@@ -186,7 +186,7 @@ void XclFontData::Clear()
 {
     maName.clear();
     maStyle.clear();
-    maColor.SetColor( COL_AUTO );
+    maColor = COL_AUTO;
     mnHeight = 0;
     mnWeight = EXC_FONTWGHT_DONTKNOW;
     mnEscapem = EXC_FONTESC_NONE;
