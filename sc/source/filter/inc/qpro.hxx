@@ -38,6 +38,7 @@ class ScQProReader
     sal_uInt32 mnOffset;
     SvStream *mpStream;
     bool mbEndOfFile;
+    const SCTAB mnMaxTab;
 
 public:
     ScQProReader(SvStream* pStream);

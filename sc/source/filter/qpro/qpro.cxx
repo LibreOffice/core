@@ -32,6 +32,7 @@
 #include <document.hxx>
 #include <formulacell.hxx>
 #include <tools/stream.hxx>
+#include <unotools/configmgr.hxx>
 #include <docoptio.hxx>
 #include <scdll.hxx>
 #include <memory>
@@ -142,6 +143,7 @@ ScQProReader::ScQProReader(SvStream* pStream)
     , mnOffset(0)
     , mpStream(pStream)
     , mbEndOfFile(false)
+    , mnMaxTab(utl::ConfigManager::IsFuzzing() ? 128 : MAXTAB)
 {
     if( mpStream )
     {
@@ -178,7 +180,7 @@ ErrCode ScQProReader::parse( ScDocument *pDoc )
                 break;
 
             case 0x00ca: // Beginning of sheet
-                if( nTab <= MAXTAB )
+                if (nTab <= mnMaxTab)
                 {
                     if( nTab < 26 )
                     {
