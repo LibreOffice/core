@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_2314da42",
+        "filename": "Makefile.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-19T12:56:24Z",
+      "side": 1,
+      "message": "apparently \"modules/foo\" is only used with UIConfig, so best to only add this for \"UIConfig_modules/%\" not for every target (i.e. outside the foreach)",
+      "revId": "a9e4e5cea0aedb2f17ec6da23bd83e13881d99c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
