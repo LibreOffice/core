@@ -521,6 +521,7 @@ public:
     // set of api calls.
     bool isLocked() const { return mbModelLocked; }
     void setLock( bool bLock );
+    void setLockSimple( bool bLock ) { mbModelLocked = bLock; }
 
     void            SetForbiddenCharsTable( const std::shared_ptr<SvxForbiddenCharactersTable>& xForbiddenChars );
     const std::shared_ptr<SvxForbiddenCharactersTable>& GetForbiddenCharsTable() const { return mpForbiddenCharactersTable;}
