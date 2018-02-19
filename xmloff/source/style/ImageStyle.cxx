@@ -62,7 +62,8 @@ void XMLImageStyle::exportXML(OUString const & rStrName, uno::Any const & rValue
         auto xBitmap = rValue.get<uno::Reference<awt::XBitmap>>();
         uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
 
-        const OUString aStr = rExport.AddEmbeddedXGraphic(xGraphic);
+        OUString aMimeType;
+        const OUString aStr = rExport.AddEmbeddedXGraphic(xGraphic, aMimeType);
 
         // uri
         if (!aStr.isEmpty())
