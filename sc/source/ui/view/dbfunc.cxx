@@ -21,6 +21,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
@@ -365,9 +366,11 @@ void ScDBFunc::ToggleAutoFilter()
         }
         else
         {
-            ScopedVclPtrInstance<MessageDialog> aErrorBox(GetViewData().GetDialogParent(),
-                                ScGlobal::GetRscString(STR_ERR_AUTOFILTER));
-            aErrorBox->Execute();
+            vcl::Window* pWin = GetViewData().GetDialogParent();
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                           VclMessageType::Warning, VclButtonsType::Ok,
+                                                           ScGlobal::GetRscString(STR_ERR_AUTOFILTER)));
+            xErrorBox->run();
         }
     }
 

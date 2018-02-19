@@ -18,7 +18,8 @@
  */
 
 #include <unotools/resmgr.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <strings.hrc>
 #include "masterpassworddlg.hxx"
 
@@ -46,8 +47,9 @@ MasterPasswordDialog::MasterPasswordDialog
     if( nDialogMode == css::task::PasswordRequestMode_PASSWORD_REENTER )
     {
         OUString aErrorMsg(Translate::get(STR_ERROR_MASTERPASSWORD_WRONG, rResLocale));
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(pParent, aErrorMsg);
-        aErrorBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+                                                       VclMessageType::Warning, VclButtonsType::Ok, aErrorMsg));
+        xErrorBox->run();
     }
 
     m_pOKBtn->SetClickHdl( LINK( this, MasterPasswordDialog, OKHdl_Impl ) );

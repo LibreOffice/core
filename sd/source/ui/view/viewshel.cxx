@@ -1655,6 +1655,11 @@ void ViewShell::NotifyAccUpdate( )
     GetViewShellBase().GetDrawController().NotifyAccUpdate();
 }
 
+weld::Window* ViewShell::GetFrameWeld() const
+{
+    return mpActiveWindow ? mpActiveWindow->GetFrameWeld() : nullptr;
+}
+
 sd::Window* ViewShell::GetContentWindow() const
 {
     return mpContentWindow.get();

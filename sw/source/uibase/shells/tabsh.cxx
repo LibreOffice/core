@@ -40,7 +40,7 @@
 #include <svx/svxdlg.hxx>
 #include <svl/zformat.hxx>
 #include <sfx2/bindings.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -763,9 +763,11 @@ void SwTableShell::Execute(SfxRequest &rReq)
                         break;
                     case TableMergeErr::TooComplex:
                     {
-                        ScopedVclPtrInstance<MessageDialog> aInfoBox( GetView().GetWindow(),
-                                    SwResId( STR_ERR_TABLE_MERGE ), VclMessageType::Info );
-                        aInfoBox->Execute();
+                        vcl::Window* pWin = GetView().GetWindow();
+                        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                                      SwResId(STR_ERR_TABLE_MERGE)));
+                        xInfoBox->run();
                         break;
                     }
                     default:

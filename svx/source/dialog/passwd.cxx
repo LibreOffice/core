@@ -18,7 +18,8 @@
  */
 
 #include <comphelper/string.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <svx/passwd.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
@@ -29,7 +30,10 @@ IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl, Button*, void)
 
     if ( m_pNewPasswdED->GetText() != m_pRepeatPasswdED->GetText() )
     {
-        ScopedVclPtrInstance<MessageDialog>(this, aRepeatPasswdErrStr)->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                 VclMessageType::Warning, VclButtonsType::Ok,
+                                                                 aRepeatPasswdErrStr));
+        xBox->run();
         m_pNewPasswdED->SetText( "" );
         m_pRepeatPasswdED->SetText( "" );
         m_pNewPasswdED->GrabFocus();
@@ -38,7 +42,10 @@ IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl, Button*, void)
 
     if ( bOK && aCheckPasswordHdl.IsSet() && !aCheckPasswordHdl.Call( this ) )
     {
-        ScopedVclPtrInstance<MessageDialog>(this, aOldPasswdErrStr)->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                 VclMessageType::Warning, VclButtonsType::Ok,
+                                                                 aOldPasswdErrStr));
+        xBox->run();
         m_pOldPasswdED->SetText( "" );
         m_pOldPasswdED->GrabFocus();
         bOK = false;
@@ -47,7 +54,6 @@ IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl, Button*, void)
     if ( bOK )
         EndDialog( RET_OK );
 }
-
 
 IMPL_LINK_NOARG(SvxPasswordDialog, EditModifyHdl, Edit&, void)
 {

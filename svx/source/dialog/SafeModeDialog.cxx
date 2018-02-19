@@ -14,7 +14,7 @@
 #include <osl/file.hxx>
 #include <sfx2/safemode.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ZipPackageHelper.hxx>
@@ -373,8 +373,10 @@ IMPL_LINK(SafeModeDialog, CreateZipBtnHdl, Button*, /*pBtn*/, void)
     }
     catch (uno::Exception)
     {
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(this, SvxResId(RID_SVXSTR_SAFEMODE_ZIP_FAILURE));
-        aErrorBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                 VclMessageType::Warning, VclButtonsType::Ok,
+                                                                 SvxResId(RID_SVXSTR_SAFEMODE_ZIP_FAILURE)));
+        xBox->run();
         return;
     }
 

@@ -358,25 +358,23 @@ bool DialogHelper::IsSharedPkgMgr( const uno::Reference< deployment::XPackage > 
     return xPackage->getRepositoryName() == SHARED_PACKAGE_MANAGER;
 }
 
-
 bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::XPackage > &xPackage,
-                                              vcl::Window *pParent,
+                                              weld::Widget* pParent,
                                               const char* pResID,
                                               bool &bHadWarning )
 {
     if ( !bHadWarning && IsSharedPkgMgr( xPackage ) )
     {
         const SolarMutexGuard guard;
-        ScopedVclPtrInstance<MessageDialog> aInfoBox(pParent, DpResId(pResID),
-                                                     VclMessageType::Warning, VclButtonsType::OkCancel);
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                                                  VclMessageType::Warning, VclButtonsType::OkCancel, DpResId(pResID)));
         bHadWarning = true;
 
-        return RET_OK == aInfoBox->Execute();
+        return RET_OK == xBox->run();
     }
     else
         return true;
 }
-
 
 void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle ) const
 {
@@ -395,9 +393,10 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
         uno::Any exc( ::cppu::getCaughtException() );
         OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, msg);
-        aErrorBox->SetText( sTitle );
-        aErrorBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(getFrameWeld(),
+                                                       VclMessageType::Warning, VclButtonsType::Ok, msg));
+        xErrorBox->set_title(sTitle);
+        xErrorBox->run();
     }
 }
 
@@ -409,30 +408,30 @@ bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
     // Check if extension installation is disabled in the expert configurations
     if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get())
     {
-        ScopedVclPtrInstance<MessageDialog> aWarn(m_pVCLWindow, DpResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED),
-                                                  VclMessageType::Warning, VclButtonsType::Ok);
-        aWarn->Execute();
+        std::unique_ptr<weld::MessageDialog> xWarnBox(Application::CreateMessageDialog(getFrameWeld(),
+                                                      VclMessageType::Warning, VclButtonsType::Ok,
+                                                      DpResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED)));
+        xWarnBox->run();
 
         return false;
     }
 
-    ScopedVclPtrInstance<MessageDialog> aInfo(m_pVCLWindow, DpResId(RID_STR_WARNING_INSTALL_EXTENSION),
-                                              VclMessageType::Warning, VclButtonsType::OkCancel);
-
-    OUString sText(aInfo->get_primary_text());
+    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(getFrameWeld(),
+                                                  VclMessageType::Warning, VclButtonsType::OkCancel,
+                                                  DpResId(RID_STR_WARNING_INSTALL_EXTENSION)));
+    OUString sText(xInfoBox->get_primary_text());
     sText = sText.replaceAll("%NAME", rExtensionName);
-    aInfo->set_primary_text(sText);
+    xInfoBox->set_primary_text(sText);
 
-    return ( RET_OK == aInfo->Execute() );
+    return (RET_OK == xInfoBox->run());
 }
 
 bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
 {
     const SolarMutexGuard guard;
-    ScopedVclPtrInstance<MessageDialog> aQuery(m_pVCLWindow, "InstallForAllDialog",
-                                               "desktop/ui/installforalldialog.ui");
-
-    short nRet = aQuery->Execute();
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(getFrameWeld(), "desktop/ui/installforalldialog.ui"));
+    std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("InstallForAllDialog"));
+    short nRet = xQuery->run();
     if (nRet == RET_CANCEL)
         return false;
 
@@ -592,14 +591,15 @@ void ExtMgrDialog::checkEntries()
 bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
 {
     const SolarMutexGuard guard;
-    ScopedVclPtrInstance<MessageDialog> aInfo(const_cast<ExtMgrDialog*>(this), DpResId(RID_STR_WARNING_REMOVE_EXTENSION),
-                                              VclMessageType::Warning, VclButtonsType::OkCancel);
+    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                  VclMessageType::Warning, VclButtonsType::OkCancel,
+                                                  DpResId(RID_STR_WARNING_REMOVE_EXTENSION)));
 
-    OUString sText(aInfo->get_primary_text());
+    OUString sText(xInfoBox->get_primary_text());
     sText = sText.replaceAll("%NAME", rExtensionName);
-    aInfo->set_primary_text(sText);
+    xInfoBox->set_primary_text(sText);
 
-    return ( RET_OK == aInfo->Execute() );
+    return (RET_OK == xInfoBox->run());
 }
 
 void ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackage > &xPackage,
@@ -610,12 +610,12 @@ void ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackage > &
 
     if ( bEnable )
     {
-        if ( ! continueOnSharedExtension( xPackage, this, RID_STR_WARNING_ENABLE_SHARED_EXTENSION, m_bEnableWarning ) )
+        if (!continueOnSharedExtension(xPackage, GetFrameWeld(), RID_STR_WARNING_ENABLE_SHARED_EXTENSION, m_bEnableWarning))
             return;
     }
     else
     {
-        if ( ! continueOnSharedExtension( xPackage, this, RID_STR_WARNING_DISABLE_SHARED_EXTENSION, m_bDisableWarning ) )
+        if (!continueOnSharedExtension(xPackage, GetFrameWeld(), RID_STR_WARNING_DISABLE_SHARED_EXTENSION, m_bDisableWarning))
             return;
     }
 
@@ -634,7 +634,7 @@ void ExtMgrDialog::removePackage( const uno::Reference< deployment::XPackage > &
             return;
     }
 
-    if ( ! continueOnSharedExtension( xPackage, this, RID_STR_WARNING_REMOVE_SHARED_EXTENSION, m_bDeleteWarning ) )
+    if (!continueOnSharedExtension(xPackage, GetFrameWeld(), RID_STR_WARNING_REMOVE_SHARED_EXTENSION, m_bDeleteWarning))
         return;
 
     m_pManager->getCmdQueue()->removeExtension( xPackage );

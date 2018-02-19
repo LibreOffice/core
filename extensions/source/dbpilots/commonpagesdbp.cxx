@@ -293,7 +293,7 @@ namespace dbp
                     if (m_xDSContext->getByName(sCurrentDatasource) >>= xDatasource)
                     {   // connect
                         // get the default SDB interaction handler
-                        Reference< XInteractionHandler > xHandler = getDialog()->getInteractionHandler(this);
+                        Reference< XInteractionHandler > xHandler = getDialog()->getInteractionHandler(GetFrameWeld());
                         if (!xHandler.is() )
                             return;
                         xConn = xDatasource->connectWithCompletion(xHandler);
@@ -353,7 +353,7 @@ namespace dbp
             try
             {
                 // get the default SDB interaction handler
-                Reference< XInteractionHandler > xHandler = getDialog()->getInteractionHandler(this);
+                Reference< XInteractionHandler > xHandler = getDialog()->getInteractionHandler(GetFrameWeld());
                 if ( xHandler.is() )
                     xHandler->handle(xRequest);
             }

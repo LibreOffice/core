@@ -28,9 +28,9 @@
 #include <bitmaps.hlst>
 #include <indexfieldscontrol.hxx>
 #include <indexcollection.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <UITools.hxx>
 #include <svtools/imgdef.hxx>
@@ -414,8 +414,10 @@ namespace dbaui
             {
                 OUString sConfirm(DBA_RES(STR_CONFIRM_DROP_INDEX));
                 sConfirm = sConfirm.replaceFirst("$name$", m_pIndexList->GetEntryText(pSelected));
-                ScopedVclPtrInstance< MessageDialog > aConfirm(this, sConfirm, VclMessageType::Question, VclButtonsType::YesNo);
-                if (RET_YES != aConfirm->Execute())
+                std::unique_ptr<weld::MessageDialog> xConfirm(Application::CreateMessageDialog(GetFrameWeld(),
+                                                              VclMessageType::Question, VclButtonsType::YesNo,
+                                                              sConfirm));
+                if (RET_YES != xConfirm->run())
                     return;
             }
 
@@ -576,9 +578,9 @@ namespace dbaui
 
             if (aSelected->isModified() || aSelected->isNew())
             {
-                ScopedVclPtrInstance<MessageDialog> aQuestion(this, "SaveIndexDialog",
-                                                              "dbaccess/ui/saveindexdialog.ui" );
-                nResponse = aQuestion->Execute();
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "dbaccess/ui/saveindexdialog.ui"));
+                std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("SaveIndexDialog"));
+                nResponse = xQuery->run();
             }
         }
 
@@ -618,8 +620,10 @@ namespace dbaui
         {
             OUString sError(DBA_RES(STR_INDEX_NAME_ALREADY_USED));
             sError = sError.replaceFirst("$name$", sNewName);
-            ScopedVclPtrInstance< MessageDialog > aError(this, sError);
-            aError->Execute();
+            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(GetFrameWeld(),
+                                                        VclMessageType::Warning, VclButtonsType::Ok,
+                                                        sError));
+            xError->run();
 
             updateToolbox();
             m_bEditAgain = true;
@@ -679,8 +683,10 @@ namespace dbaui
         // need at least one field
         if (0 == _rPos->aFields.size())
         {
-            ScopedVclPtrInstance< MessageDialog > aError(this, DBA_RES(STR_NEED_INDEX_FIELDS));
-            aError->Execute();
+            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(GetFrameWeld(),
+                                                        VclMessageType::Warning, VclButtonsType::Ok,
+                                                        DBA_RES(STR_NEED_INDEX_FIELDS)));
+            xError->run();
             m_pFields->GrabFocus();
             return false;
         }
@@ -697,8 +703,10 @@ namespace dbaui
                 // a column is specified twice ... won't work anyway, so prevent this here and now
                 OUString sMessage(DBA_RES(STR_INDEXDESIGN_DOUBLE_COLUMN_NAME));
                 sMessage = sMessage.replaceFirst("$name$", aFieldCheck->sFieldName);
-                ScopedVclPtrInstance< MessageDialog > aError(this, sMessage);
-                aError->Execute();
+                std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(GetFrameWeld(),
+                                                            VclMessageType::Warning, VclButtonsType::Ok,
+                                                            sMessage));
+                xError->run();
                 m_pFields->GrabFocus();
                 return false;
             }

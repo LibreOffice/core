@@ -33,6 +33,7 @@
 #include <editeng/wghtitem.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
@@ -262,11 +263,11 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl, Button*, void)
 
                 if ( !bFmtInserted )
                 {
-                    sal_uInt16 nRet = ScopedVclPtrInstance<MessageDialog>(this,
-                                            ScGlobal::GetRscString(STR_INVALID_AFNAME),
-                                            VclMessageType::Error,
-                                            VclButtonsType::OkCancel
-                                          )->Execute();
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                VclMessageType::Error, VclButtonsType::OkCancel,
+                                ScGlobal::GetRscString(STR_INVALID_AFNAME)));
+
+                    sal_uInt16 nRet = xBox->run();
 
                     bOk = ( nRet == RET_CANCEL );
                 }
@@ -381,11 +382,11 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl, Button*, void)
             }
             if( !bFmtRenamed )
             {
-                bOk = RET_CANCEL == ScopedVclPtrInstance<MessageDialog>( this,
-                                      ScGlobal::GetRscString(STR_INVALID_AFNAME),
-                                      VclMessageType::Error,
-                                      VclButtonsType::OkCancel
-                                      )->Execute();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                            VclMessageType::Error, VclButtonsType::OkCancel,
+                            ScGlobal::GetRscString(STR_INVALID_AFNAME)));
+
+                bOk = RET_CANCEL == xBox->run();
             }
         }
         else

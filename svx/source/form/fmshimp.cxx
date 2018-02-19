@@ -92,7 +92,7 @@
 #include <sfx2/viewsh.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
 #include <o3tl/make_unique.hxx>
@@ -1474,8 +1474,12 @@ void FmXFormShell::ExecuteSearch_Lock()
     }
 
     if (m_aSearchForms.empty() )
-    {   // there are no controls that meet all the conditions for a search
-        ScopedVclPtrInstance<MessageDialog>(nullptr, SvxResId(RID_STR_NODATACONTROLS))->Execute();
+    {
+        // there are no controls that meet all the conditions for a search
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                                 VclMessageType::Warning, VclButtonsType::Ok,
+                                                                 SvxResId(RID_STR_NODATACONTROLS)));
+        xBox->run();
         return;
     }
 
@@ -3154,7 +3158,10 @@ void FmXFormShell::CreateExternalView_Lock()
 
         if (!bHaveUsableControls)
         {
-            ScopedVclPtrInstance<MessageDialog>(nullptr, SvxResId(RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY))->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                                     VclMessageType::Warning, VclButtonsType::Ok,
+                                                                     SvxResId(RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY)));
+            xBox->run();
             return;
         }
     }

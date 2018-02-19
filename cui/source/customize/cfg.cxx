@@ -26,7 +26,8 @@
 
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/help.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/toolbox.hxx>
@@ -1665,9 +1666,9 @@ SvTreeListEntry* SvxConfigPage::AddFunction(
 
             if ( pCurEntry->GetCommand() == pNewEntryData->GetCommand() )
             {
-                ScopedVclPtrInstance<MessageDialog>(this,
-                    CuiResId( RID_SVXSTR_MNUCFG_ALREADY_INCLUDED ),
-                    VclMessageType::Info)->Execute();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                          VclMessageType::Info, VclButtonsType::Ok, CuiResId(RID_SVXSTR_MNUCFG_ALREADY_INCLUDED)));
+                xBox->run();
                 delete pNewEntryData;
                 return nullptr;
             }

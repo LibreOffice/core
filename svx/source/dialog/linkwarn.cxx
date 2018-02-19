@@ -18,43 +18,36 @@
  */
 
 #include <osl/file.hxx>
+#include <vcl/svapp.hxx>
 #include <svx/linkwarn.hxx>
 #include <svtools/miscopt.hxx>
 
-SvxLinkWarningDialog::SvxLinkWarningDialog( vcl::Window* pParent, const OUString& _rFileName )
-    : MessageDialog(pParent, "LinkWarnDialog" , "svx/ui/linkwarndialog.ui")
+SvxLinkWarningDialog::SvxLinkWarningDialog(weld::Widget* pParent, const OUString& _rFileName)
+    : m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/linkwarndialog.ui"))
+    , m_xDialog(m_xBuilder->weld_message_dialog("LinkWarnDialog"))
+    , m_xWarningOnBox(m_xBuilder->weld_check_button("ask"))
 {
-    get(m_pWarningOnBox, "ask");
-
     // replace filename
-    OUString sInfoText = get_primary_text();
+    OUString sInfoText = m_xDialog->get_primary_text();
     OUString aPath;
     if ( osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( _rFileName, aPath ) )
         aPath = _rFileName;
     sInfoText = sInfoText.replaceAll("%FILENAME", aPath);
-    set_primary_text( sInfoText );
+    m_xDialog->set_primary_text(sInfoText);
 
     // load state of "warning on" checkbox from misc options
     SvtMiscOptions aMiscOpt;
-    m_pWarningOnBox->Check( aMiscOpt.ShowLinkWarningDialog() );
-    if( aMiscOpt.IsShowLinkWarningDialogReadOnly() )
-        m_pWarningOnBox->Disable();
+    m_xWarningOnBox->set_active(aMiscOpt.ShowLinkWarningDialog());
+    m_xWarningOnBox->set_sensitive(!aMiscOpt.IsShowLinkWarningDialogReadOnly());
 }
 
 SvxLinkWarningDialog::~SvxLinkWarningDialog()
 {
-    disposeOnce();
-}
-
-void SvxLinkWarningDialog::dispose()
-{
     // save value of "warning off" checkbox, if necessary
     SvtMiscOptions aMiscOpt;
-    bool bChecked = m_pWarningOnBox->IsChecked();
-    if ( aMiscOpt.ShowLinkWarningDialog() != bChecked )
-        aMiscOpt.SetShowLinkWarningDialog( bChecked );
-    m_pWarningOnBox.clear();
-    MessageDialog::dispose();
+    bool bChecked = m_xWarningOnBox->get_active();
+    if (aMiscOpt.ShowLinkWarningDialog() != bChecked)
+        aMiscOpt.SetShowLinkWarningDialog(bChecked);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

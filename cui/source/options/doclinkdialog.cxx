@@ -23,7 +23,8 @@
 #include <comphelper/processfactory.hxx>
 #include <strings.hrc>
 #include <svl/filenotation.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <ucbhelper/content.hxx>
 #include <dialmgr.hxx>
 #include <tools/urlobj.hxx>
@@ -126,8 +127,9 @@ namespace svx
         {
             OUString sMsg = CuiResId(STR_LINKEDDOC_DOESNOTEXIST);
             sMsg = sMsg.replaceFirst("$file$", m_pURL->GetText());
-            ScopedVclPtrInstance< MessageDialog > aError(this, sMsg);
-            aError->Execute();
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                           VclMessageType::Warning, VclButtonsType::Ok, sMsg));
+            xErrorBox->run();
             return;
         } // if (!bFileExists)
         INetURLObject aURL( sURL );
@@ -135,8 +137,9 @@ namespace svx
         {
             OUString sMsg = CuiResId(STR_LINKEDDOC_NO_SYSTEM_FILE);
             sMsg = sMsg.replaceFirst("$file$", m_pURL->GetText());
-            ScopedVclPtrInstance< MessageDialog > aError(this, sMsg);
-            aError->Execute();
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                           VclMessageType::Warning, VclButtonsType::Ok, sMsg));
+            xErrorBox->run();
             return;
         }
 
@@ -147,8 +150,9 @@ namespace svx
             {
                 OUString sMsg = CuiResId(STR_NAME_CONFLICT);
                 sMsg = sMsg.replaceFirst("$file$", sCurrentText);
-                ScopedVclPtrInstance< MessageDialog > aError(this, sMsg, VclMessageType::Info);
-                aError->Execute();
+                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                               VclMessageType::Info, VclButtonsType::Ok, sMsg));
+                xErrorBox->run();
 
                 m_pName->SetSelection(Selection(0,sCurrentText.getLength()));
                 m_pName->GrabFocus();

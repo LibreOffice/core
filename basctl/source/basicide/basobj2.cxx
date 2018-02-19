@@ -30,6 +30,7 @@
 #include <framework/documentundoguard.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/moduleoptions.hxx>
+#include <vcl/weld.hxx>
 
 #include <memory>
 #include <vector>
@@ -137,7 +138,7 @@ Sequence< OUString > GetMergedLibraryNames( const Reference< script::XLibraryCon
 }
 
 bool RenameModule (
-    vcl::Window* pErrorParent,
+    weld::Widget* pErrorParent,
     const ScriptDocument& rDocument,
     const OUString& rLibName,
     const OUString& rOldName,
@@ -152,16 +153,18 @@ bool RenameModule (
 
     if ( rDocument.hasModule( rLibName, rNewName ) )
     {
-        ScopedVclPtrInstance< MessageDialog > aError(pErrorParent, IDEResId(RID_STR_SBXNAMEALLREADYUSED2));
-        aError->Execute();
+        std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(pErrorParent,
+                                                    VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_SBXNAMEALLREADYUSED2)));
+        xError->run();
         return false;
     }
 
     // #i74440
     if ( rNewName.isEmpty() )
     {
-        ScopedVclPtrInstance< MessageDialog > aError(pErrorParent, IDEResId(RID_STR_BADSBXNAME));
-        aError->Execute();
+        std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(pErrorParent,
+                                                    VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_BADSBXNAME)));
+        xError->run();
         return false;
     }
 
@@ -325,7 +328,9 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument,
                     {
                         // error
                         bError = true;
-                        ScopedVclPtrInstance<MessageDialog>(nullptr, IDEResId(RID_STR_ERRORCHOOSEMACRO))->Execute();
+                        std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(nullptr,
+                                                                    VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_ERRORCHOOSEMACRO)));
+                        xError->run();
                     }
                 }
             }

@@ -24,6 +24,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svxids.hrc>
@@ -284,9 +285,10 @@ void DrawViewShell::ExecBmpMask( SfxRequest const & rReq )
 
                 if (xNewObj->IsLinkedGraphic())
                 {
-                    ScopedVclPtrInstance< MessageDialog > aQueryBox( static_cast<vcl::Window*>(GetActiveWindow()),"QueryUnlinkImageDialog","modules/sdraw/ui/queryunlinkimagedialog.ui");
+                    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/sdraw/ui/queryunlinkimagedialog.ui"));
+                    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryUnlinkImageDialog"));
 
-                    if (RET_YES == aQueryBox->Execute())
+                    if (RET_YES == xQueryBox->run())
                         xNewObj->ReleaseGraphicLink();
                     else
                         bCont = false;

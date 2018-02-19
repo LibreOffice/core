@@ -20,6 +20,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
@@ -590,10 +591,9 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, Button*, void)
         }
         else
         {
-            ScopedVclPtrInstance<MessageDialog> aBox( GetParentDialog()
-                                                      ,"DuplicateNameDialog"
-                                                      ,"cui/ui/queryduplicatedialog.ui" );
-            aBox->Execute();
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+            xBox->run();
         }
     }
     pDlg.disposeAndClear();
@@ -663,10 +663,9 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl, Button*, void)
             }
             else
             {
-                ScopedVclPtrInstance<MessageDialog> aBox( GetParentDialog()
-                                                          ,"DuplicateNameDialog"
-                                                          ,"cui/ui/queryduplicatedialog.ui" );
-                aBox->Execute();
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+                std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+                xBox->run();
             }
         }
     }
@@ -679,11 +678,9 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl, Button*, void)
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ScopedVclPtrInstance<MessageDialog> aQueryBox( GetParentDialog()
-                                                       ,"AskDelLineStyleDialog"
-                                                       ,"cui/ui/querydeletelinestyledialog.ui" );
-
-        if ( aQueryBox->Execute() == RET_YES )
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletelinestyledialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("AskDelLineStyleDialog"));
+        if (xQueryBox->run() == RET_YES)
         {
             pDashList->Remove(nPos);
             m_pLbLineStyles->RemoveEntry( nPos );
@@ -713,9 +710,10 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl, Button*, void)
 
     if ( *pnDashListState & ChangeType::MODIFIED )
     {
-        nReturn = ScopedVclPtrInstance<MessageDialog>(GetParentDialog()
-                                ,"AskSaveList"
-                                ,"cui/ui/querysavelistdialog.ui")->Execute();
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querysavelistdialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("AskSaveList"));
+
+        nReturn = xBox->run();
 
         if ( nReturn == RET_YES )
             pDashList->Save();
@@ -765,10 +763,11 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl, Button*, void)
                 *pnDashListState &= ~ChangeType::MODIFIED;
             }
             else
-                //aIStream.Close();
-                ScopedVclPtrInstance<MessageDialog>(GetParentDialog()
-                              ,"NoLoadedFileDialog"
-                              ,"cui/ui/querynoloadedfiledialog.ui")->Execute();
+            {
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querynoloadedfiledialog.ui"));
+                std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("NoLoadedFileDialog"));
+                xBox->run();
+            }
         }
     }
 
@@ -832,9 +831,9 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl, Button*, void)
         }
         else
         {
-            ScopedVclPtrInstance<MessageDialog>(GetParentDialog()
-                         ,"NoSaveFileDialog"
-                         ,"cui/ui/querynosavefiledialog.ui")->Execute();
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querynosavefiledialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("NoSaveFileDialog"));
+            xBox->run();
         }
     }
 }

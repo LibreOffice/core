@@ -23,7 +23,8 @@
 #include <unotools/moduleoptions.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/help.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -281,8 +282,9 @@ IMPL_LINK(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
         break;
     case MNI_DELETE:
     {
-        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VclButtonsType::YesNo);
-        if ( aQueryDlg->Execute() != RET_YES )
+        std::unique_ptr<weld::MessageDialog> xQueryDlg(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
+                                                       SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE)));
+        if (xQueryDlg->run() != RET_YES)
             break;
 
         maDeleteTemplateHdl.Call(maSelectedItem);
@@ -511,8 +513,9 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
         {
             OUString sQuery = SfxResId(STR_MSG_QUERY_COPY).replaceFirst("$1", pViewItem->maTitle).replaceFirst("$2",
                 getRegionName(nTargetRegion));
-            ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, sQuery, VclMessageType::Question, VclButtonsType::YesNo);
-            if ( aQueryDlg->Execute() != RET_YES )
+
+            std::unique_ptr<weld::MessageDialog> xQueryDlg(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo, sQuery));
+            if (xQueryDlg->run() != RET_YES)
                 return false;
 
             if (!mpDocTemplates->Copy(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnDocId))
@@ -609,13 +612,14 @@ void TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
                 {
                     OUString sQuery = SfxResId(STR_MSG_QUERY_COPY).replaceFirst("$1", pViewItem->maTitle).replaceFirst("$2",
                         getRegionName(nTargetRegion));
-                    ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, sQuery, VclMessageType::Question, VclButtonsType::YesNo);
-
-                    if ( aQueryDlg->Execute() != RET_YES )
+                    std::unique_ptr<weld::MessageDialog> xQueryDlg(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo, sQuery));
+                    if (xQueryDlg->run() != RET_YES)
                     {
                         OUString sMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE));
                         sMsg = sMsg.replaceFirst("$1",getRegionName(nTargetRegion));
-                        ScopedVclPtrInstance<MessageDialog>(this, sMsg.replaceFirst( "$2",pViewItem->maTitle))->Execute();
+                        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                  VclMessageType::Warning, VclButtonsType::Ok, sMsg.replaceFirst( "$2",pViewItem->maTitle)));
+                        xBox->run();
 
                         return; //return if any single move operation fails
                     }
@@ -890,9 +894,9 @@ void TemplateLocalView::KeyInput( const KeyEvent& rKEvt )
     }
     else if( aKeyCode == KEY_DELETE && !mFilteredItemList.empty())
     {
-        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VclButtonsType::YesNo);
-
-        if ( aQueryDlg->Execute() != RET_YES )
+        std::unique_ptr<weld::MessageDialog> xQueryDlg(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
+                                                       SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE)));
+        if (xQueryDlg->run() != RET_YES)
             return;
 
         //copy to avoid changing filtered item list during deletion

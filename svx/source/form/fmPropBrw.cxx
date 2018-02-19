@@ -63,6 +63,7 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/confignode.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/weld.hxx>
 
 #include <algorithm>
 
@@ -563,7 +564,8 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
 
     if ( !m_xBrowserController.is() )
     {
-        ShowServiceNotAvailableError( GetParent(), "com.sun.star.inspection.ObjectInspector", true );
+        vcl::Window *pWin = GetParent();
+        ShowServiceNotAvailableError(pWin ? pWin->GetFrameWeld() : nullptr, "com.sun.star.inspection.ObjectInspector", true);
     }
     else
     {

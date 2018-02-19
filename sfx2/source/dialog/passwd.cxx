@@ -17,16 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-// Include ---------------------------------------------------------------
-#include <vcl/layout.hxx>
-
 #include <sfx2/passwd.hxx>
 #include <sfxtypes.hxx>
 #include <sfx2/sfxresid.hxx>
-
 #include <sfx2/strings.hrc>
-
+#include <vcl/weld.hxx>
 
 IMPL_LINK( SfxPasswordDialog, EditModifyHdl, Edit&, rEdit, void )
 {
@@ -71,8 +66,10 @@ IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl, Button*, void)
         bConfirmFailed = true;
     if ( bConfirmFailed )
     {
-        ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId(STR_ERROR_WRONG_CONFIRM));
-        aBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                 VclMessageType::Warning, VclButtonsType::Ok,
+                                                                 SfxResId(STR_ERROR_WRONG_CONFIRM)));
+        xBox->run();
         mpConfirm1ED->SetText( OUString() );
         mpConfirm1ED->GrabFocus();
     }

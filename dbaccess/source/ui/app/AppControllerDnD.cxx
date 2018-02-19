@@ -45,7 +45,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <dlgsave.hxx>
 #include <comphelper/types.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <connectivity/dbexception.hxx>
@@ -178,8 +178,10 @@ void OApplicationController::deleteTables(const std::vector< OUString>& _rList)
         else
         {
             OUString sMessage(DBA_RES(STR_MISSING_TABLES_XDROP));
-            ScopedVclPtrInstance< MessageDialog > aError(getView(), sMessage);
-            aError->Execute();
+            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(getFrameWeld(),
+                                                        VclMessageType::Warning, VclButtonsType::Ok,
+                                                        sMessage));
+            xError->run();
         }
     }
 }
@@ -190,7 +192,6 @@ void OApplicationController::deleteObjects( ElementType _eType, const std::vecto
     Reference< XHierarchicalNameContainer > xHierarchyName( xNames, UNO_QUERY );
     if ( xNames.is() )
     {
-        OString sDialogPosition;
         short eResult = _bConfirm ? svtools::QUERYDELETE_YES : svtools::QUERYDELETE_ALL;
 
         // The list of elements to delete is allowed to contain related elements: A given element may
@@ -213,17 +214,12 @@ void OApplicationController::deleteObjects( ElementType _eType, const std::vecto
 
             if ( eResult != svtools::QUERYDELETE_ALL )
             {
-                ScopedVclPtrInstance< svtools::QueryDeleteDlg_Impl > aDlg(getView(), *aThisRound);
-
-                if ( !sDialogPosition.isEmpty() )
-                    aDlg->SetWindowState( sDialogPosition );
+                svtools::QueryDeleteDlg_Impl aDlg(getFrameWeld(), *aThisRound);
 
                 if ( nObjectsLeft > 1 )
-                    aDlg->EnableAllButton();
+                    aDlg.EnableAllButton();
 
-                eResult = aDlg->Execute();
-
-                sDialogPosition = aDlg->GetWindowState( );
+                eResult = aDlg.run();
             }
 
             bool bSuccess = false;

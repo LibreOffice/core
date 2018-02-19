@@ -1885,14 +1885,10 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl()
         // we only want to show the dialog once and if we want to delete a style in use (UX-advice)
         if ( bUsedStyle )
         {
-        #if defined UNX
-            ScopedVclPtrInstance<MessageDialog> aBox(SfxGetpApp()->GetTopWindow(), aMsg,
-                               VclMessageType::Question, VclButtonsType::YesNo);
-        #else
-            ScopedVclPtrInstance<MessageDialog> aBox(GetWindow(), aMsg,
-                               VclMessageType::Question, VclButtonsType::YesNo);
-        #endif
-            aApproved = aBox->Execute() == RET_YES;
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                     VclMessageType::Question, VclButtonsType::YesNo,
+                                                                     aMsg));
+            aApproved = xBox->run() == RET_YES;
         }
 
         // if there are no used styles selected or the user approved the changes

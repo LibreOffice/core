@@ -853,9 +853,9 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, void )
         {
             OUString sMsg = FpsResId( STR_SVT_DELETESERVICE );
             sMsg = sMsg.replaceFirst( "$servicename$", m_pServices_lb->GetSelectedEntry() );
-            ScopedVclPtrInstance< MessageDialog > aBox( this, sMsg, VclMessageType::Question, VclButtonsType::YesNo );
-
-            if( aBox->Execute() == RET_YES )
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Question, VclButtonsType::YesNo, sMsg));
+            if (xBox->run() == RET_YES)
             {
                 // remove password
                 try
@@ -1158,8 +1158,9 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl, Button*, void )
         {
             OUString sMsg = FpsResId( STR_SVT_ALREADYEXISTOVERWRITE );
             sMsg = sMsg.replaceFirst( "$filename$", sName );
-            ScopedVclPtrInstance< MessageDialog > aBox( this, sMsg, VclMessageType::Question, VclButtonsType::YesNo );
-            if( aBox->Execute() != RET_YES )
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Question, VclButtonsType::YesNo, sMsg));
+            if (xBox->run() != RET_YES)
                 return;
         }
     }

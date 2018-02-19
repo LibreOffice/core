@@ -59,6 +59,8 @@
 #include <rtl/string.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxdlg.hxx>
@@ -795,9 +797,10 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             uno::Any exc( ::cppu::getCaughtException() );
             OUString msg( ::comphelper::anyToString( exc ) );
             const SolarMutexGuard guard;
-            ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, msg);
-            aErrorBox->SetText( "Explanations" );
-            aErrorBox->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_pSh->GetView().GetViewFrame()->GetWindow().GetFrameWeld(),
+                                                      VclMessageType::Warning, VclButtonsType::Ok, msg));
+            xBox->set_title("Explanations");
+            xBox->run();
         }
     }
     else if (nId == m_nRedlineAcceptId || nId == m_nRedlineRejectId

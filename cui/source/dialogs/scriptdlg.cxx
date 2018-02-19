@@ -22,7 +22,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/builderfactory.hxx>
 #include <o3tl/make_unique.hxx>
 
@@ -896,9 +896,11 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
                     {
                         bValid = false;
                         OUString aError = m_createErrStr + m_createDupStr;
-                        ScopedVclPtrInstance< MessageDialog > aErrorBox(static_cast<vcl::Window*>(this), aError);
-                        aErrorBox->SetText( m_createErrTitleStr );
-                        aErrorBox->Execute();
+
+                        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                       VclMessageType::Warning, VclButtonsType::Ok, aError));
+                        xErrorBox->set_title(m_createErrTitleStr);
+                        xErrorBox->run();
                         xNewDlg->SetObjectName( aNewName );
                         break;
                     }
@@ -976,9 +978,10 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
     {
         //ISSUE L10N & message from exception?
         OUString aError( m_createErrStr );
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(static_cast<vcl::Window*>(this), aError);
-        aErrorBox->SetText( m_createErrTitleStr );
-        aErrorBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                       VclMessageType::Warning, VclButtonsType::Ok, aError));
+        xErrorBox->set_title(m_createErrTitleStr);
+        xErrorBox->run();
     }
 }
 
@@ -1035,9 +1038,10 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
     {
         //ISSUE L10N & message from exception?
         OUString aError( m_renameErrStr );
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(static_cast<vcl::Window*>(this), aError);
-        aErrorBox->SetText( m_renameErrTitleStr );
-        aErrorBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                       VclMessageType::Warning, VclButtonsType::Ok, aError));
+        xErrorBox->set_title(m_renameErrTitleStr);
+        xErrorBox->run();
     }
 }
 void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
@@ -1046,9 +1050,10 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
     Reference< browse::XBrowseNode > node = getBrowseNode( pEntry );
     // ISSUE L10N string & can we centre list?
     OUString aQuery = m_delQueryStr + getListOfChildren( node, 0 );
-    VclPtrInstance< MessageDialog > aQueryBox(static_cast<vcl::Window*>(this), aQuery, VclMessageType::Question, VclButtonsType::YesNo);
-    aQueryBox->SetText( m_delQueryTitleStr );
-    if ( aQueryBox->Execute() == RET_NO )
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                   VclMessageType::Question, VclButtonsType::YesNo, aQuery));
+    xQueryBox->set_title(m_delQueryTitleStr);
+    if (xQueryBox->run() == RET_NO)
     {
         return;
     }
@@ -1079,9 +1084,10 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
     else
     {
         //ISSUE L10N & message from exception?
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(static_cast<vcl::Window*>(this), m_delErrStr);
-        aErrorBox->SetText( m_delErrTitleStr );
-        aErrorBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                       VclMessageType::Warning, VclButtonsType::Ok, m_delErrStr));
+        xErrorBox->set_title(m_delErrTitleStr);
+        xErrorBox->run();
     }
 
 }
@@ -1428,9 +1434,10 @@ IMPL_STATIC_LINK( SvxScriptErrorDialog, ShowDialog, void*, p, void )
         message = CuiResId( RID_SVXSTR_ERROR_TITLE );
     }
 
-    ScopedVclPtrInstance<MessageDialog> pBox( nullptr, message, VclMessageType::Warning );
-    pBox->SetText( CuiResId( RID_SVXSTR_ERROR_TITLE ) );
-    pBox->Execute();
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                              VclMessageType::Warning, VclButtonsType::Ok, message));
+    xBox->set_title(CuiResId(RID_SVXSTR_ERROR_TITLE));
+    xBox->run();
 
     delete pMessage;
 }

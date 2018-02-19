@@ -31,7 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <browserids.hxx>
 #include "SelectionBrowseBox.hxx"
 #include <strings.hrc>
@@ -741,7 +741,12 @@ namespace
                         {
                             // only show the messagebox the first time
                             if (!bCritsOnAsterikWarning)
-                                ScopedVclPtrInstance<MessageDialog>(_pView, DBA_RES(STR_QRY_CRITERIA_ON_ASTERISK))->Execute();
+                            {
+                                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(_pView ? _pView->GetFrameWeld() : nullptr,
+                                                                          VclMessageType::Warning, VclButtonsType::Ok,
+                                                                          DBA_RES(STR_QRY_CRITERIA_ON_ASTERISK)));
+                                xBox->run();
+                            }
                             bCritsOnAsterikWarning = true;
                             continue;
                         }
@@ -892,7 +897,12 @@ namespace
                     {
                         // only show the  MessageBox the first time
                         if (!bCritsOnAsterikWarning)
-                            ScopedVclPtrInstance<MessageDialog>(_pView, DBA_RES(STR_QRY_ORDERBY_ON_ASTERISK))->Execute();
+                        {
+                            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(_pView ? _pView->GetFrameWeld() : nullptr,
+                                                                      VclMessageType::Warning, VclButtonsType::Ok,
+                                                                      DBA_RES(STR_QRY_ORDERBY_ON_ASTERISK)));
+                            xBox->run();
+                        }
                         bCritsOnAsterikWarning = true;
                         continue;
                     }

@@ -47,7 +47,8 @@
 #include <strings.hrc>
 #include <swerror.h>
 #include <frmmgr.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/lstbox.hxx>
 
 #include <editeng/acorrcfg.hxx>
@@ -321,7 +322,9 @@ bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShortNam
                             rCfg.IsSaveRelFile(), pOnlyText );
     if(nSuccess == sal_uInt16(-1) )
     {
-        ScopedVclPtrInstance<MessageDialog>(pWrtShell->GetView().GetWindow(), SwResId(STR_ERR_INSERT_GLOS), VclMessageType::Info)->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWrtShell->GetView().GetWindow()->GetFrameWeld(),
+                                                                                   VclMessageType::Info, VclButtonsType::Ok, SwResId(STR_ERR_INSERT_GLOS)));
+        xBox->run();
     }
     if( !pCurGrp )
         delete pTmp;

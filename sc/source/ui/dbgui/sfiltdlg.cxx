@@ -36,10 +36,20 @@
 
 #include <filtdlg.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 // DEFINE --------------------------------------------------------------------
 
-#define ERRORBOX(rid) ScopedVclPtrInstance<MessageDialog>(this, ScGlobal::GetRscString(rid))->Execute()
+namespace
+{
+    void ERRORBOX(weld::Window* pParent, const char* rid)
+    {
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  ScGlobal::GetRscString(rid)));
+        xBox->run();
+    }
+}
 
 //  class ScSpecialFilterDialog
 
@@ -309,7 +319,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
                 if (!pExpander->get_expanded())
                     pExpander->set_expanded(true);
 
-                ERRORBOX( STR_INVALID_TABREF );
+                ERRORBOX(GetFrameWeld(), STR_INVALID_TABREF);
                 pEdCopyArea->GrabFocus();
                 bEditInputOk = false;
             }
@@ -321,7 +331,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
 
             if ( (nResult & ScRefFlags::VALID) == ScRefFlags::ZERO )
             {
-                ERRORBOX( STR_INVALID_TABREF );
+                ERRORBOX(GetFrameWeld(), STR_INVALID_TABREF);
                 pEdFilterArea->GrabFocus();
                 bEditInputOk = false;
             }
@@ -379,7 +389,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
         }
         else
         {
-            ERRORBOX( STR_INVALID_QUERYAREA );
+            ERRORBOX(GetFrameWeld(), STR_INVALID_QUERYAREA);
             pEdFilterArea->GrabFocus();
         }
     }

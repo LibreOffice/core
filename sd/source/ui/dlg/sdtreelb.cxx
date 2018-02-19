@@ -20,7 +20,7 @@
 #include <sal/types.h>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
@@ -841,8 +841,9 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
 
         if ( !mpBookmarkDoc )
         {
-            ScopedVclPtrInstance< MessageDialog > aErrorBox(this, SdResId(STR_READ_DATA_ERROR));
-            aErrorBox->Execute();
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                           VclMessageType::Warning, VclButtonsType::Ok, SdResId(STR_READ_DATA_ERROR)));
+            xErrorBox->run();
             mpMedium = nullptr; //On failure the SfxMedium is invalid
         }
     }

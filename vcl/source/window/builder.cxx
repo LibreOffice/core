@@ -43,6 +43,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <svdata.hxx>
 #include <bitmaps.hlst>
+#include <vcl/messagedialog.hxx>
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
 #include <desktop/crashreport.hxx>
@@ -172,7 +173,7 @@ namespace weld
         m_xSpinButton->get_range(min, max);
         auto width = std::max(m_xSpinButton->get_pixel_size(format_number(min)).Width(),
                               m_xSpinButton->get_pixel_size(format_number(max)).Width());
-        int chars = ceil(width / m_xSpinButton->approximate_char_width());
+        int chars = ceil(width / m_xSpinButton->get_approximate_char_width());
         m_xSpinButton->set_width_chars(chars);
     }
 
@@ -1314,6 +1315,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
         xWindow = VclPtr<MessageDialog>::Create(pParent, nBits);
+        xWindow->set_border_width(12);
     }
     else if (name == "GtkBox")
     {

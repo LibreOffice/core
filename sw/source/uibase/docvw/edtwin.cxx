@@ -34,6 +34,7 @@
 #include <vcl/help.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <sot/storage.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/securityoptions.hxx>
@@ -1848,8 +1849,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     else if (!rSh.IsCursorInParagraphMetadataField())
                     {
-                        ScopedVclPtrInstance<MessageDialog>(this, "InfoReadonlyDialog",
-                            "modules/swriter/ui/inforeadonlydialog.ui")->Execute();
+                        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui"));
+                        std::unique_ptr<weld::MessageDialog> xInfo(xBuilder->weld_message_dialog("InfoReadonlyDialog"));
+                        xInfo->run();
                         eKeyState = SwKeyState::End;
                     }
                     break;
@@ -2024,8 +2026,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     else if (!rSh.IsCursorInParagraphMetadataField())
                     {
-                        ScopedVclPtrInstance<MessageDialog>(this, "InfoReadonlyDialog",
-                            "modules/swriter/ui/inforeadonlydialog.ui")->Execute();
+                        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui"));
+                        std::unique_ptr<weld::MessageDialog> xInfo(xBuilder->weld_message_dialog("InfoReadonlyDialog"));
+                        xInfo->run();
                         eKeyState = SwKeyState::End;
                     }
                     break;
@@ -2471,8 +2474,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
             }
             else
             {
-                ScopedVclPtrInstance<MessageDialog>(this, "InfoReadonlyDialog",
-                    "modules/swriter/ui/inforeadonlydialog.ui")->Execute();
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui"));
+                std::unique_ptr<weld::MessageDialog> xInfo(xBuilder->weld_message_dialog("InfoReadonlyDialog"));
+                xInfo->run();
                 eKeyState = SwKeyState::End;
             }
         break;

@@ -18,9 +18,9 @@
  */
 
 #include <rtl/ustring.hxx>
-#include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
+#include <vcl/wrkwin.hxx>
 #include <svtools/langtab.hxx>
 
 #include <vcl/errinf.hxx>
@@ -363,8 +363,10 @@ bool SvxSpellWrapper::SpellNext( )
         WAIT_OFF();
 
         const char* pResId = bReverse ? RID_SVXSTR_QUERY_BW_CONTINUE : RID_SVXSTR_QUERY_CONTINUE;
-        ScopedVclPtrInstance< MessageDialog > aBox(pWin, EditResId(pResId), VclMessageType::Question, VclButtonsType::YesNo);
-        if ( aBox->Execute() != RET_YES )
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                 VclMessageType::Question, VclButtonsType::YesNo,
+                                                                 EditResId(pResId)));
+        if (xBox->run() != RET_YES)
         {
             // sacrifice the other area if necessary ask for special area
             WAIT_ON();

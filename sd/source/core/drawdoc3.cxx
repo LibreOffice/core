@@ -37,8 +37,8 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdundo.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <sot/formats.hxx>
 #include <xmloff/autolayout.hxx>
 
@@ -244,8 +244,9 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium* pMedium)
 
     if (!bOK)
     {
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, SdResId(STR_READ_DATA_ERROR));
-        aErrorBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(nullptr,
+                                                       VclMessageType::Warning, VclButtonsType::Ok, SdResId(STR_READ_DATA_ERROR)));
+        xErrorBox->run();
 
         CloseBookmarkDoc();
         pBookmarkDoc = nullptr;

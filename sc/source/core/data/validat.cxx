@@ -32,7 +32,7 @@
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/msgbox.hxx>
 #include <rtl/math.hxx>
 
@@ -181,7 +181,7 @@ bool ScValidationData::GetErrMsg( OUString& rTitle, OUString& rMsg,
 }
 
 bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
-                                ScFormulaCell* pCell, vcl::Window* pParent ) const
+                                ScFormulaCell* pCell, weld::Window* pParent ) const
 {
     ScDocument* pDocument = GetDocument();
     SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
@@ -251,9 +251,10 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
     // Macro not found (only with input)
     {
         //TODO: different error message, if found, but not bAllowed ??
-
-        ScopedVclPtrInstance< MessageDialog > aBox( pParent, ScGlobal::GetRscString(STR_VALID_MACRONOTFOUND));
-        aBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  ScGlobal::GetRscString(STR_VALID_MACRONOTFOUND)));
+        xBox->run();
     }
 
     return bScriptReturnedFalse;
@@ -262,7 +263,7 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
     // true -> abort
 
 bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
-                                ScFormulaCell* pCell, vcl::Window* pParent ) const
+                                ScFormulaCell* pCell, weld::Window* pParent ) const
 {
     if ( SfxApplication::IsXScriptURL( aErrorTitle ) )
     {
@@ -356,9 +357,10 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
     if ( !bDone && !pCell )         // Macro not found (only with input)
     {
         //TODO: different error message, if found, but not bAllowed ??
-
-        ScopedVclPtrInstance< MessageDialog > aBox(pParent, ScGlobal::GetRscString(STR_VALID_MACRONOTFOUND));
-        aBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  ScGlobal::GetRscString(STR_VALID_MACRONOTFOUND)));
+        xBox->run();
     }
 
     return bRet;
@@ -376,7 +378,7 @@ bool ScValidationData::DoError( vcl::Window* pParent, const OUString& rInput,
                                 const ScAddress& rPos ) const
 {
     if ( eErrorStyle == SC_VALERR_MACRO )
-        return DoMacro( rPos, rInput, nullptr, pParent );
+        return DoMacro( rPos, rInput, nullptr, pParent ? pParent->GetFrameWeld() : nullptr);
 
     //  Output error message
 

@@ -24,7 +24,8 @@
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/group.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <svx/pagectrl.hxx>
 #include <svx/svxdllapi.h>
@@ -120,24 +121,32 @@ public:
     SVX_DLLPRIVATE SvxFooterPage(   vcl::Window* pParent, const SfxItemSet& rSet );
 };
 
-class SVX_DLLPUBLIC DeleteHeaderDialog : public MessageDialog
+class SVX_DLLPUBLIC DeleteHeaderDialog
 {
+private:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::MessageDialog> m_xDialog;
 public:
-    DeleteHeaderDialog(vcl::Window *pParent)
-        : MessageDialog(pParent, "DeleteHeaderDialog",
-            "svx/ui/deleteheaderdialog.ui")
+    DeleteHeaderDialog(weld::Widget* pParent)
+        : m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/deleteheaderdialog.ui"))
+        , m_xDialog(m_xBuilder->weld_message_dialog("DeleteHeaderDialog"))
     {
     }
+    short run() { return m_xDialog->run(); }
 };
 
-class SVX_DLLPUBLIC DeleteFooterDialog : public MessageDialog
+class SVX_DLLPUBLIC DeleteFooterDialog
 {
+private:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::MessageDialog> m_xDialog;
 public:
-    DeleteFooterDialog(vcl::Window *pParent)
-        : MessageDialog(pParent, "DeleteFooterDialog",
-            "svx/ui/deletefooterdialog.ui")
+    DeleteFooterDialog(weld::Widget* pParent)
+        : m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/deletefooterdialog.ui"))
+        , m_xDialog(m_xBuilder->weld_message_dialog("DeleteFooterDialog"))
     {
     }
+    short run() { return m_xDialog->run(); }
 };
 
 #endif

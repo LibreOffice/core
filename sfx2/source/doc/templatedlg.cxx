@@ -36,9 +36,9 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -630,7 +630,9 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, ImportClickHdl, Button*, void)
             else
             {
                 OUString aMsg( SfxResId(STR_CREATE_ERROR) );
-                ScopedVclPtrInstance<MessageDialog>(this, aMsg.replaceFirst("$1", sCategory))->Execute();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
+                                                          aMsg.replaceFirst("$1", sCategory)));
+                xBox->run();
                 return;
             }
         }
@@ -748,7 +750,9 @@ IMPL_LINK(SfxTemplateManagerDlg, DeleteTemplateHdl, ThumbnailViewItem*, pItem, v
     if (!aDeletedTemplate.isEmpty())
     {
         OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_TEMPLATE) );
-        ScopedVclPtrInstance<MessageDialog>(this, aMsg.replaceFirst("$1",aDeletedTemplate))->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
+                                                  aMsg.replaceFirst("$1",aDeletedTemplate)));
+        xBox->run();
     }
 }
 
@@ -967,7 +971,9 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(const OUString& sCategory)
                 {
                     OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT));
                     aMsg = aMsg.replaceFirst("$1",pContItem->maTitle);
-                    ScopedVclPtrInstance<MessageDialog>(this, aMsg.replaceFirst("$2",aTemplateList))->Execute();
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
+                                                              aMsg.replaceFirst("$2",aTemplateList)));
+                    xBox->run();
                 }
             }
         }
@@ -1056,12 +1062,16 @@ void SfxTemplateManagerDlg::OnTemplateExport()
         if (!aTemplateList.isEmpty())
         {
             OUString aText( SfxResId(STR_MSG_ERROR_EXPORT) );
-            ScopedVclPtrInstance<MessageDialog>(this, aText.replaceFirst("$1",aTemplateList))->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
+                                                      aText.replaceFirst("$1",aTemplateList)));
+            xBox->run();
         }
         else
         {
             OUString sText( SfxResId(STR_MSG_EXPORT_SUCCESS) );
-            ScopedVclPtrInstance<MessageDialog>(this, sText.replaceFirst("$1", OUString::number(nCount)), VclMessageType::Info)->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Info, VclButtonsType::Ok,
+                                                      sText.replaceFirst("$1", OUString::number(nCount))));
+            xBox->run();
         }
     }
 }
@@ -1117,7 +1127,9 @@ void SfxTemplateManagerDlg::OnCategoryNew()
         else
         {
             OUString aMsg( SfxResId(STR_CREATE_ERROR) );
-            ScopedVclPtrInstance<MessageDialog>(this, aMsg.replaceFirst("$1", aName))->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
+                                                      aMsg.replaceFirst("$1", aName)));
+            xBox->run();
         }
     }
 }
@@ -1147,7 +1159,9 @@ void SfxTemplateManagerDlg::OnCategoryRename()
         else
         {
             OUString aMsg( SfxResId(STR_CREATE_ERROR) );
-            ScopedVclPtrInstance<MessageDialog>(this, aMsg.replaceFirst("$1", aName))->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
+                                                      aMsg.replaceFirst("$1", aName)));
+            xBox->run();
         }
     }
 }
@@ -1164,10 +1178,9 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
     {
         OUString sCategory = aDlg->GetSelectedCategory();
         aDlg.disposeAndClear();
-        ScopedVclPtrInstance< MessageDialog > popupDlg(this, SfxResId(STR_QMSG_SEL_FOLDER_DELETE),
-            VclMessageType::Question, VclButtonsType::YesNo);
-
-        if ( popupDlg->Execute() != RET_YES )
+        std::unique_ptr<weld::MessageDialog> popupDlg(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
+                                                      SfxResId(STR_QMSG_SEL_FOLDER_DELETE)));
+        if (popupDlg->run() != RET_YES)
             return;
 
         sal_Int16 nItemId = mpLocalView->getRegionId(sCategory);
@@ -1175,7 +1188,9 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
         if (!mpLocalView->removeRegion(nItemId))
         {
             OUString sMsg( SfxResId(STR_MSG_ERROR_DELETE_FOLDER) );
-            ScopedVclPtrInstance<MessageDialog>(this, sMsg.replaceFirst("$1",sCategory))->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
+                                                      sMsg.replaceFirst("$1",sCategory)));
+            xBox->run();
         }
         else
         {
@@ -1241,7 +1256,9 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nItemId)
                 OUString sDst = mpLocalView->getRegionItemName(nItemId);
                 OUString sMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE));
                 sMsg = sMsg.replaceFirst("$1",sDst);
-                ScopedVclPtrInstance<MessageDialog>(this, sMsg.replaceFirst( "$2",pItem->maTitle))->Execute();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning, VclButtonsType::Ok,
+                                                          sMsg.replaceFirst( "$2",pItem->maTitle)));
+                xBox->run();
             }
         }
     }

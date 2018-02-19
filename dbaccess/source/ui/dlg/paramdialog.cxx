@@ -29,7 +29,7 @@
 #include <connectivity/dbtools.hxx>
 #include <stringconstants.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <unotools/syslocale.hxx>
@@ -201,7 +201,10 @@ namespace dbaui
 
                     OUString sMessage(DBA_RES(STR_COULD_NOT_CONVERT_PARAM));
                     sMessage = sMessage.replaceAll( "$name$", sName );
-                    ScopedVclPtrInstance<MessageDialog>(nullptr, sMessage)->Execute();
+                    std::unique_ptr<weld::MessageDialog> xDialog(Application::CreateMessageDialog(nullptr,
+                                                                 VclMessageType::Warning, VclButtonsType::Ok,
+                                                                 sMessage));
+                    xDialog->run();
                     m_pParam->GrabFocus();
                     return true;
                 }

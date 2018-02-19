@@ -21,6 +21,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dialoghelper.hxx>
@@ -447,7 +448,6 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
     assert(pFact && "Dialog creation failed!");
     ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     assert(pDlg && "Dialog creation failed!");
-    ScopedVclPtr<MessageDialog> pWarnBox;
     sal_uInt16         nError   = 1;
 
     while( pDlg->Execute() == RET_OK )
@@ -461,18 +461,12 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
             break;
         }
 
-        if( !pWarnBox )
-        {
-            pWarnBox.disposeAndReset(VclPtr<MessageDialog>::Create( GetParentDialog()
-                                         ,"DuplicateNameDialog"
-                                         ,"cui/ui/queryduplicatedialog.ui"));
-        }
-
-        if( pWarnBox->Execute() != RET_OK )
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+        if (xWarnBox->run() != RET_OK)
             break;
     }
     pDlg.disposeAndClear();
-    pWarnBox.disposeAndClear();
 
     if( !nError )
     {
@@ -535,9 +529,9 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        ScopedVclPtrInstance< MessageDialog > aQueryBox( GetParentDialog(),"AskDelHatchDialog","cui/ui/querydeletehatchdialog.ui");
-
-        if( aQueryBox->Execute() == RET_YES )
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletehatchdialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("AskDelHatchDialog"));
+        if (xQueryBox->run() == RET_YES)
         {
             m_pHatchingList->Remove(nPos);
             m_pHatchLB->RemoveItem( nId );
@@ -588,10 +582,9 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
             }
             else
             {
-                ScopedVclPtrInstance<MessageDialog> aBox( GetParentDialog()
-                                                            ,"DuplicateNameDialog"
-                                                            ,"cui/ui/queryduplicatedialog.ui" );
-                aBox->Execute();
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+                std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+                xBox->run();
             }
         }
     }

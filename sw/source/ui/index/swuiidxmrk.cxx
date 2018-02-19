@@ -30,7 +30,7 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <i18nutil/searchopt.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/textsearch.hxx>
@@ -1219,8 +1219,10 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl, Button*, void)
                 bDifferent |= m_sFields[i] != pEntry->GetAuthorField(static_cast<ToxAuthorityField>(i));
             if(bDifferent)
             {
-                ScopedVclPtrInstance< MessageDialog > aQuery(&m_rDialog, SwResId(STR_QUERY_CHANGE_AUTH_ENTRY), VclMessageType::Question, VclButtonsType::YesNo);
-                if(RET_YES != aQuery->Execute())
+                std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(m_rDialog.GetFrameWeld(),
+                                                            VclMessageType::Question, VclButtonsType::YesNo,
+                                                            SwResId(STR_QUERY_CHANGE_AUTH_ENTRY)));
+                if (RET_YES != xQuery->run())
                     return;
             }
         }

@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
 
-namespace vcl { class Window; }
+namespace weld { class Widget; }
 
 /** Opens the general query save document dialog.
     @param  _pParent
@@ -31,7 +31,7 @@ namespace vcl { class Window; }
         The title of the document.
 */
 SFX2_DLLPUBLIC short ExecuteQuerySaveDocument(
-    vcl::Window* _pParent, const OUString& _rTitle);
+    weld::Widget* _pParent, const OUString& _rTitle);
 
 #endif // INCLUDED_SFX2_QUERYSAVEDOCUMENT_HXX
 

@@ -271,7 +271,7 @@ void ScGraphicShell::ExecuteSaveGraphic( SAL_UNUSED_PARAMETER SfxRequest& /*rReq
             {
                 if (pWin)
                 {
-                    nState = GraphicHelper::HasToSaveTransformedImage(pWin);
+                    nState = GraphicHelper::HasToSaveTransformedImage(pWin->GetFrameWeld());
                 }
             }
             else

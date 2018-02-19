@@ -33,7 +33,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <tools/datetime.hxx>
 #include <unotools/datetime.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <svl/fstathelper.hxx>
 #include <config_folders.h>
 
@@ -528,14 +528,24 @@ bool SfxClassificationHelper::ShowPasteInfo(SfxClassificationCheckPasteResult eR
     case SfxClassificationCheckPasteResult::TargetDocNotClassified:
     {
         if (!Application::IsHeadlessModeEnabled())
-            ScopedVclPtrInstance<MessageDialog>(nullptr, SfxResId(STR_TARGET_DOC_NOT_CLASSIFIED), VclMessageType::Info)->Execute();
+        {
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                                     VclMessageType::Info, VclButtonsType::Ok,
+                                                                     SfxResId(STR_TARGET_DOC_NOT_CLASSIFIED)));
+            xBox->run();
+        }
         return false;
     }
     break;
     case SfxClassificationCheckPasteResult::DocClassificationTooLow:
     {
         if (!Application::IsHeadlessModeEnabled())
-            ScopedVclPtrInstance<MessageDialog>(nullptr, SfxResId(STR_DOC_CLASSIFICATION_TOO_LOW), VclMessageType::Info)->Execute();
+        {
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                                     VclMessageType::Info, VclButtonsType::Ok,
+                                                                     SfxResId(STR_DOC_CLASSIFICATION_TOO_LOW)));
+            xBox->run();
+        }
         return false;
     }
     break;

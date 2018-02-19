@@ -96,6 +96,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
+#include <vcl/weld.hxx>
 
 #include <editeng/cmapitem.hxx>
 #include <editeng/escapementitem.hxx>
@@ -1283,13 +1284,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 if (pObj && pObj->GetGraphicType() == GraphicType::Bitmap)
                 {
                     vcl::Window* pWin = GetActiveWindow();
+                    weld::Window* pFrame = GetFrameWeld();
                     GraphicAttr aGraphicAttr = pObj->GetGraphicAttr();
                     short nState = RET_CANCEL;
                     if (aGraphicAttr != GraphicAttr()) // the image has been modified
                     {
-                        if (pWin)
+                        if (pFrame)
                         {
-                            nState = GraphicHelper::HasToSaveTransformedImage(pWin);
+                            nState = GraphicHelper::HasToSaveTransformedImage(pFrame);
                         }
                     }
                     else

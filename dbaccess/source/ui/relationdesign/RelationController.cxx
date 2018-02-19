@@ -28,6 +28,7 @@
 #include <strings.hrc>
 #include <strings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <browserids.hxx>
 #include <comphelper/types.hxx>
 #include <core_resource.hxx>
@@ -256,9 +257,9 @@ short ORelationController::saveModified()
     short nSaved = RET_YES;
     if(haveDataSource() && isModified())
     {
-        ScopedVclPtrInstance<MessageDialog> aQry(getView(), "DesignSaveModifiedDialog",
-                                                 "dbaccess/ui/designsavemodifieddialog.ui");
-        nSaved = aQry->Execute();
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(getFrameWeld(), "dbaccess/ui/designsavemodifieddialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("DesignSaveModifiedDialog"));
+        nSaved = xQuery->run();
         if(nSaved == RET_YES)
             Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());
     }

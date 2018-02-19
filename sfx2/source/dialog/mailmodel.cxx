@@ -52,7 +52,7 @@
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 
 #include <sfx2/mailmodelapi.hxx>
 #include <sfxtypes.hxx>
@@ -784,8 +784,9 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     SolarMutexGuard aGuard;
                     VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
 
-                    ScopedVclPtrInstance< MessageDialog > aBox(pParentWindow, "ErrorFindEmailDialog", "sfx/ui/errorfindemaildialog.ui");
-                    aBox->Execute();
+                    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pParentWindow ? pParentWindow->GetFrameWeld() : nullptr, "sfx/ui/errorfindemaildialog.ui"));
+                    std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("ErrorFindEmailDialog"));
+                    xBox->run();
                     eResult = SEND_MAIL_CANCELLED;
                 }
                 else
