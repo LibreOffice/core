@@ -26,7 +26,7 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/builderfactory.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
@@ -394,19 +394,24 @@ void SmFontDialog::DataChanged( const DataChangedEvent& rDCEvt )
     ModalDialog::DataChanged( rDCEvt );
 }
 
-class SaveDefaultsQuery : public MessageDialog
+class SaveDefaultsQuery
 {
+private:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::MessageDialog> m_xBox;
 public:
-    explicit SaveDefaultsQuery(vcl::Window *pParent)
-        : MessageDialog(pParent, "SaveDefaultsDialog",
-            "modules/smath/ui/savedefaultsdialog.ui")
+    explicit SaveDefaultsQuery(weld::Widget* pParent)
+        : m_xBuilder(Application::CreateBuilder(pParent, "modules/smath/ui/savedefaultsdialog.ui"))
+        , m_xBox(m_xBuilder->weld_message_dialog("SaveDefaultsDialog"))
     {
     }
+    short run() { return m_xBox->run(); }
 };
 
 IMPL_LINK_NOARG( SmFontSizeDialog, DefaultButtonClickHdl, Button *, void )
 {
-    if (ScopedVclPtrInstance<SaveDefaultsQuery>(this)->Execute() == RET_YES)
+    SaveDefaultsQuery aQuery(GetFrameWeld());
+    if (aQuery.run() == RET_YES)
     {
         SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
@@ -508,7 +513,8 @@ IMPL_LINK( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu, bool )
 
 IMPL_LINK_NOARG( SmFontTypeDialog, DefaultButtonClickHdl, Button *, void )
 {
-    if (ScopedVclPtrInstance<SaveDefaultsQuery>(this)->Execute() == RET_YES)
+    SaveDefaultsQuery aQuery(GetFrameWeld());
+    if (aQuery.run() == RET_YES)
     {
         SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
@@ -704,7 +710,8 @@ IMPL_LINK( SmDistanceDialog, MenuSelectHdl, Menu *, pMenu, bool )
 
 IMPL_LINK_NOARG( SmDistanceDialog, DefaultButtonClickHdl, Button *, void )
 {
-    if (ScopedVclPtrInstance<SaveDefaultsQuery>(this)->Execute() == RET_YES)
+    SaveDefaultsQuery aQuery(GetFrameWeld());
+    if (aQuery.run() == RET_YES)
     {
         SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
@@ -996,7 +1003,8 @@ void SmDistanceDialog::WriteTo(SmFormat &rFormat) /*const*/
 
 IMPL_LINK_NOARG( SmAlignDialog, DefaultButtonClickHdl, Button *, void )
 {
-    if (ScopedVclPtrInstance<SaveDefaultsQuery>(this)->Execute() == RET_YES)
+    SaveDefaultsQuery aQuery(GetFrameWeld());
+    if (aQuery.run() == RET_YES)
     {
         SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );

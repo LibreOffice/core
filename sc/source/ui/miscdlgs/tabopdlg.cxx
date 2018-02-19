@@ -19,7 +19,7 @@
 
 #include <scitems.hxx>
 #include <sfx2/dispatch.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 
 #include <uiitems.hxx>
 #include <global.hxx>
@@ -224,7 +224,9 @@ void ScTabOpDlg::RaiseError( ScTabOpErr eError )
             break;
     }
 
-    ScopedVclPtrInstance<MessageDialog>(this, *pMsg, VclMessageType::Error, VclButtonsType::OkCancel)->Execute();
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                              VclMessageType::Error, VclButtonsType::OkCancel, *pMsg));
+    xBox->run();
     pEd->GrabFocus();
 }
 

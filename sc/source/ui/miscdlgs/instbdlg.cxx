@@ -26,6 +26,7 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <global.hxx>
 #include <docsh.hxx>
@@ -300,7 +301,9 @@ IMPL_LINK_NOARG(ScInsertTableDlg, DoEnterHdl, Button*, void)
     else
     {
         OUString aErrMsg ( ScGlobal::GetRscString( STR_INVALIDTABNAME ) );
-        (void)ScopedVclPtrInstance<MessageDialog>(this, aErrMsg)->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning,
+                    VclButtonsType::Ok, aErrMsg));
+        xBox->run();
     }
 }
 

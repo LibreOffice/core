@@ -21,7 +21,7 @@
 #include <directsql.hxx>
 #include <dbu_dlg.hxx>
 #include <strings.hrc>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <comphelper/types.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -109,8 +109,10 @@ namespace dbaui
 
         {
             OUString sMessage(DBA_RES(STR_DIRECTSQL_CONNECTIONLOST));
-            ScopedVclPtrInstance< MessageDialog > aError(this, sMessage);
-            aError->Execute();
+            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(GetFrameWeld(),
+                                                        VclMessageType::Warning, VclButtonsType::Ok,
+                                                        sMessage));
+            xError->run();
         }
 
         PostUserEvent(LINK(this, DirectSQLDialog, OnClose), nullptr, true);

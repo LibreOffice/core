@@ -43,7 +43,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/builderfactory.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XSet.hpp>
@@ -522,8 +522,8 @@ namespace svxform
                 {
                     if ( !m_sInstanceURL.isEmpty() )
                     {
-                        ScopedVclPtrInstance< LinkedInstanceWarningBox > aMsgBox( this );
-                        if ( aMsgBox->Execute() != RET_OK )
+                        LinkedInstanceWarningBox aMsgBox(GetFrameWeld());
+                        if (aMsgBox.run() != RET_OK)
                             return bHandled;
                     }
 
@@ -685,8 +685,8 @@ namespace svxform
                 {
                     if ( DGTInstance == m_eGroup && !m_sInstanceURL.isEmpty() )
                     {
-                        ScopedVclPtrInstance< LinkedInstanceWarningBox > aMsgBox( this );
-                        if ( aMsgBox->Execute() != RET_OK )
+                        LinkedInstanceWarningBox aMsgBox(GetFrameWeld());
+                        if (aMsgBox.run() != RET_OK)
                             return bHandled;
                     }
 
@@ -770,8 +770,8 @@ namespace svxform
             bHandled = true;
             if ( DGTInstance == m_eGroup && !m_sInstanceURL.isEmpty() )
             {
-                ScopedVclPtrInstance< LinkedInstanceWarningBox > aMsgBox( this );
-                if ( aMsgBox->Execute() != RET_OK )
+                LinkedInstanceWarningBox aMsgBox(GetFrameWeld());
+                if (aMsgBox.run() != RET_OK)
                     return bHandled;
             }
             bIsDocModified = RemoveEntry();
@@ -952,12 +952,14 @@ namespace svxform
                     bool bIsElement = ( eChildType == css::xml::dom::NodeType_ELEMENT_NODE );
                     const char* pResId = bIsElement ? RID_STR_QRY_REMOVE_ELEMENT : RID_STR_QRY_REMOVE_ATTRIBUTE;
                     OUString sVar = bIsElement ? OUString(ELEMENTNAME) : OUString(ATTRIBUTENAME);
-                    ScopedVclPtrInstance< MessageDialog > aQBox(this, SvxResId(pResId), VclMessageType::Question, VclButtonsType::YesNo);
-                    OUString sMessText = aQBox->get_primary_text();
+                    std::unique_ptr<weld::MessageDialog> xQBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                             VclMessageType::Question, VclButtonsType::YesNo,
+                                                                             SvxResId(pResId)));
+                    OUString sMessText = xQBox->get_primary_text();
                     sMessText = sMessText.replaceFirst(
                         sVar, m_xUIHelper->getNodeDisplayName( pNode->m_xNode, false ) );
-                    aQBox->set_primary_text(sMessText);
-                    if ( aQBox->Execute() == RET_YES )
+                    xQBox->set_primary_text(sMessText);
+                    if (xQBox->run() == RET_YES)
                     {
                         SvTreeListEntry* pParent = m_pItemList->GetParent( pEntry );
                         DBG_ASSERT( pParent, "XFormsPage::RemoveEntry(): no parent entry" );
@@ -994,12 +996,13 @@ namespace svxform
                 {
                     SAL_WARN( "svx.form", "XFormsPage::RemoveEntry(): exception caught" );
                 }
-                ScopedVclPtrInstance<MessageDialog> aQBox(this, SvxResId(pResId),
-                                                          VclMessageType::Question, VclButtonsType::YesNo);
-                OUString sMessText = aQBox->get_primary_text();
+                std::unique_ptr<weld::MessageDialog> xQBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                         VclMessageType::Question, VclButtonsType::YesNo,
+                                                                         SvxResId(pResId)));
+                OUString sMessText = xQBox->get_primary_text();
                 sMessText = sMessText.replaceFirst( sSearch, sName);
-                aQBox->set_primary_text(sMessText);
-                if ( aQBox->Execute() == RET_YES )
+                xQBox->set_primary_text(sMessText);
+                if (xQBox->run() == RET_YES)
                 {
                     try
                     {
@@ -1496,9 +1499,11 @@ namespace svxform
                         if ( m_pModelsBox->GetEntryPos( sNewName ) != LISTBOX_ENTRY_NOTFOUND )
                         {
                             // error: model name already exists
-                            ScopedVclPtrInstance< MessageDialog > aErrBox( this, SvxResId( RID_STR_DOUBLE_MODELNAME ) );
-                            aErrBox->set_primary_text(aErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
-                            aErrBox->Execute();
+                            std::unique_ptr<weld::MessageDialog> xErrBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                                     VclMessageType::Warning, VclButtonsType::Ok,
+                                                                                     SvxResId(RID_STR_DOUBLE_MODELNAME)));
+                            xErrBox->set_primary_text(xErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
+                            xErrBox->run();
                             bShowDialog = true;
                         }
                         else
@@ -1586,12 +1591,13 @@ namespace svxform
             }
             else if (sIdent == "modelsremove")
             {
-                ScopedVclPtrInstance<MessageDialog> aQBox(this, SvxResId( RID_STR_QRY_REMOVE_MODEL),
-                                    VclMessageType::Question, VclButtonsType::YesNo);
-                OUString sText = aQBox->get_primary_text();
+                std::unique_ptr<weld::MessageDialog> xQBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                         VclMessageType::Question, VclButtonsType::YesNo,
+                                                                         SvxResId( RID_STR_QRY_REMOVE_MODEL)));
+                OUString sText = xQBox->get_primary_text();
                 sText = sText.replaceFirst( MODELNAME, sSelectedModel );
-                aQBox->set_primary_text(sText);
-                if ( aQBox->Execute() == RET_YES )
+                xQBox->set_primary_text(sText);
+                if (xQBox->run() == RET_YES)
                 {
                     try
                     {
@@ -1686,12 +1692,13 @@ namespace svxform
                 if ( pPage )
                 {
                     OUString sInstName = pPage->GetInstanceName();
-                    ScopedVclPtrInstance<MessageDialog> aQBox(this, SvxResId(RID_STR_QRY_REMOVE_INSTANCE),
-                                                              VclMessageType::Question, VclButtonsType::YesNo);
-                    OUString sMessText = aQBox->get_primary_text();
+                    std::unique_ptr<weld::MessageDialog> xQBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                             VclMessageType::Question, VclButtonsType::YesNo,
+                                                                             SvxResId(RID_STR_QRY_REMOVE_INSTANCE)));
+                    OUString sMessText = xQBox->get_primary_text();
                     sMessText = sMessText.replaceFirst( INSTANCENAME, sInstName );
-                    aQBox->set_primary_text(sMessText);
-                    if ( aQBox->Execute() == RET_YES )
+                    xQBox->set_primary_text(sMessText);
+                    if (xQBox->run() == RET_YES)
                     {
                         bool bDoRemove = false;
                         if (IsAdditionalPage(nId))
@@ -2439,9 +2446,11 @@ namespace svxform
              ( bIsHandleBinding && sNewName.isEmpty() ) )
         {
             // Error and don't close the dialog
-            ScopedVclPtrInstance< MessageDialog > aErrBox( this, SvxResId( RID_STR_INVALID_XMLNAME ) );
-            aErrBox->set_primary_text(aErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
-            aErrBox->Execute();
+            std::unique_ptr<weld::MessageDialog> xErrBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                     VclMessageType::Warning, VclButtonsType::Ok,
+                                                                     SvxResId(RID_STR_INVALID_XMLNAME)));
+            xErrBox->set_primary_text(xErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
+            xErrBox->run();
             return;
         }
 
@@ -3072,9 +3081,11 @@ namespace svxform
         {
             if ( !m_pConditionDlg->GetUIHelper()->isValidPrefixName( sPrefix ) )
             {
-                ScopedVclPtrInstance< MessageDialog > aErrBox(this, SvxResId( RID_STR_INVALID_XMLPREFIX ) );
-                aErrBox->set_primary_text(aErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sPrefix));
-                aErrBox->Execute();
+                std::unique_ptr<weld::MessageDialog> xErrBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                         VclMessageType::Warning, VclButtonsType::Ok,
+                                                                         SvxResId(RID_STR_INVALID_XMLPREFIX)));
+                xErrBox->set_primary_text(xErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sPrefix));
+                xErrBox->run();
                 return;
             }
         }
@@ -3144,11 +3155,13 @@ namespace svxform
     IMPL_LINK_NOARG(AddSubmissionDialog, OKHdl, Button*, void)
     {
         OUString sName(m_pNameED->GetText());
-        if(sName.isEmpty()) {
-
-            ScopedVclPtrInstance< MessageDialog > aErrorBox(this,SvxResId(RID_STR_EMPTY_SUBMISSIONNAME));
-            aErrorBox->set_primary_text( Application::GetDisplayName() );
-            aErrorBox->Execute();
+        if(sName.isEmpty())
+        {
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                                     VclMessageType::Warning, VclButtonsType::Ok,
+                                                                     SvxResId(RID_STR_EMPTY_SUBMISSIONNAME)));
+            xErrorBox->set_primary_text(Application::GetDisplayName());
+            xErrorBox->run();
             return;
         }
 
@@ -3388,8 +3401,9 @@ namespace svxform
             m_pURLED->SetText( aDlg.GetPath() );
     }
 
-    LinkedInstanceWarningBox::LinkedInstanceWarningBox( vcl::Window* pParent )
-        : MessageDialog(pParent, "FormLinkWarnDialog", "svx/ui/formlinkwarndialog.ui")
+    LinkedInstanceWarningBox::LinkedInstanceWarningBox(weld::Widget* pParent)
+        : m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/formlinkwarndialog.ui"))
+        , m_xDialog(m_xBuilder->weld_message_dialog("FormLinkWarnDialog"))
     {
     }
 

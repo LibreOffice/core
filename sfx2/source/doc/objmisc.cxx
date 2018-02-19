@@ -63,6 +63,7 @@
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <basic/sbx.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
@@ -1826,8 +1827,9 @@ bool SfxObjectShell::IsContinueImportOnFilterExceptions(const OUString& aErrMess
             if (!aErrMessage.isEmpty())
                 aMessage += SfxResId(STR_QMSG_ERROR_OPENING_FILE_DETAILS) + aErrMessage;
             aMessage += SfxResId(STR_QMSG_ERROR_OPENING_FILE_CONTINUE);
-            ScopedVclPtrInstance< MessageDialog > aBox(nullptr, aMessage, VclMessageType::Question, VclButtonsType::YesNo);
-            mbContinueImportOnFilterExceptions = (aBox->Execute() == RET_YES) ? yes : no;
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                      VclMessageType::Question, VclButtonsType::YesNo, aMessage));
+            mbContinueImportOnFilterExceptions = (xBox->run() == RET_YES) ? yes : no;
         }
         else
             mbContinueImportOnFilterExceptions = no;

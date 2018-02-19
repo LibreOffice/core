@@ -26,7 +26,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
@@ -777,10 +777,11 @@ uno::Reference < i18n::XExtendedInputSequenceChecker > const & Edit::ImplGetInpu
     return mxISC;
 }
 
-void Edit::ShowTruncationWarning( vcl::Window* pParent )
+void Edit::ShowTruncationWarning(weld::Widget* pParent)
 {
-    ScopedVclPtrInstance< MessageDialog > aBox(pParent, VclResId(SV_EDIT_WARNING_STR), VclMessageType::Warning);
-    aBox->Execute();
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent, VclMessageType::Warning,
+                                              VclButtonsType::Ok, VclResId(SV_EDIT_WARNING_STR)));
+    xBox->run();
 }
 
 bool Edit::ImplTruncateToMaxLen( OUString& rStr, sal_Int32 nSelectionLen ) const
@@ -1306,7 +1307,7 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard > cons
                 OUString aText;
                 aData >>= aText;
                 if( ImplTruncateToMaxLen( aText, maSelection.Len() ) )
-                    ShowTruncationWarning( this );
+                    ShowTruncationWarning(GetFrameWeld());
                 ReplaceSelected( aText );
             }
             catch( const css::uno::Exception& )

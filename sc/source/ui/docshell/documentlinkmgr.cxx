@@ -25,7 +25,8 @@
 #include <scresid.hxx>
 #include <o3tl/deleter.hxx>
 #include <svx/svdoole2.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <memory>
 
@@ -144,7 +145,7 @@ bool DocumentLinkManager::hasDdeOrOleOrWebServiceLinks(bool bDde, bool bOle, boo
     return false;
 }
 
-bool DocumentLinkManager::updateDdeOrOleOrWebServiceLinks(vcl::Window* pWin)
+bool DocumentLinkManager::updateDdeOrOleOrWebServiceLinks(weld::Window* pWin)
 {
     if (!mpImpl->mpLinkManager)
         return false;
@@ -195,8 +196,10 @@ bool DocumentLinkManager::updateDdeOrOleOrWebServiceLinks(vcl::Window* pWin)
             aBuf.append(aElem);
             aBuf.append("\nType : ");
             aBuf.append(aType);
-            ScopedVclPtrInstance< MessageDialog > aBox(pWin, aBuf.makeStringAndClear());
-            aBox->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin,
+                                                      VclMessageType::Warning, VclButtonsType::Ok,
+                                                      aBuf.makeStringAndClear()));
+            xBox->run();
         }
     }
 

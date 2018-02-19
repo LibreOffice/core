@@ -23,7 +23,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/oldprintadaptor.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/prnmon.hxx>
@@ -176,10 +176,12 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             }
             else
             {
-                ScopedVclPtrInstance< MessageDialog > aInfoBox(&GetEditWin(), SwResId(STR_ERR_NO_FAX), VclMessageType::Info);
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetEditWin().GetFrameWeld(),
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SwResId(STR_ERR_NO_FAX)));
                 const char* pResId = bWeb ? STR_WEBOPTIONS : STR_TEXTOPTIONS;
-                aInfoBox->set_primary_text(aInfoBox->get_primary_text().replaceFirst("%1", SwResId(pResId)));
-                aInfoBox->Execute();
+                xInfoBox->set_primary_text(xInfoBox->get_primary_text().replaceFirst("%1", SwResId(pResId)));
+                xInfoBox->run();
                 SfxUInt16Item aDefPage(SID_SW_EDITOPTIONS, TP_OPTPRINT_PAGE);
                 GetViewFrame()->GetDispatcher()->ExecuteList(SID_SW_EDITOPTIONS,
                             SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
@@ -201,9 +203,9 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             if(!bSilent && !bFromMerge &&
                     SW_MOD()->GetModuleConfig()->IsAskForMailMerge() && pSh->IsAnyDatabaseFieldInDoc())
             {
-                ScopedVclPtrInstance<MessageDialog> aBox(&GetEditWin(), "PrintMergeDialog",
-                                   "modules/swriter/ui/printmergedialog.ui");
-                short nRet = aBox->Execute();
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetEditWin().GetFrameWeld(), "modules/swriter/ui/printmergedialog.ui"));
+                std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("PrintMergeDialog"));
+                short nRet = xBox->run();
                 if(RET_NO != nRet)
                 {
                     if(RET_YES == nRet)

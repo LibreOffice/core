@@ -30,6 +30,7 @@
 
 #include <svl/undo.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
@@ -1078,7 +1079,7 @@ void TextView::Paste( css::uno::Reference< css::datatransfer::clipboard::XClipbo
                     mpImpl->mpTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
 
                     if( bWasTruncated )
-                        Edit::ShowTruncationWarning( mpImpl->mpWindow );
+                        Edit::ShowTruncationWarning(mpImpl->mpWindow->GetFrameWeld());
                 }
                 catch( const css::datatransfer::UnsupportedFlavorException& )
                 {

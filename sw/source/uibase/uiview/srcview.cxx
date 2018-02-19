@@ -23,7 +23,7 @@
 #include <unotools/tempfile.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/errinf.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/print.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
@@ -612,8 +612,9 @@ void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
         {
             if(bNotFoundMessage)
             {
-                ScopedVclPtrInstance<MessageDialog>(nullptr, "InfoNotFoundDialog",
-                    "modules/swriter/ui/infonotfounddialog.ui")->Execute();
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/infonotfounddialog.ui"));
+                std::unique_ptr<weld::MessageDialog> xInfoBox(xBuilder->weld_message_dialog("InfoNotFoundDialog"));
+                xInfoBox->run();
             }
             else if(!bRecursive)
             {
@@ -621,13 +622,15 @@ void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
 
                 if (!bForward)
                 {
-                    nRet = ScopedVclPtrInstance<MessageDialog>(nullptr, "QueryContinueEndDialog",
-                        "modules/swriter/ui/querycontinueenddialog.ui")->Execute();
+                    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/querycontinueenddialog.ui"));
+                    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryContinueEndDialog"));
+                    nRet = xQueryBox->run();
                 }
                 else
                 {
-                    nRet = ScopedVclPtrInstance<MessageDialog>(nullptr, "QueryContinueBeginDialog",
-                        "modules/swriter/ui/querycontinuebegindialog.ui")->Execute();
+                    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/querycontinuebegindialog.ui"));
+                    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryContinueBeginDialog"));
+                    nRet = xQueryBox->run();
                 }
 
                 if (nRet == RET_YES)
@@ -804,8 +807,11 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         }
         else
         {
-            vcl::Window *pTmpWindow = &GetViewFrame()->GetWindow();
-            ScopedVclPtrInstance<MessageDialog>(pTmpWindow, SwResId(STR_ERR_SRCSTREAM), VclMessageType::Info)->Execute();
+            vcl::Window& rTmpWindow = GetViewFrame()->GetWindow();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(rTmpWindow.GetFrameWeld(),
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      SwResId(STR_ERR_SRCSTREAM)));
+            xBox->run();
         }
     }
     else

@@ -35,6 +35,7 @@
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/weld.hxx>
 #include <tools/diagnose_ex.h>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <svtools/treelistentry.hxx>
@@ -86,7 +87,9 @@ bool ExtTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewT
 {
     if ( !IsValidSbxName(rNewText) )
     {
-        ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_BADSBXNAME))->Execute();
+        std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(GetFrameWeld(),
+                                                    VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_BADSBXNAME)));
+        xError->run();
         return false;
     }
 
@@ -104,8 +107,8 @@ bool ExtTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewT
     EntryType eType = aDesc.GetType();
 
     bool bSuccess = eType == OBJ_TYPE_MODULE ?
-        RenameModule(this, aDocument, aLibName, aCurText, rNewText) :
-        RenameDialog(this, aDocument, aLibName, aCurText, rNewText);
+        RenameModule(GetFrameWeld(), aDocument, aLibName, aCurText, rNewText) :
+        RenameDialog(GetFrameWeld(), aDocument, aLibName, aCurText, rNewText);
 
     if ( !bSuccess )
         return false;
@@ -824,7 +827,9 @@ void ObjectPage::NewDialog()
 
             if ( aDocument.hasDialog( aLibName, aDlgName ) )
             {
-                ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_SBXNAMEALLREADYUSED2))->Execute();
+                std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(GetFrameWeld(),
+                                                            VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_SBXNAMEALLREADYUSED2)));
+                xError->run();
             }
             else
             {
@@ -882,8 +887,8 @@ void ObjectPage::DeleteCurrent()
     OUString aName( aDesc.GetName() );
     EntryType eType = aDesc.GetType();
 
-    if ( ( eType == OBJ_TYPE_MODULE && QueryDelModule( aName, this ) ) ||
-         ( eType == OBJ_TYPE_DIALOG && QueryDelDialog( aName, this ) ) )
+    if ( ( eType == OBJ_TYPE_MODULE && QueryDelModule(aName, GetFrameWeld()) ) ||
+         ( eType == OBJ_TYPE_DIALOG && QueryDelDialog(aName, GetFrameWeld()) ) )
     {
         m_pBasicBox->GetModel()->Remove( pCurEntry );
         if ( m_pBasicBox->GetCurEntry() )  // OV-Bug ?
@@ -1038,7 +1043,9 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
         }
         catch (const container::ElementExistException& )
         {
-            ScopedVclPtrInstance<MessageDialog>(pWin, IDEResId(RID_STR_SBXNAMEALLREADYUSED2))->Execute();
+            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                        VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_SBXNAMEALLREADYUSED2)));
+            xError->run();
         }
         catch (const container::NoSuchElementException& )
         {
@@ -1047,7 +1054,6 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
     }
     return pModule;
 }
-
 
 } // namespace basctl
 

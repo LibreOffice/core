@@ -32,6 +32,7 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/srchdefs.hxx>
+#include <vcl/weld.hxx>
 
 namespace basctl
 {
@@ -477,7 +478,11 @@ TabBarAllowRenamingReturnCode TabBar::AllowRenaming()
     bool const bValid = IsValidSbxName(GetEditText());
 
     if ( !bValid )
-        ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_BADSBXNAME))->Execute();
+    {
+        std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(GetFrameWeld(),
+                                                    VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_BADSBXNAME)));
+        xError->run();
+    }
 
     return bValid ? TABBAR_RENAMING_YES : TABBAR_RENAMING_NO;
 }
@@ -706,37 +711,38 @@ LibInfo::Item::Item (
 LibInfo::Item::~Item ()
 { }
 
-bool QueryDel(const OUString& rName, const OUString &rStr, vcl::Window* pParent)
+bool QueryDel(const OUString& rName, const OUString &rStr, weld::Widget* pParent)
 {
     OUStringBuffer aNameBuf( rName );
     aNameBuf.append('\'');
     aNameBuf.insert(0, '\'');
     OUString aQuery = rStr.replaceAll("XX", aNameBuf.makeStringAndClear());
-    ScopedVclPtrInstance< MessageDialog > aQueryBox(pParent, aQuery, VclMessageType::Question, VclButtonsType::YesNo);
-    return ( aQueryBox->Execute() == RET_YES );
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pParent,
+                                                   VclMessageType::Question, VclButtonsType::YesNo, aQuery));
+    return (xQueryBox->run() == RET_YES);
 }
 
-bool QueryDelMacro( const OUString& rName, vcl::Window* pParent )
+bool QueryDelMacro( const OUString& rName, weld::Widget* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMACRO ), pParent );
 }
 
-bool QueryReplaceMacro( const OUString& rName, vcl::Window* pParent )
+bool QueryReplaceMacro( const OUString& rName, weld::Widget* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYREPLACEMACRO ), pParent );
 }
 
-bool QueryDelDialog( const OUString& rName, vcl::Window* pParent )
+bool QueryDelDialog( const OUString& rName, weld::Widget* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELDIALOG ), pParent );
 }
 
-bool QueryDelLib( const OUString& rName, bool bRef, vcl::Window* pParent )
+bool QueryDelLib( const OUString& rName, bool bRef, weld::Widget* pParent )
 {
     return QueryDel( rName, IDEResId( bRef ? RID_STR_QUERYDELLIBREF : RID_STR_QUERYDELLIB ), pParent );
 }
 
-bool QueryDelModule( const OUString& rName, vcl::Window* pParent )
+bool QueryDelModule( const OUString& rName, weld::Widget* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMODULE ), pParent );
 }
@@ -777,8 +783,10 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
 
                     if ( !bOK )
                     {
-                        ScopedVclPtrInstance< MessageDialog > aErrorBox(Application::GetDefDialogParent(), IDEResId(RID_STR_WRONGPASSWORD));
-                        aErrorBox->Execute();
+                        vcl::Window* pParent = Application::GetDefDialogParent();
+                        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+                                                                       VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_WRONGPASSWORD)));
+                        xErrorBox->run();
                     }
                 }
             }

@@ -20,6 +20,7 @@
 #include <config_features.h>
 #include <osl/process.h>
 #include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -143,9 +144,10 @@ IMPL_LINK( AboutDialog, HandleClick, Button*, pButton, void )
         Any exc( ::cppu::getCaughtException() );
         OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, msg);
-        aErrorBox->SetText( GetText() );
-        aErrorBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pButton->GetFrameWeld(),
+                                                       VclMessageType::Warning, VclButtonsType::Ok, msg));
+        xErrorBox->set_title(GetText());
+        xErrorBox->run();
     }
 }
 

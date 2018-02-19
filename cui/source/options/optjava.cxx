@@ -35,7 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/imagemgr.hxx>
@@ -538,13 +538,17 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
     }
     else if ( JFW_E_NOT_RECOGNIZED == eErr )
     {
-        ScopedVclPtrInstance< MessageDialog > aErrBox( this, CuiResId( RID_SVXSTR_JRE_NOT_RECOGNIZED ) );
-        aErrBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  CuiResId(RID_SVXSTR_JRE_NOT_RECOGNIZED)));
+        xBox->run();
     }
     else if ( JFW_E_FAILED_VERSION == eErr )
     {
-        ScopedVclPtrInstance< MessageDialog > aErrBox( this, CuiResId( RID_SVXSTR_JRE_FAILED_VERSION ) );
-        aErrBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  CuiResId(RID_SVXSTR_JRE_FAILED_VERSION)));
+        xBox->run();
     }
 
     if ( bStartAgain )
@@ -928,7 +932,9 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
         {
             OUString sMsg( CuiResId( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sFile );
-            ScopedVclPtrInstance<MessageDialog>(this, sMsg)->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Warning, VclButtonsType::Ok, sMsg));
+            xBox->run();
         }
     }
     EnableRemoveButton();
@@ -963,7 +969,9 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl, Button*, void)
         {
             OUString sMsg( CuiResId( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sNewFolder );
-            ScopedVclPtrInstance<MessageDialog>(this, sMsg)->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Warning, VclButtonsType::Ok, sMsg));
+            xBox->run();
         }
     }
     EnableRemoveButton();

@@ -3,7 +3,6 @@
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkMessageDialog" id="AskDelColorDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">6</property>
     <property name="title" translatable="yes" context="querydeletecolordialog|AskDelColorDialog">Delete color?</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
@@ -19,7 +18,6 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="messagedialog-action_area">
             <property name="can_focus">False</property>
-            <property name="layout_style">center</property>
           </object>
           <packing>
             <property name="expand">False</property>

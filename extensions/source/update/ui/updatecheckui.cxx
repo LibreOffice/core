@@ -40,7 +40,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/button.hxx>
@@ -544,7 +544,10 @@ IMPL_LINK_NOARG(UpdateCheckUI, ClickHdl, MenuBar::MenuBarButtonCallbackArg&, boo
             mrJob->execute( aEmpty );
         }
         catch(const uno::Exception&) {
-            ScopedVclPtrInstance<MessageDialog>(nullptr, Translate::get(STR_NO_WEBBROWSER_FOUND, maSfxLocale))->Execute();
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(nullptr,
+                                                           VclMessageType::Warning, VclButtonsType::Ok,
+                                                           Translate::get(STR_NO_WEBBROWSER_FOUND, maSfxLocale)));
+            xErrorBox->run();
         }
     }
 

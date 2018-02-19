@@ -62,7 +62,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/anytostring.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include "dp_gui.h"
@@ -145,7 +145,7 @@ public:
         , m_nCurrentProgress(0)
         {}
 
-    Dialog * activeDialog() { return m_pDialogHelper ? m_pDialogHelper->getWindow() : nullptr; }
+    weld::Window* activeDialog() { return m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr; }
 
     void startProgress();
     void stopProgress();
@@ -421,12 +421,12 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             verExc.Deployed->getDisplayName();
         {
             SolarMutexGuard guard;
-            ScopedVclPtrInstance<MessageDialog> box(m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr,
-                                                    DpResId(id), VclMessageType::Warning, VclButtonsType::OkCancel);
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr,
+                                                      VclMessageType::Warning, VclButtonsType::Ok, DpResId(id)));
             OUString s;
             if (bEqualNames)
             {
-                s = box->get_primary_text();
+                s = xBox->get_primary_text();
             }
             else if (!strcmp(id, RID_STR_WARNING_VERSION_EQUAL))
             {
@@ -447,8 +447,8 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             s = s.replaceAll("$OLDNAME", verExc.Deployed->getDisplayName());
             s = s.replaceAll("$NEW", getVersion(verExc.NewVersion));
             s = s.replaceAll("$DEPLOYED", getVersion(verExc.Deployed));
-            box->set_primary_text(s);
-            approve = box->Execute() == RET_OK;
+            xBox->set_primary_text(s);
+            approve = xBox->run() == RET_OK;
             abort = !approve;
         }
     }
@@ -476,8 +476,9 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         SolarMutexGuard guard;
         OUString sMsg(DpResId(RID_STR_UNSUPPORTED_PLATFORM));
         sMsg = sMsg.replaceAll("%Name", platExc.package->getDisplayName());
-        ScopedVclPtrInstance< MessageDialog > box(m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, sMsg);
-        box->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr,
+                                                  VclMessageType::Warning, VclButtonsType::Ok, sMsg));
+        xBox->run();
         approve = true;
     }
 
@@ -539,8 +540,9 @@ void ProgressCmdEnv::update_( uno::Any const & rStatus )
             text = ::comphelper::anyToString( rStatus ); // fallback
 
         const SolarMutexGuard aGuard;
-        ScopedVclPtrInstance< MessageDialog > aBox(m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, text);
-        aBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr,
+                                                  VclMessageType::Warning, VclButtonsType::Ok, text));
+        xBox->run();
     }
     ++m_nCurrentProgress;
     updateProgress();
@@ -781,11 +783,11 @@ void ExtensionCmdQueue::Thread::execute()
                     msg = ::comphelper::anyToString(exc);
 
                 const SolarMutexGuard guard;
-                ScopedVclPtr<MessageDialog> box(
-                    VclPtr<MessageDialog>::Create(currentCmdEnv->activeDialog(), msg));
-                if ( m_pDialogHelper )
-                    box->SetText( m_pDialogHelper->getWindow()->GetText() );
-                box->Execute();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(currentCmdEnv->activeDialog(),
+                                                          VclMessageType::Warning, VclButtonsType::Ok, msg));
+                if (m_pDialogHelper)
+                    xBox->set_title(m_pDialogHelper->getWindow()->GetText());
+                xBox->run();
                     //Continue with installation of the remaining extensions
             }
             {

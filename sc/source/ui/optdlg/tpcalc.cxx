@@ -21,6 +21,7 @@
 
 #include <scitems.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <global.hxx>
 #include <globstr.hrc>
@@ -235,9 +236,9 @@ DeactivateRC ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 
     if ( nReturn == DeactivateRC::KeepPage )
     {
-        ScopedVclPtrInstance<MessageDialog>( this,
-                  ScGlobal::GetRscString( STR_INVALID_EPS )
-                )->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning,
+                    VclButtonsType::Ok, ScGlobal::GetRscString(STR_INVALID_EPS)));
+        xBox->run();
 
         m_pEdEps->GrabFocus();
     }

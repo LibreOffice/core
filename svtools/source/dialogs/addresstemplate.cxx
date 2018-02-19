@@ -30,6 +30,7 @@
 #include <vcl/waitobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/ui/dialogs/AddressBookSourcePilot.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -723,7 +724,7 @@ void AssignmentPersistentData::ImplCommit()
             if (!m_xDatabaseContext.is())
             {
                 const OUString sContextServiceName("com.sun.star.sdb.DatabaseContext");
-                ShowServiceNotAvailableError( this, sContextServiceName, false);
+                ShowServiceNotAvailableError(GetFrameWeld(), sContextServiceName, false);
                 return;
             }
         }
@@ -774,7 +775,7 @@ void AssignmentPersistentData::ImplCommit()
         if (!xHandler.is())
         {
             const OUString sInteractionHandlerServiceName("com.sun.star.task.InteractionHandler");
-            ShowServiceNotAvailableError(this, sInteractionHandlerServiceName, true);
+            ShowServiceNotAvailableError(GetFrameWeld(), sInteractionHandlerServiceName, true);
             return;
         }
 
@@ -1141,7 +1142,7 @@ void AssignmentPersistentData::ImplCommit()
         catch(const Exception&) { }
         if (!xAdminDialog.is())
         {
-            ShowServiceNotAvailableError(this, "com.sun.star.ui.dialogs.AddressBookSourcePilot", true);
+            ShowServiceNotAvailableError(GetFrameWeld(), "com.sun.star.ui.dialogs.AddressBookSourcePilot", true);
             return;
         }
 

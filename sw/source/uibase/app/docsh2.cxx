@@ -30,8 +30,9 @@
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/configmgr.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/lckbitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/zforlist.hxx>
@@ -608,10 +609,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         std::shared_ptr<const SfxFilter> pFlt = GetMedium()->GetFilter();
                         if(!pFlt || pFlt->GetUserData() != pHtmlFlt->GetUserData())
                         {
-                            ScopedVclPtrInstance<MessageDialog> aQuery(&pViewFrame->GetWindow(),
-                                                                       "SaveAsHTMLDialog", "modules/swriter/ui/saveashtmldialog.ui");
-
-                            if(RET_YES == aQuery->Execute())
+                            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pViewFrame->GetWindow().GetFrameWeld(), "modules/swriter/ui/saveashtmldialog.ui"));
+                            std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("SaveAsHTMLDialog"));
+                            if (RET_YES == xQuery->run())
                                 bLocalHasName = false;
                             else
                                 break;

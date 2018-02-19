@@ -20,7 +20,8 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <svl/zforlist.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <limits.h>
 
 #include <scresid.hxx>
@@ -321,7 +322,9 @@ IMPL_LINK_NOARG(ScFillSeriesDlg, OKHdl, Button*, void)
         EndDialog( RET_OK );
     else
     {
-        ScopedVclPtrInstance<MessageDialog>(this, aErrMsgInvalidVal)->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Warning,
+                    VclButtonsType::Ok, aErrMsgInvalidVal));
+        xBox->run();
         pEdWrong->GrabFocus();
     }
 }

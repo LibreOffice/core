@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_GRAPHICHELPER_HXX
 
 #include <vcl/graph.hxx>
+#include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 
 #include <com/sun/star/drawing/XShape.hpp>
@@ -32,7 +33,7 @@ public:
     static void GetPreferredExtension( OUString& rExtension, const Graphic& rGraphic );
     static OUString ExportGraphic(const vcl::Window* pWin, const Graphic& rGraphic, const OUString& rGraphicName);
     static void SaveShapeAsGraphic(const vcl::Window* pWin, const css::uno::Reference< css::drawing::XShape >& xShape);
-    static short HasToSaveTransformedImage(vcl::Window* pWin);
+    static short HasToSaveTransformedImage(weld::Widget* pWin);
 };
 
 

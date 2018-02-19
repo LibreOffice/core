@@ -83,24 +83,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::system;
 
-namespace old
-{
-    class NoHelpErrorBox : public MessageDialog
-    {
-    public:
-        explicit NoHelpErrorBox(vcl::Window* _pParent)
-            : MessageDialog(_pParent, SfxResId(RID_STR_HLPFILENOTEXIST))
-        {
-            // Error message: "No help available"
-        }
-
-        virtual void RequestHelp( const HelpEvent& ) override
-        {
-            // do nothing, because no help available
-        }
-    };
-}
-
 class NoHelpErrorBox
 {
 private:
@@ -836,14 +818,14 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
 
     if ( !impl_hasHelpInstalled() )
     {
-        ScopedVclPtrInstance< MessageDialog > aQueryBox(const_cast< vcl::Window* >( pWindow ),
-                                                        "onlinehelpmanual", "sfx/ui/helpmanual.ui");
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWindow ? pWindow->GetFrameWeld() : nullptr, "sfx/ui/helpmanual.ui"));
+        std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("onlinehelpmanual"));
 
         LanguageTag aLangTag = Application::GetSettings().GetUILanguageTag();
         OUString sLocaleString = SvtLanguageTable::GetLanguageString( aLangTag.getLanguageType() );
-        OUString sPrimTex = aQueryBox->get_primary_text();
-        aQueryBox->set_primary_text(sPrimTex.replaceAll("$UILOCALE", sLocaleString));
-        short OnlineHelpBox = aQueryBox->Execute();
+        OUString sPrimTex = xQueryBox->get_primary_text();
+        xQueryBox->set_primary_text(sPrimTex.replaceAll("$UILOCALE", sLocaleString));
+        short OnlineHelpBox = xQueryBox->run();
 
         if(OnlineHelpBox == RET_OK)
         {
@@ -851,8 +833,8 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
                 return true;
             else
             {
-                ScopedVclPtrInstance< old::NoHelpErrorBox > aErrBox(const_cast< vcl::Window* >( pWindow ));
-                aErrBox->Execute();
+                NoHelpErrorBox aErrBox(pWindow ? pWindow->GetFrameWeld() : nullptr);
+                aErrBox.run();
                 return false;
             }
         }

@@ -59,8 +59,8 @@
 #include <unotools/configmgr.hxx>
 #include <tools/svlibrary.h>
 #include <tools/diagnose_ex.h>
-#include <vcl/layout.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/weld.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -1605,7 +1605,10 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             SvtModuleOptions aModuleOpt;
             if ( !aModuleOpt.IsImpress() )
             {
-                ScopedVclPtrInstance<MessageDialog>( nullptr, SfxResId( STR_MODULENOTINSTALLED ))->Execute();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                                         VclMessageType::Warning, VclButtonsType::Ok,
+                                                                         SfxResId(STR_MODULENOTINSTALLED)));
+                xBox->run();
                 return;
             }
 

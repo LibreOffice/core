@@ -27,8 +27,8 @@
 #include <com/sun/star/java/JavaVMCreationFailureException.hpp>
 #include <com/sun/star/java/RestartRequiredException.hpp>
 #include <comphelper/processfactory.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <jvmfwk/framework.hxx>
 
 #include <svtools/restartdialog.hxx>
@@ -90,7 +90,6 @@ void SAL_CALL JavaInteractionHandler::release(  ) throw ()
         delete this;
 }
 
-
 void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionRequest >& Request )
 {
     Any anyExc = Request->getRequest();
@@ -131,20 +130,23 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
            // No suitable JRE found
             g_JavaEvents.bNotFoundHandled = true;
 #if defined( MACOSX )
-            ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_JAVANOTFOUND_MAC), VclMessageType::Warning);
+            std::unique_ptr<weld::MessageDialog> xWarningBox(Application::CreateMessageDialog(nullptr,
+                                                             VclMessageType::Warning, VclButtonsType::Ok, SvtResId(STR_WARNING_JAVANOTFOUND_MAC)));
 #elif defined( _WIN32 )
-            ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_JAVANOTFOUND_WIN), VclMessageType::Warning);
-            OUString sPrimTex = aWarningBox->get_primary_text();
+            std::unique_ptr<weld::MessageDialog> xWarningBox(Application::CreateMessageDialog(nullptr,
+                                                             VclMessageType::Warning, VclButtonsType::Ok, SvtResId(STR_WARNING_JAVANOTFOUND_WIN)));
+            OUString sPrimTex = xWarningBox->get_primary_text();
 #if defined( _WIN64 )
-            aWarningBox->set_primary_text(sPrimTex.replaceAll( "%BITNESS", "64" ));
+            xWarningBox->set_primary_text(sPrimTex.replaceAll( "%BITNESS", "64" ));
 #else
-            aWarningBox->set_primary_text(sPrimTex.replaceAll( "%BITNESS", "32" ));
+            xWarningBox->set_primary_text(sPrimTex.replaceAll( "%BITNESS", "32" ));
 #endif
 #else
-            ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_JAVANOTFOUND), VclMessageType::Warning);
+            std::unique_ptr<weld::MessageDialog> xWarningBox(Application::CreateMessageDialog(nullptr,
+                                                             VclMessageType::Warning, VclButtonsType::Ok, SvtResId(STR_WARNING_JAVANOTFOUND)));
 #endif
-            aWarningBox->SetText(SvtResId(STR_WARNING_JAVANOTFOUND_TITLE));
-            nResult = aWarningBox->Execute();
+            xWarningBox->set_title(SvtResId(STR_WARNING_JAVANOTFOUND_TITLE));
+            nResult = xWarningBox->run();
         }
         else
         {
@@ -159,12 +161,14 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
            // javavendors.xml was updated and Java has not been configured yet
             g_JavaEvents.bInvalidSettingsHandled = true;
 #ifdef MACOSX
-            ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_INVALIDJAVASETTINGS_MAC), VclMessageType::Warning);
+            OUString sWarning(SvtResId(STR_WARNING_INVALIDJAVASETTINGS_MAC));
 #else
-            ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_INVALIDJAVASETTINGS), VclMessageType::Warning);
+            OUString sWarning(SvtResId(STR_WARNING_INVALIDJAVASETTINGS));
 #endif
-            aWarningBox->SetText(SvtResId(STR_WARNING_INVALIDJAVASETTINGS_TITLE));
-            nResult = aWarningBox->Execute();
+            std::unique_ptr<weld::MessageDialog> xWarningBox(Application::CreateMessageDialog(nullptr,
+                                                             VclMessageType::Warning, VclButtonsType::Ok, sWarning));
+            xWarningBox->set_title(SvtResId(STR_WARNING_INVALIDJAVASETTINGS_TITLE));
+            nResult = xWarningBox->run();
         }
         else
         {
@@ -178,9 +182,9 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
         {
             g_JavaEvents.bDisabledHandled = true;
             // Java disabled. Give user a chance to enable Java inside Office.
-            ScopedVclPtrInstance<MessageDialog> aQueryBox(nullptr , "JavaDisabledDialog",
-                                                          "svt/ui/javadisableddialog.ui");
-            nResult = aQueryBox->Execute();
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "svt/ui/javadisableddialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("JavaDisabledDialog"));
+            nResult = xQueryBox->run();
             if ( nResult == RET_YES )
             {
                 jfw_setEnabled(true);
@@ -202,12 +206,14 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             // Java not correctly installed, or damaged
             g_JavaEvents.bVMCreationFailureHandled = true;
 #ifdef MACOSX
-            ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, SvtResId(STR_ERROR_JVMCREATIONFAILED_MAC));
+            OUString sWarning(SvtResId(STR_ERROR_JVMCREATIONFAILED_MAC));
 #else
-            ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, SvtResId(STR_ERROR_JVMCREATIONFAILED));
+            OUString sWarning(SvtResId(STR_ERROR_JVMCREATIONFAILED));
 #endif
-            aErrorBox->SetText(SvtResId(STR_ERROR_JVMCREATIONFAILED_TITLE));
-            nResult = aErrorBox->Execute();
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(nullptr,
+                                                           VclMessageType::Warning, VclButtonsType::Ok, sWarning));
+            xErrorBox->set_title(SvtResId(STR_ERROR_JVMCREATIONFAILED_TITLE));
+            nResult = xErrorBox->run();
         }
         else
         {

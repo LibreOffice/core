@@ -49,6 +49,7 @@
 #include <svl/whiter.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 namespace basctl
 {
@@ -358,7 +359,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                         OUString aLibName = pModWin->GetLibName();
                         ScriptDocument aDocument( pWin->GetDocument() );
 
-                        if (RenameModule(pModWin, aDocument, aLibName, aOldName, aNewName))
+                        if (RenameModule(pModWin->GetFrameWeld(), aDocument, aLibName, aOldName, aNewName))
                         {
                             bRenameOk = true;
                             // Because we listen for container events for script

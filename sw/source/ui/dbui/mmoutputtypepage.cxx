@@ -21,6 +21,7 @@
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/messagedialog.hxx>
 #include <dbui.hrc>
 #include <strings.hrc>
 #include <bitmaps.hlst>

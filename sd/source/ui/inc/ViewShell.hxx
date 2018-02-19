@@ -42,6 +42,11 @@ class ScrollBarBox;
 class SdDrawDocument;
 class ScrollBar;
 
+namespace weld
+{
+    class Window;
+}
+
 namespace com { namespace sun { namespace star {
 namespace embed {
     class XEmbeddedObject;
@@ -155,6 +160,7 @@ public:
         show running then the active window is a ShowWindow.
     */
     ::sd::Window* GetActiveWindow() const { return mpActiveWindow;}
+    weld::Window* GetFrameWeld() const;
 
     /** Set the active window.  When the shell is displayed in the center
         pane then the window of the ViewShellBase is also set to the given

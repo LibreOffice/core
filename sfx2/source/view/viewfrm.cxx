@@ -40,7 +40,7 @@
 #include <svl/slstitm.hxx>
 #include <svl/whiter.hxx>
 #include <svl/undo.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/ehdl.hxx>
@@ -154,35 +154,25 @@ void SfxViewFrame::InitInterface_Impl()
 
 namespace {
 /// Asks the user if editing a read-only document is really wanted.
-class SfxEditDocumentDialog : public MessageDialog
+class SfxEditDocumentDialog
 {
 private:
-    VclPtr<PushButton> m_pEditDocument;
-    VclPtr<PushButton> m_pCancel;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::MessageDialog> m_xDialog;
+    std::unique_ptr<weld::Button> m_xEditDocument;
+    std::unique_ptr<weld::Button> m_xCancel;
 
 public:
-    SfxEditDocumentDialog(vcl::Window* pParent);
-    ~SfxEditDocumentDialog() override;
-    void dispose() override;
+    SfxEditDocumentDialog(weld::Widget* pParent);
+    short run() { return m_xDialog->run(); }
 };
 
-SfxEditDocumentDialog::SfxEditDocumentDialog(vcl::Window* pParent)
-    : MessageDialog(pParent, "EditDocumentDialog", "sfx/ui/editdocumentdialog.ui")
+SfxEditDocumentDialog::SfxEditDocumentDialog(weld::Widget* pParent)
+    : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/editdocumentdialog.ui"))
+    , m_xDialog(m_xBuilder->weld_message_dialog("EditDocumentDialog"))
+    , m_xEditDocument(m_xBuilder->weld_button("edit"))
+    , m_xCancel(m_xBuilder->weld_button("cancel"))
 {
-    get(m_pEditDocument, "edit");
-    get(m_pCancel, "cancel");
-}
-
-SfxEditDocumentDialog::~SfxEditDocumentDialog()
-{
-    disposeOnce();
-}
-
-void SfxEditDocumentDialog::dispose()
-{
-    m_pEditDocument.clear();
-    m_pCancel.clear();
-    MessageDialog::dispose();
 }
 
 class SfxQueryOpenAsTemplate : public QueryBox
@@ -588,9 +578,10 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if ( bDo && GetFrame().DocIsModified_Impl() &&
                  !rReq.IsAPI() && ( !pSilentItem || !pSilentItem->GetValue() ) )
             {
-                ScopedVclPtrInstance<MessageDialog> aBox(&GetWindow(), SfxResId(STR_QUERY_LASTVERSION),
-                                   VclMessageType::Question, VclButtonsType::YesNo);
-                bDo = ( RET_YES == aBox->Execute() );
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetWindow().GetFrameWeld(),
+                                                                         VclMessageType::Question, VclButtonsType::YesNo,
+                                                                         SfxResId(STR_QUERY_LASTVERSION)));
+                bDo = RET_YES == xBox->run();
             }
 
             if ( bDo )
@@ -756,9 +747,10 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     if ( bForEdit && ( SID_EDITDOC == rReq.GetSlot() || SID_READONLYDOC == rReq.GetSlot() ) )
                     {
                         // ask user for opening as template
-                        ScopedVclPtrInstance<MessageDialog> aBox(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
-                                           VclMessageType::Question, VclButtonsType::YesNo);
-                        if ( RET_YES == aBox->Execute() )
+                        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetWindow().GetFrameWeld(),
+                                                                                 VclMessageType::Question, VclButtonsType::YesNo,
+                                                                                 SfxResId(STR_QUERY_OPENASTEMPLATE)));
+                        if (RET_YES == xBox->run())
                         {
                             SfxAllItemSet aSet( pApp->GetPool() );
                             aSet.Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );
@@ -1345,12 +1337,12 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
-IMPL_LINK_NOARG(SfxViewFrame, SwitchReadOnlyHandler, Button*, void)
+IMPL_LINK(SfxViewFrame, SwitchReadOnlyHandler, Button*, pButton, void)
 {
     if (m_xObjSh.is() && IsSignPDF(m_xObjSh))
     {
-        ScopedVclPtrInstance<SfxEditDocumentDialog> pDialog(nullptr);
-        if (pDialog->Execute() != RET_OK)
+        SfxEditDocumentDialog aDialog(pButton->GetFrameWeld());
+        if (aDialog.run() != RET_OK)
             return;
     }
     GetDispatcher()->Execute(SID_EDITDOC);

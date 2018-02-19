@@ -21,6 +21,7 @@
 
 #include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <global.hxx>
 #include <document.hxx>
@@ -692,9 +693,11 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
         }
         else
         {
-            ScopedVclPtrInstance<MessageDialog>(this,
-                      ScGlobal::GetRscString( STR_INVALID_TABREF )
-                    )->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                        VclMessageType::Warning, VclButtonsType::Ok,
+                        ScGlobal::GetRscString(STR_INVALID_TABREF)));
+
+            xBox->run();
             mpEdCopyFrom->GrabFocus();
             mpEdCopyFrom->SetSelection( Selection( 0, SELECTION_MAX ) );
         }

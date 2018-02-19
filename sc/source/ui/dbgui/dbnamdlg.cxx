@@ -24,6 +24,7 @@
 
 #include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <reffact.hxx>
 #include <document.hxx>
@@ -38,7 +39,16 @@ class DBSaveData;
 
 static DBSaveData* pSaveObj = nullptr;
 
-#define ERRORBOX(s) ScopedVclPtrInstance<MessageDialog>(this, s)->Execute()
+namespace
+{
+    void ERRORBOX(weld::Window* pParent, const OUString& rString)
+    {
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  rString));
+        xBox->run();
+    }
+}
 
 //  class DBSaveData
 
@@ -479,14 +489,14 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, Button*, void)
             }
             else
             {
-                ERRORBOX( aStrInvalid );
+                ERRORBOX(GetFrameWeld(), aStrInvalid);
                 m_pEdAssign->SetSelection( Selection( 0, SELECTION_MAX ) );
                 m_pEdAssign->GrabFocus();
             }
         }
         else
         {
-            ERRORBOX( ScGlobal::GetRscString(STR_INVALIDNAME) );
+            ERRORBOX(GetFrameWeld(), ScGlobal::GetRscString(STR_INVALIDNAME));
             m_pEdName->SetSelection( Selection( 0, SELECTION_MAX ) );
             m_pEdName->GrabFocus();
         }

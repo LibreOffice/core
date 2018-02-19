@@ -459,7 +459,7 @@ namespace dbp
         return initContext();
     }
 
-    Reference< XInteractionHandler > OControlWizard::getInteractionHandler(vcl::Window* _pWindow) const
+    Reference< XInteractionHandler > OControlWizard::getInteractionHandler(weld::Window* _pWindow) const
     {
         Reference< XInteractionHandler > xHandler;
         try
@@ -613,7 +613,7 @@ namespace dbp
             aContext.NextException = aSQLException;
 
             // create an interaction handler to display this exception
-            Reference< XInteractionHandler > xHandler = getInteractionHandler(this);
+            Reference< XInteractionHandler > xHandler = getInteractionHandler(GetFrameWeld());
             if ( !xHandler.is() )
                 return false;
 

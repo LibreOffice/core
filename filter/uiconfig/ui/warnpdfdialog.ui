@@ -23,7 +23,6 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="messagedialog-action_area">
             <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
           </object>
           <packing>
             <property name="expand">False</property>

@@ -303,8 +303,8 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
                 // really store as link only?
                 if( bAsLink && SvtMiscOptions().ShowLinkWarningDialog() )
                 {
-                    ScopedVclPtrInstance< SvxLinkWarningDialog > aWarnDlg(pWin,aFileName);
-                    if( aWarnDlg->Execute() != RET_OK )
+                    SvxLinkWarningDialog aWarnDlg(pWin ? pWin->GetFrameWeld() : nullptr, aFileName);
+                    if (aWarnDlg.run() != RET_OK)
                         bAsLink = false; // don't store as link
                 }
 
@@ -377,7 +377,7 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
                 pWin->LeaveWait();
 
             if( !bAPI )
-                ::avmedia::MediaWindow::executeFormatErrorBox( pWindow );
+                ::avmedia::MediaWindow::executeFormatErrorBox(pWindow ? pWindow->GetFrameWeld() : nullptr);
         }
         else
 #endif

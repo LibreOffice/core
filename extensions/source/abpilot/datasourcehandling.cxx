@@ -48,6 +48,7 @@
 #include <unotools/confignode.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -514,7 +515,7 @@ namespace abp
     }
 
 
-    bool ODataSource::connect( vcl::Window* _pMessageParent )
+    bool ODataSource::connect(weld::Window* _pMessageParent)
     {
         if ( isConnected( ) )
             // nothing to do

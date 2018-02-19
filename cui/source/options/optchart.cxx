@@ -22,6 +22,7 @@
 #include <dialmgr.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svxids.hrc>
 
@@ -286,7 +287,7 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, AddChartColor, Button*, void)
 // RemoveChartColor
 
 
-IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, Button*, pButton, void )
+IMPL_LINK_NOARG( SvxDefaultColorOptPage, RemoveChartColor, Button*, void )
 {
     sal_Int32 nIndex = m_pLbChartColors->GetSelectedEntryPos();
 
@@ -297,9 +298,10 @@ IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, Button*, pButton, void )
     {
         OSL_ENSURE(pColorConfig->GetColorList().size() > 1, "don't delete the last chart color");
 
-        ScopedVclPtrInstance<MessageDialog> aQuery(pButton, "QueryDeleteChartColorDialog",
-                                                   "cui/ui/querydeletechartcolordialog.ui");
-        if (RET_YES == aQuery->Execute())
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletechartcolordialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryDeleteChartColorDialog"));
+
+        if (RET_YES == xQuery->run())
         {
             pColorConfig->GetColorList().remove( nIndex  );
 

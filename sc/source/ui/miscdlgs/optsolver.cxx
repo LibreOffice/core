@@ -24,6 +24,7 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 
 #include <uiitems.hxx>
@@ -778,7 +779,10 @@ IMPL_LINK( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit&, rEdit, void )
 void ScOptSolverDlg::ShowError( bool bCondition, formula::RefEdit* pFocus )
 {
     OUString aMessage = bCondition ? maConditionError : maInputError;
-    ScopedVclPtrInstance<MessageDialog>(this, aMessage)->Execute();
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                              VclMessageType::Warning, VclButtonsType::Ok,
+                                              aMessage));
+    xBox->run();
     if (pFocus)
     {
         mpEdActive = pFocus;

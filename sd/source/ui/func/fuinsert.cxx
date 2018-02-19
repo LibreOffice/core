@@ -191,8 +191,8 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
                 // really store as link only?
                 if( SvtMiscOptions().ShowLinkWarningDialog() )
                 {
-                    ScopedVclPtrInstance< SvxLinkWarningDialog > aWarnDlg(mpWindow, aFileName);
-                    if( aWarnDlg->Execute() != RET_OK )
+                    SvxLinkWarningDialog aWarnDlg(mpWindow->GetFrameWeld(), aFileName);
+                    if (aWarnDlg.run() != RET_OK)
                         return; // don't store as link
                 }
 
@@ -726,7 +726,7 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
                 mpWindow->LeaveWait();
 
             if( !bAPI )
-                ::avmedia::MediaWindow::executeFormatErrorBox( mpWindow );
+                ::avmedia::MediaWindow::executeFormatErrorBox(mpWindow->GetFrameWeld());
         }
         else
         {

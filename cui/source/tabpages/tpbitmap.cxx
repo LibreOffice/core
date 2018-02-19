@@ -38,7 +38,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/opengrf.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <svx/svxdlg.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dialoghelper.hxx>
@@ -584,10 +584,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
             }
             else
             {
-                ScopedVclPtrInstance<MessageDialog> aBox( GetParentDialog()
-                                                            ,"DuplicateNameDialog"
-                                                            ,"cui/ui/queryduplicatedialog.ui" );
-                aBox->Execute();
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+                std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+                xBox->run();
             }
         }
     }
@@ -600,9 +599,10 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        ScopedVclPtrInstance< MessageDialog > aQueryBox( GetParentDialog(),"AskDelBitmapDialog","cui/ui/querydeletebitmapdialog.ui" );
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletebitmapdialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("AskDelBitmapDialog"));
 
-        if( aQueryBox->Execute() == RET_YES )
+        if (xQueryBox->run() == RET_YES)
         {
             m_pBitmapList->Remove( static_cast<sal_uInt16>(nPos) );
             m_pBitmapLB->RemoveItem( nId );
@@ -772,7 +772,6 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, Button*, void)
         if( !nError )
         {
             OUString aDesc(CuiResId(RID_SVXSTR_DESC_EXT_BITMAP));
-            ScopedVclPtr<MessageDialog> pWarnBox;
 
             // convert file URL to UI name
             OUString        aName;
@@ -798,19 +797,13 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, Button*, void)
                     break;
                 }
 
-                if( !pWarnBox )
-                {
-                    pWarnBox.disposeAndReset(VclPtr<MessageDialog>::Create( GetParentDialog()
-                                                 ,"DuplicateNameDialog"
-                                                 ,"cui/ui/queryduplicatedialog.ui"));
-                }
-
-                if( pWarnBox->Execute() != RET_OK )
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+                std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+                if (xBox->run() != RET_OK)
                     break;
             }
 
             pDlg.disposeAndClear();
-            pWarnBox.disposeAndClear();
 
             if( !nError )
             {
@@ -827,10 +820,12 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, Button*, void)
             }
         }
         else
+        {
             // graphic couldn't be loaded
-            ScopedVclPtrInstance<MessageDialog>( GetParentDialog()
-                          ,"NoLoadedFileDialog"
-                          ,"cui/ui/querynoloadedfiledialog.ui")->Execute();
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querynoloadedfiledialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("NoLoadedFileDialog"));
+            xBox->run();
+        }
     }
 }
 

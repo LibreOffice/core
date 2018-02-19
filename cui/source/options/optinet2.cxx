@@ -39,7 +39,7 @@
 #include <sfx2/objsh.hxx>
 #include <unotools/bootstrap.hxx>
 #include <vcl/help.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/builderfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <unotools/pathoptions.hxx>
@@ -138,7 +138,6 @@ void SvxNoSpaceEdit::KeyInput( const KeyEvent& rKEvent )
         Edit::KeyInput(rKEvent);
 }
 
-
 void SvxNoSpaceEdit::Modify()
 {
     Edit::Modify();
@@ -146,7 +145,12 @@ void SvxNoSpaceEdit::Modify()
     if ( bOnlyNumeric )
     {
         if ( !isValidPort(GetText()) )
-            ScopedVclPtrInstance<MessageDialog>(this, CuiResId( RID_SVXSTR_OPT_PROXYPORTS))->Execute();
+        {
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                           VclMessageType::Warning, VclButtonsType::Ok,
+                                                           CuiResId( RID_SVXSTR_OPT_PROXYPORTS)));
+            xErrorBox->run();
+        }
     }
 }
 
