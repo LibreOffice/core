@@ -263,17 +263,8 @@ Gallery::~Gallery()
 
 Gallery* Gallery::GetGalleryInstance()
 {
-    static Gallery* s_pGallery = nullptr;
-
-    if (!s_pGallery)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (!s_pGallery && !utl::ConfigManager::IsFuzzing())
-        {
-            s_pGallery = new Gallery( SvtPathOptions().GetGalleryPath() );
-        }
-    }
-
+    static Gallery* s_pGallery = utl::ConfigManager::IsFuzzing()
+        ? nullptr : new Gallery( SvtPathOptions().GetGalleryPath() );
     return s_pGallery;
 }
 
