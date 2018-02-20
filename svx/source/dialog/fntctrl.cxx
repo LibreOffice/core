@@ -99,8 +99,8 @@ void initFont(vcl::Font& rFont)
 void setFontSize(vcl::Font& rFont)
 {
     Size aSize(rFont.GetFontSize());
-    aSize.Height() = (aSize.Height() * 3) / 5;
-    aSize.Width() = (aSize.Width() * 3) / 5;
+    aSize.setHeight( (aSize.Height() * 3) / 5 );
+    aSize.setWidth( (aSize.Width() * 3) / 5 );
     rFont.SetFontSize(aSize);
 }
 
@@ -421,7 +421,7 @@ void FontPrevWin_Impl::DrawPrev(vcl::RenderContext& rRenderContext, Printer* _pP
 
         rFont.DrawPrev(&rRenderContext, _pPrinter, rPt, maText, nStart, nEnd - nStart);
 
-        rPt.X() += maTextWidth[nIdx++];
+        rPt.AdjustX(maTextWidth[nIdx++] );
         if (nEnd < maText.getLength() && nIdx < nCnt)
         {
             nStart = nEnd;

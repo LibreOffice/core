@@ -60,14 +60,14 @@ tools::Rectangle SdrHelpLine::GetBoundRect(const OutputDevice& rOut) const
     Point aOfs(rOut.GetMapMode().GetOrigin());
     Size aSiz(rOut.GetOutputSize());
     switch (eKind) {
-        case SdrHelpLineKind::Vertical  : aRet.Top()=-aOfs.Y(); aRet.Bottom()=-aOfs.Y()+aSiz.Height(); break;
-        case SdrHelpLineKind::Horizontal: aRet.Left()=-aOfs.X(); aRet.Right()=-aOfs.X()+aSiz.Width();  break;
+        case SdrHelpLineKind::Vertical  : aRet.SetTop(-aOfs.Y() ); aRet.SetBottom(-aOfs.Y()+aSiz.Height() ); break;
+        case SdrHelpLineKind::Horizontal: aRet.SetLeft(-aOfs.X() ); aRet.SetRight(-aOfs.X()+aSiz.Width() );  break;
         case SdrHelpLineKind::Point     : {
             Size aRad(rOut.PixelToLogic(Size(SDRHELPLINE_POINT_PIXELSIZE,SDRHELPLINE_POINT_PIXELSIZE)));
-            aRet.Left()  -=aRad.Width();
-            aRet.Right() +=aRad.Width();
-            aRet.Top()   -=aRad.Height();
-            aRet.Bottom()+=aRad.Height();
+            aRet.AdjustLeft( -(aRad.Width()) );
+            aRet.AdjustRight(aRad.Width() );
+            aRet.AdjustTop( -(aRad.Height()) );
+            aRet.AdjustBottom(aRad.Height() );
         } break;
     } // switch
     return aRet;

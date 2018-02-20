@@ -198,9 +198,9 @@ void SdrTextObj::FitFrameToTextSize()
     rOutliner.SetText(*pText->GetOutlinerParaObject());
     Size aNewSize(rOutliner.CalcTextSize());
     rOutliner.Clear();
-    aNewSize.Width()++; // because of possible rounding errors
-    aNewSize.Width()+=GetTextLeftDistance()+GetTextRightDistance();
-    aNewSize.Height()+=GetTextUpperDistance()+GetTextLowerDistance();
+    aNewSize.AdjustWidth( 1 ); // because of possible rounding errors
+    aNewSize.AdjustWidth(GetTextLeftDistance()+GetTextRightDistance() );
+    aNewSize.AdjustHeight(GetTextUpperDistance()+GetTextLowerDistance() );
     tools::Rectangle aNewRect(maRect);
     aNewRect.SetSize(aNewSize);
     ImpJustifyRect(aNewRect);
@@ -397,8 +397,8 @@ void SdrTextObj::ImpJustifyRect(tools::Rectangle& rRect)
 {
     if (!rRect.IsEmpty()) {
         rRect.Justify();
-        if (rRect.Left()==rRect.Right()) rRect.Right()++;
-        if (rRect.Top()==rRect.Bottom()) rRect.Bottom()++;
+        if (rRect.Left()==rRect.Right()) rRect.AdjustRight( 1 );
+        if (rRect.Top()==rRect.Bottom()) rRect.AdjustBottom( 1 );
     }
 }
 
@@ -648,10 +648,10 @@ void SdrTextObj::TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const
         TakeUnrotatedSnapRect(aAnkRect);
     }
     Point aRotateRef(aAnkRect.TopLeft());
-    aAnkRect.Left()+=nLeftDist;
-    aAnkRect.Top()+=nUpperDist;
-    aAnkRect.Right()-=nRightDist;
-    aAnkRect.Bottom()-=nLowerDist;
+    aAnkRect.AdjustLeft(nLeftDist );
+    aAnkRect.AdjustTop(nUpperDist );
+    aAnkRect.AdjustRight( -nRightDist );
+    aAnkRect.AdjustBottom( -nLowerDist );
 
     // Since sizes may be bigger than the object bounds it is necessary to
     // justify the rect now.
@@ -659,8 +659,8 @@ void SdrTextObj::TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const
 
     if (bFrame) {
         // TODO: Optimize this.
-        if (aAnkRect.GetWidth()<2) aAnkRect.Right()=aAnkRect.Left()+1; // minimum size h and v: 2 px
-        if (aAnkRect.GetHeight()<2) aAnkRect.Bottom()=aAnkRect.Top()+1;
+        if (aAnkRect.GetWidth()<2) aAnkRect.SetRight(aAnkRect.Left()+1 ); // minimum size h and v: 2 px
+        if (aAnkRect.GetHeight()<2) aAnkRect.SetBottom(aAnkRect.Top()+1 );
     }
     if (aGeo.nRotationAngle!=0) {
         Point aTmpPt(aAnkRect.TopLeft());
@@ -819,17 +819,17 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
     {
         long nFreeWdt=aAnkRect.GetWidth()-aTextSiz.Width();
         if (eHAdj==SDRTEXTHORZADJUST_CENTER)
-            aTextPos.X()+=nFreeWdt/2;
+            aTextPos.AdjustX(nFreeWdt/2 );
         if (eHAdj==SDRTEXTHORZADJUST_RIGHT)
-            aTextPos.X()+=nFreeWdt;
+            aTextPos.AdjustX(nFreeWdt );
     }
     if (eVAdj==SDRTEXTVERTADJUST_CENTER || eVAdj==SDRTEXTVERTADJUST_BOTTOM)
     {
         long nFreeHgt=aAnkRect.GetHeight()-aTextSiz.Height();
         if (eVAdj==SDRTEXTVERTADJUST_CENTER)
-            aTextPos.Y()+=nFreeHgt/2;
+            aTextPos.AdjustY(nFreeHgt/2 );
         if (eVAdj==SDRTEXTVERTADJUST_BOTTOM)
-            aTextPos.Y()+=nFreeHgt;
+            aTextPos.AdjustY(nFreeHgt );
     }
     if (aGeo.nRotationAngle!=0)
         RotatePoint(aTextPos,aAnkRect.TopLeft(),aGeo.nSin,aGeo.nCos);
@@ -1929,14 +1929,14 @@ GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
 
     if(SdrTextAniDirection::Left == eDirection || SdrTextAniDirection::Right == eDirection)
     {
-        aScrollFrameRect.Left() = aAnchorRect.Left();
-        aScrollFrameRect.Right() = aAnchorRect.Right();
+        aScrollFrameRect.SetLeft( aAnchorRect.Left() );
+        aScrollFrameRect.SetRight( aAnchorRect.Right() );
     }
 
     if(SdrTextAniDirection::Up == eDirection || SdrTextAniDirection::Down == eDirection)
     {
-        aScrollFrameRect.Top() = aAnchorRect.Top();
-        aScrollFrameRect.Bottom() = aAnchorRect.Bottom();
+        aScrollFrameRect.SetTop( aAnchorRect.Top() );
+        aScrollFrameRect.SetBottom( aAnchorRect.Bottom() );
     }
 
     // create the MetaFile

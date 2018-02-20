@@ -1457,8 +1457,8 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt)
                 pGrid->DeactivateCell();
 
             ::tools::Rectangle aColRect = pGrid->GetFieldRect(nId);
-            aColRect.Top() = 0;
-            aColRect.Bottom() = pGrid->GetSizePixel().Height();
+            aColRect.SetTop( 0 );
+            aColRect.SetBottom( pGrid->GetSizePixel().Height() );
             pGrid->Invalidate(aColRect);
 
             if (bWasEditing)

@@ -1375,10 +1375,10 @@ void E3dView::Start3DCreation()
         }
     }
 
-    maRef1.X() = basegfx::fround(aR.getMinX());    // Initial move axis 2/100mm to the left
-    maRef1.Y() = nY1;
-    maRef2.X() = maRef1.X();
-    maRef2.Y() = nY2;
+    maRef1.setX( basegfx::fround(aR.getMinX()) );    // Initial move axis 2/100mm to the left
+    maRef1.setY( nY1 );
+    maRef2.setX( maRef1.X() );
+    maRef2.setY( nY2 );
 
     // Turn on marks
     SetMarkHandles(nullptr);

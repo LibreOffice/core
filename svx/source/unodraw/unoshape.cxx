@@ -2065,8 +2065,8 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
             basegfx::B2DHomMatrix aNewHomogenMatrix;
             mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
 
-            aVclPoint.X() += basegfx::fround(aNewHomogenMatrix.get(0, 2));
-            aVclPoint.Y() += basegfx::fround(aNewHomogenMatrix.get(1, 2));
+            aVclPoint.AdjustX(basegfx::fround(aNewHomogenMatrix.get(0, 2)) );
+            aVclPoint.AdjustY(basegfx::fround(aNewHomogenMatrix.get(1, 2)) );
 
             // #88657# metric of pool maybe twips (writer)
             ForceMetricToItemPoolMetric(aVclPoint);
@@ -2514,8 +2514,8 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
         basegfx::B2DHomMatrix aNewHomogenMatrix;
         mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
 
-        aVclPoint.X() -= basegfx::fround(aNewHomogenMatrix.get(0, 2));
-        aVclPoint.Y() -= basegfx::fround(aNewHomogenMatrix.get(1, 2));
+        aVclPoint.AdjustX( -(basegfx::fround(aNewHomogenMatrix.get(0, 2))) );
+        aVclPoint.AdjustY( -(basegfx::fround(aNewHomogenMatrix.get(1, 2))) );
 
         awt::Point aPnt( aVclPoint.X(), aVclPoint.Y() );
         rValue <<= aPnt;

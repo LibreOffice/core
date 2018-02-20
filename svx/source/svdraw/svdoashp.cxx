@@ -1669,10 +1669,10 @@ SdrGluePoint SdrObjCustomShape::GetVertexGluePoint(sal_uInt16 nPosNum) const
 
     Point aPt;
     switch (nPosNum) {
-        case 0: aPt=maRect.TopCenter();    aPt.Y()-=nWdt; break;
-        case 1: aPt=maRect.RightCenter();  aPt.X()+=nWdt; break;
-        case 2: aPt=maRect.BottomCenter(); aPt.Y()+=nWdt; break;
-        case 3: aPt=maRect.LeftCenter();   aPt.X()-=nWdt; break;
+        case 0: aPt=maRect.TopCenter();    aPt.AdjustY( -nWdt ); break;
+        case 1: aPt=maRect.RightCenter();  aPt.AdjustX(nWdt ); break;
+        case 2: aPt=maRect.BottomCenter(); aPt.AdjustY(nWdt ); break;
+        case 3: aPt=maRect.LeftCenter();   aPt.AdjustX( -nWdt ); break;
     }
     if (aGeo.nShearAngle!=0) ShearPoint(aPt,maRect.TopLeft(),aGeo.nTan);
     if (aGeo.nRotationAngle!=0) RotatePoint(aPt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
@@ -1751,11 +1751,11 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
 
                         RotatePoint( aGlue, aRef, sin( fObjectRotation * F_PI180 ), cos( fObjectRotation * F_PI180 ) );
                         if ( bMirroredX )
-                            aGlue.X() = maRect.GetWidth() - aGlue.X();
+                            aGlue.setX( maRect.GetWidth() - aGlue.X() );
                         if ( bMirroredY )
-                            aGlue.Y() = maRect.GetHeight() - aGlue.Y();
-                        aGlue.X() -= nXDiff;
-                        aGlue.Y() -= nYDiff;
+                            aGlue.setY( maRect.GetHeight() - aGlue.Y() );
+                        aGlue.AdjustX( -nXDiff );
+                        aGlue.AdjustY( -nYDiff );
                         rPoint.SetPos( aGlue );
                     }
                 }
@@ -2241,18 +2241,18 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
             tools::Rectangle aR0(rR);
             long nHgt=0,nMinHgt=0,nMaxHgt=0;
             long nWdt=0,nMinWdt=0,nMaxWdt=0;
-            Size aSiz(rR.GetSize()); aSiz.Width()--; aSiz.Height()--;
+            Size aSiz(rR.GetSize()); aSiz.AdjustWidth( -1 ); aSiz.AdjustHeight( -1 );
             Size aMaxSiz(100000,100000);
             Size aTmpSiz(pModel->GetMaxObjSize());
-            if (aTmpSiz.Width()!=0) aMaxSiz.Width()=aTmpSiz.Width();
-            if (aTmpSiz.Height()!=0) aMaxSiz.Height()=aTmpSiz.Height();
+            if (aTmpSiz.Width()!=0) aMaxSiz.setWidth(aTmpSiz.Width() );
+            if (aTmpSiz.Height()!=0) aMaxSiz.setHeight(aTmpSiz.Height() );
             if (bWdtGrow)
             {
                 nMinWdt=GetMinTextFrameWidth();
                 nMaxWdt=GetMaxTextFrameWidth();
                 if (nMaxWdt==0 || nMaxWdt>aMaxSiz.Width()) nMaxWdt=aMaxSiz.Width();
                 if (nMinWdt<=0) nMinWdt=1;
-                aSiz.Width()=nMaxWdt;
+                aSiz.setWidth(nMaxWdt );
             }
             if (bHgtGrow)
             {
@@ -2260,16 +2260,16 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
                 nMaxHgt=GetMaxTextFrameHeight();
                 if (nMaxHgt==0 || nMaxHgt>aMaxSiz.Height()) nMaxHgt=aMaxSiz.Height();
                 if (nMinHgt<=0) nMinHgt=1;
-                aSiz.Height()=nMaxHgt;
+                aSiz.setHeight(nMaxHgt );
             }
             long nHDist=GetTextLeftDistance()+GetTextRightDistance();
             long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
-            aSiz.Width()-=nHDist;
-            aSiz.Height()-=nVDist;
+            aSiz.AdjustWidth( -nHDist );
+            aSiz.AdjustHeight( -nVDist );
             if ( aSiz.Width() < 2 )
-                aSiz.Width() = 2;   // minimum size=2
+                aSiz.setWidth( 2 );   // minimum size=2
             if ( aSiz.Height() < 2 )
-                aSiz.Height() = 2; // minimum size=2
+                aSiz.setHeight( 2 ); // minimum size=2
 
             if (HasText())
             {
@@ -2341,28 +2341,28 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
                 {
                     SdrTextHorzAdjust eHAdj=GetTextHorizontalAdjust();
                     if ( eHAdj == SDRTEXTHORZADJUST_LEFT )
-                        rR.Right()+=nWdtGrow;
+                        rR.AdjustRight(nWdtGrow );
                     else if ( eHAdj == SDRTEXTHORZADJUST_RIGHT )
-                        rR.Left()-=nWdtGrow;
+                        rR.AdjustLeft( -nWdtGrow );
                     else
                     {
                         long nWdtGrow2=nWdtGrow/2;
-                        rR.Left()-=nWdtGrow2;
-                        rR.Right()=rR.Left()+nWdt;
+                        rR.AdjustLeft( -nWdtGrow2 );
+                        rR.SetRight(rR.Left()+nWdt );
                     }
                 }
                 if ( bHgtGrow )
                 {
                     SdrTextVertAdjust eVAdj=GetTextVerticalAdjust();
                     if ( eVAdj == SDRTEXTVERTADJUST_TOP )
-                        rR.Bottom()+=nHgtGrow;
+                        rR.AdjustBottom(nHgtGrow );
                     else if ( eVAdj == SDRTEXTVERTADJUST_BOTTOM )
-                        rR.Top()-=nHgtGrow;
+                        rR.AdjustTop( -nHgtGrow );
                     else
                     {
                         long nHgtGrow2=nHgtGrow/2;
-                        rR.Top()-=nHgtGrow2;
-                        rR.Bottom()=rR.Top()+nHgt;
+                        rR.AdjustTop( -nHgtGrow2 );
+                        rR.SetBottom(rR.Top()+nHgt );
                     }
                 }
                 if ( aGeo.nRotationAngle )
@@ -2403,10 +2403,10 @@ tools::Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const bool bHgt, cons
             double fLeftDiff  = static_cast<double>( aAdjustedTextRect.Left()  - aNewTextRect.Left()  ) * fXScale;
             double fTopDiff   = static_cast<double>( aAdjustedTextRect.Top()   - aNewTextRect.Top()   ) * fYScale;
             double fBottomDiff= static_cast<double>( aAdjustedTextRect.Bottom()- aNewTextRect.Bottom()) * fYScale;
-            aReturnValue.Left() += static_cast<sal_Int32>(fLeftDiff);
-            aReturnValue.Right() += static_cast<sal_Int32>(fRightDiff);
-            aReturnValue.Top() += static_cast<sal_Int32>(fTopDiff);
-            aReturnValue.Bottom() += static_cast<sal_Int32>(fBottomDiff);
+            aReturnValue.AdjustLeft(static_cast<sal_Int32>(fLeftDiff) );
+            aReturnValue.AdjustRight(static_cast<sal_Int32>(fRightDiff) );
+            aReturnValue.AdjustTop(static_cast<sal_Int32>(fTopDiff) );
+            aReturnValue.AdjustBottom(static_cast<sal_Int32>(fBottomDiff) );
         }
     }
     return aReturnValue;
@@ -2497,12 +2497,12 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools
         aViewInit.Move(aCenter.X(),aCenter.Y());
     }
     Size aAnkSiz(aViewInit.GetSize());
-    aAnkSiz.Width()--; aAnkSiz.Height()--; // because GetSize() adds 1
+    aAnkSiz.AdjustWidth( -1 ); aAnkSiz.AdjustHeight( -1 ); // because GetSize() adds 1
     Size aMaxSiz(1000000,1000000);
     if (pModel!=nullptr) {
         Size aTmpSiz(pModel->GetMaxObjSize());
-        if (aTmpSiz.Width()!=0) aMaxSiz.Width()=aTmpSiz.Width();
-        if (aTmpSiz.Height()!=0) aMaxSiz.Height()=aTmpSiz.Height();
+        if (aTmpSiz.Width()!=0) aMaxSiz.setWidth(aTmpSiz.Width() );
+        if (aTmpSiz.Height()!=0) aMaxSiz.setHeight(aTmpSiz.Height() );
     }
     SdrTextHorzAdjust eHAdj(GetTextHorizontalAdjust());
     SdrTextVertAdjust eVAdj(GetTextVerticalAdjust());
@@ -2531,11 +2531,11 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools
             nMinWdt = nMaxWdt;
         }
     }
-    aPaperMax.Width()=nMaxWdt;
-    aPaperMax.Height()=nMaxHgt;
+    aPaperMax.setWidth(nMaxWdt );
+    aPaperMax.setHeight(nMaxHgt );
 
-    aPaperMin.Width()=nMinWdt;
-    aPaperMin.Height()=nMinHgt;
+    aPaperMin.setWidth(nMinWdt );
+    aPaperMin.setHeight(nMinHgt );
 
     if ( pViewMin )
     {
@@ -2543,30 +2543,30 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools
 
         long nXFree = aAnkSiz.Width() - aPaperMin.Width();
         if ( eHAdj == SDRTEXTHORZADJUST_LEFT )
-            pViewMin->Right() -= nXFree;
+            pViewMin->AdjustRight( -nXFree );
         else if ( eHAdj == SDRTEXTHORZADJUST_RIGHT )
-            pViewMin->Left() += nXFree;
-        else { pViewMin->Left() += nXFree / 2; pViewMin->Right() = pViewMin->Left() + aPaperMin.Width(); }
+            pViewMin->AdjustLeft(nXFree );
+        else { pViewMin->AdjustLeft(nXFree / 2 ); pViewMin->SetRight( pViewMin->Left() + aPaperMin.Width() ); }
 
         long nYFree = aAnkSiz.Height() - aPaperMin.Height();
         if ( eVAdj == SDRTEXTVERTADJUST_TOP )
-            pViewMin->Bottom() -= nYFree;
+            pViewMin->AdjustBottom( -nYFree );
         else if ( eVAdj == SDRTEXTVERTADJUST_BOTTOM )
-            pViewMin->Top() += nYFree;
-        else { pViewMin->Top() += nYFree / 2; pViewMin->Bottom() = pViewMin->Top() + aPaperMin.Height(); }
+            pViewMin->AdjustTop(nYFree );
+        else { pViewMin->AdjustTop(nYFree / 2 ); pViewMin->SetBottom( pViewMin->Top() + aPaperMin.Height() ); }
     }
 
     if( IsVerticalWriting() )
-        aPaperMin.Width() = 0;
+        aPaperMin.setWidth( 0 );
     else
-        aPaperMin.Height() = 0;
+        aPaperMin.setHeight( 0 );
 
     if( eHAdj != SDRTEXTHORZADJUST_BLOCK )
-        aPaperMin.Width()=0;
+        aPaperMin.setWidth(0 );
 
     // For complete vertical adjust support, set paper min height to 0, here.
     if(SDRTEXTVERTADJUST_BLOCK != eVAdj )
-        aPaperMin.Height() = 0;
+        aPaperMin.setHeight( 0 );
 
     if (pPaperMin!=nullptr) *pPaperMin=aPaperMin;
     if (pPaperMax!=nullptr) *pPaperMax=aPaperMax;
@@ -2582,16 +2582,16 @@ void SdrObjCustomShape::TakeTextAnchorRect( tools::Rectangle& rAnchorRect ) cons
     if ( GetTextBounds( rAnchorRect ) )
     {
         Point aRotateRef( maSnapRect.Center() );
-        rAnchorRect.Left()   += GetTextLeftDistance();
-        rAnchorRect.Top()    += GetTextUpperDistance();
-        rAnchorRect.Right()  -= GetTextRightDistance();
-        rAnchorRect.Bottom() -= GetTextLowerDistance();
+        rAnchorRect.AdjustLeft(GetTextLeftDistance() );
+        rAnchorRect.AdjustTop(GetTextUpperDistance() );
+        rAnchorRect.AdjustRight( -(GetTextRightDistance()) );
+        rAnchorRect.AdjustBottom( -(GetTextLowerDistance()) );
         ImpJustifyRect( rAnchorRect );
 
         if ( rAnchorRect.GetWidth() < 2 )
-            rAnchorRect.Right() = rAnchorRect.Left() + 1;   // minimal width is 2
+            rAnchorRect.SetRight( rAnchorRect.Left() + 1 );   // minimal width is 2
         if ( rAnchorRect.GetHeight() < 2 )
-            rAnchorRect.Bottom() = rAnchorRect.Top() + 1;   // minimal height is 2
+            rAnchorRect.SetBottom( rAnchorRect.Top() + 1 );   // minimal height is 2
         if ( aGeo.nRotationAngle )
         {
             Point aP( rAnchorRect.TopLeft() );
@@ -2716,17 +2716,17 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& 
     {
         long nFreeWdt=aAnkRect.GetWidth()-aTextSiz.Width();
         if (eHAdj==SDRTEXTHORZADJUST_CENTER)
-            aTextPos.X()+=nFreeWdt/2;
+            aTextPos.AdjustX(nFreeWdt/2 );
         if (eHAdj==SDRTEXTHORZADJUST_RIGHT)
-            aTextPos.X()+=nFreeWdt;
+            aTextPos.AdjustX(nFreeWdt );
     }
     if (eVAdj==SDRTEXTVERTADJUST_CENTER || eVAdj==SDRTEXTVERTADJUST_BOTTOM)
     {
         long nFreeHgt=aAnkRect.GetHeight()-aTextSiz.Height();
         if (eVAdj==SDRTEXTVERTADJUST_CENTER)
-            aTextPos.Y()+=nFreeHgt/2;
+            aTextPos.AdjustY(nFreeHgt/2 );
         if (eVAdj==SDRTEXTVERTADJUST_BOTTOM)
-            aTextPos.Y()+=nFreeHgt;
+            aTextPos.AdjustY(nFreeHgt );
     }
     if (aGeo.nRotationAngle!=0)
         RotatePoint(aTextPos,aAnkRect.TopLeft(),aGeo.nSin,aGeo.nCos);

@@ -197,13 +197,13 @@ void SvxShowCharSet::MouseMove( const MouseEvent& rMEvt )
         Size  aSize = GetSizePixel();
 
         if ( aPos.X() < 0 )
-            aPos.X() = 0;
+            aPos.setX( 0 );
         else if ( aPos.X() > aSize.Width()-5 )
-            aPos.X() = aSize.Width()-5;
+            aPos.setX( aSize.Width()-5 );
         if ( aPos.Y() < 0 )
-            aPos.Y() = 0;
+            aPos.setY( 0 );
         else if ( aPos.Y() > aSize.Height()-5 )
-            aPos.Y() = aSize.Height()-5;
+            aPos.setY( aSize.Height()-5 );
 
         int nIndex = PixelToMapIndex( aPos );
     // Fire the focus event.
@@ -545,22 +545,22 @@ tools::Rectangle SvxShowCharSet::getGridRectangle(const Point &rPointUL, const S
     long nXDistFromLeft = x - m_nXGap;
     if (nXDistFromLeft <= 1)
     {
-        aPointUL.X() = 1;
-        aGridSize.Width() += m_nXGap + nXDistFromLeft;
+        aPointUL.setX( 1 );
+        aGridSize.AdjustWidth(m_nXGap + nXDistFromLeft );
     }
     long nXDistFromRight = rOutputSize.Width() - m_nXGap - nX - x;
     if (nXDistFromRight <= 1)
-        aGridSize.Width() += m_nXGap + nXDistFromRight;
+        aGridSize.AdjustWidth(m_nXGap + nXDistFromRight );
 
     long nXDistFromTop = y - m_nYGap;
     if (nXDistFromTop <= 1)
     {
-        aPointUL.Y() = 1;
-        aGridSize.Height() += m_nYGap + nXDistFromTop;
+        aPointUL.setY( 1 );
+        aGridSize.AdjustHeight(m_nYGap + nXDistFromTop );
     }
     long nXDistFromBottom = rOutputSize.Height() - m_nYGap - nY - y;
     if (nXDistFromBottom <= 1)
-        aGridSize.Height() += m_nYGap + nXDistFromBottom;
+        aGridSize.AdjustHeight(m_nYGap + nXDistFromBottom );
 
     return tools::Rectangle(aPointUL, aGridSize);
 }
@@ -572,7 +572,7 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
 
     Size aOutputSize(GetOutputSizePixel());
     if (aVscrollSB->IsVisible())
-        aOutputSize.Width() -= aVscrollSB->GetOptimalSize().Width();
+        aOutputSize.AdjustWidth( -(aVscrollSB->GetOptimalSize().Width()) );
 
     int i;
     for (i = 1; i < COLUMN_COUNT; ++i)
@@ -615,7 +615,7 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
             // zero advance width => use ink width to center glyph
             if (!nTextWidth)
             {
-                aPointTxTy.X() = x - aBoundRect.Left() + (nX - aBoundRect.GetWidth() + 1) / 2;
+                aPointTxTy.setX( x - aBoundRect.Left() + (nX - aBoundRect.GetWidth() + 1) / 2 );
             }
 
             aBoundRect += aPointTxTy;
@@ -624,17 +624,17 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
             int nYLDelta = aBoundRect.Top() - y;
             int nYHDelta = (y + nY) - aBoundRect.Bottom();
             if (nYLDelta <= 0)
-                aPointTxTy.Y() -= nYLDelta - 1;
+                aPointTxTy.AdjustY( -(nYLDelta - 1) );
             else if (nYHDelta <= 0)
-                aPointTxTy.Y() += nYHDelta - 1;
+                aPointTxTy.AdjustY(nYHDelta - 1 );
 
             // shift back horizontally if needed
             int nXLDelta = aBoundRect.Left() - x;
             int nXHDelta = (x + nX) - aBoundRect.Right();
             if (nXLDelta <= 0)
-                aPointTxTy.X() -= nXLDelta - 1;
+                aPointTxTy.AdjustX( -(nXLDelta - 1) );
             else if (nXHDelta <= 0)
-                aPointTxTy.X() += nXHDelta - 1;
+                aPointTxTy.AdjustX(nXHDelta - 1 );
         }
 
         Color aTextCol = rRenderContext.GetTextColor();
@@ -733,7 +733,7 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
 
     Size aSize(GetOutputSizePixel());
     long nSBWidth = aVscrollSB->GetOptimalSize().Width();
-    aSize.Width() -= nSBWidth;
+    aSize.AdjustWidth( -nSBWidth );
 
     vcl::Font aFont = rRenderContext.GetFont();
     aFont.SetWeight(WEIGHT_LIGHT);

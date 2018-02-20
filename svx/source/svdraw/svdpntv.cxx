@@ -929,7 +929,7 @@ void SdrPaintView::InvalidateAllWin(const tools::Rectangle& rRect)
             tools::Rectangle aRect(rRect);
 
             Point aOrg(rOutDev.GetMapMode().GetOrigin());
-            aOrg.X()=-aOrg.X(); aOrg.Y()=-aOrg.Y();
+            aOrg.setX(-aOrg.X() ); aOrg.setY(-aOrg.Y() );
             tools::Rectangle aOutRect(aOrg, rOutDev.GetOutputSize());
 
             // In case of tiled rendering we want to get all invalidations, so visual area is not interesting.

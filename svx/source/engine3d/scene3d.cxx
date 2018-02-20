@@ -526,18 +526,18 @@ void E3dScene::RotateScene (const Point& rRef, double sn, double cs)
         // point is the origin, and the y-axis increases upward, the X-axis to
         // the right. This must be especially noted for the Y-values.
         // (When considering a flat piece of paper the Y-axis pointing downwards
-    Center.X() = (UpperLeft.X() + dxOutRectHalf) - rRef.X();
-    Center.Y() = -((UpperLeft.Y() + dyOutRectHalf) - rRef.Y());
+    Center.setX( (UpperLeft.X() + dxOutRectHalf) - rRef.X() );
+    Center.setY( -((UpperLeft.Y() + dyOutRectHalf) - rRef.Y()) );
                   // A few special cases has to be dealt with first (n * 90 degrees n integer)
     if (sn==1.0 && cs==0.0) { // 90deg
-        NewCenter.X() = -Center.Y();
-        NewCenter.Y() = -Center.X();
+        NewCenter.setX( -Center.Y() );
+        NewCenter.setY( -Center.X() );
     } else if (sn==0.0 && cs==-1.0) { // 180deg
-        NewCenter.X() = -Center.X();
-        NewCenter.Y() = -Center.Y();
+        NewCenter.setX( -Center.X() );
+        NewCenter.setY( -Center.Y() );
     } else if (sn==-1.0 && cs==0.0) { // 270deg
-        NewCenter.X() =  Center.Y();
-        NewCenter.Y() = -Center.X();
+        NewCenter.setX(  Center.Y() );
+        NewCenter.setY( -Center.X() );
     }
     else          // Here it is rotated to any angle in the mathematically
                   // positive direction!
@@ -545,14 +545,14 @@ void E3dScene::RotateScene (const Point& rRef, double sn, double cs)
                   // ynew = x * sin(alpha) + y * cos(alpha)
                   // Bottom Right is not rotated: the pages of aOutRect must
                   // remain parallel to the coordinate axes.
-        NewCenter.X() = static_cast<long>(Center.X() * cs - Center.Y() * sn);
-        NewCenter.Y() = static_cast<long>(Center.X() * sn + Center.Y() * cs);
+        NewCenter.setX( static_cast<long>(Center.X() * cs - Center.Y() * sn) );
+        NewCenter.setY( static_cast<long>(Center.X() * sn + Center.Y() * cs) );
     }
 
     Size Differenz;
     Point DiffPoint = (NewCenter - Center);
-    Differenz.Width() = DiffPoint.X();
-    Differenz.Height() = -DiffPoint.Y();  // Note that the Y-axis is counted ad positive downward.
+    Differenz.setWidth( DiffPoint.X() );
+    Differenz.setHeight( -DiffPoint.Y() );  // Note that the Y-axis is counted ad positive downward.
     NbcMove (Differenz);  // Actually executes the coordinate transformation.
 }
 

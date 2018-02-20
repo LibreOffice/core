@@ -554,13 +554,13 @@ void SdrHdl::CreateB2dIAObject()
                         Size aOffset = rOutDev.PixelToLogic(Size(4, 4));
 
                         if(eKind == SdrHdlKind::UpperLeft || eKind == SdrHdlKind::Upper || eKind == SdrHdlKind::UpperRight)
-                            aMoveOutsideOffset.Y() -= aOffset.Width();
+                            aMoveOutsideOffset.AdjustY( -(aOffset.Width()) );
                         if(eKind == SdrHdlKind::LowerLeft || eKind == SdrHdlKind::Lower || eKind == SdrHdlKind::LowerRight)
-                            aMoveOutsideOffset.Y() += aOffset.Height();
+                            aMoveOutsideOffset.AdjustY(aOffset.Height() );
                         if(eKind == SdrHdlKind::UpperLeft || eKind == SdrHdlKind::Left  || eKind == SdrHdlKind::LowerLeft)
-                            aMoveOutsideOffset.X() -= aOffset.Width();
+                            aMoveOutsideOffset.AdjustX( -(aOffset.Width()) );
                         if(eKind == SdrHdlKind::UpperRight || eKind == SdrHdlKind::Right || eKind == SdrHdlKind::LowerRight)
-                            aMoveOutsideOffset.X() += aOffset.Height();
+                            aMoveOutsideOffset.AdjustX(aOffset.Height() );
                     }
 
                     rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();

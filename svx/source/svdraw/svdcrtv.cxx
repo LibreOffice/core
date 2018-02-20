@@ -465,22 +465,22 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, cons
                 {
                     if(aPnt.X() < rWorkArea.Left())
                     {
-                        aPnt.X() = rWorkArea.Left();
+                        aPnt.setX( rWorkArea.Left() );
                     }
 
                     if(aPnt.X() > rWorkArea.Right())
                     {
-                        aPnt.X() = rWorkArea.Right();
+                        aPnt.setX( rWorkArea.Right() );
                     }
 
                     if(aPnt.Y() < rWorkArea.Top())
                     {
-                        aPnt.Y() = rWorkArea.Top();
+                        aPnt.setY( rWorkArea.Top() );
                     }
 
                     if(aPnt.Y() > rWorkArea.Bottom())
                     {
-                        aPnt.Y() = rWorkArea.Bottom();
+                        aPnt.setY( rWorkArea.Bottom() );
                     }
                 }
 

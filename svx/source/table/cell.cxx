@@ -695,10 +695,10 @@ SfxStyleSheet* Cell::GetStyleSheet() const
 
 void Cell::TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const
 {
-    rAnchorRect.Left() = maCellRect.Left() + GetTextLeftDistance();
-    rAnchorRect.Right() = maCellRect.Right() - GetTextRightDistance();
-    rAnchorRect.Top() = maCellRect.Top() + GetTextUpperDistance();
-    rAnchorRect.Bottom() = maCellRect.Bottom() - GetTextLowerDistance();
+    rAnchorRect.SetLeft( maCellRect.Left() + GetTextLeftDistance() );
+    rAnchorRect.SetRight( maCellRect.Right() - GetTextRightDistance() );
+    rAnchorRect.SetTop( maCellRect.Top() + GetTextUpperDistance() );
+    rAnchorRect.SetBottom( maCellRect.Bottom() - GetTextLowerDistance() );
 }
 
 
@@ -735,7 +735,7 @@ sal_Int32 Cell::getMinimumHeight()
     tools::Rectangle aTextRect;
     TakeTextAnchorRect( aTextRect );
     Size aSize( aTextRect.GetSize() );
-    aSize.Height()=0x0FFFFFFF;
+    aSize.setHeight(0x0FFFFFFF );
 
     SdrOutliner* pEditOutliner = rTableObj.GetCellTextEditOutliner( *this );
     if(pEditOutliner)

@@ -795,8 +795,8 @@ void RecovDocListEntry::Paint(const Point& aPos, SvTreeListBox& aDevice, vcl::Re
     if (pTxt)
     {
         Point aPnt(aPos);
-        aPnt.X() += pList->m_aGreenCheckImg.GetSizePixel().Width();
-        aPnt.X() += 10;
+        aPnt.AdjustX(pList->m_aGreenCheckImg.GetSizePixel().Width() );
+        aPnt.AdjustX(10 );
         rRenderContext.DrawText(aPnt, *pTxt);
     }
 }

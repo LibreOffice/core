@@ -117,12 +117,12 @@ void SdrDragStat::TakeCreateRect(tools::Rectangle& rRect) const
     rRect=tools::Rectangle(mvPnts[0], mvPnts.back());
     if (mvPnts.size()>1) {
         Point aBtmRgt(mvPnts[1]);
-        rRect.Right()=aBtmRgt.X();
-        rRect.Bottom()=aBtmRgt.Y();
+        rRect.SetRight(aBtmRgt.X() );
+        rRect.SetBottom(aBtmRgt.Y() );
     }
     if (pView!=nullptr && pView->IsCreate1stPointAsCenter()) {
-        rRect.Top()+=rRect.Top()-rRect.Bottom();
-        rRect.Left()+=rRect.Left()-rRect.Right();
+        rRect.AdjustTop(rRect.Top()-rRect.Bottom() );
+        rRect.AdjustLeft(rRect.Left()-rRect.Right() );
     }
 }
 

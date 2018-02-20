@@ -319,10 +319,10 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
             aPos = xShape->getPosition();
             aSize = xShape->getSize();
 
-            aBoundingBox.Left() = aPos.X;
-            aBoundingBox.Top() = aPos.Y;
-            aBoundingBox.Right() = aPos.X + aSize.Width;
-            aBoundingBox.Bottom() = aPos.Y + aSize.Height;
+            aBoundingBox.SetLeft( aPos.X );
+            aBoundingBox.SetTop( aPos.Y );
+            aBoundingBox.SetRight( aPos.X + aSize.Width );
+            aBoundingBox.SetBottom( aPos.Y + aSize.Height );
 
             // Insert shape if it is visible, i.e. its bounding box overlaps
             // the visible area.

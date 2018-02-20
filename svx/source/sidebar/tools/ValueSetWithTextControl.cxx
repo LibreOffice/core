@@ -63,7 +63,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
     vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, MsLangId::getSystemLanguage(), GetDefaultFontFlags::OnlyOne));
     {
         Size aSize = aFont.GetFontSize();
-        aSize.Height() = (nRectHeight*4)/9;
+        aSize.setHeight( (nRectHeight*4)/9 );
         aFont.SetFontSize( aSize );
     }
 
@@ -72,8 +72,8 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
         if ( GetSelectItemId() == nItemId )
         {
             tools::Rectangle aBackRect = aRect;
-            aBackRect.Top() += 3;
-            aBackRect.Bottom() -= 2;
+            aBackRect.AdjustTop(3 );
+            aBackRect.AdjustBottom( -2 );
             pDev->SetFillColor( sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Color_Highlight ) );
             pDev->DrawRect(aBackRect);
         }
@@ -93,16 +93,16 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
         }
 
         tools::Rectangle aStrRect = aRect;
-        aStrRect.Top() += nRectHeight/4;
-        aStrRect.Bottom() -= nRectHeight/4;
+        aStrRect.AdjustTop(nRectHeight/4 );
+        aStrRect.AdjustBottom( -(nRectHeight/4) );
 
         const long nRectWidth = aRect.GetWidth();
-        aStrRect.Left() += 8;
-        aStrRect.Right() -= (nRectWidth*2)/3;
+        aStrRect.AdjustLeft(8 );
+        aStrRect.AdjustRight( -((nRectWidth*2)/3) );
         pDev->SetFont(aFont);
         pDev->DrawText(aStrRect, maItems[nItemId-1].maItemText, DrawTextFlags::EndEllipsis);
-        aStrRect.Left() += nRectWidth/3;
-        aStrRect.Right() += (nRectWidth*2)/3;
+        aStrRect.AdjustLeft(nRectWidth/3 );
+        aStrRect.AdjustRight((nRectWidth*2)/3 );
         pDev->DrawText(aStrRect, maItems[nItemId-1].maItemText2, DrawTextFlags::EndEllipsis);
     }
 

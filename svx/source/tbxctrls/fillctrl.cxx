@@ -884,11 +884,11 @@ void FillControl::SetOptimalSize()
 
     Point aAttrPnt = mpLbFillAttr->GetPosPixel();
 
-    aSize.Height() = std::max(aSize.Height(), mpLbFillType->get_preferred_size().Height());
-    aSize.Height() = std::max(aSize.Height(), mpToolBoxColor->get_preferred_size().Height());
-    aSize.Height() = std::max(aSize.Height(), mpLbFillAttr->get_preferred_size().Height());
+    aSize.setHeight( std::max(aSize.Height(), mpLbFillType->get_preferred_size().Height()) );
+    aSize.setHeight( std::max(aSize.Height(), mpToolBoxColor->get_preferred_size().Height()) );
+    aSize.setHeight( std::max(aSize.Height(), mpLbFillAttr->get_preferred_size().Height()) );
 
-    aSize.Width() = aAttrPnt.X() + aSize.Width();
+    aSize.setWidth( aAttrPnt.X() + aSize.Width() );
 
     SetSizePixel(aSize);
 }

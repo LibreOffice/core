@@ -404,11 +404,11 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
             rRect.Left() + rRect.GetWidth() / 2 + PAINT_OFFSET;
         // draw position
         Point aPnt = rRect.TopLeft();
-        aPnt.Y() = aItemPos.Y();
-        aPnt.X() += PAINT_OFFSET;
+        aPnt.setY( aItemPos.Y() );
+        aPnt.AdjustX(PAINT_OFFSET );
         pDev->DrawImage( aPnt, pImpl->aPosImage );
-        aPnt.X() += pImpl->aPosImage.GetSizePixel().Width();
-        aPnt.X() += PAINT_OFFSET;
+        aPnt.AdjustX(pImpl->aPosImage.GetSizePixel().Width() );
+        aPnt.AdjustX(PAINT_OFFSET );
         OUString aStr = GetMetricStr_Impl( pImpl->aPos.X());
         aStr += " / ";
         aStr += GetMetricStr_Impl( pImpl->aPos.Y());
@@ -420,14 +420,14 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
         pDev->SetClipRegion(aOrigRegion);
 
         // draw the size, when available
-        aPnt.X() = nSizePosX;
+        aPnt.setX( nSizePosX );
 
         if ( pImpl->bSize )
         {
             pDev->DrawImage( aPnt, pImpl->aSizeImage );
-            aPnt.X() += pImpl->aSizeImage.GetSizePixel().Width();
+            aPnt.AdjustX(pImpl->aSizeImage.GetSizePixel().Width() );
             Point aDrwPnt = aPnt;
-            aPnt.X() += PAINT_OFFSET;
+            aPnt.AdjustX(PAINT_OFFSET );
             aStr = GetMetricStr_Impl( pImpl->aSize.Width() );
             aStr += " x ";
             aStr += GetMetricStr_Impl( pImpl->aSize.Height() );

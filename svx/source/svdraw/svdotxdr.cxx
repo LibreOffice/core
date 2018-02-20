@@ -86,10 +86,10 @@ tools::Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
     bool bRgt=(eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::Right || eHdl==SdrHdlKind::LowerRight);
     bool bTop=(eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::Upper || eHdl==SdrHdlKind::UpperLeft);
     bool bBtm=(eHdl==SdrHdlKind::LowerRight || eHdl==SdrHdlKind::Lower || eHdl==SdrHdlKind::LowerLeft);
-    if (bLft) aTmpRect.Left()  =aPos.X();
-    if (bRgt) aTmpRect.Right() =aPos.X();
-    if (bTop) aTmpRect.Top()   =aPos.Y();
-    if (bBtm) aTmpRect.Bottom()=aPos.Y();
+    if (bLft) aTmpRect.SetLeft(aPos.X() );
+    if (bRgt) aTmpRect.SetRight(aPos.X() );
+    if (bTop) aTmpRect.SetTop(aPos.Y() );
+    if (bBtm) aTmpRect.SetBottom(aPos.Y() );
     if (bOrtho) { // Ortho
         long nWdt0=maRect.Right() -maRect.Left();
         long nHgt0=maRect.Bottom()-maRect.Top();
@@ -114,26 +114,26 @@ tools::Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
             if (bUseX) {
                 long nNeed=long(BigInt(nHgt0)*BigInt(nXMul)/BigInt(nXDiv));
                 if (bYNeg) nNeed=-nNeed;
-                if (bTop) aTmpRect.Top()=aTmpRect.Bottom()-nNeed;
-                if (bBtm) aTmpRect.Bottom()=aTmpRect.Top()+nNeed;
+                if (bTop) aTmpRect.SetTop(aTmpRect.Bottom()-nNeed );
+                if (bBtm) aTmpRect.SetBottom(aTmpRect.Top()+nNeed );
             } else {
                 long nNeed=long(BigInt(nWdt0)*BigInt(nYMul)/BigInt(nYDiv));
                 if (bXNeg) nNeed=-nNeed;
-                if (bLft) aTmpRect.Left()=aTmpRect.Right()-nNeed;
-                if (bRgt) aTmpRect.Right()=aTmpRect.Left()+nNeed;
+                if (bLft) aTmpRect.SetLeft(aTmpRect.Right()-nNeed );
+                if (bRgt) aTmpRect.SetRight(aTmpRect.Left()+nNeed );
             }
         } else { // apex handles
             if ((bLft || bRgt) && nXDiv!=0) {
                 long nHgt0b=maRect.Bottom()-maRect.Top();
                 long nNeed=long(BigInt(nHgt0b)*BigInt(nXMul)/BigInt(nXDiv));
-                aTmpRect.Top()-=(nNeed-nHgt0b)/2;
-                aTmpRect.Bottom()=aTmpRect.Top()+nNeed;
+                aTmpRect.AdjustTop( -((nNeed-nHgt0b)/2) );
+                aTmpRect.SetBottom(aTmpRect.Top()+nNeed );
             }
             if ((bTop || bBtm) && nYDiv!=0) {
                 long nWdt0b=maRect.Right()-maRect.Left();
                 long nNeed=long(BigInt(nWdt0b)*BigInt(nYMul)/BigInt(nYDiv));
-                aTmpRect.Left()-=(nNeed-nWdt0b)/2;
-                aTmpRect.Right()=aTmpRect.Left()+nNeed;
+                aTmpRect.AdjustLeft( -((nNeed-nWdt0b)/2) );
+                aTmpRect.SetRight(aTmpRect.Left()+nNeed );
             }
         }
     }

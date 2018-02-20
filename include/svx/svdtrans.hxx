@@ -55,7 +55,7 @@ namespace svx
 }
 
 inline void MoveRect(tools::Rectangle& rRect, const Size& S)    { rRect.Move(S.Width(),S.Height()); }
-inline void MovePoint(Point& rPnt, const Size& S)        { rPnt.X()+=S.Width(); rPnt.Y()+=S.Height(); }
+inline void MovePoint(Point& rPnt, const Size& S)        { rPnt.AdjustX(S.Width()); rPnt.AdjustY(S.Height()); }
 inline void MovePoly(tools::Polygon& rPoly, const Size& S)      { rPoly.Move(S.Width(),S.Height()); }
 void MoveXPoly(XPolygon& rPoly, const Size& S);
 

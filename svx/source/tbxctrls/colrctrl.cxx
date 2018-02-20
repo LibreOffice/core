@@ -222,10 +222,10 @@ SvxColorDockingWindow::SvxColorDockingWindow
     }
 
     aItemSize = aColorSet->CalcItemSizePixel(Size(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength()));
-    aItemSize.Width() = aItemSize.Width() + SvxColorValueSet::getEntryEdgeLength();
-    aItemSize.Width() /= 2;
-    aItemSize.Height() = aItemSize.Height() + SvxColorValueSet::getEntryEdgeLength();
-    aItemSize.Height() /= 2;
+    aItemSize.setWidth( aItemSize.Width() + SvxColorValueSet::getEntryEdgeLength() );
+    aItemSize.setWidth( aItemSize.Width() / 2 );
+    aItemSize.setHeight( aItemSize.Height() + SvxColorValueSet::getEntryEdgeLength() );
+    aItemSize.setHeight( aItemSize.Height() / 2 );
 
     SetSize();
     aColorSet->Show();
@@ -288,8 +288,8 @@ void SvxColorDockingWindow::SetSize()
 {
     // calculate the size for ValueSet
     Size aSize = GetOutputSizePixel();
-    aSize.Width()  -= 4;
-    aSize.Height() -= 4;
+    aSize.AdjustWidth( -4 );
+    aSize.AdjustHeight( -4 );
 
     // calculate rows and columns
     nCols = static_cast<sal_uInt16>( aSize.Width() / aItemSize.Width() );
@@ -436,8 +436,8 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
 
 void SvxColorDockingWindow::Resizing( Size& rNewSize )
 {
-    rNewSize.Width()  -= 4;
-    rNewSize.Height() -= 4;
+    rNewSize.AdjustWidth( -4 );
+    rNewSize.AdjustHeight( -4 );
 
     // determine columns and rows
     nCols = static_cast<sal_uInt16>( static_cast<float>(rNewSize.Width()) / static_cast<float>(aItemSize.Width()) + 0.5 );
@@ -473,8 +473,8 @@ void SvxColorDockingWindow::Resizing( Size& rNewSize )
         std::min< long >( nLines, nMaxLines ) );
 
     // set size of the window
-    rNewSize.Width()  = nCols * aItemSize.Width() + nScrollWidth + 4;
-    rNewSize.Height() = nLines * aItemSize.Height() + 4;
+    rNewSize.setWidth( nCols * aItemSize.Width() + nScrollWidth + 4 );
+    rNewSize.setHeight( nLines * aItemSize.Height() + 4 );
 }
 
 void SvxColorDockingWindow::Resize()

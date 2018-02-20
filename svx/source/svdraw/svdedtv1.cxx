@@ -121,10 +121,10 @@ void SdrEditView::SetMarkedObjRect(const tools::Rectangle& rRect)
                 } else {
                     t=0; b=h1;
                 }
-                aR1.Left  ()=long(l);
-                aR1.Right ()=long(r);
-                aR1.Top   ()=long(t);
-                aR1.Bottom()=long(b);
+                aR1.SetLeft(long(l) );
+                aR1.SetRight(long(r) );
+                aR1.SetTop(long(t) );
+                aR1.SetBottom(long(b) );
                 aR1.Move(x1,y1);
             }
             pO->SetSnapRect(aR1);
@@ -424,7 +424,7 @@ void SdrEditView::MirrorMarkedObjHorizontal()
 {
     Point aCenter(GetMarkedObjRect().Center());
     Point aPt2(aCenter);
-    aPt2.Y()++;
+    aPt2.AdjustY( 1 );
     MirrorMarkedObj(aCenter,aPt2);
 }
 
@@ -432,7 +432,7 @@ void SdrEditView::MirrorMarkedObjVertical()
 {
     Point aCenter(GetMarkedObjRect().Center());
     Point aPt2(aCenter);
-    aPt2.X()++;
+    aPt2.AdjustX( 1 );
     MirrorMarkedObj(aCenter,aPt2);
 }
 
@@ -731,8 +731,8 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr)
         tools::Rectangle aRect(aAllSnapRect); // TODO: change this for PolyPt's and GluePt's!!!
         if (bAllPosX) aRect.Move(nAllPosX-aRect.Left(),0);
         if (bAllPosY) aRect.Move(0,nAllPosY-aRect.Top());
-        if (bAllWdt)  aRect.Right()=aAllSnapRect.Left()+nAllWdt;
-        if (bAllHgt)  aRect.Bottom()=aAllSnapRect.Top()+nAllHgt;
+        if (bAllWdt)  aRect.SetRight(aAllSnapRect.Left()+nAllWdt );
+        if (bAllHgt)  aRect.SetBottom(aAllSnapRect.Top()+nAllHgt );
         SetMarkedObjRect(aRect);
     }
     if (rAttr.GetItemState(SDRATTR_RESIZEXALL,true,&pPoolItem)==SfxItemState::SET) {

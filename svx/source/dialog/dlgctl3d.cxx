@@ -1023,20 +1023,20 @@ void SvxLightCtl3D::NewLayout()
     maLightControl->SetPosSizePixel(aPoint, aDestSize);
 
     // hor scrollbar
-    aPoint.Y() = aSize.Height() - nScrollSize;
-    aDestSize.Height() = nScrollSize;
+    aPoint.setY( aSize.Height() - nScrollSize );
+    aDestSize.setHeight( nScrollSize );
     maHorScroller->SetPosSizePixel(aPoint, aDestSize);
 
     // vert scrollbar
-    aPoint.X() = aSize.Width() - nScrollSize;
-    aPoint.Y() = 0;
-    aDestSize.Width() = nScrollSize;
-    aDestSize.Height() = aSize.Height() - nScrollSize;
+    aPoint.setX( aSize.Width() - nScrollSize );
+    aPoint.setY( 0 );
+    aDestSize.setWidth( nScrollSize );
+    aDestSize.setHeight( aSize.Height() - nScrollSize );
     maVerScroller->SetPosSizePixel(aPoint, aDestSize);
 
     // button
-    aPoint.Y() = aSize.Height() - nScrollSize;
-    aDestSize.Height() = nScrollSize;
+    aPoint.setY( aSize.Height() - nScrollSize );
+    aDestSize.setHeight( nScrollSize );
     maSwitcher->SetPosSizePixel(aPoint, aDestSize);
 }
 
@@ -1197,8 +1197,8 @@ void SvxLightCtl3D::GetFocus()
 
         Size aFocusSize = maLightControl->GetOutputSizePixel();
 
-        aFocusSize.Width() -= 4;
-        aFocusSize.Height() -= 4;
+        aFocusSize.AdjustWidth( -4 );
+        aFocusSize.AdjustHeight( -4 );
 
         tools::Rectangle aFocusRect( Point( 2, 2 ), aFocusSize );
 

@@ -155,7 +155,7 @@ VclPtr<vcl::Window> SvxFmTbxCtlRecText::CreateItemWindow( vcl::Window* pParent )
     VclPtrInstance<FixedText> pFixedText( pParent );
     Size aSize( pFixedText->GetTextWidth( aText ), pFixedText->GetTextHeight( ) );
     pFixedText->SetText( aText );
-    aSize.Width() += 6;
+    aSize.AdjustWidth(6 );
     pFixedText->SetSizePixel( aSize );
     pFixedText->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
 
@@ -180,7 +180,7 @@ VclPtr<vcl::Window> SvxFmTbxCtlRecFromText::CreateItemWindow( vcl::Window* pPare
     OUString aText(SvxResId(RID_STR_REC_FROM_TEXT));
     VclPtrInstance<FixedText> pFixedText( pParent, WB_CENTER );
     Size aSize( pFixedText->GetTextWidth( aText ), pFixedText->GetTextHeight( ) );
-    aSize.Width() += 12;
+    aSize.AdjustWidth(12 );
     pFixedText->SetText( aText );
     pFixedText->SetSizePixel( aSize );
     pFixedText->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
@@ -207,7 +207,7 @@ VclPtr<vcl::Window> SvxFmTbxCtlRecTotal::CreateItemWindow( vcl::Window* pParent 
     pFixedText.reset(VclPtr<FixedText>::Create( pParent ));
     OUString const aSample("123456");
     Size aSize( pFixedText->GetTextWidth( aSample ), pFixedText->GetTextHeight( ) );
-    aSize.Width() += 12;
+    aSize.AdjustWidth(12 );
     pFixedText->SetSizePixel( aSize );
     pFixedText->SetBackground();
     pFixedText->SetPaintTransparent(true);

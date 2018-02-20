@@ -461,11 +461,11 @@ void SdrCaptionObj::ImpCalcTail1(const ImpCaptParams& rPara, tools::Polygon& rPo
 
     if(eEscDir==LKS || eEscDir==RTS)
     {
-        aPol[0].X() = aEscPos.X();
+        aPol[0].setX( aEscPos.X() );
     }
     else
     {
-        aPol[0].Y() = aEscPos.Y();
+        aPol[0].setY( aEscPos.Y() );
     }
 
     rPoly = aPol;
@@ -502,17 +502,17 @@ void SdrCaptionObj::ImpCalcTail3(const ImpCaptParams& rPara, tools::Polygon& rPo
 
     if (eEscDir==LKS || eEscDir==RTS) {
         if (rPara.bFitLineLen) {
-            aPol[1].X()=(aTl.X()+aEscPos.X())/2;
+            aPol[1].setX((aTl.X()+aEscPos.X())/2 );
         } else {
-            if (eEscDir==LKS) aPol[1].X()-=rPara.nLineLen;
-            else aPol[1].X()+=rPara.nLineLen;
+            if (eEscDir==LKS) aPol[1].AdjustX( -(rPara.nLineLen) );
+            else aPol[1].AdjustX(rPara.nLineLen );
         }
     } else {
         if (rPara.bFitLineLen) {
-            aPol[1].Y()=(aTl.Y()+aEscPos.Y())/2;
+            aPol[1].setY((aTl.Y()+aEscPos.Y())/2 );
         } else {
-            if (eEscDir==OBN) aPol[1].Y()-=rPara.nLineLen;
-            else aPol[1].Y()+=rPara.nLineLen;
+            if (eEscDir==OBN) aPol[1].AdjustY( -(rPara.nLineLen) );
+            else aPol[1].AdjustY(rPara.nLineLen );
         }
     }
     if (!rPara.bFixedAngle) {

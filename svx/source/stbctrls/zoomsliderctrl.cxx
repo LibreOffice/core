@@ -238,10 +238,10 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
     long nSliderHeight  = 2 * pDev->GetDPIScaleFactor();
     long nSnappingHeight = 4 * pDev->GetDPIScaleFactor();
 
-    aSlider.Top()   += (aControlRect.GetHeight() - nSliderHeight)/2;
-    aSlider.Bottom() = aSlider.Top() + nSliderHeight - 1;
-    aSlider.Left()  += nSliderXOffset;
-    aSlider.Right() -= nSliderXOffset;
+    aSlider.AdjustTop((aControlRect.GetHeight() - nSliderHeight)/2 );
+    aSlider.SetBottom( aSlider.Top() + nSliderHeight - 1 );
+    aSlider.AdjustLeft(nSliderXOffset );
+    aSlider.AdjustRight( -nSliderXOffset );
 
     Color               aOldLineColor = pDev->GetLineColor();
     Color               aOldFillColor = pDev->GetFillColor();
@@ -268,19 +268,19 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
 
     // draw slider button
     Point aImagePoint = aRect.TopLeft();
-    aImagePoint.X() += Zoom2Offset( mxImpl->mnCurrentZoom );
-    aImagePoint.X() -= mxImpl->maSliderButton.GetSizePixel().Width()/2;
-    aImagePoint.Y() += (aControlRect.GetHeight() - mxImpl->maSliderButton.GetSizePixel().Height())/2;
+    aImagePoint.AdjustX(Zoom2Offset( mxImpl->mnCurrentZoom ) );
+    aImagePoint.AdjustX( -(mxImpl->maSliderButton.GetSizePixel().Width()/2) );
+    aImagePoint.AdjustY((aControlRect.GetHeight() - mxImpl->maSliderButton.GetSizePixel().Height())/2 );
     pDev->DrawImage( aImagePoint, mxImpl->maSliderButton );
 
     // draw decrease button
     aImagePoint = aRect.TopLeft();
-    aImagePoint.X() += (nSliderXOffset - mxImpl->maDecreaseButton.GetSizePixel().Width())/2;
-    aImagePoint.Y() += (aControlRect.GetHeight() - mxImpl->maDecreaseButton.GetSizePixel().Height())/2;
+    aImagePoint.AdjustX((nSliderXOffset - mxImpl->maDecreaseButton.GetSizePixel().Width())/2 );
+    aImagePoint.AdjustY((aControlRect.GetHeight() - mxImpl->maDecreaseButton.GetSizePixel().Height())/2 );
     pDev->DrawImage( aImagePoint, mxImpl->maDecreaseButton );
 
     // draw increase button
-    aImagePoint.X() = aRect.TopLeft().X() + aControlRect.GetWidth() - mxImpl->maIncreaseButton.GetSizePixel().Width() - (nSliderXOffset - mxImpl->maIncreaseButton.GetSizePixel().Height())/2;
+    aImagePoint.setX( aRect.TopLeft().X() + aControlRect.GetWidth() - mxImpl->maIncreaseButton.GetSizePixel().Width() - (nSliderXOffset - mxImpl->maIncreaseButton.GetSizePixel().Height())/2 );
     pDev->DrawImage( aImagePoint, mxImpl->maIncreaseButton );
 
     pDev->SetLineColor( aOldLineColor );

@@ -177,8 +177,8 @@ bool SdrDragView::TakeDragObjAnchorPos(Point& rPos, bool bTR ) const
                 {
                     // drag the whole Object (Move, Resize, ...)
                     const basegfx::B2DPoint aTransformed(mpCurrentSdrDragMethod->getCurrentTransformation() * basegfx::B2DPoint(aPt.X(), aPt.Y()));
-                    rPos.X() = basegfx::fround(aTransformed.getX());
-                    rPos.Y() = basegfx::fround(aTransformed.getY());
+                    rPos.setX( basegfx::fround(aTransformed.getX()) );
+                    rPos.setY( basegfx::fround(aTransformed.getY()) );
                 }
             }
         }

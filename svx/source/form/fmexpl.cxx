@@ -559,8 +559,8 @@ namespace svxform
 
         Size aLogOutputSize = PixelToLogic(GetOutputSizePixel(), MapMode(MapUnit::MapAppFont));
         Size aLogExplSize = aLogOutputSize;
-        aLogExplSize.Width() -= 6;
-        aLogExplSize.Height() -= 6;
+        aLogExplSize.AdjustWidth( -6 );
+        aLogExplSize.AdjustHeight( -6 );
 
         Point aExplPos = LogicToPixel(Point(3, 3), MapMode(MapUnit::MapAppFont));
         Size aExplSize = LogicToPixel(aLogExplSize, MapMode(MapUnit::MapAppFont));

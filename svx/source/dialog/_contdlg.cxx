@@ -159,9 +159,9 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
             double fWH = static_cast<double>(aSizePix.Width()) / aSizePix.Height();
 
             if( fWH <= 1.0 )
-                aSizePix.Width() = FRound( ( aSizePix.Height() = 512 ) * fWH );
+                aSizePix.setWidth( FRound( ( aSizePix.Height() = 512 ) * fWH ) );
             else
-                aSizePix.Height() = FRound( ( aSizePix.Width() = 512 ) / fWH );
+                aSizePix.setHeight( FRound( ( aSizePix.Width() = 512 ) / fWH ) );
         }
 
         if( pVDev->SetOutputSizePixel( aSizePix ) )
@@ -273,7 +273,7 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
     m_pTbx1->SetSizePixel( aTbxSize );
     m_pTbx1->SetSelectHdl( LINK( this, SvxSuperContourDlg, Tbx1ClickHdl ) );
 
-    aPos.X() += aTbxSize.Width() + LogicToPixel( Size( 3, 0 ), MapMode( MapUnit::MapAppFont ) ).Width();
+    aPos.AdjustX(aTbxSize.Width() + LogicToPixel( Size( 3, 0 ), MapMode( MapUnit::MapAppFont ) ).Width() );
     m_pMtfTolerance->SetPosPixel( aPos );
     m_pMtfTolerance->SetValue( 10 );
 
@@ -662,10 +662,10 @@ IMPL_LINK( SvxSuperContourDlg, PipetteHdl, ContourWindow&, rWnd, void )
     m_pStbStatus->SetLineColor( rColor );
     m_pStbStatus->SetFillColor( rColor );
 
-    aRect.Left() += 4;
-    aRect.Top() += 4;
-    aRect.Right() -= 4;
-    aRect.Bottom() -= 4;
+    aRect.AdjustLeft(4 );
+    aRect.AdjustTop(4 );
+    aRect.AdjustRight( -4 );
+    aRect.AdjustBottom( -4 );
 
     m_pStbStatus->DrawRect( aRect );
 

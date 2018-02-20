@@ -996,9 +996,9 @@ void FmFilterItemsString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::Ren
         rRenderContext.DrawLine(aFirst, aSecond);
 
         aFirst = aSecond;
-        aFirst.X() += 1;
-        aSecond.X() += 6;
-        aSecond.Y() -= 5;
+        aFirst.AdjustX(1 );
+        aSecond.AdjustX(6 );
+        aSecond.AdjustY( -5 );
 
         rRenderContext.DrawLine(aFirst, aSecond);
         rRenderContext.Pop();
@@ -1014,7 +1014,7 @@ void FmFilterItemsString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pE
         pViewData = pView->GetViewDataItem( pEntry, this );
 
     Size aSize(pView->GetTextWidth(GetText()), pView->GetTextHeight());
-    aSize.Width() += nxDBmp;
+    aSize.AdjustWidth(nxDBmp );
     pViewData->maSize = aSize;
 }
 
@@ -1050,7 +1050,7 @@ void FmFilterString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
 
     Size aSize(pView->GetTextWidth(m_aName), pView->GetTextHeight());
     pView->Control::SetFont( aOldFont );
-    aSize.Width() += pView->GetTextWidth(GetText()) + nxD;
+    aSize.AdjustWidth(pView->GetTextWidth(GetText()) + nxD );
     pViewData->maSize = aSize;
 }
 
@@ -1067,7 +1067,7 @@ void FmFilterString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderCo
     rRenderContext.DrawText(aPos, m_aName);
 
     // position for the second text
-    aPos.X() += rDev.GetTextWidth(m_aName) + nxD;
+    aPos.AdjustX(rDev.GetTextWidth(m_aName) + nxD );
     rRenderContext.Pop();
     rDev.DrawText(aPos, GetText());
 }
@@ -1921,8 +1921,8 @@ void FmFilterNavigatorWin::Resize()
 
     Size aLogOutputSize = PixelToLogic(GetOutputSizePixel(), MapMode(MapUnit::MapAppFont));
     Size aLogExplSize = aLogOutputSize;
-    aLogExplSize.Width() -= 6;
-    aLogExplSize.Height() -= 6;
+    aLogExplSize.AdjustWidth( -6 );
+    aLogExplSize.AdjustHeight( -6 );
 
     Point aExplPos = LogicToPixel(Point(3,3), MapMode(MapUnit::MapAppFont));
     Size aExplSize = LogicToPixel(aLogExplSize, MapMode(MapUnit::MapAppFont));

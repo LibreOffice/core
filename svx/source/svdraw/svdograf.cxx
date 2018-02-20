@@ -1309,13 +1309,13 @@ void SdrGrafObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrink
             // Scale graphic to page size
             if ( fGrfWH < fWinWH )
             {
-                aSize.Width() = static_cast<long>(aMaxSize.Height() * fGrfWH);
-                aSize.Height()= aMaxSize.Height();
+                aSize.setWidth( static_cast<long>(aMaxSize.Height() * fGrfWH) );
+                aSize.setHeight( aMaxSize.Height() );
             }
             else if ( fGrfWH > 0.F )
             {
-                aSize.Width() = aMaxSize.Width();
-                aSize.Height()= static_cast<long>(aMaxSize.Width() / fGrfWH);
+                aSize.setWidth( aMaxSize.Width() );
+                aSize.setHeight( static_cast<long>(aMaxSize.Width() / fGrfWH) );
             }
 
             aPos = rMaxRect.Center();
@@ -1324,8 +1324,8 @@ void SdrGrafObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrink
         if( bShrinkOnly )
             aPos = maRect.TopLeft();
 
-        aPos.X() -= aSize.Width() / 2;
-        aPos.Y() -= aSize.Height() / 2;
+        aPos.AdjustX( -(aSize.Width() / 2) );
+        aPos.AdjustY( -(aSize.Height() / 2) );
         SetLogicRect( tools::Rectangle( aPos, aSize ) );
     }
 }

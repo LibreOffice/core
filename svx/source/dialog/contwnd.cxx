@@ -191,8 +191,8 @@ void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
     {
         GraphCtrl::MouseButtonUp( rMEvt );
 
-        aWorkRect.Right() = aLogPt.X();
-        aWorkRect.Bottom() = aLogPt.Y();
+        aWorkRect.SetRight( aLogPt.X() );
+        aWorkRect.SetBottom( aLogPt.Y() );
         aWorkRect.Intersection( aGraphRect );
         aWorkRect.Justify();
 
