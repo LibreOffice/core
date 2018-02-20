@@ -302,7 +302,7 @@ void SvxGeneralTabPage::InitCryptography()
 {
 #if HAVE_FEATURE_GPGME
     m_pCryptoFrame->Show();
-    // unused yet, I just wanted to see if this delivers the desired results
+
     uno::Reference< xml::crypto::XSEInitializer > xSEInitializer;
     try
     {
@@ -321,6 +321,17 @@ void SvxGeneralTabPage::InitCryptography()
                     m_pEncryptionKeyLB->InsertEntry( xCert->getIssuerName());
                 }
             }
+
+             //tdf#115015: wrap checkbox text and listboxes if necessary
+             Size aPrefSize(m_pEncryptToSelfCB->get_preferred_size());
+             Size aSize(m_pEncryptToSelfCB->CalcMinimumSize(40*approximate_char_width()));
+             if (aPrefSize.Width() > aSize.Width())
+             {
+                 m_pSigningKeyLB->set_width_request(aSize.Width());
+                 m_pEncryptionKeyLB->set_width_request(aSize.Width());
+                 m_pEncryptToSelfCB->set_width_request(aSize.Width());
+             }
+
         }
     }
     catch ( uno::Exception const & )
