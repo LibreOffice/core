@@ -238,8 +238,6 @@ void Test::testConstruction()
     aEngine.SetText(aParaText);
 }
 
-namespace {
-
 bool includes(const uno::Sequence<OUString>& rSeq, const OUString& rVal)
 {
     for (sal_Int32 i = 0, n = rSeq.getLength(); i < n; ++i)
@@ -247,8 +245,6 @@ bool includes(const uno::Sequence<OUString>& rSeq, const OUString& rVal)
             return true;
 
     return false;
-}
-
 }
 
 void Test::testUnoTextFields()
@@ -814,18 +810,16 @@ void Test::testTabsCopyPaste()
     CPPUNIT_ASSERT_EQUAL( OUString("sample\ttextfortestingtab\t\ttextfortestingtab\t"), rDoc.GetParaAsString(sal_Int32(0)) );
 }
 
-namespace {
-    class UrlEditEngine : public EditEngine
-    {
-    public:
-        explicit UrlEditEngine(SfxItemPool *pPool) : EditEngine(pPool) {}
+class UrlEditEngine : public EditEngine
+{
+public:
+    explicit UrlEditEngine(SfxItemPool *pPool) : EditEngine(pPool) {}
 
-        virtual OUString CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_Int32, Color*&, Color*& ) override
-        {
-            return OUString("jim@bob.com"); // a sophisticated view of value:
-        }
-    };
-}
+    virtual OUString CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_Int32, Color*&, Color*& ) override
+    {
+        return OUString("jim@bob.com"); // a sophisticated view of value:
+    }
+};
 
 // Odd accounting for hyperlink position & size etc.
 // https://bugzilla.novell.com/show_bug.cgi?id=467459

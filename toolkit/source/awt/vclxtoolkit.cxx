@@ -544,46 +544,42 @@ WindowType ImplGetComponentType( const OUString& rServiceName )
     return pInf ? pInf->nWinType : WindowType::NONE;
 }
 
-
-namespace
+struct MessageBoxTypeInfo
 {
-    struct MessageBoxTypeInfo
-    {
-        css::awt::MessageBoxType eType;
-        const sal_Char          *pName;
-        sal_Int32                nLen;
-    };
+    css::awt::MessageBoxType eType;
+    const sal_Char          *pName;
+    sal_Int32                nLen;
+};
 
-    static const MessageBoxTypeInfo aMessageBoxTypeInfo[] =
-    {
-        { css::awt::MessageBoxType_MESSAGEBOX,      RTL_CONSTASCII_STRINGPARAM("messbox") },
-        { css::awt::MessageBoxType_INFOBOX,         RTL_CONSTASCII_STRINGPARAM("infobox") },
-        { css::awt::MessageBoxType_WARNINGBOX,      RTL_CONSTASCII_STRINGPARAM("warningbox") },
-        { css::awt::MessageBoxType_ERRORBOX,        RTL_CONSTASCII_STRINGPARAM("errorbox") },
-        { css::awt::MessageBoxType_QUERYBOX,        RTL_CONSTASCII_STRINGPARAM("querybox") },
-        { css::awt::MessageBoxType::MessageBoxType_MAKE_FIXED_SIZE, nullptr, 0 }
-    };
+static const MessageBoxTypeInfo aMessageBoxTypeInfo[] =
+{
+    { css::awt::MessageBoxType_MESSAGEBOX,      RTL_CONSTASCII_STRINGPARAM("messbox") },
+    { css::awt::MessageBoxType_INFOBOX,         RTL_CONSTASCII_STRINGPARAM("infobox") },
+    { css::awt::MessageBoxType_WARNINGBOX,      RTL_CONSTASCII_STRINGPARAM("warningbox") },
+    { css::awt::MessageBoxType_ERRORBOX,        RTL_CONSTASCII_STRINGPARAM("errorbox") },
+    { css::awt::MessageBoxType_QUERYBOX,        RTL_CONSTASCII_STRINGPARAM("querybox") },
+    { css::awt::MessageBoxType::MessageBoxType_MAKE_FIXED_SIZE, nullptr, 0 }
+};
 
-    bool lcl_convertMessageBoxType(
-        rtl::OUString &sType,
-        css::awt::MessageBoxType eType )
-    {
-        const MessageBoxTypeInfo *pMap = aMessageBoxTypeInfo;
-        css::awt::MessageBoxType eVal = css::awt::MessageBoxType::MessageBoxType_MAKE_FIXED_SIZE;
+bool lcl_convertMessageBoxType(
+    rtl::OUString &sType,
+    css::awt::MessageBoxType eType )
+{
+    const MessageBoxTypeInfo *pMap = aMessageBoxTypeInfo;
+    css::awt::MessageBoxType eVal = css::awt::MessageBoxType::MessageBoxType_MAKE_FIXED_SIZE;
 
-        while ( pMap->pName )
+    while ( pMap->pName )
+    {
+        if ( pMap->eType == eType )
         {
-            if ( pMap->eType == eType )
-            {
-                eVal = eType;
-                sType = rtl::OUString( pMap->pName, pMap->nLen, RTL_TEXTENCODING_ASCII_US );
-                break;
-            }
-            pMap++;
+            eVal = eType;
+            sType = rtl::OUString( pMap->pName, pMap->nLen, RTL_TEXTENCODING_ASCII_US );
+            break;
         }
-
-        return ( eVal != css::awt::MessageBoxType::MessageBoxType_MAKE_FIXED_SIZE );
+        pMap++;
     }
+
+    return ( eVal != css::awt::MessageBoxType::MessageBoxType_MAKE_FIXED_SIZE );
 }
 
 static sal_Int32                            nVCLToolkitInstanceCount = 0;

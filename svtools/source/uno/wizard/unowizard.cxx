@@ -67,23 +67,19 @@ namespace {
 
     namespace WizardButton = css::ui::dialogs::WizardButton;
 
-
-    namespace
+    WizardButtonFlags lcl_convertWizardButtonToWZB( const sal_Int16 i_nWizardButton )
     {
-        WizardButtonFlags lcl_convertWizardButtonToWZB( const sal_Int16 i_nWizardButton )
+        switch ( i_nWizardButton )
         {
-            switch ( i_nWizardButton )
-            {
-            case WizardButton::NONE:        return WizardButtonFlags::NONE;
-            case WizardButton::NEXT:        return WizardButtonFlags::NEXT;
-            case WizardButton::PREVIOUS:    return WizardButtonFlags::PREVIOUS;
-            case WizardButton::FINISH:      return WizardButtonFlags::FINISH;
-            case WizardButton::CANCEL:      return WizardButtonFlags::CANCEL;
-            case WizardButton::HELP:        return WizardButtonFlags::HELP;
-            }
-            OSL_FAIL( "lcl_convertWizardButtonToWZB: invalid WizardButton constant!" );
-            return WizardButtonFlags::NONE;
+        case WizardButton::NONE:        return WizardButtonFlags::NONE;
+        case WizardButton::NEXT:        return WizardButtonFlags::NEXT;
+        case WizardButton::PREVIOUS:    return WizardButtonFlags::PREVIOUS;
+        case WizardButton::FINISH:      return WizardButtonFlags::FINISH;
+        case WizardButton::CANCEL:      return WizardButtonFlags::CANCEL;
+        case WizardButton::HELP:        return WizardButtonFlags::HELP;
         }
+        OSL_FAIL( "lcl_convertWizardButtonToWZB: invalid WizardButton constant!" );
+        return WizardButtonFlags::NONE;
     }
 
     typedef ::cppu::ImplInheritanceHelper  <   ::svt::OGenericUnoDialog
@@ -147,8 +143,6 @@ namespace {
     {
     }
 
-    namespace {
-
     OUString lcl_getHelpURL( const OString& sHelpId )
     {
         OUStringBuffer aBuffer;
@@ -159,8 +153,6 @@ namespace {
             aBuffer.append( INET_HID_SCHEME );
         aBuffer.append( aTmp );
         return aBuffer.makeStringAndClear();
-    }
-
     }
 
     Wizard::~Wizard()
@@ -176,52 +168,47 @@ namespace {
         }
     }
 
-
-    namespace
+    void lcl_checkPaths( const Sequence< Sequence< sal_Int16 > >& i_rPaths, const Reference< XInterface >& i_rContext )
     {
-        void lcl_checkPaths( const Sequence< Sequence< sal_Int16 > >& i_rPaths, const Reference< XInterface >& i_rContext )
+        // need at least one path
+        if ( i_rPaths.getLength() == 0 )
+            throw IllegalArgumentException( OUString(), i_rContext, 2 );
+
+        // each path must be of length 1, at least
+        for ( sal_Int32 i = 0; i < i_rPaths.getLength(); ++i )
         {
-            // need at least one path
-            if ( i_rPaths.getLength() == 0 )
+            if ( i_rPaths[i].getLength() == 0 )
                 throw IllegalArgumentException( OUString(), i_rContext, 2 );
 
-            // each path must be of length 1, at least
-            for ( sal_Int32 i = 0; i < i_rPaths.getLength(); ++i )
+            // page IDs must be in ascending order
+            sal_Int16 nPreviousPageID = i_rPaths[i][0];
+            for ( sal_Int32 j=1; j<i_rPaths[i].getLength(); ++j )
             {
-                if ( i_rPaths[i].getLength() == 0 )
-                    throw IllegalArgumentException( OUString(), i_rContext, 2 );
-
-                // page IDs must be in ascending order
-                sal_Int16 nPreviousPageID = i_rPaths[i][0];
-                for ( sal_Int32 j=1; j<i_rPaths[i].getLength(); ++j )
+                if ( i_rPaths[i][j] <= nPreviousPageID )
                 {
-                    if ( i_rPaths[i][j] <= nPreviousPageID )
-                    {
-                        throw IllegalArgumentException(
-                            "Path " + OUString::number(i)
-                            + ": invalid page ID sequence - each page ID must be greater than the previous one.",
-                            i_rContext, 2 );
-                    }
-                    nPreviousPageID = i_rPaths[i][j];
-                }
-            }
-
-            // if we have one path, that's okay
-            if ( i_rPaths.getLength() == 1 )
-                return;
-
-            // if we have multiple paths, they must start with the same page id
-            const sal_Int16 nFirstPageId = i_rPaths[0][0];
-            for ( sal_Int32 i = 0; i < i_rPaths.getLength(); ++i )
-            {
-                if ( i_rPaths[i][0] != nFirstPageId )
                     throw IllegalArgumentException(
-                        "All paths must start with the same page id.",
+                        "Path " + OUString::number(i)
+                        + ": invalid page ID sequence - each page ID must be greater than the previous one.",
                         i_rContext, 2 );
+                }
+                nPreviousPageID = i_rPaths[i][j];
             }
         }
-    }
 
+        // if we have one path, that's okay
+        if ( i_rPaths.getLength() == 1 )
+            return;
+
+        // if we have multiple paths, they must start with the same page id
+        const sal_Int16 nFirstPageId = i_rPaths[0][0];
+        for ( sal_Int32 i = 0; i < i_rPaths.getLength(); ++i )
+        {
+            if ( i_rPaths[i][0] != nFirstPageId )
+                throw IllegalArgumentException(
+                    "All paths must start with the same page id.",
+                    i_rContext, 2 );
+        }
+    }
 
     void SAL_CALL Wizard::initialize( const Sequence< Any >& i_Arguments )
     {

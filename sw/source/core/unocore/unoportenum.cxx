@@ -225,8 +225,6 @@ namespace
         }
     }
 
-namespace
-{
     class theSwXTextPortionEnumerationUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextPortionEnumerationUnoTunnelId > {};
     struct SwAnnotationStartPortion_Impl
     {
@@ -306,7 +304,6 @@ namespace
             }
         }
     }
-}
 
 }
 

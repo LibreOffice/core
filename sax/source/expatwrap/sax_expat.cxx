@@ -384,27 +384,24 @@ SaxExpatParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments
     }
 }
 
-namespace
+class ParserCleanup
 {
-    class ParserCleanup
+private:
+    SaxExpatParser_Impl& m_rParser;
+    Entity& m_rEntity;
+public:
+    ParserCleanup(SaxExpatParser_Impl& rParser, Entity& rEntity)
+        : m_rParser(rParser)
+        , m_rEntity(rEntity)
     {
-    private:
-        SaxExpatParser_Impl& m_rParser;
-        Entity& m_rEntity;
-    public:
-        ParserCleanup(SaxExpatParser_Impl& rParser, Entity& rEntity)
-            : m_rParser(rParser)
-            , m_rEntity(rEntity)
-        {
-        }
-        ~ParserCleanup()
-        {
-            m_rParser.popEntity();
-            //XML_ParserFree accepts a null arg
-            XML_ParserFree(m_rEntity.pParser);
-        }
-    };
-}
+    }
+    ~ParserCleanup()
+    {
+        m_rParser.popEntity();
+        //XML_ParserFree accepts a null arg
+        XML_ParserFree(m_rEntity.pParser);
+    }
+};
 
 /***************
 *

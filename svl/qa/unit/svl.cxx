@@ -1133,7 +1133,6 @@ void Test::testIsNumberFormat()
     }
 }
 
-namespace {
 struct FormatInputOutput
 {
     const char*      mpInput;
@@ -1141,7 +1140,6 @@ struct FormatInputOutput
     const char*      mpOutput;
     const sal_uInt32 mnOutputIndex;
 };
-}
 
 void checkSpecificNumberFormats( SvNumberFormatter& rFormatter,
         const std::vector<FormatInputOutput>& rVec, const char* pName )

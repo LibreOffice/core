@@ -124,8 +124,6 @@ void Default::setPropertyValue(OUString const &, css::uno::Any const &)
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 
-namespace {
-
 OUString xdg_user_dir_lookup (const char *type)
 {
     char *config_home;
@@ -232,8 +230,6 @@ css::uno::Any xdgDirectoryIfExists(char const * type) {
         ? css::beans::Optional<css::uno::Any>(true, css::uno::Any(url))
         : css::beans::Optional<css::uno::Any>(false, css::uno::Any()));
 }
-
-} // namespace
 
 css::uno::Any Default::getPropertyValue(OUString const & PropertyName)
 {

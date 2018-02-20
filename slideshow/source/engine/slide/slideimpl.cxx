@@ -688,37 +688,34 @@ SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr
     return std::make_shared<SlideBitmap>( pBitmap );
 }
 
-namespace
+class MainSequenceSearcher
 {
-    class MainSequenceSearcher
+public:
+    MainSequenceSearcher()
     {
-    public:
-        MainSequenceSearcher()
+        maSearchKey.Name = "node-type";
+        maSearchKey.Value <<= presentation::EffectNodeType::MAIN_SEQUENCE;
+    }
+
+    void operator()( const uno::Reference< animations::XAnimationNode >& xChildNode )
+    {
+        uno::Sequence< beans::NamedValue > aUserData( xChildNode->getUserData() );
+
+        if( findNamedValue( aUserData, maSearchKey ) )
         {
-            maSearchKey.Name = "node-type";
-            maSearchKey.Value <<= presentation::EffectNodeType::MAIN_SEQUENCE;
+            maMainSequence = xChildNode;
         }
+    }
 
-        void operator()( const uno::Reference< animations::XAnimationNode >& xChildNode )
-        {
-            uno::Sequence< beans::NamedValue > aUserData( xChildNode->getUserData() );
+    const uno::Reference< animations::XAnimationNode >& getMainSequence() const
+    {
+        return maMainSequence;
+    }
 
-            if( findNamedValue( aUserData, maSearchKey ) )
-            {
-                maMainSequence = xChildNode;
-            }
-        }
-
-        const uno::Reference< animations::XAnimationNode >& getMainSequence() const
-        {
-            return maMainSequence;
-        }
-
-    private:
-        beans::NamedValue                               maSearchKey;
-        uno::Reference< animations::XAnimationNode >    maMainSequence;
-    };
-}
+private:
+    beans::NamedValue                               maSearchKey;
+    uno::Reference< animations::XAnimationNode >    maMainSequence;
+};
 
 bool SlideImpl::implPrefetchShow()
 {

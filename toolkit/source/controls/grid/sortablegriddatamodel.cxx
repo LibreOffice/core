@@ -209,15 +209,12 @@ public:
     }
 };
 
-    namespace
-    {
-        template< class STLCONTAINER >
-        void lcl_clear( STLCONTAINER& i_container )
-        {
-            STLCONTAINER empty;
-            empty.swap( i_container );
-        }
-    }
+template< class STLCONTAINER >
+void lcl_clear( STLCONTAINER& i_container )
+{
+    STLCONTAINER empty;
+    empty.swap( i_container );
+}
 
     SortableGridDataModel::SortableGridDataModel( Reference< XComponentContext > const & rxContext )
         :SortableGridDataModel_Base( m_aMutex )
@@ -296,17 +293,12 @@ public:
         return css::uno::Sequence<sal_Int8>();
     }
 
-
-    namespace
+    Reference< XCollator > lcl_loadDefaultCollator_throw( const Reference<XComponentContext> & rxContext )
     {
-        Reference< XCollator > lcl_loadDefaultCollator_throw( const Reference<XComponentContext> & rxContext )
-        {
-            Reference< XCollator > const xCollator = Collator::create( rxContext );
-            xCollator->loadDefaultCollator( Application::GetSettings().GetLanguageTag().getLocale(), 0 );
-            return xCollator;
-        }
+        Reference< XCollator > const xCollator = Collator::create( rxContext );
+        xCollator->loadDefaultCollator( Application::GetSettings().GetLanguageTag().getLocale(), 0 );
+        return xCollator;
     }
-
 
     void SAL_CALL SortableGridDataModel::initialize( const Sequence< Any >& i_arguments )
     {
@@ -381,22 +373,17 @@ public:
         impl_broadcast( &XGridDataListener::rowsInserted, aEvent, aGuard );
     }
 
-
-    namespace
+    void lcl_decrementValuesGreaterThan( ::std::vector< ::sal_Int32 > & io_indexMap, sal_Int32 const i_threshold )
     {
-        void lcl_decrementValuesGreaterThan( ::std::vector< ::sal_Int32 > & io_indexMap, sal_Int32 const i_threshold )
+        for (   ::std::vector< ::sal_Int32 >::iterator loop = io_indexMap.begin();
+                loop != io_indexMap.end();
+                ++loop
+            )
         {
-            for (   ::std::vector< ::sal_Int32 >::iterator loop = io_indexMap.begin();
-                    loop != io_indexMap.end();
-                    ++loop
-                )
-            {
-                if ( *loop >= i_threshold )
-                    --*loop;
-            }
+            if ( *loop >= i_threshold )
+                --*loop;
         }
     }
-
 
     void SortableGridDataModel::impl_rebuildIndexesAndNotify( MethodGuard& i_instanceLock )
     {
@@ -506,47 +493,42 @@ public:
     {
     }
 
-
-    namespace
+    class CellDataLessComparison
     {
-        class CellDataLessComparison
+    public:
+        CellDataLessComparison(
+            ::std::vector< Any > const & i_data,
+            ::comphelper::IKeyPredicateLess const & i_predicate,
+            bool const i_sortAscending
+        )
+            :m_data( i_data )
+            ,m_predicate( i_predicate )
+            ,m_sortAscending( i_sortAscending )
         {
-        public:
-            CellDataLessComparison(
-                ::std::vector< Any > const & i_data,
-                ::comphelper::IKeyPredicateLess const & i_predicate,
-                bool const i_sortAscending
-            )
-                :m_data( i_data )
-                ,m_predicate( i_predicate )
-                ,m_sortAscending( i_sortAscending )
-            {
-            }
+        }
 
-            bool operator()( sal_Int32 const i_lhs, sal_Int32 const i_rhs ) const
-            {
-                Any const & lhs = m_data[ i_lhs ];
-                Any const & rhs = m_data[ i_rhs ];
-                // <VOID/> is less than everything else
-                if ( !lhs.hasValue() )
-                    return m_sortAscending;
-                if ( !rhs.hasValue() )
-                    return !m_sortAscending;
+        bool operator()( sal_Int32 const i_lhs, sal_Int32 const i_rhs ) const
+        {
+            Any const & lhs = m_data[ i_lhs ];
+            Any const & rhs = m_data[ i_rhs ];
+            // <VOID/> is less than everything else
+            if ( !lhs.hasValue() )
+                return m_sortAscending;
+            if ( !rhs.hasValue() )
+                return !m_sortAscending;
 
-                // actually compare
-                if ( m_sortAscending )
-                    return m_predicate.isLess( lhs, rhs );
-                else
-                    return m_predicate.isLess( rhs, lhs );
-            }
+            // actually compare
+            if ( m_sortAscending )
+                return m_predicate.isLess( lhs, rhs );
+            else
+                return m_predicate.isLess( rhs, lhs );
+        }
 
-        private:
-            ::std::vector< Any > const &            m_data;
-            ::comphelper::IKeyPredicateLess const & m_predicate;
-            bool const                          m_sortAscending;
-        };
-    }
-
+    private:
+        ::std::vector< Any > const &            m_data;
+        ::comphelper::IKeyPredicateLess const & m_predicate;
+        bool const                          m_sortAscending;
+    };
 
     bool SortableGridDataModel::impl_reIndex_nothrow( ::sal_Int32 const i_columnIndex, bool const i_sortAscending )
     {

@@ -203,58 +203,51 @@ public:
     void parseLine( const OString& rLine );
 };
 
-
-namespace
+/** Unescapes line-ending characters in input string. These
+    characters are encoded as pairs of characters: '\\' 'n', resp.
+    '\\' 'r'. This function converts them back to '\n', resp. '\r'.
+  */
+OString lcl_unescapeLineFeeds(const OString& i_rStr)
 {
+    const size_t nOrigLen(sal::static_int_cast<size_t>(i_rStr.getLength()));
+    const sal_Char* const pOrig(i_rStr.getStr());
+    std::unique_ptr<sal_Char[]> pBuffer(new sal_Char[nOrigLen + 1]);
 
-    /** Unescapes line-ending characters in input string. These
-        characters are encoded as pairs of characters: '\\' 'n', resp.
-        '\\' 'r'. This function converts them back to '\n', resp. '\r'.
-      */
-    OString lcl_unescapeLineFeeds(const OString& i_rStr)
+    const sal_Char* pRead(pOrig);
+    sal_Char* pWrite(pBuffer.get());
+    const sal_Char* pCur(pOrig);
+    while ((pCur = strchr(pCur, '\\')) != nullptr)
     {
-        const size_t nOrigLen(sal::static_int_cast<size_t>(i_rStr.getLength()));
-        const sal_Char* const pOrig(i_rStr.getStr());
-        std::unique_ptr<sal_Char[]> pBuffer(new sal_Char[nOrigLen + 1]);
-
-        const sal_Char* pRead(pOrig);
-        sal_Char* pWrite(pBuffer.get());
-        const sal_Char* pCur(pOrig);
-        while ((pCur = strchr(pCur, '\\')) != nullptr)
+        const sal_Char cNext(pCur[1]);
+        if (cNext == 'n' || cNext == 'r' || cNext == '\\')
         {
-            const sal_Char cNext(pCur[1]);
-            if (cNext == 'n' || cNext == 'r' || cNext == '\\')
-            {
-                const size_t nLen(pCur - pRead);
-                strncpy(pWrite, pRead, nLen);
-                pWrite += nLen;
-                *pWrite = cNext == 'n' ? '\n' : (cNext == 'r' ? '\r' : '\\');
-                ++pWrite;
-                pCur = pRead = pCur + 2;
-            }
-            else
-            {
-                // Just continue on the next character. The current
-                // block will be copied the next time it goes through the
-                // 'if' branch.
-                ++pCur;
-            }
-        }
-        // maybe there are some data to copy yet
-        if (sal::static_int_cast<size_t>(pRead - pOrig) < nOrigLen)
-        {
-            const size_t nLen(nOrigLen - (pRead - pOrig));
+            const size_t nLen(pCur - pRead);
             strncpy(pWrite, pRead, nLen);
             pWrite += nLen;
+            *pWrite = cNext == 'n' ? '\n' : (cNext == 'r' ? '\r' : '\\');
+            ++pWrite;
+            pCur = pRead = pCur + 2;
         }
-        *pWrite = '\0';
-
-        OString aResult(pBuffer.get());
-        return aResult;
+        else
+        {
+            // Just continue on the next character. The current
+            // block will be copied the next time it goes through the
+            // 'if' branch.
+            ++pCur;
+        }
     }
+    // maybe there are some data to copy yet
+    if (sal::static_int_cast<size_t>(pRead - pOrig) < nOrigLen)
+    {
+        const size_t nLen(nOrigLen - (pRead - pOrig));
+        strncpy(pWrite, pRead, nLen);
+        pWrite += nLen;
+    }
+    *pWrite = '\0';
 
+    OString aResult(pBuffer.get());
+    return aResult;
 }
-
 
 OString Parser::readNextToken()
 {
