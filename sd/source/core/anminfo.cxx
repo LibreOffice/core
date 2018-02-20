@@ -52,8 +52,8 @@ SdAnimationInfo::SdAnimationInfo(SdrObject& rObject)
                  mnVerb                     (0),
                  mrObject                   (rObject)
 {
-    maBlueScreen = RGB_Color(COL_LIGHTMAGENTA);
-    maDimColor = RGB_Color(COL_LIGHTGRAY);
+    maBlueScreen = COL_LIGHTMAGENTA;
+    maDimColor = COL_LIGHTGRAY;
 }
 
 SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rObject)

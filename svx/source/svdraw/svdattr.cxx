@@ -109,7 +109,7 @@ SdrItemPool::SdrItemPool(
 :   XOutdevItemPool(_pMaster)
 {
     // prepare some constants
-    const Color aNullCol(RGB_Color(COL_BLACK));
+    const Color aNullCol(COL_BLACK);
     const sal_Int32 nDefEdgeDist(500); // Defaulting hard for Draw (100TH_MM) currently. MapMode will have to be taken into account in the future.
 
     // init the non-persistent items
