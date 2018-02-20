@@ -323,8 +323,8 @@ bool SvxPagePosSizeItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberI
         css::awt::Rectangle aPagePosSize;
         if ( rVal >>= aPagePosSize )
         {
-            aPos.X() = aPagePosSize.X;
-            aPos.Y() = aPagePosSize.Y;
+            aPos.setX( aPagePosSize.X );
+            aPos.setY( aPagePosSize.Y );
             lWidth   = aPagePosSize.Width;
             lHeight  = aPagePosSize.Height;
             return true;
@@ -336,8 +336,8 @@ bool SvxPagePosSizeItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberI
     {
         switch ( nMemberId )
         {
-            case MID_X: aPos.X() = nVal; break;
-            case MID_Y: aPos.Y() = nVal; break;
+            case MID_X: aPos.setX( nVal ); break;
+            case MID_Y: aPos.setY( nVal ); break;
             case MID_WIDTH: lWidth = nVal; break;
             case MID_HEIGHT: lHeight = nVal; break;
 

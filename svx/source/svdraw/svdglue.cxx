@@ -52,13 +52,13 @@ Point SdrGluePoint::GetAbsolutePos(const SdrObject& rObj) const
 
     Point aOfs(aSnap.Center());
     switch (GetHorzAlign()) {
-        case SdrAlign::HORZ_LEFT  : aOfs.X()=aSnap.Left(); break;
-        case SdrAlign::HORZ_RIGHT : aOfs.X()=aSnap.Right(); break;
+        case SdrAlign::HORZ_LEFT  : aOfs.setX(aSnap.Left() ); break;
+        case SdrAlign::HORZ_RIGHT : aOfs.setX(aSnap.Right() ); break;
         default: break;
     }
     switch (GetVertAlign()) {
-        case SdrAlign::VERT_TOP   : aOfs.Y()=aSnap.Top(); break;
-        case SdrAlign::VERT_BOTTOM: aOfs.Y()=aSnap.Bottom(); break;
+        case SdrAlign::VERT_TOP   : aOfs.setY(aSnap.Top() ); break;
+        case SdrAlign::VERT_BOTTOM: aOfs.setY(aSnap.Bottom() ); break;
         default: break;
     }
     if (!bNoPercent) {
@@ -67,20 +67,20 @@ Point SdrGluePoint::GetAbsolutePos(const SdrObject& rObj) const
         long nXDiv=10000;
         long nYDiv=10000;
         if (nXMul!=nXDiv) {
-            aPt.X()*=nXMul;
-            aPt.X()/=nXDiv;
+            aPt.setX( aPt.X() * nXMul );
+            aPt.setX( aPt.X() / nXDiv );
         }
         if (nYMul!=nYDiv) {
-            aPt.Y()*=nYMul;
-            aPt.Y()/=nYDiv;
+            aPt.setY( aPt.Y() * nYMul );
+            aPt.setY( aPt.Y() / nYDiv );
         }
     }
     aPt+=aOfs;
     // Now limit to the BoundRect of the object
-    if (aPt.X()<aBound.Left  ()) aPt.X()=aBound.Left  ();
-    if (aPt.X()>aBound.Right ()) aPt.X()=aBound.Right ();
-    if (aPt.Y()<aBound.Top   ()) aPt.Y()=aBound.Top   ();
-    if (aPt.Y()>aBound.Bottom()) aPt.Y()=aBound.Bottom();
+    if (aPt.X()<aBound.Left  ()) aPt.setX(aBound.Left  () );
+    if (aPt.X()>aBound.Right ()) aPt.setX(aBound.Right () );
+    if (aPt.Y()<aBound.Top   ()) aPt.setY(aBound.Top   () );
+    if (aPt.Y()>aBound.Bottom()) aPt.setY(aBound.Bottom() );
     return aPt;
 }
 
@@ -95,13 +95,13 @@ void SdrGluePoint::SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj)
 
     Point aOfs(aSnap.Center());
     switch (GetHorzAlign()) {
-        case SdrAlign::HORZ_LEFT  : aOfs.X()=aSnap.Left(); break;
-        case SdrAlign::HORZ_RIGHT : aOfs.X()=aSnap.Right(); break;
+        case SdrAlign::HORZ_LEFT  : aOfs.setX(aSnap.Left() ); break;
+        case SdrAlign::HORZ_RIGHT : aOfs.setX(aSnap.Right() ); break;
         default: break;
     }
     switch (GetVertAlign()) {
-        case SdrAlign::VERT_TOP   : aOfs.Y()=aSnap.Top(); break;
-        case SdrAlign::VERT_BOTTOM: aOfs.Y()=aSnap.Bottom(); break;
+        case SdrAlign::VERT_TOP   : aOfs.setY(aSnap.Top() ); break;
+        case SdrAlign::VERT_BOTTOM: aOfs.setY(aSnap.Bottom() ); break;
         default: break;
     }
     aPt-=aOfs;
@@ -113,12 +113,12 @@ void SdrGluePoint::SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj)
         long nXDiv=10000;
         long nYDiv=10000;
         if (nXMul!=nXDiv) {
-            aPt.X()*=nXDiv;
-            aPt.X()/=nXMul;
+            aPt.setX( aPt.X() * nXDiv );
+            aPt.setX( aPt.X() / nXMul );
         }
         if (nYMul!=nYDiv) {
-            aPt.Y()*=nYDiv;
-            aPt.Y()/=nYMul;
+            aPt.setY( aPt.Y() * nYDiv );
+            aPt.setY( aPt.Y() / nYMul );
         }
     }
     aPos=aPt;

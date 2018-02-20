@@ -372,7 +372,7 @@ namespace svxform
         m_pToolBox->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
         m_pToolBox->SetSelectHdl( LINK( this, XFormsPage, TbxSelectHdl ) );
         Point aPos = m_pItemList->GetPosPixel();
-        aPos.Y() = aTbxSz.Height();
+        aPos.setY( aTbxSz.Height() );
         m_pItemList->SetPosPixel( aPos );
 
         m_pItemList->SetSelectHdl( LINK( this, XFormsPage, ItemSelectHdl ) );
@@ -1047,10 +1047,10 @@ namespace svxform
     {
         Size aSize = GetOutputSizePixel();
         Size aTbxSize = m_pToolBox->GetSizePixel();
-        aTbxSize.Width() = aSize.Width();
+        aTbxSize.setWidth( aSize.Width() );
         m_pToolBox->SetSizePixel( aTbxSize );
-        aSize.Width() -= 4;
-        aSize.Height() -= ( 4 + aTbxSize.Height() );
+        aSize.AdjustWidth( -4 );
+        aSize.AdjustHeight( -( 4 + aTbxSize.Height() ) );
         m_pItemList->SetPosSizePixel( Point( 2, 2 + aTbxSize.Height() ), aSize );
     }
 
@@ -2195,8 +2195,8 @@ namespace svxform
 
         Size aLogOutputSize = PixelToLogic(GetOutputSizePixel(), MapMode(MapUnit::MapAppFont));
         Size aLogExplSize = aLogOutputSize;
-        aLogExplSize.Width() -= 2;
-        aLogExplSize.Height() -= 2;
+        aLogExplSize.AdjustWidth( -2 );
+        aLogExplSize.AdjustHeight( -2 );
 
         Point aExplPos = LogicToPixel(Point(1,1), MapMode(MapUnit::MapAppFont));
         Size aExplSize = LogicToPixel(aLogExplSize, MapMode(MapUnit::MapAppFont));
@@ -2613,8 +2613,8 @@ namespace svxform
                 Size a3and1Sz = LogicToPixel( Size(3, 1), MapMode(MapUnit::MapAppFont));
                 Size aNewSz = m_pDefaultED->GetSizePixel();
                 Point aNewPnt = m_pDefaultED->GetPosPixel();
-                aNewPnt.Y() += a3and1Sz.Height();
-                aNewSz.Width() -= ( m_pDefaultBtn->GetSizePixel().Width() + a3and1Sz.Width() );
+                aNewPnt.AdjustY(a3and1Sz.Height() );
+                aNewSz.AdjustWidth( -( m_pDefaultBtn->GetSizePixel().Width() + a3and1Sz.Width() ) );
                 m_pDefaultED->SetPosSizePixel( aNewPnt, aNewSz );
                 m_pDefaultBtn->Show();
             }

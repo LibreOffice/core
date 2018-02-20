@@ -379,7 +379,7 @@ void SvxLineEndWindow::FillValueSet()
 
     maBmpSize = aBmp.GetSizePixel();
     pVD->SetOutputSizePixel( maBmpSize, false );
-    maBmpSize.Width() = maBmpSize.Width() / 2;
+    maBmpSize.setWidth( maBmpSize.Width() / 2 );
     Point aPt0( 0, 0 );
     Point aPt1( maBmpSize.Width(), 0 );
 
@@ -438,12 +438,12 @@ void SvxLineEndWindow::SetSize()
     mpLineEndSet->SetStyle( nBits );
 
     Size aSize( maBmpSize );
-    aSize.Width()  += 6;
-    aSize.Height() += 6;
+    aSize.AdjustWidth(6 );
+    aSize.AdjustHeight(6 );
     aSize = mpLineEndSet->CalcWindowSizePixel( aSize );
     mpLineEndSet->SetPosSizePixel( Point( 2, 2 ), aSize );
-    aSize.Width()  += 4;
-    aSize.Height() += 4;
+    aSize.AdjustWidth(4 );
+    aSize.AdjustHeight(4 );
     SetOutputSizePixel( aSize );
 }
 

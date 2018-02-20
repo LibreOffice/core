@@ -331,13 +331,13 @@ void ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Poi
     if (dAngle<18000) {
         nCircStAngle=NormAngle360(nTangAngle-9000);
         nCircRelAngle=NormAngle360(2*dAngle);
-        aCircCenter.X()+=svx::Round(nRad*cos((nTangAngle+9000)*nPi180));
-        aCircCenter.Y()-=svx::Round(nRad*sin((nTangAngle+9000)*nPi180));
+        aCircCenter.AdjustX(svx::Round(nRad*cos((nTangAngle+9000)*nPi180)) );
+        aCircCenter.AdjustY( -(svx::Round(nRad*sin((nTangAngle+9000)*nPi180))) );
     } else {
         nCircStAngle=NormAngle360(nTangAngle+9000);
         nCircRelAngle=-NormAngle360(36000-2*dAngle);
-        aCircCenter.X()+=svx::Round(nRad*cos((nTangAngle-9000)*nPi180));
-        aCircCenter.Y()-=svx::Round(nRad*sin((nTangAngle-9000)*nPi180));
+        aCircCenter.AdjustX(svx::Round(nRad*cos((nTangAngle-9000)*nPi180)) );
+        aCircCenter.AdjustY( -(svx::Round(nRad*sin((nTangAngle-9000)*nPi180))) );
     }
     bAngleSnap=pView!=nullptr && pView->IsAngleSnapEnabled();
     if (bAngleSnap) {
@@ -462,8 +462,8 @@ void ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point
         y+=svx::Round(nGKathLen*sn);
         x+=svx::Round(nGKathLen*cs);
     }
-    aRectP2.X()+=x;
-    aRectP2.Y()+=y;
+    aRectP2.AdjustX(x );
+    aRectP2.AdjustY(y );
     if (pView!=nullptr && pView->IsOrtho()) {
         long dx1=aRectP2.X()-aRectP1.X(); long dx1a=std::abs(dx1);
         long dy1=aRectP2.Y()-aRectP1.Y(); long dy1a=std::abs(dy1);
@@ -473,15 +473,15 @@ void ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point
         if (b1MoreThan2 != pView->IsBigOrtho()) {
             long xtemp=dy2a-dx1a; if (dx1<0) xtemp=-xtemp;
             long ytemp=dx2a-dy1a; if (dy1<0) ytemp=-ytemp;
-            aRectP2.X()+=xtemp;
-            aRectP2.Y()+=ytemp;
-            aRectP3.X()+=xtemp;
-            aRectP3.Y()+=ytemp;
+            aRectP2.AdjustX(xtemp );
+            aRectP2.AdjustY(ytemp );
+            aRectP3.AdjustX(xtemp );
+            aRectP3.AdjustY(ytemp );
         } else {
             long xtemp=dy1a-dx2a; if (dx2<0) xtemp=-xtemp;
             long ytemp=dx1a-dy2a; if (dy2<0) ytemp=-ytemp;
-            aRectP3.X()+=xtemp;
-            aRectP3.Y()+=ytemp;
+            aRectP3.AdjustX(xtemp );
+            aRectP3.AdjustY(ytemp );
         }
     }
     bRect=true;
@@ -695,8 +695,8 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
                     if (bHor) ndy=long(ndy0*nXFact);
                     if (bVer) ndx=long(ndx0*nYFact);
                     aNeuPos1=aPnt1;
-                    aNeuPos1.X()+=ndx;
-                    aNeuPos1.Y()+=ndy;
+                    aNeuPos1.AdjustX(ndx );
+                    aNeuPos1.AdjustY(ndy );
                 }
             }
             if (nPnt2!=0xFFFF && !bNextIsControl) {
@@ -716,8 +716,8 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
                     if (bHor) ndy=long(ndy0*nXFact);
                     if (bVer) ndx=long(ndx0*nYFact);
                     aNeuPos2=aPnt2;
-                    aNeuPos2.X()+=ndx;
-                    aNeuPos2.Y()+=ndy;
+                    aNeuPos2.AdjustX(ndx );
+                    aNeuPos2.AdjustY(ndy );
                 }
             }
             if (bPnt1 && bPnt2) { // both alternatives exist (and compete)
@@ -894,12 +894,12 @@ bool ImpPathForDragAndCreate::endPathDrag(SdrDragStat const & rDrag)
                 Point aRef1(mrSdrPathObject.GetSnapRect().Center());
                 if (bXMirr) {
                     Point aRef2(aRef1);
-                    aRef2.Y()++;
+                    aRef2.AdjustY( 1 );
                     mrSdrPathObject.NbcMirrorGluePoints(aRef1,aRef2);
                 }
                 if (bYMirr) {
                     Point aRef2(aRef1);
-                    aRef2.X()++;
+                    aRef2.AdjustX( 1 );
                     mrSdrPathObject.NbcMirrorGluePoints(aRef1,aRef2);
                 }
             }

@@ -867,10 +867,10 @@ void TableLayouter::updateCells( tools::Rectangle& rRectangle )
                 if( getCellArea( xCell, aPos, aCellArea ) )
                 {
                     tools::Rectangle aCellRect;
-                    aCellRect.Left() = aCellArea.getMinX();
-                    aCellRect.Right() = aCellArea.getMaxX();
-                    aCellRect.Top() = aCellArea.getMinY();
-                    aCellRect.Bottom() = aCellArea.getMaxY();
+                    aCellRect.SetLeft( aCellArea.getMinX() );
+                    aCellRect.SetRight( aCellArea.getMaxX() );
+                    aCellRect.SetTop( aCellArea.getMinY() );
+                    aCellRect.SetBottom( aCellArea.getMaxY() );
                     aCellRect.Move( rRectangle.Left(), rRectangle.Top() );
                     xCell->setCellRect( aCellRect );
                 }
@@ -1111,7 +1111,7 @@ void TableLayouter::DistributeRows( ::tools::Rectangle& rArea, sal_Int32 nFirstR
         if( nHeight < nMinHeight )
         {
             sal_Int32 nNeededHeight = nRows * nMinHeight;
-            rArea.Bottom() += nNeededHeight - nAllHeight;
+            rArea.AdjustBottom(nNeededHeight - nAllHeight );
             nHeight = nMinHeight;
             nAllHeight = nRows * nMinHeight;
         }

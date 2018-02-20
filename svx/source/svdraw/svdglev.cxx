@@ -347,8 +347,8 @@ void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const vo
 
 static void ImpMove(Point& rPt, const void* p1, const void* /*p2*/, const void* /*p3*/, const void* /*p4*/)
 {
-    rPt.X()+=static_cast<const Size*>(p1)->Width();
-    rPt.Y()+=static_cast<const Size*>(p1)->Height();
+    rPt.AdjustX(static_cast<const Size*>(p1)->Width() );
+    rPt.AdjustY(static_cast<const Size*>(p1)->Height() );
 }
 
 void SdrGlueEditView::MoveMarkedGluePoints(const Size& rSiz, bool bCopy)

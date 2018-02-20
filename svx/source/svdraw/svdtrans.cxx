@@ -40,19 +40,19 @@ void ResizeRect(tools::Rectangle& rRect, const Point& rRef, const Fraction& rxFa
         SAL_WARN( "svx.svdraw", "invalid fraction xFract, using Fraction(1,1)" );
         aXFact = Fraction(1,1);
         long nWdt = rRect.Right() - rRect.Left();
-        if (nWdt == 0) rRect.Right()++;
+        if (nWdt == 0) rRect.AdjustRight( 1 );
     }
-    rRect.Left()  = rRef.X() + svx::Round( (rRect.Left()  - rRef.X()) * double(aXFact) );
-    rRect.Right() = rRef.X() + svx::Round( (rRect.Right() - rRef.X()) * double(aXFact) );
+    rRect.SetLeft( rRef.X() + svx::Round( (rRect.Left()  - rRef.X()) * double(aXFact) ) );
+    rRect.SetRight( rRef.X() + svx::Round( (rRect.Right() - rRef.X()) * double(aXFact) ) );
 
     if (!aYFact.IsValid()) {
         SAL_WARN( "svx.svdraw", "invalid fraction yFract, using Fraction(1,1)" );
         aYFact = Fraction(1,1);
         long nHgt = rRect.Bottom() - rRect.Top();
-        if (nHgt == 0) rRect.Bottom()++;
+        if (nHgt == 0) rRect.AdjustBottom( 1 );
     }
-    rRect.Top()    = rRef.Y() + svx::Round( (rRect.Top()    - rRef.Y()) * double(aYFact) );
-    rRect.Bottom() = rRef.Y() + svx::Round( (rRect.Bottom() - rRef.Y()) * double(aYFact) );
+    rRect.SetTop( rRef.Y() + svx::Round( (rRect.Top()    - rRef.Y()) * double(aYFact) ) );
+    rRect.SetBottom( rRef.Y() + svx::Round( (rRect.Bottom() - rRef.Y()) * double(aYFact) ) );
 
     rRect.Justify();
 }
@@ -104,20 +104,20 @@ void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2)
     long my=rRef2.Y()-rRef1.Y();
     if (mx==0) { // vertical axis
         long dx=rRef1.X()-rPnt.X();
-        rPnt.X()+=2*dx;
+        rPnt.AdjustX(2*dx );
     } else if (my==0) { // horizontal axis
         long dy=rRef1.Y()-rPnt.Y();
-        rPnt.Y()+=2*dy;
+        rPnt.AdjustY(2*dy );
     } else if (mx==my) { // diagonal axis '\'
         long dx1=rPnt.X()-rRef1.X();
         long dy1=rPnt.Y()-rRef1.Y();
-        rPnt.X()=rRef1.X()+dy1;
-        rPnt.Y()=rRef1.Y()+dx1;
+        rPnt.setX(rRef1.X()+dy1 );
+        rPnt.setY(rRef1.Y()+dx1 );
     } else if (mx==-my) { // diagonal axis '/'
         long dx1=rPnt.X()-rRef1.X();
         long dy1=rPnt.Y()-rRef1.Y();
-        rPnt.X()=rRef1.X()-dy1;
-        rPnt.Y()=rRef1.Y()-dx1;
+        rPnt.setX(rRef1.X()-dy1 );
+        rPnt.setY(rRef1.Y()-dx1 );
     } else { // arbitrary axis
         // TODO: Optimize this! Raise perpendicular on the mirroring axis..?
         long nRefWink=GetAngle(rRef2-rRef1);
@@ -172,36 +172,36 @@ double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCent
     if (bC1) {
         if (bVert) {
             // move into the direction of the center, as a basic position for the rotation
-            pC1->Y()-=y0;
+            pC1->AdjustY( -y0 );
             // resize, account for the distance from the center
-            pC1->Y()=svx::Round(static_cast<double>(pC1->Y()) /rRad.X()*(cx-pC1->X()));
-            pC1->Y()+=cy;
+            pC1->setY(svx::Round(static_cast<double>(pC1->Y()) /rRad.X()*(cx-pC1->X())) );
+            pC1->AdjustY(cy );
         } else {
             // move into the direction of the center, as a basic position for the rotation
-            pC1->X()-=x0;
+            pC1->AdjustX( -x0 );
             // resize, account for the distance from the center
             long nPntRad=cy-pC1->Y();
             double nFact=static_cast<double>(nPntRad)/static_cast<double>(rRad.Y());
-            pC1->X()=svx::Round(static_cast<double>(pC1->X())*nFact);
-            pC1->X()+=cx;
+            pC1->setX(svx::Round(static_cast<double>(pC1->X())*nFact) );
+            pC1->AdjustX(cx );
         }
         RotatePoint(*pC1,rCenter,sn,cs);
     }
     if (bC2) {
         if (bVert) {
             // move into the direction of the center, as a basic position for the rotation
-            pC2->Y()-=y0;
+            pC2->AdjustY( -y0 );
             // resize, account for the distance from the center
-            pC2->Y()=svx::Round(static_cast<double>(pC2->Y()) /rRad.X()*(rCenter.X()-pC2->X()));
-            pC2->Y()+=cy;
+            pC2->setY(svx::Round(static_cast<double>(pC2->Y()) /rRad.X()*(rCenter.X()-pC2->X())) );
+            pC2->AdjustY(cy );
         } else {
             // move into the direction of the center, as a basic position for the rotation
-            pC2->X()-=x0;
+            pC2->AdjustX( -x0 );
             // resize, account for the distance from the center
             long nPntRad=rCenter.Y()-pC2->Y();
             double nFact=static_cast<double>(nPntRad)/static_cast<double>(rRad.Y());
-            pC2->X()=svx::Round(static_cast<double>(pC2->X())*nFact);
-            pC2->X()+=cx;
+            pC2->setX(svx::Round(static_cast<double>(pC2->X())*nFact) );
+            pC2->AdjustX(cx );
         }
         RotatePoint(*pC2,rCenter,sn,cs);
     }
@@ -223,42 +223,42 @@ double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCente
     if (bVert) {
         long nStart=rCenter.X()-rRad.X();
         dx1=rPnt.X()-nStart;
-        rPnt.X()=nStart;
+        rPnt.setX(nStart );
         if (bC1) {
             dxC1=pC1->X()-nStart;
-            pC1->X()=nStart;
+            pC1->setX(nStart );
         }
         if (bC2) {
             dxC2=pC2->X()-nStart;
-            pC2->X()=nStart;
+            pC2->setX(nStart );
         }
     } else {
         long nStart=rCenter.Y()-rRad.Y();
         dy1=rPnt.Y()-nStart;
-        rPnt.Y()=nStart;
+        rPnt.setY(nStart );
         if (bC1) {
             dyC1=pC1->Y()-nStart;
-            pC1->Y()=nStart;
+            pC1->setY(nStart );
         }
         if (bC2) {
             dyC2=pC2->Y()-nStart;
-            pC2->Y()=nStart;
+            pC2->setY(nStart );
         }
     }
     double nAngle=GetCrookAngle(rPnt,rCenter,rRad,bVert);
     double sn=sin(nAngle);
     double cs=cos(nAngle);
     RotatePoint(rPnt,rCenter,sn,cs);
-    if (bC1) { if (bVert) pC1->Y()-=y0-rCenter.Y(); else pC1->X()-=x0-rCenter.X(); RotatePoint(*pC1,rCenter,sn,cs); }
-    if (bC2) { if (bVert) pC2->Y()-=y0-rCenter.Y(); else pC2->X()-=x0-rCenter.X(); RotatePoint(*pC2,rCenter,sn,cs); }
+    if (bC1) { if (bVert) pC1->AdjustY( -(y0-rCenter.Y()) ); else pC1->AdjustX( -(x0-rCenter.X()) ); RotatePoint(*pC1,rCenter,sn,cs); }
+    if (bC2) { if (bVert) pC2->AdjustY( -(y0-rCenter.Y()) ); else pC2->AdjustX( -(x0-rCenter.X()) ); RotatePoint(*pC2,rCenter,sn,cs); }
     if (bVert) {
-        rPnt.X()+=dx1;
-        if (bC1) pC1->X()+=dxC1;
-        if (bC2) pC2->X()+=dxC2;
+        rPnt.AdjustX(dx1 );
+        if (bC1) pC1->AdjustX(dxC1 );
+        if (bC2) pC2->AdjustX(dxC2 );
     } else {
-        rPnt.Y()+=dy1;
-        if (bC1) pC1->Y()+=dyC1;
-        if (bC2) pC2->Y()+=dyC2;
+        rPnt.AdjustY(dy1 );
+        if (bC1) pC1->AdjustY(dyC1 );
+        if (bC2) pC2->AdjustY(dyC2 );
     }
     rSin=sn;
     rCos=cs;
@@ -279,7 +279,7 @@ double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCen
         long dy=rPnt.Y()-y0;
         double a=static_cast<double>(y0-nTop)/nHgt;
         a*=dy;
-        rPnt.Y()=y0+svx::Round(a);
+        rPnt.setY(y0+svx::Round(a) );
     } return 0.0;
 }
 
@@ -515,8 +515,8 @@ void Poly2Rect(const tools::Polygon& rPol, tools::Rectangle& rRect, GeoStat& rGe
     rGeo.nShearAngle=nShW;
     rGeo.RecalcTan();
     Point aRU(aPt0);
-    aRU.X()+=nWdt;
-    aRU.Y()+=nHgt;
+    aRU.AdjustX(nWdt );
+    aRU.AdjustY(nHgt );
     rRect=tools::Rectangle(aPt0,aRU);
 }
 
@@ -528,12 +528,12 @@ void OrthoDistance8(const Point& rPt0, Point& rPt, bool bBigOrtho)
     long dxa=std::abs(dx);
     long dya=std::abs(dy);
     if (dx==0 || dy==0 || dxa==dya) return;
-    if (dxa>=dya*2) { rPt.Y()=rPt0.Y(); return; }
-    if (dya>=dxa*2) { rPt.X()=rPt0.X(); return; }
+    if (dxa>=dya*2) { rPt.setY(rPt0.Y() ); return; }
+    if (dya>=dxa*2) { rPt.setX(rPt0.X() ); return; }
     if ((dxa<dya) != bBigOrtho) {
-        rPt.Y()=rPt0.Y()+(dxa* (dy>=0 ? 1 : -1) );
+        rPt.setY(rPt0.Y()+(dxa* (dy>=0 ? 1 : -1) ) );
     } else {
-        rPt.X()=rPt0.X()+(dya* (dx>=0 ? 1 : -1) );
+        rPt.setX(rPt0.X()+(dya* (dx>=0 ? 1 : -1) ) );
     }
 }
 
@@ -544,9 +544,9 @@ void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho)
     long dxa=std::abs(dx);
     long dya=std::abs(dy);
     if ((dxa<dya) != bBigOrtho) {
-        rPt.Y()=rPt0.Y()+(dxa* (dy>=0 ? 1 : -1) );
+        rPt.setY(rPt0.Y()+(dxa* (dy>=0 ? 1 : -1) ) );
     } else {
-        rPt.X()=rPt0.X()+(dya* (dx>=0 ? 1 : -1) );
+        rPt.setX(rPt0.X()+(dya* (dx>=0 ? 1 : -1) ) );
     }
 }
 

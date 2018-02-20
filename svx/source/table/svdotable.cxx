@@ -1448,9 +1448,9 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, too
     {
         long nFreeHgt=aAnkRect.GetHeight()-aTextSiz.Height();
         if (eVAdj==SDRTEXTVERTADJUST_CENTER)
-            aTextPos.Y()+=nFreeHgt/2;
+            aTextPos.AdjustY(nFreeHgt/2 );
         if (eVAdj==SDRTEXTVERTADJUST_BOTTOM)
-            aTextPos.Y()+=nFreeHgt;
+            aTextPos.AdjustY(nFreeHgt );
     }
 
     if (pAnchorRect)
@@ -1563,14 +1563,14 @@ void SdrTableObj::TakeTextEditArea( const CellPos& rPos, Size* pPaperMin, Size* 
     TakeTextAnchorRect( rPos, aViewInit );
 
     Size aAnkSiz(aViewInit.GetSize());
-    aAnkSiz.Width()--; aAnkSiz.Height()--; // because GetSize() increments by one
+    aAnkSiz.AdjustWidth( -1 ); aAnkSiz.AdjustHeight( -1 ); // because GetSize() increments by one
 
     Size aMaxSiz(aAnkSiz.Width(),1000000);
     if (pModel!=nullptr)
     {
         Size aTmpSiz(pModel->GetMaxObjSize());
         if (aTmpSiz.Height()!=0)
-            aMaxSiz.Height()=aTmpSiz.Height();
+            aMaxSiz.setHeight(aTmpSiz.Height() );
     }
 
     CellRef xCell( mpImpl->getCell( rPos ) );
@@ -1578,7 +1578,7 @@ void SdrTableObj::TakeTextEditArea( const CellPos& rPos, Size* pPaperMin, Size* 
 
     aPaperMax=aMaxSiz;
 
-        aPaperMin.Width() = aAnkSiz.Width();
+        aPaperMin.setWidth( aAnkSiz.Width() );
 
     if (pViewMin!=nullptr)
     {
@@ -1587,24 +1587,24 @@ void SdrTableObj::TakeTextEditArea( const CellPos& rPos, Size* pPaperMin, Size* 
 
         if (eVAdj==SDRTEXTVERTADJUST_TOP)
         {
-            pViewMin->Bottom()-=nYFree;
+            pViewMin->AdjustBottom( -nYFree );
         }
         else if (eVAdj==SDRTEXTVERTADJUST_BOTTOM)
         {
-            pViewMin->Top()+=nYFree;
+            pViewMin->AdjustTop(nYFree );
         }
         else
         {
-            pViewMin->Top()+=nYFree/2;
-            pViewMin->Bottom()=pViewMin->Top()+aPaperMin.Height();
+            pViewMin->AdjustTop(nYFree/2 );
+            pViewMin->SetBottom(pViewMin->Top()+aPaperMin.Height() );
         }
     }
 
 
     if(IsVerticalWriting())
-        aPaperMin.Width() = 0;
+        aPaperMin.setWidth( 0 );
     else
-        aPaperMin.Height() = 0;
+        aPaperMin.setHeight( 0 );
 
     if (pPaperMin!=nullptr) *pPaperMin=aPaperMin;
     if (pPaperMax!=nullptr) *pPaperMax=aPaperMax;
@@ -2018,7 +2018,7 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
         nEdgeMax -= nEdge;
 
         Point aPoint( maRect.TopLeft() );
-        aPoint.Y() += nEdge;
+        aPoint.AdjustY(nEdge );
 
         TableEdgeHdl* pHdl= new TableEdgeHdl(aPoint,true,nEdgeMin,nEdgeMax,nColCount+1);
         pHdl->SetPointNum( nRow );
@@ -2037,7 +2037,7 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
         nEdgeMax -= nEdge;
 
         Point aPoint( maRect.TopLeft() );
-        aPoint.X() += nEdge;
+        aPoint.AdjustX(nEdge );
 
         TableEdgeHdl* pHdl = new TableEdgeHdl(aPoint,false,nEdgeMin,nEdgeMax, nRowCount+1);
         pHdl->SetPointNum( nCol );

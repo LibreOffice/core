@@ -104,13 +104,13 @@ void SvxXConnectionPreview::AdaptSize()
     // Adapt bitmap to Thumb size (not here!)
     if ( fRectWH < fWinWH)
     {
-        aNewSize.Width() = static_cast<long>( static_cast<double>(nHeight) * fRectWH );
-        aNewSize.Height()= nHeight;
+        aNewSize.setWidth( static_cast<long>( static_cast<double>(nHeight) * fRectWH ) );
+        aNewSize.setHeight( nHeight );
     }
     else
     {
-        aNewSize.Width() = nWidth;
-        aNewSize.Height()= static_cast<long>( static_cast<double>(nWidth) / fRectWH );
+        aNewSize.setWidth( nWidth );
+        aNewSize.setHeight( static_cast<long>( static_cast<double>(nWidth) / fRectWH ) );
     }
 
     Fraction aFrac1( aWinSize.Width(), aRect.GetWidth() );
@@ -122,8 +122,8 @@ void SvxXConnectionPreview::AdaptSize()
     aDisplayMap.SetScaleY( aMinFrac );
 
     // Centering
-    aNewPos.X() = ( nWidth - aNewSize.Width() )  >> 1;
-    aNewPos.Y() = ( nHeight - aNewSize.Height() ) >> 1;
+    aNewPos.setX( ( nWidth - aNewSize.Width() )  >> 1 );
+    aNewPos.setY( ( nHeight - aNewSize.Height() ) >> 1 );
 
     aDisplayMap.SetOrigin( LogicToLogic( aNewPos, aMapMode, aDisplayMap ) );
     SetMapMode( aDisplayMap );
@@ -292,8 +292,8 @@ void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
             Point aPt( aMapMode.GetOrigin() );
             long nX = static_cast<long>( ( static_cast<double>(aOutSize.Width()) - ( static_cast<double>(aOutSize.Width()) * static_cast<double>(*pMultFrac)  ) ) / 2.0 + 0.5 );
             long nY = static_cast<long>( ( static_cast<double>(aOutSize.Height()) - ( static_cast<double>(aOutSize.Height()) * static_cast<double>(*pMultFrac)  ) ) / 2.0 + 0.5 );
-            aPt.X() +=  nX;
-            aPt.Y() +=  nY;
+            aPt.AdjustX(nX );
+            aPt.AdjustY(nY );
 
             aMapMode.SetOrigin( aPt );
             SetMapMode( aMapMode );

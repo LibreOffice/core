@@ -472,10 +472,10 @@ Point SvxRectCtl::SetActualRPWithoutInvalidate( RectPoint eNewRP )
     aPtNew = GetPointFromRP( eNewRP );
 
     if( m_nState & CTL_STATE::NOHORZ )
-        aPtNew.X() = aPtMM.X();
+        aPtNew.setX( aPtMM.X() );
 
     if( m_nState & CTL_STATE::NOVERT )
-        aPtNew.Y() = aPtMM.Y();
+        aPtNew.setY( aPtMM.Y() );
 
     // fdo#74751 this fix reverse base point on RTL UI.
     bool bRTL = AllSettings::GetLayoutRTL();
@@ -590,10 +590,10 @@ void SvxRectCtl::SetState( CTL_STATE nState )
     Point _aPtNew( aPtLast );
 
     if( m_nState & CTL_STATE::NOHORZ )
-        _aPtNew.X() = aPtMM.X();
+        _aPtNew.setX( aPtMM.X() );
 
     if( m_nState & CTL_STATE::NOVERT)
-        _aPtNew.Y() = aPtMM.Y();
+        _aPtNew.setY( aPtMM.Y() );
 
     eRP = GetRPFromPoint( _aPtNew );
     Invalidate();
@@ -688,8 +688,8 @@ Point SvxPixelCtl::IndexToPoint(long nIndex) const
     sal_Int32 nYIndex = nIndex / nLines;
 
     Point aPtTl;
-    aPtTl.Y() = aRectSize.Height() * nYIndex / nLines + 1;
-    aPtTl.X() = aRectSize.Width() * nXIndex / nLines + 1;
+    aPtTl.setY( aRectSize.Height() * nYIndex / nLines + 1 );
+    aPtTl.setX( aRectSize.Width() * nXIndex / nLines + 1 );
 
     return aPtTl;
 }
@@ -812,13 +812,13 @@ void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectan
 
         for (i = 0; i < nLines; i++)
         {
-            aPtTl.Y() = aRectSize.Height() * i / nLines + 1;
-            aPtBr.Y() = aRectSize.Height() * (i + 1) / nLines - 1;
+            aPtTl.setY( aRectSize.Height() * i / nLines + 1 );
+            aPtBr.setY( aRectSize.Height() * (i + 1) / nLines - 1 );
 
             for (j = 0; j < nLines; j++)
             {
-                aPtTl.X() = aRectSize.Width() * j / nLines + 1;
-                aPtBr.X() = aRectSize.Width() * (j + 1) / nLines - 1;
+                aPtTl.setX( aRectSize.Width() * j / nLines + 1 );
+                aPtBr.setX( aRectSize.Width() * (j + 1) / nLines - 1 );
 
                 if (maPixelData[i * nLines + j] != nLastPixel)
                 {
@@ -1554,8 +1554,8 @@ void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     {
         const Size aOutputSize(GetOutputSize());
         Point aPos = Point( aOutputSize.Width() / 3, aOutputSize.Height() / 2 );
-        aPos.X() -= maSymbolSize.Width() / 2;
-        aPos.Y() -= maSymbolSize.Height() / 2;
+        aPos.AdjustX( -(maSymbolSize.Width() / 2) );
+        aPos.AdjustY( -(maSymbolSize.Height() / 2) );
         mpGraphic->Draw(&getBufferDevice(), aPos, maSymbolSize);
     }
 
@@ -1632,8 +1632,8 @@ SvxXShadowPreview::SvxXShadowPreview( vcl::Window* pParent )
 
     // prepare size
     Size aSize = GetOutputSize();
-    aSize.Width() = aSize.Width() / 3;
-    aSize.Height() = aSize.Height() / 3;
+    aSize.setWidth( aSize.Width() / 3 );
+    aSize.setHeight( aSize.Height() / 3 );
 
     // create RectangleObject
     const tools::Rectangle aObjectSize( Point( aSize.Width(), aSize.Height() ), aSize );
@@ -1683,8 +1683,8 @@ void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const tools::R
 
     // prepare size
     Size aSize = rRenderContext.GetOutputSize();
-    aSize.Width() = aSize.Width() / 3;
-    aSize.Height() = aSize.Height() / 3;
+    aSize.setWidth( aSize.Width() / 3 );
+    aSize.setHeight( aSize.Height() / 3 );
 
     tools::Rectangle aObjectRect(Point(aSize.Width(), aSize.Height()), aSize);
     mpRectangleObject->SetSnapRect(aObjectRect);

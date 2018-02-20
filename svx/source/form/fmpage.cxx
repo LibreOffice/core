@@ -200,11 +200,11 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
         tools::Rectangle aItemRect = pObj->GetCurrentBoundRect();
         aItemRect = pWindow->LogicToPixel( aItemRect );
         Point aPt = pWindow->OutputToScreenPixel( aItemRect.TopLeft() );
-        aItemRect.Left()   = aPt.X();
-        aItemRect.Top()    = aPt.Y();
+        aItemRect.SetLeft( aPt.X() );
+        aItemRect.SetTop( aPt.Y() );
         aPt = pWindow->OutputToScreenPixel( aItemRect.BottomRight() );
-        aItemRect.Right()  = aPt.X();
-        aItemRect.Bottom() = aPt.Y();
+        aItemRect.SetRight( aPt.X() );
+        aItemRect.SetBottom( aPt.Y() );
         if( rEvt.GetMode() == HelpEventMode::BALLOON )
             Help::ShowBalloon( pWindow, aItemRect.Center(), aItemRect, aHelpText);
         else

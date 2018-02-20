@@ -583,8 +583,8 @@ IMPL_LINK_NOARG(GalleryBrowser1, ShowContextMenuHdl, void*, void)
     const tools::Rectangle aThemesRect( mpThemes->GetPosPixel(), mpThemes->GetOutputSizePixel() );
     Point           aSelPos( mpThemes->GetBoundingRectangle( mpThemes->GetSelectedEntryPos() ).Center() );
 
-    aSelPos.X() = std::max( std::min( aSelPos.X(), aThemesRect.Right() ), aThemesRect.Left() );
-    aSelPos.Y() = std::max( std::min( aSelPos.Y(), aThemesRect.Bottom() ), aThemesRect.Top() );
+    aSelPos.setX( std::max( std::min( aSelPos.X(), aThemesRect.Right() ), aThemesRect.Left() ) );
+    aSelPos.setY( std::max( std::min( aSelPos.Y(), aThemesRect.Bottom() ), aThemesRect.Top() ) );
 
     aMenu->Execute( this, aSelPos );
 }

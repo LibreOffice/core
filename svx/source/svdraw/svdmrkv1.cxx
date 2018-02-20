@@ -292,10 +292,10 @@ void SdrMarkView::ImpSetPointsRects() const
             if (rR.IsEmpty()) {
                 rR=tools::Rectangle(aPt,aPt);
             } else {
-                if (aPt.X()<rR.Left  ()) rR.Left  ()=aPt.X();
-                if (aPt.X()>rR.Right ()) rR.Right ()=aPt.X();
-                if (aPt.Y()<rR.Top   ()) rR.Top   ()=aPt.Y();
-                if (aPt.Y()>rR.Bottom()) rR.Bottom()=aPt.Y();
+                if (aPt.X()<rR.Left  ()) rR.SetLeft(aPt.X() );
+                if (aPt.X()>rR.Right ()) rR.SetRight(aPt.X() );
+                if (aPt.Y()<rR.Top   ()) rR.SetTop(aPt.Y() );
+                if (aPt.Y()>rR.Bottom()) rR.SetBottom(aPt.Y() );
             }
         }
     }

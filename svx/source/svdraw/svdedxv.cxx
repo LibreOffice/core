@@ -337,10 +337,10 @@ void SdrObjEditView::ModelHasChanged()
                         tools::Rectangle aTmpRect(aOldArea);
                         sal_uInt16 nPixSiz=pOLV->GetInvalidateMore()+1;
                         Size aMore(pWin->PixelToLogic(Size(nPixSiz,nPixSiz)));
-                        aTmpRect.Left()-=aMore.Width();
-                        aTmpRect.Right()+=aMore.Width();
-                        aTmpRect.Top()-=aMore.Height();
-                        aTmpRect.Bottom()+=aMore.Height();
+                        aTmpRect.AdjustLeft( -(aMore.Width()) );
+                        aTmpRect.AdjustRight(aMore.Width() );
+                        aTmpRect.AdjustTop( -(aMore.Height()) );
+                        aTmpRect.AdjustBottom(aMore.Height() );
                         InvalidateOneWin(*pWin,aTmpRect);
                     }
                     if (bAnchorChg)
@@ -775,10 +775,10 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView const & rOutlView) c
             tools::Rectangle aPixRect(pWin->LogicToPixel(aBlankRect));
             sal_uInt16 nPixSiz(rOutlView.GetInvalidateMore() - 1);
 
-            aPixRect.Left()--;
-            aPixRect.Top()--;
-            aPixRect.Right()++;
-            aPixRect.Bottom()++;
+            aPixRect.AdjustLeft( -1 );
+            aPixRect.AdjustTop( -1 );
+            aPixRect.AdjustRight( 1 );
+            aPixRect.AdjustBottom( 1 );
 
             {
                 // limit xPixRect because of driver problems when pixel coordinates are too far out
@@ -787,17 +787,17 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView const & rOutlView) c
                 long nMaxX(aMaxXY.Width() + a);
                 long nMaxY(aMaxXY.Height() + a);
 
-                if (aPixRect.Left  ()<-a) aPixRect.Left()=-a;
-                if (aPixRect.Top   ()<-a) aPixRect.Top ()=-a;
-                if (aPixRect.Right ()>nMaxX) aPixRect.Right ()=nMaxX;
-                if (aPixRect.Bottom()>nMaxY) aPixRect.Bottom()=nMaxY;
+                if (aPixRect.Left  ()<-a) aPixRect.SetLeft(-a );
+                if (aPixRect.Top   ()<-a) aPixRect.SetTop(-a );
+                if (aPixRect.Right ()>nMaxX) aPixRect.SetRight(nMaxX );
+                if (aPixRect.Bottom()>nMaxY) aPixRect.SetBottom(nMaxY );
             }
 
             tools::Rectangle aOuterPix(aPixRect);
-            aOuterPix.Left()-=nPixSiz;
-            aOuterPix.Top()-=nPixSiz;
-            aOuterPix.Right()+=nPixSiz;
-            aOuterPix.Bottom()+=nPixSiz;
+            aOuterPix.AdjustLeft( -nPixSiz );
+            aOuterPix.AdjustTop( -nPixSiz );
+            aOuterPix.AdjustRight(nPixSiz );
+            aOuterPix.AdjustBottom(nPixSiz );
 
             bool bMerk(pWin->IsMapModeEnabled());
             pWin->EnableMapMode(false);
@@ -1558,10 +1558,10 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             aRect.Union(aTextEditArea);
             aRect.Union(aMinTextEditArea);
             aRect=pWin->LogicToPixel(aRect);
-            aRect.Left()-=nMorePix;
-            aRect.Top()-=nMorePix;
-            aRect.Right()+=nMorePix;
-            aRect.Bottom()+=nMorePix;
+            aRect.AdjustLeft( -nMorePix );
+            aRect.AdjustTop( -nMorePix );
+            aRect.AdjustRight(nMorePix );
+            aRect.AdjustBottom(nMorePix );
             aRect=pWin->PixelToLogic(aRect);
             InvalidateOneWin(*pWin,aRect);
             pWin->SetFillColor();
@@ -1703,10 +1703,10 @@ bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
                 aEditArea.Union(pOLV->GetOutputArea());
                 if (!aEditArea.IsInside(rHit)) {
                     Size aSiz(pWin->PixelToLogic(Size(nPixSiz,nPixSiz)));
-                    aEditArea.Left()-=aSiz.Width();
-                    aEditArea.Top()-=aSiz.Height();
-                    aEditArea.Right()+=aSiz.Width();
-                    aEditArea.Bottom()+=aSiz.Height();
+                    aEditArea.AdjustLeft( -(aSiz.Width()) );
+                    aEditArea.AdjustTop( -(aSiz.Height()) );
+                    aEditArea.AdjustRight(aSiz.Width() );
+                    aEditArea.AdjustBottom(aSiz.Height() );
                     bOk=aEditArea.IsInside(rHit);
                 }
             }
@@ -1790,10 +1790,10 @@ bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin)
             if (pWin)
             {
                 tools::Rectangle aR(pWin->LogicToPixel(pTextEditOutlinerView->GetOutputArea()));
-                if (aPixPos.X()<aR.Left  ()) aPixPos.X()=aR.Left  ();
-                if (aPixPos.X()>aR.Right ()) aPixPos.X()=aR.Right ();
-                if (aPixPos.Y()<aR.Top   ()) aPixPos.Y()=aR.Top   ();
-                if (aPixPos.Y()>aR.Bottom()) aPixPos.Y()=aR.Bottom();
+                if (aPixPos.X()<aR.Left  ()) aPixPos.setX(aR.Left  () );
+                if (aPixPos.X()>aR.Right ()) aPixPos.setX(aR.Right () );
+                if (aPixPos.Y()<aR.Top   ()) aPixPos.setY(aR.Top   () );
+                if (aPixPos.Y()>aR.Bottom()) aPixPos.setY(aR.Bottom() );
             }
             MouseEvent aMEvt(aPixPos,rMEvt.GetClicks(),rMEvt.GetMode(),
                              rMEvt.GetButtons(),rMEvt.GetModifier());
@@ -1823,10 +1823,10 @@ bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin)
         if (bPostIt && pWin) {
             Point aPixPos(rMEvt.GetPosPixel());
             tools::Rectangle aR(pWin->LogicToPixel(pTextEditOutlinerView->GetOutputArea()));
-            if (aPixPos.X()<aR.Left  ()) aPixPos.X()=aR.Left  ();
-            if (aPixPos.X()>aR.Right ()) aPixPos.X()=aR.Right ();
-            if (aPixPos.Y()<aR.Top   ()) aPixPos.Y()=aR.Top   ();
-            if (aPixPos.Y()>aR.Bottom()) aPixPos.Y()=aR.Bottom();
+            if (aPixPos.X()<aR.Left  ()) aPixPos.setX(aR.Left  () );
+            if (aPixPos.X()>aR.Right ()) aPixPos.setX(aR.Right () );
+            if (aPixPos.Y()<aR.Top   ()) aPixPos.setY(aR.Top   () );
+            if (aPixPos.Y()>aR.Bottom()) aPixPos.setY(aR.Bottom() );
             MouseEvent aMEvt(aPixPos,rMEvt.GetClicks(),rMEvt.GetMode(),
                              rMEvt.GetButtons(),rMEvt.GetModifier());
             if (pTextEditOutlinerView->MouseButtonUp(aMEvt)) {
@@ -1861,10 +1861,10 @@ bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
                 aR = pWin->LogicToPixel(aR);
             else if (pTextEditWin)
                 aR = pTextEditWin->LogicToPixel(aR);
-            if (aPixPos.X()<aR.Left  ()) aPixPos.X()=aR.Left  ();
-            if (aPixPos.X()>aR.Right ()) aPixPos.X()=aR.Right ();
-            if (aPixPos.Y()<aR.Top   ()) aPixPos.Y()=aR.Top   ();
-            if (aPixPos.Y()>aR.Bottom()) aPixPos.Y()=aR.Bottom();
+            if (aPixPos.X()<aR.Left  ()) aPixPos.setX(aR.Left  () );
+            if (aPixPos.X()>aR.Right ()) aPixPos.setX(aR.Right () );
+            if (aPixPos.Y()<aR.Top   ()) aPixPos.setY(aR.Top   () );
+            if (aPixPos.Y()>aR.Bottom()) aPixPos.setY(aR.Bottom() );
             MouseEvent aMEvt(aPixPos,rMEvt.GetClicks(),rMEvt.GetMode(),
                              rMEvt.GetButtons(),rMEvt.GetModifier());
             if (pTextEditOutlinerView->MouseMove(aMEvt) && bSelMode) {
@@ -1896,10 +1896,10 @@ bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
                 Point aPixPos(rCEvt.GetMousePosPixel());
                 if (rCEvt.IsMouseEvent() && pWin) {
                     tools::Rectangle aR(pWin->LogicToPixel(pTextEditOutlinerView->GetOutputArea()));
-                    if (aPixPos.X()<aR.Left  ()) aPixPos.X()=aR.Left  ();
-                    if (aPixPos.X()>aR.Right ()) aPixPos.X()=aR.Right ();
-                    if (aPixPos.Y()<aR.Top   ()) aPixPos.Y()=aR.Top   ();
-                    if (aPixPos.Y()>aR.Bottom()) aPixPos.Y()=aR.Bottom();
+                    if (aPixPos.X()<aR.Left  ()) aPixPos.setX(aR.Left  () );
+                    if (aPixPos.X()>aR.Right ()) aPixPos.setX(aR.Right () );
+                    if (aPixPos.Y()<aR.Top   ()) aPixPos.setY(aR.Top   () );
+                    if (aPixPos.Y()>aR.Bottom()) aPixPos.setY(aR.Bottom() );
                 }
                 CommandEvent aCEvt(aPixPos,rCEvt.GetCommand(),rCEvt.IsMouseEvent());
                 // Command is void at the OutlinerView, sadly

@@ -92,15 +92,15 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
     long nWdt = 0, nMinWdt = 0, nMaxWdt = 0;
 
     Size aNewSize = rR.GetSize();
-    aNewSize.Width()--; aNewSize.Height()--;
+    aNewSize.AdjustWidth( -1 ); aNewSize.AdjustHeight( -1 );
 
     Size aMaxSiz(100000, 100000);
     Size aTmpSiz = pModel->GetMaxObjSize();
 
     if (aTmpSiz.Width())
-        aMaxSiz.Width() = aTmpSiz.Width();
+        aMaxSiz.setWidth( aTmpSiz.Width() );
     if (aTmpSiz.Height())
-        aMaxSiz.Height() = aTmpSiz.Height();
+        aMaxSiz.setHeight( aTmpSiz.Height() );
 
     if (bWdtGrow)
     {
@@ -111,7 +111,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
         if (nMinWdt <= 0)
             nMinWdt = 1;
 
-        aNewSize.Width() = nMaxWdt;
+        aNewSize.setWidth( nMaxWdt );
     }
 
     if (bHgtGrow)
@@ -123,25 +123,25 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
         if (nMinHgt <= 0)
             nMinHgt = 1;
 
-        aNewSize.Height() = nMaxHgt;
+        aNewSize.setHeight( nMaxHgt );
     }
 
     long nHDist = GetTextLeftDistance() + GetTextRightDistance();
     long nVDist = GetTextUpperDistance() + GetTextLowerDistance();
-    aNewSize.Width() -= nHDist;
-    aNewSize.Height() -= nVDist;
+    aNewSize.AdjustWidth( -nHDist );
+    aNewSize.AdjustHeight( -nVDist );
 
     if (aNewSize.Width() < 2)
-        aNewSize.Width() = 2;
+        aNewSize.setWidth( 2 );
     if (aNewSize.Height() < 2)
-        aNewSize.Height() = 2;
+        aNewSize.setHeight( 2 );
 
     if (!IsInEditMode())
     {
         if (bHScroll)
-            aNewSize.Width() = 0x0FFFFFFF; // don't break ticker text
+            aNewSize.setWidth( 0x0FFFFFFF ); // don't break ticker text
         if (bVScroll)
-            aNewSize.Height() = 0x0FFFFFFF;
+            aNewSize.setHeight( 0x0FFFFFFF );
     }
 
     if (pEdtOutl)
@@ -216,14 +216,14 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
         SdrTextHorzAdjust eHAdj = GetTextHorizontalAdjust();
 
         if (eHAdj == SDRTEXTHORZADJUST_LEFT)
-            rR.Right() += nWdtGrow;
+            rR.AdjustRight(nWdtGrow );
         else if (eHAdj == SDRTEXTHORZADJUST_RIGHT)
-            rR.Left() -= nWdtGrow;
+            rR.AdjustLeft( -nWdtGrow );
         else
         {
             long nWdtGrow2 = nWdtGrow / 2;
-            rR.Left() -= nWdtGrow2;
-            rR.Right() = rR.Left() + nWdt;
+            rR.AdjustLeft( -nWdtGrow2 );
+            rR.SetRight( rR.Left() + nWdt );
         }
     }
 
@@ -232,14 +232,14 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
         SdrTextVertAdjust eVAdj = GetTextVerticalAdjust();
 
         if (eVAdj == SDRTEXTVERTADJUST_TOP)
-            rR.Bottom() += nHgtGrow;
+            rR.AdjustBottom(nHgtGrow );
         else if (eVAdj == SDRTEXTVERTADJUST_BOTTOM)
-            rR.Top() -= nHgtGrow;
+            rR.AdjustTop( -nHgtGrow );
         else
         {
             long nHgtGrow2 = nHgtGrow / 2;
-            rR.Top() -= nHgtGrow2;
-            rR.Bottom() = rR.Top() + nHgt;
+            rR.AdjustTop( -nHgtGrow2 );
+            rR.SetBottom( rR.Top() + nHgt );
         }
     }
 

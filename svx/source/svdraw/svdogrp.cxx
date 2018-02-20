@@ -418,12 +418,12 @@ void SdrObjGroup::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
         Point aRef1(GetSnapRect().Center());
         if (bXMirr) {
             Point aRef2(aRef1);
-            aRef2.Y()++;
+            aRef2.AdjustY( 1 );
             NbcMirrorGluePoints(aRef1,aRef2);
         }
         if (bYMirr) {
             Point aRef2(aRef1);
-            aRef2.X()++;
+            aRef2.AdjustX( 1 );
             NbcMirrorGluePoints(aRef1,aRef2);
         }
     }
@@ -570,12 +570,12 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
             Point aRef1(GetSnapRect().Center());
             if (bXMirr) {
                 Point aRef2(aRef1);
-                aRef2.Y()++;
+                aRef2.AdjustY( 1 );
                 NbcMirrorGluePoints(aRef1,aRef2);
             }
             if (bYMirr) {
                 Point aRef2(aRef1);
-                aRef2.X()++;
+                aRef2.AdjustX( 1 );
                 NbcMirrorGluePoints(aRef1,aRef2);
             }
         }

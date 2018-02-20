@@ -213,8 +213,8 @@ uno::Reference<XAccessible > SAL_CALL SvxPixelCtlAccessible::getAccessibleAtPoin
         throw lang::DisposedException();
 
     Point childPoint;
-    childPoint.X() = aPoint.X;
-    childPoint.Y() = aPoint.Y;
+    childPoint.setX( aPoint.X );
+    childPoint.setY( aPoint.Y );
 
     Point pt= mrPixelCtl.PixelToLogic(childPoint);
     long nIndex = mrPixelCtl.PointToIndex(pt);

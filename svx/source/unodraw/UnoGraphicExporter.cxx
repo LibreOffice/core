@@ -228,12 +228,12 @@ namespace {
                     {
                         if(aTargetSize.Width())
                         {
-                            aTargetSize.Width() -= 1;
+                            aTargetSize.AdjustWidth( -1 );
                         }
 
                         if(aTargetSize.Height())
                         {
-                            aTargetSize.Height() -= 1;
+                            aTargetSize.AdjustHeight( -1 );
                         }
                     }
                 }
@@ -268,8 +268,8 @@ namespace {
             nHeight = ( nWidth * aBoundSize.Height() ) / aBoundSize.Width();
         }
 
-        aOutSize.Width() = nWidth;
-        aOutSize.Height() = nHeight;
+        aOutSize.setWidth( nWidth );
+        aOutSize.setHeight( nHeight );
 
         return &aOutSize;
     }

@@ -199,7 +199,7 @@ void SdrRectObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
         if (aGeo.nShearAngle>0)
         {
             Point aRef(rRect.TopLeft());
-            rRect.Left()-=nDst;
+            rRect.AdjustLeft( -nDst );
             Point aTmpPt(rRect.TopLeft());
             RotatePoint(aTmpPt,aRef,aGeo.nSin,aGeo.nCos);
             aTmpPt-=rRect.TopLeft();
@@ -207,7 +207,7 @@ void SdrRectObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
         }
         else
         {
-            rRect.Right()-=nDst;
+            rRect.AdjustRight( -nDst );
         }
     }
 }
@@ -335,7 +335,7 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
             if (a>b) a=b;
             if (a<0) a=0;
             aPnt=maRect.TopLeft();
-            aPnt.X()+=a;
+            aPnt.AdjustX(a );
             eKind = SdrHdlKind::Circle;
             break;
         }
@@ -520,10 +520,10 @@ SdrGluePoint SdrRectObj::GetVertexGluePoint(sal_uInt16 nPosNum) const
 
     Point aPt;
     switch (nPosNum) {
-        case 0: aPt=maRect.TopCenter();    aPt.Y()-=nWdt; break;
-        case 1: aPt=maRect.RightCenter();  aPt.X()+=nWdt; break;
-        case 2: aPt=maRect.BottomCenter(); aPt.Y()+=nWdt; break;
-        case 3: aPt=maRect.LeftCenter();   aPt.X()-=nWdt; break;
+        case 0: aPt=maRect.TopCenter();    aPt.AdjustY( -nWdt ); break;
+        case 1: aPt=maRect.RightCenter();  aPt.AdjustX(nWdt ); break;
+        case 2: aPt=maRect.BottomCenter(); aPt.AdjustY(nWdt ); break;
+        case 3: aPt=maRect.LeftCenter();   aPt.AdjustX( -nWdt ); break;
     }
     if (aGeo.nShearAngle!=0) ShearPoint(aPt,maRect.TopLeft(),aGeo.nTan);
     if (aGeo.nRotationAngle!=0) RotatePoint(aPt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
@@ -546,10 +546,10 @@ SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
 
     Point aPt;
     switch (nPosNum) {
-        case 0: aPt=maRect.TopLeft();     aPt.X()-=nWdt; aPt.Y()-=nWdt; break;
-        case 1: aPt=maRect.TopRight();    aPt.X()+=nWdt; aPt.Y()-=nWdt; break;
-        case 2: aPt=maRect.BottomRight(); aPt.X()+=nWdt; aPt.Y()+=nWdt; break;
-        case 3: aPt=maRect.BottomLeft();  aPt.X()-=nWdt; aPt.Y()+=nWdt; break;
+        case 0: aPt=maRect.TopLeft();     aPt.AdjustX( -nWdt ); aPt.AdjustY( -nWdt ); break;
+        case 1: aPt=maRect.TopRight();    aPt.AdjustX(nWdt ); aPt.AdjustY( -nWdt ); break;
+        case 2: aPt=maRect.BottomRight(); aPt.AdjustX(nWdt ); aPt.AdjustY(nWdt ); break;
+        case 3: aPt=maRect.BottomLeft();  aPt.AdjustX( -nWdt ); aPt.AdjustY(nWdt ); break;
     }
     if (aGeo.nShearAngle!=0) ShearPoint(aPt,maRect.TopLeft(),aGeo.nTan);
     if (aGeo.nRotationAngle!=0) RotatePoint(aPt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);

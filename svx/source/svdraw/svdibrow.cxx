@@ -333,7 +333,7 @@ void SdrItemBrowserControl::PaintField(OutputDevice& rDev, const tools::Rectangl
         return;
     }
     tools::Rectangle aR(rRect);
-    aR.Bottom()++;
+    aR.AdjustBottom( 1 );
     auto& pEntry=aList[nAktPaintRow];
     if (pEntry->bComment)
     {
@@ -341,8 +341,8 @@ void SdrItemBrowserControl::PaintField(OutputDevice& rDev, const tools::Rectangl
         {
             rDev.SetLineColor();
             rDev.SetFillColor( Color( COL_LIGHTGRAY ) );
-            aR.Left()=0;
-            aR.Right()=rDev.GetOutputSize().Width();
+            aR.SetLeft(0 );
+            aR.SetRight(rDev.GetOutputSize().Width() );
             rDev.DrawRect(aR);
             rDev.DrawText(rRect.TopLeft(),pEntry->aName);
         }
@@ -477,8 +477,8 @@ bool SdrItemBrowserControl::BeginChangeEntry(std::size_t nPos)
         SetMode(MYBROWSEMODE & BrowserMode(~BrowserMode::KEEPHIGHLIGHT));
         pEditControl=VclPtr<ImpItemEdit>::Create(&GetDataWindow(),this,0);
         tools::Rectangle aRect(GetFieldRectPixel(nPos, ITEMBROWSER_VALUECOL_ID, false));
-        aRect.Left()+=2; // little offset for the Edit, so it's exact to the pixel
-        aRect.Right()--;
+        aRect.AdjustLeft(2 ); // little offset for the Edit, so it's exact to the pixel
+        aRect.AdjustRight( -1 );
         pEditControl->SetPosSizePixel(aRect.TopLeft(),aRect.GetSize());
         pEditControl->SetText(pEntry->aValue);
         pEditControl->SetBackground( Wallpaper(Color(COL_LIGHTGRAY)));

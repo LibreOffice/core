@@ -743,8 +743,8 @@ void IMapWindow::CreateDefaultObject()
     Size aPageSize = pPageView->GetPage()->GetSize();
     sal_uInt32 nDefaultObjectSizeWidth = aPageSize.Width() / 4;
     sal_uInt32 nDefaultObjectSizeHeight = aPageSize.Height() / 4;
-    aPagePos.X() += (aPageSize.Width() / 2) - (nDefaultObjectSizeWidth / 2);
-    aPagePos.Y() += (aPageSize.Height() / 2) - (nDefaultObjectSizeHeight / 2);
+    aPagePos.AdjustX((aPageSize.Width() / 2) - (nDefaultObjectSizeWidth / 2) );
+    aPagePos.AdjustY((aPageSize.Height() / 2) - (nDefaultObjectSizeHeight / 2) );
     tools::Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject( pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(), nullptr, pModel);

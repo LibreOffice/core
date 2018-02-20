@@ -492,10 +492,10 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
             long nHalfLen=(rPol.nLineLen-nNeedSiz-nArrow1Wdt/4-nArrow2Wdt/4) /2;
             rPol.nMainlineCnt=2;
             rPol.aMainline1.aP2=aMainlinePt1;
-            rPol.aMainline1.aP2.X()+=nHalfLen;
+            rPol.aMainline1.aP2.AdjustX(nHalfLen );
             RotatePoint(rPol.aMainline1.aP2,rPol.aMainline1.aP1,nLineSin,nLineCos);
             rPol.aMainline2.aP1=aMainlinePt2;
-            rPol.aMainline2.aP1.X()-=nHalfLen;
+            rPol.aMainline2.aP1.AdjustX( -nHalfLen );
             RotatePoint(rPol.aMainline2.aP1,rPol.aMainline2.aP2,nLineSin,nLineCos);
         }
     } else {
@@ -507,8 +507,8 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
             if (rPol.eUsedTextHPos==css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE) nLen2=nArrow2Len+nTextWdt;
         }
         rPol.aMainline1.aP1=aMainlinePt1;
-        rPol.aMainline1.aP2=aMainlinePt1; rPol.aMainline1.aP2.X()-=nLen1; RotatePoint(rPol.aMainline1.aP2,aMainlinePt1,nLineSin,nLineCos);
-        rPol.aMainline2.aP1=aMainlinePt2; rPol.aMainline2.aP1.X()+=nLen2; RotatePoint(rPol.aMainline2.aP1,aMainlinePt2,nLineSin,nLineCos);
+        rPol.aMainline1.aP2=aMainlinePt1; rPol.aMainline1.aP2.AdjustX( -nLen1 ); RotatePoint(rPol.aMainline1.aP2,aMainlinePt1,nLineSin,nLineCos);
+        rPol.aMainline2.aP1=aMainlinePt2; rPol.aMainline2.aP1.AdjustX(nLen2 ); RotatePoint(rPol.aMainline2.aP1,aMainlinePt2,nLineSin,nLineCos);
         rPol.aMainline2.aP2=aMainlinePt2;
         rPol.aMainline3.aP1=aMainlinePt1;
         rPol.aMainline3.aP2=aMainlinePt2;
@@ -623,10 +623,10 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 
     // determine TextSize including text frame margins
     Size aTextSize2(aMPol.aTextSize);
-    if (aTextSize2.Width()<1) aTextSize2.Width()=1;
-    if (aTextSize2.Height()<1) aTextSize2.Height()=1;
-    aTextSize2.Width()+=GetTextLeftDistance()+GetTextRightDistance();
-    aTextSize2.Height()+=GetTextUpperDistance()+GetTextLowerDistance();
+    if (aTextSize2.Width()<1) aTextSize2.setWidth(1 );
+    if (aTextSize2.Height()<1) aTextSize2.setHeight(1 );
+    aTextSize2.AdjustWidth(GetTextLeftDistance()+GetTextRightDistance() );
+    aTextSize2.AdjustHeight(GetTextUpperDistance()+GetTextLowerDistance() );
 
     Point aPt1b(aMPol.aMainline1.aP1);
     long nLen=aMPol.nLineLen;
@@ -649,47 +649,47 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
     css::drawing::MeasureTextVertPos eMV=aMPol.eUsedTextVPos;
     if (!bRota90) {
         switch (eMH) {
-            case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE: aTextPos.X()=aPt1b.X()-aTextSize2.Width()-nArr1Len-nLWdt; break;
-            case css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE: aTextPos.X()=aPt1b.X()+nLen+nArr2Len+nLWdt; break;
-            default: aTextPos.X()=aPt1b.X(); aTextSize2.Width()=nLen;
+            case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE: aTextPos.setX(aPt1b.X()-aTextSize2.Width()-nArr1Len-nLWdt ); break;
+            case css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE: aTextPos.setX(aPt1b.X()+nLen+nArr2Len+nLWdt ); break;
+            default: aTextPos.setX(aPt1b.X() ); aTextSize2.setWidth(nLen );
         }
         switch (eMV) {
             case css::drawing::MeasureTextVertPos_CENTERED:
-                aTextPos.Y()=aPt1b.Y()-aTextSize2.Height()/2; break;
+                aTextPos.setY(aPt1b.Y()-aTextSize2.Height()/2 ); break;
             case css::drawing::MeasureTextVertPos_WEST: {
-                if (!bUpsideDown) aTextPos.Y()=aPt1b.Y()+nLWdt;
-                else aTextPos.Y()=aPt1b.Y()-aTextSize2.Height()-nLWdt;
+                if (!bUpsideDown) aTextPos.setY(aPt1b.Y()+nLWdt );
+                else aTextPos.setY(aPt1b.Y()-aTextSize2.Height()-nLWdt );
             } break;
             default: {
-                if (!bUpsideDown) aTextPos.Y()=aPt1b.Y()-aTextSize2.Height()-nLWdt;
-                else aTextPos.Y()=aPt1b.Y()+nLWdt;
+                if (!bUpsideDown) aTextPos.setY(aPt1b.Y()-aTextSize2.Height()-nLWdt );
+                else aTextPos.setY(aPt1b.Y()+nLWdt );
             }
         }
         if (bUpsideDown) {
-            aTextPos.X()+=aTextSize2.Width();
-            aTextPos.Y()+=aTextSize2.Height();
+            aTextPos.AdjustX(aTextSize2.Width() );
+            aTextPos.AdjustY(aTextSize2.Height() );
         }
     } else { // also if bTextRota90==TRUE
         switch (eMH) {
-            case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE: aTextPos.X()=aPt1b.X()-aTextSize2.Height()-nArr1Len; break;
-            case css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE: aTextPos.X()=aPt1b.X()+nLen+nArr2Len; break;
-            default: aTextPos.X()=aPt1b.X(); aTextSize2.Height()=nLen;
+            case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE: aTextPos.setX(aPt1b.X()-aTextSize2.Height()-nArr1Len ); break;
+            case css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE: aTextPos.setX(aPt1b.X()+nLen+nArr2Len ); break;
+            default: aTextPos.setX(aPt1b.X() ); aTextSize2.setHeight(nLen );
         }
         switch (eMV) {
             case css::drawing::MeasureTextVertPos_CENTERED:
-                aTextPos.Y()=aPt1b.Y()+aTextSize2.Width()/2; break;
+                aTextPos.setY(aPt1b.Y()+aTextSize2.Width()/2 ); break;
             case css::drawing::MeasureTextVertPos_WEST: {
-                if (!bBelowRefEdge) aTextPos.Y()=aPt1b.Y()+aTextSize2.Width()+nLWdt;
-                else aTextPos.Y()=aPt1b.Y()-nLWdt;
+                if (!bBelowRefEdge) aTextPos.setY(aPt1b.Y()+aTextSize2.Width()+nLWdt );
+                else aTextPos.setY(aPt1b.Y()-nLWdt );
             } break;
             default: {
-                if (!bBelowRefEdge) aTextPos.Y()=aPt1b.Y()-nLWdt;
-                else aTextPos.Y()=aPt1b.Y()+aTextSize2.Width()+nLWdt;
+                if (!bBelowRefEdge) aTextPos.setY(aPt1b.Y()-nLWdt );
+                else aTextPos.setY(aPt1b.Y()+aTextSize2.Width()+nLWdt );
             }
         }
         if (bUpsideDown) {
-            aTextPos.X()+=aTextSize2.Height();
-            aTextPos.Y()-=aTextSize2.Width();
+            aTextPos.AdjustX(aTextSize2.Height() );
+            aTextPos.AdjustY( -(aTextSize2.Width()) );
         }
     }
     if (aMPol.nTextAngle!=aGeo.nRotationAngle) {
@@ -697,7 +697,7 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
         const_cast<SdrMeasureObj*>(this)->aGeo.RecalcSinCos();
     }
     RotatePoint(aTextPos,aPt1b,aMPol.nLineSin,aMPol.nLineCos);
-    aTextSize2.Width()++; aTextSize2.Height()++; // because of the Rect-Ctor's odd behavior
+    aTextSize2.AdjustWidth( 1 ); aTextSize2.AdjustHeight( 1 ); // because of the Rect-Ctor's odd behavior
     rRect=tools::Rectangle(aTextPos,aTextSize2);
     rRect.Justify();
     const_cast<SdrMeasureObj*>(this)->maRect=rRect;
@@ -920,8 +920,8 @@ void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) c
                     if (bHor) ndy=long(ndy0*nXFact);
                     if (bVer) ndx=long(ndx0*nYFact);
                     aPt=aFix;
-                    aPt.X()+=ndx;
-                    aPt.Y()+=ndy;
+                    aPt.AdjustX(ndx );
+                    aPt.AdjustY(ndy );
                 } // else Ortho8
             }
             rMov=aPt;
@@ -1026,11 +1026,11 @@ void SdrMeasureObj::NbcRotate(const Point& rRef, long nAngle, double sn, double 
         dx=BigMulDiv(dx,nLen0,nLen1);
         dy=BigMulDiv(dy,nLen0,nLen1);
         if (rRef==aPt2) {
-            aPt1.X()=aPt2.X()-dx;
-            aPt1.Y()=aPt2.Y()-dy;
+            aPt1.setX(aPt2.X()-dx );
+            aPt1.setY(aPt2.Y()-dy );
         } else {
-            aPt2.X()=aPt1.X()+dx;
-            aPt2.Y()=aPt1.Y()+dy;
+            aPt2.setX(aPt1.X()+dx );
+            aPt2.setY(aPt1.Y()+dy );
         }
     }
     SetRectsDirty();

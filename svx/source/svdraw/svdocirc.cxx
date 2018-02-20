@@ -61,25 +61,25 @@ Point GetAnglePnt(const tools::Rectangle& rR, long nAngle)
     double a;
     a=nAngle*nPi180;
     Point aRetval(svx::Round(cos(a)*nMaxRad),-svx::Round(sin(a)*nMaxRad));
-    if (nWdt==0) aRetval.X()=0;
-    if (nHgt==0) aRetval.Y()=0;
+    if (nWdt==0) aRetval.setX(0 );
+    if (nHgt==0) aRetval.setY(0 );
     if (nWdt!=nHgt) {
         if (nWdt>nHgt) {
             if (nWdt!=0) {
                 // stop possible overruns for very large objects
                 if (std::abs(nHgt)>32767 || std::abs(aRetval.Y())>32767) {
-                    aRetval.Y()=BigMulDiv(aRetval.Y(),nHgt,nWdt);
+                    aRetval.setY(BigMulDiv(aRetval.Y(),nHgt,nWdt) );
                 } else {
-                    aRetval.Y()=aRetval.Y()*nHgt/nWdt;
+                    aRetval.setY(aRetval.Y()*nHgt/nWdt );
                 }
             }
         } else {
             if (nHgt!=0) {
                 // stop possible overruns for very large objects
                 if (std::abs(nWdt)>32767 || std::abs(aRetval.X())>32767) {
-                    aRetval.X()=BigMulDiv(aRetval.X(),nWdt,nHgt);
+                    aRetval.setX(BigMulDiv(aRetval.X(),nWdt,nHgt) );
                 } else {
-                    aRetval.X()=aRetval.X()*nWdt/nHgt;
+                    aRetval.setX(aRetval.X()*nWdt/nHgt );
                 }
             }
         }
@@ -505,11 +505,11 @@ bool SdrCircObj::applySpecialDrag(SdrDragStat& rDrag)
 
         if(nWdt>=nHgt)
         {
-            aPt.Y()=BigMulDiv(aPt.Y(),nWdt,nHgt);
+            aPt.setY(BigMulDiv(aPt.Y(),nWdt,nHgt) );
         }
         else
         {
-            aPt.X()=BigMulDiv(aPt.X(),nHgt,nWdt);
+            aPt.setX(BigMulDiv(aPt.X(),nHgt,nWdt) );
         }
 
         long nAngle=NormAngle360(GetAngle(aPt));
@@ -618,12 +618,12 @@ void ImpCircUser::SetCreateParams(SdrDragStat const & rStat)
     nEnd=36000;
     if (rStat.GetPointCount()>2) {
         Point aP(rStat.GetPoint(2)-aCenter);
-        if (nWdt==0) aP.X()=0;
-        if (nHgt==0) aP.Y()=0;
+        if (nWdt==0) aP.setX(0 );
+        if (nHgt==0) aP.setY(0 );
         if (nWdt>=nHgt) {
-            if (nHgt!=0) aP.Y()=aP.Y()*nWdt/nHgt;
+            if (nHgt!=0) aP.setY(aP.Y()*nWdt/nHgt );
         } else {
-            if (nWdt!=0) aP.X()=aP.X()*nHgt/nWdt;
+            if (nWdt!=0) aP.setX(aP.X()*nHgt/nWdt );
         }
         nStart=NormAngle360(GetAngle(aP));
         if (rStat.GetView()!=nullptr && rStat.GetView()->IsAngleSnapEnabled()) {
@@ -642,9 +642,9 @@ void ImpCircUser::SetCreateParams(SdrDragStat const & rStat)
     if (rStat.GetPointCount()>3) {
         Point aP(rStat.GetPoint(3)-aCenter);
         if (nWdt>=nHgt) {
-            aP.Y()=BigMulDiv(aP.Y(),nWdt,nHgt);
+            aP.setY(BigMulDiv(aP.Y(),nWdt,nHgt) );
         } else {
-            aP.X()=BigMulDiv(aP.X(),nHgt,nWdt);
+            aP.setX(BigMulDiv(aP.X(),nHgt,nWdt) );
         }
         nEnd=NormAngle360(GetAngle(aP));
         if (rStat.GetView()!=nullptr && rStat.GetView()->IsAngleSnapEnabled()) {
@@ -868,14 +868,14 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         // starting point
         a=nStartAngle*nPi180;
         aTmpPt1=Point(svx::Round(cos(a)*nMaxRad),-svx::Round(sin(a)*nMaxRad));
-        if (nWdt==0) aTmpPt1.X()=0;
-        if (nHgt==0) aTmpPt1.Y()=0;
+        if (nWdt==0) aTmpPt1.setX(0 );
+        if (nHgt==0) aTmpPt1.setY(0 );
         aTmpPt1+=aCenter;
         // finishing point
         a=nEndAngle*nPi180;
         aTmpPt2=Point(svx::Round(cos(a)*nMaxRad),-svx::Round(sin(a)*nMaxRad));
-        if (nWdt==0) aTmpPt2.X()=0;
-        if (nHgt==0) aTmpPt2.Y()=0;
+        if (nWdt==0) aTmpPt2.setX(0 );
+        if (nHgt==0) aTmpPt2.setY(0 );
         aTmpPt2+=aCenter;
         if (aGeo.nRotationAngle!=0) {
             RotatePoint(aTmpPt1,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
@@ -940,10 +940,10 @@ void SdrCircObj::RestGeoData(const SdrObjGeoData& rGeo)
 
 void Union(tools::Rectangle& rR, const Point& rP)
 {
-    if (rP.X()<rR.Left  ()) rR.Left  ()=rP.X();
-    if (rP.X()>rR.Right ()) rR.Right ()=rP.X();
-    if (rP.Y()<rR.Top   ()) rR.Top   ()=rP.Y();
-    if (rP.Y()>rR.Bottom()) rR.Bottom()=rP.Y();
+    if (rP.X()<rR.Left  ()) rR.SetLeft(rP.X() );
+    if (rP.X()>rR.Right ()) rR.SetRight(rP.X() );
+    if (rP.Y()<rR.Top   ()) rR.SetTop(rP.Y() );
+    if (rP.Y()>rR.Bottom()) rR.SetBottom(rP.Y() );
 }
 
 void SdrCircObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
@@ -954,10 +954,10 @@ void SdrCircObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
         const Point aPntEnd(GetAnglePnt(maRect,nEndAngle));
         long a=nStartAngle;
         long e=nEndAngle;
-        rRect.Left  ()=maRect.Right();
-        rRect.Right ()=maRect.Left();
-        rRect.Top   ()=maRect.Bottom();
-        rRect.Bottom()=maRect.Top();
+        rRect.SetLeft(maRect.Right() );
+        rRect.SetRight(maRect.Left() );
+        rRect.SetTop(maRect.Bottom() );
+        rRect.SetBottom(maRect.Top() );
         Union(rRect,aPntStart);
         Union(rRect,aPntEnd);
         if ((a<=18000 && e>=18000) || (a>e && (a<=18000 || e>=18000))) {
@@ -988,13 +988,13 @@ void SdrCircObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
         long nDst=svx::Round((rRect.Bottom()-rRect.Top())*aGeo.nTan);
         if (aGeo.nShearAngle>0) {
             Point aRef(rRect.TopLeft());
-            rRect.Left()-=nDst;
+            rRect.AdjustLeft( -nDst );
             Point aTmpPt(rRect.TopLeft());
             RotatePoint(aTmpPt,aRef,aGeo.nSin,aGeo.nCos);
             aTmpPt-=rRect.TopLeft();
             rRect.Move(aTmpPt.X(),aTmpPt.Y());
         } else {
-            rRect.Right()-=nDst;
+            rRect.AdjustRight( -nDst );
         }
     }
 }

@@ -142,8 +142,8 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
 
     if(mpPage)
     {
-        aPgOrg.X()=mpPage->GetLeftBorder();
-        aPgOrg.Y()=mpPage->GetUpperBorder();
+        aPgOrg.setX(mpPage->GetLeftBorder() );
+        aPgOrg.setY(mpPage->GetUpperBorder() );
     }
     mbHasMarked = false;
     aLayerVisi.SetAll();
@@ -701,10 +701,10 @@ void SdrPageView::ImpInvalidateHelpLineArea(sal_uInt16 nNum) const
                 OutputDevice& rOutDev = pCandidate->GetOutputDevice();
                 tools::Rectangle aR(rHL.GetBoundRect(rOutDev));
                 Size aSiz(rOutDev.PixelToLogic(Size(1,1)));
-                aR.Left() -= aSiz.Width();
-                aR.Right() += aSiz.Width();
-                aR.Top() -= aSiz.Height();
-                aR.Bottom() += aSiz.Height();
+                aR.AdjustLeft( -(aSiz.Width()) );
+                aR.AdjustRight(aSiz.Width() );
+                aR.AdjustTop( -(aSiz.Height()) );
+                aR.AdjustBottom(aSiz.Height() );
                 const_cast<SdrView&>(GetView()).InvalidateOneWin(static_cast<vcl::Window&>(rOutDev), aR);
             }
         }

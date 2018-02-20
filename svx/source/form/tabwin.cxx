@@ -378,8 +378,8 @@ void FmFieldWin::Resize()
     // adapt size of css::form::ListBox
     Point aLBPos( LISTBOX_BORDER, LISTBOX_BORDER );
     Size aLBSize( aOutputSize );
-    aLBSize.Width() -= (2*LISTBOX_BORDER);
-    aLBSize.Height() -= (2*LISTBOX_BORDER);
+    aLBSize.AdjustWidth( -(2*LISTBOX_BORDER) );
+    aLBSize.AdjustHeight( -(2*LISTBOX_BORDER) );
 
     pListBox->SetPosSizePixel( aLBPos, aLBSize );
 }

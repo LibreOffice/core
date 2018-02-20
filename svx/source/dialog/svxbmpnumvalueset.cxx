@@ -103,13 +103,13 @@ static void lcl_PaintLevel(OutputDevice* pVDev, sal_Int16 nNumberingType,
         rRuleFont.SetStyleName(rFontName);
         pVDev->SetFont(rRuleFont);
         pVDev->DrawText(rLeft, rBulletChar);
-        rLeft.X() += pVDev->GetTextWidth(rBulletChar);
+        rLeft.AdjustX(pVDev->GetTextWidth(rBulletChar) );
     }
     else
     {
         pVDev->SetFont(rTextFont);
         pVDev->DrawText(rLeft, rText);
-        rLeft.X() += pVDev->GetTextWidth(rText);
+        rLeft.AdjustX(pVDev->GetTextWidth(rText) );
     }
 }
 void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
@@ -148,7 +148,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     Size aSize = aFont.GetFontSize();
 
     vcl::Font aRuleFont( lcl_GetDefaultBulletFont() );
-    aSize.Height() = nRectHeight/6;
+    aSize.setHeight( nRectHeight/6 );
     aRuleFont.SetFontSize(aSize);
     aRuleFont.SetColor(aTextColor);
     aRuleFont.SetFillColor(aBackColor);
@@ -156,7 +156,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         aFont = aRuleFont;
     else if(ePageType == NumberingPageType::OUTLINE)
     {
-        aSize.Height() = nRectHeight/8;
+        aSize.setHeight( nRectHeight/8 );
     }
     aFont.SetColor(aTextColor);
     aFont.SetFillColor(aBackColor);
@@ -200,13 +200,13 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         for( sal_uInt16 i = 0; i < 3; i++ )
         {
             sal_uInt16 nY = 11 + i * 33;
-            aStart.Y() = aBLPos.Y() + nRectHeight  * nY / 100;
+            aStart.setY( aBLPos.Y() + nRectHeight  * nY / 100 );
             OUString sText;
             if(ePageType == NumberingPageType::BULLET)
             {
                 sText = OUString( aBulletTypes[nItemId - 1] );
-                aStart.Y() -= pDev->GetTextHeight()/2;
-                aStart.X() = aBLPos.X() + 5;
+                aStart.AdjustY( -(pDev->GetTextHeight()/2) );
+                aStart.setX( aBLPos.X() + 5 );
             }
             else
             {
@@ -227,8 +227,8 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     }
                 }
                 // start just next to the left edge
-                aStart.X() = aBLPos.X() + 2;
-                aStart.Y() -= pDev->GetTextHeight()/2;
+                aStart.setX( aBLPos.X() + 2 );
+                aStart.AdjustY( -(pDev->GetTextHeight()/2) );
             }
             pDev->DrawText(aStart, sText);
         }
@@ -300,13 +300,13 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         OSL_FAIL("Exception in DefaultNumberingProvider::makeNumberingString");
                     }
 
-                    aLeft.Y() -= (pDev->GetTextHeight()/2);
+                    aLeft.AdjustY( -(pDev->GetTextHeight()/2) );
                     if(!sPrefixes[i].isEmpty() &&
                         sPrefixes[i] != " ")
                     {
                         pVDev->SetFont(aFont);
                         pVDev->DrawText(aLeft, sPrefixes[i]);
-                        aLeft.X() += pDev->GetTextWidth(sPrefixes[i]);
+                        aLeft.AdjustX(pDev->GetTextWidth(sPrefixes[i]) );
                     }
                     if(aParentNumberings[i])
                     {
@@ -339,7 +339,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     {
                         pVDev->SetFont(aFont);
                         pVDev->DrawText(aLeft, sSuffixes[i]);
-                        aLeft.X() += pDev->GetTextWidth(sSuffixes[i]);
+                        aLeft.AdjustX(pDev->GetTextWidth(sSuffixes[i]) );
                     }
 
                     long nLineTop = nStartY + nRectHeight * aLinesArr[2 * i + 1]/100 ;
@@ -542,7 +542,7 @@ void SvxBmpNumValueSet::UserDraw(const UserDrawEvent& rUDEvt)
         for( sal_uInt16 i = 0; i < 3; i++ )
         {
             sal_uInt16 nY = 11 + i * 33;
-            aPos.Y() = aBLPos.Y() + nRectHeight  * nY / 100;
+            aPos.setY( aBLPos.Y() + nRectHeight  * nY / 100 );
             aGraphic.Draw( pDev, aPos, aSize );
         }
     }

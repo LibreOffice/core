@@ -229,16 +229,16 @@ Point EnhancedCustomShape3d::Transformation2D::Transform2D( const basegfx::B3DPo
     Point aPoint2D;
     if ( eProjectionMode == drawing::ProjectionMode_PARALLEL )
     {
-        aPoint2D.X() = static_cast<sal_Int32>(rPoint3D.getX());
-        aPoint2D.Y() = static_cast<sal_Int32>(rPoint3D.getY());
+        aPoint2D.setX( static_cast<sal_Int32>(rPoint3D.getX()) );
+        aPoint2D.setY( static_cast<sal_Int32>(rPoint3D.getY()) );
     }
     else
     {
         double fX = rPoint3D.getX() - fOriginX;
         double fY = rPoint3D.getY() - fOriginY;
         double f = ( fZScreen - fViewPoint.getZ() ) / ( rPoint3D.getZ() - fViewPoint.getZ() );
-        aPoint2D.X() = static_cast<sal_Int32>(( fX - fViewPoint.getX() ) * f + fViewPoint.getX() + fOriginX );
-        aPoint2D.Y() = static_cast<sal_Int32>(( fY - fViewPoint.getY() ) * f + fViewPoint.getY() + fOriginY );
+        aPoint2D.setX( static_cast<sal_Int32>(( fX - fViewPoint.getX() ) * f + fViewPoint.getX() + fOriginX ) );
+        aPoint2D.setY( static_cast<sal_Int32>(( fY - fViewPoint.getY() ) * f + fViewPoint.getY() + fOriginY ) );
     }
     aPoint2D.Move( aCenter.X(), aCenter.Y() );
     return aPoint2D;
@@ -285,10 +285,10 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             long dy = aSnapRect.Bottom()- aSnapRect.Top();
             Point aP( aSnapRect.TopLeft() );
             RotatePoint( aP, pCustomShape->GetSnapRect().Center(), sin( a ), cos( a ) );
-            aSnapRect.Left() = aP.X();
-            aSnapRect.Top() = aP.Y();
-            aSnapRect.Right() = aSnapRect.Left() + dx;
-            aSnapRect.Bottom() = aSnapRect.Top() + dy;
+            aSnapRect.SetLeft( aP.X() );
+            aSnapRect.SetTop( aP.Y() );
+            aSnapRect.SetRight( aSnapRect.Left() + dx );
+            aSnapRect.SetBottom( aSnapRect.Top() + dy );
         }
         Point aCenter( aSnapRect.Center() );
 

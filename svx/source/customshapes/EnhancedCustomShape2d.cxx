@@ -725,8 +725,8 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
 
     Point aP( pCustomShapeObj->GetSnapRect().Center() );
     Size aS( pCustomShapeObj->GetLogicRect().GetSize() );
-    aP.X() -= aS.Width() / 2;
-    aP.Y() -= aS.Height() / 2;
+    aP.AdjustX( -(aS.Width() / 2) );
+    aP.AdjustY( -(aS.Height() / 2) );
     aLogicRect = tools::Rectangle( aP, aS );
 
     OUString sShapeType;
@@ -935,7 +935,7 @@ Point EnhancedCustomShape2d::GetPoint( const css::drawing::EnhancedCustomShapePa
             {
                 fVal *= fYScale;
             }
-            aRetValue.Y() = static_cast<sal_Int32>(fVal);
+            aRetValue.setY( static_cast<sal_Int32>(fVal) );
         }
         else            // width
         {
@@ -945,7 +945,7 @@ Point EnhancedCustomShape2d::GetPoint( const css::drawing::EnhancedCustomShapePa
             {
                 fVal *= fXScale;
             }
-            aRetValue.X() = static_cast<long>(fVal);
+            aRetValue.setX( static_cast<long>(fVal) );
         }
     }
     while ( ++nPass < 2 );
@@ -1107,13 +1107,13 @@ tools::Rectangle EnhancedCustomShape2d::GetTextRect() const
     Point aBottomRight( GetPoint( seqTextFrames[ nIndex ].BottomRight, !bOOXMLShape, true ) );
     if ( bFlipH )
     {
-        aTopLeft.X() = aLogicRect.GetWidth() - aTopLeft.X();
-        aBottomRight.X() = aLogicRect.GetWidth() - aBottomRight.X();
+        aTopLeft.setX( aLogicRect.GetWidth() - aTopLeft.X() );
+        aBottomRight.setX( aLogicRect.GetWidth() - aBottomRight.X() );
     }
     if ( bFlipV )
     {
-        aTopLeft.Y() = aLogicRect.GetHeight() - aTopLeft.Y();
-        aBottomRight.Y() = aLogicRect.GetHeight() - aBottomRight.Y();
+        aTopLeft.setY( aLogicRect.GetHeight() - aTopLeft.Y() );
+        aBottomRight.setY( aLogicRect.GetHeight() - aBottomRight.Y() );
     }
     tools::Rectangle aRect( aTopLeft, aBottomRight );
     SAL_INFO("svx", aRect.GetWidth() << " x " << aRect.GetHeight());
@@ -1184,9 +1184,9 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
                 RotatePoint( rReturnPosition, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), sin( a ), cos( a ) );
             }
             if ( bFlipH )
-                rReturnPosition.X() = aLogicRect.GetWidth() - rReturnPosition.X();
+                rReturnPosition.setX( aLogicRect.GetWidth() - rReturnPosition.X() );
             if ( bFlipV )
-                rReturnPosition.Y() = aLogicRect.GetHeight() - rReturnPosition.Y();
+                rReturnPosition.setY( aLogicRect.GetHeight() - rReturnPosition.Y() );
             rReturnPosition.Move( aLogicRect.Left(), aLogicRect.Top() );
             bRetValue = true;
         }
@@ -1207,9 +1207,9 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
 
             aP.Move( -aLogicRect.Left(), -aLogicRect.Top() );
             if ( bFlipH )
-                aP.X() = aLogicRect.GetWidth() - aP.X();
+                aP.setX( aLogicRect.GetWidth() - aP.X() );
             if ( bFlipV )
-                aP.Y() = aLogicRect.GetHeight() - aP.Y();
+                aP.setY( aLogicRect.GetHeight() - aP.Y() );
             if ( nRotateAngle )
             {
                 double a = -nRotateAngle * F_PI18000;
@@ -1624,8 +1624,8 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                             fHeight /= 2;
                         }else if( bIsDefaultPath && !bIsDefaultViewBox /*&& (nGeneratorVersion == SfxObjectShell::Sym_L2)*/ )
                         {
-                            _aCenter.X() = nCoordWidth/2 * fXScale;
-                            _aCenter.Y() = nCoordHeight/2 * fYScale;
+                            _aCenter.setX( nCoordWidth/2 * fXScale );
+                            _aCenter.setY( nCoordHeight/2 * fYScale );
                             fWidth = nCoordWidth/2;
                             fHeight = nCoordHeight/2;
                             const Any* pViewBox = rGeometryItem.GetPropertyValueByName( "ViewBox" );
@@ -1794,10 +1794,10 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                             Point aCenter( aRect.Center() );
                             Point aStart( GetPoint( seqCoordinates[ static_cast<sal_uInt16>( rSrcPt + nXor ) ], true, true ) );
                             Point aEnd( GetPoint( seqCoordinates[ static_cast<sal_uInt16>( rSrcPt + ( nXor ^ 1 ) ) ], true, true ) );
-                            aStart.X() = static_cast<sal_Int32>( static_cast<double>( aStart.X() - aCenter.X() ) ) + aCenter.X();
-                            aStart.Y() = static_cast<sal_Int32>( static_cast<double>( aStart.Y() - aCenter.Y() ) ) + aCenter.Y();
-                            aEnd.X()   = static_cast<sal_Int32>( static_cast<double>( aEnd.X()   - aCenter.X() ) ) + aCenter.X();
-                            aEnd.Y()   = static_cast<sal_Int32>( static_cast<double>( aEnd.Y()   - aCenter.Y() ) ) + aCenter.Y();
+                            aStart.setX( static_cast<sal_Int32>( static_cast<double>( aStart.X() - aCenter.X() ) ) + aCenter.X() );
+                            aStart.setY( static_cast<sal_Int32>( static_cast<double>( aStart.Y() - aCenter.Y() ) ) + aCenter.Y() );
+                            aEnd.setX( static_cast<sal_Int32>( static_cast<double>( aEnd.X()   - aCenter.X() ) ) + aCenter.X() );
+                            aEnd.setY( static_cast<sal_Int32>( static_cast<double>( aEnd.Y()   - aCenter.Y() ) ) + aCenter.Y() );
                             aNewB2DPolygon.append(CreateArc( aRect, aStart, aEnd, bClockwise));
                         }
                         rSrcPt += 4;

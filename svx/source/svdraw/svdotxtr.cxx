@@ -110,12 +110,12 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
         Point aRef1(GetSnapRect().Center());
         if (bXMirr) {
             Point aRef2(aRef1);
-            aRef2.Y()++;
+            aRef2.AdjustY( 1 );
             NbcMirrorGluePoints(aRef1,aRef2);
         }
         if (bYMirr) {
             Point aRef2(aRef1);
-            aRef2.X()++;
+            aRef2.AdjustX( 1 );
             NbcMirrorGluePoints(aRef1,aRef2);
         }
     }
@@ -191,10 +191,10 @@ void SdrTextObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
     long dy=maRect.Bottom()-maRect.Top();
     Point aP(maRect.TopLeft());
     RotatePoint(aP,rRef,sn,cs);
-    maRect.Left()=aP.X();
-    maRect.Top()=aP.Y();
-    maRect.Right()=maRect.Left()+dx;
-    maRect.Bottom()=maRect.Top()+dy;
+    maRect.SetLeft(aP.X() );
+    maRect.SetTop(aP.Y() );
+    maRect.SetRight(maRect.Left()+dx );
+    maRect.SetBottom(maRect.Top()+dy );
     if (aGeo.nRotationAngle==0) {
         aGeo.nRotationAngle=NormAngle360(nAngle);
         aGeo.nSin=sn;
