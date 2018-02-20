@@ -105,11 +105,12 @@ handleLockedDocumentRequest_(
                                   ? aInfo
                                   : Translate::get( STR_UNKNOWNUSER,
                                                aResLocale ) );
-            aMessage = Translate::get(STR_TRYLATER_MSG, aResLocale);
+            aMessage = Translate::get(xRetry.is() ? STR_OVERWRITE_IGNORELOCK_MSG : STR_TRYLATER_MSG,
+                aResLocale);
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            ScopedVclPtrInstance< TryLaterQueryBox > xDialog(pParent, aResLocale, aMessage);
+            ScopedVclPtrInstance< TryLaterQueryBox > xDialog(pParent, aResLocale, aMessage, xRetry.is());
             nResult = xDialog->Execute();
         }
         else if ( nMode == UUI_DOC_OWN_LOAD_LOCK ||
