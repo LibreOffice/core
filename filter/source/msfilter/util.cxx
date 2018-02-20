@@ -1318,7 +1318,7 @@ sal_uInt8 TransColToIco( const Color& rCol )
     case COL_AUTO:          nCol = 0;   break;
 
     default:
-        static const ColorData aColArr[ 16 ] = {
+        static const Color aColArr[ 16 ] = {
             COL_BLACK,      COL_LIGHTBLUE,  COL_LIGHTCYAN,  COL_LIGHTGREEN,
             COL_LIGHTMAGENTA,COL_LIGHTRED,  COL_YELLOW,     COL_WHITE,
             COL_BLUE,       COL_CYAN,       COL_GREEN,      COL_MAGENTA,

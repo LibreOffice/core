@@ -524,7 +524,7 @@ public:
     std::map<sal_uInt32,OString> aEscherBlipCache;
 
     DffRecordManager    maShapeRecords;
-    ColorData           mnDefaultColor;
+    Color               mnDefaultColor;
 
     bool                mbSkipImages;
 
@@ -581,7 +581,7 @@ public:
                      SvStream* pStData,
                      SdrModel* pSdrModel_,
                      long      nApplicationScale,
-                     ColorData mnDefaultColor_      =  COL_DEFAULT,
+                     Color     mnDefaultColor_      =  COL_DEFAULT,
                      SvStream* pStData2_            =  nullptr,
                      bool bSkipImages               =  false );
 
