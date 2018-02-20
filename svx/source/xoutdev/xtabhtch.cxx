@@ -67,11 +67,11 @@ bool XHatchList::Create()
     aStr.append(" 1");
 
     sal_Int32 nLen = aStr.getLength() - 1;
-    Insert(o3tl::make_unique<XHatchEntry>(XHatch(RGB_Color(COL_BLACK),css::drawing::HatchStyle_SINGLE,100,  0),aStr.toString()));
+    Insert(o3tl::make_unique<XHatchEntry>(XHatch(COL_BLACK,css::drawing::HatchStyle_SINGLE,100,  0),aStr.toString()));
     aStr[nLen] = '2';
-    Insert(o3tl::make_unique<XHatchEntry>(XHatch(RGB_Color(COL_RED  ),css::drawing::HatchStyle_DOUBLE, 80,450),aStr.toString()));
+    Insert(o3tl::make_unique<XHatchEntry>(XHatch(COL_RED  ,css::drawing::HatchStyle_DOUBLE, 80,450),aStr.toString()));
     aStr[nLen] = '3';
-    Insert(o3tl::make_unique<XHatchEntry>(XHatch(RGB_Color(COL_BLUE ),css::drawing::HatchStyle_TRIPLE,120,  0),aStr.toString()));
+    Insert(o3tl::make_unique<XHatchEntry>(XHatch(COL_BLUE ,css::drawing::HatchStyle_TRIPLE,120,  0),aStr.toString()));
 
     return true;
 }
