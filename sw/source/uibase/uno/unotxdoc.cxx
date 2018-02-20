@@ -3406,6 +3406,12 @@ VclPtr<vcl::Window> SwXTextDocument::getDocWindow()
     SwView* pView = pDocShell->GetView();
     if (pView)
         pWindow = &(pView->GetEditWin());
+
+    LokChartHelper aChartHelper(pView);
+    VclPtr<vcl::Window> pChartWindow = aChartHelper.GetWindow();
+    if (pChartWindow)
+        pWindow = pChartWindow;
+
     return pWindow;
 }
 
@@ -3479,18 +3485,11 @@ void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
 
-    vcl::Window* pWindow = &(pDocShell->GetView()->GetEditWin());
-
-    SfxViewShell* pViewShell = pDocShell->GetView();
-    LokChartHelper aChartHelper(pViewShell);
-    vcl::Window* pChartWindow = aChartHelper.GetWindow();
-    if (pChartWindow)
-    {
-        pWindow = pChartWindow;
-    }
+    VclPtr<vcl::Window> pWindow = getDocWindow();
+    if (!pWindow)
+        return;
 
     KeyEvent aEvent(nCharCode, nKeyCode, 0);
-
     switch (nType)
     {
     case LOK_KEYEVENT_KEYINPUT:
