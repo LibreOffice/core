@@ -102,6 +102,13 @@
   <Type Name="SwRect">
     <DisplayString>{m_Point}, {m_Size}</DisplayString>
   </Type>
+  <Type Name="tools::Rectangle">
+    <DisplayString IncludeView="w">{nRight==-32767?0:(nRight-nLeft+(nLeft>nRight?(-1):(1)))}</DisplayString>
+    <DisplayString IncludeView="h">{nBottom==-32767?0:(nBottom-nTop+(nTop>nBottom?(-1):(1)))}</DisplayString>
+    <DisplayString IncludeView="sz" Condition="nRight==-32767 || nBottom==-32767">empty</DisplayString>
+    <DisplayString IncludeView="sz">{*this,view(w)nd} x {*this,view(h)nd}</DisplayString>
+    <DisplayString>{{ LT=[{nLeft} , {nTop}] RB=[{nRight} , {nBottom}] [{*this,view(sz)}] }}</DisplayString>
+  </Type>
   <Type Name="_sal_Sequence">
     <DisplayString Condition="nElements == 0">_sal_Sequence (empty)</DisplayString>
     <DisplayString>_sal_Sequence of {nElements,d} elements</DisplayString>
