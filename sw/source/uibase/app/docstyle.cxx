@@ -56,6 +56,7 @@
 #include <paratr.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/intlwrapper.hxx>
@@ -859,7 +860,7 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
         return aDesc;
     }
 
-    if ( SfxStyleFamily::Frame == nFamily || SfxStyleFamily::Para == nFamily)
+    if ( SfxStyleFamily::Frame == nFamily || SfxStyleFamily::Para == nFamily || SfxStyleFamily::Char == nFamily )
     {
         if( !pSet )
             GetItemSet();
@@ -871,7 +872,9 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
         OUString sBreak;
         bool bHasWesternFontPrefix = false;
         bool bHasCJKFontPrefix = false;
+        bool bHasCTLFontPrefix = false;
         SvtCJKOptions aCJKOptions;
+        SvtCTLOptions aCTLOptions;
 
         // Get currently used FillStyle and remember, also need the XFillFloatTransparenceItem
         // to decide if gradient transparence is used
@@ -886,12 +889,6 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
                 {
                     case SID_ATTR_AUTO_STYLE_UPDATE:
                     case RES_PAGEDESC:
-                    //CTL not yet supported
-                    case RES_CHRATR_CTL_FONT:
-                    case RES_CHRATR_CTL_FONTSIZE:
-                    case RES_CHRATR_CTL_LANGUAGE:
-                    case RES_CHRATR_CTL_POSTURE:
-                    case RES_CHRATR_CTL_WEIGHT:
                         break;
                     default:
                     {
@@ -960,6 +957,19 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
                                 {
                                     aItemPresentation = SwResId(STR_CJK_FONT) + aItemPresentation;
                                     bHasCJKFontPrefix = true;
+                                }
+                                break;
+                                case RES_CHRATR_CTL_FONT:
+                                case RES_CHRATR_CTL_FONTSIZE:
+                                case RES_CHRATR_CTL_LANGUAGE:
+                                case RES_CHRATR_CTL_POSTURE:
+                                case RES_CHRATR_CTL_WEIGHT:
+                                if(aCTLOptions.IsCTLFontEnabled())
+                                    bIsDefault = true;
+                                if(!bHasCTLFontPrefix)
+                                {
+                                    aItemPresentation = SwResId(STR_CTL_FONT) + aItemPresentation;
+                                    bHasCTLFontPrefix = true;
                                 }
                                 break;
                                 case RES_CHRATR_FONT:
