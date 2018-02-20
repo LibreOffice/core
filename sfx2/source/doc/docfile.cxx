@@ -29,6 +29,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/document/XDocumentRevisionListPersistence.hpp>
 #include <com/sun/star/document/LockedDocumentRequest.hpp>
+#include <com/sun/star/document/LockedOnSavingRequest.hpp>
 #include <com/sun/star/document/OwnLockOnDocumentRequest.hpp>
 #include <com/sun/star/document/LockFileIgnoreRequest.hpp>
 #include <com/sun/star/document/LockFileCorruptRequest.hpp>
@@ -67,6 +68,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/tempfile.hxx>
@@ -858,7 +860,7 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog( const LockFileEnt
     // show the interaction regarding the document opening
     uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
 
-    if ( ::svt::DocumentLockFile::IsInteractionAllowed() && xHandler.is() && ( bIsLoading || bOwnLock ) )
+    if ( ::svt::DocumentLockFile::IsInteractionAllowed() && xHandler.is() && ( bIsLoading || !bHandleSysLocked || bOwnLock ) )
     {
         OUString aDocumentURL = GetURLObject().GetLastName();
         OUString aInfo;
@@ -873,27 +875,32 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog( const LockFileEnt
             xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
                 document::OwnLockOnDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo, !bIsLoading ) ) );
         }
-        else /*logically therefore bIsLoading is set */
+        else
         {
+            // Use a fourth continuation in case there's no filesystem lock:
+            // "Ignore lock file and open/replace the document"
+            if (!bHandleSysLocked)
+                nContinuations = 4;
+
             if ( !aData[LockFileComponent::OOOUSERNAME].isEmpty() )
                 aInfo = aData[LockFileComponent::OOOUSERNAME];
             else
                 aInfo = aData[LockFileComponent::SYSUSERNAME];
 
             if ( !aInfo.isEmpty() && !aData[LockFileComponent::EDITTIME].isEmpty() )
+                aInfo += " ( " + aData[LockFileComponent::EDITTIME] + " )";
+
+            if (!bIsLoading) // so, !bHandleSysLocked
             {
-                aInfo +=  " ( " ;
-                aInfo += aData[LockFileComponent::EDITTIME];
-                aInfo += " )";
+                xInteractionRequestImpl = new ::ucbhelper::InteractionRequest(uno::makeAny(
+                    document::LockedOnSavingRequest(OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo)));
+                // Currently, only the last "Retry" continuation (meaning ignore the lock and try overwriting) can be returned.
             }
-
-            xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
-                document::LockedDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo ) ) );
-
-            // Use a fourth continuation in case there's no filesystem lock:
-            // "Ignore lock file and open the document"
-            if (!bHandleSysLocked)
-                nContinuations = 4;
+            else /*logically therefore bIsLoading is set */
+            {
+                xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
+                    document::LockedDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo ) ) );
+            }
         }
 
         uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations(nContinuations);
@@ -903,7 +910,7 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog( const LockFileEnt
         if (nContinuations > 3)
         {
             // We use InteractionRetry to reflect that user wants to
-            // ignore the (stale?) alien lock file and open the document
+            // ignore the (stale?) alien lock file and open/overwrite the document
             aContinuations[3] = new ::ucbhelper::InteractionRetry(xInteractionRequestImpl.get());
         }
         xInteractionRequestImpl->setContinuations( aContinuations );
@@ -1248,6 +1255,22 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
                     // TODO/LATER: This implementation does not allow to detect the system lock on saving here, actually this is no big problem
                     // if system lock is used the writeable stream should be available
                     bool bHandleSysLocked = ( bLoading && bUseSystemLock && !pImpl->xStream.is() && !pImpl->m_pOutStream );
+
+                    // The file is attempted to get locked for the duration of lockfile creation on save
+                    std::unique_ptr<osl::File> pFileLock;
+                    if (!bLoading && bUseSystemLock && pImpl->pTempFile)
+                    {
+                        INetURLObject aDest(GetURLObject());
+                        OUString aDestURL(aDest.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+
+                        if (comphelper::isFileUrl(aDestURL) || !aDest.removeSegment())
+                        {
+                            pFileLock = o3tl::make_unique<osl::File>(aDestURL);
+                            auto rc = pFileLock->open(osl_File_OpenFlag_Write);
+                            if (rc == osl::FileBase::E_ACCES)
+                                bHandleSysLocked = true;
+                        }
+                    }
 
                     do
                     {
