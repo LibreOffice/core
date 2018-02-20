@@ -2486,10 +2486,10 @@ void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     switch (nType)
     {
     case LOK_KEYEVENT_KEYINPUT:
-        pWindow->KeyInput(aEvent);
+        Application::PostKeyEvent(VclEventId::WindowKeyInput, pWindow, &aEvent);
         break;
     case LOK_KEYEVENT_KEYUP:
-        pWindow->KeyUp(aEvent);
+        Application::PostKeyEvent(VclEventId::WindowKeyUp, pWindow, &aEvent);
         break;
     default:
         assert(false);
