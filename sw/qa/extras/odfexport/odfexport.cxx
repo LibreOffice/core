@@ -983,6 +983,13 @@ DECLARE_ODFEXPORT_TEST(testRelhPage, "relh-page.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3168), parseDump("/root/page/body/txt/anchored/fly/infos/bounds", "height").toInt32());
 }
 
+DECLARE_ODFEXPORT_TEST(testRelhPageTdf80282, "relh-page-tdf80282.odt")
+{
+    uno::Reference<drawing::XShape> xTextFrame = getShape(1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Height", sal_Int32(8391), parseDump("//anchored/fly/infos/bounds", "height").toInt32());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Width",  sal_Int32(5953), parseDump("//anchored/fly/infos/bounds", "width").toInt32());
+}
+
 DECLARE_ODFEXPORT_TEST(testRelwPage, "relw-page.odt")
 {
     uno::Reference<drawing::XShape> xTextFrame = getShape(1);
