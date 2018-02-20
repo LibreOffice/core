@@ -186,9 +186,6 @@ def main():
             elif a == "none":
                 Wnone = True
 
-    if not args:
-        sys.exit("%s: no input files" % progname)
-
     for filename in args:
         try:
             tree = ET.parse(filename)
