@@ -2087,8 +2087,6 @@ void Window::PostExtTextInputEvent(VclEventId nType, const OUString& rText)
         }
         SalExtTextInputEvent aEvent { rText, pAttr.get(), rText.getLength(), EXTTEXTINPUT_CURSOR_OVERWRITE };
         ImplWindowFrameProc(this, SalEvent::ExtTextInput, &aEvent);
-        SalExtTextInputPosEvent evt;
-        ImplWindowFrameProc(this, SalEvent::ExtTextInputPos, &evt);
     }
     break;
     case VclEventId::EndExtTextInput:
