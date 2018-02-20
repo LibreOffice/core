@@ -1685,18 +1685,15 @@ namespace
         return eErrorCode;
     }
 
-    namespace
+    OQueryTableWindow* lcl_findColumnInTables( const OUString& _rColumName, const OJoinTableView::OTableWindowMap& _rTabList, OTableFieldDescRef const & _rInfo )
     {
-        OQueryTableWindow* lcl_findColumnInTables( const OUString& _rColumName, const OJoinTableView::OTableWindowMap& _rTabList, OTableFieldDescRef const & _rInfo )
+        for (auto const& table : _rTabList)
         {
-            for (auto const& table : _rTabList)
-            {
-                OQueryTableWindow* pTabWin = static_cast< OQueryTableWindow* >( table.second.get() );
-                if ( pTabWin && pTabWin->ExistsField( _rColumName, _rInfo ) )
-                    return pTabWin;
-            }
-            return nullptr;
+            OQueryTableWindow* pTabWin = static_cast< OQueryTableWindow* >( table.second.get() );
+            if ( pTabWin && pTabWin->ExistsField( _rColumName, _rInfo ) )
+                return pTabWin;
         }
+        return nullptr;
     }
 
     void InsertColumnRef(const OQueryDesignView* _pView,

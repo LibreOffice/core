@@ -2683,29 +2683,26 @@ AutoRecovery::TDocumentList::iterator AutoRecovery::impl_searchDocument(      Au
     return pIt;
 }
 
-namespace
+void lcl_changeVisibility( const css::uno::Reference< css::frame::XFramesSupplier >& i_rFrames, bool i_bVisible )
 {
-    void lcl_changeVisibility( const css::uno::Reference< css::frame::XFramesSupplier >& i_rFrames, bool i_bVisible )
+    css::uno::Reference< css::container::XIndexAccess > xFramesContainer( i_rFrames->getFrames(), css::uno::UNO_QUERY );
+    const sal_Int32 count = xFramesContainer->getCount();
+
+    Any aElement;
+    for ( sal_Int32 i=0; i < count; ++i )
     {
-        css::uno::Reference< css::container::XIndexAccess > xFramesContainer( i_rFrames->getFrames(), css::uno::UNO_QUERY );
-        const sal_Int32 count = xFramesContainer->getCount();
+        aElement = xFramesContainer->getByIndex(i);
+        // check for sub frames
+        css::uno::Reference< css::frame::XFramesSupplier > xFramesSupp( aElement, css::uno::UNO_QUERY );
+        if ( xFramesSupp.is() )
+            lcl_changeVisibility( xFramesSupp, i_bVisible );
 
-        Any aElement;
-        for ( sal_Int32 i=0; i < count; ++i )
-        {
-            aElement = xFramesContainer->getByIndex(i);
-            // check for sub frames
-            css::uno::Reference< css::frame::XFramesSupplier > xFramesSupp( aElement, css::uno::UNO_QUERY );
-            if ( xFramesSupp.is() )
-                lcl_changeVisibility( xFramesSupp, i_bVisible );
+        css::uno::Reference< css::frame::XFrame > xFrame( aElement, css::uno::UNO_QUERY );
+        if ( !xFrame.is() )
+            continue;
 
-            css::uno::Reference< css::frame::XFrame > xFrame( aElement, css::uno::UNO_QUERY );
-            if ( !xFrame.is() )
-                continue;
-
-            css::uno::Reference< css::awt::XWindow > xWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
-            xWindow->setVisible( i_bVisible );
-        }
+        css::uno::Reference< css::awt::XWindow > xWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
+        xWindow->setVisible( i_bVisible );
     }
 }
 

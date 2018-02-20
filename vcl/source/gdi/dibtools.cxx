@@ -321,35 +321,31 @@ bool ImplReadDIBPalette(SvStream& rIStm, BitmapPalette& rPal, bool bQuad)
     return rIStm.GetError() == ERRCODE_NONE;
 }
 
-namespace
+BitmapColor SanitizePaletteIndex(sal_uInt8 nIndex, BitmapPalette& rPalette, bool bForceToMonoWhileReading)
 {
-    BitmapColor SanitizePaletteIndex(sal_uInt8 nIndex, BitmapPalette& rPalette, bool bForceToMonoWhileReading)
+    const sal_uInt16 nPaletteEntryCount = rPalette.GetEntryCount();
+    if (nPaletteEntryCount && nIndex >= nPaletteEntryCount)
     {
-        const sal_uInt16 nPaletteEntryCount = rPalette.GetEntryCount();
-        if (nPaletteEntryCount && nIndex >= nPaletteEntryCount)
-        {
-            auto nSanitizedIndex = nIndex % nPaletteEntryCount;
-            SAL_WARN_IF(nIndex != nSanitizedIndex, "vcl", "invalid colormap index: "
-                        << static_cast<unsigned int>(nIndex) << ", colormap len is: "
-                        << nPaletteEntryCount);
-            nIndex = nSanitizedIndex;
-        }
-
-        if (nPaletteEntryCount && bForceToMonoWhileReading)
-        {
-            return BitmapColor(static_cast<sal_uInt8>(rPalette[nIndex].GetLuminance() >= 255));
-        }
-
-        return BitmapColor(nIndex);
+        auto nSanitizedIndex = nIndex % nPaletteEntryCount;
+        SAL_WARN_IF(nIndex != nSanitizedIndex, "vcl", "invalid colormap index: "
+                    << static_cast<unsigned int>(nIndex) << ", colormap len is: "
+                    << nPaletteEntryCount);
+        nIndex = nSanitizedIndex;
     }
 
-    BitmapColor SanitizeColor(const BitmapColor &rColor, bool bForceToMonoWhileReading)
+    if (nPaletteEntryCount && bForceToMonoWhileReading)
     {
-        if (!bForceToMonoWhileReading)
-            return rColor;
-        return BitmapColor(static_cast<sal_uInt8>(rColor.GetLuminance() >= 255));
+        return BitmapColor(static_cast<sal_uInt8>(rPalette[nIndex].GetLuminance() >= 255));
     }
 
+    return BitmapColor(nIndex);
+}
+
+BitmapColor SanitizeColor(const BitmapColor &rColor, bool bForceToMonoWhileReading)
+{
+    if (!bForceToMonoWhileReading)
+        return rColor;
+    return BitmapColor(static_cast<sal_uInt8>(rColor.GetLuminance() >= 255));
 }
 
 bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header const & rHeader, BitmapWriteAccess& rAcc, BitmapPalette& rPalette, bool bForceToMonoWhileReading, bool bRLE4)
