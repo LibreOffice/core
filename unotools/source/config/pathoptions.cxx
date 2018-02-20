@@ -120,6 +120,7 @@ class SvtPathOptions_Impl
         const OUString& GetWorkPath() { return GetPath( SvtPathOptions::PATH_WORK ); }
         const OUString& GetUIConfigPath() { return GetPath( SvtPathOptions::PATH_UICONFIG ); }
         const OUString& GetFingerprintPath() { return GetPath( SvtPathOptions::PATH_FINGERPRINT ); }
+        const OUString& GetNumbertextPath() { return GetPath( SvtPathOptions::PATH_NUMBERTEXT ); }
         const OUString& GetClassificationPath() { return GetPath( SvtPathOptions::PATH_CLASSIFICATION ); }
 
         // set the paths
@@ -195,6 +196,7 @@ static const PropertyStruct aPropNames[] =
     { "Work",           SvtPathOptions::PATH_WORK           },
     { "UIConfig",       SvtPathOptions::PATH_UICONFIG       },
     { "Fingerprint",    SvtPathOptions::PATH_FINGERPRINT    },
+    { "Numbertext",     SvtPathOptions::PATH_NUMBERTEXT     },
     { "Classification", SvtPathOptions::PATH_CLASSIFICATION }
 };
 
@@ -538,6 +540,11 @@ const OUString& SvtPathOptions::GetFingerprintPath() const
     return pImpl->GetFingerprintPath();
 }
 
+const OUString& SvtPathOptions::GetNumbertextPath() const
+{
+    return pImpl->GetNumbertextPath();
+}
+
 const OUString& SvtPathOptions::GetModulePath() const
 {
     return pImpl->GetModulePath();
@@ -783,6 +790,7 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, Paths ePath )
                 case PATH_WORK:         aPath = GetWorkPath();          break;
                 case PATH_UICONFIG:     aPath = pImpl->GetUIConfigPath(); break;
                 case PATH_FINGERPRINT:  aPath = GetFingerprintPath();   break;
+                case PATH_NUMBERTEXT:   aPath = GetNumbertextPath();    break;
                 case PATH_CLASSIFICATION: aPath = GetClassificationPath(); break;
                 // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
                 case PATH_USERCONFIG:

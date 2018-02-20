@@ -1981,6 +1981,32 @@ DECLARE_ODFEXPORT_TEST(testChapterNumberingNewLine, "chapter-number-new-line.odt
         sal_Int16(SvxNumberFormat::NEWLINE), hashMap["LabelFollowedBy"].get<sal_Int16>());
 }
 
+DECLARE_ODFEXPORT_TEST(testSpellOutNumberingTypes, "spellout-numberingtypes.odt")
+{
+    // ordinal indicator, ordinal and cardinal number numbering styles (from LibreOffice 6.1)
+    const char* aFieldTexts[] = { "1st", "First", "One" };
+    // fallback for old platforms without std::codecvt and std::regex supports
+    const char* aFieldTextFallbacks[] = { "Ordinal-number 1", "Ordinal 1", "1" };
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    // update text field content
+    uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY)->refresh();
+
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(aFieldTexts); i++)
+    {
+        uno::Any aField = xFields->nextElement();
+        uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
+        if (xServiceInfo->supportsService("com.sun.star.text.textfield.PageNumber"))
+        {
+            uno::Reference<text::XTextContent> xField(aField, uno::UNO_QUERY);
+            CPPUNIT_ASSERT_EQUAL(true, OUString::fromUtf8(aFieldTexts[i]).equals(xField->getAnchor()->getString()) ||
+                           OUString::fromUtf8(aFieldTextFallbacks[i]).equals(xField->getAnchor()->getString()));
+        }
+    }
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
