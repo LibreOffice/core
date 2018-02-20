@@ -638,12 +638,12 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         else if (sName == SC_UNONAME_TABCOLOR)
         {
             // There are documents out there that have their tab color defined as a view setting.
-            sal_Int32 nColor = COL_AUTO;
+            Color nColor = COL_AUTO;
             aSettings[i].Value >>= nColor;
-            if (static_cast<ColorData>(nColor) != COL_AUTO)
+            if (nColor != COL_AUTO)
             {
                 ScDocument* pDoc = rViewData.GetDocument();
-                pDoc->SetTabBgColor(nTab, Color(static_cast<ColorData>(nColor)));
+                pDoc->SetTabBgColor(nTab, nColor);
             }
         }
         // Fallback to common SdrModel processing

@@ -47,13 +47,6 @@ class SfxObjectShell;
 class ScfApiHelper
 {
 public:
-    /** Converts a tools color to a UNO color value. */
-    static sal_Int32 ConvertToApiColor( const Color& rColor )
-                            { return static_cast< sal_Int32 >( rColor.GetColor() ); }
-    /** Converts a UNO color value to a tools color. */
-    static Color ConvertFromApiColor( sal_Int32 nApiColor )
-                            { return Color( static_cast< ColorData >( nApiColor ) ); }
-
     /** Converts a non-empty vector into a UNO sequence containing elements of the same type. */
     template< typename Type >
     static css::uno::Sequence< Type >
@@ -188,7 +181,7 @@ public:
 
     /** Puts the passed color into the property set. */
     void         SetColorProperty( const OUString& rPropName, const Color& rColor )
-                            { SetProperty( rPropName, ScfApiHelper::ConvertToApiColor( rColor ) ); }
+                            { SetProperty( rPropName, sal_Int32( rColor ) ); }
 
     /** Puts the passed properties into the property set. Tries to use the XMultiPropertySet interface.
         @param rPropNames  The property names. MUST be ordered alphabetically.
@@ -247,7 +240,7 @@ public:
     void                WriteValue( const css::uno::Any& rAny );
     /** Writes a color value to the value sequence. */
     void         WriteValue( const Color& rColor )
-                            { WriteValue( ScfApiHelper::ConvertToApiColor( rColor ) ); }
+                            { WriteValue( sal_Int32( rColor ) ); }
     /** Writes a C++ boolean value to the value sequence. */
     void                WriteValue( bool rbValue );
 

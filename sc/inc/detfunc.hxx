@@ -50,9 +50,9 @@ enum ScDetectiveObjType
 
 class SC_DLLPUBLIC ScDetectiveFunc
 {
-    static ColorData nArrowColor;
-    static ColorData nErrorColor;
-    static ColorData nCommentColor;
+    static Color     nArrowColor;
+    static Color     nErrorColor;
+    static Color     nCommentColor;
     static bool      bColorsInitialized;
 
     ScDocument*     pDoc;
@@ -144,9 +144,9 @@ public:
     void        InsertObject( ScDetectiveObjType eType, const ScAddress& rPosition,
                                 const ScRange& rSource, bool bRedLine );
 
-    static ColorData GetArrowColor();
-    static ColorData GetErrorColor();
-    static ColorData GetCommentColor();
+    static Color GetArrowColor();
+    static Color GetErrorColor();
+    static Color GetCommentColor();
     static void InitializeColors();
     static bool IsColorsInitialized();
     static void AppendChangTrackNoteSeparator(OUString &str);
