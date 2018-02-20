@@ -2344,13 +2344,9 @@ Size SwFlyFrame::CalcRel( const SwFormatFrameSize &rSz ) const
             nRelWidth  = pSh->GetBrowseWidth();
             nRelHeight = pSh->VisArea().Height();
             Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
-            long nDiff = nRelWidth - pRel->getFramePrintArea().Width();
-            if ( nDiff > 0 )
-                nRelWidth -= nDiff;
+            nRelWidth  = std::min( nRelWidth,  pRel->getFramePrintArea().Width() );
             nRelHeight -= 2*aBorder.Height();
-            nDiff = nRelHeight - pRel->getFramePrintArea().Height();
-            if ( nDiff > 0 )
-                nRelHeight -= nDiff;
+            nRelHeight = std::min( nRelHeight, pRel->getFramePrintArea().Height() );
         }
 
         // At the moment only the "== PAGE_FRAME" and "!= PAGE_FRAME" cases are handled.
