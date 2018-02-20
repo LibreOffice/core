@@ -2374,6 +2374,12 @@ VclPtr<vcl::Window> SdXImpressDocument::getDocWindow()
     VclPtr<vcl::Window> pWindow;
     if (pViewShell)
         pWindow = pViewShell->GetActiveWindow();
+
+    LokChartHelper aChartHelper(pViewShell->GetViewShell());
+    VclPtr<vcl::Window> pChartWindow = aChartHelper.GetWindow();
+    if (pChartWindow)
+        pWindow = pChartWindow;
+
     return pWindow;
 }
 
@@ -2496,30 +2502,18 @@ void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
 
-    DrawViewShell* pViewShell = GetViewShell();
-    if (!pViewShell)
-        return;
-
-    vcl::Window* pWindow = pViewShell->GetActiveWindow();
+    VclPtr<vcl::Window> pWindow = getDocWindow();
     if (!pWindow)
         return;
 
-    LokChartHelper aChartHelper(pViewShell->GetViewShell());
-    vcl::Window* pChartWindow = aChartHelper.GetWindow();
-    if (pChartWindow)
-    {
-        pWindow = pChartWindow;
-    }
-
     KeyEvent aEvent(nCharCode, nKeyCode, 0);
-
     switch (nType)
     {
     case LOK_KEYEVENT_KEYINPUT:
-        pWindow->KeyInput(aEvent);
+        Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, pWindow, &aEvent);
         break;
     case LOK_KEYEVENT_KEYUP:
-        pWindow->KeyUp(aEvent);
+        Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, pWindow, &aEvent);
         break;
     default:
         assert(false);
