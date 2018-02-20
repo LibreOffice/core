@@ -43,7 +43,7 @@ Paint::Paint (const Gradient& rGradient)
 
 Paint Paint::Create (const css::uno::Any& rValue)
 {
-    ColorData aColor (0);
+    Color aColor (0);
     if (rValue >>= aColor)
         return Paint(Color(aColor));
 

@@ -36,7 +36,7 @@ namespace rptui
         svtools::ExtendedColorConfig        m_aExtendedColorConfig;
         OUString                            m_sColorEntry;
         sal_Int32                           m_nColor;
-        sal_Int32                           m_nTextBoundaries;
+        Color                               m_nTextBoundaries;
         bool                            m_bCollapsed;
         bool                            m_bMarked;
 

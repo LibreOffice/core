@@ -92,13 +92,13 @@ void SAL_CALL SvxUnoColorTable::insertByName( const OUString& aName, const uno::
     if( hasByName( aName ) )
         throw container::ElementExistException();
 
-    sal_Int32 nColor = 0;
-    if( !(aElement >>= nColor) )
+    Color aColor;
+    if( !(aElement >>= aColor) )
         throw lang::IllegalArgumentException();
 
     if( pList.is() )
     {
-        pList->Insert(o3tl::make_unique<XColorEntry>(Color(static_cast<ColorData>(nColor)), aName));
+        pList->Insert(o3tl::make_unique<XColorEntry>(aColor, aName));
     }
 }
 
@@ -122,7 +122,7 @@ void SAL_CALL SvxUnoColorTable::replaceByName( const OUString& aName, const uno:
     if( nIndex == -1  )
         throw container::NoSuchElementException();
 
-    pList->Replace(nIndex, o3tl::make_unique<XColorEntry>(Color(static_cast<ColorData>(nColor)), aName ));
+    pList->Replace(nIndex, o3tl::make_unique<XColorEntry>(Color(static_cast<Color>(nColor)), aName ));
 }
 
 // XNameAccess

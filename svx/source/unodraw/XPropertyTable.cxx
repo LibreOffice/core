@@ -262,11 +262,10 @@ uno::Any SvxUnoXColorTable::getAny( const XPropertyEntry* pEntry ) const throw()
 
 std::unique_ptr<XPropertyEntry> SvxUnoXColorTable::createEntry(const OUString& rName, const uno::Any& rAny) const
 {
-    sal_Int32 nColor = 0;
-    if( !(rAny >>= nColor) )
+    Color aColor;
+    if( !(rAny >>= aColor) )
         return std::unique_ptr<XPropertyEntry>();
 
-    const Color aColor( static_cast<ColorData>(nColor) );
     return o3tl::make_unique<XColorEntry>(aColor, rName);
 }
 
