@@ -83,6 +83,7 @@ class XMLImport : public cppu::WeakImplHelper
     const css::uno::Reference<css::uno::XComponentContext> &mxContext;
     css::uno::Reference<css::uri::XUriReferenceFactory> mxUriReferenceFactory;
     OUString maMediaDir;
+    bool mbIsInPageSpan;
     const std::vector<FixedLayoutPage> &mrPageMetafiles;
 
 public:
@@ -112,6 +113,10 @@ public:
     PopupState FillPopupData(const OUString &rURL, librevenge::RVNGPropertyList &rPropList);
     const std::vector<FixedLayoutPage> &GetPageMetafiles() const;
     const css::uno::Reference<css::uno::XComponentContext> &GetComponentContext() const;
+
+    bool GetIsInPageSpan() const { return mbIsInPageSpan; }
+    void SetIsInPageSpan(bool bSet) { mbIsInPageSpan = bSet; }
+    void HandlePageSpan(const librevenge::RVNGPropertyList &rPropertyList);
 
     // XDocumentHandler
     void SAL_CALL startDocument() override;

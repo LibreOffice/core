@@ -13,6 +13,7 @@
 #include "xmltbli.hxx"
 #include "XMLSectionContext.hxx"
 #include "XMLTextListContext.hxx"
+#include "xmlimp.hxx"
 
 using namespace com::sun::star;
 
@@ -24,6 +25,12 @@ namespace exp
 XMLBodyContentContext::XMLBodyContentContext(XMLImport &rImport)
     : XMLImportContext(rImport)
 {
+}
+
+void XMLBodyContentContext::endElement(const OUString &/*rName*/)
+{
+    if (mrImport.GetIsInPageSpan())
+        mrImport.GetGenerator().closePageSpan();
 }
 
 rtl::Reference<XMLImportContext> XMLBodyContentContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
