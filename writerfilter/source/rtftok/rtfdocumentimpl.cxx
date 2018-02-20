@@ -646,7 +646,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     m_bNeedSect = false;
 }
 
-sal_uInt32 RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
+Color RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
 {
     if (!m_pSuperstream)
     {

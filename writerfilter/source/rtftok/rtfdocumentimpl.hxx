@@ -22,7 +22,7 @@
 #include <oox/mathml/importutils.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/colordata.hxx>
+#include <tools/color.hxx>
 
 #include <rtftok/RTFDocument.hxx>
 #include "rtfreferencetable.hxx"
@@ -143,7 +143,7 @@ public:
         m_bAuto = false;
         m_nB = nBlue;
     }
-    ColorData GetColor() const { return m_bAuto ? COL_AUTO : RGB_COLORDATA(m_nR, m_nG, m_nB); }
+    Color GetColor() const { return m_bAuto ? COL_AUTO : Color(m_nR, m_nG, m_nB); }
 
 private:
     bool m_bAuto = true;
@@ -472,7 +472,7 @@ public:
 
 private:
     SvStream& Strm();
-    sal_uInt32 getColorTable(sal_uInt32 nIndex);
+    Color getColorTable(sal_uInt32 nIndex);
     writerfilter::Reference<Properties>::Pointer_t createStyleProperties();
     void resetSprms();
     void resetAttributes();
@@ -539,7 +539,7 @@ private:
     /// Maps style indexes to style types.
     std::map<int, Id> m_aStyleTypes;
     /// Color index <-> RGB color value map
-    std::vector<sal_uInt32> m_aColorTable;
+    std::vector<Color> m_aColorTable;
     bool m_bFirstRun;
     /// If paragraph properties should be emitted on next run.
     bool m_bNeedPap;

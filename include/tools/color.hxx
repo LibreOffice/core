@@ -21,10 +21,11 @@
 
 #include <tools/toolsdllapi.h>
 #include <tools/colordata.hxx>
+#include <com/sun/star/uno/Any.hxx>
+#include <basegfx/color/bcolor.hxx>
 
 class SvStream;
 
-#include <basegfx/color/bcolor.hxx>
 
 // Color
 
@@ -33,16 +34,16 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Color final
     ColorData mnColor;
 
 public:
-    Color()
+    constexpr Color()
         : mnColor(COL_BLACK)
     {}
-    Color(ColorData nColor)
+    constexpr Color(ColorData nColor)
         : mnColor(nColor)
     {}
-    Color(sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
+    constexpr Color(sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
         : mnColor(RGB_COLORDATA(nRed, nGreen, nBlue))
     {}
-    Color(sal_uInt8 nTransparency, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
+    constexpr Color(sal_uInt8 nTransparency, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
         : mnColor(TRGB_COLORDATA(nTransparency, nRed, nGreen, nBlue))
     {}
 
@@ -52,6 +53,17 @@ public:
                                 sal_uInt8((rBColor.getGreen() * 255.0) + 0.5),
                                 sal_uInt8((rBColor.getBlue() * 255.0) + 0.5)))
     {}
+
+    /** Primarily used when passing Color objects to UNO API */
+    constexpr explicit operator sal_uInt32() const
+    {
+        return mnColor;
+    }
+
+    constexpr explicit operator sal_Int32() const
+    {
+        return sal_Int32(sal_uInt32());
+    }
 
     bool operator<(const Color& b) const
     {
@@ -192,6 +204,27 @@ inline void Color::Merge( const Color& rMergeColor, sal_uInt8 cTransparency )
     SetGreen(ColorChannelMerge(COLORDATA_GREEN(mnColor), COLORDATA_GREEN(rMergeColor.mnColor), cTransparency));
     SetBlue(ColorChannelMerge(COLORDATA_BLUE(mnColor), COLORDATA_BLUE(rMergeColor.mnColor), cTransparency));
 }
+
+// to reduce the noise when moving these into and out of Any
+inline bool operator >>=( const css::uno::Any & rAny, Color & value )
+{
+  sal_Int32 nTmp;
+  if (!(rAny >>= nTmp))
+      return false;
+  value = Color(nTmp);
+  return true;
+}
+inline void operator <<=( css::uno::Any & rAny, Color value )
+{
+    rAny <<= sal_Int32(value);
+}
+namespace com { namespace sun { namespace star { namespace uno {
+    template<>
+    inline Any makeAny( Color const & value )
+    {
+        return Any(sal_Int32(value));
+    }
+} } } }
 
 #endif
 
