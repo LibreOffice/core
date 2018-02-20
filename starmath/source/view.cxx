@@ -133,7 +133,7 @@ void SmGraphicWindow::ApplyColorConfigValues(const svtools::ColorConfig &rColorC
 {
     // Note: SetTextColor not necessary since the nodes that
     // get painted have the color information.
-    SetBackground(Color(static_cast<ColorData>(rColorCfg.GetColorValue(svtools::DOCCOLOR).nColor)));
+    SetBackground(rColorCfg.GetColorValue(svtools::DOCCOLOR).nColor);
 }
 
 

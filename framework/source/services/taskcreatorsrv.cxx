@@ -267,7 +267,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     {
         try
         {
-            nBackground = ::svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor;
+            nBackground = sal_Int32(::svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor);
         }
         catch (const css::uno::Exception &)
         {

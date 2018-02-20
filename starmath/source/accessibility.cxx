@@ -264,7 +264,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getBackground()
     if (!pWin)
         throw RuntimeException();
     Wallpaper aWall( pWin->GetDisplayBackground() );
-    ColorData nCol;
+    Color nCol;
     if (aWall.IsBitmap() || aWall.IsGradient())
         nCol = pWin->GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     else
@@ -1689,7 +1689,7 @@ sal_Int32 SAL_CALL SmEditAccessible::getBackground()
     if (!pWin)
         throw RuntimeException();
     Wallpaper aWall( pWin->GetDisplayBackground() );
-    ColorData nCol;
+    Color nCol;
     if (aWall.IsBitmap() || aWall.IsGradient())
         nCol = pWin->GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     else

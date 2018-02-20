@@ -84,7 +84,7 @@ struct ColorConfigValue
 {
 
     bool        bIsVisible; //validity depends on the element type
-    sal_Int32   nColor;
+    ::Color     nColor;
     ColorConfigValue() : bIsVisible(false), nColor(0) {}
     bool operator !=(const ColorConfigValue& rCmp) const
         { return nColor != rCmp.nColor || bIsVisible != rCmp.bIsVisible;}

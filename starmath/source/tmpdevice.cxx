@@ -45,8 +45,8 @@ SmTmpDevice::SmTmpDevice(OutputDevice &rTheDev, bool bUseMap100th_mm) :
 
 Color SmTmpDevice::Impl_GetColor( const Color& rColor )
 {
-    ColorData nNewCol = rColor.GetColor();
-    if (COL_AUTO == nNewCol)
+    Color nNewCol = rColor.GetColor();
+    if (nNewCol == COL_AUTO)
     {
         if (OUTDEV_PRINTER == rOutDev.GetOutDevType())
             nNewCol = COL_BLACK;

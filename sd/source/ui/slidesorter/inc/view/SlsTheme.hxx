@@ -73,7 +73,7 @@ public:
         Color_PageCountFontColor,
         ColorType_Size_
     };
-    ColorData GetColor (const ColorType eType);
+    Color GetColor (const ColorType eType);
 
     enum GradientColorType {
         Gradient_NormalPage,
@@ -91,12 +91,12 @@ public:
         Fill1,
         Fill2
     };
-    ColorData GetGradientColor (
+    Color GetGradientColor (
         const GradientColorType eType,
         const GradientColorClass eClass);
     void SetGradient (
         const GradientColorType eType,
-        const ColorData aBaseColor,
+        const Color aBaseColor,
         const sal_Int32 nSaturationOverride,
         const sal_Int32 nBrightnessOverride,
         const sal_Int32 nFillStartOffset,
@@ -118,15 +118,15 @@ private:
     class GradientDescriptor
     {
     public:
-        ColorData maFillColor1;
-        ColorData maFillColor2;
-        ColorData maBorderColor1;
-        ColorData maBorderColor2;
+        Color maFillColor1;
+        Color maFillColor2;
+        Color maBorderColor1;
+        Color maBorderColor2;
     };
-    ColorData maBackgroundColor;
+    Color maBackgroundColor;
     ::std::vector<GradientDescriptor> maGradients;
     ::std::vector<BitmapEx> maIcons;
-    ::std::vector<ColorData> maColor;
+    ::std::vector<Color> maColor;
 
     GradientDescriptor& GetGradient (const GradientColorType eType);
     /** Guarded initialization of the specified icon in the maIcons

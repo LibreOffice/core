@@ -32,28 +32,27 @@
 
 namespace sd { namespace slidesorter { namespace view {
 
-const static ColorData Black = 0x000000;
-const static ColorData White = 0xffffff;
+const static Color Black = 0x000000;
+const static Color White = 0xffffff;
 
-ColorData ChangeLuminance (const ColorData aColorData, const int nValue)
+Color ChangeLuminance (Color aColor, const int nValue)
 {
-    Color aColor (aColorData);
     if (nValue > 0)
         aColor.IncreaseLuminance(nValue);
     else
         aColor.DecreaseLuminance(-nValue);
-    return aColor.GetColor();
+    return aColor;
 }
 
-ColorData HGBAdapt (
-    const ColorData aColorData,
+Color HGBAdapt (
+    const Color aColor,
     const sal_Int32 nNewSaturation,
     const sal_Int32 nNewBrightness)
 {
     sal_uInt16 nHue (0);
     sal_uInt16 nSaturation (0);
     sal_uInt16 nBrightness (0);
-    Color(aColorData).RGBtoHSB(nHue, nSaturation, nBrightness);
+    aColor.RGBtoHSB(nHue, nSaturation, nBrightness);
     return Color::HSBtoRGB(
         nHue,
         nNewSaturation>=0 ? nNewSaturation : nSaturation,
@@ -88,7 +87,7 @@ void Theme::Update (const std::shared_ptr<controller::Properties>& rpProperties)
     maGradients.resize(GradientColorType_Size_);
 
     maColor[Color_Background] = maBackgroundColor;
-    const ColorData aSelectionColor (rpProperties->GetSelectionColor().GetColor());
+    const Color aSelectionColor (rpProperties->GetSelectionColor());
     maColor[Color_Selection] = aSelectionColor;
     if (Color(aSelectionColor).IsBright())
         maColor[Color_PageCountFontColor] = Black;
@@ -160,7 +159,7 @@ std::shared_ptr<vcl::Font> Theme::GetFont (
     return pFont;
 }
 
-ColorData Theme::GetColor (const ColorType eType)
+Color Theme::GetColor (const ColorType eType)
 {
     if (sal_uInt32(eType)<maColor.size())
         return maColor[eType];
@@ -168,7 +167,7 @@ ColorData Theme::GetColor (const ColorType eType)
         return 0;
 }
 
-ColorData Theme::GetGradientColor (
+Color Theme::GetGradientColor (
     const GradientColorType eType,
     const GradientColorClass eClass)
 {
@@ -186,7 +185,7 @@ ColorData Theme::GetGradientColor (
 
 void Theme::SetGradient (
     const GradientColorType eType,
-    const ColorData aBaseColor,
+    const Color aBaseColor,
     const sal_Int32 nSaturationOverride,
     const sal_Int32 nBrightnessOverride,
     const sal_Int32 nFillStartOffset,
@@ -196,7 +195,7 @@ void Theme::SetGradient (
 {
     GradientDescriptor& rGradient (GetGradient(eType));
 
-    const ColorData aColor (nSaturationOverride>=0 || nBrightnessOverride>=0
+    const Color aColor (nSaturationOverride>=0 || nBrightnessOverride>=0
         ? HGBAdapt(aBaseColor, nSaturationOverride, nBrightnessOverride)
         : aBaseColor);
 

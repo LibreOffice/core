@@ -124,13 +124,13 @@ Color MultiLineEditSyntaxHighlight::GetColorValue(TokenType aToken)
         {
             switch (aToken)
             {
-                case TokenType::Identifier: aColor = static_cast<ColorData>(m_aColorConfig.GetColorValue(svtools::SQLIDENTIFIER).nColor); break;
-                case TokenType::Number:     aColor = static_cast<ColorData>(m_aColorConfig.GetColorValue(svtools::SQLNUMBER).nColor); break;
-                case TokenType::String:     aColor = static_cast<ColorData>(m_aColorConfig.GetColorValue(svtools::SQLSTRING).nColor); break;
-                case TokenType::Operator:   aColor = static_cast<ColorData>(m_aColorConfig.GetColorValue(svtools::SQLOPERATOR).nColor); break;
-                case TokenType::Keywords:   aColor = static_cast<ColorData>(m_aColorConfig.GetColorValue(svtools::SQLKEYWORD).nColor); break;
-                case TokenType::Parameter:  aColor = static_cast<ColorData>(m_aColorConfig.GetColorValue(svtools::SQLPARAMETER).nColor); break;
-                case TokenType::Comment:    aColor = static_cast<ColorData>(m_aColorConfig.GetColorValue(svtools::SQLCOMMENT).nColor); break;
+                case TokenType::Identifier: aColor = m_aColorConfig.GetColorValue(svtools::SQLIDENTIFIER).nColor; break;
+                case TokenType::Number:     aColor = m_aColorConfig.GetColorValue(svtools::SQLNUMBER).nColor; break;
+                case TokenType::String:     aColor = m_aColorConfig.GetColorValue(svtools::SQLSTRING).nColor; break;
+                case TokenType::Operator:   aColor = m_aColorConfig.GetColorValue(svtools::SQLOPERATOR).nColor; break;
+                case TokenType::Keywords:   aColor = m_aColorConfig.GetColorValue(svtools::SQLKEYWORD).nColor; break;
+                case TokenType::Parameter:  aColor = m_aColorConfig.GetColorValue(svtools::SQLPARAMETER).nColor; break;
+                case TokenType::Comment:    aColor = m_aColorConfig.GetColorValue(svtools::SQLCOMMENT).nColor; break;
                 default:            aColor = Color(0,0,0);
             }
             break;

@@ -885,7 +885,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getBackground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
+    return sal_Int32(SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
 }
 
 // XAccessibleContext ---------------------------------------------------------
@@ -1402,7 +1402,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvCell::getBackground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
+    return sal_Int32(SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
 }
 
 // XAccessibleContext -----------------------------------------------------

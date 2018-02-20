@@ -836,7 +836,7 @@ sal_Int32 SAL_CALL AccessibleDocumentViewBase::getBackground(  )
 {
      ThrowIfDisposed ();
     ::osl::MutexGuard aGuard (maMutex);
-    return mpViewShell->GetView()->getColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
+    return sal_Int32(mpViewShell->GetView()->getColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
 }
 } // end of namespace accessibility
 

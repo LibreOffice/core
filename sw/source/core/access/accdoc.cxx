@@ -760,7 +760,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
 {
     SolarMutexGuard aGuard;
-    return SW_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
+    return sal_Int32(SW_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
 }
 
 css::uno::Sequence< css::uno::Any >
