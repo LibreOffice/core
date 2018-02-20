@@ -621,7 +621,8 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
                                  const bool bInclStrings,
                                  const bool bOnlyArabic,
                                  const unsigned int _nRestrictToThisLevel,
-                                 SwNumRule::Extremities* pExtremities ) const
+                                 SwNumRule::Extremities* pExtremities,
+                                 LanguageType nLang ) const
 {
     OUString aStr;
 
@@ -673,7 +674,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
                     if( bOnlyArabic )
                         aStr += OUString::number( rNumVector[ i ] );
                     else
-                        aStr += rNFormat.GetNumStr( rNumVector[ i ] );
+                        aStr += rNFormat.GetNumStr( rNumVector[ i ], nLang );
                 }
                 else
                     aStr += "0";        // all 0 level are a 0

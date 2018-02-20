@@ -35,6 +35,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 #include <algorithm>
+#include <i18nlangtag/lang.h>
 
 class SvxBrushItem;
 namespace vcl { class Font; }
@@ -66,8 +67,8 @@ public:
     SvxNumberType(const SvxNumberType& rType);
     ~SvxNumberType();
 
-    OUString        GetNumStr( sal_Int32 nNo ) const;
-    OUString        GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLocale ) const;
+    OUString        GetNumStr( sal_Int32 nNo, LanguageType nLang = LANGUAGE_SYSTEM ) const;
+    OUString        GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLocale, LanguageType nLang = LANGUAGE_SYSTEM ) const;
 
     void            SetNumberingType(SvxNumType nSet) {nNumType = nSet;}
     SvxNumType      GetNumberingType() const {return nNumType;}

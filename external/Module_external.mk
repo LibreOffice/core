@@ -59,6 +59,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,LIBEXTTEXTCAT,libexttextcat) \
 	$(call gb_Helper_optional,LIBGPGERROR,libgpg-error) \
 	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
+	$(call gb_Helper_optional,LIBNUMBERTEXT,libnumbertext) \
 	$(call gb_Helper_optional,LIBPNG,libpng) \
 	$(call gb_Helper_optional,LIBXML2,libxml2) \
 	$(call gb_Helper_optional,LIBXSLT,libxslt) \

@@ -201,7 +201,10 @@ enum SvxNumType : sal_Int16
     SVX_NUM_NUMBER_HEBREW         = css::style::NumberingType::NUMBER_HEBREW,
     SVX_NUM_NUMBER_ARABIC_INDIC   = css::style::NumberingType::NUMBER_ARABIC_INDIC,
     SVX_NUM_NUMBER_EAST_ARABIC_INDIC  = css::style::NumberingType::NUMBER_EAST_ARABIC_INDIC,
-    SVX_NUM_NUMBER_INDIC_DEVANAGARI  = css::style::NumberingType::NUMBER_INDIC_DEVANAGARI
+    SVX_NUM_NUMBER_INDIC_DEVANAGARI  = css::style::NumberingType::NUMBER_INDIC_DEVANAGARI,
+    SVX_NUM_TEXT_NUMBER           = css::style::NumberingType::TEXT_NUMBER,
+    SVX_NUM_TEXT_CARDINAL         = css::style::NumberingType::TEXT_CARDINAL,
+    SVX_NUM_TEXT_ORDINAL          = css::style::NumberingType::TEXT_ORDINAL
 };
 
 #endif
