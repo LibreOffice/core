@@ -227,7 +227,7 @@ class DLLEXPORT HWPFile
         HWPInfo& GetHWPInfo(void) { return _hwpInfo; }
         HWPFont& GetHWPFont(void) { return _hwpFont; }
         HWPStyle& GetHWPStyle(void) { return _hwpStyle; }
-        HWPPara *GetFirstPara(void) { return plist.front().get(); }
+        HWPPara *GetFirstPara(void) { return !plist.empty() ? plist.front().get() : nullptr; }
 
         EmPicture *GetEmPicture(Picture *pic);
         EmPicture *GetEmPictureByName(char * name);
