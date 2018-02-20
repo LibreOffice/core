@@ -1040,14 +1040,8 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
 
     if ( pSizeBox->GetText().isEmpty() )   // GetValue() returns the min-value
         nSize = 0;
-    long nSavedSize = pSizeBox->GetSavedValue().toInt32();
-    bool bRel = true;
-
-    if ( !pSizeBox->IsRelative() )
-    {
-        nSavedSize *= 10;
-        bRel = false;
-    }
+    long nSavedSize = static_cast<long>(pSizeBox->GetSavedIntValue());
+    const bool bRel = pSizeBox->IsRelative();
 
     switch ( eLangGrp )
     {

@@ -362,6 +362,7 @@ class SVT_DLLPUBLIC FontSizeBox : public MetricBox
 
 protected:
     virtual OUString CreateFieldText( sal_Int64 nValue ) const override;
+    virtual sal_Int64 GetValueFromStringUnit(const OUString& rStr, FieldUnit eOutUnit) const override;
 
 public:
                     FontSizeBox( vcl::Window* pParent, WinBits nWinStyle );
@@ -384,8 +385,6 @@ public:
 
     virtual void    SetValue( sal_Int64 nNewValue, FieldUnit eInUnit ) override;
     virtual void    SetValue( sal_Int64 nNewValue  ) override;
-    virtual sal_Int64   GetValue( FieldUnit eOutUnit ) const override;
-    virtual sal_Int64   GetValue() const override;
 
 private:
                     FontSizeBox( const FontSizeBox& ) = delete;
