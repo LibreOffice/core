@@ -552,10 +552,19 @@ OUString ScModelObj::getPartHash( int nPart )
 VclPtr<vcl::Window> ScModelObj::getDocWindow()
 {
     SolarMutexGuard aGuard;
+
+    // There seems to be no clear way of getting the grid window for this
+    // particular document, hence we need to hope we get the right window.
     ScViewData* pViewData = ScDocShell::GetViewData();
     VclPtr<vcl::Window> pWindow;
     if (pViewData)
         pWindow = pViewData->GetActiveWin();
+
+    LokChartHelper aChartHelper(pViewData->GetViewShell());
+    vcl::Window* pChartWindow = aChartHelper.GetWindow();
+    if (pChartWindow)
+        pWindow = pChartWindow;
+
     return pWindow;
 }
 
@@ -597,24 +606,11 @@ void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
 
-    // There seems to be no clear way of getting the grid window for this
-    // particular document, hence we need to hope we get the right window.
-    ScViewData* pViewData = ScDocShell::GetViewData();
-    vcl::Window* pWindow = pViewData->GetActiveWin();
-
+    VclPtr<vcl::Window> pWindow = getDocWindow();
     if (!pWindow)
         return;
 
     KeyEvent aEvent(nCharCode, nKeyCode, 0);
-
-    ScTabViewShell * pTabViewShell = pViewData->GetViewShell();
-    LokChartHelper aChartHelper(pTabViewShell);
-    vcl::Window* pChartWindow = aChartHelper.GetWindow();
-    if (pChartWindow)
-    {
-        pWindow = pChartWindow;
-    }
-
     switch (nType)
     {
     case LOK_KEYEVENT_KEYINPUT:
