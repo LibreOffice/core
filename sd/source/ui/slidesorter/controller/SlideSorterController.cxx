@@ -353,7 +353,15 @@ bool SlideSorterController::Command (
             pWindow->ReleaseMouse();
 
             Point aMenuLocation (0,0);
-            if (!rEvent.IsMouseEvent())
+            if (rEvent.IsMouseEvent())
+            {
+                // We have to explicitly specify the location of the menu
+                // when the slide sorter is placed in an undocked child
+                // menu.  But when it is docked it does not hurt, so we
+                // specify the location always.
+                aMenuLocation = pWindow->GetParent()->GetPointerPosPixel();
+            }
+            else
             {
                 // The event is not a mouse event.  Use the center of the
                 // focused page as top left position of the context menu.
@@ -376,10 +384,7 @@ bool SlideSorterController::Command (
                 if (pDispatcher != nullptr)
                 {
                     mbContextMenuOpen = true;
-                    if (!rEvent.IsMouseEvent())
-                        pDispatcher->ExecutePopup(aPopupId, pWindow, &aMenuLocation);
-                    else
-                        pDispatcher->ExecutePopup(aPopupId);
+                    pDispatcher->ExecutePopup(aPopupId, pWindow->GetParent(), &aMenuLocation);
                     mbContextMenuOpen = false;
                     mrSlideSorter.GetView().UpdatePageUnderMouse();
                     ::rtl::Reference<SelectionFunction> pFunction(GetCurrentSelectionFunction());
