@@ -994,6 +994,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
         aEvent.FeatureURL.Path == "RightPara" ||
         aEvent.FeatureURL.Path == "Shadowed" ||
         aEvent.FeatureURL.Path == "SpellOnline" ||
+        aEvent.FeatureURL.Path == "OnlineAutoFormat" ||
         aEvent.FeatureURL.Path == "SubScript" ||
         aEvent.FeatureURL.Path == "SuperScript" ||
         aEvent.FeatureURL.Path == "Strikeout" ||
