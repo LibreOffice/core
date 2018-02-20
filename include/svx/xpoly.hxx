@@ -53,8 +53,7 @@ class SVX_DLLPUBLIC XPolygon final
     static bool CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1, sal_uInt16& nA2);
 
 public:
-    XPolygon();
-    XPolygon( sal_uInt16 nSize );
+    XPolygon( sal_uInt16 nSize=16 );
     XPolygon( const XPolygon& rXPoly );
     XPolygon( XPolygon&& rXPoly );
     XPolygon( const tools::Polygon& rPoly );
@@ -65,8 +64,10 @@ public:
 
     ~XPolygon();
 
+    sal_uInt16      GetSize() const;
+
+    void        SetPointCount( sal_uInt16 nPoints );
     sal_uInt16      GetPointCount() const;
-    void            SetPointCount( sal_uInt16 nPoints );
 
     void        Insert( sal_uInt16 nPos, const Point& rPt, PolyFlags eFlags );
     void        Insert( sal_uInt16 nPos, const XPolygon& rXPoly );
@@ -80,7 +81,7 @@ public:
     XPolygon&       operator=( XPolygon&& rXPoly );
     bool            operator==( const XPolygon& rXPoly ) const;
 
-    PolyFlags   GetFlags( sal_uInt16 nPos ) const;
+    PolyFlags  GetFlags( sal_uInt16 nPos ) const;
     void        SetFlags( sal_uInt16 nPos, PolyFlags eFlags );
     bool        IsControl(sal_uInt16 nPos) const;
     bool        IsSmooth(sal_uInt16 nPos) const;

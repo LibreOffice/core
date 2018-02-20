@@ -29,13 +29,26 @@ class Point;
 class ImpXPolygon
 {
 public:
-    std::vector<std::pair<Point, PolyFlags>> mvPointsAndFlags;
-    ImpXPolygon() = default;
-    ImpXPolygon(sal_uInt16 nSize)
-    {
-        mvPointsAndFlags.resize(nSize);
-    }
-    bool operator==(ImpXPolygon const & rOther) const { return mvPointsAndFlags == rOther.mvPointsAndFlags; }
+    Point*              pPointAry;
+    std::unique_ptr<PolyFlags[]>
+                        pFlagAry;
+    Point*              pOldPointAry;
+    bool                bDeleteOldPoints;
+    sal_uInt16          nSize;
+    sal_uInt16          nResize;
+    sal_uInt16          nPoints;
+
+    ImpXPolygon( sal_uInt16 nInitSize, sal_uInt16 nResize=16 );
+    ImpXPolygon( const ImpXPolygon& rImpXPoly );
+    ~ImpXPolygon();
+
+    bool operator==(const ImpXPolygon& rImpXPoly) const;
+
+    void CheckPointDelete() const;
+
+    void Resize( sal_uInt16 nNewSize, bool bDeletePoints = true );
+    void InsertSpace( sal_uInt16 nPos, sal_uInt16 nCount );
+    void Remove( sal_uInt16 nPos, sal_uInt16 nCount );
 };
 
 class ImpXPolyPolygon
