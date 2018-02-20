@@ -72,23 +72,23 @@ using ::std::vector;
 using namespace ::com::sun::star;
 
 typedef ::cppu::WeakImplHelper< container::XIndexAccess > XIndexAccess_BASE;
-typedef ::std::vector< ColorData > ColorDataVec;
+typedef ::std::vector< Color > ColorVec;
 
 class PaletteIndex : public XIndexAccess_BASE
 {
 public:
-    explicit PaletteIndex( const ColorDataVec& rColorDataTable ) : maColorData( rColorDataTable ) {}
+    explicit PaletteIndex( const ColorVec& rColorTable ) : maColor( rColorTable ) {}
 
     // Methods XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount() override
     {
-         return  maColorData.size();
+         return  maColor.size();
     }
 
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         //--Index;  // apparently the palette is already 1 based
-        return uno::makeAny( sal_Int32( maColorData[ Index ] ) );
+        return uno::makeAny( sal_Int32( maColor[ Index ] ) );
     }
 
     // Methods XElementAccess
@@ -98,11 +98,11 @@ public:
     }
     virtual sal_Bool SAL_CALL hasElements() override
     {
-        return (maColorData.size() > 0);
+        return (maColor.size() > 0);
     }
 
 private:
-    ColorDataVec        maColorData;
+    ColorVec        maColor;
 };
 
 void
@@ -112,10 +112,10 @@ XclImpPalette::ExportPalette()
     {
         // copy values in color palette
         sal_Int16 nColors =  maColorTable.size();
-        ColorDataVec aColors;
+        ColorVec aColors;
         aColors.resize( nColors );
         for( sal_uInt16 nIndex = 0; nIndex < nColors; ++nIndex )
-            aColors[ nIndex ] = GetColorData( nIndex );
+            aColors[ nIndex ] = GetColor( nIndex );
 
         uno::Reference< beans::XPropertySet > xProps( pDocShell->GetModel(), uno::UNO_QUERY );
         if ( xProps.is() )
@@ -138,7 +138,7 @@ void XclImpPalette::Initialize()
     maColorTable.clear();
 }
 
-ColorData XclImpPalette::GetColorData( sal_uInt16 nXclIndex ) const
+Color XclImpPalette::GetColor( sal_uInt16 nXclIndex ) const
 {
     if( nXclIndex >= EXC_COLOR_USEROFFSET )
     {
@@ -146,7 +146,7 @@ ColorData XclImpPalette::GetColorData( sal_uInt16 nXclIndex ) const
         if( nIx < maColorTable.size() )
             return maColorTable[ nIx ];
     }
-    return GetDefColorData( nXclIndex );
+    return GetDefColor( nXclIndex );
 }
 
 void XclImpPalette::ReadPalette( XclImpStream& rStrm )

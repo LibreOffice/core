@@ -121,9 +121,9 @@ private:
     SfxItemSet          aCaptionSet;
 };
 
-ColorData ScDetectiveFunc::nArrowColor = 0;
-ColorData ScDetectiveFunc::nErrorColor = 0;
-ColorData ScDetectiveFunc::nCommentColor = 0;
+Color ScDetectiveFunc::nArrowColor = 0;
+Color ScDetectiveFunc::nErrorColor = 0;
+Color ScDetectiveFunc::nCommentColor = 0;
 bool ScDetectiveFunc::bColorsInitialized = false;
 
 static bool lcl_HasThickLine( const SdrObject& rObj )
@@ -488,8 +488,8 @@ bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     else
         rAttrSet.Put( XLineWidthItem( 0 ) );                // single reference
 
-    ColorData nColorData = ( bRed ? GetErrorColor() : GetArrowColor() );
-    rAttrSet.Put( XLineColorItem( OUString(), Color( nColorData ) ) );
+    Color nColor = ( bRed ? GetErrorColor() : GetArrowColor() );
+    rAttrSet.Put( XLineColorItem( OUString(), Color( nColor ) ) );
 
     basegfx::B2DPolygon aTempPoly;
     aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
@@ -553,8 +553,8 @@ bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     else
         rAttrSet.Put( XLineWidthItem( 0 ) );                // single reference
 
-    ColorData nColorData = ( bRed ? GetErrorColor() : GetArrowColor() );
-    rAttrSet.Put( XLineColorItem( OUString(), Color( nColorData ) ) );
+    Color nColor = ( bRed ? GetErrorColor() : GetArrowColor() );
+    rAttrSet.Put( XLineColorItem( OUString(), Color( nColor ) ) );
 
     basegfx::B2DPolygon aTempPoly;
     aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
@@ -1498,8 +1498,8 @@ void ScDetectiveFunc::UpdateAllArrowColors()
 
                     if ( bArrow || bError )
                     {
-                        ColorData nColorData = ( bError ? GetErrorColor() : GetArrowColor() );
-                        pObject->SetMergedItem( XLineColorItem( OUString(), Color( nColorData ) ) );
+                        Color nColor = ( bError ? GetErrorColor() : GetArrowColor() );
+                        pObject->SetMergedItem( XLineColorItem( OUString(), Color( nColor ) ) );
 
                         // repaint only
                         pObject->ActionChanged();
@@ -1579,7 +1579,7 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject, 
                     FindFrameForObject( pObject, rSource );     // modifies rSource
                 }
 
-                ColorData nObjColor = pObject->GetMergedItem(XATTR_LINECOLOR).GetColorValue().GetColor();
+                Color nObjColor = pObject->GetMergedItem(XATTR_LINECOLOR).GetColorValue().GetColor();
                 if ( nObjColor == GetErrorColor() && nObjColor != GetArrowColor() )
                     rRedLine = true;
             }
@@ -1631,21 +1631,21 @@ void ScDetectiveFunc::InsertObject( ScDetectiveObjType eType,
     }
 }
 
-ColorData ScDetectiveFunc::GetArrowColor()
+Color ScDetectiveFunc::GetArrowColor()
 {
     if (!bColorsInitialized)
         InitializeColors();
     return nArrowColor;
 }
 
-ColorData ScDetectiveFunc::GetErrorColor()
+Color ScDetectiveFunc::GetErrorColor()
 {
     if (!bColorsInitialized)
         InitializeColors();
     return nErrorColor;
 }
 
-ColorData ScDetectiveFunc::GetCommentColor()
+Color ScDetectiveFunc::GetCommentColor()
 {
     if (!bColorsInitialized)
         InitializeColors();
