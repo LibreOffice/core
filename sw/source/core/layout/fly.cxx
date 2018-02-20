@@ -2357,8 +2357,14 @@ Size SwFlyFrame::CalcRel( const SwFormatFrameSize &rSz ) const
         // When size is a relative to page size, ignore size of SwBodyFrame.
         if (rSz.GetWidthPercentRelation() != text::RelOrientation::PAGE_FRAME)
             nRelWidth  = std::min( nRelWidth,  pRel->getFramePrintArea().Width() );
+        else if ( pRel->IsPageFrame() )
+            nRelWidth  = std::min( nRelWidth,  pRel->getFrameArea().Width() );
+
         if (rSz.GetHeightPercentRelation() != text::RelOrientation::PAGE_FRAME)
             nRelHeight = std::min( nRelHeight, pRel->getFramePrintArea().Height() );
+        else if ( pRel->IsPageFrame() )
+            nRelHeight = std::min( nRelHeight, pRel->getFrameArea().Height() );
+
         if( !pRel->IsPageFrame() )
         {
             const SwPageFrame* pPage = FindPageFrame();
