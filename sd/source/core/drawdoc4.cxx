@@ -139,17 +139,17 @@ void SdDrawDocument::CreateLayoutTemplates()
     SfxItemSet& rISet = pSheet->GetItemSet();
 
     ::basegfx::B2DPolyPolygon aNullPolyPolygon;
-    Color    aNullCol(RGB_Color(COL_DEFAULT_SHAPE_STROKE));
+    Color    aNullCol(COL_DEFAULT_SHAPE_STROKE);
 
     XDash     aNullDash;
-    XGradient aNullGrad(aNullCol,RGB_Color(COL_WHITE));
+    XGradient aNullGrad(aNullCol,COL_WHITE);
               aNullGrad.SetStartIntens( 100 );
               aNullGrad.SetEndIntens( 100 );
     XHatch    aNullHatch(aNullCol);
 
                     // Line attributes (Extended OutputDevice)
     rISet.Put(XLineStyleItem(drawing::LineStyle_SOLID));
-    rISet.Put(XLineColorItem(OUString(), RGB_Color(COL_DEFAULT_SHAPE_STROKE)));
+    rISet.Put(XLineColorItem(OUString(), COL_DEFAULT_SHAPE_STROKE));
     rISet.Put(XLineWidthItem(0));
     rISet.Put(XLineDashItem(aNullDash));
     rISet.Put(XLineStartItem(aNullPolyPolygon));
@@ -162,7 +162,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
                     // Fill attributes (Extended OutputDevice)
     rISet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
-    rISet.Put(XFillColorItem(OUString(), RGB_Color(COL_DEFAULT_SHAPE_FILLING)));
+    rISet.Put(XFillColorItem(OUString(), COL_DEFAULT_SHAPE_FILLING));
 
     rISet.Put( XFillGradientItem( aNullGrad) );
     rISet.Put(XFillHatchItem(aNullHatch));
@@ -174,7 +174,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
                     // Shadow attributes (Drawing Engine)
     rISet.Put(makeSdrShadowItem(false));
-    rISet.Put(makeSdrShadowColorItem(RGB_Color(COL_GRAY)));
+    rISet.Put(makeSdrShadowColorItem(COL_GRAY));
     rISet.Put(makeSdrShadowXDistItem(200));         // 3 mm Shadow distance
     rISet.Put(makeSdrShadowYDistItem(200));
 
@@ -260,7 +260,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet = &pSheet->GetItemSet();
 
     pISet->Put(XLineStyleItem(drawing::LineStyle_SOLID));
-    pISet->Put(XLineColorItem(OUString(), RGB_Color(COL_BLACK)));
+    pISet->Put(XLineColorItem(OUString(), COL_BLACK));
     pISet->Put(XLineWidthItem(150));
 
     ::basegfx::B2DPolygon aArrow;
@@ -282,7 +282,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet = &pSheet->GetItemSet();
 
     pISet->Put(makeSdrShadowItem(true));
-    pISet->Put(makeSdrShadowColorItem(RGB_Color(COL_GRAY)));
+    pISet->Put(makeSdrShadowColorItem(COL_GRAY));
     pISet->Put(makeSdrShadowXDistItem(200));        // 3 mm shadow distance
     pISet->Put(makeSdrShadowYDistItem(200));
 
@@ -294,7 +294,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet = &pSheet->GetItemSet();
 
     pISet->Put(XFillStyleItem(drawing::FillStyle_NONE));
-    pISet->Put(XLineColorItem(OUString(), RGB_Color(COL_BLACK)));
+    pISet->Put(XLineColorItem(OUString(), COL_BLACK));
 
     // Object no fill no line
 
@@ -378,10 +378,10 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(XLineStyleItem(drawing::LineStyle_NONE));
     pISet->Put(XFillStyleItem(drawing::FillStyle_SOLID));
-    pISet->Put(XFillColorItem(OUString(), RGB_Color(COL_CYAN)));
+    pISet->Put(XFillColorItem(OUString(), COL_CYAN));
 
     pISet->Put(makeSdrShadowItem(true));
-    pISet->Put(makeSdrShadowColorItem(RGB_Color(COL_GRAY)));
+    pISet->Put(makeSdrShadowColorItem(COL_GRAY));
     pISet->Put(makeSdrShadowXDistItem(200));        // 2 mm shadow distance
     pISet->Put(makeSdrShadowYDistItem(200));
 
@@ -405,7 +405,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XFillColorItem(OUString(), aOrange4));
 
     pISet->Put(makeSdrShadowItem(true));
-    pISet->Put(makeSdrShadowColorItem(RGB_Color(COL_GRAY)));
+    pISet->Put(makeSdrShadowColorItem(COL_GRAY));
     pISet->Put(makeSdrShadowXDistItem(200));        // 2 mm shadow distance
     pISet->Put(makeSdrShadowYDistItem(200));
 
@@ -477,7 +477,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet = &pSheet->GetItemSet();
 
     pISet->Put(XFillStyleItem(drawing::FillStyle_NONE));
-    pISet->Put(XLineColorItem(OUString(), RGB_Color(COL_BLACK)));
+    pISet->Put(XLineColorItem(OUString(), COL_BLACK));
 
     pISet->Put(SvxFontHeightItem(423, 100, EE_CHAR_FONTHEIGHT ));         // 12 pt
 
@@ -544,15 +544,15 @@ void SdDrawDocument::CreateDefaultCellStyles()
     pSheet->SetHelpId( OUString(), HID_SD_CELL_STYLE_DEFAULT );
     SfxItemSet& rISet = pSheet->GetItemSet();
 
-    Color    aNullCol(RGB_Color(COL_BLACK));
+    Color    aNullCol(COL_BLACK);
 
-    XGradient aNullGrad(aNullCol,RGB_Color(COL_WHITE));
+    XGradient aNullGrad(aNullCol,COL_WHITE);
               aNullGrad.SetStartIntens( 100 );
               aNullGrad.SetEndIntens( 100 );
     XHatch    aNullHatch(aNullCol);
 
     rISet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
-    rISet.Put(XFillColorItem(OUString(), RGB_Color(0x00ccccff)));
+    rISet.Put(XFillColorItem(OUString(), 0x00ccccff));
 
     vcl::Font aLatinFont, aCJKFont, aCTLFont;
 

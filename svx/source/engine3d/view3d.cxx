@@ -651,21 +651,21 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
     {
         const SfxItemSet& rSet = pObj->GetMergedItemSet();
         const SvxColorItem& rTextColorItem = rSet.Get(EE_CHAR_COLOR);
-        if(rTextColorItem.GetValue() == RGB_Color(COL_BLACK))
+        if(rTextColorItem.GetValue() == COL_BLACK)
         {
             //For black text objects, the color set to gray
             if(pObj->GetPage())
             {
                 // if black is only default attribute from
                 // pattern set it hard so that it is used in undo.
-                pObj->SetMergedItem(SvxColorItem(RGB_Color(COL_BLACK), EE_CHAR_COLOR));
+                pObj->SetMergedItem(SvxColorItem(COL_BLACK, EE_CHAR_COLOR));
 
                 // add undo now
                 if( GetModel()->IsUndoEnabled() )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
             }
 
-            pObj->SetMergedItem(SvxColorItem(RGB_Color(COL_GRAY), EE_CHAR_COLOR));
+            pObj->SetMergedItem(SvxColorItem(COL_GRAY, EE_CHAR_COLOR));
         }
     }
 }
@@ -1488,8 +1488,8 @@ void E3dView::ResetCreationActive ()
 void E3dView::InitView ()
 {
     eDragConstraint          = E3dDragConstraint::XYZ;
-    aDefaultLightColor       = RGB_Color(COL_WHITE);
-    aDefaultAmbientColor     = RGB_Color(COL_BLACK);
+    aDefaultLightColor       = COL_WHITE;
+    aDefaultAmbientColor     = COL_BLACK;
     mpMirrorOverlay          = nullptr;
 }
 

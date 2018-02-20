@@ -384,7 +384,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             if(pXFillGradientItem)
             {
-                const XGradient aNullGrad(RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
+                const XGradient aNullGrad(COL_BLACK, COL_WHITE);
                 XFillGradientItem aXFillGradientItem(aNullGrad);
 
                 aXFillGradientItem.PutValue(*pXFillGradientItem, MID_FILLGRADIENT);
@@ -535,7 +535,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             if(pXFillFloatTransparenceItem)
             {
-                const XGradient aNullGrad(RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
+                const XGradient aNullGrad(COL_BLACK, COL_WHITE);
                 XFillFloatTransparenceItem aXFillFloatTransparenceItem(aNullGrad, false);
 
                 aXFillFloatTransparenceItem.PutValue(*pXFillFloatTransparenceItem, MID_FILLGRADIENT);
