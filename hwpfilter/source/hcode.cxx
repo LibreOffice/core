@@ -1217,6 +1217,8 @@ hchar_string hstr2ucsstr(hchar const* hstr)
 hchar_string kstr2hstr(unsigned char const* src)
 {
     hchar_string ret;
+    if (!src)
+        return ret;
     for (unsigned int i = 0; src[i] != '\0' ; i++)
     {
         if ( src[i] < 127 )
