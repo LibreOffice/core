@@ -1771,7 +1771,8 @@ static void doc_iniUnoCommands ()
         OUString(".uno:DocumentRepair"),
         OUString(".uno:TransformDialog"),
         OUString(".uno:InsertPageHeader"),
-        OUString(".uno:InsertPageFooter")
+        OUString(".uno:InsertPageFooter"),
+        OUString(".uno:OnlineAutoFormat")
     };
 
     util::URL aCommandURL;
