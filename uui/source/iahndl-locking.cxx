@@ -111,7 +111,8 @@ handleLockedDocumentRequest_(
                                   ? aInfo
                                   : ResId( STR_UNKNOWNUSER,
                                                *xManager.get() ).toString() );
-            aMessage = ResId(STR_TRYLATER_MSG, *xManager.get()).toString();
+            aMessage = ResId(xRetry.is() ? STR_OVERWRITE_IGNORELOCK_MSG : STR_TRYLATER_MSG,
+                *xManager.get()).toString();
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 

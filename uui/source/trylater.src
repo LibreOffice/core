@@ -29,6 +29,10 @@ String STR_TRYLATER_MSG
 {
     Text [ en-US ] = "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nTry again later to save document or save a copy of that document.\n\n";
 };
+String STR_OVERWRITE_IGNORELOCK_MSG
+{
+    Text [ en-US ] = "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nYou may try to ignore the file locking and overwrite the existing document.\n\n";
+};
 String STR_TRYLATER_RETRYSAVING_BTN
 {
     Text [ en-US ] = "~Retry Saving";
