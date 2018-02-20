@@ -241,6 +241,7 @@ public:
     void testBackgroundColorStandardXLSXML();
     void testNamedExpressionsXLSXML();
     void testEmptyRowsXLSXML();
+    void testBorderDirectionsXLSXML();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -367,6 +368,7 @@ public:
     CPPUNIT_TEST(testBackgroundColorStandardXLSXML);
     CPPUNIT_TEST(testNamedExpressionsXLSXML);
     CPPUNIT_TEST(testEmptyRowsXLSXML);
+    CPPUNIT_TEST(testBorderDirectionsXLSXML);
     CPPUNIT_TEST(testCondFormatFormulaListenerXLSX);
 
     CPPUNIT_TEST_SUITE_END();
@@ -3677,6 +3679,96 @@ void ScFiltersTest::testEmptyRowsXLSXML()
     ScAddress aPos;
     aPos.Parse("B9");
     ASSERT_FORMULA_EQUAL(rDoc, aPos, "SUM(B4:B8)", nullptr);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testBorderDirectionsXLSXML()
+{
+    ScDocShellRef xDocSh = loadDoc("border-directions.", FORMAT_XLS_XML);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load border-directions.xml", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    struct Check
+    {
+        ScAddress aPos;
+        bool bTop;
+        bool bBottom;
+        bool bLeft;
+        bool bRight;
+        bool bTLtoBR;
+        bool bTRtoBL;
+    };
+
+    std::vector<Check> aChecks = {
+        { { 1,  1, 0 },  true, false, false, false, false, false }, // B2 - top
+        { { 1,  3, 0 }, false, false,  true, false, false, false }, // B4 - left
+        { { 1,  5, 0 }, false, false, false,  true, false, false }, // B6 - right
+        { { 1,  7, 0 }, false,  true, false, false, false, false }, // B8 - bottom
+        { { 1,  9, 0 }, false, false, false, false,  true, false }, // B10 - tl to br
+        { { 1, 11, 0 }, false, false, false, false, false,  true }, // B12 - tr to bl
+        { { 1, 13, 0 }, false, false, false, false,  true,  true }, // B14 - cross-diagonal
+    };
+
+    auto funcCheckBorder = []( bool bHasBorder, const editeng::SvxBorderLine* pLine ) -> bool
+    {
+        if (bHasBorder)
+        {
+            if (!pLine)
+            {
+                std::cout << "Border was expected, but not found!" << std::endl;
+                return false;
+            }
+
+            if (SvxBorderLineStyle::SOLID != pLine->GetBorderLineStyle())
+            {
+                std::cout << "Border type was expected to be of SOLID, but is not." << std::endl;
+                return false;
+            }
+
+            if (Color(COL_BLACK) != pLine->GetColor())
+            {
+                std::cout << "Border color was expected to be black, but is not." << std::endl;
+                return false;
+            }
+        }
+        else
+        {
+            if (pLine)
+            {
+                std::cout << "Border was not expected, but is found!" << std::endl;
+                return false;
+            }
+        }
+
+        return true;
+    };
+
+    for (const Check& c : aChecks)
+    {
+        const ScPatternAttr* pPat = rDoc.GetPattern(c.aPos);
+        CPPUNIT_ASSERT(pPat);
+
+        const SvxBoxItem& rBox = pPat->GetItem(ATTR_BORDER);
+
+        const editeng::SvxBorderLine* pLine = rBox.GetTop();
+        CPPUNIT_ASSERT(funcCheckBorder(c.bTop, pLine));
+
+        pLine = rBox.GetBottom();
+        CPPUNIT_ASSERT(funcCheckBorder(c.bBottom, pLine));
+
+        pLine = rBox.GetLeft();
+        CPPUNIT_ASSERT(funcCheckBorder(c.bLeft, pLine));
+
+        pLine = rBox.GetRight();
+        CPPUNIT_ASSERT(funcCheckBorder(c.bRight, pLine));
+
+        pLine = pPat->GetItem(ATTR_BORDER_TLBR).GetLine();
+        CPPUNIT_ASSERT(funcCheckBorder(c.bTLtoBR, pLine));
+
+        pLine = pPat->GetItem(ATTR_BORDER_BLTR).GetLine();
+        CPPUNIT_ASSERT(funcCheckBorder(c.bTRtoBL, pLine));
+    }
 
     xDocSh->DoClose();
 }
