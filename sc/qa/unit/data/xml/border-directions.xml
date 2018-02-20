@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>Kohei Yoshida</Author>
+  <LastAuthor>Kohei Yoshida</LastAuthor>
+  <Created>2018-01-14T17:03:52Z</Created>
+  <LastSaved>2018-01-25T01:00:20Z</LastSaved>
+  <Version>16.00</Version>
+ </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <AllowPNG/>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>7680</WindowHeight>
+  <WindowWidth>20490</WindowWidth>
+  <WindowTopX>0</WindowTopX>
+  <WindowTopY>0</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s16">
+   <Borders>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s17">
+   <Borders>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s18">
+   <Borders>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s19">
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s20">
+   <Borders>
+    <Border ss:Position="DiagonalLeft" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s21">
+   <Borders>
+    <Border ss:Position="DiagonalRight" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s22">
+   <Borders>
+    <Border ss:Position="DiagonalLeft" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="DiagonalRight" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Directions">
+  <Table ss:ExpandedColumnCount="2" ss:ExpandedRowCount="14" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultRowHeight="15">
+   <Column ss:Index="2" ss:AutoFitWidth="0" ss:Width="92.25"/>
+   <Row ss:Index="2">
+    <Cell ss:Index="2" ss:StyleID="s16"><Data ss:Type="String">top</Data></Cell>
+   </Row>
+   <Row ss:Index="4">
+    <Cell ss:Index="2" ss:StyleID="s17"><Data ss:Type="String">left</Data></Cell>
+   </Row>
+   <Row ss:Index="6">
+    <Cell ss:Index="2" ss:StyleID="s18"><Data ss:Type="String">right</Data></Cell>
+   </Row>
+   <Row ss:Index="8">
+    <Cell ss:Index="2" ss:StyleID="s19"><Data ss:Type="String">bottom</Data></Cell>
+   </Row>
+   <Row ss:Index="10">
+    <Cell ss:Index="2" ss:StyleID="s20"><Data ss:Type="String">tl to br</Data></Cell>
+   </Row>
+   <Row ss:Index="12">
+    <Cell ss:Index="2" ss:StyleID="s21"><Data ss:Type="String">tr to bl</Data></Cell>
+   </Row>
+   <Row ss:Index="14">
+    <Cell ss:Index="2" ss:StyleID="s22"><Data ss:Type="String">cross diagonal</Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <Print>
+    <ValidPrinterInfo/>
+    <HorizontalResolution>600</HorizontalResolution>
+    <VerticalResolution>600</VerticalResolution>
+   </Print>
+   <Selected/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>13</ActiveRow>
+     <ActiveCol>1</ActiveCol>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>
