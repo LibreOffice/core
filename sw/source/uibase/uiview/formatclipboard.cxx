@@ -39,6 +39,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtrowsplt.hxx>
+#include <frmatr.hxx>
 
 namespace
 {

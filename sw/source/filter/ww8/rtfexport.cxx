@@ -34,6 +34,12 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/paperinf.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
 #include <lineinfo.hxx>
 #include <swmodule.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -53,6 +59,7 @@
 #include <fmtfsize.hxx>
 #include <ndtxt.hxx>
 #include <numrule.hxx>
+#include <frmatr.hxx>
 
 using namespace ::com::sun::star;
 

@@ -61,6 +61,7 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <strings.hrc>
+#include <frmatr.hxx>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>

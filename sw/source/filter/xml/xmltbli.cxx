@@ -36,6 +36,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/i18nmap.hxx>
 #include <editeng/protitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <poolfmt.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>

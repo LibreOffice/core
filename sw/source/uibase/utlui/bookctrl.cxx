@@ -23,6 +23,7 @@
 
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/event.hxx>
 #include <vcl/status.hxx>

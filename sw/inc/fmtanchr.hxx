@@ -21,7 +21,6 @@
 
 #include "swdllapi.h"
 #include "hintids.hxx"
-#include "swtypes.hxx"
 #include "format.hxx"
 #include <svl/poolitem.hxx>
 

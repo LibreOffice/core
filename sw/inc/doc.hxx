@@ -172,6 +172,8 @@ class IDocumentExternalData;
 class IDocumentMarkAccess;
 class SetGetExpFields;
 struct SwInsertTableOptions;
+enum class SvMacroItemId : sal_uInt16;
+enum class SvxFrameDirection;
 
 namespace sw { namespace mark {
     class MarkManager;

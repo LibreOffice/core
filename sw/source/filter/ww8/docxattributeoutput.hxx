@@ -45,6 +45,7 @@
 
 class SwGrfNode;
 class SdrObject;
+enum class SvxBoxItemLine;
 
 namespace docx { class FootnotesList; }
 namespace oox { namespace drawingml { class DrawingML; } }

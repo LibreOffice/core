@@ -38,6 +38,8 @@
 #include <svx/svdogrp.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/lingucfg.hxx>
 #include <svx/svdpage.hxx>
