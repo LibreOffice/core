@@ -16,6 +16,24 @@
       "revId": "3c0b06d3ba32289f73af217f6a6e594eea979a02",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e6fe506a",
+        "filename": "bin/gla11y",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2018-02-20T13:53:07Z",
+      "side": 1,
+      "message": "In the update, I have added the MPL template.\n\nThis script is meant to get updated from an external BSD-licenced project which would be shared with other projects, thus keeping the BSD template",
+      "parentUuid": "fa31d9ce_639412e2",
+      "revId": "3c0b06d3ba32289f73af217f6a6e594eea979a02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
