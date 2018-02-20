@@ -1895,6 +1895,8 @@ void Test::testHoriAlignIgnoreTrailingWhitespace()
 // this keeps failing on OSX with a value of 4495
 #if !defined(MACOSX)
         CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(4527), pLine->GetStartPosX(), 10);
+#else
+        (void) pLine; // avoid -Wunused-variable
 #endif
     }
 
