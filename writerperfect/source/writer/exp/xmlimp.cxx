@@ -339,6 +339,7 @@ void XMLOfficeDocContext::HandleFixedLayoutPage(const FixedLayoutPage &rPage, bo
 XMLImport::XMLImport(const uno::Reference<uno::XComponentContext> &xContext, librevenge::RVNGTextInterface &rGenerator, const OUString &rURL, const uno::Sequence<beans::PropertyValue> &rDescriptor, const std::vector<FixedLayoutPage> &rPageMetafiles)
     : mrGenerator(rGenerator),
       mxContext(xContext),
+      mbIsInPageSpan(false),
       mrPageMetafiles(rPageMetafiles)
 {
     uno::Sequence<beans::PropertyValue> aFilterData;
@@ -593,6 +594,37 @@ void XMLImport::processingInstruction(const OUString &/*rTarget*/, const OUStrin
 
 void XMLImport::setDocumentLocator(const uno::Reference<xml::sax::XLocator> &/*xLocator*/)
 {
+}
+
+void XMLImport::HandlePageSpan(const librevenge::RVNGPropertyList &rPropertyList)
+{
+    OUString sMasterPageName;
+    OUString sLayoutName;
+
+    if (rPropertyList["style:master-page-name"])
+        sMasterPageName = OStringToOUString(rPropertyList["style:master-page-name"]->getStr().cstr(), RTL_TEXTENCODING_UTF8);
+    else if (!GetIsInPageSpan())
+        sMasterPageName = "Standard";
+
+    if (sMasterPageName.getLength())
+    {
+        librevenge::RVNGPropertyList &rMasterPage = GetMasterStyles()[sMasterPageName];
+        if (rMasterPage["style:page-layout-name"])
+        {
+            sLayoutName = OStringToOUString(rMasterPage["style:page-layout-name"]->getStr().cstr(), RTL_TEXTENCODING_UTF8);
+        }
+    }
+
+    if (sLayoutName.getLength())
+    {
+        librevenge::RVNGPropertyList &rPageLayout = GetPageLayouts()[sLayoutName];
+
+        if (GetIsInPageSpan())
+            GetGenerator().closePageSpan();
+
+        GetGenerator().openPageSpan(rPageLayout);
+        SetIsInPageSpan(true);
+    }
 }
 
 } // namespace exp

@@ -296,6 +296,7 @@ void XMLStyleContext::startElement(const OUString &/*rName*/, const css::uno::Re
         m_aGraphicPropertyList.insert(sName.getStr(), sValue.getStr());
         m_aPageLayoutPropertyList.insert(sName.getStr(), sValue.getStr());
         m_aMasterPagePropertyList.insert(sName.getStr(), sValue.getStr());
+        m_aTablePropertyList.insert(sName.getStr(), sValue.getStr());
     }
 }
 

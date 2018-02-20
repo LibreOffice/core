@@ -402,6 +402,7 @@ void XMLParaContext::startElement(const OUString &/*rName*/, const css::uno::Ref
             m_aStyleName = rAttributeValue;
             FillStyles(m_aStyleName, mrImport.GetAutomaticParagraphStyles(), mrImport.GetParagraphStyles(), aPropertyList);
             FillStyles(m_aStyleName, mrImport.GetAutomaticTextStyles(), mrImport.GetTextStyles(), m_aTextPropertyList);
+            mrImport.HandlePageSpan(aPropertyList);
         }
         else
         {

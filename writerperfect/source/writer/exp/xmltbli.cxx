@@ -205,7 +205,10 @@ void XMLTableContext::startElement(const OUString &/*rName*/, const css::uno::Re
         const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
 
         if (rAttributeName == "table:style-name")
+        {
             FillStyles(rAttributeValue, mrImport.GetAutomaticTableStyles(), mrImport.GetTableStyles(), m_aPropertyList);
+            mrImport.HandlePageSpan(m_aPropertyList);
+        }
         else
         {
             OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);

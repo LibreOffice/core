@@ -98,6 +98,9 @@ public:
     void testPopupAPI();
     void testPageSize();
     void testSVG();
+    void testTdf115623SingleWritingMode();
+    void testTdf115623SplitByChapter();
+    void testTdf115623ManyPageSpans();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -144,6 +147,9 @@ public:
     CPPUNIT_TEST(testPopupAPI);
     CPPUNIT_TEST(testPageSize);
     CPPUNIT_TEST(testSVG);
+    CPPUNIT_TEST(testTdf115623SingleWritingMode);
+    CPPUNIT_TEST(testTdf115623SplitByChapter);
+    CPPUNIT_TEST(testTdf115623ManyPageSpans);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -879,6 +885,55 @@ void EPUBExportTest::testSVG()
     // define its URL.
     mpXmlDoc = parseExport("OEBPS/images/image0001.svg");
     assertXPathNSDef(mpXmlDoc, "/svg:svg", "xlink", "http://www.w3.org/1999/xlink");
+}
+
+
+void EPUBExportTest::testTdf115623SingleWritingMode()
+{
+    // Simple page that has single writing mode should work.
+    createDoc("tdf115623-single-writing-mode.odt", {});
+    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    OUString aClass = getXPath(mpXmlDoc, "//xhtml:body", "class");
+    CPPUNIT_ASSERT_EQUAL(OUString("vertical-rl"), EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
+}
+
+void EPUBExportTest::testTdf115623SplitByChapter()
+{
+    createDoc("tdf115623-split-by-chapter.odt", {});
+    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    {
+        mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+        OUString aClass = getXPath(mpXmlDoc, "//xhtml:body", "class");
+        CPPUNIT_ASSERT_EQUAL(OUString("vertical-rl"), EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
+        xmlFreeDoc(mpXmlDoc);
+        mpXmlDoc = nullptr;
+    }
+    // Splitted HTML should keep the same writing-mode.
+    {
+        mpXmlDoc = parseExport("OEBPS/sections/section0002.xhtml");
+        OUString aClass = getXPath(mpXmlDoc, "//xhtml:body", "class");
+        CPPUNIT_ASSERT_EQUAL(OUString("vertical-rl"), EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
+    }
+}
+
+void EPUBExportTest::testTdf115623ManyPageSpans()
+{
+    createDoc("tdf115623-many-pagespans.odt", {});
+    std::map< OUString, std::vector<OUString> > aCssDoc = parseCss("OEBPS/styles/stylesheet.css");
+    // Two pages should have different writing modes.
+    {
+        mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+        OUString aClass = getXPath(mpXmlDoc, "//xhtml:body", "class");
+        CPPUNIT_ASSERT_EQUAL(OUString("vertical-rl"), EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
+        xmlFreeDoc(mpXmlDoc);
+        mpXmlDoc = nullptr;
+    }
+    {
+        mpXmlDoc = parseExport("OEBPS/sections/section0002.xhtml");
+        OUString aClass = getXPath(mpXmlDoc, "//xhtml:body", "class");
+        CPPUNIT_ASSERT_EQUAL(OUString("horizontal-tb"), EPUBExportTest::getCss(aCssDoc, aClass, "writing-mode"));
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
