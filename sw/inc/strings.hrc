@@ -273,6 +273,7 @@
 #define STR_PAGEBREAK                           NC_("STR_PAGEBREAK", "Break before new page")
 #define STR_WESTERN_FONT                        NC_("STR_WESTERN_FONT", "Western text: ")
 #define STR_CJK_FONT                            NC_("STR_CJK_FONT", "Asian text: ")
+#define STR_CTL_FONT                            NC_("STR_CTL_FONT", "CTL text: ")
 #define STR_REDLINE_UNKNOWN_AUTHOR              NC_("STR_REDLINE_UNKNOWN_AUTHOR", "Unknown Author")
 #define STR_DELETE_NOTE_AUTHOR                  NC_("STR_DELETE_NOTE_AUTHOR", "Delete ~All Comments by $1")
 #define STR_HIDE_NOTE_AUTHOR                    NC_("STR_HIDE_NOTE_AUTHOR", "H~ide All Comments by $1")
