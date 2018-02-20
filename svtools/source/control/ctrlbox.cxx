@@ -1562,23 +1562,17 @@ void FontSizeBox::SetValue( sal_Int64 nNewValue )
     SetValue( nNewValue, FUNIT_NONE );
 }
 
-sal_Int64 FontSizeBox::GetValue( FieldUnit eOutUnit ) const
+sal_Int64 FontSizeBox::GetValueFromStringUnit(const OUString& rStr, FieldUnit eOutUnit) const
 {
     if ( !bRelative )
     {
         FontSizeNames aFontSizeNames( GetSettings().GetUILanguageTag().getLanguageType() );
-        sal_Int64 nValue = aFontSizeNames.Name2Size( GetText() );
-        if ( nValue)
+        sal_Int64 nValue = aFontSizeNames.Name2Size( rStr );
+        if ( nValue )
             return MetricField::ConvertValue( nValue, GetBaseValue(), GetDecimalDigits(), GetUnit(), eOutUnit );
     }
 
-    return MetricBox::GetValue( eOutUnit );
-}
-
-sal_Int64 FontSizeBox::GetValue() const
-{
-    // implementation not inline, because it is a virtual function
-    return GetValue( FUNIT_NONE );
+    return MetricBox::GetValueFromStringUnit( rStr, eOutUnit );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
