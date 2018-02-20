@@ -31,14 +31,6 @@
 
 using namespace com::sun::star;
 
-// Helper for other sub-classes to have easy-to-read constructors
-Color RGB_Color( ColorData nColorName )
-{
-    Color aColor( nColorName );
-    Color aRGBColor( aColor.GetRed(), aColor.GetGreen(), aColor.GetBlue() );
-    return aRGBColor;
-}
-
 XColorEntry::XColorEntry(const Color& rColor, const OUString& rName)
 :   XPropertyEntry(rName),
     aColor(rColor)

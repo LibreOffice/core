@@ -38,9 +38,9 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
     const basegfx::B2DPolyPolygon aNullPol;
     const Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE); // #i121448# Use defined default color
     const Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING); // #i121448# Use defined default color
-    const Color aNullShadowCol(RGB_Color(COL_LIGHTGRAY));
+    const Color aNullShadowCol(COL_LIGHTGRAY);
     const XDash aNullDash;
-    const XGradient aNullGrad(RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
+    const XGradient aNullGrad(COL_BLACK, COL_WHITE);
     const XHatch aNullHatch(aNullLineCol);
 
     // get master pointer, evtl. add myself to the end of the pools
