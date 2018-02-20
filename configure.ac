@@ -9645,6 +9645,15 @@ if test "$with_system_libexttextcat" = "yes"; then
 fi
 AC_SUBST(SYSTEM_LIBEXTTEXTCAT_DATA)
 
+dnl ===================================================================
+dnl Checking for libnumbertext
+dnl ===================================================================
+libo_CHECK_SYSTEM_MODULE([libnumbertext],[LIBNUMBERTEXT],[libnumbertext >= 1.0.0])
+if test "$with_system_libnumbertext" = "yes"; then
+    SYSTEM_LIBNUMBERTEXT_DATA=file://`$PKG_CONFIG --variable=pkgdatadir libnumbertext`
+fi
+AC_SUBST(SYSTEM_LIBNUMBERTEXT_DATA)
+
 dnl ***************************************
 dnl testing libc version for Linux...
 dnl ***************************************

@@ -1,6 +1,5 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
-#
 # This file is part of the LibreOffice project.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -8,16 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,lingucomponent))
+$(eval $(call gb_StaticLibrary_StaticLibrary,libnumbertext))
 
-$(eval $(call gb_Module_add_targets,lingucomponent,\
-	Library_guesslang \
-	Library_hyphen \
-	Library_lnth \
-	$(if $(filter MACOSX,$(OS)),Library_MacOSXSpell) \
-	Library_spell \
-	StaticLibrary_ulingu \
-	Library_numbertext \
-))
+$(eval $(call gb_StaticLibrary_use_unpacked,libnumbertext,libnumbertext))
+
+$(eval $(call gb_StaticLibrary_set_warnings_not_errors,libnumbertext))
 
 # vim: set noet sw=4 ts=4:

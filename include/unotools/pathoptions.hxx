@@ -65,6 +65,7 @@ public:
         PATH_CLASSIFICATION,
         PATH_UICONFIG,
         PATH_FINGERPRINT,
+        PATH_NUMBERTEXT,
         PATH_COUNT // should always be the last element
     };
 
@@ -96,6 +97,7 @@ public:
     const OUString& GetUserConfigPath() const;
     const OUString& GetWorkPath() const;
     const OUString& GetFingerprintPath() const;
+    const OUString& GetNumbertextPath() const;
     const OUString& GetClassificationPath() const;
 
     // set the paths
