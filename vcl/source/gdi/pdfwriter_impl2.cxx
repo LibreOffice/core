@@ -1560,11 +1560,8 @@ inline bool isSet( const Scanline i_pLine, long i_nIndex )
     return (i_pLine[ i_nIndex/8 ] & (0x80 >> (i_nIndex&7))) != 0;
 }
 
-long findBitRun( const Scanline i_pLine, long i_nStartIndex, long i_nW, bool i_bSet )
+long findBitRunImpl( const Scanline i_pLine, long i_nStartIndex, long i_nW, bool i_bSet )
 {
-    if( i_nStartIndex < 0 )
-        return i_nW;
-
     long nIndex = i_nStartIndex;
     if( nIndex < i_nW )
     {
@@ -1624,6 +1621,24 @@ long findBitRun( const Scanline i_pLine, long i_nStartIndex, long i_nW, bool i_b
         }
     }
     return std::min(nIndex, i_nW);
+}
+
+long findBitRun(const Scanline i_pLine, long i_nStartIndex, long i_nW, bool i_bSet)
+{
+    if (i_nStartIndex < 0)
+        return i_nW;
+
+    return findBitRunImpl(i_pLine, i_nStartIndex, i_nW, i_bSet);
+}
+
+long findBitRun(const Scanline i_pLine, long i_nStartIndex, long i_nW)
+{
+    if (i_nStartIndex < 0)
+        return i_nW;
+
+    const bool bSet = i_nStartIndex < i_nW && isSet(i_pLine, i_nStartIndex);
+
+    return findBitRunImpl(i_pLine, i_nStartIndex, i_nW, bSet);
 }
 
 struct BitStreamState
@@ -1929,7 +1944,7 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess const * i_pBitmap )
         long nRefIndex1 = bRefSet ? 0 : findBitRun( pRefLine, 0, nW, bRefSet );
         for( ; nLineIndex < nW; )
         {
-            long nRefIndex2 = findBitRun( pRefLine, nRefIndex1, nW, isSet( pRefLine, nRefIndex1 ) );
+            long nRefIndex2 = findBitRun( pRefLine, nRefIndex1, nW );
             if( nRefIndex2 >= nRunIndex1 )
             {
                 long nDiff = nRefIndex1 - nRunIndex1;
@@ -1959,7 +1974,7 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess const * i_pBitmap )
                 {   // difference too large, horizontal coding
                     // emit horz code 001
                     putG4Bits( 3, 0x1, aBitState );
-                    long nRunIndex2 = findBitRun( pCurLine, nRunIndex1, nW, isSet( pCurLine, nRunIndex1 ) );
+                    long nRunIndex2 = findBitRun( pCurLine, nRunIndex1, nW );
                     bool bWhiteFirst = ( nLineIndex + nRunIndex1 == 0 || ! isSet( pCurLine, nLineIndex ) );
                     putG4Span( nRunIndex1 - nLineIndex, bWhiteFirst, aBitState );
                     putG4Span( nRunIndex2 - nRunIndex1, ! bWhiteFirst, aBitState );
