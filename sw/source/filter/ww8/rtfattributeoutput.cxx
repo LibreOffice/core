@@ -54,6 +54,13 @@
 #include <editeng/paravertalignitem.hxx>
 #include <editeng/blinkitem.hxx>
 #include <editeng/charhiddenitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/opaqitem.hxx>
 #include <svx/svdouno.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <sfx2/sfxbasemodel.hxx>
@@ -82,6 +89,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <o3tl/make_unique.hxx>
 #include <svl/grabbagitem.hxx>
+#include <frmatr.hxx>
 #include "rtfexport.hxx"
 
 using namespace ::com::sun::star;

@@ -51,6 +51,8 @@ class SvxPatternListItem;
 class SvxDashListItem;
 class SvxLineEndListItem;
 class SvxLineItem;
+class SvxBoxInfoItem;
+class SfxStringItem;
 
 // member IDs
 

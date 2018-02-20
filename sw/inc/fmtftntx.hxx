@@ -20,9 +20,9 @@
 #define INCLUDED_SW_INC_FMTFTNTX_HXX
 
 #include <svl/eitem.hxx>
+#include <editeng/numitem.hxx>
 #include "hintids.hxx"
 #include "format.hxx"
-#include "numrule.hxx"
 #include "swdllapi.h"
 
 enum SwFootnoteEndPosEnum

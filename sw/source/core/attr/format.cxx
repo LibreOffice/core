@@ -28,6 +28,7 @@
 #include <paratr.hxx>
 #include <swcache.hxx>
 #include <swtblfmt.hxx>
+#include <frmatr.hxx>
 #include <svl/grabbagitem.hxx>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svx/unobrushitemhelper.hxx>

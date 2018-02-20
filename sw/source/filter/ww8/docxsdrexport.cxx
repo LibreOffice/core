@@ -14,6 +14,11 @@
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <editeng/unoprnms.hxx>
 #include <editeng/charrotateitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <svx/svdogrp.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/namespaces.hxx>
@@ -27,6 +32,7 @@
 #include <txatbase.hxx>
 #include <fmtfsize.hxx>
 #include <drawdoc.hxx>
+#include <frmatr.hxx>
 #include "docxattributeoutput.hxx"
 #include "docxexportfilter.hxx"
 #include <comphelper/seqstream.hxx>

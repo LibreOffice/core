@@ -46,6 +46,7 @@ class SvxAutoCorrect;
 class NaviContentBookmark;
 struct SwCallMouseEvent;
 class SfxStringListItem;
+enum class SvMacroItemId : sal_uInt16;
 
 namespace i18nutil {
     struct SearchOptions2;

@@ -68,6 +68,7 @@ class IDocumentFieldsAccess;
 class IDocumentContentOperations;
 class IDocumentListItems;
 class Point;
+enum class SvxFrameDirection;
 typedef std::vector<SwOLENode*> SwOLENodes; // docary.hxx
 
 namespace drawinglayer { namespace attribute {

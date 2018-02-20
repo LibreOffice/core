@@ -26,6 +26,8 @@
 #include <svl/typedwhich.hxx>
 #include <vector>
 
+class SfxStringItem;
+
 // For SwTextHints without end index the following char is added:
 
 #define CH_TXTATR_BREAKWORD     u'\x0001'

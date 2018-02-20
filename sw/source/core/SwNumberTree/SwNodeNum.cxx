@@ -18,6 +18,8 @@
  */
 
 #include <editeng/svxenum.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
 #include <ndtxt.hxx>

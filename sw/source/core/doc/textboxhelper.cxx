@@ -41,6 +41,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 
 using namespace com::sun::star;
 
