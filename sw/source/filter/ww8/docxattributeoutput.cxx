@@ -88,6 +88,7 @@
 #include <editeng/blinkitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/keepitem.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/fmglob.hxx>
@@ -126,6 +127,7 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <grfatr.hxx>
+#include <frmatr.hxx>
 
 #include <osl/file.hxx>
 #include <vcl/embeddedfontshelper.hxx>

@@ -21,8 +21,8 @@
 
 #include <svl/poolitem.hxx>
 #include "hintids.hxx"
-#include "format.hxx"
 #include "swdllapi.h"
+#include "swatrset.hxx"
 
 class IntlWrapper;
 

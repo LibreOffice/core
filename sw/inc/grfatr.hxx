@@ -27,7 +27,6 @@
 #include <svx/grfcrop.hxx>
 #include "swdllapi.h"
 #include "swatrset.hxx"
-#include "format.hxx"
 
 enum class MirrorGraph
 {

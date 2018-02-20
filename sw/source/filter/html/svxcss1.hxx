@@ -32,6 +32,7 @@
 class SfxItemPool;
 class SvxBoxItem;
 class FontList;
+enum class SvxBoxItemLine;
 
 enum SvxCSS1Position
 {

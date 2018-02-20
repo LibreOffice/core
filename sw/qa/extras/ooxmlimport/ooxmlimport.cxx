@@ -61,6 +61,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <test/mtfxmldump.hxx>
 
 class Test : public SwModelTestBase

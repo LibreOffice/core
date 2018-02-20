@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_FMTRUBY_HXX
 #define INCLUDED_SW_INC_FMTRUBY_HXX
 
+#include "swdllapi.h"
 #include <svl/poolitem.hxx>
 #include <com/sun/star/text/RubyAdjust.hpp>
 
