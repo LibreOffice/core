@@ -147,6 +147,12 @@
         <node install:module="externallibexttextcatdata" oor:name="${SYSTEM_LIBEXTTEXTCAT_DATA}" oor:op="fuse"/>
       </node>
     </node>
+    <node oor:name="Numbertext" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node install:module="internallibnumbertextdata" oor:name="$(insturl)/@LIBO_SHARE_FOLDER@/numbertext" oor:op="fuse"/>
+        <node install:module="externallibnumbertextdata" oor:name="${SYSTEM_LIBNUMBERTEXT_DATA}" oor:op="fuse"/>
+      </node>
+    </node>
     <!-- deprecated ! -->
     <node oor:name="Storage" oor:op="fuse" oor:mandatory="true">
       <prop oor:name="WritePath">
