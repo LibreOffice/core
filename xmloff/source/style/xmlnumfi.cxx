@@ -283,7 +283,7 @@ enum SvXMLStyleElemAttrTokens
 
 #define XML_NUMF_COLORCOUNT     10
 
-static const ColorData aNumFmtStdColors[XML_NUMF_COLORCOUNT] =
+static const Color aNumFmtStdColors[XML_NUMF_COLORCOUNT] =
 {
     COL_BLACK,
     COL_LIGHTBLUE,
@@ -2216,7 +2216,7 @@ void SvXMLNumFormatContext::AddCondition( const OUString& rCondition, const OUSt
     aMyConditions.push_back(aCondition);
 }
 
-void SvXMLNumFormatContext::AddColor( sal_uInt32 const nColor )
+void SvXMLNumFormatContext::AddColor( Color const nColor )
 {
     SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
     if (!pFormatter)

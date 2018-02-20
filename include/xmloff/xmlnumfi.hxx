@@ -199,7 +199,7 @@ public:
     bool ReplaceNfKeyword( sal_uInt16 nOld, sal_uInt16 nNew );
     void AddCondition( const sal_Int32 nIndex );
     void AddCondition( const OUString& rCondition, const OUString& rApplyName );
-    void AddColor( sal_uInt32 const nColor );
+    void AddColor( Color nColor );
 
     /// determine whether number format uses the system language
     bool IsSystemLanguage();
