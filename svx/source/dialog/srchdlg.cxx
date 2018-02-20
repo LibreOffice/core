@@ -2364,11 +2364,11 @@ SfxChildWinInfo SvxSearchDialogWrapper::GetInfo() const
 }
 
 
-static vcl::Window* lcl_GetSearchLabelWindow()
+static void lcl_SetSearchLabelWindow(const OUString& rStr)
 {
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if (!pViewFrame)
-        return nullptr;
+        return;
 
     css::uno::Reference< css::beans::XPropertySet > xPropSet(
             pViewFrame->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY_THROW);
@@ -2377,7 +2377,7 @@ static vcl::Window* lcl_GetSearchLabelWindow()
     css::uno::Reference< css::ui::XUIElement > xUIElement =
         xLayoutManager->getElement("private:resource/toolbar/findbar");
     if (!xUIElement.is())
-        return nullptr;
+        return;
     css::uno::Reference< css::awt::XWindow > xWindow(
             xUIElement->getRealInterface(), css::uno::UNO_QUERY_THROW);
     VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>( VCLUnoHelper::GetWindow(xWindow).get() );
@@ -2385,9 +2385,19 @@ static vcl::Window* lcl_GetSearchLabelWindow()
     {
         sal_uInt16 id = pToolBox->GetItemId(i);
         if (pToolBox->GetItemCommand(id) == ".uno:SearchLabel")
-            return pToolBox->GetItemWindow(id);
+        {
+            vcl::Window* pSearchLabel = pToolBox->GetItemWindow(id);
+            assert(pSearchLabel);
+            pSearchLabel->Hide();
+            pSearchLabel->SetText(rStr);
+            if (!rStr.isEmpty())
+            {
+                pSearchLabel->SetSizePixel(pSearchLabel->get_preferred_size());
+                pSearchLabel->Show();
+            }
+        }
     }
-    return nullptr;
+    pToolBox->Resize();
 }
 
 void SvxSearchDialogWrapper::SetSearchLabel(const SearchLabel& rSL)
@@ -2402,16 +2412,7 @@ void SvxSearchDialogWrapper::SetSearchLabel(const SearchLabel& rSL)
     else if (rSL == SearchLabel::NotFound)
         sStr = SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND);
 
-    if (vcl::Window *pSearchLabel = lcl_GetSearchLabelWindow())
-    {
-        if (sStr.isEmpty())
-            pSearchLabel->Hide();
-        else
-        {
-            pSearchLabel->SetText(sStr);
-            pSearchLabel->Show();
-        }
-    }
+    lcl_SetSearchLabelWindow(sStr);
     if (SvxSearchDialogWrapper *pWrp = static_cast<SvxSearchDialogWrapper*>( SfxViewFrame::Current()->
             GetChildWindow( SvxSearchDialogWrapper::GetChildWindowId() )))
         pWrp->getDialog()->SetSearchLabel(sStr);
@@ -2420,16 +2421,7 @@ void SvxSearchDialogWrapper::SetSearchLabel(const SearchLabel& rSL)
 void SvxSearchDialogWrapper::SetSearchLabel(const OUString& sStr)
 {
 
-    if (vcl::Window *pSearchLabel = lcl_GetSearchLabelWindow())
-    {
-        if (sStr.isEmpty())
-            pSearchLabel->Hide();
-        else
-        {
-            pSearchLabel->SetText(sStr);
-            pSearchLabel->Show();
-        }
-    }
+    lcl_SetSearchLabelWindow(sStr);
     if (SvxSearchDialogWrapper *pWrp = static_cast<SvxSearchDialogWrapper*>( SfxViewFrame::Current()->
             GetChildWindow( SvxSearchDialogWrapper::GetChildWindowId() )))
         pWrp->getDialog()->SetSearchLabel(sStr);
