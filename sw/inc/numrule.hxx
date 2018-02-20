@@ -22,6 +22,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <editeng/numitem.hxx>
+#include <i18nlangtag/lang.h>
 #include "swdllapi.h"
 #include "swtypes.hxx"
 #include "calbck.hxx"
@@ -166,7 +167,8 @@ public:
                           const bool bInclStrings = true,
                           const bool bOnlyArabic = false,
                           const unsigned int _nRestrictToThisLevel = MAXLEVEL,
-                          Extremities* pExtremities = nullptr ) const;
+                          Extremities* pExtremities = nullptr,
+                          LanguageType nLang = LANGUAGE_SYSTEM) const;
     OUString MakeRefNumString( const SwNodeNum& rNodeNum,
                              const bool bInclSuperiorNumLabels,
                              const int nRestrictInclToThisLevel ) const;

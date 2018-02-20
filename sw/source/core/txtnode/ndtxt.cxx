@@ -2779,7 +2779,9 @@ OUString SwTextNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
             return pRule->MakeNumString( GetNum()->GetNumberVector(),
                                      _bInclPrefixAndSuffixStrings,
                                      false,
-                                     _nRestrictToThisLevel );
+                                     _nRestrictToThisLevel,
+                                     nullptr,
+                                     GetLang(0));
         }
     }
 
