@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/i18n/XTransliteration.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
@@ -80,6 +81,7 @@ private:
     OUString makeNumberingIdentifier( sal_Int16 index );
     /// @throws css::uno::RuntimeException
     bool isScriptFlagEnabled(const OUString& aName );
+    mutable css::uno::Reference< css::i18n::XCharacterClassification > xCharClass;
 };
 
 }

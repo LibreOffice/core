@@ -1,0 +1,54 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+$(eval $(call gb_ExternalProject_ExternalProject,libnumbertext))
+
+$(eval $(call gb_ExternalProject_register_targets,libnumbertext,\
+	boost_headers \
+	boost_system \
+	boost_locale \
+	build \
+))
+
+libnumbertext_CPPFLAGS=$(CXXFLAGS) $(CXXFLAGS_CXX11)
+
+ifneq (,$(filter ANDROID DRAGONFLY FREEBSD IOS LINUX NETBSD OPENBSD,$(OS)))
+ifneq (,$(gb_ENABLE_DBGUTIL))
+libnumbertext_CPPFLAGS+=-D_GLIBCXX_DEBUG
+endif
+endif
+
+ifneq ($(SYSTEM_BOOST),)
+libnumbertext_LIBS+=$(BOOST_SYSTEM_LIB) $(BOOST_LOCALE_LIB)
+else
+libnumbertext_LIBS+=-L$(gb_StaticLibrary_WORKDIR) -lboost_system -lboost_locale
+endif
+
+$(call gb_ExternalProject_get_state_target,libnumbertext,build):
+	$(call gb_ExternalProject_run,build,\
+		$(if $(libnumbertext_LIBS),LIBS='$(libnumbertext_LIBS)') \
+		$(if $(filter IOS MACOSX,$(OS)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") \
+		LIBS="$(gb_STDLIBS) $(LIBS)" \
+		autoreconf && \
+		$(SHELL) ./configure --disable-shared --with-pic \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\
+			$(if $(filter AIX,$(OS)),CFLAGS="-D_LINUX_SOURCE_COMPAT") \
+			$(if $(libnumbertext_CPPFLAGS),CPPFLAGS='$(libnumbertext_CPPFLAGS)') \
+                        $(if $(SYSTEM_BOOST),,\
+				--with-boost=$(WORKDIR)/UnpackedTarball/boost \
+				boost_cv_lib_system=yes \
+				boost_cv_lib_locale=yes \
+			) \
+			CXXFLAGS="$(CXXFLAGS) $(if $(ENABLE_OPTIMIZED) $(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) $(if $(debug),$(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CXXFLAGS))" \
+		&& cd src && $(MAKE) \
+	)
+
+
+
+# vim: set noet sw=4 ts=4:
