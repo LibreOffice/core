@@ -98,15 +98,15 @@ SvxNumberType::~SvxNumberType()
         xFormatter = nullptr;
 }
 
-OUString SvxNumberType::GetNumStr( sal_Int32 nNo ) const
+OUString SvxNumberType::GetNumStr( sal_Int32 nNo, LanguageType nLang ) const
 {
     LanguageTag aLang = utl::ConfigManager::IsFuzzing() ?
         LanguageTag("en-US") :
         Application::GetSettings().GetLanguageTag();
-    return GetNumStr( nNo, aLang.getLocale() );
+    return GetNumStr( nNo, aLang.getLocale(), nLang );
 }
 
-OUString SvxNumberType::GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLocale ) const
+OUString SvxNumberType::GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLocale, LanguageType nLang ) const
 {
     lcl_getFormatter(xFormatter);
     if(!xFormatter.is())
@@ -126,12 +126,15 @@ OUString SvxNumberType::GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLoca
                         return OUString('0');
                     else
                     {
-                        Sequence< PropertyValue > aProperties(2);
+                        Sequence< PropertyValue > aProperties(3);
                         PropertyValue* pValues = aProperties.getArray();
                         pValues[0].Name = "NumberingType";
                         pValues[0].Value <<= static_cast<sal_uInt16>(nNumType);
                         pValues[1].Name = "Value";
                         pValues[1].Value <<= nNo;
+                        pValues[2].Name = "Language";
+                        pValues[2].Value <<= static_cast<sal_uInt16>(nLang);
+
 
                         try
                         {

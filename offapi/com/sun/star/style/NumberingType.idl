@@ -458,6 +458,29 @@ published constants NumberingType
      */
     const short NUMBER_INDIC_DEVANAGARI = 59;
 
+    /** Numbering in ordinal numbers of the language
+        of the text node
+        for example, 1st, 2nd, 3rd... in English
+
+        @since LibreOffice 6.1
+     */
+    const short TEXT_NUMBER = 60;
+
+    /** Numbering in cardinal numbers of the language
+        of the text node
+        for example, One, Two, Three... in English
+
+        @since LibreOffice 6.1
+     */
+    const short TEXT_CARDINAL = 61;
+
+    /** Numbering in ordinal numbers of the language
+        of the text node
+        for example, First, Second, Third... in English
+
+        @since LibreOffice 6.1
+     */
+    const short TEXT_ORDINAL = 62;
 };
 
 
