@@ -317,7 +317,6 @@ protected:
     void AddSubLine();
     void ConcatLine();
     void CompareLine();
-    void NotLine();
     OpCode Expression();
     void PopTokenArray();
     void PushTokenArray( FormulaTokenArray*, bool );

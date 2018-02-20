@@ -92,7 +92,6 @@ bool FormulaToken::IsFunction() const
                                                                             // FuncAutoPilot)
         || eOp == ocMacro || eOp == ocExternal                  // macros, AddIns
         || eOp == ocAnd || eOp == ocOr                          // former binary, now x parameters
-        || eOp == ocNot || eOp == ocNeg                         // unary but function
         || (eOp >= ocInternalBegin && eOp <= ocInternalEnd)     // internal
         ));
 }

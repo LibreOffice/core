@@ -96,8 +96,6 @@ enum OpCode : sal_uInt16
         ocUnion             = SC_OPCODE_UNION,
         ocRange             = SC_OPCODE_RANGE,
     // Unary operators
-        ocNot               = SC_OPCODE_NOT,
-        ocNeg               = SC_OPCODE_NEG,
         ocNegSub            = SC_OPCODE_NEG_SUB,
     // Functions with no parameters
         ocPi                = SC_OPCODE_PI,
@@ -109,6 +107,8 @@ enum OpCode : sal_uInt16
         ocNotAvail          = SC_OPCODE_NO_VALUE,
         ocCurrent           = SC_OPCODE_CURRENT,
     // Functions with one parameter
+        ocNot               = SC_OPCODE_NOT,
+        ocNeg               = SC_OPCODE_NEG,
         ocDeg               = SC_OPCODE_DEG,
         ocRad               = SC_OPCODE_RAD,
         ocSin               = SC_OPCODE_SIN,
