@@ -29,6 +29,7 @@
 OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const IntlWrapper* pIntl )
 {
     bool bNeg = false;
+    bool bShowAtLeastOneDecimalDigit = true;
     sal_Int32 nRet = 0;
 
     if ( nVal < 0 )
@@ -74,6 +75,11 @@ OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const In
         }
 
         case MapUnit::MapPoint:
+            // fractions of a point are used, e.g., for font size
+            nRet = OutputDevice::LogicToLogic(nVal, eSrcUnit, MapUnit::MapTwip) * 50;
+            bShowAtLeastOneDecimalDigit = false;
+            break;
+
         case MapUnit::MapTwip:
         case MapUnit::MapPixel:
             return OUString::number( OutputDevice::LogicToLogic(
@@ -107,7 +113,7 @@ OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const In
         else
             sRet.append(nRet / nDiff);
         nRet %= nDiff;
-        if( 4 == nDigits )
+        if( 4 == nDigits && (bShowAtLeastOneDecimalDigit || nRet) )
         {
             if(pIntl)
                 sRet.append(pIntl->getLocaleData()->getNumDecimalSep());
