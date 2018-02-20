@@ -20,20 +20,35 @@
 #include "ids.hrc"
 #include "trylater.hxx"
 
-TryLaterQueryBox::TryLaterQueryBox( vcl::Window* pParent, ResMgr* pResMgr, const OUString& aMessage ) :
+TryLaterQueryBox::TryLaterQueryBox( vcl::Window* pParent, ResMgr* pResMgr, const OUString& aMessage, bool bEnableOverride ) :
     MessBox(pParent, 0,
             ResId(STR_TRYLATER_TITLE, *pResMgr).toString(),
             aMessage )
 {
     SetImage( QueryBox::GetStandardImage() );
 
-    AddButton(ResId(STR_TRYLATER_RETRYSAVING_BTN, *pResMgr).toString(), RET_YES,
-            ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
-    AddButton(ResId(STR_TRYLATER_SAVEAS_BTN, *pResMgr).toString(), RET_NO);
-    AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
+    // Currently we don't have the retry/save-as functionality implemented for cases when file is locked.
+    // So threat them mutually exclusive with overwrite here. TODO/LATER: just add the overwrite option
+    // as third option when retrying and saving with another name would be possible along with overwriting
+    if (bEnableOverride)
+    {
+        AddButton(ResId(STR_FILECHANGED_SAVEANYWAY_BTN, *pResMgr).toString(), RET_IGNORE,
+            ButtonDialogFlags::OK);
+        AddButton(StandardButtonType::Cancel, RET_CANCEL,
+            ButtonDialogFlags::Default | ButtonDialogFlags::Cancel | ButtonDialogFlags::Focus);
 
-    SetButtonHelpText( RET_YES, OUString() );
-    SetButtonHelpText( RET_NO, OUString() );
+        SetButtonHelpText(RET_IGNORE, OUString());
+    }
+    else
+    {
+        AddButton(ResId(STR_TRYLATER_RETRYSAVING_BTN, *pResMgr).toString(), RET_YES,
+                ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
+        AddButton(ResId(STR_TRYLATER_SAVEAS_BTN, *pResMgr).toString(), RET_NO);
+        AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
+
+        SetButtonHelpText( RET_YES, OUString() );
+        SetButtonHelpText( RET_NO, OUString() );
+    }
 }
 
 TryLaterQueryBox::~TryLaterQueryBox()
