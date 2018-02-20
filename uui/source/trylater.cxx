@@ -21,18 +21,33 @@
 #include <strings.hrc>
 #include "trylater.hxx"
 
-TryLaterQueryBox::TryLaterQueryBox(vcl::Window* pParent, const std::locale& rResLocale, const OUString& aMessage)
+TryLaterQueryBox::TryLaterQueryBox(vcl::Window* pParent, const std::locale& rResLocale, const OUString& aMessage, bool bEnableOverride)
     : MessBox(pParent, MessBoxStyle::NONE, 0, Translate::get(STR_TRYLATER_TITLE, rResLocale), aMessage)
 {
     SetImage(GetStandardQueryBoxImage());
 
-    AddButton(Translate::get(STR_TRYLATER_RETRYSAVING_BTN, rResLocale), RET_YES,
-            ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
-    AddButton(Translate::get(STR_TRYLATER_SAVEAS_BTN, rResLocale), RET_NO);
-    AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
+    // Currently we don't have the retry/save-as functionality implemented for cases when file is locked.
+    // So threat them mutually exclusive with overwrite here. TODO/LATER: just add the overwrite option
+    // as third option when retrying and saving with another name would be possible along with overwriting
+    if (bEnableOverride)
+    {
+        AddButton(Translate::get(STR_FILECHANGED_SAVEANYWAY_BTN, rResLocale), RET_IGNORE,
+            ButtonDialogFlags::OK);
+        AddButton(StandardButtonType::Cancel, RET_CANCEL,
+            ButtonDialogFlags::Default | ButtonDialogFlags::Cancel | ButtonDialogFlags::Focus);
 
-    SetButtonHelpText( RET_YES, OUString() );
-    SetButtonHelpText( RET_NO, OUString() );
+        SetButtonHelpText(RET_IGNORE, OUString());
+    }
+    else
+    {
+        AddButton(Translate::get(STR_TRYLATER_RETRYSAVING_BTN, rResLocale), RET_YES,
+                ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
+        AddButton(Translate::get(STR_TRYLATER_SAVEAS_BTN, rResLocale), RET_NO);
+        AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
+
+        SetButtonHelpText( RET_YES, OUString() );
+        SetButtonHelpText( RET_NO, OUString() );
+    }
 }
 
 TryLaterQueryBox::~TryLaterQueryBox()
