@@ -242,6 +242,7 @@ public:
     void testNamedExpressionsXLSXML();
     void testEmptyRowsXLSXML();
     void testBorderDirectionsXLSXML();
+    void testBorderColorsXLSXML();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -369,6 +370,7 @@ public:
     CPPUNIT_TEST(testNamedExpressionsXLSXML);
     CPPUNIT_TEST(testEmptyRowsXLSXML);
     CPPUNIT_TEST(testBorderDirectionsXLSXML);
+    CPPUNIT_TEST(testBorderColorsXLSXML);
     CPPUNIT_TEST(testCondFormatFormulaListenerXLSX);
 
     CPPUNIT_TEST_SUITE_END();
@@ -3769,6 +3771,63 @@ void ScFiltersTest::testBorderDirectionsXLSXML()
         pLine = pPat->GetItem(ATTR_BORDER_BLTR).GetLine();
         CPPUNIT_ASSERT(funcCheckBorder(c.bTRtoBL, pLine));
     }
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testBorderColorsXLSXML()
+{
+    ScDocShellRef xDocSh = loadDoc("border-colors.", FORMAT_XLS_XML);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load border-colors.xml", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // B3 - red
+    const ScPatternAttr* pPat = rDoc.GetPattern(ScAddress(1,2,0));
+    CPPUNIT_ASSERT(pPat);
+    const editeng::SvxBorderLine* pLine = pPat->GetItem(ATTR_BORDER).GetRight();
+    CPPUNIT_ASSERT(pLine);
+    CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pLine->GetBorderLineStyle());
+    CPPUNIT_ASSERT_EQUAL(Color(255,0,0), pLine->GetColor());
+
+    // B4 - blue
+    pPat = rDoc.GetPattern(ScAddress(1,3,0));
+    CPPUNIT_ASSERT(pPat);
+    pLine = pPat->GetItem(ATTR_BORDER).GetRight();
+    CPPUNIT_ASSERT(pLine);
+    CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pLine->GetBorderLineStyle());
+    CPPUNIT_ASSERT_EQUAL(Color(0,112,192), pLine->GetColor());
+
+    // B5 - green
+    pPat = rDoc.GetPattern(ScAddress(1,4,0));
+    CPPUNIT_ASSERT(pPat);
+    pLine = pPat->GetItem(ATTR_BORDER).GetRight();
+    CPPUNIT_ASSERT(pLine);
+    CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pLine->GetBorderLineStyle());
+    CPPUNIT_ASSERT_EQUAL(Color(0,176,80), pLine->GetColor());
+
+    // B7 - yellow (left), purple (right), light blue (cross)
+    pPat = rDoc.GetPattern(ScAddress(1,6,0));
+    CPPUNIT_ASSERT(pPat);
+
+    pLine = pPat->GetItem(ATTR_BORDER).GetLeft();
+    CPPUNIT_ASSERT(pLine);
+    CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pLine->GetBorderLineStyle());
+    CPPUNIT_ASSERT_EQUAL(Color(255,255,0), pLine->GetColor()); // yellow
+
+    pLine = pPat->GetItem(ATTR_BORDER).GetRight();
+    CPPUNIT_ASSERT(pLine);
+    CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pLine->GetBorderLineStyle());
+    CPPUNIT_ASSERT_EQUAL(Color(112,48,160), pLine->GetColor()); // purple
+
+    pLine = pPat->GetItem(ATTR_BORDER_TLBR).GetLine();
+    CPPUNIT_ASSERT(pLine);
+    CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pLine->GetBorderLineStyle());
+    CPPUNIT_ASSERT_EQUAL(Color(0,176,240), pLine->GetColor()); // light blue
+
+    pLine = pPat->GetItem(ATTR_BORDER_BLTR).GetLine();
+    CPPUNIT_ASSERT(pLine);
+    CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pLine->GetBorderLineStyle());
+    CPPUNIT_ASSERT_EQUAL(Color(0,176,240), pLine->GetColor()); // light blue
 
     xDocSh->DoClose();
 }
