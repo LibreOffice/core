@@ -2469,7 +2469,7 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
 {
     const vcl::Font& rFnt = pFont ? *pFont : GetOut().GetFont();
     bool bPrt = GetShell() && ! GetShell()->GetWin();
-    ColorData nNewColor = COL_BLACK;
+    Color nNewColor = COL_BLACK;
     bool bChgFntColor = false;
     bool bChgLineColor = false;
 

@@ -114,9 +114,9 @@ using namespace nsHdFtFlags;
 static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP* pPap,
     const WW8RStyle* pSty = nullptr, const WW8PLCFx_SEPX* pSep = nullptr);
 
-ColorData SwWW8ImplReader::GetCol(sal_uInt8 nIco)
+Color SwWW8ImplReader::GetCol(sal_uInt8 nIco)
 {
-    static const ColorData eSwWW8ColA[] =
+    static const Color eSwWW8ColA[] =
     {
         COL_AUTO, COL_BLACK, COL_LIGHTBLUE, COL_LIGHTCYAN, COL_LIGHTGREEN,
         COL_LIGHTMAGENTA, COL_LIGHTRED, COL_YELLOW, COL_WHITE, COL_BLUE,
@@ -1395,7 +1395,7 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace,
     aLine.SetWidth(fConverted);
 
     //No AUTO for borders as yet, so if AUTO, use BLACK
-    ColorData col = (cv==0xff000000) ? COL_BLACK : msfilter::util::BGRToRGB(cv);
+    Color col = (cv==0xff000000) ? COL_BLACK : msfilter::util::BGRToRGB(cv);
 
     aLine.SetColor(col);
 
@@ -4645,21 +4645,21 @@ SwWW8Shade::SwWW8Shade(bool bVer67, const WW8_SHD& rSHD)
     if (b >= 17)
         b = 0;
 
-    ColorData nFore(SwWW8ImplReader::GetCol(b));
+    Color nFore(SwWW8ImplReader::GetCol(b));
 
     b = rSHD.GetBack();
     OSL_ENSURE(b < 17, "ww8: colour out of range");
     if( b >=  17 )
         b = 0;
 
-    ColorData nBack(SwWW8ImplReader::GetCol(b));
+    Color nBack(SwWW8ImplReader::GetCol(b));
 
     b = rSHD.GetStyle(bVer67);
 
     SetShade(nFore, nBack, b);
 }
 
-void SwWW8Shade::SetShade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex)
+void SwWW8Shade::SetShade(Color nFore, Color nBack, sal_uInt16 nIndex)
 {
     static const sal_uLong eMSGrayScale[] =
     {
@@ -4738,7 +4738,7 @@ void SwWW8Shade::SetShade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex)
         nFore = COL_BLACK;
 
     //NO auto for shading so background: Auto = Weiss
-    ColorData nUseBack = nBack;
+    Color nUseBack = nBack;
     if (nUseBack == COL_AUTO)
         nUseBack = COL_WHITE;
 

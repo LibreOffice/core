@@ -28,7 +28,7 @@ class SW_DLLPUBLIC AuthorCharAttr
 public:
     sal_uInt16  m_nItemId;
     sal_uInt16  m_nAttr;
-    ColorData m_nColor;
+    Color m_nColor;
 
     AuthorCharAttr();
 

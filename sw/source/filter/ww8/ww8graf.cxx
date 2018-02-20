@@ -112,7 +112,7 @@ Color WW8TransCol(SVBT32 nWC)
     // (to make the writer UI show the right color names)
     // the table is split in base 3, the greys are missing as
     // they don't fit into that system (4 values: bw, wb, 2 * grey)
-    static const ColorData eColA[] = {              //  B G R  B G R  B G R
+    static const Color eColA[] = {                  //  B G R  B G R  B G R
         COL_BLACK, COL_RED, COL_LIGHTRED,           //  0 0 0, 0 0 1, 0 0 2
         COL_GREEN, COL_BROWN, COL_BLACK,            //  0 1 0, 0 1 1, 0 1 2
         COL_LIGHTGREEN, COL_BLACK, COL_YELLOW,      //  0 2 0, 0 2 1, 0 2 2

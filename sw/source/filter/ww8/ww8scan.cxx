@@ -1342,7 +1342,7 @@ WW8_BRCVer9::WW8_BRCVer9(const WW8_BRC& brcVer8)
     else
     {
         sal_uInt32 _cv = brcVer8.ico() == 0 ? 0xff000000 // "auto" colour
-            : wwUtility::RGBToBGR(SwWW8ImplReader::GetCol(brcVer8.ico()));
+            : wwUtility::RGBToBGR(sal_uInt32(SwWW8ImplReader::GetCol(brcVer8.ico())));
         *this = WW8_BRCVer9(_cv, brcVer8.dptLineWidth(), brcVer8.brcType(),
             brcVer8.dptSpace(), brcVer8.fShadow(), brcVer8.fFrame());
     }

@@ -2047,7 +2047,7 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
 }
 
 #if HAVE_FEATURE_DESKTOP && defined DBG_UTIL
-void SwLayIdle::ShowIdle( ColorData eColorData )
+void SwLayIdle::ShowIdle( Color eColor )
 {
     if ( !m_bIndicator )
     {
@@ -2059,16 +2059,16 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
             aRect = pWin->PixelToLogic( aRect );
             // Depending on if idle layout is in progress or not, draw a "red square" or a "green square".
             pWin->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
-            pWin->SetFillColor( eColorData );
+            pWin->SetFillColor( eColor );
             pWin->SetLineColor();
             pWin->DrawRect( aRect );
             pWin->Pop();
         }
     }
 }
-#define SHOW_IDLE( ColorData ) ShowIdle( ColorData )
+#define SHOW_IDLE( Color ) ShowIdle( Color )
 #else
-#define SHOW_IDLE( ColorData )
+#define SHOW_IDLE( Color )
 #endif // DBG_UTIL
 
 SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
