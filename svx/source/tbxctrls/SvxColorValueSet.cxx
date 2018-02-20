@@ -160,7 +160,7 @@ Size SvxColorValueSet::layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntry
     }
 
     // set height to wanted height
-    aNewSize.Height() = nHeight;
+    aNewSize.setHeight( nHeight );
 
     SetItemWidth(aItemSize.Width());
     SetItemHeight(aItemSize.Height());

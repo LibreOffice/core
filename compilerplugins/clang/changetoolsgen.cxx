@@ -214,13 +214,13 @@ bool ChangeToolsGen::ChangeBinaryOperatorPlusMinus(BinaryOperator const* binaryO
     std::string newText;
     if (binaryOp->getOpcode() == BO_AddAssign)
     {
-        newText = std::regex_replace(callText, std::regex(methodName + " *\\( *\\) +\\+= *"),
+        newText = std::regex_replace(callText, std::regex(methodName + " *\\( *\\) *\\+= *"),
                                      "Adjust" + methodName + "(");
         newText += " )";
     }
     else
     {
-        newText = std::regex_replace(callText, std::regex(methodName + " *\\( *\\) +\\-= *"),
+        newText = std::regex_replace(callText, std::regex(methodName + " *\\( *\\) *\\-= *"),
                                      "Adjust" + methodName + "( -(");
         newText += ") )";
     }

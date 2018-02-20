@@ -416,7 +416,7 @@ namespace
     {
         _rButton.SetPosPixel( _rPos );
         _rButton.SetSizePixel( _rSize );
-        _rPos.X() += static_cast<sal_uInt16>(_rSize.Width());
+        _rPos.AdjustX(static_cast<sal_uInt16>(_rSize.Width()) );
     }
 }
 
@@ -490,33 +490,33 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
 
     if (nX > nW)
     {
-        aButtonPos.X() = nW-nH;
+        aButtonPos.setX( nW-nH );
         m_aNewBtn->SetPosPixel(aButtonPos);
-        aButtonPos.X() -= nH;
+        aButtonPos.AdjustX( -nH );
         m_aLastBtn->SetPosPixel(aButtonPos);
-        aButtonPos.X() -= nH;
+        aButtonPos.AdjustX( -nH );
         m_aNextBtn->SetPosPixel(aButtonPos);
-        aButtonPos.X() -= nH;
+        aButtonPos.AdjustX( -nH );
         m_aPrevBtn->SetPosPixel(aButtonPos);
-        aButtonPos.X() -= nH;
+        aButtonPos.AdjustX( -nH );
         m_aFirstBtn->SetPosPixel(aButtonPos);
 
         auto nDiff = nX - nW;
 
         Size aSize = m_aAbsolute->GetSizePixel();
-        aSize.Width() -= nDiff/3.0;
+        aSize.AdjustWidth( -(nDiff/3.0) );
         m_aAbsolute->SetSizePixel(aSize);
 
         aSize = m_aRecordCount->GetSizePixel();
-        aSize.Width() -= nDiff/3.0*2;
+        aSize.AdjustWidth( -(nDiff/3.0*2) );
         m_aRecordCount->SetSizePixel(aSize);
 
         Point aPos = m_aRecordOf->GetPosPixel();
-        aPos.X() -= nDiff/3.0;
+        aPos.AdjustX( -(nDiff/3.0) );
         m_aRecordOf->SetPosPixel(aPos);
 
         aPos = m_aRecordCount->GetPosPixel();
-        aPos.X() -= nDiff/3.0;
+        aPos.AdjustX( -(nDiff/3.0) );
         m_aRecordCount->SetPosPixel(aPos);
 
         vcl::Window* pWindows[] =
@@ -540,7 +540,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
             auto nExcess = (pWindow->GetPosPixel().X() + aSize.Width()) - nW;
             if (nExcess > 0)
             {
-                aSize.Width() -= nExcess;
+                aSize.AdjustWidth( -nExcess );
                 pWindow->SetSizePixel(aSize);
             }
         }
@@ -2044,8 +2044,8 @@ void DbGridControl::PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect,
         tools::Rectangle aArea(rRect);
         if ((GetMode() & BrowserMode::CURSOR_WO_FOCUS) == BrowserMode::CURSOR_WO_FOCUS)
         {
-            aArea.Top() += 1;
-            aArea.Bottom() -= 1;
+            aArea.AdjustTop(1 );
+            aArea.AdjustBottom( -1 );
         }
         pColumn->Paint(rDev, aArea, m_xPaintRow.get(), getNumberFormatter());
     }

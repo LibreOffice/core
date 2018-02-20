@@ -375,7 +375,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             if ( rTextArea.aBoundRect.IsEmpty() )
                 rTextArea.aBoundRect = tools::Rectangle( Point( 0, 0 ), Size( 1, rFWData.nSingleLineHeight ) );
             else
-                rTextArea.aBoundRect.Bottom() += rFWData.nSingleLineHeight;
+                rTextArea.aBoundRect.AdjustBottom(rFWData.nSingleLineHeight );
         }
         else
         {
@@ -772,8 +772,8 @@ void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWDa
                                     for (sal_uInt16 j = 0; j < _nPointCount; ++j)
                                     {
                                         Point& rPoint = aLocalPoly[ j ];
-                                        rPoint.X() -= nLeft;
-                                        rPoint.Y() -= nTop;
+                                        rPoint.AdjustX( -nLeft );
+                                        rPoint.AdjustY( -nTop );
                                         double fX = static_cast<double>(rPoint.X()) / static_cast<double>(nWidth);
                                         double fY = static_cast<double>(rPoint.Y()) / static_cast<double>(nHeight);
 
@@ -782,8 +782,8 @@ void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWDa
                                         GetPoint( rOutlinePoly2, vDistances2, fX, fx2, fy2 );
                                         double fWidth = fx2 - fx1;
                                         double fHeight= fy2 - fy1;
-                                        rPoint.X() = static_cast<sal_Int32>( fx1 + fWidth * fY );
-                                        rPoint.Y() = static_cast<sal_Int32>( fy1 + fHeight* fY );
+                                        rPoint.setX( static_cast<sal_Int32>( fx1 + fWidth * fY ) );
+                                        rPoint.setY( static_cast<sal_Int32>( fy1 + fHeight* fY ) );
                                     }
                                 }
 

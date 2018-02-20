@@ -301,7 +301,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     long        nH    = GetCoreValue( *m_pHeightEdit, eUnit );
 
     nH += nDist; // add distance
-    aSize.Height() = nH;
+    aSize.setHeight( nH );
     aSizeItem.SetSize( aSize );
     aSet.Put( aSizeItem );
 
@@ -1101,7 +1101,7 @@ void SvxHFPage::RangeHdl()
 static void lcl_Move(vcl::Window& rWin, sal_Int32 nDiff)
 {
     Point aPos(rWin.GetPosPixel());
-    aPos.Y() -= nDiff;
+    aPos.AdjustY( -nDiff );
     rWin.SetPosPixel(aPos);
 }
 

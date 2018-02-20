@@ -150,10 +150,10 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
     mnThemeId = nThemeId;
 
     Size aThumbSize( mpCtlFavorites->GetSizePixel() );
-    aThumbSize.Width() /= nColCount;
-    aThumbSize.Height() /= nLineCount;
-    aThumbSize.Width() -= 12;
-    aThumbSize.Height() -= 12;
+    aThumbSize.setWidth( aThumbSize.Width() / nColCount );
+    aThumbSize.setHeight( aThumbSize.Height() / nLineCount );
+    aThumbSize.AdjustWidth( -12 );
+    aThumbSize.AdjustHeight( -12 );
 
     std::vector< Bitmap * >::size_type nFavCount = maFavoritesHorizontal.size();
 
@@ -206,8 +206,8 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                     tools::Rectangle aObjRect( pNewObject->GetLogicRect() );
                     tools::Rectangle aVisArea = pOutDev->PixelToLogic(tools::Rectangle(Point(0,0), pOutDev->GetOutputSizePixel()));
                     Point aPagePos = aVisArea.Center();
-                    aPagePos.X() -= aObjRect.GetWidth() / 2;
-                    aPagePos.Y() -= aObjRect.GetHeight() / 2;
+                    aPagePos.AdjustX( -(aObjRect.GetWidth() / 2) );
+                    aPagePos.AdjustY( -(aObjRect.GetHeight() / 2) );
                     tools::Rectangle aNewObjectRectangle(aPagePos, aObjRect.GetSize());
                     SdrPageView* pPV = mpSdrView->GetSdrPageView();
 

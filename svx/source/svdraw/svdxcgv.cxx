@@ -70,25 +70,25 @@ bool SdrExchangeView::ImpLimitToWorkArea(Point& rPt) const
     {
         if(rPt.X()<maMaxWorkArea.Left())
         {
-            rPt.X() = maMaxWorkArea.Left();
+            rPt.setX( maMaxWorkArea.Left() );
             bRet = true;
         }
 
         if(rPt.X()>maMaxWorkArea.Right())
         {
-            rPt.X() = maMaxWorkArea.Right();
+            rPt.setX( maMaxWorkArea.Right() );
             bRet = true;
         }
 
         if(rPt.Y()<maMaxWorkArea.Top())
         {
-            rPt.Y() = maMaxWorkArea.Top();
+            rPt.setY( maMaxWorkArea.Top() );
             bRet = true;
         }
 
         if(rPt.Y()>maMaxWorkArea.Bottom())
         {
-            rPt.Y() = maMaxWorkArea.Bottom();
+            rPt.setY( maMaxWorkArea.Bottom() );
             bRet = true;
         }
     }

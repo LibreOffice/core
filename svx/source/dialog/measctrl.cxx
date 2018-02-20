@@ -143,8 +143,8 @@ void SvxXMeasurePreview::MouseButtonDown(const MouseEvent& rMEvt)
             Point aPt(aMapMode.GetOrigin());
             long nX = long((double(aOutSize.Width()) - (double(aOutSize.Width()) * double(*pMultFrac))) / 2.0 + 0.5);
             long nY = long((double(aOutSize.Height()) - (double(aOutSize.Height()) * double(*pMultFrac))) / 2.0 + 0.5);
-            aPt.X() += nX;
-            aPt.Y() += nY;
+            aPt.AdjustX(nX );
+            aPt.AdjustY(nY );
 
             aMapMode.SetOrigin(aPt);
             SetMapMode(aMapMode);

@@ -138,18 +138,18 @@ void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
 
     if( mpImpl->mnState == SignatureState::OK )
     {
-        aRect.Top() += yOffset;
+        aRect.AdjustTop(yOffset );
         pDev->DrawImage( aRect.TopLeft(), mpImpl->maImage );
     }
     else if( mpImpl->mnState == SignatureState::BROKEN )
     {
-        aRect.Top() += yOffset;
+        aRect.AdjustTop(yOffset );
         pDev->DrawImage( aRect.TopLeft(), mpImpl->maImageBroken );
     }
     else if( mpImpl->mnState == SignatureState::NOTVALIDATED
         || mpImpl->mnState == SignatureState::PARTIAL_OK)
     {
-        aRect.Top() += yOffset;
+        aRect.AdjustTop(yOffset );
         pDev->DrawImage( aRect.TopLeft(), mpImpl->maImageNotValidated );
     }
     else

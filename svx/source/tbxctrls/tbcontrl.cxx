@@ -610,8 +610,8 @@ bool SvxStyleBox_Impl::AdjustFontForItemHeight(OutputDevice* pDevice, tools::Rec
         double ratio = static_cast< double >( nHeight ) / rTextRect.Bottom();
         vcl::Font aFont(pDevice->GetFont());
         Size aPixelSize(aFont.GetFontSize());
-        aPixelSize.Width() *= ratio;
-        aPixelSize.Height() *= ratio;
+        aPixelSize.setWidth( aPixelSize.Width() * ratio );
+        aPixelSize.setHeight( aPixelSize.Height() * ratio );
         aFont.SetFontSize(aPixelSize);
         pDevice->SetFont(aFont);
         return true;
@@ -640,10 +640,10 @@ void SvxStyleBox_Impl::UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString
     pDevice->GetTextBoundRect(aTextRect, rStyleName);
 
     Point aPos( rUDEvt.GetRect().TopLeft() );
-    aPos.X() += nLeftDistance;
+    aPos.AdjustX(nLeftDistance );
 
     if (!AdjustFontForItemHeight(pDevice, aTextRect, rUDEvt.GetRect().GetHeight()))
-        aPos.Y() += ( rUDEvt.GetRect().GetHeight() - aTextRect.Bottom() ) / 2;
+        aPos.AdjustY(( rUDEvt.GetRect().GetHeight() - aTextRect.Bottom() ) / 2 );
 
     pDevice->DrawText(aPos, rStyleName);
 }
@@ -1948,8 +1948,8 @@ void SvxFrameWindow_Impl::CalcSizeValueSet()
     Size aItemSize( 20 * GetParent()->GetDPIScaleFactor(), 20 * GetParent()->GetDPIScaleFactor() );
     Size aSize = aFrameSet->CalcWindowSizePixel( aItemSize );
     aFrameSet->SetPosSizePixel( Point( 2, 2 ), aSize );
-    aSize.Width()  += 4;
-    aSize.Height() += 4;
+    aSize.AdjustWidth(4 );
+    aSize.AdjustHeight(4 );
     SetOutputSizePixel( aSize );
 }
 

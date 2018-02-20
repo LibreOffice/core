@@ -49,8 +49,8 @@ Size PanelLayout::GetOptimalSize() const
     if (isLayoutEnabled(this))
     {
         Size aSize = VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
-        aSize.Width() = std::min<long>(aSize.Width(),
-            (SidebarController::gnMaximumSidebarWidth - TabBar::GetDefaultWidth()) * GetDPIScaleFactor());
+        aSize.setWidth( std::min<long>(aSize.Width(),
+            (SidebarController::gnMaximumSidebarWidth - TabBar::GetDefaultWidth()) * GetDPIScaleFactor()) );
         return aSize;
     }
 

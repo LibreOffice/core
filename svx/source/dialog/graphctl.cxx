@@ -216,17 +216,17 @@ void GraphCtrl::Resize()
         // Adapt Bitmap to Thumb size
         if ( fGrfWH < fWinWH)
         {
-            aNewSize.Width() = static_cast<long>( static_cast<double>(nHeight) * fGrfWH );
-            aNewSize.Height()= nHeight;
+            aNewSize.setWidth( static_cast<long>( static_cast<double>(nHeight) * fGrfWH ) );
+            aNewSize.setHeight( nHeight );
         }
         else
         {
-            aNewSize.Width() = nWidth;
-            aNewSize.Height()= static_cast<long>( static_cast<double>(nWidth) / fGrfWH );
+            aNewSize.setWidth( nWidth );
+            aNewSize.setHeight( static_cast<long>( static_cast<double>(nWidth) / fGrfWH ) );
         }
 
-        aNewPos.X() = ( nWidth - aNewSize.Width() )  >> 1;
-        aNewPos.Y() = ( nHeight - aNewSize.Height() ) >> 1;
+        aNewPos.setX( ( nWidth - aNewSize.Width() )  >> 1 );
+        aNewPos.setY( ( nHeight - aNewSize.Height() ) >> 1 );
 
         // Implementing MapMode for Engine
         aDisplayMap.SetScaleX( Fraction( aNewSize.Width(), aGraphSize.Width() ) );

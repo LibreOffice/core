@@ -67,12 +67,12 @@ Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, bool bHMirr,
 
             // Adjust the positions inside the whole bitmap
             if( bHMirr )
-                aAnimBmp.aPosPix.X() = rGlobalSize.Width() - aAnimBmp.aPosPix.X() -
-                                       aAnimBmp.aSizePix.Width();
+                aAnimBmp.aPosPix.setX( rGlobalSize.Width() - aAnimBmp.aPosPix.X() -
+                                       aAnimBmp.aSizePix.Width() );
 
             if( bVMirr )
-                aAnimBmp.aPosPix.Y() = rGlobalSize.Height() - aAnimBmp.aPosPix.Y() -
-                                       aAnimBmp.aSizePix.Height();
+                aAnimBmp.aPosPix.setY( rGlobalSize.Height() - aAnimBmp.aPosPix.Y() -
+                                       aAnimBmp.aSizePix.Height() );
 
             aNewAnim.Replace( aAnimBmp, i );
         }

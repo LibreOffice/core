@@ -648,8 +648,8 @@ namespace
                     {
                         // TopLeft-Spot
                         aSpotPos[i] = rArea.TopLeft();
-                        aSpotPos[i].X() += nWidth14;
-                        aSpotPos[i].Y() += nHeight14;
+                        aSpotPos[i].AdjustX(nWidth14 );
+                        aSpotPos[i].AdjustY(nHeight14 );
                     }
                     break;
 
@@ -657,8 +657,8 @@ namespace
                     {
                         // TopRight-Spot
                         aSpotPos[i] = rArea.TopLeft();
-                        aSpotPos[i].X() += nWidth34;
-                        aSpotPos[i].Y() += nHeight14;
+                        aSpotPos[i].AdjustX(nWidth34 );
+                        aSpotPos[i].AdjustY(nHeight14 );
                     }
                     break;
 
@@ -666,8 +666,8 @@ namespace
                     {
                         // BottomLeft-Spot
                         aSpotPos[i] = rArea.TopLeft();
-                        aSpotPos[i].X() += nWidth14;
-                        aSpotPos[i].Y() += nHeight34;
+                        aSpotPos[i].AdjustX(nWidth14 );
+                        aSpotPos[i].AdjustY(nHeight34 );
                     }
                     break;
 
@@ -675,8 +675,8 @@ namespace
                     {
                         // BottomRight-Spot
                         aSpotPos[i] = rArea.TopLeft();
-                        aSpotPos[i].X() += nWidth34;
-                        aSpotPos[i].Y() += nHeight34;
+                        aSpotPos[i].AdjustX(nWidth34 );
+                        aSpotPos[i].AdjustY(nHeight34 );
                     }
                     break;
 

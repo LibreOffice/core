@@ -1478,8 +1478,8 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
             const sal_uInt16 nObjID = OBJ_FM_BUTTON;
             ::Size controlSize(4000, 500);
             FmFormObj *pControl = static_cast<FmFormObj*>(SdrObjFactory::MakeNewObject( SdrInventor::FmForm, nObjID, nullptr ));
-            controlSize.Width() = long(controlSize.Width() * eTargetMode.GetScaleX());
-            controlSize.Height() = long(controlSize.Height() * eTargetMode.GetScaleY());
+            controlSize.setWidth( long(controlSize.Width() * eTargetMode.GetScaleX()) );
+            controlSize.setHeight( long(controlSize.Height() * eTargetMode.GetScaleY()) );
             ::Point controlPos( OutputDevice::LogicToLogic( ::Point( controlSize.Width(), 0 ), eSourceMode, eTargetMode ) );
             ::tools::Rectangle controlRect( controlPos, OutputDevice::LogicToLogic( controlSize, eSourceMode, eTargetMode ) );
             pControl->SetLogicRect(controlRect);
@@ -1564,12 +1564,12 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     ::Size aDefImageSize(4000, 4000);
 
     ::Size aRealSize = OutputDevice::LogicToLogic(aTextSize, eTargetMode, eSourceMode);
-    aRealSize.Width() = std::max(aRealSize.Width(), aDefTxtSize.Width());
-    aRealSize.Height()= aDefSize.Height();
+    aRealSize.setWidth( std::max(aRealSize.Width(), aDefTxtSize.Width()) );
+    aRealSize.setHeight( aDefSize.Height() );
 
     // adjust to scaling of the target device (#53523#)
-    aRealSize.Width() = long(Fraction(aRealSize.Width(), 1) * eTargetMode.GetScaleX());
-    aRealSize.Height() = long(Fraction(aRealSize.Height(), 1) * eTargetMode.GetScaleY());
+    aRealSize.setWidth( long(Fraction(aRealSize.Width(), 1) * eTargetMode.GetScaleX()) );
+    aRealSize.setHeight( long(Fraction(aRealSize.Height(), 1) * eTargetMode.GetScaleY()) );
 
     // for boolean fields, we do not create a label, but just a checkbox
     bool bNeedLabel = ( _nControlObjectID != OBJ_FM_CHECKBOX );
@@ -1635,8 +1635,8 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     if ( OBJ_FM_IMAGECONTROL == _nControlObjectID )
         aControlSize = aDefImageSize;
 
-    aControlSize.Width() = long(Fraction(aControlSize.Width(), 1) * eTargetMode.GetScaleX());
-    aControlSize.Height() = long(Fraction(aControlSize.Height(), 1) * eTargetMode.GetScaleY());
+    aControlSize.setWidth( long(Fraction(aControlSize.Width(), 1) * eTargetMode.GetScaleX()) );
+    aControlSize.setHeight( long(Fraction(aControlSize.Height(), 1) * eTargetMode.GetScaleY()) );
 
     pControl->SetLogicRect( ::tools::Rectangle(
         OutputDevice::LogicToLogic( ::Point( aRealSize.Width() + _nXOffsetMM, _nYOffsetMM ), eSourceMode, eTargetMode ),

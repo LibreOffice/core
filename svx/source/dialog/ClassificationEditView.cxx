@@ -58,7 +58,7 @@ ClassificationEditView::ClassificationEditView(vcl::Window* pParent, WinBits nBi
 
     Size aOutputSize(GetOutputSize());
     Size aSize(aOutputSize);
-    aSize.Height() *= 4;
+    aSize.setHeight( aSize.Height() * 4 );
 
     pEdEngine.reset(new ClassificationEditEngine(EditEngine::CreatePool()));
     pEdEngine->SetPaperSize( aSize );
@@ -82,7 +82,7 @@ void ClassificationEditView::Resize()
 {
     Size aOutputSize(GetOutputSize());
     Size aSize(aOutputSize);
-    aSize.Height() *= 4;
+    aSize.setHeight( aSize.Height() * 4 );
     pEdEngine->SetPaperSize(aSize);
     pEdView->SetOutputArea(tools::Rectangle(Point(0,0), aOutputSize));
     Control::Resize();

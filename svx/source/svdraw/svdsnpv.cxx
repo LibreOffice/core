@@ -329,10 +329,10 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
         while (aIter.IsMore() && (nMaxPointSnapCount>0 || nMaxFrameSnapCount>0)) {
             SdrObject* pO=aIter.Next();
             tools::Rectangle aRect(pO->GetCurrentBoundRect());
-            aRect.Left  ()-=mx;
-            aRect.Right ()+=mx;
-            aRect.Top   ()-=my;
-            aRect.Bottom()+=my;
+            aRect.AdjustLeft( -mx );
+            aRect.AdjustRight(mx );
+            aRect.AdjustTop( -my );
+            aRect.AdjustBottom(my );
             if (aRect.IsInside(rPnt)) {
                 if (bOPntSnap && nMaxPointSnapCount>0)
                 {
@@ -352,10 +352,10 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
                 if (bOFrmSnap && nMaxFrameSnapCount>0) {
                     tools::Rectangle aLog(pO->GetSnapRect());
                     tools::Rectangle aR1(aLog);
-                    aR1.Left  ()-=mx;
-                    aR1.Right ()+=mx;
-                    aR1.Top   ()-=my;
-                    aR1.Bottom()+=my;
+                    aR1.AdjustLeft( -mx );
+                    aR1.AdjustRight(mx );
+                    aR1.AdjustTop( -my );
+                    aR1.AdjustBottom(my );
                     if (aR1.IsInside(rPnt)) {
                         if (std::abs(x-aLog.Left  ())<=mx) { dx1=-(x-aLog.Left  ()); if (std::abs(dx1)<std::abs(dx)) dx=dx1; }
                         if (std::abs(x-aLog.Right ())<=mx) { dx1=-(x-aLog.Right ()); if (std::abs(dx1)<std::abs(dx)) dx=dx1; }
@@ -403,8 +403,8 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     SdrSnap bRet=SdrSnap::NOTSNAPPED;
     if (dx==NOT_SNAPPED) dx=0; else bRet|=SdrSnap::XSNAPPED;
     if (dy==NOT_SNAPPED) dy=0; else bRet|=SdrSnap::YSNAPPED;
-    rPnt.X()=x+dx;
-    rPnt.Y()=y+dy;
+    rPnt.setX(x+dx );
+    rPnt.setY(y+dy );
     return bRet;
 }
 

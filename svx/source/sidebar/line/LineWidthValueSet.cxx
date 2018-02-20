@@ -103,7 +103,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
     vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, MsLangId::getSystemLanguage(), GetDefaultFontFlags::OnlyOne));
     Size aSize = aFont.GetFontSize();
-    aSize.Height() = nRectHeight*3/5;
+    aSize.setHeight( nRectHeight*3/5 );
     aFont.SetFontSize( aSize );
 
     Point aLineStart(aBLPos.X() + 5,            aBLPos.Y() + ( nRectHeight - nItemId )/2);
@@ -114,9 +114,9 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         pDev->DrawImage(aImgStart, imgCus);
     //  Point aStart(aImgStart.X() + 14 + 20 , aBLPos.Y() + nRectHeight/6);
         tools::Rectangle aStrRect = aRect;
-        aStrRect.Top() += nRectHeight/6;
-        aStrRect.Bottom() -= nRectHeight/6;
-        aStrRect.Left() += imgCus.GetSizePixel().Width() + 20;
+        aStrRect.AdjustTop(nRectHeight/6 );
+        aStrRect.AdjustBottom( -(nRectHeight/6) );
+        aStrRect.AdjustLeft(imgCus.GetSizePixel().Width() + 20 );
         if(bCusEnable)
             aFont.SetColor(GetSettings().GetStyleSettings().GetFieldTextColor());
         else
@@ -131,8 +131,8 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         {
             Color aBackColor(50,107,197);
             tools::Rectangle aBackRect = aRect;
-            aBackRect.Top() += 3;
-            aBackRect.Bottom() -= 2;
+            aBackRect.AdjustTop(3 );
+            aBackRect.AdjustBottom( -2 );
             pDev->SetFillColor(aBackColor);
             pDev->DrawRect(aBackRect);
         }

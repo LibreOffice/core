@@ -303,7 +303,7 @@ void ImplGrafControl::GetFocus()
 void ImplGrafControl::Resize()
 {
     Size aFldSize(maField->GetSizePixel());
-    aFldSize.Width() = GetSizePixel().Width() - SYMBOL_TO_FIELD_OFFSET - maImage->GetSizePixel().Width();
+    aFldSize.setWidth( GetSizePixel().Width() - SYMBOL_TO_FIELD_OFFSET - maImage->GetSizePixel().Width() );
     maField->SetSizePixel(aFldSize);
 
     Control::Resize();

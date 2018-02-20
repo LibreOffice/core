@@ -174,7 +174,7 @@ void SvxSearchCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1
 
     Size aOutputSize(GetOutputSizePixel());
     if (aVscrollSB->IsVisible())
-        aOutputSize.Width() -= aVscrollSB->GetOptimalSize().Width();
+        aOutputSize.AdjustWidth( -(aVscrollSB->GetOptimalSize().Width()) );
 
     int i;
     for (i = 1; i < COLUMN_COUNT; ++i)
@@ -225,7 +225,7 @@ void SvxSearchCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1
             // zero advance width => use ink width to center glyph
             if (!nTextWidth)
             {
-                aPointTxTy.X() = x - aBoundRect.Left() + (nX - aBoundRect.GetWidth() + 1) / 2;
+                aPointTxTy.setX( x - aBoundRect.Left() + (nX - aBoundRect.GetWidth() + 1) / 2 );
             }
 
             aBoundRect += aPointTxTy;
@@ -234,17 +234,17 @@ void SvxSearchCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1
             int nYLDelta = aBoundRect.Top() - y;
             int nYHDelta = (y + nY) - aBoundRect.Bottom();
             if (nYLDelta <= 0)
-                aPointTxTy.Y() -= nYLDelta - 1;
+                aPointTxTy.AdjustY( -(nYLDelta - 1) );
             else if (nYHDelta <= 0)
-                aPointTxTy.Y() += nYHDelta - 1;
+                aPointTxTy.AdjustY(nYHDelta - 1 );
 
             // shift back horizontally if needed
             int nXLDelta = aBoundRect.Left() - x;
             int nXHDelta = (x + nX) - aBoundRect.Right();
             if (nXLDelta <= 0)
-                aPointTxTy.X() -= nXLDelta - 1;
+                aPointTxTy.AdjustX( -(nXLDelta - 1) );
             else if (nXHDelta <= 0)
-                aPointTxTy.X() += nXHDelta - 1;
+                aPointTxTy.AdjustX(nXHDelta - 1 );
         }
 
         Color aTextCol = rRenderContext.GetTextColor();
@@ -310,7 +310,7 @@ void SvxSearchCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
 
     Size aSize(GetOutputSizePixel());
     long nSBWidth = aVscrollSB->GetOptimalSize().Width();
-    aSize.Width() -= nSBWidth;
+    aSize.AdjustWidth( -nSBWidth );
 
     vcl::Font aFont = rRenderContext.GetFont();
     aFont.SetWeight(WEIGHT_LIGHT);

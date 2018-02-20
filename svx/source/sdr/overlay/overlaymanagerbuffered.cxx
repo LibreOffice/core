@@ -265,22 +265,22 @@ namespace sdr
                     // maximum size indirectly shall be limited to getOutputDevice().GetOutputSizePixel()
                     if(aRegionRectanglePixel.Left() < 0)
                     {
-                        aRegionRectanglePixel.Left() = 0;
+                        aRegionRectanglePixel.SetLeft( 0 );
                     }
 
                     if(aRegionRectanglePixel.Top() < 0)
                     {
-                        aRegionRectanglePixel.Top() = 0;
+                        aRegionRectanglePixel.SetTop( 0 );
                     }
 
                     if(aRegionRectanglePixel.Right() > aDestinationSizePixel.getWidth())
                     {
-                        aRegionRectanglePixel.Right() = aDestinationSizePixel.getWidth();
+                        aRegionRectanglePixel.SetRight( aDestinationSizePixel.getWidth() );
                     }
 
                     if(aRegionRectanglePixel.Bottom() > aDestinationSizePixel.getHeight())
                     {
-                        aRegionRectanglePixel.Bottom() = aDestinationSizePixel.getHeight();
+                        aRegionRectanglePixel.SetBottom( aDestinationSizePixel.getHeight() );
                     }
 
                     // get sizes

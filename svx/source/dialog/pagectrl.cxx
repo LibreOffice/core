@@ -74,8 +74,8 @@ SvxPageWindow::SvxPageWindow(vcl::Window* pParent)
     // Count in Twips by default
     SetMapMode(MapMode(MapUnit::MapTwip));
     aWinSize = GetOptimalSize();
-    aWinSize.Height() -= 4;
-    aWinSize.Width() -= 4;
+    aWinSize.AdjustHeight( -4 );
+    aWinSize.AdjustWidth( -4 );
 
     aWinSize = PixelToLogic(aWinSize);
     SetBackground();
@@ -187,10 +187,10 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
 
     tools::Rectangle aRect;
 
-    aRect.Left() = rOrg.X() + nL;
-    aRect.Right() = rOrg.X() + aTempSize.Width() - nR;
-    aRect.Top() = rOrg.Y() + nTop;
-    aRect.Bottom() = rOrg.Y() + aTempSize.Height() - nBottom;
+    aRect.SetLeft( rOrg.X() + nL );
+    aRect.SetRight( rOrg.X() + aTempSize.Width() - nR );
+    aRect.SetTop( rOrg.Y() + nTop );
+    aRect.SetBottom( rOrg.Y() + aTempSize.Height() - nBottom );
 
     tools::Rectangle aHdRect(aRect);
     tools::Rectangle aFtRect(aRect);
@@ -208,10 +208,10 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
         if (bHeader)
         {
             // show headers if possible
-            aHdRect.Left() += nHdLeft;
-            aHdRect.Right() -= nHdRight;
-            aHdRect.Bottom() = aRect.Top() + nHdHeight;
-            aRect.Top() += nHdHeight + nHdDist;
+            aHdRect.AdjustLeft(nHdLeft );
+            aHdRect.AdjustRight( -(nHdRight) );
+            aHdRect.SetBottom( aRect.Top() + nHdHeight );
+            aRect.AdjustTop(nHdHeight + nHdDist );
 
             // draw header over PageFill, plus outline
             drawFillAttributes(rRenderContext, maHeaderFillAttributes, aHdRect, aHdRect);
@@ -220,10 +220,10 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
         if (bFooter)
         {
             // show footer if possible
-            aFtRect.Left() += nFtLeft;
-            aFtRect.Right() -= nFtRight;
-            aFtRect.Top() = aRect.Bottom() - nFtHeight;
-            aRect.Bottom() -= nFtHeight + nFtDist;
+            aFtRect.AdjustLeft(nFtLeft );
+            aFtRect.AdjustRight( -(nFtRight) );
+            aFtRect.SetTop( aRect.Bottom() - nFtHeight );
+            aRect.AdjustBottom( -(nFtHeight + nFtDist) );
 
             // draw footer over PageFill, plus outline
             drawFillAttributes(rRenderContext, maFooterFillAttributes, aFtRect, aFtRect);
@@ -254,26 +254,26 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
         {
         case SvxFrameDirection::Horizontal_LR_TB:
             aPos = aRect.TopLeft();
-            aPos.X() += PixelToLogic(Point(1,1)).X();
-            aMove.Y() = 0;
+            aPos.AdjustX(PixelToLogic(Point(1,1)).X() );
+            aMove.setY( 0 );
             cArrow = 0x2192;
             break;
         case SvxFrameDirection::Horizontal_RL_TB:
             aPos = aRect.TopRight();
-            aPos.X() -= nAWidth;
-            aMove.Y() = 0;
-            aMove.X() *= -1;
+            aPos.AdjustX( -nAWidth );
+            aMove.setY( 0 );
+            aMove.setX( aMove.X() * -1 );
             cArrow = 0x2190;
             break;
         case SvxFrameDirection::Vertical_LR_TB:
             aPos = aRect.TopLeft();
-            aPos.X() += rRenderContext.PixelToLogic(Point(1,1)).X();
-            aMove.X() = 0;
+            aPos.AdjustX(rRenderContext.PixelToLogic(Point(1,1)).X() );
+            aMove.setX( 0 );
             break;
         case SvxFrameDirection::Vertical_RL_TB:
             aPos = aRect.TopRight();
-            aPos.X() -= nAWidth;
-            aMove.X() = 0;
+            aPos.AdjustX( -nAWidth );
+            aMove.setX( 0 );
             break;
         default: break;
         }
@@ -287,17 +287,17 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
             if (!bHorizontal)
             {
                 nHDiff = (nAWidth - nCharWidth) / 2;
-                aPos.X() += nHDiff;
+                aPos.AdjustX(nHDiff );
             }
             rRenderContext.DrawText(aPos,sDraw);
             if (bHorizontal)
             {
-                aPos.X() += aMove.X() < 0 ? -nCharWidth : nCharWidth;
+                aPos.AdjustX(aMove.X() < 0 ? -nCharWidth : nCharWidth );
             }
             else
             {
-                aPos.X() -= nHDiff;
-                aPos.Y() += aMove.Y();
+                aPos.AdjustX( -nHDiff );
+                aPos.AdjustY(aMove.Y() );
             }
         }
         aFont.SetFontSize(aSaveSize);
@@ -319,8 +319,8 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
 
         for (sal_uInt16 i = 0; i < 3; ++i)
         {
-            aCellRect.Left() = _nLeft;
-            aCellRect.Right() = _nLeft + CELL_WIDTH;
+            aCellRect.SetLeft( _nLeft );
+            aCellRect.SetRight( _nLeft + CELL_WIDTH );
             if(i > 0)
                 aCellRect.Move(0,CELL_HEIGHT);
 

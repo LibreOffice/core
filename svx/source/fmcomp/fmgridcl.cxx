@@ -162,11 +162,11 @@ void FmGridHeader::RequestHelp( const HelpEvent& rHEvt )
         {
             tools::Rectangle aItemRect = GetItemRect( nItemId );
             Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
-            aItemRect.Left()   = aPt.X();
-            aItemRect.Top()    = aPt.Y();
+            aItemRect.SetLeft( aPt.X() );
+            aItemRect.SetTop( aPt.Y() );
             aPt = OutputToScreenPixel( aItemRect.BottomRight() );
-            aItemRect.Right()  = aPt.X();
-            aItemRect.Bottom() = aPt.Y();
+            aItemRect.SetRight( aPt.X() );
+            aItemRect.SetBottom( aPt.Y() );
 
             sal_uInt16 nPos = GetModelColumnPos(nItemId);
             Reference< css::container::XIndexContainer >  xColumns(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());

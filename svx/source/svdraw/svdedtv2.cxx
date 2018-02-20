@@ -1209,9 +1209,9 @@ void SdrEditView::EqualizeMarkedObjects(bool bWidth)
         tools::Rectangle aLogicRect(pObj->GetLogicRect());
         Size aLogicRectSize(aLogicRect.GetSize());
         if (bWidth)
-            aLogicRectSize.Width() = aLastRectSize.Width();
+            aLogicRectSize.setWidth( aLastRectSize.Width() );
         else
-            aLogicRectSize.Height() = aLastRectSize.Height();
+            aLogicRectSize.setHeight( aLastRectSize.Height() );
         aLogicRect.SetSize(aLogicRectSize);
         if (bUndo)
             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));

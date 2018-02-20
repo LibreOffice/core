@@ -114,9 +114,9 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
                     double  fFactorPix = static_cast< double >( aBmpSize.Width() ) / aBmpSize.Height();
 
                     if( fFactorPix > fFactorLog )
-                        aBmpSize.Width() = FRound( aBmpSize.Height() * fFactorLog );
+                        aBmpSize.setWidth( FRound( aBmpSize.Height() * fFactorLog ) );
                     else
-                        aBmpSize.Height() = FRound( aBmpSize.Width() / fFactorLog );
+                        aBmpSize.setHeight( FRound( aBmpSize.Width() / fFactorLog ) );
 
                     aBmpEx.SetSizePixel( aBmpSize, BmpScaleFlag::BestQuality );
                 }
@@ -152,9 +152,9 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
         const double fFactor  = static_cast<double>(aPrefSize.Width()) / static_cast<double>(aPrefSize.Height());
         Size aSize( S_THUMB, S_THUMB );
         if ( fFactor < 1.0 )
-            aSize.Width() = static_cast<sal_Int32>( S_THUMB * fFactor );
+            aSize.setWidth( static_cast<sal_Int32>( S_THUMB * fFactor ) );
         else
-            aSize.Height() = static_cast<sal_Int32>( S_THUMB / fFactor );
+            aSize.setHeight( static_cast<sal_Int32>( S_THUMB / fFactor ) );
 
         const GraphicConversionParameters aParameters(aSize, false, true, true /*TODO: extra ", true" post-#i121194#*/);
         aThumbBmp = rGraphic.GetBitmapEx(aParameters);

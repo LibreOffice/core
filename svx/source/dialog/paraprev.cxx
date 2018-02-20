@@ -61,8 +61,8 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
     aWinSize = rRenderContext.PixelToLogic(aWinSize);
     Size aTmp(1, 1);
     aTmp = PixelToLogic(aTmp);
-    aWinSize.Width() -= aTmp.Width() /2;
-    aWinSize.Height() -= aTmp.Height() /2;
+    aWinSize.AdjustWidth( -(aTmp.Width() /2) );
+    aWinSize.AdjustHeight( -(aTmp.Height() /2) );
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     const Color& rWinColor = rStyleSettings.GetWindowColor();
@@ -77,7 +77,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
     Size aLineSiz(aWinSize.Width() - DEF_MARGIN, nH);
     Size aSiz = aLineSiz;
     Point aPnt;
-    aPnt.X() = DEF_MARGIN / 2;
+    aPnt.setX( DEF_MARGIN / 2 );
     rRenderContext.SetFillColor(aGrayColor);
 
     for (sal_uInt16 i = 0; i < 9; ++i)
@@ -86,7 +86,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
         {
             rRenderContext.SetFillColor(Color(COL_GRAY));
             long nTop = nUpper * aLineSiz.Height() / aSize.Height();
-            aPnt.Y() += nTop * 2;
+            aPnt.AdjustY(nTop * 2 );
         }
 
         if (i == 6 )
@@ -100,16 +100,16 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
 
             if (i == 3)
             {
-                aPnt.X() += nTmp;
-                aSiz.Width() -= nTmp;
+                aPnt.AdjustX(nTmp );
+                aSiz.AdjustWidth( -nTmp );
             }
             else
             {
-                aPnt.X() += nLeft;
-                aSiz.Width() -= nLeft;
+                aPnt.AdjustX(nLeft );
+                aSiz.AdjustWidth( -nLeft );
             }
             long nRight = nRightMargin * aLineSiz.Width() / aSize.Width();
-            aSiz.Width() -= nRight;
+            aSiz.AdjustWidth( -nRight );
         }
 
         if (4 == i || 5 == i || 6 == i)
@@ -119,13 +119,13 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
                 case SvxPrevLineSpace::N1:
                     break;
                 case SvxPrevLineSpace::N115:
-                    aPnt.Y() += nH / 6.67; // 1/.15 = 6.(6)
+                    aPnt.AdjustY(nH / 6.67 ); // 1/.15 = 6.(6)
                     break;
                 case SvxPrevLineSpace::N15:
-                    aPnt.Y() += nH / 2;
+                    aPnt.AdjustY(nH / 2 );
                     break;
                 case SvxPrevLineSpace::N2:
-                    aPnt.Y() += nH;
+                    aPnt.AdjustY(nH );
                     break;
                 case SvxPrevLineSpace::Prop:
                 case SvxPrevLineSpace::Min:
@@ -134,7 +134,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
             }
         }
 
-        aPnt.Y() += nH;
+        aPnt.AdjustY(nH );
 
         if (3 <= i && 5 >= i)
         {
@@ -160,10 +160,10 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
                 case SvxAdjust::Left:
                     break;
                 case SvxAdjust::Right:
-                    aPnt.X() += ( aSiz.Width() - nLW );
+                    aPnt.AdjustX( aSiz.Width() - nLW );
                     break;
                 case SvxAdjust::Center:
-                    aPnt.X() += ( aSiz.Width() - nLW ) / 2;
+                    aPnt.AdjustX(( aSiz.Width() - nLW ) / 2 );
                     break;
                 default: ; //prevent warning
             }
@@ -176,10 +176,10 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
                         case SvxAdjust::Left:
                             break;
                         case SvxAdjust::Right:
-                            aPnt.X() += ( aSiz.Width() - nLW );
+                            aPnt.AdjustX( aSiz.Width() - nLW );
                             break;
                         case SvxAdjust::Center:
-                            aPnt.X() += ( aSiz.Width() - nLW ) / 2;
+                            aPnt.AdjustX(( aSiz.Width() - nLW ) / 2 );
                             break;
                         case SvxAdjust::Block:
                             nLW = aSiz.Width();
@@ -190,7 +190,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
                 else
                     nLW = aSiz.Width();
             }
-            aSiz.Width() = nLW;
+            aSiz.setWidth( nLW );
         }
 
         tools::Rectangle aRect(aPnt, aSiz);
@@ -201,12 +201,12 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
         if (5 == i)
         {
             long nBottom = nLower * aLineSiz.Height() / aSize.Height();
-            aPnt.Y() += nBottom * 2;
+            aPnt.AdjustY(nBottom * 2 );
         }
 
-        aPnt.Y() += nH;
+        aPnt.AdjustY(nH );
         // Reset, recalculate for each line
-        aPnt.X() = DEF_MARGIN / 2;
+        aPnt.setX( DEF_MARGIN / 2 );
         aSiz = aLineSiz;
     }
 }
