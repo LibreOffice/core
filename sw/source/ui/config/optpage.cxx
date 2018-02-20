@@ -1837,7 +1837,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
 
     const bool bOldShowInlineTooltips = pOpt->IsShowInlineTooltip();
 
-    ColorData nOldMarkColor = pOpt->GetMarkAlignColor().GetColor();
+    Color nOldMarkColor = pOpt->GetMarkAlignColor();
     sal_uInt16 nOldMarkMode = pOpt->GetMarkAlignMode();
 
     sal_Int32 nPos = m_pInsertLB->GetSelectedEntryPos();
@@ -1916,7 +1916,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
     InitFontStyle(*m_pDeletedPreviewWN);
     InitFontStyle(*m_pChangedPreviewWN);
 
-    ColorData nColor = rInsertAttr.m_nColor;
+    Color nColor = rInsertAttr.m_nColor;
     m_pInsertColorLB->SelectEntry(Color(nColor));
 
     nColor = rDeletedAttr.m_nColor;

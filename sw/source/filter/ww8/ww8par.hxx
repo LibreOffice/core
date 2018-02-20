@@ -620,12 +620,12 @@ class SwWW8Shade
 public:
     Color aColor;
     SwWW8Shade(bool bVer67, const WW8_SHD& rSHD);
-    SwWW8Shade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex)
+    SwWW8Shade(Color nFore, Color nBack, sal_uInt16 nIndex)
     {
         SetShade(nFore, nBack, nIndex);
     }
 private:
-    void SetShade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex);
+    void SetShade(Color nFore, Color nBack, sal_uInt16 nIndex);
 };
 
 //    Formulas
@@ -1878,7 +1878,7 @@ public:     // really private, but can only be done public
     static void PicRead( SvStream *pDataStream, WW8_PIC *pPic, bool bVer67);
     static bool ImportOleWMF( tools::SvRef<SotStorage> xSrc1, GDIMetaFile &rWMF,
         long &rX, long &rY);
-    static ColorData GetCol(sal_uInt8 nIco);
+    static Color GetCol(sal_uInt8 nIco);
 
     SwWW8ImplReader( sal_uInt8 nVersionPara, SotStorage* pStorage, SvStream* pSt,
         SwDoc& rD, const OUString& rBaseURL, bool bNewDoc, bool bSkipImages, SwPosition const &rPos );

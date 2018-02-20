@@ -72,7 +72,7 @@ class DbgRect : public SwDbgOut
 public:
         DbgRect( OutputDevice* pOut, const tools::Rectangle &rRect,
                  const bool bOn,
-                 ColorData eColor );
+                 Color eColor );
 };
 
 inline SwDbgOut::SwDbgOut( OutputDevice* pOutDev, const bool bOn )
@@ -99,7 +99,7 @@ inline DbgBackColor::~DbgBackColor()
 
 inline DbgRect::DbgRect( OutputDevice* pOutDev, const tools::Rectangle &rRect,
                          const bool bOn,
-                         ColorData eColor )
+                         Color eColor )
     : SwDbgOut( pOutDev, bOn )
 {
     if( pOut )

@@ -427,9 +427,9 @@ OUString const & SwModule::GetRedlineAuthor(std::size_t nPos)
     return m_pAuthorNames[nPos];
 }
 
-static ColorData lcl_GetAuthorColor(std::size_t nPos)
+static Color lcl_GetAuthorColor(std::size_t nPos)
 {
-    static const ColorData aColArr[] =
+    static const Color aColArr[] =
     {
         COL_AUTHOR1_DARK, COL_AUTHOR2_DARK, COL_AUTHOR3_DARK,
         COL_AUTHOR4_DARK, COL_AUTHOR5_DARK, COL_AUTHOR6_DARK,
@@ -445,7 +445,7 @@ boost::property_tree::ptree lcl_AuthorToJson(const OUString& rAuthor, std::size_
     boost::property_tree::ptree aRet;
     aRet.put("index", nIndex);
     aRet.put("name", rAuthor.toUtf8().getStr());
-    aRet.put("color", lcl_GetAuthorColor(nIndex));
+    aRet.put("color", sal_uInt32(lcl_GetAuthorColor(nIndex)));
     return aRet;
 }
 
@@ -483,10 +483,10 @@ static void lcl_FillAuthorAttr( std::size_t nAuthor, SfxItemSet &rSet,
 {
     Color aCol( rAttr.m_nColor );
 
-    if( COL_TRANSPARENT == rAttr.m_nColor )
+    if( rAttr.m_nColor == COL_TRANSPARENT )
         aCol = lcl_GetAuthorColor(nAuthor);
 
-    bool bBackGr = COL_NONE_COLOR == rAttr.m_nColor;
+    bool bBackGr = rAttr.m_nColor == COL_NONE_COLOR;
 
     switch (rAttr.m_nItemId)
     {
