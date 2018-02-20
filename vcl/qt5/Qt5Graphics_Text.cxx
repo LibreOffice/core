@@ -20,12 +20,14 @@
 #include "Qt5Graphics.hxx"
 #include "Qt5FontFace.hxx"
 #include "Qt5Font.hxx"
+#include "Qt5Painter.hxx"
 
 #include <vcl/fontcharmap.hxx>
 
 #include <sallayout.hxx>
 #include <PhysicalFontCollection.hxx>
 
+#include <QtGui/QGlyphRun>
 #include <QtGui/QFontDatabase>
 #include <QtGui/QRawFont>
 #include <QtCore/QStringList>
@@ -61,7 +63,7 @@ void Qt5Graphics::GetFontMetric(ImplFontMetricDataRef& rFMD, int nFallbackLevel)
     std::vector<uint8_t> rHhea(aHheaTable.data(), aHheaTable.data() + aHheaTable.size());
 
     QByteArray aOs2Table = aRawFont.fontTable("OS/2");
-    std::vector<uint8_t> rOS2(aHheaTable.data(), aHheaTable.data() + aHheaTable.size());
+    std::vector<uint8_t> rOS2(aOs2Table.data(), aOs2Table.data() + aOs2Table.size());
 
     rFMD->ImplCalcLineSpacing(rHhea, rOS2, aRawFont.unitsPerEm());
 
@@ -140,6 +142,33 @@ std::unique_ptr<SalLayout> Qt5Graphics::GetTextLayout(ImplLayoutArgs&, int nFall
     return std::unique_ptr<SalLayout>();
 }
 
-void Qt5Graphics::DrawTextLayout(const GenericSalLayout&) {}
+void Qt5Graphics::DrawTextLayout(const GenericSalLayout &rLayout )
+{
+    const Qt5Font* pFont = static_cast<const Qt5Font*>(&rLayout.GetFont());
+    assert( pFont );
+    QRawFont aRawFont(QRawFont::fromFont( *pFont ));
+
+    QVector<quint32> glyphIndexes;
+    QVector<QPointF> positions;
+
+    Point aPos;
+    const GlyphItem* pGlyph;
+    int nStart = 0;
+    while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
+    {
+        glyphIndexes.push_back(pGlyph->maGlyphId);
+        positions.push_back(QPointF(aPos.X(), aPos.Y()));
+    }
+
+    QGlyphRun aGlyphRun;
+    aGlyphRun.setPositions( positions );
+    aGlyphRun.setGlyphIndexes( glyphIndexes );
+    aGlyphRun.setRawFont( aRawFont );
+
+    Qt5Painter aPainter(*this);
+    QColor aColor = QColor::fromRgb(QRgb(m_aTextColor));
+    aPainter.setPen(aColor);
+    aPainter.drawGlyphRun( QPointF(), aGlyphRun );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
