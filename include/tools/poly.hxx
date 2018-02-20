@@ -88,7 +88,6 @@ public:
                         Polygon( sal_uInt16 nSize );
                         Polygon( sal_uInt16 nPoints, const Point* pPtAry,
                                  const PolyFlags* pFlagAry = nullptr );
-                        Polygon( std::vector< std::pair<Point, PolyFlags> > const & );
                         Polygon( const tools::Rectangle& rRect );
                         Polygon( const tools::Rectangle& rRect,
                                  sal_uInt32 nHorzRound, sal_uInt32 nVertRound );

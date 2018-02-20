@@ -35,7 +35,6 @@ public:
                     ImplPolygon() : mnPoints(0) {}
                     ImplPolygon( sal_uInt16 nInitSize, bool bFlags = false );
                     ImplPolygon( sal_uInt16 nPoints, const Point* pPtAry, const PolyFlags* pInitFlags );
-                    ImplPolygon( std::vector< std::pair<Point, PolyFlags> > const & );
                     ImplPolygon( const ImplPolygon& rImplPoly );
                     ImplPolygon( const tools::Rectangle& rRect );
                     ImplPolygon( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVertRound);
