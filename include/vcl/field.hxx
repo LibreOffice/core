@@ -153,7 +153,8 @@ public:
 
     void                    SetUserValue( sal_Int64 nNewValue );
     virtual void            SetValue( sal_Int64 nNewValue );
-    virtual sal_Int64       GetValue() const;
+    sal_Int64               GetValue() const;
+    sal_Int64               GetSavedIntValue() const;
     virtual OUString        CreateFieldText( sal_Int64 nValue ) const;
     bool                    IsValueModified() const;
 
@@ -183,6 +184,8 @@ protected:
     SAL_DLLPRIVATE bool     ImplNumericReformat( const OUString& rStr, sal_Int64& rValue, OUString& rOutStr );
     SAL_DLLPRIVATE void     ImplNewFieldValue( sal_Int64 nNewValue );
     SAL_DLLPRIVATE void     ImplSetUserValue( sal_Int64 nNewValue, Selection const * pNewSelection = nullptr );
+
+    virtual sal_Int64       GetValueFromString(const OUString& rStr) const;
 
 private:
     SAL_DLLPRIVATE void     ImplInit();
@@ -223,8 +226,8 @@ public:
     virtual void            SetValue( sal_Int64 nValue ) override;
     using NumericFormatter::SetUserValue;
     void                    SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit );
-    virtual sal_Int64       GetValue( FieldUnit eOutUnit ) const;
-    virtual sal_Int64       GetValue() const override;
+    using NumericFormatter::GetValue;
+    sal_Int64               GetValue( FieldUnit eOutUnit ) const;
     virtual OUString        CreateFieldText( sal_Int64 nValue ) const override;
     sal_Int64               GetCorrectedValue( FieldUnit eOutUnit ) const;
 
@@ -240,6 +243,9 @@ protected:
 
     SAL_DLLPRIVATE bool     ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr );
 
+    virtual sal_Int64       GetValueFromString(const OUString& rStr) const override;
+    virtual sal_Int64       GetValueFromStringUnit(const OUString& rStr, FieldUnit eOutUnit) const;
+
 private:
     SAL_DLLPRIVATE  void    ImplInit();
 
@@ -253,6 +259,7 @@ class VCL_DLLPUBLIC CurrencyFormatter : public NumericFormatter
 protected:
                             CurrencyFormatter();
     SAL_DLLPRIVATE bool     ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr );
+    virtual sal_Int64       GetValueFromString(const OUString& rStr) const override;
 
 public:
     virtual                 ~CurrencyFormatter() override;
@@ -260,7 +267,6 @@ public:
     virtual void            Reformat() override;
 
     virtual void            SetValue( sal_Int64 nNewValue ) override;
-    virtual sal_Int64       GetValue() const override;
     virtual OUString        CreateFieldText( sal_Int64 nValue ) const override;
 };
 
@@ -659,8 +665,7 @@ public:
                                          FieldUnit eInUnit = FUNIT_NONE ) const;
 
     // Needed, because GetValue() with nPos hide these functions
-    virtual sal_Int64       GetValue( FieldUnit eOutUnit ) const override;
-    virtual sal_Int64       GetValue() const override;
+    using MetricFormatter::GetValue;
 
     virtual void            dispose() override;
 };
@@ -679,7 +684,6 @@ public:
 
     virtual void            ReformatAll() override;
 
-    virtual sal_Int64       GetValue() const override;
     virtual void            dispose() override;
 };
 
