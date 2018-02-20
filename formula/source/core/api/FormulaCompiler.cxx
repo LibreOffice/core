@@ -525,16 +525,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             // regular unary operators
             for (sal_uInt16 nOp = SC_OPCODE_START_UN_OP; nOp < SC_OPCODE_STOP_UN_OP && nOp < mnSymbols; ++nOp)
             {
-                switch (nOp)
-                {
-                    // NOT and NEG in fact are functions but for legacy reasons
-                    // are sorted into unary operators for compiler interna.
-                    case SC_OPCODE_NOT :
-                    case SC_OPCODE_NEG :
-                        break;   // nothing,
-                    default:
-                        lclPushOpCodeMapEntry( aVec, mpTable.get(), nOp );
-                }
+                lclPushOpCodeMapEntry( aVec, mpTable.get(), nOp );
             }
         }
         if ((nGroups & FormulaMapGroup::BINARY_OPERATORS) != 0)
@@ -568,9 +559,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                 SC_OPCODE_IF_NA,
                 SC_OPCODE_CHOOSE,
                 SC_OPCODE_AND,
-                SC_OPCODE_OR,
-                SC_OPCODE_NOT,
-                SC_OPCODE_NEG
+                SC_OPCODE_OR
             };
             lclPushOpCodeMapEntries( aVec, mpTable.get(), aOpCodes, SAL_N_ELEMENTS(aOpCodes) );
             // functions with 2 or more parameters.
@@ -1473,9 +1462,7 @@ void FormulaCompiler::Factor()
                 NextToken();
             }
         }
-        // special cases NOT() and NEG()
-        else if( eOp == ocNot || eOp == ocNeg
-              || (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR) )
+        else if (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR)
         {
             if (eOp == ocIsoWeeknum && FormulaGrammar::isODFF( meGrammar ))
             {
@@ -1551,7 +1538,7 @@ void FormulaCompiler::Factor()
             }
             else
             {
-                // standard handling of ocNot, ocNeg and 1-parameter opcodes
+                // standard handling of 1-parameter opcodes
                 pFacToken = mpToken;
                 eOp = NextToken();
                 if( nNumFmt == SvNumFormatType::UNDEFINED && eOp == ocNot )
@@ -1918,18 +1905,6 @@ void FormulaCompiler::CompareLine()
     }
 }
 
-void FormulaCompiler::NotLine()
-{
-    CompareLine();
-    while (mpToken->GetOpCode() == ocNot)
-    {
-        FormulaTokenRef p = mpToken;
-        NextToken();
-        CompareLine();
-        PutCode(p);
-    }
-}
-
 OpCode FormulaCompiler::Expression()
 {
     static const short nRecursionMax = 42;
@@ -1939,13 +1914,13 @@ OpCode FormulaCompiler::Expression()
         SetError( FormulaError::StackOverflow );
         return ocStop;      //! generate token instead?
     }
-    NotLine();
+    CompareLine();
     while (mpToken->GetOpCode() == ocAnd || mpToken->GetOpCode() == ocOr)
     {
         FormulaTokenRef p = mpToken;
         mpToken->SetByte( 2 );       // 2 parameters!
         NextToken();
-        NotLine();
+        CompareLine();
         PutCode(p);
     }
     return mpToken->GetOpCode();

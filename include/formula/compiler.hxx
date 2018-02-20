@@ -97,10 +97,8 @@
 
 /*** Unary operators ***/
 #define SC_OPCODE_START_UN_OP        70
-#define SC_OPCODE_NOT                70
-#define SC_OPCODE_NEG                71
-#define SC_OPCODE_NEG_SUB            72
-#define SC_OPCODE_STOP_UN_OP         73
+#define SC_OPCODE_NEG_SUB            70
+#define SC_OPCODE_STOP_UN_OP         71
 
 #define SC_OPCODE_START_FUNCTION     75
 
@@ -205,7 +203,9 @@
 #define SC_OPCODE_ERROR_TYPE_ODF    175
 #define SC_OPCODE_ENCODEURL         176
 #define SC_OPCODE_ISOWEEKNUM        177
-#define SC_OPCODE_STOP_1_PAR        178
+#define SC_OPCODE_NOT               178
+#define SC_OPCODE_NEG               179
+#define SC_OPCODE_STOP_1_PAR        180
 
 /*** Functions with more than one parameters ***/
 #define SC_OPCODE_START_2_PAR       201
