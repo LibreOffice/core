@@ -100,6 +100,12 @@ public:
 
     virtual void TriggerUserEventProcessing() override;
     virtual void ProcessEvent(SalUserEvent aEvent) override;
+
+    virtual css::uno::Reference< css::ui::dialogs::XFilePicker2 > createFilePicker(
+        const css::uno::Reference< css::uno::XComponentContext >& ) override;
+
+    virtual css::uno::Reference< css::ui::dialogs::XFolderPicker2 > createFolderPicker(
+        const css::uno::Reference< css::uno::XComponentContext >& ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

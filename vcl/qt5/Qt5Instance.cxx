@@ -20,19 +20,20 @@
 #include "Qt5Instance.hxx"
 #include <Qt5Instance.moc>
 
-#include "Qt5Frame.hxx"
+#include "Qt5Bitmap.hxx"
 #include "Qt5Data.hxx"
+#include "Qt5FilePicker.hxx"
+#include "Qt5Frame.hxx"
+#include "Qt5Object.hxx"
 #include "Qt5Timer.hxx"
 #include "Qt5VirtualDevice.hxx"
-#include "Qt5Object.hxx"
-#include "Qt5Bitmap.hxx"
 
 #include <headless/svpvd.hxx>
 
+#include <QtCore/QAbstractEventDispatcher>
 #include <QtCore/QThread>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
-#include <QtCore/QAbstractEventDispatcher>
 
 #include <vclpluginapi.h>
 #include <sal/log.hxx>
@@ -181,6 +182,20 @@ void Qt5Instance::TriggerUserEventProcessing()
 void Qt5Instance::ProcessEvent(SalUserEvent aEvent)
 {
     aEvent.m_pFrame->CallCallback(aEvent.m_nEvent, aEvent.m_pData);
+}
+
+css::uno::Reference< css::ui::dialogs::XFilePicker2 >
+Qt5Instance::createFilePicker( const css::uno::Reference< css::uno::XComponentContext > & )
+{
+    return css::uno::Reference< css::ui::dialogs::XFilePicker2 >(
+        new Qt5FilePicker( QFileDialog::ExistingFile ) );
+}
+
+css::uno::Reference< css::ui::dialogs::XFolderPicker2 >
+Qt5Instance::createFolderPicker( const css::uno::Reference< css::uno::XComponentContext > & )
+{
+    return css::uno::Reference< css::ui::dialogs::XFolderPicker2 >(
+        new Qt5FilePicker( QFileDialog::Directory ) );
 }
 
 extern "C" {
