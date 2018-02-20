@@ -2094,7 +2094,7 @@ when save as MS file, the connector must be convert to corresponding type.
 sal_Int32 lcl_GetAdjustValueCount( const XPolygon& rPoly )
 {
     int nRet = 0;
-    switch (  rPoly.GetPointCount() )
+    switch (  rPoly.GetSize() )
     {
     case 2 :
     case 3:
@@ -2107,7 +2107,7 @@ sal_Int32 lcl_GetAdjustValueCount( const XPolygon& rPoly )
         nRet = 2;
         break;
     default:
-        if ( rPoly.GetPointCount()>=6 )
+        if ( rPoly.GetSize()>=6 )
             nRet = 3;
         break;
     }
@@ -2117,7 +2117,7 @@ sal_Int32 lcl_GetAdjustValueCount( const XPolygon& rPoly )
 // Adjust value decide the position which connector should turn a corner
 sal_Int32 lcl_GetConnectorAdjustValue ( const XPolygon& rPoly, sal_uInt16 nIndex )
 {
-    sal_uInt16 k =  rPoly.GetPointCount();
+    sal_uInt16 k =  rPoly.GetSize();
     OSL_ASSERT ( k >= ( 3 + nIndex ) );
 
     Point aPt;
