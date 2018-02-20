@@ -52,12 +52,11 @@ ifeq ($(ENABLE_PDFIMPORT),TRUE)
 $(eval $(call gb_CppunitTest_use_executable,xmlsecurity_signing,xpdfimport))
 endif
 
-ifeq ($(ENABLE_RUNTIME_OPTIMIZATIONS),)
+# reset the LD_LIBRARY_PATH for spawned GPG processes
 ifeq ($(OS),LINUX)
 $(call gb_CppunitTest_get_target,xmlsecurity_signing): \
     EXTRA_ENV_VARS := \
         LIBO_LD_PATH=$$LD_LIBRARY_PATH
-endif
 endif
 
 # vim: set noet sw=4 ts=4:
