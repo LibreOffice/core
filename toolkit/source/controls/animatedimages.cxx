@@ -131,21 +131,16 @@ public:
         return aServices;
     }
 
-
-    namespace
+    void lcl_updatePeer( Reference< XWindowPeer > const& i_peer, Reference< XControlModel > const& i_model )
     {
-        void lcl_updatePeer( Reference< XWindowPeer > const& i_peer, Reference< XControlModel > const& i_model )
+        const Reference< css::util::XModifyListener > xPeerModify( i_peer, UNO_QUERY );
+        if ( xPeerModify.is() )
         {
-            const Reference< css::util::XModifyListener > xPeerModify( i_peer, UNO_QUERY );
-            if ( xPeerModify.is() )
-            {
-                EventObject aEvent;
-                aEvent.Source = i_model;
-                xPeerModify->modified( aEvent );
-            }
+            EventObject aEvent;
+            aEvent.Source = i_model;
+            xPeerModify->modified( aEvent );
         }
     }
-
 
     sal_Bool SAL_CALL AnimatedImagesControl::setModel( const Reference< XControlModel >& i_rModel )
     {

@@ -178,8 +178,6 @@ private:
     }
 };
 
-namespace {
-
 struct test_name_compare
 {
     explicit test_name_compare(const std::string& rName):
@@ -214,8 +212,6 @@ bool addRecursiveTests(const std::vector<std::string>& test_names, CppUnit::Test
         }
     }
     return ret;
-}
-
 }
 
 //Allow the whole uniting testing framework to be run inside a "Protector"

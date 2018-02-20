@@ -1099,9 +1099,6 @@ Reference<XComponentContext> raise_uno_process(
     }
 }
 
-
-namespace {
-
 void extractComponentData(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     css::uno::Reference< css::registry::XRegistryKey > const & registry,
@@ -1144,8 +1141,6 @@ void extractComponentData(
                     name, OUString(), componentUrl, keys[i]));
         }
     }
-}
-
 }
 
 void BackendImpl::ComponentPackageImpl::getComponentInfo(

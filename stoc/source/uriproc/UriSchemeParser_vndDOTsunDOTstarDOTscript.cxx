@@ -135,8 +135,6 @@ OUString parsePart(
     return buf.makeStringAndClear();
 }
 
-namespace {
-
 OUString encodeNameOrParamFragment(OUString const & fragment) {
     static sal_Bool const nameOrParamFragment[] = {
         false, false, false, false, false, false, false, false,
@@ -158,8 +156,6 @@ OUString encodeNameOrParamFragment(OUString const & fragment) {
     return rtl::Uri::encode(
         fragment, nameOrParamFragment, rtl_UriEncodeIgnoreEscapes,
         RTL_TEXTENCODING_UTF8);
-}
-
 }
 
 bool parseSchemeSpecificPart(OUString const & part) {

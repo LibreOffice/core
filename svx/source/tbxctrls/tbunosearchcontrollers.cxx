@@ -319,14 +319,11 @@ SearchToolbarControllersManager::SearchToolbarControllersManager()
 {
 }
 
-namespace
+class theSearchToolbarControllersManager
+    : public rtl::Static<SearchToolbarControllersManager,
+        theSearchToolbarControllersManager>
 {
-    class theSearchToolbarControllersManager
-        : public rtl::Static<SearchToolbarControllersManager,
-            theSearchToolbarControllersManager>
-    {
-    };
-}
+};
 
 SearchToolbarControllersManager& SearchToolbarControllersManager::createControllersManager()
 {
