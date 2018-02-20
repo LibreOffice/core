@@ -245,6 +245,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/linguistic2,\
 	LinguServiceManager \
 	Proofreader \
 	ProofreadingIterator \
+	NumberText \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/logging,\
 	ConsoleHandler \
@@ -2850,6 +2851,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/linguistic2,\
 	XLinguServiceManager \
 	XLinguServiceManager2 \
 	XMeaning \
+	XNumberText \
 	XPossibleHyphens \
 	XProofreader \
 	XProofreadingIterator \
