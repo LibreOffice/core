@@ -792,14 +792,11 @@ bool SwFrame::IsFootnoteAllowed() const
     if ( !IsInDocBody() )
         return false;
 
-    if ( IsInTab() )
-    {
-        // no footnotes in repeated headlines
-        const SwTabFrame *pTab = const_cast<SwFrame*>(this)->ImplFindTabFrame();
-        assert(pTab);
-        if ( pTab->IsFollow() )
-            return !pTab->IsInHeadline( *this );
-    }
+    // no footnotes in repeated headlines
+    const SwTabFrame *pTab = IsInTab() ? const_cast<SwFrame*>(this)->ImplFindTabFrame() : nullptr;
+    if (pTab && pTab->IsFollow())
+        return !pTab->IsInHeadline( *this );
+
     return true;
 }
 
