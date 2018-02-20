@@ -10257,6 +10257,7 @@ sc/qa/unit/helper/xpath.hxx
 sc/qa/unit/mark_test.cxx
 sc/qa/unit/opencl-test.cxx
 sc/qa/unit/parallelism.cxx
+sc/qa/unit/pivottable_filters_test.cxx
 sc/qa/unit/range.cxx
 sc/qa/unit/rangelst_test.cxx
 sc/qa/unit/screenshots/screenshots.cxx
