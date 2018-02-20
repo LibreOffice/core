@@ -2162,7 +2162,22 @@ void SfxCustomPropertiesPage::dispose()
 
 IMPL_LINK_NOARG(SfxCustomPropertiesPage, AddHdl, Button*, void)
 {
-    m_pPropertiesCtrl->AddLine( Any() );
+    // tdf#115853: reload current lines before adding a brand new one
+    // indeed the info are deleted by ClearCustomProperties
+    // each time SfxDocumentInfoItem destructor is called
+    SfxDocumentInfoItem pInfo;
+    Sequence< beans::PropertyValue > aPropertySeq = m_pPropertiesCtrl->GetCustomProperties();
+    sal_Int32 i = 0, nCount = aPropertySeq.getLength();
+    for ( ; i < nCount; ++i )
+    {
+        if ( !aPropertySeq[i].Name.isEmpty() )
+        {
+            pInfo.AddCustomProperty( aPropertySeq[i].Name, aPropertySeq[i].Value );
+        }
+    }
+
+    Any aAny;
+    m_pPropertiesCtrl->AddLine(aAny);
 }
 
 bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet* rSet )
