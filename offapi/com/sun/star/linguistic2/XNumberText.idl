@@ -1,0 +1,123 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef __com_sun_star_linguistic2_XNumberText_idl__
+#define __com_sun_star_linguistic2_XNumberText_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+module com { module sun { module star { module linguistic2 {
+
+/** This interface allows to spell out numbers and money amounts
+
+    <p> The current set of supported languages is:
+    <ul>
+        <li>af : Afrikaans</li>
+        <li>ca : Catalan</li>
+        <li>cs : Czech</li>
+        <li>da : Danish</li>
+        <li>de : German</li>
+        <li>de-CH : Swiss Standard German</li>
+        <li>de-LI : Swiss Standard German</li>
+        <li>el : Greek</li>
+        <li>en : English</li>
+        <li>en-AU : Australian English</li>
+        <li>en-GB : British English</li>
+        <li>en-IE : Irish English</li>
+        <li>en-NZ : New Zealand English</li>
+        <li>eo : Esperanto</li>
+        <li>es : Spanish</li>
+        <li>fi : Finnish</li>
+        <li>fr : French</li>
+        <li>fr-BE : Belgian French</li>
+        <li>fr-CH : Swiss French</li>
+        <li>he : Hebrew</li>
+        <li>hr : Croatian</li>
+        <li>hu : Hungarian</li>
+        <li>Hung : Old Hungarian</li>
+        <li>id : Indonesian</li>
+        <li>it : Italian</li>
+        <li>ja : Japanese</li>
+        <li>ko-KP : North-Korean</li>
+        <li>ko-KR : South-Korean</li>
+        <li>lb : Luxembourgish</li>
+        <li>lt : Lithuanian</li>
+        <li>lv : Latvian</li>
+        <li>ms : Malay</li>
+        <li>nl : Dutch</li>
+        <li>pl : Polish</li>
+        <li>pt-BR : Portuguese (Brasilian)</li>
+        <li>pt-PT : Portuguese (Portugal)</li>
+        <li>ro : Romanian</li>
+        <li>Roman : Roman numbers</li>
+        <li>ru : Russian</li>
+        <li>sh : Serbian (written with latin characters)</li>
+        <li>sl : Slovenian</li>
+        <li>sr : Serbian (written with cyrillic characters) (added with OOo 3.4)</li>
+        <li>Suzhou : Suzhou numerals</li>
+        <li>sv : Swedish</li>
+        <li>th : Thai</li>
+        <li>tr : Turkish</li>
+        <li>vi : Vietnamese</li>
+        <li>zh : Chinese</li>
+    </ul>
+
+    </p>
+
+    @since LibreOffice 6.1
+ */
+interface XNumberText
+{
+    /** spell out numbers and money amounts
+
+        <p>Please note that text argument can contain prefixes separated by space,
+        for example "ordinal" for ordinal numbers, "ordinal-number" for ordinal
+        indicators and ISO 4217 currency codes.
+
+        Language modules list the supported prefixes by the input text "help".</p>
+
+        @returns
+            the result of the number name conversion.
+
+        @param  aText
+            all the text including the part that should converted.
+
+        @param  aLocale
+            the locale for the target language of the number name conversion.
+
+        @see    com::sun::star::lang::Locale
+     */
+    string   getNumberText(
+            [in] string  aText,
+            [in] com::sun::star::lang::Locale aLocale )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** returns a list of all supported languages.
+    */
+    sequence< com::sun::star::lang::Locale > getAvailableLanguages();
+
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,6 +19,7 @@
 
 #include <defaultnumberingprovider.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/linguistic2/NumberText.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -31,6 +32,9 @@
 #include <string.h>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <unordered_map>
+#include <map>
 
 // Cyrillic upper case
 #define C_CYR_A "\xD0\x90"
@@ -634,6 +638,46 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
           case CHARS_LOWER_LETTER:
                lcl_formatChars( lowerLetter, 26, number-1, result );
                break;
+          case TEXT_NUMBER:
+          case TEXT_CARDINAL:
+          case TEXT_ORDINAL:
+               {
+                   static css::uno::Reference< css::linguistic2::XNumberText > xNumberText;
+                   if (!xNumberText.is())
+                       xNumberText = linguistic2::NumberText::create( m_xContext );
+                   OUString aLoc = LanguageTag::convertToBcp47(aLocale);
+                   OUString numbertext_prefix = "";
+                   if (numType == TEXT_NUMBER)
+                       numbertext_prefix += "ordinal-number ";
+                   else if (numType == TEXT_ORDINAL)
+                       numbertext_prefix += "ordinal ";
+                   // Several hundreds of headings could result typing lags because
+                   // of the continuous update of the multiple number names during typing.
+                   // We fix this by buffering the result of the conversion.
+                   static std::unordered_map<sal_Int32,std::map<OUString, OUString> > aBuff;
+                   auto aBuffItem = aBuff.find(number);
+                   std::map<OUString, OUString> aItem;
+                   if (aBuffItem == aBuff.end() || !aBuffItem->second.count(numbertext_prefix + aLoc))
+                   {
+                       OUString snumber = OUString::number(number);
+                       OUString aNum =
+                           xNumberText->getNumberText( numbertext_prefix + snumber, aLocale);
+                       if ( !xCharClass.is() )
+                           xCharClass = CharacterClassification::create( m_xContext );
+                       // use number at missing number to text conversion
+                       if (aNum.getLength() == 0)
+                           aNum = snumber;
+                       // capitalize first letter
+                       aItem[numbertext_prefix + aLoc] = xCharClass->toTitle(aNum, 0, 1, aLocale) + aNum.copy(1);
+                       aBuff.insert(std::make_pair(number, aItem));
+                   }
+                   else
+                   {
+                       aItem = aBuffItem->second;
+                   }
+                   result += aItem[numbertext_prefix + aLoc];
+                   break;
+               }
           case ROMAN_UPPER:
                result += toRoman( number );
                break;
@@ -928,6 +972,9 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHAR_SPECIAL,                    "Bullet", LANG_ALL},
         {style::NumberingType::PAGE_DESCRIPTOR,                 "Page", LANG_ALL},
         {style::NumberingType::BITMAP,                          "Bitmap", LANG_ALL},
+        {style::NumberingType::TEXT_NUMBER,             "1st", LANG_ALL},
+        {style::NumberingType::TEXT_CARDINAL,           "One", LANG_ALL},
+        {style::NumberingType::TEXT_ORDINAL,            "First", LANG_ALL},
         {style::NumberingType::CHARS_UPPER_LETTER_N,    "AAA", LANG_ALL},
         {style::NumberingType::CHARS_LOWER_LETTER_N,    "aaa", LANG_ALL},
         {style::NumberingType::NATIVE_NUMBERING,        "Native Numbering", LANG_CJK|LANG_CTL},
