@@ -5630,7 +5630,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
                                  SvStream* pStData_,
                                  SdrModel* pSdrModel_,// see SetModel() below
                                  long      nApplicationScale,
-                                 ColorData mnDefaultColor_,
+                                 Color     mnDefaultColor_,
                                  SvStream* pStData2_,
                                  bool bSkipImages )
     :DffPropertyReader( *this ),
