@@ -15,6 +15,24 @@ set -euo pipefail
 PARA=1
 check_path="${INSTDIR:-.}"
 
+help()
+{
+    cat << "EOF"
+    -d <dir>  directory to check
+    -p        run unbound parallel checks
+    -h        help
+EOF
+    [ -z "${1:-}" ] && exit 0
+}
+
+die()
+{
+    echo "$1"
+    echo
+    help 1
+    exit 1
+}
+
 while [ "${1:-}" != "" ]; do
     parm=${1%%=*}
     arg=${1#*=}
@@ -28,12 +46,18 @@ while [ "${1:-}" != "" ]; do
     case "${parm}" in
         --dir|-d)
 	    if [ "$has_arg" ] ; then
-		check_path=$arg
+		check_path="$arg"
 	    else
 		shift
-		check_path=$1
+		check_path="$1"
 	    fi
-            ;;
+	    if [ ! -d "$check_path" ]; then
+		die "Invalid directory '$check_path'"
+	    fi
+	    ;;
+        -h)
+	    help
+	    ;;
         -p)
 	    # this sound counter intuitive. but the idea
             # is to possibly support -p <n>
