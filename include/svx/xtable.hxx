@@ -43,10 +43,6 @@
 #include <limits>
 #include <memory>
 
-// function to convert in real RGB_Colours;
-// it can't be compared with enum COL_NAME
-SVX_DLLPUBLIC Color RGB_Color( ColorData nColorName );
-
 class SVX_DLLPUBLIC XColorEntry : public XPropertyEntry
 {
 private:
