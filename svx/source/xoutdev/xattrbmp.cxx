@@ -264,13 +264,6 @@ bool XFillBitmapItem::QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId) const
         aInternalName = GetName();
     }
 
-    if (nMemberId == MID_GRAFURL)
-    {
-        aURL = UNO_NAME_GRAPHOBJ_URLPREFIX;
-        aURL += OStringToOUString(
-            GetGraphicObject().GetUniqueID(),
-            RTL_TEXTENCODING_ASCII_US);
-    }
     if( nMemberId == MID_BITMAP ||
         nMemberId == 0  )
     {
@@ -279,8 +272,6 @@ bool XFillBitmapItem::QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId) const
 
     if( nMemberId == MID_NAME )
         rVal <<= aApiName;
-    else if( nMemberId == MID_GRAFURL )
-        rVal <<= aURL;
     else if( nMemberId == MID_BITMAP )
         rVal <<= xBmp;
     else
