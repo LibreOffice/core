@@ -1573,9 +1573,16 @@ oslFileError SAL_CALL osl_getFileStatus(
         break;
     }
 
+    // Provide a long path version of the file name, because when
+    // the path is longer than 255 chars, windows api calls expect this prefix.
+    OUString sFullPath(pItemImpl->m_pFullPath);
+
+    if (sFullPath.getLength() >= 260 && isalpha(sFullPath[0]) && sFullPath[1] == ':')
+        sFullPath = "\\\\?\\" + sFullPath;
+
     if ( uFieldMask & osl_FileStatus_Mask_Validate )
     {
-        HANDLE  hFind = FindFirstFileW( o3tl::toW(rtl_uString_getStr( pItemImpl->m_pFullPath )), &pItemImpl->FindData );
+        HANDLE  hFind = FindFirstFileW( o3tl::toW(sFullPath.getStr() ), &pItemImpl->FindData );
 
         if ( hFind != INVALID_HANDLE_VALUE )
             FindClose( hFind );
@@ -1647,7 +1654,7 @@ oslFileError SAL_CALL osl_getFileStatus(
         if ( !pItemImpl->bFullPathNormalized )
         {
             ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
-            sal_uInt32 nNewLen = GetCaseCorrectPathName( o3tl::toW(rtl_uString_getStr( pItemImpl->m_pFullPath )),
+            sal_uInt32 nNewLen = GetCaseCorrectPathName( o3tl::toW( sFullPath.getStr() ),
                                                          o3tl::toW( aBuffer ),
                                                          aBuffer.getBufSizeInSymbols(),
                                                          true );
@@ -1659,7 +1666,7 @@ oslFileError SAL_CALL osl_getFileStatus(
             }
         }
 
-        oslFileError error = osl_getFileURLFromSystemPath( pItemImpl->m_pFullPath, &pStatus->ustrFileURL );
+        oslFileError error = osl_getFileURLFromSystemPath( sFullPath.pData, &pStatus->ustrFileURL );
         if (error != osl_File_E_None)
             return error;
         pStatus->uValidFields |= osl_FileStatus_Mask_FileURL;
