@@ -27,8 +27,9 @@ bridge_noopt_objects := cpp2uno except uno2cpp
 bridge_asm_objects := ios64_helper
 
 #HACK
-$(eval $(call gb_Library_use_custom_headers,$(gb_CPPU_ENV)_uno,\
-        bridges/source/cpp_uno/gcc3_ios \
+$(eval $(call gb_Library_set_include,$(gb_CPPU_ENV)_uno,\
+    $$(INCLUDE) \
+    -I $(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_ios) \
 ))
 
 $(SRCDIR)/bridges/source/cpp_uno/gcc3_ios/ios64_helper.s: \
