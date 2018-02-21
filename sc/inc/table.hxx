@@ -131,17 +131,17 @@ class ScColumnsRange final
         typedef const SCCOL* pointer;
         typedef SCCOL reference;
 
-        explicit Iterator(std::vector<ScColumn*>::const_iterator colIter) : maColIter(colIter) {}
+        explicit Iterator(const std::vector<ScColumn*>::const_iterator& colIter) : maColIter(colIter) {}
 
         Iterator& operator++() { maColIter++; return *this;}
         Iterator& operator--() { maColIter--; return *this;}
 
-        bool operator==(Iterator other) const {return maColIter == other.maColIter;}
-        bool operator!=(Iterator other) const {return !(*this == other);}
+        bool operator==(const Iterator & rOther) const {return maColIter == rOther.maColIter;}
+        bool operator!=(const Iterator & rOther) const {return !(*this == rOther);}
         SCCOL operator*() const {return (*maColIter)->GetCol();}
     };
 
-    ScColumnsRange(Iterator nBegin, Iterator nEnd) : maBegin(nBegin), maEnd(nEnd) {}
+    ScColumnsRange(const Iterator & rBegin, const Iterator & rEnd) : maBegin(rBegin), maEnd(rEnd) {}
     const Iterator & begin() { return maBegin; }
     const Iterator & end() { return maEnd; }
     std::reverse_iterator<Iterator> rbegin() { return std::reverse_iterator<Iterator>(maEnd); }
