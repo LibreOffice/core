@@ -820,13 +820,26 @@ bool Dialog::ImplStartExecuteModal()
         return false;
     }
 
+    ImplSVData* pSVData = ImplGetSVData();
+
     switch ( Application::GetDialogCancelMode() )
     {
     case Application::DialogCancelMode::Off:
         break;
     case Application::DialogCancelMode::Silent:
         if (GetLOKNotifier())
-            break;
+        {
+            // check if there's already some dialog being ::Execute()d
+            Dialog* pExeDlg = pSVData->maWinData.mpLastExecuteDlg;
+            while (pExeDlg && !pExeDlg->IsInSyncExecute())
+                pExeDlg = pExeDlg->mpPrevExecuteDlg;
+
+            const bool bDialogExecuting = pExeDlg ? pExeDlg->IsInSyncExecute() : false;
+            if (!(bDialogExecuting && IsInSyncExecute()))
+                break;
+            else
+                SAL_WARN("lok.dialog", "Dialog \"" << ImplGetDialogText(this) << "\" is being synchronously executed over an existing synchronously executing dialog.");
+        }
 
         SAL_INFO(
             "vcl",
@@ -852,8 +865,6 @@ bool Dialog::ImplStartExecuteModal()
 
     }
 #endif
-
-    ImplSVData* pSVData = ImplGetSVData();
 
      // link all dialogs which are being executed
     mpPrevExecuteDlg = pSVData->maWinData.mpLastExecuteDlg;
@@ -969,6 +980,8 @@ short Dialog::Execute()
 #if HAVE_FEATURE_DESKTOP
     VclPtr<vcl::Window> xWindow = this;
 
+    mbInSyncExecute = true;
+
     if ( !ImplStartExecuteModal() )
         return 0;
 
@@ -977,8 +990,8 @@ short Dialog::Execute()
     while ( !xWindow->IsDisposed() && mbInExecute )
         Application::Yield();
 
+    mbInSyncExecute = false;
     ImplEndExecuteModal();
-
 #ifdef DBG_UTIL
     assert (!mpDialogParent || !mpDialogParent->IsDisposed());
 #endif
