@@ -3072,11 +3072,11 @@ void XMLTextParagraphExport::_exportTextGraphic(
         SdXMLImExTransform2D aSdXMLImExTransform2D;
 
         // Convert from 10th degree integer to deg.
-        // CAUTION: Internal rotation is classically mathematically 'wrong' defined by ignoring that
+        // CAUTION: internal rotation is classically mathematically 'wrong' defined by ignoring that
         // we have a right-handed coordinate system, so need to correct this by mirroring
         // the rotation to get the correct transformation. See also case XML_TOK_TEXT_FRAME_TRANSFORM
         // in XMLTextFrameContext_Impl::XMLTextFrameContext_Impl and #i78696#
-        // CAUTIONII: Due to tdf#115782 it is better for current ODF to indeed write it with the wrong
+        // CAUTION-II: due to tdf#115782 it is better for current ODF to indeed write it with the wrong
         // orientation as in all other cases - ARGH! We will need to correct this in future ODF ASAP!
         const double fRotate(static_cast< double >(nRotation) * (F_PI/1800.0));
 

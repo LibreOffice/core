@@ -85,7 +85,7 @@ def check_objects(filename, elm, objects, target):
     if length == 0:
         err(filename, elm, "use of undeclared target '%s'" % target)
     elif length > 1:
-        err(filename, elm, "sevral targets are named '%s'" % target)
+        err(filename, elm, "several targets are named '%s'" % target)
 
 def check_props(filename, root, props):
     """
