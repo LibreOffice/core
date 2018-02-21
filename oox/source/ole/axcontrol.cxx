@@ -264,9 +264,9 @@ void ControlConverter::convertPicture( PropertyMap& rPropMap, const StreamDataSe
 {
     if( rPicData.hasElements() )
     {
-        OUString aGraphicUrl = mrGraphicHelper.importGraphicObject( rPicData );
-        if( !aGraphicUrl.isEmpty() )
-            rPropMap.setProperty( PROP_ImageURL, aGraphicUrl );
+        uno::Reference<graphic::XGraphic> xGraphic = mrGraphicHelper.importGraphic(rPicData);
+        if (xGraphic.is())
+            rPropMap.setProperty(PROP_Graphic, xGraphic);
     }
 }
 
