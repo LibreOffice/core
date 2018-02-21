@@ -346,9 +346,9 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
     }
     if ( maGraphic.hasValue() )
     {
-        Reference< css::awt::XBitmap > xBitmap( maGraphic, UNO_QUERY );
-        if ( xBitmap.is() )
-            rPropMap.setProperty( PROP_Graphic, xBitmap);
+        Reference<css::awt::XBitmap> xBitmap(maGraphic, UNO_QUERY);
+        if (xBitmap.is())
+            rPropMap.setProperty(PROP_GraphicBitmap, xBitmap);
     }
     if( mnSize.hasValue() )
         rPropMap.setAnyProperty( PROP_BulletRelSize, mnSize);
