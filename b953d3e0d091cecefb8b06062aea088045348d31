@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_f40c3a3d",
+        "filename": "sw/source/ui/config/mailconfigpage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-02-21T10:45:31Z",
+      "side": 1,
+      "message": "This overwrites the initial value copied from m_sErrorServer on line 386. Instead, it should be +\u003d to replace the \"append\" method.",
+      "range": {
+        "startLine": 388,
+        "startChar": 26,
+        "endLine": 388,
+        "endChar": 27
+      },
+      "revId": "b953d3e0d091cecefb8b06062aea088045348d31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
