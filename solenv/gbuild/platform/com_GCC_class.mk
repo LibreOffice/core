@@ -155,4 +155,13 @@ $(call gb_Helper_abbreviate_dirs,\
 
 endef
 
+define gb_UIConfig__gla11y_command
+$(call gb_Helper_abbreviate_dirs,\
+	$(gb_UIConfig_LXML_PATH) $(gb_Helper_set_ld_path) \
+	$(call gb_ExternalExecutable_get_command,python) \
+	$(gb_UIConfig_gla11y_SCRIPT) -o $@ $(UIFILES)
+)
+
+endef
+
 # vim: set noet sw=4 ts=4:
