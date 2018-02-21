@@ -870,4 +870,12 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/site-packages/README \
 ))
 
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/config-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m,\
+	Makefile \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/include/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m,\
+	pyconfig.h \
+))
+
 # vim: set noet sw=4 ts=4:
