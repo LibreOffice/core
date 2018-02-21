@@ -1969,9 +1969,7 @@ void SdTiledRenderingTest::testPasteTextOnSlide()
     // Load the document.
     comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("paste_text_onslide.odp");
-
-    ViewCallback aView1;
-    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    CPPUNIT_ASSERT(pXImpressDocument);
 
     // select second text object
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
@@ -2017,7 +2015,10 @@ void SdTiledRenderingTest::testPasteTextOnSlide()
     Scheduler::ProcessEventsToIdle();
 
     // Check the position of the newly added text shape, created for pasted text
-    SdrObject* pObject = pXImpressDocument->GetDocShell()->GetViewShell()->GetActualPage()->GetObj(2);
+    SdPage* pActualPage = pXImpressDocument->GetDocShell()->GetViewShell()->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
+    SdrObject* pObject = pActualPage->GetObj(2);
+    CPPUNIT_ASSERT(pObject);
     SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObject);
     CPPUNIT_ASSERT(pTextObj);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TEXT), pTextObj->GetObjIdentifier());
