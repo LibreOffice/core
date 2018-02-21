@@ -2664,8 +2664,12 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
                 if ( pActiveViewSh )                // If it came from MouseButtonDown
                     pActiveViewSh->StopMarking();   // (the InfoBox consumes the MouseButtonUp)
 
-                //FIXME: We still run into problems if the input is triggered by activating another View
-                vcl::Window* pParent = Application::GetDefDialogParent();
+                vcl::Window* pParent = nullptr;
+                if (pActiveViewSh)
+                    pParent = &pActiveViewSh->GetViewFrame()->GetWindow();
+                else
+                    pParent = Application::GetDefDialogParent();
+
                 if ( pData->DoError( pParent, aString, aCursorPos ) )
                     bForget = true;                 // Do not take over input
             }
