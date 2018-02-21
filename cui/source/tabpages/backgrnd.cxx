@@ -880,7 +880,7 @@ void SvxBackgroundTabPage::RaiseLoadError_Impl()
 {
     SfxErrorContext aContext( ERRCTX_SVX_BACKGROUND,
                               OUString(),
-                              this,
+                              GetFrameWeld(),
                               RID_SVXERRCTX,
                               SvxResLocale() );
 

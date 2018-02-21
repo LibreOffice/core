@@ -3478,7 +3478,7 @@ SvxIconChangeDialog::SvxIconChangeDialog(
     pLineEditDescription->set_width_request(aSize.Width());
     pLineEditDescription->set_height_request(aSize.Height());
 
-    pFImageInfo->SetImage(InfoBox::GetStandardImage());
+    pFImageInfo->SetImage(GetStandardInfoBoxImage());
     pLineEditDescription->SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     pLineEditDescription->SetText(aMessage);
 }

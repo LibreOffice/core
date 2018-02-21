@@ -126,12 +126,10 @@ private:
     {
         OString m_sID;
         VclPtr<vcl::Window> m_pWindow;
-        short m_nResponseId;
         PackingData m_aPackingData;
         WinAndId(const OString &rId, vcl::Window *pWindow, bool bVertical)
             : m_sID(rId)
             , m_pWindow(pWindow)
-            , m_nResponseId(RET_CANCEL)
             , m_aPackingData(bVertical)
         {
         }

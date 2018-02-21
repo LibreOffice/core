@@ -33,7 +33,7 @@
 #include <svx/float3d.hxx>
 #include <svx/f3dchild.hxx>
 #include <svx/dialogs.hrc>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
@@ -162,10 +162,11 @@ void DrawViewShell::AssignFrom3DWindow()
             }
             else
             {
-                ScopedVclPtrInstance<InfoBox> aInfoBox (
-                    GetActiveWindow(),
-                    SdResId(STR_ACTION_NOTPOSSIBLE));
-                aInfoBox->Execute();
+                vcl::Window* pWindow = GetActiveWindow();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SdResId(STR_ACTION_NOTPOSSIBLE)));
+                xInfoBox->run();
             }
 
             // get focus back

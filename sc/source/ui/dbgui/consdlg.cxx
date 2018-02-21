@@ -32,9 +32,19 @@
 #include <strings.hrc>
 
 #include <consdlg.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
-#define INFOBOX(id) ScopedVclPtrInstance<InfoBox>(this, ScGlobal::GetRscString(id))->Execute()
+namespace
+{
+    void INFOBOX(weld::Window* pWindow, const char* id)
+    {
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      ScGlobal::GetRscString(id)));
+        xInfoBox->run();
+    }
+}
 
 class ScAreaData
 {
@@ -406,7 +416,7 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl, Button*, void)
         }
         else
         {
-            INFOBOX( STR_INVALID_TABREF );
+            INFOBOX(GetFrameWeld(), STR_INVALID_TABREF);
             pEdDestArea->GrabFocus();
         }
     }
@@ -461,11 +471,11 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, Button*, pBtn, void )
                 if ( pLbConsAreas->GetEntryPos( aNewArea ) == LISTBOX_ENTRY_NOTFOUND )
                     pLbConsAreas->InsertEntry( aNewArea );
                 else
-                    INFOBOX( STR_AREA_ALREADY_INSERTED );
+                    INFOBOX(GetFrameWeld(), STR_AREA_ALREADY_INSERTED);
             }
             else
             {
-                INFOBOX( STR_INVALID_TABREF );
+                INFOBOX(GetFrameWeld(), STR_INVALID_TABREF);
                 pEdDataArea->GrabFocus();
             }
         }

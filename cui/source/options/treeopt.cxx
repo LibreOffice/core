@@ -101,7 +101,7 @@
 #include <unotools/viewoptions.hxx>
 #include <vcl/help.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/treelistentry.hxx>
@@ -974,7 +974,10 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
                 if(!pGroupInfo->m_pModule)
                 {
                     pGroupInfo->m_bLoadError = true;
-                    ScopedVclPtrInstance<InfoBox>(pBox, sNotLoadedError)->Execute();
+                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pBox->GetFrameWeld(),
+                                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                                  sNotLoadedError));
+                    xInfoBox->run();
                     return;
                 }
                 if(bIdentical)
