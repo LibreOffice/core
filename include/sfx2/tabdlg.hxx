@@ -190,6 +190,8 @@ public:
 
     short               Execute() override;
     void                StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
+
+    using               Dialog::StartExecuteAsync;
     bool                StartExecuteAsync( VclAbstractDialog::AsyncContext &rCtx ) override;
     void                Start();
 
