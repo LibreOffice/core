@@ -19,7 +19,6 @@
 #ifndef INCLUDED_UUI_SOURCE_SSLWARNDLG_HXX
 #define INCLUDED_UUI_SOURCE_SSLWARNDLG_HXX
 
-#include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/messagedialog.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
@@ -32,19 +31,22 @@
 class SSLWarnDialog : public MessageDialog
 {
 private:
+    VclPtr<PushButton> m_xView;
     const css::uno::Reference< css::uno::XComponentContext >& m_xContext;
     const css::uno::Reference< css::security::XCertificate >& m_rXCert;
 
-    void ViewCert();
+    DECL_LINK(ViewCertHdl, Button*, void);
 
 public:
     SSLWarnDialog( vcl::Window* pParent,
         const css::uno::Reference< css::security::XCertificate >& rXCert,
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-    virtual void response(short nResponseId) override;
-
     void setDescription1Text(const OUString &aText) { set_primary_text(aText); }
+
+    virtual void dispose() override;
+
+    virtual ~SSLWarnDialog() override;
 };
 
 #endif // INCLUDED_UUI_SOURCE_SSLWARNDLG_HXX

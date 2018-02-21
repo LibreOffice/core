@@ -3378,38 +3378,6 @@ PopupMenu *VclBuilder::get_menu(const OString& sID)
     return nullptr;
 }
 
-short VclBuilder::get_response(const vcl::Window *pWindow) const
-{
-    for (auto const& child : m_aChildren)
-    {
-        if (child.m_pWindow == pWindow)
-        {
-            return child.m_nResponseId;
-        }
-    }
-
-    //how did we not find sID ?
-    assert(false);
-    return RET_CANCEL;
-}
-
-IMPL_LINK(VclBuilder, ResponseHdl, ::Button*, pButton, void)
-{
-    short nResponse = get_response(pButton);
-    Dialog* pDialog = pButton->GetParentDialog();
-    assert(pDialog && "who puts a response without a dialog");
-    if (nResponse == RET_HELP)
-    {
-        vcl::Window* pFocusWin = Application::GetFocusWindow();
-        if (!pFocusWin)
-            pFocusWin = pButton;
-        HelpEvent aEvt(pFocusWin->GetPointerPosPixel(), HelpEventMode::CONTEXT);
-        pFocusWin->RequestHelp(aEvt);
-    }
-    else
-        pDialog->EndDialog(nResponse);
-}
-
 void VclBuilder::set_response(const OString& sID, short nResponse)
 {
     switch (nResponse)
@@ -3436,27 +3404,20 @@ void VclBuilder::set_response(const OString& sID, short nResponse)
 
     assert(nResponse >= 0);
 
-    bool bFound = false;
-
     for (auto & child : m_aChildren)
     {
         if (child.m_sID == sID)
         {
-            child.m_nResponseId = nResponse;
-            bFound = true;
-            break;
+            PushButton* pPushButton = dynamic_cast<PushButton*>(child.m_pWindow.get());
+            assert(pPushButton);
+            Dialog* pDialog = pPushButton->GetParentDialog();
+            assert(pDialog);
+            pDialog->add_button(pPushButton, nResponse, false);
+            return;
         }
     }
 
-    if (!m_bLegacy)
-    {
-        PushButton* pPushButton = get<PushButton>(sID);
-        assert(pPushButton);
-        pPushButton->SetClickHdl(LINK(this, VclBuilder, ResponseHdl));
-    }
-
-    //how did we not find sID ?
-    assert(bFound); (void)bFound;
+    assert(false);
 }
 
 void VclBuilder::delete_by_name(const OString& sID)

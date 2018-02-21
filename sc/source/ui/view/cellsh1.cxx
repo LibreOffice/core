@@ -35,6 +35,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <svx/svxdlg.hxx>
 #include <sot/formats.hxx>
 #include <svx/postattr.hxx>
@@ -2960,8 +2961,11 @@ void ScCellShell::ExecuteDataPilotDialog()
         if (pSrcErrorId)
         {
             // Error occurred during data creation.  Launch an error and bail out.
-            ScopedVclPtrInstance< InfoBox > aBox(pTabViewShell->GetDialogParent(), ScGlobal::GetRscString(pSrcErrorId));
-            aBox->Execute();
+            vcl::Window* pWin = pTabViewShell->GetDialogParent();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          ScGlobal::GetRscString(pSrcErrorId)));
+            xInfoBox->run();
             return;
         }
 

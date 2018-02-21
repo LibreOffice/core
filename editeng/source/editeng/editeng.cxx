@@ -21,7 +21,7 @@
 #include <comphelper/lok.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 
 #include <svtools/ctrltool.hxx>
@@ -1042,7 +1042,11 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                     bDebugPaint = !bDebugPaint;
                     OStringBuffer aInfo("DebugPaint: ");
                     aInfo.append(bDebugPaint ? "On" : "Off");
-                    ScopedVclPtrInstance<InfoBox>(nullptr, OStringToOUString(aInfo.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US))->Execute();
+                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                                  OStringToOUString(aInfo.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US)));
+                    xInfoBox->run();
+
                 }
                 bDone = false;
             }

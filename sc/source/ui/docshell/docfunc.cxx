@@ -25,6 +25,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 #include <svl/PasswordHelper.hxx>
@@ -394,8 +395,10 @@ bool ScDocFunc::DetectiveMarkInvalid(SCTAB nTab)
         aModificator.SetDocumentModified();
         if ( bOverflow )
         {
-            ScopedVclPtrInstance<InfoBox>( nullptr,
-                    ScGlobal::GetRscString( STR_DETINVALID_OVERFLOW ) )->Execute();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          ScGlobal::GetRscString(STR_DETINVALID_OVERFLOW)));
+            xInfoBox->run();
         }
     }
     else
@@ -3911,8 +3914,11 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
         {
             if (!bApi)
             {
-                ScopedVclPtrInstance< InfoBox > aBox( ScDocShell::GetActiveDialogParent(), ScResId( SCSTR_WRONGPASSWORD ) );
-                aBox->Execute();
+                vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              ScResId(SCSTR_WRONGPASSWORD)));
+                xInfoBox->run();
             }
             return false;
         }
@@ -3941,8 +3947,11 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
         {
             if (!bApi)
             {
-                ScopedVclPtrInstance< InfoBox > aBox( ScDocShell::GetActiveDialogParent(), ScResId( SCSTR_WRONGPASSWORD ) );
-                aBox->Execute();
+                vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              ScResId(SCSTR_WRONGPASSWORD)));
+                xInfoBox->run();
             }
             return false;
         }

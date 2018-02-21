@@ -27,7 +27,7 @@
 
 using namespace css;
 
-void SSLWarnDialog::ViewCert()
+IMPL_LINK_NOARG(SSLWarnDialog, ViewCertHdl, ::Button*, void)
 {
     uno::Reference< css::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
 
@@ -36,27 +36,25 @@ void SSLWarnDialog::ViewCert()
     xDocumentDigitalSignatures.get()->showCertificate(m_rXCert);
 }
 
-
 SSLWarnDialog::SSLWarnDialog(vcl::Window* pParent,
     const css::uno::Reference< css::security::XCertificate >& rXCert,
     const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : MessageDialog(pParent, "SSLWarnDialog", "uui/ui/sslwarndialog.ui")
+    , m_xView(get<PushButton>("view"))
     , m_xContext(xContext)
     , m_rXCert(rXCert)
 {
 }
 
-void SSLWarnDialog::response(short nResponseId)
+void SSLWarnDialog::dispose()
 {
-    switch (nResponseId)
-    {
-        case 101:
-            ViewCert();
-            break;
-        default:
-            MessageDialog::response(nResponseId);
-            break;
-    }
+    m_xView.clear();
+    MessageDialog::dispose();
+}
+
+SSLWarnDialog::~SSLWarnDialog()
+{
+    disposeOnce();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

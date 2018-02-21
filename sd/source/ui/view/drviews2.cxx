@@ -958,7 +958,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SdResId(STR_ACTION_NOTPOSSIBLE)));
+                xInfoBox->run();
             }
             else
             {
@@ -1003,7 +1006,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SdResId(STR_ACTION_NOTPOSSIBLE)));
+                xInfoBox->run();
             }
             else
             {
@@ -1031,7 +1037,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected(true,true,true) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SdResId(STR_ACTION_NOTPOSSIBLE)));
+                xInfoBox->run();
             }
             else
             {
@@ -1545,7 +1554,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected(false) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SdResId(STR_ACTION_NOTPOSSIBLE)));
+                xInfoBox->run();
             }
             else
             {
@@ -1724,11 +1736,16 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( !bDone )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
 #ifndef UNX
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_TWAIN_NO_SOURCE))->Execute();
+                                                              SdResId(STR_TWAIN_NO_SOURCE)
 #else
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_TWAIN_NO_SOURCE_UNX))->Execute();
+                                                              SdResId(STR_TWAIN_NO_SOURCE_UNX)
 #endif
+                                                              ));
+                xInfoBox->run();
+
             }
             else
             {
@@ -2449,7 +2466,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected( true, true, true ) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SdResId(STR_ACTION_NOTPOSSIBLE)));
+                xInfoBox->run();
             }
             else
             {
@@ -2568,7 +2588,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SdResId(STR_ACTION_NOTPOSSIBLE)));
+                xInfoBox->run();
             }
             else
             {
@@ -2585,7 +2608,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SdResId(STR_ACTION_NOTPOSSIBLE)));
+                xInfoBox->run();
             }
             else
             {
@@ -2605,7 +2631,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SdResId(STR_ACTION_NOTPOSSIBLE)));
+                xInfoBox->run();
             }
             else
             {
@@ -2626,7 +2655,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SdResId(STR_ACTION_NOTPOSSIBLE)));
+                xInfoBox->run();
             }
             else
             {
@@ -2647,7 +2679,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SdResId(STR_ACTION_NOTPOSSIBLE)));
+                xInfoBox->run();
             }
             else
             {
@@ -2689,7 +2724,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SdResId(STR_ACTION_NOTPOSSIBLE)));
+                xInfoBox->run();
             }
             else
             {
@@ -2781,7 +2819,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SdResId(STR_ACTION_NOTPOSSIBLE)));
+                xInfoBox->run();
             }
             else
             {
