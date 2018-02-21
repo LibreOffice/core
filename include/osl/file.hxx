@@ -80,8 +80,8 @@ public:
         E_NOTTY        = osl_File_E_NOTTY,          ///< inappropriate I/O control operation
         E_FBIG         = osl_File_E_FBIG,           ///< file too large
         E_NOSPC        = osl_File_E_NOSPC,          ///< no space left on device, write failed
-        E_SPIPE        = osl_File_E_ROFS,           ///< invalid seek operation (such as on pipe)
-        E_ROFS         = osl_File_E_SPIPE,          ///< illegal modification to read-only filesystem
+        E_SPIPE        = osl_File_E_SPIPE,          ///< invalid seek operation (such as on pipe)
+        E_ROFS         = osl_File_E_ROFS,           ///< illegal modification to read-only filesystem
         E_MLINK        = osl_File_E_MLINK,          ///< too many links to file
         E_PIPE         = osl_File_E_PIPE,           ///< broken pipe; no process reading from other end of pipe
         E_DOM          = osl_File_E_DOM,            ///< domain error (mathematical error)
