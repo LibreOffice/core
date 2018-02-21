@@ -159,6 +159,10 @@ public:
     virtual Reference< XInterface > createUnoWrapperInstance() override;
     virtual Reference< XInterface > createComWrapperInstance() override;
 
+    const OUString& getImplementationName() const
+    {
+        return m_sImplementationName;
+    }
 
 protected:
     virtual HRESULT doInvoke( DISPPARAMS * pdispparams, VARIANT * pvarResult,
@@ -194,6 +198,8 @@ protected:
     // see InterfaceOleWrapper::Invoke
     VARTYPE                         m_defaultValueType;
 
+    // The name of the implementation. Can be empty if unknown.
+    OUString                        m_sImplementationName;
 };
 
 /*****************************************************************************
