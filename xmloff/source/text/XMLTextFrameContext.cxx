@@ -1025,8 +1025,8 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                         // value is already mirrored, so do not do it again here (to be in sync
                         // with XMLTextParagraphExport::_exportTextGraphic normally it would need
                         // to me mirrored using * -1.0, see conversion there)
-                        // CAUTIONII: Due to tdf#115782 it is better for current ODF to indeed use it
-                        //  with the wrong orientation as in all other cases - ARGH! We will need to
+                        // CAUTION-II: due to tdf#115782 it is better for current ODF to indeed use it
+                        // with the wrong orientation as in all other cases - ARGH! We will need to
                         // correct this in future ODF ASAP! For now, mirror the rotation here AGAIN
                         const double fRotate(aDecomposedTransform.getRotate() * (-1800.0/M_PI));
                         nRotation = static_cast< sal_Int16 >(basegfx::fround(fRotate) % 3600);
