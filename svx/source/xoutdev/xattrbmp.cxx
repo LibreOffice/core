@@ -252,7 +252,6 @@ bool XFillBitmapItem::QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId) const
     // needed for complete item (MID 0)
     OUString aInternalName;
 
-    OUString aURL;
     css::uno::Reference< css::awt::XBitmap > xBmp;
 
     if( nMemberId == MID_NAME )
@@ -264,23 +263,14 @@ bool XFillBitmapItem::QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId) const
         aInternalName = GetName();
     }
 
-    if (nMemberId == MID_GRAFURL)
-    {
-        aURL = UNO_NAME_GRAPHOBJ_URLPREFIX;
-        aURL += OStringToOUString(
-            GetGraphicObject().GetUniqueID(),
-            RTL_TEXTENCODING_ASCII_US);
-    }
     if( nMemberId == MID_BITMAP ||
         nMemberId == 0  )
     {
-        xBmp.set(VCLUnoHelper::CreateBitmap(GetGraphicObject().GetGraphic().GetBitmapEx()));
+        xBmp.set(GetGraphicObject().GetGraphic().GetXGraphic(), uno::UNO_QUERY);
     }
 
     if( nMemberId == MID_NAME )
         rVal <<= aApiName;
-    else if( nMemberId == MID_GRAFURL )
-        rVal <<= aURL;
     else if( nMemberId == MID_BITMAP )
         rVal <<= xBmp;
     else
@@ -305,12 +295,10 @@ bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     nMemberId &= ~CONVERT_TWIPS;
 
     OUString aName;
-    OUString aURL;
     css::uno::Reference< css::awt::XBitmap > xBmp;
     css::uno::Reference< css::graphic::XGraphic > xGraphic;
 
     bool bSetName   = false;
-    bool bSetURL    = false;
     bool bSetBitmap = false;
 
     if( nMemberId == MID_NAME )
@@ -341,31 +329,19 @@ bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     {
         SetName( aName );
     }
-    if( bSetURL )
-    {
-        GraphicObject aGraphicObject  = GraphicObject::CreateGraphicObjectFromURL(aURL);
-        if( aGraphicObject.GetType() != GraphicType::NONE )
-            maGraphicObject = aGraphicObject;
-
-        // #121194# Prefer GraphicObject over bitmap object if both are provided
-        if(bSetBitmap && GraphicType::NONE != maGraphicObject.GetType())
-        {
-            bSetBitmap = false;
-        }
-    }
     if( bSetBitmap )
     {
-        if(xBmp.is())
+        if (xBmp.is())
         {
-            maGraphicObject.SetGraphic(VCLUnoHelper::GetBitmap(xBmp));
+            xGraphic.set(xBmp, uno::UNO_QUERY);
         }
-        else if(xGraphic.is())
+        if (xGraphic.is())
         {
             maGraphicObject.SetGraphic(xGraphic);
         }
     }
 
-    return (bSetName || bSetURL || bSetBitmap);
+    return (bSetName || bSetBitmap);
 }
 
 bool XFillBitmapItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
