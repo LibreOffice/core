@@ -962,6 +962,50 @@ IMPL_LINK_NOARG(SfxTabDialog, ResetHdl, Button*, void)
     DBG_ASSERT( pDataObject, "Id not known" );
 
     pDataObject->pTabPage->Reset( m_pSet );
+    // Also reset relevant items of ExampleSet and OutSet to initial state
+    if (pDataObject->fnGetRanges)
+    {
+        if (!m_pExampleSet)
+            m_pExampleSet = new SfxItemSet(*m_pSet);
+
+        const SfxItemPool* pPool = m_pSet->GetPool();
+        const sal_uInt16* pTmpRanges = (pDataObject->fnGetRanges)();
+
+        while (*pTmpRanges)
+        {
+            const sal_uInt16* pU = pTmpRanges + 1;
+
+            // Correct Range with multiple values
+            sal_uInt16 nTmp = *pTmpRanges, nTmpEnd = *pU;
+            DBG_ASSERT(nTmp <= nTmpEnd, "Range is sorted the wrong way");
+
+            if (nTmp > nTmpEnd)
+            {
+                // If really sorted wrongly, then set new
+                std::swap(nTmp, nTmpEnd);
+            }
+
+            while (nTmp && nTmp <= nTmpEnd)
+            {
+                // Iterate over the Range and set the Items
+                sal_uInt16 nWh = pPool->GetWhich(nTmp);
+                const SfxPoolItem* pItem;
+                if (SfxItemState::SET == m_pSet->GetItemState(nWh, false, &pItem))
+                {
+                    m_pExampleSet->Put(*pItem);
+                    m_pOutSet->Put(*pItem);
+                }
+                else
+                {
+                    m_pExampleSet->ClearItem(nWh);
+                    m_pOutSet->ClearItem(nWh);
+                }
+                nTmp++;
+            }
+            // Go to the next pair
+            pTmpRanges += 2;
+        }
+    }
 }
 
 
