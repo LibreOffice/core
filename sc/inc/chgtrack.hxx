@@ -49,12 +49,12 @@ private:
     const std::set<OUString>& rUsers;
     OUString                aLastUserName;
     sal_uInt16              nLastUserIndex;
-    ColorData               nColor;
+    Color                   nColor;
 
 public:
     ScActionColorChanger( const ScChangeTrack& rTrack );
     void        Update( const ScChangeAction& rAction );
-    ColorData   GetColor() const    { return nColor; }
+    Color       GetColor() const { return nColor; }
 };
 
 enum ScChangeActionType

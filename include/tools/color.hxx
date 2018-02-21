@@ -62,7 +62,7 @@ public:
 
     constexpr explicit operator sal_Int32() const
     {
-        return sal_Int32(sal_uInt32());
+        return sal_Int32(mnColor);
     }
 
     bool operator<(const Color& b) const

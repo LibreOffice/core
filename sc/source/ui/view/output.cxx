@@ -79,7 +79,7 @@ using namespace com::sun::star;
 
 #define SC_AUTHORCOLORCOUNT     9
 
-static const ColorData nAuthorColor[ SC_AUTHORCOLORCOUNT ] = {
+static const Color nAuthorColor[ SC_AUTHORCOLORCOUNT ] = {
                     COL_LIGHTRED,       COL_LIGHTBLUE,      COL_LIGHTMAGENTA,
                     COL_GREEN,          COL_RED,            COL_BLUE,
                     COL_BROWN,          COL_MAGENTA,        COL_CYAN };
@@ -96,7 +96,7 @@ ScActionColorChanger::ScActionColorChanger( const ScChangeTrack& rTrack ) :
 
 void ScActionColorChanger::Update( const ScChangeAction& rAction )
 {
-    ColorData nSetColor;
+    Color nSetColor;
     switch (rAction.GetType())
     {
         case SC_CAT_INSERT_COLS:

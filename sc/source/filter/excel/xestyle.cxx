@@ -253,7 +253,7 @@ public:
 
     /** Returns the RGB color data for a (non-zero-based) Excel palette entry.
         @return  The color from current or default palette or COL_AUTO, if nothing else found. */
-    ColorData           GetColorData( sal_uInt16 nXclIndex ) const;
+    Color               GetColor( sal_uInt16 nXclIndex ) const;
 
     /** Returns true, if all colors of the palette are equal to default palette colors. */
     bool                IsDefaultPalette() const;
@@ -461,7 +461,7 @@ void XclExpPaletteImpl::GetMixedColors(
     }
 }
 
-ColorData XclExpPaletteImpl::GetColorData( sal_uInt16 nXclIndex ) const
+Color XclExpPaletteImpl::GetColor( sal_uInt16 nXclIndex ) const
 {
     if( nXclIndex >= EXC_COLOR_USEROFFSET )
     {
@@ -469,7 +469,7 @@ ColorData XclExpPaletteImpl::GetColorData( sal_uInt16 nXclIndex ) const
         if( nIdx < maPalette.size() )
             return maPalette[ nIdx ].maColor.GetColor();
     }
-    return mrDefPal.GetDefColorData( nXclIndex );
+    return mrDefPal.GetDefColor( nXclIndex );
 }
 
 bool XclExpPaletteImpl::IsDefaultPalette() const
@@ -798,7 +798,7 @@ void XclExpPalette::GetMixedColors(
 
 Color XclExpPalette::GetColor( sal_uInt16 nXclIndex ) const
 {
-    return Color(mxImpl->GetColorData( nXclIndex ));
+    return Color(mxImpl->GetColor( nXclIndex ));
 }
 
 void XclExpPalette::Save( XclExpStream& rStrm )

@@ -2678,7 +2678,7 @@ void ScExportTest::testSheetTabColorsXLSX()
                 }
             }
 
-            const ColorData aXclColors[] =
+            const Color aXclColors[] =
             {
                 0x0000B050, // green
                 0x00FF0000, // red

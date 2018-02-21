@@ -377,11 +377,11 @@ handle_r1c1:
                     pRangeFindList.reset(new ScRangeFindList( pDocSh->GetTitle() ));
                 }
 
-                ColorData nColorData = pRangeFindList->Insert( ScRangeFindData( aRange, nFlags, nStart, nPos ) );
+                Color nColor = pRangeFindList->Insert( ScRangeFindData( aRange, nFlags, nStart, nPos ) );
 
                 ESelection aSel( 0, nStart, 0, nPos );
                 SfxItemSet aSet( mpEditEngine->GetEmptyItemSet() );
-                aSet.Put( SvxColorItem( Color( nColorData ),
+                aSet.Put( SvxColorItem( Color( nColor ),
                             EE_CHAR_COLOR ) );
                 mpEditEngine->QuickSetAttribs( aSet, aSel );
                 ++nCount;
@@ -434,7 +434,7 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
         ScRangeFindData& rData = pRangeFindList->GetObject( nIndex );
         sal_Int32 nOldStart = rData.nSelStart;
         sal_Int32 nOldEnd = rData.nSelEnd;
-        ColorData nNewColor = pRangeFindList->FindColor( rNew, nIndex );
+        Color nNewColor = pRangeFindList->FindColor( rNew, nIndex );
 
         ScRange aJustified = rNew;
         aJustified.PutInOrder(); // Always display Ref in the Formula the right way
@@ -448,7 +448,7 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
 
         lcl_Replace( pTopView, aNewStr, aOldSel );
         lcl_Replace( pTableView, aNewStr, aOldSel );
-        aSet.Put( SvxColorItem( Color( nNewColor ), EE_CHAR_COLOR ) );
+        aSet.Put( SvxColorItem( nNewColor, EE_CHAR_COLOR ) );
         mpEditEngine->QuickSetAttribs( aSet, aOldSel );
 
         bInRangeUpdate = true;
@@ -459,7 +459,7 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
 
         rData.aRef = rNew;
         rData.nSelEnd = rData.nSelEnd + nDiff;
-        rData.nColorData = nNewColor;
+        rData.nColor = nNewColor;
 
         sal_uInt16 nCount = static_cast<sal_uInt16>(pRangeFindList->Count());
         for (sal_uInt16 i=nIndex+1; i<nCount; i++)
