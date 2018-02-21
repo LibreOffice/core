@@ -6876,7 +6876,6 @@ include/sfx2/msgpool.hxx
 include/sfx2/navigat.hxx
 include/sfx2/new.hxx
 include/sfx2/newstyle.hxx
-include/sfx2/notebookbar/NotebookbarContextControl.hxx
 include/sfx2/notebookbar/NotebookbarTabControl.hxx
 include/sfx2/notebookbar/SfxNotebookBar.hxx
 include/sfx2/objface.hxx
@@ -7973,6 +7972,7 @@ include/vcl/IconThemeInfo.hxx
 include/vcl/IconThemeScanner.hxx
 include/vcl/IconThemeSelector.hxx
 include/vcl/ImageTree.hxx
+include/vcl/NotebookbarContextControl.hxx
 include/vcl/abstdlg.hxx
 include/vcl/accel.hxx
 include/vcl/alpha.hxx

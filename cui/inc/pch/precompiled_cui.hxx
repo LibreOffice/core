@@ -111,6 +111,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/singletonref.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/bitmap.hxx>
@@ -339,7 +340,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/opengrf.hxx>
 #include <sfx2/request.hxx>

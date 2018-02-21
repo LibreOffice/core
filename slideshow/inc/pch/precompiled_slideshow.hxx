@@ -98,6 +98,7 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/EnumContext.hxx>
+#include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
@@ -247,7 +248,6 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 #include <tools/color.hxx>
 #include <tools/colordata.hxx>
 #include <tools/debug.hxx>

@@ -13,7 +13,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/EnumContext.hxx>
-#include <sfx2/notebookbar/NotebookbarContextControl.hxx>
+#include <vcl/NotebookbarContextControl.hxx>
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <vector>
 

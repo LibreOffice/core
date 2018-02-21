@@ -118,6 +118,7 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/EnumContext.hxx>
+#include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
@@ -394,7 +395,6 @@
 #include <ooo/vba/XHelperInterface.hpp>
 #include <pam.hxx>
 #include <sfx2/dllapi.h>
-#include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/shell.hxx>
 #include <sot/formats.hxx>

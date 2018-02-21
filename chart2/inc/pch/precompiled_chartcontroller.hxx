@@ -105,6 +105,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/IContext.hxx>
+#include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/bitmap.hxx>
@@ -404,7 +405,6 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
 #include <sfx2/dllapi.h>
-#include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/signaturestate.hxx>
