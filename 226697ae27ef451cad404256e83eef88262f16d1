@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_694f93bd",
+        "filename": "solenv/gbuild/TargetLocations.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2018-02-21T08:42:36Z",
+      "side": 1,
+      "message": "Well, I simply followed existing practice, I\u0027m fine with doing it differently, I just thought it\u0027s better to integrate with the existing generic clean rules, so it can benefit from whatever improvement etc. are made there.",
+      "parentUuid": "fa31d9ce_c9631f40",
+      "revId": "226697ae27ef451cad404256e83eef88262f16d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_095e1776",
         "filename": "solenv/gbuild/UIConfig.mk",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2018-02-21T08:34:13Z",
       "side": 1,
       "message": "so this will only do the checking when using system python, and silently do nothing when using internal python?",
+      "revId": "226697ae27ef451cad404256e83eef88262f16d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_894a07ab",
+        "filename": "solenv/gbuild/UIConfig.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2018-02-21T08:42:36Z",
+      "side": 1,
+      "message": "For now, yes.\nI plan to work on adding external lxml fetch so as to run gla11y in that case too.",
+      "parentUuid": "fa31d9ce_095e1776",
       "revId": "226697ae27ef451cad404256e83eef88262f16d1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
