@@ -15126,7 +15126,6 @@ sw/inc/tabcol.hxx
 sw/inc/tblafmt.hxx
 sw/inc/tblenum.hxx
 sw/inc/tblsel.hxx
-sw/inc/textboxhelper.hxx
 sw/inc/tgrditem.hxx
 sw/inc/tox.hxx
 sw/inc/toxe.hxx
@@ -15375,7 +15374,6 @@ sw/source/core/doc/swstylemanager.hxx
 sw/source/core/doc/tblafmt.cxx
 sw/source/core/doc/tblcpy.cxx
 sw/source/core/doc/tblrwcl.cxx
-sw/source/core/doc/textboxhelper.cxx
 sw/source/core/doc/visiturl.cxx
 sw/source/core/docnode/cancellablejob.cxx
 sw/source/core/docnode/cancellablejob.hxx
