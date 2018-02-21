@@ -83,7 +83,7 @@ void RemoteServer::execute()
         spServer = nullptr;
         return;
     }
-    osl::SocketAddr aAddr( "0", PORT );
+    osl::SocketAddr aAddr( "0.0.0.0", PORT );
     if ( !mSocket.bind( aAddr ) )
     {
         SAL_WARN( "sdremote", "bind failed" << mSocket.getErrorAsString() );
