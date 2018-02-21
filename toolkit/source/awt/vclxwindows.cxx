@@ -469,14 +469,14 @@ css::awt::Size VCLXButton::calcAdjustedSize( const css::awt::Size& rNewSize )
         if ( pButton->GetText().isEmpty() )
         {
             if ( aSz.Width() < aMinSz.Width() )
-                aSz.Width() = aMinSz.Width();
+                aSz.setWidth( aMinSz.Width() );
             if ( aSz.Height() < aMinSz.Height() )
-                aSz.Height() = aMinSz.Height();
+                aSz.setHeight( aMinSz.Height() );
         }
         else
         {
             if ( ( aSz.Width() > aMinSz.Width() ) && ( aSz.Height() < aMinSz.Height() ) )
-                aSz.Height() = aMinSz.Height();
+                aSz.setHeight( aMinSz.Height() );
             else
                 aSz = aMinSz;
         }
@@ -937,7 +937,7 @@ css::awt::Size VCLXCheckBox::calcAdjustedSize( const css::awt::Size& rNewSize )
     {
         Size aMinSz = pCheckBox->CalcMinimumSize();
         if ( ( aSz.Width() > aMinSz.Width() ) && ( aSz.Height() < aMinSz.Height() ) )
-            aSz.Height() = aMinSz.Height();
+            aSz.setHeight( aMinSz.Height() );
         else
             aSz = aMinSz;
     }
@@ -1279,7 +1279,7 @@ css::awt::Size VCLXRadioButton::calcAdjustedSize( const css::awt::Size& rNewSize
     {
         Size aMinSz = pRadioButton->CalcMinimumSize();
         if ( ( aSz.Width() > aMinSz.Width() ) && ( aSz.Height() < aMinSz.Height() ) )
-            aSz.Height() = aMinSz.Height();
+            aSz.setHeight( aMinSz.Height() );
         else
             aSz = aMinSz;
     }
@@ -1979,7 +1979,7 @@ css::awt::Size VCLXListBox::getPreferredSize(  )
     {
         aSz = pListBox->CalcMinimumSize();
         if ( pListBox->GetStyle() & WB_DROPDOWN )
-            aSz.Height() += 4;
+            aSz.AdjustHeight(4 );
     }
     return AWTSize(aSz);
 }
@@ -4025,7 +4025,7 @@ css::awt::Size VCLXEdit::getPreferredSize(  )
     if ( pEdit )
     {
         aSz = pEdit->CalcMinimumSize();
-        aSz.Height() += 4;
+        aSz.AdjustHeight(4 );
     }
     return AWTSize(aSz);
 }
@@ -4451,7 +4451,7 @@ css::awt::Size VCLXComboBox::getPreferredSize(  )
     {
         aSz = pComboBox->CalcMinimumSize();
         if ( pComboBox->GetStyle() & WB_DROPDOWN )
-            aSz.Height() += 4;
+            aSz.AdjustHeight(4 );
     }
     return AWTSize(aSz);
 }

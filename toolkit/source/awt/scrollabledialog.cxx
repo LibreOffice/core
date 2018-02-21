@@ -138,13 +138,13 @@ void ScrollableDialog::SetScrollLeft( long nLeft )
 
 void ScrollableDialog::SetScrollWidth( long nWidth )
 {
-    maScrollArea.Width() = nWidth;
+    maScrollArea.setWidth( nWidth );
     ResetScrollBars();
 }
 
 void ScrollableDialog::SetScrollHeight( long nHeight )
 {
-    maScrollArea.Height() = nHeight;
+    maScrollArea.setHeight( nHeight );
     ResetScrollBars();
 }
 
