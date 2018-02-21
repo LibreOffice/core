@@ -133,8 +133,8 @@ class ScColumnsRange final
 
         explicit Iterator(const std::vector<ScColumn*>::const_iterator& colIter) : maColIter(colIter) {}
 
-        Iterator& operator++() { maColIter++; return *this;}
-        Iterator& operator--() { maColIter--; return *this;}
+        Iterator& operator++() { ++maColIter; return *this;}
+        Iterator& operator--() { --maColIter; return *this;}
 
         bool operator==(const Iterator & rOther) const {return maColIter == rOther.maColIter;}
         bool operator!=(const Iterator & rOther) const {return !(*this == rOther);}
