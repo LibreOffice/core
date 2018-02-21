@@ -538,16 +538,16 @@ public:
     }
 
     /**
-     * Post the text input from external input window, like IME
+     * Post the text input from external input window, like IME, to given windowId
      *
      * @param nWindowId Specify the window id to post the input event to. If
      * nWindow is 0, the event is posted into the document
      * @param nType see LibreOfficeKitExtTextInputType
      * @param pText Text for LOK_EXT_TEXTINPUT
      */
-    void postExtTextInputEvent(unsigned nWindowId, int nType, const char* pText)
+    void postWindowExtTextInputEvent(unsigned nWindowId, int nType, const char* pText)
     {
-        mpDoc->pClass->postExtTextInputEvent(mpDoc, nWindowId, nType, pText);
+        mpDoc->pClass->postWindowExtTextInputEvent(mpDoc, nWindowId, nType, pText);
     }
 
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY

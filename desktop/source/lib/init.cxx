@@ -542,10 +542,10 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis,
                              int nType,
                              int nCharCode,
                              int nKeyCode);
-static void doc_postExtTextInputEvent(LibreOfficeKitDocument* pThis,
-                                      unsigned nWindowId,
-                                      int nType,
-                                      const char* pText);
+static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis,
+                                            unsigned nWindowId,
+                                            int nType,
+                                            const char* pText);
 static void doc_postWindowKeyEvent(LibreOfficeKitDocument* pThis,
                                    unsigned nLOKWindowId,
                                    int nType,
@@ -639,7 +639,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->initializeForRendering = doc_initializeForRendering;
         m_pDocumentClass->registerCallback = doc_registerCallback;
         m_pDocumentClass->postKeyEvent = doc_postKeyEvent;
-        m_pDocumentClass->postExtTextInputEvent = doc_postExtTextInputEvent;
+        m_pDocumentClass->postWindowExtTextInputEvent = doc_postWindowExtTextInputEvent;
         m_pDocumentClass->postWindowKeyEvent = doc_postWindowKeyEvent;
         m_pDocumentClass->postMouseEvent = doc_postMouseEvent;
         m_pDocumentClass->postWindowMouseEvent = doc_postWindowMouseEvent;
@@ -2300,7 +2300,7 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
     pDoc->postKeyEvent(nType, nCharCode, nKeyCode);
 }
 
-static void doc_postExtTextInputEvent(LibreOfficeKitDocument* pThis, unsigned nWindowId, int nType, const char* pText)
+static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsigned nWindowId, int nType, const char* pText)
 {
     SolarMutexGuard aGuard;
     VclPtr<vcl::Window> pWindow;
