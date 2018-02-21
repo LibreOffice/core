@@ -150,7 +150,6 @@ private:
     const OUString sGraphicFilter;
     const OUString sGraphicRotation;
     const OUString sGraphicURL;
-    const OUString sReplacementGraphicURL;
     const OUString sHeight;
     const OUString sHoriOrient;
     const OUString sHoriOrientPosition;
