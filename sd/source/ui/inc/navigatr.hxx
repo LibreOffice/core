@@ -76,7 +76,7 @@ private:
     ::sd::DrawDocShell* mpDocShell;
 };
 
-class SdNavigatorWin : public PanelLayout
+class SD_DLLPUBLIC SdNavigatorWin : public PanelLayout
 {
 public:
     typedef ::std::function<void ()> UpdateRequestFunctor;
@@ -101,6 +101,7 @@ public:
     bool                        InsertFile(const OUString& rFileName);
 
     NavigatorDragType           GetNavigatorDragType();
+    VclPtr<SdPageObjsTLB> GetObjects();
 
 protected:
     virtual bool                EventNotify(NotifyEvent& rNEvt) override;
