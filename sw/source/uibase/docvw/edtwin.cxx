@@ -2471,8 +2471,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
             }
             else
             {
-                ScopedVclPtrInstance<MessageDialog>(this, "InfoReadonlyDialog",
-                    "modules/swriter/ui/inforeadonlydialog.ui")->Execute();
+                VclPtr<MessageDialog> pDlg = VclPtr<MessageDialog>::Create(this, "InfoReadonlyDialog",
+                                                                           "modules/swriter/ui/inforeadonlydialog.ui");
+                pDlg->StartExecuteAsync([=](int){});
                 eKeyState = SwKeyState::End;
             }
         break;

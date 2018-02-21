@@ -2302,7 +2302,7 @@ void MessageDialog::SetMessagesWidths(vcl::Window const *pParent,
         pPrimaryMessage->SetMaxTextWidth(pPrimaryMessage->approximate_char_width() * 60);
 }
 
-short MessageDialog::Execute()
+void MessageDialog::InitExecute()
 {
     setDeferredProperties();
 
@@ -2428,6 +2428,17 @@ short MessageDialog::Execute()
         pButtonBox->sort_native_button_order();
         m_pGrid->Show();
     }
+}
+
+bool MessageDialog::StartExecuteAsync(const std::function<void(sal_Int32)> &rEndDialogFn)
+{
+    InitExecute();
+    return Dialog::StartExecuteAsync(rEndDialogFn);
+}
+
+short MessageDialog::Execute()
+{
+    InitExecute();
     return Dialog::Execute();
 }
 
