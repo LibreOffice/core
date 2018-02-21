@@ -37,7 +37,8 @@
   <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLSecurityContext_MSCryptImpl">
     <service name="com.sun.star.xml.crypto.XMLSecurityContext"/>
   </implementation>
-  <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLSignature_MSCryptImpl">
+  <implementation name="com.sun.star.xml.crypto.XMLSignature"
+    constructor="com_sun_star_xml_crypto_XMLSignature_get_implementation">
     <service name="com.sun.star.xml.crypto.XMLSignature"/>
   </implementation>
 </component>

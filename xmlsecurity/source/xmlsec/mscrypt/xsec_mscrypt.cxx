@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include "seinitializer_mscryptimpl.hxx"
-#include "xmlsignature_mscryptimpl.hxx"
 #include "xmlsecuritycontext_mscryptimpl.hxx"
 #include "securityenvironment_mscryptimpl.hxx"
 
@@ -43,9 +42,7 @@ void* mscrypt_component_getFactory( const sal_Char* pImplName , void* pServiceMa
     Reference< XSingleServiceFactory > xFactory ;
 
     if( pImplName != nullptr && pServiceManager != nullptr ) {
-        if( XMLSignature_MSCryptImpl::impl_getImplementationName().equalsAscii( pImplName ) ) {
-            xFactory = XMLSignature_MSCryptImpl::impl_createFactory( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-        } else if( XMLSecurityContext_MSCryptImpl::impl_getImplementationName().equalsAscii( pImplName ) ) {
+        if( XMLSecurityContext_MSCryptImpl::impl_getImplementationName().equalsAscii( pImplName ) ) {
             xFactory = XMLSecurityContext_MSCryptImpl::impl_createFactory( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
         } else if( SecurityEnvironment_MSCryptImpl::impl_getImplementationName().equalsAscii( pImplName ) ) {
             xFactory = SecurityEnvironment_MSCryptImpl::impl_createFactory( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
