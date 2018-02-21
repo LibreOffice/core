@@ -50,27 +50,27 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
     // Mirrored horizontally?
     if( mbHMirr )
     {
-        maDispPt.X() = maPt.X() + maSz.Width() + 1;
-        maDispSz.Width() = -maSz.Width();
-        maSzPix.Width() = -maSzPix.Width();
+        maDispPt.setX( maPt.X() + maSz.Width() + 1 );
+        maDispSz.setWidth( -maSz.Width() );
+        maSzPix.setWidth( -maSzPix.Width() );
     }
     else
     {
-        maDispPt.X() = maPt.X();
-        maDispSz.Width() = maSz.Width();
+        maDispPt.setX( maPt.X() );
+        maDispSz.setWidth( maSz.Width() );
     }
 
     // Mirrored vertically?
     if( mbVMirr )
     {
-        maDispPt.Y() = maPt.Y() + maSz.Height() + 1;
-        maDispSz.Height() = -maSz.Height();
-        maSzPix.Height() = -maSzPix.Height();
+        maDispPt.setY( maPt.Y() + maSz.Height() + 1 );
+        maDispSz.setHeight( -maSz.Height() );
+        maSzPix.setHeight( -maSzPix.Height() );
     }
     else
     {
-        maDispPt.Y() = maPt.Y();
-        maDispSz.Height() = maSz.Height();
+        maDispPt.setY( maPt.Y() );
+        maDispSz.setHeight( maSz.Height() );
     }
 
     // save background
@@ -137,22 +137,22 @@ void ImplAnimView::getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size
     else
         fFactY = 1.0;
 
-    rPosPix.X() = FRound( rAnm.aPosPix.X() * fFactX );
-    rPosPix.Y() = FRound( rAnm.aPosPix.Y() * fFactY );
+    rPosPix.setX( FRound( rAnm.aPosPix.X() * fFactX ) );
+    rPosPix.setY( FRound( rAnm.aPosPix.Y() * fFactY ) );
 
-    aPt2.X() = FRound( aPt2.X() * fFactX );
-    aPt2.Y() = FRound( aPt2.Y() * fFactY );
+    aPt2.setX( FRound( aPt2.X() * fFactX ) );
+    aPt2.setY( FRound( aPt2.Y() * fFactY ) );
 
-    rSizePix.Width() = aPt2.X() - rPosPix.X() + 1;
-    rSizePix.Height() = aPt2.Y() - rPosPix.Y() + 1;
+    rSizePix.setWidth( aPt2.X() - rPosPix.X() + 1 );
+    rSizePix.setHeight( aPt2.Y() - rPosPix.Y() + 1 );
 
     // Mirrored horizontally?
     if( mbHMirr )
-        rPosPix.X() = maSzPix.Width() - 1 - aPt2.X();
+        rPosPix.setX( maSzPix.Width() - 1 - aPt2.X() );
 
     // Mirrored vertically?
     if( mbVMirr )
-        rPosPix.Y() = maSzPix.Height() - 1 - aPt2.Y();
+        rPosPix.setY( maSzPix.Height() - 1 - aPt2.Y() );
 }
 
 void ImplAnimView::drawToPos( sal_uLong nPos )
@@ -219,25 +219,25 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
         // Mirrored horizontally?
         if( mbHMirr )
         {
-            aBmpPosPix.X() = aPosPix.X() + aSizePix.Width() - 1;
-            aBmpSizePix.Width() = -aSizePix.Width();
+            aBmpPosPix.setX( aPosPix.X() + aSizePix.Width() - 1 );
+            aBmpSizePix.setWidth( -aSizePix.Width() );
         }
         else
         {
-            aBmpPosPix.X() = aPosPix.X();
-            aBmpSizePix.Width() = aSizePix.Width();
+            aBmpPosPix.setX( aPosPix.X() );
+            aBmpSizePix.setWidth( aSizePix.Width() );
         }
 
         // Mirrored vertically?
         if( mbVMirr )
         {
-            aBmpPosPix.Y() = aPosPix.Y() + aSizePix.Height() - 1;
-            aBmpSizePix.Height() = -aSizePix.Height();
+            aBmpPosPix.setY( aPosPix.Y() + aSizePix.Height() - 1 );
+            aBmpSizePix.setHeight( -aSizePix.Height() );
         }
         else
         {
-            aBmpPosPix.Y() = aPosPix.Y();
-            aBmpSizePix.Height() = aSizePix.Height();
+            aBmpPosPix.setY( aPosPix.Y() );
+            aBmpSizePix.setHeight( aSizePix.Height() );
         }
 
         // get output device

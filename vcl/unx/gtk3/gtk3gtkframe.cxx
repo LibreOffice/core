@@ -1386,8 +1386,8 @@ Size GtkSalFrame::calcDefaultSize()
 {
     Size aScreenSize(getDisplay()->GetScreenSize(GetDisplayScreen()));
     int scale = gtk_widget_get_scale_factor(m_pWindow);
-    aScreenSize.Width() /= scale;
-    aScreenSize.Height() /= scale;
+    aScreenSize.setWidth( aScreenSize.Width() / scale );
+    aScreenSize.setHeight( aScreenSize.Height() / scale );
     return bestmaxFrameSizeForScreenSize(aScreenSize);
 }
 
@@ -1869,8 +1869,8 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
 
         // #i110881# for the benefit of compiz set a max size here
         // else setting to fullscreen fails for unknown reasons
-        m_aMaxSize.Width() = aNewMonitor.width;
-        m_aMaxSize.Height() = aNewMonitor.height;
+        m_aMaxSize.setWidth( aNewMonitor.width );
+        m_aMaxSize.setHeight( aNewMonitor.height );
     }
 
     if( pSize && eType == SetType::UnFullscreen )

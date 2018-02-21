@@ -237,22 +237,22 @@ void ImplDrawUpDownButtons(vcl::RenderContext& rRenderContext,
     tools::Rectangle aLowRect = aDecoView.DrawButton(rLowerRect, nStyle);
 
      // make use of additional default edge
-    aUpRect.Left()--;
-    aUpRect.Top()--;
-    aUpRect.Right()++;
-    aUpRect.Bottom()++;
-    aLowRect.Left()--;
-    aLowRect.Top()--;
-    aLowRect.Right()++;
-    aLowRect.Bottom()++;
+    aUpRect.AdjustLeft( -1 );
+    aUpRect.AdjustTop( -1 );
+    aUpRect.AdjustRight( 1 );
+    aUpRect.AdjustBottom( 1 );
+    aLowRect.AdjustLeft( -1 );
+    aLowRect.AdjustTop( -1 );
+    aLowRect.AdjustRight( 1 );
+    aLowRect.AdjustBottom( 1 );
 
     // draw into the edge, so that something is visible if the rectangle is too small
     if (aUpRect.GetHeight() < 4)
     {
-        aUpRect.Right()++;
-        aUpRect.Bottom()++;
-        aLowRect.Right()++;
-        aLowRect.Bottom()++;
+        aUpRect.AdjustRight( 1 );
+        aUpRect.AdjustBottom( 1 );
+        aLowRect.AdjustRight( 1 );
+        aLowRect.AdjustBottom( 1 );
     }
 
     // calculate Symbol size
@@ -261,18 +261,18 @@ void ImplDrawUpDownButtons(vcl::RenderContext& rRenderContext,
     if (std::abs( nTempSize1-nTempSize2 ) == 1)
     {
         if (nTempSize1 > nTempSize2)
-            aUpRect.Left()++;
+            aUpRect.AdjustLeft( 1 );
         else
-            aLowRect.Left()++;
+            aLowRect.AdjustLeft( 1 );
     }
     nTempSize1 = aUpRect.GetHeight();
     nTempSize2 = aLowRect.GetHeight();
     if (std::abs(nTempSize1 - nTempSize2) == 1)
     {
         if (nTempSize1 > nTempSize2)
-            aUpRect.Top()++;
+            aUpRect.AdjustTop( 1 );
         else
-            aLowRect.Top()++;
+            aLowRect.AdjustTop( 1 );
     }
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
@@ -618,9 +618,9 @@ void SpinField::ImplCalcButtonAreas(OutputDevice* pDev, const Size& rOutSz, tool
         long nW = rStyleSettings.GetScrollBarSize();
         nW = GetDrawPixel( pDev, nW );
         aDropDownSize = Size( CalcZoom( nW ), aSize.Height() );
-        aSize.Width() -= aDropDownSize.Width();
+        aSize.AdjustWidth( -(aDropDownSize.Width()) );
         rDDArea = tools::Rectangle( Point( aSize.Width(), 0 ), aDropDownSize );
-        rDDArea.Top()--;
+        rDDArea.AdjustTop( -1 );
     }
     else
         rDDArea.SetEmpty();
@@ -675,7 +675,7 @@ void SpinField::ImplCalcButtonAreas(OutputDevice* pDev, const Size& rOutSz, tool
         }
         else
         {
-            aSize.Width() -= CalcZoom( GetDrawPixel( pDev, rStyleSettings.GetSpinSize() ) );
+            aSize.AdjustWidth( -(CalcZoom( GetDrawPixel( pDev, rStyleSettings.GetSpinSize() ) )) );
 
             rSpinUpArea = tools::Rectangle( aSize.Width(), 0, rOutSz.Width()-aDropDownSize.Width()-1, nBottom1 );
             rSpinDownArea = tools::Rectangle( rSpinUpArea.Left(), nTop2, rSpinUpArea.Right(), nBottom2 );
@@ -728,10 +728,10 @@ void SpinField::Resize()
                 if (maUpperRect.IsEmpty())
                 {
                     SAL_WARN_IF( maDropDownRect.IsEmpty(), "vcl", "SpinField::Resize: SPIN && DROPDOWN, but all empty rects?" );
-                    aSize.Width() = maDropDownRect.Left();
+                    aSize.setWidth( maDropDownRect.Left() );
                 }
                 else
-                    aSize.Width() = maUpperRect.Left();
+                    aSize.setWidth( maUpperRect.Left() );
             }
         }
 
@@ -894,7 +894,7 @@ Size SpinField::CalcMinimumSizeForText(const OUString &rString) const
     Size aSz = Edit::CalcMinimumSizeForText(rString);
 
     if ( GetStyle() & WB_DROPDOWN )
-        aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
+        aSz.AdjustWidth(GetSettings().GetStyleSettings().GetScrollBarSize() );
     if ( GetStyle() & WB_SPIN )
     {
         ImplControlValue aControlValue;
@@ -907,11 +907,11 @@ Size SpinField::CalcMinimumSizeForText(const OUString &rString) const
                    aArea, ControlState::NONE, aControlValue, aEditBound, aEditContent)
            )
         {
-            aSz.Width() += (aEntireContent.GetWidth() - aEditContent.GetWidth());
+            aSz.AdjustWidth(aEntireContent.GetWidth() - aEditContent.GetWidth());
         }
         else
         {
-            aSz.Width() += maUpperRect.GetWidth();
+            aSz.AdjustWidth(maUpperRect.GetWidth() );
         }
     }
 
@@ -933,9 +933,9 @@ Size SpinField::CalcSize(sal_Int32 nChars) const
     Size aSz = Edit::CalcSize( nChars );
 
     if ( GetStyle() & WB_DROPDOWN )
-        aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
+        aSz.AdjustWidth(GetSettings().GetStyleSettings().GetScrollBarSize() );
     if ( GetStyle() & WB_SPIN )
-        aSz.Width() += GetSettings().GetStyleSettings().GetSpinSize();
+        aSz.AdjustWidth(GetSettings().GetStyleSettings().GetSpinSize() );
 
     return aSz;
 }
@@ -986,7 +986,7 @@ void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, D
     ImplCalcButtonAreas(pDev, aSize, aDD, aUp, aDown);
     aDD.Move(aPos.X(), aPos.Y());
     aUp.Move(aPos.X(), aPos.Y());
-    aUp.Top()++;
+    aUp.AdjustTop( 1 );
     aDown.Move(aPos.X(), aPos.Y());
 
     Color aButtonTextColor;

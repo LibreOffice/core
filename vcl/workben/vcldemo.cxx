@@ -460,8 +460,8 @@ public:
                     int nHeight = r.GetHeight();
 
                     // move the text to the bottom of the bounding rect before rotating
-                    aFontRect.Top() += nHeight/2;
-                    aFontRect.Bottom() += nHeight;
+                    aFontRect.AdjustTop(nHeight/2 );
+                    aFontRect.AdjustBottom(nHeight );
 
                     aFont.SetOrientation(45 * 10); // 45 degrees
 
@@ -582,7 +582,7 @@ public:
                     long nNewX = drawStringBox(rDev, aPos, aString,
                                                nMaxTextHeight);
 
-                    aPos.X() = nNewX;
+                    aPos.setX( nNewX );
 
                     if (aPos.X() >= r.Right())
                     {
@@ -1987,8 +1987,8 @@ class DemoPopup : public FloatingWindow
         SetLineColor(COL_BLACK);
         SetFillColor();
         DrawRect( tools::Rectangle( Point(), aSize ) );
-        aSize.Width() -= 2;
-        aSize.Height() -= 2;
+        aSize.AdjustWidth( -2 );
+        aSize.AdjustHeight( -2 );
         Color aColor( GetLineColor() );
         SetLineColor( COL_GRAY );
         DrawRect( tools::Rectangle( Point( 1, 1 ), aSize ) );

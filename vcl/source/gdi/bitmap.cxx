@@ -315,8 +315,8 @@ void Bitmap::ImplAssignWithSize( const Bitmap& rBitmap )
 
     if( ( aOldSizePix != aNewSizePix ) && aOldSizePix.Width() && aOldSizePix.Height() )
     {
-        aNewPrefSize.Width() = FRound( maPrefSize.Width() * aNewSizePix.Width() / aOldSizePix.Width() );
-        aNewPrefSize.Height() = FRound( maPrefSize.Height() * aNewSizePix.Height() / aOldSizePix.Height() );
+        aNewPrefSize.setWidth( FRound( maPrefSize.Width() * aNewSizePix.Width() / aOldSizePix.Width() ) );
+        aNewPrefSize.setHeight( FRound( maPrefSize.Height() * aNewSizePix.Height() / aOldSizePix.Height() ) );
     }
     else
         aNewPrefSize = maPrefSize;
@@ -1457,13 +1457,13 @@ vcl::Region Bitmap::CreateRegion( const Color& rColor, const tools::Rectangle& r
                     tools::Rectangle aSubRect;
 
                     // enter y values and proceed ystart
-                    aSubRect.Top() = nYStart;
-                    aSubRect.Bottom() = nY ? nY - 1 : 0;
+                    aSubRect.SetTop( nYStart );
+                    aSubRect.SetBottom( nY ? nY - 1 : 0 );
 
                     for(size_t a(0); a < aLine.size();)
                     {
-                        aSubRect.Left() = aLine[a++];
-                        aSubRect.Right() = aLine[a++];
+                        aSubRect.SetLeft( aLine[a++] );
+                        aSubRect.SetRight( aLine[a++] );
                         aRegion.Union(aSubRect);
                     }
                 }
@@ -1480,13 +1480,13 @@ vcl::Region Bitmap::CreateRegion( const Color& rColor, const tools::Rectangle& r
             tools::Rectangle aSubRect;
 
             // enter y values
-            aSubRect.Top() = nYStart;
-            aSubRect.Bottom() = nY ? nY - 1 : 0;
+            aSubRect.SetTop( nYStart );
+            aSubRect.SetBottom( nY ? nY - 1 : 0 );
 
             for(size_t a(0); a < aLine.size();)
             {
-                aSubRect.Left() = aLine[a++];
-                aSubRect.Right() = aLine[a++];
+                aSubRect.SetLeft( aLine[a++] );
+                aSubRect.SetRight( aLine[a++] );
                 aRegion.Union(aSubRect);
             }
         }

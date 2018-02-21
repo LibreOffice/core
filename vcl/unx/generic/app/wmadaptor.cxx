@@ -1470,9 +1470,9 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
                                  aTarget.GetHeight()
                                  )
                             );
-            aTarget.Left() =
+            aTarget.SetLeft(
                 pFrame->maRestorePosSize.IsEmpty() ?
-                rGeom.nX : pFrame->maRestorePosSize.Left();
+                rGeom.nX : pFrame->maRestorePosSize.Left() );
         }
         else if( ! bVertical )
         {
@@ -1483,9 +1483,9 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
                                  rGeom.nHeight : pFrame->maRestorePosSize.GetHeight()
                                  )
                             );
-            aTarget.Top() =
+            aTarget.SetTop(
                 pFrame->maRestorePosSize.IsEmpty() ?
-                rGeom.nY : pFrame->maRestorePosSize.Top();
+                rGeom.nY : pFrame->maRestorePosSize.Top() );
         }
 
         tools::Rectangle aRestore( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );

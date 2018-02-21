@@ -413,10 +413,10 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
             if(nLineWidth)
             {
                 const long nHalfLineWidth((nLineWidth + 1) / 2);
-                aActionBounds.Left() -= nHalfLineWidth;
-                aActionBounds.Top() -= nHalfLineWidth;
-                aActionBounds.Right() += nHalfLineWidth;
-                aActionBounds.Bottom() += nHalfLineWidth;
+                aActionBounds.AdjustLeft( -nHalfLineWidth );
+                aActionBounds.AdjustTop( -nHalfLineWidth );
+                aActionBounds.AdjustRight(nHalfLineWidth );
+                aActionBounds.AdjustBottom(nHalfLineWidth );
             }
             break;
         }
@@ -466,10 +466,10 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
             if(nLineWidth)
             {
                 const long nHalfLineWidth((nLineWidth + 1) / 2);
-                aActionBounds.Left() -= nHalfLineWidth;
-                aActionBounds.Top() -= nHalfLineWidth;
-                aActionBounds.Right() += nHalfLineWidth;
-                aActionBounds.Bottom() += nHalfLineWidth;
+                aActionBounds.AdjustLeft( -nHalfLineWidth );
+                aActionBounds.AdjustTop( -nHalfLineWidth );
+                aActionBounds.AdjustRight(nHalfLineWidth );
+                aActionBounds.AdjustBottom(nHalfLineWidth );
             }
             break;
         }
@@ -1154,16 +1154,16 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
                         while( aDstPtPix.Y() <= aBoundRect.Bottom() )
                         {
-                            aDstPtPix.X() = aBoundRect.Left();
+                            aDstPtPix.setX( aBoundRect.Left() );
                             aDstSzPix = bTiling ? Size( MAX_TILE_WIDTH, MAX_TILE_HEIGHT ) : aBoundRect.GetSize();
 
                             if( ( aDstPtPix.Y() + aDstSzPix.Height() - 1 ) > aBoundRect.Bottom() )
-                                aDstSzPix.Height() = aBoundRect.Bottom() - aDstPtPix.Y() + 1;
+                                aDstSzPix.setHeight( aBoundRect.Bottom() - aDstPtPix.Y() + 1 );
 
                             while( aDstPtPix.X() <= aBoundRect.Right() )
                             {
                                 if( ( aDstPtPix.X() + aDstSzPix.Width() - 1 ) > aBoundRect.Right() )
-                                    aDstSzPix.Width() = aBoundRect.Right() - aDstPtPix.X() + 1;
+                                    aDstSzPix.setWidth( aBoundRect.Right() - aDstPtPix.X() + 1 );
 
                                 if( !tools::Rectangle( aDstPtPix, aDstSzPix ).Intersection( aBoundRect ).IsEmpty() &&
                                     aPaintVDev->SetOutputSizePixel( aDstSzPix ) )
@@ -1247,11 +1247,11 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                 }
 
                                 // overlapping bands to avoid missing lines (e.g. PostScript)
-                                aDstPtPix.X() += aDstSzPix.Width();
+                                aDstPtPix.AdjustX(aDstSzPix.Width() );
                             }
 
                             // overlapping bands to avoid missing lines (e.g. PostScript)
-                            aDstPtPix.Y() += aDstSzPix.Height();
+                            aDstPtPix.AdjustY(aDstSzPix.Height() );
                         }
 
                         rOutMtf.AddAction( new MetaPopAction() );

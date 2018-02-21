@@ -831,13 +831,13 @@ Size X11SalBitmap::GetSize() const
 
     if( mpDIB )
     {
-        aSize.Width() = mpDIB->mnWidth;
-        aSize.Height() = mpDIB->mnHeight;
+        aSize.setWidth( mpDIB->mnWidth );
+        aSize.setHeight( mpDIB->mnHeight );
     }
     else if( mpDDB )
     {
-        aSize.Width() = mpDDB->ImplGetWidth();
-        aSize.Height() = mpDDB->ImplGetHeight();
+        aSize.setWidth( mpDDB->ImplGetWidth() );
+        aSize.setHeight( mpDDB->ImplGetHeight() );
     }
 
     return aSize;

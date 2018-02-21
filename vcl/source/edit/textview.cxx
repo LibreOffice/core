@@ -349,15 +349,15 @@ void TextView::ImpHighlight( const TextSelection& rSel )
                         nEndIndex = nStartIndex;
 
                     tools::Rectangle aTmpRect( mpImpl->mpTextEngine->GetEditCursor( TextPaM( nPara, nStartIndex ), false ) );
-                    aTmpRect.Top() += nY;
-                    aTmpRect.Bottom() += nY;
+                    aTmpRect.AdjustTop(nY );
+                    aTmpRect.AdjustBottom(nY );
                     Point aTopLeft( aTmpRect.TopLeft() );
 
                     aTmpRect = mpImpl->mpTextEngine->GetEditCursor( TextPaM( nPara, nEndIndex ), true );
-                    aTmpRect.Top() += nY;
-                    aTmpRect.Bottom() += nY;
+                    aTmpRect.AdjustTop(nY );
+                    aTmpRect.AdjustBottom(nY );
                     Point aBottomRight( aTmpRect.BottomRight() );
-                    aBottomRight.X()--;
+                    aBottomRight.AdjustX( -1 );
 
                     // only paint if in the visible region
                     if ( ( aTopLeft.X() < aBottomRight.X() ) && ( aBottomRight.Y() >= aVisArea.Top() ) )
@@ -966,14 +966,14 @@ void TextView::Scroll( long ndX, long ndY )
     Point aNewStartPos( mpImpl->maStartDocPos );
 
     // Vertical:
-    aNewStartPos.Y() -= ndY;
+    aNewStartPos.AdjustY( -ndY );
     if ( aNewStartPos.Y() < 0 )
-        aNewStartPos.Y() = 0;
+        aNewStartPos.setY( 0 );
 
     // Horizontal:
-    aNewStartPos.X() -= ndX;
+    aNewStartPos.AdjustX( -ndX );
     if ( aNewStartPos.X() < 0 )
-        aNewStartPos.X() = 0;
+        aNewStartPos.setX( 0 );
 
     long nDiffX = mpImpl->maStartDocPos.X() - aNewStartPos.X();
     long nDiffY = mpImpl->maStartDocPos.Y() - aNewStartPos.Y();
@@ -1540,10 +1540,10 @@ TextPaM TextView::PageUp( const TextPaM& rPaM )
 {
     tools::Rectangle aRect = mpImpl->mpTextEngine->PaMtoEditCursor( rPaM );
     Point aTopLeft = aRect.TopLeft();
-    aTopLeft.Y() -= mpImpl->mpWindow->GetOutputSizePixel().Height() * 9/10;
-    aTopLeft.X() += 1;
+    aTopLeft.AdjustY( -(mpImpl->mpWindow->GetOutputSizePixel().Height() * 9/10) );
+    aTopLeft.AdjustX(1 );
     if ( aTopLeft.Y() < 0 )
-        aTopLeft.Y() = 0;
+        aTopLeft.setY( 0 );
 
     TextPaM aPaM = mpImpl->mpTextEngine->GetPaM( aTopLeft );
     return aPaM;
@@ -1553,11 +1553,11 @@ TextPaM TextView::PageDown( const TextPaM& rPaM )
 {
     tools::Rectangle aRect = mpImpl->mpTextEngine->PaMtoEditCursor( rPaM );
     Point aBottomRight = aRect.BottomRight();
-    aBottomRight.Y() += mpImpl->mpWindow->GetOutputSizePixel().Height() * 9/10;
-    aBottomRight.X() += 1;
+    aBottomRight.AdjustY(mpImpl->mpWindow->GetOutputSizePixel().Height() * 9/10 );
+    aBottomRight.AdjustX(1 );
     long nHeight = mpImpl->mpTextEngine->GetTextHeight();
     if ( aBottomRight.Y() > nHeight )
-        aBottomRight.Y() = nHeight-1;
+        aBottomRight.setY( nHeight-1 );
 
     TextPaM aPaM = mpImpl->mpTextEngine->GetPaM( aBottomRight );
     return aPaM;
@@ -1603,21 +1603,21 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
             TETextPortion* pTextPortion = pParaPortion->GetTextPortions()[ nTextPortion ];
             if ( pTextPortion->GetKind() == PORTIONKIND_TAB )
             {
-                aEditCursor.Right() += pTextPortion->GetWidth();
+                aEditCursor.AdjustRight(pTextPortion->GetWidth() );
             }
             else
             {
                 TextPaM aNext = CursorRight( TextPaM( aPaM.GetPara(), aPaM.GetIndex() ), sal_uInt16(css::i18n::CharacterIteratorMode::SKIPCELL) );
-                aEditCursor.Right() = mpImpl->mpTextEngine->GetEditCursor( aNext, true ).Left();
+                aEditCursor.SetRight( mpImpl->mpTextEngine->GetEditCursor( aNext, true ).Left() );
             }
         }
     }
 
     Size aOutSz = mpImpl->mpWindow->GetOutputSizePixel();
     if ( aEditCursor.GetHeight() > aOutSz.Height() )
-        aEditCursor.Bottom() = aEditCursor.Top() + aOutSz.Height() - 1;
+        aEditCursor.SetBottom( aEditCursor.Top() + aOutSz.Height() - 1 );
 
-    aEditCursor.Left() -= 1;
+    aEditCursor.AdjustLeft( -1 );
 
     if ( bGotoCursor
         // #i81283# protect maStartDocPos against initialization problems
@@ -1634,26 +1634,26 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
 
         if ( aEditCursor.Bottom() > nVisEndY )
         {
-            aNewStartPos.Y() += ( aEditCursor.Bottom() - nVisEndY );
+            aNewStartPos.AdjustY( aEditCursor.Bottom() - nVisEndY);
         }
         else if ( aEditCursor.Top() < nVisStartY )
         {
-            aNewStartPos.Y() -= ( nVisStartY - aEditCursor.Top() );
+            aNewStartPos.AdjustY( -( nVisStartY - aEditCursor.Top() ) );
         }
 
         if ( aEditCursor.Right() >= nVisEndX )
         {
-            aNewStartPos.X() += ( aEditCursor.Right() - nVisEndX );
+            aNewStartPos.AdjustX( aEditCursor.Right() - nVisEndX );
 
             // do you want some more?
-            aNewStartPos.X() += nMoreX;
+            aNewStartPos.AdjustX(nMoreX );
         }
         else if ( aEditCursor.Left() <= nVisStartX )
         {
-            aNewStartPos.X() -= ( nVisStartX - aEditCursor.Left() );
+            aNewStartPos.AdjustX( -( nVisStartX - aEditCursor.Left() ) );
 
             // do you want some more?
-            aNewStartPos.X() -= nMoreX;
+            aNewStartPos.AdjustX( -nMoreX );
         }
 
         // X can be wrong for the 'some more' above:
@@ -1666,16 +1666,16 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
             nMaxX = 0;
 
         if ( aNewStartPos.X() < 0 )
-            aNewStartPos.X() = 0;
+            aNewStartPos.setX( 0 );
         else if ( aNewStartPos.X() > nMaxX )
-            aNewStartPos.X() = nMaxX;
+            aNewStartPos.setX( nMaxX );
 
         // Y should not be further down than needed
         long nYMax = mpImpl->mpTextEngine->GetTextHeight() - aOutSz.Height();
         if ( nYMax < 0 )
             nYMax = 0;
         if ( aNewStartPos.Y() > nYMax )
-            aNewStartPos.Y() = nYMax;
+            aNewStartPos.setY( nYMax );
 
         if ( aNewStartPos != mpImpl->maStartDocPos )
             Scroll( -(aNewStartPos.X() - mpImpl->maStartDocPos.X()), -(aNewStartPos.Y() - mpImpl->maStartDocPos.Y()) );
@@ -1684,8 +1684,8 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
     if ( aEditCursor.Right() < aEditCursor.Left() )
     {
         long n = aEditCursor.Left();
-        aEditCursor.Left() = aEditCursor.Right();
-        aEditCursor.Right() = n;
+        aEditCursor.SetLeft( aEditCursor.Right() );
+        aEditCursor.SetRight( n );
     }
 
     Point aPoint( GetWindowPos( !mpImpl->mpTextEngine->IsRightToLeft() ? aEditCursor.TopLeft() : aEditCursor.TopRight() ) );
@@ -1776,7 +1776,7 @@ void TextView::ImpShowDDCursor()
     if ( !mpImpl->mpDDInfo->mbVisCursor )
     {
         tools::Rectangle aCursor = mpImpl->mpTextEngine->PaMtoEditCursor( mpImpl->mpDDInfo->maDropPos, true );
-        aCursor.Right()++;
+        aCursor.AdjustRight( 1 );
         aCursor.SetPos( GetWindowPos( aCursor.TopLeft() ) );
 
         mpImpl->mpDDInfo->maCursor.SetWindow( mpImpl->mpWindow );
@@ -2034,7 +2034,7 @@ Point TextView::ImpGetOutputStartPos( const Point& rStartDocPos ) const
     if ( mpImpl->mpTextEngine->IsRightToLeft() )
     {
         Size aSz = mpImpl->mpWindow->GetOutputSizePixel();
-        aStartPos.X() = rStartDocPos.X() + aSz.Width() - 1; // -1: Start is 0
+        aStartPos.setX( rStartDocPos.X() + aSz.Width() - 1 ); // -1: Start is 0
     }
     return aStartPos;
 }
@@ -2045,16 +2045,16 @@ Point TextView::GetDocPos( const Point& rWindowPos ) const
 
     Point aPoint;
 
-    aPoint.Y() = rWindowPos.Y() + mpImpl->maStartDocPos.Y();
+    aPoint.setY( rWindowPos.Y() + mpImpl->maStartDocPos.Y() );
 
     if ( !mpImpl->mpTextEngine->IsRightToLeft() )
     {
-        aPoint.X() = rWindowPos.X() + mpImpl->maStartDocPos.X();
+        aPoint.setX( rWindowPos.X() + mpImpl->maStartDocPos.X() );
     }
     else
     {
         Size aSz = mpImpl->mpWindow->GetOutputSizePixel();
-        aPoint.X() = ( aSz.Width() - 1 ) - rWindowPos.X() + mpImpl->maStartDocPos.X();
+        aPoint.setX( ( aSz.Width() - 1 ) - rWindowPos.X() + mpImpl->maStartDocPos.X() );
     }
 
     return aPoint;
@@ -2066,16 +2066,16 @@ Point TextView::GetWindowPos( const Point& rDocPos ) const
 
     Point aPoint;
 
-    aPoint.Y() = rDocPos.Y() - mpImpl->maStartDocPos.Y();
+    aPoint.setY( rDocPos.Y() - mpImpl->maStartDocPos.Y() );
 
     if ( !mpImpl->mpTextEngine->IsRightToLeft() )
     {
-        aPoint.X() = rDocPos.X() - mpImpl->maStartDocPos.X();
+        aPoint.setX( rDocPos.X() - mpImpl->maStartDocPos.X() );
     }
     else
     {
         Size aSz = mpImpl->mpWindow->GetOutputSizePixel();
-        aPoint.X() = ( aSz.Width() - 1 ) - ( rDocPos.X() - mpImpl->maStartDocPos.X() );
+        aPoint.setX( ( aSz.Width() - 1 ) - ( rDocPos.X() - mpImpl->maStartDocPos.X() ) );
     }
 
     return aPoint;

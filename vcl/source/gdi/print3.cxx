@@ -443,8 +443,8 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
         css::awt::Size aSizeVal;
         if( pPgSizeVal && (pPgSizeVal->Value >>= aSizeVal) )
         {
-            aMPS.aPaperSize.Width() = aSizeVal.Width;
-            aMPS.aPaperSize.Height() = aSizeVal.Height;
+            aMPS.aPaperSize.setWidth( aSizeVal.Width );
+            aMPS.aPaperSize.setHeight( aSizeVal.Height );
         }
 
         xController->setMultipage( aMPS );
@@ -905,8 +905,8 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
 
     if( aIsSize.Width && aIsSize.Height )
     {
-        aPageSize.aSize.Width() = aIsSize.Width;
-        aPageSize.aSize.Height() = aIsSize.Height;
+        aPageSize.aSize.setWidth( aIsSize.Width );
+        aPageSize.aSize.setHeight( aIsSize.Height );
 
         Size aRealPaperSize( getRealPaperSize( aPageSize.aSize, true/*bNoNUP*/ ) );
         if( aRealPaperSize != aCurSize )
@@ -1111,10 +1111,10 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     // multi page area: page size minus margins + one time spacing right and down
     // the added spacing is so each subpage can be calculated including its spacing
     Size aMPArea( aPaperSize );
-    aMPArea.Width()  -= rMPS.nLeftMargin + rMPS.nRightMargin;
-    aMPArea.Width()  += rMPS.nHorizontalSpacing;
-    aMPArea.Height() -= rMPS.nTopMargin + rMPS.nBottomMargin;
-    aMPArea.Height() += rMPS.nVerticalSpacing;
+    aMPArea.AdjustWidth( -(rMPS.nLeftMargin + rMPS.nRightMargin) );
+    aMPArea.AdjustWidth(rMPS.nHorizontalSpacing );
+    aMPArea.AdjustHeight( -(rMPS.nTopMargin + rMPS.nBottomMargin) );
+    aMPArea.AdjustHeight(rMPS.nVerticalSpacing );
 
     // determine offsets
     long nAdvX = aMPArea.Width() / rMPS.nColumns;

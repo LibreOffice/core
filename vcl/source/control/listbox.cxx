@@ -387,8 +387,8 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
     else
         nTextStyle |= DrawTextFlags::Left;
 
-    aTextRect.Left() += nOffX;
-    aTextRect.Right() -= nOffX;
+    aTextRect.AdjustLeft(nOffX );
+    aTextRect.AdjustRight( -nOffX );
 
     if ( IsDropDownBox() )
     {
@@ -404,7 +404,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
         {
             tools::Rectangle aClip( aPos, aSize );
             if ( nTextHeight > aSize.Height() )
-                aClip.Bottom() += nTextHeight-aSize.Height()+1;  // So that HP Printers don't optimize this away
+                aClip.AdjustBottom(nTextHeight-aSize.Height()+1 );  // So that HP Printers don't optimize this away
             pDev->IntersectClipRegion( aClip );
         }
 
@@ -434,8 +434,8 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
                 pDev->SetTextColor( COL_WHITE );
             }
 
-            aTextRect.Top() = aPos.Y() + n*nTextHeight;
-            aTextRect.Bottom() = aTextRect.Top() + nTextHeight;
+            aTextRect.SetTop( aPos.Y() + n*nTextHeight );
+            aTextRect.SetBottom( aTextRect.Top() + nTextHeight );
 
             pDev->DrawText( aTextRect, mpImplLB->GetEntryList()->GetEntryText( nEntry ), nTextStyle );
 
@@ -553,9 +553,9 @@ void ListBox::setPosSizePixel( long nX, long nY, long nWidth, long nHeight, PosS
     {
         Size aPrefSz = mpFloatWin->GetPrefSize();
         if ( ( nFlags & PosSizeFlags::Height ) && ( nHeight >= 2*mnDDHeight ) )
-            aPrefSz.Height() = nHeight-mnDDHeight;
+            aPrefSz.setHeight( nHeight-mnDDHeight );
         if ( nFlags & PosSizeFlags::Width )
-            aPrefSz.Width() = nWidth;
+            aPrefSz.setWidth( nWidth );
         mpFloatWin->SetPrefSize( aPrefSz );
 
         if (IsAutoSizeEnabled())
@@ -592,7 +592,7 @@ void ListBox::Resize()
             aContent.Move( -aPoint.X(), -aPoint.Y() );
 
             // Use the themes drop down size for the button
-            aOutSz.Width() = aContent.Left();
+            aOutSz.setWidth( aContent.Left() );
             mpBtn->setPosSizePixel( aContent.Left(), nTop, aContent.Right(), (nBottom-nTop) );
 
             // Adjust the size of the edit field
@@ -611,8 +611,8 @@ void ListBox::Resize()
                     // completely wrong.
                     Size aSz( GetOutputSizePixel() );
                     long nDiff = aContent.Top() - (aSz.Height() - aContent.GetHeight())/2;
-                    aContent.Top() -= nDiff;
-                    aContent.Bottom() -= nDiff;
+                    aContent.AdjustTop( -nDiff );
+                    aContent.AdjustBottom( -nDiff );
                 }
                 mpImplWin->SetPosSizePixel( aContent.TopLeft(), aContent.GetSize() );
             }
@@ -1169,8 +1169,8 @@ Size ListBox::CalcMinimumSize() const
 
     if (IsDropDownBox())
     {
-        aSz.Height() += 4; // add a space between entry and border
-        aSz.Width() += 4;  // add a little breathing space
+        aSz.AdjustHeight(4 ); // add a space between entry and border
+        aSz.AdjustWidth(4 );  // add a little breathing space
         bAddScrollWidth = true;
     }
     else
@@ -1189,10 +1189,10 @@ Size ListBox::CalcMinimumSize() const
                     aControlValue, aBound, aContent) )
         {
             // use the themes drop down size
-            aSz.Width() += aTestSize.Width() - aContent.GetWidth();
+            aSz.AdjustWidth(aTestSize.Width() - aContent.GetWidth() );
         }
         else
-            aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
+            aSz.AdjustWidth(GetSettings().GetStyleSettings().GetScrollBarSize() );
     }
 
     aSz = CalcWindowSize( aSz );
@@ -1206,7 +1206,7 @@ Size ListBox::CalcMinimumSize() const
                     aControlValue, aBound, aContent) )
         {
             if( aBound.GetHeight() > aSz.Height() )
-                aSz.Height() = aBound.GetHeight();
+                aSz.setHeight( aBound.GetHeight() );
         }
     }
 
@@ -1224,19 +1224,19 @@ Size ListBox::CalcSubEditSize() const
         aSz = mpImplLB->CalcSize (mnLineCount ? mnLineCount : mpImplLB->GetEntryList()->GetEntryCount());
     else
     {
-        aSz.Height() = mpImplLB->CalcSize( 1 ).Height();
+        aSz.setHeight( mpImplLB->CalcSize( 1 ).Height() );
         // Size to maxmimum entry width
-        aSz.Width() = mpImplLB->GetMaxEntryWidth();
+        aSz.setWidth( mpImplLB->GetMaxEntryWidth() );
 
         if (m_nMaxWidthChars != -1)
         {
             long nMaxWidth = m_nMaxWidthChars * approximate_char_width();
-            aSz.Width() = std::min(aSz.Width(), nMaxWidth);
+            aSz.setWidth( std::min(aSz.Width(), nMaxWidth) );
         }
 
         // Do not create ultrathin ListBoxes, it doesn't look good
         if( aSz.Width() < GetSettings().GetStyleSettings().GetScrollBarSize() )
-            aSz.Width() = GetSettings().GetStyleSettings().GetScrollBarSize();
+            aSz.setWidth( GetSettings().GetStyleSettings().GetScrollBarSize() );
     }
 
     return aSz;
@@ -1257,20 +1257,20 @@ Size ListBox::CalcAdjustedSize( const Size& rPrefSize ) const
     Size aSz = rPrefSize;
     sal_Int32 nLeft, nTop, nRight, nBottom;
     static_cast<vcl::Window*>(const_cast<ListBox *>(this))->GetBorder( nLeft, nTop, nRight, nBottom );
-    aSz.Height() -= nTop+nBottom;
+    aSz.AdjustHeight( -(nTop+nBottom) );
     if ( !IsDropDownBox() )
     {
         long nEntryHeight = CalcBlockSize( 1, 1 ).Height();
         long nLines = aSz.Height() / nEntryHeight;
         if ( nLines < 1 )
             nLines = 1;
-        aSz.Height() = nLines * nEntryHeight;
+        aSz.setHeight( nLines * nEntryHeight );
     }
     else
     {
-        aSz.Height() = mnDDHeight;
+        aSz.setHeight( mnDDHeight );
     }
-    aSz.Height() += nTop+nBottom;
+    aSz.AdjustHeight(nTop+nBottom );
 
     aSz = CalcWindowSize( aSz );
     return aSz;
@@ -1288,28 +1288,28 @@ Size ListBox::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
     if ( nLines )
     {
         if ( !IsDropDownBox() )
-            aSz.Height() = mpImplLB->CalcSize( nLines ).Height();
+            aSz.setHeight( mpImplLB->CalcSize( nLines ).Height() );
         else
-            aSz.Height() = mnDDHeight;
+            aSz.setHeight( mnDDHeight );
     }
     else
-        aSz.Height() = aMinSz.Height();
+        aSz.setHeight( aMinSz.Height() );
 
     // Width
     if ( nColumns )
-        aSz.Width() = nColumns * GetTextWidth( OUString('X') );
+        aSz.setWidth( nColumns * GetTextWidth( OUString('X') ) );
     else
-        aSz.Width() = aMinSz.Width();
+        aSz.setWidth( aMinSz.Width() );
 
     if ( IsDropDownBox() )
-        aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
+        aSz.AdjustWidth(GetSettings().GetStyleSettings().GetScrollBarSize() );
 
     if ( !IsDropDownBox() )
     {
         if ( aSz.Width() < aMinSz.Width() )
-            aSz.Height() += GetSettings().GetStyleSettings().GetScrollBarSize();
+            aSz.AdjustHeight(GetSettings().GetStyleSettings().GetScrollBarSize() );
         if ( aSz.Height() < aMinSz.Height() )
-            aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
+            aSz.AdjustWidth(GetSettings().GetStyleSettings().GetScrollBarSize() );
     }
 
     aSz = CalcWindowSize( aSz );

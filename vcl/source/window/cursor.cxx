@@ -67,16 +67,16 @@ static void ImplCursorInvert( ImplCursorData const * pData )
         tools::Polygon aPoly( aRect );
         if( aPoly.GetSize() == 5 )
         {
-            aPoly[1].X() += 1;  // include the right border
-            aPoly[2].X() += 1;
+            aPoly[1].AdjustX(1 );  // include the right border
+            aPoly[2].AdjustX(1 );
             if ( pData->mnPixSlant )
             {
                 Point aPoint = aPoly.GetPoint( 0 );
-                aPoint.X() += pData->mnPixSlant;
+                aPoint.AdjustX(pData->mnPixSlant );
                 aPoly.SetPoint( aPoint, 0 );
                 aPoly.SetPoint( aPoint, 4 );
                 aPoint = aPoly.GetPoint( 1 );
-                aPoint.X() += pData->mnPixSlant;
+                aPoint.AdjustX(pData->mnPixSlant );
                 aPoly.SetPoint( aPoint, 1 );
             }
 
@@ -91,9 +91,9 @@ static void ImplCursorInvert( ImplCursorData const * pData )
                     pAry[0] = aPoly.GetPoint( 0 );
                     pAry[1] = aPoly.GetPoint( 1 );
                     pAry[2] = pAry[1];
-                    pAry[2].X() += delta;
+                    pAry[2].AdjustX(delta );
                     pAry[3] =  pAry[1];
-                    pAry[3].Y() += delta;
+                    pAry[3].AdjustY(delta );
                     pAry[4] = aPoly.GetPoint( 2 );
                     pAry[5] = aPoly.GetPoint( 3 );
                     pAry[6] = aPoly.GetPoint( 4 );
@@ -106,9 +106,9 @@ static void ImplCursorInvert( ImplCursorData const * pData )
                     pAry[2] = aPoly.GetPoint( 2 );
                     pAry[3] = aPoly.GetPoint( 3 );
                     pAry[4] = pAry[0];
-                    pAry[4].Y() += delta;
+                    pAry[4].AdjustY(delta );
                     pAry[5] =  pAry[0];
-                    pAry[5].X() -= delta;
+                    pAry[5].AdjustX( -delta );
                     pAry[6] = aPoly.GetPoint( 4 );
                 }
                 aPoly = tools::Polygon( 7, pAry);
@@ -148,7 +148,7 @@ void vcl::Cursor::ImplDraw()
 
         // use width (as set in Settings) if size is 0,
         if ( !mpData->maPixSize.Width() )
-            mpData->maPixSize.Width() = pWindow->GetSettings().GetStyleSettings().GetCursorSize();
+            mpData->maPixSize.setWidth( pWindow->GetSettings().GetStyleSettings().GetCursorSize() );
 
         // calculate output area and display
         ImplCursorInvert( mpData.get() );
@@ -233,7 +233,7 @@ void vcl::Cursor::LOKNotify( vcl::Window* pWindow, const OUString& rAction )
             const long nY = pWindow->GetOutOffYPixel() + pWindow->LogicToPixel(GetPos()).Y();
             Size aSize = pWindow->LogicToPixel(GetSize());
             if (!aSize.Width())
-                aSize.Width() = pWindow->GetSettings().GetStyleSettings().GetCursorSize();
+                aSize.setWidth( pWindow->GetSettings().GetStyleSettings().GetCursorSize() );
 
             const tools::Rectangle aRect(Point(nX, nY), aSize);
             aItems.emplace_back("rectangle", aRect.toString());
@@ -395,7 +395,7 @@ void vcl::Cursor::SetWidth( long nNewWidth )
 {
     if ( maSize.Width() != nNewWidth )
     {
-        maSize.Width() = nNewWidth;
+        maSize.setWidth( nNewWidth );
         ImplNew();
     }
 }

@@ -1421,7 +1421,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                                 else
                                     aX += BigInt( aScaleX.GetNumerator()/2 );
                             aX /= BigInt( aScaleX.GetNumerator() );
-                            aOrigin.X() = static_cast<long>(aX) + aMM.GetOrigin().X();
+                            aOrigin.setX( static_cast<long>(aX) + aMM.GetOrigin().X() );
                             BigInt aY( aOrigin.Y() );
                             aY *= BigInt( aScaleY.GetDenominator() );
                             if( aOrigin.Y() >= 0 )
@@ -1435,7 +1435,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                                 else
                                     aY += BigInt( aScaleY.GetNumerator()/2 );
                             aY /= BigInt( aScaleY.GetNumerator() );
-                            aOrigin.Y() = static_cast<long>(aY) + aMM.GetOrigin().Y();
+                            aOrigin.setY( static_cast<long>(aY) + aMM.GetOrigin().Y() );
                             aSrcMapMode.SetOrigin( aOrigin );
 
                             aScaleX *= aSrcMapMode.GetScaleX();
@@ -1581,8 +1581,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     if( fScaleX != 1.0 || fScaleY != 1.0 )
                     {
                         aTmpMtf.Scale( fScaleX, fScaleY );
-                        aSrcPt.X() = FRound( aSrcPt.X() * fScaleX );
-                        aSrcPt.Y() = FRound( aSrcPt.Y() * fScaleY );
+                        aSrcPt.setX( FRound( aSrcPt.X() * fScaleX ) );
+                        aSrcPt.setY( FRound( aSrcPt.Y() * fScaleY ) );
                     }
 
                     nMoveX = aDestPt.X() - aSrcPt.X();
@@ -1716,8 +1716,8 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
         aTargetMapMode = aSrcMapMode;
         aTargetSize = rMTF.GetPrefSize();
         sal_uInt16 nTargetDivisor = CalcSaveTargetMapMode(aTargetMapMode, aTargetSize);
-        aTargetSize.Width() /= nTargetDivisor;
-        aTargetSize.Height() /= nTargetDivisor;
+        aTargetSize.setWidth( aTargetSize.Width() / nTargetDivisor );
+        aTargetSize.setHeight( aTargetSize.Height() / nTargetDivisor );
     }
     else
     {

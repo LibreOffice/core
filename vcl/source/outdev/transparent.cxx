@@ -137,16 +137,16 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
     // mirrored horizontically
     if( aDestSz.Width() < 0 )
     {
-        aDestSz.Width() = -aDestSz.Width();
-        aDestPt.X() -= ( aDestSz.Width() - 1 );
+        aDestSz.setWidth( -aDestSz.Width() );
+        aDestPt.AdjustX( -( aDestSz.Width() - 1 ) );
         nMirrFlags |= BmpMirrorFlags::Horizontal;
     }
 
     // mirrored vertically
     if( aDestSz.Height() < 0 )
     {
-        aDestSz.Height() = -aDestSz.Height();
-        aDestPt.Y() -= ( aDestSz.Height() - 1 );
+        aDestSz.setHeight( -aDestSz.Height() );
+        aDestPt.AdjustY( -( aDestSz.Height() - 1 ) );
         nMirrFlags |= BmpMirrorFlags::Vertical;
     }
 
