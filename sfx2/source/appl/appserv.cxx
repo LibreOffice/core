@@ -501,7 +501,28 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         {
             // Askbot has URL's normalized to languages, not locales
             // Get language from locale: ll or lll or ll-CC or lll-CC
-            OUString aLang = LanguageTag(utl::ConfigManager::getLocale()).getLanguage();
+
+            // Franklin.20180220: tdf#115795
+            // Askbot has URL's normalized to languages not locales, but
+            // "zh" on Askbot is by default treated as Simplified Chinese
+            // therefore Traditional Chinese users (zh-tw)  will be
+            // redirected to zh-cn forum due to provide only "zh" to LOlang
+
+            // Solution:
+            // Check for the Locale, if it is zh-TW then use zh-tw instead
+
+            OUString localeStr = utl::ConfigManager::getLocale();
+            OUString zhtwLang("zh-TW");
+            OUString aLang = LanguageTag(localeStr).getLanguage();
+
+            if (localeStr == zhtwLang) { // special case for zh_TW
+                // notice that Ask.libreoffice.org accept zh-tw only
+                // not zh-TW
+                aLang = utl::ConfigManager::getLocale().toAsciiLowerCase();
+            }
+
+            // Franklin.20180220: tdf#115795 end
+
             OUString sURL("https://hub.libreoffice.org/forum/?LOlang=" + aLang);
             sfx2::openUriExternally(sURL, false);
             break;
