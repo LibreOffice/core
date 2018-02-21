@@ -20,7 +20,7 @@
 #include <vcl/errinf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <sfx2/viewfrm.hxx>
 
@@ -616,8 +616,11 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 pErrStringId = STR_MSSG_IMPORTDATA_0;
             aErrorMessage = ScGlobal::GetRscString(pErrStringId);
         }
-        ScopedVclPtrInstance< InfoBox > aInfoBox( ScDocShell::GetActiveDialogParent(), aErrorMessage );
-        aInfoBox->Execute();
+        vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      aErrorMessage));
+        xInfoBox->run();
     }
 
     delete pImportDoc;

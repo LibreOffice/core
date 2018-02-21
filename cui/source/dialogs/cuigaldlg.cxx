@@ -25,7 +25,7 @@
 #include <vcl/errinf.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/weld.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <unotools/pathoptions.hxx>
@@ -562,8 +562,10 @@ IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl, Button*, void)
 
             aStr += " (" + pInfo->GetThemeName() + ")";
 
-            ScopedVclPtrInstance< InfoBox > aBox( this, aStr );
-            aBox->Execute();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          aStr));
+            xInfoBox->run();
             m_pLbResName->GrabFocus();
             bDifferentThemeExists = true;
         }

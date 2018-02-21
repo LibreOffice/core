@@ -31,6 +31,7 @@
 #include <limits.h>
 
 namespace vcl { class Window; }
+namespace weld { class Window; }
 
 class ErrorHandler;
 class ErrorContext;
@@ -43,7 +44,7 @@ enum class DialogMask;
 typedef void (* DisplayFnPtr)();
 
 typedef DialogMask WindowDisplayErrorFunc(
-    vcl::Window*, DialogMask eMask, const OUString &rErr, const OUString &rAction);
+    weld::Window*, DialogMask eMask, const OUString &rErr, const OUString &rAction);
 
 typedef void BasicDisplayErrorFunc(
     const OUString &rErr, const OUString &rAction);
@@ -99,7 +100,7 @@ namespace o3tl
 }
 
 typedef DialogMask WindowDisplayErrorFunc(
-    vcl::Window*, DialogMask nMask, const OUString &rErr, const OUString &rAction);
+    weld::Window*, DialogMask nMask, const OUString &rErr, const OUString &rAction);
 
 typedef void BasicDisplayErrorFunc(
     const OUString &rErr, const OUString &rAction);
@@ -128,7 +129,7 @@ public:
 
         @return what sort of dialog to use, with what buttons
     */
-    static DialogMask       HandleError(ErrCode nId, vcl::Window* pParent = nullptr, DialogMask nMask = DialogMask::MAX);
+    static DialogMask       HandleError(ErrCode nId, weld::Window* pParent = nullptr, DialogMask nMask = DialogMask::MAX);
     static bool             GetErrorString(ErrCode nId, OUString& rStr);
 
 protected:
@@ -204,11 +205,11 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorContext
     friend class ErrorHandler;
 
 public:
-                            ErrorContext(vcl::Window *pWin);
+                            ErrorContext(weld::Window *pWin);
     virtual                 ~ErrorContext();
 
     virtual bool            GetString(ErrCode nErrId, OUString& rCtxStr) = 0;
-    vcl::Window*            GetParent();
+    weld::Window*           GetParent();
 
     static ErrorContext*    GetContext();
 

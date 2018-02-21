@@ -18,9 +18,9 @@
  */
 
 #include <unotools/resmgr.hxx>
-#include <tools/wintypes.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 
 #include <svtools/ehdl.hxx>
@@ -33,7 +33,7 @@
 #include <strings.hxx>
 
 static DialogMask aWndFunc(
-    vcl::Window *pWin,            // Parent of the dialog
+    weld::Window *pWin,            // Parent of the dialog
     DialogMask nFlags,
     const OUString &rErr,      // error text
     const OUString &rAction)   // action text
@@ -52,33 +52,17 @@ static DialogMask aWndFunc(
     SolarMutexGuard aGuard;
 
     // determine necessary WinBits from the flags
-    MessBoxStyle eBits = MessBoxStyle::NONE;
+    VclButtonsType eButtonsType = VclButtonsType::NONE;
+    bool bAddRetry = false;
     if ( (nFlags & (DialogMask::ButtonsCancel | DialogMask::ButtonsRetry)) == (DialogMask::ButtonsCancel | DialogMask::ButtonsRetry))
-        eBits = MessBoxStyle::RetryCancel;
-    else if ( (nFlags & DialogMask::ButtonsOk) == DialogMask::ButtonsOk )
-        eBits = MessBoxStyle::Ok;
-    else if ( (nFlags & DialogMask::ButtonsYesNo) == DialogMask::ButtonsYesNo )
-        eBits = MessBoxStyle::YesNo;
-
-    switch(nFlags & DialogMask(0x0f00))
     {
-      case DialogMask::ButtonDefaultsOk:
-            eBits |= MessBoxStyle::DefaultOk;
-            break;
-
-      case DialogMask::ButtonDefaultsCancel:
-            eBits |= MessBoxStyle::DefaultCancel;
-            break;
-
-      case DialogMask::ButtonDefaultsYes:
-            eBits |= MessBoxStyle::DefaultYes;
-            break;
-
-      case DialogMask::ButtonDefaultsNo:
-            eBits |= MessBoxStyle::DefaultNo;
-            break;
-      default: break;
+        bAddRetry = true;
+        eButtonsType = VclButtonsType::Cancel;
     }
+    else if ( (nFlags & DialogMask::ButtonsOk) == DialogMask::ButtonsOk )
+        eButtonsType = VclButtonsType::Ok;
+    else if ( (nFlags & DialogMask::ButtonsYesNo) == DialogMask::ButtonsYesNo )
+        eButtonsType = VclButtonsType::YesNo;
 
     OUString aErr("$(ACTION)$(ERROR)");
     OUString aAction(rAction);
@@ -87,19 +71,19 @@ static DialogMask aWndFunc(
     aErr = aErr.replaceAll("$(ACTION)", aAction);
     aErr = aErr.replaceAll("$(ERROR)", rErr);
 
-    VclPtr<MessBox> pBox;
-    switch ( nFlags & DialogMask(0xf000) )
+    VclMessageType eMessageType;
+    switch (nFlags & DialogMask(0xf000))
     {
         case DialogMask::MessageError:
-            pBox.reset(VclPtr<ErrorBox>::Create(pWin, eBits, aErr));
+            eMessageType = VclMessageType::Error;
             break;
 
         case DialogMask::MessageWarning:
-            pBox.reset(VclPtr<WarningBox>::Create(pWin, eBits, aErr));
+            eMessageType = VclMessageType::Warning;
             break;
 
         case DialogMask::MessageInfo:
-            pBox.reset(VclPtr<InfoBox>::Create(pWin, aErr));
+            eMessageType = VclMessageType::Info;
             break;
 
         default:
@@ -109,8 +93,32 @@ static DialogMask aWndFunc(
         }
     }
 
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin,
+                                              eMessageType, eButtonsType, aErr));
+
+    if (bAddRetry)
+        xBox->add_button(Button::GetStandardText(StandardButtonType::Retry), RET_RETRY);
+
+    switch(nFlags & DialogMask(0x0f00))
+    {
+        case DialogMask::ButtonDefaultsOk:
+            xBox->set_default_response(RET_OK);
+            break;
+        case DialogMask::ButtonDefaultsCancel:
+            xBox->set_default_response(RET_CANCEL);
+            break;
+        case DialogMask::ButtonDefaultsYes:
+            xBox->set_default_response(RET_YES);
+            break;
+        case DialogMask::ButtonDefaultsNo:
+            xBox->set_default_response(RET_NO);
+            break;
+        default:
+            break;
+    }
+
     DialogMask nRet = DialogMask::NONE;
-    switch ( pBox->Execute() )
+    switch (xBox->run())
     {
         case RET_OK:
             nRet = DialogMask::ButtonsOk;
@@ -131,7 +139,7 @@ static DialogMask aWndFunc(
             SAL_WARN( "svtools.misc", "Unknown MessBox return value" );
             break;
     }
-    pBox.disposeAndClear();
+
     return nRet;
 }
 
@@ -234,7 +242,7 @@ bool SfxErrorHandler::GetErrorString(ErrCode lErrId, OUString &rStr) const
 }
 
 SfxErrorContext::SfxErrorContext(
-    sal_uInt16 nCtxIdP, vcl::Window *pWindow, const ErrMsgCode* pIdsP, const std::locale& rResLocaleP)
+    sal_uInt16 nCtxIdP, weld::Window *pWindow, const ErrMsgCode* pIdsP, const std::locale& rResLocaleP)
 :   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP), aResLocale(rResLocaleP)
 {
     if (!pIds)
@@ -243,7 +251,7 @@ SfxErrorContext::SfxErrorContext(
 
 
 SfxErrorContext::SfxErrorContext(
-    sal_uInt16 nCtxIdP, const OUString &aArg1P, vcl::Window *pWindow,
+    sal_uInt16 nCtxIdP, const OUString &aArg1P, weld::Window *pWindow,
     const ErrMsgCode* pIdsP, const std::locale& rResLocaleP)
 :   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP), aResLocale(rResLocaleP),
     aArg1(aArg1P)
