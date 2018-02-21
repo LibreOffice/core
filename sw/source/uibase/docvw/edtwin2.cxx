@@ -371,11 +371,11 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             {
                 tools::Rectangle aRect( aFieldRect.SVRect() );
                 Point aPt( OutputToScreenPixel( LogicToPixel( aRect.TopLeft() )));
-                aRect.Left()   = aPt.X();
-                aRect.Top()    = aPt.Y();
+                aRect.SetLeft( aPt.X() );
+                aRect.SetTop( aPt.Y() );
                 aPt = OutputToScreenPixel( LogicToPixel( aRect.BottomRight() ));
-                aRect.Right()  = aPt.X();
-                aRect.Bottom() = aPt.Y();
+                aRect.SetRight( aPt.X() );
+                aRect.SetBottom( aPt.Y() );
 
                 if( bBalloon )
                     Help::ShowBalloon( this, rEvt.GetMousePosPixel(), aRect, sText );

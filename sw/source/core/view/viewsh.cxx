@@ -348,11 +348,11 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                         aTmp1 = GetOut()->LogicToPixel( aTmp1 );
                         tools::Rectangle aTmp2( GetOut()->PixelToLogic( aTmp1 ) );
                         if ( aTmp2.Left() > aRect.Left() )
-                            aTmp1.Left() = std::max( 0L, aTmp1.Left() - 1 );
+                            aTmp1.SetLeft( std::max( 0L, aTmp1.Left() - 1 ) );
                         if ( aTmp2.Top() > aRect.Top() )
-                            aTmp1.Top() = std::max( 0L, aTmp1.Top() - 1 );
-                        aTmp1.Right() += 1;
-                        aTmp1.Bottom() += 1;
+                            aTmp1.SetTop( std::max( 0L, aTmp1.Top() - 1 ) );
+                        aTmp1.AdjustRight(1 );
+                        aTmp1.AdjustBottom(1 );
                         aTmp1 = GetOut()->PixelToLogic( aTmp1 );
                         aRect = SwRect( aTmp1 );
 
@@ -376,7 +376,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                             pVout->SetLineColor( pOld->GetLineColor() );
                             pVout->SetFillColor( pOld->GetFillColor() );
                             Point aOrigin( aRect.Pos() );
-                            aOrigin.X() = -aOrigin.X(); aOrigin.Y() = -aOrigin.Y();
+                            aOrigin.setX( -aOrigin.X() ); aOrigin.setY( -aOrigin.Y() );
                             aMapMode.SetOrigin( aOrigin );
                             pVout->SetMapMode( aMapMode );
 
@@ -476,8 +476,8 @@ void SwViewShell::ImplUnlockPaint( bool bVirDev )
             VclPtrInstance<VirtualDevice> pVout( *mpOut );
             pVout->SetMapMode( mpOut->GetMapMode() );
             Size aSize( VisArea().SSize() );
-            aSize.Width() += 20;
-            aSize.Height()+= 20;
+            aSize.AdjustWidth(20 );
+            aSize.AdjustHeight(20 );
             if( pVout->SetOutputSize( aSize ) )
             {
                 GetWin()->EnablePaint( true );
@@ -1158,8 +1158,8 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                 pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
             }
             tools::Rectangle aRect( aPrevArea.SVRect() );
-            aRect.Left()  = nMinLeft;
-            aRect.Right() = nMaxRight;
+            aRect.SetLeft( nMinLeft );
+            aRect.SetRight( nMaxRight );
             if( VisArea().IsOver( aPrevArea ) && !mnLockPaint )
             {
                 bScrolled = true;
@@ -1191,7 +1191,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
     if (!comphelper::LibreOfficeKit::isActive())
     {
         Point aPt( VisArea().Pos() );
-        aPt.X() = -aPt.X(); aPt.Y() = -aPt.Y();
+        aPt.setX( -aPt.X() ); aPt.setY( -aPt.Y() );
         MapMode aMapMode( GetWin()->GetMapMode() );
         aMapMode.SetOrigin( aPt );
         GetWin()->SetMapMode( aMapMode );
@@ -1261,7 +1261,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle
         pVout->SetMapMode( aMapMode );
         Size aSize( maVisArea.Width()+2*aPixSz.Width(), std::abs(lYDiff)+(2*aPixSz.Height()) );
         if ( pRect )
-            aSize.Width() = std::min(aSize.Width(), pRect->GetWidth()+2*aPixSz.Width());
+            aSize.setWidth( std::min(aSize.Width(), pRect->GetWidth()+2*aPixSz.Width()) );
         if ( pVout->SetOutputSize( aSize ) )
         {
             mnLockPaint++;
@@ -1271,14 +1271,14 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle
             aRect.Height( aSize.Height() );
             if ( pRect )
             {
-                aRect.Pos().X() = std::max(aRect.Left(),pRect->Left()-aPixSz.Width());
+                aRect.Pos().setX( std::max(aRect.Left(),pRect->Left()-aPixSz.Width()) );
                 aRect.Right( std::min(aRect.Right()+2*aPixSz.Width(), pRect->Right()+aPixSz.Width()));
             }
             else
-                aRect.SSize().Width() += 2*aPixSz.Width();
-            aRect.Pos().Y() = lYDiff < 0 ? aOldVis.Bottom() - aPixSz.Height()
-                                         : aRect.Top() - aSize.Height() + aPixSz.Height();
-            aRect.Pos().X() = std::max( 0L, aRect.Left()-aPixSz.Width() );
+                aRect.SSize().AdjustWidth(2*aPixSz.Width() );
+            aRect.Pos().setY( lYDiff < 0 ? aOldVis.Bottom() - aPixSz.Height()
+                                         : aRect.Top() - aSize.Height() + aPixSz.Height() );
+            aRect.Pos().setX( std::max( 0L, aRect.Left()-aPixSz.Width() ) );
             aRect.Pos()  = GetWin()->PixelToLogic( GetWin()->LogicToPixel( aRect.Pos()));
             aRect.SSize()= GetWin()->PixelToLogic( GetWin()->LogicToPixel( aRect.SSize()));
             maVisArea = aRect;
@@ -1356,14 +1356,14 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle
                 }
 
                 const SwRect aTmpOldVis = VisArea();
-                maVisArea.Pos().Y() -= lScroll;
+                maVisArea.Pos().AdjustY( -lScroll );
                 maVisArea.Pos() = GetWin()->PixelToLogic( GetWin()->LogicToPixel( VisArea().Pos()));
                 lScroll = aTmpOldVis.Top() - VisArea().Top();
                 if ( pRect )
                 {
                     tools::Rectangle aTmp( aTmpOldVis.SVRect() );
-                    aTmp.Left() = pRect->Left();
-                    aTmp.Right()= pRect->Right();
+                    aTmp.SetLeft( pRect->Left() );
+                    aTmp.SetRight( pRect->Right() );
                     GetWin()->Scroll( 0, lScroll, aTmp, ScrollFlags::Children);
                 }
                 else
@@ -1442,8 +1442,8 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle
     }
 #endif
 
-    maVisArea.Pos().X() -= lXDiff;
-    maVisArea.Pos().Y() -= lYDiff;
+    maVisArea.Pos().AdjustX( -lXDiff );
+    maVisArea.Pos().AdjustY( -lYDiff );
     if ( pRect )
         GetWin()->Scroll( lXDiff, lYDiff, *pRect, ScrollFlags::Children);
     else
@@ -1519,8 +1519,8 @@ void SwViewShell::PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect 
 
             const bool bSidebarRight =
                 static_cast<const SwPageFrame*>(pPage)->SidebarPosition() == sw::sidebarwindows::SidebarPosition::RIGHT;
-            aPageRect.Pos().X() -= bSidebarRight ? 0 : nSidebarWidth;
-            aPageRect.SSize().Width() += nSidebarWidth;
+            aPageRect.Pos().AdjustX( -(bSidebarRight ? 0 : nSidebarWidth) );
+            aPageRect.SSize().AdjustWidth(nSidebarWidth );
 
             if ( aPageRect.IsOver( rRect ) )
                 aRegion -= aPageRect;
@@ -1973,8 +1973,8 @@ sal_Int32 SwViewShell::GetBrowseWidth() const
     if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
     {
         Size aBorder( maBrowseBorder );
-        aBorder.Width() += maBrowseBorder.Width();
-        aBorder.Width() += pPostItMgr->GetSidebarWidth(true) + pPostItMgr->GetSidebarBorderWidth(true);
+        aBorder.AdjustWidth(maBrowseBorder.Width() );
+        aBorder.AdjustWidth(pPostItMgr->GetSidebarWidth(true) + pPostItMgr->GetSidebarBorderWidth(true) );
         return maVisArea.Width() - GetOut()->PixelToLogic(aBorder).Width();
     }
     else
@@ -2502,7 +2502,7 @@ sal_Int32 SwViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const S
 
     // #i40059# Position out of bounds:
     SwRect aRect( rRect );
-    aRect.Pos().X() = std::max( aRect.Left(), GetLayout()->getFrameArea().Left() );
+    aRect.Pos().setX( std::max( aRect.Left(), GetLayout()->getFrameArea().Left() ) );
 
     const SwPageFrame* pPage = GetLayout()->GetPageAtPos( aRect.Center() );
     if ( pPage )
@@ -2510,8 +2510,8 @@ sal_Int32 SwViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const S
         OSL_ENSURE( pPage, "GetPageNumAndSetOffsetForPDF: No page found" );
 
         Point aOffset( pPage->getFrameArea().Pos() );
-        aOffset.X() = -aOffset.X();
-        aOffset.Y() = -aOffset.Y();
+        aOffset.setX( -aOffset.X() );
+        aOffset.setY( -aOffset.Y() );
 
         MapMode aMapMode( rOut.GetMapMode() );
         aMapMode.SetOrigin( aOffset );

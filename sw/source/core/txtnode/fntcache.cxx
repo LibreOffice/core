@@ -235,24 +235,24 @@ static void lcl_calcLinePos( const CalcLinePosData &rData,
     switch ( nDir )
     {
     case 0 :
-        rStart.X() += nKernStart;
-        rEnd.X() = nBlank + rData.rInf.GetPos().X() + nKernEnd;
-        rEnd.Y() = rData.rInf.GetPos().Y();
+        rStart.AdjustX(nKernStart );
+        rEnd.setX( nBlank + rData.rInf.GetPos().X() + nKernEnd );
+        rEnd.setY( rData.rInf.GetPos().Y() );
         break;
     case 900 :
-        rStart.Y() -= nKernStart;
-        rEnd.X() = rData.rInf.GetPos().X();
-        rEnd.Y() = nBlank + rData.rInf.GetPos().Y() - nKernEnd;
+        rStart.AdjustY( -nKernStart );
+        rEnd.setX( rData.rInf.GetPos().X() );
+        rEnd.setY( nBlank + rData.rInf.GetPos().Y() - nKernEnd );
         break;
     case 1800 :
-        rStart.X() -= nKernStart;
-        rEnd.X() = rData.rInf.GetPos().X() - nKernEnd - nBlank;
-        rEnd.Y() = rData.rInf.GetPos().Y();
+        rStart.AdjustX( -nKernStart );
+        rEnd.setX( rData.rInf.GetPos().X() - nKernEnd - nBlank );
+        rEnd.setY( rData.rInf.GetPos().Y() );
         break;
     case 2700 :
-        rStart.Y() += nKernStart;
-        rEnd.X() = rData.rInf.GetPos().X();
-        rEnd.Y() = nBlank + rData.rInf.GetPos().Y() + nKernEnd;
+        rStart.AdjustY(nKernStart );
+        rEnd.setX( rData.rInf.GetPos().X() );
+        rEnd.setY( nBlank + rData.rInf.GetPos().Y() + nKernEnd );
         break;
     }
 
@@ -724,8 +724,8 @@ static void lcl_DrawLineForWrongListData(
                 {
                     rInf.GetOut().SetLineColor( wrongArea->mColor );
 
-                    aStart.Y() +=30;
-                    aEnd.Y() +=30;
+                    aStart.AdjustY(30 );
+                    aEnd.AdjustY(30 );
 
                     LineInfo aLineInfo( LineStyle::Dash );
                     aLineInfo.SetDistance( 40 );
@@ -897,7 +897,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             nPixWidth = rInf.GetOut().PixelToLogic( aTmp ).Width();
         }
 
-        aTextOriginPos.X() += rInf.GetFrame()->IsRightToLeft() ? 0 : nPixWidth;
+        aTextOriginPos.AdjustX(rInf.GetFrame()->IsRightToLeft() ? 0 : nPixWidth );
     }
 
     Color aOldColor( pTmpFont->GetColor() );
@@ -969,7 +969,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             {
             // centre character
             case SwScriptInfo::NONE :
-                aTextOriginPos.X() += ( nAvgWidthPerChar - nCharWidth ) / 2;
+                aTextOriginPos.AdjustX(( nAvgWidthPerChar - nCharWidth ) / 2 );
                 nNextFix = nCharWidth / 2;
                 break;
             case SwScriptInfo::SPECIAL_RIGHT :
@@ -977,7 +977,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 break;
             // punctuation
             default:
-                aTextOriginPos.X() += nAvgWidthPerChar - nCharWidth;
+                aTextOriginPos.AdjustX(nAvgWidthPerChar - nCharWidth );
                 nNextFix = nCharWidth - nHalfWidth;
             }
 
@@ -1132,7 +1132,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                     pKernArray.get() + j, rInf.GetIdx() + j, i - j );
                                 j = i + 1;
                                 pKernArray[i] = pKernArray[i] + nSpaceSum;
-                                aTmpPos.X() = aTextOriginPos.X() + pKernArray[ i ] + nKernSum;
+                                aTmpPos.setX( aTextOriginPos.X() + pKernArray[ i ] + nKernSum );
                             }
                         }
                         if( j < i )
@@ -1336,7 +1336,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         SwTwips nAdd = pKernArray[ i ] + nKernSum;
                         if ( ( ComplexTextLayoutFlags::BiDiStrong | ComplexTextLayoutFlags::BiDiRtl ) == nMode )
                             nAdd *= -1;
-                        aTmpPos.X() = aTextOriginPos.X() + nAdd;
+                        aTmpPos.setX( aTextOriginPos.X() + nAdd );
                     }
                 }
                 if( j < i )
@@ -1661,20 +1661,20 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         switch ( nDir )
                         {
                         case 0 :
-                            aEnd.X() = rInf.GetPos().X() + nKernVal;
-                            aEnd.Y() = rInf.GetPos().Y();
+                            aEnd.setX( rInf.GetPos().X() + nKernVal );
+                            aEnd.setY( rInf.GetPos().Y() );
                             break;
                         case 900 :
-                            aEnd.X() = rInf.GetPos().X();
-                            aEnd.Y() = rInf.GetPos().Y() - nKernVal;
+                            aEnd.setX( rInf.GetPos().X() );
+                            aEnd.setY( rInf.GetPos().Y() - nKernVal );
                             break;
                         case 1800 :
-                            aEnd.X() = rInf.GetPos().X() - nKernVal;
-                            aEnd.Y() = rInf.GetPos().Y();
+                            aEnd.setX( rInf.GetPos().X() - nKernVal );
+                            aEnd.setY( rInf.GetPos().Y() );
                             break;
                         case 2700 :
-                            aEnd.X() = rInf.GetPos().X();
-                            aEnd.Y() = rInf.GetPos().Y() + nKernVal;
+                            aEnd.setX( rInf.GetPos().X() );
+                            aEnd.setY( rInf.GetPos().Y() + nKernVal );
                             break;
                         }
 
@@ -1767,9 +1767,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             aBulletOverlay[ nTmpIdx ] == CH_BULLET )
                         {
                             if (bSwitchH2V)
-                                aTextOriginPos.Y() += nShift ;
+                                aTextOriginPos.AdjustY(nShift ) ;
                             else
-                                aTextOriginPos.X() += nShift ;
+                                aTextOriginPos.AdjustX(nShift ) ;
                             nAdd = nShift ;
                         }
                         for( sal_Int32 i = 1 ; i < nLen ; ++i )
@@ -1827,14 +1827,14 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             else
                 pOutDev = rInf.GetpOut();
 
-            aTextSize.Width() =
-                    pOutDev->GetTextWidth( rInf.GetText(), rInf.GetIdx(), nLn );
+            aTextSize.setWidth(
+                    pOutDev->GetTextWidth( rInf.GetText(), rInf.GetIdx(), nLn ) );
 
             OSL_ENSURE( !rInf.GetShell() ||
                     ( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExternalLeading() ),
                 "Leading values should be already calculated" );
-            aTextSize.Height() = pOutDev->GetTextHeight() +
-                                GetFontLeading( rInf.GetShell(), rInf.GetOut() );
+            aTextSize.setHeight( pOutDev->GetTextHeight() +
+                                GetFontLeading( rInf.GetShell(), rInf.GetOut() ) );
 
             long nAvgWidthPerChar = aTextSize.Width() / nLn;
 
@@ -1842,7 +1842,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                             ( nAvgWidthPerChar - 1 ) / nGridWidth + 1:
                             1;
 
-            aTextSize.Width() = i * nGridWidth * nLn;
+            aTextSize.setWidth( i * nGridWidth * nLn );
             rInf.SetKanaDiff( 0 );
             return aTextSize;
         }
@@ -1864,10 +1864,10 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             }
             else
                 pOutDev = rInf.GetpOut();
-            aTextSize.Width() = pOutDev->GetTextWidth( rInf.GetText(), rInf.GetIdx(), nLn );
-            aTextSize.Height() = pOutDev->GetTextHeight() +
-                                GetFontLeading( rInf.GetShell(), rInf.GetOut() );
-            aTextSize.Width() += nLn * nGridWidthAdd;
+            aTextSize.setWidth( pOutDev->GetTextWidth( rInf.GetText(), rInf.GetIdx(), nLn ) );
+            aTextSize.setHeight( pOutDev->GetTextHeight() +
+                                GetFontLeading( rInf.GetShell(), rInf.GetOut() ) );
+            aTextSize.AdjustWidth(nLn * nGridWidthAdd );
             //if ( rInf.GetKern() && nLn )
             //    aTextSize.Width() += ( nLn ) * long( rInf.GetKern() );
 
@@ -1892,9 +1892,9 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     {
         if( !m_pPrtFont->IsSameInstance( m_pPrinter->GetFont() ) )
             m_pPrinter->SetFont(*m_pPrtFont);
-        aTextSize.Width() = m_pPrinter->GetTextWidth( rInf.GetText(),
-                                                   rInf.GetIdx(), nLn );
-        aTextSize.Height() = m_pPrinter->GetTextHeight();
+        aTextSize.setWidth( m_pPrinter->GetTextWidth( rInf.GetText(),
+                                                   rInf.GetIdx(), nLn ) );
+        aTextSize.setHeight( m_pPrinter->GetTextHeight() );
         long* pKernArray = new long[nLn];
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
         if( !GetScrFont()->IsSameInstance( rInf.GetOut().GetFont() ) )
@@ -1954,7 +1954,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         }
 
         delete[] pKernArray;
-        aTextSize.Width() = nScrPos;
+        aTextSize.setWidth( nScrPos );
     }
     else
     {
@@ -1968,26 +1968,26 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray.get(),
                 rInf.GetIdx(), nLn, rInf.GetKanaComp(),
                 static_cast<sal_uInt16>(m_aFont.GetFontSize().Height()) ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
-            aTextSize.Width() = pKernArray[ nLn - 1 ];
+            aTextSize.setWidth( pKernArray[ nLn - 1 ] );
         }
         else
         {
-            aTextSize.Width() = rInf.GetOut().GetTextWidth( rInf.GetText(),
+            aTextSize.setWidth( rInf.GetOut().GetTextWidth( rInf.GetText(),
                                                            rInf.GetIdx(), nLn,
-                                                           rInf.GetVclCache());
+                                                           rInf.GetVclCache()) );
             rInf.SetKanaDiff( 0 );
         }
 
-        aTextSize.Height() = rInf.GetOut().GetTextHeight();
+        aTextSize.setHeight( rInf.GetOut().GetTextHeight() );
     }
 
     if ( rInf.GetKern() && nLn )
-        aTextSize.Width() += ( nLn - 1 ) * rInf.GetKern();
+        aTextSize.AdjustWidth(( nLn - 1 ) * rInf.GetKern() );
 
     OSL_ENSURE( !rInf.GetShell() ||
             ( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExternalLeading() ),
               "Leading values should be already calculated" );
-    aTextSize.Height() += GetFontLeading( rInf.GetShell(), rInf.GetOut() );
+    aTextSize.AdjustHeight(GetFontLeading( rInf.GetShell(), rInf.GetOut() ) );
     return aTextSize;
 }
 

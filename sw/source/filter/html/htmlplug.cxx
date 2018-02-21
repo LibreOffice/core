@@ -138,11 +138,11 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     if( SVX_CSS1_LTYPE_PERCENTAGE == rCSS1PropInfo.m_eWidthType )
     {
         nPrcWidth = static_cast<sal_uInt8>(rCSS1PropInfo.m_nWidth);
-        aTwipSz.Width() = rTwipDfltSize.Width();
+        aTwipSz.setWidth( rTwipDfltSize.Width() );
     }
     else if( SVX_CSS1_LTYPE_TWIP== rCSS1PropInfo.m_eWidthType )
     {
-        aTwipSz.Width() = rCSS1PropInfo.m_nWidth;
+        aTwipSz.setWidth( rCSS1PropInfo.m_nWidth );
     }
     else if( bPrcWidth && rPixSize.Width() )
     {
@@ -150,26 +150,26 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
         if( nPrcWidth > 100 )
             nPrcWidth = 100;
 
-        aTwipSz.Width() = rTwipDfltSize.Width();
+        aTwipSz.setWidth( rTwipDfltSize.Width() );
     }
     else if( USHRT_MAX==rPixSize.Width() )
     {
-        aTwipSz.Width() = rTwipDfltSize.Width();
+        aTwipSz.setWidth( rTwipDfltSize.Width() );
     }
     if( aTwipSz.Width() < MINFLY )
     {
-        aTwipSz.Width() = MINFLY;
+        aTwipSz.setWidth( MINFLY );
     }
 
     // process height
     if( SVX_CSS1_LTYPE_PERCENTAGE == rCSS1PropInfo.m_eHeightType )
     {
         nPrcHeight = static_cast<sal_uInt8>(rCSS1PropInfo.m_nHeight);
-        aTwipSz.Height() = rTwipDfltSize.Height();
+        aTwipSz.setHeight( rTwipDfltSize.Height() );
     }
     else if( SVX_CSS1_LTYPE_TWIP== rCSS1PropInfo.m_eHeightType )
     {
-        aTwipSz.Height() = rCSS1PropInfo.m_nHeight;
+        aTwipSz.setHeight( rCSS1PropInfo.m_nHeight );
     }
     else if( bPrcHeight && rPixSize.Height() )
     {
@@ -177,15 +177,15 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
         if( nPrcHeight > 100 )
             nPrcHeight = 100;
 
-        aTwipSz.Height() = rTwipDfltSize.Height();
+        aTwipSz.setHeight( rTwipDfltSize.Height() );
     }
     else if( USHRT_MAX==rPixSize.Height() )
     {
-        aTwipSz.Height() = rTwipDfltSize.Height();
+        aTwipSz.setHeight( rTwipDfltSize.Height() );
     }
     if( aTwipSz.Height() < MINFLY )
     {
-        aTwipSz.Height() = MINFLY;
+        aTwipSz.setHeight( MINFLY );
     }
 
     // set size
@@ -339,23 +339,23 @@ void SwHTMLParser::InsertEmbed()
             if( USHRT_MAX==aSize.Width() )
             {
                 bPrcWidth = (rOption.GetString().indexOf('%') != -1);
-                aSize.Width() = static_cast<long>(rOption.GetNumber());
+                aSize.setWidth( static_cast<long>(rOption.GetNumber()) );
             }
             break;
         case HtmlOptionId::HEIGHT:
             if( USHRT_MAX==aSize.Height() )
             {
                 bPrcHeight = (rOption.GetString().indexOf('%') != -1);
-                aSize.Height() = static_cast<long>(rOption.GetNumber());
+                aSize.setHeight( static_cast<long>(rOption.GetNumber()) );
             }
             break;
         case HtmlOptionId::HSPACE:
             if( USHRT_MAX==aSpace.Width() )
-                aSpace.Width() = static_cast<long>(rOption.GetNumber());
+                aSpace.setWidth( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::VSPACE:
             if( USHRT_MAX==aSpace.Height() )
-                aSpace.Height() = static_cast<long>(rOption.GetNumber());
+                aSpace.setHeight( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::UNKNOWN:
             if (rOption.GetTokenString().equalsIgnoreAsciiCase(
@@ -381,14 +381,14 @@ void SwHTMLParser::InsertEmbed()
     if( eVertOri==text::VertOrientation::NONE && eHoriOri==text::HoriOrientation::NONE )
         eVertOri = text::VertOrientation::TOP;
     if( USHRT_MAX==aSpace.Width() )
-        aSpace.Width() = 0;
+        aSpace.setWidth( 0 );
     if( USHRT_MAX==aSpace.Height() )
-        aSpace.Height() = 0;
+        aSpace.setHeight( 0 );
     if( bHidden )
     {
         // Size (0,0) will be changed to (MINFLY, MINFLY) in SetFrameSize()
-        aSize.Width() = 0; aSize.Height() = 0;
-        aSpace.Width() = 0; aSpace.Height() = 0;
+        aSize.setWidth( 0 ); aSize.setHeight( 0 );
+        aSpace.setWidth( 0 ); aSpace.setHeight( 0 );
         bPrcWidth = bPrcHeight = false;
     }
 
@@ -530,11 +530,11 @@ void SwHTMLParser::NewObject()
             break;
         case HtmlOptionId::WIDTH:
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
-            aSize.Width() = static_cast<long>(rOption.GetNumber());
+            aSize.setWidth( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HEIGHT:
             bPrcHeight = (rOption.GetString().indexOf('%') != -1);
-            aSize.Height() = static_cast<long>(rOption.GetNumber());
+            aSize.setHeight( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::ALIGN:
             eVertOri = rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
@@ -546,10 +546,10 @@ void SwHTMLParser::NewObject()
             aName = rOption.GetString();
             break;
         case HtmlOptionId::HSPACE:
-            aSpace.Width() = static_cast<long>(rOption.GetNumber());
+            aSpace.setWidth( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::VSPACE:
-            aSpace.Height() = static_cast<long>(rOption.GetNumber());
+            aSpace.setHeight( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::BORDER:
             break;
@@ -694,17 +694,17 @@ void SwHTMLParser::InsertApplet()
             break;
         case HtmlOptionId::WIDTH:
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
-            aSize.Width() = static_cast<long>(rOption.GetNumber());
+            aSize.setWidth( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HEIGHT:
             bPrcHeight = (rOption.GetString().indexOf('%') != -1);
-            aSize.Height() = static_cast<long>(rOption.GetNumber());
+            aSize.setHeight( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HSPACE:
-            aSpace.Width() = static_cast<long>(rOption.GetNumber());
+            aSpace.setWidth( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::VSPACE:
-            aSpace.Height() = static_cast<long>(rOption.GetNumber());
+            aSpace.setHeight( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::MAYSCRIPT:
             bMayScript = true;
@@ -845,17 +845,17 @@ void SwHTMLParser::InsertFloatingFrame()
             break;
         case HtmlOptionId::WIDTH:
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
-            aSize.Width() = static_cast<long>(rOption.GetNumber());
+            aSize.setWidth( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HEIGHT:
             bPrcHeight = (rOption.GetString().indexOf('%') != -1);
-            aSize.Height() = static_cast<long>(rOption.GetNumber());
+            aSize.setHeight( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HSPACE:
-            aSpace.Width() = static_cast<long>(rOption.GetNumber());
+            aSpace.setWidth( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::VSPACE:
-            aSpace.Height() = static_cast<long>(rOption.GetNumber());
+            aSpace.setHeight( static_cast<long>(rOption.GetNumber()) );
             break;
         default: break;
         }

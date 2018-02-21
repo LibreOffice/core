@@ -218,16 +218,16 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
 
     Size aTwipSz( pTextObj->GetLogicRect().GetSize() );
     if( pTextObj->IsAutoGrowWidth() )
-        aTwipSz.Width() = 0;
+        aTwipSz.setWidth( 0 );
     // The height is at MS a minimum height, therefore we output the minimum
     // height, if they exists. Because a minimum height MINFLY is coming with
     // high probability from import, we aren't outputting it. You can't
     // do anything wrong, because every font is higher.
     if( pTextObj->IsAutoGrowHeight() )
     {
-        aTwipSz.Height() = pTextObj->GetMinTextFrameHeight();
+        aTwipSz.setHeight( pTextObj->GetMinTextFrameHeight() );
         if( MINFLY==aTwipSz.Height() )
-            aTwipSz.Height() = 0;
+            aTwipSz.setHeight( 0 );
     }
 
     if( (aTwipSz.Width() || aTwipSz.Height()) &&
@@ -237,9 +237,9 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
             Application::GetDefaultDevice()->LogicToPixel( aTwipSz,
                                                 MapMode(MapUnit::MapTwip) );
         if( !aPixelSz.Width() && aTwipSz.Width() )
-            aPixelSz.Width() = 1;
+            aPixelSz.setWidth( 1 );
         if( !aPixelSz.Height() && aTwipSz.Height() )
-            aPixelSz.Height() = 1;
+            aPixelSz.setHeight( 1 );
 
         if( aPixelSz.Width() )
         {

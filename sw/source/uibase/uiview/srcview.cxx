@@ -161,7 +161,7 @@ static void lcl_PrintHeader( vcl::RenderContext &rOutDev, sal_Int32 nPages, sal_
         aPageStr += " ";
         aPageStr += OUString::number( nCurPage );
         aPageStr += "]";
-        aPos.X() += rOutDev.GetTextWidth( rTitle );
+        aPos.AdjustX(rOutDev.GetTextWidth( rTitle ) );
         rOutDev.DrawText( aPos, aPageStr );
     }
 
@@ -696,8 +696,8 @@ sal_Int32 SwSrcView::PrintSource(
     const long nParaSpace = 10;
 
     Size aPaperSz = pOutDev->GetOutputSize();
-    aPaperSz.Width() -= (LMARGPRN + RMARGPRN);
-    aPaperSz.Height() -= (TMARGPRN + BMARGPRN);
+    aPaperSz.AdjustWidth( -(LMARGPRN + RMARGPRN) );
+    aPaperSz.AdjustHeight( -(TMARGPRN + BMARGPRN) );
 
     // nLinepPage is not true, if lines have to be wrapped...
     const long nLinespPage = nLineHeight ? aPaperSz.Height() / nLineHeight : 1;
@@ -720,7 +720,7 @@ sal_Int32 SwSrcView::PrintSource(
         const sal_Int32 nLines = (nLineLen+nCharspLine-1) / nCharspLine;
         for ( sal_Int32 nLine = 0; nLine < nLines; ++nLine )
         {
-            aPos.Y() += nLineHeight;
+            aPos.AdjustY(nLineHeight );
             if ( aPos.Y() > ( aPaperSz.Height() + TMARGPRN - nLineHeight/2 ) )
             {
                 ++nCurPage;
@@ -735,7 +735,7 @@ sal_Int32 SwSrcView::PrintSource(
                 pOutDev->DrawText( aPos, aLine.copy(nStart, nLen) );
             }
         }
-        aPos.Y() += nParaSpace;
+        aPos.AdjustY(nParaSpace );
     }
 
     pOutDev->Pop();

@@ -310,21 +310,21 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
             Size aCalcSz( aSz );
             if ( !aSz.Height() && aSz.Width() )
                 // Calculate the right height
-                aCalcSz.Height() = rGrfSz.Height() *
-                        aSz.Width() / rGrfSz.Width();
+                aCalcSz.setHeight( rGrfSz.Height() *
+                        aSz.Width() / rGrfSz.Width() );
             else if ( !aSz.Width() && aSz.Height() )
                 // Calculate the right width
-                aCalcSz.Width() = rGrfSz.Width() *
-                        aSz.Height() / rGrfSz.Height();
+                aCalcSz.setWidth( rGrfSz.Width() *
+                        aSz.Height() / rGrfSz.Height() );
             else
                 // Take over height and width
                 aCalcSz = rGrfSz;
 
             const SvxBoxItem     &rBox = pFormat->GetBox();
-            aCalcSz.Width() += rBox.CalcLineSpace(SvxBoxItemLine::LEFT) +
-                               rBox.CalcLineSpace(SvxBoxItemLine::RIGHT);
-            aCalcSz.Height()+= rBox.CalcLineSpace(SvxBoxItemLine::TOP) +
-                               rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM);
+            aCalcSz.AdjustWidth(rBox.CalcLineSpace(SvxBoxItemLine::LEFT) +
+                               rBox.CalcLineSpace(SvxBoxItemLine::RIGHT) );
+            aCalcSz.AdjustHeight(rBox.CalcLineSpace(SvxBoxItemLine::TOP) +
+                               rBox.CalcLineSpace(SvxBoxItemLine::BOTTOM) );
             const SwFormatFrameSize& rOldAttr = pFormat->GetFrameSize();
             if( rOldAttr.GetSize() != aCalcSz )
             {

@@ -332,12 +332,12 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
             case HtmlOptionId::HSPACE:
                 // first only save as pixel value!
-                aSpace.Height() = rOption.GetNumber();
+                aSpace.setHeight( rOption.GetNumber() );
                 break;
 
             case HtmlOptionId::VSPACE:
                 // first only save as pixel value!
-                aSpace.Width() = rOption.GetNumber();
+                aSpace.setWidth( rOption.GetNumber() );
                 break;
 
             case HtmlOptionId::ALIGN:
@@ -467,12 +467,12 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
     if( SVX_CSS1_LTYPE_TWIP== aPropInfo.m_eWidthType )
     {
-        aTwipSz.Width() = aPropInfo.m_nWidth;
+        aTwipSz.setWidth( aPropInfo.m_nWidth );
         nWidth = 1; // != 0;
         bPrcWidth = false;
     }
     if( SVX_CSS1_LTYPE_TWIP== aPropInfo.m_eHeightType )
-        aTwipSz.Height() = aPropInfo.m_nHeight;
+        aTwipSz.setHeight( aPropInfo.m_nHeight );
 
     m_bFixMarqueeWidth = false;
     if( !nWidth || bPrcWidth )
@@ -494,25 +494,25 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                 nWidth = 100;
                 bPrcWidth = true;
             }
-            aTwipSz.Width() = MINLAY;
+            aTwipSz.setWidth( MINLAY );
         }
         else
         {
             long nBrowseWidth = GetCurrentBrowseWidth();
-            aTwipSz.Width() = !nWidth ? nBrowseWidth
-                                      : (nWidth*nBrowseWidth) / 100;
+            aTwipSz.setWidth( !nWidth ? nBrowseWidth
+                                      : (nWidth*nBrowseWidth) / 100 );
         }
     }
 
     // The height is only minimum height
     if( aTwipSz.Height() < MINFLY )
-        aTwipSz.Height() = MINFLY;
+        aTwipSz.setHeight( MINFLY );
     aItemSet.Put( makeSdrTextMinFrameHeightItem( aTwipSz.Height() ) );
 
     m_pMarquee->SetMergedItemSetAndBroadcast(aItemSet);
 
     if( aTwipSz.Width() < MINFLY )
-        aTwipSz.Width() = MINFLY;
+        aTwipSz.setWidth( MINFLY );
     m_pMarquee->SetLogicRect( tools::Rectangle( 0, 0, aTwipSz.Width(), aTwipSz.Height() ) );
 
     // and insert the object into the document

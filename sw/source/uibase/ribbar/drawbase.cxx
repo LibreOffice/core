@@ -598,10 +598,10 @@ void SwDrawBase::CreateDefaultObject()
 {
     Point aStartPos = GetDefaultCenterPos();
     Point aEndPos(aStartPos);
-    aStartPos.X() -= 8 * MM50;
-    aStartPos.Y() -= 4 * MM50;
-    aEndPos.X() += 8 * MM50;
-    aEndPos.Y() += 4 * MM50;
+    aStartPos.AdjustX( -(8 * MM50) );
+    aStartPos.AdjustY( -(4 * MM50) );
+    aEndPos.AdjustX(8 * MM50 );
+    aEndPos.AdjustY(4 * MM50 );
     tools::Rectangle aRect(aStartPos, aEndPos);
     m_pSh->CreateDefaultShape( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), aRect, m_nSlotId);
 }
@@ -612,9 +612,9 @@ Point  SwDrawBase::GetDefaultCenterPos()
     const SwRect& rVisArea = m_pSh->VisArea();
     Point aStartPos = rVisArea.Center();
     if(rVisArea.Width() > aDocSz.Width())
-        aStartPos.X() = aDocSz.Width() / 2 + rVisArea.Left();
+        aStartPos.setX( aDocSz.Width() / 2 + rVisArea.Left() );
     if(rVisArea.Height() > aDocSz.Height())
-        aStartPos.Y() = aDocSz.Height() / 2 + rVisArea.Top();
+        aStartPos.setY( aDocSz.Height() / 2 + rVisArea.Top() );
     return aStartPos;
 }
 

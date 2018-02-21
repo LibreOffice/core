@@ -1441,13 +1441,13 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
                     const SwTwips lBorder = IsDocumentBorder() ? DOCUMENTBORDER : 2 * DOCUMENTBORDER;
                     SwTwips nEditWidth = GetEditWin().GetOutputSize().Width();
                     if(nEditWidth > (m_aDocSz.Width() + lBorder ))
-                        aTopLeft.X() = ( m_aDocSz.Width() + lBorder - nEditWidth  ) / 2;
+                        aTopLeft.setX( ( m_aDocSz.Width() + lBorder - nEditWidth  ) / 2 );
                     else
                     {
                         //check if the values are possible
                         long nXMax = m_pHScrollbar->GetRangeMax() - m_pHScrollbar->GetVisibleSize();
                         if( aTopLeft.X() > nXMax )
-                            aTopLeft.X() = nXMax < 0 ? 0 : nXMax;
+                            aTopLeft.setX( nXMax < 0 ? 0 : nXMax );
                     }
                     SetVisArea( aTopLeft );
                 }

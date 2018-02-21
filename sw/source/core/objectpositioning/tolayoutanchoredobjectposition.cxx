@@ -106,15 +106,15 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         if( aRectFnSet.IsVert() )
         {
             if ( aRectFnSet.IsVertL2R() )
-                   aRelPos.X() = nRelPosY;
+                   aRelPos.setX( nRelPosY );
             else
-                   aRelPos.X() = -nRelPosY - aObjBoundRect.Width();
-            maOffsetToFrameAnchorPos.X() = nVertOffsetToFrameAnchorPos;
+                   aRelPos.setX( -nRelPosY - aObjBoundRect.Width() );
+            maOffsetToFrameAnchorPos.setX( nVertOffsetToFrameAnchorPos );
         }
         else
         {
-            aRelPos.Y() = nRelPosY;
-            maOffsetToFrameAnchorPos.Y() = nVertOffsetToFrameAnchorPos;
+            aRelPos.setY( nRelPosY );
+            maOffsetToFrameAnchorPos.setY( nVertOffsetToFrameAnchorPos );
         }
 
         // if in online-layout the bottom of to-page anchored object is beyond
@@ -196,13 +196,13 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         if( aRectFnSet.IsVert() || aRectFnSet.IsVertL2R() )
         {
 
-            aRelPos.Y() = nRelPosX;
-            maOffsetToFrameAnchorPos.Y() = nOffset;
+            aRelPos.setY( nRelPosX );
+            maOffsetToFrameAnchorPos.setY( nOffset );
         }
         else
         {
-            aRelPos.X() = nRelPosX;
-            maOffsetToFrameAnchorPos.X() = nOffset;
+            aRelPos.setX( nRelPosX );
+            maOffsetToFrameAnchorPos.setX( nOffset );
         }
 
         // keep the calculated relative horizontal position - needed for filters

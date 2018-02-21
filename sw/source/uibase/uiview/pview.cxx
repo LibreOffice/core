@@ -1375,17 +1375,17 @@ void SwPagePreview::SetVisArea( const tools::Rectangle &rRect )
 
     if(aLR.Top() < 0)
     {
-        aLR.Bottom() += std::abs(aLR.Top());
-        aLR.Top() = 0;
+        aLR.AdjustBottom(std::abs(aLR.Top()) );
+        aLR.SetTop( 0 );
     }
 
     if(aLR.Left() < 0)
     {
-        aLR.Right() += std::abs(aLR.Left());
-        aLR.Left() = 0;
+        aLR.AdjustRight(std::abs(aLR.Left()) );
+        aLR.SetLeft( 0 );
     }
-    if(aLR.Right() < 0) aLR.Right() = 0;
-    if(aLR.Bottom() < 0) aLR.Bottom() = 0;
+    if(aLR.Right() < 0) aLR.SetRight( 0 );
+    if(aLR.Bottom() < 0) aLR.SetBottom( 0 );
     if(aLR == m_aVisArea ||
         // Ignore empty rectangle
         ( 0 == aLR.Bottom() - aLR.Top() && 0 == aLR.Right() - aLR.Left() ) )
@@ -1429,12 +1429,12 @@ IMPL_LINK( SwPagePreview, ScrollHdl, ScrollBar *, p, void )
         sStateStr += OUString::number( nThmbPos );
         Point aPos = pScrollbar->GetParent()->OutputToScreenPixel(
                                         pScrollbar->GetPosPixel());
-        aPos.Y() = pScrollbar->OutputToScreenPixel(pScrollbar->GetPointerPosPixel()).Y();
+        aPos.setY( pScrollbar->OutputToScreenPixel(pScrollbar->GetPointerPosPixel()).Y() );
         tools::Rectangle aRect;
-        aRect.Left()    = aPos.X() -8;
-        aRect.Right()   = aRect.Left();
-        aRect.Top()     = aPos.Y();
-        aRect.Bottom()  = aRect.Top();
+        aRect.SetLeft( aPos.X() -8 );
+        aRect.SetRight( aRect.Left() );
+        aRect.SetTop( aPos.Y() );
+        aRect.SetBottom( aRect.Top() );
 
         Help::ShowQuickHelp(pScrollbar, aRect, sStateStr,
                 QuickHelpFlags::Right|QuickHelpFlags::VCenter);

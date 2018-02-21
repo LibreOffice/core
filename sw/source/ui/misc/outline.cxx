@@ -892,9 +892,9 @@ static long lcl_DrawGraphic(vcl::RenderContext* pVDev, const SwNumFormat &rForma
         if (pGraphic)
         {
             Size aGSize( rFormat.GetGraphicSize());
-            aGSize.Width() /= nDivision;
+            aGSize.setWidth( aGSize.Width() / nDivision );
             nRet = aGSize.Width();
-            aGSize.Height() /= nDivision;
+            aGSize.setHeight( aGSize.Height() / nDivision );
             pGraphic->Draw(pVDev, Point(nXStart, nYStart), pVDev->PixelToLogic(aGSize));
         }
     }

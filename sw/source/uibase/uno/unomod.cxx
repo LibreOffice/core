@@ -598,7 +598,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             if(!(rValue >>= nTmp)  ||  nTmp < 10)
                 throw IllegalArgumentException();
             Size aSize( mpViewOption->GetSnapSize() );
-            aSize.Width() = convertMm100ToTwip( nTmp );
+            aSize.setWidth( convertMm100ToTwip( nTmp ) );
             mpViewOption->SetSnapSize( aSize );
         }
         break;
@@ -608,7 +608,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             if(!(rValue >>= nTmp)  ||  nTmp < 10)
                 throw IllegalArgumentException();
             Size aSize( mpViewOption->GetSnapSize() );
-            aSize.Height() = convertMm100ToTwip( nTmp );
+            aSize.setHeight( convertMm100ToTwip( nTmp ) );
             mpViewOption->SetSnapSize( aSize );
         }
         break;

@@ -437,8 +437,8 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         if( RES_DRAWFRMFMT == pFrameFormat->Which() ) {
             // get the old cached value
             const SwFormatFrameSize& rOldSize = m_pOldSet->Get( RES_FRM_SIZE );
-            aDrawSavePt.X() = rOldSize.GetWidth();
-            aDrawSavePt.Y() = rOldSize.GetHeight();
+            aDrawSavePt.setX( rOldSize.GetWidth() );
+            aDrawSavePt.setY( rOldSize.GetHeight() );
             m_pOldSet->ClearItem( RES_FRM_SIZE );
 
             // write the current value into cache

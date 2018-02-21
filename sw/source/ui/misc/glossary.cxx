@@ -865,10 +865,10 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         {
             aPos = GetEntryPosition( pEntry );
              Size aSize(pItem->GetSize( this, pEntry ));
-            aPos.X() = GetTabPos( pEntry, pTab );
+            aPos.setX( GetTabPos( pEntry, pTab ) );
 
             if((aPos.X() + aSize.Width()) > GetSizePixel().Width())
-                aSize.Width() = GetSizePixel().Width() - aPos.X();
+                aSize.setWidth( GetSizePixel().Width() - aPos.X() );
             aPos = OutputToScreenPixel(aPos);
              tools::Rectangle aItemRect( aPos, aSize );
             OUString sMsg;

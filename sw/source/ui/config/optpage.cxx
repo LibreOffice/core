@@ -1686,8 +1686,8 @@ void SwMarkPreview::PaintPage(vcl::RenderContext& rRenderContext, const tools::R
 
     tools::Rectangle aTextLine = rRect;
     aTextLine.SetSize(Size(aTextLine.GetWidth(), 2));
-    aTextLine.Left()    += 4;
-    aTextLine.Right()   -= 4;
+    aTextLine.AdjustLeft(4 );
+    aTextLine.AdjustRight( -4 );
     aTextLine.Move(0, 4);
 
     const long nStep = aTextLine.GetHeight() + 2;

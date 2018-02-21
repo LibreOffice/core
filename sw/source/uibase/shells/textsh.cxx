@@ -394,8 +394,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             Size aWinSize = rEdtWin.GetSizePixel();
             Point aStartPos(aWinSize.Width()/2, aWinSize.Height() / 2);
             aStartPos = rEdtWin.PixelToLogic(aStartPos);
-            aStartPos.X() -= 8 * MM50;
-            aStartPos.Y() -= 4 * MM50;
+            aStartPos.AdjustX( -(8 * MM50) );
+            aStartPos.AdjustY( -(4 * MM50) );
             Size aSize(16 * MM50, 8 * MM50);
             GetShell().LockPaint();
             GetShell().StartAllAction();
@@ -434,7 +434,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         if(pArgs)
         {
             Size aSize(aMgr.GetSize());
-            aSize.Width() = GetShell().GetAnyCurRect(CurRectType::PagePrt).Width();
+            aSize.setWidth( GetShell().GetAnyCurRect(CurRectType::PagePrt).Width() );
             Point aPos = aMgr.GetPos();
             RndStdIds eAnchor = RndStdIds::FLY_AT_PARA;
             if(pArgs->GetItemState(nSlot, false, &pItem) == SfxItemState::SET)

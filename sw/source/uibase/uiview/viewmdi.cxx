@@ -97,7 +97,7 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
         //mod #i6193# added sidebar width
         SwPostItMgr* pPostItMgr = GetPostItMgr();
         if (pPostItMgr->HasNotes() && pPostItMgr->ShowNotes())
-            aPageSize.Width() += pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth();
+            aPageSize.AdjustWidth(pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth() );
 
         const MapMode aTmpMap( MapUnit::MapTwip );
         const Size aWindowSize( GetEditWin().PixelToLogic( rEditSize, aTmpMap ) );
@@ -105,13 +105,13 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
         if( UseOnPage::Mirror == rDesc.GetUseOn() )    // mirrored pages
         {
             const SvxLRSpaceItem &rLeftLRSpace = rDesc.GetLeft().GetLRSpace();
-            aPageSize.Width() += std::abs( rLeftLRSpace.GetLeft() - rLRSpace.GetLeft() );
+            aPageSize.AdjustWidth(std::abs( rLeftLRSpace.GetLeft() - rLRSpace.GetLeft() ) );
         }
 
         if( SvxZoomType::OPTIMAL == eZoomType )
         {
             if (!pPostItMgr->HasNotes() || !pPostItMgr->ShowNotes())
-                aPageSize.Width() -= ( rLRSpace.GetLeft() + rLRSpace.GetRight() + nLeftOfst * 2 );
+                aPageSize.AdjustWidth( -( rLRSpace.GetLeft() + rLRSpace.GetRight() + nLeftOfst * 2 ) );
             lLeftMargin = rLRSpace.GetLeft() + DOCUMENTBORDER + nLeftOfst;
             nFac = aWindowSize.Width() * 100 / aPageSize.Width();
         }
@@ -120,7 +120,7 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
             const long nOf = DOCUMENTBORDER * 2;
             long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();
             nTmpWidth += nOf;
-            aPageSize.Height() += nOf;
+            aPageSize.AdjustHeight(nOf );
             nFac = aWindowSize.Width() * 100 / nTmpWidth;
 
             if ( SvxZoomType::WHOLEPAGE == eZoomType )
@@ -163,18 +163,18 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
             Point aPos;
 
             if ( eZoomType == SvxZoomType::WHOLEPAGE )
-                aPos.Y() = m_pWrtShell->GetAnyCurRect(CurRectType::Page).Top() - DOCUMENTBORDER;
+                aPos.setY( m_pWrtShell->GetAnyCurRect(CurRectType::Page).Top() - DOCUMENTBORDER );
             else
             {
                 // Make sure that the cursor is in the visible range, so that
                 // the scrolling will be performed only once.
-                aPos.X() = lLeftMargin;
+                aPos.setX( lLeftMargin );
                 const SwRect &rCharRect = m_pWrtShell->GetCharRect();
                 if ( rCharRect.Top() > GetVisArea().Bottom() ||
                     rCharRect.Bottom() < aPos.Y() )
-                    aPos.Y() = rCharRect.Top() - rCharRect.Height();
+                    aPos.setY( rCharRect.Top() - rCharRect.Height() );
                 else
-                    aPos.Y() = GetVisArea().Top();
+                    aPos.setY( GetVisArea().Top() );
             }
             SetVisArea( aPos );
         }

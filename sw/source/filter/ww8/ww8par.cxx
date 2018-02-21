@@ -697,8 +697,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 if (nTextRotationAngle == 9000)
                 {
                     long nWidth = rTextRect.GetWidth();
-                    rTextRect.Right() = rTextRect.Left() + rTextRect.GetHeight();
-                    rTextRect.Bottom() = rTextRect.Top() + nWidth;
+                    rTextRect.SetRight( rTextRect.Left() + rTextRect.GetHeight() );
+                    rTextRect.SetBottom( rTextRect.Top() + nWidth );
 
                     sal_Int32 nOldTextLeft = nTextLeft;
                     sal_Int32 nOldTextRight = nTextRight;
@@ -713,8 +713,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 else if (nTextRotationAngle == 27000)
                 {
                     long nWidth = rTextRect.GetWidth();
-                    rTextRect.Right() = rTextRect.Left() + rTextRect.GetHeight();
-                    rTextRect.Bottom() = rTextRect.Top() + nWidth;
+                    rTextRect.SetRight( rTextRect.Left() + rTextRect.GetHeight() );
+                    rTextRect.SetBottom( rTextRect.Top() + nWidth );
 
                     sal_Int32 nOldTextLeft = nTextLeft;
                     sal_Int32 nOldTextRight = nTextRight;
@@ -737,8 +737,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             // The vertical paragraph justification are contained within the
             // BoundRect so calculate it here
             tools::Rectangle aNewRect(rTextRect);
-            aNewRect.Bottom() -= nTextTop + nTextBottom;
-            aNewRect.Right() -= nTextLeft + nTextRight;
+            aNewRect.AdjustBottom( -(nTextTop + nTextBottom) );
+            aNewRect.AdjustRight( -(nTextLeft + nTextRight) );
 
             // Only if it's a simple Textbox, Writer can replace the Object
             // with a Frame, else
@@ -872,8 +872,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                             rTextRect.GetWidth() : rTextRect.GetHeight();
                         nMinWH /= 2;
                         Point aPivot(rTextRect.TopLeft());
-                        aPivot.X() += nMinWH;
-                        aPivot.Y() += nMinWH;
+                        aPivot.AdjustX(nMinWH );
+                        aPivot.AdjustY(nMinWH );
                         double a = nTextRotationAngle * nPi180;
                         pObj->NbcRotate(aPivot, nTextRotationAngle, sin(a), cos(a));
                     }
@@ -988,8 +988,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                         nX = nSmallX;
                         nY = nSmallY;
                     }
-                    (*(pImpRec->pWrapPolygon))[i].X() = nX;
-                    (*(pImpRec->pWrapPolygon))[i].Y() = nY;
+                    (*(pImpRec->pWrapPolygon))[i].setX( nX );
+                    (*(pImpRec->pWrapPolygon))[i].setY( nY );
                 }
             }
         }

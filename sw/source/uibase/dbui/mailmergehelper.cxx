@@ -317,13 +317,13 @@ void SwAddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     sal_uInt16 nStartRow = 0;
     if(aVScrollBar->IsVisible())
     {
-        aSize.Width() -= aVScrollBar->GetSizePixel().Width();
+        aSize.AdjustWidth( -(aVScrollBar->GetSizePixel().Width()) );
         nStartRow = static_cast<sal_uInt16>(aVScrollBar->GetThumbPos());
     }
     Size aPartSize(aSize.Width() / pImpl->nColumns,
                    aSize.Height() / pImpl->nRows);
-    aPartSize.Width() -= 2;
-    aPartSize.Height() -= 2;
+    aPartSize.AdjustWidth( -2 );
+    aPartSize.AdjustHeight( -2 );
 
     sal_uInt16 nAddress = nStartRow * pImpl->nColumns;
     const sal_uInt16 nNumAddresses = static_cast<sal_uInt16>(pImpl->aAddresses.size());
@@ -444,7 +444,7 @@ void SwAddressPreview::DrawText_Impl(vcl::RenderContext& rRenderContext, const O
     do
     {
         rRenderContext.DrawText(aStart, rAddress.getToken(0, '\n', nPos));
-        aStart.Y() += nHeight;
+        aStart.AdjustY(nHeight );
     }
     while (nPos >= 0);
 }

@@ -55,22 +55,22 @@ void DrawArrow(vcl::RenderContext& rRenderContext, const Point &rP1, const Point
         if (rP1.Y() == rP2.Y())
         {
             // Horizontal
-            aArr[0].X() = rP2.X() - 5;
-            aArr[0].Y() = rP2.Y() - 2;
-            aArr[1].X() = rP2.X();
-            aArr[1].Y() = rP2.Y();
-            aArr[2].X() = rP2.X() - 5;
-            aArr[2].Y() = rP2.Y() + 2;
+            aArr[0].setX( rP2.X() - 5 );
+            aArr[0].setY( rP2.Y() - 2 );
+            aArr[1].setX( rP2.X() );
+            aArr[1].setY( rP2.Y() );
+            aArr[2].setX( rP2.X() - 5 );
+            aArr[2].setY( rP2.Y() + 2 );
         }
         else
         {
             // Vertical
-            aArr[0].X() = rP2.X() - 2;
-            aArr[0].Y() = rP2.Y() - 5;
-            aArr[1].X() = rP2.X() + 2;
-            aArr[1].Y() = rP2.Y() - 5;
-            aArr[2].X() = rP2.X();
-            aArr[2].Y() = rP2.Y();
+            aArr[0].setX( rP2.X() - 2 );
+            aArr[0].setY( rP2.Y() - 5 );
+            aArr[1].setX( rP2.X() + 2 );
+            aArr[1].setY( rP2.Y() - 5 );
+            aArr[2].setX( rP2.X() );
+            aArr[2].setY( rP2.Y() );
         }
 
         const Color& rFieldTextColor = SwViewOption::GetFontColor();

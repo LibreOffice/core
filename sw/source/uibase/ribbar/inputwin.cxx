@@ -113,19 +113,19 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher const * pDispat
     tools::Rectangle aItemRect( GetItemRect(FN_FORMULA_CALC) );
     long nMaxHeight = std::max(aEditSize.Height(), aItemRect.GetHeight());
     if( nMaxHeight+2 > aSizeTbx.Height() )
-        aSizeTbx.Height() = nMaxHeight+2;
+        aSizeTbx.setHeight( nMaxHeight+2 );
     Size aSize = GetSizePixel();
-    aSize.Height() = aSizeTbx.Height();
+    aSize.setHeight( aSizeTbx.Height() );
     SetSizePixel( aSize );
 
     // align edit and item vcentered
     Size    aPosSize = aPos->GetSizePixel();
-    aPosSize.Height()  = nMaxHeight;
-    aEditSize.Height() = nMaxHeight;
+    aPosSize.setHeight( nMaxHeight );
+    aEditSize.setHeight( nMaxHeight );
     Point aPosPos  = aPos->GetPosPixel();
     Point aEditPos = aEdit->GetPosPixel();
-    aPosPos.Y()    = (aSize.Height() - nMaxHeight)/2 + 1;
-    aEditPos.Y()   = (aSize.Height() - nMaxHeight)/2 + 1;
+    aPosPos.setY( (aSize.Height() - nMaxHeight)/2 + 1 );
+    aEditPos.setY( (aSize.Height() - nMaxHeight)/2 + 1 );
     aPos->SetPosSizePixel( aPosPos, aPosSize );
     aEdit->SetPosSizePixel( aEditPos, aEditSize );
 }
@@ -179,7 +179,7 @@ void SwInputWindow::Resize()
     long    nLeft       = aEdit->GetPosPixel().X();
     Size    aEditSize   = aEdit->GetSizePixel();
 
-    aEditSize.Width() = std::max( static_cast<long>(nWidth - nLeft - 5), long(0) );
+    aEditSize.setWidth( std::max( static_cast<long>(nWidth - nLeft - 5), long(0) ) );
     aEdit->SetSizePixel( aEditSize );
     aEdit->Invalidate();
 }

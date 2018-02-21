@@ -934,13 +934,13 @@ SwTwips SwAnchoredObjectPosition::AdjustHoriRelPosForDrawAside(
     Point aTmpPos = aRectFnSet.GetPos(rAnchorTextFrame.getFrameArea());
     if( aRectFnSet.IsVert() )
     {
-        aTmpPos.X() -= _nRelPosY + aObjBoundRect.Width();
-        aTmpPos.Y() += nAdjustedRelPosX;
+        aTmpPos.AdjustX( -(_nRelPosY + aObjBoundRect.Width()) );
+        aTmpPos.AdjustY(nAdjustedRelPosX );
     }
     else
     {
-        aTmpPos.X() += nAdjustedRelPosX;
-        aTmpPos.Y() += _nRelPosY;
+        aTmpPos.AdjustX(nAdjustedRelPosX );
+        aTmpPos.AdjustY(_nRelPosY );
     }
     SwRect aTmpObjRect( aTmpPos, aObjBoundRect.SSize() );
 
@@ -987,8 +987,8 @@ SwTwips SwAnchoredObjectPosition::AdjustHoriRelPosForDrawAside(
                             nAdjustedRelPosX = nTmp;
                         }
                     }
-                    aTmpObjRect.Pos().Y() = rAnchorTextFrame.getFrameArea().Top() +
-                                            nAdjustedRelPosX;
+                    aTmpObjRect.Pos().setY( rAnchorTextFrame.getFrameArea().Top() +
+                                            nAdjustedRelPosX );
                 }
             }
             else
@@ -1023,8 +1023,8 @@ SwTwips SwAnchoredObjectPosition::AdjustHoriRelPosForDrawAside(
                             nAdjustedRelPosX = nTmp;
                         }
                     }
-                    aTmpObjRect.Pos().X() = rAnchorTextFrame.getFrameArea().Left() +
-                                            nAdjustedRelPosX;
+                    aTmpObjRect.Pos().setX( rAnchorTextFrame.getFrameArea().Left() +
+                                            nAdjustedRelPosX );
                 }
             } // end of <if (bVert)>
         } // end of <if DrawAsideFly(..)>

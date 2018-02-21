@@ -914,14 +914,14 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
             else
                 nOffset = nOffset - nMinDist;
         }
-        aPos.X() += nOffset;
+        aPos.AdjustX(nOffset );
     }
 
     if( m_bReplace )
     {
         const long nTmpH = GetPortion() ? GetPortion()->GetAscent() : 120;
         aSize = Size( nTmpH, nTmpH );
-        aPos.Y() = rInf.Y() - nTmpH;
+        aPos.setY( rInf.Y() - nTmpH );
     }
     SwRect aTmp( aPos, aSize );
 
@@ -1119,8 +1119,8 @@ void SwCombinedPortion::Paint( const SwTextPaintInfo &rInf ) const
     for( sal_Int32 i = 0 ; i < nCount; ++i )
     {
         if( i == nTop ) // change the row
-            aOutPos.Y() = aOldPos.Y() + nLowPos;    // Y of the second row
-        aOutPos.X() = aOldPos.X() + aPos[i];        // X position
+            aOutPos.setY( aOldPos.Y() + nLowPos );    // Y of the second row
+        aOutPos.setX( aOldPos.X() + aPos[i] );        // X position
         const SwFontScript nAct = aScrType[i];        // script type
         aTmpFont.SetActual( nAct );
 
@@ -1131,7 +1131,7 @@ void SwCombinedPortion::Paint( const SwTextPaintInfo &rInf ) const
             Size aTmpSz = aTmpFont.GetSize( nAct );
             if( aTmpSz.Width() != aWidth[ nAct ] )
             {
-                aTmpSz.Width() = aWidth[ nAct ];
+                aTmpSz.setWidth( aWidth[ nAct ] );
                 aTmpFont.SetSize( aTmpSz, nAct );
             }
         }
@@ -1208,7 +1208,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
             if( aWidth[ nScrp ] )
             {
                 Size aFontSize( aTmpFont.GetSize( nScrp ) );
-                aFontSize.Width() = aWidth[ nScrp ];
+                aFontSize.setWidth( aWidth[ nScrp ] );
                 aTmpFont.SetSize( aFontSize, nScrp );
             }
 

@@ -229,7 +229,7 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
             m_pScrollBar->DoScroll(0);
         }
         Size aWinOutputSize(m_aWinOutputSize);
-        aWinOutputSize.Height() = nContentHeight;
+        aWinOutputSize.setHeight( nContentHeight );
         m_pWindow->SetOutputSizePixel(aWinOutputSize);
 
     }

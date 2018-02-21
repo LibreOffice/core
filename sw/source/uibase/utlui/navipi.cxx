@@ -546,7 +546,7 @@ void SwNavigationPI::ZoomOut()
 
     Size aOptimalSize(GetOptimalSize());
     Size aNewSize(pNav->GetOutputSizePixel());
-    aNewSize.Height() = m_aExpandedSize.Height();
+    aNewSize.setHeight( m_aExpandedSize.Height() );
     pNav->SetMinOutputSizePixel(aOptimalSize);
     pNav->SetOutputSizePixel(aNewSize);
 
@@ -576,7 +576,7 @@ void SwNavigationPI::ZoomIn()
 
     Size aOptimalSize(GetOptimalSize());
     Size aNewSize(pNav->GetOutputSizePixel());
-    aNewSize.Height() = aOptimalSize.Height();
+    aNewSize.setHeight( aOptimalSize.Height() );
     pNav->SetMinOutputSizePixel(aOptimalSize);
     pNav->SetOutputSizePixel(aNewSize);
 
@@ -651,7 +651,7 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     Size aItemWinSize( aFirstRect.Left() - aSecondRect.Left(),
                        aFirstRect.Bottom() - aFirstRect.Top() );
     Size aOptimalSize(m_xEdit->get_preferred_size());
-    aItemWinSize.Width() = std::max(aItemWinSize.Width(), aOptimalSize.Width());
+    aItemWinSize.setWidth( std::max(aItemWinSize.Width(), aOptimalSize.Width()) );
     m_xEdit->SetSizePixel(aItemWinSize);
     m_aContentToolBox->InsertSeparator(4);
     m_aContentToolBox->InsertWindow( FN_PAGENUMBER, m_xEdit, ToolBoxItemBits::NONE, 4);

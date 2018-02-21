@@ -178,10 +178,10 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
     // check, if we have to adjust the point
     if ( !getFrameArea().IsInside( aPoint ) )
     {
-        aPoint.X() = std::max( aPoint.X(), getFrameArea().Left() );
-        aPoint.X() = std::min( aPoint.X(), getFrameArea().Right() );
-        aPoint.Y() = std::max( aPoint.Y(), getFrameArea().Top() );
-        aPoint.Y() = std::min( aPoint.Y(), getFrameArea().Bottom() );
+        aPoint.setX( std::max( aPoint.X(), getFrameArea().Left() ) );
+        aPoint.setX( std::min( aPoint.X(), getFrameArea().Right() ) );
+        aPoint.setY( std::max( aPoint.Y(), getFrameArea().Top() ) );
+        aPoint.setY( std::min( aPoint.Y(), getFrameArea().Bottom() ) );
     }
 
     bool bTextRet = false;
@@ -1221,15 +1221,15 @@ const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
 
                     //First set the vertical position
                     if ( aContentFrame.Top() > aContentPoint.Y() )
-                        aContentPoint.Y() = aContentFrame.Top();
+                        aContentPoint.setY( aContentFrame.Top() );
                     else if ( aContentFrame.Bottom() < aContentPoint.Y() )
-                        aContentPoint.Y() = aContentFrame.Bottom();
+                        aContentPoint.setY( aContentFrame.Bottom() );
 
                     //Now the horizontal position
                     if ( aContentFrame.Left() > aContentPoint.X() )
-                        aContentPoint.X() = aContentFrame.Left();
+                        aContentPoint.setX( aContentFrame.Left() );
                     else if ( aContentFrame.Right() < aContentPoint.X() )
-                        aContentPoint.X() = aContentFrame.Right();
+                        aContentPoint.setX( aContentFrame.Right() );
 
                     // pInside is a page area in which the point lies. As soon
                     // as pInside != 0 only frames are accepted which are
@@ -1321,41 +1321,41 @@ const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
     //A small correction at the first/last
     Size aActualSize( pActual->getFramePrintArea().SSize() );
     if ( aActualSize.Height() > pActual->GetUpper()->getFramePrintArea().Height() )
-        aActualSize.Height() = pActual->GetUpper()->getFramePrintArea().Height();
+        aActualSize.setHeight( pActual->GetUpper()->getFramePrintArea().Height() );
 
     SwRectFnSet aRectFnSet(pActual);
     if ( !pActual->GetPrev() &&
          aRectFnSet.YDiff( aRectFnSet.GetPrtTop(*pActual),
                               aRectFnSet.IsVert() ? rPoint.X() : rPoint.Y() ) > 0 )
     {
-        aPoint.Y() = pActual->getFrameArea().Top() + pActual->getFramePrintArea().Top();
-        aPoint.X() = pActual->getFrameArea().Left() +
+        aPoint.setY( pActual->getFrameArea().Top() + pActual->getFramePrintArea().Top() );
+        aPoint.setX( pActual->getFrameArea().Left() +
                         ( pActual->IsRightToLeft() || aRectFnSet.IsVert() ?
                           pActual->getFramePrintArea().Right() :
-                          pActual->getFramePrintArea().Left() );
+                          pActual->getFramePrintArea().Left() ) );
     }
     else if ( !pActual->GetNext() &&
               aRectFnSet.YDiff( aRectFnSet.GetPrtBottom(*pActual),
                                    aRectFnSet.IsVert() ? rPoint.X() : rPoint.Y() ) < 0 )
     {
-        aPoint.Y() = pActual->getFrameArea().Top() + pActual->getFramePrintArea().Bottom();
-        aPoint.X() = pActual->getFrameArea().Left() +
+        aPoint.setY( pActual->getFrameArea().Top() + pActual->getFramePrintArea().Bottom() );
+        aPoint.setX( pActual->getFrameArea().Left() +
                         ( pActual->IsRightToLeft() || aRectFnSet.IsVert() ?
                           pActual->getFramePrintArea().Left() :
-                          pActual->getFramePrintArea().Right() );
+                          pActual->getFramePrintArea().Right() ) );
     }
 
     //Bring the Point in to the PrtArea
     const SwRect aRect( pActual->getFrameArea().Pos() + pActual->getFramePrintArea().Pos(),
                         aActualSize );
     if ( aPoint.Y() < aRect.Top() )
-        aPoint.Y() = aRect.Top();
+        aPoint.setY( aRect.Top() );
     else if ( aPoint.Y() > aRect.Bottom() )
-        aPoint.Y() = aRect.Bottom();
+        aPoint.setY( aRect.Bottom() );
     if ( aPoint.X() < aRect.Left() )
-        aPoint.X() = aRect.Left();
+        aPoint.setX( aRect.Left() );
     else if ( aPoint.X() > aRect.Right() )
-        aPoint.X() = aRect.Right();
+        aPoint.setX( aRect.Right() );
     rPoint = aPoint;
     return pActual;
 }
@@ -1396,15 +1396,15 @@ void SwPageFrame::GetContentPosition( const Point &rPt, SwPosition &rPos ) const
 
         //Calculate the vertical position first
         if ( aContentFrame.Top() > rPt.Y() )
-            aPoint.Y() = aContentFrame.Top();
+            aPoint.setY( aContentFrame.Top() );
         else if ( aContentFrame.Bottom() < rPt.Y() )
-            aPoint.Y() = aContentFrame.Bottom();
+            aPoint.setY( aContentFrame.Bottom() );
 
         //And now the horizontal position
         if ( aContentFrame.Left() > rPt.X() )
-            aPoint.X() = aContentFrame.Left();
+            aPoint.setX( aContentFrame.Left() );
         else if ( aContentFrame.Right() < rPt.X() )
-            aPoint.X() = aContentFrame.Right();
+            aPoint.setX( aContentFrame.Right() );
 
         const sal_uInt64 nDiff = ::CalcDiff( aPoint, rPt );
         if ( nDiff < nDist )
@@ -1425,13 +1425,13 @@ void SwPageFrame::GetContentPosition( const Point &rPt, SwPosition &rPos ) const
     //Bring the point into the PrtArea.
     const SwRect aRect( pAct->getFrameArea().Pos() + pAct->getFramePrintArea().Pos(), pAct->getFramePrintArea().SSize() );
     if ( aAct.Y() < aRect.Top() )
-        aAct.Y() = aRect.Top();
+        aAct.setY( aRect.Top() );
     else if ( aAct.Y() > aRect.Bottom() )
-        aAct.Y() = aRect.Bottom();
+        aAct.setY( aRect.Bottom() );
     if ( aAct.X() < aRect.Left() )
-        aAct.X() = aRect.Left();
+        aAct.setX( aRect.Left() );
     else if ( aAct.X() > aRect.Right() )
-        aAct.X() = aRect.Right();
+        aAct.setX( aRect.Right() );
 
     if (!pAct->isFrameAreaDefinitionValid() ||
         (pAct->IsTextFrame() && !static_cast<SwTextFrame const*>(pAct)->HasPara()))
@@ -2353,14 +2353,14 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                 if( aTmpSt.Y() > aTmpEnd.Y() )
                 {
                     long nTmpY = aTmpEnd.Y();
-                    aTmpEnd.Y() = aTmpSt.Y();
-                    aTmpSt.Y() = nTmpY;
+                    aTmpEnd.setY( aTmpSt.Y() );
+                    aTmpSt.setY( nTmpY );
                 }
                 if( aTmpSt.X() > aTmpEnd.X() )
                 {
                     long nTmpX = aTmpEnd.X();
-                    aTmpEnd.X() = aTmpSt.X();
-                    aTmpSt.X() = nTmpX;
+                    aTmpEnd.setX( aTmpSt.X() );
+                    aTmpSt.setX( nTmpX );
                 }
             }
 

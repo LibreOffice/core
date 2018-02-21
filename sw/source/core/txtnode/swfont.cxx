@@ -502,7 +502,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             m_aSub[SwFontScript::Latin].SvxFont::SetPropr( 100 );
             m_aSub[SwFontScript::Latin].m_aSize = m_aSub[SwFontScript::Latin].Font::GetFontSize();
             Size aTmpSize = m_aSub[SwFontScript::Latin].m_aSize;
-            aTmpSize.Height() = pHeight->GetHeight();
+            aTmpSize.setHeight( pHeight->GetHeight() );
             m_aSub[SwFontScript::Latin].SetSize( aTmpSize );
         }
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_POSTURE,
@@ -532,7 +532,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             m_aSub[SwFontScript::CJK].SvxFont::SetPropr( 100 );
             m_aSub[SwFontScript::CJK].m_aSize = m_aSub[SwFontScript::CJK].Font::GetFontSize();
             Size aTmpSize = m_aSub[SwFontScript::CJK].m_aSize;
-            aTmpSize.Height() = pHeight->GetHeight();
+            aTmpSize.setHeight( pHeight->GetHeight() );
             m_aSub[SwFontScript::CJK].SetSize( aTmpSize );
         }
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_CJK_POSTURE,
@@ -568,7 +568,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             m_aSub[SwFontScript::CTL].SvxFont::SetPropr( 100 );
             m_aSub[SwFontScript::CTL].m_aSize = m_aSub[SwFontScript::CTL].Font::GetFontSize();
             Size aTmpSize = m_aSub[SwFontScript::CTL].m_aSize;
-            aTmpSize.Height() = pHeight->GetHeight();
+            aTmpSize.setHeight( pHeight->GetHeight() );
             m_aSub[SwFontScript::CTL].SetSize( aTmpSize );
         }
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_CTL_POSTURE,
@@ -748,7 +748,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         m_aSub[SwFontScript::Latin].SetCharSet( rFont.GetCharSet() );
         m_aSub[SwFontScript::Latin].SvxFont::SetPropr( 100 ); // 100% of FontSize
         Size aTmpSize = m_aSub[SwFontScript::Latin].m_aSize;
-        aTmpSize.Height() = pAttrSet->GetSize().GetHeight();
+        aTmpSize.setHeight( pAttrSet->GetSize().GetHeight() );
         m_aSub[SwFontScript::Latin].SetSize( aTmpSize );
         m_aSub[SwFontScript::Latin].SetItalic( pAttrSet->GetPosture().GetPosture() );
         m_aSub[SwFontScript::Latin].SetWeight( pAttrSet->GetWeight().GetWeight() );
@@ -764,7 +764,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         m_aSub[SwFontScript::CJK].SetCharSet( rFont.GetCharSet() );
         m_aSub[SwFontScript::CJK].SvxFont::SetPropr( 100 ); // 100% of FontSize
         Size aTmpSize = m_aSub[SwFontScript::CJK].m_aSize;
-        aTmpSize.Height() = pAttrSet->GetCJKSize().GetHeight();
+        aTmpSize.setHeight( pAttrSet->GetCJKSize().GetHeight() );
         m_aSub[SwFontScript::CJK].SetSize( aTmpSize );
         m_aSub[SwFontScript::CJK].SetItalic( pAttrSet->GetCJKPosture().GetPosture() );
         m_aSub[SwFontScript::CJK].SetWeight( pAttrSet->GetCJKWeight().GetWeight() );
@@ -784,7 +784,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         m_aSub[SwFontScript::CTL].SetCharSet( rFont.GetCharSet() );
         m_aSub[SwFontScript::CTL].SvxFont::SetPropr( 100 ); // 100% of FontSize
         Size aTmpSize = m_aSub[SwFontScript::CTL].m_aSize;
-        aTmpSize.Height() = pAttrSet->GetCTLSize().GetHeight();
+        aTmpSize.setHeight( pAttrSet->GetCTLSize().GetHeight() );
         m_aSub[SwFontScript::CTL].SetSize( aTmpSize );
         m_aSub[SwFontScript::CTL].SetItalic( pAttrSet->GetCTLPosture().GetPosture() );
         m_aSub[SwFontScript::CTL].SetWeight( pAttrSet->GetCTLWeight().GetWeight() );
@@ -1092,8 +1092,8 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
         {
             const sal_uInt16 nAscent = pLastFont->GetFontAscent( rInf.GetShell(),
                                                              rInf.GetOut() );
-            aTextSize.Height() =
-                static_cast<long>(CalcEscHeight( static_cast<sal_uInt16>(aTextSize.Height()), nAscent));
+            aTextSize.setHeight(
+                static_cast<long>(CalcEscHeight( static_cast<sal_uInt16>(aTextSize.Height()), nAscent)) );
         }
     }
 
@@ -1385,13 +1385,13 @@ void SwSubFont::CalcEsc( SwDrawTextInfo const & rInf, Point& rPos )
         switch ( nDir )
         {
         case 0 :
-            rPos.Y() += nOfst;
+            rPos.AdjustY(nOfst );
             break;
         case 900 :
-            rPos.X() += nOfst;
+            rPos.AdjustX(nOfst );
             break;
         case 2700 :
-            rPos.X() -= nOfst;
+            rPos.AdjustX( -nOfst );
             break;
         }
 
@@ -1403,13 +1403,13 @@ void SwSubFont::CalcEsc( SwDrawTextInfo const & rInf, Point& rPos )
         switch ( nDir )
         {
         case 0 :
-            rPos.Y() += nOfst;
+            rPos.AdjustY(nOfst );
             break;
         case 900 :
-            rPos.X() += nOfst;
+            rPos.AdjustX(nOfst );
             break;
         case 2700 :
-            rPos.X() -= nOfst;
+            rPos.AdjustX( -nOfst );
             break;
         }
 
@@ -1420,13 +1420,13 @@ void SwSubFont::CalcEsc( SwDrawTextInfo const & rInf, Point& rPos )
         switch ( nDir )
         {
         case 0 :
-            rPos.Y() -= nOfst;
+            rPos.AdjustY( -nOfst );
             break;
         case 900 :
-            rPos.X() -= nOfst;
+            rPos.AdjustX( -nOfst );
             break;
         case 2700 :
-            rPos.X() += nOfst;
+            rPos.AdjustX(nOfst );
             break;
         }
     }
@@ -1450,17 +1450,17 @@ void SwDrawTextInfo::Shift( sal_uInt16 nDir )
     switch ( nDir )
     {
     case 0 :
-        m_aPos.X() += GetSize().Width();
+        m_aPos.AdjustX(GetSize().Width() );
         break;
     case 900 :
         OSL_ENSURE( m_aPos.Y() >= GetSize().Width(), "Going underground" );
-        m_aPos.Y() -= GetSize().Width();
+        m_aPos.AdjustY( -(GetSize().Width()) );
         break;
     case 1800 :
-        m_aPos.X() -= GetSize().Width();
+        m_aPos.AdjustX( -(GetSize().Width()) );
         break;
     case 2700 :
-        m_aPos.Y() += GetSize().Width();
+        m_aPos.AdjustY(GetSize().Width() );
         break;
     }
 }

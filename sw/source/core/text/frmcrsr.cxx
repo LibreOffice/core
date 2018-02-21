@@ -219,33 +219,33 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
         if ( aRectFnSet.IsVert() )
         {
             if( nFirstOffset > 0 )
-                aPnt1.Y() += nFirstOffset;
+                aPnt1.AdjustY(nFirstOffset );
             if ( aPnt1.X() < nMaxY && !aRectFnSet.IsVertL2R() )
-                aPnt1.X() = nMaxY;
-            aPnt2.X() = aPnt1.X() + pFrame->getFramePrintArea().Width();
-            aPnt2.Y() = aPnt1.Y();
+                aPnt1.setX( nMaxY );
+            aPnt2.setX( aPnt1.X() + pFrame->getFramePrintArea().Width() );
+            aPnt2.setY( aPnt1.Y() );
             if( aPnt2.X() < nMaxY )
-                aPnt2.X() = nMaxY;
+                aPnt2.setX( nMaxY );
         }
         else
         {
             if( nFirstOffset > 0 )
-                aPnt1.X() += nFirstOffset;
+                aPnt1.AdjustX(nFirstOffset );
 
             if( aPnt1.Y() > nMaxY )
-                aPnt1.Y() = nMaxY;
-            aPnt2.X() = aPnt1.X();
-            aPnt2.Y() = aPnt1.Y() + pFrame->getFramePrintArea().Height();
+                aPnt1.setY( nMaxY );
+            aPnt2.setX( aPnt1.X() );
+            aPnt2.setY( aPnt1.Y() + pFrame->getFramePrintArea().Height() );
             if( aPnt2.Y() > nMaxY )
-                aPnt2.Y() = nMaxY;
+                aPnt2.setY( nMaxY );
         }
 
         rOrig = SwRect( aPnt1, aPnt2 );
 
         if ( pCMS )
         {
-            pCMS->m_aRealHeight.X() = 0;
-            pCMS->m_aRealHeight.Y() = aRectFnSet.IsVert() ? -rOrig.Width() : rOrig.Height();
+            pCMS->m_aRealHeight.setX( 0 );
+            pCMS->m_aRealHeight.setY( aRectFnSet.IsVert() ? -rOrig.Width() : rOrig.Height() );
         }
 
         if ( pFrame->IsRightToLeft() )
@@ -311,13 +311,13 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
             {
                 if ( pCMS->m_bRealHeight )
                 {
-                    pCMS->m_aRealHeight.Y() = -pCMS->m_aRealHeight.Y();
+                    pCMS->m_aRealHeight.setY( -pCMS->m_aRealHeight.Y() );
                     if ( pCMS->m_aRealHeight.Y() < 0 )
                     {
                         // writing direction is from top to bottom
-                        pCMS->m_aRealHeight.X() =  ( rOrig.Width() -
-                                                    pCMS->m_aRealHeight.X() +
-                                                    pCMS->m_aRealHeight.Y() );
+                        pCMS->m_aRealHeight.setX(  rOrig.Width() -
+                                                   pCMS->m_aRealHeight.X() +
+                                                   pCMS->m_aRealHeight.Y() );
                     }
                 }
                 if( pCMS->m_b2Lines && pCMS->m_p2Lines)
@@ -388,21 +388,21 @@ bool SwTextFrame::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
         if ( aRectFnSet.IsVert() )
         {
             if ( aPnt1.X() < nMaxY && !aRectFnSet.IsVertL2R() )
-                aPnt1.X() = nMaxY;
+                aPnt1.setX( nMaxY );
 
-            aPnt2.X() = aPnt1.X() + pFrame->getFramePrintArea().Width();
-            aPnt2.Y() = aPnt1.Y();
+            aPnt2.setX( aPnt1.X() + pFrame->getFramePrintArea().Width() );
+            aPnt2.setY( aPnt1.Y() );
             if( aPnt2.X() < nMaxY )
-                aPnt2.X() = nMaxY;
+                aPnt2.setX( nMaxY );
         }
         else
         {
             if( aPnt1.Y() > nMaxY )
-                aPnt1.Y() = nMaxY;
-            aPnt2.X() = aPnt1.X();
-            aPnt2.Y() = aPnt1.Y() + pFrame->getFramePrintArea().Height();
+                aPnt1.setY( nMaxY );
+            aPnt2.setX( aPnt1.X() );
+            aPnt2.setY( aPnt1.Y() + pFrame->getFramePrintArea().Height() );
             if( aPnt2.Y() > nMaxY )
-                aPnt2.Y() = nMaxY;
+                aPnt2.setY( nMaxY );
         }
         rOrig = SwRect( aPnt1, aPnt2 );
         return true;
@@ -424,7 +424,7 @@ bool SwTextFrame::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
         {
             if( aTmpState.m_aRealHeight.X() >= 0 )
             {
-                rOrig.Pos().Y() += aTmpState.m_aRealHeight.X();
+                rOrig.Pos().AdjustY(aTmpState.m_aRealHeight.X() );
                 rOrig.Height( aTmpState.m_aRealHeight.Y() );
             }
 
@@ -822,8 +822,8 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
 
             if ( bPrevLine || bSecondOfDouble )
             {
-                aCharBox.SSize().Width() /= 2;
-                aCharBox.Pos().X() = aCharBox.Pos().X() - 150;
+                aCharBox.SSize().setWidth( aCharBox.SSize().Width() / 2 );
+                aCharBox.Pos().setX( aCharBox.Pos().X() - 150 );
 
                 // See comment in SwTextFrame::GetCursorOfst()
 #if OSL_DEBUG_LEVEL > 0
@@ -850,7 +850,7 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
             if ( IsFollow() )
             {
                 aLine.GetCharRect( &aCharBox, nPos );
-                aCharBox.SSize().Width() /= 2;
+                aCharBox.SSize().setWidth( aCharBox.SSize().Width() / 2 );
             }
             break;
         } while ( true );
@@ -881,7 +881,7 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
             }
             if ( !pPrevPrev )
                 return pTmpPrev->SwContentFrame::UnitUp( pPam, nOffset, bSetInReadOnly );
-            aCharBox.Pos().Y() = pPrevPrev->getFrameArea().Bottom() - 1;
+            aCharBox.Pos().setY( pPrevPrev->getFrameArea().Bottom() - 1 );
             return pPrevPrev->GetKeyCursorOfst( pPam->GetPoint(), aCharBox.Pos() );
         }
     }
@@ -1184,7 +1184,7 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
 
             if( pNextLine || bFirstOfDouble )
             {
-                aCharBox.SSize().Width() /= 2;
+                aCharBox.SSize().setWidth( aCharBox.SSize().Width() / 2 );
 #if OSL_DEBUG_LEVEL > 0
                 // See comment in SwTextFrame::GetCursorOfst()
                 const sal_uLong nOldNode = pPam->GetPoint()->nNode.GetIndex();
@@ -1229,7 +1229,7 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
                 }
 
                 aLine.GetCharRect( &aCharBox, nPos );
-                aCharBox.SSize().Width() /= 2;
+                aCharBox.SSize().setWidth( aCharBox.SSize().Width() / 2 );
             }
             else if( !IsFollow() )
             {
@@ -1258,7 +1258,7 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
     // We take a shortcut for follows
     if( pTmpFollow )
     {
-        aCharBox.Pos().Y() = pTmpFollow->getFrameArea().Top() + 1;
+        aCharBox.Pos().setY( pTmpFollow->getFrameArea().Top() + 1 );
         return static_cast<const SwTextFrame*>(pTmpFollow)->GetKeyCursorOfst( pPam->GetPoint(),
                                                      aCharBox.Pos() );
     }

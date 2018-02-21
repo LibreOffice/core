@@ -1045,7 +1045,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
                 }
                 nMin -= MINFLY;
             }
-            aSz.Width() = std::max( aSz.Width(), nMin );
+            aSz.setWidth( std::max( aSz.Width(), nMin ) );
         }
 
         SwFrameFormat *pFormat = GetFormat();
@@ -1260,8 +1260,8 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
         {
             aRect.Pos().setX(aRect.Pos().getX() + rRec.nTol);
             aRect.Pos().setY(aRect.Pos().getY() + rRec.nTol);
-            aRect.SSize().Height()-= 2 * rRec.nTol;
-            aRect.SSize().Width() -= 2 * rRec.nTol;
+            aRect.SSize().AdjustHeight( -(2 * rRec.nTol) );
+            aRect.SSize().AdjustWidth( -(2 * rRec.nTol) );
 
             if( aRect.IsInside( rRec.aPos ) )
             {

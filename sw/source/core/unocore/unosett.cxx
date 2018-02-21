@@ -1977,8 +1977,8 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     {
                         size.Width = convertMm100ToTwip(size.Width);
                         size.Height = convertMm100ToTwip(size.Height);
-                        pSetSize->Width() = size.Width;
-                        pSetSize->Height() = size.Height;
+                        pSetSize->setWidth( size.Width );
+                        pSetSize->setHeight( size.Height );
                     }
                     else
                         bWrongArg = true;

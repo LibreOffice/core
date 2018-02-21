@@ -1385,9 +1385,9 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         const SwRect aPageRect( m_pWrtShell->GetAnyCurRect( CurRectType::PageCalc ) );
                         const SwRect aRootRect( m_pWrtShell->GetAnyCurRect( CurRectType::PagesArea ) ); // width of columns
                         Size aPageSize( aPageRect.SSize() );
-                        aPageSize.Width() += pMgr->HasNotes() && pMgr->ShowNotes() ?
+                        aPageSize.AdjustWidth(pMgr->HasNotes() && pMgr->ShowNotes() ?
                                              pMgr->GetSidebarWidth() + pMgr->GetSidebarBorderWidth() :
-                                             0;
+                                             0 );
 
                         Size aRootSize( aRootRect.SSize() );
 
@@ -1398,7 +1398,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         const long nOf = pVOpt->GetDocumentBorder() * 2;
                         long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();
                         nTmpWidth += nOf;
-                        aPageSize.Height() += nOf;
+                        aPageSize.AdjustHeight(nOf );
                         long nFac = aWindowSize.Width() * 100 / nTmpWidth;
 
                         long nVisPercent = aWindowSize.Height() * 100 / aPageSize.Height();

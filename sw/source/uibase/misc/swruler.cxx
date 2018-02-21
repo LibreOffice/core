@@ -136,22 +136,22 @@ void SwCommentRuler::DrawCommentControl(vcl::RenderContext& rRenderContext)
     Point aArrowPos;
     bool  bArrowToRight;
     // TODO Discover why it should be 0 instead of CONTROL_BORDER_WIDTH + CONTROL_TOP_OFFSET
-    aLabelPos.Y() = 0;
-    aArrowPos.Y() = CONTROL_BORDER_WIDTH + CONTROL_TOP_OFFSET;
+    aLabelPos.setY( 0 );
+    aArrowPos.setY( CONTROL_BORDER_WIDTH + CONTROL_TOP_OFFSET );
     if ( !AllSettings::GetLayoutRTL() )
     {
         // LTR
         if ( bIsCollapsed )
         {
             // It should draw something like | > Comments  |
-            aLabelPos.X() = CONTROL_LEFT_OFFSET + CONTROL_TRIANGLE_WIDTH + CONTROL_TRIANGLE_PAD;
-            aArrowPos.X() = CONTROL_LEFT_OFFSET;
+            aLabelPos.setX( CONTROL_LEFT_OFFSET + CONTROL_TRIANGLE_WIDTH + CONTROL_TRIANGLE_PAD );
+            aArrowPos.setX( CONTROL_LEFT_OFFSET );
         }
         else
         {
             // It should draw something like | Comments  < |
-            aLabelPos.X() = CONTROL_LEFT_OFFSET;
-            aArrowPos.X() = aControlRect.GetSize().Width() - 1 - CONTROL_RIGHT_OFFSET - CONTROL_BORDER_WIDTH - CONTROL_TRIANGLE_WIDTH;
+            aLabelPos.setX( CONTROL_LEFT_OFFSET );
+            aArrowPos.setX( aControlRect.GetSize().Width() - 1 - CONTROL_RIGHT_OFFSET - CONTROL_BORDER_WIDTH - CONTROL_TRIANGLE_WIDTH );
         }
         bArrowToRight = bIsCollapsed;
     }
@@ -162,14 +162,14 @@ void SwCommentRuler::DrawCommentControl(vcl::RenderContext& rRenderContext)
         if ( bIsCollapsed )
         {
             // It should draw something like |  Comments < |
-            aArrowPos.X() = aControlRect.GetSize().Width() - 1 - CONTROL_RIGHT_OFFSET - CONTROL_BORDER_WIDTH - CONTROL_TRIANGLE_WIDTH;
-            aLabelPos.X() = aArrowPos.X() - CONTROL_TRIANGLE_PAD - nLabelWidth;
+            aArrowPos.setX( aControlRect.GetSize().Width() - 1 - CONTROL_RIGHT_OFFSET - CONTROL_BORDER_WIDTH - CONTROL_TRIANGLE_WIDTH );
+            aLabelPos.setX( aArrowPos.X() - CONTROL_TRIANGLE_PAD - nLabelWidth );
         }
         else
         {
             // It should draw something like | >  Comments |
-            aLabelPos.X() = aControlRect.GetSize().Width() - 1 - CONTROL_RIGHT_OFFSET - CONTROL_BORDER_WIDTH - nLabelWidth;
-            aArrowPos.X() = CONTROL_LEFT_OFFSET;
+            aLabelPos.setX( aControlRect.GetSize().Width() - 1 - CONTROL_RIGHT_OFFSET - CONTROL_BORDER_WIDTH - nLabelWidth );
+            aArrowPos.setX( CONTROL_LEFT_OFFSET );
         }
         bArrowToRight = !bIsCollapsed;
     }

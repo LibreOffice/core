@@ -4850,12 +4850,12 @@ void SwHTMLParser::InsertSpacer()
         case HtmlOptionId::WIDTH:
             // First only save as pixel value!
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
-            aSize.Width() = static_cast<long>(rOption.GetNumber());
+            aSize.setWidth( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HEIGHT:
             // First only save as pixel value!
             bPrcHeight = (rOption.GetString().indexOf('%') != -1);
-            aSize.Height() = static_cast<long>(rOption.GetNumber());
+            aSize.setHeight( static_cast<long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::SIZE:
             // First only save as pixel value!
@@ -5017,11 +5017,11 @@ SwTwips SwHTMLParser::GetCurrentBrowseWidth()
         const SvxULSpaceItem& rUL = rPgFormat.GetULSpace();
         const SwFormatCol& rCol = rPgFormat.GetCol();
 
-        m_aHTMLPageSize.Width() = rSz.GetWidth() - rLR.GetLeft() - rLR.GetRight();
-        m_aHTMLPageSize.Height() = rSz.GetHeight() - rUL.GetUpper() - rUL.GetLower();
+        m_aHTMLPageSize.setWidth( rSz.GetWidth() - rLR.GetLeft() - rLR.GetRight() );
+        m_aHTMLPageSize.setHeight( rSz.GetHeight() - rUL.GetUpper() - rUL.GetLower() );
 
         if( 1 < rCol.GetNumCols() )
-            m_aHTMLPageSize.Width() /= rCol.GetNumCols();
+            m_aHTMLPageSize.setWidth( m_aHTMLPageSize.Width() / ( rCol.GetNumCols()) );
     }
 
     return m_aHTMLPageSize.Width();

@@ -174,7 +174,7 @@ SwTwips SwAnchoredObject::GetRelCharY( const SwFrame* pFrame ) const
 
 void SwAnchoredObject::AddLastCharY( long nDiff )
 {
-    maLastCharRect.Pos().Y() += nDiff;
+    maLastCharRect.Pos().AdjustY(nDiff );
 }
 
 void SwAnchoredObject::ResetLastCharRectHeight()
@@ -577,8 +577,8 @@ const SwRect& SwAnchoredObject::GetObjRectWithSpaces() const
         {
             maObjRectWithSpaces.Top ( std::max( maObjRectWithSpaces.Top() - long(rUL.GetUpper()), 0L ));
             maObjRectWithSpaces.Left( std::max( maObjRectWithSpaces.Left()- rLR.GetLeft(),  0L ));
-            maObjRectWithSpaces.SSize().Height() += rUL.GetLower();
-            maObjRectWithSpaces.SSize().Width()  += rLR.GetRight();
+            maObjRectWithSpaces.SSize().AdjustHeight(rUL.GetLower() );
+            maObjRectWithSpaces.SSize().AdjustWidth(rLR.GetRight() );
         }
 
         mbObjRectWithSpacesValid = true;
@@ -888,7 +888,7 @@ Point SwAnchoredObject::GetRelPosToLine() const
     Point aRelPos;
 
     aRelPos = GetObjRect().Pos();
-    aRelPos.Y() -= GetLastTopOfLine();
+    aRelPos.AdjustY( -(GetLastTopOfLine()) );
 
     return aRelPos;
 }

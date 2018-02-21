@@ -105,7 +105,7 @@ void SwFrame::MakeBelowPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
     if( pPrv )
     {
         aFrm.Pos( pPrv->getFrameArea().Pos() );
-        aFrm.Pos().Y() += pPrv->getFrameArea().Height();
+        aFrm.Pos().AdjustY(pPrv->getFrameArea().Height() );
     }
     else
     {
@@ -115,7 +115,7 @@ void SwFrame::MakeBelowPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
 
     if( bNotify )
     {
-        aFrm.Pos().Y() += 1;
+        aFrm.Pos().AdjustY(1 );
     }
 }
 
@@ -126,18 +126,18 @@ void SwFrame::MakeLeftPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify
     if( pPrv )
     {
         aFrm.Pos( pPrv->getFrameArea().Pos() );
-        aFrm.Pos().X() -= aFrm.Width();
+        aFrm.Pos().AdjustX( -(aFrm.Width()) );
     }
     else
     {
         aFrm.Pos( pUp->getFrameArea().Pos() );
         aFrm.Pos() += pUp->getFramePrintArea().Pos();
-        aFrm.Pos().X() += pUp->getFramePrintArea().Width() - aFrm.Width();
+        aFrm.Pos().AdjustX(pUp->getFramePrintArea().Width() - aFrm.Width() );
     }
 
     if( bNotify )
     {
-        aFrm.Pos().X() -= 1;
+        aFrm.Pos().AdjustX( -1 );
     }
 }
 
@@ -148,7 +148,7 @@ void SwFrame::MakeRightPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
     if( pPrv )
     {
         aFrm.Pos( pPrv->getFrameArea().Pos() );
-        aFrm.Pos().X() += pPrv->getFrameArea().Width();
+        aFrm.Pos().AdjustX(pPrv->getFrameArea().Width() );
     }
     else
     {
@@ -158,7 +158,7 @@ void SwFrame::MakeRightPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
 
     if( bNotify )
     {
-        aFrm.Pos().X() += 1;
+        aFrm.Pos().AdjustX(1 );
     }
 }
 
@@ -288,16 +288,16 @@ Point SwFrame::GetFrameAnchorPos( bool bIgnoreFlysAnchoredAtThisFrame ) const
     Point aAnchor = getFrameArea().Pos();
 
     if ( ( IsVertical() && !IsVertLR() ) || IsRightToLeft() )
-        aAnchor.X() += getFrameArea().Width();
+        aAnchor.AdjustX(getFrameArea().Width() );
 
     if ( IsTextFrame() )
     {
         SwTwips nBaseOfstForFly =
             static_cast<const SwTextFrame*>(this)->GetBaseOfstForFly( bIgnoreFlysAnchoredAtThisFrame );
         if ( IsVertical() )
-            aAnchor.Y() += nBaseOfstForFly;
+            aAnchor.AdjustY(nBaseOfstForFly );
         else
-            aAnchor.X() += nBaseOfstForFly;
+            aAnchor.AdjustX(nBaseOfstForFly );
 
         // OD 2004-03-10 #i11860# - if option 'Use former object positioning'
         // is OFF, consider the lower space and the line spacing of the
@@ -307,11 +307,11 @@ Point SwFrame::GetFrameAnchorPos( bool bIgnoreFlysAnchoredAtThisFrame ) const
                 pThisTextFrame->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
         if ( IsVertical() )
         {
-            aAnchor.X() -= nUpperSpaceAmountConsideredForPrevFrameAndPageGrid;
+            aAnchor.AdjustX( -nUpperSpaceAmountConsideredForPrevFrameAndPageGrid );
         }
         else
         {
-            aAnchor.Y() += nUpperSpaceAmountConsideredForPrevFrameAndPageGrid;
+            aAnchor.AdjustY(nUpperSpaceAmountConsideredForPrevFrameAndPageGrid );
         }
     }
 

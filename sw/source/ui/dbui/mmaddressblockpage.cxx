@@ -50,7 +50,7 @@ using namespace ::com::sun::star::sdbcx;
 static void lcl_Move(Control* pCtrl, long nYOffset)
 {
     Point aPos(pCtrl->GetPosPixel());
-    aPos.Y() += nYOffset;
+    aPos.AdjustY(nYOffset );
     pCtrl->SetPosPixel(aPos);
 }
 

@@ -1322,8 +1322,8 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
                     aFrameSz.SetWidth( aNewSz.Width() );
                     if( ATT_MIN_SIZE != aFrameSz.GetHeightSizeType() )
                     {
-                        aNewSz.Height() += pChgFly->getFrameArea().Height() -
-                                               pFly->getFramePrintArea().Height();
+                        aNewSz.AdjustHeight(pChgFly->getFrameArea().Height() -
+                                               pFly->getFramePrintArea().Height() );
                         if( std::abs( aNewSz.Height() - pChgFly->getFrameArea().Height()) > 1 )
                             aFrameSz.SetHeight( aNewSz.Height() );
                     }
@@ -1337,8 +1337,8 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
         // set the new Size at the fly themself
         if ( pFly->getFramePrintArea().Height() > 0 && pFly->getFramePrintArea().Width() > 0 )
         {
-            aSz.Width() += pFly->getFrameArea().Width() - pFly->getFramePrintArea().Width();
-            aSz.Height()+= pFly->getFrameArea().Height()- pFly->getFramePrintArea().Height();
+            aSz.AdjustWidth(pFly->getFrameArea().Width() - pFly->getFramePrintArea().Width() );
+            aSz.AdjustHeight(pFly->getFrameArea().Height()- pFly->getFramePrintArea().Height() );
         }
         aResult = pFly->ChgSize( aSz );
 

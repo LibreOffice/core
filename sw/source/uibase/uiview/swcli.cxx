@@ -142,8 +142,8 @@ void SwOleClient::ViewChanged()
     const MapMode aObjMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( GetObject()->getMapUnit( GetAspect() ) ) );
     aVisSize = OutputDevice::LogicToLogic( aVisSize, aObjMap, aMyMap );
 
-    aVisSize.Width()  = long(aVisSize.Width() * GetScaleWidth());
-    aVisSize.Height() = long(aVisSize.Height() * GetScaleHeight());
+    aVisSize.setWidth( long(aVisSize.Width() * GetScaleWidth()) );
+    aVisSize.setHeight( long(aVisSize.Height() * GetScaleHeight()) );
 
     SwRect aRect( Point( LONG_MIN, LONG_MIN ), aVisSize );
     rSh.LockView( true );   // Prevent scrolling in the EndAction

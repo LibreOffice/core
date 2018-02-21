@@ -811,7 +811,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                         {
                             SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*mrpFrame);
                             aFrm.Pos() = mrpLay->getFrameArea().Pos();
-                            aFrm.Pos().Y() += 1;
+                            aFrm.Pos().AdjustY(1 );
                         }
 
                         mrpPrv = mrpFrame;
@@ -921,7 +921,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                     {
                         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pSct);
                         aFrm.Pos() = mrpLay->getFrameArea().Pos();
-                        aFrm.Pos().Y() += 1; //because of the notifications
+                        aFrm.Pos().AdjustY(1 ); //because of the notifications
                     }
 
                     mrpLay = pSct;
@@ -1022,8 +1022,8 @@ void SwLayHelper::CheckFlyCache_( SwPageFrame* pPage )
                 {
                     // we get the stored information
                     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pFly);
-                    aFrm.Pos().X() = pFlyCache->Left() + pPage->getFrameArea().Left();
-                    aFrm.Pos().Y() = pFlyCache->Top() + pPage->getFrameArea().Top();
+                    aFrm.Pos().setX( pFlyCache->Left() + pPage->getFrameArea().Left() );
+                    aFrm.Pos().setY( pFlyCache->Top() + pPage->getFrameArea().Top() );
 
                     if ( mpImpl->IsUseFlyCache() )
                     {

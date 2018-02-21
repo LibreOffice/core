@@ -215,10 +215,10 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
 
     rRenderContext.SetFillColor(Color(COL_LIGHTGRAY));
     tools::Rectangle aRect;
-    aRect.Right() = rOrg.X() + GetSize().Width() - nR;
-    aRect.Left()  = rOrg.X() + nL;
-    aRect.Top()   = rOrg.Y() + GetTop() + GetHdHeight() + GetHdDist();
-    aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist();
+    aRect.SetRight( rOrg.X() + GetSize().Width() - nR );
+    aRect.SetLeft( rOrg.X() + nL );
+    aRect.SetTop( rOrg.Y() + GetTop() + GetHdHeight() + GetHdDist() );
+    aRect.SetBottom( rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist() );
     rRenderContext.DrawRect(aRect);
 
     const tools::Rectangle aDefineRect(aRect);
@@ -252,9 +252,9 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
             nAutoColWidth = pColMgr->GetColWidth(i);
 
         if (!m_bVertical)
-            aRect.Right() = aRect.Left() + nAutoColWidth;
+            aRect.SetRight( aRect.Left() + nAutoColWidth );
         else
-            aRect.Bottom() = aRect.Top() + nAutoColWidth;
+            aRect.SetBottom( aRect.Top() + nAutoColWidth );
 
         // use primitive draw command
         drawFillAttributes(rRenderContext, getPageFillAttributes(), aRect, aDefineRect);
@@ -262,9 +262,9 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
         if (i < nColumnCount - 1)
         {
             if (!m_bVertical)
-                aRect.Left() = aRect.Right() + pColMgr->GetGutterWidth(i);
+                aRect.SetLeft( aRect.Right() + pColMgr->GetGutterWidth(i) );
             else
-                aRect.Top() = aRect.Bottom() + pColMgr->GetGutterWidth(i);
+                aRect.SetTop( aRect.Bottom() + pColMgr->GetGutterWidth(i) );
         }
     }
     if (pColMgr->HasLine())
@@ -281,26 +281,26 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
             {
                 case COLADJ_BOTTOM:
                     if (!m_bVertical)
-                        aUp.Y() += nLength;
+                        aUp.AdjustY(nLength );
                     else
-                        aUp.X() += nLength;
+                        aUp.AdjustX(nLength );
                     break;
                 case COLADJ_TOP:
                     if (!m_bVertical)
-                        aDown.Y() -= nLength;
+                        aDown.AdjustY( -nLength );
                     else
-                        aDown.X() -= nLength;
+                        aDown.AdjustX( -nLength );
                     break;
                 case COLADJ_CENTER:
                     if (!m_bVertical)
                     {
-                        aUp.Y() += nLength / 2;
-                        aDown.Y() -= nLength / 2;
+                        aUp.AdjustY(nLength / 2 );
+                        aDown.AdjustY( -(nLength / 2) );
                     }
                     else
                     {
-                        aUp.X() += nLength / 2;
-                        aDown.X() -= nLength / 2;
+                        aUp.AdjustX(nLength / 2 );
+                        aDown.AdjustX( -(nLength / 2) );
                     }
                     break;
                 default:
@@ -315,13 +315,13 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
             nDist -= (i == 0) ? nGutter / 2 : 0;
             if (!m_bVertical)
             {
-                aUp.X() += nDist;
-                aDown.X() += nDist;
+                aUp.AdjustX(nDist );
+                aDown.AdjustX(nDist );
             }
             else
             {
-                aUp.Y() += nDist;
-                aDown.Y() += nDist;
+                aUp.AdjustY(nDist );
+                aDown.AdjustY(nDist );
             }
 
             rRenderContext.DrawLine(aUp, aDown);
@@ -337,8 +337,8 @@ SwColumnOnlyExample::SwColumnOnlyExample(vcl::Window* pParent)
 {
     SetMapMode( MapMode( MapUnit::MapTwip ) );
     m_aWinSize = GetOptimalSize();
-    m_aWinSize.Height() -= 4;
-    m_aWinSize.Width() -= 4;
+    m_aWinSize.AdjustHeight( -4 );
+    m_aWinSize.AdjustWidth( -4 );
 
     m_aWinSize = PixelToLogic( m_aWinSize );
 
@@ -404,11 +404,11 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools:
             nLength -= nLength * nPercent / 100;
             switch(m_aCols.GetLineAdj())
             {
-                case COLADJ_BOTTOM: aUp.Y() += nLength; break;
-                case COLADJ_TOP: aDown.Y() -= nLength; break;
+                case COLADJ_BOTTOM: aUp.AdjustY(nLength ); break;
+                case COLADJ_TOP: aDown.AdjustY( -nLength ); break;
                 case COLADJ_CENTER:
-                        aUp.Y() += nLength / 2;
-                        aDown.Y() -= nLength / 2;
+                        aUp.AdjustY(nLength / 2 );
+                        aDown.AdjustY( -(nLength / 2) );
                 break;
                 default:
                     break; //prevent warning
@@ -427,9 +427,9 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools:
         for (sal_uInt16 i = 0; i < nColCount; i++)
         {
             const SwColumn* pCol = &rCols[i];
-            aFrameRect.Left() = nSum + pCol->GetLeft(); //nSum + pCol->GetLeft() + aTL.X();
+            aFrameRect.SetLeft( nSum + pCol->GetLeft() ); //nSum + pCol->GetLeft() + aTL.X();
             nSum += pCol->GetWishWidth();
-            aFrameRect.Right() = nSum - pCol->GetRight();
+            aFrameRect.SetRight( nSum - pCol->GetRight() );
             rRenderContext.DrawRect(aFrameRect);
         }
         if (bLines)
@@ -438,8 +438,8 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools:
             for (sal_uInt16 i = 0; i < nColCount - 1; i++)
             {
                 nSum += rCols[i].GetWishWidth();
-                aUp.X() = nSum;
-                aDown.X() = nSum;
+                aUp.setX( nSum );
+                aDown.setX( nSum );
                 rRenderContext.DrawLine(aUp, aDown);
             }
         }
@@ -533,10 +533,10 @@ void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point
     }
 
     tools::Rectangle aRect;
-    aRect.Right() = rOrg.X() + GetSize().Width() - nR;
-    aRect.Left()  = rOrg.X() + nL;
-    aRect.Top()   = rOrg.Y() + GetTop() + GetHdHeight() + GetHdDist();
-    aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist();
+    aRect.SetRight( rOrg.X() + GetSize().Width() - nR );
+    aRect.SetLeft( rOrg.X() + nL );
+    aRect.SetTop( rOrg.Y() + GetTop() + GetHdHeight() + GetHdDist() );
+    aRect.SetBottom( rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist() );
 
     //increase the values to get a 'viewable' preview
     sal_Int32 nBaseHeight = pGridItem->GetBaseHeight() * 3;
@@ -595,9 +595,9 @@ void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point
             {
                 rRenderContext.DrawLine(aStart, aEnd);
                 if(m_bVertical)
-                    aStart.Y() = aEnd.Y() += nBaseHeight;
+                    aStart.setY( aEnd.AdjustY(nBaseHeight ) );
                 else
-                    aStart.X() = aEnd.X() += nBaseHeight;
+                    aStart.setX( aEnd.AdjustX(nBaseHeight ) );
             }
         }
         aRubyRect.Move(nXMove, nYMove);

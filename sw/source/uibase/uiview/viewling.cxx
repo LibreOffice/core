@@ -864,8 +864,8 @@ SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
     }
 
     Size lbSize(aListBox->GetOptimalSize());
-    lbSize.Width()+=50;
-    lbSize.Height()+=20;
+    lbSize.AdjustWidth(50 );
+    lbSize.AdjustHeight(20 );
     aListBox->SetSizePixel(lbSize);
     aListBox->SetSelectHdl( LINK( this, SwFieldDialog, MyListBoxHandler ) );
     aListBox->Show();

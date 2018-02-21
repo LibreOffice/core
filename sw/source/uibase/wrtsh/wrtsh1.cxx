@@ -303,8 +303,8 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
 
         // Add the margin attributes to GrfSize,
         // because these counts at the margin additionally
-        aGrfSize.Width() += pFrameMgr->CalcWidthBorder();
-        aGrfSize.Height()+= pFrameMgr->CalcHeightBorder();
+        aGrfSize.AdjustWidth(pFrameMgr->CalcWidthBorder() );
+        aGrfSize.AdjustHeight(pFrameMgr->CalcHeightBorder() );
 
         const BigInt aTempWidth( aGrfSize.Width() );
         const BigInt aTempHeight( aGrfSize.Height());
@@ -312,14 +312,14 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
         // Fit width if necessary, scale down the height proportional thereafter.
         if( aGrfSize.Width() > aBound.Width() )
         {
-            aGrfSize.Width()  = aBound.Width();
-            aGrfSize.Height() = BigInt(aBound.Width()) * aTempHeight / aTempWidth;
+            aGrfSize.setWidth( aBound.Width() );
+            aGrfSize.setHeight( BigInt(aBound.Width()) * aTempHeight / aTempWidth );
         }
         // Fit height if necessary, scale down the width proportional thereafter.
         if( aGrfSize.Height() > aBound.Height() )
         {
-            aGrfSize.Height() = aBound.Height();
-            aGrfSize.Width() =  BigInt(aBound.Height()) * aTempWidth / aTempHeight;
+            aGrfSize.setHeight( aBound.Height() );
+            aGrfSize.setWidth(  BigInt(aBound.Height()) * aTempWidth / aTempHeight );
         }
         pFrameMgr->SetSize( aGrfSize );
         pFrameMgr->UpdateFlyFrame();
@@ -508,8 +508,8 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
     if ( aSz.Width() > aBound.Width() )
     {
         //Always limit proportional.
-        aSz.Height() = aSz.Height() * aBound.Width() / aSz.Width();
-        aSz.Width() = aBound.Width();
+        aSz.setHeight( aSz.Height() * aBound.Width() / aSz.Width() );
+        aSz.setWidth( aBound.Width() );
     }
     aFrameMgr.SetSize( aSz );
     SwFlyFrameFormat *pFormat = SwFEShell::InsertObject( xRef, &aFrameMgr.GetAttrSet() );

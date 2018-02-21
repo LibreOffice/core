@@ -82,8 +82,8 @@ public:
     long&               Y() { return nB; }
 
     void                Move( long nHorzMove, long nVertMove );
-    void                AdjustX( long nHorzMove ) { nA += nHorzMove; }
-    void                AdjustY( long nVertMove ) { nB += nVertMove; }
+    long                AdjustX( long nHorzMove ) { nA += nHorzMove; return nA; }
+    long                AdjustY( long nVertMove ) { nB += nVertMove; return nB; }
 
     void                RotateAround( long& rX, long& rY, short nOrientation ) const;
 
@@ -193,8 +193,8 @@ public:
 
     long&           Width()  { return nA; }
     long&           Height() { return nB; }
-    void            AdjustWidth( long n ) { nA += n; }
-    void            AdjustHeight( long n ) { nB += n; }
+    long            AdjustWidth( long n ) { nA += n; return nA; }
+    long            AdjustHeight( long n ) { nB += n; return nB; }
 
     long            getWidth() const { return Width(); }
     long            getHeight() const { return Height(); }
@@ -404,10 +404,10 @@ public:
 
     /// Move the top and left edges by a delta, preserving width and height
     inline void         Move( long nHorzMoveDelta, long nVertMoveDelta );
-    void                AdjustLeft( long nHorzMoveDelta ) { nLeft += nHorzMoveDelta; }
-    void                AdjustRight( long nHorzMoveDelta ) { nRight += nHorzMoveDelta; }
-    void                AdjustTop( long nVertMoveDelta ) { nTop += nVertMoveDelta; }
-    void                AdjustBottom( long nVertMoveDelta ) { nBottom += nVertMoveDelta; }
+    long                AdjustLeft( long nHorzMoveDelta ) { nLeft += nHorzMoveDelta; return nLeft; }
+    long                AdjustRight( long nHorzMoveDelta ) { nRight += nHorzMoveDelta; return nRight; }
+    long                AdjustTop( long nVertMoveDelta ) { nTop += nVertMoveDelta; return nTop; }
+    long                AdjustBottom( long nVertMoveDelta ) { nBottom += nVertMoveDelta; return nBottom; }
     inline void         SetPos( const Point& rPoint );
     void                SetSize( const Size& rSize );
     inline Size         GetSize() const;

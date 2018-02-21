@@ -54,8 +54,8 @@ static bool lcl_IsDropFlyInter( const SwTextFormatInfo &rInf,
     {
         SwRect aRect( rInf.GetTextFrame()->getFrameArea().Pos(), Size( nWidth, nHeight) );
         aRect.Pos() += rInf.GetTextFrame()->getFramePrintArea().Pos();
-        aRect.Pos().X() += rInf.X();
-        aRect.Pos().Y() = rInf.Y();
+        aRect.Pos().AdjustX(rInf.X() );
+        aRect.Pos().setY( rInf.Y() );
         aRect = rTextFly.GetFrame( aRect );
         return aRect.HasArea();
     }
@@ -621,10 +621,10 @@ void SwTextPainter::PaintDropPortion()
     }
     Point aLineOrigin( GetTopLeft() );
 
-    aLineOrigin.X() += nX;
+    aLineOrigin.AdjustX(nX );
     sal_uInt16 nTmpAscent, nTmpHeight;
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
-    aLineOrigin.Y() += nTmpAscent;
+    aLineOrigin.AdjustY(nTmpAscent );
     GetInfo().SetIdx( GetStart() );
     GetInfo().SetPos( aLineOrigin );
     GetInfo().SetLen( pDrop->GetLen() );

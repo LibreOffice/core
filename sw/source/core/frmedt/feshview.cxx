@@ -837,7 +837,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
                 bCheckNeighbours = true;
                 pFly->InvalidatePos();
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pFly);
-                aFrm.Pos().Y() += 1;
+                aFrm.Pos().AdjustY(1 );
             }
 
             pPage = pFly->FindPageFrame();
@@ -884,7 +884,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
                 {
                     pAct->InvalidatePos();
                     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pAct);
-                    aFrm.Pos().Y() += 1;
+                    aFrm.Pos().AdjustY(1 );
                 }
             }
         }
@@ -1802,10 +1802,10 @@ bool SwFEShell::ImpEndCreate()
             // The crsr should not be too far away
             bCharBound = true;
             tools::Rectangle aRect( aTmp.SVRect() );
-            aRect.Left()  -= MM50*2;
-            aRect.Top()   -= MM50*2;
-            aRect.Right() += MM50*2;
-            aRect.Bottom()+= MM50*2;
+            aRect.AdjustLeft( -(MM50*2) );
+            aRect.AdjustTop( -(MM50*2) );
+            aRect.AdjustRight(MM50*2 );
+            aRect.AdjustBottom(MM50*2 );
 
             if( !aRect.IsOver( rBound ) && !::GetHtmlMode( GetDoc()->GetDocShell() ))
                 bCharBound = false;

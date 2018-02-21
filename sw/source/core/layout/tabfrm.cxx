@@ -4532,7 +4532,7 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 
             if( IsVertical() && !IsVertLR() )
             {
-                aFrm.Pos().X() += nReal;
+                aFrm.Pos().AdjustX(nReal );
             }
         }
 
@@ -4551,7 +4551,7 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 
                 if( IsVertical() && !IsVertLR() )
                 {
-                    aFrm.Pos().X() -= nReal;
+                    aFrm.Pos().AdjustX( -nReal );
                 }
             }
             nReal = nTmp;
