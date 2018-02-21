@@ -49,23 +49,18 @@ public:
     /** Clears all buffered data, used to set up for a new sheet. */
     void                Initialize();
 
-    /** Returns the RGB color data for a (non-zero-based) Excel palette entry.
-        @descr  First looks for a color read from file, then looks for a default color.
-        @return  The color from current or default palette or COL_AUTO, if nothing else found. */
-    ColorData           GetColorData( sal_uInt16 nXclIndex ) const;
     /** Returns the color for a (non-zero-based) Excel palette entry.
         @descr  First looks for a color read from file, then looks for a default color.
         @return  The color from current or default palette or COL_AUTO, if nothing else found. */
-    Color        GetColor( sal_uInt16 nXclIndex ) const
-                            { return Color( GetColorData( nXclIndex ) ); }
+    Color           GetColor( sal_uInt16 nXclIndex ) const;
 
     /** Reads a PALETTE record. */
     void                ReadPalette( XclImpStream& rStrm );
 
 private:
     void ExportPalette();
-    typedef ::std::vector< ColorData > ColorDataVec;
-    ColorDataVec        maColorTable;       /// Colors read from file.
+    typedef ::std::vector< Color > ColorVec;
+    ColorVec                      maColorTable;       /// Colors read from file.
     const XclImpRoot&             mrRoot;
 };
 

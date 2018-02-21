@@ -257,22 +257,19 @@ public:
     /** Returns the color count in the current palette. */
     sal_uInt32   GetColorCount() const { return mnTableSize - EXC_COLOR_USEROFFSET; }
 
-    /** Returns the default RGB color data for a (non-zero-based) Excel color or COL_AUTO on error. */
-    ColorData           GetDefColorData( sal_uInt16 nXclIndex ) const;
     /** Returns the default color for a (non-zero-based) Excel color or COL_AUTO on error. */
-    Color        GetDefColor( sal_uInt16 nXclIndex ) const
-                            { return Color( GetDefColorData( nXclIndex ) ); }
+    Color        GetDefColor( sal_uInt16 nXclIndex ) const;
 
     /** Returns true, if the passed Excel color index is a system color. */
     bool         IsSystemColor( sal_uInt16 nXclIndex ) const { return nXclIndex >= mnTableSize; }
 
 private:
-    const ColorData*    mpnColorTable;      /// The table with RGB values.
-    ColorData           mnWindowText;       /// System window text color.
-    ColorData           mnWindowBack;       /// System window background color.
-    ColorData           mnFaceColor;        /// System button background color.
-    ColorData           mnNoteText;         /// Note text color.
-    ColorData           mnNoteBack;         /// Note background color.
+    const Color*        mpnColorTable;      /// The table with RGB values.
+    Color               mnWindowText;       /// System window text color.
+    Color               mnWindowBack;       /// System window background color.
+    Color               mnFaceColor;        /// System button background color.
+    Color               mnNoteText;         /// Note text color.
+    Color               mnNoteBack;         /// Note background color.
     sal_uInt32          mnTableSize;        /// The color table size.
 };
 

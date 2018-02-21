@@ -223,10 +223,10 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, Configura
         {
             const svtools::ColorConfig& rColors = GetColorConfig();
             bool bArrows =
-                ( ScDetectiveFunc::GetArrowColor() != static_cast<ColorData>(rColors.GetColorValue(svtools::CALCDETECTIVE).nColor) ||
-                  ScDetectiveFunc::GetErrorColor() != static_cast<ColorData>(rColors.GetColorValue(svtools::CALCDETECTIVEERROR).nColor) );
+                ( ScDetectiveFunc::GetArrowColor() != rColors.GetColorValue(svtools::CALCDETECTIVE).nColor ||
+                  ScDetectiveFunc::GetErrorColor() != rColors.GetColorValue(svtools::CALCDETECTIVEERROR).nColor );
             bool bComments =
-                ( ScDetectiveFunc::GetCommentColor() != static_cast<ColorData>(rColors.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor) );
+                ( ScDetectiveFunc::GetCommentColor() != rColors.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor );
             if ( bArrows || bComments )
             {
                 ScDetectiveFunc::InitializeColors(); // get the new colors
