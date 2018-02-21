@@ -94,7 +94,11 @@ endef
 # * UIConfig/<name> containing all nontranslatable files
 
 gb_UIConfig_INSTDIR := $(LIBO_SHARE_FOLDER)/config/soffice.cfg
-gb_UIConfig_a11yerrors_COMMAND = $(PYTHON_FOR_BUILD) $(SRCDIR)/bin/gla11y
+
+ifneq ($(filter LXML,$(BUILD_TYPE)),)
+gb_UIConfig_LXML_PATH := PYPATH=$${PYPATH:+$$PYPATH:}$(call gb_UnpackedTarball_get_dir,lxml)/install ;
+endif
+gb_UIConfig_gla11y_SCRIPT := $(SRCDIR)/bin/gla11y
 
 $(dir $(call gb_UIConfig_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
@@ -122,17 +126,11 @@ $(call gb_UIConfig_get_clean_target,%) :
 
 define gb_UIConfig_a11yerrors__command
 $(call gb_Output_announce,$(2),$(true),UIA,1)
-$(call gb_Helper_abbreviate_dirs,\
-	$(gb_UIConfig_a11yerrors_COMMAND) -W none $(UIFILES) > $@
-)
+$(call gb_UIConfig__gla11y_command)
 endef
 
-$(call gb_UIConfig_get_a11yerrors_target,%) : $(gb_UIConfig_a11yerrors_COMMAND)
-ifeq ($(PYTHON_LXML),TRUE)
+$(call gb_UIConfig_get_a11yerrors_target,%) : $(call gb_ExternalProject_get_target,lxml) $(call gb_ExternalExecutable_get_dependencies,python) $(gb_UIConfig_gla11y_SCRIPT)
 	$(call gb_UIConfig_a11yerrors__command,$@,$*)
-else
-	touch $@
-endif
 
 gb_UIConfig_get_packagename = UIConfig/$(1)
 gb_UIConfig_get_packagesetname = UIConfig/$(1)
@@ -186,7 +184,7 @@ $(call gb_UIConfig_get_imagelist_target,$(1)) : UI_IMAGELISTS += $(call gb_UIIma
 $(call gb_UIConfig_get_imagelist_target,$(1)) : $(call gb_UIImageListTarget_get_target,$(2))
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_UIImageListTarget_get_clean_target,$(2))
 
-$(call gb_UIConfig_get_a11yerrors_target,$(1)) : UIFILES += $(SRCDIR)/$(2).ui
+$(call gb_UIConfig_get_a11yerrors_target,$(1)) : UIFILES += $(2).ui
 
 endef
 
