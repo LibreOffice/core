@@ -1221,7 +1221,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
             produce();
         else
         {
-            SAL_INFO("sax.fastparser", " startElement line " << mxDocumentLocator->getLineNumber() << " column " << mxDocumentLocator->getColumnNumber() << " " << prefix << ":" << localName);
+            SAL_INFO("sax.fastparser", " startElement line " << mxDocumentLocator->getLineNumber() << " column " << mxDocumentLocator->getColumnNumber() << " " << ( prefix ? XML_CAST(prefix) : "(null)" ) << ":" << localName);
             rEntity.startElement( &rEvent );
         }
     }
