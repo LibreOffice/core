@@ -113,20 +113,28 @@ published service GraphicObjectShape
 
     /// Whether this shape is actually a signature line.
     [optional, property] boolean IsSignatureLine;
+
     /// The ID of the signature line, used to connect to a signature.
     [optional, property] string SignatureLineId;
+
     /// Suggested Signer, Name of the Signer
     [optional, property] string SignatureLineSuggestedSignerName;
+
     /// Suggested Signer, Line 2 (Title or additional information)
     [optional, property] string SignatureLineSuggestedSignerTitle;
+
     /// Suggested Signer Email
     [optional, property] string SignatureLineSuggestedSignerEmail;
+
     /// Signing instructions, to be shown at signing time
     [optional, property] string SignatureLineSigningInstructions;
+
     /// Whether the signing date should be shown in the shape
     [optional, property] boolean SignatureLineShowSignDate;
+
     /// Whether the user can attach a comment at signing time
     [optional, property] boolean SignatureLineCanAddComment;
+
     /** Image to be displayed when the signature line is unsigned
      *
      *  Images for signed signature lines (valid and invalid)
