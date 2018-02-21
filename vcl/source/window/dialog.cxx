@@ -23,6 +23,7 @@
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <comphelper/lok.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
@@ -803,13 +804,26 @@ bool Dialog::ImplStartExecuteModal()
         return false;
     }
 
+    ImplSVData* pSVData = ImplGetSVData();
+
     switch ( Application::GetDialogCancelMode() )
     {
     case Application::DialogCancelMode::Off:
         break;
     case Application::DialogCancelMode::Silent:
         if (GetLOKNotifier())
-            break;
+        {
+            // check if there's already some dialog being ::Execute()d
+            const bool bDialogExecuting = std::any_of(pSVData->maWinData.mpExecuteDialogs.begin(),
+                                                      pSVData->maWinData.mpExecuteDialogs.end(),
+                                                      [](const Dialog* pDialog) {
+                                                          return pDialog->IsInSyncExecute();
+                                                      });
+            if (!(bDialogExecuting && IsInSyncExecute()))
+                break;
+            else
+                SAL_WARN("lok.dialog", "Dialog \"" << ImplGetDialogText(this) << "\" is being synchronously executed over an existing synchronously executing dialog.");
+        }
 
         SAL_INFO(
             "vcl",
@@ -836,9 +850,7 @@ bool Dialog::ImplStartExecuteModal()
     }
 #endif
 
-    ImplSVData* pSVData = ImplGetSVData();
-
-     // link all dialogs which are being executed
+    // link all dialogs which are being executed
     pSVData->maWinData.mpExecuteDialogs.push_back(this);
 
     // stop capturing, in order to have control over the dialog
@@ -950,6 +962,11 @@ short Dialog::Execute()
 #if HAVE_FEATURE_DESKTOP
     VclPtr<vcl::Window> xWindow = this;
 
+    mbInSyncExecute = true;
+    comphelper::ScopeGuard aGuard([&]() {
+            mbInSyncExecute = false;
+        });
+
     if ( !ImplStartExecuteModal() )
         return 0;
 
@@ -959,7 +976,6 @@ short Dialog::Execute()
         Application::Yield();
 
     ImplEndExecuteModal();
-
 #ifdef DBG_UTIL
     assert (!mpDialogParent || !mpDialogParent->IsDisposed());
 #endif
