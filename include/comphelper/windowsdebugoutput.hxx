@@ -27,6 +27,11 @@
 #else
 #include <windows.h>
 #endif
+#include <initguid.h>
+
+namespace {
+DEFINE_GUID(IID_IdentityUnmarshal, 0x0000001B, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
+}
 
 template <typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
@@ -69,6 +74,28 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
                           std::wstring(sValue.data()))
                    << "\"";
         }
+    }
+    else
+    {
+        // Special case well-known interfaces that pop up a lot, but which don't have their name in
+        // the Registry.
+
+        if (IsEqualIID(rIid, IID_IMarshal))
+            stream << "=\"IMarshal\"";
+        else if (IsEqualIID(rIid, IID_INoMarshal))
+            stream << "=\"INoMarshal\"";
+        else if (IsEqualIID(rIid, IID_IdentityUnmarshal))
+            stream << "=\"IdentityUnmarshal\"";
+        else if (IsEqualIID(rIid, IID_IFastRundown))
+            stream << "=\"IdentityUnmarshal\"";
+        else if (IsEqualIID(rIid, IID_IStdMarshalInfo))
+            stream << "=\"IStdMarshalInfo\"";
+        else if (IsEqualIID(rIid, IID_IAgileObject))
+            stream << "=\"IAgileObject\"";
+        else if (IsEqualIID(rIid, IID_IExternalConnection))
+            stream << "=\"IExternalConnection\"";
+        else if (IsEqualIID(rIid, IID_ICallFactory))
+            stream << "=\"ICallFactory\"";
     }
 
     CoTaskMemFree(pRiid);
