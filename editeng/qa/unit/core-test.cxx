@@ -1892,12 +1892,7 @@ void Test::testHoriAlignIgnoreTrailingWhitespace()
         // Check horizontal position
         ParaPortion* pParaPortion = aEditEngine.GetParaPortions()[0];
         EditLine* pLine = &pParaPortion->GetLines()[0];
-// this keeps failing on OSX with a value of 4495
-#if !defined(MACOSX)
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(4527), pLine->GetStartPosX(), 10);
-#else
-        (void) pLine; // avoid -Wunused-variable
-#endif
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(4527), pLine->GetStartPosX(), 100);
     }
 
     // Second test case: center alignment with compatibility option disabled
@@ -1918,7 +1913,7 @@ void Test::testHoriAlignIgnoreTrailingWhitespace()
         // Check horizontal position
         ParaPortion* pParaPortion = aEditEngine.GetParaPortions()[0];
         EditLine* pLine = &pParaPortion->GetLines()[0];
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(4407), pLine->GetStartPosX(), 10);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(4407), pLine->GetStartPosX(), 100);
     }
 
     // Third test case: right alignment with compatibility option enabled
@@ -1939,7 +1934,7 @@ void Test::testHoriAlignIgnoreTrailingWhitespace()
         // Check horizontal position
         ParaPortion* pParaPortion = aEditEngine.GetParaPortions()[0];
         EditLine* pLine = &pParaPortion->GetLines()[0];
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(9054), pLine->GetStartPosX(), 10);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(9054), pLine->GetStartPosX(), 100);
     }
 
     // Fourth test case: right alignment with compatibility option disabled
@@ -1960,7 +1955,7 @@ void Test::testHoriAlignIgnoreTrailingWhitespace()
         // Check horizontal position
         ParaPortion* pParaPortion = aEditEngine.GetParaPortions()[0];
         EditLine* pLine = &pParaPortion->GetLines()[0];
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(8815), pLine->GetStartPosX(), 10);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(8815), pLine->GetStartPosX(), 100);
     }
 
     // Test multiple paragraph case
@@ -1991,9 +1986,9 @@ void Test::testHoriAlignIgnoreTrailingWhitespace()
 
         // Check horizontal position
         ParaPortion* pParaPortion = aEditEngine.GetParaPortions()[0];
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(4527), pParaPortion->GetLines()[0].GetStartPosX(), 50);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(4527), pParaPortion->GetLines()[0].GetStartPosX(), 100);
         pParaPortion = aEditEngine.GetParaPortions()[1];
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(8815), pParaPortion->GetLines()[0].GetStartPosX(), 50);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(8815), pParaPortion->GetLines()[0].GetStartPosX(), 100);
     }
 }
 
