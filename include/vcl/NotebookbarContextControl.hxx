@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_NOTEBOOKBAR_NOTEBOOKBARCONTEXTCONTROL_HXX
-#define INCLUDED_SFX2_NOTEBOOKBAR_NOTEBOOKBARCONTEXTCONTROL_HXX
+#ifndef INCLUDED_VCL_NOTEBOOKBARCONTEXTCONTROL_HXX
+#define INCLUDED_VCL_NOTEBOOKBARCONTEXTCONTROL_HXX
 
 #include <vcl/EnumContext.hxx>
 
@@ -21,6 +21,6 @@ public:
     virtual void SetContext( vcl::EnumContext::Context eContext ) = 0;
 };
 
-#endif // INCLUDED_SFX2_NOTEBOOKBAR_NOTEBOOKBARCONTEXTCONTROL_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

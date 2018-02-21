@@ -116,6 +116,7 @@
 #include <salhelper/thread.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/IContext.hxx>
+#include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/bitmap.hxx>
@@ -453,7 +454,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/lokhelper.hxx>
-#include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>

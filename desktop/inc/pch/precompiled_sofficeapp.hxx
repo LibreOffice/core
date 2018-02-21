@@ -108,6 +108,7 @@
 #include <sal/typesizes.h>
 #include <salhelper/singletonref.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
@@ -242,7 +243,6 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <sfx2/dllapi.h>
-#include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 #include <svl/hint.hxx>
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>

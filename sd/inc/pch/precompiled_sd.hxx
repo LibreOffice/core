@@ -88,6 +88,7 @@
 #include <sal/typesizes.h>
 #include <vcl/EnumContext.hxx>
 #include <vcl/IContext.hxx>
+#include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmapex.hxx>
@@ -376,7 +377,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
-#include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>

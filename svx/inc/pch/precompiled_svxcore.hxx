@@ -104,6 +104,7 @@
 #include <salhelper/singletonref.hxx>
 #include <salhelper/thread.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/bitmap.hxx>
@@ -401,7 +402,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/docfile.hxx>
-#include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/shell.hxx>

@@ -85,6 +85,7 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/EnumContext.hxx>
+#include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
@@ -480,7 +481,6 @@
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/new.hxx>
-#include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objitem.hxx>

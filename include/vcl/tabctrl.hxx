@@ -25,7 +25,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/EnumContext.hxx>
-#include <sfx2/notebookbar/NotebookbarContextControl.hxx>
+#include <vcl/NotebookbarContextControl.hxx>
 
 struct ImplTabItem;
 struct ImplTabCtrlData;

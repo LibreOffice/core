@@ -114,6 +114,7 @@
 #include <salhelper/singletonref.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/IContext.hxx>
+#include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
@@ -405,7 +406,6 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/linksrc.hxx>
 #include <sfx2/lnkbase.hxx>
-#include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 #include <sfx2/sfxstatuslistener.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
