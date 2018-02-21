@@ -20,7 +20,7 @@
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -1434,8 +1434,11 @@ void ScTabView::ErrorMessage(const char* pGlobStrId)
         }
     }
 
-    ScopedVclPtrInstance<InfoBox> aBox(pParent, ScGlobal::GetRscString(pGlobStrId));
-    aBox->Execute();
+    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                  ScGlobal::GetRscString(pGlobStrId)));
+    xInfoBox->run();
+
     if (bFocus)
         pParent->GrabFocus();
 }

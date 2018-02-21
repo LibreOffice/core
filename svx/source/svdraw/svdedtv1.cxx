@@ -26,7 +26,8 @@
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
 #include <tools/bigint.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <getallcharpropids.hxx>
 #include <svdglob.hxx>
@@ -964,7 +965,10 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
         if(bHasEEFeatureItems)
         {
             OUString aMessage("SdrEditView::SetAttrToMarked(): Setting EE_FEATURE items at the SdrView does not make sense! It only leads to overhead and unreadable documents.");
-            ScopedVclPtrInstance<InfoBox>(nullptr, aMessage)->Execute();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          aMessage));
+            xInfoBox->run();
         }
     }
 #endif

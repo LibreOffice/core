@@ -23,7 +23,7 @@
 #include <cassert>
 
 #include <scitems.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
@@ -82,8 +82,11 @@ void ScDocShell::ErrorMessage(const char* pGlobStrId)
         }
     }
 
-    ScopedVclPtrInstance< InfoBox > aBox( pParent, ScGlobal::GetRscString(pGlobStrId));
-    aBox->Execute();
+    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                  ScGlobal::GetRscString(pGlobStrId)));
+    xInfoBox->run();
+
     if (bFocus)
         pParent->GrabFocus();
 }
@@ -519,9 +522,11 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
 
     if (bErr)
     {
-        ScopedVclPtrInstance<InfoBox> aBox( GetActiveDialogParent(),
-                ScGlobal::GetRscString( STR_CONSOLIDATE_ERR1 ) );
-        aBox->Execute();
+        vcl::Window* pWin = GetActiveDialogParent();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      ScGlobal::GetRscString(STR_CONSOLIDATE_ERR1)));
+        xInfoBox->run();
         return;
     }
 
@@ -729,16 +734,20 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
             }
             else
             {
-                ScopedVclPtrInstance<InfoBox> aBox( GetActiveDialogParent(),
-                    ScGlobal::GetRscString( STR_PROTECTIONERR ) );
-                aBox->Execute();
+                vcl::Window* pWin = GetActiveDialogParent();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              ScGlobal::GetRscString(STR_PROTECTIONERR)));
+                xInfoBox->run();
             }
         }
         else
         {
-            ScopedVclPtrInstance<InfoBox> aBox(GetActiveDialogParent(),
-                ScGlobal::GetRscString( STR_SCENARIO_NOTFOUND ) );
-            aBox->Execute();
+            vcl::Window* pWin = GetActiveDialogParent();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          ScGlobal::GetRscString(STR_SCENARIO_NOTFOUND)));
+            xInfoBox->run();
         }
     }
     else

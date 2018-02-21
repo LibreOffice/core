@@ -180,7 +180,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
         xNewDic = nullptr;
         // error: couldn't create new dictionary
         SfxErrorContext aContext( ERRCTX_SVX_LINGU_DICTIONARY, OUString(),
-            this, RID_SVXERRCTX, SvxResLocale() );
+            GetFrameWeld(), RID_SVXERRCTX, SvxResLocale() );
         ErrorHandler::HandleError( *new StringErrorInfo(
                 ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE, sDict ) );
         EndDialog();
@@ -646,7 +646,7 @@ bool SvxEditDictionaryDialog::NewDelHdl(void const * pBtn)
              }
         }
         if (DictionaryError::NONE != nAddRes)
-            SvxDicError( this, nAddRes );
+            SvxDicError(GetFrameWeld(), nAddRes);
 
         if(DictionaryError::NONE == nAddRes && !sEntry.isEmpty())
         {

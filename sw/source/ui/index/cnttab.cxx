@@ -20,10 +20,10 @@
 #include <config_folders.h>
 
 #include <comphelper/string.hxx>
-#include <svl/style.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/help.hxx>
 #include <vcl/builderfactory.hxx>
+#include <svl/style.hxx>
+#include <vcl/help.hxx>
+#include <vcl/weld.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
@@ -487,8 +487,11 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl, Button*, void )
                 OUString sInfo(SwResId(STR_FILE_NOT_FOUND));
                 sInfo = sInfo.replaceFirst( "%1", sTemplate );
                 sInfo = sInfo.replaceFirst( "%2", aOpt.GetTemplatePath() );
-                ScopedVclPtrInstance< InfoBox > aInfo(GetParent(), sInfo);
-                aInfo->Execute();
+                vcl::Window* pWin = GetParent();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              sInfo));
+                xInfoBox->run();
             }
             else
             {

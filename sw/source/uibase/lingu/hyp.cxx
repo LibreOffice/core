@@ -22,7 +22,7 @@
 #include <edtwin.hxx>
 #include <wrtsh.hxx>
 #include <globals.hrc>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/wrkwin.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
@@ -120,7 +120,12 @@ SwHyphWrapper::~SwHyphWrapper()
     if( nPageCount )
         ::EndProgress( pView->GetDocShell() );
     if( bInfoBox && !Application::IsHeadlessModeEnabled() )
-        ScopedVclPtrInstance<InfoBox>(&pView->GetEditWin(), SwResId(STR_HYP_OK))->Execute();
+    {
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pView->GetEditWin().GetFrameWeld(),
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      SwResId(STR_HYP_OK)));
+        xInfoBox->run();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
