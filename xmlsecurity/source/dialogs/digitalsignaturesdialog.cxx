@@ -472,7 +472,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, Button*, void)
     }
 }
 
-IMPL_STATIC_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, Button*, void)
+IMPL_STATIC_LINK(DigitalSignaturesDialog, CertMgrButtonHdl, Button*, pButton, void)
 {
 #ifdef _WIN32
     // FIXME: call GpgME::dirInfo("bindir") somewhere in
@@ -514,11 +514,12 @@ IMPL_STATIC_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, Button*, void)
        }
        else
        {
-           ScopedVclPtrInstance<InfoBox>(nullptr, XsResId(STR_XMLSECDLG_NO_CERT_MANAGER))->Execute();
+           std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pButton->GetFrameWeld(),
+                                                         VclMessageType::Info, VclButtonsType::Ok,
+                                                         XsResId(STR_XMLSECDLG_NO_CERT_MANAGER)));
+           xInfoBox->run();
        }
-
     }
-
 }
 
 IMPL_LINK_NOARG(DigitalSignaturesDialog, StartVerifySignatureHdl, LinkParamNone*, bool)
@@ -746,7 +747,10 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         }
         else
         {
-            ScopedVclPtrInstance<InfoBox>(nullptr, XsResId(STR_XMLSECDLG_NO_CERT_FOUND))->Execute();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          XsResId(STR_XMLSECDLG_NO_CERT_FOUND)));
+            xInfoBox->run();
         }
     }
 }

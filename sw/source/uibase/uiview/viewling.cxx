@@ -411,7 +411,7 @@ void SwView::HyphenateDocument()
         return;
     }
 
-    SfxErrorContext aContext( ERRCTX_SVX_LINGU_HYPHENATION, OUString(), m_pEditWin,
+    SfxErrorContext aContext( ERRCTX_SVX_LINGU_HYPHENATION, OUString(), m_pEditWin->GetFrameWeld(),
          RID_SVXERRCTX, SvxResLocale() );
 
     Reference< XHyphenator >  xHyph( ::GetHyphenator() );
@@ -535,7 +535,7 @@ void SwView::StartThesaurus()
     if (!IsValidSelectionForThesaurus())
         return;
 
-    SfxErrorContext aContext( ERRCTX_SVX_LINGU_THESAURUS, OUString(), m_pEditWin,
+    SfxErrorContext aContext( ERRCTX_SVX_LINGU_THESAURUS, OUString(), m_pEditWin->GetFrameWeld(),
          RID_SVXERRCTX, SvxResLocale() );
 
     // Determine language

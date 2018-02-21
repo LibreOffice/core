@@ -21,7 +21,8 @@
 
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/filedlghelper.hxx>
 
 #include <multipat.hxx>
@@ -92,7 +93,9 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl, Button*, void)
         {
             OUString sMsg( CuiResId( RID_MULTIPATH_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sInsPath );
-            ScopedVclPtrInstance<InfoBox>(this, sMsg)->Execute();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                          VclMessageType::Info, VclButtonsType::Ok, sMsg));
+            xInfoBox->run();
         }
 
         SelectHdl_Impl( nullptr );
@@ -116,7 +119,9 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl, Button*, void)
         {
             OUString sMsg( CuiResId( RID_MULTIPATH_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sInsPath );
-            ScopedVclPtrInstance<InfoBox>(this, sMsg)->Execute();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                          VclMessageType::Info, VclButtonsType::Ok, sMsg));
+            xInfoBox->run();
         }
         else
         {

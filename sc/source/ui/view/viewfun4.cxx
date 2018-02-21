@@ -41,7 +41,7 @@
 #include <svtools/transfer.hxx>
 #include <svl/urlbmk.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <avmedia/mediawindow.hxx>
 
 #include <comphelper/storagehelper.hxx>
@@ -399,8 +399,12 @@ void ScViewFunc::DoThesaurus()
         LanguageType eLnge = ScViewUtil::GetEffLanguage( &rDoc, ScAddress( nCol, nRow, nTab ) );
         OUString aErr = SvtLanguageTable::GetLanguageString(eLnge);
         aErr += ScGlobal::GetRscString( STR_SPELLING_NO_LANG );
-        ScopedVclPtrInstance< InfoBox > aBox( GetViewData().GetDialogParent(), aErr );
-        aBox->Execute();
+
+        vcl::Window* pWin = GetViewData().GetDialogParent();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      aErr));
+        xInfoBox->run();
     }
     if (pThesaurusEngine->IsModified())
     {

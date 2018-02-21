@@ -20,7 +20,7 @@
 #include <comphelper/string.hxx>
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/builderfactory.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/treelistentry.hxx>
@@ -63,7 +63,10 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, ModifyHdl, Edit&, void)
     if (sTmp.getLength() != nLen)
     {
         m_pEditBox->SetText(sTmp);
-        ScopedVclPtrInstance<InfoBox>(this, sRemoveWarning + sMsg)->Execute();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      sRemoveWarning + sMsg));
+        xInfoBox->run();
     }
 
     sal_Int32 nSelectedEntries = 0;

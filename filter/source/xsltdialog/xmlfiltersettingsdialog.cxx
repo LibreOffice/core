@@ -30,9 +30,10 @@
 #include <unotools/pathoptions.hxx>
 #include <osl/file.hxx>
 #include <o3tl/enumrange.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/builderfactory.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svtools/treelistentry.hxx>
 
@@ -902,8 +903,10 @@ void XMLFilterSettingsDialog::onSave()
             aMsg = aMsg.replaceFirst( sPlaceholder, aURL.GetName() );
         }
 
-        ScopedVclPtrInstance< InfoBox > aBox(this, aMsg );
-        aBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      aMsg));
+        xInfoBox->run();
     }
 }
 
@@ -967,8 +970,10 @@ void XMLFilterSettingsDialog::onOpen()
             aMsg = aMsg.replaceFirst( sPlaceholder, OUString::number( nFilters ) );
         }
 
-        ScopedVclPtrInstance< InfoBox > aBox(this, aMsg );
-        aBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      aMsg));
+        xInfoBox->run();
     }
 }
 

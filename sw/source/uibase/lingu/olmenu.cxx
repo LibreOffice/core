@@ -747,7 +747,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
                     sWord, false, OUString() );
             if (linguistic::DictionaryError::NONE != nAddRes && !xDictionary->getEntry(sWord).is())
             {
-                SvxDicError(&m_pSh->GetView().GetViewFrame()->GetWindow(), nAddRes);
+                SvxDicError(m_pSh->GetView().GetViewFrame()->GetWindow().GetFrameWeld(), nAddRes);
             }
         }
     }
@@ -779,7 +779,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
 
             if (linguistic::DictionaryError::NONE != nAddRes && !xDic->getEntry(sWord).is())
             {
-                SvxDicError(&m_pSh->GetView().GetViewFrame()->GetWindow(), nAddRes);
+                SvxDicError(m_pSh->GetView().GetViewFrame()->GetWindow().GetFrameWeld(), nAddRes);
             }
         }
     }
