@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_b4a482b9",
+        "filename": "basctl/source/basicide/basicbox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-02-21T13:56:24Z",
+      "side": 1,
+      "message": "I think this would be better on a single line.",
+      "range": {
+        "startLine": 411,
+        "startChar": 15,
+        "endLine": 412,
+        "endChar": 51
+      },
+      "revId": "40d64ae3c0261aad1da5ba69c6ce414fa78ed77f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
