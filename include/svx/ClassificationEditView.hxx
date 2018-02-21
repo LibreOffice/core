@@ -13,6 +13,7 @@
 
 #include <sal/config.h>
 #include <svx/svxdllapi.h>
+#include <vcl/ctrl.hxx>
 #include <vcl/dialog.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/numitem.hxx>
