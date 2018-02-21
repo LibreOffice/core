@@ -863,21 +863,21 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
 
 Reference< XShape > SimpleShape::createEmbeddedPictureObject( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect, OUString const & rGraphicPath ) const
 {
-    XmlFilterBase& rFilter = mrDrawing.getFilter();
-    OUString aGraphicUrl = rFilter.getGraphicHelper().importEmbeddedGraphicObject( rGraphicPath );
-    return SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicUrl);
+    Reference<XGraphic> xGraphic = mrDrawing.getFilter().getGraphicHelper().importEmbeddedGraphic(rGraphicPath);
+    return SimpleShape::createPictureObject(rxShapes, rShapeRect, xGraphic);
 }
 
-Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect, OUString const & rGraphicUrl ) const
+Reference< XShape > SimpleShape::createPictureObject(const Reference< XShapes >& rxShapes,
+                                                     const awt::Rectangle& rShapeRect,
+                                                     uno::Reference<graphic::XGraphic> const & rxGraphic) const
 {
     Reference< XShape > xShape = mrDrawing.createAndInsertXShape( "com.sun.star.drawing.GraphicObjectShape", rxShapes, rShapeRect );
     if( xShape.is() )
     {
-
-        PropertySet aPropSet( xShape );
-        if( !rGraphicUrl.isEmpty() )
+        PropertySet aPropSet(xShape);
+        if (rxGraphic.is())
         {
-            aPropSet.setProperty( PROP_GraphicURL, rGraphicUrl );
+            aPropSet.setProperty(PROP_Graphic, rxGraphic);
         }
         uno::Reference< lang::XServiceInfo > xServiceInfo(rxShapes, uno::UNO_QUERY);
         // If the shape has an absolute position, set the properties accordingly, unless we're inside a group shape.
@@ -897,9 +897,7 @@ Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >
         if (maTypeModel.moCropBottom.has() || maTypeModel.moCropLeft.has() || maTypeModel.moCropRight.has() || maTypeModel.moCropTop.has())
         {
             text::GraphicCrop aGraphicCrop;
-            uno::Reference<graphic::XGraphic> xGraphic;
-            aPropSet.getProperty(xGraphic, PROP_Graphic);
-            awt::Size aOriginalSize = rGraphicHelper.getOriginalSize(xGraphic);
+            awt::Size aOriginalSize = rGraphicHelper.getOriginalSize(rxGraphic);
 
             if (maTypeModel.moCropBottom.has())
                 aGraphicCrop.Bottom = lclConvertCrop(maTypeModel.moCropBottom.get(), aOriginalSize.Height);
@@ -1249,7 +1247,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
 
     if( getShapeModel().mbIsSignatureLine )
     {
-        OUString aGraphicUrl;
+        uno::Reference<graphic::XGraphic> xGraphic;
         try
         {
             // Get the document signatures
@@ -1278,16 +1276,14 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
                         // Signature is valid, use the 'valid' image
                         SAL_WARN_IF(!xSignatureInfo[i].ValidSignatureLineImage.is(), "oox.vml",
                                     "No ValidSignatureLineImage!");
-                        aGraphicUrl = rFilter.getGraphicHelper().createGraphicObject(
-                            xSignatureInfo[i].ValidSignatureLineImage);
+                        xGraphic = xSignatureInfo[i].ValidSignatureLineImage;
                     }
                     else
                     {
                         // Signature is invalid, use the 'invalid' image
                         SAL_WARN_IF(!xSignatureInfo[i].InvalidSignatureLineImage.is(), "oox.vml",
                                     "No InvalidSignatureLineImage!");
-                        aGraphicUrl = rFilter.getGraphicHelper().createGraphicObject(
-                            xSignatureInfo[i].InvalidSignatureLineImage);
+                        xGraphic = xSignatureInfo[i].InvalidSignatureLineImage;
                     }
                     break;
                 }
@@ -1300,10 +1296,10 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         }
 
         Reference< XShape > xShape;
-        if (!aGraphicUrl.isEmpty())
+        if (xGraphic.is())
         {
             // If available, use the signed image from the signature
-            xShape = SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicUrl);
+            xShape = SimpleShape::createPictureObject(rxShapes, rShapeRect, xGraphic);
         }
         else
         {
@@ -1337,10 +1333,8 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
 
         if (!aGraphicPath.isEmpty())
         {
-            Reference< XGraphic > xGraphic
-                = rFilter.getGraphicHelper().importEmbeddedGraphic(aGraphicPath);
-            xPropertySet->setPropertyValue("SignatureLineUnsignedImage",
-                                            uno::makeAny(xGraphic));
+            xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic(aGraphicPath);
+            xPropertySet->setPropertyValue("SignatureLineUnsignedImage", uno::makeAny(xGraphic));
         }
         return xShape;
     }
@@ -1348,7 +1342,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
     // try to create a picture object
     if( !aGraphicPath.isEmpty() )
     {
-        Reference< XShape > xShape = SimpleShape::createEmbeddedPictureObject(rxShapes, rShapeRect, aGraphicPath);
+        Reference<XShape> xShape = SimpleShape::createEmbeddedPictureObject(rxShapes, rShapeRect, aGraphicPath);
         // AS_CHARACTER shape: vertical orientation default is bottom, MSO default is top.
         if ( maTypeModel.maPosition != "absolute" && maTypeModel.maPosition != "relative" )
             PropertySet( xShape ).setAnyProperty( PROP_VertOrient, makeAny(text::VertOrientation::TOP));
