@@ -188,7 +188,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
 
     Point aMailPos = m_pMailingRB->GetPosPixel();
     Point aFilePos = m_pFileRB->GetPosPixel();
-    aFilePos.X() -= (aFilePos.X() - aMailPos.X()) /2;
+    aFilePos.AdjustX( -((aFilePos.X() - aMailPos.X()) /2) );
     m_pFileRB->SetPosPixel(aFilePos);
     uno::Reference< lang::XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
     if(pSelection) {

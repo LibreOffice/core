@@ -1134,11 +1134,11 @@ static void lcl_SetPos( SwFrame&             _rNewFrame,
     // notifications for a new calculated position after its formatting.
     if ( aRectFnSet.IsVert() )
     {
-        aFrm.Pos().X() -= 1;
+        aFrm.Pos().AdjustX( -1 );
     }
     else
     {
-        aFrm.Pos().Y() += 1;
+        aFrm.Pos().AdjustY(1 );
     }
 }
 

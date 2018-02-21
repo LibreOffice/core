@@ -99,11 +99,11 @@ bool SwLayVout::DoesFit( const Size &rNew )
 
     if( rNew.Width() > aSize.Width() )
     {
-        aSize.Width() = rNew.Width();
+        aSize.setWidth( rNew.Width() );
         if( !pVirDev->SetOutputSizePixel( aSize ) )
         {
             pVirDev.disposeAndClear();
-            aSize.Width() = 0;
+            aSize.setWidth( 0 );
             return false;
         }
     }
@@ -142,8 +142,8 @@ void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, bool bOn )
     pOut = pO;
     Size aPixSz( pOut->PixelToLogic( Size( 1,1 )) );
     SwRect aTmp( rRect );
-    aTmp.SSize().Width() += aPixSz.Width()/2 + 1;
-    aTmp.SSize().Height()+= aPixSz.Height()/2 + 1;
+    aTmp.SSize().AdjustWidth(aPixSz.Width()/2 + 1 );
+    aTmp.SSize().AdjustHeight(aPixSz.Height()/2 + 1 );
     tools::Rectangle aTmpRect( pO->LogicToPixel( aTmp.SVRect() ) );
 
     OSL_ENSURE( !pSh->GetWin()->IsReallyVisible() ||

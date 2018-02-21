@@ -409,7 +409,7 @@ void SwDropCapsPict::DrawPrev(vcl::RenderContext& rRenderContext, const Point& r
         rFnt.DrawPrev(&rRenderContext, mpPrinter, aPt, maText, nStart, nEnd - nStart);
 
         if (!maScriptChanges.empty())
-            aPt.X() += maScriptChanges[nIdx].textWidth;
+            aPt.AdjustX(maScriptChanges[nIdx].textWidth );
 
         if (!GetNextScriptSegment(nIdx, nStart, nEnd, nScript))
             break;

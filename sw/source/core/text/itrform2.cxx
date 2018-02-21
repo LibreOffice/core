@@ -2067,26 +2067,26 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
             if ( GetMulti()->HasBrackets() )
             {
                 OSL_ENSURE( GetMulti()->IsDouble(), "Brackets only for doubles");
-                aSt.X() += static_cast<SwDoubleLinePortion*>(GetMulti())->PreWidth();
+                aSt.AdjustX(static_cast<SwDoubleLinePortion*>(GetMulti())->PreWidth() );
             }
             else if( GetMulti()->HasRotation() )
             {
-                aSt.Y() += pCurrent->GetAscent() - GetMulti()->GetAscent();
+                aSt.AdjustY(pCurrent->GetAscent() - GetMulti()->GetAscent() );
                 if( GetMulti()->IsRevers() )
-                    aSt.X() += GetMulti()->Width();
+                    aSt.AdjustX(GetMulti()->Width() );
                 else
-                    aSt.Y() += GetMulti()->Height();
+                    aSt.AdjustY(GetMulti()->Height() );
                }
             else if ( GetMulti()->IsBidi() )
                 // jump to end of the bidi portion
-                aSt.X() += pLay->Width();
+                aSt.AdjustX(pLay->Width() );
 
             sal_Int32 nStIdx = aTmpInf.GetIdx();
             do
             {
                 UpdatePos( pLay, aSt, nStIdx, bAlways );
                 nStIdx = nStIdx + pLay->GetLen();
-                aSt.Y() += pLay->Height();
+                aSt.AdjustY(pLay->Height() );
                 pLay = pLay->GetNext();
             } while ( pLay );
             const_cast<SwTextFormatter*>(this)->pMulti = nullptr;
@@ -2166,7 +2166,7 @@ bool SwTextFormatter::ChkFlyUnderflow( SwTextFormatInfo &rInf ) const
         // We now check every portion that could have lowered for overlapping
         // with the fly.
         const SwLinePortion *pPos = GetCurr()->GetFirstPortion();
-        aLine.Pos().Y() = Y() + GetCurr()->GetRealHeight() - GetCurr()->Height();
+        aLine.Pos().setY( Y() + GetCurr()->GetRealHeight() - GetCurr()->Height() );
         aLine.Height( GetCurr()->Height() );
 
         while( pPos )
@@ -2337,7 +2337,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     }
 
     // aInter becomes frame-local
-    aInter.Pos().X() -= nLeftMar;
+    aInter.Pos().AdjustX( -nLeftMar );
     SwFlyPortion *pFly = new SwFlyPortion( aInter );
     if( bForced )
     {
@@ -2513,7 +2513,7 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
         rInf.SelectFont();
         if( pRet->GetAscent() > nAscent )
         {
-            aBase.Y() = Y() + pRet->GetAscent();
+            aBase.setY( Y() + pRet->GetAscent() );
             nMode |= AsCharFlags::UlSpace;
             if( !rInf.IsTest() )
             {

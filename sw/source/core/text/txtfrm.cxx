@@ -89,29 +89,29 @@ void SwTextFrame::SwapWidthAndHeight()
         if ( ! mbIsSwapped )
         {
             const long nPrtOfstX = aPrt.Pos().X();
-            aPrt.Pos().X() = aPrt.Pos().Y();
+            aPrt.Pos().setX( aPrt.Pos().Y() );
 
             if( IsVertLR() )
             {
-                aPrt.Pos().Y() = nPrtOfstX;
+                aPrt.Pos().setY( nPrtOfstX );
             }
             else
             {
-                aPrt.Pos().Y() = getFrameArea().Width() - ( nPrtOfstX + aPrt.Width() );
+                aPrt.Pos().setY( getFrameArea().Width() - ( nPrtOfstX + aPrt.Width() ) );
             }
         }
         else
         {
             const long nPrtOfstY = aPrt.Pos().Y();
-            aPrt.Pos().Y() = aPrt.Pos().X();
+            aPrt.Pos().setY( aPrt.Pos().X() );
 
             if( IsVertLR() )
             {
-                aPrt.Pos().X() = nPrtOfstY;
+                aPrt.Pos().setX( nPrtOfstY );
             }
             else
             {
-                aPrt.Pos().X() = getFrameArea().Height() - ( nPrtOfstY + aPrt.Height() );
+                aPrt.Pos().setX( getFrameArea().Height() - ( nPrtOfstY + aPrt.Height() ) );
             }
         }
 
@@ -178,17 +178,17 @@ void SwTextFrame::SwitchHorizontalToVertical( Point& rPoint ) const
     const long nOfstX = rPoint.X() - getFrameArea().Left();
     const long nOfstY = rPoint.Y() - getFrameArea().Top();
     if ( IsVertLR() )
-        rPoint.X() = getFrameArea().Left() + nOfstY;
+        rPoint.setX( getFrameArea().Left() + nOfstY );
     else
     {
         if ( mbIsSwapped )
-            rPoint.X() = getFrameArea().Left() + getFrameArea().Height() - nOfstY;
+            rPoint.setX( getFrameArea().Left() + getFrameArea().Height() - nOfstY );
         else
             // calc rotated coords
-            rPoint.X() = getFrameArea().Left() + getFrameArea().Width() - nOfstY;
+            rPoint.setX( getFrameArea().Left() + getFrameArea().Width() - nOfstY );
     }
 
-    rPoint.Y() = getFrameArea().Top() + nOfstX;
+    rPoint.setY( getFrameArea().Top() + nOfstX );
 }
 
 /**
@@ -254,8 +254,8 @@ void SwTextFrame::SwitchVerticalToHorizontal( Point& rPoint ) const
     const long nOfstY = rPoint.Y() - getFrameArea().Top();
 
     // calc rotated coords
-    rPoint.X() = getFrameArea().Left() + nOfstY;
-    rPoint.Y() = getFrameArea().Top() + nOfstX;
+    rPoint.setX( getFrameArea().Left() + nOfstY );
+    rPoint.setY( getFrameArea().Top() + nOfstX );
 }
 
 /**
@@ -302,7 +302,7 @@ void SwTextFrame::SwitchLTRtoRTL( Point& rPoint ) const
 {
     SwSwapIfNotSwapped swap(const_cast<SwTextFrame *>(this));
 
-    rPoint.X() = 2 * ( getFrameArea().Left() + getFramePrintArea().Left() ) + getFramePrintArea().Width() - rPoint.X() - 1;
+    rPoint.setX( 2 * ( getFrameArea().Left() + getFramePrintArea().Left() ) + getFramePrintArea().Width() - rPoint.X() - 1 );
 }
 
 SwLayoutModeModifier::SwLayoutModeModifier( const OutputDevice& rOutp ) :
@@ -798,7 +798,7 @@ void SwTextFrame::CalcLineSpace()
     aLine.Top();
     aLine.RecalcRealHeight();
 
-    aNewSize.Height() = (aLine.Y() - getFrameArea().Top()) + aLine.GetLineHeight();
+    aNewSize.setHeight( (aLine.Y() - getFrameArea().Top()) + aLine.GetLineHeight() );
 
     SwTwips nDelta = aNewSize.Height() - getFramePrintArea().Height();
     // Underflow with free-flying frames
@@ -2157,7 +2157,7 @@ SwTwips SwTextFrame::CalcFitToContent()
     if ( IsRightToLeft() )
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-        aFrm.Pos().X() += nOldFrameWidth - nPageWidth;
+        aFrm.Pos().AdjustX(nOldFrameWidth - nPageWidth );
     }
 
     TextFrameLockGuard aLock( this );

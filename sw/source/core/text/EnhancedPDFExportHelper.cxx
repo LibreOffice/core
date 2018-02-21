@@ -1512,13 +1512,13 @@ tools::Rectangle SwEnhancedPDFExportHelper::SwRectToPDFRect(const SwPageFrame* p
     tools::Rectangle aRect(rRectangle);
     Size aRectSize(aRect.GetSize());
     double fScale = 0.75;
-    aRectSize.Width() = (aRectSize.Width() * fScale);
-    aRectSize.Height() = (aRectSize.Height() * fScale);
+    aRectSize.setWidth( aRectSize.Width() * fScale );
+    aRectSize.setHeight( aRectSize.Height() * fScale );
     long nOrigHeight = pCurrPage->getFrameArea().Height();
     long nNewHeight = nOrigHeight*fScale;
     long nShiftY = (nOrigHeight-nNewHeight)/2;
-    aRect.Left() = (aRect.Left() * fScale);
-    aRect.Top() = (aRect.Top() * fScale);
+    aRect.SetLeft( aRect.Left() * fScale );
+    aRect.SetTop( aRect.Top() * fScale );
     aRect.Move(0, nShiftY);
     aRect.SetSize(aRectSize);
     return aRect;

@@ -1658,8 +1658,8 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
         if( bRefLandscape != rPageDesc.GetLandscape() )
         {
             long nTmp = aRefSz.Height();
-            aRefSz.Height() = aRefSz.Width();
-            aRefSz.Width() = nTmp;
+            aRefSz.setHeight( aRefSz.Width() );
+            aRefSz.setWidth( nTmp );
         }
     }
 

@@ -79,32 +79,32 @@ IMPL_LINK_NOARG(SwBlink, Blinker, Timer *, void)
                 switch ( pTmp->GetDirection() )
                 {
                     case 900:
-                        aPos.X() -= pTmp->GetPortion()->GetAscent();
-                        aPos.Y() -= pTmp->GetPortion()->Width();
+                        aPos.AdjustX( -(pTmp->GetPortion()->GetAscent()) );
+                        aPos.AdjustY( -(pTmp->GetPortion()->Width()) );
                         nWidth = pTmp->GetPortion()->SvLSize().Height();
                         nHeight = pTmp->GetPortion()->SvLSize().Width();
                         break;
                     case 1800:
-                        aPos.Y() -= pTmp->GetPortion()->Height() -
-                                    pTmp->GetPortion()->GetAscent();
-                        aPos.X() -= pTmp->GetPortion()->Width();
+                        aPos.AdjustY( -(pTmp->GetPortion()->Height() -
+                                    pTmp->GetPortion()->GetAscent()) );
+                        aPos.AdjustX( -(pTmp->GetPortion()->Width()) );
                         nWidth = pTmp->GetPortion()->SvLSize().Width();
                         nHeight = pTmp->GetPortion()->SvLSize().Height();
                         break;
                     case 2700:
-                        aPos.X() -= pTmp->GetPortion()->Height() -
-                                    pTmp->GetPortion()->GetAscent();
+                        aPos.AdjustX( -(pTmp->GetPortion()->Height() -
+                                    pTmp->GetPortion()->GetAscent()) );
                         nWidth = pTmp->GetPortion()->SvLSize().Height();
                         nHeight = pTmp->GetPortion()->SvLSize().Width();
                         break;
                     default:
-                        aPos.Y() -= pTmp->GetPortion()->GetAscent();
+                        aPos.AdjustY( -(pTmp->GetPortion()->GetAscent()) );
                         nWidth = pTmp->GetPortion()->SvLSize().Width();
                         nHeight = pTmp->GetPortion()->SvLSize().Height();
                 }
 
                 tools::Rectangle aRefresh( aPos, Size( nWidth, nHeight ) );
-                aRefresh.Right() += ( aRefresh.Bottom()- aRefresh.Top() ) / 8;
+                aRefresh.AdjustRight(( aRefresh.Bottom()- aRefresh.Top() ) / 8 );
                 pTmp->GetRootFrame()
                     ->GetCurrShell()->InvalidateWindows( aRefresh );
             }

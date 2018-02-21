@@ -3865,8 +3865,8 @@ void RtfAttributeOutput::FlyFrameOLEReplacement(const SwFlyFrameFormat* pFlyFram
     m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPPICT);
     Size aSize(rOLENode.GetTwipSize());
     Size aRendered(aSize);
-    aRendered.Width() = rSize.Width();
-    aRendered.Height() = rSize.Height();
+    aRendered.setWidth(rSize.Width());
+    aRendered.setHeight(rSize.Height());
     const Graphic* pGraphic = rOLENode.GetGraphic();
     Size aMapped(pGraphic->GetPrefSize());
     auto& rCr = static_cast<const SwCropGrf&>(rOLENode.GetAttr(RES_GRFATR_CROPGRF));
@@ -4022,8 +4022,8 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
     Size aRendered(aSize);
 
     const SwFormatFrameSize& rS = pFlyFrameFormat->GetFrameSize();
-    aRendered.Width() = rS.GetWidth();
-    aRendered.Height() = rS.GetHeight();
+    aRendered.setWidth(rS.GetWidth());
+    aRendered.setHeight(rS.GetHeight());
 
     ww8::Frame* pFrame = nullptr;
     for (auto& rFrame : m_rExport.m_aFrames)

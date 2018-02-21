@@ -1669,9 +1669,9 @@ void SwHTMLParser::InsertInput()
     case HTMLInputType::Image:
         {
             // SIZE = WIDTH
-            aSz.Width() = nSize ? nSize : nWidth;
-            aSz.Width() = nWidth;
-            aSz.Height() = nHeight;
+            aSz.setWidth( nSize ? nSize : nWidth );
+            aSz.setWidth( nWidth );
+            aSz.setHeight( nHeight );
             if( (aSz.Width() || aSz.Height()) && Application::GetDefaultDevice() )
             {
                 aSz = Application::GetDefaultDevice()
@@ -1745,7 +1745,7 @@ void SwHTMLParser::InsertInput()
 
         if( !nSize )
             nSize = 20;
-        aTextSz.Width() = nSize;
+        aTextSz.setWidth( nSize );
         bMinHeight = true;
         break;
 
@@ -1764,7 +1764,7 @@ void SwHTMLParser::InsertInput()
             Size aNewSz( nSize, 0 );
             aNewSz = Application::GetDefaultDevice()
                         ->PixelToLogic( aNewSz, MapMode( MapUnit::Map100thMM ) );
-            aSz.Width() = aNewSz.Width();
+            aSz.setWidth( aNewSz.Width() );
             OSL_ENSURE( !aTextSz.Width(), "text width is present" );
             bMinWidth = false;
         }
@@ -1781,14 +1781,14 @@ void SwHTMLParser::InsertInput()
 
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.m_eWidthType )
     {
-        aSz.Width() = convertTwipToMm100( aCSS1PropInfo.m_nWidth );
-        aTextSz.Width() = 0;
+        aSz.setWidth( convertTwipToMm100( aCSS1PropInfo.m_nWidth ) );
+        aTextSz.setWidth( 0 );
         bMinWidth = false;
     }
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.m_eHeightType )
     {
-        aSz.Height() = convertTwipToMm100( aCSS1PropInfo.m_nHeight );
-        aTextSz.Height() = 0;
+        aSz.setHeight( convertTwipToMm100( aCSS1PropInfo.m_nHeight ) );
+        aTextSz.setHeight( 0 );
         bMinHeight = false;
     }
 
@@ -1797,21 +1797,21 @@ void SwHTMLParser::InsertInput()
     {
         if( !aSz.Width() )
         {
-            aSz.Width() = HTML_DFLT_IMG_WIDTH;
+            aSz.setWidth( HTML_DFLT_IMG_WIDTH );
             bSetGrfWidth = true;
             if (m_xTable)
                 IncGrfsThatResizeTable();
         }
         if( !aSz.Height() )
         {
-            aSz.Height() = HTML_DFLT_IMG_HEIGHT;
+            aSz.setHeight( HTML_DFLT_IMG_HEIGHT );
             bSetGrfHeight = true;
         }
     }
     if( aSz.Width() < MINFLY )
-        aSz.Width() = MINFLY;
+        aSz.setWidth( MINFLY );
     if( aSz.Height() < MINFLY )
-        aSz.Height() = MINFLY;
+        aSz.setHeight( MINFLY );
 
     uno::Reference< drawing::XShape > xShape = InsertControl(
                                              xFComp, xPropSet, aSz,
@@ -2042,18 +2042,18 @@ void SwHTMLParser::NewTextArea()
     Size aSz( MINFLY, MINFLY );
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.m_eWidthType )
     {
-        aSz.Width() = convertTwipToMm100( aCSS1PropInfo.m_nWidth );
-        aTextSz.Width() = 0;
+        aSz.setWidth( convertTwipToMm100( aCSS1PropInfo.m_nWidth ) );
+        aTextSz.setWidth( 0 );
     }
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.m_eHeightType )
     {
-        aSz.Height() = convertTwipToMm100( aCSS1PropInfo.m_nHeight );
-        aTextSz.Height() = 0;
+        aSz.setHeight( convertTwipToMm100( aCSS1PropInfo.m_nHeight ) );
+        aTextSz.setHeight( 0 );
     }
     if( aSz.Width() < MINFLY )
-        aSz.Width() = MINFLY;
+        aSz.setWidth( MINFLY );
     if( aSz.Height() < MINFLY )
-        aSz.Height() = MINFLY;
+        aSz.setHeight( MINFLY );
 
     uno::Reference< drawing::XShape > xShape = InsertControl( xFComp, xPropSet, aSz,
                                       text::VertOrientation::TOP, text::HoriOrientation::NONE,
@@ -2293,7 +2293,7 @@ void SwHTMLParser::NewSelect()
         {
             xPropSet->setPropertyValue("MultiSelection", makeAny(true) );
         }
-        aTextSz.Height() = m_nSelectEntryCnt;
+        aTextSz.setHeight( m_nSelectEntryCnt );
         bMinHeight = false;
     }
 
@@ -2310,20 +2310,20 @@ void SwHTMLParser::NewSelect()
     m_bFixSelectWidth = true;
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.m_eWidthType )
     {
-        aSz.Width() = convertTwipToMm100( aCSS1PropInfo.m_nWidth );
+        aSz.setWidth( convertTwipToMm100( aCSS1PropInfo.m_nWidth ) );
         m_bFixSelectWidth = false;
         bMinWidth = false;
     }
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.m_eHeightType )
     {
-        aSz.Height() = convertTwipToMm100( aCSS1PropInfo.m_nHeight );
-        aTextSz.Height() = 0;
+        aSz.setHeight( convertTwipToMm100( aCSS1PropInfo.m_nHeight ) );
+        aTextSz.setHeight( 0 );
         bMinHeight = false;
     }
     if( aSz.Width() < MINFLY )
-        aSz.Width() = MINFLY;
+        aSz.setWidth( MINFLY );
     if( aSz.Height() < MINFLY )
-        aSz.Height() = MINFLY;
+        aSz.setHeight( MINFLY );
 
     uno::Reference< drawing::XShape >  xShape = InsertControl( xFComp, xPropSet, aSz,
                                       text::VertOrientation::TOP, text::HoriOrientation::NONE,

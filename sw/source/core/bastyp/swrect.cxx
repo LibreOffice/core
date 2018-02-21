@@ -150,9 +150,9 @@ void SwRect::Justify()
 // Similar to the inline methods, but we need the function pointers
 void SwRect::Width_( const long nNew ) { m_Size.setWidth(nNew); }
 void SwRect::Height_( const long nNew ) { m_Size.setHeight(nNew); }
-void SwRect::Left_( const long nLeft ){ m_Size.Width() += m_Point.getX() - nLeft; m_Point.setX(nLeft); }
+void SwRect::Left_( const long nLeft ){ m_Size.AdjustWidth(m_Point.getX() - nLeft ); m_Point.setX(nLeft); }
 void SwRect::Right_( const long nRight ){ m_Size.setWidth(nRight - m_Point.getX()); }
-void SwRect::Top_( const long nTop ){ m_Size.Height() += m_Point.getY() - nTop; m_Point.setY(nTop); }
+void SwRect::Top_( const long nTop ){ m_Size.AdjustHeight(m_Point.getY() - nTop ); m_Point.setY(nTop); }
 void SwRect::Bottom_( const long nBottom ){ m_Size.setHeight(nBottom - m_Point.getY()); }
 
 long SwRect::Width_() const{ return m_Size.getWidth(); }
@@ -162,12 +162,12 @@ long SwRect::Right_() const{ return m_Point.getX() + m_Size.getWidth(); }
 long SwRect::Top_() const{ return m_Point.getY(); }
 long SwRect::Bottom_() const{ return m_Point.getY() + m_Size.getHeight(); }
 
-void SwRect::AddWidth( const long nAdd ) { m_Size.Width() += nAdd; }
-void SwRect::AddHeight( const long nAdd ) { m_Size.Height() += nAdd; }
-void SwRect::SubLeft( const long nSub ){ m_Size.Width() += nSub; m_Point.setX(m_Point.getX() - nSub); }
-void SwRect::AddRight( const long nAdd ){ m_Size.Width() += nAdd; }
-void SwRect::SubTop( const long nSub ){ m_Size.Height() += nSub; m_Point.setY(m_Point.getY() - nSub); }
-void SwRect::AddBottom( const long nAdd ){ m_Size.Height() += nAdd; }
+void SwRect::AddWidth( const long nAdd ) { m_Size.AdjustWidth(nAdd ); }
+void SwRect::AddHeight( const long nAdd ) { m_Size.AdjustHeight(nAdd ); }
+void SwRect::SubLeft( const long nSub ){ m_Size.AdjustWidth(nSub ); m_Point.setX(m_Point.getX() - nSub); }
+void SwRect::AddRight( const long nAdd ){ m_Size.AdjustWidth(nAdd ); }
+void SwRect::SubTop( const long nSub ){ m_Size.AdjustHeight(nSub ); m_Point.setY(m_Point.getY() - nSub); }
+void SwRect::AddBottom( const long nAdd ){ m_Size.AdjustHeight(nAdd ); }
 void SwRect::SetPosX( const long nNew ){ m_Point.setX(nNew); }
 void SwRect::SetPosY( const long nNew ){ m_Point.setY(nNew); }
 

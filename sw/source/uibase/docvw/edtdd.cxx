@@ -341,10 +341,10 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
     Point aPoint;
     tools::Rectangle aWin(aPoint,GetOutputSizePixel());
     const int nMargin = 10;
-    aWin.Left() += nMargin;
-    aWin.Top() += nMargin;
-    aWin.Right() -= nMargin;
-    aWin.Bottom() -= nMargin;
+    aWin.AdjustLeft(nMargin );
+    aWin.AdjustTop(nMargin );
+    aWin.AdjustRight( -nMargin );
+    aWin.AdjustBottom( -nMargin );
     if(!aWin.IsInside(aPixPt)) {
         static sal_uInt64 last_tick = 0;
         sal_uInt64 current_tick = tools::Time::GetSystemTicks();
@@ -356,10 +356,10 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
                 m_bOldIdleSet = true;
             }
             CleanupDropUserMarker();
-            if(aPixPt.X() > aWin.Right()) aPixPt.X() += nMargin;
-            if(aPixPt.X() < aWin.Left()) aPixPt.X() -= nMargin;
-            if(aPixPt.Y() > aWin.Bottom()) aPixPt.Y() += nMargin;
-            if(aPixPt.Y() < aWin.Top()) aPixPt.Y() -= nMargin;
+            if(aPixPt.X() > aWin.Right()) aPixPt.AdjustX(nMargin );
+            if(aPixPt.X() < aWin.Left()) aPixPt.AdjustX( -nMargin );
+            if(aPixPt.Y() > aWin.Bottom()) aPixPt.AdjustY(nMargin );
+            if(aPixPt.Y() < aWin.Top()) aPixPt.AdjustY( -nMargin );
             Point aDocPt(PixelToLogic(aPixPt));
             SwRect rect(aDocPt,Size(1,1));
             rSh.MakeVisible(rect);

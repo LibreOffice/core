@@ -347,8 +347,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 aSet.Put( aSzItm );
 
                 Size aSz( aSizeCopy.GetWidthPercent(), aSizeCopy.GetHeightPercent() );
-                if( SwFormatFrameSize::SYNCED == aSz.Width() )   aSz.Width() = 0;
-                if( SwFormatFrameSize::SYNCED == aSz.Height() )  aSz.Height() = 0;
+                if( SwFormatFrameSize::SYNCED == aSz.Width() )   aSz.setWidth( 0 );
+                if( SwFormatFrameSize::SYNCED == aSz.Height() )  aSz.setHeight( 0 );
 
                 aSzItm.SetSize( aSz );
                 aSzItm.SetWhich( SID_ATTR_GRAF_FRMSIZE_PERCENT );

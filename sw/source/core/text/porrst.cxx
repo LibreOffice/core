@@ -189,10 +189,10 @@ SwArrowPortion::SwArrowPortion( const SwTextPaintInfo &rInf )
     : bLeft( false )
 {
     Height( static_cast<sal_uInt16>(rInf.GetTextFrame()->getFramePrintArea().Height()) );
-    aPos.X() = rInf.GetTextFrame()->getFrameArea().Left() +
-               rInf.GetTextFrame()->getFramePrintArea().Right();
-    aPos.Y() = rInf.GetTextFrame()->getFrameArea().Top() +
-               rInf.GetTextFrame()->getFramePrintArea().Bottom();
+    aPos.setX( rInf.GetTextFrame()->getFrameArea().Left() +
+               rInf.GetTextFrame()->getFramePrintArea().Right() );
+    aPos.setY( rInf.GetTextFrame()->getFrameArea().Top() +
+               rInf.GetTextFrame()->getFramePrintArea().Bottom() );
     SetWhichPor( POR_ARROW );
 }
 
@@ -463,8 +463,8 @@ void SwHiddenTextPortion::Paint( const SwTextPaintInfo & rInf) const
     Color aOldColor( pOut->GetFillColor() );
     pOut->SetFillColor( aCol );
     Point aPos( rInf.GetPos() );
-    aPos.Y() -= 150;
-    aPos.X() -= 25;
+    aPos.AdjustY( -150 );
+    aPos.AdjustX( -25 );
     SwRect aRect( aPos, Size( 100, 200 ) );
     pOut->DrawRect( aRect.SVRect() );
     pOut->SetFillColor( aOldColor );
@@ -515,7 +515,7 @@ void SwControlCharPortion::Paint( const SwTextPaintInfo &rInf ) const
 
             Point aOldPos = rInf.GetPos();
             Point aNewPos( aOldPos );
-            aNewPos.X() = aNewPos.X() + ( Width() / 2 ) - mnHalfCharWidth;
+            aNewPos.setX( aNewPos.X() + ( Width() / 2 ) - mnHalfCharWidth );
             const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
 
             rInf.DrawText( aOutString, *this );

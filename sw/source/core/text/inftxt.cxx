@@ -579,7 +579,7 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
                 GetTextFrame()->SwitchLTRtoRTL( aPoint );
 
             if ( ComplexTextLayoutFlags::BiDiStrong != GetOut()->GetLayoutMode() )
-                aPoint.X() -= rPor.Width();
+                aPoint.AdjustX( -(rPor.Width()) );
 
             if ( GetTextFrame()->IsVertical() )
                 GetTextFrame()->SwitchHorizontalToVertical( aPoint );
@@ -654,30 +654,30 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
         const sal_uInt16 nLeftBorderSpace = m_pFnt->GetLeftBorderSpace();
         if ( GetTextFrame()->IsRightToLeft() )
         {
-            aFontPos.X() -= nLeftBorderSpace;
+            aFontPos.AdjustX( -nLeftBorderSpace );
         }
         else
         {
             switch( m_pFnt->GetOrientation(GetTextFrame()->IsVertical()) )
             {
                 case 0 :
-                    aFontPos.X() += nLeftBorderSpace;
+                    aFontPos.AdjustX(nLeftBorderSpace );
                     break;
                 case 900 :
-                    aFontPos.Y() -= nLeftBorderSpace;
+                    aFontPos.AdjustY( -nLeftBorderSpace );
                     break;
                 case 1800 :
-                    aFontPos.X() -= nLeftBorderSpace;
+                    aFontPos.AdjustX( -nLeftBorderSpace );
                     break;
                 case 2700 :
-                    aFontPos.Y() += nLeftBorderSpace;
+                    aFontPos.AdjustY(nLeftBorderSpace );
                     break;
             }
         }
         if( aFontPos.X() < 0 )
-            aFontPos.X() = 0;
+            aFontPos.setX( 0 );
         if( aFontPos.Y() < 0 )
-            aFontPos.Y() = 0;
+            aFontPos.setY( 0 );
     }
 
     if( GetTextFly().IsOn() )
@@ -716,13 +716,13 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
 {
     Size aSize( rPor.Width(), rPor.Height() );
     if( rPor.IsHangingPortion() )
-        aSize.Width() = static_cast<const SwHangingPortion&>(rPor).GetInnerWidth();
+        aSize.setWidth( static_cast<const SwHangingPortion&>(rPor).GetInnerWidth() );
     if( rPor.InSpaceGrp() && GetSpaceAdd() )
     {
         SwTwips nAdd = rPor.CalcSpacing( GetSpaceAdd(), *this );
         if( rPor.InFieldGrp() && GetSpaceAdd() < 0 && nAdd )
             nAdd += GetSpaceAdd() / SPACING_PRECISION_FACTOR;
-        aSize.Width() += nAdd;
+        aSize.AdjustWidth(nAdd );
     }
 
     Point aPoint;
@@ -730,26 +730,26 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
     if( IsRotated() )
     {
         long nTmp = aSize.Width();
-        aSize.Width() = aSize.Height();
-        aSize.Height() = nTmp;
+        aSize.setWidth( aSize.Height() );
+        aSize.setHeight( nTmp );
         if ( 1 == GetDirection() )
         {
-            aPoint.X() = X() - rPor.GetAscent();
-            aPoint.Y() = Y() - aSize.Height();
+            aPoint.setX( X() - rPor.GetAscent() );
+            aPoint.setY( Y() - aSize.Height() );
         }
         else
         {
-            aPoint.X() = X() - rPor.Height() + rPor.GetAscent();
-            aPoint.Y() = Y();
+            aPoint.setX( X() - rPor.Height() + rPor.GetAscent() );
+            aPoint.setY( Y() );
         }
     }
     else
     {
-        aPoint.X() = X();
+        aPoint.setX( X() );
         if ( GetTextFrame()->IsVertLR() )
-            aPoint.Y() = Y() - rPor.Height() + rPor.GetAscent();
+            aPoint.setY( Y() - rPor.Height() + rPor.GetAscent() );
         else
-            aPoint.Y() = Y() - rPor.GetAscent();
+            aPoint.setY( Y() - rPor.GetAscent() );
     }
 
     // Adjust x coordinate if we are inside a bidi portion
@@ -758,7 +758,7 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
                              (  bFrameDir && DIR_LEFT2RIGHT == GetDirection() );
 
     if ( bCounterDir )
-        aPoint.X() -= aSize.Width();
+        aPoint.AdjustX( -(aSize.Width()) );
 
     SwRect aRect( aPoint, aSize );
 
@@ -868,8 +868,8 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rInf, const SwLinePortion& r
 
         // new height for font
         const SwFontScript nAct = s_pFnt->GetActual();
-        aFontSize.Height() = ( 100 * s_pFnt->GetSize( nAct ).Height() ) / nFactor;
-        aFontSize.Width() = ( 100 * s_pFnt->GetSize( nAct).Width() ) / nFactor;
+        aFontSize.setHeight( ( 100 * s_pFnt->GetSize( nAct ).Height() ) / nFactor );
+        aFontSize.setWidth( ( 100 * s_pFnt->GetSize( nAct).Width() ) / nFactor );
 
         if ( !aFontSize.Width() && !aFontSize.Height() )
             break;
@@ -975,8 +975,8 @@ void SwTextPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
     sal_Unicode cChar;
     if( static_cast<const SwArrowPortion&>(rPor).IsLeft() )
     {
-        aRect.Pos().Y() += 20 - GetAscent();
-        aRect.Pos().X() += 20;
+        aRect.Pos().AdjustY(20 - GetAscent() );
+        aRect.Pos().AdjustX(20 );
         if( aSize.Height() > rPor.Height() )
             aRect.Height( rPor.Height() );
         cChar = CHAR_LEFT_ARROW;
@@ -985,8 +985,8 @@ void SwTextPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
     {
         if( aSize.Height() > rPor.Height() )
             aRect.Height( rPor.Height() );
-        aRect.Pos().Y() -= aRect.Height() + 20;
-        aRect.Pos().X() -= aRect.Width() + 20;
+        aRect.Pos().AdjustY( -(aRect.Height() + 20) );
+        aRect.Pos().AdjustX( -(aRect.Width() + 20) );
         cChar = CHAR_RIGHT_ARROW;
     }
 
@@ -1017,23 +1017,23 @@ void SwTextPaintInfo::DrawPostIts( bool bScript ) const
     switch ( m_pFnt->GetOrientation( GetTextFrame()->IsVertical() ) )
     {
     case 0 :
-        aSize.Width() = nPostItsWidth;
-        aSize.Height() = nFontHeight;
-        aTmp.X() = aPos.X();
-        aTmp.Y() = aPos.Y() - nFontAscent;
+        aSize.setWidth( nPostItsWidth );
+        aSize.setHeight( nFontHeight );
+        aTmp.setX( aPos.X() );
+        aTmp.setY( aPos.Y() - nFontAscent );
         break;
     case 900 :
-        aSize.Height() = nPostItsWidth;
-        aSize.Width() = nFontHeight;
-        aTmp.X() = aPos.X() - nFontAscent;
-        aTmp.Y() = aPos.Y();
+        aSize.setHeight( nPostItsWidth );
+        aSize.setWidth( nFontHeight );
+        aTmp.setX( aPos.X() - nFontAscent );
+        aTmp.setY( aPos.Y() );
         break;
     case 2700 :
-        aSize.Height() = nPostItsWidth;
-        aSize.Width() = nFontHeight;
-        aTmp.X() = aPos.X() - nFontHeight +
-                              nFontAscent;
-        aTmp.Y() = aPos.Y();
+        aSize.setHeight( nPostItsWidth );
+        aSize.setWidth( nFontHeight );
+        aTmp.setX( aPos.X() - nFontHeight +
+                              nFontAscent );
+        aTmp.setY( aPos.Y() );
         break;
     }
 

@@ -338,7 +338,7 @@ void  SwSrcEditWindow::Resize()
     if ( m_pTextView->GetStartDocPos().Y() > nMaxVisAreaStart )
     {
         Point aStartDocPos( m_pTextView->GetStartDocPos() );
-        aStartDocPos.Y() = nMaxVisAreaStart;
+        aStartDocPos.setY( nMaxVisAreaStart );
         m_pTextView->SetStartDocPos( aStartDocPos );
         m_pTextView->ShowCursor();
     }
@@ -348,13 +348,13 @@ void  SwSrcEditWindow::Resize()
 
     m_pHScrollbar->SetPosSizePixel( aScrollPos, aScrollSz);
 
-    aScrollSz.Width() = aScrollSz.Height();
-    aScrollSz.Height() = aOutSz.Height();
+    aScrollSz.setWidth( aScrollSz.Height() );
+    aScrollSz.setHeight( aOutSz.Height() );
     aScrollPos = Point(aOutSz.Width() - nScrollStd, 0);
 
     m_pVScrollbar->SetPosSizePixel( aScrollPos, aScrollSz);
-    aOutSz.Width()  -= nScrollStd;
-    aOutSz.Height()     -= nScrollStd;
+    aOutSz.AdjustWidth( -nScrollStd );
+    aOutSz.AdjustHeight( -nScrollStd );
     m_pOutWin->SetOutputSizePixel(aOutSz);
     InitScrollBars();
 
@@ -989,8 +989,8 @@ void SwSrcEditWindow::SetFont()
     vcl::Font aFont(aFontMetric);
     Size aSize(rFont.GetFontSize());
     //font height is stored in point and set in twip
-    aSize.Height() =
-        officecfg::Office::Common::Font::SourceViewFont::FontHeight::get() * 20;
+    aSize.setHeight(
+        officecfg::Office::Common::Font::SourceViewFont::FontHeight::get() * 20 );
     aFont.SetFontSize(m_pOutWin->LogicToPixel(aSize, MapMode(MapUnit::MapTwip)));
     GetTextEngine()->SetFont( aFont );
     m_pOutWin->SetFont(aFont);

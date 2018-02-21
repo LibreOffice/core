@@ -75,7 +75,7 @@ void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
         // (see frmform.cxx) because for some fonts it could be too small.
         // Consequently, we have to enlarge the clipping rectangle as well.
         if ( bEnlargeRect && ! bVertical )
-            aRect.Bottom() += 40;
+            aRect.AdjustBottom(40 );
 
         // If the ClipRect is identical, nothing will happen
         if( pOut->IsClipRegion() ) // no && because of Mac

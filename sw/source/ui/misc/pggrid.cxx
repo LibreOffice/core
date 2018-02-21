@@ -322,13 +322,13 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
                                 rBox.GetDistance(SvxBoxItemLine::RIGHT);
     if(m_bVertical)
     {
-        m_aPageSize.Width() = nValue1;
-        m_aPageSize.Height() = nValue2;
+        m_aPageSize.setWidth( nValue1 );
+        m_aPageSize.setHeight( nValue2 );
     }
     else
     {
-        m_aPageSize.Width() = nValue2;
-        m_aPageSize.Height() = nValue1;
+        m_aPageSize.setWidth( nValue2 );
+        m_aPageSize.setHeight( nValue1 );
     }
 
     sal_Int32 nTextSize = static_cast< sal_Int32 >(m_bRubyUserValue ?

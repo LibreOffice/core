@@ -118,15 +118,15 @@ public:
 
 void SwDoGetCapitalSize::Init( SwFntObj *, SwFntObj * )
 {
-    aTextSize.Height() = 0;
-    aTextSize.Width() = 0;
+    aTextSize.setHeight( 0 );
+    aTextSize.setWidth( 0 );
 }
 
 void SwDoGetCapitalSize::Do()
 {
-    aTextSize.Width() += rInf.GetSize().Width();
+    aTextSize.AdjustWidth(rInf.GetSize().Width() );
     if( rInf.GetUpper() )
-        aTextSize.Height() = rInf.GetSize().Height();
+        aTextSize.setHeight( rInf.GetSize().Height() );
 }
 
 Size SwSubFont::GetCapitalSize( SwDrawTextInfo& rInf )
@@ -146,7 +146,7 @@ Size SwSubFont::GetCapitalSize( SwDrawTextInfo& rInf )
     if( !aTextSize.Height() )
     {
         SV_STAT( nGetTextSize );
-        aTextSize.Height() = short ( rInf.GetpOut()->GetTextHeight() );
+        aTextSize.setHeight( short ( rInf.GetpOut()->GetTextHeight() ) );
     }
     rInf.SetKern( nOldKern );
     return aTextSize;
@@ -297,7 +297,7 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
         GetOut().DrawStretchText( aPos, nDiff,
             "  ", 0, 2 );
     }
-    rPos.X() = rInf.GetPos().X() + rInf.GetWidth();
+    rPos.setX( rInf.GetPos().X() + rInf.GetWidth() );
 }
 
 void SwSubFont::DrawCapital( SwDrawTextInfo &rInf )
@@ -439,7 +439,7 @@ void SwDoDrawStretchCapital::Do()
             GetOut().DrawStretchText( aPos, nPartWidth,
                                 rInf.GetText(), rInf.GetIdx(), rInf.GetLen() );
     }
-    const_cast<Point&>(rInf.GetPos()).X() += nPartWidth;
+    const_cast<Point&>(rInf.GetPos()).AdjustX(nPartWidth );
 }
 
 void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
@@ -594,7 +594,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
             nKana += rDo.GetInf().GetKanaDiff();
             rDo.GetInf().SetOut( *pOldOut );
             if( nTmpKern && nPos < nMaxPos )
-                aPartSize.Width() += nTmpKern;
+                aPartSize.AdjustWidth(nTmpKern );
             rDo.GetInf().SetSize( aPartSize );
             rDo.Do();
             nOldPos = nPos;
@@ -659,9 +659,9 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                         nKana += rDo.GetInf().GetKanaDiff();
                         rDo.GetInf().SetOut( *pOldOut );
                         if( nSpaceAdd )
-                            aPartSize.Width() += nSpaceAdd * ( nTmp - nOldPos );
+                            aPartSize.AdjustWidth(nSpaceAdd * ( nTmp - nOldPos ) );
                         if( nTmpKern && nPos < nMaxPos )
-                            aPartSize.Width() += nTmpKern;
+                            aPartSize.AdjustWidth(nTmpKern );
                         rDo.GetInf().SetSize( aPartSize );
                         rDo.Do();
                         aStartPos = rDo.GetInf().GetPos();
@@ -703,11 +703,11 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                         for( sal_Int32 nI = nOldPos; nI < nPos; ++nI )
                         {
                             if (CH_BLANK == oldText[nI])
-                                aPartSize.Width() += nSpaceAdd;
+                                aPartSize.AdjustWidth(nSpaceAdd );
                         }
                     }
                     if( nTmpKern && nPos < nMaxPos )
-                        aPartSize.Width() += nTmpKern;
+                        aPartSize.AdjustWidth(nTmpKern );
                     rDo.GetInf().SetSize( aPartSize );
                     rDo.Do();
                     nOldPos = nTmp;

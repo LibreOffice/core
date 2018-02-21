@@ -123,16 +123,16 @@ void SwView::ExecDraw(SfxRequest& rReq)
                     const SwRect& rVisArea = m_pWrtShell->VisArea();
                     Point aStartPos = rVisArea.Center();
                     if(rVisArea.Width() > aDocSize.Width())
-                        aStartPos.X() = aDocSize.Width() / 2 + rVisArea.Left();
+                        aStartPos.setX( aDocSize.Width() / 2 + rVisArea.Left() );
                     if(rVisArea.Height() > aDocSize.Height())
-                        aStartPos.Y() = aDocSize.Height() / 2 + rVisArea.Top();
+                        aStartPos.setY( aDocSize.Height() / 2 + rVisArea.Top() );
 
                     //determine the size of the object
                     if(pObj->IsGroupObject())
                     {
                         const tools::Rectangle& rBoundRect = static_cast<SdrObjGroup*>(pObj)->GetCurrentBoundRect();
-                        aStartPos.X() -= rBoundRect.GetWidth()/2;
-                        aStartPos.Y() -= rBoundRect.GetHeight()/2;
+                        aStartPos.AdjustX( -(rBoundRect.GetWidth()/2) );
+                        aStartPos.AdjustY( -(rBoundRect.GetHeight()/2) );
                     }
 
                     // TODO: unmark all other
@@ -168,10 +168,10 @@ void SwView::ExecDraw(SfxRequest& rReq)
                 Size            aPrefSize( pObj->GetSnapRect().GetSize() );
 
                 if( rVisArea.Width() > aDocSize.Width())
-                    aPos.X() = aDocSize.Width() / 2 + rVisArea.Left();
+                    aPos.setX( aDocSize.Width() / 2 + rVisArea.Left() );
 
                 if(rVisArea.Height() > aDocSize.Height())
-                    aPos.Y() = aDocSize.Height() / 2 + rVisArea.Top();
+                    aPos.setY( aDocSize.Height() / 2 + rVisArea.Top() );
 
                 if( aPrefSize.Width() && aPrefSize.Height() )
                 {

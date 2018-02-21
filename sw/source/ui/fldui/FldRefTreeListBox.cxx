@@ -45,11 +45,11 @@ void SwFieldRefTreeListBox::RequestHelp( const HelpEvent& rHEvt )
             {
                 aPos = GetEntryPosition( pEntry );
 
-                aPos.X() = GetTabPos( pEntry, pTab );
+                aPos.setX( GetTabPos( pEntry, pTab ) );
                 Size aSize( pItem->GetSize( this, pEntry ) );
 
                 if((aPos.X() + aSize.Width()) > GetSizePixel().Width())
-                    aSize.Width() = GetSizePixel().Width() - aPos.X();
+                    aSize.setWidth( GetSizePixel().Width() - aPos.X() );
 
                 aPos = OutputToScreenPixel(aPos);
                 tools::Rectangle aItemRect( aPos, aSize );

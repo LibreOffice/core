@@ -565,7 +565,7 @@ bool SwCursorShell::SttEndDoc( bool bStt )
     if( bRet )
     {
         if( bStt )
-            pTmpCursor->GetPtPos().Y() = 0; // set to 0 explicitly (table header)
+            pTmpCursor->GetPtPos().setY( 0 ); // set to 0 explicitly (table header)
         if( m_pBlockCursor )
         {
             m_pBlockCursor->clearPoints();
@@ -2795,8 +2795,8 @@ void SwCursorShell::MakeSelVisible()
         }
         if( !aTmp.HasArea() )
         {
-            aTmp.SSize().Height() += 1;
-            aTmp.SSize().Width() += 1;
+            aTmp.SSize().AdjustHeight(1 );
+            aTmp.SSize().AdjustWidth(1 );
         }
         MakeVisible( aTmp );
     }
@@ -2807,7 +2807,7 @@ void SwCursorShell::MakeSelVisible()
         else
         {
             SwRect aTmp( m_aCharRect );
-            aTmp.SSize().Height() += 1; aTmp.SSize().Width() += 1;
+            aTmp.SSize().AdjustHeight(1 ); aTmp.SSize().AdjustWidth(1 );
             MakeVisible( aTmp );
         }
     }

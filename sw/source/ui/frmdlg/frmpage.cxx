@@ -2707,14 +2707,14 @@ void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
                       && (aGrfSize.Height() <= aPntSz.Height()))
         {
             const long nHeight = aPntSz.Height();
-            aPntSz.Width() = aGrfSize.Width();
-            aPntSz.Height() = aGrfSize.Height();
-            aPntPos.Y() += (nHeight - aPntSz.Height()) / 2;
+            aPntSz.setWidth( aGrfSize.Width() );
+            aPntSz.setHeight( aGrfSize.Height() );
+            aPntPos.AdjustY((nHeight - aPntSz.Height()) / 2 );
         }
         else
-            aPntSz.Width() = aPntSz.Height() * nRelGrf /100;
+            aPntSz.setWidth( aPntSz.Height() * nRelGrf /100 );
 
-        aPntPos.X() += nWidth - aPntSz.Width() ;
+        aPntPos.AdjustX(nWidth - aPntSz.Width() ) ;
     }
 
     // #i119307# clear window background, the graphic might have transparency

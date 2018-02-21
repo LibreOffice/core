@@ -102,10 +102,10 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
             Size            aSize;
 
             if( rVisArea.Width() > aDocSz.Width())
-                aPos.X() = aDocSz.Width() / 2 + rVisArea.Left();
+                aPos.setX( aDocSz.Width() / 2 + rVisArea.Left() );
 
             if(rVisArea.Height() > aDocSz.Height())
-                aPos.Y() = aDocSz.Height() / 2 + rVisArea.Top();
+                aPos.setY( aDocSz.Height() / 2 + rVisArea.Top() );
 
             if( aPrefSize.Width() && aPrefSize.Height() )
             {

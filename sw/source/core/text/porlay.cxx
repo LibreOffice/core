@@ -1641,7 +1641,7 @@ long SwScriptInfo::Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
                             nMove = nLast;
                         else
                         {
-                            pPoint->X() += nLast;
+                            pPoint->AdjustX(nLast );
                             nLast = 0;
                         }
                     }

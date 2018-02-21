@@ -383,11 +383,11 @@ void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
 
                         if( aRectFnSet.IsVert() )
                         {
-                            aPrt.SSize().Width() += nChgHght;
+                            aPrt.SSize().AdjustWidth(nChgHght );
                         }
                         else
                         {
-                            aPrt.SSize().Height() += nChgHght;
+                            aPrt.SSize().AdjustHeight(nChgHght );
                         }
 
                         return;

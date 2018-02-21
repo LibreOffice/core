@@ -103,18 +103,18 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
     const long nXOffset = (aRect.GetWidth() - nImageWidthSum) / 2;
     const long nYOffset = (aControlRect.GetHeight() - mpImpl->maImageSingleColumn.GetSizePixel().Height()) / 2;
 
-    aRect.Left() = aRect.Left() + nXOffset;
-    aRect.Top()  = aRect.Top() + nYOffset;
+    aRect.SetLeft( aRect.Left() + nXOffset );
+    aRect.SetTop( aRect.Top() + nYOffset );
 
     // draw single column image:
     pDev->DrawImage( aRect.TopLeft(), bSingleColumn ? mpImpl->maImageSingleColumn_Active : mpImpl->maImageSingleColumn );
 
     // draw automatic image:
-    aRect.Left() += mpImpl->maImageSingleColumn.GetSizePixel().Width();
+    aRect.AdjustLeft(mpImpl->maImageSingleColumn.GetSizePixel().Width() );
     pDev->DrawImage( aRect.TopLeft(), bAutomatic ? mpImpl->maImageAutomatic_Active       : mpImpl->maImageAutomatic );
 
     // draw bookmode image:
-    aRect.Left() += mpImpl->maImageAutomatic.GetSizePixel().Width();
+    aRect.AdjustLeft(mpImpl->maImageAutomatic.GetSizePixel().Width() );
     pDev->DrawImage( aRect.TopLeft(), bBookMode ? mpImpl->maImageBookMode_Active         : mpImpl->maImageBookMode );
 }
 

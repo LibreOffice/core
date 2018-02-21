@@ -298,8 +298,8 @@ tools::Rectangle SwTextBoxHelper::getTextRectangle(SwFrameFormat* pShape, bool b
         // Relative, so count the logic (reference) rectangle, see the EnhancedCustomShape2d ctor.
         Point aPoint(pCustomShape->GetSnapRect().Center());
         Size aSize(pCustomShape->GetLogicRect().GetSize());
-        aPoint.X() -= aSize.Width() / 2;
-        aPoint.Y() -= aSize.Height() / 2;
+        aPoint.AdjustX( -(aSize.Width() / 2) );
+        aPoint.AdjustY( -(aSize.Height() / 2) );
         tools::Rectangle aLogicRect(aPoint, aSize);
         aRet.Move(-1 * aLogicRect.Left(), -1 * aLogicRect.Top());
     }

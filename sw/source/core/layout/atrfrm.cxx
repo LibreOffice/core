@@ -295,8 +295,8 @@ bool SwFormatFrameSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 Size aTmp(aVal.Width, aVal.Height);
                 if(bConvert)
                 {
-                    aTmp.Height() = convertMm100ToTwip(aTmp.Height());
-                    aTmp.Width() = convertMm100ToTwip(aTmp.Width());
+                    aTmp.setHeight( convertMm100ToTwip(aTmp.Height()) );
+                    aTmp.setWidth( convertMm100ToTwip(aTmp.Width()) );
                 }
                 SetSize(aTmp);
             }
@@ -2708,7 +2708,7 @@ SwRect SwFrameFormat::FindLayoutRect( const bool bPrtArea, const Point* pPoint )
                 else
                 {
                     aRet = pFrame->getFrameArea();
-                    --aRet.Pos().Y();
+                    aRet.Pos().AdjustY( -1 );
                 }
                 pFrame = nullptr;       // the rect is finished by now
             }

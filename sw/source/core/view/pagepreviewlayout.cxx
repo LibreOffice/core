@@ -62,8 +62,8 @@ void SwPagePreviewLayout::Clear_()
 {
     mbLayoutInfoValid = mbLayoutSizesValid = mbPaintInfoValid = false;
 
-    maWinSize.Width() = 0;
-    maWinSize.Height() = 0;
+    maWinSize.setWidth( 0 );
+    maWinSize.setHeight( 0 );
     mnCols = mnRows = 0;
 
     ClearPreviewLayoutSizes();
@@ -74,16 +74,16 @@ void SwPagePreviewLayout::Clear_()
     mnPaintPhyStartPageNum = 0;
     mnPaintStartCol = mnPaintStartRow = 0;
     mbNoPageVisible = false;
-    maPaintStartPageOffset.X() = 0;
-    maPaintStartPageOffset.Y() = 0;
-    maPaintPreviewDocOffset.X() = 0;
-    maPaintPreviewDocOffset.Y() = 0;
-    maAdditionalPaintOffset.X() = 0;
-    maAdditionalPaintOffset.Y() = 0;
-    maPaintedPreviewDocRect.Left() = 0;
-    maPaintedPreviewDocRect.Top() = 0;
-    maPaintedPreviewDocRect.Right() = 0;
-    maPaintedPreviewDocRect.Bottom() = 0;
+    maPaintStartPageOffset.setX( 0 );
+    maPaintStartPageOffset.setY( 0 );
+    maPaintPreviewDocOffset.setX( 0 );
+    maPaintPreviewDocOffset.setY( 0 );
+    maAdditionalPaintOffset.setX( 0 );
+    maAdditionalPaintOffset.setY( 0 );
+    maPaintedPreviewDocRect.SetLeft( 0 );
+    maPaintedPreviewDocRect.SetTop( 0 );
+    maPaintedPreviewDocRect.SetRight( 0 );
+    maPaintedPreviewDocRect.SetBottom( 0 );
     mnSelectedPageNum = 0;
     ClearPreviewPageData();
 
@@ -95,8 +95,8 @@ void SwPagePreviewLayout::ClearPreviewLayoutSizes()
 {
     mnPages = 0;
 
-    maMaxPageSize.Width() = 0;
-    maMaxPageSize.Height() = 0;
+    maMaxPageSize.setWidth( 0 );
+    maMaxPageSize.setHeight( 0 );
     maPreviewDocRect.Left() = maPreviewDocRect.Top() = 0;
     maPreviewDocRect.Right() = maPreviewDocRect.Bottom() = 0;
     mnColWidth = mnRowHeight = 0;
@@ -135,9 +135,9 @@ void SwPagePreviewLayout::CalcPreviewLayoutSizes()
         pPage->Calc(pRenderContext);
         const Size& rPageSize = pPage->getFrameArea().SSize();
         if ( rPageSize.Width() > maMaxPageSize.Width() )
-            maMaxPageSize.Width() = rPageSize.Width();
+            maMaxPageSize.setWidth( rPageSize.Width() );
         if ( rPageSize.Height() > maMaxPageSize.Height() )
-            maMaxPageSize.Height() = rPageSize.Height();
+            maMaxPageSize.setHeight( rPageSize.Height() );
         pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
     }
     // calculate and set column width and row height
@@ -152,14 +152,14 @@ void SwPagePreviewLayout::CalcPreviewLayoutSizes()
     {
         Size aDocSize;
         // document width
-        aDocSize.Width() = mnPreviewLayoutWidth;
+        aDocSize.setWidth( mnPreviewLayoutWidth );
 
         // document height
         // determine number of rows needed for <nPages> in preview layout
         // use method <GetRowOfPage(..)>.
         const sal_uInt16 nDocRows = GetRowOfPage( mnPages );
-        aDocSize.Height() = nDocRows * maMaxPageSize.Height() +
-                            (nDocRows+1) * mnYFree;
+        aDocSize.setHeight( nDocRows * maMaxPageSize.Height() +
+                            (nDocRows+1) * mnYFree );
         maPreviewDocRect.SetPos( Point( 0, 0 ) );
         maPreviewDocRect.SetSize( aDocSize );
     }
@@ -356,14 +356,14 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
         // set starting row
         mnPaintStartRow = nRowOfProposed;
         // page offset == (-1,-1), indicating no offset and paint of free space.
-        maPaintStartPageOffset.X() = -1;
-        maPaintStartPageOffset.Y() = -1;
+        maPaintStartPageOffset.setX( -1 );
+        maPaintStartPageOffset.setY( -1 );
         // virtual preview document offset.
         if ( _bStartWithPageAtFirstCol )
-            maPaintPreviewDocOffset.X() = 0;
+            maPaintPreviewDocOffset.setX( 0 );
         else
-            maPaintPreviewDocOffset.X() = (nColOfProposed-1) * mnColWidth;
-        maPaintPreviewDocOffset.Y() = (nRowOfProposed-1) * mnRowHeight;
+            maPaintPreviewDocOffset.setX( (nColOfProposed-1) * mnColWidth );
+        maPaintPreviewDocOffset.setY( (nRowOfProposed-1) * mnRowHeight );
     }
     else
     {
@@ -399,10 +399,10 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
         mnPaintStartCol = nColOfProposed;
         mnPaintStartRow = nRowOfProposed;
         // page offset
-        maPaintStartPageOffset.X() =
-                (rProposedStartPos.X() % mnColWidth) - mnXFree;
-        maPaintStartPageOffset.Y() =
-                (rProposedStartPos.Y() % mnRowHeight) - mnYFree;
+        maPaintStartPageOffset.setX(
+                (rProposedStartPos.X() % mnColWidth) - mnXFree );
+        maPaintStartPageOffset.setY(
+                (rProposedStartPos.Y() % mnRowHeight) - mnYFree );
         // virtual preview document offset.
         maPaintPreviewDocOffset = rProposedStartPos;
     }
@@ -481,24 +481,24 @@ void SwPagePreviewLayout::CalcAdditionalPaintOffset()
          maPaintStartPageOffset.X() <= 0 )
     {
         mbDoesLayoutColsFitIntoWindow = true;
-        maAdditionalPaintOffset.X() = (maWinSize.Width() - mnPreviewLayoutWidth) / 2;
+        maAdditionalPaintOffset.setX( (maWinSize.Width() - mnPreviewLayoutWidth) / 2 );
     }
     else
     {
         mbDoesLayoutColsFitIntoWindow = false;
-        maAdditionalPaintOffset.X() = 0;
+        maAdditionalPaintOffset.setX( 0 );
     }
 
     if ( mnPreviewLayoutHeight <= maWinSize.Height() &&
          maPaintStartPageOffset.Y() <= 0 )
     {
         mbDoesLayoutRowsFitIntoWindow = true;
-        maAdditionalPaintOffset.Y() = (maWinSize.Height() - mnPreviewLayoutHeight) / 2;
+        maAdditionalPaintOffset.setY( (maWinSize.Height() - mnPreviewLayoutHeight) / 2 );
     }
     else
     {
         mbDoesLayoutRowsFitIntoWindow = false;
-        maAdditionalPaintOffset.Y() = 0;
+        maAdditionalPaintOffset.setY( 0 );
     }
 }
 
@@ -512,17 +512,17 @@ void SwPagePreviewLayout::CalcDocPreviewPaintRect()
 
     Size aSize;
     if ( mbDoesLayoutColsFitIntoWindow )
-        aSize.Width() = std::min( mnPreviewLayoutWidth,
-                             maPreviewDocRect.GetWidth() - aTopLeftPos.X() );
+        aSize.setWidth( std::min( mnPreviewLayoutWidth,
+                             maPreviewDocRect.GetWidth() - aTopLeftPos.X() ) );
     else
-        aSize.Width() = std::min( maPreviewDocRect.GetWidth() - aTopLeftPos.X(),
-                             maWinSize.Width() - maAdditionalPaintOffset.X() );
+        aSize.setWidth( std::min( maPreviewDocRect.GetWidth() - aTopLeftPos.X(),
+                             maWinSize.Width() - maAdditionalPaintOffset.X() ) );
     if ( mbDoesLayoutRowsFitIntoWindow )
-        aSize.Height() = std::min( mnPreviewLayoutHeight,
-                              maPreviewDocRect.GetHeight() - aTopLeftPos.Y() );
+        aSize.setHeight( std::min( mnPreviewLayoutHeight,
+                              maPreviewDocRect.GetHeight() - aTopLeftPos.Y() ) );
     else
-        aSize.Height() = std::min( maPreviewDocRect.GetHeight() - aTopLeftPos.Y(),
-                              maWinSize.Height() - maAdditionalPaintOffset.Y() );
+        aSize.setHeight( std::min( maPreviewDocRect.GetHeight() - aTopLeftPos.Y(),
+                              maWinSize.Height() - maAdditionalPaintOffset.Y() ) );
     maPaintedPreviewDocRect.SetSize( aSize );
 }
 
@@ -602,8 +602,8 @@ void SwPagePreviewLayout::CalcPreviewPages()
                 // --> continue with increased paint offset and next column
                 /// check whether RTL interface or not
                 if(!AllSettings::GetLayoutRTL())
-                    aCurrPaintOffset.X() += mnColWidth;
-                else aCurrPaintOffset.X() -= mnColWidth;
+                    aCurrPaintOffset.AdjustX(mnColWidth );
+                else aCurrPaintOffset.AdjustX( -(mnColWidth) );
                 ++nCurrCol;
                 continue;
             }
@@ -628,15 +628,15 @@ void SwPagePreviewLayout::CalcPreviewPages()
 
         /// check whether RTL interface or not
         if(!AllSettings::GetLayoutRTL())
-            aCurrPaintOffset.X() += mnColWidth;
-        else aCurrPaintOffset.X() -= mnColWidth;
+            aCurrPaintOffset.AdjustX(mnColWidth );
+        else aCurrPaintOffset.AdjustX( -(mnColWidth) );
         ++nCurrCol;
         if ( nCurrCol > mnCols )
         {
             ++nConsideredRows;
-            aCurrPaintOffset.X() = aInitialPaintOffset.X();
+            aCurrPaintOffset.setX( aInitialPaintOffset.X() );
             nCurrCol = 1;
-            aCurrPaintOffset.Y() += mnRowHeight;
+            aCurrPaintOffset.AdjustY(mnRowHeight );
         }
     }
 }
@@ -664,9 +664,9 @@ void SwPagePreviewLayout::CalcPreviewDataForPage( const SwPageFrame& _rPage,
     // position of page in preview window
     Point aPreviewWinOffset( _rPreviewOffset );
     if ( _opPreviewPage->aPageSize.Width() < maMaxPageSize.Width() )
-        aPreviewWinOffset.X() += ( maMaxPageSize.Width() - _opPreviewPage->aPageSize.Width() ) / 2;
+        aPreviewWinOffset.AdjustX(( maMaxPageSize.Width() - _opPreviewPage->aPageSize.Width() ) / 2 );
     if ( _opPreviewPage->aPageSize.Height() < maMaxPageSize.Height() )
-        aPreviewWinOffset.Y() += ( maMaxPageSize.Height() - _opPreviewPage->aPageSize.Height() ) / 2;
+        aPreviewWinOffset.AdjustY(( maMaxPageSize.Height() - _opPreviewPage->aPageSize.Height() ) / 2 );
     _opPreviewPage->aPreviewWinPos = aPreviewWinOffset;
     // logic position of page and mapping offset for paint
     if ( _rPage.IsEmptyPage() )
@@ -702,7 +702,7 @@ bool SwPagePreviewLayout::SetBookPreviewMode( const bool _bEnableBookPreview,
             // bottom, adjust it to the virtual preview document bottom
             if ( aProposedStartPos.Y() > maPreviewDocRect.Bottom() )
             {
-                aProposedStartPos.Y() = maPreviewDocRect.Bottom();
+                aProposedStartPos.setY( maPreviewDocRect.Bottom() );
             }
             Prepare( 0, aProposedStartPos,
                      mrParentViewShell.GetOut()->LogicToPixel( maWinSize ),
@@ -732,13 +732,13 @@ Point SwPagePreviewLayout::GetPreviewStartPosForNewScale(
     {
         // increase paint width by moving start point to left.
         if ( mnPreviewLayoutWidth < _aNewWinSize.Width() )
-            aNewPaintStartPos.X() = 0;
+            aNewPaintStartPos.setX( 0 );
         else if ( maPaintedPreviewDocRect.GetWidth() < _aNewWinSize.Width() )
         {
-            aNewPaintStartPos.X() -=
-                (_aNewWinSize.Width() - maPaintedPreviewDocRect.GetWidth()) / 2;
+            aNewPaintStartPos.AdjustX( -(
+                (_aNewWinSize.Width() - maPaintedPreviewDocRect.GetWidth()) / 2) );
             if ( aNewPaintStartPos.X() < 0)
-                aNewPaintStartPos.X() = 0;
+                aNewPaintStartPos.setX( 0 );
         }
 
         if ( !mbDoesLayoutRowsFitIntoWindow )
@@ -746,15 +746,15 @@ Point SwPagePreviewLayout::GetPreviewStartPosForNewScale(
             // increase paint height by moving start point to top.
             if ( mnPreviewLayoutHeight < _aNewWinSize.Height() )
             {
-                aNewPaintStartPos.Y() =
-                    ( (mnPaintStartRow - 1) * mnRowHeight );
+                aNewPaintStartPos.setY(
+                    (mnPaintStartRow - 1) * mnRowHeight );
             }
             else if ( maPaintedPreviewDocRect.GetHeight() < _aNewWinSize.Height() )
             {
-                aNewPaintStartPos.Y() -=
-                    (_aNewWinSize.Height() - maPaintedPreviewDocRect.GetHeight()) / 2;
+                aNewPaintStartPos.AdjustY( -(
+                    (_aNewWinSize.Height() - maPaintedPreviewDocRect.GetHeight()) / 2) );
                 if ( aNewPaintStartPos.Y() < 0)
-                    aNewPaintStartPos.Y() = 0;
+                    aNewPaintStartPos.setY( 0 );
             }
         }
     }
@@ -762,17 +762,17 @@ Point SwPagePreviewLayout::GetPreviewStartPosForNewScale(
     {
         // decrease paint width by moving start point to right
         if ( maPaintedPreviewDocRect.GetWidth() > _aNewWinSize.Width() )
-            aNewPaintStartPos.X() +=
-                (maPaintedPreviewDocRect.GetWidth() - _aNewWinSize.Width()) / 2;
+            aNewPaintStartPos.AdjustX(
+                (maPaintedPreviewDocRect.GetWidth() - _aNewWinSize.Width()) / 2 );
         // decrease paint height by moving start point to bottom
         if ( maPaintedPreviewDocRect.GetHeight() > _aNewWinSize.Height() )
         {
-            aNewPaintStartPos.Y() +=
-                (maPaintedPreviewDocRect.GetHeight() - _aNewWinSize.Height()) / 2;
+            aNewPaintStartPos.AdjustY(
+                (maPaintedPreviewDocRect.GetHeight() - _aNewWinSize.Height()) / 2 );
             // check, if new y-position is outside document preview
             if ( aNewPaintStartPos.Y() > maPreviewDocRect.Bottom() )
-                aNewPaintStartPos.Y() =
-                        std::max( 0L, maPreviewDocRect.Bottom() - mnPreviewLayoutHeight );
+                aNewPaintStartPos.setY(
+                        std::max( 0L, maPreviewDocRect.Bottom() - mnPreviewLayoutHeight ) );
         }
     }
 
@@ -897,8 +897,8 @@ bool SwPagePreviewLayout::IsPreviewPosInDocPreviewPage( const Point&  rPreviewPo
                                                     sal_uInt16&  _onPageNum ) const
 {
     // initialize variable parameter values.
-    _orDocPos.X() = 0;
-    _orDocPos.Y() = 0;
+    _orDocPos.setX( 0 );
+    _orDocPos.setY( 0 );
     _obPosInEmptyPage = false;
     _onPageNum = 0;
 

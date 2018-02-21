@@ -508,17 +508,17 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
                     sEntry = m_aContextStrings[IDX_STR_BROKEN_LINK] + sEntry;
                 Point aEntryPos = GetEntryPosition( pEntry );
 
-                aEntryPos.X() = GetTabPos( pEntry, pTab );
+                aEntryPos.setX( GetTabPos( pEntry, pTab ) );
                 Size aSize( pItem->GetSize( this, pEntry ) );
 
                 if((aEntryPos.X() + aSize.Width()) > GetSizePixel().Width())
-                    aSize.Width() = GetSizePixel().Width() - aEntryPos.X();
+                    aSize.setWidth( GetSizePixel().Width() - aEntryPos.X() );
 
                 aEntryPos = OutputToScreenPixel(aEntryPos);
                 tools::Rectangle aItemRect( aEntryPos, aSize );
                 if(Help::IsBalloonHelpEnabled())
                 {
-                    aEntryPos.X() += aSize.Width();
+                    aEntryPos.AdjustX(aSize.Width() );
                     Help::ShowBalloon( this, aEntryPos, aItemRect, sEntry );
                 }
                 else

@@ -1787,7 +1787,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         if(bVerticalWriting)
                         {
                             aRect.Pos() += Point(aTmpRect.Left(), aTmpRect.Top());
-                            aRect.Pos().Y() -= rPageRect.Top();
+                            aRect.Pos().AdjustY( -(rPageRect.Top()) );
                             aColItem.SetLeft(aRect.Top());
                             aColItem.SetRight(nPageHeight - aRect.Bottom());
                         }
@@ -2014,18 +2014,18 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     const sal_uInt16 nL = std::max< sal_uInt16 >(nLft, 0);
                     const sal_uInt16 nR = std::max< sal_uInt16 >(nRgt, 0);
 
-                    aRectangle.Left() = nL;
+                    aRectangle.SetLeft( nL );
                     if(nNum > 1)
-                        aRectangle.Left() += aTabCols[nNum - 2];
+                        aRectangle.AdjustLeft(aTabCols[nNum - 2] );
                     if(nNum)
-                        aRectangle.Left() += MINLAY;
+                        aRectangle.AdjustLeft(MINLAY );
                     if(aTabCols.Count() <= nNum + 1 )
-                        aRectangle.Right() = nR;
+                        aRectangle.SetRight( nR );
                     else
-                        aRectangle.Right() = nPageWidth - (nL + aTabCols[nNum + 1]);
+                        aRectangle.SetRight( nPageWidth - (nL + aTabCols[nNum + 1]) );
 
                     if(nNum < aTabCols.Count())
-                        aRectangle.Right() += MINLAY;
+                        aRectangle.AdjustRight(MINLAY );
                 }
                 else
                 {
@@ -2048,42 +2048,42 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     const sal_uInt16 nOuterWidth = static_cast<sal_uInt16>(aAbsRect.Width());
                     int nWidth = 0,
                         nEnd = 0;
-                    aRectangle.Left() = 0;
+                    aRectangle.SetLeft( 0 );
                     for ( sal_uInt16 i = 0; i < nCount; ++i )
                     {
                         const SwColumn* pCol = &rCols[i];
                         const int nStart = pCol->GetLeft() + nWidth;
                         if(i == nNum - 2)
-                            aRectangle.Left() = nStart;
+                            aRectangle.SetLeft( nStart );
                         nWidth += pCols->CalcColWidth( i, nTotalWidth );
                         nEnd = nWidth - pCol->GetRight();
                     }
-                    aRectangle.Right() = rPageRect.Right() - nEnd;
-                    aRectangle.Left() -= rPageRect.Left();
+                    aRectangle.SetRight( rPageRect.Right() - nEnd );
+                    aRectangle.AdjustLeft( -(rPageRect.Left()) );
 
                     if(nNum > 1)
                     {
-                        aRectangle.Left() += MINLAY;
-                        aRectangle.Left() += aRect.Left();
+                        aRectangle.AdjustLeft(MINLAY );
+                        aRectangle.AdjustLeft(aRect.Left() );
                     }
                     if(pFormat) // Range in frame - here you may up to the edge
                         aRectangle.Left()  = aRectangle.Right() = 0;
                     else
                     {
                         // Move the rectangle to the correct absolute position.
-                        aRectangle.Left() += aAbsRect.Left();
-                        aRectangle.Right() -= aAbsRect.Left();
+                        aRectangle.AdjustLeft(aAbsRect.Left() );
+                        aRectangle.AdjustRight( -(aAbsRect.Left()) );
                         // Include distance to the border.
-                        aRectangle.Right() -= (nOuterWidth - nTotalWidth) / 2;
+                        aRectangle.AdjustRight( -((nOuterWidth - nTotalWidth) / 2) );
                     }
 
                     if(nNum < rCols.size())
                     {
-                        aRectangle.Right() += MINLAY;
+                        aRectangle.AdjustRight(MINLAY );
                     }
                     else
                         // Right is only the margin now.
-                        aRectangle.Right() = 0;
+                        aRectangle.SetRight( 0 );
 
                 }
             }
@@ -2105,18 +2105,18 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         aRect.Pos() += rSh.GetAnyCurRect( CurRectType::FlyEmbedded,
                                                                 pPt ).Pos();
 
-                        aRectangle.Left()  = aRect.Left() - rPageRect.Left();
-                        aRectangle.Right() = rPageRect.Right() - aRect.Right();
+                        aRectangle.SetLeft( aRect.Left() - rPageRect.Left() );
+                        aRectangle.SetRight( rPageRect.Right() - aRect.Right() );
                     }
                     else if( bBrowse )
                     {
-                        aRectangle.Left()  = rPagePrtRect.Left();
-                        aRectangle.Right() = nPageWidth - rPagePrtRect.Right();
+                        aRectangle.SetLeft( rPagePrtRect.Left() );
+                        aRectangle.SetRight( nPageWidth - rPagePrtRect.Right() );
                     }
                     else
                     {
-                        aRectangle.Left()  = aPageLRSpace.GetLeft();
-                        aRectangle.Right() = aPageLRSpace.GetRight();
+                        aRectangle.SetLeft( aPageLRSpace.GetLeft() );
+                        aRectangle.SetRight( aPageLRSpace.GetRight() );
                     }
                 }
                 else
@@ -2183,31 +2183,31 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     }
                     if( bFrame || bColSct )
                     {
-                        aRectangle.Left()  = aRect.Left() - rPageRect.Left() + nStart;
-                        aRectangle.Right() = nPageWidth - aRectangle.Left() - nEnd + nStart;
+                        aRectangle.SetLeft( aRect.Left() - rPageRect.Left() + nStart );
+                        aRectangle.SetRight( nPageWidth - aRectangle.Left() - nEnd + nStart );
                     }
                     else if(!bBrowse)
                     {
-                        aRectangle.Left()  = aPageLRSpace.GetLeft() + nStart;
-                        aRectangle.Right() = nPageWidth - nEnd - aPageLRSpace.GetLeft();
+                        aRectangle.SetLeft( aPageLRSpace.GetLeft() + nStart );
+                        aRectangle.SetRight( nPageWidth - nEnd - aPageLRSpace.GetLeft() );
                     }
                     else
                     {
                         long nLeft = rPagePrtRect.Left();
-                        aRectangle.Left()  = nStart + nLeft;
-                        aRectangle.Right() = nPageWidth - nEnd - nLeft;
+                        aRectangle.SetLeft( nStart + nLeft );
+                        aRectangle.SetRight( nPageWidth - nEnd - nLeft );
                     }
                     if(!bFrame)
                     {
-                        aRectangle.Left() += nBorder;
-                        aRectangle.Right() -= nBorder;
+                        aRectangle.AdjustLeft(nBorder );
+                        aRectangle.AdjustRight( -nBorder );
                     }
                 }
             }
             else if ( nFrameType & ( FrameTypeFlags::HEADER  | FrameTypeFlags::FOOTER ))
             {
-                aRectangle.Left()  = aPageLRSpace.GetLeft();
-                aRectangle.Right() = aPageLRSpace.GetRight();
+                aRectangle.SetLeft( aPageLRSpace.GetLeft() );
+                aRectangle.SetRight( aPageLRSpace.GetRight() );
             }
             else
                 aRectangle.Left()  = aRectangle.Right() = 0;

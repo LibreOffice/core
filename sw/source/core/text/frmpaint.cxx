@@ -218,13 +218,13 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
     else
         pTmpFnt = GetFont();
     Point aTmpPos( nX, nY );
-    aTmpPos.Y() += nAsc;
+    aTmpPos.AdjustY(nAsc );
     bool bPaint = true;
     if( !IsClipChg() )
     {
         Size aSize = pTmpFnt->GetTextSize_( aDrawInf );
         if( bGoLeft )
-            aTmpPos.X() -= aSize.Width();
+            aTmpPos.AdjustX( -(aSize.Width()) );
         // calculate rectangle containing the line number
         SwRect aRct( Point( aTmpPos.X(),
                          aTmpPos.Y() - pTmpFnt->GetAscent( pSh, *pSh->GetOut() )
@@ -238,7 +238,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
         }
     }
     else if( bGoLeft )
-        aTmpPos.X() -= pTmpFnt->GetTextSize_( aDrawInf ).Width();
+        aTmpPos.AdjustX( -(pTmpFnt->GetTextSize_( aDrawInf ).Width()) );
     aDrawInf.SetPos( aTmpPos );
     if( bPaint )
         pTmpFnt->DrawText_( aDrawInf );
@@ -512,7 +512,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                     GetTextNode()->GetSwAttrSet().GetLRSpace();
 
                 if ( rSpace.GetTextFirstLineOfst() > 0 )
-                    aPos.X() += rSpace.GetTextFirstLineOfst();
+                    aPos.AdjustX(rSpace.GetTextFirstLineOfst() );
 
                 SwSaveClip *pClip;
                 if( IsUndersized() )
@@ -523,7 +523,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 else
                     pClip = nullptr;
 
-                aPos.Y() += pFnt->GetAscent( pSh, *pSh->GetOut() );
+                aPos.AdjustY(pFnt->GetAscent( pSh, *pSh->GetOut() ) );
 
                 if ( GetTextNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
                      IsInDocBody() )
@@ -532,11 +532,11 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                     if ( pGrid )
                     {
                         // center character in grid line
-                        aPos.Y() += ( pGrid->GetBaseHeight() -
-                                      pFnt->GetHeight( pSh, *pSh->GetOut() ) ) / 2;
+                        aPos.AdjustY(( pGrid->GetBaseHeight() -
+                                      pFnt->GetHeight( pSh, *pSh->GetOut() ) ) / 2 );
 
                         if ( ! pGrid->GetRubyTextBelow() )
-                            aPos.Y() += pGrid->GetRubyHeight();
+                            aPos.AdjustY(pGrid->GetRubyHeight() );
                     }
                 }
 

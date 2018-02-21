@@ -513,7 +513,7 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
                 if ( !bDisableOffPagePositioning || nOld <= nClipBot)
                 {
                     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-                    aFrm.Pos().Y() = std::max( aClip.Top(), nClipBot - aFrm.Height() );
+                    aFrm.Pos().setY( std::max( aClip.Top(), nClipBot - aFrm.Height() ) );
                 }
 
                 if ( getFrameArea().Top() != nOld )
@@ -533,7 +533,7 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             if ( !bDisableOffPagePositioning || nOld <= nClipRig )
             {
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-                aFrm.Pos().X() = std::max( aClip.Left(), nClipRig - aFrm.Width() );
+                aFrm.Pos().setX( std::max( aClip.Left(), nClipRig - aFrm.Width() ) );
             }
 
             if ( getFrameArea().Left() != nOld )
@@ -544,7 +544,7 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
                 if( rH.GetHoriOrient() == text::HoriOrientation::LEFT )
                 {
                     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-                    aFrm.Pos().X() = nOld;
+                    aFrm.Pos().setX( nOld );
                 }
                 else
                 {

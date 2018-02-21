@@ -207,7 +207,7 @@ void SwViewShell::PrintProspect(
         }
 
         pStPage = pNxtPage;
-        aSttPt.X() += aTmpPrtSize.Width() / 2;
+        aSttPt.AdjustX(aTmpPrtSize.Width() / 2 );
     }
 
     SwPaintQueue::Repaint();

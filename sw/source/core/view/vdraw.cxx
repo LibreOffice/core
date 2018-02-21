@@ -257,18 +257,18 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
             {
                 Size aSz;
                 if ( aObjBound.Left() > aDocRect.Right() )
-                    aSz.Width() = (aDocRect.Right() - aObjBound.Left()) - MINFLY;
+                    aSz.setWidth( (aDocRect.Right() - aObjBound.Left()) - MINFLY );
                 if ( aObjBound.Top() > aDocRect.Bottom() )
-                    aSz.Height() = (aDocRect.Bottom() - aObjBound.Top()) - MINFLY;
+                    aSz.setHeight( (aDocRect.Bottom() - aObjBound.Top()) - MINFLY );
                 if ( aSz.Width() || aSz.Height() )
                     pObj->Move( aSz );
 
                 // Don't let large objects disappear to the top
                 aSz.Width() = aSz.Height() = 0;
                 if ( aObjBound.Right() < aDocRect.Left() )
-                    aSz.Width() = (aDocRect.Left() - aObjBound.Right()) + MINFLY;
+                    aSz.setWidth( (aDocRect.Left() - aObjBound.Right()) + MINFLY );
                 if ( aObjBound.Bottom() < aDocRect.Top() )
-                    aSz.Height() = (aDocRect.Top() - aObjBound.Bottom()) + MINFLY;
+                    aSz.setHeight( (aDocRect.Top() - aObjBound.Bottom()) + MINFLY );
                 if ( aSz.Width() || aSz.Height() )
                     pObj->Move( aSz );
             }

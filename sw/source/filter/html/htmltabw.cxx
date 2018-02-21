@@ -111,7 +111,7 @@ void SwHTMLWrtTable::Pixelize( sal_uInt16& rValue )
         Size aSz( rValue, 0 );
         aSz = Application::GetDefaultDevice()->LogicToPixel( aSz, MapMode(MapUnit::MapTwip) );
         if( !aSz.Width() )
-            aSz.Width() = 1;
+            aSz.setWidth( 1 );
         aSz = Application::GetDefaultDevice()->PixelToLogic( aSz, MapMode(MapUnit::MapTwip) );
         rValue = static_cast<sal_uInt16>(aSz.Width());
     }
@@ -351,9 +351,9 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         aPixelSz = Application::GetDefaultDevice()->LogicToPixel( aPixelSz,
                                                         MapMode(MapUnit::MapTwip) );
         if( aOldSz.Width() && !aPixelSz.Width() )
-            aPixelSz.Width() = 1;
+            aPixelSz.setWidth( 1 );
         if( aOldSz.Height() && !aPixelSz.Height() )
-            aPixelSz.Height() = 1;
+            aPixelSz.setHeight( 1 );
     }
 
     // output WIDTH: from layout or calculated
@@ -657,9 +657,9 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             Application::GetDefaultDevice()->LogicToPixel( Size(nHSpace,nVSpace),
                                                    MapMode(MapUnit::MapTwip) );
         if( !aPixelSpc.Width() && nHSpace )
-            aPixelSpc.Width() = 1;
+            aPixelSpc.setWidth( 1 );
         if( !aPixelSpc.Height() && nVSpace )
-            aPixelSpc.Height() = 1;
+            aPixelSpc.setHeight( 1 );
 
         if( aPixelSpc.Width() )
         {

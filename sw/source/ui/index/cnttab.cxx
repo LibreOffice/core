@@ -1595,7 +1595,7 @@ void SwTOXEdit::AdjustSize()
      Size aSize(GetSizePixel());
      Size aTextSize(GetTextWidth(GetText()), GetTextHeight());
     aTextSize = LogicToPixel(aTextSize);
-    aSize.Width() = aTextSize.Width() + EDIT_MINWIDTH;
+    aSize.setWidth( aTextSize.Width() + EDIT_MINWIDTH );
     SetSizePixel(aSize);
 }
 
@@ -1769,11 +1769,11 @@ void SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
                 {
                     aPos = GetEntryPosition( pEntry );
 
-                    aPos.X() = GetTabPos( pEntry, pTab );
+                    aPos.setX( GetTabPos( pEntry, pTab ) );
                  Size aSize( pItem->GetSize( this, pEntry ) );
 
                     if((aPos.X() + aSize.Width()) > GetSizePixel().Width())
-                        aSize.Width() = GetSizePixel().Width() - aPos.X();
+                        aSize.setWidth( GetSizePixel().Width() - aPos.X() );
 
                     aPos = OutputToScreenPixel(aPos);
                      tools::Rectangle aItemRect( aPos, aSize );
@@ -2791,7 +2791,7 @@ void SwTokenWindow::setAllocation(const Size &rAllocation)
     for (VclPtr<Control> const & pControl : m_aControlList)
     {
         Size aSize(pControl->GetSizePixel());
-        aSize.Height() = aControlSize.Height();
+        aSize.setHeight( aControlSize.Height() );
         pControl->SetSizePixel(aSize);
     }
     AdjustPositions();
@@ -2934,7 +2934,7 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
 
         aControlSize = pLast->GetSizePixel();
         aControlPos = pLast->GetPosPixel();
-        aControlPos.X() += aControlSize.Width();
+        aControlPos.AdjustX(aControlSize.Width() );
     }
 
     if(TOKEN_TEXT == rToken.eTokenType)
@@ -2958,7 +2958,7 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
         }
         pEdit->SetAccessibleName(strName);
         Size aEditSize(aControlSize);
-        aEditSize.Width() = pEdit->GetTextWidth(rText) + EDIT_MINWIDTH;
+        aEditSize.setWidth( pEdit->GetTextWidth(rText) + EDIT_MINWIDTH );
         pEdit->SetSizePixel(aEditSize);
         pEdit->SetModifyHdl(LINK(this, SwTokenWindow, EditResize ));
         pEdit->SetPrevNextLink(LINK(this, SwTokenWindow, NextItemHdl));
@@ -2974,7 +2974,7 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
         m_aControlList.emplace_back(pButton);
 
         Size aEditSize(aControlSize);
-        aEditSize.Width() = pButton->GetTextWidth(rText) + 5;
+        aEditSize.setWidth( pButton->GetTextWidth(rText) + 5 );
         pButton->SetSizePixel(aEditSize);
         pButton->SetPrevNextLink(LINK(this, SwTokenWindow, NextItemBtnHdl));
         pButton->SetGetFocusHdl(LINK(this, SwTokenWindow, TbxFocusBtnHdl));
@@ -3198,7 +3198,7 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
     }
 
     Size aEditSize(GetOutputSizePixel());
-    aEditSize.Width() = pButton->GetTextWidth(rText) + 5;
+    aEditSize.setWidth( pButton->GetTextWidth(rText) + 5 );
     pButton->SetSizePixel(aEditSize);
     pButton->Check();
     pButton->Show();
@@ -3255,13 +3255,13 @@ void SwTokenWindow::AdjustPositions()
         ++it;
 
         Point aNextPos = pCtrl->GetPosPixel();
-        aNextPos.X() += pCtrl->GetSizePixel().Width();
+        aNextPos.AdjustX(pCtrl->GetSizePixel().Width() );
 
         for(; it != m_aControlList.end(); ++it)
         {
             pCtrl = it->get();
             pCtrl->SetPosPixel(aNextPos);
-            aNextPos.X() += pCtrl->GetSizePixel().Width();
+            aNextPos.AdjustX(pCtrl->GetSizePixel().Width() );
         }
 
         AdjustScrolling();
@@ -3274,7 +3274,7 @@ void SwTokenWindow::MoveControls(long nOffset)
     for (VclPtr<Control> const & pCtrl : m_aControlList)
     {
         Point aPos = pCtrl->GetPosPixel();
-        aPos.X() += nOffset;
+        aPos.AdjustX(nOffset );
 
         pCtrl->SetPosPixel(aPos);
     }
@@ -3974,7 +3974,7 @@ Size SwEntryBrowseBox::GetOptimalSize() const
 
     long nWidth(std::accumulate(aWidths.begin(), aWidths.end(), 0));
 
-    aSize.Width() = std::max(aSize.Width(), nWidth);
+    aSize.setWidth( std::max(aSize.Width(), nWidth) );
 
     return aSize;
 }

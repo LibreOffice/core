@@ -669,8 +669,8 @@ static void GetControlSize(const SdrUnoObj& rFormObj, Size& rSz, SwDoc *pDoc)
 
     sal_Int16 nCols=0, nLines=0;
     xLC->getColumnsAndLines( nCols, nLines );
-    rSz.Width() = nCols;
-    rSz.Height() = nLines;
+    rSz.setWidth( nCols );
+    rSz.setHeight( nLines );
 }
 
 Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
@@ -988,9 +988,9 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                 Application::GetDefaultDevice()->LogicToPixel( aTwipSz,
                                                     MapMode(MapUnit::MapTwip) );
             if( !aPixelSz.Width() && aTwipSz.Width() )
-                aPixelSz.Width() = 1;
+                aPixelSz.setWidth( 1 );
             if( !aPixelSz.Height() && aTwipSz.Height() )
-                aPixelSz.Height() = 1;
+                aPixelSz.setHeight( 1 );
         }
 
         if( aPixelSz.Width() )

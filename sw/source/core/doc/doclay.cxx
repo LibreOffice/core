@@ -266,7 +266,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
             // Set size
              Size aSize( pNoTextNode->GetTwipSize() );
             if( MINFLY > aSize.Width() )
-                aSize.Width() = DEF_FLY_WIDTH;
+                aSize.setWidth( DEF_FLY_WIDTH );
             aFormatSize.SetWidth( aSize.Width() );
             if( aSize.Height() )
             {

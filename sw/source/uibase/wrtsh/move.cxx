@@ -102,7 +102,7 @@ bool SwWrtShell::Left( sal_uInt16 nMode, bool bSelect,
     if ( !bSelect && !bBasicCall && IsCursorReadonly()  && !GetViewOptions()->IsSelectionInReadonly())
     {
         Point aTmp( VisArea().Pos() );
-        aTmp.X() -= VisArea().Width() * nReadOnlyScrollOfst / 100;
+        aTmp.AdjustX( -(VisArea().Width() * nReadOnlyScrollOfst / 100) );
         m_rView.SetVisArea( aTmp );
         return true;
     }
@@ -119,8 +119,8 @@ bool SwWrtShell::Right( sal_uInt16 nMode, bool bSelect,
     if ( !bSelect && !bBasicCall && IsCursorReadonly() && !GetViewOptions()->IsSelectionInReadonly() )
     {
         Point aTmp( VisArea().Pos() );
-        aTmp.X() += VisArea().Width() * nReadOnlyScrollOfst / 100;
-        aTmp.X() = m_rView.SetHScrollMax( aTmp.X() );
+        aTmp.AdjustX(VisArea().Width() * nReadOnlyScrollOfst / 100 );
+        aTmp.setX( m_rView.SetHScrollMax( aTmp.X() ) );
         m_rView.SetVisArea( aTmp );
         return true;
     }
@@ -136,7 +136,7 @@ bool SwWrtShell::Up( bool bSelect, sal_uInt16 nCount, bool bBasicCall )
     if ( !bSelect && !bBasicCall && IsCursorReadonly()  && !GetViewOptions()->IsSelectionInReadonly())
     {
         Point aTmp( VisArea().Pos() );
-        aTmp.Y() -= VisArea().Height() * nReadOnlyScrollOfst / 100;
+        aTmp.AdjustY( -(VisArea().Height() * nReadOnlyScrollOfst / 100) );
         m_rView.SetVisArea( aTmp );
         return true;
     }
@@ -150,8 +150,8 @@ bool SwWrtShell::Down( bool bSelect, sal_uInt16 nCount, bool bBasicCall )
     if ( !bSelect && !bBasicCall && IsCursorReadonly() && !GetViewOptions()->IsSelectionInReadonly())
     {
         Point aTmp( VisArea().Pos() );
-        aTmp.Y() += VisArea().Height() * nReadOnlyScrollOfst / 100;
-        aTmp.Y() = m_rView.SetVScrollMax( aTmp.Y() );
+        aTmp.AdjustY(VisArea().Height() * nReadOnlyScrollOfst / 100 );
+        aTmp.setY( m_rView.SetVScrollMax( aTmp.Y() ) );
         m_rView.SetVisArea( aTmp );
         return true;
     }
@@ -165,7 +165,7 @@ bool SwWrtShell::LeftMargin( bool bSelect, bool bBasicCall )
     if ( !bSelect && !bBasicCall && IsCursorReadonly() )
     {
         Point aTmp( VisArea().Pos() );
-        aTmp.X() = DOCUMENTBORDER;
+        aTmp.setX( DOCUMENTBORDER );
         m_rView.SetVisArea( aTmp );
         return true;
     }
@@ -181,9 +181,9 @@ bool SwWrtShell::RightMargin( bool bSelect, bool bBasicCall  )
     if ( !bSelect && !bBasicCall && IsCursorReadonly() )
     {
         Point aTmp( VisArea().Pos() );
-        aTmp.X() = GetDocSize().Width() - VisArea().Width() + DOCUMENTBORDER;
+        aTmp.setX( GetDocSize().Width() - VisArea().Width() + DOCUMENTBORDER );
         if( DOCUMENTBORDER > aTmp.X() )
-            aTmp.X() = DOCUMENTBORDER;
+            aTmp.setX( DOCUMENTBORDER );
         m_rView.SetVisArea( aTmp );
         return true;
     }
@@ -408,11 +408,11 @@ bool SwWrtShell::PushCursor(SwTwips lOffset, bool bSelect)
         if( !IsCursorVisible() )
             // set CursorPos to top-/bottom left pos. So the pagescroll is not
             // be dependent on the current cursor, but on the visarea.
-            aPt.Y() = aTmpArea.Top() + aTmpArea.Height() / 2;
+            aPt.setY( aTmpArea.Top() + aTmpArea.Height() / 2 );
 
-        aPt.Y() += lOffset;
+        aPt.AdjustY(lOffset );
         m_aDest = GetContentPos(aPt,lOffset > 0);
-        m_aDest.X() = aPt.X();
+        m_aDest.setX( aPt.X() );
         m_bDestOnStack = true;
     }
 
@@ -424,7 +424,7 @@ bool SwWrtShell::PushCursor(SwTwips lOffset, bool bSelect)
     //Place the cursor at the target position; remember that no target
     //position is longer on the stack.
     //The new visible region is to be determined beforehand.
-    aTmpArea.Pos().Y() += lOffset;
+    aTmpArea.Pos().AdjustY(lOffset );
     if( aTmpArea.IsInside(m_aDest) )
     {
         if( bSelect )
@@ -482,7 +482,7 @@ bool SwWrtShell::PopCursor(bool bUpdate, bool bSelect)
             // If a predecessor is on the stack,
             // use the flag for a valid position.
         SwRect aTmpArea(VisArea());
-        aTmpArea.Pos().Y() -= m_pCursorStack->lOffset;
+        aTmpArea.Pos().AdjustY( -(m_pCursorStack->lOffset) );
         if( aTmpArea.IsInside( m_pCursorStack->aDocPos ) )
         {
             if( bSelect )

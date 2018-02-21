@@ -857,7 +857,7 @@ void SwDocShell::SetVisArea( const tools::Rectangle &rRect )
     if (m_pView)
     {
         Size aSz( m_pView->GetDocSz() );
-        aSz.Width() += DOCUMENTBORDER; aSz.Height() += DOCUMENTBORDER;
+        aSz.AdjustWidth(DOCUMENTBORDER ); aSz.AdjustHeight(DOCUMENTBORDER );
         long nMoveX = 0, nMoveY = 0;
         if ( aRect.Right() > aSz.Width() )
             nMoveX = aSz.Width() - aRect.Right();

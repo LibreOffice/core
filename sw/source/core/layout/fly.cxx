@@ -765,10 +765,10 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 SwRect aOld( getFrameArea() );
                 const SvxULSpaceItem &rUL = static_cast<const SwFormatChg*>(pOld)->pChangedFormat->GetULSpace();
                 aOld.Top( std::max( aOld.Top() - long(rUL.GetUpper()), 0L ) );
-                aOld.SSize().Height()+= rUL.GetLower();
+                aOld.SSize().AdjustHeight(rUL.GetLower() );
                 const SvxLRSpaceItem &rLR = static_cast<const SwFormatChg*>(pOld)->pChangedFormat->GetLRSpace();
                 aOld.Left  ( std::max( aOld.Left() - rLR.GetLeft(), 0L ) );
-                aOld.SSize().Width() += rLR.GetRight();
+                aOld.SSize().AdjustWidth(rLR.GetRight() );
                 aNew.Union( aOld );
                 NotifyBackground( FindPageFrame(), aNew, PREP_CLEAR );
 
@@ -867,13 +867,13 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 {
                     const SvxULSpaceItem &rUL = *static_cast<const SvxULSpaceItem*>(pNew);
                     aOld.Top( std::max( aOld.Top() - long(rUL.GetUpper()), 0L ) );
-                    aOld.SSize().Height()+= rUL.GetLower();
+                    aOld.SSize().AdjustHeight(rUL.GetLower() );
                 }
                 else
                 {
                     const SvxLRSpaceItem &rLR = *static_cast<const SvxLRSpaceItem*>(pNew);
                     aOld.Left  ( std::max( aOld.Left() - rLR.GetLeft(), 0L ) );
-                    aOld.SSize().Width() += rLR.GetRight();
+                    aOld.SSize().AdjustWidth(rLR.GetRight() );
                 }
             }
             aNew.Union( aOld );
@@ -2378,19 +2378,19 @@ Size SwFlyFrame::CalcRel( const SwFormatFrameSize &rSz ) const
         }
 
         if ( rSz.GetWidthPercent() && rSz.GetWidthPercent() != SwFormatFrameSize::SYNCED )
-            aRet.Width() = nRelWidth * rSz.GetWidthPercent() / 100;
+            aRet.setWidth( nRelWidth * rSz.GetWidthPercent() / 100 );
         if ( rSz.GetHeightPercent() && rSz.GetHeightPercent() != SwFormatFrameSize::SYNCED )
-            aRet.Height() = nRelHeight * rSz.GetHeightPercent() / 100;
+            aRet.setHeight( nRelHeight * rSz.GetHeightPercent() / 100 );
 
         if ( rSz.GetWidthPercent() == SwFormatFrameSize::SYNCED )
         {
-            aRet.Width() *= aRet.Height();
-            aRet.Width() /= rSz.GetHeight();
+            aRet.setWidth( aRet.Width() * ( aRet.Height()) );
+            aRet.setWidth( aRet.Width() / ( rSz.GetHeight()) );
         }
         else if ( rSz.GetHeightPercent() == SwFormatFrameSize::SYNCED )
         {
-            aRet.Height() *= aRet.Width();
-            aRet.Height() /= rSz.GetWidth();
+            aRet.setHeight( aRet.Height() * ( aRet.Width()) );
+            aRet.setHeight( aRet.Height() / ( rSz.GetWidth()) );
         }
     }
     return aRet;

@@ -334,13 +334,13 @@ static void lcl_CalcRect( Point& rPt, Size& rDim, MirrorGraph nMirror )
     if( nMirror == MirrorGraph::Vertical || nMirror == MirrorGraph::Both )
     {
         rPt.setX(rPt.getX() + rDim.Width() -1);
-        rDim.Width() = -rDim.Width();
+        rDim.setWidth( -rDim.Width() );
     }
 
     if( nMirror == MirrorGraph::Horizontal || nMirror == MirrorGraph::Both )
     {
         rPt.setY(rPt.getY() + rDim.Height() -1);
-        rDim.Height() = -rDim.Height();
+        rDim.setHeight( -rDim.Height() );
     }
 }
 
@@ -382,7 +382,7 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
     Size aOrigSz( static_cast<const SwNoTextNode*>(GetNode())->GetTwipSize() );
     if ( !aOrigSz.Width() )
     {
-        aOrigSz.Width() = aFramePrintArea.Width();
+        aOrigSz.setWidth( aFramePrintArea.Width() );
         nLeftCrop  = -rCrop.GetLeft();
         nRightCrop = -rCrop.GetRight();
     }
@@ -405,7 +405,7 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
 
     if( !aOrigSz.Height() )
     {
-        aOrigSz.Height() = aFramePrintArea.Height();
+        aOrigSz.setHeight( aFramePrintArea.Height() );
         nTopCrop   = -rCrop.GetTop();
         nBottomCrop= -rCrop.GetBottom();
     }
@@ -434,17 +434,17 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
     if ( nLeftCrop > 0 )
     {
         aVisPt.setX(aVisPt.getX() + nLeftCrop);
-        aVisSz.Width() -= nLeftCrop;
+        aVisSz.AdjustWidth( -nLeftCrop );
     }
     if ( nTopCrop > 0 )
     {
         aVisPt.setY(aVisPt.getY() + nTopCrop);
-        aVisSz.Height() -= nTopCrop;
+        aVisSz.AdjustHeight( -nTopCrop );
     }
     if ( nRightCrop > 0 )
-        aVisSz.Width() -= nRightCrop;
+        aVisSz.AdjustWidth( -nRightCrop );
     if ( nBottomCrop > 0 )
-        aVisSz.Height() -= nBottomCrop;
+        aVisSz.AdjustHeight( -nBottomCrop );
 
     rRect.Pos  ( aVisPt );
     rRect.SSize( aVisSz );
@@ -454,9 +454,9 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
     {
         Size aTmpSz( aGrfSz );
         aGrfPt.setX(aGrfPt.getX() + nLeftCrop);
-        aTmpSz.Width() -= nLeftCrop + nRightCrop;
+        aTmpSz.AdjustWidth( -(nLeftCrop + nRightCrop) );
         aGrfPt.setY(aGrfPt.getY() + nTopCrop);
-        aTmpSz.Height()-= nTopCrop + nBottomCrop;
+        aTmpSz.AdjustHeight( -(nTopCrop + nBottomCrop) );
 
         if( MirrorGraph::Dont != nMirror )
             lcl_CalcRect( aGrfPt, aTmpSz, nMirror );

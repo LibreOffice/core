@@ -1379,7 +1379,7 @@ SwTwips SwRootFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
     if ( !bTst )
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-        aFrm.SSize().Height() += nDist;
+        aFrm.SSize().AdjustHeight(nDist );
     }
 
     return nDist;
@@ -1393,7 +1393,7 @@ SwTwips SwRootFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool )
     if ( !bTst )
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-        aFrm.SSize().Height() -= nDist;
+        aFrm.SSize().AdjustHeight( -nDist );
     }
 
     return nDist;

@@ -707,12 +707,12 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                     // #i22673#
                     sal_Int16 eOri = rVOr.GetRelationOrient();
                     if (eOri == text::RelOrientation::CHAR || eOri == text::RelOrientation::TEXT_LINE)
-                        aObjPos.Y() = -rVOr.GetPos();
+                        aObjPos.setY( -rVOr.GetPos() );
                     else
-                        aObjPos.Y() = rVOr.GetPos();
+                        aObjPos.setY( rVOr.GetPos() );
                 }
                 if (text::HoriOrientation::NONE == rHOr.GetHoriOrient())
-                    aObjPos.X() = rHOr.GetPos();
+                    aObjPos.setX( rHOr.GetPos() );
                 aRect.SetPos( aObjPos );
             }
 

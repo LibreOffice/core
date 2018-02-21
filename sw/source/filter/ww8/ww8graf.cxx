@@ -314,13 +314,13 @@ SdrObject* SwWW8ImplReader::ReadLine(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet
         Point& rP0 = aP[0];
         Point& rP1 = aP[1];
 
-        rP0.X() = static_cast<sal_Int16>(SVBT16ToShort( pHd->xa )) + m_nDrawXOfs2;
-        rP0.Y() = static_cast<sal_Int16>(SVBT16ToShort( pHd->ya )) + m_nDrawYOfs2;
+        rP0.setX( static_cast<sal_Int16>(SVBT16ToShort( pHd->xa )) + m_nDrawXOfs2 );
+        rP0.setY( static_cast<sal_Int16>(SVBT16ToShort( pHd->ya )) + m_nDrawYOfs2 );
         rP1 = rP0;
-        rP0.X() += static_cast<sal_Int16>(SVBT16ToShort( aLine.xaStart ));
-        rP0.Y() += static_cast<sal_Int16>(SVBT16ToShort( aLine.yaStart ));
-        rP1.X() += static_cast<sal_Int16>(SVBT16ToShort( aLine.xaEnd ));
-        rP1.Y() += static_cast<sal_Int16>(SVBT16ToShort( aLine.yaEnd ));
+        rP0.AdjustX(static_cast<sal_Int16>(SVBT16ToShort( aLine.xaStart )) );
+        rP0.AdjustY(static_cast<sal_Int16>(SVBT16ToShort( aLine.yaStart )) );
+        rP1.AdjustX(static_cast<sal_Int16>(SVBT16ToShort( aLine.xaEnd )) );
+        rP1.AdjustY(static_cast<sal_Int16>(SVBT16ToShort( aLine.yaEnd )) );
     }
 
     ::basegfx::B2DPolygon aPolygon;
@@ -344,8 +344,8 @@ SdrObject* SwWW8ImplReader::ReadRect(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet
     Point aP0( static_cast<sal_Int16>(SVBT16ToShort( pHd->xa )) + m_nDrawXOfs2,
                static_cast<sal_Int16>(SVBT16ToShort( pHd->ya )) + m_nDrawYOfs2 );
     Point aP1( aP0 );
-    aP1.X() += static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa ));
-    aP1.Y() += static_cast<sal_Int16>(SVBT16ToShort( pHd->dya ));
+    aP1.AdjustX(static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa )) );
+    aP1.AdjustY(static_cast<sal_Int16>(SVBT16ToShort( pHd->dya )) );
 
     SdrObject* pObj = new SdrRectObj( tools::Rectangle( aP0, aP1 ) );
 
@@ -365,8 +365,8 @@ SdrObject* SwWW8ImplReader::ReadElipse(WW8_DPHEAD const * pHd, SfxAllItemSet &rS
     Point aP0( static_cast<sal_Int16>(SVBT16ToShort( pHd->xa )) + m_nDrawXOfs2,
                static_cast<sal_Int16>(SVBT16ToShort( pHd->ya )) + m_nDrawYOfs2 );
     Point aP1( aP0 );
-    aP1.X() += static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa ));
-    aP1.Y() += static_cast<sal_Int16>(SVBT16ToShort( pHd->dya ));
+    aP1.AdjustX(static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa )) );
+    aP1.AdjustY(static_cast<sal_Int16>(SVBT16ToShort( pHd->dya )) );
 
     SdrObject* pObj = new SdrCircObj( OBJ_CIRC, tools::Rectangle( aP0, aP1 ) );
 
@@ -386,18 +386,18 @@ SdrObject* SwWW8ImplReader::ReadArc(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet)
     Point aP0( static_cast<sal_Int16>(SVBT16ToShort( pHd->xa )) + m_nDrawXOfs2,
                static_cast<sal_Int16>(SVBT16ToShort( pHd->ya )) + m_nDrawYOfs2 );
     Point aP1( aP0 );
-    aP1.X() += static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa )) * 2;
-    aP1.Y() += static_cast<sal_Int16>(SVBT16ToShort( pHd->dya )) * 2;
+    aP1.AdjustX(static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa )) * 2 );
+    aP1.AdjustY(static_cast<sal_Int16>(SVBT16ToShort( pHd->dya )) * 2 );
 
     short nA[] = { 2, 3, 1, 0 };
     short nW = nA[ ( ( aArc.fLeft & 1 ) << 1 ) + ( aArc.fUp & 1 ) ];
     if( !aArc.fLeft ){
-        aP0.Y() -= static_cast<sal_Int16>(SVBT16ToShort( pHd->dya ));
-        aP1.Y() -= static_cast<sal_Int16>(SVBT16ToShort( pHd->dya ));
+        aP0.AdjustY( -static_cast<sal_Int16>(SVBT16ToShort( pHd->dya )) );
+        aP1.AdjustY( -static_cast<sal_Int16>(SVBT16ToShort( pHd->dya )) );
     }
     if( aArc.fUp ){
-        aP0.X() -= static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa ));
-        aP1.X() -= static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa ));
+        aP0.AdjustX( -static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa )) );
+        aP1.AdjustX( -static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa )) );
     }
 
     SdrObject* pObj = new SdrCircObj( OBJ_SECT, tools::Rectangle( aP0, aP1 ),
@@ -428,10 +428,10 @@ SdrObject* SwWW8ImplReader::ReadPolyLine(WW8_DPHEAD const * pHd, SfxAllItemSet &
     Point aPt;
     for (sal_uInt16 i=0; i<nCount; ++i)
     {
-        aPt.X() = SVBT16ToShort( xP[i << 1] ) + m_nDrawXOfs2
-                  + static_cast<sal_Int16>(SVBT16ToShort( pHd->xa ));
-        aPt.Y() = SVBT16ToShort( xP[( i << 1 ) + 1] ) + m_nDrawYOfs2
-                  + static_cast<sal_Int16>(SVBT16ToShort( pHd->ya ));
+        aPt.setX( SVBT16ToShort( xP[i << 1] ) + m_nDrawXOfs2
+                  + static_cast<sal_Int16>(SVBT16ToShort( pHd->xa )) );
+        aPt.setY( SVBT16ToShort( xP[( i << 1 ) + 1] ) + m_nDrawYOfs2
+                  + static_cast<sal_Int16>(SVBT16ToShort( pHd->ya )) );
         aP[i] = aPt;
     }
     xP.reset();
@@ -1218,8 +1218,8 @@ SdrObject* SwWW8ImplReader::ReadTextBox(WW8_DPHEAD const * pHd, SfxAllItemSet &r
     Point aP0( static_cast<sal_Int16>(SVBT16ToShort( pHd->xa )) + m_nDrawXOfs2,
                static_cast<sal_Int16>(SVBT16ToShort( pHd->ya )) + m_nDrawYOfs2 );
     Point aP1( aP0 );
-    aP1.X() += static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa ));
-    aP1.Y() += static_cast<sal_Int16>(SVBT16ToShort( pHd->dya ));
+    aP1.AdjustX(static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa )) );
+    aP1.AdjustY(static_cast<sal_Int16>(SVBT16ToShort( pHd->dya )) );
 
     SdrRectObj* pObj = new SdrRectObj( OBJ_TEXT, tools::Rectangle( aP0, aP1 ) );
     pObj->SetModel( m_pDrawModel );
@@ -1281,8 +1281,8 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox(WW8_DPHEAD const * pHd, SfxAllItemSet
                static_cast<sal_Int16>(SVBT16ToShort( pHd->ya ))
                + static_cast<sal_Int16>(SVBT16ToShort( aCallB.dpheadTxbx.ya )) + m_nDrawYOfs2 );
     Point aP1( aP0 );
-    aP1.X() += static_cast<sal_Int16>(SVBT16ToShort( aCallB.dpheadTxbx.dxa ));
-    aP1.Y() += static_cast<sal_Int16>(SVBT16ToShort( aCallB.dpheadTxbx.dya ));
+    aP1.AdjustX(static_cast<sal_Int16>(SVBT16ToShort( aCallB.dpheadTxbx.dxa )) );
+    aP1.AdjustY(static_cast<sal_Int16>(SVBT16ToShort( aCallB.dpheadTxbx.dya )) );
     Point aP2( static_cast<sal_Int16>(SVBT16ToShort( pHd->xa ))
                 + static_cast<sal_Int16>(SVBT16ToShort( aCallB.dpheadPolyLine.xa ))
                 + m_nDrawXOfs2 + static_cast<sal_Int16>(SVBT16ToShort( xP[0] )),
@@ -1688,15 +1688,15 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
             eDashing, eShapeType, nLineThick, aBox);
     }
 
-    rInnerDist.Left()+=nLineThick;
-    rInnerDist.Top()+=nLineThick;
-    rInnerDist.Right()+=nLineThick;
-    rInnerDist.Bottom()+=nLineThick;
+    rInnerDist.AdjustLeft(nLineThick );
+    rInnerDist.AdjustTop(nLineThick );
+    rInnerDist.AdjustRight(nLineThick );
+    rInnerDist.AdjustBottom(nLineThick );
 
-    rInnerDist.Left()   -= aBox.CalcLineWidth( SvxBoxItemLine::LEFT );
-    rInnerDist.Top()    -= aBox.CalcLineWidth( SvxBoxItemLine::TOP );
-    rInnerDist.Right()  -= aBox.CalcLineWidth( SvxBoxItemLine::RIGHT );
-    rInnerDist.Bottom() -= aBox.CalcLineWidth( SvxBoxItemLine::BOTTOM );
+    rInnerDist.AdjustLeft( -(aBox.CalcLineWidth( SvxBoxItemLine::LEFT )) );
+    rInnerDist.AdjustTop( -(aBox.CalcLineWidth( SvxBoxItemLine::TOP )) );
+    rInnerDist.AdjustRight( -(aBox.CalcLineWidth( SvxBoxItemLine::RIGHT )) );
+    rInnerDist.AdjustBottom( -(aBox.CalcLineWidth( SvxBoxItemLine::BOTTOM )) );
 
     // set distances from box's border to text contained within the box
     if( 0 < rInnerDist.Left() )

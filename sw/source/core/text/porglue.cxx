@@ -89,7 +89,7 @@ void SwGluePortion::Paint( const SwTextPaintInfo &rInf ) const
             OUString aBullet( CH_BULLET );
             SwPosSize aBulletSize( rInf.GetTextSize( aBullet ) );
             Point aPos( rInf.GetPos() );
-            aPos.X() += (Width()/2) - (aBulletSize.Width()/2);
+            aPos.AdjustX((Width()/2) - (aBulletSize.Width()/2) );
             SwTextPaintInfo aInf( rInf, &aBullet );
             aInf.SetPos( aPos );
             SwTextPortion aBulletPor;

@@ -133,24 +133,24 @@ void SwFieldDlg::Initialize(SfxChildWinInfo *pInfo)
         aSize = GetSizePixel();
 
         Size aParentSize = GetParent()->GetOutputSizePixel();
-        aPos.X() += ( aParentSize.Width() - aSize.Width() ) / 2;
-        aPos.Y() += ( aParentSize.Height() - aSize.Height() ) / 2;
+        aPos.AdjustX(( aParentSize.Width() - aSize.Width() ) / 2 );
+        aPos.AdjustY(( aParentSize.Height() - aSize.Height() ) / 2 );
     }
 
     Point aPoint;
     tools::Rectangle aRect = GetDesktopRectPixel();
-    aPoint.X() = aRect.Right() - aSize.Width();
-    aPoint.Y() = aRect.Bottom() - aSize.Height();
+    aPoint.setX( aRect.Right() - aSize.Width() );
+    aPoint.setY( aRect.Bottom() - aSize.Height() );
 
     aPoint = OutputToScreenPixel( aPoint );
 
     if ( aPos.X() > aPoint.X() )
-        aPos.X() = aPoint.X() ;
+        aPos.setX( aPoint.X() ) ;
     if ( aPos.Y() > aPoint.Y() )
-        aPos.Y() = aPoint.Y();
+        aPos.setY( aPoint.Y() );
 
-    if ( aPos.X() < 0 ) aPos.X() = 0;
-    if ( aPos.Y() < 0 ) aPos.Y() = 0;
+    if ( aPos.X() < 0 ) aPos.setX( 0 );
+    if ( aPos.Y() < 0 ) aPos.setY( 0 );
 
     SetPosPixel( aPos );
 }

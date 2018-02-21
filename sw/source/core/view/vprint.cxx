@@ -184,7 +184,7 @@ void SetSwVisArea( SwViewShell *pSh, const SwRect &rRect )
     // move the start point of the output operation to a position
     // such that in the output device all pages will be painted
     // at the same position
-    aPt.X() = -aPt.X(); aPt.Y() = -aPt.Y();
+    aPt.setX( -aPt.X() ); aPt.setY( -aPt.Y() );
 
     vcl::RenderContext *pOut = pSh->GetOut();
 
@@ -278,8 +278,8 @@ void SwViewShell::ChgAllPageSize( Size const &rSz )
                   : aSz.Height() < aSz.Width() )
         {
             SwTwips aTmp = aSz.Height();
-            aSz.Height() = aSz.Width();
-            aSz.Width()  = aTmp;
+            aSz.setHeight( aSz.Width() );
+            aSz.setWidth( aTmp );
         }
 
         SwFormatFrameSize aFrameSz( rPgFormat.GetFrameSize() );

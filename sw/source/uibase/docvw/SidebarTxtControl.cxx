@@ -134,7 +134,7 @@ void SidebarTextControl::Draw(OutputDevice* pDev, const Point& rPt, const Size& 
 {
     //Take the control's height, but overwrite the scrollbar area if there was one
     Size aSize(PixelToLogic(GetSizePixel()));
-    aSize.Width() = rSz.Width();
+    aSize.setWidth( rSz.Width() );
 
     if ( GetTextView() )
     {

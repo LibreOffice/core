@@ -271,12 +271,12 @@ void SwFlyFrameAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     {
         Point aPos(aBoundRect.Pos());
         long nTmp = aPos.X();
-        aPos.X() = aPos.Y();
-        aPos.Y() = nTmp;
+        aPos.setX( aPos.Y() );
+        aPos.setY( nTmp );
         Size aSize(aBoundRect.SSize());
         nTmp = aSize.Width();
-        aSize.Width() = aSize.Height();
-        aSize.Height() = nTmp;
+        aSize.setWidth( aSize.Height() );
+        aSize.setHeight( nTmp );
         aBoundRect.Chg( aPos, aSize );
         //exchange width/height to enable correct values
         nTmp = rVal.nWidth;

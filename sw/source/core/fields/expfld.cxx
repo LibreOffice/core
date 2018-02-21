@@ -247,7 +247,7 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
             else
             {
                 Point aPt( pLayout->getFrameArea().Pos() );
-                aPt.Y()++;      // get out of the header
+                aPt.AdjustY( 1 );      // get out of the header
                 pContentFrame = pPgFrame->GetContentPos( aPt, false, true );
                 pTextNode = GetFirstTextNode( rDoc, rPos, pContentFrame, aPt );
             }

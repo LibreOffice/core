@@ -581,8 +581,8 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
                                     (aGrTwipSz.Width() < 0 ) || (aGrTwipSz.Height() < 0);
     if ( bIsSubstitutedSize )
     {
-        aGrTwipSz.Width() = nWidth;
-        aGrTwipSz.Height() = nHeight;
+        aGrTwipSz.setWidth( nWidth );
+        aGrTwipSz.setHeight( nHeight );
     }
     using namespace sw::types;
     // set xExt & yExt
@@ -714,8 +714,8 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
     if ( (convertTwipToMm100(aGrTwipSz.Width()) > USHRT_MAX ) || ( convertTwipToMm100(aGrTwipSz.Height()) > USHRT_MAX )
         || (aGrTwipSz.Width() < 0 ) || (aGrTwipSz.Height() < 0) )
     {
-        aGrTwipSz.Width() = nWidth;
-        aGrTwipSz.Height() = nHeight;
+        aGrTwipSz.setWidth( nWidth );
+        aGrTwipSz.setHeight( nHeight );
     }
     using namespace sw::types;
     // set xExt & yExt

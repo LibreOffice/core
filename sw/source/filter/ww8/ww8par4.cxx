@@ -318,8 +318,8 @@ bool SwWW8ImplReader::ImportOleWMF(tools::SvRef<SotStorage> xSrc1,GDIMetaFile &r
         // take scaling factor as found in PIC and apply it to graphic.
         SwWw8ReadScaling( rX, rY, xSrc1 );
         Size aFinalSize, aOrigSize;
-        aFinalSize.Width() = rX;
-        aFinalSize.Height() = rY;
+        aFinalSize.setWidth( rX );
+        aFinalSize.setHeight( rY );
         aFinalSize = OutputDevice::LogicToLogic(
             aFinalSize, MapMode(MapUnit::MapTwip), rWMF.GetPrefMapMode() );
         aOrigSize = rWMF.GetPrefSize();

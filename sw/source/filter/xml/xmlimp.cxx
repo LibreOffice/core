@@ -1222,14 +1222,14 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
         {
             pValue->Value >>= nTmp;
             Size aSize( aRect.GetSize() );
-            aSize.Width() = static_cast< long >(bTwip ? sanitiseMm100ToTwip(nTmp) : nTmp);
+            aSize.setWidth( static_cast< long >(bTwip ? sanitiseMm100ToTwip(nTmp) : nTmp) );
             aRect.SetSize( aSize );
         }
         else if ( pValue->Name == "ViewAreaHeight" )
         {
             pValue->Value >>= nTmp;
             Size aSize( aRect.GetSize() );
-            aSize.Height() = static_cast< long >(bTwip ? sanitiseMm100ToTwip(nTmp) : nTmp);
+            aSize.setHeight( static_cast< long >(bTwip ? sanitiseMm100ToTwip(nTmp) : nTmp) );
             aRect.SetSize( aSize );
         }
         else if ( pValue->Name == "ShowRedlineChanges" )
