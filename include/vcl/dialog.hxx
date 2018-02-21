@@ -48,6 +48,7 @@ private:
     std::unique_ptr<DialogImpl> mpDialogImpl;
     long            mnMousePositioned;
     bool            mbInExecute;
+    bool            mbInSyncExecute;
     bool            mbInClose;
     bool            mbModalMode;
     bool            mbPaintComplete;
@@ -127,6 +128,8 @@ public:
 
     virtual short   Execute();
     bool            IsInExecute() const { return mbInExecute; }
+    // Return true when dialog is synchronously executed (calling ::Execute())
+    bool            IsInSyncExecute() const { return mbInSyncExecute; };
 
     virtual FactoryFunction GetUITestFactory() const override;
 
