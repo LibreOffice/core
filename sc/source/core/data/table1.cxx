@@ -2405,9 +2405,28 @@ const ScConditionalFormatList* ScTable::GetCondFormList() const
 
 ScColumnsRange ScTable::GetColumnsRange(SCCOL nColBegin, SCCOL nColEnd) const
 {
-    // because the range is inclusive, some code will pass nColEnd<nColBegin to indicate an empty range
-    return ScColumnsRange(ScColumnsRange::Iterator(aCol.begin() + nColBegin),
-                          ScColumnsRange::Iterator(nColEnd < nColBegin ? (aCol.begin() + nColBegin) : (aCol.begin() + nColEnd + 1)));
+    // Because the range is inclusive, some code will pass nColEnd<nColBegin to
+    // indicate an empty range. Ensure that we create only valid iterators for
+    // the range, limit columns to bounds.
+    SCCOL nEffBegin, nEffEnd;
+    if (nColBegin <= nColEnd)
+    {
+        if (nColBegin < 0)
+            nEffBegin = 0;
+        else
+            nEffBegin = std::min<SCCOL>( nColBegin, aCol.size());
+        if (nColEnd < 0)
+            nEffEnd = 0;
+        else
+            nEffEnd = std::min<SCCOL>( nColEnd + 1, aCol.size());
+    }
+    else
+    {
+        // Any empty will do.
+        nEffBegin = nEffEnd = 0;
+    }
+    return ScColumnsRange( ScColumnsRange::Iterator( aCol.begin() + nEffBegin),
+                           ScColumnsRange::Iterator( aCol.begin() + nEffEnd));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
