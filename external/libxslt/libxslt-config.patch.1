@@ -18,8 +18,8 @@ Hack the xslt-config to return paths into WORKDIR.
  exec_prefix_set=no
 -includedir=@includedir@
 -libdir=@libdir@
-+includedir=${WORKDIR}/UnpackedTarball/libxslt/libxslt
-+libdir=${WORKDIR}/UnpackedTarball/libxslt/libxslt/.libs
++includedir=${WORKDIR}/UnpackedTarball/libxslt
++libdir=${WORKDIR}/UnpackedTarball/libxslt
  
  usage()
  {
@@ -29,7 +29,7 @@ Hack the xslt-config to return paths into WORKDIR.
  
 -the_libs="@XSLT_LIBDIR@ @XSLT_LIBS@ @EXTRA_LIBS@"
 +#the_libs="@XSLT_LIBDIR@ @XSLT_LIBS@ @EXTRA_LIBS@"
-+the_libs="-L${libdir} -lxslt -lm"
++the_libs="-L${libdir}/libxslt/.libs -L${libdir}/libexslt/.libs -lxslt -lm"
  if test "$includedir" != "/usr/include"; then
      the_flags="$the_flags -I$includedir `@XML_CONFIG@ --cflags`"
  else
