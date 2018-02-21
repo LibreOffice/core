@@ -502,8 +502,8 @@ void SAL_CALL UnoDialogControl::windowResized( const css::awt::WindowEvent& e )
     if ( xDialogDevice.is() && mbDesignMode )
     {
         DeviceInfo aDeviceInfo( xDialogDevice->getInfo() );
-        aAppFontSize.Width() -= aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
-        aAppFontSize.Height() -= aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
+        aAppFontSize.AdjustWidth( -(aDeviceInfo.LeftInset + aDeviceInfo.RightInset) );
+        aAppFontSize.AdjustHeight( -(aDeviceInfo.TopInset + aDeviceInfo.BottomInset) );
     }
 
     aAppFontSize = ImplMapPixelToAppFont( pOutDev, aAppFontSize );

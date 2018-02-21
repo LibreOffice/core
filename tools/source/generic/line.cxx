@@ -39,8 +39,8 @@ bool Line::Intersection( const Line& rLine, Point& rIntersection ) const
 
     if( Intersection( rLine, fX, fY ) )
     {
-        rIntersection.X() = FRound( fX );
-        rIntersection.Y() = FRound( fY );
+        rIntersection.setX( FRound( fX ) );
+        rIntersection.setY( FRound( fY ) );
         bRet = true;
     }
     else
