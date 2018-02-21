@@ -1791,10 +1791,10 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
                 bool bVert(pState->mnState & WindowStateState::MaximizedVert);
                 GetDisplay()->getWMAdaptor()->maximizeFrame( this, bHorz, bVert );
             }
-            maRestorePosSize.Left() = pState->mnX;
-            maRestorePosSize.Top() = pState->mnY;
-            maRestorePosSize.Right() = maRestorePosSize.Left() + pState->mnWidth;
-            maRestorePosSize.Right() = maRestorePosSize.Left() + pState->mnHeight;
+            maRestorePosSize.SetLeft( pState->mnX );
+            maRestorePosSize.SetTop( pState->mnY );
+            maRestorePosSize.SetRight( maRestorePosSize.Left() + pState->mnWidth );
+            maRestorePosSize.SetRight( maRestorePosSize.Left() + pState->mnHeight );
         }
         else if( mbMaximizedHorz || mbMaximizedVert )
             GetDisplay()->getWMAdaptor()->maximizeFrame( this, false, false );
@@ -3767,9 +3767,9 @@ bool X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
             Size aSize(maGeometry.nWidth, maGeometry.nHeight);
 
             if (nFrameWidth  > nScreenWidth)
-                aSize.Width()  = nScreenWidth  - maGeometry.nRightDecoration - maGeometry.nLeftDecoration;
+                aSize.setWidth( nScreenWidth  - maGeometry.nRightDecoration - maGeometry.nLeftDecoration );
             if (nFrameHeight > nScreenHeight)
-                aSize.Height() = nScreenHeight - maGeometry.nBottomDecoration - maGeometry.nTopDecoration;
+                aSize.setHeight( nScreenHeight - maGeometry.nBottomDecoration - maGeometry.nTopDecoration );
 
             SetSize( aSize );
             bResized = false;

@@ -407,8 +407,8 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
                         mbpHYs = true;
 
                         // convert into MapUnit::Map100thMM
-                        maPhysSize.Width()  = static_cast<sal_Int32>( (100000.0 * maOrigSize.Width()) / nXPixelPerMeter );
-                        maPhysSize.Height() = static_cast<sal_Int32>( (100000.0 * maOrigSize.Height()) / nYPixelPerMeter );
+                        maPhysSize.setWidth( static_cast<sal_Int32>( (100000.0 * maOrigSize.Width()) / nXPixelPerMeter ) );
+                        maPhysSize.setHeight( static_cast<sal_Int32>( (100000.0 * maOrigSize.Height()) / nYPixelPerMeter ) );
                     }
                 }
             }
@@ -454,8 +454,8 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     if( mnChunkLen < 13 )
         return false;
 
-    maOrigSize.Width()  = ImplReadsal_uInt32();
-    maOrigSize.Height() = ImplReadsal_uInt32();
+    maOrigSize.setWidth( ImplReadsal_uInt32() );
+    maOrigSize.setHeight( ImplReadsal_uInt32() );
 
     if (maOrigSize.Width() <= 0 || maOrigSize.Height() <= 0)
         return false;
@@ -650,8 +650,8 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
         }
     }
 
-    maTargetSize.Width()  = (maOrigSize.Width() + mnPreviewMask) >> mnPreviewShift;
-    maTargetSize.Height() = (maOrigSize.Height() + mnPreviewMask) >> mnPreviewShift;
+    maTargetSize.setWidth( (maOrigSize.Width() + mnPreviewMask) >> mnPreviewShift );
+    maTargetSize.setHeight( (maOrigSize.Height() + mnPreviewMask) >> mnPreviewShift );
 
     //round bits up to nearest multiple of 8 and divide by 8 to get num of bytes per pixel
     int nBytesPerPixel = ((mnTargetDepth + 7) & ~7)/8;

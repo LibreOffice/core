@@ -110,21 +110,21 @@ Size OutputDevice::GetDevFontSize( const vcl::Font& rFont, int nSizeIndex ) cons
     Size aSize( 0, mpDeviceFontSizeList->Get( nSizeIndex ) );
     if ( mbMap )
     {
-        aSize.Height() *= 10;
+        aSize.setHeight( aSize.Height() * 10 );
         MapMode aMap( MapUnit::Map10thInch, Point(), Fraction( 1, 72 ), Fraction( 1, 72 ) );
         aSize = PixelToLogic( aSize, aMap );
-        aSize.Height() += 5;
-        aSize.Height() /= 10;
+        aSize.AdjustHeight(5 );
+        aSize.setHeight( aSize.Height() / 10 );
         long nRound = aSize.Height() % 5;
         if ( nRound >= 3 )
-            aSize.Height() += (5-nRound);
+            aSize.AdjustHeight(5-nRound);
         else
-            aSize.Height() -= nRound;
-        aSize.Height() *= 10;
+            aSize.AdjustHeight( -nRound );
+        aSize.setHeight( aSize.Height() * 10 );
         aSize = LogicToPixel( aSize, aMap );
         aSize = PixelToLogic( aSize );
-        aSize.Height() += 5;
-        aSize.Height() /= 10;
+        aSize.AdjustHeight(5 );
+        aSize.setHeight( aSize.Height() / 10 );
     }
     return aSize;
 }
@@ -882,14 +882,14 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
                     {
                         // use default pixel height only when logical height is zero
                         if ( aFont.GetFontHeight() )
-                            aSize.Height() = 1;
+                            aSize.setHeight( 1 );
                         else
-                            aSize.Height() = (12*pOutDev->mnDPIY)/72;
+                            aSize.setHeight( (12*pOutDev->mnDPIY)/72 );
                     }
 
                     // use default width only when logical width is zero
                     if( (0 == aSize.Width()) && (0 != aFont.GetFontSize().Width()) )
-                        aSize.Width() = 1;
+                        aSize.setWidth( 1 );
 
                     // get the name of the first available font
                     float fExactHeight = static_cast<float>(aSize.Height());
@@ -1033,15 +1033,15 @@ bool OutputDevice::ImplNewFont() const
     {
         // use default pixel height only when logical height is zero
         if ( maFont.GetFontSize().Height() )
-            aSize.Height() = 1;
+            aSize.setHeight( 1 );
         else
-            aSize.Height() = (12*mnDPIY)/72;
+            aSize.setHeight( (12*mnDPIY)/72 );
         fExactHeight =  static_cast<float>(aSize.Height());
     }
 
     // select the default width only when logical width is zero
     if( (0 == aSize.Width()) && (0 != maFont.GetFontSize().Width()) )
-        aSize.Width() = 1;
+        aSize.setWidth( 1 );
 
     // get font entry
     LogicalFontInstance* pOldFontInstance = mpFontInstance;
@@ -1255,9 +1255,9 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     Point aOffset = Point(0,0);
 
     if ( nEmphasisMark & FontEmphasisMark::PosBelow )
-        aOffset.Y() += mpFontInstance->mxFontMetric->GetDescent() + nEmphasisYOff;
+        aOffset.AdjustY(mpFontInstance->mxFontMetric->GetDescent() + nEmphasisYOff );
     else
-        aOffset.Y() -= mpFontInstance->mxFontMetric->GetAscent() + nEmphasisYOff;
+        aOffset.AdjustY( -(mpFontInstance->mxFontMetric->GetAscent() + nEmphasisYOff) );
 
     long nEmphasisWidth2  = nEmphasisWidth / 2;
     long nEmphasisHeight2 = nEmphasisHeight / 2;
@@ -1275,7 +1275,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
         if (!pGlyph->IsSpacing())
         {
             Point aAdjPoint = aOffset;
-            aAdjPoint.X() += aRectangle.Left() + (aRectangle.GetWidth() - nEmphasisWidth) / 2;
+            aAdjPoint.AdjustX(aRectangle.Left() + (aRectangle.GetWidth() - nEmphasisWidth) / 2 );
             if ( mpFontInstance->mnOrientation )
             {
                 Point aOriginPt(0, 0);

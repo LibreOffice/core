@@ -773,7 +773,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
     if( nNewWidth < nMaxGlyphWidth)
         nNewWidth = nMaxGlyphWidth;
     nNewWidth -= pGlyphIterRight->mnOrigWidth;
-    pGlyphIterRight->maLinearPos.X() = maBasePoint.X() + nNewWidth;
+    pGlyphIterRight->maLinearPos.setX( maBasePoint.X() + nNewWidth );
 
     // justify glyph widths and positions
     int nDiffWidth = nNewWidth - nOldWidth;
@@ -784,7 +784,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
         for( pGlyphIter = m_GlyphItems.begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter )
         {
             // move glyph to justified position
-            pGlyphIter->maLinearPos.X() += nDeltaSum;
+            pGlyphIter->maLinearPos.AdjustX(nDeltaSum );
 
             // do not stretch non-stretchable glyphs
             if( pGlyphIter->IsDiacritic() || (nStretchable <= 0) )
@@ -807,7 +807,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
             {
                 int nX = pGlyphIter->maLinearPos.X() - maBasePoint.X();
                 nX = static_cast<int>(nX * fSqueeze);
-                pGlyphIter->maLinearPos.X() = nX + maBasePoint.X();
+                pGlyphIter->maLinearPos.setX( nX + maBasePoint.X() );
             }
         }
         // adjust glyph widths to new positions
@@ -853,7 +853,7 @@ void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
 
         // adjust the glyph positions to the new glyph widths
         if( pGlyphIter+1 != pGlyphIterEnd )
-            pGlyphIter->maLinearPos.X() += nOffset;
+            pGlyphIter->maLinearPos.AdjustX(nOffset );
     }
 }
 
@@ -967,8 +967,8 @@ int GenericSalLayout::GetNextGlyphs(int nLen, const GlyphItem** pGlyphs,
             break;
     }
 
-    aRelativePos.X() /= mnUnitsPerPixel;
-    aRelativePos.Y() /= mnUnitsPerPixel;
+    aRelativePos.setX( aRelativePos.X() / ( mnUnitsPerPixel) );
+    aRelativePos.setY( aRelativePos.Y() / ( mnUnitsPerPixel) );
     rPos = GetDrawPosition( aRelativePos );
 
     return nCount;
@@ -994,7 +994,7 @@ void GenericSalLayout::MoveGlyph( int nStart, long nNewXPos )
     {
         for( std::vector<GlyphItem>::iterator pGlyphIterEnd = m_GlyphItems.end(); pGlyphIter != pGlyphIterEnd; ++pGlyphIter )
         {
-            pGlyphIter->maLinearPos.X() += nXDelta;
+            pGlyphIter->maLinearPos.AdjustX(nXDelta );
         }
     }
 }

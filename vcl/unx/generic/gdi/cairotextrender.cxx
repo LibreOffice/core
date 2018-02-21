@@ -426,11 +426,11 @@ bool CairoTextRender::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangl
     {
         double nCos = pSF->mnCos / 65536.0;
         double nSin = pSF->mnSin / 65536.0;
-        rRect.Left() =  nCos*aRect.Left() + nSin*aRect.Top();
-        rRect.Top()  = -nSin*aRect.Left() - nCos*aRect.Top();
+        rRect.SetLeft(  nCos*aRect.Left() + nSin*aRect.Top() );
+        rRect.SetTop( -nSin*aRect.Left() - nCos*aRect.Top() );
 
-        rRect.Right()  =  nCos*aRect.Right() + nSin*aRect.Bottom();
-        rRect.Bottom() = -nSin*aRect.Right() - nCos*aRect.Bottom();
+        rRect.SetRight(  nCos*aRect.Right() + nSin*aRect.Bottom() );
+        rRect.SetBottom( -nSin*aRect.Right() - nCos*aRect.Bottom() );
     }
     else
         rRect = aRect;

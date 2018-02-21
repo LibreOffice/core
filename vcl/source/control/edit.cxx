@@ -536,7 +536,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
 
     bool bDrawSelection = maSelection.Len() && (HasFocus() || (GetStyle() & WB_NOHIDESELECTION) || mbActivePopup);
 
-    aPos.X() = mnXOffset + ImplGetExtraXOffset();
+    aPos.setX( mnXOffset + ImplGetExtraXOffset() );
     if (bPaintPlaceholderText)
     {
         rRenderContext.DrawText(aPos, maPlaceholderText);
@@ -558,8 +558,8 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
         for(sal_Int32 i = 0; i < nLen; ++i)
         {
             tools::Rectangle aRect(aPos, Size(10, nTH));
-            aRect.Left() = pDX[2 * i] + mnXOffset + ImplGetExtraXOffset();
-            aRect.Right() = pDX[2 * i + 1] + mnXOffset + ImplGetExtraXOffset();
+            aRect.SetLeft( pDX[2 * i] + mnXOffset + ImplGetExtraXOffset() );
+            aRect.SetRight( pDX[2 * i + 1] + mnXOffset + ImplGetExtraXOffset() );
             aRect.Justify();
             bool bHighlight = false;
             if (i >= aTmpSel.Min() && i < aTmpSel.Max())
@@ -636,8 +636,8 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
                     while (nIndex < mpIMEInfos->nLen && mpIMEInfos->pAttribs[nIndex] == nAttr)  // #112631# check nIndex before using it
                     {
                         tools::Rectangle aRect( aPos, Size( 10, nTH ) );
-                        aRect.Left() = pDX[2 * (nIndex + mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraXOffset();
-                        aRect.Right() = pDX[2 * (nIndex + mpIMEInfos->nPos) + 1] + mnXOffset + ImplGetExtraXOffset();
+                        aRect.SetLeft( pDX[2 * (nIndex + mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraXOffset() );
+                        aRect.SetRight( pDX[2 * (nIndex + mpIMEInfos->nPos) + 1] + mnXOffset + ImplGetExtraXOffset() );
                         aRect.Justify();
                         aClip.Union(aRect);
                         nIndex++;
@@ -986,8 +986,8 @@ void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::
     */
     Point aTmpPoint;
     tools::Rectangle aRect(aTmpPoint, GetOutputSizePixel());
-    aRect.Left() = nXStart;
-    aRect.Right() = nXEnd;
+    aRect.SetLeft( nXStart );
+    aRect.SetRight( nXEnd );
 
     if( !(ImplUseNativeBorder(rRenderContext, GetStyle()) || IsPaintTransparent()))
         rRenderContext.Erase(aRect);
@@ -1008,8 +1008,8 @@ void Edit::ImplPaintBorder(vcl::RenderContext const & rRenderContext, long nXSta
 
     Point aTmpPoint;
     tools::Rectangle aRect(aTmpPoint, GetOutputSizePixel());
-    aRect.Left() = nXStart;
-    aRect.Right() = nXEnd;
+    aRect.SetLeft( nXStart );
+    aRect.SetRight( nXEnd );
 
     if (ImplUseNativeBorder(rRenderContext, GetStyle()) || IsPaintTransparent())
     {
@@ -1800,8 +1800,8 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawF
     else
         nTextStyle |= DrawTextFlags::Left;
 
-    aTextRect.Left() += nOffX;
-    aTextRect.Right() -= nOffX;
+    aTextRect.AdjustLeft(nOffX );
+    aTextRect.AdjustRight( -nOffX );
 
     OUString    aText = ImplGetText();
     long        nTextHeight = pDev->GetTextHeight();
@@ -1815,7 +1815,7 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawF
     {
         tools::Rectangle aClip( aPos, aSize );
         if ( nTextHeight > aSize.Height() )
-            aClip.Bottom() += nTextHeight-aSize.Height()+1;  // prevent HP printers from 'optimizing'
+            aClip.AdjustBottom(nTextHeight-aSize.Height()+1 );  // prevent HP printers from 'optimizing'
         pDev->IntersectClipRegion( aClip );
     }
 
@@ -2151,7 +2151,7 @@ void Edit::Command( const CommandEvent& rCEvt )
             for ( int nIndex = 0; nIndex < mpIMEInfos->nLen; ++nIndex )
             {
                 tools::Rectangle aRect( aPos, Size( 10, nTH ) );
-                aRect.Left() = pDX[2*(nIndex+mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraXOffset();
+                aRect.SetLeft( pDX[2*(nIndex+mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraXOffset() );
                 aRects[ nIndex ] = aRect;
             }
             SetCompositionCharRect( aRects.get(), mpIMEInfos->nLen );
@@ -2706,9 +2706,9 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
         else
             aString = rString;
 
-        aSize.Height() = GetTextHeight();
-        aSize.Width() = GetTextWidth(aString);
-        aSize.Width() += ImplGetExtraXOffset() * 2;
+        aSize.setHeight( GetTextHeight() );
+        aSize.setWidth( GetTextWidth(aString) );
+        aSize.AdjustWidth(ImplGetExtraXOffset() * 2 );
 
         // do not create edit fields in which one cannot enter anything
         // a default minimum width should exist for at least 3 characters
@@ -2717,10 +2717,10 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
         //function, so undo the first one with CalcOutputSize
         Size aMinSize(CalcOutputSize(CalcSize(3)));
         if (aSize.Width() < aMinSize.Width())
-            aSize.Width() = aMinSize.Width();
+            aSize.setWidth( aMinSize.Width() );
     }
 
-    aSize.Height() += ImplGetExtraYOffset() * 2;
+    aSize.AdjustHeight(ImplGetExtraYOffset() * 2 );
 
     aSize = CalcWindowSize( aSize );
 
@@ -2732,7 +2732,7 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
                                aControlValue, aBound, aContent))
     {
         if (aBound.GetHeight() > aSize.Height())
-            aSize.Height() = aBound.GetHeight();
+            aSize.setHeight( aBound.GetHeight() );
     }
     return aSize;
 }
@@ -2760,8 +2760,8 @@ Size Edit::CalcSize(sal_Int32 nChars) const
     // width for N characters, independent from content.
     // works only correct for fixed fonts, average otherwise
     Size aSz( GetTextWidth( "x" ), GetTextHeight() );
-    aSz.Width() *= nChars;
-    aSz.Width() += ImplGetExtraXOffset() * 2;
+    aSz.setWidth( aSz.Width() * nChars );
+    aSz.AdjustWidth(ImplGetExtraXOffset() * 2 );
     aSz = CalcWindowSize( aSz );
     return aSz;
 }

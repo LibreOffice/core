@@ -60,8 +60,8 @@ namespace
     Point lcl_centerWithin( const tools::Rectangle& _rArea, const Size& _rObjectSize )
     {
         Point aPos( _rArea.TopLeft() );
-        aPos.X() += ( _rArea.GetWidth() - _rObjectSize.Width() ) / 2;
-        aPos.Y() += ( _rArea.GetHeight() - _rObjectSize.Height() ) / 2;
+        aPos.AdjustX(( _rArea.GetWidth() - _rObjectSize.Width() ) / 2 );
+        aPos.AdjustY(( _rArea.GetHeight() - _rObjectSize.Height() ) / 2 );
         return aPos;
     }
 }
@@ -142,10 +142,10 @@ void ImageControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     pBorderWindow->SetFillColor();
     pBorderWindow->SetLineColor(bFlat ? COL_WHITE : COL_BLACK);
     pBorderWindow->DrawRect(aRect);
-    ++aRect.Left();
-    --aRect.Right();
-    ++aRect.Top();
-    --aRect.Bottom();
+    aRect.AdjustLeft( 1 );
+    aRect.AdjustRight( -1 );
+    aRect.AdjustTop( 1 );
+    aRect.AdjustBottom( -1 );
     pBorderWindow->SetLineColor(bFlat ? COL_BLACK : COL_WHITE);
     pBorderWindow->DrawRect(aRect);
     pBorderWindow->SetLineColor(oldLineCol);

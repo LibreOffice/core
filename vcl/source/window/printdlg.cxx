@@ -113,17 +113,17 @@ void PrintDialog::PrintPreviewWindow::Resize()
     Size aNewSize( GetSizePixel() );
     long nTextHeight = maHorzDim->GetTextHeight();
     // leave small space for decoration
-    aNewSize.Width() -= nTextHeight + 2;
-    aNewSize.Height() -= nTextHeight + 2;
+    aNewSize.AdjustWidth( -(nTextHeight + 2) );
+    aNewSize.AdjustHeight( -(nTextHeight + 2) );
     Size aScaledSize;
     double fScale = 1.0;
 
     // #i106435# catch corner case of Size(0,0)
     Size aOrigSize( maOrigSize );
     if( aOrigSize.Width() < 1 )
-        aOrigSize.Width() = aNewSize.Width();
+        aOrigSize.setWidth( aNewSize.Width() );
     if( aOrigSize.Height() < 1 )
-        aOrigSize.Height() = aNewSize.Height();
+        aOrigSize.setHeight( aNewSize.Height() );
     if( aOrigSize.Width() > aOrigSize.Height() )
     {
         aScaledSize = Size( aNewSize.Width(), aNewSize.Width() * aOrigSize.Height() / aOrigSize.Width() );
@@ -136,8 +136,8 @@ void PrintDialog::PrintPreviewWindow::Resize()
         if( aScaledSize.Width() > aNewSize.Width() )
             fScale = double(aNewSize.Width())/double(aScaledSize.Width());
     }
-    aScaledSize.Width() = long(aScaledSize.Width()*fScale);
-    aScaledSize.Height() = long(aScaledSize.Height()*fScale);
+    aScaledSize.setWidth( long(aScaledSize.Width()*fScale) );
+    aScaledSize.setHeight( long(aScaledSize.Height()*fScale) );
 
     maPreviewSize = aScaledSize;
 
@@ -149,8 +149,8 @@ void PrintDialog::PrintPreviewWindow::Resize()
 
     double aAspectRatio = aScaledSize.Height() / static_cast<double>(aScaledSize.Width());
 
-    aScaledSize.Width()  = PREVIEW_BITMAP_WIDTH;
-    aScaledSize.Height() = PREVIEW_BITMAP_WIDTH * aAspectRatio;
+    aScaledSize.setWidth( PREVIEW_BITMAP_WIDTH );
+    aScaledSize.setHeight( PREVIEW_BITMAP_WIDTH * aAspectRatio );
 
     maPageVDev->SetOutputSizePixel( aScaledSize, false );
 
@@ -272,9 +272,9 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     const Size aLogicSize( maPageVDev->PixelToLogic( aVDevSize, MapMode( MapUnit::Map100thMM ) ) );
     Size aOrigSize( maOrigSize );
     if( aOrigSize.Width() < 1 )
-        aOrigSize.Width() = aLogicSize.Width();
+        aOrigSize.setWidth( aLogicSize.Width() );
     if( aOrigSize.Height() < 1 )
-        aOrigSize.Height() = aLogicSize.Height();
+        aOrigSize.setHeight( aLogicSize.Height() );
     double fScale = double(aLogicSize.Width())/double(aOrigSize.Width());
 
     maPageVDev->Erase();

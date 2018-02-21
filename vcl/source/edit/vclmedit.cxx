@@ -248,8 +248,8 @@ void ImpVclMEdit::ImpInitScrollBars()
     {
         ImpSetScrollBarRanges();
         Size aCharBox;
-        aCharBox.Width() = mpTextWindow->GetTextWidth( OUString(sampleChar) );
-        aCharBox.Height() = mpTextWindow->GetTextHeight();
+        aCharBox.setWidth( mpTextWindow->GetTextWidth( OUString(sampleChar) ) );
+        aCharBox.setHeight( mpTextWindow->GetTextHeight() );
         Size aOutSz = mpTextWindow->GetOutputSizePixel();
         if ( mpHScrollBar )
         {
@@ -370,9 +370,9 @@ void ImpVclMEdit::Resize()
         nSBWidth = pVclMultiLineEdit->CalcZoom( nSBWidth );
 
         if ( mpHScrollBar )
-            aSz.Height() -= nSBWidth+1;
+            aSz.AdjustHeight( -(nSBWidth+1) );
         if ( mpVScrollBar )
-            aSz.Width() -= nSBWidth+1;
+            aSz.AdjustWidth( -(nSBWidth+1) );
 
         if ( !mpHScrollBar )
             mpTextWindow->GetTextEngine()->SetMaxTextWidth( aSz.Width() );
@@ -385,7 +385,7 @@ void ImpVclMEdit::Resize()
             if( AllSettings::GetLayoutRTL() )
             {
                 mpVScrollBar->setPosSizePixel( 0, 0, nSBWidth, aSz.Height() );
-                aTextWindowPos.X() += nSBWidth;
+                aTextWindowPos.AdjustX(nSBWidth );
             }
             else
                 mpVScrollBar->setPosSizePixel( aEditSize.Width()-nSBWidth, 0, nSBWidth, aSz.Height() );
@@ -395,12 +395,12 @@ void ImpVclMEdit::Resize()
             mpScrollBox->setPosSizePixel( aSz.Width(), aSz.Height(), nSBWidth, nSBWidth );
 
         Size aTextWindowSize( aSz );
-        aTextWindowSize.Width() -= maTextWindowOffset.X();
-        aTextWindowSize.Height() -= maTextWindowOffset.Y();
+        aTextWindowSize.AdjustWidth( -(maTextWindowOffset.X()) );
+        aTextWindowSize.AdjustHeight( -(maTextWindowOffset.Y()) );
         if ( aTextWindowSize.Width() < 0 )
-            aTextWindowSize.Width() = 0;
+            aTextWindowSize.setWidth( 0 );
         if ( aTextWindowSize.Height() < 0 )
-            aTextWindowSize.Height() = 0;
+            aTextWindowSize.setHeight( 0 );
 
         Size aOldTextWindowSize( mpTextWindow->GetSizePixel() );
         mpTextWindow->SetPosSizePixel( aTextWindowPos, aTextWindowSize );
@@ -598,9 +598,9 @@ Size ImpVclMEdit::CalcMinimumSize() const
                 mpTextWindow->GetTextEngine()->GetTextHeight() );
 
     if ( mpHScrollBar )
-        aSz.Height() += mpHScrollBar->GetSizePixel().Height();
+        aSz.AdjustHeight(mpHScrollBar->GetSizePixel().Height() );
     if ( mpVScrollBar )
-        aSz.Width() += mpVScrollBar->GetSizePixel().Width();
+        aSz.AdjustWidth(mpVScrollBar->GetSizePixel().Width() );
 
     return aSz;
 }
@@ -611,23 +611,23 @@ Size ImpVclMEdit::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 
     Size aSz;
     Size aCharSz;
-    aCharSz.Width() = mpTextWindow->GetTextWidth( OUString(sampleChar) );
-    aCharSz.Height() = mpTextWindow->GetTextHeight();
+    aCharSz.setWidth( mpTextWindow->GetTextWidth( OUString(sampleChar) ) );
+    aCharSz.setHeight( mpTextWindow->GetTextHeight() );
 
     if ( nLines )
-        aSz.Height() = nLines*aCharSz.Height();
+        aSz.setHeight( nLines*aCharSz.Height() );
     else
-        aSz.Height() = mpTextWindow->GetTextEngine()->GetTextHeight();
+        aSz.setHeight( mpTextWindow->GetTextEngine()->GetTextHeight() );
 
     if ( nColumns )
-        aSz.Width() = nColumns*aCharSz.Width();
+        aSz.setWidth( nColumns*aCharSz.Width() );
     else
-        aSz.Width() = mpTextWindow->GetTextEngine()->CalcTextWidth();
+        aSz.setWidth( mpTextWindow->GetTextEngine()->CalcTextWidth() );
 
     if ( mpHScrollBar )
-        aSz.Height() += mpHScrollBar->GetSizePixel().Height();
+        aSz.AdjustHeight(mpHScrollBar->GetSizePixel().Height() );
     if ( mpVScrollBar )
-        aSz.Width() += mpVScrollBar->GetSizePixel().Width();
+        aSz.AdjustWidth(mpVScrollBar->GetSizePixel().Width() );
 
     return aSz;
 }
@@ -1222,8 +1222,8 @@ Size VclMultiLineEdit::CalcMinimumSize() const
 
     sal_Int32 nLeft, nTop, nRight, nBottom;
     static_cast<vcl::Window*>(const_cast<VclMultiLineEdit *>(this))->GetBorder( nLeft, nTop, nRight, nBottom );
-    aSz.Width() += nLeft+nRight;
-    aSz.Height() += nTop+nBottom;
+    aSz.AdjustWidth(nLeft+nRight );
+    aSz.AdjustHeight(nTop+nBottom );
 
     return aSz;
 }
@@ -1242,8 +1242,8 @@ Size VclMultiLineEdit::CalcAdjustedSize( const Size& rPrefSize ) const
     if ( nLines < 1 )
         nLines = 1;
 
-    aSz.Height() = nLines * nLineHeight;
-    aSz.Height() += nTop+nBottom;
+    aSz.setHeight( nLines * nLineHeight );
+    aSz.AdjustHeight(nTop+nBottom );
 
     return aSz;
 }
@@ -1254,8 +1254,8 @@ Size VclMultiLineEdit::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) c
 
     sal_Int32 nLeft, nTop, nRight, nBottom;
     static_cast<vcl::Window*>(const_cast<VclMultiLineEdit *>(this))->GetBorder( nLeft, nTop, nRight, nBottom );
-    aSz.Width() += nLeft+nRight;
-    aSz.Height() += nTop+nBottom;
+    aSz.AdjustWidth(nLeft+nRight );
+    aSz.AdjustHeight(nTop+nBottom );
     return aSz;
 }
 
@@ -1387,7 +1387,7 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
     sal_uLong nLines = static_cast<sal_uLong>(aSize.Height() / aTextSz.Height());
     if ( !nLines )
         nLines = 1;
-    aTextSz.Height() = nLines*aTextSz.Height();
+    aTextSz.setHeight( nLines*aTextSz.Height() );
     long nOnePixel = GetDrawPixel( pDev, 1 );
     long nOffX = 3*nOnePixel;
     long nOffY = 2*nOnePixel;
@@ -1397,7 +1397,7 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
     {
         tools::Rectangle aClip( aPos, aSize );
         if ( aTextSz.Height() > aSize.Height() )
-            aClip.Bottom() += aTextSz.Height() - aSize.Height() + 1;  // so that HP-printer does not 'optimize-away'
+            aClip.AdjustBottom(aTextSz.Height() - aSize.Height() + 1 );  // so that HP-printer does not 'optimize-away'
         pDev->IntersectClipRegion( aClip );
     }
 

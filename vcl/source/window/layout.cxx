@@ -77,18 +77,18 @@ void VclContainer::setLayoutAllocation(vcl::Window &rChild, const Point &rAllocP
             break;
         case VclAlign::Start:
             if (aChildPreferredSize.Width() < rChildAlloc.Width())
-                aChildSize.Width() = aChildPreferredSize.Width();
+                aChildSize.setWidth( aChildPreferredSize.Width() );
             break;
         case VclAlign::End:
             if (aChildPreferredSize.Width() < rChildAlloc.Width())
-                aChildSize.Width() = aChildPreferredSize.Width();
-            aChildPos.X() += rChildAlloc.Width();
-            aChildPos.X() -= aChildSize.Width();
+                aChildSize.setWidth( aChildPreferredSize.Width() );
+            aChildPos.AdjustX(rChildAlloc.Width() );
+            aChildPos.AdjustX( -(aChildSize.Width()) );
             break;
         case VclAlign::Center:
             if (aChildPreferredSize.Width() < aChildSize.Width())
-                aChildSize.Width() = aChildPreferredSize.Width();
-            aChildPos.X() += (rChildAlloc.Width() - aChildSize.Width()) / 2;
+                aChildSize.setWidth( aChildPreferredSize.Width() );
+            aChildPos.AdjustX((rChildAlloc.Width() - aChildSize.Width()) / 2 );
             break;
     }
 
@@ -98,18 +98,18 @@ void VclContainer::setLayoutAllocation(vcl::Window &rChild, const Point &rAllocP
             break;
         case VclAlign::Start:
             if (aChildPreferredSize.Height() < rChildAlloc.Height())
-                aChildSize.Height() = aChildPreferredSize.Height();
+                aChildSize.setHeight( aChildPreferredSize.Height() );
             break;
         case VclAlign::End:
             if (aChildPreferredSize.Height() < rChildAlloc.Height())
-                aChildSize.Height() = aChildPreferredSize.Height();
-            aChildPos.Y() += rChildAlloc.Height();
-            aChildPos.Y() -= aChildSize.Height();
+                aChildSize.setHeight( aChildPreferredSize.Height() );
+            aChildPos.AdjustY(rChildAlloc.Height() );
+            aChildPos.AdjustY( -(aChildSize.Height()) );
             break;
         case VclAlign::Center:
             if (aChildPreferredSize.Height() < aChildSize.Height())
-                aChildSize.Height() = aChildPreferredSize.Height();
-            aChildPos.Y() += (rChildAlloc.Height() - aChildSize.Height()) / 2;
+                aChildSize.setHeight( aChildPreferredSize.Height() );
+            aChildPos.AdjustY((rChildAlloc.Height() - aChildSize.Height()) / 2 );
             break;
     }
 
@@ -150,8 +150,8 @@ void VclContainer::SetPosPixel(const Point& rAllocPos)
 {
     Point aAllocPos = rAllocPos;
     sal_Int32 nBorderWidth = get_border_width();
-    aAllocPos.X() += nBorderWidth + get_margin_left();
-    aAllocPos.Y() += nBorderWidth + get_margin_top();
+    aAllocPos.AdjustX(nBorderWidth + get_margin_left() );
+    aAllocPos.AdjustY(nBorderWidth + get_margin_top() );
 
     if (aAllocPos != GetPosPixel())
         Window::SetPosPixel(aAllocPos);
@@ -161,8 +161,8 @@ void VclContainer::SetSizePixel(const Size& rAllocation)
 {
     Size aAllocation = rAllocation;
     sal_Int32 nBorderWidth = get_border_width();
-    aAllocation.Width() -= nBorderWidth*2 + get_margin_left() + get_margin_right();
-    aAllocation.Height() -= nBorderWidth*2 + get_margin_top() + get_margin_bottom();
+    aAllocation.AdjustWidth( -(nBorderWidth*2 + get_margin_left() + get_margin_right()) );
+    aAllocation.AdjustHeight( -(nBorderWidth*2 + get_margin_top() + get_margin_bottom()) );
     bool bSizeChanged = aAllocation != GetSizePixel();
     if (bSizeChanged)
         Window::SetSizePixel(aAllocation);
@@ -1408,20 +1408,20 @@ void VclGrid::setAllocation(const Size& rAllocation)
 
                 sal_Int32 nWidth = rEntry.nSpanWidth;
                 for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
-                    aChildAlloc.Width() += aWidths[x+nSpanX].m_nValue;
-                aChildAlloc.Width() += nColSpacing*(nWidth-1);
+                    aChildAlloc.AdjustWidth(aWidths[x+nSpanX].m_nValue );
+                aChildAlloc.AdjustWidth(nColSpacing*(nWidth-1) );
 
                 sal_Int32 nHeight = rEntry.nSpanHeight;
                 for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
-                    aChildAlloc.Height() += aHeights[y+nSpanY].m_nValue;
-                aChildAlloc.Height() += nRowSpacing*(nHeight-1);
+                    aChildAlloc.AdjustHeight(aHeights[y+nSpanY].m_nValue );
+                aChildAlloc.AdjustHeight(nRowSpacing*(nHeight-1) );
 
                 setLayoutAllocation(*pChild, aAllocPos, aChildAlloc);
             }
-            aAllocPos.Y() += aHeights[y].m_nValue + nRowSpacing;
+            aAllocPos.AdjustY(aHeights[y].m_nValue + nRowSpacing );
         }
-        aAllocPos.X() += aWidths[x].m_nValue + nColSpacing;
-        aAllocPos.Y() = 0;
+        aAllocPos.AdjustX(aWidths[x].m_nValue + nColSpacing );
+        aAllocPos.setY( 0 );
     }
 }
 
@@ -1500,14 +1500,14 @@ Size VclFrame::calculateRequisition() const
     if (pLabel && pLabel->IsVisible())
     {
         Size aLabelSize = getLayoutRequisition(*pLabel);
-        aRet.Height() += aLabelSize.Height();
-        aRet.Width() = std::max(aLabelSize.Width(), aRet.Width());
+        aRet.AdjustHeight(aLabelSize.Height() );
+        aRet.setWidth( std::max(aLabelSize.Width(), aRet.Width()) );
     }
 
     const FrameStyle &rFrameStyle =
         GetSettings().GetStyleSettings().GetFrameStyle();
-    aRet.Width() += rFrameStyle.left + rFrameStyle.right;
-    aRet.Height() += rFrameStyle.top + rFrameStyle.bottom;
+    aRet.AdjustWidth(rFrameStyle.left + rFrameStyle.right );
+    aRet.AdjustHeight(rFrameStyle.top + rFrameStyle.bottom );
 
     return aRet;
 }
@@ -1528,11 +1528,11 @@ void VclFrame::setAllocation(const Size &rAllocation)
     if (pLabel && pLabel->IsVisible())
     {
         Size aLabelSize = getLayoutRequisition(*pLabel);
-        aLabelSize.Height() = std::min(aLabelSize.Height(), aAllocation.Height());
-        aLabelSize.Width() = std::min(aLabelSize.Width(), aAllocation.Width());
+        aLabelSize.setHeight( std::min(aLabelSize.Height(), aAllocation.Height()) );
+        aLabelSize.setWidth( std::min(aLabelSize.Width(), aAllocation.Width()) );
         setLayoutAllocation(*pLabel, aChildPos, aLabelSize);
-        aAllocation.Height() -= aLabelSize.Height();
-        aChildPos.Y() += aLabelSize.Height();
+        aAllocation.AdjustHeight( -(aLabelSize.Height()) );
+        aChildPos.AdjustY(aLabelSize.Height() );
     }
 
     if (pChild && pChild->IsVisible())
@@ -1620,8 +1620,8 @@ Size VclAlignment::calculateRequisition() const
     if (pChild && pChild->IsVisible())
     {
         Size aChildSize = getLayoutRequisition(*pChild);
-        aRet.Width() += aChildSize.Width();
-        aRet.Height() += aChildSize.Height();
+        aRet.AdjustWidth(aChildSize.Width() );
+        aRet.AdjustHeight(aChildSize.Height() );
     }
 
     return aRet;
@@ -1636,8 +1636,8 @@ void VclAlignment::setAllocation(const Size &rAllocation)
     Point aChildPos(m_nLeftPadding, m_nTopPadding);
 
     Size aAllocation;
-    aAllocation.Width() = rAllocation.Width() - (m_nLeftPadding + m_nRightPadding);
-    aAllocation.Height() = rAllocation.Height() - (m_nTopPadding + m_nBottomPadding);
+    aAllocation.setWidth( rAllocation.Width() - (m_nLeftPadding + m_nRightPadding) );
+    aAllocation.setHeight( rAllocation.Height() - (m_nTopPadding + m_nBottomPadding) );
 
     setLayoutAllocation(*pChild, aChildPos, aAllocation);
 }
@@ -1694,17 +1694,17 @@ Size VclExpander::calculateRequisition() const
     if (pLabel && pLabel->IsVisible())
     {
         Size aLabelSize = getLayoutRequisition(*pLabel);
-        aExpanderSize.Height() = std::max(aExpanderSize.Height(), aLabelSize.Height());
-        aExpanderSize.Width() += aLabelSize.Width();
+        aExpanderSize.setHeight( std::max(aExpanderSize.Height(), aLabelSize.Height()) );
+        aExpanderSize.AdjustWidth(aLabelSize.Width() );
     }
 
-    aRet.Height() += aExpanderSize.Height();
-    aRet.Width() = std::max(aExpanderSize.Width(), aRet.Width());
+    aRet.AdjustHeight(aExpanderSize.Height() );
+    aRet.setWidth( std::max(aExpanderSize.Width(), aRet.Width()) );
 
     const FrameStyle &rFrameStyle =
         GetSettings().GetStyleSettings().GetFrameStyle();
-    aRet.Width() += rFrameStyle.left + rFrameStyle.right;
-    aRet.Height() += rFrameStyle.top + rFrameStyle.bottom;
+    aRet.AdjustWidth(rFrameStyle.left + rFrameStyle.right );
+    aRet.AdjustHeight(rFrameStyle.top + rFrameStyle.bottom );
 
     return aRet;
 }
@@ -1729,15 +1729,15 @@ void VclExpander::setAllocation(const Size &rAllocation)
     if (pLabel && pLabel->IsVisible())
     {
         aLabelSize = getLayoutRequisition(*pLabel);
-        aExpanderSize.Height() = std::max(aExpanderSize.Height(), aLabelSize.Height());
-        aExpanderSize.Width() += aLabelSize.Width();
+        aExpanderSize.setHeight( std::max(aExpanderSize.Height(), aLabelSize.Height()) );
+        aExpanderSize.AdjustWidth(aLabelSize.Width() );
     }
 
-    aExpanderSize.Height() = std::min(aExpanderSize.Height(), aAllocation.Height());
-    aExpanderSize.Width() = std::min(aExpanderSize.Width(), aAllocation.Width());
+    aExpanderSize.setHeight( std::min(aExpanderSize.Height(), aAllocation.Height()) );
+    aExpanderSize.setWidth( std::min(aExpanderSize.Width(), aAllocation.Width()) );
 
-    aButtonSize.Height() = std::min(aButtonSize.Height(), aExpanderSize.Height());
-    aButtonSize.Width() = std::min(aButtonSize.Width(), aExpanderSize.Width());
+    aButtonSize.setHeight( std::min(aButtonSize.Height(), aExpanderSize.Height()) );
+    aButtonSize.setWidth( std::min(aButtonSize.Width(), aExpanderSize.Width()) );
 
     long nExtraExpanderHeight = aExpanderSize.Height() - aButtonSize.Height();
     Point aButtonPos(aChildPos.X(), aChildPos.Y() + nExtraExpanderHeight/2);
@@ -1745,17 +1745,17 @@ void VclExpander::setAllocation(const Size &rAllocation)
 
     if (pLabel && pLabel->IsVisible())
     {
-        aLabelSize.Height() = std::min(aLabelSize.Height(), aExpanderSize.Height());
-        aLabelSize.Width() = std::min(aLabelSize.Width(),
-            aExpanderSize.Width() - aButtonSize.Width());
+        aLabelSize.setHeight( std::min(aLabelSize.Height(), aExpanderSize.Height()) );
+        aLabelSize.setWidth( std::min(aLabelSize.Width(),
+            aExpanderSize.Width() - aButtonSize.Width()) );
 
         long nExtraLabelHeight = aExpanderSize.Height() - aLabelSize.Height();
         Point aLabelPos(aChildPos.X() + aButtonSize.Width(), aChildPos.Y() + nExtraLabelHeight/2);
         setLayoutAllocation(*pLabel, aLabelPos, aLabelSize);
     }
 
-    aAllocation.Height() -= aExpanderSize.Height();
-    aChildPos.Y() += aExpanderSize.Height();
+    aAllocation.AdjustHeight( -(aExpanderSize.Height()) );
+    aChildPos.AdjustY(aExpanderSize.Height() );
 
     if (pChild && pChild->IsVisible())
     {
@@ -1841,12 +1841,12 @@ IMPL_LINK_NOARG(VclScrolledWindow, ScrollBarHdl, ScrollBar*, void)
 
     if (m_pHScroll->IsVisible())
     {
-        aWinPos.X() = -m_pHScroll->GetThumbPos();
+        aWinPos.setX( -m_pHScroll->GetThumbPos() );
     }
 
     if (m_pVScroll->IsVisible())
     {
-        aWinPos.Y() = -m_pVScroll->GetThumbPos();
+        aWinPos.setY( -m_pVScroll->GetThumbPos() );
     }
 
     pChild->SetPosPixel(aWinPos);
@@ -1873,10 +1873,10 @@ Size VclScrolledWindow::calculateRequisition() const
         aRet = getLayoutRequisition(*pChild);
 
     if (GetStyle() & WB_VSCROLL)
-        aRet.Width() += getLayoutRequisition(*m_pVScroll).Width();
+        aRet.AdjustWidth(getLayoutRequisition(*m_pVScroll).Width() );
 
     if (GetStyle() & WB_HSCROLL)
-        aRet.Height() += getLayoutRequisition(*m_pHScroll).Height();
+        aRet.AdjustHeight(getLayoutRequisition(*m_pHScroll).Height() );
 
     return aRet;
 }
@@ -1946,9 +1946,9 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
         Point aScrollPos(rAllocation.Width() - nScrollBarWidth, 0);
         Size aScrollSize(nScrollBarWidth, rAllocation.Height());
         setLayoutAllocation(*m_pVScroll, aScrollPos, aScrollSize);
-        aChildAllocation.Width() -= nScrollBarWidth;
-        aInnerSize.Width() -= nScrollBarWidth;
-        aChildAllocation.Height() = aChildReq.Height();
+        aChildAllocation.AdjustWidth( -nScrollBarWidth );
+        aInnerSize.AdjustWidth( -nScrollBarWidth );
+        aChildAllocation.setHeight( aChildReq.Height() );
     }
 
     if (m_pHScroll->IsVisible())
@@ -1957,9 +1957,9 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
         Point aScrollPos(0, rAllocation.Height() - nScrollBarHeight);
         Size aScrollSize(rAllocation.Width(), nScrollBarHeight);
         setLayoutAllocation(*m_pHScroll, aScrollPos, aScrollSize);
-        aChildAllocation.Height() -= nScrollBarHeight;
-        aInnerSize.Height() -= nScrollBarHeight;
-        aChildAllocation.Width() = aChildReq.Width();
+        aChildAllocation.AdjustHeight( -nScrollBarHeight );
+        aInnerSize.AdjustHeight( -nScrollBarHeight );
+        aChildAllocation.setWidth( aChildReq.Width() );
     }
 
     if (m_pVScroll->IsVisible() && m_pHScroll->IsVisible())
@@ -1987,9 +1987,9 @@ Size VclScrolledWindow::getVisibleChildSize() const
 {
     Size aRet(GetSizePixel());
     if (m_pVScroll->IsVisible())
-        aRet.Width() -= m_pVScroll->GetSizePixel().Width();
+        aRet.AdjustWidth( -(m_pVScroll->GetSizePixel().Width()) );
     if (m_pHScroll->IsVisible())
-        aRet.Height() -= m_pHScroll->GetSizePixel().Height();
+        aRet.AdjustHeight( -(m_pHScroll->GetSizePixel().Height()) );
     return aRet;
 }
 
@@ -2026,8 +2026,8 @@ void VclViewport::setAllocation(const Size &rAllocation)
     if (pChild && pChild->IsVisible())
     {
         Size aReq(getLayoutRequisition(*pChild));
-        aReq.Width() = std::max(aReq.Width(), rAllocation.Width());
-        aReq.Height() = std::max(aReq.Height(), rAllocation.Height());
+        aReq.setWidth( std::max(aReq.Width(), rAllocation.Width()) );
+        aReq.setHeight( std::max(aReq.Height(), rAllocation.Height()) );
         setLayoutAllocation(*pChild, Point(0, 0), aReq);
     }
 }
@@ -2067,8 +2067,8 @@ Size VclEventBox::calculateRequisition() const
         if (!pChild->IsVisible())
             continue;
         Size aChildSize = getLayoutRequisition(*pChild);
-        aRet.Width() = std::max(aRet.Width(), aChildSize.Width());
-        aRet.Height() = std::max(aRet.Height(), aChildSize.Height());
+        aRet.setWidth( std::max(aRet.Width(), aChildSize.Width()) );
+        aRet.setHeight( std::max(aRet.Height(), aChildSize.Height()) );
     }
 
     return aRet;
@@ -2620,8 +2620,8 @@ Size VclVPaned::calculateRequisition() const
         if (!pChild->IsVisible())
             continue;
         Size aChildSize = getLayoutRequisition(*pChild);
-        aRet.Width() = std::max(aRet.Width(), aChildSize.Width());
-        aRet.Height() += aChildSize.Height();
+        aRet.setWidth( std::max(aRet.Width(), aChildSize.Width()) );
+        aRet.AdjustHeight(aChildSize.Height() );
     }
 
     return aRet;
@@ -2646,8 +2646,8 @@ Size getLegacyBestSizeForChildren(const vcl::Window &rWindow)
 
     Size aRet(aBounds.GetSize());
     Point aTopLeft(aBounds.TopLeft());
-    aRet.Width() += aTopLeft.X()*2;
-    aRet.Height() += aTopLeft.Y()*2;
+    aRet.AdjustWidth(aTopLeft.X()*2 );
+    aRet.AdjustHeight(aTopLeft.Y()*2 );
 
     return aRet;
 }

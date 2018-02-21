@@ -1447,7 +1447,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             {
                 Size aImgSz = pData->aImage.GetSizePixel();
                 if ( aImgSz.Height() > aMaxImgSz.Height() )
-                    aMaxImgSz.Height() = aImgSz.Height();
+                    aMaxImgSz.setHeight( aImgSz.Height() );
                 if ( aImgSz.Height() > nMinMenuItemHeight )
                     nMinMenuItemHeight = aImgSz.Height();
                 break;
@@ -1463,8 +1463,8 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
     {
         MenuItemData* pData = pItemList->GetDataFromPos( --n );
 
-        pData->aSz.Height() = 0;
-        pData->aSz.Width() = 0;
+        pData->aSz.setHeight( 0 );
+        pData->aSz.setWidth( 0 );
 
         if ( ImplIsVisible( n ) )
         {
@@ -1474,7 +1474,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             if (!IsMenuBar()&& (pData->eType == MenuItemType::SEPARATOR))
             {
                 //Useless: SAL_WARN_IF( IsMenuBar(), "vcl", "Separator in MenuBar ?! " );
-                pData->aSz.Height() = 4;
+                pData->aSz.setHeight( 4 );
             }
 
             // Image:
@@ -1482,14 +1482,14 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             {
                 Size aImgSz = pData->aImage.GetSizePixel();
 
-                aImgSz.Height() += 4; // add a border for native marks
-                aImgSz.Width() += 4; // add a border for native marks
+                aImgSz.AdjustHeight(4 ); // add a border for native marks
+                aImgSz.AdjustWidth(4 ); // add a border for native marks
                 if ( aImgSz.Width() > aMaxImgSz.Width() )
-                    aMaxImgSz.Width() = aImgSz.Width();
+                    aMaxImgSz.setWidth( aImgSz.Width() );
                 if ( aImgSz.Height() > aMaxImgSz.Height() )
-                    aMaxImgSz.Height() = aImgSz.Height();
+                    aMaxImgSz.setHeight( aImgSz.Height() );
                 if ( aImgSz.Height() > pData->aSz.Height() )
-                    pData->aSz.Height() = aImgSz.Height();
+                    pData->aSz.setHeight( aImgSz.Height() );
             }
 
             // Check Buttons:
@@ -1510,13 +1510,13 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
                 if (IsMenuBar())
                 {
                     if ( nTextHeight > pData->aSz.Height() )
-                        pData->aSz.Height() = nTextHeight;
+                        pData->aSz.setHeight( nTextHeight );
 
-                    pData->aSz.Width() = nTextWidth + 4*nExtra;
-                    aSz.Width() += pData->aSz.Width();
+                    pData->aSz.setWidth( nTextWidth + 4*nExtra );
+                    aSz.AdjustWidth(pData->aSz.Width() );
                 }
                 else
-                    pData->aSz.Height() = std::max( std::max( nTextHeight, pData->aSz.Height() ), nMinMenuItemHeight );
+                    pData->aSz.setHeight( std::max( std::max( nTextHeight, pData->aSz.Height() ), nMinMenuItemHeight ) );
 
                 nWidth += nTextWidth;
             }
@@ -1536,13 +1536,13 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
                     if ( nFontHeight > nWidth )
                         nWidth += nFontHeight;
 
-                pData->aSz.Height() = std::max( std::max( nFontHeight, pData->aSz.Height() ), nMinMenuItemHeight );
+                pData->aSz.setHeight( std::max( std::max( nFontHeight, pData->aSz.Height() ), nMinMenuItemHeight ) );
             }
 
-            pData->aSz.Height() += EXTRAITEMHEIGHT; // little bit more distance
+            pData->aSz.AdjustHeight(EXTRAITEMHEIGHT ); // little bit more distance
 
             if (!IsMenuBar())
-                aSz.Height() += pData->aSz.Height();
+                aSz.AdjustHeight(pData->aSz.Height() );
 
             if ( nWidth > nMaxWidth )
                 nMaxWidth = nWidth;
@@ -1565,7 +1565,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
 
         // Vertically, one height of char + extra space for decoration
         nTitleHeight =  aTextBoundRect.GetSize().Height() + 4 * SPACE_AROUND_TITLE ;
-        aSz.Height() += nTitleHeight;
+        aSz.AdjustHeight(nTitleHeight );
 
         long nWidth = aTextBoundRect.GetSize().Width() + 4 * SPACE_AROUND_TITLE;
         pWin->Pop();
@@ -1596,16 +1596,16 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
         nTextPos = static_cast<sal_uInt16>(nImgOrChkPos + nImgOrChkWidth);
         nTextPos = nTextPos + gfxExtra;
 
-        aSz.Width() = nTextPos + nMaxWidth + nExtra;
-        aSz.Width() += 4*nExtra;   // a _little_ more ...
+        aSz.setWidth( nTextPos + nMaxWidth + nExtra );
+        aSz.AdjustWidth(4*nExtra );   // a _little_ more ...
 
-        aSz.Width() += 2*ImplGetSVData()->maNWFData.mnMenuFormatBorderX;
-        aSz.Height() += 2*ImplGetSVData()->maNWFData.mnMenuFormatBorderY;
+        aSz.AdjustWidth(2*ImplGetSVData()->maNWFData.mnMenuFormatBorderX );
+        aSz.AdjustHeight(2*ImplGetSVData()->maNWFData.mnMenuFormatBorderY );
     }
     else
     {
         nTextPos = static_cast<sal_uInt16>(2*nExtra);
-        aSz.Height() = nFontHeight+6;
+        aSz.setHeight( nFontHeight+6 );
 
         // get menubar height from native methods if supported
         if( pWindow->IsNativeControlSupported( ControlType::Menubar, ControlPart::Entire ) )
@@ -1626,7 +1626,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             {
                 int nNativeHeight = aNativeBounds.GetHeight();
                 if( nNativeHeight > aSz.Height() )
-                    aSz.Height() = nNativeHeight;
+                    aSz.setHeight( nNativeHeight );
             }
         }
 
@@ -1634,7 +1634,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
         // due to NWF this is variable
         long nCloseButtonHeight = static_cast<MenuBarWindow*>(pWindow.get())->MinCloseButtonSize().Height();
         if (aSz.Height() < nCloseButtonHeight)
-            aSz.Height() = nCloseButtonHeight;
+            aSz.setHeight( nCloseButtonHeight );
     }
 
     return aSz;
@@ -1709,9 +1709,9 @@ void Menu::ImplPaintMenuTitle(vcl::RenderContext& rRenderContext, const tools::R
     Point aTextTopLeft(aBgRect.TopLeft());
     tools::Rectangle aTextBoundRect;
     rRenderContext.GetTextBoundRect( aTextBoundRect, aTitleText );
-    aTextTopLeft.X() += (aBgRect.getWidth() - aTextBoundRect.GetSize().Width()) / 2;
-    aTextTopLeft.Y() += (aBgRect.GetHeight() - aTextBoundRect.GetSize().Height()) / 2
-                        - aTextBoundRect.TopLeft().Y();
+    aTextTopLeft.AdjustX((aBgRect.getWidth() - aTextBoundRect.GetSize().Width()) / 2 );
+    aTextTopLeft.AdjustY((aBgRect.GetHeight() - aTextBoundRect.GetSize().Height()) / 2
+                        - aTextBoundRect.TopLeft().Y() );
     rRenderContext.DrawText(aTextTopLeft, aTitleText, 0, aTitleText.getLength());
 
     // Restore
@@ -1739,8 +1739,8 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
     if (!IsMenuBar())
     {
         nOuterSpaceX = ImplGetSVData()->maNWFData.mnMenuFormatBorderX;
-        aTopLeft.X() += nOuterSpaceX;
-        aTopLeft.Y() += ImplGetSVData()->maNWFData.mnMenuFormatBorderY;
+        aTopLeft.AdjustX(nOuterSpaceX );
+        aTopLeft.AdjustY(ImplGetSVData()->maNWFData.mnMenuFormatBorderY );
     }
 
     // for the computations, use size of the underlying window, not of RenderContext
@@ -1787,8 +1787,8 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
             }
 
             Point aPos(aTopLeft);
-            aPos.Y() += nBorder;
-            aPos.Y() += nStartY;
+            aPos.AdjustY(nBorder );
+            aPos.AdjustY(nStartY );
 
             if (aPos.Y() >= 0)
             {
@@ -1823,9 +1823,9 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                             nState |= ControlState::SELECTED;
                         int nSepPad = ImplGetSVData()->maNWFData.mnMenuSeparatorBorderX;
                         Point aMpos (aPos);
-                        aMpos.X() += nSepPad;
+                        aMpos.AdjustX(nSepPad );
                         Size aSz(pData->aSz);
-                        aSz.Width() = aOutSz.Width() - 2*nOuterSpaceX - 2 * nSepPad;
+                        aSz.setWidth( aOutSz.Width() - 2*nOuterSpaceX - 2 * nSepPad );
                         tools::Rectangle aItemRect(aMpos, aSz);
                         MenupopupValue aVal(nTextPos - GUTTERBORDER, aItemRect);
                         bNativeOk = rRenderContext.DrawNativeControl(ControlType::MenuPopup, ControlPart::Separator,
@@ -1833,11 +1833,11 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                     }
                     if (!bNativeOk)
                     {
-                        aTmpPos.Y() = aPos.Y() + ((pData->aSz.Height() - 2) / 2);
-                        aTmpPos.X() = aPos.X() + 2 + nOuterSpaceX;
+                        aTmpPos.setY( aPos.Y() + ((pData->aSz.Height() - 2) / 2) );
+                        aTmpPos.setX( aPos.X() + 2 + nOuterSpaceX );
                         rRenderContext.SetLineColor(rSettings.GetShadowColor());
                         rRenderContext.DrawLine(aTmpPos, Point(aOutSz.Width() - 3 - 2 * nOuterSpaceX, aTmpPos.Y()));
-                        aTmpPos.Y()++;
+                        aTmpPos.AdjustY( 1 );
                         rRenderContext.SetLineColor(rSettings.GetLightColor());
                         rRenderContext.DrawLine(aTmpPos, Point(aOutSz.Width() - 3 - 2 * nOuterSpaceX, aTmpPos.Y()));
                         rRenderContext.SetLineColor();
@@ -1846,10 +1846,10 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
 
                 tools::Rectangle aOuterCheckRect(Point(aPos.X()+nImgOrChkPos, aPos.Y()),
                                           Size(pData->aSz.Height(), pData->aSz.Height()));
-                aOuterCheckRect.Left() += 1;
-                aOuterCheckRect.Right() -= 1;
-                aOuterCheckRect.Top() += 1;
-                aOuterCheckRect.Bottom() -= 1;
+                aOuterCheckRect.AdjustLeft(1 );
+                aOuterCheckRect.AdjustRight( -1 );
+                aOuterCheckRect.AdjustTop(1 );
+                aOuterCheckRect.AdjustBottom( -1 );
 
                 // CheckMark
                 if (!bLayout && !IsMenuBar() && pData->HasCheck())
@@ -1883,12 +1883,12 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                                 nState |= ControlState::SELECTED;
 
                             long nCtrlHeight = (pData->nBits & MenuItemBits::RADIOCHECK) ? nCheckHeight : nRadioHeight;
-                            aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - nCtrlHeight) / 2;
-                            aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - nCtrlHeight) / 2;
+                            aTmpPos.setX( aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - nCtrlHeight) / 2 );
+                            aTmpPos.setY( aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - nCtrlHeight) / 2 );
 
                             tools::Rectangle aCheckRect(aTmpPos, Size(nCtrlHeight, nCtrlHeight));
                             Size aSz(pData->aSz);
-                            aSz.Width() = aOutSz.Width() - 2 * nOuterSpaceX;
+                            aSz.setWidth( aOutSz.Width() - 2 * nOuterSpaceX );
                             tools::Rectangle aItemRect(aPos, aSz);
                             MenupopupValue aVal(nTextPos - GUTTERBORDER, aItemRect);
                             rRenderContext.DrawNativeControl(ControlType::MenuPopup, nPart, aCheckRect,
@@ -1910,8 +1910,8 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                                 eSymbol = SymbolType::CHECKMARK;
                                 aSymbolSize = Size((nFontHeight * 25) / 40, nFontHeight / 2);
                             }
-                            aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - aSymbolSize.Width()) / 2;
-                            aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - aSymbolSize.Height()) / 2;
+                            aTmpPos.setX( aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - aSymbolSize.Width()) / 2 );
+                            aTmpPos.setY( aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - aSymbolSize.Height()) / 2 );
                             tools::Rectangle aRect(aTmpPos, aSymbolSize);
                             aDecoView.DrawSymbol(aRect, eSymbol, rRenderContext.GetTextColor(), nSymbolStyle);
                         }
@@ -1928,17 +1928,17 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                     Image aImage = pData->aImage;
 
                     aTmpPos = aOuterCheckRect.TopLeft();
-                    aTmpPos.X() += (aOuterCheckRect.GetWidth() - aImage.GetSizePixel().Width()) / 2;
-                    aTmpPos.Y() += (aOuterCheckRect.GetHeight() - aImage.GetSizePixel().Height()) / 2;
+                    aTmpPos.AdjustX((aOuterCheckRect.GetWidth() - aImage.GetSizePixel().Width()) / 2 );
+                    aTmpPos.AdjustY((aOuterCheckRect.GetHeight() - aImage.GetSizePixel().Height()) / 2 );
                     rRenderContext.DrawImage(aTmpPos, aImage, nImageStyle);
                 }
 
                 // Text:
                 if ((pData->eType == MenuItemType::STRING ) || (pData->eType == MenuItemType::STRINGIMAGE))
                 {
-                    aTmpPos.X() = aPos.X() + nTextPos;
-                    aTmpPos.Y() = aPos.Y();
-                    aTmpPos.Y() += nTextOffsetY;
+                    aTmpPos.setX( aPos.X() + nTextPos );
+                    aTmpPos.setY( aPos.Y() );
+                    aTmpPos.AdjustY(nTextOffsetY );
                     DrawTextFlags nStyle = nTextStyle | DrawTextFlags::Mnemonic;
 
                     const Menu *pMenu = this;
@@ -2009,12 +2009,12 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                 if (!bLayout && !IsMenuBar() && pData->aAccelKey.GetCode() && !ImplAccelDisabled())
                 {
                     OUString aAccText = pData->aAccelKey.GetName();
-                    aTmpPos.X() = aOutSz.Width() - rRenderContext.GetTextWidth(aAccText);
-                    aTmpPos.X() -= 4 * nExtra;
+                    aTmpPos.setX( aOutSz.Width() - rRenderContext.GetTextWidth(aAccText) );
+                    aTmpPos.AdjustX( -(4 * nExtra) );
 
-                    aTmpPos.X() -= nOuterSpaceX;
-                    aTmpPos.Y() = aPos.Y();
-                    aTmpPos.Y() += nTextOffsetY;
+                    aTmpPos.AdjustX( -nOuterSpaceX );
+                    aTmpPos.setY( aPos.Y() );
+                    aTmpPos.AdjustY(nTextOffsetY );
                     rRenderContext.DrawCtrlText(aTmpPos, aAccText, 0, aAccText.getLength(), nTextStyle);
                 }
 
@@ -2039,9 +2039,9 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                         if (bHighlighted)
                             nState |= ControlState::SELECTED;
 
-                        aTmpPos.X() = aOutSz.Width() - aTmpSz.Width() - aSpacing - nOuterSpaceX;
-                        aTmpPos.Y() = aPos.Y() + ( pData->aSz.Height() - aTmpSz.Height() ) / 2;
-                        aTmpPos.Y() += nExtra / 2;
+                        aTmpPos.setX( aOutSz.Width() - aTmpSz.Width() - aSpacing - nOuterSpaceX );
+                        aTmpPos.setY( aPos.Y() + ( pData->aSz.Height() - aTmpSz.Height() ) / 2 );
+                        aTmpPos.AdjustY(nExtra / 2 );
 
                         tools::Rectangle aItemRect(aTmpPos, aTmpSz);
                         MenupopupValue aVal(nTextPos - GUTTERBORDER, aItemRect);
@@ -2050,15 +2050,15 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                     }
                     if (!bNativeOk)
                     {
-                        aTmpPos.X() = aOutSz.Width() - nFontHeight + nExtra - nOuterSpaceX;
-                        aTmpPos.Y() = aPos.Y();
-                        aTmpPos.Y() += nExtra/2;
-                        aTmpPos.Y() += (pData->aSz.Height() / 2) - (nFontHeight / 4);
+                        aTmpPos.setX( aOutSz.Width() - nFontHeight + nExtra - nOuterSpaceX );
+                        aTmpPos.setY( aPos.Y() );
+                        aTmpPos.AdjustY(nExtra/2 );
+                        aTmpPos.AdjustY((pData->aSz.Height() / 2) - (nFontHeight / 4) );
                         if (pData->nBits & MenuItemBits::POPUPSELECT)
                         {
                             rRenderContext.SetTextColor(rSettings.GetMenuTextColor());
                             Point aTmpPos2(aPos);
-                            aTmpPos2.X() = aOutSz.Width() - nFontHeight - nFontHeight/4;
+                            aTmpPos2.setX( aOutSz.Width() - nFontHeight - nFontHeight/4 );
                             aDecoView.DrawFrame(tools::Rectangle(aTmpPos2, Size(nFontHeight + nFontHeight / 4,
                                                                          pData->aSz.Height())),
                                                 DrawFrameStyle::Group);
@@ -2088,9 +2088,9 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
         }
 
         if (!IsMenuBar())
-            aTopLeft.Y() += pData->aSz.Height();
+            aTopLeft.AdjustY(pData->aSz.Height() );
         else
-            aTopLeft.X() += pData->aSz.Width();
+            aTopLeft.AdjustX(pData->aSz.Width() );
     }
 
     // draw "more" (">>") indicator if some items have been hidden as they go out of visible area
@@ -2927,7 +2927,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
         pWin->EnableScrollMenu( true );
         sal_uInt16 nStart = ImplGetFirstVisible();
         sal_uInt16 nEntries = ImplCalcVisEntries( nMaxHeight, nStart );
-        aSz.Height() = ImplCalcHeight( nEntries );
+        aSz.setHeight( ImplCalcHeight( nEntries ) );
     }
 
     pWin->SetFocusId( xFocusId );

@@ -130,7 +130,7 @@ void NotebookBar::Resize()
         if (pWindow)
         {
             Size aSize = pWindow->GetSizePixel();
-            aSize.Width() = GetSizePixel().Width();
+            aSize.setWidth( GetSizePixel().Width() );
             pWindow->SetSizePixel(aSize);
         }
     }

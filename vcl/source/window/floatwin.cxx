@@ -305,9 +305,9 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
         {
 
             case FloatWinPopupFlags::Left:
-                aPos.X() = devRect.Left()-aSize.Width()+1;
-                aPos.Y() = devRect.Top();
-                aPos.Y() -= pWindow->mpWindowImpl->mnTopBorder;
+                aPos.setX( devRect.Left()-aSize.Width()+1 );
+                aPos.setY( devRect.Top() );
+                aPos.AdjustY( -(pWindow->mpWindowImpl->mnTopBorder) );
                 if( bRTL )
                 {
                     if( (devRectRTL.Right()+aSize.Width()) > aScreenRect.Right() )
@@ -323,15 +323,15 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
                     e1 = devRect.TopLeft();
                     e2 = devRect.BottomLeft();
                     // set non-zero width
-                    e2.X()++;
+                    e2.AdjustX( 1 );
                     // don't clip corners
-                    e1.Y()++;
-                    e2.Y()--;
+                    e1.AdjustY( 1 );
+                    e2.AdjustY( -1 );
                 }
                 break;
             case FloatWinPopupFlags::Right:
                 aPos     = devRect.TopRight();
-                aPos.Y() -= pWindow->mpWindowImpl->mnTopBorder;
+                aPos.AdjustY( -(pWindow->mpWindowImpl->mnTopBorder) );
                 if( bRTL )
                 {
                     if( (devRectRTL.Left() - aSize.Width()) < aScreenRect.Left() )
@@ -347,15 +347,15 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
                     e1 = devRect.TopRight();
                     e2 = devRect.BottomRight();
                     // set non-zero width
-                    e2.X()++;
+                    e2.AdjustX( 1 );
                     // don't clip corners
-                    e1.Y()++;
-                    e2.Y()--;
+                    e1.AdjustY( 1 );
+                    e2.AdjustY( -1 );
                 }
                 break;
             case FloatWinPopupFlags::Up:
-                aPos.X() = devRect.Left();
-                aPos.Y() = devRect.Top()-aSize.Height()+1;
+                aPos.setX( devRect.Left() );
+                aPos.setY( devRect.Top()-aSize.Height()+1 );
                 if ( aPos.Y() < aScreenRect.Top() )
                     bBreak = false;
                 if( bBreak )
@@ -363,10 +363,10 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
                     e1 = devRect.TopLeft();
                     e2 = devRect.TopRight();
                     // set non-zero height
-                    e2.Y()++;
+                    e2.AdjustY( 1 );
                     // don't clip corners
-                    e1.X()++;
-                    e2.X()--;
+                    e1.AdjustX( 1 );
+                    e2.AdjustX( -1 );
                 }
                 break;
             case FloatWinPopupFlags::Down:
@@ -378,10 +378,10 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
                     e1 = devRect.BottomLeft();
                     e2 = devRect.BottomRight();
                     // set non-zero height
-                    e2.Y()++;
+                    e2.AdjustY( 1 );
                     // don't clip corners
-                    e1.X()++;
-                    e2.X()--;
+                    e1.AdjustX( 1 );
+                    e2.AdjustX( -1 );
                 }
                 break;
             default: break;
@@ -395,9 +395,9 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
             {
                 if ( aPos.Y()+aSize.Height() > aScreenRect.Bottom() )
                 {
-                    aPos.Y() = devRect.Bottom()-aSize.Height()+1;
+                    aPos.setY( devRect.Bottom()-aSize.Height()+1 );
                     if ( aPos.Y() < aScreenRect.Top() )
-                        aPos.Y() = aScreenRect.Top();
+                        aPos.setY( aScreenRect.Top() );
                 }
             }
             else
@@ -405,13 +405,13 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
                 if( bRTL )
                 {
                     if( devRectRTL.Right()-aSize.Width()+1 < aScreenRect.Left() )
-                        aPos.X() -= aScreenRect.Left() - devRectRTL.Right() + aSize.Width() - 1;
+                        aPos.AdjustX( -(aScreenRect.Left() - devRectRTL.Right() + aSize.Width() - 1) );
                 }
                 else if ( aPos.X()+aSize.Width() > aScreenRect.Right() )
                 {
-                    aPos.X() = devRect.Right()-aSize.Width()+1;
+                    aPos.setX( devRect.Right()-aSize.Width()+1 );
                     if ( aPos.X() < aScreenRect.Left() )
-                        aPos.X() = aScreenRect.Left();
+                        aPos.setX( aScreenRect.Left() );
                 }
             }
         }
@@ -720,10 +720,10 @@ void FloatingWindow::StartPopupMode( const tools::Rectangle& rRect, FloatWinPopu
     // !!! rRect is expected to be in screen coordinates of the parent frame window !!!
     maFloatRect = FloatingWindow::ImplConvertToAbsPos(GetParent(), rRect);
 
-    maFloatRect.Left()     -= 2;
-    maFloatRect.Top()      -= 2;
-    maFloatRect.Right()    += 2;
-    maFloatRect.Bottom()   += 2;
+    maFloatRect.AdjustLeft( -2 );
+    maFloatRect.AdjustTop( -2 );
+    maFloatRect.AdjustRight(2 );
+    maFloatRect.AdjustBottom(2 );
     mnPopupModeFlags        = nFlags;
     mbInPopupMode           = true;
     mbPopupMode             = true;

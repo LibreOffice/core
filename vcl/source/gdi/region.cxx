@@ -1739,10 +1739,10 @@ static inline bool ImplPolygonRectTest( const tools::Polygon& rPoly, tools::Rect
                     nY2--;
                 }
 
-                pRectOut->Left()    = nX1;
-                pRectOut->Right()   = nX2;
-                pRectOut->Top()     = nY1;
-                pRectOut->Bottom()  = nY2;
+                pRectOut->SetLeft( nX1 );
+                pRectOut->SetRight( nX2 );
+                pRectOut->SetTop( nY1 );
+                pRectOut->SetBottom( nY2 );
             }
         }
     }

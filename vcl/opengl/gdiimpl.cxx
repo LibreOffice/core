@@ -924,8 +924,8 @@ void OpenGLSalGraphicsImpl::DrawRegionBand( const RegionBand& rRegion )
 
     for(tools::Rectangle & rRect : aRects)
     {
-        rRect.Bottom() += 1;
-        rRect.Right() += 1;
+        rRect.AdjustBottom(1 );
+        rRect.AdjustRight(1 );
         ADD_VERTICE( rRect.TopLeft() );
         ADD_VERTICE( rRect.TopRight() );
         ADD_VERTICE( rRect.BottomLeft() );
@@ -1974,10 +1974,10 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
         return false;
     }
 
-    aBoundRect.Left()--;
-    aBoundRect.Top()--;
-    aBoundRect.Right()++;
-    aBoundRect.Bottom()++;
+    aBoundRect.AdjustLeft( -1 );
+    aBoundRect.AdjustTop( -1 );
+    aBoundRect.AdjustRight( 1 );
+    aBoundRect.AdjustBottom( 1 );
 
     PreDraw( XOROption::IMPLEMENT_XOR );
 

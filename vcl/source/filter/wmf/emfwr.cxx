@@ -1187,8 +1187,8 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                 {
                     aTmpMtf.Scale( fScaleX, fScaleY );
-                    aSrcPt.X() = FRound( aSrcPt.X() * fScaleX );
-                    aSrcPt.Y() = FRound( aSrcPt.Y() * fScaleY );
+                    aSrcPt.setX( FRound( aSrcPt.X() * fScaleX ) );
+                    aSrcPt.setY( FRound( aSrcPt.Y() * fScaleY ) );
                 }
 
                 nMoveX = aDestPt.X() - aSrcPt.X();

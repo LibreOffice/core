@@ -83,14 +83,14 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
     BmpMirrorFlags nMirrorFlags(BmpMirrorFlags::NONE);
     if( aSize.Width() < 0 )
     {
-        aSize.Width() *= -1;
-        aPoint.X() -= aSize.Width();
+        aSize.setWidth( aSize.Width() * -1 );
+        aPoint.AdjustX( -(aSize.Width()) );
         nMirrorFlags |= BmpMirrorFlags::Horizontal;
     }
     if( aSize.Height() < 0 )
     {
-        aSize.Height() *= -1;
-        aPoint.Y() -= aSize.Height();
+        aSize.setHeight( aSize.Height() * -1 );
+        aPoint.AdjustY( -(aSize.Height()) );
         nMirrorFlags |= BmpMirrorFlags::Vertical;
     }
 
@@ -129,13 +129,13 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
 
             if( fBmpWH < fMaxWH )
             {
-                aNewBmpSize.Width() = FRound( fMaxPixelY * fBmpWH );
-                aNewBmpSize.Height() = FRound( fMaxPixelY );
+                aNewBmpSize.setWidth( FRound( fMaxPixelY * fBmpWH ) );
+                aNewBmpSize.setHeight( FRound( fMaxPixelY ) );
             }
             else if( fBmpWH > 0.0 )
             {
-                aNewBmpSize.Width() = FRound( fMaxPixelX );
-                aNewBmpSize.Height() = FRound( fMaxPixelX / fBmpWH);
+                aNewBmpSize.setWidth( FRound( fMaxPixelX ) );
+                aNewBmpSize.setHeight( FRound( fMaxPixelX / fBmpWH) );
             }
 
             if( aNewBmpSize.Width() && aNewBmpSize.Height() )

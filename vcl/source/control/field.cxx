@@ -870,7 +870,7 @@ namespace
             string::padToLength(aBuf, aBuf.getLength() + nDigits, '9');
         }
         aMaxTextSize = rSpinField.CalcMinimumSizeForText(sBuf.makeStringAndClear());
-        aRet.Width() = std::min(aRet.Width(), aMaxTextSize.Width());
+        aRet.setWidth( std::min(aRet.Width(), aMaxTextSize.Width()) );
 
         return aRet;
     }
@@ -903,8 +903,8 @@ Size NumericBox::CalcMinimumSize() const
     if (IsDropDownBox())
     {
         Size aComboSugg(ComboBox::CalcMinimumSize());
-        aRet.Width() = std::max(aRet.Width(), aComboSugg.Width());
-        aRet.Height() = std::max(aRet.Height(), aComboSugg.Height());
+        aRet.setWidth( std::max(aRet.Width(), aComboSugg.Width()) );
+        aRet.setHeight( std::max(aRet.Height(), aComboSugg.Height()) );
     }
 
     return aRet;
@@ -1687,8 +1687,8 @@ Size MetricBox::CalcMinimumSize() const
     if (IsDropDownBox())
     {
         Size aComboSugg(ComboBox::CalcMinimumSize());
-        aRet.Width() = std::max(aRet.Width(), aComboSugg.Width());
-        aRet.Height() = std::max(aRet.Height(), aComboSugg.Height());
+        aRet.setWidth( std::max(aRet.Width(), aComboSugg.Width()) );
+        aRet.setHeight( std::max(aRet.Height(), aComboSugg.Height()) );
     }
 
     return aRet;

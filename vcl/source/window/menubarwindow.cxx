@@ -300,7 +300,7 @@ void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
             pData = pMenu->pItemList->GetDataFromPos( nHighlightedItem );
             Point aItemTopLeft( nX, 0 );
             Point aItemBottomRight( aItemTopLeft );
-            aItemBottomRight.X() += pData->aSz.Width();
+            aItemBottomRight.AdjustX(pData->aSz.Width() );
 
             if (pData->bHiddenOnGUI)
             {
@@ -330,7 +330,7 @@ void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
             if ( GetSizePixel().Height() )
             {
                 // #107747# give menuitems the height of the menubar
-                aItemBottomRight.Y() += GetOutputSizePixel().Height()-1;
+                aItemBottomRight.AdjustY(GetOutputSizePixel().Height()-1 );
             }
 
             // ImplExecute is not modal...
@@ -617,7 +617,7 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
     size_t nCount = pMenu->pItemList->size();
 
     Size aOutputSize = GetOutputSizePixel();
-    aOutputSize.Width() -= aCloseBtn->GetSizePixel().Width();
+    aOutputSize.AdjustWidth( -(aCloseBtn->GetSizePixel().Width()) );
 
     for (size_t n = 0; n < nCount; n++)
     {
@@ -931,7 +931,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     }
 
     // shrink the area of the buttons
-    aOutputSize.Width() -= aCloseBtn->GetSizePixel().Width();
+    aOutputSize.AdjustWidth( -(aCloseBtn->GetSizePixel().Width()) );
 
     rRenderContext.SetFillColor(rStyleSettings.GetMenuColor());
     pMenu->ImplPaint(rRenderContext, aOutputSize, 0);

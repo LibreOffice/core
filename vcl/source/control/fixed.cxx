@@ -145,7 +145,7 @@ void FixedText::ImplDraw(OutputDevice* pDev, DrawFlags nDrawFlags,
     Point aPos = rPos;
 
     if ( nWinStyle & WB_EXTRAOFFSET )
-        aPos.X() += 2;
+        aPos.AdjustX(2 );
 
     if ( nWinStyle & WB_PATHELLIPSIS )
     {
@@ -325,13 +325,13 @@ Size FixedText::CalcMinimumTextSize( Control const *pControl, long nMaxWidth )
     Size aSize = getTextDimensions(pControl, pControl->GetText(), nMaxWidth);
 
     if ( pControl->GetStyle() & WB_EXTRAOFFSET )
-        aSize.Width() += 2;
+        aSize.AdjustWidth(2 );
 
     // GetTextRect cannot take an empty string
     if ( aSize.Width() < 0 )
-        aSize.Width() = 0;
+        aSize.setWidth( 0 );
     if ( aSize.Height() <= 0 )
-        aSize.Height() = pControl->GetTextHeight();
+        aSize.setHeight( pControl->GetTextHeight() );
 
     return aSize;
 }
@@ -525,9 +525,9 @@ void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext)
         SetFont(aFont);
         Point aStartPt(aOutSize.Width() / 2, aOutSize.Height() - 1);
         if (nWinStyle & WB_VCENTER)
-            aStartPt.Y() -= (aOutSize.Height() - nWidth) / 2;
+            aStartPt.AdjustY( -((aOutSize.Height() - nWidth) / 2) );
         Point aTextPt(aStartPt);
-        aTextPt.X() -= GetTextHeight() / 2;
+        aTextPt.AdjustX( -(GetTextHeight() / 2) );
         rRenderContext.DrawText(aTextPt, aText, 0, aText.getLength());
         rRenderContext.Pop();
         if (aOutSize.Height() - aStartPt.Y() > FIXEDLINE_TEXT_BORDER)

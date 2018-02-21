@@ -94,16 +94,16 @@ void Splitter::ImplSplitMousePos( Point& rPos )
     if ( mbHorzSplit )
     {
         if ( rPos.X() > maDragRect.Right()-1 )
-            rPos.X() = maDragRect.Right()-1;
+            rPos.setX( maDragRect.Right()-1 );
         if ( rPos.X() < maDragRect.Left()+1 )
-            rPos.X() = maDragRect.Left()+1;
+            rPos.setX( maDragRect.Left()+1 );
     }
     else
     {
         if ( rPos.Y() > maDragRect.Bottom()-1 )
-            rPos.Y() = maDragRect.Bottom()-1;
+            rPos.setY( maDragRect.Bottom()-1 );
         if ( rPos.Y() < maDragRect.Top()+1 )
-            rPos.Y() = maDragRect.Top()+1;
+            rPos.setY( maDragRect.Top()+1 );
     }
 }
 
@@ -113,13 +113,13 @@ void Splitter::ImplDrawSplitter()
 
     if ( mbHorzSplit )
     {
-        aInvRect.Left()     = maDragPos.X() - 1;
-        aInvRect.Right()    = maDragPos.X() + 1;
+        aInvRect.SetLeft( maDragPos.X() - 1 );
+        aInvRect.SetRight( maDragPos.X() + 1 );
     }
     else
     {
-        aInvRect.Top()      = maDragPos.Y() - 1;
-        aInvRect.Bottom()   = maDragPos.Y() + 1;
+        aInvRect.SetTop( maDragPos.Y() - 1 );
+        aInvRect.SetBottom( maDragPos.Y() + 1 );
     }
 
     mpRefWin->InvertTracking( mpRefWin->PixelToLogic(aInvRect), ShowTrackFlags::Split );
@@ -224,9 +224,9 @@ void Splitter::MouseButtonDown( const MouseEvent& rMEvt )
             StartSplit();
             Point aPos = rMEvt.GetPosPixel();
             if ( mbHorzSplit )
-                aPos.X() = mnLastSplitPos;
+                aPos.setX( mnLastSplitPos );
             else
-                aPos.Y() = mnLastSplitPos;
+                aPos.setY( mnLastSplitPos );
             ImplSplitMousePos( aPos );
             long nTemp = mnSplitPos;
             if ( mbHorzSplit )
@@ -382,16 +382,16 @@ void Splitter::ImplKbdTracking( vcl::KeyCode aKeyCode )
             switch( nCode )
             {
             case KEY_LEFT:
-                aNewPos.X()-=delta;
+                aNewPos.AdjustX( -delta );
                 break;
             case KEY_RIGHT:
-                aNewPos.X()+=delta;
+                aNewPos.AdjustX(delta );
                 break;
             case KEY_UP:
-                aNewPos.Y()-=delta;
+                aNewPos.AdjustY( -delta );
                 break;
             case KEY_DOWN:
-                aNewPos.Y()+=delta;
+                aNewPos.AdjustY(delta );
                 break;
             default:
                 maxiter = 0;    // leave loop
@@ -515,9 +515,9 @@ void Splitter::ImplRestoreSplitter()
     {
         // restore last pos if it was a useful position (>5)
         if ( mbHorzSplit )
-            aPos.X() = mnLastSplitPos;
+            aPos.setX( mnLastSplitPos );
         else
-            aPos.Y() = mnLastSplitPos;
+            aPos.setY( mnLastSplitPos );
     }
 
     ImplSplitMousePos( aPos );
@@ -607,9 +607,9 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
                 StartSplit();
                 Point aPos;
                 if ( mbHorzSplit )
-                    aPos.X() = 0;
+                    aPos.setX( 0 );
                 else
-                    aPos.Y() = 0;
+                    aPos.setY( 0 );
                 ImplSplitMousePos( aPos );
                 long nTemp = mnSplitPos;
                 if ( mbHorzSplit )

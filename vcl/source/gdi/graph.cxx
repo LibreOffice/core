@@ -57,25 +57,25 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
         pOutDev->SetLineColor( COL_BLACK );
     else
     {
-        aBorderRect.Left() += nPixel;
-        aBorderRect.Top() += nPixel;
+        aBorderRect.AdjustLeft(nPixel );
+        aBorderRect.AdjustTop(nPixel );
 
         pOutDev->SetLineColor( COL_LIGHTGRAY );
         pOutDev->DrawRect( aBorderRect );
 
-        aBorderRect.Left() -= nPixel;
-        aBorderRect.Top() -= nPixel;
-        aBorderRect.Right() -= nPixel;
-        aBorderRect.Bottom() -= nPixel;
+        aBorderRect.AdjustLeft( -nPixel );
+        aBorderRect.AdjustTop( -nPixel );
+        aBorderRect.AdjustRight( -nPixel );
+        aBorderRect.AdjustBottom( -nPixel );
         pOutDev->SetLineColor( COL_GRAY );
     }
 
     pOutDev->DrawRect( aBorderRect );
 
-    aPoint.X() += nPixelWidth + 2*nPixel;
-    aPoint.Y() += nPixelWidth + 2*nPixel;
-    aSize.Width() -= 2*nPixelWidth + 4*nPixel;
-    aSize.Height() -= 2*nPixelWidth + 4*nPixel;
+    aPoint.AdjustX(nPixelWidth + 2*nPixel );
+    aPoint.AdjustY(nPixelWidth + 2*nPixel );
+    aSize.AdjustWidth( -(2*nPixelWidth + 4*nPixel) );
+    aSize.AdjustHeight( -(2*nPixelWidth + 4*nPixel) );
 
     if( aSize.Width() > 0 && aSize.Height() > 0
         && ( pBitmapEx && !!*pBitmapEx ) )
@@ -85,8 +85,8 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
         if( aSize.Height() > aBitmapSize.Height() && aSize.Width() > aBitmapSize.Width() )
         {
             pOutDev->DrawBitmapEx( aPoint, *pBitmapEx );
-            aPoint.X() += aBitmapSize.Width() + 2*nPixel;
-            aSize.Width() -= aBitmapSize.Width() + 2*nPixel;
+            aPoint.AdjustX(aBitmapSize.Width() + 2*nPixel );
+            aSize.AdjustWidth( -(aBitmapSize.Width() + 2*nPixel) );
         }
     }
 
@@ -101,7 +101,7 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
         if ( !nStep )
             nStep = aSz.Height() - nThreshold;
 
-        for(;; aSz.Height() -= nStep )
+        for(;; aSz.AdjustHeight( -nStep ) )
         {
             pFont->SetFontSize( aSz );
             pOutDev->SetFont( *pFont );
@@ -146,7 +146,7 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
                             nTextWidth = pOutDev->GetTextWidth( *pText, nStart, --n );
                         pOutDev->DrawText( aPoint, *pText, nStart, n );
 
-                        aPoint.Y() += nTextHeight;
+                        aPoint.AdjustY(nTextHeight );
                         nStart      = sal::static_int_cast<sal_uInt16>(nStart + nLen);
                         nLen        = nNext-nLen;
                         while( nStart < pText->getLength() && (*pText)[nStart] == ' ' )
@@ -166,10 +166,10 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
     // If the default graphic does not have content, we draw a red rectangle
     if( !bFilled )
     {
-        aBorderRect.Left()++;
-        aBorderRect.Top()++;
-        aBorderRect.Right()--;
-        aBorderRect.Bottom()--;
+        aBorderRect.AdjustLeft( 1 );
+        aBorderRect.AdjustTop( 1 );
+        aBorderRect.AdjustRight( -1 );
+        aBorderRect.AdjustBottom( -1 );
 
         pOutDev->SetLineColor( COL_LIGHTRED );
         pOutDev->DrawLine( aBorderRect.TopLeft(), aBorderRect.BottomRight() );

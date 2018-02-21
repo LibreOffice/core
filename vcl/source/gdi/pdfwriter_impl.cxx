@@ -1411,10 +1411,10 @@ void PDFWriterImpl::PDFPage::convertRect( tools::Rectangle& rRect ) const
                               m_pWriter->m_aMapMode,
                               m_pWriter->getReferenceDevice(),
                               rRect.GetSize() );
-    rRect.Left()    = aLL.X();
-    rRect.Right()   = aLL.X() + aSize.Width();
-    rRect.Top()     = pointToPixel(getHeight()) - aLL.Y();
-    rRect.Bottom()  = rRect.Top() + aSize.Height();
+    rRect.SetLeft( aLL.X() );
+    rRect.SetRight( aLL.X() + aSize.Width() );
+    rRect.SetTop( pointToPixel(getHeight()) - aLL.Y() );
+    rRect.SetBottom( rRect.Top() + aSize.Height() );
 }
 
 void PDFWriterImpl::PDFPage::appendPolygon( const tools::Polygon& rPoly, OStringBuffer& rBuffer, bool bClose ) const
@@ -2772,9 +2772,9 @@ bool PDFWriterImpl::emitTilings()
         sal_Int32 nW = static_cast<sal_Int32>(tiling.m_aRectangle.GetWidth());
         sal_Int32 nH = static_cast<sal_Int32>(tiling.m_aRectangle.GetHeight());
         if( tiling.m_aCellSize.Width() == 0 )
-            tiling.m_aCellSize.Width() = nW;
+            tiling.m_aCellSize.setWidth( nW );
         if( tiling.m_aCellSize.Height() == 0 )
-            tiling.m_aCellSize.Height() = nH;
+            tiling.m_aCellSize.setHeight( nH );
 
         bool bDeflate = compressStream( tiling.m_pTilingStream );
         tiling.m_pTilingStream->Seek( STREAM_SEEK_TO_END );
@@ -4191,8 +4191,8 @@ Font PDFWriterImpl::drawFieldBorder( PDFWidget& rIntern,
             tools::Rectangle aRect = rIntern.m_aRect;
             setFillColor( rSettings.GetLightBorderColor() );
             drawRectangle( aRect );
-            aRect.Left()  += nDelta; aRect.Top()     += nDelta;
-            aRect.Right() -= nDelta; aRect.Bottom()  -= nDelta;
+            aRect.AdjustLeft(nDelta ); aRect.AdjustTop(nDelta );
+            aRect.AdjustRight( -nDelta ); aRect.AdjustBottom( -nDelta );
             setFillColor( rSettings.GetFieldColor() );
             drawRectangle( aRect );
             setFillColor( rSettings.GetLightColor() );
@@ -4215,10 +4215,10 @@ Font PDFWriterImpl::drawFieldBorder( PDFWidget& rIntern,
             sal_Int32 nDelta = aFont.GetFontHeight()/4;
             if( nDelta < 1 )
                 nDelta = 1;
-            rIntern.m_aRect.Left()  += nDelta;
-            rIntern.m_aRect.Top()   += nDelta;
-            rIntern.m_aRect.Right() -= nDelta;
-            rIntern.m_aRect.Bottom()-= nDelta;
+            rIntern.m_aRect.AdjustLeft(nDelta );
+            rIntern.m_aRect.AdjustTop(nDelta );
+            rIntern.m_aRect.AdjustRight( -nDelta );
+            rIntern.m_aRect.AdjustBottom( -nDelta );
         }
     }
     return aFont;
@@ -4335,30 +4335,30 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     setFont( aFont );
     Size aFontSize = aFont.GetFontSize();
     if( aFontSize.Height() > rBox.m_aRect.GetHeight() )
-        aFontSize.Height() = rBox.m_aRect.GetHeight();
+        aFontSize.setHeight( rBox.m_aRect.GetHeight() );
     sal_Int32 nDelta = aFontSize.Height()/10;
     if( nDelta < 1 )
         nDelta = 1;
 
     tools::Rectangle aCheckRect, aTextRect;
     {
-        aCheckRect.Left()   = rBox.m_aRect.Left() + nDelta;
-        aCheckRect.Top()    = rBox.m_aRect.Top() + (rBox.m_aRect.GetHeight()-aFontSize.Height())/2;
-        aCheckRect.Right()  = aCheckRect.Left() + aFontSize.Height();
-        aCheckRect.Bottom() = aCheckRect.Top() + aFontSize.Height();
+        aCheckRect.SetLeft( rBox.m_aRect.Left() + nDelta );
+        aCheckRect.SetTop( rBox.m_aRect.Top() + (rBox.m_aRect.GetHeight()-aFontSize.Height())/2 );
+        aCheckRect.SetRight( aCheckRect.Left() + aFontSize.Height() );
+        aCheckRect.SetBottom( aCheckRect.Top() + aFontSize.Height() );
 
         // #i74206# handle small controls without text area
         while( aCheckRect.GetWidth() > rBox.m_aRect.GetWidth() && aCheckRect.GetWidth() > nDelta )
         {
-            aCheckRect.Right()  -= nDelta;
-            aCheckRect.Top()    += nDelta/2;
-            aCheckRect.Bottom() -= nDelta - (nDelta/2);
+            aCheckRect.AdjustRight( -nDelta );
+            aCheckRect.AdjustTop(nDelta/2 );
+            aCheckRect.AdjustBottom( -(nDelta - (nDelta/2)) );
         }
 
-        aTextRect.Left()    = rBox.m_aRect.Left() + aCheckRect.GetWidth()+5*nDelta;
-        aTextRect.Top()     = rBox.m_aRect.Top();
-        aTextRect.Right()   = aTextRect.Left() + rBox.m_aRect.GetWidth() - aCheckRect.GetWidth()-6*nDelta;
-        aTextRect.Bottom()  = rBox.m_aRect.Bottom();
+        aTextRect.SetLeft( rBox.m_aRect.Left() + aCheckRect.GetWidth()+5*nDelta );
+        aTextRect.SetTop( rBox.m_aRect.Top() );
+        aTextRect.SetRight( aTextRect.Left() + rBox.m_aRect.GetWidth() - aCheckRect.GetWidth()-6*nDelta );
+        aTextRect.SetBottom( rBox.m_aRect.Bottom() );
     }
     setLineColor( Color( COL_BLACK ) );
     setFillColor( Color( COL_TRANSPARENT ) );
@@ -4439,30 +4439,30 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     setFont( aFont );
     Size aFontSize = aFont.GetFontSize();
     if( aFontSize.Height() > rBox.m_aRect.GetHeight() )
-        aFontSize.Height() = rBox.m_aRect.GetHeight();
+        aFontSize.setHeight( rBox.m_aRect.GetHeight() );
     sal_Int32 nDelta = aFontSize.Height()/10;
     if( nDelta < 1 )
         nDelta = 1;
 
     tools::Rectangle aCheckRect, aTextRect;
     {
-        aCheckRect.Left()   = rBox.m_aRect.Left() + nDelta;
-        aCheckRect.Top()    = rBox.m_aRect.Top() + (rBox.m_aRect.GetHeight()-aFontSize.Height())/2;
-        aCheckRect.Right()  = aCheckRect.Left() + aFontSize.Height();
-        aCheckRect.Bottom() = aCheckRect.Top() + aFontSize.Height();
+        aCheckRect.SetLeft( rBox.m_aRect.Left() + nDelta );
+        aCheckRect.SetTop( rBox.m_aRect.Top() + (rBox.m_aRect.GetHeight()-aFontSize.Height())/2 );
+        aCheckRect.SetRight( aCheckRect.Left() + aFontSize.Height() );
+        aCheckRect.SetBottom( aCheckRect.Top() + aFontSize.Height() );
 
         // #i74206# handle small controls without text area
         while( aCheckRect.GetWidth() > rBox.m_aRect.GetWidth() && aCheckRect.GetWidth() > nDelta )
         {
-            aCheckRect.Right()  -= nDelta;
-            aCheckRect.Top()    += nDelta/2;
-            aCheckRect.Bottom() -= nDelta - (nDelta/2);
+            aCheckRect.AdjustRight( -nDelta );
+            aCheckRect.AdjustTop(nDelta/2 );
+            aCheckRect.AdjustBottom( -(nDelta - (nDelta/2)) );
         }
 
-        aTextRect.Left()    = rBox.m_aRect.Left() + aCheckRect.GetWidth()+5*nDelta;
-        aTextRect.Top()     = rBox.m_aRect.Top();
-        aTextRect.Right()   = aTextRect.Left() + rBox.m_aRect.GetWidth() - aCheckRect.GetWidth()-6*nDelta;
-        aTextRect.Bottom()  = rBox.m_aRect.Bottom();
+        aTextRect.SetLeft( rBox.m_aRect.Left() + aCheckRect.GetWidth()+5*nDelta );
+        aTextRect.SetTop( rBox.m_aRect.Top() );
+        aTextRect.SetRight( aTextRect.Left() + rBox.m_aRect.GetWidth() - aCheckRect.GetWidth()-6*nDelta );
+        aTextRect.SetBottom( rBox.m_aRect.Bottom() );
     }
     setLineColor( Color( COL_BLACK ) );
     setFillColor( Color( COL_TRANSPARENT ) );
@@ -4507,10 +4507,10 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     writeBuffer( aDA.getStr(), aDA.getLength() );
     setFillColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ) );
     setLineColor( Color( COL_TRANSPARENT ) );
-    aCheckRect.Left()   += 3*nDelta;
-    aCheckRect.Top()    += 3*nDelta;
-    aCheckRect.Bottom() -= 3*nDelta;
-    aCheckRect.Right()  -= 3*nDelta;
+    aCheckRect.AdjustLeft(3*nDelta );
+    aCheckRect.AdjustTop(3*nDelta );
+    aCheckRect.AdjustBottom( -(3*nDelta) );
+    aCheckRect.AdjustRight( -(3*nDelta) );
     drawEllipse( aCheckRect );
     writeBuffer( "\nEMC\n", 5 );
     endRedirect();
@@ -6405,8 +6405,8 @@ void PDFWriterImpl::drawVerticalGlyphs(
         if (rGlyphs[i].m_bVertical)
         {
             fDeltaAngle = M_PI/2.0;
-            aDeltaPos.X() = m_pReferenceDevice->GetFontMetric().GetAscent();
-            aDeltaPos.Y() = static_cast<int>(static_cast<double>(m_pReferenceDevice->GetFontMetric().GetDescent()) * fXScale);
+            aDeltaPos.setX( m_pReferenceDevice->GetFontMetric().GetAscent() );
+            aDeltaPos.setY( static_cast<int>(static_cast<double>(m_pReferenceDevice->GetFontMetric().GetDescent()) * fXScale) );
             fYScale = fXScale;
             fTempXScale = 1.0;
             fSkewA = -fSkewB;
@@ -6750,8 +6750,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             if (i > 0)
             {
                 Point aPos = pGlyphs[i]->maLinearPos;
-                aPos.X() /= rLayout.GetUnitsPerPixel();
-                aPos.Y() /= rLayout.GetUnitsPerPixel();
+                aPos.setX( aPos.X() / ( rLayout.GetUnitsPerPixel()) );
+                aPos.setY( aPos.Y() / ( rLayout.GetUnitsPerPixel()) );
                 aGNGlyphPos = rLayout.GetDrawPosition(aPos);
             }
             aGlyphs.emplace_back( aGNGlyphPos,
@@ -6801,9 +6801,9 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
     Point aAlignOffset;
     if ( eAlign == ALIGN_BOTTOM )
-        aAlignOffset.Y() -= aRefDevFontMetric.GetDescent();
+        aAlignOffset.AdjustY( -(aRefDevFontMetric.GetDescent()) );
     else if ( eAlign == ALIGN_TOP )
-        aAlignOffset.Y() += aRefDevFontMetric.GetAscent();
+        aAlignOffset.AdjustY(aRefDevFontMetric.GetAscent() );
     if( aAlignOffset.X() || aAlignOffset.Y() )
         aAlignOffset = aRotScale.transform( aAlignOffset );
 
@@ -6925,18 +6925,18 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     Point aOffset = Point(0,0);
 
     if ( nEmphMark & FontEmphasisMark::PosBelow )
-        aOffset.Y() += m_pReferenceDevice->mpFontInstance->mxFontMetric->GetDescent() + nEmphYOff;
+        aOffset.AdjustY(m_pReferenceDevice->mpFontInstance->mxFontMetric->GetDescent() + nEmphYOff );
     else
-        aOffset.Y() -= m_pReferenceDevice->mpFontInstance->mxFontMetric->GetAscent() + nEmphYOff;
+        aOffset.AdjustY( -(m_pReferenceDevice->mpFontInstance->mxFontMetric->GetAscent() + nEmphYOff) );
 
     long nEmphWidth2     = nEmphWidth / 2;
     long nEmphHeight2    = nEmphHeight / 2;
     aOffset += Point( nEmphWidth2, nEmphHeight2 );
 
     if ( eAlign == ALIGN_BOTTOM )
-        aOffset.Y() -= m_pReferenceDevice->mpFontInstance->mxFontMetric->GetDescent();
+        aOffset.AdjustY( -(m_pReferenceDevice->mpFontInstance->mxFontMetric->GetDescent()) );
     else if ( eAlign == ALIGN_TOP )
-        aOffset.Y() += m_pReferenceDevice->mpFontInstance->mxFontMetric->GetAscent();
+        aOffset.AdjustY(m_pReferenceDevice->mpFontInstance->mxFontMetric->GetAscent() );
 
     Point aPos;
     const GlyphItem* pGlyph;
@@ -6946,7 +6946,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         if (pGlyph->IsSpacing())
         {
             Point aAdjOffset = aOffset;
-            aAdjOffset.X() += (pGlyph->mnNewWidth - nEmphWidth) / 2;
+            aAdjOffset.AdjustX((pGlyph->mnNewWidth - nEmphWidth) / 2 );
             aAdjOffset = aRotScale.transform( aAdjOffset );
 
             aAdjOffset -= Point( nEmphWidth2, nEmphHeight2 );
@@ -7115,25 +7115,25 @@ void PDFWriterImpl::drawText( const tools::Rectangle& rRect, const OUString& rOr
 
             // vertical alignment
             if ( nStyle & DrawTextFlags::Bottom )
-                aPos.Y() += nHeight-(nFormatLines*nTextHeight);
+                aPos.AdjustY(nHeight-(nFormatLines*nTextHeight) );
             else if ( nStyle & DrawTextFlags::VCenter )
-                aPos.Y() += (nHeight-(nFormatLines*nTextHeight))/2;
+                aPos.AdjustY((nHeight-(nFormatLines*nTextHeight))/2 );
 
             // draw all lines excluding the last
             for ( i = 0; i < nFormatLines; i++ )
             {
                 pLineInfo = aMultiLineInfo.GetLine( i );
                 if ( nStyle & DrawTextFlags::Right )
-                    aPos.X() += nWidth-pLineInfo->GetWidth();
+                    aPos.AdjustX(nWidth-pLineInfo->GetWidth() );
                 else if ( nStyle & DrawTextFlags::Center )
-                    aPos.X() += (nWidth-pLineInfo->GetWidth())/2;
+                    aPos.AdjustX((nWidth-pLineInfo->GetWidth())/2 );
                 sal_Int32 nIndex = pLineInfo->GetIndex();
                 sal_Int32 nLineLen = pLineInfo->GetLen();
                 drawText( aPos, aStr, nIndex, nLineLen );
                 // mnemonics should not appear in documents,
                 // if the need arises, put them in here
-                aPos.Y() += nTextHeight;
-                aPos.X() = rRect.Left();
+                aPos.AdjustY(nTextHeight );
+                aPos.setX( rRect.Left() );
             }
 
             // output last line left adjusted since it was shortened
@@ -7159,14 +7159,14 @@ void PDFWriterImpl::drawText( const tools::Rectangle& rRect, const OUString& rOr
 
         // vertical alignment
         if ( nStyle & DrawTextFlags::Right )
-            aPos.X() += nWidth-nTextWidth;
+            aPos.AdjustX(nWidth-nTextWidth );
         else if ( nStyle & DrawTextFlags::Center )
-            aPos.X() += (nWidth-nTextWidth)/2;
+            aPos.AdjustX((nWidth-nTextWidth)/2 );
 
         if ( nStyle & DrawTextFlags::Bottom )
-            aPos.Y() += nHeight-nTextHeight;
+            aPos.AdjustY(nHeight-nTextHeight );
         else if ( nStyle & DrawTextFlags::VCenter )
-            aPos.Y() += (nHeight-nTextHeight)/2;
+            aPos.AdjustY((nHeight-nTextHeight)/2 );
 
         // mnemonics should be inserted here if the need arises
 
@@ -7572,10 +7572,10 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     push( PushFlags::CLIPREGION );
     FontMetric aRefDevFontMetric = m_pReferenceDevice->GetFontMetric();
     tools::Rectangle aRect;
-    aRect.Left() = rPos.X();
-    aRect.Right() = aRect.Left()+nWidth;
-    aRect.Bottom() = rPos.Y()+aRefDevFontMetric.GetDescent();
-    aRect.Top() = rPos.Y()-aRefDevFontMetric.GetAscent();
+    aRect.SetLeft( rPos.X() );
+    aRect.SetRight( aRect.Left()+nWidth );
+    aRect.SetBottom( rPos.Y()+aRefDevFontMetric.GetDescent() );
+    aRect.SetTop( rPos.Y()-aRefDevFontMetric.GetAscent() );
 
     LogicalFontInstance* pFontInstance = m_pReferenceDevice->mpFontInstance;
     if (pFontInstance->mnOrientation)
@@ -7629,9 +7629,9 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
     Point aPos( rPos );
     TextAlign eAlign = m_aCurrentPDFState.m_aFont.GetAlignment();
     if( eAlign == ALIGN_TOP )
-        aPos.Y() += HCONV( pFontInstance->mxFontMetric->GetAscent() );
+        aPos.AdjustY(HCONV( pFontInstance->mxFontMetric->GetAscent() ));
     else if( eAlign == ALIGN_BOTTOM )
-        aPos.Y() -= HCONV( pFontInstance->mxFontMetric->GetDescent() );
+        aPos.AdjustY( -HCONV( pFontInstance->mxFontMetric->GetDescent() ) );
 
     OStringBuffer aLine( 512 );
     // save GS
@@ -7855,7 +7855,7 @@ void PDFWriterImpl::beginRedirect( SvStream* pStream, const tools::Rectangle& rT
                          rTargetRect );
         Point aDelta = m_aOutputStreams.front().m_aTargetRect.BottomLeft();
         long nPageHeight = pointToPixel(m_aPages[m_nCurrentPage].getHeight());
-        aDelta.Y() = -(nPageHeight - m_aOutputStreams.front().m_aTargetRect.Bottom());
+        aDelta.setY( -(nPageHeight - m_aOutputStreams.front().m_aTargetRect.Bottom()) );
         m_aMapMode.SetOrigin( m_aMapMode.GetOrigin() + aDelta );
     }
 
@@ -8451,10 +8451,10 @@ void PDFWriterImpl::drawPolyLine( const tools::Polygon& rPoly, const PDFWriter::
         if( rInfo.m_fLineWidth > 0.0 )
         {
             sal_Int32 nLW = sal_Int32(rInfo.m_fLineWidth);
-            aBoundRect.Top()    -= nLW;
-            aBoundRect.Left()   -= nLW;
-            aBoundRect.Right()  += nLW;
-            aBoundRect.Bottom() += nLW;
+            aBoundRect.AdjustTop( -nLW );
+            aBoundRect.AdjustLeft( -nLW );
+            aBoundRect.AdjustRight(nLW );
+            aBoundRect.AdjustBottom(nLW );
         }
         endTransparencyGroup( aBoundRect, static_cast<sal_uInt16>(100.0*rInfo.m_fTransparency) );
     }
@@ -8777,8 +8777,8 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
     // See: OutputDevice::ImplDrawLinearGradient for reference
     tools::Rectangle aRect;
     aRect.Left() = aRect.Top() = 0;
-    aRect.Right() = aSize.Width();
-    aRect.Bottom() = aSize.Height();
+    aRect.SetRight( aSize.Width() );
+    aRect.SetBottom( aSize.Height() );
 
     tools::Rectangle aBoundRect;
     Point     aCenter;
@@ -8792,10 +8792,10 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
         fBorder /= 2.0;
     }
 
-    aBoundRect.Bottom() -= fBorder;
+    aBoundRect.AdjustBottom( -fBorder );
     if (!bLinear)
     {
-        aBoundRect.Top() += fBorder;
+        aBoundRect.AdjustTop(fBorder );
     }
 
     switch (rObject.m_aGradient.GetStyle())
@@ -9927,8 +9927,8 @@ sal_Int32 PDFWriterImpl::createGradient( const Gradient& rGradient, const Size& 
     // check if we already have this gradient
     // rounding to point will generally lose some pixels
     // round up to point boundary
-    aPtSize.Width()++;
-    aPtSize.Height()++;
+    aPtSize.AdjustWidth( 1 );
+    aPtSize.AdjustHeight( 1 );
     std::list< GradientEmit >::const_iterator it = std::find_if(m_aGradients.begin(), m_aGradients.end(),
                                              [&](const GradientEmit& arg) { return ((rGradient == arg.m_aGradient) && (aPtSize == arg.m_aSize) ); });
 
@@ -10051,32 +10051,32 @@ void PDFWriterImpl::drawWallpaper( const tools::Rectangle& rRect, const Wallpape
                     case WallpaperStyle::TopLeft:
                         break;
                     case WallpaperStyle::Top:
-                        aBmpPos.X() += (aRect.GetWidth()-aBmpSize.Width())/2;
+                        aBmpPos.AdjustX((aRect.GetWidth()-aBmpSize.Width())/2 );
                         break;
                     case WallpaperStyle::Left:
-                        aBmpPos.Y() += (aRect.GetHeight()-aBmpSize.Height())/2;
+                        aBmpPos.AdjustY((aRect.GetHeight()-aBmpSize.Height())/2 );
                         break;
                     case WallpaperStyle::TopRight:
-                        aBmpPos.X() += aRect.GetWidth()-aBmpSize.Width();
+                        aBmpPos.AdjustX(aRect.GetWidth()-aBmpSize.Width() );
                         break;
                     case WallpaperStyle::Center:
-                        aBmpPos.X() += (aRect.GetWidth()-aBmpSize.Width())/2;
-                        aBmpPos.Y() += (aRect.GetHeight()-aBmpSize.Height())/2;
+                        aBmpPos.AdjustX((aRect.GetWidth()-aBmpSize.Width())/2 );
+                        aBmpPos.AdjustY((aRect.GetHeight()-aBmpSize.Height())/2 );
                         break;
                     case WallpaperStyle::Right:
-                        aBmpPos.X() += aRect.GetWidth()-aBmpSize.Width();
-                        aBmpPos.Y() += (aRect.GetHeight()-aBmpSize.Height())/2;
+                        aBmpPos.AdjustX(aRect.GetWidth()-aBmpSize.Width() );
+                        aBmpPos.AdjustY((aRect.GetHeight()-aBmpSize.Height())/2 );
                         break;
                     case WallpaperStyle::BottomLeft:
-                        aBmpPos.Y() += aRect.GetHeight()-aBmpSize.Height();
+                        aBmpPos.AdjustY(aRect.GetHeight()-aBmpSize.Height() );
                         break;
                     case WallpaperStyle::Bottom:
-                        aBmpPos.X() += (aRect.GetWidth()-aBmpSize.Width())/2;
-                        aBmpPos.Y() += aRect.GetHeight()-aBmpSize.Height();
+                        aBmpPos.AdjustX((aRect.GetWidth()-aBmpSize.Width())/2 );
+                        aBmpPos.AdjustY(aRect.GetHeight()-aBmpSize.Height() );
                         break;
                     case WallpaperStyle::BottomRight:
-                        aBmpPos.X() += aRect.GetWidth()-aBmpSize.Width();
-                        aBmpPos.Y() += aRect.GetHeight()-aBmpSize.Height();
+                        aBmpPos.AdjustX(aRect.GetWidth()-aBmpSize.Width() );
+                        aBmpPos.AdjustY(aRect.GetHeight()-aBmpSize.Height() );
                         break;
                     default: ;
                 }
