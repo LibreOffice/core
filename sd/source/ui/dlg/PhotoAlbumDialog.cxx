@@ -26,6 +26,7 @@
 #include <officecfg/Office/Impress.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xfillit.hxx>
@@ -490,8 +491,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
         }
         else
         {
-            ScopedVclPtrInstance< InfoBox > aInfo(this, OUString("Function is not implemented!"));
-            aInfo->Execute();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          "Function is not implemented!"));
+            xInfoBox->run();
         }
         EndDialog();
     }

@@ -420,7 +420,10 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
         if ( bValueIgnored )
         {
-            ScopedVclPtrInstance<InfoBox>(this, aStrCopyErr)->Execute();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          aStrCopyErr));
+            xInfoBox->run();
         }
     }
 

@@ -29,16 +29,16 @@ typedef std::pair<const char*, ErrCode> ErrMsgCode;
 SVT_DLLPUBLIC extern const ErrMsgCode RID_ERRHDL[];
 SVT_DLLPUBLIC extern const ErrMsgCode RID_ERRCTX[];
 
-namespace vcl { class Window; }
+namespace weld { class Window; }
 
 class SVT_DLLPUBLIC SfxErrorContext : private ErrorContext
 {
 public:
     SfxErrorContext(
-            sal_uInt16 nCtxIdP, vcl::Window *pWin=nullptr,
+            sal_uInt16 nCtxIdP, weld::Window *pWin=nullptr,
             const ErrMsgCode* pIds = nullptr, const std::locale& rResLocaleP = SvtResLocale());
     SfxErrorContext(
-            sal_uInt16 nCtxIdP, const OUString &aArg1, vcl::Window *pWin=nullptr,
+            sal_uInt16 nCtxIdP, const OUString &aArg1, weld::Window *pWin=nullptr,
             const ErrMsgCode* pIds = nullptr, const std::locale& rResLocaleP = SvtResLocale());
     bool GetString(ErrCode nErrId, OUString &rStr) override;
 

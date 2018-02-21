@@ -24,7 +24,7 @@
 #include <unotools.hxx>
 #include <unoprnms.hxx>
 #include <i18nutil/unicode.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
@@ -93,7 +93,10 @@ void SwOneExampleFrame::CreateErrorMessage()
     {
         OUString sInfo(SwResId(STR_SERVICE_UNAVAILABLE));
         sInfo += "com.sun.star.frame.FrameControl";
-        ScopedVclPtrInstance<InfoBox>(nullptr, sInfo)->Execute();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      sInfo));
+        xInfoBox->run();
         SwOneExampleFrame::bShowServiceNotAvailableMessage = false;
     }
 }

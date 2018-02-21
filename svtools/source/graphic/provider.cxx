@@ -198,7 +198,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( co
         OUString sImageName( rResourceURL.copy( nIndex ) );
         if ( sImageName == "info" )
         {
-            xRet = Graphic(InfoBox::GetStandardImage().GetBitmapEx()).GetXGraphic();
+            xRet = Graphic(GetStandardInfoBoxImage().GetBitmapEx()).GetXGraphic();
         }
         else if ( sImageName == "warning" )
         {

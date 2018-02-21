@@ -19,6 +19,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
@@ -59,6 +60,7 @@ executeErrorDialog(
     aText.append(rMessage);
 
     VclPtr< MessBox > xBox;
+    std::unique_ptr<weld::MessageDialog> xOtherBox;
     try
     {
         switch (eClassification)
@@ -79,8 +81,10 @@ executeErrorDialog(
 #           define WB_DEF_BUTTONS (MessBoxStyle::DefaultOk | MessBoxStyle::DefaultCancel | MessBoxStyle::DefaultRetry)
             //(want to ignore any default button settings)...
             if ((nButtonMask & WB_DEF_BUTTONS) == MessBoxStyle::DefaultOk)
-                xBox.reset(VclPtr<InfoBox>::Create(pParent,
-                                       aText.makeStringAndClear()));
+            {
+                xOtherBox.reset(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+                            VclMessageType::Info, VclButtonsType::Ok, aText.makeStringAndClear()));
+            }
             else
                 xBox.reset(VclPtr<ErrorBox>::Create(pParent,
                                         nButtonMask,
@@ -103,9 +107,16 @@ executeErrorDialog(
         throw uno::RuntimeException("out of memory");
     }
 
-    sal_uInt16 aMessResult = xBox->Execute();
-
-    xBox.disposeAndClear();
+    sal_uInt16 aMessResult;
+    if (xBox)
+    {
+        aMessResult = xBox->Execute();
+        xBox.disposeAndClear();
+    }
+    else
+    {
+        aMessResult = xOtherBox->run();
+    }
 
     DialogMask aResult = DialogMask::NONE;
     switch( aMessResult )

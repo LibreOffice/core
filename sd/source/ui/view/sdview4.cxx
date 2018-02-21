@@ -26,7 +26,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xfillit.hxx>
@@ -377,7 +377,8 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
     if( !mpViewSh )
         return;
 
-    SfxErrorContext aEc( ERRCTX_ERROR, mpViewSh->GetActiveWindow(), RID_SO_ERRCTX );
+    vcl::Window* pWindow = mpViewSh->GetActiveWindow();
+    SfxErrorContext aEc( ERRCTX_ERROR, pWindow ? pWindow->GetFrameWeld() : nullptr, RID_SO_ERRCTX );
     ErrCode nError = ERRCODE_NONE;
 
     ::std::vector< OUString >::const_iterator aIter( maDropFileVector.begin() );
@@ -570,7 +571,11 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
  */
 IMPL_LINK_NOARG(View, DropErrorHdl, Timer *, void)
 {
-    ScopedVclPtrInstance<InfoBox>( mpViewSh ? mpViewSh->GetActiveWindow() : nullptr, SdResId(STR_ACTION_NOTPOSSIBLE) )->Execute();
+    vcl::Window* pWin = mpViewSh ? mpViewSh->GetActiveWindow() : nullptr;
+    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                  SdResId(STR_ACTION_NOTPOSSIBLE)));
+    xInfoBox->run();
 }
 
 /**

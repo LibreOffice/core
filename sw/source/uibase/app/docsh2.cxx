@@ -1099,7 +1099,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                     if( !bDone && !rReq.IsAPI() )
                     {
-                        ScopedVclPtrInstance<InfoBox>(nullptr, SwResId( STR_CANTCREATE))->Execute();
+                        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                                      SwResId(STR_CANTCREATE)));
+                        xInfoBox->run();
                     }
                 }
             }
