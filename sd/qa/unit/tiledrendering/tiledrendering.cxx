@@ -48,6 +48,7 @@
 #include <svx/svxids.hrc>
 #include <DrawViewShell.hxx>
 #include <pres.hxx>
+#include <navigatr.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/vclevent.hxx>
 
@@ -111,6 +112,7 @@ public:
     void testIMESupport();
     void testTdf115783();
     void testPasteTextOnSlide();
+    void testTdf115873();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -154,6 +156,7 @@ public:
     CPPUNIT_TEST(testIMESupport);
     CPPUNIT_TEST(testTdf115783);
     CPPUNIT_TEST(testPasteTextOnSlide);
+    CPPUNIT_TEST(testTdf115873);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2120,6 +2123,41 @@ void SdTiledRenderingTest::testPasteTextOnSlide()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(7393), aPos.getY(), 100);
 
     comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testTdf115873()
+{
+    // Initialize the navigator.
+    SdXImpressDocument* pXImpressDocument = createDoc("tdf115873.fodp");
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
+    ScopedVclPtrInstance<SdNavigatorWin> pNavigator(nullptr, &rBindings);
+    pNavigator->InitTreeLB(pXImpressDocument->GetDoc());
+    pNavigator->Show();
+    VclPtr<SdPageObjsTLB> pObjects = pNavigator->GetObjects();
+    pObjects->Select(pObjects->GetEntry(0));
+    sd::ViewShell* pSdViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pSdrView = pSdViewShell->GetView();
+    pSdrView->UnmarkAllObj(pSdrView->GetSdrPageView());
+
+    // Make sure that no shapes are selected.
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rMarkList.GetMarkCount());
+
+    // Single-click with the mouse.
+    short nHeight = pObjects->GetEntryHeight();
+    // Position of the center of the 2nd entry (first is the slide, second is
+    // the shape).
+    Point aPoint(pObjects->GetOutputWidthPixel() / 2, nHeight * 1.5);
+    MouseEvent aMouseEvent(aPoint, /*nClicks=*/1, MouseEventModifiers::NONE, MOUSE_LEFT);
+    pObjects->MouseButtonDown(aMouseEvent);
+    pObjects->MouseButtonUp(aMouseEvent);
+    Scheduler::ProcessEventsToIdle();
+    // This failed, single-click did not result in a shape selection (only
+    // double-click did).
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);

@@ -54,6 +54,7 @@
 #include <slideshow.hxx>
 #include <FrameView.hxx>
 #include <helpids.h>
+#include <Window.hxx>
 
 namespace {
 static const sal_uInt16 nShowNamedShapesFilter=1;
@@ -215,6 +216,11 @@ NavigatorDragType SdNavigatorWin::GetNavigatorDragType()
     return eDT;
 }
 
+VclPtr<SdPageObjsTLB> SdNavigatorWin::GetObjects()
+{
+    return maTlbObjects;
+}
+
 IMPL_LINK_NOARG(SdNavigatorWin, SelectToolboxHdl, ToolBox *, void)
 {
     sal_uInt16 nId = maToolbox->GetCurItemId();
@@ -351,6 +357,27 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl, SvTreeListBox*, bool)
                     if ( pShellWnd )
                         pShellWnd->GrabFocus();
                 }
+
+                // We navigated to an object, but the current shell may be
+                // still the slide sorter. Explicitly try to grab the draw
+                // shell focus, so follow-up operations work with the object
+                // and not with the whole slide.
+                sd::DrawDocShell* pDocShell = pInfo->mpDocShell;
+                if (pDocShell)
+                {
+                    sd::ViewShell* pViewShell = pDocShell->GetViewShell();
+                    if (pViewShell)
+                    {
+                        vcl::Window* pWindow = pViewShell->GetActiveWindow();
+                        if (pWindow)
+                            pWindow->GrabFocus();
+                    }
+                }
+
+                if (!maTlbObjects->IsNavigationGrabsFocus())
+                    // This is the case when keyboard navigation inside the
+                    // navigator should continue to work.
+                    maTlbObjects->GrabFocus();
             }
         }
     }
