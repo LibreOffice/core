@@ -43,6 +43,8 @@ static const wchar_t UNC_PREFIX[] = L"\\\\";
 static const wchar_t BACKSLASH = '\\';
 static const wchar_t SLASH = '/';
 
+#define STR_LONG_PATH_PREFIX "\\\\?\\"
+
 extern "C" BOOL TimeValueToFileTime(const TimeValue *cpTimeVal, FILETIME *pFTime)
 {
     SYSTEMTIME  BaseSysTime;
@@ -1585,6 +1587,14 @@ oslFileError SAL_CALL osl_getFileStatus(
     if ( !pItemImpl )
         return osl_File_E_INVAL;
 
+    // Provide a long path version of the file name, because when
+    // the path is longer than 255 chars, windows api calls expect this prefix.
+    rtl_uString* sPrefix = nullptr;
+    rtl_uString* sLongPath = nullptr;
+    rtl_uString_newFromAscii( &sPrefix, STR_LONG_PATH_PREFIX );
+    rtl_uString_newConcat( &sLongPath, sPrefix, pItemImpl->m_pFullPath );
+    rtl_uString_release( sPrefix );
+
     switch ( pItemImpl->uType  )
     {
     case DIRECTORYITEM_DRIVE:
@@ -1597,7 +1607,7 @@ oslFileError SAL_CALL osl_getFileStatus(
 
     if ( uFieldMask & osl_FileStatus_Mask_Validate )
     {
-        HANDLE  hFind = FindFirstFile( rtl_uString_getStr( pItemImpl->m_pFullPath ), &pItemImpl->FindData );
+        HANDLE  hFind = FindFirstFile( rtl_uString_getStr( sLongPath ), &pItemImpl->FindData );
 
         if ( hFind != INVALID_HANDLE_VALUE )
             FindClose( hFind );
@@ -1669,7 +1679,7 @@ oslFileError SAL_CALL osl_getFileStatus(
         if ( !pItemImpl->bFullPathNormalized )
         {
             ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
-            sal_uInt32 nNewLen = GetCaseCorrectPathName( rtl_uString_getStr( pItemImpl->m_pFullPath ),
+            sal_uInt32 nNewLen = GetCaseCorrectPathName( rtl_uString_getStr( sLongPath ),
                                                       ::osl::mingw_reinterpret_cast<LPWSTR>( aBuffer ),
                                                       aBuffer.getBufSizeInSymbols(),
                                                       sal_True );
@@ -1681,11 +1691,13 @@ oslFileError SAL_CALL osl_getFileStatus(
             }
         }
 
-        oslFileError error = osl_getFileURLFromSystemPath( pItemImpl->m_pFullPath, &pStatus->ustrFileURL );
+        oslFileError error = osl_getFileURLFromSystemPath( sLongPath, &pStatus->ustrFileURL );
         if (error != osl_File_E_None)
             return error;
         pStatus->uValidFields |= osl_FileStatus_Mask_FileURL;
     }
+
+    rtl_uString_release( sLongPath );
 
     return osl_File_E_None;
 }
