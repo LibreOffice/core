@@ -1343,16 +1343,14 @@ void SAL_CALL BluetoothServer::run()
         return;
     }
 
-    SOCKADDR aName;
+    SOCKADDR_BTH aName;
     int aNameSize = sizeof(aName);
-    getsockname( aSocket, &aName, &aNameSize ); // Retrieve the local address and port
+    getsockname( aSocket, reinterpret_cast<SOCKADDR*>(&aName), &aNameSize ); // Retrieve the local address and port
 
     CSADDR_INFO aAddrInfo;
     memset( &aAddrInfo, 0, sizeof(aAddrInfo) );
-    aAddrInfo.LocalAddr.lpSockaddr = &aName;
+    aAddrInfo.LocalAddr.lpSockaddr = reinterpret_cast<SOCKADDR*>(&aName);
     aAddrInfo.LocalAddr.iSockaddrLength = sizeof( SOCKADDR_BTH );
-    aAddrInfo.RemoteAddr.lpSockaddr = &aName;
-    aAddrInfo.RemoteAddr.iSockaddrLength = sizeof( SOCKADDR_BTH );
     aAddrInfo.iSocketType = SOCK_STREAM;
     aAddrInfo.iProtocol = BTHPROTO_RFCOMM;
 
@@ -1376,7 +1374,6 @@ void SAL_CALL BluetoothServer::run()
     aRecord.dwNameSpace = NS_BTH;
     aRecord.dwNumberOfCsAddrs = 1;
     aRecord.lpcsaBuffer = &aAddrInfo;
-
     if (WSASetServiceW( &aRecord, RNRSERVICE_REGISTER, 0 ) == SOCKET_ERROR)
     {
         closesocket( aSocket );
