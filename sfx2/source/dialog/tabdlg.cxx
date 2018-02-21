@@ -776,10 +776,10 @@ short SfxTabDialog::Ok()
 
     if ( !m_pOutSet )
     {
-        if ( !m_pExampleSet && m_pSet )
-            m_pOutSet = m_pSet->Clone( false );  // without Items
-        else if ( m_pExampleSet )
+        if ( m_pExampleSet )
             m_pOutSet = new SfxItemSet( *m_pExampleSet );
+        else if ( m_pSet )
+            m_pOutSet = m_pSet->Clone( false );  // without Items
     }
     bool bModified = false;
 
