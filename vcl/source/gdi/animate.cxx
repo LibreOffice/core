@@ -581,10 +581,10 @@ void Animation::Mirror( BmpMirrorFlags nMirrorFlags )
                 if( bRet )
                 {
                     if( nMirrorFlags & BmpMirrorFlags::Horizontal )
-                        pStepBmp->aPosPix.X() = maGlobalSize.Width() - pStepBmp->aPosPix.X() - pStepBmp->aSizePix.Width();
+                        pStepBmp->aPosPix.setX( maGlobalSize.Width() - pStepBmp->aPosPix.X() - pStepBmp->aSizePix.Width() );
 
                     if( nMirrorFlags & BmpMirrorFlags::Vertical )
-                        pStepBmp->aPosPix.Y() = maGlobalSize.Height() - pStepBmp->aPosPix.Y() - pStepBmp->aSizePix.Height();
+                        pStepBmp->aPosPix.setY( maGlobalSize.Height() - pStepBmp->aPosPix.Y() - pStepBmp->aSizePix.Height() );
                 }
             }
 

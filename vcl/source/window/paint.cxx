@@ -353,10 +353,10 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
     tools::Rectangle aRect(rRect);
     if (bDrawExtBorderOnly)
     {
-        aRect.Left()   -= 1;
-        aRect.Top()    -= 1;
-        aRect.Right()  += 1;
-        aRect.Bottom() += 1;
+        aRect.AdjustLeft( -1 );
+        aRect.AdjustTop( -1 );
+        aRect.AdjustRight(1 );
+        aRect.AdjustBottom(1 );
     }
     rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
 

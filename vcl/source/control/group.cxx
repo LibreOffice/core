@@ -128,8 +128,8 @@ void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
     }
     else
     {
-        aRect.Left() += GROUP_BORDER;
-        aRect.Right() -= GROUP_BORDER;
+        aRect.AdjustLeft(GROUP_BORDER );
+        aRect.AdjustRight( -(GROUP_BORDER) );
         aRect = pDev->GetTextRect( aRect, aText, nTextStyle );
         nTop = rPos.Y();
         nTop += aRect.GetHeight() / 2;

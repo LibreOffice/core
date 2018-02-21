@@ -298,10 +298,10 @@ tools::Rectangle StatusBar::ImplGetItemRectPos( sal_uInt16 nPos ) const
     {
         if ( pItem->mbVisible )
         {
-            aRect.Left()   = pItem->mnX;
-            aRect.Right()  = aRect.Left() + pItem->mnWidth + pItem->mnExtraWidth;
-            aRect.Top()    = STATUSBAR_OFFSET_Y;
-            aRect.Bottom() = mnCalcHeight - STATUSBAR_OFFSET_Y;
+            aRect.SetLeft( pItem->mnX );
+            aRect.SetRight( aRect.Left() + pItem->mnWidth + pItem->mnExtraWidth );
+            aRect.SetTop( STATUSBAR_OFFSET_Y );
+            aRect.SetBottom( mnCalcHeight - STATUSBAR_OFFSET_Y );
         }
     }
 
@@ -327,12 +327,12 @@ void StatusBar::ImplDrawText(vcl::RenderContext& rRenderContext)
 {
     // prevent item box from being overwritten
     tools::Rectangle aTextRect;
-    aTextRect.Left() = STATUSBAR_OFFSET_X + 1;
-    aTextRect.Top() = mnTextY;
+    aTextRect.SetLeft( STATUSBAR_OFFSET_X + 1 );
+    aTextRect.SetTop( mnTextY );
     if (mbVisibleItems && (GetStyle() & WB_RIGHT))
-        aTextRect.Right() = mnDX - mnItemsWidth - 1;
+        aTextRect.SetRight( mnDX - mnItemsWidth - 1 );
     else
-        aTextRect.Right() = mnDX - 1;
+        aTextRect.SetRight( mnDX - 1 );
     if (aTextRect.Right() > aTextRect.Left())
     {
         // compute position
@@ -341,7 +341,7 @@ void StatusBar::ImplDrawText(vcl::RenderContext& rRenderContext)
         if (nPos != -1)
             aStr = aStr.copy(0, nPos);
 
-        aTextRect.Bottom() = aTextRect.Top()+GetTextHeight()+1;
+        aTextRect.SetBottom( aTextRect.Top()+GetTextHeight()+1 );
 
         rRenderContext.DrawText(aTextRect, aStr, DrawTextFlags::Left | DrawTextFlags::Top | DrawTextFlags::Clip | DrawTextFlags::EndEllipsis);
     }
@@ -393,8 +393,8 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
     }
     else
     {
-        aTextPos.X() += aTextRect.Left();
-        aTextPos.Y() += aTextRect.Top();
+        aTextPos.AdjustX(aTextRect.Left() );
+        aTextPos.AdjustY(aTextRect.Top() );
         rRenderContext.DrawText(
                     aTextPos,
                     pItem->maText,
@@ -446,11 +446,11 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
     {
         // draw separator
         Point aFrom(aRect.TopLeft());
-        aFrom.X() -= 4;
-        aFrom.Y()++;
+        aFrom.AdjustX( -4 );
+        aFrom.AdjustY( 1 );
         Point aTo(aRect.BottomLeft());
-        aTo.X() -= 4;
-        aTo.Y()--;
+        aTo.AdjustX( -4 );
+        aTo.AdjustY( -1 );
 
         DecorationView aDecoView(&rRenderContext);
         aDecoView.DrawSeparator(aFrom, aTo);
@@ -527,8 +527,8 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
         do
         {
             rRenderContext.Erase(aRect);
-            aRect.Left()  -= nDX;
-            aRect.Right() -= nDX;
+            aRect.AdjustLeft( -nDX );
+            aRect.AdjustRight( -nDX );
             nPerc1--;
         }
         while (nPerc1 > nPerc2);
@@ -552,8 +552,8 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
         do
         {
             rRenderContext.DrawRect(aRect);
-            aRect.Left()  += nDX;
-            aRect.Right() += nDX;
+            aRect.AdjustLeft(nDX );
+            aRect.AdjustRight(nDX );
             nPerc1++;
         }
         while (nPerc1 < nPerc2);
@@ -564,8 +564,8 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
             // define on/off status
             if (((nPercent2 / nPercentCount) & 0x01) == (nPercentCount & 0x01))
             {
-                aRect.Left()  -= nDX;
-                aRect.Right() -= nDX;
+                aRect.AdjustLeft( -nDX );
+                aRect.AdjustRight( -nDX );
                 rRenderContext.Erase(aRect);
             }
         }
@@ -599,12 +599,12 @@ void StatusBar::ImplCalcProgressRect()
 {
     // calculate text size
     Size aPrgsTxtSize( GetTextWidth( maPrgsTxt ), GetTextHeight() );
-    maPrgsTxtPos.X()    = STATUSBAR_OFFSET_X+1;
+    maPrgsTxtPos.setX( STATUSBAR_OFFSET_X+1 );
 
     // calculate progress frame
-    maPrgsFrameRect.Left()      = maPrgsTxtPos.X()+aPrgsTxtSize.Width()+STATUSBAR_OFFSET;
-    maPrgsFrameRect.Top()       = STATUSBAR_OFFSET_Y;
-    maPrgsFrameRect.Bottom()    = mnCalcHeight - STATUSBAR_OFFSET_Y;
+    maPrgsFrameRect.SetLeft( maPrgsTxtPos.X()+aPrgsTxtSize.Width()+STATUSBAR_OFFSET );
+    maPrgsFrameRect.SetTop( STATUSBAR_OFFSET_Y );
+    maPrgsFrameRect.SetBottom( mnCalcHeight - STATUSBAR_OFFSET_Y );
 
     // calculate size of progress rects
     mnPrgsSize = maPrgsFrameRect.Bottom()-maPrgsFrameRect.Top()-(STATUSBAR_PRGS_OFFSET*2);
@@ -619,7 +619,7 @@ void StatusBar::ImplCalcProgressRect()
         if ( nMaxPercent <= STATUSBAR_PRGS_MIN )
             break;
     }
-    maPrgsFrameRect.Right() = maPrgsFrameRect.Left() + ImplCalcProgressWidth( nMaxPercent, mnPrgsSize );
+    maPrgsFrameRect.SetRight( maPrgsFrameRect.Left() + ImplCalcProgressWidth( nMaxPercent, mnPrgsSize ) );
 
     // save the divisor for later
     mnPercentCount = 10000 / nMaxPercent;
@@ -637,14 +637,14 @@ void StatusBar::ImplCalcProgressRect()
             if( nProgressHeight > maPrgsFrameRect.GetHeight() )
             {
                 long nDelta = nProgressHeight - maPrgsFrameRect.GetHeight();
-                maPrgsFrameRect.Top() -= (nDelta - nDelta/2);
-                maPrgsFrameRect.Bottom() += nDelta/2;
+                maPrgsFrameRect.AdjustTop( -(nDelta - nDelta/2) );
+                maPrgsFrameRect.AdjustBottom(nDelta/2 );
             }
-            maPrgsTxtPos.Y() = maPrgsFrameRect.Top() + (nProgressHeight - GetTextHeight())/2;
+            maPrgsTxtPos.setY( maPrgsFrameRect.Top() + (nProgressHeight - GetTextHeight())/2 );
         }
     }
     if( ! bNativeOK )
-        maPrgsTxtPos.Y()    = mnTextY;
+        maPrgsTxtPos.setY( mnTextY );
 }
 
 void StatusBar::MouseButtonDown( const MouseEvent& rMEvt )
@@ -771,11 +771,11 @@ void StatusBar::RequestHelp( const HelpEvent& rHEvt )
     {
         tools::Rectangle aItemRect = GetItemRect( nItemId );
         Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
-        aItemRect.Left()   = aPt.X();
-        aItemRect.Top()    = aPt.Y();
+        aItemRect.SetLeft( aPt.X() );
+        aItemRect.SetTop( aPt.Y() );
         aPt = OutputToScreenPixel( aItemRect.BottomRight() );
-        aItemRect.Right()  = aPt.X();
-        aItemRect.Bottom() = aPt.Y();
+        aItemRect.SetRight( aPt.X() );
+        aItemRect.SetBottom( aPt.Y() );
 
         if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
         {
@@ -884,7 +884,7 @@ void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
         Size aSize = GetSizePixel();
         // do not disturb current width, since
         // CalcWindowSizePixel calculates a minimum width
-        aSize.Height() = CalcWindowSizePixel().Height();
+        aSize.setHeight( CalcWindowSizePixel().Height() );
         SetSizePixel( aSize );
         Invalidate();
     }
@@ -1082,10 +1082,10 @@ tools::Rectangle StatusBar::GetItemRect( sal_uInt16 nItemId ) const
             // get rectangle and subtract frame
             aRect = ImplGetItemRectPos( nPos );
             long nW = mpImplData->mnItemBorderWidth+1;
-            aRect.Top() += nW-1;
-            aRect.Bottom() -= nW-1;
-            aRect.Left() += nW;
-            aRect.Right() -= nW;
+            aRect.AdjustTop(nW-1 );
+            aRect.AdjustBottom( -(nW-1) );
+            aRect.AdjustLeft(nW );
+            aRect.AdjustRight( -nW );
             return aRect;
         }
     }
@@ -1111,8 +1111,8 @@ Point StatusBar::GetItemTextPos( sal_uInt16 nItemId ) const
                                              pItem->mnBits );
             if ( !mbInUserDraw )
             {
-                aPos.X() += aTextRect.Left();
-                aPos.Y() += aTextRect.Top();
+                aPos.AdjustX(aTextRect.Left() );
+                aPos.AdjustY(aTextRect.Top() );
             }
             return aPos;
         }

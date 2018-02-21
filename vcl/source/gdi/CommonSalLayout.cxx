@@ -759,7 +759,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                                     nAdvance, nXOffset);
                 AppendGlyph(aGI);
 
-                aCurrPos.X() += nAdvance;
+                aCurrPos.AdjustX(nAdvance );
             }
         }
     }
@@ -859,10 +859,10 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
         {
             if (m_GlyphItems[j].mnCharPos != m_GlyphItems[i].mnCharPos)
                 break;
-            m_GlyphItems[j].maLinearPos.X() += nDelta;
+            m_GlyphItems[j].maLinearPos.AdjustX(nDelta );
             // For RTL, put all DX adjustment space to the left of the glyph.
             if (m_GlyphItems[i].IsRTLGlyph())
-                m_GlyphItems[j].maLinearPos.X() += nDiff;
+                m_GlyphItems[j].maLinearPos.AdjustX(nDiff );
             ++j;
         }
 
@@ -880,7 +880,7 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
                 auto pGlyph = m_GlyphItems.begin() + i - 1;
                 while (pGlyph != m_GlyphItems.begin() && pGlyph->IsDiacritic())
                 {
-                    pGlyph->maLinearPos.X() += nDiff;
+                    pGlyph->maLinearPos.AdjustX(nDiff );
                     --pGlyph;
                 }
             }
@@ -930,8 +930,8 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
             {
                 GlyphItem aKashida(nCharPos, nKashidaIndex, aPos, nFlags, nKashidaWidth);
                 pGlyphIter = m_GlyphItems.insert(pGlyphIter, aKashida);
-                aPos.X() += nKashidaWidth;
-                aPos.X() -= nOverlap;
+                aPos.AdjustX(nKashidaWidth );
+                aPos.AdjustX( -nOverlap );
                 ++pGlyphIter;
                 ++nInserted;
             }

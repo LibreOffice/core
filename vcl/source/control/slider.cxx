@@ -116,23 +116,23 @@ void Slider::ImplUpdateRects( bool bUpdate )
     {
         if ( GetStyle() & WB_HORZ )
         {
-            maThumbRect.Left()      = mnThumbPixPos-SLIDER_THUMB_HALFSIZE;
-            maThumbRect.Right()     = maThumbRect.Left()+SLIDER_THUMB_SIZE-1;
+            maThumbRect.SetLeft( mnThumbPixPos-SLIDER_THUMB_HALFSIZE );
+            maThumbRect.SetRight( maThumbRect.Left()+SLIDER_THUMB_SIZE-1 );
             if ( mnChannelPixOffset < maThumbRect.Left() )
             {
-                maChannel1Rect.Left()   = mnChannelPixOffset;
-                maChannel1Rect.Right()  = maThumbRect.Left()-1;
-                maChannel1Rect.Top()    = mnChannelPixTop;
-                maChannel1Rect.Bottom() = mnChannelPixBottom;
+                maChannel1Rect.SetLeft( mnChannelPixOffset );
+                maChannel1Rect.SetRight( maThumbRect.Left()-1 );
+                maChannel1Rect.SetTop( mnChannelPixTop );
+                maChannel1Rect.SetBottom( mnChannelPixBottom );
             }
             else
                 maChannel1Rect.SetEmpty();
             if ( mnChannelPixOffset+mnChannelPixRange-1 > maThumbRect.Right() )
             {
-                maChannel2Rect.Left()   = maThumbRect.Right()+1;
-                maChannel2Rect.Right()  = mnChannelPixOffset+mnChannelPixRange-1;
-                maChannel2Rect.Top()    = mnChannelPixTop;
-                maChannel2Rect.Bottom() = mnChannelPixBottom;
+                maChannel2Rect.SetLeft( maThumbRect.Right()+1 );
+                maChannel2Rect.SetRight( mnChannelPixOffset+mnChannelPixRange-1 );
+                maChannel2Rect.SetTop( mnChannelPixTop );
+                maChannel2Rect.SetBottom( mnChannelPixBottom );
             }
             else
                 maChannel2Rect.SetEmpty();
@@ -143,30 +143,30 @@ void Slider::ImplUpdateRects( bool bUpdate )
                                          aControlRegion, ControlState::NONE, ImplControlValue(),
                                          aThumbBounds, aThumbContent ) )
             {
-                maThumbRect.Left() = mnThumbPixPos - aThumbBounds.GetWidth()/2;
-                maThumbRect.Right() = maThumbRect.Left() + aThumbBounds.GetWidth() - 1;
+                maThumbRect.SetLeft( mnThumbPixPos - aThumbBounds.GetWidth()/2 );
+                maThumbRect.SetRight( maThumbRect.Left() + aThumbBounds.GetWidth() - 1 );
                 bInvalidateAll = true;
             }
         }
         else
         {
-            maThumbRect.Top()       = mnThumbPixPos-SLIDER_THUMB_HALFSIZE;
-            maThumbRect.Bottom()    = maThumbRect.Top()+SLIDER_THUMB_SIZE-1;
+            maThumbRect.SetTop( mnThumbPixPos-SLIDER_THUMB_HALFSIZE );
+            maThumbRect.SetBottom( maThumbRect.Top()+SLIDER_THUMB_SIZE-1 );
             if ( mnChannelPixOffset < maThumbRect.Top() )
             {
-                maChannel1Rect.Top()    = mnChannelPixOffset;
-                maChannel1Rect.Bottom() = maThumbRect.Top()-1;
-                maChannel1Rect.Left()   = mnChannelPixTop;
-                maChannel1Rect.Right()  = mnChannelPixBottom;
+                maChannel1Rect.SetTop( mnChannelPixOffset );
+                maChannel1Rect.SetBottom( maThumbRect.Top()-1 );
+                maChannel1Rect.SetLeft( mnChannelPixTop );
+                maChannel1Rect.SetRight( mnChannelPixBottom );
             }
             else
                 maChannel1Rect.SetEmpty();
             if ( mnChannelPixOffset+mnChannelPixRange-1 > maThumbRect.Bottom() )
             {
-                maChannel2Rect.Top()    = maThumbRect.Bottom()+1;
-                maChannel2Rect.Bottom() = mnChannelPixOffset+mnChannelPixRange-1;
-                maChannel2Rect.Left()   = mnChannelPixTop;
-                maChannel2Rect.Right()  = mnChannelPixBottom;
+                maChannel2Rect.SetTop( maThumbRect.Bottom()+1 );
+                maChannel2Rect.SetBottom( mnChannelPixOffset+mnChannelPixRange-1 );
+                maChannel2Rect.SetLeft( mnChannelPixTop );
+                maChannel2Rect.SetRight( mnChannelPixBottom );
             }
             else
                 maChannel2Rect.SetEmpty();
@@ -177,8 +177,8 @@ void Slider::ImplUpdateRects( bool bUpdate )
                                          aControlRegion, ControlState::NONE, ImplControlValue(),
                                          aThumbBounds, aThumbContent ) )
             {
-                maThumbRect.Top() = mnThumbPixPos - aThumbBounds.GetHeight()/2;
-                maThumbRect.Bottom() = maThumbRect.Top() + aThumbBounds.GetHeight() - 1;
+                maThumbRect.SetTop( mnThumbPixPos - aThumbBounds.GetHeight()/2 );
+                maThumbRect.SetBottom( maThumbRect.Top() + aThumbBounds.GetHeight() - 1 );
                 bInvalidateAll = true;
             }
         }
@@ -266,15 +266,15 @@ void Slider::ImplCalc( bool bUpdate )
         {
             nCalcWidth          = aSize.Width();
             nCalcHeight         = aSize.Height();
-            maThumbRect.Top()   = 0;
-            maThumbRect.Bottom()= aSize.Height()-1;
+            maThumbRect.SetTop( 0 );
+            maThumbRect.SetBottom( aSize.Height()-1 );
         }
         else
         {
             nCalcWidth          = aSize.Height();
             nCalcHeight         = aSize.Width();
-            maThumbRect.Left()  = 0;
-            maThumbRect.Right() = aSize.Width()-1;
+            maThumbRect.SetLeft( 0 );
+            maThumbRect.SetRight( aSize.Width()-1 );
         }
 
         if ( nCalcWidth >= SLIDER_THUMB_SIZE )
@@ -374,12 +374,12 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
 
         if (nRectSize > 1)
         {
-            aRect.Left()++;
-            aRect.Top()++;
+            aRect.AdjustLeft( 1 );
+            aRect.AdjustTop( 1 );
             if (GetStyle() & WB_HORZ)
-                aRect.Bottom()--;
+                aRect.AdjustBottom( -1 );
             else
-                aRect.Right()--;
+                aRect.AdjustRight( -1 );
             rRenderContext.SetLineColor();
             if (mnStateFlags & SLIDER_STATE_CHANNEL1_DOWN)
                 rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
@@ -415,12 +415,12 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
             else
                 rRenderContext.DrawLine(aRect.TopLeft(), Point(aRect.Left(), aRect.Bottom() - 1));
 
-            aRect.Right()--;
-            aRect.Bottom()--;
+            aRect.AdjustRight( -1 );
+            aRect.AdjustBottom( -1 );
             if (GetStyle() & WB_HORZ)
-                aRect.Top()++;
+                aRect.AdjustTop( 1 );
             else
-                aRect.Left()++;
+                aRect.AdjustLeft( 1 );
             rRenderContext.SetLineColor();
             if (mnStateFlags & SLIDER_STATE_CHANNEL2_DOWN)
                 rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
@@ -454,13 +454,13 @@ bool Slider::ImplIsPageUp( const Point& rPos )
     tools::Rectangle aRect = maChannel1Rect;
     if ( GetStyle() & WB_HORZ )
     {
-        aRect.Top()     = 0;
-        aRect.Bottom()  = aSize.Height()-1;
+        aRect.SetTop( 0 );
+        aRect.SetBottom( aSize.Height()-1 );
     }
     else
     {
-        aRect.Left()    = 0;
-        aRect.Right()   = aSize.Width()-1;
+        aRect.SetLeft( 0 );
+        aRect.SetRight( aSize.Width()-1 );
     }
     return aRect.IsInside( rPos );
 }
@@ -471,13 +471,13 @@ bool Slider::ImplIsPageDown( const Point& rPos )
     tools::Rectangle aRect = maChannel2Rect;
     if ( GetStyle() & WB_HORZ )
     {
-        aRect.Top()     = 0;
-        aRect.Bottom()  = aSize.Height()-1;
+        aRect.SetTop( 0 );
+        aRect.SetBottom( aSize.Height()-1 );
     }
     else
     {
-        aRect.Left()    = 0;
-        aRect.Right()   = aSize.Width()-1;
+        aRect.SetLeft( 0 );
+        aRect.SetRight( aSize.Width()-1 );
     }
     return aRect.IsInside( rPos );
 }
@@ -952,13 +952,13 @@ Size Slider::CalcWindowSizePixel()
     Size aSize;
     if ( GetStyle() & WB_HORZ )
     {
-        aSize.Width()   = nWidth;
-        aSize.Height()  = nHeight;
+        aSize.setWidth( nWidth );
+        aSize.setHeight( nHeight );
     }
     else
     {
-        aSize.Height()  = nWidth;
-        aSize.Width()   = nHeight;
+        aSize.setHeight( nWidth );
+        aSize.setWidth( nHeight );
     }
     return aSize;
 }

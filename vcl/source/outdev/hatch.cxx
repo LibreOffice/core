@@ -175,13 +175,13 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
             Size        aInc;
 
             // Single hatch
-            aRect.Left() -= nLogPixelWidth; aRect.Top() -= nLogPixelWidth; aRect.Right() += nLogPixelWidth; aRect.Bottom() += nLogPixelWidth;
+            aRect.AdjustLeft( -nLogPixelWidth ); aRect.AdjustTop( -nLogPixelWidth ); aRect.AdjustRight(nLogPixelWidth ); aRect.AdjustBottom(nLogPixelWidth );
             CalcHatchValues( aRect, nWidth, rHatch.GetAngle(), aPt1, aPt2, aInc, aEndPt1 );
             do
             {
                 DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
-                aPt1.X() += aInc.Width(); aPt1.Y() += aInc.Height();
-                aPt2.X() += aInc.Width(); aPt2.Y() += aInc.Height();
+                aPt1.AdjustX(aInc.Width() ); aPt1.AdjustY(aInc.Height() );
+                aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
             }
             while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
 
@@ -192,8 +192,8 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
                 do
                 {
                     DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
-                    aPt1.X() += aInc.Width(); aPt1.Y() += aInc.Height();
-                    aPt2.X() += aInc.Width(); aPt2.Y() += aInc.Height();
+                    aPt1.AdjustX(aInc.Width() ); aPt1.AdjustY(aInc.Height() );
+                    aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
                 }
                 while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
 
@@ -204,8 +204,8 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
                     do
                     {
                         DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
-                        aPt1.X() += aInc.Width(); aPt1.Y() += aInc.Height();
-                        aPt2.X() += aInc.Width(); aPt2.Y() += aInc.Height();
+                        aPt1.AdjustX(aInc.Width() ); aPt1.AdjustY(aInc.Height() );
+                        aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
                     }
                     while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
                 }
@@ -238,8 +238,8 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, s
         else
             nOffset = ( nDist - ( ( aRef.Y() - rRect.Top() ) % nDist ) );
 
-        rPt1.Y() -= nOffset;
-        rPt2.Y() -= nOffset;
+        rPt1.AdjustY( -nOffset );
+        rPt2.AdjustY( -nOffset );
     }
     else if( 900 == nAngle )
     {
@@ -253,8 +253,8 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, s
         else
             nOffset = nDist - ( ( aRef.X() - rRect.Left() ) % nDist );
 
-        rPt1.X() -= nOffset;
-        rPt2.X() -= nOffset;
+        rPt1.AdjustX( -nOffset );
+        rPt2.AdjustX( -nOffset );
     }
     else if( nAngle >= -450 && nAngle <= 450 )
     {
@@ -285,8 +285,8 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, s
         else
             nOffset = nDist - ( ( nPY - rPt1.Y() ) % nDist );
 
-        rPt1.Y() -= nOffset;
-        rPt2.Y() -= nOffset;
+        rPt1.AdjustY( -nOffset );
+        rPt2.AdjustY( -nOffset );
     }
     else
     {
@@ -317,8 +317,8 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, s
         else
             nOffset = nDist - ( ( nPX - rPt1.X() ) % nDist );
 
-        rPt1.X() -= nOffset;
-        rPt2.X() -= nOffset;
+        rPt1.AdjustX( -nOffset );
+        rPt2.AdjustX( -nOffset );
     }
 }
 

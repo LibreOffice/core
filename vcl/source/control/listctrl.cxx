@@ -84,12 +84,12 @@ void ListControl::RecalcAll()
         item->SetPosPixel(aPoint);
         Size aSize = item->GetSizePixel();
         if(mbHasScrollBar)
-            aSize.Width() = aCtrlSize.Width() - nSrcBarSize;
+            aSize.setWidth( aCtrlSize.Width() - nSrcBarSize );
         else
-            aSize.Width() = aCtrlSize.Width();
+            aSize.setWidth( aCtrlSize.Width() );
         item->SetSizePixel(aSize);
 
-        aPoint.Y() += item->GetSizePixel().Height();
+        aPoint.AdjustY(item->GetSizePixel().Height() );
     }
 }
 
@@ -114,7 +114,7 @@ void ListControl::DoScroll(long nDelta)
 {
     Point aNewPoint = mpScrollBar->GetPosPixel();
     tools::Rectangle aRect(Point(), GetOutputSize());
-    aRect.Right() -= mpScrollBar->GetSizePixel().Width();
+    aRect.AdjustRight( -(mpScrollBar->GetSizePixel().Width()) );
     Scroll( 0, -nDelta, aRect );
     mpScrollBar->SetPosPixel(aNewPoint);
 }

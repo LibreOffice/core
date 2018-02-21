@@ -526,9 +526,9 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     rIStm.ReadInt16( nVersion );                              // Version
     sal_Int32 nTmp32(0);
     rIStm.ReadInt32( nTmp32 );
-    aPrefSz.Width() = nTmp32;                       // PrefSize.Width()
+    aPrefSz.setWidth( nTmp32 );                       // PrefSize.Width()
     rIStm.ReadInt32( nTmp32 );
-    aPrefSz.Height() = nTmp32;                      // PrefSize.Height()
+    aPrefSz.setHeight( nTmp32 );                      // PrefSize.Height()
 
     // check header-magic and version
     if( rIStm.GetError()
@@ -2383,8 +2383,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
                     if( fScaleX != 1.0 || fScaleY != 1.0 )
                     {
                         aMtf.Scale( fScaleX, fScaleY );
-                        aSrcPt.X() = FRound( aSrcPt.X() * fScaleX );
-                        aSrcPt.Y() = FRound( aSrcPt.Y() * fScaleY );
+                        aSrcPt.setX( FRound( aSrcPt.X() * fScaleX ) );
+                        aSrcPt.setY( FRound( aSrcPt.Y() * fScaleY ) );
                     }
 
                     nMoveX = rPos.X() - aSrcPt.X();

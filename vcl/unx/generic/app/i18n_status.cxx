@@ -139,14 +139,14 @@ void XIMStatusWindow::toggle( bool bOn )
 
 void XIMStatusWindow::layout()
 {
-    m_aWindowSize.Width() = m_aStatusText->GetTextWidth( m_aStatusText->GetText() )+8;
+    m_aWindowSize.setWidth( m_aStatusText->GetTextWidth( m_aStatusText->GetText() )+8 );
     Font aFont( m_aStatusText->GetFont() );
-    m_aWindowSize.Height() = aFont.GetFontHeight()+10;
+    m_aWindowSize.setHeight( aFont.GetFontHeight()+10 );
     m_aWindowSize = LogicToPixel( m_aWindowSize );
 
     Size aControlSize( m_aWindowSize );
-    aControlSize.Width()  -= 4;
-    aControlSize.Height() -= 4;
+    aControlSize.AdjustWidth( -4 );
+    aControlSize.AdjustHeight( -4 );
 
     m_aStatusText->SetPosSizePixel( Point( 1, 1 ), aControlSize );
     m_aStatusText->SetFont( aFont );
@@ -215,15 +215,15 @@ Point XIMStatusWindow::updatePosition()
         int const nGap = 4; // between cursor and status window
         if (aPosEvent.mbVertical)
         {
-            aRet.X() = x + aPosEvent.mnX + (bLeft
+            aRet.setX( x + aPosEvent.mnX + (bLeft
                                             ? -m_aWindowSize.Width() - nGap
-                                            : aPosEvent.mnHeight + nGap);
-            aRet.Y() = y + aPosEvent.mnY;
+                                            : aPosEvent.mnHeight + nGap) );
+            aRet.setY( y + aPosEvent.mnY );
         }
         else
         {
-            aRet.X() = x + aPosEvent.mnX + (bLeft ? -m_aWindowSize.Width() : 0);
-            aRet.Y() = y + aPosEvent.mnY+aPosEvent.mnHeight + nGap;
+            aRet.setX( x + aPosEvent.mnX + (bLeft ? -m_aWindowSize.Width() : 0) );
+            aRet.setY( y + aPosEvent.mnY+aPosEvent.mnHeight + nGap );
         }
 
         m_bAnchoredAtRight = bLeft;
@@ -284,7 +284,7 @@ void XIMStatusWindow::show( bool bShow, I18NStatus::ShowReason )
 void XIMStatusWindow::setText( const OUString& rText )
 {
     m_aStatusText->SetText( rText );
-    m_aWindowSize.Width() = m_aStatusText->GetTextWidth( rText )+8;
+    m_aWindowSize.setWidth( m_aStatusText->GetTextWidth( rText )+8 );
 }
 
 /*

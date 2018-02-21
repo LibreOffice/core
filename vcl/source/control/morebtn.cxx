@@ -109,13 +109,13 @@ void MoreButton::Click()
         Point aPos( pParent->GetPosPixel() );
         tools::Rectangle aDeskRect( pParent->ImplGetFrameWindow()->GetDesktopRectPixel() );
 
-        aSize.Height() += nDeltaPixel;
+        aSize.AdjustHeight(nDeltaPixel );
         if ( (aPos.Y()+aSize.Height()) > aDeskRect.Bottom() )
         {
-            aPos.Y() = aDeskRect.Bottom()-aSize.Height();
+            aPos.setY( aDeskRect.Bottom()-aSize.Height() );
 
             if ( aPos.Y() < aDeskRect.Top() )
-                aPos.Y() = aDeskRect.Top();
+                aPos.setY( aDeskRect.Top() );
 
             pParent->SetPosSizePixel( aPos, aSize );
         }
@@ -125,7 +125,7 @@ void MoreButton::Click()
     else
     {
         // Adapt Dialogbox
-        aSize.Height() -= nDeltaPixel;
+        aSize.AdjustHeight( -nDeltaPixel );
         pParent->SetSizePixel( aSize );
 
         // Hide window(s) again

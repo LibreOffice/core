@@ -53,10 +53,10 @@ void TabDialog::ImplPosControls()
                 Size aOptimalSize(pChild->get_preferred_size());
                 long nTxtWidth = aOptimalSize.Width();
                 if ( nTxtWidth > aCtrlSize.Width() )
-                    aCtrlSize.Width() = nTxtWidth;
+                    aCtrlSize.setWidth( nTxtWidth );
                 long nTxtHeight = aOptimalSize.Height();
                 if ( nTxtHeight > aCtrlSize.Height() )
-                    aCtrlSize.Height() = nTxtHeight;
+                    aCtrlSize.setHeight( nTxtHeight );
                 nDownCtrl++;
             }
             else
@@ -103,8 +103,8 @@ void TabDialog::ImplPosControls()
                 nViewOffY       = nOffY+IMPL_DIALOG_OFFSET;
                 nViewWidth      = aTabSize.Width();
                 nViewPosFlags  |= PosSizeFlags::Width;
-                aTabOffset.Y() += aViewSize.Height()+IMPL_DIALOG_OFFSET;
-                aDlgSize.Height() += aViewSize.Height()+IMPL_DIALOG_OFFSET;
+                aTabOffset.AdjustY(aViewSize.Height()+IMPL_DIALOG_OFFSET );
+                aDlgSize.AdjustHeight(aViewSize.Height()+IMPL_DIALOG_OFFSET );
             }
             else if (  meViewAlign == WindowAlign::Bottom )
             {
@@ -112,7 +112,7 @@ void TabDialog::ImplPosControls()
                 nViewOffY       = aTabOffset.Y()+aTabSize.Height()+IMPL_DIALOG_OFFSET;
                 nViewWidth      = aTabSize.Width();
                 nViewPosFlags  |= PosSizeFlags::Width;
-                aDlgSize.Height() += aViewSize.Height()+IMPL_DIALOG_OFFSET;
+                aDlgSize.AdjustHeight(aViewSize.Height()+IMPL_DIALOG_OFFSET );
             }
             else if (  meViewAlign == WindowAlign::Right )
             {
@@ -120,7 +120,7 @@ void TabDialog::ImplPosControls()
                 nViewOffY       = aTabOffset.Y();
                 nViewHeight     = aTabSize.Height();
                 nViewPosFlags  |= PosSizeFlags::Height;
-                aDlgSize.Width() += aViewSize.Width()+IMPL_DIALOG_OFFSET;
+                aDlgSize.AdjustWidth(aViewSize.Width()+IMPL_DIALOG_OFFSET );
                 nBtnEx          = aViewSize.Width()+IMPL_DIALOG_OFFSET;
             }
             else // meViewAlign == WindowAlign::Left
@@ -129,8 +129,8 @@ void TabDialog::ImplPosControls()
                 nViewOffY       = aTabOffset.Y();
                 nViewHeight     = aTabSize.Height();
                 nViewPosFlags  |= PosSizeFlags::Height;
-                aTabOffset.X() += aViewSize.Width()+IMPL_DIALOG_OFFSET;
-                aDlgSize.Width() += aViewSize.Width()+IMPL_DIALOG_OFFSET;
+                aTabOffset.AdjustX(aViewSize.Width()+IMPL_DIALOG_OFFSET );
+                aDlgSize.AdjustWidth(aViewSize.Width()+IMPL_DIALOG_OFFSET );
                 nBtnEx          = aViewSize.Width()+IMPL_DIALOG_OFFSET;
             }
 
@@ -188,7 +188,7 @@ void TabDialog::ImplPosControls()
             pChild2 = pChild2->GetWindow( GetWindowType::Next );
         }
 
-        aDlgSize.Height() += nLines * (aCtrlSize.Height()+IMPL_DIALOG_OFFSET);
+        aDlgSize.AdjustHeight(nLines * (aCtrlSize.Height()+IMPL_DIALOG_OFFSET) );
         SetOutputSizePixel( aDlgSize );
     }
 

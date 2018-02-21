@@ -64,8 +64,8 @@ WindowHitTest Window::ImplHitTest( const Point& rFramePos )
     if ( mpWindowImpl->mbWinRegion )
     {
         Point aTempPos = aFramePos;
-        aTempPos.X() -= mnOutOffX;
-        aTempPos.Y() -= mnOutOffY;
+        aTempPos.AdjustX( -(mnOutOffX) );
+        aTempPos.AdjustY( -(mnOutOffY) );
         if ( !mpWindowImpl->maWinRegion.IsInside( aTempPos ) )
             return WindowHitTest::NONE;
     }
