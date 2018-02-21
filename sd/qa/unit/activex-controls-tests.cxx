@@ -1119,9 +1119,9 @@ void SdActiveXControlsTest::testPictureProperties()
         CPPUNIT_ASSERT(xControlShape.is());
         uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
 
-        OUString sImageURL;
-        xPropertySet->getPropertyValue("ImageURL") >>= sImageURL;
-        CPPUNIT_ASSERT(!sImageURL.isEmpty());
+        uno::Reference<graphic::XGraphic> xGraphic;
+        xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+        CPPUNIT_ASSERT(xGraphic.is());
 
         sal_Int16 nColor;
         xPropertySet->getPropertyValue("ImagePosition") >>= nColor;
@@ -1138,12 +1138,12 @@ void SdActiveXControlsTest::testPictureProperties()
 
         OString sMessage = "The wrong control's index is: " + OString::number(i);
 
-        OUString sImageURL;
-        xPropertySet->getPropertyValue("ImageURL") >>= sImageURL;
+        uno::Reference<graphic::XGraphic> xGraphic;
+        xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
         if (i == 0) // First control has no image specified
-            CPPUNIT_ASSERT_MESSAGE(sMessage.getStr(), sImageURL.isEmpty());
+            CPPUNIT_ASSERT_MESSAGE(sMessage.getStr(), !xGraphic.is());
         else
-            CPPUNIT_ASSERT_MESSAGE(sMessage.getStr(), !sImageURL.isEmpty());
+            CPPUNIT_ASSERT_MESSAGE(sMessage.getStr(), xGraphic.is());
 
         sal_Int16 nScaleMode;
         xPropertySet->getPropertyValue("ScaleMode") >>= nScaleMode;
