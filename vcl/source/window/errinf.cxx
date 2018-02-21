@@ -108,7 +108,7 @@ bool ErrorHandler::GetErrorString(ErrCode nErrCodeId, OUString& rErrStr)
     return false;
 }
 
-DialogMask ErrorHandler::HandleError(ErrCode nErrCodeId, vcl::Window *pParent, DialogMask nFlags)
+DialogMask ErrorHandler::HandleError(ErrCode nErrCodeId, weld::Window *pParent, DialogMask nFlags)
 {
     if (nErrCodeId == ERRCODE_NONE || nErrCodeId == ERRCODE_ABORT)
         return DialogMask::NONE;
@@ -186,10 +186,10 @@ DialogMask ErrorHandler::HandleError(ErrCode nErrCodeId, vcl::Window *pParent, D
 
 struct ImplErrorContext
 {
-    vcl::Window *pWin; // FIXME: should be VclPtr for strong lifecycle
+    weld::Window *pWin;
 };
 
-ErrorContext::ErrorContext(vcl::Window *pWinP)
+ErrorContext::ErrorContext(weld::Window *pWinP)
     : pImpl( new ImplErrorContext )
 {
     pImpl->pWin = pWinP;
@@ -207,7 +207,7 @@ ErrorContext *ErrorContext::GetContext()
     return TheErrorRegistry::get().contexts.empty() ? nullptr : TheErrorRegistry::get().contexts.front();
 }
 
-vcl::Window* ErrorContext::GetParent()
+weld::Window* ErrorContext::GetParent()
 {
     return pImpl ? pImpl->pWin : nullptr;
 }

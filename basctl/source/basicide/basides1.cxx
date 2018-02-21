@@ -48,6 +48,7 @@
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/xtextedt.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 
@@ -114,7 +115,11 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
 
                 OUString aReplStr(IDEResId(RID_STR_SEARCHREPLACES));
                 aReplStr = aReplStr.replaceAll("XX", OUString::number(nFound));
-                ScopedVclPtrInstance<InfoBox>(pCurWin, aReplStr)->Execute();
+
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pCurWin->GetFrameWeld(),
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              aReplStr));
+                xInfoBox->run();
             }
             else
             {
@@ -181,7 +186,12 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                         SetCurWindow( pWin, true );
                 }
                 if ( !nFound && !bCanceled )
-                    ScopedVclPtrInstance<InfoBox>(pCurWin, IDEResId(RID_STR_SEARCHNOTFOUND))->Execute();
+                {
+                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pCurWin->GetFrameWeld(),
+                                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                                  IDEResId(RID_STR_SEARCHNOTFOUND)));
+                    xInfoBox->run();
+                }
             }
 
             rReq.Done();

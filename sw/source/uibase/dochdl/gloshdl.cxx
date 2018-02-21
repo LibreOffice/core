@@ -21,7 +21,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <vcl/errinf.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <svl/macitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
@@ -478,7 +478,11 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
             }
             OUString aTmp( SwResId(STR_NOGLOS));
             aTmp = aTmp.replaceFirst("%1", aShortName);
-            ScopedVclPtrInstance<InfoBox>(pWrtShell->GetView().GetWindow(), aTmp)->Execute();
+            vcl::Window* pWin = pWrtShell->GetView().GetWindow();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          aTmp));
+            xInfoBox->run();
         }
 
         return false;

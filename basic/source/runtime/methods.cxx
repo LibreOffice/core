@@ -28,7 +28,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/sound.hxx>
 #include <tools/wintypes.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/character.hxx>
@@ -4207,75 +4208,30 @@ void SbRtl_SavePicture(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
 {
-    static const MessBoxStyle nStyleMap[] =
-    {
-        MessBoxStyle::Ok,                // MB_OK
-        MessBoxStyle::OkCancel,          // MB_OKCANCEL
-        MessBoxStyle::AbortRetryIgnore,  // MB_ABORTRETRYIGNORE
-        MessBoxStyle::YesNoCancel,       // MB_YESNOCANCEL
-        MessBoxStyle::YesNo,             // MB_YESNO
-        MessBoxStyle::RetryCancel        // MB_RETRYCANCEL
-    };
-    static const sal_Int16 nButtonMap[] =
-    {
-        2, // RET_CANCEL is 0
-        1, // RET_OK     is 1
-        6, // RET_YES    is 2
-        7, // RET_NO     is 3
-        4  // RET_RETRY  is 4
-    };
-
-
     sal_uInt16 nArgCount = rPar.Count();
     if( nArgCount < 2 || nArgCount > 6 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
-    MessBoxStyle nWinBits;
     WinBits nType = 0; // MB_OK
     if( nArgCount >= 3 )
         nType = static_cast<WinBits>(rPar.Get(2)->GetInteger());
     WinBits nStyle = nType;
     nStyle &= 15; // delete bits 4-16
-    if( nStyle > 5 )
-    {
+    if (nStyle > 5)
         nStyle = 0;
-    }
-    nWinBits = nStyleMap[ nStyle ];
 
-    MessBoxStyle nWinDefBits = MessBoxStyle::DefaultOk | MessBoxStyle::DefaultRetry | MessBoxStyle::DefaultYes;
-    if( nType & 256 )
+    enum BasicResponse
     {
-        if( nStyle == 5 )
-        {
-            nWinDefBits = MessBoxStyle::DefaultCancel;
-        }
-        else if( nStyle == 2 )
-        {
-            nWinDefBits = MessBoxStyle::DefaultRetry;
-        }
-        else
-        {
-            nWinDefBits = (MessBoxStyle::DefaultCancel | MessBoxStyle::DefaultRetry | MessBoxStyle::DefaultNo);
-        }
-    }
-    else if( nType & 512 )
-    {
-        if( nStyle == 2)
-        {
-            nWinDefBits = MessBoxStyle::DefaultIgnore;
-        }
-        else
-        {
-            nWinDefBits = MessBoxStyle::DefaultCancel;
-        }
-    }
-    else if( nStyle == 2)
-    {
-        nWinDefBits = MessBoxStyle::DefaultCancel;
-    }
-    nWinBits |= nWinDefBits;
+        Ok = 1,
+        Cancel = 2,
+        Abort = 3,
+        Retry = 4,
+        Ignore = 5,
+        Yes = 6,
+        No = 7
+    };
 
     OUString aMsg = rPar.Get(1)->GetOUString();
     OUString aTitle;
@@ -4288,46 +4244,99 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
         aTitle = Application::GetDisplayName();
     }
 
-    nType &= (16+32+64);
-    VclPtr<MessBox> pBox;
+    WinBits nDialogType = nType & (16+32+64);
 
     SolarMutexGuard aSolarGuard;
+    vcl::Window* pParentWin = Application::GetDefDialogParent();
+    weld::Widget* pParent = pParentWin ? pParentWin->GetFrameWeld() : nullptr;
 
-    vcl::Window* pParent = Application::GetDefDialogParent();
-    switch( nType )
+    VclMessageType eType = VclMessageType::Info;
+
+    switch (nDialogType)
     {
-    case 16:
-        pBox.reset(VclPtr<ErrorBox>::Create( pParent, nWinBits, aMsg ));
-        break;
-    case 32:
-        pBox.reset(VclPtr<QueryBox>::Create( pParent, nWinBits, aMsg ));
-        break;
-    case 48:
-        pBox.reset(VclPtr<WarningBox>::Create( pParent, nWinBits, aMsg ));
-        break;
-    case 64:
-        pBox.reset(VclPtr<InfoBox>::Create( pParent, nWinBits, aMsg ));
-        break;
-    default:
-        pBox.reset(VclPtr<MessBox>::Create( pParent, nWinBits, 0, aTitle, aMsg ));
+        case 16:
+            eType = VclMessageType::Error;
+            break;
+        case 32:
+            eType = VclMessageType::Question;
+            break;
+        case 48:
+            eType = VclMessageType::Warning;
+            break;
+        case 64:
+        default:
+            eType = VclMessageType::Info;
+            break;
     }
-    pBox->SetText( aTitle );
-    short nRet = pBox->Execute();
-    sal_Int16 nMappedRet;
-    if( nStyle == 2 )
+
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                eType, VclButtonsType::NONE, aMsg));
+
+    switch (nStyle)
     {
-        nMappedRet = nRet;
-        if( nMappedRet == 0 )
-        {
-            nMappedRet = 3; // Abort
-        }
+        case 0: // MB_OK
+        default:
+            xBox->add_button(Button::GetStandardText(StandardButtonType::OK), BasicResponse::Ok);
+            break;
+        case 1: // MB_OKCANCEL
+            xBox->add_button(Button::GetStandardText(StandardButtonType::OK), BasicResponse::Ok);
+            xBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), BasicResponse::Cancel);
+
+            if (nType & 256 || nType & 512)
+                xBox->set_default_response(BasicResponse::Cancel);
+            else
+                xBox->set_default_response(BasicResponse::Ok);
+
+            break;
+        case 2: // MB_ABORTRETRYIGNORE
+            xBox->add_button(Button::GetStandardText(StandardButtonType::Abort), BasicResponse::Abort);
+            xBox->add_button(Button::GetStandardText(StandardButtonType::Retry), BasicResponse::Retry);
+            xBox->add_button(Button::GetStandardText(StandardButtonType::Ignore), BasicResponse::Ignore);
+
+            if (nType & 256)
+                xBox->set_default_response(BasicResponse::Retry);
+            else if (nType & 512)
+                xBox->set_default_response(BasicResponse::Ignore);
+            else
+                xBox->set_default_response(BasicResponse::Cancel);
+
+            break;
+        case 3: // MB_YESNOCANCEL
+            xBox->add_button(Button::GetStandardText(StandardButtonType::Yes), BasicResponse::Yes);
+            xBox->add_button(Button::GetStandardText(StandardButtonType::No), BasicResponse::No);
+            xBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), BasicResponse::Cancel);
+
+            if (nType & 256 || nType & 512)
+                xBox->set_default_response(BasicResponse::Cancel);
+            else
+                xBox->set_default_response(BasicResponse::Yes);
+
+            break;
+        case 4: // MB_YESNO
+            xBox->add_button(Button::GetStandardText(StandardButtonType::Yes), BasicResponse::Yes);
+            xBox->add_button(Button::GetStandardText(StandardButtonType::No), BasicResponse::No);
+
+            if (nType & 256 || nType & 512)
+                xBox->set_default_response(BasicResponse::No);
+            else
+                xBox->set_default_response(BasicResponse::Yes);
+
+            break;
+        case 5: // MB_RETRYCANCEL
+            xBox->add_button(Button::GetStandardText(StandardButtonType::Retry), BasicResponse::Retry);
+            xBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), BasicResponse::Cancel);
+
+            if (nType & 256 || nType & 512)
+                xBox->set_default_response(BasicResponse::Cancel);
+            else
+                xBox->set_default_response(BasicResponse::Retry);
+
+            break;
     }
-    else
-    {
-        nMappedRet = nButtonMap[ nRet ];
-    }
-    rPar.Get(0)->PutInteger( nMappedRet );
-    pBox.disposeAndClear();
+
+    xBox->set_title(aTitle);
+    sal_Int16 nRet = xBox->run();
+    rPar.Get(0)->PutInteger(nRet);
 }
 
 void SbRtl_SetAttr(StarBASIC *, SbxArray & rPar, bool)

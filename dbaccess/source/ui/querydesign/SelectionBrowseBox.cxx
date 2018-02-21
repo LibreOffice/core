@@ -36,7 +36,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <stringconstants.hxx>
 #include "QTableWindow.hxx"
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include "QueryDesignFieldUndoAct.hxx"
 #include <sqlmessage.hxx>
@@ -523,7 +523,10 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
                 m_pVisibleCell->GetBox().EnableInput(false);
                 OUString aMessage(DBA_RES(STR_QRY_ORDERBY_UNRELATED));
                 OQueryDesignView* paDView = getDesignView();
-                ScopedVclPtrInstance<InfoBox>(paDView, aMessage)->Execute();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(paDView ? paDView->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              aMessage));
+                xInfoBox->run();
             }
         }   break;
         case BROW_ORDER_ROW:
