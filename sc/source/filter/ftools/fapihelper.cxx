@@ -201,7 +201,7 @@ bool ScfPropertySet::GetColorProperty( Color& rColor, const OUString& rPropName 
 {
     sal_Int32 nApiColor = 0;
     bool bRet = GetProperty( nApiColor, rPropName );
-    rColor = ScfApiHelper::ConvertFromApiColor( nApiColor );
+    rColor = Color( nApiColor );
     return bRet;
 }
 
@@ -324,7 +324,7 @@ void ScfPropSetHelper::ReadValue( Color& rColor )
 {
     sal_Int32 nApiColor(0);
     ReadValue( nApiColor );
-    rColor = ScfApiHelper::ConvertFromApiColor( nApiColor );
+    rColor = Color( nApiColor );
 }
 
 void ScfPropSetHelper::ReadValue( bool& rbValue )

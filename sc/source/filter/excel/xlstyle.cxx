@@ -42,13 +42,13 @@
             0x800000, 0x008000, 0x000080, 0x808000, 0x800080, 0x008080, 0xC0C0C0, 0x808080
 
 /** Default color table for BIFF2. */
-static const ColorData spnDefColorTable2[] =
+static const Color spnDefColorTable2[] =
 {
 /*  0 */    EXC_PALETTE_EGA_COLORS_LIGHT
 };
 
 /** Default color table for BIFF3/BIFF4. */
-static const ColorData spnDefColorTable3[] =
+static const Color spnDefColorTable3[] =
 {
 /*  0 */    EXC_PALETTE_EGA_COLORS_LIGHT,
 /*  8 */    EXC_PALETTE_EGA_COLORS_LIGHT,
@@ -56,7 +56,7 @@ static const ColorData spnDefColorTable3[] =
 };
 
 /** Default color table for BIFF5/BIFF7. */
-static const ColorData spnDefColorTable5[] =
+static const Color spnDefColorTable5[] =
 {
 /*  0 */    EXC_PALETTE_EGA_COLORS_LIGHT,
 /*  8 */    EXC_PALETTE_EGA_COLORS_LIGHT,
@@ -69,7 +69,7 @@ static const ColorData spnDefColorTable5[] =
 };
 
 /** Default color table for BIFF8. */
-static const ColorData spnDefColorTable8[] =
+static const Color spnDefColorTable8[] =
 {
 /*  0 */    EXC_PALETTE_EGA_COLORS_LIGHT,
 /*  8 */    EXC_PALETTE_EGA_COLORS_LIGHT,
@@ -134,9 +134,9 @@ XclDefaultPalette::XclDefaultPalette( const XclRoot& rRoot ) :
     }
 }
 
-ColorData XclDefaultPalette::GetDefColorData( sal_uInt16 nXclIndex ) const
+Color XclDefaultPalette::GetDefColor( sal_uInt16 nXclIndex ) const
 {
-    ColorData nColor;
+    Color nColor;
     if( nXclIndex < mnTableSize )
         nColor = mpnColorTable[ nXclIndex ];
     else switch( nXclIndex )
@@ -153,7 +153,7 @@ ColorData XclDefaultPalette::GetDefColorData( sal_uInt16 nXclIndex ) const
         case EXC_COLOR_NOTETEXT:        nColor = mnNoteText;    break;
         case EXC_COLOR_FONTAUTO:        nColor = COL_AUTO;      break;
         default:
-            SAL_WARN("sc",  "XclDefaultPalette::GetDefColorData - unknown default color index: " << nXclIndex );
+            SAL_WARN("sc",  "XclDefaultPalette::GetDefColor - unknown default color index: " << nXclIndex );
             nColor = COL_AUTO;
     }
     return nColor;
