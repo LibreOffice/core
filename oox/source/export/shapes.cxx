@@ -1864,7 +1864,7 @@ ShapeExport& ShapeExport::WriteTextShape( const Reference< XShape >& xShape )
     WriteShapeTransformation( xShape, XML_a );
     WritePresetShape( "rect" );
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, UNO_QUERY);
-    WriteBlipOrNormalFill(xPropertySet, "GraphicURL");
+    WriteBlipOrNormalFill(xPropertySet, "Graphic");
     WriteOutline(xPropertySet);
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
