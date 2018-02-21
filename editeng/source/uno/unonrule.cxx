@@ -225,7 +225,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
             pGraphic = pBrush->GetGraphic();
         if (pGraphic)
         {
-            uno::Reference<awt::XBitmap> xBitmap = VCLUnoHelper::CreateBitmap(pGraphic->GetBitmapEx());
+            uno::Reference<awt::XBitmap> xBitmap(pGraphic->GetXGraphic(), uno::UNO_QUERY);
             aVal <<= xBitmap;
 
             const beans::PropertyValue aGraphicProp("GraphicBitmap", -1, aVal, beans::PropertyState_DIRECT_VALUE);
@@ -352,13 +352,14 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
                 continue;
             }
         }
-        else if ( rPropName == "Graphic" )
+        else if ( rPropName == "GraphicBitmap" )
         {
-            Reference< awt::XBitmap > xBmp;
-            if( aVal >>= xBmp )
+            uno::Reference<awt::XBitmap> xBitmap;
+            if(aVal >>= xBitmap)
             {
-                Graphic aGraf( VCLUnoHelper::GetBitmap( xBmp ) );
-                SvxBrushItem aBrushItem(aGraf, GPOS_AREA, SID_ATTR_BRUSH);
+                uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
+                Graphic aGraphic(xGraphic);
+                SvxBrushItem aBrushItem(aGraphic, GPOS_AREA, SID_ATTR_BRUSH);
                 aFmt.SetGraphicBrush( &aBrushItem );
                 continue;
             }
