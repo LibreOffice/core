@@ -135,6 +135,7 @@ MessBox::MessBox( vcl::Window* pParent, WinBits nStyle,
     mbCheck( false ),
     maMessText( rMessage )
 {
+    ImplLOKNotifier(pParent);
     ImplInit( pParent, nStyle | WB_MOVEABLE | WB_HORZ | WB_CENTER );
     ImplInitButtons();
 
