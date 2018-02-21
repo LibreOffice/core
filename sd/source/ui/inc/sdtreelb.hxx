@@ -195,6 +195,7 @@ public:
     OUString                GetEntryLongDescription( SvTreeListEntry* pEntry ) const override;
     virtual void            SelectHdl() override;
     virtual void            KeyInput( const KeyEvent& rKEvt ) override;
+    void MouseButtonDown(const MouseEvent& rMEvt) override;
 
     void                    SetViewFrame( SfxViewFrame* pViewFrame );
 
@@ -202,6 +203,7 @@ public:
     void                    Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const OUString& rDocName );
     void                    SetShowAllShapes (const bool bShowAllShapes, const bool bFill);
     bool                    GetShowAllShapes() const { return mbShowAllShapes;}
+    bool IsNavigationGrabsFocus() const { return mbNavigationGrabsFocus; }
     bool                    IsEqualToDoc( const SdDrawDocument* pInDoc );
     bool                    HasSelectedChildren( const OUString& rName );
     bool                    SelectEntry( const OUString& rName );
@@ -247,6 +249,16 @@ private:
     /** This flag controls whether to show all pages.
     */
     bool mbShowAllPages;
+    /**
+     * If changing the selection should also result in navigating to the
+     * relevant shape.
+     */
+    bool mbSelectionHandlerNavigates;
+    /**
+     * If navigation should not only select the relevant shape but also change
+     * focus to it.
+     */
+    bool mbNavigationGrabsFocus;
 
     /** Return <TRUE/> when the current transferable may be dropped at the
         given list box entry.
