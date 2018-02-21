@@ -179,8 +179,8 @@ tools::Polygon VCLUnoHelper::CreatePolygon( const css::uno::Sequence< sal_Int32 
     for ( sal_Int32 n = 0; n < nLen; n++ )
     {
         Point aPnt;
-        aPnt.X() = pDataX[n];
-        aPnt.Y() = pDataY[n];
+        aPnt.setX( pDataX[n] );
+        aPnt.setY( pDataY[n] );
         aPoly[n] = aPnt;
     }
     return aPoly;

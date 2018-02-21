@@ -22,11 +22,11 @@ tools::Rectangle & operator += ( tools::Rectangle & rRect, const SvBorder & rBor
 {
     // call GetSize first due to Empty-Rect
     Size aS( rRect.GetSize() );
-    aS.Width()  += rBorder.Left() + rBorder.Right();
-    aS.Height() += rBorder.Top() + rBorder.Bottom();
+    aS.AdjustWidth(rBorder.Left() + rBorder.Right() );
+    aS.AdjustHeight(rBorder.Top() + rBorder.Bottom() );
 
-    rRect.Left()   -= rBorder.Left();
-    rRect.Top()    -= rBorder.Top();
+    rRect.AdjustLeft( -(rBorder.Left()) );
+    rRect.AdjustTop( -(rBorder.Top()) );
     rRect.SetSize( aS );
     return rRect;
 }

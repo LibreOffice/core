@@ -895,8 +895,8 @@ Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
     {
         sal_Int32 nLeft, nTop, nRight, nBottom;
         pWindow->GetBorder( nLeft, nTop, nRight, nBottom );
-        aSz.Width() += nLeft+nRight;
-        aSz.Height() += nTop+nBottom;
+        aSz.AdjustWidth(nLeft+nRight );
+        aSz.AdjustHeight(nTop+nBottom );
     }
     return aSz;
 }
@@ -2166,8 +2166,8 @@ css::awt::Size VCLXWindow::getMinimumSize(  )
         switch ( nWinType )
         {
             case WindowType::CONTROL:
-                aSz.Width() = GetWindow()->GetTextWidth( GetWindow()->GetText() )+2*12;
-                aSz.Height() = GetWindow()->GetTextHeight()+2*6;
+                aSz.setWidth( GetWindow()->GetTextWidth( GetWindow()->GetText() )+2*12 );
+                aSz.setHeight( GetWindow()->GetTextHeight()+2*6 );
             break;
 
             case WindowType::PATTERNBOX:
@@ -2177,8 +2177,8 @@ css::awt::Size VCLXWindow::getMinimumSize(  )
             case WindowType::DATEBOX:
             case WindowType::TIMEBOX:
             case WindowType::LONGCURRENCYBOX:
-                aSz.Width() = GetWindow()->GetTextWidth( GetWindow()->GetText() )+2*2;
-                aSz.Height() = GetWindow()->GetTextHeight()+2*2;
+                aSz.setWidth( GetWindow()->GetTextWidth( GetWindow()->GetText() )+2*2 );
+                aSz.setHeight( GetWindow()->GetTextHeight()+2*2 );
             break;
             case WindowType::SCROLLBARBOX:
                 return VCLXScrollBar::implGetMinimumSize( GetWindow() );

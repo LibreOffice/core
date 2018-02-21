@@ -262,8 +262,8 @@ void StdTabController::autoTabOrder(  )
         ComponentEntry* pE = new ComponentEntry;
         pE->pComponent = pC;
         awt::Rectangle aPosSize = pC->getPosSize();
-        pE->aPos.X() = aPosSize.X;
-        pE->aPos.Y() = aPosSize.Y;
+        pE->aPos.setX( aPosSize.X );
+        pE->aPos.setY( aPosSize.Y );
 
         ComponentEntryList::size_type nPos;
         for ( nPos = 0; nPos < aCtrls.size(); nPos++ )
