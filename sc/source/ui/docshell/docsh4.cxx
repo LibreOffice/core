@@ -44,6 +44,7 @@ using namespace ::com::sun::star;
 #include <svx/ofaitem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/drawitem.hxx>
@@ -1293,9 +1294,11 @@ bool ScDocShell::ExecuteChangeProtectionDialog( bool bJustQueryIfProtected )
                 }
                 else
                 {
-                    ScopedVclPtrInstance<InfoBox> aBox( GetActiveDialogParent(),
-                        ScResId( SCSTR_WRONGPASSWORD ) );
-                    aBox->Execute();
+                    vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
+                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                                  ScResId(SCSTR_WRONGPASSWORD)));
+                    xInfoBox->run();
                 }
             }
             else
@@ -1629,10 +1632,12 @@ void ScDocShell::PageStyleModified( const OUString& rStyleName, bool bApi )
 
         if (bWarn && !bApi)
         {
-            ScWaitCursorOff aWaitOff( GetActiveDialogParent() );
-            ScopedVclPtrInstance<InfoBox> aInfoBox(GetActiveDialogParent(),
-                                                   ScGlobal::GetRscString(STR_PRINT_INVALID_AREA));
-            aInfoBox->Execute();
+            vcl::Window* pWin = GetActiveDialogParent();
+            ScWaitCursorOff aWaitOff(pWin);
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          ScGlobal::GetRscString(STR_PRINT_INVALID_AREA)));
+            xInfoBox->run();
         }
     }
 

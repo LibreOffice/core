@@ -19,6 +19,7 @@
 
 #include <sfx2/app.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/svdpage.hxx>
@@ -1670,9 +1671,11 @@ void ScDBDocFunc::UpdateImport( const OUString& rTarget, const svx::ODataAccessD
     const ScDBData* pData = rDBColl.getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rTarget));
     if (!pData)
     {
-        ScopedVclPtrInstance<InfoBox> aInfoBox( ScDocShell::GetActiveDialogParent(),
-                                                ScGlobal::GetRscString( STR_TARGETNOTFOUND ) );
-        aInfoBox->Execute();
+        vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      ScGlobal::GetRscString(STR_TARGETNOTFOUND)));
+        xInfoBox->run();
         return;
     }
 

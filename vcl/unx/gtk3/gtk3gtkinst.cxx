@@ -1386,6 +1386,8 @@ public:
                 ret = RET_OK;
             else if (ret == GTK_RESPONSE_CANCEL)
                 ret = RET_CANCEL;
+            else if (ret == GTK_RESPONSE_CLOSE)
+                ret = RET_CLOSE;
             else if (ret == GTK_RESPONSE_YES)
                 ret = RET_YES;
             else if (ret == GTK_RESPONSE_NO)
@@ -1396,19 +1398,36 @@ public:
         return ret;
     }
 
-    virtual void response(int nResponse) override
+    static int VclToGtk(int nResponse)
     {
         if (nResponse == RET_OK)
-            nResponse = GTK_RESPONSE_OK;
+            return GTK_RESPONSE_OK;
         else if (nResponse == RET_CANCEL)
-            nResponse = GTK_RESPONSE_CANCEL;
+            return GTK_RESPONSE_CANCEL;
+        else if (nResponse == RET_CLOSE)
+            return GTK_RESPONSE_CLOSE;
         else if (nResponse == RET_YES)
-            nResponse = GTK_RESPONSE_YES;
+            return GTK_RESPONSE_YES;
         else if (nResponse == RET_NO)
-            nResponse = GTK_RESPONSE_NO;
+            return GTK_RESPONSE_NO;
         else if (nResponse == RET_HELP)
-            nResponse = GTK_RESPONSE_HELP;
-        gtk_dialog_response(m_pDialog, nResponse);
+            return GTK_RESPONSE_HELP;
+        return nResponse;
+    }
+
+    virtual void response(int nResponse) override
+    {
+        gtk_dialog_response(m_pDialog, VclToGtk(nResponse));
+    }
+
+    virtual void add_button(const OUString& rText, int nResponse) override
+    {
+        gtk_dialog_add_button(m_pDialog, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(), VclToGtk(nResponse));
+    }
+
+    virtual void set_default_response(int nResponse) override
+    {
+        gtk_dialog_set_default_response(m_pDialog, VclToGtk(nResponse));
     }
 
     virtual ~GtkInstanceDialog() override

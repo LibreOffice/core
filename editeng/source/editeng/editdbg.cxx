@@ -21,7 +21,7 @@
 #include <memory>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 
 #include <editeng/lspcitem.hxx>
@@ -482,7 +482,12 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
     }
     fclose( fp );
     if ( bInfoBox )
-        ScopedVclPtrInstance<InfoBox>(nullptr, OUString( "D:\\DEBUG.LOG !" ) )->Execute();
+    {
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      "D:\\DEBUG.LOG !" ));
+        xInfoBox->run();
+    }
 }
 #endif
 

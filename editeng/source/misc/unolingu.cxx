@@ -44,8 +44,8 @@
 #include <unotools/localfilehelper.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <linguistic/misc.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
@@ -727,7 +727,7 @@ SvxDicListChgClamp::~SvxDicListChgClamp()
     }
 }
 
-short SvxDicError( vcl::Window *pParent, linguistic::DictionaryError nError )
+short SvxDicError(weld::Window *pParent, linguistic::DictionaryError nError)
 {
     short nRes = 0;
     if (linguistic::DictionaryError::NONE != nError)
@@ -741,7 +741,11 @@ short SvxDicError( vcl::Window *pParent, linguistic::DictionaryError nError )
                 pRid = RID_SVXSTR_DIC_ERR_UNKNOWN;
                 SAL_WARN("editeng", "unexpected case");
         }
-        nRes = ScopedVclPtrInstance<InfoBox>(pParent, EditResId(pRid))->Execute();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      EditResId(pRid)));
+        nRes = xInfoBox->run();
+
     }
     return nRes;
 }
