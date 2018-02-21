@@ -352,7 +352,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
                 continue;
             }
         }
-        else if ( rPropName == "Graphic" )
+        else if ( rPropName == "GraphicBitmap" )
         {
             Reference< awt::XBitmap > xBmp;
             if( aVal >>= xBmp )
