@@ -8149,16 +8149,19 @@ fi
 
 dnl By now enable_python should be "system", "internal" or "no"
 PYTHON_LXML=
+SYSTEM_PYTHON_LXML=
 case $enable_python in
 system)
     SYSTEM_PYTHON=TRUE
+    PYTHON_LXML=TRUE
 
     AC_MSG_CHECKING([for python lxml])
     if $PYTHON_FOR_BUILD -c "import lxml.etree as ET" ; then
-        PYTHON_LXML=TRUE
+        SYSTEM_PYTHON_LXML=TRUE
         AC_MSG_RESULT([yes])
     else
-        AC_MSG_RESULT([no, will not be able to check UI accessibility])
+        BUILD_TYPE="$BUILD_TYPE LXML"
+        AC_MSG_RESULT([no, using internal lxml])
     fi
 
     dnl Check if the headers really work
@@ -8208,6 +8211,9 @@ internal)
             AC_MSG_ERROR([the internal Python module has a .tar.bz2. You need bzip2])
         fi
     fi
+    PYTHON_LXML=TRUE
+    SYSTEM_PYTHON_LXML=
+    BUILD_TYPE="$BUILD_TYPE LXML"
     ;;
 no)
     DISABLE_PYTHON=TRUE
@@ -8220,6 +8226,7 @@ esac
 
 AC_SUBST(DISABLE_PYTHON)
 AC_SUBST(SYSTEM_PYTHON)
+AC_SUBST(SYSTEM_PYTHON_LXML)
 AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
 AC_SUBST(PYTHON_LXML)
