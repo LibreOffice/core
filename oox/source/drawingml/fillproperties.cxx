@@ -750,11 +750,6 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         }
         rPropMap.setProperty(PROP_Graphic, xGraphic);
 
-        // do we still need to set GraphicURL as well? (TODO)
-        OUString aGraphicUrl = rGraphicHelper.createGraphicObject( xGraphic );
-        if( !aGraphicUrl.isEmpty() )
-            rPropMap.setProperty(PROP_GraphicURL, aGraphicUrl);
-
         // cropping
         if ( maBlipProps.moClipRect.has() )
         {
