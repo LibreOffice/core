@@ -629,6 +629,7 @@ private:
     void setButtonHandlers(VclButtonBox const *pButtonBox);
     short get_response(const vcl::Window *pWindow) const;
     void create_owned_areas();
+    void InitExecute();
 
     friend class VclPtr<MessageDialog>;
     MessageDialog(vcl::Window* pParent, WinBits nStyle);
@@ -640,6 +641,11 @@ public:
         VclButtonsType eButtonsType = VclButtonsType::Ok);
     MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+
+    // Avoid -Woverloaded-virtual
+    using Dialog::StartExecuteAsync;
+    virtual bool StartExecuteAsync(const std::function<void(sal_Int32)> &rEndDialogFn) override;
+
     virtual short Execute() override;
     ///Emitted when an action widget is clicked
     virtual void response(short nResponseId);
