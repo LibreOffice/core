@@ -3302,12 +3302,8 @@ include/tools/datetime.hxx:34
     enum DateTime::DateTimeInitSystem SYSTEM
 include/tools/datetime.hxx:39
     enum DateTime::DateTimeInitEmpty EMPTY
-include/tools/errinf.hxx:44
-    enum ErrorHandlerFlags ButtonsOkCancel
 include/tools/errinf.hxx:47
     enum ErrorHandlerFlags ButtonsYesNo
-include/tools/errinf.hxx:48
-    enum ErrorHandlerFlags ButtonsYesNoCancel
 include/tools/inetmsg.hxx:66
     enum InetMessageMime VERSION
 include/tools/inetmsg.hxx:67

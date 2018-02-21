@@ -55,12 +55,8 @@ static DialogMask aWndFunc(
     MessBoxStyle eBits = MessBoxStyle::NONE;
     if ( (nFlags & (DialogMask::ButtonsCancel | DialogMask::ButtonsRetry)) == (DialogMask::ButtonsCancel | DialogMask::ButtonsRetry))
         eBits = MessBoxStyle::RetryCancel;
-    else if ( (nFlags & DialogMask::ButtonsOkCancel) == DialogMask::ButtonsOkCancel )
-        eBits = MessBoxStyle::OkCancel;
     else if ( (nFlags & DialogMask::ButtonsOk) == DialogMask::ButtonsOk )
         eBits = MessBoxStyle::Ok;
-    else if ( (nFlags & DialogMask::ButtonsYesNoCancel) == DialogMask::ButtonsYesNoCancel )
-        eBits = MessBoxStyle::YesNoCancel;
     else if ( (nFlags & DialogMask::ButtonsYesNo) == DialogMask::ButtonsYesNo )
         eBits = MessBoxStyle::YesNo;
 
