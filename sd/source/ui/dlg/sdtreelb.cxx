@@ -58,6 +58,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 #include <o3tl/make_unique.hxx>
+#include <comphelper/scopeguard.hxx>
 
 
 using namespace com::sun::star;
@@ -205,6 +206,8 @@ SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, WinBits nStyle )
 ,   mbSaveTreeItemState ( false )
 ,   mbShowAllShapes     ( false )
 ,   mbShowAllPages      ( false )
+,   mbSelectionHandlerNavigates(false)
+,   mbNavigationGrabsFocus(true)
 {
     // add lines to Tree-ListBox
     SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
@@ -665,7 +668,7 @@ bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
             SdrObjListIter aIter(
                 *pPage,
                 !pPage->HasObjectNavigationOrder() /* use navigation order, if available */,
-                SdrIterMode::DeepWithGroups );
+                SdrIterMode::Flat );
 
             while( aIter.IsMore() )
             {
@@ -895,6 +898,9 @@ void SdPageObjsTLB::SelectHdl()
     }
 
     SvTreeListBox::SelectHdl();
+
+    if (mbSelectionHandlerNavigates)
+        DoubleClickHdl();
 }
 
 /**
@@ -937,6 +943,16 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
     }
     else
         SvTreeListBox::KeyInput( rKEvt );
+}
+
+void SdPageObjsTLB::MouseButtonDown(const MouseEvent& rMEvt)
+{
+    mbSelectionHandlerNavigates = rMEvt.GetClicks() == 1;
+    comphelper::ScopeGuard aNavigationGuard([this]() { this->mbSelectionHandlerNavigates = false; });
+    mbNavigationGrabsFocus = rMEvt.GetClicks() != 1;
+    comphelper::ScopeGuard aGrabGuard([this]() { this->mbNavigationGrabsFocus = true; });
+
+    SvTreeListBox::MouseButtonDown(rMEvt);
 }
 
 /**
