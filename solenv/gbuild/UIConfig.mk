@@ -121,7 +121,7 @@ $(call gb_UIConfig_get_clean_target,%) :
 define gb_UIConfig_a11yerrors__command
 $(call gb_Output_announce,$(2),$(true),UIA,1)
 $(call gb_Helper_abbreviate_dirs,\
-	$(gb_UIConfig_a11yerrors_COMMAND) -W none $(UIFILE) > $@
+	$(gb_UIConfig_a11yerrors_COMMAND) -W none $(UIFILES) > $@
 )
 endef
 
@@ -189,7 +189,7 @@ $(call gb_UIConfig_get_imagelist_target,$(1)) : UI_IMAGELISTS += $(call gb_UIIma
 $(call gb_UIConfig_get_imagelist_target,$(1)) : $(call gb_UIImageListTarget_get_target,$(2))
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_UIImageListTarget_get_clean_target,$(2))
 
-$(call gb_UIConfig_get_a11yerrors_target,$(1)) : UIFILE := $(SRCDIR)/$(2).ui
+$(call gb_UIConfig_get_a11yerrors_target,$(1)) : UIFILES += $(SRCDIR)/$(2).ui
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_UIA11YErrorsTarget_get_clean_target,$(2))
 
 endef
