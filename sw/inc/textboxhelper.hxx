@@ -55,11 +55,14 @@ public:
     static css::uno::Any queryInterface(SwFrameFormat* pShape, const css::uno::Type& rType);
 
     /// Sync property of TextBox with the one of the shape.
-    static void syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID, const css::uno::Any& rValue);
+    static void syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
+                             const css::uno::Any& rValue);
     /// Does the same, but works on properties which lack an sw-specific WID / MemberID.
-    static void syncProperty(SwFrameFormat* pShape, const OUString& rPropertyName, const css::uno::Any& rValue);
+    static void syncProperty(SwFrameFormat* pShape, const OUString& rPropertyName,
+                             const css::uno::Any& rValue);
     /// Get a property of the underlying TextFrame.
-    static void getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID, css::uno::Any& rValue);
+    static void getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
+                            css::uno::Any& rValue);
 
     /// Similar to syncProperty(), but used by the internal API (e.g. for UI purposes).
     static void syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& rSet);
@@ -74,7 +77,8 @@ public:
      */
     static SwFrameFormat* getOtherTextBoxFormat(const SwFrameFormat* pFormat, sal_uInt16 nType);
     /// If we have an associated TextFrame, then return that.
-    static SwFrameFormat* getOtherTextBoxFormat(css::uno::Reference<css::drawing::XShape> const& xShape);
+    static SwFrameFormat*
+    getOtherTextBoxFormat(css::uno::Reference<css::drawing::XShape> const& xShape);
     /// Return the textbox rectangle of a draw shape (in twips).
     static tools::Rectangle getTextRectangle(SwFrameFormat* pShape, bool bAbsolute = true);
 
@@ -103,11 +107,14 @@ public:
     static void getShapeWrapThrough(const SwFrameFormat* pTextBox, bool& rWrapThrough);
 
     /// Saves the current shape -> textbox links in a map, so they can be restored later.
-    static void saveLinks(const SwFrameFormats& rFormats, std::map<const SwFrameFormat*, const SwFrameFormat*>& rLinks);
+    static void saveLinks(const SwFrameFormats& rFormats,
+                          std::map<const SwFrameFormat*, const SwFrameFormat*>& rLinks);
     /// Reset the shape -> textbox link on the shape, and save it to the map, so it can be restored later.
-    static void resetLink(SwFrameFormat* pShape, std::map<const SwFrameFormat*, SwFormatContent>& rOldContent);
+    static void resetLink(SwFrameFormat* pShape,
+                          std::map<const SwFrameFormat*, SwFormatContent>& rOldContent);
     /// Undo the effect of saveLinks() + individual resetLink() calls.
-    static void restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew, SavedLink& rSavedLinks, SavedContent& rResetContent);
+    static void restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew,
+                             SavedLink& rSavedLinks, SavedContent& rResetContent);
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX
