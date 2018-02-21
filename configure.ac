@@ -8154,7 +8154,7 @@ system)
     SYSTEM_PYTHON=TRUE
 
     AC_MSG_CHECKING([for python lxml])
-    if $PYTHON -c "import lxml.etree as ET" ; then
+    if $PYTHON_FOR_BUILD -c "import lxml.etree as ET" ; then
         PYTHON_LXML=TRUE
         AC_MSG_RESULT([yes])
     else

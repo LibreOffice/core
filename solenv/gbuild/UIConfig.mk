@@ -94,7 +94,7 @@ endef
 # * UIConfig/<name> containing all nontranslatable files
 
 gb_UIConfig_INSTDIR := $(LIBO_SHARE_FOLDER)/config/soffice.cfg
-gb_UIConfig_a11yerrors_COMMAND = $(SRCDIR)/bin/gla11y
+gb_UIConfig_a11yerrors_COMMAND = $(PYTHON_FOR_BUILD) $(SRCDIR)/bin/gla11y
 
 $(dir $(call gb_UIConfig_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
