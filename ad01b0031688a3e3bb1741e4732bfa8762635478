@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_748f6acc",
+        "filename": "sc/source/core/data/table7.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-21T17:09:21Z",
+      "side": 0,
+      "message": "Removing const is dangerous, certainly pSrcTab is not to be modified here.",
+      "range": {
+        "startLine": 121,
+        "startChar": 102,
+        "endLine": 121,
+        "endChar": 107
+      },
+      "revId": "ad01b0031688a3e3bb1741e4732bfa8762635478",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
