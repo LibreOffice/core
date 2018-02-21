@@ -26,7 +26,7 @@
 #include <svx/xtable.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/useroptions.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #include <global.hxx>
@@ -151,12 +151,18 @@ IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl, Button*, void)
 
     if ( !ScDocument::ValidTabName( aName ) )
     {
-        ScopedVclPtrInstance<InfoBox>(this, ScGlobal::GetRscString(STR_INVALIDTABNAME))->Execute();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      ScGlobal::GetRscString(STR_INVALIDTABNAME)));
+        xInfoBox->run();
         m_pEdName->GrabFocus();
     }
     else if ( !bIsEdit && !pDoc->ValidNewTabName( aName ) )
     {
-        ScopedVclPtrInstance<InfoBox>(this, ScGlobal::GetRscString(STR_NEWTABNAMENOTUNIQUE))->Execute();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      ScGlobal::GetRscString(STR_NEWTABNAMENOTUNIQUE)));
+        xInfoBox->run();
         m_pEdName->GrabFocus();
     }
     else

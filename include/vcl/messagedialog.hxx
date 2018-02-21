@@ -26,13 +26,8 @@ private:
     VclPtr<FixedImage> m_pImage;
     VclPtr<VclMultiLineEdit> m_pPrimaryMessage;
     VclPtr<VclMultiLineEdit> m_pSecondaryMessage;
-    std::vector<VclPtr<PushButton>> m_aOwnedButtons;
-    std::map<VclPtr<const vcl::Window>, short> m_aResponses;
     OUString m_sPrimaryString;
     OUString m_sSecondaryString;
-    DECL_DLLPRIVATE_LINK(ButtonHdl, Button*, void);
-    void setButtonHandlers(VclButtonBox const* pButtonBox);
-    short get_response(const vcl::Window* pWindow) const;
     void create_owned_areas();
 
     friend class VclPtr<MessageDialog>;
@@ -45,8 +40,6 @@ public:
     MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
     virtual bool set_property(const OString& rKey, const OUString& rValue) override;
     virtual short Execute() override;
-    ///Emitted when an action widget is clicked
-    virtual void response(short nResponseId);
     OUString const& get_primary_text() const;
     OUString const& get_secondary_text() const;
     void set_primary_text(const OUString& rPrimaryString);

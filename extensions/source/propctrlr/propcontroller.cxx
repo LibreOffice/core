@@ -42,7 +42,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/property.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
 #include <osl/mutex.hxx>
@@ -1376,7 +1376,10 @@ namespace pcr
         }
         catch(const PropertyVetoException& eVetoException)
         {
-            ScopedVclPtrInstance<InfoBox>(m_pView, eVetoException.Message)->Execute();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_pView ? m_pView->GetFrameWeld() : nullptr,
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          eVetoException.Message));
+            xInfoBox->run();
             PropertyHandlerRef handler = impl_getHandlerForProperty_throw( rName );
             Any aNormalizedValue = handler->getPropertyValue( rName );
             getPropertyBox().SetPropertyValue( rName, aNormalizedValue, false );

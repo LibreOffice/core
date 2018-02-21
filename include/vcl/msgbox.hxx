@@ -88,16 +88,8 @@ public:
     virtual Size        GetOptimalSize() const override;
 };
 
-class VCL_DLLPUBLIC InfoBox : public MessBox
-{
-public:
-                        InfoBox( vcl::Window* pParent, const OUString& rMessage );
-                        InfoBox( vcl::Window* pParent, MessBoxStyle nStyle,
-                                const OUString& rMessage );
-
-    static Image const & GetStandardImage();
-    static OUString     GetStandardText();
-};
+VCL_DLLPUBLIC Image const & GetStandardInfoBoxImage();
+VCL_DLLPUBLIC OUString GetStandardInfoBoxText();
 
 class VCL_DLLPUBLIC WarningBox : public MessBox
 {

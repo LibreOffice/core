@@ -37,6 +37,7 @@
 #include <basic/sbxmeth.hxx>
 #include <basic/sbxcore.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svl/eitem.hxx>
@@ -490,7 +491,10 @@ bool SfxFilterMatcher::IsFilterInstalled_Impl( const std::shared_ptr<const SfxFi
         {
 #ifdef DBG_UTIL
             // Start Setup
-            ScopedVclPtrInstance<InfoBox>( nullptr, "Here should the Setup now be starting!" )->Execute();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          "Here should the Setup now be starting!"));
+            xInfoBox->run();
 #endif
             // Installation must still give feedback if it worked or not,
             // then the  Filterflag be deleted
@@ -502,7 +506,10 @@ bool SfxFilterMatcher::IsFilterInstalled_Impl( const std::shared_ptr<const SfxFi
     {
         OUString aText( SfxResId(STR_FILTER_CONSULT_SERVICE) );
         aText = aText.replaceFirst( "$(FILTER)", pFilter->GetUIName() );
-        ScopedVclPtrInstance<InfoBox>( nullptr, aText )->Execute();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      aText));
+        xInfoBox->run();
         return false;
     }
     else

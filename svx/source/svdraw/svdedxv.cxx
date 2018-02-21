@@ -22,7 +22,7 @@
 #include <svx/svdedxv.hxx>
 #include <svl/solar.hrc>
 #include <svl/itemiter.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/hatch.hxx>
 #include <svl/whiter.hxx>
 #include <svl/style.hxx>
@@ -2076,7 +2076,10 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             if(bHasEEFeatureItems)
             {
                 OUString aMessage("SdrObjEditView::SetAttributes(): Setting EE_FEATURE items at the SdrView does not make sense! It only leads to overhead and unreadable documents.");
-                ScopedVclPtrInstance<InfoBox>(nullptr, aMessage)->Execute();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              aMessage));
+                xInfoBox->run();
             }
         }
 #endif

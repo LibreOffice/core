@@ -392,6 +392,19 @@ public:
     {
         m_xDialog->EndDialog(nResponse);
     }
+
+    virtual void add_button(const OUString& rText, int nResponse)
+    {
+        VclButtonBox* pBox = m_xDialog->get_action_area();
+        VclPtr<PushButton> xButton(new PushButton(pBox, WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER));
+        xButton->SetText(rText);
+        m_xDialog->add_button(xButton, nResponse, true);
+    }
+
+    virtual void set_default_response(int response) override
+    {
+        m_xDialog->set_default_response(response);
+    }
 };
 
 class SalInstanceMessageDialog : public SalInstanceDialog, public virtual weld::MessageDialog

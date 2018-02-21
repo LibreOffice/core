@@ -32,6 +32,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <svl/eitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/intitem.hxx>
@@ -123,7 +124,12 @@ static bool lcl_IsPasswordCorrect( const OUString &rPassword )
     if (SvPasswordHelper::CompareHashPassword( aPasswordHash, rPassword ))
         bRes = true;    // password was correct
     else
-        ScopedVclPtrInstance<InfoBox>(nullptr, SfxResId(RID_SVXSTR_INCORRECT_PASSWORD))->Execute();
+    {
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      SfxResId(RID_SVXSTR_INCORRECT_PASSWORD)));
+        xInfoBox->run();
+    }
 
     return bRes;
 }
