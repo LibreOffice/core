@@ -110,6 +110,7 @@ public:
     void testDefaultView();
     void testIMESupport();
     void testTdf115783();
+    void testPasteTextOnSlide();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -152,6 +153,7 @@ public:
     CPPUNIT_TEST(testDefaultView);
     CPPUNIT_TEST(testIMESupport);
     CPPUNIT_TEST(testTdf115783);
+    CPPUNIT_TEST(testPasteTextOnSlide);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2051,6 +2053,70 @@ void SdTiledRenderingTest::testTdf115783()
     int nHeight = xPropertySet->getPropertyValue("CharHeight").get<float>();
     // Make sure that the single font size for the cell is the expected one.
     CPPUNIT_ASSERT_EQUAL(12, nHeight);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testPasteTextOnSlide()
+{
+    // Load the document.
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("paste_text_onslide.odp");
+
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+
+    // select second text object
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    Scheduler::ProcessEventsToIdle();
+
+    // step into text editing
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '1', 0);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, '1', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // select full text
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    Scheduler::ProcessEventsToIdle();
+
+    // Copy some text
+    comphelper::dispatchCommand(".uno:Copy", uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+
+    // Paste onto the slide
+    comphelper::dispatchCommand(".uno:Paste", uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+
+    // Check the position of the newly added text shape, created for pasted text
+    SdrObject* pObject = pXImpressDocument->GetDocShell()->GetViewShell()->GetActualPage()->GetObj(2);
+    SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObject);
+    CPPUNIT_ASSERT(pTextObj);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TEXT), pTextObj->GetObjIdentifier());
+    Point aPos = pTextObj->GetLastBoundRect().TopLeft();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(12990), aPos.getX(), 100);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(7393), aPos.getY(), 100);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
