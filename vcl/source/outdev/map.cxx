@@ -540,12 +540,12 @@ tools::Polygon OutputDevice::ImplLogicToDevicePixel( const tools::Polygon& rLogi
         {
             const Point* pPt = &(pPointAry[i]);
             Point aPt;
-            aPt.X() = ImplLogicToPixel( pPt->X()+maMapRes.mnMapOfsX, mnDPIX,
+            aPt.setX( ImplLogicToPixel( pPt->X()+maMapRes.mnMapOfsX, mnDPIX,
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
-                                        maThresRes.mnThresLogToPixX )+mnOutOffX+mnOutOffOrigX;
-            aPt.Y() = ImplLogicToPixel( pPt->Y()+maMapRes.mnMapOfsY, mnDPIY,
+                                        maThresRes.mnThresLogToPixX )+mnOutOffX+mnOutOffOrigX );
+            aPt.setY( ImplLogicToPixel( pPt->Y()+maMapRes.mnMapOfsY, mnDPIY,
                                         maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
-                                        maThresRes.mnThresLogToPixY )+mnOutOffY+mnOutOffOrigY;
+                                        maThresRes.mnThresLogToPixY )+mnOutOffY+mnOutOffOrigY );
             aPoly[i] = aPt;
         }
     }
@@ -554,8 +554,8 @@ tools::Polygon OutputDevice::ImplLogicToDevicePixel( const tools::Polygon& rLogi
         for ( i = 0; i < nPoints; i++ )
         {
             Point aPt = pPointAry[i];
-            aPt.X() += mnOutOffX;
-            aPt.Y() += mnOutOffY;
+            aPt.AdjustX(mnOutOffX );
+            aPt.AdjustY(mnOutOffY );
             aPoly[i] = aPt;
         }
     }
@@ -1002,12 +1002,12 @@ tools::Polygon OutputDevice::LogicToPixel( const tools::Polygon& rLogicPoly ) co
     {
         const Point* pPt = &(pPointAry[i]);
         Point aPt;
-        aPt.X() = ImplLogicToPixel( pPt->X() + maMapRes.mnMapOfsX, mnDPIX,
+        aPt.setX( ImplLogicToPixel( pPt->X() + maMapRes.mnMapOfsX, mnDPIX,
                                     maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
-                                    maThresRes.mnThresLogToPixX )+mnOutOffOrigX;
-        aPt.Y() = ImplLogicToPixel( pPt->Y() + maMapRes.mnMapOfsY, mnDPIY,
+                                    maThresRes.mnThresLogToPixX )+mnOutOffOrigX );
+        aPt.setY( ImplLogicToPixel( pPt->Y() + maMapRes.mnMapOfsY, mnDPIY,
                                     maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
-                                    maThresRes.mnThresLogToPixY )+mnOutOffOrigY;
+                                    maThresRes.mnThresLogToPixY )+mnOutOffOrigY );
         aPoly[i] = aPt;
     }
 
@@ -1161,12 +1161,12 @@ tools::Polygon OutputDevice::LogicToPixel( const tools::Polygon& rLogicPoly,
     {
         const Point* pPt = &(pPointAry[i]);
         Point aPt;
-        aPt.X() = ImplLogicToPixel( pPt->X() + aMapRes.mnMapOfsX, mnDPIX,
+        aPt.setX( ImplLogicToPixel( pPt->X() + aMapRes.mnMapOfsX, mnDPIX,
                                     aMapRes.mnMapScNumX, aMapRes.mnMapScDenomX,
-                                    aThresRes.mnThresLogToPixX )+mnOutOffOrigX;
-        aPt.Y() = ImplLogicToPixel( pPt->Y() + aMapRes.mnMapOfsY, mnDPIY,
+                                    aThresRes.mnThresLogToPixX )+mnOutOffOrigX );
+        aPt.setY( ImplLogicToPixel( pPt->Y() + aMapRes.mnMapOfsY, mnDPIY,
                                     aMapRes.mnMapScNumY, aMapRes.mnMapScDenomY,
-                                    aThresRes.mnThresLogToPixY )+mnOutOffOrigY;
+                                    aThresRes.mnThresLogToPixY )+mnOutOffOrigY );
         aPoly[i] = aPt;
     }
 
@@ -1247,12 +1247,12 @@ tools::Polygon OutputDevice::PixelToLogic( const tools::Polygon& rDevicePoly ) c
     {
         const Point* pPt = &(pPointAry[i]);
         Point aPt;
-        aPt.X() = ImplPixelToLogic( pPt->X(), mnDPIX,
+        aPt.setX( ImplPixelToLogic( pPt->X(), mnDPIX,
                                     maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
-                                    maThresRes.mnThresPixToLogX ) - maMapRes.mnMapOfsX - mnOutOffLogicX;
-        aPt.Y() = ImplPixelToLogic( pPt->Y(), mnDPIY,
+                                    maThresRes.mnThresPixToLogX ) - maMapRes.mnMapOfsX - mnOutOffLogicX );
+        aPt.setY( ImplPixelToLogic( pPt->Y(), mnDPIY,
                                     maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
-                                    maThresRes.mnThresPixToLogY ) - maMapRes.mnMapOfsY - mnOutOffLogicY;
+                                    maThresRes.mnThresPixToLogY ) - maMapRes.mnMapOfsY - mnOutOffLogicY );
         aPoly[i] = aPt;
     }
 
@@ -1410,12 +1410,12 @@ tools::Polygon OutputDevice::PixelToLogic( const tools::Polygon& rDevicePoly,
     {
         const Point* pPt = &(pPointAry[i]);
         Point aPt;
-        aPt.X() = ImplPixelToLogic( pPt->X(), mnDPIX,
+        aPt.setX( ImplPixelToLogic( pPt->X(), mnDPIX,
                                     aMapRes.mnMapScNumX, aMapRes.mnMapScDenomX,
-                                    aThresRes.mnThresPixToLogX ) - aMapRes.mnMapOfsX - mnOutOffLogicX;
-        aPt.Y() = ImplPixelToLogic( pPt->Y(), mnDPIY,
+                                    aThresRes.mnThresPixToLogX ) - aMapRes.mnMapOfsX - mnOutOffLogicX );
+        aPt.setY( ImplPixelToLogic( pPt->Y(), mnDPIY,
                                     aMapRes.mnMapScNumY, aMapRes.mnMapScDenomY,
-                                    aThresRes.mnThresPixToLogY ) - aMapRes.mnMapOfsY - mnOutOffLogicY;
+                                    aThresRes.mnThresPixToLogY ) - aMapRes.mnMapOfsY - mnOutOffLogicY );
         aPoly[i] = aPt;
     }
 

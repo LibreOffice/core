@@ -183,7 +183,7 @@ tools::Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, tools::
     tools::Rectangle buttonRect;
     buttonRect.SetSize(Size(buttonWidth, buttonHeight));
     buttonRect.setY(aAreaRect.Top());
-    buttonRect.Bottom() = buttonRect.Top() + aAreaRect.GetHeight();
+    buttonRect.SetBottom( buttonRect.Top() + aAreaRect.GetHeight() );
     tools::Rectangle partRect(buttonRect);
     if ( nPart == ControlPart::ButtonUp )
     {
@@ -203,16 +203,16 @@ tools::Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, tools::
     {
         if (AllSettings::GetLayoutRTL())
         {
-            partRect.Right() = aAreaRect.Left() + aAreaRect.GetWidth();
-            partRect.Left()  = aAreaRect.Left() + (2 * buttonRect.GetWidth()) - 1;
+            partRect.SetRight( aAreaRect.Left() + aAreaRect.GetWidth() );
+            partRect.SetLeft( aAreaRect.Left() + (2 * buttonRect.GetWidth()) - 1 );
         }
         else
         {
-            partRect.Right() = (aAreaRect.Left() + (aAreaRect.GetWidth() - 2 * buttonRect.GetWidth())) - 1;
-            partRect.Left()  = aAreaRect.Left();
+            partRect.SetRight( (aAreaRect.Left() + (aAreaRect.GetWidth() - 2 * buttonRect.GetWidth())) - 1 );
+            partRect.SetLeft( aAreaRect.Left() );
         }
-        partRect.Top()    = aAreaRect.Top();
-        partRect.Bottom() = aAreaRect.Bottom();
+        partRect.SetTop( aAreaRect.Top() );
+        partRect.SetBottom( aAreaRect.Bottom() );
     }
 
     return partRect;
@@ -288,25 +288,25 @@ tools::Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, tools
 
         if (nPart == ControlPart::ButtonUp)
         {
-            aSize.Height() *= nFirst;
+            aSize.setHeight( aSize.Height() * nFirst );
             buttonRect.setX(aAreaRect.Left());
             buttonRect.setY(aAreaRect.Top());
         }
         else if (nPart == ControlPart::ButtonLeft)
         {
-            aSize.Width() *= nFirst;
+            aSize.setWidth( aSize.Width() * nFirst );
             buttonRect.setX(aAreaRect.Left());
             buttonRect.setY(aAreaRect.Top());
         }
         else if (nPart == ControlPart::ButtonDown)
         {
-            aSize.Height() *= nSecond;
+            aSize.setHeight( aSize.Height() * nSecond );
             buttonRect.setX(aAreaRect.Left());
             buttonRect.setY(aAreaRect.Top() + aAreaRect.GetHeight() - aSize.Height());
         }
         else if (nPart == ControlPart::ButtonRight)
         {
-            aSize.Width() *= nSecond;
+            aSize.setWidth( aSize.Width() * nSecond );
             buttonRect.setX(aAreaRect.Left() + aAreaRect.GetWidth() - aSize.Width());
             buttonRect.setY(aAreaRect.Top());
         }
@@ -409,10 +409,10 @@ namespace
         GtkBorder margin;
         gtk_style_context_get_margin(pContext, gtk_style_context_get_state(pContext), &margin);
 
-        aRect.Left() += margin.left;
-        aRect.Top() += margin.top;
-        aRect.Right() -= margin.right;
-        aRect.Bottom() -= margin.bottom;
+        aRect.AdjustLeft(margin.left );
+        aRect.AdjustTop(margin.top );
+        aRect.AdjustRight( -(margin.right) );
+        aRect.AdjustBottom( -(margin.bottom) );
 
         gtk_render_background(pContext, cr, aRect.Left(), aRect.Top(),
                                             aRect.GetWidth(), aRect.GetHeight());
@@ -423,10 +423,10 @@ namespace
         gtk_style_context_get_border(pContext, gtk_style_context_get_state(pContext), &border);
         gtk_style_context_get_padding(pContext, gtk_style_context_get_state(pContext), &padding);
 
-        aRect.Left() += border.left + padding.left;
-        aRect.Top() += border.top + padding.top;
-        aRect.Right() -= border.right + padding.right;
-        aRect.Bottom() -= border.bottom + padding.bottom;
+        aRect.AdjustLeft(border.left + padding.left );
+        aRect.AdjustTop(border.top + padding.top );
+        aRect.AdjustRight( -(border.right + padding.right) );
+        aRect.AdjustBottom( -(border.bottom + padding.bottom) );
 
         return aRect;
     }
@@ -712,15 +712,15 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         {
             tools::Rectangle aBtn1Rect = NWGetScrollButtonRect(ControlPart::ButtonLeft, aTrackRect);
             tools::Rectangle aBtn2Rect = NWGetScrollButtonRect(ControlPart::ButtonRight, aTrackRect);
-            aTrackRect.Left() = aBtn1Rect.Right();
-            aTrackRect.Right() = aBtn2Rect.Left();
+            aTrackRect.SetLeft( aBtn1Rect.Right() );
+            aTrackRect.SetRight( aBtn2Rect.Left() );
         }
         else
         {
             tools::Rectangle aBtn1Rect = NWGetScrollButtonRect(ControlPart::ButtonUp, aTrackRect);
             tools::Rectangle aBtn2Rect = NWGetScrollButtonRect(ControlPart::ButtonDown, aTrackRect);
-            aTrackRect.Top() = aBtn1Rect.Bottom() + 1;
-            aTrackRect.Bottom() = aBtn2Rect.Top();
+            aTrackRect.SetTop( aBtn1Rect.Bottom() + 1 );
+            aTrackRect.SetBottom( aBtn2Rect.Top() );
         }
 
         GtkStyleContext* pScrollbarTroughStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
@@ -841,11 +841,11 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         button21BoundRect.SetSize( Size( stepper_size, slider_width ) );
         button22BoundRect.SetSize( Size( stepper_size, slider_width ) );
 
-        thumbRect.Bottom() = thumbRect.Top() + slider_width - 1;
+        thumbRect.SetBottom( thumbRect.Top() + slider_width - 1 );
         // Make sure the thumb is at least the default width (so we don't get tiny thumbs),
         // but if the VCL gives us a size smaller than the theme's default thumb size,
         // honor the VCL size
-        thumbRect.Right() += magic;
+        thumbRect.AdjustRight(magic );
         // Center vertically in the track
         thumbRect.Move( 0, (scrollbarRect.GetHeight() - slider_width) / 2 );
     }
@@ -880,9 +880,9 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         button21BoundRect.SetSize( Size( slider_width, stepper_size ) );
         button22BoundRect.SetSize( Size( slider_width, stepper_size ) );
 
-        thumbRect.Right() = thumbRect.Left() + slider_width - 1;
+        thumbRect.SetRight( thumbRect.Left() + slider_width - 1 );
 
-        thumbRect.Bottom() += magic;
+        thumbRect.AdjustBottom(magic );
         // Center horizontally in the track
         thumbRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, 0 );
     }
@@ -1169,7 +1169,7 @@ tools::Rectangle GtkSalGraphics::NWGetComboBoxButtonRect(
     {
         Point aPos = Point(aAreaRect.Left() + aAreaRect.GetWidth() - nButtonWidth, aAreaRect.Top());
         if (AllSettings::GetLayoutRTL())
-            aPos.X() = aAreaRect.Left();
+            aPos.setX( aAreaRect.Left() );
         aButtonRect.SetSize( Size( nButtonWidth, aAreaRect.GetHeight() ) );
         aButtonRect.SetPos(aPos);
     }
@@ -1184,10 +1184,10 @@ tools::Rectangle GtkSalGraphics::NWGetComboBoxButtonRect(
                                    aAreaRect.GetHeight() - (adjust_top + adjust_bottom)) );
         Point aEditPos = aAreaRect.TopLeft();
         if (AllSettings::GetLayoutRTL())
-            aEditPos.X() += nButtonWidth;
+            aEditPos.AdjustX(nButtonWidth );
         else
-            aEditPos.X() += adjust_left;
-        aEditPos.Y() += adjust_top;
+            aEditPos.AdjustX(adjust_left );
+        aEditPos.AdjustY(adjust_top );
         aButtonRect.SetPos( aEditPos );
     }
 
@@ -2679,9 +2679,9 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         rNativeContentRegion = rNativeBoundingRegion;
 
         if (!rNativeContentRegion.GetWidth())
-            rNativeContentRegion.Right() = rNativeContentRegion.Left() + 1;
+            rNativeContentRegion.SetRight( rNativeContentRegion.Left() + 1 );
         if (!rNativeContentRegion.GetHeight())
-            rNativeContentRegion.Bottom() = rNativeContentRegion.Top() + 1;
+            rNativeContentRegion.SetBottom( rNativeContentRegion.Top() + 1 );
 
         return true;
     }

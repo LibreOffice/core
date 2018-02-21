@@ -223,14 +223,14 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
     {
         aImageSize = pItem->maTabImage.GetSizePixel();
         if( !pItem->maFormatText.isEmpty() )
-            aImageSize.Width() += GetTextHeight()/4;
+            aImageSize.AdjustWidth(GetTextHeight()/4 );
     }
-    aSize.Width() += aImageSize.Width();
+    aSize.AdjustWidth(aImageSize.Width() );
     if( aImageSize.Height() > aSize.Height() )
-        aSize.Height() = aImageSize.Height();
+        aSize.setHeight( aImageSize.Height() );
 
-    aSize.Width()  += TAB_TABOFFSET_X*2;
-    aSize.Height() += TAB_TABOFFSET_Y*2;
+    aSize.AdjustWidth(TAB_TABOFFSET_X*2 );
+    aSize.AdjustHeight(TAB_TABOFFSET_Y*2 );
 
     tools::Rectangle aCtrlRegion( Point( 0, 0 ), aSize );
     tools::Rectangle aBoundingRgn, aContentRgn;
@@ -247,7 +247,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
     // For languages with short names (e.g. Chinese), because the space is
     // normally only one pixel per char
     if ( pItem->maFormatText.getLength() < TAB_EXTRASPACE_X )
-        aSize.Width() += TAB_EXTRASPACE_X-pItem->maFormatText.getLength();
+        aSize.AdjustWidth(TAB_EXTRASPACE_X-pItem->maFormatText.getLength() );
 
     // shorten Text if needed
     if ( aSize.Width()+4 >= nMaxWidth )
@@ -257,22 +257,22 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
         do
         {
             pItem->maFormatText = pItem->maFormatText.replaceAt( pItem->maFormatText.getLength()-aAppendStr.getLength()-1, 1, "" );
-            aSize.Width() = GetCtrlTextWidth( pItem->maFormatText );
-            aSize.Width() += aImageSize.Width();
-            aSize.Width() += TAB_TABOFFSET_X*2;
+            aSize.setWidth( GetCtrlTextWidth( pItem->maFormatText ) );
+            aSize.AdjustWidth(aImageSize.Width() );
+            aSize.AdjustWidth(TAB_TABOFFSET_X*2 );
         }
         while ( (aSize.Width()+4 >= nMaxWidth) && (pItem->maFormatText.getLength() > aAppendStr.getLength()) );
         if ( aSize.Width()+4 >= nMaxWidth )
         {
             pItem->maFormatText = ".";
-            aSize.Width() = 1;
+            aSize.setWidth( 1 );
         }
     }
 
     if( pItem->maFormatText.isEmpty() )
     {
         if( aSize.Height() < aImageSize.Height()+4 ) //leave space for focus rect
-            aSize.Height() = aImageSize.Height()+4;
+            aSize.setHeight( aImageSize.Height()+4 );
     }
 
     return aSize;
@@ -484,16 +484,16 @@ bool TabControl::ImplPlaceTabs( long nWidth )
                 n++;
             }
 
-            item.maRect.Left() += nIDX;
-            item.maRect.Right() += nIDX + nDX;
-            item.maRect.Top() = nLineHeightAry[n-1];
-            item.maRect.Bottom() = nLineHeightAry[n-1] + nIH;
+            item.maRect.AdjustLeft(nIDX );
+            item.maRect.AdjustRight(nIDX + nDX );
+            item.maRect.SetTop( nLineHeightAry[n-1] );
+            item.maRect.SetBottom( nLineHeightAry[n-1] + nIH );
             nIDX += nDX;
 
             if ( nModDX )
             {
                 nIDX++;
-                item.maRect.Right()++;
+                item.maRect.AdjustRight( 1 );
                 nModDX--;
             }
 
@@ -511,8 +511,8 @@ bool TabControl::ImplPlaceTabs( long nWidth )
             }
             for (auto & item : mpTabCtrlData->maItemList)
             {
-                item.maRect.Left() += nRightSpace / 2;
-                item.maRect.Right() += nRightSpace / 2;
+                item.maRect.AdjustLeft(nRightSpace / 2 );
+                item.maRect.AdjustRight(nRightSpace / 2 );
             }
         }
     }
@@ -594,21 +594,21 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
 
         if ( !pOldItem || !pItem || (pOldItem->mnLine != pItem->mnLine) )
         {
-            aRect.Left() = 0;
-            aRect.Top() = 0;
-            aRect.Right() = Control::GetOutputSizePixel().Width();
+            aRect.SetLeft( 0 );
+            aRect.SetTop( 0 );
+            aRect.SetRight( Control::GetOutputSizePixel().Width() );
         }
         else
         {
-            aRect.Left()    -= 3;
-            aRect.Top()     -= 2;
-            aRect.Right()   += 3;
+            aRect.AdjustLeft( -3 );
+            aRect.AdjustTop( -2 );
+            aRect.AdjustRight(3 );
             Invalidate( aRect );
             nPos = GetPagePos( nOldId );
             aRect = ImplGetTabRect( nPos );
-            aRect.Left()    -= 3;
-            aRect.Top()     -= 2;
-            aRect.Right()   += 3;
+            aRect.AdjustLeft( -3 );
+            aRect.AdjustTop( -2 );
+            aRect.AdjustRight(3 );
         }
         Invalidate( aRect );
     }
@@ -664,10 +664,10 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
     // see Window::DrawNativeControl()
     if( IsNativeControlSupported( ControlType::TabPane, ControlPart::Entire ) )
     {
-        aRect.Left()   -= TAB_OFFSET;
-        aRect.Top()    -= TAB_OFFSET;
-        aRect.Right()  += TAB_OFFSET;
-        aRect.Bottom() += TAB_OFFSET;
+        aRect.AdjustLeft( -(TAB_OFFSET) );
+        aRect.AdjustTop( -(TAB_OFFSET) );
+        aRect.AdjustRight(TAB_OFFSET );
+        aRect.AdjustBottom(TAB_OFFSET );
     }
 
     Invalidate( aRect );
@@ -733,16 +733,16 @@ void TabControl::ImplShowFocus()
     {
         aImageSize = rItem.maTabImage.GetSizePixel();
         if( !rItem.maFormatText.isEmpty() )
-            aImageSize.Width() += GetTextHeight()/4;
+            aImageSize.AdjustWidth(GetTextHeight()/4 );
     }
 
     if( !rItem.maFormatText.isEmpty() )
     {
         // show focus around text
-        aRect.Left()   = aRect.Left()+aImageSize.Width()+((aTabSize.Width()-nTextWidth-aImageSize.Width())/2)-nOff-1-1;
-        aRect.Top()    = aRect.Top()+((aTabSize.Height()-nTextHeight)/2)-1-1;
-        aRect.Right()  = aRect.Left()+nTextWidth+2;
-        aRect.Bottom() = aRect.Top()+nTextHeight+2;
+        aRect.SetLeft( aRect.Left()+aImageSize.Width()+((aTabSize.Width()-nTextWidth-aImageSize.Width())/2)-nOff-1-1 );
+        aRect.SetTop( aRect.Top()+((aTabSize.Height()-nTextHeight)/2)-1-1 );
+        aRect.SetRight( aRect.Left()+nTextWidth+2 );
+        aRect.SetBottom( aRect.Top()+nTextHeight+2 );
     }
     else
     {
@@ -752,10 +752,10 @@ void TabControl::ImplShowFocus()
         if( aImageSize.Height() < aRect.GetHeight() )
             nYPos += (aRect.GetHeight() - aImageSize.Height())/2;
 
-        aRect.Left() = nXPos - 2;
-        aRect.Top() = nYPos - 2;
-        aRect.Right() = aRect.Left() + aImageSize.Width() + 4;
-        aRect.Bottom() = aRect.Top() + aImageSize.Height() + 4;
+        aRect.SetLeft( nXPos - 2 );
+        aRect.SetTop( nYPos - 2 );
+        aRect.SetRight( aRect.Left() + aImageSize.Width() + 4 );
+        aRect.SetBottom( aRect.Top() + aImageSize.Height() + 4 );
     }
     ShowFocus( aRect );
 }
@@ -796,10 +796,10 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
         Point aRightTestPos = aRect.BottomRight();
         if (aLeftTestPos.Y() == rCurRect.Bottom())
         {
-            aLeftTestPos.X() -= 2;
+            aLeftTestPos.AdjustX( -2 );
             if (rCurRect.IsInside(aLeftTestPos))
                 bLeftBorder = false;
-            aRightTestPos.X() += 2;
+            aRightTestPos.AdjustX(2 );
             if (rCurRect.IsInside(aRightTestPos))
                 bRightBorder = false;
         }
@@ -916,7 +916,7 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
     {
         aImageSize = pItem->maTabImage.GetSizePixel();
         if (!pItem->maFormatText.isEmpty())
-            aImageSize.Width() += GetTextHeight() / 4;
+            aImageSize.AdjustWidth(GetTextHeight() / 4 );
     }
     long nXPos = aRect.Left() + ((aTabSize.Width() - nTextWidth - aImageSize.Width()) / 2) - nOff - nOff3;
     long nYPos = aRect.Top() + ((aTabSize.Height() - nTextHeight) / 2) - nOff3;
@@ -947,7 +947,7 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
     {
         Point aImgTL( nXPos, aRect.Top() );
         if (aImageSize.Height() < aRect.GetHeight())
-            aImgTL.Y() += (aRect.GetHeight() - aImageSize.Height()) / 2;
+            aImgTL.AdjustY((aRect.GetHeight() - aImageSize.Height()) / 2 );
         rRenderContext.DrawImage(aImgTL, pItem->maTabImage, pItem->mbEnabled ? DrawImageFlags::NONE : DrawImageFlags::Disable );
     }
 }
@@ -1063,10 +1063,10 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rect
     // Draw the TabPage border
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     tools::Rectangle aCurRect;
-    aRect.Left()   -= TAB_OFFSET;
-    aRect.Top()    -= TAB_OFFSET;
-    aRect.Right()  += TAB_OFFSET;
-    aRect.Bottom() += TAB_OFFSET;
+    aRect.AdjustLeft( -(TAB_OFFSET) );
+    aRect.AdjustTop( -(TAB_OFFSET) );
+    aRect.AdjustRight(TAB_OFFSET );
+    aRect.AdjustBottom(TAB_OFFSET );
 
     // if we have an invisible tabpage or no tabpage at all the tabpage rect should be
     // increased to avoid round corners that might be drawn by a theme
@@ -1077,8 +1077,8 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rect
     if (!pCurPage || !pCurPage->IsVisible())
     {
         bNoTabPage = true;
-        aRect.Left() -= 10;
-        aRect.Right() += 10;
+        aRect.AdjustLeft( -10 );
+        aRect.AdjustRight(10 );
     }
 
     if (rRenderContext.IsNativeControlSupported(ControlType::TabPane, ControlPart::Entire))
@@ -1274,10 +1274,10 @@ void TabControl::setAllocation(const Size &rAllocation)
     if ( mbSmallInvalidate )
     {
         tools::Rectangle aRect = ImplGetTabRect( TAB_PAGERECT );
-        aRect.Left()   -= TAB_OFFSET+TAB_BORDER_LEFT;
-        aRect.Top()    -= TAB_OFFSET+TAB_BORDER_TOP;
-        aRect.Right()  += TAB_OFFSET+TAB_BORDER_RIGHT;
-        aRect.Bottom() += TAB_OFFSET+TAB_BORDER_BOTTOM;
+        aRect.AdjustLeft( -(TAB_OFFSET+TAB_BORDER_LEFT) );
+        aRect.AdjustTop( -(TAB_OFFSET+TAB_BORDER_TOP) );
+        aRect.AdjustRight(TAB_OFFSET+TAB_BORDER_RIGHT );
+        aRect.AdjustBottom(TAB_OFFSET+TAB_BORDER_BOTTOM );
         if ( bTabPage )
             Invalidate( aRect, InvalidateFlags::NoChildren );
         else
@@ -1358,11 +1358,11 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
             {
                 tools::Rectangle aItemRect = ImplGetTabRect( GetPagePos( nItemId ) );
                 Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
-                aItemRect.Left()   = aPt.X();
-                aItemRect.Top()    = aPt.Y();
+                aItemRect.SetLeft( aPt.X() );
+                aItemRect.SetTop( aPt.Y() );
                 aPt = OutputToScreenPixel( aItemRect.BottomRight() );
-                aItemRect.Right()  = aPt.X();
-                aItemRect.Bottom() = aPt.Y();
+                aItemRect.SetRight( aPt.X() );
+                aItemRect.SetBottom( aPt.Y() );
                 Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aStr );
                 return;
             }
@@ -1389,11 +1389,11 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
             {
                 tools::Rectangle aItemRect = ImplGetTabRect( GetPagePos( nItemId ) );
                 Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
-                aItemRect.Left()   = aPt.X();
-                aItemRect.Top()    = aPt.Y();
+                aItemRect.SetLeft( aPt.X() );
+                aItemRect.SetTop( aPt.Y() );
                 aPt = OutputToScreenPixel( aItemRect.BottomRight() );
-                aItemRect.Right()  = aPt.X();
-                aItemRect.Bottom() = aPt.Y();
+                aItemRect.SetRight( aPt.X() );
+                aItemRect.SetBottom( aPt.Y() );
                 if ( !rStr.isEmpty() )
                 {
                     if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
@@ -1414,11 +1414,11 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
             {
                 tools::Rectangle aItemRect = ImplGetTabRect( GetPagePos( nItemId ) );
                 Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
-                aItemRect.Left()   = aPt.X();
-                aItemRect.Top()    = aPt.Y();
+                aItemRect.SetLeft( aPt.X() );
+                aItemRect.SetTop( aPt.Y() );
                 aPt = OutputToScreenPixel( aItemRect.BottomRight() );
-                aItemRect.Right()  = aPt.X();
-                aItemRect.Bottom() = aPt.Y();
+                aItemRect.SetRight( aPt.X() );
+                aItemRect.SetBottom( aPt.Y() );
                 Help::ShowQuickHelp( this, aItemRect, rHelpText );
                 return;
             }
@@ -1552,9 +1552,9 @@ bool TabControl::PreNotify( NotifyEvent& rNEvt )
                         // as used by gtk
                         // TODO: query for the correct sizes
                         tools::Rectangle aRect(*pLastRect);
-                        aRect.Left()-=2;
-                        aRect.Right()+=2;
-                        aRect.Top()-=3;
+                        aRect.AdjustLeft( -2 );
+                        aRect.AdjustRight(2 );
+                        aRect.AdjustTop( -3 );
                         aClipRgn.Union( aRect );
                     }
                     if( pRect )
@@ -1563,9 +1563,9 @@ bool TabControl::PreNotify( NotifyEvent& rNEvt )
                         // as used by gtk
                         // TODO: query for the correct sizes
                         tools::Rectangle aRect(*pRect);
-                        aRect.Left()-=2;
-                        aRect.Right()+=2;
-                        aRect.Top()-=3;
+                        aRect.AdjustLeft( -2 );
+                        aRect.AdjustRight(2 );
+                        aRect.AdjustTop( -3 );
                         aClipRgn.Union( aRect );
                     }
                     if( !aClipRgn.IsEmpty() )
@@ -1603,10 +1603,10 @@ void TabControl::SetTabPageSizePixel( const Size& rSize )
     ImplFreeLayoutData();
 
     Size aNewSize( rSize );
-    aNewSize.Width() += TAB_OFFSET*2;
+    aNewSize.AdjustWidth(TAB_OFFSET*2 );
     tools::Rectangle aRect = ImplGetTabRect( TAB_PAGERECT,
                                       aNewSize.Width(), aNewSize.Height() );
-    aNewSize.Height() += aRect.Top()+TAB_OFFSET;
+    aNewSize.AdjustHeight(aRect.Top()+TAB_OFFSET );
     Window::SetOutputSizePixel( aNewSize );
 }
 
@@ -2121,9 +2121,9 @@ Size TabControl::calculateRequisition() const
         Size aPageSize(VclContainer::getLayoutRequisition(*pPage));
 
         if (aPageSize.Width() > aOptimalPageSize.Width())
-            aOptimalPageSize.Width() = aPageSize.Width();
+            aOptimalPageSize.setWidth( aPageSize.Width() );
         if (aPageSize.Height() > aOptimalPageSize.Height())
-            aOptimalPageSize.Height() = aPageSize.Height();
+            aOptimalPageSize.setHeight( aPageSize.Height() );
     }
 
     //fdo#61940 If we were forced to activate pages in order to on-demand
@@ -2150,11 +2150,11 @@ Size TabControl::calculateRequisition() const
     }
 
     Size aOptimalSize(aOptimalPageSize);
-    aOptimalSize.Height() += nTabLabelsBottom;
-    aOptimalSize.Width() = std::max(nTabLabelsRight, aOptimalSize.Width());
+    aOptimalSize.AdjustHeight(nTabLabelsBottom );
+    aOptimalSize.setWidth( std::max(nTabLabelsRight, aOptimalSize.Width()) );
 
-    aOptimalSize.Width() += TAB_OFFSET * 2;
-    aOptimalSize.Height() += TAB_OFFSET * 2;
+    aOptimalSize.AdjustWidth(TAB_OFFSET * 2 );
+    aOptimalSize.AdjustHeight(TAB_OFFSET * 2 );
 
     return aOptimalSize;
 }
@@ -2391,10 +2391,10 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
 
         // set minimum tab size
         if( nFullWidth < nMaxWidth && !item.maText.isEmpty() && aSize.getWidth() < 100)
-            aSize.Width() = 100;
+            aSize.setWidth( 100 );
 
         if( !item.maText.isEmpty() && aSize.getHeight() < 28 )
-            aSize.Height() = 28;
+            aSize.setHeight( 28 );
 
         tools::Rectangle aNewRect( Point( nX, nY ), aSize );
         if ( mbSmallInvalidate && (item.maRect != aNewRect) )
@@ -2418,8 +2418,8 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
         }
         for (auto & item : mpTabCtrlData->maItemList)
         {
-            item.maRect.Left() += nRightSpace / 2;
-            item.maRect.Right() += nRightSpace / 2;
+            item.maRect.AdjustLeft(nRightSpace / 2 );
+            item.maRect.AdjustRight(nRightSpace / 2 );
         }
     }
 
@@ -2453,10 +2453,10 @@ void NotebookbarTabControlBase::ImplPaint(vcl::RenderContext& rRenderContext, co
     // Draw the TabPage border
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     tools::Rectangle aCurRect;
-    aRect.Left()   -= TAB_OFFSET;
-    aRect.Top()    -= TAB_OFFSET;
-    aRect.Right()  += TAB_OFFSET;
-    aRect.Bottom() += TAB_OFFSET;
+    aRect.AdjustLeft( -(TAB_OFFSET) );
+    aRect.AdjustTop( -(TAB_OFFSET) );
+    aRect.AdjustRight(TAB_OFFSET );
+    aRect.AdjustBottom(TAB_OFFSET );
 
     // if we have an invisible tabpage or no tabpage at all the tabpage rect should be
     // increased to avoid round corners that might be drawn by a theme
@@ -2467,8 +2467,8 @@ void NotebookbarTabControlBase::ImplPaint(vcl::RenderContext& rRenderContext, co
     if (!pCurPage || !pCurPage->IsVisible())
     {
         bNoTabPage = true;
-        aRect.Left() -= 10;
-        aRect.Right() += 10;
+        aRect.AdjustLeft( -10 );
+        aRect.AdjustRight(10 );
     }
 
     if (rRenderContext.IsNativeControlSupported(ControlType::TabPane, ControlPart::Entire))
@@ -2650,9 +2650,9 @@ Size NotebookbarTabControlBase::calculateRequisition() const
         Size aPageSize(VclContainer::getLayoutRequisition(*pPage));
 
         if (aPageSize.Width() > aOptimalPageSize.Width())
-            aOptimalPageSize.Width() = aPageSize.Width();
+            aOptimalPageSize.setWidth( aPageSize.Width() );
         if (aPageSize.Height() > aOptimalPageSize.Height())
-            aOptimalPageSize.Height() = aPageSize.Height();
+            aOptimalPageSize.setHeight( aPageSize.Height() );
     }
 
     //fdo#61940 If we were forced to activate pages in order to on-demand
@@ -2682,11 +2682,11 @@ Size NotebookbarTabControlBase::calculateRequisition() const
     }
 
     Size aOptimalSize(aOptimalPageSize);
-    aOptimalSize.Height() += nTabLabelsBottom;
-    aOptimalSize.Width() = std::max(nTabLabelsRight, aOptimalSize.Width());
+    aOptimalSize.AdjustHeight(nTabLabelsBottom );
+    aOptimalSize.setWidth( std::max(nTabLabelsRight, aOptimalSize.Width()) );
 
-    aOptimalSize.Width() += TAB_OFFSET * 2;
-    aOptimalSize.Height() += TAB_OFFSET * 2;
+    aOptimalSize.AdjustWidth(TAB_OFFSET * 2 );
+    aOptimalSize.AdjustHeight(TAB_OFFSET * 2 );
 
     return aOptimalSize;
 }

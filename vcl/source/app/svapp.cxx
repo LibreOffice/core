@@ -883,8 +883,8 @@ ImplSVEvent * Application::PostMouseEvent( VclEventId nEvent, vcl::Window *pWin,
     {
         Point aTransformedPos( pMouseEvent->GetPosPixel() );
 
-        aTransformedPos.X() += pWin->GetOutOffXPixel();
-        aTransformedPos.Y() += pWin->GetOutOffYPixel();
+        aTransformedPos.AdjustX(pWin->GetOutOffXPixel() );
+        aTransformedPos.AdjustY(pWin->GetOutOffYPixel() );
 
         const MouseEvent aTransformedEvent( aTransformedPos, pMouseEvent->GetClicks(), pMouseEvent->GetMode(),
                                             pMouseEvent->GetButtons(), pMouseEvent->GetModifier() );

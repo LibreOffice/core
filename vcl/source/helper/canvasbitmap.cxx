@@ -468,8 +468,8 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
     tools::Rectangle aRequestedBytes( aRequestedArea );
 
     // adapt to byte boundaries
-    aRequestedBytes.Left()  = aRequestedArea.Left()*m_nBitsPerOutputPixel/8;
-    aRequestedBytes.Right() = (aRequestedArea.Right()*m_nBitsPerOutputPixel + 7)/8;
+    aRequestedBytes.SetLeft( aRequestedArea.Left()*m_nBitsPerOutputPixel/8 );
+    aRequestedBytes.SetRight( (aRequestedArea.Right()*m_nBitsPerOutputPixel + 7)/8 );
 
     // copy stuff to output sequence
     aRet.realloc(aRequestedBytes.getWidth()*aRequestedBytes.getHeight());

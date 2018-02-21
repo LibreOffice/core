@@ -205,39 +205,39 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
         break;
 
     case WallpaperStyle::Top:
-        aPos.X() += ( aSize.Width() - nBmpWidth ) >> 1;
+        aPos.AdjustX(( aSize.Width() - nBmpWidth ) >> 1 );
         break;
 
     case WallpaperStyle::TopRight:
-        aPos.X() += ( aSize.Width() - nBmpWidth );
+        aPos.AdjustX( aSize.Width() - nBmpWidth);
         break;
 
     case WallpaperStyle::Left:
-        aPos.Y() += ( aSize.Height() - nBmpHeight ) >> 1;
+        aPos.AdjustY(( aSize.Height() - nBmpHeight ) >> 1 );
         break;
 
     case WallpaperStyle::Center:
-        aPos.X() += ( aSize.Width() - nBmpWidth ) >> 1;
-        aPos.Y() += ( aSize.Height() - nBmpHeight ) >> 1;
+        aPos.AdjustX(( aSize.Width() - nBmpWidth ) >> 1 );
+        aPos.AdjustY(( aSize.Height() - nBmpHeight ) >> 1 );
         break;
 
     case WallpaperStyle::Right:
-        aPos.X() += ( aSize.Width() - nBmpWidth );
-        aPos.Y() += ( aSize.Height() - nBmpHeight ) >> 1;
+        aPos.AdjustX(aSize.Width() - nBmpWidth);
+        aPos.AdjustY(( aSize.Height() - nBmpHeight ) >> 1 );
         break;
 
     case WallpaperStyle::BottomLeft:
-        aPos.Y() += ( aSize.Height() - nBmpHeight );
+        aPos.AdjustY( aSize.Height() - nBmpHeight );
         break;
 
     case WallpaperStyle::Bottom:
-        aPos.X() += ( aSize.Width() - nBmpWidth ) >> 1;
-        aPos.Y() += ( aSize.Height() - nBmpHeight );
+        aPos.AdjustX(( aSize.Width() - nBmpWidth ) >> 1 );
+        aPos.AdjustY( aSize.Height() - nBmpHeight );
         break;
 
     case WallpaperStyle::BottomRight:
-        aPos.X() += ( aSize.Width() - nBmpWidth );
-        aPos.Y() += ( aSize.Height() - nBmpHeight );
+        aPos.AdjustX( aSize.Width() - nBmpWidth );
+        aPos.AdjustY( aSize.Height() - nBmpHeight );
         break;
 
     default:

@@ -128,34 +128,34 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
     {
         if ( GetStyle() & WB_HORZ )
         {
-            maThumbRect.Left()      = maTrackRect.Left()+mnThumbPixPos;
-            maThumbRect.Right()     = maThumbRect.Left()+mnThumbPixSize-1;
+            maThumbRect.SetLeft( maTrackRect.Left()+mnThumbPixPos );
+            maThumbRect.SetRight( maThumbRect.Left()+mnThumbPixSize-1 );
             if ( !mnThumbPixPos )
                 maPage1Rect.SetWidthEmpty();
             else
-                maPage1Rect.Right()     = maThumbRect.Left()-1;
+                maPage1Rect.SetRight( maThumbRect.Left()-1 );
             if ( mnThumbPixPos >= (mnThumbPixRange-mnThumbPixSize) )
                 maPage2Rect.SetWidthEmpty();
             else
             {
-                maPage2Rect.Left()      = maThumbRect.Right()+1;
-                maPage2Rect.Right()     = maTrackRect.Right();
+                maPage2Rect.SetLeft( maThumbRect.Right()+1 );
+                maPage2Rect.SetRight( maTrackRect.Right() );
             }
         }
         else
         {
-            maThumbRect.Top()       = maTrackRect.Top()+mnThumbPixPos;
-            maThumbRect.Bottom()    = maThumbRect.Top()+mnThumbPixSize-1;
+            maThumbRect.SetTop( maTrackRect.Top()+mnThumbPixPos );
+            maThumbRect.SetBottom( maThumbRect.Top()+mnThumbPixSize-1 );
             if ( !mnThumbPixPos )
                 maPage1Rect.SetHeightEmpty();
             else
-                maPage1Rect.Bottom()    = maThumbRect.Top()-1;
+                maPage1Rect.SetBottom( maThumbRect.Top()-1 );
             if ( mnThumbPixPos >= (mnThumbPixRange-mnThumbPixSize) )
                 maPage2Rect.SetHeightEmpty();
             else
             {
-                maPage2Rect.Top()       = maThumbRect.Bottom()+1;
-                maPage2Rect.Bottom()    = maTrackRect.Bottom();
+                maPage2Rect.SetTop( maThumbRect.Bottom()+1 );
+                maPage2Rect.SetBottom( maTrackRect.Bottom() );
             }
         }
     }
@@ -166,10 +166,10 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
             const long nSpace = maTrackRect.Right() - maTrackRect.Left();
             if ( nSpace > 0 )
             {
-                maPage1Rect.Left()   = maTrackRect.Left();
-                maPage1Rect.Right()  = maTrackRect.Left() + (nSpace/2);
-                maPage2Rect.Left()   = maPage1Rect.Right() + 1;
-                maPage2Rect.Right()  = maTrackRect.Right();
+                maPage1Rect.SetLeft( maTrackRect.Left() );
+                maPage1Rect.SetRight( maTrackRect.Left() + (nSpace/2) );
+                maPage2Rect.SetLeft( maPage1Rect.Right() + 1 );
+                maPage2Rect.SetRight( maTrackRect.Right() );
             }
         }
         else
@@ -177,10 +177,10 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
             const long nSpace = maTrackRect.Bottom() - maTrackRect.Top();
             if ( nSpace > 0 )
             {
-                maPage1Rect.Top()    = maTrackRect.Top();
-                maPage1Rect.Bottom() = maTrackRect.Top() + (nSpace/2);
-                maPage2Rect.Top()    = maPage1Rect.Bottom() + 1;
-                maPage2Rect.Bottom() = maTrackRect.Bottom();
+                maPage1Rect.SetTop( maTrackRect.Top() );
+                maPage1Rect.SetBottom( maTrackRect.Top() + (nSpace/2) );
+                maPage2Rect.SetTop( maPage1Rect.Bottom() + 1 );
+                maPage2Rect.SetBottom( maTrackRect.Bottom() );
             }
         }
     }
@@ -255,8 +255,8 @@ void ScrollBar::ImplCalc( bool bUpdate )
             else
             {
                 Size aBtnSize( aSize.Height(), aSize.Height() );
-                maBtn2Rect.Top()    = maBtn1Rect.Top();
-                maBtn2Rect.Left()   = aSize.Width()-aSize.Height();
+                maBtn2Rect.SetTop( maBtn1Rect.Top() );
+                maBtn2Rect.SetLeft( aSize.Width()-aSize.Height() );
                 maBtn1Rect.SetSize( aBtnSize );
                 maBtn2Rect.SetSize( aBtnSize );
             }
@@ -271,7 +271,7 @@ void ScrollBar::ImplCalc( bool bUpdate )
             mnThumbPixRange = maTrackRect.Right() - maTrackRect.Left();
             if( mnThumbPixRange > 0 )
             {
-                maPage1Rect.Left()      = maTrackRect.Left();
+                maPage1Rect.SetLeft( maTrackRect.Left() );
                 maPage1Rect.Bottom()    =
                 maPage2Rect.Bottom()    =
                 maThumbRect.Bottom()    = maTrackRect.Bottom();
@@ -296,8 +296,8 @@ void ScrollBar::ImplCalc( bool bUpdate )
             else
             {
                 const Size aBtnSize( aSize.Width(), aSize.Width() );
-                maBtn2Rect.Left()   = maBtn1Rect.Left();
-                maBtn2Rect.Top()    = aSize.Height()-aSize.Width();
+                maBtn2Rect.SetLeft( maBtn1Rect.Left() );
+                maBtn2Rect.SetTop( aSize.Height()-aSize.Width() );
                 maBtn1Rect.SetSize( aBtnSize );
                 maBtn2Rect.SetSize( aBtnSize );
             }
@@ -312,7 +312,7 @@ void ScrollBar::ImplCalc( bool bUpdate )
             mnThumbPixRange = maTrackRect.Bottom() - maTrackRect.Top();
             if( mnThumbPixRange > 0 )
             {
-                maPage1Rect.Top()       = maTrackRect.Top();
+                maPage1Rect.SetTop( maTrackRect.Top() );
                 maPage1Rect.Right()     =
                 maPage2Rect.Right()     =
                 maThumbRect.Right()     = maTrackRect.Right();
@@ -1121,13 +1121,13 @@ void ScrollBar::ImplInvert()
     tools::Rectangle aRect( maThumbRect );
     if( aRect.getWidth() > 4 )
     {
-        aRect.Left() += 2;
-        aRect.Right() -= 2;
+        aRect.AdjustLeft(2 );
+        aRect.AdjustRight( -2 );
     }
     if( aRect.getHeight() > 4 )
     {
-        aRect.Top() += 2;
-        aRect.Bottom() -= 2;
+        aRect.AdjustTop(2 );
+        aRect.AdjustBottom( -2 );
     }
 
     Invert( aRect );
@@ -1402,11 +1402,11 @@ Size ScrollBar::GetOptimalSize() const
 
     if (GetStyle() & WB_HORZ)
     {
-        aRet.Width() = maBtn1Rect.GetWidth() + nMinThumbSize + maBtn2Rect.GetWidth();
+        aRet.setWidth( maBtn1Rect.GetWidth() + nMinThumbSize + maBtn2Rect.GetWidth() );
     }
     else
     {
-        aRet.Height() = maBtn1Rect.GetHeight() + nMinThumbSize + maBtn2Rect.GetHeight();
+        aRet.setHeight( maBtn1Rect.GetHeight() + nMinThumbSize + maBtn2Rect.GetHeight() );
     }
 
     return aRet;

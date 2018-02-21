@@ -460,10 +460,10 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
     Size aTmpPrefSize( pOut->LogicToPixel( GetPrefSize(), aDrawMap ) );
 
     if( !aTmpPrefSize.Width() )
-        aTmpPrefSize.Width() = aDestSize.Width();
+        aTmpPrefSize.setWidth( aDestSize.Width() );
 
     if( !aTmpPrefSize.Height() )
-        aTmpPrefSize.Height() = aDestSize.Height();
+        aTmpPrefSize.setHeight( aDestSize.Height() );
 
     Fraction aScaleX( aDestSize.Width(), aTmpPrefSize.Width() );
     Fraction aScaleY( aDestSize.Height(), aTmpPrefSize.Height() );
@@ -690,8 +690,8 @@ void GDIMetaFile::Move( long nX, long nY, long nDPIX, long nDPIY )
             {
                 aOffset = aMapVDev->LogicToPixel( aBaseOffset, GetPrefMapMode() );
                 MapMode aMap( aMapVDev->GetMapMode() );
-                aOffset.Width() = static_cast<long>(aOffset.Width() * static_cast<double>(aMap.GetScaleX()));
-                aOffset.Height() = static_cast<long>(aOffset.Height() * static_cast<double>(aMap.GetScaleY()));
+                aOffset.setWidth( static_cast<long>(aOffset.Width() * static_cast<double>(aMap.GetScaleX())) );
+                aOffset.setHeight( static_cast<long>(aOffset.Height() * static_cast<double>(aMap.GetScaleY())) );
             }
             else
                 aOffset = OutputDevice::LogicToLogic( aBaseOffset, GetPrefMapMode(), aMapVDev->GetMapMode() );
@@ -718,8 +718,8 @@ void GDIMetaFile::Scale( double fScaleX, double fScaleY )
         pModAct->Scale( fScaleX, fScaleY );
     }
 
-    m_aPrefSize.Width() = FRound( m_aPrefSize.Width() * fScaleX );
-    m_aPrefSize.Height() = FRound( m_aPrefSize.Height() * fScaleY );
+    m_aPrefSize.setWidth( FRound( m_aPrefSize.Width() * fScaleX ) );
+    m_aPrefSize.setHeight( FRound( m_aPrefSize.Height() * fScaleY ) );
 }
 
 void GDIMetaFile::Scale( const Fraction& rScaleX, const Fraction& rScaleY )
@@ -1498,7 +1498,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
             aMapVDev->GetTextBoundRect( aRect, aStr, 0, 0, aStr.getLength() );
             Point aPt( pAct->GetStartPoint() );
             aRect.Move( aPt.X(), aPt.Y() );
-            aRect.Right() = aRect.Left() + pAct->GetWidth();
+            aRect.SetRight( aRect.Left() + pAct->GetWidth() );
             ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
         }
         break;
@@ -2806,17 +2806,17 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, BmpConversion eColorConve
 
         if ( fWH <= 1.0 )
         {
-            aSizePix.Width() = FRound( nMaximumExtent * fWH );
-            aSizePix.Height() = nMaximumExtent;
+            aSizePix.setWidth( FRound( nMaximumExtent * fWH ) );
+            aSizePix.setHeight( nMaximumExtent );
         }
         else
         {
-            aSizePix.Width() = nMaximumExtent;
-            aSizePix.Height() = FRound(  nMaximumExtent / fWH );
+            aSizePix.setWidth( nMaximumExtent );
+            aSizePix.setHeight( FRound(  nMaximumExtent / fWH ) );
         }
 
-        aDrawSize.Width() = FRound( ( static_cast< double >( aDrawSize.Width() ) * aSizePix.Width() ) / aOldSizePix.Width() );
-        aDrawSize.Height() = FRound( ( static_cast< double >( aDrawSize.Height() ) * aSizePix.Height() ) / aOldSizePix.Height() );
+        aDrawSize.setWidth( FRound( ( static_cast< double >( aDrawSize.Width() ) * aSizePix.Width() ) / aOldSizePix.Width() ) );
+        aDrawSize.setHeight( FRound( ( static_cast< double >( aDrawSize.Height() ) * aSizePix.Height() ) / aOldSizePix.Height() ) );
     }
 
     // draw image(s) into VDev and get resulting image

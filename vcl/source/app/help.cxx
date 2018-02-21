@@ -331,11 +331,11 @@ void HelpTextWindow::SetHelpText( const OUString& rHelpText )
     if ( mnHelpWinStyle == HELPWINSTYLE_QUICK && maHelpText.getLength() < HELPTEXTMAXLEN)
     {
         Size aSize;
-        aSize.Height() = GetTextHeight();
+        aSize.setHeight( GetTextHeight() );
         if ( mnStyle & QuickHelpFlags::CtrlText )
-            aSize.Width() = GetCtrlTextWidth( maHelpText );
+            aSize.setWidth( GetCtrlTextWidth( maHelpText ) );
         else
-            aSize.Width() = GetTextWidth( maHelpText );
+            aSize.setWidth( GetTextWidth( maHelpText ) );
         maTextRect = tools::Rectangle( Point( HELPTEXTMARGIN_QUICK, HELPTEXTMARGIN_QUICK ), aSize );
     }
     else // HELPWINSTYLE_BALLOON
@@ -410,8 +410,8 @@ void HelpTextWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rec
         rRenderContext.DrawRect(tools::Rectangle(Point(), aSz));
         if (mnHelpWinStyle == HELPWINSTYLE_BALLOON)
         {
-            aSz.Width() -= 2;
-            aSz.Height() -= 2;
+            aSz.AdjustWidth( -2 );
+            aSz.AdjustHeight( -2 );
             Color aColor(rRenderContext.GetLineColor());
             rRenderContext.SetLineColor(COL_GRAY);
             rRenderContext.DrawRect(tools::Rectangle(Point(1, 1), aSz));
@@ -468,8 +468,8 @@ IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer, void)
 Size HelpTextWindow::CalcOutSize() const
 {
     Size aSz = maTextRect.GetSize();
-    aSz.Width() += 2*maTextRect.Left();
-    aSz.Height() += 2*maTextRect.Top();
+    aSz.AdjustWidth(2*maTextRect.Left() );
+    aSz.AdjustHeight(2*maTextRect.Top() );
     return aSz;
 }
 
@@ -600,11 +600,11 @@ void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, Quic
         if ( !(nStyle & QuickHelpFlags::NoAutoPos) )
         {
             long nScreenHeight = aScreenRect.GetHeight();
-            aPos.X() -= 4;
+            aPos.AdjustX( -4 );
             if ( aPos.Y() > aScreenRect.Top()+nScreenHeight-(nScreenHeight/4) )
-                aPos.Y() -= aSz.Height()+4;
+                aPos.AdjustY( -(aSz.Height()+4) );
             else
-                aPos.Y() += 21;
+                aPos.AdjustY(21 );
         }
     }
     else
@@ -613,8 +613,8 @@ void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, Quic
         // so the mouse pointer does not cover it
         if ( aPos == aMousePos )
         {
-            aPos.X() += 12;
-            aPos.Y() += 16;
+            aPos.AdjustX(12 );
+            aPos.AdjustY(16 );
         }
     }
 
@@ -629,39 +629,39 @@ void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, Quic
         aPos = devHelpArea.Center();
 
         if ( nStyle & QuickHelpFlags::Left )
-            aPos.X() = devHelpArea.Left();
+            aPos.setX( devHelpArea.Left() );
         else if ( nStyle & QuickHelpFlags::Right )
-            aPos.X() = devHelpArea.Right();
+            aPos.setX( devHelpArea.Right() );
 
         if ( nStyle & QuickHelpFlags::Top )
-            aPos.Y() = devHelpArea.Top();
+            aPos.setY( devHelpArea.Top() );
         else if ( nStyle & QuickHelpFlags::Bottom )
-            aPos.Y() = devHelpArea.Bottom();
+            aPos.setY( devHelpArea.Bottom() );
 
         // which direction?
         if ( nStyle & QuickHelpFlags::Left )
             ;
         else if ( nStyle & QuickHelpFlags::Right )
-            aPos.X() -= aSz.Width();
+            aPos.AdjustX( -(aSz.Width()) );
         else
-            aPos.X() -= aSz.Width()/2;
+            aPos.AdjustX( -(aSz.Width()/2) );
 
         if ( nStyle & QuickHelpFlags::Top )
             ;
         else if ( nStyle & QuickHelpFlags::Bottom )
-            aPos.Y() -= aSz.Height();
+            aPos.AdjustY( -(aSz.Height()) );
         else
-            aPos.Y() -= aSz.Height()/2;
+            aPos.AdjustY( -(aSz.Height()/2) );
     }
 
     if ( aPos.X() < aScreenRect.Left() )
-        aPos.X() = aScreenRect.Left();
+        aPos.setX( aScreenRect.Left() );
     else if ( ( aPos.X() + aSz.Width() ) > aScreenRect.Right() )
-        aPos.X() = aScreenRect.Right() - aSz.Width();
+        aPos.setX( aScreenRect.Right() - aSz.Width() );
     if ( aPos.Y() < aScreenRect.Top() )
-        aPos.Y() = aScreenRect.Top();
+        aPos.setY( aScreenRect.Top() );
     else if ( ( aPos.Y() + aSz.Height() ) > aScreenRect.Bottom() )
-        aPos.Y() = aScreenRect.Bottom() - aSz.Height();
+        aPos.setY( aScreenRect.Bottom() - aSz.Height() );
 
     if( ! (nStyle & QuickHelpFlags::NoEvadePointer) )
     {

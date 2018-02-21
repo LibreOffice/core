@@ -1247,7 +1247,7 @@ static void ImplHandleExtTextInputPos( vcl::Window* pWindow,
                 Point aPos = pChildOutDev->ImplLogicToDevicePixel( pCursor->GetPos() );
                 Size aSize = pChild->LogicToPixel( pCursor->GetSize() );
                 if ( !aSize.Width() )
-                    aSize.Width() = pChild->GetSettings().GetStyleSettings().GetCursorSize();
+                    aSize.setWidth( pChild->GetSettings().GetStyleSettings().GetCursorSize() );
                 rRect = tools::Rectangle( aPos, aSize );
             }
             else

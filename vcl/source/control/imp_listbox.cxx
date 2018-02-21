@@ -625,7 +625,7 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
             Size aCurSize( PixelToLogic( GetSizePixel() ) );
             // set the current size to a large number
             // GetTextRect should shrink it to the actual size
-            aCurSize.Height() = 0x7fffff;
+            aCurSize.setHeight( 0x7fffff );
             tools::Rectangle aTextRect( Point( 0, 0 ), aCurSize );
             aTextRect = GetTextRect( aTextRect, rEntry.maStr, DrawTextFlags::WordBreak | DrawTextFlags::MultiLine );
             aMetrics.nTextWidth = aTextRect.GetWidth();
@@ -1714,7 +1714,7 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
     {
         mbInUserDraw = true;
         mnUserDrawEntry = nPos;
-        aRect.Left() -= mnLeft;
+        aRect.AdjustLeft( -(mnLeft) );
         if (nPos < GetEntryList()->GetMRUCount())
             nPos = GetEntryList()->FindEntry(GetEntryList()->GetEntryText(nPos));
         nPos = nPos - GetEntryList()->GetMRUCount();
@@ -1758,7 +1758,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
             // pb: #106948# explicit mirroring for calc
             if (mbMirroring)
                 // right aligned
-                aPtImg.X() = mnMaxWidth + mnBorder - aImgSz.Width() - mnLeft;
+                aPtImg.setX( mnMaxWidth + mnBorder - aImgSz.Width() - mnLeft );
 
             if (!IsZoom())
             {
@@ -1766,8 +1766,8 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
             }
             else
             {
-                aImgSz.Width() = CalcZoom(aImgSz.Width());
-                aImgSz.Height() = CalcZoom(aImgSz.Height());
+                aImgSz.setWidth( CalcZoom(aImgSz.Width()) );
+                aImgSz.setHeight( CalcZoom(aImgSz.Height()) );
                 rRenderContext.DrawImage(aPtImg, aImgSz, aImage);
             }
 
@@ -1805,16 +1805,16 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
             if (!bDrawTextAtImagePos && (mpEntryList->HasEntryImage(nPos) || IsUserDrawEnabled()))
             {
                 long nImageWidth = std::max(mnMaxImgWidth, maUserItemSize.Width());
-                aTextRect.Left() += nImageWidth + IMG_TXT_DISTANCE;
+                aTextRect.AdjustLeft(nImageWidth + IMG_TXT_DISTANCE );
             }
 
             // pb: #106948# explicit mirroring for calc
             if (mbMirroring)
             {
                 // right aligned
-                aTextRect.Left() = nMaxWidth + mnBorder - rRenderContext.GetTextWidth(aStr) - mnLeft;
+                aTextRect.SetLeft( nMaxWidth + mnBorder - rRenderContext.GetTextWidth(aStr) - mnLeft );
                 if (aImgSz.Width() > 0)
-                    aTextRect.Left() -= (aImgSz.Width() + IMG_TXT_DISTANCE);
+                    aTextRect.AdjustLeft( -(aImgSz.Width() + IMG_TXT_DISTANCE) );
             }
 
             DrawTextFlags nDrawStyle = ImplGetTextStyle();
@@ -1834,9 +1834,9 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         rRenderContext.SetLineColor((GetBackground().GetColor() != COL_LIGHTGRAY) ? COL_LIGHTGRAY : COL_GRAY);
         Point aStartPos(0, nY);
         if (nPos == mnSeparatorPos)
-            aStartPos.Y() += pEntry->mnHeight - 1;
+            aStartPos.AdjustY(pEntry->mnHeight - 1 );
         Point aEndPos(aStartPos);
-        aEndPos.X() = GetOutputSizePixel().Width();
+        aEndPos.setX( GetOutputSizePixel().Width() );
         rRenderContext.DrawLine(aStartPos, aEndPos);
         rRenderContext.SetLineColor(aOldLineColor);
     }
@@ -2018,8 +2018,8 @@ Size ImplListBoxWindow::CalcSize(sal_Int32 nMaxLines) const
     // FIXME: ListBoxEntryFlags::MultiLine
 
     Size aSz;
-    aSz.Height() =  nMaxLines * mnMaxHeight;
-    aSz.Width() = mnMaxWidth + 2*mnBorder;
+    aSz.setHeight(  nMaxLines * mnMaxHeight );
+    aSz.setWidth( mnMaxWidth + 2*mnBorder );
     return aSz;
 }
 
@@ -2358,9 +2358,9 @@ void ImplListBox::ImplResizeControls()
 
     Size aInnerSz( aOutSz );
     if ( mbVScroll )
-        aInnerSz.Width() -= nSBWidth;
+        aInnerSz.AdjustWidth( -nSBWidth );
     if ( mbHScroll )
-        aInnerSz.Height() -= nSBWidth;
+        aInnerSz.AdjustHeight( -nSBWidth );
 
     // pb: #106948# explicit mirroring for calc
     // Scrollbar on left or right side?
@@ -2768,8 +2768,8 @@ void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bLayout)
         }
         else
         {
-            aImgSz.Width() = CalcZoom( aImgSz.Width() );
-            aImgSz.Height() = CalcZoom( aImgSz.Height() );
+            aImgSz.setWidth( CalcZoom( aImgSz.Width() ) );
+            aImgSz.setHeight( CalcZoom( aImgSz.Height() ) );
             rRenderContext.DrawImage( aPtImg, aImgSz, *pImage, nStyle );
         }
 
@@ -2806,7 +2806,7 @@ void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bLayout)
 
         if ( bImage || IsUserDrawEnabled() )
         {
-            aTextRect.Left() += maImage.GetSizePixel().Width() + IMG_TXT_DISTANCE;
+            aTextRect.AdjustLeft(maImage.GetSizePixel().Width() + IMG_TXT_DISTANCE );
         }
 
         MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr;
@@ -2941,10 +2941,10 @@ void ImplListBoxFloatingWindow::setPosSizePixel( long nX, long nY, long nWidth, 
         aPos = GetParent()->GetParent()->OutputToScreenPixel( aPos );
 
         if ( nFlags & PosSizeFlags::X )
-            aPos.X() = nX;
+            aPos.setX( nX );
 
         if ( nFlags & PosSizeFlags::Y )
-            aPos.Y() = nY;
+            aPos.setY( nY );
 
         sal_uInt16 nIndex;
         SetPosPixel( ImplCalcPos( this, tools::Rectangle( aPos, GetParent()->GetSizePixel() ), FloatWinPopupFlags::Down, nIndex ) );
@@ -2984,40 +2984,40 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
     long nMaxHeight = aSz.Height() + nTop + nBottom;
 
     if ( mnDDLineCount )
-        aFloatSz.Height() = nMaxHeight;
+        aFloatSz.setHeight( nMaxHeight );
 
     if( mbAutoWidth )
     {
         // AutoSize first only for width...
 
-        aFloatSz.Width() = aSz.Width() + nLeft + nRight;
-        aFloatSz.Width() += nRight; // adding some space looks better...
+        aFloatSz.setWidth( aSz.Width() + nLeft + nRight );
+        aFloatSz.AdjustWidth(nRight ); // adding some space looks better...
 
         if ( ( aFloatSz.Height() < nMaxHeight ) || ( mnDDLineCount && ( mnDDLineCount < mpImplLB->GetEntryList()->GetEntryCount() ) ) )
         {
             // then we also need the vertical Scrollbar
             long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-            aFloatSz.Width() += nSBWidth;
+            aFloatSz.AdjustWidth(nSBWidth );
         }
 
         long nDesktopWidth = GetDesktopRectPixel().getWidth();
         if (aFloatSz.Width() > nDesktopWidth)
             // Don't exceed the desktop width.
-            aFloatSz.Width() = nDesktopWidth;
+            aFloatSz.setWidth( nDesktopWidth );
     }
 
     if ( aFloatSz.Height() > nMaxHeight )
-        aFloatSz.Height() = nMaxHeight;
+        aFloatSz.setHeight( nMaxHeight );
 
     // Minimal height, in case height is not set to Float height.
     // The parent of FloatWin must be DropDown-Combo/Listbox.
     Size aParentSz = GetParent()->GetSizePixel();
     if( (!mnDDLineCount || !nLines) && ( aFloatSz.Height() < aParentSz.Height() ) )
-        aFloatSz.Height() = aParentSz.Height();
+        aFloatSz.setHeight( aParentSz.Height() );
 
     // do not get narrower than the parent...
     if( aFloatSz.Width() < aParentSz.Width() )
-        aFloatSz.Width() = aParentSz.Width();
+        aFloatSz.setWidth( aParentSz.Width() );
 
     // align height to entries...
     long nInnerHeight = aFloatSz.Height() - nTop - nBottom;
@@ -3027,7 +3027,7 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
         nInnerHeight /= nEntryHeight;
         nInnerHeight++;
         nInnerHeight *= nEntryHeight;
-        aFloatSz.Height() = nInnerHeight + nTop + nBottom;
+        aFloatSz.setHeight( nInnerHeight + nTop + nBottom );
     }
 
     if (aFloatSz.Width() < aSz.Width())
@@ -3035,7 +3035,7 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
         // The max width of list box entries exceeds the window width.
         // Account for the scroll bar height.
         long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-        aFloatSz.Height() += nSBWidth;
+        aFloatSz.AdjustHeight(nSBWidth );
     }
 
     return aFloatSz;
@@ -3063,10 +3063,10 @@ void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
         GetParent()->IsNativeWidgetEnabled() )
     {
         const sal_Int32 nLeft = 4, nTop = 4, nRight = 4, nBottom = 4;
-        aPos.X() += nLeft;
-        aPos.Y() += nTop;
-        aSz.Width() -= nLeft + nRight;
-        aSz.Height() -= nTop + nBottom;
+        aPos.AdjustX(nLeft );
+        aPos.AdjustY(nTop );
+        aSz.AdjustWidth( -(nLeft + nRight) );
+        aSz.AdjustHeight( -(nTop + nBottom) );
     }
     tools::Rectangle aRect( aPos, aSz );
 

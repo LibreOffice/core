@@ -369,16 +369,16 @@ static sal_uInt16 ImplFindItem( ImplSplitSet* pSet, const Point& rPos,
             if ( bRows )
             {
                 if ( bDown )
-                    aRect.Bottom() += pSet->mnSplitSize;
+                    aRect.AdjustBottom(pSet->mnSplitSize );
                 else
-                    aRect.Top() -= pSet->mnSplitSize;
+                    aRect.AdjustTop( -(pSet->mnSplitSize) );
             }
             else
             {
                 if ( bDown )
-                    aRect.Right() += pSet->mnSplitSize;
+                    aRect.AdjustRight(pSet->mnSplitSize );
                 else
-                    aRect.Left() -= pSet->mnSplitSize;
+                    aRect.AdjustLeft( -(pSet->mnSplitSize) );
             }
 
             if ( aRect.IsInside( rPos ) )
@@ -781,33 +781,33 @@ void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool b
                     // invalidate old rectangle
                     if ( bRows )
                     {
-                        aRect.Left()    = rItems[i].mnLeft;
-                        aRect.Right()   = rItems[i].mnLeft+rItems[i].mnOldWidth-1;
-                        aRect.Top()     = rItems[i].mnOldSplitPos;
-                        aRect.Bottom()  = aRect.Top() + rItems[i].mnOldSplitSize;
+                        aRect.SetLeft( rItems[i].mnLeft );
+                        aRect.SetRight( rItems[i].mnLeft+rItems[i].mnOldWidth-1 );
+                        aRect.SetTop( rItems[i].mnOldSplitPos );
+                        aRect.SetBottom( aRect.Top() + rItems[i].mnOldSplitSize );
                     }
                     else
                     {
-                        aRect.Top()     = rItems[i].mnTop;
-                        aRect.Bottom()  = rItems[i].mnTop+rItems[i].mnOldHeight-1;
-                        aRect.Left()    = rItems[i].mnOldSplitPos;
-                        aRect.Right()   = aRect.Left() + rItems[i].mnOldSplitSize;
+                        aRect.SetTop( rItems[i].mnTop );
+                        aRect.SetBottom( rItems[i].mnTop+rItems[i].mnOldHeight-1 );
+                        aRect.SetLeft( rItems[i].mnOldSplitPos );
+                        aRect.SetRight( aRect.Left() + rItems[i].mnOldSplitSize );
                     }
                     pWindow->Invalidate( aRect );
                     // invalidate new rectangle
                     if ( bRows )
                     {
-                        aRect.Left()    = rItems[i].mnLeft;
-                        aRect.Right()   = rItems[i].mnLeft+rItems[i].mnWidth-1;
-                        aRect.Top()     = rItems[i].mnSplitPos;
-                        aRect.Bottom()  = aRect.Top() + rItems[i].mnSplitSize;
+                        aRect.SetLeft( rItems[i].mnLeft );
+                        aRect.SetRight( rItems[i].mnLeft+rItems[i].mnWidth-1 );
+                        aRect.SetTop( rItems[i].mnSplitPos );
+                        aRect.SetBottom( aRect.Top() + rItems[i].mnSplitSize );
                     }
                     else
                     {
-                        aRect.Top()     = rItems[i].mnTop;
-                        aRect.Bottom()  = rItems[i].mnTop+rItems[i].mnHeight-1;
-                        aRect.Left()    = rItems[i].mnSplitPos;
-                        aRect.Right()   = aRect.Left() + rItems[i].mnSplitSize;
+                        aRect.SetTop( rItems[i].mnTop );
+                        aRect.SetBottom( rItems[i].mnTop+rItems[i].mnHeight-1 );
+                        aRect.SetLeft( rItems[i].mnSplitPos );
+                        aRect.SetRight( aRect.Left() + rItems[i].mnSplitSize );
                     }
                     pWindow->Invalidate( aRect );
 
@@ -815,10 +815,10 @@ void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool b
                     // are not cluttered by windows
                     if ( rItems[i].mpSet && rItems[i].mpSet->mvItems.empty() )
                     {
-                        aRect.Left()    = rItems[i].mnLeft;
-                        aRect.Top()     = rItems[i].mnTop;
-                        aRect.Right()   = rItems[i].mnLeft+rItems[i].mnWidth-1;
-                        aRect.Bottom()  = rItems[i].mnTop+rItems[i].mnHeight-1;
+                        aRect.SetLeft( rItems[i].mnLeft );
+                        aRect.SetTop( rItems[i].mnTop );
+                        aRect.SetRight( rItems[i].mnLeft+rItems[i].mnWidth-1 );
+                        aRect.SetBottom( rItems[i].mnTop+rItems[i].mnHeight-1 );
                         pWindow->Invalidate( aRect );
                     }
                 }
@@ -905,14 +905,14 @@ void SplitWindow::ImplDrawBack(vcl::RenderContext& rRenderContext, const tools::
         rRenderContext.IntersectClipRegion(rRect);
         do
         {
-            aPos.X() = rRect.Left();
+            aPos.setX( rRect.Left() );
             do
             {
                 rRenderContext.DrawBitmap(aPos, *pBitmap);
-                aPos.X() += aBmpSize.Width();
+                aPos.AdjustX(aBmpSize.Width() );
             }
             while (aPos.X() < rRect.Right());
-            aPos.Y() += aBmpSize.Height();
+            aPos.AdjustY(aBmpSize.Height() );
         }
         while (aPos.Y() < rRect.Bottom());
         rRenderContext.Pop();
@@ -1188,30 +1188,30 @@ void SplitWindow::ImplDrawSplitTracking(const Point& rPos)
 
     if (mnSplitTest & SPLIT_HORZ)
     {
-        aRect.Top()    = maDragRect.Top();
-        aRect.Bottom() = maDragRect.Bottom();
-        aRect.Left()   = rPos.X();
-        aRect.Right()  = aRect.Left() + mpSplitSet->mnSplitSize - 1;
+        aRect.SetTop( maDragRect.Top() );
+        aRect.SetBottom( maDragRect.Bottom() );
+        aRect.SetLeft( rPos.X() );
+        aRect.SetRight( aRect.Left() + mpSplitSet->mnSplitSize - 1 );
         if (!(mnWinStyle & WB_NOSPLITDRAW))
-            aRect.Right()--;
+            aRect.AdjustRight( -1 );
         if ((mnSplitTest & SPLIT_WINDOW) && (mbFadeOut))
         {
-            aRect.Left()  += SPLITWIN_SPLITSIZEEXLN;
-            aRect.Right() += SPLITWIN_SPLITSIZEEXLN;
+            aRect.AdjustLeft(SPLITWIN_SPLITSIZEEXLN );
+            aRect.AdjustRight(SPLITWIN_SPLITSIZEEXLN );
         }
     }
     else
     {
-        aRect.Left() = maDragRect.Left();
-        aRect.Right() = maDragRect.Right();
-        aRect.Top() = rPos.Y();
-        aRect.Bottom() = aRect.Top() + mpSplitSet->mnSplitSize - 1;
+        aRect.SetLeft( maDragRect.Left() );
+        aRect.SetRight( maDragRect.Right() );
+        aRect.SetTop( rPos.Y() );
+        aRect.SetBottom( aRect.Top() + mpSplitSet->mnSplitSize - 1 );
         if (!(mnWinStyle & WB_NOSPLITDRAW))
-            aRect.Bottom()--;
+            aRect.AdjustBottom( -1 );
         if ((mnSplitTest & SPLIT_WINDOW) && (mbFadeOut))
         {
-            aRect.Top() += SPLITWIN_SPLITSIZEEXLN;
-            aRect.Bottom() += SPLITWIN_SPLITSIZEEXLN;
+            aRect.AdjustTop(SPLITWIN_SPLITSIZEEXLN );
+            aRect.AdjustBottom(SPLITWIN_SPLITSIZEEXLN );
         }
     }
     ShowTracking(aRect, ShowTrackFlags::Split);
@@ -1333,29 +1333,29 @@ void SplitWindow::ImplSetWindowSize( long nDelta )
     switch ( meAlign )
     {
     case WindowAlign::Top:
-        aSize.Height() += nDelta;
+        aSize.AdjustHeight(nDelta );
         SetSizePixel( aSize );
         break;
     case WindowAlign::Bottom:
     {
-        maDragRect.Top() += nDelta;
+        maDragRect.AdjustTop(nDelta );
         Point aPos = GetPosPixel();
-        aPos.Y() -= nDelta;
-        aSize.Height() += nDelta;
+        aPos.AdjustY( -nDelta );
+        aSize.AdjustHeight(nDelta );
         SetPosSizePixel( aPos, aSize );
         break;
     }
     case WindowAlign::Left:
-        aSize.Width() += nDelta;
+        aSize.AdjustWidth(nDelta );
         SetSizePixel( aSize );
         break;
     case WindowAlign::Right:
     default:
     {
-        maDragRect.Left() += nDelta;
+        maDragRect.AdjustLeft(nDelta );
         Point aPos = GetPosPixel();
-        aPos.X() -= nDelta;
-        aSize.Width() += nDelta;
+        aPos.AdjustX( -nDelta );
+        aSize.AdjustWidth(nDelta );
         SetPosSizePixel( aPos, aSize );
         break;
     }
@@ -1407,19 +1407,19 @@ Size SplitWindow::CalcLayoutSizePixel( const Size& aNewSize )
             switch ( meAlign )
             {
             case WindowAlign::Top:
-                aSize.Height() += nDelta;
+                aSize.AdjustHeight(nDelta );
                 break;
             case WindowAlign::Bottom:
-                aPos.Y() -= nDelta;
-                aSize.Height() += nDelta;
+                aPos.AdjustY( -nDelta );
+                aSize.AdjustHeight(nDelta );
                 break;
             case WindowAlign::Left:
-                aSize.Width() += nDelta;
+                aSize.AdjustWidth(nDelta );
                 break;
             case WindowAlign::Right:
             default:
-                aPos.X() -= nDelta;
-                aSize.Width() += nDelta;
+                aPos.AdjustX( -nDelta );
+                aSize.AdjustWidth(nDelta );
                 break;
             }
         }
@@ -1526,21 +1526,21 @@ void SplitWindow::ImplSplitMousePos( Point& rMousePos )
 {
     if ( mnSplitTest & SPLIT_HORZ )
     {
-        rMousePos.X() -= mnMouseOff;
+        rMousePos.AdjustX( -(mnMouseOff) );
         if ( rMousePos.X() < maDragRect.Left() )
-            rMousePos.X() = maDragRect.Left();
+            rMousePos.setX( maDragRect.Left() );
         else if ( rMousePos.X()+mpSplitSet->mnSplitSize+1 > maDragRect.Right() )
-            rMousePos.X() = maDragRect.Right()-mpSplitSet->mnSplitSize+1;
+            rMousePos.setX( maDragRect.Right()-mpSplitSet->mnSplitSize+1 );
         // store in screen coordinates due to FullDrag
         mnMSplitPos = OutputToScreenPixel( rMousePos ).X();
     }
     else
     {
-        rMousePos.Y() -= mnMouseOff;
+        rMousePos.AdjustY( -(mnMouseOff) );
         if ( rMousePos.Y() < maDragRect.Top() )
-            rMousePos.Y() = maDragRect.Top();
+            rMousePos.setY( maDragRect.Top() );
         else if ( rMousePos.Y()+mpSplitSet->mnSplitSize+1 > maDragRect.Bottom() )
-            rMousePos.Y() = maDragRect.Bottom()-mpSplitSet->mnSplitSize+1;
+            rMousePos.setY( maDragRect.Bottom()-mpSplitSet->mnSplitSize+1 );
         mnMSplitPos = OutputToScreenPixel( rMousePos ).Y();
     }
 }
@@ -1568,47 +1568,47 @@ void SplitWindow::ImplGetButtonRect( tools::Rectangle& rRect, bool bTest ) const
     switch ( meAlign )
     {
     case WindowAlign::Top:
-        rRect.Left()    = mnLeftBorder+nEx;
-        rRect.Top()     = mnDY-mnBottomBorder-nSplitSize;
-        rRect.Right()   = rRect.Left()+SPLITWIN_SPLITSIZEAUTOHIDE;
-        rRect.Bottom()  = mnDY-mnBottomBorder-1;
+        rRect.SetLeft( mnLeftBorder+nEx );
+        rRect.SetTop( mnDY-mnBottomBorder-nSplitSize );
+        rRect.SetRight( rRect.Left()+SPLITWIN_SPLITSIZEAUTOHIDE );
+        rRect.SetBottom( mnDY-mnBottomBorder-1 );
         if ( bTest )
         {
-            rRect.Top()     -= mnTopBorder;
-            rRect.Bottom()  += mnBottomBorder;
+            rRect.AdjustTop( -(mnTopBorder) );
+            rRect.AdjustBottom(mnBottomBorder );
         }
         break;
     case WindowAlign::Bottom:
-        rRect.Left()    = mnLeftBorder+nEx;
-        rRect.Top()     = mnTopBorder;
-        rRect.Right()   = rRect.Left()+SPLITWIN_SPLITSIZEAUTOHIDE;
-        rRect.Bottom()  = mnTopBorder+nSplitSize-1;
+        rRect.SetLeft( mnLeftBorder+nEx );
+        rRect.SetTop( mnTopBorder );
+        rRect.SetRight( rRect.Left()+SPLITWIN_SPLITSIZEAUTOHIDE );
+        rRect.SetBottom( mnTopBorder+nSplitSize-1 );
         if ( bTest )
         {
-            rRect.Top()     -= mnTopBorder;
-            rRect.Bottom()  += mnBottomBorder;
+            rRect.AdjustTop( -(mnTopBorder) );
+            rRect.AdjustBottom(mnBottomBorder );
         }
         break;
     case WindowAlign::Left:
-        rRect.Left()    = mnDX-mnRightBorder-nSplitSize;
-        rRect.Top()     = mnTopBorder+nEx;
-        rRect.Right()   = mnDX-mnRightBorder-1;
-        rRect.Bottom()  = rRect.Top()+SPLITWIN_SPLITSIZEAUTOHIDE;
+        rRect.SetLeft( mnDX-mnRightBorder-nSplitSize );
+        rRect.SetTop( mnTopBorder+nEx );
+        rRect.SetRight( mnDX-mnRightBorder-1 );
+        rRect.SetBottom( rRect.Top()+SPLITWIN_SPLITSIZEAUTOHIDE );
         if ( bTest )
         {
-            rRect.Left()    -= mnLeftBorder;
-            rRect.Right()   += mnRightBorder;
+            rRect.AdjustLeft( -(mnLeftBorder) );
+            rRect.AdjustRight(mnRightBorder );
         }
         break;
     case WindowAlign::Right:
-        rRect.Left()    = mnLeftBorder;
-        rRect.Top()     = mnTopBorder+nEx;
-        rRect.Right()   = mnLeftBorder+nSplitSize-1;
-        rRect.Bottom()  = rRect.Top()+SPLITWIN_SPLITSIZEAUTOHIDE;
+        rRect.SetLeft( mnLeftBorder );
+        rRect.SetTop( mnTopBorder+nEx );
+        rRect.SetRight( mnLeftBorder+nSplitSize-1 );
+        rRect.SetBottom( rRect.Top()+SPLITWIN_SPLITSIZEAUTOHIDE );
         if ( bTest )
         {
-            rRect.Left()    -= mnLeftBorder;
-            rRect.Right()   += mnRightBorder;
+            rRect.AdjustLeft( -(mnLeftBorder) );
+            rRect.AdjustRight(mnRightBorder );
         }
         break;
     }
@@ -1801,24 +1801,24 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
             bDown = false;
 
         pSplitItem          = &mpSplitSet->mvItems[mnSplitPos];
-        maDragRect.Left()   = pSplitItem->mnLeft;
-        maDragRect.Top()    = pSplitItem->mnTop;
-        maDragRect.Right()  = pSplitItem->mnLeft+pSplitItem->mnWidth-1;
-        maDragRect.Bottom() = pSplitItem->mnTop+pSplitItem->mnHeight-1;
+        maDragRect.SetLeft( pSplitItem->mnLeft );
+        maDragRect.SetTop( pSplitItem->mnTop );
+        maDragRect.SetRight( pSplitItem->mnLeft+pSplitItem->mnWidth-1 );
+        maDragRect.SetBottom( pSplitItem->mnTop+pSplitItem->mnHeight-1 );
 
         if ( mnSplitTest & SPLIT_HORZ )
         {
             if ( bDown )
-                maDragRect.Right() += mpSplitSet->mnSplitSize;
+                maDragRect.AdjustRight(mpSplitSet->mnSplitSize );
             else
-                maDragRect.Left() -= mpSplitSet->mnSplitSize;
+                maDragRect.AdjustLeft( -(mpSplitSet->mnSplitSize) );
         }
         else
         {
             if ( bDown )
-                maDragRect.Bottom() += mpSplitSet->mnSplitSize;
+                maDragRect.AdjustBottom(mpSplitSet->mnSplitSize );
             else
-                maDragRect.Top() -= mpSplitSet->mnSplitSize;
+                maDragRect.AdjustTop( -(mpSplitSet->mnSplitSize) );
         }
 
         if ( mnSplitPos )
@@ -1834,16 +1834,16 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
                     if ( mnSplitTest & SPLIT_HORZ )
                     {
                         if ( bDown )
-                            maDragRect.Left() -= pSplitItem->mnPixSize;
+                            maDragRect.AdjustLeft( -(pSplitItem->mnPixSize) );
                         else
-                            maDragRect.Right() += pSplitItem->mnPixSize;
+                            maDragRect.AdjustRight(pSplitItem->mnPixSize );
                     }
                     else
                     {
                         if ( bDown )
-                            maDragRect.Top() -= pSplitItem->mnPixSize;
+                            maDragRect.AdjustTop( -(pSplitItem->mnPixSize) );
                         else
-                            maDragRect.Bottom() += pSplitItem->mnPixSize;
+                            maDragRect.AdjustBottom(pSplitItem->mnPixSize );
                     }
                 }
                 nTemp--;
@@ -1855,16 +1855,16 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
             if ( bDown )
             {
                 if ( mbHorz )
-                    maDragRect.Bottom() += nCurMaxSize-mnDY-mnTopBorder;
+                    maDragRect.AdjustBottom(nCurMaxSize-mnDY-mnTopBorder );
                 else
-                    maDragRect.Right() += nCurMaxSize-mnDX-mnLeftBorder;
+                    maDragRect.AdjustRight(nCurMaxSize-mnDX-mnLeftBorder );
             }
             else
             {
                 if ( mbHorz )
-                    maDragRect.Top() -= nCurMaxSize-mnDY-mnBottomBorder;
+                    maDragRect.AdjustTop( -(nCurMaxSize-mnDY-mnBottomBorder) );
                 else
-                    maDragRect.Left() -= nCurMaxSize-mnDX-mnRightBorder;
+                    maDragRect.AdjustLeft( -(nCurMaxSize-mnDX-mnRightBorder) );
             }
         }
         else
@@ -1880,16 +1880,16 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
                     if ( mnSplitTest & SPLIT_HORZ )
                     {
                         if ( bDown )
-                            maDragRect.Right() += pSplitItem->mnPixSize;
+                            maDragRect.AdjustRight(pSplitItem->mnPixSize );
                         else
-                            maDragRect.Left() -= pSplitItem->mnPixSize;
+                            maDragRect.AdjustLeft( -(pSplitItem->mnPixSize) );
                     }
                     else
                     {
                         if ( bDown )
-                            maDragRect.Bottom() += pSplitItem->mnPixSize;
+                            maDragRect.AdjustBottom(pSplitItem->mnPixSize );
                         else
-                            maDragRect.Top() -= pSplitItem->mnPixSize;
+                            maDragRect.AdjustTop( -(pSplitItem->mnPixSize) );
                     }
                 }
                 nTemp++;
@@ -1898,23 +1898,23 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
     }
     else
     {
-        maDragRect.Left()   = mnLeftBorder;
-        maDragRect.Top()    = mnTopBorder;
-        maDragRect.Right()  = mnDX-mnRightBorder-1;
-        maDragRect.Bottom() = mnDY-mnBottomBorder-1;
+        maDragRect.SetLeft( mnLeftBorder );
+        maDragRect.SetTop( mnTopBorder );
+        maDragRect.SetRight( mnDX-mnRightBorder-1 );
+        maDragRect.SetBottom( mnDY-mnBottomBorder-1 );
         if ( mbHorz )
         {
             if ( mbBottomRight )
-                maDragRect.Top() -= nCurMaxSize-mnDY-mnBottomBorder;
+                maDragRect.AdjustTop( -(nCurMaxSize-mnDY-mnBottomBorder) );
             else
-                maDragRect.Bottom() += nCurMaxSize-mnDY-mnTopBorder;
+                maDragRect.AdjustBottom(nCurMaxSize-mnDY-mnTopBorder );
         }
         else
         {
             if ( mbBottomRight )
-                maDragRect.Left() -= nCurMaxSize-mnDX-mnRightBorder;
+                maDragRect.AdjustLeft( -(nCurMaxSize-mnDX-mnRightBorder) );
             else
-                maDragRect.Right() += nCurMaxSize-mnDX-mnLeftBorder;
+                maDragRect.AdjustRight(nCurMaxSize-mnDX-mnLeftBorder );
         }
     }
 
@@ -2280,11 +2280,11 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
         if (pHelpResId)
         {
             Point aPt = OutputToScreenPixel( aHelpRect.TopLeft() );
-            aHelpRect.Left()   = aPt.X();
-            aHelpRect.Top()    = aPt.Y();
+            aHelpRect.SetLeft( aPt.X() );
+            aHelpRect.SetTop( aPt.Y() );
             aPt = OutputToScreenPixel( aHelpRect.BottomRight() );
-            aHelpRect.Right()  = aPt.X();
-            aHelpRect.Bottom() = aPt.Y();
+            aHelpRect.SetRight( aPt.X() );
+            aHelpRect.SetBottom( aPt.Y() );
 
             // get and draw text
             OUString aStr = VclResId(pHelpResId);

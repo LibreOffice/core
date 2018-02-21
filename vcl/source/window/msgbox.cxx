@@ -216,9 +216,9 @@ void MessBox::ImplPosControls()
     aImageSize = maImage.GetSizePixel();
     if ( aImageSize.Width() )
     {
-        aImageSize.Width()  += 4;
-        aImageSize.Height() += 4;
-        aTextPos.X() += aImageSize.Width()+IMPL_SEP_MSGBOX_IMAGE;
+        aImageSize.AdjustWidth(4 );
+        aImageSize.AdjustHeight(4 );
+        aTextPos.AdjustX(aImageSize.Width()+IMPL_SEP_MSGBOX_IMAGE );
         mpFixedImage = VclPtr<FixedImage>::Create( this );
         mpFixedImage->SetPosSizePixel( Point( IMPL_DIALOG_OFFSET-2+IMPL_MSGBOX_OFFSET_EXTRA_X,
                                               IMPL_DIALOG_OFFSET-2+IMPL_MSGBOX_OFFSET_EXTRA_Y ),
@@ -228,7 +228,7 @@ void MessBox::ImplPosControls()
         nMaxWidth -= aImageSize.Width()+IMPL_SEP_MSGBOX_IMAGE;
     }
     else
-        aTextPos.X() += IMPL_MSGBOX_OFFSET_EXTRA_X;
+        aTextPos.AdjustX(IMPL_MSGBOX_OFFSET_EXTRA_X );
 
     // Determine maximum line length without wordbreak
     aFormatRect = GetTextRect( aRect, aMessText, nTextStyle, &aTextInfo );
@@ -250,48 +250,48 @@ void MessBox::ImplPosControls()
     if ( nWidth > nMaxWidth )
         nWidth = nMaxWidth;
 
-    aRect.Right() = nWidth;
+    aRect.SetRight( nWidth );
     aFormatRect = GetTextRect( aRect, aMessText, nTextStyle, &aTextInfo );
     if ( aTextInfo.GetMaxLineWidth() > nWidth )
     {
         nWidth = aTextInfo.GetMaxLineWidth()+8;
-        aRect.Right() = nWidth;
+        aRect.SetRight( nWidth );
         aFormatRect = GetTextRect( aRect, aMessText, nTextStyle, &aTextInfo );
     }
 
     // get Style for VCLMultiLineEdit
-    aMEditSize.Width()  = aTextInfo.GetMaxLineWidth()+1;
-    aMEditSize.Height() = aFormatRect.GetHeight();
-    aPageSize.Width()   = aImageSize.Width();
+    aMEditSize.setWidth( aTextInfo.GetMaxLineWidth()+1 );
+    aMEditSize.setHeight( aFormatRect.GetHeight() );
+    aPageSize.setWidth( aImageSize.Width() );
     if ( aMEditSize.Height() < aImageSize.Height() )
     {
         nWinStyle |= WB_VCENTER;
-        aPageSize.Height()  = aImageSize.Height();
-        aMEditSize.Height() = aImageSize.Height();
+        aPageSize.setHeight( aImageSize.Height() );
+        aMEditSize.setHeight( aImageSize.Height() );
     }
     else
     {
         nWinStyle |= WB_TOP;
-        aPageSize.Height()  = aMEditSize.Height();
+        aPageSize.setHeight( aMEditSize.Height() );
     }
     if ( aImageSize.Width() )
-        aPageSize.Width() += IMPL_SEP_MSGBOX_IMAGE;
-    aPageSize.Width()  += (IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_X*2);
-    aPageSize.Width()  += aMEditSize.Width()+1;
-    aPageSize.Height() += (IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2);
+        aPageSize.AdjustWidth(IMPL_SEP_MSGBOX_IMAGE );
+    aPageSize.AdjustWidth((IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_X*2) );
+    aPageSize.AdjustWidth(aMEditSize.Width()+1 );
+    aPageSize.AdjustHeight((IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2) );
 
     if ( aPageSize.Width() < IMPL_MINSIZE_MSGBOX_WIDTH )
-        aPageSize.Width() = IMPL_MINSIZE_MSGBOX_WIDTH;
+        aPageSize.setWidth( IMPL_MINSIZE_MSGBOX_WIDTH );
     if ( aPageSize.Width() < nTitleWidth )
-        aPageSize.Width() = nTitleWidth;
+        aPageSize.setWidth( nTitleWidth );
 
     if ( !maCheckBoxText.isEmpty() )
     {
         Size aMinCheckboxSize ( aMEditSize );
         if ( aPageSize.Width() < IMPL_MINSIZE_MSGBOX_WIDTH+80 )
         {
-            aPageSize.Width() = IMPL_MINSIZE_MSGBOX_WIDTH+80;
-            aMinCheckboxSize.Width() += 80;
+            aPageSize.setWidth( IMPL_MINSIZE_MSGBOX_WIDTH+80 );
+            aMinCheckboxSize.AdjustWidth(80 );
         }
 
         // #104492# auto mnemonics for CJK strings may increase the length, so measure the
@@ -322,10 +322,10 @@ void MessBox::ImplPosControls()
         mpCheckBox->SetText( maCheckBoxText );
 
         Point aPos( aTextPos );
-        aPos.Y() += aMEditSize.Height() + (IMPL_DIALOG_OFFSET)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2);
+        aPos.AdjustY(aMEditSize.Height() + (IMPL_DIALOG_OFFSET)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2) );
 
         // increase messagebox
-        aPageSize.Height() += aSize.Height() + (IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2);
+        aPageSize.AdjustHeight(aSize.Height() + (IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2) );
 
         mpCheckBox->SetPosSizePixel( aPos, aSize );
         mpCheckBox->Show();

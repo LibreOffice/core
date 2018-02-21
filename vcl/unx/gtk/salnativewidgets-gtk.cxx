@@ -1122,9 +1122,9 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
 
         //See fdo#33523, possibly makes sense to do this test for all return values
         if (!rNativeContentRegion.GetWidth())
-            rNativeContentRegion.Right() = rNativeContentRegion.Left() + 1;
+            rNativeContentRegion.SetRight( rNativeContentRegion.Left() + 1 );
         if (!rNativeContentRegion.GetHeight())
-            rNativeContentRegion.Bottom() = rNativeContentRegion.Top() + 1;
+            rNativeContentRegion.SetBottom( rNativeContentRegion.Top() + 1 );
         returnVal = true;
     }
     if( (nType == ControlType::Menubar) && (nPart == ControlPart::Entire) )
@@ -1251,13 +1251,13 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         tools::Rectangle aRect( rControlRegion );
         if( nPart == ControlPart::ThumbHorz )
         {
-            aRect.Right() = aRect.Left() + slider_length - 1;
-            aRect.Bottom() = aRect.Top() + slider_width - 1;
+            aRect.SetRight( aRect.Left() + slider_length - 1 );
+            aRect.SetBottom( aRect.Top() + slider_width - 1 );
         }
         else
         {
-            aRect.Bottom() = aRect.Top() + slider_length - 1;
-            aRect.Right() = aRect.Left() + slider_width - 1;
+            aRect.SetBottom( aRect.Top() + slider_length - 1 );
+            aRect.SetRight( aRect.Left() + slider_width - 1 );
         }
         rNativeBoundingRegion = rNativeContentRegion = aRect;
         returnVal = true;
@@ -1958,11 +1958,11 @@ bool GtkSalGraphics::NWPaintGTKScrollbar( ControlPart nPart,
         button21BoundRect.SetSize( Size( stepper_size, slider_width ) );
         button22BoundRect.SetSize( Size( stepper_size, slider_width ) );
 
-        thumbRect.Bottom() = thumbRect.Top() + slider_width - 1;
+        thumbRect.SetBottom( thumbRect.Top() + slider_width - 1 );
         // Make sure the thumb is at least the default width (so we don't get tiny thumbs),
         // but if the VCL gives us a size smaller than the theme's default thumb size,
         // honor the VCL size
-        thumbRect.Right() += magic;
+        thumbRect.AdjustRight(magic );
         // Center vertically in the track
         thumbRect.Move( 0, (scrollbarRect.GetHeight() - slider_width) / 2 );
     }
@@ -2002,9 +2002,9 @@ bool GtkSalGraphics::NWPaintGTKScrollbar( ControlPart nPart,
         button21BoundRect.SetSize( Size( slider_width, stepper_size ) );
         button22BoundRect.SetSize( Size( slider_width, stepper_size ) );
 
-        thumbRect.Right() = thumbRect.Left() + slider_width - 1;
+        thumbRect.SetRight( thumbRect.Left() + slider_width - 1 );
 
-        thumbRect.Bottom() += magic;
+        thumbRect.AdjustBottom(magic );
         // Center horizontally in the track
         thumbRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, 0 );
     }
@@ -2473,24 +2473,24 @@ static tools::Rectangle NWGetSpinButtonRect( SalX11Screen     nScreen,
     if ( nPart == ControlPart::ButtonUp )
     {
         buttonRect.setY( aAreaRect.Top() );
-        buttonRect.Bottom() = buttonRect.Top() + (aAreaRect.GetHeight() / 2);
+        buttonRect.SetBottom( buttonRect.Top() + (aAreaRect.GetHeight() / 2) );
     }
     else if( nPart == ControlPart::ButtonDown )
     {
         buttonRect.setY( aAreaRect.Top() + (aAreaRect.GetHeight() / 2) );
-        buttonRect.Bottom() = aAreaRect.Bottom(); // cover area completely
+        buttonRect.SetBottom( aAreaRect.Bottom() ); // cover area completely
     }
     else
     {
         if( AllSettings::GetLayoutRTL() ) {
-            buttonRect.Left()   = buttonRect.Right()+1;
-            buttonRect.Right()  = aAreaRect.Right();
+            buttonRect.SetLeft( buttonRect.Right()+1 );
+            buttonRect.SetRight( aAreaRect.Right() );
         } else {
-            buttonRect.Right()  = buttonRect.Left()-1;
-            buttonRect.Left()   = aAreaRect.Left();
+            buttonRect.SetRight( buttonRect.Left()-1 );
+            buttonRect.SetLeft( aAreaRect.Left() );
         }
-        buttonRect.Top()    = aAreaRect.Top();
-        buttonRect.Bottom() = aAreaRect.Bottom();
+        buttonRect.SetTop( aAreaRect.Top() );
+        buttonRect.SetBottom( aAreaRect.Bottom() );
     }
 
     return buttonRect;
@@ -2565,7 +2565,7 @@ bool GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
 
     buttonRect = NWGetComboBoxButtonRect( m_nXScreen, ControlPart::ButtonDown, pixmapRect );
     if( nPart == ControlPart::ButtonDown )
-        buttonRect.Left() += 1;
+        buttonRect.AdjustLeft(1 );
 
     tools::Rectangle        aEditBoxRect( pixmapRect );
     aEditBoxRect.SetSize( Size( pixmapRect.GetWidth() - buttonRect.GetWidth(), aEditBoxRect.GetHeight() ) );
@@ -2652,10 +2652,10 @@ static tools::Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen,
         aButtonRect.SetSize( Size( aAreaRect.GetWidth() - nButtonWidth - 2 * adjust_x,
                                    aAreaRect.GetHeight() - 2 * adjust_y ) );
         Point aEditPos = aAreaRect.TopLeft();
-        aEditPos.X() += adjust_x;
-        aEditPos.Y() += adjust_y;
+        aEditPos.AdjustX(adjust_x );
+        aEditPos.AdjustY(adjust_y );
         if( AllSettings::GetLayoutRTL() )
-            aEditPos.X() += nButtonWidth;
+            aEditPos.AdjustX(nButtonWidth );
         aButtonRect.SetPos( aEditPos );
     }
 
@@ -2714,16 +2714,16 @@ bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType,
         {
             // In GTK+, the selected tab is 2px taller than all other tabs
             pixmapRect.Move( 0, -2 );
-            pixmapRect.Bottom() += 2;
+            pixmapRect.AdjustBottom(2 );
             tabRect = pixmapRect;
             // Only draw over 1 pixel of the tab pane that this tab is drawn on top of.
-            tabRect.Bottom() -= 1;
+            tabRect.AdjustBottom( -1 );
         }
         else
             tabRect = pixmapRect;
 
         // Allow the tab to draw a right border if needed
-        tabRect.Right() -= 1;
+        tabRect.AdjustRight( -1 );
 
         // avoid degenerate cases which might lead to crashes
         if( tabRect.GetWidth() <= 1 || tabRect.GetHeight() <= 1 )
@@ -3356,10 +3356,10 @@ bool GtkSalGraphics::NWPaintGTKListNode(
     NWEnsureGTKTreeView( m_nXScreen );
 
     tools::Rectangle aRect( rControlRectangle );
-    aRect.Left() -= 2;
-    aRect.Right() += 2;
-    aRect.Top() -= 2;
-    aRect.Bottom() += 2;
+    aRect.AdjustLeft( -2 );
+    aRect.AdjustRight(2 );
+    aRect.AdjustTop( -2 );
+    aRect.AdjustBottom(2 );
     gint            w, h;
     w = aRect.GetWidth();
     h = aRect.GetHeight();
@@ -3574,21 +3574,21 @@ static tools::Rectangle NWGetListBoxButtonRect( SalX11Screen nScreen,
     switch( nPart )
     {
         case ControlPart::ButtonDown:
-            aPartSize.Width() = nButtonAreaWidth;
-            aPartPos.X() = aAreaRect.Left() + aAreaRect.GetWidth() - aPartSize.Width();
+            aPartSize.setWidth( nButtonAreaWidth );
+            aPartPos.setX( aAreaRect.Left() + aAreaRect.GetWidth() - aPartSize.Width() );
             break;
 
         case ControlPart::SubEdit:
-            aPartSize.Width() = aAreaRect.GetWidth() - nButtonAreaWidth - xthickness;
+            aPartSize.setWidth( aAreaRect.GetWidth() - nButtonAreaWidth - xthickness );
             if( AllSettings::GetLayoutRTL() )
-                aPartPos.X() = aAreaRect.Left() + nButtonAreaWidth;
+                aPartPos.setX( aAreaRect.Left() + nButtonAreaWidth );
             else
-                aPartPos.X() = aAreaRect.Left() + xthickness;
+                aPartPos.setX( aAreaRect.Left() + xthickness );
             break;
 
         default:
-            aPartSize.Width() = aAreaRect.GetWidth();
-            aPartPos.X() = aAreaRect.Left();
+            aPartSize.setWidth( aAreaRect.GetWidth() );
+            aPartPos.setX( aAreaRect.Left() );
             break;
     }
     aPartRect = tools::Rectangle( aPartPos, aPartSize );
@@ -3676,9 +3676,9 @@ static tools::Rectangle NWGetToolbarRect(  SalX11Screen nScreen,
 
         gtk_widget_ensure_style( gWidgetData[nScreen].gToolbarButtonWidget );
         if( aAreaRect.GetWidth() < nMinWidth )
-            aRet.Right() = aRet.Left() + nMinWidth;
+            aRet.SetRight( aRet.Left() + nMinWidth );
         if( aAreaRect.GetHeight() < nMinHeight  )
-            aRet.Bottom() = aRet.Top() + nMinHeight;
+            aRet.SetBottom( aRet.Top() + nMinHeight );
     }
 
     return aRet;

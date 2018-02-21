@@ -221,13 +221,13 @@ Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
 
                 if( fBmpWH < fMaxWH )
                 {
-                    aNewBmpSize.Width() = FRound( fMaxPixelY * fBmpWH );
-                    aNewBmpSize.Height() = FRound( fMaxPixelY );
+                    aNewBmpSize.setWidth( FRound( fMaxPixelY * fBmpWH ) );
+                    aNewBmpSize.setHeight( FRound( fMaxPixelY ) );
                 }
                 else if( fBmpWH > 0.0 )
                 {
-                    aNewBmpSize.Width() = FRound( fMaxPixelX );
-                    aNewBmpSize.Height() = FRound( fMaxPixelX / fBmpWH);
+                    aNewBmpSize.setWidth( FRound( fMaxPixelX ) );
+                    aNewBmpSize.setHeight( FRound( fMaxPixelX / fBmpWH) );
                 }
 
                 if( aNewBmpSize.Width() && aNewBmpSize.Height() )
@@ -643,14 +643,14 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
 
     if (bHMirr)
     {
-        aOutSz.Width() = -aOutSz.Width();
-        aOutPt.X() -= aOutSz.Width() - 1;
+        aOutSz.setWidth( -aOutSz.Width() );
+        aOutPt.AdjustX( -(aOutSz.Width() - 1) );
     }
 
     if (bVMirr)
     {
-        aOutSz.Height() = -aOutSz.Height();
-        aOutPt.Y() -= aOutSz.Height() - 1;
+        aOutSz.setHeight( -aOutSz.Height() );
+        aOutPt.AdjustY( -(aOutSz.Height() - 1) );
     }
 
     if (!aDstRect.Intersection(tools::Rectangle(aOutPt, aOutSz)).IsEmpty())
