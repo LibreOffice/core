@@ -475,8 +475,12 @@ sal_Bool Invocation_Impl::hasMethod( const OUString& Name )
 
 sal_Bool Invocation_Impl::hasProperty( const OUString& Name )
 {
-    if (!mbFromOLE && _xDirect.is())
-        return _xDirect->hasProperty( Name );
+    if (_xDirect.is())
+    {
+        bool bRet = _xDirect->hasProperty( Name );
+        if (bRet || !mbFromOLE)
+            return bRet;
+    }
     // PropertySet
     if( _xIntrospectionAccess.is()
         && _xIntrospectionAccess->hasProperty( Name, PropertyConcept::ALL ^ PropertyConcept::DANGEROUS ) )
@@ -490,8 +494,16 @@ sal_Bool Invocation_Impl::hasProperty( const OUString& Name )
 
 Any Invocation_Impl::getValue( const OUString& PropertyName )
 {
-    if (!mbFromOLE && _xDirect.is())
-        return _xDirect->getValue( PropertyName );
+    try
+    {
+        if (_xDirect.is())
+            return _xDirect->getValue( PropertyName );
+    }
+    catch (RuntimeException &)
+    {
+        if (!mbFromOLE)
+            throw;
+    }
     try
     {
         // PropertySet

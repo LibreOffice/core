@@ -47,10 +47,12 @@
 #include <com/sun/star/script/XInvocation2.hpp>
 #include <com/sun/star/script/MemberType.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
+#include <ooo/vba/msforms/XCheckBox.hpp>
 #include <osl/interlck.h>
 #include <com/sun/star/uno/genfunc.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>
+#include <comphelper/windowsdebugoutput.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include "comifaces.hxx"
@@ -107,6 +109,8 @@ InterfaceOleWrapper::~InterfaceOleWrapper()
 
 STDMETHODIMP InterfaceOleWrapper::QueryInterface(REFIID riid, LPVOID FAR * ppv)
 {
+    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::QueryInterface " << riid);
+
     HRESULT ret= S_OK;
 
     if( !ppv)
@@ -179,12 +183,263 @@ STDMETHODIMP  InterfaceOleWrapper::getOriginalUnoStruct( Any * pStruct)
 
 STDMETHODIMP InterfaceOleWrapper::GetTypeInfoCount( unsigned int * /*pctinfo*/ )
 {
-    return E_NOTIMPL ;
+    SAL_WARN("extensions.olebridge", "InterfaceOleWrapper@" << this << "::GetTypeInfoCount: NOTIMPL");
+    return E_NOTIMPL;
 }
 
-STDMETHODIMP InterfaceOleWrapper::GetTypeInfo(unsigned int /*itinfo*/, LCID /*lcid*/, ITypeInfo ** /*pptinfo*/)
+class CXTypeInfo : public ITypeInfo,
+                   public CComObjectRoot
 {
-    return E_NOTIMPL;
+public:
+    BEGIN_COM_MAP(CXTypeInfo)
+        COM_INTERFACE_ENTRY(ITypeInfo)
+    END_COM_MAP()
+
+    DECLARE_NOT_AGGREGATABLE(CXTypeInfo)
+
+    void Init(InterfaceOleWrapper* pInterfaceOleWrapper)
+    {
+        SAL_INFO("extensions.olebridge", "CXTypeInfo::Init() this=" << this << " for " << pInterfaceOleWrapper->getImplementationName());
+        mpInterfaceOleWrapper = pInterfaceOleWrapper;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetTypeAttr(TYPEATTR **ppTypeAttr) override
+    {
+        (void) ppTypeAttr;
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetTypeAttr: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetTypeComp(ITypeComp **ppTComp) override
+    {
+        (void) ppTComp;
+        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetTypeComp: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetFuncDesc(UINT index,
+                                                  FUNCDESC **ppFuncDesc) override
+    {
+        (void) index;
+        (void) ppFuncDesc;
+        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetFuncDesc: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetVarDesc(UINT index,
+                                                 VARDESC **ppVarDesc) override
+    {
+        (void) index;
+        (void) ppVarDesc;
+        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetVarDesc: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetNames(MEMBERID memid,
+                                               BSTR *rgBstrNames,
+                                               UINT cMaxNames,
+                                               UINT *pcNames) override
+    {
+        (void) memid;
+        (void) rgBstrNames;
+        (void) cMaxNames;
+        (void) pcNames;
+        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetNames: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetRefTypeOfImplType(UINT index,
+                                                           HREFTYPE *pRefType) override
+    {
+        (void) index;
+        (void) pRefType;
+        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetRefTypeOfImplType: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetImplTypeFlags(UINT index,
+                                                       INT *pImplTypeFlags) override
+    {
+        (void) index;
+        (void) pImplTypeFlags;
+        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetImplTypeFlags: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetIDsOfNames(LPOLESTR *rgszNames,
+                                                    UINT cNames,
+                                                    MEMBERID *pMemId) override
+    {
+        (void) rgszNames;
+        (void) cNames;
+        (void) pMemId;
+        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetIDsOfNames: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE Invoke(PVOID pvInstance,
+                                             MEMBERID memid,
+                                             WORD wFlags,
+                                             DISPPARAMS *pDispParams,
+                                             VARIANT *pVarResult,
+                                             EXCEPINFO *pExcepInfo,
+                                             UINT *puArgErr) override
+    {
+        (void) pvInstance;
+        (void) memid;
+        (void) wFlags;
+        (void) pDispParams;
+        (void) pVarResult;
+        (void) pExcepInfo;
+        (void) puArgErr;
+        SAL_WARN("extensions.olebridge", "CxTypeInfo::Invoke: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetDocumentation(MEMBERID memid,
+                                                       BSTR *pBstrName,
+                                                       BSTR *pBstrDocString,
+                                                       DWORD *pdwHelpContext,
+                                                       BSTR *pBstrHelpFile) override
+    {
+        SAL_INFO("extensions.olebridge", "CxTypeInfo::GetDocumentation(" << memid << ")");
+        if (pBstrName)
+        {
+            if (memid == MEMBERID_NIL)
+            {
+                *pBstrName = SysAllocString(o3tl::toW(mpInterfaceOleWrapper->getImplementationName().getStr()));
+            }
+            else if (memid == DISPID_VALUE)
+            {
+                // MEMBERIDs are the same as DISPIDs, apparently?
+                *pBstrName = SysAllocString(L"Value");
+            }
+            else
+            {
+                *pBstrName = SysAllocString(L"Unknown");
+            }
+        }
+        if (pBstrDocString)
+            *pBstrDocString = SysAllocString(L"");;
+        if (pdwHelpContext)
+            *pdwHelpContext = 0;
+        if (pBstrHelpFile)
+            *pBstrHelpFile = NULL;
+
+        return S_OK;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetDllEntry(MEMBERID memid,
+                                                  INVOKEKIND invKind,
+                                                  BSTR *pBstrDllName,
+                                                  BSTR *pBstrName,
+                                                  WORD *pwOrdinal) override
+    {
+        (void) memid;
+        (void) invKind;
+        (void) pBstrDllName;
+        (void) pBstrName;
+        (void) pwOrdinal;
+        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetDllEntry: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetRefTypeInfo(HREFTYPE hRefType,
+                                                     ITypeInfo **ppTInfo) override
+    {
+        (void) hRefType;
+        (void) ppTInfo;
+        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetRefTypeInfo: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE AddressOfMember(MEMBERID memid,
+                                                      INVOKEKIND invKind,
+                                                      PVOID *ppv) override
+    {
+        (void) memid;
+        (void) invKind;
+        (void) ppv;
+        SAL_WARN("extensions.olebridge", "CxTypeInfo::AddressOfMember: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE CreateInstance(IUnknown *pUnkOuter,
+                                                     REFIID riid,
+                                                     PVOID *ppvObj) override
+    {
+        (void) pUnkOuter;
+        (void) riid;
+        (void) ppvObj;
+        SAL_WARN("extensions.olebridge", "CxTypeInfo::CreateInstance: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetMops(MEMBERID memid,
+                                              BSTR *pBstrMops) override
+    {
+        (void) memid;
+        (void) pBstrMops;
+        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetMops: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetContainingTypeLib(ITypeLib **ppTLib,
+                                                           UINT *pIndex) override
+    {
+        (void) ppTLib;
+        (void) pIndex;
+        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetContainingTypeLib: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual void STDMETHODCALLTYPE ReleaseTypeAttr(TYPEATTR *pTypeAttr) override
+    {
+        (void) pTypeAttr;
+        SAL_WARN("extensions.olebridge", "CxTypeInfo::ReleaseTypeAttr: NOTIMPL");
+    }
+
+    virtual void STDMETHODCALLTYPE ReleaseFuncDesc(FUNCDESC *pFuncDesc) override
+    {
+        (void) pFuncDesc;
+        SAL_WARN("extensions.olebridge", "CxTypeInfo::ReleaseFuncDesc: NOTIMPL");
+    }
+
+    virtual void STDMETHODCALLTYPE ReleaseVarDesc(VARDESC *pVarDesc) override
+    {
+        (void) pVarDesc;
+        SAL_WARN("extensions.olebridge", "CxTypeInfo::ReleaseVarDesc: NOTIMPL");
+    }
+
+private:
+    InterfaceOleWrapper* mpInterfaceOleWrapper;
+};
+
+STDMETHODIMP InterfaceOleWrapper::GetTypeInfo(unsigned int iTInfo, LCID, ITypeInfo ** ppTInfo)
+{
+    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::GetTypeInfo(" << iTInfo << ")");
+
+    if (!ppTInfo)
+        return E_POINTER;
+
+    if (iTInfo != 0)
+        return E_NOTIMPL;
+
+    HRESULT ret = S_OK;
+
+    CComObject<CXTypeInfo>* pTypeInfo;
+
+    ret = CComObject<CXTypeInfo>::CreateInstance(&pTypeInfo);
+    if (FAILED(ret))
+        return ret;
+
+    pTypeInfo->AddRef();
+
+    pTypeInfo->Init(this);
+
+    *ppTInfo = pTypeInfo;
+
+    return S_OK;
 }
 
 STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
@@ -193,12 +448,18 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
                                                 LCID /*lcid*/,
                                                 DISPID * rgdispid )
 {
+    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::GetIDsOfNames("
+             << OUString(o3tl::toU(rgszNames[0]))
+             << (cNames > 1 ? "...!" : "") << "," << cNames << ")");
+
     HRESULT ret = DISP_E_UNKNOWNNAME;
     try
     {
         MutexGuard guard( getBridgeMutex());
         if( ! rgdispid)
             return E_POINTER;
+
+        // FIXME: Handle the cNames > 1 case
 
         if( ! _wcsicmp( *rgszNames, JSCRIPT_VALUE_FUNC) ||
             ! _wcsicmp( *rgszNames, BRIDGE_VALUE_FUNC))
@@ -230,6 +491,8 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
                 if (m_xExactName.is())
                 {
                     exactName = m_xExactName->getExactName(name);
+                    if (exactName.isEmpty())
+                        exactName = name;
                 }
                 else
                 {
@@ -269,6 +532,7 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
             else
             {
                 *rgdispid = (*iter).second;
+                SAL_INFO("extensions.olebridge", "  " << name << ": " << *rgdispid);
                 ret = S_OK;
             }
         }
@@ -513,6 +777,13 @@ void SAL_CALL InterfaceOleWrapper::initialize( const Sequence< Any >& aArguments
         aArguments[0] >>= m_xInvocation;
         aArguments[1] >>= m_xOrigin;
         aArguments[2] >>= m_defaultValueType;
+
+        Reference<XServiceInfo> xServiceInfo(m_xOrigin, UNO_QUERY);
+        if (xServiceInfo.is())
+            m_sImplementationName = xServiceInfo->getImplementationName();
+
+        SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::initialize for "
+                 << (m_sImplementationName.isEmpty()?"an unknown implementation":m_sImplementationName));
         break;
     }
 
@@ -787,6 +1058,8 @@ STDMETHODIMP InterfaceOleWrapper::Invoke(DISPID dispidMember,
                                          EXCEPINFO * pexcepinfo,
                                          unsigned int * puArgErr )
 {
+    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::Invoke(" << dispidMember << ")");
+
     comphelper::ProfileZone aZone("COM Bridge");
     HRESULT ret = S_OK;
 
@@ -1142,9 +1415,19 @@ HRESULT InterfaceOleWrapper::InvokeGeneral( DISPID dispidMember, unsigned short 
 // DISPID_VALUE | The DEFAULT Value is required in JScript when the situation
 // is that we put an object into an Array object ( out parameter). We have to return
 // IDispatch otherwise the object cannot be accessed from the Script.
-        if( dispidMember == DISPID_VALUE && wFlags == DISPATCH_PROPERTYGET
+        if( dispidMember == DISPID_VALUE && (wFlags & DISPATCH_PROPERTYGET) != 0
             && m_defaultValueType != VT_EMPTY && pvarResult != nullptr)
         {
+            // Special case hack: If it is a ScVbaCheckBox, return the boolean value
+            Reference<ooo::vba::msforms::XCheckBox> xCheckBox(m_xOrigin, UNO_QUERY);
+            if (xCheckBox.is())
+            {
+                bHandled = true;
+                Any aValue = xCheckBox->getValue();
+                anyToVariant(pvarResult, aValue);
+                return S_OK;
+            }
+
             bHandled= true;
             if( m_defaultValueType == VT_DISPATCH)
             {
