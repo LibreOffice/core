@@ -568,7 +568,7 @@
 #define FN_UNO_PARA_STYLE_CONDITIONS        (FN_EXTRA2 + 100)
 #define FN_UNO_GRAPHIC                      (FN_EXTRA2 + 101)
 
-#define FN_UNO_REPLACEMENT_GRAPHIC_URL      (FN_EXTRA2 + 102)
+// #define free                             (FN_EXTRA2 + 102)
 #define FN_UNO_CELL_ROW_SPAN                (FN_EXTRA2 + 103)
 #define FN_UNO_TABLE_BORDER_DISTANCES       (FN_EXTRA2 + 104)
 #define FN_SPELL_GRAMMAR_DIALOG             (FN_EXTRA2 + 105)
@@ -596,7 +596,7 @@
 #define FN_UNO_FOOTER_FIRST                 (FN_EXTRA2 + 119)
 #define FN_UNO_TABLE_BORDER2                (FN_EXTRA2 + 120)
 
-#define FN_UNO_REPLACEMENT_GRAPHIC_U_R_L    (FN_EXTRA2 + 121)
+// #define free                             (FN_EXTRA2 + 121)
 #define FN_UNO_HIDDEN                       (FN_EXTRA2 + 122)
 #define FN_UNO_STYLE_INTEROP_GRAB_BAG       (FN_EXTRA2 + 123)
 #define FN_UNO_TABLE_TEMPLATE_NAME          (FN_EXTRA2 + 124)

@@ -1639,41 +1639,13 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 }
             }
         }
-        else if( FN_UNO_REPLACEMENT_GRAPHIC_URL == pEntry->nWID || FN_UNO_REPLACEMENT_GRAPHIC == pEntry->nWID )
+        else if (FN_UNO_REPLACEMENT_GRAPHIC == pEntry->nWID)
         {
-            bool bURL = FN_UNO_REPLACEMENT_GRAPHIC_URL == pEntry->nWID;
-            bool bApply = false;
-            Graphic aGraphic;
-            if( bURL )
+            uno::Reference<graphic::XGraphic> xGraphic;
+            aValue >>= xGraphic;
+            if (xGraphic.is())
             {
-                OUString aGrfUrl;
-                aValue >>= aGrfUrl;
-
-                // the package URL based graphics are handled in different way currently
-                // TODO/LATER: actually this is the correct place to handle them
-                OUString aGraphicProtocol( sGraphicObjectProtocol );
-                if( aGrfUrl.startsWith( aGraphicProtocol ) )
-                {
-                    OString sId(OUStringToOString(
-                        aGrfUrl.copy(sizeof(sGraphicObjectProtocol)-1),
-                        RTL_TEXTENCODING_ASCII_US));
-                    aGraphic = GraphicObject( sId ).GetGraphic();
-                    bApply = true;
-                }
-            }
-            else
-            {
-                uno::Reference< graphic::XGraphic > xGraphic;
-                aValue >>= xGraphic;
-                if( xGraphic.is() )
-                {
-                    aGraphic = Graphic( xGraphic );
-                    bApply = true;
-                }
-            }
-
-            if ( bApply )
-            {
+                Graphic aGraphic(xGraphic);
                 const ::SwFormatContent* pCnt = &pFormat->GetContent();
                 if ( pCnt->GetContentIdx() && pDoc->GetNodes()[ pCnt->GetContentIdx()->GetIndex() + 1 ] )
                 {
@@ -2082,29 +2054,6 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                     sGrfName = sGraphicObjectProtocol + sId;
                 }
             }
-            aAny <<= sGrfName;
-        }
-        else if( FN_UNO_REPLACEMENT_GRAPHIC_U_R_L == pEntry->nWID)
-        {
-            OUString sGrfName;
-            const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
-
-            if(pIdx)
-            {
-                SwNodeIndex aIdx(*pIdx, 1);
-                SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
-                if(!pGrfNode)
-                    throw uno::RuntimeException();
-
-                const GraphicObject* pGraphicObject = pGrfNode->GetReplacementGrfObj();
-
-                if(pGraphicObject)
-                {
-                    sGrfName = sGraphicObjectProtocol
-                             + OStringToOUString( pGraphicObject->GetUniqueID(), RTL_TEXTENCODING_ASCII_US );
-                }
-            }
-
             aAny <<= sGrfName;
         }
         else if (FN_UNO_REPLACEMENT_GRAPHIC == pEntry->nWID)
