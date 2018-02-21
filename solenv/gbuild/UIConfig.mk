@@ -94,7 +94,24 @@ endef
 # * UIConfig/<name> containing all nontranslatable files
 
 gb_UIConfig_INSTDIR := $(LIBO_SHARE_FOLDER)/config/soffice.cfg
-gb_UIConfig_a11yerrors_COMMAND = $(PYTHON_FOR_BUILD) $(SRCDIR)/bin/gla11y
+
+ifeq ($(SYSTEM_PYTHON),TRUE)
+gb_UIConfig_LXML_PATH := PYTHONPATH=$(INSTDIR)/program
+else
+# gb_UIConfig_PYTHON already sets PYTHONPATH
+gb_UIConfig_LXML_PATH :=
+endif
+
+ifeq ($(SYSTEM_PYTHON_LXML),)
+gb_UIConfig_LXML_DEPS := $(call gb_ExternalProject_get_target,lxml)
+else
+gb_UIConfig_LXML_DEPS :=
+endif
+
+gb_UIConfig_PYTHON := $(call gb_ExternalExecutable_get_command,python)
+
+gb_UIConfig_gla11y_SCRIPT := $(SRCDIR)/bin/gla11y
+gb_UIConfig_gla11y_COMMAND := $(gb_Helper_set_ld_path) $(gb_UIConfig_LXML_PATH) $(gb_UIConfig_PYTHON) $(gb_UIConfig_gla11y_SCRIPT)
 
 $(dir $(call gb_UIConfig_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
@@ -121,11 +138,11 @@ $(call gb_UIConfig_get_clean_target,%) :
 define gb_UIConfig_a11yerrors__command
 $(call gb_Output_announce,$(2),$(true),UIA,1)
 $(call gb_Helper_abbreviate_dirs,\
-	$(gb_UIConfig_a11yerrors_COMMAND) -W none $(UIFILE) > $@
+	$(gb_UIConfig_gla11y_COMMAND) -W none $(UIFILE) > $@
 )
 endef
 
-$(call gb_UIConfig_get_a11yerrors_target,%) : $(gb_UIConfig_a11yerrors_COMMAND)
+$(call gb_UIConfig_get_a11yerrors_target,%) : $(gb_UIConfig_LXML_DEPS) $(call gb_ExternalExecutable_get_dependencies,python) $(gb_UIConfig_a11yerrors_SCRIPT)
 ifeq ($(PYTHON_LXML),TRUE)
 	$(call gb_UIConfig_a11yerrors__command,$@,$*)
 else
