@@ -177,7 +177,8 @@ DECLARE_OOXMLEXPORT_TEST(testTextBoxPictureFill, "textbox_picturefill.docx")
 {
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
-    CPPUNIT_ASSERT(!(getProperty<OUString>(xFrame,"FillBitmapURL")).isEmpty());
+    auto xBitmap = getProperty<uno::Reference<awt::XBitmap>>(xFrame,"FillBitmap");
+    CPPUNIT_ASSERT(xBitmap.is());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFDO73034, "FDO73034.docx")
