@@ -203,6 +203,7 @@ GenerateVbaEvents
 Geometry3D
 GradientName
 Graphic
+GraphicBitmap
 GraphicColorMode
 GraphicCrop
 GraphicSize
@@ -245,7 +246,6 @@ IgnoreBlankCells
 IgnoreCase
 IgnoreLeadingSpaces
 ImagePosition
-ImageURL
 IncludeHiddenCells
 InputMessage
 InputTitle

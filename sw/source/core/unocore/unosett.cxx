@@ -50,6 +50,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <o3tl/any.hxx>
@@ -1451,8 +1452,8 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
                 pGraphic = pBrush->GetGraphic();
             if(pGraphic)
             {
-                uno::Reference<awt::XBitmap> xBmp = VCLUnoHelper::CreateBitmap( pGraphic->GetBitmapEx() );
-                aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_GRAPHIC_BITMAP, xBmp));
+                uno::Reference<awt::XBitmap> xBitmap(pGraphic->GetXGraphic(), uno::UNO_QUERY);
+                aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_GRAPHIC_BITMAP, xBitmap));
             }
              Size aSize = rFormat.GetGraphicSize();
             // #i101131#
@@ -1959,9 +1960,9 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                                 pSetBrush = new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND);
                         }
 
-                        BitmapEx aBmp = VCLUnoHelper::GetBitmap(xBitmap);
-                        Graphic aNewGr(aBmp);
-                        pSetBrush->SetGraphic( aNewGr );
+                        uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
+                        Graphic aGraphic(xGraphic);
+                        pSetBrush->SetGraphic(aGraphic);
                     }
                     else
                         bWrongArg = true;

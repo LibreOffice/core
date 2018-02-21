@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 
 #include <o3tl/any.hxx>
 #include <o3tl/make_unique.hxx>
@@ -528,23 +529,27 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
 
         if( bImage )
         {
-            OUString sStr( sImageURL );
-            if( !sImageURL.isEmpty() )
+            uno::Reference<graphic::XGraphic> xGraphic;
+            if (!sImageURL.isEmpty())
             {
-                sStr = GetImport().ResolveGraphicObjectURL( sImageURL, false );
+                xGraphic = GetImport().loadGraphicByURL(sImageURL);
             }
             else if( xBase64Stream.is() )
             {
-                sStr = GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream );
+                xGraphic = GetImport().loadGraphicFromBase64(xBase64Stream);
             }
 
-            if( !sStr.isEmpty() )
+            uno::Reference<awt::XBitmap> xBitmap;
+            if (xGraphic.is())
+                xBitmap.set(xGraphic, uno::UNO_QUERY);
+
+            if (xBitmap.is())
             {
-                pProps[nPos].Name = "GraphicURL";
-                pProps[nPos++].Value <<= sStr;
+                pProps[nPos].Name = "GraphicBitmap";
+                pProps[nPos++].Value <<= xBitmap;
             }
 
-            awt::Size aSize( nImageWidth, nImageHeight );
+            awt::Size aSize(nImageWidth, nImageHeight);
             pProps[nPos].Name = "GraphicSize";
             pProps[nPos++].Value <<= aSize;
 
