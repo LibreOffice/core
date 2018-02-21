@@ -78,11 +78,9 @@ enum class DialogMask
     ButtonsOk               = 0x0001,
     ButtonsCancel           = 0x0002,
     ButtonsRetry            = 0x0004,
-    ButtonsOkCancel         = 0x0003,
     ButtonsNo               = 0x0008,
     ButtonsYes              = 0x0010,
     ButtonsYesNo            = 0x0018,
-    ButtonsYesNoCancel      = 0x001a,
 
     ButtonDefaultsOk        = 0x0100,
     ButtonDefaultsCancel    = 0x0200,
