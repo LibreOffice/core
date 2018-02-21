@@ -35,6 +35,7 @@ namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }
     namespace drawing { class XShape; }
     namespace drawing { class XShapes; }
+    namespace graphic { class XGraphic; }
 } } }
 
 namespace oox {
@@ -304,9 +305,11 @@ protected:
     css::uno::Reference<css::drawing::XShape>createEmbeddedPictureObject(
         const css::uno::Reference< css::drawing::XShapes >& rxShapes,
         const css::awt::Rectangle& rShapeRect, OUString const & rGraphicPath ) const;
+
     css::uno::Reference<css::drawing::XShape>createPictureObject(
             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
-            const css::awt::Rectangle& rShapeRect, OUString const & rGraphicUrl ) const;
+            const css::awt::Rectangle& rShapeRect,
+            css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) const;
 
 private:
     OUString     maService;          ///< Name of the UNO shape service.
