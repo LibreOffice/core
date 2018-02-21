@@ -34,6 +34,7 @@
 #include <svl/aeitem.hxx>
 #include <editeng/editstat.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/fmshell.hxx>
@@ -328,7 +329,10 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                     if ( mpDrawView->IsPresObjSelected() )
                     {
                         ::sd::Window* pWindow = GetActiveWindow();
-                        ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE) )->Execute();
+                        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                                      SdResId(STR_ACTION_NOTPOSSIBLE)));
+                        xInfoBox->run();
                     }
                     else if ( ScopedVclPtrInstance<QueryBox>(GetActiveWindow(), MessBoxStyle::YesNo,
                                       SdResId(STR_ASK_FOR_CONVERT_TO_BEZIER)
@@ -365,7 +369,10 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                     if ( mpDrawView->IsPresObjSelected() )
                     {
                         ::sd::Window* pWindow = GetActiveWindow();
-                        ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE) )->Execute();
+                        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                                      SdResId(STR_ACTION_NOTPOSSIBLE)));
+                        xInfoBox->run();
                     }
                     else if ( ScopedVclPtrInstance<QueryBox>(GetActiveWindow(), MessBoxStyle::YesNo,
                                       SdResId(STR_ASK_FOR_CONVERT_TO_BEZIER)
@@ -671,7 +678,10 @@ void DrawViewShell::FuDeleteSelectedObjects()
     if (mpDrawView->IsPresObjSelected(false, true, false, true))
     {
         ::sd::Window* pWindow = GetActiveWindow();
-        ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE) )->Execute();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      SdResId(STR_ACTION_NOTPOSSIBLE)));
+        xInfoBox->run();
         bConsumed = true;
     }
 
@@ -785,7 +795,10 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected(false, true, false, true) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SdResId(STR_ACTION_NOTPOSSIBLE)));
+                xInfoBox->run();
             }
             else
             {
@@ -807,7 +820,10 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected(false, true, false, true) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SdResId(STR_ACTION_NOTPOSSIBLE)));
+                xInfoBox->run();
             }
             else
             {

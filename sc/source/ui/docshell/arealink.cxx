@@ -23,7 +23,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <arealink.hxx>
 
@@ -463,9 +463,11 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
 
         //! Link dialog must set default parent
         //  "cannot insert rows"
-        ScopedVclPtrInstance<InfoBox> aBox( Application::GetDefDialogParent(),
-                                            ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_2 ) );
-        aBox->Execute();
+        vcl::Window* pWin = Application::GetDefDialogParent();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      ScGlobal::GetRscString(STR_MSSG_DOSUBTOTALS_2)));
+        xInfoBox->run();
     }
 
     //  clean up

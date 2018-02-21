@@ -39,6 +39,7 @@
 #include <vcl/fltcall.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphictools.hxx>
+#include <vcl/weld.hxx>
 #include <strings.hrc>
 
 #include <math.h>
@@ -439,8 +440,10 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     if ( mbStatus && mnLevelWarning && pFilterConfigItem )
     {
         std::locale loc = Translate::Create("flt");
-        ScopedVclPtrInstance< InfoBox > aInfoBox(nullptr, Translate::get(KEY_VERSION_CHECK, loc));
-        aInfoBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      Translate::get(KEY_VERSION_CHECK, loc)));
+        xInfoBox->run();
     }
 
     if ( xStatusIndicator.is() )

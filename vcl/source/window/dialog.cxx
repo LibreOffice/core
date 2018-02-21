@@ -343,12 +343,34 @@ static void ImplMouseAutoPos( Dialog* pDialog )
 
 struct DialogImpl
 {
+    std::vector<VclPtr<PushButton>> maOwnedButtons;
+    std::map<VclPtr<vcl::Window>, short> maResponses;
     long    mnResult;
     bool    mbStartedModal;
     VclAbstractDialog::AsyncContext maEndCtx;
 
     DialogImpl() : mnResult( -1 ), mbStartedModal( false ) {}
+
+    short get_response(vcl::Window *pWindow) const
+    {
+        auto aFind = maResponses.find(pWindow);
+        if (aFind != maResponses.end())
+            return aFind->second;
+        return RET_CANCEL;
+    }
+
+    ~DialogImpl()
+    {
+        for (VclPtr<PushButton> & pOwnedButton : maOwnedButtons)
+            pOwnedButton.disposeAndClear();
+    }
 };
+
+void Dialog::disposeOwnedButtons()
+{
+    for (VclPtr<PushButton> & pOwnedButton : mpDialogImpl->maOwnedButtons)
+        pOwnedButton.disposeAndClear();
+}
 
 void Dialog::ImplInitDialogData()
 {
@@ -1281,6 +1303,96 @@ bool Dialog::set_property(const OString &rKey, const OUString &rValue)
 FactoryFunction Dialog::GetUITestFactory() const
 {
     return DialogUIObject::create;
+}
+
+IMPL_LINK(Dialog, ResponseHdl, Button*, pButton, void)
+{
+    auto aFind = mpDialogImpl->maResponses.find(pButton);
+    if (aFind == mpDialogImpl->maResponses.end())
+        return;
+    short nResponse = aFind->second;
+    if (nResponse == RET_HELP)
+    {
+        vcl::Window* pFocusWin = Application::GetFocusWindow();
+        if (!pFocusWin)
+            pFocusWin = pButton;
+        HelpEvent aEvt(pFocusWin->GetPointerPosPixel(), HelpEventMode::CONTEXT);
+        pFocusWin->RequestHelp(aEvt);
+        return;
+    }
+    EndDialog(nResponse);
+}
+
+void Dialog::add_button(PushButton* pButton, int response, bool bTransferOwnership)
+{
+    if (bTransferOwnership)
+        mpDialogImpl->maOwnedButtons.push_back(pButton);
+    mpDialogImpl->maResponses[pButton] = response;
+    switch (pButton->GetType())
+    {
+        case WindowType::PUSHBUTTON:
+        {
+            if (!pButton->GetClickHdl().IsSet())
+                pButton->SetClickHdl(LINK(this, Dialog, ResponseHdl));
+            break;
+        }
+        //insist that the response ids match the default actions for those
+        //widgets, and leave their default handlers in place
+        case WindowType::OKBUTTON:
+            assert(mpDialogImpl->get_response(pButton) == RET_OK);
+            break;
+        case WindowType::CANCELBUTTON:
+            assert(mpDialogImpl->get_response(pButton) == RET_CANCEL || mpDialogImpl->get_response(pButton) == RET_CLOSE);
+            break;
+        case WindowType::HELPBUTTON:
+            assert(mpDialogImpl->get_response(pButton) == RET_HELP);
+            break;
+        default:
+            SAL_WARN("vcl.layout", "The type of widget " <<
+                pButton->GetHelpId() << " is currently not handled");
+            break;
+    }
+}
+
+void Dialog::set_default_response(int response)
+{
+    //copy explicit responses
+    std::map<VclPtr<vcl::Window>, short> aResponses(mpDialogImpl->maResponses);
+
+    //add implicit responses
+    for (vcl::Window* pChild = mpActionArea->GetWindow(GetWindowType::FirstChild); pChild;
+         pChild = pChild->GetWindow(GetWindowType::Next))
+    {
+        if (aResponses.find(pChild) != aResponses.end())
+            continue;
+        switch (pChild->GetType())
+        {
+            case WindowType::OKBUTTON:
+                aResponses[pChild] = RET_OK;
+                break;
+            case WindowType::CANCELBUTTON:
+                aResponses[pChild] = RET_CANCEL;
+                break;
+            case WindowType::HELPBUTTON:
+                aResponses[pChild] = RET_HELP;
+                break;
+            default:
+                break;
+        }
+    }
+
+    for (auto& a : aResponses)
+    {
+        if (a.second == response)
+        {
+            a.first->SetStyle(a.first->GetStyle() | WB_DEFBUTTON);
+            a.first->GrabFocus();
+        }
+        else
+        {
+            a.first->SetStyle(a.first->GetStyle() & ~WB_DEFBUTTON);
+        }
+    }
 }
 
 VclBuilderContainer::VclBuilderContainer()

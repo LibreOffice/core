@@ -18,7 +18,7 @@
  */
 
 #include <sfx2/dispatch.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/request.hxx>
 #include <svl/style.hxx>
@@ -433,8 +433,11 @@ bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAtt
     {
         if (IsPresObjSelected(false))
         {
-            ScopedVclPtrInstance<InfoBox>(mpDrawViewShell->GetActiveWindow(),
-                    SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
+            vcl::Window* pWin = mpDrawViewShell->GetActiveWindow();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          SdResId(STR_ACTION_NOTPOSSIBLE)));
+            xInfoBox->run();
             bResult = false;
         }
         else
