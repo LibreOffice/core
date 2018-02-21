@@ -259,6 +259,7 @@ public:
 
     virtual ValueT      GetControlValue() const SAL_OVERRIDE;
     virtual void        SetControlValue( ValueT nValue ) SAL_OVERRIDE;
+    bool                IsControlValueChanged() const;
 
 private:
     FieldUnit           meUnit;
@@ -478,6 +479,12 @@ template< typename ValueT >
 void MetricFieldWrapper< ValueT >::SetControlValue( ValueT nValue )
 {
     this->GetControl().SetValue( this->GetControl().Normalize( static_cast< sal_Int64 >( nValue ) ), meUnit );
+}
+
+template< typename ValueT >
+bool MetricFieldWrapper< ValueT >::IsControlValueChanged() const
+{
+    return this->GetControl().IsValueChangedFromSaved();
 }
 
 

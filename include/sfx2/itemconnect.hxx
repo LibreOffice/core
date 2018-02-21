@@ -243,6 +243,7 @@ protected:
 
     ItemWrapperType     maItemWrp;
     std::unique_ptr<ControlWrpT>   mxCtrlWrp;
+    bool                mbModified;
 };
 
 
@@ -393,7 +394,8 @@ ItemControlConnection< ItemWrpT, ControlWrpT >::ItemControlConnection(
         sal_uInt16 nSlot, ControlWrpT* pNewCtrlWrp, ItemConnFlags nFlags ) :
     ItemConnectionBase( nFlags ),
     maItemWrp( nSlot ),
-    mxCtrlWrp( pNewCtrlWrp )
+    mxCtrlWrp( pNewCtrlWrp ),
+    mbModified( false )
 {
 }
 
@@ -402,7 +404,8 @@ ItemControlConnection< ItemWrpT, ControlWrpT >::ItemControlConnection(
         sal_uInt16 nSlot, ControlType& rControl, ItemConnFlags nFlags ) :
     ItemConnectionBase( nFlags ),
     maItemWrp( nSlot ),
-    mxCtrlWrp( new ControlWrpT( rControl ) )
+    mxCtrlWrp( new ControlWrpT( rControl ) ),
+    mbModified( false )
 {
 }
 
@@ -425,6 +428,7 @@ void ItemControlConnection< ItemWrpT, ControlWrpT >::Reset( const SfxItemSet* pI
     mxCtrlWrp->SetControlDontKnow( pItem == nullptr );
     if( pItem )
         mxCtrlWrp->SetControlValue( maItemWrp.GetItemValue( *pItem ) );
+    mbModified = false;
 }
 
 template< typename ItemWrpT, typename ControlWrpT >
@@ -432,7 +436,6 @@ bool ItemControlConnection< ItemWrpT, ControlWrpT >::FillItemSet(
         SfxItemSet& rDestSet, const SfxItemSet& rOldSet )
 {
     const ItemType* pOldItem = maItemWrp.GetUniqueItem( rOldSet );
-    bool bChanged = false;
     if( !mxCtrlWrp->IsControlDontKnow() )
     {
         // first store the control value in a local variable
@@ -440,7 +443,7 @@ bool ItemControlConnection< ItemWrpT, ControlWrpT >::FillItemSet(
         // convert to item value type -> possible to convert i.e. from 'T' to 'const T&'
         ItemValueType aNewValue( aCtrlValue );
         // do not rely on existence of ItemValueType::operator!=
-        if( !pOldItem || !(maItemWrp.GetItemValue( *pOldItem ) == aNewValue) )
+        if( mbModified || !pOldItem || !(maItemWrp.GetItemValue( *pOldItem ) == aNewValue) )
         {
             sal_uInt16 nWhich = ItemWrapperHelper::GetWhichId( rDestSet, maItemWrp.GetSlotId() );
             std::unique_ptr< ItemType > xItem(
@@ -448,12 +451,12 @@ bool ItemControlConnection< ItemWrpT, ControlWrpT >::FillItemSet(
             xItem->SetWhich( nWhich );
             maItemWrp.SetItemValue( *xItem, aNewValue );
             rDestSet.Put( *xItem );
-            bChanged = true;
+            mbModified = true;
         }
     }
-    if( !bChanged )
+    if( !mbModified )
         ItemWrapperHelper::RemoveDefaultItem( rDestSet, rOldSet, maItemWrp.GetSlotId() );
-    return bChanged;
+    return mbModified;
 }
 
 
