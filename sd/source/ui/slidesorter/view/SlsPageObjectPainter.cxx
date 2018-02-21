@@ -231,7 +231,7 @@ void PageObjectPainter::PaintPageNumber (
         // Page number is painted on background for hover or selection or
         // both.  Each of these background colors has a predefined luminance
         // which is compatible with the PageNumberHover color.
-        aPageNumberColor = Color(mpTheme->GetColor(Theme::Color_PageNumberHover));
+        aPageNumberColor = mpTheme->GetColor(Theme::Color_PageNumberHover);
     }
     else
     {
@@ -240,7 +240,7 @@ void PageObjectPainter::PaintPageNumber (
         // When the background color is black then this is interpreted as
         // high contrast mode and the font color is set to white.
         if (nBackgroundLuminance == 0)
-            aPageNumberColor = Color(mpTheme->GetColor(Theme::Color_PageNumberHighContrast));
+            aPageNumberColor = mpTheme->GetColor(Theme::Color_PageNumberHighContrast);
         else
         {
             // Compare luminance of default page number color and background
@@ -250,9 +250,9 @@ void PageObjectPainter::PaintPageNumber (
             if (abs(nBackgroundLuminance - nFontLuminance) < 60)
             {
                 if (nBackgroundLuminance > nFontLuminance-30)
-                    aPageNumberColor = Color(mpTheme->GetColor(Theme::Color_PageNumberBrightBackground));
+                    aPageNumberColor = mpTheme->GetColor(Theme::Color_PageNumberBrightBackground);
                 else
-                    aPageNumberColor = Color(mpTheme->GetColor(Theme::Color_PageNumberDarkBackground));
+                    aPageNumberColor = mpTheme->GetColor(Theme::Color_PageNumberDarkBackground);
             }
         }
     }

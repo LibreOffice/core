@@ -12,6 +12,9 @@
 #include <memory>
 
 #include "rtl/ustring.hxx"
+#include "tools/color.hxx"
+
+void method1(OUString const &);
 
 int main() {
     OUString s;
@@ -22,6 +25,16 @@ int main() {
     (void) T2(s); // expected-error {{redundant copy construction from 'rtl::OUString' to 'T2' (aka 'const rtl::OUString') [loplugin:redundantcopy]}}
 
     (void) std::unique_ptr<int>(std::unique_ptr<int>(new int{})); // expected-error {{redundant copy construction from 'std::unique_ptr<int>' to 'std::unique_ptr<int>' [loplugin:redundantcopy]}}
+
+    OUString s1;
+    method1( OUString(s1) ); // expected-error {{redundant copy construction from 'rtl::OUString' to 'rtl::OUString' [loplugin:redundantcopy]}}
+
+    OUString s2;
+    s2 = OUString(s1); // expected-error {{redundant copy construction from 'rtl::OUString' to 'rtl::OUString' [loplugin:redundantcopy]}}
+
+    Color col1;
+    Color col2 = Color(col1); // expected-error {{redundant copy construction from 'Color' to 'Color' [loplugin:redundantcopy]}}
+    (void)col2;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

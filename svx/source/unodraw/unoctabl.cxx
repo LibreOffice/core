@@ -122,7 +122,7 @@ void SAL_CALL SvxUnoColorTable::replaceByName( const OUString& aName, const uno:
     if( nIndex == -1  )
         throw container::NoSuchElementException();
 
-    pList->Replace(nIndex, o3tl::make_unique<XColorEntry>(Color(static_cast<Color>(nColor)), aName ));
+    pList->Replace(nIndex, o3tl::make_unique<XColorEntry>(static_cast<Color>(nColor), aName ));
 }
 
 // XNameAccess

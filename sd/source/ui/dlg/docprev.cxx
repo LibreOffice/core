@@ -121,7 +121,7 @@ void SdDocPreviewWin::ImpPaint( OutputDevice* pVDev )
     svtools::ColorConfig aColorConfig;
 
     pVDev->SetLineColor();
-    pVDev->SetFillColor( Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor ) );
+    pVDev->SetFillColor( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
     pVDev->DrawRect(::tools::Rectangle( Point(0,0 ), pVDev->GetOutputSize()));
 }
 
@@ -154,7 +154,7 @@ void SdDocPreviewWin::updateViewSettings()
     else
     {
         svtools::ColorConfig aColorConfig;
-        maDocumentColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
+        maDocumentColor = aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor;
     }
 
     Invalidate();

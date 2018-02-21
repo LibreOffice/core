@@ -607,7 +607,7 @@ void OJoinTableView::InitColors()
 {
     // the colors for the illustration should be the system colors
     StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
-    SetBackground(Wallpaper(Color(aSystemStyle.GetDialogColor())));
+    SetBackground(Wallpaper(aSystemStyle.GetDialogColor()));
 }
 
 void OJoinTableView::BeginChildMove( OTableWindow* pTabWin, const Point& rMousePos  )

@@ -65,7 +65,7 @@ Color SmTmpDevice::Impl_GetColor( const Color& rColor )
                 nNewCol = COL_BLACK;
         }
     }
-    return Color( nNewCol );
+    return nNewCol;
 }
 
 

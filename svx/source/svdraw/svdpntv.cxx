@@ -1244,7 +1244,7 @@ void SdrPaintView::VisAreaChanged()
 
 void SdrPaintView::onChangeColorConfig()
 {
-    maGridColor = Color( maColorConfig.GetColorValue( svtools::DRAWGRID ).nColor );
+    maGridColor = maColorConfig.GetColorValue( svtools::DRAWGRID ).nColor;
 }
 
 

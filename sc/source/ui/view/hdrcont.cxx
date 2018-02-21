@@ -455,7 +455,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                         aTransRect = tools::Rectangle( 0, nTransStart, nBarSize-1, nTransEnd );
                     else
                         aTransRect = tools::Rectangle( nTransStart, 0, nTransEnd, nBarSize-1 );
-                    SetBackground( Color( rStyleSettings.GetFaceColor() ) );
+                    SetBackground( rStyleSettings.GetFaceColor() );
                     DrawSelectionBackground( aTransRect, 0, true, false );
                     SetBackground();
                 }

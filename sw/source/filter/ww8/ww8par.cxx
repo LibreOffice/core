@@ -930,8 +930,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             SfxItemState eState = aSet.GetItemState( XATTR_FILLCOLOR,
                                                      false, &pPoolItem );
             if( SfxItemState::DEFAULT == eState )
-                aSet.Put( XFillColorItem( OUString(),
-                          Color( mnDefaultColor ) ) );
+                aSet.Put( XFillColorItem( OUString(), mnDefaultColor ) );
             pObj->SetMergedItemSet(aSet);
         }
 

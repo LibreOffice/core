@@ -969,7 +969,7 @@ void Ruler::ApplySettings(vcl::RenderContext& rRenderContext)
 
     Color aColor;
     svtools::ColorConfig aColorConfig;
-    aColor = Color(aColorConfig.GetColorValue(svtools::APPBACKGROUND).nColor);
+    aColor = aColorConfig.GetColorValue(svtools::APPBACKGROUND).nColor;
     ApplyControlBackground(rRenderContext, aColor);
 }
 
@@ -997,7 +997,7 @@ void Ruler::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
     {
         Color aColor;
         svtools::ColorConfig aColorConfig;
-        aColor = Color(aColorConfig.GetColorValue(svtools::APPBACKGROUND).nColor);
+        aColor = aColorConfig.GetColorValue(svtools::APPBACKGROUND).nColor;
         ApplyControlBackground(*this, aColor);
     }
 
