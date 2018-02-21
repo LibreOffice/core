@@ -62,7 +62,7 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <svx/xmlsecctrl.hxx>
 #include <sfx2/viewfac.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include <cppuhelper/implbase.hxx>
 
@@ -386,8 +386,10 @@ bool Shell::PrepareClose( bool bUI )
     {
         if( bUI )
         {
-            vcl::Window *pParent = &GetViewFrame()->GetWindow();
-            ScopedVclPtrInstance<InfoBox>(pParent, IDEResId(RID_STR_CANNOTCLOSE))->Execute();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetViewFrame()->GetWindow().GetFrameWeld(),
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          IDEResId(RID_STR_CANNOTCLOSE)));
+            xInfoBox->run();
         }
         return false;
     }

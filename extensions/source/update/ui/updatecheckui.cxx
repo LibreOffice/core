@@ -269,7 +269,7 @@ Image UpdateCheckUI::GetBubbleImage( OUString const &rURL )
     }
 
     if ( aImage.GetSizePixel().Width() == 0 )
-        aImage = InfoBox::GetStandardImage();
+        aImage = GetStandardInfoBoxImage();
 
     return aImage;
 }
@@ -777,7 +777,6 @@ void BubbleWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Re
               aThickLine );
     SetLineColor( aOldLine );
 
-    //Image aImage = InfoBox::GetStandardImage();
     Size aImgSize = maBubbleImage.GetSizePixel();
 
     DrawImage( Point( BUBBLE_BORDER, BUBBLE_BORDER + TIP_HEIGHT ), maBubbleImage );
@@ -820,7 +819,6 @@ void BubbleWindow::Show( bool bVisible, ShowFlags nFlags )
 
     Size aWindowSize = GetSizePixel();
 
-    // Image aImage = InfoBox::GetStandardImage();
     Size aImgSize = maBubbleImage.GetSizePixel();
 
     RecalcTextRects();

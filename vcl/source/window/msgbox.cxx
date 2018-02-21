@@ -366,33 +366,13 @@ Size MessBox::GetOptimalSize() const
     return Size( 250, 100 );
 }
 
-InfoBox::InfoBox( vcl::Window* pParent, const OUString& rMessage ) :
-    MessBox( pParent, MessBoxStyle::Ok | MessBoxStyle::DefaultOk, 0, OUString(), rMessage )
-{
-    // Default Text is the display title from the application
-    if ( GetText().isEmpty() )
-        SetText( GetStandardText() );
-
-    SetImage( InfoBox::GetStandardImage() );
-}
-
-InfoBox::InfoBox( vcl::Window* pParent, MessBoxStyle nStyle, const OUString& rMessage ) :
-    MessBox( pParent, nStyle, 0, OUString(), rMessage )
-{
-    // Default Text is the display title from the application
-    if ( GetText().isEmpty() )
-        SetText( GetStandardText() );
-
-    SetImage( InfoBox::GetStandardImage() );
-}
-
-Image const & InfoBox::GetStandardImage()
+Image const & GetStandardInfoBoxImage()
 {
     ImplInitMsgBoxImageList();
     return ImplGetSVData()->maWinData.maMsgBoxImgList[3];
 }
 
-OUString InfoBox::GetStandardText()
+OUString GetStandardInfoBoxText()
 {
     return VclResId(SV_MSGBOX_INFO);
 }

@@ -29,6 +29,7 @@
 #include <vcl/abstdlg.hxx>
 
 struct DialogImpl;
+class PushButton;
 class VclBox;
 class VclButtonBox;
 
@@ -69,7 +70,8 @@ private:
     SAL_DLLPRIVATE         Dialog (const Dialog &) = delete;
     SAL_DLLPRIVATE         Dialog & operator= (const Dialog &) = delete;
 
-    DECL_DLLPRIVATE_LINK( ImplAsyncCloseHdl, void*, void );
+    DECL_DLLPRIVATE_LINK(ImplAsyncCloseHdl, void*, void);
+    DECL_DLLPRIVATE_LINK(ResponseHdl, Button*, void);
 
 protected:
     using Window::ImplInit;
@@ -78,6 +80,7 @@ protected:
 public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
     virtual        void    doDeferredInit(WinBits nBits) override;
+    SAL_DLLPRIVATE void    disposeOwnedButtons();
 
 protected:
     explicit        Dialog( WindowType nType );
@@ -170,6 +173,9 @@ public:
 
     void            GrabFocusToFirstControl();
     virtual void    Resize() override;
+
+    void            add_button(PushButton* pButton, int nResponse, bool bTransferOwnership);
+    void            set_default_response(int nResponse);
 };
 
 class VCL_DLLPUBLIC ModelessDialog : public Dialog

@@ -2203,83 +2203,19 @@ MessageDialog::MessageDialog(vcl::Window* pParent, const OString& rID, const OUS
 
 void MessageDialog::dispose()
 {
-    for (VclPtr<PushButton> & pOwnedButton : m_aOwnedButtons)
-        pOwnedButton.disposeAndClear();
-    m_aOwnedButtons.clear();
-
+    disposeOwnedButtons();
     m_pPrimaryMessage.disposeAndClear();
     m_pSecondaryMessage.disposeAndClear();
     m_pImage.disposeAndClear();
     m_pGrid.disposeAndClear();
     m_pOwnedActionArea.disposeAndClear();
     m_pOwnedContentArea.disposeAndClear();
-    m_aResponses.clear();
     Dialog::dispose();
 }
 
 MessageDialog::~MessageDialog()
 {
     disposeOnce();
-}
-
-void MessageDialog::response(short nResponseId)
-{
-    EndDialog(nResponseId);
-}
-
-IMPL_LINK(MessageDialog, ButtonHdl, Button *, pButton, void)
-{
-    response(get_response(pButton));
-}
-
-short MessageDialog::get_response(const vcl::Window *pWindow) const
-{
-    auto aFind = m_aResponses.find(pWindow);
-    if (aFind != m_aResponses.end())
-        return aFind->second;
-    if (!m_pUIBuilder)
-        return RET_CANCEL;
-    return m_pUIBuilder->get_response(pWindow);
-}
-
-void MessageDialog::setButtonHandlers(VclButtonBox const *pButtonBox)
-{
-    assert(pButtonBox);
-    for (vcl::Window* pChild = pButtonBox->GetWindow(GetWindowType::FirstChild); pChild;
-        pChild = pChild->GetWindow(GetWindowType::Next))
-    {
-        switch (pChild->GetType())
-        {
-            case WindowType::PUSHBUTTON:
-            {
-                PushButton* pButton = static_cast<PushButton*>(pChild);
-                if (!pButton->GetClickHdl().IsSet())
-                    pButton->SetClickHdl(LINK(this, MessageDialog, ButtonHdl));
-                break;
-            }
-            //insist that the response ids match the default actions for those
-            //widgets, and leave their default handlers in place
-            case WindowType::OKBUTTON:
-                assert(get_response(pChild) == RET_OK);
-                break;
-            case WindowType::CANCELBUTTON:
-                assert(get_response(pChild) == RET_CANCEL);
-                break;
-            case WindowType::HELPBUTTON:
-                assert(get_response(pChild) == RET_HELP);
-                break;
-            default:
-                SAL_WARN("vcl.layout", "The type of widget " <<
-                    pChild->GetHelpId() << " is currently not handled");
-                break;
-        }
-        //The default is to stick the focus into the first widget
-        //that accepts it, and if that happens and it's a button
-        //then that becomes the new default button, so explicitly
-        //put the focus into the default button
-        if (pChild->GetStyle() & WB_DEFBUTTON)
-            pChild->GrabFocus();
-    }
 }
 
 void MessageDialog::SetMessagesWidths(vcl::Window const *pParent,
@@ -2317,7 +2253,7 @@ short MessageDialog::Execute()
         switch (m_eMessageType)
         {
             case VclMessageType::Info:
-                m_pImage->SetImage(InfoBox::GetStandardImage());
+                m_pImage->SetImage(GetStandardInfoBoxImage());
                 break;
             case VclMessageType::Warning:
                 m_pImage->SetImage(WarningBox::GetStandardImage());
@@ -2363,6 +2299,7 @@ short MessageDialog::Execute()
         assert(pButtonBox);
 
         VclPtr<PushButton> pBtn;
+        short nDefaultResponse = RET_CANCEL;
         switch (m_eButtonsType)
         {
             case VclButtonsType::NONE:
@@ -2372,56 +2309,52 @@ short MessageDialog::Execute()
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 pBtn->set_id("ok");
-                m_aOwnedButtons.push_back(pBtn);
-                m_aResponses[pBtn] = RET_OK;
+                add_button(pBtn, RET_OK, true);
+                nDefaultResponse = RET_OK;
                 break;
             case VclButtonsType::Close:
                 pBtn.set( VclPtr<CloseButton>::Create(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 pBtn->set_id("close");
-                m_aOwnedButtons.push_back(pBtn);
-                m_aResponses[pBtn] = RET_CLOSE;
+                add_button(pBtn, RET_CLOSE, true);
+                nDefaultResponse = RET_CLOSE;
                 break;
             case VclButtonsType::Cancel:
                 pBtn.set( VclPtr<CancelButton>::Create(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->set_id("cancel");
-                m_aOwnedButtons.push_back(pBtn);
-                m_aResponses[pBtn] = RET_CANCEL;
+                add_button(pBtn, RET_CANCEL, true);
+                nDefaultResponse = RET_CANCEL;
                 break;
             case VclButtonsType::YesNo:
                 pBtn = VclPtr<PushButton>::Create(pButtonBox);
                 pBtn->SetText(Button::GetStandardText(StandardButtonType::Yes));
                 pBtn->Show();
                 pBtn->set_id("yes");
-                m_aOwnedButtons.push_back(pBtn);
-                m_aResponses[pBtn] = RET_YES;
+                add_button(pBtn, RET_YES, true);
 
                 pBtn.set( VclPtr<PushButton>::Create(pButtonBox) );
-                pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->SetText(Button::GetStandardText(StandardButtonType::No));
                 pBtn->Show();
                 pBtn->set_id("no");
-                m_aOwnedButtons.push_back(pBtn);
-                m_aResponses[pBtn] = RET_NO;
+                add_button(pBtn, RET_NO, true);
+                nDefaultResponse = RET_NO;
                 break;
             case VclButtonsType::OkCancel:
                 pBtn.set( VclPtr<OKButton>::Create(pButtonBox) );
                 pBtn->Show();
                 pBtn->set_id("ok");
-                m_aOwnedButtons.push_back(pBtn);
-                m_aResponses[pBtn] = RET_OK;
+                add_button(pBtn, RET_OK, true);
 
                 pBtn.set( VclPtr<CancelButton>::Create(pButtonBox) );
-                pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 pBtn->set_id("cancel");
-                m_aOwnedButtons.push_back(pBtn);
-                m_aResponses[pBtn] = RET_CANCEL;
+                add_button(pBtn, RET_CANCEL, true);
+                nDefaultResponse = RET_CANCEL;
                 break;
         }
-        setButtonHandlers(pButtonBox);
+        set_default_response(nDefaultResponse);
         pButtonBox->sort_native_button_order();
         m_pGrid->Show();
     }

@@ -21,7 +21,7 @@
 
 #include <hintids.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/jobset.hxx>
@@ -177,7 +177,10 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
     {
         if(!bAPICall)
         {
-            ScopedVclPtrInstance<InfoBox>(nullptr, SwResId(STR_CANTOPEN))->Execute();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          SwResId(STR_CANTOPEN)));
+            xInfoBox->run();
         }
         return nullptr;
     }
@@ -550,7 +553,10 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     SwReaderWriter::GetWriter( pFlt->GetUserData(), rMedium.GetBaseURL( true ), xWriter );
     if( !xWriter.is() )
     {   // Filter not available
-        ScopedVclPtrInstance<InfoBox>(nullptr, SwResId(STR_DLLNOTFOUND))->Execute();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      SwResId(STR_DLLNOTFOUND)));
+        xInfoBox->run();
         return false;
     }
 

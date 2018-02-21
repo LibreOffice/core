@@ -57,6 +57,7 @@
 #include <tools/svlibrary.h>
 #include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <memory>
 #include <osl/endian.h>
@@ -227,9 +228,11 @@ bool ScImportExport::StartPaste()
         ScEditableTester aTester( pDoc, aRange );
         if ( !aTester.IsEditable() )
         {
-            ScopedVclPtrInstance<InfoBox> aInfoBox( Application::GetDefDialogParent(),
-                                ScGlobal::GetRscString( aTester.GetMessageId() ) );
-            aInfoBox->Execute();
+            vcl::Window* pWin = Application::GetDefDialogParent();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          ScGlobal::GetRscString(aTester.GetMessageId())));
+            xInfoBox->run();
             return false;
         }
     }

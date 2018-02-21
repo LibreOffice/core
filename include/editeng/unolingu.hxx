@@ -34,7 +34,7 @@
 
 class LinguMgrExitLstnr;
 
-namespace vcl { class Window; }
+namespace weld { class Window; }
 namespace linguistic { enum class DictionaryError; }
 
 
@@ -125,7 +125,7 @@ public:
     ~SvxDicListChgClamp();
 };
 
-EDITENG_DLLPUBLIC short SvxDicError( vcl::Window *pParent, linguistic::DictionaryError nError );
+EDITENG_DLLPUBLIC short SvxDicError(weld::Window *pParent, linguistic::DictionaryError nError);
 
 
 #endif

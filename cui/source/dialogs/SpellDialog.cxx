@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <vcl/weld.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/layout.hxx>
@@ -900,7 +901,7 @@ void SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu const *p
     }
     if (DictionaryError::NONE != nAddRes)
     {
-        SvxDicError( this, nAddRes );
+        SvxDicError(GetFrameWeld(), nAddRes);
         return; // don't continue
     }
 

@@ -622,7 +622,7 @@ void OSQLMessageBox::Construct( MessBoxStyle _nStyle, MessageType _eImage )
             OSL_FAIL( "OSQLMessageBox::impl_initImage: unsupported image type!" );
             SAL_FALLTHROUGH;
         case Info:
-            m_aInfoImage->SetImage(InfoBox::GetStandardImage());
+            m_aInfoImage->SetImage(GetStandardInfoBoxImage());
             break;
         case Warning:
             m_aInfoImage->SetImage(WarningBox::GetStandardImage());
