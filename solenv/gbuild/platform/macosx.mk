@@ -364,7 +364,7 @@ $(call gb_UIMenubarTarget_get_target,$(1)) :| $(call gb_ExternalExecutable_get_d
 endef
 
 # Python
-gb_Python_PRECOMMAND :=
+gb_Python_PRECOMMAND := PYTHONPATH="$$PYPATH"
 gb_Python_INSTALLED_EXECUTABLE := $(INSTROOT)/$(LIBO_LIB_FOLDER)/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/Resources/Python.app/Contents/MacOS/LibreOfficePython
 # this is passed to gdb as executable when running tests
 gb_Python_INSTALLED_EXECUTABLE_GDB := $(gb_Python_INSTALLED_EXECUTABLE)
