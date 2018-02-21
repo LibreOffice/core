@@ -742,7 +742,7 @@ void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Windo
                 pItem = pItemSet->GetItem( SID_ATTR_CHAR_COLOR );
                 // text color, when nothing is selected
                 if ( (nullptr != pItem) && bIsNotSelected)
-                    aFontCol = Color( static_cast< const SvxColorItem* >( pItem )->GetValue() );
+                    aFontCol = static_cast< const SvxColorItem* >( pItem )->GetValue();
 
                 drawing::FillStyle style = drawing::FillStyle_NONE;
                 // which kind of Fill style is selected
@@ -758,7 +758,7 @@ void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Windo
                         // set background color
                         pItem = pItemSet->GetItem( XATTR_FILLCOLOR );
                         if ( nullptr != pItem )
-                            aBackCol = Color( static_cast< const XFillColorItem* >( pItem )->GetColorValue() );
+                            aBackCol = static_cast< const XFillColorItem* >( pItem )->GetColorValue();
 
                         if ( aBackCol != COL_AUTO )
                         {

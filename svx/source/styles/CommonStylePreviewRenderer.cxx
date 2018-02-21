@@ -113,7 +113,7 @@ bool CommonStylePreviewRenderer::recalculate()
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_COLOR)) != nullptr)
     {
-        maFontColor = Color(static_cast<const SvxColorItem*>(pItem)->GetValue());
+        maFontColor = static_cast<const SvxColorItem*>(pItem)->GetValue();
     }
 
     if (mpStyle->GetFamily() == SfxStyleFamily::Para)
@@ -125,7 +125,7 @@ bool CommonStylePreviewRenderer::recalculate()
             {
                 if ((pItem = pItemSet->GetItem(XATTR_FILLCOLOR)) != nullptr)
                 {
-                    maBackgroundColor = Color(static_cast<const XFillColorItem*>(pItem)->GetColorValue());
+                    maBackgroundColor = static_cast<const XFillColorItem*>(pItem)->GetColorValue();
                 }
             }
         }

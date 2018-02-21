@@ -33,6 +33,7 @@ public:
         }
         auto tc = loplugin::TypeCheck(t1);
         if (!(tc.Class("OUString").Namespace("rtl").GlobalNamespace()
+              || tc.Class("Color").GlobalNamespace()
               || tc.Class("unique_ptr").StdNamespace()))
         {
             return true;

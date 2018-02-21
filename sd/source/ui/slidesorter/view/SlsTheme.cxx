@@ -89,7 +89,7 @@ void Theme::Update (const std::shared_ptr<controller::Properties>& rpProperties)
     maColor[Color_Background] = maBackgroundColor;
     const Color aSelectionColor (rpProperties->GetSelectionColor());
     maColor[Color_Selection] = aSelectionColor;
-    if (Color(aSelectionColor).IsBright())
+    if (aSelectionColor.IsBright())
         maColor[Color_PageCountFontColor] = Black;
     else
         maColor[Color_PageCountFontColor] = White;

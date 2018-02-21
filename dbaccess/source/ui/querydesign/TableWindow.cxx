@@ -321,7 +321,7 @@ void OTableWindow::DataChanged(const DataChangedEvent& rDCEvt)
         // In the worst-case the colours have changed so
         // adapt myself to the new colours
         const StyleSettings&  aSystemStyle = Application::GetSettings().GetStyleSettings();
-        SetBackground(Wallpaper(Color(aSystemStyle.GetFaceColor())));
+        SetBackground(Wallpaper(aSystemStyle.GetFaceColor()));
         SetTextColor(aSystemStyle.GetButtonTextColor());
     }
 }

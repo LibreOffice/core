@@ -3667,7 +3667,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                             }
                                         }
                                         Color aOldColor( pOutDev->GetLineColor() );
-                                        pOutDev->SetLineColor( Color( GetColorConfig().GetColorValue( svtools::SPELL ).nColor ) );
+                                        pOutDev->SetLineColor( GetColorConfig().GetColorValue( svtools::SPELL ).nColor );
                                         lcl_DrawRedLines( pOutDev, aTmpFont.GetFontSize().Height(), aRedLineTmpPos, static_cast<size_t>(nIndex), static_cast<size_t>(nIndex) + rTextPortion.GetLen(), pDXArray, pPortion->GetNode()->GetWrongList(), nOrientation, aOrigin, IsVertical(), rTextPortion.IsRightToLeft() );
                                         pOutDev->SetLineColor( aOldColor );
                                     }

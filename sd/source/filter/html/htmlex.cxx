@@ -807,9 +807,9 @@ void HtmlExport::SetDocColors( SdPage* pPage )
         pPage = mpDoc->GetSdPage(0, PageKind::Standard);
 
     svtools::ColorConfig aConfig;
-    maVLinkColor = Color(aConfig.GetColorValue(svtools::LINKSVISITED).nColor);
-    maALinkColor = Color(aConfig.GetColorValue(svtools::LINKS).nColor);
-    maLinkColor  = Color(aConfig.GetColorValue(svtools::LINKS).nColor);
+    maVLinkColor = aConfig.GetColorValue(svtools::LINKSVISITED).nColor;
+    maALinkColor = aConfig.GetColorValue(svtools::LINKS).nColor;
+    maLinkColor  = aConfig.GetColorValue(svtools::LINKS).nColor;
     maTextColor  = Color(COL_BLACK);
 
     SfxStyleSheet* pSheet = nullptr;

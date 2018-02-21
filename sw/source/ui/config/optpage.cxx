@@ -1590,7 +1590,7 @@ void SwMarkPreview::InitColors()
     // m_aTransCol and m_aMarkCol are _not_ changed because they are set from outside!
 
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-    m_aBgCol = Color( rSettings.GetWindowColor() );
+    m_aBgCol = rSettings.GetWindowColor();
 
     bool bHC = rSettings.GetHighContrastMode();
     m_aLineCol = bHC? SwViewOption::GetFontColor() : Color( COL_BLACK );
@@ -1917,13 +1917,13 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
     InitFontStyle(*m_pChangedPreviewWN);
 
     Color nColor = rInsertAttr.m_nColor;
-    m_pInsertColorLB->SelectEntry(Color(nColor));
+    m_pInsertColorLB->SelectEntry(nColor);
 
     nColor = rDeletedAttr.m_nColor;
-    m_pDeletedColorLB->SelectEntry(Color(nColor));
+    m_pDeletedColorLB->SelectEntry(nColor);
 
     nColor = rChangedAttr.m_nColor;
-    m_pChangedColorLB->SelectEntry(Color(nColor));
+    m_pChangedColorLB->SelectEntry(nColor);
 
     m_pMarkColorLB->SelectEntry(pOpt->GetMarkAlignColor());
 

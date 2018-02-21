@@ -68,7 +68,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
     const Color& rWinColor = rStyleSettings.GetWindowColor();
     Color aGrayColor(COL_LIGHTGRAY);
 
-    rRenderContext.SetFillColor(Color(rWinColor));
+    rRenderContext.SetFillColor(rWinColor);
     rRenderContext.DrawRect(tools::Rectangle(Point(), aWinSize));
 
     rRenderContext.SetLineColor();

@@ -164,7 +164,7 @@ void SvxRectCtl::InitRectBitmap()
     aColorAry2[2] = rStyles.GetLightColor();
     aColorAry2[3] = rStyles.GetShadowColor();
     aColorAry2[4] = rStyles.GetDarkShadowColor();
-    aColorAry2[5] = Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+    aColorAry2[5] = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
     aColorAry2[6] = rStyles.GetDialogColor();
 
 #ifdef DBG_UTIL

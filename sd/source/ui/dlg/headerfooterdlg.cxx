@@ -753,7 +753,7 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, SdrTextObj con
     svtools::ColorConfigValue aColor( aColorConfig.GetColorValue( bVisible ? svtools::FONTCOLOR : svtools::OBJECTBOUNDARIES ) );
 
     // paint at OutDev
-    rRenderContext.SetLineColor(Color(aColor.nColor));
+    rRenderContext.SetLineColor(aColor.nColor);
     rRenderContext.SetFillColor();
 
     for (sal_uInt32 a(0); a < aGeometry.count(); a++)

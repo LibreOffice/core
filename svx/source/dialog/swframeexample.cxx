@@ -71,7 +71,7 @@ Size SvxSwFrameExample::GetOptimalSize() const
 void SvxSwFrameExample::InitColors_Impl()
 {
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-    m_aBgCol = Color( rSettings.GetWindowColor() );
+    m_aBgCol = rSettings.GetWindowColor();
 
     bool bHC = rSettings.GetHighContrastMode();
 
