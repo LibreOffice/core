@@ -59,7 +59,7 @@ SdDisplay::SdDisplay(vcl::Window* pWin)
 {
     SetMapMode(MapMode(MapUnit::MapPixel));
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    SetBackground( Wallpaper( Color( rStyles.GetFieldColor() ) ) );
+    SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
 }
 
 SdDisplay::~SdDisplay()
@@ -113,7 +113,7 @@ void SdDisplay::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-        SetBackground( Wallpaper( Color( rStyles.GetFieldColor() ) ) );
+        SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
         SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode()
             ? sd::OUTPUT_DRAWMODE_CONTRAST
             : sd::OUTPUT_DRAWMODE_COLOR );

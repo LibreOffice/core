@@ -1326,7 +1326,7 @@ sal_uInt8 TransColToIco( const Color& rCol )
         };
         BitmapPalette aBmpPal(16);
         for( sal_uInt16 i = 0; i < 16; ++i )
-            aBmpPal[i] = Color( aColArr[ i ] );
+            aBmpPal[i] = aColArr[ i ];
 
         nCol = static_cast< sal_uInt8 >(GetBestIndex(aBmpPal, rCol) + 1);
         break;

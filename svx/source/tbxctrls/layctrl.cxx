@@ -130,7 +130,7 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, vcl::Window* pParent, const OUStri
 
     SetBackground( aBackgroundColor );
     vcl::Font aFont = GetFont();
-    aFont.SetColor( ::Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor )  );
+    aFont.SetColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
     aFont.SetFillColor( aBackgroundColor );
     aFont.SetTransparent( false );
     SetFont( aFont );
@@ -416,7 +416,7 @@ ColumnsWindow::ColumnsWindow( sal_uInt16 nId, vcl::Window* pParent, const OUStri
 {
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
-    aLineColor = ::Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+    aLineColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
     aHighlightLineColor = rStyles.GetHighlightTextColor();
     aFillColor = rStyles.GetWindowColor();
     aHighlightFillColor = rStyles.GetHighlightColor();

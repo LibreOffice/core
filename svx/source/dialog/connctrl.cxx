@@ -307,7 +307,7 @@ void SvxXConnectionPreview::SetStyles()
 {
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
-    SetBackground( Wallpaper( Color( rStyles.GetFieldColor() ) ) );
+    SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
 }
 
 void SvxXConnectionPreview::DataChanged( const DataChangedEvent& rDCEvt )

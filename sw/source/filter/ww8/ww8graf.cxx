@@ -141,7 +141,7 @@ Color WW8TransCol(SVBT32 nWC)
                 nIdx += ((nWC[i] == 0xff) ? 2 : 1);
         }
         if (eColA[nIdx] != COL_BLACK)
-            return Color(eColA[nIdx]);  // default color
+            return eColA[nIdx];  // default color
     }
 #endif
 
@@ -1759,7 +1759,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
         const sal_Int32 nShdDistY = WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWYDIST,
             SdrMetricItem);
 
-        aShadow.SetColor( Color( aShdColor ) );
+        aShadow.SetColor( aShdColor );
 
         aShadow.SetWidth(writer_cast<sal_uInt16>((std::abs( nShdDistX) +
             std::abs( nShdDistY )) / 2 ));

@@ -3472,7 +3472,7 @@ void SwWW8ImplReader::Read_TextColor( sal_uInt16, const sal_uInt8* pData, short 
         if( b > 16 )                // unknown -> Black
             b = 0;
 
-        NewAttr( SvxColorItem(Color(GetCol(b)), RES_CHRATR_COLOR));
+        NewAttr( SvxColorItem(GetCol(b), RES_CHRATR_COLOR));
         if (m_pCurrentColl && m_xStyles)
             m_xStyles->bTextColChanged = true;
     }

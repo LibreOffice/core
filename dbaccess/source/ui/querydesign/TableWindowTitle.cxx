@@ -43,7 +43,7 @@ OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
 {
     // set background- and text colour
     StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
-    SetBackground(Wallpaper(Color(aSystemStyle.GetFaceColor())));
+    SetBackground(Wallpaper(aSystemStyle.GetFaceColor()));
     SetTextColor(aSystemStyle.GetButtonTextColor());
 
     vcl::Font aFont( GetFont() );
@@ -168,7 +168,7 @@ void OTableWindowTitle::DataChanged(const DataChangedEvent& rDCEvt)
     {
         // assume worst-case: colours have changed, therefore I have to adept
         StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
-        SetBackground(Wallpaper(Color(aSystemStyle.GetFaceColor())));
+        SetBackground(Wallpaper(aSystemStyle.GetFaceColor()));
         SetTextColor(aSystemStyle.GetButtonTextColor());
     }
 }

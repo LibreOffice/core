@@ -260,7 +260,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                 if( aColor.bIsVisible )
                 {
                     // get basic object transformation
-                    const basegfx::BColor aRGBColor(Color(aColor.nColor).getBColor());
+                    const basegfx::BColor aRGBColor(aColor.nColor.getBColor());
                     basegfx::B2DHomMatrix aObjectMatrix;
                     basegfx::B2DPolyPolygon aObjectPolyPolygon;
                     pObject->TRGetBaseGeometry(aObjectMatrix, aObjectPolyPolygon);

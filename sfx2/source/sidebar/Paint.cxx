@@ -45,7 +45,7 @@ Paint Paint::Create (const css::uno::Any& rValue)
 {
     Color aColor (0);
     if (rValue >>= aColor)
-        return Paint(Color(aColor));
+        return Paint(aColor);
 
     awt::Gradient aAwtGradient;
     if (rValue >>= aAwtGradient)
