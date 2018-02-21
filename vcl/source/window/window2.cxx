@@ -448,8 +448,8 @@ void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::F
     {
         vcl::Font aFont(rFont);
         Size aSize = aFont.GetFontSize();
-        aSize.Width() = WinFloatRound(double(aSize.Width() * rZoom));
-        aSize.Height() = WinFloatRound(double(aSize.Height() * rZoom));
+        aSize.setWidth( WinFloatRound(double(aSize.Width() * rZoom)) );
+        aSize.setHeight( WinFloatRound(double(aSize.Height() * rZoom)) );
         aFont.SetFontSize(aSize);
         SetPointFont(rRenderContext, aFont);
     }
@@ -602,16 +602,16 @@ void Window::ApplyControlBackground(vcl::RenderContext& rRenderContext, const Co
 Size Window::CalcWindowSize( const Size& rOutSz ) const
 {
     Size aSz = rOutSz;
-    aSz.Width()  += mpWindowImpl->mnLeftBorder+mpWindowImpl->mnRightBorder;
-    aSz.Height() += mpWindowImpl->mnTopBorder+mpWindowImpl->mnBottomBorder;
+    aSz.AdjustWidth(mpWindowImpl->mnLeftBorder+mpWindowImpl->mnRightBorder );
+    aSz.AdjustHeight(mpWindowImpl->mnTopBorder+mpWindowImpl->mnBottomBorder );
     return aSz;
 }
 
 Size Window::CalcOutputSize( const Size& rWinSz ) const
 {
     Size aSz = rWinSz;
-    aSz.Width()  -= mpWindowImpl->mnLeftBorder+mpWindowImpl->mnRightBorder;
-    aSz.Height() -= mpWindowImpl->mnTopBorder+mpWindowImpl->mnBottomBorder;
+    aSz.AdjustWidth( -(mpWindowImpl->mnLeftBorder+mpWindowImpl->mnRightBorder) );
+    aSz.AdjustHeight( -(mpWindowImpl->mnTopBorder+mpWindowImpl->mnBottomBorder) );
     return aSz;
 }
 
@@ -1656,9 +1656,9 @@ Size Window::get_ungrouped_preferred_size() const
         }
 
         if (aRet.Width() == -1)
-            aRet.Width() = pWindowImpl->mnOptimalWidthCache;
+            aRet.setWidth( pWindowImpl->mnOptimalWidthCache );
         if (aRet.Height() == -1)
-            aRet.Height() = pWindowImpl->mnOptimalHeightCache;
+            aRet.setHeight( pWindowImpl->mnOptimalHeightCache );
     }
     return aRet;
 }
@@ -1684,9 +1684,9 @@ Size Window::get_preferred_size() const
                     continue;
                 Size aOtherSize = pOther->get_ungrouped_preferred_size();
                 if (eMode == VclSizeGroupMode::Both || eMode == VclSizeGroupMode::Horizontal)
-                    aRet.Width() = std::max(aRet.Width(), aOtherSize.Width());
+                    aRet.setWidth( std::max(aRet.Width(), aOtherSize.Width()) );
                 if (eMode == VclSizeGroupMode::Both || eMode == VclSizeGroupMode::Vertical)
-                    aRet.Height() = std::max(aRet.Height(), aOtherSize.Height());
+                    aRet.setHeight( std::max(aRet.Height(), aOtherSize.Height()) );
             }
         }
     }

@@ -122,13 +122,13 @@ long ButtonDialog::ImplGetButtonSize()
         nTxtWidth += IMPL_EXTRA_BUTTON_WIDTH;
 
         if ( nTxtWidth > maCtrlSize.Width() )
-            maCtrlSize.Width() = nTxtWidth;
+            maCtrlSize.setWidth( nTxtWidth );
 
         long nTxtHeight = it->mpPushButton->GetTextHeight();
         nTxtHeight += IMPL_EXTRA_BUTTON_HEIGHT;
 
         if ( nTxtHeight > maCtrlSize.Height() )
-            maCtrlSize.Height() = nTxtHeight;
+            maCtrlSize.setHeight( nTxtHeight );
 
         nSepSize += it->mnSepSize;
 
@@ -163,7 +163,7 @@ void ButtonDialog::ImplPosControls()
     if ( GetStyle() & WB_HORZ )
     {
         if ( mnButtonSize+(IMPL_DIALOG_OFFSET*2) > aDlgSize.Width() )
-            aDlgSize.Width() = mnButtonSize+(IMPL_DIALOG_OFFSET*2);
+            aDlgSize.setWidth( mnButtonSize+(IMPL_DIALOG_OFFSET*2) );
         if ( GetStyle() & WB_LEFT )
             nX = IMPL_DIALOG_OFFSET;
         else if ( GetStyle() & WB_RIGHT )
@@ -171,13 +171,13 @@ void ButtonDialog::ImplPosControls()
         else
             nX = (aDlgSize.Width()-mnButtonSize)/2;
 
-        aDlgSize.Height() += IMPL_DIALOG_OFFSET+maCtrlSize.Height();
+        aDlgSize.AdjustHeight(IMPL_DIALOG_OFFSET+maCtrlSize.Height() );
         nY = aDlgSize.Height()-maCtrlSize.Height()-IMPL_DIALOG_OFFSET;
     }
     else
     {
         if ( mnButtonSize+(IMPL_DIALOG_OFFSET*2) > aDlgSize.Height() )
-            aDlgSize.Height() = mnButtonSize+(IMPL_DIALOG_OFFSET*2);
+            aDlgSize.setHeight( mnButtonSize+(IMPL_DIALOG_OFFSET*2) );
         if ( GetStyle() & WB_BOTTOM )
             nY = aDlgSize.Height()-mnButtonSize-IMPL_DIALOG_OFFSET;
         else if ( GetStyle() & WB_VCENTER )
@@ -185,7 +185,7 @@ void ButtonDialog::ImplPosControls()
         else
             nY = IMPL_DIALOG_OFFSET;
 
-        aDlgSize.Width() += IMPL_DIALOG_OFFSET+maCtrlSize.Width();
+        aDlgSize.AdjustWidth(IMPL_DIALOG_OFFSET+maCtrlSize.Width() );
         nX = aDlgSize.Width()-maCtrlSize.Width()-IMPL_DIALOG_OFFSET;
     }
 

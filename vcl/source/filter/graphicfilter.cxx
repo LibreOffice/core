@@ -1959,8 +1959,8 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
             if (nMaxMem<nNeededMem)
             {
                 double fFak=sqrt(static_cast<double>(nMaxMem)/static_cast<double>(nNeededMem));
-                aSizePixel.Width()=static_cast<sal_uLong>(static_cast<double>(aSizePixel.Width())*fFak);
-                aSizePixel.Height()=static_cast<sal_uLong>(static_cast<double>(aSizePixel.Height())*fFak);
+                aSizePixel.setWidth(static_cast<sal_uLong>(static_cast<double>(aSizePixel.Width())*fFak) );
+                aSizePixel.setHeight(static_cast<sal_uLong>(static_cast<double>(aSizePixel.Height())*fFak) );
             }
 
             aVirDev->SetMapMode(MapMode(MapUnit::MapPixel));

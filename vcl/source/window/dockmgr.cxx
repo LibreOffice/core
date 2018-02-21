@@ -172,9 +172,9 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl, void*, void)
             sal_Int32 nLeft, nTop, nRight, nBottom;
             GetBorder( nLeft, nTop, nRight, nBottom );
             // limit borderrect to the caption part only and without the resizing borders
-            aBorderRect.Bottom() = aBorderRect.Top() + nTop;
-            aBorderRect.Left() += nLeft;
-            aBorderRect.Right() -= nRight;
+            aBorderRect.SetBottom( aBorderRect.Top() + nTop );
+            aBorderRect.AdjustLeft(nLeft );
+            aBorderRect.AdjustRight( -nRight );
 
             PointerState aBorderState = pBorder->GetPointerState();
             bRealMove = aBorderRect.IsInside( aBorderState.maPos );
@@ -515,8 +515,8 @@ void ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
 
     if ( mbLastFloatMode )
     {
-        maMouseOff.X()  += mnDockLeft;
-        maMouseOff.Y()  += mnDockTop;
+        maMouseOff.AdjustX(mnDockLeft );
+        maMouseOff.AdjustY(mnDockTop );
         mnTrackX        -= mnDockLeft;
         mnTrackY        -= mnDockTop;
         mnTrackWidth    += mnDockLeft+mnDockRight;
@@ -563,21 +563,21 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
             Point   aFrameMousePos = GetWindow()->ImplOutputToFrame( aMousePos );
             Size    aFrameSize = GetWindow()->ImplGetFrameWindow()->GetOutputSizePixel();
             if ( aFrameMousePos.X() < 0 )
-                aFrameMousePos.X() = 0;
+                aFrameMousePos.setX( 0 );
             if ( aFrameMousePos.Y() < 0 )
-                aFrameMousePos.Y() = 0;
+                aFrameMousePos.setY( 0 );
             if ( aFrameMousePos.X() > aFrameSize.Width()-1 )
-                aFrameMousePos.X() = aFrameSize.Width()-1;
+                aFrameMousePos.setX( aFrameSize.Width()-1 );
             if ( aFrameMousePos.Y() > aFrameSize.Height()-1 )
-                aFrameMousePos.Y() = aFrameSize.Height()-1;
+                aFrameMousePos.setY( aFrameSize.Height()-1 );
             aMousePos = GetWindow()->ImplFrameToOutput( aFrameMousePos );
-            aMousePos.X() -= maMouseOff.X();
-            aMousePos.Y() -= maMouseOff.Y();
+            aMousePos.AdjustX( -(maMouseOff.X()) );
+            aMousePos.AdjustY( -(maMouseOff.Y()) );
             Point aPos = GetWindow()->ImplOutputToFrame( aMousePos );
             tools::Rectangle aTrackRect( aPos, Size( mnTrackWidth, mnTrackHeight ) );
             tools::Rectangle aCompRect = aTrackRect;
-            aPos.X()    += maMouseOff.X();
-            aPos.Y()    += maMouseOff.Y();
+            aPos.AdjustX(maMouseOff.X() );
+            aPos.AdjustY(maMouseOff.Y() );
 
             bool bFloatMode = Docking( aPos, aTrackRect );
 
@@ -585,19 +585,19 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
             {
                 if ( bFloatMode )
                 {
-                    aTrackRect.Left()   -= mnDockLeft;
-                    aTrackRect.Top()    -= mnDockTop;
-                    aTrackRect.Right()  += mnDockRight;
-                    aTrackRect.Bottom() += mnDockBottom;
+                    aTrackRect.AdjustLeft( -(mnDockLeft) );
+                    aTrackRect.AdjustTop( -(mnDockTop) );
+                    aTrackRect.AdjustRight(mnDockRight );
+                    aTrackRect.AdjustBottom(mnDockBottom );
                 }
                 else
                 {
                     if ( aCompRect == aTrackRect )
                     {
-                        aTrackRect.Left()   += mnDockLeft;
-                        aTrackRect.Top()    += mnDockTop;
-                        aTrackRect.Right()  -= mnDockRight;
-                        aTrackRect.Bottom() -= mnDockBottom;
+                        aTrackRect.AdjustLeft(mnDockLeft );
+                        aTrackRect.AdjustTop(mnDockTop );
+                        aTrackRect.AdjustRight( -(mnDockRight) );
+                        aTrackRect.AdjustBottom( -(mnDockBottom) );
                     }
                 }
                 mbLastFloatMode = bFloatMode;
@@ -614,8 +614,8 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
             GetWindow()->ShowTracking( aShowTrackRect, nTrackStyle );
 
             // calculate mouse offset again, as the rectangle was changed
-            maMouseOff.X()  = aPos.X() - aTrackRect.Left();
-            maMouseOff.Y()  = aPos.Y() - aTrackRect.Top();
+            maMouseOff.setX( aPos.X() - aTrackRect.Left() );
+            maMouseOff.setY( aPos.Y() - aTrackRect.Top() );
 
             mnTrackX        = aTrackRect.Left();
             mnTrackY        = aTrackRect.Top();

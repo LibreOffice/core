@@ -1358,13 +1358,13 @@ void Window::ImplPointToLogic(vcl::RenderContext const & rRenderContext, vcl::Fo
 
     if (aSize.Width())
     {
-        aSize.Width() *= mpWindowImpl->mpFrameData->mnDPIX;
-        aSize.Width() += 72 / 2;
-        aSize.Width() /= 72;
+        aSize.setWidth( aSize.Width() * ( mpWindowImpl->mpFrameData->mnDPIX) );
+        aSize.AdjustWidth(72 / 2 );
+        aSize.setWidth( aSize.Width() / 72 );
     }
-    aSize.Height() *= mpWindowImpl->mpFrameData->mnDPIY;
-    aSize.Height() += 72/2;
-    aSize.Height() /= 72;
+    aSize.setHeight( aSize.Height() * ( mpWindowImpl->mpFrameData->mnDPIY) );
+    aSize.AdjustHeight(72/2 );
+    aSize.setHeight( aSize.Height() / 72 );
 
     if (rRenderContext.IsMapModeEnabled())
         aSize = rRenderContext.PixelToLogic(aSize);
@@ -1381,13 +1381,13 @@ void Window::ImplLogicToPoint(vcl::RenderContext const & rRenderContext, vcl::Fo
 
     if (aSize.Width())
     {
-        aSize.Width() *= 72;
-        aSize.Width() += mpWindowImpl->mpFrameData->mnDPIX / 2;
-        aSize.Width() /= mpWindowImpl->mpFrameData->mnDPIX;
+        aSize.setWidth( aSize.Width() * 72 );
+        aSize.AdjustWidth(mpWindowImpl->mpFrameData->mnDPIX / 2 );
+        aSize.setWidth( aSize.Width() / ( mpWindowImpl->mpFrameData->mnDPIX) );
     }
-    aSize.Height() *= 72;
-    aSize.Height() += mpWindowImpl->mpFrameData->mnDPIY / 2;
-    aSize.Height() /= mpWindowImpl->mpFrameData->mnDPIY;
+    aSize.setHeight( aSize.Height() * 72 );
+    aSize.AdjustHeight(mpWindowImpl->mpFrameData->mnDPIY / 2 );
+    aSize.setHeight( aSize.Height() / ( mpWindowImpl->mpFrameData->mnDPIY) );
 
     rFont.SetFontSize(aSize);
 }
@@ -1517,7 +1517,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             {
                 if( ImplIsAntiparallel() )
                 {
-                    aPtDev.X() = mpWindowImpl->mnAbsScreenX;
+                    aPtDev.setX( mpWindowImpl->mnAbsScreenX );
                     nOrgX = mpWindowImpl->maPos.X();
                 }
             }
@@ -1539,7 +1539,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                                        *pOverlapRegion, false, true );
             }
             mpWindowImpl->mnX = nX;
-            mpWindowImpl->maPos.X() = nOrgX;
+            mpWindowImpl->maPos.setX( nOrgX );
             mpWindowImpl->mnAbsScreenX = aPtDev.X();
             bNewPos = true;
         }
@@ -1557,7 +1557,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                                        *pOverlapRegion, false, true );
             }
             mpWindowImpl->mnY = nY;
-            mpWindowImpl->maPos.Y() = nY;
+            mpWindowImpl->maPos.setY( nY );
             bNewPos = true;
         }
     }
@@ -1755,9 +1755,9 @@ void Window::ImplNewInputContext()
             // only set default sizes if the font height in logical
             // coordinates equals 0
             if ( rFont.GetFontSize().Height() )
-                aSize.Height() = 1;
+                aSize.setHeight( 1 );
             else
-                aSize.Height() = (12*pFocusWin->mnDPIY)/72;
+                aSize.setHeight( (12*pFocusWin->mnDPIY)/72 );
         }
         pFontInstance = pFocusWin->mpFontCache->GetFontInstance( pFocusWin->mpFontCollection,
                          rFont, aSize, static_cast<float>(aSize.Height()) );
@@ -2252,10 +2252,10 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
                     */
                     const int workaround_border = 5;
                     tools::Rectangle aBounds( aInvRegion.GetBoundRect() );
-                    aBounds.Left()      -= workaround_border;
-                    aBounds.Top()       -= workaround_border;
-                    aBounds.Right()     += workaround_border;
-                    aBounds.Bottom()    += workaround_border;
+                    aBounds.AdjustLeft( -workaround_border );
+                    aBounds.AdjustTop( -workaround_border );
+                    aBounds.AdjustRight(workaround_border );
+                    aBounds.AdjustBottom(workaround_border );
                     aInvRegion = aBounds;
                 }
                 if ( !mpWindowImpl->mbNoParentUpdate && !(nFlags & ShowFlags::NoParentUpdate) )
@@ -2908,8 +2908,8 @@ Point Window::OutputToAbsoluteScreenPixel( const Point& rPos ) const
     // relative to the screen
     Point p = OutputToScreenPixel( rPos );
     SalFrameGeometry g = mpWindowImpl->mpFrame->GetGeometry();
-    p.X() += g.nX;
-    p.Y() += g.nY;
+    p.AdjustX(g.nX );
+    p.AdjustY(g.nY );
     return p;
 }
 
@@ -2918,8 +2918,8 @@ Point Window::AbsoluteScreenToOutputPixel( const Point& rPos ) const
     // relative to the screen
     Point p = ScreenToOutputPixel( rPos );
     SalFrameGeometry g = mpWindowImpl->mpFrame->GetGeometry();
-    p.X() -= g.nX;
-    p.Y() -= g.nY;
+    p.AdjustX( -(g.nX) );
+    p.AdjustY( -(g.nY) );
     return p;
 }
 
@@ -2930,12 +2930,12 @@ tools::Rectangle Window::ImplOutputToUnmirroredAbsoluteScreenPixel( const tools:
     SalFrameGeometry g = mpWindowImpl->mpFrame->GetUnmirroredGeometry();
 
     Point p1 = OutputToScreenPixel( rRect.TopRight() );
-    p1.X() = g.nX+g.nWidth-p1.X();
-    p1.Y() += g.nY;
+    p1.setX( g.nX+g.nWidth-p1.X() );
+    p1.AdjustY(g.nY );
 
     Point p2 = OutputToScreenPixel( rRect.BottomLeft() );
-    p2.X() = g.nX+g.nWidth-p2.X();
-    p2.Y() += g.nY;
+    p2.setX( g.nX+g.nWidth-p2.X() );
+    p2.AdjustY(g.nY );
 
     return tools::Rectangle( p1, p2 );
 }
@@ -2960,16 +2960,16 @@ tools::Rectangle Window::ImplGetWindowExtentsRelative( vcl::Window *pRelativeWin
     const vcl::Window *pWin = (!bClientOnly && mpWindowImpl->mpBorderWindow) ? mpWindowImpl->mpBorderWindow : this;
 
     Point aPos( pWin->OutputToScreenPixel( Point(0,0) ) );
-    aPos.X() += g.nX;
-    aPos.Y() += g.nY;
+    aPos.AdjustX(g.nX );
+    aPos.AdjustY(g.nY );
     Size aSize ( pWin->GetSizePixel() );
     // #104088# do not add decoration to the workwindow to be compatible to java accessibility api
     if( !bClientOnly && (mpWindowImpl->mbFrame || (mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame && GetType() != WindowType::WORKWINDOW)) )
     {
-        aPos.X() -= g.nLeftDecoration;
-        aPos.Y() -= g.nTopDecoration;
-        aSize.Width() += g.nLeftDecoration + g.nRightDecoration;
-        aSize.Height() += g.nTopDecoration + g.nBottomDecoration;
+        aPos.AdjustX( -sal_Int32(g.nLeftDecoration) );
+        aPos.AdjustY( -sal_Int32(g.nTopDecoration) );
+        aSize.AdjustWidth(g.nLeftDecoration + g.nRightDecoration );
+        aSize.AdjustHeight(g.nTopDecoration + g.nBottomDecoration );
     }
     if( pRelativeWindow )
     {
@@ -3510,7 +3510,7 @@ bool Window::IsScrollable() const
 
 void Window::ImplMirrorFramePos( Point &pt ) const
 {
-    pt.X() = mpWindowImpl->mpFrame->maGeometry.nWidth-1-pt.X();
+    pt.setX( mpWindowImpl->mpFrame->maGeometry.nWidth-1-pt.X() );
 }
 
 // frame based modal counter (dialogs are not modal to the whole application anymore)

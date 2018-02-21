@@ -250,8 +250,8 @@ void DockingWindow::ImplStartDocking( const Point& rPos )
 
     if ( mbLastFloatMode )
     {
-        maMouseOff.X()  += mnDockLeft;
-        maMouseOff.Y()  += mnDockTop;
+        maMouseOff.AdjustX(mnDockLeft );
+        maMouseOff.AdjustY(mnDockTop );
         mnTrackX        -= mnDockLeft;
         mnTrackY        -= mnDockTop;
         mnTrackWidth    += mnDockLeft+mnDockRight;
@@ -440,21 +440,21 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
             Point   aFrameMousePos = ImplOutputToFrame( aMousePos );
             Size    aFrameSize = mpWindowImpl->mpFrameWindow->GetOutputSizePixel();
             if ( aFrameMousePos.X() < 0 )
-                aFrameMousePos.X() = 0;
+                aFrameMousePos.setX( 0 );
             if ( aFrameMousePos.Y() < 0 )
-                aFrameMousePos.Y() = 0;
+                aFrameMousePos.setY( 0 );
             if ( aFrameMousePos.X() > aFrameSize.Width()-1 )
-                aFrameMousePos.X() = aFrameSize.Width()-1;
+                aFrameMousePos.setX( aFrameSize.Width()-1 );
             if ( aFrameMousePos.Y() > aFrameSize.Height()-1 )
-                aFrameMousePos.Y() = aFrameSize.Height()-1;
+                aFrameMousePos.setY( aFrameSize.Height()-1 );
             aMousePos = ImplFrameToOutput( aFrameMousePos );
-            aMousePos.X() -= maMouseOff.X();
-            aMousePos.Y() -= maMouseOff.Y();
+            aMousePos.AdjustX( -(maMouseOff.X()) );
+            aMousePos.AdjustY( -(maMouseOff.Y()) );
             Point aFramePos = ImplOutputToFrame( aMousePos );
             tools::Rectangle aTrackRect( aFramePos, Size( mnTrackWidth, mnTrackHeight ) );
             tools::Rectangle aCompRect = aTrackRect;
-            aFramePos.X()    += maMouseOff.X();
-            aFramePos.Y()    += maMouseOff.Y();
+            aFramePos.AdjustX(maMouseOff.X() );
+            aFramePos.AdjustY(maMouseOff.Y() );
             if ( mbDragFull )
                 StartDocking();
             bool bFloatMode = Docking( aFramePos, aTrackRect );
@@ -462,19 +462,19 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
             {
                 if ( bFloatMode )
                 {
-                    aTrackRect.Left()   -= mnDockLeft;
-                    aTrackRect.Top()    -= mnDockTop;
-                    aTrackRect.Right()  += mnDockRight;
-                    aTrackRect.Bottom() += mnDockBottom;
+                    aTrackRect.AdjustLeft( -(mnDockLeft) );
+                    aTrackRect.AdjustTop( -(mnDockTop) );
+                    aTrackRect.AdjustRight(mnDockRight );
+                    aTrackRect.AdjustBottom(mnDockBottom );
                 }
                 else
                 {
                     if ( aCompRect == aTrackRect )
                     {
-                        aTrackRect.Left()   += mnDockLeft;
-                        aTrackRect.Top()    += mnDockTop;
-                        aTrackRect.Right()  -= mnDockRight;
-                        aTrackRect.Bottom() -= mnDockBottom;
+                        aTrackRect.AdjustLeft(mnDockLeft );
+                        aTrackRect.AdjustTop(mnDockTop );
+                        aTrackRect.AdjustRight( -(mnDockRight) );
+                        aTrackRect.AdjustBottom( -(mnDockBottom) );
                     }
                 }
                 mbLastFloatMode = bFloatMode;
@@ -503,8 +503,8 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
                 ShowTracking( aShowTrackRect, nTrackStyle );
 
                 // recalculate mouse offset, as the rectangle was changed
-                maMouseOff.X()  = aFramePos.X() - aTrackRect.Left();
-                maMouseOff.Y()  = aFramePos.Y() - aTrackRect.Top();
+                maMouseOff.setX( aFramePos.X() - aTrackRect.Left() );
+                maMouseOff.setY( aFramePos.Y() - aTrackRect.Top() );
             }
 
             mnTrackX        = aTrackRect.Left();
@@ -982,8 +982,8 @@ void DockingWindow::setOptimalLayoutSize()
 
     Size aMax(bestmaxFrameSizeForScreenSize(GetDesktopRectPixel().GetSize()));
 
-    aSize.Width() = std::min(aMax.Width(), aSize.Width());
-    aSize.Height() = std::min(aMax.Height(), aSize.Height());
+    aSize.setWidth( std::min(aMax.Width(), aSize.Width()) );
+    aSize.setHeight( std::min(aMax.Height(), aSize.Height()) );
 
     SetMinOutputSizePixel(aSize);
     setPosSizeOnContainee();
@@ -997,8 +997,8 @@ void DockingWindow::setPosSizeOnContainee()
     // otherwise the floating window will handle the border as well.
     sal_Int32 nBorderWidth = mpWindowImpl->mnBorderWidth;
 
-    aSize.Width() -= 2 * nBorderWidth;
-    aSize.Height() -= 2 * nBorderWidth;
+    aSize.AdjustWidth( -(2 * nBorderWidth) );
+    aSize.AdjustHeight( -(2 * nBorderWidth) );
 
     Window* pBox = GetWindow(GetWindowType::FirstChild);
     assert(pBox);
@@ -1016,8 +1016,8 @@ Size DockingWindow::GetOptimalSize() const
     // otherwise the floating window will handle the border as well.
     sal_Int32 nBorderWidth = mpWindowImpl->mnBorderWidth;
 
-    aSize.Height() += 2 * nBorderWidth;
-    aSize.Width()  += 2 * nBorderWidth;
+    aSize.AdjustHeight(2 * nBorderWidth );
+    aSize.AdjustWidth(2 * nBorderWidth );
 
     return aSize;
 }

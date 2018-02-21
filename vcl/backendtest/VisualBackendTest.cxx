@@ -59,8 +59,8 @@ void drawBitmapCentered(tools::Rectangle const & rRect, Bitmap aBitmap, vcl::Ren
 
     Point aPoint(rRect.TopLeft());
 
-    aPoint.X() += (nWidth  - aBitmapSize.Width())  / 2;
-    aPoint.Y() += (nHeight - aBitmapSize.Height()) / 2;
+    aPoint.AdjustX((nWidth  - aBitmapSize.Width())  / 2 );
+    aPoint.AdjustY((nHeight - aBitmapSize.Height()) / 2 );
 
     rRenderContext.DrawBitmap(aPoint, aBitmap);
 }

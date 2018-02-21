@@ -125,7 +125,7 @@ void ProgressBar::ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt1
         Size aSize(GetOutputSizePixel());
         mnPrgsHeight = aSize.Height() - (PROGRESSBAR_WIN_OFFSET * 2);
         mnPrgsWidth = (mnPrgsHeight * 2) / 3;
-        maPos.Y() = PROGRESSBAR_WIN_OFFSET;
+        maPos.setY( PROGRESSBAR_WIN_OFFSET );
         long nMaxWidth = (aSize.Width() - (PROGRESSBAR_WIN_OFFSET * 2) + PROGRESSBAR_OFFSET);
         sal_uInt16 nMaxCount = static_cast<sal_uInt16>(nMaxWidth / (mnPrgsWidth+PROGRESSBAR_OFFSET));
         if (nMaxCount <= 1)
@@ -141,7 +141,7 @@ void ProgressBar::ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt1
         }
         mnPercentCount = 10000 / nMaxCount;
         nMaxWidth = ((10000 / (10000 / nMaxCount)) * (mnPrgsWidth + PROGRESSBAR_OFFSET)) - PROGRESSBAR_OFFSET;
-        maPos.X() = (aSize.Width() - nMaxWidth) / 2;
+        maPos.setX( (aSize.Width() - nMaxWidth) / 2 );
     }
 
     ::DrawProgress(this, rRenderContext, maPos, PROGRESSBAR_OFFSET, mnPrgsWidth, mnPrgsHeight,

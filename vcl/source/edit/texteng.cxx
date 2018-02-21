@@ -859,8 +859,8 @@ tools::Rectangle TextEngine::PaMtoEditCursor( const TextPaM& rPaM, bool bSpecial
     }
 
     aEditCursor = GetEditCursor( rPaM, bSpecial );
-    aEditCursor.Top() += nY;
-    aEditCursor.Bottom() += nY;
+    aEditCursor.AdjustTop(nY );
+    aEditCursor.AdjustBottom(nY );
     return aEditCursor;
 }
 
@@ -905,9 +905,9 @@ tools::Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, bool bSpecial, 
 
     tools::Rectangle aEditCursor;
 
-    aEditCursor.Top() = nY;
+    aEditCursor.SetTop( nY );
     nY += mnCharHeight;
-    aEditCursor.Bottom() = nY-1;
+    aEditCursor.SetBottom( nY-1 );
 
     // search within the line
     long nX = ImpGetXPos( rPaM.GetPara(), pLine, rPaM.GetIndex(), bPreferPortionStart );
@@ -1028,7 +1028,7 @@ TextPaM TextEngine::GetPaM( const Point& rDocPos )
         {
             nY -= nTmpHeight;
             Point aPosInPara( rDocPos );
-            aPosInPara.Y() -= nY;
+            aPosInPara.AdjustY( -nY );
 
             TextPaM aPaM( nPortion, 0 );
             aPaM.GetIndex() = ImpFindIndex( nPortion, aPosInPara );
@@ -1469,7 +1469,7 @@ void TextEngine::UpdateViews( TextView* pCurView )
             // translate into window coordinates
             Point aNewPos = pView->GetWindowPos( aClipRect.TopLeft() );
             if ( IsRightToLeft() )
-                aNewPos.X() -= aOutSz.Width() - 1;
+                aNewPos.AdjustX( -(aOutSz.Width() - 1) );
             aClipRect.SetPos( aNewPos );
 
             pView->GetWindow()->Invalidate( aClipRect );
@@ -1542,7 +1542,7 @@ void TextEngine::FormatDoc()
             }
             else
             {
-                maInvalidRect.Bottom() = nY + CalcParaHeight( nPara );
+                maInvalidRect.SetBottom( nY + CalcParaHeight( nPara ) );
             }
 
             if ( mnCurTextWidth >= 0 )
@@ -1556,7 +1556,7 @@ void TextEngine::FormatDoc()
         }
         else if ( bGrow )
         {
-            maInvalidRect.Bottom() = nY + CalcParaHeight( nPara );
+            maInvalidRect.SetBottom( nY + CalcParaHeight( nPara ) );
         }
         nY += CalcParaHeight( nPara );
         if ( !mbHasMultiLineParas && pTEParaPortion->GetLines().size() > 1 )
@@ -1569,13 +1569,13 @@ void TextEngine::FormatDoc()
         const long nDiff = nNewHeight - mnCurTextHeight;
         if ( nNewHeight < mnCurTextHeight )
         {
-            maInvalidRect.Bottom() = std::max( nNewHeight, mnCurTextHeight );
+            maInvalidRect.SetBottom( std::max( nNewHeight, mnCurTextHeight ) );
             if ( maInvalidRect.IsEmpty() )
             {
-                maInvalidRect.Top() = 0;
+                maInvalidRect.SetTop( 0 );
                 // Left and Right are not evaluated, but set because of IsEmpty
-                maInvalidRect.Left() = 0;
-                maInvalidRect.Right() = mnMaxTextWidth;
+                maInvalidRect.SetLeft( 0 );
+                maInvalidRect.SetRight( mnMaxTextWidth );
             }
         }
 
@@ -1943,7 +1943,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, tools:
                         ImpInitLayoutMode( pOutDev /*, pTextPortion->IsRightToLeft() */);
 
                         const long nTxtWidth = pTextPortion->GetWidth();
-                        aTmpPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, &rLine, nIndex, nIndex );
+                        aTmpPos.setX( rStartPos.X() + ImpGetOutputOffset( nPara, &rLine, nIndex, nIndex ) );
 
                         // only print if starting in the visible region
                         if ( ( aTmpPos.X() + nTxtWidth ) >= 0 )
@@ -1977,7 +1977,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, tools:
                                                 {
                                                     const sal_Int32 nL = pSelStart->GetIndex() - nTmpIndex;
                                                     pOutDev->SetFont( aFont);
-                                                    aPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, &rLine, nTmpIndex, nTmpIndex+nL );
+                                                    aPos.setX( rStartPos.X() + ImpGetOutputOffset( nPara, &rLine, nTmpIndex, nTmpIndex+nL ) );
                                                     pOutDev->DrawText( aPos, pPortion->GetNode()->GetText(), nTmpIndex, nL );
                                                     nTmpIndex = nTmpIndex + nL;
 
@@ -1991,7 +1991,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, tools:
                                                     const Color aOldTextColor = pOutDev->GetTextColor();
                                                     pOutDev->SetTextColor( rStyleSettings.GetHighlightTextColor() );
                                                     pOutDev->SetTextFillColor( rStyleSettings.GetHighlightColor() );
-                                                    aPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, &rLine, nTmpIndex, nTmpIndex+nL );
+                                                    aPos.setX( rStartPos.X() + ImpGetOutputOffset( nPara, &rLine, nTmpIndex, nTmpIndex+nL ) );
                                                     pOutDev->DrawText( aPos, pPortion->GetNode()->GetText(), nTmpIndex, nL );
                                                     pOutDev->SetTextColor( aOldTextColor );
                                                     pOutDev->SetTextFillColor();
@@ -2002,7 +2002,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, tools:
                                                 if ( nTmpIndex < nEnd )
                                                 {
                                                     nL = nEnd-nTmpIndex;
-                                                    aPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, &rLine, nTmpIndex, nTmpIndex+nL );
+                                                    aPos.setX( rStartPos.X() + ImpGetOutputOffset( nPara, &rLine, nTmpIndex, nTmpIndex+nL ) );
                                                     pOutDev->DrawText( aPos, pPortion->GetNode()->GetText(), nTmpIndex, nEnd-nTmpIndex );
                                                 }
                                                 bDone = true;
@@ -2010,7 +2010,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, tools:
                                         }
                                         if ( !bDone )
                                         {
-                                            aPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, &rLine, nTmpIndex, nEnd );
+                                            aPos.setX( rStartPos.X() + ImpGetOutputOffset( nPara, &rLine, nTmpIndex, nEnd ) );
                                             pOutDev->DrawText( aPos, pPortion->GetNode()->GetText(), nTmpIndex, nEnd-nTmpIndex );
                                         }
                                     }

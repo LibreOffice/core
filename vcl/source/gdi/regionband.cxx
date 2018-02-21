@@ -1233,13 +1233,13 @@ void RegionBand::GetRegionRectangles(RectangleVector& rTarget) const
     {
         ImplRegionBandSep* pCurrRectBandSep = pCurrRectBand->mpFirstSep;
 
-        aRectangle.Top() = pCurrRectBand->mnYTop;
-        aRectangle.Bottom() = pCurrRectBand->mnYBottom;
+        aRectangle.SetTop( pCurrRectBand->mnYTop );
+        aRectangle.SetBottom( pCurrRectBand->mnYBottom );
 
         while(pCurrRectBandSep)
         {
-            aRectangle.Left() = pCurrRectBandSep->mnXLeft;
-            aRectangle.Right() = pCurrRectBandSep->mnXRight;
+            aRectangle.SetLeft( pCurrRectBandSep->mnXLeft );
+            aRectangle.SetRight( pCurrRectBandSep->mnXRight );
             rTarget.push_back(aRectangle);
             pCurrRectBandSep = pCurrRectBandSep->mpNextSep;
         }

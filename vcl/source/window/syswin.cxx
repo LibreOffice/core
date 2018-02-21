@@ -372,7 +372,7 @@ void SystemWindow::RollUp()
         maOrgSize = GetOutputSizePixel();
         Size aSize = maRollUpOutSize;
         if ( !aSize.Width() )
-            aSize.Width() = GetOutputSizePixel().Width();
+            aSize.setWidth( GetOutputSizePixel().Width() );
         mbRollUp = true;
         if ( mpWindowImpl->mpBorderWindow )
             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetRollUp( true, aSize );
@@ -410,9 +410,9 @@ void SystemWindow::SetMaxOutputSizePixel( const Size& rSize )
 {
     Size aSize( rSize );
     if( aSize.Width() > SHRT_MAX || aSize.Width() <= 0 )
-        aSize.Width() = SHRT_MAX;
+        aSize.setWidth( SHRT_MAX );
     if( aSize.Height() > SHRT_MAX || aSize.Height() <= 0 )
-        aSize.Height() = SHRT_MAX;
+        aSize.setHeight( SHRT_MAX );
 
     mpImplData->maMaxOutSize = aSize;
     if ( mpWindowImpl->mpBorderWindow )
@@ -864,7 +864,7 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
 
         if ( IsRollUp() )
         {
-            aSize.Height() += maOrgSize.Height();
+            aSize.AdjustHeight(maOrgSize.Height() );
             nState = WindowStateState::Rollup;
         }
 
@@ -1066,8 +1066,8 @@ Size SystemWindow::GetOptimalSize() const
 
     sal_Int32 nBorderWidth = get_border_width();
 
-    aSize.Height() += 2 * nBorderWidth;
-    aSize.Width()  += 2 * nBorderWidth;
+    aSize.AdjustHeight(2 * nBorderWidth );
+    aSize.AdjustWidth(2 * nBorderWidth );
 
     return Window::CalcWindowSize(aSize);
 }
@@ -1076,8 +1076,8 @@ void SystemWindow::setPosSizeOnContainee(Size aSize, Window &rBox)
 {
     sal_Int32 nBorderWidth = get_border_width();
 
-    aSize.Width() -= 2 * nBorderWidth;
-    aSize.Height() -= 2 * nBorderWidth;
+    aSize.AdjustWidth( -(2 * nBorderWidth) );
+    aSize.AdjustHeight( -(2 * nBorderWidth) );
 
     Point aPos(nBorderWidth, nBorderWidth);
     VclContainer::setLayoutAllocation(rBox, aPos, CalcOutputSize(aSize));
@@ -1125,8 +1125,8 @@ void SystemWindow::setOptimalLayoutSize()
 
     Size aMax(bestmaxFrameSizeForScreenSize(GetDesktopRectPixel().GetSize()));
 
-    aSize.Width() = std::min(aMax.Width(), aSize.Width());
-    aSize.Height() = std::min(aMax.Height(), aSize.Height());
+    aSize.setWidth( std::min(aMax.Width(), aSize.Width()) );
+    aSize.setHeight( std::min(aMax.Height(), aSize.Height()) );
 
     SetMinOutputSizePixel(aSize);
     SetSizePixel(aSize);

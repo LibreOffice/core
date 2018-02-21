@@ -310,11 +310,11 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
         rRenderContext.DrawLine(project(aP1) + aCenter,
                                 project(aP2) + aCenter,
                                 aLineInfo);
-        aPoint.X() = static_cast<int>((static_cast<double>(aP1.X())*cosd - static_cast<double>(aP1.Y())*sind)*factor);
-        aPoint.Y() = static_cast<int>((static_cast<double>(aP1.Y())*cosd + static_cast<double>(aP1.X())*sind)*factor);
+        aPoint.setX( static_cast<int>((static_cast<double>(aP1.X())*cosd - static_cast<double>(aP1.Y())*sind)*factor) );
+        aPoint.setY( static_cast<int>((static_cast<double>(aP1.Y())*cosd + static_cast<double>(aP1.X())*sind)*factor) );
         aP1 = aPoint;
-        aPoint.X() = static_cast<int>((static_cast<double>(aP2.X())*cosd - static_cast<double>(aP2.Y())*sind)*factor);
-        aPoint.Y() = static_cast<int>((static_cast<double>(aP2.Y())*cosd + static_cast<double>(aP2.X())*sind)*factor);
+        aPoint.setX( static_cast<int>((static_cast<double>(aP2.X())*cosd - static_cast<double>(aP2.Y())*sind)*factor) );
+        aPoint.setY( static_cast<int>((static_cast<double>(aP2.Y())*cosd + static_cast<double>(aP2.X())*sind)*factor) );
         aP2 = aPoint;
     }
     rRenderContext.Pop();

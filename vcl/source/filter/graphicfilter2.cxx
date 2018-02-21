@@ -130,11 +130,11 @@ bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
 
             // Pixel width
             rStm.ReadUInt32( nTemp32 );
-            aPixSize.Width() = nTemp32;
+            aPixSize.setWidth( nTemp32 );
 
             // Pixel height
             rStm.ReadUInt32( nTemp32 );
-            aPixSize.Height() = nTemp32;
+            aPixSize.setHeight( nTemp32 );
 
             // Planes
             rStm.ReadUInt16( nTemp16 );
@@ -152,12 +152,12 @@ bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
             rStm.SeekRel( 4 );
             rStm.ReadUInt32( nTemp32 );
             if ( nTemp32 )
-                aLogSize.Width() = ( aPixSize.Width() * 100000 ) / nTemp32;
+                aLogSize.setWidth( ( aPixSize.Width() * 100000 ) / nTemp32 );
 
             // logical height
             rStm.ReadUInt32( nTemp32 );
             if ( nTemp32 )
-                aLogSize.Height() = ( aPixSize.Height() * 100000 ) / nTemp32;
+                aLogSize.setHeight( ( aPixSize.Height() * 100000 ) / nTemp32 );
 
             // further validation, check for rational values
             if ( ( nBitsPerPixel > 24 ) || ( nCompression > 3 ) )
@@ -196,11 +196,11 @@ bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, bool bExtendedInfo )
 
                 // Pixel width
                 rStm.ReadUInt16( nTemp16 );
-                aPixSize.Width() = nTemp16;
+                aPixSize.setWidth( nTemp16 );
 
                 // Pixel height
                 rStm.ReadUInt16( nTemp16 );
-                aPixSize.Height() = nTemp16;
+                aPixSize.setHeight( nTemp16 );
 
                 // Bits/Pixel
                 rStm.ReadUChar( cByte );
@@ -375,8 +375,8 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
                                     // nSamplingFactor (lower nibble: vertical,
                                     // upper nibble: horizontal) is unused
 
-                                    aPixSize.Height() = nNumberOfLines;
-                                    aPixSize.Width() = nSamplesPerLine;
+                                    aPixSize.setHeight( nNumberOfLines );
+                                    aPixSize.setWidth( nSamplesPerLine );
                                     nBitsPerPixel = ( nNumberOfImageComponents == 3 ? 24 : nNumberOfImageComponents == 1 ? 8 : 0 );
                                     nPlanes = 1;
 
@@ -476,8 +476,8 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, bool bExtendedInfo )
                 rStm.ReadUInt16( nTemp16 );
                 nYmax = nTemp16;
 
-                aPixSize.Width() = nXmax - nXmin + 1;
-                aPixSize.Height() = nYmax - nYmin + 1;
+                aPixSize.setWidth( nXmax - nXmin + 1 );
+                aPixSize.setHeight( nYmax - nYmin + 1 );
 
                 // resolution
                 rStm.ReadUInt16( nTemp16 );
@@ -532,11 +532,11 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
 
                 // width
                 rStm.ReadUInt32( nTemp32 );
-                aPixSize.Width() = nTemp32;
+                aPixSize.setWidth( nTemp32 );
 
                 // height
                 rStm.ReadUInt32( nTemp32 );
-                aPixSize.Height() = nTemp32;
+                aPixSize.setHeight( nTemp32 );
 
                 // Bits/Pixel
                 rStm.ReadUChar( cByte );
@@ -584,10 +584,10 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
                     if ( cByte )
                     {
                         if ( nXRes )
-                            aLogSize.Width() = (aPixSize.Width() * 100000) / nXRes;
+                            aLogSize.setWidth( (aPixSize.Width() * 100000) / nXRes );
 
                         if ( nYRes )
-                            aLogSize.Height() = (aPixSize.Height() * 100000) / nYRes;
+                            aLogSize.setHeight( (aPixSize.Height() * 100000) / nYRes );
                     }
                 }
             }
@@ -668,13 +668,13 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
                             if ( nTemp16 == 3 )
                             {
                                 rStm.ReadUInt16( nTemp16 );
-                                aPixSize.Width() = nTemp16;
+                                aPixSize.setWidth( nTemp16 );
                                 rStm.SeekRel( 2 );
                             }
                             else
                             {
                                 rStm.ReadUInt32( nTemp32 );
-                                aPixSize.Width() = nTemp32;
+                                aPixSize.setWidth( nTemp32 );
                             }
 
                             // height
@@ -684,13 +684,13 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
                             if ( nTemp16 == 3 )
                             {
                                 rStm.ReadUInt16( nTemp16 );
-                                aPixSize.Height() = nTemp16;
+                                aPixSize.setHeight( nTemp16 );
                                 rStm.SeekRel( 2 );
                             }
                             else
                             {
                                 rStm.ReadUInt32( nTemp32 );
-                                aPixSize.Height() = nTemp32;
+                                aPixSize.setHeight( nTemp32 );
                             }
 
                             // Bits/Pixel
@@ -870,8 +870,8 @@ bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, bool bExtendedInfo )
                             SAL_FALLTHROUGH;
                         case 2 :
                         case 1 :
-                            aPixSize.Width() = nColumns;
-                            aPixSize.Height() = nRows;
+                            aPixSize.setWidth( nColumns );
+                            aPixSize.setHeight( nRows );
                         break;
                         default:
                             bRet = false;
@@ -980,12 +980,12 @@ bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
                 // width
                 nTemp32 = 0;
                 rStm.ReadUInt32( nTemp32 );
-                aLogSize.Width() = nTemp32;
+                aLogSize.setWidth( nTemp32 );
 
                 // height
                 nTemp32 = 0;
                 rStm.ReadUInt32( nTemp32 );
-                aLogSize.Height() = nTemp32;
+                aLogSize.setHeight( nTemp32 );
 
                 // read MapUnit and determine PrefSize
                 nTemp16 = 0;

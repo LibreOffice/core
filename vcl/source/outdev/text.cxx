@@ -274,13 +274,13 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
     {
         long w = meOutDevType == OUTDEV_VIRDEV ? mnOutWidth : mpGraphics->GetGraphicsWidth();
         long x = rSalLayout.DrawBase().X();
-           rSalLayout.DrawBase().X() = w - 1 - x;
+           rSalLayout.DrawBase().setX( w - 1 - x );
         if( !IsRTLEnabled() )
         {
             OutputDevice *pOutDevRef = this;
             // mirror this window back
             long devX = w-pOutDevRef->mnOutWidth-pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX
-            rSalLayout.DrawBase().X() = devX + ( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) ) ;
+            rSalLayout.DrawBase().setX( devX + ( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) ) ) ;
         }
     }
     else if( IsRTLEnabled() )
@@ -289,11 +289,11 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
 
         // mirror this window back
         long devX = pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX
-        rSalLayout.DrawBase().X() = pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) + devX;
+        rSalLayout.DrawBase().setX( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) + devX );
     }
 
     rSalLayout.DrawText( *mpGraphics );
-    rSalLayout.DrawBase().X() = nOldX;
+    rSalLayout.DrawBase().setX( nOldX );
 
     if( bTextLines )
         ImplDrawTextLines( rSalLayout,
@@ -1361,7 +1361,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
             nRTLOffset = nPixelWidth;
         else
             nRTLOffset = pSalLayout->GetTextWidth() / pSalLayout->GetUnitsPerPixel();
-        pSalLayout->DrawOffset().X() = 1 - nRTLOffset;
+        pSalLayout->DrawOffset().setX( 1 - nRTLOffset );
     }
 
     return pSalLayout;
@@ -1605,24 +1605,24 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
 
             // Vertical alignment
             if ( nStyle & DrawTextFlags::Bottom )
-                aPos.Y() += nHeight-(nFormatLines*nTextHeight);
+                aPos.AdjustY(nHeight-(nFormatLines*nTextHeight) );
             else if ( nStyle & DrawTextFlags::VCenter )
-                aPos.Y() += (nHeight-(nFormatLines*nTextHeight))/2;
+                aPos.AdjustY((nHeight-(nFormatLines*nTextHeight))/2 );
 
             // Font alignment
             if ( eAlign == ALIGN_BOTTOM )
-                aPos.Y() += nTextHeight;
+                aPos.AdjustY(nTextHeight );
             else if ( eAlign == ALIGN_BASELINE )
-                aPos.Y() += rTargetDevice.GetFontMetric().GetAscent();
+                aPos.AdjustY(rTargetDevice.GetFontMetric().GetAscent() );
 
             // Output all lines except for the last one
             for ( i = 0; i < nFormatLines; i++ )
             {
                 pLineInfo = aMultiLineInfo.GetLine( i );
                 if ( nStyle & DrawTextFlags::Right )
-                    aPos.X() += nWidth-pLineInfo->GetWidth();
+                    aPos.AdjustX(nWidth-pLineInfo->GetWidth() );
                 else if ( nStyle & DrawTextFlags::Center )
-                    aPos.X() += (nWidth-pLineInfo->GetWidth())/2;
+                    aPos.AdjustX((nWidth-pLineInfo->GetWidth())/2 );
                 sal_Int32 nIndex   = pLineInfo->GetIndex();
                 sal_Int32 nLineLen = pLineInfo->GetLen();
                 _rLayout.DrawText( aPos, aStr, nIndex, nLineLen, pVector, pDisplayText );
@@ -1647,8 +1647,8 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
                         rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
                     }
                 }
-                aPos.Y() += nTextHeight;
-                aPos.X() = rRect.Left();
+                aPos.AdjustY(nTextHeight );
+                aPos.setX( rRect.Left() );
             }
 
             // If there still is a last line, we output it left-aligned as the line would be clipped
@@ -1683,20 +1683,20 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
 
         // horizontal text alignment
         if ( nStyle & DrawTextFlags::Right )
-            aPos.X() += nWidth-nTextWidth;
+            aPos.AdjustX(nWidth-nTextWidth );
         else if ( nStyle & DrawTextFlags::Center )
-            aPos.X() += (nWidth-nTextWidth)/2;
+            aPos.AdjustX((nWidth-nTextWidth)/2 );
 
         // vertical font alignment
         if ( eAlign == ALIGN_BOTTOM )
-            aPos.Y() += nTextHeight;
+            aPos.AdjustY(nTextHeight );
         else if ( eAlign == ALIGN_BASELINE )
-            aPos.Y() += rTargetDevice.GetFontMetric().GetAscent();
+            aPos.AdjustY(rTargetDevice.GetFontMetric().GetAscent() );
 
         if ( nStyle & DrawTextFlags::Bottom )
-            aPos.Y() += nHeight-nTextHeight;
+            aPos.AdjustY(nHeight-nTextHeight );
         else if ( nStyle & DrawTextFlags::VCenter )
-            aPos.Y() += (nHeight-nTextHeight)/2;
+            aPos.AdjustY((nHeight-nTextHeight)/2 );
 
         long nMnemonicX = 0;
         long nMnemonicY = 0;
@@ -1913,30 +1913,30 @@ tools::Rectangle OutputDevice::GetTextRect( const tools::Rectangle& rRect,
     }
 
     if ( nStyle & DrawTextFlags::Right )
-        aRect.Left() = aRect.Right()-nMaxWidth+1;
+        aRect.SetLeft( aRect.Right()-nMaxWidth+1 );
     else if ( nStyle & DrawTextFlags::Center )
     {
-        aRect.Left() += (nWidth-nMaxWidth)/2;
-        aRect.Right() = aRect.Left()+nMaxWidth-1;
+        aRect.AdjustLeft((nWidth-nMaxWidth)/2 );
+        aRect.SetRight( aRect.Left()+nMaxWidth-1 );
     }
     else
-        aRect.Right() = aRect.Left()+nMaxWidth-1;
+        aRect.SetRight( aRect.Left()+nMaxWidth-1 );
 
     if ( nStyle & DrawTextFlags::Bottom )
-        aRect.Top() = aRect.Bottom()-(nTextHeight*nLines)+1;
+        aRect.SetTop( aRect.Bottom()-(nTextHeight*nLines)+1 );
     else if ( nStyle & DrawTextFlags::VCenter )
     {
-        aRect.Top()   += (aRect.GetHeight()-(nTextHeight*nLines))/2;
-        aRect.Bottom() = aRect.Top()+(nTextHeight*nLines)-1;
+        aRect.AdjustTop((aRect.GetHeight()-(nTextHeight*nLines))/2 );
+        aRect.SetBottom( aRect.Top()+(nTextHeight*nLines)-1 );
     }
     else
-        aRect.Bottom() = aRect.Top()+(nTextHeight*nLines)-1;
+        aRect.SetBottom( aRect.Top()+(nTextHeight*nLines)-1 );
 
     // #99188# get rid of rounding problems when using this rect later
     if (nStyle & DrawTextFlags::Right)
-        aRect.Left()--;
+        aRect.AdjustLeft( -1 );
     else
-        aRect.Right()++;
+        aRect.AdjustRight( 1 );
     return aRect;
 }
 

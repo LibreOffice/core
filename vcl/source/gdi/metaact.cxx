@@ -109,8 +109,8 @@ meta_action_name(MetaActionType nMetaAction)
 
 inline void ImplScalePoint( Point& rPt, double fScaleX, double fScaleY )
 {
-    rPt.X() = FRound( fScaleX * rPt.X() );
-    rPt.Y() = FRound( fScaleY * rPt.Y() );
+    rPt.setX( FRound( fScaleX * rPt.X() ) );
+    rPt.setY( FRound( fScaleY * rPt.Y() ) );
 }
 
 inline void ImplScaleRect( tools::Rectangle& rRect, double fScaleX, double fScaleY )

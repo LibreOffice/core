@@ -175,8 +175,8 @@ vcl::Region MenuFloatingWindow::ImplCalcClipRegion() const
     Size aOutSz = GetOutputSizePixel();
     Point aPos;
     tools::Rectangle aRect( aPos, aOutSz );
-    aRect.Top() += nScrollerHeight;
-    aRect.Bottom() -= nScrollerHeight;
+    aRect.AdjustTop(nScrollerHeight );
+    aRect.AdjustBottom( -(nScrollerHeight) );
 
     vcl::Region aRegion(aRect);
 
@@ -332,19 +332,19 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer, void )
             Size MySize = GetOutputSizePixel();
             Point aItemTopLeft( 0, nY );
             Point aItemBottomRight( aItemTopLeft );
-            aItemBottomRight.X() += MySize.Width();
-            aItemBottomRight.Y() += pData->aSz.Height();
+            aItemBottomRight.AdjustX(MySize.Width() );
+            aItemBottomRight.AdjustY(pData->aSz.Height() );
 
             // shift the popups a little
-            aItemTopLeft.X() += 2;
-            aItemBottomRight.X() -= 2;
+            aItemTopLeft.AdjustX(2 );
+            aItemBottomRight.AdjustX( -2 );
             if ( nHighlightedItem )
-                aItemTopLeft.Y() -= 2;
+                aItemTopLeft.AdjustY( -2 );
             else
             {
                 sal_Int32 nL, nT, nR, nB;
                 GetBorder( nL, nT, nR, nB );
-                aItemTopLeft.Y() -= nT;
+                aItemTopLeft.AdjustY( -nT );
             }
 
             // pTest: crash due to Reschedule() in call of Activate()
@@ -827,7 +827,7 @@ void MenuFloatingWindow::RenderHighlightItem(vcl::RenderContext& rRenderContext,
                 if (pData->nBits & MenuItemBits::POPUPSELECT)
                 {
                     long nFontHeight = GetTextHeight();
-                    aItemRect.Right() -= nFontHeight + nFontHeight / 4;
+                    aItemRect.AdjustRight( -(nFontHeight + nFontHeight / 4) );
                 }
 
                 if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::Entire))
@@ -903,7 +903,7 @@ tools::Rectangle MenuFloatingWindow::ImplGetItemRect( sal_uInt16 nPos )
                 if ( pData->nBits & MenuItemBits::POPUPSELECT )
                 {
                     long nFontHeight = GetTextHeight();
-                    aRect.Right() -= nFontHeight + nFontHeight/4;
+                    aRect.AdjustRight( -(nFontHeight + nFontHeight/4) );
                 }
             }
             break;
@@ -1182,7 +1182,7 @@ void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
         rRenderContext.SetClipRegion();
         long nX = 0;
         Size aPxSize(GetOutputSizePixel());
-        aPxSize.Width() -= nX;
+        aPxSize.AdjustWidth( -nX );
         ImplControlValue aVal(pMenu->nTextPos - GUTTERBORDER);
         rRenderContext.DrawNativeControl(ControlType::MenuPopup, ControlPart::Entire,
                                          tools::Rectangle(Point(nX, 0), aPxSize),
