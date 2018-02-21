@@ -63,6 +63,7 @@
 #include "drawview.hxx"
 #include "helpids.h"
 #include <vcl/svapp.hxx>
+#include <comphelper/lok.hxx>
 
 #include "slideshow.hxx"
 #include <memory>
@@ -319,7 +320,12 @@ void View::DoPaste (vcl::Window* pWindow)
         sal_Int8    nDnDAction = DND_ACTION_COPY;
 
         if( pWindow )
-            aPos = pWindow->PixelToLogic( Rectangle( aPos, pWindow->GetOutputSizePixel() ).Center() );
+        {
+            if (comphelper::LibreOfficeKit::isActive())
+                aPos = Rectangle(aPos, GetSdrPageView()->GetPage()->GetSize()).Center();
+            else
+                aPos = pWindow->PixelToLogic( Rectangle( aPos, pWindow->GetOutputSizePixel() ).Center() );
+        }
 
         DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>( mpDocSh->GetViewShell() );
 
