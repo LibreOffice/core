@@ -230,7 +230,10 @@ SvxShadowItem ShadowControlsWrapper::GetControlValue() const
     SvxShadowItem aItem( GetDefaultValue() );
     if( !maPosWrp.IsControlDontKnow() )
         aItem.SetLocation( maPosWrp.GetControlValue() );
-    if( !maSizeWrp.IsControlDontKnow() )
+    // Default value was saved; so don't change the aItem's width if the control
+    // has not changed its value, to avoid round-trip errors (like twip->cm->twip)
+    // E.g., initial 100 twip will become 0.18 cm, which will return as 102 twip
+    if( !maSizeWrp.IsControlDontKnow() && maSizeWrp.IsControlValueChanged() )
         aItem.SetWidth( maSizeWrp.GetControlValue() );
     if( !maColorWrp.IsControlDontKnow() )
         aItem.SetColor( maColorWrp.GetControlValue() );
@@ -239,8 +242,10 @@ SvxShadowItem ShadowControlsWrapper::GetControlValue() const
 
 void ShadowControlsWrapper::SetControlValue( SvxShadowItem aItem )
 {
+    SetDefaultValue(aItem);
     maPosWrp.SetControlValue( aItem.GetLocation() );
     maSizeWrp.SetControlValue( aItem.GetWidth() );
+    maSizeWrp.GetControl().SaveValue();
     maColorWrp.SetControlValue( aItem.GetColor() );
 }
 
