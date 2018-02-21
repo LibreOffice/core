@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_89e1279d",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-21T09:01:49Z",
+      "side": 1,
+      "message": "move computation of sLongPath to where it is actually used (i.e., past the following switch)?",
+      "revId": "2bd05a6634c0df6e065e8803381b09986c01b975",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_29dcbbe3",
         "filename": "sal/osl/w32/file_dirvol.cxx",
         "patchSetId": 1
@@ -30,6 +47,23 @@
       "writtenOn": "2018-02-21T08:58:18Z",
       "side": 1,
       "message": "You can use the C++ OUString functionality to construct sLongPath (and then access it as sLongPath.getStr() below; the concat with pItemImpl-\u003em_pFullPath can use OUString::unacquired to turn that into an OUString to be used with operator +).\n\n(This file used to be plain C in the past, for no good reason, and hasn\u0027t been cleaned up fully yet.)",
+      "revId": "2bd05a6634c0df6e065e8803381b09986c01b975",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_a9eeeb88",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-21T09:01:49Z",
+      "side": 1,
+      "message": "...and C++-ification will take care of the leaks of sLongPath in early returns",
       "revId": "2bd05a6634c0df6e065e8803381b09986c01b975",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
