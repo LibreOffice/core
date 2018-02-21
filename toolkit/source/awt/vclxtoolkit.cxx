@@ -788,6 +788,19 @@ css::uno::Reference< css::awt::XRegion > VCLXToolkit::createRegion(  )
     return xRef;
 }
 
+class InfoBox : public MessBox
+{
+public:
+    InfoBox(vcl::Window* pParent, const OUString& rMessage)
+        : MessBox(pParent, MessBoxStyle::Ok | MessBoxStyle::DefaultOk, 0, OUString(), rMessage)
+    {
+        // Default Text is the display title from the application
+        if (GetText().isEmpty())
+            SetText(GetStandardInfoBoxText());
+        SetImage(GetStandardInfoBoxImage());
+    }
+};
+
 vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     const css::awt::WindowDescriptor& rDescriptor,
     vcl::Window* pParent, WinBits nWinBits, MessBoxStyle nMessBoxStyle )

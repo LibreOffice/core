@@ -214,7 +214,7 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update, Timer*, void)
 
         if (!xDocShell.Is())
         {
-            SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,pAntiImpl);
+            SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE, pAntiImpl->GetFrameWeld());
             SfxApplication *pSfxApp = SfxGetpApp();
             SfxItemSet* pSet = new SfxAllItemSet(pSfxApp->GetPool());
             pSet->Put(SfxBoolItem(SID_TEMPLATE, true));

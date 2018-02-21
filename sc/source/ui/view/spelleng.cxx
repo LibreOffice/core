@@ -27,9 +27,10 @@
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <spelldialog.hxx>
 #include <tabvwsh.hxx>
@@ -316,7 +317,10 @@ void ScSpellingEngine::ShowFinishDialog()
 {
     vcl::Window* pParent = GetDialogParent();
     ScWaitCursorOff aWaitOff( pParent );
-    ScopedVclPtrInstance<InfoBox>( pParent, ScGlobal::GetRscString( STR_SPELLING_STOP_OK ) )->Execute();
+    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                  ScGlobal::GetRscString(STR_SPELLING_STOP_OK)));
+    xInfoBox->run();
 }
 
 vcl::Window* ScSpellingEngine::GetDialogParent()

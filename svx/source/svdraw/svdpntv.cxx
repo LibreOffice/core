@@ -20,7 +20,7 @@
 #include <memory>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <svx/svdpntv.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svx/svdmodel.hxx>
@@ -1028,7 +1028,10 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll)
         if(bHasEEFeatureItems)
         {
             OUString aMessage("SdrPaintView::SetDefaultAttr(): Setting EE_FEATURE items at the SdrView does not make sense! It only leads to overhead and unreadable documents.");
-            ScopedVclPtrInstance<InfoBox>(nullptr, aMessage)->Execute();
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          aMessage));
+            xInfoBox->run();
         }
     }
 #endif

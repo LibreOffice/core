@@ -1120,7 +1120,10 @@ UUIInteractionHelper::handleGenericErrorRequest(
             executeMessageBox(getParentProperty(), aTitle, aErrorString, MessBoxStyle::Ok);
         }
         else
-            ErrorHandler::HandleError(nErrorCode, getParentProperty());
+        {
+            vcl::Window* pParent = getParentProperty();
+            ErrorHandler::HandleError(nErrorCode, pParent ? pParent->GetFrameWeld() : nullptr);
+        }
 
         if (xApprove.is() && bWarning)
             xApprove->select();

@@ -58,7 +58,7 @@
 #include <drawview.hxx>
 #include <fusel.hxx>
 #include <svl/aeitem.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <slideshow.hxx>
 #include <svx/sdrhittesthelper.hxx>
 
@@ -339,7 +339,10 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
             {
                 if (mpView->IsPresObjSelected(false, true, false, true))
                 {
-                    ScopedVclPtrInstance<InfoBox>(mpWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
+                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(mpWindow->GetFrameWeld(),
+                                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                                  SdResId(STR_ACTION_NOTPOSSIBLE)));
+                    xInfoBox->run();
                 }
                 else
                 {
