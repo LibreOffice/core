@@ -39,8 +39,7 @@ XMLReplacementImageContext::XMLReplacementImageContext(
         const Reference< XAttributeList > & rAttrList,
         const Reference< XPropertySet > & rPropSet ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    m_xPropSet( rPropSet ),
-    m_sGraphicURL("GraphicURL")
+    m_xPropSet( rPropSet )
 {
     rtl::Reference < XMLTextImportHelper > xTxtImport =
         GetImport().GetTextImport();
@@ -93,8 +92,8 @@ void XMLReplacementImageContext::EndElement()
 
     Reference < XPropertySetInfo > xPropSetInfo =
         m_xPropSet->getPropertySetInfo();
-    if( xPropSetInfo->hasPropertyByName( m_sGraphicURL ) )
-        m_xPropSet->setPropertyValue( m_sGraphicURL, makeAny( sHRef ) );
+    if( xPropSetInfo->hasPropertyByName("GraphicURL") )
+        m_xPropSet->setPropertyValue("GraphicURL", makeAny( sHRef ) );
 }
 
 SvXMLImportContextRef XMLReplacementImageContext::CreateChildContext(

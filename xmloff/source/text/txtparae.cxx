@@ -1193,7 +1193,6 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sFrame("Frame"),
     sGraphicFilter("GraphicFilter"),
     sGraphicRotation("GraphicRotation"),
-    sGraphicURL("GraphicURL"),
     sHeight("Height"),
     sHoriOrient("HoriOrient"),
     sHoriOrientPosition("HoriOrientPosition"),
@@ -3111,7 +3110,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
 
     // xlink:href
     OUString sOrigURL;
-    rPropSet->getPropertyValue( sGraphicURL ) >>= sOrigURL;
+    rPropSet->getPropertyValue("GraphicURL") >>= sOrigURL;
     OUString sURL(GetExport().AddEmbeddedGraphicObject( sOrigURL ));
 
     // If there still is no url, then graphic is empty

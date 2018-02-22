@@ -34,7 +34,6 @@ class XMLReplacementImageContext : public SvXMLImportContext
     css::uno::Reference < css::beans::XPropertySet > m_xPropSet;
 
     OUString m_sHRef;
-    const OUString m_sGraphicURL;
 
 public:
 
