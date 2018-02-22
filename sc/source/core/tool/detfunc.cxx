@@ -142,7 +142,7 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
 {
     nMaxLevel = 0;
 
-    aBoxSet.Put( XLineColorItem( EMPTY_OUSTRING, Color( ScDetectiveFunc::GetArrowColor() ) ) );
+    aBoxSet.Put( XLineColorItem( EMPTY_OUSTRING, ScDetectiveFunc::GetArrowColor() ) );
     aBoxSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
 
     //  create default line endings (like XLineEndList::Create)
@@ -187,7 +187,7 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     aFromTabSet.Put( XLineEndWidthItem( 200 ) );
     aFromTabSet.Put( XLineEndCenterItem( false ) );
 
-    aCircleSet.Put( XLineColorItem( OUString(), Color( ScDetectiveFunc::GetErrorColor() ) ) );
+    aCircleSet.Put( XLineColorItem( OUString(), ScDetectiveFunc::GetErrorColor() ) );
     aCircleSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
     aCircleSet.Put( XLineWidthItem( 55 ) ); // 54 = 1 Pixel
 }
@@ -489,7 +489,7 @@ bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
         rAttrSet.Put( XLineWidthItem( 0 ) );                // single reference
 
     Color nColor = ( bRed ? GetErrorColor() : GetArrowColor() );
-    rAttrSet.Put( XLineColorItem( OUString(), Color( nColor ) ) );
+    rAttrSet.Put( XLineColorItem( OUString(), nColor ) );
 
     basegfx::B2DPolygon aTempPoly;
     aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
@@ -554,7 +554,7 @@ bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
         rAttrSet.Put( XLineWidthItem( 0 ) );                // single reference
 
     Color nColor = ( bRed ? GetErrorColor() : GetArrowColor() );
-    rAttrSet.Put( XLineColorItem( OUString(), Color( nColor ) ) );
+    rAttrSet.Put( XLineColorItem( OUString(), nColor ) );
 
     basegfx::B2DPolygon aTempPoly;
     aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
@@ -1499,7 +1499,7 @@ void ScDetectiveFunc::UpdateAllArrowColors()
                     if ( bArrow || bError )
                     {
                         Color nColor = ( bError ? GetErrorColor() : GetArrowColor() );
-                        pObject->SetMergedItem( XLineColorItem( OUString(), Color( nColor ) ) );
+                        pObject->SetMergedItem( XLineColorItem( OUString(), nColor ) );
 
                         // repaint only
                         pObject->ActionChanged();

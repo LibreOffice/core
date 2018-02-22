@@ -798,7 +798,7 @@ void XclExpPalette::GetMixedColors(
 
 Color XclExpPalette::GetColor( sal_uInt16 nXclIndex ) const
 {
-    return Color(mxImpl->GetColor( nXclIndex ));
+    return mxImpl->GetColor( nXclIndex );
 }
 
 void XclExpPalette::Save( XclExpStream& rStrm )

@@ -381,8 +381,7 @@ handle_r1c1:
 
                 ESelection aSel( 0, nStart, 0, nPos );
                 SfxItemSet aSet( mpEditEngine->GetEmptyItemSet() );
-                aSet.Put( SvxColorItem( Color( nColor ),
-                            EE_CHAR_COLOR ) );
+                aSet.Put( SvxColorItem( nColor, EE_CHAR_COLOR ) );
                 mpEditEngine->QuickSetAttribs( aSet, aSel );
                 ++nCount;
             }
