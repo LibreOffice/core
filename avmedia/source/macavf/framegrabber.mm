@@ -41,24 +41,6 @@ FrameGrabber::~FrameGrabber()
 }
 
 
-bool FrameGrabber::create( const ::rtl::OUString& rURL )
-{
-    NSString* pNSStr = [NSString stringWithCharacters:reinterpret_cast<unichar const *>(rURL.getStr()) length:rURL.getLength()];
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        //TODO: 10.11 stringByAddingPercentEscapesUsingEncoding
-    NSURL* pNSURL = [NSURL URLWithString: [pNSStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-    SAL_WNODEPRECATED_DECLARATIONS_POP
-    AVAsset* pMovie = [AVURLAsset URLAssetWithURL:pNSURL options:nil];
-    if( !pMovie )
-    {
-        SAL_WARN("avmedia", "AVGrabber::create() cannot load url=" << [pNSStr UTF8String] );
-        return false;
-    }
-
-    return create( pMovie );
-}
-
-
 bool FrameGrabber::create( AVAsset* pMovie )
 {
     if( [[pMovie tracksWithMediaType:AVMediaTypeVideo] count] == 0)
