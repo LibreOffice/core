@@ -391,7 +391,7 @@ public:
     void SetGridCoarse(const Size& rSiz) { maGridBig=rSiz; }
     void SetGridFine(const Size& rSiz) {
         maGridFin=rSiz;
-        if (maGridFin.Height()==0) maGridFin.Height()=maGridFin.Width();
+        if (maGridFin.Height()==0) maGridFin.setHeight(maGridFin.Width());
         if (mbGridVisible) InvalidateAllWin();
     }
     const Size& GetGridCoarse() const { return maGridBig; }

@@ -1341,10 +1341,10 @@ void AquaSalFrame::GetWorkArea( tools::Rectangle& rRect )
         pScreen = [NSScreen mainScreen];
     NSRect aRect = [pScreen visibleFrame];
     CocoaToVCL( aRect );
-    rRect.Left()     = static_cast<long>(aRect.origin.x);
-    rRect.Top()      = static_cast<long>(aRect.origin.y);
-    rRect.Right()    = static_cast<long>(aRect.origin.x + aRect.size.width - 1);
-    rRect.Bottom()   = static_cast<long>(aRect.origin.y + aRect.size.height - 1);
+    rRect.SetLeft( static_cast<long>(aRect.origin.x) );
+    rRect.SetTop( static_cast<long>(aRect.origin.y) );
+    rRect.SetRight( static_cast<long>(aRect.origin.x + aRect.size.width - 1) );
+    rRect.SetBottom( static_cast<long>(aRect.origin.y + aRect.size.height - 1) );
 }
 
 SalPointerState AquaSalFrame::GetPointerState()

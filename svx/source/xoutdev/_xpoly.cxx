@@ -405,8 +405,8 @@ void XPolygon::Move( long nHorzMove, long nVertMove )
     for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
         Point* pPt = &(pImpXPolygon->pPointAry[i]);
-        pPt->X() += nHorzMove;
-        pPt->Y() += nVertMove;
+        pPt->AdjustX( nHorzMove );
+        pPt->AdjustY( nVertMove );
     }
 }
 
@@ -536,28 +536,28 @@ void XPolygon::SubdivideBezier(sal_uInt16 nPos, bool bCalcFirst, double fT)
         nPosInc = 1;
         nIdxInc = 1;
     }
-    pPoints[nPos].X() = static_cast<long>(fU3 *       pPoints[nIdx  ].X() +
+    pPoints[nPos].setX( static_cast<long>(fU3 *       pPoints[nIdx  ].X() +
                                 fT  * fU2 * pPoints[nIdx+1].X() * 3 +
                                 fT2 * fU  * pPoints[nIdx+2].X() * 3 +
-                                fT3 *       pPoints[nIdx+3].X());
-    pPoints[nPos].Y() = static_cast<long>(fU3 *       pPoints[nIdx  ].Y() +
+                                fT3 *       pPoints[nIdx+3].X()) );
+    pPoints[nPos].setY( static_cast<long>(fU3 *       pPoints[nIdx  ].Y() +
                                 fT  * fU2 * pPoints[nIdx+1].Y() * 3 +
                                 fT2 * fU  * pPoints[nIdx+2].Y() * 3 +
-                                fT3 *       pPoints[nIdx+3].Y());
+                                fT3 *       pPoints[nIdx+3].Y()) );
     nPos = nPos + nPosInc;
     nIdx = nIdx + nIdxInc;
-    pPoints[nPos].X() = static_cast<long>(fU2 *       pPoints[nIdx  ].X() +
+    pPoints[nPos].setX( static_cast<long>(fU2 *       pPoints[nIdx  ].X() +
                                 fT  * fU *  pPoints[nIdx+1].X() * 2 +
-                                fT2 *       pPoints[nIdx+2].X());
-    pPoints[nPos].Y() = static_cast<long>(fU2 *       pPoints[nIdx  ].Y() +
+                                fT2 *       pPoints[nIdx+2].X()) );
+    pPoints[nPos].setY( static_cast<long>(fU2 *       pPoints[nIdx  ].Y() +
                                 fT  * fU *  pPoints[nIdx+1].Y() * 2 +
-                                fT2 *       pPoints[nIdx+2].Y());
+                                fT2 *       pPoints[nIdx+2].Y()) );
     nPos = nPos + nPosInc;
     nIdx = nIdx + nIdxInc;
-    pPoints[nPos].X() = static_cast<long>(fU * pPoints[nIdx  ].X() +
-                                fT * pPoints[nIdx+1].X());
-    pPoints[nPos].Y() = static_cast<long>(fU * pPoints[nIdx  ].Y() +
-                                fT * pPoints[nIdx+1].Y());
+    pPoints[nPos].setX( static_cast<long>(fU * pPoints[nIdx  ].X() +
+                                fT * pPoints[nIdx+1].X()) );
+    pPoints[nPos].setY( static_cast<long>(fU * pPoints[nIdx  ].Y() +
+                                fT * pPoints[nIdx+1].Y()) );
 }
 
 /// Generate a Bézier arc
@@ -580,22 +580,26 @@ void XPolygon::GenBezArc(const Point& rCenter, long nRx, long nRy,
 
     if ( nQuad == 0 || nQuad == 2 )
     {
-        pPoints[nFirst].X() += nRx; pPoints[nFirst+3].Y() += nRy;
+        pPoints[nFirst].AdjustX( nRx );
+        pPoints[nFirst+3].AdjustY( nRy );
     }
     else
     {
-        pPoints[nFirst].Y() += nRy; pPoints[nFirst+3].X() += nRx;
+        pPoints[nFirst].AdjustY( nRy );
+        pPoints[nFirst+3].AdjustX( nRx );
     }
     pPoints[nFirst+1] = pPoints[nFirst];
     pPoints[nFirst+2] = pPoints[nFirst+3];
 
     if ( nQuad == 0 || nQuad == 2 )
     {
-        pPoints[nFirst+1].Y() += nYHdl; pPoints[nFirst+2].X() += nXHdl;
+        pPoints[nFirst+1].AdjustY( nYHdl );
+        pPoints[nFirst+2].AdjustX( nXHdl );
     }
     else
     {
-        pPoints[nFirst+1].X() += nXHdl; pPoints[nFirst+2].Y() += nYHdl;
+        pPoints[nFirst+1].AdjustX( nXHdl );
+        pPoints[nFirst+2].AdjustY( nYHdl );
     }
     if ( nStart > 0 )
         SubdivideBezier(nFirst, false, static_cast<double>(nStart) / 900);
@@ -769,8 +773,8 @@ void XPolygon::Scale(double fSx, double fSy)
     for (sal_uInt16 i = 0; i < nPntCnt; i++)
     {
         Point& rPnt = pImpXPolygon->pPointAry[i];
-        rPnt.X() = static_cast<long>(fSx * rPnt.X());
-        rPnt.Y() = static_cast<long>(fSy * rPnt.Y());
+        rPnt.setX( static_cast<long>(fSx * rPnt.X()) );
+        rPnt.setY( static_cast<long>(fSy * rPnt.Y()) );
     }
 }
 

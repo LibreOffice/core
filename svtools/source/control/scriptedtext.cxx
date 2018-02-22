@@ -102,7 +102,8 @@ const vcl::Font& SvtScriptedTextHelper_Impl::GetFont( sal_uInt16 _nScript ) cons
 
 void SvtScriptedTextHelper_Impl::CalculateSizes()
 {
-    maTextSize.Width() = maTextSize.Height() = 0;
+    maTextSize.setWidth(0);
+    maTextSize.setHeight(0);
     mrOutDevice.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
 
     // calculate text portion widths and total width
