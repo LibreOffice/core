@@ -305,7 +305,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">ok</action-widget>
+      <action-widget response="-5">ok</action-widget>
     </action-widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

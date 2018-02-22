@@ -176,9 +176,9 @@
     </child>
     <action-widgets>
       <action-widget response="0">insert</action-widget>
-      <action-widget response="0">close</action-widget>
+      <action-widget response="-7">close</action-widget>
       <action-widget response="0">edit</action-widget>
-      <action-widget response="0">help</action-widget>
+      <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
