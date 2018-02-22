@@ -121,7 +121,7 @@
       <action-widget response="0">acceptall</action-widget>
       <action-widget response="0">rejectall</action-widget>
       <action-widget response="0">undo</action-widget>
-      <action-widget response="0">close</action-widget>
+      <action-widget response="-7">close</action-widget>
     </action-widgets>
   </object>
   <object class="GtkMenu" id="calcmenu">
