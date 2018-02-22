@@ -789,7 +789,7 @@ ScVbaWorksheet::Names( const css::uno::Any& aIndex )
     uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue("NamedRanges"), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, mxModel ) );
     if ( aIndex.hasValue() )
-        return uno::Any( xNames->Item( aIndex, uno::Any() ) );
+        return xNames->Item( aIndex, uno::Any() );
     return uno::Any( xNames );
 }
 

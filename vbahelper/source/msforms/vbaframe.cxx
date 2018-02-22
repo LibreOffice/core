@@ -89,7 +89,7 @@ uno::Any SAL_CALL ScVbaFrame::Controls( const uno::Any& rIndex )
 
     uno::Reference< XCollection > xControls( new ScVbaControls( this, mxContext, mxDialog, m_xModel, fOffsetX, fOffsetY ) );
     if( rIndex.hasValue() )
-        return uno::Any( xControls->Item( rIndex, uno::Any() ) );
+        return xControls->Item( rIndex, uno::Any() );
     return uno::Any( xControls );
 }
 

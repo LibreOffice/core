@@ -112,7 +112,7 @@ XGradient getXGradientForName(const css::uno::Reference<css::frame::XModel>& xMo
                 continue;
 
             if (pGradient->GetName() == rName)
-                return XGradient(pGradient->GetGradient());
+                return pGradient->GetGradient();
         }
     }
     catch (...)

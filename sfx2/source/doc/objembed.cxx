@@ -55,7 +55,7 @@ SfxObjectShell* SfxObjectShell::GetParentShellByModel_Impl()
             {
                 SvGlobalName aSfxIdent( SFX_GLOBAL_CLASSID );
                 pResult = reinterpret_cast<SfxObjectShell*>(xParentTunnel->getSomething(
-                                                uno::Sequence< sal_Int8 >( aSfxIdent.GetByteSequence() ) ) );
+                                                aSfxIdent.GetByteSequence() ) );
             }
         }
     }
