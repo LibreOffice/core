@@ -157,7 +157,10 @@ static void initNSApp()
 
     // activate our delegate methods
     [NSApp setDelegate: NSApp];
+}
 
+void postInitVCLinitNSApp()
+{
     [[NSNotificationCenter defaultCenter] addObserver: NSApp
                                           selector: @selector(systemColorsChanged:)
                                           name: NSSystemColorsDidChangeNotification
