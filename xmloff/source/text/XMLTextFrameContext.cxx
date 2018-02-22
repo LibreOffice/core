@@ -55,6 +55,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <map>
 
@@ -828,6 +829,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
 
     sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
     sal_Int16 nTotalAttrCount = nAttrCount + (rFrameAttrList.is() ? rFrameAttrList->getLength() : 0);
+    basegfx::B2DHomMatrix aFullTransform; // It is initialized with identity matrix.
     for( sal_Int16 i=0; i < nTotalAttrCount; i++ )
     {
         const OUString& rAttrName =
@@ -988,7 +990,6 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                 // may be necessary in the future, so that svg:x/svg:y/svg:width/svg:height
                 // may be extended/replaced with 'draw:transform' (see draw objects)
                 SdXMLImExTransform2D aSdXMLImExTransform2D;
-                basegfx::B2DHomMatrix aFullTransform;
 
                 // Use SdXMLImExTransform2D to convert to transformation
                 // Note: using GetTwipUnitConverter instead of GetMM100UnitConverter may be needed,
@@ -1017,6 +1018,8 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                     // The definition contains implicitly the RotationCenter absolute
                     // to the scaled and translated object, so this may be used if needed (see
                     // _exportTextGraphic how the -trans/rot/trans is composed)
+                    // tdf#115590 Alien applications might use other default positions, correction
+                    // is done below, outside for-loop, because nWidth and nHeight are needed.
 
                     if(!basegfx::fTools::equalZero(aDecomposedTransform.getRotate()))
                     {
@@ -1061,6 +1064,30 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             sTblName = rValue;
             break;
         }
+    }
+
+    // tdf115590 MS Word at least assumes top-left of a <draw:frame> object in the origin,
+    // and therefore writes a different translation into the draw:transform attribute. The
+    // position is corrected by comparing the given frame center with the transformed one.
+    // This catches cases too, where the transformation has no rotation but only a translation.
+    if ( !aFullTransform.isIdentity() )
+    {
+        // Adaption is here only possible, if svg:width and svg:height are given by the
+        // producer, because results of relative values are not known here. Writing this
+        // information is an ODF advice.
+        if ( nWidth != 0 && nHeight != 0 )
+        {
+            basegfx::B2IPoint aCenterPosition ( nX + nWidth/2, nY + nHeight/2 );
+            basegfx::B2IPoint aTransformedCenterPosition (aCenterPosition);
+            aTransformedCenterPosition *= aFullTransform;
+            if ( aTransformedCenterPosition != aCenterPosition )
+            {
+                nX = aTransformedCenterPosition.getX() - nWidth/2;
+                nY = aTransformedCenterPosition.getY() - nHeight/2;
+            }
+        }
+        else
+            SAL_WARN("xmloff.text", "Likely wrong position because missing width or height.");
     }
 
     if( ( (XML_TEXT_FRAME_GRAPHIC == nType ||
