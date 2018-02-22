@@ -40,7 +40,7 @@ friend class SvTokenStream;
     OString                 aString;
     union
     {
-        sal_uLong           nLong;
+        sal_uInt64           nLong;
         bool                bBool;
         char                cChar;
         SvStringHashEntry * pHash;
@@ -79,7 +79,7 @@ public:
                         ? pHash->GetName()
                         : aString;
                 }
-    sal_uLong   GetNumber() const       { return nLong;         }
+    sal_uInt64   GetNumber() const       { return nLong;         }
     bool        GetBool() const         { return bBool;         }
     char        GetChar() const         { return cChar;         }
 

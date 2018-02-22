@@ -148,9 +148,9 @@ char SvTokenStream::GetNextChar()
     return nChar;
 }
 
-sal_uLong SvTokenStream::GetNumber()
+sal_uInt64 SvTokenStream::GetNumber()
 {
-    sal_uLong   l = 0;
+    sal_uInt64   l = 0;
     short   nLog = 10;
 
     if( '0' == c )
