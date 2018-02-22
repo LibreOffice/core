@@ -55,6 +55,7 @@ SheetSettingsModel::SheetSettingsModel() :
 }
 
 SheetProtectionModel::SheetProtectionModel() :
+    mnSpinCount( 0 ),
     mnPasswordHash( 0 ),
     mbSheet( false ),
     mbObjects( false ),
@@ -106,6 +107,10 @@ void WorksheetSettings::importOutlinePr( const AttributeList& rAttribs )
 
 void WorksheetSettings::importSheetProtection( const AttributeList& rAttribs )
 {
+    maSheetProt.maAlgorithmName    = rAttribs.getString( XML_algorithmName, OUString());
+    maSheetProt.maHashValue        = rAttribs.getString( XML_hashValue, OUString());
+    maSheetProt.maSaltValue        = rAttribs.getString( XML_saltValue, OUString());
+    maSheetProt.mnSpinCount        = rAttribs.getUnsigned( XML_spinCount, 0);
     maSheetProt.mnPasswordHash     = oox::core::CodecHelper::getPasswordHash( rAttribs, XML_password );
     maSheetProt.mbSheet            = rAttribs.getBool( XML_sheet, false );
     maSheetProt.mbObjects          = rAttribs.getBool( XML_objects, false );
