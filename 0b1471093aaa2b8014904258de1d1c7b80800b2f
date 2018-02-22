@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_1ae817e2",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-02-22T14:44:10Z",
+      "side": 1,
+      "message": "^^^ here",
+      "revId": "0b1471093aaa2b8014904258de1d1c7b80800b2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_fae0a3fc",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-02-22T14:44:10Z",
+      "side": 1,
+      "message": "I\u0027m not testing wheter pObj-\u003eGetOutlinerParaObject !\u003d nullptr, because it is already done above ...",
+      "revId": "0b1471093aaa2b8014904258de1d1c7b80800b2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
