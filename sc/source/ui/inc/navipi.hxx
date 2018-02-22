@@ -40,6 +40,7 @@ class ScNavigatorControllerItem;
 class ScNavigatorDialogWrapper;
 class ScNavigatorDlg;
 class ScNavigatorSettings;
+class VclContainer;
 
 #define SC_DROPMODE_URL         0
 #define SC_DROPMODE_LINK        1

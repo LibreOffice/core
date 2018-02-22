@@ -24,6 +24,7 @@
 #include <vcl/edit.hxx>
 #include <sfx2/basedlgs.hxx>
 
+class VclContainer;
 class SwTableAutoFormat;
 class SwView;
 class SwWrtShell;
