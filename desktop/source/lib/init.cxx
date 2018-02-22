@@ -2016,7 +2016,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
         return;
     }
 
-#if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
+#if defined(UNX) && !defined(MACOSX)
 
 #if defined(IOS)
     SystemGraphicsData aData;
