@@ -163,6 +163,24 @@
     },
     {
       "key": {
+        "uuid": "fa31d9ce_fab7c3f2",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-22T14:56:31Z",
+      "side": 1,
+      "message": "I see where the problem with that bug attachment doc is, the unprotected cells have style \u0027saisie\u0027 applied and protection is applied via conditional formatting with styles \u0027gris\u0027 and \u0027grisclair\u0027. So all this gets more complicated and evaluating only the ScPatternAttr isn\u0027t sufficient.",
+      "parentUuid": "fa31d9ce_48b73086",
+      "revId": "2c48644740cb1bbbb5dd2a884f548f8846599923",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_a7e8e011",
         "filename": "sc/source/core/data/table1.cxx",
         "patchSetId": 5
