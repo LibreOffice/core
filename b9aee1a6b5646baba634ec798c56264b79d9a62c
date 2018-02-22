@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_3a1cfb12",
+        "filename": "external/lxml/ExternalProject_lxml.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-22T14:26:07Z",
+      "side": 1,
+      "message": "Regardless of SYSTEM_PYTHON or not, the used command should be\n\n  $(call gb_ExternalExecutable_get_command,python)\n\n(and this rule have an order-only dep on\n\n  $(call gb_ExternalExecutable_get_dependencies,python)\n\nsee \u003chttps://gerrit.libreoffice.org/#/c/50180/\u003e \"https://gerrit.libreoffice.org/#/c/50180/\").\n\nHowever, even then, my --enable-python\u003dfully-internal build fails with\n\n...\n\u003e copying src/lxml/isoschematron/resources/xsl/iso-schematron-xslt1/iso_schematron_message.xsl -\u003e build/lib.linux-x86_64-3.5/lxml/isoschematron/resources/xsl/iso-schematron-xslt1\n\u003e copying src/lxml/isoschematron/resources/xsl/iso-schematron-xslt1/iso_svrl_for_xslt1.xsl -\u003e build/lib.linux-x86_64-3.5/lxml/isoschematron/resources/xsl/iso-schematron-xslt1\n\u003e copying src/lxml/isoschematron/resources/xsl/iso-schematron-xslt1/readme.txt -\u003e build/lib.linux-x86_64-3.5/lxml/isoschematron/resources/xsl/iso-schematron-xslt1\n\u003e running build_ext\n\u003e error: invalid Python installation: unable to open /data/sbergman/lo-clang2/core/instdir/program/python-core-3.5.4/lib/python3.5/config-3.5m/Makefile (No such file or directory)\n\u003e make[1]: *** [/data/sbergman/lo-clang2/core/external/lxml/ExternalProject_lxml.mk:29: /data/sbergman/lo-clang2/core/workdir/ExternalProject/lxml/build] Error 1\n\u003e make: *** [Makefile:166: UIConfig_vcl] Error 2",
+      "revId": "b9aee1a6b5646baba634ec798c56264b79d9a62c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
