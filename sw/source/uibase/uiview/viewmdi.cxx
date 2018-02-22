@@ -309,6 +309,13 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
         return;
     const bool bNext = *pbNext;
     SwWrtShell& rSh = GetWrtShell();
+    if ( NID_SRCH_REP != m_nMoveType)
+    {
+        if ( rSh.GetDrawView()->IsTextEdit() )
+            rSh.EndTextEdit();
+        if ( IsDrawMode() )
+            LeaveDrawCreate();
+    }
     switch( m_nMoveType )
     {
         case NID_PGE:
