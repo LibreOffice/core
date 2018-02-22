@@ -1013,9 +1013,7 @@ IMPL_LINK_NOARG(SfxTabDialog, BaseFmtHdl, Button*, void)
                 if ( nTmp > nTmpEnd )
                 {
                     // If really sorted wrongly, then set new
-                    sal_uInt16 nTmp1 = nTmp;
-                    nTmp = nTmpEnd;
-                    nTmpEnd = nTmp1;
+                    std::swap(nTmp, nTmpEnd);
                 }
 
                 while ( nTmp <= nTmpEnd )
