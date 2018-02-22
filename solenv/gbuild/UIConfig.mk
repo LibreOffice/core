@@ -115,7 +115,7 @@ $(call gb_UIConfig_get_imagelist_target,%) :
 $(call gb_UIConfig_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),UIC,2)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_UIConfig_get_target,$*) \
+		rm -f $(call gb_UIConfig_get_target,$*) $(call gb_UIConfig_get_imagelist_target,$*) \
 	)
 
 define gb_UIConfig_a11yerrors__command
