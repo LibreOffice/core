@@ -24,6 +24,7 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/toolbox.hxx>
 
+class VclContainer;
 class XFillFloatTransparenceItem;
 
 namespace svx { namespace sidebar {
