@@ -1657,9 +1657,9 @@ void ScDetectiveFunc::InitializeColors()
     // may be called several times to update colors from configuration
 
     const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
-    nArrowColor   = sal_Int32(rColorCfg.GetColorValue(svtools::CALCDETECTIVE).nColor);
-    nErrorColor   = sal_Int32(rColorCfg.GetColorValue(svtools::CALCDETECTIVEERROR).nColor);
-    nCommentColor = sal_Int32(rColorCfg.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor);
+    nArrowColor   = rColorCfg.GetColorValue(svtools::CALCDETECTIVE).nColor;
+    nErrorColor   = rColorCfg.GetColorValue(svtools::CALCDETECTIVEERROR).nColor;
+    nCommentColor = rColorCfg.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor;
 
     bColorsInitialized = true;
 }
