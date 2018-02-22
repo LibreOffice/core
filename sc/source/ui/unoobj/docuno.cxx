@@ -609,14 +609,16 @@ void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     if (!pWindow)
         return;
 
+    if (!pWindow->HasFocus())
+        pWindow->GrabFocus();
     KeyEvent aEvent(nCharCode, nKeyCode, 0);
     switch (nType)
     {
     case LOK_KEYEVENT_KEYINPUT:
-        pWindow->KeyInput(aEvent);
+        Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, pWindow, &aEvent);
         break;
     case LOK_KEYEVENT_KEYUP:
-        pWindow->KeyUp(aEvent);
+        Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, pWindow, &aEvent);
         break;
     default:
         assert(false);
