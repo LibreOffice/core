@@ -994,41 +994,26 @@ IMPL_LINK_NOARG(SfxTabDialog, BaseFmtHdl, Button*, void)
         {
             const sal_uInt16* pU = pTmpRanges + 1;
 
-            if ( *pTmpRanges == *pU )
+            // Correct Range with multiple values
+            sal_uInt16 nTmp = *pTmpRanges, nTmpEnd = *pU;
+            DBG_ASSERT( nTmp <= nTmpEnd, "Range is sorted the wrong way" );
+
+            if ( nTmp > nTmpEnd )
             {
-                // Range which two identical values -> only set one Item
-                sal_uInt16 nWh = pPool->GetWhich( *pTmpRanges );
+                // If really sorted wrongly, then set new
+                std::swap(nTmp, nTmpEnd);
+            }
+
+            while ( nTmp && nTmp <= nTmpEnd ) // guard against overflow
+            {
+                // Iterate over the Range and set the Items
+                sal_uInt16 nWh = pPool->GetWhich( nTmp );
                 m_pExampleSet->ClearItem( nWh );
                 aTmpSet.ClearItem( nWh );
                 // At the Outset of InvalidateItem,
                 // so that the change takes effect
                 m_pOutSet->InvalidateItem( nWh );
-            }
-            else
-            {
-                // Correct Range with multiple values
-                sal_uInt16 nTmp = *pTmpRanges, nTmpEnd = *pU;
-                DBG_ASSERT( nTmp <= nTmpEnd, "Range is sorted the wrong way" );
-
-                if ( nTmp > nTmpEnd )
-                {
-                    // If really sorted wrongly, then set new
-                    sal_uInt16 nTmp1 = nTmp;
-                    nTmp = nTmpEnd;
-                    nTmpEnd = nTmp1;
-                }
-
-                while ( nTmp <= nTmpEnd )
-                {
-                    // Iterate over the Range and set the Items
-                    sal_uInt16 nWh = pPool->GetWhich( nTmp );
-                    m_pExampleSet->ClearItem( nWh );
-                    aTmpSet.ClearItem( nWh );
-                    // At the Outset of InvalidateItem,
-                    // so that the change takes effect
-                    m_pOutSet->InvalidateItem( nWh );
-                    nTmp++;
-                }
+                nTmp++;
             }
             // Go to the next pair
             pTmpRanges += 2;
