@@ -1,0 +1,30 @@
+From 12e5d89cbd7101c61fbdf063322203a1590a0ef5 Mon Sep 17 00:00:00 2001
+From: Markus Mohrhard <markus.mohrhard@googlemail.com>
+Date: Wed, 21 Feb 2018 00:29:03 +0100
+Subject: [PATCH] protect the self-closing xml element code against
+ self-closing root elements
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Found by Antti Levomäki and Christian Jalio from Forcepoint.
+---
+ include/orcus/sax_parser.hpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/include/orcus/sax_parser.hpp b/include/orcus/sax_parser.hpp
+index ba5ebcd..67d5943 100644
+--- a/include/orcus/sax_parser.hpp
++++ b/include/orcus/sax_parser.hpp
+@@ -171,6 +171,8 @@ void sax_parser<_Handler,_Config>::element_open(std::ptrdiff_t begin_pos)
+             m_handler.start_element(elem);
+             reset_buffer_pos();
+             m_handler.end_element(elem);
++            if (!m_nest_level)
++                m_root_elem_open = false;
+ #if ORCUS_DEBUG_SAX_PARSER
+             cout << "element_open: ns='" << elem.ns << "', name='" << elem.name << "' (self-closing)" << endl;
+ #endif
+-- 
+2.7.4
+
