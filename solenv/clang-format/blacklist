@@ -1764,7 +1764,6 @@ compilerplugins/clang/privatebase.cxx
 compilerplugins/clang/ptrvector.cxx
 compilerplugins/clang/rangedforcopy.cxx
 compilerplugins/clang/redundantcast.cxx
-compilerplugins/clang/redundantcopy.cxx
 compilerplugins/clang/redundantinline.cxx
 compilerplugins/clang/redundantpointerops.cxx
 compilerplugins/clang/refcounting.cxx
@@ -1855,7 +1854,6 @@ compilerplugins/clang/test/passparamsbyref.cxx
 compilerplugins/clang/test/passstuffbyref.cxx
 compilerplugins/clang/test/redundantcast.cxx
 compilerplugins/clang/test/redundantcast.hxx
-compilerplugins/clang/test/redundantcopy.cxx
 compilerplugins/clang/test/redundantinline.cxx
 compilerplugins/clang/test/redundantinline.hxx
 compilerplugins/clang/test/redundantpointerops.cxx
