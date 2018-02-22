@@ -144,20 +144,15 @@ OUString GetColorString( const Color& rCol )
     if (rCol.GetColor() == COL_AUTO)
         return EditResId(RID_SVXSTR_AUTOMATIC);
 
-    OUString sStr;
-
-    ColorData nColData =
-        RGB_COLORDATA( rCol.GetRed(), rCol.GetGreen(), rCol.GetBlue() );
-    sal_uInt16 nColor = 0;
-
-    static const ColorData aColAry[] = {
+    static const Color aColAry[] = {
         COL_BLACK, COL_BLUE, COL_GREEN, COL_CYAN,
         COL_RED, COL_MAGENTA, COL_BROWN, COL_GRAY,
         COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTGREEN, COL_LIGHTCYAN,
         COL_LIGHTRED, COL_LIGHTMAGENTA, COL_YELLOW, COL_WHITE };
 
+    sal_uInt16 nColor = 0;
     while ( nColor < SAL_N_ELEMENTS(aColAry) &&
-            aColAry[nColor] != nColData )
+            aColAry[nColor] != rCol.GetRGBColor() )
     {
         nColor += 1;
     }
@@ -184,6 +179,7 @@ OUString GetColorString( const Color& rCol )
 
     static_assert(SAL_N_ELEMENTS(aColAry) == SAL_N_ELEMENTS(RID_SVXITEMS_COLORS), "must match");
 
+    OUString sStr;
     if ( nColor < SAL_N_ELEMENTS(aColAry) )
         sStr = EditResId(RID_SVXITEMS_COLORS[nColor]);
 

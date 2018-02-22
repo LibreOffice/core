@@ -2361,9 +2361,9 @@ css::uno::Any Document::mapFontColor(::Color const & rColor)
 // static
 ::Color Document::mapFontColor(css::uno::Any const & rColor)
 {
-    ::sal_Int32 nColor = 0;
+    ::Color nColor;
     rColor >>= nColor;
-    return ::Color(static_cast< ::ColorData >(nColor));
+    return nColor;
 }
 
 // static
