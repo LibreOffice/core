@@ -23,8 +23,6 @@
 #   WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 #   ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 #   OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-#
-# vim: set shiftwidth=4 softtabstop=4 expandtab:
 
 # Take LibreOffice (glade) .ui files and check for non accessible widgets
 
@@ -211,3 +209,5 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         pass
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:
