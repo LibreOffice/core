@@ -300,7 +300,7 @@
     <action-widgets>
       <action-widget response="0">credits</action-widget>
       <action-widget response="0">website</action-widget>
-      <action-widget response="0">close</action-widget>
+      <action-widget response="-7">close</action-widget>
     </action-widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
