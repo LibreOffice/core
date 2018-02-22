@@ -29,11 +29,12 @@ $(packimages_DIR)/%.zip : \
 		$(packimages_DIR)/commandimagelist.ilst \
 		$(packimages_DIR)/sourceimagelist.ilst \
 		$(SRCDIR)/wizards/source/imagelists/imagelists.ilst \
-		$(call gb_Helper_get_imagelists)
+		$(call gb_Helper_get_imagelists) \
+		| $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Helper_abbreviate_dirs, \
 		ILSTFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,$(filter %.ilst,$^)) && \
-		$(PYTHON_FOR_BUILD) $(SRCDIR)/solenv/bin/pack_images.py \
+		$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/solenv/bin/pack_images.py \
 			$(if $(DEFAULT_THEME),\
 				-g $(packimages_DIR) -m $(packimages_DIR) -c $(packimages_DIR),\
 				-g $(SRCDIR)/icon-themes/$(subst images_,,$*) -m $(SRCDIR)/icon-themes/$(subst images_,,$*) -c $(SRCDIR)/icon-themes/$(subst images_,,$*) \
