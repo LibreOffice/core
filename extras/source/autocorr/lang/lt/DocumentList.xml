@@ -145,25 +145,39 @@
   <block-list:block block-list:abbreviated-name=":AD2:" block-list:name="⇘"/>
   <block-list:block block-list:abbreviated-name=":AD:" block-list:name="↘"/>
   <block-list:block block-list:abbreviated-name=":Adi Šakti:" block-list:name="☬"/>
+  <block-list:block block-list:abbreviated-name=":agurkas:" block-list:name="🥒"/>
   <block-list:block block-list:abbreviated-name=":AK2:" block-list:name="⇙"/>
   <block-list:block block-list:abbreviated-name=":akademinė kepurė:" block-list:name="🎓"/>
   <block-list:block block-list:abbreviated-name=":AK:" block-list:name="↙"/>
+  <block-list:block block-list:abbreviated-name=":akcijų grafikas:" block-list:name="🗠"/>
   <block-list:block block-list:abbreviated-name=":akiniai:" block-list:name="👓"/>
+  <block-list:block block-list:abbreviated-name=":akis:" block-list:name="👁"/>
+  <block-list:block block-list:abbreviated-name=":akmenslydis:" block-list:name="🥌"/>
   <block-list:block block-list:abbreviated-name=":akys:" block-list:name="👀"/>
   <block-list:block block-list:abbreviated-name=":akys širdelės:" block-list:name="😍"/>
   <block-list:block block-list:abbreviated-name=":^alfa:" block-list:name="ᵅ"/>
   <block-list:block block-list:abbreviated-name=":alfa:" block-list:name="α"/>
   <block-list:block block-list:abbreviated-name=":Alfa:" block-list:name="Α"/>
+  <block-list:block block-list:abbreviated-name=":alfas:" block-list:name="🧝"/>
+  <block-list:block block-list:abbreviated-name=":alpinistas:" block-list:name="🧗"/>
   <block-list:block block-list:abbreviated-name=":alus 2:" block-list:name="🍻"/>
   <block-list:block block-list:abbreviated-name=":alus:" block-list:name="🍺"/>
   <block-list:block block-list:abbreviated-name=":amerikietiškas futbolas:" block-list:name="🏈"/>
+  <block-list:block block-list:abbreviated-name=":amfora:" block-list:name="🏺"/>
   <block-list:block block-list:abbreviated-name=":ananasas:" block-list:name="🍍"/>
   <block-list:block block-list:abbreviated-name=":Andriaus kryžius:" block-list:name="☓"/>
   <block-list:block block-list:abbreviated-name=":angelas:" block-list:name="👼"/>
   <block-list:block block-list:abbreviated-name=":ankas:" block-list:name="☥"/>
+  <block-list:block block-list:abbreviated-name=":antakis:" block-list:name="🤨"/>
+  <block-list:block block-list:abbreviated-name=":antena:" block-list:name="📡"/>
+  <block-list:block block-list:abbreviated-name=":antis:" block-list:name="🦆"/>
+  <block-list:block block-list:abbreviated-name=":apkabinimas:" block-list:name="🤗"/>
   <block-list:block block-list:abbreviated-name=":aplankas 2:" block-list:name="📂"/>
+  <block-list:block block-list:abbreviated-name=":aplankas 3:" block-list:name="🗀"/>
+  <block-list:block block-list:abbreviated-name=":aplankas 4:" block-list:name="🗁"/>
+  <block-list:block block-list:abbreviated-name=":aplankas 5:" block-list:name="🖿"/>
   <block-list:block block-list:abbreviated-name=":aplankas:" block-list:name="📁"/>
-  <block-list:block block-list:abbreviated-name=":apskritimas:" block-list:name="○"/>
+  <block-list:block block-list:abbreviated-name=":apmaudas:" block-list:name="🤦"/>
   <block-list:block block-list:abbreviated-name=":apsvaigęs:" block-list:name="😵"/>
   <block-list:block block-list:abbreviated-name=":apsvaigimas:" block-list:name="💫"/>
   <block-list:block block-list:abbreviated-name=":apžvalgos ratas:" block-list:name="🎡"/>
@@ -175,8 +189,11 @@
   <block-list:block block-list:abbreviated-name=":artėjanti pilnatis:" block-list:name="🌔"/>
   <block-list:block block-list:abbreviated-name=":artėjantis priešpilnis:" block-list:name="🌒"/>
   <block-list:block block-list:abbreviated-name=":Asklepijo lazda:" block-list:name="⚕"/>
+  <block-list:block block-list:abbreviated-name=":asmenukė:" block-list:name="🤳"/>
   <block-list:block block-list:abbreviated-name=":aštuntinė nata:" block-list:name="𝅘𝅥𝅮"/>
   <block-list:block block-list:abbreviated-name=":aštuntinė pauzė:" block-list:name="𝄾"/>
+  <block-list:block block-list:abbreviated-name=":aštuntinės natos 2:" block-list:name="🎜"/>
+  <block-list:block block-list:abbreviated-name=":aštuntinės natos:" block-list:name="🎝"/>
   <block-list:block block-list:abbreviated-name=":aštuonkojis:" block-list:name="🐙"/>
   <block-list:block block-list:abbreviated-name=":ateivis 2:" block-list:name="👾"/>
   <block-list:block block-list:abbreviated-name=":ateivis:" block-list:name="👽"/>
@@ -184,10 +201,18 @@
   <block-list:block block-list:abbreviated-name=":atkaklumas:" block-list:name="😣"/>
   <block-list:block block-list:abbreviated-name=":atomas:" block-list:name="⚛"/>
   <block-list:block block-list:abbreviated-name=":atrakinta spyna:" block-list:name="🔓"/>
+  <block-list:block block-list:abbreviated-name=":atsisakyti:" block-list:name="🗙"/>
   <block-list:block block-list:abbreviated-name=":atviri delnai:" block-list:name="👐"/>
+  <block-list:block block-list:abbreviated-name=":atvykimas:" block-list:name="🛬"/>
+  <block-list:block block-list:abbreviated-name=":audra 2:" block-list:name="☈"/>
+  <block-list:block block-list:abbreviated-name=":audra:" block-list:name="🌧"/>
   <block-list:block block-list:abbreviated-name=":auganti širdis:" block-list:name="💗"/>
+  <block-list:block block-list:abbreviated-name=":aukso medalis:" block-list:name="🥇"/>
   <block-list:block block-list:abbreviated-name=":aukšta įtampa:" block-list:name="⚡"/>
   <block-list:block block-list:abbreviated-name=":aukštyn 2:" block-list:name="👆"/>
+  <block-list:block block-list:abbreviated-name=":aukštyn 3:" block-list:name="🖞"/>
+  <block-list:block block-list:abbreviated-name=":aukštyn 4:" block-list:name="🖠"/>
+  <block-list:block block-list:abbreviated-name=":aukštyn 5:" block-list:name="🖢"/>
   <block-list:block block-list:abbreviated-name=":aukštyn:" block-list:name="☝"/>
   <block-list:block block-list:abbreviated-name=":aulinis batas:" block-list:name="👢"/>
   <block-list:block block-list:abbreviated-name=":aureolė:" block-list:name="😇"/>
@@ -199,16 +224,21 @@
   <block-list:block block-list:abbreviated-name=":autobusų stotelė:" block-list:name="🚏"/>
   <block-list:block block-list:abbreviated-name=":automobilis 2:" block-list:name="🚘"/>
   <block-list:block block-list:abbreviated-name=":automobilis 3:" block-list:name="🚙"/>
+  <block-list:block block-list:abbreviated-name=":automobilis 4:" block-list:name="🏎"/>
   <block-list:block block-list:abbreviated-name=":automobilis:" block-list:name="🚗"/>
   <block-list:block block-list:abbreviated-name=":autoriaus teisės:" block-list:name="©"/>
   <block-list:block block-list:abbreviated-name=":avinas:" block-list:name="🐏"/>
   <block-list:block block-list:abbreviated-name=":Avinas:" block-list:name="♈"/>
   <block-list:block block-list:abbreviated-name=":avis:" block-list:name="🐑"/>
+  <block-list:block block-list:abbreviated-name=":avokadas:" block-list:name="🥑"/>
   <block-list:block block-list:abbreviated-name=":azijinis buivolas:" block-list:name="🐃"/>
+  <block-list:block block-list:abbreviated-name=":badmintonas:" block-list:name="🏸"/>
   <block-list:block block-list:abbreviated-name=":bagažas:" block-list:name="🛄"/>
   <block-list:block block-list:abbreviated-name=":baimė:" block-list:name="😨"/>
   <block-list:block block-list:abbreviated-name=":baklažanas:" block-list:name="🍆"/>
+  <block-list:block block-list:abbreviated-name=":balandis:" block-list:name="🕊"/>
   <block-list:block block-list:abbreviated-name=":balionas:" block-list:name="🎈"/>
+  <block-list:block block-list:abbreviated-name=":balsavimas:" block-list:name="🗳"/>
   <block-list:block block-list:abbreviated-name=":balta gėlė:" block-list:name="💮"/>
   <block-list:block block-list:abbreviated-name=":baltas skritulys:" block-list:name="⚪"/>
   <block-list:block block-list:abbreviated-name=":baltųjų bokštas:" block-list:name="♖"/>
@@ -224,21 +254,25 @@
   <block-list:block block-list:abbreviated-name=":banglentininkas:" block-list:name="🏄"/>
   <block-list:block block-list:abbreviated-name=":bankas:" block-list:name="🏦"/>
   <block-list:block block-list:abbreviated-name=":bankomatas:" block-list:name="🏧"/>
+  <block-list:block block-list:abbreviated-name=":barzda:" block-list:name="🧔"/>
   <block-list:block block-list:abbreviated-name=":batas 2:" block-list:name="👟"/>
   <block-list:block block-list:abbreviated-name=":batas 3:" block-list:name="👠"/>
   <block-list:block block-list:abbreviated-name=":batas:" block-list:name="👞"/>
   <block-list:block block-list:abbreviated-name=":batatas:" block-list:name="🍠"/>
   <block-list:block block-list:abbreviated-name=":baterija:" block-list:name="🔋"/>
+  <block-list:block block-list:abbreviated-name=":batonas:" block-list:name="🥖"/>
   <block-list:block block-list:abbreviated-name=":bazinis punktas:" block-list:name="‱"/>
   <block-list:block block-list:abbreviated-name=":bažnyčia:" block-list:name="⛪"/>
   <block-list:block block-list:abbreviated-name=":^b:" block-list:name="ᵇ"/>
   <block-list:block block-list:abbreviated-name=":^B:" block-list:name="ᴮ"/>
   <block-list:block block-list:abbreviated-name=":begalybė:" block-list:name="∞"/>
+  <block-list:block block-list:abbreviated-name=":bėgiai:" block-list:name="🛤"/>
   <block-list:block block-list:abbreviated-name=":bėgikas:" block-list:name="🏃"/>
   <block-list:block block-list:abbreviated-name=":beisbolas:" block-list:name="⚾"/>
   <block-list:block block-list:abbreviated-name=":bekaras:" block-list:name="♮"/>
   <block-list:block block-list:abbreviated-name=":bemolis:" block-list:name="♭"/>
   <block-list:block block-list:abbreviated-name=":bengališka ugnelė:" block-list:name="🎇"/>
+  <block-list:block block-list:abbreviated-name=":berniukai:" block-list:name="🛉"/>
   <block-list:block block-list:abbreviated-name=":berniukas:" block-list:name="👦"/>
   <block-list:block block-list:abbreviated-name=":besisukančios širdys:" block-list:name="💞"/>
   <block-list:block block-list:abbreviated-name=":besišypsantis velniūkštis:" block-list:name="😈"/>
@@ -250,9 +284,11 @@
   <block-list:block block-list:abbreviated-name=":beždžionė:" block-list:name="🐒"/>
   <block-list:block block-list:abbreviated-name=":bikinis:" block-list:name="👙"/>
   <block-list:block block-list:abbreviated-name=":biliardas:" block-list:name="🎱"/>
+  <block-list:block block-list:abbreviated-name=":bilietas 2:" block-list:name="🎟"/>
   <block-list:block block-list:abbreviated-name=":bilietas:" block-list:name="🎫"/>
   <block-list:block block-list:abbreviated-name=":biorizika:" block-list:name="☣"/>
   <block-list:block block-list:abbreviated-name=":bitė:" block-list:name="🐝"/>
+  <block-list:block block-list:abbreviated-name=":bitkoinas:" block-list:name="₿"/>
   <block-list:block block-list:abbreviated-name=":biuras:" block-list:name="🏢"/>
   <block-list:block block-list:abbreviated-name=":biustai:" block-list:name="👥"/>
   <block-list:block block-list:abbreviated-name=":biustas:" block-list:name="👤"/>
@@ -281,10 +317,15 @@
   <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
   <block-list:block block-list:abbreviated-name=":+-:" block-list:name="±"/>
   <block-list:block block-list:abbreviated-name=":bloknotas:" block-list:name="📒"/>
+  <block-list:block block-list:abbreviated-name=":blykstė:" block-list:name="📸"/>
+  <block-list:block block-list:abbreviated-name=":blynai:" block-list:name="🥞"/>
+  <block-list:block block-list:abbreviated-name=":boksas:" block-list:name="🥊"/>
   <block-list:block block-list:abbreviated-name=":bomba:" block-list:name="💣"/>
   <block-list:block block-list:abbreviated-name=":boružė:" block-list:name="🐞"/>
   <block-list:block block-list:abbreviated-name=":brangakmenis:" block-list:name="💎"/>
   <block-list:block block-list:abbreviated-name=":braškė:" block-list:name="🍓"/>
+  <block-list:block block-list:abbreviated-name=":brokolis:" block-list:name="🥦"/>
+  <block-list:block block-list:abbreviated-name=":bronzos medalis:" block-list:name="🥉"/>
   <block-list:block block-list:abbreviated-name=":bučinio žymė:" block-list:name="💋"/>
   <block-list:block block-list:abbreviated-name=":bučinys 2:" block-list:name="😘"/>
   <block-list:block block-list:abbreviated-name=":bučinys 3:" block-list:name="😙"/>
@@ -293,10 +334,14 @@
   <block-list:block block-list:abbreviated-name=":bučinys:" block-list:name="💏"/>
   <block-list:block block-list:abbreviated-name=":būgnai 2:" block-list:name="♢"/>
   <block-list:block block-list:abbreviated-name=":būgnai:" block-list:name="♦"/>
+  <block-list:block block-list:abbreviated-name=":būgnas:" block-list:name="🥁"/>
   <block-list:block block-list:abbreviated-name=":bulius:" block-list:name="🐂"/>
+  <block-list:block block-list:abbreviated-name=":bulvė:" block-list:name="🥔"/>
   <block-list:block block-list:abbreviated-name=":bulvytės:" block-list:name="🍟"/>
+  <block-list:block block-list:abbreviated-name=":buritas:" block-list:name="🌯"/>
   <block-list:block block-list:abbreviated-name=":burlaivis:" block-list:name="⛵"/>
   <block-list:block block-list:abbreviated-name=":burna:" block-list:name="👄"/>
+  <block-list:block block-list:abbreviated-name=":burundukas:" block-list:name="🐿"/>
   <block-list:block block-list:abbreviated-name=":^c:" block-list:name="ᶜ"/>
   <block-list:block block-list:abbreviated-name=":centas:" block-list:name="¢"/>
   <block-list:block block-list:abbreviated-name=":^chi:" block-list:name="ᵡ"/>
@@ -304,9 +349,10 @@
   <block-list:block block-list:abbreviated-name=":chi:" block-list:name="χ"/>
   <block-list:block block-list:abbreviated-name=":Chi:" block-list:name="Χ"/>
   <block-list:block block-list:abbreviated-name=":chronometras:" block-list:name="⏱"/>
+  <block-list:block block-list:abbreviated-name=":čiaudulys:" block-list:name="🤧"/>
   <block-list:block block-list:abbreviated-name=":ciklonas:" block-list:name="🌀"/>
   <block-list:block block-list:abbreviated-name=":cilindras:" block-list:name="🎩"/>
-  <block-list:block block-list:abbreviated-name=":cirko palapinė:" block-list:name="🎪"/>
+  <block-list:block block-list:abbreviated-name=":cirkas:" block-list:name="🎪"/>
   <block-list:block block-list:abbreviated-name=":citrina:" block-list:name="🍋"/>
   <block-list:block block-list:abbreviated-name=":colis:" block-list:name="″"/>
   <block-list:block block-list:abbreviated-name=":D2:" block-list:name="⇒"/>
@@ -323,28 +369,44 @@
   <block-list:block block-list:abbreviated-name=":debesis 2:" block-list:name="⛅"/>
   <block-list:block block-list:abbreviated-name=":debesis 3:" block-list:name="⛈"/>
   <block-list:block block-list:abbreviated-name=":debesis:" block-list:name="☁"/>
+  <block-list:block block-list:abbreviated-name=":debesuota 2:" block-list:name="🌥"/>
+  <block-list:block block-list:abbreviated-name=":debesuota:" block-list:name="🌤"/>
   <block-list:block block-list:abbreviated-name=":dėklas 2:" block-list:name="📥"/>
   <block-list:block block-list:abbreviated-name=":dėklas:" block-list:name="📤"/>
   <block-list:block block-list:abbreviated-name=":dekoratyvinė širdis:" block-list:name="💟"/>
   <block-list:block block-list:abbreviated-name=":delčia:" block-list:name="🌗"/>
   <block-list:block block-list:abbreviated-name=":delfinas:" block-list:name="🐬"/>
-  <block-list:block block-list:abbreviated-name=":delnas:" block-list:name="✋"/>
+  <block-list:block block-list:abbreviated-name=":delnai:" block-list:name="🤲"/>
   <block-list:block block-list:abbreviated-name=":delninukė:" block-list:name="👝"/>
   <block-list:block block-list:abbreviated-name=":^delta:" block-list:name="ᵟ"/>
   <block-list:block block-list:abbreviated-name=":delta:" block-list:name="δ"/>
   <block-list:block block-list:abbreviated-name=":Delta:" block-list:name="Δ"/>
   <block-list:block block-list:abbreviated-name=":dešinėn 2:" block-list:name="👉"/>
   <block-list:block block-list:abbreviated-name=":dešinėn 3:" block-list:name="☛"/>
+  <block-list:block block-list:abbreviated-name=":dešinėn 4:" block-list:name="🖛"/>
+  <block-list:block block-list:abbreviated-name=":dešinėn 5:" block-list:name="🖙"/>
+  <block-list:block block-list:abbreviated-name=":dešinėn 6:" block-list:name="🖝"/>
   <block-list:block block-list:abbreviated-name=":dešinėn:" block-list:name="☞"/>
+  <block-list:block block-list:abbreviated-name=":dešrainis:" block-list:name="🌭"/>
+  <block-list:block block-list:abbreviated-name=":dėžė:" block-list:name="🗃"/>
   <block-list:block block-list:abbreviated-name=":didelis apskritimas 2:" block-list:name="⬤"/>
   <block-list:block block-list:abbreviated-name=":didelis apskritimas:" block-list:name="◯"/>
   <block-list:block block-list:abbreviated-name=":didelis garsas:" block-list:name="🔊"/>
   <block-list:block block-list:abbreviated-name=":didelis kvadratas 2:" block-list:name="⬛"/>
   <block-list:block block-list:abbreviated-name=":didelis kvadratas:" block-list:name="⬜"/>
   <block-list:block block-list:abbreviated-name=":diezas:" block-list:name="♯"/>
+  <block-list:block block-list:abbreviated-name=":dinozauras 2:" block-list:name="🦖"/>
+  <block-list:block block-list:abbreviated-name=":dinozauras:" block-list:name="🦕"/>
+  <block-list:block block-list:abbreviated-name=":diskelis 2:" block-list:name="🖬"/>
+  <block-list:block block-list:abbreviated-name=":diskelis 3:" block-list:name="🖫"/>
+  <block-list:block block-list:abbreviated-name=":diskelis 4:" block-list:name="🖪"/>
   <block-list:block block-list:abbreviated-name=":diskelis:" block-list:name="💾"/>
   <block-list:block block-list:abbreviated-name=":distiliatorius:" block-list:name="⚗"/>
   <block-list:block block-list:abbreviated-name=":dobilas:" block-list:name="🍀"/>
+  <block-list:block block-list:abbreviated-name=":dokumentas 2:" block-list:name="🖹"/>
+  <block-list:block block-list:abbreviated-name=":dokumentas 3:" block-list:name="🖻"/>
+  <block-list:block block-list:abbreviated-name=":dokumentas 4:" block-list:name="🖺"/>
+  <block-list:block block-list:abbreviated-name=":dokumentas:" block-list:name="🗎"/>
   <block-list:block block-list:abbreviated-name=":doleris 2:" block-list:name="💵"/>
   <block-list:block block-list:abbreviated-name=":doleris:" block-list:name="💲"/>
   <block-list:block block-list:abbreviated-name=":domino:" block-list:name="🁠"/>
@@ -354,7 +416,10 @@
   <block-list:block block-list:abbreviated-name=":drakonas 2:" block-list:name="🐲"/>
   <block-list:block block-list:abbreviated-name=":drakonas:" block-list:name="🐉"/>
   <block-list:block block-list:abbreviated-name=":dramblys:" block-list:name="🐘"/>
+  <block-list:block block-list:abbreviated-name=":draudžiama:" block-list:name="🛇"/>
   <block-list:block block-list:abbreviated-name=":draudžiamasis ženklas:" block-list:name="🚫"/>
+  <block-list:block block-list:abbreviated-name=":driežas:" block-list:name="🦎"/>
+  <block-list:block block-list:abbreviated-name=":drugelis:" block-list:name="🦋"/>
   <block-list:block block-list:abbreviated-name=":dubuo:" block-list:name="🍜"/>
   <block-list:block block-list:abbreviated-name=":duona:" block-list:name="🍞"/>
   <block-list:block block-list:abbreviated-name=":durys:" block-list:name="🚪"/>
@@ -367,27 +432,38 @@
   <block-list:block block-list:abbreviated-name=":dviratis:" block-list:name="🚲"/>
   <block-list:block block-list:abbreviated-name=":dvi širdys:" block-list:name="💕"/>
   <block-list:block block-list:abbreviated-name=":Dvyniai:" block-list:name="♊"/>
+  <block-list:block block-list:abbreviated-name=":dykuma:" block-list:name="🏜"/>
   <block-list:block block-list:abbreviated-name=":dzeta:" block-list:name="ζ"/>
   <block-list:block block-list:abbreviated-name=":Dzeta:" block-list:name="Ζ"/>
   <block-list:block block-list:abbreviated-name=":džiaugsmas:" block-list:name="😂"/>
+  <block-list:block block-list:abbreviated-name=":džinas:" block-list:name="🧞"/>
   <block-list:block block-list:abbreviated-name=":džinsai:" block-list:name="👖"/>
+  <block-list:block block-list:abbreviated-name=":dziudo:" block-list:name="🥋"/>
   <block-list:block block-list:abbreviated-name=":džokeris:" block-list:name="🃏"/>
   <block-list:block block-list:abbreviated-name=":^e:" block-list:name="ᵉ"/>
   <block-list:block block-list:abbreviated-name=":_e:" block-list:name="ₑ"/>
   <block-list:block block-list:abbreviated-name=":^E:" block-list:name="ᴱ"/>
   <block-list:block block-list:abbreviated-name=":egzistuoja:" block-list:name="∃"/>
+  <block-list:block block-list:abbreviated-name=":ekranas:" block-list:name="🖵"/>
   <block-list:block block-list:abbreviated-name=":elipsė:" block-list:name="⬭"/>
+  <block-list:block block-list:abbreviated-name=":elnias:" block-list:name="🦌"/>
   <block-list:block block-list:abbreviated-name=":el. paštas:" block-list:name="📧"/>
   <block-list:block block-list:abbreviated-name=":^epsilon:" block-list:name="ᵋ"/>
   <block-list:block block-list:abbreviated-name=":epsilon:" block-list:name="ε"/>
   <block-list:block block-list:abbreviated-name=":Epsilon:" block-list:name="Ε"/>
+  <block-list:block block-list:abbreviated-name=":erelis:" block-list:name="🦅"/>
   <block-list:block block-list:abbreviated-name=":eta:" block-list:name="η"/>
   <block-list:block block-list:abbreviated-name=":Eta:" block-list:name="Η"/>
+  <block-list:block block-list:abbreviated-name=":etiketė:" block-list:name="🏷"/>
   <block-list:block block-list:abbreviated-name=":euras 2:" block-list:name="💶"/>
   <block-list:block block-list:abbreviated-name=":euras:" block-list:name="€"/>
+  <block-list:block block-list:abbreviated-name=":ežys:" block-list:name="🦔"/>
   <block-list:block block-list:abbreviated-name=":fabrikas:" block-list:name="🏭"/>
+  <block-list:block block-list:abbreviated-name=":faksas 2:" block-list:name="🖷"/>
   <block-list:block block-list:abbreviated-name=":faksas:" block-list:name="📠"/>
   <block-list:block block-list:abbreviated-name=":^f:" block-list:name="ᶠ"/>
+  <block-list:block block-list:abbreviated-name=":fechtuotojas:" block-list:name="🤺"/>
+  <block-list:block block-list:abbreviated-name=":fėja:" block-list:name="🧚"/>
   <block-list:block block-list:abbreviated-name=":fejerverkai:" block-list:name="🎆"/>
   <block-list:block block-list:abbreviated-name=":^fi:" block-list:name="ᵠ"/>
   <block-list:block block-list:abbreviated-name=":_fi:" block-list:name="ᵩ"/>
@@ -398,44 +474,59 @@
   <block-list:block block-list:abbreviated-name=":fotoaparatas:" block-list:name="📷"/>
   <block-list:block block-list:abbreviated-name=":Fudzijama:" block-list:name="🗻"/>
   <block-list:block block-list:abbreviated-name=":futbolas:" block-list:name="⚽"/>
+  <block-list:block block-list:abbreviated-name=":futbolo vartai:" block-list:name="🥅"/>
   <block-list:block block-list:abbreviated-name=":gaidys:" block-list:name="🐓"/>
+  <block-list:block block-list:abbreviated-name=":gairelė 2:" block-list:name="🏱"/>
+  <block-list:block block-list:abbreviated-name=":gairelė:" block-list:name="🏲"/>
+  <block-list:block block-list:abbreviated-name=":gaisrinė 2:" block-list:name="🛱"/>
   <block-list:block block-list:abbreviated-name=":gaisrinė:" block-list:name="🚒"/>
+  <block-list:block block-list:abbreviated-name=":galva:" block-list:name="🗣"/>
   <block-list:block block-list:abbreviated-name=":^gama:" block-list:name="ᵞ"/>
   <block-list:block block-list:abbreviated-name=":_gama:" block-list:name="ᵧ"/>
   <block-list:block block-list:abbreviated-name=":gama:" block-list:name="γ"/>
   <block-list:block block-list:abbreviated-name=":Gama:" block-list:name="Γ"/>
   <block-list:block block-list:abbreviated-name=":garsas:" block-list:name="🔉"/>
   <block-list:block block-list:abbreviated-name=":garsiakalbis 2:" block-list:name="🔈"/>
+  <block-list:block block-list:abbreviated-name=":garsiakalbis 3:" block-list:name="🕩"/>
+  <block-list:block block-list:abbreviated-name=":garsiakalbis 4:" block-list:name="🕨"/>
+  <block-list:block block-list:abbreviated-name=":garsiakalbis 5:" block-list:name="🕪"/>
   <block-list:block block-list:abbreviated-name=":garsiakalbis:" block-list:name="📢"/>
-  <block-list:block block-list:abbreviated-name=":garvežys:" block-list:name="🚂"/>
   <block-list:block block-list:abbreviated-name=":gaublys 2:" block-list:name="🌎"/>
   <block-list:block block-list:abbreviated-name=":gaublys 3:" block-list:name="🌏"/>
   <block-list:block block-list:abbreviated-name=":gaublys 4:" block-list:name="🌐"/>
   <block-list:block block-list:abbreviated-name=":gaublys:" block-list:name="🌍"/>
   <block-list:block block-list:abbreviated-name=":^g:" block-list:name="ᵍ"/>
   <block-list:block block-list:abbreviated-name=":^G:" block-list:name="ᴳ"/>
+  <block-list:block block-list:abbreviated-name=":gėlė 2:" block-list:name="🥀"/>
   <block-list:block block-list:abbreviated-name=":gėlė:" block-list:name="⚘"/>
+  <block-list:block block-list:abbreviated-name=":gėlės žiedas 2:" block-list:name="🌸"/>
   <block-list:block block-list:abbreviated-name=":gėlės žiedas:" block-list:name="🌼"/>
-  <block-list:block block-list:abbreviated-name=":gerai 2:" block-list:name="🙆"/>
+  <block-list:block block-list:abbreviated-name=":gerai 2:" block-list:name="🖏"/>
+  <block-list:block block-list:abbreviated-name=":gerai 3:" block-list:name="🙆"/>
   <block-list:block block-list:abbreviated-name=":gerai:" block-list:name="👌"/>
   <block-list:block block-list:abbreviated-name=":geriamas vanduo:" block-list:name="🚰"/>
+  <block-list:block block-list:abbreviated-name=":gėrimas 2:" block-list:name="🍹"/>
+  <block-list:block block-list:abbreviated-name=":gėrimas:" block-list:name="🥤"/>
+  <block-list:block block-list:abbreviated-name=":gimnastas:" block-list:name="🤸"/>
   <block-list:block block-list:abbreviated-name=":gimtadienis:" block-list:name="🎂"/>
   <block-list:block block-list:abbreviated-name=":gitara:" block-list:name="🎸"/>
-  <block-list:block block-list:abbreviated-name=":golfas:" block-list:name="⛳"/>
+  <block-list:block block-list:abbreviated-name=":golfas 2:" block-list:name="⛳"/>
+  <block-list:block block-list:abbreviated-name=":golfas:" block-list:name="🏌"/>
+  <block-list:block block-list:abbreviated-name=":gorila:" block-list:name="🦍"/>
   <block-list:block block-list:abbreviated-name=":grafikas aukštyn:" block-list:name="📈"/>
-  <block-list:block block-list:abbreviated-name=":grafikas:" block-list:name="💹"/>
   <block-list:block block-list:abbreviated-name=":grafikas žemyn:" block-list:name="📉"/>
   <block-list:block block-list:abbreviated-name=":graikiškas kryžius 2:" block-list:name="✙"/>
   <block-list:block block-list:abbreviated-name=":graikiškas kryžius:" block-list:name="✚"/>
   <block-list:block block-list:abbreviated-name=":grandinės:" block-list:name="⛓"/>
+  <block-list:block block-list:abbreviated-name=":greitkelis:" block-list:name="🛣"/>
   <block-list:block block-list:abbreviated-name=":greitoji pagalba:" block-list:name="🚑"/>
-  <block-list:block block-list:abbreviated-name=":griaustinis:" block-list:name="☈"/>
   <block-list:block block-list:abbreviated-name=":grimasa:" block-list:name="😬"/>
   <block-list:block block-list:abbreviated-name=":grivina:" block-list:name="₴"/>
   <block-list:block block-list:abbreviated-name=":grybas:" block-list:name="🍄"/>
   <block-list:block block-list:abbreviated-name=":&gt;=:" block-list:name="≥"/>
   <block-list:block block-list:abbreviated-name=":&gt;&gt;:" block-list:name="≫"/>
   <block-list:block block-list:abbreviated-name=":gūsis:" block-list:name="💨"/>
+  <block-list:block block-list:abbreviated-name=":gūžčiojimas:" block-list:name="🤷"/>
   <block-list:block block-list:abbreviated-name=":gyvatė:" block-list:name="🐍"/>
   <block-list:block block-list:abbreviated-name=":gyvatnešis:" block-list:name="⛎"/>
   <block-list:block block-list:abbreviated-name=":^h:" block-list:name="ʰ"/>
@@ -447,7 +538,9 @@
   <block-list:block block-list:abbreviated-name=":_i:" block-list:name="ᵢ"/>
   <block-list:block block-list:abbreviated-name=":^I:" block-list:name="ᴵ"/>
   <block-list:block block-list:abbreviated-name=":ilgalaikis popierius:" block-list:name="♾"/>
+  <block-list:block block-list:abbreviated-name=":imtynės:" block-list:name="🤼"/>
   <block-list:block block-list:abbreviated-name=":informacija 2:" block-list:name="💁"/>
+  <block-list:block block-list:abbreviated-name=":informacija 3:" block-list:name="🛈"/>
   <block-list:block block-list:abbreviated-name=":informacija:" block-list:name="ℹ"/>
   <block-list:block block-list:abbreviated-name=":įniršęs:" block-list:name="😡"/>
   <block-list:block block-list:abbreviated-name=":in-jang:" block-list:name="☯"/>
@@ -460,15 +553,30 @@
   <block-list:block block-list:abbreviated-name=":ipsilon:" block-list:name="υ"/>
   <block-list:block block-list:abbreviated-name=":Ipsilon:" block-list:name="Υ"/>
   <block-list:block block-list:abbreviated-name=":Iranas:" block-list:name="☫"/>
+  <block-list:block block-list:abbreviated-name=":įrašymas:" block-list:name="⏺"/>
   <block-list:block block-list:abbreviated-name=":ir:" block-list:name="∧"/>
   <block-list:block block-list:abbreviated-name=":įrodymo pabaiga:" block-list:name="∎"/>
+  <block-list:block block-list:abbreviated-name=":išdidinti:" block-list:name="🗖"/>
   <block-list:block block-list:abbreviated-name=":išjungtas garsas:" block-list:name="🔇"/>
+  <block-list:block block-list:abbreviated-name=":išnaša 10:" block-list:name="🗩"/>
+  <block-list:block block-list:abbreviated-name=":išnaša 2:" block-list:name="🗪"/>
+  <block-list:block block-list:abbreviated-name=":išnaša 3:" block-list:name="🗫"/>
+  <block-list:block block-list:abbreviated-name=":išnaša 4:" block-list:name="🗯"/>
+  <block-list:block block-list:abbreviated-name=":išnaša 5:" block-list:name="🗭"/>
+  <block-list:block block-list:abbreviated-name=":išnaša 6:" block-list:name="🗱"/>
+  <block-list:block block-list:abbreviated-name=":išnaša 7:" block-list:name="🗬"/>
+  <block-list:block block-list:abbreviated-name=":išnaša 8:" block-list:name="🗮"/>
+  <block-list:block block-list:abbreviated-name=":išnaša 9:" block-list:name="🗰"/>
+  <block-list:block block-list:abbreviated-name=":išnaša:" block-list:name="🗨"/>
   <block-list:block block-list:abbreviated-name=":įspėjimas:" block-list:name="☡"/>
+  <block-list:block block-list:abbreviated-name=":išsekimas:" block-list:name="🙇"/>
+  <block-list:block block-list:abbreviated-name=":išvykimas:" block-list:name="🛫"/>
   <block-list:block block-list:abbreviated-name=":Japonija:" block-list:name="🗾"/>
   <block-list:block block-list:abbreviated-name=":japoniškas vėrinukas:" block-list:name="🍢"/>
   <block-list:block block-list:abbreviated-name=":japoniški pietūs:" block-list:name="🍱"/>
   <block-list:block block-list:abbreviated-name=":jaunatis 2:" block-list:name="🌚"/>
   <block-list:block block-list:abbreviated-name=":jaunatis:" block-list:name="🌑"/>
+  <block-list:block block-list:abbreviated-name=":jaunikis:" block-list:name="🤵"/>
   <block-list:block block-list:abbreviated-name=":Jautis:" block-list:name="♉"/>
   <block-list:block block-list:abbreviated-name=":^j:" block-list:name="ʲ"/>
   <block-list:block block-list:abbreviated-name=":_j:" block-list:name="ⱼ"/>
@@ -476,9 +584,11 @@
   <block-list:block block-list:abbreviated-name=":jena 2:" block-list:name="💴"/>
   <block-list:block block-list:abbreviated-name=":jena:" block-list:name="¥"/>
   <block-list:block block-list:abbreviated-name=":Jeruzalės kryžius:" block-list:name="☩"/>
+  <block-list:block block-list:abbreviated-name=":joga:" block-list:name="🧘"/>
   <block-list:block block-list:abbreviated-name=":^jota:" block-list:name="ᶥ"/>
   <block-list:block block-list:abbreviated-name=":jota:" block-list:name="ι"/>
   <block-list:block block-list:abbreviated-name=":Jota:" block-list:name="Ι"/>
+  <block-list:block block-list:abbreviated-name=":juoda širdis:" block-list:name="🖤"/>
   <block-list:block block-list:abbreviated-name=":juodas skritulys:" block-list:name="⚫"/>
   <block-list:block block-list:abbreviated-name=":juodųjų bokštas:" block-list:name="♜"/>
   <block-list:block block-list:abbreviated-name=":juodųjų karalius:" block-list:name="♚"/>
@@ -490,20 +600,28 @@
   <block-list:block block-list:abbreviated-name=":juokas su prakaitu:" block-list:name="😅"/>
   <block-list:block block-list:abbreviated-name=":Jupiteris:" block-list:name="♃"/>
   <block-list:block block-list:abbreviated-name=":K2:" block-list:name="⇐"/>
+  <block-list:block block-list:abbreviated-name=":Kaaba:" block-list:name="🕋"/>
   <block-list:block block-list:abbreviated-name=":kabantis traukinys:" block-list:name="🚟"/>
   <block-list:block block-list:abbreviated-name=":kaducėjus:" block-list:name="☤"/>
   <block-list:block block-list:abbreviated-name=":Kaducėjus:" block-list:name="⚚"/>
   <block-list:block block-list:abbreviated-name=":kairėn 2:" block-list:name="👈"/>
   <block-list:block block-list:abbreviated-name=":kairėn 3:" block-list:name="☚"/>
+  <block-list:block block-list:abbreviated-name=":kairėn 4:" block-list:name="🖚"/>
+  <block-list:block block-list:abbreviated-name=":kairėn 5:" block-list:name="🖜"/>
+  <block-list:block block-list:abbreviated-name=":kairėn 6:" block-list:name="🖘"/>
   <block-list:block block-list:abbreviated-name=":kairėn:" block-list:name="☜"/>
   <block-list:block block-list:abbreviated-name=":kaka:" block-list:name="💩"/>
   <block-list:block block-list:abbreviated-name=":kaklaraištis:" block-list:name="👔"/>
   <block-list:block block-list:abbreviated-name=":kaktusas:" block-list:name="🌵"/>
+  <block-list:block block-list:abbreviated-name=":kalakutas:" block-list:name="🦃"/>
   <block-list:block block-list:abbreviated-name=":kalbos išnaša:" block-list:name="💬"/>
   <block-list:block block-list:abbreviated-name=":Kalėdos:" block-list:name="🎄"/>
-  <block-list:block block-list:abbreviated-name=":Kalėdų Senis:" block-list:name="🎅"/>
+  <block-list:block block-list:abbreviated-name=":Kalėdų Senelis:" block-list:name="🎅"/>
   <block-list:block block-list:abbreviated-name=":kalendorius 2:" block-list:name="📆"/>
+  <block-list:block block-list:abbreviated-name=":kalendorius 3:" block-list:name="🗓"/>
   <block-list:block block-list:abbreviated-name=":kalendorius:" block-list:name="📅"/>
+  <block-list:block block-list:abbreviated-name=":kalmaras:" block-list:name="🦑"/>
+  <block-list:block block-list:abbreviated-name=":kalnas 2:" block-list:name="🏔"/>
   <block-list:block block-list:abbreviated-name=":kalnas:" block-list:name="⛰"/>
   <block-list:block block-list:abbreviated-name=":kalnų geležinkelis:" block-list:name="🚞"/>
   <block-list:block block-list:abbreviated-name=":kamera:" block-list:name="📹"/>
@@ -511,6 +629,7 @@
   <block-list:block block-list:abbreviated-name=":kampas:" block-list:name="∠"/>
   <block-list:block block-list:abbreviated-name=":kampo minutė:" block-list:name="′"/>
   <block-list:block block-list:abbreviated-name=":kamuolys:" block-list:name="⛹"/>
+  <block-list:block block-list:abbreviated-name=":kanoja:" block-list:name="🛶"/>
   <block-list:block block-list:abbreviated-name=":kapa:" block-list:name="κ"/>
   <block-list:block block-list:abbreviated-name=":Kapa:" block-list:name="Κ"/>
   <block-list:block block-list:abbreviated-name=":karalius:" block-list:name="🂮"/>
@@ -522,10 +641,13 @@
   <block-list:block block-list:abbreviated-name=":karuselė:" block-list:name="🎠"/>
   <block-list:block block-list:abbreviated-name=":karvė 2:" block-list:name="🐮"/>
   <block-list:block block-list:abbreviated-name=":karvė:" block-list:name="🐄"/>
-  <block-list:block block-list:abbreviated-name=":kaspinas:" block-list:name="🎀"/>
+  <block-list:block block-list:abbreviated-name=":kasetė:" block-list:name="🖭"/>
+  <block-list:block block-list:abbreviated-name=":kaspinas 2:" block-list:name="🎀"/>
+  <block-list:block block-list:abbreviated-name=":kaspinas:" block-list:name="🎗"/>
   <block-list:block block-list:abbreviated-name=":kaštonas:" block-list:name="🌰"/>
   <block-list:block block-list:abbreviated-name=":katė 2:" block-list:name="🐱"/>
   <block-list:block block-list:abbreviated-name=":katė:" block-list:name="🐈"/>
+  <block-list:block block-list:abbreviated-name=":kateris 2:" block-list:name="🛥"/>
   <block-list:block block-list:abbreviated-name=":kateris:" block-list:name="🚤"/>
   <block-list:block block-list:abbreviated-name=":katės akys širdelės:" block-list:name="😻"/>
   <block-list:block block-list:abbreviated-name=":katės bučinys:" block-list:name="😽"/>
@@ -535,6 +657,7 @@
   <block-list:block block-list:abbreviated-name=":katės šypsena 2:" block-list:name="😺"/>
   <block-list:block block-list:abbreviated-name=":katės šypsena:" block-list:name="😸"/>
   <block-list:block block-list:abbreviated-name=":katės verkimas:" block-list:name="😿"/>
+  <block-list:block block-list:abbreviated-name=":kaubojus:" block-list:name="🤠"/>
   <block-list:block block-list:abbreviated-name=":kaukas:" block-list:name="👺"/>
   <block-list:block block-list:abbreviated-name=":kaukė:" block-list:name="😷"/>
   <block-list:block block-list:abbreviated-name=":kaukolė:" block-list:name="💀"/>
@@ -554,47 +677,70 @@
   <block-list:block block-list:abbreviated-name=":KD:" block-list:name="↔"/>
   <block-list:block block-list:abbreviated-name=":kėdė:" block-list:name="💺"/>
   <block-list:block block-list:abbreviated-name=":kėgliai:" block-list:name="🎳"/>
+  <block-list:block block-list:abbreviated-name=":keiksmai:" block-list:name="🤬"/>
   <block-list:block block-list:abbreviated-name=":keltas:" block-list:name="⛴"/>
+  <block-list:block block-list:abbreviated-name=":keltų kryžius:" block-list:name="🕈"/>
   <block-list:block block-list:abbreviated-name=":keltuvas 2:" block-list:name="🚡"/>
   <block-list:block block-list:abbreviated-name=":keltuvas:" block-list:name="🚠"/>
+  <block-list:block block-list:abbreviated-name=":kepimas:" block-list:name="🍳"/>
+  <block-list:block block-list:abbreviated-name=":kepsnys:" block-list:name="🥩"/>
   <block-list:block block-list:abbreviated-name=":kepta krevetė:" block-list:name="🍤"/>
+  <block-list:block block-list:abbreviated-name=":kepuraitė:" block-list:name="🧢"/>
   <block-list:block block-list:abbreviated-name=":ketvirtinė nata:" block-list:name="𝅘𝅥"/>
   <block-list:block block-list:abbreviated-name=":ketvirtinė pauzė:" block-list:name="𝄽"/>
   <block-list:block block-list:abbreviated-name=":kiaulė 2:" block-list:name="🐷"/>
   <block-list:block block-list:abbreviated-name=":kiaulė:" block-list:name="🐖"/>
-  <block-list:block block-list:abbreviated-name=":kiaušinienė:" block-list:name="🍳"/>
+  <block-list:block block-list:abbreviated-name=":kiaušinis:" block-list:name="🥚"/>
   <block-list:block block-list:abbreviated-name=":kiekvienas:" block-list:name="∀"/>
   <block-list:block block-list:abbreviated-name=":kilpa:" block-list:name="➰"/>
   <block-list:block block-list:abbreviated-name=":kilpos:" block-list:name="➿"/>
   <block-list:block block-list:abbreviated-name=":kimono:" block-list:name="👘"/>
   <block-list:block block-list:abbreviated-name=":kinas:" block-list:name="🎦"/>
+  <block-list:block block-list:abbreviated-name=":kino juosta:" block-list:name="🎞"/>
   <block-list:block block-list:abbreviated-name=":kino kamera:" block-list:name="🎥"/>
+  <block-list:block block-list:abbreviated-name=":kino projektorius:" block-list:name="📽"/>
   <block-list:block block-list:abbreviated-name=":kinrožė:" block-list:name="🌺"/>
   <block-list:block block-list:abbreviated-name=":kirpimas:" block-list:name="💇"/>
   <block-list:block block-list:abbreviated-name=":kirpykla:" block-list:name="💈"/>
   <block-list:block block-list:abbreviated-name=":kirtiklis:" block-list:name="⛏"/>
   <block-list:block block-list:abbreviated-name=":kištukas:" block-list:name="🔌"/>
+  <block-list:block block-list:abbreviated-name=":kivis:" block-list:name="🥝"/>
+  <block-list:block block-list:abbreviated-name=":klaviatūra 2:" block-list:name="🖮"/>
+  <block-list:block block-list:abbreviated-name=":klaviatūra 3:" block-list:name="🖦"/>
   <block-list:block block-list:abbreviated-name=":klaviatūra:" block-list:name="⌨"/>
-  <block-list:block block-list:abbreviated-name=":knyga 2:" block-list:name="📖"/>
-  <block-list:block block-list:abbreviated-name=":knyga:" block-list:name="📕"/>
+  <block-list:block block-list:abbreviated-name=":klounas:" block-list:name="🤡"/>
+  <block-list:block block-list:abbreviated-name=":knyga 2:" block-list:name="📕"/>
+  <block-list:block block-list:abbreviated-name=":knyga 3:" block-list:name="📖"/>
+  <block-list:block block-list:abbreviated-name=":knyga:" block-list:name="🕮"/>
   <block-list:block block-list:abbreviated-name=":knygos:" block-list:name="📚"/>
   <block-list:block block-list:abbreviated-name=":knyslė:" block-list:name="🐽"/>
   <block-list:block block-list:abbreviated-name=":koala:" block-list:name="🐨"/>
+  <block-list:block block-list:abbreviated-name=":kojinės:" block-list:name="🧦"/>
+  <block-list:block block-list:abbreviated-name=":kokosas:" block-list:name="🥥"/>
   <block-list:block block-list:abbreviated-name=":kokteilis:" block-list:name="🍸"/>
+  <block-list:block block-list:abbreviated-name=":koldūnas:" block-list:name="🥟"/>
   <block-list:block block-list:abbreviated-name=":kolonėlė:" block-list:name="⛽"/>
   <block-list:block block-list:abbreviated-name=":kometa:" block-list:name="☄"/>
   <block-list:block block-list:abbreviated-name=":kompaktinis diskas:" block-list:name="💿"/>
+  <block-list:block block-list:abbreviated-name=":kompiuteris 2:" block-list:name="🖥"/>
+  <block-list:block block-list:abbreviated-name=":kompiuteris 3:" block-list:name="🖳"/>
   <block-list:block block-list:abbreviated-name=":kompiuteris:" block-list:name="💻"/>
-  <block-list:block block-list:abbreviated-name=":konfeti:" block-list:name="🎊"/>
   <block-list:block block-list:abbreviated-name=":kontaktų kortelės:" block-list:name="📇"/>
   <block-list:block block-list:abbreviated-name=":kortos:" block-list:name="🎴"/>
+  <block-list:block block-list:abbreviated-name=":kostiumas:" block-list:name="🕴"/>
+  <block-list:block block-list:abbreviated-name=":krabas:" block-list:name="🦀"/>
+  <block-list:block block-list:abbreviated-name=":kranas:" block-list:name="🏗"/>
+  <block-list:block block-list:abbreviated-name=":kreidelė:" block-list:name="🖍"/>
   <block-list:block block-list:abbreviated-name=":kremas:" block-list:name="🍮"/>
   <block-list:block block-list:abbreviated-name=":krepšinis:" block-list:name="🏀"/>
+  <block-list:block block-list:abbreviated-name=":krevetė:" block-list:name="🦐"/>
   <block-list:block block-list:abbreviated-name=":kriauklė:" block-list:name="🐚"/>
   <block-list:block block-list:abbreviated-name=":kriaušė:" block-list:name="🍐"/>
+  <block-list:block block-list:abbreviated-name=":kriketas:" block-list:name="🏏"/>
   <block-list:block block-list:abbreviated-name=":Kristaus monograma:" block-list:name="☧"/>
   <block-list:block block-list:abbreviated-name=":krištolo rutulys:" block-list:name="🔮"/>
   <block-list:block block-list:abbreviated-name=":krokodilas:" block-list:name="🐊"/>
+  <block-list:block block-list:abbreviated-name=":kruasanas:" block-list:name="🥐"/>
   <block-list:block block-list:abbreviated-name=":krumpliaratis:" block-list:name="⚙"/>
   <block-list:block block-list:abbreviated-name=":kryžiai 2:" block-list:name="♧"/>
   <block-list:block block-list:abbreviated-name=":kryžiai:" block-list:name="♣"/>
@@ -604,33 +750,52 @@
   <block-list:block block-list:abbreviated-name=":Ksi:" block-list:name="Ξ"/>
   <block-list:block block-list:abbreviated-name=":kūdikio buteliukas:" block-list:name="🍼"/>
   <block-list:block block-list:abbreviated-name=":kūdikis 2:" block-list:name="🚼"/>
+  <block-list:block block-list:abbreviated-name=":kūdikis 3:" block-list:name="🤱"/>
   <block-list:block block-list:abbreviated-name=":kūdikis:" block-list:name="👶"/>
   <block-list:block block-list:abbreviated-name=":kūjis ir kirtiklis:" block-list:name="⚒"/>
   <block-list:block block-list:abbreviated-name=":kūjis ir pjautuvas:" block-list:name="☭"/>
   <block-list:block block-list:abbreviated-name=":kukurūzai:" block-list:name="🌽"/>
   <block-list:block block-list:abbreviated-name=":kulšis:" block-list:name="🍗"/>
   <block-list:block block-list:abbreviated-name=":kumštis 2:" block-list:name="👊"/>
+  <block-list:block block-list:abbreviated-name=":kumštis 3:" block-list:name="🤛"/>
+  <block-list:block block-list:abbreviated-name=":kumštis 4:" block-list:name="🤜"/>
   <block-list:block block-list:abbreviated-name=":kumštis:" block-list:name="✊"/>
   <block-list:block block-list:abbreviated-name=":kupranugaris 2:" block-list:name="🐫"/>
   <block-list:block block-list:abbreviated-name=":kupranugaris:" block-list:name="🐪"/>
   <block-list:block block-list:abbreviated-name=":kuprinė:" block-list:name="🎒"/>
   <block-list:block block-list:abbreviated-name=":kvadratas 2:" block-list:name="■"/>
   <block-list:block block-list:abbreviated-name=":kvadratas:" block-list:name="□"/>
+  <block-list:block block-list:abbreviated-name=":kvailystė:" block-list:name="🤪"/>
+  <block-list:block block-list:abbreviated-name=":kvatojimas:" block-list:name="🤣"/>
   <block-list:block block-list:abbreviated-name=":lagaminėlis:" block-list:name="💼"/>
   <block-list:block block-list:abbreviated-name=":laikmatis:" block-list:name="⏲"/>
+  <block-list:block block-list:abbreviated-name=":laikraštis 2:" block-list:name="🗞"/>
   <block-list:block block-list:abbreviated-name=":laikraštis:" block-list:name="📰"/>
+  <block-list:block block-list:abbreviated-name=":laikrodis 2:" block-list:name="🕰"/>
   <block-list:block block-list:abbreviated-name=":laikrodis:" block-list:name="⌚"/>
   <block-list:block block-list:abbreviated-name=":laipsnis:" block-list:name="°"/>
   <block-list:block block-list:abbreviated-name=":Laisvės statula:" block-list:name="🗽"/>
+  <block-list:block block-list:abbreviated-name=":laivas 2:" block-list:name="🛳"/>
   <block-list:block block-list:abbreviated-name=":laivas:" block-list:name="🚢"/>
   <block-list:block block-list:abbreviated-name=":lambda:" block-list:name="λ"/>
   <block-list:block block-list:abbreviated-name=":Lambda:" block-list:name="Λ"/>
+  <block-list:block block-list:abbreviated-name=":langas:" block-list:name="🗔"/>
   <block-list:block block-list:abbreviated-name=":langelis 2:" block-list:name="☑"/>
   <block-list:block block-list:abbreviated-name=":langelis 3:" block-list:name="☒"/>
+  <block-list:block block-list:abbreviated-name=":langelis 4:" block-list:name="🗷"/>
+  <block-list:block block-list:abbreviated-name=":langelis 5:" block-list:name="🗹"/>
+  <block-list:block block-list:abbreviated-name=":langelis 6:" block-list:name="🗵"/>
   <block-list:block block-list:abbreviated-name=":langelis:" block-list:name="☐"/>
+  <block-list:block block-list:abbreviated-name=":lankas:" block-list:name="🏹"/>
+  <block-list:block block-list:abbreviated-name=":lapai:" block-list:name="🗐"/>
   <block-list:block block-list:abbreviated-name=":lapas 2:" block-list:name="🍂"/>
   <block-list:block block-list:abbreviated-name=":lapas 3:" block-list:name="🍃"/>
   <block-list:block block-list:abbreviated-name=":lapas:" block-list:name="🍁"/>
+  <block-list:block block-list:abbreviated-name=":lapė:" block-list:name="🦊"/>
+  <block-list:block block-list:abbreviated-name=":lapeliai:" block-list:name="🗊"/>
+  <block-list:block block-list:abbreviated-name=":lapelis:" block-list:name="🗈"/>
+  <block-list:block block-list:abbreviated-name=":lapelis užrašams:" block-list:name="🗉"/>
+  <block-list:block block-list:abbreviated-name=":lašas 2:" block-list:name="🌢"/>
   <block-list:block block-list:abbreviated-name=":lašas:" block-list:name="💧"/>
   <block-list:block block-list:abbreviated-name=":^l:" block-list:name="ˡ"/>
   <block-list:block block-list:abbreviated-name=":_l:" block-list:name="ₗ"/>
@@ -638,11 +803,20 @@
   <block-list:block block-list:abbreviated-name=":ledai 2:" block-list:name="🍧"/>
   <block-list:block block-list:abbreviated-name=":ledai:" block-list:name="🍨"/>
   <block-list:block block-list:abbreviated-name=":ledinukas:" block-list:name="🍭"/>
+  <block-list:block block-list:abbreviated-name=":ledo ritulys:" block-list:name="🏒"/>
+  <block-list:block block-list:abbreviated-name=":lėkštė:" block-list:name="🍽"/>
+  <block-list:block block-list:abbreviated-name=":lėktuvas 2:" block-list:name="🛩"/>
+  <block-list:block block-list:abbreviated-name=":lėktuvas 3:" block-list:name="🛧"/>
+  <block-list:block block-list:abbreviated-name=":lėktuvas 4:" block-list:name="🛨"/>
+  <block-list:block block-list:abbreviated-name=":lėktuvas 5:" block-list:name="🛦"/>
+  <block-list:block block-list:abbreviated-name=":lėktuvas 6:" block-list:name="🛪"/>
   <block-list:block block-list:abbreviated-name=":lėktuvas:" block-list:name="✈"/>
   <block-list:block block-list:abbreviated-name=":lėlės:" block-list:name="🎎"/>
   <block-list:block block-list:abbreviated-name=":lemputė:" block-list:name="💡"/>
   <block-list:block block-list:abbreviated-name=":lengvasis geležinkelis:" block-list:name="🚈"/>
+  <block-list:block block-list:abbreviated-name=":lenktynės:" block-list:name="🏁"/>
   <block-list:block block-list:abbreviated-name=":leopardas:" block-list:name="🐆"/>
+  <block-list:block block-list:abbreviated-name=":lietinga:" block-list:name="🌦"/>
   <block-list:block block-list:abbreviated-name=":lietus 2:" block-list:name="⛆"/>
   <block-list:block block-list:abbreviated-name=":lietus:" block-list:name="☔"/>
   <block-list:block block-list:abbreviated-name=":liežuvis 2:" block-list:name="😛"/>
@@ -658,28 +832,41 @@
   <block-list:block block-list:abbreviated-name=":liniuotė:" block-list:name="📏"/>
   <block-list:block block-list:abbreviated-name=":linksmieji kalneliai:" block-list:name="🎢"/>
   <block-list:block block-list:abbreviated-name=":lira:" block-list:name="₤"/>
+  <block-list:block block-list:abbreviated-name=":liūtas:" block-list:name="🦁"/>
   <block-list:block block-list:abbreviated-name=":Liūtas:" block-list:name="♌"/>
+  <block-list:block block-list:abbreviated-name=":lokomotyvas 2:" block-list:name="🛲"/>
+  <block-list:block block-list:abbreviated-name=":lokomotyvas:" block-list:name="🚂"/>
   <block-list:block block-list:abbreviated-name=":lokys:" block-list:name="🐻"/>
   <block-list:block block-list:abbreviated-name=":lošimo automatas:" block-list:name="🎰"/>
   <block-list:block block-list:abbreviated-name=":Lotaringijos kryžius:" block-list:name="☨"/>
+  <block-list:block block-list:abbreviated-name=":lotyniškas kryžius 2:" block-list:name="🕆"/>
+  <block-list:block block-list:abbreviated-name=":lotyniškas kryžius 3:" block-list:name="🕇"/>
   <block-list:block block-list:abbreviated-name=":lotyniškas kryžius:" block-list:name="✝"/>
+  <block-list:block block-list:abbreviated-name=":lova:" block-list:name="🛏"/>
   <block-list:block block-list:abbreviated-name=":&lt;=:" block-list:name="≤"/>
   <block-list:block block-list:abbreviated-name=":&lt;&lt;:" block-list:name="≪"/>
   <block-list:block block-list:abbreviated-name=":lupa 2:" block-list:name="🔎"/>
   <block-list:block block-list:abbreviated-name=":lupa:" block-list:name="🔍"/>
   <block-list:block block-list:abbreviated-name=":lūpdažis:" block-list:name="💄"/>
+  <block-list:block block-list:abbreviated-name=":lūpos:" block-list:name="🗢"/>
   <block-list:block block-list:abbreviated-name=":lygiagretainis 2:" block-list:name="▰"/>
   <block-list:block block-list:abbreviated-name=":lygiagretainis:" block-list:name="▱"/>
   <block-list:block block-list:abbreviated-name=":lygiagretu:" block-list:name="∥"/>
   <block-list:block block-list:abbreviated-name=":madžongas:" block-list:name="🀄"/>
+  <block-list:block block-list:abbreviated-name=":magas:" block-list:name="🧙"/>
+  <block-list:block block-list:abbreviated-name=":magnetofonas:" block-list:name="📾"/>
+  <block-list:block block-list:abbreviated-name=":maistas:" block-list:name="🥘"/>
+  <block-list:block block-list:abbreviated-name=":maistas išsinešimui:" block-list:name="🥡"/>
   <block-list:block block-list:abbreviated-name=":malda:" block-list:name="🙏"/>
   <block-list:block block-list:abbreviated-name=":Maltos kryžius:" block-list:name="✠"/>
   <block-list:block block-list:abbreviated-name=":mandarinas:" block-list:name="🍊"/>
   <block-list:block block-list:abbreviated-name=":manikiūras:" block-list:name="💅"/>
+  <block-list:block block-list:abbreviated-name=":manipuliatorius:" block-list:name="🖲"/>
   <block-list:block block-list:abbreviated-name=":Marsas:" block-list:name="♂"/>
   <block-list:block block-list:abbreviated-name=":marškinėliai 2:" block-list:name="🎽"/>
   <block-list:block block-list:abbreviated-name=":marškinėliai:" block-list:name="👕"/>
   <block-list:block block-list:abbreviated-name=":masažas:" block-list:name="💆"/>
+  <block-list:block block-list:abbreviated-name=":mąstymas:" block-list:name="🤔"/>
   <block-list:block block-list:abbreviated-name=":mažas kvadratas 2:" block-list:name="▪"/>
   <block-list:block block-list:abbreviated-name=":mažas kvadratas:" block-list:name="▫"/>
   <block-list:block block-list:abbreviated-name=":mažas priklauso:" block-list:name="∊"/>
@@ -692,18 +879,26 @@
   <block-list:block block-list:abbreviated-name=":_m:" block-list:name="ₘ"/>
   <block-list:block block-list:abbreviated-name=":^M:" block-list:name="ᴹ"/>
   <block-list:block block-list:abbreviated-name=":md diskas:" block-list:name="💽"/>
+  <block-list:block block-list:abbreviated-name=":mečetė:" block-list:name="🕌"/>
+  <block-list:block block-list:abbreviated-name=":medalis 2:" block-list:name="🎖"/>
+  <block-list:block block-list:abbreviated-name=":medalis:" block-list:name="🏅"/>
   <block-list:block block-list:abbreviated-name=":medis:" block-list:name="🌳"/>
   <block-list:block block-list:abbreviated-name=":medus:" block-list:name="🍯"/>
+  <block-list:block block-list:abbreviated-name=":megafonas 2:" block-list:name="🕬"/>
   <block-list:block block-list:abbreviated-name=":megafonas:" block-list:name="📣"/>
+  <block-list:block block-list:abbreviated-name=":meilė 2:" block-list:name="🤟"/>
   <block-list:block block-list:abbreviated-name=":meilė:" block-list:name="💘"/>
   <block-list:block block-list:abbreviated-name=":meilės laiškas:" block-list:name="💌"/>
   <block-list:block block-list:abbreviated-name=":meilumas:" block-list:name="💠"/>
+  <block-list:block block-list:abbreviated-name=":melagis:" block-list:name="🤥"/>
   <block-list:block block-list:abbreviated-name=":melionas:" block-list:name="🍈"/>
+  <block-list:block block-list:abbreviated-name=":menora:" block-list:name="🕎"/>
   <block-list:block block-list:abbreviated-name=":mėnulis 2:" block-list:name="☾"/>
   <block-list:block block-list:abbreviated-name=":mėnulis 3:" block-list:name="🌛"/>
   <block-list:block block-list:abbreviated-name=":mėnulis 4:" block-list:name="🌜"/>
   <block-list:block block-list:abbreviated-name=":mėnulis:" block-list:name="☽"/>
   <block-list:block block-list:abbreviated-name=":mergaitė:" block-list:name="👧"/>
+  <block-list:block block-list:abbreviated-name=":mergaitės:" block-list:name="🛊"/>
   <block-list:block block-list:abbreviated-name=":Mergelė:" block-list:name="♍"/>
   <block-list:block block-list:abbreviated-name=":Merkurijus:" block-list:name="☿"/>
   <block-list:block block-list:abbreviated-name=":mėsa:" block-list:name="🍖"/>
@@ -712,28 +907,42 @@
   <block-list:block block-list:abbreviated-name=":mi:" block-list:name="μ"/>
   <block-list:block block-list:abbreviated-name=":Mi:" block-list:name="Μ"/>
   <block-list:block block-list:abbreviated-name=":miegantis:" block-list:name="😴"/>
+  <block-list:block block-list:abbreviated-name=":miegas 2:" block-list:name="🛌"/>
   <block-list:block block-list:abbreviated-name=":miegas:" block-list:name="💤"/>
   <block-list:block block-list:abbreviated-name=":mieguistas:" block-list:name="😪"/>
+  <block-list:block block-list:abbreviated-name=":miestas:" block-list:name="🏙"/>
+  <block-list:block block-list:abbreviated-name=":mikrofonas 2:" block-list:name="🎙"/>
   <block-list:block block-list:abbreviated-name=":mikrofonas:" block-list:name="🎤"/>
   <block-list:block block-list:abbreviated-name=":mikroskopas:" block-list:name="🔬"/>
   <block-list:block block-list:abbreviated-name=":minkšti ledai:" block-list:name="🍦"/>
   <block-list:block block-list:abbreviated-name=":minties išnaša:" block-list:name="💭"/>
   <block-list:block block-list:abbreviated-name=":mirktelėjimas:" block-list:name="😉"/>
   <block-list:block block-list:abbreviated-name=":Moai:" block-list:name="🗿"/>
+  <block-list:block block-list:abbreviated-name=":mobilusis 2:" block-list:name="🖁"/>
   <block-list:block block-list:abbreviated-name=":mobilusis:" block-list:name="📱"/>
+  <block-list:block block-list:abbreviated-name=":modemas:" block-list:name="🖀"/>
   <block-list:block block-list:abbreviated-name=":mojavimas:" block-list:name="👋"/>
   <block-list:block block-list:abbreviated-name=":mokėjimo kortelė:" block-list:name="💳"/>
+  <block-list:block block-list:abbreviated-name=":moksliukas:" block-list:name="🤓"/>
   <block-list:block block-list:abbreviated-name=":mokykla:" block-list:name="🏫"/>
+  <block-list:block block-list:abbreviated-name=":monoklis:" block-list:name="🧐"/>
+  <block-list:block block-list:abbreviated-name=":morka:" block-list:name="🥕"/>
+  <block-list:block block-list:abbreviated-name=":Morkaus ženklas:" block-list:name="🕅"/>
   <block-list:block block-list:abbreviated-name=":moteris:" block-list:name="👩"/>
   <block-list:block block-list:abbreviated-name=":moterų ženklas:" block-list:name="🚺"/>
+  <block-list:block block-list:abbreviated-name=":motociklas:" block-list:name="🏍"/>
+  <block-list:block block-list:abbreviated-name=":motoroleris:" block-list:name="🛵"/>
   <block-list:block block-list:abbreviated-name=":muitinė:" block-list:name="🛃"/>
+  <block-list:block block-list:abbreviated-name=":muziejus:" block-list:name="🏛"/>
   <block-list:block block-list:abbreviated-name=":muzika 2:" block-list:name="🎵"/>
   <block-list:block block-list:abbreviated-name=":muzika:" block-list:name="🎶"/>
   <block-list:block block-list:abbreviated-name=":mygtukas 2:" block-list:name="🔲"/>
   <block-list:block block-list:abbreviated-name=":mygtukas:" block-list:name="🔳"/>
   <block-list:block block-list:abbreviated-name=":N18:" block-list:name="🔞"/>
   <block-list:block block-list:abbreviated-name=":naktis:" block-list:name="🌃"/>
+  <block-list:block block-list:abbreviated-name=":namai:" block-list:name="🏘"/>
   <block-list:block block-list:abbreviated-name=":namas 2:" block-list:name="🏡"/>
+  <block-list:block block-list:abbreviated-name=":namas 3:" block-list:name="🏚"/>
   <block-list:block block-list:abbreviated-name=":namas:" block-list:name="🏠"/>
   <block-list:block block-list:abbreviated-name=":nata 4:" block-list:name="♩"/>
   <block-list:block block-list:abbreviated-name=":nata 8:" block-list:name="♪"/>
@@ -742,6 +951,7 @@
   <block-list:block block-list:abbreviated-name=":^n:" block-list:name="ⁿ"/>
   <block-list:block block-list:abbreviated-name=":_n:" block-list:name="ₙ"/>
   <block-list:block block-list:abbreviated-name=":^N:" block-list:name="ᴺ"/>
+  <block-list:block block-list:abbreviated-name=":ne 2:" block-list:name="🖓"/>
   <block-list:block block-list:abbreviated-name=":ne:" block-list:name="👎"/>
   <block-list:block block-list:abbreviated-name=":nedalija:" block-list:name="∤"/>
   <block-list:block block-list:abbreviated-name=":neegzistuoja:" block-list:name="∄"/>
@@ -751,6 +961,7 @@
   <block-list:block block-list:abbreviated-name=":nelygiagretu:" block-list:name="∦"/>
   <block-list:block block-list:abbreviated-name=":nelygu:" block-list:name="≠"/>
   <block-list:block block-list:abbreviated-name=":nepasitenkinimas:" block-list:name="😒"/>
+  <block-list:block block-list:abbreviated-name=":ne piratams:" block-list:name="🕲"/>
   <block-list:block block-list:abbreviated-name=":nepriklauso:" block-list:name="∉"/>
   <block-list:block block-list:abbreviated-name=":Neptūnas:" block-list:name="♆"/>
   <block-list:block block-list:abbreviated-name=":nėra poaibis:" block-list:name="⊄"/>
@@ -758,6 +969,7 @@
   <block-list:block block-list:abbreviated-name=":nerimas:" block-list:name="🙍"/>
   <block-list:block block-list:abbreviated-name=":nerūkoma:" block-list:name="🚭"/>
   <block-list:block block-list:abbreviated-name=":nešiukšlinti:" block-list:name="🚯"/>
+  <block-list:block block-list:abbreviated-name=":nėštumas:" block-list:name="🤰"/>
   <block-list:block block-list:abbreviated-name=":neturi:" block-list:name="∌"/>
   <block-list:block block-list:abbreviated-name=":niam:" block-list:name="😋"/>
   <block-list:block block-list:abbreviated-name=":ni:" block-list:name="ν"/>
@@ -767,11 +979,11 @@
   <block-list:block block-list:abbreviated-name=":nieko nematau:" block-list:name="🙈"/>
   <block-list:block block-list:abbreviated-name=":nieko nesakau:" block-list:name="🙊"/>
   <block-list:block block-list:abbreviated-name=":nosis:" block-list:name="👃"/>
+  <block-list:block block-list:abbreviated-name=":nso:" block-list:name="🛸"/>
   <block-list:block block-list:abbreviated-name=":nuodai:" block-list:name="☠"/>
   <block-list:block block-list:abbreviated-name=":nuostaba:" block-list:name="😯"/>
   <block-list:block block-list:abbreviated-name=":nuotaka:" block-list:name="👰"/>
   <block-list:block block-list:abbreviated-name=":nuovargis:" block-list:name="😩"/>
-  <block-list:block block-list:abbreviated-name=":nusilenkimas:" block-list:name="🙇"/>
   <block-list:block block-list:abbreviated-name=":nusivylimas:" block-list:name="😞"/>
   <block-list:block block-list:abbreviated-name=":nustebęs:" block-list:name="😲"/>
   <block-list:block block-list:abbreviated-name=":nuviliantis palengvėjimas:" block-list:name="😥"/>
@@ -779,10 +991,18 @@
   <block-list:block block-list:abbreviated-name=":_o:" block-list:name="ₒ"/>
   <block-list:block block-list:abbreviated-name=":^O:" block-list:name="ᴼ"/>
   <block-list:block block-list:abbreviated-name=":obuolys:" block-list:name="🍎"/>
+  <block-list:block block-list:abbreviated-name=":oda 1:" block-list:name="🏻"/>
+  <block-list:block block-list:abbreviated-name=":oda 2:" block-list:name="🏼"/>
+  <block-list:block block-list:abbreviated-name=":oda 3:" block-list:name="🏽"/>
+  <block-list:block block-list:abbreviated-name=":oda 4:" block-list:name="🏾"/>
+  <block-list:block block-list:abbreviated-name=":oda 5:" block-list:name="🏿"/>
+  <block-list:block block-list:abbreviated-name=":om:" block-list:name="🕉"/>
   <block-list:block block-list:abbreviated-name=":omega:" block-list:name="ω"/>
   <block-list:block block-list:abbreviated-name=":Omega:" block-list:name="Ω"/>
   <block-list:block block-list:abbreviated-name=":omikron:" block-list:name="ο"/>
   <block-list:block block-list:abbreviated-name=":Omikron:" block-list:name="Ο"/>
+  <block-list:block block-list:abbreviated-name=":optinis diskas:" block-list:name="🖸"/>
+  <block-list:block block-list:abbreviated-name=":oranžinė širdis:" block-list:name="🧡"/>
   <block-list:block block-list:abbreviated-name=":Ožiaragis:" block-list:name="♑"/>
   <block-list:block block-list:abbreviated-name=":ožka:" block-list:name="🐐"/>
   <block-list:block block-list:abbreviated-name=":pabaisa:" block-list:name="👹"/>
@@ -797,14 +1017,18 @@
   <block-list:block block-list:abbreviated-name=":paletė:" block-list:name="🎨"/>
   <block-list:block block-list:abbreviated-name=":paliktas bagažas:" block-list:name="🛅"/>
   <block-list:block block-list:abbreviated-name=":palmė:" block-list:name="🌴"/>
-  <block-list:block block-list:abbreviated-name=":palydovinė antena:" block-list:name="📡"/>
+  <block-list:block block-list:abbreviated-name=":paltas:" block-list:name="🧥"/>
+  <block-list:block block-list:abbreviated-name=":palydovas:" block-list:name="🛰"/>
   <block-list:block block-list:abbreviated-name=":panda:" block-list:name="🐼"/>
+  <block-list:block block-list:abbreviated-name=":paplūdimys:" block-list:name="🏖"/>
   <block-list:block block-list:abbreviated-name=":paragrafas:" block-list:name="§"/>
   <block-list:block block-list:abbreviated-name=":parduotuvė 2:" block-list:name="🏬"/>
   <block-list:block block-list:abbreviated-name=":parduotuvė:" block-list:name="🏪"/>
+  <block-list:block block-list:abbreviated-name=":parkas:" block-list:name="🏞"/>
   <block-list:block block-list:abbreviated-name=":paršas:" block-list:name="🐗"/>
   <block-list:block block-list:abbreviated-name=":pasimetimas:" block-list:name="😕"/>
   <block-list:block block-list:abbreviated-name=":pasitenkinimas:" block-list:name="😏"/>
+  <block-list:block block-list:abbreviated-name=":paspirtukas:" block-list:name="🛴"/>
   <block-list:block block-list:abbreviated-name=":paštas 2:" block-list:name="🏣"/>
   <block-list:block block-list:abbreviated-name=":paštas:" block-list:name="🏤"/>
   <block-list:block block-list:abbreviated-name=":pašto dėžė:" block-list:name="📮"/>
@@ -816,24 +1040,33 @@
   <block-list:block block-list:abbreviated-name=":pasų kontrolė:" block-list:name="🛂"/>
   <block-list:block block-list:abbreviated-name=":Paukščių takas:" block-list:name="🌌"/>
   <block-list:block block-list:abbreviated-name=":paukštis:" block-list:name="🐦"/>
+  <block-list:block block-list:abbreviated-name=":pauzė:" block-list:name="⏸"/>
   <block-list:block block-list:abbreviated-name=":pavargęs:" block-list:name="😫"/>
+  <block-list:block block-list:abbreviated-name=":paveikslas:" block-list:name="🖼"/>
   <block-list:block block-list:abbreviated-name=":^p:" block-list:name="ᵖ"/>
   <block-list:block block-list:abbreviated-name=":_p:" block-list:name="ₚ"/>
   <block-list:block block-list:abbreviated-name=":^P:" block-list:name="ᴾ"/>
   <block-list:block block-list:abbreviated-name=":pėdos:" block-list:name="🐾"/>
   <block-list:block block-list:abbreviated-name=":pėdsakai:" block-list:name="👣"/>
+  <block-list:block block-list:abbreviated-name=":peilis 2:" block-list:name="🗡"/>
   <block-list:block block-list:abbreviated-name=":peilis:" block-list:name="🔪"/>
   <block-list:block block-list:abbreviated-name=":pelė 2:" block-list:name="🐭"/>
+  <block-list:block block-list:abbreviated-name=":pelė 3:" block-list:name="🖱"/>
+  <block-list:block block-list:abbreviated-name=":pelė 4:" block-list:name="🖰"/>
+  <block-list:block block-list:abbreviated-name=":pelė 5:" block-list:name="🖯"/>
   <block-list:block block-list:abbreviated-name=":pelė:" block-list:name="🐁"/>
+  <block-list:block block-list:abbreviated-name=":pelėda:" block-list:name="🦉"/>
   <block-list:block block-list:abbreviated-name=":penkiakampis 2:" block-list:name="⬟"/>
   <block-list:block block-list:abbreviated-name=":penkiakampis:" block-list:name="⬠"/>
   <block-list:block block-list:abbreviated-name=":penklinė:" block-list:name="🎼"/>
   <block-list:block block-list:abbreviated-name=":pentagrama:" block-list:name="⛤"/>
   <block-list:block block-list:abbreviated-name=":perbrauktas dviratis:" block-list:name="🚳"/>
   <block-list:block block-list:abbreviated-name=":perbrauktas varpelis:" block-list:name="🔕"/>
+  <block-list:block block-list:abbreviated-name=":perdengti:" block-list:name="🗗"/>
   <block-list:block block-list:abbreviated-name=":perdirbimas2:" block-list:name="♻"/>
   <block-list:block block-list:abbreviated-name=":perdirbimas:" block-list:name="♲"/>
   <block-list:block block-list:abbreviated-name=":perdirbtas popierius:" block-list:name="♼"/>
+  <block-list:block block-list:abbreviated-name=":pergalė 2:" block-list:name="🖔"/>
   <block-list:block block-list:abbreviated-name=":pergalė:" block-list:name="✌"/>
   <block-list:block block-list:abbreviated-name=":persikas:" block-list:name="🍑"/>
   <block-list:block block-list:abbreviated-name=":perspėjimas:" block-list:name="⚠"/>
@@ -844,8 +1077,10 @@
   <block-list:block block-list:abbreviated-name=":pi:" block-list:name="π"/>
   <block-list:block block-list:abbreviated-name=":Pi:" block-list:name="Π"/>
   <block-list:block block-list:abbreviated-name=":pica:" block-list:name="🍕"/>
+  <block-list:block block-list:abbreviated-name=":pienas:" block-list:name="🥛"/>
   <block-list:block block-list:abbreviated-name=":pieštukas 2:" block-list:name="✏"/>
   <block-list:block block-list:abbreviated-name=":pieštukas 3:" block-list:name="✐"/>
+  <block-list:block block-list:abbreviated-name=":pieštukas 4:" block-list:name="🖉"/>
   <block-list:block block-list:abbreviated-name=":pieštukas:" block-list:name="✎"/>
   <block-list:block block-list:abbreviated-name=":piktas:" block-list:name="😠"/>
   <block-list:block block-list:abbreviated-name=":pilis 2:" block-list:name="🏯"/>
@@ -856,12 +1091,27 @@
   <block-list:block block-list:abbreviated-name=":pilnoji nata:" block-list:name="𝅝"/>
   <block-list:block block-list:abbreviated-name=":pilnoji pauzė:" block-list:name="𝄻"/>
   <block-list:block block-list:abbreviated-name=":pingvinas:" block-list:name="🐧"/>
+  <block-list:block block-list:abbreviated-name=":pinigai 2:" block-list:name="💰"/>
+  <block-list:block block-list:abbreviated-name=":pinigai 3:" block-list:name="🤑"/>
   <block-list:block block-list:abbreviated-name=":pinigai:" block-list:name="💸"/>
   <block-list:block block-list:abbreviated-name=":piniginė:" block-list:name="👛"/>
-  <block-list:block block-list:abbreviated-name=":pinigų maišas:" block-list:name="💰"/>
+  <block-list:block block-list:abbreviated-name=":pipiras:" block-list:name="🌶"/>
+  <block-list:block block-list:abbreviated-name=":piratai:" block-list:name="🕱"/>
+  <block-list:block block-list:abbreviated-name=":pirkiniai:" block-list:name="🛍"/>
+  <block-list:block block-list:abbreviated-name=":pirkinių vežimėlis:" block-list:name="🛒"/>
+  <block-list:block block-list:abbreviated-name=":pirštai:" block-list:name="🤞"/>
+  <block-list:block block-list:abbreviated-name=":pirštas:" block-list:name="🖕"/>
+  <block-list:block block-list:abbreviated-name=":pirštinės:" block-list:name="🧤"/>
+  <block-list:block block-list:abbreviated-name=":pirtis:" block-list:name="🧖"/>
   <block-list:block block-list:abbreviated-name=":pistoletas:" block-list:name="🔫"/>
+  <block-list:block block-list:abbreviated-name=":pita:" block-list:name="🥙"/>
   <block-list:block block-list:abbreviated-name=":plakanti širdis:" block-list:name="💓"/>
   <block-list:block block-list:abbreviated-name=":plaktukas:" block-list:name="🔨"/>
+  <block-list:block block-list:abbreviated-name=":plaktukas ir raktas:" block-list:name="🛠"/>
+  <block-list:block block-list:abbreviated-name=":plaštaka 2:" block-list:name="🖐"/>
+  <block-list:block block-list:abbreviated-name=":plaštaka 3:" block-list:name="🖑"/>
+  <block-list:block block-list:abbreviated-name=":plaštaka 4:" block-list:name="🤚"/>
+  <block-list:block block-list:abbreviated-name=":plaštaka:" block-list:name="✋"/>
   <block-list:block block-list:abbreviated-name=":plaukikas:" block-list:name="🏊"/>
   <block-list:block block-list:abbreviated-name=":pliauškė:" block-list:name="🎬"/>
   <block-list:block block-list:abbreviated-name=":plojimas:" block-list:name="👏"/>
@@ -873,6 +1123,9 @@
   <block-list:block block-list:abbreviated-name=":policija:" block-list:name="🚓"/>
   <block-list:block block-list:abbreviated-name=":policininkas:" block-list:name="👮"/>
   <block-list:block block-list:abbreviated-name=":pomidoras:" block-list:name="🍅"/>
+  <block-list:block block-list:abbreviated-name=":popieriaus lapas 2:" block-list:name="🗏"/>
+  <block-list:block block-list:abbreviated-name=":popieriaus lapas 3:" block-list:name="📃"/>
+  <block-list:block block-list:abbreviated-name=":popieriaus lapas 4:" block-list:name="🗟"/>
   <block-list:block block-list:abbreviated-name=":popieriaus lapas:" block-list:name="📄"/>
   <block-list:block block-list:abbreviated-name=":pora 2:" block-list:name="👬"/>
   <block-list:block block-list:abbreviated-name=":pora 3:" block-list:name="👭"/>
@@ -886,24 +1139,36 @@
   <block-list:block block-list:abbreviated-name=":pravira burna:" block-list:name="😮"/>
   <block-list:block block-list:abbreviated-name=":priešpilnis:" block-list:name="🌓"/>
   <block-list:block block-list:abbreviated-name=":priklauso:" block-list:name="∈"/>
+  <block-list:block block-list:abbreviated-name=":princas:" block-list:name="🤴"/>
   <block-list:block block-list:abbreviated-name=":princesė:" block-list:name="👸"/>
   <block-list:block block-list:abbreviated-name=":promilė:" block-list:name="‰"/>
   <block-list:block block-list:abbreviated-name=":psi:" block-list:name="ψ"/>
   <block-list:block block-list:abbreviated-name=":Psi:" block-list:name="Ψ"/>
   <block-list:block block-list:abbreviated-name=":pudelis:" block-list:name="🐩"/>
+  <block-list:block block-list:abbreviated-name=":puokštė 2:" block-list:name="🎕"/>
   <block-list:block block-list:abbreviated-name=":puokštė:" block-list:name="💐"/>
   <block-list:block block-list:abbreviated-name=":pusinė nata:" block-list:name="𝅗𝅥"/>
   <block-list:block block-list:abbreviated-name=":pusinė pauzė:" block-list:name="𝄼"/>
   <block-list:block block-list:abbreviated-name=":pušis:" block-list:name="🌲"/>
   <block-list:block block-list:abbreviated-name=":pusmėnulis:" block-list:name="🌙"/>
+  <block-list:block block-list:abbreviated-name=":pykinimas:" block-list:name="🤢"/>
   <block-list:block block-list:abbreviated-name=":pyktis:" block-list:name="💢"/>
+  <block-list:block block-list:abbreviated-name=":pyragas:" block-list:name="🥧"/>
   <block-list:block block-list:abbreviated-name=":radijas:" block-list:name="📻"/>
   <block-list:block block-list:abbreviated-name=":radioaktyvumas:" block-list:name="☢"/>
+  <block-list:block block-list:abbreviated-name=":ragai:" block-list:name="🤘"/>
+  <block-list:block block-list:abbreviated-name=":raganosis:" block-list:name="🦏"/>
   <block-list:block block-list:abbreviated-name=":raketa:" block-list:name="🚀"/>
+  <block-list:block block-list:abbreviated-name=":raktas 2:" block-list:name="🗝"/>
   <block-list:block block-list:abbreviated-name=":raktas:" block-list:name="🔑"/>
   <block-list:block block-list:abbreviated-name=":ramus:" block-list:name="😐"/>
   <block-list:block block-list:abbreviated-name=":rankinė:" block-list:name="👜"/>
+  <block-list:block block-list:abbreviated-name=":rankinis:" block-list:name="🤾"/>
+  <block-list:block block-list:abbreviated-name=":rankų paspaudimas:" block-list:name="🤝"/>
+  <block-list:block block-list:abbreviated-name=":rašiklis 2:" block-list:name="🖋"/>
+  <block-list:block block-list:abbreviated-name=":rašiklis:" block-list:name="🖊"/>
   <block-list:block block-list:abbreviated-name=":raštelis:" block-list:name="📝"/>
+  <block-list:block block-list:abbreviated-name=":rašymas 2:" block-list:name="🖎"/>
   <block-list:block block-list:abbreviated-name=":rašymas:" block-list:name="✍"/>
   <block-list:block block-list:abbreviated-name=":raudonis 2:" block-list:name="😳"/>
   <block-list:block block-list:abbreviated-name=":raudonis:" block-list:name="😊"/>
@@ -913,17 +1178,28 @@
   <block-list:block block-list:abbreviated-name=":^R:" block-list:name="ᴿ"/>
   <block-list:block block-list:abbreviated-name=":regbis:" block-list:name="🏉"/>
   <block-list:block block-list:abbreviated-name=":registruota:" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name=":rėmelis 2:" block-list:name="🖽"/>
+  <block-list:block block-list:abbreviated-name=":rėmelis:" block-list:name="🖾"/>
   <block-list:block block-list:abbreviated-name=":restoranas:" block-list:name="🍴"/>
+  <block-list:block block-list:abbreviated-name=":riestainis:" block-list:name="🥨"/>
   <block-list:block block-list:abbreviated-name=":riksmas:" block-list:name="😱"/>
   <block-list:block block-list:abbreviated-name=":ritinys:" block-list:name="📜"/>
   <block-list:block block-list:abbreviated-name=":_ro:" block-list:name="ᵨ"/>
   <block-list:block block-list:abbreviated-name=":ro:" block-list:name="ρ"/>
   <block-list:block block-list:abbreviated-name=":Ro:" block-list:name="Ρ"/>
+  <block-list:block block-list:abbreviated-name=":robotas:" block-list:name="🤖"/>
+  <block-list:block block-list:abbreviated-name=":rodyklė:" block-list:name="🗂"/>
+  <block-list:block block-list:abbreviated-name=":rodyklės:" block-list:name="🗘"/>
+  <block-list:block block-list:abbreviated-name=":rogutės:" block-list:name="🛷"/>
   <block-list:block block-list:abbreviated-name=":rombas:" block-list:name="◊"/>
   <block-list:block block-list:abbreviated-name=":rožė:" block-list:name="🌹"/>
-  <block-list:block block-list:abbreviated-name=":rūkas:" block-list:name="🌁"/>
+  <block-list:block block-list:abbreviated-name=":rozetė 2:" block-list:name="🏶"/>
+  <block-list:block block-list:abbreviated-name=":rozetė:" block-list:name="🏵"/>
+  <block-list:block block-list:abbreviated-name=":rožinis:" block-list:name="📿"/>
+  <block-list:block block-list:abbreviated-name=":rūkas:" block-list:name="🌫"/>
   <block-list:block block-list:abbreviated-name=":rūkymas:" block-list:name="🚬"/>
   <block-list:block block-list:abbreviated-name=":rupija:" block-list:name="₹"/>
+  <block-list:block block-list:abbreviated-name=":ryklys:" block-list:name="🦈"/>
   <block-list:block block-list:abbreviated-name=":ryškumas 2:" block-list:name="🔆"/>
   <block-list:block block-list:abbreviated-name=":ryškumas:" block-list:name="🔅"/>
   <block-list:block block-list:abbreviated-name=":ryžiai:" block-list:name="🍚"/>
@@ -938,15 +1214,20 @@
   <block-list:block block-list:abbreviated-name=":šaknis 4:" block-list:name="∜"/>
   <block-list:block block-list:abbreviated-name=":šaknis:" block-list:name="√"/>
   <block-list:block block-list:abbreviated-name=":saksofonas:" block-list:name="🎷"/>
+  <block-list:block block-list:abbreviated-name=":sala:" block-list:name="🏝"/>
   <block-list:block block-list:abbreviated-name=":saldainis:" block-list:name="🍬"/>
+  <block-list:block block-list:abbreviated-name=":šalikas:" block-list:name="🧣"/>
   <block-list:block block-list:abbreviated-name=":šalmas:" block-list:name="⛑"/>
+  <block-list:block block-list:abbreviated-name=":salotos:" block-list:name="🥗"/>
   <block-list:block block-list:abbreviated-name=":šaltas prakaitas:" block-list:name="😰"/>
   <block-list:block block-list:abbreviated-name=":sandalas:" block-list:name="👡"/>
   <block-list:block block-list:abbreviated-name=":sandauga:" block-list:name="∏"/>
   <block-list:block block-list:abbreviated-name=":sankirta:" block-list:name="∩"/>
   <block-list:block block-list:abbreviated-name=":sargybinis:" block-list:name="💂"/>
   <block-list:block block-list:abbreviated-name=":Saturnas:" block-list:name="♄"/>
-  <block-list:block block-list:abbreviated-name=":saulė 2:" block-list:name="☼"/>
+  <block-list:block block-list:abbreviated-name=":šaukštas:" block-list:name="🥄"/>
+  <block-list:block block-list:abbreviated-name=":saulė 2:" block-list:name="🌣"/>
+  <block-list:block block-list:abbreviated-name=":Saulė 2:" block-list:name="☼"/>
   <block-list:block block-list:abbreviated-name=":saulė:" block-list:name="☀"/>
   <block-list:block block-list:abbreviated-name=":Saulė:" block-list:name="☉"/>
   <block-list:block block-list:abbreviated-name=":saulėgrąža:" block-list:name="🌻"/>
@@ -955,53 +1236,92 @@
   <block-list:block block-list:abbreviated-name=":saulėtekis 3:" block-list:name="🌇"/>
   <block-list:block block-list:abbreviated-name=":saulėtekis:" block-list:name="🌅"/>
   <block-list:block block-list:abbreviated-name=":Šaulys:" block-list:name="♐"/>
+  <block-list:block block-list:abbreviated-name=":sausainis 2:" block-list:name="🥠"/>
   <block-list:block block-list:abbreviated-name=":sausainis:" block-list:name="🍪"/>
+  <block-list:block block-list:abbreviated-name=":sąvaržėlė 2:" block-list:name="🖇"/>
   <block-list:block block-list:abbreviated-name=":sąvaržėlė:" block-list:name="📎"/>
   <block-list:block block-list:abbreviated-name=":^s:" block-list:name="ˢ"/>
   <block-list:block block-list:abbreviated-name=":_s:" block-list:name="ₛ"/>
   <block-list:block block-list:abbreviated-name=":segtuvas:" block-list:name="📋"/>
+  <block-list:block block-list:abbreviated-name=":seilėjimasis:" block-list:name="🤤"/>
   <block-list:block block-list:abbreviated-name=":šeima:" block-list:name="👪"/>
   <block-list:block block-list:abbreviated-name=":šekelis:" block-list:name="₪"/>
+  <block-list:block block-list:abbreviated-name=":seklys:" block-list:name="🕵"/>
+  <block-list:block block-list:abbreviated-name=":senjoras:" block-list:name="🧓"/>
   <block-list:block block-list:abbreviated-name=":šešiakampis 2:" block-list:name="⬢"/>
   <block-list:block block-list:abbreviated-name=":šešiakampis:" block-list:name="⬡"/>
   <block-list:block block-list:abbreviated-name=":šešioliktinė nata:" block-list:name="𝅘𝅥𝅯"/>
+  <block-list:block block-list:abbreviated-name=":sidabro medalis:" block-list:name="🥈"/>
   <block-list:block block-list:abbreviated-name=":sielvartas:" block-list:name="😧"/>
   <block-list:block block-list:abbreviated-name=":sigma 2:" block-list:name="ς"/>
   <block-list:block block-list:abbreviated-name=":sigma:" block-list:name="σ"/>
   <block-list:block block-list:abbreviated-name=":Sigma:" block-list:name="Σ"/>
   <block-list:block block-list:abbreviated-name=":signalo stiprumas:" block-list:name="📶"/>
+  <block-list:block block-list:abbreviated-name=":šikšnosparnis:" block-list:name="🦇"/>
+  <block-list:block block-list:abbreviated-name=":sinagoga:" block-list:name="🕍"/>
+  <block-list:block block-list:abbreviated-name=":sintezatorius:" block-list:name="🎘"/>
+  <block-list:block block-list:abbreviated-name=":širdis 2:" block-list:name="🎔"/>
   <block-list:block block-list:abbreviated-name=":širdis:" block-list:name="❤"/>
   <block-list:block block-list:abbreviated-name=":širdis su kaspinu:" block-list:name="💝"/>
   <block-list:block block-list:abbreviated-name=":širdys 2:" block-list:name="♡"/>
   <block-list:block block-list:abbreviated-name=":širdys:" block-list:name="♥"/>
   <block-list:block block-list:abbreviated-name=":šiukšlės:" block-list:name="🚮"/>
+  <block-list:block block-list:abbreviated-name=":šiukšliadėžė:" block-list:name="🗑"/>
+  <block-list:block block-list:abbreviated-name=":skaičiuotuvas:" block-list:name="🖩"/>
+  <block-list:block block-list:abbreviated-name=":skambinimas:" block-list:name="🤙"/>
   <block-list:block block-list:abbreviated-name=":skambutis:" block-list:name="📲"/>
+  <block-list:block block-list:abbreviated-name=":skara:" block-list:name="🧕"/>
+  <block-list:block block-list:abbreviated-name=":skardinė:" block-list:name="🥫"/>
   <block-list:block block-list:abbreviated-name=":skėtis 2:" block-list:name="🌂"/>
   <block-list:block block-list:abbreviated-name=":skėtis 3:" block-list:name="⛱"/>
   <block-list:block block-list:abbreviated-name=":skėtis:" block-list:name="☂"/>
+  <block-list:block block-list:abbreviated-name=":skorpionas:" block-list:name="🦂"/>
   <block-list:block block-list:abbreviated-name=":Skorpionas:" block-list:name="♏"/>
-  <block-list:block block-list:abbreviated-name=":skritulys:" block-list:name="●"/>
+  <block-list:block block-list:abbreviated-name=":skritulys 2:" block-list:name="●"/>
+  <block-list:block block-list:abbreviated-name=":skritulys 3:" block-list:name="🔾"/>
+  <block-list:block block-list:abbreviated-name=":skritulys 4:" block-list:name="🔿"/>
+  <block-list:block block-list:abbreviated-name=":skritulys:" block-list:name="○"/>
   <block-list:block block-list:abbreviated-name=":skruzdėlė:" block-list:name="🐜"/>
   <block-list:block block-list:abbreviated-name=":skrybėlė 2:" block-list:name="👲"/>
   <block-list:block block-list:abbreviated-name=":skrybėlė:" block-list:name="👒"/>
-  <block-list:block block-list:abbreviated-name=":skydas:" block-list:name="⛨"/>
+  <block-list:block block-list:abbreviated-name=":skydas 2:" block-list:name="⛨"/>
+  <block-list:block block-list:abbreviated-name=":skydas:" block-list:name="🛡"/>
+  <block-list:block block-list:abbreviated-name=":skylė:" block-list:name="🕳"/>
   <block-list:block block-list:abbreviated-name=":skyrybos:" block-list:name="⚮"/>
+  <block-list:block block-list:abbreviated-name=":šliaužiklis:" block-list:name="🎚"/>
   <block-list:block block-list:abbreviated-name=":slidės:" block-list:name="🎿"/>
   <block-list:block block-list:abbreviated-name=":slidininkas:" block-list:name="⛷"/>
   <block-list:block block-list:abbreviated-name=":slystantis automobilis:" block-list:name="⛐"/>
+  <block-list:block block-list:abbreviated-name=":smegenys:" block-list:name="🧠"/>
   <block-list:block block-list:abbreviated-name=":smeigtukas 2:" block-list:name="📍"/>
+  <block-list:block block-list:abbreviated-name=":smeigtukas 3:" block-list:name="🖈"/>
   <block-list:block block-list:abbreviated-name=":smeigtukas:" block-list:name="📌"/>
   <block-list:block block-list:abbreviated-name=":smėlio laikrodis 2:" block-list:name="⏳"/>
   <block-list:block block-list:abbreviated-name=":smėlio laikrodis:" block-list:name="⌛"/>
   <block-list:block block-list:abbreviated-name=":smuikas:" block-list:name="🎻"/>
   <block-list:block block-list:abbreviated-name=":smuiko raktas:" block-list:name="𝄞"/>
   <block-list:block block-list:abbreviated-name=":snaigė:" block-list:name="❄"/>
+  <block-list:block block-list:abbreviated-name=":sniegas:" block-list:name="🌨"/>
   <block-list:block block-list:abbreviated-name=":snieglentininkas:" block-list:name="🏂"/>
   <block-list:block block-list:abbreviated-name=":sniego senis 2:" block-list:name="⛄"/>
   <block-list:block block-list:abbreviated-name=":sniego senis:" block-list:name="☃"/>
+  <block-list:block block-list:abbreviated-name=":sofa:" block-list:name="🛋"/>
+  <block-list:block block-list:abbreviated-name=":šokas:" block-list:name="🤯"/>
+  <block-list:block block-list:abbreviated-name=":šokėjas:" block-list:name="🕺"/>
   <block-list:block block-list:abbreviated-name=":šokis:" block-list:name="💃"/>
   <block-list:block block-list:abbreviated-name=":šokoladas:" block-list:name="🍫"/>
+  <block-list:block block-list:abbreviated-name=":šoninė:" block-list:name="🥓"/>
   <block-list:block block-list:abbreviated-name=":spageti:" block-list:name="🍝"/>
+  <block-list:block block-list:abbreviated-name=":spausdintuvas 2:" block-list:name="🖶"/>
+  <block-list:block block-list:abbreviated-name=":spausdintuvas:" block-list:name="🖨"/>
+  <block-list:block block-list:abbreviated-name=":spaustuvas:" block-list:name="🗜"/>
+  <block-list:block block-list:abbreviated-name=":spinduliai 2:" block-list:name="🗥"/>
+  <block-list:block block-list:abbreviated-name=":spinduliai 3:" block-list:name="🗤"/>
+  <block-list:block block-list:abbreviated-name=":spinduliai 4:" block-list:name="🗧"/>
+  <block-list:block block-list:abbreviated-name=":spinduliai:" block-list:name="🗦"/>
+  <block-list:block block-list:abbreviated-name=":spintelė:" block-list:name="🗄"/>
+  <block-list:block block-list:abbreviated-name=":Spokas:" block-list:name="🖖"/>
+  <block-list:block block-list:abbreviated-name=":spragėsiai:" block-list:name="🍿"/>
   <block-list:block block-list:abbreviated-name=":sprogimas:" block-list:name="💥"/>
   <block-list:block block-list:abbreviated-name=":spurga:" block-list:name="🍩"/>
   <block-list:block block-list:abbreviated-name=":spyna 2:" block-list:name="🔏"/>
@@ -1009,27 +1329,43 @@
   <block-list:block block-list:abbreviated-name=":spyna:" block-list:name="🔒"/>
   <block-list:block block-list:abbreviated-name=":sraigė:" block-list:name="🐌"/>
   <block-list:block block-list:abbreviated-name=":sraigtasparnis:" block-list:name="🚁"/>
+  <block-list:block block-list:abbreviated-name=":šriftas 2:" block-list:name="🗚"/>
+  <block-list:block block-list:abbreviated-name=":šriftas:" block-list:name="🗛"/>
   <block-list:block block-list:abbreviated-name=":stačiakampis 2:" block-list:name="▬"/>
   <block-list:block block-list:abbreviated-name=":stačiakampis:" block-list:name="▭"/>
   <block-list:block block-list:abbreviated-name=":stačiatikių kryžius:" block-list:name="☦"/>
+  <block-list:block block-list:abbreviated-name=":stadionas:" block-list:name="🏟"/>
+  <block-list:block block-list:abbreviated-name=":stalo tenisas:" block-list:name="🏓"/>
+  <block-list:block block-list:abbreviated-name=":standusis diskas:" block-list:name="🖴"/>
+  <block-list:block block-list:abbreviated-name=":statinė:" block-list:name="🛢"/>
   <block-list:block block-list:abbreviated-name=":statusis trikampis:" block-list:name="⊿"/>
+  <block-list:block block-list:abbreviated-name=":stop 2:" block-list:name="⏹"/>
+  <block-list:block block-list:abbreviated-name=":stop:" block-list:name="🛑"/>
   <block-list:block block-list:abbreviated-name=":stotis:" block-list:name="🚉"/>
+  <block-list:block block-list:abbreviated-name=":stovykla:" block-list:name="🏕"/>
   <block-list:block block-list:abbreviated-name=":stulpelinė diagrama:" block-list:name="📊"/>
+  <block-list:block block-list:abbreviated-name=":suaugęs:" block-list:name="🧑"/>
   <block-list:block block-list:abbreviated-name=":sudaužyta širdis:" block-list:name="💔"/>
   <block-list:block block-list:abbreviated-name=":suglumimas:" block-list:name="😖"/>
   <block-list:block block-list:abbreviated-name=":suknelė:" block-list:name="👗"/>
   <block-list:block block-list:abbreviated-name=":suma:" block-list:name="∑"/>
+  <block-list:block block-list:abbreviated-name=":sumažinti:" block-list:name="🗕"/>
+  <block-list:block block-list:abbreviated-name=":sumuštinis:" block-list:name="🥪"/>
+  <block-list:block block-list:abbreviated-name=":sunkiaatletis:" block-list:name="🏋"/>
   <block-list:block block-list:abbreviated-name=":sunkvežimis 2:" block-list:name="🚚"/>
   <block-list:block block-list:abbreviated-name=":sunkvežimis 3:" block-list:name="🚛"/>
   <block-list:block block-list:abbreviated-name=":sunkvežimis:" block-list:name="⛟"/>
   <block-list:block block-list:abbreviated-name=":šuo 2:" block-list:name="🐶"/>
   <block-list:block block-list:abbreviated-name=":šuo:" block-list:name="🐕"/>
   <block-list:block block-list:abbreviated-name=":suraukti antakiai:" block-list:name="🙎"/>
+  <block-list:block block-list:abbreviated-name=":sūris:" block-list:name="🧀"/>
   <block-list:block block-list:abbreviated-name=":susiraukęs:" block-list:name="☹"/>
+  <block-list:block block-list:abbreviated-name=":susiraukimas 2:" block-list:name="🙁"/>
   <block-list:block block-list:abbreviated-name=":susiraukimas:" block-list:name="😦"/>
   <block-list:block block-list:abbreviated-name=":susiraukusi katė:" block-list:name="😾"/>
   <block-list:block block-list:abbreviated-name=":susirūpinimas:" block-list:name="😟"/>
   <block-list:block block-list:abbreviated-name=":sušis:" block-list:name="🍣"/>
+  <block-list:block block-list:abbreviated-name=":susižavėjimas:" block-list:name="🤩"/>
   <block-list:block block-list:abbreviated-name=":svaras 2:" block-list:name="💷"/>
   <block-list:block block-list:abbreviated-name=":svaras:" block-list:name="£"/>
   <block-list:block block-list:abbreviated-name=":svarstyklės:" block-list:name="⚖"/>
@@ -1038,22 +1374,30 @@
   <block-list:block block-list:abbreviated-name=":šviesoforas:" block-list:name="🚦"/>
   <block-list:block block-list:abbreviated-name=":šviesūs plaukai:" block-list:name="👱"/>
   <block-list:block block-list:abbreviated-name=":švirkštas:" block-list:name="💉"/>
+  <block-list:block block-list:abbreviated-name=":svirplys:" block-list:name="🦗"/>
   <block-list:block block-list:abbreviated-name=":švyturėlis:" block-list:name="🚨"/>
   <block-list:block block-list:abbreviated-name=":šypsena 2:" block-list:name="☻"/>
   <block-list:block block-list:abbreviated-name=":šypsena 3:" block-list:name="😄"/>
+  <block-list:block block-list:abbreviated-name=":šypsena 4:" block-list:name="🙂"/>
+  <block-list:block block-list:abbreviated-name=":šypsena 5:" block-list:name="🤭"/>
   <block-list:block block-list:abbreviated-name=":šypsena:" block-list:name="☺"/>
   <block-list:block block-list:abbreviated-name=":šypsenėlė:" block-list:name="😃"/>
   <block-list:block block-list:abbreviated-name=":taika:" block-list:name="☮"/>
   <block-list:block block-list:abbreviated-name=":taikinys:" block-list:name="🎯"/>
   <block-list:block block-list:abbreviated-name=":Tailando batas:" block-list:name="฿"/>
+  <block-list:block block-list:abbreviated-name=":taip 2:" block-list:name="🖒"/>
   <block-list:block block-list:abbreviated-name=":taip:" block-list:name="👍"/>
+  <block-list:block block-list:abbreviated-name=":tako:" block-list:name="🌮"/>
   <block-list:block block-list:abbreviated-name=":taksi 2:" block-list:name="🚖"/>
   <block-list:block block-list:abbreviated-name=":taksi:" block-list:name="🚕"/>
-  <block-list:block block-list:abbreviated-name=":tamsūs akiniai:" block-list:name="😎"/>
+  <block-list:block block-list:abbreviated-name=":tamsūs akiniai 2:" block-list:name="😎"/>
+  <block-list:block block-list:abbreviated-name=":tamsūs akiniai:" block-list:name="🕶"/>
   <block-list:block block-list:abbreviated-name=":tanabata:" block-list:name="🎋"/>
   <block-list:block block-list:abbreviated-name=":taškas:" block-list:name="·"/>
   <block-list:block block-list:abbreviated-name=":tau:" block-list:name="τ"/>
   <block-list:block block-list:abbreviated-name=":Tau:" block-list:name="Τ"/>
+  <block-list:block block-list:abbreviated-name=":taurė 2:" block-list:name="🥃"/>
+  <block-list:block block-list:abbreviated-name=":taurė:" block-list:name="🍷"/>
   <block-list:block block-list:abbreviated-name=":^t:" block-list:name="ᵗ"/>
   <block-list:block block-list:abbreviated-name=":_t:" block-list:name="ₜ"/>
   <block-list:block block-list:abbreviated-name=":^T:" block-list:name="ᵀ"/>
@@ -1062,18 +1406,29 @@
   <block-list:block block-list:abbreviated-name=":telefonai išjungti:" block-list:name="📴"/>
   <block-list:block block-list:abbreviated-name=":telefonas 2:" block-list:name="☏"/>
   <block-list:block block-list:abbreviated-name=":telefonas 3:" block-list:name="✆"/>
+  <block-list:block block-list:abbreviated-name=":telefonas 4:" block-list:name="🕾"/>
+  <block-list:block block-list:abbreviated-name=":telefonas 5:" block-list:name="🕿"/>
   <block-list:block block-list:abbreviated-name=":telefonas:" block-list:name="☎"/>
+  <block-list:block block-list:abbreviated-name=":telefono ragelis 2:" block-list:name="🕻"/>
+  <block-list:block block-list:abbreviated-name=":telefono ragelis 3:" block-list:name="🕽"/>
+  <block-list:block block-list:abbreviated-name=":telefono ragelis 4:" block-list:name="🕼"/>
   <block-list:block block-list:abbreviated-name=":telefono ragelis:" block-list:name="📞"/>
   <block-list:block block-list:abbreviated-name=":teleskopas:" block-list:name="🔭"/>
   <block-list:block block-list:abbreviated-name=":tenisas:" block-list:name="🎾"/>
+  <block-list:block block-list:abbreviated-name=":teptukas:" block-list:name="🖌"/>
+  <block-list:block block-list:abbreviated-name=":termometras 2:" block-list:name="🤒"/>
+  <block-list:block block-list:abbreviated-name=":termometras:" block-list:name="🌡"/>
   <block-list:block block-list:abbreviated-name=":^teta:" block-list:name="ᶿ"/>
   <block-list:block block-list:abbreviated-name=":teta:" block-list:name="θ"/>
   <block-list:block block-list:abbreviated-name=":Teta:" block-list:name="Θ"/>
   <block-list:block block-list:abbreviated-name=":tigras 2:" block-list:name="🐯"/>
   <block-list:block block-list:abbreviated-name=":tigras:" block-list:name="🐅"/>
   <block-list:block block-list:abbreviated-name=":tiltas:" block-list:name="🌉"/>
+  <block-list:block block-list:abbreviated-name=":tinklas:" block-list:name="🖧"/>
+  <block-list:block block-list:abbreviated-name=":tinklinis:" block-list:name="🏐"/>
   <block-list:block block-list:abbreviated-name=":tm:" block-list:name="™"/>
   <block-list:block block-list:abbreviated-name=":Tokijo bokštas:" block-list:name="🗼"/>
+  <block-list:block block-list:abbreviated-name=":tornadas:" block-list:name="🌪"/>
   <block-list:block block-list:abbreviated-name=":tortas:" block-list:name="🍰"/>
   <block-list:block block-list:abbreviated-name=":traktorius:" block-list:name="🚜"/>
   <block-list:block block-list:abbreviated-name=":tramvajus 2:" block-list:name="🚋"/>
@@ -1085,6 +1440,7 @@
   <block-list:block block-list:abbreviated-name=":trikampė liniuotė:" block-list:name="📐"/>
   <block-list:block block-list:abbreviated-name=":trikampė vėliava:" block-list:name="🚩"/>
   <block-list:block block-list:abbreviated-name=":trikampis 2:" block-list:name="▲"/>
+  <block-list:block block-list:abbreviated-name=":trikampis 3:" block-list:name="🛆"/>
   <block-list:block block-list:abbreviated-name=":trikampis:" block-list:name="△"/>
   <block-list:block block-list:abbreviated-name=":trimitas:" block-list:name="🎺"/>
   <block-list:block block-list:abbreviated-name=":trišakis:" block-list:name="🔱"/>
@@ -1093,7 +1449,6 @@
   <block-list:block block-list:abbreviated-name=":triušis:" block-list:name="🐇"/>
   <block-list:block block-list:abbreviated-name=":trofėjus:" block-list:name="🏆"/>
   <block-list:block block-list:abbreviated-name=":troleibusas:" block-list:name="🚎"/>
-  <block-list:block block-list:abbreviated-name=":tropikų gėrimas:" block-list:name="🍹"/>
   <block-list:block block-list:abbreviated-name=":troškinys:" block-list:name="🍲"/>
   <block-list:block block-list:abbreviated-name=":tsukimi:" block-list:name="🎑"/>
   <block-list:block block-list:abbreviated-name=":tualetas 2:" block-list:name="🚾"/>
@@ -1104,40 +1459,66 @@
   <block-list:block block-list:abbreviated-name=":turi:" block-list:name="∋"/>
   <block-list:block block-list:abbreviated-name=":Turkijos lira:" block-list:name="₺"/>
   <block-list:block block-list:abbreviated-name=":tuščia aibė:" block-list:name="∅"/>
+  <block-list:block block-list:abbreviated-name=":tuščias dokumentas:" block-list:name="🗋"/>
+  <block-list:block block-list:abbreviated-name=":tuščias lapas:" block-list:name="🗌"/>
+  <block-list:block block-list:abbreviated-name=":tuščias lapelis:" block-list:name="🗅"/>
+  <block-list:block block-list:abbreviated-name=":tuščias lapelis užrašams:" block-list:name="🗆"/>
+  <block-list:block block-list:abbreviated-name=":tušti lapai:" block-list:name="🗍"/>
+  <block-list:block block-list:abbreviated-name=":tušti lapeliai:" block-list:name="🗇"/>
   <block-list:block block-list:abbreviated-name=":tūzas:" block-list:name="🂡"/>
+  <block-list:block block-list:abbreviated-name=":tvarstis:" block-list:name="🤕"/>
   <block-list:block block-list:abbreviated-name=":tv:" block-list:name="📺"/>
+  <block-list:block block-list:abbreviated-name=":tyla:" block-list:name="🤫"/>
   <block-list:block block-list:abbreviated-name=":^u:" block-list:name="ᵘ"/>
   <block-list:block block-list:abbreviated-name=":_u:" block-list:name="ᵤ"/>
   <block-list:block block-list:abbreviated-name=":^U:" block-list:name="ᵁ"/>
   <block-list:block block-list:abbreviated-name=":ugnikalnis:" block-list:name="🌋"/>
   <block-list:block block-list:abbreviated-name=":ugnis:" block-list:name="🔥"/>
+  <block-list:block block-list:abbreviated-name=":ūkanota:" block-list:name="🌁"/>
+  <block-list:block block-list:abbreviated-name=":undinė:" block-list:name="🧜"/>
   <block-list:block block-list:abbreviated-name=":Uranas:" block-list:name="♅"/>
   <block-list:block block-list:abbreviated-name=":urna:" block-list:name="⚱"/>
   <block-list:block block-list:abbreviated-name=":užrašinė 2:" block-list:name="📔"/>
+  <block-list:block block-list:abbreviated-name=":užrašinė 3:" block-list:name="🗒"/>
   <block-list:block block-list:abbreviated-name=":užrašinė:" block-list:name="📓"/>
-  <block-list:block block-list:abbreviated-name=":užriestas lapas:" block-list:name="📃"/>
+  <block-list:block block-list:abbreviated-name=":užtraukta burna:" block-list:name="🤐"/>
   <block-list:block block-list:abbreviated-name=":užtvaras:" block-list:name="🚧"/>
   <block-list:block block-list:abbreviated-name=":V2:" block-list:name="⇑"/>
   <block-list:block block-list:abbreviated-name=":VA2:" block-list:name="⇕"/>
   <block-list:block block-list:abbreviated-name=":VA:" block-list:name="↕"/>
   <block-list:block block-list:abbreviated-name=":vagonas:" block-list:name="🚃"/>
   <block-list:block block-list:abbreviated-name=":vaiduoklis:" block-list:name="👻"/>
-  <block-list:block block-list:abbreviated-name=":vaikai perėjoje:" block-list:name="🚸"/>
+  <block-list:block block-list:abbreviated-name=":vaikai:" block-list:name="🚸"/>
+  <block-list:block block-list:abbreviated-name=":vaikas:" block-list:name="🧒"/>
+  <block-list:block block-list:abbreviated-name=":vairasvirtė:" block-list:name="🕹"/>
   <block-list:block block-list:abbreviated-name=":vaivorykštė:" block-list:name="🌈"/>
   <block-list:block block-list:abbreviated-name=":vaizdo kasetė:" block-list:name="📼"/>
   <block-list:block block-list:abbreviated-name=":vaizdo žaidimas:" block-list:name="🎮"/>
+  <block-list:block block-list:abbreviated-name=":vakarėlis 2:" block-list:name="🎊"/>
+  <block-list:block block-list:abbreviated-name=":vakarėlis 3:" block-list:name="🥂"/>
+  <block-list:block block-list:abbreviated-name=":vakarėlis 4:" block-list:name="🍾"/>
   <block-list:block block-list:abbreviated-name=":vakarėlis:" block-list:name="🎉"/>
+  <block-list:block block-list:abbreviated-name=":valdikliai:" block-list:name="🎛"/>
   <block-list:block block-list:abbreviated-name=":valetas:" block-list:name="🂫"/>
-  <block-list:block block-list:abbreviated-name=":valiutos keitimas:" block-list:name="💱"/>
+  <block-list:block block-list:abbreviated-name=":valgomosios lazdelės:" block-list:name="🥢"/>
+  <block-list:block block-list:abbreviated-name=":valiutos:" block-list:name="💱"/>
+  <block-list:block block-list:abbreviated-name=":valiutos kurso grafikas:" block-list:name="💹"/>
   <block-list:block block-list:abbreviated-name=":valtis:" block-list:name="🚣"/>
+  <block-list:block block-list:abbreviated-name=":vampyras:" block-list:name="🧛"/>
   <block-list:block block-list:abbreviated-name=":Vandenis:" block-list:name="♒"/>
+  <block-list:block block-list:abbreviated-name=":vandensvydis:" block-list:name="🤽"/>
   <block-list:block block-list:abbreviated-name=":vandenynas:" block-list:name="🌊"/>
   <block-list:block block-list:abbreviated-name=":vardas:" block-list:name="📛"/>
   <block-list:block block-list:abbreviated-name=":varlė:" block-list:name="🐸"/>
   <block-list:block block-list:abbreviated-name=":varnelė 2:" block-list:name="✔"/>
   <block-list:block block-list:abbreviated-name=":varnelė 3:" block-list:name="✅"/>
+  <block-list:block block-list:abbreviated-name=":varnelė 4:" block-list:name="🗴"/>
+  <block-list:block block-list:abbreviated-name=":varnelė 5:" block-list:name="🗸"/>
   <block-list:block block-list:abbreviated-name=":varnelė:" block-list:name="✓"/>
+  <block-list:block block-list:abbreviated-name=":varpelis 2:" block-list:name="🛎"/>
+  <block-list:block block-list:abbreviated-name=":varpelis 3:" block-list:name="🕭"/>
   <block-list:block block-list:abbreviated-name=":varpelis:" block-list:name="🔔"/>
+  <block-list:block block-list:abbreviated-name=":vartomos akys:" block-list:name="🙄"/>
   <block-list:block block-list:abbreviated-name=":^v:" block-list:name="ᵛ"/>
   <block-list:block block-list:abbreviated-name=":_v:" block-list:name="ᵥ"/>
   <block-list:block block-list:abbreviated-name=":^V:" block-list:name="ⱽ"/>
@@ -1146,13 +1527,16 @@
   <block-list:block block-list:abbreviated-name=":VD:" block-list:name="↗"/>
   <block-list:block block-list:abbreviated-name=":vedybos:" block-list:name="⚭"/>
   <block-list:block block-list:abbreviated-name=":veidas be burnos:" block-list:name="😶"/>
+  <block-list:block block-list:abbreviated-name=":vėjas:" block-list:name="🌬"/>
   <block-list:block block-list:abbreviated-name=":vėjo varpelis:" block-list:name="🎐"/>
-  <block-list:block block-list:abbreviated-name=":vėliava 2:" block-list:name="⚑"/>
-  <block-list:block block-list:abbreviated-name=":vėliava 3:" block-list:name="🏁"/>
-  <block-list:block block-list:abbreviated-name=":vėliava:" block-list:name="⚐"/>
+  <block-list:block block-list:abbreviated-name=":vėliava 2:" block-list:name="🏳"/>
+  <block-list:block block-list:abbreviated-name=":vėliava 3:" block-list:name="⚑"/>
+  <block-list:block block-list:abbreviated-name=":vėliava 4:" block-list:name="⚐"/>
+  <block-list:block block-list:abbreviated-name=":vėliava:" block-list:name="🏴"/>
   <block-list:block block-list:abbreviated-name=":vėliavos 2:" block-list:name="🎏"/>
   <block-list:block block-list:abbreviated-name=":vėliavos:" block-list:name="🎌"/>
   <block-list:block block-list:abbreviated-name=":velniūkštis:" block-list:name="👿"/>
+  <block-list:block block-list:abbreviated-name=":vėmimas:" block-list:name="🤮"/>
   <block-list:block block-list:abbreviated-name=":Venera:" block-list:name="♀"/>
   <block-list:block block-list:abbreviated-name=":verkimas:" block-list:name="😢"/>
   <block-list:block block-list:abbreviated-name=":verksmas:" block-list:name="😭"/>
@@ -1166,6 +1550,7 @@
   <block-list:block block-list:abbreviated-name=":vidutinė žvaigždė:" block-list:name="⭐"/>
   <block-list:block block-list:abbreviated-name=":vidutinis kvadratas 2:" block-list:name="◼"/>
   <block-list:block block-list:abbreviated-name=":vidutinis kvadratas:" block-list:name="◻"/>
+  <block-list:block block-list:abbreviated-name=":vienaragis:" block-list:name="🦄"/>
   <block-list:block block-list:abbreviated-name=":vienbėgis geležinkelis:" block-list:name="🚝"/>
   <block-list:block block-list:abbreviated-name=":viešbutis 2:" block-list:name="🏩"/>
   <block-list:block block-list:abbreviated-name=":viešbutis:" block-list:name="🏨"/>
@@ -1178,35 +1563,51 @@
   <block-list:block block-list:abbreviated-name=":višta:" block-list:name="🐔"/>
   <block-list:block block-list:abbreviated-name=":VK2:" block-list:name="⇖"/>
   <block-list:block block-list:abbreviated-name=":VK:" block-list:name="↖"/>
-  <block-list:block block-list:abbreviated-name=":vokas 2:" block-list:name="📨"/>
-  <block-list:block block-list:abbreviated-name=":vokas 3:" block-list:name="📩"/>
+  <block-list:block block-list:abbreviated-name=":vokas 2:" block-list:name="🖃"/>
+  <block-list:block block-list:abbreviated-name=":vokas 3:" block-list:name="🖂"/>
+  <block-list:block block-list:abbreviated-name=":vokas 4:" block-list:name="🖆"/>
+  <block-list:block block-list:abbreviated-name=":vokas 5:" block-list:name="🖄"/>
+  <block-list:block block-list:abbreviated-name=":vokas 6:" block-list:name="🖅"/>
+  <block-list:block block-list:abbreviated-name=":vokas 7:" block-list:name="📨"/>
+  <block-list:block block-list:abbreviated-name=":vokas 8:" block-list:name="📩"/>
   <block-list:block block-list:abbreviated-name=":vokas:" block-list:name="✉"/>
   <block-list:block block-list:abbreviated-name=":vonas:" block-list:name="₩"/>
   <block-list:block block-list:abbreviated-name=":vonia 2:" block-list:name="🛁"/>
   <block-list:block block-list:abbreviated-name=":vonia:" block-list:name="🛀"/>
+  <block-list:block block-list:abbreviated-name=":voras:" block-list:name="🕷"/>
+  <block-list:block block-list:abbreviated-name=":voratinklis:" block-list:name="🕸"/>
   <block-list:block block-list:abbreviated-name=":vynai 2:" block-list:name="♤"/>
   <block-list:block block-list:abbreviated-name=":vynai:" block-list:name="♠"/>
-  <block-list:block block-list:abbreviated-name=":vyno taurė:" block-list:name="🍷"/>
   <block-list:block block-list:abbreviated-name=":vynuogės:" block-list:name="🍇"/>
   <block-list:block block-list:abbreviated-name=":vyras:" block-list:name="👨"/>
   <block-list:block block-list:abbreviated-name=":vyrų ženklas:" block-list:name="🚹"/>
   <block-list:block block-list:abbreviated-name=":vyšnios:" block-list:name="🍒"/>
-  <block-list:block block-list:abbreviated-name=":vyšnios žiedas:" block-list:name="🌸"/>
   <block-list:block block-list:abbreviated-name=":^w:" block-list:name="ʷ"/>
   <block-list:block block-list:abbreviated-name=":^W:" block-list:name="ᵂ"/>
   <block-list:block block-list:abbreviated-name=":x2:" block-list:name="❌"/>
   <block-list:block block-list:abbreviated-name=":x3:" block-list:name="❎"/>
+  <block-list:block block-list:abbreviated-name=":x4:" block-list:name="🗶"/>
   <block-list:block block-list:abbreviated-name=":^x:" block-list:name="ˣ"/>
   <block-list:block block-list:abbreviated-name=":_x:" block-list:name="ₓ"/>
   <block-list:block block-list:abbreviated-name=":x:" block-list:name="×"/>
   <block-list:block block-list:abbreviated-name=":^y:" block-list:name="ʸ"/>
   <block-list:block block-list:abbreviated-name=":žadintuvas:" block-list:name="⏰"/>
-  <block-list:block block-list:abbreviated-name=":žaibas:" block-list:name="☇"/>
+  <block-list:block block-list:abbreviated-name=":žaibas 2:" block-list:name="🗲"/>
+  <block-list:block block-list:abbreviated-name=":žaibas 3:" block-list:name="☇"/>
+  <block-list:block block-list:abbreviated-name=":žaibas:" block-list:name="🌩"/>
   <block-list:block block-list:abbreviated-name=":žalias obuolys:" block-list:name="🍏"/>
   <block-list:block block-list:abbreviated-name=":^z:" block-list:name="ᶻ"/>
+  <block-list:block block-list:abbreviated-name=":zebras:" block-list:name="🦓"/>
   <block-list:block block-list:abbreviated-name=":Žemė:" block-list:name="♁"/>
+  <block-list:block block-list:abbreviated-name=":žemėlapis:" block-list:name="🗺"/>
+  <block-list:block block-list:abbreviated-name=":žemės riešutai:" block-list:name="🥜"/>
   <block-list:block block-list:abbreviated-name=":žemyn 2:" block-list:name="👇"/>
+  <block-list:block block-list:abbreviated-name=":žemyn 3:" block-list:name="🖟"/>
+  <block-list:block block-list:abbreviated-name=":žemyn 4:" block-list:name="🖗"/>
+  <block-list:block block-list:abbreviated-name=":žemyn 5:" block-list:name="🖣"/>
+  <block-list:block block-list:abbreviated-name=":žemyn 6:" block-list:name="🖡"/>
   <block-list:block block-list:abbreviated-name=":žemyn:" block-list:name="☟"/>
+  <block-list:block block-list:abbreviated-name=":žemyn galva:" block-list:name="🙃"/>
   <block-list:block block-list:abbreviated-name=":ženklelis 2:" block-list:name="‣"/>
   <block-list:block block-list:abbreviated-name=":ženklelis 3:" block-list:name="◦"/>
   <block-list:block block-list:abbreviated-name=":ženklelis:" block-list:name="•"/>
@@ -1216,9 +1617,10 @@
   <block-list:block block-list:abbreviated-name=":žibintas:" block-list:name="🏮"/>
   <block-list:block block-list:abbreviated-name=":žibintuvėlis:" block-list:name="🔦"/>
   <block-list:block block-list:abbreviated-name=":žiedas:" block-list:name="💍"/>
+  <block-list:block block-list:abbreviated-name=":žirafa:" block-list:name="🦒"/>
   <block-list:block block-list:abbreviated-name=":žirgas 2:" block-list:name="🐴"/>
+  <block-list:block block-list:abbreviated-name=":žirgas 3:" block-list:name="🏇"/>
   <block-list:block block-list:abbreviated-name=":žirgas:" block-list:name="🐎"/>
-  <block-list:block block-list:abbreviated-name=":žirgų lenktynės:" block-list:name="🏇"/>
   <block-list:block block-list:abbreviated-name=":žirklės 2:" block-list:name="✄"/>
   <block-list:block block-list:abbreviated-name=":žirklės 3:" block-list:name="✁"/>
   <block-list:block block-list:abbreviated-name=":žirklės 4:" block-list:name="✃"/>
@@ -1227,6 +1629,9 @@
   <block-list:block block-list:abbreviated-name=":žiurkėnas:" block-list:name="🐹"/>
   <block-list:block block-list:abbreviated-name=":žolė:" block-list:name="🌾"/>
   <block-list:block block-list:abbreviated-name=":žolelė:" block-list:name="🌿"/>
+  <block-list:block block-list:abbreviated-name=":žolės riedulys:" block-list:name="🏑"/>
+  <block-list:block block-list:abbreviated-name=":zombis:" block-list:name="🧟"/>
+  <block-list:block block-list:abbreviated-name=":žongliravimas:" block-list:name="🤹"/>
   <block-list:block block-list:abbreviated-name=":zuikio ausys:" block-list:name="👯"/>
   <block-list:block block-list:abbreviated-name=":žuvies suktinukas:" block-list:name="🍥"/>
   <block-list:block block-list:abbreviated-name=":žuvis 2:" block-list:name="🐠"/>
@@ -1238,6 +1643,7 @@
   <block-list:block block-list:abbreviated-name=":žvaigždė 4:" block-list:name="🌠"/>
   <block-list:block block-list:abbreviated-name=":žvaigždė:" block-list:name="★"/>
   <block-list:block block-list:abbreviated-name=":žvaigždė ir pusmėnulis:" block-list:name="☪"/>
+  <block-list:block block-list:abbreviated-name=":žvakė:" block-list:name="🕯"/>
   <block-list:block block-list:abbreviated-name=":žvejyba:" block-list:name="🎣"/>
   <block-list:block block-list:abbreviated-name=":žymelė 2:" block-list:name="🔖"/>
   <block-list:block block-list:abbreviated-name=":žymelė:" block-list:name="📑"/>
