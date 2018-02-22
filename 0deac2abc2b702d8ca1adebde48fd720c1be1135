@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_cf35df46",
+        "filename": "external/lxml/README",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-22T08:55:29Z",
+      "side": 1,
+      "message": "please specify the full URL of the specific archive",
+      "revId": "0deac2abc2b702d8ca1adebde48fd720c1be1135",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
