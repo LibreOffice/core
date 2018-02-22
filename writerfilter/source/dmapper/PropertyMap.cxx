@@ -1220,7 +1220,14 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     }
     rPendingFloatingTables.clear();
 
-    HandleIncreasedAnchoredObjectSpacing(rDM_Impl);
+    try
+    {
+        HandleIncreasedAnchoredObjectSpacing(rDM_Impl);
+    }
+    catch (const uno::Exception& rException)
+    {
+        SAL_WARN("writerfilter", "HandleIncreasedAnchoredObjectSpacing() failed: " << rException);
+    }
 
     if ( m_nLnnMod )
     {
