@@ -499,7 +499,7 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRo
 
 SvTreeListEntry* TreeListBox::ImpFindEntry( SvTreeListEntry* pParent, const OUString& rText )
 {
-    sal_uLong nRootPos = 0;
+    size_t nRootPos = 0;
     SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
     while ( pEntry )
     {
@@ -616,7 +616,7 @@ SvTreeListEntry* TreeListBox::CloneEntry( SvTreeListEntry* pSource )
 
 SvTreeListEntry* TreeListBox::FindEntry( SvTreeListEntry* pParent, const OUString& rText, EntryType eType )
 {
-    sal_uLong nRootPos = 0;
+    size_t nRootPos = 0;
     SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
     while ( pEntry )
     {
