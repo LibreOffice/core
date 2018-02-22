@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_7ac0332b",
+        "filename": "solenv/gbuild/extensions/post_PackageInfo.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-22T15:52:37Z",
+      "side": 1,
+      "message": "the \"foreach\" with one element looks a bit superfluous, but it should work of course",
+      "revId": "4165ff82c577050ee1194eb19941645a15cbcb96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
