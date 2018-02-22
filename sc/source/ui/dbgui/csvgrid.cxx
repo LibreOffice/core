@@ -213,11 +213,11 @@ void ScCsvGrid::InitColors()
     OSL_PRECOND(mpColorConfig, "the object hasn't been initialized properly");
     if ( !mpColorConfig )
         return;
-    maBackColor = static_cast< sal_uInt32 >( mpColorConfig->GetColorValue( ::svtools::DOCCOLOR ).nColor );
-    maGridColor = static_cast< sal_uInt32 >( mpColorConfig->GetColorValue( ::svtools::CALCGRID ).nColor );
-    maGridPBColor = static_cast< sal_uInt32 >( mpColorConfig->GetColorValue( ::svtools::CALCPAGEBREAK ).nColor );
-    maAppBackColor = static_cast< sal_uInt32 >( mpColorConfig->GetColorValue( ::svtools::APPBACKGROUND ).nColor );
-    maTextColor = static_cast< sal_uInt32 >( mpColorConfig->GetColorValue( ::svtools::FONTCOLOR ).nColor );
+    maBackColor = mpColorConfig->GetColorValue( ::svtools::DOCCOLOR ).nColor;
+    maGridColor = mpColorConfig->GetColorValue( ::svtools::CALCGRID ).nColor;
+    maGridPBColor = mpColorConfig->GetColorValue( ::svtools::CALCPAGEBREAK ).nColor;
+    maAppBackColor = mpColorConfig->GetColorValue( ::svtools::APPBACKGROUND ).nColor;
+    maTextColor = mpColorConfig->GetColorValue( ::svtools::FONTCOLOR ).nColor;
 
     const StyleSettings& rSett = GetSettings().GetStyleSettings();
     maHeaderBackColor = rSett.GetFaceColor();
