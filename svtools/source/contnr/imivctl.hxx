@@ -386,7 +386,7 @@ public:
     const tools::Rectangle&    GetEntryBoundRect( SvxIconChoiceCtrlEntry* );
     void                InvalidateBoundingRect( tools::Rectangle& rRect )
                         {
-                            rRect.Right() = LONG_MAX;
+                            rRect.SetRight(LONG_MAX);
                             bBoundRectsDirty = true;
                         }
     static bool         IsBoundingRectValid( const tools::Rectangle& rRect ) { return ( rRect.Right() != LONG_MAX ); }
