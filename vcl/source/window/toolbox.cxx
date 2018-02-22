@@ -1625,7 +1625,11 @@ bool ToolBox::ImplCalcItem()
             if ( item.meType == ToolBoxItemType::BUTTON || item.meType == ToolBoxItemType::SPACE )
             {
                 // add borders
-                ImplAddButtonBorder( item.maItemSize.Width(), item.maItemSize.Height(), mpData->mbNativeButtons );
+                long w = item.maItemSize.Width();
+                long h = item.maItemSize.Height();
+                ImplAddButtonBorder( w, h, mpData->mbNativeButtons );
+                item.maItemSize.setWidth(w);
+                item.maItemSize.setHeight(h);
 
                 if( item.meType == ToolBoxItemType::BUTTON )
                 {

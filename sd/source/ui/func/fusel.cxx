@@ -1222,7 +1222,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
     aHitPosR.AdjustX(n2HitLog );
     aHitPosL.AdjustX( -n2HitLog );
-    aHitPosT.Y() += n2HitLog;
+    aHitPosT.AdjustY( n2HitLog );
     aHitPosB.AdjustY( -n2HitLog );
 
     if ( !bClosed                                      ||

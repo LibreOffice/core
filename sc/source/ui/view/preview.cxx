@@ -815,7 +815,7 @@ sal_uInt16 ScPreview::GetOptimalZoom(bool bWidthOnly)
     //  -> add only 0.10cm, so there is some margin in all cases.
     Size aMarginSize( LogicToPixel(Size(100, 100), MapMode(MapUnit::Map100thMM)) );
     aWinSize.AdjustWidth( -(2 * aMarginSize.Width()) );
-    aWinSize.Height() -= 2 * aMarginSize.Height();
+    aWinSize.AdjustHeight( -(2 * aMarginSize.Height()) );
 
     Size aLocalPageSize = lcl_GetDocPageSize( &pDocShell->GetDocument(), nTab );
     if ( aLocalPageSize.Width() && aLocalPageSize.Height() )

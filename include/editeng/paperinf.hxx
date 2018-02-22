@@ -49,8 +49,8 @@ public:
 inline Size &Swap(Size &rSize)
 {
     const long lVal = rSize.Width();
-    rSize.Width() = rSize.Height();
-    rSize.Height() = lVal;
+    rSize.setWidth( rSize.Height() );
+    rSize.setHeight( lVal );
     return rSize;
 }
 
