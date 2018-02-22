@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/rpath.patch.0 \
 	external/liborcus/visibility.patch.0 \
 	external/liborcus/nullptr-in-ostringstream.patch.1 \
+	external/liborcus/0001-protect-the-self-closing-xml-element-code-against-se.patch \
 ))
 
 ifeq ($(OS),WNT)
