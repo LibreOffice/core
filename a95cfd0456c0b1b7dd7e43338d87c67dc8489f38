@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_9a74079d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2018-02-22T12:16:17Z",
+      "side": 1,
+      "message": "I would check nullptr !\u003d pOPO here",
+      "range": {
+        "startLine": 900,
+        "startChar": 16,
+        "endLine": 900,
+        "endChar": 20
+      },
+      "revId": "a95cfd0456c0b1b7dd7e43338d87c67dc8489f38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_ba770b9e",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2018-02-22T12:16:17Z",
+      "side": 1,
+      "message": "pOPO \u003d nullptr;",
+      "range": {
+        "startLine": 906,
+        "startChar": 20,
+        "endLine": 906,
+        "endChar": 24
+      },
+      "revId": "a95cfd0456c0b1b7dd7e43338d87c67dc8489f38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_da6e7fc8",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2018-02-22T12:16:17Z",
+      "side": 1,
+      "message": "Before here:\nif(nullptr !\u003d pOPO) delete pOPO;",
+      "range": {
+        "startLine": 909,
+        "startChar": 12,
+        "endLine": 909,
+        "endChar": 13
+      },
+      "revId": "a95cfd0456c0b1b7dd7e43338d87c67dc8489f38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
