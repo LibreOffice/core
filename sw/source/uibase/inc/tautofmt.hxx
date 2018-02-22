@@ -18,20 +18,21 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_TAUTOFMT_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_TAUTOFMT_HXX
+
+#include <tools/link.hxx>
 #include <sfx2/basedlgs.hxx>
-
-#include <vcl/fixed.hxx>
-
-#include <vcl/lstbox.hxx>
-
+#include <sal/types.h>
+#include <rtl/ustring.hxx>
+#include <vcl/vclreferencebase.hxx>
 #include <vcl/button.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/window.hxx>
 
-#include <vcl/morebtn.hxx>
-
-#include <vcl/virdev.hxx>
+#include "wrtsh.hxx"
+#include "autoformatpreview.hxx"
+#include <tblafmt.hxx>
 
 class SwTableAutoFormat;
-class AutoFormatPreview;
 class SwTableAutoFormatTable;
 class SwWrtShell;
 
@@ -61,7 +62,7 @@ class SwAutoFormatDlg : public SfxModalDialog
     VclPtr<AutoFormatPreview> m_pWndPreview;
 
     SwWrtShell*             pShell;
-    SwTableAutoFormatTable*      pTableTable;
+    SwTableAutoFormatTable*     pTableTable;
     sal_uInt8                   nIndex;
     sal_uInt8                   nDfltStylePos;
     bool                    bCoreDataChanged : 1;
