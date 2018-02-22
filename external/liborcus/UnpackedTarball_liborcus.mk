@@ -19,6 +19,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/0001-workaround-a-linking-problem-on-windows.patch \
 	external/liborcus/rpath.patch.0 \
 	external/liborcus/silence-assert.patch \
+	external/liborcus/0001-protect-the-self-closing-xml-element-code-against-se.patch \
 ))
 
 ifeq ($(OS),WNT)
