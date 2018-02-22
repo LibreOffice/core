@@ -1,0 +1,11 @@
+--- misc/hsqldb/src/org/hsqldb/jdbc/jdbcDatabaseMetaData.java	2012-02-08 15:14:42.802123563 +0000
++++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcDatabaseMetaData.java	2012-02-08 15:47:35.835635654 +0000
+@@ -1347,7 +1347,7 @@
+      * @exception SQLException if a database access error occurs
+      */
+     public boolean supportsMultipleResultSets() throws SQLException {
+-        return false;
++        return true;
+     }
+
+     /**
