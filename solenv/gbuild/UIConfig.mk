@@ -117,6 +117,8 @@ $(call gb_UIConfig_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_UIConfig_get_target,$*) $(call gb_UIConfig_get_imagelist_target,$*) \
 	)
+	$(call gb_Output_announce,$*,$(false),UIA,2)
+	rm -f $(call gb_UIConfig_get_a11yerrors_target,$*)
 
 define gb_UIConfig_a11yerrors__command
 $(call gb_Output_announce,$(2),$(true),UIA,1)
@@ -131,11 +133,6 @@ ifeq ($(PYTHON_LXML),TRUE)
 else
 	touch $@
 endif
-
-.PHONY : $(call gb_UIA11YErrorsTarget_get_clean_target,%)
-$(call gb_UIA11YErrorsTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),UIA,2)
-	rm -f $(call gb_UIConfig_get_a11yerrors_target,$*)
 
 gb_UIConfig_get_packagename = UIConfig/$(1)
 gb_UIConfig_get_packagesetname = UIConfig/$(1)
@@ -190,7 +187,6 @@ $(call gb_UIConfig_get_imagelist_target,$(1)) : $(call gb_UIImageListTarget_get_
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_UIImageListTarget_get_clean_target,$(2))
 
 $(call gb_UIConfig_get_a11yerrors_target,$(1)) : UIFILES += $(SRCDIR)/$(2).ui
-$(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_UIA11YErrorsTarget_get_clean_target,$(2))
 
 endef
 

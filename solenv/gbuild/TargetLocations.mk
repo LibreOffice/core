@@ -281,7 +281,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	CppunitTestFakeExecutable \
 	CustomTarget \
 	ExternalProject \
-	UIA11YErrorsTarget \
 	UIConfig \
 	UIImageListTarget \
 	UIMenubarTarget \
