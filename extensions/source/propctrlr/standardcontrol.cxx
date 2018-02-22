@@ -654,7 +654,7 @@ namespace pcr
         css::util::Color nColor = COL_TRANSPARENT;
         if (_rValue.hasValue())
             _rValue >>= nColor;
-        getTypedControlWindow()->SelectEntry(::Color(static_cast<ColorData>(nColor)));
+        getTypedControlWindow()->SelectEntry(::Color(sal_uInt32(nColor)));
     }
 
     Any SAL_CALL OColorControl::getValue()

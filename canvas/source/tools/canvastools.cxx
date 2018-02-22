@@ -894,7 +894,7 @@ namespace canvas
             const sal_Int8* pCols( rColor.getConstArray() );
             return ::Color( pCols[3], pCols[0], pCols[1], pCols[2] );
 #else
-            return ::Color( *reinterpret_cast< const ::ColorData* >(rColor.getConstArray()) );
+            return ::Color( *reinterpret_cast< const ::sal_uInt32* >(rColor.getConstArray()) );
 #endif
         }
 
