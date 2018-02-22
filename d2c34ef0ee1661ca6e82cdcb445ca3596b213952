@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_5a30cf01",
+        "filename": "external/lxml/ExternalProject_lxml.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-22T20:40:24Z",
+      "side": 1,
+      "message": "does that install anything to instdir?  that wouldn\u0027t be appropriate for a build-time--only tool like this (plus, $(INSTDIR)/program doesn\u0027t even exist e.g. on macOS)",
+      "range": {
+        "startLine": 34,
+        "startChar": 34,
+        "endLine": 34,
+        "endChar": 66
+      },
+      "revId": "d2c34ef0ee1661ca6e82cdcb445ca3596b213952",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
