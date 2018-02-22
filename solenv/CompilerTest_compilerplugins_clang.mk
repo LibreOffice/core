@@ -35,7 +35,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/passstuffbyref \
     compilerplugins/clang/test/pointerbool \
     compilerplugins/clang/test/redundantcast \
-    compilerplugins/clang/test/redundantcopy \
+    compilerplugins/clang/test/redundantfcast \
     compilerplugins/clang/test/redundantinline \
     compilerplugins/clang/test/redundantpointerops \
     compilerplugins/clang/test/refcounting \

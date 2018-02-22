@@ -11,50 +11,51 @@
 #include "compat.hxx"
 #include "plugin.hxx"
 
-namespace {
-
-class RedundantCopy final:
-    public RecursiveASTVisitor<RedundantCopy>, public loplugin::Plugin
+namespace
+{
+class RedundantFCast final : public RecursiveASTVisitor<RedundantFCast>, public loplugin::Plugin
 {
 public:
-    explicit RedundantCopy(loplugin::InstantiationData const & data):
-        Plugin(data) {}
+    explicit RedundantFCast(loplugin::InstantiationData const& data)
+        : Plugin(data)
+    {
+    }
 
-    bool VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * expr) {
-        if (ignoreLocation(expr)) {
+    bool VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const* expr)
+    {
+        if (ignoreLocation(expr))
+        {
             return true;
         }
         auto const t1 = expr->getTypeAsWritten();
         auto const t2 = compat::getSubExprAsWritten(expr)->getType();
-        if (t1.getCanonicalType().getTypePtr()
-            != t2.getCanonicalType().getTypePtr())
+        if (t1.getCanonicalType().getTypePtr() != t2.getCanonicalType().getTypePtr())
         {
             return true;
         }
         auto tc = loplugin::TypeCheck(t1);
         if (!(tc.Class("OUString").Namespace("rtl").GlobalNamespace()
-              || tc.Class("Color").GlobalNamespace()
-              || tc.Class("unique_ptr").StdNamespace()))
+              || tc.Class("Color").GlobalNamespace() || tc.Class("unique_ptr").StdNamespace()))
         {
             return true;
         }
-        report(
-            DiagnosticsEngine::Warning,
-            "redundant copy construction from %0 to %1", expr->getExprLoc())
+        report(DiagnosticsEngine::Warning, "redundant functional cast from %0 to %1",
+               expr->getExprLoc())
             << t2 << t1 << expr->getSourceRange();
         return true;
     }
 
 private:
-    void run() override {
-        if (compiler.getLangOpts().CPlusPlus) {
+    void run() override
+    {
+        if (compiler.getLangOpts().CPlusPlus)
+        {
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         }
     }
 };
 
-static loplugin::Plugin::Registration<RedundantCopy> reg("redundantcopy");
-
+static loplugin::Plugin::Registration<RedundantFCast> reg("redundantfcast");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
