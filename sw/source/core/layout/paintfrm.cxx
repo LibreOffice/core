@@ -6439,10 +6439,14 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
     const bool bHori = rP1.Y() == rP2.Y();
 
     // use pointers to member function in order to unify flow
-    typedef long& (Point:: *pmfPt)();
-    const pmfPt pmfPtX = &Point::X;
-    const pmfPt pmfPtY = &Point::Y;
-    const pmfPt pDirPt = bHori ? pmfPtX : pmfPtY;
+    typedef long (Point:: *pmfPtGet)() const;
+    typedef void (Point:: *pmfPtSet)(long);
+    const pmfPtGet pDirPtX = &Point::X;
+    const pmfPtGet pDirPtY = &Point::Y;
+    const pmfPtGet pDirPt = bHori ? pDirPtX : pDirPtY;
+    const pmfPtSet pDirPtSetX = &Point::setX;
+    const pmfPtSet pDirPtSetY = &Point::setY;
+    const pmfPtSet pDirPtSet = bHori ? pDirPtSetX : pDirPtSetY;
 
     Point aP1( rP1 );
     Point aP2( rP2 );
@@ -6511,10 +6515,10 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
                 const long nDrDirSz = bHori ? aDrSz.Width() : aDrSz.Height();
 
                 if ( (aP1.*pDirPt)() >= nDrDirPt && (aP1.*pDirPt)() <= nDrDirPt + nDrDirSz )
-                    (aP1.*pDirPt)() = nDrDirPt + nDrDirSz;
+                    (aP1.*pDirPtSet)( nDrDirPt + nDrDirSz );
 
                 if ( (aP2.*pDirPt)() >= nDrDirPt && (aP1.*pDirPt)() < (nDrDirPt - 1) )
-                    (aP2.*pDirPt)() = nDrDirPt - 1;
+                    (aP2.*pDirPtSet)( nDrDirPt - 1 );
             }
             aIter.Next();
         }
@@ -6528,7 +6532,7 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
                     nullptr, nSubColor, gProp );
         }
         aP1 = aP2;
-        (aP1.*pDirPt)() += 1;
+        (aP1.*pDirPtSet)( (aP1.*pDirPt)() + 1 );
         aP2 = rP2;
     }
 }
