@@ -799,7 +799,7 @@ Document::retrieveParagraphText(Paragraph const * pParagraph)
 {
     SolarMutexGuard aGuard;
     ::osl::MutexGuard aInternalGuard(GetMutex());
-    return m_rEngine.GetText(static_cast< ::sal_uLong >(pParagraph->getNumber()));
+    return m_rEngine.GetText(static_cast< ::sal_uInt32 >(pParagraph->getNumber()));
         // numeric overflow cannot happen here
 }
 

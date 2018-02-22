@@ -288,7 +288,7 @@ private:
 
 void            CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines );
 OUString CreateMgrAndLibStr( const OUString& rMgrName, const OUString& rLibName );
-sal_uLong           CalcLineCount( SvStream& rStream );
+sal_uInt32           CalcLineCount( SvStream& rStream );
 
 bool QueryReplaceMacro( const OUString& rName, vcl::Window* pParent );
 bool QueryDelMacro( const OUString& rName, vcl::Window* pParent );
