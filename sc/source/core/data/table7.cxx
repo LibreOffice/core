@@ -130,10 +130,10 @@ void ScTable::CopyOneCellFromClip(
         assert(nColOffset >= 0);
         aCol[nCol].CopyOneCellFromClip(rCxt, nRow1, nRow2, nColOffset);
 
-        if ((rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB) && (nColOffset == 0))
+        if (rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB)
         {
             for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
-                CopyConditionalFormat(nCol, nRow, nCol + nSrcColSize - 1, nRow, nCol - aSrcRange.aStart.Col(),
+                CopyConditionalFormat(nCol, nRow, nCol, nRow, nCol - aSrcRange.aStart.Col() - nColOffset,
                         nRow - nSrcRow, pSrcTab);
         }
     }
