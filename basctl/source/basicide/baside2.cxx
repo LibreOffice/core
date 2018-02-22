@@ -420,7 +420,7 @@ void ModulWindow::LoadBasic()
         if ( pStream )
         {
             AssertValidEditEngine();
-            sal_uLong nLines = CalcLineCount( *pStream );
+            sal_uInt32 nLines = CalcLineCount( *pStream );
             // nLines*4: ReadText/Formatting/Highlighting/Formatting
             GetEditorWindow().CreateProgress( IDEResId(RID_STR_GENERATESOURCE), nLines*4 );
             GetEditEngine()->SetUpdateMode( false );

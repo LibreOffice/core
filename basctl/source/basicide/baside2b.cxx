@@ -204,7 +204,7 @@ private:
 class EditorWindow::ProgressInfo : public SfxProgress
 {
 public:
-    ProgressInfo (SfxObjectShell* pObjSh, OUString const& rText, sal_uLong nRange) :
+    ProgressInfo (SfxObjectShell* pObjSh, OUString const& rText, sal_uInt32 nRange) :
         SfxProgress(pObjSh, rText, nRange),
         nCurState(0)
     { }
@@ -1304,7 +1304,7 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
     }
 }
 
-void EditorWindow::CreateProgress( const OUString& rText, sal_uLong nRange )
+void EditorWindow::CreateProgress( const OUString& rText, sal_uInt32 nRange )
 {
     DBG_ASSERT( !pProgress, "ProgressInfo exists already" );
     pProgress.reset(new ProgressInfo(

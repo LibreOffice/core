@@ -39,7 +39,7 @@ VclPtr<DialogWindow> Shell::CreateDlgWin( const ScriptDocument& rDocument, const
 {
     bCreatingWindow = true;
 
-    sal_uLong nKey = 0;
+    sal_uInt16 nKey = 0;
     VclPtr<DialogWindow> pWin;
     OUString aLibName( rLibName );
     OUString aDlgName( rDlgName );
@@ -97,7 +97,7 @@ VclPtr<DialogWindow> Shell::CreateDlgWin( const ScriptDocument& rDocument, const
     if( pWin )
     {
         pWin->GrabScrollBars( aHScrollBar.get(), aVScrollBar.get() );
-        pTabBar->InsertPage( static_cast<sal_uInt16>(nKey), aDlgName );
+        pTabBar->InsertPage( nKey, aDlgName );
         pTabBar->Sort();
         if ( !pCurWin )
             SetCurWindow( pWin, false, false );
