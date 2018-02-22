@@ -495,8 +495,8 @@
     </child>
     <action-widgets>
       <action-widget response="0">apply</action-widget>
-      <action-widget response="0">ok</action-widget>
-      <action-widget response="0">close</action-widget>
+      <action-widget response="-5">ok</action-widget>
+      <action-widget response="-7">close</action-widget>
     </action-widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

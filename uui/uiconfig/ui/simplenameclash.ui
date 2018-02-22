@@ -127,10 +127,10 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">help</action-widget>
+      <action-widget response="-11">help</action-widget>
       <action-widget response="0">replace</action-widget>
       <action-widget response="0">rename</action-widget>
-      <action-widget response="0">cancel</action-widget>
+      <action-widget response="-6">cancel</action-widget>
     </action-widgets>
   </object>
 </interface>

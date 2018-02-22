@@ -233,7 +233,7 @@
       <action-widget response="0">restore</action-widget>
       <action-widget response="0">prev</action-widget>
       <action-widget response="0">next</action-widget>
-      <action-widget response="0">close</action-widget>
+      <action-widget response="-7">close</action-widget>
     </action-widgets>
   </object>
 </interface>

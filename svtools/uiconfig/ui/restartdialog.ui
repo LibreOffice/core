@@ -249,8 +249,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">yes</action-widget>
-      <action-widget response="0">no</action-widget>
+      <action-widget response="-8">yes</action-widget>
+      <action-widget response="-9">no</action-widget>
     </action-widgets>
   </object>
 </interface>
