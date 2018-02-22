@@ -35,7 +35,6 @@ public:
     explicit FrameGrabber( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
     virtual  ~FrameGrabber() override;
 
-    bool    create( const ::rtl::OUString& rURL );
     bool    create( AVAsset* pMovie );
 
     // XFrameGrabber
