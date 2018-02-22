@@ -190,7 +190,7 @@ namespace DOM
         // start with mappings in effect for last level
         NSMap aNSMap;
         if (!m_aNSStack.empty())
-            aNSMap = NSMap(m_aNSStack.top());
+            aNSMap = m_aNSStack.top();
 
         // handle xmlns: attributes and add to mappings
         OUString attr_qname;

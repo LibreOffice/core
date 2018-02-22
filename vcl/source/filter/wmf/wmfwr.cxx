@@ -1003,7 +1003,7 @@ void WMFWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx:
             for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
             {
                 const tools::Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
-                WMFRecord_Polygon( tools::Polygon(aPolygon) );
+                WMFRecord_Polygon( aPolygon );
             }
 
             aSrcLineColor = aOldLineColor;

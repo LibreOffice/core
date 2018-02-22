@@ -1333,7 +1333,7 @@ void Writer::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegf
             for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
             {
                 const tools::Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
-                Impl_writePolyPolygon(tools::PolyPolygon(tools::Polygon(aPolygon)), true );
+                Impl_writePolyPolygon(tools::PolyPolygon(aPolygon), true );
             }
 
             mpVDev->SetLineColor(aOldLineColor);

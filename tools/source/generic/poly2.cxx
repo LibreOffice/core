@@ -58,7 +58,7 @@ void PolyPolygon::Insert( const tools::Polygon& rPoly, sal_uInt16 nPos )
     if ( nPos > mpImplPolyPolygon->mvPolyAry.size() )
         nPos = mpImplPolyPolygon->mvPolyAry.size();
 
-    mpImplPolyPolygon->mvPolyAry.insert(mpImplPolyPolygon->mvPolyAry.begin() + nPos, tools::Polygon( rPoly ));
+    mpImplPolyPolygon->mvPolyAry.insert(mpImplPolyPolygon->mvPolyAry.begin() + nPos, rPoly);
 }
 
 void PolyPolygon::Remove( sal_uInt16 nPos )
@@ -72,7 +72,7 @@ void PolyPolygon::Replace( const tools::Polygon& rPoly, sal_uInt16 nPos )
 {
     assert(nPos < Count() && "PolyPolygon::Replace(): nPos >= nSize");
 
-    mpImplPolyPolygon->mvPolyAry[nPos] = tools::Polygon( rPoly );
+    mpImplPolyPolygon->mvPolyAry[nPos] = rPoly;
 }
 
 const tools::Polygon& PolyPolygon::GetObject( sal_uInt16 nPos ) const

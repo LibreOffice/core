@@ -4727,8 +4727,7 @@ void ScCellRangeObj::RefChanged()
     OSL_ENSURE(rRanges.size() == 1, "What ranges ?!?!");
     if ( !rRanges.empty() )
     {
-        const ScRange* pFirst = rRanges[0];
-        aRange = ScRange(*pFirst);
+        aRange = *rRanges[0];
         aRange.PutInOrder();
     }
 }

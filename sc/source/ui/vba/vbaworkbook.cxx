@@ -245,7 +245,7 @@ ScVbaWorkbook::Worksheets( const uno::Any& aIndex )
         return uno::Any( xWorkSheets );
     }
     // pass on to collection
-    return uno::Any( xWorkSheets->Item( aIndex, uno::Any() ) );
+    return xWorkSheets->Item( aIndex, uno::Any() );
 }
 uno::Any SAL_CALL
 ScVbaWorkbook::Windows( const uno::Any& aIndex )
@@ -254,7 +254,7 @@ ScVbaWorkbook::Windows( const uno::Any& aIndex )
     uno::Reference< excel::XWindows >  xWindows( new ScVbaWindows( getParent(), mxContext ) );
     if ( aIndex.getValueTypeClass() == uno::TypeClass_VOID )
         return uno::Any( xWindows );
-    return uno::Any( xWindows->Item( aIndex, uno::Any() ) );
+    return xWindows->Item( aIndex, uno::Any() );
 }
 
 void SAL_CALL
@@ -373,7 +373,7 @@ ScVbaWorkbook::Names( const uno::Any& aIndex )
     uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue("NamedRanges"), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, xModel ) );
     if ( aIndex.hasValue() )
-        return uno::Any( xNames->Item( aIndex, uno::Any() ) );
+        return xNames->Item( aIndex, uno::Any() );
     return uno::Any( xNames );
 }
 

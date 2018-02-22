@@ -282,7 +282,7 @@ void XMLOfficeDocContext::HandleFixedLayoutPage(const FixedLayoutPage &rPage, bo
 
     uno::Sequence<uno::Any> aArguments =
     {
-        uno::makeAny(uno::Sequence<beans::PropertyValue>({comphelper::makePropertyValue("DTDString", false)}))
+        uno::makeAny<uno::Sequence<beans::PropertyValue>>({comphelper::makePropertyValue("DTDString", false)})
     };
     uno::Reference<svg::XSVGWriter> xSVGWriter(xCtx->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.svg.SVGWriter", aArguments, xCtx), uno::UNO_QUERY);
     if (!xSVGWriter.is())

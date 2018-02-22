@@ -934,7 +934,7 @@ void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const bas
             for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
             {
                 const tools::Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
-                ImplWritePolyPolygonRecord(tools::PolyPolygon( tools::Polygon(aPolygon) ));
+                ImplWritePolyPolygonRecord(tools::PolyPolygon( aPolygon ));
             }
 
             maVDev->SetLineColor(aOldLineColor);

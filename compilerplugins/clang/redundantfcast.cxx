@@ -29,16 +29,20 @@ public:
         }
         auto const t1 = expr->getTypeAsWritten();
         auto const t2 = compat::getSubExprAsWritten(expr)->getType();
+
         if (t1.getCanonicalType().getTypePtr() != t2.getCanonicalType().getTypePtr())
-        {
             return true;
-        }
+
+        bool bInterestingType = false;
+        if (auto const recType = t1->getAs<RecordType>())
+            bInterestingType = recType->getDecl()->hasAttr<WarnUnusedAttr>();
         auto tc = loplugin::TypeCheck(t1);
-        if (!(tc.Class("OUString").Namespace("rtl").GlobalNamespace()
-              || tc.Class("Color").GlobalNamespace() || tc.Class("unique_ptr").StdNamespace()))
-        {
+        bInterestingType |= tc.Class("unique_ptr").StdNamespace()
+                            || tc.Class("shared_ptr").StdNamespace()
+                            || loplugin::isExtraWarnUnusedType(t1);
+        if (!bInterestingType)
             return true;
-        }
+
         report(DiagnosticsEngine::Warning, "redundant functional cast from %0 to %1",
                expr->getExprLoc())
             << t2 << t1 << expr->getSourceRange();

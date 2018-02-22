@@ -155,7 +155,7 @@ SwVbaDocument::Bookmarks( const uno::Any& rIndex )
     if (  rIndex.getValueTypeClass() == uno::TypeClass_VOID )
         return uno::makeAny( xBookmarksVba );
 
-    return uno::Any( xBookmarksVba->Item( rIndex, uno::Any() ) );
+    return xBookmarksVba->Item( rIndex, uno::Any() );
 }
 
 uno::Any SAL_CALL
@@ -169,7 +169,7 @@ SwVbaDocument::Variables( const uno::Any& rIndex )
     if (  rIndex.getValueTypeClass() == uno::TypeClass_VOID )
         return uno::makeAny( xVariables );
 
-    return uno::Any( xVariables->Item( rIndex, uno::Any() ) );
+    return xVariables->Item( rIndex, uno::Any() );
 }
 
 uno::Any SAL_CALL

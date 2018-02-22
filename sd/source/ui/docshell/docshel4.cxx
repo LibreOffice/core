@@ -318,7 +318,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
             SdPage* pPage = mpDoc->GetSdPage( 0, PageKind::Standard );
 
             if( pPage )
-                SetVisArea( ::tools::Rectangle( pPage->GetAllObjBoundRect() ) );
+                SetVisArea( pPage->GetAllObjBoundRect() );
         }
 
         FinishedLoading();

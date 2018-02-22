@@ -1379,11 +1379,11 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
             {
                 // nPtPos is the end of the paragraph, select the last word then.
                 --nPtPos;
-                aBndry = Boundary( g_pBreakIt->GetBreakIter()->getWordBoundary(
+                aBndry = g_pBreakIt->GetBreakIter()->getWordBoundary(
                                     pTextNd->GetText(), nPtPos,
                                     g_pBreakIt->GetLocale( pTextNd->GetLang( nPtPos ) ),
                                     nWordType,
-                                    bForward ));
+                                    bForward );
             }
 
             if( aBndry.startPos != aBndry.endPos )
