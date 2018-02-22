@@ -17,21 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/msgbox.hxx>
-
-#include <wrtsh.hxx>
-#include <view.hxx>
-#include <itabenum.hxx>
 #include <instable.hxx>
-#include <tblafmt.hxx>
+#include <shellres.hxx>
 #include <modcfg.hxx>
 #include <swmodule.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <viewopt.hxx>
-
 #include <swabstdlg.hxx>
-#include <swuiexp.hxx>
-#include <memory>
 
 #define ROW_COL_PROD 16384
 
@@ -44,8 +36,6 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
     rRow = static_cast<sal_uInt16>(m_pRowNF->GetValue());
     rCol = static_cast<sal_uInt16>(m_pColNF->GetValue());
 
-    if (m_pBorderCB->IsChecked())
-        nInsMode |= tabopts::DEFAULT_BORDER;
     if (m_pHeaderCB->IsChecked())
         nInsMode |= tabopts::HEADLINE;
     if (m_pRepeatHeaderCB->IsEnabled() && m_pRepeatHeaderCB->IsChecked())
@@ -77,11 +67,11 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     get(m_pHeaderCB, "headercb");
     get(m_pRepeatHeaderCB, "repeatcb");
     get(m_pDontSplitCB, "dontsplitcb");
-    get(m_pBorderCB, "bordercb");
-    get(m_pAutoFormatBtn, "autoformat");
     get(m_pInsertBtn, "ok");
     get(m_pRepeatGroup, "repeatgroup");
     get(m_pRepeatHeaderNF, "repeatheaderspin");
+    get(m_pLbFormat, "formatlbinstable");
+    get(m_pWndPreview, "previewinstable");
 
     m_pNameEdit->SetText(pShell->GetUniqueTableName());
     m_pNameEdit->SetModifyHdl(LINK(this, SwInsTableDlg, ModifyName));
@@ -90,7 +80,6 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
 
     m_pRowNF->SetMax(ROW_COL_PROD/m_pColNF->GetValue());
     m_pColNF->SetMax(ROW_COL_PROD/m_pRowNF->GetValue());
-    m_pAutoFormatBtn->SetClickHdl(LINK(this, SwInsTableDlg, AutoFormatHdl));
 
     m_pInsertBtn->SetClickHdl(LINK(this, SwInsTableDlg, OKHdl));
 
@@ -103,19 +92,13 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     m_pHeaderCB->Check( 0 != (nInsTableFlags & tabopts::HEADLINE) );
     m_pRepeatHeaderCB->Check(aInsOpts.mnRowsToRepeat > 0);
     if(bHTMLMode)
-    {
         m_pDontSplitCB->Hide();
-        m_pBorderCB->SetPosPixel(m_pDontSplitCB->GetPosPixel());
-    }
     else
-    {
         m_pDontSplitCB->Check( 0 == (nInsTableFlags & tabopts::SPLIT_LAYOUT) );
-    }
-    m_pBorderCB->Check( 0 != (nInsTableFlags & tabopts::DEFAULT_BORDER) );
 
     m_pRepeatHeaderNF->SetModifyHdl( LINK( this, SwInsTableDlg, ModifyRepeatHeaderNF_Hdl ) );
-    m_pHeaderCB->SetClickHdl(LINK(this, SwInsTableDlg, CheckBoxHdl));
-    m_pRepeatHeaderCB->SetClickHdl(LINK(this, SwInsTableDlg, ReapeatHeaderCheckBoxHdl));
+    m_pHeaderCB->SetClickHdl( LINK( this, SwInsTableDlg, CheckBoxHdl ) );
+    m_pRepeatHeaderCB->SetClickHdl( LINK( this, SwInsTableDlg, ReapeatHeaderCheckBoxHdl ) );
     ReapeatHeaderCheckBoxHdl(nullptr);
     CheckBoxHdl(nullptr);
 
@@ -125,11 +108,52 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     else
         --nMax;
     m_pRepeatHeaderNF->SetMax( nMax );
+
+    InitAutoTableFormat();
 }
 
-IMPL_LINK_NOARG(SwInsTableDlg, OKHdl, Button*, void)
+void SwInsTableDlg::InitAutoTableFormat()
 {
-    EndDialog(RET_OK);
+    m_pWndPreview->DetectRTL(pShell);
+
+    m_pLbFormat->SetSelectHdl( LINK( this, SwInsTableDlg, SelFormatHdl ) );
+
+    pTableTable = new SwTableAutoFormatTable;
+    pTableTable->Load();
+
+    // Add "- none -" style autoformat table.
+    m_pLbFormat->InsertEntry( SwViewShell::GetShellRes()->aStrNone ); // Insert to listbox
+
+    // Add other styles of autoformat tables.
+    for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(pTableTable->size());
+            i < nCount; i++)
+    {
+        SwTableAutoFormat const& rFormat = (*pTableTable)[ i ];
+        m_pLbFormat->InsertEntry(rFormat.GetName());
+        if (pTAutoFormat && rFormat.GetName() == pTAutoFormat->GetName())
+            lbIndex = i;
+    }
+
+    // Change this min variable if you add autotable manually.
+    minTableIndexInLb = 1;
+    maxTableIndexInLb = minTableIndexInLb + static_cast<sal_uInt8>(pTableTable->size());
+    lbIndex = 1;
+    m_pLbFormat->SelectEntryPos( lbIndex );
+    tbIndex = lbIndexToTableIndex(lbIndex);
+
+    SelFormatHdl( *m_pLbFormat );
+}
+
+sal_uInt8 SwInsTableDlg::lbIndexToTableIndex( const sal_uInt8 listboxIndex )
+{
+    if( minTableIndexInLb != maxTableIndexInLb &&
+            minTableIndexInLb <= listboxIndex &&
+            listboxIndex < maxTableIndexInLb )
+    {
+        return listboxIndex - minTableIndexInLb;
+    }
+
+    return 255;
 }
 
 SwInsTableDlg::~SwInsTableDlg()
@@ -140,6 +164,7 @@ SwInsTableDlg::~SwInsTableDlg()
 void SwInsTableDlg::dispose()
 {
     delete pTAutoFormat;
+    m_pLbFormat.clear();
     m_pNameEdit.clear();
     m_pColNF.clear();
     m_pRowNF.clear();
@@ -148,10 +173,63 @@ void SwInsTableDlg::dispose()
     m_pRepeatHeaderNF.clear();
     m_pRepeatGroup.clear();
     m_pDontSplitCB.clear();
-    m_pBorderCB.clear();
     m_pInsertBtn.clear();
-    m_pAutoFormatBtn.clear();
+    m_pWndPreview.clear();
+    pTableTable->Save();
+    delete pTableTable;
     SfxModalDialog::dispose();
+}
+
+static void lcl_SetProperties( SwTableAutoFormat* pTableAutoFormat, bool bVal )
+{
+    pTableAutoFormat->SetFont( bVal );
+    pTableAutoFormat->SetJustify( bVal );
+    pTableAutoFormat->SetFrame( bVal );
+    pTableAutoFormat->SetBackground( bVal );
+    pTableAutoFormat->SetValueFormat( bVal );
+    pTableAutoFormat->SetWidthHeight( bVal );
+}
+
+
+IMPL_LINK_NOARG(SwInsTableDlg, SelFormatHdl, ListBox&, void)
+{
+    // Get index of selected item from the listbox
+    lbIndex = static_cast<sal_uInt8>(m_pLbFormat->GetSelectedEntryPos());
+    tbIndex = lbIndexToTableIndex( lbIndex );
+
+    // To understand this index maping, look InitAutoTableFormat function to
+    // see how listbox item is implemented.
+    if( tbIndex < 255 )
+        m_pWndPreview->NotifyChange( (*pTableTable)[tbIndex] );
+    else
+    {
+        SwTableAutoFormat aTmp( SwViewShell::GetShellRes()->aStrNone );
+        lcl_SetProperties( &aTmp, false );
+
+        m_pWndPreview->NotifyChange( aTmp );
+    }
+}
+
+IMPL_LINK_NOARG(SwInsTableDlg, OKHdl, Button*, void)
+{
+    if( tbIndex < 255 )
+        pShell->SetTableStyle((*pTableTable)[tbIndex]);
+
+    if( tbIndex < 255 )
+    {
+        if( pTAutoFormat )
+            *pTAutoFormat = (*pTableTable)[ tbIndex ];
+        else
+            pTAutoFormat = new SwTableAutoFormat( (*pTableTable)[ tbIndex ] );
+    }
+    else
+    {
+        delete pTAutoFormat;
+        pTAutoFormat = new SwTableAutoFormat( SwViewShell::GetShellRes()->aStrNone );
+        lcl_SetProperties( pTAutoFormat, false );
+    }
+
+    EndDialog(RET_OK);
 }
 
 IMPL_LINK( SwInsTableDlg, ModifyName, Edit&, rEdit, void )
@@ -193,16 +271,6 @@ IMPL_LINK( SwInsTableDlg, ModifyRowCol, Edit&, rEdit, void )
         else if( nActVal < nEnteredValRepeatHeaderNF )
             m_pRepeatHeaderNF->SetValue( std::min( nEnteredValRepeatHeaderNF, nMax ) );
     }
-}
-IMPL_LINK( SwInsTableDlg, AutoFormatHdl, Button*, pButton, void )
-{
-    SwAbstractDialogFactory* pFact = swui::GetFactory();
-    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
-    ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton,pShell, false, pTAutoFormat));
-    OSL_ENSURE(pDlg, "Dialog creation failed!");
-    if( RET_OK == pDlg->Execute())
-        pDlg->FillAutoFormatOfIndex( pTAutoFormat );
 }
 
 IMPL_LINK_NOARG(SwInsTableDlg, CheckBoxHdl, Button*, void)
