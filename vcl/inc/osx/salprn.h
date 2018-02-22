@@ -73,8 +73,8 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     virtual bool                SetData( JobSetFlags i_nFlags, ImplJobSetup* i_pSetupData ) override;
     virtual void                GetPageInfo( const ImplJobSetup* i_pSetupData,
                                              long& o_rOutWidth, long& o_rOutHeight,
-                                             long& o_rPageOffX, long& o_rPageOffY,
-                                             long& o_rPageWidth, long& o_rPageHeight ) override;
+                                             Point& rPageOffset,
+                                             Size& rPaperSize ) override;
     virtual sal_uInt32          GetCapabilities( const ImplJobSetup* i_pSetupData, PrinterCapType i_nType ) override;
     virtual sal_uInt16          GetPaperBinCount( const ImplJobSetup* i_pSetupData ) override;
     virtual OUString            GetPaperBinName( const ImplJobSetup* i_pSetupData, sal_uInt16 i_nPaperBin ) override;
