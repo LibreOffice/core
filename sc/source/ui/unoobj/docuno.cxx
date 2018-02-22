@@ -611,10 +611,10 @@ void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     switch (nType)
     {
     case LOK_KEYEVENT_KEYINPUT:
-        Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, pWindow, &aEvent);
+        pWindow->KeyInput(aEvent);
         break;
     case LOK_KEYEVENT_KEYUP:
-        Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, pWindow, &aEvent);
+        pWindow->KeyUp(aEvent);
         break;
     default:
         assert(false);
