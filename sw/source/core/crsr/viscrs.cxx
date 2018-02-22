@@ -48,7 +48,6 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/srchdlg.hxx>
-#include <vcl/svapp.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
 #include "overlayrangesoutline.hxx"
 

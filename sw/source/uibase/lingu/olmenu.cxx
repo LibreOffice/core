@@ -73,7 +73,6 @@
 #include <unotools/linguprops.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
 #include <sal/macros.h>
 
 #include <map>
