@@ -1417,7 +1417,8 @@ void ColumnValueSet::UserDraw(const UserDrawEvent& rUDEvt)
         Point aEnd(aBLPos.X() + nEnds[j], 0);
         for( sal_uInt16 i = 0; i < 12; i ++)
         {
-            aStart.Y() = aEnd.Y() = aBLPos.Y() + nTop + i * nStep;
+            aStart.setY( aBLPos.Y() + nTop + i * nStep);
+            aEnd.setY( aStart.Y() );
             pDev->DrawLine(aStart, aEnd);
         }
     }

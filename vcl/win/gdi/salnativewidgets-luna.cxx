@@ -1372,9 +1372,9 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             tools::Rectangle aRect( ImplGetThemeRect( hTheme, hDC, CP_DROPDOWNBUTTON,
                                                CBXS_NORMAL, aBoxRect ) );
             if( aRect.GetHeight() > aBoxRect.GetHeight() )
-                aBoxRect.Bottom() = aBoxRect.Top() + aRect.GetHeight();
+                aBoxRect.SetBottom( aBoxRect.Top() + aRect.GetHeight() );
             if( aRect.GetWidth() > aBoxRect.GetWidth() )
-                aBoxRect.Right() = aBoxRect.Left() + aRect.GetWidth();
+                aBoxRect.SetRight( aBoxRect.Left() + aRect.GetWidth() );
             rNativeContentRegion = aBoxRect;
             rNativeBoundingRegion = rNativeContentRegion;
             if( !aRect.IsEmpty() )
@@ -1402,12 +1402,12 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
 
                 if( aRect.GetHeight() && nFontHeight )
                 {
-                    aRect.Bottom() += aRect.GetHeight();
-                    aRect.Bottom() += nFontHeight;
+                    aRect.AdjustBottom(aRect.GetHeight());
+                    aRect.AdjustBottom(nFontHeight);
                     if( aRect.GetHeight() > aBoxRect.GetHeight() )
-                        aBoxRect.Bottom() = aBoxRect.Top() + aRect.GetHeight();
+                        aBoxRect.SetBottom( aBoxRect.Top() + aRect.GetHeight() );
                     if( aRect.GetWidth() > aBoxRect.GetWidth() )
-                        aBoxRect.Right() = aBoxRect.Left() + aRect.GetWidth();
+                        aBoxRect.SetRight( aBoxRect.Left() + aRect.GetWidth() );
                     rNativeContentRegion = aBoxRect;
                     rNativeBoundingRegion = rNativeContentRegion;
                         bRet = TRUE;
@@ -1451,7 +1451,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             {
                 long nW = aThumbRect.GetWidth();
                 tools::Rectangle aRect( rControlRegion );
-                aRect.Right() = aRect.Left() + nW - 1;
+                aRect.SetRight( aRect.Left() + nW - 1 );
                 rNativeContentRegion = aRect;
                 rNativeBoundingRegion = rNativeContentRegion;
             }
@@ -1459,7 +1459,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             {
                 long nH = aThumbRect.GetHeight();
                 tools::Rectangle aRect( rControlRegion );
-                aRect.Bottom() = aRect.Top() + nH - 1;
+                aRect.SetBottom( aRect.Top() + nH - 1 );
                 rNativeContentRegion = aRect;
                 rNativeBoundingRegion = rNativeContentRegion;
             }
@@ -1472,26 +1472,26 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
         tools::Rectangle aControlRect( rControlRegion );
         rNativeContentRegion = aControlRect;
 
-        --aControlRect.Bottom();
+        aControlRect.AdjustBottom(-1);
 
         if( rControlValue.getType() == ControlType::TabItem )
         {
             const TabitemValue *pValue = static_cast<const TabitemValue*>(&rControlValue);
             if ( pValue->isBothAligned() )
-                --aControlRect.Right();
+                aControlRect.AdjustRight(-1);
 
             if ( nState & ControlState::SELECTED )
             {
-                aControlRect.Left() -= 2;
+                aControlRect.AdjustLeft(-2);
                 if ( pValue && !pValue->isBothAligned() )
                 {
                     if ( pValue->isLeftAligned() || pValue->isNotAligned() )
-                        aControlRect.Right() += 2;
+                        aControlRect.AdjustRight(2);
                     if ( pValue->isRightAligned() )
-                        aControlRect.Right() += 1;
+                        aControlRect.AdjustRight(1);
                 }
-                aControlRect.Top() -= 2;
-                aControlRect.Bottom() += 2;
+                aControlRect.AdjustTop(-2);
+                aControlRect.AdjustBottom(2);
             }
         }
         rNativeBoundingRegion = aControlRect;

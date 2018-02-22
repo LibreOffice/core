@@ -463,7 +463,7 @@ void ScZoomSliderWnd::DoPaint(vcl::RenderContext& rRenderContext)
     Point aImagePoint = aRect.TopLeft();
     aImagePoint.AdjustX(Zoom2Offset(mpImpl->mnCurrentZoom) );
     aImagePoint.AdjustX( -(nButtonWidth / 2) );
-    aImagePoint.Y() += (aSliderWindowSize.Height() - nButtonHeight) / 2;
+    aImagePoint.AdjustY( (aSliderWindowSize.Height() - nButtonHeight) / 2 );
     pVDev->DrawImage(aImagePoint, mpImpl->maSliderButton);
 
     // draw decrease button

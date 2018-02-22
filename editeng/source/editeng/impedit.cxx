@@ -907,7 +907,8 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         if ( aPaM.GetNode()->Len() && ( aPaM.GetIndex() < aPaM.GetNode()->Len() ) )
         {
             // If we are behind a portion, and the next portion has other direction, we must change position...
-            aEditCursor.Left() = aEditCursor.Right() = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly|GetCursorFlags::PreferPortionStart ).Left();
+            aEditCursor.SetLeft( pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly|GetCursorFlags::PreferPortionStart ).Left() );
+            aEditCursor.SetRight( aEditCursor.Left() );
 
             sal_Int32 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, true );
             const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nTextPortion];

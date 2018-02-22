@@ -97,8 +97,10 @@ void SwPagePreviewLayout::ClearPreviewLayoutSizes()
 
     maMaxPageSize.setWidth( 0 );
     maMaxPageSize.setHeight( 0 );
-    maPreviewDocRect.Left() = maPreviewDocRect.Top() = 0;
-    maPreviewDocRect.Right() = maPreviewDocRect.Bottom() = 0;
+    maPreviewDocRect.SetLeft( 0 );
+    maPreviewDocRect.SetTop( 0 );
+    maPreviewDocRect.SetRight( 0 );
+    maPreviewDocRect.SetBottom( 0 );
     mnColWidth = mnRowHeight = 0;
     mnPreviewLayoutWidth = mnPreviewLayoutHeight = 0;
 }
