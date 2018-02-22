@@ -116,7 +116,7 @@
     </child>
     <action-widgets>
       <action-widget response="0">connect</action-widget>
-      <action-widget response="0">close</action-widget>
+      <action-widget response="-7">close</action-widget>
     </action-widgets>
   </object>
 </interface>

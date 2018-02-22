@@ -1659,8 +1659,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">help</action-widget>
-      <action-widget response="0">cancel</action-widget>
+      <action-widget response="-11">help</action-widget>
+      <action-widget response="-6">cancel</action-widget>
       <action-widget response="0">lastPageButton</action-widget>
       <action-widget response="0">nextPageButton</action-widget>
       <action-widget response="0">finishButton</action-widget>

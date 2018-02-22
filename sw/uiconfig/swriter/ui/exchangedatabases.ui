@@ -264,8 +264,8 @@ Use the browse button to select a database file.</property>
     </child>
     <action-widgets>
       <action-widget response="0">define</action-widget>
-      <action-widget response="0">close</action-widget>
-      <action-widget response="0">help</action-widget>
+      <action-widget response="-7">close</action-widget>
+      <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>
 </interface>
