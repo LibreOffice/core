@@ -1370,8 +1370,8 @@ DECLARE_WW8EXPORT_TEST(testTdf99474, "tdf99474.odt")
     uno::Reference<beans::XPropertySet> xStyle(
         getStyles("CharacterStyles")->getByName(charStyleName),
         uno::UNO_QUERY);
-    ColorData charColor = getProperty<util::Color>(xStyle, "CharColor");
-    CPPUNIT_ASSERT_EQUAL(COL_AUTO, charColor);
+    Color charColor(getProperty<util::Color>(xStyle, "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(COL_AUTO), sal_uInt32(charColor));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

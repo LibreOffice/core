@@ -41,7 +41,7 @@ public:
     // accessors
     size_t size() const;
     const XColorEntry & operator[]( size_t _nIndex ) const;
-    ColorData getColorData( size_t _nIndex ) const;
+    Color getColor( size_t _nIndex ) const;
 
     // mutators
     void clear();
