@@ -684,6 +684,12 @@ DECLARE_OOXMLIMPORT_TEST(testTdf105975formula, "tdf105975.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("25"), xEnumerationAccess->getPresentation(false).trim());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf115883, "tdf115883.docx")
+{
+    // Import failed due to an unhandled exception when getting the Surround
+    // property of a not yet inserted frame.
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf75573, "tdf75573_page1frame.docx")
 {
     // the problem was that the frame was discarded
