@@ -489,7 +489,6 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">array</action-widget>
       <action-widget response="0">help</action-widget>
       <action-widget response="0">back</action-widget>
       <action-widget response="0">next</action-widget>
