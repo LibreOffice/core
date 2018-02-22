@@ -620,10 +620,10 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines )
     }
 }
 
-sal_uLong CalcLineCount( SvStream& rStream )
+sal_uInt32 CalcLineCount( SvStream& rStream )
 {
-    sal_uLong nLFs = 0;
-    sal_uLong nCRs = 0;
+    sal_uInt32 nLFs = 0;
+    sal_uInt32 nCRs = 0;
     char c;
 
     rStream.Seek( 0 );

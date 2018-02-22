@@ -138,7 +138,7 @@ public:
     ExtTextEngine*  GetEditEngine() const   { return pEditEngine.get(); }
     TextView*       GetEditView() const     { return pEditView.get(); }
 
-    void            CreateProgress( const OUString& rText, sal_uLong nRange );
+    void            CreateProgress( const OUString& rText, sal_uInt32 nRange );
     void            DestroyProgress();
 
     void            ParagraphInsertedDeleted( sal_uLong nNewPara, bool bInserted );
