@@ -51,7 +51,6 @@
 #include "oox/helper/zipstorage.hxx"
 #include <oox/ole/olestorage.hxx>
 #include <oox/token/namespaces.hxx>
-#include <oox/token/relationship.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -69,6 +68,7 @@
 #include <com/sun/star/util/Duration.hpp>
 #include <sax/tools/converter.hxx>
 #include <oox/token/namespacemap.hxx>
+#include <editeng/unoprnms.hxx>
 
 using ::com::sun::star::xml::dom::DocumentBuilder;
 using ::com::sun::star::xml::dom::XDocument;
@@ -1013,7 +1013,7 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
         {
             Reference<XDocument> xCustDoc = importFragment("customXml/item" + OUString::number(i) + ".xml");
             Reference<XDocument> xCustDocProps = importFragment("customXml/itemProps" + OUString::number(i) + ".xml");
-            if (xCustDoc && xCustDocProps)
+            if (xCustDoc.is() && xCustDocProps.is())
             {
                 aCustomXmlDomList.emplace_back(xCustDoc);
                 aCustomXmlDomPropsList.emplace_back(xCustDocProps);
@@ -1082,7 +1082,7 @@ void XmlFilterBase::exportCustomFragments()
         const OUString fragmentPath = "customXml/item" + OUString::number((j+1)) + ".xml";
         if (customXmlDom.is())
         {
-            addRelation(oox::getRelationship(Relationship::CUSTOMXML), "../" + fragmentPath);
+            addRelation("http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml", "../" + fragmentPath);
 
             uno::Reference<xml::sax::XSAXSerializable> serializer(customXmlDom, uno::UNO_QUERY);
             uno::Reference<xml::sax::XWriter> writer = xml::sax::Writer::create(comphelper::getProcessComponentContext());
@@ -1102,7 +1102,7 @@ void XmlFilterBase::exportCustomFragments()
 
             // Adding itemprops's relationship entry to item.xml.rels file
             addRelation(openFragmentStream(fragmentPath, "application/xml"),
-                        oox::getRelationship(Relationship::CUSTOMXMLPROPS),
+                        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXmlProps",
                         "itemProps"+OUString::number((j+1))+".xml");
         }
     }
