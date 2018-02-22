@@ -394,6 +394,17 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
         fWeight = 0;
     }
 
+    // tdf#68889: Ditto for Gill Sans MT Pro. Here I can kinda understand it, maybe the
+    // kCTFontWeightTrait is intended to give a subjective "optical" impression of how the font
+    // looks, and Gill Sans MT Pro Medium is kinda heavy. But with the way LibreOffice uses fonts,
+    // we still should think of it as being "medium" weight.
+    if (rDFA.GetFamilyName() == "Gill Sans MT Pro" &&
+        (rDFA.GetStyleName() == "Medium" || rDFA.GetStyleName() == "Medium Italic") &&
+        fWeight > 0.2)
+    {
+        fWeight = 0;
+    }
+
     if( fWeight > 0 )
     {
         nInt = rint(WEIGHT_NORMAL + fWeight * ((WEIGHT_BLACK - WEIGHT_NORMAL)/0.68));
