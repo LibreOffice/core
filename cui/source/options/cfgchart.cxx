@@ -56,7 +56,7 @@ const XColorEntry & SvxChartColorTable::operator[]( size_t _nIndex ) const
     return m_aColorEntries[ _nIndex ];
 }
 
-ColorData SvxChartColorTable::getColorData( size_t _nIndex ) const
+Color SvxChartColorTable::getColor( size_t _nIndex ) const
 {
     if ( _nIndex >= m_aColorEntries.size() )
     {
@@ -100,19 +100,19 @@ void SvxChartColorTable::replace( size_t _nIndex, const XColorEntry & _rEntry )
 
 void SvxChartColorTable::useDefault()
 {
-    ColorData aColors[] = {
-        RGB_COLORDATA( 0x00, 0x45, 0x86 ),
-        RGB_COLORDATA( 0xff, 0x42, 0x0e ),
-        RGB_COLORDATA( 0xff, 0xd3, 0x20 ),
-        RGB_COLORDATA( 0x57, 0x9d, 0x1c ),
-        RGB_COLORDATA( 0x7e, 0x00, 0x21 ),
-        RGB_COLORDATA( 0x83, 0xca, 0xff ),
-        RGB_COLORDATA( 0x31, 0x40, 0x04 ),
-        RGB_COLORDATA( 0xae, 0xcf, 0x00 ),
-        RGB_COLORDATA( 0x4b, 0x1f, 0x6f ),
-        RGB_COLORDATA( 0xff, 0x95, 0x0e ),
-        RGB_COLORDATA( 0xc5, 0x00, 0x0b ),
-        RGB_COLORDATA( 0x00, 0x84, 0xd1 )
+    Color aColors[] = {
+        Color( 0x00, 0x45, 0x86 ),
+        Color( 0xff, 0x42, 0x0e ),
+        Color( 0xff, 0xd3, 0x20 ),
+        Color( 0x57, 0x9d, 0x1c ),
+        Color( 0x7e, 0x00, 0x21 ),
+        Color( 0x83, 0xca, 0xff ),
+        Color( 0x31, 0x40, 0x04 ),
+        Color( 0xae, 0xcf, 0x00 ),
+        Color( 0x4b, 0x1f, 0x6f ),
+        Color( 0xff, 0x95, 0x0e ),
+        Color( 0xc5, 0x00, 0x0b ),
+        Color( 0x00, 0x84, 0xd1 )
     };
 
     clear();
@@ -158,7 +158,7 @@ bool SvxChartColorTable::operator==( const SvxChartColorTable & _rOther ) const
     {
         for( size_t i = 0; i < m_aColorEntries.size(); ++i )
         {
-            if( getColorData( i ) != _rOther.getColorData( i ))
+            if( getColor( i ) != _rOther.getColor( i ))
             {
                 bEqual = false;
                 break;
@@ -232,7 +232,7 @@ bool SvxChartOptions::RetrieveOptions()
         // set color values
         for( sal_Int32 i=0; i < nCount; i++ )
         {
-            aCol = static_cast< ColorData >(aColorSeq[ i ]);
+            aCol = Color(aColorSeq[ i ]);
 
             aName = aPrefix + OUString::number(i + 1) + aPostfix;
 
@@ -256,8 +256,8 @@ void SvxChartOptions::ImplCommit()
         uno::Sequence< sal_Int64 > aColors( nCount );
         for( size_t i=0; i < nCount; i++ )
         {
-            ColorData aData = maDefColors.getColorData( i );
-            aColors[ i ] = aData;
+            Color aData = maDefColors.getColor( i );
+            aColors[ i ] = sal_uInt32(aData);
         }
 
         aValues[ 0 ] <<= aColors;
