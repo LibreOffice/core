@@ -84,7 +84,7 @@ This product was created by %OOOVENDOR, based on OpenOffice.org, which is Copyri
     </child>
     <action-widgets>
       <action-widget response="0">show</action-widget>
-      <action-widget response="0">close</action-widget>
+      <action-widget response="-7">close</action-widget>
     </action-widgets>
   </object>
 </interface>

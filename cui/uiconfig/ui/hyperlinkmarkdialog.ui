@@ -83,7 +83,7 @@
     </child>
     <action-widgets>
       <action-widget response="0">apply</action-widget>
-      <action-widget response="0">close</action-widget>
+      <action-widget response="-7">close</action-widget>
     </action-widgets>
   </object>
 </interface>
