@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_cfe79fe2",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1580,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-02-22T08:23:41Z",
+      "side": 1,
+      "message": "since getLength returns size without terminating null, it should be \u003e\u003d (https://msdn.microsoft.com/en-us/library/aa365247 says, that MAX_PATH allows this *maximum* path: \"D:\\some 256-character path string\u003cNUL\u003e\") - i.e., 259 characters + null.",
+      "range": {
+        "startLine": 1580,
+        "startChar": 30,
+        "endLine": 1580,
+        "endChar": 31
+      },
+      "revId": "4e7ec69c1d06b1131d8f623be81fc53fc34097fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
