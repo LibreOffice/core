@@ -813,6 +813,16 @@
   <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
   <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
   <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+  <block-list:block block-list:abbreviated-name=":100%:" block-list:name="💯"/>
+  <block-list:block block-list:abbreviated-name=":alpha:" block-list:name="α"/>
+  <block-list:block block-list:abbreviated-name=":Alpha:" block-list:name="Α"/>
+  <block-list:block block-list:abbreviated-name=":Anchor:" block-list:name="⚓"/>
+  <block-list:block block-list:abbreviated-name=":and:" block-list:name="∧"/>
+  <block-list:block block-list:abbreviated-name=":angle:" block-list:name="∠"/>
+  <block-list:block block-list:abbreviated-name=":Back:" block-list:name="🂫"/>
+  <block-list:block block-list:abbreviated-name=":beta:" block-list:name="β"/>
+  <block-list:block block-list:abbreviated-name=":Blink:" block-list:name="🔗"/>
+  <block-list:block block-list:abbreviated-name=":Block:" block-list:name="🔒"/>
   <block-list:block block-list:abbreviated-name=":^-:" block-list:name="⁻"/>
   <block-list:block block-list:abbreviated-name=":^(:" block-list:name="⁽"/>
   <block-list:block block-list:abbreviated-name=":^):" block-list:name="⁾"/>
@@ -830,6 +840,143 @@
   <block-list:block block-list:abbreviated-name=":.:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
   <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
+  <block-list:block block-list:abbreviated-name=":Bookmark:" block-list:name="📑"/>
+  <block-list:block block-list:abbreviated-name=":Brightness:" block-list:name="🔅"/>
+  <block-list:block block-list:abbreviated-name=":Brown:" block-list:name="☹"/>
+  <block-list:block block-list:abbreviated-name=":Bullet:" block-list:name="•"/>
+  <block-list:block block-list:abbreviated-name=":Bushi:" block-list:name="🍣"/>
+  <block-list:block block-list:abbreviated-name=":Button:" block-list:name="🔳"/>
+  <block-list:block block-list:abbreviated-name=":Calendar:" block-list:name="📅"/>
+  <block-list:block block-list:abbreviated-name=":Camera:" block-list:name="📷"/>
+  <block-list:block block-list:abbreviated-name=":Cell:" block-list:name="🔔"/>
+  <block-list:block block-list:abbreviated-name=":Cellphone:" block-list:name="📱"/>
+  <block-list:block block-list:abbreviated-name=":chart:" block-list:name="📉"/>
+  <block-list:block block-list:abbreviated-name=":chi:" block-list:name="χ"/>
+  <block-list:block block-list:abbreviated-name=":Circle:" block-list:name="○"/>
+  <block-list:block block-list:abbreviated-name=":clipboard:" block-list:name="📋"/>
+  <block-list:block block-list:abbreviated-name=":Cloud:" block-list:name="☁"/>
+  <block-list:block block-list:abbreviated-name=":Clover:" block-list:name="🍀"/>
+  <block-list:block block-list:abbreviated-name=":Computers:" block-list:name="💻"/>
+  <block-list:block block-list:abbreviated-name=":Crescent Moon:" block-list:name="🌙"/>
+  <block-list:block block-list:abbreviated-name=":Dash:" block-list:name="💨"/>
+  <block-list:block block-list:abbreviated-name=": degrees:" block-list:name="°"/>
+  <block-list:block block-list:abbreviated-name=":delta:" block-list:name="Δ"/>
+  <block-list:block block-list:abbreviated-name=":Diamond:" block-list:name="♦"/>
+  <block-list:block block-list:abbreviated-name=":Divides:" block-list:name="∣"/>
+  <block-list:block block-list:abbreviated-name=":down:" block-list:name="☟"/>
+  <block-list:block block-list:abbreviated-name=":Droplets:" block-list:name="💧"/>
+  <block-list:block block-list:abbreviated-name=":Ellipse:" block-list:name="⬭"/>
+  <block-list:block block-list:abbreviated-name=":e-mail:" block-list:name="📧"/>
+  <block-list:block block-list:abbreviated-name=":Empty Set:" block-list:name="∅"/>
+  <block-list:block block-list:abbreviated-name=":Envelope:" block-list:name="✉"/>
+  <block-list:block block-list:abbreviated-name=":epsilon:" block-list:name="Ε"/>
+  <block-list:block block-list:abbreviated-name=":eta:" block-list:name="Β"/>
+  <block-list:block block-list:abbreviated-name=":feet:" block-list:name="🐾"/>
+  <block-list:block block-list:abbreviated-name=":Fill:" block-list:name="💊"/>
+  <block-list:block block-list:abbreviated-name=":Flags:" block-list:name="🎌"/>
+  <block-list:block block-list:abbreviated-name=":Flat:" block-list:name="♭"/>
+  <block-list:block block-list:abbreviated-name=":Flower:" block-list:name="⚘"/>
+  <block-list:block block-list:abbreviated-name=":Folder:" block-list:name="📁"/>
+  <block-list:block block-list:abbreviated-name=":Foot:" block-list:name="👢"/>
+  <block-list:block block-list:abbreviated-name=":French:" block-list:name="🔧"/>
+  <block-list:block block-list:abbreviated-name=":gamma:" block-list:name="γ"/>
+  <block-list:block block-list:abbreviated-name=":Gamma:" block-list:name="Γ"/>
+  <block-list:block block-list:abbreviated-name=":Ganda:" block-list:name="🐼"/>
+  <block-list:block block-list:abbreviated-name=":Grey:" block-list:name="📤"/>
   <block-list:block block-list:abbreviated-name=":&gt;&gt;:" block-list:name="≫"/>
+  <block-list:block block-list:abbreviated-name=":Heartbeat:" block-list:name="💓"/>
+  <block-list:block block-list:abbreviated-name=":Heart:" block-list:name="❤"/>
+  <block-list:block block-list:abbreviated-name=":Hexagon:" block-list:name="⬡"/>
+  <block-list:block block-list:abbreviated-name=":in:" block-list:name="∈"/>
+  <block-list:block block-list:abbreviated-name=":inch:" block-list:name="″"/>
+  <block-list:block block-list:abbreviated-name=":infinite:" block-list:name="∞"/>
+  <block-list:block block-list:abbreviated-name=":Information:" block-list:name="ℹ"/>
+  <block-list:block block-list:abbreviated-name=":Instrction:" block-list:name="🚧"/>
+  <block-list:block block-list:abbreviated-name=":Integral:" block-list:name="∫"/>
+  <block-list:block block-list:abbreviated-name=":Intersection:" block-list:name="∩"/>
+  <block-list:block block-list:abbreviated-name=":iota:" block-list:name="Ι"/>
+  <block-list:block block-list:abbreviated-name=":kappa:" block-list:name="Κ"/>
+  <block-list:block block-list:abbreviated-name=":Keyboard:" block-list:name="⌨"/>
+  <block-list:block block-list:abbreviated-name=":lambda:" block-list:name="Λ"/>
+  <block-list:block block-list:abbreviated-name=":left:" block-list:name="☚"/>
+  <block-list:block block-list:abbreviated-name=":like:" block-list:name="🚲"/>
+  <block-list:block block-list:abbreviated-name=":Line:" block-list:name="🌲"/>
+  <block-list:block block-list:abbreviated-name=":Link:" block-list:name="😉"/>
+  <block-list:block block-list:abbreviated-name=":List:" block-list:name="✊"/>
   <block-list:block block-list:abbreviated-name=":&lt;&lt;:" block-list:name="≪"/>
+  <block-list:block block-list:abbreviated-name=":Make:" block-list:name="🍰"/>
+  <block-list:block block-list:abbreviated-name=":Maths:" block-list:name="🛀"/>
+  <block-list:block block-list:abbreviated-name=":mean:" block-list:name="🍖"/>
+  <block-list:block block-list:abbreviated-name=":mile:" block-list:name="♂"/>
+  <block-list:block block-list:abbreviated-name=":month:" block-list:name="👄"/>
+  <block-list:block block-list:abbreviated-name=":Moon:" block-list:name="☽"/>
+  <block-list:block block-list:abbreviated-name=":Move:" block-list:name="💘"/>
+  <block-list:block block-list:abbreviated-name=":mu:" block-list:name="μ"/>
+  <block-list:block block-list:abbreviated-name=":Mute:" block-list:name="🔇"/>
+  <block-list:block block-list:abbreviated-name=":Name:" block-list:name="📛"/>
+  <block-list:block block-list:abbreviated-name=":none:" block-list:name="👃"/>
+  <block-list:block block-list:abbreviated-name=":Note:" block-list:name="♩"/>
+  <block-list:block block-list:abbreviated-name=":notequal:" block-list:name="≠"/>
+  <block-list:block block-list:abbreviated-name=":Notes:" block-list:name="♫"/>
+  <block-list:block block-list:abbreviated-name=":Not Subset:" block-list:name="⊄"/>
+  <block-list:block block-list:abbreviated-name=":Not Superset:" block-list:name="⊅"/>
+  <block-list:block block-list:abbreviated-name=":nu:" block-list:name="ν"/>
+  <block-list:block block-list:abbreviated-name=":Office:" block-list:name="🏢"/>
+  <block-list:block block-list:abbreviated-name=":omega:" block-list:name="Ω"/>
+  <block-list:block block-list:abbreviated-name=":omicron:" block-list:name="Ο"/>
+  <block-list:block block-list:abbreviated-name=":or:" block-list:name="∨"/>
+  <block-list:block block-list:abbreviated-name=":Pager:" block-list:name="📟"/>
+  <block-list:block block-list:abbreviated-name=":Parallel:" block-list:name="∥"/>
+  <block-list:block block-list:abbreviated-name=":Parallelogram:" block-list:name="▰"/>
+  <block-list:block block-list:abbreviated-name=":Partial:" block-list:name="∂"/>
+  <block-list:block block-list:abbreviated-name=":Pentagon:" block-list:name="⬟"/>
+  <block-list:block block-list:abbreviated-name=":phi:" block-list:name="φ"/>
+  <block-list:block block-list:abbreviated-name=":pi:" block-list:name="π"/>
+  <block-list:block block-list:abbreviated-name=":Power:" block-list:name="🗼"/>
+  <block-list:block block-list:abbreviated-name=":Price:" block-list:name="🍚"/>
+  <block-list:block block-list:abbreviated-name=":Product:" block-list:name="∏"/>
+  <block-list:block block-list:abbreviated-name=":psi:" block-list:name="ψ"/>
+  <block-list:block block-list:abbreviated-name=":~Radio Button:" block-list:name="🔘"/>
+  <block-list:block block-list:abbreviated-name=":radix:" block-list:name="📻"/>
+  <block-list:block block-list:abbreviated-name=":range:" block-list:name="😡"/>
+  <block-list:block block-list:abbreviated-name=":rate:" block-list:name="🐀"/>
+  <block-list:block block-list:abbreviated-name=":Rectangle:" block-list:name="▬"/>
+  <block-list:block block-list:abbreviated-name=":rho:" block-list:name="ρ"/>
+  <block-list:block block-list:abbreviated-name=":right:" block-list:name="☛"/>
+  <block-list:block block-list:abbreviated-name=":Right:" block-list:name="🌃"/>
+  <block-list:block block-list:abbreviated-name=":Right Triangle:" block-list:name="⊿"/>
+  <block-list:block block-list:abbreviated-name=":Ring:" block-list:name="🂮"/>
+  <block-list:block block-list:abbreviated-name=":Rotation:" block-list:name="🚉"/>
+  <block-list:block block-list:abbreviated-name=":Ruler:" block-list:name="📏"/>
+  <block-list:block block-list:abbreviated-name=":Sango:" block-list:name="🍡"/>
+  <block-list:block block-list:abbreviated-name=":Save:" block-list:name="👋"/>
+  <block-list:block block-list:abbreviated-name=":Section:" block-list:name="§"/>
+  <block-list:block block-list:abbreviated-name=":sheet:" block-list:name="🐑"/>
+  <block-list:block block-list:abbreviated-name=":Shell:" block-list:name="🐚"/>
+  <block-list:block block-list:abbreviated-name=":sigma:" block-list:name="Σ"/>
+  <block-list:block block-list:abbreviated-name=":Socket:" block-list:name="🚀"/>
+  <block-list:block block-list:abbreviated-name=":Sound:" block-list:name="£"/>
+  <block-list:block block-list:abbreviated-name=":Square:" block-list:name="□"/>
+  <block-list:block block-list:abbreviated-name=":start:" block-list:name="★"/>
+  <block-list:block block-list:abbreviated-name=":Subset:" block-list:name="⊂"/>
+  <block-list:block block-list:abbreviated-name=":Sun:" block-list:name="☉"/>
+  <block-list:block block-list:abbreviated-name=":Superset:" block-list:name="⊃"/>
+  <block-list:block block-list:abbreviated-name=":tau:" block-list:name="τ"/>
+  <block-list:block block-list:abbreviated-name=":text:" block-list:name="⛺"/>
+  <block-list:block block-list:abbreviated-name=":theta:" block-list:name="Θ"/>
+  <block-list:block block-list:abbreviated-name=":Top right:" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name=":true:" block-list:name="🌳"/>
+  <block-list:block block-list:abbreviated-name=":Union:" block-list:name="∪"/>
+  <block-list:block block-list:abbreviated-name=":up:" block-list:name="☝"/>
+  <block-list:block block-list:abbreviated-name=":upsilon:" block-list:name="υ"/>
+  <block-list:block block-list:abbreviated-name=":Wall:" block-list:name="⛹"/>
+  <block-list:block block-list:abbreviated-name=":Walloon:" block-list:name="🎈"/>
+  <block-list:block block-list:abbreviated-name=":Warning:" block-list:name="⚠"/>
+  <block-list:block block-list:abbreviated-name=":Watch:" block-list:name="⌚"/>
+  <block-list:block block-list:abbreviated-name=":Whip:" block-list:name="🚢"/>
+  <block-list:block block-list:abbreviated-name=":xi:" block-list:name="ξ"/>
+  <block-list:block block-list:abbreviated-name=":year:" block-list:name="⚙"/>
+  <block-list:block block-list:abbreviated-name=":yes:" block-list:name="👀"/>
+  <block-list:block block-list:abbreviated-name=":zeta:" block-list:name="ζ"/>
+  <block-list:block block-list:abbreviated-name=":Zoom:" block-list:name="💥"/>
 </block-list:block-list>

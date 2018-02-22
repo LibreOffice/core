@@ -6189,6 +6189,7 @@
   <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
   <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
   <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+  <block-list:block block-list:abbreviated-name=":100%:" block-list:name="💯"/>
   <block-list:block block-list:abbreviated-name=":^-:" block-list:name="⁻"/>
   <block-list:block block-list:abbreviated-name=":^(:" block-list:name="⁽"/>
   <block-list:block block-list:abbreviated-name=":^):" block-list:name="⁾"/>
@@ -6206,6 +6207,132 @@
   <block-list:block block-list:abbreviated-name=":.:" block-list:name="…"/>
   <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
   <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
+  <block-list:block block-list:abbreviated-name=":Ganda:" block-list:name="🐼"/>
   <block-list:block block-list:abbreviated-name=":&gt;&gt;:" block-list:name="≫"/>
   <block-list:block block-list:abbreviated-name=":&lt;&lt;:" block-list:name="≪"/>
+  <block-list:block block-list:abbreviated-name=":Sango:" block-list:name="🍡"/>
+  <block-list:block block-list:abbreviated-name=":Walloon:" block-list:name="🎈"/>
+  <block-list:block block-list:abbreviated-name=":یا:" block-list:name="∨"/>
+  <block-list:block block-list:abbreviated-name=":ابر:" block-list:name="☁"/>
+  <block-list:block block-list:abbreviated-name=":اپسیلون:" block-list:name="Ε"/>
+  <block-list:block block-list:abbreviated-name=":اِتا:" block-list:name="Β"/>
+  <block-list:block block-list:abbreviated-name=":اجتماع:" block-list:name="∪"/>
+  <block-list:block block-list:abbreviated-name=":اخطار:" block-list:name="⚠"/>
+  <block-list:block block-list:abbreviated-name=":اداری:" block-list:name="🏢"/>
+  <block-list:block block-list:abbreviated-name=":یادداشت:" block-list:name="♩"/>
+  <block-list:block block-list:abbreviated-name=":یادداشت‌ها:" block-list:name="♫"/>
+  <block-list:block block-list:abbreviated-name=":اشتراک:" block-list:name="∩"/>
+  <block-list:block block-list:abbreviated-name=":اطلاعات:" block-list:name="ℹ"/>
+  <block-list:block block-list:abbreviated-name=":آغاز:" block-list:name="★"/>
+  <block-list:block block-list:abbreviated-name=":آلفا:" block-list:name="Α"/>
+  <block-list:block block-list:abbreviated-name=":اُمیکرون:" block-list:name="Ο"/>
+  <block-list:block block-list:abbreviated-name=":اُمگا:" block-list:name="Ω"/>
+  <block-list:block block-list:abbreviated-name=":انتگرال:" block-list:name="∫"/>
+  <block-list:block block-list:abbreviated-name=":اینچ:" block-list:name="″"/>
+  <block-list:block block-list:abbreviated-name=":اوپسیلون:" block-list:name="υ"/>
+  <block-list:block block-list:abbreviated-name=":ایوتا:" block-list:name="Ι"/>
+  <block-list:block block-list:abbreviated-name=":بالا:" block-list:name="☝"/>
+  <block-list:block block-list:abbreviated-name=":بالا سمت راست:" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name=":بتا:" block-list:name="β"/>
+  <block-list:block block-list:abbreviated-name=":بخش:" block-list:name="§"/>
+  <block-list:block block-list:abbreviated-name=":بخش‌پذیر نیست بر:" block-list:name="∣"/>
+  <block-list:block block-list:abbreviated-name=":بی‌صدا:" block-list:name="🔇"/>
+  <block-list:block block-list:abbreviated-name=":بیضی:" block-list:name="⬭"/>
+  <block-list:block block-list:abbreviated-name=":بله:" block-list:name="👀"/>
+  <block-list:block block-list:abbreviated-name=":بی‌نهایت:" block-list:name="∞"/>
+  <block-list:block block-list:abbreviated-name=":پی:" block-list:name="π"/>
+  <block-list:block block-list:abbreviated-name=":پاکت:" block-list:name="✉"/>
+  <block-list:block block-list:abbreviated-name=":پایین:" block-list:name="☟"/>
+  <block-list:block block-list:abbreviated-name=":پی‌جو:" block-list:name="📟"/>
+  <block-list:block block-list:abbreviated-name=":پر کردن:" block-list:name="💊"/>
+  <block-list:block block-list:abbreviated-name=":پسی:" block-list:name="ψ"/>
+  <block-list:block block-list:abbreviated-name=":پست الکترونیکی:" block-list:name="📧"/>
+  <block-list:block block-list:abbreviated-name=":پنج‌ضلعی:" block-list:name="⬟"/>
+  <block-list:block block-list:abbreviated-name=":پوسته:" block-list:name="🐚"/>
+  <block-list:block block-list:abbreviated-name=":پوشه:" block-list:name="📁"/>
+  <block-list:block block-list:abbreviated-name=":پیوند:" block-list:name="😉"/>
+  <block-list:block block-list:abbreviated-name=":تاو:" block-list:name="τ"/>
+  <block-list:block block-list:abbreviated-name=":تپش قلب:" block-list:name="💓"/>
+  <block-list:block block-list:abbreviated-name=":تتا:" block-list:name="Θ"/>
+  <block-list:block block-list:abbreviated-name=":تخت:" block-list:name="♭"/>
+  <block-list:block block-list:abbreviated-name=":تخته‌شستی:" block-list:name="📋"/>
+  <block-list:block block-list:abbreviated-name=":تقویم:" block-list:name="📅"/>
+  <block-list:block block-list:abbreviated-name=":تلفن همراه:" block-list:name="📱"/>
+  <block-list:block block-list:abbreviated-name=":توان:" block-list:name="🗼"/>
+  <block-list:block block-list:abbreviated-name=":جابه‌جایی:" block-list:name="💘"/>
+  <block-list:block block-list:abbreviated-name=":جزئی:" block-list:name="∂"/>
+  <block-list:block block-list:abbreviated-name=":چی:" block-list:name="χ"/>
+  <block-list:block block-list:abbreviated-name=":چپ:" block-list:name="☚"/>
+  <block-list:block block-list:abbreviated-name=":چرخش:" block-list:name="🚉"/>
+  <block-list:block block-list:abbreviated-name=":چشمک‌زن:" block-list:name="🔗"/>
+  <block-list:block block-list:abbreviated-name=":حاصل:" block-list:name="∏"/>
+  <block-list:block block-list:abbreviated-name=":حلقه:" block-list:name="🂮"/>
+  <block-list:block block-list:abbreviated-name=":خی:" block-list:name="ξ"/>
+  <block-list:block block-list:abbreviated-name=":خاکستری:" block-list:name="📤"/>
+  <block-list:block block-list:abbreviated-name=":خانه:" block-list:name="🔔"/>
+  <block-list:block block-list:abbreviated-name=":خط:" block-list:name="🌲"/>
+  <block-list:block block-list:abbreviated-name=":خط‌کش:" block-list:name="📏"/>
+  <block-list:block block-list:abbreviated-name=":خورشید:" block-list:name="☉"/>
+  <block-list:block block-list:abbreviated-name=":دایره:" block-list:name="○"/>
+  <block-list:block block-list:abbreviated-name=":دکمه:" block-list:name="🔳"/>
+  <block-list:block block-list:abbreviated-name=":دلتا:" block-list:name="Δ"/>
+  <block-list:block block-list:abbreviated-name=":دیوار:" block-list:name="⛹"/>
+  <block-list:block block-list:abbreviated-name=":دوربین:" block-list:name="📷"/>
+  <block-list:block block-list:abbreviated-name=":ذخیره:" block-list:name="👋"/>
+  <block-list:block block-list:abbreviated-name=":رایانه‌ها:" block-list:name="💻"/>
+  <block-list:block block-list:abbreviated-name=":راست:" block-list:name="☛"/>
+  <block-list:block block-list:abbreviated-name=":ریاضی:" block-list:name="🛀"/>
+  <block-list:block block-list:abbreviated-name=":رو:" block-list:name="ρ"/>
+  <block-list:block block-list:abbreviated-name=":روشنی:" block-list:name="🔅"/>
+  <block-list:block block-list:abbreviated-name=":زاویه:" block-list:name="∠"/>
+  <block-list:block block-list:abbreviated-name=":زتا:" block-list:name="ζ"/>
+  <block-list:block block-list:abbreviated-name=":زیرمجموعه:" block-list:name="⊂"/>
+  <block-list:block block-list:abbreviated-name=":زیرمجموعه نیست:" block-list:name="⊄"/>
+  <block-list:block block-list:abbreviated-name=":زوم:" block-list:name="💥"/>
+  <block-list:block block-list:abbreviated-name=":سال:" block-list:name="⚙"/>
+  <block-list:block block-list:abbreviated-name=":سیگما:" block-list:name="Σ"/>
+  <block-list:block block-list:abbreviated-name=":سوکت:" block-list:name="🚀"/>
+  <block-list:block block-list:abbreviated-name=":شامل نیست:" block-list:name="⊅"/>
+  <block-list:block block-list:abbreviated-name=":شانزده‌ضلعی:" block-list:name="⬡"/>
+  <block-list:block block-list:abbreviated-name=":شبدر:" block-list:name="🍀"/>
+  <block-list:block block-list:abbreviated-name=":صدا:" block-list:name="£"/>
+  <block-list:block block-list:abbreviated-name=":صفحه‌کلید:" block-list:name="⌨"/>
+  <block-list:block block-list:abbreviated-name=":عدد:" block-list:name="μ"/>
+  <block-list:block block-list:abbreviated-name=":عقب:" block-list:name="🂫"/>
+  <block-list:block block-list:abbreviated-name=":فی:" block-list:name="φ"/>
+  <block-list:block block-list:abbreviated-name=":فرانسوی:" block-list:name="🔧"/>
+  <block-list:block block-list:abbreviated-name=":فهرست:" block-list:name="✊"/>
+  <block-list:block block-list:abbreviated-name=":فوت:" block-list:name="🐾"/>
+  <block-list:block block-list:abbreviated-name=":قلب:" block-list:name="❤"/>
+  <block-list:block block-list:abbreviated-name=":قهوه‌ای:" block-list:name="☹"/>
+  <block-list:block block-list:abbreviated-name=":کاپا:" block-list:name="Κ"/>
+  <block-list:block block-list:abbreviated-name=":گاما:" block-list:name="Γ"/>
+  <block-list:block block-list:abbreviated-name=":گل:" block-list:name="⚘"/>
+  <block-list:block block-list:abbreviated-name=":گلوله:" block-list:name="•"/>
+  <block-list:block block-list:abbreviated-name=":لاندا:" block-list:name="Λ"/>
+  <block-list:block block-list:abbreviated-name=":لنگر:" block-list:name="⚓"/>
+  <block-list:block block-list:abbreviated-name=":لوزی:" block-list:name="♦"/>
+  <block-list:block block-list:abbreviated-name=":مایل:" block-list:name="♂"/>
+  <block-list:block block-list:abbreviated-name=":میانگین:" block-list:name="🍖"/>
+  <block-list:block block-list:abbreviated-name=":ماه:" block-list:name="☽"/>
+  <block-list:block block-list:abbreviated-name=":متن:" block-list:name="⛺"/>
+  <block-list:block block-list:abbreviated-name=":متوازی‌الاضلاع:" block-list:name="▰"/>
+  <block-list:block block-list:abbreviated-name=":مثلث راست‌گوشه:" block-list:name="⊿"/>
+  <block-list:block block-list:abbreviated-name=":مجموعهٔ شامل:" block-list:name="⊃"/>
+  <block-list:block block-list:abbreviated-name=":مجوعهٔ تهی:" block-list:name="∅"/>
+  <block-list:block block-list:abbreviated-name=":محدوده:" block-list:name="😡"/>
+  <block-list:block block-list:abbreviated-name=":مربع:" block-list:name="□"/>
+  <block-list:block block-list:abbreviated-name=":مستطیل:" block-list:name="▬"/>
+  <block-list:block block-list:abbreviated-name=":مسدود کردن:" block-list:name="🔒"/>
+  <block-list:block block-list:abbreviated-name=":مشاهده:" block-list:name="⌚"/>
+  <block-list:block block-list:abbreviated-name=":~موازی:" block-list:name="∥"/>
+  <block-list:block block-list:abbreviated-name=":نا‌برابر:" block-list:name="≠"/>
+  <block-list:block block-list:abbreviated-name=":نام:" block-list:name="📛"/>
+  <block-list:block block-list:abbreviated-name=":نرخ:" block-list:name="🐀"/>
+  <block-list:block block-list:abbreviated-name=":نشانک:" block-list:name="📑"/>
+  <block-list:block block-list:abbreviated-name=":نمودار:" block-list:name="📉"/>
+  <block-list:block block-list:abbreviated-name=":نو:" block-list:name="ν"/>
+  <block-list:block block-list:abbreviated-name=":هیچ‌کدام:" block-list:name="👃"/>
+  <block-list:block block-list:abbreviated-name=":هلال ماه:" block-list:name="🌙"/>
+  <block-list:block block-list:abbreviated-name=":و:" block-list:name="∧"/>
 </block-list:block-list>

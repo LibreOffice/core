@@ -635,18 +635,25 @@
   <block-list:block block-list:abbreviated-name=":alfa:" block-list:name="α"/>
   <block-list:block block-list:abbreviated-name=":Alfa:" block-list:name="Α"/>
   <block-list:block block-list:abbreviated-name=":americký fotbal:" block-list:name="🏈"/>
+  <block-list:block block-list:abbreviated-name=":amfora:" block-list:name="🏺"/>
   <block-list:block block-list:abbreviated-name=":ananas:" block-list:name="🍍"/>
   <block-list:block block-list:abbreviated-name=":anch:" block-list:name="☥"/>
   <block-list:block block-list:abbreviated-name=":anděl:" block-list:name="👼"/>
+  <block-list:block block-list:abbreviated-name=":ano2:" block-list:name="🖒"/>
   <block-list:block block-list:abbreviated-name=":ano:" block-list:name="👍"/>
+  <block-list:block block-list:abbreviated-name=":anténa:" block-list:name="📡"/>
+  <block-list:block block-list:abbreviated-name=":arašídy:" block-list:name="🥜"/>
   <block-list:block block-list:abbreviated-name=":archivační papír:" block-list:name="♾"/>
   <block-list:block block-list:abbreviated-name=":atom:" block-list:name="⚛"/>
   <block-list:block block-list:abbreviated-name=":auto2:" block-list:name="🚘"/>
   <block-list:block block-list:abbreviated-name=":auto3:" block-list:name="🚙"/>
+  <block-list:block block-list:abbreviated-name=":auto4:" block-list:name="🏎"/>
   <block-list:block block-list:abbreviated-name=":auto:" block-list:name="🚗"/>
   <block-list:block block-list:abbreviated-name=":autobus2:" block-list:name="🚍"/>
   <block-list:block block-list:abbreviated-name=":autobus:" block-list:name="🚌"/>
+  <block-list:block block-list:abbreviated-name=":avokádo:" block-list:name="🥑"/>
   <block-list:block block-list:abbreviated-name=":a zároveň:" block-list:name="∧"/>
+  <block-list:block block-list:abbreviated-name=":badminton:" block-list:name="🏸"/>
   <block-list:block block-list:abbreviated-name=":baht:" block-list:name="฿"/>
   <block-list:block block-list:abbreviated-name=":baklažán:" block-list:name="🍆"/>
   <block-list:block block-list:abbreviated-name=":balík:" block-list:name="📦"/>
@@ -672,6 +679,7 @@
   <block-list:block block-list:abbreviated-name=":Beta:" block-list:name="Β"/>
   <block-list:block block-list:abbreviated-name=":běžec:" block-list:name="🏃"/>
   <block-list:block block-list:abbreviated-name=":bez mobilu:" block-list:name="📵"/>
+  <block-list:block block-list:abbreviated-name=":bez pirátství:" block-list:name="🕲"/>
   <block-list:block block-list:abbreviated-name=":bez úst:" block-list:name="😶"/>
   <block-list:block block-list:abbreviated-name=":bez výrazu:" block-list:name="😑"/>
   <block-list:block block-list:abbreviated-name=":bez zvonku:" block-list:name="🔕"/>
@@ -685,7 +693,11 @@
   <block-list:block block-list:abbreviated-name=":bílý pěšec:" block-list:name="♙"/>
   <block-list:block block-list:abbreviated-name=":bílý střelec:" block-list:name="♗"/>
   <block-list:block block-list:abbreviated-name=":biohazard:" block-list:name="☣"/>
-  <block-list:block block-list:abbreviated-name=":blesk:" block-list:name="☇"/>
+  <block-list:block block-list:abbreviated-name=":bitcoin:" block-list:name="₿"/>
+  <block-list:block block-list:abbreviated-name=":bláznivý:" block-list:name="🤪"/>
+  <block-list:block block-list:abbreviated-name=":blesk2:" block-list:name="🗲"/>
+  <block-list:block block-list:abbreviated-name=":blesk3:" block-list:name="☇"/>
+  <block-list:block block-list:abbreviated-name=":blesk:" block-list:name="🌩"/>
   <block-list:block block-list:abbreviated-name=":Blíženci:" block-list:name="♊"/>
   <block-list:block block-list:abbreviated-name=":^=:" block-list:name="⁼"/>
   <block-list:block block-list:abbreviated-name=":^-:" block-list:name="⁻"/>
@@ -716,13 +728,31 @@
   <block-list:block block-list:abbreviated-name=":bota2:" block-list:name="👟"/>
   <block-list:block block-list:abbreviated-name=":bota3:" block-list:name="👠"/>
   <block-list:block block-list:abbreviated-name=":bota:" block-list:name="👞"/>
-  <block-list:block block-list:abbreviated-name=":bouřka:" block-list:name="☈"/>
+  <block-list:block block-list:abbreviated-name=":bouřka2:" block-list:name="☈"/>
+  <block-list:block block-list:abbreviated-name=":bouřka:" block-list:name="🌧"/>
+  <block-list:block block-list:abbreviated-name=":box:" block-list:name="🥊"/>
+  <block-list:block block-list:abbreviated-name=":brambora:" block-list:name="🥔"/>
+  <block-list:block block-list:abbreviated-name=":brokolice:" block-list:name="🥦"/>
+  <block-list:block block-list:abbreviated-name=":bronzová:" block-list:name="🥉"/>
   <block-list:block block-list:abbreviated-name=":broskev:" block-list:name="🍑"/>
   <block-list:block block-list:abbreviated-name=":brusle:" block-list:name="⛸"/>
   <block-list:block block-list:abbreviated-name=":brýle:" block-list:name="👓"/>
+  <block-list:block block-list:abbreviated-name=":buben:" block-list:name="🥁"/>
+  <block-list:block block-list:abbreviated-name=":bublina10:" block-list:name="🗩"/>
+  <block-list:block block-list:abbreviated-name=":bublina2:" block-list:name="🗪"/>
+  <block-list:block block-list:abbreviated-name=":bublina3:" block-list:name="🗫"/>
+  <block-list:block block-list:abbreviated-name=":bublina4:" block-list:name="🗯"/>
+  <block-list:block block-list:abbreviated-name=":bublina5:" block-list:name="🗭"/>
+  <block-list:block block-list:abbreviated-name=":bublina6:" block-list:name="🗱"/>
+  <block-list:block block-list:abbreviated-name=":bublina7:" block-list:name="🗬"/>
+  <block-list:block block-list:abbreviated-name=":bublina8:" block-list:name="🗮"/>
+  <block-list:block block-list:abbreviated-name=":bublina9:" block-list:name="🗰"/>
+  <block-list:block block-list:abbreviated-name=":bublina:" block-list:name="🗨"/>
   <block-list:block block-list:abbreviated-name=":bublina myšlenky:" block-list:name="💭"/>
   <block-list:block block-list:abbreviated-name=":bublina řeči:" block-list:name="💬"/>
   <block-list:block block-list:abbreviated-name=":budík:" block-list:name="⏰"/>
+  <block-list:block block-list:abbreviated-name=":burrito:" block-list:name="🌯"/>
+  <block-list:block block-list:abbreviated-name=":burunduk:" block-list:name="🐿"/>
   <block-list:block block-list:abbreviated-name=":busta:" block-list:name="👤"/>
   <block-list:block block-list:abbreviated-name=":busty:" block-list:name="👥"/>
   <block-list:block block-list:abbreviated-name=":buvol:" block-list:name="🐃"/>
@@ -735,8 +765,10 @@
   <block-list:block block-list:abbreviated-name=":celá pomlka:" block-list:name="𝄻"/>
   <block-list:block block-list:abbreviated-name=":celnice:" block-list:name="🛃"/>
   <block-list:block block-list:abbreviated-name=":cent:" block-list:name="¢"/>
+  <block-list:block block-list:abbreviated-name=":čepice:" block-list:name="🧢"/>
   <block-list:block block-list:abbreviated-name=":černá dáma:" block-list:name="♛"/>
   <block-list:block block-list:abbreviated-name=":černá věž:" block-list:name="♜"/>
+  <block-list:block block-list:abbreviated-name=":černé srdce:" block-list:name="🖤"/>
   <block-list:block block-list:abbreviated-name=":černý jezdec:" block-list:name="♞"/>
   <block-list:block block-list:abbreviated-name=":černý král:" block-list:name="♚"/>
   <block-list:block block-list:abbreviated-name=":černý kruh:" block-list:name="⚫"/>
@@ -750,17 +782,20 @@
   <block-list:block block-list:abbreviated-name=":chí:" block-list:name="χ"/>
   <block-list:block block-list:abbreviated-name=":Chí:" block-list:name="Χ"/>
   <block-list:block block-list:abbreviated-name=":chí ró:" block-list:name="☧"/>
+  <block-list:block block-list:abbreviated-name=":chlapci:" block-list:name="🛉"/>
   <block-list:block block-list:abbreviated-name=":chlapec:" block-list:name="👦"/>
+  <block-list:block block-list:abbreviated-name=":chléb2:" block-list:name="🥖"/>
   <block-list:block block-list:abbreviated-name=":chléb:" block-list:name="🍞"/>
   <block-list:block block-list:abbreviated-name=":chobotnice:" block-list:name="🐙"/>
   <block-list:block block-list:abbreviated-name=":chodec:" block-list:name="🚶"/>
-  <block-list:block block-list:abbreviated-name=":cirkusový stan:" block-list:name="🎪"/>
+  <block-list:block block-list:abbreviated-name=":cirkus:" block-list:name="🎪"/>
   <block-list:block block-list:abbreviated-name=":citrón:" block-list:name="🍋"/>
   <block-list:block block-list:abbreviated-name=":člun:" block-list:name="🚤"/>
   <block-list:block block-list:abbreviated-name=":čokoláda:" block-list:name="🍫"/>
   <block-list:block block-list:abbreviated-name=":copyright:" block-list:name="©"/>
   <block-list:block block-list:abbreviated-name=":couvající měsíc:" block-list:name="🌖"/>
   <block-list:block block-list:abbreviated-name=":couvající srpek:" block-list:name="🌘"/>
+  <block-list:block block-list:abbreviated-name=":croissant:" block-list:name="🥐"/>
   <block-list:block block-list:abbreviated-name=":čtverec2:" block-list:name="■"/>
   <block-list:block block-list:abbreviated-name=":čtverec:" block-list:name="□"/>
   <block-list:block block-list:abbreviated-name=":čtvereček2:" block-list:name="▪"/>
@@ -770,10 +805,13 @@
   <block-list:block block-list:abbreviated-name=":čtvrťová pomlka:" block-list:name="𝄽"/>
   <block-list:block block-list:abbreviated-name=":čtyřlístek:" block-list:name="🍀"/>
   <block-list:block block-list:abbreviated-name=":cukimi:" block-list:name="🎑"/>
+  <block-list:block block-list:abbreviated-name=":curling:" block-list:name="🥌"/>
+  <block-list:block block-list:abbreviated-name=":cvrček:" block-list:name="🦗"/>
   <block-list:block block-list:abbreviated-name=":cyklista2:" block-list:name="🚵"/>
   <block-list:block block-list:abbreviated-name=":cyklista:" block-list:name="🚴"/>
   <block-list:block block-list:abbreviated-name=":cylindr:" block-list:name="🎩"/>
   <block-list:block block-list:abbreviated-name=":dalekohled:" block-list:name="🔭"/>
+  <block-list:block block-list:abbreviated-name=":dálnice:" block-list:name="🛣"/>
   <block-list:block block-list:abbreviated-name=":dámské šaty:" block-list:name="👚"/>
   <block-list:block block-list:abbreviated-name=":dango:" block-list:name="🍡"/>
   <block-list:block block-list:abbreviated-name=":dárek:" block-list:name="🎁"/>
@@ -788,33 +826,56 @@
   <block-list:block block-list:abbreviated-name=":Delta:" block-list:name="Δ"/>
   <block-list:block block-list:abbreviated-name=":déšť2:" block-list:name="⛆"/>
   <block-list:block block-list:abbreviated-name=":déšť:" block-list:name="☔"/>
+  <block-list:block block-list:abbreviated-name=":deštivo:" block-list:name="🌦"/>
   <block-list:block block-list:abbreviated-name=":deštník2:" block-list:name="🌂"/>
   <block-list:block block-list:abbreviated-name=":deštník3:" block-list:name="⛱"/>
   <block-list:block block-list:abbreviated-name=":deštník:" block-list:name="☂"/>
-  <block-list:block block-list:abbreviated-name=":disketa2:" block-list:name="💽"/>
+  <block-list:block block-list:abbreviated-name=":detektiv:" block-list:name="🕵"/>
+  <block-list:block block-list:abbreviated-name=":dinosaurus2:" block-list:name="🦖"/>
+  <block-list:block block-list:abbreviated-name=":dinosaurus:" block-list:name="🦕"/>
+  <block-list:block block-list:abbreviated-name=":díra:" block-list:name="🕳"/>
+  <block-list:block block-list:abbreviated-name=":disketa2:" block-list:name="🖬"/>
+  <block-list:block block-list:abbreviated-name=":disketa3:" block-list:name="🖫"/>
+  <block-list:block block-list:abbreviated-name=":disketa4:" block-list:name="🖪"/>
+  <block-list:block block-list:abbreviated-name=":disketa5:" block-list:name="💽"/>
   <block-list:block block-list:abbreviated-name=":disketa:" block-list:name="💾"/>
   <block-list:block block-list:abbreviated-name=":dítě2:" block-list:name="🚼"/>
+  <block-list:block block-list:abbreviated-name=":dítě3:" block-list:name="🤱"/>
   <block-list:block block-list:abbreviated-name=":dítě:" block-list:name="👶"/>
   <block-list:block block-list:abbreviated-name=":divadlo:" block-list:name="🎭"/>
   <block-list:block block-list:abbreviated-name=":dívka:" block-list:name="👧"/>
+  <block-list:block block-list:abbreviated-name=":dívky:" block-list:name="🛊"/>
   <block-list:block block-list:abbreviated-name=":divočák:" block-list:name="🐗"/>
+  <block-list:block block-list:abbreviated-name=":dlaň2:" block-list:name="🤲"/>
+  <block-list:block block-list:abbreviated-name=":dokument2:" block-list:name="🖹"/>
+  <block-list:block block-list:abbreviated-name=":dokument3:" block-list:name="🖻"/>
+  <block-list:block block-list:abbreviated-name=":dokument4:" block-list:name="🖺"/>
+  <block-list:block block-list:abbreviated-name=":dokument:" block-list:name="🗎"/>
   <block-list:block block-list:abbreviated-name=":dolar2:" block-list:name="💵"/>
   <block-list:block block-list:abbreviated-name=":dolar tučně:" block-list:name="💲"/>
   <block-list:block block-list:abbreviated-name=":dolů2:" block-list:name="👇"/>
+  <block-list:block block-list:abbreviated-name=":dolů3:" block-list:name="🖟"/>
+  <block-list:block block-list:abbreviated-name=":dolů4:" block-list:name="🖗"/>
+  <block-list:block block-list:abbreviated-name=":dolů5:" block-list:name="🖣"/>
+  <block-list:block block-list:abbreviated-name=":dolů6:" block-list:name="🖡"/>
   <block-list:block block-list:abbreviated-name=":dolů:" block-list:name="☟"/>
   <block-list:block block-list:abbreviated-name=":domino:" block-list:name="🁠"/>
+  <block-list:block block-list:abbreviated-name=":domy:" block-list:name="🏘"/>
   <block-list:block block-list:abbreviated-name=":donut:" block-list:name="🍩"/>
   <block-list:block block-list:abbreviated-name=":dort:" block-list:name="🍰"/>
   <block-list:block block-list:abbreviated-name=":dorůstající měsíc:" block-list:name="🌔"/>
   <block-list:block block-list:abbreviated-name=":dorůstající srpek:" block-list:name="🌒"/>
-  <block-list:block block-list:abbreviated-name=":dostihy:" block-list:name="🏇"/>
+  <block-list:block block-list:abbreviated-name=":dospělý:" block-list:name="🧑"/>
+  <block-list:block block-list:abbreviated-name=":dráha:" block-list:name="🛤"/>
   <block-list:block block-list:abbreviated-name=":drahokam:" block-list:name="💎"/>
   <block-list:block block-list:abbreviated-name=":drak2:" block-list:name="🐲"/>
   <block-list:block block-list:abbreviated-name=":drak:" block-list:name="🐉"/>
   <block-list:block block-list:abbreviated-name=":dres2:" block-list:name="🎽"/>
+  <block-list:block block-list:abbreviated-name=":družice:" block-list:name="🛰"/>
   <block-list:block block-list:abbreviated-name=":duch:" block-list:name="👻"/>
   <block-list:block block-list:abbreviated-name=":duha:" block-list:name="🌈"/>
   <block-list:block block-list:abbreviated-name=":dům2:" block-list:name="🏡"/>
+  <block-list:block block-list:abbreviated-name=":dům3:" block-list:name="🏚"/>
   <block-list:block block-list:abbreviated-name=":dům:" block-list:name="🏠"/>
   <block-list:block block-list:abbreviated-name=":dušené:" block-list:name="🍲"/>
   <block-list:block block-list:abbreviated-name=":dvd:" block-list:name="📀"/>
@@ -824,11 +885,13 @@
   <block-list:block block-list:abbreviated-name=":dvojkřížek:" block-list:name="𝄪"/>
   <block-list:block block-list:abbreviated-name=":dzéta:" block-list:name="ζ"/>
   <block-list:block block-list:abbreviated-name=":Dzéta:" block-list:name="Ζ"/>
+  <block-list:block block-list:abbreviated-name=":džin:" block-list:name="🧞"/>
   <block-list:block block-list:abbreviated-name=":džíny:" block-list:name="👖"/>
   <block-list:block block-list:abbreviated-name=":^e:" block-list:name="ᵉ"/>
   <block-list:block block-list:abbreviated-name=":_e:" block-list:name="ₑ"/>
   <block-list:block block-list:abbreviated-name=":^E:" block-list:name="ᴱ"/>
   <block-list:block block-list:abbreviated-name=":elektřina:" block-list:name="⚡"/>
+  <block-list:block block-list:abbreviated-name=":elf:" block-list:name="🧝"/>
   <block-list:block block-list:abbreviated-name=":elipsa:" block-list:name="⬭"/>
   <block-list:block block-list:abbreviated-name=":e-mail:" block-list:name="📧"/>
   <block-list:block block-list:abbreviated-name=":^epsilon:" block-list:name="ᵋ"/>
@@ -840,6 +903,7 @@
   <block-list:block block-list:abbreviated-name=":euro2:" block-list:name="💶"/>
   <block-list:block block-list:abbreviated-name=":euro:" block-list:name="€"/>
   <block-list:block block-list:abbreviated-name=":existuje:" block-list:name="∃"/>
+  <block-list:block block-list:abbreviated-name=":fax2:" block-list:name="🖷"/>
   <block-list:block block-list:abbreviated-name=":fax:" block-list:name="📠"/>
   <block-list:block block-list:abbreviated-name=":^f:" block-list:name="ᶠ"/>
   <block-list:block block-list:abbreviated-name=":ff:" block-list:name="ﬀ"/>
@@ -851,43 +915,63 @@
   <block-list:block block-list:abbreviated-name=":^Fí:" block-list:name="ᶲ"/>
   <block-list:block block-list:abbreviated-name=":fí:" block-list:name="φ"/>
   <block-list:block block-list:abbreviated-name=":Fí:" block-list:name="Φ"/>
+  <block-list:block block-list:abbreviated-name=":film:" block-list:name="🎞"/>
   <block-list:block block-list:abbreviated-name=":fl:" block-list:name="ﬂ"/>
   <block-list:block block-list:abbreviated-name=":fontána:" block-list:name="⛲"/>
+  <block-list:block block-list:abbreviated-name=":fotbal2:" block-list:name="🥅"/>
   <block-list:block block-list:abbreviated-name=":fotbal:" block-list:name="⚽"/>
   <block-list:block block-list:abbreviated-name=":fotoaparát:" block-list:name="📷"/>
+  <block-list:block block-list:abbreviated-name=":fotoblesk:" block-list:name="📸"/>
   <block-list:block block-list:abbreviated-name=":Fudži:" block-list:name="🗻"/>
   <block-list:block block-list:abbreviated-name=":^gama:" block-list:name="ᵞ"/>
   <block-list:block block-list:abbreviated-name=":_gama:" block-list:name="ᵧ"/>
   <block-list:block block-list:abbreviated-name=":gama:" block-list:name="γ"/>
   <block-list:block block-list:abbreviated-name=":Gama:" block-list:name="Γ"/>
+  <block-list:block block-list:abbreviated-name=":gauč:" block-list:name="🛋"/>
   <block-list:block block-list:abbreviated-name=":^g:" block-list:name="ᵍ"/>
   <block-list:block block-list:abbreviated-name=":^G:" block-list:name="ᴳ"/>
   <block-list:block block-list:abbreviated-name=":glóbus2:" block-list:name="🌎"/>
   <block-list:block block-list:abbreviated-name=":glóbus3:" block-list:name="🌏"/>
   <block-list:block block-list:abbreviated-name=":glóbus4:" block-list:name="🌐"/>
   <block-list:block block-list:abbreviated-name=":glóbus:" block-list:name="🌍"/>
-  <block-list:block block-list:abbreviated-name=":golf:" block-list:name="⛳"/>
-  <block-list:block block-list:abbreviated-name=":graf:" block-list:name="💹"/>
+  <block-list:block block-list:abbreviated-name=":golf2:" block-list:name="⛳"/>
+  <block-list:block block-list:abbreviated-name=":golf:" block-list:name="🏌"/>
+  <block-list:block block-list:abbreviated-name=":gorila:" block-list:name="🦍"/>
+  <block-list:block block-list:abbreviated-name=":graf4:" block-list:name="💹"/>
+  <block-list:block block-list:abbreviated-name=":graf5:" block-list:name="🗠"/>
+  <block-list:block block-list:abbreviated-name=":graf:" block-list:name="📈"/>
   <block-list:block block-list:abbreviated-name=":graf poklesu:" block-list:name="📉"/>
-  <block-list:block block-list:abbreviated-name=":graf růstu:" block-list:name="📈"/>
   <block-list:block block-list:abbreviated-name=":&gt;=:" block-list:name="≥"/>
   <block-list:block block-list:abbreviated-name=":&gt;&gt;:" block-list:name="≫"/>
+  <block-list:block block-list:abbreviated-name=":gymnasta:" block-list:name="🤸"/>
   <block-list:block block-list:abbreviated-name=":had:" block-list:name="🐍"/>
   <block-list:block block-list:abbreviated-name=":Hadonoš:" block-list:name="⛎"/>
   <block-list:block block-list:abbreviated-name=":Halloween:" block-list:name="🎃"/>
   <block-list:block block-list:abbreviated-name=":hamburger:" block-list:name="🍔"/>
+  <block-list:block block-list:abbreviated-name=":hasiči2:" block-list:name="🛱"/>
   <block-list:block block-list:abbreviated-name=":hasiči:" block-list:name="🚒"/>
+  <block-list:block block-list:abbreviated-name=":házená:" block-list:name="🤾"/>
   <block-list:block block-list:abbreviated-name=":^h:" block-list:name="ʰ"/>
   <block-list:block block-list:abbreviated-name=":_h:" block-list:name="ₕ"/>
   <block-list:block block-list:abbreviated-name=":^H:" block-list:name="ᴴ"/>
   <block-list:block block-list:abbreviated-name=":hlasitý zvuk:" block-list:name="🔊"/>
+  <block-list:block block-list:abbreviated-name=":hlasování:" block-list:name="🗳"/>
+  <block-list:block block-list:abbreviated-name=":hlava:" block-list:name="🗣"/>
+  <block-list:block block-list:abbreviated-name=":hlava v dlani:" block-list:name="🤦"/>
   <block-list:block block-list:abbreviated-name=":hlemýžď:" block-list:name="🐌"/>
   <block-list:block block-list:abbreviated-name=":hmyz:" block-list:name="🐛"/>
   <block-list:block block-list:abbreviated-name=":hněv:" block-list:name="💢"/>
   <block-list:block block-list:abbreviated-name=":hodinky:" block-list:name="⌚"/>
+  <block-list:block block-list:abbreviated-name=":hodiny:" block-list:name="🕰"/>
+  <block-list:block block-list:abbreviated-name=":hodně štěstí:" block-list:name="🤞"/>
+  <block-list:block block-list:abbreviated-name=":hokej2:" block-list:name="🏑"/>
+  <block-list:block block-list:abbreviated-name=":hokej:" block-list:name="🏒"/>
   <block-list:block block-list:abbreviated-name=":holičství:" block-list:name="💈"/>
+  <block-list:block block-list:abbreviated-name=":holubice:" block-list:name="🕊"/>
+  <block-list:block block-list:abbreviated-name=":hora2:" block-list:name="🏔"/>
   <block-list:block block-list:abbreviated-name=":hora:" block-list:name="⛰"/>
   <block-list:block block-list:abbreviated-name=":hornický:" block-list:name="⚒"/>
+  <block-list:block block-list:abbreviated-name=":horolezec:" block-list:name="🧗"/>
   <block-list:block block-list:abbreviated-name=":horská dráha:" block-list:name="🎢"/>
   <block-list:block block-list:abbreviated-name=":horská železnice:" block-list:name="🚞"/>
   <block-list:block block-list:abbreviated-name=":hotel2:" block-list:name="🏩"/>
@@ -900,11 +984,14 @@
   <block-list:block block-list:abbreviated-name=":hrad:" block-list:name="🏰"/>
   <block-list:block block-list:abbreviated-name=":hranolky:" block-list:name="🍟"/>
   <block-list:block block-list:abbreviated-name=":hřivna:" block-list:name="₴"/>
+  <block-list:block block-list:abbreviated-name=":hrot pera2:" block-list:name="✒"/>
+  <block-list:block block-list:abbreviated-name=":hrot pera:" block-list:name="✑"/>
   <block-list:block block-list:abbreviated-name=":hrozny:" block-list:name="🍇"/>
   <block-list:block block-list:abbreviated-name=":hruška:" block-list:name="🍐"/>
   <block-list:block block-list:abbreviated-name=":hudba2:" block-list:name="🎵"/>
   <block-list:block block-list:abbreviated-name=":hudba:" block-list:name="🎶"/>
   <block-list:block block-list:abbreviated-name=":hůl:" block-list:name="⚚"/>
+  <block-list:block block-list:abbreviated-name=":hůlky:" block-list:name="🥢"/>
   <block-list:block block-list:abbreviated-name=":hurikán:" block-list:name="🌀"/>
   <block-list:block block-list:abbreviated-name=":hvězda2:" block-list:name="☆"/>
   <block-list:block block-list:abbreviated-name=":hvězda3:" block-list:name="🌟"/>
@@ -918,6 +1005,7 @@
   <block-list:block block-list:abbreviated-name=":_i:" block-list:name="ᵢ"/>
   <block-list:block block-list:abbreviated-name=":^I:" block-list:name="ᴵ"/>
   <block-list:block block-list:abbreviated-name=":informace2:" block-list:name="💁"/>
+  <block-list:block block-list:abbreviated-name=":informace3:" block-list:name="🛈"/>
   <block-list:block block-list:abbreviated-name=":informace:" block-list:name="ℹ"/>
   <block-list:block block-list:abbreviated-name=":injekce:" block-list:name="💉"/>
   <block-list:block block-list:abbreviated-name=":integrál2:" block-list:name="∬"/>
@@ -946,26 +1034,43 @@
   <block-list:block block-list:abbreviated-name=":J:" block-list:name="↓"/>
   <block-list:block block-list:abbreviated-name=":jed:" block-list:name="☠"/>
   <block-list:block block-list:abbreviated-name=":jednokolejka:" block-list:name="🚝"/>
+  <block-list:block block-list:abbreviated-name=":jednorožec:" block-list:name="🦄"/>
   <block-list:block block-list:abbreviated-name=":jehličnatý:" block-list:name="🌲"/>
+  <block-list:block block-list:abbreviated-name=":jelen:" block-list:name="🦌"/>
   <block-list:block block-list:abbreviated-name=":jen2:" block-list:name="💴"/>
   <block-list:block block-list:abbreviated-name=":jen:" block-list:name="¥"/>
+  <block-list:block block-list:abbreviated-name=":jeřáb:" block-list:name="🏗"/>
   <block-list:block block-list:abbreviated-name=":jeruzalémský kříž:" block-list:name="☩"/>
+  <block-list:block block-list:abbreviated-name=":Ještěrka:" block-list:name="🦎"/>
   <block-list:block block-list:abbreviated-name=":je v:" block-list:name="∈"/>
+  <block-list:block block-list:abbreviated-name=":ježek:" block-list:name="🦔"/>
+  <block-list:block block-list:abbreviated-name=":jídlo:" block-list:name="🥘"/>
+  <block-list:block block-list:abbreviated-name=":jídlo s sebou:" block-list:name="🥡"/>
   <block-list:block block-list:abbreviated-name=":jin jang:" block-list:name="☯"/>
   <block-list:block block-list:abbreviated-name=":jiskřící srdce:" block-list:name="💖"/>
   <block-list:block block-list:abbreviated-name=":jmenovka:" block-list:name="📛"/>
+  <block-list:block block-list:abbreviated-name=":jóga:" block-list:name="🧘"/>
+  <block-list:block block-list:abbreviated-name=":joystick:" block-list:name="🕹"/>
+  <block-list:block block-list:abbreviated-name=":judo:" block-list:name="🥋"/>
   <block-list:block block-list:abbreviated-name=":Jupiter:" block-list:name="♃"/>
   <block-list:block block-list:abbreviated-name=":JV2:" block-list:name="⇘"/>
   <block-list:block block-list:abbreviated-name=":JV:" block-list:name="↘"/>
   <block-list:block block-list:abbreviated-name=":JZ2:" block-list:name="⇙"/>
   <block-list:block block-list:abbreviated-name=":JZ:" block-list:name="↙"/>
+  <block-list:block block-list:abbreviated-name=":Kába:" block-list:name="🕋"/>
+  <block-list:block block-list:abbreviated-name=":kabát:" block-list:name="🧥"/>
   <block-list:block block-list:abbreviated-name=":kabelka:" block-list:name="👜"/>
+  <block-list:block block-list:abbreviated-name=":kachna:" block-list:name="🦆"/>
   <block-list:block block-list:abbreviated-name=":kaduceus:" block-list:name="☤"/>
   <block-list:block block-list:abbreviated-name=":kaktus:" block-list:name="🌵"/>
   <block-list:block block-list:abbreviated-name=":kalendář2:" block-list:name="📆"/>
+  <block-list:block block-list:abbreviated-name=":kalendář3:" block-list:name="🗓"/>
   <block-list:block block-list:abbreviated-name=":kalendář:" block-list:name="📅"/>
+  <block-list:block block-list:abbreviated-name=":kalkulačka:" block-list:name="🖩"/>
   <block-list:block block-list:abbreviated-name=":kamera:" block-list:name="🎥"/>
   <block-list:block block-list:abbreviated-name=":kanceláře:" block-list:name="🏢"/>
+  <block-list:block block-list:abbreviated-name=":kánoe:" block-list:name="🛶"/>
+  <block-list:block block-list:abbreviated-name=":kapka2:" block-list:name="🌢"/>
   <block-list:block block-list:abbreviated-name=":kapka:" block-list:name="💧"/>
   <block-list:block block-list:abbreviated-name=":kappa:" block-list:name="κ"/>
   <block-list:block block-list:abbreviated-name=":Kappa:" block-list:name="Κ"/>
@@ -974,22 +1079,34 @@
   <block-list:block block-list:abbreviated-name=":karetní srdce2:" block-list:name="♡"/>
   <block-list:block block-list:abbreviated-name=":karetní srdce:" block-list:name="♥"/>
   <block-list:block block-list:abbreviated-name=":kari:" block-list:name="🍛"/>
+  <block-list:block block-list:abbreviated-name=":kartotéka:" block-list:name="🗄"/>
   <block-list:block block-list:abbreviated-name=":karty:" block-list:name="🎴"/>
+  <block-list:block block-list:abbreviated-name=":kašel:" block-list:name="🤧"/>
   <block-list:block block-list:abbreviated-name=":kaštan:" block-list:name="🌰"/>
   <block-list:block block-list:abbreviated-name=":káva:" block-list:name="☕"/>
   <block-list:block block-list:abbreviated-name=":^k:" block-list:name="ᵏ"/>
   <block-list:block block-list:abbreviated-name=":_k:" block-list:name="ₖ"/>
   <block-list:block block-list:abbreviated-name=":^K:" block-list:name="ᴷ"/>
+  <block-list:block block-list:abbreviated-name=":kebab:" block-list:name="🥙"/>
+  <block-list:block block-list:abbreviated-name=":keltský kříž:" block-list:name="🕈"/>
+  <block-list:block block-list:abbreviated-name=":kemp:" block-list:name="🏕"/>
   <block-list:block block-list:abbreviated-name=":kimono:" block-list:name="👘"/>
   <block-list:block block-list:abbreviated-name=":kino:" block-list:name="🎦"/>
+  <block-list:block block-list:abbreviated-name=":kiwi:" block-list:name="🥝"/>
+  <block-list:block block-list:abbreviated-name=":kladivo a klíč:" block-list:name="🛠"/>
   <block-list:block block-list:abbreviated-name=":kladivo:" block-list:name="🔨"/>
   <block-list:block block-list:abbreviated-name=":klapka:" block-list:name="🎬"/>
+  <block-list:block block-list:abbreviated-name=":klaun:" block-list:name="🤡"/>
+  <block-list:block block-list:abbreviated-name=":klávesnice2:" block-list:name="🖮"/>
+  <block-list:block block-list:abbreviated-name=":klávesnice3:" block-list:name="🖦"/>
   <block-list:block block-list:abbreviated-name=":klávesnice:" block-list:name="⌨"/>
+  <block-list:block block-list:abbreviated-name=":klíč2:" block-list:name="🗝"/>
   <block-list:block block-list:abbreviated-name=":klíč:" block-list:name="🔑"/>
   <block-list:block block-list:abbreviated-name=":klobouk2:" block-list:name="👲"/>
   <block-list:block block-list:abbreviated-name=":klobouk:" block-list:name="👒"/>
-  <block-list:block block-list:abbreviated-name=":kniha2:" block-list:name="📖"/>
-  <block-list:block block-list:abbreviated-name=":kniha:" block-list:name="📕"/>
+  <block-list:block block-list:abbreviated-name=":kniha2:" block-list:name="📕"/>
+  <block-list:block block-list:abbreviated-name=":kniha3:" block-list:name="📖"/>
+  <block-list:block block-list:abbreviated-name=":kniha:" block-list:name="🕮"/>
   <block-list:block block-list:abbreviated-name=":knihy:" block-list:name="📚"/>
   <block-list:block block-list:abbreviated-name=":koala:" block-list:name="🐨"/>
   <block-list:block block-list:abbreviated-name=":kočka2:" block-list:name="🐱"/>
@@ -997,12 +1114,15 @@
   <block-list:block block-list:abbreviated-name=":kočka s očima ze srdcí:" block-list:name="😻"/>
   <block-list:block block-list:abbreviated-name=":kohout:" block-list:name="🐓"/>
   <block-list:block block-list:abbreviated-name=":kojenecká láhev:" block-list:name="🍼"/>
+  <block-list:block block-list:abbreviated-name=":kokosový ořech:" block-list:name="🥥"/>
   <block-list:block block-list:abbreviated-name=":koktejl:" block-list:name="🍸"/>
+  <block-list:block block-list:abbreviated-name=":koláč:" block-list:name="🥧"/>
+  <block-list:block block-list:abbreviated-name=":koloběžka:" block-list:name="🛴"/>
   <block-list:block block-list:abbreviated-name=":kolo:" block-list:name="🚲"/>
-  <block-list:block block-list:abbreviated-name=":kolotoč:" block-list:name="🎠"/>
   <block-list:block block-list:abbreviated-name=":kometa:" block-list:name="☄"/>
   <block-list:block block-list:abbreviated-name=":konec důkazu:" block-list:name="∎"/>
-  <block-list:block block-list:abbreviated-name=":konfety:" block-list:name="🎊"/>
+  <block-list:block block-list:abbreviated-name=":konzerva:" block-list:name="🥫"/>
+  <block-list:block block-list:abbreviated-name=":korále:" block-list:name="📿"/>
   <block-list:block block-list:abbreviated-name=":koruna:" block-list:name="👑"/>
   <block-list:block block-list:abbreviated-name=":kostel:" block-list:name="⛪"/>
   <block-list:block block-list:abbreviated-name=":kostka1:" block-list:name="⚀"/>
@@ -1015,8 +1135,13 @@
   <block-list:block block-list:abbreviated-name=":kotva:" block-list:name="⚓"/>
   <block-list:block block-list:abbreviated-name=":koupel:" block-list:name="🛀"/>
   <block-list:block block-list:abbreviated-name=":kouření:" block-list:name="🚬"/>
+  <block-list:block block-list:abbreviated-name=":kouzelník:" block-list:name="🧙"/>
+  <block-list:block block-list:abbreviated-name=":kovboj:" block-list:name="🤠"/>
   <block-list:block block-list:abbreviated-name=":koza:" block-list:name="🐐"/>
   <block-list:block block-list:abbreviated-name=":Kozoroh:" block-list:name="♑"/>
+  <block-list:block block-list:abbreviated-name=":krab:" block-list:name="🦀"/>
+  <block-list:block block-list:abbreviated-name=":krabice:" block-list:name="🗃"/>
+  <block-list:block block-list:abbreviated-name=":krakatice:" block-list:name="🦑"/>
   <block-list:block block-list:abbreviated-name=":král:" block-list:name="🂮"/>
   <block-list:block block-list:abbreviated-name=":králičí uši:" block-list:name="👯"/>
   <block-list:block block-list:abbreviated-name=":královna:" block-list:name="🂭"/>
@@ -1024,16 +1149,21 @@
   <block-list:block block-list:abbreviated-name=":kráva2:" block-list:name="🐮"/>
   <block-list:block block-list:abbreviated-name=":kráva:" block-list:name="🐄"/>
   <block-list:block block-list:abbreviated-name=":kravata:" block-list:name="👔"/>
+  <block-list:block block-list:abbreviated-name=":krčení rameny:" block-list:name="🤷"/>
   <block-list:block block-list:abbreviated-name=":křeček:" block-list:name="🐹"/>
-  <block-list:block block-list:abbreviated-name=":kreveta:" block-list:name="🍤"/>
+  <block-list:block block-list:abbreviated-name=":kreveta:" block-list:name="🦐"/>
   <block-list:block block-list:abbreviated-name=":křičící kočka:" block-list:name="🙀"/>
   <block-list:block block-list:abbreviated-name=":křik:" block-list:name="😱"/>
+  <block-list:block block-list:abbreviated-name=":kriket:" block-list:name="🏏"/>
   <block-list:block block-list:abbreviated-name=":křišťálová koule:" block-list:name="🔮"/>
   <block-list:block block-list:abbreviated-name=":kříž2:" block-list:name="‡"/>
   <block-list:block block-list:abbreviated-name=":kříž:" block-list:name="†"/>
   <block-list:block block-list:abbreviated-name=":křížek:" block-list:name="♯"/>
+  <block-list:block block-list:abbreviated-name=":krocan:" block-list:name="🦃"/>
   <block-list:block block-list:abbreviated-name=":krokodýl:" block-list:name="🐊"/>
   <block-list:block block-list:abbreviated-name=":kruh2:" block-list:name="●"/>
+  <block-list:block block-list:abbreviated-name=":kruh3:" block-list:name="🔾"/>
+  <block-list:block block-list:abbreviated-name=":kruh4:" block-list:name="🔿"/>
   <block-list:block block-list:abbreviated-name=":kruh:" block-list:name="○"/>
   <block-list:block block-list:abbreviated-name=":krumpáč:" block-list:name="⛏"/>
   <block-list:block block-list:abbreviated-name=":krysa:" block-list:name="🐀"/>
@@ -1043,15 +1173,23 @@
   <block-list:block block-list:abbreviated-name=":kukuřice:" block-list:name="🌽"/>
   <block-list:block block-list:abbreviated-name=":kulečník:" block-list:name="🎱"/>
   <block-list:block block-list:abbreviated-name=":kůň2:" block-list:name="🐴"/>
+  <block-list:block block-list:abbreviated-name=":kůň3:" block-list:name="🏇"/>
   <block-list:block block-list:abbreviated-name=":kůň:" block-list:name="🐎"/>
   <block-list:block block-list:abbreviated-name=":kuře2:" block-list:name="🐤"/>
   <block-list:block block-list:abbreviated-name=":kuře3:" block-list:name="🐥"/>
   <block-list:block block-list:abbreviated-name=":kuře:" block-list:name="🐣"/>
+  <block-list:block block-list:abbreviated-name=":kůže1:" block-list:name="🏻"/>
+  <block-list:block block-list:abbreviated-name=":kůže2:" block-list:name="🏼"/>
+  <block-list:block block-list:abbreviated-name=":kůže3:" block-list:name="🏽"/>
+  <block-list:block block-list:abbreviated-name=":kůže4:" block-list:name="🏾"/>
+  <block-list:block block-list:abbreviated-name=":kůže5:" block-list:name="🏿"/>
   <block-list:block block-list:abbreviated-name=":kuželky:" block-list:name="🎳"/>
+  <block-list:block block-list:abbreviated-name=":květ2:" block-list:name="🌸"/>
   <block-list:block block-list:abbreviated-name=":květ:" block-list:name="🌼"/>
+  <block-list:block block-list:abbreviated-name=":květina2:" block-list:name="🥀"/>
   <block-list:block block-list:abbreviated-name=":květina:" block-list:name="⚘"/>
-  <block-list:block block-list:abbreviated-name=":květ třešně:" block-list:name="🌸"/>
   <block-list:block block-list:abbreviated-name=":kytara:" block-list:name="🎸"/>
+  <block-list:block block-list:abbreviated-name=":kytice2:" block-list:name="🎕"/>
   <block-list:block block-list:abbreviated-name=":kytice:" block-list:name="💐"/>
   <block-list:block block-list:abbreviated-name=":lak na nehty:" block-list:name="💅"/>
   <block-list:block block-list:abbreviated-name=":lambda:" block-list:name="λ"/>
@@ -1059,7 +1197,10 @@
   <block-list:block block-list:abbreviated-name=":lampa:" block-list:name="🏮"/>
   <block-list:block block-list:abbreviated-name=":lanovka2:" block-list:name="🚡"/>
   <block-list:block block-list:abbreviated-name=":lanovka:" block-list:name="🚠"/>
+  <block-list:block block-list:abbreviated-name=":láska2:" block-list:name="🤟"/>
   <block-list:block block-list:abbreviated-name=":láska:" block-list:name="💘"/>
+  <block-list:block block-list:abbreviated-name=":latinský kříž2:" block-list:name="🕆"/>
+  <block-list:block block-list:abbreviated-name=":latinský kříž3:" block-list:name="🕇"/>
   <block-list:block block-list:abbreviated-name=":latinský kříž:" block-list:name="✝"/>
   <block-list:block block-list:abbreviated-name=":^l:" block-list:name="ˡ"/>
   <block-list:block block-list:abbreviated-name=":_l:" block-list:name="ₗ"/>
@@ -1067,9 +1208,16 @@
   <block-list:block block-list:abbreviated-name=":lebka:" block-list:name="💀"/>
   <block-list:block block-list:abbreviated-name=":lejno:" block-list:name="💩"/>
   <block-list:block block-list:abbreviated-name=":lékařský:" block-list:name="⚕"/>
+  <block-list:block block-list:abbreviated-name=":letadlo2:" block-list:name="🛩"/>
+  <block-list:block block-list:abbreviated-name=":letadlo3:" block-list:name="🛧"/>
+  <block-list:block block-list:abbreviated-name=":letadlo4:" block-list:name="🛨"/>
+  <block-list:block block-list:abbreviated-name=":letadlo5:" block-list:name="🛦"/>
+  <block-list:block block-list:abbreviated-name=":letadlo6:" block-list:name="🛪"/>
   <block-list:block block-list:abbreviated-name=":letadlo:" block-list:name="✈"/>
+  <block-list:block block-list:abbreviated-name=":lev:" block-list:name="🦁"/>
   <block-list:block block-list:abbreviated-name=":Lev:" block-list:name="♌"/>
   <block-list:block block-list:abbreviated-name=":levhart:" block-list:name="🐆"/>
+  <block-list:block block-list:abbreviated-name=":lhář:" block-list:name="🤥"/>
   <block-list:block block-list:abbreviated-name=":líbající2:" block-list:name="😘"/>
   <block-list:block block-list:abbreviated-name=":líbající3:" block-list:name="😙"/>
   <block-list:block block-list:abbreviated-name=":líbající4:" block-list:name="😚"/>
@@ -1081,22 +1229,29 @@
   <block-list:block block-list:abbreviated-name=":lidské stopy:" block-list:name="👣"/>
   <block-list:block block-list:abbreviated-name=":lilie:" block-list:name="⚜"/>
   <block-list:block block-list:abbreviated-name=":lira:" block-list:name="₤"/>
+  <block-list:block block-list:abbreviated-name=":liška:" block-list:name="🦊"/>
   <block-list:block block-list:abbreviated-name=":list2:" block-list:name="🍂"/>
   <block-list:block block-list:abbreviated-name=":list3:" block-list:name="🍃"/>
   <block-list:block block-list:abbreviated-name=":list:" block-list:name="🍁"/>
   <block-list:block block-list:abbreviated-name=":listnatý:" block-list:name="🌳"/>
+  <block-list:block block-list:abbreviated-name=":lívance:" block-list:name="🥞"/>
   <block-list:block block-list:abbreviated-name=":lízátko:" block-list:name="🍭"/>
+  <block-list:block block-list:abbreviated-name=":loď2:" block-list:name="🛳"/>
   <block-list:block block-list:abbreviated-name=":loď:" block-list:name="🚢"/>
   <block-list:block block-list:abbreviated-name=":loďka:" block-list:name="🚣"/>
+  <block-list:block block-list:abbreviated-name=":lokomotiva2:" block-list:name="🛲"/>
   <block-list:block block-list:abbreviated-name=":lokomotiva:" block-list:name="🚂"/>
+  <block-list:block block-list:abbreviated-name=":lol:" block-list:name="🤣"/>
   <block-list:block block-list:abbreviated-name=":lotrinský kříž:" block-list:name="☨"/>
   <block-list:block block-list:abbreviated-name=":lozenge:" block-list:name="◊"/>
   <block-list:block block-list:abbreviated-name=":&lt;=:" block-list:name="≤"/>
   <block-list:block block-list:abbreviated-name=":&lt;&lt;:" block-list:name="≪"/>
+  <block-list:block block-list:abbreviated-name=":luk:" block-list:name="🏹"/>
   <block-list:block block-list:abbreviated-name=":lupa2:" block-list:name="🔎"/>
   <block-list:block block-list:abbreviated-name=":lupa:" block-list:name="🔍"/>
   <block-list:block block-list:abbreviated-name=":lyžař:" block-list:name="⛷"/>
   <block-list:block block-list:abbreviated-name=":lyže:" block-list:name="🎿"/>
+  <block-list:block block-list:abbreviated-name=":lžíce:" block-list:name="🥄"/>
   <block-list:block block-list:abbreviated-name=":mahjong:" block-list:name="🀄"/>
   <block-list:block block-list:abbreviated-name=":maják:" block-list:name="🚨"/>
   <block-list:block block-list:abbreviated-name=":malé je v:" block-list:name="∊"/>
@@ -1104,17 +1259,24 @@
   <block-list:block block-list:abbreviated-name=":maltézský kříž:" block-list:name="✠"/>
   <block-list:block block-list:abbreviated-name=":mandarinka:" block-list:name="🍊"/>
   <block-list:block block-list:abbreviated-name=":manželství:" block-list:name="⚭"/>
+  <block-list:block block-list:abbreviated-name=":mapa:" block-list:name="🗺"/>
   <block-list:block block-list:abbreviated-name=":masáž:" block-list:name="💆"/>
   <block-list:block block-list:abbreviated-name=":maso:" block-list:name="🍖"/>
   <block-list:block block-list:abbreviated-name=":mávání:" block-list:name="👋"/>
+  <block-list:block block-list:abbreviated-name=":maximalizovat:" block-list:name="🗖"/>
   <block-list:block block-list:abbreviated-name=":^m:" block-list:name="ᵐ"/>
   <block-list:block block-list:abbreviated-name=":_m:" block-list:name="ₘ"/>
   <block-list:block block-list:abbreviated-name=":^M:" block-list:name="ᴹ"/>
   <block-list:block block-list:abbreviated-name=":meče:" block-list:name="⚔"/>
+  <block-list:block block-list:abbreviated-name=":medaile2:" block-list:name="🎖"/>
+  <block-list:block block-list:abbreviated-name=":medaile:" block-list:name="🏅"/>
   <block-list:block block-list:abbreviated-name=":med:" block-list:name="🍯"/>
   <block-list:block block-list:abbreviated-name=":medvěd:" block-list:name="🐻"/>
-  <block-list:block block-list:abbreviated-name=":megafon:" block-list:name="📣"/>
+  <block-list:block block-list:abbreviated-name=":megafon2:" block-list:name="🕬"/>
+  <block-list:block block-list:abbreviated-name=":megafon3:" block-list:name="📣"/>
+  <block-list:block block-list:abbreviated-name=":megafon:" block-list:name="🕫"/>
   <block-list:block block-list:abbreviated-name=":meloun:" block-list:name="🍈"/>
+  <block-list:block block-list:abbreviated-name=":menora:" block-list:name="🕎"/>
   <block-list:block block-list:abbreviated-name=":menší čtverec2:" block-list:name="◾"/>
   <block-list:block block-list:abbreviated-name=":menší čtverec:" block-list:name="◽"/>
   <block-list:block block-list:abbreviated-name=":Merkur:" block-list:name="☿"/>
@@ -1122,44 +1284,74 @@
   <block-list:block block-list:abbreviated-name=":Měsíc2:" block-list:name="☾"/>
   <block-list:block block-list:abbreviated-name=":měsíc:" block-list:name="🌛"/>
   <block-list:block block-list:abbreviated-name=":Měsíc:" block-list:name="☽"/>
+  <block-list:block block-list:abbreviated-name=":mešita:" block-list:name="🕌"/>
+  <block-list:block block-list:abbreviated-name=":město:" block-list:name="🏙"/>
   <block-list:block block-list:abbreviated-name=":metro:" block-list:name="🚇"/>
   <block-list:block block-list:abbreviated-name=":mí:" block-list:name="μ"/>
   <block-list:block block-list:abbreviated-name=":Mí:" block-list:name="Μ"/>
   <block-list:block block-list:abbreviated-name=":míč:" block-list:name="⛹"/>
+  <block-list:block block-list:abbreviated-name=":mikrofon2:" block-list:name="🎙"/>
   <block-list:block block-list:abbreviated-name=":mikrofon:" block-list:name="🎤"/>
   <block-list:block block-list:abbreviated-name=":mikroskop:" block-list:name="🔬"/>
   <block-list:block block-list:abbreviated-name=":milostný dopis:" block-list:name="💌"/>
   <block-list:block block-list:abbreviated-name=":mimozemšťan2:" block-list:name="👾"/>
   <block-list:block block-list:abbreviated-name=":mimozemšťan:" block-list:name="👽"/>
   <block-list:block block-list:abbreviated-name=":minibus:" block-list:name="🚐"/>
+  <block-list:block block-list:abbreviated-name=":minimalizovat:" block-list:name="🗕"/>
   <block-list:block block-list:abbreviated-name=":minuta:" block-list:name="′"/>
   <block-list:block block-list:abbreviated-name=":minutka:" block-list:name="⏲"/>
   <block-list:block block-list:abbreviated-name=":mír:" block-list:name="☮"/>
+  <block-list:block block-list:abbreviated-name=":miska:" block-list:name="🥣"/>
   <block-list:block block-list:abbreviated-name=":Mléčná dráha:" block-list:name="🌌"/>
-  <block-list:block block-list:abbreviated-name=":mlha:" block-list:name="🌁"/>
+  <block-list:block block-list:abbreviated-name=":mléko:" block-list:name="🥛"/>
+  <block-list:block block-list:abbreviated-name=":mlha:" block-list:name="🌫"/>
   <block-list:block block-list:abbreviated-name=":mňam:" block-list:name="😋"/>
+  <block-list:block block-list:abbreviated-name=":mobil2:" block-list:name="🖁"/>
   <block-list:block block-list:abbreviated-name=":mobil:" block-list:name="📱"/>
+  <block-list:block block-list:abbreviated-name=":modem:" block-list:name="🖀"/>
   <block-list:block block-list:abbreviated-name=":modlitba:" block-list:name="🙏"/>
+  <block-list:block block-list:abbreviated-name=":monokl:" block-list:name="🧐"/>
   <block-list:block block-list:abbreviated-name=":montážní klíč:" block-list:name="🔧"/>
+  <block-list:block block-list:abbreviated-name=":mořská bytost:" block-list:name="🧜"/>
   <block-list:block block-list:abbreviated-name=":most:" block-list:name="🌉"/>
+  <block-list:block block-list:abbreviated-name=":motocykl:" block-list:name="🏍"/>
+  <block-list:block block-list:abbreviated-name=":motorový člun:" block-list:name="🛥"/>
+  <block-list:block block-list:abbreviated-name=":motýl:" block-list:name="🦋"/>
+  <block-list:block block-list:abbreviated-name=":mozek:" block-list:name="🧠"/>
+  <block-list:block block-list:abbreviated-name=":mračící2:" block-list:name="🙁"/>
   <block-list:block block-list:abbreviated-name=":mračící:" block-list:name="😦"/>
   <block-list:block block-list:abbreviated-name=":mravenec:" block-list:name="🐜"/>
+  <block-list:block block-list:abbreviated-name=":mrkev:" block-list:name="🥕"/>
   <block-list:block block-list:abbreviated-name=":mrknutí:" block-list:name="😉"/>
   <block-list:block block-list:abbreviated-name=":mrzutý:" block-list:name="😒"/>
   <block-list:block block-list:abbreviated-name=":muž:" block-list:name="👨"/>
+  <block-list:block block-list:abbreviated-name=":muzeum:" block-list:name="🏛"/>
   <block-list:block block-list:abbreviated-name=":muži:" block-list:name="🚹"/>
   <block-list:block block-list:abbreviated-name=":myš2:" block-list:name="🐭"/>
+  <block-list:block block-list:abbreviated-name=":myš3:" block-list:name="🖱"/>
+  <block-list:block block-list:abbreviated-name=":myš4:" block-list:name="🖰"/>
+  <block-list:block block-list:abbreviated-name=":myš5:" block-list:name="🖯"/>
   <block-list:block block-list:abbreviated-name=":myš:" block-list:name="🐁"/>
+  <block-list:block block-list:abbreviated-name=":nadávající:" block-list:name="🤬"/>
   <block-list:block block-list:abbreviated-name=":nadmnožina:" block-list:name="⊃"/>
+  <block-list:block block-list:abbreviated-name=":nadšený:" block-list:name="🤩"/>
   <block-list:block block-list:abbreviated-name=":nahoru2:" block-list:name="👆"/>
+  <block-list:block block-list:abbreviated-name=":nahoru3:" block-list:name="🖞"/>
+  <block-list:block block-list:abbreviated-name=":nahoru4:" block-list:name="🖠"/>
+  <block-list:block block-list:abbreviated-name=":nahoru5:" block-list:name="🖢"/>
   <block-list:block block-list:abbreviated-name=":nahoru:" block-list:name="☝"/>
   <block-list:block block-list:abbreviated-name=":nákladní auto2:" block-list:name="🚚"/>
   <block-list:block block-list:abbreviated-name=":nákladní auto3:" block-list:name="🚛"/>
   <block-list:block block-list:abbreviated-name=":nákladní auto:" block-list:name="⛟"/>
+  <block-list:block block-list:abbreviated-name=":nákup:" block-list:name="🛍"/>
+  <block-list:block block-list:abbreviated-name=":náplň:" block-list:name="🖭"/>
+  <block-list:block block-list:abbreviated-name=":nápoj2:" block-list:name="🍹"/>
+  <block-list:block block-list:abbreviated-name=":nápoj:" block-list:name="🥤"/>
   <block-list:block block-list:abbreviated-name=":narozeniny:" block-list:name="🎂"/>
   <block-list:block block-list:abbreviated-name=":^n:" block-list:name="ⁿ"/>
   <block-list:block block-list:abbreviated-name=":_n:" block-list:name="ₙ"/>
   <block-list:block block-list:abbreviated-name=":^N:" block-list:name="ᴺ"/>
+  <block-list:block block-list:abbreviated-name=":ne2:" block-list:name="🖓"/>
   <block-list:block block-list:abbreviated-name=":nebezpečí smyku:" block-list:name="⛐"/>
   <block-list:block block-list:abbreviated-name=":ne:" block-list:name="👎"/>
   <block-list:block block-list:abbreviated-name=":nebo:" block-list:name="∨"/>
@@ -1179,21 +1371,29 @@
   <block-list:block block-list:abbreviated-name=":Neptun:" block-list:name="♆"/>
   <block-list:block block-list:abbreviated-name=":nerovnoběžné:" block-list:name="∦"/>
   <block-list:block block-list:abbreviated-name=":neslyším zlo:" block-list:name="🙉"/>
+  <block-list:block block-list:abbreviated-name=":netopýr:" block-list:name="🦇"/>
   <block-list:block block-list:abbreviated-name=":neutrální:" block-list:name="😐"/>
   <block-list:block block-list:abbreviated-name=":nevěsta:" block-list:name="👰"/>
   <block-list:block block-list:abbreviated-name=":nevidím zlo:" block-list:name="🙈"/>
   <block-list:block block-list:abbreviated-name=":nevinný:" block-list:name="😇"/>
+  <block-list:block block-list:abbreviated-name=":nevolnost:" block-list:name="🤢"/>
   <block-list:block block-list:abbreviated-name=":nezletilý:" block-list:name="🔞"/>
   <block-list:block block-list:abbreviated-name=":noc:" block-list:name="🌃"/>
+  <block-list:block block-list:abbreviated-name=":nocleh:" block-list:name="🛌"/>
   <block-list:block block-list:abbreviated-name=":nos:" block-list:name="👃"/>
+  <block-list:block block-list:abbreviated-name=":nosorožec:" block-list:name="🦏"/>
   <block-list:block block-list:abbreviated-name=":nota2:" block-list:name="♪"/>
   <block-list:block block-list:abbreviated-name=":nota:" block-list:name="♩"/>
   <block-list:block block-list:abbreviated-name=":noty2:" block-list:name="♬"/>
+  <block-list:block block-list:abbreviated-name=":noty3:" block-list:name="🎝"/>
+  <block-list:block block-list:abbreviated-name=":noty4:" block-list:name="🎜"/>
   <block-list:block block-list:abbreviated-name=":noty:" block-list:name="♫"/>
   <block-list:block block-list:abbreviated-name=":nov2:" block-list:name="🌚"/>
   <block-list:block block-list:abbreviated-name=":nov:" block-list:name="🌑"/>
+  <block-list:block block-list:abbreviated-name=":noviny2:" block-list:name="🗞"/>
   <block-list:block block-list:abbreviated-name=":noviny:" block-list:name="📰"/>
   <block-list:block block-list:abbreviated-name=":nudle:" block-list:name="🍜"/>
+  <block-list:block block-list:abbreviated-name=":nůž2:" block-list:name="🗡"/>
   <block-list:block block-list:abbreviated-name=":nůž:" block-list:name="🔪"/>
   <block-list:block block-list:abbreviated-name=":nůžky2:" block-list:name="✄"/>
   <block-list:block block-list:abbreviated-name=":nůžky3:" block-list:name="✁"/>
@@ -1201,22 +1401,34 @@
   <block-list:block block-list:abbreviated-name=":nůžky:" block-list:name="✂"/>
   <block-list:block block-list:abbreviated-name=":ný:" block-list:name="ν"/>
   <block-list:block block-list:abbreviated-name=":Ný:" block-list:name="Ν"/>
-  <block-list:block block-list:abbreviated-name=":obálka2:" block-list:name="📨"/>
-  <block-list:block block-list:abbreviated-name=":obálka3:" block-list:name="📩"/>
+  <block-list:block block-list:abbreviated-name=":obálka2:" block-list:name="🖃"/>
+  <block-list:block block-list:abbreviated-name=":obálka3:" block-list:name="🖂"/>
+  <block-list:block block-list:abbreviated-name=":obálka4:" block-list:name="🖆"/>
+  <block-list:block block-list:abbreviated-name=":obálka5:" block-list:name="🖄"/>
+  <block-list:block block-list:abbreviated-name=":obálka6:" block-list:name="🖅"/>
+  <block-list:block block-list:abbreviated-name=":obálka7:" block-list:name="📨"/>
+  <block-list:block block-list:abbreviated-name=":obálka8:" block-list:name="📩"/>
   <block-list:block block-list:abbreviated-name=":obálka:" block-list:name="✉"/>
   <block-list:block block-list:abbreviated-name=":obchod2:" block-list:name="🏬"/>
   <block-list:block block-list:abbreviated-name=":obchod:" block-list:name="🏪"/>
   <block-list:block block-list:abbreviated-name=":obdélník2:" block-list:name="▬"/>
   <block-list:block block-list:abbreviated-name=":obdélník:" block-list:name="▭"/>
   <block-list:block block-list:abbreviated-name=":obíhající srdce:" block-list:name="💞"/>
+  <block-list:block block-list:abbreviated-name=":objímající:" block-list:name="🤗"/>
+  <block-list:block block-list:abbreviated-name=":oblačno2:" block-list:name="🌥"/>
+  <block-list:block block-list:abbreviated-name=":oblačno:" block-list:name="🌤"/>
   <block-list:block block-list:abbreviated-name=":oblak2:" block-list:name="⛅"/>
   <block-list:block block-list:abbreviated-name=":oblak3:" block-list:name="⛈"/>
   <block-list:block block-list:abbreviated-name=":oblak:" block-list:name="☁"/>
+  <block-list:block block-list:abbreviated-name=":oblek:" block-list:name="🕴"/>
   <block-list:block block-list:abbreviated-name=":^o:" block-list:name="ᵒ"/>
   <block-list:block block-list:abbreviated-name=":_o:" block-list:name="ₒ"/>
   <block-list:block block-list:abbreviated-name=":^O:" block-list:name="ᴼ"/>
+  <block-list:block block-list:abbreviated-name=":obraz:" block-list:name="🖼"/>
+  <block-list:block block-list:abbreviated-name=":obrazovka:" block-list:name="🖵"/>
   <block-list:block block-list:abbreviated-name=":obr:" block-list:name="👹"/>
   <block-list:block block-list:abbreviated-name=":obsahuje:" block-list:name="∋"/>
+  <block-list:block block-list:abbreviated-name=":obvaz:" block-list:name="🤕"/>
   <block-list:block block-list:abbreviated-name=":oceán:" block-list:name="🌊"/>
   <block-list:block block-list:abbreviated-name=":oči:" block-list:name="👀"/>
   <block-list:block block-list:abbreviated-name=":oči ze srdcí:" block-list:name="😍"/>
@@ -1224,7 +1436,9 @@
   <block-list:block block-list:abbreviated-name=":odemknuto:" block-list:name="🔓"/>
   <block-list:block block-list:abbreviated-name=":oden:" block-list:name="🍢"/>
   <block-list:block block-list:abbreviated-name=":odkaz:" block-list:name="🔗"/>
+  <block-list:block block-list:abbreviated-name=":odlet:" block-list:name="🛫"/>
   <block-list:block block-list:abbreviated-name=":odmocnina:" block-list:name="√"/>
+  <block-list:block block-list:abbreviated-name=":odpadkový koš:" block-list:name="🗑"/>
   <block-list:block block-list:abbreviated-name=":odpadky:" block-list:name="🚮"/>
   <block-list:block block-list:abbreviated-name=":odrážka2:" block-list:name="‣"/>
   <block-list:block block-list:abbreviated-name=":odrážka3:" block-list:name="◦"/>
@@ -1232,8 +1446,13 @@
   <block-list:block block-list:abbreviated-name=":odrážka noty:" block-list:name="♮"/>
   <block-list:block block-list:abbreviated-name=":oheň:" block-list:name="🔥"/>
   <block-list:block block-list:abbreviated-name=":ohňostroj:" block-list:name="🎆"/>
-  <block-list:block block-list:abbreviated-name=":ok2:" block-list:name="🙆"/>
+  <block-list:block block-list:abbreviated-name=":ok2:" block-list:name="🖏"/>
+  <block-list:block block-list:abbreviated-name=":ok3:" block-list:name="🙆"/>
   <block-list:block block-list:abbreviated-name=":ok:" block-list:name="👌"/>
+  <block-list:block block-list:abbreviated-name=":okno:" block-list:name="🗔"/>
+  <block-list:block block-list:abbreviated-name=":oko:" block-list:name="👁"/>
+  <block-list:block block-list:abbreviated-name=":okurka:" block-list:name="🥒"/>
+  <block-list:block block-list:abbreviated-name=":óm:" block-list:name="🕉"/>
   <block-list:block block-list:abbreviated-name=":omega:" block-list:name="ω"/>
   <block-list:block block-list:abbreviated-name=":Omega:" block-list:name="Ω"/>
   <block-list:block block-list:abbreviated-name=":omikron:" block-list:name="ο"/>
@@ -1241,14 +1460,21 @@
   <block-list:block block-list:abbreviated-name=":ondřejský kříž:" block-list:name="☓"/>
   <block-list:block block-list:abbreviated-name=":opice2:" block-list:name="🐵"/>
   <block-list:block block-list:abbreviated-name=":opice:" block-list:name="🐒"/>
+  <block-list:block block-list:abbreviated-name=":optický disk:" block-list:name="🖸"/>
+  <block-list:block block-list:abbreviated-name=":oranžové srdce:" block-list:name="🧡"/>
+  <block-list:block block-list:abbreviated-name=":orel:" block-list:name="🦅"/>
   <block-list:block block-list:abbreviated-name=":ornament srdce:" block-list:name="💟"/>
-  <block-list:block block-list:abbreviated-name=":oslava:" block-list:name="🙌"/>
+  <block-list:block block-list:abbreviated-name=":oslava2:" block-list:name="🕄"/>
+  <block-list:block block-list:abbreviated-name=":oslava:" block-list:name="🕃"/>
   <block-list:block block-list:abbreviated-name=":osminová nota:" block-list:name="𝅘𝅥𝅮"/>
   <block-list:block block-list:abbreviated-name=":osminová pomlka:" block-list:name="𝄾"/>
   <block-list:block block-list:abbreviated-name=":ospalý:" block-list:name="😪"/>
+  <block-list:block block-list:abbreviated-name=":ostrov:" block-list:name="🏝"/>
   <block-list:block block-list:abbreviated-name=":otevřená ústa:" block-list:name="😮"/>
   <block-list:block block-list:abbreviated-name=":otevřené dlaně:" block-list:name="👐"/>
   <block-list:block block-list:abbreviated-name=":ovce:" block-list:name="🐑"/>
+  <block-list:block block-list:abbreviated-name=":ovládací prvek:" block-list:name="🎛"/>
+  <block-list:block block-list:abbreviated-name=":označení kapitol:" block-list:name="🕅"/>
   <block-list:block block-list:abbreviated-name=":ozubené kolo:" block-list:name="⚙"/>
   <block-list:block block-list:abbreviated-name=":pager:" block-list:name="📟"/>
   <block-list:block block-list:abbreviated-name=":palec:" block-list:name="″"/>
@@ -1256,37 +1482,57 @@
   <block-list:block block-list:abbreviated-name=":palma:" block-list:name="🌴"/>
   <block-list:block block-list:abbreviated-name=":panda:" block-list:name="🐼"/>
   <block-list:block block-list:abbreviated-name=":panenky:" block-list:name="🎎"/>
+  <block-list:block block-list:abbreviated-name=":paní Clausová:" block-list:name="🤶"/>
   <block-list:block block-list:abbreviated-name=":Panna:" block-list:name="♍"/>
+  <block-list:block block-list:abbreviated-name=":paprika:" block-list:name="🌶"/>
+  <block-list:block block-list:abbreviated-name=":paprsky2:" block-list:name="🗥"/>
+  <block-list:block block-list:abbreviated-name=":paprsky3:" block-list:name="🗤"/>
+  <block-list:block block-list:abbreviated-name=":paprsky4:" block-list:name="🗧"/>
+  <block-list:block block-list:abbreviated-name=":paprsky:" block-list:name="🗦"/>
   <block-list:block block-list:abbreviated-name=":pár2:" block-list:name="👬"/>
   <block-list:block block-list:abbreviated-name=":pár3:" block-list:name="👭"/>
   <block-list:block block-list:abbreviated-name=":pár4:" block-list:name="💑"/>
   <block-list:block block-list:abbreviated-name=":paragraf:" block-list:name="§"/>
   <block-list:block block-list:abbreviated-name=":pár:" block-list:name="👫"/>
   <block-list:block block-list:abbreviated-name=":parciální:" block-list:name="∂"/>
+  <block-list:block block-list:abbreviated-name=":párek v rohlíku:" block-list:name="🌭"/>
+  <block-list:block block-list:abbreviated-name=":park:" block-list:name="🏞"/>
   <block-list:block block-list:abbreviated-name=":partitura:" block-list:name="🎼"/>
   <block-list:block block-list:abbreviated-name=":pas:" block-list:name="🛂"/>
+  <block-list:block block-list:abbreviated-name=":pastelka:" block-list:name="🖍"/>
+  <block-list:block block-list:abbreviated-name=":pavouk:" block-list:name="🕷"/>
+  <block-list:block block-list:abbreviated-name=":pavučina:" block-list:name="🕸"/>
   <block-list:block block-list:abbreviated-name=":^p:" block-list:name="ᵖ"/>
   <block-list:block block-list:abbreviated-name=":_p:" block-list:name="ₚ"/>
   <block-list:block block-list:abbreviated-name=":^P:" block-list:name="ᴾ"/>
   <block-list:block block-list:abbreviated-name=":peněženka:" block-list:name="👛"/>
+  <block-list:block block-list:abbreviated-name=":peníze2:" block-list:name="💰"/>
+  <block-list:block block-list:abbreviated-name=":peníze3:" block-list:name="🤑"/>
   <block-list:block block-list:abbreviated-name=":peníze:" block-list:name="💸"/>
-  <block-list:block block-list:abbreviated-name=":pero2:" block-list:name="✒"/>
-  <block-list:block block-list:abbreviated-name=":pero:" block-list:name="✑"/>
+  <block-list:block block-list:abbreviated-name=":pero2:" block-list:name="🖋"/>
+  <block-list:block block-list:abbreviated-name=":pero:" block-list:name="🖊"/>
   <block-list:block block-list:abbreviated-name=":perský:" block-list:name="☫"/>
   <block-list:block block-list:abbreviated-name=":pes2:" block-list:name="🐶"/>
   <block-list:block block-list:abbreviated-name=":pes:" block-list:name="🐕"/>
   <block-list:block block-list:abbreviated-name=":peso:" block-list:name="₱"/>
   <block-list:block block-list:abbreviated-name=":pěst2:" block-list:name="👊"/>
+  <block-list:block block-list:abbreviated-name=":pěst3:" block-list:name="🤛"/>
+  <block-list:block block-list:abbreviated-name=":pěst4:" block-list:name="🤜"/>
   <block-list:block block-list:abbreviated-name=":pěst:" block-list:name="✊"/>
   <block-list:block block-list:abbreviated-name=":pěticípá hvězda:" block-list:name="⛤"/>
   <block-list:block block-list:abbreviated-name=":pětiúhelník2:" block-list:name="⬟"/>
   <block-list:block block-list:abbreviated-name=":pětiúhelník:" block-list:name="⬠"/>
+  <block-list:block block-list:abbreviated-name=":pevný disk:" block-list:name="🖴"/>
   <block-list:block block-list:abbreviated-name=":piano:" block-list:name="🎹"/>
   <block-list:block block-list:abbreviated-name=":pí:" block-list:name="π"/>
   <block-list:block block-list:abbreviated-name=":Pí:" block-list:name="Π"/>
   <block-list:block block-list:abbreviated-name=":piky2:" block-list:name="♤"/>
   <block-list:block block-list:abbreviated-name=":piky:" block-list:name="♠"/>
   <block-list:block block-list:abbreviated-name=":pilulka:" block-list:name="💊"/>
+  <block-list:block block-list:abbreviated-name=":pirát:" block-list:name="🕱"/>
+  <block-list:block block-list:abbreviated-name=":piroh:" block-list:name="🥟"/>
+  <block-list:block block-list:abbreviated-name=":písmo2:" block-list:name="🗚"/>
+  <block-list:block block-list:abbreviated-name=":písmo:" block-list:name="🗛"/>
   <block-list:block block-list:abbreviated-name=":pistole:" block-list:name="🔫"/>
   <block-list:block block-list:abbreviated-name=":pitná voda:" block-list:name="🚰"/>
   <block-list:block block-list:abbreviated-name=":pivo2:" block-list:name="🍻"/>
@@ -1296,8 +1542,12 @@
   <block-list:block block-list:abbreviated-name=":plačící kočka:" block-list:name="😿"/>
   <block-list:block block-list:abbreviated-name=":platební karta:" block-list:name="💳"/>
   <block-list:block block-list:abbreviated-name=":plavec:" block-list:name="🏊"/>
+  <block-list:block block-list:abbreviated-name=":pláž:" block-list:name="🏖"/>
   <block-list:block block-list:abbreviated-name=":Pluto:" block-list:name="♇"/>
+  <block-list:block block-list:abbreviated-name=":počítač2:" block-list:name="🖥"/>
+  <block-list:block block-list:abbreviated-name=":počítač3:" block-list:name="🖳"/>
   <block-list:block block-list:abbreviated-name=":počítač:" block-list:name="💻"/>
+  <block-list:block block-list:abbreviated-name=":podání ruky:" block-list:name="🤝"/>
   <block-list:block block-list:abbreviated-name=":podmnožina:" block-list:name="⊂"/>
   <block-list:block block-list:abbreviated-name=":pohár:" block-list:name="🏆"/>
   <block-list:block block-list:abbreviated-name=":polibek2:" block-list:name="💏"/>
@@ -1305,38 +1555,68 @@
   <block-list:block block-list:abbreviated-name=":policie2:" block-list:name="🚔"/>
   <block-list:block block-list:abbreviated-name=":policie:" block-list:name="🚓"/>
   <block-list:block block-list:abbreviated-name=":policista:" block-list:name="👮"/>
+  <block-list:block block-list:abbreviated-name=":ponožky:" block-list:name="🧦"/>
+  <block-list:block block-list:abbreviated-name=":popcorn:" block-list:name="🍿"/>
   <block-list:block block-list:abbreviated-name=":poslední čtvrť:" block-list:name="🌗"/>
   <block-list:block block-list:abbreviated-name=":pošta2:" block-list:name="🏣"/>
   <block-list:block block-list:abbreviated-name=":pošta:" block-list:name="🏤"/>
+  <block-list:block block-list:abbreviated-name=":postel:" block-list:name="🛏"/>
   <block-list:block block-list:abbreviated-name=":poštovní schránka:" block-list:name="📮"/>
   <block-list:block block-list:abbreviated-name=":poštovní trubka:" block-list:name="📯"/>
+  <block-list:block block-list:abbreviated-name=":posuvník:" block-list:name="🎚"/>
   <block-list:block block-list:abbreviated-name=":pot:" block-list:name="💦"/>
   <block-list:block block-list:abbreviated-name=":potlesk:" block-list:name="👏"/>
+  <block-list:block block-list:abbreviated-name=":potomek:" block-list:name="🧒"/>
+  <block-list:block block-list:abbreviated-name=":poušť:" block-list:name="🏜"/>
+  <block-list:block block-list:abbreviated-name=":pouť2:" block-list:name="🎠"/>
+  <block-list:block block-list:abbreviated-name=":pouť:" block-list:name="🎡"/>
+  <block-list:block block-list:abbreviated-name=":pozastavit:" block-list:name="⏸"/>
+  <block-list:block block-list:abbreviated-name=":poznámka3:" block-list:name="🗈"/>
   <block-list:block block-list:abbreviated-name=":poznámka:" block-list:name="📝"/>
+  <block-list:block block-list:abbreviated-name=":poznámkový blok2:" block-list:name="🗊"/>
+  <block-list:block block-list:abbreviated-name=":poznámkový blok:" block-list:name="🗒"/>
   <block-list:block block-list:abbreviated-name=":pozor:" block-list:name="☡"/>
-  <block-list:block block-list:abbreviated-name=":praporek:" block-list:name="🚩"/>
+  <block-list:block block-list:abbreviated-name=":praporek2:" block-list:name="🏱"/>
+  <block-list:block block-list:abbreviated-name=":praporek3:" block-list:name="🚩"/>
+  <block-list:block block-list:abbreviated-name=":praporek:" block-list:name="🏲"/>
   <block-list:block block-list:abbreviated-name=":pravítko2:" block-list:name="📐"/>
   <block-list:block block-list:abbreviated-name=":pravítko:" block-list:name="📏"/>
   <block-list:block block-list:abbreviated-name=":pravoslavný kříž:" block-list:name="☦"/>
   <block-list:block block-list:abbreviated-name=":pravoúhlý trojúhelník:" block-list:name="⊿"/>
   <block-list:block block-list:abbreviated-name=":prázdná množina:" block-list:name="∅"/>
-  <block-list:block block-list:abbreviated-name=":přecházející děti:" block-list:name="🚸"/>
+  <block-list:block block-list:abbreviated-name=":prázdná poznámka:" block-list:name="🗅"/>
+  <block-list:block block-list:abbreviated-name=":prázdná stránka:" block-list:name="🗌"/>
+  <block-list:block block-list:abbreviated-name=":prázdná stránka poznámek:" block-list:name="🗆"/>
+  <block-list:block block-list:abbreviated-name=":prázdné stránky:" block-list:name="🗍"/>
+  <block-list:block block-list:abbreviated-name=":prázdný dokument:" block-list:name="🗋"/>
+  <block-list:block block-list:abbreviated-name=":prázdný poznámkový blok:" block-list:name="🗇"/>
+  <block-list:block block-list:abbreviated-name=":přechod pro chodce:" block-list:name="🚸"/>
+  <block-list:block block-list:abbreviated-name=":preclík:" block-list:name="🥨"/>
+  <block-list:block block-list:abbreviated-name=":překrývat:" block-list:name="🗗"/>
+  <block-list:block block-list:abbreviated-name=":přemýšlící:" block-list:name="🤔"/>
   <block-list:block block-list:abbreviated-name=":přepínač:" block-list:name="🔘"/>
   <block-list:block block-list:abbreviated-name=":přesýpací hodiny2:" block-list:name="⏳"/>
   <block-list:block block-list:abbreviated-name=":přesýpací hodiny:" block-list:name="⌛"/>
   <block-list:block block-list:abbreviated-name=":přihrádka2:" block-list:name="📥"/>
   <block-list:block block-list:abbreviated-name=":přihrádka:" block-list:name="📤"/>
   <block-list:block block-list:abbreviated-name=":přilba:" block-list:name="⛑"/>
+  <block-list:block block-list:abbreviated-name=":přílet:" block-list:name="🛬"/>
+  <block-list:block block-list:abbreviated-name=":princ:" block-list:name="🤴"/>
   <block-list:block block-list:abbreviated-name=":princezna:" block-list:name="👸"/>
+  <block-list:block block-list:abbreviated-name=":připínáček2:" block-list:name="🖈"/>
   <block-list:block block-list:abbreviated-name=":připínáček:" block-list:name="📌"/>
   <block-list:block block-list:abbreviated-name=":přívoz:" block-list:name="⛴"/>
   <block-list:block block-list:abbreviated-name=":promile:" block-list:name="‰"/>
+  <block-list:block block-list:abbreviated-name=":promítačka:" block-list:name="📽"/>
   <block-list:block block-list:abbreviated-name=":promoce:" block-list:name="🎓"/>
+  <block-list:block block-list:abbreviated-name=":protočené panenky:" block-list:name="🙄"/>
   <block-list:block block-list:abbreviated-name=":pro všechna:" block-list:name="∀"/>
   <block-list:block block-list:abbreviated-name=":prskavka:" block-list:name="🎇"/>
+  <block-list:block block-list:abbreviated-name=":prst:" block-list:name="🖕"/>
   <block-list:block block-list:abbreviated-name=":prsten:" block-list:name="💍"/>
   <block-list:block block-list:abbreviated-name=":průnik:" block-list:name="∩"/>
   <block-list:block block-list:abbreviated-name=":první čtvrť:" block-list:name="🌓"/>
+  <block-list:block block-list:abbreviated-name=":psaní2:" block-list:name="🖎"/>
   <block-list:block block-list:abbreviated-name=":psaní:" block-list:name="✍"/>
   <block-list:block block-list:abbreviated-name=":psí:" block-list:name="ψ"/>
   <block-list:block block-list:abbreviated-name=":Psí:" block-list:name="Ψ"/>
@@ -1346,7 +1626,6 @@
   <block-list:block block-list:abbreviated-name=":půlová nota:" block-list:name="𝅗𝅥"/>
   <block-list:block block-list:abbreviated-name=":půlová pomlka:" block-list:name="𝄼"/>
   <block-list:block block-list:abbreviated-name=":puls:" block-list:name="💓"/>
-  <block-list:block block-list:abbreviated-name=":pytel peněz:" block-list:name="💰"/>
   <block-list:block block-list:abbreviated-name=":radioaktivní:" block-list:name="☢"/>
   <block-list:block block-list:abbreviated-name=":rádio:" block-list:name="📻"/>
   <block-list:block block-list:abbreviated-name=":radost:" block-list:name="😂"/>
@@ -1356,6 +1635,8 @@
   <block-list:block block-list:abbreviated-name=":Rak:" block-list:name="♋"/>
   <block-list:block block-list:abbreviated-name=":raketa:" block-list:name="🚀"/>
   <block-list:block block-list:abbreviated-name=":rakev:" block-list:name="⚰"/>
+  <block-list:block block-list:abbreviated-name=":rámec2:" block-list:name="🖽"/>
+  <block-list:block block-list:abbreviated-name=":rámec:" block-list:name="🖾"/>
   <block-list:block block-list:abbreviated-name=":rarach:" block-list:name="👿"/>
   <block-list:block block-list:abbreviated-name=":^r:" block-list:name="ʳ"/>
   <block-list:block block-list:abbreviated-name=":_r:" block-list:name="ᵣ"/>
@@ -1368,14 +1649,20 @@
   <block-list:block block-list:abbreviated-name=":registrované:" block-list:name="®"/>
   <block-list:block block-list:abbreviated-name=":řehot:" block-list:name="😁"/>
   <block-list:block block-list:abbreviated-name=":řehtající:" block-list:name="😀"/>
+  <block-list:block block-list:abbreviated-name=":rejstřík:" block-list:name="🗂"/>
   <block-list:block block-list:abbreviated-name=":rekonstrukce:" block-list:name="🚧"/>
+  <block-list:block block-list:abbreviated-name=":reproduktor2:" block-list:name="🕩"/>
+  <block-list:block block-list:abbreviated-name=":reproduktor3:" block-list:name="🕨"/>
+  <block-list:block block-list:abbreviated-name=":reproduktor4:" block-list:name="🕪"/>
   <block-list:block block-list:abbreviated-name=":reproduktor:" block-list:name="🔈"/>
   <block-list:block block-list:abbreviated-name=":restaurace:" block-list:name="🍴"/>
   <block-list:block block-list:abbreviated-name=":řetězy:" block-list:name="⛓"/>
   <block-list:block block-list:abbreviated-name=":_ró:" block-list:name="ᵨ"/>
   <block-list:block block-list:abbreviated-name=":ró:" block-list:name="ρ"/>
   <block-list:block block-list:abbreviated-name=":Ró:" block-list:name="Ρ"/>
+  <block-list:block block-list:abbreviated-name=":robot:" block-list:name="🤖"/>
   <block-list:block block-list:abbreviated-name=":rodina:" block-list:name="👪"/>
+  <block-list:block block-list:abbreviated-name=":rohy:" block-list:name="🤘"/>
   <block-list:block block-list:abbreviated-name=":rouška:" block-list:name="😷"/>
   <block-list:block block-list:abbreviated-name=":rovnoběžné:" block-list:name="∥"/>
   <block-list:block block-list:abbreviated-name=":rovnoběžník2:" block-list:name="▰"/>
@@ -1386,10 +1673,16 @@
   <block-list:block block-list:abbreviated-name=":rozvod:" block-list:name="⚮"/>
   <block-list:block block-list:abbreviated-name=":rozzlobený:" block-list:name="😠"/>
   <block-list:block block-list:abbreviated-name=":rtěnka:" block-list:name="💄"/>
+  <block-list:block block-list:abbreviated-name=":rty:" block-list:name="🗢"/>
+  <block-list:block block-list:abbreviated-name=":ruka2:" block-list:name="🖐"/>
+  <block-list:block block-list:abbreviated-name=":ruka3:" block-list:name="🖑"/>
+  <block-list:block block-list:abbreviated-name=":ruka4:" block-list:name="🤚"/>
   <block-list:block block-list:abbreviated-name=":ruka:" block-list:name="✋"/>
+  <block-list:block block-list:abbreviated-name=":rukavice:" block-list:name="🧤"/>
   <block-list:block block-list:abbreviated-name=":rupie:" block-list:name="₹"/>
-  <block-list:block block-list:abbreviated-name=":ruské kolo:" block-list:name="🎡"/>
   <block-list:block block-list:abbreviated-name=":růže:" block-list:name="🌹"/>
+  <block-list:block block-list:abbreviated-name=":růžička2:" block-list:name="🏶"/>
+  <block-list:block block-list:abbreviated-name=":růžička:" block-list:name="🏵"/>
   <block-list:block block-list:abbreviated-name=":ryba2:" block-list:name="🐠"/>
   <block-list:block block-list:abbreviated-name=":ryba3:" block-list:name="🐡"/>
   <block-list:block block-list:abbreviated-name=":ryba:" block-list:name="🐟"/>
@@ -1402,14 +1695,18 @@
   <block-list:block block-list:abbreviated-name=":rýžová sušenka:" block-list:name="🍘"/>
   <block-list:block block-list:abbreviated-name=":S2:" block-list:name="⇑"/>
   <block-list:block block-list:abbreviated-name=":saké:" block-list:name="🍶"/>
+  <block-list:block block-list:abbreviated-name=":šála:" block-list:name="🧣"/>
+  <block-list:block block-list:abbreviated-name=":salát:" block-list:name="🥗"/>
   <block-list:block block-list:abbreviated-name=":samec:" block-list:name="♂"/>
   <block-list:block block-list:abbreviated-name=":samice:" block-list:name="♀"/>
   <block-list:block block-list:abbreviated-name=":sandál:" block-list:name="👡"/>
   <block-list:block block-list:abbreviated-name=":sanitka:" block-list:name="🚑"/>
+  <block-list:block block-list:abbreviated-name=":sáňky:" block-list:name="🛷"/>
   <block-list:block block-list:abbreviated-name=":Santa:" block-list:name="🎅"/>
-  <block-list:block block-list:abbreviated-name=":satelit:" block-list:name="📡"/>
+  <block-list:block block-list:abbreviated-name=":šátek:" block-list:name="🧕"/>
   <block-list:block block-list:abbreviated-name=":Saturn:" block-list:name="♄"/>
   <block-list:block block-list:abbreviated-name=":šaty:" block-list:name="👗"/>
+  <block-list:block block-list:abbreviated-name=":sauna:" block-list:name="🧖"/>
   <block-list:block block-list:abbreviated-name=":saxofon:" block-list:name="🎷"/>
   <block-list:block block-list:abbreviated-name=":sazenice:" block-list:name="🌱"/>
   <block-list:block block-list:abbreviated-name=":^s:" block-list:name="ˢ"/>
@@ -1422,8 +1719,11 @@
   <block-list:block block-list:abbreviated-name=":schránka:" block-list:name="📋"/>
   <block-list:block block-list:abbreviated-name=":sedadlo:" block-list:name="💺"/>
   <block-list:block block-list:abbreviated-name=":šekel:" block-list:name="₪"/>
+  <block-list:block block-list:abbreviated-name=":selfie:" block-list:name="🤳"/>
   <block-list:block block-list:abbreviated-name=":semafor2:" block-list:name="🚦"/>
   <block-list:block block-list:abbreviated-name=":semafor:" block-list:name="🚥"/>
+  <block-list:block block-list:abbreviated-name=":sendvič:" block-list:name="🥪"/>
+  <block-list:block block-list:abbreviated-name=":šermíř:" block-list:name="🤺"/>
   <block-list:block block-list:abbreviated-name=":šestiúhelník2:" block-list:name="⬢"/>
   <block-list:block block-list:abbreviated-name=":šestiúhelník:" block-list:name="⬡"/>
   <block-list:block block-list:abbreviated-name=":šestnáctinová nota:" block-list:name="𝅘𝅥𝅯"/>
@@ -1431,85 +1731,136 @@
   <block-list:block block-list:abbreviated-name=":sigma:" block-list:name="σ"/>
   <block-list:block block-list:abbreviated-name=":Sigma:" block-list:name="Σ"/>
   <block-list:block block-list:abbreviated-name=":síla signálu:" block-list:name="📶"/>
+  <block-list:block block-list:abbreviated-name=":šipky:" block-list:name="🗘"/>
+  <block-list:block block-list:abbreviated-name=":síť:" block-list:name="🖧"/>
   <block-list:block block-list:abbreviated-name=":SJ2:" block-list:name="⇕"/>
   <block-list:block block-list:abbreviated-name=":SJ:" block-list:name="↕"/>
   <block-list:block block-list:abbreviated-name=":sjednocení:" block-list:name="∪"/>
   <block-list:block block-list:abbreviated-name=":šklebící:" block-list:name="😬"/>
+  <block-list:block block-list:abbreviated-name=":sklenice3:" block-list:name="🥃"/>
+  <block-list:block block-list:abbreviated-name=":sklenice:" block-list:name="🍷"/>
   <block-list:block block-list:abbreviated-name=":škola:" block-list:name="🏫"/>
   <block-list:block block-list:abbreviated-name=":školní taška:" block-list:name="🎒"/>
   <block-list:block block-list:abbreviated-name=":skřítek:" block-list:name="👺"/>
+  <block-list:block block-list:abbreviated-name=":skútr:" block-list:name="🛵"/>
   <block-list:block block-list:abbreviated-name=":sladký brambor:" block-list:name="🍠"/>
+  <block-list:block block-list:abbreviated-name=":slanina:" block-list:name="🥓"/>
+  <block-list:block block-list:abbreviated-name=":slavení:" block-list:name="🙌"/>
   <block-list:block block-list:abbreviated-name=":slepice:" block-list:name="🐔"/>
+  <block-list:block block-list:abbreviated-name=":slintající:" block-list:name="🤤"/>
   <block-list:block block-list:abbreviated-name=":slon:" block-list:name="🐘"/>
   <block-list:block block-list:abbreviated-name=":sloupcový graf:" block-list:name="📊"/>
   <block-list:block block-list:abbreviated-name=":složka2:" block-list:name="📂"/>
+  <block-list:block block-list:abbreviated-name=":složka3:" block-list:name="🗀"/>
+  <block-list:block block-list:abbreviated-name=":složka4:" block-list:name="🗁"/>
+  <block-list:block block-list:abbreviated-name=":složka5:" block-list:name="🖿"/>
   <block-list:block block-list:abbreviated-name=":složka:" block-list:name="📁"/>
   <block-list:block block-list:abbreviated-name=":sluchátka:" block-list:name="🎧"/>
+  <block-list:block block-list:abbreviated-name=":sluchátko2:" block-list:name="🕻"/>
+  <block-list:block block-list:abbreviated-name=":sluchátko3:" block-list:name="🕽"/>
+  <block-list:block block-list:abbreviated-name=":sluchátko4:" block-list:name="🕼"/>
   <block-list:block block-list:abbreviated-name=":sluchátko:" block-list:name="📞"/>
   <block-list:block block-list:abbreviated-name=":Slunce2:" block-list:name="☼"/>
+  <block-list:block block-list:abbreviated-name=":Slunce3:" block-list:name="🌣"/>
   <block-list:block block-list:abbreviated-name=":slunce:" block-list:name="🌞"/>
   <block-list:block block-list:abbreviated-name=":Slunce:" block-list:name="☉"/>
   <block-list:block block-list:abbreviated-name=":slunéčko:" block-list:name="🐞"/>
-  <block-list:block block-list:abbreviated-name=":sluneční brýle:" block-list:name="😎"/>
+  <block-list:block block-list:abbreviated-name=":sluneční brýle2:" block-list:name="😎"/>
+  <block-list:block block-list:abbreviated-name=":sluneční brýle:" block-list:name="🕶"/>
   <block-list:block block-list:abbreviated-name=":slunečnice:" block-list:name="🌻"/>
   <block-list:block block-list:abbreviated-name=":slunečno:" block-list:name="☀"/>
-  <block-list:block block-list:abbreviated-name=":směna peněz:" block-list:name="💱"/>
+  <block-list:block block-list:abbreviated-name=":smažená kreveta:" block-list:name="🍤"/>
+  <block-list:block block-list:abbreviated-name=":směna:" block-list:name="💱"/>
   <block-list:block block-list:abbreviated-name=":smích:" block-list:name="😆"/>
   <block-list:block block-list:abbreviated-name=":smyčka2:" block-list:name="➿"/>
   <block-list:block block-list:abbreviated-name=":smyčka:" block-list:name="➰"/>
   <block-list:block block-list:abbreviated-name=":sněhová vločka:" block-list:name="❄"/>
   <block-list:block block-list:abbreviated-name=":sněhulák2:" block-list:name="⛄"/>
   <block-list:block block-list:abbreviated-name=":sněhulák:" block-list:name="☃"/>
+  <block-list:block block-list:abbreviated-name=":sníh:" block-list:name="🌨"/>
   <block-list:block block-list:abbreviated-name=":snowboardista:" block-list:name="🏂"/>
   <block-list:block block-list:abbreviated-name=":socha:" block-list:name="🗿"/>
+  <block-list:block block-list:abbreviated-name=":šokovaný:" block-list:name="🤯"/>
   <block-list:block block-list:abbreviated-name=":sopka:" block-list:name="🌋"/>
   <block-list:block block-list:abbreviated-name=":součet:" block-list:name="∑"/>
   <block-list:block block-list:abbreviated-name=":součin:" block-list:name="∏"/>
+  <block-list:block block-list:abbreviated-name=":sova:" block-list:name="🦉"/>
   <block-list:block block-list:abbreviated-name=":špagety:" block-list:name="🍝"/>
   <block-list:block block-list:abbreviated-name=":spánek:" block-list:name="💤"/>
   <block-list:block block-list:abbreviated-name=":špendlík:" block-list:name="📍"/>
   <block-list:block block-list:abbreviated-name=":spící:" block-list:name="😴"/>
+  <block-list:block block-list:abbreviated-name=":Spock:" block-list:name="🖖"/>
   <block-list:block block-list:abbreviated-name=":spodek:" block-list:name="🂫"/>
+  <block-list:block block-list:abbreviated-name=":sponka2:" block-list:name="🖇"/>
   <block-list:block block-list:abbreviated-name=":sponka:" block-list:name="📎"/>
   <block-list:block block-list:abbreviated-name=":sprcha:" block-list:name="🚿"/>
+  <block-list:block block-list:abbreviated-name=":šprt:" block-list:name="🤓"/>
+  <block-list:block block-list:abbreviated-name=":srdce2:" block-list:name="🎔"/>
   <block-list:block block-list:abbreviated-name=":srdce:" block-list:name="❤"/>
   <block-list:block block-list:abbreviated-name=":srdce se stuhou:" block-list:name="💝"/>
   <block-list:block block-list:abbreviated-name=":šroub a matka:" block-list:name="🔩"/>
   <block-list:block block-list:abbreviated-name=":srp a kladivo:" block-list:name="☭"/>
   <block-list:block block-list:abbreviated-name=":srpek měsíce:" block-list:name="🌙"/>
+  <block-list:block block-list:abbreviated-name=":stadion:" block-list:name="🏟"/>
   <block-list:block block-list:abbreviated-name=":stan:" block-list:name="⛺"/>
   <block-list:block block-list:abbreviated-name=":stanice:" block-list:name="🚉"/>
   <block-list:block block-list:abbreviated-name=":starší muž:" block-list:name="👴"/>
   <block-list:block block-list:abbreviated-name=":starší žena:" block-list:name="👵"/>
+  <block-list:block block-list:abbreviated-name=":starý:" block-list:name="🧓"/>
+  <block-list:block block-list:abbreviated-name=":steak:" block-list:name="🥩"/>
   <block-list:block block-list:abbreviated-name=":stehno:" block-list:name="🍗"/>
+  <block-list:block block-list:abbreviated-name=":stereo:" block-list:name="📾"/>
   <block-list:block block-list:abbreviated-name=":štěstí:" block-list:name="🙋"/>
+  <block-list:block block-list:abbreviated-name=":štětec:" block-list:name="🖌"/>
+  <block-list:block block-list:abbreviated-name=":štír:" block-list:name="🦂"/>
   <block-list:block block-list:abbreviated-name=":Štír:" block-list:name="♏"/>
-  <block-list:block block-list:abbreviated-name=":štít:" block-list:name="⛨"/>
+  <block-list:block block-list:abbreviated-name=":štít2:" block-list:name="⛨"/>
+  <block-list:block block-list:abbreviated-name=":štít:" block-list:name="🛡"/>
+  <block-list:block block-list:abbreviated-name=":štítek:" block-list:name="🏷"/>
+  <block-list:block block-list:abbreviated-name=":stolní tenis:" block-list:name="🏓"/>
+  <block-list:block block-list:abbreviated-name=":stop:" block-list:name="🛑"/>
   <block-list:block block-list:abbreviated-name=":stopky:" block-list:name="⏱"/>
   <block-list:block block-list:abbreviated-name=":stopy:" block-list:name="🐾"/>
-  <block-list:block block-list:abbreviated-name=":stránka:" block-list:name="📃"/>
-  <block-list:block block-list:abbreviated-name=":stránka s ohnutým rohem:" block-list:name="📄"/>
+  <block-list:block block-list:abbreviated-name=":stránka2:" block-list:name="🗏"/>
+  <block-list:block block-list:abbreviated-name=":stránka3:" block-list:name="📃"/>
+  <block-list:block block-list:abbreviated-name=":stránka4:" block-list:name="🗟"/>
+  <block-list:block block-list:abbreviated-name=":stránka:" block-list:name="📄"/>
+  <block-list:block block-list:abbreviated-name=":stránka poznámek:" block-list:name="🗉"/>
+  <block-list:block block-list:abbreviated-name=":stránky:" block-list:name="🗐"/>
   <block-list:block block-list:abbreviated-name=":stráž:" block-list:name="💂"/>
   <block-list:block block-list:abbreviated-name=":střední čtverec2:" block-list:name="◼"/>
   <block-list:block block-list:abbreviated-name=":střední čtverec:" block-list:name="◻"/>
   <block-list:block block-list:abbreviated-name=":střední hvězda:" block-list:name="⭐"/>
   <block-list:block block-list:abbreviated-name=":Střelec:" block-list:name="♐"/>
+  <block-list:block block-list:abbreviated-name=":stříbrná:" block-list:name="🥈"/>
   <block-list:block block-list:abbreviated-name=":studený pot:" block-list:name="😰"/>
-  <block-list:block block-list:abbreviated-name=":stuha:" block-list:name="🎀"/>
+  <block-list:block block-list:abbreviated-name=":stuha2:" block-list:name="🎀"/>
+  <block-list:block block-list:abbreviated-name=":stuha:" block-list:name="🎗"/>
   <block-list:block block-list:abbreviated-name=":stupeň:" block-list:name="°"/>
+  <block-list:block block-list:abbreviated-name=":sud:" block-list:name="🛢"/>
   <block-list:block block-list:abbreviated-name=":surfař:" block-list:name="🏄"/>
+  <block-list:block block-list:abbreviated-name=":sušenka2:" block-list:name="🥠"/>
   <block-list:block block-list:abbreviated-name=":sušenka:" block-list:name="🍪"/>
   <block-list:block block-list:abbreviated-name=":suši:" block-list:name="🍣"/>
   <block-list:block block-list:abbreviated-name=":SV2:" block-list:name="⇗"/>
   <block-list:block block-list:abbreviated-name=":sval:" block-list:name="💪"/>
   <block-list:block block-list:abbreviated-name=":svatba:" block-list:name="💒"/>
+  <block-list:block block-list:abbreviated-name=":svatyně:" block-list:name="🛐"/>
   <block-list:block block-list:abbreviated-name=":SV:" block-list:name="↗"/>
+  <block-list:block block-list:abbreviated-name=":svěrka:" block-list:name="🗜"/>
   <block-list:block block-list:abbreviated-name=":světlé vlasy:" block-list:name="👱"/>
+  <block-list:block block-list:abbreviated-name=":svíčka:" block-list:name="🕯"/>
   <block-list:block block-list:abbreviated-name=":svitek:" block-list:name="📜"/>
   <block-list:block block-list:abbreviated-name=":svoboda:" block-list:name="🗽"/>
+  <block-list:block block-list:abbreviated-name=":synagoga:" block-list:name="🕍"/>
+  <block-list:block block-list:abbreviated-name=":syntetizér:" block-list:name="🎘"/>
+  <block-list:block block-list:abbreviated-name=":sýr:" block-list:name="🧀"/>
   <block-list:block block-list:abbreviated-name=":SZ2:" block-list:name="⇖"/>
   <block-list:block block-list:abbreviated-name=":SZ:" block-list:name="↖"/>
+  <block-list:block block-list:abbreviated-name=":taco:" block-list:name="🌮"/>
+  <block-list:block block-list:abbreviated-name=":talíř:" block-list:name="🍽"/>
   <block-list:block block-list:abbreviated-name=":tanabata:" block-list:name="🎋"/>
+  <block-list:block block-list:abbreviated-name=":tanečník2:" block-list:name="🕺"/>
   <block-list:block block-list:abbreviated-name=":tanečník:" block-list:name="💃"/>
   <block-list:block block-list:abbreviated-name=":taška:" block-list:name="👝"/>
   <block-list:block block-list:abbreviated-name=":tau:" block-list:name="τ"/>
@@ -1520,19 +1871,29 @@
   <block-list:block block-list:abbreviated-name=":_t:" block-list:name="ₜ"/>
   <block-list:block block-list:abbreviated-name=":^T:" block-list:name="ᵀ"/>
   <block-list:block block-list:abbreviated-name=":tečka uprostřed:" block-list:name="·"/>
+  <block-list:block block-list:abbreviated-name=":těhotná:" block-list:name="🤰"/>
   <block-list:block block-list:abbreviated-name=":telefon2:" block-list:name="☏"/>
-  <block-list:block block-list:abbreviated-name=":telefon3:" block-list:name="✆"/>
+  <block-list:block block-list:abbreviated-name=":telefon3:" block-list:name="🕾"/>
+  <block-list:block block-list:abbreviated-name=":telefon4:" block-list:name="🕿"/>
+  <block-list:block block-list:abbreviated-name=":telefon5:" block-list:name="✆"/>
+  <block-list:block block-list:abbreviated-name=":telefonát:" block-list:name="🤙"/>
   <block-list:block block-list:abbreviated-name=":telefon:" block-list:name="☎"/>
   <block-list:block block-list:abbreviated-name=":televize:" block-list:name="📺"/>
   <block-list:block block-list:abbreviated-name=":tenis:" block-list:name="🎾"/>
+  <block-list:block block-list:abbreviated-name=":teploměr2:" block-list:name="🤒"/>
+  <block-list:block block-list:abbreviated-name=":teploměr:" block-list:name="🌡"/>
   <block-list:block block-list:abbreviated-name=":termální prameny:" block-list:name="♨"/>
   <block-list:block block-list:abbreviated-name=":^théta:" block-list:name="ᶿ"/>
   <block-list:block block-list:abbreviated-name=":théta:" block-list:name="θ"/>
   <block-list:block block-list:abbreviated-name=":Théta:" block-list:name="Θ"/>
+  <block-list:block block-list:abbreviated-name=":tiskárna2:" block-list:name="🖶"/>
+  <block-list:block block-list:abbreviated-name=":tiskárna:" block-list:name="🖨"/>
   <block-list:block block-list:abbreviated-name=":tlačítko2:" block-list:name="🔲"/>
   <block-list:block block-list:abbreviated-name=":tlačítko:" block-list:name="🔳"/>
   <block-list:block block-list:abbreviated-name=":tm:" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name=":tornádo:" block-list:name="🌪"/>
   <block-list:block block-list:abbreviated-name=":továrna:" block-list:name="🏭"/>
+  <block-list:block block-list:abbreviated-name=":trackball:" block-list:name="🖲"/>
   <block-list:block block-list:abbreviated-name=":traktor:" block-list:name="🚜"/>
   <block-list:block block-list:abbreviated-name=":tramvaj2:" block-list:name="🚋"/>
   <block-list:block block-list:abbreviated-name=":tramvaj:" block-list:name="🚊"/>
@@ -1544,10 +1905,10 @@
   <block-list:block block-list:abbreviated-name=":tričko:" block-list:name="👕"/>
   <block-list:block block-list:abbreviated-name=":triumf:" block-list:name="😤"/>
   <block-list:block block-list:abbreviated-name=":trojúhelník2:" block-list:name="▲"/>
+  <block-list:block block-list:abbreviated-name=":trojúhelník3:" block-list:name="🛆"/>
   <block-list:block block-list:abbreviated-name=":trojúhelník:" block-list:name="△"/>
   <block-list:block block-list:abbreviated-name=":trojzubec:" block-list:name="🔱"/>
   <block-list:block block-list:abbreviated-name=":trolejbus:" block-list:name="🚎"/>
-  <block-list:block block-list:abbreviated-name=":tropický nápoj:" block-list:name="🍹"/>
   <block-list:block block-list:abbreviated-name=":trpící:" block-list:name="😧"/>
   <block-list:block block-list:abbreviated-name=":třpyt:" block-list:name="✨"/>
   <block-list:block block-list:abbreviated-name=":trubka:" block-list:name="🎺"/>
@@ -1557,6 +1918,7 @@
   <block-list:block block-list:abbreviated-name=":turecká lira:" block-list:name="₺"/>
   <block-list:block block-list:abbreviated-name=":tužka2:" block-list:name="✏"/>
   <block-list:block block-list:abbreviated-name=":tužka3:" block-list:name="✐"/>
+  <block-list:block block-list:abbreviated-name=":tužka4:" block-list:name="🖉"/>
   <block-list:block block-list:abbreviated-name=":tužka:" block-list:name="✎"/>
   <block-list:block block-list:abbreviated-name=":tygr2:" block-list:name="🐯"/>
   <block-list:block block-list:abbreviated-name=":tygr:" block-list:name="🐅"/>
@@ -1567,11 +1929,12 @@
   <block-list:block block-list:abbreviated-name=":účetní kniha:" block-list:name="📒"/>
   <block-list:block block-list:abbreviated-name=":ucho:" block-list:name="👂"/>
   <block-list:block block-list:abbreviated-name=":údiv:" block-list:name="😲"/>
+  <block-list:block block-list:abbreviated-name=":ufo:" block-list:name="🛸"/>
   <block-list:block block-list:abbreviated-name=":úhel2:" block-list:name="∡"/>
   <block-list:block block-list:abbreviated-name=":úhel:" block-list:name="∠"/>
-  <block-list:block block-list:abbreviated-name=":úklona:" block-list:name="🙇"/>
   <block-list:block block-list:abbreviated-name=":ulita:" block-list:name="🐚"/>
   <block-list:block block-list:abbreviated-name=":unavený:" block-list:name="😫"/>
+  <block-list:block block-list:abbreviated-name=":upír:" block-list:name="🧛"/>
   <block-list:block block-list:abbreviated-name=":úplněk2:" block-list:name="🌝"/>
   <block-list:block block-list:abbreviated-name=":úplněk:" block-list:name="🌕"/>
   <block-list:block block-list:abbreviated-name=":upozornění:" block-list:name="⚠"/>
@@ -1587,6 +1950,8 @@
   <block-list:block block-list:abbreviated-name=":usměvavá kočka2:" block-list:name="😺"/>
   <block-list:block block-list:abbreviated-name=":usměvavá kočka:" block-list:name="😸"/>
   <block-list:block block-list:abbreviated-name=":usměvavý2:" block-list:name="☻"/>
+  <block-list:block block-list:abbreviated-name=":usměvavý3:" block-list:name="🙂"/>
+  <block-list:block block-list:abbreviated-name=":usměvavý4:" block-list:name="🤭"/>
   <block-list:block block-list:abbreviated-name=":usměvavý:" block-list:name="☺"/>
   <block-list:block block-list:abbreviated-name=":úsměv:" block-list:name="😃"/>
   <block-list:block block-list:abbreviated-name=":ústa:" block-list:name="👄"/>
@@ -1598,13 +1963,17 @@
   <block-list:block block-list:abbreviated-name=":Váhy:" block-list:name="♎"/>
   <block-list:block block-list:abbreviated-name=":vana:" block-list:name="🛁"/>
   <block-list:block block-list:abbreviated-name=":Vánoce:" block-list:name="🎄"/>
+  <block-list:block block-list:abbreviated-name=":vaření:" block-list:name="🍳"/>
   <block-list:block block-list:abbreviated-name=":^v:" block-list:name="ᵛ"/>
   <block-list:block block-list:abbreviated-name=":_v:" block-list:name="ᵥ"/>
   <block-list:block block-list:abbreviated-name=":^V:" block-list:name="ⱽ"/>
   <block-list:block block-list:abbreviated-name=":V:" block-list:name="→"/>
   <block-list:block block-list:abbreviated-name=":včela:" block-list:name="🐝"/>
+  <block-list:block block-list:abbreviated-name=":večírek2:" block-list:name="🎊"/>
+  <block-list:block block-list:abbreviated-name=":večírek3:" block-list:name="🥂"/>
+  <block-list:block block-list:abbreviated-name=":večírek4:" block-list:name="🍾"/>
   <block-list:block block-list:abbreviated-name=":večírek:" block-list:name="🎉"/>
-  <block-list:block block-list:abbreviated-name=":vejce:" block-list:name="🍳"/>
+  <block-list:block block-list:abbreviated-name=":vejce:" block-list:name="🥚"/>
   <block-list:block block-list:abbreviated-name=":velbloud2:" block-list:name="🐫"/>
   <block-list:block block-list:abbreviated-name=":velbloud:" block-list:name="🐪"/>
   <block-list:block block-list:abbreviated-name=":velký čtverec2:" block-list:name="⬛"/>
@@ -1619,13 +1988,16 @@
   <block-list:block block-list:abbreviated-name=":videohra:" block-list:name="🎮"/>
   <block-list:block block-list:abbreviated-name=":videokamera:" block-list:name="📹"/>
   <block-list:block block-list:abbreviated-name=":videokazeta:" block-list:name="📼"/>
-  <block-list:block block-list:abbreviated-name=":víno:" block-list:name="🍷"/>
+  <block-list:block block-list:abbreviated-name=":víla:" block-list:name="🧚"/>
   <block-list:block block-list:abbreviated-name=":visutá dráha:" block-list:name="🚟"/>
+  <block-list:block block-list:abbreviated-name=":vítězství2:" block-list:name="🖔"/>
   <block-list:block block-list:abbreviated-name=":vítězství:" block-list:name="✌"/>
+  <block-list:block block-list:abbreviated-name=":vítr:" block-list:name="🌬"/>
   <block-list:block block-list:abbreviated-name=":vizitkář:" block-list:name="📇"/>
-  <block-list:block block-list:abbreviated-name=":vlajka2:" block-list:name="⚑"/>
-  <block-list:block block-list:abbreviated-name=":vlajka3:" block-list:name="🏁"/>
-  <block-list:block block-list:abbreviated-name=":vlajka:" block-list:name="⚐"/>
+  <block-list:block block-list:abbreviated-name=":vlajka2:" block-list:name="🏳"/>
+  <block-list:block block-list:abbreviated-name=":vlajka3:" block-list:name="⚑"/>
+  <block-list:block block-list:abbreviated-name=":vlajka4:" block-list:name="⚐"/>
+  <block-list:block block-list:abbreviated-name=":vlajka:" block-list:name="🏴"/>
   <block-list:block block-list:abbreviated-name=":vlajky2:" block-list:name="🎏"/>
   <block-list:block block-list:abbreviated-name=":vlajky:" block-list:name="🎌"/>
   <block-list:block block-list:abbreviated-name=":vlak2:" block-list:name="🚄"/>
@@ -1634,18 +2006,30 @@
   <block-list:block block-list:abbreviated-name=":vlak:" block-list:name="🚆"/>
   <block-list:block block-list:abbreviated-name=":vlevo2:" block-list:name="👈"/>
   <block-list:block block-list:abbreviated-name=":vlevo3:" block-list:name="☚"/>
+  <block-list:block block-list:abbreviated-name=":vlevo4:" block-list:name="🖚"/>
+  <block-list:block block-list:abbreviated-name=":vlevo5:" block-list:name="🖜"/>
+  <block-list:block block-list:abbreviated-name=":vlevo6:" block-list:name="🖘"/>
   <block-list:block block-list:abbreviated-name=":vlevo:" block-list:name="☜"/>
   <block-list:block block-list:abbreviated-name=":vlk:" block-list:name="🐺"/>
   <block-list:block block-list:abbreviated-name=":Vodnář:" block-list:name="♒"/>
   <block-list:block block-list:abbreviated-name=":vodní meloun:" block-list:name="🍉"/>
+  <block-list:block block-list:abbreviated-name=":vodní pólo:" block-list:name="🤽"/>
   <block-list:block block-list:abbreviated-name=":volaný mobil:" block-list:name="📲"/>
+  <block-list:block block-list:abbreviated-name=":volejbal:" block-list:name="🏐"/>
+  <block-list:block block-list:abbreviated-name=":vousy:" block-list:name="🧔"/>
+  <block-list:block block-list:abbreviated-name=":vozík:" block-list:name="🛒"/>
   <block-list:block block-list:abbreviated-name=":vpravo2:" block-list:name="👉"/>
   <block-list:block block-list:abbreviated-name=":vpravo3:" block-list:name="☛"/>
+  <block-list:block block-list:abbreviated-name=":vpravo4:" block-list:name="🖛"/>
+  <block-list:block block-list:abbreviated-name=":vpravo5:" block-list:name="🖙"/>
+  <block-list:block block-list:abbreviated-name=":vpravo6:" block-list:name="🖝"/>
   <block-list:block block-list:abbreviated-name=":vpravo:" block-list:name="☞"/>
   <block-list:block block-list:abbreviated-name=":vrtulník:" block-list:name="🚁"/>
+  <block-list:block block-list:abbreviated-name=":vstupenka2:" block-list:name="🎟"/>
   <block-list:block block-list:abbreviated-name=":vstupenka:" block-list:name="🎫"/>
   <block-list:block block-list:abbreviated-name=":vůl:" block-list:name="🐂"/>
   <block-list:block block-list:abbreviated-name=":výbuch:" block-list:name="💥"/>
+  <block-list:block block-list:abbreviated-name=":vyčerpání:" block-list:name="🙇"/>
   <block-list:block block-list:abbreviated-name=":vyčerpaný:" block-list:name="😩"/>
   <block-list:block block-list:abbreviated-name=":východ slunce2:" block-list:name="🌄"/>
   <block-list:block block-list:abbreviated-name=":východ slunce3:" block-list:name="🌇"/>
@@ -1654,12 +2038,15 @@
   <block-list:block block-list:abbreviated-name=":vysoké boty:" block-list:name="👢"/>
   <block-list:block block-list:abbreviated-name=":VZ2:" block-list:name="⇔"/>
   <block-list:block block-list:abbreviated-name=":VZ:" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name=":vzhůru nohama:" block-list:name="🙃"/>
   <block-list:block block-list:abbreviated-name=":vzlyk:" block-list:name="😭"/>
+  <block-list:block block-list:abbreviated-name=":vzpěrač:" block-list:name="🏋"/>
   <block-list:block block-list:abbreviated-name=":^w:" block-list:name="ʷ"/>
   <block-list:block block-list:abbreviated-name=":^W:" block-list:name="ᵂ"/>
   <block-list:block block-list:abbreviated-name=":won:" block-list:name="₩"/>
   <block-list:block block-list:abbreviated-name=":x2:" block-list:name="❌"/>
   <block-list:block block-list:abbreviated-name=":x3:" block-list:name="❎"/>
+  <block-list:block block-list:abbreviated-name=":x4:" block-list:name="🗶"/>
   <block-list:block block-list:abbreviated-name=":^x:" block-list:name="ˣ"/>
   <block-list:block block-list:abbreviated-name=":_x:" block-list:name="ₓ"/>
   <block-list:block block-list:abbreviated-name=":x:" block-list:name="×"/>
@@ -1674,6 +2061,7 @@
   <block-list:block block-list:abbreviated-name=":záchody:" block-list:name="🚻"/>
   <block-list:block block-list:abbreviated-name=":zajíc2:" block-list:name="🐰"/>
   <block-list:block block-list:abbreviated-name=":zajíc:" block-list:name="🐇"/>
+  <block-list:block block-list:abbreviated-name=":zákaz:" block-list:name="🛇"/>
   <block-list:block block-list:abbreviated-name=":zákaz chodců:" block-list:name="🚷"/>
   <block-list:block block-list:abbreviated-name=":zákaz kol:" block-list:name="🚳"/>
   <block-list:block block-list:abbreviated-name=":zákaz kouření:" block-list:name="🚭"/>
@@ -1685,10 +2073,12 @@
   <block-list:block block-list:abbreviated-name=":zámek2:" block-list:name="🔏"/>
   <block-list:block block-list:abbreviated-name=":zámek3:" block-list:name="🔐"/>
   <block-list:block block-list:abbreviated-name=":zámek:" block-list:name="🔒"/>
+  <block-list:block block-list:abbreviated-name=":zamlženo:" block-list:name="🌁"/>
   <block-list:block block-list:abbreviated-name=":zamračená osoba:" block-list:name="🙍"/>
   <block-list:block block-list:abbreviated-name=":zamračený:" block-list:name="☹"/>
   <block-list:block block-list:abbreviated-name=":zamyšlený:" block-list:name="😔"/>
   <block-list:block block-list:abbreviated-name=":západ slunce:" block-list:name="🌆"/>
+  <block-list:block block-list:abbreviated-name=":zápas:" block-list:name="🤼"/>
   <block-list:block block-list:abbreviated-name=":zápisník2:" block-list:name="📔"/>
   <block-list:block block-list:abbreviated-name=":zápisník:" block-list:name="📓"/>
   <block-list:block block-list:abbreviated-name=":záře:" block-list:name="❇"/>
@@ -1697,39 +2087,61 @@
   <block-list:block block-list:abbreviated-name=":zásah:" block-list:name="🎯"/>
   <block-list:block block-list:abbreviated-name=":zaškrtávací pole2:" block-list:name="☑"/>
   <block-list:block block-list:abbreviated-name=":zaškrtávací pole3:" block-list:name="☒"/>
+  <block-list:block block-list:abbreviated-name=":zaškrtávací pole4:" block-list:name="🗷"/>
+  <block-list:block block-list:abbreviated-name=":zaškrtávací pole5:" block-list:name="🗹"/>
+  <block-list:block block-list:abbreviated-name=":zaškrtávací pole6:" block-list:name="🗵"/>
   <block-list:block block-list:abbreviated-name=":zaškrtávací pole:" block-list:name="☐"/>
   <block-list:block block-list:abbreviated-name=":zaškrtnuto2:" block-list:name="✔"/>
   <block-list:block block-list:abbreviated-name=":zaškrtnuto3:" block-list:name="✅"/>
+  <block-list:block block-list:abbreviated-name=":zaškrtnuto4:" block-list:name="🗴"/>
+  <block-list:block block-list:abbreviated-name=":zaškrtnuto5:" block-list:name="🗸"/>
   <block-list:block block-list:abbreviated-name=":zaškrtnuto:" block-list:name="✓"/>
+  <block-list:block block-list:abbreviated-name=":zastavit2:" block-list:name="⏹"/>
   <block-list:block block-list:abbreviated-name=":zastávka autobusu:" block-list:name="🚏"/>
   <block-list:block block-list:abbreviated-name=":zástrčka:" block-list:name="🔌"/>
   <block-list:block block-list:abbreviated-name=":zavazadlo:" block-list:name="🛄"/>
+  <block-list:block block-list:abbreviated-name=":závod:" block-list:name="🏁"/>
   <block-list:block block-list:abbreviated-name=":závrať2:" block-list:name="😵"/>
   <block-list:block block-list:abbreviated-name=":závrať:" block-list:name="💫"/>
+  <block-list:block block-list:abbreviated-name=":zaznamenat:" block-list:name="⏺"/>
   <block-list:block block-list:abbreviated-name=":^z:" block-list:name="ᶻ"/>
   <block-list:block block-list:abbreviated-name=":Z:" block-list:name="←"/>
   <block-list:block block-list:abbreviated-name=":zčervenalý2:" block-list:name="😳"/>
+  <block-list:block block-list:abbreviated-name=":zdvižené obočí:" block-list:name="🤨"/>
+  <block-list:block block-list:abbreviated-name=":zebra:" block-list:name="🦓"/>
   <block-list:block block-list:abbreviated-name=":zelené jablko:" block-list:name="🍏"/>
   <block-list:block block-list:abbreviated-name=":želva:" block-list:name="🐢"/>
   <block-list:block block-list:abbreviated-name=":Země:" block-list:name="♁"/>
   <block-list:block block-list:abbreviated-name=":žena:" block-list:name="👩"/>
+  <block-list:block block-list:abbreviated-name=":ženich:" block-list:name="🤵"/>
   <block-list:block block-list:abbreviated-name=":ženy:" block-list:name="🚺"/>
+  <block-list:block block-list:abbreviated-name=":zip:" block-list:name="🤐"/>
+  <block-list:block block-list:abbreviated-name=":žirafa:" block-list:name="🦒"/>
   <block-list:block block-list:abbreviated-name=":zklamané oddechnutí:" block-list:name="😥"/>
   <block-list:block block-list:abbreviated-name=":zklamaný:" block-list:name="😞"/>
+  <block-list:block block-list:abbreviated-name=":zlatá:" block-list:name="🥇"/>
   <block-list:block block-list:abbreviated-name=":zlomené srdce:" block-list:name="💔"/>
   <block-list:block block-list:abbreviated-name=":zmatený:" block-list:name="😕"/>
   <block-list:block block-list:abbreviated-name=":zmrzlina2:" block-list:name="🍧"/>
   <block-list:block block-list:abbreviated-name=":zmrzlina:" block-list:name="🍦"/>
   <block-list:block block-list:abbreviated-name=":zmrzlinový pohár:" block-list:name="🍨"/>
   <block-list:block block-list:abbreviated-name=":žolík:" block-list:name="🃏"/>
+  <block-list:block block-list:abbreviated-name=":zombie:" block-list:name="🧟"/>
+  <block-list:block block-list:abbreviated-name=":žonglování:" block-list:name="🤹"/>
   <block-list:block block-list:abbreviated-name=":zpocený:" block-list:name="😓"/>
   <block-list:block block-list:abbreviated-name=":zpocený úsměv:" block-list:name="😅"/>
+  <block-list:block block-list:abbreviated-name=":žralok:" block-list:name="🦈"/>
+  <block-list:block block-list:abbreviated-name=":zrušit:" block-list:name="🗙"/>
+  <block-list:block block-list:abbreviated-name=":ztišení:" block-list:name="🤫"/>
   <block-list:block block-list:abbreviated-name=":ztišený:" block-list:name="😯"/>
   <block-list:block block-list:abbreviated-name=":ztišený mobil:" block-list:name="📳"/>
   <block-list:block block-list:abbreviated-name=":ztlumeno:" block-list:name="🔇"/>
   <block-list:block block-list:abbreviated-name=":zuřivý:" block-list:name="😡"/>
   <block-list:block block-list:abbreviated-name=":zvětšující se srdce:" block-list:name="💗"/>
+  <block-list:block block-list:abbreviated-name=":zvonek2:" block-list:name="🛎"/>
+  <block-list:block block-list:abbreviated-name=":zvonek3:" block-list:name="🕭"/>
   <block-list:block block-list:abbreviated-name=":zvonek:" block-list:name="🔔"/>
   <block-list:block block-list:abbreviated-name=":zvonkohra:" block-list:name="🎐"/>
+  <block-list:block block-list:abbreviated-name=":zvracení:" block-list:name="🤮"/>
   <block-list:block block-list:abbreviated-name=":zvuk:" block-list:name="🔉"/>
 </block-list:block-list>

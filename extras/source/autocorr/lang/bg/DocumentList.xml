@@ -164,30 +164,47 @@
   <block-list:block block-list:abbreviated-name=":^W:" block-list:name="ᵂ"/>
   <block-list:block block-list:abbreviated-name=":x2:" block-list:name="❌"/>
   <block-list:block block-list:abbreviated-name=":x3:" block-list:name="❎"/>
+  <block-list:block block-list:abbreviated-name=":x4:" block-list:name="🗶"/>
   <block-list:block block-list:abbreviated-name=":^x:" block-list:name="ˣ"/>
   <block-list:block block-list:abbreviated-name=":_x:" block-list:name="ₓ"/>
   <block-list:block block-list:abbreviated-name=":x:" block-list:name="×"/>
   <block-list:block block-list:abbreviated-name=":^y:" block-list:name="ʸ"/>
   <block-list:block block-list:abbreviated-name=":^z:" block-list:name="ᶻ"/>
+  <block-list:block block-list:abbreviated-name=":авокадо:" block-list:name="🥑"/>
   <block-list:block block-list:abbreviated-name=":автобус2:" block-list:name="🚍"/>
   <block-list:block block-list:abbreviated-name=":автобус:" block-list:name="🚌"/>
   <block-list:block block-list:abbreviated-name=":авторски права:" block-list:name="©"/>
   <block-list:block block-list:abbreviated-name=":Ади Шакти:" block-list:name="☬"/>
+  <block-list:block block-list:abbreviated-name=":акула:" block-list:name="🦈"/>
   <block-list:block block-list:abbreviated-name=":аламбик:" block-list:name="⚗"/>
   <block-list:block block-list:abbreviated-name=":алкална хартия:" block-list:name="♾"/>
   <block-list:block block-list:abbreviated-name=":^алфа:" block-list:name="ᵅ"/>
   <block-list:block block-list:abbreviated-name=":алфа:" block-list:name="α"/>
   <block-list:block block-list:abbreviated-name=":Алфа:" block-list:name="Α"/>
   <block-list:block block-list:abbreviated-name=":американски футбол:" block-list:name="🏈"/>
+  <block-list:block block-list:abbreviated-name=":амфора:" block-list:name="🏺"/>
   <block-list:block block-list:abbreviated-name=":ананас:" block-list:name="🍍"/>
   <block-list:block block-list:abbreviated-name=":ангел:" block-list:name="👼"/>
   <block-list:block block-list:abbreviated-name=":андреевски кръст:" block-list:name="☓"/>
   <block-list:block block-list:abbreviated-name=":анкх:" block-list:name="☥"/>
+  <block-list:block block-list:abbreviated-name=":антена:" block-list:name="📡"/>
+  <block-list:block block-list:abbreviated-name=":архивен шкаф:" block-list:name="🗄"/>
   <block-list:block block-list:abbreviated-name=":асо:" block-list:name="🂡"/>
   <block-list:block block-list:abbreviated-name=":атом:" block-list:name="⚛"/>
   <block-list:block block-list:abbreviated-name=":багаж:" block-list:name="🛄"/>
+  <block-list:block block-list:abbreviated-name=":бадминтон:" block-list:name="🏸"/>
   <block-list:block block-list:abbreviated-name=":базов пункт:" block-list:name="‱"/>
   <block-list:block block-list:abbreviated-name=":балон:" block-list:name="🎈"/>
+  <block-list:block block-list:abbreviated-name=":балонче10:" block-list:name="🗩"/>
+  <block-list:block block-list:abbreviated-name=":балонче2:" block-list:name="🗪"/>
+  <block-list:block block-list:abbreviated-name=":балонче3:" block-list:name="🗫"/>
+  <block-list:block block-list:abbreviated-name=":балонче4:" block-list:name="🗯"/>
+  <block-list:block block-list:abbreviated-name=":балонче5:" block-list:name="🗭"/>
+  <block-list:block block-list:abbreviated-name=":балонче6:" block-list:name="🗱"/>
+  <block-list:block block-list:abbreviated-name=":балонче7:" block-list:name="🗬"/>
+  <block-list:block block-list:abbreviated-name=":балонче8:" block-list:name="🗮"/>
+  <block-list:block block-list:abbreviated-name=":балонче9:" block-list:name="🗰"/>
+  <block-list:block block-list:abbreviated-name=":балонче:" block-list:name="🗨"/>
   <block-list:block block-list:abbreviated-name=":балонче с мисъл:" block-list:name="💭"/>
   <block-list:block block-list:abbreviated-name=":балонче с реплика:" block-list:name="💬"/>
   <block-list:block block-list:abbreviated-name=":бамбук:" block-list:name="🎍"/>
@@ -195,11 +212,13 @@
   <block-list:block block-list:abbreviated-name=":банка:" block-list:name="🏦"/>
   <block-list:block block-list:abbreviated-name=":банкомат:" block-list:name="🏧"/>
   <block-list:block block-list:abbreviated-name=":баня:" block-list:name="🛀"/>
+  <block-list:block block-list:abbreviated-name=":барабан:" block-list:name="🥁"/>
   <block-list:block block-list:abbreviated-name=":баскетбол:" block-list:name="🏀"/>
   <block-list:block block-list:abbreviated-name=":бат:" block-list:name="฿"/>
   <block-list:block block-list:abbreviated-name=":батерия:" block-list:name="🔋"/>
   <block-list:block block-list:abbreviated-name=":бацу:" block-list:name="🙅"/>
   <block-list:block block-list:abbreviated-name=":бебе2:" block-list:name="🚼"/>
+  <block-list:block block-list:abbreviated-name=":бебе3:" block-list:name="🤱"/>
   <block-list:block block-list:abbreviated-name=":бебе:" block-list:name="👶"/>
   <block-list:block block-list:abbreviated-name=":бебешка бутилка:" block-list:name="🍼"/>
   <block-list:block block-list:abbreviated-name=":бегач:" block-list:name="🏃"/>
@@ -208,7 +227,11 @@
   <block-list:block block-list:abbreviated-name=":без мобилни телефони:" block-list:name="📵"/>
   <block-list:block block-list:abbreviated-name=":бейзбол:" block-list:name="⚾"/>
   <block-list:block block-list:abbreviated-name=":бекар:" block-list:name="♮"/>
-  <block-list:block block-list:abbreviated-name=":бележка:" block-list:name="📝"/>
+  <block-list:block block-list:abbreviated-name=":бекон:" block-list:name="🥓"/>
+  <block-list:block block-list:abbreviated-name=":бележка2:" block-list:name="📝"/>
+  <block-list:block block-list:abbreviated-name=":бележка3:" block-list:name="🗈"/>
+  <block-list:block block-list:abbreviated-name=":бележка:" block-list:name="🗉"/>
+  <block-list:block block-list:abbreviated-name=":бележки:" block-list:name="🗊"/>
   <block-list:block block-list:abbreviated-name=":бележник2:" block-list:name="📔"/>
   <block-list:block block-list:abbreviated-name=":бележник:" block-list:name="📓"/>
   <block-list:block block-list:abbreviated-name=":бемол:" block-list:name="♭"/>
@@ -220,35 +243,50 @@
   <block-list:block block-list:abbreviated-name=":бета:" block-list:name="β"/>
   <block-list:block block-list:abbreviated-name=":Бета:" block-list:name="Β"/>
   <block-list:block block-list:abbreviated-name=":бикини:" block-list:name="👙"/>
+  <block-list:block block-list:abbreviated-name=":билет2:" block-list:name="🎟"/>
   <block-list:block block-list:abbreviated-name=":билет:" block-list:name="🎫"/>
   <block-list:block block-list:abbreviated-name=":билка:" block-list:name="🌿"/>
   <block-list:block block-list:abbreviated-name=":билярд:" block-list:name="🎱"/>
+  <block-list:block block-list:abbreviated-name=":бинт:" block-list:name="🤕"/>
   <block-list:block block-list:abbreviated-name=":биологична опасност:" block-list:name="☣"/>
   <block-list:block block-list:abbreviated-name=":бира2:" block-list:name="🍻"/>
   <block-list:block block-list:abbreviated-name=":бира:" block-list:name="🍺"/>
   <block-list:block block-list:abbreviated-name=":бисквитка:" block-list:name="🍪"/>
+  <block-list:block block-list:abbreviated-name=":биткойн:" block-list:name="₿"/>
   <block-list:block block-list:abbreviated-name=":близалка:" block-list:name="🍭"/>
-  <block-list:block block-list:abbreviated-name=":Близнаци:" block-list:name="♊"/>
+  <block-list:block block-list:abbreviated-name=":близнаци:" block-list:name="♊"/>
   <block-list:block block-list:abbreviated-name=":боклук:" block-list:name="🚮"/>
+  <block-list:block block-list:abbreviated-name=":бокс:" block-list:name="🥊"/>
   <block-list:block block-list:abbreviated-name=":болница:" block-list:name="🏥"/>
   <block-list:block block-list:abbreviated-name=":болт и гайка:" block-list:name="🔩"/>
   <block-list:block block-list:abbreviated-name=":бомба:" block-list:name="💣"/>
   <block-list:block block-list:abbreviated-name=":бонбон:" block-list:name="🍬"/>
   <block-list:block block-list:abbreviated-name=":бор:" block-list:name="🌲"/>
+  <block-list:block block-list:abbreviated-name=":борба:" block-list:name="🤼"/>
   <block-list:block block-list:abbreviated-name=":ботуш:" block-list:name="👢"/>
   <block-list:block block-list:abbreviated-name=":боулинг:" block-list:name="🎳"/>
+  <block-list:block block-list:abbreviated-name=":брада:" block-list:name="🧔"/>
   <block-list:block block-list:abbreviated-name=":брак:" block-list:name="⚭"/>
+  <block-list:block block-list:abbreviated-name=":бременна:" block-list:name="🤰"/>
   <block-list:block block-list:abbreviated-name=":британска лира 2:" block-list:name="💷"/>
   <block-list:block block-list:abbreviated-name=":британска лира:" block-list:name="£"/>
+  <block-list:block block-list:abbreviated-name=":броеница:" block-list:name="📿"/>
+  <block-list:block block-list:abbreviated-name=":броколи:" block-list:name="🥦"/>
+  <block-list:block block-list:abbreviated-name=":бронз:" block-list:name="🥉"/>
   <block-list:block block-list:abbreviated-name=":бръснар:" block-list:name="💈"/>
   <block-list:block block-list:abbreviated-name=":буболечка:" block-list:name="🐛"/>
   <block-list:block block-list:abbreviated-name=":будилник:" block-list:name="⏰"/>
+  <block-list:block block-list:abbreviated-name=":букет2:" block-list:name="🎕"/>
   <block-list:block block-list:abbreviated-name=":букет:" block-list:name="💐"/>
   <block-list:block block-list:abbreviated-name=":булка:" block-list:name="👰"/>
-  <block-list:block block-list:abbreviated-name=":буря:" block-list:name="☈"/>
+  <block-list:block block-list:abbreviated-name=":бурито:" block-list:name="🌯"/>
+  <block-list:block block-list:abbreviated-name=":бурундук:" block-list:name="🐿"/>
+  <block-list:block block-list:abbreviated-name=":буря2:" block-list:name="☈"/>
+  <block-list:block block-list:abbreviated-name=":буря:" block-list:name="🌧"/>
   <block-list:block block-list:abbreviated-name=":бутон2:" block-list:name="🔲"/>
   <block-list:block block-list:abbreviated-name=":бутон:" block-list:name="🔳"/>
   <block-list:block block-list:abbreviated-name=":бутон за избор:" block-list:name="🔘"/>
+  <block-list:block block-list:abbreviated-name=":бюлетина:" block-list:name="🗳"/>
   <block-list:block block-list:abbreviated-name=":бюст:" block-list:name="👤"/>
   <block-list:block block-list:abbreviated-name=":бюстове:" block-list:name="👥"/>
   <block-list:block block-list:abbreviated-name=":бяла пешка:" block-list:name="♙"/>
@@ -261,24 +299,29 @@
   <block-list:block block-list:abbreviated-name=":бял цар:" block-list:name="♔"/>
   <block-list:block block-list:abbreviated-name=":вагон:" block-list:name="🚃"/>
   <block-list:block block-list:abbreviated-name=":вале:" block-list:name="🂫"/>
+  <block-list:block block-list:abbreviated-name=":вампир:" block-list:name="🧛"/>
   <block-list:block block-list:abbreviated-name=":вана:" block-list:name="🛁"/>
+  <block-list:block block-list:abbreviated-name=":варел:" block-list:name="🛢"/>
+  <block-list:block block-list:abbreviated-name=":вежда:" block-list:name="🤨"/>
   <block-list:block block-list:abbreviated-name=":везна:" block-list:name="⚖"/>
-  <block-list:block block-list:abbreviated-name=":Везни:" block-list:name="♎"/>
+  <block-list:block block-list:abbreviated-name=":везни:" block-list:name="♎"/>
   <block-list:block block-list:abbreviated-name=":велосипед:" block-list:name="🚲"/>
   <block-list:block block-list:abbreviated-name=":велосипедист2:" block-list:name="🚵"/>
   <block-list:block block-list:abbreviated-name=":велосипедист:" block-list:name="🚴"/>
   <block-list:block block-list:abbreviated-name=":Венера:" block-list:name="♀"/>
   <block-list:block block-list:abbreviated-name=":вериги:" block-list:name="⛓"/>
+  <block-list:block block-list:abbreviated-name=":вестник2:" block-list:name="🗞"/>
   <block-list:block block-list:abbreviated-name=":вестник:" block-list:name="📰"/>
   <block-list:block block-list:abbreviated-name=":видеоигра:" block-list:name="🎮"/>
   <block-list:block block-list:abbreviated-name=":видеокамера:" block-list:name="📹"/>
   <block-list:block block-list:abbreviated-name=":видеокасета:" block-list:name="📼"/>
-  <block-list:block block-list:abbreviated-name=":виенско колело:" block-list:name="🎡"/>
-  <block-list:block block-list:abbreviated-name=":винена чаша:" block-list:name="🍷"/>
+  <block-list:block block-list:abbreviated-name=":вимпел2:" block-list:name="🏱"/>
+  <block-list:block block-list:abbreviated-name=":вимпел:" block-list:name="🏲"/>
   <block-list:block block-list:abbreviated-name=":високоговорител2:" block-list:name="📢"/>
+  <block-list:block block-list:abbreviated-name=":високоговорител3:" block-list:name="🕨"/>
+  <block-list:block block-list:abbreviated-name=":високоговорител4:" block-list:name="🕪"/>
   <block-list:block block-list:abbreviated-name=":високоговорител:" block-list:name="🔈"/>
-  <block-list:block block-list:abbreviated-name=":вишнев цвят:" block-list:name="🌸"/>
-  <block-list:block block-list:abbreviated-name=":вишни:" block-list:name="🍒"/>
+  <block-list:block block-list:abbreviated-name=":вишна:" block-list:name="🍒"/>
   <block-list:block block-list:abbreviated-name=":вкусно:" block-list:name="😋"/>
   <block-list:block block-list:abbreviated-name=":влак2:" block-list:name="🚄"/>
   <block-list:block block-list:abbreviated-name=":влак3:" block-list:name="🚅"/>
@@ -288,8 +331,10 @@
   <block-list:block block-list:abbreviated-name=":влюбено лице:" block-list:name="😍"/>
   <block-list:block block-list:abbreviated-name=":внимание:" block-list:name="☡"/>
   <block-list:block block-list:abbreviated-name=":воден бивол:" block-list:name="🐃"/>
-  <block-list:block block-list:abbreviated-name=":Водолей:" block-list:name="♒"/>
+  <block-list:block block-list:abbreviated-name=":водна топка:" block-list:name="🤽"/>
+  <block-list:block block-list:abbreviated-name=":водолей:" block-list:name="♒"/>
   <block-list:block block-list:abbreviated-name=":вол:" block-list:name="🐂"/>
+  <block-list:block block-list:abbreviated-name=":волейбол:" block-list:name="🏐"/>
   <block-list:block block-list:abbreviated-name=":вон:" block-list:name="₩"/>
   <block-list:block block-list:abbreviated-name=":врата:" block-list:name="🚪"/>
   <block-list:block block-list:abbreviated-name=":вратовръзка:" block-list:name="👔"/>
@@ -299,10 +344,13 @@
   <block-list:block block-list:abbreviated-name=":вход забранен:" block-list:name="🚫"/>
   <block-list:block block-list:abbreviated-name=":входяща поща:" block-list:name="📥"/>
   <block-list:block block-list:abbreviated-name=":въжена линия:" block-list:name="🚠"/>
+  <block-list:block block-list:abbreviated-name=":възрастен:" block-list:name="🧑"/>
   <block-list:block block-list:abbreviated-name=":възрастен мъж:" block-list:name="👴"/>
   <block-list:block block-list:abbreviated-name=":възрастна жена:" block-list:name="👵"/>
   <block-list:block block-list:abbreviated-name=":вълк:" block-list:name="🐺"/>
   <block-list:block block-list:abbreviated-name=":вълна:" block-list:name="👋"/>
+  <block-list:block block-list:abbreviated-name=":вълнение:" block-list:name="🤩"/>
+  <block-list:block block-list:abbreviated-name=":вятър:" block-list:name="🌬"/>
   <block-list:block block-list:abbreviated-name=":вятърни камбанки:" block-list:name="🎐"/>
   <block-list:block block-list:abbreviated-name=":габърче:" block-list:name="📌"/>
   <block-list:block block-list:abbreviated-name=":гаечен ключ:" block-list:name="🔧"/>
@@ -312,6 +360,9 @@
   <block-list:block block-list:abbreviated-name=":Гама:" block-list:name="Γ"/>
   <block-list:block block-list:abbreviated-name=":гара:" block-list:name="🚉"/>
   <block-list:block block-list:abbreviated-name=":гвардеец:" block-list:name="💂"/>
+  <block-list:block block-list:abbreviated-name=":г-жа коледа:" block-list:name="🤶"/>
+  <block-list:block block-list:abbreviated-name=":гимнастик:" block-list:name="🤸"/>
+  <block-list:block block-list:abbreviated-name=":глава:" block-list:name="🗣"/>
   <block-list:block block-list:abbreviated-name=":глиган:" block-list:name="🐗"/>
   <block-list:block block-list:abbreviated-name=":глобус2:" block-list:name="🌎"/>
   <block-list:block block-list:abbreviated-name=":глобус3:" block-list:name="🌏"/>
@@ -320,12 +371,16 @@
   <block-list:block block-list:abbreviated-name=":гневно лице:" block-list:name="😠"/>
   <block-list:block block-list:abbreviated-name=":гняв:" block-list:name="💢"/>
   <block-list:block block-list:abbreviated-name=":гоблин:" block-list:name="👺"/>
-  <block-list:block block-list:abbreviated-name=":голф:" block-list:name="⛳"/>
+  <block-list:block block-list:abbreviated-name=":голф2:" block-list:name="⛳"/>
+  <block-list:block block-list:abbreviated-name=":голф:" block-list:name="🏌"/>
   <block-list:block block-list:abbreviated-name=":голям квадрат 2:" block-list:name="⬛"/>
   <block-list:block block-list:abbreviated-name=":голям квадрат:" block-list:name="⬜"/>
   <block-list:block block-list:abbreviated-name=":голям кръг 2:" block-list:name="⬤"/>
   <block-list:block block-list:abbreviated-name=":голям кръг:" block-list:name="◯"/>
   <block-list:block block-list:abbreviated-name=":горещи извори:" block-list:name="♨"/>
+  <block-list:block block-list:abbreviated-name=":горила:" block-list:name="🦍"/>
+  <block-list:block block-list:abbreviated-name=":готвене:" block-list:name="🍳"/>
+  <block-list:block block-list:abbreviated-name=":град:" block-list:name="🏙"/>
   <block-list:block block-list:abbreviated-name=":градус:" block-list:name="°"/>
   <block-list:block block-list:abbreviated-name=":гребна лодка:" block-list:name="🚣"/>
   <block-list:block block-list:abbreviated-name=":гривна:" block-list:name="₴"/>
@@ -333,7 +388,10 @@
   <block-list:block block-list:abbreviated-name=":грозде:" block-list:name="🍇"/>
   <block-list:block block-list:abbreviated-name=":гръцки кръст 2:" block-list:name="✙"/>
   <block-list:block block-list:abbreviated-name=":гръцки кръст:" block-list:name="✚"/>
+  <block-list:block block-list:abbreviated-name=":гущер:" block-list:name="🦎"/>
   <block-list:block block-list:abbreviated-name=":гъба:" block-list:name="🍄"/>
+  <block-list:block block-list:abbreviated-name=":гълъб:" block-list:name="🕊"/>
+  <block-list:block block-list:abbreviated-name=":да2:" block-list:name="🖒"/>
   <block-list:block block-list:abbreviated-name=":да:" block-list:name="👍"/>
   <block-list:block block-list:abbreviated-name=":давидова звезда:" block-list:name="✡"/>
   <block-list:block block-list:abbreviated-name=":дама:" block-list:name="🂭"/>
@@ -345,57 +403,88 @@
   <block-list:block block-list:abbreviated-name=":двойка3:" block-list:name="👭"/>
   <block-list:block block-list:abbreviated-name=":двойка4:" block-list:name="💑"/>
   <block-list:block block-list:abbreviated-name=":двойка:" block-list:name="👫"/>
-  <block-list:block block-list:abbreviated-name=":Дева:" block-list:name="♍"/>
+  <block-list:block block-list:abbreviated-name=":дева:" block-list:name="♍"/>
   <block-list:block block-list:abbreviated-name=":дели:" block-list:name="∣"/>
   <block-list:block block-list:abbreviated-name=":^делта:" block-list:name="ᵟ"/>
   <block-list:block block-list:abbreviated-name=":делта:" block-list:name="δ"/>
   <block-list:block block-list:abbreviated-name=":Делта:" block-list:name="Δ"/>
   <block-list:block block-list:abbreviated-name=":делфин:" block-list:name="🐬"/>
+  <block-list:block block-list:abbreviated-name=":дете:" block-list:name="🧒"/>
+  <block-list:block block-list:abbreviated-name=":детектив:" block-list:name="🕵"/>
   <block-list:block block-list:abbreviated-name=":детелина:" block-list:name="🍀"/>
+  <block-list:block block-list:abbreviated-name=":джамия:" block-list:name="🕌"/>
+  <block-list:block block-list:abbreviated-name=":джин:" block-list:name="🧞"/>
+  <block-list:block block-list:abbreviated-name=":джойстик:" block-list:name="🕹"/>
   <block-list:block block-list:abbreviated-name=":джокер:" block-list:name="🃏"/>
+  <block-list:block block-list:abbreviated-name=":джудо:" block-list:name="🥋"/>
   <block-list:block block-list:abbreviated-name=":диаграма2:" block-list:name="📉"/>
   <block-list:block block-list:abbreviated-name=":диаграма3:" block-list:name="📊"/>
   <block-list:block block-list:abbreviated-name=":диаграма4:" block-list:name="💹"/>
+  <block-list:block block-list:abbreviated-name=":диаграма5:" block-list:name="🗠"/>
   <block-list:block block-list:abbreviated-name=":диаграма:" block-list:name="📈"/>
   <block-list:block block-list:abbreviated-name=":дивиди:" block-list:name="📀"/>
   <block-list:block block-list:abbreviated-name=":диез:" block-list:name="♯"/>
+  <block-list:block block-list:abbreviated-name=":динозавър2:" block-list:name="🦖"/>
+  <block-list:block block-list:abbreviated-name=":динозавър:" block-list:name="🦕"/>
   <block-list:block block-list:abbreviated-name=":диня:" block-list:name="🍉"/>
   <block-list:block block-list:abbreviated-name=":дипломиране:" block-list:name="🎓"/>
+  <block-list:block block-list:abbreviated-name=":дискета2:" block-list:name="🖬"/>
+  <block-list:block block-list:abbreviated-name=":дискета3:" block-list:name="🖫"/>
+  <block-list:block block-list:abbreviated-name=":дискета4:" block-list:name="🖪"/>
   <block-list:block block-list:abbreviated-name=":дискета:" block-list:name="💾"/>
   <block-list:block block-list:abbreviated-name=":длан:" block-list:name="✋"/>
+  <block-list:block block-list:abbreviated-name=":длани:" block-list:name="🤲"/>
+  <block-list:block block-list:abbreviated-name=":документ2:" block-list:name="🖹"/>
+  <block-list:block block-list:abbreviated-name=":документ3:" block-list:name="🖻"/>
+  <block-list:block block-list:abbreviated-name=":документ4:" block-list:name="🖺"/>
+  <block-list:block block-list:abbreviated-name=":документ:" block-list:name="🗎"/>
   <block-list:block block-list:abbreviated-name=":долар2:" block-list:name="💵"/>
   <block-list:block block-list:abbreviated-name=":долар3:" block-list:name="💲"/>
   <block-list:block block-list:abbreviated-name=":домат:" block-list:name="🍅"/>
   <block-list:block block-list:abbreviated-name=":домино:" block-list:name="🁠"/>
+  <block-list:block block-list:abbreviated-name=":досада:" block-list:name="🙄"/>
   <block-list:block block-list:abbreviated-name=":дракон2:" block-list:name="🐲"/>
   <block-list:block block-list:abbreviated-name=":дракон:" block-list:name="🐉"/>
   <block-list:block block-list:abbreviated-name=":дрехи:" block-list:name="👚"/>
+  <block-list:block block-list:abbreviated-name=":дупка:" block-list:name="🕳"/>
   <block-list:block block-list:abbreviated-name=":душ:" block-list:name="🚿"/>
   <block-list:block block-list:abbreviated-name=":дъга:" block-list:name="🌈"/>
   <block-list:block block-list:abbreviated-name=":дъжд2:" block-list:name="⛆"/>
   <block-list:block block-list:abbreviated-name=":дъжд:" block-list:name="☔"/>
+  <block-list:block block-list:abbreviated-name=":дъждовно:" block-list:name="🌦"/>
+  <block-list:block block-list:abbreviated-name=":дълбок поклон:" block-list:name="🙇"/>
   <block-list:block block-list:abbreviated-name=":дънки:" block-list:name="👖"/>
   <block-list:block block-list:abbreviated-name=":дърво:" block-list:name="🌳"/>
-  <block-list:block block-list:abbreviated-name=":дядо Коледа:" block-list:name="🎅"/>
+  <block-list:block block-list:abbreviated-name=":дюнер:" block-list:name="🥙"/>
+  <block-list:block block-list:abbreviated-name=":дядо коледа:" block-list:name="🎅"/>
   <block-list:block block-list:abbreviated-name=":евро2:" block-list:name="💶"/>
   <block-list:block block-list:abbreviated-name=":евро:" block-list:name="€"/>
+  <block-list:block block-list:abbreviated-name=":еднорог:" block-list:name="🦄"/>
   <block-list:block block-list:abbreviated-name=":език2:" block-list:name="😛"/>
   <block-list:block block-list:abbreviated-name=":език3:" block-list:name="😜"/>
   <block-list:block block-list:abbreviated-name=":език4:" block-list:name="😝"/>
   <block-list:block block-list:abbreviated-name=":език:" block-list:name="👅"/>
+  <block-list:block block-list:abbreviated-name=":екран:" block-list:name="🖵"/>
   <block-list:block block-list:abbreviated-name=":елипса:" block-list:name="⬭"/>
+  <block-list:block block-list:abbreviated-name=":елф:" block-list:name="🧝"/>
   <block-list:block block-list:abbreviated-name=":^епсилон:" block-list:name="ᵋ"/>
   <block-list:block block-list:abbreviated-name=":епсилон:" block-list:name="ε"/>
   <block-list:block block-list:abbreviated-name=":Епсилон:" block-list:name="Ε"/>
   <block-list:block block-list:abbreviated-name=":ета:" block-list:name="η"/>
   <block-list:block block-list:abbreviated-name=":Ета:" block-list:name="Η"/>
+  <block-list:block block-list:abbreviated-name=":етикет:" block-list:name="🏷"/>
   <block-list:block block-list:abbreviated-name=":жаба:" block-list:name="🐸"/>
   <block-list:block block-list:abbreviated-name=":жезъл:" block-list:name="⚚"/>
   <block-list:block block-list:abbreviated-name=":жена:" block-list:name="👩"/>
+  <block-list:block block-list:abbreviated-name=":жираф:" block-list:name="🦒"/>
+  <block-list:block block-list:abbreviated-name=":жонглиране:" block-list:name="🤹"/>
   <block-list:block block-list:abbreviated-name=":З2:" block-list:name="⇐"/>
   <block-list:block block-list:abbreviated-name=":З:" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name=":забрадка:" block-list:name="🧕"/>
+  <block-list:block block-list:abbreviated-name=":забранено:" block-list:name="🛇"/>
   <block-list:block block-list:abbreviated-name=":забранено за велосипеди:" block-list:name="🚳"/>
   <block-list:block block-list:abbreviated-name=":забранено за пешеходци:" block-list:name="🚷"/>
+  <block-list:block block-list:abbreviated-name=":забранено пиратство:" block-list:name="🕲"/>
   <block-list:block block-list:abbreviated-name=":забранено хвърлянето на отпадъци:" block-list:name="🚯"/>
   <block-list:block block-list:abbreviated-name=":за всички:" block-list:name="∀"/>
   <block-list:block block-list:abbreviated-name=":заглушаване:" block-list:name="🔇"/>
@@ -409,6 +498,7 @@
   <block-list:block block-list:abbreviated-name=":за мъже:" block-list:name="🚹"/>
   <block-list:block block-list:abbreviated-name=":замък2:" block-list:name="🏯"/>
   <block-list:block block-list:abbreviated-name=":замък:" block-list:name="🏰"/>
+  <block-list:block block-list:abbreviated-name=":запис:" block-list:name="⏺"/>
   <block-list:block block-list:abbreviated-name=":зар1:" block-list:name="⚀"/>
   <block-list:block block-list:abbreviated-name=":зар2:" block-list:name="⚁"/>
   <block-list:block block-list:abbreviated-name=":зар3:" block-list:name="⚂"/>
@@ -416,26 +506,34 @@
   <block-list:block block-list:abbreviated-name=":зар5:" block-list:name="⚄"/>
   <block-list:block block-list:abbreviated-name=":зар6:" block-list:name="⚅"/>
   <block-list:block block-list:abbreviated-name=":зарове:" block-list:name="🎲"/>
-  <block-list:block block-list:abbreviated-name=":зачертана камбанка:" block-list:name="🔕"/>
   <block-list:block block-list:abbreviated-name=":зачертана уста:" block-list:name="😶"/>
+  <block-list:block block-list:abbreviated-name=":зачертан звънец:" block-list:name="🔕"/>
   <block-list:block block-list:abbreviated-name=":звезда2:" block-list:name="☆"/>
   <block-list:block block-list:abbreviated-name=":звезда3:" block-list:name="🌟"/>
   <block-list:block block-list:abbreviated-name=":звезда4:" block-list:name="🌠"/>
   <block-list:block block-list:abbreviated-name=":звезда:" block-list:name="★"/>
   <block-list:block block-list:abbreviated-name=":звезда и полумесец:" block-list:name="☪"/>
   <block-list:block block-list:abbreviated-name=":звук:" block-list:name="🔉"/>
+  <block-list:block block-list:abbreviated-name=":звънец2:" block-list:name="🛎"/>
+  <block-list:block block-list:abbreviated-name=":звънец3:" block-list:name="🕭"/>
+  <block-list:block block-list:abbreviated-name=":звънец:" block-list:name="🔔"/>
+  <block-list:block block-list:abbreviated-name=":звънни ми:" block-list:name="🤙"/>
+  <block-list:block block-list:abbreviated-name=":зебра:" block-list:name="🦓"/>
   <block-list:block block-list:abbreviated-name=":зелена ябълка:" block-list:name="🍏"/>
-  <block-list:block block-list:abbreviated-name=":Земя:" block-list:name="♁"/>
+  <block-list:block block-list:abbreviated-name=":земя:" block-list:name="♁"/>
   <block-list:block block-list:abbreviated-name=":зета:" block-list:name="ζ"/>
   <block-list:block block-list:abbreviated-name=":Зета:" block-list:name="Ζ"/>
   <block-list:block block-list:abbreviated-name=":зигзаг:" block-list:name="⚡"/>
+  <block-list:block block-list:abbreviated-name=":злато:" block-list:name="🥇"/>
   <block-list:block block-list:abbreviated-name=":змиеносец:" block-list:name="⛎"/>
   <block-list:block block-list:abbreviated-name=":змия:" block-list:name="🐍"/>
-  <block-list:block block-list:abbreviated-name=":знаме2:" block-list:name="⚑"/>
-  <block-list:block block-list:abbreviated-name=":знаме3:" block-list:name="🏁"/>
-  <block-list:block block-list:abbreviated-name=":знаме:" block-list:name="⚐"/>
+  <block-list:block block-list:abbreviated-name=":знаме2:" block-list:name="🏳"/>
+  <block-list:block block-list:abbreviated-name=":знаме3:" block-list:name="⚑"/>
+  <block-list:block block-list:abbreviated-name=":знаме4:" block-list:name="⚐"/>
+  <block-list:block block-list:abbreviated-name=":знаме:" block-list:name="🏴"/>
   <block-list:block block-list:abbreviated-name=":знамена2:" block-list:name="🎏"/>
   <block-list:block block-list:abbreviated-name=":знамена:" block-list:name="🎌"/>
+  <block-list:block block-list:abbreviated-name=":зомби:" block-list:name="🧟"/>
   <block-list:block block-list:abbreviated-name=":зъбно колело:" block-list:name="⚙"/>
   <block-list:block block-list:abbreviated-name=":И2:" block-list:name="⇒"/>
   <block-list:block block-list:abbreviated-name=":и:" block-list:name="∧"/>
@@ -449,6 +547,7 @@
   <block-list:block block-list:abbreviated-name=":изгрев:" block-list:name="🌅"/>
   <block-list:block block-list:abbreviated-name=":изключен мобилен телефон:" block-list:name="📴"/>
   <block-list:block block-list:abbreviated-name=":изкуство:" block-list:name="🎨"/>
+  <block-list:block block-list:abbreviated-name=":изненада:" block-list:name="😯"/>
   <block-list:block block-list:abbreviated-name=":изоставен багаж:" block-list:name="🛅"/>
   <block-list:block block-list:abbreviated-name=":изпражнение:" block-list:name="💩"/>
   <block-list:block block-list:abbreviated-name=":изумление:" block-list:name="😲"/>
@@ -459,12 +558,14 @@
   <block-list:block block-list:abbreviated-name=":имейл:" block-list:name="📧"/>
   <block-list:block block-list:abbreviated-name=":имп:" block-list:name="👿"/>
   <block-list:block block-list:abbreviated-name=":инвалиден стол:" block-list:name="♿"/>
+  <block-list:block block-list:abbreviated-name=":инструменти:" block-list:name="🛠"/>
   <block-list:block block-list:abbreviated-name=":интеграл2:" block-list:name="∬"/>
   <block-list:block block-list:abbreviated-name=":интеграл3:" block-list:name="∭"/>
   <block-list:block block-list:abbreviated-name=":интеграл4:" block-list:name="∮"/>
   <block-list:block block-list:abbreviated-name=":интеграл5:" block-list:name="∰"/>
   <block-list:block block-list:abbreviated-name=":интеграл:" block-list:name="∫"/>
   <block-list:block block-list:abbreviated-name=":информация2:" block-list:name="💁"/>
+  <block-list:block block-list:abbreviated-name=":информация3:" block-list:name="🛈"/>
   <block-list:block block-list:abbreviated-name=":информация:" block-list:name="ℹ"/>
   <block-list:block block-list:abbreviated-name=":инч:" block-list:name="″"/>
   <block-list:block block-list:abbreviated-name=":ин-ян:" block-list:name="☯"/>
@@ -475,39 +576,55 @@
   <block-list:block block-list:abbreviated-name=":йена2:" block-list:name="💴"/>
   <block-list:block block-list:abbreviated-name=":йена:" block-list:name="¥"/>
   <block-list:block block-list:abbreviated-name=":йерусалимски кръст:" block-list:name="☩"/>
+  <block-list:block block-list:abbreviated-name=":йога:" block-list:name="🧘"/>
   <block-list:block block-list:abbreviated-name=":^йота:" block-list:name="ᶥ"/>
   <block-list:block block-list:abbreviated-name=":йота:" block-list:name="ι"/>
   <block-list:block block-list:abbreviated-name=":Йота:" block-list:name="Ι"/>
+  <block-list:block block-list:abbreviated-name=":кааба:" block-list:name="🕋"/>
+  <block-list:block block-list:abbreviated-name=":кабарче:" block-list:name="🖈"/>
   <block-list:block block-list:abbreviated-name=":кадуцей:" block-list:name="☤"/>
   <block-list:block block-list:abbreviated-name=":кактус:" block-list:name="🌵"/>
   <block-list:block block-list:abbreviated-name=":календар2:" block-list:name="📆"/>
+  <block-list:block block-list:abbreviated-name=":календар3:" block-list:name="🗓"/>
   <block-list:block block-list:abbreviated-name=":календар:" block-list:name="📅"/>
   <block-list:block block-list:abbreviated-name=":калинка:" block-list:name="🐞"/>
-  <block-list:block block-list:abbreviated-name=":камбанка:" block-list:name="🔔"/>
+  <block-list:block block-list:abbreviated-name=":калкулатор:" block-list:name="🖩"/>
   <block-list:block block-list:abbreviated-name=":камила2:" block-list:name="🐫"/>
   <block-list:block block-list:abbreviated-name=":камила:" block-list:name="🐪"/>
   <block-list:block block-list:abbreviated-name=":камион2:" block-list:name="🚚"/>
   <block-list:block block-list:abbreviated-name=":камион3:" block-list:name="🚛"/>
   <block-list:block block-list:abbreviated-name=":камион:" block-list:name="⛟"/>
+  <block-list:block block-list:abbreviated-name=":кану:" block-list:name="🛶"/>
   <block-list:block block-list:abbreviated-name=":капа:" block-list:name="κ"/>
   <block-list:block block-list:abbreviated-name=":Капа:" block-list:name="Κ"/>
+  <block-list:block block-list:abbreviated-name=":капка2:" block-list:name="🌢"/>
   <block-list:block block-list:abbreviated-name=":капка:" block-list:name="💧"/>
   <block-list:block block-list:abbreviated-name=":капки пот:" block-list:name="💦"/>
   <block-list:block block-list:abbreviated-name=":каро2:" block-list:name="♢"/>
   <block-list:block block-list:abbreviated-name=":каро:" block-list:name="♦"/>
+  <block-list:block block-list:abbreviated-name=":карта:" block-list:name="🗺"/>
   <block-list:block block-list:abbreviated-name=":карти:" block-list:name="🎴"/>
+  <block-list:block block-list:abbreviated-name=":картина:" block-list:name="🖼"/>
   <block-list:block block-list:abbreviated-name=":картотека:" block-list:name="📇"/>
+  <block-list:block block-list:abbreviated-name=":картоф:" block-list:name="🥔"/>
+  <block-list:block block-list:abbreviated-name=":касета:" block-list:name="🖭"/>
   <block-list:block block-list:abbreviated-name=":каска:" block-list:name="⛑"/>
+  <block-list:block block-list:abbreviated-name=":каскада:" block-list:name="🗗"/>
+  <block-list:block block-list:abbreviated-name=":каскет:" block-list:name="🧢"/>
+  <block-list:block block-list:abbreviated-name=":катерач:" block-list:name="🧗"/>
   <block-list:block block-list:abbreviated-name=":катинар:" block-list:name="🔒"/>
   <block-list:block block-list:abbreviated-name=":катинар и ключ:" block-list:name="🔐"/>
   <block-list:block block-list:abbreviated-name=":катинар и перо:" block-list:name="🔏"/>
+  <block-list:block block-list:abbreviated-name=":каубой:" block-list:name="🤠"/>
   <block-list:block block-list:abbreviated-name=":кафе:" block-list:name="☕"/>
   <block-list:block block-list:abbreviated-name=":квадрат2:" block-list:name="■"/>
   <block-list:block block-list:abbreviated-name=":квадрат:" block-list:name="□"/>
   <block-list:block block-list:abbreviated-name=":квадратен корен:" block-list:name="√"/>
   <block-list:block block-list:abbreviated-name=":квадратче2:" block-list:name="▪"/>
   <block-list:block block-list:abbreviated-name=":квадратче:" block-list:name="▫"/>
+  <block-list:block block-list:abbreviated-name=":келтски кръст:" block-list:name="🕈"/>
   <block-list:block block-list:abbreviated-name=":кестен:" block-list:name="🌰"/>
+  <block-list:block block-list:abbreviated-name=":киви:" block-list:name="🥝"/>
   <block-list:block block-list:abbreviated-name=":кимоно:" block-list:name="👘"/>
   <block-list:block block-list:abbreviated-name=":кино:" block-list:name="🎦"/>
   <block-list:block block-list:abbreviated-name=":кинокамера:" block-list:name="🎥"/>
@@ -515,49 +632,76 @@
   <block-list:block block-list:abbreviated-name=":кит2:" block-list:name="🐋"/>
   <block-list:block block-list:abbreviated-name=":кит:" block-list:name="🐳"/>
   <block-list:block block-list:abbreviated-name=":китара:" block-list:name="🎸"/>
+  <block-list:block block-list:abbreviated-name=":кихане:" block-list:name="🤧"/>
   <block-list:block block-list:abbreviated-name=":ккнигоразделител2:" block-list:name="🔖"/>
+  <block-list:block block-list:abbreviated-name=":клавиатура2:" block-list:name="🖮"/>
+  <block-list:block block-list:abbreviated-name=":клавиатура3:" block-list:name="🖦"/>
   <block-list:block block-list:abbreviated-name=":клавиатура:" block-list:name="⌨"/>
+  <block-list:block block-list:abbreviated-name=":кламер2:" block-list:name="🖇"/>
   <block-list:block block-list:abbreviated-name=":кламер:" block-list:name="📎"/>
+  <block-list:block block-list:abbreviated-name=":клечки:" block-list:name="🥢"/>
   <block-list:block block-list:abbreviated-name=":клипборд:" block-list:name="📋"/>
+  <block-list:block block-list:abbreviated-name=":клоун:" block-list:name="🤡"/>
+  <block-list:block block-list:abbreviated-name=":ключ2:" block-list:name="🗝"/>
   <block-list:block block-list:abbreviated-name=":ключ:" block-list:name="🔑"/>
   <block-list:block block-list:abbreviated-name=":ключ сол:" block-list:name="𝄞"/>
-  <block-list:block block-list:abbreviated-name=":книга2:" block-list:name="📖"/>
-  <block-list:block block-list:abbreviated-name=":книга:" block-list:name="📕"/>
+  <block-list:block block-list:abbreviated-name=":кнедла:" block-list:name="🥟"/>
+  <block-list:block block-list:abbreviated-name=":книга2:" block-list:name="📕"/>
+  <block-list:block block-list:abbreviated-name=":книга3:" block-list:name="📖"/>
+  <block-list:block block-list:abbreviated-name=":книга:" block-list:name="🕮"/>
   <block-list:block block-list:abbreviated-name=":книги:" block-list:name="📚"/>
   <block-list:block block-list:abbreviated-name=":книгоразделител:" block-list:name="📑"/>
   <block-list:block block-list:abbreviated-name=":коала:" block-list:name="🐨"/>
   <block-list:block block-list:abbreviated-name=":ковчег:" block-list:name="⚰"/>
+  <block-list:block block-list:abbreviated-name=":кожа1:" block-list:name="🏻"/>
+  <block-list:block block-list:abbreviated-name=":кожа2:" block-list:name="🏼"/>
+  <block-list:block block-list:abbreviated-name=":кожа3:" block-list:name="🏽"/>
+  <block-list:block block-list:abbreviated-name=":кожа4:" block-list:name="🏾"/>
+  <block-list:block block-list:abbreviated-name=":кожа5:" block-list:name="🏿"/>
   <block-list:block block-list:abbreviated-name=":коза:" block-list:name="🐐"/>
-  <block-list:block block-list:abbreviated-name=":Козирог:" block-list:name="♑"/>
-  <block-list:block block-list:abbreviated-name=":коктейл2:" block-list:name="🍹"/>
+  <block-list:block block-list:abbreviated-name=":козирог:" block-list:name="♑"/>
+  <block-list:block block-list:abbreviated-name=":кокосов орех:" block-list:name="🥥"/>
   <block-list:block block-list:abbreviated-name=":коктейл:" block-list:name="🍸"/>
   <block-list:block block-list:abbreviated-name=":кола2:" block-list:name="🚘"/>
   <block-list:block block-list:abbreviated-name=":кола3:" block-list:name="🚙"/>
+  <block-list:block block-list:abbreviated-name=":кола4:" block-list:name="🏎"/>
   <block-list:block block-list:abbreviated-name=":кола:" block-list:name="🚗"/>
-  <block-list:block block-list:abbreviated-name=":Коледа:" block-list:name="🎄"/>
+  <block-list:block block-list:abbreviated-name=":коледа:" block-list:name="🎄"/>
+  <block-list:block block-list:abbreviated-name=":количка:" block-list:name="🛒"/>
   <block-list:block block-list:abbreviated-name=":комета:" block-list:name="☄"/>
   <block-list:block block-list:abbreviated-name=":компактдиск:" block-list:name="💿"/>
+  <block-list:block block-list:abbreviated-name=":компютър2:" block-list:name="🖥"/>
   <block-list:block block-list:abbreviated-name=":компютър:" block-list:name="💻"/>
   <block-list:block block-list:abbreviated-name=":кон2:" block-list:name="🐴"/>
+  <block-list:block block-list:abbreviated-name=":кон3:" block-list:name="🏇"/>
   <block-list:block block-list:abbreviated-name=":кон:" block-list:name="🐎"/>
-  <block-list:block block-list:abbreviated-name=":конно надбягване:" block-list:name="🏇"/>
+  <block-list:block block-list:abbreviated-name=":консерва:" block-list:name="🥫"/>
+  <block-list:block block-list:abbreviated-name=":контрола:" block-list:name="🎛"/>
   <block-list:block block-list:abbreviated-name=":конфети:" block-list:name="🎉"/>
-  <block-list:block block-list:abbreviated-name=":конче от въртележка:" block-list:name="🎠"/>
+  <block-list:block block-list:abbreviated-name=":кораб2:" block-list:name="🛳"/>
   <block-list:block block-list:abbreviated-name=":кораб:" block-list:name="🚢"/>
   <block-list:block block-list:abbreviated-name=":корона:" block-list:name="👑"/>
   <block-list:block block-list:abbreviated-name=":костенурка:" block-list:name="🐢"/>
+  <block-list:block block-list:abbreviated-name=":костюм:" block-list:name="🕴"/>
   <block-list:block block-list:abbreviated-name=":котва:" block-list:name="⚓"/>
   <block-list:block block-list:abbreviated-name=":котка2:" block-list:name="🐱"/>
   <block-list:block block-list:abbreviated-name=":котка:" block-list:name="🐈"/>
+  <block-list:block block-list:abbreviated-name=":кошче:" block-list:name="🗑"/>
   <block-list:block block-list:abbreviated-name=":крава2:" block-list:name="🐮"/>
   <block-list:block block-list:abbreviated-name=":крава:" block-list:name="🐄"/>
   <block-list:block block-list:abbreviated-name=":край на доказателство:" block-list:name="∎"/>
+  <block-list:block block-list:abbreviated-name=":кран:" block-list:name="🏗"/>
+  <block-list:block block-list:abbreviated-name=":краставица:" block-list:name="🥒"/>
   <block-list:block block-list:abbreviated-name=":кредитна карта:" block-list:name="💳"/>
+  <block-list:block block-list:abbreviated-name=":крикет:" block-list:name="🏏"/>
   <block-list:block block-list:abbreviated-name=":кристална топка:" block-list:name="🔮"/>
+  <block-list:block block-list:abbreviated-name=":кроасан:" block-list:name="🥐"/>
   <block-list:block block-list:abbreviated-name=":крокодил:" block-list:name="🐊"/>
   <block-list:block block-list:abbreviated-name=":круша:" block-list:name="🍐"/>
   <block-list:block block-list:abbreviated-name=":крушка:" block-list:name="💡"/>
   <block-list:block block-list:abbreviated-name=":кръг2:" block-list:name="●"/>
+  <block-list:block block-list:abbreviated-name=":кръг3:" block-list:name="🔾"/>
+  <block-list:block block-list:abbreviated-name=":кръг4:" block-list:name="🔿"/>
   <block-list:block block-list:abbreviated-name=":кръг:" block-list:name="○"/>
   <block-list:block block-list:abbreviated-name=":кръгло габърче:" block-list:name="📍"/>
   <block-list:block block-list:abbreviated-name=":кръгче за списък:" block-list:name="◦"/>
@@ -571,17 +715,28 @@
   <block-list:block block-list:abbreviated-name=":кула:" block-list:name="🗼"/>
   <block-list:block block-list:abbreviated-name=":купа2:" block-list:name="♡"/>
   <block-list:block block-list:abbreviated-name=":купа:" block-list:name="♥"/>
+  <block-list:block block-list:abbreviated-name=":курабийка:" block-list:name="🥠"/>
+  <block-list:block block-list:abbreviated-name=":кутия:" block-list:name="🗃"/>
   <block-list:block block-list:abbreviated-name=":куфарче:" block-list:name="💼"/>
   <block-list:block block-list:abbreviated-name=":куче2:" block-list:name="🐶"/>
   <block-list:block block-list:abbreviated-name=":куче:" block-list:name="🐕"/>
+  <block-list:block block-list:abbreviated-name=":кушетка:" block-list:name="🛋"/>
   <block-list:block block-list:abbreviated-name=":кънка:" block-list:name="⛸"/>
   <block-list:block block-list:abbreviated-name=":къри:" block-list:name="🍛"/>
+  <block-list:block block-list:abbreviated-name=":кърлинг:" block-list:name="🥌"/>
+  <block-list:block block-list:abbreviated-name=":късмет:" block-list:name="🤞"/>
   <block-list:block block-list:abbreviated-name=":къща2:" block-list:name="🏡"/>
+  <block-list:block block-list:abbreviated-name=":къща3:" block-list:name="🏚"/>
   <block-list:block block-list:abbreviated-name=":къща:" block-list:name="🏠"/>
+  <block-list:block block-list:abbreviated-name=":къщи:" block-list:name="🏘"/>
+  <block-list:block block-list:abbreviated-name=":лагер:" block-list:name="🏕"/>
   <block-list:block block-list:abbreviated-name=":лале:" block-list:name="🌷"/>
   <block-list:block block-list:abbreviated-name=":ламбда:" block-list:name="λ"/>
   <block-list:block block-list:abbreviated-name=":Ламбда:" block-list:name="Λ"/>
+  <block-list:block block-list:abbreviated-name=":латински кръст 2:" block-list:name="🕆"/>
+  <block-list:block block-list:abbreviated-name=":латински кръст 3:" block-list:name="🕇"/>
   <block-list:block block-list:abbreviated-name=":латински кръст:" block-list:name="✝"/>
+  <block-list:block block-list:abbreviated-name=":легло:" block-list:name="🛏"/>
   <block-list:block block-list:abbreviated-name=":леко метро:" block-list:name="🚈"/>
   <block-list:block block-list:abbreviated-name=":леопард:" block-list:name="🐆"/>
   <block-list:block block-list:abbreviated-name=":лимон:" block-list:name="🍋"/>
@@ -589,25 +744,42 @@
   <block-list:block block-list:abbreviated-name=":линийка2:" block-list:name="📐"/>
   <block-list:block block-list:abbreviated-name=":линийка:" block-list:name="📏"/>
   <block-list:block block-list:abbreviated-name=":лира:" block-list:name="₤"/>
+  <block-list:block block-list:abbreviated-name=":лисица:" block-list:name="🦊"/>
   <block-list:block block-list:abbreviated-name=":листо2:" block-list:name="🍂"/>
   <block-list:block block-list:abbreviated-name=":листо3:" block-list:name="🍃"/>
   <block-list:block block-list:abbreviated-name=":листо:" block-list:name="🍁"/>
   <block-list:block block-list:abbreviated-name=":лифт:" block-list:name="🚡"/>
+  <block-list:block block-list:abbreviated-name=":локомотив2:" block-list:name="🛲"/>
+  <block-list:block block-list:abbreviated-name=":локомотив:" block-list:name="🚂"/>
   <block-list:block block-list:abbreviated-name=":лотарингски кръст:" block-list:name="☨"/>
   <block-list:block block-list:abbreviated-name=":луна2:" block-list:name="🌜"/>
   <block-list:block block-list:abbreviated-name=":Луна2:" block-list:name="☾"/>
   <block-list:block block-list:abbreviated-name=":луна:" block-list:name="🌛"/>
   <block-list:block block-list:abbreviated-name=":Луна:" block-list:name="☽"/>
+  <block-list:block block-list:abbreviated-name=":лунапарк2:" block-list:name="🎠"/>
+  <block-list:block block-list:abbreviated-name=":лунапарк:" block-list:name="🎡"/>
   <block-list:block block-list:abbreviated-name=":лупа2:" block-list:name="🔎"/>
   <block-list:block block-list:abbreviated-name=":лупа:" block-list:name="🔍"/>
-  <block-list:block block-list:abbreviated-name=":Лъв:" block-list:name="♌"/>
+  <block-list:block block-list:abbreviated-name=":лъв2:" block-list:name="🦁"/>
+  <block-list:block block-list:abbreviated-name=":лъв:" block-list:name="♌"/>
+  <block-list:block block-list:abbreviated-name=":лъжец:" block-list:name="🤥"/>
+  <block-list:block block-list:abbreviated-name=":лъжица:" block-list:name="🥄"/>
+  <block-list:block block-list:abbreviated-name=":лък:" block-list:name="🏹"/>
+  <block-list:block block-list:abbreviated-name=":лъчи2:" block-list:name="🗥"/>
+  <block-list:block block-list:abbreviated-name=":лъчи3:" block-list:name="🗤"/>
+  <block-list:block block-list:abbreviated-name=":лъчи4:" block-list:name="🗧"/>
+  <block-list:block block-list:abbreviated-name=":лъчи:" block-list:name="🗦"/>
+  <block-list:block block-list:abbreviated-name=":любов2:" block-list:name="🤟"/>
   <block-list:block block-list:abbreviated-name=":любов:" block-list:name="💘"/>
   <block-list:block block-list:abbreviated-name=":любовно писмо:" block-list:name="💌"/>
   <block-list:block block-list:abbreviated-name=":магазин2:" block-list:name="🏬"/>
   <block-list:block block-list:abbreviated-name=":магазин:" block-list:name="🏪"/>
+  <block-list:block block-list:abbreviated-name=":магистрала:" block-list:name="🛣"/>
+  <block-list:block block-list:abbreviated-name=":магьосник:" block-list:name="🧙"/>
   <block-list:block block-list:abbreviated-name=":маджонг:" block-list:name="🀄"/>
   <block-list:block block-list:abbreviated-name=":маймуна2:" block-list:name="🐵"/>
   <block-list:block block-list:abbreviated-name=":маймуна:" block-list:name="🐒"/>
+  <block-list:block block-list:abbreviated-name=":максимизиране:" block-list:name="🗖"/>
   <block-list:block block-list:abbreviated-name=":малка звезда 2:" block-list:name="⭑"/>
   <block-list:block block-list:abbreviated-name=":малка звезда:" block-list:name="⭒"/>
   <block-list:block block-list:abbreviated-name=":малко „принадлежи на“:" block-list:name="∊"/>
@@ -617,73 +789,116 @@
   <block-list:block block-list:abbreviated-name=":малък квадрат:" block-list:name="◽"/>
   <block-list:block block-list:abbreviated-name=":мандарина:" block-list:name="🍊"/>
   <block-list:block block-list:abbreviated-name=":маникюр:" block-list:name="💅"/>
+  <block-list:block block-list:abbreviated-name=":маркова глава:" block-list:name="🕅"/>
   <block-list:block block-list:abbreviated-name=":Марс:" block-list:name="♂"/>
-  <block-list:block block-list:abbreviated-name=":мару:" block-list:name="🙆"/>
   <block-list:block block-list:abbreviated-name=":масаж:" block-list:name="💆"/>
   <block-list:block block-list:abbreviated-name=":маска:" block-list:name="😷"/>
-  <block-list:block block-list:abbreviated-name=":мегафон:" block-list:name="📣"/>
+  <block-list:block block-list:abbreviated-name=":мегафон2:" block-list:name="🕬"/>
+  <block-list:block block-list:abbreviated-name=":мегафон:" block-list:name="🕫"/>
   <block-list:block block-list:abbreviated-name=":мед:" block-list:name="🍯"/>
+  <block-list:block block-list:abbreviated-name=":медал2:" block-list:name="🎖"/>
+  <block-list:block block-list:abbreviated-name=":медал:" block-list:name="🏅"/>
   <block-list:block block-list:abbreviated-name=":медицина:" block-list:name="⚕"/>
-  <block-list:block block-list:abbreviated-name=":Меркурий:" block-list:name="☿"/>
+  <block-list:block block-list:abbreviated-name=":меркурий:" block-list:name="☿"/>
   <block-list:block block-list:abbreviated-name=":месо:" block-list:name="🍖"/>
   <block-list:block block-list:abbreviated-name=":метро:" block-list:name="🚇"/>
   <block-list:block block-list:abbreviated-name=":мечка:" block-list:name="🐻"/>
   <block-list:block block-list:abbreviated-name=":мечове:" block-list:name="⚔"/>
   <block-list:block block-list:abbreviated-name=":мида:" block-list:name="🐚"/>
   <block-list:block block-list:abbreviated-name=":микроскоп:" block-list:name="🔬"/>
+  <block-list:block block-list:abbreviated-name=":микрофон2:" block-list:name="🎙"/>
   <block-list:block block-list:abbreviated-name=":микрофон:" block-list:name="🎤"/>
   <block-list:block block-list:abbreviated-name=":минибус:" block-list:name="🚐"/>
   <block-list:block block-list:abbreviated-name=":минидиск:" block-list:name="💽"/>
+  <block-list:block block-list:abbreviated-name=":минимизиране:" block-list:name="🗕"/>
   <block-list:block block-list:abbreviated-name=":мир:" block-list:name="☮"/>
+  <block-list:block block-list:abbreviated-name=":мислене:" block-list:name="🤔"/>
   <block-list:block block-list:abbreviated-name=":митница:" block-list:name="🛃"/>
   <block-list:block block-list:abbreviated-name=":мишка2:" block-list:name="🐭"/>
+  <block-list:block block-list:abbreviated-name=":мишка3:" block-list:name="🖱"/>
+  <block-list:block block-list:abbreviated-name=":мишка4:" block-list:name="🖰"/>
+  <block-list:block block-list:abbreviated-name=":мишка5:" block-list:name="🖯"/>
   <block-list:block block-list:abbreviated-name=":мишка:" block-list:name="🐁"/>
-  <block-list:block block-list:abbreviated-name=":Млечен път:" block-list:name="🌌"/>
+  <block-list:block block-list:abbreviated-name=":младоженец:" block-list:name="🤵"/>
+  <block-list:block block-list:abbreviated-name=":млечен път:" block-list:name="🌌"/>
+  <block-list:block block-list:abbreviated-name=":мляко:" block-list:name="🥛"/>
+  <block-list:block block-list:abbreviated-name=":мобилен телефон 2:" block-list:name="🖁"/>
   <block-list:block block-list:abbreviated-name=":мобилен телефон:" block-list:name="📱"/>
+  <block-list:block block-list:abbreviated-name=":модем:" block-list:name="🖀"/>
+  <block-list:block block-list:abbreviated-name=":мозък:" block-list:name="🧠"/>
   <block-list:block block-list:abbreviated-name=":молив2:" block-list:name="✏"/>
   <block-list:block block-list:abbreviated-name=":молив3:" block-list:name="✐"/>
+  <block-list:block block-list:abbreviated-name=":молив4:" block-list:name="🖉"/>
   <block-list:block block-list:abbreviated-name=":молив:" block-list:name="✎"/>
   <block-list:block block-list:abbreviated-name=":молитва:" block-list:name="🙏"/>
   <block-list:block block-list:abbreviated-name=":момиче:" block-list:name="👧"/>
+  <block-list:block block-list:abbreviated-name=":момичета:" block-list:name="🛊"/>
   <block-list:block block-list:abbreviated-name=":момче:" block-list:name="👦"/>
+  <block-list:block block-list:abbreviated-name=":момчета:" block-list:name="🛉"/>
   <block-list:block block-list:abbreviated-name=":монетен автомат:" block-list:name="🎰"/>
+  <block-list:block block-list:abbreviated-name=":монокъл:" block-list:name="🧐"/>
   <block-list:block block-list:abbreviated-name=":монорелс:" block-list:name="🚝"/>
+  <block-list:block block-list:abbreviated-name=":мопед:" block-list:name="🛵"/>
+  <block-list:block block-list:abbreviated-name=":морков:" block-list:name="🥕"/>
   <block-list:block block-list:abbreviated-name=":мост:" block-list:name="🌉"/>
   <block-list:block block-list:abbreviated-name=":моторница:" block-list:name="🚤"/>
+  <block-list:block block-list:abbreviated-name=":мотоциклет:" block-list:name="🏍"/>
   <block-list:block block-list:abbreviated-name=":мравка:" block-list:name="🐜"/>
+  <block-list:block block-list:abbreviated-name=":мрежа:" block-list:name="🖧"/>
+  <block-list:block block-list:abbreviated-name=":мръщене2:" block-list:name="🙁"/>
   <block-list:block block-list:abbreviated-name=":мръщене:" block-list:name="😦"/>
+  <block-list:block block-list:abbreviated-name=":музей:" block-list:name="🏛"/>
   <block-list:block block-list:abbreviated-name=":музика2:" block-list:name="🎵"/>
   <block-list:block block-list:abbreviated-name=":музика:" block-list:name="🎶"/>
   <block-list:block block-list:abbreviated-name=":мускул:" block-list:name="💪"/>
-  <block-list:block block-list:abbreviated-name=":мъгла:" block-list:name="🌁"/>
+  <block-list:block block-list:abbreviated-name=":мъгла:" block-list:name="🌫"/>
+  <block-list:block block-list:abbreviated-name=":мъгливо:" block-list:name="🌁"/>
   <block-list:block block-list:abbreviated-name=":мъж:" block-list:name="👨"/>
-  <block-list:block block-list:abbreviated-name=":мълния:" block-list:name="☇"/>
-  <block-list:block block-list:abbreviated-name=":мълчание:" block-list:name="😯"/>
+  <block-list:block block-list:abbreviated-name=":мълния2:" block-list:name="🗲"/>
+  <block-list:block block-list:abbreviated-name=":мълния3:" block-list:name="☇"/>
+  <block-list:block block-list:abbreviated-name=":мълния:" block-list:name="🌩"/>
+  <block-list:block block-list:abbreviated-name=":мълчание:" block-list:name="🤐"/>
   <block-list:block block-list:abbreviated-name=":мю:" block-list:name="μ"/>
   <block-list:block block-list:abbreviated-name=":Мю:" block-list:name="Μ"/>
   <block-list:block block-list:abbreviated-name=":наближаващо пълнолуние:" block-list:name="🌔"/>
   <block-list:block block-list:abbreviated-name=":нагоре2:" block-list:name="👆"/>
+  <block-list:block block-list:abbreviated-name=":нагоре3:" block-list:name="🖞"/>
+  <block-list:block block-list:abbreviated-name=":нагоре4:" block-list:name="🖠"/>
+  <block-list:block block-list:abbreviated-name=":нагоре5:" block-list:name="🖢"/>
   <block-list:block block-list:abbreviated-name=":нагоре:" block-list:name="☝"/>
   <block-list:block block-list:abbreviated-name=":над 18 години:" block-list:name="🔞"/>
   <block-list:block block-list:abbreviated-name=":надмножество:" block-list:name="⊃"/>
   <block-list:block block-list:abbreviated-name=":надолу2:" block-list:name="👇"/>
+  <block-list:block block-list:abbreviated-name=":надолу3:" block-list:name="🖟"/>
+  <block-list:block block-list:abbreviated-name=":надолу4:" block-list:name="🖗"/>
+  <block-list:block block-list:abbreviated-name=":надолу5:" block-list:name="🖣"/>
+  <block-list:block block-list:abbreviated-name=":надолу6:" block-list:name="🖡"/>
   <block-list:block block-list:abbreviated-name=":надолу:" block-list:name="☟"/>
   <block-list:block block-list:abbreviated-name=":надясно2:" block-list:name="👉"/>
   <block-list:block block-list:abbreviated-name=":надясно3:" block-list:name="☛"/>
+  <block-list:block block-list:abbreviated-name=":надясно4:" block-list:name="🖛"/>
+  <block-list:block block-list:abbreviated-name=":надясно5:" block-list:name="🖙"/>
+  <block-list:block block-list:abbreviated-name=":надясно6:" block-list:name="🖝"/>
   <block-list:block block-list:abbreviated-name=":надясно:" block-list:name="☞"/>
   <block-list:block block-list:abbreviated-name=":наляво2:" block-list:name="👈"/>
   <block-list:block block-list:abbreviated-name=":наляво3:" block-list:name="☚"/>
+  <block-list:block block-list:abbreviated-name=":наляво4:" block-list:name="🖚"/>
+  <block-list:block block-list:abbreviated-name=":наляво5:" block-list:name="🖜"/>
+  <block-list:block block-list:abbreviated-name=":наляво6:" block-list:name="🖘"/>
   <block-list:block block-list:abbreviated-name=":наляво:" block-list:name="☜"/>
   <block-list:block block-list:abbreviated-name=":намаляващ полумесец:" block-list:name="🌘"/>
   <block-list:block block-list:abbreviated-name=":намигане:" block-list:name="😉"/>
   <block-list:block block-list:abbreviated-name=":намръщено лице:" block-list:name="☹"/>
   <block-list:block block-list:abbreviated-name=":намръщен човек:" block-list:name="🙍"/>
+  <block-list:block block-list:abbreviated-name=":напитка2:" block-list:name="🍹"/>
+  <block-list:block block-list:abbreviated-name=":напитка:" block-list:name="🥤"/>
   <block-list:block block-list:abbreviated-name=":нарастващо сърце:" block-list:name="💗"/>
   <block-list:block block-list:abbreviated-name=":нарастващ полумесец:" block-list:name="🌒"/>
   <block-list:block block-list:abbreviated-name=":настърган лед:" block-list:name="🍧"/>
   <block-list:block block-list:abbreviated-name=":нацупена котка:" block-list:name="😾"/>
   <block-list:block block-list:abbreviated-name=":нацупен човек:" block-list:name="🙎"/>
   <block-list:block block-list:abbreviated-name=":начинаещ:" block-list:name="🔰"/>
+  <block-list:block block-list:abbreviated-name=":не2:" block-list:name="🖓"/>
   <block-list:block block-list:abbreviated-name=":не:" block-list:name="👎"/>
   <block-list:block block-list:abbreviated-name=":не виждам зло:" block-list:name="🙈"/>
   <block-list:block block-list:abbreviated-name=":невинен:" block-list:name="😇"/>
@@ -694,26 +909,32 @@
   <block-list:block block-list:abbreviated-name=":непитейна вода:" block-list:name="🚱"/>
   <block-list:block block-list:abbreviated-name=":не подмножество:" block-list:name="⊄"/>
   <block-list:block block-list:abbreviated-name=":не принадлежи на:" block-list:name="∉"/>
-  <block-list:block block-list:abbreviated-name=":Нептун:" block-list:name="♆"/>
+  <block-list:block block-list:abbreviated-name=":нептун:" block-list:name="♆"/>
   <block-list:block block-list:abbreviated-name=":не споменавам зло:" block-list:name="🙊"/>
   <block-list:block block-list:abbreviated-name=":не съдържа:" block-list:name="∌"/>
   <block-list:block block-list:abbreviated-name=":не съществува:" block-list:name="∄"/>
   <block-list:block block-list:abbreviated-name=":не успоредно на:" block-list:name="∦"/>
   <block-list:block block-list:abbreviated-name=":неутрално лице:" block-list:name="😐"/>
   <block-list:block block-list:abbreviated-name=":не чувам зло:" block-list:name="🙉"/>
+  <block-list:block block-list:abbreviated-name=":нло:" block-list:name="🛸"/>
   <block-list:block block-list:abbreviated-name=":новолуние2:" block-list:name="🌚"/>
   <block-list:block block-list:abbreviated-name=":новолуние:" block-list:name="🌑"/>
+  <block-list:block block-list:abbreviated-name=":нож2:" block-list:name="🗡"/>
   <block-list:block block-list:abbreviated-name=":нож:" block-list:name="🔪"/>
   <block-list:block block-list:abbreviated-name=":ножица2:" block-list:name="✄"/>
   <block-list:block block-list:abbreviated-name=":ножица3:" block-list:name="✁"/>
   <block-list:block block-list:abbreviated-name=":ножица4:" block-list:name="✃"/>
   <block-list:block block-list:abbreviated-name=":ножица:" block-list:name="✂"/>
   <block-list:block block-list:abbreviated-name=":нос:" block-list:name="👃"/>
+  <block-list:block block-list:abbreviated-name=":носорог:" block-list:name="🦏"/>
   <block-list:block block-list:abbreviated-name=":нота2:" block-list:name="♪"/>
   <block-list:block block-list:abbreviated-name=":нота:" block-list:name="♩"/>
   <block-list:block block-list:abbreviated-name=":ноти2:" block-list:name="♬"/>
+  <block-list:block block-list:abbreviated-name=":ноти3:" block-list:name="🎝"/>
+  <block-list:block block-list:abbreviated-name=":ноти4:" block-list:name="🎜"/>
   <block-list:block block-list:abbreviated-name=":ноти:" block-list:name="♫"/>
   <block-list:block block-list:abbreviated-name=":нощ:" block-list:name="🌃"/>
+  <block-list:block block-list:abbreviated-name=":нърд:" block-list:name="🤓"/>
   <block-list:block block-list:abbreviated-name=":ню:" block-list:name="ν"/>
   <block-list:block block-list:abbreviated-name=":Ню:" block-list:name="Ν"/>
   <block-list:block block-list:abbreviated-name=":обаждане:" block-list:name="📲"/>
@@ -721,58 +942,90 @@
   <block-list:block block-list:abbreviated-name=":облак2:" block-list:name="⛅"/>
   <block-list:block block-list:abbreviated-name=":облак3:" block-list:name="⛈"/>
   <block-list:block block-list:abbreviated-name=":облак:" block-list:name="☁"/>
+  <block-list:block block-list:abbreviated-name=":облачно2:" block-list:name="🌥"/>
+  <block-list:block block-list:abbreviated-name=":облачно:" block-list:name="🌤"/>
   <block-list:block block-list:abbreviated-name=":облекчение:" block-list:name="😌"/>
-  <block-list:block block-list:abbreviated-name=":обмен на валута:" block-list:name="💱"/>
+  <block-list:block block-list:abbreviated-name=":обмяна:" block-list:name="💱"/>
   <block-list:block block-list:abbreviated-name=":обувка2:" block-list:name="👟"/>
   <block-list:block block-list:abbreviated-name=":обувка3:" block-list:name="👠"/>
   <block-list:block block-list:abbreviated-name=":обувка:" block-list:name="👞"/>
   <block-list:block block-list:abbreviated-name=":объркване:" block-list:name="😖"/>
-  <block-list:block block-list:abbreviated-name=":овен:" block-list:name="🐏"/>
-  <block-list:block block-list:abbreviated-name=":Овен:" block-list:name="♈"/>
+  <block-list:block block-list:abbreviated-name=":овен2:" block-list:name="🐏"/>
+  <block-list:block block-list:abbreviated-name=":овен:" block-list:name="♈"/>
   <block-list:block block-list:abbreviated-name=":овца:" block-list:name="🐑"/>
   <block-list:block block-list:abbreviated-name=":огън:" block-list:name="🔥"/>
   <block-list:block block-list:abbreviated-name=":оден:" block-list:name="🍢"/>
   <block-list:block block-list:abbreviated-name=":окачена железница:" block-list:name="🚟"/>
   <block-list:block block-list:abbreviated-name=":океан:" block-list:name="🌊"/>
+  <block-list:block block-list:abbreviated-name=":окей2:" block-list:name="🖏"/>
+  <block-list:block block-list:abbreviated-name=":окей3:" block-list:name="🙆"/>
   <block-list:block block-list:abbreviated-name=":окей:" block-list:name="👌"/>
+  <block-list:block block-list:abbreviated-name=":око:" block-list:name="👁"/>
   <block-list:block block-list:abbreviated-name=":октопод:" block-list:name="🐙"/>
+  <block-list:block block-list:abbreviated-name=":ом:" block-list:name="🕉"/>
   <block-list:block block-list:abbreviated-name=":омега:" block-list:name="ω"/>
   <block-list:block block-list:abbreviated-name=":Омега:" block-list:name="Ω"/>
   <block-list:block block-list:abbreviated-name=":омикрон:" block-list:name="ο"/>
   <block-list:block block-list:abbreviated-name=":Омикрон:" block-list:name="Ο"/>
+  <block-list:block block-list:abbreviated-name=":оптичен диск:" block-list:name="🖸"/>
+  <block-list:block block-list:abbreviated-name=":оранжево сърце:" block-list:name="🧡"/>
+  <block-list:block block-list:abbreviated-name=":орел:" block-list:name="🦅"/>
   <block-list:block block-list:abbreviated-name=":ориз:" block-list:name="🍚"/>
   <block-list:block block-list:abbreviated-name=":оризова топка:" block-list:name="🍙"/>
   <block-list:block block-list:abbreviated-name=":оризов крекер:" block-list:name="🍘"/>
   <block-list:block block-list:abbreviated-name=":осмина нота:" block-list:name="𝅘𝅥𝅮"/>
   <block-list:block block-list:abbreviated-name=":осмина пауза:" block-list:name="𝄾"/>
+  <block-list:block block-list:abbreviated-name=":остров:" block-list:name="🏝"/>
   <block-list:block block-list:abbreviated-name=":отворена уста:" block-list:name="😮"/>
   <block-list:block block-list:abbreviated-name=":отворени длани:" block-list:name="👐"/>
   <block-list:block block-list:abbreviated-name=":отворен катинар:" block-list:name="🔓"/>
   <block-list:block block-list:abbreviated-name=":отегчение:" block-list:name="😩"/>
+  <block-list:block block-list:abbreviated-name=":отказ:" block-list:name="🗙"/>
   <block-list:block block-list:abbreviated-name=":отметка2:" block-list:name="✔"/>
   <block-list:block block-list:abbreviated-name=":отметка3:" block-list:name="✅"/>
+  <block-list:block block-list:abbreviated-name=":отметка4:" block-list:name="🗴"/>
+  <block-list:block block-list:abbreviated-name=":отметка5:" block-list:name="🗸"/>
   <block-list:block block-list:abbreviated-name=":отметка:" block-list:name="✓"/>
+  <block-list:block block-list:abbreviated-name=":отпътуване:" block-list:name="🛫"/>
   <block-list:block block-list:abbreviated-name=":отрицание:" block-list:name="¬"/>
   <block-list:block block-list:abbreviated-name=":отрова:" block-list:name="☠"/>
   <block-list:block block-list:abbreviated-name=":офис:" block-list:name="🏢"/>
   <block-list:block block-list:abbreviated-name=":охлюв:" block-list:name="🐌"/>
   <block-list:block block-list:abbreviated-name=":очи:" block-list:name="👀"/>
   <block-list:block block-list:abbreviated-name=":очила:" block-list:name="👓"/>
+  <block-list:block block-list:abbreviated-name=":пай:" block-list:name="🥧"/>
   <block-list:block block-list:abbreviated-name=":пакет:" block-list:name="📦"/>
   <block-list:block block-list:abbreviated-name=":палатка:" block-list:name="⛺"/>
+  <block-list:block block-list:abbreviated-name=":палачинки:" block-list:name="🥞"/>
   <block-list:block block-list:abbreviated-name=":палма:" block-list:name="🌴"/>
+  <block-list:block block-list:abbreviated-name=":палто:" block-list:name="🧥"/>
   <block-list:block block-list:abbreviated-name=":панда:" block-list:name="🐼"/>
-  <block-list:block block-list:abbreviated-name=":панделка:" block-list:name="🎀"/>
+  <block-list:block block-list:abbreviated-name=":панделка2:" block-list:name="🎀"/>
+  <block-list:block block-list:abbreviated-name=":панделка:" block-list:name="🎗"/>
   <block-list:block block-list:abbreviated-name=":папка2:" block-list:name="📂"/>
+  <block-list:block block-list:abbreviated-name=":папка3:" block-list:name="🗀"/>
+  <block-list:block block-list:abbreviated-name=":папка4:" block-list:name="🗁"/>
+  <block-list:block block-list:abbreviated-name=":папка5:" block-list:name="🖿"/>
   <block-list:block block-list:abbreviated-name=":папка:" block-list:name="📁"/>
   <block-list:block block-list:abbreviated-name=":параграф:" block-list:name="§"/>
-  <block-list:block block-list:abbreviated-name=":парен локомотив:" block-list:name="🚂"/>
+  <block-list:block block-list:abbreviated-name=":пари2:" block-list:name="💰"/>
+  <block-list:block block-list:abbreviated-name=":пари3:" block-list:name="🤑"/>
   <block-list:block block-list:abbreviated-name=":пари:" block-list:name="💸"/>
+  <block-list:block block-list:abbreviated-name=":парк:" block-list:name="🏞"/>
+  <block-list:block block-list:abbreviated-name=":парти2:" block-list:name="🎊"/>
+  <block-list:block block-list:abbreviated-name=":парти3:" block-list:name="🥂"/>
+  <block-list:block block-list:abbreviated-name=":парти4:" block-list:name="🍾"/>
   <block-list:block block-list:abbreviated-name=":партитура:" block-list:name="🎼"/>
   <block-list:block block-list:abbreviated-name=":паспорт:" block-list:name="🛂"/>
+  <block-list:block block-list:abbreviated-name=":пастел:" block-list:name="🖍"/>
+  <block-list:block block-list:abbreviated-name=":патица:" block-list:name="🦆"/>
   <block-list:block block-list:abbreviated-name=":патладжан:" block-list:name="🍆"/>
+  <block-list:block block-list:abbreviated-name=":пауза:" block-list:name="⏸"/>
+  <block-list:block block-list:abbreviated-name=":паяжина:" block-list:name="🕸"/>
+  <block-list:block block-list:abbreviated-name=":паяк:" block-list:name="🕷"/>
   <block-list:block block-list:abbreviated-name=":пейджър:" block-list:name="📟"/>
   <block-list:block block-list:abbreviated-name=":пентаграм:" block-list:name="⛤"/>
+  <block-list:block block-list:abbreviated-name=":пеперуда:" block-list:name="🦋"/>
   <block-list:block block-list:abbreviated-name=":перо2:" block-list:name="✒"/>
   <block-list:block block-list:abbreviated-name=":перо:" block-list:name="✑"/>
   <block-list:block block-list:abbreviated-name=":песо:" block-list:name="₱"/>
@@ -780,6 +1033,7 @@
   <block-list:block block-list:abbreviated-name=":петоъгълник2:" block-list:name="⬟"/>
   <block-list:block block-list:abbreviated-name=":петоъгълник:" block-list:name="⬠"/>
   <block-list:block block-list:abbreviated-name=":пешеходец:" block-list:name="🚶"/>
+  <block-list:block block-list:abbreviated-name=":пешеходци:" block-list:name="🚸"/>
   <block-list:block block-list:abbreviated-name=":пи:" block-list:name="π"/>
   <block-list:block block-list:abbreviated-name=":Пи:" block-list:name="Π"/>
   <block-list:block block-list:abbreviated-name=":пиано:" block-list:name="🎹"/>
@@ -791,33 +1045,51 @@
   <block-list:block block-list:abbreviated-name=":пиленце:" block-list:name="🐣"/>
   <block-list:block block-list:abbreviated-name=":пилешко бутче:" block-list:name="🍗"/>
   <block-list:block block-list:abbreviated-name=":пингвин:" block-list:name="🐧"/>
+  <block-list:block block-list:abbreviated-name=":пинг-понг:" block-list:name="🏓"/>
+  <block-list:block block-list:abbreviated-name=":пипер:" block-list:name="🌶"/>
+  <block-list:block block-list:abbreviated-name=":пират:" block-list:name="🕱"/>
+  <block-list:block block-list:abbreviated-name=":писалка:" block-list:name="🖋"/>
+  <block-list:block block-list:abbreviated-name=":писане2:" block-list:name="🖎"/>
   <block-list:block block-list:abbreviated-name=":писане:" block-list:name="✍"/>
   <block-list:block block-list:abbreviated-name=":пистолет:" block-list:name="🔫"/>
   <block-list:block block-list:abbreviated-name=":писък:" block-list:name="😱"/>
   <block-list:block block-list:abbreviated-name=":питейна вода:" block-list:name="🚰"/>
   <block-list:block block-list:abbreviated-name=":пица:" block-list:name="🍕"/>
   <block-list:block block-list:abbreviated-name=":пищяща котка:" block-list:name="🙀"/>
+  <block-list:block block-list:abbreviated-name=":пк:" block-list:name="🖳"/>
+  <block-list:block block-list:abbreviated-name=":плаж:" block-list:name="🏖"/>
+  <block-list:block block-list:abbreviated-name=":планина2:" block-list:name="🏔"/>
   <block-list:block block-list:abbreviated-name=":планина:" block-list:name="⛰"/>
   <block-list:block block-list:abbreviated-name=":планинска железница:" block-list:name="🚞"/>
   <block-list:block block-list:abbreviated-name=":платноходка:" block-list:name="⛵"/>
   <block-list:block block-list:abbreviated-name=":плач:" block-list:name="😢"/>
   <block-list:block block-list:abbreviated-name=":плачеща котка:" block-list:name="😿"/>
-  <block-list:block block-list:abbreviated-name=":плик2:" block-list:name="📨"/>
-  <block-list:block block-list:abbreviated-name=":плик3:" block-list:name="📩"/>
+  <block-list:block block-list:abbreviated-name=":плик2:" block-list:name="🖃"/>
+  <block-list:block block-list:abbreviated-name=":плик3:" block-list:name="🖂"/>
+  <block-list:block block-list:abbreviated-name=":плик4:" block-list:name="🖆"/>
+  <block-list:block block-list:abbreviated-name=":плик5:" block-list:name="🖄"/>
+  <block-list:block block-list:abbreviated-name=":плик6:" block-list:name="🖅"/>
+  <block-list:block block-list:abbreviated-name=":плик7:" block-list:name="📨"/>
+  <block-list:block block-list:abbreviated-name=":плик8:" block-list:name="📩"/>
   <block-list:block block-list:abbreviated-name=":плик:" block-list:name="✉"/>
   <block-list:block block-list:abbreviated-name=":плувец:" block-list:name="🏊"/>
-  <block-list:block block-list:abbreviated-name=":Плутон:" block-list:name="♇"/>
+  <block-list:block block-list:abbreviated-name=":плутон:" block-list:name="♇"/>
+  <block-list:block block-list:abbreviated-name=":плъзгач:" block-list:name="🎚"/>
   <block-list:block block-list:abbreviated-name=":плъх:" block-list:name="🐀"/>
+  <block-list:block block-list:abbreviated-name=":победа2:" block-list:name="🖔"/>
   <block-list:block block-list:abbreviated-name=":победа:" block-list:name="✌"/>
+  <block-list:block block-list:abbreviated-name=":повръщане:" block-list:name="🤮"/>
   <block-list:block block-list:abbreviated-name=":подарък:" block-list:name="🎁"/>
-  <block-list:block block-list:abbreviated-name=":подвита страница:" block-list:name="📃"/>
   <block-list:block block-list:abbreviated-name=":подмножество:" block-list:name="⊂"/>
   <block-list:block block-list:abbreviated-name=":подсмихване:" block-list:name="😏"/>
   <block-list:block block-list:abbreviated-name=":подсмихната котка:" block-list:name="😼"/>
+  <block-list:block block-list:abbreviated-name=":пожарна2:" block-list:name="🛱"/>
   <block-list:block block-list:abbreviated-name=":пожарна:" block-list:name="🚒"/>
-  <block-list:block block-list:abbreviated-name=":поклон:" block-list:name="🙇"/>
   <block-list:block block-list:abbreviated-name=":поле за отметка 2:" block-list:name="☑"/>
   <block-list:block block-list:abbreviated-name=":поле за отметка 3:" block-list:name="☒"/>
+  <block-list:block block-list:abbreviated-name=":поле за отметка 4:" block-list:name="🗷"/>
+  <block-list:block block-list:abbreviated-name=":поле за отметка 5:" block-list:name="🗹"/>
+  <block-list:block block-list:abbreviated-name=":поле за отметка 6:" block-list:name="🗵"/>
   <block-list:block block-list:abbreviated-name=":поле за отметка:" block-list:name="☐"/>
   <block-list:block block-list:abbreviated-name=":полицай:" block-list:name="👮"/>
   <block-list:block block-list:abbreviated-name=":полицейска кола 2:" block-list:name="🚔"/>
@@ -845,26 +1117,47 @@
   <block-list:block block-list:abbreviated-name=":правоъгълен триъгълник:" block-list:name="⊿"/>
   <block-list:block block-list:abbreviated-name=":правоъгълник2:" block-list:name="▬"/>
   <block-list:block block-list:abbreviated-name=":правоъгълник:" block-list:name="▭"/>
+  <block-list:block block-list:abbreviated-name=":празен документ:" block-list:name="🗋"/>
+  <block-list:block block-list:abbreviated-name=":празна бележка 2:" block-list:name="🗅"/>
+  <block-list:block block-list:abbreviated-name=":празна бележка:" block-list:name="🗆"/>
+  <block-list:block block-list:abbreviated-name=":празна страница:" block-list:name="🗌"/>
+  <block-list:block block-list:abbreviated-name=":празни бележки:" block-list:name="🗇"/>
+  <block-list:block block-list:abbreviated-name=":празник2:" block-list:name="🕄"/>
+  <block-list:block block-list:abbreviated-name=":празник:" block-list:name="🕃"/>
+  <block-list:block block-list:abbreviated-name=":празни страници:" block-list:name="🗍"/>
   <block-list:block block-list:abbreviated-name=":празно множество:" block-list:name="∅"/>
   <block-list:block block-list:abbreviated-name=":прасе2:" block-list:name="🐷"/>
   <block-list:block block-list:abbreviated-name=":прасе:" block-list:name="🐖"/>
   <block-list:block block-list:abbreviated-name=":праскова:" block-list:name="🍑"/>
+  <block-list:block block-list:abbreviated-name=":прегръдка:" block-list:name="🤗"/>
   <block-list:block block-list:abbreviated-name=":предупреждение:" block-list:name="⚠"/>
-  <block-list:block block-list:abbreviated-name=":пресичащи деца:" block-list:name="🚸"/>
+  <block-list:block block-list:abbreviated-name=":претцел:" block-list:name="🥨"/>
   <block-list:block block-list:abbreviated-name=":приблизително равно:" block-list:name="≈"/>
   <block-list:block block-list:abbreviated-name=":призрак:" block-list:name="👻"/>
+  <block-list:block block-list:abbreviated-name=":прилеп:" block-list:name="🦇"/>
+  <block-list:block block-list:abbreviated-name=":прилошаване:" block-list:name="🤢"/>
   <block-list:block block-list:abbreviated-name=":прим:" block-list:name="′"/>
   <block-list:block block-list:abbreviated-name=":примка2:" block-list:name="➿"/>
   <block-list:block block-list:abbreviated-name=":примка:" block-list:name="➰"/>
   <block-list:block block-list:abbreviated-name=":принадлежи на:" block-list:name="∈"/>
+  <block-list:block block-list:abbreviated-name=":принтер2:" block-list:name="🖶"/>
+  <block-list:block block-list:abbreviated-name=":принтер:" block-list:name="🖨"/>
+  <block-list:block block-list:abbreviated-name=":принц:" block-list:name="🤴"/>
   <block-list:block block-list:abbreviated-name=":принцеса:" block-list:name="👸"/>
+  <block-list:block block-list:abbreviated-name=":пристигане:" block-list:name="🛬"/>
+  <block-list:block block-list:abbreviated-name=":проектор:" block-list:name="📽"/>
+  <block-list:block block-list:abbreviated-name=":прозорец:" block-list:name="🗔"/>
   <block-list:block block-list:abbreviated-name=":произведение:" block-list:name="∏"/>
   <block-list:block block-list:abbreviated-name=":промил:" block-list:name="‰"/>
+  <block-list:block block-list:abbreviated-name=":пръст:" block-list:name="🖕"/>
   <block-list:block block-list:abbreviated-name=":пръстен:" block-list:name="💍"/>
   <block-list:block block-list:abbreviated-name=":пси:" block-list:name="ψ"/>
   <block-list:block block-list:abbreviated-name=":Пси:" block-list:name="Ψ"/>
   <block-list:block block-list:abbreviated-name=":птица:" block-list:name="🐦"/>
   <block-list:block block-list:abbreviated-name=":пудел:" block-list:name="🐩"/>
+  <block-list:block block-list:abbreviated-name=":пуйка:" block-list:name="🦃"/>
+  <block-list:block block-list:abbreviated-name=":пуканки:" block-list:name="🍿"/>
+  <block-list:block block-list:abbreviated-name=":пустиня:" block-list:name="🏜"/>
   <block-list:block block-list:abbreviated-name=":пушене:" block-list:name="🚬"/>
   <block-list:block block-list:abbreviated-name=":пушенето забранено:" block-list:name="🚭"/>
   <block-list:block block-list:abbreviated-name=":пчела:" block-list:name="🐝"/>
@@ -874,6 +1167,7 @@
   <block-list:block block-list:abbreviated-name=":първа четвърт:" block-list:name="🌓"/>
   <block-list:block block-list:abbreviated-name=":пържена скарида:" block-list:name="🍤"/>
   <block-list:block block-list:abbreviated-name=":пържени картофки:" block-list:name="🍟"/>
+  <block-list:block block-list:abbreviated-name=":пържола:" block-list:name="🥩"/>
   <block-list:block block-list:abbreviated-name=":пясъчен часовник 2:" block-list:name="⏳"/>
   <block-list:block block-list:abbreviated-name=":пясъчен часовник:" block-list:name="⌛"/>
   <block-list:block block-list:abbreviated-name=":работник:" block-list:name="👷"/>
@@ -887,12 +1181,16 @@
   <block-list:block block-list:abbreviated-name=":размисъл:" block-list:name="😔"/>
   <block-list:block block-list:abbreviated-name=":разочарование:" block-list:name="😞"/>
   <block-list:block block-list:abbreviated-name=":разочарование и облекчение:" block-list:name="😥"/>
-  <block-list:block block-list:abbreviated-name=":Рак:" block-list:name="♋"/>
+  <block-list:block block-list:abbreviated-name=":рак2:" block-list:name="🦀"/>
+  <block-list:block block-list:abbreviated-name=":рак:" block-list:name="♋"/>
   <block-list:block block-list:abbreviated-name=":ракета:" block-list:name="🚀"/>
   <block-list:block block-list:abbreviated-name=":рамен:" block-list:name="🍜"/>
+  <block-list:block block-list:abbreviated-name=":рамка2:" block-list:name="🖽"/>
+  <block-list:block block-list:abbreviated-name=":рамка:" block-list:name="🖾"/>
   <block-list:block block-list:abbreviated-name=":регистрирана марка:" block-list:name="®"/>
   <block-list:block block-list:abbreviated-name=":режим вибрация:" block-list:name="📳"/>
   <block-list:block block-list:abbreviated-name=":режисьорска клапа:" block-list:name="🎬"/>
+  <block-list:block block-list:abbreviated-name=":релси:" block-list:name="🛤"/>
   <block-list:block block-list:abbreviated-name=":ресторант:" block-list:name="🍴"/>
   <block-list:block block-list:abbreviated-name=":рециклирана хартия:" block-list:name="♼"/>
   <block-list:block block-list:abbreviated-name=":рециклиране2:" block-list:name="♻"/>
@@ -900,40 +1198,67 @@
   <block-list:block block-list:abbreviated-name=":риба2:" block-list:name="🐠"/>
   <block-list:block block-list:abbreviated-name=":риба3:" block-list:name="🐡"/>
   <block-list:block block-list:abbreviated-name=":риба:" block-list:name="🐟"/>
-  <block-list:block block-list:abbreviated-name=":Риби:" block-list:name="♓"/>
+  <block-list:block block-list:abbreviated-name=":риби:" block-list:name="♓"/>
   <block-list:block block-list:abbreviated-name=":рибно кюфте:" block-list:name="🍥"/>
   <block-list:block block-list:abbreviated-name=":риболов:" block-list:name="🎣"/>
   <block-list:block block-list:abbreviated-name=":_ро:" block-list:name="ᵨ"/>
   <block-list:block block-list:abbreviated-name=":ро:" block-list:name="ρ"/>
   <block-list:block block-list:abbreviated-name=":Ро:" block-list:name="Ρ"/>
+  <block-list:block block-list:abbreviated-name=":робот:" block-list:name="🤖"/>
+  <block-list:block block-list:abbreviated-name=":рога:" block-list:name="🤘"/>
   <block-list:block block-list:abbreviated-name=":рожден ден:" block-list:name="🎂"/>
   <block-list:block block-list:abbreviated-name=":роза:" block-list:name="🌹"/>
+  <block-list:block block-list:abbreviated-name=":розетка2:" block-list:name="🏶"/>
+  <block-list:block block-list:abbreviated-name=":розетка:" block-list:name="🏵"/>
   <block-list:block block-list:abbreviated-name=":рокля:" block-list:name="👗"/>
   <block-list:block block-list:abbreviated-name=":ромб:" block-list:name="◊"/>
   <block-list:block block-list:abbreviated-name=":ромб с точка:" block-list:name="💠"/>
+  <block-list:block block-list:abbreviated-name=":ругатня:" block-list:name="🤬"/>
   <block-list:block block-list:abbreviated-name=":рупия:" block-list:name="₹"/>
+  <block-list:block block-list:abbreviated-name=":рупор:" block-list:name="📣"/>
   <block-list:block block-list:abbreviated-name=":руса коса:" block-list:name="👱"/>
+  <block-list:block block-list:abbreviated-name=":русалка:" block-list:name="🧜"/>
   <block-list:block block-list:abbreviated-name=":ръгби:" block-list:name="🏉"/>
+  <block-list:block block-list:abbreviated-name=":ръка2:" block-list:name="🖐"/>
+  <block-list:block block-list:abbreviated-name=":ръка3:" block-list:name="🖑"/>
+  <block-list:block block-list:abbreviated-name=":ръка4:" block-list:name="🤚"/>
+  <block-list:block block-list:abbreviated-name=":ръкавици:" block-list:name="🧤"/>
   <block-list:block block-list:abbreviated-name=":ръкопляскане:" block-list:name="👏"/>
+  <block-list:block block-list:abbreviated-name=":ръкостискане:" block-list:name="🤝"/>
   <block-list:block block-list:abbreviated-name=":ръчна чанта:" block-list:name="👜"/>
   <block-list:block block-list:abbreviated-name=":С2:" block-list:name="⇑"/>
   <block-list:block block-list:abbreviated-name=":С:" block-list:name="↑"/>
   <block-list:block block-list:abbreviated-name=":саке:" block-list:name="🍶"/>
   <block-list:block block-list:abbreviated-name=":саксофон:" block-list:name="🎷"/>
+  <block-list:block block-list:abbreviated-name=":салата:" block-list:name="🥗"/>
+  <block-list:block block-list:abbreviated-name=":самолет2:" block-list:name="🛩"/>
+  <block-list:block block-list:abbreviated-name=":самолет3:" block-list:name="🛧"/>
+  <block-list:block block-list:abbreviated-name=":самолет4:" block-list:name="🛨"/>
+  <block-list:block block-list:abbreviated-name=":самолет5:" block-list:name="🛦"/>
+  <block-list:block block-list:abbreviated-name=":самолет6:" block-list:name="🛪"/>
   <block-list:block block-list:abbreviated-name=":самолет:" block-list:name="✈"/>
   <block-list:block block-list:abbreviated-name=":сандал:" block-list:name="👡"/>
-  <block-list:block block-list:abbreviated-name=":сателитна антена:" block-list:name="📡"/>
-  <block-list:block block-list:abbreviated-name=":Сатурн:" block-list:name="♄"/>
+  <block-list:block block-list:abbreviated-name=":сандвич:" block-list:name="🥪"/>
+  <block-list:block block-list:abbreviated-name=":сателит:" block-list:name="🛰"/>
+  <block-list:block block-list:abbreviated-name=":сатурн:" block-list:name="♄"/>
+  <block-list:block block-list:abbreviated-name=":сауна:" block-list:name="🧖"/>
   <block-list:block block-list:abbreviated-name=":сблъсък:" block-list:name="💥"/>
   <block-list:block block-list:abbreviated-name=":сватба:" block-list:name="💒"/>
+  <block-list:block block-list:abbreviated-name=":светкавица:" block-list:name="📸"/>
   <block-list:block block-list:abbreviated-name=":светофар2:" block-list:name="🚦"/>
   <block-list:block block-list:abbreviated-name=":светофар:" block-list:name="🚥"/>
+  <block-list:block block-list:abbreviated-name=":свещ:" block-list:name="🕯"/>
+  <block-list:block block-list:abbreviated-name=":свиване на рамене:" block-list:name="🤷"/>
   <block-list:block block-list:abbreviated-name=":свинска зурла:" block-list:name="🐽"/>
   <block-list:block block-list:abbreviated-name=":свитък:" block-list:name="📜"/>
   <block-list:block block-list:abbreviated-name=":свобода:" block-list:name="🗽"/>
+  <block-list:block block-list:abbreviated-name=":с главата надолу:" block-list:name="🙃"/>
   <block-list:block block-list:abbreviated-name=":седалка:" block-list:name="💺"/>
+  <block-list:block block-list:abbreviated-name=":седмосвещник:" block-list:name="🕎"/>
   <block-list:block block-list:abbreviated-name=":секундомер:" block-list:name="⏱"/>
+  <block-list:block block-list:abbreviated-name=":селфи:" block-list:name="🤳"/>
   <block-list:block block-list:abbreviated-name=":семейство:" block-list:name="👪"/>
+  <block-list:block block-list:abbreviated-name=":сепия:" block-list:name="🦑"/>
   <block-list:block block-list:abbreviated-name=":сечение:" block-list:name="∩"/>
   <block-list:block block-list:abbreviated-name=":СЗ2:" block-list:name="⇖"/>
   <block-list:block block-list:abbreviated-name=":СЗ:" block-list:name="↖"/>
@@ -945,22 +1270,33 @@
   <block-list:block block-list:abbreviated-name=":сила на сигнала:" block-list:name="📶"/>
   <block-list:block block-list:abbreviated-name=":силен звук:" block-list:name="🔊"/>
   <block-list:block block-list:abbreviated-name=":силен плач:" block-list:name="😭"/>
+  <block-list:block block-list:abbreviated-name=":силен смях:" block-list:name="🤣"/>
+  <block-list:block block-list:abbreviated-name=":синагога:" block-list:name="🕍"/>
+  <block-list:block block-list:abbreviated-name=":синтезатор:" block-list:name="🎘"/>
+  <block-list:block block-list:abbreviated-name=":сирене:" block-list:name="🧀"/>
+  <block-list:block block-list:abbreviated-name=":скарида:" block-list:name="🦐"/>
   <block-list:block block-list:abbreviated-name=":ски:" block-list:name="🎿"/>
   <block-list:block block-list:abbreviated-name=":скиор:" block-list:name="⛷"/>
-  <block-list:block block-list:abbreviated-name=":Скорпион:" block-list:name="♏"/>
+  <block-list:block block-list:abbreviated-name=":скорпион2:" block-list:name="🦂"/>
+  <block-list:block block-list:abbreviated-name=":скорпион:" block-list:name="♏"/>
   <block-list:block block-list:abbreviated-name=":скъпоценен камък:" block-list:name="💎"/>
   <block-list:block block-list:abbreviated-name=":сладолед2:" block-list:name="🍨"/>
   <block-list:block block-list:abbreviated-name=":сладолед:" block-list:name="🍦"/>
   <block-list:block block-list:abbreviated-name=":сладък картоф:" block-list:name="🍠"/>
   <block-list:block block-list:abbreviated-name=":след пълнолуние:" block-list:name="🌖"/>
   <block-list:block block-list:abbreviated-name=":слон:" block-list:name="🐘"/>
+  <block-list:block block-list:abbreviated-name=":слушалка2:" block-list:name="🕻"/>
+  <block-list:block block-list:abbreviated-name=":слушалка3:" block-list:name="🕽"/>
+  <block-list:block block-list:abbreviated-name=":слушалка4:" block-list:name="🕼"/>
   <block-list:block block-list:abbreviated-name=":слушалка:" block-list:name="📞"/>
   <block-list:block block-list:abbreviated-name=":слушалки:" block-list:name="🎧"/>
+  <block-list:block block-list:abbreviated-name=":слънце2:" block-list:name="🌣"/>
   <block-list:block block-list:abbreviated-name=":Слънце2:" block-list:name="☼"/>
   <block-list:block block-list:abbreviated-name=":слънце:" block-list:name="🌞"/>
   <block-list:block block-list:abbreviated-name=":Слънце:" block-list:name="☉"/>
   <block-list:block block-list:abbreviated-name=":слънчево:" block-list:name="☀"/>
   <block-list:block block-list:abbreviated-name=":слънчоглед:" block-list:name="🌻"/>
+  <block-list:block block-list:abbreviated-name=":слюнка:" block-list:name="🤤"/>
   <block-list:block block-list:abbreviated-name=":смутена усмивка:" block-list:name="😊"/>
   <block-list:block block-list:abbreviated-name=":смущение:" block-list:name="😕"/>
   <block-list:block block-list:abbreviated-name=":смях:" block-list:name="😆"/>
@@ -968,56 +1304,84 @@
   <block-list:block block-list:abbreviated-name=":снежен човек:" block-list:name="☃"/>
   <block-list:block block-list:abbreviated-name=":снежинка:" block-list:name="❄"/>
   <block-list:block block-list:abbreviated-name=":сноубордист:" block-list:name="🏂"/>
+  <block-list:block block-list:abbreviated-name=":сняг:" block-list:name="🌨"/>
+  <block-list:block block-list:abbreviated-name=":сова:" block-list:name="🦉"/>
   <block-list:block block-list:abbreviated-name=":спагети:" block-list:name="🍝"/>
   <block-list:block block-list:abbreviated-name=":спане:" block-list:name="😴"/>
   <block-list:block block-list:abbreviated-name=":спатия2:" block-list:name="♧"/>
   <block-list:block block-list:abbreviated-name=":спатия:" block-list:name="♣"/>
   <block-list:block block-list:abbreviated-name=":спирка:" block-list:name="🚏"/>
+  <block-list:block block-list:abbreviated-name=":спок:" block-list:name="🖖"/>
   <block-list:block block-list:abbreviated-name=":спринцовка:" block-list:name="💉"/>
+  <block-list:block block-list:abbreviated-name=":сребро:" block-list:name="🥈"/>
   <block-list:block block-list:abbreviated-name=":среден квадрат 2:" block-list:name="◼"/>
   <block-list:block block-list:abbreviated-name=":среден квадрат:" block-list:name="◻"/>
   <block-list:block block-list:abbreviated-name=":средна звезда:" block-list:name="⭐"/>
+  <block-list:block block-list:abbreviated-name=":стадион:" block-list:name="🏟"/>
+  <block-list:block block-list:abbreviated-name=":старец:" block-list:name="🧓"/>
   <block-list:block block-list:abbreviated-name=":статуя:" block-list:name="🗿"/>
+  <block-list:block block-list:abbreviated-name=":стереоуредба:" block-list:name="📾"/>
+  <block-list:block block-list:abbreviated-name=":стоп2:" block-list:name="⏹"/>
+  <block-list:block block-list:abbreviated-name=":стоп:" block-list:name="🛑"/>
+  <block-list:block block-list:abbreviated-name=":страница2:" block-list:name="🗏"/>
+  <block-list:block block-list:abbreviated-name=":страница3:" block-list:name="📃"/>
+  <block-list:block block-list:abbreviated-name=":страница4:" block-list:name="🗟"/>
   <block-list:block block-list:abbreviated-name=":страница:" block-list:name="📄"/>
+  <block-list:block block-list:abbreviated-name=":страници:" block-list:name="🗐"/>
   <block-list:block block-list:abbreviated-name=":страх:" block-list:name="😨"/>
-  <block-list:block block-list:abbreviated-name=":Стрелец:" block-list:name="♐"/>
+  <block-list:block block-list:abbreviated-name=":стрелец:" block-list:name="♐"/>
+  <block-list:block block-list:abbreviated-name=":стрелки:" block-list:name="🗘"/>
   <block-list:block block-list:abbreviated-name=":строеж:" block-list:name="🚧"/>
   <block-list:block block-list:abbreviated-name=":стръкче:" block-list:name="🌱"/>
   <block-list:block block-list:abbreviated-name=":студена пот:" block-list:name="😰"/>
   <block-list:block block-list:abbreviated-name=":стъпки:" block-list:name="👣"/>
+  <block-list:block block-list:abbreviated-name=":стяга:" block-list:name="🗜"/>
   <block-list:block block-list:abbreviated-name=":сума:" block-list:name="∑"/>
+  <block-list:block block-list:abbreviated-name=":супа:" block-list:name="🥣"/>
   <block-list:block block-list:abbreviated-name=":суши:" block-list:name="🍣"/>
   <block-list:block block-list:abbreviated-name=":счетоводна книга:" block-list:name="📒"/>
   <block-list:block block-list:abbreviated-name=":съдържа:" block-list:name="∋"/>
   <block-list:block block-list:abbreviated-name=":сън:" block-list:name="💤"/>
   <block-list:block block-list:abbreviated-name=":сънливост:" block-list:name="😪"/>
+  <block-list:block block-list:abbreviated-name=":сърна:" block-list:name="🦌"/>
   <block-list:block block-list:abbreviated-name=":сърп и чук:" block-list:name="☭"/>
   <block-list:block block-list:abbreviated-name=":сърфист:" block-list:name="🏄"/>
+  <block-list:block block-list:abbreviated-name=":сърце2:" block-list:name="🎔"/>
   <block-list:block block-list:abbreviated-name=":сърце:" block-list:name="❤"/>
   <block-list:block block-list:abbreviated-name=":сърцебиене:" block-list:name="💓"/>
   <block-list:block block-list:abbreviated-name=":сърце подарък:" block-list:name="💝"/>
   <block-list:block block-list:abbreviated-name=":сърце с искри:" block-list:name="💖"/>
   <block-list:block block-list:abbreviated-name=":сърце украса:" block-list:name="💟"/>
+  <block-list:block block-list:abbreviated-name=":състезание:" block-list:name="🏁"/>
   <block-list:block block-list:abbreviated-name=":съществува:" block-list:name="∃"/>
   <block-list:block block-list:abbreviated-name=":СЮ2:" block-list:name="⇕"/>
   <block-list:block block-list:abbreviated-name=":СЮ:" block-list:name="↕"/>
   <block-list:block block-list:abbreviated-name=":таймер:" block-list:name="⏲"/>
+  <block-list:block block-list:abbreviated-name=":тако:" block-list:name="🌮"/>
   <block-list:block block-list:abbreviated-name=":такси2:" block-list:name="🚖"/>
   <block-list:block block-list:abbreviated-name=":такси:" block-list:name="🚕"/>
   <block-list:block block-list:abbreviated-name=":танабата:" block-list:name="🎋"/>
+  <block-list:block block-list:abbreviated-name=":танцьор2:" block-list:name="🕺"/>
   <block-list:block block-list:abbreviated-name=":танцьор:" block-list:name="💃"/>
+  <block-list:block block-list:abbreviated-name=":таралеж:" block-list:name="🦔"/>
   <block-list:block block-list:abbreviated-name=":тау:" block-list:name="τ"/>
   <block-list:block block-list:abbreviated-name=":Тау:" block-list:name="Τ"/>
+  <block-list:block block-list:abbreviated-name=":твърд диск:" block-list:name="🖴"/>
   <block-list:block block-list:abbreviated-name=":театър:" block-list:name="🎭"/>
+  <block-list:block block-list:abbreviated-name=":тежкоатлет:" block-list:name="🏋"/>
   <block-list:block block-list:abbreviated-name=":телевизор:" block-list:name="📺"/>
   <block-list:block block-list:abbreviated-name=":телескоп:" block-list:name="🔭"/>
   <block-list:block block-list:abbreviated-name=":телефон2:" block-list:name="☏"/>
+  <block-list:block block-list:abbreviated-name=":телефон3:" block-list:name="🕾"/>
+  <block-list:block block-list:abbreviated-name=":телефон4:" block-list:name="🕿"/>
   <block-list:block block-list:abbreviated-name=":телефон:" block-list:name="☎"/>
   <block-list:block block-list:abbreviated-name=":телефонна слушалка:" block-list:name="✆"/>
-  <block-list:block block-list:abbreviated-name=":Телец:" block-list:name="♉"/>
+  <block-list:block block-list:abbreviated-name=":телец:" block-list:name="♉"/>
   <block-list:block block-list:abbreviated-name=":тенис:" block-list:name="🎾"/>
   <block-list:block block-list:abbreviated-name=":тениска2:" block-list:name="🎽"/>
   <block-list:block block-list:abbreviated-name=":тениска:" block-list:name="👕"/>
+  <block-list:block block-list:abbreviated-name=":термометър2:" block-list:name="🤒"/>
+  <block-list:block block-list:abbreviated-name=":термометър:" block-list:name="🌡"/>
   <block-list:block block-list:abbreviated-name=":^тета:" block-list:name="ᶿ"/>
   <block-list:block block-list:abbreviated-name=":тета:" block-list:name="θ"/>
   <block-list:block block-list:abbreviated-name=":Тета:" block-list:name="Θ"/>
@@ -1027,11 +1391,11 @@
   <block-list:block block-list:abbreviated-name=":тоалетна3:" block-list:name="🚻"/>
   <block-list:block block-list:abbreviated-name=":тоалетна:" block-list:name="🚽"/>
   <block-list:block block-list:abbreviated-name=":топка:" block-list:name="⛹"/>
-  <block-list:block block-list:abbreviated-name=":топка с конфети:" block-list:name="🎊"/>
-  <block-list:block block-list:abbreviated-name=":торба с пари:" block-list:name="💰"/>
+  <block-list:block block-list:abbreviated-name=":торнадо:" block-list:name="🌪"/>
   <block-list:block block-list:abbreviated-name=":торта:" block-list:name="🍰"/>
   <block-list:block block-list:abbreviated-name=":точка в средата:" block-list:name="·"/>
   <block-list:block block-list:abbreviated-name=":точка за списък:" block-list:name="•"/>
+  <block-list:block block-list:abbreviated-name=":тракбол:" block-list:name="🖲"/>
   <block-list:block block-list:abbreviated-name=":трактор:" block-list:name="🚜"/>
   <block-list:block block-list:abbreviated-name=":трамвай2:" block-list:name="🚋"/>
   <block-list:block block-list:abbreviated-name=":трамвай:" block-list:name="🚊"/>
@@ -1042,22 +1406,27 @@
   <block-list:block block-list:abbreviated-name=":триумф:" block-list:name="😤"/>
   <block-list:block block-list:abbreviated-name=":триъгълен флаг:" block-list:name="🚩"/>
   <block-list:block block-list:abbreviated-name=":триъгълник2:" block-list:name="▲"/>
+  <block-list:block block-list:abbreviated-name=":триъгълник3:" block-list:name="🛆"/>
   <block-list:block block-list:abbreviated-name=":триъгълник:" block-list:name="△"/>
   <block-list:block block-list:abbreviated-name=":триъгълник за списък:" block-list:name="‣"/>
   <block-list:block block-list:abbreviated-name=":тролейбус:" block-list:name="🚎"/>
   <block-list:block block-list:abbreviated-name=":тромпет:" block-list:name="🎺"/>
+  <block-list:block block-list:abbreviated-name=":тротинетка:" block-list:name="🛴"/>
   <block-list:block block-list:abbreviated-name=":трофей:" block-list:name="🏆"/>
   <block-list:block block-list:abbreviated-name=":турска лира:" block-list:name="₺"/>
-  <block-list:block block-list:abbreviated-name=":тъмни очила:" block-list:name="😎"/>
+  <block-list:block block-list:abbreviated-name=":тъмни очила 2:" block-list:name="😎"/>
+  <block-list:block block-list:abbreviated-name=":тъмни очила:" block-list:name="🕶"/>
   <block-list:block block-list:abbreviated-name=":търговска марка:" block-list:name="™"/>
   <block-list:block block-list:abbreviated-name=":тържествуване:" block-list:name="🙌"/>
   <block-list:block block-list:abbreviated-name=":тюрбан:" block-list:name="👳"/>
   <block-list:block block-list:abbreviated-name=":увеселително влакче:" block-list:name="🎢"/>
   <block-list:block block-list:abbreviated-name=":умножение2:" block-list:name="✖"/>
   <block-list:block block-list:abbreviated-name=":умора:" block-list:name="😫"/>
-  <block-list:block block-list:abbreviated-name=":Уран:" block-list:name="♅"/>
+  <block-list:block block-list:abbreviated-name=":уран:" block-list:name="♅"/>
   <block-list:block block-list:abbreviated-name=":урна:" block-list:name="⚱"/>
   <block-list:block block-list:abbreviated-name=":усмивка2:" block-list:name="☻"/>
+  <block-list:block block-list:abbreviated-name=":усмивка3:" block-list:name="🙂"/>
+  <block-list:block block-list:abbreviated-name=":усмивка4:" block-list:name="🤭"/>
   <block-list:block block-list:abbreviated-name=":усмивка:" block-list:name="☺"/>
   <block-list:block block-list:abbreviated-name=":усмихната котка 2:" block-list:name="😺"/>
   <block-list:block block-list:abbreviated-name=":усмихната котка:" block-list:name="😸"/>
@@ -1068,47 +1437,66 @@
   <block-list:block block-list:abbreviated-name=":успоредник:" block-list:name="▱"/>
   <block-list:block block-list:abbreviated-name=":успоредно на:" block-list:name="∥"/>
   <block-list:block block-list:abbreviated-name=":уста:" block-list:name="👄"/>
+  <block-list:block block-list:abbreviated-name=":устни:" block-list:name="🗢"/>
   <block-list:block block-list:abbreviated-name=":ухилване:" block-list:name="😁"/>
   <block-list:block block-list:abbreviated-name=":ухилено лице:" block-list:name="😀"/>
   <block-list:block block-list:abbreviated-name=":ухо:" block-list:name="👂"/>
   <block-list:block block-list:abbreviated-name=":ученическа чанта:" block-list:name="🎒"/>
   <block-list:block block-list:abbreviated-name=":училище:" block-list:name="🏫"/>
   <block-list:block block-list:abbreviated-name=":фабрика:" block-list:name="🏭"/>
+  <block-list:block block-list:abbreviated-name=":факс2:" block-list:name="🖷"/>
   <block-list:block block-list:abbreviated-name=":факс:" block-list:name="📠"/>
   <block-list:block block-list:abbreviated-name=":Фарси:" block-list:name="☫"/>
   <block-list:block block-list:abbreviated-name=":фенер:" block-list:name="🏮"/>
   <block-list:block block-list:abbreviated-name=":фенерче:" block-list:name="🔦"/>
   <block-list:block block-list:abbreviated-name=":ферибот:" block-list:name="⛴"/>
+  <block-list:block block-list:abbreviated-name=":фехтовач:" block-list:name="🤺"/>
+  <block-list:block block-list:abbreviated-name=":фея:" block-list:name="🧚"/>
   <block-list:block block-list:abbreviated-name=":^фи:" block-list:name="ᵠ"/>
   <block-list:block block-list:abbreviated-name=":_фи:" block-list:name="ᵩ"/>
   <block-list:block block-list:abbreviated-name=":^Фи:" block-list:name="ᶲ"/>
   <block-list:block block-list:abbreviated-name=":фи:" block-list:name="φ"/>
   <block-list:block block-list:abbreviated-name=":Фи:" block-list:name="Φ"/>
+  <block-list:block block-list:abbreviated-name=":филм:" block-list:name="🎞"/>
   <block-list:block block-list:abbreviated-name=":фойерверки:" block-list:name="🎆"/>
   <block-list:block block-list:abbreviated-name=":фонтан:" block-list:name="⛲"/>
   <block-list:block block-list:abbreviated-name=":фотоапарат:" block-list:name="📷"/>
+  <block-list:block block-list:abbreviated-name=":франзела:" block-list:name="🥖"/>
   <block-list:block block-list:abbreviated-name=":фризьор:" block-list:name="💇"/>
   <block-list:block block-list:abbreviated-name=":Фуджи:" block-list:name="🗻"/>
+  <block-list:block block-list:abbreviated-name=":футбол2:" block-list:name="🥅"/>
   <block-list:block block-list:abbreviated-name=":футбол:" block-list:name="⚽"/>
+  <block-list:block block-list:abbreviated-name=":фъстъци:" block-list:name="🥜"/>
   <block-list:block block-list:abbreviated-name=":хамбургер:" block-list:name="🍔"/>
   <block-list:block block-list:abbreviated-name=":хамстер:" block-list:name="🐹"/>
+  <block-list:block block-list:abbreviated-name=":хандбал:" block-list:name="🤾"/>
   <block-list:block block-list:abbreviated-name=":хапче:" block-list:name="💊"/>
+  <block-list:block block-list:abbreviated-name=":хващане за главата:" block-list:name="🤦"/>
   <block-list:block block-list:abbreviated-name=":хеликоптер:" block-list:name="🚁"/>
-  <block-list:block block-list:abbreviated-name=":Хелоуин:" block-list:name="🎃"/>
+  <block-list:block block-list:abbreviated-name=":хелоуин:" block-list:name="🎃"/>
   <block-list:block block-list:abbreviated-name=":хералдическа лилия:" block-list:name="⚜"/>
   <block-list:block block-list:abbreviated-name=":^хи:" block-list:name="ᵡ"/>
   <block-list:block block-list:abbreviated-name=":_хи:" block-list:name="ᵪ"/>
   <block-list:block block-list:abbreviated-name=":хи:" block-list:name="χ"/>
   <block-list:block block-list:abbreviated-name=":Хи:" block-list:name="Χ"/>
   <block-list:block block-list:abbreviated-name=":хибискус:" block-list:name="🌺"/>
+  <block-list:block block-list:abbreviated-name=":химикалка:" block-list:name="🖊"/>
   <block-list:block block-list:abbreviated-name=":хлъзгав път:" block-list:name="⛐"/>
   <block-list:block block-list:abbreviated-name=":хляб:" block-list:name="🍞"/>
   <block-list:block block-list:abbreviated-name=":ходила:" block-list:name="🐾"/>
+  <block-list:block block-list:abbreviated-name=":хокей2:" block-list:name="🏑"/>
+  <block-list:block block-list:abbreviated-name=":хокей:" block-list:name="🏒"/>
+  <block-list:block block-list:abbreviated-name=":хотдог:" block-list:name="🌭"/>
   <block-list:block block-list:abbreviated-name=":хотел2:" block-list:name="🏩"/>
   <block-list:block block-list:abbreviated-name=":хотел:" block-list:name="🏨"/>
+  <block-list:block block-list:abbreviated-name=":храм:" block-list:name="🛐"/>
+  <block-list:block block-list:abbreviated-name=":храна:" block-list:name="🥘"/>
+  <block-list:block block-list:abbreviated-name=":храна за вкъщи:" block-list:name="🥡"/>
   <block-list:block block-list:abbreviated-name=":хризма:" block-list:name="☧"/>
   <block-list:block block-list:abbreviated-name=":царевица:" block-list:name="🌽"/>
+  <block-list:block block-list:abbreviated-name=":цвете2:" block-list:name="🥀"/>
   <block-list:block block-list:abbreviated-name=":цвете:" block-list:name="⚘"/>
+  <block-list:block block-list:abbreviated-name=":цветче2:" block-list:name="🌸"/>
   <block-list:block block-list:abbreviated-name=":цветче:" block-list:name="🌼"/>
   <block-list:block block-list:abbreviated-name=":целуване:" block-list:name="😗"/>
   <block-list:block block-list:abbreviated-name=":целуваща котка:" block-list:name="😽"/>
@@ -1133,6 +1521,8 @@
   <block-list:block block-list:abbreviated-name=":чантичка:" block-list:name="👝"/>
   <block-list:block block-list:abbreviated-name=":часовник:" block-list:name="⌚"/>
   <block-list:block block-list:abbreviated-name=":частна производна:" block-list:name="∂"/>
+  <block-list:block block-list:abbreviated-name=":чаша3:" block-list:name="🥃"/>
+  <block-list:block block-list:abbreviated-name=":чаша:" block-list:name="🍷"/>
   <block-list:block block-list:abbreviated-name=":червило:" block-list:name="💄"/>
   <block-list:block block-list:abbreviated-name=":черен кон:" block-list:name="♞"/>
   <block-list:block block-list:abbreviated-name=":черен кръг:" block-list:name="⚫"/>
@@ -1142,23 +1532,34 @@
   <block-list:block block-list:abbreviated-name=":череп:" block-list:name="💀"/>
   <block-list:block block-list:abbreviated-name=":черна пешка:" block-list:name="♟"/>
   <block-list:block block-list:abbreviated-name=":черна царица:" block-list:name="♛"/>
+  <block-list:block block-list:abbreviated-name=":черно сърце:" block-list:name="🖤"/>
   <block-list:block block-list:abbreviated-name=":четвърти корен:" block-list:name="∜"/>
   <block-list:block block-list:abbreviated-name=":четвъртина нота:" block-list:name="𝅘𝅥"/>
   <block-list:block block-list:abbreviated-name=":четвъртина пауза:" block-list:name="𝄽"/>
+  <block-list:block block-list:abbreviated-name=":четка:" block-list:name="🖌"/>
+  <block-list:block block-list:abbreviated-name=":чиния:" block-list:name="🍽"/>
+  <block-list:block block-list:abbreviated-name=":чорапи:" block-list:name="🧦"/>
   <block-list:block block-list:abbreviated-name=":чудовище:" block-list:name="👹"/>
   <block-list:block block-list:abbreviated-name=":чук:" block-list:name="🔨"/>
   <block-list:block block-list:abbreviated-name=":чук и кирка:" block-list:name="⚒"/>
+  <block-list:block block-list:abbreviated-name=":шал:" block-list:name="🧣"/>
   <block-list:block block-list:abbreviated-name=":шапка2:" block-list:name="👲"/>
   <block-list:block block-list:abbreviated-name=":шапка:" block-list:name="👒"/>
+  <block-list:block block-list:abbreviated-name=":шейна:" block-list:name="🛷"/>
   <block-list:block block-list:abbreviated-name=":шекел:" block-list:name="₪"/>
   <block-list:block block-list:abbreviated-name=":шестнадесетина нота:" block-list:name="𝅘𝅥𝅯"/>
   <block-list:block block-list:abbreviated-name=":шестоъгълник2:" block-list:name="⬢"/>
   <block-list:block block-list:abbreviated-name=":шестоъгълник:" block-list:name="⬡"/>
   <block-list:block block-list:abbreviated-name=":шок:" block-list:name="😧"/>
   <block-list:block block-list:abbreviated-name=":шоколад:" block-list:name="🍫"/>
+  <block-list:block block-list:abbreviated-name=":шрифт2:" block-list:name="🗚"/>
+  <block-list:block block-list:abbreviated-name=":шрифт:" block-list:name="🗛"/>
+  <block-list:block block-list:abbreviated-name=":шъткане:" block-list:name="🤫"/>
   <block-list:block block-list:abbreviated-name=":щастие:" block-list:name="🙋"/>
   <block-list:block block-list:abbreviated-name=":щепсел:" block-list:name="🔌"/>
-  <block-list:block block-list:abbreviated-name=":щит:" block-list:name="⛨"/>
+  <block-list:block block-list:abbreviated-name=":щит2:" block-list:name="⛨"/>
+  <block-list:block block-list:abbreviated-name=":щит:" block-list:name="🛡"/>
+  <block-list:block block-list:abbreviated-name=":щурец:" block-list:name="🦗"/>
   <block-list:block block-list:abbreviated-name=":ъгъл2:" block-list:name="∡"/>
   <block-list:block block-list:abbreviated-name=":ъгъл:" block-list:name="∠"/>
   <block-list:block block-list:abbreviated-name=":Ю2:" block-list:name="⇓"/>
@@ -1168,11 +1569,13 @@
   <block-list:block block-list:abbreviated-name=":ЮИ2:" block-list:name="⇘"/>
   <block-list:block block-list:abbreviated-name=":ЮИ:" block-list:name="↘"/>
   <block-list:block block-list:abbreviated-name=":юмрук2:" block-list:name="👊"/>
+  <block-list:block block-list:abbreviated-name=":юмрук3:" block-list:name="🤛"/>
+  <block-list:block block-list:abbreviated-name=":юмрук4:" block-list:name="🤜"/>
   <block-list:block block-list:abbreviated-name=":юмрук:" block-list:name="✊"/>
-  <block-list:block block-list:abbreviated-name=":Юпитер:" block-list:name="♃"/>
+  <block-list:block block-list:abbreviated-name=":юпитер:" block-list:name="♃"/>
   <block-list:block block-list:abbreviated-name=":ябълка:" block-list:name="🍎"/>
   <block-list:block block-list:abbreviated-name=":ягода:" block-list:name="🍓"/>
-  <block-list:block block-list:abbreviated-name=":яйце:" block-list:name="🍳"/>
+  <block-list:block block-list:abbreviated-name=":яйце:" block-list:name="🥚"/>
   <block-list:block block-list:abbreviated-name=":яйчен крем:" block-list:name="🍮"/>
   <block-list:block block-list:abbreviated-name=":Япония:" block-list:name="🗾"/>
   <block-list:block block-list:abbreviated-name=":яркост2:" block-list:name="🔆"/>
