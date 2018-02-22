@@ -565,6 +565,31 @@ void ScTable::CopyCellToDocument(SCCOL nSrcCol, SCROW nSrcRow, SCCOL nDestCol, S
     rSrcCol.CopyCellToDocument(nSrcRow, nDestRow, rDestCol);
 }
 
+namespace {
+
+bool CheckAndDeduplicateCondFormat(ScDocument* pDocument, ScConditionalFormat* pOldFormat, ScConditionalFormat* pNewFormat, SCTAB nTab)
+{
+    if (!pOldFormat)
+        return false;
+
+    if (pOldFormat->EqualEntries(*pNewFormat, true))
+    {
+        pDocument->RemoveCondFormatData(pOldFormat->GetRange(), nTab, pOldFormat->GetKey());
+        const ScRangeList& rNewRangeList = pNewFormat->GetRange();
+        ScRangeList& rDstRangeList = pOldFormat->GetRangeList();
+        for (size_t i = 0; i < rNewRangeList.size(); ++i)
+        {
+            rDstRangeList.Join(*rNewRangeList[i]);
+        }
+        pDocument->AddCondFormatData(pOldFormat->GetRange(), nTab, pOldFormat->GetKey());
+        return true;
+    }
+
+    return false;
+}
+
+}
+
 void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         SCCOL nDx, SCROW nDy, const ScTable* pTable)
 {
@@ -591,6 +616,11 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         aRefCxt.mnTabDelta = nTab - pTable->nTab;
         pNewFormat->UpdateReference(aRefCxt, true);
 
+        if (bSameDoc && pTable->nTab == nTab && CheckAndDeduplicateCondFormat(pDocument, mpCondFormatList->GetFormat((*itr)->GetKey()), pNewFormat, nTab))
+        {
+            delete pNewFormat;
+            continue;
+        }
         sal_uLong nMax = 0;
         bool bDuplicate = false;
         for(ScConditionalFormatList::const_iterator itrCond = mpCondFormatList->begin();
@@ -598,17 +628,9 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         {
             // Check if there is the same format in the destination
             // If there is, then simply expand its range
-            if ((*itrCond)->EqualEntries(*pNewFormat, true))
+            if (CheckAndDeduplicateCondFormat(pDocument, (*itrCond).get(), pNewFormat, nTab))
             {
                 bDuplicate = true;
-                pDocument->RemoveCondFormatData((*itrCond)->GetRange(), nTab, (*itrCond)->GetKey());
-                const ScRangeList& rNewRangeList = pNewFormat->GetRange();
-                ScRangeList& rDstRangeList = (*itrCond)->GetRangeList();
-                for (size_t i = 0; i < rNewRangeList.size(); ++i)
-                {
-                    rDstRangeList.Join(*rNewRangeList[i]);
-                }
-                pDocument->AddCondFormatData((*itrCond)->GetRange(), nTab, (*itrCond)->GetKey());
                 break;
             }
 
