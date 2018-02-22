@@ -106,6 +106,12 @@ bool SalGraphics::drawTransformedBitmap(
     return false;
 }
 
+long SalGraphics::mirror2( long x, const OutputDevice *pOutDev ) const
+{
+    mirror(x, pOutDev);
+    return x;
+}
+
 void SalGraphics::mirror( long& x, const OutputDevice *pOutDev ) const
 {
     long w;
@@ -647,7 +653,7 @@ bool SalGraphics::HitTestNativeScrollbar( ControlPart nPart, const tools::Rectan
     {
         Point pt( aPos );
         tools::Rectangle rgn( rControlRegion );
-        mirror( pt.X(), pOutDev );
+        pt.setX( mirror2( pt.X(), pOutDev ) );
         mirror( rgn, pOutDev );
         return hitTestNativeControl( ControlType::Scrollbar, nPart, rgn, pt, rIsInside );
     }

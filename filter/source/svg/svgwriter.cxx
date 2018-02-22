@@ -2250,7 +2250,8 @@ void SVGActionWriter::ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPo
                 // Setting x value of a gradient vector to rotation center to
                 // place a gradient vector in a target polygon.
                 // This would help editing it in SVG editors like inkscape.
-                aPoly[ 0 ].X() = aPoly[ 1 ].X() = aCenter.X();
+                aPoly[ 0 ].setX( aCenter.X() );
+                aPoly[ 1 ].setX( aCenter.X() );
                 aPoly[ 0 ].setY( aRect.Top() );
                 aPoly[ 1 ].setY( aRect.Bottom() );
                 aPoly.Rotate( aCenter, nAngle );

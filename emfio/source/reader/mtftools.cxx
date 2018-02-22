@@ -1566,13 +1566,13 @@ namespace emfio
             if ( mnTextAlign & TA_RIGHT_CENTER )
             {
                 Point aDisplacement( ( ( mnTextAlign & TA_RIGHT_CENTER ) == TA_RIGHT ) ? nTextWidth : nTextWidth >> 1, 0 );
-                Point().RotateAround(aDisplacement.X(), aDisplacement.Y(), maFont.GetOrientation());
+                Point().RotateAround(aDisplacement, maFont.GetOrientation());
                 rPosition -= aDisplacement;
             }
 
             if( mnTextAlign & TA_UPDATECP )
             {
-                Point().RotateAround(aActPosDelta.X(), aActPosDelta.Y(), maFont.GetOrientation());
+                Point().RotateAround(aActPosDelta, maFont.GetOrientation());
                 maActPos = rPosition + aActPosDelta;
             }
         }
@@ -1595,7 +1595,7 @@ namespace emfio
                 for (sal_Int32 i = 0; i < rText.getLength(); ++i)
                 {
                     Point aCharDisplacement( i ? pDXArry[i-1] : 0, i ? pDYArry[i-1] : 0 );
-                    Point().RotateAround(aCharDisplacement.X(), aCharDisplacement.Y(), maFont.GetOrientation());
+                    Point().RotateAround(aCharDisplacement, maFont.GetOrientation());
                     mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition + aCharDisplacement, OUString( rText[i] ), nullptr, 0, 1 ) );
                 }
             }
