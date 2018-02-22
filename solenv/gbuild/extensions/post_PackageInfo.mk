@@ -69,6 +69,9 @@ define gb_PackageInfo_emit_l10n_for_one_lang
 $(if $(filter-out qtz en-US,$(1)),$(foreach packagedir,$(patsubst %/,%,$(gb_AllLangPackage_ALLDIRS)),$(call gb_PackageInfo_emit_l10n_for_one_alllangpackage,$(packagedir),$(1))))
 $(if $(filter $(gb_AllLangMoTarget_LANGS),$(1)),$(foreach target,$(gb_AllLangMoTarget_REGISTERED),$(call gb_PackageInfo_emit_l10n_for_one_mo,$(target),$(1))))
 $(if $(filter $(gb_Configuration_LANGS),$(1)),$(foreach configfile,Langpack- res/fcfg_langpack_ res/registry_,$(call gb_PackageInfo_emit_l10n_for_one_configfile,$(1),$(configfile))))
+$(if $(filter $(gb_CJK_LANGS),$(1)),$(foreach configfile,cjk_,$(call gb_PackageInfo_emit_l10n_for_one_configfile,$(1),$(configfile))))
+$(if $(filter $(gb_CTL_LANGS),$(1)),$(foreach configfile,ctl_,$(call gb_PackageInfo_emit_l10n_for_one_configfile,$(1),$(configfile))))
+$(if $(filter $(gb_CTLSEQCHECK_LANGS),$(1)),$(foreach configfile,ctlseqcheck_,$(call gb_PackageInfo_emit_l10n_for_one_configfile,$(1),$(configfile))))
 @echo "$(foreach suf,executables libraries files,$(gb_PackageInfo_get_target)/l10n-$(1).$(suf)) \\" >> $(WORKDIR)/Dep/packageinfo.d
 
 endef
