@@ -187,6 +187,10 @@ int ImplSVMain()
 
     bool bInit = isInitVCL() || InitVCL();
 
+#ifdef MACOSX
+    postInitVCLinitNSApp();
+#endif
+
     if( bInit )
     {
         // call application main
