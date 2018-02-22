@@ -146,6 +146,7 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/misc/titlepage \
     sw/source/ui/table/colwd \
     sw/source/ui/table/convert \
+    sw/source/ui/table/autoformatpreview \
     sw/source/ui/table/instable \
     sw/source/ui/table/mergetbl \
     sw/source/ui/table/rowht \
