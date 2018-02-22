@@ -911,7 +911,8 @@ tools::Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, bool bSpecial, 
 
     // search within the line
     long nX = ImpGetXPos( rPaM.GetPara(), pLine, rPaM.GetIndex(), bPreferPortionStart );
-    aEditCursor.Left() = aEditCursor.Right() = nX;
+    aEditCursor.SetLeft(nX);
+    aEditCursor.SetRight(nX);
     return aEditCursor;
 }
 

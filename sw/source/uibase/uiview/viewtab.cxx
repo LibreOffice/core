@@ -2067,7 +2067,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         aRectangle.AdjustLeft(aRect.Left() );
                     }
                     if(pFormat) // Range in frame - here you may up to the edge
-                        aRectangle.Left()  = aRectangle.Right() = 0;
+                    {
+                        aRectangle.SetLeft(0);
+                        aRectangle.SetRight(0);
+                    }
                     else
                     {
                         // Move the rectangle to the correct absolute position.
@@ -2210,7 +2213,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 aRectangle.SetRight( aPageLRSpace.GetRight() );
             }
             else
-                aRectangle.Left()  = aRectangle.Right() = 0;
+            {
+                aRectangle.SetLeft(0);
+                aRectangle.SetRight(0);
+            }
 
             SfxRectangleItem aLR( SID_RULER_LR_MIN_MAX , aRectangle);
             rSet.Put(aLR);

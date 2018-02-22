@@ -272,9 +272,9 @@ void ScrollBar::ImplCalc( bool bUpdate )
             if( mnThumbPixRange > 0 )
             {
                 maPage1Rect.SetLeft( maTrackRect.Left() );
-                maPage1Rect.Bottom()    =
-                maPage2Rect.Bottom()    =
-                maThumbRect.Bottom()    = maTrackRect.Bottom();
+                maPage1Rect.SetBottom( maTrackRect.Bottom() );
+                maPage2Rect.SetBottom (maTrackRect.Bottom() );
+                maThumbRect.SetBottom( maTrackRect.Bottom() );
             }
             else
             {
@@ -313,9 +313,9 @@ void ScrollBar::ImplCalc( bool bUpdate )
             if( mnThumbPixRange > 0 )
             {
                 maPage1Rect.SetTop( maTrackRect.Top() );
-                maPage1Rect.Right()     =
-                maPage2Rect.Right()     =
-                maThumbRect.Right()     = maTrackRect.Right();
+                maPage1Rect.SetRight( maTrackRect.Right() );
+                maPage2Rect.SetRight( maTrackRect.Right() );
+                maThumbRect.SetRight( maTrackRect.Right() );
             }
             else
             {

@@ -146,9 +146,9 @@ private:
     bool                bVisible;
 
     bool                IsVisible() const { return bVisible; }
-    void                SetText( const OUString& rText ) { aBulText = rText; aBulSize.Width() = -1; }
-    void                Invalidate() { aBulSize.Width() = -1; }
-    void                SetDepth( sal_Int16 nNewDepth ) { nDepth = nNewDepth; aBulSize.Width() = -1; }
+    void                SetText( const OUString& rText ) { aBulText = rText; aBulSize.setWidth(-1); }
+    void                Invalidate() { aBulSize.setWidth(-1); }
+    void                SetDepth( sal_Int16 nNewDepth ) { nDepth = nNewDepth; aBulSize.setWidth(-1); }
     const OUString&     GetText() const { return aBulText; }
 
                         Paragraph( sal_Int16 nDepth );
