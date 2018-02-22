@@ -149,7 +149,6 @@ private:
     const OUString sFrame;
     const OUString sGraphicFilter;
     const OUString sGraphicRotation;
-    const OUString sGraphicURL;
     const OUString sHeight;
     const OUString sHoriOrient;
     const OUString sHoriOrientPosition;
