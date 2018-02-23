@@ -466,7 +466,11 @@ bool SdDrawDocument::InsertBookmarkAsPage(
             pBMPage->GetLowerBorder()   != pRefPage->GetLowerBorder())
         {
             OUString aStr(SdResId(STR_SCALE_OBJECTS));
-            sal_uInt16 nBut = ScopedVclPtrInstance<QueryBox>(nullptr, MessBoxStyle::YesNoCancel, aStr)->Execute();
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
+                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                           aStr));
+            xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+            sal_uInt16 nBut = xQueryBox->run();
 
             bScaleObjects = nBut == RET_YES;
             bContinue     = nBut != RET_CANCEL;

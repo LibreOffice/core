@@ -52,7 +52,6 @@
 #include <strings.hrc>
 #include <resourcemanager.hxx>
 
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/configitem.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -440,7 +439,10 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
     catch ( uno::Exception& )
     {
         OSL_FAIL( "Exception while adding a signature!" );
-        ScopedVclPtrInstance<ErrorBox>(this, XsResId(STR_XMLSECDLG_SIGNING_FAILED))->Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                  VclMessageType::Error, VclButtonsType::Ok,
+                                                  XsResId(STR_XMLSECDLG_SIGNING_FAILED)));
+        xBox->run();
         // Don't keep invalid entries...
         ImplGetSignatureInformations(/*bUseTempStream=*/true, /*bCacheLastSignature=*/false);
         ImplFillSignaturesBox();

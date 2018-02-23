@@ -37,6 +37,7 @@
 #include <vcl/image.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/math.hxx>
 
@@ -757,9 +758,10 @@ void DataBrowser::ShowWarningBox()
 
 bool DataBrowser::ShowQueryBox()
 {
-    ScopedVclPtrInstance<QueryBox> pQueryBox(this, MessBoxStyle::YesNo, SchResId(STR_DATA_EDITOR_INCORRECT_INPUT));
-
-    return pQueryBox->Execute() == RET_YES;
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                   VclMessageType::Question, VclButtonsType::YesNo,
+                                                   SchResId(STR_DATA_EDITOR_INCORRECT_INPUT)));
+    return xQueryBox->run() == RET_YES;
 }
 
 bool DataBrowser::IsDataValid()
