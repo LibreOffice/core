@@ -270,10 +270,31 @@ public:
 class SvxShape;
 class SVX_DLLPUBLIC SdrObject: public SfxListener, public virtual tools::WeakBase
 {
+private:
     friend class                SdrObjListIter;
     friend class                SdrVirtObj;
     friend class                SdrRectObj;
     friend class                SdrDelayBroadcastObjectChange;
+
+    // OperationSmiley: Allow at each SdrObject to set a FillGeometryDefiningShape,
+    // so that for SdrObjects where this is set, the definition of a defined FillStyle
+    // will use this, but the local geometry will be filled. This allows to fill
+    // multiple shapes with a unified fill, e.g think about CustomShapes.
+    // Currently this is *only* used for CustomShapes, but may be developed to get a
+    // common mechanism - usages for it are easy to be found. The current limitation
+    // to CustomShapes allows to to think about these SdrObjects to 'vanish' during the
+    // lifetime of 'this' - the SdrObjects without SdrPage and SdrModel are used as helper
+    // objects for SdrObjCustomShape and thus their lifetime is limited to the lifetime
+    // of this local object. For unifying this mechanism, some weak reference of
+    // SdrObjects would have to be thought about (not easy with the current implementation).
+    // So - allow *only* EnhancedCustomShape2d (which creates the visualizations for
+    // SdrObjCustomShape) to set this. Already allow unified read to use it - thus already
+    // allowing to implement as standard case for all kinds of SdrObjects.
+    friend class EnhancedCustomShape2d;
+    const SdrObject*            mpFillGeometryDefiningShape;
+    void setFillGeometryDefiningShape(const SdrObject* pNew) { mpFillGeometryDefiningShape = pNew; }
+public:
+    const SdrObject* getFillGeometryDefiningShape() const { return mpFillGeometryDefiningShape; }
 
 public:
     SdrObject();

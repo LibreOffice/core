@@ -43,13 +43,31 @@ namespace drawinglayer
                 // #i108255# no need to use correctOrientations here; target is
                 // straight visualisation
                 basegfx::B2DPolyPolygon aTransformed(getUnitPolyPolygon());
-
                 aTransformed.transform(getTransform());
-                aRetval.push_back(
-                    createPolyPolygonFillPrimitive(
-                        aTransformed,
-                        getSdrLFSTAttribute().getFill(),
-                        getSdrLFSTAttribute().getFillFloatTransGradient()));
+
+                // OperationSmiley: Check if a UnitDefinitionPolyPolygon is set
+                if(getUnitDefinitionPolyPolygon().count()
+                    && getUnitDefinitionPolyPolygon() != getUnitPolyPolygon())
+                {
+                    // if yes, use the B2DRange of it's transformed form
+                    basegfx::B2DPolyPolygon aTransformedDefinition(getUnitDefinitionPolyPolygon());
+                    aTransformedDefinition.transform(getTransform());
+
+                    aRetval.push_back(
+                        createPolyPolygonFillPrimitive(
+                            aTransformed,
+                            aTransformedDefinition.getB2DRange(),
+                            getSdrLFSTAttribute().getFill(),
+                            getSdrLFSTAttribute().getFillFloatTransGradient()));
+                }
+                else
+                {
+                    aRetval.push_back(
+                        createPolyPolygonFillPrimitive(
+                            aTransformed,
+                            getSdrLFSTAttribute().getFill(),
+                            getSdrLFSTAttribute().getFillFloatTransGradient()));
+                }
             }
 
             // add line
@@ -107,11 +125,13 @@ namespace drawinglayer
         SdrPathPrimitive2D::SdrPathPrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
-            const basegfx::B2DPolyPolygon& rUnitPolyPolygon)
+            const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
+            const basegfx::B2DPolyPolygon& rUnitDefinitionPolyPolygon)
         :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
-            maUnitPolyPolygon(rUnitPolyPolygon)
+            maUnitPolyPolygon(rUnitPolyPolygon),
+            maUnitDefinitionPolyPolygon(rUnitDefinitionPolyPolygon)
         {
         }
 
@@ -122,6 +142,7 @@ namespace drawinglayer
                 const SdrPathPrimitive2D& rCompare = static_cast<const SdrPathPrimitive2D&>(rPrimitive);
 
                 return (getUnitPolyPolygon() == rCompare.getUnitPolyPolygon()
+                    && getUnitDefinitionPolyPolygon() == rCompare.getUnitDefinitionPolyPolygon()
                     && getTransform() == rCompare.getTransform()
                     && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute());
             }

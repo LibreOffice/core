@@ -83,6 +83,7 @@ namespace sdr
 
             // prepare object transformation and unit polygon (direct model data)
             basegfx::B2DHomMatrix aObjectMatrix;
+            basegfx::B2DPolyPolygon aUnitDefinitionPolyPolygon;
             bool bIsLine(
                 !aUnitPolyPolygon.areControlPointsUsed()
                 && 1 == nPolyCount
@@ -166,6 +167,30 @@ namespace sdr
                 basegfx::B2DHomMatrix aInverse(aObjectMatrix);
                 aInverse.invert();
                 aUnitPolyPolygon.transform(aInverse);
+
+                // OperationSmiley: Check if a FillGeometryDefiningShape is set
+                const SdrObject* pFillGeometryDefiningShape(GetPathObj().getFillGeometryDefiningShape());
+
+                if(nullptr != pFillGeometryDefiningShape)
+                {
+                    // If yes, get it's BoundRange and use as defining Geometry for the FillStyle.
+                    // If no, aUnitDefinitionPolyPolygon will just be empty and thus be interpreted
+                    // as unused.
+                    // Using SnapRect will make the FillDefinition to always be extended e.g.
+                    // for rotated/sheared objects.
+                    const tools::Rectangle& rSnapRect(pFillGeometryDefiningShape->GetSnapRect());
+
+                    aUnitDefinitionPolyPolygon.append(
+                        basegfx::utils::createPolygonFromRect(
+                            basegfx::B2DRange(
+                                rSnapRect.Left(), rSnapRect.Top(),
+                                rSnapRect.Right(), rSnapRect.Bottom())));
+
+                    // use same coordinate system as the shape geometry -> this
+                    // makes it relative to shape's unit geometry and thus freely
+                    // transformable with the shape
+                    aUnitDefinitionPolyPolygon.transform(aInverse);
+                }
             }
 
             // create primitive. Always create primitives to allow the decomposition of
@@ -174,7 +199,8 @@ namespace sdr
                 new drawinglayer::primitive2d::SdrPathPrimitive2D(
                     aObjectMatrix,
                     aAttribute,
-                    aUnitPolyPolygon));
+                    aUnitPolyPolygon,
+                    aUnitDefinitionPolyPolygon));
 
             return drawinglayer::primitive2d::Primitive2DContainer { xReference };
         }

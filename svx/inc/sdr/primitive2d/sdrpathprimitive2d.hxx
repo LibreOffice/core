@@ -40,20 +40,36 @@ namespace drawinglayer
             attribute::SdrLineFillShadowTextAttribute   maSdrLFSTAttribute;
             basegfx::B2DPolyPolygon                     maUnitPolyPolygon;
 
+            // OperationSmiley: Added to be able to define a FillGeometry different from local
+            // geometry. It is ignored when empty and/or equal to UnitPolyPolygon.
+            // If used and there is a fill, object's geomery (maUnitPolyPolygon) will be filled,
+            // but UnitDefinitionPolyPolygon will be used to define the FillStyle. Thus when
+            // using the 'same' UnitDefinitionPolyPolygon for multiple definitions,
+            // all filled stuff using it will fit seamless together.
+            // 'same' is in quotes since it is a UnitPolygon, so being relative to the
+            // unit polygon of the local geometry (UnitPolyPolygon). The definition is complete
+            // when applying the also given transfomation (maTransform)
+            basegfx::B2DPolyPolygon                     maUnitDefinitionPolyPolygon;
+
         protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
 
         public:
+            // OperationSmiley: Extended to UnitDefinitionPolyPolygon, but when needed
+            // a 2nd version without can be defined that just does not set the
+            // maUnitDefinitionPolyPolygon or set equal to UnitPolyPolygon
             SdrPathPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransform,
                 const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
-                const basegfx::B2DPolyPolygon& rUnitPolyPolygon);
+                const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
+                const basegfx::B2DPolyPolygon& rUnitDefinitionPolyPolygon);
 
             // data access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             const attribute::SdrLineFillShadowTextAttribute& getSdrLFSTAttribute() const { return maSdrLFSTAttribute; }
             const basegfx::B2DPolyPolygon& getUnitPolyPolygon() const { return maUnitPolyPolygon; }
+            const basegfx::B2DPolyPolygon& getUnitDefinitionPolyPolygon() const { return maUnitDefinitionPolyPolygon; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
