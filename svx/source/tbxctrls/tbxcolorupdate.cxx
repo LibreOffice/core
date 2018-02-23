@@ -22,6 +22,7 @@
 #include <svx/svxids.hrc>
 #include <svx/xdef.hxx>
 
+#include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
@@ -85,7 +86,8 @@ namespace svx
         if (!aItemSize.Width() || !aItemSize.Height())
             return;
 
-        ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
+        ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(),
+            DeviceFormat::DEFAULT, DeviceFormat::DEFAULT));
         pVirDev->SetOutputSizePixel(aItemSize);
         maBmpSize = aItemSize;
 
