@@ -1108,14 +1108,14 @@ void Test::testCondFormatUndoList()
 
 namespace {
 
-sal_uInt32 addSingleCellCondFormat(ScDocument* pDoc, const ScAddress& rAddr, sal_uInt32 nKey)
+sal_uInt32 addSingleCellCondFormat(ScDocument* pDoc, const ScAddress& rAddr, sal_uInt32 nKey, const OUString& rCondition)
 {
     ScConditionalFormat* pFormat = new ScConditionalFormat(nKey, pDoc);
     ScRange aCondFormatRange(rAddr);
     ScRangeList aRangeList(aCondFormatRange);
     pFormat->SetRange(aRangeList);
 
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct, "=B2" + OUString::number(nKey), "",
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct, rCondition, "",
             pDoc, ScAddress(0,0,0), ScGlobal::GetRscString(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
     return pDoc->AddCondFormat(pFormat, 0);
@@ -1127,8 +1127,8 @@ void Test::testMultipleSingleCellCondFormatCopyPaste()
 {
     m_pDoc->InsertTab(0, "Test");
 
-    sal_uInt32 nFirstCondFormatKey = addSingleCellCondFormat(m_pDoc, ScAddress(0, 0, 0), 1);
-    sal_uInt32 nSecondCondFormatKey = addSingleCellCondFormat(m_pDoc, ScAddress(1, 0, 0), 2);
+    sal_uInt32 nFirstCondFormatKey = addSingleCellCondFormat(m_pDoc, ScAddress(0, 0, 0), 1, "=A2");
+    sal_uInt32 nSecondCondFormatKey = addSingleCellCondFormat(m_pDoc, ScAddress(1, 0, 0), 2, "=B3");
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, ScRange(0,0,0,2,0,0), &aClipDoc);
@@ -1137,7 +1137,38 @@ void Test::testMultipleSingleCellCondFormatCopyPaste()
 
     for (SCCOL nCol = 2; nCol <= 7; ++nCol)
     {
-        std::cout << nCol << std::endl;
+        ScConditionalFormat* pFormat = m_pDoc->GetCondFormat(nCol, 4, 0);
+        if (((nCol - 2) % 3) == 0)
+        {
+            CPPUNIT_ASSERT_EQUAL(pFormat->GetKey(), nFirstCondFormatKey);
+        }
+        else if (((nCol - 2) % 3) == 1)
+        {
+            CPPUNIT_ASSERT_EQUAL(pFormat->GetKey(), nSecondCondFormatKey);
+        }
+        else
+        {
+            CPPUNIT_ASSERT(!pFormat);
+        }
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testDeduplicateMultipleCondFormats()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    sal_uInt32 nFirstCondFormatKey = addSingleCellCondFormat(m_pDoc, ScAddress(0, 0, 0), 1, "=B2");
+    sal_uInt32 nSecondCondFormatKey = addSingleCellCondFormat(m_pDoc, ScAddress(1, 0, 0), 2, "=B2");
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, ScRange(0,0,0,2,0,0), &aClipDoc);
+    ScRange aTargetRange(2,4,0,7,4,0);
+    pasteOneCellFromClip(m_pDoc, aTargetRange, &aClipDoc);
+
+    for (SCCOL nCol = 2; nCol <= 7; ++nCol)
+    {
         ScConditionalFormat* pFormat = m_pDoc->GetCondFormat(nCol, 4, 0);
         if (((nCol - 2) % 3) == 0)
         {
