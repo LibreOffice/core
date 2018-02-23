@@ -19,7 +19,9 @@
 #include <osl/detail/android-bootstrap.h>
 #include <rtl/strbuf.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
+#include <memory>
 
 #define LOGTAG "LibreOffice/androidinst"
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, LOGTAG, __VA_ARGS__))
@@ -222,10 +224,11 @@ int AndroidSalSystem::ShowNativeDialog( const OUString& rTitle,
         // it intended to be used from Java, so some verbose JNI
         // horror would be needed to use it directly here. Probably we
         // want some easier to use magic wrapper, hmm.
-
-        MessageDialog aVclErrBox(NULL, rMessage);
-        aVclErrBox.SetText(rTitle);
-        aVclErrBox.Execute();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                  VclMessageType::Warning, VclButtonsType::Ok,
+                                                  rMessage));
+        xBox->set_title(rTitle);
+        xBox->run();
     }
     else
         LOGE("VCL not initialized");
