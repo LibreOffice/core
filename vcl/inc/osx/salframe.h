@@ -81,6 +81,7 @@ public:
     PointerStyle                    mePointerStyle;         // currently active pointer style
 
     NSTrackingRectTag               mnTrackingRectTag;      // used to get enter/leave messages
+    NSRect                          maTrackingRect;
 
     CGMutablePathRef                mrClippingPath;         // used for "shaping"
     std::vector< CGRect >           maClippingRects;
@@ -93,6 +94,11 @@ public:
 
     // To prevent display sleep during presentation
     IOPMAssertionID                 mnAssertionID;
+
+    NSRect                          maFrameRect;
+    NSRect                          maContentRect;
+
+    bool                            mbGeometryDidChange;
 
 public:
     /** Constructor
