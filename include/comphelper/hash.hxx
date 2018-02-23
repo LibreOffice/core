@@ -15,6 +15,10 @@
 #include <memory>
 #include <vector>
 
+namespace rtl {
+    class OUString;
+}
+
 namespace comphelper {
 
 enum class HashType
@@ -42,6 +46,65 @@ public:
     std::vector<unsigned char> finalize();
 
     static std::vector<unsigned char> calculateHash(const unsigned char* pInput, size_t length, HashType eType);
+
+    /** Calculate hash value with salt (pSalt,nSaltLen) prepended to password
+        (pInput,nLength) and repeated iterations run if nSpinCount>0.
+
+        For repeated iterations, each iteration's result plus a 4 byte value
+        (0-based, little endian) containing the number of the iteration
+        appended to the hash value is the input for the next iteration.
+
+        This implements the algorithm as specified in
+        https://msdn.microsoft.com/en-us/library/dd920692
+
+        @param  pSalt
+                may be nullptr thus no salt prepended
+
+        @return the raw hash value
+     */
+    static std::vector<unsigned char> calculateHash(
+            const unsigned char* pInput, size_t nLength,
+            const unsigned char* pSalt, size_t nSaltLen,
+            sal_uInt32 nSpinCount,
+            HashType eType);
+
+    /** Convenience function to calculate a salted hash with iterations.
+
+        @param  rPassword
+                UTF-16LE encoded string without leading BOM character
+
+        @param  rSaltValue
+                Salt that will be prepended to password data.
+     */
+    static std::vector<unsigned char> calculateHash(
+            const rtl::OUString& rPassword,
+            const std::vector<unsigned char>& rSaltValue,
+            sal_uInt32 nSpinCount,
+            HashType eType);
+
+    /** Convenience function to calculate a salted hash with iterations.
+
+        @param  rPassword
+                UTF-16LE encoded string without leading BOM character
+
+        @param  rSaltValue
+                Base64 encoded salt that will be decoded and prepended to password
+                data.
+
+        @param  rAlgorithmName
+                One of "SHA-512", "SHA-256", ... as listed in
+                https://msdn.microsoft.com/en-us/library/dd920692
+                that have a valid match in HashType. If not, an empty string is
+                returned. Not all algorithm names are supported.
+
+        @return the base64 encoded string of the hash value, that can be
+                compared against a stored base64 encoded hash value.
+     */
+    static rtl::OUString calculateHash(
+            const rtl::OUString& rPassword,
+            const rtl::OUString& rSaltValue,
+            sal_uInt32 nSpinCount,
+            const rtl::OUString& rAlgorithmName);
 
     size_t getLength() const;
 };

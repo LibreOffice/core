@@ -8,6 +8,11 @@
  */
 
 #include <comphelper/hash.hxx>
+#include <comphelper/base64.hxx>
+#include <comphelper/sequence.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/alloc.h>
+#include <osl/endian.h>
 #include <config_oox.h>
 
 #if USE_TLS_NSS
@@ -148,6 +153,113 @@ std::vector<unsigned char> Hash::calculateHash(const unsigned char* pInput, size
     Hash aHash(eType);
     aHash.update(pInput, length);
     return aHash.finalize();
+}
+
+std::vector<unsigned char> Hash::calculateHash(
+        const unsigned char* pInput, size_t nLength,
+        const unsigned char* pSalt, size_t nSaltLen,
+        sal_uInt32 nSpinCount,
+        HashType eType)
+{
+    if (!pSalt)
+        nSaltLen = 0;
+
+    if (!nSaltLen && !nSpinCount)
+        return calculateHash( pInput, nLength, eType);
+
+    Hash aHash(eType);
+    std::vector<unsigned char> hash;
+    if (nSaltLen)
+    {
+        std::vector<unsigned char> initialData( nSaltLen + nLength);
+        std::copy( pSalt, pSalt + nSaltLen, initialData.begin());
+        std::copy( pInput, pInput + nLength, initialData.begin() + nSaltLen);
+        aHash.update( initialData.data(), initialData.size());
+        rtl_secureZeroMemory( initialData.data(), initialData.size());
+    }
+    else
+    {
+        aHash.update( pInput, nLength);
+    }
+    hash = aHash.finalize();
+
+    if (nSpinCount)
+    {
+        // https://msdn.microsoft.com/en-us/library/dd920692
+        // says the iteration is concatenated after the hash.
+        // XXX NOTE: oox/source/crypto/AgileEngine.cxx
+        // AgileEngine::calculateHashFinal() prepends the iteration value, they
+        // do things differently for write protection and encryption passwords.
+        // https://msdn.microsoft.com/en-us/library/dd924776
+        /* TODO: maybe pass a flag whether to prepend or append, and then let
+         * AgileEngine::calculateHashFinal() call this function. */
+        const size_t nIterPos = hash.size();
+        const size_t nHashPos = 0;
+        //const size_t nIterPos = 0;
+        //const size_t nHashPos = 4;
+        std::vector<unsigned char> data( hash.size() + 4, 0);
+        for (sal_uInt32 i = 0; i < nSpinCount; ++i)
+        {
+            std::copy( hash.begin(), hash.end(), data.begin() + nHashPos);
+#ifdef OSL_BIGENDIAN
+            sal_uInt32 be = i;
+            sal_uInt8* p = reinterpret_cast<sal_uInt8*>(&be);
+            std::swap( p[0], p[3] );
+            std::swap( p[1], p[2] );
+            memcpy( data.data() + nIterPos, &be, 4);
+#else
+            memcpy( data.data() + nIterPos, &i, 4);
+#endif
+            /* TODO: isn't there something better than
+             * creating/finalizing/destroying on each iteration? */
+            Hash aReHash(eType);
+            aReHash.update( data.data(), data.size());
+            hash = aReHash.finalize();
+        }
+    }
+
+    return hash;
+}
+
+std::vector<unsigned char> Hash::calculateHash(
+        const OUString& rPassword,
+        const std::vector<unsigned char>& rSaltValue,
+        sal_uInt32 nSpinCount,
+        HashType eType)
+{
+    const unsigned char* pPassBytes = reinterpret_cast<const unsigned char*>(rPassword.getStr());
+    const size_t nPassBytesLen = rPassword.getLength() * 2;
+    return calculateHash( pPassBytes, nPassBytesLen, rSaltValue.data(), rSaltValue.size(), nSpinCount, eType);
+}
+
+OUString Hash::calculateHash(
+        const rtl::OUString& rPassword,
+        const rtl::OUString& rSaltValue,
+        sal_uInt32 nSpinCount,
+        const rtl::OUString& rAlgorithmName)
+{
+    HashType eType;
+    if (rAlgorithmName == "SHA-512")
+        eType = HashType::SHA512;
+    else if (rAlgorithmName == "SHA-256")
+        eType = HashType::SHA256;
+    else if (rAlgorithmName == "SHA-1")
+        eType = HashType::SHA1;
+    else if (rAlgorithmName == "MD5")
+        eType = HashType::MD5;
+    else
+        return OUString();
+
+    css::uno::Sequence<sal_Int8> aSaltSeq;
+    comphelper::Base64::decode( aSaltSeq, rSaltValue);
+
+    std::vector<unsigned char> hash = calculateHash( rPassword,
+            comphelper::sequenceToContainer<std::vector<unsigned char>>( aSaltSeq),
+            nSpinCount, eType);
+
+    OUStringBuffer aBuf;
+    comphelper::Base64::encode( aBuf, comphelper::containerToSequence<sal_Int8>( hash));
+    return aBuf.makeStringAndClear();
 }
 
 }
