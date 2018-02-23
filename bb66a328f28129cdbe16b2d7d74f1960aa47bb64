@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_671c1714",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-02-23T13:51:40Z",
+      "side": 1,
+      "message": "I think you can remove this whole wall of comment text and just write sth like \"The hub redirects each locale to an appropriate local forum\".",
+      "range": {
+        "startLine": 514,
+        "startChar": 11,
+        "endLine": 514,
+        "endChar": 48
+      },
+      "revId": "bb66a328f28129cdbe16b2d7d74f1960aa47bb64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
