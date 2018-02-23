@@ -21,7 +21,7 @@ public:
 // plugin factory function
 SalInstance* svp_create_SalInstance()
 {
-    SvpSalInstance* pInstance = new SvpSalInstance( new SalYieldMutex() );
+    SvpSalInstance* pInstance = new SvpSalInstance( new SvpSalYieldMutex() );
     new SvpSalData( pInstance );
     return pInstance;
 }

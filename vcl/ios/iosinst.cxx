@@ -170,7 +170,7 @@ SalData::~SalData()
 // This is our main entry point:
 SalInstance *CreateSalInstance()
 {
-    IosSalInstance* pInstance = new IosSalInstance( new SalYieldMutex() );
+    IosSalInstance* pInstance = new IosSalInstance( new SvpSalYieldMutex() );
     new IosSalData( pInstance );
     pInstance->AcquireYieldMutex();
     return pInstance;

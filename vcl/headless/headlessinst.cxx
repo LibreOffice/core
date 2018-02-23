@@ -90,7 +90,7 @@ SalData::~SalData()
 // This is our main entry point:
 SalInstance *CreateSalInstance()
 {
-    HeadlessSalInstance* pInstance = new HeadlessSalInstance( new SalYieldMutex() );
+    HeadlessSalInstance* pInstance = new HeadlessSalInstance( new SvpSalYieldMutex() );
     new HeadlessSalData( pInstance );
     pInstance->AcquireYieldMutex();
     return pInstance;
