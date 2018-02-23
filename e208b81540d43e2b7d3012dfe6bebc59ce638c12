@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_c704e37f",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2018-02-23T15:42:37Z",
+      "side": 1,
+      "message": "Not needed with pOPO \u003d nullptr. It is better to read without it. Also makes deletion independent from conditions, so when adding/changing conditions it is less dangerous to crete a \u0027wrong\u0027 else. Or the other way around: Safer and better readable/understandable by just using the ptr and setting to nullptr if \u0027consumed\u0027",
+      "range": {
+        "startLine": 913,
+        "startChar": 20,
+        "endLine": 913,
+        "endChar": 24
+      },
+      "revId": "e208b81540d43e2b7d3012dfe6bebc59ce638c12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
