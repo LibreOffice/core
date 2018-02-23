@@ -144,10 +144,10 @@ void WorksheetSettings::importProtectedRange( const AttributeList& rAttribs )
      * 'saltValue' and 'spinCount' that are written if the protection was newly
      * created. */
     aProt.mnPasswordVerifier = rAttribs.getIntegerHex( XML_password, 0);
-    aProt.maAlgorithmName = rAttribs.getString( XML_algorithmName, OUString());
-    aProt.maHashValue = rAttribs.getString( XML_hashValue, OUString());
-    aProt.maSaltValue = rAttribs.getString( XML_saltValue, OUString());
-    aProt.mnSpinCount = rAttribs.getUnsigned( XML_spinCount, 0);
+    aProt.maPasswordHash.maAlgorithmName = rAttribs.getString( XML_algorithmName, OUString());
+    aProt.maPasswordHash.maHashValue = rAttribs.getString( XML_hashValue, OUString());
+    aProt.maPasswordHash.maSaltValue = rAttribs.getString( XML_saltValue, OUString());
+    aProt.maPasswordHash.mnSpinCount = rAttribs.getUnsigned( XML_spinCount, 0);
     OUString aRefs( rAttribs.getString( XML_sqref, OUString()));
     if (!aRefs.isEmpty())
     {

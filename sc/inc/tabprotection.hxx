@@ -39,6 +39,18 @@ enum ScPasswordHash
     PASSHASH_UNSPECIFIED
 };
 
+/// OOXML password definitions: algorithmName, hashValue, saltValue, spinCount
+struct ScOoxPasswordHash
+{
+    OUString    maAlgorithmName;    /// "SHA-512", ...
+    OUString    maHashValue;        /// base64 encoded hash value
+    OUString    maSaltValue;        /// base64 encoded salt value
+    sal_uInt32  mnSpinCount;        /// spin count, iteration runs
+
+    ScOoxPasswordHash() : mnSpinCount(0) {}
+    bool hasPassword() const { return !maHashValue.isEmpty(); }
+};
+
 namespace ScPassHashHelper
 {
     /** Check for the compatibility of all password hashes.  If there is at
@@ -117,13 +129,9 @@ struct ScEnhancedProtection
     OUString                    maTitle;
     ::std::vector< sal_uInt8 >  maSecurityDescriptor;       // imported as raw BIFF data
     OUString                    maSecurityDescriptorXML;    // imported from OOXML
-    // OOXML password definitions
-    OUString                    maAlgorithmName;
-    OUString                    maHashValue;
-    OUString                    maSaltValue;
-    sal_uInt32                  mnSpinCount;
+    ScOoxPasswordHash           maPasswordHash;
 
-    ScEnhancedProtection() : mnAreserved(0), mnPasswordVerifier(0), mnSpinCount(0) {}
+    ScEnhancedProtection() : mnAreserved(0), mnPasswordVerifier(0) {}
 
     bool hasSecurityDescriptor() const
     {
@@ -132,7 +140,7 @@ struct ScEnhancedProtection
 
     bool hasPassword() const
     {
-        return mnPasswordVerifier != 0 || !maHashValue.isEmpty();
+        return mnPasswordVerifier != 0 || maPasswordHash.hasPassword();
     }
 };
 

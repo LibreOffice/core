@@ -516,10 +516,10 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
                          * 'algorithmName', 'hashValue', 'saltValue' and
                          * 'spinCount' are absent; so do we if it was present. */
                         XML_password, (*it).mnPasswordVerifier ? OString::number( (*it).mnPasswordVerifier, 16).getStr() : nullptr,
-                        XML_algorithmName, (*it).maAlgorithmName.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maAlgorithmName).getStr(),
-                        XML_hashValue, (*it).maHashValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maHashValue).getStr(),
-                        XML_saltValue, (*it).maSaltValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maSaltValue).getStr(),
-                        XML_spinCount, (*it).mnSpinCount ? OString::number( (*it).mnSpinCount).getStr() : nullptr,
+                        XML_algorithmName, (*it).maPasswordHash.maAlgorithmName.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maPasswordHash.maAlgorithmName).getStr(),
+                        XML_hashValue, (*it).maPasswordHash.maHashValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maPasswordHash.maHashValue).getStr(),
+                        XML_saltValue, (*it).maPasswordHash.maSaltValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maPasswordHash.maSaltValue).getStr(),
+                        XML_spinCount, (*it).maPasswordHash.mnSpinCount ? OString::number( (*it).maPasswordHash.mnSpinCount).getStr() : nullptr,
                         XML_sqref, (*it).maRangeList.is() ? XclXmlUtils::ToOString( *(*it).maRangeList).getStr() : nullptr,
                         FSEND);
             }
