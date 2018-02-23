@@ -27,8 +27,6 @@
 
 #include "securityenvironment_nssimpl.hxx"
 
-#include "xmlsecuritycontext_nssimpl.hxx"
-
 #include <xmlsec-wrapper.h>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 
