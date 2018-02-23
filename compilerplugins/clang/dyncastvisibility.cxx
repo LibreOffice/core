@@ -7,8 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <algorithm>
 #include <cassert>
+#include <cstddef>
 #include <set>
+#include <string>
 
 #include "plugin.hxx"
 
@@ -102,6 +105,41 @@ public:
         auto const rdd = cast<CXXRecordDecl>(rtd->getDecl())->getDefinition();
         assert(rdd != nullptr);
         if (getTypeVisibility(rdd) != DefaultVisibility) {
+            // Heuristic to find problematic dynamic_cast<T> with hidden type T is: T is defined in
+            // include/M1/ while the compilation unit is in module M2/ with M1 != M2.  There are
+            // legitimate cases where T is a hidden type in dynamic_cast<T>, e.g., when both the
+            // type and the cast are in the same library.  This heuristic appears to be conservative
+            // enough to produce only a few false positives (which have been addressed with
+            // preceding commits, marking the relevant types in global include files as
+            // SAL_DLLPUBLIC_RTTI after all, to be on the safe side) and aggressive enough to find
+            // at least some interesting cases (though it would still not be aggressive enough to
+            // have found ff570b4b58dbf274d3094d21d974f18b613e9b4b "DocumentSettingsSerializer must
+            // be SAL_DLLPUBLIC_RTTI for dynamic_cast"):
+            auto const file = compiler.getSourceManager().getFilename(
+                compiler.getSourceManager().getSpellingLoc(rdd->getLocation()));
+            if (loplugin::hasPathnamePrefix(file, SRCDIR "/include/")) {
+                std::size_t const n1 = std::strlen(SRCDIR "/include/");
+                std::size_t n2 = file.find('/', n1);
+#if defined _WIN32
+                n2 = std::min(n2, file.find('\\', n1));
+#endif
+                auto const seg = n2 >= file.size() ? file.substr(n1) : file.substr(n1, n2 - n1);
+                auto prefix = std::string(SRCDIR "/");
+                prefix += seg;
+                if (!loplugin::hasPathnamePrefix(
+                        (compiler.getSourceManager()
+                         .getFileEntryForID(compiler.getSourceManager().getMainFileID())
+                         ->getName()),
+                        prefix))
+                {
+                    report(
+                        DiagnosticsEngine::Warning,
+                        "Suspicious dynamic_cast to %0 with %1 type visibility", expr->getExprLoc())
+                        << td << vis(getTypeVisibility(rdd)) << expr->getSourceRange();
+                    report(DiagnosticsEngine::Note, "class %0 defined here", rdd->getLocation())
+                        << td << rdd->getSourceRange();
+                }
+            }
             return true;
         }
         auto ts = expr->getSubExpr()->getType();
