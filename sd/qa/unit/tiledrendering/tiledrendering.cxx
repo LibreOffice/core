@@ -103,6 +103,7 @@ public:
     void testMultiViewInsertDeletePage();
     void testTdf115783();
     void testTdf115873();
+    void testTdf115873Group();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -141,6 +142,7 @@ public:
     CPPUNIT_TEST(testMultiViewInsertDeletePage);
     CPPUNIT_TEST(testTdf115783);
     CPPUNIT_TEST(testTdf115873);
+    CPPUNIT_TEST(testTdf115873Group);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1883,6 +1885,21 @@ void SdTiledRenderingTest::testTdf115873()
     // This failed, single-click did not result in a shape selection (only
     // double-click did).
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
+}
+
+void SdTiledRenderingTest::testTdf115873Group()
+{
+    // Initialize the navigator.
+    SdXImpressDocument* pXImpressDocument = createDoc("tdf115873-group.fodp");
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
+    ScopedVclPtrInstance<SdNavigatorWin> pNavigator(nullptr, &rBindings);
+    pNavigator->InitTreeLB(pXImpressDocument->GetDoc());
+    VclPtr<SdPageObjsTLB> pObjects = pNavigator->GetObjects();
+    // This failed, Fill() and IsEqualToDoc() were out of sync for group
+    // shapes.
+    CPPUNIT_ASSERT(pObjects->IsEqualToDoc(pXImpressDocument->GetDoc()));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);
