@@ -285,7 +285,8 @@ void SdrObject::SetBoundRectDirty()
 
 
 SdrObject::SdrObject() :
-    pPage(nullptr)
+    mpFillGeometryDefiningShape(nullptr)
+    ,pPage(nullptr)
     ,pModel(nullptr)
     ,pUserCall(nullptr)
     ,pPlusData(nullptr)

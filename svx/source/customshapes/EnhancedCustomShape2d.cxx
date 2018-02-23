@@ -1963,22 +1963,6 @@ void EnhancedCustomShape2d::CreateSubPath(
 
     if(aNewB2DPolyPolygon.count())
     {
-        if( !bLineGeometryNeededOnly )
-        {
-            // hack aNewB2DPolyPolygon to fill logic rect - this is
-            // needed to produce gradient fills that look like mso
-            aNewB2DPolygon.clear();
-            aNewB2DPolygon.append(basegfx::B2DPoint(0,0));
-            aNewB2DPolygon.setClosed(true);
-            aNewB2DPolyPolygon.append(aNewB2DPolygon);
-
-            aNewB2DPolygon.clear();
-            aNewB2DPolygon.append(basegfx::B2DPoint(aLogicRect.GetWidth(),
-                                                    aLogicRect.GetHeight()));
-            aNewB2DPolygon.setClosed(true);
-            aNewB2DPolyPolygon.append(aNewB2DPolygon);
-        }
-
         // #i37011#
         bool bForceCreateTwoObjects(false);
 
@@ -2335,6 +2319,16 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
                         rCustomShapeSet,
                         nColorIndex,
                         nColorCount);
+
+                    // OperationSmiley: when we have access to the SdrObjCustomShape and the
+                    // CustomShape is built with more than a single filled Geometry, use it
+                    // to define that all helper geometites defined here (SdrObjects currently)
+                    // will use the same FillGeometryDefinition (from the referenced SdrObjCustomShape).
+                    // This will all same-filled objects look like filled smoothly with the same style.
+                    if(pCustomShapeObj)
+                    {
+                        pObj->setFillGeometryDefiningShape(pCustomShapeObj);
+                    }
                 }
             }
 
