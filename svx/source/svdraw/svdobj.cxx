@@ -290,8 +290,9 @@ void SdrObject::SetBoundRectDirty()
 
 
 SdrObject::SdrObject() :
-    mpImpl(new Impl),
-    mpProperties(nullptr)
+    mpFillGeometryDefiningShape(nullptr)
+    ,mpImpl(new Impl)
+    ,mpProperties(nullptr)
     ,mpViewContact(nullptr)
     ,pObjList(nullptr)
     ,pPage(nullptr)
