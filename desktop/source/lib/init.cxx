@@ -194,57 +194,6 @@ static const ExtensionMap aDrawExtensionMap[] =
     { nullptr, nullptr }
 };
 
-/*
- * Map directly to css cursor styles to avoid further mapping in the client.
- * Gtk (via gdk_cursor_new_from_name) also supports the same css cursor styles.
- *
- * This was created partially with help of the mappings in gtkdata.cxx.
- * The list is incomplete as some cursor style simply aren't supported
- * by css, it might turn out to be worth mapping some of these missing cursors
- * to available cursors?
- */
-static const std::map <PointerStyle, OString> aPointerMap {
-    { PointerStyle::Arrow, "default" },
-    // PointerStyle::Null ?
-    { PointerStyle::Wait, "wait" },
-    { PointerStyle::Text, "text" },
-    { PointerStyle::Help, "help" },
-    { PointerStyle::Cross, "crosshair" },
-    { PointerStyle::Fill, "fill" },
-    { PointerStyle::Move, "move" },
-    { PointerStyle::NSize, "n-resize" },
-    { PointerStyle::SSize, "s-resize" },
-    { PointerStyle::WSize, "w-resize" },
-    { PointerStyle::ESize, "e-resize" },
-    { PointerStyle::NWSize, "ne-resize" },
-    { PointerStyle::NESize, "ne-resize" },
-    { PointerStyle::SWSize, "sw-resize" },
-    { PointerStyle::SESize, "se-resize" },
-    // WindowNSize through WindowSESize
-    { PointerStyle::HSplit, "col-resize" },
-    { PointerStyle::VSplit, "row-resize" },
-    { PointerStyle::HSizeBar, "col-resize" },
-    { PointerStyle::VSizeBar, "row-resize" },
-    { PointerStyle::Hand, "grab" },
-    { PointerStyle::RefHand, "grabbing" },
-    // Pen, Magnify, Fill, Rotate
-    // HShear, VShear
-    // Mirror, Crook, Crop, MovePoint, MoveBezierWeight
-    // MoveData
-    { PointerStyle::CopyData, "copy" },
-    { PointerStyle::LinkData, "alias" },
-    // MoveDataLink, CopyDataLink
-    //MoveFile, CopyFile, LinkFile
-    // MoveFileLink, CopyFileLink, MoveFiless, CopyFiles
-    { PointerStyle::NotAllowed, "not-allowed" },
-    // DrawLine through DrawCaption
-    // Chart, Detective, PivotCol, PivotRow, PivotField, Chain, ChainNotAllowed
-    // AutoScrollN through AutoScrollNSWE
-    { PointerStyle::TextVertical, "vertical-text" }
-    // Pivot Delete, TabSelectS through TabSelectSW
-    // PaintBrush, HideWhiteSpace, ShowWhiteSpace
-};
-
 static OUString getUString(const char* pString)
 {
     if (pString == nullptr)
@@ -2503,25 +2452,6 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
     }
 
     pDoc->postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier);
-
-    Pointer aPointer = pDoc->getPointer();
-    // We don't map all possible pointers hence we need a default
-    OString aPointerString = "default";
-    auto aIt = aPointerMap.find(aPointer.GetStyle());
-    if (aIt != aPointerMap.end())
-    {
-        aPointerString = aIt->second;
-    }
-
-    LibLODocument_Impl* pLib = static_cast<LibLODocument_Impl*>(pThis);
-    int nView = SfxLokHelper::getView();
-    if (nView < 0)
-        return;
-
-    if (pLib->mpCallbackFlushHandlers[nView])
-    {
-        pLib->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_MOUSE_POINTER, aPointerString.getStr());
-    }
 }
 
 static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)

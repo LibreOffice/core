@@ -22,6 +22,9 @@
 
 #include <tools/time.hxx>
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
+#include <vcl/ITiledRenderable.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/window.hxx>
@@ -481,6 +484,20 @@ void Window::SetPointer( const Pointer& rPointer )
     // possibly immediately move pointer
     if ( !mpWindowImpl->mpFrameData->mbInMouseMove && ImplTestMousePointerSet() )
         mpWindowImpl->mpFrame->SetPointer( ImplGetMousePointer() );
+
+    if (VclPtr<vcl::Window> pWin = GetParentWithLOKNotifier())
+    {
+        Pointer aPointer = GetPointer();
+        // We don't map all possible pointers hence we need a default
+        OString aPointerString = "default";
+        auto aIt = vcl::gaLOKPointerMap.find(aPointer.GetStyle());
+        if (aIt != vcl::gaLOKPointerMap.end())
+        {
+            aPointerString = aIt->second;
+        }
+
+        pWin->GetLOKNotifier()->libreOfficeKitViewCallback(LOK_CALLBACK_MOUSE_POINTER, aPointerString.getStr());
+    }
 }
 
 void Window::EnableChildPointerOverwrite( bool bOverwrite )
