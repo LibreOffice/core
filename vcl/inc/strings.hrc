@@ -83,7 +83,6 @@
 
 #define SV_STDTEXT_SERVICENOTAVAILABLE               NC_("SV_STDTEXT_SERVICENOTAVAILABLE", "The component (%s) could not be loaded.\nPlease start setup with the repair option.")
 
-#define SV_STDTEXT_DONTASKAGAIN                      NC_("SV_STDTEXT_DONTASKAGAIN", "Do not show this question again.")
 #define SV_STDTEXT_DONTWARNAGAIN                     NC_("SV_STDTEXT_DONTWARNAGAIN", "Do not show warning again.")
 
 #define SV_STDTEXT_ABOUT                             NC_("SV_STDTEXT_ABOUT", "About %PRODUCTNAME")

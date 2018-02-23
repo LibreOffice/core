@@ -803,7 +803,7 @@ NameClashQueryBox::NameClashQueryBox( vcl::Window* pParent,
     AddButton( IDEResId(RID_STR_DLGIMP_CLASH_REPLACE), RET_NO );
     AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
 
-    SetImage( QueryBox::GetStandardImage() );
+    SetImage(GetStandardQueryBoxImage());
 }
 
 
@@ -828,9 +828,8 @@ LanguageMismatchQueryBox::LanguageMismatchQueryBox( vcl::Window* pParent,
     AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
     AddButton( StandardButtonType::Help, RET_HELP, ButtonDialogFlags::Help, 4 );
 
-    SetImage( QueryBox::GetStandardImage() );
+    SetImage(GetStandardQueryBoxImage() );
 }
-
 
 bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& aLibName )
 {

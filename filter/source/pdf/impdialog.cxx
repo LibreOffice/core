@@ -1655,6 +1655,8 @@ ImplErrorDialog::ImplErrorDialog(const std::set< vcl::PDFWriter::ErrorCode >& rE
     }
 
     m_pErrors->SetSelectHdl( LINK( this, ImplErrorDialog, SelectHdl ) );
+
+    create_message_area();
 }
 
 

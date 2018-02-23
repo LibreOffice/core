@@ -23,7 +23,7 @@
 #include <cassert>
 
 #include <comphelper/string.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
 #include <reffact.hxx>
@@ -533,9 +533,11 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl, Button*, void)
         aBuf.append(aStrDelMsg.getToken(0, '#'));
         aBuf.append(aStrEntry);
         aBuf.append(aStrDelMsg.getToken(1, '#'));
-        ScopedVclPtrInstance< QueryBox > aBox(this, MessBoxStyle::YesNo|MessBoxStyle::DefaultYes, aBuf.makeStringAndClear());
-
-        if (RET_YES == aBox->Execute())
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                       VclMessageType::Question, VclButtonsType::YesNo,
+                                                       aBuf.makeStringAndClear()));
+        xQueryBox->set_default_response(RET_YES);
+        if (RET_YES == xQueryBox->run())
         {
             SCTAB nTab;
             SCCOL nColStart, nColEnd;

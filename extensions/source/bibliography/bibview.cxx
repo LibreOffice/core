@@ -32,7 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
@@ -138,11 +138,26 @@ namespace bib
             {
                 sErrorString += "\n";
                 sErrorString += BibResId(RID_MAP_QUESTION);
-                ScopedVclPtrInstance< QueryBox > aQuery(this, MessBoxStyle::YesNo, sErrorString);
-                aQuery->SetDefaultCheckBoxText();
-                short nResult = aQuery->Execute();
-                BibModul::GetConfig()->SetShowColumnAssignmentWarning(
-                    !aQuery->GetCheckBoxState());
+
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/sbibliography/ui/querydialog.ui"));
+                std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryDialog"));
+                xQueryBox->set_primary_text(sErrorString);
+                std::unique_ptr<weld::CheckButton> xWarningOnBox(xBuilder->weld_check_button("ask"));
+
+                //fdo#75121, a bit tricky because the widgets we want to align with
+                //don't actually exist in the ui description, they're implied
+                std::unique_ptr<weld::Container> xOrigParent(xWarningOnBox->weld_parent());
+                std::unique_ptr<weld::Container> xContentArea(xQueryBox->weld_message_area());
+                xOrigParent->remove(xWarningOnBox.get());
+                xContentArea->add(xWarningOnBox.get());
+
+                short nResult = xQueryBox->run();
+                BibModul::GetConfig()->SetShowColumnAssignmentWarning(!xWarningOnBox->get_active());
+
+                //put them back as they were
+                xContentArea->remove(xWarningOnBox.get());
+                xOrigParent->add(xWarningOnBox.get());
+
                 if( RET_YES != nResult )
                 {
                     bExecute = false;
