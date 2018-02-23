@@ -58,7 +58,7 @@ class ScTextImportOptionsDlg;
 class ScCondFormatManagerDlg;
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
-    ScopedVclPtr<DialogClass> pDlg;                 \
+    VclPtr<DialogClass> pDlg;                       \
 public:                                             \
     explicit        Class( DialogClass* p)          \
                      : pDlg(p)                      \
