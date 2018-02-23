@@ -124,6 +124,11 @@ $(call gb_UIConfig_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),UIA,2)
 	rm -f $(call gb_UIConfig_get_a11yerrors_target,$*)
 
+# Enable this to regenerate suppression files
+ifeq (1,0)
+GEN_A11Y_SUPPRS = -g $(UI_A11YSUPPRS)
+endif
+
 define gb_UIConfig_a11yerrors__command
 $(call gb_Output_announce,$(2),$(true),UIA,1)
 $(call gb_UIConfig__gla11y_command)
@@ -154,6 +159,7 @@ $(call gb_PackageSet_add_package,$(call gb_UIConfig_get_packagesetname,$(1)),$(c
 $(call gb_UIConfig_get_target,$(1)) :| $(dir $(call gb_UIConfig_get_target,$(1))).dir
 $(call gb_UIConfig_get_imagelist_target,$(1)) :| $(dir $(call gb_UIConfig_get_imagelist_target,$(1))).dir
 $(call gb_UIConfig_get_a11yerrors_target,$(1)) :| $(dir $(call gb_UIConfig_get_a11yerrors_target,$(1))).dir
+$(call gb_UIConfig_get_a11yerrors_target,$(1)) : UI_A11YSUPPRS := $(SRCDIR)/solenv/sanitizers/ui/$(1).suppr
 $(call gb_UIConfig_get_target,$(1)) : $(call gb_PackageSet_get_target,$(call gb_UIConfig_get_packagesetname,$(1)))
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_PackageSet_get_clean_target,$(call gb_UIConfig_get_packagesetname,$(1)))
 
