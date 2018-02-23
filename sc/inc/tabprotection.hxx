@@ -49,6 +49,12 @@ struct ScOoxPasswordHash
 
     ScOoxPasswordHash() : mnSpinCount(0) {}
     bool hasPassword() const { return !maHashValue.isEmpty(); }
+    void clear()
+    {
+        // Keep algorithm and spin count.
+        maHashValue.clear();
+        maSaltValue.clear();
+    }
 };
 
 namespace ScPassHashHelper
