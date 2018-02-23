@@ -108,19 +108,8 @@ public:
 VCL_DLLPUBLIC Image const & GetStandardErrorBoxImage();
 VCL_DLLPUBLIC OUString GetStandardErrorBoxText();
 
-class VCL_DLLPUBLIC QueryBox : public MessBox
-{
-public:
-                        QueryBox( vcl::Window* pParent, MessBoxStyle nStyle,
-                                  const OUString& rMessage );
-                        QueryBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits n,
-                                  const OUString& rMessage );
-
-    void                SetDefaultCheckBoxText();
-
-    static Image const & GetStandardImage();
-    static OUString     GetStandardText();
-};
+VCL_DLLPUBLIC Image const & GetStandardQueryBoxImage();
+VCL_DLLPUBLIC OUString GetStandardQueryBoxText();
 
 #endif // INCLUDED_VCL_MSGBOX_HXX
 

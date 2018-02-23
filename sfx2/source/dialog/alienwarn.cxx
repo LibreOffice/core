@@ -32,7 +32,7 @@ SfxAlienWarningDialog::SfxAlienWarningDialog(vcl::Window* pParent, const OUStrin
     get(m_pWarningOnBox, "ask");
     //fdo#75121, a bit tricky because the widgets we want to align with
     //don't actually exist in the ui description, they're implied
-    m_pWarningOnBox->set_margin_left(QueryBox::GetStandardImage().GetSizePixel().Width() + 12);
+    m_pWarningOnBox->set_margin_left(GetStandardQueryBoxImage().GetSizePixel().Width() + 12);
 
     get(m_pKeepCurrentBtn, "save");
     get(m_pUseDefaultFormatBtn, "cancel");

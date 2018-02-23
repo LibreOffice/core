@@ -210,7 +210,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( co
         }
         else if ( sImageName == "query" )
         {
-            xRet = Graphic(QueryBox::GetStandardImage().GetBitmapEx()).GetXGraphic();
+            xRet = Graphic(GetStandardQueryBoxImage().GetBitmapEx()).GetXGraphic();
         }
     }
     return xRet;

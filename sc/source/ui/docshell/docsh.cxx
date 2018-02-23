@@ -26,6 +26,7 @@
 #include <comphelper/classids.hxx>
 #include <formula/errorcodes.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 #include <rtl/bootstrap.hxx>
@@ -473,14 +474,18 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css
         {
             // Generator is not LibreOffice.  Ask if the user wants to perform
             // full re-calculation.
-            ScopedVclPtrInstance<QueryBox> aBox(
-                GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
-                ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_ODS));
-            aBox->SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
+            vcl::Window* pWin = GetActiveDialogParent();
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                           ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_ODS)));
+            xQueryBox->set_default_response(RET_YES);
 
-            bHardRecalc = aBox->Execute() == RET_YES;
+            //TO DO aBox->SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
 
-            if (aBox->GetCheckBoxState())
+            bHardRecalc = xQueryBox->run() == RET_YES;
+
+//            if (aBox->GetCheckBoxState())
+            if (0)
             {
                 // Always perform selected action in the future.
                 std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());

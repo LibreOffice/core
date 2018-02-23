@@ -421,33 +421,13 @@ OUString GetStandardErrorBoxText()
     return VclResId(SV_MSGBOX_ERROR);
 }
 
-QueryBox::QueryBox( vcl::Window* pParent, MessBoxStyle nStyle, const OUString& rMessage ) :
-    QueryBox( pParent, nStyle, 0, rMessage )
-{
-}
-
-QueryBox::QueryBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits nWinBits, const OUString& rMessage ) :
-    MessBox( pParent, nStyle, nWinBits, OUString(), rMessage )
-{
-    // Default Text is the display title from the application
-    if ( GetText().isEmpty() )
-        SetText( GetStandardText() );
-
-    SetImage( QueryBox::GetStandardImage() );
-}
-
-void QueryBox::SetDefaultCheckBoxText()
-{
-    maCheckBoxText = VclResId(SV_STDTEXT_DONTASKAGAIN);
-}
-
-Image const & QueryBox::GetStandardImage()
+Image const & GetStandardQueryBoxImage()
 {
     ImplInitMsgBoxImageList();
     return ImplGetSVData()->maWinData.maMsgBoxImgList[1];
 }
 
-OUString QueryBox::GetStandardText()
+OUString GetStandardQueryBoxText()
 {
     return VclResId(SV_MSGBOX_QUERY);
 }

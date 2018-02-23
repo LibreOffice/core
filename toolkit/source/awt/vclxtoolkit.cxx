@@ -815,6 +815,19 @@ namespace
             SetImage(GetStandardErrorBoxImage());
         }
     };
+
+    class QueryBox : public MessBox
+    {
+    public:
+        QueryBox(vcl::Window* pParent, MessBoxStyle nStyle, WinBits nWinBits, const OUString& rMessage)
+            : MessBox(pParent, nStyle, nWinBits, OUString(), rMessage)
+        {
+            // Default Text is the display title from the application
+            if (GetText().isEmpty())
+                SetText(GetStandardQueryBoxText());
+            SetImage(GetStandardQueryBoxImage());
+        }
+    };
 }
 
 vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,

@@ -32,7 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
@@ -138,11 +138,13 @@ namespace bib
             {
                 sErrorString += "\n";
                 sErrorString += BibResId(RID_MAP_QUESTION);
-                ScopedVclPtrInstance< QueryBox > aQuery(this, MessBoxStyle::YesNo, sErrorString);
-                aQuery->SetDefaultCheckBoxText();
-                short nResult = aQuery->Execute();
-                BibModul::GetConfig()->SetShowColumnAssignmentWarning(
-                    !aQuery->GetCheckBoxState());
+                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                               VclMessageType::Question, VclButtonsType::YesNo,
+                                                               sErrorString));
+                //TO DO aQuery->SetDefaultCheckBoxText();
+                short nResult = xQueryBox->run();
+                //BibModul::GetConfig()->SetShowColumnAssignmentWarning(
+                //    !aQuery->GetCheckBoxState());
                 if( RET_YES != nResult )
                 {
                     bExecute = false;

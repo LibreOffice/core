@@ -33,7 +33,6 @@
 #include <vcl/waitobj.hxx>
 #include <svl/aeitem.hxx>
 #include <editeng/editstat.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
@@ -326,21 +325,25 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                 if ( mpDrawView->GetMarkedObjectList().GetMarkCount() > 0 &&
                     !mpDrawView->IsCrookAllowed( mpDrawView->IsCrookNoContortion() ) )
                 {
+                    ::sd::Window* pWindow = GetActiveWindow();
                     if ( mpDrawView->IsPresObjSelected() )
                     {
-                        ::sd::Window* pWindow = GetActiveWindow();
                         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
                                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                                       SdResId(STR_ACTION_NOTPOSSIBLE)));
                         xInfoBox->run();
                     }
-                    else if ( ScopedVclPtrInstance<QueryBox>(GetActiveWindow(), MessBoxStyle::YesNo,
-                                      SdResId(STR_ASK_FOR_CONVERT_TO_BEZIER)
-                                      )->Execute() == RET_YES )
+                    else
                     {
-                        // implicit transformation into bezier
-                        WaitObject aWait( GetActiveWindow() );
-                        mpDrawView->ConvertMarkedToPathObj(false);
+                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                                       VclMessageType::Question, VclButtonsType::YesNo,
+                                                                       SdResId(STR_ASK_FOR_CONVERT_TO_BEZIER)));
+                        if (xQueryBox->run() == RET_YES )
+                        {
+                            // implicit transformation into bezier
+                            WaitObject aWait( GetActiveWindow() );
+                            mpDrawView->ConvertMarkedToPathObj(false);
+                        }
                     }
                 }
             }
@@ -366,21 +369,25 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                 if ( nMarkCnt > 0 && !b3DObjMarked &&
                      (!mpDrawView->IsShearAllowed() || !mpDrawView->IsDistortAllowed()) )
                 {
+                    ::sd::Window* pWindow = GetActiveWindow();
                     if ( mpDrawView->IsPresObjSelected() )
                     {
-                        ::sd::Window* pWindow = GetActiveWindow();
                         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
                                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                                       SdResId(STR_ACTION_NOTPOSSIBLE)));
                         xInfoBox->run();
                     }
-                    else if ( ScopedVclPtrInstance<QueryBox>(GetActiveWindow(), MessBoxStyle::YesNo,
-                                      SdResId(STR_ASK_FOR_CONVERT_TO_BEZIER)
-                                      )->Execute() == RET_YES )
+                    else
                     {
-                        // implicit transformation into bezier
-                        WaitObject aWait( GetActiveWindow() );
-                        mpDrawView->ConvertMarkedToPathObj(false);
+                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                                                                       VclMessageType::Question, VclButtonsType::YesNo,
+                                                                       SdResId(STR_ASK_FOR_CONVERT_TO_BEZIER)));
+                        if (xQueryBox->run() == RET_YES)
+                        {
+                            // implicit transformation into bezier
+                            WaitObject aWait( GetActiveWindow() );
+                            mpDrawView->ConvertMarkedToPathObj(false);
+                        }
                     }
                 }
             }

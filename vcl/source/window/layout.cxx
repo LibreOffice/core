@@ -2259,7 +2259,7 @@ short MessageDialog::Execute()
                 m_pImage->SetImage(WarningBox::GetStandardImage());
                 break;
             case VclMessageType::Question:
-                m_pImage->SetImage(QueryBox::GetStandardImage());
+                m_pImage->SetImage(GetStandardQueryBoxImage());
                 break;
             case VclMessageType::Error:
                 m_pImage->SetImage(GetStandardErrorBoxImage());
