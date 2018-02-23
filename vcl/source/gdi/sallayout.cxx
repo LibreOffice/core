@@ -1214,7 +1214,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         rArgs.mnEndCharPos : rArgs.mnMinCharPos - 1;
     int nRunVisibleEndChar = pGlyphs[0]->mnCharPos;
     // merge the fallback levels
-    while( nValid[0] && (nLevel > 0))
+    while( nValid[nFirstValid] && (nLevel > 0))
     {
         // find best fallback level
         for( n = 0; n < nLevel; ++n )
@@ -1249,7 +1249,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                 nStartOld[0] = nStartNew[0];
                 nValid[0] = mpLayouts[0]->GetNextGlyphs(1, &pGlyphs[0], aPos, nStartNew[0]);
 
-                if( !nValid[0] )
+                if( !nValid[nFirstValid] )
                    break;
             }
         }
