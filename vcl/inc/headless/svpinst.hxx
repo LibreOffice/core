@@ -22,6 +22,7 @@
 
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
+#include <osl/conditn.hxx>
 #include <salinst.hxx>
 #include <salwtype.hxx>
 #include <saltimer.hxx>
@@ -30,6 +31,7 @@
 #include <unx/genprn.h>
 
 #include <list>
+#include <condition_variable>
 
 #include <time.h>
 
@@ -56,19 +58,55 @@ public:
 class SvpSalFrame;
 class GenPspGraphics;
 
+enum class SvpRequest
+{
+    NONE,
+    MainThreadDispatchOneEvent,
+    MainThreadDispatchAllEvents,
+};
+
+class SvpSalYieldMutex : public SalYieldMutex
+{
+private:
+    // note: these members might as well live in SvpSalInstance, but there is
+    // at least one subclass of SvpSalInstance (GTK3) that doesn't use them.
+    friend class SvpSalInstance;
+    // members for communication from main thread to non-main thread
+    int                     m_FeedbackFDs[2];
+    osl::Condition          m_NonMainWaitingYieldCond;
+    // members for communication from non-main thread to main thread
+    bool                    m_bNoYieldLock = false; // accessed only on main thread
+    std::mutex              m_WakeUpMainMutex; // guard m_wakeUpMain & m_Request
+    std::condition_variable m_WakeUpMainCond;
+    bool                    m_wakeUpMain = false;
+    SvpRequest              m_Request = SvpRequest::NONE;
+
+protected:
+    virtual void            doAcquire( sal_uInt32 nLockCount ) override;
+    virtual sal_uInt32      doRelease( bool bUnlockAll ) override;
+
+public:
+    SvpSalYieldMutex();
+    virtual ~SvpSalYieldMutex() override;
+
+    virtual bool IsCurrentThread() const override;
+
+};
+
 SalInstance* svp_create_SalInstance();
 
+// NOTE: the functions IsMainThread, DoYield and Wakeup *require* the use of
+// SvpSalYieldMutex; if a subclass uses something else it must override these
+// (Wakeup is only called by SvpSalTimer and SvpSalFrame)
 class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance, public SalUserEventList
 {
     timeval                 m_aTimeout;
     sal_uLong               m_nTimeoutMS;
-    int                     m_pTimeoutFDS[2];
-
-    void                    DoReleaseYield( int nTimeoutMS );
+    oslThreadIdentifier     m_MainThread;
 
     virtual void            TriggerUserEventProcessing() override;
     virtual void            ProcessEvent( SalUserEvent aEvent ) override;
-    void                    Wakeup();
+    void                    Wakeup(SvpRequest request = SvpRequest::NONE);
 
 public:
     static SvpSalInstance*  s_pDefaultInstance;
@@ -132,7 +170,7 @@ public:
     // and timer
     virtual bool            DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
     virtual bool            AnyInput( VclInputFlags nType ) override;
-    virtual bool            IsMainThread() const override { return true; }
+    virtual bool            IsMainThread() const override;
 
     // may return NULL to disable session management
     virtual SalSession*     CreateSalSession() override;
