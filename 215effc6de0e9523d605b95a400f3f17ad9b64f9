@@ -16,6 +16,24 @@
       "revId": "215effc6de0e9523d605b95a400f3f17ad9b64f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_47e8f3e2",
+        "filename": "external/python3/ExternalPackage_python3.mk",
+        "patchSetId": 10
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2018-02-23T14:15:45Z",
+      "side": 1,
+      "message": "Well, that is what upstream python installs (and what we have in Linux distributions for instance), yes, it\u0027s unfortunate that they put all of that. I guess we can filter the content to only keep what is actually needed for setup.py (installation paths).",
+      "parentUuid": "fa31d9ce_e7d64726",
+      "revId": "215effc6de0e9523d605b95a400f3f17ad9b64f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
