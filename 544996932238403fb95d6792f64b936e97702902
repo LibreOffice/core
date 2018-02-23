@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_55ab401d",
+        "filename": "compilerplugins/clang/redundantfcast.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-23T09:13:19Z",
+      "side": 1,
+      "message": "That still leaves the question whether that assumption is useful.  SAL_WARN_UNUSED is used on classes that have nontrivial ctor/dtor (so the compiler can\u0027t figure out for itself whether to warn) but which are nevertheless considered side-effect--free on the world outside the class instance.\n\nThink a PRNG class with internal state, where the ctor sets a seed member to a random value from some other source.  It should arguably be marked SAL_WARN_UNUSED.  But it may also make sense to create copies, so that the two instances afterwards produce identical streams of random numbers.",
+      "revId": "544996932238403fb95d6792f64b936e97702902",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
