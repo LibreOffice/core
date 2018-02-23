@@ -305,12 +305,10 @@ bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     nMemberId &= ~CONVERT_TWIPS;
 
     OUString aName;
-    OUString aURL;
     css::uno::Reference< css::awt::XBitmap > xBmp;
     css::uno::Reference< css::graphic::XGraphic > xGraphic;
 
     bool bSetName   = false;
-    bool bSetURL    = false;
     bool bSetBitmap = false;
 
     if( nMemberId == MID_NAME )
@@ -341,18 +339,6 @@ bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     {
         SetName( aName );
     }
-    if( bSetURL )
-    {
-        GraphicObject aGraphicObject  = GraphicObject::CreateGraphicObjectFromURL(aURL);
-        if( aGraphicObject.GetType() != GraphicType::NONE )
-            maGraphicObject = aGraphicObject;
-
-        // #121194# Prefer GraphicObject over bitmap object if both are provided
-        if(bSetBitmap && GraphicType::NONE != maGraphicObject.GetType())
-        {
-            bSetBitmap = false;
-        }
-    }
     if( bSetBitmap )
     {
         if(xBmp.is())
@@ -365,7 +351,7 @@ bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
         }
     }
 
-    return (bSetName || bSetURL || bSetBitmap);
+    return (bSetName || bSetBitmap);
 }
 
 bool XFillBitmapItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
