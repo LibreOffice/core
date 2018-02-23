@@ -1,0 +1,18 @@
+diff -ur libcmis.org/src/libcmis/xml-utils.cxx libcmis/src/libcmis/xml-utils.cxx
+--- libcmis.org/src/libcmis/xml-utils.cxx	2018-02-23 12:07:56.447339701 +0100
++++ libcmis/src/libcmis/xml-utils.cxx	2018-02-23 12:10:16.167218210 +0100
+@@ -459,10 +459,11 @@
+         bool value = false;
+         if ( boolStr == "true" || boolStr == "1" )
+             value = true;
+-        else if ( boolStr == "false" || boolStr == "0" )
+-            value = false;
++        // else if ( boolStr == "false" || boolStr == "0" )
++        //     value = false;
+         else
+-            throw Exception( string( "Invalid xsd:boolean input: " ) + boolStr );
++            value = false;
++            // throw Exception( string( "Invalid xsd:boolean input: " ) + boolStr );
+         return value;
+     }
+ 
