@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_e7d64726",
+        "filename": "external/python3/ExternalPackage_python3.mk",
+        "patchSetId": 10
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-23T13:54:52Z",
+      "side": 1,
+      "message": "These two files (Makefile and pyconfig.h) don\u0027t look suitable to be included in installation sets (and, in extension, in instdir; instdir shall not contain anything that will not go into installation sets).  For example, for my local Linux build, instdir/program/python-core-3.5.4/lib/python3.5/config-3.5m/Makefile contains problematic lines like\n\n...\n\u003e abs_srcdir\u003d\t/data/sbergman/lo-clang2/core/workdir/UnpackedTarball/python3\n\u003e abs_builddir\u003d\t/data/sbergman/lo-clang2/core/workdir/UnpackedTarball/python3\n...\n\u003e CC\u003d\t\t/data/sbergman/llvm/inst/bin/clang -fcolor-diagnostics -fno-sanitize-recover\u003dall -I/data/sbergman/lo-clang2/core/workdir/UnpackedTarball/openssl/include -I/data/sbergman/lo-clang2/core/workdir/UnpackedTarball/openssl/include -I/data/sbergman/lo-clang2/core/workdir/UnpackedTarball/expat/lib -pthread\n\u003e CXX\u003d\t\t/data/sbergman/llvm/inst/bin/clang++ -fcolor-diagnostics -fno-sanitize-recover\u003dall -fsized-deallocation -pthread\n...\n\u003e CONFIGURE_CFLAGS\u003d\t -I/data/sbergman/lo-clang2/core/workdir/UnpackedTarball/zlib  \n...\n\u003e CONFIGURE_LDFLAGS\u003d\t-L/data/sbergman/lo-clang2/core/workdir/UnpackedTarball/openssl -L/data/sbergman/lo-clang2/core/workdir/LinkTarget/StaticLibrary -L/data/sbergman/lo-clang2/core/workdir/LinkTarget/StaticLibrary\n...\n\u003e RUNSHARED\u003d       LD_LIBRARY_PATH\u003d/data/sbergman/lo-clang2/core/workdir/UnpackedTarball/python3\n...\n\nmentioning the position of my local build tree (instead of the position where the end user will install LO), and details of my CC/CXX compiler settings.  Likewise, instdir/program/python-core-3.5.4/include/python3.5m/pyconfig.h contains various HAVE_* information about my local system, when the installed version should presumably contain information about the end-user\u0027s system.",
+      "revId": "215effc6de0e9523d605b95a400f3f17ad9b64f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
