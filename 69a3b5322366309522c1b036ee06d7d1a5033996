@@ -70,6 +70,30 @@
       "revId": "69a3b5322366309522c1b036ee06d7d1a5033996",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_87baeb21",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2018-02-23T12:13:00Z",
+      "side": 1,
+      "message": "Ah yes in the system case, runtime uses the system-provided python.\n\nOk, I believe I now understand all the python thing, and Patch Set 9 should be addressing all your comments (and happens to be much simpler since gla11y is then always enabled since we always have a python interpreter at build time).\n\nThanks for your patience!",
+      "parentUuid": "fa31d9ce_e79e47b7",
+      "range": {
+        "startLine": 9,
+        "startChar": 37,
+        "endLine": 9,
+        "endChar": 41
+      },
+      "revId": "69a3b5322366309522c1b036ee06d7d1a5033996",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
