@@ -677,7 +677,7 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     switch (nType)
     {
     case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
-        pGridWindow->MouseButtonDown(aEvent);
+        Application::PostMouseEvent(VCLEVENT_WINDOW_MOUSEBUTTONDOWN, pGridWindow, &aEvent);
 
         // Invoke the context menu
         if (nButtons & MOUSE_RIGHT)
@@ -687,16 +687,16 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
         }
         break;
     case LOK_MOUSEEVENT_MOUSEBUTTONUP:
-        pGridWindow->MouseButtonUp(aEvent);
+        Application::PostMouseEvent(VCLEVENT_WINDOW_MOUSEBUTTONUP, pGridWindow, &aEvent);
 
         // sometimes MouseButtonDown captures mouse and starts tracking, and VCL
         // will not take care of releasing that with tiled rendering
-        if (pGridWindow->IsTracking())
-            pGridWindow->EndTracking(TrackingEventFlags::DontCallHdl);
+        //if (pGridWindow->IsTracking())
+        //pGridWindow->EndTracking(TrackingEventFlags::DontCallHdl);
 
         break;
     case LOK_MOUSEEVENT_MOUSEMOVE:
-        pGridWindow->MouseMove(aEvent);
+        Application::PostMouseEvent(VCLEVENT_WINDOW_MOUSEMOVE, pGridWindow, &aEvent);
         break;
     default:
         assert(false);
