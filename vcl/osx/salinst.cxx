@@ -330,8 +330,10 @@ sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
     sal_uInt32 nCount;
     {
         std::unique_lock<std::mutex> g(m_runInMainMutex);
+        // read m_nCount before doRelease
+        bool const isReleased(bUnlockAll || m_nCount == 1);
         nCount = comphelper::GenericSolarMutex::doRelease( bUnlockAll );
-        if ( 0 == m_nCount && !pInst->IsMainThread() ) {
+        if (isReleased && !pInst->IsMainThread()) {
             m_wakeUpMain = true;
             m_aInMainCondition.notify_all();
         }
