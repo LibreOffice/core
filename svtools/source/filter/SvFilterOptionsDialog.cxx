@@ -25,7 +25,7 @@
 #include <osl/module.hxx>
 #include <rtl/ref.hxx>
 #include <svl/solar.hrc>
-#include <vcl/fltcall.hxx>
+#include <FltCallDialogParameter.hxx>
 #include <vcl/settings.hxx>
 #include "exportdialog.hxx"
 #include <uno/mapping.hxx>

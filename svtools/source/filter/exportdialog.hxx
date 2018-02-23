@@ -21,7 +21,7 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_FILTER_EXPORTDIALOG_HXX
 #define INCLUDED_SVTOOLS_SOURCE_FILTER_EXPORTDIALOG_HXX
 
-#include <vcl/fltcall.hxx>
+#include <FltCallDialogParameter.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
