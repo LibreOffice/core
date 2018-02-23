@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_9531380e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-23T10:09:19Z",
+      "side": 1,
+      "message": "We need it to run on all systems, not only some.\n\nThere are only two cases of which Python to use at LO build time:\n\n1  --enable-python\u003dfully-internal definitely uses the external/python3 one that gets built at LO build time.  PYTHON_FOR_BUILD will be empty in this case.\n\n2  --enable-python\u003dsystem and --disable-python definitely use the system Python.  (Configuration will fail for --disable-python if no suitable Python is found on the system.)  PYTHON_FOR_BUILD will be non-empty and point at the system Python interpreter in this case.\n\nAll other supported --enable-python\u003d values resolve to one of those two cases, depending on whether or not a suitable Python is found on the system.  (They only make a difference whether external/python3 will be included in LO installation sets.)\n\n*  So, when using Python to execute gla11y at LO build time, we should always either use PYTHON_FOR_BUILD if that is set, or else external/python3.  (gb_ExternalExecutable_get_command,python takes care of that.)  I think this is already covered by the current patch set.\n\n*  configure.ac needs to check for a system Python\u0027s lxml whenever PYTHON_FOR_BUILD is non-empty, not only when enable_python\u003dsystem.  (And the SYSTEM_PYTHON_LXML variable is actually redundant, as it encodes the same information as \"BUILD_TYPE doesn\u0027t contain LXML\").\n\n*  solenv/gbuild/UIConfig.mk needs to call gb_UIConfig_a11yerrors__command unconditionally.  The PYTHON_LXML variable should not be needed.",
+      "range": {
+        "startLine": 9,
+        "startChar": 37,
+        "endLine": 9,
+        "endChar": 41
+      },
+      "revId": "69a3b5322366309522c1b036ee06d7d1a5033996",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
