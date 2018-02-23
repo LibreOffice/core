@@ -39,11 +39,17 @@ except ImportError:
     lxml = False
 
 progname = os.path.basename(sys.argv[0])
+suppressions = {}
+gen_suppr = None
+gen_supprfile = None
 outfile = None
+pflag = False
 Werror = False
 Wnone = False
 errors = 0
+errexists = 0
 warnings = 0
+warnexists = 0
 
 def step_elm(elm):
     """
@@ -75,6 +81,29 @@ def find_elm(root, elm):
             return step + path
     return None
 
+def errpath(filename, tree, elm):
+    """
+    Return the XML class path of the element
+    """
+    if elm is None:
+        return ""
+    path = ""
+    if 'class' in elm.attrib:
+        path += elm.attrib['class']
+    oid = elm.attrib.get('id')
+    if oid is not None:
+        oid = oid.encode('ascii','ignore').decode('ascii')
+        path += "[@id='%s']" % oid
+    if lxml:
+        elm = elm.getparent()
+        while elm is not None:
+            step = step_elm(elm)
+            path = step + path
+            elm = elm.getparent()
+    else:
+        path = find_elm(tree.getroot(), elm)[:-1]
+    path = filename + ':' + path
+    return path
 
 def elm_prefix(filename, elm):
     """
@@ -99,10 +128,44 @@ def elm_name(elm):
         return name
     return ""
 
-def err(filename, tree, elm, msg):
-    global errors
+def elm_suppr(filename, tree, elm, msgtype):
+    """
+    Return the prefix to be displayed to the user and the suppression line for
+    the warning type "msgtype" for element "elm"
+    """
+    global gen_suppr, gen_supprfile, pflag
 
-    prefix = elm_prefix(filename, elm)
+    if suppressions or gen_suppr is not None or pflag:
+        prefix = errpath(filename, tree, elm)
+
+    if suppressions or gen_suppr is not None:
+        suppr = '%s %s' % (prefix, msgtype)
+
+        if gen_suppr is not None and msgtype is not None:
+            if gen_supprfile is None:
+                gen_supprfile = open(gen_suppr, 'w')
+            print(suppr, file=gen_supprfile)
+    else:
+        suppr = None
+
+    if not pflag:
+        # Use user-friendly line numbers
+        prefix = elm_prefix(filename, elm)
+
+    return (prefix, suppr)
+
+def err(filename, tree, elm, msgtype, msg):
+    """
+    Emit an error for an element
+    """
+    global errors, errexists
+
+    (prefix, suppr) = elm_suppr(filename, tree, elm, msgtype)
+
+    if suppr in suppressions:
+        # Suppressed
+        errexists += 1
+        return
 
     errors += 1
     msg = "%s ERROR: %s%s" % (prefix, elm_name(elm), msg)
@@ -111,13 +174,23 @@ def err(filename, tree, elm, msg):
         print(msg, file=outfile)
 
 
-def warn(filename, elm, msg):
-    global Werror, Wnone, errors, warnings
+def warn(filename, tree, elm, msgtype, msg):
+    """
+    Emit a warning for an element
+    """
+    global Werror, Wnone, errors, errexists, warnings, warnexists
 
     if Wnone:
         return
 
-    prefix = elm_prefix(filename, elm)
+    (prefix, suppr) = elm_suppr(filename, tree, elm, msgtype)
+    if suppr in suppressions:
+        # Suppressed
+        if Werror:
+            errexists += 1
+        else:
+            warnexists += 1
+        return
 
     if Werror:
         errors += 1
@@ -136,9 +209,9 @@ def check_objects(filename, tree, elm, objects, target):
     """
     length = len(list(objects))
     if length == 0:
-        err(filename, tree, elm, "uses undeclared target '%s'" % target)
+        err(filename, tree, elm, "undeclared-target", "uses undeclared target '%s'" % target)
     elif length > 1:
-        err(filename, tree, elm, "several targets are named '%s'" % target)
+        err(filename, tree, elm, "multiple-target", "several targets are named '%s'" % target)
 
 def check_props(filename, tree, root, elm, props):
     """
@@ -220,25 +293,53 @@ def check_a11y_relation(filename, tree):
         if len(labelled_by) > 0:
             continue
 
+        # Case 3/4: has an ID...
+        oid = obj.attrib.get('id')
+        if oid is not None:
+            # ...referenced by a single "label-for" <relation>
+            rels = root.iterfind(".//relation[@target='%s']" % oid)
+            labelfor = [r for r in rels if r.attrib.get('type') == 'label-for']
+            if len(labelfor) == 1:
+                continue
+            if len(labelfor) > 1:
+                err(filename, tree, obj, "multiple-label-for", "has too many elements"
+                    ", expected single <relation type='label-for' target='%s'>"
+                    "%s" % (oid, elm_lines(labelfor)))
+                continue
+
+            # ...referenced by a single "mnemonic_widget"
+            props = root.iterfind(".//property[@name='mnemonic_widget']")
+            props = [p for p in props if p.text == oid]
+            # TODO: warn when more than one.
+            if len(props) >= 1:
+                continue
+
         # TODO: after a few more checks and false-positives filtering, warn
         # that this does not have a label
+        if obj.attrib['class'] == "GtkScale":
+            # GtkScale definitely needs a context
+            err(filename, tree, obj, "no-labelled-by", "has no accessibility label")
 
 
 def usage():
-    print("%s [-W error|none] [-o LOG_FILE] [file ... | -L filelist]" % progname,
+    print("%s [-W error|none] [-p] [-g SUPPR_FILE] [-s SUPPR_FILE] [-o LOG_FILE] [file ... | -L filelist]" % progname,
           file=sys.stderr)
+    print("  -p print XML class path instead of line number");
+    print("  -g Generate suppression file SUPPR_FILE");
+    print("  -s Suppress warnings given by file SUPPR_FILE");
     print("  -o Also prints errors and warnings to given file");
     sys.exit(2)
 
 
 def main():
-    global Werror, Wnone, errors, outfile
+    global pflag, Werror, Wnone, gen_suppr, gen_supprfile, suppressions, errors, outfile
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "W:o:L:")
+        opts, args = getopt.getopt(sys.argv[1:], "W:pg:s:o:L:")
     except getopt.GetoptError:
         usage()
 
+    suppr = None
     out = None
     filelist = None
     for o, a in opts:
@@ -247,10 +348,27 @@ def main():
                 Werror = True
             elif a == "none":
                 Wnone = True
+        elif o == "-p":
+            pflag = True
+        elif o == "-g":
+            gen_suppr = a
+        elif o == "-s":
+            suppr = a
         elif o == "-o":
             out = a
         elif o == "-L":
             filelist = a
+
+    # Read suppression file before overwriting it
+    if suppr is not None:
+        try:
+            supprfile = open(suppr, 'r')
+            for line in supprfile.readlines():
+                prefix = line.rstrip()
+                suppressions[prefix] = True
+            supprfile.close()
+        except IOError:
+            pass
 
     if out is not None:
         outfile = open(out, 'w')
@@ -270,10 +388,10 @@ def main():
         try:
             tree = ET.parse(filename)
         except ET.ParseError:
-            err(filename, None, None, "malformatted xml file")
+            err(filename, None, None, "parse", "malformatted xml file")
             continue
         except IOError:
-            err(filename, None, None, "unable to read file")
+            err(filename, None, None, None, "unable to read file")
             continue
 
         try:
@@ -281,11 +399,26 @@ def main():
         except Exception as error:
             import traceback
             traceback.print_exc()
-            err(filename, None, None, "error parsing file")
+            err(filename, None, None, "parse", "error parsing file")
 
+    if errors > 0 or errexists > 0:
+        estr = "%s new error%s" % (errors, 's' if errors > 1 else '')
+        if errexists > 0:
+            estr += " (%s suppressed by %s)" % (errexists, suppr)
+        print(estr)
+
+    if warnings > 0 or warnexists > 0:
+        wstr = "%s new warning%s" % (warnings,
+                                           's' if warnings > 1 else '')
+        if warnexists > 0:
+            wstr += " (%s suppressed by %s)" % (warnexists, suppr)
+        print(wstr)
+
+    if gen_supprfile is not None:
+        gen_supprfile.close()
     if outfile is not None:
         outfile.close()
-    if errors > 0:
+    if errors > 0 and gen_suppr is None:
         sys.exit(1)
 
 
