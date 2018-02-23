@@ -34,6 +34,8 @@ public:
     virtual void notifyWindow(vcl::LOKWindowId nLOKWindowId,
                               const OUString& rAction,
                               const std::vector<LOKPayloadItem>& rPayload = std::vector<LOKPayloadItem>()) const = 0;
+
+    virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) const = 0;
 };
 
 } // namespace vcl

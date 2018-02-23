@@ -316,6 +316,7 @@ void ScTiledRenderingTest::testSortAscendingDescending()
     pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, 551, 129, 1, MOUSE_LEFT, 0);
     pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEMOVE, 820, 1336, 1, MOUSE_LEFT, 0);
     pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, 820, 1359, 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
 
     // sort ascending
     uno::Sequence<beans::PropertyValue> aArgs;
@@ -865,6 +866,7 @@ void ScTiledRenderingTest::testGraphicInvalidate()
     aView.m_bGraphicSelection = false;
     pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 1, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bGraphicSelection);
 
     // Drag Drop graphic
