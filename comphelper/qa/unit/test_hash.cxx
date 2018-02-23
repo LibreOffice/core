@@ -9,6 +9,7 @@
 
 #include <comphelper/hash.hxx>
 
+#include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <iomanip>
 
@@ -22,12 +23,16 @@ public:
     void testSHA1();
     void testSHA256();
     void testSHA512();
+    void testSHA512_NoSaltNoSpin();
+    void testSHA512_saltspin();
 
     CPPUNIT_TEST_SUITE(TestHash);
     CPPUNIT_TEST(testMD5);
     CPPUNIT_TEST(testSHA1);
     CPPUNIT_TEST(testSHA256);
     CPPUNIT_TEST(testSHA512);
+    CPPUNIT_TEST(testSHA512_NoSaltNoSpin);
+    CPPUNIT_TEST(testSHA512_saltspin);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -85,6 +90,30 @@ void TestHash::testSHA512()
     CPPUNIT_ASSERT_EQUAL(size_t(64), calculate_hash.size());
     std::string aStr("cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e");
     CPPUNIT_ASSERT_EQUAL(aStr, tostring(calculate_hash));
+}
+
+// Must be identical to testSHA512()
+void TestHash::testSHA512_NoSaltNoSpin()
+{
+    const char* const pInput = "";
+    std::vector<unsigned char> calculate_hash =
+        comphelper::Hash::calculateHash( reinterpret_cast<const unsigned char*>(pInput), 0,
+                nullptr, 0, 0, comphelper::HashType::SHA512);
+    CPPUNIT_ASSERT_EQUAL(size_t(64), calculate_hash.size());
+    std::string aStr("cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e");
+    CPPUNIT_ASSERT_EQUAL(aStr, tostring(calculate_hash));
+}
+
+// Password, salt, hash and spin count taken from OOXML sheetProtection of
+// tdf#104250 https://bugs.documentfoundation.org/attachment.cgi?id=129104
+void TestHash::testSHA512_saltspin()
+{
+    const OUString aPass("pwd");
+    const OUString aAlgo("SHA-512");
+    const OUString aSalt("876MLoKTq42+/DLp415iZQ==");
+    const OUString aHash = comphelper::Hash::calculateHash( aPass, aSalt, 100000, aAlgo);
+    OUString aStr("5l3mgNHXpWiFaBPv5Yso1Xd/UifWvQWmlDnl/hsCYbFT2sJCzorjRmBCQ/3qeDu6Q/4+GIE8a1DsdaTwYh1q2g==");
+    CPPUNIT_ASSERT_EQUAL(aStr, aHash);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestHash);
