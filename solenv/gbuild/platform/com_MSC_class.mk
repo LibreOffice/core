@@ -586,7 +586,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	xargs \
 	$(call gb_ExternalExecutable__get_internal,python) $(call gb_ExternalExecutable__get_executable,python) \
 	$(gb_ExternalExecutable_python_ARGUMENTS) \
-	$(gb_UIConfig_gla11y_SCRIPT) -o $@ < $$FILES
+	$(gb_UIConfig_gla11y_SCRIPT) -s $(UI_A11YSUPPRS) $(GEN_A11Y_SUPPRS) -o $@ < $$FILES
 )
 
 endef
