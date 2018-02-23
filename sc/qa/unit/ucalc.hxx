@@ -515,6 +515,7 @@ public:
 
     void testCondFormatUndoList();
     void testMultipleSingleCellCondFormatCopyPaste();
+    void testDeduplicateMultipleCondFormats();
 
     void testImportStream();
     void testDeleteContents();
@@ -797,6 +798,7 @@ public:
     CPPUNIT_TEST(testCondFormatUpdateReferenceInsRow);
     CPPUNIT_TEST(testCondFormatUndoList);
     CPPUNIT_TEST(testMultipleSingleCellCondFormatCopyPaste);
+    CPPUNIT_TEST(testDeduplicateMultipleCondFormats);
     CPPUNIT_TEST(testIconSet);
     CPPUNIT_TEST(testDataBarLengthAutomaticAxis);
     CPPUNIT_TEST(testDataBarLengthMiddleAxis);
