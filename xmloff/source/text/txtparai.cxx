@@ -1539,9 +1539,14 @@ XMLImpSpanContext_Impl::XMLImpSpanContext_Impl(
 
 XMLImpSpanContext_Impl::~XMLImpSpanContext_Impl()
 {
-    if( pHint )
-        pHint->SetEnd( GetImport().GetTextImport()
-                            ->GetCursorAsRange()->getStart() );
+    if (!pHint)
+        return;
+
+    Reference<XTextRange> xCrsrRange(GetImport().GetTextImport()->GetCursorAsRange());
+    if (!xCrsrRange.is())
+        return; // Robust (defective file)
+
+    pHint->SetEnd(xCrsrRange->getStart());
 }
 
 SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
@@ -1936,7 +1941,7 @@ XMLParaContext::~XMLParaContext()
         GetImport().GetTextImport());
     Reference < XTextRange > xCrsrRange( xTxtImport->GetCursorAsRange() );
     if( !xCrsrRange.is() )
-        return; // Robust (defect file)
+        return; // Robust (defective file)
     Reference < XTextRange > xEnd(xCrsrRange->getStart());
 
     // if we have an id set for this paragraph, get a cursor for this
@@ -1962,7 +1967,7 @@ XMLParaContext::~XMLParaContext()
     try {
         xAttrCursor = xTxtImport->GetText()->createTextCursorByRange( xStart );
         if( !xAttrCursor.is() )
-            return; // Robust (defect file)
+            return; // Robust (defective file)
     } catch (const uno::Exception &) {
         // createTextCursorByRange() likes to throw runtime exception, even
         // though it just means 'we were unable to create the cursor'
