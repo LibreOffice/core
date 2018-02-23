@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_27b4dfcf",
+        "filename": "solenv/gbuild/UIConfig.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-23T15:20:32Z",
+      "side": 1,
+      "message": "why remove that empty line that appears unrelated to this change?",
+      "revId": "f1c4681230cc7bec398f98031e0969724eb05c9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
