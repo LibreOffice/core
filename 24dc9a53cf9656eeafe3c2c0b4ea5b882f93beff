@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_a7e36f32",
+        "filename": "vcl/headless/svpinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-23T12:43:23Z",
+      "side": 1,
+      "message": "the scope of this lock is smaller here than in the OSX implemenation, where it\u0027s in the outer block; i\u0027m not sure if there is a reason for that",
+      "revId": "24dc9a53cf9656eeafe3c2c0b4ea5b882f93beff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
