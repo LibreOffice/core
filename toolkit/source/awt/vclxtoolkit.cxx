@@ -802,6 +802,19 @@ namespace
             SetImage(GetStandardInfoBoxImage());
         }
     };
+
+    class ErrorBox : public MessBox
+    {
+    public:
+        ErrorBox(vcl::Window* pParent, MessBoxStyle nStyle, WinBits nWinBits, const OUString& rMessage)
+            : MessBox(pParent, nStyle, nWinBits, OUString(), rMessage)
+        {
+            // Default Text is the display title from the application
+            if (GetText().isEmpty())
+                SetText(GetStandardErrorBoxText());
+            SetImage(GetStandardErrorBoxImage());
+        }
+    };
 }
 
 vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,

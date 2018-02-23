@@ -2262,7 +2262,7 @@ short MessageDialog::Execute()
                 m_pImage->SetImage(QueryBox::GetStandardImage());
                 break;
             case VclMessageType::Error:
-                m_pImage->SetImage(ErrorBox::GetStandardImage());
+                m_pImage->SetImage(GetStandardErrorBoxImage());
                 break;
         }
         m_pImage->set_grid_left_attach(0);

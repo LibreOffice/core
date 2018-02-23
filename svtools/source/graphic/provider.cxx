@@ -206,7 +206,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( co
         }
         else if ( sImageName == "error" )
         {
-            xRet = Graphic(ErrorBox::GetStandardImage().GetBitmapEx()).GetXGraphic();
+            xRet = Graphic(GetStandardErrorBoxImage().GetBitmapEx()).GetXGraphic();
         }
         else if ( sImageName == "query" )
         {

@@ -410,51 +410,13 @@ OUString WarningBox::GetStandardText()
     return VclResId(SV_MSGBOX_WARNING);
 }
 
-ErrorBox::ErrorBox( vcl::Window* pParent, const OUString& rMessage ) :
-    MessBox( pParent, MessBoxStyle::Ok | MessBoxStyle::DefaultOk, 0, OUString(), rMessage )
+Image const & GetStandardErrorBoxImage()
 {
-    DBG_TESTSOLARMUTEX();
-    // Default Text is the display title from the application
-    if ( GetText().isEmpty() )
-        SetText( GetStandardText() );
-
-    SetImage( ErrorBox::GetStandardImage() );
-}
-
-ErrorBox::ErrorBox( vcl::Window* pParent, MessBoxStyle nStyle,
-                    const OUString& rMessage ) :
-       ErrorBox(pParent, nStyle, 0, rMessage )
-{
-}
-
-ErrorBox::ErrorBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits nWinBits,
-                    const OUString& rMessage ) :
-    MessBox( pParent, nStyle, nWinBits, OUString(), rMessage )
-{
-    DBG_TESTSOLARMUTEX();
-    // Default Text is the display title from the application
-    if ( GetText().isEmpty() )
-        SetText( GetStandardText() );
-
-    SetImage( ErrorBox::GetStandardImage() );
-}
-
-Image ErrorBox::GetStandardImage()
-{
-    try
-    {
-        ImplInitMsgBoxImageList();
-    }
-    catch (const css::uno::Exception &)
-    {
-        // During early bootstrap we can have no initialized
-        // ucb and hence no ability to get this image, so nop.
-        return Image();
-    }
+    ImplInitMsgBoxImageList();
     return ImplGetSVData()->maWinData.maMsgBoxImgList[0];
 }
 
-OUString ErrorBox::GetStandardText()
+OUString GetStandardErrorBoxText()
 {
     return VclResId(SV_MSGBOX_ERROR);
 }

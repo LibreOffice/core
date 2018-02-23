@@ -105,18 +105,8 @@ public:
     static OUString     GetStandardText();
 };
 
-class VCL_DLLPUBLIC ErrorBox : public MessBox
-{
-public:
-                        ErrorBox( vcl::Window* pParent, const OUString& rMessage );
-                        ErrorBox( vcl::Window* pParent, MessBoxStyle nStyle,
-                                  const OUString& rMessage );
-                        ErrorBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits n,
-                                  const OUString& rMessage );
-
-    static Image        GetStandardImage();
-    static OUString     GetStandardText();
-};
+VCL_DLLPUBLIC Image const & GetStandardErrorBoxImage();
+VCL_DLLPUBLIC OUString GetStandardErrorBoxText();
 
 class VCL_DLLPUBLIC QueryBox : public MessBox
 {
