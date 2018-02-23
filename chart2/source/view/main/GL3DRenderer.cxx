@@ -44,10 +44,11 @@ GLfloat texCoords[] = {
 
 glm::vec4 getColorAsVector(sal_uInt32 nColor)
 {
-    return glm::vec4(((nColor & 0x00FF0000) >> 16) / 255.0f,
-            ((nColor & 0x0000FF00) >> 8) / 255.0f,
-            (nColor & 0x000000FF) / 255.0f,
-            (0xFF - (nColor & 0xFF000000)/255.0));
+    auto red   = ((nColor & 0x00FF0000) >> 16) / 255.0f;
+    auto green = ((nColor & 0x0000FF00) >> 8) / 255.0f;
+    auto blue  = (nColor & 0x000000FF) / 255.0f;
+    auto alpha = (0xFF - ((nColor & 0xFF000000) >> 24)) / 255.0;
+    return glm::vec4(red, green, blue, alpha);
 }
 
 }
