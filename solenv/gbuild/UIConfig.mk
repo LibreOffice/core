@@ -125,15 +125,20 @@ $(call gb_UIConfig_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),UIA,2)
 	rm -f $(call gb_UIConfig_get_a11yerrors_target,$*)
 
+# Enable this to regenerate suppression files
+ifeq (1,0)
+GEN_A11Y_SUPPRS = -g $(UI_A11YSUPPRS)
+endif
+
 define gb_UIConfig_a11yerrors__command
 $(call gb_Output_announce,$(2),$(true),UIA,1)
 $(call gb_Helper_abbreviate_dirs,\
 	$(gb_UIConfig_LXML_PATH) \
-	$(gb_UIConfig_gla11y_COMMAND) -W none $(UIFILES) > $@
+	$(gb_UIConfig_gla11y_COMMAND) -s $(UI_A11YSUPPRS) $(GEN_A11Y_SUPPRS) $(UIFILES) | tee $@
 )
 endef
 
-$(call gb_UIConfig_get_a11yerrors_target,%) : $(call gb_ExternalProject_get_target,lxml) $(call gb_ExternalExecutable_get_dependencies,python) $(gb_UIConfig_gla11y_SCRIPT)
+$(call gb_UIConfig_get_a11yerrors_target,%) : $(call gb_ExternalProject_get_target,lxml) $(call gb_ExternalExecutable_get_dependencies,python) $(gb_UIConfig_gla11y_SCRIPT) $(UI_A11YSUPPRS)
 	$(call gb_UIConfig_a11yerrors__command,$@,$*)
 
 gb_UIConfig_get_packagename = UIConfig/$(1)
@@ -158,6 +163,7 @@ $(call gb_PackageSet_add_package,$(call gb_UIConfig_get_packagesetname,$(1)),$(c
 $(call gb_UIConfig_get_target,$(1)) :| $(dir $(call gb_UIConfig_get_target,$(1))).dir
 $(call gb_UIConfig_get_imagelist_target,$(1)) :| $(dir $(call gb_UIConfig_get_imagelist_target,$(1))).dir
 $(call gb_UIConfig_get_a11yerrors_target,$(1)) :| $(dir $(call gb_UIConfig_get_a11yerrors_target,$(1))).dir
+$(call gb_UIConfig_get_a11yerrors_target,$(1)) : UI_A11YSUPPRS := $(SRCDIR)/solenv/sanitizers/ui/$(1).suppr
 $(call gb_UIConfig_get_target,$(1)) : $(call gb_PackageSet_get_target,$(call gb_UIConfig_get_packagesetname,$(1)))
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_PackageSet_get_clean_target,$(call gb_UIConfig_get_packagesetname,$(1)))
 
@@ -189,7 +195,6 @@ $(call gb_UIConfig_get_imagelist_target,$(1)) : $(call gb_UIImageListTarget_get_
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_UIImageListTarget_get_clean_target,$(2))
 
 $(call gb_UIConfig_get_a11yerrors_target,$(1)) : UIFILES += $(SRCDIR)/$(2).ui
-
 endef
 
 gb_UIConfig_ALLFILES:=
