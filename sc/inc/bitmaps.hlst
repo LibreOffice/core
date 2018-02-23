@@ -96,7 +96,7 @@
 #define BMP_ICON_SET_PIES_THREE_QUARTER         "sc/res/icon-set-pies-three-quarters.png"
 #define BMP_ICON_SET_PIES_FULL                  "sc/res/icon-set-pies-full.png"
 #define BMP_ICON_SET_SHAPES_CIRCLE              "sc/res/icon-set-shapes-circle.png"
-#define BMP_ICON_SET_SHAPES_TRIANGLE            "sc/res/icon-set-shapes-triangle"
+#define BMP_ICON_SET_SHAPES_TRIANGLE            "sc/res/icon-set-shapes-triangle.png"
 #define BMP_ICON_SET_SHAPES_DIAMOND             "sc/res/icon-set-shapes-diamond.png"
 #define BMP_ICON_SET_SQUARES_EMPTY              "sc/res/icon-set-squares-empty.png"
 #define BMP_ICON_SET_SQUARES_ONE_QUARTER        "sc/res/icon-set-squares-one-quarter.png"
