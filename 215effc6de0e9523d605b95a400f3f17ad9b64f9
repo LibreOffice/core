@@ -34,6 +34,24 @@
       "revId": "215effc6de0e9523d605b95a400f3f17ad9b64f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_07b51bed",
+        "filename": "external/python3/ExternalPackage_python3.mk",
+        "patchSetId": 10
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2018-02-23T14:31:10Z",
+      "side": 1,
+      "message": "No, better yet, setting _PYTHON_PROJECT_BASE makes python understand that we are building an extension with an uninstalled python.",
+      "parentUuid": "fa31d9ce_47e8f3e2",
+      "revId": "215effc6de0e9523d605b95a400f3f17ad9b64f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
