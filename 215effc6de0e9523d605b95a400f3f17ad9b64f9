@@ -52,6 +52,24 @@
       "revId": "215effc6de0e9523d605b95a400f3f17ad9b64f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_4796334d",
+        "filename": "external/python3/ExternalPackage_python3.mk",
+        "patchSetId": 10
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-23T14:36:08Z",
+      "side": 1,
+      "message": "What kind of \"installation paths\"?  Doesn\u0027t that mean we\u0027ll end up installing for the end user files that mention paths specific to the original build machine?\n\nAnd would such stripped down files be useful in the installation set?  If there is a convention that a Python installation includes those Makefile and setup.py files, but we cannot at build-time generate such files with content that would be useful in the end-user\u0027s installation set, I think we better not include such files at all (rather than including stripped-down, broken versions that happened to be useful during the build).",
+      "parentUuid": "fa31d9ce_47e8f3e2",
+      "revId": "215effc6de0e9523d605b95a400f3f17ad9b64f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
