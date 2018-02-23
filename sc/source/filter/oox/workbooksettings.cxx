@@ -63,6 +63,7 @@ const sal_Int16 API_SHOWMODE_PLACEHOLDER        = 2;        /// Show placeholder
 } // namespace
 
 FileSharingModel::FileSharingModel() :
+    mnSpinCount( 0 ),
     mnPasswordHash( 0 ),
     mbRecommendReadOnly( false )
 {
@@ -108,6 +109,10 @@ WorkbookSettings::WorkbookSettings( const WorkbookHelper& rHelper ) :
 void WorkbookSettings::importFileSharing( const AttributeList& rAttribs )
 {
     maFileSharing.maUserName          = rAttribs.getXString( XML_userName, OUString() );
+    maFileSharing.maAlgorithmName     = rAttribs.getString( XML_algorithmName, OUString());
+    maFileSharing.maHashValue         = rAttribs.getString( XML_hashValue, OUString());
+    maFileSharing.maSaltValue         = rAttribs.getString( XML_saltValue, OUString());
+    maFileSharing.mnSpinCount         = rAttribs.getUnsigned( XML_spinCount, 0);
     maFileSharing.mnPasswordHash      = oox::core::CodecHelper::getPasswordHash( rAttribs, XML_reservationPassword );
     maFileSharing.mbRecommendReadOnly = rAttribs.getBool( XML_readOnlyRecommended, false );
 }
