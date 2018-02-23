@@ -268,6 +268,10 @@ void AquaSalFrame::screenParametersChanged()
 
     if( mpGraphics )
         mpGraphics->updateResolution();
+
+    if (!mbGeometryDidChange)
+        return;
+
     CallCallback( SalEvent::DisplayChanged, nullptr );
 }
 
@@ -1522,6 +1526,9 @@ void AquaSalFrame::SetParent( SalFrame* pNewParent )
 
 void AquaSalFrame::UpdateFrameGeometry()
 {
+    bool bFirstTime = (mnTrackingRectTag == 0);
+    mbGeometryDidChange = false;
+
     if ( !mpNSWindow )
         return;
 
@@ -1534,38 +1541,65 @@ void AquaSalFrame::UpdateFrameGeometry()
     NSScreen * pScreen = [mpNSWindow screen];
     if( pScreen )
     {
-        maScreenRect = [pScreen frame];
+        NSRect aNewScreenRect = [pScreen frame];
+        if (bFirstTime || !NSEqualRects(maScreenRect, aNewScreenRect))
+        {
+            mbGeometryDidChange = true;
+            maScreenRect = aNewScreenRect;
+        }
         NSArray* pScreens = [NSScreen screens];
         if( pScreens )
-            maGeometry.nDisplayScreenNumber = [pScreens indexOfObject: pScreen];
+        {
+            unsigned int nNewDisplayScreenNumber = [pScreens indexOfObject: pScreen];
+            if (bFirstTime || maGeometry.nDisplayScreenNumber != nNewDisplayScreenNumber)
+            {
+                mbGeometryDidChange = true;
+                maGeometry.nDisplayScreenNumber = nNewDisplayScreenNumber;
+            }
+        }
     }
 
     NSRect aFrameRect = [mpNSWindow frame];
     NSRect aContentRect = [NSWindow contentRectForFrameRect: aFrameRect styleMask: mnStyleMask];
 
-    // release old track rect
-    [mpNSView removeTrackingRect: mnTrackingRectTag];
-    // install the new track rect
     NSRect aTrackRect = { NSZeroPoint, aContentRect.size };
-    mnTrackingRectTag = [mpNSView addTrackingRect: aTrackRect owner: mpNSView userData: nil assumeInside: NO];
+
+    if (bFirstTime || !NSEqualRects(maTrackingRect, aTrackRect))
+    {
+        mbGeometryDidChange = true;
+        maTrackingRect = aTrackRect;
+
+        // release old track rect
+        [mpNSView removeTrackingRect: mnTrackingRectTag];
+        // install the new track rect
+        mnTrackingRectTag = [mpNSView addTrackingRect: aTrackRect owner: mpNSView userData: nil assumeInside: NO];
+    }
 
     // convert to vcl convention
     CocoaToVCL( aFrameRect );
     CocoaToVCL( aContentRect );
 
-    maGeometry.nX = static_cast<int>(aContentRect.origin.x);
-    maGeometry.nY = static_cast<int>(aContentRect.origin.y);
+    if (bFirstTime || !NSEqualRects(maContentRect, aContentRect) || !NSEqualRects(maFrameRect, aFrameRect))
+    {
+        mbGeometryDidChange = true;
 
-    maGeometry.nLeftDecoration = static_cast<unsigned int>(aContentRect.origin.x - aFrameRect.origin.x);
-    maGeometry.nRightDecoration = static_cast<unsigned int>((aFrameRect.origin.x + aFrameRect.size.width) -
-                                  (aContentRect.origin.x + aContentRect.size.width));
+        maContentRect = aContentRect;
+        maFrameRect = aFrameRect;
 
-    maGeometry.nTopDecoration = static_cast<unsigned int>(aContentRect.origin.y - aFrameRect.origin.y);
-    maGeometry.nBottomDecoration = static_cast<unsigned int>((aFrameRect.origin.y + aFrameRect.size.height) -
-                                   (aContentRect.origin.y + aContentRect.size.height));
+        maGeometry.nX = static_cast<int>(aContentRect.origin.x);
+        maGeometry.nY = static_cast<int>(aContentRect.origin.y);
 
-    maGeometry.nWidth = static_cast<unsigned int>(aContentRect.size.width);
-    maGeometry.nHeight = static_cast<unsigned int>(aContentRect.size.height);
+        maGeometry.nLeftDecoration = static_cast<unsigned int>(aContentRect.origin.x - aFrameRect.origin.x);
+        maGeometry.nRightDecoration = static_cast<unsigned int>((aFrameRect.origin.x + aFrameRect.size.width) -
+                                      (aContentRect.origin.x + aContentRect.size.width));
+
+        maGeometry.nTopDecoration = static_cast<unsigned int>(aContentRect.origin.y - aFrameRect.origin.y);
+        maGeometry.nBottomDecoration = static_cast<unsigned int>((aFrameRect.origin.y + aFrameRect.size.height) -
+                                       (aContentRect.origin.y + aContentRect.size.height));
+
+        maGeometry.nWidth = static_cast<unsigned int>(aContentRect.size.width);
+        maGeometry.nHeight = static_cast<unsigned int>(aContentRect.size.height);
+    }
 }
 
 void AquaSalFrame::CaptureMouse( bool bCapture )
