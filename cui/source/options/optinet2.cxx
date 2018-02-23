@@ -23,7 +23,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Security.hxx>
 #include <tools/config.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
@@ -663,8 +663,12 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl, Button*, void)
         }
         else
         {
-            ScopedVclPtrInstance< QueryBox > aQuery( this, MessBoxStyle::YesNo|MessBoxStyle::DefaultNo, m_sPasswordStoringDeactivateStr );
-            sal_uInt16 nRet = aQuery->Execute();
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                           m_sPasswordStoringDeactivateStr));
+            xQueryBox->set_default_response(RET_NO);
+
+            sal_uInt16 nRet = xQueryBox->run();
 
             if( RET_YES == nRet )
             {
