@@ -40,7 +40,8 @@
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <tools/debug.hxx>
 #include <sal/macros.h>
 
@@ -510,7 +511,6 @@ namespace pcr
         m_pHelper->setValidatingDataTypeByName( _rNewName );
     }
 
-
     bool XSDValidationPropertyHandler::implPrepareRemoveCurrentDataType()
     {
         OSL_PRECOND( m_pHelper.get(), "XSDValidationPropertyHandler::implPrepareRemoveCurrentDataType: this will crash!" );
@@ -525,13 +525,15 @@ namespace pcr
         // confirmation message
         OUString sConfirmation( PcrRes( RID_STR_CONFIRM_DELETE_DATA_TYPE ) );
         sConfirmation = sConfirmation.replaceFirst( "#type#", pType->getName() );
-        ScopedVclPtrInstance<QueryBox> aQuery( nullptr, MessBoxStyle::YesNo, sConfirmation ); // TODO/eForms: proper parent
-        if ( aQuery->Execute() != RET_YES )
+
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr, // TODO/eForms: proper parent
+                                                       VclMessageType::Question, VclButtonsType::YesNo,
+                                                       sConfirmation));
+        if (xQueryBox->run() != RET_YES)
             return false;
 
         return true;
     }
-
 
     bool XSDValidationPropertyHandler::implDoRemoveCurrentDataType()
     {

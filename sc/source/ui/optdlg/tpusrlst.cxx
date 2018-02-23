@@ -20,7 +20,6 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <comphelper/string.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 
 #include <global.hxx>
@@ -617,10 +616,12 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
                           + mpLbLists->GetEntry( nRemovePos )
                           + aStrQueryRemove.getToken( 1, '#' );
 
-            if ( RET_YES == ScopedVclPtrInstance<QueryBox>( this,
-                                      MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
-                                      aMsg
-                                     )->Execute() )
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                           aMsg));
+            xQueryBox->set_default_response(RET_YES);
+
+            if (RET_YES == xQueryBox->run())
             {
                 RemoveList( nRemovePos );
                 UpdateUserListBox();

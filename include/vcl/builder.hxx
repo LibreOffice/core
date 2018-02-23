@@ -36,6 +36,7 @@
 
 class Button;
 class ListBox;
+class MessageDialog;
 class NumericFormatter;
 class PopupMenu;
 class SalInstanceBuilder;
@@ -275,6 +276,8 @@ private:
         std::vector<MnemonicWidgetMap> m_aMnemonicWidgetMaps;
 
         std::vector< VclPtr<VclExpander> > m_aExpanderWidgets;
+
+        std::vector< VclPtr<MessageDialog> > m_aMessageDialogs;
 
         sal_uInt16 m_nLastToolbarId;
 

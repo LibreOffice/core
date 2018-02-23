@@ -134,7 +134,8 @@ using ::com::sun::star::container::XIndexContainer;
 #include <sfx2/minfitem.hxx>
 #include <sfx2/strings.hrc>
 #include "impviewframe.hxx"
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #define SfxViewFrame
 #include <sfxslots.hxx>
@@ -175,28 +176,23 @@ SfxEditDocumentDialog::SfxEditDocumentDialog(weld::Widget* pParent)
 {
 }
 
-class SfxQueryOpenAsTemplate : public QueryBox
+class SfxQueryOpenAsTemplate
 {
+private:
+    std::unique_ptr<weld::MessageDialog> m_xQueryBox;
 public:
-    SfxQueryOpenAsTemplate(vcl::Window* pParent, MessBoxStyle nStyle, bool bAllowIgnoreLock);
-};
-
-SfxQueryOpenAsTemplate::SfxQueryOpenAsTemplate(vcl::Window* pParent, MessBoxStyle nStyle, bool bAllowIgnoreLock)
-    : QueryBox(pParent, nStyle, SfxResId(bAllowIgnoreLock ? STR_QUERY_OPENASTEMPLATE_ALLOW_IGNORE : STR_QUERY_OPENASTEMPLATE))
-{
-    AddButton(SfxResId(STR_QUERY_OPENASTEMPLATE_OPENCOPY_BTN), RET_YES,
-        ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
-    SetButtonHelpText(RET_YES, OUString());
-
-    if (bAllowIgnoreLock)
+    SfxQueryOpenAsTemplate(weld::Window* pParent, bool bAllowIgnoreLock)
+        : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Question, VclButtonsType::NONE,
+                      SfxResId(bAllowIgnoreLock ? STR_QUERY_OPENASTEMPLATE_ALLOW_IGNORE : STR_QUERY_OPENASTEMPLATE)))
     {
-        AddButton(SfxResId(STR_QUERY_OPENASTEMPLATE_OPEN_BTN), RET_IGNORE);
-        SetButtonHelpText(RET_IGNORE, OUString());
+        m_xQueryBox->add_button(SfxResId(STR_QUERY_OPENASTEMPLATE_OPENCOPY_BTN), RET_YES);
+        if (bAllowIgnoreLock)
+            m_xQueryBox->add_button(SfxResId(STR_QUERY_OPENASTEMPLATE_OPEN_BTN), RET_IGNORE);
+        m_xQueryBox->add_button(Button::GetStandardText( StandardButtonType::Cancel ), RET_CANCEL);
+        m_xQueryBox->set_default_response(RET_YES);
     }
-
-    AddButton(StandardButtonType::Cancel, RET_CANCEL);
-    SetButtonHelpText(RET_CANCEL, OUString());
-}
+    short run() { return m_xQueryBox->run(); }
+};
 
 /// Is this read-only object shell opened via .uno:SignPDF?
 bool IsSignPDF(const SfxObjectShellRef& xObjSh)
@@ -463,9 +459,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         if (nOpenMode == SFX_STREAM_READWRITE && !rReq.IsAPI())
                         {
                             // css::sdbcx::User offering to open it as a template
-                            ScopedVclPtrInstance<SfxQueryOpenAsTemplate> aBox(&GetWindow(), MessBoxStyle::NONE, bRetryIgnoringLock);
+                            SfxQueryOpenAsTemplate aBox(GetWindow().GetFrameWeld(), bRetryIgnoringLock);
 
-                            short nUserAnswer = aBox->Execute();
+                            short nUserAnswer = aBox.run();
                             bOpenTemplate = RET_YES == nUserAnswer;
                             // Always reset this here to avoid infinite loop
                             bRetryIgnoringLock = RET_IGNORE == nUserAnswer;

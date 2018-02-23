@@ -49,7 +49,6 @@
 #include <svl/whiter.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 
 namespace basctl
@@ -102,7 +101,17 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                         nActModWindows++;
                 }
 
-                if ( nActModWindows <= 1 || ( !rSearchItem.GetSelection() && ScopedVclPtrInstance<QueryBox>(pCurWin, MessBoxStyle::YesNo|MessBoxStyle::DefaultYes, IDEResId(RID_STR_SEARCHALLMODULES))->Execute() == RET_YES ) )
+                bool bAllModules = nActModWindows <= 1;
+                if (!bAllModules)
+                {
+                    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pCurWin ? pCurWin->GetFrameWeld() : nullptr,
+                                                                   VclMessageType::Question, VclButtonsType::YesNo,
+                                                                   IDEResId(RID_STR_SEARCHALLMODULES)));
+                    xQueryBox->set_default_response(RET_YES);
+                    bAllModules = xQueryBox->run() == RET_YES;
+                }
+
+                if (bAllModules)
                 {
                     for (auto const& window : aWindowTable)
                     {
@@ -145,8 +154,12 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                             SfxViewFrame* pViewFrame = GetViewFrame();
                             SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SEARCH_DLG ) : nullptr;
                             vcl::Window* pParent = pChildWin ? pChildWin->GetWindow() : nullptr;
-                            ScopedVclPtrInstance< QueryBox > aQuery(pParent, MessBoxStyle::YesNo|MessBoxStyle::DefaultYes, IDEResId(RID_STR_SEARCHFROMSTART));
-                            if ( aQuery->Execute() == RET_YES )
+
+                            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+                                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                                           IDEResId(RID_STR_SEARCHFROMSTART)));
+                            xQueryBox->set_default_response(RET_YES);
+                            if (xQueryBox->run() == RET_YES)
                             {
                                 it = aWindowTable.begin();
                                 if ( it != aWindowTable.end() )
