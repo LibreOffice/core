@@ -2839,7 +2839,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
         }
         rRenderContext.DrawImage(Point( nImageOffX, nImageOffY ), *pImage, nImageStyle);
         if (!!rOverlayImage)
-            rRenderContext.DrawImage(Point( nImageOffX, nImageOffY ), rOverlayImage, nImageStyle);
+            rRenderContext.DrawImage(Point( nImageOffX, nImageOffY ), rOverlayImage, nImageStyle | DrawImageFlags::SemiTransparent);
     }
 
     // draw the text

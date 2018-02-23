@@ -88,6 +88,8 @@ namespace svx
         ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
         pVirDev->SetOutputSizePixel(aItemSize);
         maBmpSize = aItemSize;
+//        pVirDev->SetFillColor(Color(255, 0, 0, 0));
+//        pVirDev->DrawRect(tools::Rectangle(Point(), aItemSize));
 
         mbWasHiContrastMode = mpTbx->GetSettings().GetStyleSettings().GetHighContrastMode();
 
