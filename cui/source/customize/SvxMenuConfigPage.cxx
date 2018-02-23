@@ -27,7 +27,6 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/help.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/scrbar.hxx>
@@ -286,9 +285,10 @@ short SvxMenuConfigPage::QueryReset()
 
     OUString label = SvxConfigPageHelper::replaceSaveInName( msg, saveInName );
 
-    ScopedVclPtrInstance<QueryBox> qbox( this, MessBoxStyle::YesNo, label );
-
-    return qbox->Execute();
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                   VclMessageType::Question, VclButtonsType::YesNo,
+                                                   label));
+    return xQueryBox->run();
 }
 
 IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenu, ListBox&, void )

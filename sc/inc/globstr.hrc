@@ -469,7 +469,6 @@
 #define STR_EDIT_EXISTING_COND_FORMATS          NC_("STR_EDIT_EXISTING_COND_FORMATS", "The selected cell already contains conditional formatting. You can either edit the existing conditional format or you define a new overlapping conditional format.\n\n Do you want to edit the existing conditional format?")
 #define STR_QUERY_FORMULA_RECALC_ONLOAD_ODS     NC_("STR_QUERY_FORMULA_RECALC_ONLOAD_ODS", "This document was last saved by an application other than %PRODUCTNAME.  Some formula cells may produce different results when recalculated.\n\nDo you want to recalculate all formula cells in this document now?")
 #define STR_QUERY_FORMULA_RECALC_ONLOAD_XLS     NC_("STR_QUERY_FORMULA_RECALC_ONLOAD_XLS", "This document was last saved by Excel.  Some formula cells may produce different results when recalculated.\n\nDo you want to recalculate all formula cells now?")
-#define STR_ALWAYS_PERFORM_SELECTED             NC_("STR_ALWAYS_PERFORM_SELECTED", "Always perform this without prompt in the future.")
 #define STR_NO_INSERT_DELETE_OVER_PIVOT_TABLE   NC_("STR_NO_INSERT_DELETE_OVER_PIVOT_TABLE", "You cannot insert or delete cells when the affected range intersects with pivot table.")
 #define STR_DPFIELD_GROUP_BY_SECONDS            NC_("STR_DPFIELD_GROUP_BY_SECONDS", "Seconds")
 #define STR_DPFIELD_GROUP_BY_MINUTES            NC_("STR_DPFIELD_GROUP_BY_MINUTES", "Minutes")

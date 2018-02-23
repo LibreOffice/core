@@ -5106,9 +5106,14 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                         aMessage += aName;
                         aMessage += aTemplate.getToken( 1, '#' );
 
-                        short nResult = ScopedVclPtrInstance<QueryBox>( ScDocShell::GetActiveDialogParent(),
-                                                    MessBoxStyle::YesNoCancel | MessBoxStyle::DefaultYes,
-                                                    aMessage )->Execute();
+                        vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
+                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                       VclMessageType::Question, VclButtonsType::YesNo,
+                                                                       aMessage));
+                        xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+                        xQueryBox->set_default_response(RET_YES);
+
+                        short nResult = xQueryBox->run();
                         if ( nResult == RET_YES )
                         {
                             rList.erase(*pOld);

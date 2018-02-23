@@ -24,6 +24,7 @@
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include <navipi.hxx>
 #include <scresid.hxx>
@@ -183,8 +184,14 @@ void ScScenarioListBox::EditScenario()
 void ScScenarioListBox::DeleteScenario()
 {
     if( GetSelectedEntryCount() > 0 )
-        if( ScopedVclPtrInstance<QueryBox>( nullptr, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, ScGlobal::GetRscString( STR_QUERY_DELSCENARIO ) )->Execute() == RET_YES )
+    {
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
+                                                       VclMessageType::Question, VclButtonsType::YesNo,
+                                                       ScGlobal::GetRscString(STR_QUERY_DELSCENARIO)));
+        xQueryBox->set_default_response(RET_YES);
+        if (xQueryBox->run() == RET_YES)
             ExecuteScenarioSlot( SID_DELETE_SCENARIO );
+    }
 }
 
 // class ScScenarioWindow ------------------------------------------------
