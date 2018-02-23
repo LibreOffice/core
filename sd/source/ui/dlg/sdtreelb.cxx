@@ -629,6 +629,52 @@ void SdPageObjsTLB::SetShowAllShapes (
     }
 }
 
+bool SdPageObjsTLB::IsEqualToShapeList(SvTreeListEntry*& pEntry, const SdrObjList& rList,
+                                       const OUString& rListName)
+{
+    if (!pEntry)
+        return false;
+    OUString aName = GetEntryText(pEntry);
+
+    if (rListName != aName)
+        return false;
+
+    pEntry = Next(pEntry);
+
+    SdrObjListIter aIter(rList,
+                         !rList.HasObjectNavigationOrder() /* use navigation order, if available */,
+                         SdrIterMode::Flat);
+
+    while (aIter.IsMore())
+    {
+        SdrObject* pObj = aIter.Next();
+
+        const OUString aObjectName(GetObjectName(pObj));
+
+        if (!aObjectName.isEmpty())
+        {
+            if (!pEntry)
+                return false;
+
+            aName = GetEntryText(pEntry);
+
+            if (aObjectName != aName)
+                return false;
+
+            if (pObj->IsGroupObject())
+            {
+                bool bRet = IsEqualToShapeList(pEntry, *pObj->GetSubList(), aObjectName);
+                if (!bRet)
+                    return false;
+            }
+            else
+                pEntry = Next(pEntry);
+        }
+    }
+
+    return true;
+}
+
 /**
  * Checks if the pages (PageKind::Standard) of a doc and the objects on the pages
  * are identical to the TreeLB.
@@ -643,9 +689,7 @@ bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
     if( !mpDoc )
         return false;
 
-    SdrObject*   pObj = nullptr;
     SvTreeListEntry* pEntry = First();
-    OUString     aName;
 
     // compare all pages including the objects
     sal_uInt16 nPage = 0;
@@ -656,39 +700,9 @@ bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
         const SdPage* pPage = static_cast<const SdPage*>( mpDoc->GetPage( nPage ) );
         if( pPage->GetPageKind() == PageKind::Standard )
         {
-            if( !pEntry )
+            bool bRet = IsEqualToShapeList(pEntry, *pPage, pPage->GetName());
+            if (!bRet)
                 return false;
-            aName = GetEntryText( pEntry );
-
-            if( pPage->GetName() != aName )
-                return false;
-
-            pEntry = Next( pEntry );
-
-            SdrObjListIter aIter(
-                *pPage,
-                !pPage->HasObjectNavigationOrder() /* use navigation order, if available */,
-                SdrIterMode::Flat );
-
-            while( aIter.IsMore() )
-            {
-                pObj = aIter.Next();
-
-                const OUString aObjectName( GetObjectName( pObj ) );
-
-                if( !aObjectName.isEmpty() )
-                {
-                    if( !pEntry )
-                        return false;
-
-                    aName = GetEntryText( pEntry );
-
-                    if( aObjectName != aName )
-                        return false;
-
-                    pEntry = Next( pEntry );
-                }
-            }
         }
         nPage++;
     }
