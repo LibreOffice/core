@@ -22,6 +22,7 @@
 #include <svx/ruler.hxx>
 #include <idxmrk.hxx>
 #include <view.hxx>
+#include <basesh.hxx>
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
 #include <viewopt.hxx>
@@ -68,6 +69,32 @@ void SwView::Activate(bool bMDIActivate)
 
     if ( bMDIActivate )
     {
+        if ( m_pShell )
+        {
+            SfxDispatcher &rDispatcher = GetDispatcher();
+            SfxShell *pTopShell = rDispatcher.GetShell( 0 );
+
+            // this SwView is the top-most shell on the stack
+            if ( pTopShell == this )
+            {
+                for ( sal_uInt16 i = 1; true; ++i )
+                {
+                    SfxShell *pSfxShell = rDispatcher.GetShell( i );
+                    // does the stack contain any shells spawned by this SwView already?
+                    if  ( ( dynamic_cast< const SwBaseShell *>( pSfxShell ) !=  nullptr
+                         || dynamic_cast< const FmFormShell  *>( pSfxShell ) !=  nullptr )
+                         && ( pSfxShell->GetViewShell() == this ) )
+                    {
+                        // it shouldn't b/c we haven't been activated yet
+                        // so assert that 'cause it'll crash during dispose at the latest
+                        assert( pSfxShell && "Corrupted shell stack: dependent shell positioned below its view");
+                    }
+                    else
+                        break;
+                }
+            }
+        }
+
         m_pWrtShell->ShellGetFocus();     // Selections visible
 
         if( !m_sSwViewData.isEmpty() )
