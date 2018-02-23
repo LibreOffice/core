@@ -22,6 +22,30 @@
       "revId": "69a3b5322366309522c1b036ee06d7d1a5033996",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_152628ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2018-02-23T10:29:20Z",
+      "side": 1,
+      "message": "Ah, so --disable-python actually uses python at build time? That was counterintuitive to me :)\n\nSo AIUI now, --enable-python\u003danything_not_no means shipping a python interpreter along libreoffice, while --disable-python means only using python at build time and not ship it? \n\nThen everything you said makes complete sense and I\u0027ll fix things, I just didn\u0027t know the exact meaning above and was confused between PYTHON_FOR_BUILD etc. Perhaps autoconf.ac wording could be improved.",
+      "parentUuid": "fa31d9ce_9531380e",
+      "range": {
+        "startLine": 9,
+        "startChar": 37,
+        "endLine": 9,
+        "endChar": 41
+      },
+      "revId": "69a3b5322366309522c1b036ee06d7d1a5033996",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
