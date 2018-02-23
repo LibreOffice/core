@@ -205,6 +205,9 @@ public:
     bool                    GetShowAllShapes() const { return mbShowAllShapes;}
     bool IsNavigationGrabsFocus() const { return mbNavigationGrabsFocus; }
     bool                    IsEqualToDoc( const SdDrawDocument* pInDoc );
+    /// Visits rList recursively and tries to advance pEntry accordingly.
+    bool IsEqualToShapeList(SvTreeListEntry*& pEntry, const SdrObjList& rList,
+                            const OUString& rListName);
     bool                    HasSelectedChildren( const OUString& rName );
     bool                    SelectEntry( const OUString& rName );
     OUString                GetSelectedEntry();
