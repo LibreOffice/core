@@ -608,7 +608,7 @@ namespace osl_FileBase
         void getSystemPathFromFileURL_004();
         void getSystemPathFromFileURL_005();
 
-        // test case fot getFileURLFromSystemPath
+        // test case for getFileURLFromSystemPath
         void getFileURLFromSystemPath_001();
         void getFileURLFromSystemPath_002();
         void getFileURLFromSystemPath_003();

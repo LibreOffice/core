@@ -412,7 +412,7 @@ void SfxSplitWindow::Split()
         }
     }
 
-    // workaround insuffiency of <SplitWindow> regarding dock layouting:
+    // workaround insufficiency of <SplitWindow> regarding dock layouting:
     // apply FIXED item size as 'original' item size to improve layouting of undock-dock-cycle of a window
     {
         DeactivateUpdateMode aDeactivateUpdateMode( *this );
@@ -731,7 +731,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl const * pDock,
 
     delete pDeactivateUpdateMode;
 
-    // workaround insuffiency of <SplitWindow> regarding dock layouting:
+    // workaround insufficiency of <SplitWindow> regarding dock layouting:
     // apply FIXED item size as 'original' item size to improve layouting of undock-dock-cycle of a window
     {
         std::vector< std::pair< sal_uInt16, long > > aNewOrgSizes;

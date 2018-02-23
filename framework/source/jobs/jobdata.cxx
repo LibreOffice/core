@@ -190,7 +190,7 @@ void JobData::setService( const OUString& sService )
                 the underlying configuration! (That must be done from outside.
                 Because the caller must have the configuration already open to
                 get the values for sEvent and sAlias! And doing so it can perform
-                only, if the time stamp values are readed outside too.
+                only, if the time stamp values are read outside too.
                 Further it make no sense to initialize and start a disabled job.
                 So this initialization method will be called for enabled jobs only.)
 
