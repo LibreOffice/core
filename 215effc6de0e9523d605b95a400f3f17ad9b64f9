@@ -70,6 +70,24 @@
       "revId": "215effc6de0e9523d605b95a400f3f17ad9b64f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_e792c74a",
+        "filename": "external/python3/ExternalPackage_python3.mk",
+        "patchSetId": 10
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2018-02-23T14:56:42Z",
+      "side": 1,
+      "message": "Yes, that\u0027s what I eventually did in patch set 11: instead of making python install files needed for building an extension, I\u0027m passing _PYTHON_PROJECT_BASE so that setup.py gets them from the build tree.",
+      "parentUuid": "fa31d9ce_4796334d",
+      "revId": "215effc6de0e9523d605b95a400f3f17ad9b64f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
