@@ -132,6 +132,7 @@ private:
     bool mbProtected;
     ScPasswordHash meHash1;
     ScPasswordHash meHash2;
+    ScOoxPasswordHash maPasswordHash;
     ::std::vector< ScEnhancedProtection > maEnhancedProtection;
 };
 
@@ -198,6 +199,7 @@ ScTableProtectionImpl::ScTableProtectionImpl(const ScTableProtectionImpl& r) :
     mbProtected(r.mbProtected),
     meHash1(r.meHash1),
     meHash2(r.meHash2),
+    maPasswordHash(r.maPasswordHash),
     maEnhancedProtection(r.maEnhancedProtection)
 {
 }
