@@ -30,14 +30,18 @@ class SvStream;
 class Graphic;
 namespace vcl { class Window; }
 
-typedef bool (*PFilterCall)(SvStream & rStream, Graphic & rGraphic,
-                            FilterConfigItem* pConfigItem);
-    // Of this type are both export-filter and import-filter functions
-    // rFileName is the complete path to the file to be imported or exported
-    // pCallBack can be NULL. pCallerData is handed to the callback function
-    // pOptionsConfig can be NULL; if not, the group of the config is already set
-    // and may not be changed by this filter!
+struct FltCallDialogParameter
+{
 
+    VclPtr<vcl::Window> pWindow;
+    FieldUnit   eFieldUnit;
+    OUString    aFilterExt;
+
+    // In and Out PropertySequence for all filter dialogs
+    css::uno::Sequence< css::beans::PropertyValue > aFilterData;
+
+    FltCallDialogParameter( vcl::Window* pW, FieldUnit eFiUni ) :
+        pWindow         ( pW ),
+        eFieldUnit      ( eFiUni ) {};
+};
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
