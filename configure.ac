@@ -1179,7 +1179,7 @@ AC_ARG_ENABLE(lto,
 
 AC_ARG_ENABLE(python,
     AS_HELP_STRING([--enable-python=<no/auto/system/internal/fully-internal>],
-        [Enables or disables Python support at run-time and build-time.
+        [Enables or disables Python support at run-time.
          Also specifies what Python to use. 'auto' is the default.
          'fully-internal' even forces the internal version for uses of Python
          during the build.]))
