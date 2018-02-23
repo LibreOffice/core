@@ -723,9 +723,10 @@ short SvxToolbarConfigPage::QueryReset()
 
     OUString label = SvxConfigPageHelper::replaceSaveInName( msg, saveInName );
 
-    ScopedVclPtrInstance< QueryBox > qbox( this, MessBoxStyle::YesNo, label );
-
-    return qbox->Execute();
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                   VclMessageType::Question, VclButtonsType::YesNo,
+                                                   label));
+    return xQueryBox->run();
 }
 
 IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )

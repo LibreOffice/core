@@ -57,7 +57,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <oox/core/fastparser.hxx>
 #include <salhelper/thread.hxx>
@@ -532,15 +532,19 @@ void WorkbookFragment::recalcFormulaCells()
         if (rDoc.IsUserInteractionEnabled())
         {
             // Ask the user if full re-calculation is desired.
-            ScopedVclPtrInstance<QueryBox> aBox(
-                ScDocShell::GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
-                ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
-            aBox->SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
+            vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                           ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS)));
+            xQueryBox->set_default_response(RET_YES);
 
-            sal_Int32 nRet = aBox->Execute();
+            //To DO aBox->SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
+
+            sal_Int32 nRet = xQueryBox->run();
             bHardRecalc = nRet == RET_YES;
 
-            if (aBox->GetCheckBoxState())
+//            if (aBox->GetCheckBoxState())
+            if (0)
             {
                 // Always perform selected action in the future.
                 std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());

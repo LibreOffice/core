@@ -261,8 +261,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     aMessage += sTarget;
                     aMessage += aTemplate.getToken( 1, '#' );
 
-                    ScopedVclPtrInstance< QueryBox > aBox( nullptr, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, aMessage );
-                    bDo = ( aBox->Execute() == RET_YES );
+                    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
+                                                                   VclMessageType::Question, VclButtonsType::YesNo,
+                                                                   aMessage));
+                    xQueryBox->set_default_response(RET_YES);
+                    bDo = xQueryBox->run() == RET_YES;
                 }
 
                 if (bDo)
@@ -521,9 +524,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     OSL_ENSURE(pViewSh,"SID_REIMPORT_AFTER_LOAD: no View");
                     if (pViewSh && pDBColl)
                     {
-                        ScopedVclPtrInstance<QueryBox> aBox( GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
-                                                ScGlobal::GetRscString(STR_REIMPORT_AFTER_LOAD) );
-                        if (aBox->Execute() == RET_YES)
+                        vcl::Window* pWin = GetActiveDialogParent();
+                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                       VclMessageType::Question, VclButtonsType::YesNo,
+                                                                       ScGlobal::GetRscString(STR_REIMPORT_AFTER_LOAD)));
+                        xQueryBox->set_default_response(RET_YES);
+                        if (xQueryBox->run() == RET_YES)
                         {
                             ScDBCollection::NamedDBs& rDBs = pDBColl->getNamedDBs();
                             ScDBCollection::NamedDBs::iterator itr = rDBs.begin(), itrEnd = rDBs.end();
@@ -973,11 +979,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             bool bContinue = true;
                             if ( HasName() )
                             {
-                                ScopedVclPtrInstance<QueryBox> aBox(
-                                    GetActiveDialogParent(),
-                                    MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
-                                    ScGlobal::GetRscString( STR_DOC_WILLBESAVED ) );
-                                if ( aBox->Execute() == RET_NO )
+                                vcl::Window* pWin = GetActiveDialogParent();
+                                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                               VclMessageType::Question, VclButtonsType::YesNo,
+                                                                               ScGlobal::GetRscString(STR_REIMPORT_AFTER_LOAD)));
+                                xQueryBox->set_default_response(RET_YES);
+                                if (xQueryBox->run() == RET_NO)
                                 {
                                     bContinue = false;
                                 }

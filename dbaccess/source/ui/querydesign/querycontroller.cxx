@@ -80,6 +80,7 @@
 #include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/strbuf.hxx>
 #include <memory>
@@ -1738,9 +1739,14 @@ short OQueryController::saveModified()
         )
     {
         OUString sMessageText( lcl_getObjectResourceString( STR_QUERY_SAVEMODIFIED, m_nCommandType ) );
-        ScopedVclPtrInstance< QueryBox > aQry( getView(), MessBoxStyle::YesNoCancel | MessBoxStyle::DefaultYes, sMessageText );
 
-        nRet = aQry->Execute();
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(getFrameWeld(),
+                                                       VclMessageType::Question, VclButtonsType::YesNo,
+                                                       sMessageText));
+        xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+        xQueryBox->set_default_response(RET_YES);
+
+        nRet = xQueryBox->run();
         if  (   ( nRet == RET_YES )
             &&  !doSaveAsDoc( false )
             )

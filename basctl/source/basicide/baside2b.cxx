@@ -37,7 +37,7 @@
 #include <comphelper/string.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/dispatch.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/xtextedt.hxx>
@@ -479,7 +479,10 @@ bool EditorWindow::ImpCanModify()
     {
         // If in Trace-mode, abort the trace or refuse input
         // Remove markers in the modules in Notify at Basic::Stopped
-        if (ScopedVclPtrInstance<QueryBox>(nullptr, MessBoxStyle::OkCancel, IDEResId(RID_STR_WILLSTOPPRG))->Execute() == RET_OK)
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
+                                                       VclMessageType::Question, VclButtonsType::OkCancel,
+                                                       IDEResId(RID_STR_WILLSTOPPRG)));
+        if (xQueryBox->run() == RET_OK)
         {
             rModulWindow.GetBasicStatus().bIsRunning = false;
             StopBasic();
