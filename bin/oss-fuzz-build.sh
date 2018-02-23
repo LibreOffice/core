@@ -26,7 +26,7 @@ cp $SRC/libreoffice/extras/source/truetype/symbol/opens___.ttf instdir/share/fon
 rm -rf $OUT/services $OUT/types $OUT/*rdb
 mkdir $OUT/services
 pushd instdir/program
-cp -r *fuzzer *rc types.rdb types $OUT
+cp -r *fuzzer unorc fundamentalrc types.rdb types $OUT
 head -c -14 services.rdb  > $OUT/services.rdb
 tail -c +85 ./services/services.rdb >> $OUT/services.rdb
 popd
