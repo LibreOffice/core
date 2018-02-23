@@ -33,7 +33,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <sal/macros.h>
 #include <svl/style.hxx>
@@ -837,9 +837,11 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
 
         // Pop up question box that asks the user whether to wrap around.
         // The dialog is made modal with respect to the whole application.
-        ScopedVclPtrInstance< QueryBox > aQuestionBox( nullptr, (MessBoxStyle::YesNo | MessBoxStyle::DefaultYes), SdResId(pStringId));
-        aQuestionBox->SetImage( QueryBox::GetStandardImage() );
-        if (aQuestionBox->Execute() != RET_YES)
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
+                                                       VclMessageType::Question, VclButtonsType::YesNo,
+                                                       SdResId(pStringId)));
+        xQueryBox->set_default_response(RET_YES);
+        if (xQueryBox->run() != RET_YES)
             break;
     }
     while( true );
