@@ -54,8 +54,6 @@ namespace svx
     inline long Round(double a) { return a>0.0 ? static_cast<long>(a+0.5) : -static_cast<long>((-a)+0.5); }
 }
 
-inline void MoveRect(tools::Rectangle& rRect, const Size& S)    { rRect.Move(S.Width(),S.Height()); }
-inline void MovePoint(Point& rPnt, const Size& S)        { rPnt.AdjustX(S.Width()); rPnt.AdjustY(S.Height()); }
 inline void MovePoly(tools::Polygon& rPoly, const Size& S)      { rPoly.Move(S.Width(),S.Height()); }
 void MoveXPoly(XPolygon& rPoly, const Size& S);
 

@@ -94,9 +94,9 @@ long SdrTextObj::GetShearAngle(bool /*bVertical*/) const
 
 void SdrTextObj::NbcMove(const Size& rSiz)
 {
-    MoveRect(maRect,rSiz);
-    MoveRect(aOutRect,rSiz);
-    MoveRect(maSnapRect,rSiz);
+    maRect.Move(rSiz);
+    aOutRect.Move(rSiz);
+    maSnapRect.Move(rSiz);
     SetRectsDirty(true);
 }
 

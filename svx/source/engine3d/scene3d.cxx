@@ -290,7 +290,7 @@ void E3dScene::NbcSetSnapRect(const tools::Rectangle& rRect)
 void E3dScene::NbcMove(const Size& rSize)
 {
     tools::Rectangle aNewSnapRect = GetSnapRect();
-    MoveRect(aNewSnapRect, rSize);
+    aNewSnapRect.Move(rSize);
     NbcSetSnapRect(aNewSnapRect);
 }
 

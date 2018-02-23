@@ -643,7 +643,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         aOutRect = GetFlyFrame()->getFrameArea().SVRect();
     }
 
-    MoveRect( aOutRect, rSiz );
+    aOutRect.Move( rSiz );
     const Point aOldPos( GetFlyFrame()->getFrameArea().Pos() );
     const Point aNewPos( aOutRect.TopLeft() );
     const SwRect aFlyRect( aOutRect );
@@ -1105,7 +1105,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
         const Size aDeltaMove(
                 aNewPos.X() - aOldPos.X(),
                 aNewPos.Y() - aOldPos.Y());
-        MoveRect(aOutRect, Size(-aDeltaMove.Width(), -aDeltaMove.Height()));
+        aOutRect.Move(-aDeltaMove.Width(), -aDeltaMove.Height());
 
         // Now, move as needed (no empty delta which was a hack anyways)
         if(bIsTransformableSwFrame)
