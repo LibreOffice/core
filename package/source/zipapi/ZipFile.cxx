@@ -838,11 +838,14 @@ sal_Int32 ZipFile::findEND()
         nEnd = nPos >= 0 ? nPos : 0 ;
 
         aGrabber.seek( nEnd );
-        aGrabber.readBytes ( aBuffer, nLength - nEnd );
+
+        auto nSize = nLength - nEnd;
+        if (nSize != aGrabber.readBytes(aBuffer, nSize))
+            throw ZipException("Zip END signature not found!" );
 
         const sal_Int8 *pBuffer = aBuffer.getConstArray();
 
-        nPos = nLength - nEnd - ENDHDR;
+        nPos = nSize - ENDHDR;
         while ( nPos >= 0 )
         {
             if (pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K' && pBuffer[nPos+2] == 5 && pBuffer[nPos+3] == 6 )
