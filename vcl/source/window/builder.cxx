@@ -523,6 +523,10 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
         }
     }
 
+    // create message dialog message area now
+    for (auto const& elem : m_pParserState->m_aMessageDialogs)
+        elem->create_message_area();
+
     //drop maps, etc. that we don't need again
     m_pParserState.reset();
 
@@ -1314,7 +1318,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         WinBits nBits = WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
-        xWindow = VclPtr<MessageDialog>::Create(pParent, nBits);
+        VclPtr<MessageDialog> xDialog(VclPtr<MessageDialog>::Create(pParent, nBits));
+        m_pParserState->m_aMessageDialogs.push_back(xDialog);
+        xWindow = xDialog;
         xWindow->set_border_width(12);
     }
     else if (name == "GtkBox")

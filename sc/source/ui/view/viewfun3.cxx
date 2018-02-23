@@ -32,7 +32,7 @@
 #include <sot/storage.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <tools/urlobj.hxx>
 #include <sot/exchange.hxx>
 #include <memory>
@@ -1052,9 +1052,13 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         {
             ScWaitCursorOff aWaitOff( GetFrameWin() );
             OUString aMessage = ScGlobal::GetRscString( STR_PASTE_BIGGER );
-            ScopedVclPtrInstance<QueryBox> aBox( GetViewData().GetDialogParent(),
-                            MessBoxStyle::YesNo | MessBoxStyle::DefaultNo, aMessage );
-            if ( aBox->Execute() != RET_YES )
+
+            vcl::Window* pWin = GetViewData().GetDialogParent();
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                           aMessage));
+            xQueryBox->set_default_response(RET_NO);
+            if (xQueryBox->run() != RET_YES)
             {
                 return false;
             }

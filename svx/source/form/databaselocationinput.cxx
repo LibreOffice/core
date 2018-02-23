@@ -34,13 +34,11 @@
 #include <unotools/confignode.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <vcl/button.hxx>
-#include <vcl/msgbox.hxx>
-
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 namespace svx
 {
-
-
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
@@ -124,8 +122,11 @@ namespace svx
         {
             if ( ::utl::UCBContentHelper::Exists( sURL ) )
             {
-                ScopedVclPtrInstance< QueryBox > aBox( m_rLocationInput.GetSystemWindow(), MessBoxStyle::YesNo, SvxResId(RID_STR_ALREADYEXISTOVERWRITE) );
-                if ( aBox->Execute() != RET_YES )
+                vcl::Window* pWin = m_rLocationInput.GetSystemWindow();
+                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                               VclMessageType::Question, VclButtonsType::YesNo,
+                                                               SvxResId(RID_STR_ALREADYEXISTOVERWRITE)));
+                if (xQueryBox->run() != RET_YES)
                     return false;
             }
         }

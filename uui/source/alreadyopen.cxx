@@ -26,7 +26,7 @@ AlreadyOpenQueryBox::AlreadyOpenQueryBox( vcl::Window* pParent, const std::local
             Translate::get(STR_ALREADYOPEN_TITLE, rLocale),
             aMessage )
 {
-    SetImage( QueryBox::GetStandardImage() );
+    SetImage(GetStandardQueryBoxImage());
 
     if ( bIsStoring )
     {

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 
 #include <ids.hxx>
 #include "sslwarndlg.hxx"
@@ -27,7 +27,7 @@
 
 using namespace css;
 
-IMPL_LINK_NOARG(SSLWarnDialog, ViewCertHdl, ::Button*, void)
+IMPL_LINK_NOARG(SSLWarnDialog, ViewCertHdl, weld::Button&, void)
 {
     uno::Reference< css::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
 
@@ -36,25 +36,16 @@ IMPL_LINK_NOARG(SSLWarnDialog, ViewCertHdl, ::Button*, void)
     xDocumentDigitalSignatures.get()->showCertificate(m_rXCert);
 }
 
-SSLWarnDialog::SSLWarnDialog(vcl::Window* pParent,
+SSLWarnDialog::SSLWarnDialog(weld::Window* pParent,
     const css::uno::Reference< css::security::XCertificate >& rXCert,
     const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : MessageDialog(pParent, "SSLWarnDialog", "uui/ui/sslwarndialog.ui")
-    , m_xView(get<PushButton>("view"))
+    : m_xBuilder(Application::CreateBuilder(pParent, "uui/ui/sslwarndialog.ui"))
+    , m_xDialog(m_xBuilder->weld_message_dialog("SSLWarnDialog"))
+    , m_xView(m_xBuilder->weld_button("view"))
     , m_xContext(xContext)
     , m_rXCert(rXCert)
 {
-}
-
-void SSLWarnDialog::dispose()
-{
-    m_xView.clear();
-    MessageDialog::dispose();
-}
-
-SSLWarnDialog::~SSLWarnDialog()
-{
-    disposeOnce();
+    m_xView->connect_clicked(LINK(this, SSLWarnDialog, ViewCertHdl));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

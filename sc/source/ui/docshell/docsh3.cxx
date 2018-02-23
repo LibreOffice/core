@@ -1204,9 +1204,12 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
                     ScopedVclPtrInstance< ScConflictsDlg > aDlg( GetActiveDialogParent(), GetViewData(), &rSharedDoc, aConflictsList );
                     if ( aDlg->Execute() == RET_CANCEL )
                     {
-                        ScopedVclPtrInstance<QueryBox> aBox( GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
-                            ScGlobal::GetRscString( STR_DOC_WILLNOTBESAVED ) );
-                        if ( aBox->Execute() == RET_YES )
+                        vcl::Window* pWin = GetActiveDialogParent();
+                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                       VclMessageType::Question, VclButtonsType::YesNo,
+                                                                       ScGlobal::GetRscString(STR_DOC_WILLNOTBESAVED)));
+                        xQueryBox->set_default_response(RET_YES);
+                        if (xQueryBox->run() == RET_YES)
                         {
                             return false;
                         }

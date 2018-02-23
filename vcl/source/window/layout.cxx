@@ -2146,96 +2146,7 @@ void VclSizeGroup::set_property(const OString &rKey, const OUString &rValue)
     }
 }
 
-void MessageDialog::create_owned_areas()
-{
-    set_border_width(12);
-    m_pOwnedContentArea.set(VclPtr<VclVBox>::Create(this, false, 24));
-    set_content_area(m_pOwnedContentArea);
-    m_pOwnedContentArea->Show();
-    m_pOwnedActionArea.set( VclPtr<VclHButtonBox>::Create(m_pOwnedContentArea) );
-    set_action_area(m_pOwnedActionArea);
-    m_pOwnedActionArea->Show();
-}
-
-MessageDialog::MessageDialog(vcl::Window* pParent, WinBits nStyle)
-    : Dialog(pParent, nStyle)
-    , m_eButtonsType(VclButtonsType::NONE)
-    , m_eMessageType(VclMessageType::Info)
-    , m_pOwnedContentArea(nullptr)
-    , m_pOwnedActionArea(nullptr)
-    , m_pGrid(nullptr)
-    , m_pImage(nullptr)
-    , m_pPrimaryMessage(nullptr)
-    , m_pSecondaryMessage(nullptr)
-{
-    SetType(WindowType::MESSBOX);
-}
-
-MessageDialog::MessageDialog(vcl::Window* pParent,
-    const OUString &rMessage,
-    VclMessageType eMessageType,
-    VclButtonsType eButtonsType)
-    : Dialog(pParent, WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE)
-    , m_eButtonsType(eButtonsType)
-    , m_eMessageType(eMessageType)
-    , m_pGrid(nullptr)
-    , m_pImage(nullptr)
-    , m_pPrimaryMessage(nullptr)
-    , m_pSecondaryMessage(nullptr)
-    , m_sPrimaryString(rMessage)
-{
-    SetType(WindowType::MESSBOX);
-    create_owned_areas();
-}
-
-MessageDialog::MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
-    : Dialog(pParent, OStringToOUString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription, WindowType::MESSBOX)
-    , m_eButtonsType(VclButtonsType::NONE)
-    , m_eMessageType(VclMessageType::Info)
-    , m_pOwnedContentArea(nullptr)
-    , m_pOwnedActionArea(nullptr)
-    , m_pGrid(nullptr)
-    , m_pImage(nullptr)
-    , m_pPrimaryMessage(nullptr)
-    , m_pSecondaryMessage(nullptr)
-{
-}
-
-void MessageDialog::dispose()
-{
-    disposeOwnedButtons();
-    m_pPrimaryMessage.disposeAndClear();
-    m_pSecondaryMessage.disposeAndClear();
-    m_pImage.disposeAndClear();
-    m_pGrid.disposeAndClear();
-    m_pOwnedActionArea.disposeAndClear();
-    m_pOwnedContentArea.disposeAndClear();
-    Dialog::dispose();
-}
-
-MessageDialog::~MessageDialog()
-{
-    disposeOnce();
-}
-
-void MessageDialog::SetMessagesWidths(vcl::Window const *pParent,
-    VclMultiLineEdit *pPrimaryMessage, VclMultiLineEdit *pSecondaryMessage)
-{
-    if (pSecondaryMessage)
-    {
-        assert(pPrimaryMessage);
-        vcl::Font aFont = pParent->GetSettings().GetStyleSettings().GetLabelFont();
-        aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * 1.2));
-        aFont.SetWeight(WEIGHT_BOLD);
-        pPrimaryMessage->SetControlFont(aFont);
-        pPrimaryMessage->SetMaxTextWidth(pPrimaryMessage->approximate_char_width() * 44);
-        pSecondaryMessage->SetMaxTextWidth(pSecondaryMessage->approximate_char_width() * 60);
-    }
-    else
-        pPrimaryMessage->SetMaxTextWidth(pPrimaryMessage->approximate_char_width() * 60);
-}
-
-short MessageDialog::Execute()
+void MessageDialog::create_message_area()
 {
     setDeferredProperties();
 
@@ -2247,7 +2158,10 @@ short MessageDialog::Execute()
         m_pGrid.set( VclPtr<VclGrid>::Create(pContainer) );
         m_pGrid->reorderWithinParent(0);
         m_pGrid->set_column_spacing(12);
-        m_pGrid->set_row_spacing(GetTextHeight());
+        m_pMessageBox.set(VclPtr<VclVBox>::Create(m_pGrid));
+        m_pMessageBox->set_grid_left_attach(1);
+        m_pMessageBox->set_grid_top_attach(0);
+        m_pMessageBox->set_spacing(GetTextHeight());
 
         m_pImage = VclPtr<FixedImage>::Create(m_pGrid, WB_CENTER | WB_VCENTER | WB_3DLOOK);
         switch (m_eMessageType)
@@ -2259,10 +2173,10 @@ short MessageDialog::Execute()
                 m_pImage->SetImage(WarningBox::GetStandardImage());
                 break;
             case VclMessageType::Question:
-                m_pImage->SetImage(QueryBox::GetStandardImage());
+                m_pImage->SetImage(GetStandardQueryBoxImage());
                 break;
             case VclMessageType::Error:
-                m_pImage->SetImage(ErrorBox::GetStandardImage());
+                m_pImage->SetImage(GetStandardErrorBoxImage());
                 break;
         }
         m_pImage->set_grid_left_attach(0);
@@ -2274,21 +2188,17 @@ short MessageDialog::Execute()
 
         bool bHasSecondaryText = !m_sSecondaryString.isEmpty();
 
-        m_pPrimaryMessage = VclPtr<VclMultiLineEdit>::Create(m_pGrid, nWinStyle);
+        m_pPrimaryMessage = VclPtr<VclMultiLineEdit>::Create(m_pMessageBox, nWinStyle);
         m_pPrimaryMessage->SetPaintTransparent(true);
         m_pPrimaryMessage->EnableCursor(false);
 
-        m_pPrimaryMessage->set_grid_left_attach(1);
-        m_pPrimaryMessage->set_grid_top_attach(0);
         m_pPrimaryMessage->set_hexpand(true);
         m_pPrimaryMessage->SetText(m_sPrimaryString);
         m_pPrimaryMessage->Show(!m_sPrimaryString.isEmpty());
 
-        m_pSecondaryMessage = VclPtr<VclMultiLineEdit>::Create(m_pGrid, nWinStyle);
+        m_pSecondaryMessage = VclPtr<VclMultiLineEdit>::Create(m_pMessageBox, nWinStyle);
         m_pSecondaryMessage->SetPaintTransparent(true);
         m_pSecondaryMessage->EnableCursor(false);
-        m_pSecondaryMessage->set_grid_left_attach(1);
-        m_pSecondaryMessage->set_grid_top_attach(1);
         m_pSecondaryMessage->set_hexpand(true);
         m_pSecondaryMessage->SetText(m_sSecondaryString);
         m_pSecondaryMessage->Show(bHasSecondaryText);
@@ -2356,9 +2266,102 @@ short MessageDialog::Execute()
         }
         set_default_response(nDefaultResponse);
         pButtonBox->sort_native_button_order();
+        m_pMessageBox->Show();
         m_pGrid->Show();
     }
-    return Dialog::Execute();
+}
+
+void MessageDialog::create_owned_areas()
+{
+    set_border_width(12);
+    m_pOwnedContentArea.set(VclPtr<VclVBox>::Create(this, false, 24));
+    set_content_area(m_pOwnedContentArea);
+    m_pOwnedContentArea->Show();
+    m_pOwnedActionArea.set( VclPtr<VclHButtonBox>::Create(m_pOwnedContentArea) );
+    set_action_area(m_pOwnedActionArea);
+    m_pOwnedActionArea->Show();
+}
+
+MessageDialog::MessageDialog(vcl::Window* pParent, WinBits nStyle)
+    : Dialog(pParent, nStyle)
+    , m_eButtonsType(VclButtonsType::NONE)
+    , m_eMessageType(VclMessageType::Info)
+    , m_pOwnedContentArea(nullptr)
+    , m_pOwnedActionArea(nullptr)
+    , m_pGrid(nullptr)
+    , m_pMessageBox(nullptr)
+    , m_pImage(nullptr)
+    , m_pPrimaryMessage(nullptr)
+    , m_pSecondaryMessage(nullptr)
+{
+    SetType(WindowType::MESSBOX);
+}
+
+MessageDialog::MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+    : Dialog(pParent, OStringToOUString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription, WindowType::MESSBOX)
+    , m_eButtonsType(VclButtonsType::NONE)
+    , m_eMessageType(VclMessageType::Info)
+    , m_pOwnedContentArea(nullptr)
+    , m_pOwnedActionArea(nullptr)
+    , m_pGrid(nullptr)
+    , m_pImage(nullptr)
+    , m_pPrimaryMessage(nullptr)
+    , m_pSecondaryMessage(nullptr)
+{
+}
+
+MessageDialog::MessageDialog(vcl::Window* pParent,
+    const OUString &rMessage,
+    VclMessageType eMessageType,
+    VclButtonsType eButtonsType)
+    : Dialog(pParent, WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE)
+    , m_eButtonsType(eButtonsType)
+    , m_eMessageType(eMessageType)
+    , m_pGrid(nullptr)
+    , m_pMessageBox(nullptr)
+    , m_pImage(nullptr)
+    , m_pPrimaryMessage(nullptr)
+    , m_pSecondaryMessage(nullptr)
+    , m_sPrimaryString(rMessage)
+{
+    SetType(WindowType::MESSBOX);
+    create_owned_areas();
+    create_message_area();
+}
+
+void MessageDialog::dispose()
+{
+    disposeOwnedButtons();
+    m_pPrimaryMessage.disposeAndClear();
+    m_pSecondaryMessage.disposeAndClear();
+    m_pImage.disposeAndClear();
+    m_pMessageBox.disposeAndClear();
+    m_pGrid.disposeAndClear();
+    m_pOwnedActionArea.disposeAndClear();
+    m_pOwnedContentArea.disposeAndClear();
+    Dialog::dispose();
+}
+
+MessageDialog::~MessageDialog()
+{
+    disposeOnce();
+}
+
+void MessageDialog::SetMessagesWidths(vcl::Window const *pParent,
+    VclMultiLineEdit *pPrimaryMessage, VclMultiLineEdit *pSecondaryMessage)
+{
+    if (pSecondaryMessage)
+    {
+        assert(pPrimaryMessage);
+        vcl::Font aFont = pParent->GetSettings().GetStyleSettings().GetLabelFont();
+        aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * 1.2));
+        aFont.SetWeight(WEIGHT_BOLD);
+        pPrimaryMessage->SetControlFont(aFont);
+        pPrimaryMessage->SetMaxTextWidth(pPrimaryMessage->approximate_char_width() * 44);
+        pSecondaryMessage->SetMaxTextWidth(pSecondaryMessage->approximate_char_width() * 60);
+    }
+    else
+        pPrimaryMessage->SetMaxTextWidth(pPrimaryMessage->approximate_char_width() * 60);
 }
 
 OUString const & MessageDialog::get_primary_text() const

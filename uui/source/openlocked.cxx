@@ -26,7 +26,7 @@ OpenLockedQueryBox::OpenLockedQueryBox( vcl::Window* pParent, const std::locale&
             Translate::get(STR_OPENLOCKED_TITLE, rResLocale),
             aMessage )
 {
-    SetImage( QueryBox::GetStandardImage() );
+    SetImage(GetStandardQueryBoxImage());
 
     AddButton(Translate::get(STR_OPENLOCKED_OPENREADONLY_BTN, rResLocale), RET_YES,
             ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);

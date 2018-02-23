@@ -1298,9 +1298,12 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
         // OutRange of pOldObj (pDestObj) is still old area
         if (!lcl_EmptyExcept(&rDoc, aNewOut, pOldObj->GetOutRange()))
         {
-            ScopedVclPtrInstance<QueryBox> aBox( ScDocShell::GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
-                             ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) );
-            if (aBox->Execute() == RET_NO)
+            vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                           ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY)));
+            xQueryBox->set_default_response(RET_YES);
+            if (xQueryBox->run() == RET_NO)
             {
                 //! like above (not editable)
                 *pOldObj = aUndoDPObj;
@@ -1349,10 +1352,12 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
 
         if (pModel && !aListOfObjects.empty())
         {
-            ScopedVclPtrInstance<QueryBox> aBox(
-                    ScDocShell::GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
-                    ScGlobal::GetRscString(STR_PIVOT_REMOVE_PIVOTCHART));
-            if (aBox->Execute() == RET_NO)
+            vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                           ScGlobal::GetRscString(STR_PIVOT_REMOVE_PIVOTCHART)));
+            xQueryBox->set_default_response(RET_YES);
+            if (xQueryBox->run() == RET_NO)
             {
                 return false;
             }
@@ -1493,11 +1498,12 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
 
         if (!bEmpty)
         {
-            ScopedVclPtrInstance<QueryBox> aBox(
-                ScDocShell::GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
-                ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY));
-
-            if (aBox->Execute() == RET_NO)
+            vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                           ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY)));
+            xQueryBox->set_default_response(RET_YES);
+            if (xQueryBox->run() == RET_NO)
             {
                 //! like above (not editable)
                 return false;
@@ -1567,9 +1573,12 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     {
         if (!lcl_EmptyExcept(&rDoc, aNewOut, rDPObj.GetOutRange()))
         {
-            ScopedVclPtrInstance<QueryBox> aBox( ScDocShell::GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
-                                                 ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) );
-            if (aBox->Execute() == RET_NO)
+            vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                           ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY)));
+            xQueryBox->set_default_response(RET_YES);
+            if (xQueryBox->run() == RET_NO)
             {
                 rDPObj = aUndoDPObj;
                 return false;

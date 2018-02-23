@@ -34,7 +34,6 @@
 #include <svl/zformat.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svxdlg.hxx>
 #include <sot/formats.hxx>
@@ -2015,9 +2014,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     // or should create a new overlapping conditional format
                     if(!bCondFormatDlg && bContainsExistingCondFormat)
                     {
-                        ScopedVclPtrInstance<QueryBox> aBox( pTabViewShell->GetDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
-                               ScGlobal::GetRscString(STR_EDIT_EXISTING_COND_FORMATS) );
-                        bool bEditExisting = aBox->Execute() == RET_YES;
+                        vcl::Window* pWin = pTabViewShell->GetDialogParent();
+                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                       VclMessageType::Question, VclButtonsType::YesNo,
+                                                                       ScGlobal::GetRscString(STR_EDIT_EXISTING_COND_FORMATS)));
+                        xQueryBox->set_default_response(RET_YES);
+                        bool bEditExisting = xQueryBox->run() == RET_YES;
                         if(bEditExisting)
                         {
                             // differentiate between ranges where one conditional format is defined
@@ -2930,11 +2932,12 @@ void ScCellShell::ExecuteDataPilotDialog()
                     if ( pDoc->HasSubTotalCells( aRange ) )
                     {
                         //  confirm selection if it contains SubTotal cells
-
-                        ScopedVclPtrInstance<QueryBox> aBox( pTabViewShell->GetDialogParent(),
-                                        MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
-                                        ScGlobal::GetRscString(STR_DATAPILOT_SUBTOTAL) );
-                        if (aBox->Execute() == RET_NO)
+                        vcl::Window* pWin = pTabViewShell->GetDialogParent();
+                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                       VclMessageType::Question, VclButtonsType::YesNo,
+                                                                       ScGlobal::GetRscString(STR_DATAPILOT_SUBTOTAL)));
+                        xQueryBox->set_default_response(RET_YES);
+                        if (xQueryBox->run() == RET_NO)
                             bOK = false;
                     }
                     if (bOK)

@@ -136,7 +136,7 @@ getLocalizedDatTimeStr(
 
 bool
 executeUnknownAuthDialog(
-    vcl::Window * pParent,
+    weld::Window * pParent,
     uno::Reference< uno::XComponentContext > const & xContext,
     const uno::Reference< security::XCertificate >& rXCert)
 {
@@ -144,7 +144,7 @@ executeUnknownAuthDialog(
     {
         SolarMutexGuard aGuard;
 
-        ScopedVclPtrInstance< UnknownAuthDialog > xDialog(pParent, rXCert, xContext);
+        UnknownAuthDialog aDialog(pParent, rXCert, xContext);
 
         // Get correct resource string
         OUString aMessage;
@@ -158,9 +158,9 @@ executeUnknownAuthDialog(
         aMessage = Translate::get(STR_UUI_UNKNOWNAUTH_UNTRUSTED, aResLocale);
         aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
-        xDialog->setDescriptionText( aMessage );
+        aDialog.setDescriptionText( aMessage );
 
-        return static_cast<bool>(xDialog->Execute());
+        return static_cast<bool>(aDialog.run());
     }
     catch (std::bad_alloc const &)
     {
@@ -174,7 +174,7 @@ enum class SslWarnType {
 
 bool
 executeSSLWarnDialog(
-    vcl::Window * pParent,
+    weld::Window * pParent,
     uno::Reference< uno::XComponentContext > const & xContext,
     const uno::Reference< security::XCertificate >& rXCert,
     SslWarnType failure,
@@ -184,7 +184,7 @@ executeSSLWarnDialog(
     {
         SolarMutexGuard aGuard;
 
-        ScopedVclPtrInstance< SSLWarnDialog > xDialog(pParent, rXCert, xContext);
+        SSLWarnDialog aDialog(pParent, rXCert, xContext);
 
         // Get correct resource string
         std::vector< OUString > aArguments_1;
@@ -225,12 +225,12 @@ executeSSLWarnDialog(
         OUString aMessage_1 = Translate::get(pMessageKey, aResLocale);
         aMessage_1 = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage_1, aArguments_1 );
-        xDialog->setDescription1Text( aMessage_1 );
+        aDialog.setDescription1Text( aMessage_1 );
 
         OUString aTitle = Translate::get(pTitleKey, aResLocale);
-        xDialog->SetText(aTitle);
+        aDialog.set_title(aTitle);
 
-        return static_cast<bool>(xDialog->Execute());
+        return static_cast<bool>(aDialog.run());
     }
     catch (std::bad_alloc const &)
     {
@@ -240,7 +240,7 @@ executeSSLWarnDialog(
 
 void
 handleCertificateValidationRequest_(
-    vcl::Window * pParent,
+    weld::Window * pParent,
     uno::Reference< uno::XComponentContext > const & xContext,
     ucb::CertificateValidationRequest const & rRequest,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
@@ -362,7 +362,8 @@ UUIInteractionHelper::handleCertificateValidationRequest(
     ucb::CertificateValidationRequest aCertificateValidationRequest;
     if (aAnyRequest >>= aCertificateValidationRequest)
     {
-        handleCertificateValidationRequest_(getParentProperty(),
+        vcl::Window* pWindow = getParentProperty();
+        handleCertificateValidationRequest_(pWindow ? pWindow->GetFrameWeld() : nullptr,
                                             m_xContext,
                                             aCertificateValidationRequest,
                                             rRequest->getContinuations());

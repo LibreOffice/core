@@ -19,8 +19,9 @@
 
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/builderfactory.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/tempfile.hxx>
@@ -158,8 +159,12 @@ void SwGlossaryGroupDlg::Apply()
         const OUString sMsg(SwResId(STR_QUERY_DELETE_GROUP1)
                             + sTitle
                             + SwResId(STR_QUERY_DELETE_GROUP2));
-        ScopedVclPtrInstance< QueryBox > aQuery(GetParent(), MessBoxStyle::YesNo|MessBoxStyle::DefaultNo, sMsg );
-        if(RET_YES == aQuery->Execute())
+
+        vcl::Window* pWin = GetParent();
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                       VclMessageType::Question, VclButtonsType::YesNo, sMsg));
+        xQueryBox->set_default_response(RET_NO);
+        if (RET_YES == xQueryBox->run())
             pGlosHdl->DelGroup( sDelGroup );
     }
 

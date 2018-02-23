@@ -278,7 +278,7 @@ static short lcl_AskRedlineFlags(vcl::Window *pWin)
     ScopedVclPtrInstance<MessBox> aQBox( pWin, MessBoxStyle::NONE, 0,
                     SwResId( STR_REDLINE_TITLE ),
                     SwResId( STR_REDLINE_MSG ) );
-    aQBox->SetImage( QueryBox::GetStandardImage() );
+    aQBox->SetImage(GetStandardQueryBoxImage());
     const ButtonDialogFlags nBtnFlags = ButtonDialogFlags::Default |
                         ButtonDialogFlags::OK |
                         ButtonDialogFlags::Focus;

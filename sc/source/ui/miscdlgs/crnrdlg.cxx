@@ -23,7 +23,6 @@
 #include <globstr.hrc>
 #include <docsh.hxx>
 #include <crnrdlg.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <memory>
 
@@ -34,10 +33,19 @@ namespace
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
                                                   VclMessageType::Warning, VclButtonsType::Ok,
                                                   rString));
+        xBox->run();
     }
-}
 
-#define QUERYBOX(m) ScopedVclPtrInstance<QueryBox>(this, MessBoxStyle::YesNo|MessBoxStyle::DefaultYes, m)->Execute()
+    int QUERYBOX(weld::Window* pParent, const OUString& rString)
+    {
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                                                  VclMessageType::Question, VclButtonsType::YesNo,
+                                                  rString));
+        xBox->set_default_response(RET_YES);
+        return xBox->run();
+    }
+
+}
 
 const sal_uLong nEntryDataCol = 0;
 const sal_uLong nEntryDataRow = 1;
@@ -606,7 +614,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl, Button*, void)
                             + aRangeStr
                             + aStrDelMsg.getToken( 1, '#' );
 
-        if ( RET_YES == QUERYBOX(aMsg) )
+        if (RET_YES == QUERYBOX(GetFrameWeld(), aMsg))
         {
             if ( bColName )
                 xColNameRanges->Remove( pPair );

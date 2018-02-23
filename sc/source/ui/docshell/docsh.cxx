@@ -26,6 +26,7 @@
 #include <comphelper/classids.hxx>
 #include <formula/errorcodes.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 #include <rtl/bootstrap.hxx>
@@ -473,14 +474,29 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css
         {
             // Generator is not LibreOffice.  Ask if the user wants to perform
             // full re-calculation.
-            ScopedVclPtrInstance<QueryBox> aBox(
-                GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
-                ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_ODS));
-            aBox->SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
+            vcl::Window* pWin = GetActiveDialogParent();
 
-            bHardRecalc = aBox->Execute() == RET_YES;
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWin ? pWin->GetFrameWeld() : nullptr,
+                        "modules/scalc/ui/recalcquerydialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("RecalcQueryDialog"));
+            xQueryBox->set_primary_text(ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_ODS));
+            xQueryBox->set_default_response(RET_YES);
+            std::unique_ptr<weld::CheckButton> xWarningOnBox(xBuilder->weld_check_button("ask"));
 
-            if (aBox->GetCheckBoxState())
+            //fdo#75121, a bit tricky because the widgets we want to align with
+            //don't actually exist in the ui description, they're implied
+            std::unique_ptr<weld::Container> xOrigParent(xWarningOnBox->weld_parent());
+            std::unique_ptr<weld::Container> xContentArea(xQueryBox->weld_message_area());
+            xOrigParent->remove(xWarningOnBox.get());
+            xContentArea->add(xWarningOnBox.get());
+
+            bHardRecalc = xQueryBox->run() == RET_YES;
+
+            //put them back as they were
+            xContentArea->remove(xWarningOnBox.get());
+            xOrigParent->add(xWarningOnBox.get());
+
+            if (xWarningOnBox->get_active())
             {
                 // Always perform selected action in the future.
                 std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());

@@ -30,7 +30,7 @@ namespace sfx2
 QueryTemplateBox::QueryTemplateBox( vcl::Window* pParent, const OUString& rMessage ) :
     MessBox ( pParent, MessBoxStyle::NONE, 0, Application::GetDisplayName(), rMessage )
 {
-    SetImage( QueryBox::GetStandardImage() );
+    SetImage(GetStandardQueryBoxImage());
     SetHelpId( HID_QUERY_LOAD_TEMPLATE );
 
     AddButton( SfxResId( STR_QRYTEMPL_UPDATE_BTN ), RET_YES,

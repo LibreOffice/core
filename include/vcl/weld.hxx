@@ -19,6 +19,8 @@
 
 namespace weld
 {
+class Container;
+
 class VCL_DLLPUBLIC Widget
 {
 public:
@@ -44,13 +46,16 @@ public:
     virtual Size get_pixel_size(const OUString& rText) const = 0;
     virtual OString get_buildable_name() const = 0;
     virtual OString get_help_id() const = 0;
-    virtual Widget* weld_parent() const = 0;
+    virtual Container* weld_parent() const = 0;
 
     virtual ~Widget() {}
 };
 
 class VCL_DLLPUBLIC Container : virtual public Widget
 {
+public:
+    virtual void remove(weld::Widget* pWidget) = 0;
+    virtual void add(weld::Widget* pWidget) = 0;
 };
 
 class VCL_DLLPUBLIC Frame : virtual public Container
@@ -107,6 +112,7 @@ public:
     virtual OUString get_primary_text() const = 0;
     virtual void set_secondary_text(const OUString& rText) = 0;
     virtual OUString get_secondary_text() const = 0;
+    virtual Container* weld_message_area() = 0;
 };
 
 class VCL_DLLPUBLIC ComboBoxText : virtual public Container
@@ -160,6 +166,7 @@ public:
     virtual void insert(const OUString& rText, int pos) = 0;
     virtual int n_children() const = 0;
     virtual void select(int pos) = 0;
+    using Container::remove;
     virtual void remove(int pos) = 0;
     virtual int find(const OUString& rText) const = 0;
     virtual void set_top_entry(int pos) = 0;

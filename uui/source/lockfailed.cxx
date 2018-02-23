@@ -25,7 +25,7 @@
 LockFailedQueryBox::LockFailedQueryBox(vcl::Window* pParent, const std::locale& rResLocale)
     : MessBox(pParent, MessBoxStyle::NONE, 0, Translate::get(STR_LOCKFAILED_TITLE, rResLocale), OUString())
 {
-    SetImage( ErrorBox::GetStandardImage() );
+    SetImage(GetStandardErrorBoxImage());
 
     AddButton(Translate::get(STR_LOCKFAILED_OPENREADONLY_BTN, rResLocale), RET_OK,
         ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);

@@ -27,7 +27,7 @@ SvxPrtQryBox::SvxPrtQryBox(vcl::Window* pParent) :
             SvxResId(RID_SVXSTR_QRY_PRINT_TITLE),
             SvxResId(RID_SVXSTR_QRY_PRINT_MSG))
 {
-    SetImage( QueryBox::GetStandardImage() );
+    SetImage(GetStandardQueryBoxImage());
 
     AddButton(SvxResId(RID_SVXSTR_QRY_PRINT_SELECTION), RET_OK,
             ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);

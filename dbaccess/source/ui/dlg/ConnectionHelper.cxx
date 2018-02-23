@@ -33,6 +33,7 @@
 #include <osl/process.h>
 #include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <dbadmin.hxx>
 #include <comphelper/types.hxx>
@@ -475,8 +476,12 @@ namespace dbaui
             sQuery = sQuery.replaceFirst("$path$", aTransformer.get(OFileNotation::N_SYSTEM));
 
             m_bUserGrabFocus = false;
-            ScopedVclPtrInstance< QueryBox > aQuery(GetParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, sQuery);
-            sal_Int32 nQueryResult = aQuery->Execute();
+            vcl::Window* pWin = GetParent();
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                           sQuery));
+            xQueryBox->set_default_response(RET_YES);
+            sal_Int32 nQueryResult = xQueryBox->run();
             m_bUserGrabFocus = true;
 
             switch (nQueryResult)
@@ -492,8 +497,14 @@ namespace dbaui
                             sQuery = sQuery.replaceFirst("$name$", aTransformer.get(OFileNotation::N_SYSTEM));
 
                             m_bUserGrabFocus = false;
-                            ScopedVclPtrInstance< QueryBox > aWhatToDo(GetParent(), MessBoxStyle::RetryCancel | MessBoxStyle::DefaultRetry, sQuery);
-                            nQueryResult = aWhatToDo->Execute();
+
+                            std::unique_ptr<weld::MessageDialog> xWhatToDo(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                           VclMessageType::Question, VclButtonsType::NONE,
+                                                                           sQuery));
+                            xWhatToDo->add_button(Button::GetStandardText(StandardButtonType::Retry), RET_RETRY);
+                            xWhatToDo->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+                            xWhatToDo->set_default_response(RET_RETRY);
+                            nQueryResult = xWhatToDo->run();
                             m_bUserGrabFocus = true;
 
                             if (RET_RETRY == nQueryResult)

@@ -25,7 +25,7 @@
 #include <sfx2/viewsh.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/languageoptions.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <unotools/configitem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <sal/macros.h>
@@ -1375,7 +1375,11 @@ DeactivateRC SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
 
     if ( ePaper != PAPER_SCREEN_4_3 && ePaper != PAPER_SCREEN_16_9 && ePaper != PAPER_SCREEN_16_10 && IsMarginOutOfRange() )
     {
-        if (ScopedVclPtrInstance<QueryBox>(this, MessBoxStyle::YesNo | MessBoxStyle::DefaultNo, m_pPrintRangeQueryText->GetText())->Execute() == RET_NO)
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                       VclMessageType::Question, VclButtonsType::YesNo,
+                                                       m_pPrintRangeQueryText->GetText()));
+        xQueryBox->set_default_response(RET_NO);
+        if (xQueryBox->run() == RET_NO)
         {
             MetricField* pField = nullptr;
             if ( IsPrinterRangeOverflow( *m_pLeftMarginEdit, nFirstLeftMargin, nLastLeftMargin, MARGIN_LEFT ) )

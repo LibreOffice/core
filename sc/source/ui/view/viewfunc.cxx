@@ -34,7 +34,7 @@
 #include <sfx2/bindings.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/wrkwin.hxx>
@@ -442,9 +442,13 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 {
                     OUString aMessage( ScResId( SCSTR_FORMULA_AUTOCORRECTION ) );
                     aMessage += aCorrectedFormula;
-                    nResult = ScopedVclPtrInstance<QueryBox>( GetViewData().GetDialogParent(),
-                                            MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
-                                            aMessage )->Execute();
+
+                    vcl::Window* pWin = GetViewData().GetDialogParent();
+                    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                   VclMessageType::Question, VclButtonsType::YesNo,
+                                                                   aMessage));
+                    xQueryBox->set_default_response(RET_YES);
+                    nResult = xQueryBox->run();
                 }
                 if ( nResult == RET_YES )
                 {

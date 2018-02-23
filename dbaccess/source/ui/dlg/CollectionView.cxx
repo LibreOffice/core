@@ -32,7 +32,8 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <stringconstants.hxx>
 #include <bitmaps.hlst>
 #include <UITools.hxx>
@@ -175,8 +176,10 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click, Button*, void)
         {
             if ( xNameContainer->hasByName(sName) )
             {
-                ScopedVclPtrInstance< QueryBox > aBox(this, MessBoxStyle::YesNo, DBA_RES(STR_ALREADYEXISTOVERWRITE));
-                if ( aBox->Execute() != RET_YES )
+                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                               VclMessageType::Question, VclButtonsType::YesNo,
+                                                               DBA_RES(STR_ALREADYEXISTOVERWRITE)));
+                if (xQueryBox->run() != RET_YES)
                     return;
             }
             m_pName->SetText(sName);

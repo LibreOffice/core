@@ -28,7 +28,8 @@
 #include <tools/urlobj.hxx>
 #include <sot/exchange.hxx>
 #include <tools/debug.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/graph.hxx>
@@ -271,7 +272,7 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
 void LinkManager::UpdateAllLinks(
     bool bAskUpdate,
     bool bUpdateGrfLinks,
-    vcl::Window* pParentWin )
+    weld::Window* pParentWin )
 {
     // First make a copy of the array in order to update links
     // links in ... no contact between them!
@@ -308,7 +309,12 @@ void LinkManager::UpdateAllLinks(
 
         if( bAskUpdate )
         {
-            int nRet = ScopedVclPtrInstance<QueryBox>(pParentWin, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, SfxResId( STR_QUERY_UPDATE_LINKS ))->Execute();
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pParentWin,
+                                                           VclMessageType::Question, VclButtonsType::YesNo,
+                                                           SfxResId(STR_QUERY_UPDATE_LINKS)));
+            xQueryBox->set_default_response(RET_YES);
+
+            int nRet = xQueryBox->run();
             if( RET_YES != nRet )
             {
                 SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();

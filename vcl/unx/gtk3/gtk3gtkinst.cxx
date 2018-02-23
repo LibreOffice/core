@@ -1266,11 +1266,7 @@ public:
         return Size(nWidth, nHeight);
     }
 
-    virtual weld::Widget* weld_parent() const override
-    {
-        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
-        return pParent ? new GtkInstanceWidget(pParent, false) : nullptr;
-    }
+    virtual weld::Container* weld_parent() const override;
 
     virtual OString get_buildable_name() const override
     {
@@ -1312,9 +1308,28 @@ public:
         : GtkInstanceWidget(GTK_WIDGET(pContainer), bTakeOwnership)
         , m_pContainer(pContainer)
     {
-        (void)m_pContainer;
+    }
+
+    virtual void remove(weld::Widget* pWidget) override
+    {
+        GtkInstanceWidget* pGtkWidget = dynamic_cast<GtkInstanceWidget*>(pWidget);
+        assert(pGtkWidget);
+        gtk_container_remove(m_pContainer, pGtkWidget->getWidget());
+    }
+
+    virtual void add(weld::Widget* pWidget) override
+    {
+        GtkInstanceWidget* pGtkWidget = dynamic_cast<GtkInstanceWidget*>(pWidget);
+        assert(pGtkWidget);
+        gtk_container_add(m_pContainer, pGtkWidget->getWidget());
     }
 };
+
+weld::Container* GtkInstanceWidget::weld_parent() const
+{
+    GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+    return pParent ? new GtkInstanceContainer(GTK_CONTAINER(pParent), false) : nullptr;
+}
 
 class GtkInstanceWindow : public GtkInstanceContainer, public virtual weld::Window
 {
@@ -1473,6 +1488,11 @@ public:
         gchar* pText = nullptr;
         g_object_get(G_OBJECT(m_pMessageDialog), "secondary-text", &pText, nullptr);
         return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    virtual Container* weld_message_area() override
+    {
+        return new GtkInstanceContainer(GTK_CONTAINER(gtk_message_dialog_get_message_area(m_pMessageDialog)), false);
     }
 };
 
@@ -1836,6 +1856,8 @@ public:
         gtk_list_store_insert(m_pListStore, &iter, pos);
         gtk_list_store_set(m_pListStore, &iter, 0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(), -1);
     }
+
+    using GtkInstanceContainer::remove;
 
     virtual void remove(int pos) override
     {

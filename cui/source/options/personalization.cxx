@@ -21,7 +21,7 @@
 #include <rtl/strbuf.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -709,8 +709,11 @@ void SearchAndParseThread::execute()
                     sError = CuiResId(RID_SVXSTR_SEARCHERROR);
                     sError = sError.replaceAll("%1", m_aURL);
                     m_pPersonaDialog->SetProgress( OUString() );
-                    ScopedVclPtrInstance< ErrorBox > aBox( nullptr, MessBoxStyle::Ok, sError);
-                    aBox->Execute();
+
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                              VclMessageType::Error, VclButtonsType::Ok,
+                                                              sError));
+                    xBox->run();
                     return;
                 }
             }
@@ -722,8 +725,10 @@ void SearchAndParseThread::execute()
                 sError = CuiResId(RID_SVXSTR_SEARCHERROR);
                 sError = sError.replaceAll("%1", m_aURL);
                 m_pPersonaDialog->SetProgress( OUString() );
-                ScopedVclPtrInstance< ErrorBox > aBox( nullptr, MessBoxStyle::Ok, sError );
-                aBox->Execute();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                          VclMessageType::Error, VclButtonsType::Ok,
+                                                          sError));
+                xBox->run();
                 return;
             }
 
@@ -763,8 +768,10 @@ void SearchAndParseThread::execute()
                     sError = CuiResId(RID_SVXSTR_SEARCHERROR);
                     sError = sError.replaceAll("%1", m_aURL);
                     m_pPersonaDialog->SetProgress( OUString() );
-                    ScopedVclPtrInstance< ErrorBox > aBox( nullptr, MessBoxStyle::Ok, sError);
-                    aBox->Execute();
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                              VclMessageType::Error, VclButtonsType::Ok,
+                                                              sError));
+                    xBox->run();
                     return;
                 }
                 continue;
@@ -847,8 +854,10 @@ void SearchAndParseThread::execute()
             sError = CuiResId( RID_SVXSTR_SEARCHERROR );
             sError = sError.replaceAll("%1", m_aURL);
             m_pPersonaDialog->SetProgress( OUString() );
-            ScopedVclPtrInstance< ErrorBox > aBox( nullptr, MessBoxStyle::Ok, sError);
-            aBox->Execute();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                      VclMessageType::Error, VclButtonsType::Ok,
+                                                      sError));
+            xBox->run();
             return;
         }
 

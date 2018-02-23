@@ -23,6 +23,7 @@ private:
     VclPtr<VclBox> m_pOwnedContentArea;
     VclPtr<VclButtonBox> m_pOwnedActionArea;
     VclPtr<VclGrid> m_pGrid;
+    VclPtr<VclVBox> m_pMessageBox;
     VclPtr<FixedImage> m_pImage;
     VclPtr<VclMultiLineEdit> m_pPrimaryMessage;
     VclPtr<VclMultiLineEdit> m_pSecondaryMessage;
@@ -39,13 +40,15 @@ public:
                   VclButtonsType eButtonsType = VclButtonsType::Ok);
     MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
     virtual bool set_property(const OString& rKey, const OUString& rValue) override;
-    virtual short Execute() override;
     OUString const& get_primary_text() const;
     OUString const& get_secondary_text() const;
     void set_primary_text(const OUString& rPrimaryString);
     void set_secondary_text(const OUString& rSecondaryString);
     virtual ~MessageDialog() override;
     virtual void dispose() override;
+
+    void create_message_area();
+    VclContainer* get_message_area() const { return m_pMessageBox.get(); }
 
     static void SetMessagesWidths(vcl::Window const* pParent, VclMultiLineEdit* pPrimaryMessage,
                                   VclMultiLineEdit* pSecondaryMessage);

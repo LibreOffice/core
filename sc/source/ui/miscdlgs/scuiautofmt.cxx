@@ -32,7 +32,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <svl/zforlist.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/strings.hrc>
@@ -286,8 +286,12 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl, Button*, void)
                       + m_pLbFormat->GetSelectedEntry()
                       + aStrDelMsg.getToken( 1, '#' );
 
-        if ( RET_YES ==
-             ScopedVclPtrInstance<QueryBox>( this, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, aMsg )->Execute() )
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                       VclMessageType::Question, VclButtonsType::YesNo,
+                                                       aMsg));
+        xQueryBox->set_default_response(RET_YES);
+
+        if (RET_YES == xQueryBox->run())
         {
             m_pLbFormat->RemoveEntry( nIndex );
             m_pLbFormat->SelectEntryPos( nIndex-1 );

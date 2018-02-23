@@ -263,11 +263,7 @@ public:
         return m_xWidget->GetHelpId();
     }
 
-    virtual Widget* weld_parent() const override
-    {
-        vcl::Window* pParent = m_xWidget->GetParent();
-        return pParent ? new SalInstanceWidget(pParent, false) : nullptr;
-    }
+    virtual weld::Container* weld_parent() const override;
 
     virtual ~SalInstanceWidget() override
     {
@@ -296,7 +292,25 @@ public:
         , m_xContainer(pContainer)
     {
     }
+    virtual void remove(weld::Widget* pWidget) override
+    {
+        SalInstanceWidget* pGtkWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
+        assert(pGtkWidget);
+        pGtkWidget->getWidget()->SetParent(nullptr);
+    }
+    virtual void add(weld::Widget* pWidget) override
+    {
+        SalInstanceWidget* pGtkWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
+        assert(pGtkWidget);
+        pGtkWidget->getWidget()->SetParent(m_xContainer);
+    }
 };
+
+weld::Container* SalInstanceWidget::weld_parent() const
+{
+    vcl::Window* pParent = m_xWidget->GetParent();
+    return pParent ? new SalInstanceContainer(pParent, false) : nullptr;
+}
 
 class SalInstanceWindow : public SalInstanceContainer, public virtual weld::Window
 {
@@ -437,6 +451,11 @@ public:
     {
         return m_xMessageDialog->get_secondary_text();
     }
+
+    virtual Container* weld_message_area() override
+    {
+        return new SalInstanceContainer(m_xMessageDialog->get_message_area(), false);
+    }
 };
 
 class SalInstanceFrame : public SalInstanceContainer, public virtual weld::Frame
@@ -540,12 +559,14 @@ class SalInstanceButton : public SalInstanceContainer, public virtual weld::Butt
 {
 private:
     VclPtr<::Button> m_xButton;
+    Link<::Button*,void> m_aOldClickHdl;
 
     DECL_LINK(ClickHdl, ::Button*, void);
 public:
     SalInstanceButton(::Button* pButton, bool bTakeOwnership)
         : SalInstanceContainer(pButton, bTakeOwnership)
         , m_xButton(pButton)
+        , m_aOldClickHdl(pButton->GetClickHdl())
     {
         m_xButton->SetClickHdl(LINK(this, SalInstanceButton, ClickHdl));
     }
@@ -573,7 +594,7 @@ IMPL_LINK(SalInstanceButton, ClickHdl, ::Button*, pButton, void)
     //etc buttons.
     if (!m_aClickHdl.IsSet())
     {
-        pButton->SetClickHdl(Link<::Button*,void>());
+        pButton->SetClickHdl(m_aOldClickHdl);
         pButton->Click();
         pButton->SetClickHdl(LINK(this, SalInstanceButton, ClickHdl));
         return;
@@ -766,6 +787,8 @@ public:
     {
         m_xTreeView->InsertEntry(rText, pos);
     }
+
+    using SalInstanceContainer::remove;
 
     virtual void remove(int pos) override
     {

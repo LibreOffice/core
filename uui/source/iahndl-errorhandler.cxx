@@ -18,7 +18,7 @@
  */
 
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/button.hxx>
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/task/XInteractionAbort.hpp>
@@ -43,13 +43,22 @@ using namespace com::sun::star;
 
 namespace {
 
+enum class MessageBoxStyle {
+    NONE              = 0x0000,
+    Ok                = 0x0001,
+    OkCancel          = 0x0002,
+    YesNo             = 0x0004,
+    YesNoCancel       = 0x0008,
+    RetryCancel       = 0x0010
+};
+
 DialogMask
 executeErrorDialog(
     vcl::Window * pParent,
     task::InteractionClassification eClassification,
     OUString const & rContext,
     OUString const & rMessage,
-    MessBoxStyle nButtonMask)
+    MessageBoxStyle nButtonMask)
 {
     SolarMutexGuard aGuard;
 
@@ -59,87 +68,59 @@ executeErrorDialog(
             //TODO! must be internationalized
     aText.append(rMessage);
 
-    VclPtr< MessBox > xBox;
-    std::unique_ptr<weld::MessageDialog> xOtherBox;
-    try
+    std::unique_ptr<weld::MessageDialog> xBox;
+
+    switch (eClassification)
     {
-        switch (eClassification)
-        {
         case task::InteractionClassification_ERROR:
-            xBox.reset(VclPtr<ErrorBox>::Create(pParent,
-                                    nButtonMask,
-                                    aText.makeStringAndClear()));
+            xBox.reset(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+                        VclMessageType::Error, VclButtonsType::NONE, aText.makeStringAndClear()));
             break;
-
         case task::InteractionClassification_WARNING:
-            xBox.reset(VclPtr<WarningBox>::Create(pParent,
-                                      nButtonMask,
-                                      aText.makeStringAndClear()));
+            xBox.reset(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+                        VclMessageType::Warning, VclButtonsType::NONE, aText.makeStringAndClear()));
             break;
-
         case task::InteractionClassification_INFO:
-#           define WB_DEF_BUTTONS (MessBoxStyle::DefaultOk | MessBoxStyle::DefaultCancel | MessBoxStyle::DefaultRetry)
-            //(want to ignore any default button settings)...
-            if ((nButtonMask & WB_DEF_BUTTONS) == MessBoxStyle::DefaultOk)
-            {
-                xOtherBox.reset(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
-                            VclMessageType::Info, VclButtonsType::Ok, aText.makeStringAndClear()));
-            }
-            else
-                xBox.reset(VclPtr<ErrorBox>::Create(pParent,
-                                        nButtonMask,
-                                        aText.makeStringAndClear()));
+            xBox.reset(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+                        VclMessageType::Info, VclButtonsType::NONE, aText.makeStringAndClear()));
             break;
-
         case task::InteractionClassification_QUERY:
-            xBox.reset(VclPtr<QueryBox>::Create(pParent,
-                                    nButtonMask,
-                                    aText.makeStringAndClear()));
+            xBox.reset(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+                        VclMessageType::Question, VclButtonsType::NONE, aText.makeStringAndClear()));
             break;
-
         default:
-            OSL_ASSERT(false);
+            assert(false);
             break;
-        }
-    }
-    catch (std::bad_alloc const &)
-    {
-        throw uno::RuntimeException("out of memory");
     }
 
-    sal_uInt16 aMessResult;
-    if (xBox)
+
+    switch (nButtonMask)
     {
-        aMessResult = xBox->Execute();
-        xBox.disposeAndClear();
-    }
-    else
-    {
-        aMessResult = xOtherBox->run();
+        case MessageBoxStyle::NONE:
+            break;
+        case MessageBoxStyle::Ok:
+            xBox->add_button(Button::GetStandardText(StandardButtonType::OK), static_cast<int>(DialogMask::ButtonsOk));
+            break;
+        case MessageBoxStyle::OkCancel:
+            xBox->add_button(Button::GetStandardText(StandardButtonType::OK), static_cast<int>(DialogMask::ButtonsOk));
+            xBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), static_cast<int>(DialogMask::ButtonsCancel));
+            break;
+        case MessageBoxStyle::YesNo:
+            xBox->add_button(Button::GetStandardText(StandardButtonType::Yes), static_cast<int>(DialogMask::ButtonsYes));
+            xBox->add_button(Button::GetStandardText(StandardButtonType::No), static_cast<int>(DialogMask::ButtonsNo));
+            break;
+        case MessageBoxStyle::YesNoCancel:
+            xBox->add_button(Button::GetStandardText(StandardButtonType::Yes), static_cast<int>(DialogMask::ButtonsYes));
+            xBox->add_button(Button::GetStandardText(StandardButtonType::No), static_cast<int>(DialogMask::ButtonsNo));
+            xBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), static_cast<int>(DialogMask::ButtonsCancel));
+            break;
+        case MessageBoxStyle::RetryCancel:
+            xBox->add_button(Button::GetStandardText(StandardButtonType::Retry), static_cast<int>(DialogMask::ButtonsRetry));
+            xBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), static_cast<int>(DialogMask::ButtonsCancel));
+            break;
     }
 
-    DialogMask aResult = DialogMask::NONE;
-    switch( aMessResult )
-    {
-    case RET_OK:
-        aResult = DialogMask::ButtonsOk;
-        break;
-    case RET_CANCEL:
-        aResult = DialogMask::ButtonsCancel;
-        break;
-    case RET_YES:
-        aResult = DialogMask::ButtonsYes;
-        break;
-    case RET_NO:
-        aResult = DialogMask::ButtonsNo;
-        break;
-    case RET_RETRY:
-        aResult = DialogMask::ButtonsRetry;
-        break;
-    default: assert(false);
-    }
-
-    return aResult;
+    return static_cast<DialogMask>(xBox->run());
 }
 
 }
@@ -225,30 +206,30 @@ UUIInteractionHelper::handleErrorHandlerRequest(
         // Finally, it seems to be better to leave default button
         // determination to VCL (the favouring of CANCEL as default button
         // seems to not always be what the user wants)...
-        MessBoxStyle const aButtonMask[16]
-            = { MessBoxStyle::NONE,
-                MessBoxStyle::Ok /*| MessBoxStyle::DefaultOk*/, // Abort
-                MessBoxStyle::NONE,
-                MessBoxStyle::RetryCancel /*| MessBoxStyle::DefaultCancel*/, // Retry, Abort
-                MessBoxStyle::NONE,
-                MessBoxStyle::NONE,
-                MessBoxStyle::NONE,
-                MessBoxStyle::NONE,
-                MessBoxStyle::Ok /*| MessBoxStyle::DefaultOk*/, // Approve
-                MessBoxStyle::OkCancel /*| MessBoxStyle::DefaultCancel*/, // Approve, Abort
-                MessBoxStyle::NONE,
-                MessBoxStyle::NONE,
-                MessBoxStyle::YesNo /*| MessBoxStyle::DefaultNo*/, // Approve, Disapprove
-                MessBoxStyle::YesNoCancel /*| MessBoxStyle::DefaultCancel*/,
+        MessageBoxStyle const aButtonMask[16]
+            = { MessageBoxStyle::NONE,
+                MessageBoxStyle::Ok /*| MessBoxStyle::DefaultOk*/, // Abort
+                MessageBoxStyle::NONE,
+                MessageBoxStyle::RetryCancel /*| MessBoxStyle::DefaultCancel*/, // Retry, Abort
+                MessageBoxStyle::NONE,
+                MessageBoxStyle::NONE,
+                MessageBoxStyle::NONE,
+                MessageBoxStyle::NONE,
+                MessageBoxStyle::Ok /*| MessBoxStyle::DefaultOk*/, // Approve
+                MessageBoxStyle::OkCancel /*| MessBoxStyle::DefaultCancel*/, // Approve, Abort
+                MessageBoxStyle::NONE,
+                MessageBoxStyle::NONE,
+                MessageBoxStyle::YesNo /*| MessBoxStyle::DefaultNo*/, // Approve, Disapprove
+                MessageBoxStyle::YesNoCancel /*| MessBoxStyle::DefaultCancel*/,
                 // Approve, Disapprove, Abort
-                MessBoxStyle::NONE,
-                MessBoxStyle::NONE };
+                MessageBoxStyle::NONE,
+                MessageBoxStyle::NONE };
 
-        MessBoxStyle nButtonMask = aButtonMask[(xApprove.is() ? 8 : 0)
+        MessageBoxStyle nButtonMask = aButtonMask[(xApprove.is() ? 8 : 0)
                                           | (xDisapprove.is() ? 4 : 0)
                                           | (xRetry.is() ? 2 : 0)
                                           | (xAbort.is() ? 1 : 0)];
-        if (nButtonMask == MessBoxStyle::NONE)
+        if (nButtonMask == MessageBoxStyle::NONE)
             return;
 
         //TODO! remove this backwards compatibility?

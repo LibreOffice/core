@@ -57,7 +57,7 @@
 #include <svx/ClassificationCommon.hxx>
 #include <svl/cryptosign.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <hintids.hxx>
 #include <doc.hxx>
@@ -2129,8 +2129,10 @@ void SwEditShell::ClassifyDocPerHighestParagraphClass()
 
     if (aClassificationCategory != sHighestClass)
     {
-        ScopedVclPtrInstance<QueryBox> aQueryBox(nullptr, MessBoxStyle::Ok, SwResId(STR_CLASSIFICATION_LEVEL_CHANGED));
-        aQueryBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
+                                                       VclMessageType::Question, VclButtonsType::Ok,
+                                                       SwResId(STR_CLASSIFICATION_LEVEL_CHANGED)));
+        xQueryBox->run();
     }
 
     const SfxClassificationPolicyType eHighestClassType = SfxClassificationHelper::stringToPolicyType(sHighestClass);

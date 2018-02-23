@@ -60,7 +60,6 @@ SwMailMergeOutputTypePage::SwMailMergeOutputTypePage(SwMailMergeWizard* pParent)
     else
         m_pMailRB->Check();
     TypeHdl_Impl(m_pLetterRB);
-
 }
 
 SwMailMergeOutputTypePage::~SwMailMergeOutputTypePage()
@@ -235,6 +234,7 @@ SwSendWarningBox_Impl::SwSendWarningBox_Impl(vcl::Window* pParent, const OUStrin
     m_pDetailED->set_width_request(80 * m_pDetailED->approximate_char_width());
     m_pDetailED->set_height_request(8 * m_pDetailED->GetTextHeight());
     m_pDetailED->SetText(rDetails);
+    create_message_area();
 }
 
 #define ITEMID_TASK     1

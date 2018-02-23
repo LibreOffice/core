@@ -19,8 +19,7 @@
 #ifndef INCLUDED_UUI_SOURCE_SSLWARNDLG_HXX
 #define INCLUDED_UUI_SOURCE_SSLWARNDLG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/messagedialog.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -28,25 +27,26 @@
 
 //= Https_WarnDialog
 
-class SSLWarnDialog : public MessageDialog
+class SSLWarnDialog
 {
 private:
-    VclPtr<PushButton> m_xView;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::MessageDialog> m_xDialog;
+    std::unique_ptr<weld::Button> m_xView;
     const css::uno::Reference< css::uno::XComponentContext >& m_xContext;
     const css::uno::Reference< css::security::XCertificate >& m_rXCert;
 
-    DECL_LINK(ViewCertHdl, Button*, void);
+    DECL_LINK(ViewCertHdl, weld::Button&, void);
 
 public:
-    SSLWarnDialog( vcl::Window* pParent,
+    SSLWarnDialog(weld::Window* pParent,
         const css::uno::Reference< css::security::XCertificate >& rXCert,
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-    void setDescription1Text(const OUString &aText) { set_primary_text(aText); }
+    void setDescription1Text(const OUString &rText) { m_xDialog->set_primary_text(rText); }
+    void set_title(const OUString &rText) { m_xDialog->set_title(rText); }
 
-    virtual void dispose() override;
-
-    virtual ~SSLWarnDialog() override;
+    short run() { return m_xDialog->run(); }
 };
 
 #endif // INCLUDED_UUI_SOURCE_SSLWARNDLG_HXX

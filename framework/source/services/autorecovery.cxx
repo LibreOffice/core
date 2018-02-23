@@ -88,7 +88,7 @@
 #include <ucbhelper/content.hxx>
 
 #include <osl/time.h>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
@@ -4087,11 +4087,11 @@ void AutoRecovery::impl_showFullDiscError()
     if (sBackupPath.getLength() < 1)
         sBackupPath = sBackupURL;
 
-    ScopedVclPtrInstance<ErrorBox> dlgError(
-        nullptr, MessBoxStyle::Ok,
-        sMsg.replaceAll("%PATH", sBackupPath));
-    dlgError->SetButtonText(dlgError->GetButtonId(0), sBtn);
-    dlgError->Execute();
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                              VclMessageType::Error, VclButtonsType::NONE,
+                                              sMsg.replaceAll("%PATH", sBackupPath)));
+    xBox->add_button(sBtn, RET_OK);
+    xBox->run();
 }
 
 void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,

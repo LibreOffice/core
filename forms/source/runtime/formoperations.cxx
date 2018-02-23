@@ -50,7 +50,8 @@
 #include <connectivity/dbexception.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/stdtext.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/container.hxx>
@@ -434,17 +435,22 @@ namespace frm
             if(needConfirmation)
             {
                 // TODO: shouldn't this be done with an interaction handler?
-                ScopedVclPtrInstance< QueryBox > aQuery( nullptr, MessBoxStyle::YesNoCancel | MessBoxStyle::DefaultYes, FRM_RES_STRING( RID_STR_QUERY_SAVE_MODIFIED_ROW ) );
-                switch ( aQuery->Execute() )
+                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
+                                                               VclMessageType::Question, VclButtonsType::YesNo,
+                                                               FRM_RES_STRING(RID_STR_QUERY_SAVE_MODIFIED_ROW)));
+                xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+                xQueryBox->set_default_response(RET_YES);
+
+                switch (xQueryBox->run())
                 {
-                case RET_NO:
-                    shouldCommit = false;
-                    SAL_FALLTHROUGH; // don't ask again!
-                case RET_YES:
-                    needConfirmation = false;
-                    return true;
-                case RET_CANCEL:
-                    return false;
+                    case RET_NO:
+                        shouldCommit = false;
+                        SAL_FALLTHROUGH; // don't ask again!
+                    case RET_YES:
+                        needConfirmation = false;
+                        return true;
+                    case RET_CANCEL:
+                        return false;
                 }
             }
             return true;

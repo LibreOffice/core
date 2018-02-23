@@ -628,10 +628,10 @@ void OSQLMessageBox::Construct( MessBoxStyle _nStyle, MessageType _eImage )
             m_aInfoImage->SetImage(WarningBox::GetStandardImage());
             break;
         case Error:
-            m_aInfoImage->SetImage(ErrorBox::GetStandardImage());
+            m_aInfoImage->SetImage(GetStandardErrorBoxImage());
             break;
         case Query:
-            m_aInfoImage->SetImage(QueryBox::GetStandardImage());
+            m_aInfoImage->SetImage(GetStandardQueryBoxImage());
             break;
     }
 

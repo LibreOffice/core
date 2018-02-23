@@ -26,7 +26,7 @@ FileChangedQueryBox::FileChangedQueryBox( vcl::Window* pParent, const std::local
             Translate::get(STR_FILECHANGED_TITLE, rLocale),
             OUString() )
 {
-    SetImage( QueryBox::GetStandardImage() );
+    SetImage(GetStandardQueryBoxImage());
 
     AddButton(Translate::get(STR_FILECHANGED_SAVEANYWAY_BTN, rLocale), RET_YES,
             ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);

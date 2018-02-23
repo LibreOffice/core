@@ -18,7 +18,8 @@
  */
 
 #include <svl/eitem.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <recfloat.hxx>
 #include <sfx2/strings.hrc>
@@ -59,9 +60,14 @@ bool SfxRecordingFloatWrapper_Impl::QueryClose()
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
     if ( xRecorder.is() && !xRecorder->getRecordedMacro().isEmpty() )
     {
-        ScopedVclPtrInstance< QueryBox > aBox(GetWindow(), MessBoxStyle::YesNo | MessBoxStyle::DefaultNo , SfxResId(STR_MACRO_LOSS));
-        aBox->SetText( SfxResId(STR_CANCEL_RECORDING) );
-        bRet = ( aBox->Execute() == RET_YES );
+        vcl::Window* pWin = GetWindow();
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                       VclMessageType::Question, VclButtonsType::YesNo,
+                                                       SfxResId(STR_MACRO_LOSS)));
+        xQueryBox->set_default_response(RET_NO);
+
+        xQueryBox->set_title(SfxResId(STR_CANCEL_RECORDING));
+        bRet = (xQueryBox->run() == RET_YES);
     }
 
     return bRet;
