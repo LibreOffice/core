@@ -191,7 +191,7 @@ SalData::~SalData()
 SalInstance *CreateSalInstance()
 {
     LOGI("Android: CreateSalInstance!");
-    AndroidSalInstance* pInstance = new AndroidSalInstance( new SalYieldMutex() );
+    AndroidSalInstance* pInstance = new AndroidSalInstance( new SvpSalYieldMutex() );
     new AndroidSalData( pInstance );
     pInstance->AcquireYieldMutex();
     return pInstance;
