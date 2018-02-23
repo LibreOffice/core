@@ -373,7 +373,7 @@ void ScDrawView::MarkListHasChanged()
     ScClient* pClient = static_cast<ScClient*>( pViewSh->GetIPClient() );
     if ( pClient && pClient->IsObjectInPlaceActive() && !bUnoRefDialog )
     {
-        // do not display the handles fot ViewShell::Activate from the Reset2Open
+        // do not display the handles for ViewShell::Activate from the Reset2Open
         pClient->DeactivateObject();
         // replacing image ole graphics is now done in ScClient::UIActivate
     }

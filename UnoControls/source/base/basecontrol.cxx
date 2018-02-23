@@ -265,7 +265,7 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
 
     if ( !m_xPeer.is() )
     {
-        // use method "BaseControl::getWindowDescriptor()" fot change window attributes !!!
+        // use method "BaseControl::getWindowDescriptor()" to change window attributes!
         WindowDescriptor* pDescriptor = impl_getWindowDescriptor( xParentPeer );
 
         if ( m_bVisible )
