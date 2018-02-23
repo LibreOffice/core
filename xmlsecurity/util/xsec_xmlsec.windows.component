@@ -25,6 +25,9 @@
   <implementation name="com.sun.star.xml.security.bridge.xmlsec.SEInitializer_MSCryptImpl">
     <service name="com.sun.star.xml.crypto.SEInitializer"/>
   </implementation>
+  <implementation name="com.sun.star.xml.security.SEInitializer_Gpg">
+    <service name="com.sun.star.xml.crypto.GPGSEInitializer"/>
+  </implementation>
   <implementation name="com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_MSCryptImpl">
     <service name="com.sun.star.xml.crypto.SecurityEnvironment"/>
   </implementation>
