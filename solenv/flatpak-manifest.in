@@ -561,6 +561,7 @@
         "--socket=x11",
         "--socket=wayland",
         "--socket=pulseaudio",
+        "--device=dri",
         "--filesystem=host",
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
         "--env=LIBO_FLATPAK=1",
