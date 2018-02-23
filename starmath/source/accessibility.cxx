@@ -482,7 +482,6 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
             // get appropriate rectangle
             Point aOffset(pNode->GetTopLeft() - pTree->GetTopLeft());
             Point aTLPos (pWin->GetFormulaDrawPos() + aOffset);
-            aTLPos.AdjustX( -0 );
             Size  aSize (pNode->GetSize());
 
             long* pXAry = new long[ aNodeText.getLength() ];
@@ -542,7 +541,6 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
             // get appropriate rectangle
             Point   aOffset( pNode->GetTopLeft() - pTree->GetTopLeft() );
             Point   aTLPos ( aOffset );
-            aTLPos.AdjustX( -0 );
             Size  aSize( pNode->GetSize() );
 
             tools::Rectangle aRect( aTLPos, aSize );
