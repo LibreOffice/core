@@ -602,9 +602,9 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
 
 static void ImpMove(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* /*p2*/, const void* /*p3*/, const void* /*p4*/)
 {
-    MovePoint(rPt,*static_cast<const Size*>(p1));
-    if (pC1!=nullptr) MovePoint(*pC1,*static_cast<const Size*>(p1));
-    if (pC2!=nullptr) MovePoint(*pC2,*static_cast<const Size*>(p1));
+    rPt.Move(*static_cast<const Size*>(p1));
+    if (pC1!=nullptr) pC1->Move(*static_cast<const Size*>(p1));
+    if (pC2!=nullptr) pC2->Move(*static_cast<const Size*>(p1));
 }
 
 void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz)

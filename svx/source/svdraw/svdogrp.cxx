@@ -395,7 +395,7 @@ void SdrObjGroup::NbcSetLogicRect(const tools::Rectangle& rRect)
 
 void SdrObjGroup::NbcMove(const Size& rSiz)
 {
-    MovePoint(aRefPoint,rSiz);
+    aRefPoint.Move(rSiz);
     if (pSub->GetObjCount()!=0) {
         SdrObjList* pOL=pSub.get();
         const size_t nObjCount = pOL->GetObjCount();
@@ -404,7 +404,7 @@ void SdrObjGroup::NbcMove(const Size& rSiz)
             pObj->NbcMove(rSiz);
         }
     } else {
-        MoveRect(aOutRect,rSiz);
+        aOutRect.Move(rSiz);
         SetRectsDirty();
     }
 }
@@ -491,7 +491,7 @@ void SdrObjGroup::NbcSetAnchorPos(const Point& rPnt)
 {
     aAnchor=rPnt;
     Size aSiz(rPnt.X()-aAnchor.X(),rPnt.Y()-aAnchor.Y());
-    MovePoint(aRefPoint,aSiz);
+    aRefPoint.Move(aSiz);
     SdrObjList* pOL=pSub.get();
     const size_t nObjCount=pOL->GetObjCount();
     for (size_t i=0; i<nObjCount; ++i) {
@@ -536,7 +536,7 @@ void SdrObjGroup::Move(const Size& rSiz)
 {
     if (rSiz.Width()!=0 || rSiz.Height()!=0) {
         tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-        MovePoint(aRefPoint,rSiz);
+        aRefPoint.Move(rSiz);
         if (pSub->GetObjCount()!=0) {
             // first move the connectors, then everything else
             SdrObjList* pOL=pSub.get();
@@ -550,7 +550,7 @@ void SdrObjGroup::Move(const Size& rSiz)
                 if (!pObj->IsEdgeObj()) pObj->Move(rSiz);
             }
         } else {
-            MoveRect(aOutRect,rSiz);
+            aOutRect.Move(rSiz);
             SetRectsDirty();
         }
 
@@ -690,7 +690,7 @@ void SdrObjGroup::SetAnchorPos(const Point& rPnt)
     bool bChg=aAnchor!=rPnt;
     aAnchor=rPnt;
     Size aSiz(rPnt.X()-aAnchor.X(),rPnt.Y()-aAnchor.Y());
-    MovePoint(aRefPoint,aSiz);
+    aRefPoint.Move(aSiz);
     // move the connectors first, everything else afterwards
     SdrObjList* pOL=pSub.get();
     const size_t nObjCount = pOL->GetObjCount();

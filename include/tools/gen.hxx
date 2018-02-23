@@ -69,6 +69,7 @@ inline bool equal(Pair const & p1, Pair const & p2)
 
 // Point
 
+class Size;
 class SAL_WARN_UNUSED SAL_DLLPUBLIC_EXPORT Point final : protected Pair
 {
 public:
@@ -82,6 +83,7 @@ public:
     long&               Y() { return nB; }
 
     void                Move( long nHorzMove, long nVertMove );
+    void                Move( Size const & s );
     long                AdjustX( long nHorzMove ) { nA += nHorzMove; return nA; }
     long                AdjustY( long nVertMove ) { nB += nVertMove; return nB; }
 
@@ -222,6 +224,12 @@ inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const Size& size )
 {
     return stream << size.Width() << 'x' << size.Height();
+}
+
+inline void Point::Move( Size const & s )
+{
+    AdjustX(s.Width());
+    AdjustY(s.Height());
 }
 
 // Range
@@ -404,6 +412,7 @@ public:
 
     /// Move the top and left edges by a delta, preserving width and height
     inline void         Move( long nHorzMoveDelta, long nVertMoveDelta );
+    void                Move( Size const & s ) { Move(s.Width(), s.Height()); }
     long                AdjustLeft( long nHorzMoveDelta ) { nLeft += nHorzMoveDelta; return nLeft; }
     long                AdjustRight( long nHorzMoveDelta ) { nRight += nHorzMoveDelta; return nRight; }
     long                AdjustTop( long nVertMoveDelta ) { nTop += nVertMoveDelta; return nTop; }

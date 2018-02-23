@@ -342,7 +342,7 @@ basegfx::B2DPolyPolygon SdrVirtObj::TakeCreatePoly(const SdrDragStat& rDrag) con
 
 void SdrVirtObj::NbcMove(const Size& rSiz)
 {
-    MovePoint(aAnchor,rSiz);
+    aAnchor.Move(rSiz);
     SetRectsDirty();
 }
 

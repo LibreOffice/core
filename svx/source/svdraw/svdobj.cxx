@@ -1359,7 +1359,7 @@ Pointer SdrObject::GetCreatePointer() const
 // transformations
 void SdrObject::NbcMove(const Size& rSiz)
 {
-    MoveRect(aOutRect,rSiz);
+    aOutRect.Move(rSiz);
     SetRectsDirty();
 }
 

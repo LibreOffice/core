@@ -1853,7 +1853,7 @@ void SdrTableObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool /* bSh
 
 void SdrTableObj::NbcMove(const Size& rSiz)
 {
-    MoveRect(maLogicRect,rSiz);
+    maLogicRect.Move(rSiz);
     SdrTextObj::NbcMove( rSiz );
     if( mpImpl.is() )
         mpImpl->UpdateCells( maRect );

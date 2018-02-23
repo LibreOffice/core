@@ -1001,8 +1001,8 @@ Pointer SdrMeasureObj::GetCreatePointer() const
 void SdrMeasureObj::NbcMove(const Size& rSiz)
 {
     SdrTextObj::NbcMove(rSiz);
-    MovePoint(aPt1,rSiz);
-    MovePoint(aPt2,rSiz);
+    aPt1.Move(rSiz);
+    aPt2.Move(rSiz);
 }
 
 void SdrMeasureObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)

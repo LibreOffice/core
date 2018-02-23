@@ -789,9 +789,9 @@ Pointer SdrCircObj::GetCreatePointer() const
 
 void SdrCircObj::NbcMove(const Size& aSiz)
 {
-    MoveRect(maRect,aSiz);
-    MoveRect(aOutRect,aSiz);
-    MoveRect(maSnapRect,aSiz);
+    maRect.Move(aSiz);
+    aOutRect.Move(aSiz);
+    maSnapRect.Move(aSiz);
     SetXPolyDirty();
     SetRectsDirty(true);
 }
