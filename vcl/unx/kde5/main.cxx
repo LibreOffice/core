@@ -72,7 +72,7 @@ extern "C" {
         }
 #endif
 
-        KDE5SalInstance* pInstance = new KDE5SalInstance( new SalYieldMutex() );
+        KDE5SalInstance* pInstance = new KDE5SalInstance( new SvpSalYieldMutex() );
         SAL_INFO( "vcl.kde5", "created KDE5SalInstance " << &pInstance );
 
         // initialize SalData
