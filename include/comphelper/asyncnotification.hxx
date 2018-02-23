@@ -198,7 +198,7 @@ namespace comphelper
     /** AnyEvent derivee holding an foreign event instance
     */
     template < typename EVENT_OBJECT >
-    class EventHolder : public AnyEvent
+    class SAL_DLLPUBLIC_RTTI EventHolder : public AnyEvent
     {
     public:
         typedef EVENT_OBJECT    EventObjectType;
