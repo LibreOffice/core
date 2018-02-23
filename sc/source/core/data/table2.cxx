@@ -595,7 +595,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
 {
     ScRange aOldRange( nCol1 - nDx, nRow1 - nDy, pTable->nTab, nCol2 - nDx, nRow2 - nDy, pTable->nTab);
     ScRange aNewRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
-    bool bSameDoc = pDocument == pTable->pDocument;
+    bool bSameDoc = pDocument->GetStyleSheetPool() == pTable->pDocument->GetStyleSheetPool();
 
     for(ScConditionalFormatList::const_iterator itr = pTable->mpCondFormatList->begin(),
             itrEnd = pTable->mpCondFormatList->end(); itr != itrEnd; ++itr)
