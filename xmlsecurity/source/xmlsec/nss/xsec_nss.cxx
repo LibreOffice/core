@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include "seinitializer_nssimpl.hxx"
-#include "xmlsecuritycontext_nssimpl.hxx"
 #include <xsec_xmlsec.hxx>
 #include "securityenvironment_nssimpl.hxx"
 
@@ -51,10 +50,6 @@ void* nss_component_getFactory( const sal_Char* pImplName , void* pServiceManage
                 static_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 SEInitializer_NssImpl_createInstance, SEInitializer_NssImpl_getSupportedServiceNames() ) );
-        }
-        else if( XMLSecurityContext_NssImpl::impl_getImplementationName().equalsAscii( pImplName ) )
-        {
-            xFactory = XMLSecurityContext_NssImpl::impl_createFactory( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
         }
         else if( SecurityEnvironment_NssImpl::impl_getImplementationName().equalsAscii( pImplName ) )
         {
