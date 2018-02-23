@@ -10,6 +10,10 @@
 #ifndef INCLUDED_SVL_STYLESHEETUSER_HXX
 #define INCLUDED_SVL_STYLESHEETUSER_HXX
 
+#include <sal/config.h>
+
+#include <sal/types.h>
+
 namespace svl
 {
 
@@ -19,7 +23,7 @@ namespace svl
   a SfxStyleSheet (and listen on it). It can be queried by the stylesheet
   to determine if it is really used.
   */
-class StyleSheetUser
+class SAL_DLLPUBLIC_RTTI StyleSheetUser
 {
 public:
     /** Test whether this object is used.
