@@ -55,6 +55,7 @@ struct ScOoxPasswordHash
         maHashValue.clear();
         maSaltValue.clear();
     }
+    bool verifyPassword( const OUString& aPassText ) const;
 };
 
 namespace ScPassHashHelper

@@ -20,6 +20,7 @@
 #include <tabprotection.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/hash.hxx>
 #include <osl/diagnose.h>
 #include <document.hxx>
 
@@ -86,6 +87,19 @@ ScPasswordHash ScPassHashHelper::getHashTypeFromURI(const OUString& rURI)
     else if ( rURI == URI_XLS_LEGACY )
         return PASSHASH_XL;
     return PASSHASH_UNSPECIFIED;
+}
+
+bool ScOoxPasswordHash::verifyPassword( const OUString& aPassText ) const
+{
+    if (!hasPassword())
+        return false;
+
+    const OUString aHash( comphelper::Hash::calculateHashBase64( aPassText, maSaltValue, mnSpinCount, maAlgorithmName));
+    if (aHash.isEmpty())
+        // unsupported algorithm
+        return false;
+
+    return aHash == maHashValue;
 }
 
 ScPassHashProtectable::~ScPassHashProtectable()
