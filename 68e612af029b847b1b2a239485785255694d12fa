@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_8aabd21c",
+        "filename": "sw/source/filter/html/htmlflywriter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-02-24T17:06:35Z",
+      "side": 1,
+      "message": "pCntnrStr is equal to nullptr here since it\u0027s not yet initialized",
+      "range": {
+        "startLine": 435,
+        "startChar": 35,
+        "endLine": 435,
+        "endChar": 44
+      },
+      "revId": "68e612af029b847b1b2a239485785255694d12fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_aaa6d650",
+        "filename": "sw/source/filter/html/htmlflywriter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-02-24T17:06:35Z",
+      "side": 1,
+      "message": "Why not replacing OStringBuffer by OUString?",
+      "range": {
+        "startLine": 435,
+        "startChar": 8,
+        "endLine": 435,
+        "endChar": 21
+      },
+      "revId": "68e612af029b847b1b2a239485785255694d12fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
