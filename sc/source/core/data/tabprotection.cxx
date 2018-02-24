@@ -362,6 +362,11 @@ bool ScTableProtectionImpl::verifyPassword(const OUString& aPassText) const
         return aHash2 == maPassHash;
     }
 
+    // Not yet generated or tracked with meHash1 or meHash2, but can be read
+    // from OOXML.
+    if (maPasswordHash.verifyPassword( aPassText))
+        return true;
+
     return false;
 }
 
