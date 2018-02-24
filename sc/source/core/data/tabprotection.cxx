@@ -330,6 +330,20 @@ void ScTableProtectionImpl::setPasswordHash(
 void ScTableProtectionImpl::setPasswordHash( const OUString& rAlgorithmName, const OUString& rHashValue,
         const OUString& rSaltValue, sal_uInt32 nSpinCount )
 {
+    if (!rHashValue.isEmpty())
+    {
+        // Invalidate the other hashes.
+        setPasswordHash( uno::Sequence<sal_Int8>(), PASSHASH_UNSPECIFIED, PASSHASH_UNSPECIFIED);
+
+        // We don't know whether this is an empty password (or would
+        // unnecessarily have to try to verify an empty password), assume it is
+        // not. A later verifyPassword() with an empty password will determine.
+        // If this was not set to false then a verifyPassword() with an empty
+        // password would unlock even if this hash here wasn't for an empty
+        // password. Ugly stuff.
+        mbEmptyPass = false;
+    }
+
     maPasswordHash.maAlgorithmName  = rAlgorithmName;
     maPasswordHash.maHashValue      = rHashValue;
     maPasswordHash.maSaltValue      = rSaltValue;
@@ -350,19 +364,24 @@ bool ScTableProtectionImpl::verifyPassword(const OUString& aPassText) const
         // Clear text password exists, and this one takes precedence.
         return aPassText == maPassText;
 
-    Sequence<sal_Int8> aHash = hashPassword(aPassText, meHash1);
-    aHash = hashPassword(aHash, meHash2);
+    // For PASSHASH_UNSPECIFIED also maPassHash is empty and any aPassText
+    // would yield an empty hash as well and thus compare true. Don't.
+    if (meHash1 != PASSHASH_UNSPECIFIED)
+    {
+        Sequence<sal_Int8> aHash = hashPassword(aPassText, meHash1);
+        aHash = hashPassword(aHash, meHash2);
 
 #if DEBUG_TAB_PROTECTION
-    fprintf(stdout, "ScTableProtectionImpl::verifyPassword: hash = ");
-    for (sal_Int32 i = 0; i < aHash.getLength(); ++i)
-        printf("%2.2X ", static_cast<sal_uInt8>(aHash[i]));
-    printf("\n");
+        fprintf(stdout, "ScTableProtectionImpl::verifyPassword: hash = ");
+        for (sal_Int32 i = 0; i < aHash.getLength(); ++i)
+            printf("%2.2X ", static_cast<sal_uInt8>(aHash[i]));
+        printf("\n");
 #endif
 
-    if (aHash == maPassHash)
-    {
-        return true;
+        if (aHash == maPassHash)
+        {
+            return true;
+        }
     }
 
     // tdf#115483 compat hack for ODF 1.2; for now UTF8-SHA1 passwords are only
