@@ -124,8 +124,8 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     }
 
     if (nch && !reuse_shape){
-         if( pshape->coldef.ncols > 1 ) {
-             hwpf.SetColumnDef(&(pshape->coldef));
+         if( pshape->xColdef->ncols > 1 ) {
+             hwpf.SetColumnDef(pshape->xColdef);
          }
     }
 
