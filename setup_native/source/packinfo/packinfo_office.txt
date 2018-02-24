@@ -376,7 +376,7 @@ requires = "%BASISPACKAGEPREFIX-core01"
 copyright = "2012-2018 by The Apache Software Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "Apache Software Foundation"
-description = "Mailcap module for %APACHEPROJECTNAME %PRODUCTVERSION"
+description = "Fonts module for %APACHEPROJECTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%OOOPACKAGEVERSION"
 End
