@@ -85,6 +85,7 @@ public:
     virtual void setPassword(const OUString& aPassText) = 0;
     virtual css::uno::Sequence<sal_Int8> getPasswordHash(
         ScPasswordHash eHash, ScPasswordHash eHas2 = PASSHASH_UNSPECIFIED) const = 0;
+    virtual const ScOoxPasswordHash& getPasswordHash() const = 0;
     virtual void setPasswordHash(
         const css::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) = 0;
@@ -116,6 +117,7 @@ public:
     virtual void setPassword(const OUString& aPassText) override;
     virtual css::uno::Sequence<sal_Int8> getPasswordHash(
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
+    virtual const ScOoxPasswordHash& getPasswordHash() const override;
     virtual void setPasswordHash(
         const css::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) override;
@@ -199,6 +201,7 @@ public:
     virtual void setPassword(const OUString& aPassText) override;
     virtual css::uno::Sequence<sal_Int8> getPasswordHash(
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
+    virtual const ScOoxPasswordHash& getPasswordHash() const override;
     virtual void setPasswordHash(
         const css::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) override;

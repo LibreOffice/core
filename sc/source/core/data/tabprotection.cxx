@@ -124,6 +124,7 @@ public:
     void setPassword(const OUString& aPassText);
     css::uno::Sequence<sal_Int8> getPasswordHash(
         ScPasswordHash eHash, ScPasswordHash eHash2) const;
+    const ScOoxPasswordHash& getPasswordHash() const;
     void setPasswordHash(
         const css::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash, ScPasswordHash eHash2);
@@ -309,6 +310,11 @@ Sequence<sal_Int8> ScTableProtectionImpl::getPasswordHash(
 
     // failed.
     return Sequence<sal_Int8>();
+}
+
+const ScOoxPasswordHash& ScTableProtectionImpl::getPasswordHash() const
+{
+    return maPasswordHash;
 }
 
 void ScTableProtectionImpl::setPasswordHash(
@@ -586,6 +592,11 @@ uno::Sequence<sal_Int8> ScDocProtection::getPasswordHash(ScPasswordHash eHash, S
     return mpImpl->getPasswordHash(eHash, eHash2);
 }
 
+const ScOoxPasswordHash& ScDocProtection::getPasswordHash() const
+{
+    return mpImpl->getPasswordHash();
+}
+
 void ScDocProtection::setPasswordHash(
     const uno::Sequence<sal_Int8>& aPassword, ScPasswordHash eHash, ScPasswordHash eHash2)
 {
@@ -664,6 +675,11 @@ void ScTableProtection::setPassword(const OUString& aPassText)
 Sequence<sal_Int8> ScTableProtection::getPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2) const
 {
     return mpImpl->getPasswordHash(eHash, eHash2);
+}
+
+const ScOoxPasswordHash& ScTableProtection::getPasswordHash() const
+{
+    return mpImpl->getPasswordHash();
 }
 
 void ScTableProtection::setPasswordHash(

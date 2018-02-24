@@ -469,6 +469,12 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
    const ScTableProtection* pTabProtect = rDoc.GetTabProtection(mnTab);
    if ( pTabProtect )
    {
+        const ScOoxPasswordHash& rPH = pTabProtect->getPasswordHash();
+        // Do not write any hash attributes if there is no password.
+        ScOoxPasswordHash aPH;
+        if (rPH.hasPassword())
+            aPH = rPH;
+
         Sequence<sal_Int8> aHash = pTabProtect->getPasswordHash(PASSHASH_XL);
         OString sHash;
         if (aHash.getLength() >= 2)
@@ -480,6 +486,10 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
         }
         sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
         rWorksheet->singleElement( XML_sheetProtection,
+            XML_algorithmName, aPH.maAlgorithmName.isEmpty() ? nullptr : XclXmlUtils::ToOString( aPH.maAlgorithmName).getStr(),
+            XML_hashValue, aPH.maHashValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( aPH.maHashValue).getStr(),
+            XML_saltValue, aPH.maSaltValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( aPH.maSaltValue).getStr(),
+            XML_spinCount, aPH.mnSpinCount ? OString::number( aPH.mnSpinCount).getStr() : nullptr,
             XML_sheet,  ToPsz( true ),
             XML_password, sHash.isEmpty()? nullptr : sHash.getStr(),
             XML_objects, pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) ? nullptr : ToPsz( true ),
