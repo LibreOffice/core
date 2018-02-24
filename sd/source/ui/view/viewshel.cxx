@@ -513,45 +513,6 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
     }
 }
 
-void ViewShell::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
-{
-    // When we're not doing tiled rendering, then positions must be passed as pixels.
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    Point aPoint = mpActiveWindow->GetPointerPosPixel();
-    mpActiveWindow->SetLastMousePos(rMouseEvent.GetPosPixel());
-
-    MouseButtonDown(rMouseEvent, mpActiveWindow);
-
-    mpActiveWindow->SetPointerPosPixel(aPoint);
-}
-
-void ViewShell::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
-{
-    // When we're not doing tiled rendering, then positions must be passed as pixels.
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    Point aPoint = mpActiveWindow->GetPointerPosPixel();
-    mpActiveWindow->SetLastMousePos(rMouseEvent.GetPosPixel());
-
-    MouseButtonUp(rMouseEvent, mpActiveWindow);
-
-    mpActiveWindow->SetPointerPosPixel(aPoint);
-}
-
-void ViewShell::LogicMouseMove(const MouseEvent& rMouseEvent)
-{
-    // When we're not doing tiled rendering, then positions must be passed as pixels.
-    assert(comphelper::LibreOfficeKit::isActive());
-
-    Point aPoint = mpActiveWindow->GetPointerPosPixel();
-    mpActiveWindow->SetLastMousePos(rMouseEvent.GetPosPixel());
-
-    MouseMove(rMouseEvent, mpActiveWindow);
-
-    mpActiveWindow->SetPointerPosPixel(aPoint);
-}
-
 void ViewShell::SetCursorMm100Position(const Point& rPosition, bool bPoint, bool bClearMark)
 {
     if (SdrView* pSdrView = GetView())

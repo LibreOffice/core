@@ -416,12 +416,6 @@ public:
         SdPage* pPage,
         const sal_Int32 nInsertPosition = -1);
 
-    /// Same as MouseButtonDown(), but coordinates are in logic unit.
-    void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
-    /// Same as MouseButtonUp(), but coordinates are in logic unit.
-    void LogicMouseButtonUp(const MouseEvent& rMouseEvent);
-    /// Same as MouseMove(), but coordinates are in logic unit.
-    void LogicMouseMove(const MouseEvent& rMouseEvent);
     /// Allows adjusting the point or mark of the selection to a document coordinate.
     void SetCursorMm100Position(const Point& rPosition, bool bPoint, bool bClearMark);
     /// Gets the currently selected text.

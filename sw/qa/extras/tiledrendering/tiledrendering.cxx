@@ -314,6 +314,7 @@ void SwTiledRenderingTest::testPostKeyEvent()
 
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
     // Did we manage to insert the character after the first one?
     CPPUNIT_ASSERT_EQUAL(OUString("Axaa bbb."), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
 }
@@ -332,6 +333,7 @@ void SwTiledRenderingTest::testPostMouseEvent()
     aStart.setX(aStart.getX() - 1000);
     pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
     pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
     // The new cursor position must be before the first word.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), pShellCursor->GetPoint()->nContent.GetIndex());
     comphelper::LibreOfficeKit::setActive(false);
@@ -936,20 +938,24 @@ void SwTiledRenderingTest::testShapeViewCursors()
     pWrtShell2->GetView().BeginTextEdit(pObject, pView->GetSdrPageView(), pWrtShell2->GetWin());
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-
+    Scheduler::ProcessEventsToIdle();
     // Press a key in the second view, while the first one observes this.
-    aView1.m_bOwnCursorInvalidated = false;
     aView1.m_bViewCursorInvalidated = false;
     aView2.m_bOwnCursorInvalidated = false;
-    aView2.m_bViewCursorInvalidated = false;
+    const tools::Rectangle aLastOwnCursor1 = aView1.m_aOwnCursor;
+    const tools::Rectangle aLastViewCursor1 = aView1.m_aViewCursor;
+    const tools::Rectangle aLastOwnCursor2 = aView2.m_aOwnCursor;
+    const tools::Rectangle aLastViewCursor2 = aView2.m_aViewCursor;
+
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'y', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'y', 0);
+    Scheduler::ProcessEventsToIdle();
     // Make sure that aView1 gets a view-only cursor notification, while
     // aView2 gets a real cursor notification.
-    CPPUNIT_ASSERT(!aView1.m_bOwnCursorInvalidated);
-    CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
-    CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated);
-    CPPUNIT_ASSERT(!aView2.m_bViewCursorInvalidated);
+    CPPUNIT_ASSERT(aView1.m_aOwnCursor == aLastOwnCursor1);
+    CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated && aLastViewCursor1 != aView1.m_aViewCursor);
+    CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated && aLastOwnCursor2 != aView2.m_aOwnCursor);
+    CPPUNIT_ASSERT(aLastViewCursor2 == aView2.m_aViewCursor);
     mxComponent->dispose();
     mxComponent.clear();
 
@@ -1079,11 +1085,14 @@ void SwTiledRenderingTest::testTextEditViewInvalidations()
     pWrtShell->GetView().BeginTextEdit(pObject, pView->GetSdrPageView(), pWrtShell->GetWin());
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
 
     // Assert that both views are invalidated when pressing a key while in text edit.
     aView1.m_bTilesInvalidated = false;
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'y', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'y', 0);
+    Scheduler::ProcessEventsToIdle();
+
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
 
     pWrtShell->EndTextEdit();
@@ -1111,6 +1120,9 @@ void SwTiledRenderingTest::testUndoInvalidations()
     pWrtShell->EndDoc();
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
+    Scheduler::ProcessEventsToIdle();
+    // ProcessEventsToIdle resets the view; set it again
+    SfxLokHelper::setView(nView1);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb.c"), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
 
@@ -1142,6 +1154,7 @@ void SwTiledRenderingTest::testUndoLimiting()
     pWrtShell2->EndDoc();
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
+    Scheduler::ProcessEventsToIdle();
     SwShellCursor* pShellCursor = pWrtShell2->getShellCursor(false);
     CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb.c"), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
 
@@ -1169,6 +1182,7 @@ void SwTiledRenderingTest::testUndoShapeLimiting()
     pWrtShell2->GetView().BeginTextEdit(pObject, pView->GetSdrPageView(), pWrtShell2->GetWin());
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
 
     // Assert that the first view can't and the second view can undo the insertion.
     SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
@@ -1198,6 +1212,7 @@ void SwTiledRenderingTest::testUndoDispatch()
     SfxLokHelper::setView(nView1);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
+    Scheduler::ProcessEventsToIdle();
 
     // Click before the first word in the second view.
     SfxLokHelper::setView(nView2);
@@ -1207,6 +1222,7 @@ void SwTiledRenderingTest::testUndoDispatch()
     aStart.setX(aStart.getX() - 1000);
     pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
     pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aStart.getX(), aStart.getY(), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
     uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
     uno::Reference<frame::XFrame> xFrame2 = xDesktop->getActiveFrame();
 
@@ -1233,6 +1249,7 @@ void SwTiledRenderingTest::testUndoRepairDispatch()
     SfxLokHelper::setView(nView1);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
+    Scheduler::ProcessEventsToIdle();
 
     // Assert that by default the second view can't undo the action.
     SfxLokHelper::setView(nView2);
@@ -1273,6 +1290,7 @@ void SwTiledRenderingTest::testShapeTextUndoShells()
     pWrtShell->GetView().BeginTextEdit(pObject, pView->GetSdrPageView(), pWrtShell->GetWin());
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
 
     // Make sure that the undo item remembers who created it.
     SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
@@ -1305,6 +1323,7 @@ void SwTiledRenderingTest::testShapeTextUndoGroupShells()
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::BACKSPACE);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::BACKSPACE);
+    Scheduler::ProcessEventsToIdle();
 
     // Make sure that the undo item remembers who created it.
     SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
@@ -1317,6 +1336,7 @@ void SwTiledRenderingTest::testShapeTextUndoGroupShells()
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
     // 0th para, 0th char -> 0th para, 1st char.
     ESelection aWordSelection(0, 0, 0, 1);
     rEditView.SetSelection(aWordSelection);
@@ -1591,22 +1611,23 @@ void SwTiledRenderingTest::testCommentEndTextEdit()
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
     tools::Rectangle aBodyCursor = aView1.m_aOwnCursor;
 
     // Create a comment and type a character there as well.
     const int nCtrlAltC = KEY_MOD1 + KEY_MOD2 + 512 + 'c' - 'a';
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', nCtrlAltC);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', nCtrlAltC);
-    Scheduler::ProcessEventsToIdle();
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-
+    Scheduler::ProcessEventsToIdle();
     // End comment text edit by clicking in the body text area, and assert that
     // no unexpected cursor callbacks are emitted at origin (top left corner of
     // the document).
     aView1.m_bOwnCursorAtOrigin = false;
     pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aBodyCursor.getX(), aBodyCursor.getY(), 1, MOUSE_LEFT, 0);
     pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aBodyCursor.getX(), aBodyCursor.getY(), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
     // This failed, the cursor was at 0, 0 at some point during end text edit
     // of the comment.
     CPPUNIT_ASSERT(!aView1.m_bOwnCursorAtOrigin);
@@ -1693,11 +1714,13 @@ void SwTiledRenderingTest::testUndoRepairResult()
     SfxLokHelper::setView(nView2);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'b', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'b', 0);
+    Scheduler::ProcessEventsToIdle();
 
     // Insert a character in the first view.
     SfxLokHelper::setView(nView1);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'a', 0);
+    Scheduler::ProcessEventsToIdle();
 
     // Assert that by default the second view can't undo the action.
     SfxLokHelper::setView(nView2);
@@ -1726,11 +1749,14 @@ void SwTiledRenderingTest::testRedoRepairResult()
     SfxLokHelper::setView(nView2);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'b', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'b', 0);
+    Scheduler::ProcessEventsToIdle();
 
     // Insert a character in the first view.
     SfxLokHelper::setView(nView1);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'a', 0);
+    Scheduler::ProcessEventsToIdle();
+
     comphelper::dispatchCommand(".uno:Undo", {}, xListener);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0), pResult2->m_nDocRepair);
 

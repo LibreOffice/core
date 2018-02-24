@@ -358,6 +358,7 @@ void SdTiledRenderingTest::testRegisterCallback()
 
 void SdTiledRenderingTest::testPostKeyEvent()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -372,6 +373,7 @@ void SdTiledRenderingTest::testPostKeyEvent()
 
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
@@ -381,6 +383,7 @@ void SdTiledRenderingTest::testPostKeyEvent()
     rEditView.SetSelection(aWordSelection);
     // Did we enter the expected character?
     CPPUNIT_ASSERT_EQUAL(OUString("xx"), rEditView.GetSelected());
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testPostMouseEvent()
@@ -411,6 +414,7 @@ void SdTiledRenderingTest::testPostMouseEvent()
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
                                       convertMm100ToTwip(aPosition.getX()), convertMm100ToTwip(aPosition.getY()),
                                       1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     // The new cursor position must be before the first word.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), rEditView.GetSelection().nStartPos);
@@ -1353,6 +1357,7 @@ void SdTiledRenderingTest::testTdf102223()
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
                                       convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
                                       1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
     pView->SdrBeginTextEdit(pTableObject);
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
@@ -1447,6 +1452,7 @@ void SdTiledRenderingTest::testTdf103083()
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
                                       convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
                                       1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
     pView->SdrBeginTextEdit(pTextObject);
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
@@ -1563,7 +1569,6 @@ void SdTiledRenderingTest::testTdf81754()
 
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-
     Scheduler::ProcessEventsToIdle();
 
     // now save, reload, and assert that we did not lose the edit

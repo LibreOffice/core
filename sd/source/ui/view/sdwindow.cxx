@@ -1014,6 +1014,45 @@ void Window::LogicInvalidate(const ::tools::Rectangle* pRectangle)
     SfxLokHelper::notifyInvalidation(&rSfxViewShell, sRectangle);
 }
 
+void Window::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
+{
+    // When we're not doing tiled rendering, then positions must be passed as pixels.
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    Point aPoint = GetPointerPosPixel();
+    SetLastMousePos(rMouseEvent.GetPosPixel());
+
+    mpViewShell->MouseButtonDown(rMouseEvent, this);
+
+    SetPointerPosPixel(aPoint);
+}
+
+void Window::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
+{
+    // When we're not doing tiled rendering, then positions must be passed as pixels.
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    Point aPoint = GetPointerPosPixel();
+    SetLastMousePos(rMouseEvent.GetPosPixel());
+
+    mpViewShell->MouseButtonUp(rMouseEvent, this);
+
+    SetPointerPosPixel(aPoint);
+}
+
+void Window::LogicMouseMove(const MouseEvent& rMouseEvent)
+{
+    // When we're not doing tiled rendering, then positions must be passed as pixels.
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    Point aPoint = GetPointerPosPixel();
+    SetLastMousePos(rMouseEvent.GetPosPixel());
+
+    mpViewShell->MouseMove(rMouseEvent, this);
+
+    SetPointerPosPixel(aPoint);
+}
+
 FactoryFunction Window::GetUITestFactory() const
 {
     if (get_id() == "impress_win")
