@@ -125,7 +125,7 @@ writeUpdateInformationData($ARGV[0]);
 die "Error: The description.xml does not contain a <identifier> element.\n" unless $identifier;
 die "Error: The description.xml does not contain a <version> element. \n" unless $version;
 
-#write the write the update-download element and the children.
+#write the update-download element and the children.
 #the indention of <update-download> corresponds to that of <version>
 print $FH ' 'x$indent, '<update-download>', "\n";
 #check if update-urls have been provided through --update-url option
