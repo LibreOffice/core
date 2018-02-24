@@ -1116,8 +1116,7 @@ bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
     if( GetDoc()->SetFlyFrameAttr( *pFormat, rSet ))
     {
         bRet = true;
-        Point aTmp;
-        SelectObj( aTmp, 0, pObj );
+        SelectObj( Point(), 0, pObj );
     }
     EndAllActionAndCall();
     EndUndo();

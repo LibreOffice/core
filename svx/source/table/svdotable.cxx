@@ -1393,10 +1393,9 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, too
     SdrTextVertAdjust eVAdj=xCell->GetTextVerticalAdjust();
 
     EEControlBits nStat0=rOutliner.GetControlWord();
-    Size aNullSize;
     nStat0 |= EEControlBits::AUTOPAGESIZE;
     rOutliner.SetControlWord(nStat0);
-    rOutliner.SetMinAutoPaperSize(aNullSize);
+    rOutliner.SetMinAutoPaperSize(Size());
     rOutliner.SetMaxAutoPaperSize(aAnkRect.GetSize());
     rOutliner.SetPaperSize(aAnkRect.GetSize());
 

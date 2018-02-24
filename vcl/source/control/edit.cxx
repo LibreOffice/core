@@ -985,8 +985,7 @@ void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::
     /*
     * note: at this point the cursor must be switched off already
     */
-    Point aTmpPoint;
-    tools::Rectangle aRect(aTmpPoint, GetOutputSizePixel());
+    tools::Rectangle aRect(Point(), GetOutputSizePixel());
     aRect.SetLeft( nXStart );
     aRect.SetRight( nXEnd );
 
@@ -1007,8 +1006,7 @@ void Edit::ImplPaintBorder(vcl::RenderContext const & rRenderContext, long nXSta
     if (SupportsDoubleBuffering())
         return;
 
-    Point aTmpPoint;
-    tools::Rectangle aRect(aTmpPoint, GetOutputSizePixel());
+    tools::Rectangle aRect(Point(), GetOutputSizePixel());
     aRect.SetLeft( nXStart );
     aRect.SetRight( nXEnd );
 

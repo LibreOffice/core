@@ -1181,10 +1181,9 @@ Size ListBox::CalcMinimumSize() const
         // Try native borders; scrollbar size may not be a good indicator
         // See how large the edit area inside is to estimate what is needed for the dropdown
         ImplControlValue aControlValue;
-        Point aPoint;
         tools::Rectangle aContent, aBound;
         Size aTestSize( 100, 20 );
-        tools::Rectangle aArea( aPoint, aTestSize );
+        tools::Rectangle aArea( Point(), aTestSize );
         if( GetNativeControlRegion( ControlType::Listbox, ControlPart::SubEdit, aArea, ControlState::NONE,
                     aControlValue, aBound, aContent) )
         {

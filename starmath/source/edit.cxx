@@ -554,8 +554,7 @@ IMPL_LINK( SmEditWindow, ScrollHdl, ScrollBar *, /*pScrollBar*/, void )
 tools::Rectangle SmEditWindow::AdjustScrollBars()
 {
     const Size aOut( GetOutputSizePixel() );
-    Point aPoint;
-    tools::Rectangle aRect( aPoint, aOut );
+    tools::Rectangle aRect( Point(), aOut );
 
     if (pVScrollBar && pHScrollBar && pScrollBox)
     {

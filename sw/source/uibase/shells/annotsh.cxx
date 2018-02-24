@@ -602,9 +602,8 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         aNewAttr.Put(*pNewItem);
     }
 
-    tools::Rectangle aNullRect;
     tools::Rectangle aOutRect = pOLV->GetOutputArea();
-    if (aNullRect != aOutRect)
+    if (tools::Rectangle() != aOutRect)
         pOLV->SetAttribs(aNewAttr);
 
     rView.GetViewFrame()->GetBindings().InvalidateAll(false);

@@ -2558,9 +2558,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
 
 void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet ) const
 {
-    tools::Rectangle aEmptyRect;
     DffRecordHeader aHdTemp;
-    DffObjData aDffObjTemp( aHdTemp, aEmptyRect, 0 );
+    DffObjData aDffObjTemp( aHdTemp, tools::Rectangle(), 0 );
     ApplyAttributes( rIn, rSet, aDffObjTemp );
 }
 

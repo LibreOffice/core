@@ -988,8 +988,7 @@ void ScCsvGrid::Command( const CommandEvent& rCEvt )
         break;
         case CommandEventId::Wheel:
         {
-            Point aPoint;
-            tools::Rectangle aRect( aPoint, maWinSize );
+            tools::Rectangle aRect( Point(), maWinSize );
             if( aRect.IsInside( rCEvt.GetMousePosPixel() ) )
             {
                 const CommandWheelData* pData = rCEvt.GetWheelData();

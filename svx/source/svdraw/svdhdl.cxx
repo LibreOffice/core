@@ -585,7 +585,6 @@ void SdrHdl::CreateB2dIAObject()
                             float fScalingFactor = rOutDev.GetDPIScaleFactor();
                             basegfx::B2DSize aB2DSize(fSize * fScalingFactor, fSize * fScalingFactor);
 
-                            Color aHandleStrokeColor(COL_BLACK);
                             Color aHandleFillColor(COL_LIGHTGREEN);
                             switch (eColIndex)
                             {
@@ -607,7 +606,7 @@ void SdrHdl::CreateB2dIAObject()
                                 default:
                                     break;
                             }
-                            pNewOverlayObject = new sdr::overlay::OverlayHandle(aPosition, aB2DSize, aHandleStrokeColor, aHandleFillColor);
+                            pNewOverlayObject = new sdr::overlay::OverlayHandle(aPosition, aB2DSize, /*HandleStrokeColor*/COL_BLACK, aHandleFillColor);
                         }
                         else
                         {

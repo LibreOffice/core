@@ -109,10 +109,8 @@ void SvResizeHelper::Draw(vcl::RenderContext& rRenderContext)
 {
     rRenderContext.Push();
     rRenderContext.SetMapMode( MapMode() );
-    Color aColBlack;
-    Color aFillColor( COL_LIGHTGRAY );
 
-    rRenderContext.SetFillColor( aFillColor );
+    rRenderContext.SetFillColor( COL_LIGHTGRAY );
     rRenderContext.SetLineColor();
 
     tools::Rectangle aMoveRects[ 4 ];
@@ -121,7 +119,7 @@ void SvResizeHelper::Draw(vcl::RenderContext& rRenderContext)
     for (i = 0; i < 4; i++)
         rRenderContext.DrawRect(aMoveRects[i]);
     // draw handles
-    rRenderContext.SetFillColor(aColBlack);
+    rRenderContext.SetFillColor(Color()); // black
     tools::Rectangle aRects[ 8 ];
     FillHandleRectsPixel(aRects);
     for (i = 0; i < 8; i++)

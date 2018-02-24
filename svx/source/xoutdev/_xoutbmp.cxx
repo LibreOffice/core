@@ -532,8 +532,7 @@ tools::Polygon XOutBitmap::GetContour( const Bitmap& rBmp, const XOutFlags nFlag
 {
     Bitmap      aWorkBmp;
     tools::Polygon aRetPoly;
-    Point       aTmpPoint;
-    tools::Rectangle   aWorkRect( aTmpPoint, rBmp.GetSizePixel() );
+    tools::Rectangle   aWorkRect( Point(), rBmp.GetSizePixel() );
 
     if( pWorkRectPixel )
         aWorkRect.Intersection( *pWorkRectPixel );

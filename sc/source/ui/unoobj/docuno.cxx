@@ -1905,8 +1905,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     {
         // Similar to as in and when calling ScTransferObj::PaintToDev()
 
-        Point aPoint;
-        tools::Rectangle aBound( aPoint, pDev->GetOutputSize());
+        tools::Rectangle aBound( Point(), pDev->GetOutputSize());
 
         ScViewData aViewData(nullptr,nullptr);
         aViewData.InitData( &rDoc );
@@ -4496,11 +4495,10 @@ void SAL_CALL ScScenariosObj::addNewByName( const OUString& aName,
             }
         }
 
-        Color aColor( COL_LIGHTGRAY );  // Default
         ScScenarioFlags const nFlags = ScScenarioFlags::ShowFrame | ScScenarioFlags::PrintFrame
                                      | ScScenarioFlags::TwoWay    | ScScenarioFlags::Protected;
 
-        pDocShell->MakeScenario( nTab, aName, aComment, aColor, nFlags, aMarkData );
+        pDocShell->MakeScenario( nTab, aName, aComment, COL_LIGHTGRAY, nFlags, aMarkData );
     }
 }
 

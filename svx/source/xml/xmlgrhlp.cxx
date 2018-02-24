@@ -1060,9 +1060,8 @@ OUString SAL_CALL SvXMLGraphicHelper::saveGraphicByName(css::uno::Reference<css:
 
 OUString SAL_CALL SvXMLGraphicHelper::saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
 {
-    OUString aEmpty;
     OUString aOutMimeType;
-    return implSaveGraphic(rxGraphic, aOutMimeType, aEmpty);
+    return implSaveGraphic(rxGraphic, aOutMimeType, OUString());
 }
 
 OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,

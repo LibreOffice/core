@@ -182,8 +182,7 @@ Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
 
     if( !aBmp.IsEmpty() )
     {
-        Point           aPoint;
-        const tools::Rectangle aBmpRect( aPoint, aBmp.GetSizePixel() );
+        const tools::Rectangle aBmpRect( Point(), aBmp.GetSizePixel() );
         tools::Rectangle       aSrcRect( rSrcPt, rSrcSz );
 
         // do cropping if necessary

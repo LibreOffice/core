@@ -173,8 +173,7 @@ long MenuFloatingWindow::ImplGetStartY() const
 vcl::Region MenuFloatingWindow::ImplCalcClipRegion() const
 {
     Size aOutSz = GetOutputSizePixel();
-    Point aPos;
-    tools::Rectangle aRect( aPos, aOutSz );
+    tools::Rectangle aRect( Point(), aOutSz );
     aRect.AdjustTop(nScrollerHeight );
     aRect.AdjustBottom( -(nScrollerHeight) );
 

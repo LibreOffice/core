@@ -167,9 +167,8 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put( XFillGradientItem( aNullGrad) );
     rISet.Put(XFillHatchItem(aNullHatch));
     Size    aNullSize( 32, 32 );
-    Color   aNullColor( COL_WHITE );
     Bitmap  aNullBmp( aNullSize, 8 );
-    aNullBmp.Erase( aNullColor );
+    aNullBmp.Erase( COL_WHITE );
     rISet.Put(XFillBitmapItem(Graphic(aNullBmp)));
 
                     // Shadow attributes (Drawing Engine)
@@ -401,8 +400,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Don't get color from the color table, because the color might have been
     // deleted or changed there
-    Color aOrange4(255, 204, 153);
-    pISet->Put(XFillColorItem(OUString(), aOrange4));
+    pISet->Put(XFillColorItem(OUString(), Color(255, 204, 153))); // orange
 
     pISet->Put(makeSdrShadowItem(true));
     pISet->Put(makeSdrShadowColorItem(COL_GRAY));

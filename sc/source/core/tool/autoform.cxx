@@ -885,10 +885,9 @@ ScAutoFormat::ScAutoFormat() :
     aBox.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
 
     Color aWhite(COL_WHITE);
-    Color aBlue(COL_BLUE);
     SvxColorItem aWhiteText( aWhite, ATTR_FONT_COLOR );
     SvxColorItem aBlackText( aBlack, ATTR_FONT_COLOR );
-    SvxBrushItem aBlueBack( aBlue, ATTR_BACKGROUND );
+    SvxBrushItem aBlueBack( COL_BLUE, ATTR_BACKGROUND );
     SvxBrushItem aWhiteBack( aWhite, ATTR_BACKGROUND );
     SvxBrushItem aGray70Back( Color(0x4d, 0x4d, 0x4d), ATTR_BACKGROUND );
     SvxBrushItem aGray20Back( Color(0xcc, 0xcc, 0xcc), ATTR_BACKGROUND );

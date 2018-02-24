@@ -762,8 +762,7 @@ awt::Rectangle SAL_CALL ToolbarMenuEntryAcc::getBounds()
     if( mpParent )
     {
         tools::Rectangle   aRect( mpParent->maRect );
-        Point       aOrigin;
-        tools::Rectangle   aParentRect( aOrigin, mpParent->mrMenu.GetOutputSizePixel() );
+        tools::Rectangle   aParentRect( Point(), mpParent->mrMenu.GetOutputSizePixel() );
 
         aRect.Intersection( aParentRect );
 

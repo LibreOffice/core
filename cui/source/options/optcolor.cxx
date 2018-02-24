@@ -547,8 +547,7 @@ void ColorConfigWindow_Impl::CreateEntries()
 
 void ColorConfigWindow_Impl::SetAppearance ()
 {
-    Color TempColor(COL_TRANSPARENT);
-    Wallpaper const aTransparentWall(TempColor);
+    Wallpaper const aTransparentWall(COL_TRANSPARENT);
     StyleSettings const& rStyleSettings = GetSettings().GetStyleSettings();
     Color const aBackColor = rStyleSettings.GetHighContrastMode() ?
         rStyleSettings.GetShadowColor() : Color(COL_LIGHTGRAY);

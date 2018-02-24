@@ -148,14 +148,11 @@ void SdrUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "Mirror")
     {
-        Point aPos;
-        Point aPos2;
-        pObj->Mirror(aPos, aPos2);
+        pObj->Mirror(Point(), Point());
     }
     else if (rAction == "SHEAR")
     {
-        Point aPos;
-        pObj->Shear(aPos, 0.0/*nAngle*/, 0, false);
+        pObj->Shear(Point(), 0.0/*nAngle*/, 0, false);
     }
 }
 

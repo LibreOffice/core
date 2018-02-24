@@ -334,7 +334,14 @@ bool OnceVar::VisitVarDecl( const VarDecl* varDecl )
         && !tc.Class("OString").Namespace("rtl").GlobalNamespace()
         && !tc.Class("OUString").Namespace("rtl").GlobalNamespace()
         && !tc.Class("OStringBuffer").Namespace("rtl").GlobalNamespace()
-        && !tc.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace())
+        && !tc.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+        && !tc.Class("Color").GlobalNamespace()
+        && !tc.Class("Pair").GlobalNamespace()
+        && !tc.Class("Point").GlobalNamespace()
+        && !tc.Class("Size").GlobalNamespace()
+        && !tc.Class("Range").GlobalNamespace()
+        && !tc.Class("Selection").GlobalNamespace()
+        && !tc.Class("Rectangle").Namespace("tools").GlobalNamespace())
     {
         return true;
     }

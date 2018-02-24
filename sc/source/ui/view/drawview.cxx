@@ -264,9 +264,8 @@ void ScDrawView::UpdateWorkArea()
     SdrPage* pPage = GetModel()->GetPage(static_cast<sal_uInt16>(nTab));
     if (pPage)
     {
-        Point aPos;
         Size aPageSize( pPage->GetSize() );
-        tools::Rectangle aNewArea( aPos, aPageSize );
+        tools::Rectangle aNewArea( Point(), aPageSize );
         if ( aPageSize.Width() < 0 )
         {
             //  RTL: from max.negative (left) to zero (right)

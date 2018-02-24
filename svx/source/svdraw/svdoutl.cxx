@@ -56,9 +56,8 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
         nStat &= ~EEControlBits( EEControlBits::STRETCHING | EEControlBits::AUTOPAGESIZE );
         SetControlWord(nStat);
 
-        Size aNullSize;
         Size aMaxSize( 100000,100000 );
-        SetMinAutoPaperSize( aNullSize );
+        SetMinAutoPaperSize( Size() );
         SetMaxAutoPaperSize( aMaxSize );
         SetPaperSize( aMaxSize );
         ClearPolygon();
