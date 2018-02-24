@@ -72,11 +72,10 @@ class   HStream;
 struct ColumnInfo{
     int start_page;
     bool bIsSet;
-    ColumnDef *coldef;
+    std::shared_ptr<ColumnDef> xColdef;
     explicit ColumnInfo(int num){
         start_page = num;
         bIsSet = false;
-        coldef = nullptr;
     }
 };
 
@@ -211,7 +210,7 @@ class DLLEXPORT HWPFile
         void AddBox(FBox *);
         void AddPage(){ m_nCurrentPage++;}
         void AddColumnInfo();
-        void SetColumnDef(ColumnDef *coldef);
+        void SetColumnDef(std::shared_ptr<ColumnDef> const &);
         void AddParaShape(std::shared_ptr<ParaShape> const &);
         void AddCharShape(std::shared_ptr<CharShape> const &);
         void AddFBoxStyle(FBoxStyle *);
