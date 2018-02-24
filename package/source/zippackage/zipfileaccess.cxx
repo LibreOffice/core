@@ -260,7 +260,7 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
 
     EntryHash::iterator aIter = m_pZipFile->GetEntryHash().find( aName );
     if ( aIter == m_pZipFile->GetEntryHash().end() )
-        throw container::NoSuchElementException(THROW_WHERE );
+        throw container::NoSuchElementException(aName);
 
     uno::Reference< io::XInputStream > xEntryStream;
     try
