@@ -231,10 +231,10 @@ Shell::~Shell()
     aVScrollBar.disposeAndClear();
     aHScrollBar.disposeAndClear();
 
-    for (WindowTable::iterator it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
+    for (auto & window : aWindowTable)
     {
         // no store; does already happen when the BasicManagers are destroyed
-        it->second.disposeAndClear();
+        window.second.disposeAndClear();
     }
 
     // no store; does already happen when the BasicManagers are destroyed
@@ -300,9 +300,9 @@ void Shell::onDocumentClosed( const ScriptDocument& _rDocument )
     std::vector<VclPtr<BaseWindow> > aDeleteVec;
 
     // remove all windows which belong to this document
-    for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
+    for (auto const& window : aWindowTable)
     {
-        BaseWindow* pWin = it->second;
+        BaseWindow* pWin = window.second;
         if ( pWin->IsDocument( _rDocument ) )
         {
             if ( pWin->GetStatus() & (BASWIN_RUNNINGBASIC|BASWIN_INRESCHEDULE) )
@@ -345,9 +345,9 @@ void Shell::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )
 
 void Shell::onDocumentModeChanged( const ScriptDocument& _rDocument )
 {
-    for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
+    for (auto const& window : aWindowTable)
     {
-        BaseWindow* pWin = it->second;
+        BaseWindow* pWin = window.second;
         if ( pWin->IsDocument( _rDocument ) && _rDocument.isDocument() )
             pWin->SetReadOnly( _rDocument.isReadOnly() );
     }
@@ -355,9 +355,9 @@ void Shell::onDocumentModeChanged( const ScriptDocument& _rDocument )
 
 void Shell::StoreAllWindowData( bool bPersistent )
 {
-    for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
+    for (auto const& window : aWindowTable)
     {
-        BaseWindow* pWin = it->second;
+        BaseWindow* pWin = window.second;
         DBG_ASSERT( pWin, "PrepareClose: NULL-Pointer in Table?" );
         if ( !pWin->IsSuspended() )
             pWin->StoreData();
@@ -394,15 +394,16 @@ bool Shell::PrepareClose( bool bUI )
     else
     {
         bool bCanClose = true;
-        for (WindowTableIt it = aWindowTable.begin(); bCanClose && (it != aWindowTable.end()); ++it)
+        for (auto const& window : aWindowTable)
         {
-            BaseWindow* pWin = it->second;
+            BaseWindow* pWin = window.second;
             if ( !pWin->CanClose() )
             {
                 if ( !m_aCurLibName.isEmpty() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )
                     SetCurLib( ScriptDocument::getApplicationScriptDocument(), OUString(), false );
                 SetCurWindow( pWin, true );
                 bCanClose = false;
+                break;
             }
         }
 
@@ -535,9 +536,9 @@ void Shell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     m_pCurLocalizationMgr->handleBasicStarted();
                 }
 
-                for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
+                for (auto const& window : aWindowTable)
                 {
-                    BaseWindow* pWin = it->second;
+                    BaseWindow* pWin = window.second;
                     if ( nHintId == SfxHintId::BasicStart )
                         pWin->BasicStarted();
                     else
@@ -553,9 +554,9 @@ void Shell::CheckWindows()
 {
     bool bSetCurWindow = false;
     std::vector<VclPtr<BaseWindow> > aDeleteVec;
-    for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
+    for (auto const& window : aWindowTable)
     {
-        BaseWindow* pWin = it->second;
+        BaseWindow* pWin = window.second;
         if ( pWin->GetStatus() & BASWIN_TOBEKILLED )
             aDeleteVec.emplace_back(pWin );
     }
@@ -575,9 +576,9 @@ void Shell::RemoveWindows( const ScriptDocument& rDocument, const OUString& rLib
 {
     bool bChangeCurWindow = pCurWin;
     std::vector<VclPtr<BaseWindow> > aDeleteVec;
-    for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
+    for (auto const& window : aWindowTable)
     {
-        BaseWindow* pWin = it->second;
+        BaseWindow* pWin = window.second;
         if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName )
             aDeleteVec.emplace_back(pWin );
     }
@@ -600,9 +601,9 @@ void Shell::UpdateWindows()
     if ( !m_aCurLibName.isEmpty() )
     {
         std::vector<VclPtr<BaseWindow> > aDeleteVec;
-        for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
+        for (auto const& window : aWindowTable)
         {
-            BaseWindow* pWin = it->second;
+            BaseWindow* pWin = window.second;
             if ( !pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName )
             {
                 if ( pWin == pCurWin )
@@ -615,9 +616,9 @@ void Shell::UpdateWindows()
                     aDeleteVec.emplace_back(pWin );
             }
         }
-        for ( auto it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
+        for (auto const& elem : aDeleteVec)
         {
-            RemoveWindow( *it, false, false );
+            RemoveWindow( elem, false, false );
         }
     }
 
@@ -628,15 +629,12 @@ void Shell::UpdateWindows()
 
     // show all windows that are to be shown
     ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( ScriptDocument::AllWithApplication ) );
-    for (   ScriptDocuments::const_iterator doc = aDocuments.begin();
-            doc != aDocuments.end();
-            ++doc
-        )
+    for (auto const& doc : aDocuments)
     {
-        StartListening(*doc->getBasicManager(), DuplicateHandling::Prevent /* log on only once */);
+        StartListening(*doc.getBasicManager(), DuplicateHandling::Prevent /* log on only once */);
 
         // libraries
-        Sequence< OUString > aLibNames( doc->getLibraryNames() );
+        Sequence< OUString > aLibNames( doc.getLibraryNames() );
         sal_Int32 nLibCount = aLibNames.getLength();
         const OUString* pLibNames = aLibNames.getConstArray();
 
@@ -644,11 +642,11 @@ void Shell::UpdateWindows()
         {
             OUString aLibName = pLibNames[ i ];
 
-            if ( m_aCurLibName.isEmpty() || ( *doc == m_aCurDocument && aLibName == m_aCurLibName ) )
+            if ( m_aCurLibName.isEmpty() || ( doc == m_aCurDocument && aLibName == m_aCurLibName ) )
             {
                 // check, if library is password protected and not verified
                 bool bProtected = false;
-                Reference< script::XLibraryContainer > xModLibContainer( doc->getLibraryContainer( E_SCRIPTS ) );
+                Reference< script::XLibraryContainer > xModLibContainer( doc.getLibraryContainer( E_SCRIPTS ) );
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )
                 {
                     Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
@@ -662,27 +660,27 @@ void Shell::UpdateWindows()
                 {
                     LibInfo::Item const* pLibInfoItem = nullptr;
                     if (ExtraData* pData = GetExtraData())
-                        pLibInfoItem = pData->GetLibInfo().GetInfo(*doc, aLibName);
+                        pLibInfoItem = pData->GetLibInfo().GetInfo(doc, aLibName);
 
                     // modules
                     if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )
                     {
-                        StarBASIC* pLib = doc->getBasicManager()->GetLib( aLibName );
+                        StarBASIC* pLib = doc.getBasicManager()->GetLib( aLibName );
                         if ( pLib )
                             StartListening(pLib->GetBroadcaster(), DuplicateHandling::Prevent /* log on only once */);
 
                         try
                         {
-                            Sequence< OUString > aModNames( doc->getObjectNames( E_SCRIPTS, aLibName ) );
+                            Sequence< OUString > aModNames( doc.getObjectNames( E_SCRIPTS, aLibName ) );
                             sal_Int32 nModCount = aModNames.getLength();
                             const OUString* pModNames = aModNames.getConstArray();
 
                             for ( sal_Int32 j = 0 ; j < nModCount ; j++ )
                             {
                                 OUString aModName = pModNames[ j ];
-                                VclPtr<ModulWindow> pWin = FindBasWin( *doc, aLibName, aModName );
+                                VclPtr<ModulWindow> pWin = FindBasWin( doc, aLibName, aModName );
                                 if ( !pWin )
-                                    pWin = CreateBasWin( *doc, aLibName, aModName );
+                                    pWin = CreateBasWin( doc, aLibName, aModName );
                                 if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aModName &&
                                      pLibInfoItem->GetCurrentType() == TYPE_MODULE )
                                 {
@@ -697,12 +695,12 @@ void Shell::UpdateWindows()
                     }
 
                     // dialogs
-                    Reference< script::XLibraryContainer > xDlgLibContainer( doc->getLibraryContainer( E_DIALOGS ) );
+                    Reference< script::XLibraryContainer > xDlgLibContainer( doc.getLibraryContainer( E_DIALOGS ) );
                     if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) )
                     {
                         try
                         {
-                            Sequence< OUString > aDlgNames = doc->getObjectNames( E_DIALOGS, aLibName );
+                            Sequence< OUString > aDlgNames = doc.getObjectNames( E_DIALOGS, aLibName );
                             sal_Int32 nDlgCount = aDlgNames.getLength();
                             const OUString* pDlgNames = aDlgNames.getConstArray();
 
@@ -711,9 +709,9 @@ void Shell::UpdateWindows()
                                 OUString aDlgName = pDlgNames[ j ];
                                 // this find only looks for non-suspended windows;
                                 // suspended windows are handled in CreateDlgWin
-                                VclPtr<DialogWindow> pWin = FindDlgWin( *doc, aLibName, aDlgName );
+                                VclPtr<DialogWindow> pWin = FindDlgWin( doc, aLibName, aDlgName );
                                 if ( !pWin )
-                                    pWin = CreateDlgWin( *doc, aLibName, aDlgName );
+                                    pWin = CreateDlgWin( doc, aLibName, aDlgName );
                                 if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aDlgName &&
                                      pLibInfoItem->GetCurrentType() == TYPE_DIALOG )
                                 {

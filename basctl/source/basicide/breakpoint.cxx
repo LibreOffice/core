@@ -55,7 +55,7 @@ void BreakPointList::transfer(BreakPointList & rList)
 
 void BreakPointList::InsertSorted(BreakPoint* pNewBrk)
 {
-    for ( std::vector< BreakPoint* >::iterator i = maBreakPoints.begin(); i < maBreakPoints.end(); ++i )
+    for ( std::vector< BreakPoint* >::iterator i = maBreakPoints.begin(); i != maBreakPoints.end(); ++i )
     {
         if ( pNewBrk->nLine <= (*i)->nLine )
         {
@@ -131,7 +131,7 @@ void BreakPointList::ResetHitCount()
 
 BreakPoint* BreakPointList::remove(BreakPoint* ptr)
 {
-    for ( std::vector< BreakPoint* >::iterator i = maBreakPoints.begin(); i < maBreakPoints.end(); ++i )
+    for ( std::vector< BreakPoint* >::iterator i = maBreakPoints.begin(); i != maBreakPoints.end(); ++i )
     {
         if ( ptr == *i )
         {

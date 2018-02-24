@@ -171,12 +171,11 @@ namespace accessibility
                     else
                     {
                         // NULL means Clear()
-                        MAP_ENTRY::iterator mi = m_mapEntry.begin();
-                        for ( ; mi != m_mapEntry.end() ; ++mi)
+                        for (auto const& entry : m_mapEntry)
                         {
                             uno::Any aNewValue;
                             uno::Any aOldValue;
-                            aOldValue <<= mi->second;
+                            aOldValue <<= entry.second;
                             NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
                         }
                         m_mapEntry.clear();

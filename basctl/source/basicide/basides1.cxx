@@ -94,18 +94,18 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
             if (rSearchItem.GetCommand() == SvxSearchCmd::REPLACE_ALL)
             {
                 sal_uInt16 nActModWindows = 0;
-                for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
+                for (auto const& window : aWindowTable)
                 {
-                    BaseWindow* pWin = it->second;
+                    BaseWindow* pWin = window.second;
                     if (pWin->HasActiveEditor())
                         nActModWindows++;
                 }
 
                 if ( nActModWindows <= 1 || ( !rSearchItem.GetSelection() && ScopedVclPtrInstance<QueryBox>(pCurWin, MessBoxStyle::YesNo|MessBoxStyle::DefaultYes, IDEResId(RID_STR_SEARCHALLMODULES))->Execute() == RET_YES ) )
                 {
-                    for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
+                    for (auto const& window : aWindowTable)
                     {
-                        BaseWindow* pWin = it->second;
+                        BaseWindow* pWin = window.second;
                         nFound += pWin->StartSearchAndReplace(rSearchItem);
                     }
                 }
@@ -413,9 +413,9 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         case SID_BASICIDE_STOREALLMODULESOURCES:
         case SID_BASICIDE_UPDATEALLMODULESOURCES:
         {
-            for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
+            for (auto const& window : aWindowTable)
             {
-                BaseWindow* pWin = it->second;
+                BaseWindow* pWin = window.second;
                 if (!pWin->IsSuspended() && dynamic_cast<ModulWindow*>(pWin))
                 {
                     if ( rReq.GetSlot() == SID_BASICIDE_STOREALLMODULESOURCES )
@@ -1154,9 +1154,9 @@ VclPtr<BaseWindow> Shell::FindWindow(
     ItemType eType, bool bFindSuspended
 )
 {
-    for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
+    for (auto const& window : aWindowTable)
     {
-        BaseWindow* const pWin = it->second;
+        BaseWindow* const pWin = window.second;
         if (pWin->Is(rDocument, rLibName, rName, eType, bFindSuspended))
             return pWin;
     }
@@ -1296,9 +1296,9 @@ void Shell::Deactivate( bool bMDI )
 
         // test CanClose to also test during deactivating the BasicIDE whether
         // the sourcecode is too large in one of the modules...
-        for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
+        for (auto const& window : aWindowTable)
         {
-            BaseWindow* pWin = it->second;
+            BaseWindow* pWin = window.second;
             if ( /* !pWin->IsSuspended() && */ !pWin->CanClose() )
             {
                 if ( !m_aCurLibName.isEmpty() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )

@@ -134,12 +134,9 @@ namespace basctl
         {
             try
             {
-                for (   docs::Controllers::const_iterator controller = _rDocument.aControllers.begin();
-                        controller != _rDocument.aControllers.end();
-                        ++controller
-                    )
+                for (auto const& controller : _rDocument.aControllers)
                 {
-                    Reference< XFrame > xFrame( (*controller)->getFrame(), UNO_SET_THROW );
+                    Reference< XFrame > xFrame( controller->getFrame(), UNO_SET_THROW );
                     Reference< XWindow2 > xContainer( xFrame->getContainerWindow(), UNO_QUERY_THROW );
                     if ( xContainer->isVisible() )
                         return true;
@@ -1058,17 +1055,14 @@ namespace basctl
         docs::Documents aDocuments;
         lcl_getAllModels_throw( aDocuments, false );
 
-        for (   docs::Documents::const_iterator doc = aDocuments.begin();
-                doc != aDocuments.end();
-                ++doc
-            )
+        for (auto const& doc : aDocuments)
         {
-            const BasicManager* pDocBasicManager = ::basic::BasicManagerRepository::getDocumentBasicManager( doc->xModel );
+            const BasicManager* pDocBasicManager = ::basic::BasicManagerRepository::getDocumentBasicManager( doc.xModel );
             if  (   ( pDocBasicManager != SfxApplication::GetBasicManager() )
                 &&  ( pDocBasicManager == _pManager )
                 )
             {
-                return ScriptDocument( doc->xModel );
+                return ScriptDocument( doc.xModel );
             }
         }
 
@@ -1086,12 +1080,9 @@ namespace basctl
         docs::Documents aDocuments;
         lcl_getAllModels_throw( aDocuments, false );
 
-        for (   docs::Documents::const_iterator doc = aDocuments.begin();
-                doc != aDocuments.end();
-                ++doc
-            )
+        for (auto const& doc : aDocuments)
         {
-            const ScriptDocument aCheck = ScriptDocument( doc->xModel );
+            const ScriptDocument aCheck = ScriptDocument( doc.xModel );
             if  (   _rUrlOrCaption == aCheck.getTitle()
                 ||  _rUrlOrCaption == aCheck.m_pImpl->getURL()
                 )
@@ -1138,13 +1129,10 @@ namespace basctl
             docs::Documents aDocuments;
             lcl_getAllModels_throw( aDocuments, true /* exclude invisible */ );
 
-            for (   docs::Documents::const_iterator doc = aDocuments.begin();
-                    doc != aDocuments.end();
-                    ++doc
-                )
+            for (auto const& doc : aDocuments)
             {
                 // exclude documents without script/library containers
-                ScriptDocument aDoc( doc->xModel );
+                ScriptDocument aDoc( doc.xModel );
                 if ( !aDoc.isValid() )
                     continue;
 

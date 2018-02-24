@@ -519,8 +519,8 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox, void )
         }
 
         m_pMacroBox->SetUpdateMode(false);
-        for ( map< sal_uInt16, SbMethod* >::iterator it = aMacros.begin(); it != aMacros.end(); ++it )
-            m_pMacroBox->InsertEntry( (*it).second->GetName() );
+        for (auto const& macro : aMacros)
+            m_pMacroBox->InsertEntry( macro.second->GetName() );
         m_pMacroBox->SetUpdateMode(true);
 
         if ( m_pMacroBox->GetEntryCount() )

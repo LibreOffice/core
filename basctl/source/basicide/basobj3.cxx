@@ -217,17 +217,14 @@ StarBASIC* FindBasic( const SbxVariable* pVar )
 BasicManager* FindBasicManager( StarBASIC const * pLib )
 {
     ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( ScriptDocument::AllWithApplication ) );
-    for (   ScriptDocuments::const_iterator doc = aDocuments.begin();
-            doc != aDocuments.end();
-            ++doc
-        )
+    for (auto const& doc : aDocuments)
     {
-        BasicManager* pBasicMgr = doc->getBasicManager();
+        BasicManager* pBasicMgr = doc.getBasicManager();
         OSL_ENSURE( pBasicMgr, "basctl::FindBasicManager: no basic manager for the document!" );
         if ( !pBasicMgr )
             continue;
 
-        Sequence< OUString > aLibNames( doc->getLibraryNames() );
+        Sequence< OUString > aLibNames( doc.getLibraryNames() );
         sal_Int32 nLibCount = aLibNames.getLength();
         const OUString* pLibNames = aLibNames.getConstArray();
 
@@ -278,9 +275,9 @@ void StopBasic()
     if (Shell* pShell = GetShell())
     {
         Shell::WindowTable& rWindows = pShell->GetWindowTable();
-        for (Shell::WindowTableIt it = rWindows.begin(); it != rWindows.end(); ++it )
+        for (auto const& window : rWindows)
         {
-            BaseWindow* pWin = it->second;
+            BaseWindow* pWin = window.second;
             // call BasicStopped manually because the Stop-Notify
             // might not get through otherwise
             pWin->BasicStopped();

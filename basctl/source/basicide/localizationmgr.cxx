@@ -777,9 +777,9 @@ void LocalizationMgr::handleBasicStopped()
 DialogWindow* FindDialogWindowForEditor( DlgEditor const * pEditor )
 {
     Shell::WindowTable const& aWindowTable = GetShell()->GetWindowTable();
-    for (Shell::WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it )
+    for (auto const& window : aWindowTable)
     {
-        BaseWindow* pWin = it->second;
+        BaseWindow* pWin = window.second;
         if (!pWin->IsSuspended())
             if (DialogWindow* pDlgWin = dynamic_cast<DialogWindow*>(pWin))
             {
