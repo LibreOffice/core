@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_fd57baff",
+        "filename": "sw/inc/hintids.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-02-24T20:04:22Z",
+      "side": 1,
+      "message": "I am not sure how to tell if this change is correct (I don\u0027t quite get the mechanics here), but the item is in reality not a SvxShadowedItem (bool), but SvxShadowItem (i.e., the shadow specs). I was testing with the style definition when worked on style dialog problems recently.",
+      "range": {
+        "startLine": 97,
+        "startChar": 64,
+        "endLine": 97,
+        "endChar": 79
+      },
+      "revId": "35f5274ece0fcbb70753a71619b526ed0d4cbd6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
