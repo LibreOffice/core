@@ -2476,19 +2476,22 @@ void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     if (!pWindow)
         return;
 
-    KeyEvent aEvent(nCharCode, nKeyCode, 0);
+    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
+    pLOKEv->mpWindow = pWindow;
     switch (nType)
     {
     case LOK_KEYEVENT_KEYINPUT:
-        pWindow->KeyInput(aEvent);
+        pLOKEv->mnEvent = VclEventId::WindowKeyInput;
         break;
     case LOK_KEYEVENT_KEYUP:
-        pWindow->KeyUp(aEvent);
+        pLOKEv->mnEvent = VclEventId::WindowKeyUp;
         break;
     default:
         assert(false);
-        break;
     }
+
+    pLOKEv->maKeyEvent = KeyEvent(nCharCode, nKeyCode, 0);
+    Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
 }
 
 void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
@@ -2516,33 +2519,28 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
             return;
     }
 
-    Window* pWindow = pViewShell->GetActiveWindow();
-
-    Point aPos(Point(convertTwipToMm100(nX), convertTwipToMm100(nY)));
-    MouseEvent aEvent(aPos, nCount,
-            MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
-
+    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
+    pLOKEv->mpWindow = pViewShell->GetActiveWindow();
     switch (nType)
     {
     case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
-        pViewShell->LogicMouseButtonDown(aEvent);
-
-        if (nButtons & MOUSE_RIGHT)
-        {
-            const CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, true, nullptr);
-            pViewShell->Command(aCEvt, pWindow);
-        }
+        pLOKEv->mnEvent = VclEventId::WindowMouseButtonDown;
         break;
     case LOK_MOUSEEVENT_MOUSEBUTTONUP:
-        pViewShell->LogicMouseButtonUp(aEvent);
+        pLOKEv->mnEvent = VclEventId::WindowMouseButtonUp;
         break;
     case LOK_MOUSEEVENT_MOUSEMOVE:
-        pViewShell->LogicMouseMove(aEvent);
+        pLOKEv->mnEvent = VclEventId::WindowMouseMove;
         break;
     default:
         assert(false);
-        break;
     }
+
+    const Point aPos(Point(convertTwipToMm100(nX), convertTwipToMm100(nY)));
+    pLOKEv->maMouseEvent = MouseEvent(aPos, nCount,
+                                      MouseEventModifiers::SIMPLECLICK,
+                                      nButtons, nModifier);
+    Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
 }
 
 void SdXImpressDocument::setTextSelection(int nType, int nX, int nY)
