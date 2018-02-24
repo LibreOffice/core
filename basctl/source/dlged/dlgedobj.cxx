@@ -530,10 +530,9 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt )
     {
         // stop listening with all children
         std::vector<DlgEdObj*> aChildList = pForm->GetChildren();
-        std::vector<DlgEdObj*>::iterator aIter;
-        for ( aIter = aChildList.begin() ; aIter != aChildList.end() ; ++aIter )
+        for (auto const& child : aChildList)
         {
-            (*aIter)->EndListening( false );
+            child->EndListening( false );
         }
 
         Reference< container::XNameAccess > xNameAcc( pForm->GetUnoControlModel() , UNO_QUERY );
@@ -613,9 +612,9 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt )
         }
 
         // start listening with all children
-        for ( aIter = aChildList.begin() ; aIter != aChildList.end() ; ++aIter )
+        for (auto const& child : aChildList)
         {
-            (*aIter)->StartListening();
+            child->StartListening();
         }
     }
 }
@@ -1318,7 +1317,6 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
     bool bAdjustedPageSize = rEditor.AdjustPageSize();
     SetRectFromProps();
     std::vector<DlgEdObj*> const& aChildList = GetChildren();
-    std::vector<DlgEdObj*>::const_iterator aIter;
 
     if ( bAdjustedPageSize )
     {
@@ -1328,9 +1326,9 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
         nPageHeightIn = aPageSize.Height();
         if ( TransformSdrToControlCoordinates( nPageXIn, nPageYIn, nPageWidthIn, nPageHeightIn, nPageX, nPageY, nPageWidth, nPageHeight ) )
         {
-            for ( aIter = aChildList.begin(); aIter != aChildList.end(); ++aIter )
+            for (auto const& child : aChildList)
             {
-                Reference< beans::XPropertySet > xPSet( (*aIter)->GetUnoControlModel(), UNO_QUERY );
+                Reference< beans::XPropertySet > xPSet( child->GetUnoControlModel(), UNO_QUERY );
                 if ( xPSet.is() )
                 {
                     sal_Int32 nX = 0, nY = 0, nWidth = 0, nHeight = 0;
@@ -1371,8 +1369,8 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
         }
     }
 
-    for ( aIter = aChildList.begin(); aIter != aChildList.end(); ++aIter )
-        (*aIter)->SetRectFromProps();
+    for (auto const& child : aChildList)
+        child->SetRectFromProps();
 }
 
 void DlgEdForm::UpdateStep()
@@ -1394,10 +1392,9 @@ void DlgEdForm::UpdateStep()
 void DlgEdForm::UpdateTabIndices()
 {
     // stop listening with all children
-    std::vector<DlgEdObj*>::iterator aIter;
-    for ( aIter = pChildren.begin() ; aIter != pChildren.end() ; ++aIter )
+    for (auto const& child : pChildren)
     {
-        (*aIter)->EndListening( false );
+        child->EndListening( false );
     }
 
     Reference< css::container::XNameAccess > xNameAcc( GetUnoControlModel() , UNO_QUERY );
@@ -1429,9 +1426,9 @@ void DlgEdForm::UpdateTabIndices()
 
         // set new tab indices
         sal_Int16 nNewTabIndex = 0;
-        for ( IndexToNameMap::iterator aIt = aIndexToNameMap.begin(); aIt != aIndexToNameMap.end(); ++aIt )
+        for (auto const& indexToName : aIndexToNameMap)
         {
-            Any aCtrl = xNameAcc->getByName( aIt->second );
+            Any aCtrl = xNameAcc->getByName( indexToName.second );
             Reference< beans::XPropertySet > xPSet;
                aCtrl >>= xPSet;
             if ( xPSet.is() )
@@ -1445,9 +1442,9 @@ void DlgEdForm::UpdateTabIndices()
     }
 
     // start listening with all children
-    for ( aIter = pChildren.begin() ; aIter != pChildren.end() ; ++aIter )
+    for (auto const& child : pChildren)
     {
-        (*aIter)->StartListening();
+        child->StartListening();
     }
 }
 
@@ -1551,12 +1548,11 @@ void DlgEdForm::NbcMove( const Size& rSize )
     StartListening();
 
     // set geometry properties of all children
-    std::vector<DlgEdObj*>::iterator aIter;
-    for ( aIter = pChildren.begin() ; aIter != pChildren.end() ; ++aIter )
+    for (auto const& child : pChildren)
     {
-        (*aIter)->EndListening(false);
-        (*aIter)->SetPropsFromRect();
-        (*aIter)->StartListening();
+        child->EndListening(false);
+        child->SetPropsFromRect();
+        child->StartListening();
     }
 
     // dialog model changed
@@ -1573,12 +1569,11 @@ void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fract
     StartListening();
 
     // set geometry properties of all children
-    std::vector<DlgEdObj*>::iterator aIter;
-    for ( aIter = pChildren.begin() ; aIter != pChildren.end() ; ++aIter )
+    for (auto const& child : pChildren)
     {
-        (*aIter)->EndListening(false);
-        (*aIter)->SetPropsFromRect();
-        (*aIter)->StartListening();
+        child->EndListening(false);
+        child->SetPropsFromRect();
+        child->StartListening();
     }
 
     // dialog model changed

@@ -1392,12 +1392,9 @@ void LibPage::FillListBox()
     InsertListBoxEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_SHARE );
 
     ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( ScriptDocument::DocumentsSorted ) );
-    for (   ScriptDocuments::const_iterator doc = aDocuments.begin();
-            doc != aDocuments.end();
-            ++doc
-        )
+    for (auto const& doc : aDocuments)
     {
-        InsertListBoxEntry( *doc, LIBRARY_LOCATION_DOCUMENT );
+        InsertListBoxEntry( doc, LIBRARY_LOCATION_DOCUMENT );
     }
 }
 

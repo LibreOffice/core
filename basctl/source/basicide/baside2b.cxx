@@ -600,12 +600,11 @@ void EditorWindow::HandleAutoCorrect()
     HighlightPortion& r = aPortions.back();
     if( static_cast<size_t>(nIndex) != aPortions.size()-1 )
     {//cursor is not standing at the end of the line
-        for (std::vector<HighlightPortion>::iterator i(aPortions.begin());
-             i != aPortions.end(); ++i)
+        for (auto const& portion : aPortions)
         {
-            if( i->nEnd == nIndex )
+            if( portion.nEnd == nIndex )
             {
-                r = *i;
+                r = portion;
                 break;
             }
         }
@@ -673,12 +672,11 @@ TextSelection EditorWindow::GetLastHighlightPortionTextSelection()
     HighlightPortion& r = aPortions.back();
     if( static_cast<size_t>(nIndex) != aPortions.size()-1 )
     {//cursor is not standing at the end of the line
-        for (std::vector<HighlightPortion>::iterator i(aPortions.begin());
-             i != aPortions.end(); ++i)
+        for (auto const& portion : aPortions)
         {
-            if( i->nEnd == nIndex )
+            if( portion.nEnd == nIndex )
             {
-                r = *i;
+                r = portion;
                 break;
             }
         }
@@ -794,18 +792,17 @@ bool EditorWindow::GetProcedureName(OUString const & rLine, OUString& rProcType,
     bool bFoundType = false;
     bool bFoundName = false;
 
-    for (std::vector<HighlightPortion>::iterator i(aPortions.begin());
-         i != aPortions.end(); ++i)
+    for (auto const& portion : aPortions)
     {
-        OUString sTokStr = rLine.copy(i->nBegin, i->nEnd - i->nBegin);
+        OUString sTokStr = rLine.copy(portion.nBegin, portion.nEnd - portion.nBegin);
 
-        if( i->tokenType == TokenType::Keywords && ( sTokStr.equalsIgnoreAsciiCase("sub")
+        if( portion.tokenType == TokenType::Keywords && ( sTokStr.equalsIgnoreAsciiCase("sub")
             || sTokStr.equalsIgnoreAsciiCase("function")) )
         {
             rProcType = sTokStr;
             bFoundType = true;
         }
-        if( i->tokenType == TokenType::Identifier && bFoundType )
+        if( portion.tokenType == TokenType::Identifier && bFoundType )
         {
             rProcName = sTokStr;
             bFoundName = true;
@@ -1166,11 +1163,10 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
         std::vector<HighlightPortion> aPortions;
         aHighlighter.getHighlightPortions( aLine, aPortions );
 
-        for (std::vector<HighlightPortion>::iterator i(aPortions.begin());
-             i != aPortions.end(); ++i)
+        for (auto const& portion : aPortions)
         {
-            Color const aColor = rModulWindow.GetLayout().GetSyntaxColor(i->tokenType);
-            pEditEngine->SetAttrib(TextAttribFontColor(aColor), nLine, i->nBegin, i->nEnd);
+            Color const aColor = rModulWindow.GetLayout().GetSyntaxColor(portion.tokenType);
+            pEditEngine->SetAttrib(TextAttribFontColor(aColor), nLine, portion.nBegin, portion.nEnd);
         }
 
         pEditEngine->SetModified(bWasModified);
@@ -1261,11 +1257,9 @@ IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl, Timer *, void)
     //pEditEngine->SetUpdateMode(false);
 
     bHighlighting = true;
-    for ( std::set<sal_uInt16>::const_iterator it = aSyntaxLineTable.begin();
-          it != aSyntaxLineTable.end(); ++it )
+    for (auto const& syntaxLine : aSyntaxLineTable)
     {
-        sal_uInt16 nLine = *it;
-        DoSyntaxHighlight( nLine );
+        DoSyntaxHighlight(syntaxLine);
     }
 
     // #i45572#

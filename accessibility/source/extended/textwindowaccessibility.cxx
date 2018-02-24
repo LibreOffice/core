@@ -2340,11 +2340,10 @@ void Document::handleSelectionChangeNotification()
 
 void Document::disposeParagraphs()
 {
-    for (Paragraphs::iterator aIt(m_xParagraphs->begin());
-         aIt != m_xParagraphs->end(); ++aIt)
+    for (auto const& paragraph : *m_xParagraphs)
     {
         css::uno::Reference< css::lang::XComponent > xComponent(
-            aIt->getParagraph().get(), css::uno::UNO_QUERY);
+            paragraph.getParagraph().get(), css::uno::UNO_QUERY);
         if (xComponent.is())
             xComponent->dispose();
     }

@@ -386,9 +386,9 @@ void DlgEditor::SetDialog( const uno::Reference< container::XNameContainer >& xU
         }
 
         // create controls and insert them into drawing page
-        for ( IndexToNameMap::iterator aIt = aIndexToNameMap.begin(); aIt != aIndexToNameMap.end(); ++aIt )
+        for (auto const& indexToName : aIndexToNameMap)
         {
-            Any aCtrl = xNameAcc->getByName( aIt->second );
+            Any aCtrl = xNameAcc->getByName( indexToName.second );
             Reference< css::awt::XControlModel > xCtrlModel;
             aCtrl >>= xCtrlModel;
             DlgEdObj* pCtrlObj = new DlgEdObj();

@@ -120,9 +120,9 @@ VclPtr<DialogWindow> Shell::FindDlgWin (
 
 sal_uInt16 Shell::GetWindowId(const BaseWindow* pWin) const
 {
-    for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
-        if ( it->second == pWin )
-            return it->first;
+    for (auto const& window : aWindowTable)
+        if ( window.second == pWin )
+            return window.first;
     return 0;
 }
 

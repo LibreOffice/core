@@ -175,10 +175,10 @@ Layout::SplittedSide::SplittedSide (Layout* pParent, Side eSide) :
 void Layout::SplittedSide::dispose()
 {
     aSplitter.disposeAndClear();
-    for (auto i = vItems.begin(); i != vItems.end(); ++i)
+    for (auto & item : vItems)
     {
-        i->pSplit.disposeAndClear();
-        i->pWin.clear();
+        item.pSplit.disposeAndClear();
+        item.pWin.clear();
     }
 }
 
