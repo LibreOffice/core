@@ -1452,13 +1452,13 @@ OUString ImpEditView::SpellIgnoreWord()
 
 void ImpEditView::DeleteSelected()
 {
-    DrawSelectionXOR();
-
     pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_DELETE );
 
     EditPaM aPaM = pEditEngine->pImpEditEngine->DeleteSelected( GetEditSelection() );
 
     pEditEngine->pImpEditEngine->UndoActionEnd();
+
+    DrawSelectionXOR();
 
     SetEditSelection( EditSelection( aPaM, aPaM ) );
     pEditEngine->pImpEditEngine->FormatAndUpdate( GetEditViewPtr() );
