@@ -279,9 +279,8 @@ public:
 
 OUString SwarmSolver::getResourceString(const char* pId)
 {
-    OUString sString;
     if (!pId)
-        return sString;
+        return OUString();
 
     return Translate::get(pId, Translate::Create("scc"));
 }

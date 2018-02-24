@@ -698,8 +698,7 @@ bool SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
         tools::Rectangle rgn( rControlRegion );
-        tools::Rectangle aNull;
-        if (rgn != aNull)
+        if (rgn != tools::Rectangle())
             mirror(rgn, pOutDev);
         std::unique_ptr< ImplControlValue > mirrorValue( aValue.clone());
         mirror( *mirrorValue, pOutDev );

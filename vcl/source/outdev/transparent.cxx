@@ -393,8 +393,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
     tools::PolyPolygon aPolyPoly( LogicToPixel( rPolyPoly ) );
     tools::Rectangle aPolyRect( aPolyPoly.GetBoundRect() );
-    Point aPoint;
-    tools::Rectangle aDstRect( aPoint, GetOutputSizePixel() );
+    tools::Rectangle aDstRect( Point(), GetOutputSizePixel() );
 
     aDstRect.Intersection( aPolyRect );
 

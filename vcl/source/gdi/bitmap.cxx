@@ -444,8 +444,7 @@ bool Bitmap::Erase(const Color& rFillColor)
         }
         else
         {
-            Point aTmpPoint;
-            const tools::Rectangle aRect( aTmpPoint, Size( pWriteAcc->Width(), pWriteAcc->Height() ) );
+            const tools::Rectangle aRect( Point(), Size( pWriteAcc->Width(), pWriteAcc->Height() ) );
             pWriteAcc->SetFillColor( rFillColor );
             pWriteAcc->FillRect( aRect );
         }
@@ -752,8 +751,7 @@ bool Bitmap::Crop( const tools::Rectangle& rRectPixel )
 
         if( pReadAcc )
         {
-            Point               aTmpPoint;
-            const tools::Rectangle     aNewRect( aTmpPoint, aRect.GetSize() );
+            const tools::Rectangle     aNewRect( Point(), aRect.GetSize() );
             Bitmap              aNewBmp( aNewRect.GetSize(), GetBitCount(), &pReadAcc->GetPalette() );
             ScopedWriteAccess   pWriteAcc(aNewBmp);
 

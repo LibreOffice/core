@@ -1127,8 +1127,7 @@ ScPagePreviewCountData::ScPagePreviewCountData( const ScPreviewLocationData& rDa
     Size aOutputSize;
     if ( pSizeWindow )
         aOutputSize = pSizeWindow->GetOutputSizePixel();
-    Point aPoint;
-    aVisRect = tools::Rectangle( aPoint, aOutputSize );
+    aVisRect = tools::Rectangle( Point(), aOutputSize );
 
     tools::Rectangle aObjRect;
 
@@ -1236,8 +1235,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
             vcl::Window* pSizeWindow = mpViewShell->GetWindow();
             if ( pSizeWindow )
                 aOutputSize = pSizeWindow->GetOutputSizePixel();
-            Point aPoint;
-            tools::Rectangle aVisRect( aPoint, aOutputSize );
+            tools::Rectangle aVisRect( Point(), aOutputSize );
             GetNotesChildren()->DataChanged(aVisRect);
 
             GetShapeChildren()->DataChanged();
@@ -1273,8 +1271,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
             vcl::Window* pSizeWindow = mpViewShell->GetWindow();
             if ( pSizeWindow )
                 aOutputSize = pSizeWindow->GetOutputSizePixel();
-            Point aPoint;
-            tools::Rectangle aVisRect( aPoint, aOutputSize );
+            tools::Rectangle aVisRect( Point(), aOutputSize );
             GetNotesChildren()->DataChanged(aVisRect);
 
             GetShapeChildren()->VisAreaChanged();

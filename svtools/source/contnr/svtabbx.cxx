@@ -1143,8 +1143,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessible()
 
 tools::Rectangle SvHeaderTabListBox::GetFieldCharacterBounds(sal_Int32,sal_Int32,sal_Int32)
 {
-    tools::Rectangle aRect;
-    return aRect;
+    return tools::Rectangle();
 }
 
 sal_Int32 SvHeaderTabListBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)

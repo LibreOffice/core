@@ -1118,10 +1118,9 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                     std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
                     if (xMetaFile)
                     {
-                        Point   aPoint;
                         Size    aSize( GetPage()->GetSize() );
                         xMetaFile->AddAction( static_cast<MetaAction*>(new MetaFillColorAction( COL_WHITE, true )), 0 );
-                        xMetaFile->AddAction( static_cast<MetaAction*>(new MetaRectAction( ::tools::Rectangle( aPoint, aSize ) )), 1 );
+                        xMetaFile->AddAction( static_cast<MetaAction*>(new MetaRectAction( ::tools::Rectangle( Point(), aSize ) )), 1 );
                         xMetaFile->SetPrefMapMode(MapMode(MapUnit::Map100thMM));
                         xMetaFile->SetPrefSize( aSize );
 

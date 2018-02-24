@@ -825,8 +825,7 @@ awt::Rectangle SAL_CALL ThumbnailViewItemAcc::getBounds()
     if( mpParent )
     {
         tools::Rectangle   aRect( mpParent->getDrawArea() );
-        Point       aOrigin;
-        tools::Rectangle   aParentRect( aOrigin, mpParent->mrParent.GetOutputSizePixel() );
+        tools::Rectangle   aParentRect( Point(), mpParent->mrParent.GetOutputSizePixel() );
 
         aRect.Intersection( aParentRect );
 

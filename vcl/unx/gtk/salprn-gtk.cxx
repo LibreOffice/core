@@ -242,7 +242,6 @@ GtkSalPrinter::StartJob(
     if (!bDoJob)
         return false;
 #endif
-    bool bCollate = false;
 
     //To-Do proper name, watch for encodings
     sFileName = OString("/tmp/hacking.ps");
@@ -252,7 +251,7 @@ GtkSalPrinter::StartJob(
 
     //To-Do, swap ps/pdf for gtk_printer_accepts_ps()/gtk_printer_accepts_pdf() ?
 
-    return impl_doJob(&aFileName, i_rJobName, i_rAppName, io_pSetupData, bCollate, io_rController);
+    return impl_doJob(&aFileName, i_rJobName, i_rAppName, io_pSetupData, /*bCollate*/false, io_rController);
 }
 
 bool

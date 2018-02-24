@@ -738,8 +738,7 @@ awt::Rectangle SvxShowCharSetItemAcc::implGetBounds(  )
     if( mpParent )
     {
         tools::Rectangle   aRect( mpParent->maRect );
-        Point       aOrigin;
-        tools::Rectangle   aParentRect( aOrigin, mpParent->mrParent.GetOutputSizePixel() );
+        tools::Rectangle   aParentRect( Point(), mpParent->mrParent.GetOutputSizePixel() );
 
         aRect.Intersection( aParentRect );
 

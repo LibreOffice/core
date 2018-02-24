@@ -359,7 +359,6 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
     const sal_uLong nLinks = aNames.getLength();
     const OUString* pNames = aNames.getConstArray();
 
-    Color aMaskColor( COL_LIGHTMAGENTA );
     const OUString aProp_LinkDisplayName( "LinkDisplayName" );
     const OUString aProp_LinkTarget( "com.sun.star.document.LinkTarget" );
     const OUString aProp_LinkDisplayBitmap( "LinkDisplayBitmap" );
@@ -410,7 +409,7 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
                         aXBitmap( xTarget->getPropertyValue( aProp_LinkDisplayBitmap ), uno::UNO_QUERY );
                     if( aXBitmap.is() )
                     {
-                        Image aBmp(BitmapEx(VCLUnoHelper::GetBitmap(aXBitmap).GetBitmap(), aMaskColor));
+                        Image aBmp(BitmapEx(VCLUnoHelper::GetBitmap(aXBitmap).GetBitmap(), /*mask*/COL_LIGHTMAGENTA));
                         // insert Displayname into treelist with bitmaps
                         pEntry = mpLbTree->InsertEntry ( aStrDisplayname,
                                                         aBmp, aBmp,

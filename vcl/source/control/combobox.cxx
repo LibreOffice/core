@@ -1002,11 +1002,10 @@ long ComboBox::getMaxWidthScrollBarAndDownButton() const
 
     vcl::Window *pBorder = GetWindow( GetWindowType::Border );
     ImplControlValue aControlValue;
-    Point aPoint;
     tools::Rectangle aContent, aBound;
 
     // use the full extent of the control
-    tools::Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
+    tools::Rectangle aArea( Point(), pBorder->GetOutputSizePixel() );
 
     if ( GetNativeControlRegion(ControlType::Combobox, ControlPart::ButtonDown,
         aArea, ControlState::NONE, aControlValue, aBound, aContent) )

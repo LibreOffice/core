@@ -774,9 +774,8 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                     std::unique_ptr<OutlinerView> pOutlView( new OutlinerView( &aTmpOutliner, &(rView.GetEditWin()) ) );
                     pOutlView->GetOutliner()->SetRefDevice( rSh.getIDocumentDeviceAccess().getPrinter( false ) );
                     aTmpOutliner.InsertView( pOutlView.get() );
-                    Point aPt;
                     Size aSize(1,1);
-                    tools::Rectangle aRect( aPt, aSize );
+                    tools::Rectangle aRect( Point(), aSize );
                     pOutlView->SetOutputArea( aRect );
                     aTmpOutliner.SetText( *pParaObj );
                     aTmpOutliner.ClearModifyFlag();

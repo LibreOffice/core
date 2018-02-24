@@ -1015,8 +1015,7 @@ void SAL_CALL SmModel::render(
                     aPrtPageOffset = Point( static_cast<long>(aPrtPaperSize.Width()  * 0.0250),
                                             static_cast<long>(aPrtPaperSize.Height() * 0.0214));
                 }
-                Point   aZeroPoint;
-                tools::Rectangle OutputRect( aZeroPoint, aOutputSize );
+                tools::Rectangle OutputRect( Point(), aOutputSize );
 
 
                 // set minimum top and bottom border

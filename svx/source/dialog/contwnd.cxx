@@ -174,8 +174,7 @@ void ContourWindow::MouseMove( const MouseEvent& rMEvt )
 
 void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    Point aTmpPoint;
-    const tools::Rectangle aGraphRect( aTmpPoint, GetGraphicSize() );
+    const tools::Rectangle aGraphRect( Point(), GetGraphicSize() );
     const Point     aLogPt( PixelToLogic( rMEvt.GetPosPixel() ) );
 
     bClickValid = aGraphRect.IsInside( aLogPt );

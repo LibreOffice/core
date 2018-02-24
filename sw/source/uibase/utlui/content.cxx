@@ -3575,8 +3575,7 @@ void SwContentLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::Ren
     {
         vcl::Font aOldFont(rRenderContext.GetFont());
         vcl::Font aFont(aOldFont);
-        Color aCol(COL_LIGHTGRAY);
-        aFont.SetColor(aCol);
+        aFont.SetColor(COL_LIGHTGRAY);
         rRenderContext.SetFont(aFont );
         rRenderContext.DrawText(rPos, GetText());
         rRenderContext.SetFont(aOldFont);

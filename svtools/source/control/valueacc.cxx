@@ -951,8 +951,7 @@ awt::Rectangle SAL_CALL ValueItemAcc::getBounds()
     if( mpParent )
     {
         tools::Rectangle   aRect( mpParent->mrParent.GetItemRect(mpParent->mnId) );
-        Point       aOrigin;
-        tools::Rectangle   aParentRect( aOrigin, mpParent->mrParent.GetOutputSizePixel() );
+        tools::Rectangle   aParentRect( Point(), mpParent->mrParent.GetOutputSizePixel() );
 
         aRect.Intersection( aParentRect );
 

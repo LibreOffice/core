@@ -134,8 +134,7 @@ Size SwSubFont::GetCapitalSize( SwDrawTextInfo& rInf )
     // Start:
     const long nOldKern = rInf.GetKern();
     rInf.SetKern( CheckKerning() );
-    Point aPos;
-    rInf.SetPos( aPos );
+    rInf.SetPos( Point() );
     rInf.SetSpace( 0 );
     rInf.SetDrawSpace( false );
     SwDoGetCapitalSize aDo( rInf );
@@ -377,8 +376,7 @@ sal_Int32 SwSubFont::GetCapitalCursorOfst( SwDrawTextInfo& rInf )
     const long nOldKern = rInf.GetKern();
     rInf.SetKern( CheckKerning() );
     SwDoCapitalCursorOfst aDo( rInf, rInf.GetOfst() );
-    Point aPos;
-    rInf.SetPos( aPos );
+    rInf.SetPos( Point() );
     rInf.SetDrawSpace( false );
     DoOnCapitals( aDo );
     rInf.SetKern( nOldKern );

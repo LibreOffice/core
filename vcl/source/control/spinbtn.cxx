@@ -102,8 +102,7 @@ void SpinButton::Resize()
     Control::Resize();
 
     Size aSize(GetOutputSizePixel());
-    Point aTmpPoint;
-    tools::Rectangle aRect(aTmpPoint, aSize);
+    tools::Rectangle aRect(Point(), aSize);
     if (mbHorz)
     {
         maLowerRect = tools::Rectangle(0, 0, aSize.Width() / 2, aSize.Height() - 1);

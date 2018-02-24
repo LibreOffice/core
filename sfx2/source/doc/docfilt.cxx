@@ -175,9 +175,9 @@ OUString SfxFilter::GetTypeFromStorage(
             SotClipboardFormatId nClipId = SotExchange::GetFormat( aDataFlavor );
             if ( nClipId != SotClipboardFormatId::NONE )
             {
-                SfxFilterFlags nMust = SfxFilterFlags::IMPORT;
+                SfxFilterFlags const nMust = SfxFilterFlags::IMPORT;
                 // template filters shouldn't be detected if not explicitly asked for
-                SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED | SfxFilterFlags::TEMPLATEPATH;
+                SfxFilterFlags const nDont = SFX_FILTER_NOTINSTALLED | SfxFilterFlags::TEMPLATEPATH;
 
                 // get filter from storage MediaType
                 std::shared_ptr<const SfxFilter> pFilter = aMatcher.GetFilter4ClipBoardId( nClipId, nMust, nDont );

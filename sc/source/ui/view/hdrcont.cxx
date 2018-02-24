@@ -258,9 +258,8 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
         aBoldFont.SetColor( aSelTextColor );
     SetTextColor( ( bBoldSet && !bHighContrast ) ? aSelTextColor : aTextColor );
 
-    Color aBlack( COL_BLACK );
     Color aSelLineColor = rStyleSettings.GetHighlightColor();
-    aSelLineColor.Merge( aBlack, 0xe0 );        // darken just a little bit
+    aSelLineColor.Merge( COL_BLACK, 0xe0 );        // darken just a little bit
 
     bool bLayoutRTL = IsLayoutRTL();
     long nLayoutSign = bLayoutRTL ? -1 : 1;
@@ -707,8 +706,7 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
     else
     {
         pSelEngine->SetWindow( this );
-        Point aPoint;
-        tools::Rectangle aVis( aPoint,GetOutputSizePixel() );
+        tools::Rectangle aVis( Point(), GetOutputSizePixel() );
         if (bVertical)
         {
             aVis.SetLeft( LONG_MIN );

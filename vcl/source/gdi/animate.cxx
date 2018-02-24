@@ -146,8 +146,7 @@ void Animation::Clear()
 
 bool Animation::IsTransparent() const
 {
-    Point       aPoint;
-    tools::Rectangle   aRect( aPoint, maGlobalSize );
+    tools::Rectangle   aRect( Point(), maGlobalSize );
     bool        bRet = false;
 
     // If some small bitmap needs to be replaced by the background,
@@ -446,8 +445,7 @@ bool Animation::Insert( const AnimationBitmap& rStepBmp )
 
     if( !IsInAnimation() )
     {
-        Point       aPoint;
-        tools::Rectangle   aGlobalRect( aPoint, maGlobalSize );
+        tools::Rectangle   aGlobalRect( Point(), maGlobalSize );
 
         maGlobalSize = aGlobalRect.Union( tools::Rectangle( rStepBmp.aPosPix, rStepBmp.aSizePix ) ).GetSize();
         maList.emplace_back( new AnimationBitmap( rStepBmp ) );

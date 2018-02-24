@@ -984,8 +984,7 @@ namespace emfio
 
     void MtfTools::ImplSetNonPersistentLineColorTransparenz()
     {
-        Color aColor(  COL_TRANSPARENT);
-        WinMtfLineStyle aTransparentLine( aColor, true );
+        WinMtfLineStyle aTransparentLine( COL_TRANSPARENT, true );
         if ( ! ( maLatestLineStyle == aTransparentLine ) )
         {
             maLatestLineStyle = aTransparentLine;

@@ -1999,7 +1999,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
         const char *mpFrom;
         const char *mpTo;
         const char *mpPurpose;
-    } aMappingLoad[] = {
+    } const aMappingLoad[] = {
         { "gcc3", "uno",  "" },
         { "uno",  "gcc3", "" },
     };
