@@ -69,18 +69,15 @@ private:
     Scanline            mpScanAccess;
     sal_PtrDiff         mnScanOffset;
 
-    sal_uInt32          ColorOf (BitmapColor const & rColor) const;
-    sal_uInt8           GrayOf  (BitmapColor const & rColor) const;
+public:
+    explicit            SalPrinterBmp (BitmapBuffer* pBitmap);
 
-    public:
-
-        explicit        SalPrinterBmp (BitmapBuffer* pBitmap);
-        virtual sal_uInt32  GetPaletteColor (sal_uInt32 nIdx) const override;
-        virtual sal_uInt32  GetPaletteEntryCount () const override;
-        virtual sal_uInt32  GetPixelRGB  (sal_uInt32 nRow, sal_uInt32 nColumn) const override;
-        virtual sal_uInt8   GetPixelGray (sal_uInt32 nRow, sal_uInt32 nColumn) const override;
-        virtual sal_uInt8   GetPixelIdx  (sal_uInt32 nRow, sal_uInt32 nColumn) const override;
-        virtual sal_uInt32  GetDepth () const override;
+    virtual sal_uInt32  GetPaletteColor (sal_uInt32 nIdx) const override;
+    virtual sal_uInt32  GetPaletteEntryCount () const override;
+    virtual sal_uInt32  GetPixelRGB  (sal_uInt32 nRow, sal_uInt32 nColumn) const override;
+    virtual sal_uInt8   GetPixelGray (sal_uInt32 nRow, sal_uInt32 nColumn) const override;
+    virtual sal_uInt8   GetPixelIdx  (sal_uInt32 nRow, sal_uInt32 nColumn) const override;
+    virtual sal_uInt32  GetDepth () const override;
 };
 
 SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer)
@@ -174,37 +171,19 @@ SalPrinterBmp::GetDepth () const
 }
 
 sal_uInt32
-SalPrinterBmp::ColorOf (BitmapColor const & rColor) const
-{
-    if (rColor.IsIndex())
-        return ColorOf (mpBmpBuffer->maPalette[rColor.GetIndex()]);
-    else
-        return    ((rColor.GetBlue())        & 0x000000ff)
-                | ((rColor.GetGreen() <<  8) & 0x0000ff00)
-                | ((rColor.GetRed()   << 16) & 0x00ff0000);
-}
-
-sal_uInt8
-SalPrinterBmp::GrayOf (BitmapColor const & rColor) const
-{
-    if (rColor.IsIndex())
-        return GrayOf (mpBmpBuffer->maPalette[rColor.GetIndex()]);
-    else
-        return (  rColor.GetBlue()  *  28UL
-                + rColor.GetGreen() * 151UL
-                + rColor.GetRed()   *  77UL ) >> 8;
-}
-
-sal_uInt32
 SalPrinterBmp::GetPaletteEntryCount () const
 {
     return mpBmpBuffer->maPalette.GetEntryCount ();
 }
 
 sal_uInt32
-SalPrinterBmp::GetPaletteColor (sal_uInt32 nIdx) const
+SalPrinterBmp::GetPaletteColor(sal_uInt32 nIdx) const
 {
-    return ColorOf (mpBmpBuffer->maPalette[nIdx]);
+    BitmapColor aColor(mpBmpBuffer->maPalette[nIdx]);
+
+    return ((aColor.GetBlue())        & 0x000000ff)
+         | ((aColor.GetGreen() <<  8) & 0x0000ff00)
+         | ((aColor.GetRed()   << 16) & 0x00ff0000);
 }
 
 sal_uInt32
@@ -213,7 +192,12 @@ SalPrinterBmp::GetPixelRGB (sal_uInt32 nRow, sal_uInt32 nColumn) const
     Scanline pScan = mpScanAccess + nRow * mnScanOffset;
     BitmapColor aColor = mpFncGetPixel (pScan, nColumn, mpBmpBuffer->maColorMask);
 
-    return ColorOf (aColor);
+    if (aColor.IsIndex())
+        GetPaletteColor(aColor.GetIndex());
+
+    return ((aColor.GetBlue())        & 0x000000ff)
+         | ((aColor.GetGreen() <<  8) & 0x0000ff00)
+         | ((aColor.GetRed()   << 16) & 0x00ff0000);
 }
 
 sal_uInt8
@@ -222,7 +206,13 @@ SalPrinterBmp::GetPixelGray (sal_uInt32 nRow, sal_uInt32 nColumn) const
     Scanline pScan = mpScanAccess + nRow * mnScanOffset;
     BitmapColor aColor = mpFncGetPixel (pScan, nColumn, mpBmpBuffer->maColorMask);
 
-    return GrayOf (aColor);
+    if (aColor.IsIndex())
+        aColor = mpBmpBuffer->maPalette[aColor.GetIndex()];
+
+    return (  aColor.GetBlue()  *  28UL
+            + aColor.GetGreen() * 151UL
+            + aColor.GetRed()   *  77UL ) >> 8;
+
 }
 
 sal_uInt8
