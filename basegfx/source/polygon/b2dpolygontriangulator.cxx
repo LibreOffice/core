@@ -367,11 +367,9 @@ namespace basegfx
 
         Triangulator::~Triangulator()
         {
-            EdgeEntryPointers::iterator aIter(maNewEdgeEntries.begin());
-
-            while(aIter != maNewEdgeEntries.end())
+            for (auto const& newEdgeEntry : maNewEdgeEntries)
             {
-                delete *aIter++;
+                delete newEdgeEntry;
             }
         }
 

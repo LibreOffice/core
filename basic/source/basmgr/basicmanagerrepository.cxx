@@ -348,12 +348,9 @@ namespace basic
 
     void ImplRepository::impl_notifyCreationListeners( const Reference< XModel >& _rxDocumentModel, BasicManager& _rManager )
     {
-        for (   CreationListeners::const_iterator loop = m_aCreationListeners.begin();
-                loop != m_aCreationListeners.end();
-                ++loop
-            )
+        for (auto const& creationListener : m_aCreationListeners)
         {
-            (*loop)->onBasicManagerCreated( _rxDocumentModel, _rManager );
+            creationListener->onBasicManagerCreated( _rxDocumentModel, _rManager );
         }
     }
 

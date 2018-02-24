@@ -3257,11 +3257,10 @@ VBAConstantHelper::isVBAConstantType( const OUString& rName )
 {
     init();
     bool bConstant = false;
-    VBAConstantsVector::const_iterator it = aConstCache.begin();
 
-    for( ; it != aConstCache.end(); ++it )
+    for (auto const& elem : aConstCache)
     {
-        if( rName.equalsIgnoreAsciiCase( *it ) )
+        if( rName.equalsIgnoreAsciiCase(elem) )
         {
             bConstant = true;
             break;
@@ -4471,10 +4470,9 @@ void disposeComVariablesForBasic( StarBASIC const * pBasic )
         }
 
         ComponentRefVector& rv = pItem->m_vComImplementsObjects;
-        ComponentRefVector::iterator itCRV;
-        for( itCRV = rv.begin() ; itCRV != rv.end() ; ++itCRV )
+        for (auto const& elem : rv)
         {
-            Reference< XComponent > xComponent( (*itCRV).get(), UNO_QUERY );
+            Reference< XComponent > xComponent( elem.get(), UNO_QUERY );
             if (xComponent.is())
                 xComponent->dispose();
         }
@@ -4639,8 +4637,8 @@ SbUnoStructRefObject::SbUnoStructRefObject( const OUString& aName_, const Struct
 
 SbUnoStructRefObject::~SbUnoStructRefObject()
 {
-    for ( StructFieldInfo::iterator it = maFields.begin(), it_end = maFields.end(); it != it_end; ++it )
-        delete it->second;
+    for (auto const& field : maFields)
+        delete field.second;
 }
 
 void SbUnoStructRefObject::initMemberCache()
@@ -4736,15 +4734,15 @@ void SbUnoStructRefObject::implCreateAll()
     if (!mbMemberCacheInit)
         initMemberCache();
 
-    for ( StructFieldInfo::iterator it = maFields.begin(), it_end = maFields.end(); it != it_end; ++it )
+    for (auto const& field : maFields)
     {
-        const OUString& rName = it->first;
+        const OUString& rName = field.first;
         SbxDataType eSbxType;
-        eSbxType = unoToSbxType( it->second->getTypeClass() );
+        eSbxType = unoToSbxType( field.second->getTypeClass() );
         SbxDataType eRealSbxType = eSbxType;
         Property aProp;
         aProp.Name = rName;
-        aProp.Type = css::uno::Type( it->second->getTypeClass(), it->second->getTypeName() );
+        aProp.Type = css::uno::Type( field.second->getTypeClass(), field.second->getTypeName() );
         SbUnoProperty* pProp = new SbUnoProperty( rName, eSbxType, eRealSbxType, aProp, 0, false, ( aProp.Type.getTypeClass() == css::uno::TypeClass_STRUCT) );
         SbxVariableRef xVarRef = pProp;
         QuickInsert( xVarRef.get() );

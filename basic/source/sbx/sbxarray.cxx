@@ -646,16 +646,15 @@ sal_uInt32 SbxDimArray::Offset32( const sal_Int32* pIdx )
 sal_uInt16 SbxDimArray::Offset( const short* pIdx )
 {
     long nPos = 0;
-    for( std::vector<SbxDim>::const_iterator it = m_vDimensions.begin();
-         it != m_vDimensions.end(); ++it )
+    for (auto const& vDimension : m_vDimensions)
     {
         short nIdx = *pIdx++;
-        if( nIdx < it->nLbound || nIdx > it->nUbound )
+        if( nIdx < vDimension.nLbound || nIdx > vDimension.nUbound )
         {
             nPos = SBX_MAXINDEX + 1;
             break;
         }
-        nPos = nPos * it->nSize + nIdx - it->nLbound;
+        nPos = nPos * vDimension.nSize + nIdx - vDimension.nLbound;
     }
     if( m_vDimensions.empty() || nPos > SBX_MAXINDEX )
     {
@@ -699,16 +698,17 @@ sal_uInt32 SbxDimArray::Offset32( SbxArray* pPar )
 #endif
     sal_uInt32 nPos = 0;
     sal_uInt16 nOff = 1;    // Non element 0!
-    for( std::vector<SbxDim>::const_iterator it = m_vDimensions.begin();
-         it != m_vDimensions.end() && !IsError(); ++it )
+    for (auto const& vDimension : m_vDimensions)
     {
         sal_Int32 nIdx = pPar->Get( nOff++ )->GetLong();
-        if( nIdx < it->nLbound || nIdx > it->nUbound )
+        if( nIdx < vDimension.nLbound || nIdx > vDimension.nUbound )
         {
             nPos = sal_uInt32(SBX_MAXINDEX32)+1;
             break;
         }
-        nPos = nPos * it->nSize + nIdx - it->nLbound;
+        nPos = nPos * vDimension.nSize + nIdx - vDimension.nLbound;
+        if (IsError())
+            break;
     }
     if( nPos > sal_uInt32(SBX_MAXINDEX32) )
     {

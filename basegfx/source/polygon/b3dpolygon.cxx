@@ -226,12 +226,9 @@ public:
 
     void transform(const ::basegfx::B3DHomMatrix& rMatrix)
     {
-        CoordinateData3DVector::iterator aStart(maVector.begin());
-        CoordinateData3DVector::iterator aEnd(maVector.end());
-
-        for(; aStart != aEnd; ++aStart)
+        for (auto & elem : maVector)
         {
-            aStart->transform(rMatrix);
+            elem.transform(rMatrix);
         }
     }
 };
@@ -532,11 +529,9 @@ public:
 
     void transform(const basegfx::B3DHomMatrix& rMatrix)
     {
-        const NormalsData3DVector::const_iterator aEnd(maVector.end());
-
-        for(NormalsData3DVector::iterator aStart(maVector.begin()); aStart != aEnd; ++aStart)
+        for (auto & elem : maVector)
         {
-            (*aStart) *= rMatrix;
+            elem *= rMatrix;
         }
     }
 };
@@ -689,11 +684,9 @@ public:
 
     void transform(const ::basegfx::B2DHomMatrix& rMatrix)
     {
-        const TextureData2DVector::const_iterator aEnd(maVector.end());
-
-        for(TextureData2DVector::iterator aStart(maVector.begin()); aStart != aEnd; ++aStart)
+        for (auto & elem : maVector)
         {
-            (*aStart) *= rMatrix;
+            elem *= rMatrix;
         }
     }
 };

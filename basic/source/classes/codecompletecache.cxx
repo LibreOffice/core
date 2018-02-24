@@ -100,18 +100,18 @@ void CodeCompleteOptions::SetAutoCorrectOn( bool b )
 std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache)
 {
     aStream << "Global variables" << std::endl;
-    for(CodeCompleteVarTypes::const_iterator aIt = aCache.aGlobalVars.begin(); aIt != aCache.aGlobalVars.end(); ++aIt )
+    for (auto const& globalVar : aCache.aGlobalVars)
     {
-        aStream << aIt->first << "," << aIt->second << std::endl;
+        aStream << globalVar.first << "," << globalVar.second << std::endl;
     }
     aStream << "Local variables" << std::endl;
-    for( CodeCompleteVarScopes::const_iterator aIt = aCache.aVarScopes.begin(); aIt != aCache.aVarScopes.end(); ++aIt )
+    for (auto const& varScope : aCache.aVarScopes)
     {
-        aStream << aIt->first << std::endl;
-        CodeCompleteVarTypes aVarTypes = aIt->second;
-        for( CodeCompleteVarTypes::const_iterator aOtherIt = aVarTypes.begin(); aOtherIt != aVarTypes.end(); ++aOtherIt )
+        aStream << varScope.first << std::endl;
+        CodeCompleteVarTypes aVarTypes = varScope.second;
+        for (auto const& varType : aVarTypes)
         {
-            aStream << "\t" << aOtherIt->first << "," << aOtherIt->second << std::endl;
+            aStream << "\t" << varType.first << "," << varType.second << std::endl;
         }
     }
     aStream << "-----------------" << std::endl;
@@ -148,44 +148,44 @@ void CodeCompleteDataCache::InsertLocalVar( const OUString& sProcName, const OUS
 
 OUString CodeCompleteDataCache::GetVarType( const OUString& sVarName ) const
 {
-    for( CodeCompleteVarScopes::const_iterator aIt = aVarScopes.begin(); aIt != aVarScopes.end(); ++aIt )
+    for (auto const& varScope : aVarScopes)
     {
-        CodeCompleteVarTypes aTypes = aIt->second;
-        for( CodeCompleteVarTypes::const_iterator aOtherIt = aTypes.begin(); aOtherIt != aTypes.end(); ++aOtherIt )
+        CodeCompleteVarTypes aTypes = varScope.second;
+        for (auto const& elem : aTypes)
         {
-            if( aOtherIt->first.equalsIgnoreAsciiCase( sVarName ) )
+            if( elem.first.equalsIgnoreAsciiCase( sVarName ) )
             {
-                return aOtherIt->second;
+                return elem.second;
             }
         }
     }
     //not a local, search global scope
-    for( CodeCompleteVarTypes::const_iterator aIt = aGlobalVars.begin(); aIt != aGlobalVars.end(); ++aIt )
+    for (auto const& globalVar : aGlobalVars)
     {
-        if( aIt->first.equalsIgnoreAsciiCase( sVarName ) )
-            return aIt->second;
+        if( globalVar.first.equalsIgnoreAsciiCase( sVarName ) )
+            return globalVar.second;
     }
     return OUString(); //not found
 }
 
 OUString CodeCompleteDataCache::GetCorrectCaseVarName( const OUString& sVarName, const OUString& sActProcName ) const
 {
-    for( CodeCompleteVarScopes::const_iterator aIt = aVarScopes.begin(); aIt != aVarScopes.end(); ++aIt )
+    for (auto const& varScope : aVarScopes)
     {
-        CodeCompleteVarTypes aTypes = aIt->second;
-        for( CodeCompleteVarTypes::const_iterator aOtherIt = aTypes.begin(); aOtherIt != aTypes.end(); ++aOtherIt )
+        CodeCompleteVarTypes aTypes = varScope.second;
+        for (auto const& elem : aTypes)
         {
-            if( aOtherIt->first.equalsIgnoreAsciiCase( sVarName ) && aIt->first.equalsIgnoreAsciiCase( sActProcName ) )
+            if( elem.first.equalsIgnoreAsciiCase( sVarName ) && varScope.first.equalsIgnoreAsciiCase( sActProcName ) )
             {
-                return aOtherIt->first;
+                return elem.first;
             }
         }
     }
     // search global scope
-    for( CodeCompleteVarTypes::const_iterator aIt = aGlobalVars.begin(); aIt != aGlobalVars.end(); ++aIt )
+    for (auto const& globalVar : aGlobalVars)
     {
-        if( aIt->first.equalsIgnoreAsciiCase( sVarName ) )
-            return aIt->first;
+        if( globalVar.first.equalsIgnoreAsciiCase( sVarName ) )
+            return globalVar.first;
     }
     return OUString(); //not found
 }

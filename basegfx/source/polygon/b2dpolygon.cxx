@@ -186,12 +186,9 @@ public:
 
     void transform(const basegfx::B2DHomMatrix& rMatrix)
     {
-        CoordinateData2DVector::iterator aStart(maVector.begin());
-        CoordinateData2DVector::iterator aEnd(maVector.end());
-
-        for(; aStart != aEnd; ++aStart)
+        for (auto & elem : maVector)
         {
-            aStart->transform(rMatrix);
+            elem.transform(rMatrix);
         }
     }
 };
