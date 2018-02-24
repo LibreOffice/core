@@ -1567,7 +1567,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
                 aCurPos = pFly->getFrameArea().Pos();
             }
             else
-                aCurPos = pObj->GetCurrentBoundRect().TopLeft();
+                aCurPos = pObj->GetSnapRect().TopLeft();
 
             // Special case if another object is on same Y.
             if( aCurPos != aPos &&          // only when it is not me
