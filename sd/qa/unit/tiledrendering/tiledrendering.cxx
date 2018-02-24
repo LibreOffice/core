@@ -2216,11 +2216,6 @@ void SdTiledRenderingTest::testCutSelectionChange()
 
     // Selection is removed
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), m_aSelection.size());
-
-    utl::TempFile* pNewTempFile(new utl::TempFile);
-    FileFormat* pFormat = getFormat(ODP);
-    save(pXImpressDocument->GetDocShell(), pFormat, *pNewTempFile);
-
     comphelper::LibreOfficeKit::setActive(false);
 }
 
