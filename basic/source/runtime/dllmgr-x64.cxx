@@ -603,15 +603,13 @@ ErrCode call(
         arguments->Get(i)->ResetFlag(SbxFlagBits::Reference);
             //TODO: skipped for errors?!?
     }
-    for (std::vector< UnmarshalData >::iterator i(data.unmarshal.begin());
-         i != data.unmarshal.end(); ++i)
+    for (auto const& elem : data.unmarshal)
     {
-        unmarshal(i->variable, i->buffer);
+        unmarshal(elem.variable, elem.buffer);
     }
-    for (std::vector< StringData >::iterator i(data.unmarshalStrings.begin());
-         i != data.unmarshalStrings.end(); ++i)
+    for (auto const& unmarshalString : data.unmarshalStrings)
     {
-        ErrCode e = unmarshalString(*i, result);
+        ErrCode e = unmarshalString(unmarshalString, result);
         if (e != ERRCODE_NONE) {
             return e;
         }

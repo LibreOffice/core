@@ -1204,10 +1204,9 @@ void StarBASIC::InitAllModules( StarBASIC const * pBasicNotToInit )
         }
     }
 
-    ModuleInitDependencyMap::iterator it;
-    for( it = aMIDMap.begin() ; it != aMIDMap.end(); ++it )
+    for (auto & elem : aMIDMap)
     {
-        ClassModuleRunInitItem& rItem = it->second;
+        ClassModuleRunInitItem& rItem = elem.second;
         SbModule::implProcessModuleRunInit( aMIDMap, rItem );
     }
 
@@ -1936,10 +1935,9 @@ Reference< frame::XModel > StarBASIC::GetModelFromBasic( SbxObject* pBasic )
 void StarBASIC::DetachAllDocBasicItems()
 {
     std::unordered_map< const StarBASIC *, DocBasicItemRef >& rItems = GaDocBasicItems::get();
-    auto it = rItems.begin(), itEnd = rItems.end();
-    for (; it != itEnd; ++it)
+    for (auto const& item : rItems)
     {
-        DocBasicItemRef xItem = it->second;
+        DocBasicItemRef xItem = item.second;
         xItem->setDisposed(true);
     }
 }

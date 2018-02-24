@@ -138,20 +138,19 @@ void Coverage::Coverage_Iterator()
     process_directory(sDirName); // any files in the root test dir are run in test harness default locale ( en-US )
     std::vector< OUString > sLangDirs = get_subdirnames( sDirName );
 
-    for ( std::vector< OUString >::iterator it = sLangDirs.begin(), it_end = sLangDirs.end(); it != it_end; ++it )
+    for (auto const& langDir : sLangDirs)
     {
-        OUString sDir( *it );
-        sal_Int32 nSlash = (*it).lastIndexOf('/');
+        sal_Int32 nSlash = langDir.lastIndexOf('/');
         if ( nSlash != -1 )
         {
-            OUString sLangISO = sDir.copy( nSlash + 1 );
+            OUString sLangISO = langDir.copy( nSlash + 1 );
             LanguageTag aLocale( sLangISO );
             if ( aLocale.isValidBcp47() )
             {
                 SvtSysLocaleOptions aLocalOptions;
                 // set locale for test dir
                 aLocalOptions.SetLocaleConfigString( sLangISO );
-                process_directory(sDir);
+                process_directory(langDir);
             }
         }
     }
