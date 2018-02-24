@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_cad06a56",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-24T00:01:43Z",
+      "side": 1,
+      "message": "Why is the command name ScalingName but the text just \"Scale\"?",
+      "revId": "33b8a649dbd3ab76e610ed65c58e783326fef4f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_ead36e5d",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-24T00:01:43Z",
+      "side": 1,
+      "message": "Why is the command name ScalingValue but the text \"Scale Level\"?",
+      "revId": "33b8a649dbd3ab76e610ed65c58e783326fef4f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_0acb62a6",
+        "filename": "sc/inc/sc.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-24T00:01:43Z",
+      "side": 1,
+      "message": "Please keep the order of values, not jumping 11,9,12\nThe next values should be 10,11, shouldn\u0027t it?",
+      "revId": "33b8a649dbd3ab76e610ed65c58e783326fef4f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_0a428210",
+        "filename": "sc/sdi/scalc.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 5905,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-24T00:01:43Z",
+      "side": 1,
+      "message": "Probably should be SfxUInt16Item instead.",
+      "range": {
+        "startLine": 5905,
+        "startChar": 0,
+        "endLine": 5905,
+        "endChar": 17
+      },
+      "revId": "33b8a649dbd3ab76e610ed65c58e783326fef4f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_ca378aae",
+        "filename": "sc/source/ui/view/prevwsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-24T00:01:43Z",
+      "side": 1,
+      "message": "It\u0027s unnecessary to add this here if there\u0027s no code for it. It\u0027s caught by the empty default case below.",
+      "revId": "33b8a649dbd3ab76e610ed65c58e783326fef4f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa31d9ce_ea3a8e97",
+        "filename": "sc/source/ui/view/prevwsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-02-24T00:01:43Z",
+      "side": 1,
+      "message": "The slot is defined in sc/sdi/scalc.sdi as holding a SvxZoomSliderItem, not a SfxStringItem. But if it is to transport a sal_uInt16 number then it should be a SfxUInt16Item instead.",
+      "revId": "33b8a649dbd3ab76e610ed65c58e783326fef4f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
