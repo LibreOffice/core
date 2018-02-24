@@ -1461,6 +1461,9 @@ void ImpEditView::DeleteSelected()
     pEditEngine->pImpEditEngine->UndoActionEnd();
 
     SetEditSelection( EditSelection( aPaM, aPaM ) );
+
+    DrawSelectionXOR();
+
     pEditEngine->pImpEditEngine->FormatAndUpdate( GetEditViewPtr() );
     ShowCursor( DoAutoScroll(), true );
 }
