@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa31d9ce_2aebc6b1",
+        "filename": "vcl/inc/osx/salframe.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-02-24T09:41:32Z",
+      "side": 1,
+      "message": "Do we miss some tweak to the constructor to initialize all of these new variables ? particularly this one to 0 ?",
+      "revId": "b0b912df502324b5dd272f8be9e4f6f147a7c8a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
