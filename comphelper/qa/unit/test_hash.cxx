@@ -111,8 +111,8 @@ void TestHash::testSHA512_saltspin()
     const OUString aPass("pwd");
     const OUString aAlgo("SHA-512");
     const OUString aSalt("876MLoKTq42+/DLp415iZQ==");
-    const OUString aHash = comphelper::Hash::calculateHash( aPass, aSalt, 100000, aAlgo);
-    OUString aStr("5l3mgNHXpWiFaBPv5Yso1Xd/UifWvQWmlDnl/hsCYbFT2sJCzorjRmBCQ/3qeDu6Q/4+GIE8a1DsdaTwYh1q2g==");
+    const OUString aHash = comphelper::Hash::calculateHashBase64( aPass, aSalt, 100000, aAlgo);
+    const OUString aStr("5l3mgNHXpWiFaBPv5Yso1Xd/UifWvQWmlDnl/hsCYbFT2sJCzorjRmBCQ/3qeDu6Q/4+GIE8a1DsdaTwYh1q2g==");
     CPPUNIT_ASSERT_EQUAL(aStr, aHash);
 }
 
