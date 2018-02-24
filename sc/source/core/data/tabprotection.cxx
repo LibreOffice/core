@@ -209,7 +209,7 @@ bool ScTableProtectionImpl::isProtectedWithPass() const
     if (!mbProtected)
         return false;
 
-    return !maPassText.isEmpty() || maPassHash.getLength();
+    return !maPassText.isEmpty() || maPassHash.getLength() || maPasswordHash.hasPassword();
 }
 
 void ScTableProtectionImpl::setProtected(bool bProtected)
@@ -232,6 +232,7 @@ void ScTableProtectionImpl::setPassword(const OUString& aPassText)
     {
         maPassHash = Sequence<sal_Int8>();
     }
+    maPasswordHash.clear();
 }
 
 bool ScTableProtectionImpl::hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2) const
