@@ -611,6 +611,7 @@ Size ScModelObj::getDocumentSize()
     return aSize;
 }
 
+
 void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
@@ -619,21 +620,22 @@ void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     if (!pWindow)
         return;
 
-    if (!pWindow->HasFocus())
-        pWindow->GrabFocus();
-    KeyEvent aEvent(nCharCode, nKeyCode, 0);
+    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
+    pLOKEv->mpWindow = pWindow;
     switch (nType)
     {
     case LOK_KEYEVENT_KEYINPUT:
-        Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, pWindow, &aEvent);
+        pLOKEv->mnEvent = VCLEVENT_WINDOW_KEYINPUT;
         break;
     case LOK_KEYEVENT_KEYUP:
-        Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, pWindow, &aEvent);
+        pLOKEv->mnEvent = VCLEVENT_WINDOW_KEYUP;
         break;
     default:
         assert(false);
-        break;
     }
+
+    pLOKEv->maKeyEvent = KeyEvent(nCharCode, nKeyCode, 0);
+    Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
 }
 
 void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
@@ -668,34 +670,29 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
             return;
     }
 
-
-    // Calc operates in pixels...
-    Point aPos(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY());
-    MouseEvent aEvent(aPos, nCount,
-            MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
-
+    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
+    pLOKEv->mpWindow = pGridWindow;
     switch (nType)
     {
     case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
-        Application::PostMouseEvent(VCLEVENT_WINDOW_MOUSEBUTTONDOWN, pGridWindow, &aEvent);
-
-        // Invoke the context menu
-        if (nButtons & MOUSE_RIGHT)
-        {
-            const CommandEvent aCEvt(aPos, CommandEventId::ContextMenu, true, nullptr);
-            pGridWindow->Command(aCEvt);
-        }
+        pLOKEv->mnEvent = VCLEVENT_WINDOW_MOUSEBUTTONDOWN;
         break;
     case LOK_MOUSEEVENT_MOUSEBUTTONUP:
-        Application::PostMouseEvent(VCLEVENT_WINDOW_MOUSEBUTTONUP, pGridWindow, &aEvent);
+        pLOKEv->mnEvent = VCLEVENT_WINDOW_MOUSEBUTTONUP;
         break;
     case LOK_MOUSEEVENT_MOUSEMOVE:
-        Application::PostMouseEvent(VCLEVENT_WINDOW_MOUSEMOVE, pGridWindow, &aEvent);
+        pLOKEv->mnEvent = VCLEVENT_WINDOW_MOUSEMOVE;
         break;
     default:
         assert(false);
-        break;
     }
+
+    // Calc operates in pixels...
+    const Point aPos(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY());
+    pLOKEv->maMouseEvent = MouseEvent(aPos, nCount,
+                                      MouseEventModifiers::SIMPLECLICK,
+                                      nButtons, nModifier);
+    Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
 }
 
 void ScModelObj::setTextSelection(int nType, int nX, int nY)
