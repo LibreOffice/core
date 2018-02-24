@@ -340,7 +340,6 @@ void HelpTextWindow::SetHelpText( const OUString& rHelpText )
     }
     else // HELPWINSTYLE_BALLOON
     {
-        Point       aTmpPoint;
         sal_Int32 nCharsInLine = 35 + ((maHelpText.getLength()/100)*5);
         // average width to have all windows consistent
         OUStringBuffer aBuf;
@@ -348,7 +347,7 @@ void HelpTextWindow::SetHelpText( const OUString& rHelpText )
         OUString aXXX = aBuf.makeStringAndClear();
         long nWidth = GetTextWidth( aXXX );
         Size aTmpSize( nWidth, 0x7FFFFFFF );
-        tools::Rectangle aTry1( aTmpPoint, aTmpSize );
+        tools::Rectangle aTry1( Point(), aTmpSize );
         DrawTextFlags nDrawFlags = DrawTextFlags::MultiLine | DrawTextFlags::WordBreak |
                             DrawTextFlags::Left | DrawTextFlags::Top;
         if ( mnStyle & QuickHelpFlags::CtrlText )

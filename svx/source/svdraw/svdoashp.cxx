@@ -2957,13 +2957,12 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     }
 
     // build and set BaseRect (use scale)
-    Point aPoint;
     Size aSize(FRound(aScale.getX()), FRound(aScale.getY()));
     // fdo#47434 We need a valid rectangle here
     if( !aSize.Height() ) aSize.setHeight( 1 );
     if( !aSize.Width() ) aSize.setWidth( 1 );
 
-    tools::Rectangle aBaseRect(aPoint, aSize);
+    tools::Rectangle aBaseRect(Point(), aSize);
     SetSnapRect(aBaseRect);
 
     // shear?

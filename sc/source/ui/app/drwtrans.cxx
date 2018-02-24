@@ -744,8 +744,7 @@ void ScDrawTransferObj::InitDocShell()
             }
         }
 
-        Point aTmpPoint;
-        tools::Rectangle aDestArea( aTmpPoint, aSrcSize );
+        tools::Rectangle aDestArea( Point(), aSrcSize );
         pDocSh->SetVisArea( aDestArea );
 
         ScViewOptions aViewOpt( rDestDoc.GetViewOptions() );

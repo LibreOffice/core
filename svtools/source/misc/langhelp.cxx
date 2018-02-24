@@ -115,7 +115,7 @@ OUString getInstalledLocaleForSystemUILanguage(const css::uno::Sequence<OUString
         {
             // Get the list of langpacks that this build was configured to include
             std::vector<OUString> aPackages;
-            OUString sAvailableLocales(WITH_LANG);
+            OUString const sAvailableLocales(WITH_LANG);
             std::vector<OUString> aAvailable;
             sal_Int32 nIndex = 0;
             do

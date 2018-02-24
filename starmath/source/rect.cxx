@@ -73,9 +73,8 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
     pGlyphDev->SetFont(aFnt);
 
     long nTextWidth = rDev.GetTextWidth(rText);
-    Point aPoint;
-    tools::Rectangle   aResult (aPoint, Size(nTextWidth, rDev.GetTextHeight())),
-                aTmp;
+    tools::Rectangle   aResult (Point(), Size(nTextWidth, rDev.GetTextHeight())),
+                       aTmp;
 
     bool bSuccess = pGlyphDev->GetTextBoundRect(aTmp, rText);
     OSL_ENSURE( bSuccess, "GetTextBoundRect failed" );

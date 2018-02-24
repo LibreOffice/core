@@ -507,8 +507,7 @@ void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext)
     Size aWndSize(GetSizePixel());
     vcl::Font aFont(aVD->GetFont());
     Color aBackCol(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
-    Point aTmpPoint;
-    tools::Rectangle aRect(aTmpPoint, aWndSize);
+    tools::Rectangle aRect(Point(), aWndSize);
 
     aFont.SetTransparent( true );
     aVD->SetFont(aFont);

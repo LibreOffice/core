@@ -1783,8 +1783,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
 
         rFlySet.Put( aShadow );
     }
-    Color Temp(COL_WHITE);
-    SvxBrushItem aBrushItem(Temp, RES_BACKGROUND);
+    SvxBrushItem aBrushItem(COL_WHITE, RES_BACKGROUND);
     bool bBrushItemOk = false;
     sal_uInt8 nTrans = 0;
 

@@ -1088,11 +1088,10 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
 
     // Convert vector into a uno::Sequence
     // TODO/LATER: use Default entries in future
-    uno::Sequence< beans::StringPair > aDefaultsSequence(aManList.size());
+    uno::Sequence< beans::StringPair > aDefaultsSequence(1);
     // Add at least the application/xml default entry.
     aDefaultsSequence[0].First = "xml";
     aDefaultsSequence[0].Second= "application/xml";
-    sal_Int32 nDefSeqLength = 1;
 
     uno::Sequence< beans::StringPair > aOverridesSequence(aManList.size());
     sal_Int32 nOverSeqLength = 0;
@@ -1117,7 +1116,6 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
         }
     }
     aOverridesSequence.realloc(nOverSeqLength);
-    aDefaultsSequence.realloc(nDefSeqLength);
 
     ::comphelper::OFOPXMLHelper::WriteContentSequence(
             xConTypeOutStream, aDefaultsSequence, aOverridesSequence, m_xContext );

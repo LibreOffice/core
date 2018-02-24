@@ -122,9 +122,8 @@ int ToolBox::ImplGetDragWidth( const vcl::RenderContext& rRenderContext, bool bH
     {
 
         ImplControlValue aControlValue;
-        Point aPoint;
         tools::Rectangle aContent, aBound;
-        tools::Rectangle aArea( aPoint, rRenderContext.GetOutputSizePixel() );
+        tools::Rectangle aArea( Point(), rRenderContext.GetOutputSizePixel() );
 
         if ( rRenderContext.GetNativeControlRegion(ControlType::Toolbar,
                 bHorz ? ControlPart::ThumbVert : ControlPart::ThumbHorz,
@@ -248,8 +247,7 @@ void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext,
         ToolbarValue aToolbarValue;
         aToolbarValue.maGripRect = aDragArea;
 
-        Point aPt;
-        tools::Rectangle aCtrlRegion(aPt, aSz);
+        tools::Rectangle aCtrlRegion(Point(), aSz);
 
         bNativeOk = rRenderContext.DrawNativeControl( ControlType::Toolbar, ePart,
                                         aCtrlRegion, ControlState::ENABLED, aToolbarValue, OUString() );
@@ -430,8 +428,7 @@ void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext)
 bool ToolBox::ImplDrawNativeBackground(vcl::RenderContext& rRenderContext)
 {
     // use NWF
-    Point aPt;
-    tools::Rectangle aCtrlRegion(aPt, GetOutputSizePixel());
+    tools::Rectangle aCtrlRegion(Point(), GetOutputSizePixel());
 
     return rRenderContext.DrawNativeControl( ControlType::Toolbar, mbHorz ? ControlPart::DrawBackgroundHorz : ControlPart::DrawBackgroundVert,
                                     aCtrlRegion, ControlState::ENABLED, ImplControlValue(), OUString() );

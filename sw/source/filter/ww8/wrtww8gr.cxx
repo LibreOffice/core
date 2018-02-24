@@ -131,17 +131,15 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
     {
         // bGraphicNeeded set to true is right / fixes #i51670#.
         bGraphicNeeded = true;
-        Point aTmpPoint;
-        tools::Rectangle aRect( aTmpPoint, Size( nX, nY ) );
+        tools::Rectangle aRect( Point(), Size( nX, nY ) );
         Graphic aGraph(aWMF);
 
         ErrCode nErr = ERRCODE_NONE;
-        tools::Rectangle aVisArea;
         sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
         if ( pOLENd )
             nAspect = pOLENd->GetAspect();
         SdrOle2Obj *pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-            rStorageName,xObjStg,m_pDoc->GetDocStorage(),aGraph,aRect,aVisArea,nullptr,nErr,0,nAspect, m_pWriter->GetBaseURL());
+            rStorageName,xObjStg,m_pDoc->GetDocStorage(),aGraph,aRect,tools::Rectangle(),nullptr,nErr,0,nAspect, m_pWriter->GetBaseURL());
 
         if (pRet)
         {

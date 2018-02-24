@@ -1007,8 +1007,7 @@ bool PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
     basegfx::B2DPolygon aSize(tools::Polygon(tools::Rectangle(Point(0, 0), rMtf.GetPrefSize())).getB2DPolygon());
     basegfx::B2DPolygon aSizePDF(OutputDevice::LogicToLogic(aSize, rMtf.GetPrefMapMode(), MapMode(MapUnit::MapPoint)));
     basegfx::B2DRange aRangePDF(aSizePDF.getB2DRange());
-    Point           aOrigin;
-    tools::Rectangle       aPageRect( aOrigin, rMtf.GetPrefSize() );
+    tools::Rectangle       aPageRect( Point(), rMtf.GetPrefSize() );
 
     rWriter.NewPage( aRangePDF.getWidth(), aRangePDF.getHeight() );
     rWriter.SetMapMode( rMtf.GetPrefMapMode() );

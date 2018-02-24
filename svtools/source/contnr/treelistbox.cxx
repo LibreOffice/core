@@ -3472,8 +3472,7 @@ void SvTreeListBox::EnableAsyncDrag( bool b )
 
 SvTreeListEntry* SvTreeListBox::GetFirstEntryInView() const
 {
-    Point aPos;
-    return GetEntry( aPos );
+    return GetEntry( Point() );
 }
 
 SvTreeListEntry* SvTreeListBox::GetNextEntryInView(SvTreeListEntry* pEntry ) const

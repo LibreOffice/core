@@ -1648,7 +1648,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
             case SfxHintId::RedlineChanged:
                 {
-                    sal_uInt16 aSlotRedLine[] = {
+                    static sal_uInt16 const aSlotRedLine[] = {
                         FN_REDLINE_NEXT_CHANGE,
                         FN_REDLINE_PREV_CHANGE,
                         FN_REDLINE_ACCEPT_DIRECT,

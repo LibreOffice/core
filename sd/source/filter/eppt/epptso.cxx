@@ -828,8 +828,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 {
                     case css::drawing::FillStyle_GRADIENT :
                     {
-                        Point aEmptyPoint;
-                        ::tools::Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
+                        ::tools::Rectangle aRect( Point(), Size( 28000, 21000 ) );
                         EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
                         aPropOpt.CreateGradientProperties( mXPropSet );
                         aPropOpt.GetOpt( ESCHER_Prop_fillColor, nBackgroundColor );
@@ -851,8 +850,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                         {
                             case css::drawing::FillStyle_GRADIENT :
                             {
-                                Point aEmptyPoint;
-                                ::tools::Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
+                                ::tools::Rectangle aRect( Point(), Size( 28000, 21000 ) );
                                 EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
                                 aPropOpt.CreateGradientProperties( mXBackgroundPropSet );
                                 aPropOpt.GetOpt( ESCHER_Prop_fillColor, nBackgroundColor );

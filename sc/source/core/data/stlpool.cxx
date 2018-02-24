@@ -214,7 +214,6 @@ void ScStyleSheetPool::CreateStandardStyles()
     //  Add new entries even for CopyStdStylesFrom
 
     Color           aColBlack   ( COL_BLACK );
-    Color           aColGrey    ( COL_LIGHTGRAY );
     OUString        aStr;
     sal_Int32       nStrLen;
     OUString        aHelpFile;//which text???
@@ -338,7 +337,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     pHFSetItem = new SvxSetItem( pSet->Get( ATTR_PAGE_HEADERSET ) );
     pHFSet = &(pHFSetItem->GetItemSet());
 
-    pHFSet->Put( SvxBrushItem( aColGrey, ATTR_BACKGROUND ) );
+    pHFSet->Put( SvxBrushItem( COL_LIGHTGRAY, ATTR_BACKGROUND ) );
     pHFSet->Put( aBoxItem );
     pHFSet->Put( aBoxInfoItem );
     pHFSetItem->SetWhich(ATTR_PAGE_HEADERSET);

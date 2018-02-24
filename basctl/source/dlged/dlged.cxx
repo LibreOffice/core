@@ -472,8 +472,7 @@ void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     aPaintRect = rRect;
     mnPaintGuard++;
 
-    Size aMacSize;
-    if (bFirstDraw && rWindow.IsVisible() && (rRenderContext.GetOutputSize() != aMacSize))
+    if (bFirstDraw && rWindow.IsVisible() && (rRenderContext.GetOutputSize() != Size()))
     {
         bFirstDraw = false;
 

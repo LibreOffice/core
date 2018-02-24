@@ -220,7 +220,7 @@ void Calendar::ImplFormat()
         if ( (aOutSize.Width() <= 1) || (aOutSize.Height() <= 1) )
             return;
 
-        OUString a99Text("99");
+        OUString const a99Text("99");
 
         vcl::Font aOldFont = GetFont();
 
@@ -1577,7 +1577,7 @@ void Calendar::EndSelection()
 
 Size Calendar::CalcWindowSizePixel() const
 {
-    OUString  a99Text("99");
+    OUString  const a99Text("99");
     vcl::Font aOldFont = GetFont();
 
     Size    aSize;

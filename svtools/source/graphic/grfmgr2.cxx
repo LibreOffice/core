@@ -921,8 +921,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
         // calculate output sizes
         if( !pBmpEx )
         {
-            Point       aPt;
-            tools::Rectangle   aOutRect( aPt, pOutputDevice->GetOutputSizePixel() );
+            tools::Rectangle   aOutRect( Point(), pOutputDevice->GetOutputSizePixel() );
             tools::Rectangle   aBmpRect( aOutputPointPix, aOutputSizePix );
 
             if( pOutputDevice->GetOutDevType() == OUTDEV_WINDOW )

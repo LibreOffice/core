@@ -193,8 +193,7 @@ void SwWriteTable::MergeBorders( const SvxBorderLine* pBorderLine,
 {
     if( sal_uInt32(-1) == m_nBorderColor )
     {
-        Color aGrayColor( COL_GRAY );
-        if( !pBorderLine->GetColor().IsRGBEqual( aGrayColor ) )
+        if( !pBorderLine->GetColor().IsRGBEqual( COL_GRAY ) )
             m_nBorderColor = pBorderLine->GetColor().GetColor();
     }
 

@@ -2714,8 +2714,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
     if( !!rBmpEx )
     {
         BitmapEx aBmpEx( rBmpEx );
-        Point    aPoint;
-        const tools::Rectangle aBmpRect( aPoint, rBmpEx.GetSizePixel() );
+        const tools::Rectangle aBmpRect( Point(), rBmpEx.GetSizePixel() );
         const tools::Rectangle aSrcRect( rSrcPt, rSrcSz );
 
         if( aSrcRect != aBmpRect )

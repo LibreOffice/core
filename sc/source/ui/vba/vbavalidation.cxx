@@ -301,7 +301,6 @@ ScVbaValidation::getFormula1()
 
     ScRefFlags nFlags = ScRefFlags::ZERO;
     ScRangeList aCellRanges;
-    formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1;
 
     ScDocShell* pDocSh = excel::GetDocShellFromRange( m_xRange );
     // in calc validation formula is either a range or formula
@@ -309,7 +308,7 @@ ScVbaValidation::getFormula1()
     // In VBA both formula and address can have a leading '='
     // in result of getFormula1, however it *seems* that a named range or
     // real formula has to (or is expected to) have the '='
-    if ( pDocSh && !ScVbaRange::getCellRangesForAddress(  nFlags, sString, pDocSh, aCellRanges, eConv, 0 ) )
+    if ( pDocSh && !ScVbaRange::getCellRangesForAddress(  nFlags, sString, pDocSh, aCellRanges, formula::FormulaGrammar::CONV_XL_A1, 0 ) )
         sString = "=" + sString;
     return sString;
 }

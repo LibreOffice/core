@@ -182,8 +182,7 @@ void IMapWindow::SetTargetList( TargetList& rTargetList )
 
 SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
 {
-    Point       aPoint;
-    tools::Rectangle   aClipRect( aPoint, GetGraphicSize() );
+    tools::Rectangle   aClipRect( Point(), GetGraphicSize() );
     SdrObject*  pSdrObj = nullptr;
     IMapObjectPtr pCloneIMapObj;
 

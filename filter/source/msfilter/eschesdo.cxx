@@ -196,8 +196,6 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             }
         }
 
-        Point aTextRefPoint;
-
         if( rObj.GetType() == "drawing.Group" )
         {
             Reference< XIndexAccess > xXIndexAccess( rObj.GetShapeRef(), UNO_QUERY );
@@ -700,7 +698,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         if( bAdditionalText )
         {
             mpEscherEx->EndShape( nShapeType, nShapeID );
-            ImplWriteAdditionalText( rObj, aTextRefPoint );
+            ImplWriteAdditionalText( rObj, Point() );
         }
 
     } while ( false );
