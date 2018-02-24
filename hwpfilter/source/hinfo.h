@@ -292,7 +292,7 @@ struct ParaShape
     unsigned char condense;
     unsigned char arrange_type;
     TabSet    tabs[MAXTABS];
-    ColumnDef coldef;
+    std::shared_ptr<ColumnDef> xColdef;
     unsigned char shade;
     unsigned char outline;
     unsigned char outline_continue;
