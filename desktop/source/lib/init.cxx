@@ -3406,7 +3406,7 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
 
             if (*pFontWidth > 0 && *pFontHeight > 0)
             {
-                DrawTextFlags nStyle =
+                DrawTextFlags const nStyle =
                         DrawTextFlags::Center
                         | DrawTextFlags::VCenter
                         | DrawTextFlags::MultiLine

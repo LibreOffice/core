@@ -102,8 +102,7 @@ void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPr
     if (!pDoc)
         return;
 
-    Point aPoint;
-    tools::Rectangle aBound( aPoint, pDev->GetOutputSize() );      //! use size from clip area?
+    tools::Rectangle aBound( Point(), pDev->GetOutputSize() );      //! use size from clip area?
 
     ScViewData aViewData(nullptr,nullptr);
     aViewData.InitData( pDoc );

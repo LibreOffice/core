@@ -265,9 +265,8 @@ bool ScPreviewViewForwarder::IsValid() const
 
 tools::Rectangle ScPreviewViewForwarder::GetVisArea() const
 {
-    tools::Rectangle aVisArea;
     OSL_FAIL("should be implemented in an abrevated class");
-    return aVisArea;
+    return tools::Rectangle();
 }
 
 Point ScPreviewViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
@@ -325,8 +324,7 @@ tools::Rectangle ScPreviewViewForwarder::GetVisRect() const
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if ( pWindow )
             aOutputSize = pWindow->GetOutputSizePixel();
-        Point aPoint;
-        tools::Rectangle aVisRect( aPoint, aOutputSize );
+        tools::Rectangle aVisRect( Point(), aOutputSize );
         return aVisRect;
     }
     return tools::Rectangle();
@@ -1274,8 +1272,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
             vcl::Window* pWindow = mpViewShell->GetWindow();
             if ( pWindow )
                 aOutputSize = pWindow->GetOutputSizePixel();
-            Point aPoint;
-            tools::Rectangle aVisRect( aPoint, aOutputSize );
+            tools::Rectangle aVisRect( Point(), aOutputSize );
             Size aSize(mpViewShell->GetLocationData().GetHeaderCellOutputRect(aVisRect, aCellPos, mbColHeader).GetSize());
             if (pWindow)
                 aSize = pWindow->PixelToLogic(aSize, pEditEngine->GetRefMapMode());
@@ -1501,8 +1498,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
             vcl::Window* pWindow = mpViewShell->GetWindow();
             if ( pWindow )
                 aOutputSize = pWindow->GetOutputSizePixel();
-            Point aPoint;
-            tools::Rectangle aVisRect( aPoint, aOutputSize );
+            tools::Rectangle aVisRect( Point(), aOutputSize );
             Size aSize(mpViewShell->GetLocationData().GetNoteInRangeOutputRect(aVisRect, mbMarkNote, maCellPos).GetSize());
             if (pWindow)
                 aSize = pWindow->PixelToLogic(aSize, mpEditEngine->GetRefMapMode());

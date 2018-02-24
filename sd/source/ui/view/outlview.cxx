@@ -113,8 +113,7 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
     }
 
     mpOutlinerView[0] = new OutlinerView(&mrOutliner, pWindow);
-    ::tools::Rectangle aNullRect;
-    mpOutlinerView[0]->SetOutputArea(aNullRect);
+    mpOutlinerView[0]->SetOutputArea(::tools::Rectangle());
     mrOutliner.SetUpdateMode(false);
     mrOutliner.InsertView(mpOutlinerView[0], EE_APPEND);
 

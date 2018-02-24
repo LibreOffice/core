@@ -739,8 +739,7 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, c
         nFlags |= DrawFrameFlags::WindowBorder;
 
     DecorationView aDecoView(&rRenderContext);
-    Point aTmpPoint;
-    tools::Rectangle aInRect(aTmpPoint, Size(mnWidth, mnHeight));
+    tools::Rectangle aInRect(Point(), Size(mnWidth, mnHeight));
     aDecoView.DrawFrame(aInRect, nStyle, nFlags);
 }
 

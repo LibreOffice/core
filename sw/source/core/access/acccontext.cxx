@@ -1369,9 +1369,8 @@ bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
     {
         if( pFEShell )
         {
-            Point aDummy;
             sal_uInt8 nFlags = bAdd ? SW_ADD_SELECT : 0;
-            pFEShell->SelectObj( aDummy, nFlags, pObj );
+            pFEShell->SelectObj( Point(), nFlags, pObj );
             bRet = true;
         }
     }

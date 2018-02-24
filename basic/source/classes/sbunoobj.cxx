@@ -647,8 +647,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                     SbxDimArray* pArray = nullptr;
                     Sequence< sal_Int32 > indices;
                     Sequence< sal_Int32 > sizes;
-                    sal_Int32 dimension = 0;
-                    implSequenceToMultiDimArray( pArray, indices, sizes, aWrap.Array, dimension, aWrap.IsZeroIndex, nullptr );
+                    implSequenceToMultiDimArray( pArray, indices, sizes, aWrap.Array, /*dimension*/0, aWrap.IsZeroIndex, nullptr );
                     if ( pArray )
                     {
                         SbxDimArrayRef xArray = pArray;

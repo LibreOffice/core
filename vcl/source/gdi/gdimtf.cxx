@@ -2828,9 +2828,8 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, BmpConversion eColorConve
         Size aAntialias(aDrawSize.Width() * 4, aDrawSize.Height() * 4);
 
         // draw metafile into VDev
-        Point aBackPosPix;
         const_cast<GDIMetaFile *>(this)->WindStart();
-        const_cast<GDIMetaFile *>(this)->Play(aVDev.get(), aBackPosPix, aAntialias);
+        const_cast<GDIMetaFile *>(this)->Play(aVDev.get(), Point(), aAntialias);
 
         // get paint bitmap
         Bitmap aBitmap( aVDev->GetBitmap( aNullPt, aVDev->GetOutputSizePixel() ) );

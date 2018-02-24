@@ -636,8 +636,7 @@ void ScAccessiblePreviewTable::FillTableInfo() const
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if ( pWindow )
             aOutputSize = pWindow->GetOutputSizePixel();
-        Point aPoint;
-        tools::Rectangle aVisRect( aPoint, aOutputSize );
+        tools::Rectangle aVisRect( Point(), aOutputSize );
 
         mpTableInfo = new ScPreviewTableInfo;
         mpViewShell->GetLocationData().GetTableInfo( aVisRect, *mpTableInfo );

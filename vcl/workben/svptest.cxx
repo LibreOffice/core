@@ -252,14 +252,14 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
                               Size( 3000,3000 ),
                               m_aBitmap);
 
-    Color aWhite(0xff, 0xff, 0xff);
-    Color aBlack(0, 0, 0);
-    Color aLightRed(0xff, 0, 0);
-    Color aDarkRed(0x40, 0, 0);
-    Color aLightBlue(0, 0, 0xff);
-    Color aDarkBlue(0,0,0x40);
-    Color aLightGreen(0, 0xff, 0);
-    Color aDarkGreen(0, 0x40, 0);
+    Color const aWhite(0xff, 0xff, 0xff);
+    Color const aBlack(0, 0, 0);
+    Color const aLightRed(0xff, 0, 0);
+    Color const aDarkRed(0x40, 0, 0);
+    Color const aLightBlue(0, 0, 0xff);
+    Color const aDarkBlue(0,0,0x40);
+    Color const aLightGreen(0, 0xff, 0);
+    Color const aDarkGreen(0, 0x40, 0);
 
     Gradient aGradient(GradientStyle::Linear, aBlack, aWhite);
     aGradient.SetAngle(900);

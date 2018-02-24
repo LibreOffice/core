@@ -305,7 +305,7 @@ bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     nMemberId &= ~CONVERT_TWIPS;
 
     OUString aName;
-    OUString aURL;
+    OUString const aURL;
     css::uno::Reference< css::awt::XBitmap > xBmp;
     css::uno::Reference< css::graphic::XGraphic > xGraphic;
 

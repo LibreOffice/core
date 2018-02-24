@@ -69,8 +69,7 @@ Size SfxPreviewBase_Impl::GetOptimalSize() const
 void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFile* pFile)
 {
     rRenderContext.SetLineColor();
-    Color aLightGrayCol(COL_LIGHTGRAY);
-    rRenderContext.SetFillColor(aLightGrayCol);
+    rRenderContext.SetFillColor(COL_LIGHTGRAY);
     rRenderContext.DrawRect(tools::Rectangle(Point(0,0), rRenderContext.GetOutputSize()));
 
     Size aTmpSize = pFile ? pFile->GetPrefSize() : Size(1, 1);
@@ -101,10 +100,8 @@ void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFil
 
     if (pFile)
     {
-        Color aBlackCol(COL_BLACK);
-        Color aWhiteCol(COL_WHITE);
-        rRenderContext.SetLineColor(aBlackCol);
-        rRenderContext.SetFillColor(aWhiteCol);
+        rRenderContext.SetLineColor(COL_BLACK);
+        rRenderContext.SetFillColor(COL_WHITE);
         rRenderContext.DrawRect(tools::Rectangle(aPoint + Point(FRAME, FRAME), bPoint + Point(FRAME, FRAME)));
         pFile->WindStart();
         pFile->Play(&rRenderContext, aPoint + Point(FRAME, FRAME), aSize);

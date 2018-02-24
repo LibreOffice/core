@@ -494,8 +494,8 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( vcl::Window* pReference, const
         // use the border window to have the exact position
         vcl::Window *pBorderWin = pWin->GetWindow( GetWindowType::Border );
 
-        Point aPt;  // the top-left corner in output coordinates ie (0,0)
-        tools::Rectangle devRect( pBorderWin->ImplOutputToUnmirroredAbsoluteScreenPixel( tools::Rectangle( aPt, pBorderWin->GetSizePixel()) ) ) ;
+        // the top-left corner in output coordinates ie (0,0)
+        tools::Rectangle devRect( pBorderWin->ImplOutputToUnmirroredAbsoluteScreenPixel( tools::Rectangle( Point(), pBorderWin->GetSizePixel()) ) ) ;
         if ( devRect.IsInside( aAbsolute ) )
         {
             rHitTest = HITTEST_WINDOW;

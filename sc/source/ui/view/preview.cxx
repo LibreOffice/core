@@ -514,8 +514,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             rDefPattern.FillEditItemSet(pEditDefaults);
             pEditEng->SetDefaults(pEditDefaults);
 
-            Color aTextColor(COL_LIGHTGRAY);
-            pEditDefaults->Put(SvxColorItem(aTextColor, EE_CHAR_COLOR));
+            pEditDefaults->Put(SvxColorItem(COL_LIGHTGRAY, EE_CHAR_COLOR));
 
             OUString aEmptyMsg;
             if (mbHasEmptyRangeTable)

@@ -733,7 +733,6 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
                          const Point& rDestPt, const Size& rDestSize,
                          const Point& rSrcPtPixel, const Size& rSrcSizePixel )
 {
-    Point       aPt;
     Point       aDestPt( LogicToPixel( rDestPt ) );
     Size        aDestSz( LogicToPixel( rDestSize ) );
     tools::Rectangle   aSrcRect( rSrcPtPixel, rSrcSizePixel );
@@ -766,7 +765,7 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
     }
 
     // source cropped?
-    if( aSrcRect != tools::Rectangle( aPt, aMask.GetSizePixel() ) )
+    if( aSrcRect != tools::Rectangle( Point(), aMask.GetSizePixel() ) )
         aMask.Crop( aSrcRect );
 
     // destination mirrored

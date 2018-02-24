@@ -273,8 +273,7 @@ void CreateTableFromRTF( SvStream& rStream, SdDrawDocument* pModel )
         if( pPage )
         {
             Size aSize( 200, 200 );
-            Point aPos;
-            ::tools::Rectangle aRect (aPos, aSize);
+            ::tools::Rectangle aRect (Point(), aSize);
             sdr::table::SdrTableObj* pObj = new sdr::table::SdrTableObj( pModel, aRect, 1, 1 );
             pObj->NbcSetStyleSheet( pModel->GetDefaultStyleSheet(), true );
             apply_table_style( pObj, pModel, OUString() );

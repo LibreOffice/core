@@ -809,8 +809,7 @@ IMPL_LINK_NOARG( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, void )
 
 void SmCmdBoxWindow::AdjustPosition()
 {
-    Point aPt;
-    const tools::Rectangle aRect( aPt, GetParent()->GetOutputSizePixel() );
+    const tools::Rectangle aRect( Point(), GetParent()->GetOutputSizePixel() );
     Point aTopLeft( Point( aRect.Left(),
                            aRect.Bottom() - GetSizePixel().Height() ) );
     Point aPos( GetParent()->OutputToScreenPixel( aTopLeft ) );
@@ -2021,8 +2020,7 @@ void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
         {
             const MapMode aMap( MapUnit::Map100thMM );
             SfxPrinter *pPrinter = GetPrinter( true );
-            Point aPoint;
-            tools::Rectangle  OutputRect(aPoint, pPrinter->GetOutputSize());
+            tools::Rectangle  OutputRect(Point(), pPrinter->GetOutputSize());
             Size       OutputSize(pPrinter->LogicToPixel(Size(OutputRect.GetWidth(),
                                                               OutputRect.GetHeight()), aMap));
             Size       GraphicSize(pPrinter->LogicToPixel(GetDoc()->GetSize(), aMap));

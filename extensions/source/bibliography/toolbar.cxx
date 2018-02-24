@@ -508,8 +508,7 @@ IMPL_LINK_NOARG( BibToolBar, MenuHdl, ToolBox*, void)
             SendDispatch(nTBC_BT_AUTOFILTER, aPropVal);
         }
 
-        Point aPoint;
-        MouseEvent aLeave( aPoint, 0, MouseEventModifiers::LEAVEWINDOW | MouseEventModifiers::SYNTHETIC );
+        MouseEvent aLeave( Point(), 0, MouseEventModifiers::LEAVEWINDOW | MouseEventModifiers::SYNTHETIC );
         MouseMove( aLeave );
         SetItemDown(nTBC_BT_AUTOFILTER, false);
 

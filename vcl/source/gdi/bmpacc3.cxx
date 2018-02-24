@@ -234,8 +234,7 @@ void BitmapWriteAccess::FillRect( const tools::Rectangle& rRect )
     if (mpFillColor)
     {
         const BitmapColor& rFillColor = *mpFillColor.get();
-        Point aPoint;
-        tools::Rectangle aRect(aPoint, maBitmap.GetSizePixel());
+        tools::Rectangle aRect(Point(), maBitmap.GetSizePixel());
 
         aRect.Intersection(rRect);
 

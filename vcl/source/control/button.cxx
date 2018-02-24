@@ -750,8 +750,7 @@ void PushButton::ImplDrawPushButtonFrame(vcl::RenderContext& rRenderContext,
 bool PushButton::ImplHitTestPushButton( vcl::Window const * pDev,
                                         const Point& rPos )
 {
-    Point       aTempPoint;
-    tools::Rectangle   aTestRect( aTempPoint, pDev->GetOutputSizePixel() );
+    tools::Rectangle   aTestRect( Point(), pDev->GetOutputSizePixel() );
 
     return aTestRect.IsInside( rPos );
 }
@@ -934,9 +933,8 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
     HideFocus();
 
     DrawButtonFlags nButtonStyle = ImplGetButtonState();
-    Point aPoint;
     Size aOutSz(GetOutputSizePixel());
-    tools::Rectangle aRect(aPoint, aOutSz);
+    tools::Rectangle aRect(Point(), aOutSz);
     tools::Rectangle aInRect = aRect;
     bool bNativeOK = false;
 
@@ -1517,8 +1515,7 @@ bool PushButton::PreNotify( NotifyEvent& rNEvt )
                 if(aCtrlType == ControlType::Combobox)
                 {
                     // only paint the button part to avoid flickering of the combobox text
-                    Point aPt;
-                    tools::Rectangle aClipRect( aPt, GetOutputSizePixel() );
+                    tools::Rectangle aClipRect( Point(), GetOutputSizePixel() );
                     aClipRect.SetPos(pBorder->ScreenToOutputPixel(OutputToScreenPixel(aClipRect.TopLeft())));
                     pBorder->Invalidate( aClipRect );
                 }

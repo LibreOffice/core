@@ -140,11 +140,10 @@ public:
         {
             // wrap bitmap into GDIMetafile
             GDIMetaFileSharedPtr xMtf(new GDIMetaFile);
-            ::Point         aEmptyPoint;
 
             ::BitmapEx      aBmpEx( aGraphic.GetBitmapEx() );
 
-            xMtf->AddAction( new MetaBmpExAction( aEmptyPoint,
+            xMtf->AddAction( new MetaBmpExAction( Point(),
                                                  aBmpEx ) );
             xMtf->SetPrefSize( aBmpEx.GetPrefSize() );
             xMtf->SetPrefMapMode( aBmpEx.GetPrefMapMode() );

@@ -374,8 +374,7 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
     // disable unused XFillFloatTransparenceItem
     if(bSwitchOffGradient && (bGradActive || bGradUsed))
     {
-        Color aColor(COL_BLACK);
-        XGradient aGrad(aColor, Color(COL_WHITE));
+        XGradient aGrad(COL_BLACK, Color(COL_WHITE));
         aGrad.SetStartIntens(100);
         aGrad.SetEndIntens(100);
         XFillFloatTransparenceItem aItem(aGrad);

@@ -993,12 +993,10 @@ void SwTextPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
     if ( GetTextFrame()->IsVertical() )
         GetTextFrame()->SwitchHorizontalToVertical( aRect );
 
-    Color aCol( COL_LIGHTRED );
-
     if( aRect.HasArea() )
     {
         const sal_uInt8 nOptions = 0;
-        lcl_DrawSpecial( *this, rPor, aRect, aCol, cChar, nOptions );
+        lcl_DrawSpecial( *this, rPor, aRect, COL_LIGHTRED, cChar, nOptions );
     }
 }
 

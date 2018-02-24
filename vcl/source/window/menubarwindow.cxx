@@ -602,8 +602,7 @@ static void ImplAddNWFSeparator(vcl::RenderContext& rRenderContext, const Size& 
         // note: the menubar only provides the upper (dark) half of it, the rest (bright part) is drawn by the docking area
 
         rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetSeparatorColor());
-        Point aPt;
-        tools::Rectangle aRect(aPt, rSize);
+        tools::Rectangle aRect(Point(), rSize);
         rRenderContext.DrawLine(aRect.BottomLeft(), aRect.BottomRight());
     }
 }
@@ -920,8 +919,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
             Erase(rRenderContext);
         else
         {
-            Point aPt;
-            tools::Rectangle aCtrlRegion( aPt, aOutputSize );
+            tools::Rectangle aCtrlRegion( Point(), aOutputSize );
 
             rRenderContext.DrawNativeControl(ControlType::Menubar, ControlPart::Entire, aCtrlRegion,
                                              ControlState::ENABLED, aMenubarValue, OUString());

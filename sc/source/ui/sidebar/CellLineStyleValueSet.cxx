@@ -92,11 +92,10 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
     if( nSelItem ==  nItemId )
     {
-        Color aBackColor(50,107,197);
         tools::Rectangle aBackRect = aRect;
         aBackRect.AdjustTop(3 );
         aBackRect.AdjustBottom( -2 );
-        pDev->SetFillColor(aBackColor);
+        pDev->SetFillColor(Color(50,107,197));
         pDev->DrawRect(aBackRect);
     }
     else

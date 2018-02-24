@@ -450,8 +450,7 @@ void AnnotationTag::addCustomHandles( SdrHdlList& rHandlerList )
     if( mxAnnotation.is() )
     {
         SmartTagReference xThis( this );
-        Point aPoint;
-        AnnotationHdl* pHdl = new AnnotationHdl( xThis, mxAnnotation, aPoint );
+        AnnotationHdl* pHdl = new AnnotationHdl( xThis, mxAnnotation, Point() );
         pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
         pHdl->SetPageView( mrView.GetSdrPageView() );
 
