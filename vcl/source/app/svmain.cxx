@@ -575,10 +575,6 @@ void DeInitVCL()
     }
 
     ImplDeletePrnQueueList();
-    delete pSVData->maGDIData.mpScreenFontList;
-    pSVData->maGDIData.mpScreenFontList = nullptr;
-    delete pSVData->maGDIData.mpScreenFontCache;
-    pSVData->maGDIData.mpScreenFontCache = nullptr;
 
     Scheduler::ImplDeInitScheduler();
 
@@ -615,6 +611,11 @@ void DeInitVCL()
     pSVData->maWinData.mpTrackWin = nullptr;
     pSVData->maWinData.mpAutoScrollWin = nullptr;
     pSVData->maWinData.mpLastWheelWindow = nullptr;
+
+    delete pSVData->maGDIData.mpScreenFontList;
+    pSVData->maGDIData.mpScreenFontList = nullptr;
+    delete pSVData->maGDIData.mpScreenFontCache;
+    pSVData->maGDIData.mpScreenFontCache = nullptr;
 
     // Deinit Sal
     if (pSVData->mpDefInst)
