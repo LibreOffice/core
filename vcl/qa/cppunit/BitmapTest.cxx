@@ -33,16 +33,38 @@ namespace
 
 class BitmapTest : public CppUnit::TestFixture
 {
+    void testCreation();
     void testConvert();
     void testScale();
     void testCRC();
 
     CPPUNIT_TEST_SUITE(BitmapTest);
+    CPPUNIT_TEST(testCreation);
     CPPUNIT_TEST(testConvert);
     CPPUNIT_TEST(testScale);
     CPPUNIT_TEST(testCRC);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void BitmapTest::testCreation()
+{
+    {
+        Bitmap aBmp;
+        Size aSize = aBmp.GetSizePixel();
+        CPPUNIT_ASSERT_EQUAL(static_cast<long>(0), aSize.Width());
+        CPPUNIT_ASSERT_EQUAL(static_cast<long>(0), aSize.Height());
+        CPPUNIT_ASSERT(aBmp.IsEmpty());
+    }
+
+    {
+        Bitmap aBmp(Size(10, 10), 8);
+        Size aSize = aBmp.GetSizePixel();
+        CPPUNIT_ASSERT_EQUAL(static_cast<long>(10), aSize.Width());
+        CPPUNIT_ASSERT_EQUAL(static_cast<long>(10), aSize.Height());
+        CPPUNIT_ASSERT(!aBmp.IsEmpty());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), aBmp.GetBitCount());
+    }
+}
 
 void BitmapTest::testConvert()
 {
