@@ -431,14 +431,10 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
 
         if( m_bLFPossible && HtmlContainerFlags::Div == nCntnrMode )
             OutNewLine();
-
-        OStringBuffer sOut;
         pCntnrStr = (HtmlContainerFlags::Div == nCntnrMode)
                             ? OOO_STRING_SVTOOLS_HTML_division
                             : OOO_STRING_SVTOOLS_HTML_span;
-        sOut.append('<').append(pCntnrStr).append(' ')
-            .append(OOO_STRING_SVTOOLS_HTML_O_class).append("=\"")
-            .append("sd-abs-pos").append('\"');
+         OUString sOut = '<' + pCntnrStr + ' ' + OOO_STRING_SVTOOLS_HTML_O_class + "=\""+ "sd-abs-pos" + '\"';
         Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
         // Output a width for non-draw objects
