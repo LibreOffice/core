@@ -127,6 +127,8 @@ public:
     void setPasswordHash(
         const css::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash, ScPasswordHash eHash2);
+    void setPasswordHash( const OUString& rAlgorithmName, const OUString& rHashValue,
+            const OUString& rSaltValue, sal_uInt32 nSpinCount );
     bool verifyPassword(const OUString& aPassText) const;
 
     bool isOptionEnabled(SCSIZE nOptId) const;
@@ -323,6 +325,15 @@ void ScTableProtectionImpl::setPasswordHash(
         printf("%2.2X ", static_cast<sal_uInt8>(aPassword[i]));
     printf("\n");
 #endif
+}
+
+void ScTableProtectionImpl::setPasswordHash( const OUString& rAlgorithmName, const OUString& rHashValue,
+        const OUString& rSaltValue, sal_uInt32 nSpinCount )
+{
+    maPasswordHash.maAlgorithmName  = rAlgorithmName;
+    maPasswordHash.maHashValue      = rHashValue;
+    maPasswordHash.maSaltValue      = rSaltValue;
+    maPasswordHash.mnSpinCount      = nSpinCount;
 }
 
 bool ScTableProtectionImpl::verifyPassword(const OUString& aPassText) const
@@ -562,6 +573,12 @@ void ScDocProtection::setPasswordHash(
     mpImpl->setPasswordHash(aPassword, eHash, eHash2);
 }
 
+void ScDocProtection::setPasswordHash( const OUString& rAlgorithmName, const OUString& rHashValue,
+        const OUString& rSaltValue, sal_uInt32 nSpinCount )
+{
+    mpImpl->setPasswordHash( rAlgorithmName, rHashValue, rSaltValue, nSpinCount);
+}
+
 bool ScDocProtection::verifyPassword(const OUString& aPassText) const
 {
     return mpImpl->verifyPassword(aPassText);
@@ -634,6 +651,12 @@ void ScTableProtection::setPasswordHash(
     const uno::Sequence<sal_Int8>& aPassword, ScPasswordHash eHash, ScPasswordHash eHash2)
 {
     mpImpl->setPasswordHash(aPassword, eHash, eHash2);
+}
+
+void ScTableProtection::setPasswordHash( const OUString& rAlgorithmName, const OUString& rHashValue,
+        const OUString& rSaltValue, sal_uInt32 nSpinCount )
+{
+    mpImpl->setPasswordHash( rAlgorithmName, rHashValue, rSaltValue, nSpinCount);
 }
 
 bool ScTableProtection::verifyPassword(const OUString& aPassText) const

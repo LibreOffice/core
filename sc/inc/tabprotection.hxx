@@ -88,6 +88,8 @@ public:
     virtual void setPasswordHash(
         const css::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) = 0;
+    virtual void setPasswordHash( const OUString& rAlgorithmName, const OUString& rHashValue,
+            const OUString& rSaltValue, sal_uInt32 nSpinCount ) = 0;
     virtual bool verifyPassword(const OUString& aPassText) const = 0;
 };
 
@@ -117,6 +119,8 @@ public:
     virtual void setPasswordHash(
         const css::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) override;
+    virtual void setPasswordHash( const OUString& rAlgorithmName, const OUString& rHashValue,
+            const OUString& rSaltValue, sal_uInt32 nSpinCount ) override;
     virtual bool verifyPassword(const OUString& aPassText) const override;
 
     bool isOptionEnabled(Option eOption) const;
@@ -198,6 +202,8 @@ public:
     virtual void setPasswordHash(
         const css::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) override;
+    virtual void setPasswordHash( const OUString& rAlgorithmName, const OUString& rHashValue,
+            const OUString& rSaltValue, sal_uInt32 nSpinCount ) override;
     virtual bool verifyPassword(const OUString& aPassText) const override;
 
     bool isOptionEnabled(Option eOption) const;
