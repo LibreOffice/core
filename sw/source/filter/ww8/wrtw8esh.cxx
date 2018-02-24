@@ -1341,6 +1341,16 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
         OUString aStr( rEditObj.GetText( n ));
         sal_Int32 nAktPos = 0;
         const sal_Int32 nEnd = aStr.getLength();
+
+        const SfxItemSet aSet(rEditObj.GetParaAttribs(n));
+        bool bIsRTLPara = false;
+        const SfxPoolItem *pItem;
+        if(SfxItemState::SET == aSet.GetItemState(EE_PARA_WRITINGDIR, true, &pItem))
+        {
+            SvxFrameDirection nDir = static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue();
+            bIsRTLPara = SvxFrameDirection::Horizontal_RL_TB == nDir;
+        }
+
         do {
             const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
 
@@ -1355,6 +1365,17 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
 
                                             // output of character attributes
             aAttrIter.OutAttr( nAktPos );   // nAktPos - 1 ??
+
+            if (bIsRTLPara)
+            {
+                // This is necessary to make word order correct in MS Word.
+                // In theory we should do this for complex-script runs only,
+                // but Outliner does not split runs like Writer core did.
+                // Fortunately, both MS Word and Writer seems to tolerate
+                // that we turn it on for non complex-script runs.
+                AttrOutput().OutputItem(SfxInt16Item(RES_CHRATR_BIDIRTL, 1));
+            }
+
             m_pChpPlc->AppendFkpEntry( Strm().Tell(),
                                             pO->size(), pO->data() );
             pO->clear();
