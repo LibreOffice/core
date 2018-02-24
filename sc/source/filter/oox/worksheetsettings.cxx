@@ -241,6 +241,12 @@ void WorksheetSettings::finalizeImport()
     {
         ScTableProtection aProtect;
         aProtect.setProtected(true);
+        aProtect.setPasswordHash( maSheetProt.maAlgorithmName, maSheetProt.maHashValue,
+                maSheetProt.maSaltValue, maSheetProt.mnSpinCount);
+        // Set the simple hash after the proper hash because setting the proper
+        // hash resets the simple hash, yet if the simple hash is present we
+        // may as well use it and more important want to keep it for saving the
+        // document again.
         if (maSheetProt.mnPasswordHash)
         {
             Sequence<sal_Int8> aPass(2);
