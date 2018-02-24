@@ -412,7 +412,7 @@ void HWPFile::TagsRead()
 ColumnDef *HWPFile::GetColumnDef(int num)
 {
     if (static_cast<size_t>(num) < columnlist.size())
-        return columnlist[num]->coldef;
+        return columnlist[num]->xColdef.get();
     else
         return nullptr;
 }
@@ -569,12 +569,12 @@ void HWPFile::AddColumnInfo()
     setMaxSettedPage();
 }
 
-void HWPFile::SetColumnDef(ColumnDef *coldef)
+void HWPFile::SetColumnDef(const std::shared_ptr<ColumnDef>& rColdef)
 {
     ColumnInfo *cinfo = columnlist.back().get();
     if( cinfo->bIsSet )
         return;
-    cinfo->coldef = coldef;
+    cinfo->xColdef = rColdef;
     cinfo->bIsSet = true;
 }
 

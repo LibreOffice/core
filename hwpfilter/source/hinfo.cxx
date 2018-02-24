@@ -201,6 +201,7 @@ ParaShape::ParaShape()
     , pspacing_next(0)
     , condense(0)
     , arrange_type(0)
+    , xColdef(new ColumnDef)
     , shade(0)
     , outline(0)
     , outline_continue(0)
@@ -240,17 +241,17 @@ void ParaShape::Read(HWPFile & hwpf)
             return;
         tab.position = tmp16;
     }
-    hwpf.Read1b(coldef.ncols);
-    hwpf.Read1b(coldef.separator);
+    hwpf.Read1b(xColdef->ncols);
+    hwpf.Read1b(xColdef->separator);
     if (!hwpf.Read2b(tmp16))
         return;
-    coldef.spacing = tmp16;
+    xColdef->spacing = tmp16;
     if (!hwpf.Read2b(tmp16))
         return;
-    coldef.columnlen = tmp16;
+    xColdef->columnlen = tmp16;
     if (!hwpf.Read2b(tmp16))
         return;
-    coldef.columnlen0 = tmp16;
+    xColdef->columnlen0 = tmp16;
     hwpf.Read1b(shade);
     hwpf.Read1b(outline);
     hwpf.Read1b(outline_continue);
