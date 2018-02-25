@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_0902e93e",
+        "filename": "svtools/inc/FltCallDialogParameter.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2018-02-25T15:50:32Z",
+      "side": 1,
+      "message": "Our naming convention for include guards says this should be INCLUDED_SVTOOLS_INC_FTLCALLDIALOGPARAMETER_HXX",
+      "range": {
+        "startLine": 20,
+        "startChar": 8,
+        "endLine": 20,
+        "endChar": 32
+      },
+      "revId": "ee32ccc81a5bc5a61d9261d87f446214dbde2f42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
