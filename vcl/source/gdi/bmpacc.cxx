@@ -30,23 +30,6 @@ BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
             mpBuffer        ( nullptr ),
             mnAccessMode    ( nMode )
 {
-    ImplCreate( rBitmap );
-}
-
-BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap ) :
-            mpBuffer        ( nullptr ),
-            mnAccessMode    ( BitmapAccessMode::Info )
-{
-    ImplCreate( rBitmap );
-}
-
-BitmapInfoAccess::~BitmapInfoAccess()
-{
-    ImplDestroy();
-}
-
-void BitmapInfoAccess::ImplCreate( Bitmap& rBitmap )
-{
     std::shared_ptr<ImpBitmap> xImpBmp = rBitmap.ImplGetImpBitmap();
 
     SAL_WARN_IF( !xImpBmp, "vcl", "Forbidden Access to empty bitmap!" );
@@ -83,7 +66,7 @@ void BitmapInfoAccess::ImplCreate( Bitmap& rBitmap )
     }
 }
 
-void BitmapInfoAccess::ImplDestroy()
+BitmapInfoAccess::~BitmapInfoAccess()
 {
     std::shared_ptr<ImpBitmap> xImpBmp = maBitmap.ImplGetImpBitmap();
 
@@ -104,23 +87,6 @@ BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
             mFncGetPixel    ( nullptr ),
             mFncSetPixel    ( nullptr )
 {
-    ImplInitScanBuffer( rBitmap );
-}
-
-BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap ) :
-            BitmapInfoAccess( rBitmap, BitmapAccessMode::Read ),
-            mFncGetPixel    ( nullptr ),
-            mFncSetPixel    ( nullptr )
-{
-    ImplInitScanBuffer( rBitmap );
-}
-
-BitmapReadAccess::~BitmapReadAccess()
-{
-}
-
-void BitmapReadAccess::ImplInitScanBuffer( Bitmap const & rBitmap )
-{
     if (!mpBuffer)
         return;
 
@@ -137,6 +103,10 @@ void BitmapReadAccess::ImplInitScanBuffer( Bitmap const & rBitmap )
         xImpBmp->ImplReleaseBuffer( mpBuffer, mnAccessMode );
         mpBuffer = nullptr;
     }
+}
+
+BitmapReadAccess::~BitmapReadAccess()
+{
 }
 
 bool BitmapReadAccess::ImplSetAccessPointers( ScanlineFormat nFormat )

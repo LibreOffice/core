@@ -35,7 +35,7 @@ class VCL_DLLPUBLIC BitmapInfoAccess
     friend class BitmapReadAccess;
 
 public:
-    BitmapInfoAccess(Bitmap& rBitmap);
+    BitmapInfoAccess(Bitmap& rBitmap, BitmapAccessMode nMode = BitmapAccessMode::Info);
     virtual ~BitmapInfoAccess();
 
     bool operator!() const
@@ -146,12 +146,6 @@ protected:
     BitmapBuffer* mpBuffer;
     ColorMask maColorMask;
     BitmapAccessMode mnAccessMode;
-
-    SAL_DLLPRIVATE void ImplCreate(Bitmap& rBitmap);
-    SAL_DLLPRIVATE void ImplDestroy();
-
-protected:
-    BitmapInfoAccess(Bitmap& rBitmap, BitmapAccessMode nMode);
 };
 
 
@@ -160,7 +154,7 @@ class VCL_DLLPUBLIC BitmapReadAccess : public BitmapInfoAccess
     friend class BitmapWriteAccess;
 
 public:
-    BitmapReadAccess(Bitmap& rBitmap);
+    BitmapReadAccess(Bitmap& rBitmap, BitmapAccessMode nMode = BitmapAccessMode::Read);
     virtual ~BitmapReadAccess() override;
 
     Scanline GetBuffer() const
@@ -243,7 +237,6 @@ protected:
     FncGetPixel mFncGetPixel;
     FncSetPixel mFncSetPixel;
 
-    SAL_DLLPRIVATE void ImplInitScanBuffer( Bitmap const & rBitmap );
     SAL_DLLPRIVATE bool ImplSetAccessPointers( ScanlineFormat nFormat );
 
 public:
@@ -285,8 +278,6 @@ public:
     static void SetPixelForN32BitTcRgba(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
     static void SetPixelForN32BitTcMask(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
 
-protected:
-    BitmapReadAccess(Bitmap& rBitmap, BitmapAccessMode nMode);
 };
 
 
