@@ -29,7 +29,7 @@
 
 namespace accessibility {
 
-    class AccessibleGridControl_Impl;
+    class AccessibleGridControlHeader;
 
 
 /** This class represents the complete accessible Grid Control object. */
@@ -138,8 +138,20 @@ private:
         @return  An AccessibleGridControlTable. */
     AccessibleGridControlTable* createAccessibleTable();
 
-    // members ----------------------------------------------------------------
-    std::unique_ptr< AccessibleGridControl_Impl > m_xImpl;
+    /// the css::accessibility::XAccessible which created the AccessibleGridControl
+    css::uno::WeakReference< css::accessibility::XAccessible >                    m_aCreator;
+
+    /** The data table child. */
+    rtl::Reference<AccessibleGridControlTable>                m_xTable;
+
+    /** The header bar for rows. */
+    rtl::Reference<AccessibleGridControlHeader>               m_xRowHeaderBar;
+
+    /** The header bar for columns (first row of the table). */
+    rtl::Reference<AccessibleGridControlHeader>               m_xColumnHeaderBar;
+
+    /** The table cell child. */
+    rtl::Reference<AccessibleGridControlTableCell>            m_xCell;
 };
 
 

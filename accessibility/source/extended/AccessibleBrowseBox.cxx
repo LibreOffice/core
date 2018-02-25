@@ -34,43 +34,24 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 using namespace ::svt;
 
-
-class AccessibleBrowseBoxImpl
-{
-public:
-    /// the css::accessibility::XAccessible which created the AccessibleBrowseBox
-    css::uno::WeakReference< css::accessibility::XAccessible >  m_aCreator;
-
-    /** The data table child. */
-    rtl::Reference<AccessibleBrowseBoxTable>                    mxTable;
-
-    /** The header bar for rows ("handle column"). */
-    rtl::Reference<AccessibleBrowseBoxHeaderBar>                mxRowHeaderBar;
-
-    /** The header bar for columns (first row of the table). */
-    rtl::Reference<AccessibleBrowseBoxHeaderBar>                mxColumnHeaderBar;
-};
-
 // Ctor/Dtor/disposing
 
 AccessibleBrowseBox::AccessibleBrowseBox(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator,
             ::svt::IAccessibleTableProvider& _rBrowseBox )
-    : AccessibleBrowseBoxBase( _rxParent, _rBrowseBox,nullptr, BBTYPE_BROWSEBOX )
+    : AccessibleBrowseBoxBase( _rxParent, _rBrowseBox,nullptr, BBTYPE_BROWSEBOX ),
+      m_aCreator(_rxCreator)
 {
-    m_xImpl.reset( new AccessibleBrowseBoxImpl );
-    m_xImpl->m_aCreator = _rxCreator;
-
     m_xFocusWindow = VCLUnoHelper::GetInterface(mpBrowseBox->GetWindowInstance());
 }
 
 void AccessibleBrowseBox::setCreator( const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator )
 {
 #if OSL_DEBUG_LEVEL > 0
-    css::uno::Reference< css::accessibility::XAccessible > xCreator(m_xImpl->m_aCreator);
+    css::uno::Reference< css::accessibility::XAccessible > xCreator(m_aCreator);
     OSL_ENSURE( !xCreator.is(), "extended/AccessibleBrowseBox::setCreator: creator already set!" );
 #endif
-    m_xImpl->m_aCreator = _rxCreator;
+    m_aCreator = _rxCreator;
 }
 
 
@@ -83,22 +64,22 @@ void SAL_CALL AccessibleBrowseBox::disposing()
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
-    m_xImpl->m_aCreator.clear();
+    m_aCreator.clear();
 
-    if ( m_xImpl->mxTable.is() )
+    if ( mxTable.is() )
     {
-        m_xImpl->mxTable->dispose();
-        m_xImpl->mxTable.clear();
+        mxTable->dispose();
+        mxTable.clear();
     }
-    if ( m_xImpl->mxRowHeaderBar.is() )
+    if ( mxRowHeaderBar.is() )
     {
-        m_xImpl->mxRowHeaderBar->dispose();
-        m_xImpl->mxRowHeaderBar.clear();
+        mxRowHeaderBar->dispose();
+        mxRowHeaderBar.clear();
     }
-    if ( m_xImpl->mxColumnHeaderBar.is() )
+    if ( mxColumnHeaderBar.is() )
     {
-        m_xImpl->mxColumnHeaderBar->dispose();
-        m_xImpl->mxColumnHeaderBar.clear();
+        mxColumnHeaderBar->dispose();
+        mxColumnHeaderBar.clear();
     }
 
     AccessibleBrowseBoxBase::disposing();
@@ -209,12 +190,12 @@ tools::Rectangle AccessibleBrowseBox::implGetBoundingBoxOnScreen()
 
 css::uno::Reference< css::accessibility::XAccessible > AccessibleBrowseBox::implGetTable()
 {
-    if( !m_xImpl->mxTable.is() )
+    if( !mxTable.is() )
     {
-        m_xImpl->mxTable = createAccessibleTable();
+        mxTable = createAccessibleTable();
 
     }
-    return m_xImpl->mxTable.get();
+    return mxTable.get();
 }
 
 
@@ -225,16 +206,16 @@ AccessibleBrowseBox::implGetHeaderBar( AccessibleBrowseBoxObjType eObjType )
     rtl::Reference< AccessibleBrowseBoxHeaderBar >* pxMember = nullptr;
 
     if( eObjType == BBTYPE_ROWHEADERBAR )
-        pxMember = &m_xImpl->mxRowHeaderBar;
+        pxMember = &mxRowHeaderBar;
     else if( eObjType ==  BBTYPE_COLUMNHEADERBAR )
-        pxMember = &m_xImpl->mxColumnHeaderBar;
+        pxMember = &mxColumnHeaderBar;
 
     if( pxMember )
     {
         if( !pxMember->is() )
         {
             AccessibleBrowseBoxHeaderBar* pHeaderBar = new AccessibleBrowseBoxHeaderBar(
-                m_xImpl->m_aCreator, *mpBrowseBox, eObjType );
+                m_aCreator, *mpBrowseBox, eObjType );
             *pxMember = pHeaderBar;
         }
         xRet = pxMember->get();
@@ -264,16 +245,16 @@ AccessibleBrowseBox::implGetFixedChild( sal_Int32 nChildIndex )
 
 AccessibleBrowseBoxTable* AccessibleBrowseBox::createAccessibleTable()
 {
-    css::uno::Reference< css::accessibility::XAccessible > xCreator(m_xImpl->m_aCreator);
+    css::uno::Reference< css::accessibility::XAccessible > xCreator(m_aCreator);
     OSL_ENSURE( xCreator.is(), "extended/AccessibleBrowseBox::createAccessibleTable: my creator died - how this?" );
     return new AccessibleBrowseBoxTable( xCreator, *mpBrowseBox );
 }
 
 void AccessibleBrowseBox::commitTableEvent(sal_Int16 _nEventId,const Any& _rNewValue,const Any& _rOldValue)
 {
-    if ( m_xImpl->mxTable.is() )
+    if ( mxTable.is() )
     {
-        m_xImpl->mxTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
+        mxTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
     }
 }
 
@@ -281,7 +262,7 @@ void AccessibleBrowseBox::commitHeaderBarEvent( sal_Int16 _nEventId,
                                                 const Any& _rNewValue,
                                                 const Any& _rOldValue,bool _bColumnHeaderBar)
 {
-    rtl::Reference< AccessibleBrowseBoxHeaderBar >& xHeaderBar = _bColumnHeaderBar ? m_xImpl->mxColumnHeaderBar : m_xImpl->mxRowHeaderBar;
+    rtl::Reference< AccessibleBrowseBoxHeaderBar >& xHeaderBar = _bColumnHeaderBar ? mxColumnHeaderBar : mxRowHeaderBar;
     if ( xHeaderBar.is() )
         xHeaderBar->commitEvent(_nEventId,_rNewValue,_rOldValue);
 }
