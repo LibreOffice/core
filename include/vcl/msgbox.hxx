@@ -62,8 +62,6 @@ class VCL_DLLPUBLIC MessBox : public ButtonDialog
 
 protected:
     OUString                   maMessText;
-    VclPtr<CheckBox>           mpCheckBox;
-    OUString                   maCheckBoxText;
 
     SAL_DLLPRIVATE void ImplInitButtons();
     SAL_DLLPRIVATE void ImplPosControls();
@@ -81,10 +79,6 @@ public:
 
     void                SetImage( const Image& rImage ) { maImage = rImage; }
 
-    void                SetCheckBoxText( const OUString& rText ) { maCheckBoxText = rText;}
-    void                SetCheckBoxState( bool bCheck );
-    bool                GetCheckBoxState() const;
-
     virtual Size        GetOptimalSize() const override;
 };
 
@@ -98,8 +92,6 @@ public:
                                     const OUString& rMessage );
                         WarningBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits n,
                                     const OUString& rMessage );
-
-    void                SetDefaultCheckBoxText();
 
     static Image const & GetStandardImage();
     static OUString     GetStandardText();

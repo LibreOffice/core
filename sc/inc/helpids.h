@@ -66,10 +66,6 @@
 
 // Other help IDs (max.70) ---------------------------------------------------
 #define HID_SELECTTABLES                                        "SC_HID_SELECTTABLES"
-#define HID_SC_REPLCELLSWARN                                    "SC_HID_SC_REPLCELLSWARN"
-
-
-
 
 
 // Analysis Addin Functions (max.120) ----------------------------------------
