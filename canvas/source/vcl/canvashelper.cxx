@@ -742,7 +742,7 @@ namespace vclcanvas
                     if( aBmpEx.IsAlpha() )
                     {
                         Bitmap aMask( aBmpEx.GetAlpha().GetBitmap() );
-                        aMask.MakeMono( 253 );
+                        aMask.MakeMonochrome(253);
                         aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMask );
                     }
                     else if( aBmpEx.IsTransparent() )

@@ -128,8 +128,8 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
     // Ensure a mask is exactly one bit deep
     if( !!aMask && aMask.GetBitCount() != 1 )
     {
-        SAL_WARN( "vcl", "BitmapEx: forced mask to monochrome");
-        aMask.ImplMakeMono( 255 );
+        SAL_WARN("vcl", "BitmapEx: forced mask to monochrome");
+        aMask.MakeMonochrome(255);
     }
 
     if(!!aBitmap && !!aMask && aBitmap.GetSizePixel() != aMask.GetSizePixel())
@@ -267,7 +267,7 @@ Bitmap BitmapEx::GetMask() const
     Bitmap aRet( aMask );
 
     if( IsAlpha() )
-        aRet.ImplMakeMono( 255 );
+        aRet.MakeMonochrome(255);
 
     return aRet;
 }

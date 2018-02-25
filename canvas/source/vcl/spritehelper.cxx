@@ -153,7 +153,7 @@ namespace vclcanvas
                     {
                         OSL_FAIL("CanvasCustomSprite::redraw(): Mask bitmap is not "
                                    "monochrome (performance!)");
-                        aMask.MakeMono(255);
+                        aMask.MakeMonochrome(255);
                     }
 #endif
 

@@ -197,7 +197,7 @@ void BitmapTest::testMonochrome()
     aBmpAccess.SetPixel(3, 2, BitmapColor(Color(COL_YELLOW)));
     aBmpAccess.SetPixel(3, 3, BitmapColor(Color(COL_WHITE)));
 
-    aBmp.MakeMono(63);
+    aBmp.MakeMonochrome(63);
     BitmapReadAccess aBmpReadAccess(aBmp);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Black pixel wrong monochrome value",
