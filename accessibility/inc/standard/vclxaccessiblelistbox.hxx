@@ -31,7 +31,7 @@
     VCLXAccessibleListBoxList class which does support
     selection.
 */
-class VCLXAccessibleListBox : public VCLXAccessibleBox
+class VCLXAccessibleListBox final : public VCLXAccessibleBox
 {
 public:
     VCLXAccessibleListBox (VCLXWindow* pVCLXindow);
@@ -42,7 +42,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
-protected:
+private:
     virtual ~VCLXAccessibleListBox() override = default;
 
     virtual bool IsValid() const override;

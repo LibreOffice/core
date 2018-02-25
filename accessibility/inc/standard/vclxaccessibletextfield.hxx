@@ -66,7 +66,7 @@ public:
         getSupportedServiceNames() override;
 
 protected:
-    virtual ~VCLXAccessibleTextField() override;
+    virtual ~VCLXAccessibleTextField() override = default;
 
     /** With this method the text of the currently selected item is made
         available to the VCLXAccessibleTextComponent base class.

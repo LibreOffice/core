@@ -31,7 +31,7 @@
     VCLXAccessibleList class which does not support selection
     at the moment.
 */
-class VCLXAccessibleDropDownComboBox : public VCLXAccessibleBox
+class VCLXAccessibleDropDownComboBox final : public VCLXAccessibleBox
 {
 public:
     VCLXAccessibleDropDownComboBox (VCLXWindow* pVCLXindow);
@@ -42,8 +42,8 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
-protected:
-    virtual ~VCLXAccessibleDropDownComboBox() override;
+private:
+    virtual ~VCLXAccessibleDropDownComboBox() override = default;
 
     virtual bool IsValid() const override;
     virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) override;

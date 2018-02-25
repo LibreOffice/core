@@ -27,10 +27,6 @@ namespace uno = ::com::sun::star::uno;
 
 using ::com::sun::star::accessibility::AccessibleRelation;
 namespace AccessibleRelationType = ::com::sun::star::accessibility::AccessibleRelationType;
-FloatingWindowAccessible::FloatingWindowAccessible(VCLXWindow* pWindow) :
-    VCLXAccessibleComponent(pWindow)
-{
-}
 
 void FloatingWindowAccessible::FillAccessibleRelationSet(utl::AccessibleRelationSetHelper& rRelationSet)
 {
