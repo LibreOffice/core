@@ -33,12 +33,14 @@ namespace
 class BitmapTest : public CppUnit::TestFixture
 {
     void testCreation();
+    void testEmpty();
     void testConvert();
     void testScale();
     void testCRC();
 
     CPPUNIT_TEST_SUITE(BitmapTest);
     CPPUNIT_TEST(testCreation);
+    CPPUNIT_TEST(testEmpty);
     CPPUNIT_TEST(testConvert);
     CPPUNIT_TEST(testScale);
     CPPUNIT_TEST(testCRC);
@@ -50,19 +52,118 @@ void BitmapTest::testCreation()
     {
         Bitmap aBmp;
         Size aSize = aBmp.GetSizePixel();
-        CPPUNIT_ASSERT_EQUAL(static_cast<long>(0), aSize.Width());
-        CPPUNIT_ASSERT_EQUAL(static_cast<long>(0), aSize.Height());
-        CPPUNIT_ASSERT(aBmp.IsEmpty());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<long>(0), aSize.Width());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<long>(0), aSize.Height());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
+        CPPUNIT_ASSERT_MESSAGE("Not empty", aBmp.IsEmpty());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(0),
+                                     aBmp.GetBitCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", static_cast<sal_uLong>(1),
+                                     aBmp.GetColorCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(0),
+                                     aBmp.GetSizeBytes());
+    }
+
+    {
+        Bitmap aBmp(Size(10, 10), 1);
+        Size aSize = aBmp.GetSizePixel();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<long>(10), aSize.Width());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<long>(10), aSize.Height());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
+        CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(1),
+                                     aBmp.GetBitCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", static_cast<sal_uLong>(2),
+                                     aBmp.GetColorCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(12),
+                                     aBmp.GetSizeBytes());
+    }
+
+    {
+        Bitmap aBmp(Size(10, 10), 4);
+        Size aSize = aBmp.GetSizePixel();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<long>(10), aSize.Width());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<long>(10), aSize.Height());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
+        CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(4),
+                                     aBmp.GetBitCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", static_cast<sal_uLong>(16),
+                                     aBmp.GetColorCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(50),
+                                     aBmp.GetSizeBytes());
     }
 
     {
         Bitmap aBmp(Size(10, 10), 8);
         Size aSize = aBmp.GetSizePixel();
-        CPPUNIT_ASSERT_EQUAL(static_cast<long>(10), aSize.Width());
-        CPPUNIT_ASSERT_EQUAL(static_cast<long>(10), aSize.Height());
-        CPPUNIT_ASSERT(!aBmp.IsEmpty());
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), aBmp.GetBitCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<long>(10), aSize.Width());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<long>(10), aSize.Height());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
+        CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(8),
+                                     aBmp.GetBitCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", static_cast<sal_uLong>(256),
+                                     aBmp.GetColorCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(100),
+                                     aBmp.GetSizeBytes());
     }
+
+    {
+        Bitmap aBmp(Size(10, 10), 16);
+        Size aSize = aBmp.GetSizePixel();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<long>(10), aSize.Width());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<long>(10), aSize.Height());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
+        CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(24),
+                                     aBmp.GetBitCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", static_cast<sal_uLong>(16777216),
+                                     aBmp.GetColorCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(300),
+                                     aBmp.GetSizeBytes());
+    }
+
+    {
+        Bitmap aBmp(Size(10, 10), 24);
+        Size aSize = aBmp.GetSizePixel();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<long>(10), aSize.Width());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<long>(10), aSize.Height());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
+        CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(24),
+                                     aBmp.GetBitCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", static_cast<sal_uLong>(16777216),
+                                     aBmp.GetColorCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(300),
+                                     aBmp.GetSizeBytes());
+    }
+
+    {
+        Bitmap aBmp(Size(10, 10), 32);
+        Size aSize = aBmp.GetSizePixel();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<long>(10), aSize.Width());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<long>(10), aSize.Height());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
+        CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(24),
+                                     aBmp.GetBitCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", static_cast<sal_uLong>(16777216),
+                                     aBmp.GetColorCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(300),
+                                     aBmp.GetSizeBytes());
+    }
+}
+
+void BitmapTest::testEmpty()
+{
+    Bitmap aBitmap(Size(10, 10), 8);
+    aBitmap.Erase(COL_LIGHTGRAYBLUE);
+
+    CPPUNIT_ASSERT(!aBitmap.IsEmpty());
+
+    aBitmap.SetEmpty();
+    CPPUNIT_ASSERT(aBitmap.IsEmpty());
 }
 
 void BitmapTest::testConvert()
