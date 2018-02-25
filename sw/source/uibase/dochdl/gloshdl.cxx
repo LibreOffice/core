@@ -48,7 +48,6 @@
 #include <swerror.h>
 #include <frmmgr.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
 #include <vcl/lstbox.hxx>
 
 #include <editeng/acorrcfg.hxx>
