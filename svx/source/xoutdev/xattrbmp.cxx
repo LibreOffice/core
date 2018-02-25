@@ -277,7 +277,7 @@ bool XFillBitmapItem::QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId) const
     {
         // member-id 0 => complete item (e.g. for toolbars)
         DBG_ASSERT( nMemberId == 0, "invalid member-id" );
-        uno::Sequence< beans::PropertyValue > aPropSeq( 3 );
+        uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
 
         aPropSeq[0].Name  = "Name";
         aPropSeq[0].Value <<= aInternalName;
