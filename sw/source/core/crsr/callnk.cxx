@@ -117,15 +117,15 @@ SwCallLink::~SwCallLink()
     }
     lcl_notifyRow(pNode, rShell);
 
-    sal_Int32 nCmp, nAktContent = pCurrentCursor->GetPoint()->nContent.GetIndex();
+    sal_Int32 nCmp, nCurrentContent = pCurrentCursor->GetPoint()->nContent.GetIndex();
     SwNodeType nNdWhich = pCNd->GetNodeType();
-    sal_uLong nAktNode = pCurrentCursor->GetPoint()->nNode.GetIndex();
+    sal_uLong nCurrentNode = pCurrentCursor->GetPoint()->nNode.GetIndex();
 
     // Register the Shell as dependent at the current Node. By doing this all
     // attribute changes can be signaled over the link.
     pCNd->Add( &rShell );
 
-    if( nNdTyp != nNdWhich || nNode != nAktNode )
+    if( nNdTyp != nNdWhich || nNode != nCurrentNode )
     {
         // Every time a switch between nodes occurs, there is a chance that
         // new attributes do apply - meaning text-attributes.
@@ -139,16 +139,16 @@ SwCallLink::~SwCallLink()
         rShell.CallChgLnk();
     }
     else if( rShell.m_aChgLnk.IsSet() && SwNodeType::Text == nNdWhich &&
-             nContent != nAktContent )
+             nContent != nCurrentContent )
     {
         // If travelling with left/right only and the frame is
         // unchanged (columns!) then check text hints.
-        if( nLeftFramePos == SwCallLink::getLayoutFrame( rShell.GetLayout(), *pCNd->GetTextNode(), nAktContent,
+        if( nLeftFramePos == SwCallLink::getLayoutFrame( rShell.GetLayout(), *pCNd->GetTextNode(), nCurrentContent,
                                                     !rShell.ActionPend() ) &&
-            (( nCmp = nContent ) + 1 == nAktContent ||          // Right
-            nContent -1 == ( nCmp = nAktContent )) )            // Left
+            (( nCmp = nContent ) + 1 == nCurrentContent ||          // Right
+            nContent -1 == ( nCmp = nCurrentContent )) )            // Left
         {
-            if( nCmp == nAktContent && pCurrentCursor->HasMark() ) // left & select
+            if( nCmp == nCurrentContent && pCurrentCursor->HasMark() ) // left & select
                 ++nCmp;
 
             if ( pCNd->GetTextNode()->HasHints() )
@@ -164,7 +164,7 @@ SwCallLink::~SwCallLink()
                     // If "only start" or "start and end equal" then call on
                     // every overflow of start.
                     if( ( !pEnd || ( nStart == *pEnd ) ) &&
-                        ( nStart == nContent || nStart == nAktContent) )
+                        ( nStart == nContent || nStart == nCurrentContent) )
                     {
                         rShell.CallChgLnk();
                         return;
@@ -187,7 +187,7 @@ SwCallLink::~SwCallLink()
             const OUString rText = pCNd->GetTextNode()->GetText();
             if( !nCmp ||
                 g_pBreakIt->GetBreakIter()->getScriptType( rText, nContent )
-                != g_pBreakIt->GetBreakIter()->getScriptType(rText, nAktContent))
+                != g_pBreakIt->GetBreakIter()->getScriptType(rText, nCurrentContent))
             {
                 rShell.CallChgLnk();
                 return;
