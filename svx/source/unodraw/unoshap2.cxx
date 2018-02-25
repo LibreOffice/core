@@ -1913,9 +1913,14 @@ bool SvxCustomShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
     }
 }
 
-
 void SvxCustomShape::createCustomShapeDefaults( const OUString& rValueType )
 {
+    if (!mpObj.is())
+    {
+        OSL_FAIL("could not create Custom Shape Defaults!");
+        return;
+    }
+
     static_cast<SdrObjCustomShape*>(mpObj.get())->MergeDefaultAttributes( &rValueType );
 }
 
