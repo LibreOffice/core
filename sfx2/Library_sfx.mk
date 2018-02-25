@@ -165,6 +165,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/charmappopup \
     sfx2/source/dialog/dinfdlg \
     sfx2/source/dialog/dockwin \
+    sfx2/source/dialog/docrepairdlg \
     sfx2/source/dialog/documentfontsdialog \
     sfx2/source/dialog/filedlghelper \
     sfx2/source/dialog/filtergrouping \

@@ -76,6 +76,7 @@
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/docrepairdlg.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objitem.hxx>
 #include <sfx2/objsh.hxx>
@@ -834,6 +835,24 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         {
             CheckIn( );
             break;
+        }
+
+        case SID_DOC_REPAIR:
+        {
+            VclPtr<SfxDocumentRepairDlg> pDlg(VclPtr<SfxDocumentRepairDlg>::Create(&GetFrame()->GetWindow(), GetUndoManager()));
+            pDlg->StartExecuteAsync([this, pDlg](sal_Int32 nResult){
+                if (RET_OK == nResult)
+                {
+                    SfxRequest aReq(pDlg->GetType(), SfxCallMode::SLOT, GetPool());
+                    aReq.AppendItem(SfxUInt16Item(pDlg->GetType(), pDlg->GetIndex()));
+                    aReq.AppendItem(SfxBoolItem(SID_REPAIRPACKAGE, true));
+
+                    if (SfxViewShell* pViewShell = SfxViewShell::Current())
+                    {
+                        pViewShell->ExecuteSlot(aReq, pViewShell->GetInterface());
+                    }
+                }
+            });
         }
     }
 

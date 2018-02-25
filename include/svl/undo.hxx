@@ -203,7 +203,7 @@ namespace svl
 
         virtual size_t          GetRedoActionCount( bool const i_currentLevel = CurrentLevel ) const = 0;
         virtual OUString        GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const = 0;
-        virtual SfxUndoAction*  GetRedoAction() const = 0;
+        virtual SfxUndoAction*  GetRedoAction( size_t nNo=0 ) const = 0;
         /// Get info about all redo actions (comment, view shell id, etc.)
         virtual OUString        GetRedoActionsInfo() const = 0;
 
@@ -321,7 +321,7 @@ public:
     OUString                GetUndoActionsInfo() const override;
     virtual size_t          GetRedoActionCount( bool const i_currentLevel = CurrentLevel ) const override;
     virtual OUString        GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const override;
-    virtual SfxUndoAction*  GetRedoAction() const override;
+    virtual SfxUndoAction*  GetRedoAction( size_t nNo=0 ) const override;
     OUString                GetRedoActionsInfo() const override;
     virtual bool            Undo() override;
     virtual bool            Redo() override;

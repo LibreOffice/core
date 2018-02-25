@@ -204,6 +204,7 @@ interface OfficeDocument : Document
     ]
     SID_DOC_REPAIR
     [
+        ExecMethod = ExecFile_Impl;
         StateMethod = GetState_Impl;
     ]
 }

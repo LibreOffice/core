@@ -105,6 +105,11 @@
 #define STR_SVT_FILEVIEW_COLUMN_SIZE            NC_("STR_SVT_FILEVIEW_COLUMN_SIZE", "Size")
 #define STR_SVT_FILEVIEW_COLUMN_DATE            NC_("STR_SVT_FILEVIEW_COLUMN_DATE", "Date modified")
 #define STR_SVT_FILEVIEW_COLUMN_TYPE            NC_("STR_SVT_FILEVIEW_COLUMN_TYPE", "Type")
+#define STR_SVT_FILEVIEW_COLUMN_INDEX           NC_("STR_SVT_FILEVIEW_COLUMN_INDEX", "Index")
+#define STR_SVT_FILEVIEW_COLUMN_COMMENT         NC_("STR_SVT_FILEVIEW_COLUMN_COMMENT", "Comment")
+#define STR_SVT_FILEVIEW_COLUMN_VIEWID          NC_("STR_SVT_FILEVIEW_COLUMN_VIEWID", "View ID")
+#define STR_SVT_FILEVIEW_COLUMN_TIMESTAMP       NC_("STR_SVT_FILEVIEW_COLUMN_TIMESTAMP", "Timestamp")
+
 #define STR_SVT_BYTES                           NC_("STR_SVT_BYTES", "Bytes")
 #define STR_SVT_KB                              NC_("STR_SVT_KB", "KB")
 #define STR_SVT_MB                              NC_("STR_SVT_MB", "MB")
