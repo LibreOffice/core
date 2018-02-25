@@ -38,6 +38,7 @@ class BitmapTest : public CppUnit::TestFixture
     void testConvert();
     void testScale();
     void testCRC();
+    void testGreyPalette();
 
     CPPUNIT_TEST_SUITE(BitmapTest);
     CPPUNIT_TEST(testCreation);
@@ -46,6 +47,7 @@ class BitmapTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testConvert);
     CPPUNIT_TEST(testScale);
     CPPUNIT_TEST(testCRC);
+    CPPUNIT_TEST(testGreyPalette);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -392,6 +394,60 @@ void BitmapTest::testCRC()
     checkAndInsert(aCRCs, aChecker, "checkerboard");
     aChecker.Invert();
     checkAndInsert(aCRCs, aChecker, "inverted checkerboard");
+}
+
+void BitmapTest::testGreyPalette()
+{
+    {
+        BitmapPalette aPalette = Bitmap::GetGreyPalette(2);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of palette entries", static_cast<sal_uInt16>(2),
+                                     aPalette.GetEntryCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 1 wrong", BitmapColor(0, 0, 0), aPalette[0]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 2 wrong", BitmapColor(255, 255, 255), aPalette[1]);
+    }
+
+    {
+        BitmapPalette aPalette = Bitmap::GetGreyPalette(4);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of palette entries", static_cast<sal_uInt16>(4),
+                                     aPalette.GetEntryCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 1 wrong", BitmapColor(0, 0, 0), aPalette[0]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 2 wrong", BitmapColor(85, 85, 85), aPalette[1]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 3 wrong", BitmapColor(170, 170, 170), aPalette[2]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 4 wrong", BitmapColor(255, 255, 255), aPalette[3]);
+    }
+
+    {
+        BitmapPalette aPalette = Bitmap::GetGreyPalette(16);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of palette entries", static_cast<sal_uInt16>(16),
+                                     aPalette.GetEntryCount());
+        // this is a *reall* specific number of greys, incremented in units of 17 so may
+        // as well test them all...
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 1 wrong", BitmapColor(0, 0, 0), aPalette[0]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 2 wrong", BitmapColor(17, 17, 17), aPalette[1]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 3 wrong", BitmapColor(34, 34, 34), aPalette[2]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 4 wrong", BitmapColor(51, 51, 51), aPalette[3]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 5 wrong", BitmapColor(68, 68, 68), aPalette[4]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 6 wrong", BitmapColor(85, 85, 85), aPalette[5]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 7 wrong", BitmapColor(102, 102, 102), aPalette[6]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 8 wrong", BitmapColor(119, 119, 119), aPalette[7]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 9 wrong", BitmapColor(136, 136, 136), aPalette[8]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 10 wrong", BitmapColor(153, 153, 153), aPalette[9]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 11 wrong", BitmapColor(170, 170, 170), aPalette[10]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 12 wrong", BitmapColor(187, 187, 187), aPalette[11]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 13 wrong", BitmapColor(204, 204, 204), aPalette[12]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 14 wrong", BitmapColor(221, 221, 221), aPalette[13]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 15 wrong", BitmapColor(238, 238, 238), aPalette[14]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 16 wrong", BitmapColor(255, 255, 255), aPalette[15]);
+    }
+
+    {
+        BitmapPalette aPalette = Bitmap::GetGreyPalette(256);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong number of palette entries",
+                                     static_cast<sal_uInt16>(256), aPalette.GetEntryCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 1 wrong", BitmapColor(0, 0, 0), aPalette[0]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 127 wrong", BitmapColor(127, 127, 127), aPalette[127]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Entry 255 wrong", BitmapColor(255, 255, 255), aPalette[255]);
+    }
 }
 
 } // namespace
