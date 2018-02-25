@@ -235,7 +235,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
     switch( eConversion )
     {
         case BmpConversion::N1BitThreshold:
-            bRet = ImplMakeMono( 128 );
+            bRet = MakeMonochrome(128);
         break;
 
         case BmpConversion::N4BitGreys:
@@ -295,82 +295,6 @@ bool Bitmap::Convert( BmpConversion eConversion )
         default:
             OSL_FAIL( "Bitmap::Convert(): Unsupported conversion" );
         break;
-    }
-
-    return bRet;
-}
-
-bool Bitmap::ImplMakeMono( sal_uInt8 cThreshold )
-{
-    ScopedReadAccess pReadAcc(*this);
-    bool bRet = false;
-
-    if( pReadAcc )
-    {
-        Bitmap aNewBmp( GetSizePixel(), 1 );
-        ScopedWriteAccess pWriteAcc(aNewBmp);
-
-        if( pWriteAcc )
-        {
-            const BitmapColor aBlack( pWriteAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
-            const BitmapColor aWhite( pWriteAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
-            const long nWidth = pWriteAcc->Width();
-            const long nHeight = pWriteAcc->Height();
-
-            if( pReadAcc->HasPalette() )
-            {
-                for( long nY = 0; nY < nHeight; nY++ )
-                {
-                    Scanline pScanline = pWriteAcc->GetScanline(nY);
-                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    for( long nX = 0; nX < nWidth; nX++ )
-                    {
-                        const sal_uInt8 cIndex = pReadAcc->GetIndexFromData( pScanlineRead, nX );
-                        if( pReadAcc->GetPaletteColor( cIndex ).GetLuminance() >=
-                            cThreshold )
-                        {
-                            pWriteAcc->SetPixelOnData( pScanline, nX, aWhite );
-                        }
-                        else
-                            pWriteAcc->SetPixelOnData( pScanline, nX, aBlack );
-                    }
-                }
-            }
-            else
-            {
-                for( long nY = 0; nY < nHeight; nY++ )
-                {
-                    Scanline pScanline = pWriteAcc->GetScanline(nY);
-                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    for( long nX = 0; nX < nWidth; nX++ )
-                    {
-                        if( pReadAcc->GetPixelFromData( pScanlineRead, nX ).GetLuminance() >=
-                            cThreshold )
-                        {
-                            pWriteAcc->SetPixelOnData( pScanline, nX, aWhite );
-                        }
-                        else
-                            pWriteAcc->SetPixelOnData( pScanline, nX, aBlack );
-                    }
-                }
-            }
-
-            pWriteAcc.reset();
-            bRet = true;
-        }
-
-        pReadAcc.reset();
-
-        if( bRet )
-        {
-            const MapMode aMap( maPrefMapMode );
-            const Size aSize( maPrefSize );
-
-            *this = aNewBmp;
-
-            maPrefMapMode = aMap;
-            maPrefSize = aSize;
-        }
     }
 
     return bRet;
@@ -817,7 +741,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
     //
     //If we start with a 1 bit image, then after scaling it in any mode except
     //BmpScaleFlag::Fast we have a 24bit image which is perfectly correct, but we
-    //are going to down-shift it to mono again and Bitmap::ImplMakeMono just
+    //are going to down-shift it to mono again and Bitmap::MakeMonochrome just
     //has "Bitmap aNewBmp( GetSizePixel(), 1 );" to create a 1 bit bitmap which
     //will default to black/white and the colors mapped to which ever is closer
     //to black/white
@@ -825,7 +749,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
     //So the easiest thing to do to retain the colors of 1 bit bitmaps is to
     //just use the fast scale rather than attempting to count unique colors in
     //the other converters and pass all the info down through
-    //Bitmap::ImplMakeMono
+    //Bitmap::MakeMonochrome
     if (nStartCount == 1)
         nScaleFlag = BmpScaleFlag::Fast;
 
