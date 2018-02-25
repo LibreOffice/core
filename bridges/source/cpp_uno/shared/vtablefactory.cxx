@@ -63,7 +63,7 @@ extern "C" void * allocExec(
 {
     std::size_t pagesize;
 #if defined SAL_UNX
-#if defined FREEBSD || defined NETBSD || defined OPENBSD || defined DRAGONFLY
+#if defined FREEBSD || defined NETBSD || defined OPENBSD || defined DRAGONFLY || defined HAIKU
     pagesize = getpagesize();
 #else
     pagesize = sysconf(_SC_PAGESIZE);

@@ -65,11 +65,13 @@ const sal_Char pBuffer_Blank[]  = "";
 #   include <errno.h>
 #   include <fcntl.h>
 #   include <sys/stat.h>
-#   if !defined(MACOSX) && !defined(IOS) && !defined(__OpenBSD__) && !defined(__FreeBSD__) && !defined(__NetBSD__) && !defined (DRAGONFLY)
+#   if !defined(MACOSX) && !defined(IOS) && !defined(__OpenBSD__) && !defined(__FreeBSD__) && !defined(__NetBSD__) && !defined (DRAGONFLY) && !defined(HAIKU)
 #       include <sys/statfs.h>
 #   else
 #       include <sys/param.h>
-#       include <sys/mount.h>
+#       ifndef HAIKU
+#           include <sys/mount.h>
+#       endif
 #   endif
 #   if !defined(ANDROID)
 #        include <sys/statvfs.h>

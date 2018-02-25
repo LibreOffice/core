@@ -31,6 +31,10 @@ $(eval $(call gb_Executable_use_libraries,svpclient,\
     comphelper \
 ))
 
+ifeq ($(OS),HAIKU)
+$(eval $(call gb_Executable_add_libs,svpclient,-lnetwork))
+endif
+
 $(eval $(call gb_Executable_add_exception_objects,svpclient,\
     vcl/workben/svpclient \
 ))

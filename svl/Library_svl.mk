@@ -21,7 +21,7 @@ $(eval $(call gb_Library_Library,svl))
 
 $(eval $(call gb_Library_use_externals,svl,\
     boost_headers \
-    $(if $(filter LINUX MACOSX ANDROID %BSD SOLARIS,$(OS)), \
+    $(if $(filter LINUX MACOSX ANDROID %BSD SOLARIS HAIKU,$(OS)), \
         curl) \
     icu_headers \
     icuuc \

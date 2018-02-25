@@ -34,7 +34,7 @@ extern "C" {
             || defined _M_MRX000 || defined _M_PPC
 #       define OSL_LITENDIAN
 #   endif
-#elif defined ANDROID || defined LINUX
+#elif defined ANDROID || defined LINUX || defined HAIKU
 #   include <endian.h>
 #   if __BYTE_ORDER == __LITTLE_ENDIAN
 #       define OSL_LITENDIAN

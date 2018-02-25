@@ -33,6 +33,7 @@
 #include <list>
 #include <condition_variable>
 
+#include <sys/time.h>
 #include <time.h>
 
 #define VIRTUAL_DESKTOP_WIDTH 1024

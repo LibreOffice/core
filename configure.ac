@@ -792,7 +792,6 @@ haiku*)
     test_randr=no
     test_xrender=no
     test_freetype=yes
-    test_cairo=yes
     enable_java=no
     enable_opengl=no
     enable_odk=no
@@ -803,7 +802,7 @@ haiku*)
     enable_gltf=no
     enable_collada=no
     enable_coinmp=no
-    enable_pdfimport=no
+    enable_pdfium=no
     enable_postgresql_sdbc=no
     enable_firebird_sdbc=no
     _os=Haiku
@@ -4612,6 +4611,10 @@ if test "$USING_X11" != TRUE; then
     test_qt5=no
     test_gtk3_kde5=no
     enable_cairo_canvas=no
+fi
+
+if test "$OS" = "HAIKU"; then
+    enable_cairo_canvas=yes
 fi
 
 dnl ===================================================================

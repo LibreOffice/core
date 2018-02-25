@@ -41,7 +41,7 @@
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <desktop/crashreport.hxx>
 
-#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined HAIKU
 #include <opengl/x11/X11DeviceInfo.hxx>
 #elif defined (_WIN32)
 #include <opengl/win/WinDeviceInfo.hxx>
@@ -199,7 +199,7 @@ namespace
 
     OString getDeviceInfoString()
     {
-#if defined( SAL_UNX ) && !defined( MACOSX ) && !defined( IOS )&& !defined( ANDROID )
+#if defined( SAL_UNX ) && !defined( MACOSX ) && !defined( IOS )&& !defined( ANDROID ) && !defined( HAIKU )
         const X11OpenGLDeviceInfo aInfo;
         return aInfo.GetOS() +
             aInfo.GetOSRelease() +
@@ -774,7 +774,7 @@ bool OpenGLHelper::isDeviceBlacklisted()
     {
         OpenGLZone aZone;
 
-#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined HAIKU
         X11OpenGLDeviceInfo aInfo;
         bBlacklisted = aInfo.isDeviceBlocked();
         SAL_INFO("vcl.opengl", "blacklisted: " << bBlacklisted);
