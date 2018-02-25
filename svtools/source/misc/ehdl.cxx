@@ -308,7 +308,7 @@ bool SfxErrorContext::GetString(sal_uInt32 nErrId, OUString &rStr)
         {
             sal_uInt16 nId = ( nErrId & ERRCODE_WARNING_MASK ) ? ERRCTX_WARNING : ERRCTX_ERROR;
             ResStringArray aEr(ResId(RID_ERRCTX, *pMgr));
-            rStr = rStr.replaceAll("$(ERR)", aEr.GetString(nId));
+            rStr = rStr.replaceAll("$(ERR)", aEr.GetString(aEr.FindIndex(nId)));
         }
     }
 
