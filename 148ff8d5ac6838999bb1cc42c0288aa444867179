@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "da36d5c6_4934e1dd",
+        "filename": "vcl/qa/cppunit/bitmapcolor.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2018-02-25T05:54:54Z",
+      "side": 1,
+      "message": "When I used a straight constant, no matter what I tried the clang plugins were giving me errors. That\u0027s why I did this, to get around it.",
+      "parentUuid": "da36d5c6_a9039d0c",
+      "revId": "148ff8d5ac6838999bb1cc42c0288aa444867179",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da36d5c6_c908d12b",
         "filename": "vcl/qa/cppunit/bitmapcolor.cxx",
         "patchSetId": 4
@@ -47,6 +65,24 @@
       "writtenOn": "2018-02-25T05:38:03Z",
       "side": 1,
       "message": "That\u0027s really complicated.. Can\u0027t you just test 0,0,0, 128,128,128 and 255,255,255. That should cover the usual and corner cases. \n\nIt is OK to copy/paste to a certain degree in the tests if it makes it more clear and readable. Usually when you look at the test you want to see what is the input, what is performed, and then what is the expected output (what is the actual output is evaluated when the test is run). If you have a lot of logic how the input and output are created it makes it hard to read and evaluate too. \n\nI have seen tests (not in LO) which re-implements the logic of what was tested inside the test, to generate the expected output values and the authors didn\u0027t want to \"hardcode\" them (as hardcoding values is a bad practice).",
+      "revId": "148ff8d5ac6838999bb1cc42c0288aa444867179",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_6931a5ec",
+        "filename": "vcl/qa/cppunit/bitmapcolor.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2018-02-25T05:54:54Z",
+      "side": 1,
+      "message": "OK, will do.",
+      "parentUuid": "da36d5c6_c908d12b",
       "revId": "148ff8d5ac6838999bb1cc42c0288aa444867179",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
