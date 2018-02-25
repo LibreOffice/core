@@ -99,8 +99,6 @@ public:
                         WarningBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits n,
                                     const OUString& rMessage );
 
-    void                SetDefaultCheckBoxText();
-
     static Image const & GetStandardImage();
     static OUString     GetStandardText();
 };

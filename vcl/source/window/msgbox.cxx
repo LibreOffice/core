@@ -394,11 +394,6 @@ WarningBox::WarningBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits nWinB
     SetImage( WarningBox::GetStandardImage() );
 }
 
-void WarningBox::SetDefaultCheckBoxText()
-{
-    maCheckBoxText = VclResId(SV_STDTEXT_DONTWARNAGAIN);
-}
-
 Image const & WarningBox::GetStandardImage()
 {
     ImplInitMsgBoxImageList();
