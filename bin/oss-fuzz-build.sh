@@ -20,15 +20,25 @@ export ASAN_OPTIONS="detect_leaks=0"
 
 make fuzzers
 
-#some minimal fonts required
-cp $SRC/libreoffice/extras/source/truetype/symbol/opens___.ttf instdir/share/fonts/truetype/Liberation* $OUT
-#minimal runtime requirements
-rm -rf $OUT/services $OUT/types $OUT/*rdb
-mkdir $OUT/services
 pushd instdir/program
-cp -r *fuzzer unorc fundamentalrc types.rdb types $OUT
-head -c -14 services.rdb  > $OUT/services.rdb
-tail -c +85 ./services/services.rdb >> $OUT/services.rdb
+head -c -14 services.rdb  > templateservices.rdb
+tail -c +85 ./services/services.rdb >> templateservices.rdb
+for a in *fuzzer; do
+    #some minimal fonts required
+    cp $a $OUT
+    mkdir -p $OUT/$a.fonts
+    cp $SRC/libreoffice/extras/source/truetype/symbol/opens___.ttf ../share/fonts/truetype/Liberation* $OUT/$a.fonts
+    #minimal runtime requirements
+    cp templateservices.rdb $OUT/$a.services.rdb
+    cp types.rdb $OUT/$a.types.rdb
+    cp types/offapi.rdb $OUT/$a.moretypes.rdb
+    cat > $OUT/$a.unorc << EOF
+[Bootstrap]
+URE_INTERNAL_LIB_DIR=\${ORIGIN}
+UNO_TYPES=\${ORIGIN}/$a.types.rdb \${ORIGIN}/$a.moretypes.rdb
+UNO_SERVICES=\${ORIGIN}/$a.services.rdb
+EOF
+done
 popd
 
 #starting corpuses

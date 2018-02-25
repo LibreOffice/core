@@ -49,17 +49,25 @@ namespace
         return uri;
     }
 
+    OUString getExecutableName()
+    {
+        OUString uri;
+        if (osl_getExecutableFile(&uri.pData) != osl_Process_E_None) {
+            abort();
+        }
+        return uri.copy(uri.lastIndexOf('/') + 1);
+    }
+
     void setFontConfigConf(const OUString &execdir)
     {
         osl::File aFontConfig("file:///tmp/wmffuzzerfonts.conf");
         if (aFontConfig.open(osl_File_OpenFlag_Create | osl_File_OpenFlag_Write) == osl::File::E_None)
         {
-            OUString path;
-            osl::FileBase::getSystemPathFromFileURL(execdir, path);
-            OString sFontDir = OUStringToOString(path, osl_getThreadTextEncoding());
+            OUString sExecDir;
+            osl::FileBase::getSystemPathFromFileURL(execdir, sExecDir);
 
             rtl::OStringBuffer aBuffer("<?xml version=\"1.0\"?>\n<fontconfig><dir>");
-            aBuffer.append(sFontDir);
+            aBuffer.append(OUStringToOString(sExecDir + getExecutableName() + ".fonts", osl_getThreadTextEncoding());
             aBuffer.append("</dir><cachedir>/tmp/cache/fontconfig</cachedir></fontconfig>");
             rtl::OString aConf = aBuffer.makeStringAndClear();
             sal_uInt64 aBytesWritten;
@@ -104,7 +112,8 @@ void CommonInitialize(int *argc, char ***argv)
 
     tools::extendApplicationEnvironment();
 
-    Reference< XComponentContext > xContext = defaultBootstrap_InitialComponentContext();
+    Reference< XComponentContext > xContext =
+        defaultBootstrap_InitialComponentContext(sExecDir + getExecutableName() + ".unorc");
     Reference< XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), UNO_QUERY );
     if( !xServiceManager.is() )
         Application::Abort( "Failed to bootstrap" );
