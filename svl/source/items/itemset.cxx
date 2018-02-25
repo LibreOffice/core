@@ -373,12 +373,12 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
                                         const SfxPoolItem **ppItem ) const
 {
     // Find the range in which the Which is located
-    const SfxItemSet* pAktSet = this;
+    const SfxItemSet* pCurrentSet = this;
     SfxItemState eRet = SfxItemState::UNKNOWN;
     do
     {
-        SfxPoolItem const** ppFnd = pAktSet->m_pItems.get();
-        const sal_uInt16* pPtr = pAktSet->m_pWhichRanges;
+        SfxPoolItem const** ppFnd = pCurrentSet->m_pItems.get();
+        const sal_uInt16* pPtr = pCurrentSet->m_pWhichRanges;
         if (pPtr)
         {
             while ( *pPtr )
@@ -412,7 +412,7 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
                 pPtr += 2;
             }
         }
-    } while (bSrchInParent && nullptr != (pAktSet = pAktSet->m_pParent));
+    } while (bSrchInParent && nullptr != (pCurrentSet = pCurrentSet->m_pParent));
     return eRet;
 }
 
@@ -852,13 +852,13 @@ const SfxPoolItem* SfxItemSet::GetItem(sal_uInt16 nId, bool bSearchInParent) con
 const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
 {
     // Search the Range in which the Which is located in:
-    const SfxItemSet* pAktSet = this;
+    const SfxItemSet* pCurrentSet = this;
     do
     {
-        if( pAktSet->Count() )
+        if( pCurrentSet->Count() )
         {
-            SfxPoolItem const** ppFnd = pAktSet->m_pItems.get();
-            const sal_uInt16* pPtr = pAktSet->m_pWhichRanges;
+            SfxPoolItem const** ppFnd = pCurrentSet->m_pItems.get();
+            const sal_uInt16* pPtr = pCurrentSet->m_pWhichRanges;
             while( *pPtr )
             {
                 if( *pPtr <= nWhich && nWhich <= *(pPtr+1) )
@@ -890,7 +890,7 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
 //TODO: Search until end of Range: What are we supposed to do now? To the Parent or Default??
 //      if( !*pPtr )            // Until the end of the search Range?
 //      break;
-    } while (bSrchInParent && nullptr != (pAktSet = pAktSet->m_pParent));
+    } while (bSrchInParent && nullptr != (pCurrentSet = pCurrentSet->m_pParent));
 
     // Get the Default from the Pool and return
     SAL_WARN_IF(!m_pPool, "svl.items", "no Pool, but status is ambiguous, with ID/pos " << nWhich);
