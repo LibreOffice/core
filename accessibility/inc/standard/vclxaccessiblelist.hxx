@@ -142,7 +142,7 @@ private:
     sal_Int32   m_nCurSelectedPos;
 
 
-    virtual ~VCLXAccessibleList() override;
+    virtual ~VCLXAccessibleList() override = default;
 
     /** This function is called from the implementation helper during a
         XComponent::dispose call.  Free the list of items and the items themselves.

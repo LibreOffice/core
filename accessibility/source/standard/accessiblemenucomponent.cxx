@@ -46,12 +46,6 @@ using namespace ::comphelper;
 // class OAccessibleMenuComponent
 
 
-OAccessibleMenuComponent::OAccessibleMenuComponent( Menu* pMenu )
-    :OAccessibleMenuBaseComponent( pMenu )
-{
-}
-
-
 bool OAccessibleMenuComponent::IsEnabled()
 {
     return true;

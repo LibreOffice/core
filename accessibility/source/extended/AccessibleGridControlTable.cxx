@@ -39,12 +39,6 @@ AccessibleGridControlTable::AccessibleGridControlTable(
         const Reference< XAccessible >& rxParent,
         IAccessibleTable& rTable) :
     AccessibleGridControlTableBase( rxParent, rTable, TCTYPE_TABLE )
-        ,m_pCellVector( )
-        ,m_pAccessCellVector( )
-{
-}
-
-AccessibleGridControlTable::~AccessibleGridControlTable()
 {
 }
 

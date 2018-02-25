@@ -58,11 +58,6 @@ VCLXAccessibleStatusBarItem::VCLXAccessibleStatusBarItem( StatusBar* pStatusBar,
 }
 
 
-VCLXAccessibleStatusBarItem::~VCLXAccessibleStatusBarItem()
-{
-}
-
-
 bool VCLXAccessibleStatusBarItem::IsShowing()
 {
     bool bShowing = false;
