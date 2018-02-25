@@ -29,7 +29,7 @@
 
 namespace accessibility {
 
-    class AccessibleBrowseBoxImpl;
+    class AccessibleBrowseBoxHeaderBar;
     class AccessibleBrowseBoxTable;
 
 
@@ -174,8 +174,17 @@ protected:
     virtual AccessibleBrowseBoxTable*   createAccessibleTable();
 
 private:
-    // members
-    std::unique_ptr< AccessibleBrowseBoxImpl > m_xImpl;
+    /// the css::accessibility::XAccessible which created the AccessibleBrowseBox
+    css::uno::WeakReference< css::accessibility::XAccessible >  m_aCreator;
+
+    /** The data table child. */
+    rtl::Reference<AccessibleBrowseBoxTable>                    mxTable;
+
+    /** The header bar for rows ("handle column"). */
+    rtl::Reference<AccessibleBrowseBoxHeaderBar>                mxRowHeaderBar;
+
+    /** The header bar for columns (first row of the table). */
+    rtl::Reference<AccessibleBrowseBoxHeaderBar>                mxColumnHeaderBar;
 };
 
 
