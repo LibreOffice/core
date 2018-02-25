@@ -607,9 +607,9 @@ ErrCode call(
     {
         unmarshal(elem.variable, elem.buffer);
     }
-    for (auto const& unmarshalString : data.unmarshalStrings)
+    for (auto const& elem : data.unmarshalStrings)
     {
-        ErrCode e = unmarshalString(unmarshalString, result);
+        ErrCode e = unmarshalString(elem, result);
         if (e != ERRCODE_NONE) {
             return e;
         }
