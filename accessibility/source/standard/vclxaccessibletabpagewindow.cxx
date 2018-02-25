@@ -58,11 +58,6 @@ VCLXAccessibleTabPageWindow::VCLXAccessibleTabPageWindow( VCLXWindow* pVCLXWindo
 }
 
 
-VCLXAccessibleTabPageWindow::~VCLXAccessibleTabPageWindow()
-{
-}
-
-
 // OCommonAccessibleComponent
 
 

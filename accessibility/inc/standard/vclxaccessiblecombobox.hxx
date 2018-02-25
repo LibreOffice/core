@@ -31,7 +31,7 @@
     object of the VCLXAccessibleList class which does not
     support selection at the moment.
 */
-class VCLXAccessibleComboBox
+class VCLXAccessibleComboBox final
     : public VCLXAccessibleBox
 {
 public:
@@ -43,8 +43,8 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
-protected:
-    virtual ~VCLXAccessibleComboBox() override;
+private:
+    virtual ~VCLXAccessibleComboBox() override = default;
 
     virtual bool IsValid() const override;
 };

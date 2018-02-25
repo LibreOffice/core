@@ -43,7 +43,7 @@ class AccessibleGridControl final : public AccessibleGridControlBase
     ::svt::table::IAccessibleTable& _rTable
     );
 
-    virtual ~AccessibleGridControl() override;
+    virtual ~AccessibleGridControl() override = default;
 
     /** Cleans up members. */
     using AccessibleGridControlBase::disposing;
