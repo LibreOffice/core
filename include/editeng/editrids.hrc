@@ -127,10 +127,10 @@
 
 // enum CASEMAP ----------------------------------------------------------
 #define RID_SVXITEMS_CASEMAP_NONE               NC_("RID_SVXITEMS_CASEMAP_NONE", "None")
-#define RID_SVXITEMS_CASEMAP_VERSALIEN          NC_("RID_SVXITEMS_CASEMAP_VERSALIEN", "Caps")
-#define RID_SVXITEMS_CASEMAP_GEMEINE            NC_("RID_SVXITEMS_CASEMAP_GEMEINE", "Lowercase")
-#define RID_SVXITEMS_CASEMAP_TITEL              NC_("RID_SVXITEMS_CASEMAP_TITEL", "Title")
-#define RID_SVXITEMS_CASEMAP_KAPITAELCHEN       NC_("RID_SVXITEMS_CASEMAP_KAPITAELCHEN", "Small caps")
+#define RID_SVXITEMS_CASEMAP_UPPERCASE          NC_("RID_SVXITEMS_CASEMAP_VERSALIEN", "Caps")
+#define RID_SVXITEMS_CASEMAP_LOWERCASE          NC_("RID_SVXITEMS_CASEMAP_GEMEINE", "Lowercase")
+#define RID_SVXITEMS_CASEMAP_TITLE              NC_("RID_SVXITEMS_CASEMAP_TITEL", "Title")
+#define RID_SVXITEMS_CASEMAP_SMALLCAPS          NC_("RID_SVXITEMS_CASEMAP_KAPITAELCHEN", "Small caps")
 
 // enum ESCAPEMENT -------------------------------------------------------
 #define RID_SVXITEMS_ESCAPEMENT_OFF             NC_("RID_SVXITEMS_ESCAPEMENT_OFF", "Normal position")
