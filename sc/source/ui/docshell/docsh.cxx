@@ -724,12 +724,28 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         ScAppOptions aAppOptions = SC_MOD()->GetAppOptions();
                         if ( aAppOptions.GetShowSharedDocumentWarning() )
                         {
-                            ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(), MessBoxStyle::Ok,
-                                ScGlobal::GetRscString( STR_SHARED_DOC_WARNING ) );
-                            aBox->SetDefaultCheckBoxText();
-                            aBox->Execute();
-                            bool bChecked = aBox->GetCheckBoxState();
-                            if ( bChecked )
+                            vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
+
+                            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWin ? pWin->GetFrameWeld() : nullptr,
+                                        "modules/scalc/ui/sharedwarningdialog.ui"));
+                            std::unique_ptr<weld::MessageDialog> xWarningBox(xBuilder->weld_message_dialog("SharedWarningDialog"));
+                            std::unique_ptr<weld::CheckButton> xWarningOnBox(xBuilder->weld_check_button("ask"));
+
+                            //fdo#75121, a bit tricky because the widgets we want to align with
+                            //don't actually exist in the ui description, they're implied
+                            std::unique_ptr<weld::Container> xOrigParent(xWarningOnBox->weld_parent());
+                            std::unique_ptr<weld::Container> xContentArea(xWarningBox->weld_message_area());
+                            xOrigParent->remove(xWarningOnBox.get());
+                            xContentArea->add(xWarningOnBox.get());
+
+                            xWarningBox->run();
+
+                            //put them back as they were
+                            xContentArea->remove(xWarningOnBox.get());
+                            xOrigParent->add(xWarningOnBox.get());
+
+                            bool bChecked = xWarningOnBox->get_active();
+                            if (bChecked)
                             {
                                 aAppOptions.SetShowSharedDocumentWarning( !bChecked );
                                 SC_MOD()->SetAppOptions( aAppOptions );

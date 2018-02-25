@@ -126,7 +126,6 @@ MessBox::MessBox(vcl::Window* pParent, MessBoxStyle nMessBoxStyle, WinBits nWinB
                  const OUString& rTitle, const OUString& rMessage) :
     ButtonDialog( WindowType::MESSBOX ),
     mbHelpBtn( false ),
-    mbCheck( false ),
     mnMessBoxStyle( nMessBoxStyle ),
     maMessText( rMessage )
 {
@@ -147,7 +146,6 @@ void MessBox::dispose()
 {
     mpVCLMultiLineEdit.disposeAndClear();
     mpFixedImage.disposeAndClear();
-    mpCheckBox.disposeAndClear();
     ButtonDialog::dispose();
 }
 
@@ -187,11 +185,6 @@ void MessBox::ImplPosControls()
 
     mpVCLMultiLineEdit.disposeAndClear();
     mpFixedImage.disposeAndClear();
-    if ( mpCheckBox )
-    {
-        mbCheck = mpCheckBox->IsChecked();
-        mpCheckBox.disposeAndClear();
-    }
 
     // Clean up message text with tabs
     OUString aMessText(maMessText.replaceAll("\t", "    "));
@@ -286,52 +279,6 @@ void MessBox::ImplPosControls()
     if ( aPageSize.Width() < nTitleWidth )
         aPageSize.setWidth( nTitleWidth );
 
-    if ( !maCheckBoxText.isEmpty() )
-    {
-        Size aMinCheckboxSize ( aMEditSize );
-        if ( aPageSize.Width() < IMPL_MINSIZE_MSGBOX_WIDTH+80 )
-        {
-            aPageSize.setWidth( IMPL_MINSIZE_MSGBOX_WIDTH+80 );
-            aMinCheckboxSize.AdjustWidth(80 );
-        }
-
-        // #104492# auto mnemonics for CJK strings may increase the length, so measure the
-        // checkbox length including a temporary mnemonic, the correct auto mnemonic will be
-        // generated later in the dialog (see init_show)
-
-        OUString aMnemonicString( maCheckBoxText );
-        if( GetSettings().GetStyleSettings().GetAutoMnemonic() )
-        {
-            if( aMnemonicString == GetNonMnemonicString( maCheckBoxText ) )
-            {
-                // no mnemonic found -> create one
-                MnemonicGenerator aMnemonicGenerator;
-                aMnemonicString = aMnemonicGenerator.CreateMnemonic( aMnemonicString );
-            }
-        }
-
-        mpCheckBox = VclPtr<CheckBox>::Create( this );
-        mpCheckBox->Check( mbCheck );
-        mpCheckBox->SetText( aMnemonicString );
-        mpCheckBox->SetStyle( mpCheckBox->GetStyle() | WB_WORDBREAK );
-        mpCheckBox->SetHelpId( GetHelpId() );   // DR: Check box and dialog have same HID
-
-        // align checkbox with message text
-        Size aSize = mpCheckBox->CalcMinimumSize( aMinCheckboxSize.Width() );
-
-        // now set the original non-mnemonic string
-        mpCheckBox->SetText( maCheckBoxText );
-
-        Point aPos( aTextPos );
-        aPos.AdjustY(aMEditSize.Height() + (IMPL_DIALOG_OFFSET)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2) );
-
-        // increase messagebox
-        aPageSize.AdjustHeight(aSize.Height() + (IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2) );
-
-        mpCheckBox->SetPosSizePixel( aPos, aSize );
-        mpCheckBox->Show();
-    }
-
     mpVCLMultiLineEdit = VclPtr<VclMultiLineEdit>::Create( this, nWinStyle );
     mpVCLMultiLineEdit->SetText( aMessText );
     mpVCLMultiLineEdit->SetPosSizePixel( aTextPos, aMEditSize );
@@ -348,17 +295,6 @@ void MessBox::StateChanged( StateChangedType nType )
         ImplPosControls();
     }
     ButtonDialog::StateChanged( nType );
-}
-
-bool MessBox::GetCheckBoxState() const
-{
-    return mpCheckBox ? mpCheckBox->IsChecked() : mbCheck;
-}
-
-void MessBox::SetCheckBoxState( bool bCheck )
-{
-    if( mpCheckBox ) mpCheckBox->Check( bCheck );
-    mbCheck = bCheck;
 }
 
 Size MessBox::GetOptimalSize() const
@@ -393,11 +329,6 @@ WarningBox::WarningBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits nWinB
         SetText( GetStandardText() );
 
     SetImage( WarningBox::GetStandardImage() );
-}
-
-void WarningBox::SetDefaultCheckBoxText()
-{
-    maCheckBoxText = VclResId(SV_STDTEXT_DONTWARNAGAIN);
 }
 
 Image const & WarningBox::GetStandardImage()
