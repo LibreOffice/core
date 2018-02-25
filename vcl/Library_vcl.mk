@@ -628,6 +628,27 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 endif
 endif
 
+ifeq ($(OS),HAIKU)
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/unx/generic/printer/jobdata \
+    vcl/unx/generic/printer/ppdparser \
+    vcl/null/printerinfomanager \
+    $(vcl_headless_code) \
+    $(vcl_headless_freetype_code) \
+))
+
+$(eval $(call gb_Library_add_libs,vcl,\
+	-lbe \
+))
+
+$(eval $(call gb_Library_use_externals,vcl,\
+	cairo \
+	fontconfig \
+	freetype \
+	expat \
+))
+endif
+
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_add_libs,vcl,\
 	-llog \

@@ -9,6 +9,6 @@
 
 #please make generic modifications to unxgcc.mk
 
-include $(GBUILDDIR)/platform/unxgcc.mk
+include $(GBUILDDIR)/platform/haiku.mk
 
 # vim: set noet sw=4:

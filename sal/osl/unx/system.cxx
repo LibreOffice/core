@@ -28,7 +28,7 @@
 
 /* struct passwd differs on some platforms */
 
-#if defined(MACOSX) || defined(IOS) || defined(OPENBSD) || defined(NETBSD)
+#if defined(MACOSX) || defined(IOS) || defined(OPENBSD) || defined(NETBSD) || defined(HAIKU)
 
 //No mutex needed on Mac OS X, gethostbyname is thread safe
 

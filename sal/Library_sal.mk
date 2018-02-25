@@ -57,7 +57,7 @@ $(eval $(call gb_Library_use_system_win32_libs,sal,\
 ))
 
 $(eval $(call gb_Library_add_libs,sal,\
-	$(if $(filter-out $(OS),WNT), \
+	$(if $(filter-out $(OS),WNT HAIKU), \
 		$(if $(filter $(OS),ANDROID),, \
 			-lpthread \
 		) \
@@ -69,6 +69,9 @@ $(eval $(call gb_Library_add_libs,sal,\
 	$(if $(filter $(OS),SOLARIS), \
 		-lnsl \
 		-lsocket \
+	) \
+	$(if $(filter $(OS),HAIKU), \
+		-lnetwork \
 	) \
 ))
 

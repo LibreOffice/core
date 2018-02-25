@@ -59,6 +59,19 @@
 #endif /* !(_BYTE_ORDER == _LITTLE_ENDIAN) */
 #endif /* Def *BSD */
 
+#if defined(__HAIKU__)
+#include <endian.h>
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+#undef CORE_BIG_ENDIAN
+#define CORE_LITTLE_ENDIAN
+#else /* !(__BYTE_ORDER == __LITTLE_ENDIAN) */
+#if __BYTE_ORDER == __BIG_ENDIAN
+#define CORE_BIG_ENDIAN
+#undef CORE_LITTLE_ENDIAN
+#endif /* __BYTE_ORDER == __BIG_ENDIAN */
+#endif /* !(__BYTE_ORDER == __LITTLE_ENDIAN) */
+#endif /* Def __HAIKU__ */
+
 #ifdef __sun
 #ifdef __sparc
 #define CORE_BIG_ENDIAN

@@ -31,6 +31,7 @@
 
 #include <list>
 
+#include <sys/time.h>
 #include <time.h>
 
 #define VIRTUAL_DESKTOP_WIDTH 1024

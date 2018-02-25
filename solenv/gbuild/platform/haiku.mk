@@ -7,10 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-#please make generic modifications to unxgcc.mk
 
-gb_CPUDEFS := -DX86
+include $(GBUILDDIR)/platform/unxgcc.mk
 
-include $(GBUILDDIR)/platform/haiku.mk
+ifeq ($(HAVE_GCC_STACK_PROTECTOR_STRONG),TRUE)
+gb_CFLAGS_COMMON += -lssp
+gb_CXXFLAGS_COMMON += -lssp
+gb_LinkTarget_LDFLAGS += -lssp
+endif
 
-# vim: set noet sw=4:
+# vim: set noet sw=4 ts=4:

@@ -155,8 +155,10 @@ oslFileError oslTranslateFileError(int Errno)
             return osl_File_E_MULTIHOP;
 #endif /* MACOSX */
 
+#if !defined(HAIKU)
         case EUSERS:
             return osl_File_E_USERS;
+#endif
 
         case EOVERFLOW:
             return osl_File_E_OVERFLOW;

@@ -187,7 +187,7 @@ static ErrCode GetSvError( int nErrno )
 #if defined(NETBSD) || \
     defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD) || \
     defined(__FreeBSD_kernel__) || defined (AIX) || defined(DRAGONFLY) || \
-    defined(IOS)
+    defined(IOS) || defined(HAIKU)
         { EDEADLK,      SVSTREAM_LOCKING_VIOLATION },
 #else
         { EDEADLOCK,    SVSTREAM_LOCKING_VIOLATION },

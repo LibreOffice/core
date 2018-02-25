@@ -102,6 +102,8 @@ else ifeq ($(OS),ANDROID)
 
 else ifeq ($(OS),IOS)
 
+else ifeq ($(OS),HAIKU)
+
 else
 
 $(eval $(call gb_Module_add_targets,desktop,\
