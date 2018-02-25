@@ -30,7 +30,6 @@
 
 namespace
 {
-
 class BitmapTest : public CppUnit::TestFixture
 {
     void testCreation();
@@ -171,12 +170,13 @@ void BitmapTest::testScale()
     }
 }
 
-typedef std::unordered_map<sal_uInt64, const char *> CRCHash;
+typedef std::unordered_map<sal_uInt64, const char*> CRCHash;
 
-void checkAndInsert(CRCHash &rHash, sal_uInt64 nCRC, const char *pLocation)
+void checkAndInsert(CRCHash& rHash, sal_uInt64 nCRC, const char* pLocation)
 {
     auto it = rHash.find(nCRC);
-    if (it != rHash.end()) {
+    if (it != rHash.end())
+    {
         OStringBuffer aBuf("CRC collision between ");
         aBuf.append(pLocation);
         aBuf.append(" and ");
@@ -188,12 +188,12 @@ void checkAndInsert(CRCHash &rHash, sal_uInt64 nCRC, const char *pLocation)
     rHash[nCRC] = pLocation;
 }
 
-void checkAndInsert(CRCHash &rHash, Bitmap const & rBmp, const char *pLocation)
+void checkAndInsert(CRCHash& rHash, Bitmap const& rBmp, const char* pLocation)
 {
     checkAndInsert(rHash, rBmp.GetChecksum(), pLocation);
 }
 
-Bitmap getAsBitmap(VclPtr<OutputDevice> const & pOut)
+Bitmap getAsBitmap(VclPtr<OutputDevice> const& pOut)
 {
     return pOut->GetBitmap(Point(), pOut->GetOutputSizePixel());
 }
@@ -202,7 +202,7 @@ void BitmapTest::testCRC()
 {
     CRCHash aCRCs;
 
-    Bitmap aBitmap(Size(1023,759), 24, nullptr);
+    Bitmap aBitmap(Size(1023, 759), 24, nullptr);
     aBitmap.Erase(COL_BLACK);
     checkAndInsert(aCRCs, aBitmap, "black bitmap");
     aBitmap.Invert();
