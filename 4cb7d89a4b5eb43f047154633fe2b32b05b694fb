@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_69e4453b",
+        "filename": "vcl/qa/cppunit/bitmapcolor.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-02-25T07:51:51Z",
+      "side": 1,
+      "message": "typo... sal_uIn8",
+      "revId": "4cb7d89a4b5eb43f047154633fe2b32b05b694fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
