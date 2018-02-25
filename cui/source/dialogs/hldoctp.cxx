@@ -60,7 +60,6 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* p
 
     m_pCbbPath->Show();
     m_pCbbPath->SetBaseURL(INET_FILE_SCHEME);
-    m_pCbbPath->SetHelpId( HID_HYPERDLG_DOC_PATH );
 
     SetExchangeSupport ();
 

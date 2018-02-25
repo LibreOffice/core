@@ -53,7 +53,6 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( vcl::Window *pParent,
     InitStdControls();
 
     m_pCbbTarget->Show();
-    m_pCbbTarget->SetHelpId( HID_HYPERDLG_INET_PATH );
 
     SetExchangeSupport ();
 

@@ -38,7 +38,6 @@
 #include "dialmgr.hxx"
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
-#include "helpids.h"
 #include <svx/hlnkitem.hxx>
 
 #include "hlmarkwn.hxx"
