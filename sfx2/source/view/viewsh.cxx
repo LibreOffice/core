@@ -156,12 +156,18 @@ SfxClipboardChangeListener::SfxClipboardChangeListener( SfxViewShell* pView, con
 void SfxClipboardChangeListener::ChangedContents()
 {
     const SolarMutexGuard aGuard;
-    if( m_pViewShell )
+    if (m_pViewShell)
     {
         SfxBindings& rBind = m_pViewShell->GetViewFrame()->GetBindings();
-        rBind.Invalidate( SID_PASTE );
-        rBind.Invalidate( SID_PASTE_SPECIAL );
-        rBind.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
+        rBind.Invalidate(SID_PASTE);
+        rBind.Invalidate(SID_PASTE_SPECIAL);
+        rBind.Invalidate(SID_CLIPBOARD_FORMAT_ITEMS);
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            // In the future we might send the payload as well.
+            SfxLokHelper::notifyAllViews(LOK_CALLBACK_CLIPBOARD_CHANGED, "");
+        }
     }
 }
 
@@ -822,7 +828,7 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
     if ( !pClients )
         return nullptr;
 
-    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
+    const bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
 
     for (SfxInPlaceClient* pIPClient : *pClients)
     {
