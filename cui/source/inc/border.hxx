@@ -107,6 +107,7 @@ private:
 
     long                nMinValue;  ///< minimum distance
     SwBorderModes       nSWMode;    ///< table, textframe, paragraph
+    sal_uInt16          mnBoxSlot;
 
     bool                mbHorEnabled;       ///< true = Inner horizontal border enabled.
     bool                mbVerEnabled;       ///< true = Inner vertical border enabled.

@@ -276,7 +276,7 @@ IMPL_LINK( SwEnvFormatPage, EditHdl, MenuButton *, pButton, void )
 
         // In order for the background color not to get ironed over:
         SfxAllItemSet aTmpSet(*pCollSet);
-        ::ConvertAttrCharToGen(aTmpSet, CONV_ATTR_ENV);
+        ::ConvertAttrCharToGen(aTmpSet);
 
         SwAbstractDialogFactory* pFact = swui::GetFactory();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
@@ -287,7 +287,7 @@ IMPL_LINK( SwEnvFormatPage, EditHdl, MenuButton *, pButton, void )
         if (pDlg->Execute() == RET_OK)
         {
             SfxItemSet aOutputSet( *pDlg->GetOutputItemSet() );
-            ::ConvertAttrGenToChar(aOutputSet, aTmpSet, CONV_ATTR_ENV);
+            ::ConvertAttrGenToChar(aOutputSet, aTmpSet);
             pCollSet->Put(aOutputSet);
         }
     }
