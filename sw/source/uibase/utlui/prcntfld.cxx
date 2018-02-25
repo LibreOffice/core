@@ -63,7 +63,7 @@ void PercentField::ShowPercent(bool bPercent)
 
     if (bPercent)
     {
-        sal_Int64 nAktWidth, nPercent;
+        sal_Int64 nCurrentWidth, nPercent;
 
         nOldValue = GetValue();
 
@@ -76,9 +76,9 @@ void PercentField::ShowPercent(bool bPercent)
         m_pField->SetUnit(FUNIT_CUSTOM);
         m_pField->SetDecimalDigits( 0 );
 
-        nAktWidth = MetricField::ConvertValue(nOldMin, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
+        nCurrentWidth = MetricField::ConvertValue(nOldMin, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
         // round to 0.5 percent
-        nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
+        nPercent = ((nCurrentWidth * 10) / nRefValue + 5) / 10;
 
         m_pField->SetMin(std::max(static_cast< sal_Int64 >(1), nPercent));
         m_pField->SetMax(100);
@@ -86,8 +86,8 @@ void PercentField::ShowPercent(bool bPercent)
         m_pField->SetBaseValue(0);
         if (nOldValue != nLastValue)
         {
-            nAktWidth = MetricField::ConvertValue(nOldValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
-            nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
+            nCurrentWidth = MetricField::ConvertValue(nOldValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
+            nPercent = ((nCurrentWidth * 10) / nRefValue + 5) / 10;
             m_pField->SetValue(nPercent);
             nLastPercent = nPercent;
             nLastValue = nOldValue;
@@ -126,17 +126,17 @@ void PercentField::SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit)
     else
     {
         // Overwrite output value, do not restore later
-        sal_Int64 nPercent, nAktWidth;
+        sal_Int64 nPercent, nCurrentWidth;
         if(eInUnit == FUNIT_TWIP)
         {
-            nAktWidth = MetricField::ConvertValue(nNewValue, 0, nOldDigits, FUNIT_TWIP, FUNIT_TWIP);
+            nCurrentWidth = MetricField::ConvertValue(nNewValue, 0, nOldDigits, FUNIT_TWIP, FUNIT_TWIP);
         }
         else
         {
             sal_Int64 nValue = Convert(nNewValue, eInUnit, eOldUnit);
-            nAktWidth = MetricField::ConvertValue(nValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
+            nCurrentWidth = MetricField::ConvertValue(nValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
         }
-        nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
+        nPercent = ((nCurrentWidth * 10) / nRefValue + 5) / 10;
         m_pField->SetValue(nPercent);
     }
 }
@@ -211,17 +211,17 @@ void PercentField::SetUserValue(sal_Int64 nNewValue, FieldUnit eInUnit)
     else
     {
         // Overwrite output value, do not restore later
-        sal_Int64 nPercent, nAktWidth;
+        sal_Int64 nPercent, nCurrentWidth;
         if (eInUnit == FUNIT_TWIP)
         {
-            nAktWidth = MetricField::ConvertValue(nNewValue, 0, nOldDigits, FUNIT_TWIP, FUNIT_TWIP);
+            nCurrentWidth = MetricField::ConvertValue(nNewValue, 0, nOldDigits, FUNIT_TWIP, FUNIT_TWIP);
         }
         else
         {
             sal_Int64 nValue = Convert(nNewValue, eInUnit, eOldUnit);
-            nAktWidth = MetricField::ConvertValue(nValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
+            nCurrentWidth = MetricField::ConvertValue(nValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
         }
-        nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
+        nPercent = ((nCurrentWidth * 10) / nRefValue + 5) / 10;
         m_pField->SetUserValue(nPercent,FUNIT_NONE);
     }
 }
@@ -265,15 +265,15 @@ sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit e
     if (eOutUnit == FUNIT_CUSTOM)
     {
         // Convert to percent
-        sal_Int64 nAktWidth;
+        sal_Int64 nCurrentWidth;
         nValue = DenormalizePercent(nValue);
 
         if (eInUnit == FUNIT_TWIP)  // Only convert if necessary
-            nAktWidth = nValue;
+            nCurrentWidth = nValue;
         else
-            nAktWidth = MetricField::ConvertValue(nValue, 0, nOldDigits, eInUnit, FUNIT_TWIP);
+            nCurrentWidth = MetricField::ConvertValue(nValue, 0, nOldDigits, eInUnit, FUNIT_TWIP);
         // Round to 0.5 percent
-        return ((nAktWidth * 1000) / nRefValue + 5) / 10;
+        return ((nCurrentWidth * 1000) / nRefValue + 5) / 10;
     }
 
     return MetricField::ConvertValue(nValue, 0, nOldDigits, eInUnit, eOutUnit);
