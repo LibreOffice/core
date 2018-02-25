@@ -601,7 +601,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
         SfxItemSet aTmpSet( *m_pDlg->GetOutputItemSet() );
         if( SfxStyleFamily::Char == m_nFamily )
         {
-            ::ConvertAttrGenToChar(aTmpSet, m_xTmp->GetItemSet(), CONV_ATTR_STD);
+            ::ConvertAttrGenToChar(aTmpSet, m_xTmp->GetItemSet());
         }
 
         m_xTmp->SetItemSet( aTmpSet );
@@ -784,7 +784,7 @@ void SwDocShell::Edit(
     }
     else if( SfxStyleFamily::Char == nFamily )
     {
-        ::ConvertAttrCharToGen(xTmp->GetItemSet(), CONV_ATTR_STD);
+        ::ConvertAttrCharToGen(xTmp->GetItemSet());
     }
 
     if(SfxStyleFamily::Page == nFamily || SfxStyleFamily::Para == nFamily)
@@ -880,7 +880,7 @@ void SwDocShell::Edit(
             ::SfxToSwPageDescAttr( *GetWrtShell(), xTmp->GetItemSet() );
         else
         {
-            ::ConvertAttrGenToChar(xTmp->GetItemSet(), xTmp->GetItemSet(), CONV_ATTR_STD);
+            ::ConvertAttrGenToChar(xTmp->GetItemSet(), xTmp->GetItemSet());
         }
         if(SfxStyleFamily::Page == nFamily)
             m_pView->InvalidateRulerPos();

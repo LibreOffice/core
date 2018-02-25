@@ -164,7 +164,7 @@ void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot, const 
     }
     pCoreSet->Put(SfxUInt16Item(SID_ATTR_CHAR_WIDTH_FIT_TO_LINE, rWrtSh.GetScalingOfSelectedText()));
 
-    ::ConvertAttrCharToGen(*pCoreSet, CONV_ATTR_STD);
+    ::ConvertAttrCharToGen(*pCoreSet);
 
     // Setting the BoxInfo
     ::PrepareBoxInfo(*pCoreSet, rWrtSh);
@@ -221,7 +221,7 @@ void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot, const 
 static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std::shared_ptr<SfxItemSet> pCoreSet, bool bSel, bool bSelectionPut, SfxRequest *pReq)
 {
     SfxItemSet aTmpSet( *pSet );
-    ::ConvertAttrGenToChar(aTmpSet, *pCoreSet, CONV_ATTR_STD);
+    ::ConvertAttrGenToChar(aTmpSet, *pCoreSet);
 
     const SfxPoolItem* pSelectionItem;
     bool bInsert = false;
