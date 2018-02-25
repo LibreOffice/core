@@ -1099,7 +1099,7 @@ void SbRtl_LTrim(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_Mid(StarBASIC *, SbxArray & rPar, bool bWrite)
 {
-    int nArgCount = rPar.Count()-1;
+    std::size_t nArgCount = rPar.Count()-1;
     if ( nArgCount < 2 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
