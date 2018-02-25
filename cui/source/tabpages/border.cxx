@@ -39,6 +39,7 @@
 #include <vcl/settings.hxx>
 #include <svx/flagsdef.hxx>
 #include <sfx2/request.hxx>
+#include <svl/grabbagitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/ilstitem.hxx>
 #include <svl/int64item.hxx>
@@ -96,6 +97,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     : SfxTabPage(pParent, "BorderPage", "cui/ui/borderpage.ui", &rCoreAttrs)
     , nMinValue(0)
     , nSWMode(SwBorderModes::NONE)
+    , mnBoxSlot(SID_ATTR_BORDER_OUTER)
     , mbHorEnabled(false)
     , mbVerEnabled(false)
     , mbTLBREnabled(false)
@@ -316,9 +318,25 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     FillLineListBox_Impl();
 
     // connections
-    bool bSupportsShadow = !SfxItemPool::IsSlot( GetWhich( SID_ATTR_BORDER_SHADOW ) );
+    sal_uInt16 nShadowSlot = SID_ATTR_BORDER_SHADOW;
+    if (rCoreAttrs.HasItem(GetWhich(SID_ATTR_CHAR_GRABBAG), &pItem))
+    {
+        const SfxGrabBagItem* pGrabBag = static_cast<const SfxGrabBagItem*>(pItem);
+        auto it = pGrabBag->GetGrabBag().find("DialogUseCharAttr");
+        if (it != pGrabBag->GetGrabBag().end())
+        {
+            bool bDialogUseCharAttr = false;
+            it->second >>= bDialogUseCharAttr;
+            if (bDialogUseCharAttr)
+            {
+                nShadowSlot = SID_ATTR_CHAR_SHADOW;
+                mnBoxSlot = SID_ATTR_CHAR_BOX;
+            }
+        }
+    }
+    bool bSupportsShadow = !SfxItemPool::IsSlot( GetWhich( nShadowSlot ) );
     if( bSupportsShadow )
-        AddItemConnection( svx::CreateShadowConnection( rCoreAttrs, *m_pWndShadows, *m_pEdShadowSize, *m_pLbShadowColor ) );
+        AddItemConnection( svx::CreateShadowConnection( nShadowSlot, rCoreAttrs, *m_pWndShadows, *m_pEdShadowSize, *m_pLbShadowColor ) );
     else
         HideShadowControls();
 
@@ -427,10 +445,10 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 
     const SvxBoxItem*       pBoxItem;
     const SvxBoxInfoItem*   pBoxInfoItem;
-    sal_uInt16              nWhichBox       = GetWhich(SID_ATTR_BORDER_OUTER);
+    sal_uInt16              nWhichBox       = GetWhich(mnBoxSlot);
     MapUnit                 eCoreUnit;
 
-    pBoxItem  = static_cast<const SvxBoxItem*>(GetItem( *rSet, SID_ATTR_BORDER_OUTER ));
+    pBoxItem  = static_cast<const SvxBoxItem*>(GetItem( *rSet, mnBoxSlot ));
 
     pBoxInfoItem = GetItem( *rSet, SID_ATTR_BORDER_INNER, false );
 
@@ -648,12 +666,12 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
     bool bAttrsChanged = SfxTabPage::FillItemSet( rCoreAttrs );
 
     bool                  bPut          = true;
-    sal_uInt16            nBoxWhich     = GetWhich( SID_ATTR_BORDER_OUTER );
+    sal_uInt16            nBoxWhich     = GetWhich( mnBoxSlot );
     sal_uInt16            nBoxInfoWhich = rCoreAttrs->GetPool()->GetWhich( SID_ATTR_BORDER_INNER, false );
     const SfxItemSet&     rOldSet       = GetItemSet();
     SvxBoxItem            aBoxItem      ( nBoxWhich );
     SvxBoxInfoItem        aBoxInfoItem  ( nBoxInfoWhich );
-    const SvxBoxItem*     pOldBoxItem = static_cast<const SvxBoxItem*>(GetOldItem( *rCoreAttrs, SID_ATTR_BORDER_OUTER ));
+    const SvxBoxItem*     pOldBoxItem = static_cast<const SvxBoxItem*>(GetOldItem( *rCoreAttrs, mnBoxSlot ));
 
     MapUnit eCoreUnit = rOldSet.GetPool()->GetMetric( nBoxWhich );
 
@@ -1224,7 +1242,7 @@ void SvxBorderTabPage::UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset )
         return;
     const SfxItemSet&     rOldSet         = GetItemSet();
     const SvxBoxInfoItem* pOldBoxInfoItem = GetOldItem( rOldSet, SID_ATTR_BORDER_INNER );
-    const SvxBoxItem*     pOldBoxItem     = static_cast<const SvxBoxItem*>(GetOldItem( rOldSet, SID_ATTR_BORDER_OUTER ));
+    const SvxBoxItem*     pOldBoxItem     = static_cast<const SvxBoxItem*>(GetOldItem( rOldSet, mnBoxSlot ));
     if( !pOldBoxInfoItem || !pOldBoxItem )
         return;
     std::pair<svx::FrameBorderType, SvxBoxInfoItemValidFlags> eTypes1[] = {

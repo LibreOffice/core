@@ -302,8 +302,8 @@ SfxItemInfo aSlotTab[] =
     { SID_ATTR_CHAR_HIDDEN, true },        // RES_CHRATR_HIDDEN
     { SID_ATTR_CHAR_OVERLINE, true },      // RES_CHRATR_OVERLINE
     { 0, true },                           // RES_CHRATR_RSID
-    { 0, true },                           // RES_CHRATR_BOX
-    { 0, true },                           // RES_CHRATR_SHADOW
+    { SID_ATTR_CHAR_BOX, true },           // RES_CHRATR_BOX
+    { SID_ATTR_CHAR_SHADOW, true },        // RES_CHRATR_SHADOW
     { 0, true },                           // RES_CHRATR_HIGHLIGHT
     { SID_ATTR_CHAR_GRABBAG, true },       // RES_CHRATR_GRABBAG
     { 0, true },                           // RES_CHRATR_BIDIRTL
