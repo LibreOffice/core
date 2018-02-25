@@ -349,10 +349,17 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
         break;
         case NID_DRW :
         case NID_CTRL:
-            rSh.GotoObj(bNext,
+        {
+            bool bSuccess = rSh.GotoObj(bNext,
                     m_nMoveType == NID_DRW ?
                         GotoObjFlags::DrawSimple :
                         GotoObjFlags::DrawControl);
+            if(bSuccess)
+            {
+                rSh.HideCursor();
+                rSh.EnterSelFrameMode();
+            }
+        }
         break;
         case NID_REG :
             rSh.EnterStdMode();
