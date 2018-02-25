@@ -55,7 +55,6 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog*
     InitStdControls();
 
     m_pCbbReceiver->Show();
-    m_pCbbReceiver->SetHelpId( HID_HYPERDLG_MAIL_PATH );
 
     SetExchangeSupport ();
 

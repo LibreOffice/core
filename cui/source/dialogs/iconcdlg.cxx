@@ -24,7 +24,6 @@
 #include <iconcdlg.hxx>
 #include <cuihyperdlg.hxx>
 
-#include <helpids.h>
 #include <unotools/viewoptions.hxx>
 #include <svtools/apearcfg.hxx>
 #include <vcl/mnemonic.hxx>
@@ -169,7 +168,6 @@ IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
     m_pIconCtrl->Show();
     m_pIconCtrl->SetChoiceWithCursor();
     m_pIconCtrl->SetSelectionMode( SelectionMode::Single );
-    m_pIconCtrl->SetHelpId( HID_ICCDIALOG_CHOICECTRL );
 
     // ItemSet
     if ( pSet )
@@ -180,12 +178,8 @@ IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
 
     // Buttons
     m_pOKBtn->SetClickHdl   ( LINK( this, IconChoiceDialog, OkHdl ) );
-    m_pOKBtn->SetHelpId( HID_ICCDIALOG_OK_BTN );
     m_pApplyBtn->SetClickHdl   ( LINK( this, IconChoiceDialog, ApplyHdl ) );
-    //m_pApplyBtn->SetHelpId( HID_ICCDIALOG_APPLY_BTN );
-    m_pCancelBtn->SetHelpId( HID_ICCDIALOG_CANCEL_BTN );
     m_pResetBtn->SetClickHdl( LINK( this, IconChoiceDialog, ResetHdl ) );
-    m_pResetBtn->SetHelpId( HID_ICCDIALOG_RESET_BTN );
     m_pOKBtn->Show();
     m_pApplyBtn->Show();
     m_pCancelBtn->Show();
