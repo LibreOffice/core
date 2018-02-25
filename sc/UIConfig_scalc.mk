@@ -92,6 +92,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/cellprotectionpage \
 	sc/uiconfig/scalc/ui/changesourcedialog \
 	sc/uiconfig/scalc/ui/chardialog \
+	sc/uiconfig/scalc/ui/checkwarningdialog \
 	sc/uiconfig/scalc/ui/chisquaretestdialog \
 	sc/uiconfig/scalc/ui/colorrowdialog \
 	sc/uiconfig/scalc/ui/colwidthdialog \
@@ -200,6 +201,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/sharedocumentdlg \
 	sc/uiconfig/scalc/ui/sharedfooterdialog \
 	sc/uiconfig/scalc/ui/sharedheaderdialog \
+	sc/uiconfig/scalc/ui/sharedwarningdialog \
 	sc/uiconfig/scalc/ui/showchangesdialog \
 	sc/uiconfig/scalc/ui/showdetaildialog \
 	sc/uiconfig/scalc/ui/showsheetdialog \

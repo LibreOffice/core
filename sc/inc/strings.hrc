@@ -77,7 +77,6 @@
 #define STR_DLG_SELECTTABLES_TITLE                  NC_("STR_DLG_SELECTTABLES_TITLE", "Select Sheets")
 // Select tables dialog listbox
 #define STR_DLG_SELECTTABLES_LBNAME                 NC_("STR_DLG_SELECTTABLES_LBNAME", "~Selected sheets")
-#define STR_REPLCELLSWARN                           NC_("STR_REPLCELLSWARN", "You are pasting data into cells that already contain data.\nDo you really want to overwrite the existing data?")
 #define STR_ACC_CSVRULER_NAME                       NC_("STR_ACC_CSVRULER_NAME", "Ruler")
 #define STR_ACC_CSVRULER_DESCR                      NC_("STR_ACC_CSVRULER_DESCR", "This ruler manages objects at fixed positions.")
 #define STR_ACC_CSVGRID_NAME                        NC_("STR_ACC_CSVGRID_NAME", "Preview")

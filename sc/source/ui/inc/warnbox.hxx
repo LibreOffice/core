@@ -20,19 +20,25 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_WARNBOX_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_WARNBOX_HXX
 
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
 /** Warning box for "Replace cell contents?".
     With warning image and "Do not show again" checkbox. */
-class ScReplaceWarnBox : public WarningBox
+class ScReplaceWarnBox
 {
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::MessageDialog> m_xDialog;
+    std::unique_ptr<weld::CheckButton> m_xWarningOnBox;
+    std::unique_ptr<weld::Container> m_xOrigParent;
+    std::unique_ptr<weld::Container> m_xContentArea;
 public:
-                                ScReplaceWarnBox( vcl::Window* pParent );
+    ScReplaceWarnBox(weld::Window* pParent);
+    ~ScReplaceWarnBox();
 
     /** Opens dialog if IsDialogEnabled() returns true.
         @descr  If after executing the dialog the checkbox "Do not show again" is set,
                 the method DisableDialog() will be called. */
-    virtual sal_Int16           Execute() override;
+    short run();
 };
 
 #endif
