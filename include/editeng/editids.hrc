@@ -132,6 +132,8 @@
 #define SID_ATTR_PARA_OUTLINE_LEVEL                     ( SID_EDIT_START + 73 )
 #define SID_ATTR_CHAR_PREVIEW_FONT                      ( SID_EDIT_START + 74 )
 #define SID_ATTR_CHAR_ENDPREVIEW_FONT                   ( SID_EDIT_START + 75 )
+#define SID_ATTR_CHAR_BOX                               ( SID_EDIT_START + 76 )
+#define SID_ATTR_CHAR_SHADOW                            ( SID_EDIT_START + 77 )
 
 
 #if 95 > (SID_EDIT_END-SID_EDIT_START)

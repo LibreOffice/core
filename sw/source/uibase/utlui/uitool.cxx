@@ -122,7 +122,7 @@ void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh)
     rSet.Put(aBoxInfo);
 }
 
-void ConvertAttrCharToGen(SfxItemSet& rSet, const sal_uInt8 nMode)
+void ConvertAttrCharToGen(SfxItemSet& rSet)
 {
     // Background / highlight
     {
@@ -139,79 +139,43 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, const sal_uInt8 nMode)
         }
     }
 
-    if( nMode == CONV_ATTR_STD )
-    {
-        // Border
-        const SfxPoolItem *pTmpItem;
-        if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_BOX, true, &pTmpItem ) )
-        {
-            SvxBoxItem aTmpBox( *static_cast<const SvxBoxItem*>(pTmpItem) );
-            aTmpBox.SetWhich( RES_BOX );
-            rSet.Put( aTmpBox );
-        }
-        else
-            rSet.ClearItem(RES_BOX);
-
-        // Border shadow
-        if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_SHADOW, false, &pTmpItem ) )
-        {
-            SvxShadowItem aTmpShadow( *static_cast<const SvxShadowItem*>(pTmpItem) );
-            aTmpShadow.SetWhich( RES_SHADOW );
-            rSet.Put( aTmpShadow );
-        }
-        else
-            rSet.ClearItem( RES_SHADOW );
-    }
+    // Tell dialogs to use character-specific slots/whichIds
+    std::unique_ptr<SfxGrabBagItem> pGrabBag;
+    const SfxPoolItem *pTmpItem;
+    if (SfxItemState::SET == rSet.GetItemState(RES_CHRATR_GRABBAG, false, &pTmpItem))
+        pGrabBag.reset(static_cast<SfxGrabBagItem*>(pTmpItem->Clone()));
+    else
+        pGrabBag.reset(new SfxGrabBagItem(RES_CHRATR_GRABBAG));
+    pGrabBag->GetGrabBag()["DialogUseCharAttr"] <<= true;
+    rSet.Put(*pGrabBag);
 }
 
-void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, const sal_uInt8 nMode)
+void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet)
 {
     // Background / highlighting
+    const SfxPoolItem *pTmpItem;
+    if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_BACKGROUND, false, &pTmpItem ) )
     {
-        const SfxPoolItem *pTmpItem;
-        if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_BACKGROUND, false, &pTmpItem ) )
-        {
-            // Highlight is an MS specific thing, so remove it at the first time when LO modifies
-            // this part of the imported document.
-            rSet.Put( SvxBrushItem(RES_CHRATR_HIGHLIGHT) );
+        // Highlight is an MS specific thing, so remove it at the first time when LO modifies
+        // this part of the imported document.
+        rSet.Put( SvxBrushItem(RES_CHRATR_HIGHLIGHT) );
 
-            // Remove shading marker
-            if( SfxItemState::SET == rOrigSet.GetItemState( RES_CHRATR_GRABBAG, false, &pTmpItem ) )
+        // Remove shading marker
+        if( SfxItemState::SET == rOrigSet.GetItemState( RES_CHRATR_GRABBAG, false, &pTmpItem ) )
+        {
+            SfxGrabBagItem aGrabBag(*static_cast<const SfxGrabBagItem*>(pTmpItem));
+            std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
+            auto aIterator = rMap.find("CharShadingMarker");
+            if( aIterator != rMap.end() )
             {
-                SfxGrabBagItem aGrabBag(*static_cast<const SfxGrabBagItem*>(pTmpItem));
-                std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
-                auto aIterator = rMap.find("CharShadingMarker");
-                if( aIterator != rMap.end() )
-                {
-                    aIterator->second <<= false;
-                }
-                rSet.Put( aGrabBag );
+                aIterator->second <<= false;
             }
+            // Remove temporary GrabBag entry before writing to destination set
+            rMap.erase("DialogUseCharAttr");
+            rSet.Put( aGrabBag );
         }
-        rSet.ClearItem( RES_BACKGROUND );
     }
-
-    if( nMode == CONV_ATTR_STD )
-    {
-        // Border
-        const SfxPoolItem *pTmpItem;
-        if( SfxItemState::SET == rSet.GetItemState( RES_BOX, false, &pTmpItem ) )
-        {
-            SvxBoxItem aTmpBox( *static_cast<const SvxBoxItem*>(pTmpItem) );
-            aTmpBox.SetWhich( RES_CHRATR_BOX );
-            rSet.Put( aTmpBox );
-        }
-        rSet.ClearItem( RES_BOX );
-
-        // Border shadow
-        if( SfxItemState::SET == rSet.GetItemState( RES_SHADOW, false, &pTmpItem ) )
-        {
-            SvxShadowItem aTmpShadow( *static_cast<const SvxShadowItem*>(pTmpItem) );
-            aTmpShadow.SetWhich( RES_CHRATR_SHADOW );
-            rSet.Put( aTmpShadow );
-        }
-        rSet.ClearItem( RES_SHADOW );
-    }
+    rSet.ClearItem( RES_BACKGROUND );
 }
 
 // Fill header footer
