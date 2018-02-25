@@ -568,6 +568,17 @@ typedef enum
      * - "close" - window is closed
      */
     LOK_CALLBACK_WINDOW = 36,
+
+    /**
+     * Notification that the clipboard contents have changed.
+     * Typically fired in response to copying to clipboard.
+     *
+     * The payload currently is empty and it's up to the
+     * client to get the contents, if necessary. However,
+     * in the future the contents might be included for
+     * convenience.
+     */
+    LOK_CALLBACK_CLIPBOARD_CHANGED = 37,
 }
 LibreOfficeKitCallbackType;
 
