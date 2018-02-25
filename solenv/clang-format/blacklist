@@ -18002,7 +18002,6 @@ vcl/osx/salsys.cxx
 vcl/osx/saltimer.cxx
 vcl/osx/service_entry.cxx
 vcl/qa/cppunit/BitmapProcessorTest.cxx
-vcl/qa/cppunit/BitmapTest.cxx
 vcl/qa/cppunit/app/test_IconThemeInfo.cxx
 vcl/qa/cppunit/app/test_IconThemeScanner.cxx
 vcl/qa/cppunit/app/test_IconThemeSelector.cxx
