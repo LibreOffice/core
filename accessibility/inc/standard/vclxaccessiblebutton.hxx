@@ -35,17 +35,16 @@ typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessibleAction,
     css::accessibility::XAccessibleValue > VCLXAccessibleButton_BASE;
 
-class VCLXAccessibleButton : public VCLXAccessibleTextComponent,
+class VCLXAccessibleButton final : public VCLXAccessibleTextComponent,
                              public VCLXAccessibleButton_BASE
 {
-protected:
     virtual ~VCLXAccessibleButton() override = default;
 
     virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
 
 public:
-    VCLXAccessibleButton( VCLXWindow* pVCLXindow );
+    using VCLXAccessibleTextComponent::VCLXAccessibleTextComponent;
 
     // XInterface
     DECLARE_XINTERFACE()

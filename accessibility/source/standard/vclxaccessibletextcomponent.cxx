@@ -55,11 +55,6 @@ VCLXAccessibleTextComponent::VCLXAccessibleTextComponent( VCLXWindow* pVCLXWindo
 }
 
 
-VCLXAccessibleTextComponent::~VCLXAccessibleTextComponent()
-{
-}
-
-
 void VCLXAccessibleTextComponent::SetText( const OUString& sText )
 {
     Any aOldValue, aNewValue;

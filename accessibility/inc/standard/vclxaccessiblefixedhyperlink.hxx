@@ -32,7 +32,7 @@ protected:
     virtual ~VCLXAccessibleFixedHyperlink() override = default;
 
 public:
-    VCLXAccessibleFixedHyperlink( VCLXWindow* pVCLXindow );
+    using VCLXAccessibleTextComponent::VCLXAccessibleTextComponent;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

@@ -48,11 +48,6 @@ AccessibleGridControl::AccessibleGridControl(
 }
 
 
-AccessibleGridControl::~AccessibleGridControl()
-{
-}
-
-
 void SAL_CALL AccessibleGridControl::disposing()
 {
     SolarMutexGuard g;

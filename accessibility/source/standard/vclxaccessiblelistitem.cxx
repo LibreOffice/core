@@ -78,10 +78,6 @@ VCLXAccessibleListItem::VCLXAccessibleListItem(sal_Int32 _nIndexInParent, const 
         m_sEntryText = pListBoxHelper->GetEntry(static_cast<sal_uInt16>(_nIndexInParent));
 }
 
-VCLXAccessibleListItem::~VCLXAccessibleListItem()
-{
-}
-
 void VCLXAccessibleListItem::SetSelected( bool _bSelected )
 {
     if ( m_bSelected != _bSelected )

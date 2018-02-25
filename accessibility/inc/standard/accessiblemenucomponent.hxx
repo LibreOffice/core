@@ -42,8 +42,9 @@ protected:
     // OCommonAccessibleComponent
     virtual css::awt::Rectangle implGetBounds(  ) override;
 
+    using OAccessibleMenuBaseComponent::OAccessibleMenuBaseComponent;
+
 public:
-    OAccessibleMenuComponent( Menu* pMenu );
 
     // XInterface
     DECLARE_XINTERFACE()

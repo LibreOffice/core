@@ -44,12 +44,6 @@ using namespace ::comphelper;
 // VCLXAccessibleButton
 
 
-VCLXAccessibleButton::VCLXAccessibleButton( VCLXWindow* pVCLWindow )
-    :VCLXAccessibleTextComponent( pVCLWindow )
-{
-}
-
-
 void VCLXAccessibleButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     switch ( rVclWindowEvent.GetId() )

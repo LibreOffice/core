@@ -53,7 +53,6 @@ private:
 
 public:
     VCLXAccessibleStatusBar( VCLXWindow* pVCLXWindow );
-    virtual ~VCLXAccessibleStatusBar() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
