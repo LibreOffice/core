@@ -95,7 +95,7 @@ bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
         const BitmapColor   aReplace( cReplaceTransparency );
         const long          nWidth = std::min( pMaskAcc->Width(), pAcc->Width() );
         const long          nHeight = std::min( pMaskAcc->Height(), pAcc->Height() );
-        const BitmapColor   aMaskWhite( pMaskAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
+        const BitmapColor   aMaskWhite( pMaskAcc->GetBestMatchingColor( Color(COL_WHITE) ) );
 
         for( long nY = 0; nY < nHeight; nY++ )
         {

@@ -213,7 +213,7 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
         nR = GetLeft();
     }
 
-    rRenderContext.SetFillColor(Color(COL_LIGHTGRAY));
+    rRenderContext.SetFillColor(COL_LIGHTGRAY);
     tools::Rectangle aRect;
     aRect.SetRight( rOrg.X() + GetSize().Width() - nR );
     aRect.SetLeft( rOrg.X() + nL );
@@ -379,7 +379,7 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools:
     tools::Rectangle aRect(aTL, m_aFrameSize);
 
     //draw a shadow rectangle
-    rRenderContext.SetFillColor(Color(COL_GRAY));
+    rRenderContext.SetFillColor(COL_GRAY);
     tools::Rectangle aShadowRect(aRect);
     aShadowRect.Move(aTL.Y(), aTL.Y());
     rRenderContext.DrawRect(aShadowRect);
@@ -580,7 +580,7 @@ void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point
 
     //vertical lines
     bool bBothLines = pGridItem->GetGridType() == GRID_LINES_CHARS;
-    rRenderContext.SetFillColor(Color(COL_TRANSPARENT));
+    rRenderContext.SetFillColor(COL_TRANSPARENT);
     sal_Int32 nXMove = m_bVertical ? nLineHeight : 0;
     sal_Int32 nYMove = m_bVertical ? 0 : nLineHeight;
     for (sal_Int32 nLine = 0; nLine < nLines; nLine++)

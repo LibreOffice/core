@@ -1887,7 +1887,7 @@ void Fill::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
         SvxBrushItem aBrushItem( ATTR_BACKGROUND );
         if ( maApiData.mbTransparent )
         {
-            aBrushItem.SetColor( ::Color( COL_TRANSPARENT ) );
+            aBrushItem.SetColor( ::COL_TRANSPARENT );
         }
         else
         {

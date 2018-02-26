@@ -278,7 +278,7 @@ void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartP
         if (aColor != aFont.GetFillColor())
         {
             if (aFont.IsTransparent())
-                aColor = Color(COL_TRANSPARENT);
+                aColor = COL_TRANSPARENT;
             aFont.SetFillColor(aColor);
             mpImpl->mpTextEngine->maFont = aFont;
         }

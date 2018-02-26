@@ -2875,9 +2875,9 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         else if ( nAttr & ExtTextInputAttr::DashDotUnderline )
             rFont.SetUnderline( LINESTYLE_DOTTED );
         else if ( nAttr & ExtTextInputAttr::RedText )
-            rFont.SetColor( Color( COL_RED ) );
+            rFont.SetColor( COL_RED );
         else if ( nAttr & ExtTextInputAttr::HalfToneText )
-            rFont.SetColor( Color( COL_LIGHTGRAY ) );
+            rFont.SetColor( COL_LIGHTGRAY );
         if ( nAttr & ExtTextInputAttr::Highlight )
         {
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -2889,7 +2889,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         {
             rFont.SetUnderline( LINESTYLE_WAVE );
             if( pOut )
-                pOut->SetTextLineColor( Color( COL_LIGHTGRAY ) );
+                pOut->SetTextLineColor( COL_LIGHTGRAY );
         }
     }
 }

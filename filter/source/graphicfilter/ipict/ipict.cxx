@@ -414,15 +414,15 @@ Color PictReader::ReadColor()
     pPict->ReadUInt32( nCol );
     switch (nCol)
     {
-        case  33: aCol=Color( COL_BLACK );        break;
-        case  30: aCol=Color( COL_WHITE );        break;
-        case 205: aCol=Color( COL_LIGHTRED );     break;
-        case 341: aCol=Color( COL_LIGHTGREEN );   break;
-        case 409: aCol=Color( COL_LIGHTBLUE );    break;
-        case 273: aCol=Color( COL_LIGHTCYAN );    break;
-        case 137: aCol=Color( COL_LIGHTMAGENTA ); break;
-        case  69: aCol=Color( COL_YELLOW );       break;
-        default:  aCol=Color( COL_LIGHTGRAY );
+        case  33: aCol=COL_BLACK;        break;
+        case  30: aCol=COL_WHITE;        break;
+        case 205: aCol=COL_LIGHTRED;     break;
+        case 341: aCol=COL_LIGHTGREEN;   break;
+        case 409: aCol=COL_LIGHTBLUE;    break;
+        case 273: aCol=COL_LIGHTCYAN;    break;
+        case 137: aCol=COL_LIGHTMAGENTA; break;
+        case  69: aCol=COL_YELLOW;       break;
+        default:  aCol=COL_LIGHTGRAY;
     }
     return aCol;
 }
@@ -635,11 +635,11 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
               SetLineColor( aActForeColor );
             else
               SetLineColor(eActPenPattern.getColor(aActBackColor, aActForeColor));
-            SetFillColor( Color(COL_TRANSPARENT) );
+            SetFillColor( COL_TRANSPARENT );
             pVirDev->SetRasterOp(eActROP);
             break;
         case PictDrawingMethod::PAINT:
-            SetLineColor( Color(COL_TRANSPARENT) );
+            SetLineColor( COL_TRANSPARENT );
             if (eActPenPattern.isDefault())
               SetFillColor( aActForeColor );
             else
@@ -647,7 +647,7 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
             pVirDev->SetRasterOp(eActROP);
             break;
         case PictDrawingMethod::ERASE:
-            SetLineColor( Color(COL_TRANSPARENT) );
+            SetLineColor( COL_TRANSPARENT );
             if (eActBackPattern.isDefault())
               SetFillColor( aActBackColor );// Osnola: previously aActForeColor
             else // checkMe
@@ -655,12 +655,12 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
             pVirDev->SetRasterOp(RasterOp::OverPaint);
             break;
         case PictDrawingMethod::INVERT: // checkme
-            SetLineColor( Color(COL_TRANSPARENT));
-            SetFillColor( Color( COL_BLACK ) );
+            SetLineColor( COL_TRANSPARENT);
+            SetFillColor( COL_BLACK );
             pVirDev->SetRasterOp(RasterOp::Invert);
             break;
         case PictDrawingMethod::FILL:
-            SetLineColor( Color(COL_TRANSPARENT) );
+            SetLineColor( COL_TRANSPARENT );
             if (eActFillPattern.isDefault())
               SetFillColor( aActForeColor );
             else
@@ -1891,8 +1891,8 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     nOrigPos            = pPict->Tell();
     SvStreamEndian nOrigNumberFormat = pPict->GetEndian();
 
-    aActForeColor       = Color(COL_BLACK);
-    aActBackColor       = Color(COL_WHITE);
+    aActForeColor       = COL_BLACK;
+    aActBackColor       = COL_WHITE;
     nActPenSize         = Size(1,1);
     eActROP             = RasterOp::OverPaint;
     eActMethod          = PictDrawingMethod::UNDEFINED;

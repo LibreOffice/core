@@ -33,7 +33,7 @@ namespace sdr
         }
 
         OverlayPrimitive2DSequenceObject::OverlayPrimitive2DSequenceObject(const drawinglayer::primitive2d::Primitive2DContainer& rSequence)
-        :   OverlayObjectWithBasePosition(basegfx::B2DPoint(), Color(COL_BLACK)),
+        :   OverlayObjectWithBasePosition(basegfx::B2DPoint(), COL_BLACK),
             maSequence(rSequence)
         {
         }

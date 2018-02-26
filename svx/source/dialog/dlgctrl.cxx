@@ -727,9 +727,9 @@ SvxPixelCtl::SvxPixelCtl(vcl::Window* pParent)
     , bPaintable(true)
     , aFocusPosition(0,0)
 {
-    SetPixelColor( Color( COL_BLACK ) );
-    SetBackgroundColor( Color( COL_WHITE ) );
-    SetLineColor( Color( COL_LIGHTGRAY ) );
+    SetPixelColor( COL_BLACK );
+    SetBackgroundColor( COL_WHITE );
+    SetLineColor( COL_LIGHTGRAY );
     maPixelData.fill(0);
 }
 
@@ -837,8 +837,8 @@ void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectan
     }
     else
     {
-        rRenderContext.SetBackground(Wallpaper(Color(COL_LIGHTGRAY)));
-        rRenderContext.SetLineColor(Color(COL_LIGHTRED));
+        rRenderContext.SetBackground(Wallpaper(COL_LIGHTGRAY));
+        rRenderContext.SetLineColor(COL_LIGHTRED);
         rRenderContext.DrawLine(Point(0, 0), Point(aRectSize.Width(), aRectSize.Height()));
         rRenderContext.DrawLine(Point(0, aRectSize.Height()), Point(aRectSize.Width(), 0));
     }

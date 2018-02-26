@@ -69,7 +69,7 @@ ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const css::uno::Reference<css
     nArgs=0;
     aCatBox->SetDropDownLineCount(9);
     vcl::Font aFont=aFiFuncDesc->GetFont();
-    aFont.SetColor(Color(COL_BLACK));
+    aFont.SetColor(COL_BLACK);
     aFiFuncDesc->SetFont(aFont);
     aFiFuncDesc->SetBackground( GetBackground() );       //! never transparent?
     aFiFuncDesc->set_height_request(5 * aFiFuncDesc->GetTextHeight());

@@ -967,9 +967,9 @@ Color OutputDevice::GetSingleColorGradientFill()
     assert( mnDrawMode & ( DrawModeFlags::BlackGradient | DrawModeFlags::WhiteGradient | DrawModeFlags::SettingsGradient) );
 
     if ( mnDrawMode & DrawModeFlags::BlackGradient )
-        aColor = Color( COL_BLACK );
+        aColor = COL_BLACK;
     else if ( mnDrawMode & DrawModeFlags::WhiteGradient )
-        aColor = Color( COL_WHITE );
+        aColor = COL_WHITE;
     else if ( mnDrawMode & DrawModeFlags::SettingsGradient )
         aColor = GetSettings().GetStyleSettings().GetWindowColor();
 

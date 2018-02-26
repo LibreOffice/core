@@ -6170,10 +6170,10 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
                  )
                )
             {
-                pTmpBackBrush = new SvxBrushItem( Color( COL_WHITE ), RES_BACKGROUND );
+                pTmpBackBrush = new SvxBrushItem( COL_WHITE, RES_BACKGROUND );
 
                 //UUU
-                aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(Color( COL_WHITE )));
+                aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(COL_WHITE));
             }
             else
             {

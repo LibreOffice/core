@@ -884,7 +884,7 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
         }
         else
         {
-            rRenderContext.SetLineColor(Color(COL_BLACK));
+            rRenderContext.SetLineColor(COL_BLACK);
             rRenderContext.DrawPixel(Point(aRect.Left() + 1 - nOff2, aRect.Top() + 1 - nOff2));
             rRenderContext.DrawPixel(Point(aRect.Right() + nOff2 - 2, aRect.Top() + 1 - nOff2));
             if (bLeftBorder)
@@ -1124,7 +1124,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rect
         if (!(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono))
             rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
         else
-            rRenderContext.SetLineColor(Color(COL_BLACK));
+            rRenderContext.SetLineColor(COL_BLACK);
         if (pCurItem && !pCurItem->maRect.IsEmpty())
         {
             aCurRect = pCurItem->maRect;
@@ -2514,7 +2514,7 @@ void NotebookbarTabControlBase::ImplPaint(vcl::RenderContext& rRenderContext, co
         if (!(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono))
             rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
         else
-            rRenderContext.SetLineColor(Color(COL_BLACK));
+            rRenderContext.SetLineColor(COL_BLACK);
         if (pCurItem && !pCurItem->maRect.IsEmpty())
         {
             aCurRect = pCurItem->maRect;

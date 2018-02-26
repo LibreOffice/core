@@ -2827,7 +2827,7 @@ void ScExportTest::testSharedFormulaExportXLSX()
             for (SCROW i = 0; i <= 1; ++i)
             {
                 Color aTabBgColor = rDoc.GetTabBgColor(i);
-                if (aTabBgColor != Color(COL_AUTO))
+                if (aTabBgColor != COL_AUTO)
                 {
                     cerr << "The tab color of Sheet " << (i+1) << " should not be explicitly set." << endl;
                     return false;

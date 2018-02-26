@@ -130,7 +130,7 @@ static void lcl_PrintHeader( vcl::RenderContext &rOutDev, sal_Int32 nPages, sal_
     Color aOldFillColor( rOutDev.GetFillColor() );
     vcl::Font aOldFont( rOutDev.GetFont() );
 
-    rOutDev.SetFillColor( Color(COL_TRANSPARENT) );
+    rOutDev.SetFillColor( COL_TRANSPARENT );
 
     vcl::Font aFont( aOldFont );
     aFont.SetWeight( WEIGHT_BOLD );

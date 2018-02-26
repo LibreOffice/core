@@ -69,7 +69,7 @@ namespace sdr
             sal_uInt16 nCenY2,
             double fShearX,
             double fRotation)
-        :   OverlayObjectWithBasePosition(rBasePos, Color(COL_WHITE)),
+        :   OverlayObjectWithBasePosition(rBasePos, COL_WHITE),
             maBitmapEx1(rBitmapEx1),
             maBitmapEx2(rBitmapEx2),
             mnCenterX1(nCenX1), mnCenterY1(nCenY1),

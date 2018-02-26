@@ -1368,7 +1368,7 @@ GraphicObject* lclDrawHatch( const drawing::Hatch& rHatch, const Color& rBackCol
     aMtf.Clear();
     aMtf.Record(pVDev);
     pVDev->SetLineColor();
-    pVDev->SetFillColor(bFillBackground ? rBackColor : Color(COL_TRANSPARENT));
+    pVDev->SetFillColor(bFillBackground ? rBackColor : COL_TRANSPARENT);
     pVDev->DrawRect(rRect);
     pVDev->DrawHatch(tools::PolyPolygon(rRect), Hatch(static_cast<HatchStyle>(rHatch.Style), Color(rHatch.Color), rHatch.Distance, static_cast<sal_uInt16>(rHatch.Angle)));
     aMtf.Stop();

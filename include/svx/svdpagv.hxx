@@ -165,7 +165,7 @@ public:
     void DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr,
                    const tools::Rectangle& rRect = tools::Rectangle(),
                    basegfx::B2IRange const* pPageFrame = nullptr);
-    void DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& rRect, Color aColor = Color( COL_BLACK ) );
+    void DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& rRect, Color aColor = COL_BLACK );
 
     tools::Rectangle GetPageRect() const;
     SdrPage* GetPage() const { return mpPage; }

@@ -279,10 +279,10 @@ void SdExportTest::testTransparentBackground()
     const SdrPage *pPage = GetPage( 1, xDocShRef );
 
     const SdrTextObj *pObj1 = dynamic_cast<SdrTextObj *>( pPage->GetObj( 0 ) );
-    checkFontAttributes<Color, SvxBackgroundColorItem>( pObj1, Color(COL_TRANSPARENT) );
+    checkFontAttributes<Color, SvxBackgroundColorItem>( pObj1, COL_TRANSPARENT );
 
     const SdrTextObj *pObj2 = dynamic_cast<SdrTextObj *>( pPage->GetObj( 1 ) );
-    checkFontAttributes<Color, SvxBackgroundColorItem>( pObj2, Color(COL_YELLOW));
+    checkFontAttributes<Color, SvxBackgroundColorItem>( pObj2, COL_YELLOW);
 
     xDocShRef->DoClose();
 }

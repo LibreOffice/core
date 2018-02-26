@@ -401,10 +401,10 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
             Color aTextColor( mpVDev->GetTextColor() );
 
             if ( aTextColor.GetColor() == COL_BLACK )
-                aTextColor = Color( COL_WHITE );
+                aTextColor = COL_WHITE;
 
             if ( aTextColor.GetColor() == COL_WHITE )
-                aReliefColor = Color( COL_BLACK );
+                aReliefColor = COL_BLACK;
 
 
             Point aPos( rPos );
@@ -434,7 +434,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
                 Color aShadowColor( COL_BLACK );
 
                 if ( (aTextColor.GetColor() == COL_BLACK) || (aTextColor.GetLuminance() < 8) )
-                    aShadowColor = Color( COL_LIGHTGRAY );
+                    aShadowColor = COL_LIGHTGRAY;
 
                 Point aPos( rPos );
                 aPos += Point( nOff, nOff );
@@ -465,7 +465,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
                 aPos = rPos + Point(+6,+0);
                 Impl_writeText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
 
-                Impl_writeText( rPos, rText, pDXArray, nWidth, Color( COL_WHITE ) );
+                Impl_writeText( rPos, rText, pDXArray, nWidth, COL_WHITE );
             }
         }
     }
@@ -569,7 +569,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
 #if 0 // makes the calculated bound rect visible for debugging
 {
     tools::Polygon aTmpPoly( aPoly );
-    sal_uInt16 nID = FlashGeometryExporter::writePolygonShape( aMovieStream, aTmpPoly, false, Color(COL_MAGENTA), Color(COL_MAGENTA), mpClipPolyPolygon  );
+    sal_uInt16 nID = FlashGeometryExporter::writePolygonShape( aMovieStream, aTmpPoly, false, COL_MAGENTA, COL_MAGENTA, mpClipPolyPolygon  );
     ImplPlaceObject( nID );
 }
 #endif

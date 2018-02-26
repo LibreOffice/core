@@ -129,11 +129,11 @@ void lcl_DrawIDEWindowFrame(DockingWindow const * pWin, vcl::RenderContext& rRen
 
     Size aSz(pWin->GetOutputSizePixel());
     const Color aOldLineColor(rRenderContext.GetLineColor());
-    rRenderContext.SetLineColor(Color(COL_WHITE));
+    rRenderContext.SetLineColor(COL_WHITE);
     // White line on top
     rRenderContext.DrawLine(Point(0, 0), Point(aSz.Width(), 0));
     // Black line at bottom
-    rRenderContext.SetLineColor(Color(COL_BLACK));
+    rRenderContext.SetLineColor(COL_BLACK);
     rRenderContext.DrawLine(Point(0, aSz.Height() - 1),
                             Point(aSz.Width(), aSz.Height() - 1));
     rRenderContext.SetLineColor(aOldLineColor);

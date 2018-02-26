@@ -4079,7 +4079,7 @@ void SwUiWriterTest::testTdf87922()
 
     // If no color background color is found, assume white.
     Color* pColor = sw::GetActiveRetoucheColor();
-    *pColor = Color(COL_WHITE);
+    *pColor = COL_WHITE;
 
     // Make sure that automatic color on black background is white, not black.
     vcl::Font aFont;

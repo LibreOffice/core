@@ -65,8 +65,8 @@ namespace sdr
 
             // Stripe support. All striped OverlayObjects use these stripe
             // values. Changes change all those objects.
-            Color                                       maStripeColorA; // defaults to Color(COL_BLACK)
-            Color                                       maStripeColorB; // defaults to Color(COL_WHITE)
+            Color                                       maStripeColorA; // defaults to COL_BLACK
+            Color                                       maStripeColorB; // defaults to COL_WHITE
             sal_uInt32                                  mnStripeLengthPixel; // defaults to 4L
 
             // hold an incarnation of Drawinglayer configuration options

@@ -403,7 +403,7 @@ void SwExtend::ActualizeFont( SwFont &rFnt, ExtTextInputAttr nAttr )
         rFnt.SetUnderline( LINESTYLE_DOTTED );
 
     if ( nAttr & ExtTextInputAttr::RedText )
-        rFnt.SetColor( Color( COL_RED ) );
+        rFnt.SetColor( COL_RED );
 
     if ( nAttr & ExtTextInputAttr::Highlight )
     {

@@ -589,19 +589,19 @@ void SdrHdl::CreateB2dIAObject()
                             switch (eColIndex)
                             {
                                 case BitmapColorIndex::Cyan:
-                                    aHandleFillColor = Color(COL_CYAN);
+                                    aHandleFillColor = COL_CYAN;
                                     break;
                                 case BitmapColorIndex::LightCyan:
-                                    aHandleFillColor = Color(COL_LIGHTCYAN);
+                                    aHandleFillColor = COL_LIGHTCYAN;
                                     break;
                                 case BitmapColorIndex::Red:
-                                    aHandleFillColor = Color(COL_RED);
+                                    aHandleFillColor = COL_RED;
                                     break;
                                 case BitmapColorIndex::LightRed:
-                                    aHandleFillColor = Color(COL_LIGHTRED);
+                                    aHandleFillColor = COL_LIGHTRED;
                                     break;
                                 case BitmapColorIndex::Yellow:
-                                    aHandleFillColor = Color(COL_YELLOW);
+                                    aHandleFillColor = COL_YELLOW;
                                     break;
                                 default:
                                     break;
@@ -1146,10 +1146,10 @@ BitmapEx SdrHdlColor::CreateColorDropper(Color aCol)
     sal_Int32 nWidth = aMarkerSize.Width();
     sal_Int32 nHeight = aMarkerSize.Height();
 
-    pWrite->SetLineColor(Color(COL_LIGHTGRAY));
+    pWrite->SetLineColor(COL_LIGHTGRAY);
     pWrite->DrawLine(Point(0, 0), Point(0, nHeight - 1));
     pWrite->DrawLine(Point(1, 0), Point(nWidth - 1, 0));
-    pWrite->SetLineColor(Color(COL_GRAY));
+    pWrite->SetLineColor(COL_GRAY);
     pWrite->DrawLine(Point(1, nHeight - 1), Point(nWidth - 1, nHeight - 1));
     pWrite->DrawLine(Point(nWidth - 1, 1), Point(nWidth - 1, nHeight - 2));
 
@@ -1283,7 +1283,7 @@ void SdrHdlGradient::CreateB2dIAObject()
                                 );
                             DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
 
-                            pNewOverlayObject->setBaseColor(IsGradient() ? Color(COL_BLACK) : Color(COL_BLUE));
+                            pNewOverlayObject->setBaseColor(IsGradient() ? COL_BLACK : COL_BLUE);
                             xManager->add(*pNewOverlayObject);
                             maOverlayGroup.append(pNewOverlayObject);
 
@@ -1302,7 +1302,7 @@ void SdrHdlGradient::CreateB2dIAObject()
                                     aPositionLeft,
                                     aPosition2,
                                     aPositionRight,
-                                    IsGradient() ? Color(COL_BLACK) : Color(COL_BLUE)
+                                    IsGradient() ? COL_BLACK : COL_BLUE
                                 );
                             DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
 
@@ -1432,7 +1432,7 @@ void SdrHdlLine::CreateB2dIAObject()
 
                             // OVERLAYMANAGER
                             // color(?)
-                            pNewOverlayObject->setBaseColor(Color(COL_LIGHTRED));
+                            pNewOverlayObject->setBaseColor(COL_LIGHTRED);
 
                             xManager->add(*pNewOverlayObject);
                             maOverlayGroup.append(pNewOverlayObject);
@@ -1492,7 +1492,7 @@ void SdrHdlBezWgt::CreateB2dIAObject()
                                 pNewOverlayObject->setHittable(false);
 
                                 // color(?)
-                                pNewOverlayObject->setBaseColor(Color(COL_LIGHTBLUE));
+                                pNewOverlayObject->setBaseColor(COL_LIGHTBLUE);
 
                                 xManager->add(*pNewOverlayObject);
                                 maOverlayGroup.append(pNewOverlayObject);
@@ -1538,7 +1538,7 @@ void E3dVolumeMarker::CreateB2dIAObject()
                                 aWireframePoly);
 
                             // OVERLAYMANAGER
-                            pNewOverlayObject->setBaseColor(Color(COL_BLACK));
+                            pNewOverlayObject->setBaseColor(COL_BLACK);
 
                             xManager->add(*pNewOverlayObject);
                             maOverlayGroup.append(pNewOverlayObject);

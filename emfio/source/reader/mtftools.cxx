@@ -566,48 +566,48 @@ namespace emfio
             {
                 case WHITE_BRUSH :
                 {
-                    maFillStyle = WinMtfFillStyle( Color( COL_WHITE ) );
+                    maFillStyle = WinMtfFillStyle( COL_WHITE );
                     mbFillStyleSelected = true;
                 }
                 break;
                 case LTGRAY_BRUSH :
                 {
-                    maFillStyle = WinMtfFillStyle( Color( COL_LIGHTGRAY ) );
+                    maFillStyle = WinMtfFillStyle( COL_LIGHTGRAY );
                     mbFillStyleSelected = true;
                 }
                 break;
                 case GRAY_BRUSH :
                 case DKGRAY_BRUSH :
                 {
-                    maFillStyle = WinMtfFillStyle( Color( COL_GRAY ) );
+                    maFillStyle = WinMtfFillStyle( COL_GRAY );
                     mbFillStyleSelected = true;
                 }
                 break;
                 case BLACK_BRUSH :
                 {
-                    maFillStyle = WinMtfFillStyle( Color( COL_BLACK ) );
+                    maFillStyle = WinMtfFillStyle( COL_BLACK );
                     mbFillStyleSelected = true;
                 }
                 break;
                 case NULL_BRUSH :
                 {
-                   maFillStyle = WinMtfFillStyle( Color( COL_TRANSPARENT ), true );
+                   maFillStyle = WinMtfFillStyle( COL_TRANSPARENT, true );
                    mbFillStyleSelected = true;
                 }
                 break;
                 case WHITE_PEN :
                 {
-                    maLineStyle = WinMtfLineStyle( Color( COL_WHITE ) );
+                    maLineStyle = WinMtfLineStyle( COL_WHITE );
                 }
                 break;
                 case BLACK_PEN :
                 {
-                    maLineStyle = WinMtfLineStyle( Color( COL_BLACK ) );
+                    maLineStyle = WinMtfLineStyle( COL_BLACK );
                 }
                 break;
                 case NULL_PEN :
                 {
-                    maLineStyle = WinMtfLineStyle( Color( COL_TRANSPARENT ), true );
+                    maLineStyle = WinMtfLineStyle( COL_TRANSPARENT, true );
                 }
                 break;
                 default:
@@ -1043,8 +1043,8 @@ namespace emfio
                     {
                         maNopFillStyle = maFillStyle;
                         maNopLineStyle = maLineStyle;
-                        maFillStyle = WinMtfFillStyle( Color( COL_TRANSPARENT ), true );
-                        maLineStyle = WinMtfLineStyle( Color( COL_TRANSPARENT ), true );
+                        maFillStyle = WinMtfFillStyle( COL_TRANSPARENT, true );
+                        maLineStyle = WinMtfLineStyle( COL_TRANSPARENT, true );
                         mbNopMode = true;
                     }
                 }
@@ -1639,7 +1639,7 @@ namespace emfio
             }
             pVDev->SetMapMode( aMapMode );
             pVDev->SetOutputSizePixel( aSizePixel );
-            pVDev->SetFillColor( Color( COL_BLACK ) );
+            pVDev->SetFillColor( COL_BLACK );
             const tools::PolyPolygon aClip( maClipPath.getClipPath() );
             pVDev->DrawPolyPolygon( aClip );
             const Point aEmptyPoint;
@@ -1691,9 +1691,9 @@ namespace emfio
                 else
                 {
                     // need to blend in Mask quality (1Bit)
-                    Bitmap aMask(aVDevMask.CreateMask(Color(COL_WHITE)));
+                    Bitmap aMask(aVDevMask.CreateMask(COL_WHITE));
 
-                    if ( rBitmap.GetTransparentColor() == Color( COL_WHITE ) )
+                    if ( rBitmap.GetTransparentColor() == COL_WHITE )
                     {
                         aMask.CombineSimple( rBitmap.GetMask(), BmpCombine::Or );
                     }

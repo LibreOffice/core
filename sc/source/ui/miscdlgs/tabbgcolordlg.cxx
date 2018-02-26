@@ -115,7 +115,7 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
 IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, void)
 {
     sal_uInt16 nItemId = m_pTabBgColorSet->GetSelectItemId();
-    Color aColor = nItemId ? ( m_pTabBgColorSet->GetItemColor( nItemId ) ) : Color( COL_AUTO );
+    Color aColor = nItemId ? ( m_pTabBgColorSet->GetItemColor( nItemId ) ) : COL_AUTO;
     m_aTabBgColor = aColor;
     EndDialog( RET_OK );
 }
@@ -124,7 +124,7 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, void)
 IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl, Button*, void)
 {
     sal_uInt16 nItemId = m_pTabBgColorSet->GetSelectItemId();
-    Color aColor = nItemId ? ( m_pTabBgColorSet->GetItemColor( nItemId ) ) : Color( COL_AUTO );
+    Color aColor = nItemId ? ( m_pTabBgColorSet->GetItemColor( nItemId ) ) : COL_AUTO;
     m_aTabBgColor = aColor;
     EndDialog( RET_OK );
 }
@@ -165,7 +165,7 @@ void ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )
         case KEY_RETURN:
         {
             sal_uInt16 nItemId = GetSelectItemId();
-            const Color& aColor = nItemId ? ( GetItemColor( nItemId ) ) : Color( COL_AUTO );
+            const Color& aColor = nItemId ? ( GetItemColor( nItemId ) ) : COL_AUTO;
             m_pTabBgColorDlg->m_aTabBgColor = aColor;
             m_pTabBgColorDlg->EndDialog(RET_OK);
         }

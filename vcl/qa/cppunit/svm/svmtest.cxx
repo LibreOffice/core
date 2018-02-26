@@ -920,9 +920,9 @@ void SvmTest::testMasks()
         pAccess->Erase(COL_BLUE);
     }
 
-    pVirtualDev->DrawMask(Point(1, 2), aBitmap1, Color(COL_LIGHTRED));
-    pVirtualDev->DrawMask(Point(1, 2), Size(3, 4), aBitmap2, Color(COL_LIGHTRED));
-    pVirtualDev->DrawMask(Point(1, 2), Size(3, 4), Point(2, 1), Size(4, 3), aBitmap3, Color(COL_LIGHTRED), MetaActionType::MASKSCALEPART);
+    pVirtualDev->DrawMask(Point(1, 2), aBitmap1, COL_LIGHTRED);
+    pVirtualDev->DrawMask(Point(1, 2), Size(3, 4), aBitmap2, COL_LIGHTRED);
+    pVirtualDev->DrawMask(Point(1, 2), Size(3, 4), Point(2, 1), Size(4, 3), aBitmap3, COL_LIGHTRED, MetaActionType::MASKSCALEPART);
 
     checkMasks(writeAndRead(aGDIMetaFile, "masks.svm"));
 }

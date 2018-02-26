@@ -336,7 +336,7 @@ namespace emfio
         Bitmap              aBmp;
 
         WinMtfFillStyle()
-            : aFillColor(Color(COL_BLACK))
+            : aFillColor(COL_BLACK)
             , bTransparent(false)
             , aType(WinMtfFillStyleType::Solid)
         {}

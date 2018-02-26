@@ -477,12 +477,12 @@ SvTreeListEntry* ScAcceptChgDlg::AppendChangeAction(
     if(!bFlag&& bUseColor&& pParent==nullptr)
     {
         pEntry = pTheView->InsertEntry(
-            aBuf.makeStringAndClear() ,pNewData, Color(COL_LIGHTBLUE), pParent, TREELIST_APPEND);
+            aBuf.makeStringAndClear() ,pNewData, COL_LIGHTBLUE, pParent, TREELIST_APPEND);
     }
     else if(bFlag&& bUseColor&& pParent!=nullptr)
     {
         pEntry = pTheView->InsertEntry(
-            aBuf.makeStringAndClear(), pNewData, Color(COL_GREEN), pParent, TREELIST_APPEND);
+            aBuf.makeStringAndClear(), pNewData, COL_GREEN, pParent, TREELIST_APPEND);
         SvTreeListEntry* pExpEntry=pParent;
 
         while(pExpEntry!=nullptr && !pTheView->IsExpanded(pExpEntry))
@@ -739,7 +739,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
         pEntry=pTheView->InsertEntry(aString,pNewData,pParent);
     }
     else
-        pEntry=pTheView->InsertEntry(aString,pNewData,Color(COL_LIGHTBLUE),pParent);
+        pEntry=pTheView->InsertEntry(aString,pNewData,COL_LIGHTBLUE,pParent);
     return pEntry;
 }
 
@@ -1364,7 +1364,7 @@ IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvTreeListBox*, pTable, bool )
                 {
                     bTheTestFlag=InsertAcceptedORejected(pEntry);
                 }
-                if(bTheTestFlag) pTheView->InsertEntry(aStrNoEntry,nullptr,Color(COL_GRAY),pEntry);
+                if(bTheTestFlag) pTheView->InsertEntry(aStrNoEntry,nullptr,COL_GRAY,pEntry);
             }
 
         }

@@ -51,14 +51,14 @@ LotAttrCache::LotAttrCache (LOTUS_ROOT* pLotRoot)
     pDocPool = mpLotusRoot->pDoc->GetPool();
 
     pColTab = new Color [ 8 ];
-    pColTab[ 0 ] = Color( COL_WHITE );
-    pColTab[ 1 ] = Color( COL_LIGHTBLUE );
-    pColTab[ 2 ] = Color( COL_LIGHTGREEN );
-    pColTab[ 3 ] = Color( COL_LIGHTCYAN );
-    pColTab[ 4 ] = Color( COL_LIGHTRED );
-    pColTab[ 5 ] = Color( COL_LIGHTMAGENTA );
-    pColTab[ 6 ] = Color( COL_YELLOW );
-    pColTab[ 7 ] = Color( COL_BLACK );
+    pColTab[ 0 ] = COL_WHITE;
+    pColTab[ 1 ] = COL_LIGHTBLUE;
+    pColTab[ 2 ] = COL_LIGHTGREEN;
+    pColTab[ 3 ] = COL_LIGHTCYAN;
+    pColTab[ 4 ] = COL_LIGHTRED;
+    pColTab[ 5 ] = COL_LIGHTMAGENTA;
+    pColTab[ 6 ] = COL_YELLOW;
+    pColTab[ 7 ] = COL_BLACK;
 
     ppColorItems[ 0 ] = new SvxColorItem( GetColor( 1 ), ATTR_FONT_COLOR );     // 1
     ppColorItems[ 1 ] = new SvxColorItem( GetColor( 2 ), ATTR_FONT_COLOR );
@@ -67,7 +67,7 @@ LotAttrCache::LotAttrCache (LOTUS_ROOT* pLotRoot)
     ppColorItems[ 4 ] = new SvxColorItem( GetColor( 5 ), ATTR_FONT_COLOR );
     ppColorItems[ 5 ] = new SvxColorItem( GetColor( 6 ), ATTR_FONT_COLOR );     // 6
 
-    pWhite = new SvxColorItem( Color( COL_WHITE ), ATTR_FONT_COLOR );
+    pWhite = new SvxColorItem( COL_WHITE, ATTR_FONT_COLOR );
 }
 
 LotAttrCache::~LotAttrCache()

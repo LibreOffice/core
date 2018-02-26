@@ -178,7 +178,7 @@ void SdrPaintView::ImpClearVars()
     if (mpModel)
         SetDefaultStyleSheet(mpModel->GetDefaultStyleSheet(), true);
 
-    maGridColor = Color( COL_BLACK );
+    maGridColor = COL_BLACK;
 }
 
 SdrPaintView::SdrPaintView(SdrModel* pModel, OutputDevice* pOut)

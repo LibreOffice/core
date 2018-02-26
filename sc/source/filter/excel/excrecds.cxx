@@ -425,7 +425,7 @@ void XclExpXmlSheetPr::SaveXml( XclExpXmlStream& rStrm )
 
     // OOXTODO: XML_outlinePr
 
-    if (maTabColor != Color(COL_AUTO))
+    if (maTabColor != COL_AUTO)
         rWorksheet->singleElement(
             XML_tabColor, XML_rgb, XclXmlUtils::ToOString(maTabColor).getStr(), FSEND);
 

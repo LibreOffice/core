@@ -152,7 +152,7 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
     // background
     if (!bSecond || bResetBackground)
     {
-        rRenderContext.SetLineColor(Color(COL_TRANSPARENT));
+        rRenderContext.SetLineColor(COL_TRANSPARENT);
         rRenderContext.SetFillColor(rDlgColor);
         Size winSize(rRenderContext.GetOutputSize());
         rRenderContext.DrawRect(tools::Rectangle(Point(0,0), winSize));
@@ -307,7 +307,7 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
     if (bTable)
     {
         // Paint Table, if necessary center it
-        rRenderContext.SetLineColor(Color(COL_LIGHTGRAY));
+        rRenderContext.SetLineColor(COL_LIGHTGRAY);
 
         long nW = aRect.GetWidth();
         long nH = aRect.GetHeight();

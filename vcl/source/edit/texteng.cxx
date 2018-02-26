@@ -1405,9 +1405,9 @@ void TextEngine::SeekCursor( sal_uInt32 nPara, sal_Int32 nPos, vcl::Font& rFont,
         else if ( nAttr & ExtTextInputAttr::DashDotUnderline )
             rFont.SetUnderline( LINESTYLE_DOTTED );
         if ( nAttr & ExtTextInputAttr::RedText )
-            rFont.SetColor( Color( COL_RED ) );
+            rFont.SetColor( COL_RED );
         else if ( nAttr & ExtTextInputAttr::HalfToneText )
-            rFont.SetColor( Color( COL_LIGHTGRAY ) );
+            rFont.SetColor( COL_LIGHTGRAY );
         if ( nAttr & ExtTextInputAttr::Highlight )
         {
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -1419,7 +1419,7 @@ void TextEngine::SeekCursor( sal_uInt32 nPara, sal_Int32 nPos, vcl::Font& rFont,
         {
             rFont.SetUnderline( LINESTYLE_WAVE );
 //          if( pOut )
-//              pOut->SetTextLineColor( Color( COL_LIGHTGRAY ) );
+//              pOut->SetTextLineColor( COL_LIGHTGRAY );
         }
     }
 }

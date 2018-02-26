@@ -1593,9 +1593,9 @@ void SwMarkPreview::InitColors()
     m_aBgCol = rSettings.GetWindowColor();
 
     bool bHC = rSettings.GetHighContrastMode();
-    m_aLineCol = bHC? SwViewOption::GetFontColor() : Color( COL_BLACK );
+    m_aLineCol = bHC? SwViewOption::GetFontColor() : COL_BLACK;
     m_aShadowCol = bHC? m_aBgCol : rSettings.GetShadowColor();
-    m_aTextCol = bHC? SwViewOption::GetFontColor() : Color( COL_GRAY );
+    m_aTextCol = bHC? SwViewOption::GetFontColor() : COL_GRAY;
     m_aPrintAreaCol = m_aTextCol;
 }
 
@@ -1998,13 +1998,13 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox&, rLB, void )
 
     if (aColor == COL_NONE_COLOR)
     {
-        rFont.SetColor( Color( COL_BLACK ) );
-        rCJKFont.SetColor( Color( COL_BLACK ) );
+        rFont.SetColor( COL_BLACK );
+        rCJKFont.SetColor( COL_BLACK );
     }
     else if (aColor == COL_TRANSPARENT)
     {
-        rFont.SetColor( Color( COL_RED ) );
-        rCJKFont.SetColor( Color( COL_RED ) );
+        rFont.SetColor( COL_RED );
+        rCJKFont.SetColor( COL_RED );
     }
     else
     {
@@ -2052,9 +2052,9 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox&, rLB, void )
             if (aBgColor != COL_NONE_COLOR)
                 pPrev->SetColor(aBgColor);
             else
-                pPrev->SetColor(Color(COL_LIGHTGRAY));
-            rFont.SetColor( Color( COL_BLACK ) );
-            rCJKFont.SetColor( Color( COL_BLACK ) );
+                pPrev->SetColor(COL_LIGHTGRAY);
+            rFont.SetColor( COL_BLACK );
+            rCJKFont.SetColor( COL_BLACK );
         }
         break;
     }
@@ -2094,14 +2094,14 @@ IMPL_LINK( SwRedlineOptionsTabPage, ColorHdl, SvxColorListBox&, rListBox, void )
 
     if( pAttr->nItemId == SID_ATTR_BRUSH )
     {
-        rFont.SetColor( Color( COL_BLACK ) );
-        rCJKFont.SetColor( Color( COL_BLACK ) );
+        rFont.SetColor( COL_BLACK );
+        rCJKFont.SetColor( COL_BLACK );
 
         Color aBgColor = pColorLB->GetSelectEntryColor();
         if (aBgColor != COL_NONE_COLOR)
             pPrev->SetColor(aBgColor);
         else
-            pPrev->SetColor(Color(COL_LIGHTGRAY));
+            pPrev->SetColor(COL_LIGHTGRAY);
     }
     else
     {
@@ -2109,13 +2109,13 @@ IMPL_LINK( SwRedlineOptionsTabPage, ColorHdl, SvxColorListBox&, rListBox, void )
 
         if (aColor == COL_NONE_COLOR)
         {
-            rFont.SetColor( Color( COL_BLACK ) );
-            rCJKFont.SetColor( Color( COL_BLACK ) );
+            rFont.SetColor( COL_BLACK );
+            rCJKFont.SetColor( COL_BLACK );
         }
         else if (aColor == COL_TRANSPARENT)
         {
-            rFont.SetColor( Color( COL_RED ) );
-            rCJKFont.SetColor( Color( COL_RED ) );
+            rFont.SetColor( COL_RED );
+            rCJKFont.SetColor( COL_RED );
         }
         else
         {

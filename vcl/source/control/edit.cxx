@@ -658,14 +658,14 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
                         else if (nAttr & ExtTextInputAttr::GrayWaveline)
                         {
                             aFont.SetUnderline(LINESTYLE_WAVE);
-                            rRenderContext.SetTextLineColor(Color(COL_LIGHTGRAY));
+                            rRenderContext.SetTextLineColor(COL_LIGHTGRAY);
                         }
                         rRenderContext.SetFont(aFont);
 
                         if (nAttr & ExtTextInputAttr::RedText)
-                            rRenderContext.SetTextColor(Color(COL_RED));
+                            rRenderContext.SetTextColor(COL_RED);
                         else if (nAttr & ExtTextInputAttr::HalfToneText)
-                            rRenderContext.SetTextColor(Color(COL_LIGHTGRAY));
+                            rRenderContext.SetTextColor(COL_LIGHTGRAY);
 
                         rRenderContext.SetClipRegion(aClip);
                         rRenderContext.DrawText(aPos, aText, 0, nLen);
@@ -1773,7 +1773,7 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawF
 
     // Content
     if ( ( nFlags & DrawFlags::Mono ) || ( eOutDevType == OUTDEV_PRINTER ) )
-        pDev->SetTextColor( Color( COL_BLACK ) );
+        pDev->SetTextColor( COL_BLACK );
     else
     {
         if ( !(nFlags & DrawFlags::NoDisable ) && !IsEnabled() )

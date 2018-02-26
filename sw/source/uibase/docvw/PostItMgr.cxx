@@ -1109,7 +1109,7 @@ Color SwPostItMgr::GetArrowColor(sal_uInt16 aDirection,unsigned long aPage) cons
     if (ArrowEnabled(aDirection,aPage))
     {
         if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-            return Color(COL_WHITE);
+            return COL_WHITE;
         else
             return COL_NOTES_SIDEPANE_ARROW_ENABLED;
     }
@@ -2047,7 +2047,7 @@ Color SwPostItMgr::GetColorDark(std::size_t aAuthorIndex)
         return aArrayNormal[ aAuthorIndex % SAL_N_ELEMENTS( aArrayNormal )];
     }
     else
-        return Color(COL_WHITE);
+        return COL_WHITE;
 }
 
 Color SwPostItMgr::GetColorLight(std::size_t aAuthorIndex)
@@ -2062,7 +2062,7 @@ Color SwPostItMgr::GetColorLight(std::size_t aAuthorIndex)
         return aArrayLight[ aAuthorIndex % SAL_N_ELEMENTS( aArrayLight )];
     }
     else
-        return Color(COL_WHITE);
+        return COL_WHITE;
 }
 
 Color SwPostItMgr::GetColorAnchor(std::size_t aAuthorIndex)
@@ -2077,7 +2077,7 @@ Color SwPostItMgr::GetColorAnchor(std::size_t aAuthorIndex)
         return aArrayAnchor[  aAuthorIndex % SAL_N_ELEMENTS( aArrayAnchor )];
     }
     else
-        return Color(COL_WHITE);
+        return COL_WHITE;
 }
 
 void SwPostItMgr::SetActiveSidebarWin( SwAnnotationWin* p)

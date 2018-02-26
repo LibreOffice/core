@@ -464,10 +464,10 @@ void ScGlobal::Init()
 
     pRscString = new std::map<const char*, OUString>;
 
-    pEmptyBrushItem = new SvxBrushItem( Color( COL_TRANSPARENT ), ATTR_BACKGROUND );
+    pEmptyBrushItem = new SvxBrushItem( COL_TRANSPARENT, ATTR_BACKGROUND );
     pButtonBrushItem = new SvxBrushItem( Color(), ATTR_BACKGROUND );
-    pEmbeddedBrushItem = new SvxBrushItem( Color( COL_LIGHTCYAN ), ATTR_BACKGROUND );
-    pProtectedBrushItem = new SvxBrushItem( Color( COL_LIGHTGRAY ), ATTR_BACKGROUND );
+    pEmbeddedBrushItem = new SvxBrushItem( COL_LIGHTCYAN, ATTR_BACKGROUND );
+    pProtectedBrushItem = new SvxBrushItem( COL_LIGHTGRAY, ATTR_BACKGROUND );
 
     InitPPT();
     //ScCompiler::InitSymbolsNative();

@@ -523,7 +523,7 @@ void Window::SetControlForeground()
 {
     if (mpWindowImpl->mbControlForeground)
     {
-        mpWindowImpl->maControlForeground = Color(COL_TRANSPARENT);
+        mpWindowImpl->maControlForeground = COL_TRANSPARENT;
         mpWindowImpl->mbControlForeground = false;
         CompatStateChanged(StateChangedType::ControlForeground);
     }
@@ -535,7 +535,7 @@ void Window::SetControlForeground(const Color& rColor)
     {
         if (mpWindowImpl->mbControlForeground)
         {
-            mpWindowImpl->maControlForeground = Color(COL_TRANSPARENT);
+            mpWindowImpl->maControlForeground = COL_TRANSPARENT;
             mpWindowImpl->mbControlForeground = false;
             CompatStateChanged(StateChangedType::ControlForeground);
         }
@@ -563,7 +563,7 @@ void Window::SetControlBackground()
 {
     if (mpWindowImpl->mbControlBackground)
     {
-        mpWindowImpl->maControlBackground = Color(COL_TRANSPARENT);
+        mpWindowImpl->maControlBackground = COL_TRANSPARENT;
         mpWindowImpl->mbControlBackground = false;
         CompatStateChanged(StateChangedType::ControlBackground);
     }
@@ -575,7 +575,7 @@ void Window::SetControlBackground(const Color& rColor)
     {
         if (mpWindowImpl->mbControlBackground)
         {
-            mpWindowImpl->maControlBackground = Color(COL_TRANSPARENT);
+            mpWindowImpl->maControlBackground = COL_TRANSPARENT;
             mpWindowImpl->mbControlBackground = false;
             CompatStateChanged(StateChangedType::ControlBackground);
         }

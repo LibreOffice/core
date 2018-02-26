@@ -622,8 +622,8 @@ WindowImpl::WindowImpl( WindowType nType )
     mpCursor                            = nullptr;                      // cursor
     mpVCLXWindow                        = nullptr;
     mpAccessibleInfos                   = nullptr;
-    maControlForeground                 = Color( COL_TRANSPARENT );  // no foreground set
-    maControlBackground                 = Color( COL_TRANSPARENT );  // no background set
+    maControlForeground                 = COL_TRANSPARENT;  // no foreground set
+    maControlBackground                 = COL_TRANSPARENT;  // no background set
     mnLeftBorder                        = 0;                         // left border
     mnTopBorder                         = 0;                         // top border
     mnRightBorder                       = 0;                         // right border
@@ -3398,7 +3398,7 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
     Color aSelectionFillCol( aSelectionBorderCol );
 
     bool bDark = rStyles.GetFaceColor().IsDark();
-    bool bBright = ( rStyles.GetFaceColor() == Color( COL_WHITE ) );
+    bool bBright = ( rStyles.GetFaceColor() == COL_WHITE );
 
     int c1 = aSelectionBorderCol.GetLuminance();
     int c2 = GetDisplayBackground().GetColor().GetLuminance();
@@ -3419,7 +3419,7 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
     Color oldLineCol = GetLineColor();
 
     if( bDrawBorder )
-        SetLineColor( bDark ? Color(COL_WHITE) : ( bBright ? Color(COL_BLACK) : aSelectionBorderCol ) );
+        SetLineColor( bDark ? COL_WHITE : ( bBright ? COL_BLACK : aSelectionBorderCol ) );
     else
         SetLineColor();
 

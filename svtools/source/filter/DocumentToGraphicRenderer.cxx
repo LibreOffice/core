@@ -206,7 +206,7 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
 
     aMtf.Record( pOutputDev );
 
-    if (aPageColor != Color(COL_TRANSPARENT))
+    if (aPageColor != COL_TRANSPARENT)
     {
         pOutputDev->SetBackground(Wallpaper(aPageColor));
         pOutputDev->Erase();

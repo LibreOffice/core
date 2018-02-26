@@ -305,7 +305,7 @@ void SwAddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
 {
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetFillColor(rSettings.GetWindowColor());
-    rRenderContext.SetLineColor(Color(COL_TRANSPARENT));
+    rRenderContext.SetLineColor(COL_TRANSPARENT);
     rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), GetOutputSizePixel()));
     Color aPaintColor(IsEnabled() ? rSettings.GetWindowTextColor() : rSettings.GetDisableColor());
     rRenderContext.SetLineColor(aPaintColor);
@@ -433,7 +433,7 @@ void SwAddressPreview::DrawText_Impl(vcl::RenderContext& rRenderContext, const O
     if (bIsSelected)
     {
         //selection rectangle
-        rRenderContext.SetFillColor(Color(COL_TRANSPARENT));
+        rRenderContext.SetFillColor(COL_TRANSPARENT);
         rRenderContext.DrawRect(tools::Rectangle(rTopLeft, rSize));
     }
     sal_Int32 nHeight = GetTextHeight();

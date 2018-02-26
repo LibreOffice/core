@@ -103,8 +103,8 @@ TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBas
     }
     else
     {
-        m_pValueSet->SetColor( Color( COL_WHITE ) );
-        m_pValueSet->SetBackground( Color( COL_WHITE ) );
+        m_pValueSet->SetColor( COL_WHITE );
+        m_pValueSet->SetBackground( Color(COL_WHITE) );
     }
     m_pValueSet->SetSelectHdl (LINK(this, TableDesignWidget, implValueSetHdl));
 

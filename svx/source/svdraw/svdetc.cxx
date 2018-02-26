@@ -682,7 +682,7 @@ namespace
 
                 }
 
-                aSpotColor[i] = Color( COL_WHITE );
+                aSpotColor[i] = COL_WHITE;
                 impGetSdrPageFillColor(rPage, aSpotPos[i], rTextEditPV, rTextEditPV.GetVisibleLayers(), aSpotColor[i], false);
             }
 

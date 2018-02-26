@@ -731,7 +731,7 @@ sal_Int32 SAL_CALL AccessibleBase::getBackground()
 
 sal_Int32 AccessibleBase::getColor( eColorType eColType )
 {
-    sal_Int32 nResult = static_cast< sal_Int32 >( Color( COL_TRANSPARENT ).GetColor());
+    sal_Int32 nResult = static_cast< sal_Int32 >( Color(COL_TRANSPARENT).GetColor());
     if( m_bAlwaysTransparent )
         return nResult;
 

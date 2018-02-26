@@ -2169,7 +2169,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
                 if( pAct->IsSetting() )
                     aSaveFont.SetFillColor( pAct->GetColor() );
                 else
-                    aSaveFont.SetFillColor( Color( COL_TRANSPARENT ) );
+                    aSaveFont.SetFillColor( COL_TRANSPARENT );
 
                 rSaveVDev.SetFont( aSaveFont );
                 ImplWriteFont( rOStm, rSaveVDev.GetFont(), rActualCharSet );

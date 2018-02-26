@@ -326,7 +326,7 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
     Color aSelectionFillColor(aSelectionBorderColor);
 
     bool bDark = rStyles.GetFaceColor().IsDark();
-    bool bBright = ( rStyles.GetFaceColor() == Color( COL_WHITE ) );
+    bool bBright = ( rStyles.GetFaceColor() == COL_WHITE );
 
     int c1 = aSelectionBorderColor.GetLuminance();
     int c2 = rWindow.GetDisplayBackground().GetColor().GetLuminance();
@@ -361,7 +361,7 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
     rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
 
     if (bDrawBorder)
-        rRenderContext.SetLineColor(bDark ? Color(COL_WHITE) : (bBright ? Color(COL_BLACK) : aSelectionBorderColor));
+        rRenderContext.SetLineColor(bDark ? COL_WHITE : (bBright ? COL_BLACK : aSelectionBorderColor));
     else
         rRenderContext.SetLineColor();
 

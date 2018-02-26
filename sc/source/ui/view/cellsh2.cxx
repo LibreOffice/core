@@ -172,7 +172,7 @@ static bool lcl_GetSortParam( const ScViewData* pData, const ScSortParam& rSortP
         ((rSortParam.nCol1 == rSortParam.nCol2 && aExternalRange.aStart.Col() != aExternalRange.aEnd.Col()) ||
          (rSortParam.nRow1 == rSortParam.nRow2 && aExternalRange.aStart.Row() != aExternalRange.aEnd.Row())))
     {
-        pTabViewShell->AddHighlightRange( aExternalRange,Color( COL_LIGHTBLUE ) );
+        pTabViewShell->AddHighlightRange( aExternalRange,COL_LIGHTBLUE );
         ScRange rExtendRange( aExternalRange.aStart.Col(), aExternalRange.aStart.Row(), nTab, aExternalRange.aEnd.Col(), aExternalRange.aEnd.Row(), nTab );
         OUString aExtendStr(rExtendRange.Format(ScRefFlags::VALID, pDoc));
 

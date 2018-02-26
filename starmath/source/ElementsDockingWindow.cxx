@@ -727,8 +727,8 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
     mpElementListBox->SetSelectHdl(LINK(this, SmElementsDockingWindow, ElementSelectedHandle));
     mpElementListBox->SelectEntry(SmResId(RID_CATEGORY_UNARY_BINARY_OPERATORS));
 
-    mpElementsControl->SetBackground( Color( COL_WHITE ) );
-    mpElementsControl->SetTextColor( Color( COL_BLACK ) );
+    mpElementsControl->SetBackground( Color(COL_WHITE) );
+    mpElementsControl->SetTextColor( COL_BLACK );
     mpElementsControl->setElementSetId(RID_CATEGORY_UNARY_BINARY_OPERATORS);
     mpElementsControl->SetSelectHdl(LINK(this, SmElementsDockingWindow, SelectClickHandler));
 }

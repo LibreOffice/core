@@ -134,7 +134,7 @@ void BrowserColumn::Draw( BrowseBox const & rBox, OutputDevice& rDev, const Poin
         ButtonFrame( rPos, Size( Width()-1, rBox.GetDataRowHeight()-1 ),
                      "", false ).Draw( rDev );
         Color aOldLineColor = rDev.GetLineColor();
-        rDev.SetLineColor( Color( COL_BLACK ) );
+        rDev.SetLineColor( COL_BLACK );
         rDev.DrawLine(
             Point( rPos.X(), rPos.Y()+rBox.GetDataRowHeight()-1 ),
             Point( rPos.X() + Width() - 1, rPos.Y()+rBox.GetDataRowHeight()-1 ) );

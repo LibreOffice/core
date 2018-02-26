@@ -191,7 +191,7 @@ void SmCaretDrawingVisitor::Visit( SmTextNode* pNode )
     long right_line = pLine->GetRight( ) + maOffset.X( );
 
     //Set color
-    mrDev.SetLineColor( Color( COL_BLACK ) );
+    mrDev.SetLineColor( COL_BLACK );
 
     if ( mbCaretVisible ) {
         //Draw vertical line
@@ -219,7 +219,7 @@ void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
     long right_line = pLine->GetRight( ) + maOffset.X( );
 
     //Set color
-    mrDev.SetLineColor( Color( COL_BLACK ) );
+    mrDev.SetLineColor( COL_BLACK );
 
     if ( mbCaretVisible ) {
         //Draw vertical line
@@ -1859,7 +1859,7 @@ SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmN
         mrDev.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
         //Change colors
         mrDev.SetLineColor( );
-        mrDev.SetFillColor( Color( COL_LIGHTGRAY ) );
+        mrDev.SetFillColor( COL_LIGHTGRAY );
 
         //Draw rectangle
         mrDev.DrawRect( maSelectionArea );

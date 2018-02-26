@@ -256,7 +256,7 @@ namespace sdr
                 SdrRectObj aRectObj(OBJ_TEXT);
                 aRectObj.SetModel(GetGrafObject().GetModel());
                 aRectObj.NbcSetText(aDraftText);
-                aRectObj.SetMergedItem(SvxColorItem(Color(COL_LIGHTRED), EE_CHAR_COLOR));
+                aRectObj.SetMergedItem(SvxColorItem(COL_LIGHTRED, EE_CHAR_COLOR));
 
                 // get SdrText and OPO
                 SdrText* pSdrText = aRectObj.getText(0);

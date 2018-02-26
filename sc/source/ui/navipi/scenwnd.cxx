@@ -215,7 +215,7 @@ ScScenarioWindow::ScScenarioWindow( vcl::Window* pParent, const OUString& aQH_Li
 
     aLbScenario->SetQuickHelpText(aQH_List);
     aEdComment->SetQuickHelpText(aQH_Comment);
-    aEdComment->SetBackground( Color( COL_LIGHTGRAY ) );
+    aEdComment->SetBackground( Color(COL_LIGHTGRAY) );
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (pViewFrm)

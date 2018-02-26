@@ -491,7 +491,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             if ( pReqArgs->GetItemState( SID_NEW_TABLENAME, true, &pItem ) == SfxItemState::SET )
                                 aArgComment = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
-                            aColor = Color( COL_LIGHTGRAY );        // Default
+                            aColor = COL_LIGHTGRAY;        // Default
                             nFlags = ScScenarioFlags::NONE;         // not TwoWay
 
                             pTabViewShell->MakeScenario( aArgName, aArgComment, aColor, nFlags );

@@ -84,7 +84,7 @@ void SvxFont::DrawArrow( OutputDevice &rOut, const tools::Rectangle& rRect,
     Color aOldLineColor = rOut.GetLineColor();
     Color aOldFillColor = rOut.GetFillColor();
     rOut.SetFillColor( rCol );
-    rOut.SetLineColor( Color( COL_BLACK ) );
+    rOut.SetLineColor( COL_BLACK );
     rOut.DrawPolygon( aPoly );
     rOut.DrawLine( aTmp, aNxt );
     rOut.SetLineColor( aOldLineColor );

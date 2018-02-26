@@ -985,7 +985,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 tools::Rectangle           aBmpRect( aBmpPoly.GetBoundRect() );
                 BitmapEx            aBmpEx( pAct->GetBitmap() );
 
-                aBmpEx.Rotate( nAngle10, Color( COL_TRANSPARENT ) );
+                aBmpEx.Rotate( nAngle10, COL_TRANSPARENT );
                 aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(),
                                                           aBmpEx ) );
             }
@@ -999,7 +999,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 BitmapEx                aBmpEx( pAct->GetBitmap() );
 
                 aBmpEx.Crop( tools::Rectangle( pAct->GetSrcPoint(), pAct->GetSrcSize() ) );
-                aBmpEx.Rotate( nAngle10, Color( COL_TRANSPARENT ) );
+                aBmpEx.Rotate( nAngle10, COL_TRANSPARENT );
 
                 aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmpEx ) );
             }
@@ -1012,7 +1012,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 tools::Rectangle               aBmpRect( aBmpPoly.GetBoundRect() );
                 BitmapEx                aBmpEx( pAct->GetBitmapEx() );
 
-                aBmpEx.Rotate( nAngle10, Color( COL_TRANSPARENT ) );
+                aBmpEx.Rotate( nAngle10, COL_TRANSPARENT );
 
                 aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmpEx ) );
             }
@@ -1026,7 +1026,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 BitmapEx                    aBmpEx( pAct->GetBitmapEx() );
 
                 aBmpEx.Crop( tools::Rectangle( pAct->GetSrcPoint(), pAct->GetSrcSize() ) );
-                aBmpEx.Rotate( nAngle10, Color( COL_TRANSPARENT ) );
+                aBmpEx.Rotate( nAngle10, COL_TRANSPARENT );
 
                 aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmpEx ) );
             }
@@ -1774,8 +1774,8 @@ BitmapEx GDIMetaFile::ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpPa
 {
     BitmapPalette aPal( 3 );
 
-    aPal[ 0 ] = Color( COL_BLACK );
-    aPal[ 1 ] = Color( COL_WHITE );
+    aPal[ 0 ] = Color(COL_BLACK);
+    aPal[ 1 ] = Color(COL_WHITE);
     aPal[ 2 ] = static_cast<const ImplBmpMonoParam*>(pBmpParam)->aColor;
 
     Bitmap aBmp( rBmpEx.GetSizePixel(), 4, &aPal );

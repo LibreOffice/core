@@ -313,7 +313,7 @@ void Calendar::ImplFormat()
     mnDayCount += 42-nDaysInMonth-nWeekDay;
 
     // determine colours
-    maOtherColor = Color( COL_LIGHTGRAY );
+    maOtherColor = COL_LIGHTGRAY;
     if ( maOtherColor.IsRGBEqual( GetBackground().GetColor() ) )
         maOtherColor = COL_GRAY;
 

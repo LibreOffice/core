@@ -292,7 +292,7 @@ public:
                     } aPoints[] = {
                         { 0.2, 0.2 }, { 0.8, 0.3 }, { 0.7, 0.8 }
                     };
-                    rDev.SetLineColor(Color(COL_BLACK));
+                    rDev.SetLineColor(COL_BLACK);
                     basegfx::B2DPolygon aPoly;
                     tools::Rectangle aSub(aRegions[i]);
                     for (size_t j = 0; j < SAL_N_ELEMENTS(aPoints); j++)
@@ -305,8 +305,8 @@ public:
             }
             else
             {
-                rDev.SetFillColor(Color(COL_LIGHTRED));
-                rDev.SetLineColor(Color(COL_BLACK));
+                rDev.SetFillColor(COL_LIGHTRED);
+                rDev.SetLineColor(COL_BLACK);
                 rDev.DrawRect(r);
 
                 for(long i=0; i<r.GetHeight(); i+=15)
@@ -730,8 +730,8 @@ public:
                                  r.GetHeight()-nDy*2));
             tools::Polygon aPoly(aShrunk);
             tools::PolyPolygon aPPoly(aPoly);
-            rDev.SetLineColor(Color(COL_RED));
-            rDev.SetFillColor(Color(COL_RED));
+            rDev.SetLineColor(COL_RED);
+            rDev.SetFillColor(COL_RED);
             // This hits the optional 'drawPolyPolygon' code-path
             rDev.DrawTransparent(aPPoly, 64);
         }
@@ -753,8 +753,8 @@ public:
         virtual void RenderRegion(OutputDevice &rDev, tools::Rectangle r,
                                   const RenderContext &rCtx) override
         {
-            rDev.SetLineColor(Color(COL_RED));
-            rDev.SetFillColor(Color(COL_GREEN));
+            rDev.SetLineColor(COL_RED);
+            rDev.SetFillColor(COL_GREEN);
             rDev.DrawEllipse(r);
 
             if (rCtx.meStyle == RENDER_EXPANDED)
@@ -952,8 +952,8 @@ public:
                                              aSubRect.GetHeight() * aPoints[v].nY),
                                        v);
                     }
-                    rDev.SetLineColor(Color(COL_YELLOW));
-                    rDev.SetFillColor(Color(COL_BLACK));
+                    rDev.SetLineColor(COL_YELLOW);
+                    rDev.SetFillColor(COL_BLACK);
                     rDev.DrawPolygon(aPoly);
 
                     // now move and add to the polypolygon
@@ -961,8 +961,8 @@ public:
                     aPolyPoly.Insert(aPoly);
                 }
             }
-            rDev.SetLineColor(Color(COL_LIGHTRED));
-            rDev.SetFillColor(Color(COL_GREEN));
+            rDev.SetLineColor(COL_LIGHTRED);
+            rDev.SetFillColor(COL_GREEN);
             rDev.DrawTransparent(aPolyPoly, 50);
         }
     };

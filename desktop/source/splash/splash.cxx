@@ -296,7 +296,7 @@ SplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
             _textBaseline = _height;
 
         if ( NOT_LOADED_COLOR == _cProgressFrameColor )
-            _cProgressFrameColor = Color( COL_LIGHTGRAY );
+            _cProgressFrameColor = COL_LIGHTGRAY;
 
         if ( NOT_LOADED_COLOR == _cProgressBarColor )
         {
@@ -304,11 +304,11 @@ SplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
             if ( _width > 500 )
                 _cProgressBarColor = Color( 157, 202, 18 );
             else
-                _cProgressBarColor = Color( COL_BLUE );
+                _cProgressBarColor = COL_BLUE;
         }
 
         if ( NOT_LOADED_COLOR == _cProgressTextColor )
-            _cProgressTextColor = Color( COL_BLACK );
+            _cProgressTextColor = COL_BLACK;
 
         Application::AddEventListener(
             LINK( this, SplashScreen, AppEventListenerHdl ) );

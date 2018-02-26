@@ -2484,7 +2484,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pPrevWin->Show();
 
         _pPrevBmp = VclPtr<FixedBitmap>::Create( _pPrevWin, WinBits( WB_BORDER ) );
-        _pPrevBmp->SetBackground( Wallpaper( Color( COL_WHITE ) ) );
+        _pPrevBmp->SetBackground( Wallpaper( COL_WHITE ) );
         _pPrevBmp->SetSizePixel(_pPrevWin->GetSizePixel());
         _pPrevBmp->Show();
         _pPrevBmp->SetAccessibleName(FpsResId(STR_PREVIEW));

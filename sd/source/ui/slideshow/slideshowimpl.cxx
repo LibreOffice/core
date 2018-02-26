@@ -1100,7 +1100,7 @@ void SlideshowImpl::onFirstPaint()
     if( mpShowWindow )
     {
         /*
-        mpShowWindow->SetBackground( Wallpaper( Color( COL_BLACK ) ) );
+        mpShowWindow->SetBackground( Wallpaper( COL_BLACK ) );
         mpShowWindow->Erase();
         mpShowWindow->SetBackground();
         */
@@ -1995,7 +1995,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
         PopupMenu* pBlankMenu = pMenu->GetPopupMenu(pMenu->GetItemId("screen"));
         if( pBlankMenu )
         {
-            pBlankMenu->CheckItem((mpShowWindow->GetBlankColor() == Color(COL_WHITE)) ? pBlankMenu->GetItemId("white") : pBlankMenu->GetItemId("black"));
+            pBlankMenu->CheckItem((mpShowWindow->GetBlankColor() == COL_WHITE) ? pBlankMenu->GetItemId("white") : pBlankMenu->GetItemId("black"));
         }
     }
 

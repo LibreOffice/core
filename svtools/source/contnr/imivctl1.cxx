@@ -1538,7 +1538,7 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(const tools::Rectangle& rTextRect, bo
         if (bCursored)
         {
             aOldLineColor = rRenderContext.GetLineColor();
-            rRenderContext.SetLineColor(Color(COL_GRAY));
+            rRenderContext.SetLineColor(COL_GRAY);
         }
         rRenderContext.DrawRect(rTextRect);
         if (bCursored)

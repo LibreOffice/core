@@ -571,7 +571,7 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
         rRenderContext.DrawImage(aPos, Size(SMALL_ICON_SIZE, SMALL_ICON_SIZE), m_aWarningImage);
     }
 
-    rRenderContext.SetLineColor(Color(COL_LIGHTGRAY));
+    rRenderContext.SetLineColor(COL_LIGHTGRAY);
     rRenderContext.DrawLine(rRect.BottomLeft(), rRect.BottomRight());
 }
 

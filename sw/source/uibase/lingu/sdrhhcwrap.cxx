@@ -76,7 +76,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
     pOutlView->GetOutliner()->SetRefDevice(pView->GetWrtShell().getIDocumentDeviceAccess().getPrinter( false ));
 
     // Hack: all SdrTextObj attributes should be transferred to EditEngine
-    pOutlView->SetBackgroundColor( Color( COL_WHITE ) );
+    pOutlView->SetBackgroundColor( COL_WHITE );
 
     InsertView( pOutlView );
     Point aPoint( 0, 0 );

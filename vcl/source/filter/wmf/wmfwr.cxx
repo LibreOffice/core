@@ -298,7 +298,7 @@ void WMFWriter::WMFRecord_CreateBrushIndirect(const Color& rColor)
 {
     WriteRecordHeader(0x00000007,W_META_CREATEBRUSHINDIRECT);
 
-    if( rColor==Color(COL_TRANSPARENT) )
+    if( rColor==COL_TRANSPARENT )
         pWMF->WriteUInt16( W_BS_HOLLOW );
     else
         pWMF->WriteUInt16( W_BS_SOLID );
@@ -372,7 +372,7 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const vcl::Font & rFont)
 void WMFWriter::WMFRecord_CreatePenIndirect(const Color& rColor, const LineInfo& rLineInfo )
 {
     WriteRecordHeader(0x00000008,W_META_CREATEPENINDIRECT);
-    sal_uInt16 nStyle = rColor == Color( COL_TRANSPARENT ) ? W_PS_NULL : W_PS_SOLID;
+    sal_uInt16 nStyle = rColor == COL_TRANSPARENT ? W_PS_NULL : W_PS_SOLID;
     switch( rLineInfo.GetStyle() )
     {
         case LineStyle::Dash :
@@ -504,7 +504,7 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& r
                 Color aOldLineColor( aSrcLineColor );
                 aSrcLineInfo  = LineInfo();
                 aSrcFillColor = aSrcTextColor;
-                aSrcLineColor = Color( COL_TRANSPARENT );
+                aSrcLineColor = COL_TRANSPARENT;
                 SetLineAndFillAttr();
                 pVirDev->SetFont( aSrcFont );
                 std::vector<tools::PolyPolygon> aPolyPolyVec;
@@ -996,7 +996,7 @@ void WMFWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx:
             const Color aOldLineColor(aSrcLineColor);
             const Color aOldFillColor(aSrcFillColor);
 
-            aSrcLineColor = Color( COL_TRANSPARENT );
+            aSrcLineColor = COL_TRANSPARENT;
             aSrcFillColor = aOldLineColor;
             SetLineAndFillAttr();
 
@@ -1356,7 +1356,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     if( pA->IsSetting() )
                         aSrcLineColor = pA->GetColor();
                     else
-                        aSrcLineColor = Color( COL_TRANSPARENT );
+                        aSrcLineColor = COL_TRANSPARENT;
                 }
                 break;
 
@@ -1367,7 +1367,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     if( pA->IsSetting() )
                         aSrcFillColor = pA->GetColor();
                     else
-                        aSrcFillColor = Color( COL_TRANSPARENT );
+                        aSrcFillColor = COL_TRANSPARENT;
                 }
                 break;
 
@@ -1384,7 +1384,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     if( pA->IsSetting() )
                         aSrcFont.SetFillColor( pA->GetColor() );
                     else
-                        aSrcFont.SetFillColor( Color( COL_TRANSPARENT ) );
+                        aSrcFont.SetFillColor( COL_TRANSPARENT );
                 }
                 break;
 
@@ -1761,10 +1761,10 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     WMFRecord_SetROP2(eDstROP2);
 
     aDstLineInfo = LineInfo();
-    aDstLineColor = aSrcLineColor = Color( COL_BLACK );
+    aDstLineColor = aSrcLineColor = COL_BLACK;
     CreateSelectDeletePen( aDstLineColor, aDstLineInfo );
 
-    aDstFillColor = aSrcFillColor = Color( COL_WHITE );
+    aDstFillColor = aSrcFillColor = COL_WHITE;
     CreateSelectDeleteBrush( aDstFillColor );
 
     aDstClipRegion = aSrcClipRegion = vcl::Region();
@@ -1772,7 +1772,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
 
     vcl::Font aFont;
     aFont.SetCharSet( GetExtendedTextEncoding( RTL_TEXTENCODING_MS_1252 ) );
-    aFont.SetColor( Color( COL_WHITE ) );
+    aFont.SetColor( COL_WHITE );
     aFont.SetAlignment( ALIGN_BASELINE );
     aDstFont = aSrcFont = aFont;
     CreateSelectDeleteFont(aDstFont);
@@ -1781,7 +1781,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     eDstHorTextAlign = eSrcHorTextAlign = W_TA_LEFT;
     WMFRecord_SetTextAlign( eDstTextAlign, eDstHorTextAlign );
 
-    aDstTextColor = aSrcTextColor = Color( COL_WHITE );
+    aDstTextColor = aSrcTextColor = COL_WHITE;
     WMFRecord_SetTextColor(aDstTextColor);
 
     // Write records

@@ -3364,7 +3364,7 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
             ScopedVclPtrInstance< VirtualDevice > pDev;
             const Size aSz(ruler_tab_svx.width + 2, ruler_tab_svx.height + 2);
             pDev->SetOutputSize(aSz);
-            pDev->SetBackground(Wallpaper(Color(COL_WHITE)));
+            pDev->SetBackground(Wallpaper(COL_WHITE));
             Color aFillColor(pDev->GetSettings().GetStyleSettings().GetShadowColor());
             const Point aPt(aSz.Width() / 2, aSz.Height() / 2);
 
@@ -3375,7 +3375,7 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
                 DrawTab(*pDev, aFillColor, aPt, nStyle);
                 aMenu->InsertItem(i + 1,
                                  SvxResId(RID_SVXSTR_RULER_TAB[i]),
-                                 Image(BitmapEx(pDev->GetBitmap(Point(), aSz), Color(COL_WHITE))));
+                                 Image(BitmapEx(pDev->GetBitmap(Point(), aSz), COL_WHITE)));
                 aMenu->CheckItem(i + 1, i == mpTabs[mxRulerImpl->nIdx + TAB_GAP].nStyle);
                 pDev->SetOutputSize(aSz); // delete device
             }
