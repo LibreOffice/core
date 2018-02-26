@@ -129,6 +129,8 @@ public:
     bool            operator!=( const Graphic& rGraphic ) const;
     bool            operator!() const;
 
+    operator bool() const;
+
     void            Clear();
 
     GraphicType     GetType() const;
