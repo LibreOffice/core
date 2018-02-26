@@ -160,7 +160,7 @@ class SVX_DLLPUBLIC XPropertyList : public cppu::OWeakObject
 private:
     SAL_DLLPRIVATE void* operator new(size_t);
 protected:
-    SAL_DLLPRIVATE void operator delete(void *);
+    void operator delete(void *);
 protected:
     XPropertyListType   meType;
     OUString            maName; // not persistent

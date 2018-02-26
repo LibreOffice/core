@@ -204,7 +204,7 @@ bool SvxXMLXTableExportComponent::save(
     INetURLObject aURLObj( rURL );
     bool bToStorage = aURLObj.GetProtocol() == INetProtocol::NotValid; // a relative path
 
-    bool bSaveAsStorage = xTable->getElementType() == cppu::UnoType<OUString>::get();
+    bool bSaveAsStorage = xTable->getElementType() == cppu::UnoType<awt::XBitmap>::get();
 
     if( pOptName )
         *pOptName = rURL;
