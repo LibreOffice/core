@@ -69,11 +69,7 @@ static OString ImplGetDialogText( Dialog* pDialog )
         pDialog->GetText(), RTL_TEXTENCODING_UTF8));
 
     OUString sMessage;
-    if (MessBox* pMessBox = dynamic_cast<MessBox*>(pDialog))
-    {
-        sMessage = pMessBox->GetMessText();
-    }
-    else if (MessageDialog* pMessDialog = dynamic_cast<MessageDialog*>(pDialog))
+    if (MessageDialog* pMessDialog = dynamic_cast<MessageDialog*>(pDialog))
     {
         sMessage = pMessDialog->get_primary_text();
     }

@@ -60,6 +60,7 @@
 
 #include <helper/accessibilityclient.hxx>
 #include <helper/imagealign.hxx>
+#include <helper/msgbox.hxx>
 #include <helper/tkresmgr.hxx>
 #include "vclxwindows_internal.hxx"
 
