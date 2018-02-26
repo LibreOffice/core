@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_4caa2f1b",
+        "filename": "sfx2/source/sidebar/FocusManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-02-26T09:57:50Z",
+      "side": 0,
+      "message": "So with this chunk of code removed, I\u0027m afraid it won\u0027t be possible to return Tab focus back to panel title once Tab is hit over the last control in the panel ... but I\u0027ll have to verify that claim and/or suggest better approach",
+      "revId": "f7733528e88a6619f82b54b59e92a9bca72c0a89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
