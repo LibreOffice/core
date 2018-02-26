@@ -104,6 +104,7 @@ public:
     void testDefaultView();
     void testIMESupport();
     void testPasteTextOnSlide();
+    void testCutSelectionChange();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -146,6 +147,7 @@ public:
     CPPUNIT_TEST(testDefaultView);
     CPPUNIT_TEST(testIMESupport);
     CPPUNIT_TEST(testPasteTextOnSlide);
+    CPPUNIT_TEST(testCutSelectionChange);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2031,6 +2033,46 @@ void SdTiledRenderingTest::testPasteTextOnSlide()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(11798), aPos.getX(), 100);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(7115), aPos.getY(), 100);
 
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testCutSelectionChange()
+{
+    // Load the document.
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("cut_selection_change.odp");
+    CPPUNIT_ASSERT(pXImpressDocument);
+
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
+    Scheduler::ProcessEventsToIdle();
+
+    // Select first text object
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    Scheduler::ProcessEventsToIdle();
+
+    // step into text editing
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '1', 0);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, '1', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // select some text
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    Scheduler::ProcessEventsToIdle();
+
+    // Check that we have a selection before cutting
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSelection.size());
+
+    // Cut the selected text
+    comphelper::dispatchCommand(".uno:Cut", uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+
+    // Selection is removed
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), m_aSelection.size());
     comphelper::LibreOfficeKit::setActive(false);
 }
 
