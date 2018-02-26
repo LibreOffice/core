@@ -108,13 +108,13 @@ void SAL_CALL AccessibleComponentBase::grabFocus()
 
 sal_Int32 SAL_CALL AccessibleComponentBase::getForeground()
 {
-    return Color(COL_BLACK).GetColor();
+    return sal_Int32(COL_BLACK);
 }
 
 
 sal_Int32 SAL_CALL AccessibleComponentBase::getBackground()
 {
-    return Color(COL_WHITE).GetColor();
+    return sal_Int32(COL_WHITE);
 }
 
 

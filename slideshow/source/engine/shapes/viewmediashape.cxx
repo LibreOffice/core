@@ -451,7 +451,7 @@ namespace slideshow
                                 mpMediaWindow->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );
                             }
-                            mpMediaWindow->SetBackground( Color(COL_BLACK) );
+                            mpMediaWindow->SetBackground( COL_BLACK );
                             mpMediaWindow->SetParentClipMode( ParentClipMode::NoClip );
                             mpMediaWindow->EnableEraseBackground( false );
                             mpMediaWindow->EnablePaint( false );

@@ -46,6 +46,12 @@
 using namespace ::com::sun::star;
 using namespace svl;
 
+inline std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
+{
+    rStrm << "Color: R:" << static_cast<int>(rColor.GetRed()) << " G:" << static_cast<int>(rColor.GetGreen()) << " B: " << static_cast<int>(rColor.GetBlue());
+    return rStrm;
+}
+
 namespace {
 
 class Test : public CppUnit::TestFixture {
@@ -1562,16 +1568,16 @@ void Test::testStandardColorIntegrity()
     CPPUNIT_ASSERT_EQUAL( nMaxDefaultColors, size_t(NF_KEY_LASTCOLOR) - size_t(NF_KEY_FIRSTCOLOR) + 1 );
     CPPUNIT_ASSERT_EQUAL( nMaxDefaultColors, rStandardColors.size() );
     // Colors must follow same order as in sEnglishKeyword
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[0].GetColor(), COL_BLACK );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[1].GetColor(), COL_LIGHTBLUE );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[2].GetColor(), COL_LIGHTGREEN );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[3].GetColor(), COL_LIGHTCYAN );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[4].GetColor(), COL_LIGHTRED );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[5].GetColor(), COL_LIGHTMAGENTA );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[6].GetColor(), COL_BROWN );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[7].GetColor(), COL_GRAY );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[8].GetColor(), COL_YELLOW );
-    CPPUNIT_ASSERT_EQUAL( rStandardColors[9].GetColor(), COL_WHITE );
+    CPPUNIT_ASSERT_EQUAL( rStandardColors[0], COL_BLACK );
+    CPPUNIT_ASSERT_EQUAL( rStandardColors[1], COL_LIGHTBLUE );
+    CPPUNIT_ASSERT_EQUAL( rStandardColors[2], COL_LIGHTGREEN );
+    CPPUNIT_ASSERT_EQUAL( rStandardColors[3], COL_LIGHTCYAN );
+    CPPUNIT_ASSERT_EQUAL( rStandardColors[4], COL_LIGHTRED );
+    CPPUNIT_ASSERT_EQUAL( rStandardColors[5], COL_LIGHTMAGENTA );
+    CPPUNIT_ASSERT_EQUAL( rStandardColors[6], COL_BROWN );
+    CPPUNIT_ASSERT_EQUAL( rStandardColors[7], COL_GRAY );
+    CPPUNIT_ASSERT_EQUAL( rStandardColors[8], COL_YELLOW );
+    CPPUNIT_ASSERT_EQUAL( rStandardColors[9], COL_WHITE );
 }
 
 void Test::testColorNamesConversion()

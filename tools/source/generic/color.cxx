@@ -224,7 +224,7 @@ SvStream& ReadColor( SvStream& rIStream, Color& rColor )
     }
     else
     {
-        static const ColorData aColAry[] =
+        static const Color aColAry[] =
         {
             COL_BLACK,                          // COL_BLACK
             COL_BLUE,                           // COL_BLUE
@@ -260,9 +260,9 @@ SvStream& ReadColor( SvStream& rIStream, Color& rColor )
         };
 
         if ( nColorName < SAL_N_ELEMENTS( aColAry ) )
-            rColor.mnColor = aColAry[nColorName];
+            rColor = aColAry[nColorName];
         else
-            rColor.mnColor = COL_BLACK;
+            rColor = COL_BLACK;
     }
 
     return rIStream;

@@ -3736,7 +3736,7 @@ bool SwFlyFrame::IsBackgroundTransparent() const
         {
             if ( pSectionTOXColor &&
                  (pSectionTOXColor->GetTransparency() != 0) &&
-                 (pSectionTOXColor->GetColor() != COL_TRANSPARENT) )
+                 (*pSectionTOXColor != COL_TRANSPARENT) )
             {
                 bBackgroundTransparent = true;
             }

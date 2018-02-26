@@ -1313,7 +1313,7 @@ void DrawingML::WritePattFill(const Reference<XPropertySet>& rXPropSet, const cs
         WriteColor(rHatch.Color);
         mpFS->endElementNS( XML_a , XML_fgClr );
 
-        sal_uInt32 nColor = COL_WHITE;
+        ::Color nColor = COL_WHITE;
         sal_Int32 nAlpha  = 0;
         bool isBackgroundFilled = false;
 
@@ -1332,7 +1332,7 @@ void DrawingML::WritePattFill(const Reference<XPropertySet>& rXPropSet, const cs
         }
 
         mpFS->startElementNS( XML_a , XML_bgClr, FSEND );
-        WriteColor(nColor, nAlpha);
+        WriteColor(sal_uInt32(nColor), nAlpha);
         mpFS->endElementNS( XML_a , XML_bgClr );
 
         mpFS->endElementNS( XML_a , XML_pattFill );
@@ -1739,11 +1739,11 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     if( CGETAD( CharColor ) )
     {
         sal_uInt32 color = *o3tl::doAccess<sal_uInt32>(mAny);
-        SAL_INFO("oox.shape", "run color: " << color << " auto: " << COL_AUTO);
+        SAL_INFO("oox.shape", "run color: " << color << " auto: " << sal_uInt32(COL_AUTO));
 
         // tdf#104219 In LibreOffice and MS Office, there are two types of colors:
         // Automatic and Fixed. OOXML is setting automatic color, by not providing color.
-        if( color != COL_AUTO )
+        if( color != sal_uInt32(COL_AUTO) )
         {
             color &= 0xffffff;
             // TODO: special handle embossed/engraved
@@ -1755,7 +1755,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     {
         sal_uInt32 color = *o3tl::doAccess<sal_uInt32>(mAny);
         // if color is automatic, then we shouldn't write information about color but to take color from character
-        if( color != COL_AUTO )
+        if( color != sal_uInt32(COL_AUTO) )
         {
             mpFS->startElementNS( XML_a, XML_uFill, FSEND);
             WriteSolidFill( color );
@@ -2196,7 +2196,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
     {
         if(bHasBulletColor)
         {
-               if (nBulletColor == COL_AUTO )
+               if (nBulletColor == sal_uInt32(COL_AUTO) )
                {
                    nBulletColor = mbIsBackgroundDark ? 0xffffff : 0x000000;
                }

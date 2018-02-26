@@ -2539,7 +2539,7 @@ void SwWW8ImplReader::StopApo()
             */
             const SfxPoolItem &rItm = pNd->SwContentNode::GetAttr(RES_BACKGROUND);
             const SvxBrushItem &rBrush = static_cast<const SvxBrushItem&>(rItm);
-            if (rBrush.GetColor().GetColor() != COL_AUTO)
+            if (rBrush.GetColor() != COL_AUTO)
                 aBg = rBrush.GetColor();
 
             if (m_pLastAnchorPos.get())
@@ -4818,8 +4818,8 @@ sal_uInt32 SwWW8ImplReader::ExtractColour(const sal_uInt8* &rpData, bool bVer67)
     //Being a transparent background colour doesn't actually show the page
     //background through, it merely acts like white
     if (nBack == 0xFF000000)
-        nBack = COL_AUTO;
-    OSL_ENSURE(nBack == COL_AUTO || !(nBack & 0xFF000000),
+        nBack = sal_uInt32(COL_AUTO);
+    OSL_ENSURE(nBack == sal_uInt32(COL_AUTO) || !(nBack & 0xFF000000),
         "ww8: don't know what to do with such a transparent bg colour, report");
     SwWW8Shade aShade(nFore, nBack, nIndex);
     return aShade.aColor.GetColor();

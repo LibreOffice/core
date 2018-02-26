@@ -35,19 +35,19 @@ void checkValue(Bitmap::ScopedWriteAccess& pAccess, int x, int y, Color aExpecte
     if (nColorDelta <= nColorDeltaThresh)
     {
         if (bColorize)
-            pAccess->SetPixel(y, x, Color(COL_LIGHTGREEN));
+            pAccess->SetPixel(y, x, COL_LIGHTGREEN);
     }
     else if (bQuirkMode)
     {
         nNumberOfQuirks++;
         if (bColorize)
-            pAccess->SetPixel(y, x, Color(COL_YELLOW));
+            pAccess->SetPixel(y, x, COL_YELLOW);
     }
     else
     {
         nNumberOfErrors++;
         if (bColorize)
-            pAccess->SetPixel(y, x, Color(COL_LIGHTRED));
+            pAccess->SetPixel(y, x, COL_LIGHTRED);
     }
 }
 
