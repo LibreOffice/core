@@ -38,6 +38,13 @@ private:
 
 public:
 
+    enum class IterCount
+    {
+        NONE,       /// Iteration count not added to hash iterations.
+        PREPEND,    /// Iteration count prepended to hash iterations.
+        APPEND      /// Iteration count appended to hash iterations.
+    };
+
     Hash(HashType eType);
     ~Hash();
 
@@ -50,10 +57,6 @@ public:
     /** Calculate hash value with salt (pSalt,nSaltLen) prepended to password
         (pInput,nLength) and repeated iterations run if nSpinCount>0.
 
-        For repeated iterations, each iteration's result plus a 4 byte value
-        (0-based, little endian) containing the number of the iteration
-        appended to the hash value is the input for the next iteration.
-
         This implements the algorithms as specified in
         https://msdn.microsoft.com/en-us/library/dd920692 or
         https://msdn.microsoft.com/en-us/library/dd924776 and
@@ -62,12 +65,21 @@ public:
         @param  pSalt
                 may be nullptr thus no salt prepended
 
-        @param  bPrependNotAppend
-                If <FALSE/>, append spin count in iterations as per
+        @param  nSpinCount
+                If >0, repeat nSpinCount iterations. For each iteration, the
+                previous iteration's result plus a 4 byte value (0-based,
+                little endian) containing the number of the iteration prepended
+                or appended to the hash value is the input for the next
+                iteration.
+
+        @param  eIterCount
+                If IterCount::APPEND, append iteration count as per
                 https://msdn.microsoft.com/en-us/library/dd920692
-                If <TRUE/>, prepend spin count in iterations as per
+                If IterCount::PREPEND, prepend iteration count as per
                 https://msdn.microsoft.com/en-us/library/dd924776 and
                 https://msdn.microsoft.com/en-us/library/dd925430
+                If IterCount::NONE, do not add the iteration count to hash
+                iterations.
 
         @return the raw hash value
      */
@@ -75,7 +87,7 @@ public:
             const unsigned char* pInput, size_t nLength,
             const unsigned char* pSalt, size_t nSaltLen,
             sal_uInt32 nSpinCount,
-            bool bPrependNotAppend,
+            IterCount eIterCount,
             HashType eType);
 
     /** Convenience function to calculate a salted hash with iterations.
@@ -90,7 +102,7 @@ public:
             const rtl::OUString& rPassword,
             const std::vector<unsigned char>& rSaltValue,
             sal_uInt32 nSpinCount,
-            bool bPrependNotAppend,
+            IterCount eIterCount,
             HashType eType);
 
     size_t getLength() const;

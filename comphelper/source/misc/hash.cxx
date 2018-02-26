@@ -157,7 +157,7 @@ std::vector<unsigned char> Hash::calculateHash(
         const unsigned char* pInput, size_t nLength,
         const unsigned char* pSalt, size_t nSaltLen,
         sal_uInt32 nSpinCount,
-        bool bPrependNotAppend,
+        IterCount eIterCount,
         HashType eType)
 {
     if (!pSalt)
@@ -188,21 +188,25 @@ std::vector<unsigned char> Hash::calculateHash(
         // https://msdn.microsoft.com/en-us/library/dd924776 and
         // https://msdn.microsoft.com/en-us/library/dd925430
         // say the iteration is prepended to the hash.
-        const size_t nIterPos = (bPrependNotAppend ? 0 : hash.size());
-        const size_t nHashPos = (bPrependNotAppend ? 4 : 0);
-        std::vector<unsigned char> data( hash.size() + 4, 0);
+        const size_t nAddIter = (eIterCount == IterCount::NONE ? 0 : 4);
+        const size_t nIterPos = (eIterCount == IterCount::APPEND ? hash.size() : 0);
+        const size_t nHashPos = (eIterCount == IterCount::PREPEND ? nAddIter : 0);
+        std::vector<unsigned char> data( hash.size() + nAddIter, 0);
         for (sal_uInt32 i = 0; i < nSpinCount; ++i)
         {
             std::copy( hash.begin(), hash.end(), data.begin() + nHashPos);
+            if (nAddIter)
+            {
 #ifdef OSL_BIGENDIAN
-            sal_uInt32 be = i;
-            sal_uInt8* p = reinterpret_cast<sal_uInt8*>(&be);
-            std::swap( p[0], p[3] );
-            std::swap( p[1], p[2] );
-            memcpy( data.data() + nIterPos, &be, 4);
+                sal_uInt32 be = i;
+                sal_uInt8* p = reinterpret_cast<sal_uInt8*>(&be);
+                std::swap( p[0], p[3] );
+                std::swap( p[1], p[2] );
+                memcpy( data.data() + nIterPos, &be, nAddIter);
 #else
-            memcpy( data.data() + nIterPos, &i, 4);
+                memcpy( data.data() + nIterPos, &i, nAddIter);
 #endif
+            }
             /* TODO: isn't there something better than
              * creating/finalizing/destroying on each iteration? */
             Hash aReHash(eType);
@@ -218,7 +222,7 @@ std::vector<unsigned char> Hash::calculateHash(
         const OUString& rPassword,
         const std::vector<unsigned char>& rSaltValue,
         sal_uInt32 nSpinCount,
-        bool bPrependNotAppend,
+        IterCount eIterCount,
         HashType eType)
 {
     const unsigned char* pPassBytes = reinterpret_cast<const unsigned char*>(rPassword.getStr());
@@ -240,7 +244,7 @@ std::vector<unsigned char> Hash::calculateHash(
     }
 #endif
     return calculateHash( pPassBytes, nPassBytesLen, rSaltValue.data(), rSaltValue.size(), nSpinCount,
-            bPrependNotAppend, eType);
+            eIterCount, eType);
 }
 
 }

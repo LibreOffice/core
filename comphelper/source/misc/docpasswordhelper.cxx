@@ -263,7 +263,7 @@ css::uno::Sequence<sal_Int8> DocPasswordHelper::GetOoxHashAsSequence(
         const rtl::OUString& rPassword,
         const rtl::OUString& rSaltValue,
         sal_uInt32 nSpinCount,
-        bool bPrependNotAppend,
+        comphelper::Hash::IterCount eIterCount,
         const rtl::OUString& rAlgorithmName)
 {
     comphelper::HashType eType;
@@ -287,7 +287,7 @@ css::uno::Sequence<sal_Int8> DocPasswordHelper::GetOoxHashAsSequence(
     }
 
     std::vector<unsigned char> hash( comphelper::Hash::calculateHash( rPassword, aSaltVec, nSpinCount,
-                bPrependNotAppend, eType));
+                eIterCount, eType));
 
     return comphelper::containerToSequence<sal_Int8>( hash);
 }
@@ -296,11 +296,11 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
         const rtl::OUString& rPassword,
         const rtl::OUString& rSaltValue,
         sal_uInt32 nSpinCount,
-        bool bPrependNotAppend,
+        comphelper::Hash::IterCount eIterCount,
         const rtl::OUString& rAlgorithmName)
 {
     css::uno::Sequence<sal_Int8> aSeq( GetOoxHashAsSequence( rPassword, rSaltValue, nSpinCount,
-                bPrependNotAppend, rAlgorithmName));
+                eIterCount, rAlgorithmName));
 
     OUStringBuffer aBuf;
     comphelper::Base64::encode( aBuf, aSeq);

@@ -24,6 +24,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <vector>
 #include <comphelper/docpasswordrequest.hxx>
+#include <comphelper/hash.hxx>
 
 namespace com { namespace sun { namespace star { namespace task { class XInteractionHandler; } } } }
 namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
@@ -194,12 +195,14 @@ public:
         @param  nSpinCount
                 If >0 the number of repeated iterations.
 
-        @param  bPrependNotAppend
-                If <FALSE/>, append spin count in iterations as per
+        @param  eIterCount
+                If Hash::IterCount::APPEND, append iteration count as per
                 https://msdn.microsoft.com/en-us/library/dd920692
-                If <TRUE/>, prepend spin count in iterations as per
+                If Hash::IterCount::PREPEND, prepend iteration count as per
                 https://msdn.microsoft.com/en-us/library/dd924776 and
                 https://msdn.microsoft.com/en-us/library/dd925430
+                If Hash::IterCount::NONE, do not add the iteration count to hash
+                iterations.
 
         @param  rAlgorithmName
                 One of "SHA-512", "SHA-256", ... as listed for AlgorithmName in
@@ -216,7 +219,7 @@ public:
             const rtl::OUString& rPassword,
             const rtl::OUString& rSaltValue,
             sal_uInt32 nSpinCount,
-            bool bPrependNotAppend,
+            comphelper::Hash::IterCount eIterCount,
             const rtl::OUString& rAlgorithmName);
 
 
@@ -234,12 +237,14 @@ public:
         @param  nSpinCount
                 If >0 the number of repeated iterations.
 
-        @param  bPrependNotAppend
-                If <FALSE/>, append spin count in iterations as per
+        @param  eIterCount
+                If Hash::IterCount::APPEND, append iteration count as per
                 https://msdn.microsoft.com/en-us/library/dd920692
-                If <TRUE/>, prepend spin count in iterations as per
+                If Hash::IterCount::PREPEND, prepend iteration count as per
                 https://msdn.microsoft.com/en-us/library/dd924776 and
                 https://msdn.microsoft.com/en-us/library/dd925430
+                If Hash::IterCount::NONE, do not add the iteration count to hash
+                iterations.
 
         @param  rAlgorithmName
                 One of "SHA-512", "SHA-256", ... as listed for AlgorithmName in
@@ -257,7 +262,7 @@ public:
             const rtl::OUString& rPassword,
             const rtl::OUString& rSaltValue,
             sal_uInt32 nSpinCount,
-            bool bPrependNotAppend,
+            comphelper::Hash::IterCount eIterCount,
             const rtl::OUString& rAlgorithmName);
 
 
