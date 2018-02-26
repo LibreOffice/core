@@ -29,7 +29,6 @@
 #include <svl/ilstitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <vcl/msgbox.hxx>
 #include <svx/svxids.hrc>
 #include <svl/zforlist.hxx>
 #include <svtools/controldims.hxx>

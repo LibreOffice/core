@@ -31,7 +31,6 @@
 #include <svtools/miscopt.hxx>
 
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 
 namespace chart
 {

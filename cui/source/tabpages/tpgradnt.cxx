@@ -20,7 +20,6 @@
 #include <memory>
 #include <vcl/wrkwin.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>

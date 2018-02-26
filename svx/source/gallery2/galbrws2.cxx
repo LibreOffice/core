@@ -20,7 +20,6 @@
 
 #include <comphelper/string.hxx>
 #include <sot/formats.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/urlbmk.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>

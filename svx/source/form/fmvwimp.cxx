@@ -80,7 +80,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
 #include <connectivity/dbtools.hxx>
 

@@ -31,7 +31,6 @@
 #include <vcl/image.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/wrkwin.hxx>

@@ -31,7 +31,6 @@
 #include <osl/file.hxx>
 #include <o3tl/enumrange.hxx>
 #include <vcl/builderfactory.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -775,8 +774,11 @@ void XMLFilterSettingsDialog::onDelete()
         OUString aMessage(XsltResId(STR_WARN_DELETE));
         aMessage = aMessage.replaceFirst( "%s", pInfo->maFilterName );
 
-        ScopedVclPtrInstance< WarningBox > aWarnBox(this, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, aMessage );
-        if( aWarnBox->Execute() == RET_YES )
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+                                                   VclMessageType::Warning, VclButtonsType::YesNo,
+                                                   aMessage));
+        xWarn->set_default_response(RET_YES);
+        if (xWarn->run() == RET_YES)
         {
             try
             {

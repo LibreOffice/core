@@ -21,7 +21,6 @@
 #include <sal/macros.h>
 #include <vcl/wrkwin.hxx>
 #include <vcl/morebtn.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/timer.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/itemiter.hxx>

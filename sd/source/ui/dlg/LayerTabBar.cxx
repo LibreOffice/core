@@ -20,7 +20,8 @@
 #include <LayerTabBar.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdpagv.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/dispatch.hxx>
 
 #include <sdattr.hxx>
@@ -274,9 +275,10 @@ TabBarAllowRenamingReturnCode LayerTabBar::AllowRenaming()
         (rLayerAdmin.GetLayer( aNewName ) && aLayerName != aNewName) )
     {
         // Name already exists
-        ScopedVclPtrInstance<WarningBox> aWarningBox( &pDrViewSh->GetViewFrame()->GetWindow(), MessBoxStyle::Ok,
-                                SdResId( STR_WARN_NAME_DUPLICATE ) );
-        aWarningBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pDrViewSh->GetViewFrame()->GetWindow().GetFrameWeld(),
+                                                   VclMessageType::Warning, VclButtonsType::Ok,
+                                                   SdResId(STR_WARN_NAME_DUPLICATE)));
+        xWarn->run();
         bOK = false;
     }
 

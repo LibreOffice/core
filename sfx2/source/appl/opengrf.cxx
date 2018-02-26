@@ -39,7 +39,8 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/transfer.hxx>
 #include <sot/formats.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/pathoptions.hxx>
@@ -157,8 +158,12 @@ ErrCode SvxOpenGraphicDialog::Execute()
             // could not load?
             if ( nFound == USHRT_MAX )
             {
-                ScopedVclPtrInstance< WarningBox > aWarningBox(nullptr, MessBoxStyle::RetryCancel, WB_3DLOOK, SfxResId( SvxOpenGrfErr2ResId(nImpRet) ));
-                bQuitLoop = aWarningBox->Execute() != RET_RETRY;
+                std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(nullptr,
+                                                           VclMessageType::Warning, VclButtonsType::NONE,
+                                                           SfxResId(SvxOpenGrfErr2ResId(nImpRet))));
+                xWarn->add_button(Button::GetStandardText(StandardButtonType::Retry), RET_RETRY);
+                xWarn->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+                bQuitLoop = xWarn->run() != RET_RETRY;
             }
             else
             {

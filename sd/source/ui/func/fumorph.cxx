@@ -20,7 +20,6 @@
 #include <fumorph.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/xlineit.hxx>
-#include <vcl/msgbox.hxx>
 #include <svx/svdpool.hxx>
 #include <tools/poly.hxx>
 #include <svx/svdopath.hxx>

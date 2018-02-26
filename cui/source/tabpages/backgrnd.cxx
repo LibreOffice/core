@@ -21,7 +21,6 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <unotools/pathoptions.hxx>
 #include <vcl/builderfactory.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/window.hxx>

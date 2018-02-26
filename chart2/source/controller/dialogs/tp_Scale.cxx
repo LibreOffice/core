@@ -29,7 +29,7 @@
 #include <svx/chrtitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/controldims.hxx>
 
@@ -614,7 +614,10 @@ bool ScaleTabPage::ShowWarning(const char* pResIdMessage, Control* pControl /* =
     if (pResIdMessage == nullptr)
         return false;
 
-    ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok, SchResId(pResIdMessage))->Execute();
+    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+                                               VclMessageType::Warning, VclButtonsType::Ok,
+                                               SchResId(pResIdMessage)));
+    xWarn->run();
     if( pControl )
     {
         pControl->GrabFocus();

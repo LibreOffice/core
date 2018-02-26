@@ -93,7 +93,6 @@
 #include <unotools/useroptions.hxx>
 
 #include <vcl/graph.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>
@@ -1813,11 +1812,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                             || aLayerName.isEmpty() )
                         {
                             // name already exists
-                            ScopedVclPtrInstance<WarningBox> aWarningBox (
-                                GetParentWindow(),
-                                MessBoxStyle::Ok,
-                                SdResId(STR_WARN_NAME_DUPLICATE));
-                            aWarningBox->Execute();
+                            vcl::Window* pWin = GetParentWindow();
+                            std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                       VclMessageType::Warning, VclButtonsType::Ok,
+                                                                       SdResId(STR_WARN_NAME_DUPLICATE)));
+                            xWarn->run();
                         }
                         else
                             bLoop = false;
@@ -1982,11 +1981,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                              aLayerName != aOldLayerName) || aLayerName.isEmpty() )
                         {
                             // name already exists
-                            ScopedVclPtrInstance<WarningBox> aWarningBox (
-                                GetParentWindow(),
-                                MessBoxStyle::Ok,
-                                SdResId(STR_WARN_NAME_DUPLICATE));
-                            aWarningBox->Execute();
+                            vcl::Window* pWin = GetParentWindow();
+                            std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                       VclMessageType::Warning, VclButtonsType::Ok,
+                                                                       SdResId(STR_WARN_NAME_DUPLICATE)));
+                            xWarn->run();
                         }
                         else
                             bLoop = false;

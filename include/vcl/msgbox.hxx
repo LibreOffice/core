@@ -84,15 +84,6 @@ public:
 VCL_DLLPUBLIC Image const & GetStandardInfoBoxImage();
 VCL_DLLPUBLIC OUString GetStandardInfoBoxText();
 
-class VCL_DLLPUBLIC WarningBox : public MessBox
-{
-public:
-                        WarningBox( vcl::Window* pParent, MessBoxStyle nStyle,
-                                    const OUString& rMessage );
-                        WarningBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits n,
-                                    const OUString& rMessage );
-};
-
 VCL_DLLPUBLIC Image const & GetStandardWarningBoxImage();
 VCL_DLLPUBLIC OUString GetStandardWarningBoxText();
 

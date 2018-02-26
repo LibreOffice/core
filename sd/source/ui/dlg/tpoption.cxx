@@ -31,7 +31,8 @@
 #include <svx/dialogs.hrc>
 #include <svx/strarray.hxx>
 #include <svx/dlgutil.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <sdattr.hxx>
 #include <sdresid.hxx>
@@ -367,9 +368,12 @@ DeactivateRC SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
             FillItemSet( pActiveSet );
         return DeactivateRC::LeavePage;
     }
-    ScopedVclPtrInstance< WarningBox > aWarnBox( GetParent(), MessBoxStyle::YesNo, SdResId( STR_WARN_SCALE_FAIL ) );
 
-    if( aWarnBox->Execute() == RET_YES )
+    vcl::Window* pWin = GetParent();
+    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                               VclMessageType::Warning, VclButtonsType::YesNo,
+                                               SdResId(STR_WARN_SCALE_FAIL)));
+    if (xWarn->run() == RET_YES)
         return DeactivateRC::KeepPage;
 
     if( pActiveSet )

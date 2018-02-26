@@ -827,6 +827,19 @@ public:
     }
 };
 
+class WarningBox : public MessBox
+{
+public:
+    WarningBox(vcl::Window* pParent, MessBoxStyle nStyle, WinBits nWinBits, const OUString& rMessage)
+        : MessBox(pParent, nStyle, nWinBits, OUString(), rMessage)
+    {
+        // Default Text is the display title from the application
+        if (GetText().isEmpty())
+            SetText(GetStandardWarningBoxText());
+        SetImage(GetStandardWarningBoxImage());
+    }
+};
+
 vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     const css::awt::WindowDescriptor& rDescriptor,
     vcl::Window* pParent, WinBits nWinBits, MessBoxStyle nMessBoxStyle )

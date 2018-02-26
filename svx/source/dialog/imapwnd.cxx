@@ -18,7 +18,6 @@
  */
 
 #include <tools/urlobj.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svtools/imaprect.hxx>

@@ -25,7 +25,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <svx/svdview.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/xfltrit.hxx>
@@ -110,8 +110,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 {
     if (pImagesLst->GetEntryCount() == 0)
     {
-        ScopedVclPtrInstance< WarningBox > aWarning(this, MessBoxStyle::Ok, SdResId(STR_PHOTO_ALBUM_EMPTY_WARNING));
-        aWarning->Execute();
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+                                                   VclMessageType::Warning, VclButtonsType::Ok,
+                                                   SdResId(STR_PHOTO_ALBUM_EMPTY_WARNING)));
+        xWarn->run();
     }
     else
     {

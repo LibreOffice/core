@@ -14,7 +14,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>
-#include <vcl/msgbox.hxx>
 
 using namespace com::sun::star::uno;
 

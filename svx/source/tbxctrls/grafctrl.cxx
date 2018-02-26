@@ -23,7 +23,6 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/idle.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>

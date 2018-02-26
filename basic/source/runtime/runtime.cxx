@@ -37,7 +37,6 @@
 
 #include <tools/wldcrd.hxx>
 
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

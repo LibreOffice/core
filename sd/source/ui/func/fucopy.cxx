@@ -31,7 +31,6 @@
 #include <DrawDocShell.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/svdobj.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
 #include <svx/xcolit.hxx>
 #include <svx/xflclit.hxx>

@@ -51,7 +51,8 @@
 #include <tools/urlobj.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/ucbhelper.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <stringutil.hxx>
 #include <scmatrix.hxx>
 #include <columnspanset.hxx>
@@ -3195,9 +3196,11 @@ void ScExternalRefManager::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             case SfxEventHintId::PrepareCloseDoc:
                 {
-                    ScopedVclPtrInstance<WarningBox> aBox( ScDocShell::GetActiveDialogParent(), MessBoxStyle::Ok,
-                                        ScGlobal::GetRscString( STR_CLOSE_WITH_UNSAVED_REFS ) );
-                    aBox->Execute();
+                    vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
+                    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                               VclMessageType::Warning, VclButtonsType::Ok,
+                                                               ScGlobal::GetRscString(STR_CLOSE_WITH_UNSAVED_REFS)));
+                    xWarn->run();
                 }
                 break;
             case SfxEventHintId::SaveDocDone:

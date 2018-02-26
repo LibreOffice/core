@@ -55,7 +55,6 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <svx/ActionDescriptionProvider.hxx>
 
-#include <vcl/msgbox.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 

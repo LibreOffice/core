@@ -25,7 +25,8 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/progress.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <anminfo.hxx>
 #include <animobjs.hxx>
@@ -439,8 +440,10 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, Button*, pBtn, void )
     }
     else // delete everything
     {
-        ScopedVclPtrInstance< WarningBox > aWarnBox( this, MessBoxStyle::YesNo, SdResId( STR_ASK_DELETE_ALL_PICTURES ) );
-        short nReturn = aWarnBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+                                                   VclMessageType::Warning, VclButtonsType::YesNo,
+                                                   SdResId(STR_ASK_DELETE_ALL_PICTURES)));
+        short nReturn = xWarn->run();
 
         if( nReturn == RET_YES )
         {

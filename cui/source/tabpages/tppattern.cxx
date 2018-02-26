@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <vcl/wrkwin.hxx>
-#include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/pathoptions.hxx>

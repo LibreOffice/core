@@ -27,7 +27,6 @@
 #include <ResId.hxx>
 #include <strings.hrc>
 
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 

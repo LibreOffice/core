@@ -31,7 +31,6 @@
 #include <svx/xtable.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/weld.hxx>

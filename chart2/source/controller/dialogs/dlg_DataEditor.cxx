@@ -23,7 +23,6 @@
 
 #include <ResId.hxx>
 #include <sfx2/dispatch.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/pathoptions.hxx>

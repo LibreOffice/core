@@ -29,7 +29,6 @@
 #include <svtools/treelistentry.hxx>
 #include <svtools/viewdataentry.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
 #include <svx/dlgutil.hxx>

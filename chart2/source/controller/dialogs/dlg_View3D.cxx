@@ -28,8 +28,6 @@
 #include <ControllerLockGuard.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <vcl/msgbox.hxx>
-
 namespace chart
 {
 

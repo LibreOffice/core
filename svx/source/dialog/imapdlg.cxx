@@ -21,7 +21,6 @@
 #include <vcl/errinf.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
 #include <svl/eitem.hxx>

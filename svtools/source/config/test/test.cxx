@@ -43,7 +43,6 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/msgbox.hxx>
 
 using namespace ::osl                       ;
 using namespace ::comphelper                ;
