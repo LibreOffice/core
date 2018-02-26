@@ -88,11 +88,11 @@ Color OutputDevice::ImplDrawModeToColor( const Color& rColor ) const
         {
             if( nDrawMode & DrawModeFlags::BlackLine )
             {
-                aColor = Color( COL_BLACK );
+                aColor = COL_BLACK;
             }
             else if( nDrawMode & DrawModeFlags::WhiteLine )
             {
-                aColor = Color( COL_WHITE );
+                aColor = COL_WHITE;
             }
             else if( nDrawMode & DrawModeFlags::GrayLine )
             {
@@ -168,7 +168,7 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
     if( aMask.IsEmpty() )
     {
         aMask = Bitmap( aSrcRect.GetSize(), 1 );
-        aMask.Erase( Color( COL_BLACK ) );
+        aMask.Erase( COL_BLACK );
     }
 
     // do painting
@@ -475,7 +475,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                     {
                         BitmapColor aPixCol;
                         const BitmapColor aFillCol( GetFillColor() );
-                        const BitmapColor aBlack( pR->GetBestMatchingColor( Color( COL_BLACK ) ) );
+                        const BitmapColor aBlack( pR->GetBestMatchingColor( Color(COL_BLACK) ) );
                         const long nWidth = pW->Width();
                         const long nHeight = pW->Height();
                         const long nR = aFillCol.GetRed();
@@ -802,7 +802,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     xVDev->DrawGradient( tools::Rectangle( rPos, rSize ), rTransparenceGradient );
                     xVDev->SetDrawMode( DrawModeFlags::Default );
                     xVDev->EnableMapMode( false );
-                    xVDev->DrawMask( Point(), xVDev->GetOutputSizePixel(), aMask, Color( COL_WHITE ) );
+                    xVDev->DrawMask( Point(), xVDev->GetOutputSizePixel(), aMask, COL_WHITE );
 
                     aAlpha = xVDev->GetBitmap( Point(), xVDev->GetOutputSizePixel() );
 

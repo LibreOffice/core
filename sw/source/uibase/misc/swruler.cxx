@@ -182,7 +182,7 @@ void SwCommentRuler::DrawCommentControl(vcl::RenderContext& rRenderContext)
 
     // Draw arrow
     // FIXME consistence of button colors. http://opengrok.libreoffice.org/xref/core/vcl/source/control/button.cxx#785
-    Color aArrowColor = GetFadedColor(Color(COL_BLACK), rStyleSettings.GetShadowColor());
+    Color aArrowColor = GetFadedColor(COL_BLACK, rStyleSettings.GetShadowColor());
     ImplDrawArrow(*maVirDev.get(), aArrowPos.X(), aArrowPos.Y(), aArrowColor, bArrowToRight);
 
     // Blit comment control

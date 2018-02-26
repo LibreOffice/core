@@ -428,7 +428,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 
         if( pBmpAcc->HasPalette() )
         {
-            const BitmapColor aWhite( pMskAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
+            const BitmapColor aWhite( pMskAcc->GetBestMatchingColor( Color(COL_WHITE) ) );
 
             if( mnTransIndex < 256 )
             {
@@ -479,7 +479,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
         else
         {
             css::uno::Sequence<sal_Int32>  aData( nPartWidth * nPartHeight );
-            const BitmapColor                           aWhite( pMskAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
+            const BitmapColor                           aWhite( pMskAcc->GetBestMatchingColor( Color(COL_WHITE) ) );
             sal_Int32*                                  pTmp = aData.getArray();
 
             for( long nY = nStartY; nY <= nEndY; nY++ )

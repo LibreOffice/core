@@ -219,14 +219,14 @@ struct ImplTabBarItem
         , mbShort(false)
         , mbSelect(false)
         , mbProtect(false)
-        , maTabBgColor(Color(COL_AUTO))
-        , maTabTextColor(Color(COL_AUTO))
+        , maTabBgColor(COL_AUTO)
+        , maTabTextColor(COL_AUTO)
     {
     }
 
     bool IsDefaultTabBgColor() const
     {
-        return maTabBgColor == Color(COL_AUTO);
+        return maTabBgColor == COL_AUTO;
     }
 
     bool IsSelected(ImplTabBarItem const * pCurItem) const
@@ -1208,7 +1208,7 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
 
             if (pItem->mnBits & TabBarPageBits::Blue)
             {
-                rRenderContext.SetTextColor(Color(COL_LIGHTBLUE));
+                rRenderContext.SetTextColor(COL_LIGHTBLUE);
             }
             if (pItem->mnBits & TabBarPageBits::Italic)
             {
@@ -1653,7 +1653,7 @@ Color TabBar::GetTabBgColor(sal_uInt16 nPageId) const
     if (nPos != PAGE_NOT_FOUND)
         return mpImpl->mpItemList[nPos]->maTabBgColor;
     else
-        return Color(COL_AUTO);
+        return COL_AUTO;
 }
 
 void TabBar::SetTabBgColor(sal_uInt16 nPageId, const Color& aTabBgColor)
@@ -1663,18 +1663,18 @@ void TabBar::SetTabBgColor(sal_uInt16 nPageId, const Color& aTabBgColor)
         return;
 
     auto& pItem = mpImpl->mpItemList[nPos];
-    if (aTabBgColor != Color(COL_AUTO))
+    if (aTabBgColor != COL_AUTO)
     {
         pItem->maTabBgColor = aTabBgColor;
         if (aTabBgColor.GetLuminance() <= 128) //Do not use aTabBgColor.IsDark(), because that threshold is way too low...
-            pItem->maTabTextColor = Color(COL_WHITE);
+            pItem->maTabTextColor = COL_WHITE;
         else
-            pItem->maTabTextColor = Color(COL_BLACK);
+            pItem->maTabTextColor = COL_BLACK;
     }
     else
     {
-        pItem->maTabBgColor = Color(COL_AUTO);
-        pItem->maTabTextColor = Color(COL_AUTO);
+        pItem->maTabBgColor = COL_AUTO;
+        pItem->maTabTextColor = COL_AUTO;
     }
 }
 
@@ -2112,7 +2112,7 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
         }
         if (GetPageBits( mnEditId ) & TabBarPageBits::Blue)
         {
-            aForegroundColor = Color(COL_LIGHTBLUE);
+            aForegroundColor = COL_LIGHTBLUE;
         }
         mpImpl->mpEdit->SetControlFont(aFont);
         mpImpl->mpEdit->SetControlForeground(aForegroundColor);

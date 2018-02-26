@@ -6222,7 +6222,7 @@ void ScGridWindow::UpdateDragRectOverlay()
 
             sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
                 sdr::overlay::OverlayType::Invert,
-                Color(COL_BLACK),
+                COL_BLACK,
                 aRanges,
                 false);
 
@@ -6268,7 +6268,7 @@ void ScGridWindow::UpdateHeaderOverlay()
 
             sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
                 sdr::overlay::OverlayType::Invert,
-                Color(COL_BLACK),
+                COL_BLACK,
                 aRanges,
                 false);
 
@@ -6335,7 +6335,7 @@ void ScGridWindow::UpdateShrinkOverlay()
 
             sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
                 sdr::overlay::OverlayType::Invert,
-                Color(COL_BLACK),
+                COL_BLACK,
                 aRanges,
                 false);
 

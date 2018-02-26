@@ -685,7 +685,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                         }
                         else // scaleByAveraging
                         {
-                            const BitmapColor   aTrans( pWriteAccess->GetBestMatchingColor( Color( COL_WHITE ) ) );
+                            const BitmapColor   aTrans( pWriteAccess->GetBestMatchingColor( Color(COL_WHITE) ) );
                             BitmapColor         aResultColor( 0 );
                             double aSum, aCount;
 
@@ -746,7 +746,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                     }
                     else
                     {
-                        const BitmapColor   aTrans( pWriteAccess->GetBestMatchingColor( Color( COL_WHITE ) ) );
+                        const BitmapColor   aTrans( pWriteAccess->GetBestMatchingColor( Color(COL_WHITE) ) );
                         BitmapColor         aAlphaVal( 0 );
 
                         for( long nY = 0; nY < aTargetHeight; nY++ )
@@ -802,8 +802,8 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
             if( pWriteAccess )
             {
                 Bitmap              aMsk( rBmpEx.GetMask() );
-                const BitmapColor   aB( pWriteAccess->GetBestMatchingColor( Color( COL_BLACK ) ) );
-                const BitmapColor   aW( pWriteAccess->GetBestMatchingColor( Color( COL_WHITE ) ) );
+                const BitmapColor   aB( pWriteAccess->GetBestMatchingColor( Color(COL_BLACK) ) );
+                const BitmapColor   aW( pWriteAccess->GetBestMatchingColor( Color(COL_WHITE) ) );
                 BitmapReadAccess*   pMAcc = nullptr;
 
                 if( !aMsk || ( ( pMAcc = aMsk.AcquireReadAccess() ) != nullptr ) )
@@ -813,7 +813,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                     BitmapColor aTestB;
 
                     if( pMAcc )
-                        aTestB = pMAcc->GetBestMatchingColor( Color( COL_BLACK ) );
+                        aTestB = pMAcc->GetBestMatchingColor( Color(COL_BLACK) );
 
                     // create new horizontal mapping table
                     for( long nX = 0; nX < aUnrotatedWidth; nX++ )
@@ -1448,7 +1448,7 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, Gra
 
     if( ( nAdjustmentFlags & GraphicAdjustmentFlags::ROTATE ) && aAttr.IsRotated() )
     {
-        rBmpEx.Rotate( aAttr.GetRotation(), Color( COL_TRANSPARENT ) );
+        rBmpEx.Rotate( aAttr.GetRotation(), COL_TRANSPARENT );
     }
 
     if( ( nAdjustmentFlags & GraphicAdjustmentFlags::TRANSPARENCY ) && aAttr.IsTransparent() )
@@ -1881,7 +1881,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& r
                                                 AlphaMask( aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ) ) );
                     else
                         aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
-                                                aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ).CreateMask( Color(COL_WHITE) ) );
+                                                aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ).CreateMask( COL_WHITE ) );
                 }
             }
 

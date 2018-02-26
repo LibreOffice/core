@@ -94,7 +94,7 @@ namespace sdr
             const basegfx::B2DPoint& rSecondPos,
             bool bExtendedLines,
             bool bShowBounds)
-        :   OverlayObjectWithBasePosition(rBasePos, Color(COL_BLACK)),
+        :   OverlayObjectWithBasePosition(rBasePos, COL_BLACK),
             maSecondPosition(rSecondPos),
             mbExtendedLines(bExtendedLines),
             mbShowBounds(bShowBounds)

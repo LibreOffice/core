@@ -101,7 +101,7 @@ void FixedHyperlink::RequestHelp( const HelpEvent& rHEvt )
 
 void FixedHyperlink::GetFocus()
 {
-    SetTextColor( Color( COL_LIGHTRED ) );
+    SetTextColor( COL_LIGHTRED );
     Invalidate(tools::Rectangle(Point(), GetSizePixel()));
     ShowFocus( tools::Rectangle( Point( 1, 1 ), Size( m_nTextLen + 4, GetSizePixel().Height() - 2 ) ) );
 }

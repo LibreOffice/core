@@ -300,7 +300,7 @@ namespace frm
                     else if ( LID_RECORD_FILLER == pSupportedFeatures->nId )
                     {
                         pItemWindow = VclPtr<FixedText>::Create( m_pToolbar, WB_CENTER | WB_VCENTER );
-                        pItemWindow->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
+                        pItemWindow->SetBackground(Wallpaper(COL_TRANSPARENT));
                     }
                     else
                     {

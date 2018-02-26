@@ -1544,7 +1544,7 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
         SvxBrushItem aBrushItem( aItemIds.nBrush );
 
         if( bTransparent )
-            aBrushItem.SetColor( Color(COL_TRANSPARENT));
+            aBrushItem.SetColor( COL_TRANSPARENT);
         else if( bColor )
             aBrushItem.SetColor( aColor );
 
@@ -1596,7 +1596,7 @@ static void ParseCSS1_background_color( const CSS1Expression *pExpr,
         SvxBrushItem aBrushItem( aItemIds.nBrush );
 
         if( bTransparent )
-            aBrushItem.SetColor( Color(COL_TRANSPARENT) );
+            aBrushItem.SetColor( COL_TRANSPARENT );
         else if( bColor )
             aBrushItem.SetColor( aColor);
 

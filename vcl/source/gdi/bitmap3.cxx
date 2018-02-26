@@ -312,8 +312,8 @@ bool Bitmap::ImplMakeMono( sal_uInt8 cThreshold )
 
         if( pWriteAcc )
         {
-            const BitmapColor aBlack( pWriteAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
-            const BitmapColor aWhite( pWriteAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
+            const BitmapColor aBlack( pWriteAcc->GetBestMatchingColor( Color(COL_BLACK) ) );
+            const BitmapColor aWhite( pWriteAcc->GetBestMatchingColor( Color(COL_WHITE) ) );
             const long nWidth = pWriteAcc->Width();
             const long nHeight = pWriteAcc->Height();
 

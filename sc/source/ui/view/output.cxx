@@ -295,9 +295,9 @@ void ScOutputData::SetSyntaxMode( bool bNewMode )
     if (bNewMode)
         if (!pValueColor)
         {
-            pValueColor = new Color( COL_LIGHTBLUE );
-            pTextColor = new Color( COL_BLACK );
-            pFormulaColor = new Color( COL_GREEN );
+            pValueColor = new Color(COL_LIGHTBLUE);
+            pTextColor = new Color(COL_BLACK);
+            pFormulaColor = new Color(COL_GREEN);
         }
 }
 

@@ -198,7 +198,7 @@ void TableEdgeHdl::CreateB2dIAObject()
 
 
 OverlayTableEdge::OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bVisible )
-:   OverlayObject(Color(COL_GRAY))
+:   OverlayObject(COL_GRAY)
 ,   maPolyPolygon( rPolyPolygon )
 ,   mbVisible(bVisible)
 {

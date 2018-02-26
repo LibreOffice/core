@@ -3708,7 +3708,7 @@ void WW8RStyle::Set1StyleDefaults()
     {
         // Style has no text color set, winword default is auto
         if ( !bTextColChanged )
-            pIo->m_pCurrentColl->SetFormatAttr(SvxColorItem(Color(COL_AUTO), RES_CHRATR_COLOR));
+            pIo->m_pCurrentColl->SetFormatAttr(SvxColorItem(COL_AUTO, RES_CHRATR_COLOR));
 
         // Style has no FontSize ? WinWord Default is 10pt for western and asian
         if( !bFSizeChanged )

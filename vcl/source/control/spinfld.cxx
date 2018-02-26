@@ -991,7 +991,7 @@ void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, D
 
     Color aButtonTextColor;
     if ((nFlags & DrawFlags::Mono) || (eOutDevType == OUTDEV_PRINTER))
-        aButtonTextColor = Color( COL_BLACK );
+        aButtonTextColor = COL_BLACK;
     else
         aButtonTextColor = GetSettings().GetStyleSettings().GetButtonTextColor();
 

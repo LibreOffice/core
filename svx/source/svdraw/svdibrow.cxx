@@ -340,7 +340,7 @@ void SdrItemBrowserControl::PaintField(OutputDevice& rDev, const tools::Rectangl
         if (nColumnId==ITEMBROWSER_NAMECOL_ID)
         {
             rDev.SetLineColor();
-            rDev.SetFillColor( Color( COL_LIGHTGRAY ) );
+            rDev.SetFillColor( COL_LIGHTGRAY );
             aR.SetLeft(0 );
             aR.SetRight(rDev.GetOutputSize().Width() );
             rDev.DrawRect(aR);
@@ -481,9 +481,9 @@ bool SdrItemBrowserControl::BeginChangeEntry(std::size_t nPos)
         aRect.AdjustRight( -1 );
         pEditControl->SetPosSizePixel(aRect.TopLeft(),aRect.GetSize());
         pEditControl->SetText(pEntry->aValue);
-        pEditControl->SetBackground( Wallpaper(Color(COL_LIGHTGRAY)));
+        pEditControl->SetBackground( Wallpaper(COL_LIGHTGRAY));
         vcl::Font aFont(pEditControl->GetFont());
-        aFont.SetFillColor(Color(COL_LIGHTGRAY));
+        aFont.SetFillColor(COL_LIGHTGRAY);
         pEditControl->SetFont(aFont);
         pEditControl->Show();
         pEditControl->GrabFocus();

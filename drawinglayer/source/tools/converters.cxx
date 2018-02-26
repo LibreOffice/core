@@ -74,7 +74,7 @@ namespace drawinglayer
             pContent->SetMapMode(aMapModePixel);
 
             // set to all white
-            pContent->SetBackground(Wallpaper(Color(COL_WHITE)));
+            pContent->SetBackground(Wallpaper(COL_WHITE));
             pContent->Erase();
 
             // create pixel processor, also already takes care of AAing and

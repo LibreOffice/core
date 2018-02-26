@@ -135,7 +135,7 @@ void Svx3DPreviewControl::Construct()
         XATTR_FILL_FIRST, XATTR_FILLBITMAP>{} );
     aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
     aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
-    aSet.Put( XFillColorItem( "", Color( COL_WHITE ) ) );
+    aSet.Put( XFillColorItem( "", COL_WHITE ) );
 
     mpScene->SetMergedItemSet(aSet);
 
@@ -907,7 +907,7 @@ Color Svx3DLightControl::GetLightColor(sal_uInt32 nNum) const
         }
     }
 
-    return Color(COL_BLACK);
+    return COL_BLACK;
 }
 
 basegfx::B3DVector Svx3DLightControl::GetLightDirection(sal_uInt32 nNum) const

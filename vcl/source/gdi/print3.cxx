@@ -1049,8 +1049,8 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const tools::Rectangle& i_rClipR
         o_rMtf.AddAction( new MetaMapModeAction( MapMode( MapUnit::Map100thMM ) ) );
 
         tools::Rectangle aBorderRect( i_rClipRect );
-        o_rMtf.AddAction( new MetaLineColorAction( Color( COL_BLACK ), true ) );
-        o_rMtf.AddAction( new MetaFillColorAction( Color( COL_TRANSPARENT ), false ) );
+        o_rMtf.AddAction( new MetaLineColorAction( COL_BLACK, true ) );
+        o_rMtf.AddAction( new MetaFillColorAction( COL_TRANSPARENT, false ) );
         o_rMtf.AddAction( new MetaRectAction( aBorderRect ) );
 
         // restore gstate
@@ -1260,7 +1260,7 @@ DrawModeFlags PrinterController::removeTransparencies( GDIMetaFile const & i_rIn
         // in N-Up printing we have no "page" background operation
         // we also have no way to determine the paper color
         // so let's go for white, which will kill 99.9% of the real cases
-        aBg = Color( COL_WHITE );
+        aBg = COL_WHITE;
     }
     mpImplData->mxPrinter->RemoveTransparenciesFromMetaFile( i_rIn, o_rOut, nMaxBmpDPIX, nMaxBmpDPIY,
                                                              rPrinterOptions.IsReduceTransparency(),

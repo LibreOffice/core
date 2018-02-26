@@ -128,7 +128,7 @@ namespace toolkit
             aStyleSettings.SetCheckedColor( aBackground );
 
             sal_Int32 nBackgroundLuminance = Color( nBackgroundColor ).GetLuminance();
-            sal_Int32 nWhiteLuminance = Color( COL_WHITE ).GetLuminance();
+            sal_Int32 nWhiteLuminance = Color(COL_WHITE).GetLuminance();
 
             Color aLightShadow( nBackgroundColor );
             aLightShadow.IncreaseLuminance( static_cast<sal_uInt8>( ( nWhiteLuminance - nBackgroundLuminance ) * 2 / 3 ) );

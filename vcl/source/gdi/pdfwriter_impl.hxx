@@ -1098,19 +1098,19 @@ public:
 
     void setLineColor( const Color& rColor )
     {
-        m_aGraphicsStack.front().m_aLineColor = ImplIsColorTransparent(rColor) ? Color( COL_TRANSPARENT ) : rColor;
+        m_aGraphicsStack.front().m_aLineColor = ImplIsColorTransparent(rColor) ? COL_TRANSPARENT : rColor;
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::LineColor;
     }
 
     void setFillColor( const Color& rColor )
     {
-        m_aGraphicsStack.front().m_aFillColor = ImplIsColorTransparent(rColor) ? Color( COL_TRANSPARENT ) : rColor;
+        m_aGraphicsStack.front().m_aFillColor = ImplIsColorTransparent(rColor) ? COL_TRANSPARENT : rColor;
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::FillColor;
     }
 
     void setTextLineColor()
     {
-        m_aGraphicsStack.front().m_aTextLineColor = Color( COL_TRANSPARENT );
+        m_aGraphicsStack.front().m_aTextLineColor = COL_TRANSPARENT;
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::TextLineColor;
     }
 
@@ -1122,7 +1122,7 @@ public:
 
     void setOverlineColor()
     {
-        m_aGraphicsStack.front().m_aOverlineColor = Color( COL_TRANSPARENT );
+        m_aGraphicsStack.front().m_aOverlineColor = COL_TRANSPARENT;
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::OverlineColor;
     }
 
@@ -1140,7 +1140,7 @@ public:
     }
     void setTextFillColor()
     {
-        m_aGraphicsStack.front().m_aFont.SetFillColor( Color( COL_TRANSPARENT ) );
+        m_aGraphicsStack.front().m_aFont.SetFillColor( COL_TRANSPARENT );
         m_aGraphicsStack.front().m_aFont.SetTransparent( true );
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::Font;
     }

@@ -151,7 +151,7 @@ void setupMethodStubs( functor_vector_type& res )
     const Wallpaper   aWallpaper( aWhiteColor );
 
     GDIMetaFile       aMtf;
-    aMtf.AddAction( new MetaFillColorAction(Color(COL_RED),true) );
+    aMtf.AddAction( new MetaFillColorAction(COL_RED,true) );
     aMtf.AddAction( new MetaRectAction(aRect) );
 
 #ifdef FIXME_NEEDS_LOVE
@@ -630,38 +630,38 @@ void outDevGrind(vcl::RenderContext& rTarget)
     const functor_vector_type::const_iterator end  = aMethods.end();
     while( iter != end )
     {
-        rTarget.SetLineColor( Color(COL_BLACK) );
-        rTarget.SetFillColor( Color(COL_GREEN) );
+        rTarget.SetLineColor( COL_BLACK );
+        rTarget.SetFillColor( COL_GREEN );
         rTarget.SetRasterOp( RasterOp::OverPaint );
         rTarget.SetClipRegion();
         grindFunc( rTarget, iter, nTurns, "w/o clip, w/o xor" );
 
-        rTarget.SetLineColor( Color(COL_BLACK) );
-        rTarget.SetFillColor( Color(COL_GREEN) );
+        rTarget.SetLineColor( COL_BLACK );
+        rTarget.SetFillColor( COL_GREEN );
         rTarget.SetRasterOp( RasterOp::OverPaint );
         rTarget.SetClipRegion( vcl::Region( aClipRect ) );
         grindFunc( rTarget, iter, nTurns, "with rect clip, w/o xor" );
 
-        rTarget.SetLineColor( Color(COL_BLACK) );
-        rTarget.SetFillColor( Color(COL_GREEN) );
+        rTarget.SetLineColor( COL_BLACK );
+        rTarget.SetFillColor( COL_GREEN );
         rTarget.SetRasterOp( RasterOp::OverPaint );
         rTarget.SetClipRegion( vcl::Region( aClipPoly ) );
         grindFunc( rTarget, iter, nTurns, "with complex clip, w/o xor" );
 
-        rTarget.SetLineColor( Color(COL_BLACK) );
-        rTarget.SetFillColor( Color(COL_GREEN) );
+        rTarget.SetLineColor( COL_BLACK );
+        rTarget.SetFillColor( COL_GREEN );
         rTarget.SetRasterOp( RasterOp::Xor );
         rTarget.SetClipRegion();
         grindFunc( rTarget, iter, nTurns, "w/o clip, with xor" );
 
-        rTarget.SetLineColor( Color(COL_BLACK) );
-        rTarget.SetFillColor( Color(COL_GREEN) );
+        rTarget.SetLineColor( COL_BLACK );
+        rTarget.SetFillColor( COL_GREEN );
         rTarget.SetRasterOp( RasterOp::Xor );
         rTarget.SetClipRegion( vcl::Region( aClipRect ) );
         grindFunc( rTarget, iter, nTurns, "with rect clip, with xor" );
 
-        rTarget.SetLineColor( Color(COL_BLACK) );
-        rTarget.SetFillColor( Color(COL_GREEN) );
+        rTarget.SetLineColor( COL_BLACK );
+        rTarget.SetFillColor( COL_GREEN );
         rTarget.SetRasterOp( RasterOp::Xor );
         rTarget.SetClipRegion( vcl::Region( aClipPoly ) );
         grindFunc( rTarget, iter, nTurns, "with complex clip, with xor" );

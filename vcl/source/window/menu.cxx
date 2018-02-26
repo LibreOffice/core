@@ -129,9 +129,9 @@ void lclDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tools::Recta
     rRenderContext.SetLineColor();
 
     if (rRenderContext.GetSettings().GetStyleSettings().GetFaceColor().IsDark())
-        rRenderContext.SetFillColor(Color(COL_WHITE));
+        rRenderContext.SetFillColor(COL_WHITE);
     else
-        rRenderContext.SetFillColor(Color(COL_BLACK));
+        rRenderContext.SetFillColor(COL_BLACK);
     float fScaleFactor = rRenderContext.GetDPIScaleFactor();
 
     int linewidth = 1 * fScaleFactor;

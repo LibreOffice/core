@@ -816,7 +816,7 @@ void OutputDevice::SetTextLineColor()
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextLineColorAction( Color(), false ) );
 
-    maTextLineColor = Color( COL_TRANSPARENT );
+    maTextLineColor = COL_TRANSPARENT;
 
     if( mpAlphaVDev )
         mpAlphaVDev->SetTextLineColor();
@@ -833,11 +833,11 @@ void OutputDevice::SetTextLineColor( const Color& rColor )
     {
         if ( mnDrawMode & DrawModeFlags::BlackText )
         {
-            aColor = Color( COL_BLACK );
+            aColor = COL_BLACK;
         }
         else if ( mnDrawMode & DrawModeFlags::WhiteText )
         {
-            aColor = Color( COL_WHITE );
+            aColor = COL_WHITE;
         }
         else if ( mnDrawMode & DrawModeFlags::GrayText )
         {
@@ -873,7 +873,7 @@ void OutputDevice::SetOverlineColor()
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaOverlineColorAction( Color(), false ) );
 
-    maOverlineColor = Color( COL_TRANSPARENT );
+    maOverlineColor = COL_TRANSPARENT;
 
     if( mpAlphaVDev )
         mpAlphaVDev->SetOverlineColor();
@@ -890,11 +890,11 @@ void OutputDevice::SetOverlineColor( const Color& rColor )
     {
         if ( mnDrawMode & DrawModeFlags::BlackText )
         {
-            aColor = Color( COL_BLACK );
+            aColor = COL_BLACK;
         }
         else if ( mnDrawMode & DrawModeFlags::WhiteText )
         {
-            aColor = Color( COL_WHITE );
+            aColor = COL_WHITE;
         }
         else if ( mnDrawMode & DrawModeFlags::GrayText )
         {

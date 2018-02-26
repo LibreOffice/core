@@ -624,7 +624,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
     Size aAppFontSz = pOut->LogicToLogic( Size( 0, 8 ), &aMM, nullptr );
     vcl::Font aFnt( "Helvetica", aAppFontSz );
     aFnt.SetTransparent( true );
-    aFnt.SetColor( Color( COL_LIGHTRED ) );
+    aFnt.SetColor( COL_LIGHTRED );
     aFnt.SetWeight( WEIGHT_BOLD );
     aFnt.SetFamily( FAMILY_SWISS );
 
@@ -707,7 +707,7 @@ void EmbeddedObjectRef::DrawShading( const tools::Rectangle &rRect, OutputDevice
         return;
 
     pOut->Push();
-    pOut->SetLineColor( Color( COL_BLACK ) );
+    pOut->SetLineColor( COL_BLACK );
 
     Size aPixSize = pOut->LogicToPixel( rRect.GetSize() );
     aPixSize.AdjustWidth( -1 );

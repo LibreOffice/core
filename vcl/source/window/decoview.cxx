@@ -488,9 +488,9 @@ void ImplDrawButton( OutputDevice *const pDev, tools::Rectangle aFillRect,
         {
             // Hack: in monochrome mode on printers we like to have grey buttons
             if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
-                pDev->SetFillColor( Color( COL_LIGHTGRAY ) );
+                pDev->SetFillColor( COL_LIGHTGRAY );
             else
-                pDev->SetFillColor( Color( COL_WHITE ) );
+                pDev->SetFillColor( COL_WHITE );
             pDev->DrawRect( aFillRect );
         }
     }
@@ -634,12 +634,12 @@ void ImplDrawFrame( OutputDevice *const pDev, tools::Rectangle& rRect,
             if (
                 (bRound && aColor.IsDark()) ||
                 (
-                  (aColor == Color(COL_BLACK)) &&
+                  (aColor == COL_BLACK) &&
                   pDev->GetSettings().GetStyleSettings().GetFaceColor().IsDark()
                 )
                )
             {
-                aColor = Color( COL_WHITE );
+                aColor = COL_WHITE;
             }
             ImplDrawDPILineRect( pDev, rRect, &aColor, bRound );
         }
@@ -842,8 +842,8 @@ void DecorationView::DrawHighlightFrame( const tools::Rectangle& rRect,
     if ( (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) ||
          (mpOutDev->GetOutDevType() == OUTDEV_PRINTER) )
     {
-        aLightColor = Color( COL_BLACK );
-        aShadowColor = Color( COL_BLACK );
+        aLightColor = COL_BLACK;
+        aShadowColor = COL_BLACK;
     }
     else
     {
@@ -851,7 +851,7 @@ void DecorationView::DrawHighlightFrame( const tools::Rectangle& rRect,
         if ( aBackground.IsBitmap() || aBackground.IsGradient() )
         {
             aLightColor = rStyleSettings.GetFaceColor();
-            aShadowColor = Color( COL_BLACK );
+            aShadowColor = COL_BLACK;
         }
         else
         {
@@ -859,8 +859,8 @@ void DecorationView::DrawHighlightFrame( const tools::Rectangle& rRect,
             if ( (aLightColor.GetColorError( aBackColor ) < 32) ||
                  (aShadowColor.GetColorError( aBackColor ) < 32) )
             {
-                aLightColor = Color( COL_WHITE );
-                aShadowColor = Color( COL_BLACK );
+                aLightColor = COL_WHITE;
+                aShadowColor = COL_BLACK;
 
                 if ( aLightColor.GetColorError( aBackColor ) < 32 )
                     aLightColor.DecreaseLuminance( 64 );
@@ -1009,7 +1009,7 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
 
     mpOutDev->Push( PushFlags::LINECOLOR );
     if ( rStyleSettings.GetOptions() & StyleSettingsOptions::Mono )
-        mpOutDev->SetLineColor( Color( COL_BLACK ) );
+        mpOutDev->SetLineColor( COL_BLACK );
     else
         mpOutDev->SetLineColor( rStyleSettings.GetShadowColor() );
 

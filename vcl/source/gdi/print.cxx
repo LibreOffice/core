@@ -210,13 +210,13 @@ void Printer::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
         // bitmap, but perform a full alpha blend against a white
         // background here.
         Bitmap aBmp( rBmpEx.GetBitmap() );
-        aBmp.Blend( rBmpEx.GetAlpha(), Color( COL_WHITE) );
+        aBmp.Blend( rBmpEx.GetAlpha(), COL_WHITE );
         DrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp );
     }
     else
     {
         Bitmap aBmp( rBmpEx.GetBitmap() ), aMask( rBmpEx.GetMask() );
-        aBmp.Replace( aMask, Color( COL_WHITE ) );
+        aBmp.Replace( aMask, COL_WHITE );
         ImplPrintTransparent( aBmp, aMask, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
     }
 }

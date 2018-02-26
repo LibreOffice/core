@@ -1070,7 +1070,7 @@ void XclImpCellArea::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette& r
         // do not use IsTransparent() - old Calc filter writes tranparency with different color indexes
         if( mnPattern == EXC_PATT_NONE )
         {
-            aBrushItem.SetColor( Color( COL_TRANSPARENT ) );
+            aBrushItem.SetColor( COL_TRANSPARENT );
         }
         else
         {

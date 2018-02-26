@@ -2031,7 +2031,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 
 #if !defined(ANDROID)
     // Set background to transparent by default.
-    pDevice->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 #endif
 
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
@@ -3446,7 +3446,7 @@ static void doc_paintWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWind
     }
 
     ScopedVclPtrInstance<VirtualDevice> pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
-    pDevice->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nWidth, nHeight), Fraction(1.0), Point(), pBuffer);
 

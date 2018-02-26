@@ -1096,7 +1096,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
     const sal_uInt16 nZoomFactor = static_cast< sal_uInt16 >(rPrintUIOptions.getIntValue( PRTUIOPT_PRINT_SCALE, 100 ));
 
     rOutDev.Push();
-    rOutDev.SetLineColor( Color(COL_BLACK) );
+    rOutDev.SetLineColor( COL_BLACK );
 
     // output text on top
     if (bIsPrintTitle)
@@ -1108,7 +1108,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
         aFont.SetAlignment(ALIGN_TOP);
         aFont.SetWeight(WEIGHT_BOLD);
         aFont.SetFontSize(aSize650);
-        aFont.SetColor( Color(COL_BLACK) );
+        aFont.SetColor( COL_BLACK );
         rOutDev.SetFont(aFont);
 
         Size aTitleSize (GetTextSize(rOutDev, GetDoc()->GetTitle(), aOutRect.GetWidth() - 200));
@@ -1150,7 +1150,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
     {
         vcl::Font aFont(FAMILY_DONTKNOW, Size(0, 600));
         aFont.SetAlignment(ALIGN_TOP);
-        aFont.SetColor( Color(COL_BLACK) );
+        aFont.SetColor( COL_BLACK );
 
         // get size
         rOutDev.SetFont(aFont);

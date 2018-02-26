@@ -79,7 +79,7 @@ namespace svx
 
         // !!! #109290# Workaround for SetFillColor with COL_AUTO
         if (aColor.GetColor() == COL_AUTO)
-            aColor = Color(COL_TRANSPARENT);
+            aColor = COL_TRANSPARENT;
 
         if ((maCurColor == aColor) && !bSizeChanged && !bDisplayModeChanged && !bForceUpdate)
             return;
@@ -96,9 +96,9 @@ namespace svx
         if ((COL_TRANSPARENT != aColor.GetColor()) && (maBmpSize.Width() == maBmpSize.Height()))
             pVirDev->SetLineColor(aColor);
         else if( mpTbx->GetBackground().GetColor().IsDark() )
-            pVirDev->SetLineColor(Color(COL_WHITE));
+            pVirDev->SetLineColor(COL_WHITE);
         else
-            pVirDev->SetLineColor(Color(COL_BLACK));
+            pVirDev->SetLineColor(COL_BLACK);
 
         // use not only COL_TRANSPARENT for detection of transparence,
         // but the method/way which is designed to do that

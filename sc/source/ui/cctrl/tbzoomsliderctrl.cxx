@@ -432,11 +432,11 @@ void ScZoomSliderWnd::DoPaint(vcl::RenderContext& rRenderContext)
     pVDev->DrawGradient(aRect, aGradient);
 
     // draw slider
-    pVDev->SetLineColor(Color(COL_WHITE));
+    pVDev->SetLineColor(COL_WHITE);
     pVDev->DrawRect(aSecondLine);
     pVDev->DrawRect(aRight);
 
-    pVDev->SetLineColor(Color(COL_GRAY));
+    pVDev->SetLineColor(COL_GRAY);
     pVDev->DrawRect(aFirstLine);
     pVDev->DrawRect(aLeft);
 
@@ -446,7 +446,7 @@ void ScZoomSliderWnd::DoPaint(vcl::RenderContext& rRenderContext)
         aSnappingPointIter != mpImpl->maSnappingPointOffsets.end();
         ++aSnappingPointIter)
     {
-        pVDev->SetLineColor(Color(COL_GRAY));
+        pVDev->SetLineColor(COL_GRAY);
         tools::Rectangle aSnapping(aRect);
         aSnapping.SetBottom( aSlider.Top() );
         aSnapping.SetTop( aSnapping.Bottom() - nSnappingHeight );

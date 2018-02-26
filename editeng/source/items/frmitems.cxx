@@ -3055,7 +3055,7 @@ SvxBrushItem::SvxBrushItem(SvStream& rStream, sal_uInt16 nVersion, sal_uInt16 _n
         break;
 
         case 0: // BRUSH_NULL:
-            aColor = Color( COL_TRANSPARENT );
+            aColor = COL_TRANSPARENT;
         break;
 
         default:

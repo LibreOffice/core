@@ -1239,7 +1239,7 @@ CustomPropertiesYesNoButton::CustomPropertiesYesNoButton(vcl::Window* pParent)
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
     SetBorderStyle( WindowBorderStyle::MONO  );
     CheckNo();
-    Wallpaper aWall( Color( COL_TRANSPARENT ) );
+    Wallpaper aWall( COL_TRANSPARENT );
     m_aYesButton->SetBackground( aWall );
     m_aNoButton->SetBackground( aWall );
 }

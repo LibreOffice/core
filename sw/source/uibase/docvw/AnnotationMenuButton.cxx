@@ -177,7 +177,7 @@ void AnnotationMenuButton::Paint(vcl::RenderContext& rRenderContext, const tools
     const long nBorderDistanceBottom = ((aSymbolRect.GetHeight() * 150) + 500) / 1000;
     aSymbolRect.AdjustBottom( -nBorderDistanceBottom );
     DecorationView aDecoView(&rRenderContext);
-    aDecoView.DrawSymbol(aSymbolRect, SymbolType::SPIN_DOWN, (bHighContrast ? Color(COL_WHITE) : Color(COL_BLACK)));
+    aDecoView.DrawSymbol(aSymbolRect, SymbolType::SPIN_DOWN, (bHighContrast ? COL_WHITE : COL_BLACK));
 }
 
 void AnnotationMenuButton::KeyInput(const KeyEvent& rKeyEvt)

@@ -444,7 +444,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     // display text
     if (!pItem->maOutText.isEmpty())
     {
-        if (aSelectionTextColor != Color(COL_TRANSPARENT))
+        if (aSelectionTextColor != COL_TRANSPARENT)
         {
             rRenderContext.Push(PushFlags::TEXTCOLOR);
             rRenderContext.SetTextColor(aSelectionTextColor);
@@ -453,7 +453,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
             rRenderContext.DrawText(Point(nTxtPos, nTxtPosY), pItem->maOutText);
         else
             rRenderContext.DrawCtrlText(Point(nTxtPos, nTxtPosY), pItem->maOutText, 0, pItem->maOutText.getLength(), DrawTextFlags::Disable);
-        if (aSelectionTextColor != Color(COL_TRANSPARENT))
+        if (aSelectionTextColor != COL_TRANSPARENT)
             rRenderContext.Pop();
     }
 
@@ -924,7 +924,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->SetMapMode();
     pDev->SetFont( aFont );
     if ( nFlags & DrawFlags::Mono )
-        pDev->SetTextColor( Color( COL_BLACK ) );
+        pDev->SetTextColor( COL_BLACK );
     else
         pDev->SetTextColor( GetTextColor() );
     pDev->SetTextFillColor();

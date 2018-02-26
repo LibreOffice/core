@@ -2822,7 +2822,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         if (!(nCurTab == 0 && (nTreeFlags & SvTreeFlags::USESEL) && nFirstSelTab))
         {
             Color aBackgroundColor = aWallpaper.GetColor();
-            if (aBackgroundColor != Color(COL_TRANSPARENT))
+            if (aBackgroundColor != COL_TRANSPARENT)
             {
                 rRenderContext.SetFillColor(aBackgroundColor);
                 // this case may occur for smaller horizontal resizes

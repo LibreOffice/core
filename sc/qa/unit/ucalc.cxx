@@ -4401,7 +4401,7 @@ void Test::testSetBackgroundColor()
     Color aColor;
 
      //test yellow
-    aColor=Color(COL_YELLOW);
+    aColor=COL_YELLOW;
     getDocShell().GetDocFunc().SetTabBgColor(0,aColor,false, true);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("the correct color is not set",
                            aColor, m_pDoc->GetTabBgColor(0));

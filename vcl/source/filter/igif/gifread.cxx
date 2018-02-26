@@ -225,7 +225,7 @@ void GIFReader::CreateBitmaps(long nWidth, long nHeight, BitmapPalette* pPal,
         if (!!aBmp8 && bWatchForBackgroundColor && aAnimation.Count())
             aBmp8.Erase((*pPal)[nBackgroundColor].GetColor());
         else
-            aBmp8.Erase(Color(COL_WHITE));
+            aBmp8.Erase(COL_WHITE);
 
         pAcc8 = Bitmap::ScopedWriteAccess(aBmp8);
         bStatus = bool(pAcc8);
@@ -300,10 +300,10 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
         // if possible accommodate some standard colours
         if( nCount < 256 )
         {
-            (*pPal)[ 255UL ] = Color( COL_WHITE );
+            (*pPal)[ 255UL ] = Color(COL_WHITE);
 
             if( nCount < 255 )
-                (*pPal)[ 254UL ] = Color( COL_BLACK );
+                (*pPal)[ 254UL ] = Color(COL_BLACK);
         }
     }
 }

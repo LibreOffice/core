@@ -65,7 +65,7 @@ namespace sdr
         OverlayHelplineStriped::OverlayHelplineStriped(
             const basegfx::B2DPoint& rBasePos,
             SdrHelpLineKind eNewKind)
-        :   OverlayObjectWithBasePosition(rBasePos, Color(COL_BLACK)),
+        :   OverlayObjectWithBasePosition(rBasePos, COL_BLACK),
             meKind(eNewKind)
         {
         }

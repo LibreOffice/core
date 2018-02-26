@@ -791,7 +791,7 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools:
     maOutRect = aDecoView.DrawFrame(maOutRect, DrawFrameStyle::In);
 
     // draw page background
-    rRenderContext.SetFillColor(Color(COL_WHITE));
+    rRenderContext.SetFillColor(COL_WHITE);
     rRenderContext.DrawRect(maOutRect);
 
     // paint presentation objects from masterpage

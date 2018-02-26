@@ -952,8 +952,8 @@ void ScanPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 {
     Window::Paint(rRenderContext, rRect);
     rRenderContext.SetMapMode(MapMode(MapUnit::MapAppFont));
-    rRenderContext.SetFillColor(Color(COL_WHITE));
-    rRenderContext.SetLineColor(Color(COL_WHITE));
+    rRenderContext.SetFillColor(COL_WHITE);
+    rRenderContext.SetLineColor(COL_WHITE);
     rRenderContext.DrawRect(tools::Rectangle(Point(0, 0),
                                       Size(PREVIEW_WIDTH, PREVIEW_HEIGHT)));
     rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));

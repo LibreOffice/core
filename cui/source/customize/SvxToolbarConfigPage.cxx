@@ -882,7 +882,7 @@ Image SvxToolbarEntriesListBox::GetSizedImage(
     rVDev.DrawImage( aPos, aImage );
 
     // Draw separator line 2 pixels left from the right border
-    Color aLineColor = GetDisplayBackground().GetColor().IsDark() ? Color( COL_WHITE ) : Color( COL_BLACK );
+    Color aLineColor = GetDisplayBackground().GetColor().IsDark() ? COL_WHITE : COL_BLACK;
     rVDev.SetLineColor( aLineColor );
     rVDev.DrawLine( Point( aNewSize.Width()-3, 0 ), Point( aNewSize.Width()-3, aNewSize.Height()-1 ));
 

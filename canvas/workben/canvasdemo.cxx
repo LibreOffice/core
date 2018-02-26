@@ -112,9 +112,9 @@ class DemoRenderer
             maBox(),
             maViewState(),
             maRenderState(),
-            maColorBlack( vcl::unotools::colorToStdColorSpaceSequence( Color(COL_BLACK)) ),
-            maColorWhite( vcl::unotools::colorToStdColorSpaceSequence( Color(COL_WHITE)) ),
-            maColorRed( vcl::unotools::colorToStdColorSpaceSequence( Color(COL_RED)) ),
+            maColorBlack( vcl::unotools::colorToStdColorSpaceSequence( COL_BLACK) ),
+            maColorWhite( vcl::unotools::colorToStdColorSpaceSequence( COL_WHITE) ),
+            maColorRed( vcl::unotools::colorToStdColorSpaceSequence( COL_RED) ),
             mxCanvas(xCanvas),
             mxDefaultFont(),
             mxDevice( xDevice )

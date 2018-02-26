@@ -182,7 +182,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
             aRect.SetSize(aRectSize);
 
             Color aBackgroundColor = aWallpaper.GetColor();
-            if (aBackgroundColor != Color(COL_TRANSPARENT))
+            if (aBackgroundColor != COL_TRANSPARENT)
             {
                 rRenderContext.SetFillColor(aBackgroundColor);
                 // this case may occur for smaller horizontal resizes

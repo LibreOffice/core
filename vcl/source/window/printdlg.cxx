@@ -75,7 +75,7 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
 {
     SetPaintTransparent( true );
     SetBackground();
-    maPageVDev->SetBackground( Color( COL_WHITE ) );
+    maPageVDev->SetBackground( Wallpaper(COL_WHITE) );
     maHorzDim->Show();
     maVertDim->Show();
 
@@ -103,7 +103,7 @@ void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDC
     // react on settings changed
     if( i_rDCEvt.GetType() == DataChangedEventType::SETTINGS )
     {
-        maPageVDev->SetBackground( Color( COL_WHITE ) );
+        maPageVDev->SetBackground( Wallpaper(COL_WHITE) );
     }
     Window::DataChanged( i_rDCEvt );
 }

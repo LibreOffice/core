@@ -600,7 +600,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
             if( Color(COL_TRANSPARENT) != GetOut()->GetLineColor() )
             {
                 OSL_FAIL( "Hey, Joe: Where's my Null Pen?" );
-                GetOut()->SetLineColor( Color(COL_TRANSPARENT) );
+                GetOut()->SetLineColor( COL_TRANSPARENT );
             }
 #endif
         }

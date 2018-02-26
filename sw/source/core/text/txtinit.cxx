@@ -63,7 +63,7 @@ void TextInit_()
 #endif
     );
     SwTextFrame::SetTextCache( pTextCache );
-    pWaveCol = new Color( COL_GRAY );
+    pWaveCol = new Color(COL_GRAY);
     PROTOCOL_INIT
 }
 

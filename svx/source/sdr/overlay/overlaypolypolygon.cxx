@@ -73,7 +73,7 @@ namespace sdr
 
         OverlayPolyPolygonStripedAndFilled::OverlayPolyPolygonStripedAndFilled(
             const basegfx::B2DPolyPolygon& rLinePolyPolygon)
-        :   OverlayObject(Color(COL_BLACK)),
+        :   OverlayObject(COL_BLACK),
             maLinePolyPolygon(rLinePolyPolygon)
         {
         }

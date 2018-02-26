@@ -145,7 +145,7 @@ void ScCsvRuler::InitColors()
     maBackColor = rSett.GetFaceColor();
     maActiveColor = rSett.GetWindowColor();
     maTextColor = rSett.GetLabelTextColor();
-    maSplitColor = maBackColor.IsDark() ? maTextColor : Color( COL_LIGHTRED );
+    maSplitColor = maBackColor.IsDark() ? maTextColor : COL_LIGHTRED;
     InvalidateGfx();
 }
 

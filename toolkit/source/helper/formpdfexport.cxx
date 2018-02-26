@@ -318,7 +318,7 @@ namespace toolkitform
                         if ( xModelProps->getPropertyValue( sBorderColorPropertyName ) >>= nBorderColor )
                             Descriptor->BorderColor = Color( nBorderColor );
                         else
-                            Descriptor->BorderColor = Color( COL_BLACK );
+                            Descriptor->BorderColor = COL_BLACK;
                     }
                 }
             }

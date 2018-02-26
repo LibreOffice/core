@@ -264,7 +264,7 @@ void SwDropCapsPict::GetFontSettings( const SwDropCapsPage& _rPage, vcl::Font& _
 void SwDropCapsPict::UpdatePaintSettings()
 {
     maBackColor = GetSettings().GetStyleSettings().GetWindowColor();
-    maTextLineColor = Color( COL_LIGHTGRAY );
+    maTextLineColor = COL_LIGHTGRAY;
 
     // gray lines
     mnTotLineH = (GetOutputSizePixel().Height() - 2 * BORDER) / LINES;

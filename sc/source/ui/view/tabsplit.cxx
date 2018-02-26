@@ -70,8 +70,8 @@ void ScTabSplitter::Paint( vcl::RenderContext& rRenderContext, const tools::Rect
                 rRenderContext.DrawRect(tools::Rectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom()));
 
                 // Draw handle
-                rRenderContext.SetLineColor(Color(COL_BLACK));
-                rRenderContext.SetFillColor(Color(COL_BLACK));
+                rRenderContext.SetLineColor(COL_BLACK);
+                rRenderContext.SetFillColor(COL_BLACK);
                 const long xc = rRect.Right() + rRect.Left();
                 const long h4 = rRect.GetHeight() / 4;
                 // First xc fraction is truncated, second one is rounded. This will draw a centered line
@@ -101,8 +101,8 @@ void ScTabSplitter::Paint( vcl::RenderContext& rRenderContext, const tools::Rect
                 rRenderContext.DrawRect(tools::Rectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom()));
 
                  // Draw handle
-                rRenderContext.SetLineColor(Color(COL_BLACK));
-                rRenderContext.SetFillColor(Color(COL_BLACK));
+                rRenderContext.SetLineColor(COL_BLACK);
+                rRenderContext.SetFillColor(COL_BLACK);
                 const long yc = rRect.Top() + rRect.Bottom();
                 const long w4 = rRect.GetWidth() / 4;
                 // First yc fraction is truncated, second one is rounded. This will draw a centered line

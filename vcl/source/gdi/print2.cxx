@@ -737,7 +737,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         bool bStillBackground=true; // true until first non-bg action
         nActionNum=0; nLastBgAction=-1;
         pCurrAct=const_cast<GDIMetaFile&>(rInMtf).FirstAction();
-        if( rBackground != Color( COL_TRANSPARENT ) )
+        if( rBackground != COL_TRANSPARENT )
         {
             aBackgroundComponent.aBgColor = rBackground;
             if( meOutDevType == OUTDEV_PRINTER )

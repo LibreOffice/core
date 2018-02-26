@@ -991,7 +991,7 @@ static Image ImplRotImage( const Image& rImage, long nAngle10 )
 {
     BitmapEx    aRotBitmapEx( rImage.GetBitmapEx() );
 
-    aRotBitmapEx.Rotate( nAngle10, Color( COL_WHITE ) );
+    aRotBitmapEx.Rotate( nAngle10, COL_WHITE );
 
     return Image( aRotBitmapEx );
 }

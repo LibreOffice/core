@@ -401,7 +401,7 @@ bool BitmapEx::Rotate( long nAngle10, const Color& rFillColor )
 
     if( !!aBitmap )
     {
-        const bool bTransRotate = ( Color( COL_TRANSPARENT ) == rFillColor );
+        const bool bTransRotate = ( Color(COL_TRANSPARENT) == rFillColor );
 
         if( bTransRotate )
         {
@@ -551,7 +551,7 @@ bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectang
                     else
                     {
                         aMask = Bitmap( GetSizePixel(), 1 );
-                        aMask.Erase( Color( COL_BLACK ) );
+                        aMask.Erase( COL_BLACK );
                         eTransparent = TransparentType::Bitmap;
                         aMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->aMask );
                     }
@@ -567,7 +567,7 @@ bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectang
                 {
                     Bitmap aMaskSrc( pBmpExSrc->GetSizePixel(), 1 );
 
-                    aMaskSrc.Erase( Color( COL_BLACK ) );
+                    aMaskSrc.Erase( COL_BLACK );
                     aMask.CopyPixel( rRectDst, rRectSrc, &aMaskSrc );
                 }
             }

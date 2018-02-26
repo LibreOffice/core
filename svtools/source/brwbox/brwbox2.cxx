@@ -606,7 +606,7 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         else
         {
             rRenderContext.Push(PushFlags::FILLCOLOR);
-            rRenderContext.SetFillColor(Color(COL_BLACK));
+            rRenderContext.SetFillColor(COL_BLACK);
             rRenderContext.DrawRect(tools::Rectangle(Point(nX, 0), Size(pCol->Width(), GetTitleHeight() - 1)));
             rRenderContext.Pop();
         }
@@ -725,7 +725,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
             aButtonFrame.Draw( *pDev );
 
             pDev->Push( PushFlags::LINECOLOR );
-            pDev->SetLineColor( Color( COL_BLACK ) );
+            pDev->SetLineColor( COL_BLACK );
 
             pDev->DrawLine( Point( aRealPos.X(), aRealPos.Y() + nTitleHeight-1 ),
                Point( aRealPos.X() + pFirstCol->Width() - 1, aRealPos.Y() + nTitleHeight-1 ) );
@@ -791,7 +791,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
 
     // cache frequently used values
     Point aPos( aOverallAreaPos.X(), nRelTopRow * nDataRowHeigt + aOverallAreaPos.Y() );
-    _rOut.SetLineColor( Color( COL_WHITE ) );
+    _rOut.SetLineColor( COL_WHITE );
     const AllSettings& rAllSets = _rOut.GetSettings();
     const StyleSettings &rSettings = rAllSets.GetStyleSettings();
     const Color &rHighlightTextColor = rSettings.GetHighlightTextColor();
@@ -961,7 +961,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
     {
         // fill rectangle gray below handle column
         // DG: fill it only until the end of the drawing rect and not to the end, as this may overpaint handle columns
-        _rOut.SetLineColor( Color( COL_BLACK ) );
+        _rOut.SetLineColor( COL_BLACK );
         _rOut.DrawRect( tools::Rectangle(
             Point( aOverallAreaPos.X() - 1, aPos.Y() - 1 ),
             Point( aOverallAreaPos.X() + pCols[ 0 ]->Width() - 1,

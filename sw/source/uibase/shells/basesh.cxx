@@ -2306,7 +2306,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
             else
             {
                 aBrushItem.SetColor(COL_TRANSPARENT);
-                rReq.AppendItem(SvxColorItem(Color(COL_TRANSPARENT),nSlot));
+                rReq.AppendItem(SvxColorItem(COL_TRANSPARENT,nSlot));
             }
             break;
         }

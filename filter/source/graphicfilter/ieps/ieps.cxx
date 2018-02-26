@@ -457,7 +457,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 
     pVDev->EnableOutput( false );
     aMtf.Record( pVDev );
-    pVDev->SetLineColor( Color( COL_RED ) );
+    pVDev->SetLineColor( COL_RED );
     pVDev->SetFillColor();
 
     aFont.SetColor( COL_LIGHTRED );

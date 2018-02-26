@@ -2906,7 +2906,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                         // one: default to white.
                                         SfxItemSet aNewSet(*pObject->GetMergedItemSet().GetPool());
                                         aNewSet.Put(XFillStyleItem(css::drawing::FillStyle_SOLID));
-                                        aNewSet.Put(XFillColorItem(OUString(), Color(COL_WHITE)));
+                                        aNewSet.Put(XFillColorItem(OUString(), COL_WHITE));
                                         pObject->SetMergedItemSet(aNewSet);
                                     }
                                 }
@@ -5749,7 +5749,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
                                 break;
                                 case drawing::FillStyle_HATCH :
                                 case drawing::FillStyle_BITMAP :
-                                    aDefColor = Color( COL_WHITE );
+                                    aDefColor = COL_WHITE;
                                 break;
                                 default: break;
                             }

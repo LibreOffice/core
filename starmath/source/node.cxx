@@ -1877,24 +1877,24 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         case TNBOLD :   ClearAttribut(FontAttribute::Bold);   break;
         case TNITALIC : ClearAttribut(FontAttribute::Italic); break;
 
-        case TBLACK :   SetColor(Color(COL_BLACK));     break;
-        case TWHITE :   SetColor(Color(COL_WHITE));     break;
-        case TRED :     SetColor(Color(COL_LIGHTRED));      break;
-        case TGREEN :   SetColor(Color(COL_GREEN));     break;
-        case TBLUE :    SetColor(Color(COL_LIGHTBLUE));     break;
-        case TCYAN :    SetColor(Color(COL_LIGHTCYAN));     break; // as in Calc
-        case TMAGENTA : SetColor(Color(COL_LIGHTMAGENTA));  break; // as in Calc
-        case TYELLOW :  SetColor(Color(COL_YELLOW));    break;
-        case TTEAL :    SetColor(Color(COL_CYAN));  break;
-        case TSILVER :  SetColor(Color(COL_LIGHTGRAY));  break;
-        case TGRAY :    SetColor(Color(COL_GRAY));  break;
-        case TMAROON :  SetColor(Color(COL_RED));  break;
-        case TPURPLE :  SetColor(Color(COL_MAGENTA));  break;
-        case TLIME :    SetColor(Color(COL_LIGHTGREEN));  break;
-        case TOLIVE :   SetColor(Color(COL_BROWN));  break;
-        case TNAVY :    SetColor(Color(COL_BLUE));  break;
-        case TAQUA :    SetColor(Color(COL_LIGHTCYAN));  break;
-        case TFUCHSIA : SetColor(Color(COL_LIGHTMAGENTA));  break;
+        case TBLACK :   SetColor(COL_BLACK);     break;
+        case TWHITE :   SetColor(COL_WHITE);     break;
+        case TRED :     SetColor(COL_LIGHTRED);      break;
+        case TGREEN :   SetColor(COL_GREEN);     break;
+        case TBLUE :    SetColor(COL_LIGHTBLUE);     break;
+        case TCYAN :    SetColor(COL_LIGHTCYAN);     break; // as in Calc
+        case TMAGENTA : SetColor(COL_LIGHTMAGENTA);  break; // as in Calc
+        case TYELLOW :  SetColor(COL_YELLOW);    break;
+        case TTEAL :    SetColor(COL_CYAN);  break;
+        case TSILVER :  SetColor(COL_LIGHTGRAY);  break;
+        case TGRAY :    SetColor(COL_GRAY);  break;
+        case TMAROON :  SetColor(COL_RED);  break;
+        case TPURPLE :  SetColor(COL_MAGENTA);  break;
+        case TLIME :    SetColor(COL_LIGHTGREEN);  break;
+        case TOLIVE :   SetColor(COL_BROWN);  break;
+        case TNAVY :    SetColor(COL_BLUE);  break;
+        case TAQUA :    SetColor(COL_LIGHTCYAN);  break;
+        case TFUCHSIA : SetColor(COL_LIGHTMAGENTA);  break;
 
         default:
             SAL_WARN("starmath", "unknown case");

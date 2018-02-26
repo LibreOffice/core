@@ -57,7 +57,7 @@ namespace sdr
             double fAlpha,
             double fShearX,
             double fRotation)
-        :   OverlayObjectWithBasePosition(rBasePos, Color(COL_WHITE)),
+        :   OverlayObjectWithBasePosition(rBasePos, COL_WHITE),
             maBitmapEx(rBitmapEx),
             mnCenterX(nCenX),
             mnCenterY(nCenY),

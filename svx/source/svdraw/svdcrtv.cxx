@@ -439,7 +439,7 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, cons
                 if (mpModel && dynamic_cast<const SdrCaptionObj *>(pAktCreate) != nullptr)
                 {
                     SfxItemSet aSet(mpModel->GetItemPool());
-                    aSet.Put(XFillColorItem(OUString(),Color(COL_WHITE))); // in case someone turns on Solid
+                    aSet.Put(XFillColorItem(OUString(),COL_WHITE)); // in case someone turns on Solid
                     aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
                     pAktCreate->SetMergedItemSet(aSet);
@@ -449,9 +449,9 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, cons
                 {
                     // default for all text frames: no background, no border
                     SfxItemSet aSet(mpModel->GetItemPool());
-                    aSet.Put(XFillColorItem(OUString(),Color(COL_WHITE))); // in case someone turns on Solid
+                    aSet.Put(XFillColorItem(OUString(),COL_WHITE)); // in case someone turns on Solid
                     aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
-                    aSet.Put(XLineColorItem(OUString(),Color(COL_BLACK))); // in case someone turns on Solid
+                    aSet.Put(XLineColorItem(OUString(),COL_BLACK)); // in case someone turns on Solid
                     aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
 
                     pAktCreate->SetMergedItemSet(aSet);

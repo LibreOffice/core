@@ -451,7 +451,7 @@ Color ScDocument::GetTabBgColor( SCTAB nTab ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetTabBgColor();
-    return Color(COL_AUTO);
+    return COL_AUTO;
 }
 
 void ScDocument::SetTabBgColor( SCTAB nTab, const Color& rColor )

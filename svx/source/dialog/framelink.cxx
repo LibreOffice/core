@@ -642,7 +642,7 @@ StyleVectorCombination::StyleVectorCombination(
                         rStyle.Dist() * 0.5,
                         rStyle.UseGapColor()
                             ? (nullptr != pForceColor ? *pForceColor : rStyle.GetColorGap())
-                            : Color(COL_TRANSPARENT)));
+                            : COL_TRANSPARENT));
 
                 maOffsets.push_back(
                     OffsetAndHalfWidthAndColor(

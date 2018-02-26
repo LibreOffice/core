@@ -531,7 +531,7 @@ void ToolBox::ImplErase(vcl::RenderContext& rRenderContext, const tools::Rectang
                 // choose the same color as the popup will use
                 rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetFaceGradientColor());
             else
-                rRenderContext.SetFillColor(Color(COL_WHITE));
+                rRenderContext.SetFillColor(COL_WHITE);
 
             rRenderContext.DrawRect(rRect);
             rRenderContext.Pop();
@@ -2425,9 +2425,9 @@ static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tool
     rRenderContext.SetLineColor();
 
     if (rRenderContext.GetSettings().GetStyleSettings().GetFaceColor().IsDark())
-        rRenderContext.SetFillColor(Color(COL_WHITE));
+        rRenderContext.SetFillColor(COL_WHITE);
     else
-        rRenderContext.SetFillColor(Color(COL_BLACK));
+        rRenderContext.SetFillColor(COL_BLACK);
     float fScaleFactor = rRenderContext.GetDPIScaleFactor();
 
     int linewidth = 1 * fScaleFactor;
@@ -2498,9 +2498,9 @@ static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tool
     if ( bSetColor )
     {
         if (rRenderContext.GetSettings().GetStyleSettings().GetFaceColor().IsDark())
-            rRenderContext.SetFillColor(Color(COL_WHITE));
+            rRenderContext.SetFillColor(COL_WHITE);
         else
-            rRenderContext.SetFillColor(Color(COL_BLACK));
+            rRenderContext.SetFillColor(COL_BLACK);
     }
 
     float fScaleFactor = rRenderContext.GetDPIScaleFactor();
@@ -2699,7 +2699,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     bool bHighContrastWhite = false;
     // check the face color as highcontrast indicator
     // because the toolbox itself might have a gradient
-    if (rStyleSettings.GetFaceColor() == Color(COL_WHITE))
+    if (rStyleSettings.GetFaceColor() == COL_WHITE)
         bHighContrastWhite = true;
 
     // Compute buttons area.

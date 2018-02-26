@@ -99,7 +99,7 @@ namespace PictReaderShape {
     //       must be changed if other parameter are changed to draw
     //       a line/fill shape
     Color oldFColor = dev->GetFillColor(), oldLColor = dev->GetLineColor();
-    dev->SetFillColor(oldLColor); dev->SetLineColor(Color(COL_TRANSPARENT));
+    dev->SetFillColor(oldLColor); dev->SetLineColor(COL_TRANSPARENT);
     dev->DrawPolygon(poly);
     dev->SetLineColor(oldLColor); dev->SetFillColor(oldFColor);
     return true;

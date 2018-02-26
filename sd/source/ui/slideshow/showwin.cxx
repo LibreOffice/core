@@ -70,7 +70,7 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, vc
     maMouseTimer.SetInvokeHandler( LINK( this, ShowWindow, MouseTimeoutHdl ) );
     maMouseTimer.SetTimeout( HIDE_MOUSE_TIMEOUT );
 
-    maShowBackground = Wallpaper( Color( COL_BLACK ) );
+    maShowBackground = Wallpaper( COL_BLACK );
     SetBackground(); // avoids that VCL paints any background!
     GetParent()->Show();
     AddEventListener( LINK( this, ShowWindow, EventHdl ) );
@@ -294,7 +294,7 @@ void ShowWindow::SetEndMode()
     {
         DeleteWindowFromPaintView();
         meShowWindowMode = SHOWWINDOWMODE_END;
-        maShowBackground = Wallpaper( Color( COL_BLACK ) );
+        maShowBackground = Wallpaper( COL_BLACK );
 
         // hide navigator if it is visible
         if( mpViewShell->GetViewFrame()->GetChildWindow( SID_NAVIGATOR ) )
@@ -324,7 +324,7 @@ bool ShowWindow::SetPauseMode( sal_Int32 nTimeout, Graphic const * pLogo )
         mnPauseTimeout = nTimeout;
         mnRestartPageIndex = 0;
         meShowWindowMode = SHOWWINDOWMODE_PAUSE;
-        maShowBackground = Wallpaper( Color( COL_BLACK ) );
+        maShowBackground = Wallpaper( COL_BLACK );
 
         // hide navigator if it is visible
         if( mpViewShell->GetViewFrame()->GetChildWindow( SID_NAVIGATOR ) )
@@ -378,7 +378,7 @@ void ShowWindow::TerminateShow()
     maPauseTimer.Stop();
     maMouseTimer.Stop();
     Erase();
-    maShowBackground = Wallpaper( Color( COL_BLACK ) );
+    maShowBackground = Wallpaper( COL_BLACK );
     meShowWindowMode = SHOWWINDOWMODE_NORMAL;
     mnPauseTimeout = SLIDE_NO_TIMEOUT;
 
@@ -411,7 +411,7 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
     maLogo.Clear();
     maPauseTimer.Stop();
     Erase();
-    maShowBackground = Wallpaper( Color( COL_BLACK ) );
+    maShowBackground = Wallpaper( COL_BLACK );
     meShowWindowMode = SHOWWINDOWMODE_NORMAL;
     mnPauseTimeout = SLIDE_NO_TIMEOUT;
 
@@ -489,7 +489,7 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
 
         aVMap.SetOrigin( Point() );
         pVDev->SetMapMode( aVMap );
-        pVDev->SetBackground( Wallpaper( Color( COL_BLACK ) ) );
+        pVDev->SetBackground( Wallpaper( COL_BLACK ) );
 
         // set font first, to determine real output height
         pVDev->SetFont( aFont );

@@ -366,7 +366,7 @@ public:
     void            SetColor( const Color& rColor );
     void            SetColor()
     {
-        SetColor(Color(COL_TRANSPARENT));
+        SetColor(COL_TRANSPARENT);
     }
     bool            IsColor() const
     {

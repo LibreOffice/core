@@ -402,11 +402,11 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
     get(m_pCbxTrans, "cbx5");
     get(m_pLbColorTrans, "color5");
 
-    m_pLbColorTrans->SelectEntry(Color(COL_BLACK));
-    m_pLbColor1->SelectEntry(Color(COL_TRANSPARENT));
-    m_pLbColor2->SelectEntry(Color(COL_TRANSPARENT));
-    m_pLbColor3->SelectEntry(Color(COL_TRANSPARENT));
-    m_pLbColor4->SelectEntry(Color(COL_TRANSPARENT));
+    m_pLbColorTrans->SelectEntry(COL_BLACK);
+    m_pLbColor1->SelectEntry(COL_TRANSPARENT);
+    m_pLbColor2->SelectEntry(COL_TRANSPARENT);
+    m_pLbColor3->SelectEntry(COL_TRANSPARENT);
+    m_pLbColor4->SelectEntry(COL_TRANSPARENT);
 
     m_pTbxPipette->SetSelectHdl( LINK( pData, MaskData, PipetteHdl ) );
     m_pBtnExec->SetClickHdl( LINK( pData, MaskData, ExecHdl ) );

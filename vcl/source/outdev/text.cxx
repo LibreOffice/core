@@ -221,7 +221,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     aFont.SetOrientation( 0 );
     aFont.SetFontSize( Size( mpFontInstance->maFontSelData.mnWidth, mpFontInstance->maFontSelData.mnHeight ) );
     pVDev->SetFont( aFont );
-    pVDev->SetTextColor( Color( COL_BLACK ) );
+    pVDev->SetTextColor( COL_BLACK );
     pVDev->SetTextFillColor();
     pVDev->ImplNewFont();
     pVDev->InitFont();
@@ -323,16 +323,16 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
 
         // we don't have a automatic color, so black is always drawn on white
         if ( aTextColor.GetColor() == COL_BLACK )
-            aTextColor = Color( COL_WHITE );
+            aTextColor = COL_WHITE;
         if ( aTextLineColor.GetColor() == COL_BLACK )
-            aTextLineColor = Color( COL_WHITE );
+            aTextLineColor = COL_WHITE;
         if ( aOverlineColor.GetColor() == COL_BLACK )
-            aOverlineColor = Color( COL_WHITE );
+            aOverlineColor = COL_WHITE;
 
         // relief-color is black for white text, in all other cases
         // we set this to LightGray
         if ( aTextColor.GetColor() == COL_WHITE )
-            aReliefColor = Color( COL_BLACK );
+            aReliefColor = COL_BLACK;
         SetTextLineColor( aReliefColor );
         SetOverlineColor( aReliefColor );
         SetTextColor( aReliefColor );
@@ -375,9 +375,9 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
             SetOverlineColor();
             if ( (GetTextColor().GetColor() == COL_BLACK)
             ||   (GetTextColor().GetLuminance() < 8) )
-                SetTextColor( Color( COL_LIGHTGRAY ) );
+                SetTextColor( COL_LIGHTGRAY );
             else
-                SetTextColor( Color( COL_BLACK ) );
+                SetTextColor( COL_BLACK );
             ImplInitTextColor();
             rSalLayout.DrawBase() += Point( nOff, nOff );
             ImplDrawTextDirect( rSalLayout, mbTextLines );
@@ -411,9 +411,9 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
             ImplDrawTextDirect( rSalLayout, mbTextLines );
             rSalLayout.DrawBase() = aOrigPos;
 
-            SetTextColor( Color( COL_WHITE ) );
-            SetTextLineColor( Color( COL_WHITE ) );
-            SetOverlineColor( Color( COL_WHITE ) );
+            SetTextColor( COL_WHITE );
+            SetTextLineColor( COL_WHITE );
+            SetOverlineColor( COL_WHITE );
             ImplInitTextColor();
             ImplDrawTextDirect( rSalLayout, mbTextLines );
             SetTextColor( aOldColor );
@@ -662,9 +662,9 @@ void OutputDevice::SetTextColor( const Color& rColor )
                         DrawModeFlags::SettingsText ) )
     {
         if ( mnDrawMode & DrawModeFlags::BlackText )
-            aColor = Color( COL_BLACK );
+            aColor = COL_BLACK;
         else if ( mnDrawMode & DrawModeFlags::WhiteText )
-            aColor = Color( COL_WHITE );
+            aColor = COL_WHITE;
         else if ( mnDrawMode & DrawModeFlags::GrayText )
         {
             const sal_uInt8 cLum = aColor.GetLuminance();
@@ -700,8 +700,8 @@ void OutputDevice::SetTextFillColor()
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextFillColorAction( Color(), false ) );
 
-    if ( maFont.GetColor() != Color( COL_TRANSPARENT ) ) {
-        maFont.SetFillColor( Color( COL_TRANSPARENT ) );
+    if ( maFont.GetColor() != COL_TRANSPARENT ) {
+        maFont.SetFillColor( COL_TRANSPARENT );
     }
     if ( !maFont.IsTransparent() )
         maFont.SetTransparent( true );
@@ -723,9 +723,9 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
                             DrawModeFlags::GhostedFill | DrawModeFlags::SettingsFill ) )
         {
             if ( mnDrawMode & DrawModeFlags::BlackFill )
-                aColor = Color( COL_BLACK );
+                aColor = COL_BLACK;
             else if ( mnDrawMode & DrawModeFlags::WhiteFill )
-                aColor = Color( COL_WHITE );
+                aColor = COL_WHITE;
             else if ( mnDrawMode & DrawModeFlags::GrayFill )
             {
                 const sal_uInt8 cLum = aColor.GetLuminance();
@@ -735,7 +735,7 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
                 aColor = GetSettings().GetStyleSettings().GetWindowColor();
             else if ( mnDrawMode & DrawModeFlags::NoFill )
             {
-                aColor = Color( COL_TRANSPARENT );
+                aColor = COL_TRANSPARENT;
                 bTransFill = true;
             }
 
@@ -763,7 +763,7 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
 Color OutputDevice::GetTextFillColor() const
 {
     if ( maFont.IsTransparent() )
-        return Color( COL_TRANSPARENT );
+        return COL_TRANSPARENT;
     else
         return maFont.GetFillColor();
 }
