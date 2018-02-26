@@ -74,7 +74,7 @@ private:
 
 protected:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag = InitFlag::Default );
+    void    ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag = InitFlag::Default );
 
     /// Find and set the LOK notifier according to the pParent.
     void ImplLOKNotifier(vcl::Window* pParent);

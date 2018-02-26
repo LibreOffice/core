@@ -75,7 +75,7 @@ public:
 
 protected:
                         ButtonDialog( WindowType nType );
-    SAL_DLLPRIVATE long ImplGetButtonSize();
+    long                ImplGetButtonSize();
 
 private:
                         ButtonDialog( const ButtonDialog & ) = delete;
