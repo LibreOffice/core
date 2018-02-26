@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_524baa59",
+        "filename": "sw/source/core/view/vprint.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-02-26T20:47:27Z",
+      "side": 1,
+      "message": "What about including the nPostItMode \u003d\u003d SwPostItMode::InMargins condition in this bool, given that later you always check these two together? (And rename the variable accordingly.)",
+      "revId": "f26f37a14b79c2553de1cc1b76c76707ee719be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_7248ae5c",
+        "filename": "sw/source/core/view/vprint.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-02-26T20:47:27Z",
+      "side": 1,
+      "message": "So you can avoid copypasta here.",
+      "revId": "f26f37a14b79c2553de1cc1b76c76707ee719be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
