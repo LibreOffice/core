@@ -94,7 +94,8 @@ bool ScOoxPasswordHash::verifyPassword( const OUString& aPassText ) const
     if (!hasPassword())
         return false;
 
-    const OUString aHash( comphelper::Hash::calculateHashBase64( aPassText, maSaltValue, mnSpinCount, maAlgorithmName));
+    const OUString aHash( comphelper::DocPasswordHelper::GetOoxHashAsBase64(
+                aPassText, maSaltValue, mnSpinCount, maAlgorithmName));
     if (aHash.isEmpty())
         // unsupported algorithm
         return false;

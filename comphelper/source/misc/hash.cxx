@@ -8,8 +8,6 @@
  */
 
 #include <comphelper/hash.hxx>
-#include <comphelper/base64.hxx>
-#include <comphelper/sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/alloc.h>
 #include <osl/endian.h>
@@ -229,50 +227,6 @@ std::vector<unsigned char> Hash::calculateHash(
     const unsigned char* pPassBytes = reinterpret_cast<const unsigned char*>(rPassword.getStr());
     const size_t nPassBytesLen = rPassword.getLength() * 2;
     return calculateHash( pPassBytes, nPassBytesLen, rSaltValue.data(), rSaltValue.size(), nSpinCount, eType);
-}
-
-css::uno::Sequence<sal_Int8> Hash::calculateHashSequence(
-        const rtl::OUString& rPassword,
-        const rtl::OUString& rSaltValue,
-        sal_uInt32 nSpinCount,
-        const rtl::OUString& rAlgorithmName)
-{
-    HashType eType;
-    if (rAlgorithmName == "SHA-512")
-        eType = HashType::SHA512;
-    else if (rAlgorithmName == "SHA-256")
-        eType = HashType::SHA256;
-    else if (rAlgorithmName == "SHA-1")
-        eType = HashType::SHA1;
-    else if (rAlgorithmName == "MD5")
-        eType = HashType::MD5;
-    else
-        return css::uno::Sequence<sal_Int8>();
-
-    std::vector<unsigned char> aSaltVec;
-    if (!rSaltValue.isEmpty())
-    {
-        css::uno::Sequence<sal_Int8> aSaltSeq;
-        comphelper::Base64::decode( aSaltSeq, rSaltValue);
-        aSaltVec = comphelper::sequenceToContainer<std::vector<unsigned char>>( aSaltSeq);
-    }
-
-    std::vector<unsigned char> hash( calculateHash( rPassword, aSaltVec, nSpinCount, eType));
-
-    return comphelper::containerToSequence<sal_Int8>( hash);
-}
-
-OUString Hash::calculateHashBase64(
-        const rtl::OUString& rPassword,
-        const rtl::OUString& rSaltValue,
-        sal_uInt32 nSpinCount,
-        const rtl::OUString& rAlgorithmName)
-{
-    css::uno::Sequence<sal_Int8> aSeq( calculateHashSequence( rPassword, rSaltValue, nSpinCount, rAlgorithmName));
-
-    OUStringBuffer aBuf;
-    comphelper::Base64::encode( aBuf, aSeq);
-    return aBuf.makeStringAndClear();
 }
 
 }

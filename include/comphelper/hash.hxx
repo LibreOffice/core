@@ -12,8 +12,6 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
-
 #include <memory>
 #include <vector>
 
@@ -73,7 +71,7 @@ public:
     /** Convenience function to calculate a salted hash with iterations.
 
         @param  rPassword
-                UTF-16LE encoded string without leading BOM character
+                UTF-16LE encoded string, hashed byte-wise as unsigned char.
 
         @param  rSaltValue
                 Salt that will be prepended to password data.
@@ -83,53 +81,6 @@ public:
             const std::vector<unsigned char>& rSaltValue,
             sal_uInt32 nSpinCount,
             HashType eType);
-
-    /** Convenience function to calculate a salted hash with iterations.
-
-        @param  rPassword
-                UTF-16LE encoded string without leading BOM character
-
-        @param  rSaltValue
-                Base64 encoded salt that will be decoded and prepended to password
-                data.
-
-        @param  rAlgorithmName
-                One of "SHA-512", "SHA-256", ... as listed in
-                https://msdn.microsoft.com/en-us/library/dd920692
-                that have a valid match in HashType. If not, an empty string is
-                returned. Not all algorithm names are supported.
-
-        @return the raw hash value as sal_Int8 sequence.
-     */
-    static css::uno::Sequence<sal_Int8> calculateHashSequence(
-            const rtl::OUString& rPassword,
-            const rtl::OUString& rSaltValue,
-            sal_uInt32 nSpinCount,
-            const rtl::OUString& rAlgorithmName);
-
-    /** Convenience function to calculate a salted hash with iterations.
-
-        @param  rPassword
-                UTF-16LE encoded string without leading BOM character
-
-        @param  rSaltValue
-                Base64 encoded salt that will be decoded and prepended to password
-                data.
-
-        @param  rAlgorithmName
-                One of "SHA-512", "SHA-256", ... as listed in
-                https://msdn.microsoft.com/en-us/library/dd920692
-                that have a valid match in HashType. If not, an empty string is
-                returned. Not all algorithm names are supported.
-
-        @return the base64 encoded string of the hash value, that can be
-                compared against a stored base64 encoded hash value.
-     */
-    static rtl::OUString calculateHashBase64(
-            const rtl::OUString& rPassword,
-            const rtl::OUString& rSaltValue,
-            sal_uInt32 nSpinCount,
-            const rtl::OUString& rAlgorithmName);
 
     size_t getLength() const;
 };

@@ -180,6 +180,65 @@ public:
                 const OUString& aString );
 
 
+    /** Convenience function to calculate a salted hash with iterations as
+        specified in https://msdn.microsoft.com/en-us/library/dd920692 for the
+        OOXML sheetProtection and fileSharing elements.
+
+        @param  rPassword
+                UTF-16LE encoded string without leading BOM character
+
+        @param  rSaltValue
+                Base64 encoded salt that will be decoded and prepended to password
+                data.
+
+        @param  nSpinCount
+                If >0 the number of repeated iterations.
+
+        @param  rAlgorithmName
+                One of "SHA-512", "SHA-256", ... as listed in
+                https://msdn.microsoft.com/en-us/library/dd920692
+                that have a valid match in HashType. If not, an empty string is
+                returned. Not all algorithm names are supported.
+
+        @return the raw hash value as sal_Int8 sequence.
+     */
+    static css::uno::Sequence<sal_Int8> GetOoxHashAsSequence(
+            const rtl::OUString& rPassword,
+            const rtl::OUString& rSaltValue,
+            sal_uInt32 nSpinCount,
+            const rtl::OUString& rAlgorithmName);
+
+
+    /** Convenience function to calculate a salted hash with iterations as
+        specified in https://msdn.microsoft.com/en-us/library/dd920692 for the
+        OOXML sheetProtection and fileSharing elements.
+
+        @param  rPassword
+                UTF-16LE encoded string without leading BOM character
+
+        @param  rSaltValue
+                Base64 encoded salt that will be decoded and prepended to password
+                data.
+
+        @param  nSpinCount
+                If >0 the number of repeated iterations.
+
+        @param  rAlgorithmName
+                One of "SHA-512", "SHA-256", ... as listed in
+                https://msdn.microsoft.com/en-us/library/dd920692
+                that have a valid match in HashType. If not, an empty string is
+                returned. Not all algorithm names are supported.
+
+        @return the base64 encoded string of the hash value, that can be
+                compared against a stored base64 encoded hash value.
+     */
+    static rtl::OUString GetOoxHashAsBase64(
+            const rtl::OUString& rPassword,
+            const rtl::OUString& rSaltValue,
+            sal_uInt32 nSpinCount,
+            const rtl::OUString& rAlgorithmName);
+
+
     /** This helper function generates a random sequence of bytes of
         requested length.
       */
