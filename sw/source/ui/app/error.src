@@ -43,7 +43,6 @@ StringArray RID_SW_ERRHDL
 {
     ItemList [ en-US ] =
     {
-        // Import-Errors
         < "File format error found." ; ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_FILE_FORMAT_ERROR ) ; >;
         < "Error reading file." ; ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_READ_ERROR ) ; >;
         < "Input file error." ; ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_INPUT_FILE ) ; >;
@@ -56,11 +55,9 @@ StringArray RID_SW_ERRHDL
         < "File has been written in a newer version." ; ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_NEW_VERSION ) ; >;
         < "This is not a valid WinWord97 file."; ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW8_NO_WW8_FILE_ERR ) ; >;
         < "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)."; ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_FILE_ROWCOL ) ; >;
-        // Export-Errors
         < "Error writing file." ; ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_WRITE_ERROR ) ; >;
         < "Wrong AutoText document version." ; ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_OLD_GLOSSARY ) ; >;
         < "Error in writing sub-document $(ARG1)."; ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_WRITE_ERROR_FILE ) ; >;
-        // Import-/Export-Errors
         < "Internal error in %PRODUCTNAME Writer file format." ; ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_INTERNAL_ERROR ) ; >;
         < "Internal error in %PRODUCTNAME Writer file format." ; ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_INTERNAL_ERROR ) ; >;
         < "$(ARG1) has changed." ; ERR_CODE ( ERRCODE_CLASS_LOCKING , ERR_TXTBLOCK_NEWFILE_ERROR ) ; >;

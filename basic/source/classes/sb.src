@@ -117,7 +117,6 @@ StringArray RID_BASIC_START
         < "Error executing a method." ; ERRCODE_BASIC_METHOD_FAILED & ERRCODE_RES_MASK ; >;
         < "Unable to set property." ; ERRCODE_BASIC_SETPROP_FAILED & ERRCODE_RES_MASK ; >;
         < "Unable to determine property." ; ERRCODE_BASIC_GETPROP_FAILED & ERRCODE_RES_MASK ; >;
-         // Compiler errors. These are not runtime errors.
         < "Unexpected symbol: $(ARG1)." ; ERRCODE_BASIC_UNEXPECTED & ERRCODE_RES_MASK ; >;
         < "Expected: $(ARG1)." ; ERRCODE_BASIC_EXPECTED & ERRCODE_RES_MASK ; >;
         < "Symbol expected." ; ERRCODE_BASIC_SYMBOL_EXPECTED & ERRCODE_RES_MASK ; >;

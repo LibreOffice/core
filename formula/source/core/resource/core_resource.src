@@ -37,7 +37,6 @@ StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
         < "CHOOSE" ; SC_OPCODE_CHOOSE; >;
         < "(" ; SC_OPCODE_OPEN; >;
         < ")" ; SC_OPCODE_CLOSE; >;
-        // SC_OPCODE_TABLE_REF_... not supported in ODFF
         < "{" ; SC_OPCODE_ARRAY_OPEN; >;
         < "}" ; SC_OPCODE_ARRAY_CLOSE; >;
         < "|" ; SC_OPCODE_ARRAY_ROW_SEP; >;
@@ -273,7 +272,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
         < "LOOKUP" ; SC_OPCODE_LOOKUP; >;
         < "VLOOKUP" ; SC_OPCODE_V_LOOKUP; >;
         < "HLOOKUP" ; SC_OPCODE_H_LOOKUP; >;
-        < "ORG.OPENOFFICE.MULTIRANGE" ; SC_OPCODE_MULTI_AREA; >;  // legacy for range list (union)
+        < "ORG.OPENOFFICE.MULTIRANGE" ; SC_OPCODE_MULTI_AREA; >;
         < "OFFSET" ; SC_OPCODE_OFFSET; >;
         < "INDEX" ; SC_OPCODE_INDEX; >;
         < "AREAS" ; SC_OPCODE_AREAS; >;
@@ -715,7 +714,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
         < "LOOKUP" ; SC_OPCODE_LOOKUP; >;
         < "VLOOKUP" ; SC_OPCODE_V_LOOKUP; >;
         < "HLOOKUP" ; SC_OPCODE_H_LOOKUP; >;
-        < "_xlfn.ORG.OPENOFFICE.MULTIRANGE" ; SC_OPCODE_MULTI_AREA; >;  // legacy for range list (union)
+        < "_xlfn.ORG.OPENOFFICE.MULTIRANGE" ; SC_OPCODE_MULTI_AREA; >;
         < "OFFSET" ; SC_OPCODE_OFFSET; >;
         < "INDEX" ; SC_OPCODE_INDEX; >;
         < "AREAS" ; SC_OPCODE_AREAS; >;
@@ -1115,7 +1114,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF
         < "DDB" ; SC_OPCODE_DDB; >;
         < "DB" ; SC_OPCODE_DB; >;
         < "VDB" ; SC_OPCODE_VBD; >;
-        < "DURATION" ; SC_OPCODE_PDURATION; >;  // wrong but ODF1.1, keep it.
+        < "DURATION" ; SC_OPCODE_PDURATION; >;
         < "SLN" ; SC_OPCODE_SLN; >;
         < "PMT" ; SC_OPCODE_PMT; >;
         < "COLUMNS" ; SC_OPCODE_COLUMNS; >;
@@ -1160,7 +1159,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF
         < "LOOKUP" ; SC_OPCODE_LOOKUP; >;
         < "VLOOKUP" ; SC_OPCODE_V_LOOKUP; >;
         < "HLOOKUP" ; SC_OPCODE_H_LOOKUP; >;
-        < "MULTIRANGE" ; SC_OPCODE_MULTI_AREA; >;    // legacy for range list (union)
+        < "MULTIRANGE" ; SC_OPCODE_MULTI_AREA; >;
         < "OFFSET" ; SC_OPCODE_OFFSET; >;
         < "INDEX" ; SC_OPCODE_INDEX; >;
         < "AREAS" ; SC_OPCODE_AREAS; >;
@@ -1310,7 +1309,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF
         < "DDE" ; SC_OPCODE_DDE; >;
         < "BASE" ; SC_OPCODE_BASE; >;
         < "DECIMAL" ; SC_OPCODE_DECIMAL; >;
-        < "CONVERT" ; SC_OPCODE_CONVERT_OOO; >; // wrong but ODF1.1, keep it
+        < "CONVERT" ; SC_OPCODE_CONVERT_OOO; >;
         < "ROMAN" ; SC_OPCODE_ROMAN; >;
         < "ARABIC" ; SC_OPCODE_ARABIC; >;
         < "HYPERLINK" ; SC_OPCODE_HYPERLINK; >;
@@ -1606,9 +1605,9 @@ StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_API
         < "LOOKUP" ; SC_OPCODE_LOOKUP; >;
         < "VLOOKUP" ; SC_OPCODE_V_LOOKUP; >;
         < "HLOOKUP" ; SC_OPCODE_H_LOOKUP; >;
-        < "MULTIRANGE" ; SC_OPCODE_MULTI_AREA; >; // legacy for range list (union)
+        < "MULTIRANGE" ; SC_OPCODE_MULTI_AREA; >;
         < "OFFSET" ; SC_OPCODE_OFFSET; >;
-        < "INDEX" ; SC_OPCODE_INDEX; >; // ?? erstes Zeichen = I ??
+        < "INDEX" ; SC_OPCODE_INDEX; >;
         < "AREAS" ; SC_OPCODE_AREAS; >;
         < "DOLLAR" ; SC_OPCODE_CURRENCY; >;
         < "REPLACE" ; SC_OPCODE_REPLACE; >;
@@ -2261,7 +2260,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES
         < "XOR" ; SC_OPCODE_XOR ; >;
         < "NOT" ; SC_OPCODE_NOT ; >;
         < "NEG" ; SC_OPCODE_NEG ; >;
-        < "PI" ; SC_OPCODE_PI ; >; // ???
+        < "PI" ; SC_OPCODE_PI ; >;
         < "RAND" ; SC_OPCODE_RANDOM ; >;
         < "TRUE" ; SC_OPCODE_TRUE ; >;
         < "FALSE" ; SC_OPCODE_FALSE ; >;
@@ -2470,9 +2469,9 @@ StringArray RID_STRLIST_FUNCTION_NAMES
         < "LOOKUP" ; SC_OPCODE_LOOKUP ; >;
         < "VLOOKUP" ; SC_OPCODE_V_LOOKUP ; >;
         < "HLOOKUP" ; SC_OPCODE_H_LOOKUP ; >;
-        < "MULTIRANGE" ; SC_OPCODE_MULTI_AREA ; >; // legacy for range list (union)
+        < "MULTIRANGE" ; SC_OPCODE_MULTI_AREA ; >;
         < "OFFSET" ; SC_OPCODE_OFFSET ; >;
-        < "INDEX" ; SC_OPCODE_INDEX ; >; // ?? erstes Zeichen = I ??
+        < "INDEX" ; SC_OPCODE_INDEX ; >;
         < "AREAS" ; SC_OPCODE_AREAS ; >;
         < "DOLLAR" ; SC_OPCODE_CURRENCY ; >;
         < "REPLACE" ; SC_OPCODE_REPLACE ; >;
