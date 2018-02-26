@@ -625,7 +625,7 @@ void OSQLMessageBox::Construct( MessBoxStyle _nStyle, MessageType _eImage )
             m_aInfoImage->SetImage(GetStandardInfoBoxImage());
             break;
         case Warning:
-            m_aInfoImage->SetImage(WarningBox::GetStandardImage());
+            m_aInfoImage->SetImage(GetStandardWarningBoxImage());
             break;
         case Error:
             m_aInfoImage->SetImage(GetStandardErrorBoxImage());

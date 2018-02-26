@@ -326,18 +326,18 @@ WarningBox::WarningBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits nWinB
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
-        SetText( GetStandardText() );
+        SetText(GetStandardWarningBoxText());
 
-    SetImage( WarningBox::GetStandardImage() );
+    SetImage(GetStandardWarningBoxImage() );
 }
 
-Image const & WarningBox::GetStandardImage()
+Image const & GetStandardWarningBoxImage()
 {
     ImplInitMsgBoxImageList();
     return ImplGetSVData()->maWinData.maMsgBoxImgList[2];
 }
 
-OUString WarningBox::GetStandardText()
+OUString GetStandardWarningBoxText()
 {
     return VclResId(SV_MSGBOX_WARNING);
 }

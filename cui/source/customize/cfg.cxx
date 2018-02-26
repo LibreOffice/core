@@ -3426,7 +3426,7 @@ SvxIconReplacementDialog::SvxIconReplacementDialog(
 MessBox( pWindow, MessBoxStyle::DefaultYes, 0, CuiResId( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING ) )
 
 {
-    SetImage( WarningBox::GetStandardImage() );
+    SetImage( GetStandardWarningBoxImage() );
     SetMessText( ReplaceIconName( aMessage ) );
     RemoveButton( 1 );
     AddButton( StandardButtonType::Yes, 2);
@@ -3439,7 +3439,7 @@ SvxIconReplacementDialog::SvxIconReplacementDialog(
     vcl::Window *pWindow, const OUString& aMessage )
     : MessBox( pWindow, MessBoxStyle::YesNoCancel, 0, CuiResId( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING ) )
 {
-    SetImage( WarningBox::GetStandardImage() );
+    SetImage( GetStandardWarningBoxImage() );
     SetMessText( ReplaceIconName( aMessage ));
 }
 

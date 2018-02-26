@@ -239,7 +239,7 @@ void SvxLineDefTabPage::CheckChanges_Impl()
         m_pLbType2->IsValueChangedFromSaved() ||
         m_pMtrDistance->IsValueChangedFromSaved() )
     {
-        Image aWarningBoxImage = WarningBox::GetStandardImage();
+        Image aWarningBoxImage = GetStandardWarningBoxImage();
         ScopedVclPtrInstance<SvxMessDialog> aMessDlg( GetParentDialog(),
                                                       SvxResId( RID_SVXSTR_LINESTYLE ),
                                                       CuiResId(RID_SVXSTR_ASK_CHANGE_LINESTYLE),
