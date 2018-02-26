@@ -19,13 +19,15 @@
 #ifndef INCLUDED_UUI_SOURCE_OPENLOCKED_HXX
 #define INCLUDED_UUI_SOURCE_OPENLOCKED_HXX
 
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
-class OpenLockedQueryBox : public MessBox
+class OpenLockedQueryBox
 {
+private:
+    std::unique_ptr<weld::MessageDialog> m_xQueryBox;
 public:
-    OpenLockedQueryBox(vcl::Window* pParent, const std::locale& rResLocale, const OUString& rMessage, bool bEnableOverride);
-    virtual ~OpenLockedQueryBox() override;
+    OpenLockedQueryBox(weld::Window* pParent, const std::locale& rResLocale, const OUString& rMessage, bool bEnableOverride);
+    short run() {  return m_xQueryBox->run(); }
 };
 
 #endif

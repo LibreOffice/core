@@ -7354,7 +7354,6 @@ include/svx/passwd.hxx
 include/svx/polygn3d.hxx
 include/svx/polypolygoneditor.hxx
 include/svx/postattr.hxx
-include/svx/prtqry.hxx
 include/svx/pszctrl.hxx
 include/svx/rectenum.hxx
 include/svx/relfld.hxx

@@ -19,13 +19,15 @@
 #ifndef INCLUDED_UUI_SOURCE_FILECHANGED_HXX
 #define INCLUDED_UUI_SOURCE_FILECHANGED_HXX
 
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
-class FileChangedQueryBox : public MessBox
+class FileChangedQueryBox
 {
+private:
+    std::unique_ptr<weld::MessageDialog> m_xQueryBox;
 public:
-    FileChangedQueryBox( vcl::Window* pParent, const std::locale& pResLocale );
-    virtual ~FileChangedQueryBox() override;
+    FileChangedQueryBox(weld::Window* pParent, const std::locale& pResLocale);
+    short run() { return m_xQueryBox->run(); }
 };
 
 #endif

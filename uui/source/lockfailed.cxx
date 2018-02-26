@@ -21,22 +21,16 @@
 #include "lockfailed.hxx"
 #include <unotools/resmgr.hxx>
 #include <vcl/button.hxx>
+#include <vcl/svapp.hxx>
 
-LockFailedQueryBox::LockFailedQueryBox(vcl::Window* pParent, const std::locale& rResLocale)
-    : MessBox(pParent, MessBoxStyle::NONE, 0, Translate::get(STR_LOCKFAILED_TITLE, rResLocale), OUString())
+LockFailedQueryBox::LockFailedQueryBox(weld::Window* pParent, const std::locale& rLocale)
+    : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Error,
+                  VclButtonsType::NONE, Translate::get(STR_LOCKFAILED_MSG, rLocale)))
 {
-    SetImage(GetStandardErrorBoxImage());
-
-    AddButton(Translate::get(STR_LOCKFAILED_OPENREADONLY_BTN, rResLocale), RET_OK,
-        ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
-
-    AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
-
-    SetMessText(Translate::get(STR_LOCKFAILED_MSG, rResLocale));
-}
-
-LockFailedQueryBox::~LockFailedQueryBox()
-{
+    m_xQueryBox->set_title(Translate::get(STR_LOCKFAILED_TITLE, rLocale));
+    m_xQueryBox->add_button(Translate::get(STR_LOCKFAILED_OPENREADONLY_BTN, rLocale), RET_OK);
+    m_xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+    m_xQueryBox->set_default_response(RET_OK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

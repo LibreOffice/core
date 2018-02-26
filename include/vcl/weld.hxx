@@ -45,6 +45,7 @@ public:
     virtual int get_text_height() const = 0;
     virtual Size get_pixel_size(const OUString& rText) const = 0;
     virtual OString get_buildable_name() const = 0;
+    virtual void set_help_id(const OString& rName) = 0;
     virtual OString get_help_id() const = 0;
     virtual Container* weld_parent() const = 0;
 
@@ -492,10 +493,6 @@ public:
     virtual TextView* weld_text_view(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Entry* weld_entry(const OString& id, bool bTakeOwnership = false) = 0;
     virtual DrawingArea* weld_drawing_area(const OString& id, bool bTakeOwnership = false) = 0;
-    OString get_help_id(const Widget& rWidget) const
-    {
-        return m_sHelpRoot + rWidget.get_buildable_name();
-    }
     virtual ~Builder() {}
 };
 }
