@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "da36d5c6_cf40d10a",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+        "patchSetId": 8
+      },
+      "lineNbr": 2656,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-26T13:47:18Z",
+      "side": 1,
+      "message": "this should be \"tracked changes\", grammatically?",
+      "revId": "86e3f95cff4d3dad48d64e50e0c4b05034fa7064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_af3b9d9b",
+        "filename": "sw/inc/IDocumentRedlineAccess.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-26T13:47:18Z",
+      "side": 1,
+      "message": "this is a view option, and IDocumentRedlineAccess is part of the model, so it does not belong here.\n\n(the stupid SetRedlineFlags has set a horrible precedent here, but as the comment says, \"MUSS noch optimiert werden!\")",
+      "revId": "86e3f95cff4d3dad48d64e50e0c4b05034fa7064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_8f36d9b2",
+        "filename": "sw/source/core/crsr/crstrvl.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-26T13:47:18Z",
+      "side": 1,
+      "message": "this is probably wrong - you will not only disable these tooltips, but also things like clicking on fields and hyperlinks.\n\nprobably you\u0027ll need to look at every caller of GetContentAtPos and do the check on the outside where necessary?",
+      "revId": "86e3f95cff4d3dad48d64e50e0c4b05034fa7064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_10b665dc",
         "filename": "sw/source/core/inc/DocumentRedlineManager.hxx",
         "patchSetId": 8
