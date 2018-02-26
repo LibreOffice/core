@@ -49,8 +49,7 @@ enum class SfxGroupId {
     Connector,
     Modify,
     Drawing,
-    Controls,
-    Navigation
+    Controls
 };
 
 // make it hashable for storing in maps
