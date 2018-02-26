@@ -377,17 +377,22 @@ class SdModelTestBaseXML
 {
 
 public:
+    std::shared_ptr<SvStream> parseExportStream(utl::TempFile const & rTempFile, const OUString& rStreamName)
+    {
+        // Read the stream we're interested in.
+        OUString const url(rTempFile.GetURL());
+        uno::Reference<packages::zip::XZipFileAccess2> const xZipNames(packages::zip::ZipFileAccess::createWithURL(
+                                                                        comphelper::getComponentContext(m_xSFactory), url));
+        uno::Reference<io::XInputStream> const xInputStream(xZipNames->getByName(rStreamName), uno::UNO_QUERY);
+        std::shared_ptr<SvStream> const pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+        return pStream;
+    }
+
     xmlDocPtr parseExport(utl::TempFile const & rTempFile, OUString const& rStreamName)
     {
-        OUString const url(rTempFile.GetURL());
-        uno::Reference<packages::zip::XZipFileAccess2> const xZipNames(
-            packages::zip::ZipFileAccess::createWithURL(
-                comphelper::getComponentContext(m_xSFactory), url));
-        uno::Reference<io::XInputStream> const xInputStream(
-            xZipNames->getByName(rStreamName), uno::UNO_QUERY);
-        std::unique_ptr<SvStream> const pStream(
-            utl::UcbStreamHelper::CreateStream(xInputStream, true));
+        std::shared_ptr<SvStream> const pStream(parseExportStream(rTempFile, rStreamName));
         xmlDocPtr const pXmlDoc = parseXmlStream(pStream.get());
+        OUString const url(rTempFile.GetURL());
         pXmlDoc->name = reinterpret_cast<char *>(xmlStrdup(
             reinterpret_cast<xmlChar const *>(OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr())));
         return pXmlDoc;
