@@ -39,7 +39,6 @@
 #include <sfx2/objsh.hxx>
 #include <unotools/bootstrap.hxx>
 #include <vcl/help.hxx>
-#include <vcl/weld.hxx>
 #include <vcl/builderfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <unotools/pathoptions.hxx>
