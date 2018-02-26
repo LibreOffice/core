@@ -40,12 +40,15 @@ class SwAsciiFilterDlg : public SfxModalDialog
     VclPtr<RadioButton>        m_pCRLF_RB;
     VclPtr<RadioButton>        m_pCR_RB;
     VclPtr<RadioButton>        m_pLF_RB;
+    VclPtr<CheckBox>           m_pIncludeBOM_CB;
     bool                m_bSaveLineStatus;
 
     DECL_LINK( CharSetSelHdl, ListBox&, void );
     DECL_LINK( LineEndHdl, RadioButton&, void );
     void SetCRLF( LineEnd eEnd );
     LineEnd GetCRLF() const;
+    void SetIncludeBOM( bool bIncludeBOM );
+    bool GetIncludeBOM() const;
 
 public:
     // CTOR:    for import - pStream is the inputstream
