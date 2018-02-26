@@ -30,7 +30,6 @@
 #include <svx/chrtitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/controldims.hxx>
 

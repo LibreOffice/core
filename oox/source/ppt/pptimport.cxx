@@ -25,8 +25,8 @@
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <osl/diagnose.h>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/strings.hrc>
@@ -169,8 +169,10 @@ bool PowerPointImport::importDocument()
         aWarning += SvxResId(RID_SVXSTR_WARN_MISSING_SMARTART);
 
         // Show it.
-        ScopedVclPtrInstance<WarningBox> pBox(nullptr, MessBoxStyle::Ok | MessBoxStyle::DefaultOk, aWarning);
-        pBox->Execute();
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(nullptr,
+                                                   VclMessageType::Warning, VclButtonsType::Ok,
+                                                   aWarning));
+        xWarn->run();
     }
 
     if(xUndoManager.is() && bWasUnLocked)

@@ -24,12 +24,9 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <datanavi.hxx>
 #include <fmservs.hxx>
-#include <vcl/msgbox.hxx>
-
 
 namespace svxform
 {
-
 
 #define PROPERTY_ID_BINDING             5724
 #define PROPERTY_ID_FORM_MODEL          5725

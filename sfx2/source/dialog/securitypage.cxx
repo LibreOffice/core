@@ -31,7 +31,7 @@
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/eitem.hxx>
 #include <svl/poolitem.hxx>
@@ -332,9 +332,12 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl, CheckBox&, void)
         bool bAlreadyDone = false;
         if (!m_bEndRedliningWarningDone)
         {
-            ScopedVclPtrInstance<WarningBox> aBox(m_rMyTabPage.GetParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultNo,
-                    m_aEndRedliningWarning );
-            if (aBox->Execute() != RET_YES)
+            vcl::Window* pWin = m_rMyTabPage.GetParent();
+            std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                       VclMessageType::Warning, VclButtonsType::YesNo,
+                                                       m_aEndRedliningWarning));
+            xWarn->set_default_response(RET_NO);
+            if (xWarn->run() != RET_YES)
                 bAlreadyDone = true;
             else
                 m_bEndRedliningWarningDone = true;

@@ -159,6 +159,8 @@ namespace o3tl
     template<> struct typed_flags<HiddenInformation> : is_typed_flags<HiddenInformation, 0x07> {};
 }
 
+namespace weld { class Window; }
+
 enum class HiddenWarningFact
 {
     WhenSaving = 0,
@@ -424,7 +426,7 @@ public:
 
     virtual bool                PrepareClose(bool bUI = true);
     virtual HiddenInformation   GetHiddenInformationState( HiddenInformation nStates );
-    sal_Int16                   QueryHiddenInformation( HiddenWarningFact eFact, vcl::Window* pParent );
+    sal_Int16                   QueryHiddenInformation( HiddenWarningFact eFact, weld::Window* pParent );
     bool                        IsSecurityOptOpenReadOnly() const;
     void                        SetSecurityOptOpenReadOnly( bool bOpenReadOnly );
 

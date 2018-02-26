@@ -28,7 +28,6 @@
 #include <svx/dialmgr.hxx>
 #include <rtl/math.hxx>
 #include <svtools/colrdlg.hxx>
-#include <vcl/msgbox.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/svddef.hxx>
 #include <vcl/builderfactory.hxx>

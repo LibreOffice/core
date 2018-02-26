@@ -28,7 +28,6 @@
 #include <comphelper/string.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/waitobj.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

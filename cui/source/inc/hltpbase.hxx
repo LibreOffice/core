@@ -31,7 +31,6 @@
 #include <svl/eitem.hxx>
 #include <svtools/transfer.hxx>
 #include <sfx2/dispatch.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svtools/inettbc.hxx>
 #include <vcl/timer.hxx>

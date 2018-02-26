@@ -32,7 +32,6 @@
 #include "svdfmtf.hxx"
 #include <svx/svdetc.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <vcl/msgbox.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/eeitem.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

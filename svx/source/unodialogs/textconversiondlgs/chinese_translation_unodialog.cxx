@@ -22,7 +22,6 @@
 #include "chinese_translationdialog.hxx"
 #include <vcl/svapp.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-#include <vcl/msgbox.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

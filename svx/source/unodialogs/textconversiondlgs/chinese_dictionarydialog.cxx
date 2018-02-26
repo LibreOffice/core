@@ -30,7 +30,6 @@
 #include <svtools/headbar.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>

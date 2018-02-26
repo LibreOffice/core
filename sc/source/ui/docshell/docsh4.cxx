@@ -43,7 +43,6 @@ using namespace ::com::sun::star;
 #include <svtools/sfxecode.hxx>
 #include <svx/ofaitem.hxx>
 #include <svl/whiter.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
@@ -619,10 +618,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if ( !pItem )
                     {
                         // no dialog on playing the macro
-                        ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(),
-                            MessBoxStyle::YesNo | MessBoxStyle::DefaultNo,
-                            ScGlobal::GetRscString( STR_END_REDLINING ) );
-                        bDo = ( aBox->Execute() == RET_YES );
+                        vcl::Window* pWin = GetActiveDialogParent();
+                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                   VclMessageType::Warning, VclButtonsType::YesNo,
+                                                                   ScGlobal::GetRscString(STR_END_REDLINING)));
+                        xWarn->set_default_response(RET_NO);
+                        bDo = (xWarn->run() == RET_YES );
                     }
 
                     if ( bDo )
@@ -684,10 +685,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     if ( nSlot == SID_DOCUMENT_COMPARE )
                     {   //! old changes trace will be lost
-                        ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(),
-                            MessBoxStyle::YesNo | MessBoxStyle::DefaultNo,
-                            ScGlobal::GetRscString( STR_END_REDLINING ) );
-                        if( aBox->Execute() == RET_YES )
+                        vcl::Window* pWin = GetActiveDialogParent();
+                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                   VclMessageType::Warning, VclButtonsType::YesNo,
+                                                                   ScGlobal::GetRscString(STR_END_REDLINING)));
+                        xWarn->set_default_response(RET_NO);
+                        if (xWarn->run() == RET_YES)
                             bDo = ExecuteChangeProtectionDialog( true );
                         else
                             bDo = false;
@@ -1071,16 +1074,21 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                         OUString aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_TRY_LATER ) );
                                         aMessage = aMessage.replaceFirst( "%1", aUserName );
 
-                                        ScopedVclPtrInstance< WarningBox > aBox( GetActiveDialogParent(), MessBoxStyle::Ok, aMessage );
-                                        aBox->Execute();
+                                        vcl::Window* pWin = GetActiveDialogParent();
+                                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                                   VclMessageType::Warning, VclButtonsType::Ok,
+                                                                                   aMessage));
+                                        xWarn->run();
                                     }
                                     else
                                     {
-                                        ScopedVclPtrInstance<WarningBox> aBox(
-                                            GetActiveDialogParent(),
-                                            MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
-                                            ScGlobal::GetRscString( STR_DOC_DISABLESHARED ) );
-                                        if ( aBox->Execute() == RET_YES )
+                                        vcl::Window* pWin = GetActiveDialogParent();
+                                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                                   VclMessageType::Warning, VclButtonsType::YesNo,
+                                                                                   ScGlobal::GetRscString(STR_DOC_DISABLESHARED)));
+                                        xWarn->set_default_response(RET_YES);
+
+                                        if (xWarn->run() == RET_YES)
                                         {
                                             xCloseable->close( true );
 
@@ -1112,9 +1120,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 else
                                 {
                                     xCloseable->close( true );
-                                    ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(), MessBoxStyle::Ok,
-                                        ScGlobal::GetRscString( STR_DOC_NOLONGERSHARED ) );
-                                    aBox->Execute();
+                                    vcl::Window* pWin = GetActiveDialogParent();
+                                    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                               VclMessageType::Warning, VclButtonsType::Ok,
+                                                                               ScGlobal::GetRscString(STR_DOC_NOLONGERSHARED)));
+                                    xWarn->run();
                                 }
                             }
                             catch ( uno::Exception& )

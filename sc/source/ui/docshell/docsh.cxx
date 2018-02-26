@@ -25,7 +25,6 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
 #include <formula/errorcodes.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
@@ -867,8 +866,14 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             OUString aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_SAVE_LATER ) );
                                             aMessage = aMessage.replaceFirst( "%1", aUserName );
 
-                                            ScopedVclPtrInstance< WarningBox > aBox( GetActiveDialogParent(), MessBoxStyle::RetryCancel | MessBoxStyle::DefaultRetry, aMessage );
-                                            if ( aBox->Execute() == RET_RETRY )
+                                            vcl::Window* pWin = GetActiveDialogParent();
+                                            std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                                       VclMessageType::Warning, VclButtonsType::NONE,
+                                                                                       aMessage));
+                                            xWarn->add_button(Button::GetStandardText(StandardButtonType::Retry), RET_RETRY);
+                                            xWarn->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+                                            xWarn->set_default_response(RET_RETRY);
+                                            if (xWarn->run() == RET_RETRY)
                                             {
                                                 bRetry = true;
                                             }
@@ -942,9 +947,11 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     }
                                     else
                                     {
-                                        ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(), MessBoxStyle::Ok,
-                                            ScGlobal::GetRscString( STR_DOC_NOLONGERSHARED ) );
-                                        aBox->Execute();
+                                        vcl::Window* pWin = GetActiveDialogParent();
+                                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                                   VclMessageType::Warning, VclButtonsType::Ok,
+                                                                                   ScGlobal::GetRscString(STR_DOC_NOLONGERSHARED)));
+                                        xWarn->run();
 
                                         SfxBindings* pBindings = GetViewBindings();
                                         if ( pBindings )
@@ -983,10 +990,11 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 {
                     if ( GetDocument().GetExternalRefManager()->containsUnsavedReferences() )
                     {
-                        ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(), MessBoxStyle::YesNo,
-                                ScGlobal::GetRscString( STR_UNSAVED_EXT_REF ) );
-
-                        if( RET_NO == aBox->Execute())
+                        vcl::Window* pWin = GetActiveDialogParent();
+                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                   VclMessageType::Warning, VclButtonsType::YesNo,
+                                                                   ScGlobal::GetRscString(STR_UNSAVED_EXT_REF)));
+                        if (RET_NO == xWarn->run())
                         {
                             SetError(ERRCODE_IO_ABORT); // this error code will produce no error message, but will break the further saving process
                         }

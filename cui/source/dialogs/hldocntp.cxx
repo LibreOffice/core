@@ -25,7 +25,8 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Exception.hpp>
-#include <vcl/image.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
@@ -276,8 +277,10 @@ bool SvxHyperlinkNewDocTp::AskApply()
     bool bRet = ImplGetURLObject( m_pCbbPath->GetText(), m_pCbbPath->GetBaseURL(), aINetURLObject );
     if ( !bRet )
     {
-        ScopedVclPtrInstance< WarningBox > aWarning( this, MessBoxStyle::Ok, CuiResId(RID_SVXSTR_HYPDLG_NOVALIDFILENAME) );
-        aWarning->Execute();
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+                                                   VclMessageType::Warning, VclButtonsType::Ok,
+                                                   CuiResId(RID_SVXSTR_HYPDLG_NOVALIDFILENAME)));
+        xWarn->run();
     }
     return bRet;
 }
@@ -324,8 +327,10 @@ void SvxHyperlinkNewDocTp::DoApply ()
 
                 if( bOk )
                 {
-                    ScopedVclPtrInstance<WarningBox> aWarning( this, MessBoxStyle::YesNo, CuiResId(RID_SVXSTR_HYPERDLG_QUERYOVERWRITE) );
-                    bCreate = aWarning->Execute() == RET_YES;
+                    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+                                                               VclMessageType::Warning, VclButtonsType::YesNo,
+                                                               CuiResId(RID_SVXSTR_HYPERDLG_QUERYOVERWRITE)));
+                    bCreate = xWarn->run() == RET_YES;
                 }
             }
 

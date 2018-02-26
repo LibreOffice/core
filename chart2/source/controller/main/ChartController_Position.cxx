@@ -31,7 +31,6 @@
 #include <CommonConverters.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
 
-#include <vcl/msgbox.hxx>
 #include <svx/svxids.hrc>
 #include <svx/rectenum.hxx>
 #include <svl/aeitem.hxx>

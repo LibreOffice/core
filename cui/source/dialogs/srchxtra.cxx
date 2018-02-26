@@ -18,7 +18,6 @@
  */
 
 #include <srchxtra.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/objsh.hxx>

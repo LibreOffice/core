@@ -21,7 +21,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/module.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/graph.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>

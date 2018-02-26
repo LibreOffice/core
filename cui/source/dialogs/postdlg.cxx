@@ -20,7 +20,6 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>

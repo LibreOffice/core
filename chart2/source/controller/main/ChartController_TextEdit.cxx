@@ -31,7 +31,6 @@
 #include <chartview/DrawModelWrapper.hxx>
 
 #include <svx/svdotext.hxx>
-#include <vcl/msgbox.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>

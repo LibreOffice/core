@@ -16,7 +16,8 @@
 #include <svx/colorbox.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 namespace {
 
@@ -256,8 +257,10 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl, Button*, void )
     if(bWarn)
     {
         //show warning message and don't close
-        ScopedVclPtrInstance< WarningBox > aWarn(this, MessBoxStyle::Ok, maStrWarnSameValue );
-        aWarn->Execute();
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+                                                   VclMessageType::Warning, VclButtonsType::Ok,
+                                                   maStrWarnSameValue));
+        xWarn->run();
     }
     else
     {

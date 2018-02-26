@@ -25,7 +25,6 @@
 
 #include <algorithm>
 #include <vcl/controllayout.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/decoview.hxx>
 #include <unotools/lingucfg.hxx>

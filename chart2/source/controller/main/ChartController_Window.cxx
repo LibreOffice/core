@@ -72,7 +72,6 @@
 #include <svx/svddrgmt.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/math.hxx>
 #include <svtools/acceleratorexecute.hxx>

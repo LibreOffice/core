@@ -31,7 +31,6 @@
 #include <ViewShell.hxx>
 #include <fuzoom.hxx>
 
-#include <vcl/msgbox.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>

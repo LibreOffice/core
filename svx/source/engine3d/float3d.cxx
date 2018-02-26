@@ -25,7 +25,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>
 #include <svtools/colrdlg.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/xflclit.hxx>

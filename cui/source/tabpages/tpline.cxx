@@ -42,7 +42,6 @@
 #include <svx/svdview.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/numvset.hxx>
-#include <vcl/msgbox.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <sfx2/objsh.hxx>
