@@ -251,8 +251,6 @@ void TableManager::endParagraphGroup()
 
     if (mnTableDepth > 0)
     {
-        TableData::Pointer_t pTableData = mTableDataStack.top();
-
         if (isRowEnd())
         {
             endOfRowAction();
