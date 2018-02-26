@@ -68,14 +68,15 @@ Sequence< ::Property > SAL_CALL MasterPropertySetInfo::getProperties()
         maProperties.realloc ( nSize );
         Property* pProperties = maProperties.getArray();
 
-        for (PropertyDataHash::const_iterator aIter(maMap.begin()), aEnd(maMap.end()) ; aIter != aEnd; ++aIter, ++pProperties)
+        for (auto const& elem : maMap)
         {
-            PropertyInfo const * pInfo = (*aIter).second->mpInfo;
+            PropertyInfo const * pInfo = elem.second->mpInfo;
 
             pProperties->Name = pInfo->maName;
             pProperties->Handle = pInfo->mnHandle;
             pProperties->Type = pInfo->maType;
             pProperties->Attributes = pInfo->mnAttributes;
+            ++pProperties;
         }
     }
     return maProperties;

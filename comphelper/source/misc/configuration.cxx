@@ -229,10 +229,10 @@ void comphelper::ConfigurationListener::removeListener(ConfigurationListenerProp
 
 void comphelper::ConfigurationListener::dispose()
 {
-    for (auto it = maListeners.begin(); it != maListeners.end(); ++it)
+    for (auto const& listener : maListeners)
     {
-        mxConfig->removePropertyChangeListener( (*it)->maName, this );
-        (*it)->dispose();
+        mxConfig->removePropertyChangeListener( listener->maName, this );
+        listener->dispose();
     }
     maListeners.clear();
 }
@@ -252,13 +252,13 @@ void SAL_CALL comphelper::ConfigurationListener::propertyChange(
         comphelper::SolarMutex::get() );
 
     assert( rEvt.Source == mxConfig );
-    for ( auto it = maListeners.begin(); it != maListeners.end(); ++it )
+    for (auto const& listener : maListeners)
     {
-        if ( (*it)->maName == rEvt.PropertyName )
+        if ( listener->maName == rEvt.PropertyName )
         {
             // ignore rEvt.NewValue - in theory it could be stale => not set.
-            css::uno::Any aValue = mxConfig->getPropertyValue( (*it)->maName );
-            (*it)->setProperty( aValue );
+            css::uno::Any aValue = mxConfig->getPropertyValue( listener->maName );
+            listener->setProperty( aValue );
         }
     }
 }

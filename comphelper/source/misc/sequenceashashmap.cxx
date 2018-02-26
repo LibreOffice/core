@@ -204,13 +204,10 @@ const css::uno::Sequence< css::beans::PropertyValue > SequenceAsHashMap::getAsCo
 
 bool SequenceAsHashMap::match(const SequenceAsHashMap& rCheck) const
 {
-    const_iterator pCheck;
-    for (  pCheck  = rCheck.begin();
-           pCheck != rCheck.end()  ;
-         ++pCheck                  )
+    for (auto const& elem : rCheck)
     {
-        const OUString& sCheckName  = pCheck->first;
-        const css::uno::Any&   aCheckValue = pCheck->second;
+        const OUString& sCheckName  = elem.first;
+        const css::uno::Any&   aCheckValue = elem.second;
               const_iterator   pFound      = find(sCheckName);
 
         if (pFound == end())
@@ -226,13 +223,10 @@ bool SequenceAsHashMap::match(const SequenceAsHashMap& rCheck) const
 
 void SequenceAsHashMap::update(const SequenceAsHashMap& rUpdate)
 {
-    const_iterator pUpdate;
-    for (  pUpdate  = rUpdate.begin();
-           pUpdate != rUpdate.end()  ;
-         ++pUpdate                   )
+    for (auto const& elem : rUpdate)
     {
-        const OUString& sName  = pUpdate->first;
-        const css::uno::Any&   aValue = pUpdate->second;
+        const OUString& sName  = elem.first;
+        const css::uno::Any&   aValue = elem.second;
 
         (*this)[sName] = aValue;
     }

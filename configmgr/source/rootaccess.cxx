@@ -80,13 +80,12 @@ void RootAccess::initBroadcaster(
         modifications, broadcaster, changesListeners_.empty() ? nullptr : &changes);
     if (!changes.empty()) {
         css::util::ChangesSet set(comphelper::containerToSequence(changes));
-        for (ChangesListeners::iterator i(changesListeners_.begin());
-             i != changesListeners_.end(); ++i)
+        for (auto const& changesListener : changesListeners_)
         {
             cppu::OWeakObject* pSource = static_cast< cppu::OWeakObject * >(this);
             css::uno::Reference< css::uno::XInterface > xBase( pSource, css::uno::UNO_QUERY );
             broadcaster->addChangesNotification(
-                *i,
+                changesListener,
                 css::util::ChangesEvent(
                     pSource, css::uno::Any( xBase ), set));
         }
@@ -267,11 +266,10 @@ void RootAccess::addSupportedServiceNames(
 
 void RootAccess::initDisposeBroadcaster(Broadcaster * broadcaster) {
     assert(broadcaster != nullptr);
-    for (ChangesListeners::iterator i(changesListeners_.begin());
-         i != changesListeners_.end(); ++i)
+    for (auto const& changesListener : changesListeners_)
     {
         broadcaster->addDisposeNotification(
-            i->get(),
+            changesListener.get(),
             css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
     }
     Access::initDisposeBroadcaster(broadcaster);
