@@ -85,6 +85,8 @@ SwASCWriter::~SwASCWriter() {}
 
 ErrCode SwASCWriter::WriteStream()
 {
+    bool bIncludeBOM = GetAsciiOptions().GetIncludeBOM();
+
     if( bASCII_ParaAsCR )           // If predefined
         m_sLineEnd = "\015";
     else if( bASCII_ParaAsBlanc )
@@ -154,15 +156,31 @@ ErrCode SwASCWriter::WriteStream()
                         switch(GetAsciiOptions().GetCharSet())
                         {
                             case RTL_TEXTENCODING_UTF8:
-                                Strm().WriteUChar( 0xEF ).WriteUChar( 0xBB ).WriteUChar( 0xBF );
+
+                                // Byte order mark
+                                if( bIncludeBOM )
+                                {
+                                    Strm().WriteUChar( 0xEF ).WriteUChar( 0xBB ).WriteUChar( 0xBF );
+                                }
+
                                 break;
                             case RTL_TEXTENCODING_UCS2:
 #ifdef OSL_LITENDIAN
                                 Strm().SetEndian(SvStreamEndian::LITTLE);
-                                Strm().WriteUChar( 0xFF ).WriteUChar( 0xFE );
+
+                                // Byte order mark
+                                if( bIncludeBOM )
+                                {
+                                    Strm().WriteUChar( 0xFF ).WriteUChar( 0xFE );
+                                }
 #else
                                 Strm().SetEndian(SvStreamEndian::BIG);
-                                Strm().WriteUChar( 0xFE ).WriteUChar( 0xFF );
+
+                                // Byte order mark
+                                if( bIncludeBOM )
+                                {
+                                    Strm().WriteUChar( 0xFE ).WriteUChar( 0xFF );
+                                }
 #endif
                                 break;
 

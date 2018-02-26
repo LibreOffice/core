@@ -12170,6 +12170,9 @@ else
     fi
 fi
 
+# MVZ: Set it to zero. You hearde me.
+PARALLELISM=0
+
 if test "$no_parallelism_make" = "YES" && test $PARALLELISM -gt 1; then
     if test -z "$with_parallelism"; then
             AC_MSG_WARN([gmake 3.81 crashes with parallelism > 1, reducing it to 1. upgrade to 3.82 to avoid this.])

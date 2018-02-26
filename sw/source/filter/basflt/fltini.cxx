@@ -573,6 +573,7 @@ OUString NameFromCharSet(rtl_TextEncoding nChrSet)
 //      2. LineEnd - as CR/LR/CRLF
 //      3. Fontname
 //      4. Language
+//      5. Whether to include byte-order-mark
 // the delimiter character is ","
 
 void SwAsciiOptions::ReadUserData( const OUString& rStr )
@@ -601,6 +602,9 @@ void SwAsciiOptions::ReadUserData( const OUString& rStr )
                 break;
             case 3:         // Language
                 nLanguage = LanguageTag::convertToLanguageTypeWithFallback( sToken );
+                break;
+            case 4:
+                bIncludeBOM = (sToken.equalsIgnoreAsciiCase("true"));
                 break;
             }
         }
@@ -635,6 +639,17 @@ void SwAsciiOptions::WriteUserData(OUString& rStr)
     if (nLanguage)
     {
         rStr += LanguageTag::convertToBcp47(nLanguage);
+    }
+    rStr += ",";
+
+    // 5. Whether to include byte-order-mark
+    if( bIncludeBOM )
+    {
+        rStr += "true";
+    }
+    else
+    {
+        rStr += "false";
     }
     rStr += ",";
 }
