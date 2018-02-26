@@ -23,7 +23,6 @@ StringArray RID_ERRHDLSC
 {
     ItemList [ en-US ] =
     {
-        // ERRORS -----------------------------------------------------
         < "Impossible to connect to the file." ;
           SCERR_IMPORT_CONNECT & ERRCODE_RES_MASK ; >;
         < "File could not be opened." ;
@@ -53,7 +52,6 @@ StringArray RID_ERRHDLSC
         < "File format error found at $(ARG1)(row,col)." ;
           SCERR_IMPORT_FORMAT_ROWCOL & ERRCODE_RES_MASK ; >;
 
-        // Export ----------------------------------------------------
         < "Connection to the file could not be established." ;
           SCERR_EXPORT_CONNECT & ERRCODE_RES_MASK ; >;
         < "Data could not be written." ;
@@ -65,7 +63,6 @@ StringArray RID_ERRHDLSC
         < "Cell $(ARG1) contains a string that is longer in the selected target character set \"$(ARG2)\" than the given field width." ;
           SCERR_EXPORT_FIELDWIDTH & ERRCODE_RES_MASK ; >;
 
-        // WARNINGS ---------------------------------------------------
         < "Only the active sheet was saved." ;
           SCWARN_EXPORT_ASCII & ERRCODE_RES_MASK ; >;
         < "The maximum number of rows has been exceeded. Excess rows were not imported!" ;
