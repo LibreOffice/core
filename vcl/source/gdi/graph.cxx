@@ -288,6 +288,11 @@ bool Graphic::operator!() const
     return (GraphicType::NONE == mxImpGraphic->ImplGetType());
 }
 
+Graphic::operator bool() const
+{
+    return GraphicType::NONE != mxImpGraphic->ImplGetType();
+}
+
 void Graphic::Clear()
 {
     ImplTestRefCount();
