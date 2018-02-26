@@ -30,7 +30,6 @@
 #include <svx/fmpage.hxx>
 #include <svx/fmshell.hxx>
 #include <editeng/sizeitem.hxx>
-#include <svx/prtqry.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>

@@ -258,6 +258,11 @@ public:
         return m_xWidget->get_id().toUtf8();
     }
 
+    virtual void set_help_id(const OString& rId) override
+    {
+        return m_xWidget->SetHelpId(rId);
+    }
+
     virtual OString get_help_id() const override
     {
         return m_xWidget->GetHelpId();

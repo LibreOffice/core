@@ -635,21 +635,6 @@ public:
     DECL_LINK( DeleteHdl, Button *, void );
 };
 
-class SvxIconReplacementDialog : public MessBox
-{
-public:
-    SvxIconReplacementDialog(
-        vcl::Window *pWindow,
-        const OUString& aMessage,
-        bool aYestoAll);
-
-    SvxIconReplacementDialog(
-        vcl::Window *pWindow,
-        const OUString& aMessage );
-
-    static OUString ReplaceIconName( const OUString& );
-    sal_uInt16 ShowDialog();
-};
 //added for issue83555
 class SvxIconChangeDialog : public ModalDialog
 {

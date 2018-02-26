@@ -3242,6 +3242,42 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
     return bResult;
 }
 
+namespace
+{
+    OUString ReplaceIconName(const OUString& rMessage)
+    {
+        OUString name;
+        OUString message = CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING );
+        OUString placeholder("%ICONNAME" );
+        sal_Int32 pos = message.indexOf( placeholder );
+        if ( pos != -1 )
+        {
+            name = message.replaceAt(
+                pos, placeholder.getLength(), rMessage );
+        }
+        return name;
+    }
+
+    class SvxIconReplacementDialog
+    {
+    private:
+        std::unique_ptr<weld::MessageDialog> m_xQueryBox;
+    public:
+        SvxIconReplacementDialog(weld::Window *pParent, const OUString& rMessage, bool bYestoAll)
+            : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Warning, VclButtonsType::NONE, ReplaceIconName(rMessage)))
+        {
+            m_xQueryBox->set_title(CuiResId(RID_SVXSTR_REPLACE_ICON_CONFIRM));
+            m_xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Yes), 2);
+            if (bYestoAll)
+                m_xQueryBox->add_button(CuiResId(RID_SVXSTR_YESTOALL), 5);
+            m_xQueryBox->add_button(Button::GetStandardText(StandardButtonType::No), 4);
+            m_xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), 6);
+            m_xQueryBox->set_default_response(2);
+        }
+        short run() { return m_xQueryBox->run(); }
+    };
+}
+
 void SvxIconSelectorDialog::ImportGraphics(
     const uno::Sequence< OUString >& rPaths )
 {
@@ -3260,7 +3296,8 @@ void SvxIconSelectorDialog::ImportGraphics(
         {
             aIndex = rPaths[0].lastIndexOf( '/' );
             aIconName = rPaths[0].copy( aIndex+1 );
-            ret = ScopedVclPtrInstance<SvxIconReplacementDialog>(this, aIconName)->ShowDialog();
+            SvxIconReplacementDialog aDlg(GetFrameWeld(), aIconName, false);
+            ret = aDlg.run();
             if ( ret == 2 )
             {
                 ReplaceGraphicItem( rPaths[0] );
@@ -3288,7 +3325,8 @@ void SvxIconSelectorDialog::ImportGraphics(
             {
                 aIndex = rPaths[i].lastIndexOf( '/' );
                 aIconName = rPaths[i].copy( aIndex+1 );
-                ret = ScopedVclPtrInstance<SvxIconReplacementDialog>(this, aIconName, true)->ShowDialog();
+                SvxIconReplacementDialog aDlg(GetFrameWeld(), aIconName, true);
+                ret = aDlg.run();
                 if ( ret == 2 )
                 {
                     ReplaceGraphicItem( aPath );
@@ -3418,53 +3456,6 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
     return result;
 }
 
-/*******************************************************************************
-*
-* The SvxIconReplacementDialog class
-*
-*******************************************************************************/
-SvxIconReplacementDialog::SvxIconReplacementDialog(
-    vcl::Window *pWindow, const OUString& aMessage, bool /*bYestoAll*/ )
-    :
-MessBox( pWindow, MessBoxStyle::DefaultYes, 0, CuiResId( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING ) )
-
-{
-    SetImage( GetStandardWarningBoxImage() );
-    SetMessText( ReplaceIconName( aMessage ) );
-    RemoveButton( 1 );
-    AddButton( StandardButtonType::Yes, 2);
-    AddButton( CuiResId( RID_SVXSTR_YESTOALL ), 5);
-    AddButton( StandardButtonType::No, 3);
-    AddButton( StandardButtonType::Cancel, 4);
-}
-
-SvxIconReplacementDialog::SvxIconReplacementDialog(
-    vcl::Window *pWindow, const OUString& aMessage )
-    : MessBox( pWindow, MessBoxStyle::YesNoCancel, 0, CuiResId( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING ) )
-{
-    SetImage( GetStandardWarningBoxImage() );
-    SetMessText( ReplaceIconName( aMessage ));
-}
-
-OUString SvxIconReplacementDialog::ReplaceIconName( const OUString& rMessage )
-{
-    OUString name;
-    OUString message = CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING );
-    OUString placeholder("%ICONNAME" );
-    sal_Int32 pos = message.indexOf( placeholder );
-    if ( pos != -1 )
-    {
-        name = message.replaceAt(
-            pos, placeholder.getLength(), rMessage );
-    }
-    return name;
-}
-
-sal_uInt16 SvxIconReplacementDialog::ShowDialog()
-{
-    Execute();
-    return GetCurButtonId();
-}
 /*******************************************************************************
 *
 * The SvxIconChangeDialog class added for issue83555

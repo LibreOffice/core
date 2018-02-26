@@ -30,7 +30,8 @@
 #include <editeng/paperinf.hxx>
 #include <sfx2/dispatch.hxx>
 #include <unotools/misccfg.hxx>
-#include <svx/prtqry.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <svx/svdview.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -146,6 +147,27 @@ bool SwView::HasPrintOptionsPage() const
     return true;
 }
 
+namespace
+{
+    class SvxPrtQryBox
+    {
+    private:
+        std::unique_ptr<weld::MessageDialog> m_xQueryBox;
+    public:
+        SvxPrtQryBox(weld::Window* pParent)
+            : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Question, VclButtonsType::NONE, SvxResId(RID_SVXSTR_QRY_PRINT_MSG)))
+        {
+            m_xQueryBox->set_title(SvxResId(RID_SVXSTR_QRY_PRINT_TITLE));
+
+            m_xQueryBox->add_button(SvxResId(RID_SVXSTR_QRY_PRINT_SELECTION), RET_OK);
+            m_xQueryBox->add_button(SvxResId(RID_SVXSTR_QRY_PRINT_ALL), 2);
+            m_xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+            m_xQueryBox->set_default_response(RET_OK);
+        }
+        short run() { return m_xQueryBox->run(); }
+    };
+}
+
 // TabPage for application-specific print options
 
 VclPtr<SfxTabPage> SwView::CreatePrintOptionsPage(vcl::Window* pParent,
@@ -223,7 +245,8 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             {
                 if( pSh->IsSelection() || pSh->IsFrameSelected() || pSh->IsObjSelected() )
                 {
-                    short nBtn = ScopedVclPtrInstance<SvxPrtQryBox>(&GetEditWin())->Execute();
+                    SvxPrtQryBox aBox(GetEditWin().GetFrameWeld());
+                    short nBtn = aBox.run();
                     if( RET_CANCEL == nBtn )
                         return;
 

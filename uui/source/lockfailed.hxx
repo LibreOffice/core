@@ -19,13 +19,15 @@
 #ifndef INCLUDED_UUI_SOURCE_LOCKFAILED_HXX
 #define INCLUDED_UUI_SOURCE_LOCKFAILED_HXX
 
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
-class LockFailedQueryBox : public MessBox
+class LockFailedQueryBox
 {
+private:
+    std::unique_ptr<weld::MessageDialog> m_xQueryBox;
 public:
-    LockFailedQueryBox(vcl::Window* pParent, const std::locale& rResLocale);
-    virtual ~LockFailedQueryBox() override;
+    LockFailedQueryBox(weld::Window* pParent, const std::locale& rResLocale);
+    short run() { return m_xQueryBox->run(); }
 };
 
 #endif
