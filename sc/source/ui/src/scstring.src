@@ -824,6 +824,11 @@ String SCSTR_SELECT
     Text [ en-US ] = "Selection area";
 };
 
+String SCSTR_VALID_FORMULA
+{
+    Text [ en-US ] = "~Formula";
+};
+
 String STR_NOFORMULASPECIFIED
 {
     Text [ en-US ] = "No formula specified." ;
