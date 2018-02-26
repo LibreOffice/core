@@ -26,7 +26,6 @@
 #include <querycontroller.hxx>
 #include <strings.hrc>
 #include <stringconstants.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/types.hxx>

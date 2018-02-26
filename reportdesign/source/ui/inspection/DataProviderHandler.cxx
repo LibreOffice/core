@@ -24,7 +24,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <strings.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/syslocale.hxx>
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>

@@ -65,7 +65,6 @@
 #include <sfx2/docfile.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>

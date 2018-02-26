@@ -65,7 +65,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svl/stritem.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/simpleinteractionrequest.hxx>
 

@@ -25,7 +25,6 @@
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <svtools/accessibletable.hxx>
 #include <comphelper/types.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 
 namespace accessibility

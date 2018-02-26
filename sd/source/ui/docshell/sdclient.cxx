@@ -23,8 +23,6 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdpagv.hxx>
 
-#include <toolkit/helper/vclunohelper.hxx>
-
 #include <strings.hrc>
 #include <ViewShell.hxx>
 #include <DrawViewShell.hxx>

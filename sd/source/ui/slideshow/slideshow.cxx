@@ -32,7 +32,6 @@
 
 #include <sfx2/viewfrm.hxx>
 
-#include <toolkit/helper/vclunohelper.hxx>
 #include <svx/unoprov.hxx>
 
 #include <framework/FrameworkHelper.hxx>

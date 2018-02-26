@@ -23,7 +23,6 @@
 #include <strings.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/syslocale.hxx>
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

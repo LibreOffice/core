@@ -22,7 +22,6 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/unopolypolygon.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/syschild.hxx>

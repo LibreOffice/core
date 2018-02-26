@@ -40,7 +40,6 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/treelistentry.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <fpicker/strings.hrc>
 #include <svtools/helpids.h>

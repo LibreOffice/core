@@ -41,7 +41,6 @@
 
 #include <helpids.h>
 #include <dlgedfac.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 
 #define SECTION_OFFSET  3

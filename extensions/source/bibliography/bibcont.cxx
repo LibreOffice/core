@@ -19,7 +19,6 @@
 
 
 #include <cppuhelper/weak.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>

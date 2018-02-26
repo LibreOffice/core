@@ -60,7 +60,6 @@
 #include <svl/rngitem.hxx>
 
 #include <vcl/waitobj.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <svl/zforlist.hxx>
 #include <cppuhelper/queryinterface.hxx>

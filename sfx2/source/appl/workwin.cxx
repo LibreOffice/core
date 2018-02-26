@@ -39,7 +39,6 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>
 #include <tools/diagnose_ex.h>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>

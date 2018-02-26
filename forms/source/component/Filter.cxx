@@ -56,7 +56,6 @@
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <connectivity/predicateinput.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/stdtext.hxx>

@@ -50,7 +50,6 @@
 #include <unotools/charclass.hxx>
 #include <tools/multisel.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/saveopt.hxx>
 
 #include <float.h>

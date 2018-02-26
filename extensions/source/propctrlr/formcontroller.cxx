@@ -27,7 +27,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/VetoException.hpp>
 #include <cppuhelper/typeprovider.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 
 extern "C" void createRegistryInfo_FormController()

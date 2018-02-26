@@ -27,7 +27,6 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 
-#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/listenernotification.hxx>
 
 

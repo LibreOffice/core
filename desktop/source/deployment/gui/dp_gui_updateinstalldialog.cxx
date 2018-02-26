@@ -65,7 +65,6 @@
 #include <salhelper/thread.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <comphelper/anytostring.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <vector>
 

@@ -22,7 +22,6 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/combobox.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 
 namespace pcr

@@ -27,7 +27,6 @@
 #include <comphelper/extract.hxx>
 #include <stringconstants.hxx>
 #include <dbu_reghelper.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/property.hxx>
 
 extern "C" void createRegistryInfo_OColumnControlModel()

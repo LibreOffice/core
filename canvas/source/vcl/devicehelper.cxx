@@ -23,7 +23,6 @@
 #include <basegfx/utils/unopolypolygon.hxx>
 #include <canvas/canvastools.hxx>
 #include <rtl/instance.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>

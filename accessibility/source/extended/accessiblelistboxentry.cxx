@@ -40,7 +40,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <helper/accresmgr.hxx>
 #include <strings.hrc>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>

@@ -51,7 +51,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <svtools/borderhelper.hxx>
 #include <editeng/borderline.hxx>

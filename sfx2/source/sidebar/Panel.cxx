@@ -33,7 +33,6 @@
 #endif
 
 #include <tools/svborder.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/PosSize.hpp>

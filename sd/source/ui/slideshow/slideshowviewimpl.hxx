@@ -24,7 +24,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/listenernotification.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/WindowEvent.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>

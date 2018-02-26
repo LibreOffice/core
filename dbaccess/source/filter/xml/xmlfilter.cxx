@@ -52,7 +52,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <svtools/sfxecode.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
