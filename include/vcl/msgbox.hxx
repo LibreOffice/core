@@ -50,37 +50,6 @@ namespace o3tl {
     template<> struct typed_flags<MessBoxStyle> : is_typed_flags<MessBoxStyle, 0x3fff> {};
 }
 
-
-class VCL_DLLPUBLIC MessBox : public ButtonDialog
-{
-    VclPtr<VclMultiLineEdit>   mpVCLMultiLineEdit;
-    VclPtr<FixedImage>         mpFixedImage;
-    Image                      maImage;
-    bool                       mbHelpBtn;
-    MessBoxStyle               mnMessBoxStyle;
-
-protected:
-    OUString                   maMessText;
-
-    SAL_DLLPRIVATE void ImplInitButtons();
-    SAL_DLLPRIVATE void ImplPosControls();
-
-public:
-                        MessBox(vcl::Window* pParent, MessBoxStyle nMessBoxStyle, WinBits n,
-                                const OUString& rTitle, const OUString& rMessage);
-    virtual             ~MessBox() override;
-    virtual void        dispose() override;
-
-    virtual void        StateChanged( StateChangedType nStateChange ) override;
-
-    void                SetMessText( const OUString& rText ) { maMessText = rText; }
-    const OUString&     GetMessText() const { return maMessText; }
-
-    void                SetImage( const Image& rImage ) { maImage = rImage; }
-
-    virtual Size        GetOptimalSize() const override;
-};
-
 VCL_DLLPUBLIC Image const & GetStandardInfoBoxImage();
 VCL_DLLPUBLIC OUString GetStandardInfoBoxText();
 
