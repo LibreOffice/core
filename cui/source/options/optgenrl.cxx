@@ -329,6 +329,7 @@ void SvxGeneralTabPage::InitCryptography()
                  m_pSigningKeyLB->set_width_request(aSize.Width());
                  m_pEncryptionKeyLB->set_width_request(aSize.Width());
                  m_pEncryptToSelfCB->set_width_request(aSize.Width());
+                 m_pEncryptToSelfCB->set_height_request(aSize.Height());
              }
 
         }
