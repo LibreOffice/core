@@ -14,6 +14,7 @@
 #include <oox/helper/binaryoutputstream.hxx>
 
 #include <comphelper/hash.hxx>
+#include <comphelper/docpasswordhelper.hxx>
 
 namespace oox {
 namespace core {
@@ -76,35 +77,8 @@ void AgileEngine::calculateBlock(
 
 void AgileEngine::calculateHashFinal(const OUString& rPassword, std::vector<sal_uInt8>& aHashFinal)
 {
-    sal_Int32 saltSize = mInfo.saltSize;
-    std::vector<sal_uInt8>& salt = mInfo.saltValue;
-
-    sal_uInt32 passwordByteLength = rPassword.getLength() * 2;
-
-    std::vector<sal_uInt8> initialData(saltSize + passwordByteLength);
-    std::copy(salt.begin(), salt.end(), initialData.begin());
-
-    const sal_uInt8* passwordByteArray = reinterpret_cast<const sal_uInt8*>(rPassword.getStr());
-
-    std::copy(
-        passwordByteArray,
-        passwordByteArray + passwordByteLength,
-        initialData.begin() + saltSize);
-
-    std::vector<sal_uInt8> hash(mInfo.hashSize, 0);
-
-    hashCalc(hash, initialData, mInfo.hashAlgorithm);
-
-    std::vector<sal_uInt8> data(mInfo.hashSize + 4, 0);
-
-    for (sal_Int32 i = 0; i < mInfo.spinCount; i++)
-    {
-        ByteOrderConverter::writeLittleEndian(data.data(), i);
-        std::copy(hash.begin(), hash.end(), data.begin() + 4);
-        hashCalc(hash, data, mInfo.hashAlgorithm);
-    }
-
-    std::copy(hash.begin(), hash.end(), aHashFinal.begin());
+    aHashFinal = comphelper::DocPasswordHelper::GetOoxHashAsVector( rPassword, mInfo.saltValue,
+            mInfo.spinCount, comphelper::Hash::IterCount::PREPEND, mInfo.hashAlgorithm);
 }
 
 bool AgileEngine::generateEncryptionKey(const OUString& rPassword)
