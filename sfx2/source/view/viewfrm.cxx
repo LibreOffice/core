@@ -135,7 +135,6 @@ using ::com::sun::star::container::XIndexContainer;
 #include <sfx2/strings.hrc>
 #include "impviewframe.hxx"
 #include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
 
 #define SfxViewFrame
 #include <sfxslots.hxx>
