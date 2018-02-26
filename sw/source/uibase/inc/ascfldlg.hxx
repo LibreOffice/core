@@ -43,11 +43,15 @@ class SwAsciiFilterDlg : public SfxDialogController
     std::unique_ptr<weld::RadioButton> m_xCRLF_RB;
     std::unique_ptr<weld::RadioButton> m_xCR_RB;
     std::unique_ptr<weld::RadioButton> m_xLF_RB;
+    std::unique_ptr<weld::CheckButton> m_xIncludeBOM_CB;
 
     DECL_LINK(CharSetSelHdl, weld::ComboBox&, void);
     DECL_LINK(LineEndHdl, weld::ToggleButton&, void);
     void SetCRLF( LineEnd eEnd );
     LineEnd GetCRLF() const;
+    void SetIncludeBOM( bool bIncludeBOM );
+    bool GetIncludeBOM() const;
+    void UpdateIncludeBOMSensitiveState();
 
 public:
     // CTOR:    for import - pStream is the inputstream

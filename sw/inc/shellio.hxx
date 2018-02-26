@@ -66,6 +66,7 @@ class SW_DLLPUBLIC SwAsciiOptions
     rtl_TextEncoding eCharSet;
     LanguageType nLanguage;
     LineEnd eCRLF_Flag;
+    bool bIncludeBOM;   // Whether to include a byte-order-mark in the output.
 
 public:
 
@@ -81,12 +82,16 @@ public:
     LineEnd GetParaFlags() const { return eCRLF_Flag; }
     void SetParaFlags( LineEnd eVal ) { eCRLF_Flag = eVal; }
 
+    bool GetIncludeBOM() const { return bIncludeBOM; }
+    void SetIncludeBOM( bool bVal ) { bIncludeBOM = bVal; }
+
     void Reset()
     {
         sFont.clear();
         eCRLF_Flag = GetSystemLineEnd();
         eCharSet = ::osl_getThreadTextEncoding();
         nLanguage = LANGUAGE_SYSTEM;
+        bIncludeBOM = true;
     }
     // for the automatic conversion (mail/news/...)
     void ReadUserData( const OUString& );
