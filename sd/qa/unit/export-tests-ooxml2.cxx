@@ -132,6 +132,7 @@ public:
     void testTdf115394();
     void testTdf115394Zero();
     void testBulletsAsImage();
+    void testTdf111789();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -189,6 +190,7 @@ public:
     CPPUNIT_TEST(testTdf115394);
     CPPUNIT_TEST(testTdf115394Zero);
     CPPUNIT_TEST(testBulletsAsImage);
+    CPPUNIT_TEST(testTdf111789);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1495,6 +1497,43 @@ void SdOOXMLExportTest2::testBulletsAsImage()
         }
     }
     CPPUNIT_ASSERT_MESSAGE("No bitmap for the bullets", xBitmap.is());
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf111789()
+{
+    // Shadow properties were not exported for text shapes.
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf111789.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    // First text shape has some shadow
+    {
+        uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+        bool bHasShadow = false;
+        xShape->getPropertyValue("Shadow") >>= bHasShadow;
+        CPPUNIT_ASSERT(bHasShadow);
+        double fShadowDist = 0.0;
+        xShape->getPropertyValue("ShadowXDistance") >>= fShadowDist;
+        CPPUNIT_ASSERT_EQUAL(static_cast<double>(273), fShadowDist);
+        xShape->getPropertyValue("ShadowYDistance") >>= fShadowDist;
+        CPPUNIT_ASSERT_EQUAL(static_cast<double>(273), fShadowDist);
+        sal_Int32 nColor = 0;
+        xShape->getPropertyValue("ShadowColor") >>= nColor;
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xFF0000), nColor);
+        sal_Int32 nTransparency = 0;
+        xShape->getPropertyValue("ShadowTransparence") >>= nTransparency;
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7), nTransparency);
+    }
+
+    // Second text shape has no shadow
+    {
+        uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 1, 0, xDocShRef ) );
+        bool bHasShadow = false;
+        xShape->getPropertyValue("Shadow") >>= bHasShadow;
+        CPPUNIT_ASSERT(!bHasShadow);
+    }
 
     xDocShRef->DoClose();
 }
