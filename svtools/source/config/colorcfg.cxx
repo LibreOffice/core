@@ -396,7 +396,7 @@ ColorConfig::~ColorConfig()
 
 Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
 {
-    static const sal_Int32 aAutoColors[] =
+    static const Color aAutoColors[] =
     {
         COL_WHITE, // DOCCOLOR
         COL_LIGHTGRAY, // DOCBOUNDARIES

@@ -94,7 +94,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
     aBounds.setClosed(true);
 
     aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonColorPrimitive2D(
-                                        B2DPolyPolygon(aBounds), Color(COL_WHITE).getBColor()));
+                                        B2DPolyPolygon(aBounds), COL_WHITE.getBColor()));
 
     aSeq[2] = drawinglayer::primitive2d::Primitive2DReference( new FillGraphicPrimitive2D(
                                         createTranslateB2DHomMatrix(maPrev1Pos.X(),maPrev1Pos.Y()),

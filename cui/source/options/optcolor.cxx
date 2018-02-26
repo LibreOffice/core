@@ -431,7 +431,7 @@ void ColorConfigWindow_Impl::Entry::ColorChanged (
 ) {
     Color aColor = m_pColorList->GetSelectEntryColor();
     rValue.setColor(aColor.GetColor());
-    if (aColor.GetColor() == COL_AUTO)
+    if (aColor == COL_AUTO)
     {
         rValue.setColor(rValue.getDefaultColor());
     }
@@ -745,7 +745,7 @@ void ColorConfigWindow_Impl::DataChanged (DataChangedEvent const& rDCEvt)
     {
         StyleSettings const& rStyleSettings = GetSettings().GetStyleSettings();
         bool const bHighContrast = rStyleSettings.GetHighContrastMode();
-        Wallpaper const aBackWall(Color(bHighContrast ? COL_TRANSPARENT : COL_LIGHTGRAY));
+        Wallpaper const aBackWall(bHighContrast ? COL_TRANSPARENT : COL_LIGHTGRAY);
         for (auto const & i: vChapters)
             i->SetBackground(aBackWall);
         SetBackground(Wallpaper(rStyleSettings.GetWindowColor()));

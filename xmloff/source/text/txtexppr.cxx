@@ -1133,7 +1133,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     if( pCharHighlight && pCharBackground )
     {
         assert(pCharBackgroundTransparency); // always together
-        sal_uInt32 nColor = COL_TRANSPARENT;
+        Color nColor = COL_TRANSPARENT;
         pCharHighlight->maValue >>= nColor;
         if( nColor == COL_TRANSPARENT )
         {

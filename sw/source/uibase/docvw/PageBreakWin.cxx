@@ -192,9 +192,9 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
     aTriangle.append(B2DPoint((nLeft + nRight) / 2.0, nBottom));
     aTriangle.setClosed(true);
 
-    BColor aTriangleColor = Color(COL_BLACK).getBColor();
+    BColor aTriangleColor = COL_BLACK.getBColor();
     if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-        aTriangleColor = Color(COL_WHITE).getBColor();
+        aTriangleColor = COL_WHITE.getBColor();
 
     aSeq.emplace_back();
     aSeq.back().set( new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
@@ -203,7 +203,7 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
     drawinglayer::primitive2d::Primitive2DContainer aGhostedSeq(1);
     double nFadeRate = double(m_nFadeRate) / 100.0;
     const basegfx::BColorModifierSharedPtr aBColorModifier(
-                new basegfx::BColorModifier_interpolate(Color(COL_WHITE).getBColor(),
+                new basegfx::BColorModifier_interpolate(COL_WHITE.getBColor(),
                                                         1.0 - nFadeRate));
     aGhostedSeq[0].set( new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                             aSeq, aBColorModifier));

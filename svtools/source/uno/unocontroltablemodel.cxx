@@ -544,10 +544,10 @@ namespace svt { namespace table
                 o_convertedColor.reset();
             else
             {
-                sal_Int32 nColor = COL_TRANSPARENT;
+                Color nColor = COL_TRANSPARENT;
                 if ( i_color >>= nColor )
                 {
-                    o_convertedColor.reset( ::Color( nColor ) );
+                    o_convertedColor.reset( nColor );
                 }
                 else
                 {

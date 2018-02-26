@@ -314,9 +314,9 @@ namespace toolkitform
                     OUString sBorderColorPropertyName( "BorderColor" );
                     if ( xPSI->hasPropertyByName( sBorderColorPropertyName ) )
                     {
-                        sal_Int32 nBorderColor = COL_TRANSPARENT;
+                        Color nBorderColor = COL_TRANSPARENT;
                         if ( xModelProps->getPropertyValue( sBorderColorPropertyName ) >>= nBorderColor )
-                            Descriptor->BorderColor = Color( nBorderColor );
+                            Descriptor->BorderColor = nBorderColor;
                         else
                             Descriptor->BorderColor = COL_BLACK;
                     }
@@ -328,10 +328,10 @@ namespace toolkitform
             static const char FM_PROP_BACKGROUNDCOLOR[] = "BackgroundColor";
             if ( xPSI->hasPropertyByName( FM_PROP_BACKGROUNDCOLOR ) )
             {
-                sal_Int32 nBackColor = COL_TRANSPARENT;
+                Color nBackColor = COL_TRANSPARENT;
                 xModelProps->getPropertyValue( FM_PROP_BACKGROUNDCOLOR ) >>= nBackColor;
                 Descriptor->Background = true;
-                Descriptor->BackgroundColor = Color( nBackColor );
+                Descriptor->BackgroundColor = nBackColor;
             }
 
 
@@ -339,9 +339,9 @@ namespace toolkitform
             static const char FM_PROP_TEXTCOLOR[] = "TextColor";
             if ( xPSI->hasPropertyByName( FM_PROP_TEXTCOLOR ) )
             {
-                sal_Int32 nTextColor = COL_TRANSPARENT;
+                Color nTextColor = COL_TRANSPARENT;
                 xModelProps->getPropertyValue( FM_PROP_TEXTCOLOR ) >>= nTextColor;
-                Descriptor->TextColor = Color( nTextColor );
+                Descriptor->TextColor = nTextColor;
             }
 
 

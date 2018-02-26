@@ -139,7 +139,7 @@ void ScAutoFmtPreview::MakeFonts( sal_uInt16 nIndex, vcl::Font& rFont, vcl::Font
         lcl_SetFontProperties( rCTLFont, *pCTLFontItem, *pCTLWeightItem, *pCTLPostureItem );
 
         Color aColor( pColorItem->GetValue() );
-        if( aColor.GetColor() == COL_TRANSPARENT )
+        if( aColor == COL_TRANSPARENT )
             aColor = GetSettings().GetStyleSettings().GetWindowTextColor();
 
 #define SETONALLFONTS( MethodName, Value ) \

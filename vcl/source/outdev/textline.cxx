@@ -850,7 +850,7 @@ void OutputDevice::SetTextLineColor( const Color& rColor )
         }
 
         if( (mnDrawMode & DrawModeFlags::GhostedText) &&
-            (aColor.GetColor() != COL_TRANSPARENT) )
+            (aColor != COL_TRANSPARENT) )
         {
             aColor = Color( (aColor.GetRed() >> 1) | 0x80,
                             (aColor.GetGreen() >> 1) | 0x80,
@@ -907,7 +907,7 @@ void OutputDevice::SetOverlineColor( const Color& rColor )
         }
 
         if( (mnDrawMode & DrawModeFlags::GhostedText) &&
-            (aColor.GetColor() != COL_TRANSPARENT) )
+            (aColor != COL_TRANSPARENT) )
         {
             aColor = Color( (aColor.GetRed() >> 1) | 0x80,
                             (aColor.GetGreen() >> 1) | 0x80,

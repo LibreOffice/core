@@ -697,7 +697,7 @@ DECLARE_RTFEXPORT_TEST(testParaShadow, "para-shadow.rtf")
     // The problem was that \brdrsh was ignored.
     table::ShadowFormat aShadow
         = getProperty<table::ShadowFormat>(getParagraph(2), "ParaShadowFormat");
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, sal_uInt32(aShadow.Color));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aShadow.Color));
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(convertTwipToMm100(60)), aShadow.ShadowWidth);
 }
@@ -739,7 +739,7 @@ DECLARE_RTFEXPORT_TEST(testCharacterBorder, "charborder.odt")
     {
         const table::ShadowFormat aShadow
             = getProperty<table::ShadowFormat>(xRun, "CharShadowFormat");
-        CPPUNIT_ASSERT_EQUAL(COL_BLACK, sal_uInt32(aShadow.Color));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aShadow.Color));
         CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(318), aShadow.ShadowWidth);
     }

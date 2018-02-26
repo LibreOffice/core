@@ -362,7 +362,7 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
 
         // grid color
         const Color& rGridColor = rTabSett.maGridColor;
-        maData.mbDefGridColor = rGridColor.GetColor() == COL_AUTO;
+        maData.mbDefGridColor = rGridColor == COL_AUTO;
         if( !maData.mbDefGridColor )
         {
             if( GetBiff() == EXC_BIFF8 )
