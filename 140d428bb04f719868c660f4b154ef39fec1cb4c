@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_92fe0204",
+        "filename": "offapi/com/sun/star/ucb/ExoticFileLoadException.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-26T20:34:06Z",
+      "side": 1,
+      "message": "css.ucb doesn\u0027t look like a good fit for this sort of entity; maybe css.document?",
+      "revId": "140d428bb04f719868c660f4b154ef39fec1cb4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_b203060d",
+        "filename": "offapi/com/sun/star/ucb/ExoticFileLoadException.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-26T20:34:06Z",
+      "side": 1,
+      "message": "@since LibreOffice 6.1",
+      "revId": "140d428bb04f719868c660f4b154ef39fec1cb4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_d2087a2b",
+        "filename": "offapi/com/sun/star/ucb/ExoticFileLoadException.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-26T20:34:06Z",
+      "side": 1,
+      "message": "would a URL be more useful than a fie name?",
+      "revId": "140d428bb04f719868c660f4b154ef39fec1cb4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_323716e5",
+        "filename": "offapi/com/sun/star/ucb/ExoticFileLoadException.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-26T20:34:06Z",
+      "side": 1,
+      "message": "can some useful information about the filter be transported here, so the uui interaction handler can present more information to the user?",
+      "revId": "140d428bb04f719868c660f4b154ef39fec1cb4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_f2249eb0",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-26T20:34:06Z",
+      "side": 1,
+      "message": "why add an unrelated empty line here?",
+      "revId": "140d428bb04f719868c660f4b154ef39fec1cb4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_123a12ce",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3573,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-26T20:34:06Z",
+      "side": 1,
+      "message": "hold this via rtl::Reference",
+      "revId": "140d428bb04f719868c660f4b154ef39fec1cb4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
