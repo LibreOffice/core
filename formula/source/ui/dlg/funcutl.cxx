@@ -449,7 +449,7 @@ void RefEdit::SetRefValid(bool bValid)
         SetControlForeground(COL_WHITE);
         SetControlBackground(0xff6563);
 #else
-        SetControlForeground( ::Color( RGB_COLORDATA( 0xf0, 0, 0)));
+        SetControlForeground( ::Color( 0xf0, 0, 0 ) );
 #endif
     }
 }

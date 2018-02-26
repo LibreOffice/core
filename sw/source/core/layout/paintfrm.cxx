@@ -106,9 +106,9 @@
 
 #include <vcl/BitmapTools.hxx>
 
-#define COL_NOTES_SIDEPANE                  RGB_COLORDATA(230,230,230)
-#define COL_NOTES_SIDEPANE_BORDER           RGB_COLORDATA(200,200,200)
-#define COL_NOTES_SIDEPANE_SCROLLAREA       RGB_COLORDATA(230,230,220)
+#define COL_NOTES_SIDEPANE                  Color(230,230,230)
+#define COL_NOTES_SIDEPANE_BORDER           Color(200,200,200)
+#define COL_NOTES_SIDEPANE_SCROLLAREA       Color(230,230,220)
 
 using namespace ::editeng;
 using namespace ::com::sun::star;

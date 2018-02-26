@@ -381,7 +381,7 @@ public:
     }
     virtual Color ReadPixel() override
     {
-        const Color c = RGB_COLORDATA( pData[1], pData[2], pData[3] );
+        const Color c = Color( pData[1], pData[2], pData[3] );
         pData += 4;
         return c;
     }
@@ -406,7 +406,7 @@ public:
     }
     virtual Color ReadPixel() override
     {
-        const Color c = RGB_COLORDATA( pData[2], pData[1], pData[0] );
+        const Color c = Color( pData[2], pData[1], pData[0] );
         pData += 3;
         return c;
     }
@@ -434,7 +434,7 @@ public:
     }
     virtual Color ReadPixel() override
     {
-        const Color c = RGB_COLORDATA( (*pData & 0xf800) >> 8, (*pData & 0x07e0) >> 3 , (*pData & 0x001f) << 3 );
+        const Color c = Color( (*pData & 0xf800) >> 8, (*pData & 0x07e0) >> 3 , (*pData & 0x001f) << 3 );
         pData++;
         return c;
     }

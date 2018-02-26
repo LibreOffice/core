@@ -142,7 +142,7 @@ void Color::RGBtoHSB( sal_uInt16& nHue, sal_uInt16& nSat, sal_uInt16& nBri ) con
     }
 }
 
-ColorData Color::HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri )
+Color Color::HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri )
 {
     sal_uInt8 cR=0,cG=0,cB=0;
     sal_uInt8 nB = static_cast<sal_uInt8>( nBri * 255 / 100 );
@@ -180,7 +180,7 @@ ColorData Color::HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri )
         }
     }
 
-    return RGB_COLORDATA( cR, cG, cB );
+    return Color( cR, cG, cB );
 }
 
 SvStream& Color::Read( SvStream& rIStm )
@@ -220,7 +220,7 @@ SvStream& ReadColor( SvStream& rIStream, Color& rColor )
         rIStream.ReadUInt16( nGreen );
         rIStream.ReadUInt16( nBlue );
 
-        rColor.mnColor = RGB_COLORDATA( nRed>>8, nGreen>>8, nBlue>>8 );
+        rColor = Color( nRed>>8, nGreen>>8, nBlue>>8 );
     }
     else
     {

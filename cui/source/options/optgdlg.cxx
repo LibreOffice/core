@@ -1903,7 +1903,7 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, Edit&, rEd, void )
     }
     else
     {
-        rEd.SetControlForeground( ::Color( RGB_COLORDATA( 0xf0, 0, 0)));
+        rEd.SetControlForeground( ::Color( 0xf0, 0, 0 ) );
     }
     m_bDatePatternsValid = bValid;
 }

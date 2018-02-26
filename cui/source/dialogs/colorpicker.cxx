@@ -333,7 +333,7 @@ void ColorFieldControl::UpdateBitmap()
                 while (x--)
                 {
                     nSat = pPercent_Horiz[x];
-                    mxBitmap->DrawPixel(Point(x,y), Color(Color::HSBtoRGB(nHue, nSat, nBri)));
+                    mxBitmap->DrawPixel(Point(x,y), Color::HSBtoRGB(nHue, nSat, nBri));
                 }
             }
             break;
@@ -345,7 +345,7 @@ void ColorFieldControl::UpdateBitmap()
                 while (x--)
                 {
                     nHue = pGrad_Horiz[x];
-                    mxBitmap->DrawPixel(Point(x,y), Color(Color::HSBtoRGB(nHue, nSat, nBri)));
+                    mxBitmap->DrawPixel(Point(x,y), Color::HSBtoRGB(nHue, nSat, nBri));
                 }
             }
             break;
@@ -357,7 +357,7 @@ void ColorFieldControl::UpdateBitmap()
                 while (x--)
                 {
                     nHue = pGrad_Horiz[x];
-                    mxBitmap->DrawPixel(Point(x,y), Color(Color::HSBtoRGB(nHue, nSat, nBri)));
+                    mxBitmap->DrawPixel(Point(x,y), Color::HSBtoRGB(nHue, nSat, nBri));
                 }
             }
             break;
@@ -653,7 +653,7 @@ void ColorSliderControl::UpdateBitmap()
         for (long y = 0; y <= nY; y++)
         {
             nHue = static_cast<sal_uInt16>((359 * y) / nY);
-            mxBitmap->DrawPixel(Point(0, nY - y), Color(Color::HSBtoRGB(nHue, nSat, nBri)));
+            mxBitmap->DrawPixel(Point(0, nY - y), Color::HSBtoRGB(nHue, nSat, nBri));
         }
         break;
 
@@ -662,7 +662,7 @@ void ColorSliderControl::UpdateBitmap()
         for (long y = 0; y <= nY; y++)
         {
             nSat = static_cast<sal_uInt16>((100 * y) / nY);
-            mxBitmap->DrawPixel(Point(0, nY - y), Color(Color::HSBtoRGB(nHue, nSat, nBri)));
+            mxBitmap->DrawPixel(Point(0, nY - y), Color::HSBtoRGB(nHue, nSat, nBri));
         }
         break;
 
@@ -670,7 +670,7 @@ void ColorSliderControl::UpdateBitmap()
         for (long y = 0; y <= nY; y++)
         {
             nBri = static_cast<sal_uInt16>((100 * y) / nY);
-            mxBitmap->DrawPixel(Point(0, nY - y), Color(Color::HSBtoRGB(nHue, nSat, nBri)));
+            mxBitmap->DrawPixel(Point(0, nY - y), Color::HSBtoRGB(nHue, nSat, nBri));
         }
         break;
 

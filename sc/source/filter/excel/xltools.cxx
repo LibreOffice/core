@@ -706,7 +706,7 @@ XclImpStream& operator>>( XclImpStream& rStrm, Color& rColor )
     sal_uInt8 nG = rStrm.ReaduInt8();
     sal_uInt8 nB = rStrm.ReaduInt8();
     rStrm.Ignore( 1 );//nD
-    rColor = RGB_COLORDATA( nR, nG, nB );
+    rColor = Color( nR, nG, nB );
     return rStrm;
 }
 

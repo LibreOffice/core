@@ -706,7 +706,7 @@ sal_uInt32 XclExpChEscherFormat::RegisterColor( sal_uInt16 nPropId )
     if( maData.mxEscherSet && maData.mxEscherSet->GetOpt( nPropId, nBGRValue ) )
     {
         // swap red and blue
-        Color aColor( RGB_COLORDATA(
+        Color aColor( Color(
             COLORDATA_BLUE( nBGRValue ),
             COLORDATA_GREEN( nBGRValue ),
             COLORDATA_RED( nBGRValue ) ) );

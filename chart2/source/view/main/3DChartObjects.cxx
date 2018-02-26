@@ -83,7 +83,7 @@ const TextCacheItem& TextCache::getText(OUString const & rText, bool bIs3dText)
     else
         aFont = pDevice->GetFont();
     aFont.SetFontSize(Size(0, 96));
-    aFont.SetColor(COL_GREEN); // RGB_COLORDATA(0xf0, 0xf0, 0xf0));
+    aFont.SetColor(COL_GREEN);
     pDevice->SetFont(aFont);
     pDevice->Erase();
 

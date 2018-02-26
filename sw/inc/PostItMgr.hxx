@@ -66,8 +66,8 @@ class OutlinerSearchable;
 class OutlinerParaObject;
 namespace i18nutil { struct SearchOptions2; }
 
-#define COL_NOTES_SIDEPANE_ARROW_ENABLED    RGB_COLORDATA(0,0,0)
-#define COL_NOTES_SIDEPANE_ARROW_DISABLED   RGB_COLORDATA(172,168,153)
+#define COL_NOTES_SIDEPANE_ARROW_ENABLED    Color(0,0,0)
+#define COL_NOTES_SIDEPANE_ARROW_DISABLED   Color(172,168,153)
 
 typedef std::list<SwSidebarItem*> SwSidebarItem_list;
 
