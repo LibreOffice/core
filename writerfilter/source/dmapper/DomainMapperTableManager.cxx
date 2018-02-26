@@ -453,6 +453,12 @@ void DomainMapperTableManager::startLevel( )
 
 void DomainMapperTableManager::endLevel( )
 {
+    if (m_aTableGrid.empty())
+    {
+        SAL_WARN("writerfilter.dmapper", "Table stack is empty");
+        return;
+    }
+
     m_aTableGrid.pop_back( );
     m_aGridSpans.pop_back( );
 
