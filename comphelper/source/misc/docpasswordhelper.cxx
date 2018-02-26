@@ -259,9 +259,9 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 }
 
 
-css::uno::Sequence<sal_Int8> DocPasswordHelper::GetOoxHashAsSequence(
+std::vector<unsigned char> DocPasswordHelper::GetOoxHashAsVector(
         const rtl::OUString& rPassword,
-        const rtl::OUString& rSaltValue,
+        const std::vector<unsigned char>& rSaltValue,
         sal_uInt32 nSpinCount,
         comphelper::Hash::IterCount eIterCount,
         const rtl::OUString& rAlgorithmName)
@@ -276,8 +276,19 @@ css::uno::Sequence<sal_Int8> DocPasswordHelper::GetOoxHashAsSequence(
     else if (rAlgorithmName == "MD5")
         eType = comphelper::HashType::MD5;
     else
-        return css::uno::Sequence<sal_Int8>();
+        return std::vector<unsigned char>();
 
+    return comphelper::Hash::calculateHash( rPassword, rSaltValue, nSpinCount, eIterCount, eType);
+}
+
+
+css::uno::Sequence<sal_Int8> DocPasswordHelper::GetOoxHashAsSequence(
+        const rtl::OUString& rPassword,
+        const rtl::OUString& rSaltValue,
+        sal_uInt32 nSpinCount,
+        comphelper::Hash::IterCount eIterCount,
+        const rtl::OUString& rAlgorithmName)
+{
     std::vector<unsigned char> aSaltVec;
     if (!rSaltValue.isEmpty())
     {
@@ -286,8 +297,7 @@ css::uno::Sequence<sal_Int8> DocPasswordHelper::GetOoxHashAsSequence(
         aSaltVec = comphelper::sequenceToContainer<std::vector<unsigned char>>( aSaltSeq);
     }
 
-    std::vector<unsigned char> hash( comphelper::Hash::calculateHash( rPassword, aSaltVec, nSpinCount,
-                eIterCount, eType));
+    std::vector<unsigned char> hash( GetOoxHashAsVector( rPassword, aSaltVec, nSpinCount, eIterCount, rAlgorithmName));
 
     return comphelper::containerToSequence<sal_Int8>( hash);
 }
