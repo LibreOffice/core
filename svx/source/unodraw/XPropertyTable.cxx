@@ -625,8 +625,17 @@ std::unique_ptr<XPropertyEntry> SvxUnoXBitmapTable::createEntry(const OUString& 
         return std::unique_ptr<XPropertyEntry>();
 
     auto xBitmap = rAny.get<uno::Reference<awt::XBitmap>>();
+    if (!xBitmap.is())
+        return nullptr;
+
     uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
+    if (!xGraphic.is())
+        return nullptr;
+
     Graphic aGraphic(xGraphic);
+    if (!aGraphic)
+        return nullptr;
+
     GraphicObject aGraphicObject(aGraphic);
     return o3tl::make_unique<XBitmapEntry>(aGraphicObject, rName);
 }

@@ -83,38 +83,6 @@ void XMLImageStyle::exportXML(OUString const & rStrName, uno::Any const & rValue
             rExport.AddEmbeddedXGraphicAsBase64(xGraphic);
         }
     }
-    else if (rValue.has<OUString>()) // TODO: Remove when GraphicObject URL aren't used anymore
-    {
-        OUString sImageURL = rValue.get<OUString>();
-
-        // Name
-        bool bEncoded = false;
-        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
-                              rExport.EncodeStyleName( rStrName,
-                                                       &bEncoded ) );
-        if( bEncoded )
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
-                                  rStrName );
-
-        // uri
-        const OUString aStr( rExport.AddEmbeddedGraphicObject( sImageURL ) );
-        if( !aStr.isEmpty() )
-        {
-            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aStr );
-            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-        }
-
-        // Do Write
-        SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_FILL_IMAGE, true, true );
-
-        if( !sImageURL.isEmpty() )
-        {
-            // optional office:binary-data
-            rExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
-        }
-    }
 }
 
 bool XMLImageStyle::importXML(uno::Reference<xml::sax::XAttributeList> const & xAttrList,
@@ -179,7 +147,8 @@ bool XMLImageStyle::importXML(uno::Reference<xml::sax::XAttributeList> const & x
         }
     }
 
-    rValue <<= xGraphic;
+    if (xGraphic.is())
+        rValue <<= xGraphic;
 
     if( !aDisplayName.isEmpty() )
     {
@@ -188,8 +157,7 @@ bool XMLImageStyle::importXML(uno::Reference<xml::sax::XAttributeList> const & x
         rStrName = aDisplayName;
     }
 
-    bool bRet = bHasName && bHasHRef;
-    return bRet;
+    return bHasName && bHasHRef;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
