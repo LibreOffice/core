@@ -39,7 +39,6 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <comphelper/lok.hxx>
 
 #include <vcl/svapp.hxx>
 
@@ -321,31 +320,26 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                     catch( const uno::Exception& )
                     {}
 
-                    if (!comphelper::LibreOfficeKit::isActive())
-                    {
-                        // if currently another object is UIactive it will be deactivated; usually this will activate the LM of
-                        // the container. Locking the LM will prevent flicker.
-                        xContainerLM->lock();
-                        xInplaceClient->activatingUI();
-                        bool bOk = m_pDocHolder->ShowUI( xContainerLM, xContainerDP, aModuleName );
-                        xContainerLM->unlock();
+                    // if currently another object is UIactive it will be deactivated; usually this will activate the LM of
+                    // the container. Locking the LM will prevent flicker.
+                    xContainerLM->lock();
+                    xInplaceClient->activatingUI();
+                    bool bOk = m_pDocHolder->ShowUI( xContainerLM, xContainerDP, aModuleName );
+                    xContainerLM->unlock();
 
-                        if ( bOk )
-                        {
-                            m_nObjectState = nNextState;
-                            m_pDocHolder->ResizeHatchWindow();
-                        }
-                        else
-                        {
-                            xInplaceClient->deactivatedUI();
-                            throw embed::WrongStateException(); //TODO: can't activate UI
-                        }
+                    if ( bOk )
+                    {
+                        m_nObjectState = nNextState;
+                        m_pDocHolder->ResizeHatchWindow();
+                    }
+                    else
+                    {
+                        xInplaceClient->deactivatedUI();
+                        throw embed::WrongStateException(); //TODO: can't activate UI
                     }
                 }
                 else
-                {
                     throw embed::WrongStateException(); //TODO: can't activate UI
-                }
             }
         }
         else
