@@ -1038,7 +1038,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
     tools::Rectangle aCellRect( OutputToScreenPixel(aPos), Size(nSizeX,nSizeY) );
 
     aPos.AdjustX( -1 );
-    aPos.Y() += nSizeY - 1;
+    aPos.AdjustY( nSizeY - 1 );
 
     mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this, WinBits(WB_BORDER)));
     mpFilterFloat->SetPopupModeEndHdl(LINK( this, ScGridWindow, PopupModeEndHdl));

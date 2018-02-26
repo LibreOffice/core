@@ -1093,7 +1093,7 @@ Size ScPrintFunc::GetDataSize() const
 {
     Size aSize = aPageSize;
     aSize.AdjustWidth( -(nLeftMargin + nRightMargin) );
-    aSize.Height() -= nTopMargin + nBottomMargin;
+    aSize.AdjustHeight( -(nTopMargin + nBottomMargin) );
     aSize.AdjustHeight( -(aHdr.nHeight + aFtr.nHeight) );
     return aSize;
 }
@@ -1102,7 +1102,7 @@ void ScPrintFunc::GetScaleData( Size& rPhysSize, long& rDocHdr, long& rDocFtr )
 {
     rPhysSize = aPageSize;
     rPhysSize.AdjustWidth( -(nLeftMargin + nRightMargin) );
-    rPhysSize.Height() -= nTopMargin + nBottomMargin;
+    rPhysSize.AdjustHeight( -(nTopMargin + nBottomMargin) );
 
     rDocHdr = aHdr.nHeight;
     rDocFtr = aFtr.nHeight;
@@ -1538,7 +1538,7 @@ void ScPrintFunc::LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     Point aTwipOffset;
     for (nCol=0; nCol<nX1; nCol++)
         aTwipOffset.AdjustX( -(pDoc->GetColWidth( nCol, nPrintTab )) );
-    aTwipOffset.Y() -= pDoc->GetRowHeight( 0, nY1-1, nPrintTab );
+    aTwipOffset.AdjustY( -sal_Int32(pDoc->GetRowHeight( 0, nY1-1, nPrintTab )) );
 
     Point aMMOffset( aTwipOffset );
     aMMOffset.setX( static_cast<long>(aMMOffset.X() * HMM_PER_TWIPS) );

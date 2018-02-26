@@ -45,7 +45,7 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
 
     for (nCol=0; nCol<nX1; nCol++)
         aOffset.AdjustX( -(mpDoc->GetColWidth( nCol, nTab ) * nLayoutSign) );
-    aOffset.Y() -= mpDoc->GetRowHeight( 0, nY1-1, nTab );
+    aOffset.AdjustY( -sal_Int32(mpDoc->GetRowHeight( 0, nY1-1, nTab )) );
 
     long nDataWidth = 0;
     for (nCol=nX1; nCol<=nX2; nCol++)
@@ -54,8 +54,10 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
     if ( bLayoutRTL )
         aOffset.AdjustX(nDataWidth );
 
-    aRect.Left() = aRect.Right()  = -aOffset.X();
-    aRect.Top()  = aRect.Bottom() = -aOffset.Y();
+    aRect.SetLeft( -aOffset.X() );
+    aRect.SetRight( -aOffset.X() );
+    aRect.SetTop( -aOffset.Y() );
+    aRect.SetBottom( -aOffset.Y() );
 
     Point aMMOffset( aOffset );
     aMMOffset.setX( static_cast<long>(aMMOffset.X() * HMM_PER_TWIPS) );

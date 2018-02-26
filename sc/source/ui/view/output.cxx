@@ -833,7 +833,7 @@ void drawDataBars(vcl::RenderContext& rRenderContext, const ScDataBarInfo* pOldD
     tools::Rectangle aPaintRect = rRect;
     aPaintRect.AdjustTop(2 * nOneY );
     aPaintRect.AdjustBottom( -(2 * nOneY) );
-    aPaintRect.Left() += 2 * nOneX;
+    aPaintRect.AdjustLeft( 2 * nOneX );
     aPaintRect.AdjustRight( -(2 * nOneX) );
     if(pOldDataBarInfo->mnZero)
     {

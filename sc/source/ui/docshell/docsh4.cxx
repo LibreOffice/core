@@ -2111,10 +2111,11 @@ tools::Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
 
 namespace {
 
-void SnapHor( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCCOL& rStartCol )
+SAL_WARN_UNUSED_RESULT
+long SnapHorizontal( const ScDocument& rDoc, SCTAB nTab, long nVal, SCCOL& rStartCol )
 {
     SCCOL nCol = 0;
-    long nTwips = static_cast<long>(rVal / HMM_PER_TWIPS);
+    long nTwips = static_cast<long>(nVal / HMM_PER_TWIPS);
     long nSnap = 0;
     while ( nCol<MAXCOL )
     {
@@ -2127,14 +2128,16 @@ void SnapHor( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCCOL& rStartCol )
         else
             break;
     }
-    rVal = static_cast<long>( nSnap * HMM_PER_TWIPS );
+    nVal = static_cast<long>( nSnap * HMM_PER_TWIPS );
     rStartCol = nCol;
+    return nVal;
 }
 
-void SnapVer( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCROW& rStartRow )
+SAL_WARN_UNUSED_RESULT
+long SnapVertical( const ScDocument& rDoc, SCTAB nTab, long nVal, SCROW& rStartRow )
 {
     SCROW nRow = 0;
-    long nTwips = static_cast<long>(rVal / HMM_PER_TWIPS);
+    long nTwips = static_cast<long>(nVal / HMM_PER_TWIPS);
     long nSnap = 0;
 
     bool bFound = false;
@@ -2163,8 +2166,9 @@ void SnapVer( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCROW& rStartRow )
     if (!bFound)
         nRow = MAXROW;  // all hidden down to the bottom
 
-    rVal = static_cast<long>( nSnap * HMM_PER_TWIPS );
+    nVal = static_cast<long>( nSnap * HMM_PER_TWIPS );
     rStartRow = nRow;
+    return nVal;
 }
 
 }
@@ -2177,14 +2181,14 @@ void ScDocShell::SnapVisArea( tools::Rectangle& rRect ) const
         ScDrawLayer::MirrorRectRTL( rRect );        // calculate with positive (LTR) values
 
     SCCOL nCol = 0;
-    SnapHor( aDocument, nTab, rRect.Left(), nCol );
+    rRect.SetLeft( SnapHorizontal( aDocument, nTab, rRect.Left(), nCol ) );
     ++nCol;                                         // at least one column
-    SnapHor( aDocument, nTab, rRect.Right(), nCol );
+    rRect.SetRight( SnapHorizontal( aDocument, nTab, rRect.Right(), nCol ) );
 
     SCROW nRow = 0;
-    SnapVer( aDocument, nTab, rRect.Top(), nRow );
+    rRect.SetTop( SnapVertical( aDocument, nTab, rRect.Top(), nRow ) );
     ++nRow;                                         // at least one row
-    SnapVer( aDocument, nTab, rRect.Bottom(), nRow );
+    rRect.SetBottom( SnapVertical( aDocument, nTab, rRect.Bottom(), nRow ) );
 
     if ( bNegativePage )
         ScDrawLayer::MirrorRectRTL( rRect );        // back to real rectangle
