@@ -126,13 +126,10 @@ namespace comphelper
 
     NamedValueCollection& NamedValueCollection::merge( const NamedValueCollection& _rAdditionalValues, bool _bOverwriteExisting )
     {
-        for (   NamedValueRepository::const_iterator namedValue = _rAdditionalValues.m_pImpl->aValues.begin();
-                namedValue != _rAdditionalValues.m_pImpl->aValues.end();
-                ++namedValue
-            )
+        for (auto const& value : _rAdditionalValues.m_pImpl->aValues)
         {
-            if ( _bOverwriteExisting || !impl_has( namedValue->first ) )
-                impl_put( namedValue->first, namedValue->second );
+            if ( _bOverwriteExisting || !impl_has( value.first ) )
+                impl_put( value.first, value.second );
         }
 
         return *this;
@@ -154,9 +151,9 @@ namespace comphelper
     std::vector< OUString > NamedValueCollection::getNames() const
     {
         std::vector< OUString > aNames;
-        for ( NamedValueRepository::const_iterator it = m_pImpl->aValues.begin(), end = m_pImpl->aValues.end(); it != end; ++it )
+        for (auto const& value : m_pImpl->aValues)
         {
-            aNames.push_back( it->first );
+            aNames.push_back( value.first );
         }
         return aNames;
     }

@@ -33,8 +33,9 @@ void NodeMap::cloneInto(NodeMap * target) const
 {
     assert(target != nullptr && target->empty());
     NodeMapImpl clone(maImpl);
-    for (NodeMapImpl::iterator i(clone.begin()); i != clone.end(); ++i) {
-        i->second = i->second->clone(true);
+    for (auto & elem : clone)
+    {
+        elem.second = elem.second->clone(true);
     }
     std::swap(clone, target->maImpl);
     target->clearCache();

@@ -130,10 +130,9 @@ bool canRemoveFromLayer(int layer, rtl::Reference< Node > const & node) {
     switch (node->kind()) {
     case Node::KIND_LOCALIZED_PROPERTY:
     case Node::KIND_GROUP:
-        for (NodeMap::const_iterator i(node->getMembers().begin());
-             i != node->getMembers().end(); ++i)
+        for (auto const& member : node->getMembers())
         {
-            if (!canRemoveFromLayer(layer, i->second)) {
+            if (!canRemoveFromLayer(layer, member.second)) {
                 return false;
             }
         }
@@ -241,19 +240,21 @@ void Components::initGlobalBroadcaster(
     rtl::Reference< RootAccess > const & exclude, Broadcaster * broadcaster)
 {
     //TODO: Iterate only over roots w/ listeners:
-    for (WeakRootSet::iterator i(roots_.begin()); i != roots_.end(); ++i) {
+    for (auto const& elemRoot : roots_)
+    {
         rtl::Reference< RootAccess > root;
-        if ((*i)->acquireCounting() > 1) {
-            root.set(*i); // must not throw
+        if (elemRoot->acquireCounting() > 1) {
+            root.set(elemRoot); // must not throw
         }
-        (*i)->releaseNondeleting();
+        elemRoot->releaseNondeleting();
         if (root.is()) {
             if (root != exclude) {
                 std::vector<OUString> path(root->getAbsolutePath());
                 Modifications::Node const * mods = &modifications.getRoot();
-                for (auto j(path.begin()); j != path.end(); ++j) {
+                for (auto const& pathElem : path)
+                {
                     Modifications::Node::Children::const_iterator k(
-                        mods->children.find(*j));
+                        mods->children.find(pathElem));
                     if (k == mods->children.end()) {
                         mods = nullptr;
                         break;
@@ -362,9 +363,10 @@ void Components::removeExtensionXcuFile(
             rtl::Reference< Node > parent;
             NodeMap const * map = &data_.getComponents();
             rtl::Reference< Node > node;
-            for (auto j(i->begin()); j != i->end(); ++j) {
+            for (auto const& j : *i)
+            {
                 parent = node;
-                node = map->findNode(Data::NO_LAYER, *j);
+                node = map->findNode(Data::NO_LAYER, j);
                 if (!node.is()) {
                     break;
                 }
@@ -638,8 +640,9 @@ Components::~Components()
         flushModifications();
     }
 
-    for (WeakRootSet::iterator i(roots_.begin()); i != roots_.end(); ++i) {
-        (*i)->setAlive(false);
+    for (auto const& rootElem : roots_)
+    {
+        rootElem->setAlive(false);
     }
 }
 
