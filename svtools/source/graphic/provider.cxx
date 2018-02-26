@@ -202,7 +202,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( co
         }
         else if ( sImageName == "warning" )
         {
-            xRet = Graphic(WarningBox::GetStandardImage().GetBitmapEx()).GetXGraphic();
+            xRet = Graphic(GetStandardWarningBoxImage().GetBitmapEx()).GetXGraphic();
         }
         else if ( sImageName == "error" )
         {

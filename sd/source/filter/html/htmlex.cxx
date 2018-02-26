@@ -3098,7 +3098,6 @@ bool HtmlExport::checkForExistingFiles()
             OUString aMsg(SdResId(STR_OVERWRITE_WARNING));
             aMsg = aMsg.replaceFirst( "%FILENAME", aSystemPath );
             ScopedVclPtrInstance< WarningBox > aWarning( nullptr, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, aMsg );
-            aWarning->SetImage( WarningBox::GetStandardImage() );
             bFound = ( RET_NO == aWarning->Execute() );
         }
     }

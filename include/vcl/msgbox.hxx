@@ -91,10 +91,10 @@ public:
                                     const OUString& rMessage );
                         WarningBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits n,
                                     const OUString& rMessage );
-
-    static Image const & GetStandardImage();
-    static OUString     GetStandardText();
 };
+
+VCL_DLLPUBLIC Image const & GetStandardWarningBoxImage();
+VCL_DLLPUBLIC OUString GetStandardWarningBoxText();
 
 VCL_DLLPUBLIC Image const & GetStandardErrorBoxImage();
 VCL_DLLPUBLIC OUString GetStandardErrorBoxText();

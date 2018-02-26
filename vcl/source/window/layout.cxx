@@ -2170,7 +2170,7 @@ void MessageDialog::create_message_area()
                 m_pImage->SetImage(GetStandardInfoBoxImage());
                 break;
             case VclMessageType::Warning:
-                m_pImage->SetImage(WarningBox::GetStandardImage());
+                m_pImage->SetImage(GetStandardWarningBoxImage());
                 break;
             case VclMessageType::Question:
                 m_pImage->SetImage(GetStandardQueryBoxImage());

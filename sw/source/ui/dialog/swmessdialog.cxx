@@ -26,7 +26,7 @@ SwMessageAndEditDialog::SwMessageAndEditDialog(vcl::Window* pParent, const OUStr
     m_pSecondaryMessage->SetPaintTransparent(true);
     MessageDialog::SetMessagesWidths(this, m_pPrimaryMessage, m_pSecondaryMessage);
     get(m_pImageIM, "image");
-    m_pImageIM->SetImage(WarningBox::GetStandardImage());
+    m_pImageIM->SetImage(GetStandardWarningBoxImage());
     get(m_pEdit, "edit");
 }
 

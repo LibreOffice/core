@@ -164,7 +164,7 @@ IMPL_LINK_NOARG(MacroWarning, AlwaysTrustCheckHdl, Button*, void)
 void MacroWarning::InitControls()
 {
     // set warning image
-    Image aImg( WarningBox::GetStandardImage() );
+    Image aImg(GetStandardWarningBoxImage());
     mpSymbolImg->SetImage( aImg );
     mpSymbolImg->SetSizePixel( aImg.GetSizePixel() );
     // set bold font and path ellipsis for docname fixedtext
