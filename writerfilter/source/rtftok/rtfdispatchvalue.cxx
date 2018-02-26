@@ -213,7 +213,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     if (nSprm > 0)
     {
-        LanguageTag aTag((LanguageType(nParam)));
+        LanguageTag aTag((LanguageType(static_cast<sal_uInt16>(nParam))));
         auto pValue = std::make_shared<RTFValue>(aTag.getBcp47());
         putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_EG_RPrBase_lang, nSprm,
                            pValue);
