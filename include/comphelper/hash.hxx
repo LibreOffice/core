@@ -81,7 +81,7 @@ public:
     /** Convenience function to calculate a salted hash with iterations.
 
         @param  rPassword
-                UTF-16LE encoded string, hashed byte-wise as unsigned char.
+                UTF-16 encoded string, hashed byte-wise as unsigned char.
 
         @param  rSaltValue
                 Salt that will be prepended to password data.

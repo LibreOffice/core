@@ -185,7 +185,7 @@ public:
         OOXML sheetProtection and fileSharing elements.
 
         @param  rPassword
-                UTF-16LE encoded string without leading BOM character
+                UTF-16 encoded string without leading BOM character
 
         @param  rSaltValue
                 Base64 encoded salt that will be decoded and prepended to password
@@ -225,7 +225,7 @@ public:
         OOXML sheetProtection and fileSharing elements.
 
         @param  rPassword
-                UTF-16LE encoded string without leading BOM character
+                UTF-16 encoded string without leading BOM character
 
         @param  rSaltValue
                 Base64 encoded salt that will be decoded and prepended to password
