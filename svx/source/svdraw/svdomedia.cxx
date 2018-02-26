@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column:100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -269,7 +269,8 @@ uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream()
 
 static bool lcl_CopyToTempFile(
         uno::Reference<io::XInputStream> const& xInStream,
-        OUString & o_rTempFileURL)
+        OUString & o_rTempFileURL,
+        const OUString& rDesiredExtension)
 {
     OUString tempFileURL;
     ::osl::FileBase::RC const err =
@@ -278,6 +279,17 @@ static bool lcl_CopyToTempFile(
     {
         SAL_INFO("svx", "cannot create temp file");
         return false;
+    }
+
+    if (!rDesiredExtension.isEmpty())
+    {
+        OUString newTempFileURL = tempFileURL + rDesiredExtension;
+        if (osl::File::move(tempFileURL, newTempFileURL) != osl::FileBase::E_None)
+        {
+            SAL_WARN("svx", "Could not rename file '" << tempFileURL << "' to '" << newTempFileURL << "'");
+            return false;
+        }
+        tempFileURL = newTempFileURL;
     }
 
     try
@@ -304,7 +316,7 @@ void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream
         return;
     }
     OUString tempFileURL;
-    bool const bSuccess = lcl_CopyToTempFile(xStream, tempFileURL);
+    bool const bSuccess = lcl_CopyToTempFile(xStream, tempFileURL, "");
     if (bSuccess)
     {
         m_xImpl->m_pTempFile.reset(new MediaTempFile(tempFileURL));
@@ -348,7 +360,15 @@ static bool lcl_HandlePackageURL(
         SAL_WARN("svx", "no stream?");
         return false;
     }
-    return lcl_CopyToTempFile(xInStream, o_rTempFileURL);
+    // Make sure the temporary copy has the same file name extension as the original media file
+    // (like .mp4). That seems to be important for some AVFoundation APIs. For random extension-less
+    // file names, they don't seem to even bother looking inside the file.
+    sal_Int32 nLastDot = rURL.lastIndexOf('.');
+    sal_Int32 nLastSlash = rURL.lastIndexOf('/');
+    OUString sDesiredExtension;
+    if (nLastDot > nLastSlash && nLastDot+1 < rURL.getLength())
+        sDesiredExtension = rURL.copy(nLastDot);
+    return lcl_CopyToTempFile(xInStream, o_rTempFileURL, sDesiredExtension);
 }
 #endif
 
