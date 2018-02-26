@@ -101,6 +101,7 @@ public:
     void testParaMarginAndindentation();
     void testTdf111884();
     void testTdf112633();
+    void testCustomXml();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -130,6 +131,7 @@ public:
     CPPUNIT_TEST(testParaMarginAndindentation);
     CPPUNIT_TEST(testTdf111884);
     CPPUNIT_TEST(testTdf112633);
+    CPPUNIT_TEST(testCustomXml);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -829,6 +831,27 @@ void SdOOXMLExportTest1::testTdf112633()
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(
             comphelper::getComponentContext(m_xSFactory), tempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("ppt/media/hdphoto1.wdp")));
+}
+
+void SdOOXMLExportTest1::testCustomXml()
+{
+    // Load document and export it to a temporary file
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/customxml.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "customXml/item1.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    xmlDocPtr pRelsDoc = parseExport(tempFile, "customXml/_rels/item1.xml.rels");
+    CPPUNIT_ASSERT(pRelsDoc);
+
+    // Check there is a relation to itemProps1.xml.
+    const OUString sXmlPath = "/rels:Relationships/rels:Relationship[@Id='rId1']";
+    assertXPath(pRelsDoc, OUStringToOString(sXmlPath, RTL_TEXTENCODING_UTF8), "Target", "itemProps1.xml");
+
+    std::shared_ptr<SvStream> pStream = parseExportStream(tempFile, "ddp/ddpfile.xen");
+    CPPUNIT_ASSERT(pStream);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest1);
