@@ -60,7 +60,6 @@
 #include <vcl/metric.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/svapp.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <editeng/unofdesc.hxx>
 #include <fmtornt.hxx>
 #include <SwStyleNameMapper.hxx>

@@ -25,7 +25,6 @@
 #include "brwimpl.hxx"
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <toolkit/helper/vclunohelper.hxx>
 
 // Accessibility ==============================================================
 

@@ -40,7 +40,6 @@
 #include <svx/unoapi.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/accessiblewrapper.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>

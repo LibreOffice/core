@@ -24,7 +24,6 @@
 #include <svx/unoshape.hxx>
 #include <RptModel.hxx>
 #include <RptObjectListener.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <RptPage.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>

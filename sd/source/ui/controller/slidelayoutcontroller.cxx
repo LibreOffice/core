@@ -34,7 +34,6 @@
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/valueset.hxx>
 
-#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <xmloff/autolayout.hxx>

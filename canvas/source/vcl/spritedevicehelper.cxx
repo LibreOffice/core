@@ -21,7 +21,6 @@
 
 #include <basegfx/utils/canvastools.hxx>
 #include <canvas/canvastools.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>
 

@@ -36,7 +36,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>

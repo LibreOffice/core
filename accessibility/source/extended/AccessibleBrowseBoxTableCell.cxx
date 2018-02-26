@@ -20,7 +20,6 @@
 
 #include <extended/AccessibleBrowseBoxTableCell.hxx>
 #include <svtools/accessibletableprovider.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 namespace accessibility

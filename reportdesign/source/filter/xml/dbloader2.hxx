@@ -20,7 +20,6 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_DBLOADER2_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_DBLOADER2_HXX
 
-#include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>

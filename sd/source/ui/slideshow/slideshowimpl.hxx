@@ -45,8 +45,6 @@
 #include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 
-#include <toolkit/helper/vclunohelper.hxx>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <vcl/help.hxx>

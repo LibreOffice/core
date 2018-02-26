@@ -30,7 +30,6 @@
 #include <vcl/graph.hxx>
 #include <tools/debug.hxx>
 #include <svx/fmdpage.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>

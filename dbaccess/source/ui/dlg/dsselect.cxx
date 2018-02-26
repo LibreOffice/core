@@ -27,7 +27,6 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <stringconstants.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/processfactory.hxx>

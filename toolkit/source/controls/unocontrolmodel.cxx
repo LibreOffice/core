@@ -38,7 +38,6 @@
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
 #include <toolkit/helper/property.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/emptyfontdescriptor.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <unotools/localedatawrapper.hxx>

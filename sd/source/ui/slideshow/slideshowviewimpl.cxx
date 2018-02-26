@@ -31,6 +31,8 @@
 #include <cppcanvas/vclfactory.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 
+#include <toolkit/helper/vclunohelper.hxx>
+
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::WeakReference;
 using ::com::sun::star::uno::RuntimeException;

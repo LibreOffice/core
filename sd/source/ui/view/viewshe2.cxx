@@ -69,7 +69,6 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <svtools/soerr.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <svx/charthelper.hxx>
 #include <comphelper/lok.hxx>
 

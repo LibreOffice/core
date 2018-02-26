@@ -32,7 +32,6 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/moduleoptions.hxx>
