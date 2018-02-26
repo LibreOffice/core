@@ -285,12 +285,6 @@ void SvxXMLTableImportContext::importBitmap( const uno::Reference< XAttributeLis
             if (xBitmap.is())
                 rAny <<= xBitmap;
         }
-        else if (aGraphicAny.has<uno::Reference<awt::XBitmap>>())
-        {
-            auto xBitmap = aGraphicAny.get<uno::Reference<awt::XBitmap>>();
-            if (xBitmap.is())
-                rAny <<= xBitmap;
-        }
     }
     catch (const Exception&)
     {
