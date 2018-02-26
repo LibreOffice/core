@@ -318,9 +318,6 @@ void SvxRubyDialog::Activate()
 {
     SfxModelessDialog::Activate();
     std::unique_ptr<SfxPoolItem> pState;
-    SfxItemState    eState = pBindings->QueryState( SID_STYLE_DESIGNER, pState );
-    bool bEnable = (eState < SfxItemState::DEFAULT) || !pState || !static_cast<SfxBoolItem*>(pState.get())->GetValue();
-    m_pStylistPB->Enable(bEnable);
     //get selection from current view frame
     SfxViewFrame* pCurFrm = SfxViewFrame::Current();
     Reference< XController > xCtrl = pCurFrm->GetFrame().GetController();
