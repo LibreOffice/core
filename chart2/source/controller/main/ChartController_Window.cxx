@@ -57,6 +57,7 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/lok.hxx>
 
 #include <toolkit/awt/vclxmenu.hxx>
 
@@ -572,6 +573,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
 
     if ( MOUSE_LEFT == rMEvt.GetButtons() )
     {
+        SAL_DEBUG("ChartController::execute_MouseButtonDown: m_pChartWindow: " << m_pChartWindow.get());
         m_pChartWindow->GrabFocus();
         m_pChartWindow->CaptureMouse();
     }
@@ -917,7 +919,7 @@ void ChartController::execute_DoubleClick( const Point* pMousePixel )
     {
         executeDispatch_EditText( pMousePixel );
     }
-    else
+    else if (!comphelper::LibreOfficeKit::isActive())
     {
         executeDispatch_ObjectProperties();
     }

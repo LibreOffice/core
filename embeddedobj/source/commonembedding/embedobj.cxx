@@ -38,6 +38,7 @@
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/lok.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <vcl/svapp.hxx>
@@ -335,7 +336,8 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                     else
                     {
                         xInplaceClient->deactivatedUI();
-                        throw embed::WrongStateException(); //TODO: can't activate UI
+                        if (!comphelper::LibreOfficeKit::isActive())
+                            throw embed::WrongStateException(); //TODO: can't activate UI
                     }
                 }
                 else

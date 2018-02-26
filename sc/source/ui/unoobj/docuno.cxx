@@ -679,6 +679,8 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
         break;
     case LOK_MOUSEEVENT_MOUSEBUTTONUP:
         pLOKEv->mnEvent = VCLEVENT_WINDOW_MOUSEBUTTONUP;
+        if (pGridWindow->IsTracking())
+            pGridWindow->EndTracking(TrackingEventFlags::DontCallHdl);
         break;
     case LOK_MOUSEEVENT_MOUSEMOVE:
         pLOKEv->mnEvent = VCLEVENT_WINDOW_MOUSEMOVE;
