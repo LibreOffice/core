@@ -322,16 +322,16 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
         Color   aOverlineColor( aOldOverlineColor );
 
         // we don't have a automatic color, so black is always drawn on white
-        if ( aTextColor.GetColor() == COL_BLACK )
+        if ( aTextColor == COL_BLACK )
             aTextColor = COL_WHITE;
-        if ( aTextLineColor.GetColor() == COL_BLACK )
+        if ( aTextLineColor == COL_BLACK )
             aTextLineColor = COL_WHITE;
-        if ( aOverlineColor.GetColor() == COL_BLACK )
+        if ( aOverlineColor == COL_BLACK )
             aOverlineColor = COL_WHITE;
 
         // relief-color is black for white text, in all other cases
         // we set this to LightGray
-        if ( aTextColor.GetColor() == COL_WHITE )
+        if ( aTextColor == COL_WHITE )
             aReliefColor = COL_BLACK;
         SetTextLineColor( aReliefColor );
         SetOverlineColor( aReliefColor );
@@ -373,7 +373,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
                 nOff++;
             SetTextLineColor();
             SetOverlineColor();
-            if ( (GetTextColor().GetColor() == COL_BLACK)
+            if ( (GetTextColor() == COL_BLACK)
             ||   (GetTextColor().GetLuminance() < 8) )
                 SetTextColor( COL_LIGHTGRAY );
             else

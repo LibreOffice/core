@@ -332,7 +332,7 @@ XclExpPaletteImpl::XclExpPaletteImpl( const XclDefaultPalette& rDefPal ) :
 
 sal_uInt32 XclExpPaletteImpl::InsertColor( const Color& rColor, XclExpColorType eType, sal_uInt16 nAutoDefault )
 {
-    if( rColor.GetColor() == COL_AUTO )
+    if( rColor == COL_AUTO )
         return GetColorIdFromIndex( nAutoDefault );
 
     sal_uInt32 nFoundIdx = 0;

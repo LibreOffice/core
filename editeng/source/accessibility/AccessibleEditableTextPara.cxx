@@ -1485,7 +1485,7 @@ namespace accessibility
                         else
                         {
                             Color cr(xComponent->getBackground());
-                            crChar = cr.IsDark() ? COL_WHITE : COL_BLACK;
+                            crChar = sal_uInt32(cr.IsDark() ? COL_WHITE : COL_BLACK);
                             anyChar <<= crChar;
                         }
                     }
@@ -1516,7 +1516,7 @@ namespace accessibility
                         else
                         {
                             Color cr(xComponent->getBackground());
-                            crCharUnderLine = cr.IsDark() ? COL_WHITE : COL_BLACK;
+                            crCharUnderLine = sal_uInt32(cr.IsDark() ? COL_WHITE : COL_BLACK);
                             anyCharUnderLine <<= crCharUnderLine;
                         }
                     }

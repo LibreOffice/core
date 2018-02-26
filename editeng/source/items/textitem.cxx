@@ -1726,7 +1726,7 @@ SvStream& SvxColorItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
     if( VERSION_USEAUTOCOLOR == nItemVersion &&
         COL_AUTO == mColor.GetColor() )
-        WriteColor( rStrm, Color(COL_BLACK) );
+        WriteColor( rStrm, COL_BLACK );
     else
         WriteColor( rStrm, mColor );
     return rStrm;

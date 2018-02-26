@@ -119,13 +119,13 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrOle2Obj::c
                     drawinglayer::attribute::HatchStyle::Single, // single hatch
                     125.0, // 1.25 mm
                     45.0 * F_PI180, // 45 degree diagonal
-                    Color(COL_BLACK).getBColor(), // black color
+                    COL_BLACK.getBColor(), // black color
                     3, // same default as VCL, a minimum of three discrete units (pixels) offset
                     false); // no filling
 
                 const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolyPolygonHatchPrimitive2D(
                     basegfx::B2DPolyPolygon(aObjectOutline),
-                    Color(COL_BLACK).getBColor(),
+                    COL_BLACK.getBColor(),
                     aFillHatch));
 
                 xRetval.push_back(xReference);

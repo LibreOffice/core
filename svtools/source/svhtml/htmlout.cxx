@@ -583,7 +583,7 @@ SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nL
 SvStream& HTMLOutFuncs::Out_Color( SvStream& rStream, const Color& rColor )
 {
     rStream.WriteCharPtr( "\"#" );
-    if( rColor.GetColor() == COL_AUTO )
+    if( rColor == COL_AUTO )
     {
         rStream.WriteCharPtr( "000000" );
     }
@@ -992,7 +992,7 @@ void HtmlWriterHelper::applyColor(HtmlWriter& rHtmlWriter, const OString &aAttri
 {
     OStringBuffer sBuffer;
 
-    if( rColor.GetColor() == COL_AUTO )
+    if( rColor == COL_AUTO )
     {
         sBuffer.append("#000000");
     }

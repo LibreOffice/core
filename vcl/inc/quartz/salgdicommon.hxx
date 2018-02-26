@@ -30,12 +30,14 @@
 #endif
 #include <postmac.h>
 
+#include <tools/color.hxx>
 #include <vcl/salgtype.hxx>
 
 // abstracting quartz color instead of having to use an CGFloat[] array
 class RGBAColor
 {
 public:
+    RGBAColor( ::Color );
     RGBAColor( SalColor );
     RGBAColor( float fRed, float fGreen, float fBlue, float fAlpha ); //NOTUSEDYET
     const CGFloat* AsArray() const { return m_fRGBA; }
@@ -55,6 +57,14 @@ inline RGBAColor::RGBAColor( SalColor nSalColor )
     m_fRGBA[0] = SALCOLOR_RED(nSalColor) * (1.0/255);
     m_fRGBA[1] = SALCOLOR_GREEN(nSalColor) * (1.0/255);
     m_fRGBA[2] = SALCOLOR_BLUE(nSalColor) * (1.0/255);
+    m_fRGBA[3] = 1.0; // opaque
+}
+
+inline RGBAColor::RGBAColor( ::Color nColor )
+{
+    m_fRGBA[0] = nColor.GetRed() * (1.0/255);
+    m_fRGBA[1] = nColor.GetGreen() * (1.0/255);
+    m_fRGBA[2] = nColor.GetBlue() * (1.0/255);
     m_fRGBA[3] = 1.0; // opaque
 }
 

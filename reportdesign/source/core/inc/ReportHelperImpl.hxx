@@ -153,7 +153,7 @@ void SAL_CALL clazz::setDetailFields( const css::uno::Sequence< OUString >&  )\
 ::sal_Int32 SAL_CALL clazz::getControlBackground() \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
-    return varName.m_bBackgroundTransparent ? COL_TRANSPARENT : varName.nBackgroundColor; \
+    return varName.m_bBackgroundTransparent ? sal_Int32(COL_TRANSPARENT) : varName.nBackgroundColor; \
 } \
  \
 void SAL_CALL clazz::setControlBackground( ::sal_Int32 _backgroundcolor )\
