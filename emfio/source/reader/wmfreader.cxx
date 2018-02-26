@@ -708,7 +708,7 @@ namespace emfio
                 Point aPoint( ReadYX() );
                 mpInputStream->ReadUInt16( nDontKnow ).ReadUInt16( nWidth ).ReadUInt16( nHeight ).ReadUInt16( nBytesPerScan ).ReadUChar( nPlanes ).ReadUChar( nBitCount );
 
-                bool bOk = nWidth && nHeight && nPlanes == 1 && nBitCount == 1;
+                bool bOk = nWidth && nHeight && nPlanes == 1 && nBitCount == 1 && nBytesPerScan != 0;
                 if (bOk)
                 {
                     bOk = nBytesPerScan <= mpInputStream->remainingSize() / nHeight;
