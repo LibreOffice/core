@@ -181,8 +181,8 @@ class SwWrongList
     std::vector<SwWrongArea> maList;
     WrongListType            meType;
 
-    sal_Int32 nBeginInvalid;   // Start of the invalid range
-    sal_Int32 nEndInvalid;     // End of the invalid range
+    sal_Int32 mnBeginInvalid;   // Start of the invalid range
+    sal_Int32 mnEndInvalid;     // End of the invalid range
 
     static void ShiftLeft( sal_Int32 &rPos, sal_Int32 nStart, sal_Int32 nEnd )
     { if( rPos > nStart ) rPos = rPos > nEnd ? rPos - nEnd + nStart : nStart; }
@@ -202,10 +202,10 @@ public:
     virtual void CopyFrom( const SwWrongList& rCopy );
 
     WrongListType GetWrongListType() const { return meType; }
-    sal_Int32 GetBeginInv() const { return nBeginInvalid; }
-    sal_Int32 GetEndInv() const { return nEndInvalid; }
+    sal_Int32 GetBeginInv() const { return mnBeginInvalid; }
+    sal_Int32 GetEndInv() const { return mnEndInvalid; }
     void SetInvalid( sal_Int32 nBegin, sal_Int32 nEnd );
-    void Validate(){ nBeginInvalid = nEndInvalid = COMPLETE_STRING; }
+    void Validate(){ mnBeginInvalid = mnEndInvalid = COMPLETE_STRING; }
     void Invalidate( sal_Int32 nBegin, sal_Int32 nEnd );
     bool InvalidateWrong();
     enum class FreshState { FRESH, CURSOR, NOTHING };

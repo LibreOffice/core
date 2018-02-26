@@ -571,7 +571,7 @@ bool SwFileNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 SwTemplNameFieldType::SwTemplNameFieldType(SwDoc *pDocument)
     : SwFieldType( SwFieldIds::TemplateName )
 {
-    pDoc = pDocument;
+    m_pDoc = pDocument;
 }
 
 OUString SwTemplNameFieldType::Expand(sal_uLong nFormat) const
@@ -579,7 +579,7 @@ OUString SwTemplNameFieldType::Expand(sal_uLong nFormat) const
     OSL_ENSURE( nFormat < FF_END, "Expand: no valid Format!" );
 
     OUString aRet;
-    SwDocShell *pDocShell(pDoc->GetDocShell());
+    SwDocShell *pDocShell(m_pDoc->GetDocShell());
     OSL_ENSURE(pDocShell, "no SwDocShell");
     if (pDocShell) {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -626,7 +626,7 @@ OUString SwTemplNameFieldType::Expand(sal_uLong nFormat) const
 
 SwFieldType* SwTemplNameFieldType::Copy() const
 {
-    SwFieldType *pTmp = new SwTemplNameFieldType(pDoc);
+    SwFieldType *pTmp = new SwTemplNameFieldType(m_pDoc);
     return pTmp;
 }
 
