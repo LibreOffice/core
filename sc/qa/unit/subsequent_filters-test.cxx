@@ -146,6 +146,7 @@ public:
     void testMergedCellsODS();
     void testRepeatedColumnsODS();
     void testDataValidityODS();
+    void testDataValidityXLSX();
     void testDataTableMortgageXLS();
     void testDataTableOneVarXLSX();
     void testDataTableMultiTableXLSX();
@@ -277,6 +278,7 @@ public:
     CPPUNIT_TEST(testMergedCellsODS);
     CPPUNIT_TEST(testRepeatedColumnsODS);
     CPPUNIT_TEST(testDataValidityODS);
+    CPPUNIT_TEST(testDataValidityXLSX);
     CPPUNIT_TEST(testDataTableMortgageXLS);
     CPPUNIT_TEST(testDataTableOneVarXLSX);
     CPPUNIT_TEST(testDataTableMultiTableXLSX);
@@ -1324,6 +1326,7 @@ void ScFiltersTest::testDataValidityODS()
 
     ScAddress aValBaseAddr1( 2,6,0 ); //sheet1
     ScAddress aValBaseAddr2( 2,3,1 ); //sheet2
+    ScAddress aValBaseAddr3( 2,2,2 ); //sheet3
 
     //sheet1's expected Data Validation Entry values
     ValDataTestParams aVDTParams1(
@@ -1339,17 +1342,27 @@ void ScFiltersTest::testDataValidityODS()
         "Must be a whole number between 1 and 10.",
         SC_VALERR_STOP, 2
     );
+    //sheet3's expected Data Validation Entry values
+    ValDataTestParams aVDTParams3(
+        SC_VALID_CUSTOM, ScConditionMode::Direct, "ISTEXT(C3)", EMPTY_OUSTRING, rDoc,
+        aValBaseAddr3, "Error sheet 3",
+        "Must not be a numerical value.",
+        SC_VALERR_STOP, 3
+    );
     //check each sheet's Data Validation Entries
     checkValiditationEntries( aVDTParams1 );
     checkValiditationEntries( aVDTParams2 );
+    checkValiditationEntries( aVDTParams3 );
 
     //expected ranges to be associated with data validity
     ScRange aRange1( 2,2,0, 2,6,0 ); //sheet1
     ScRange aRange2( 2,3,1, 6,7,1 ); //sheet2
+    ScRange aRange3( 2,2,2, 2,6,2 ); //sheet3
 
     //check each sheet's cells for data validity
     checkCellValidity( aValBaseAddr1, aRange1, rDoc );
     checkCellValidity( aValBaseAddr2, aRange2, rDoc );
+    checkCellValidity( aValBaseAddr3, aRange3, rDoc );
 
     //check each sheet's content
     OUString aCSVFileName1;
@@ -1359,6 +1372,32 @@ void ScFiltersTest::testDataValidityODS()
     OUString aCSVFileName2;
     createCSVPath("dataValidity2.", aCSVFileName2);
     testFile(aCSVFileName2, rDoc, 1);
+
+    OUString aCSVFileName3;
+    createCSVPath("dataValidity3.", aCSVFileName3);
+    testFile(aCSVFileName3, rDoc, 2);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testDataValidityXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("dataValidity.", FORMAT_XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    ScAddress aValBaseAddr1( 2,6,0 ); //sheet1
+    ScAddress aValBaseAddr2( 2,3,1 ); //sheet2
+    ScAddress aValBaseAddr3( 2,2,2 ); //sheet3
+
+    //expected ranges to be associated with data validity
+    ScRange aRange1( 2,2,0, 2,6,0 ); //sheet1
+    ScRange aRange2( 2,3,1, 6,7,1 ); //sheet2
+    ScRange aRange3( 2,2,2, 2,6,2 ); //sheet3
+
+    //check each sheet's cells for data validity
+    checkCellValidity( aValBaseAddr1, aRange1, rDoc );
+    checkCellValidity( aValBaseAddr2, aRange2, rDoc );
+    checkCellValidity( aValBaseAddr3, aRange3, rDoc );
 
     xDocSh->DoClose();
 }
