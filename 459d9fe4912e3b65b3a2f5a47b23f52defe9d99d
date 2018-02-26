@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_6fe285a1",
+        "filename": "include/vcl/ITiledRenderable.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2018-02-26T18:20:00Z",
+      "side": 1,
+      "message": "Using this style of comments is not something we seem to follow in this line. I think best to change it to \u0027//\u0027 to keep it consistent?",
+      "range": {
+        "startLine": 250,
+        "startChar": 3,
+        "endLine": 252,
+        "endChar": 7
+      },
+      "revId": "459d9fe4912e3b65b3a2f5a47b23f52defe9d99d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
