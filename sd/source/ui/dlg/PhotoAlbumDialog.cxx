@@ -789,7 +789,7 @@ void SdPhotoAlbumDialog::createCaption(const awt::Size& aPageSize )
         SfxItemSet aSet(pDoc->GetItemPool() );
 
         aSet.Put( XFillStyleItem(drawing::FillStyle_SOLID) );
-        aSet.Put( XFillColorItem( "", Color(COL_BLACK) ) );
+        aSet.Put( XFillColorItem( "", COL_BLACK ) );
         aSet.Put( XFillTransparenceItem( 20 ) );
         pSdrObj->SetMergedItemSetAndBroadcast(aSet);
     }

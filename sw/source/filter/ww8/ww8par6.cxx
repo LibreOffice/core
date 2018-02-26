@@ -342,7 +342,7 @@ bool wwSectionManager::SetCols(SwFrameFormat &rFormat, const wwSection &rSection
     {
         aCol.SetLineAdj(COLADJ_TOP);      // Line
         aCol.SetLineHeight(100);
-        aCol.SetLineColor(Color(COL_BLACK));
+        aCol.SetLineColor(COL_BLACK);
         aCol.SetLineWidth(1);
     }
 
@@ -1479,7 +1479,7 @@ bool SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
     bool bRet = aRightBrc.fShadow() && pSizeArray && pSizeArray[WW8_RIGHT];
     if (bRet)
     {
-        rShadow.SetColor(Color(COL_BLACK));
+        rShadow.SetColor(COL_BLACK);
     //i120718
         short nVal = aRightBrc.DetermineBorderProperties();
     //End

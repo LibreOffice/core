@@ -62,7 +62,7 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
     // define an invisible button with the size of a page
     tools::Rectangle aRect( 0, 0, static_cast<long>( mnDocWidth * mnDocXScale ), static_cast<long>( mnDocHeight * mnDocYScale ) );
     tools::Polygon aPoly( aRect );
-    FillStyle aFill = FillStyle( Color(COL_WHITE) );
+    FillStyle aFill = FillStyle( COL_WHITE );
     mnWhiteBackgroundShapeId = defineShape( aPoly, aFill );
 
     ::basegfx::B2DHomMatrix m; // #i73264#

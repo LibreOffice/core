@@ -1920,8 +1920,8 @@ bool XSecondaryFillColorItem::GetPresentation
 
 XGradient::XGradient() :
     eStyle( css::awt::GradientStyle_LINEAR ),
-    aStartColor( Color( COL_BLACK ) ),
-    aEndColor( Color( COL_WHITE ) ),
+    aStartColor( COL_BLACK ),
+    aEndColor( COL_WHITE ),
     nAngle( 0 ),
     nBorder( 0 ),
     nOfsX( 50 ),

@@ -811,7 +811,7 @@ void HtmlExport::SetDocColors( SdPage* pPage )
     maVLinkColor = aConfig.GetColorValue(svtools::LINKSVISITED).nColor;
     maALinkColor = aConfig.GetColorValue(svtools::LINKS).nColor;
     maLinkColor  = aConfig.GetColorValue(svtools::LINKS).nColor;
-    maTextColor  = Color(COL_BLACK);
+    maTextColor  = COL_BLACK;
 
     SfxStyleSheet* pSheet = nullptr;
 
@@ -1422,7 +1422,7 @@ OUString HtmlExport::ParagraphToHTMLString( SdrOutliner const * pOutliner, sal_I
     if(nullptr == pPara)
         return OUString();
 
-    HtmlState aState( (mbUserAttr || mbDocColors)  ? maTextColor : Color(COL_BLACK) );
+    HtmlState aState( (mbUserAttr || mbDocColors)  ? maTextColor : COL_BLACK );
     std::vector<sal_Int32> aPortionList;
     rEditEngine.GetPortions( nPara, aPortionList );
 

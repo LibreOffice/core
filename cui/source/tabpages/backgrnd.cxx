@@ -284,7 +284,7 @@ void BackgroundPreviewImpl::Paint(vcl::RenderContext& rRenderContext, const ::to
 
     if (bIsBmp)
     {
-        rRenderContext.SetFillColor(Color(COL_TRANSPARENT));
+        rRenderContext.SetFillColor(COL_TRANSPARENT);
     }
     rRenderContext.DrawRect(aDrawRect);
 
@@ -759,7 +759,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
         else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
             rCoreSet->ClearItem( nWhich );
     }
-    else if ( SID_ATTR_BRUSH_CHAR == nSlot && aBgdColor != Color( COL_WHITE ) )
+    else if ( SID_ATTR_BRUSH_CHAR == nSlot && aBgdColor != COL_WHITE )
     {
         rCoreSet->Put( SvxBrushItem( aBgdColor, nWhich ) );
         bModified = true;
@@ -1045,7 +1045,7 @@ SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl()
 IMPL_LINK_NOARG(SvxBackgroundTabPage, BackgroundColorHdl_Impl, ValueSet*, void)
 {
     sal_uInt16 nItemId = m_pBackgroundColorSet->GetSelectItemId();
-    Color aColor = nItemId ? ( m_pBackgroundColorSet->GetItemColor( nItemId ) ) : Color( COL_TRANSPARENT );
+    Color aColor = nItemId ? ( m_pBackgroundColorSet->GetItemColor( nItemId ) ) : COL_TRANSPARENT;
     aBgdColor = aColor;
     m_bColorSelected = true;
     m_pPreviewWin1->NotifyChange( aBgdColor );

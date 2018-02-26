@@ -4455,7 +4455,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                             else
                             {
                                 OUStringBuffer aBuffer;
-                                ::sax::Converter::convertColor(aBuffer, Color(COL_LIGHTRED).GetColor());
+                                ::sax::Converter::convertColor(aBuffer, COL_LIGHTRED);
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_NEGATIVE_COLOR, aBuffer.makeStringAndClear());
                             }
                         }

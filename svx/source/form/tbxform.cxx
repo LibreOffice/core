@@ -157,7 +157,7 @@ VclPtr<vcl::Window> SvxFmTbxCtlRecText::CreateItemWindow( vcl::Window* pParent )
     pFixedText->SetText( aText );
     aSize.AdjustWidth(6 );
     pFixedText->SetSizePixel( aSize );
-    pFixedText->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
+    pFixedText->SetBackground(Wallpaper(COL_TRANSPARENT));
 
     return pFixedText;
 }
@@ -183,7 +183,7 @@ VclPtr<vcl::Window> SvxFmTbxCtlRecFromText::CreateItemWindow( vcl::Window* pPare
     aSize.AdjustWidth(12 );
     pFixedText->SetText( aText );
     pFixedText->SetSizePixel( aSize );
-    pFixedText->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
+    pFixedText->SetBackground(Wallpaper(COL_TRANSPARENT));
     return pFixedText.get();
 }
 

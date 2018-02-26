@@ -1093,7 +1093,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
 
         // solid black lines and no fill
         aNewSet.Put(XLineStyleItem(drawing::LineStyle_SOLID));
-        aNewSet.Put(XLineColorItem(OUString(), Color(COL_BLACK)));
+        aNewSet.Put(XLineColorItem(OUString(), COL_BLACK));
         aNewSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
         pClone->SetMergedItemSet(aNewSet);
 

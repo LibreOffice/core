@@ -1073,7 +1073,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
             }
 
             const Color& rOldLineColor = pOutDev->GetLineColor();
-            pOutDev->SetLineColor( Color( COL_BLACK ) );
+            pOutDev->SetLineColor( COL_BLACK );
             pOutDev->DrawLine( aStartPos, aEndPos );
             pOutDev->SetLineColor( rOldLineColor );
         }

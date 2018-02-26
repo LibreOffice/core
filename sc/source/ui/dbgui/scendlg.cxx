@@ -73,7 +73,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( vcl::Window* pParent, const OUString& rName,
     m_pBtnOk->SetClickHdl( LINK( this, ScNewScenarioDlg, OkHdl ) );
     m_pCbShowFrame->SetClickHdl( LINK( this, ScNewScenarioDlg, EnableHdl ) );
 
-    m_pLbColor->SelectEntry( Color( COL_LIGHTGRAY ) );
+    m_pLbColor->SelectEntry( COL_LIGHTGRAY );
     m_pCbShowFrame->Check();
     m_pCbTwoWay->Check();
     m_pCbCopyAll->Check(false);

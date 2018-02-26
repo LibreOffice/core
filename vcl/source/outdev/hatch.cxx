@@ -58,9 +58,9 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
         Color aColor( rHatch.GetColor() );
 
         if ( mnDrawMode & DrawModeFlags::BlackLine )
-            aColor = Color( COL_BLACK );
+            aColor = COL_BLACK;
         else if ( mnDrawMode & DrawModeFlags::WhiteLine )
-            aColor = Color( COL_WHITE );
+            aColor = COL_WHITE;
         else if ( mnDrawMode & DrawModeFlags::GrayLine )
         {
             const sal_uInt8 cLum = aColor.GetLuminance();

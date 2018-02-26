@@ -1226,7 +1226,7 @@ Color AnnotationManagerImpl::GetColor(sal_uInt16 aAuthorIndex)
         return aArrayNormal[ aAuthorIndex % SAL_N_ELEMENTS( aArrayNormal ) ];
     }
 
-    return Color(COL_WHITE);
+    return COL_WHITE;
 }
 
 Color AnnotationManagerImpl::GetColorLight(sal_uInt16 aAuthorIndex)
@@ -1241,7 +1241,7 @@ Color AnnotationManagerImpl::GetColorLight(sal_uInt16 aAuthorIndex)
         return aArrayLight[ aAuthorIndex % SAL_N_ELEMENTS( aArrayLight ) ];
     }
 
-    return Color(COL_WHITE);
+    return COL_WHITE;
 }
 
 Color AnnotationManagerImpl::GetColorDark(sal_uInt16 aAuthorIndex)
@@ -1256,7 +1256,7 @@ Color AnnotationManagerImpl::GetColorDark(sal_uInt16 aAuthorIndex)
         return aArrayAnkor[  aAuthorIndex % SAL_N_ELEMENTS( aArrayAnkor ) ];
     }
 
-    return Color(COL_WHITE);
+    return COL_WHITE;
 }
 
 SdPage* AnnotationManagerImpl::GetNextPage( SdPage const * pPage, bool bForward )

@@ -95,8 +95,8 @@ OutputDevice::OutputDevice() :
     mbOutput                        = true;
     mbDevOutput                     = false;
     mbOutputClipped                 = false;
-    maTextColor                     = Color( COL_BLACK );
-    maOverlineColor                 = Color( COL_TRANSPARENT );
+    maTextColor                     = COL_BLACK;
+    maOverlineColor                 = COL_TRANSPARENT;
     meRasterOp                      = RasterOp::OverPaint;
     mnAntialiasing                  = AntialiasingFlags::NONE;
     meTextLanguage                  = LANGUAGE_SYSTEM;  // TODO: get default from configuration?

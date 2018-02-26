@@ -2889,7 +2889,7 @@ void SvImpLBox::PaintDDCursor( SvTreeListEntry* pInsertionPos )
     RasterOp eOldOp = pView->GetRasterOp();
     pView->SetRasterOp( RasterOp::Invert );
     Color aOldLineColor = pView->GetLineColor();
-    pView->SetLineColor( Color( COL_BLACK ) );
+    pView->SetLineColor( COL_BLACK );
     pView->DrawLine( Point( 0, nY ), Point( aOutputSize.Width(), nY ) );
     pView->SetLineColor( aOldLineColor );
     pView->SetRasterOp( eOldOp );

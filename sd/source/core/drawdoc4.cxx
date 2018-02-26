@@ -214,7 +214,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(SvxCaseMapItem(SvxCaseMap::NotMapped, EE_CHAR_CASEMAP ));
     rISet.Put(SvxEmphasisMarkItem(FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK));
     rISet.Put(SvxCharReliefItem(FontRelief::NONE, EE_CHAR_RELIEF));
-    rISet.Put(SvxColorItem(Color(COL_AUTO), EE_CHAR_COLOR ));
+    rISet.Put(SvxColorItem(COL_AUTO, EE_CHAR_COLOR ));
 
     // Paragraph attributes (Edit Engine)
     rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
@@ -573,7 +573,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
     rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 18 pt
     rISet.Put( SvxFontHeightItem( convertFontHeightToCTL( 635 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 18 pt
 
-    rISet.Put(SvxColorItem(Color(COL_AUTO), EE_CHAR_COLOR ));
+    rISet.Put(SvxColorItem(COL_AUTO, EE_CHAR_COLOR ));
 
     // Paragraph attributes (Edit Engine)
     rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
@@ -1202,7 +1202,7 @@ void SdDrawDocument::SetTextDefaults() const
     aNumberFormat.SetBulletFont(&aBulletFont);
     aNumberFormat.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34
     aNumberFormat.SetBulletRelSize(45);
-    aNumberFormat.SetBulletColor(Color(COL_AUTO));
+    aNumberFormat.SetBulletColor(COL_AUTO);
     aNumberFormat.SetStart(1);
     aNumberFormat.SetNumAdjust(SvxAdjust::Left);
 

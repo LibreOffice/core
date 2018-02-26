@@ -784,7 +784,7 @@ void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
     rRenderContext.SetRasterOp(RasterOp::OverPaint);
     rRenderContext.DrawRect(::tools::Rectangle(Point(), aWinSize));
 
-    rRenderContext.SetLineColor(Color(COL_WHITE));
+    rRenderContext.SetLineColor(COL_WHITE);
     ::tools::Rectangle aRect(Point((aWinSize.Width() - aFrameSize.Width())/2,
                           (aWinSize.Height() - aFrameSize.Height())/2),
                           aFrameSize);
@@ -792,7 +792,7 @@ void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
 
     Size aSz(2, 0);
     aSz = rRenderContext.PixelToLogic(aSz);
-    rRenderContext.SetFillColor(Color(COL_TRANSPARENT));
+    rRenderContext.SetFillColor(COL_TRANSPARENT);
     rRenderContext.SetRasterOp(RasterOp::Invert);
     aRect.AdjustLeft(aTopLeft.Y() );
     aRect.AdjustTop(aTopLeft.X() );

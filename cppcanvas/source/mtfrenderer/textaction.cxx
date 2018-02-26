@@ -1610,7 +1610,7 @@ namespace cppcanvas
                 mnOutlineWidth( calcOutlineWidth(rState,rVDev) ),
                 maFillColor(
                     vcl::unotools::colorToDoubleSequence(
-                        ::Color( COL_WHITE ),
+                        ::COL_WHITE,
                         rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() )),
                 maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
                 maLinesOverallSize(),
@@ -1652,7 +1652,7 @@ namespace cppcanvas
                 mnOutlineWidth( calcOutlineWidth(rState,rVDev) ),
                 maFillColor(
                     vcl::unotools::colorToDoubleSequence(
-                        ::Color( COL_WHITE ),
+                        ::COL_WHITE,
                         rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() )),
                 maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
                 maLinesOverallSize(),
@@ -1746,7 +1746,7 @@ namespace cppcanvas
                                               double                                             nOutlineWidth ) :
                     maFillColor(
                         vcl::unotools::colorToDoubleSequence(
-                            ::Color( COL_WHITE ),
+                            ::COL_WHITE,
                             rCanvas->getDevice()->getDeviceColorSpace() )),
                     mnOutlineWidth( nOutlineWidth ),
                     mrCanvas( rCanvas ),

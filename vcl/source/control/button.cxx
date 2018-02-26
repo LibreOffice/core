@@ -799,7 +799,7 @@ static void ImplDrawBtnDropDownArrow( OutputDevice* pDev,
 
     pDev->SetLineColor();
     if ( bBlack )
-        pDev->SetFillColor( Color( COL_BLACK ) );
+        pDev->SetFillColor( COL_BLACK );
     else
         pDev->SetFillColor( rColor );
     pDev->DrawRect( tools::Rectangle( nX+0, nY+0, nX+6, nY+0 ) );
@@ -833,7 +833,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
     pDev->IntersectClipRegion( aInRect );
 
     if ( nDrawFlags & DrawFlags::Mono )
-        aColor = Color( COL_BLACK );
+        aColor = COL_BLACK;
     else if( (nDrawFlags & DrawFlags::NoRollover) && IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire) )
         aColor = rStyleSettings.GetButtonRolloverTextColor();
     else if ( IsControlForeground() )
@@ -915,7 +915,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
                     aArrowColor = rStyleSettings.GetShadowColor();
                 else
                 {
-                    aArrowColor = Color( COL_LIGHTGREEN );
+                    aArrowColor = COL_LIGHTGREEN;
                     bBlack = true;
                 }
             }
@@ -1361,7 +1361,7 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->SetFont( aFont );
     if ( nFlags & DrawFlags::Mono )
     {
-        pDev->SetTextColor( Color( COL_BLACK ) );
+        pDev->SetTextColor( COL_BLACK );
     }
     else
     {
@@ -2439,7 +2439,7 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
         pDev->SetMapMode();
         pDev->SetFont( aFont );
         if ( nFlags & DrawFlags::Mono )
-            pDev->SetTextColor( Color( COL_BLACK ) );
+            pDev->SetTextColor( COL_BLACK );
         else
             pDev->SetTextColor( GetTextColor() );
         pDev->SetTextFillColor();
@@ -2452,11 +2452,11 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
         long    nRadY = aImageSize.Height()/2;
 
         pDev->SetLineColor();
-        pDev->SetFillColor( Color( COL_BLACK ) );
+        pDev->SetFillColor( COL_BLACK );
         pDev->DrawPolygon( tools::Polygon( aCenterPos, nRadX, nRadY ) );
         nRadX -= aBrd1Size.Width();
         nRadY -= aBrd1Size.Height();
-        pDev->SetFillColor( Color( COL_WHITE ) );
+        pDev->SetFillColor( COL_WHITE );
         pDev->DrawPolygon( tools::Polygon( aCenterPos, nRadX, nRadY ) );
         if ( mbChecked )
         {
@@ -2466,7 +2466,7 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
                 nRadX = 1;
             if ( !nRadY )
                 nRadY = 1;
-            pDev->SetFillColor( Color( COL_BLACK ) );
+            pDev->SetFillColor( COL_BLACK );
             pDev->DrawPolygon( tools::Polygon( aCenterPos, nRadX, nRadY ) );
         }
 
@@ -3297,7 +3297,7 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->SetMapMode();
     pDev->SetFont( aFont );
     if ( nFlags & DrawFlags::Mono )
-        pDev->SetTextColor( Color( COL_BLACK ) );
+        pDev->SetTextColor( COL_BLACK );
     else
         pDev->SetTextColor( GetTextColor() );
     pDev->SetTextFillColor();
@@ -3306,16 +3306,16 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
               aImageSize, aStateRect, aMouseRect );
 
     pDev->SetLineColor();
-    pDev->SetFillColor( Color( COL_BLACK ) );
+    pDev->SetFillColor( COL_BLACK );
     pDev->DrawRect( aStateRect );
     aStateRect.AdjustLeft(aBrd1Size.Width() );
     aStateRect.AdjustTop(aBrd1Size.Height() );
     aStateRect.AdjustRight( -(aBrd1Size.Width()) );
     aStateRect.AdjustBottom( -(aBrd1Size.Height()) );
     if ( meState == TRISTATE_INDET )
-        pDev->SetFillColor( Color( COL_LIGHTGRAY ) );
+        pDev->SetFillColor( COL_LIGHTGRAY );
     else
-        pDev->SetFillColor( Color( COL_WHITE ) );
+        pDev->SetFillColor( COL_WHITE );
     pDev->DrawRect( aStateRect );
 
     if ( meState == TRISTATE_TRUE )
@@ -3332,7 +3332,7 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
         Point   aTempPos12( aPos12 );
         Point   aTempPos21( aPos21 );
         Point   aTempPos22( aPos22 );
-        pDev->SetLineColor( Color( COL_BLACK ) );
+        pDev->SetLineColor( COL_BLACK );
         long nDX = 0;
         for ( long i = 0; i < nCheckWidth; i++ )
         {

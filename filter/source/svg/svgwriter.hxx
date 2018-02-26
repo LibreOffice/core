@@ -189,8 +189,8 @@ struct SVGShapeDescriptor
 
 
     SVGShapeDescriptor() :
-        maShapeFillColor( Color( COL_TRANSPARENT ) ),
-        maShapeLineColor( Color( COL_TRANSPARENT ) ),
+        maShapeFillColor( COL_TRANSPARENT ),
+        maShapeLineColor( COL_TRANSPARENT ),
         mnStrokeWidth( 0 ),
         maLineJoin(basegfx::B2DLineJoin::Miter), // miter is Svg 'stroke-linejoin' default
         maLineCap(css::drawing::LineCap_BUTT) // butt is Svg 'stroke-linecap' default

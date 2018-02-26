@@ -1061,7 +1061,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( vcl::Window* pParent
     get(mpLBAfterEffect, "aeffect_list" );
     get(mpFTDimColor, "dim_color_label" );
     get(mpCLBDimColor, "dim_color_list" );
-    mpCLBDimColor->SelectEntry(Color(COL_BLACK));
+    mpCLBDimColor->SelectEntry(COL_BLACK);
     get(mpFTTextAnim, "text_animation_label" );
     get(mpLBTextAnim, "text_animation_list" );
     get(mpMFTextDelay,"text_delay" );

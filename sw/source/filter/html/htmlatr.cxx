@@ -2077,7 +2077,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                 aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_size, sWidth);
 
                 const Color& rBorderColor = pBorderLine->GetColor();
-                if( !rBorderColor.IsRGBEqual( Color(COL_GRAY) ) )
+                if( !rBorderColor.IsRGBEqual( COL_GRAY ) )
                 {
                     HtmlWriterHelper::applyColor(aHtml, OOO_STRING_SVTOOLS_HTML_O_color, rBorderColor);
                 }

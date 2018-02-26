@@ -985,7 +985,7 @@ IMPL_LINK(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI,void)
                 pFI->SetFieldColor(*pFldCol);
                 delete pFldCol;
             } else {
-                pFI->SetFieldColor(Color(COL_LIGHTGRAY)); // TODO: remove this later on (357)
+                pFI->SetFieldColor(COL_LIGHTGRAY); // TODO: remove this later on (357)
             }
         }
     }

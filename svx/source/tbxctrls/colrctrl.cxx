@@ -272,8 +272,8 @@ void SvxColorDockingWindow::FillValueSet()
     ScopedVclPtrInstance< VirtualDevice > pVD;
 
     pVD->SetOutputSizePixel( aColorSize );
-    pVD->SetLineColor( Color( COL_BLACK ) );
-    pVD->SetBackground( Wallpaper( Color( COL_WHITE ) ) );
+    pVD->SetLineColor( COL_BLACK );
+    pVD->SetBackground( Wallpaper( COL_WHITE ) );
     pVD->DrawLine( Point(), Point( nPtX, nPtY ) );
     pVD->DrawLine( Point( 0, nPtY ), Point( nPtX, 0 ) );
 

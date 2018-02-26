@@ -67,7 +67,7 @@ namespace sdr
         OverlayLineStriped::OverlayLineStriped(
             const basegfx::B2DPoint& rBasePos,
             const basegfx::B2DPoint& rSecondPos)
-        :   OverlayObjectWithBasePosition(rBasePos, Color(COL_BLACK)),
+        :   OverlayObjectWithBasePosition(rBasePos, COL_BLACK),
             maSecondPosition(rSecondPos)
         {
         }

@@ -557,7 +557,7 @@ void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     if (pTargetPaintWindow)
     {
         OutputDevice& rTargetOutDev = pTargetPaintWindow->GetTargetOutputDevice();
-        rTargetOutDev.DrawWallpaper(aPaintRect, Wallpaper(Color(COL_WHITE)));
+        rTargetOutDev.DrawWallpaper(aPaintRect, Wallpaper(COL_WHITE));
     }
 
     // do paint (unbuffered) and mark repaint end

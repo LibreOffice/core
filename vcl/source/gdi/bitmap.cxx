@@ -65,28 +65,28 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
                 if( 1 == nBitCount )
                 {
                     aPal.SetEntryCount( 2 );
-                    aPal[ 0 ] = Color( COL_BLACK );
-                    aPal[ 1 ] = Color( COL_WHITE );
+                    aPal[ 0 ] = Color(COL_BLACK);
+                    aPal[ 1 ] = Color(COL_WHITE);
                 }
                 else if( ( 4 == nBitCount ) || ( 8 == nBitCount ) )
                 {
                     aPal.SetEntryCount( 1 << nBitCount );
-                    aPal[ 0 ] = Color( COL_BLACK );
-                    aPal[ 1 ] = Color( COL_BLUE );
-                    aPal[ 2 ] = Color( COL_GREEN );
-                    aPal[ 3 ] = Color( COL_CYAN );
-                    aPal[ 4 ] = Color( COL_RED );
-                    aPal[ 5 ] = Color( COL_MAGENTA );
-                    aPal[ 6 ] = Color( COL_BROWN );
-                    aPal[ 7 ] = Color( COL_GRAY );
-                    aPal[ 8 ] = Color( COL_LIGHTGRAY );
-                    aPal[ 9 ] = Color( COL_LIGHTBLUE );
-                    aPal[ 10 ] = Color( COL_LIGHTGREEN );
-                    aPal[ 11 ] = Color( COL_LIGHTCYAN );
-                    aPal[ 12 ] = Color( COL_LIGHTRED );
-                    aPal[ 13 ] = Color( COL_LIGHTMAGENTA );
-                    aPal[ 14 ] = Color( COL_YELLOW );
-                    aPal[ 15 ] = Color( COL_WHITE );
+                    aPal[ 0 ] = Color(COL_BLACK);
+                    aPal[ 1 ] = Color(COL_BLUE);
+                    aPal[ 2 ] = Color(COL_GREEN);
+                    aPal[ 3 ] = Color(COL_CYAN);
+                    aPal[ 4 ] = Color(COL_RED);
+                    aPal[ 5 ] = Color(COL_MAGENTA);
+                    aPal[ 6 ] = Color(COL_BROWN);
+                    aPal[ 7 ] = Color(COL_GRAY);
+                    aPal[ 8 ] = Color(COL_LIGHTGRAY);
+                    aPal[ 9 ] = Color(COL_LIGHTBLUE);
+                    aPal[ 10 ] = Color(COL_LIGHTGREEN);
+                    aPal[ 11 ] = Color(COL_LIGHTCYAN);
+                    aPal[ 12 ] = Color(COL_LIGHTRED);
+                    aPal[ 13 ] = Color(COL_LIGHTMAGENTA);
+                    aPal[ 14 ] = Color(COL_YELLOW);
+                    aPal[ 15 ] = Color(COL_WHITE);
 
                     // Create dither palette
                     if( 8 == nBitCount )
@@ -1201,8 +1201,8 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uInt8 nTol ) const
     {
         const long          nWidth = pReadAcc->Width();
         const long          nHeight = pReadAcc->Height();
-        const BitmapColor   aBlack( pWriteAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
-        const BitmapColor   aWhite( pWriteAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
+        const BitmapColor   aBlack( pWriteAcc->GetBestMatchingColor( Color(COL_BLACK) ) );
+        const BitmapColor   aWhite( pWriteAcc->GetBestMatchingColor( Color(COL_WHITE) ) );
 
         if( !nTol )
         {
@@ -1510,7 +1510,7 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
     {
         const long          nWidth = std::min( pMaskAcc->Width(), pAcc->Width() );
         const long          nHeight = std::min( pMaskAcc->Height(), pAcc->Height() );
-        const BitmapColor   aMaskWhite( pMaskAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
+        const BitmapColor   aMaskWhite( pMaskAcc->GetBestMatchingColor( Color(COL_WHITE) ) );
         BitmapColor         aReplace;
 
         if( pAcc->HasPalette() )
@@ -1830,7 +1830,7 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
         const Color         aColBlack( COL_BLACK );
         BitmapColor         aPixel;
         BitmapColor         aMaskPixel;
-        const BitmapColor   aWhite( pAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
+        const BitmapColor   aWhite( pAcc->GetBestMatchingColor( Color(COL_WHITE) ) );
         const BitmapColor   aBlack( pAcc->GetBestMatchingColor( aColBlack ) );
         const BitmapColor   aMaskBlack( pMaskAcc->GetBestMatchingColor( aColBlack ) );
 

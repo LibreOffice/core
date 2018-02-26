@@ -328,7 +328,7 @@ void ClientBox::DrawRow(vcl::RenderContext& rRenderContext, const ::tools::Recta
       DrawText(m_sPinTextRect, sPinText);
     }
 
-    rRenderContext.SetLineColor(Color(COL_LIGHTGRAY));
+    rRenderContext.SetLineColor(COL_LIGHTGRAY);
     rRenderContext.DrawLine(rRect.BottomLeft(), rRect.BottomRight());
 }
 

@@ -744,10 +744,10 @@ The following structure describes the permissions used in PDF security
     void               SetDigitLanguage( LanguageType eLang );
 
     void               SetLineColor( const Color& rColor );
-    void               SetLineColor() { SetLineColor( Color( COL_TRANSPARENT ) ); }
+    void               SetLineColor() { SetLineColor( COL_TRANSPARENT ); }
 
     void               SetFillColor( const Color& rColor );
-    void               SetFillColor() { SetFillColor( Color( COL_TRANSPARENT ) ); }
+    void               SetFillColor() { SetFillColor( COL_TRANSPARENT ); }
 
     void               SetFont( const vcl::Font& rNewFont );
     void               SetTextColor( const Color& rColor );
@@ -782,7 +782,7 @@ The following structure describes the permissions used in PDF security
 
     void                DrawPixel( const Point& rPt, const Color& rColor );
     void                DrawPixel( const Point& rPt )
-    { DrawPixel( rPt, Color( COL_TRANSPARENT ) ); }
+    { DrawPixel( rPt, COL_TRANSPARENT ); }
 
     void                DrawLine( const Point& rStartPt, const Point& rEndPt );
     void                DrawLine( const Point& rStartPt, const Point& rEndPt,

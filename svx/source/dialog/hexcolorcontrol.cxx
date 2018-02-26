@@ -51,7 +51,7 @@ sal_Int32 HexColorControl::GetColor()
     sax::Converter::convertColor(nColor, aStr);
 
     if (nColor == -1)
-        SetControlBackground(Color(COL_RED));
+        SetControlBackground(COL_RED);
     else
         SetControlBackground();
 

@@ -57,7 +57,7 @@ namespace sdr
         }
 
         OverlayCrosshairStriped::OverlayCrosshairStriped(const basegfx::B2DPoint& rBasePos)
-        :   OverlayObjectWithBasePosition(rBasePos, Color(COL_BLACK))
+        :   OverlayObjectWithBasePosition(rBasePos, COL_BLACK)
         {
         }
 

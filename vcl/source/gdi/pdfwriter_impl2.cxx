@@ -492,7 +492,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 xVDev->DrawGradient( tools::Rectangle( aPoint, aDstSize ), rTransparenceGradient );
                                 xVDev->SetDrawMode( DrawModeFlags::Default );
                                 xVDev->EnableMapMode( false );
-                                xVDev->DrawMask( aPoint, aDstSizePixel, aMask, Color( COL_WHITE ) );
+                                xVDev->DrawMask( aPoint, aDstSizePixel, aMask, COL_WHITE );
                                 aAlpha = xVDev->GetBitmap( aPoint, aDstSizePixel );
 
                                 Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();

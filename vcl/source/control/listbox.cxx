@@ -360,7 +360,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
     // Content
     if ( ( nFlags & DrawFlags::Mono ) || ( eOutDevType == OUTDEV_PRINTER ) )
     {
-        pDev->SetTextColor( Color( COL_BLACK ) );
+        pDev->SetTextColor( COL_BLACK );
     }
     else
     {

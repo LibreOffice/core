@@ -119,8 +119,8 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
 
             if ( pVDev->SetOutputSizePixel( rSizePix ) )
             {
-                pVDev->SetLineColor( Color( COL_BLACK ) );
-                pVDev->SetFillColor( Color( COL_BLACK ) );
+                pVDev->SetLineColor( COL_BLACK );
+                pVDev->SetFillColor( COL_BLACK );
 
                 for( sal_uInt16 i = 0; i < nCount; i++ )
                 {
@@ -149,7 +149,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
     }
     else if( rGraphic.GetType() != GraphicType::NONE )
     {
-        const Graphic   aTmpGrf( rGraphic.GetGDIMetaFile().GetMonochromeMtf( Color( COL_BLACK ) ) );
+        const Graphic   aTmpGrf( rGraphic.GetGDIMetaFile().GetMonochromeMtf( COL_BLACK ) );
         ScopedVclPtrInstance< VirtualDevice > pVDev;
         Size            aSizePix( pVDev->LogicToPixel( aTmpGrf.GetPrefSize(), aTmpGrf.GetPrefMapMode() ) );
 

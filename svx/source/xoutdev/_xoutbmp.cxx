@@ -287,7 +287,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                                 const Wallpaper aWallpaper( pVDev->GetBackground() );
                                 const Point     aPt;
 
-                                pVDev->SetBackground( Wallpaper( Color( COL_BLACK ) ) );
+                                pVDev->SetBackground( Wallpaper( COL_BLACK ) );
                                 pVDev->Erase();
                                 rGraphic.Draw( pVDev.get(), aPt, aSize );
 
@@ -469,7 +469,7 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                 long                lGray;
 
                 // initialize border with white pixels
-                pVirDev->SetLineColor( Color( COL_WHITE) );
+                pVirDev->SetLineColor( COL_WHITE );
                 pVirDev->DrawLine( Point(), Point( nWidth - 1, 0L ) );
                 pVirDev->DrawLine( Point( nWidth - 1, 0L ), Point( nWidth - 1, nHeight - 1 ) );
                 pVirDev->DrawLine( Point( nWidth - 1, nHeight - 1 ), Point( 0L, nHeight - 1 ) );
@@ -499,9 +499,9 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                         nSum2 -= lGray;
 
                         if( ( nSum1 * nSum1 + nSum2 * nSum2 ) < lThres2 )
-                            pVirDev->DrawPixel( Point(nXDst, nY), Color(COL_WHITE) );
+                            pVirDev->DrawPixel( Point(nXDst, nY), COL_WHITE );
                         else
-                            pVirDev->DrawPixel( Point(nXDst, nY), Color(COL_BLACK) );
+                            pVirDev->DrawPixel( Point(nXDst, nY), COL_BLACK );
                     }
                 }
 
@@ -567,7 +567,7 @@ tools::Polygon XOutBitmap::GetContour( const Bitmap& rBmp, const XOutFlags nFlag
             std::unique_ptr<Point[]> pPoints2;
             long                nX, nY;
             sal_uInt16              nPolyPos = 0;
-            const BitmapColor   aBlack = pAcc->GetBestMatchingColor( Color( COL_BLACK ) );
+            const BitmapColor   aBlack = pAcc->GetBestMatchingColor( Color(COL_BLACK) );
 
             if( nFlags & XOutFlags::ContourVert )
             {

@@ -101,7 +101,7 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
     const Color aOldFillColor( pPrinter->GetFillColor() );
     const vcl::Font aOldFont( pPrinter->GetFont() );
 
-    pPrinter->SetLineColor( Color( COL_BLACK ) );
+    pPrinter->SetLineColor( COL_BLACK );
     pPrinter->SetFillColor();
 
     vcl::Font aFont( aOldFont );

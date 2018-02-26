@@ -705,7 +705,7 @@ void OS2METReader::ChangeBrush(const Color& rPatColor, bool bFill )
     if( bFill )
         aColor = rPatColor;
     else
-        aColor = Color( COL_TRANSPARENT );
+        aColor = COL_TRANSPARENT;
 
     if( pVirDev->GetFillColor() != aColor )
         pVirDev->SetFillColor( aColor );
@@ -947,7 +947,7 @@ void OS2METReader::ReadBox(bool bGivenPos)
         }
         else
         {
-            ChangeBrush( Color( COL_TRANSPARENT ), false );
+            ChangeBrush( COL_TRANSPARENT, false );
             SetRasterOp(aAttr.eLinMix);
         }
 
@@ -1148,7 +1148,7 @@ void OS2METReader::ReadFullArc(bool bGivenPos, sal_uInt16 nOrderSize)
     else
     {
         SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
-        ChangeBrush(Color( COL_TRANSPARENT ), false);
+        ChangeBrush(COL_TRANSPARENT, false);
         SetRasterOp(aAttr.eLinMix);
     }
     pVirDev->DrawEllipse(aRect);
@@ -1369,7 +1369,7 @@ void OS2METReader::ReadMarker(bool bGivenPos, sal_uInt16 nOrderLen)
     }
     else
     {
-        ChangeBrush(Color(COL_TRANSPARENT), false);
+        ChangeBrush(COL_TRANSPARENT, false);
     }
     if (bCoord32) nNumPoints=nOrderLen/8; else nNumPoints=nOrderLen/4;
     if (!bGivenPos) nNumPoints++;
@@ -1600,7 +1600,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                     if( p->bStroke )
                     {
                         SetPen( aAttr.aPatCol, aAttr.nStrLinWidth );
-                        ChangeBrush(Color(COL_TRANSPARENT), false);
+                        ChangeBrush(COL_TRANSPARENT, false);
                         SetRasterOp( aAttr.ePatMix );
                         if ( IsLineInfo() )
                         {
@@ -1648,7 +1648,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             {
                 SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
                 SetRasterOp(aAttr.eLinMix);
-                ChangeBrush(Color(COL_TRANSPARENT), false);
+                ChangeBrush(COL_TRANSPARENT, false);
                 nC=p->aPPoly.Count();
                 for (i=0; i<nC; i++)
                 {
@@ -1732,10 +1732,10 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                 }
                 else {
                     const auto nVal = ReadLittleEndian3BytesLong();
-                    if      ((nFlags&0x40)!=0 && nVal==1) aCol=Color(COL_BLACK);
-                    else if ((nFlags&0x40)!=0 && nVal==2) aCol=Color(COL_WHITE);
-                    else if ((nFlags&0x40)!=0 && nVal==4) aCol=Color(COL_WHITE);
-                    else if ((nFlags&0x40)!=0 && nVal==5) aCol=Color(COL_BLACK);
+                    if      ((nFlags&0x40)!=0 && nVal==1) aCol=COL_BLACK;
+                    else if ((nFlags&0x40)!=0 && nVal==2) aCol=COL_WHITE;
+                    else if ((nFlags&0x40)!=0 && nVal==4) aCol=COL_WHITE;
+                    else if ((nFlags&0x40)!=0 && nVal==5) aCol=COL_BLACK;
                     else aCol=GetPaletteColor(nVal);
                     if (nA==1) switch (nP) {
                         case 1: aAttr.aLinCol=aCol; break;
@@ -1792,10 +1792,10 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             }
             else {
                 const auto nVal = ReadLittleEndian3BytesLong();
-                if      ((nFlags&0x40)!=0 && nVal==1) aCol=Color(COL_BLACK);
-                else if ((nFlags&0x40)!=0 && nVal==2) aCol=Color(COL_WHITE);
-                else if ((nFlags&0x40)!=0 && nVal==4) aCol=Color(COL_WHITE);
-                else if ((nFlags&0x40)!=0 && nVal==5) aCol=Color(COL_BLACK);
+                if      ((nFlags&0x40)!=0 && nVal==1) aCol=COL_BLACK;
+                else if ((nFlags&0x40)!=0 && nVal==2) aCol=COL_WHITE;
+                else if ((nFlags&0x40)!=0 && nVal==4) aCol=COL_WHITE;
+                else if ((nFlags&0x40)!=0 && nVal==5) aCol=COL_BLACK;
                 else aCol=GetPaletteColor(nVal);
                 aAttr.aLinCol = aAttr.aChrCol = aAttr.aMrkCol = aAttr.aPatCol =
                 aAttr.aImgCol = aCol;
@@ -1823,8 +1823,8 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                 aAttr.aImgCol=aDefAttr.aImgCol;
             }
             else {
-                if      (nVal==0x0007) aCol=Color(COL_WHITE);
-                else if (nVal==0x0008) aCol=Color(COL_BLACK);
+                if      (nVal==0x0007) aCol=COL_WHITE;
+                else if (nVal==0x0008) aCol=COL_BLACK;
                 else if (nVal==0xff08) aCol=GetPaletteColor(1);
                 else aCol=GetPaletteColor(static_cast<sal_uInt32>(nVal) & 0x000000ff);
                 aAttr.aLinCol = aAttr.aChrCol = aAttr.aMrkCol = aAttr.aPatCol =
@@ -1847,8 +1847,8 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                 aAttr.aImgBgCol=aDefAttr.aImgBgCol;
             }
             else {
-                if      (nVal==0x0007) aCol=Color(COL_WHITE);
-                else if (nVal==0x0008) aCol=Color(COL_BLACK);
+                if      (nVal==0x0007) aCol=COL_WHITE;
+                else if (nVal==0x0008) aCol=COL_BLACK;
                 else if (nVal==0xff08) aCol=GetPaletteColor(0);
                 else aCol=GetPaletteColor(static_cast<sal_uInt32>(nVal) & 0x000000ff);
                 aAttr.aLinBgCol = aAttr.aChrBgCol = aAttr.aMrkBgCol =
@@ -1871,10 +1871,10 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             }
             else {
                 const auto nVal = ReadLittleEndian3BytesLong();
-                if      ((nFlags&0x40)!=0 && nVal==1) aCol=Color(COL_BLACK);
-                else if ((nFlags&0x40)!=0 && nVal==2) aCol=Color(COL_WHITE);
-                else if ((nFlags&0x40)!=0 && nVal==4) aCol=Color(COL_WHITE);
-                else if ((nFlags&0x40)!=0 && nVal==5) aCol=Color(COL_BLACK);
+                if      ((nFlags&0x40)!=0 && nVal==1) aCol=COL_BLACK;
+                else if ((nFlags&0x40)!=0 && nVal==2) aCol=COL_WHITE;
+                else if ((nFlags&0x40)!=0 && nVal==4) aCol=COL_WHITE;
+                else if ((nFlags&0x40)!=0 && nVal==5) aCol=COL_BLACK;
                 else aCol=GetPaletteColor(nVal);
                 aAttr.aLinBgCol = aAttr.aChrBgCol = aAttr.aMrkBgCol =
                 aAttr.aPatBgCol = aAttr.aImgBgCol = aCol;
@@ -2645,24 +2645,24 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     pBitmapList=nullptr;
     pAttrStack=nullptr;
 
-    aDefAttr.aLinCol     =Color(COL_BLACK);
-    aDefAttr.aLinBgCol   =Color(COL_WHITE);
+    aDefAttr.aLinCol     =COL_BLACK;
+    aDefAttr.aLinBgCol   =COL_WHITE;
     aDefAttr.eLinMix     =RasterOp::OverPaint;
     aDefAttr.eLinBgMix   =RasterOp::OverPaint;
-    aDefAttr.aChrCol     =Color(COL_BLACK);
-    aDefAttr.aChrBgCol   =Color(COL_WHITE);
+    aDefAttr.aChrCol     =COL_BLACK;
+    aDefAttr.aChrBgCol   =COL_WHITE;
     aDefAttr.eChrMix     =RasterOp::OverPaint;
     aDefAttr.eChrBgMix   =RasterOp::OverPaint;
-    aDefAttr.aMrkCol     =Color(COL_BLACK);
-    aDefAttr.aMrkBgCol   =Color(COL_WHITE);
+    aDefAttr.aMrkCol     =COL_BLACK;
+    aDefAttr.aMrkBgCol   =COL_WHITE;
     aDefAttr.eMrkMix     =RasterOp::OverPaint;
     aDefAttr.eMrkBgMix   =RasterOp::OverPaint;
-    aDefAttr.aPatCol     =Color(COL_BLACK);
-    aDefAttr.aPatBgCol   =Color(COL_WHITE);
+    aDefAttr.aPatCol     =COL_BLACK;
+    aDefAttr.aPatBgCol   =COL_WHITE;
     aDefAttr.ePatMix     =RasterOp::OverPaint;
     aDefAttr.ePatBgMix   =RasterOp::OverPaint;
-    aDefAttr.aImgCol     =Color(COL_BLACK);
-    aDefAttr.aImgBgCol   =Color(COL_WHITE);
+    aDefAttr.aImgCol     =COL_BLACK;
+    aDefAttr.aImgBgCol   =COL_WHITE;
     aDefAttr.eImgMix     =RasterOp::OverPaint;
     aDefAttr.eImgBgMix   =RasterOp::OverPaint;
     aDefAttr.nArcP       =1;

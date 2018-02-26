@@ -298,8 +298,8 @@ bool XPMReader::ImplGetScanLine( sal_uLong nY )
     {
         if ( mpMaskAcc )
         {
-            aWhite = mpMaskAcc->GetBestMatchingColor( Color( COL_WHITE ) );
-            aBlack = mpMaskAcc->GetBestMatchingColor( Color( COL_BLACK ) );
+            aWhite = mpMaskAcc->GetBestMatchingColor( Color(COL_WHITE) );
+            aBlack = mpMaskAcc->GetBestMatchingColor( Color(COL_BLACK) );
         }
         if ( mnStringSize != ( mnWidth * mnCpp ))
             bStatus = false;

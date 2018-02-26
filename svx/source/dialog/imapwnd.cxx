@@ -52,7 +52,7 @@ using namespace com::sun::star;
 using ::com::sun::star::frame::XFrame;
 using ::com::sun::star::uno::Reference;
 
-#define TRANSCOL Color( COL_WHITE )
+#define TRANSCOL COL_WHITE
 
 IMapWindow::IMapWindow( vcl::Window* pParent, WinBits nBits, const Reference< XFrame >& rxDocumentFrame ) :
             GraphCtrl( pParent, nBits ),
@@ -261,12 +261,12 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
         if ( !pIMapObj->IsActive() )
         {
             aSet.Put( XFillTransparenceItem( 100 ) );
-            aSet.Put( XLineColorItem( "", Color( COL_RED ) ) );
+            aSet.Put( XLineColorItem( "", COL_RED ) );
         }
         else
         {
             aSet.Put( XFillTransparenceItem( 50 ) );
-            aSet.Put( XLineColorItem( "", Color( COL_BLACK ) ) );
+            aSet.Put( XLineColorItem( "", COL_BLACK ) );
         }
 
         pSdrObj->SetMergedItemSetAndBroadcast(aSet);
@@ -583,12 +583,12 @@ void IMapWindow::SetCurrentObjState( bool bActive )
         if ( !bActive )
         {
             aSet.Put( XFillTransparenceItem( 100 ) );
-            aSet.Put( XLineColorItem( "", Color( COL_RED ) ) );
+            aSet.Put( XLineColorItem( "", COL_RED ) );
         }
         else
         {
             aSet.Put( XFillTransparenceItem( 50 ) );
-            aSet.Put( XLineColorItem( "", Color( COL_BLACK ) ) );
+            aSet.Put( XLineColorItem( "", COL_BLACK ) );
         }
 
         pView->SetAttributes( aSet );

@@ -181,7 +181,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     }
 
     // virtual devices have white background by default
-    SetBackground( Wallpaper( Color( COL_WHITE ) ) );
+    SetBackground( Wallpaper( COL_WHITE ) );
 
     // #i59283# don't erase user-provided surface
     if( !pData && bErase)
@@ -399,10 +399,10 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
             }
 
             // TODO: copy full outdev state to new one, here. Also needed in outdev2.cxx:DrawOutDev
-            if( GetLineColor() != Color( COL_TRANSPARENT ) )
+            if( GetLineColor() != COL_TRANSPARENT )
                 mpAlphaVDev->SetLineColor( COL_BLACK );
 
-            if( GetFillColor() != Color( COL_TRANSPARENT ) )
+            if( GetFillColor() != COL_TRANSPARENT )
                 mpAlphaVDev->SetFillColor( COL_BLACK );
 
             mpAlphaVDev->SetMapMode( GetMapMode() );

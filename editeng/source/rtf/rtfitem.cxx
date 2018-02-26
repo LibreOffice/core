@@ -1662,12 +1662,12 @@ void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
         if( USHRT_MAX != nColor )
             aCol = GetColor( nColor );
         else
-            aCol = Color( COL_BLACK );
+            aCol = COL_BLACK;
 
         if( USHRT_MAX != nFillColor )
             aFCol = GetColor( nFillColor );
         else
-            aFCol = Color( COL_WHITE );
+            aFCol = COL_WHITE;
     }
 
     Color aColor;

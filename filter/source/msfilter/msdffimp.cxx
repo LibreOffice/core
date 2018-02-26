@@ -3373,11 +3373,11 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
                     case DFF_Prop_shadowColor :
                     case DFF_Prop_fillBackColor :
                     case DFF_Prop_fillColor :
-                        aColor = Color( COL_WHITE );
+                        aColor = COL_WHITE;
                     break;
                     case DFF_Prop_lineColor :
                     {
-                        aColor = Color( COL_BLACK );
+                        aColor = COL_BLACK;
                     }
                     break;
                 }

@@ -846,13 +846,13 @@ namespace emfio
 
             case W_META_CREATEBRUSH:
             {
-                CreateObject(o3tl::make_unique<WinMtfFillStyle>( Color( COL_WHITE ), false ));
+                CreateObject(o3tl::make_unique<WinMtfFillStyle>( COL_WHITE, false ));
             }
             break;
 
             case W_META_CREATEPATTERNBRUSH:
             {
-                CreateObject(o3tl::make_unique<WinMtfFillStyle>( Color( COL_WHITE ), false ));
+                CreateObject(o3tl::make_unique<WinMtfFillStyle>( COL_WHITE, false ));
             }
             break;
 

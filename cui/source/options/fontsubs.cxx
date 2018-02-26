@@ -403,7 +403,7 @@ void SvxFontSubstTabPage::CheckEnable()
         if (m_pCheckLB->IsEnabled())
         {
             m_pCheckLB->DisableTable();
-            m_pCheckLB->SetTextColor(Color(COL_GRAY));
+            m_pCheckLB->SetTextColor(COL_GRAY);
             m_pCheckLB->Invalidate();
             m_pCheckLB->SelectAll(false);
         }

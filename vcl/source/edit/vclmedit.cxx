@@ -967,7 +967,7 @@ void VclMultiLineEdit::ApplySettings(vcl::RenderContext& rRenderContext)
     vcl::Font theFont = rRenderContext.GetFont();
     theFont.SetColor(aTextColor);
     if (IsPaintTransparent())
-        theFont.SetFillColor(Color(COL_TRANSPARENT));
+        theFont.SetFillColor(COL_TRANSPARENT);
     else
         theFont.SetFillColor(IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor());
 
@@ -1015,7 +1015,7 @@ void VclMultiLineEdit::ImplInitSettings(bool bBackground)
     vcl::Font TheFont = GetFont();
     TheFont.SetColor(aTextColor);
     if (IsPaintTransparent())
-        TheFont.SetFillColor(Color(COL_TRANSPARENT));
+        TheFont.SetFillColor(COL_TRANSPARENT);
     else
         TheFont.SetFillColor(IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor());
     pImpVclMEdit->GetTextWindow()->SetFont(TheFont);
@@ -1368,7 +1368,7 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
 
     // contents
     if ( ( nFlags & DrawFlags::Mono ) || ( eOutDevType == OUTDEV_PRINTER ) )
-        pDev->SetTextColor( Color( COL_BLACK ) );
+        pDev->SetTextColor( COL_BLACK );
     else
     {
         if ( !(nFlags & DrawFlags::NoDisable ) && !IsEnabled() )

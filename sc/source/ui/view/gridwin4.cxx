@@ -1350,7 +1350,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
         {
             //  use single font and call DrawText directly
             rDefPattern.GetFont( aFont, SC_AUTOCOL_BLACK );
-            aFont.SetColor( Color( COL_LIGHTGRAY ) );
+            aFont.SetColor( COL_LIGHTGRAY );
             //  font size is set as needed
         }
         else
@@ -1360,7 +1360,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
             pEditEng->SetRefMapMode(rRenderContext.GetMapMode());
             SfxItemSet* pEditDefaults = new SfxItemSet( pEditEng->GetEmptyItemSet() );
             rDefPattern.FillEditItemSet( pEditDefaults );
-            pEditDefaults->Put( SvxColorItem( Color( COL_LIGHTGRAY ), EE_CHAR_COLOR ) );
+            pEditDefaults->Put( SvxColorItem( COL_LIGHTGRAY, EE_CHAR_COLOR ) );
             pEditEng->SetDefaults( pEditDefaults );
         }
 

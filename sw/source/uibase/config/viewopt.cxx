@@ -120,8 +120,8 @@ void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
 {
     Color aOldColor(pOut->GetLineColor());
     Color aOldFillColor( pOut->GetFillColor() );
-    pOut->SetLineColor( Color(COL_BLACK) );
-    pOut->SetFillColor( Color(COL_TRANSPARENT ));
+    pOut->SetLineColor( COL_BLACK );
+    pOut->SetFillColor( COL_TRANSPARENT);
     pOut->DrawRect( rRect.SVRect() );
     pOut->SetFillColor( aOldFillColor );
     pOut->SetLineColor( aOldColor );
@@ -138,7 +138,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool b
     if( pOut && bIsScript )
     {
             Color aOldLineColor( pOut->GetLineColor() );
-        pOut->SetLineColor( Color(COL_GRAY ) );
+        pOut->SetLineColor( COL_GRAY );
         // to make it look nice, we subtract two pixels everywhere
         sal_uInt16 nPix = m_nPixelTwips * 2;
         if( rRect.Width() <= 2 * nPix || rRect.Height() <= 2 * nPix )

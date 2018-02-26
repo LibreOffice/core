@@ -397,18 +397,18 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     nBoundingY2 = pMTF->GetPrefSize().Height();
 
     pGDIStack = nullptr;
-    aColor = Color( COL_TRANSPARENT );
+    aColor = COL_TRANSPARENT;
     bLineColor = true;
-    aLineColor = Color( COL_BLACK );
+    aLineColor = COL_BLACK;
     bFillColor = true;
-    aFillColor = Color( COL_WHITE );
+    aFillColor = COL_WHITE;
     bTextFillColor = true;
-    aTextFillColor = Color( COL_BLACK );
+    aTextFillColor = COL_BLACK;
     fLineWidth = 1;
     fMiterLimit = 15; // use same limit as most graphic systems and basegfx
     eLineCap = SvtGraphicStroke::capButt;
     eJoinType = SvtGraphicStroke::joinMiter;
-    aBackgroundColor = Color( COL_WHITE );
+    aBackgroundColor = COL_WHITE;
     eTextAlign = ALIGN_BASELINE;
 
     nNextChrSetId = 1;
@@ -495,7 +495,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
             nLines *= aSizeBitmap.Height();
             ImplWriteLong( nLines );
             sal_Int32 nCount2, nCount = 4;
-            const BitmapColor aBlack( pAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
+            const BitmapColor aBlack( pAcc->GetBestMatchingColor( Color(COL_BLACK) ) );
             for ( long nY = 0; nY < aSizeBitmap.Height(); nY++ )
             {
                 nCount2 = 0;

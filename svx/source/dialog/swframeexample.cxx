@@ -75,17 +75,17 @@ void SvxSwFrameExample::InitColors_Impl()
 
     bool bHC = rSettings.GetHighContrastMode();
 
-    m_aFrameColor = Color( COL_LIGHTGREEN );
-    m_aAlignColor = Color( COL_LIGHTRED );
-    m_aTransColor = Color( COL_TRANSPARENT );
+    m_aFrameColor = COL_LIGHTGREEN;
+    m_aAlignColor = COL_LIGHTRED;
+    m_aTransColor = COL_TRANSPARENT;
 
     m_aTxtCol = bHC?
         svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR).nColor :
-        Color( COL_GRAY );
-    m_aPrintAreaCol = bHC? m_aTxtCol : Color( COL_GRAY );
+        COL_GRAY;
+    m_aPrintAreaCol = bHC? m_aTxtCol : COL_GRAY;
     m_aBorderCol = m_aTxtCol;
-    m_aBlankCol = bHC? m_aTxtCol : Color( COL_LIGHTGRAY );
-    m_aBlankFrameCol = bHC? m_aTxtCol : Color( COL_GRAY );
+    m_aBlankCol = bHC? m_aTxtCol : COL_LIGHTGRAY;
+    m_aBlankFrameCol = bHC? m_aTxtCol : COL_GRAY;
 }
 
 void SvxSwFrameExample::DataChanged(const DataChangedEvent& rDCEvt)

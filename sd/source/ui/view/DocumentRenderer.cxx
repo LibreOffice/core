@@ -1549,7 +1549,7 @@ private:
 
                 SdrPathObj* pPathObj = new SdrPathObj(OBJ_PATHLINE, aPathPoly );
                 pPathObj->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
-                pPathObj->SetMergedItem(XLineColorItem(OUString(), Color(COL_BLACK)));
+                pPathObj->SetMergedItem(XLineColorItem(OUString(), COL_BLACK));
 
                 pHandout->NbcInsertObject( pPathObj );
             }

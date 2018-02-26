@@ -176,7 +176,7 @@ namespace
         else
         {
             // reset alpha channel
-            aVDev->SetBackground(Wallpaper(Color(COL_BLACK)));
+            aVDev->SetBackground(Wallpaper(COL_BLACK));
             aVDev->Erase();
         }
 

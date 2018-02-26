@@ -2022,7 +2022,7 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape )
 
     ImplMap( rShape.maShapePolyPoly, aPolyPoly );
 
-    const bool  bLineOnly = ( rShape.maShapeFillColor == Color( COL_TRANSPARENT ) ) && ( !rShape.mapShapeGradient.get() );
+    const bool  bLineOnly = ( rShape.maShapeFillColor == COL_TRANSPARENT ) && ( !rShape.mapShapeGradient.get() );
     tools::Rectangle   aBoundRect( aPolyPoly.GetBoundRect() );
 
     maAttributeWriter.AddPaintAttr( rShape.maShapeLineColor, rShape.maShapeFillColor, &aBoundRect, rShape.mapShapeGradient.get() );
@@ -2459,10 +2459,10 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
             Color aTextColor( mpVDev->GetTextColor() );
 
             if ( aTextColor.GetColor() == COL_BLACK )
-                aTextColor = Color( COL_WHITE );
+                aTextColor = COL_WHITE;
 
             if ( aTextColor.GetColor() == COL_WHITE )
-                aReliefColor = Color( COL_BLACK );
+                aReliefColor = COL_BLACK;
 
 
             Point aPos( rPos );
@@ -2492,7 +2492,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
                 Color aShadowColor( COL_BLACK );
 
                 if ( (aTextColor.GetColor() == COL_BLACK) || (aTextColor.GetLuminance() < 8) )
-                    aShadowColor = Color( COL_LIGHTGRAY );
+                    aShadowColor = COL_LIGHTGRAY;
 
                 Point aPos( rPos );
                 aPos += Point( nOff, nOff );
@@ -2523,7 +2523,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
                 aPos = rPos + Point( +6, +0);
                 ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
 
-                ImplWriteText( rPos, rText, pDXArray, nWidth, Color( COL_WHITE ) );
+                ImplWriteText( rPos, rText, pDXArray, nWidth, COL_WHITE );
             }
         }
     }
@@ -2961,7 +2961,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     if( rPoly.GetSize() )
                     {
-                        maAttributeWriter.AddPaintAttr( mpVDev->GetLineColor(), Color( COL_TRANSPARENT ) );
+                        maAttributeWriter.AddPaintAttr( mpVDev->GetLineColor(), COL_TRANSPARENT );
                         ImplAddLineAttr( pA->GetLineInfo() );
                         ImplWritePolyPolygon( rPoly, true );
                     }
@@ -3279,7 +3279,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         ImplWriteShape( *mapCurShape );
 
                         mapCurShape->maShapeFillColor = mapCurShape->maShapeLineColor;
-                        mapCurShape->maShapeLineColor = Color(COL_TRANSPARENT);
+                        mapCurShape->maShapeLineColor = COL_TRANSPARENT;
                         mapCurShape->mnStrokeWidth = 0;
                         mapCurShape->maDashArray.clear();
                         mapCurShape->maLineJoin = basegfx::B2DLineJoin::Miter;

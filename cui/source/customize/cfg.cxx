@@ -979,11 +979,11 @@ public:
 
         if (rRenderContext.GetFillColor() == COL_WHITE)
         {
-            rRenderContext.SetFillColor(Color(COL_BLACK));
+            rRenderContext.SetFillColor(COL_BLACK);
         }
         else
         {
-            rRenderContext.SetFillColor(Color(COL_WHITE));
+            rRenderContext.SetFillColor(COL_WHITE);
         }
 
         long n = 0;

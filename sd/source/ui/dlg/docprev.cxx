@@ -149,7 +149,7 @@ void SdDocPreviewWin::updateViewSettings()
     bool bUseWhiteColor = !aAccOptions.GetIsForPagePreviews() && GetSettings().GetStyleSettings().GetHighContrastMode();
     if( bUseWhiteColor )
     {
-        maDocumentColor = Color( COL_WHITE );
+        maDocumentColor = COL_WHITE;
     }
     else
     {

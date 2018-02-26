@@ -412,7 +412,7 @@ void ColorConfigWindow_Impl::Entry::Update (
 ) {
     Color aColor(rValue.getColor());
     if (rValue.getColor() == rValue.getDefaultColor())
-        m_pColorList->SelectEntry(Color(COL_AUTO));
+        m_pColorList->SelectEntry(COL_AUTO);
     else
         m_pColorList->SelectEntry(aColor);
 }
@@ -549,7 +549,7 @@ void ColorConfigWindow_Impl::SetAppearance ()
     Wallpaper const aTransparentWall(COL_TRANSPARENT);
     StyleSettings const& rStyleSettings = GetSettings().GetStyleSettings();
     Color const aBackColor = rStyleSettings.GetHighContrastMode() ?
-        rStyleSettings.GetShadowColor() : Color(COL_LIGHTGRAY);
+        rStyleSettings.GetShadowColor() : COL_LIGHTGRAY;
     Wallpaper const aBackWall(aBackColor);
     for (size_t i = 0; i != vChapters.size(); ++i)
         vChapters[i]->Show(aBackWall);
@@ -565,7 +565,7 @@ void ColorConfigWindow_Impl::SetAppearance ()
         aRCheckCol.Invert();
         // if inversion didn't work (gray) then it's set to black
         if (aRCheckCol == aWinCol)
-            aRCheckCol = Color(COL_BLACK);
+            aRCheckCol = COL_BLACK;
         // setting new text color for each entry
         for (size_t i = 0; i != vEntries.size(); ++i)
             vEntries[i]->SetTextColor(aRCheckCol);

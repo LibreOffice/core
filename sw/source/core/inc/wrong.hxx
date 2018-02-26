@@ -145,7 +145,7 @@ private:
         }
         else if (WRONGLIST_GRAMMAR == listType)
         {
-            return Color( COL_LIGHTBLUE );
+            return COL_LIGHTBLUE;
         }
         else if (WRONGLIST_SMARTTAG == listType)
         {

@@ -510,7 +510,7 @@ void ScreenshotAnnotationDlg_Impl::RepaintToBuffer(
         for (auto&& rCandidate : maSelected)
         {
             static double fLineWidthEntries(5.0);
-            PaintControlDataEntry(*rCandidate, Color(COL_LIGHTRED), fLineWidthEntries, fTransparence * 0.2);
+            PaintControlDataEntry(*rCandidate, COL_LIGHTRED, fLineWidthEntries, fTransparence * 0.2);
         }
 
         // paint hilighted entry

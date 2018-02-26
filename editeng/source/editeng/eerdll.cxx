@@ -114,7 +114,7 @@ DefItems::DefItems()
     rDefItems[17] = new SvxVerJustifyItem( SvxCellVerJustify::Standard, EE_PARA_VER_JUST );
 
     // Character attributes:
-    rDefItems[18] = new SvxColorItem( Color( COL_AUTO ), EE_CHAR_COLOR );
+    rDefItems[18] = new SvxColorItem( COL_AUTO, EE_CHAR_COLOR );
     rDefItems[19] = new SvxFontItem( EE_CHAR_FONTINFO );
     rDefItems[20] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT );
     rDefItems[21] = new SvxCharScaleWidthItem( 100, EE_CHAR_FONTWIDTH );
@@ -146,11 +146,11 @@ DefItems::DefItems()
     rDefItems[47] = new SvxOverlineItem( LINESTYLE_NONE, EE_CHAR_OVERLINE );
     rDefItems[48] = new SvxCaseMapItem( SvxCaseMap::NotMapped, EE_CHAR_CASEMAP );
     rDefItems[49] = new SfxGrabBagItem( EE_CHAR_GRABBAG );
-    rDefItems[50] = new SvxBackgroundColorItem( Color( COL_AUTO ), EE_CHAR_BKGCOLOR );
+    rDefItems[50] = new SvxBackgroundColorItem( COL_AUTO, EE_CHAR_BKGCOLOR );
     // Features
     rDefItems[51] = new SfxVoidItem( EE_FEATURE_TAB );
     rDefItems[52] = new SfxVoidItem( EE_FEATURE_LINEBR );
-    rDefItems[53] = new SvxCharSetColorItem( Color( COL_RED ), EE_FEATURE_NOTCONV );
+    rDefItems[53] = new SvxCharSetColorItem( COL_RED, EE_FEATURE_NOTCONV );
     rDefItems[54] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
 
     assert(EDITITEMCOUNT == 55 && "ITEMCOUNT changed, adjust DefItems!");

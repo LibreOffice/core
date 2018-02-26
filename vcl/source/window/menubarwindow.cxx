@@ -944,7 +944,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
         rStyleSettings.GetHighContrastMode())
     {
         rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::MAPMODE);
-        rRenderContext.SetLineColor(Color(COL_WHITE));
+        rRenderContext.SetLineColor(COL_WHITE);
         rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
         Size aSize = GetSizePixel();
         rRenderContext.DrawLine(Point(0, aSize.Height() - 1),
@@ -1109,7 +1109,7 @@ void MenuBarWindow::ImplInitStyleSettings()
         ImplGetFrame()->UpdateSettings(aSettings); // to update persona
         StyleSettings aStyle(aSettings.GetStyleSettings());
         Color aHighlightTextColor = ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor;
-        if (aHighlightTextColor != Color(COL_TRANSPARENT))
+        if (aHighlightTextColor != COL_TRANSPARENT)
         {
             aStyle.SetMenuHighlightTextColor(aHighlightTextColor);
         }

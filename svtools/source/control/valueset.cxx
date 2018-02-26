@@ -772,13 +772,13 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
             const Color& rBack = rWall.GetColor();
             if (rBack.IsDark() && ! aDoubleColor.IsBright())
             {
-                aDoubleColor = Color(COL_WHITE);
-                aSingleColor = Color(COL_BLACK);
+                aDoubleColor = COL_WHITE;
+                aSingleColor = COL_BLACK;
             }
             else if (rBack.IsBright() && ! aDoubleColor.IsDark())
             {
-                aDoubleColor = Color(COL_BLACK);
-                aSingleColor = Color(COL_WHITE);
+                aDoubleColor = COL_BLACK;
+                aSingleColor = COL_WHITE;
             }
         }
     }
@@ -792,7 +792,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
 
         if (bDrawSel)
         {
-            rRenderContext.SetLineColor(mbBlackSel ? Color(COL_BLACK) : aDoubleColor);
+            rRenderContext.SetLineColor(mbBlackSel ? COL_BLACK : aDoubleColor);
             rRenderContext.DrawRect(aRect);
         }
     }
@@ -800,7 +800,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
     {
         if (bDrawSel)
         {
-            rRenderContext.SetLineColor(mbBlackSel ? Color(COL_BLACK) : aDoubleColor);
+            rRenderContext.SetLineColor(mbBlackSel ? COL_BLACK : aDoubleColor);
             rRenderContext.DrawRect(aRect);
         }
         if (mbDoubleSel)
@@ -835,11 +835,11 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
 
         if (bDrawSel)
         {
-            rRenderContext.SetLineColor(mbBlackSel ? Color(COL_WHITE) : aSingleColor);
+            rRenderContext.SetLineColor(mbBlackSel ? COL_WHITE : aSingleColor);
         }
         else
         {
-            rRenderContext.SetLineColor(Color(COL_LIGHTGRAY));
+            rRenderContext.SetLineColor(COL_LIGHTGRAY);
         }
         rRenderContext.DrawRect(aRect2);
 

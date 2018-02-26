@@ -72,7 +72,7 @@ bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt )
 
 const Color GetUnderColor( const SwFont *pFont )
 {
-    return pFont->GetUnderColor() == Color( COL_AUTO ) ?
+    return pFont->GetUnderColor() == COL_AUTO ?
         pFont->GetColor() : pFont->GetUnderColor();
 }
 
@@ -504,7 +504,7 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     // Bug 120769:Color of underline display wrongly
     if ( GetInfo().GetUnderFnt() &&
         GetInfo().GetUnderFnt()->GetFont().GetUnderline() == GetFnt()->GetUnderline() &&
-        GetInfo().GetFont() && GetInfo().GetFont()->GetUnderColor() != Color(COL_AUTO) )
+        GetInfo().GetFont() && GetInfo().GetFont()->GetUnderColor() != COL_AUTO )
         return;
     //Bug 120769(End)
 

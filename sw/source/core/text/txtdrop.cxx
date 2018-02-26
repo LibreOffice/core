@@ -269,7 +269,7 @@ void SwDropPortion::PaintText( const SwTextPaintInfo &rInf ) const
 
         if ( rInf.OnWin() &&
             !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings() &&
-            (!pCurrPart->GetFont().GetBackColor() || *pCurrPart->GetFont().GetBackColor() == Color(COL_TRANSPARENT)) )
+            (!pCurrPart->GetFont().GetBackColor() || *pCurrPart->GetFont().GetBackColor() == COL_TRANSPARENT) )
         {
             rInf.DrawBackground( *this );
         }

@@ -151,9 +151,9 @@ void ScDataBarSettingsDlg::dispose()
 
 void ScDataBarSettingsDlg::Init()
 {
-    mpLbNeg->SelectEntry(Color(COL_LIGHTRED));
-    mpLbAxisCol->SelectEntry(Color(COL_BLACK));
-    mpLbPos->SelectEntry(Color(COL_LIGHTBLUE));
+    mpLbNeg->SelectEntry(COL_LIGHTRED);
+    mpLbAxisCol->SelectEntry(COL_BLACK);
+    mpLbPos->SelectEntry(COL_LIGHTBLUE);
     mpBtnOk->SetClickHdl( LINK( this, ScDataBarSettingsDlg, OkBtnHdl ) );
 
     mpLbTypeMin->SetSelectHdl( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );

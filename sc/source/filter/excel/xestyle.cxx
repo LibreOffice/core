@@ -327,7 +327,7 @@ XclExpPaletteImpl::XclExpPaletteImpl( const XclDefaultPalette& rDefPal ) :
     for( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
         maPalette.emplace_back( mrDefPal.GetDefColor( GetXclIndex( nIdx ) ) );
 
-    InsertColor( Color( COL_BLACK ), EXC_COLOR_CELLTEXT );
+    InsertColor( COL_BLACK, EXC_COLOR_CELLTEXT );
 }
 
 sal_uInt32 XclExpPaletteImpl::InsertColor( const Color& rColor, XclExpColorType eType, sal_uInt16 nAutoDefault )

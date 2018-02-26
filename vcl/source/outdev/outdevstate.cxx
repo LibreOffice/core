@@ -319,7 +319,7 @@ void OutputDevice::SetFillColor()
     {
         mbInitFillColor = true;
         mbFillColor = false;
-        maFillColor = Color( COL_TRANSPARENT );
+        maFillColor = COL_TRANSPARENT;
     }
 
     if( mpAlphaVDev )
@@ -339,11 +339,11 @@ void OutputDevice::SetFillColor( const Color& rColor )
         {
             if( mnDrawMode & DrawModeFlags::BlackFill )
             {
-                aColor = Color( COL_BLACK );
+                aColor = COL_BLACK;
             }
             else if( mnDrawMode & DrawModeFlags::WhiteFill )
             {
-                aColor = Color( COL_WHITE );
+                aColor = COL_WHITE;
             }
             else if( mnDrawMode & DrawModeFlags::GrayFill )
             {
@@ -352,7 +352,7 @@ void OutputDevice::SetFillColor( const Color& rColor )
             }
             else if( mnDrawMode & DrawModeFlags::NoFill )
             {
-                aColor = Color( COL_TRANSPARENT );
+                aColor = COL_TRANSPARENT;
             }
             else if( mnDrawMode & DrawModeFlags::SettingsFill )
             {
@@ -377,7 +377,7 @@ void OutputDevice::SetFillColor( const Color& rColor )
         {
             mbInitFillColor = true;
             mbFillColor = false;
-            maFillColor = Color( COL_TRANSPARENT );
+            maFillColor = COL_TRANSPARENT;
         }
     }
     else
@@ -404,7 +404,7 @@ void OutputDevice::SetLineColor()
     {
         mbInitLineColor = true;
         mbLineColor = false;
-        maLineColor = Color( COL_TRANSPARENT );
+        maLineColor = COL_TRANSPARENT;
     }
 
     if( mpAlphaVDev )
@@ -425,7 +425,7 @@ void OutputDevice::SetLineColor( const Color& rColor )
         {
             mbInitLineColor = true;
             mbLineColor = false;
-            maLineColor = Color( COL_TRANSPARENT );
+            maLineColor = COL_TRANSPARENT;
         }
     }
     else
@@ -477,9 +477,9 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
         Color aTextColor( aFont.GetColor() );
 
         if ( mnDrawMode & DrawModeFlags::BlackText )
-            aTextColor = Color( COL_BLACK );
+            aTextColor = COL_BLACK;
         else if ( mnDrawMode & DrawModeFlags::WhiteText )
-            aTextColor = Color( COL_WHITE );
+            aTextColor = COL_WHITE;
         else if ( mnDrawMode & DrawModeFlags::GrayText )
         {
             const sal_uInt8 cLum = aTextColor.GetLuminance();
@@ -503,9 +503,9 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
             Color aTextFillColor( aFont.GetFillColor() );
 
             if ( mnDrawMode & DrawModeFlags::BlackFill )
-                aTextFillColor = Color( COL_BLACK );
+                aTextFillColor = COL_BLACK;
             else if ( mnDrawMode & DrawModeFlags::WhiteFill )
-                aTextFillColor = Color( COL_WHITE );
+                aTextFillColor = COL_WHITE;
             else if ( mnDrawMode & DrawModeFlags::GrayFill )
             {
                 const sal_uInt8 cLum = aTextFillColor.GetLuminance();
@@ -515,7 +515,7 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
                 aTextFillColor = GetSettings().GetStyleSettings().GetWindowColor();
             else if ( mnDrawMode & DrawModeFlags::NoFill )
             {
-                aTextFillColor = Color( COL_TRANSPARENT );
+                aTextFillColor = COL_TRANSPARENT;
                 bTransFill = true;
             }
 

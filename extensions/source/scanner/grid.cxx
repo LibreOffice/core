@@ -455,7 +455,7 @@ void GridWindow::setBoundings(double fMinX, double fMinY, double fMaxX, double f
 void GridWindow::drawGrid(vcl::RenderContext& rRenderContext)
 {
     char pBuf[256];
-    rRenderContext.SetLineColor(Color(COL_BLACK));
+    rRenderContext.SetLineColor(COL_BLACK);
     // draw vertical lines
     for (double fX = m_fMinChunkX; fX < m_fMaxX; fX += m_fChunkX)
     {
@@ -494,7 +494,7 @@ void GridWindow::drawOriginal(vcl::RenderContext& rRenderContext)
 {
     if (m_nValues && m_pXValues && m_pOrigYValues)
     {
-        rRenderContext.SetLineColor(Color(COL_RED));
+        rRenderContext.SetLineColor(COL_RED);
         for (int i = 0; i < m_nValues - 1; i++)
         {
             drawLine(rRenderContext,
@@ -509,7 +509,7 @@ void GridWindow::drawNew(vcl::RenderContext& rRenderContext)
     if (m_nValues && m_pXValues && m_pNewYValues)
     {
         rRenderContext.SetClipRegion(vcl::Region(m_aGridArea));
-        rRenderContext.SetLineColor(Color(COL_YELLOW));
+        rRenderContext.SetLineColor(COL_YELLOW);
         for (int i = 0; i < m_nValues - 1; i++)
         {
             drawLine(rRenderContext,

@@ -1370,9 +1370,9 @@ void SvxCharEffectsPage::EnableNoneFontColor()
 Color SvxCharEffectsPage::GetPreviewFontColor(const Color& rColor) const
 {
     if (rColor.GetColor() == COL_AUTO)
-        return Color(COL_BLACK);
+        return COL_BLACK;
     if (m_bEnableNoneFontColor && rColor == COL_NONE_COLOR)
-        return Color(COL_BLACK);
+        return COL_BLACK;
     return rColor;
 }
 
@@ -1763,7 +1763,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             }
             else
             {
-                m_pUnderlineColorLB->SelectEntry(Color(COL_AUTO));
+                m_pUnderlineColorLB->SelectEntry(COL_AUTO);
                 m_pUnderlineColorLB->Disable();
             }
         }
@@ -1807,7 +1807,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             }
             else
             {
-                m_pOverlineColorLB->SelectEntry(Color(COL_AUTO));
+                m_pOverlineColorLB->SelectEntry(COL_AUTO);
                 m_pOverlineColorLB->Disable();
             }
         }

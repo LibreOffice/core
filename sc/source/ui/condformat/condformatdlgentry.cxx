@@ -936,8 +936,8 @@ void ScColorScale3FrmtEntry::Init()
     maLbEntryTypeMin->SetSelectHdl( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
     maLbEntryTypeMax->SetSelectHdl( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
     maLbEntryTypeMiddle->SetSelectHdl( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
-    maLbColMin->SelectEntry(Color(COL_LIGHTRED));
-    maLbColMiddle->SelectEntry(Color(COL_YELLOW));
+    maLbColMin->SelectEntry(COL_LIGHTRED);
+    maLbColMiddle->SelectEntry(COL_YELLOW);
     maLbColMax->SelectEntry(Color(0x00CC00));
 }
 
