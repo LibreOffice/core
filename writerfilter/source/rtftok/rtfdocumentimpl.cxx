@@ -103,7 +103,7 @@ void putNestedSprm(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Pointer
     putNestedAttribute(rSprms, nParent, nId, pValue, eOverwrite, false);
 }
 
-static RTFValue::Pointer_t lcl_getNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId)
+RTFValue::Pointer_t getNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId)
 {
     RTFValue::Pointer_t pParent = rSprms.find(nParent);
     if (!pParent)
@@ -368,11 +368,11 @@ void RTFDocumentImpl::checkFirstRun()
 
         // set the requested default font, if there are none
         RTFValue::Pointer_t pFont
-            = lcl_getNestedAttribute(m_aDefaultState.aCharacterSprms,
-                                     NS_ooxml::LN_EG_RPrBase_rFonts, NS_ooxml::LN_CT_Fonts_ascii);
+            = getNestedAttribute(m_aDefaultState.aCharacterSprms, NS_ooxml::LN_EG_RPrBase_rFonts,
+                                 NS_ooxml::LN_CT_Fonts_ascii);
         RTFValue::Pointer_t pCurrentFont
-            = lcl_getNestedAttribute(m_aStates.top().aCharacterSprms,
-                                     NS_ooxml::LN_EG_RPrBase_rFonts, NS_ooxml::LN_CT_Fonts_ascii);
+            = getNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_EG_RPrBase_rFonts,
+                                 NS_ooxml::LN_CT_Fonts_ascii);
         if (pFont && !pCurrentFont)
             putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_EG_RPrBase_rFonts,
                                NS_ooxml::LN_CT_Fonts_ascii, pFont);
@@ -1937,6 +1937,26 @@ RTFError RTFDocumentImpl::pushState()
 
 writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::createStyleProperties()
 {
+    int nBasedOn = 0;
+    RTFValue::Pointer_t pBasedOn = m_aStates.top().aTableSprms.find(NS_ooxml::LN_CT_Style_basedOn);
+    if (pBasedOn)
+        nBasedOn = pBasedOn->getInt();
+    if (nBasedOn == 0)
+    {
+        // No parent style, then mimic what Word does: ignore attributes which
+        // would set a margin as formatting, but with a default value.
+        for (const auto& nId :
+             { NS_ooxml::LN_CT_Ind_firstLine, NS_ooxml::LN_CT_Ind_left, NS_ooxml::LN_CT_Ind_right,
+               NS_ooxml::LN_CT_Ind_start, NS_ooxml::LN_CT_Ind_end })
+        {
+            RTFValue::Pointer_t pValue = getNestedAttribute(m_aStates.top().aParagraphSprms,
+                                                            NS_ooxml::LN_CT_PPrBase_ind, nId);
+            if (pValue && pValue->getInt() == 0)
+                eraseNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind,
+                                     nId);
+        }
+    }
+
     RTFValue::Pointer_t pParaProps = std::make_shared<RTFValue>(
         m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms);
     RTFValue::Pointer_t pCharProps = std::make_shared<RTFValue>(
