@@ -48,8 +48,8 @@ SwWrongArea::SwWrongArea( const OUString& rType,
 
 SwWrongList::SwWrongList( WrongListType eType ) :
     meType       (eType),
-    nBeginInvalid(COMPLETE_STRING),  // everything correct... (the invalid area starts beyond the string)
-    nEndInvalid  (COMPLETE_STRING)
+    mnBeginInvalid(COMPLETE_STRING),  // everything correct... (the invalid area starts beyond the string)
+    mnEndInvalid  (COMPLETE_STRING)
 {
     maList.reserve( 5 );
 }
@@ -70,8 +70,8 @@ void SwWrongList::CopyFrom( const SwWrongList& rCopy )
 {
     maList = rCopy.maList;
     meType = rCopy.meType;
-    nBeginInvalid = rCopy.nBeginInvalid;
-    nEndInvalid = rCopy.nEndInvalid;
+    mnBeginInvalid = rCopy.mnBeginInvalid;
+    mnEndInvalid = rCopy.mnEndInvalid;
     for(SwWrongArea & i : maList)
     {
         if( i.mpSubList )
@@ -248,15 +248,15 @@ sal_uInt16 SwWrongList::GetWrongPos( sal_Int32 nValue ) const
 void SwWrongList::Invalidate_( sal_Int32 nBegin, sal_Int32 nEnd )
 {
     if ( nBegin < GetBeginInv() )
-        nBeginInvalid = nBegin;
+        mnBeginInvalid = nBegin;
     if ( nEnd > GetEndInv() || GetEndInv() == COMPLETE_STRING )
-        nEndInvalid = nEnd;
+        mnEndInvalid = nEnd;
 }
 
 void SwWrongList::SetInvalid( sal_Int32 nBegin, sal_Int32 nEnd )
 {
-    nBeginInvalid = nBegin;
-    nEndInvalid = nEnd;
+    mnBeginInvalid = nBegin;
+    mnEndInvalid = nEnd;
 }
 
 /** Change all values after the given position.
@@ -301,9 +301,9 @@ void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
             SetInvalid( nPos ? nPos - 1 : nPos, nPos + 1 );
         else
         {
-            ShiftLeft( nBeginInvalid, nPos, nEnd );
-            if( nEndInvalid != COMPLETE_STRING )
-                ShiftLeft( nEndInvalid, nPos, nEnd );
+            ShiftLeft( mnBeginInvalid, nPos, nEnd );
+            if( mnEndInvalid != COMPLETE_STRING )
+                ShiftLeft( mnEndInvalid, nPos, nEnd );
             Invalidate_( nPos ? nPos - 1 : nPos, nPos + 1 );
         }
     }
@@ -312,10 +312,10 @@ void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
         const sal_Int32 nEnd = nPos + nDiff;
         if( COMPLETE_STRING != GetBeginInv() )
         {
-            if( nBeginInvalid > nPos )
-                nBeginInvalid += nDiff;
-            if( nEndInvalid >= nPos && nEndInvalid != COMPLETE_STRING )
-                nEndInvalid += nDiff;
+            if( mnBeginInvalid > nPos )
+                mnBeginInvalid += nDiff;
+            if( mnEndInvalid >= nPos && mnEndInvalid != COMPLETE_STRING )
+                mnEndInvalid += nDiff;
         }
         // If the pointer is in the middle of a wrong word,
         // invalidation must happen from the beginning of that word.
@@ -477,9 +477,9 @@ SwWrongList* SwWrongList::SplitList( sal_Int32 nSplitPos )
         SetInvalid( 0, 1 );
     else
     {
-        ShiftLeft( nBeginInvalid, 0, nSplitPos );
-        if( nEndInvalid != COMPLETE_STRING )
-            ShiftLeft( nEndInvalid, 0, nSplitPos );
+        ShiftLeft( mnBeginInvalid, 0, nSplitPos );
+        if( mnEndInvalid != COMPLETE_STRING )
+            ShiftLeft( mnEndInvalid, 0, nSplitPos );
         Invalidate_( 0, 1 );
     }
     for (nLst = 0; nLst < Count(); ++nLst )

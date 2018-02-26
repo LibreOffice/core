@@ -223,7 +223,7 @@ public:
 
 class SwTemplNameFieldType : public SwFieldType
 {
-    SwDoc *pDoc;
+    SwDoc *m_pDoc;
 public:
     SwTemplNameFieldType(SwDoc*);
 
@@ -668,7 +668,7 @@ public:
 
 class SwScriptFieldType : public SwFieldType
 {
-    SwDoc* pDoc;
+    SwDoc* m_pDoc;
 public:
     SwScriptFieldType( SwDoc* pDoc );
 
@@ -677,11 +677,11 @@ public:
 
 class SwScriptField : public SwField
 {
-    OUString sType;  ///< Type of Code (Java/VBScript/...)
-    OUString sCode;  /**< Code as text.
+    OUString m_sType;  ///< Type of Code (Java/VBScript/...)
+    OUString m_sCode;  /**< Code as text.
                           Code as JavaCode ? */
 
-    bool    bCodeURL; ///< Code contains URL of a script.
+    bool    m_bCodeURL; ///< Code contains URL of a script.
 
 public:
     SwScriptField( SwScriptFieldType*, const OUString& rType,
@@ -699,8 +699,8 @@ public:
     virtual OUString   GetPar2() const override;
     virtual void            SetPar2(const OUString& rStr) override;
 
-    bool                    IsCodeURL() const { return bCodeURL; }
-    void                    SetCodeURL( bool bURL ) { bCodeURL = bURL; }
+    bool                    IsCodeURL() const { return m_bCodeURL; }
+    void                    SetCodeURL( bool bURL ) { m_bCodeURL = bURL; }
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
