@@ -889,6 +889,9 @@ private:
 
     bool PendingObjectsInPaM(SwPaM& rPam) const;
 
+    /// Parse FilterOptions passed to the importer.
+    void SetupFilterOptions();
+
     class TableDepthGuard
     {
     private:
