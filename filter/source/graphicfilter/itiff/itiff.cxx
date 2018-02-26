@@ -1205,6 +1205,23 @@ bool TIFFReader::HasAlphaChannel() const
            );
 }
 
+namespace
+{
+    Color SanitizePaletteIndex(sal_uInt8 nIndex, const std::vector<Color>& rPalette)
+    {
+        const size_t nPaletteEntryCount = rPalette.size();
+        if (nPaletteEntryCount && nIndex >= nPaletteEntryCount)
+        {
+            auto nSanitizedIndex = nIndex % nPaletteEntryCount;
+            SAL_WARN_IF(nIndex != nSanitizedIndex, "vcl", "invalid colormap index: "
+                        << static_cast<unsigned int>(nIndex) << ", colormap len is: "
+                        << nPaletteEntryCount);
+            nIndex = nSanitizedIndex;
+        }
+
+        return rPalette[nIndex];
+    }
+}
 
 bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 {
@@ -1548,7 +1565,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                             for (sal_Int32 nX = 0; nX < nImageWidth; ++nX)
                             {
                                 auto p = maBitmap.data() + ((maBitmapPixelSize.Width() * nY + nX) * 3);
-                                auto c = mvPalette[*p];
+                                auto c = SanitizePaletteIndex(*p, mvPalette);
                                 *p = c.GetRed();
                                 p++;
                                 *p = c.GetGreen();
