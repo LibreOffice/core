@@ -784,10 +784,10 @@ IMPL_LINK_NOARG( SvxLanguageComboBox, EditModifyHdl, Edit&, void )
         {
 #if 0
             //! Gives white on white!?! instead of white on reddish.
-            SetControlBackground( ::Color( RGB_COLORDATA( 0xff, 0x65, 0x63)));
+            SetControlBackground( ::Color( Color( 0xff, 0x65, 0x63)));
             SetControlForeground( ::Color( COL_WHITE));
 #else
-            SetControlForeground( ::Color( RGB_COLORDATA( 0xf0, 0, 0)));
+            SetControlForeground( ::Color( 0xf0, 0, 0) );
 #endif
         }
         else

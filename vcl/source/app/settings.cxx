@@ -542,8 +542,8 @@ ImplStyleData::ImplStyleData() :
     meUseImagesInMenus          = TRISTATE_INDET;
     meContextMenuShortcuts      = TRISTATE_INDET;
     mnEdgeBlending = 35;
-    maEdgeBlendingTopLeftColor = RGB_COLORDATA(0xC0, 0xC0, 0xC0);
-    maEdgeBlendingBottomRightColor = RGB_COLORDATA(0x40, 0x40, 0x40);
+    maEdgeBlendingTopLeftColor = Color(0xC0, 0xC0, 0xC0);
+    maEdgeBlendingBottomRightColor = Color(0x40, 0x40, 0x40);
     mnListBoxMaximumLineCount = 25;
     mnColorValueSetColumnCount = 12;
     mnColorValueSetMaximumRowCount = 10;
@@ -2234,7 +2234,7 @@ Color StyleSettings::GetFaceGradientColor() const
     GetFaceColor().RGBtoHSB( h, s, b );
     if( s > 1) s=1;
     if( b < 98) b=98;
-    return Color( Color::HSBtoRGB( h, s, b ) );
+    return Color::HSBtoRGB( h, s, b );
 }
 
 Color StyleSettings::GetSeparatorColor() const
@@ -2244,7 +2244,7 @@ Color StyleSettings::GetSeparatorColor() const
     GetShadowColor().RGBtoHSB( h, s, b );
     b += b/4;
     s -= s/4;
-    return Color( Color::HSBtoRGB( h, s, b ) );
+    return Color::HSBtoRGB( h, s, b );
 }
 
 void StyleSettings::CopyData()

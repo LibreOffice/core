@@ -570,7 +570,7 @@ public:
     void                            SetEdgeBlending(sal_uInt16 nCount);
     sal_uInt16                      GetEdgeBlending() const;
 
-    // TopLeft (default RGB_COLORDATA(0xC0, 0xC0, 0xC0)) and BottomRight (default RGB_COLORDATA(0x40, 0x40, 0x40))
+    // TopLeft (default Color(0xC0, 0xC0, 0xC0)) and BottomRight (default Color(0x40, 0x40, 0x40))
     // default colors for EdgeBlending
     const Color&                    GetEdgeBlendingTopLeftColor() const;
     const Color&                    GetEdgeBlendingBottomRightColor() const;

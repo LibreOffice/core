@@ -43,7 +43,7 @@ struct SwFillData;
 class SwPortionHandler;
 class SwScriptInfo;
 
-#define NON_PRINTING_CHARACTER_COLOR RGB_COLORDATA(0x26, 0x8b, 0xd2)
+#define NON_PRINTING_CHARACTER_COLOR Color(0x26, 0x8b, 0xd2)
 
 /// Represents the visualization of a paragraph. Typical upper is an
 /// SwBodyFrame. The first text portion of the first line is az SwParaPortion.

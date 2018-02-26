@@ -109,7 +109,7 @@ public:
     void ImportGradientColor( SfxItemSet& aSet, MSO_FillType eMSO_FillType, double dTrans, double dBackTrans ) const;
 };
 
-#define COL_DEFAULT RGB_COLORDATA( 0xFA, 0xFB, 0xFC )
+#define COL_DEFAULT ::Color( 0xFA, 0xFB, 0xFC )
 
 typedef ::std::map< sal_Int32, SdrObject* > SvxMSDffShapeIdContainer;
 

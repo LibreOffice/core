@@ -1753,7 +1753,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     FontLineStyle aPreviousOverline = pTmpFont->GetOverline();
                     FontStrikeout aPreviousStrikeout = pTmpFont->GetStrikeout();
 
-                    pTmpFont->SetColor( Color(NON_PRINTING_CHARACTER_COLOR) );
+                    pTmpFont->SetColor( NON_PRINTING_CHARACTER_COLOR );
                     pTmpFont->SetUnderline(LINESTYLE_NONE);
                     pTmpFont->SetOverline(LINESTYLE_NONE);
                     pTmpFont->SetStrikeout(STRIKEOUT_NONE);

@@ -153,11 +153,11 @@ void XMLGraphicsDefaultStyle::SetDefaults()
                          XMLPropertyByIndex(nStrokeIndex)))
         {
             sal_Int32 const nStroke(
-                    bIsAOO4 ? RGB_COLORDATA(128, 128, 128) : COL_BLACK);
+                    bIsAOO4 ? Color(128, 128, 128) : COL_BLACK);
             xDefaults->setPropertyValue("LineColor", makeAny(nStroke));
         }
         sal_Int32 const nFillColor( bIsAOO4
-            ? RGB_COLORDATA(0xCF, 0xE7, 0xF5) : RGB_COLORDATA(153, 204, 255));
+            ? Color(0xCF, 0xE7, 0xF5) : Color(153, 204, 255));
         sal_Int32 const nFillIndex(
             pImpPrMap->GetEntryIndex(XML_NAMESPACE_DRAW, "fill-color", 0));
         if (std::none_of(GetProperties().begin(), GetProperties().end(),
