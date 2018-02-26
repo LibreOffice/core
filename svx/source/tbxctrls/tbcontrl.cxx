@@ -1430,7 +1430,7 @@ namespace
 
     NamedColor GetNoneColor()
     {
-        return std::make_pair(Color(COL_NONE_COLOR), SvxResId(RID_SVXSTR_NONE));
+        return std::make_pair(COL_NONE_COLOR, SvxResId(RID_SVXSTR_NONE));
     }
 }
 
