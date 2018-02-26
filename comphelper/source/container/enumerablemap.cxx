@@ -556,13 +556,9 @@ namespace comphelper
     {
         ComponentMethodGuard aGuard( *this );
         impl_checkValue_throw( _value );
-
-        for (   KeyedValues::const_iterator mapping = m_aData.m_pValues->begin();
-                mapping != m_aData.m_pValues->end();
-                ++mapping
-            )
+        for (auto const& value : *m_aData.m_pValues)
         {
-            if ( mapping->second == _value )
+            if ( value.second == _value )
                 return true;
         }
         return false;

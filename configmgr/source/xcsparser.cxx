@@ -67,40 +67,38 @@ void merge(
         case Node::KIND_LOCALIZED_VALUE:
             break; //TODO: merge certain parts?
         case Node::KIND_GROUP:
-            for (NodeMap::const_iterator i2(update->getMembers().begin());
-                 i2 != update->getMembers().end(); ++i2)
+            for (auto const& updateMember : update->getMembers())
             {
                 NodeMap & members = original->getMembers();
-                NodeMap::iterator i1(members.find(i2->first));
+                NodeMap::iterator i1(members.find(updateMember.first));
                 if (i1 == members.end()) {
-                    if (i2->second->kind() == Node::KIND_PROPERTY &&
+                    if (updateMember.second->kind() == Node::KIND_PROPERTY &&
                         static_cast< GroupNode * >(
                             original.get())->isExtensible())
                     {
-                        members.insert(*i2);
+                        members.insert(updateMember);
                     }
-                } else if (i2->second->kind() == i1->second->kind()) {
-                    merge(i1->second, i2->second);
+                } else if (updateMember.second->kind() == i1->second->kind()) {
+                    merge(i1->second, updateMember.second);
                 }
             }
             break;
         case Node::KIND_SET:
-            for (NodeMap::const_iterator i2(update->getMembers().begin());
-                 i2 != update->getMembers().end(); ++i2)
+            for (auto const& updateMember : update->getMembers())
             {
                 NodeMap & members = original->getMembers();
-                NodeMap::iterator i1(members.find(i2->first));
+                NodeMap::iterator i1(members.find(updateMember.first));
                 if (i1 == members.end()) {
                     if (static_cast< SetNode * >(original.get())->
-                        isValidTemplate(i2->second->getTemplateName()))
+                        isValidTemplate(updateMember.second->getTemplateName()))
                     {
-                        members.insert(*i2);
+                        members.insert(updateMember);
                     }
-                } else if (i2->second->kind() == i1->second->kind() &&
-                           (i2->second->getTemplateName() ==
+                } else if (updateMember.second->kind() == i1->second->kind() &&
+                           (updateMember.second->getTemplateName() ==
                             i1->second->getTemplateName()))
                 {
-                    merge(i1->second, i2->second);
+                    merge(i1->second, updateMember.second);
                 }
             }
             break;

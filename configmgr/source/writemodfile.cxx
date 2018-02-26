@@ -334,10 +334,9 @@ void writeNode(
         handle.writeString("<prop oor:name=\"");
         writeAttributeValue(handle, name);
         handle.writeString("\" oor:op=\"fuse\">");
-        for (NodeMap::const_iterator i(node->getMembers().begin());
-             i != node->getMembers().end(); ++i)
+        for (auto const& member : node->getMembers())
         {
-            writeNode(components, handle, node, i->first, i->second);
+            writeNode(components, handle, node, member.first, member.second);
         }
         handle.writeString("</prop>");
         break;
@@ -380,10 +379,9 @@ void writeNode(
             handle.writeString("\" oor:op=\"replace");
         }
         handle.writeString("\">");
-        for (NodeMap::const_iterator i(node->getMembers().begin());
-             i != node->getMembers().end(); ++i)
+        for (auto const& member : node->getMembers())
         {
-            writeNode(components, handle, node, i->first, i->second);
+            writeNode(components, handle, node, member.first, member.second);
         }
         handle.writeString("</node>");
         break;

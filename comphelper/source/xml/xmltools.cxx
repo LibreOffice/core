@@ -62,10 +62,9 @@ namespace
     {
         static_assert(sizeof(aChaffEncoder) == 256, "this has to cover all chars");
 
-        for (std::vector<sal_uInt8>::iterator aI = rChaff.begin(), aEnd = rChaff.end();
-            aI != aEnd; ++aI)
+        for (auto & elem : rChaff)
         {
-            *aI = aChaffEncoder[*aI];
+            elem = aChaffEncoder[elem];
         }
     }
 }

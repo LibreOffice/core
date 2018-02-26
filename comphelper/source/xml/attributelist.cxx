@@ -77,11 +77,10 @@ OUString SAL_CALL  AttributeList::getValueByIndex(sal_Int16 i)
 
 OUString SAL_CALL AttributeList::getTypeByName( const OUString& sName )
 {
-    std::vector<struct TagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
-
-    for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
-        if( (*ii).sName == sName ) {
-            return (*ii).sType;
+    for (auto const& attribute : m_pImpl->vecAttribute)
+    {
+        if( attribute.sName == sName ) {
+            return attribute.sType;
         }
     }
     return OUString();
@@ -89,11 +88,10 @@ OUString SAL_CALL AttributeList::getTypeByName( const OUString& sName )
 
 OUString SAL_CALL AttributeList::getValueByName(const OUString& sName)
 {
-    std::vector<struct TagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
-
-    for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
-        if( (*ii).sName == sName ) {
-            return (*ii).sValue;
+    for (auto const& attribute : m_pImpl->vecAttribute)
+    {
+        if( attribute.sName == sName ) {
+            return attribute.sValue;
         }
     }
     return OUString();
