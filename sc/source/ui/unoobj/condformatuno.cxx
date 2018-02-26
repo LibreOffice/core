@@ -1211,7 +1211,7 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
         break;
         case DataBar_Color:
         {
-            sal_Int32 nColor = COL_AUTO;
+            Color nColor = COL_AUTO;
             if (aValue >>= nColor)
             {
                 getCoreObject()->GetDataBarData()->maPositiveColor = nColor;
@@ -1220,7 +1220,7 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
         break;
         case AxisColor:
         {
-            sal_Int32 nAxisColor = COL_AUTO;
+            Color nAxisColor = COL_AUTO;
             if (aValue >>= nAxisColor)
             {
                 getCoreObject()->GetDataBarData()->maAxisColor = nAxisColor;
@@ -1229,7 +1229,7 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
         break;
         case NegativeColor:
         {
-            sal_Int32 nNegativeColor = COL_AUTO;
+            Color nNegativeColor = COL_AUTO;
             if (!(aValue >>= nNegativeColor) || !getCoreObject()->GetDataBarData()->mbNeg)
                 throw lang::IllegalArgumentException();
 

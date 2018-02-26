@@ -1178,7 +1178,7 @@ void ScExportTest::testMiscRowHeightExport()
 
 namespace {
 
-void setAttribute( ScFieldEditEngine& rEE, sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt16 nType, sal_uInt32 nColor = COL_BLACK )
+void setAttribute( ScFieldEditEngine& rEE, sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt16 nType, Color nColor = COL_BLACK )
 {
     ESelection aSel;
     aSel.nStartPara = aSel.nEndPara = nPara;
@@ -1438,7 +1438,7 @@ void ScExportTest::testRichTextExportODS()
             return false;
         }
 
-        static bool isColor(const editeng::Section& rAttr, sal_uInt32 nColor)
+        static bool isColor(const editeng::Section& rAttr, Color nColor)
         {
             if (rAttr.maAttributes.empty())
                 return false;

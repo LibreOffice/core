@@ -1093,8 +1093,8 @@ void GetShadeColors( const SvxMSDffManager& rManager, const DffPropertyReader& r
     }
     if ( rShadeColors.empty() )
     {
-        rShadeColors.emplace_back( rManager.MSO_CLR_ToColor( rProperties.GetPropertyValue( DFF_Prop_fillBackColor, COL_WHITE ), DFF_Prop_fillBackColor ), 0 );
-        rShadeColors.emplace_back( rManager.MSO_CLR_ToColor( rProperties.GetPropertyValue( DFF_Prop_fillColor, COL_WHITE ), DFF_Prop_fillColor ), 1 );
+        rShadeColors.emplace_back( rManager.MSO_CLR_ToColor( rProperties.GetPropertyValue( DFF_Prop_fillBackColor, sal_uInt32(COL_WHITE) ), DFF_Prop_fillBackColor ), 0 );
+        rShadeColors.emplace_back( rManager.MSO_CLR_ToColor( rProperties.GetPropertyValue( DFF_Prop_fillColor, sal_uInt32(COL_WHITE) ), DFF_Prop_fillColor ), 1 );
     }
     rIn.Seek( nPos );
 }
@@ -2853,8 +2853,8 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
         default: break;
     }
 
-    Color aCol1( rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor, COL_WHITE ), DFF_Prop_fillColor ) );
-    Color aCol2( rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillBackColor, COL_WHITE ), DFF_Prop_fillBackColor ) );
+    Color aCol1( rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor, sal_uInt32(COL_WHITE) ), DFF_Prop_fillColor ) );
+    Color aCol2( rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillBackColor, sal_uInt32(COL_WHITE) ), DFF_Prop_fillBackColor ) );
     if ( nChgColors )
     {
         //Swap start and end color

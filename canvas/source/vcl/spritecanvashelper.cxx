@@ -104,10 +104,10 @@ namespace vclcanvas
         {
             vcl::Font aVCLFont;
             aVCLFont.SetFontHeight( 20 );
-            aVCLFont.SetColor( Color( INFO_COLOR ) );
+            aVCLFont.SetColor( INFO_COLOR );
 
             rOutDev.SetTextAlign(ALIGN_TOP);
-            rOutDev.SetTextColor( Color( INFO_COLOR ) );
+            rOutDev.SetTextColor( INFO_COLOR );
             rOutDev.SetFont( aVCLFont );
 
             rOutDev.DrawText( rPos, rStr );

@@ -4085,7 +4085,7 @@ void SwUiWriterTest::testTdf87922()
     // Make sure that automatic color on black background is white, not black.
     vcl::Font aFont;
     aDrawTextInfo.ApplyAutoColor(&aFont);
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aFont.GetColor().GetColor());
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aFont.GetColor());
 }
 
 #if HAVE_MORE_FONTS

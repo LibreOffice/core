@@ -1102,7 +1102,7 @@ const SvxFieldData* toXMLPropertyStates(
                 if (!static_cast<const SvxColorItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
                     continue;
 
-                sal_uInt32 nColor = 0;
+                ::Color nColor;
                 if ( aAny >>= nColor )
                 {
                     sal_Int32 nIndexColor = ( nColor == COL_AUTO ) ? xMapper->GetEntryIndex(
@@ -4455,7 +4455,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                             else
                             {
                                 OUStringBuffer aBuffer;
-                                ::sax::Converter::convertColor(aBuffer, COL_LIGHTRED);
+                                ::sax::Converter::convertColor(aBuffer, sal_Int32(COL_LIGHTRED));
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_NEGATIVE_COLOR, aBuffer.makeStringAndClear());
                             }
                         }

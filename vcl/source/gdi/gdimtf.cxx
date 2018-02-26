@@ -1774,8 +1774,8 @@ BitmapEx GDIMetaFile::ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpPa
 {
     BitmapPalette aPal( 3 );
 
-    aPal[ 0 ] = Color(COL_BLACK);
-    aPal[ 1 ] = Color(COL_WHITE);
+    aPal[ 0 ] = COL_BLACK;
+    aPal[ 1 ] = COL_WHITE;
     aPal[ 2 ] = static_cast<const ImplBmpMonoParam*>(pBmpParam)->aColor;
 
     Bitmap aBmp( rBmpEx.GetSizePixel(), 4, &aPal );

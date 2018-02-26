@@ -327,8 +327,8 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 
                             if( pAcc1 )
                             {
-                                aWhite = pAcc1->GetBestMatchingColor( Color(COL_WHITE) );
-                                aBlack = pAcc1->GetBestMatchingColor( Color(COL_BLACK) );
+                                aWhite = pAcc1->GetBestMatchingColor( COL_WHITE );
+                                aBlack = pAcc1->GetBestMatchingColor( COL_BLACK );
                                 bStatus = ParseData( &rIStm, aLine, eFormat );
                             }
                             else

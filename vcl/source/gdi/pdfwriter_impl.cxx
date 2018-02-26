@@ -9500,9 +9500,9 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
                 // #i47395# 1 bit bitmaps occasionally have an inverted grey palette
                 sal_uInt16 nBlackIndex = pAccess->GetBestPaletteIndex( BitmapColor( COL_BLACK ) );
                 assert( nBlackIndex == 0 || nBlackIndex == 1);
-                sal_uInt16 nWhiteIndex = pAccess->GetBestPaletteIndex( BitmapColor( Color(COL_WHITE) ) );
+                sal_uInt16 nWhiteIndex = pAccess->GetBestPaletteIndex( BitmapColor( COL_WHITE ) );
                 if( pAccess->GetPalette()[nBlackIndex] == BitmapColor( COL_BLACK ) &&
-                    pAccess->GetPalette()[nWhiteIndex] == BitmapColor( Color(COL_WHITE) ) )
+                    pAccess->GetPalette()[nWhiteIndex] == BitmapColor( COL_WHITE ) )
                 {
                     // It is black and white
                     if( nBlackIndex == 1 )
@@ -9573,7 +9573,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         if( aBitmap.GetBitCount() == 1 )
         {
             aLine.append( "/ImageMask true\n" );
-            sal_Int32 nBlackIndex = pAccess->GetBestPaletteIndex( BitmapColor( Color(COL_BLACK) ) );
+            sal_Int32 nBlackIndex = pAccess->GetBestPaletteIndex( BitmapColor( COL_BLACK ) );
             SAL_WARN_IF( nBlackIndex != 0 && nBlackIndex != 1, "vcl.pdfwriter", "wrong black index" );
             if( nBlackIndex )
                 aLine.append( "/Decode[ 1 0 ]\n" );

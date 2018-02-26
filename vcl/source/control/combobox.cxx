@@ -1335,7 +1335,7 @@ const Wallpaper& ComboBox::GetDisplayBackground() const
     const Wallpaper& rBack = m_pImpl->m_pSubEdit->GetBackground();
     if( ! rBack.IsBitmap() &&
         ! rBack.IsGradient() &&
-        rBack.GetColor().GetColor() == COL_TRANSPARENT
+        rBack.GetColor() == COL_TRANSPARENT
         )
         return Control::GetDisplayBackground();
     return rBack;

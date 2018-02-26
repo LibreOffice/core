@@ -549,8 +549,8 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color const * pExtColor)
             if (aPalette.GetEntryCount() < (nCount - 1))
             {
                 aPalette.SetEntryCount(aPalette.GetEntryCount() + 2);
-                aPalette[aPalette.GetEntryCount() - 2] = Color(COL_BLACK);
-                aPalette[aPalette.GetEntryCount() - 1] = Color(COL_WHITE);
+                aPalette[aPalette.GetEntryCount() - 2] = COL_BLACK;
+                aPalette[aPalette.GetEntryCount() - 1] = COL_WHITE;
             }
 
             pWriteAcc->SetPalette(aPalette);

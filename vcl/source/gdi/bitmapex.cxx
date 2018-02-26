@@ -401,7 +401,7 @@ bool BitmapEx::Rotate( long nAngle10, const Color& rFillColor )
 
     if( !!aBitmap )
     {
-        const bool bTransRotate = ( Color(COL_TRANSPARENT) == rFillColor );
+        const bool bTransRotate = ( COL_TRANSPARENT == rFillColor );
 
         if( bTransRotate )
         {

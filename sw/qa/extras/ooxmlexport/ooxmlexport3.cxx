@@ -153,7 +153,7 @@ DECLARE_OOXMLEXPORT_TEST(testCharacterBorder, "charborder.odt")
        width: any -> border width */
     {
         const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xRun, "CharShadowFormat");
-        CPPUNIT_ASSERT_EQUAL(COL_BLACK, sal_uInt32(aShadow.Color));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aShadow.Color));
         CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(318), aShadow.ShadowWidth);
     }
@@ -163,7 +163,7 @@ DECLARE_OOXMLEXPORT_TEST(testCharacterBorder, "charborder.odt")
     {
         uno::Reference<beans::XPropertySet> xMiddleRun(getRun(getParagraph(2),2), uno::UNO_QUERY);
         const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xMiddleRun, "CharShadowFormat");
-        CPPUNIT_ASSERT_EQUAL(COL_BLACK, sal_uInt32(aShadow.Color));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(aShadow.Color));
         CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(318), aShadow.ShadowWidth);
     }

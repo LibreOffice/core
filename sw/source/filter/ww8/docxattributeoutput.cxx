@@ -4257,7 +4257,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             bMustWrite = static_cast< const SvxCaseMapItem& >(rHt).GetCaseMap() != SvxCaseMap::NotMapped;
             break;
         case RES_CHRATR_COLOR:
-            bMustWrite = static_cast< const SvxColorItem& >(rHt).GetValue().GetColor() != COL_AUTO;
+            bMustWrite = static_cast< const SvxColorItem& >(rHt).GetValue() != COL_AUTO;
             break;
         case RES_CHRATR_CONTOUR:
             bMustWrite = static_cast< const SvxContourItem& >(rHt).GetValue();

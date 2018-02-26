@@ -516,7 +516,7 @@ void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point
 
     //paint the grid now
     Color aLineColor = pGridItem->GetColor();
-    if (aLineColor.GetColor() == COL_AUTO)
+    if (aLineColor == COL_AUTO)
     {
         aLineColor = rRenderContext.GetFillColor();
         aLineColor.Invert();

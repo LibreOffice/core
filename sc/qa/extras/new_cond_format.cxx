@@ -23,6 +23,12 @@
 
 using namespace css;
 
+inline std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
+{
+    rStrm << "Color: R:" << static_cast<int>(rColor.GetRed()) << " G:" << static_cast<int>(rColor.GetGreen()) << " B: " << static_cast<int>(rColor.GetBlue());
+    return rStrm;
+}
+
 namespace sc_apitest {
 
 class ScConditionalFormatTest : public CalcUnoApiTest
@@ -350,10 +356,10 @@ void ScConditionalFormatTest::testDataBarProperties()
 namespace {
 
 void testColorScaleEntry(uno::Reference<sheet::XColorScaleEntry> const & xEntry,
-        sal_Int32 nType, const OUString& rString, sal_uInt32 nColor)
+        sal_Int32 nType, const OUString& rString, Color nColor)
 {
     CPPUNIT_ASSERT_EQUAL(nType, xEntry->getType());
-    CPPUNIT_ASSERT_EQUAL(nColor, sal_uInt32(xEntry->getColor()));
+    CPPUNIT_ASSERT_EQUAL(nColor, Color(xEntry->getColor()));
     switch (nType)
     {
         case sheet::ColorScaleEntryType::COLORSCALE_VALUE:
@@ -370,9 +376,9 @@ void testColorScaleEntry(uno::Reference<sheet::XColorScaleEntry> const & xEntry,
 }
 
 void testColorScaleEntries(uno::Reference<beans::XPropertySet> const & xPropSet, sal_Int32 nEntries,
-        sal_Int32 nMinType, const OUString& rMinString, sal_uInt32 nMinColor,
-        sal_Int32 nMediumType, const OUString& rMediumString, sal_uInt32 nMediumColor,
-        sal_Int32 nMaxType, const OUString& rMaxString, sal_uInt32 nMaxColor)
+        sal_Int32 nMinType, const OUString& rMinString, Color nMinColor,
+        sal_Int32 nMediumType, const OUString& rMediumString, Color nMediumColor,
+        sal_Int32 nMaxType, const OUString& rMaxString, Color nMaxColor)
 {
     uno::Any aAny = xPropSet->getPropertyValue("ColorScaleEntries");
     CPPUNIT_ASSERT(aAny.hasValue());

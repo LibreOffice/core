@@ -176,64 +176,64 @@ void BitmapTest::testMonochrome()
     BitmapWriteAccess aBmpAccess(aBmp);
 
     // row 1
-    aBmpAccess.SetPixel(0, 0, BitmapColor(Color(COL_BLACK)));
-    aBmpAccess.SetPixel(0, 1, BitmapColor(Color(COL_BLUE)));
-    aBmpAccess.SetPixel(0, 2, BitmapColor(Color(COL_GREEN)));
-    aBmpAccess.SetPixel(0, 3, BitmapColor(Color(COL_CYAN)));
+    aBmpAccess.SetPixel(0, 0, BitmapColor(COL_BLACK));
+    aBmpAccess.SetPixel(0, 1, BitmapColor(COL_BLUE));
+    aBmpAccess.SetPixel(0, 2, BitmapColor(COL_GREEN));
+    aBmpAccess.SetPixel(0, 3, BitmapColor(COL_CYAN));
 
     // row 2
-    aBmpAccess.SetPixel(1, 0, BitmapColor(Color(COL_RED)));
-    aBmpAccess.SetPixel(1, 1, BitmapColor(Color(COL_MAGENTA)));
-    aBmpAccess.SetPixel(1, 2, BitmapColor(Color(COL_BROWN)));
-    aBmpAccess.SetPixel(1, 3, BitmapColor(Color(COL_GRAY)));
+    aBmpAccess.SetPixel(1, 0, BitmapColor(COL_RED));
+    aBmpAccess.SetPixel(1, 1, BitmapColor(COL_MAGENTA));
+    aBmpAccess.SetPixel(1, 2, BitmapColor(COL_BROWN));
+    aBmpAccess.SetPixel(1, 3, BitmapColor(COL_GRAY));
 
     // row 3
-    aBmpAccess.SetPixel(2, 0, BitmapColor(Color(COL_LIGHTGRAY)));
-    aBmpAccess.SetPixel(2, 1, BitmapColor(Color(COL_LIGHTBLUE)));
-    aBmpAccess.SetPixel(2, 2, BitmapColor(Color(COL_LIGHTGREEN)));
-    aBmpAccess.SetPixel(2, 3, BitmapColor(Color(COL_LIGHTCYAN)));
+    aBmpAccess.SetPixel(2, 0, BitmapColor(COL_LIGHTGRAY));
+    aBmpAccess.SetPixel(2, 1, BitmapColor(COL_LIGHTBLUE));
+    aBmpAccess.SetPixel(2, 2, BitmapColor(COL_LIGHTGREEN));
+    aBmpAccess.SetPixel(2, 3, BitmapColor(COL_LIGHTCYAN));
 
     // row 4
-    aBmpAccess.SetPixel(3, 0, BitmapColor(Color(COL_LIGHTRED)));
-    aBmpAccess.SetPixel(3, 1, BitmapColor(Color(COL_LIGHTMAGENTA)));
-    aBmpAccess.SetPixel(3, 2, BitmapColor(Color(COL_YELLOW)));
-    aBmpAccess.SetPixel(3, 3, BitmapColor(Color(COL_WHITE)));
+    aBmpAccess.SetPixel(3, 0, BitmapColor(COL_LIGHTRED));
+    aBmpAccess.SetPixel(3, 1, BitmapColor(COL_LIGHTMAGENTA));
+    aBmpAccess.SetPixel(3, 2, BitmapColor(COL_YELLOW));
+    aBmpAccess.SetPixel(3, 3, BitmapColor(COL_WHITE));
 
     aBmp.MakeMonochrome(63);
     BitmapReadAccess aBmpReadAccess(aBmp);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Black pixel wrong monochrome value",
-                                 BitmapColor(Color(COL_BLACK)), aBmpReadAccess.GetColor(0, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Blue pixel wrong monochrome value", BitmapColor(Color(COL_BLACK)),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Black pixel wrong monochrome value", BitmapColor(COL_BLACK),
+                                 aBmpReadAccess.GetColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Blue pixel wrong monochrome value", BitmapColor(COL_BLACK),
                                  aBmpReadAccess.GetColor(0, 1));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Green pixel wrong monochrome value",
-                                 BitmapColor(Color(COL_WHITE)), aBmpReadAccess.GetColor(0, 2));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cyan pixel wrong monochrome value", BitmapColor(Color(COL_WHITE)),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Green pixel wrong monochrome value", BitmapColor(COL_WHITE),
+                                 aBmpReadAccess.GetColor(0, 2));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cyan pixel wrong monochrome value", BitmapColor(COL_WHITE),
                                  aBmpReadAccess.GetColor(0, 3));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Red pixel wrong monochrome value", BitmapColor(Color(COL_BLACK)),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Red pixel wrong monochrome value", BitmapColor(COL_BLACK),
                                  aBmpReadAccess.GetColor(1, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Magenta pixel wrong monochrome value",
-                                 BitmapColor(Color(COL_BLACK)), aBmpReadAccess.GetColor(1, 1));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Brown pixel wrong monochrome value",
-                                 BitmapColor(Color(COL_WHITE)), aBmpReadAccess.GetColor(1, 2));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Gray pixel wrong monochrome value", BitmapColor(Color(COL_WHITE)),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Magenta pixel wrong monochrome value", BitmapColor(COL_BLACK),
+                                 aBmpReadAccess.GetColor(1, 1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Brown pixel wrong monochrome value", BitmapColor(COL_WHITE),
+                                 aBmpReadAccess.GetColor(1, 2));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Gray pixel wrong monochrome value", BitmapColor(COL_WHITE),
                                  aBmpReadAccess.GetColor(1, 3));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light gray pixel wrong monochrome value",
-                                 BitmapColor(Color(COL_WHITE)), aBmpReadAccess.GetColor(2, 0));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light blue pixel wrong monochrome value",
-                                 BitmapColor(Color(COL_BLACK)), aBmpReadAccess.GetColor(2, 1));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light green pixel wrong monochrome value",
-                                 BitmapColor(Color(COL_WHITE)), aBmpReadAccess.GetColor(2, 2));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light cyan pixel wrong monochrome value",
-                                 BitmapColor(Color(COL_WHITE)), aBmpReadAccess.GetColor(2, 3));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light red pixel wrong monochrome value",
-                                 BitmapColor(Color(COL_WHITE)), aBmpReadAccess.GetColor(3, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light gray pixel wrong monochrome value", BitmapColor(COL_WHITE),
+                                 aBmpReadAccess.GetColor(2, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light blue pixel wrong monochrome value", BitmapColor(COL_BLACK),
+                                 aBmpReadAccess.GetColor(2, 1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light green pixel wrong monochrome value", BitmapColor(COL_WHITE),
+                                 aBmpReadAccess.GetColor(2, 2));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light cyan pixel wrong monochrome value", BitmapColor(COL_WHITE),
+                                 aBmpReadAccess.GetColor(2, 3));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light red pixel wrong monochrome value", BitmapColor(COL_WHITE),
+                                 aBmpReadAccess.GetColor(3, 0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Light magenta pixel wrong monochrome value",
-                                 BitmapColor(Color(COL_WHITE)), aBmpReadAccess.GetColor(3, 1));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Yellow pixel wrong monochrome value",
-                                 BitmapColor(Color(COL_WHITE)), aBmpReadAccess.GetColor(3, 2));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("White pixel wrong monochrome value",
-                                 BitmapColor(Color(COL_WHITE)), aBmpReadAccess.GetColor(3, 3));
+                                 BitmapColor(COL_WHITE), aBmpReadAccess.GetColor(3, 1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Yellow pixel wrong monochrome value", BitmapColor(COL_WHITE),
+                                 aBmpReadAccess.GetColor(3, 2));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("White pixel wrong monochrome value", BitmapColor(COL_WHITE),
+                                 aBmpReadAccess.GetColor(3, 3));
 }
 
 void BitmapTest::testConvert()

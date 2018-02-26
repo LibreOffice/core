@@ -132,7 +132,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageBackgroun
         {
             aInitColor = pPageView->GetApplicationDocumentColor();
 
-            if(Color(COL_AUTO) == aInitColor)
+            if(COL_AUTO == aInitColor)
             {
                 const svtools::ColorConfig aColorConfig;
                 aInitColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;

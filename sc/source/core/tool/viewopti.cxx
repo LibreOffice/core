@@ -129,7 +129,7 @@ void ScViewOptions::SetDefaults()
     aModeArr[VOBJ_TYPE_CHART] = VOBJ_MODE_SHOW;
     aModeArr[VOBJ_TYPE_DRAW ] = VOBJ_MODE_SHOW;
 
-    aGridCol     = Color( SC_STD_GRIDCOLOR );
+    aGridCol     = SC_STD_GRIDCOLOR;
     aGridColName = ScGlobal::GetRscString( STR_GRIDCOLOR );
 
     aGridOpt.SetDefaults();

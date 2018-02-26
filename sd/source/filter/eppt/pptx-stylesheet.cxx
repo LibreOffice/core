@@ -103,7 +103,7 @@ void PPTExCharSheet::Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
        .WriteUInt16( rLev.mnFont );
 
     sal_uInt32 nFontColor = rLev.mnFontColor;
-    if ( nFontColor == COL_AUTO )
+    if ( nFontColor == sal_uInt32(COL_AUTO) )
     {
         bool bIsDark = false;
         css::uno::Any aAny;
@@ -346,7 +346,7 @@ void PPTExParaSheet::Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
     if ( bSimpleText )
         nParaFlags &= 0x7fff;
     sal_uInt32 nBulletColor = rLev.mnBulletColor;
-    if ( nBulletColor == COL_AUTO )
+    if ( nBulletColor == sal_uInt32(COL_AUTO) )
     {
         bool bIsDark = false;
         css::uno::Any aAny;
