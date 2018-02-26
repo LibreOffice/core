@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_2f65ede0",
+        "filename": "accessibility/source/extended/textwindowaccessibility.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-26T12:31:50Z",
+      "side": 1,
+      "message": "so getNumber() returns a size_t and GetText() takes a sal_Int32 parameter; casting this to sal_uInt64 seems rather pointless; presumably this is intended as a narrowing cast, as the comment in the following line indicates (as well as the comment on class Paragraph in textwindowaccessibility.hxx); better cast to the parameter type of GetText()",
+      "revId": "c6e5490e0418b8fe8bcc4680ca0a400f7633ed26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_4f6221da",
+        "filename": "basctl/source/basicide/baside2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-26T12:31:50Z",
+      "side": 1,
+      "message": "CalcLineCount() returns sal_uLong, and the consumer of nLines, CreateProgress(), takes a sal_uLong parameter, so just changing this variable is a bit pointless, better change all of them to match\n\n(it looks like this is the only call of both CalcLineCount() and CreateProgress(), so very easy to adapt them)",
+      "revId": "c6e5490e0418b8fe8bcc4680ca0a400f7633ed26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_6f5fe50e",
+        "filename": "basctl/source/basicide/bastype2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-26T12:31:50Z",
+      "side": 1,
+      "message": "this is used to call SvTreeListBox::GetEntry(), which takes a sal_uLong parameter, so it\u0027s a bit pointless to change this variable without adapting the GetEntry parameter type.\n\nit looks like that would be a larger change; if you want to do it then please in a commit of its own.",
+      "revId": "c6e5490e0418b8fe8bcc4680ca0a400f7633ed26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_8f9a59c4",
+        "filename": "basctl/source/basicide/bastype2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-26T12:31:50Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "c6e5490e0418b8fe8bcc4680ca0a400f7633ed26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
