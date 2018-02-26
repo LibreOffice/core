@@ -167,7 +167,9 @@ void SvpSalInstance::Wakeup(SvpRequest const request)
         g_CheckedMutex = true;
     }
 #endif
-#ifndef IOS
+#ifdef IOS
+    (void)request;
+#else
     SvpSalYieldMutex *const pMutex(static_cast<SvpSalYieldMutex*>(mpSalYieldMutex.get()));
     std::unique_lock<std::mutex> g(pMutex->m_WakeUpMainMutex);
     if (request != SvpRequest::NONE)
