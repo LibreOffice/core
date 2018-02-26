@@ -223,6 +223,22 @@ std::vector<unsigned char> Hash::calculateHash(
 {
     const unsigned char* pPassBytes = reinterpret_cast<const unsigned char*>(rPassword.getStr());
     const size_t nPassBytesLen = rPassword.getLength() * 2;
+#ifdef OSL_BIGENDIAN
+    // Swap UTF16-BE to UTF16-LE
+    std::vector<unsigned char> vPass;
+    if (nPassBytesLen)
+    {
+        vPass.resize( nPassBytesLen);
+        std::copy( pPassBytes, pPassBytes + nPassBytesLen, vPass.begin());
+        sal_uInt8* p = reinterpret_cast<sal_uInt8*>(vPass.data());
+        sal_uInt8 const * const pEnd = p + nPassBytesLen;
+        for ( ; p < pEnd; p += 2 )
+        {
+            std::swap( p[0], p[1] );
+        }
+        pPassBytes = vPass.data();
+    }
+#endif
     return calculateHash( pPassBytes, nPassBytesLen, rSaltValue.data(), rSaltValue.size(), nSpinCount,
             bPrependNotAppend, eType);
 }
