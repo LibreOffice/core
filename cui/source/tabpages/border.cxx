@@ -35,7 +35,6 @@
 #include <svx/dlgutil.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <svx/flagsdef.hxx>
 #include <sfx2/request.hxx>

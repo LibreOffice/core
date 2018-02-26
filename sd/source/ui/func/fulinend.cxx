@@ -23,7 +23,8 @@
 #include <svx/dialogs.hrc>
 #include <svx/svdobj.hxx>
 #include <svx/svdopath.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <strings.hrc>
 #include <ViewShell.hxx>
@@ -137,9 +138,10 @@ void FuLineEnd::DoExecute( SfxRequest& )
                 }
                 else
                 {
-                    ScopedVclPtrInstance<WarningBox> aWarningBox( mpWindow, MessBoxStyle::Ok,
-                            SdResId( STR_WARN_NAME_DUPLICATE ) );
-                    aWarningBox->Execute();
+                    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(mpWindow ? mpWindow->GetFrameWeld() : nullptr,
+                                                               VclMessageType::Warning, VclButtonsType::Ok,
+                                                               SdResId(STR_WARN_NAME_DUPLICATE)));
+                    xWarn->run();
                 }
             }
         }

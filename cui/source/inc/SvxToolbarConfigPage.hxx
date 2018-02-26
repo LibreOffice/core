@@ -42,7 +42,6 @@
 #include <sfx2/tabdlg.hxx>
 #include <memory>
 #include <vector>
-#include <vcl/msgbox.hxx>
 
 //#include "cfgutil.hxx"
 #include "cfg.hxx" //for SvxConfigPage and SaveInData

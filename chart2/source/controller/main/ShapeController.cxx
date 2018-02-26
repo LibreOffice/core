@@ -29,7 +29,6 @@
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <svx/dialogs.hrc>

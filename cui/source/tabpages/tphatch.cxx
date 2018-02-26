@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <tools/urlobj.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/pathoptions.hxx>

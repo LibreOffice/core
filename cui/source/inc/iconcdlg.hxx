@@ -22,7 +22,6 @@
 #include <rtl/ustring.hxx>
 #include <svtools/ivctrl.hxx>
 #include <vcl/tabpage.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/image.hxx>

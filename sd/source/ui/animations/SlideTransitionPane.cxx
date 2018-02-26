@@ -36,7 +36,8 @@
 #include <svtools/controldims.hxx>
 #include <svx/gallery.hxx>
 #include <unotools/pathoptions.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <tools/urlobj.hxx>
 #include <DrawViewShell.hxx>
 #include <slideshow.hxx>
@@ -768,9 +769,12 @@ void SlideTransitionPane::openSoundFileDialog()
             {
                 OUString aStrWarning(SdResId(STR_WARNING_NOSOUNDFILE));
                 aStrWarning = aStrWarning.replaceFirst("%", aFile);
-                ScopedVclPtrInstance< WarningBox > aWarningBox( nullptr, MessBoxStyle::RetryCancel, WB_3DLOOK, aStrWarning );
-                aWarningBox->SetModalInputMode (true);
-                bQuitLoop = (aWarningBox->Execute() != RET_RETRY);
+                std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(nullptr,
+                                                           VclMessageType::Warning, VclButtonsType::NONE,
+                                                           aStrWarning));
+                xWarn->add_button(Button::GetStandardText(StandardButtonType::Retry), RET_RETRY);
+                xWarn->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+                bQuitLoop = (xWarn->run() != RET_RETRY);
 
                 bValidSoundFile = false;
             }

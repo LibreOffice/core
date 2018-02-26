@@ -37,7 +37,6 @@
 #include <svx/svditer.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdobj.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>

@@ -19,7 +19,6 @@
 
 #include <vcl/wrkwin.hxx>
 #include <vcl/morebtn.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/style.hxx>

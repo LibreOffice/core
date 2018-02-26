@@ -28,7 +28,6 @@
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/scrbar.hxx>
@@ -3137,7 +3136,11 @@ IMPL_LINK_NOARG( SvxIconSelectorDialog, ImportHdl, Button *, void)
 IMPL_LINK_NOARG( SvxIconSelectorDialog, DeleteHdl, Button *, void )
 {
     OUString message = CuiResId( RID_SVXSTR_DELETE_ICON_CONFIRM );
-    if (ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::OkCancel, message)->Execute() == RET_OK)
+
+    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+                                               VclMessageType::Warning, VclButtonsType::OkCancel,
+                                               message));
+    if (xWarn->run() == RET_OK)
     {
         ToolBox::ImplToolItems::size_type nCount = pTbSymbol->GetItemCount();
 

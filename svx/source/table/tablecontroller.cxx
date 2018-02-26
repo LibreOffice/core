@@ -64,7 +64,6 @@
 #include <svx/svdpage.hxx>
 #include "tableundo.hxx"
 #include "tablelayouter.hxx"
-#include <vcl/msgbox.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <memory>
 #include <o3tl/enumarray.hxx>

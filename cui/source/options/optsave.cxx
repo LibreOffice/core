@@ -38,7 +38,6 @@
 #include <unotools/configitem.hxx>
 #include <unotools/optionsdlg.hxx>
 
-#include <vcl/msgbox.hxx>
 #include <sfx2/fcontnr.hxx>
 
 using namespace com::sun::star::uno;

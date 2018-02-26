@@ -21,7 +21,6 @@
 #include <vcl/svapp.hxx>
 #include <svl/solar.hrc>
 #include <tools/debug.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 

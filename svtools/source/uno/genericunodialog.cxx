@@ -30,8 +30,8 @@
 #include <comphelper/property.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
-#include <vcl/msgbox.hxx>
 #include <osl/mutex.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::comphelper;

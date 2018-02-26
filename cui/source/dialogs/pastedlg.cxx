@@ -28,7 +28,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/msgbox.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <svtools/strings.hrc>

@@ -19,7 +19,6 @@
 
 #include <i18nutil/unicode.hxx>
 #include <vcl/builderfactory.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/settings.hxx>

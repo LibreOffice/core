@@ -28,7 +28,6 @@
 #include <rtl/textenc.h>
 #include <svx/ucsubset.hxx>
 #include <sfx2/objsh.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/fontcharmap.hxx>

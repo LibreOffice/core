@@ -19,7 +19,6 @@
 #include <editeng/editobj.hxx>
 #include <editeng/wghtitem.hxx>
 #include <svl/itemset.hxx>
-#include <vcl/msgbox.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/uri.hxx>

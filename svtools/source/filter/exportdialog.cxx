@@ -35,7 +35,6 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <unotools/streamwrap.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/graph.hxx>

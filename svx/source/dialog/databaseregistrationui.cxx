@@ -25,7 +25,6 @@
 
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
-#include <vcl/msgbox.hxx>
 #include <memory>
 
 namespace svx

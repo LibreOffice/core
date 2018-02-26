@@ -25,9 +25,6 @@
 
 #include <com/sun/star/ui/dialogs/WizardTravelType.hpp>
 
-#include <vcl/msgbox.hxx>
-
-
 namespace svt { namespace uno
 {
 

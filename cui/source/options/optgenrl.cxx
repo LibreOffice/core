@@ -27,7 +27,6 @@
 
 #include <i18nlangtag/mslangid.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
 #include <unotools/saveopt.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/edit.hxx>
