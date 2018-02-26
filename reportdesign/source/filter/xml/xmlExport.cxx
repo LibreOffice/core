@@ -1134,7 +1134,7 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
     {
         uno::Reference<beans::XPropertySet> xBorderProp = OXMLHelper::createBorderPropertySet();
         table::BorderLine2 aValue;
-        aValue.Color = COL_BLACK;
+        aValue.Color = sal_uInt32(COL_BLACK);
         aValue.InnerLineWidth = aValue.LineDistance = 0;
         aValue.OuterLineWidth = DEFAULT_LINE_WIDTH;
         aValue.LineStyle = table::BorderLineStyle::SOLID;

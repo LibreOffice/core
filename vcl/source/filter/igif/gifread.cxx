@@ -300,10 +300,10 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
         // if possible accommodate some standard colours
         if( nCount < 256 )
         {
-            (*pPal)[ 255UL ] = Color(COL_WHITE);
+            (*pPal)[ 255UL ] = COL_WHITE;
 
             if( nCount < 255 )
-                (*pPal)[ 254UL ] = Color(COL_BLACK);
+                (*pPal)[ 254UL ] = COL_BLACK;
         }
     }
 }

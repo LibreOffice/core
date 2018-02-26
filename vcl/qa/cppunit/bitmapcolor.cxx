@@ -162,82 +162,82 @@ void BitmapColorTest::invert()
 void BitmapColorTest::getLuminance()
 {
     {
-        BitmapColor aBmpColor(Color(COL_BLACK));
+        BitmapColor aBmpColor(COL_BLACK);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(0), aBmpColor.GetLuminance());
     }
 
     {
-        BitmapColor aBmpColor(Color(COL_BLUE));
+        BitmapColor aBmpColor(COL_BLUE);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(14), aBmpColor.GetLuminance());
     }
 
     {
-        BitmapColor aBmpColor(Color(COL_GREEN));
+        BitmapColor aBmpColor(COL_GREEN);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(75), aBmpColor.GetLuminance());
     }
 
     {
-        BitmapColor aBmpColor(Color(COL_CYAN));
+        BitmapColor aBmpColor(COL_CYAN);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(89), aBmpColor.GetLuminance());
     }
 
     {
-        BitmapColor aBmpColor(Color(COL_RED));
+        BitmapColor aBmpColor(COL_RED);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(38), aBmpColor.GetLuminance());
     }
 
     {
-        BitmapColor aBmpColor(Color(COL_MAGENTA));
+        BitmapColor aBmpColor(COL_MAGENTA);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(52), aBmpColor.GetLuminance());
     }
 
     {
-        BitmapColor aBmpColor(Color(COL_BROWN));
+        BitmapColor aBmpColor(COL_BROWN);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(114), aBmpColor.GetLuminance());
     }
 
     {
-        BitmapColor aBmpColor(Color(COL_GRAY));
+        BitmapColor aBmpColor(COL_GRAY);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(128), aBmpColor.GetLuminance());
     }
 
     {
-        BitmapColor aBmpColor(Color(COL_LIGHTGRAY));
+        BitmapColor aBmpColor(COL_LIGHTGRAY);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(192), aBmpColor.GetLuminance());
     }
 
     {
-        BitmapColor aBmpColor(Color(COL_LIGHTBLUE));
+        BitmapColor aBmpColor(COL_LIGHTBLUE);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(27), aBmpColor.GetLuminance());
     }
 
     {
-        BitmapColor aBmpColor(Color(COL_LIGHTGREEN));
+        BitmapColor aBmpColor(COL_LIGHTGREEN);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(150), aBmpColor.GetLuminance());
     }
 
     {
-        BitmapColor aBmpColor(Color(COL_LIGHTCYAN));
+        BitmapColor aBmpColor(COL_LIGHTCYAN);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(178), aBmpColor.GetLuminance());
     }
 
     {
-        BitmapColor aBmpColor(Color(COL_LIGHTRED));
+        BitmapColor aBmpColor(COL_LIGHTRED);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(76), aBmpColor.GetLuminance());
     }
 
     {
-        BitmapColor aBmpColor(Color(COL_LIGHTMAGENTA));
+        BitmapColor aBmpColor(COL_LIGHTMAGENTA);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(104), aBmpColor.GetLuminance());
     }
 
     {
-        BitmapColor aBmpColor(Color(COL_YELLOW));
+        BitmapColor aBmpColor(COL_YELLOW);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(227), aBmpColor.GetLuminance());
     }
 
     {
-        BitmapColor aBmpColor(Color(COL_WHITE));
+        BitmapColor aBmpColor(COL_WHITE);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255), aBmpColor.GetLuminance());
     }
 }

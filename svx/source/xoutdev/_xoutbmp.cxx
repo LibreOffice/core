@@ -567,7 +567,7 @@ tools::Polygon XOutBitmap::GetContour( const Bitmap& rBmp, const XOutFlags nFlag
             std::unique_ptr<Point[]> pPoints2;
             long                nX, nY;
             sal_uInt16              nPolyPos = 0;
-            const BitmapColor   aBlack = pAcc->GetBestMatchingColor( Color(COL_BLACK) );
+            const BitmapColor   aBlack = pAcc->GetBestMatchingColor( COL_BLACK );
 
             if( nFlags & XOutFlags::ContourVert )
             {

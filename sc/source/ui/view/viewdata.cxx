@@ -3077,7 +3077,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
             if( pOptions )
             {
                 const Color& rGridColor = pOptions->GetGridColor();
-                if( rGridColor.GetColor() != SC_STD_GRIDCOLOR )
+                if( rGridColor != SC_STD_GRIDCOLOR )
                     rTabSett.maGridColor = rGridColor;
             }
             rTabSett.mbShowGrid = pViewTab->bShowGrid;
@@ -3238,7 +3238,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
                 if( pOptions )
                 {
                     Color aGridColor( rTabSett.maGridColor );
-                    if( aGridColor.GetColor() == COL_AUTO )
+                    if( aGridColor == COL_AUTO )
                         aGridColor = SC_STD_GRIDCOLOR;
                     pOptions->SetGridColor( aGridColor, EMPTY_OUSTRING );
                 }
@@ -3459,7 +3459,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             {
                 Color aColor(static_cast<sal_uInt32>(nColor));
                 // #i47435# set automatic grid color explicitly
-                if( aColor.GetColor() == COL_AUTO )
+                if( aColor == COL_AUTO )
                     aColor = SC_STD_GRIDCOLOR;
                 pOptions->SetGridColor(aColor, OUString());
             }

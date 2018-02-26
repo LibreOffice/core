@@ -3115,7 +3115,7 @@ const Wallpaper& Window::GetDisplayBackground() const
     const Wallpaper& rBack = GetBackground();
     if( ! rBack.IsBitmap() &&
         ! rBack.IsGradient() &&
-        rBack.GetColor().GetColor() == COL_TRANSPARENT &&
+        rBack.GetColor()== COL_TRANSPARENT &&
         mpWindowImpl->mpParent )
             return mpWindowImpl->mpParent->GetDisplayBackground();
     return rBack;

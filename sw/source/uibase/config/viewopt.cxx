@@ -101,7 +101,7 @@ bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
 }
 
 void SwViewOption::DrawRect( OutputDevice *pOut,
-                             const SwRect &rRect, long nCol )
+                             const SwRect &rRect, ::Color nCol )
 {
     if ( pOut->GetOutDevType() != OUTDEV_PRINTER )
     {

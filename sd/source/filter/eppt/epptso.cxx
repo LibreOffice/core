@@ -746,7 +746,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
         if ( nPropertyFlags & 0x20 )
         {
             sal_uInt32 nBulletColor = pPara->nBulletColor;
-            if ( nBulletColor == COL_AUTO )
+            if ( nBulletColor == sal_uInt32(COL_AUTO) )
             {
                 bool bIsDark = false;
                 css::uno::Any aAny;
@@ -799,7 +799,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
             sal_uInt32 nCharAttr = rPortion.mnCharAttr;
             sal_uInt32 nCharColor = rPortion.mnCharColor;
 
-            if ( nCharColor == COL_AUTO )   // nCharColor depends to the background color
+            if ( nCharColor == sal_uInt32(COL_AUTO) )   // nCharColor depends to the background color
             {
                 bool bIsDark = false;
                 css::uno::Any aAny;

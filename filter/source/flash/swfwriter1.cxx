@@ -400,10 +400,10 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
             Color aReliefColor( COL_LIGHTGRAY );
             Color aTextColor( mpVDev->GetTextColor() );
 
-            if ( aTextColor.GetColor() == COL_BLACK )
+            if ( aTextColor == COL_BLACK )
                 aTextColor = COL_WHITE;
 
-            if ( aTextColor.GetColor() == COL_WHITE )
+            if ( aTextColor == COL_WHITE )
                 aReliefColor = COL_BLACK;
 
 
@@ -433,7 +433,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
                 Color aTextColor( mpVDev->GetTextColor() );
                 Color aShadowColor( COL_BLACK );
 
-                if ( (aTextColor.GetColor() == COL_BLACK) || (aTextColor.GetLuminance() < 8) )
+                if ( (aTextColor == COL_BLACK) || (aTextColor.GetLuminance() < 8) )
                     aShadowColor = COL_LIGHTGRAY;
 
                 Point aPos( rPos );

@@ -829,7 +829,7 @@ css::uno::Sequence< css::uno::Any >
 
 sal_Int32 SAL_CALL AccessibleDocumentViewBase::getForeground(  )
 {
-    return COL_BLACK;
+    return sal_Int32(COL_BLACK);
 }
 
 sal_Int32 SAL_CALL AccessibleDocumentViewBase::getBackground(  )

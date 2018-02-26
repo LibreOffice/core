@@ -1537,7 +1537,7 @@ bool WW8Export::TransBrush(const Color& rCol, WW8_SHD& rShd)
 
 sal_uInt32 SuitableBGColor(sal_uInt32 nIn)
 {
-    if (nIn == COL_AUTO)
+    if (nIn == sal_uInt32(COL_AUTO))
         return 0xFF000000;
     return wwUtility::RGBToBGR(nIn);
 }

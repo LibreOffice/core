@@ -1029,11 +1029,11 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getForeground()
     {
         if ( aBackgroundCol.IsDark() )
         {
-            return COL_WHITE;
+            return sal_Int32(COL_WHITE);
         }
         else
         {
-            return COL_BLACK;
+            return sal_Int32(COL_BLACK);
         }
     }
 
@@ -2181,7 +2181,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
                 if (xComponent.is())
                 {
                     Color cr(xComponent->getBackground());
-                    crChar = cr.IsDark() ? COL_WHITE : COL_BLACK;
+                    crChar = sal_uInt32(cr.IsDark() ? COL_WHITE : COL_BLACK);
                     rValue.Value <<= crChar;
                 }
             }
@@ -2237,7 +2237,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
                 if (xComponent.is())
                 {
                     Color cr(xComponent->getBackground());
-                    crUnderline = cr.IsDark() ? COL_WHITE : COL_BLACK;
+                    crUnderline = sal_uInt32(cr.IsDark() ? COL_WHITE : COL_BLACK);
                     rValue.Value <<= crUnderline;
                 }
             }
