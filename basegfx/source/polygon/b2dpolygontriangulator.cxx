@@ -104,13 +104,12 @@ namespace basegfx
         };
 
         typedef std::vector< EdgeEntry > EdgeEntries;
-        typedef std::vector< EdgeEntry* > EdgeEntryPointers;
 
         class Triangulator
         {
             EdgeEntry*                                      mpList;
             EdgeEntries                                     maStartEntries;
-            EdgeEntryPointers                               maNewEdgeEntries;
+            std::vector< std::unique_ptr<EdgeEntry> >       maNewEdgeEntries;
             B2DPolygon                                      maResult;
 
             void handleClosingEdge(const B2DPoint& rStart, const B2DPoint& rEnd);
@@ -119,7 +118,6 @@ namespace basegfx
 
         public:
             explicit Triangulator(const B2DPolyPolygon& rCandidate);
-            ~Triangulator();
 
             const B2DPolygon& getResult() const { return maResult; }
         };
@@ -155,7 +153,7 @@ namespace basegfx
             {
                 // insert closing edge
                 EdgeEntry* pNew = new EdgeEntry(aNew);
-                maNewEdgeEntries.push_back(pNew);
+                maNewEdgeEntries.emplace_back(pNew);
                 pCurr = mpList;
                 pPrev = nullptr;
 
@@ -189,8 +187,8 @@ namespace basegfx
                     // found point in triangle -> split triangle inserting two edges
                     EdgeEntry* pStart = new EdgeEntry(pEdgeA->getStart(), rTestPoint);
                     EdgeEntry* pEnd = new EdgeEntry(*pStart);
-                    maNewEdgeEntries.push_back(pStart);
-                    maNewEdgeEntries.push_back(pEnd);
+                    maNewEdgeEntries.emplace_back(pStart);
+                    maNewEdgeEntries.emplace_back(pEnd);
 
                     pStart->setNext(pEnd);
                     pEnd->setNext(pEdgeA->getNext());
@@ -362,14 +360,6 @@ namespace basegfx
                     // only one entry at start point, delete it
                     mpList = mpList->getNext();
                 }
-            }
-        }
-
-        Triangulator::~Triangulator()
-        {
-            for (auto const& newEdgeEntry : maNewEdgeEntries)
-            {
-                delete newEdgeEntry;
             }
         }
 
