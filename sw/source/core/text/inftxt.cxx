@@ -541,7 +541,7 @@ static bool lcl_IsDarkBackground( const SwTextPaintInfo& rInf )
                 pCol = &pItem->GetColor();
 
             // Determined color <pCol> can be <COL_TRANSPARENT>. Thus, check it.
-            if ( pCol->GetColor() == COL_TRANSPARENT)
+            if ( *pCol == COL_TRANSPARENT)
                 pCol = nullptr;
         }
         else

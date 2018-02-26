@@ -1531,7 +1531,7 @@ boost::optional<SvxBrushItem> MSWordExportBase::getBackground()
     if (SfxItemState::SET == eState)
     {
         // The 'color' is set for the first page style - take it and use it as the background color of the entire DOCX
-        if (aBrush.GetColor().GetColor() != COL_AUTO)
+        if (aBrush.GetColor() != COL_AUTO)
             oRet.reset(aBrush);
     }
     return oRet;
@@ -2635,11 +2635,10 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
             WW8SHDLong aSHD;
             aSHD.setCvFore( 0xFF000000 );
 
-            sal_uInt32 nBgColor = aColor.GetColor();
-            if ( nBgColor == COL_AUTO )
+            if ( aColor == COL_AUTO )
                 aSHD.setCvBack( 0xFF000000 );
             else
-                aSHD.setCvBack( wwUtility::RGBToBGR( nBgColor ) );
+                aSHD.setCvBack( wwUtility::RGBToBGR( aColor.GetColor() ) );
 
             aSHD.Write( m_rWW8Export );
         }

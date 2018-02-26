@@ -562,7 +562,7 @@ sal_uLong PNGWriterImpl::ImplGetFilter (sal_uLong nY, sal_uLong nXStart, sal_uLo
                 }
                 else
                 {
-                    const BitmapColor aTrans(mpMaskAccess->GetBestMatchingColor(Color(COL_WHITE)));
+                    const BitmapColor aTrans(mpMaskAccess->GetBestMatchingColor(COL_WHITE));
                     Scanline pScanline = mpAccess->GetScanline( nY );
                     Scanline pScanlineMask = mpMaskAccess->GetScanline( nY );
 

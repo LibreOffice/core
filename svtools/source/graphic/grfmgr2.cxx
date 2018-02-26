@@ -685,7 +685,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                         }
                         else // scaleByAveraging
                         {
-                            const BitmapColor   aTrans( pWriteAccess->GetBestMatchingColor( Color(COL_WHITE) ) );
+                            const BitmapColor   aTrans( pWriteAccess->GetBestMatchingColor( COL_WHITE ) );
                             BitmapColor         aResultColor( 0 );
                             double aSum, aCount;
 
@@ -746,7 +746,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                     }
                     else
                     {
-                        const BitmapColor   aTrans( pWriteAccess->GetBestMatchingColor( Color(COL_WHITE) ) );
+                        const BitmapColor   aTrans( pWriteAccess->GetBestMatchingColor( COL_WHITE ) );
                         BitmapColor         aAlphaVal( 0 );
 
                         for( long nY = 0; nY < aTargetHeight; nY++ )
@@ -802,8 +802,8 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
             if( pWriteAccess )
             {
                 Bitmap              aMsk( rBmpEx.GetMask() );
-                const BitmapColor   aB( pWriteAccess->GetBestMatchingColor( Color(COL_BLACK) ) );
-                const BitmapColor   aW( pWriteAccess->GetBestMatchingColor( Color(COL_WHITE) ) );
+                const BitmapColor   aB( pWriteAccess->GetBestMatchingColor( COL_BLACK ) );
+                const BitmapColor   aW( pWriteAccess->GetBestMatchingColor( COL_WHITE ) );
                 BitmapReadAccess*   pMAcc = nullptr;
 
                 if( !aMsk || ( ( pMAcc = aMsk.AcquireReadAccess() ) != nullptr ) )
@@ -813,7 +813,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                     BitmapColor aTestB;
 
                     if( pMAcc )
-                        aTestB = pMAcc->GetBestMatchingColor( Color(COL_BLACK) );
+                        aTestB = pMAcc->GetBestMatchingColor( COL_BLACK );
 
                     // create new horizontal mapping table
                     for( long nX = 0; nX < aUnrotatedWidth; nX++ )

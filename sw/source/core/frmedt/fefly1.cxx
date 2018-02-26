@@ -597,7 +597,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                 MakeVisible( aTmpRect );
 #if OSL_DEBUG_LEVEL > 0
             //TODO: That doesn't seem to be intended
-            if( Color(COL_TRANSPARENT) != GetOut()->GetLineColor() )
+            if( COL_TRANSPARENT != GetOut()->GetLineColor() )
             {
                 OSL_FAIL( "Hey, Joe: Where's my Null Pen?" );
                 GetOut()->SetLineColor( COL_TRANSPARENT );

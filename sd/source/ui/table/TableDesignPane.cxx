@@ -104,7 +104,7 @@ TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBas
     else
     {
         m_pValueSet->SetColor( COL_WHITE );
-        m_pValueSet->SetBackground( Color(COL_WHITE) );
+        m_pValueSet->SetBackground( COL_WHITE );
     }
     m_pValueSet->SetSelectHdl (LINK(this, TableDesignWidget, implValueSetHdl));
 
@@ -619,7 +619,7 @@ const BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle
     Size aBmpSize(nBitmapWidth, nBitmapHeight);
     pVirDev->SetOutputSizePixel(aBmpSize);
 
-    pVirDev->SetBackground( Color( bIsPageDark ? COL_BLACK : COL_WHITE ) );
+    pVirDev->SetBackground( bIsPageDark ? COL_BLACK : COL_WHITE );
     pVirDev->Erase();
 
     // first draw cell background and text line previews
@@ -638,7 +638,7 @@ const BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle
                 // fill cell background
                 const ::tools::Rectangle aRect( nX, nY, nX + nCellWidth - 1, nY + nCellHeight - 1 );
 
-                if( xCellInfo->maCellColor.GetColor() != COL_TRANSPARENT )
+                if( xCellInfo->maCellColor != COL_TRANSPARENT )
                 {
                     pVirDev->SetFillColor( xCellInfo->maCellColor );
                     pVirDev->DrawRect( aRect );
@@ -648,7 +648,7 @@ const BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle
             }
 
             // draw text preview line
-            if( aTextColor.GetColor() == COL_AUTO )
+            if( aTextColor == COL_AUTO )
                 aTextColor = bIsPageDark ? COL_WHITE : COL_BLACK;
             pVirDev->SetLineColor( aTextColor );
             const Point aPnt1( nX + 2, nY + ((nCellHeight - 1 ) >> 1) );

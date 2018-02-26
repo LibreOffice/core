@@ -2528,7 +2528,7 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
 
                     /// OD 30.08.2002 #99657#
                     /// determined color <pCol> can be <COL_TRANSPARENT>. Thus, check it.
-                    if ( pCol->GetColor() == COL_TRANSPARENT)
+                    if ( *pCol == COL_TRANSPARENT)
                         pCol = nullptr;
                 }
                 else

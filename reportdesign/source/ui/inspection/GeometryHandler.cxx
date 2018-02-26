@@ -421,8 +421,8 @@ uno::Any SAL_CALL GeometryHandler::getPropertyValue(const OUString & PropertyNam
         case PROPERTY_ID_CONTROLBACKGROUND:
             {
                 aPropertyValue = m_xReportComponent->getPropertyValue( PropertyName );
-                sal_Int32 nColor = COL_TRANSPARENT;
-                if ( (aPropertyValue >>= nColor) && static_cast<sal_Int32>(COL_TRANSPARENT) == nColor )
+                Color nColor = COL_TRANSPARENT;
+                if ( (aPropertyValue >>= nColor) && COL_TRANSPARENT == nColor )
                     aPropertyValue.clear();
             }
             break;
@@ -1263,8 +1263,8 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
         case PROPERTY_ID_BACKCOLOR:
         case PROPERTY_ID_CONTROLBACKGROUND:
             {
-                sal_Int32 nColor = COL_TRANSPARENT;
-                if ( (aPropertyValue >>= nColor) && static_cast<sal_Int32>(COL_TRANSPARENT) == nColor )
+                Color nColor = COL_TRANSPARENT;
+                if ( (aPropertyValue >>= nColor) && COL_TRANSPARENT == nColor )
                     aPropertyValue.clear();
             }
             SAL_FALLTHROUGH;

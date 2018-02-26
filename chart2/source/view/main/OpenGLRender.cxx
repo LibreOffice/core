@@ -851,11 +851,11 @@ int OpenGLRender::RenderArea2DShape()
     return 0;
 }
 
-void OpenGLRender::SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2, css::drawing::FillStyle fillStyle)
+void OpenGLRender::SetBackGroundColor(::Color color1, ::Color color2, css::drawing::FillStyle fillStyle)
 {
-    sal_uInt8 r = (color1 & 0x00FF0000) >> 16;
-    sal_uInt8 g = (color1 & 0x0000FF00) >> 8;
-    sal_uInt8 b = (color1 & 0x000000FF);
+    sal_uInt8 r = color1.GetRed();
+    sal_uInt8 g = color1.GetGreen();
+    sal_uInt8 b = color1.GetBlue();
 
     m_BackgroundColor[0] = static_cast<float>(r) / 255.0f;
     m_BackgroundColor[1] = static_cast<float>(g) / 255.0f;
@@ -867,9 +867,9 @@ void OpenGLRender::SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2, css:
     m_BackgroundColor[6] = static_cast<float>(b) / 255.0f;
     m_BackgroundColor[7] = fillStyle != css::drawing::FillStyle_NONE ? 1.0 : 0.0;
 
-    r = (color2 & 0x00FF0000) >> 16;
-    g = (color2 & 0x0000FF00) >> 8;
-    b = (color2 & 0x000000FF);
+    r = color2.GetRed();
+    g = color2.GetGreen();
+    b = color2.GetBlue();
 
     m_BackgroundColor[8] = static_cast<float>(r) / 255.0f;
     m_BackgroundColor[9] = static_cast<float>(g) / 255.0f;
@@ -880,7 +880,7 @@ void OpenGLRender::SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2, css:
     m_BackgroundColor[13] = static_cast<float>(g) / 255.0f;
     m_BackgroundColor[14] = static_cast<float>(b) / 255.0f;
     m_BackgroundColor[15] = fillStyle != css::drawing::FillStyle_NONE ? 1.0 : 0.0;
-    SAL_INFO("chart2.opengl", "color1 = " << color1 << ", color2 = " << color2);
+    SAL_INFO("chart2.opengl", "color1 = " << sal_uInt32(color1) << ", color2 = " << sal_uInt32(color2));
 
 }
 

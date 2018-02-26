@@ -106,7 +106,7 @@ public:
     void renderDebug();
 #endif
 
-    void SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2, css::drawing::FillStyle fillstyle);
+    void SetBackGroundColor(::Color color1, ::Color color2, css::drawing::FillStyle fillstyle);
 
 private:
     int m_iWidth;

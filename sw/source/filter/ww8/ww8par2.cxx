@@ -1547,7 +1547,7 @@ void WW8TabBandDesc::ReadNewShd(const sal_uInt8* pS, bool bVer67)
         pNewSHDs[i++] = SwWW8ImplReader::ExtractColour(pS, bVer67);
 
     while (i < nWwCols)
-        pNewSHDs[i++] = COL_AUTO;
+        pNewSHDs[i++] = sal_uInt32(COL_AUTO);
 }
 
 void WW8TabBandDesc::setcelldefaults(WW8_TCell *pCells, short nCols)
@@ -3014,7 +3014,7 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
         return;                 // faked cells -> no color
 
     bool bFound=false;
-    if (m_pActBand->pNewSHDs && m_pActBand->pNewSHDs[nWwIdx] != COL_AUTO)
+    if (m_pActBand->pNewSHDs && m_pActBand->pNewSHDs[nWwIdx] != sal_uInt32(COL_AUTO))
     {
         Color aColor(m_pActBand->pNewSHDs[nWwIdx]);
         pBox->GetFrameFormat()->SetFormatAttr(SvxBrushItem(aColor, RES_BACKGROUND));

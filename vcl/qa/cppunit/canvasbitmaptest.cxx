@@ -653,8 +653,8 @@ void CanvasBitmapTest::runTest()
                 }
                 else
                 {
-                    aBlack = Color(COL_BLACK);
-                    aWhite = Color(COL_WHITE);
+                    aBlack = COL_BLACK;
+                    aWhite = COL_WHITE;
                 }
                 pAcc->SetFillColor(COL_GREEN);
                 pAcc->FillRect(tools::Rectangle(0,0,100,100));

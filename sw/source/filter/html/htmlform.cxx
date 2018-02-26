@@ -954,7 +954,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         {
             const Color &rColor = static_cast<const SvxBrushItem *>(pItem)->GetColor();
             /// copy color, if color is not "no fill"/"auto fill"
-            if( rColor.GetColor() != COL_TRANSPARENT )
+            if( rColor != COL_TRANSPARENT )
             {
                 /// copy complete color with transparency
                 aTmp <<= static_cast<sal_Int32>(rColor.GetColor());

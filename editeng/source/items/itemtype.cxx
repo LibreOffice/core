@@ -141,7 +141,7 @@ OUString GetSvxString(const char* pId)
 
 OUString GetColorString( const Color& rCol )
 {
-    if (rCol.GetColor() == COL_AUTO)
+    if (rCol == COL_AUTO)
         return EditResId(RID_SVXSTR_AUTOMATIC);
 
     static const Color aColAry[] = {

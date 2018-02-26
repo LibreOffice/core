@@ -1369,7 +1369,7 @@ void SvxCharEffectsPage::EnableNoneFontColor()
 
 Color SvxCharEffectsPage::GetPreviewFontColor(const Color& rColor) const
 {
-    if (rColor.GetColor() == COL_AUTO)
+    if (rColor == COL_AUTO)
         return COL_BLACK;
     if (m_bEnableNoneFontColor && rColor == COL_NONE_COLOR)
         return COL_BLACK;
