@@ -401,7 +401,7 @@ DECLARE_FILE_MAILMERGE_TEST(testMissingDefaultLineColor, "missing-default-line-c
     CPPUNIT_ASSERT( xDefaults.is());
     uno::Reference< beans::XPropertySetInfo > xInfo( xDefaults->getPropertySetInfo());
     CPPUNIT_ASSERT( xInfo->hasPropertyByName( "LineColor" ));
-    sal_uInt32 lineColor;
+    Color lineColor;
     xDefaults->getPropertyValue( "LineColor" ) >>= lineColor;
     // And the default value is black (wasn't copied properly by mailmerge).
     CPPUNIT_ASSERT_EQUAL( COL_BLACK, lineColor );

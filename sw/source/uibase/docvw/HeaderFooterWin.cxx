@@ -348,9 +348,9 @@ void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const ::tools:
         aSign.setClosed(true);
     }
 
-    BColor aSignColor = Color(COL_BLACK).getBColor();
+    BColor aSignColor = COL_BLACK.getBColor();
     if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-        aSignColor = Color(COL_WHITE).getBColor();
+        aSignColor = COL_WHITE.getBColor();
 
     aSeq.push_back( drawinglayer::primitive2d::Primitive2DReference(
                                     new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
@@ -366,7 +366,7 @@ void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const ::tools:
     double nFadeRate = double(m_nFadeRate) / 100.0;
 
     const basegfx::BColorModifierSharedPtr aBColorModifier(
-        new basegfx::BColorModifier_interpolate(Color(COL_WHITE).getBColor(),
+        new basegfx::BColorModifier_interpolate(COL_WHITE.getBColor(),
                                                 1.0 - nFadeRate));
 
     aGhostedSeq[0] = drawinglayer::primitive2d::Primitive2DReference(

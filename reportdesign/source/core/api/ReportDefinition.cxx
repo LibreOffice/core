@@ -291,7 +291,7 @@ OStyle::OStyle()
     sal_Int32 i = 0;
     registerPropertyNoMember( PROPERTY_NAME, ++i, nBound, cppu::UnoType<OUString>::get(), css::uno::Any(OUString("Default")) );
 
-    registerPropertyNoMember(PROPERTY_BACKCOLOR,                    ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(COL_TRANSPARENT));
+    registerPropertyNoMember(PROPERTY_BACKCOLOR,                    ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny(COL_TRANSPARENT));
 
     registerPropertyNoMember(PROPERTY_BACKGRAPHICLOCATION,  ++i,nBound, cppu::UnoType<style::GraphicLocation>::get(), css::uno::Any(style::GraphicLocation_NONE));
     registerPropertyNoMember(PROPERTY_BACKTRANSPARENT,  ++i,nBound,cppu::UnoType<bool>::get(), css::uno::Any(true));
@@ -300,7 +300,7 @@ OStyle::OStyle()
     registerPropertyNoMember(SC_UNO_PAGE_BOTTBRDDIST, ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
     registerPropertyNoMember(PROPERTY_BOTTOMMARGIN, ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::Any(nMargin));
     registerPropertyNoMember("DisplayName",       ++i,nBound, cppu::UnoType<OUString>::get(), css::uno::Any(OUString()));
-    registerPropertyNoMember(SC_UNO_PAGE_FTRBACKCOL,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(COL_TRANSPARENT));
+    registerPropertyNoMember(SC_UNO_PAGE_FTRBACKCOL,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny(COL_TRANSPARENT));
     registerPropertyNoMember(SC_UNO_PAGE_FTRGRFFILT,  ++i,nBound, cppu::UnoType<OUString>::get(), css::uno::Any(OUString()));
     registerPropertyNoMember(SC_UNO_PAGE_FTRGRFLOC,   ++i,nBound, cppu::UnoType<style::GraphicLocation>::get(), css::uno::Any(style::GraphicLocation_NONE));
     registerPropertyNoMember(SC_UNO_PAGE_FTRGRFURL,   ++i,nBound, cppu::UnoType<OUString>::get(), css::uno::Any(OUString()));
@@ -323,7 +323,7 @@ OStyle::OStyle()
     registerPropertyNoMember(SC_UNO_PAGE_FTRTOPBOR,   ++i,nBound, cppu::UnoType<table::BorderLine2>::get(), css::uno::Any(table::BorderLine2()));
     registerPropertyNoMember(SC_UNO_PAGE_FTRTOPBDIS,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
 
-    registerPropertyNoMember(SC_UNO_PAGE_HDRBACKCOL,  ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(COL_TRANSPARENT));
+    registerPropertyNoMember(SC_UNO_PAGE_HDRBACKCOL,  ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny(COL_TRANSPARENT));
     registerPropertyNoMember(SC_UNO_PAGE_HDRGRFFILT,  ++i,nBound|nMayBeVoid, cppu::UnoType<OUString>::get(), css::uno::Any(OUString()));
     registerPropertyNoMember(SC_UNO_PAGE_HDRGRFLOC,   ++i,nBound|nMayBeVoid, cppu::UnoType<style::GraphicLocation>::get(), css::uno::Any(style::GraphicLocation_NONE));
     registerPropertyNoMember(SC_UNO_PAGE_HDRGRFURL,   ++i,nBound|nMayBeVoid, cppu::UnoType<OUString>::get(), css::uno::Any(OUString()));

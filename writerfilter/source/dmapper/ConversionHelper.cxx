@@ -241,11 +241,11 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineToken,
                                             sal_Int32 nLineColor,
                                             table::BorderLine2& rToFill, bool bIsOOXML )
 {
-    static const sal_Int32 aBorderDefColor[] =
+    static const Color aBorderDefColor[] =
     {
         // The first item means automatic color (COL_AUTO), but we
         // do not use it anyway (see the next statement) .-)
-        0, COL_BLACK, COL_LIGHTBLUE, COL_LIGHTCYAN, COL_LIGHTGREEN,
+        COL_AUTO, COL_BLACK, COL_LIGHTBLUE, COL_LIGHTCYAN, COL_LIGHTGREEN,
         COL_LIGHTMAGENTA, COL_LIGHTRED, COL_YELLOW, COL_WHITE, COL_BLUE,
         COL_CYAN, COL_GREEN, COL_MAGENTA, COL_RED, COL_BROWN, COL_GRAY,
         COL_LIGHTGRAY
@@ -254,7 +254,7 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineToken,
     if(!nLineColor)
         ++nLineColor;
     if(!bIsOOXML && sal::static_int_cast<sal_uInt32>(nLineColor) < SAL_N_ELEMENTS(aBorderDefColor))
-        nLineColor = aBorderDefColor[nLineColor];
+        nLineColor = sal_Int32(aBorderDefColor[nLineColor]);
 
     sal_Int32 nLineType = lcl_convertBorderStyleFromToken(nLineToken);
 

@@ -357,7 +357,7 @@ namespace frm
             }
             else
             {
-                sal_Int32 nColor = COL_TRANSPARENT;
+                sal_Int32 nColor(COL_TRANSPARENT);
                 _rValue >>= nColor;
                 pControl->SetBackgroundColor( Color( nColor ) );
             }

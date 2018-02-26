@@ -78,7 +78,7 @@ namespace svx
         Color aColor(rColor);
 
         // !!! #109290# Workaround for SetFillColor with COL_AUTO
-        if (aColor.GetColor() == COL_AUTO)
+        if (aColor == COL_AUTO)
             aColor = COL_TRANSPARENT;
 
         if ((maCurColor == aColor) && !bSizeChanged && !bDisplayModeChanged && !bForceUpdate)

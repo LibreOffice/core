@@ -179,7 +179,7 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
     vcl::Font aFont;
     pPattern->GetFont(aFont,SC_AUTOCOL_RAW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 10", 200l, aFont.GetFontSize().getHeight());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font color should be black", COL_AUTO, aFont.GetColor().GetColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font color should be black", COL_AUTO, aFont.GetColor());
     pPattern = pDoc->GetPattern(0,1,1);
     pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 12", 240l, aFont.GetFontSize().getHeight());
@@ -191,7 +191,7 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
     pPattern = pDoc->GetPattern(1,0,1);
     pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be blue", COL_BLUE, aFont.GetColor().GetColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be blue", COL_BLUE, aFont.GetColor());
     pPattern = pDoc->GetPattern(1,1,1);
     pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out with a single line", STRIKEOUT_SINGLE, aFont.GetStrikeout());
@@ -224,7 +224,7 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
     }
     pPattern = pDoc->GetPattern(1,4,1);
     Color aColor = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("background color should be green", Color(COL_LIGHTGREEN), aColor);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("background color should be green", COL_LIGHTGREEN, aColor);
     pPattern = pDoc->GetPattern(2,0,1);
     SvxCellHorJustify eHorJustify = pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned centre horizontally", SvxCellHorJustify::Center, eHorJustify);

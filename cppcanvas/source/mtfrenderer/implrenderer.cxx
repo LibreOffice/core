@@ -887,7 +887,7 @@ namespace cppcanvas
                 // determine shadow color (from outdev3.cxx)
                 ::Color aTextColor = vcl::unotools::doubleSequenceToColor(
                     rState.textColor, xColorSpace );
-                bool bIsDark = (aTextColor.GetColor() == COL_BLACK)
+                bool bIsDark = (aTextColor == COL_BLACK)
                     || (aTextColor.GetLuminance() < 8);
 
                 aShadowColor = bIsDark ? COL_LIGHTGRAY : COL_BLACK;
@@ -917,7 +917,7 @@ namespace cppcanvas
                 // we don't have a automatic color, so black is always
                 // drawn on white (literally copied from
                 // vcl/source/gdi/outdev3.cxx)
-                if( aTextColor.GetColor() == COL_BLACK )
+                if( aTextColor == COL_BLACK )
                 {
                     aTextColor = ::COL_WHITE;
                     rParms.mrStates.getState().textColor =
@@ -925,7 +925,7 @@ namespace cppcanvas
                             aTextColor, xColorSpace );
                 }
 
-                if( aTextColor.GetColor() == COL_WHITE )
+                if( aTextColor == COL_WHITE )
                     aReliefColor = ::COL_BLACK;
                 aReliefColor.SetTransparency( aTextColor.GetTransparency() );
             }
