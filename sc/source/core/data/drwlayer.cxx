@@ -214,22 +214,12 @@ inline long HmmToTwips (long nVal)
             FUNIT_100TH_MM, FUNIT_TWIP) );
 }
 
-inline void TwipsToMM( long& nVal )
-{
-    nVal = TwipsToHmm (nVal);
-}
-
-inline void ReverseTwipsToMM( long& nVal )
-{
-    nVal = HmmToTwips (nVal);
-}
-
 static void lcl_ReverseTwipsToMM( tools::Rectangle& rRect )
 {
-    ReverseTwipsToMM( rRect.Left() );
-    ReverseTwipsToMM( rRect.Right() );
-    ReverseTwipsToMM( rRect.Top() );
-    ReverseTwipsToMM( rRect.Bottom() );
+    rRect.SetLeft( HmmToTwips( rRect.Left() ) );
+    rRect.SetRight( HmmToTwips( rRect.Right() ) );
+    rRect.SetTop( HmmToTwips( rRect.Top()) );
+    rRect.SetBottom( HmmToTwips(rRect.Bottom()) );
 }
 
 ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
@@ -643,15 +633,15 @@ void ScDrawLayer::ResizeLastRectFromAnchor( const SdrObject* pObj, ScDrawObjData
     SCROW nRow2 = rData.maEnd.Row();
     SCTAB nTab2 = rData.maEnd.Tab();
     Point aPos( pDoc->GetColOffset( nCol1, nTab1, bHiddenAsZero ), pDoc->GetRowOffset( nRow1, nTab1, bHiddenAsZero ) );
-    TwipsToMM( aPos.X() );
-    TwipsToMM( aPos.Y() );
+    aPos.setX(TwipsToHmm( aPos.X() ));
+    aPos.setY(TwipsToHmm( aPos.Y() ));
     aPos += lcl_calcAvailableDiff(*pDoc, nCol1, nRow1, nTab1, rData.maStartOffset);
 
     if( bCanResize )
     {
         Point aEnd( pDoc->GetColOffset( nCol2, nTab2, bHiddenAsZero ), pDoc->GetRowOffset( nRow2, nTab2, bHiddenAsZero ) );
-        TwipsToMM( aEnd.X() );
-        TwipsToMM( aEnd.Y() );
+        aEnd.setX(TwipsToHmm( aEnd.X() ));
+        aEnd.setY(TwipsToHmm( aEnd.Y() ));
         aEnd += lcl_calcAvailableDiff(*pDoc, nCol2, nRow2, nTab2, rData.maEndOffset);
 
         tools::Rectangle aNew = tools::Rectangle( aPos, aEnd );
@@ -707,8 +697,8 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         rData.maLastRect = pObj->GetLogicRect();
 
         Point aPos( pDoc->GetColOffset( nCol1, nTab1 ), pDoc->GetRowOffset( nRow1, nTab1 ) );
-        TwipsToMM( aPos.X() );
-        TwipsToMM( aPos.Y() );
+        aPos.setX(TwipsToHmm( aPos.X() ));
+        aPos.setY(TwipsToHmm( aPos.Y() ));
 
         // Calculations and values as in detfunc.cxx
 
@@ -749,8 +739,8 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                 aPos.AdjustX(pDoc->GetColWidth( nCol1, nTab1 ) / 4 );
             if (!pDoc->RowHidden(nRow1, nTab1, nullptr, &nLastRow))
                 aPos.AdjustY(pDoc->GetRowHeight( nRow1, nTab1 ) / 2 );
-            TwipsToMM( aPos.X() );
-            TwipsToMM( aPos.Y() );
+            aPos.setX(TwipsToHmm( aPos.X() ));
+            aPos.setY(TwipsToHmm( aPos.Y() ));
             Point aStartPos = aPos;
             if ( bNegativePage )
                 aStartPos.setX( -aStartPos.X() );     // don't modify aPos - used below
@@ -787,8 +777,8 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                 aPos.AdjustX(pDoc->GetColWidth( nCol2, nTab2 ) / 4 );
             if (!pDoc->RowHidden(nRow2, nTab2, nullptr, &nLastRow))
                 aPos.AdjustY(pDoc->GetRowHeight( nRow2, nTab2 ) / 2 );
-            TwipsToMM( aPos.X() );
-            TwipsToMM( aPos.Y() );
+            aPos.setX(TwipsToHmm( aPos.X() ));
+            aPos.setY(TwipsToHmm( aPos.Y() ));
             Point aEndPos = aPos;
             if ( bNegativePage )
                 aEndPos.setX( -aEndPos.X() );         // don't modify aPos - used below
@@ -1225,10 +1215,10 @@ bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
     {
         aTestRect.SetBottom( aTestRect.Top() );
         aTestRect.AdjustBottom(pDoc->GetRowHeight( nStartRow, nEndRow, nTab) );
-        TwipsToMM( aTestRect.Bottom() );
+        aTestRect.SetBottom(TwipsToHmm( aTestRect.Bottom() ));
     }
 
-    TwipsToMM( aTestRect.Top() );
+    aTestRect.SetTop(TwipsToHmm( aTestRect.Top() ));
 
     aTestRect.SetLeft( 0 );
     aTestRect.SetRight( MAXMM );
