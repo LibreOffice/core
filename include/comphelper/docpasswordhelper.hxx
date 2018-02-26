@@ -194,11 +194,21 @@ public:
         @param  nSpinCount
                 If >0 the number of repeated iterations.
 
-        @param  rAlgorithmName
-                One of "SHA-512", "SHA-256", ... as listed in
+        @param  bPrependNotAppend
+                If <FALSE/>, append spin count in iterations as per
                 https://msdn.microsoft.com/en-us/library/dd920692
-                that have a valid match in HashType. If not, an empty string is
-                returned. Not all algorithm names are supported.
+                If <TRUE/>, prepend spin count in iterations as per
+                https://msdn.microsoft.com/en-us/library/dd924776 and
+                https://msdn.microsoft.com/en-us/library/dd925430
+
+        @param  rAlgorithmName
+                One of "SHA-512", "SHA-256", ... as listed for AlgorithmName in
+                https://msdn.microsoft.com/en-us/library/dd920692
+                or "SHA512", "SHA256", ... as listed for HashAlgorithm in
+                https://msdn.microsoft.com/en-us/library/dd925810
+                that have a valid match in comphelper::HashType. If not, an
+                empty sequence is returned. Not all algorithm names are
+                supported.
 
         @return the raw hash value as sal_Int8 sequence.
      */
@@ -206,6 +216,7 @@ public:
             const rtl::OUString& rPassword,
             const rtl::OUString& rSaltValue,
             sal_uInt32 nSpinCount,
+            bool bPrependNotAppend,
             const rtl::OUString& rAlgorithmName);
 
 
@@ -223,11 +234,21 @@ public:
         @param  nSpinCount
                 If >0 the number of repeated iterations.
 
-        @param  rAlgorithmName
-                One of "SHA-512", "SHA-256", ... as listed in
+        @param  bPrependNotAppend
+                If <FALSE/>, append spin count in iterations as per
                 https://msdn.microsoft.com/en-us/library/dd920692
-                that have a valid match in HashType. If not, an empty string is
-                returned. Not all algorithm names are supported.
+                If <TRUE/>, prepend spin count in iterations as per
+                https://msdn.microsoft.com/en-us/library/dd924776 and
+                https://msdn.microsoft.com/en-us/library/dd925430
+
+        @param  rAlgorithmName
+                One of "SHA-512", "SHA-256", ... as listed for AlgorithmName in
+                https://msdn.microsoft.com/en-us/library/dd920692
+                or "SHA512", "SHA256", ... as listed for HashAlgorithm in
+                https://msdn.microsoft.com/en-us/library/dd925810
+                that have a valid match in comphelper::HashType. If not, an
+                empty sequence is returned. Not all algorithm names are
+                supported.
 
         @return the base64 encoded string of the hash value, that can be
                 compared against a stored base64 encoded hash value.
@@ -236,6 +257,7 @@ public:
             const rtl::OUString& rPassword,
             const rtl::OUString& rSaltValue,
             sal_uInt32 nSpinCount,
+            bool bPrependNotAppend,
             const rtl::OUString& rAlgorithmName);
 
 

@@ -263,12 +263,13 @@ css::uno::Sequence<sal_Int8> DocPasswordHelper::GetOoxHashAsSequence(
         const rtl::OUString& rPassword,
         const rtl::OUString& rSaltValue,
         sal_uInt32 nSpinCount,
+        bool bPrependNotAppend,
         const rtl::OUString& rAlgorithmName)
 {
     comphelper::HashType eType;
-    if (rAlgorithmName == "SHA-512")
+    if (rAlgorithmName == "SHA-512" || rAlgorithmName == "SHA512")
         eType = comphelper::HashType::SHA512;
-    else if (rAlgorithmName == "SHA-256")
+    else if (rAlgorithmName == "SHA-256" || rAlgorithmName == "SHA256")
         eType = comphelper::HashType::SHA256;
     else if (rAlgorithmName == "SHA-1")
         eType = comphelper::HashType::SHA1;
@@ -285,7 +286,8 @@ css::uno::Sequence<sal_Int8> DocPasswordHelper::GetOoxHashAsSequence(
         aSaltVec = comphelper::sequenceToContainer<std::vector<unsigned char>>( aSaltSeq);
     }
 
-    std::vector<unsigned char> hash( comphelper::Hash::calculateHash( rPassword, aSaltVec, nSpinCount, eType));
+    std::vector<unsigned char> hash( comphelper::Hash::calculateHash( rPassword, aSaltVec, nSpinCount,
+                bPrependNotAppend, eType));
 
     return comphelper::containerToSequence<sal_Int8>( hash);
 }
@@ -294,9 +296,11 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
         const rtl::OUString& rPassword,
         const rtl::OUString& rSaltValue,
         sal_uInt32 nSpinCount,
+        bool bPrependNotAppend,
         const rtl::OUString& rAlgorithmName)
 {
-    css::uno::Sequence<sal_Int8> aSeq( GetOoxHashAsSequence( rPassword, rSaltValue, nSpinCount, rAlgorithmName));
+    css::uno::Sequence<sal_Int8> aSeq( GetOoxHashAsSequence( rPassword, rSaltValue, nSpinCount,
+                bPrependNotAppend, rAlgorithmName));
 
     OUStringBuffer aBuf;
     comphelper::Base64::encode( aBuf, aSeq);

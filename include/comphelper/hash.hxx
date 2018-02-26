@@ -54,11 +54,20 @@ public:
         (0-based, little endian) containing the number of the iteration
         appended to the hash value is the input for the next iteration.
 
-        This implements the algorithm as specified in
-        https://msdn.microsoft.com/en-us/library/dd920692
+        This implements the algorithms as specified in
+        https://msdn.microsoft.com/en-us/library/dd920692 or
+        https://msdn.microsoft.com/en-us/library/dd924776 and
+        https://msdn.microsoft.com/en-us/library/dd925430
 
         @param  pSalt
                 may be nullptr thus no salt prepended
+
+        @param  bPrependNotAppend
+                If <FALSE/>, append spin count in iterations as per
+                https://msdn.microsoft.com/en-us/library/dd920692
+                If <TRUE/>, prepend spin count in iterations as per
+                https://msdn.microsoft.com/en-us/library/dd924776 and
+                https://msdn.microsoft.com/en-us/library/dd925430
 
         @return the raw hash value
      */
@@ -66,6 +75,7 @@ public:
             const unsigned char* pInput, size_t nLength,
             const unsigned char* pSalt, size_t nSaltLen,
             sal_uInt32 nSpinCount,
+            bool bPrependNotAppend,
             HashType eType);
 
     /** Convenience function to calculate a salted hash with iterations.
@@ -80,6 +90,7 @@ public:
             const rtl::OUString& rPassword,
             const std::vector<unsigned char>& rSaltValue,
             sal_uInt32 nSpinCount,
+            bool bPrependNotAppend,
             HashType eType);
 
     size_t getLength() const;

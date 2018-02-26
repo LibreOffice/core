@@ -157,6 +157,7 @@ std::vector<unsigned char> Hash::calculateHash(
         const unsigned char* pInput, size_t nLength,
         const unsigned char* pSalt, size_t nSaltLen,
         sal_uInt32 nSpinCount,
+        bool bPrependNotAppend,
         HashType eType)
 {
     if (!pSalt)
@@ -184,16 +185,11 @@ std::vector<unsigned char> Hash::calculateHash(
     {
         // https://msdn.microsoft.com/en-us/library/dd920692
         // says the iteration is concatenated after the hash.
-        // XXX NOTE: oox/source/crypto/AgileEngine.cxx
-        // AgileEngine::calculateHashFinal() prepends the iteration value, they
-        // do things differently for write protection and encryption passwords.
-        // https://msdn.microsoft.com/en-us/library/dd924776
-        /* TODO: maybe pass a flag whether to prepend or append, and then let
-         * AgileEngine::calculateHashFinal() call this function. */
-        const size_t nIterPos = hash.size();
-        const size_t nHashPos = 0;
-        //const size_t nIterPos = 0;
-        //const size_t nHashPos = 4;
+        // https://msdn.microsoft.com/en-us/library/dd924776 and
+        // https://msdn.microsoft.com/en-us/library/dd925430
+        // say the iteration is prepended to the hash.
+        const size_t nIterPos = (bPrependNotAppend ? 0 : hash.size());
+        const size_t nHashPos = (bPrependNotAppend ? 4 : 0);
         std::vector<unsigned char> data( hash.size() + 4, 0);
         for (sal_uInt32 i = 0; i < nSpinCount; ++i)
         {
@@ -222,11 +218,13 @@ std::vector<unsigned char> Hash::calculateHash(
         const OUString& rPassword,
         const std::vector<unsigned char>& rSaltValue,
         sal_uInt32 nSpinCount,
+        bool bPrependNotAppend,
         HashType eType)
 {
     const unsigned char* pPassBytes = reinterpret_cast<const unsigned char*>(rPassword.getStr());
     const size_t nPassBytesLen = rPassword.getLength() * 2;
-    return calculateHash( pPassBytes, nPassBytesLen, rSaltValue.data(), rSaltValue.size(), nSpinCount, eType);
+    return calculateHash( pPassBytes, nPassBytesLen, rSaltValue.data(), rSaltValue.size(), nSpinCount,
+            bPrependNotAppend, eType);
 }
 
 }
