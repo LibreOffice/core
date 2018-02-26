@@ -21,7 +21,6 @@
 #include <svtools/helpids.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/msgbox.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>
 

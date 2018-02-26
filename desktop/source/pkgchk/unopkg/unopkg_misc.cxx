@@ -22,7 +22,7 @@
 #include <stdio.h>
 
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -449,10 +449,11 @@ Reference<XComponentContext> getUNO(
                 if ( ! InitVCL() )
                     throw RuntimeException( "Cannot initialize VCL!" );
                 {
-                    ScopedVclPtrInstance< WarningBox > warn(nullptr, MessBoxStyle::Ok | MessBoxStyle::DefaultOk, sMsg);
-                    warn->SetText(utl::ConfigManager::getProductName());
-                    warn->SetIcon(0);
-                    warn->Execute();
+                    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(nullptr,
+                                                               VclMessageType::Warning, VclButtonsType::Ok,
+                                                               sMsg));
+                    xWarn->set_title(utl::ConfigManager::getProductName());
+                    xWarn->run();
                 }
                 DeInitVCL();
             }

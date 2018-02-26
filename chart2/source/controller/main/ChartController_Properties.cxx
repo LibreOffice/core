@@ -54,7 +54,6 @@
 
 #include <memory>
 
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
 

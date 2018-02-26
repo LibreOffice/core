@@ -25,7 +25,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/msgbox.hxx>
 #include <basic/sbx.hxx>
 #include <sot/storinfo.hxx>
 #include <unotools/pathoptions.hxx>

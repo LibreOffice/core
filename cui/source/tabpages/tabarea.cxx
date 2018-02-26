@@ -19,7 +19,6 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
-#include <vcl/msgbox.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdobj.hxx>

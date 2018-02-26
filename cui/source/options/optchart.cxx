@@ -21,7 +21,6 @@
 #include "optchart.hxx"
 #include <dialmgr.hxx>
 #include <vcl/builderfactory.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svxids.hrc>

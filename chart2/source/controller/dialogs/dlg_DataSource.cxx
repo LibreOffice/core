@@ -28,7 +28,6 @@
 #include "tp_DataSource.hxx"
 
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx> // for RET_OK
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

@@ -21,7 +21,6 @@
 #include "chinese_translationdialog.hxx"
 #include "chinese_dictionarydialog.hxx"
 #include <com/sun/star/i18n/TextConversionOption.hpp>
-#include <vcl/msgbox.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 

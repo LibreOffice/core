@@ -37,13 +37,14 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/progress.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/svditer.hxx>
 #include <svtools/imaprect.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
-#include <vcl/msgbox.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <svx/svdopath.hxx>
@@ -3097,8 +3098,12 @@ bool HtmlExport::checkForExistingFiles()
             osl::FileBase::getSystemPathFromFileURL( maExportPath, aSystemPath );
             OUString aMsg(SdResId(STR_OVERWRITE_WARNING));
             aMsg = aMsg.replaceFirst( "%FILENAME", aSystemPath );
-            ScopedVclPtrInstance< WarningBox > aWarning( nullptr, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, aMsg );
-            bFound = ( RET_NO == aWarning->Execute() );
+
+            std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(nullptr,
+                                                       VclMessageType::Warning, VclButtonsType::YesNo,
+                                                       aMsg));
+            xWarn->set_default_response(RET_YES);
+            bFound = (RET_NO == xWarn->run());
         }
     }
     catch( Exception& )

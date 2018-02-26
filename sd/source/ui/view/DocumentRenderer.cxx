@@ -49,7 +49,8 @@
 #include <svx/xlnclit.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <xmloff/autolayout.hxx>
 
@@ -1281,11 +1282,12 @@ public:
                 // Show warning that the orientation could not be set.
                 if (pViewShell)
                 {
-                    ScopedVclPtrInstance<WarningBox> aWarnBox(
-                        pViewShell->GetActiveWindow(),
-                        MessBoxStyle::OkCancel | MessBoxStyle::DefaultCancel,
-                        SdResId(STR_WARN_PRINTFORMAT_FAILURE));
-                    if (aWarnBox->Execute() != RET_OK)
+                    vcl::Window* pWin = pViewShell->GetActiveWindow();
+                    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                               VclMessageType::Warning, VclButtonsType::OkCancel,
+                                                               SdResId(STR_WARN_PRINTFORMAT_FAILURE)));
+                    xWarn->set_default_response(RET_CANCEL);
+                    if (xWarn->run() != RET_OK)
                         return;
                 }
             }

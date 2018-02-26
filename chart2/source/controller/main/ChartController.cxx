@@ -69,7 +69,6 @@
 #include <com/sun/star/chart2/XDataProviderAccess.hpp>
 
 #include <svx/sidebar/SelectionChangeHandler.hxx>
-#include <vcl/msgbox.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>

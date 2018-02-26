@@ -21,7 +21,6 @@
 
 #include <macropg.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>

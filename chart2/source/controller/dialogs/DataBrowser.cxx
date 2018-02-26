@@ -36,7 +36,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/image.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/math.hxx>
@@ -131,8 +130,12 @@ void SeriesHeaderEdit::MouseButtonDown( const MouseEvent& rMEvt )
     Edit::MouseButtonDown( rMEvt );
 
     if( m_bShowWarningBox )
-        ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok,
-                   SchResId(STR_INVALID_NUMBER))->Execute();
+    {
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+                                                   VclMessageType::Warning, VclButtonsType::Ok,
+                                                   SchResId(STR_INVALID_NUMBER)));
+        xWarn->run();
+    }
 }
 
 class SeriesHeader
@@ -752,8 +755,10 @@ void DataBrowser::MouseButtonDown( const BrowserMouseEvent& rEvt )
 
 void DataBrowser::ShowWarningBox()
 {
-    ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok,
-                                     SchResId(STR_INVALID_NUMBER))->Execute();
+    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+                                               VclMessageType::Warning, VclButtonsType::Ok,
+                                               SchResId(STR_INVALID_NUMBER)));
+    xWarn->run();
 }
 
 bool DataBrowser::ShowQueryBox()

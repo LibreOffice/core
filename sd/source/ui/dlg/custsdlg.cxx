@@ -27,7 +27,8 @@
 #include <cusshow.hxx>
 #include <sdmod.hxx>
 #include <customshowlist.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/treelistentry.hxx>
 
 // SdCustomShowDlg
@@ -531,9 +532,10 @@ IMPL_LINK_NOARG(SdDefineCustomShowDlg, OKHdl, Button*, void)
     }
     else
     {
-        ScopedVclPtrInstance<WarningBox>( this, MessBoxStyle::Ok,
-                    SdResId( STR_WARN_NAME_DUPLICATE ) )->Execute();
-
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),
+                                                   VclMessageType::Warning, VclButtonsType::Ok,
+                                                   SdResId(STR_WARN_NAME_DUPLICATE)));
+        xWarn->run();
         m_pEdtName->GrabFocus();
     }
 }
