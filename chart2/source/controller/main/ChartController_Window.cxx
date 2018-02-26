@@ -57,6 +57,7 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/lok.hxx>
 
 #include <toolkit/awt/vclxmenu.hxx>
 
@@ -917,7 +918,7 @@ void ChartController::execute_DoubleClick( const Point* pMousePixel )
     {
         executeDispatch_EditText( pMousePixel );
     }
-    else
+    else if (!comphelper::LibreOfficeKit::isActive())
     {
         executeDispatch_ObjectProperties();
     }
