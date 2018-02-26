@@ -74,6 +74,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
     get(m_pCRLF_RB, "crlf");
     get(m_pCR_RB, "cr");
     get(m_pLF_RB, "lf");
+    get(m_pIncludeBOM_CB, "includebom");
 
     SwAsciiOptions aOpt;
     {
@@ -241,6 +242,8 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
     m_pCRLF_RB->SaveValue();
     m_pLF_RB->SaveValue();
     m_pCR_RB->SaveValue();
+
+    SetIncludeBOM( aOpt.GetIncludeBOM() );
 }
 
 SwAsciiFilterDlg::~SwAsciiFilterDlg()
@@ -277,6 +280,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
     rOptions.SetCharSet( rtl_TextEncoding( nCCode ) );
     rOptions.SetLanguage( nLng );
     rOptions.SetParaFlags( GetCRLF() );
+    rOptions.SetIncludeBOM( GetIncludeBOM() );
 
     // save the user settings
     OUString sData;
@@ -319,6 +323,16 @@ LineEnd SwAsciiFilterDlg::GetCRLF() const
     else
         eEnd = LINEEND_CRLF;
     return eEnd;
+}
+
+void SwAsciiFilterDlg::SetIncludeBOM( bool bIncludeBOM )
+{
+    m_pIncludeBOM_CB->Check( bIncludeBOM );
+}
+
+bool SwAsciiFilterDlg::GetIncludeBOM() const
+{
+    return m_pIncludeBOM_CB->IsChecked();
 }
 
 IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, ListBox&, rListBox, void )
