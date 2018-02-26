@@ -24,6 +24,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <o3tl/numeric.hxx>
 #include <o3tl/make_unique.hxx>
+#include <o3tl/safeint.hxx>
 #include <svl/itemset.hxx>
 #include <svl/zformat.hxx>
 #include <sax/tools/converter.hxx>
@@ -2415,7 +2416,10 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
                 {
                     if (nMinAbsColWidth == 0)
                         throw o3tl::divide_by_zero();
-                    sal_Int32 nRelCol = ( colIter->width * nMinRelColWidth) / nMinAbsColWidth;
+                    sal_Int32 nVal;
+                    if (o3tl::checked_multiply<sal_Int32>(colIter->width, nMinRelColWidth, nVal))
+                        throw std::overflow_error("overflow in multiply");
+                    sal_Int32 nRelCol = nVal / nMinAbsColWidth;
                     colIter->width = nRelCol;
                     colIter->isRelative = true;
                     nRelWidth += nRelCol;
