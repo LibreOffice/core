@@ -832,13 +832,14 @@ sal_uInt16 SwFieldMgr::GetFormatId(sal_uInt16 nTypeId, sal_uInt32 nFormatId) con
             {
                 Sequence<sal_Int16> aTypes = m_xNumberingInfo->getSupportedNumberingTypes();
                 const sal_Int16* pTypes = aTypes.getConstArray();
+                sal_Int32 nOffset = aSwFields[nPos].nFormatLength;
                 sal_Int32 nValidEntry = 0;
                 for (sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
                 {
                     sal_Int16 nCurrent = pTypes[nType];
                     if (nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
                     {
-                        if (nValidEntry == static_cast<sal_Int32>(nFormatId))
+                        if (nValidEntry == static_cast<sal_Int32>(nFormatId) - nOffset)
                         {
                             nId = pTypes[nType];
                             break;
