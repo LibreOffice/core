@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_4f34e1dd",
+        "filename": "include/comphelper/hash.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-26T11:46:48Z",
+      "side": 1,
+      "message": "OUString is only UTF-16 LE on some CPUs, on others the implementation would have to do some swapping...",
+      "revId": "556c2eaffcdb541317ed148d58c6c973fa6fd0e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
