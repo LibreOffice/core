@@ -230,8 +230,8 @@ std::vector<unsigned char> Hash::calculateHash(
     {
         vPass.resize( nPassBytesLen);
         std::copy( pPassBytes, pPassBytes + nPassBytesLen, vPass.begin());
-        sal_uInt8* p = reinterpret_cast<sal_uInt8*>(vPass.data());
-        sal_uInt8 const * const pEnd = p + nPassBytesLen;
+        unsigned char* p = vPass.data();
+        unsigned char const * const pEnd = p + nPassBytesLen;
         for ( ; p < pEnd; p += 2 )
         {
             std::swap( p[0], p[1] );
