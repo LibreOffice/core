@@ -1455,8 +1455,8 @@ static const SwCellFrame *lcl_FindFrame( const SwLayoutFrame *pLay, const Point 
                                           aRectFnSet.GetLeft(aTabRect);
                     const SwTwips nTop  = aRectFnSet.GetTop(aTabRect);
 
-                    SwTwips& rPointX = aRectFnSet.IsVert() ? aPt.Y() : aPt.X();
-                    SwTwips& rPointY = aRectFnSet.IsVert() ? aPt.X() : aPt.Y();
+                    SwTwips const rPointX = aRectFnSet.IsVert() ? aPt.Y() : aPt.X();
+                    SwTwips const rPointY = aRectFnSet.IsVert() ? aPt.X() : aPt.Y();
 
                     const SwTwips nXDiff = aRectFnSet.XDiff( nLeft, rPointX ) * ( bRTL ? -1 : 1 );
                     const SwTwips nYDiff = aRectFnSet.YDiff( nTop, rPointY );
@@ -1485,9 +1485,9 @@ static const SwCellFrame *lcl_FindFrame( const SwLayoutFrame *pLay, const Point 
                     if ( bCloseToRow && bCloseToCol )
                         aPt = bRTL ? aTabRect.TopRight() : aRectFnSet.GetPos(aTabRect);
                     else if ( bCloseToRow )
-                        rPointX = nLeft;
+                        aRectFnSet.IsVert() ? aPt.setY(nLeft) : aPt.setX(nLeft);
                     else if ( bCloseToCol )
-                        rPointY = nTop;
+                        aRectFnSet.IsVert() ? aPt.setX(nTop) : aPt.setY(nTop);
 
                     if ( !bCloseToRow && !bCloseToCol )
                         bSearchForFrameInTab = false;

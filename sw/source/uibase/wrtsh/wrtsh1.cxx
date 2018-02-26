@@ -282,7 +282,8 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
         Size aSz( pFrameMgr->GetSize() );
         if ( !aSz.Width() || !aSz.Height() )
         {
-            aSz.Width() = aSz.Height() = 567;
+            aSz.setWidth(567);
+            aSz.setHeight( 567);
             pFrameMgr->SetSize( aSz );
         }
         else if ( aSz.Width() != DFLT_WIDTH && aSz.Height() != DFLT_HEIGHT )

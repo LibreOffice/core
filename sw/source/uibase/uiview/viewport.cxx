@@ -101,12 +101,9 @@ static void lcl_GetPos(SwView const * pView,
     if ( !bHori && nTmp > lSize )
         lDelta -= nTmp - lSize;
 
-    // use a reference to access/modify the correct coordinate
-    // returned by accessors to non-const object
-    long & rCoord = bHori ? rPos.X() : rPos.Y();
-    rCoord += lDelta;
-    if ( bBorder && rCoord < DOCUMENTBORDER )
-        rCoord = DOCUMENTBORDER;
+    bHori ? rPos.AdjustX(lDelta) : rPos.AdjustY(lDelta);
+    if ( bBorder && (bHori ? rPos.X() : rPos.Y()) < DOCUMENTBORDER )
+        bHori ? rPos.setX(DOCUMENTBORDER) : rPos.setY(DOCUMENTBORDER);
 }
 
 // Set zero ruler

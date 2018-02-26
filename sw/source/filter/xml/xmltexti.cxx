@@ -94,7 +94,7 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
 };
 static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet,
         sal_Int32 nHeight, sal_Int32 nWidth,
-        long *pTwipHeight=nullptr, long *pTwipWidth=nullptr )
+        Size *pTwipSize = nullptr )
 {
     if( nWidth > 0 && nHeight > 0 )
     {
@@ -110,10 +110,11 @@ static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet,
     SwFormatAnchor aAnchor( RndStdIds::FLY_AT_CHAR );
     rItemSet.Put( aAnchor );
 
-    if( pTwipWidth )
-        *pTwipWidth = nWidth;
-    if( pTwipHeight )
-        *pTwipHeight = nHeight;
+    if( pTwipSize )
+    {
+        pTwipSize->setWidth( nWidth );
+        pTwipSize->setHeight( nHeight);
+    }
 }
 
 static void lcl_setObjectVisualArea( const uno::Reference< embed::XEmbeddedObject >& xObj,
@@ -238,7 +239,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     Size aTwipSize( 0, 0 );
     tools::Rectangle aVisArea( 0, 0, nWidth, nHeight );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth,
-                           &aTwipSize.Height(), &aTwipSize.Width() );
+                           &aTwipSize );
 
     SwFrameFormat *pFrameFormat = nullptr;
     SwOLENode *pOLENd = nullptr;
@@ -550,7 +551,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
                          RES_FRMATR_END>{} );
     Size aTwipSize( 0, 0 );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth,
-                           &aTwipSize.Height(), &aTwipSize.Width() );
+                           &aTwipSize );
 
     // We'll need a (valid) URL. If we don't have do not insert the link and return early.
     // Copy URL into URL object on the way.
@@ -810,14 +811,14 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                         {
                             sal_Int32 nVal = SIZE_NOT_SET;
                             rProp.maValue >>= nVal;
-                            aMargin.Width() = nVal;
+                            aMargin.setWidth( nVal );
                         }
                         break;
                     case CTF_FRAME_MARGIN_VERT:
                         {
                             sal_Int32 nVal = SIZE_NOT_SET;
                             rProp.maValue >>= nVal;
-                            aMargin.Height() = nVal;
+                            aMargin.setHeight( nVal );
                         }
                         break;
                     }

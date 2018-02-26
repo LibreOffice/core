@@ -210,7 +210,10 @@ void SwViewShell::InitPrt( OutputDevice *pOutDev )
         pOutDev->SetFillColor();
     }
     else
-        maPrtOffset.X() = maPrtOffset.Y() = 0;
+    {
+        maPrtOffset.setX(0);
+        maPrtOffset.setY(0);
+    }
 
     if ( !mpWin )
         mpOut = pOutDev;

@@ -191,7 +191,7 @@ inline void SwRect::Height( long nNew )
 }
 inline void SwRect::Left( const long nLeft )
 {
-    m_Size.Width() += m_Point.getX() - nLeft;
+    m_Size.AdjustWidth( m_Point.getX() - nLeft );
     m_Point.setX(nLeft);
 }
 inline void SwRect::Right( const long nRight )
@@ -200,7 +200,7 @@ inline void SwRect::Right( const long nRight )
 }
 inline void SwRect::Top( const long nTop )
 {
-    m_Size.Height() += m_Point.getY() - nTop;
+    m_Size.AdjustHeight( m_Point.getY() - nTop );
     m_Point.setY(nTop);
 }
 inline void SwRect::Bottom( const long nBottom )

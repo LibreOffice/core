@@ -195,9 +195,16 @@ SwViewOption::SwViewOption() :
         ViewOptFlags2::AnyRuler;
 
     if (!utl::ConfigManager::IsFuzzing() && MeasurementSystem::Metric != SvtSysLocale().GetLocaleData().getMeasurementSystemEnum())
-        m_aSnapSize.Width() = m_aSnapSize.Height() = 720;   // 1/2"
+    {
+        m_aSnapSize.setWidth(720);   // 1/2"
+        m_aSnapSize.setHeight(720);   // 1/2"
+
+    }
     else
-        m_aSnapSize.Width() = m_aSnapSize.Height() = 567;   // 1 cm
+    {
+        m_aSnapSize.setWidth(567);   // 1 cm
+        m_aSnapSize.setHeight(567);   // 1 cm
+    }
     m_nDivisionX = m_nDivisionY = 1;
 
     m_bSelectionInReadonly = !utl::ConfigManager::IsFuzzing() && SW_MOD()->GetAccessibilityOptions().IsSelectionInReadonly();

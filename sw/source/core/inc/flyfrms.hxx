@@ -228,7 +228,7 @@ public:
     void RegistFlys();
 
     //see layact.cxx
-    void AddRefOfst( long nOfst ) { aRef.Y() += nOfst; }
+    void AddRefOfst( long nOfst ) { aRef.AdjustY( nOfst ); }
 
     // #i26791#
     virtual void MakeObjPos() override;

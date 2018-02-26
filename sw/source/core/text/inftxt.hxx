@@ -391,9 +391,9 @@ public:
     SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint );
 
     SwTwips X() const { return aPos.X(); }
-    void X( const long nNew ) { aPos.X() = nNew; }
+    void X( const long nNew ) { aPos.setX(nNew); }
     SwTwips Y() const { return aPos.Y(); }
-    void Y( const SwTwips nNew ) { aPos.Y() = nNew; }
+    void Y( const SwTwips nNew ) { aPos.setY(nNew); }
 
     SwTextFly& GetTextFly() { return aTextFly; }
     const SwTextFly& GetTextFly() const { return aTextFly; }

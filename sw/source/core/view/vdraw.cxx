@@ -264,7 +264,8 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
                     pObj->Move( aSz );
 
                 // Don't let large objects disappear to the top
-                aSz.Width() = aSz.Height() = 0;
+                aSz.setWidth(0);
+                aSz.setHeight(0);
                 if ( aObjBound.Right() < aDocRect.Left() )
                     aSz.setWidth( (aDocRect.Left() - aObjBound.Right()) + MINFLY );
                 if ( aObjBound.Bottom() < aDocRect.Top() )
