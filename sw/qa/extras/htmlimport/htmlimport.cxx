@@ -26,6 +26,18 @@ class HtmlImportTest : public SwModelTestBase
 {
     public:
         HtmlImportTest() : SwModelTestBase("sw/qa/extras/htmlimport/data/", "HTML (StarWriter)") {}
+    private:
+        std::unique_ptr<Resetter> preTest(const char* /*filename*/) override
+        {
+            if (getTestName().indexOf("ReqIf") != -1)
+            {
+                setImportFilterOptions("xhtmlns=reqif-xhtml");
+                // Bypass type detection, this is an XHTML fragment only.
+                setImportFilterName("HTML (StarWriter)");
+            }
+
+            return nullptr;
+        }
 };
 
 #define DECLARE_HTMLIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, nullptr, HtmlImportTest)
@@ -227,6 +239,12 @@ DECLARE_HTMLIMPORT_TEST(testOutlineLevel, "outline-level.html")
     // Heading 1 styles.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
                          getProperty<sal_Int32>(getParagraph(1), "OutlineLevel"));
+}
+
+DECLARE_HTMLIMPORT_TEST(testReqIfBr, "reqif-br.xhtml")
+{
+    // <reqif-xhtml:br/> was not recognized as a line break from a ReqIf file.
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("aaa\nbbb"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

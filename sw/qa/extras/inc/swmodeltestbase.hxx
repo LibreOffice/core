@@ -135,6 +135,8 @@ class SwModelTestBase : public test::BootstrapFixture, public unotest::MacrosTes
 {
 private:
     OUString maFilterOptions;
+    OUString maImportFilterOptions;
+    OUString maImportFilterName;
 
 protected:
     uno::Reference< lang::XComponent > mxComponent;
@@ -181,6 +183,16 @@ public:
     void setFilterOptions(const OUString &rFilterOptions)
     {
         maFilterOptions = rFilterOptions;
+    }
+
+    void setImportFilterOptions(const OUString &rFilterOptions)
+    {
+        maImportFilterOptions = rFilterOptions;
+    }
+
+    void setImportFilterName(const OUString &rFilterName)
+    {
+        maImportFilterName = rFilterName;
     }
 
     SwModelTestBase(const char* pTestDocumentPath = "", const char* pFilter = "")
@@ -639,6 +651,22 @@ protected:
         if (pPassword)
         {
             setTestInteractionHandler(pPassword, aFilterOptions);
+        }
+
+        if (!maImportFilterOptions.isEmpty())
+        {
+            beans::PropertyValue aValue;
+            aValue.Name = "FilterOptions";
+            aValue.Value <<= maImportFilterOptions;
+            aFilterOptions.push_back(aValue);
+        }
+
+        if (!maImportFilterName.isEmpty())
+        {
+            beans::PropertyValue aValue;
+            aValue.Name = "FilterName";
+            aValue.Value <<= maImportFilterName;
+            aFilterOptions.push_back(aValue);
         }
 
         // Output name early, so in the case of a hang, the name of the hanging input file is visible.

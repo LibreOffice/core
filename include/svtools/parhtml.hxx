@@ -168,6 +168,9 @@ private:
 
     OUString aEndToken;
 
+    /// XML namespace, in case of XHTML.
+    OUString maNamespace;
+
 protected:
     OUString sSaveToken;             // the read tag as string
 
@@ -181,6 +184,8 @@ protected:
     virtual ~HTMLParser() override;
 
     void FinishHeader( bool bBody ) { bIsInHeader = false; bIsInBody = bBody; }
+
+    void SetNamespace(const OUString& rNamespace);
 
 public:
     HTMLParser( SvStream& rIn, bool bReadNewDoc = true );

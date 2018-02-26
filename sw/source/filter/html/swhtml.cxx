@@ -411,6 +411,8 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
             }
         }
     }
+
+    SetupFilterOptions();
 }
 
 SwHTMLParser::~SwHTMLParser()
@@ -5529,6 +5531,25 @@ void SwHTMLParser::AddMetaUserDefined( OUString const & i_rMetaName )
     {
         (*pName) = i_rMetaName;
     }
+}
+
+void SwHTMLParser::SetupFilterOptions()
+{
+    if (!GetMedium())
+        return;
+
+    const SfxItemSet* pItemSet = GetMedium()->GetItemSet();
+    if (!pItemSet)
+        return;
+
+    auto pItem = pItemSet->GetItem<SfxStringItem>(SID_FILE_FILTEROPTIONS);
+    if (!pItem)
+        return;
+
+    OUString aFilterOptions = pItem->GetValue();
+    const OUString aXhtmlNsKey("xhtmlns=");
+    if (aFilterOptions.startsWith(aXhtmlNsKey))
+        SetNamespace(aFilterOptions.copy(aXhtmlNsKey.getLength()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

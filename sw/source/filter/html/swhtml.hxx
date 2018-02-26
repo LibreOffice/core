@@ -855,6 +855,9 @@ private:
     bool HasCurrentParaFlys( bool bNoSurroundOnly = false,
                              bool bSurroundOnly = false ) const;
 
+    /// Parse FilterOptions passed to the importer.
+    void SetupFilterOptions();
+
 public:         // used in tables
 
     // Create brush item (with new) or 0

@@ -238,6 +238,12 @@ HTMLParser::~HTMLParser()
 {
 }
 
+void HTMLParser::SetNamespace(const OUString& rNamespace)
+{
+    // Convert namespace alias to a prefix.
+    maNamespace = rNamespace + ":";
+}
+
 SvParserState HTMLParser::CallParser()
 {
     eState = SvParserState::Working;
@@ -1055,6 +1061,10 @@ HtmlTokenId HTMLParser::GetNextToken_()
                     // Search token in table:
                     sSaveToken = aToken;
                     aToken = aToken.toAsciiLowerCase();
+
+                    if (!maNamespace.isEmpty() && aToken.startsWith(maNamespace))
+                        aToken = aToken.copy(maNamespace.getLength());
+
                     if( HtmlTokenId::NONE == (nRet = GetHTMLToken( aToken )) )
                         // Unknown control
                         nRet = HtmlTokenId::UNKNOWNCONTROL_ON;
