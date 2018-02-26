@@ -71,6 +71,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
     , m_xCRLF_RB(m_xBuilder->weld_radio_button("crlf"))
     , m_xCR_RB(m_xBuilder->weld_radio_button("cr"))
     , m_xLF_RB(m_xBuilder->weld_radio_button("lf"))
+    , m_xIncludeBOM_CB(m_xBuilder->weld_check_button("includebom"))
 {
     m_xFontLB->make_sorted();
 
@@ -222,6 +223,8 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
                 pPrt.disposeAndClear();
         }
 
+        // hide the unused Controls for Export
+        m_xIncludeBOM_CB->hide();
     }
     else
     {
@@ -230,6 +233,10 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
         m_xFontLB->hide();
         m_xLanguageFT->hide();
         m_xLanguageLB->hide();
+
+
+        SetIncludeBOM(aOpt.GetIncludeBOM());
+        m_xIncludeBOM_CB->save_state();
     }
 
     // initialize character set
@@ -246,6 +253,8 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
     m_xCRLF_RB->save_state();
     m_xLF_RB->save_state();
     m_xCR_RB->save_state();
+
+    UpdateIncludeBOMSensitiveState();
 }
 
 SwAsciiFilterDlg::~SwAsciiFilterDlg()
@@ -269,6 +278,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
     rOptions.SetCharSet( rtl_TextEncoding( nCCode ) );
     rOptions.SetLanguage( nLng );
     rOptions.SetParaFlags( GetCRLF() );
+    rOptions.SetIncludeBOM( GetIncludeBOM() );
 
     // save the user settings
     OUString sData;
@@ -319,7 +329,34 @@ LineEnd SwAsciiFilterDlg::GetCRLF() const
     return eEnd;
 }
 
-IMPL_LINK_NOARG( SwAsciiFilterDlg, CharSetSelHdl, weld::ComboBox&, void )
+void SwAsciiFilterDlg::SetIncludeBOM( bool bIncludeBOM )
+{
+    m_xIncludeBOM_CB->set_state(bIncludeBOM ? TRISTATE_TRUE : TRISTATE_FALSE);
+}
+
+bool SwAsciiFilterDlg::GetIncludeBOM() const
+{
+    return m_xIncludeBOM_CB->get_state() != TRISTATE_FALSE;
+}
+
+void SwAsciiFilterDlg::UpdateIncludeBOMSensitiveState()
+{
+    if (m_xIncludeBOM_CB->get_visible())
+    {
+        switch (m_xCharSetLB->GetSelectTextEncoding())
+        {
+            case RTL_TEXTENCODING_UTF8:
+            case RTL_TEXTENCODING_UCS2:
+                m_xIncludeBOM_CB->set_sensitive(true);
+                break;
+            default:
+                m_xIncludeBOM_CB->set_sensitive(false);
+                break;
+        }
+    }
+}
+
+IMPL_LINK_NOARG(SwAsciiFilterDlg, CharSetSelHdl, weld::ComboBox&, void)
 {
     LineEnd eOldEnd = GetCRLF(), eEnd = LineEnd(-1);
     LanguageType nLng = m_xFontLB->get_visible()
@@ -391,6 +428,8 @@ IMPL_LINK_NOARG( SwAsciiFilterDlg, CharSetSelHdl, weld::ComboBox&, void )
 
     if (nOldLng != nLng && m_xFontLB->get_visible())
         m_xLanguageLB->set_active_id(nLng);
+
+    UpdateIncludeBOMSensitiveState();
 }
 
 IMPL_LINK(SwAsciiFilterDlg, LineEndHdl, weld::ToggleButton&, rBtn, void)
