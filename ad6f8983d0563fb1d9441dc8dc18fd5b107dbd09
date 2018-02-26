@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_4faa211b",
+        "filename": "sw/source/filter/html/htmlflywriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-26T18:43:10Z",
+      "side": 1,
+      "message": "you can\u0027t use char literals like \u0027\u003c\u0027 with operator+, you have to use string literals like \"\u003c\"",
+      "revId": "ad6f8983d0563fb1d9441dc8dc18fd5b107dbd09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
