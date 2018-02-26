@@ -748,12 +748,29 @@ protected:
         return parseExportInternal( maTempFile.GetURL(), rStreamName );
     }
 
-    xmlDocPtr parseExportInternal( const OUString& url, const OUString& rStreamName )
+    /**
+     * Returns an xml stream of a an exported file.
+     * To be used when the exporter doesn't create zip archives, but single files
+     * (like Flat ODF Export)
+     */
+    xmlDocPtr parseExportedFile()
     {
-        // Read the XML stream we're interested in.
+        return parseXmlStream(maTempFile.GetStream(StreamMode::READ));
+    }
+
+    std::shared_ptr<SvStream> parseExportStream(const OUString& url, const OUString& rStreamName)
+    {
+        // Read the stream we're interested in.
         uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), url);
         uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(rStreamName), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xInputStream.is());
         std::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+        return pStream;
+    }
+
+    xmlDocPtr parseExportInternal(const OUString& url, const OUString& rStreamName)
+    {
+        std::shared_ptr<SvStream> pStream(parseExportStream(url, rStreamName));
 
         xmlDocPtr pXmlDoc = parseXmlStream(pStream.get());
         pXmlDoc->name = reinterpret_cast<char *>(xmlStrdup(reinterpret_cast<xmlChar const *>(OUStringToOString(maTempFile.GetURL(), RTL_TEXTENCODING_UTF8).getStr())));
