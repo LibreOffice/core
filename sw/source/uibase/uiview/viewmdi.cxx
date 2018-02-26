@@ -50,6 +50,7 @@
 
 #include <IDocumentSettingAccess.hxx>
 #include <PostItMgr.hxx>
+#include <AnnotationWin.hxx>
 
 sal_uInt16  SwView::m_nMoveType = NID_PGE;
 sal_Int32 SwView::m_nActMark = 0;
@@ -315,6 +316,12 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
             rSh.EndTextEdit();
         if ( IsDrawMode() )
             LeaveDrawCreate();
+    }
+    if ( NID_POSTIT != m_nMoveType && m_pPostItMgr )
+    {
+        sw::annotation::SwAnnotationWin* pActiveSidebarWin = m_pPostItMgr->GetActiveSidebarWin();
+        if (pActiveSidebarWin)
+            pActiveSidebarWin->SwitchToFieldPos();
     }
     switch( m_nMoveType )
     {
