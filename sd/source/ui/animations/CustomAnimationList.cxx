@@ -421,7 +421,7 @@ void CustomAnimationTriggerEntryItem::Paint(const Point& rPos, SvTreeListBox& rD
 
     aOutRect.AdjustLeft(nHorzBorder );
     aOutRect.AdjustRight( -nHorzBorder );
-    aOutRect.Top() += nVertBorder;
+    aOutRect.AdjustTop( nVertBorder );
     aOutRect.AdjustBottom( -nVertBorder );
 
     rRenderContext.DrawText(aOutRect, rRenderContext.GetEllipsisString(msDescription, aOutRect.GetWidth()));

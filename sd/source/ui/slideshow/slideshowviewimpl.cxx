@@ -355,7 +355,7 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  )
     // render one pixel wider and higher as aPageSize below specifies
     // (when shapes of page size have visible border lines)
     aOutputSize.AdjustWidth( -1 );
-    aOutputSize.Height() --;
+    aOutputSize.AdjustHeight( -1 );
 
     // Record mTranslationOffset
     mTranslationOffset.Height = aOutputOffset.Y();

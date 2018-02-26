@@ -152,7 +152,7 @@ void ClientBox::CalcActiveHeight()
     if ( m_bHasScrollBar )
         aSize.AdjustWidth( -(m_aScrollBar->GetSizePixel().Width()) );
 
-    aSize.Width() -= ICON_OFFSET;
+    aSize.AdjustWidth( -ICON_OFFSET );
 
     aSize = LogicToPixel( Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ),
                                MapMode( MapUnit::MapAppFont ) );

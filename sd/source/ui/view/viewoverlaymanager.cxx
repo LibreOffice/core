@@ -223,8 +223,8 @@ void ImageButtonHdl::CreateB2dIAObject()
 
     BitmapEx aBitmapEx( mxChangePlaceholderTag->createOverlayImage( mnHighlightId ) ); // maImageMO.GetBitmapEx() : maImage.GetBitmapEx() );
     maImageSize = aBitmapEx.GetSizePixel();
-    maImageSize.Width() >>= 1;
-    maImageSize.Height() >>= 1;
+    maImageSize.setWidth( maImageSize.Width() >> 1 );
+    maImageSize.setHeight( maImageSize.Height() >> 1 );
 
     if(pHdlList)
     {
@@ -384,8 +384,8 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
         long all_height = nRows * aButtonSize.Height();
 
         Point aPos( rSnapRect.Center() );
-        aPos.X() -= all_width >> 1;
-        aPos.Y() -= all_height >> 1;
+        aPos.AdjustX( -(all_width >> 1) );
+        aPos.AdjustY( -(all_height >> 1) );
 
         ImageButtonHdl* pHdl = new ImageButtonHdl( xThis, aPoint );
         pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
