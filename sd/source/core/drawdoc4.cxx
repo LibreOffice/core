@@ -903,15 +903,12 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
                         sd::ModifyGuard aGuard( this );
 
                         // taking text from the outliner
-                        pObj->SetOutlinerParaObject( pOPO );
-                        // SetOPO takes care of broadcasting object change
-
+                        // use non-broadcasting version to avoid O(n^2)
+                        pObj->NbcSetOutlinerParaObject( pOPO );
                         pOPO = nullptr;
                     }
-                    else
-                        delete pOPO;
                 }
-
+                delete pOPO;
             }
         }
 
