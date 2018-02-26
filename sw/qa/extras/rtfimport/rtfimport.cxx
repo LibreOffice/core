@@ -175,6 +175,14 @@ DECLARE_RTFIMPORT_TEST(testFdo46662, "fdo46662.rtf")
     }
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf115715, "tdf115715.rtf")
+{
+    // This was 0, second paragraph was shifted to the right, it had the same
+    // horizontal position as the 3rd paragraph.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1270),
+                         getProperty<sal_Int32>(getParagraph(2), "ParaFirstLineIndent"));
+}
+
 DECLARE_RTFIMPORT_TEST(testTdf115155, "tdf115155.rtf")
 {
     auto xLevels
@@ -344,11 +352,10 @@ DECLARE_RTFIMPORT_TEST(testFdo52066, "fdo52066.rtf")
 
 DECLARE_RTFIMPORT_TEST(testTdf112211_2, "tdf112211-2.rtf")
 {
-    uno::Reference<beans::XPropertyState> xPropertyState(getParagraph(2), uno::UNO_QUERY);
-    beans::PropertyState ePropertyState = xPropertyState->getPropertyState("ParaLeftMargin");
-    // This was beans::PropertyState_DIRECT_VALUE -> direct formatting
-    // prevented inheritance from numbering definition.
-    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE, ePropertyState);
+    // Spacing between the bullet and the actual text was too large.
+    // This is now around 269, large old value was 629.
+    int nWidth = parseDump("/root/page/body/txt[2]/Text[@nType='POR_TABLEFT']", "nWidth").toInt32();
+    CPPUNIT_ASSERT_LESS(300, nWidth);
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo49892, "fdo49892.rtf")

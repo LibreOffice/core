@@ -393,6 +393,10 @@ Id getParagraphBorder(sal_uInt32 nIndex);
 void putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Pointer_t& pValue,
                         RTFOverwrite eOverwrite = RTFOverwrite::YES, bool bAttribute = true);
 bool eraseNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId);
+
+/// Looks up the nParent then the nested nId key in rSprms.
+RTFValue::Pointer_t getNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId);
+
 /// Checks if rName is contained at least once in rProperties as a key.
 bool findPropertyName(const std::vector<css::beans::PropertyValue>& rProperties,
                       const OUString& rName);
