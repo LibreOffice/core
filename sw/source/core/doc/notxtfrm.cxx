@@ -79,6 +79,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 using namespace com::sun::star;
 
@@ -1022,8 +1023,33 @@ void paintGraphicUsingPrimitivesHelper(
 
             if(0 != aClip.count())
             {
+                // tdf#114076: Expand ClipRange to next PixelBound
+                // Do this by going to basegfx::B2DRange, adding a
+                // single pixel size and using floor/ceil to go to
+                // full integer (as needed for pixels). Also need
+                // to go back to basegfx::B2DPolyPolygon for the
+                // creation of the needed MaskPrimitive2D.
+                // The general problem is that Writer is scrolling
+                // using blitting the unchanged parts, this forces
+                // this part of the scroll to pixel coordinate steps,
+                // while the ViewTransformation for paint nowadays has
+                // a sub-pixel precision. This results in an offset
+                // up to one pixel in radius. To solve this for now,
+                // we need to expand to the next outer pixel bound.
+                // Hopefully in the future we will someday be able to
+                // stay on the full available precision, but this
+                // will need a change in the repaint/scroll paradigm.
+                const basegfx::B2DRange aClipRange(aClip.getB2DRange());
+                const basegfx::B2DVector aSinglePixelXY(rOutputDevice.GetInverseViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+                const basegfx::B2DRange aExpandedClipRange(
+                    floor(aClipRange.getMinX() - aSinglePixelXY.getX()),
+                    floor(aClipRange.getMinY() - aSinglePixelXY.getY()),
+                    ceil(aClipRange.getMaxX() + aSinglePixelXY.getX()),
+                    ceil(aClipRange.getMaxY() + aSinglePixelXY.getY()));
+
                 aContent[0] = new drawinglayer::primitive2d::MaskPrimitive2D(
-                    aClip,
+                    basegfx::B2DPolyPolygon(
+                        basegfx::utils::createPolygonFromRect(aExpandedClipRange)),
                     aContent);
             }
         }
