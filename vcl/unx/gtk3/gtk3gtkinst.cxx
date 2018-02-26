@@ -1158,6 +1158,12 @@ class GtkInstanceBuilder;
 
 namespace
 {
+    void set_help_id(const GtkWidget *pWidget, const OString& rHelpId)
+    {
+        gchar *helpid = g_strdup(rHelpId.getStr());
+        g_object_set_data_full(G_OBJECT(pWidget), "helpid", helpid, g_free);
+    }
+
     OString get_help_id(const GtkWidget *pWidget)
     {
         void* pData = g_object_get_data(G_OBJECT(pWidget), "helpid");
@@ -1272,6 +1278,11 @@ public:
     {
         const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(m_pWidget));
         return OString(pStr, pStr ? strlen(pStr) : 0);
+    }
+
+    virtual void set_help_id(const OString& rHelpId) override
+    {
+        ::set_help_id(m_pWidget, rHelpId);
     }
 
     virtual OString get_help_id() const override
@@ -2462,8 +2473,7 @@ namespace
         if (!nLen)
             return;
         OString sHelpId = *pHelpRoot + OString(pStr, nLen);
-        gchar *helpid = g_strdup(sHelpId.getStr());
-        g_object_set_data_full(pObject, "helpid", helpid, g_free);
+        set_help_id(pWidget, sHelpId);
         //hook up for extended help
         const ImplSVData* pSVData = ImplGetSVData();
         if (pSVData->maHelpData.mbBalloonHelp)

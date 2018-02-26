@@ -19,13 +19,15 @@
 #ifndef INCLUDED_UUI_SOURCE_TRYLATER_HXX
 #define INCLUDED_UUI_SOURCE_TRYLATER_HXX
 
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
-class TryLaterQueryBox : public MessBox
+class TryLaterQueryBox
 {
+private:
+    std::unique_ptr<weld::MessageDialog> m_xQueryBox;
 public:
-    TryLaterQueryBox(vcl::Window* pParent, const std::locale& rLocale, const OUString& aMessage, bool bEnableOverride);
-    virtual ~TryLaterQueryBox() override;
+    TryLaterQueryBox(weld::Window* pParent, const std::locale& rLocale, const OUString& aMessage, bool bEnableOverride);
+    short run() { return m_xQueryBox->run(); }
 };
 
 #endif

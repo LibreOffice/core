@@ -57,7 +57,7 @@ namespace {
 
 void
 handleLockedDocumentRequest_(
-    vcl::Window * pParent,
+    weld::Window * pParent,
     const OUString& aDocumentURL,
     const OUString& aInfo,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
@@ -96,8 +96,8 @@ handleLockedDocumentRequest_(
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            ScopedVclPtrInstance< OpenLockedQueryBox > xDialog(pParent, aResLocale, aMessage, xRetry.is());
-            nResult = xDialog->Execute();
+            OpenLockedQueryBox aDialog(pParent, aResLocale, aMessage, xRetry.is());
+            nResult = aDialog.run();
         }
         else if ( nMode == UUI_DOC_SAVE_LOCK )
         {
@@ -110,8 +110,8 @@ handleLockedDocumentRequest_(
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            ScopedVclPtrInstance< TryLaterQueryBox > xDialog(pParent, aResLocale, aMessage, xRetry.is());
-            nResult = xDialog->Execute();
+            TryLaterQueryBox aDialog(pParent, aResLocale, aMessage, xRetry.is());
+            nResult = aDialog.run();
         }
         else if ( nMode == UUI_DOC_OWN_LOAD_LOCK ||
                   nMode == UUI_DOC_OWN_SAVE_LOCK )
@@ -124,11 +124,8 @@ handleLockedDocumentRequest_(
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            ScopedVclPtrInstance< AlreadyOpenQueryBox > xDialog( pParent,
-                                         aResLocale,
-                                         aMessage,
-                                         nMode == UUI_DOC_OWN_SAVE_LOCK );
-            nResult = xDialog->Execute();
+            AlreadyOpenQueryBox aDialog(pParent, aResLocale, aMessage, nMode == UUI_DOC_OWN_SAVE_LOCK);
+            nResult = aDialog.run();
         }
 
         if ( nResult == RET_YES )
@@ -235,7 +232,8 @@ UUIInteractionHelper::handleLockedDocumentRequest(
     document::LockedDocumentRequest aLockedDocumentRequest;
     if (aAnyRequest >>= aLockedDocumentRequest )
     {
-        handleLockedDocumentRequest_( getParentProperty(),
+        vcl::Window* pWin = getParentProperty();
+        handleLockedDocumentRequest_( pWin ? pWin->GetFrameWeld() : nullptr,
                                       aLockedDocumentRequest.DocumentURL,
                                       aLockedDocumentRequest.UserInfo,
                                       rRequest->getContinuations(),
@@ -246,7 +244,8 @@ UUIInteractionHelper::handleLockedDocumentRequest(
     document::OwnLockOnDocumentRequest aOwnLockOnDocumentRequest;
     if (aAnyRequest >>= aOwnLockOnDocumentRequest )
     {
-        handleLockedDocumentRequest_( getParentProperty(),
+        vcl::Window* pWin = getParentProperty();
+        handleLockedDocumentRequest_( pWin ? pWin->GetFrameWeld() : nullptr,
                                       aOwnLockOnDocumentRequest.DocumentURL,
                                       aOwnLockOnDocumentRequest.TimeInfo,
                                       rRequest->getContinuations(),
@@ -259,7 +258,8 @@ UUIInteractionHelper::handleLockedDocumentRequest(
     document::LockedOnSavingRequest aLockedOnSavingRequest;
     if (aAnyRequest >>= aLockedOnSavingRequest )
     {
-        handleLockedDocumentRequest_( getParentProperty(),
+        vcl::Window* pWin = getParentProperty();
+        handleLockedDocumentRequest_( pWin ? pWin->GetFrameWeld() : nullptr,
                                       aLockedOnSavingRequest.DocumentURL,
                                       aLockedOnSavingRequest.UserInfo,
                                       rRequest->getContinuations(),

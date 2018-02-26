@@ -20,34 +20,21 @@
 #include <strings.hrc>
 #include "openlocked.hxx"
 #include <unotools/resmgr.hxx>
+#include <vcl/button.hxx>
+#include <vcl/svapp.hxx>
 
-OpenLockedQueryBox::OpenLockedQueryBox( vcl::Window* pParent, const std::locale& rResLocale, const OUString& aMessage, bool bEnableOverride ) :
-    MessBox(pParent, MessBoxStyle::NONE, 0,
-            Translate::get(STR_OPENLOCKED_TITLE, rResLocale),
-            aMessage )
+OpenLockedQueryBox::OpenLockedQueryBox(weld::Window* pParent, const std::locale& rResLocale, const OUString& rMessage, bool bEnableOverride)
+    : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Question, VclButtonsType::NONE, rMessage))
 {
-    SetImage(GetStandardQueryBoxImage());
-
-    AddButton(Translate::get(STR_OPENLOCKED_OPENREADONLY_BTN, rResLocale), RET_YES,
-            ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
-    SetButtonHelpText(RET_YES, OUString());
-
-    AddButton(Translate::get(STR_OPENLOCKED_OPENCOPY_BTN, rResLocale), RET_NO);
-    SetButtonHelpText(RET_NO, OUString());
-
+    m_xQueryBox->set_title(Translate::get(STR_OPENLOCKED_TITLE, rResLocale));
+    m_xQueryBox->add_button(Translate::get(STR_OPENLOCKED_OPENREADONLY_BTN, rResLocale), RET_YES);
+    m_xQueryBox->add_button(Translate::get(STR_OPENLOCKED_OPENCOPY_BTN, rResLocale), RET_NO);
     if (bEnableOverride)
     {
         // Present option to ignore the (stale?) lock file and open the document
-        AddButton(Translate::get(STR_ALREADYOPEN_OPEN_BTN, rResLocale), RET_IGNORE);
-        SetButtonHelpText(RET_IGNORE, OUString());
+        m_xQueryBox->add_button(Translate::get(STR_ALREADYOPEN_OPEN_BTN, rResLocale), RET_IGNORE);
     }
-
-    AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
+    m_xQueryBox->add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
 }
-
-OpenLockedQueryBox::~OpenLockedQueryBox()
-{
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

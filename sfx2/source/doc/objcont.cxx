@@ -25,7 +25,7 @@
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/fileurl.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 #include <svl/style.hxx>
 #include <vcl/wrkwin.hxx>
 
@@ -72,8 +72,8 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
 #include <openflag.hxx>
-#include "querytemplate.hxx"
 #include <memory>
+#include <helpids.h>
 
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
@@ -362,6 +362,25 @@ sfx2::StyleManager* SfxObjectShell::GetStyleManager()
     return nullptr;
 }
 
+namespace
+{
+    class QueryTemplateBox
+    {
+    private:
+        std::unique_ptr<weld::MessageDialog> m_xQueryBox;
+    public:
+        QueryTemplateBox(weld::Window* pParent, const OUString& rMessage)
+            : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Question, VclButtonsType::NONE, rMessage))
+        {
+            m_xQueryBox->add_button(SfxResId(STR_QRYTEMPL_UPDATE_BTN), RET_YES);
+            m_xQueryBox->add_button(SfxResId(STR_QRYTEMPL_KEEP_BTN), RET_NO);
+            m_xQueryBox->set_default_response(RET_YES);
+            m_xQueryBox->set_help_id(HID_QUERY_LOAD_TEMPLATE);
+        }
+        short run() { return m_xQueryBox->run(); }
+    };
+}
+
 void SfxObjectShell::UpdateFromTemplate_Impl(  )
 
 /*  [Description]
@@ -466,8 +485,9 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     else if ( bCanUpdateFromTemplate == document::UpdateDocMode::ACCORDING_TO_CONFIG )
                     {
                         const OUString sMessage( SfxResId(STR_QRYTEMPL_MESSAGE).replaceAll( "$(ARG1)", aTemplName ) );
-                        ScopedVclPtrInstance< sfx2::QueryTemplateBox > aBox(GetDialogParent(), sMessage);
-                        if ( RET_YES == aBox->Execute() )
+                        vcl::Window *pWin = GetDialogParent();
+                        QueryTemplateBox aBox(pWin ? pWin->GetFrameWeld() : nullptr, sMessage);
+                        if (RET_YES == aBox.run())
                             bLoad = true;
                     }
 

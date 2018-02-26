@@ -59,7 +59,7 @@ public:
 private:
     friend class JavaDebuggingListenerImpl;
     friend class LocalizationMgr;
-    friend bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& aLibName ); // defined in baside3.cxx
+    friend bool implImportDialog(weld::Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& rLibName); // defined in baside3.cxx
 
     WindowTable        aWindowTable;
     sal_uInt16          nCurKey;

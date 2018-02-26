@@ -37,7 +37,6 @@
 
 #include <fupoor.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/prtqry.hxx>
 #include <svx/svdopage.hxx>
 #include <sfx2/progress.hxx>
 #include <svx/svdobj.hxx>

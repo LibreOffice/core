@@ -19,13 +19,15 @@
 #ifndef INCLUDED_UUI_SOURCE_ALREADYOPEN_HXX
 #define INCLUDED_UUI_SOURCE_ALREADYOPEN_HXX
 
-#include <vcl/msgbox.hxx>
+#include <vcl/weld.hxx>
 
-class AlreadyOpenQueryBox : public MessBox
+class AlreadyOpenQueryBox
 {
+private:
+    std::unique_ptr<weld::MessageDialog> m_xQueryBox;
 public:
-    AlreadyOpenQueryBox( vcl::Window* pParent, const std::locale& rResLocale, const OUString& aMessage, bool bIsStoring );
-    virtual ~AlreadyOpenQueryBox() override;
+    AlreadyOpenQueryBox(weld::Window* pParent, const std::locale& rResLocale, const OUString& aMessage, bool bIsStoring);
+    short run() { return m_xQueryBox->run(); }
 };
 
 #endif
