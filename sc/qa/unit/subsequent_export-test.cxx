@@ -155,6 +155,8 @@ public:
     void testCeilingFloorXLS();
     void testCeilingFloorODS();
 
+    void testCustomXml();
+
 #if !defined _WIN32
     void testRelativePaths();
 #endif
@@ -275,6 +277,7 @@ public:
     CPPUNIT_TEST(testCeilingFloorXLSX);
     CPPUNIT_TEST(testCeilingFloorXLS);
     CPPUNIT_TEST(testCeilingFloorODS);
+    CPPUNIT_TEST(testCustomXml);
 #if !defined(_WIN32)
     CPPUNIT_TEST(testRelativePaths);
 #endif
@@ -3013,6 +3016,22 @@ void ScExportTest::testCeilingFloorXLS()
 void ScExportTest::testCeilingFloorODS()
 {
     testCeilingFloor(FORMAT_ODS);
+}
+
+void ScExportTest::testCustomXml()
+{
+    // Load document and export it to a temporary file
+    ScDocShellRef xShell = loadDoc("customxml.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xShell.Is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "customXml/item1.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    xmlDocPtr pRelsDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "customXml/_rels/item1.xml.rels");
+    CPPUNIT_ASSERT(pRelsDoc);
+
+    std::shared_ptr<SvStream> pStream = XPathHelper::parseExportStream(pXPathFile, m_xSFactory, "ddp/ddpfile.xen");
+    CPPUNIT_ASSERT(pStream);
 }
 
 #if !defined _WIN32
