@@ -47,7 +47,7 @@ public:
 class Button;
 typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunction;
 
-#define COL_NONE_COLOR    TRGB_COLORDATA(0x80, 0xFF, 0xFF, 0xFF)
+#define COL_NONE_COLOR    ::Color(0x80, 0xFF, 0xFF, 0xFF)
 
 class SVX_DLLPUBLIC SvxColorWindow : public svtools::ToolbarPopup
 {

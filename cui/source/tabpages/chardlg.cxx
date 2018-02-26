@@ -1372,7 +1372,7 @@ Color SvxCharEffectsPage::GetPreviewFontColor(const Color& rColor) const
 {
     if (rColor.GetColor() == COL_AUTO)
         return Color(COL_BLACK);
-    if (m_bEnableNoneFontColor && rColor.GetColor() == COL_NONE_COLOR)
+    if (m_bEnableNoneFontColor && rColor == COL_NONE_COLOR)
         return Color(COL_BLACK);
     return rColor;
 }

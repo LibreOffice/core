@@ -78,8 +78,8 @@ class ProgressBar;
 #define DEFAULT_BUTTONLABEL                             "Abbrechen"
 #define PROGRESSMONITOR_DEFAULT_TOPIC                   ""
 #define PROGRESSMONITOR_DEFAULT_TEXT                    ""
-#define PROGRESSMONITOR_LINECOLOR_BRIGHT                TRGB_COLORDATA( 0x00, 0xFF, 0xFF, 0xFF )                // white
-#define PROGRESSMONITOR_LINECOLOR_SHADOW                TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x00 )                // black
+#define PROGRESSMONITOR_LINECOLOR_BRIGHT                sal_Int32(Color( 0x00, 0xFF, 0xFF, 0xFF ))             // white
+#define PROGRESSMONITOR_LINECOLOR_SHADOW                sal_Int32(Color( 0x00, 0x00, 0x00, 0x00 ))             // black
 #define PROGRESSMONITOR_DEFAULT_WIDTH                   350
 #define PROGRESSMONITOR_DEFAULT_HEIGHT                  100
 
