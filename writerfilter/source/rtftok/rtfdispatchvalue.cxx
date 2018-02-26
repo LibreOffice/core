@@ -506,7 +506,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CHCBPAT:
         {
             auto pValue
-                = std::make_shared<RTFValue>(nParam ? sal_uInt32(getColorTable(nParam)) : COL_AUTO);
+                = std::make_shared<RTFValue>(sal_uInt32(nParam ? getColorTable(nParam) : COL_AUTO));
             putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_EG_RPrBase_shd,
                                NS_ooxml::LN_CT_Shd_fill, pValue);
         }
@@ -536,7 +536,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_HIGHLIGHT:
         {
             auto pValue
-                = std::make_shared<RTFValue>(nParam ? sal_uInt32(getColorTable(nParam)) : COL_AUTO);
+                = std::make_shared<RTFValue>(sal_uInt32(nParam ? getColorTable(nParam) : COL_AUTO));
             m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_highlight, pValue);
         }
         break;

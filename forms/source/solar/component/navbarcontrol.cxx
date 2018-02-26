@@ -271,7 +271,7 @@ namespace frm
         bool bVoid = !_rValue.hasValue();
 
         bool  bBoolValue = false;
-        sal_Int32 nColor = COL_TRANSPARENT;
+        sal_Int32 nColor(COL_TRANSPARENT);
 
         // TODO: more generic mechanisms for this (the grid control implementation,
         // when used herein, will do the same stuff for lot of these)

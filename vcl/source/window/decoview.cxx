@@ -794,7 +794,7 @@ void DecorationView::DrawSymbol( const tools::Rectangle& rRect, SymbolType eType
     if ( nStyle & DrawSymbolFlags::Mono )
     {
         // Monochrome: set color to black if enabled, to gray if disabled
-        nColor = Color( ( nStyle & DrawSymbolFlags::Disable ) ? COL_GRAY : COL_BLACK );
+        nColor = ( nStyle & DrawSymbolFlags::Disable ) ? COL_GRAY : COL_BLACK;
     }
     else
     {

@@ -994,7 +994,7 @@ void SAL_CALL ScAccessibleSpreadsheet::grabFocus(  )
 
 sal_Int32 SAL_CALL ScAccessibleSpreadsheet::getForeground(  )
 {
-    return COL_BLACK;
+    return sal_Int32(COL_BLACK);
 }
 
 sal_Int32 SAL_CALL ScAccessibleSpreadsheet::getBackground(  )

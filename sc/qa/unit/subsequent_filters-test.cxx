@@ -989,7 +989,7 @@ void ScFiltersTest::testBorderODS()
     CPPUNIT_ASSERT(pRight);
     CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pRight->GetBorderLineStyle());
     CPPUNIT_ASSERT_EQUAL(5L, pRight->GetWidth());
-    CPPUNIT_ASSERT_EQUAL(Color(COL_BLUE), pRight->GetColor());
+    CPPUNIT_ASSERT_EQUAL(COL_BLUE, pRight->GetColor());
 
     xDocSh->DoClose();
 }
@@ -2179,7 +2179,7 @@ void ScFiltersTest::testCondFormatThemeColorXLSX()
 
     CPPUNIT_ASSERT_EQUAL(Color(157, 195, 230), pDataBarFormatData->maPositiveColor);
     CPPUNIT_ASSERT(pDataBarFormatData->mpNegativeColor.get());
-    CPPUNIT_ASSERT_EQUAL(Color(COL_LIGHTRED), *pDataBarFormatData->mpNegativeColor.get());
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, *pDataBarFormatData->mpNegativeColor.get());
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), rDoc.GetCondFormList(1)->size());
     pFormat = rDoc.GetCondFormat(0, 0, 1);
@@ -3563,17 +3563,17 @@ void ScFiltersTest::testBackgroundColorStandardXLSXML()
 
     const std::vector<Check> aChecks =
     {
-        { OUString("Background Color"), Color(COL_BLACK), Color(COL_TRANSPARENT) },
-        { OUString("Dark Red"),         Color(COL_WHITE), Color(192,  0,    0)   },
-        { OUString("Red"),              Color(COL_WHITE), Color(255,  0,    0)   },
-        { OUString("Orange"),           Color(COL_WHITE), Color(255, 192,   0)   },
-        { OUString("Yellow"),           Color(COL_WHITE), Color(255, 255,   0)   },
-        { OUString("Light Green"),      Color(COL_WHITE), Color(146, 208,  80)   },
-        { OUString("Green"),            Color(COL_WHITE), Color(  0, 176,  80)   },
-        { OUString("Light Blue"),       Color(COL_WHITE), Color(  0, 176, 240)   },
-        { OUString("Blue"),             Color(COL_WHITE), Color(  0, 112, 192)   },
-        { OUString("Dark Blue"),        Color(COL_WHITE), Color(  0,  32,  96)   },
-        { OUString("Purple"),           Color(COL_WHITE), Color(112,  48, 160)   },
+        { OUString("Background Color"), COL_BLACK, COL_TRANSPARENT        },
+        { OUString("Dark Red"),         COL_WHITE, Color(192,  0,    0)   },
+        { OUString("Red"),              COL_WHITE, Color(255,  0,    0)   },
+        { OUString("Orange"),           COL_WHITE, Color(255, 192,   0)   },
+        { OUString("Yellow"),           COL_WHITE, Color(255, 255,   0)   },
+        { OUString("Light Green"),      COL_WHITE, Color(146, 208,  80)   },
+        { OUString("Green"),            COL_WHITE, Color(  0, 176,  80)   },
+        { OUString("Light Blue"),       COL_WHITE, Color(  0, 176, 240)   },
+        { OUString("Blue"),             COL_WHITE, Color(  0, 112, 192)   },
+        { OUString("Dark Blue"),        COL_WHITE, Color(  0,  32,  96)   },
+        { OUString("Purple"),           COL_WHITE, Color(112,  48, 160)   },
     };
 
     for (size_t nRow = 0; nRow < aChecks.size(); ++nRow)
@@ -3728,7 +3728,7 @@ void ScFiltersTest::testBorderDirectionsXLSXML()
                 return false;
             }
 
-            if (Color(COL_BLACK) != pLine->GetColor())
+            if (COL_BLACK != pLine->GetColor())
             {
                 std::cout << "Border color was expected to be black, but is not." << std::endl;
                 return false;

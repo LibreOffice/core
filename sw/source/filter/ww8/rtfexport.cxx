@@ -1127,7 +1127,7 @@ void RtfExport::InsColor(const Color& rCol)
         if (rEntry.second == COL_AUTO)
             bAutoColorInTable = true;
     }
-    if (rCol.GetColor() == COL_AUTO)
+    if (rCol == COL_AUTO)
         // COL_AUTO gets value 0
         n = 0;
     else

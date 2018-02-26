@@ -409,7 +409,7 @@ public:
 
             std::vector<OUString> aFontNames;
 
-            sal_uInt32 const nCols[] = {
+            Color const nCols[] = {
                 COL_BLACK, COL_BLUE, COL_GREEN, COL_CYAN, COL_RED, COL_MAGENTA,
                 COL_BROWN, COL_GRAY, COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTGREEN,
                 COL_LIGHTCYAN, COL_LIGHTRED, COL_LIGHTMAGENTA, COL_YELLOW, COL_WHITE
@@ -450,7 +450,7 @@ public:
                     nFontColorIndex=(i % aFontNames.size());
                 }
 
-                rDev.SetTextColor(Color(nCols[nFontColorIndex]));
+                rDev.SetTextColor(nCols[nFontColorIndex]);
                 vcl::Font aFont( aFontNames[nFontIndex], Size(0, nFontHeight ));
 
                 if (bRotate)
@@ -777,13 +777,13 @@ public:
             if (rCtx.meStyle == RENDER_EXPANDED)
             {
                 std::vector<tools::Rectangle> aRegions(DemoRenderer::partition(rCtx,5, 4));
-                sal_uInt32 nStartCols[] = {
+                Color nStartCols[] = {
                     COL_RED, COL_RED, COL_RED, COL_GREEN, COL_GREEN,
                     COL_BLUE, COL_BLUE, COL_BLUE, COL_CYAN, COL_CYAN,
                     COL_BLACK, COL_LIGHTGRAY, COL_WHITE, COL_BLUE, COL_CYAN,
                     COL_WHITE, COL_WHITE, COL_WHITE, COL_BLACK, COL_BLACK
                 };
-                sal_uInt32 nEndCols[] = {
+                Color nEndCols[] = {
                     COL_WHITE, COL_WHITE, COL_WHITE, COL_BLACK, COL_BLACK,
                     COL_RED, COL_RED, COL_RED, COL_GREEN, COL_GREEN,
                     COL_GRAY, COL_GRAY, COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTCYAN,
@@ -818,8 +818,8 @@ public:
                 {
                     tools::Rectangle aSub = aRegions[i];
                     Gradient aGradient;
-                    aGradient.SetStartColor(Color(nStartCols[i]));
-                    aGradient.SetEndColor(Color(nEndCols[i]));
+                    aGradient.SetStartColor(nStartCols[i]);
+                    aGradient.SetEndColor(nEndCols[i]);
                     aGradient.SetStyle(eStyles[i]);
                     aGradient.SetAngle(nAngles[i]);
                     aGradient.SetBorder(nBorders[i]);

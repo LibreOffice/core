@@ -72,10 +72,10 @@ void ScAppOptions::SetDefaults()
     pLRUList[4] = SC_OPCODE_IF;
     nLRUFuncCount = 5;
 
-    nTrackContentColor = COL_TRANSPARENT;
-    nTrackInsertColor  = COL_TRANSPARENT;
-    nTrackDeleteColor  = COL_TRANSPARENT;
-    nTrackMoveColor    = COL_TRANSPARENT;
+    nTrackContentColor = sal_uInt32(COL_TRANSPARENT);
+    nTrackInsertColor  = sal_uInt32(COL_TRANSPARENT);
+    nTrackDeleteColor  = sal_uInt32(COL_TRANSPARENT);
+    nTrackMoveColor    = sal_uInt32(COL_TRANSPARENT);
     eLinkMode          = LM_ON_DEMAND;
 
     nDefaultObjectSizeWidth = 8000;

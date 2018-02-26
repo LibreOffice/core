@@ -727,7 +727,7 @@ namespace emfio
                             {
                                 if ( x < nWidth )
                                 {
-                                    aBmp.SetPixel( y, x, Color(((nEightPixels>>i)&1) ? COL_BLACK : COL_WHITE) );
+                                    aBmp.SetPixel( y, x, ((nEightPixels>>i)&1) ? COL_BLACK : COL_WHITE );
                                 }
                                 x++;
                             }

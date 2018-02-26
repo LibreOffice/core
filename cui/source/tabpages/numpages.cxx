@@ -2269,8 +2269,8 @@ static long lcl_DrawBullet(VirtualDevice* pVDev,
     aFont.SetFontSize(aTmpSize);
     aFont.SetTransparent(true);
     Color aBulletColor = rFmt.GetBulletColor();
-    if(aBulletColor.GetColor() == COL_AUTO)
-        aBulletColor = Color(pVDev->GetFillColor().IsDark() ? COL_WHITE : COL_BLACK);
+    if(aBulletColor == COL_AUTO)
+        aBulletColor = pVDev->GetFillColor().IsDark() ? COL_WHITE : COL_BLACK;
     else if(aBulletColor == pVDev->GetFillColor())
         aBulletColor.Invert();
     aFont.SetColor(aBulletColor);
@@ -2407,8 +2407,8 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     vcl::Font aSaveFont = pVDev->GetFont();
                     vcl::Font aColorFont(aSaveFont);
                     Color aTmpBulletColor = rFmt.GetBulletColor();
-                    if (aTmpBulletColor.GetColor() == COL_AUTO)
-                        aTmpBulletColor = Color(aBackColor.IsDark() ? COL_WHITE : COL_BLACK);
+                    if (aTmpBulletColor == COL_AUTO)
+                        aTmpBulletColor = aBackColor.IsDark() ? COL_WHITE : COL_BLACK;
                     else if (aTmpBulletColor == aBackColor)
                         aTmpBulletColor.Invert();
                     aColorFont.SetColor(aTmpBulletColor);
@@ -2527,8 +2527,8 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                 {
                     vcl::Font aColorFont(aStdFont);
                     Color aTmpBulletColor = rFmt.GetBulletColor();
-                    if (aTmpBulletColor.GetColor() == COL_AUTO)
-                        aTmpBulletColor = Color(aBackColor.IsDark() ? COL_WHITE : COL_BLACK);
+                    if (aTmpBulletColor == COL_AUTO)
+                        aTmpBulletColor = aBackColor.IsDark() ? COL_WHITE : COL_BLACK;
                     else if (aTmpBulletColor == aBackColor)
                         aTmpBulletColor.Invert();
                     aColorFont.SetColor(aTmpBulletColor);

@@ -312,8 +312,8 @@ bool Bitmap::ImplMakeMono( sal_uInt8 cThreshold )
 
         if( pWriteAcc )
         {
-            const BitmapColor aBlack( pWriteAcc->GetBestMatchingColor( Color(COL_BLACK) ) );
-            const BitmapColor aWhite( pWriteAcc->GetBestMatchingColor( Color(COL_WHITE) ) );
+            const BitmapColor aBlack( pWriteAcc->GetBestMatchingColor( COL_BLACK ) );
+            const BitmapColor aWhite( pWriteAcc->GetBestMatchingColor( COL_WHITE ) );
             const long nWidth = pWriteAcc->Width();
             const long nHeight = pWriteAcc->Height();
 
@@ -625,8 +625,8 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color const * pExtColor)
             if (aPalette.GetEntryCount() < (nCount - 1))
             {
                 aPalette.SetEntryCount(aPalette.GetEntryCount() + 2);
-                aPalette[aPalette.GetEntryCount() - 2] = Color(COL_BLACK);
-                aPalette[aPalette.GetEntryCount() - 1] = Color(COL_WHITE);
+                aPalette[aPalette.GetEntryCount() - 2] = COL_BLACK;
+                aPalette[aPalette.GetEntryCount() - 1] = COL_WHITE;
             }
 
             pWriteAcc->SetPalette(aPalette);

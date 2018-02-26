@@ -634,7 +634,7 @@ table::ShadowFormat PropertyMap::getShadowFromBorder( const table::BorderLine2& 
     // property of the page style, with shadow location, distance and
     // color. See SwWW8ImplReader::SetShadow().
     table::ShadowFormat aFormat;
-    aFormat.Color       = COL_BLACK;
+    aFormat.Color       = sal_Int32(COL_BLACK);
     aFormat.Location    = table::ShadowLocation_BOTTOM_RIGHT;
     aFormat.ShadowWidth = rBorder.LineWidth;
     return aFormat;

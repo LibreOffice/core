@@ -435,7 +435,7 @@ public:
     sal_uInt16 GetZoom() const    { return m_nZoom; }
     void   SetZoom( sal_uInt16 n ){ m_nZoom = n; }
 
-    static void DrawRect( OutputDevice* pOut, const SwRect &rRect, long nCol );
+    static void DrawRect( OutputDevice* pOut, const SwRect &rRect, ::Color nCol );
     static void DrawRectPrinter( OutputDevice* pOut, const SwRect& rRect );
 
     SwViewOption& operator=( const SwViewOption &rOpt );
