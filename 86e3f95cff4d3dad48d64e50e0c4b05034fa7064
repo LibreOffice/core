@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "da36d5c6_afd71d22",
+        "filename": "sw/source/core/edit/edredln.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-02-26T14:07:07Z",
+      "side": 1,
+      "message": "Stephan points out another problem here, this accesses the config-manager directly, but the SwRevisionConfig is a utl::ConfigItem that caches writes; this could mean that the reads could see a stale value.\n\nbut it turns out that, at least for the SwRevisionConfig, if you click OK in the options dialog, then utl::ConfigItem::Commit is called to sync the state, so it should not be a problem after all.",
+      "revId": "86e3f95cff4d3dad48d64e50e0c4b05034fa7064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa31d9ce_10b665dc",
         "filename": "sw/source/core/inc/DocumentRedlineManager.hxx",
         "patchSetId": 8
