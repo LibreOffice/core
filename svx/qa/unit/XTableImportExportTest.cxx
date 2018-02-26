@@ -47,6 +47,7 @@ void XTableImportExportTest::testImportExport()
     utl::TempFile aTempFile(nullptr, true);
     aTempFile.EnableKillingFile();
     OUString aTempURL = aTempFile.GetURL();
+    BitmapChecksum aChecksum(0);
 
     {
         XBitmapList xBitmapList(aTempURL, "REF");
@@ -54,13 +55,15 @@ void XTableImportExportTest::testImportExport()
         CPPUNIT_ASSERT(xNameContainer.is());
 
         Bitmap aBitmap(Size(5,5), 24);
-        BitmapEx aBitmapEx(aBitmap);
         aBitmap.Erase(COL_RED);
+        BitmapEx aBitmapEx(aBitmap);
         Graphic aGraphic(aBitmapEx);
         uno::Reference<awt::XBitmap> xBitmap(aGraphic.GetXGraphic(), css::uno::UNO_QUERY);
 
         xNameContainer->insertByName("SomeBitmap", uno::makeAny(xBitmap));
         xBitmapList.Save();
+
+        aChecksum = aBitmap.GetChecksum();
     }
 
     {
@@ -77,6 +80,8 @@ void XTableImportExportTest::testImportExport()
         CPPUNIT_ASSERT(xGraphic.is());
         Graphic aGraphic(xGraphic);
         CPPUNIT_ASSERT(aGraphic);
+        Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
+        CPPUNIT_ASSERT_EQUAL(aChecksum, aBitmap.GetChecksum());
     }
 }
 
