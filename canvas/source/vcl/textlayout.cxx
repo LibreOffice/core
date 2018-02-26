@@ -132,15 +132,11 @@ namespace vclcanvas
         {
             aOutlineSequence.reserve(aOutlines.size());
             sal_Int32 nIndex (0);
-            for (::basegfx::B2DPolyPolygonVector::const_iterator
-                     iOutline(aOutlines.begin()),
-                     iEnd(aOutlines.end());
-                 iOutline!=iEnd;
-                 ++iOutline)
+            for (auto const& outline : aOutlines)
             {
                 aOutlineSequence[nIndex++] = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
                     mxDevice,
-                    *iOutline);
+                    outline);
             }
         }
 
@@ -182,17 +178,13 @@ namespace vclcanvas
         {
             aBoundingBoxes.realloc(aMetricVector.size());
             sal_Int32 nIndex (0);
-            for (MetricVector::const_iterator
-                     iMetric(aMetricVector.begin()),
-                     iEnd(aMetricVector.end());
-                 iMetric!=iEnd;
-                 ++iMetric)
+            for (auto const& metric : aMetricVector)
             {
                 aBoundingBoxes[nIndex++] = geometry::RealRectangle2D(
-                    iMetric->getX(),
-                    iMetric->getY(),
-                    iMetric->getX() + iMetric->getWidth(),
-                    iMetric->getY() + iMetric->getHeight());
+                    metric.getX(),
+                    metric.getY(),
+                    metric.getX() + metric.getWidth(),
+                    metric.getY() + metric.getHeight());
             }
         }
         return aBoundingBoxes;
