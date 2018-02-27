@@ -139,10 +139,6 @@ public:
     ODFDefaultVersion       GetODFDefaultVersion() const;
     ODFSaneDefaultVersion   GetODFSaneDefaultVersion() const;
 
-    bool                IsUseSHA1InODF12() const;
-
-    bool                IsUseBlowfishInODF12() const;
-
     bool                IsReadOnly( EOption eOption ) const;
 };
 
