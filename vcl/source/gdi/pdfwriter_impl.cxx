@@ -8776,7 +8776,8 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
     // Determination of shading axis
     // See: OutputDevice::ImplDrawLinearGradient for reference
     tools::Rectangle aRect;
-    aRect.Left() = aRect.Top() = 0;
+    aRect.SetLeft(0);
+    aRect.SetTop(0);
     aRect.SetRight( aSize.Width() );
     aRect.SetBottom( aSize.Height() );
 

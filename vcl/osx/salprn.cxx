@@ -294,8 +294,8 @@ sal_uInt32 AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, PrinterCapT
 
 void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
                                   long& o_rOutWidth, long& o_rOutHeight,
-                                  long& o_rPageOffX, long& o_rPageOffY,
-                                  long& o_rPageWidth, long& o_rPageHeight )
+                                  Point& rPageOffset,
+                                  Size& rPaperSize )
 {
     if( mpPrintInfo )
     {
@@ -305,20 +305,26 @@ void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
                      fYScaling = static_cast<double>(nDPIY)/72.0;
 
         NSSize aPaperSize = [mpPrintInfo paperSize];
-        o_rPageWidth  = static_cast<long>( double(aPaperSize.width) * fXScaling );
-        o_rPageHeight = static_cast<long>( double(aPaperSize.height) * fYScaling );
+        rPaperSize.setWidth( static_cast<long>( double(aPaperSize.width) * fXScaling ) );
+        rPaperSize.setHeight( static_cast<long>( double(aPaperSize.height) * fYScaling ) );
 
         NSRect aImageRect = [mpPrintInfo imageablePageBounds];
-        o_rPageOffX   = static_cast<long>( aImageRect.origin.x * fXScaling );
-        o_rPageOffY   = static_cast<long>( (aPaperSize.height - aImageRect.size.height - aImageRect.origin.y) * fYScaling );
+        rPageOffset.setX( static_cast<long>( aImageRect.origin.x * fXScaling ) );
+        rPageOffset.setY( static_cast<long>( (aPaperSize.height - aImageRect.size.height - aImageRect.origin.y) * fYScaling ) );
         o_rOutWidth   = static_cast<long>( aImageRect.size.width * fXScaling );
         o_rOutHeight  = static_cast<long>( aImageRect.size.height * fYScaling );
 
         if( mePageOrientation == Orientation::Landscape )
         {
             std::swap( o_rOutWidth, o_rOutHeight );
-            std::swap( o_rPageWidth, o_rPageHeight );
-            std::swap( o_rPageOffX, o_rPageOffY );
+            // swap width and height
+            long n = rPaperSize.Width();
+            rPaperSize.setWidth(rPaperSize.Height());
+            rPaperSize.setHeight(n);
+            // swap offset x and y
+            n = rPageOffset.X();
+            rPageOffset.setX(rPageOffset.Y());
+            rPageOffset.setY(n);
         }
     }
 }
@@ -333,8 +339,8 @@ static Size getPageSize( vcl::PrinterController const & i_rController, sal_Int32
         {
             awt::Size aSize;
             aPageParms[ nProperty].Value >>= aSize;
-            aPageSize.Width() = aSize.Width;
-            aPageSize.Height() = aSize.Height;
+            aPageSize.setWidth( aSize.Width );
+            aPageSize.setHeight( aSize.Height );
             break;
         }
     }

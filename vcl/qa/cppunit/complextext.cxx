@@ -98,8 +98,7 @@ void VclComplexTextTest::testArabic()
     // if run on Win7 KVM QXL / Spice GUI, we "miss" the first pixel column?!
     if ( 1 == aBoundRect.Left() )
     {
-        long &rLeft = aTestRect.Left();
-        ++rLeft;
+        aTestRect.AdjustLeft(1);
     }
 #endif
     CPPUNIT_ASSERT_EQUAL(aTestRect, aBoundRect);
