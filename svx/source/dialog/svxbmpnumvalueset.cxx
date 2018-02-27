@@ -180,9 +180,11 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             Point aEnd(aBLPos.X() + nRectWidth * 9 / 10,0);
             for( sal_uInt16 i = 11; i < 100; i += 33)
             {
-                aStart.Y() = aEnd.Y() = aBLPos.Y() + nRectHeight  * i / 100;
+                aStart.setY( aBLPos.Y() + nRectHeight  * i / 100 );
+                aEnd.setY( aStart.Y() );
                 pVDev->DrawLine(aStart, aEnd);
-                aStart.Y() = aEnd.Y() = aBLPos.Y() + nRectHeight  * (i + 11) / 100;
+                aStart.setY( aBLPos.Y() + nRectHeight  * (i + 11) / 100 );
+                aEnd.setY( aStart.Y() );
                 pVDev->DrawLine(aStart, aEnd);
             }
         }
