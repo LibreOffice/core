@@ -560,7 +560,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
         // Do all visible lines show the same line color?
         Color aColor;
         bool bColorEq = m_pFrameSel->GetVisibleColor( aColor );
-        if( !bColorEq )
+        if( bColorEq )
             aColor.SetColor( COL_BLACK );
 
         m_pLbLineColor->SelectEntry(aColor);
