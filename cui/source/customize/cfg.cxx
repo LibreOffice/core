@@ -1838,7 +1838,7 @@ IMPL_LINK_NOARG(SvxConfigPage, SearchUpdateHdl, Edit&, void)
 {
     OUString aSearchTerm( m_pSearchEdit->GetText() );
 
-    m_pCommandCategoryListBox->categorySelected( m_pFunctions, aSearchTerm );
+    m_pCommandCategoryListBox->categorySelected( m_pFunctions, aSearchTerm, GetSaveInData() );
 }
 
 void SvxConfigPage::MoveEntry( bool bMoveUp )
