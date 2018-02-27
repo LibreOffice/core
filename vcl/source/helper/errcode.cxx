@@ -138,7 +138,7 @@ VCL_DLLPUBLIC std::ostream& operator<<(std::ostream& os, const ErrCode& err)
                 os << "Compiler";
                 break;
         }
-        os << " Code:" << OUString::number(err.GetRest());
+        os << " Code:" << OUString::number(err.GetRest() & 0xff);
     }
     os << ")";
     return os;
