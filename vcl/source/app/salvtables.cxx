@@ -404,6 +404,9 @@ public:
 
     virtual int run() override
     {
+        VclButtonBox* pActionArea = m_xDialog->get_action_area();
+        if (pActionArea)
+           pActionArea->sort_native_button_order();
         return m_xDialog->Execute();
     }
 
