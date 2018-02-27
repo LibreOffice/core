@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da36d5c6_3d6fe793",
+        "filename": "offapi/com/sun/star/ucb/ExoticFileLoadException.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2018-02-27T10:58:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da36d5c6_92fe0204",
+      "revId": "140d428bb04f719868c660f4b154ef39fec1cb4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da36d5c6_b203060d",
         "filename": "offapi/com/sun/star/ucb/ExoticFileLoadException.idl",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2018-02-26T20:34:06Z",
       "side": 1,
       "message": "@since LibreOffice 6.1",
+      "revId": "140d428bb04f719868c660f4b154ef39fec1cb4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_5d6c9b9c",
+        "filename": "offapi/com/sun/star/ucb/ExoticFileLoadException.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2018-02-27T10:58:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da36d5c6_b203060d",
       "revId": "140d428bb04f719868c660f4b154ef39fec1cb4c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "da36d5c6_7d695f8b",
+        "filename": "offapi/com/sun/star/ucb/ExoticFileLoadException.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2018-02-27T10:58:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da36d5c6_d2087a2b",
+      "revId": "140d428bb04f719868c660f4b154ef39fec1cb4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da36d5c6_323716e5",
         "filename": "offapi/com/sun/star/ucb/ExoticFileLoadException.idl",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2018-02-26T20:34:06Z",
       "side": 1,
       "message": "can some useful information about the filter be transported here, so the uui interaction handler can present more information to the user?",
+      "revId": "140d428bb04f719868c660f4b154ef39fec1cb4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_9d0453c7",
+        "filename": "offapi/com/sun/star/ucb/ExoticFileLoadException.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2018-02-27T10:58:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da36d5c6_323716e5",
       "revId": "140d428bb04f719868c660f4b154ef39fec1cb4c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "da36d5c6_bd0917e0",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2018-02-27T10:58:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da36d5c6_f2249eb0",
+      "revId": "140d428bb04f719868c660f4b154ef39fec1cb4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da36d5c6_123a12ce",
         "filename": "sfx2/source/doc/objstor.cxx",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2018-02-26T20:34:06Z",
       "side": 1,
       "message": "hold this via rtl::Reference",
+      "revId": "140d428bb04f719868c660f4b154ef39fec1cb4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_dd0ecbe4",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3573,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2018-02-27T10:58:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da36d5c6_123a12ce",
       "revId": "140d428bb04f719868c660f4b154ef39fec1cb4c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
