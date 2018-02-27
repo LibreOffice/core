@@ -132,20 +132,17 @@ SvxConfigPageHelper::generateCustomName(
         return name;
 
     // now check if there is an already existing entry with this name
-    SvxEntries::const_iterator iter = entries->begin();
-
-    while ( iter != entries->end() )
+    bool bFoundEntry = false;
+    for (auto const& entry : *entries)
     {
-        SvxConfigEntry* pEntry = *iter;
-
-        if ( name.equals( pEntry->GetName() ) )
+        if ( name.equals(entry->GetName()) )
         {
+            bFoundEntry = true;
             break;
         }
-        ++iter;
     }
 
-    if ( iter != entries->end() )
+    if (bFoundEntry)
     {
         // name already exists so try the next number up
         return generateCustomName( prefix, entries, ++suffix );
@@ -163,20 +160,17 @@ OUString SvxConfigPageHelper::generateCustomMenuURL(
         return url;
 
     // now check is there is an already existing entry with this url
-    SvxEntries::const_iterator iter = entries->begin();
-
-    while ( iter != entries->end() )
+    bool bFoundEntry = false;
+    for (auto const& entry : *entries)
     {
-        SvxConfigEntry* pEntry = *iter;
-
-        if ( url.equals( pEntry->GetCommand() ) )
+        if ( url.equals(entry->GetCommand()) )
         {
+            bFoundEntry = true;
             break;
         }
-        ++iter;
     }
 
-    if ( iter != entries->end() )
+    if (bFoundEntry)
     {
         // url already exists so try the next number up
         return generateCustomMenuURL( entries, ++suffix );
@@ -199,20 +193,17 @@ OUString SvxConfigPageHelper::generateCustomURL( SvxEntries* entries )
     url += OUString::number( generateRandomValue(), 16 );
 
     // now check is there is an already existing entry with this url
-    SvxEntries::const_iterator iter = entries->begin();
-
-    while ( iter != entries->end() )
+    bool bFoundEntry = false;
+    for (auto const& entry : *entries)
     {
-        SvxConfigEntry* pEntry = *iter;
-
-        if ( url.equals( pEntry->GetCommand() ) )
+        if ( url.equals(entry->GetCommand()) )
         {
+            bFoundEntry = true;
             break;
         }
-        ++iter;
     }
 
-    if ( iter != entries->end() )
+    if (bFoundEntry)
     {
         // url already exists so try the next number up
         return generateCustomURL( entries );

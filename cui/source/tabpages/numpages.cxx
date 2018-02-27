@@ -806,15 +806,16 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(vcl::Window* pParent,
     GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
 
     size_t i = 0;
-    for(std::vector<OUString>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
+    for (auto & grfName : aGrfNames)
     {
         m_pExamplesVS->InsertItem( i + 1, i);
 
-        INetURLObject aObj(*it);
+        INetURLObject aObj(grfName);
         if(aObj.GetProtocol() == INetProtocol::File)
-            *it = aObj.PathToFileName();
+            grfName = aObj.PathToFileName();
 
-        m_pExamplesVS->SetItemText( i + 1, *it );
+        m_pExamplesVS->SetItemText( i + 1, grfName );
+        ++i;
     }
 
     if(aGrfNames.empty())
@@ -1048,13 +1049,14 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, Button*, void)
 
                 aGrfNames.push_back(aUserGalleryURL);
                 size_t i = 0;
-                for(std::vector<OUString>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
+                for (auto & grfName : aGrfNames)
                 {
                     m_pExamplesVS->InsertItem( i + 1, i);
-                    INetURLObject aObj(*it);
+                    INetURLObject aObj(grfName);
                     if(aObj.GetProtocol() == INetProtocol::File)
-                        *it = aObj.PathToFileName();
-                    m_pExamplesVS->SetItemText( i + 1, *it );
+                        grfName = aObj.PathToFileName();
+                    m_pExamplesVS->SetItemText( i + 1, grfName );
+                    ++i;
                 }
 
                 if(aGrfNames.empty())
@@ -1994,14 +1996,12 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, MenuButton *, void)
             GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
 
             Graphic aGraphic;
-            OUString sGrfName;
-            std::vector<OUString>::const_iterator it = aGrfNames.begin();
-            for(size_t i = 0; it != aGrfNames.end(); ++it, ++i)
+            size_t i = 0;
+            for (auto & grfName : aGrfNames)
             {
-                sGrfName = *it;
-                INetURLObject aObj(sGrfName);
+                INetURLObject aObj(grfName);
                 if(aObj.GetProtocol() == INetProtocol::File)
-                    sGrfName = aObj.PathToFileName();
+                    grfName = aObj.PathToFileName();
 
                 if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, i, &aGraphic))
                 {
@@ -2018,14 +2018,15 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, MenuButton *, void)
                     }
                     Image aImage(aBitmap);
 
-                    pPopup->InsertItem(MN_GALLERY_ENTRY + i, sGrfName, aImage );
+                    pPopup->InsertItem(MN_GALLERY_ENTRY + i, grfName, aImage );
                 }
                 else
                 {
                     Image aImage;
                     pPopup->InsertItem(
-                        MN_GALLERY_ENTRY + i, sGrfName, aImage );
+                        MN_GALLERY_ENTRY + i, grfName, aImage );
                 }
+                ++i;
             }
             GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
         }

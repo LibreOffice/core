@@ -455,10 +455,10 @@ void ColorConfigWindow_Impl::dispose()
     m_pGrid.clear();
     m_pVScroll.clear();
     m_pHeaderHB.clear();
-    for (auto i = vChapters.begin(); i != vChapters.end(); ++i)
-        (*i)->dispose();
-    for (auto i = vEntries.begin(); i != vEntries.end(); ++i)
-        (*i)->dispose();
+    for (auto const& chapter : vChapters)
+        chapter->dispose();
+    for (auto const& entry : vEntries)
+        entry->dispose();
     disposeBuilder();
     VclContainer::dispose();
 }
