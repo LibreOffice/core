@@ -23,6 +23,7 @@
 #include <vcl/dialog.hxx>
 #include <unotools/securityoptions.hxx>
 #include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 namespace com {
