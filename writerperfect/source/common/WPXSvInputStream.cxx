@@ -869,7 +869,10 @@ const unsigned char *WPXSvInputStream::read(unsigned long numBytes, unsigned lon
     if (!mpImpl->mnReadBufferLength)
         return nullptr;
 
-    numBytesRead = numBytes;
+    if (numBytes <= mpImpl->mnReadBufferLength)
+        numBytesRead = numBytes;
+    else
+        numBytesRead = mpImpl->mnReadBufferLength;
 
     mpImpl->mnReadBufferPos += numBytesRead;
     return mpImpl->mpReadBuffer;
