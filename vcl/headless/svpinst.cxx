@@ -385,6 +385,12 @@ bool SvpSalInstance::IsMainThread() const
     return osl::Thread::getCurrentIdentifier() == m_MainThread;
 }
 
+void SvpSalInstance::updateMainThread()
+{
+    if (!IsMainThread())
+        m_MainThread = osl::Thread::getCurrentIdentifier();
+}
+
 bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 {
 #ifndef NDEBUG

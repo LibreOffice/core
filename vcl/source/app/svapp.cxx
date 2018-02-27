@@ -1313,6 +1313,13 @@ void Application::SetHelp( Help* pHelp )
     ImplGetSVData()->maAppData.mpHelp = pHelp;
 }
 
+void Application::UpdateMainThread()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if (pSVData && pSVData->mpDefInst)
+        pSVData->mpDefInst->updateMainThread();
+}
+
 Help* Application::GetHelp()
 {
     return ImplGetSVData()->maAppData.mpHelp;
