@@ -1256,11 +1256,16 @@ void WW8TabBandDesc::ProcessSprmTSetBRC(int nBrcVer, const sal_uInt8* pParamsTSe
 
 }
 
-void WW8TabBandDesc::ProcessSprmTTableBorders(int nBrcVer, const sal_uInt8* pParams)
+void WW8TabBandDesc::ProcessSprmTTableBorders(int nBrcVer, const sal_uInt8* pParams, sal_uInt16 nParamsLen)
 {
     // sprmTTableBorders
     if( nBrcVer == 6 )
     {
+        if (nParamsLen < sizeof(WW8_BRCVer6) * 6)
+        {
+            SAL_WARN("sw.ww8", "table border property is too short");
+            return;
+        }
         WW8_BRCVer6 const *pVer6 = reinterpret_cast<WW8_BRCVer6 const *>(pParams);
         for (int i = 0; i < 6; ++i)
             aDefBrcs[i] = WW8_BRCVer9(WW8_BRC(pVer6[i]));
@@ -1268,11 +1273,23 @@ void WW8TabBandDesc::ProcessSprmTTableBorders(int nBrcVer, const sal_uInt8* pPar
     else if ( nBrcVer == 8 )
     {
         static_assert(sizeof (WW8_BRC) == 4, "this has to match the msword size");
+        if (nParamsLen < sizeof(WW8_BRC) * 6)
+        {
+            SAL_WARN("sw.ww8", "table border property is too short");
+            return;
+        }
         for( int i = 0; i < 6; ++i )
             aDefBrcs[i] = WW8_BRCVer9(reinterpret_cast<WW8_BRC const *>(pParams)[i]);
     }
     else
+    {
+        if (nParamsLen < sizeof( aDefBrcs ))
+        {
+            SAL_WARN("sw.ww8", "table border property is too short");
+            return;
+        }
         memcpy( aDefBrcs, pParams, sizeof( aDefBrcs ) );
+    }
 }
 
 void WW8TabBandDesc::ProcessSprmTDxaCol(const sal_uInt8* pParamsTDxaCol)
@@ -1751,7 +1768,9 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         const sal_uInt8* pShadeSprm = nullptr;
         const sal_uInt8* pNewShadeSprm = nullptr;
         const sal_uInt8* pTableBorders = nullptr;
+        sal_uInt16 nTableBordersLen = 0;
         const sal_uInt8* pTableBorders90 = nullptr;
+        sal_uInt16 nTableBorders90Len = 0;
         std::vector<const sal_uInt8*> aTSetBrcs, aTSetBrc90s;
         WW8_TablePos *pTabPos  = nullptr;
 
@@ -1807,9 +1826,11 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         break;
                     case sprmTTableBorders:
                         pTableBorders = pParams; // process at end
+                        nTableBordersLen = nLen;
                         break;
                     case sprmTTableBorders90:
                         pTableBorders90 = pParams; // process at end
+                        nTableBorders90Len = nLen;
                         break;
                     case sprmTTableHeader:
                         // tdf#105570
@@ -1900,10 +1921,10 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
             if (pNewShadeSprm)
                 pNewBand->ReadNewShd(pNewShadeSprm, bOldVer);
             if (pTableBorders90)
-                pNewBand->ProcessSprmTTableBorders(9, pTableBorders90);
+                pNewBand->ProcessSprmTTableBorders(9, pTableBorders90, nTableBorders90Len);
             else if (pTableBorders)
                 pNewBand->ProcessSprmTTableBorders(bOldVer ? 6 : 8,
-                    pTableBorders);
+                    pTableBorders, nTableBordersLen);
             std::vector<const sal_uInt8*>::const_iterator iter;
             for (iter = aTSetBrcs.begin(); iter != aTSetBrcs.end(); ++iter)
                 pNewBand->ProcessSprmTSetBRC(bOldVer ? 6 : 8, *iter);
