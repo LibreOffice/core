@@ -434,7 +434,7 @@ void SwHTMLWriter::OutForm( bool bOn,
         DecIndentLevel(); // indent content of form
         if( m_bLFPossible )
             OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_form, false );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_form, false );
         m_bLFPossible = true;
 
         return;
@@ -1218,12 +1218,12 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                 HTMLOutFuncs::Out_String( rWrt.Strm(), pStrings[i],
                                           rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             }
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_option, false );
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_option, false );
 
             rHTMLWrt.DecIndentLevel();
             rHTMLWrt.OutNewLine();// the </SELECT> gets its own line
         }
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_select, false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_select, false );
     }
     else if( TAG_TEXTAREA == eTag )
     {
@@ -1250,7 +1250,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                                         rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             }
         }
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_textarea, false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_textarea, false );
     }
     else if( TYPE_CHECKBOX == eType || TYPE_RADIO == eType )
     {

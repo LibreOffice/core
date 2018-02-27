@@ -1016,7 +1016,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
     if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
     {
         // first the plug-in specifics
-        sOut.append(OOO_STRING_SVTOOLS_HTML_embed);
+        sOut.append(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_embed);
 
         OUString aStr;
         OUString aURL;
@@ -1065,7 +1065,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
     {
         // or the applet specifics
 
-        sOut.append(OOO_STRING_SVTOOLS_HTML_applet);
+        sOut.append(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_applet);
 
         // CODEBASE
         OUString aCd;
@@ -1119,7 +1119,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
     {
         // or the Floating-Frame specifics
 
-        sOut.append(OOO_STRING_SVTOOLS_HTML_iframe);
+        sOut.append(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_iframe);
         rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
         SfxFrameHTMLWriter::Out_FrameDescriptor( rWrt.Strm(), rWrt.GetBaseURL(),
@@ -1184,7 +1184,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
             const OUString& rValue = rCommand.GetArgument();
             rHTMLWrt.OutNewLine();
             OStringBuffer sBuf;
-            sBuf.append('<').append(OOO_STRING_SVTOOLS_HTML_param)
+            sBuf.append('<').append(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_param)
                 .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
                 .append("=\"");
             rWrt.Strm().WriteCharPtr( sBuf.makeStringAndClear().getStr() );
@@ -1198,7 +1198,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         rHTMLWrt.DecIndentLevel(); // indent the applet content
         if( aCommands.size() )
             rHTMLWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_applet, false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_applet, false );
     }
     else if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
     {
@@ -1231,7 +1231,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         // and for Floating-Frames just output another </IFRAME>
 
         rHTMLWrt.Strm().WriteChar( '>' );
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_iframe, false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_iframe, false );
     }
 
     if( !aEndTags.isEmpty() )
@@ -1288,9 +1288,9 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
                 SAL_WARN_IF(aStream.GetSize()>=static_cast<sal_uInt64>(SAL_MAX_INT32), "sw.html", "Stream can't fit in OString");
                 OString aData(static_cast<const char*>(aStream.GetData()), static_cast<sal_Int32>(aStream.GetSize()));
                 // Wrap output in a <span> tag to avoid 'HTML parser error: Unexpected end tag: p'
-                HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span);
+                HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span);
                 rWrt.Strm().WriteCharPtr(aData.getStr());
-                HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span, false);
+                HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span, false);
             }
             catch ( uno::Exception& )
             {
