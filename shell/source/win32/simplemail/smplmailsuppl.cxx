@@ -21,6 +21,9 @@
 #include "smplmailsuppl.hxx"
 #include "smplmailclient.hxx"
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Sequence;

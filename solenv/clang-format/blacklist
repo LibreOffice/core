@@ -13224,8 +13224,6 @@ shell/source/win32/shlxthandler/util/iso8601_converter.cxx
 shell/source/win32/shlxthandler/util/registry.cxx
 shell/source/win32/shlxthandler/util/utilities.cxx
 shell/source/win32/simplemail/senddoc.cxx
-shell/source/win32/simplemail/simplemapi.cxx
-shell/source/win32/simplemail/simplemapi.hxx
 shell/source/win32/simplemail/smplmailclient.cxx
 shell/source/win32/simplemail/smplmailclient.hxx
 shell/source/win32/simplemail/smplmailentry.cxx
