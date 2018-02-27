@@ -21,10 +21,6 @@ $(eval $(call gb_Library_use_libraries,smplmail,\
 	sal \
 ))
 
-$(eval $(call gb_Library_use_static_libraries,smplmail,\
-	simplemapi \
-))
-
 $(eval $(call gb_Library_set_componentfile,smplmail,shell/source/win32/simplemail/smplmail))
 
 $(eval $(call gb_Library_add_exception_objects,smplmail,\

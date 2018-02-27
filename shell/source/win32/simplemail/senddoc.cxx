@@ -19,36 +19,36 @@
 
 #include <osl/diagnose.h>
 #include <sal/macros.h>
-#include <rtl/string.hxx>
-#include <rtl/ustring.hxx>
-#include <rtl/uri.hxx>
-#include <osl/thread.hxx>
 
-#include "simplemapi.hxx"
+#include <wchar.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <mapi.h>
+#include <MapiUnicodeHelp.h>
 
-#include <tchar.h>
-
-#include <iostream>
+#include <string>
 #include <vector>
+#if OSL_DEBUG_LEVEL > 0
 #include <sstream>
+#endif
 #include <stdexcept>
 
 #if OSL_DEBUG_LEVEL > 0
     void dumpParameter();
 #endif
 
-typedef std::vector<std::string> StringList_t;
+typedef std::vector<std::wstring> StringList_t;
 typedef StringList_t::const_iterator StringListIterator_t;
-typedef std::vector<MapiRecipDesc> MapiRecipientList_t;
-typedef std::vector<MapiFileDesc> MapiAttachmentList_t;
+typedef std::vector<MapiRecipDescW> MapiRecipientList_t;
+typedef std::vector<MapiFileDescW> MapiAttachmentList_t;
 
 const int LEN_SMTP_PREFIX = 5; // "SMTP:"
 
 namespace /* private */
 {
-    std::string gFrom;
-    std::string gSubject;
-    std::string gBody;
+    std::wstring gFrom;
+    std::wstring gSubject;
+    std::wstring gBody;
     StringList_t gTo;
     StringList_t gCc;
     StringList_t gBcc;
@@ -69,9 +69,9 @@ namespace /* private */
     @returns
     the email address prefixed with the specified prefix.
 */
-inline std::string prefixEmailAddress(
-    const std::string& aEmailAddress,
-    const std::string& aPrefix = "SMTP:")
+inline std::wstring prefixEmailAddress(
+    const std::wstring& aEmailAddress,
+    const std::wstring& aPrefix = L"SMTP:")
 {
     return (aPrefix + aEmailAddress);
 }
@@ -79,15 +79,15 @@ inline std::string prefixEmailAddress(
 /** @internal */
 void addRecipient(
     ULONG recipClass,
-    const std::string& recipAddress,
+    const std::wstring& recipAddress,
     MapiRecipientList_t* pMapiRecipientList)
 {
-    MapiRecipDesc mrd;
+    MapiRecipDescW mrd;
     ZeroMemory(&mrd, sizeof(mrd));
 
     mrd.ulRecipClass = recipClass;
-    mrd.lpszName = const_cast<char*>(recipAddress.c_str()) + LEN_SMTP_PREFIX;
-    mrd.lpszAddress = const_cast<char*>(recipAddress.c_str());
+    mrd.lpszName = const_cast<wchar_t*>(recipAddress.c_str()) + LEN_SMTP_PREFIX;
+    mrd.lpszAddress = const_cast<wchar_t*>(recipAddress.c_str());
     pMapiRecipientList->push_back(mrd);
 }
 
@@ -97,22 +97,16 @@ void initRecipientList(MapiRecipientList_t* pMapiRecipientList)
     OSL_ASSERT(pMapiRecipientList->empty());
 
     // add to recipients
-    StringListIterator_t iter = gTo.begin();
-    StringListIterator_t iter_end = gTo.end();
-    for (; iter != iter_end; ++iter)
-        addRecipient(MAPI_TO, *iter, pMapiRecipientList);
+    for (const auto& address : gTo)
+        addRecipient(MAPI_TO, address, pMapiRecipientList);
 
     // add cc recipients
-    iter = gCc.begin();
-    iter_end = gCc.end();
-    for (; iter != iter_end; ++iter)
-        addRecipient(MAPI_CC, *iter, pMapiRecipientList);
+    for (const auto& address : gCc)
+        addRecipient(MAPI_CC, address, pMapiRecipientList);
 
     // add bcc recipients
-    iter = gBcc.begin();
-    iter_end = gBcc.end();
-    for (; iter != iter_end; ++iter)
-        addRecipient(MAPI_BCC, *iter, pMapiRecipientList);
+    for (const auto& address : gBcc)
+        addRecipient(MAPI_BCC, address, pMapiRecipientList);
 }
 
 /** @internal */
@@ -120,49 +114,37 @@ void initAttachmentList(MapiAttachmentList_t* pMapiAttachmentList)
 {
     OSL_ASSERT(pMapiAttachmentList->empty());
 
-    StringListIterator_t iter = gAttachments.begin();
-    StringListIterator_t iter_end = gAttachments.end();
-    for (/**/; iter != iter_end; ++iter)
+    for (const auto& attachment : gAttachments)
     {
-        MapiFileDesc mfd;
+        MapiFileDescW mfd;
         ZeroMemory(&mfd, sizeof(mfd));
-        mfd.lpszPathName = const_cast<char*>(iter->c_str());
+        mfd.lpszPathName = const_cast<wchar_t*>(attachment.c_str());
         mfd.nPosition = sal::static_int_cast<ULONG>(-1);
         pMapiAttachmentList->push_back(mfd);
     }
 }
 
 /** @internal */
-void initMapiOriginator(MapiRecipDesc* pMapiOriginator)
+void initMapiOriginator(MapiRecipDescW* pMapiOriginator)
 {
-    ZeroMemory(pMapiOriginator, sizeof(MapiRecipDesc));
+    ZeroMemory(pMapiOriginator, sizeof(*pMapiOriginator));
 
     pMapiOriginator->ulRecipClass = MAPI_ORIG;
-    pMapiOriginator->lpszName = const_cast<char*>("");
-    pMapiOriginator->lpszAddress = const_cast<char*>(gFrom.c_str());
+    pMapiOriginator->lpszName = const_cast<wchar_t*>(L"");
+    pMapiOriginator->lpszAddress = const_cast<wchar_t*>(gFrom.c_str());
 }
 
 /** @internal */
 void initMapiMessage(
-    MapiRecipDesc* aMapiOriginator,
+    MapiRecipDescW* aMapiOriginator,
     MapiRecipientList_t& aMapiRecipientList,
     MapiAttachmentList_t& aMapiAttachmentList,
-    MapiMessage* pMapiMessage)
+    MapiMessageW* pMapiMessage)
 {
-    ZeroMemory(pMapiMessage, sizeof(MapiMessage));
+    ZeroMemory(pMapiMessage, sizeof(*pMapiMessage));
 
-    try {
-         rtl_uString *subject = nullptr;
-         rtl_uString_newFromAscii(&subject, gSubject.c_str());
-         rtl_uString *decoded_subject = nullptr;
-         rtl_uriDecode(subject, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8, &decoded_subject);
-         OUString ou_subject(decoded_subject);
-         pMapiMessage->lpszSubject = strdup(OUStringToOString(ou_subject, osl_getThreadTextEncoding(), RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK).getStr());
-    }
-    catch (...) {
-    pMapiMessage->lpszSubject = const_cast<char*>(gSubject.c_str());
-    }
-    pMapiMessage->lpszNoteText = (gBody.length() ? const_cast<char*>(gBody.c_str()) : nullptr);
+    pMapiMessage->lpszSubject = const_cast<wchar_t*>(gSubject.c_str());
+    pMapiMessage->lpszNoteText = (gBody.length() ? const_cast<wchar_t*>(gBody.c_str()) : nullptr);
     pMapiMessage->lpOriginator = aMapiOriginator;
     pMapiMessage->lpRecips = aMapiRecipientList.size() ? &aMapiRecipientList[0] : nullptr;
     pMapiMessage->nRecipCount = aMapiRecipientList.size();
@@ -170,33 +152,33 @@ void initMapiMessage(
     pMapiMessage->nFileCount = aMapiAttachmentList.size();
 }
 
-const char* KnownParameter[] =
+const wchar_t* const KnownParameter[] =
 {
-    "--to",
-    "--cc",
-    "--bcc",
-    "--from",
-    "--subject",
-    "--body",
-    "--attach",
-    "--mapi-dialog",
-    "--mapi-logon-ui"
+    L"--to",
+    L"--cc",
+    L"--bcc",
+    L"--from",
+    L"--subject",
+    L"--body",
+    L"--attach",
+    L"--mapi-dialog",
+    L"--mapi-logon-ui"
 };
 
 const size_t nKnownParameter = SAL_N_ELEMENTS(KnownParameter);
 
 /** @internal */
-bool isKnownParameter(const char* aParameterName)
+bool isKnownParameter(const wchar_t* aParameterName)
 {
     for (size_t i = 0; i < nKnownParameter; i++)
-        if (_stricmp(aParameterName, KnownParameter[i]) == 0)
+        if (_wcsicmp(aParameterName, KnownParameter[i]) == 0)
             return true;
 
     return false;
 }
 
 /** @internal */
-void initParameter(int argc, char* argv[])
+void initParameter(int argc, wchar_t* argv[])
 {
     for (int i = 1; i < argc; i++)
     {
@@ -206,29 +188,29 @@ void initParameter(int argc, char* argv[])
             continue;
         }
 
-        if ((_stricmp(argv[i], "--mapi-dialog") == 0))
+        if (_wcsicmp(argv[i], L"--mapi-dialog") == 0)
         {
             gMapiFlags |= MAPI_DIALOG;
         }
-        else if ((_stricmp(argv[i], "--mapi-logon-ui") == 0))
+        else if (_wcsicmp(argv[i], L"--mapi-logon-ui") == 0)
         {
             gMapiFlags |= MAPI_LOGON_UI;
         }
         else if ((i+1) < argc) // is the value of a parameter available too?
         {
-            if (_stricmp(argv[i], "--to") == 0)
+            if (_wcsicmp(argv[i], L"--to") == 0)
                 gTo.push_back(prefixEmailAddress(argv[i+1]));
-            else if (_stricmp(argv[i], "--cc") == 0)
+            else if (_wcsicmp(argv[i], L"--cc") == 0)
                 gCc.push_back(prefixEmailAddress(argv[i+1]));
-            else if (_stricmp(argv[i], "--bcc") == 0)
+            else if (_wcsicmp(argv[i], L"--bcc") == 0)
                 gBcc.push_back(prefixEmailAddress(argv[i+1]));
-            else if (_stricmp(argv[i], "--from") == 0)
+            else if (_wcsicmp(argv[i], L"--from") == 0)
                 gFrom = prefixEmailAddress(argv[i+1]);
-            else if (_stricmp(argv[i], "--subject") == 0)
+            else if (_wcsicmp(argv[i], L"--subject") == 0)
                 gSubject = argv[i+1];
-            else if (_stricmp(argv[i], "--body") == 0)
+            else if (_wcsicmp(argv[i], L"--body") == 0)
                 gBody = argv[i+1];
-            else if ((_stricmp(argv[i], "--attach") == 0))
+            else if (_wcsicmp(argv[i], L"--attach") == 0)
                 gAttachments.push_back(argv[i+1]);
 
             i++;
@@ -243,7 +225,7 @@ void initParameter(int argc, char* argv[])
     parameter checking is very limited. Every unknown parameter
     will be ignored.
 */
-int main(int argc, char* argv[])
+int wmain(int argc, wchar_t* argv[])
 {
 
     initParameter(argc, argv);
@@ -256,8 +238,6 @@ int main(int argc, char* argv[])
 
     try
     {
-        CSimpleMapi mapi;
-
         // we have to set the flag MAPI_NEW_SESSION,
         // because in the case Outlook xxx (not Outlook Express!)
         // is installed as Exchange and Mail Client a Profile
@@ -266,17 +246,17 @@ int main(int argc, char* argv[])
 
         LHANDLE hSession = 0;
 
-        MapiRecipDesc mapiOriginator;
+        MapiRecipDescW mapiOriginator;
         MapiRecipientList_t mapiRecipientList;
         MapiAttachmentList_t mapiAttachmentList;
-        MapiMessage mapiMsg;
+        MapiMessageW mapiMsg;
 
         initMapiOriginator(&mapiOriginator);
         initRecipientList(&mapiRecipientList);
         initAttachmentList(&mapiAttachmentList);
         initMapiMessage((gFrom.length() ? &mapiOriginator : nullptr), mapiRecipientList, mapiAttachmentList, &mapiMsg);
 
-        ulRet = mapi.MAPISendMail(hSession, 0, &mapiMsg, gMapiFlags, 0);
+        ulRet = MAPISendMailHelper(hSession, 0, &mapiMsg, gMapiFlags, 0);
 
         // There is no point in treating an aborted mail sending
         // dialog as an error to be returned as our exit
@@ -303,7 +283,7 @@ int main(int argc, char* argv[])
 #if OSL_DEBUG_LEVEL > 0
     void dumpParameter()
     {
-        std::ostringstream oss;
+        std::wostringstream oss;
 
         if (gFrom.length() > 0)
             oss << "--from " << gFrom << std::endl;
@@ -314,25 +294,17 @@ int main(int argc, char* argv[])
         if (gBody.length() > 0)
             oss << "--body " << gBody << std::endl;
 
-        StringListIterator_t iter = gTo.begin();
-        StringListIterator_t iter_end = gTo.end();
-        for (/**/;iter != iter_end; ++iter)
-            oss << "--to " << *iter << std::endl;
+        for (const auto& address : gTo)
+            oss << "--to " << address << std::endl;
 
-        iter = gCc.begin();
-        iter_end = gCc.end();
-        for (/**/;iter != iter_end; ++iter)
-            oss << "--cc " << *iter << std::endl;
+        for (const auto& address : gCc)
+            oss << "--cc " << address << std::endl;
 
-        iter = gBcc.begin();
-        iter_end = gBcc.end();
-        for (/**/;iter != iter_end; ++iter)
-            oss << "--bcc " << *iter << std::endl;
+        for (const auto& address : gBcc)
+            oss << "--bcc " << address << std::endl;
 
-        iter = gAttachments.begin();
-        iter_end = gAttachments.end();
-        for (/**/;iter != iter_end; ++iter)
-            oss << "--attach " << *iter << std::endl;
+        for (const auto& attachment : gAttachments)
+            oss << "--attach " << attachment << std::endl;
 
         if (gMapiFlags & MAPI_DIALOG)
             oss << "--mapi-dialog" << std::endl;
@@ -340,7 +312,7 @@ int main(int argc, char* argv[])
         if (gMapiFlags & MAPI_LOGON_UI)
             oss << "--mapi-logon-ui" << std::endl;
 
-        MessageBox(nullptr, oss.str().c_str(), "Arguments", MB_OK | MB_ICONINFORMATION);
+        MessageBoxW(nullptr, oss.str().c_str(), L"Arguments", MB_OK | MB_ICONINFORMATION);
     }
 #endif
 

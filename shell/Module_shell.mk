@@ -49,7 +49,6 @@ $(eval $(call gb_Module_add_targets,shell,\
 	Executable_senddoc \
 	Library_smplmail \
 	Library_wininetbe \
-	StaticLibrary_simplemapi \
 ))
 
 ifeq ($(COM),MSC)
