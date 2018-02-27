@@ -18,14 +18,15 @@
  */
 
 #include "simplemapi.hxx"
+#include <wchar.h>
+#include <MapiUnicodeHelp.h>
 
 #include <string>
 #include <stdexcept>
 
 CSimpleMapi::CSimpleMapi() :
     m_lpfnMapiLogon(nullptr),
-    m_lpfnMapiLogoff(nullptr),
-    m_lpfnMapiSendMail(nullptr)
+    m_lpfnMapiLogoff(nullptr)
 {
     m_hMapiDll = LoadLibraryW(L"mapi32.dll");
     if ((m_hMapiDll == INVALID_HANDLE_VALUE) || (m_hMapiDll == nullptr))
@@ -38,10 +39,6 @@ CSimpleMapi::CSimpleMapi() :
     m_lpfnMapiLogoff = reinterpret_cast<LPMAPILOGOFF>(GetProcAddress(m_hMapiDll, "MAPILogoff"));
     if (!m_lpfnMapiLogoff)
         throw std::runtime_error("Couldn't find method MAPILogoff");
-
-    m_lpfnMapiSendMail = reinterpret_cast<LPMAPISENDMAIL>(GetProcAddress(m_hMapiDll, "MAPISendMail"));
-    if (!m_lpfnMapiSendMail)
-        throw std::runtime_error("Couldn't find method MAPISendMail");
 }
 
 CSimpleMapi::~CSimpleMapi()
@@ -75,14 +72,14 @@ ULONG CSimpleMapi::MAPILogoff(
     return m_lpfnMapiLogoff(lhSession, ulUIParam, flFlags, ulReserved);
 }
 
-ULONG CSimpleMapi::MAPISendMail(
+ULONG CSimpleMapi::MAPISendMailW(
     LHANDLE lhSession,
-    ULONG ulUIParam,
-    lpMapiMessage lpMessage,
+    ULONG_PTR ulUIParam,
+    lpMapiMessageW lpMessage,
     FLAGS flFlags,
     ULONG ulReserved )
 {
-    return m_lpfnMapiSendMail(lhSession, ulUIParam, lpMessage, flFlags, ulReserved);
+    return MAPISendMailHelper(lhSession, ulUIParam, lpMessage, flFlags, ulReserved);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

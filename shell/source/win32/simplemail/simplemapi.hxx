@@ -50,10 +50,10 @@ public:
         FLAGS flFlags,
         ULONG ulReserved );
 
-    ULONG MAPISendMail(
+    ULONG MAPISendMailW(
         LHANDLE lhSession,
-        ULONG ulUIParam,
-        lpMapiMessage lpMessage,
+        ULONG_PTR ulUIParam,
+        lpMapiMessageW lpMessage,
         FLAGS flFlags,
         ULONG ulReserved );
 
@@ -61,7 +61,6 @@ private:
     HMODULE         m_hMapiDll;
     LPMAPILOGON     m_lpfnMapiLogon;
     LPMAPILOGOFF    m_lpfnMapiLogoff;
-    LPMAPISENDMAIL  m_lpfnMapiSendMail;
 };
 
 #endif
