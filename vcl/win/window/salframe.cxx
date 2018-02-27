@@ -1605,10 +1605,10 @@ void WinSalFrame::GetWorkArea( tools::Rectangle &rRect )
 {
     RECT aRect;
     ImplSalGetWorkArea( mhWnd, &aRect, nullptr );
-    rRect.Left()     = aRect.left;
-    rRect.Right()    = aRect.right-1;
-    rRect.Top()      = aRect.top;
-    rRect.Bottom()   = aRect.bottom-1;
+    rRect.SetLeft( aRect.left );
+    rRect.SetRight( aRect.right-1 );
+    rRect.SetTop( aRect.top );
+    rRect.SetBottom( aRect.bottom-1 );
 }
 
 void WinSalFrame::GetClientSize( long& rWidth, long& rHeight )

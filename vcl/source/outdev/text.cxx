@@ -2384,14 +2384,14 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
             if( nWidthFactor > 1 )
             {
                 double fFactor = 1.0 / nWidthFactor;
-                aPixelRect.Left()
-                    = static_cast< long >(aPixelRect.Left() * fFactor);
-                aPixelRect.Right()
-                    = static_cast< long >(aPixelRect.Right() * fFactor);
-                aPixelRect.Top()
-                    = static_cast< long >(aPixelRect.Top() * fFactor);
-                aPixelRect.Bottom()
-                    = static_cast< long >(aPixelRect.Bottom() * fFactor);
+                aPixelRect.SetLeft(
+                    static_cast< long >(aPixelRect.Left() * fFactor) );
+                aPixelRect.SetRight(
+                    static_cast< long >(aPixelRect.Right() * fFactor) );
+                aPixelRect.SetTop(
+                    static_cast< long >(aPixelRect.Top() * fFactor) );
+                aPixelRect.SetBottom(
+                    static_cast< long >(aPixelRect.Bottom() * fFactor) );
             }
 
             Point aRotatedOfs( mnTextOffX, mnTextOffY );
