@@ -305,6 +305,9 @@
 #define STR_CLEAR_CHAR                          NC_("STR_CLEAR_CHAR", "Remove")
 #define STR_CLEAR_ALL_CHAR                      NC_("STR_CLEAR_ALL_CHAR", "Clear All")
 
+#define STR_PASSWORD_LEN                        NC_("STR_PASSWORD_LEN", "Password length")
+#define STR_PASSWORD_WARNING                    NC_("STR_PASSWORD_WARNING", "The password you have entered causes interoperability issues. Please enter a password that is shorter than 52 bytes, or longer than 55 bytes.")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

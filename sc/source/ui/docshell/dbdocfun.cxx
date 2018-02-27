@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/app.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
@@ -1008,14 +1007,17 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
 
     bool bOk = true;
     if (rParam.bReplace)
+    {
         if (rDoc.TestRemoveSubTotals( nTab, rParam ))
         {
-            bOk = ScopedVclPtrInstance<MessBox>( ScDocShell::GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, 0,
-                        // "StarCalc" "Delete Data?"
-                        ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
-                        ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_1 ) )->Execute()
-                   == RET_YES;
+            vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                      VclMessageType::Question,
+                                                      VclButtonsType::YesNo, ScGlobal::GetRscString(STR_MSSG_DOSUBTOTALS_1))); // "Delete Data?"
+            xBox->set_title(ScGlobal::GetRscString(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
+            bOk = xBox->run() == RET_YES;
         }
+    }
 
     if (bOk)
     {

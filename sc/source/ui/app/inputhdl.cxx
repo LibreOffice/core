@@ -2670,7 +2670,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
                 else
                     pParent = Application::GetDefDialogParent();
 
-                if ( pData->DoError( pParent, aString, aCursorPos ) )
+                if (pData->DoError(pParent ? pParent->GetFrameWeld() : nullptr, aString, aCursorPos))
                     bForget = true;                 // Do not take over input
             }
         }

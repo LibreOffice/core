@@ -135,7 +135,7 @@ public:
     bool IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
                     // TRUE -> break
-    bool DoError( vcl::Window* pParent, const OUString& rInput, const ScAddress& rPos ) const;
+    bool DoError(weld::Window* pParent, const OUString& rInput, const ScAddress& rPos) const;
     void DoCalcError( ScFormulaCell* pCell ) const;
 
     bool IsEmpty() const;

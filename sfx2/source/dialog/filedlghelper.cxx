@@ -2692,10 +2692,11 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
         {
             break;
         }
-        ScopedVclPtrInstance<MessBox>(Application::GetDefDialogParent(),
-            MessBoxStyle::Ok, 0, "Password length",
-            "The password you have entered causes interoperability issues. Please enter a password that is shorter than 52 bytes, or longer than 55 bytes."
-            )->Execute();
+        vcl::Window* pWin = Application::GetDefDialogParent();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr, VclMessageType::Warning,
+            VclButtonsType::Ok, SfxResId(STR_PASSWORD_LEN)));
+        xBox->set_secondary_text(SfxResId(STR_PASSWORD_WARNING));
+        xBox->run();
     }
     while (true);
     if ( pPasswordRequest->isPassword() )

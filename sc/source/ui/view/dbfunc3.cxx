@@ -21,8 +21,8 @@
 #include <scitems.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
+#include <vcl/weld.hxx>
 #include <svl/zforlist.hxx>
 #include <sfx2/app.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -418,14 +418,18 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
     WaitObject aWait( GetViewData().GetDialogParent() );
     bool bOk = true;
     if (rParam.bReplace)
+    {
         if (rDoc.TestRemoveSubTotals( nTab, rParam ))
         {
-            bOk = ScopedVclPtrInstance<MessBox>( GetViewData().GetDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, 0,
-                            // "StarCalc" "delete data?"
-                            ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
-                            ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_1 ) )->Execute()
-                    == RET_YES;
+            vcl::Window* pWin = GetViewData().GetDialogParent();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                      VclMessageType::Question, VclButtonsType::YesNo,
+                                                      ScGlobal::GetRscString(STR_MSSG_DOSUBTOTALS_1))); // "delete data?"
+            xBox->set_title(ScGlobal::GetRscString(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
+            xBox->set_default_response(RET_YES);
+            bOk = xBox->run() == RET_YES;
         }
+    }
 
     if (bOk)
     {

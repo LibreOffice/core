@@ -374,11 +374,11 @@ void ScValidationData::DoCalcError( ScFormulaCell* pCell ) const
 
     // true -> abort
 
-bool ScValidationData::DoError( vcl::Window* pParent, const OUString& rInput,
-                                const ScAddress& rPos ) const
+bool ScValidationData::DoError(weld::Window* pParent, const OUString& rInput,
+                               const ScAddress& rPos) const
 {
     if ( eErrorStyle == SC_VALERR_MACRO )
-        return DoMacro( rPos, rInput, nullptr, pParent ? pParent->GetFrameWeld() : nullptr);
+        return DoMacro(rPos, rInput, nullptr, pParent);
 
     //  Output error message
 
@@ -389,29 +389,39 @@ bool ScValidationData::DoError( vcl::Window* pParent, const OUString& rInput,
     if (aMessage.isEmpty())
         aMessage = ScGlobal::GetRscString( STR_VALID_DEFERROR );
 
-    //TODO: ErrorBox / WarningBox / InfoBox ?
-    //TODO: (with InfoBox always OK-Button only)
-
-    MessBoxStyle nStyle = MessBoxStyle::NONE;
+    VclButtonsType eStyle = VclButtonsType::Ok;
+    VclMessageType eType = VclMessageType::Error;
     switch (eErrorStyle)
     {
-        case SC_VALERR_STOP:
-            nStyle = MessBoxStyle::Ok | MessBoxStyle::DefaultOk;
+        case SC_VALERR_INFO:
+            eType = VclMessageType::Info;
+            eStyle = VclButtonsType::OkCancel;
             break;
         case SC_VALERR_WARNING:
-            nStyle = MessBoxStyle::OkCancel | MessBoxStyle::DefaultCancel;
-            break;
-        case SC_VALERR_INFO:
-            nStyle = MessBoxStyle::OkCancel | MessBoxStyle::DefaultOk;
+            eType = VclMessageType::Warning;
+            eStyle = VclButtonsType::OkCancel;
             break;
         default:
-        {
-            // added to avoid warnings
-        }
+            break;
     }
 
-    ScopedVclPtrInstance< MessBox > aBox( pParent, nStyle, 0, aTitle, aMessage );
-    sal_uInt16 nRet = aBox->Execute();
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent, eType,
+                                              eStyle, aMessage));
+    xBox->set_title(aTitle);
+
+    switch (eErrorStyle)
+    {
+        case SC_VALERR_INFO:
+            xBox->set_default_response(RET_OK);
+            break;
+        case SC_VALERR_WARNING:
+            xBox->set_default_response(RET_CANCEL);
+            break;
+        default:
+            break;
+    }
+
+    short nRet = xBox->run();
 
     return ( eErrorStyle == SC_VALERR_STOP || nRet == RET_CANCEL );
 }

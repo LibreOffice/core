@@ -29,7 +29,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 
 #include <spelldialog.hxx>
@@ -307,10 +306,13 @@ bool ScSpellingEngine::ShowTableWrapDialog()
 {
     vcl::Window* pParent = GetDialogParent();
     ScWaitCursorOff aWaitOff( pParent );
-    ScopedVclPtrInstance<MessBox> aMsgBox( pParent, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, 0,
-        ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
-        ScGlobal::GetRscString( STR_SPELLING_BEGIN_TAB) );
-    return aMsgBox->Execute() == RET_YES;
+
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+                                              VclMessageType::Question, VclButtonsType::YesNo,
+                                              ScGlobal::GetRscString(STR_SPELLING_BEGIN_TAB))); // "delete data?"
+    xBox->set_title(ScGlobal::GetRscString(STR_MSSG_DOSUBTOTALS_0));
+    xBox->set_default_response(RET_YES);
+    return xBox->run() == RET_YES;
 }
 
 void ScSpellingEngine::ShowFinishDialog()

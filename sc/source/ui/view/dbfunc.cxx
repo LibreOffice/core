@@ -20,7 +20,6 @@
 #include <scitems.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -339,10 +338,13 @@ void ScDBFunc::ToggleAutoFilter()
         {
             if (!bHeader)
             {
-                if ( ScopedVclPtrInstance<MessBox>( GetViewData().GetDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, 0,
-                        ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),       // "StarCalc"
-                        ScGlobal::GetRscString( STR_MSSG_MAKEAUTOFILTER_0 )     // header from first row?
-                    )->Execute() == RET_YES )
+                vcl::Window* pWin = GetViewData().GetDialogParent();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                          VclMessageType::Question,
+                                                          VclButtonsType::YesNo, ScGlobal::GetRscString(STR_MSSG_MAKEAUTOFILTER_0))); // header from first row?
+                xBox->set_title(ScGlobal::GetRscString(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
+                xBox->set_default_response(RET_YES);
+                if (xBox->run() == RET_YES)
                 {
                     pDBData->SetHeader( true );     //! Undo ??
                 }

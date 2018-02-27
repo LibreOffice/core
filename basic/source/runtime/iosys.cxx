@@ -21,8 +21,8 @@
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
 
@@ -720,12 +720,10 @@ void SbiIoSystem::Shutdown()
     // anything left to PRINT?
     if( !aOut.isEmpty() )
     {
-#if defined __GNUC__
         vcl::Window* pParent = Application::GetDefDialogParent();
-        ScopedVclPtrInstance<MessBox>( pParent, MessBoxStyle::Ok, 0, OUString(), aOut )->Execute();
-#else
-        ScopedVclPtrInstance<MessBox>( Application::GetDefDialogParent(), MessBoxStyle::Ok, 0, OUString(), aOut )->Execute();
-#endif
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr, VclMessageType::Warning,
+            VclButtonsType::Ok, aOut));
+        xBox->run();
     }
     aOut.clear();
 }
@@ -860,10 +858,12 @@ void SbiIoSystem::WriteCon(const OUString& rText)
         }
         {
             SolarMutexGuard aSolarGuard;
-            if( !ScopedVclPtrInstance<MessBox>(
-                        Application::GetDefDialogParent(),
-                        MessBoxStyle::OkCancel | MessBoxStyle::DefaultOk,
-                        0, OUString(), s)->Execute() )
+
+            vcl::Window* pParent = Application::GetDefDialogParent();
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr, VclMessageType::Warning,
+                VclButtonsType::OkCancel, s));
+            xBox->set_default_response(RET_OK);
+            if (!xBox->run())
             {
                 nError = ERRCODE_BASIC_USER_ABORT;
             }

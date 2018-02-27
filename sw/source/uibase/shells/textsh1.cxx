@@ -38,7 +38,9 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objitem.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/unohelp2.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
 #include <svl/macitem.hxx>
@@ -273,25 +275,11 @@ static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std:
 
 }
 
-static short lcl_AskRedlineFlags(vcl::Window *pWin)
+static short lcl_AskRedlineFlags(weld::Window *pWin)
 {
-    ScopedVclPtrInstance<MessBox> aQBox( pWin, MessBoxStyle::NONE, 0,
-                    SwResId( STR_REDLINE_TITLE ),
-                    SwResId( STR_REDLINE_MSG ) );
-    aQBox->SetImage(GetStandardQueryBoxImage());
-    const ButtonDialogFlags nBtnFlags = ButtonDialogFlags::Default |
-                        ButtonDialogFlags::OK |
-                        ButtonDialogFlags::Focus;
-
-    aQBox->AddButton(SwResId(STR_REDLINE_ACCEPT_ALL), RET_OK, nBtnFlags);
-    aQBox->GetPushButton( RET_OK )->SetHelpId(HID_AUTOFORMAT_ACCEPT);
-    aQBox->AddButton(SwResId(STR_REDLINE_REJECT_ALL), RET_CANCEL, ButtonDialogFlags::Cancel);
-    aQBox->GetPushButton( RET_CANCEL )->SetHelpId(HID_AUTOFORMAT_REJECT  );
-    aQBox->AddButton(SwResId(STR_REDLINE_EDIT), 2);
-    aQBox->GetPushButton( 2 )->SetHelpId(HID_AUTOFORMAT_EDIT_CHG);
-    aQBox->SetButtonHelpText( RET_OK, OUString() );
-
-    return aQBox->Execute();
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWin, "modules/swriter/ui/queryredlinedialog.ui"));
+    std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("QueryRedlineDialog"));
+    return xQBox->run();
 }
 
 static void sw_ParagraphDialogResult(SfxItemSet* pSet, SwWrtShell &rWrtSh, SfxRequest& rReq, SwPaM* pPaM)
@@ -741,7 +729,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             ScopedVclPtr<AbstractSwModalRedlineAcceptDlg> pDlg(pFact->CreateSwModalRedlineAcceptDlg(&GetView().GetEditWin()));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
 
-            switch (lcl_AskRedlineFlags(&GetView().GetEditWin()))
+            switch (lcl_AskRedlineFlags(GetView().GetEditWin().GetFrameWeld()))
             {
                 case RET_OK:
                 {
