@@ -535,19 +535,11 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
         {
             switch ( mnPngDepth )
             {
-                case 1 :
-#if defined(UNX) && !defined(MACOSX)
-                    // 1bpp indexed images are so badly mishandled by rest of LO on X11 that we
-                    // don't even bother, and turn them into 8bpp indexed ones with just two palette
-                    // entries instead.
-                    mnTargetDepth = 8;  // we have to expand the bitmap
-#endif
-                    mbPalette = false;
-                    break;
                 case 2 :
                     mnTargetDepth = 4;  // we have to expand the bitmap
                     mbPalette = false;
                     break;
+                case 1 :
                 case 4 :
                 case 8 :
                     mbPalette = false;
