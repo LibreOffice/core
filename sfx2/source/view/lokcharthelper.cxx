@@ -15,13 +15,14 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/fract.hxx>
 #include <tools/mapunit.hxx>
+#include <vcl/ITiledRenderable.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-
 
 #define TWIPS_PER_PIXEL 15
 
@@ -275,32 +276,34 @@ bool LokChartHelper::postMouseEvent(int nType, int nX, int nY,
         tools::Rectangle rChartBBox = GetChartBoundingBox();
         if (rChartBBox.IsInside(aMousePos))
         {
+            vcl::ITiledRenderable::LOKAsyncEventData* pLOKEv = new vcl::ITiledRenderable::LOKAsyncEventData;
+            pLOKEv->mpWindow = pChartWindow;
+            switch (nType)
+            {
+                case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
+                    pLOKEv->mnEvent = VclEventId::WindowMouseButtonDown;
+                    break;
+                case LOK_MOUSEEVENT_MOUSEBUTTONUP:
+                    pLOKEv->mnEvent = VclEventId::WindowMouseButtonUp;
+                    break;
+                case LOK_MOUSEEVENT_MOUSEMOVE:
+                    pLOKEv->mnEvent = VclEventId::WindowMouseMove;
+                    break;
+                default:
+                    assert(false);
+            }
+
             int nChartWinX = nX - rChartBBox.Left();
             int nChartWinY = nY - rChartBBox.Top();
 
             // chart window expects pixels, but the conversion factor
             // can depend on the client zoom
             Point aPos(nChartWinX * fScaleX, nChartWinY * fScaleY);
-            MouseEvent aEvent(aPos, nCount,
+            pLOKEv->maMouseEvent = MouseEvent(aPos, nCount,
                     MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
 
-            switch (nType)
-            {
-            case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
-                pChartWindow->MouseButtonDown(aEvent);
-                break;
-            case LOK_MOUSEEVENT_MOUSEBUTTONUP:
-                pChartWindow->MouseButtonUp(aEvent);
-                if (pChartWindow->IsTracking())
-                    pChartWindow->EndTracking(TrackingEventFlags::DontCallHdl);
-                break;
-            case LOK_MOUSEEVENT_MOUSEMOVE:
-                pChartWindow->MouseMove(aEvent);
-                break;
-            default:
-                assert(false);
-                break;
-            }
+            Application::PostUserEvent(Link<void*, void>(pLOKEv, vcl::ITiledRenderable::LOKPostAsyncEvent));
+
             return true;
         }
     }
