@@ -184,19 +184,30 @@ void ScreenshotTest::dumpDialogToPath(const OString& rUIXMLDescription)
         VclPtrInstance<Dialog> pDialog(Application::GetDefDialogParent(), WB_STDDIALOG | WB_SIZEABLE, Dialog::InitFlag::NoParent);
 
         {
-            VclBuilder aBuilder(pDialog, VclBuilderContainer::getUIRootDir(), OStringToOUString(rUIXMLDescription, RTL_TEXTENCODING_UTF8));
-            vcl::Window *pRoot = aBuilder.get_widget_root();
+            VclPtr<vcl::Window> aOwnedToplevel;
+
+            std::unique_ptr<VclBuilder> xBuilder(new VclBuilder(pDialog, VclBuilderContainer::getUIRootDir(), OStringToOUString(rUIXMLDescription, RTL_TEXTENCODING_UTF8)));
+            vcl::Window *pRoot = xBuilder->get_widget_root();
             Dialog *pRealDialog = dynamic_cast<Dialog*>(pRoot);
 
             if (!pRealDialog)
             {
                 pRealDialog = pDialog;
             }
+            else
+            {
+                aOwnedToplevel.set(pRoot);
+                xBuilder->drop_ownership(pRoot);
+            }
 
             pRealDialog->SetText(utl::ConfigManager::getProductName());
             pRealDialog->SetStyle(pDialog->GetStyle() | WB_CLOSEABLE);
 
             dumpDialogToPath(*pRealDialog);
+
+            if (VclBuilderContainer* pOwnedToplevel = dynamic_cast<VclBuilderContainer*>(aOwnedToplevel.get()))
+                pOwnedToplevel->m_pUIBuilder = std::move(xBuilder);
+            aOwnedToplevel.disposeAndClear();
         }
 
         pDialog.disposeAndClear();
