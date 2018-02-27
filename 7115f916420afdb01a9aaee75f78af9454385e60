@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da36d5c6_781a4d70",
+        "filename": "sw/uiconfig/swriter/ui/editfielddialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-02-27T15:36:42Z",
+      "side": 1,
+      "message": "Looks pretty nice as it is, screenshot at the ticket (with larger spacing on macOS).",
+      "parentUuid": "da36d5c6_d808992b",
+      "range": {
+        "startLine": 74,
+        "startChar": 25,
+        "endLine": 74,
+        "endChar": 32
+      },
+      "revId": "7115f916420afdb01a9aaee75f78af9454385e60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da36d5c6_b803e50c",
         "filename": "sw/uiconfig/swriter/ui/editfielddialog.ui",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-02-27T15:29:12Z",
       "side": 1,
       "message": "the \"edit\", \"prev\" and \"next\" all have the same translation context, we typically make them unique and base them off the id, i.e. |prev and |next",
+      "range": {
+        "startLine": 98,
+        "startChar": 90,
+        "endLine": 98,
+        "endChar": 94
+      },
+      "revId": "7115f916420afdb01a9aaee75f78af9454385e60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_982541b0",
+        "filename": "sw/uiconfig/swriter/ui/editfielddialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-02-27T15:36:42Z",
+      "side": 1,
+      "message": "Copy-paste issue ;-)",
+      "parentUuid": "da36d5c6_b803e50c",
       "range": {
         "startLine": 98,
         "startChar": 90,
