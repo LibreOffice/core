@@ -1397,8 +1397,27 @@ public:
     {
     }
 
+    void set_alternative_order()
+    {
+        std::vector<gint> aResponseOrder;
+        const gint aTemplateAltOrder[] =
+        {
+            GTK_RESPONSE_OK, GTK_RESPONSE_APPLY,
+            GTK_RESPONSE_ACCEPT, GTK_RESPONSE_YES,
+            GTK_RESPONSE_NO, GTK_RESPONSE_REJECT,
+            GTK_RESPONSE_CLOSE, GTK_RESPONSE_CANCEL
+        };
+        for (gint nResponse : aTemplateAltOrder)
+        {
+            if (gtk_dialog_get_widget_for_response(m_pDialog, nResponse))
+                aResponseOrder.push_back(nResponse);
+        }
+        gtk_dialog_set_alternative_button_order_from_array(m_pDialog, aResponseOrder.size(), aResponseOrder.data());
+    }
+
     virtual int run() override
     {
+        set_alternative_order();
         int ret;
         while (true)
         {
