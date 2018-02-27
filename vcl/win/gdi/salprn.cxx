@@ -1264,18 +1264,18 @@ sal_uInt32 WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, P
 
 void WinSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
                                   long& rOutWidth, long& rOutHeight,
-                                  long& rPageOffX, long& rPageOffY,
-                                  long& rPageWidth, long& rPageHeight )
+                                  Point& rPageOffset,
+                                  Size& rPaperSize )
 {
     HDC hDC = mhDC;
 
     rOutWidth   = GetDeviceCaps( hDC, HORZRES );
     rOutHeight  = GetDeviceCaps( hDC, VERTRES );
 
-    rPageOffX   = GetDeviceCaps( hDC, PHYSICALOFFSETX );
-    rPageOffY   = GetDeviceCaps( hDC, PHYSICALOFFSETY );
-    rPageWidth  = GetDeviceCaps( hDC, PHYSICALWIDTH );
-    rPageHeight = GetDeviceCaps( hDC, PHYSICALHEIGHT );
+    rPageOffset.setX( GetDeviceCaps( hDC, PHYSICALOFFSETX ) );
+    rPageOffset.setY( GetDeviceCaps( hDC, PHYSICALOFFSETY ) );
+    rPaperSize.setWidth( GetDeviceCaps( hDC, PHYSICALWIDTH ) );
+    rPaperSize.setHeight( GetDeviceCaps( hDC, PHYSICALHEIGHT ) );
 }
 
 
