@@ -99,10 +99,6 @@
 // More Help-IDs
 #define HID_EDIT_FORMULA                                        "SW_HID_EDIT_FORMULA"
 
-#define HID_AUTOFORMAT_REJECT                                   "SW_HID_AUTOFORMAT_REJECT"
-#define HID_AUTOFORMAT_ACCEPT                                   "SW_HID_AUTOFORMAT_ACCEPT"
-#define HID_AUTOFORMAT_EDIT_CHG                                 "SW_HID_AUTOFORMAT_EDIT_CHG"
-
 #define HID_AUTH_FIELD_IDENTIFIER                               "SW_HID_AUTH_FIELD_IDENTIFIER"
 #define HID_AUTH_FIELD_AUTHORITY_TYPE                           "SW_HID_AUTH_FIELD_AUTHORITY_TYPE"
 #define HID_AUTH_FIELD_ADDRESS                                  "SW_HID_AUTH_FIELD_ADDRESS"

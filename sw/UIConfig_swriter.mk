@@ -194,6 +194,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/querycontinuebegindialog \
 	sw/uiconfig/swriter/ui/querycontinueenddialog \
 	sw/uiconfig/swriter/ui/querydefaultcompatdialog \
+	sw/uiconfig/swriter/ui/queryredlinedialog \
 	sw/uiconfig/swriter/ui/queryrotateintostandarddialog \
 	sw/uiconfig/swriter/ui/querysavelabeldialog \
 	sw/uiconfig/swriter/ui/queryshowchangesdialog \
