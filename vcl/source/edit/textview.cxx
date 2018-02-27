@@ -1595,7 +1595,8 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
         if ( !pNode->GetText().isEmpty() && ( aPaM.GetIndex() < pNode->GetText().getLength() ) )
         {
             // If we are behind a portion, and the next portion has other direction, we must change position...
-            aEditCursor.Left() = aEditCursor.Right() = mpImpl->mpTextEngine->GetEditCursor( aPaM, false, true ).Left();
+            aEditCursor.SetLeft( mpImpl->mpTextEngine->GetEditCursor( aPaM, false, true ).Left() );
+            aEditCursor.SetRight( aEditCursor.Left() );
 
             TEParaPortion* pParaPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
 

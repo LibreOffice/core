@@ -126,19 +126,19 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
     switch( nPart )
     {
         case ControlPart::ButtonUp:
-            rResultRect.Bottom() = rResultRect.Top();
+            rResultRect.SetBottom( rResultRect.Top() );
             break;
 
         case ControlPart::ButtonDown:
-            rResultRect.Top() = rResultRect.Bottom();
+            rResultRect.SetTop( rResultRect.Bottom() );
             break;
 
         case ControlPart::ButtonLeft:
-            rResultRect.Right() = rResultRect.Left();
+            rResultRect.SetRight( rResultRect.Left() );
             break;
 
         case ControlPart::ButtonRight:
-            rResultRect.Left() = rResultRect.Right();
+            rResultRect.SetLeft( rResultRect.Right() );
             break;
 
         case ControlPart::TrackHorzArea:
@@ -1120,9 +1120,9 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
             {
                 tools::Rectangle aRect( aCtrlBoundRect );
                 if( aRect.GetHeight() < 16 )
-                    aRect.Bottom() = aRect.Top() + 9; // values taken from HIG for medium progress
+                    aRect.SetBottom( aRect.Top() + 9 ); // values taken from HIG for medium progress
                 else
-                    aRect.Bottom() = aRect.Top() + 15; // values taken from HIG for large progress
+                    aRect.SetBottom( aRect.Top() + 15 ); // values taken from HIG for large progress
                 rNativeBoundingRegion = aRect;
                 rNativeContentRegion = aRect;
                 toReturn = true;
@@ -1132,7 +1132,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
         case ControlType::IntroProgress:
             {
                 tools::Rectangle aRect( aCtrlBoundRect );
-                aRect.Bottom() = aRect.Top() + INTRO_PROGRESS_HEIGHT; // values taken from HIG for medium progress
+                aRect.SetBottom( aRect.Top() + INTRO_PROGRESS_HEIGHT ); // values taken from HIG for medium progress
                 rNativeBoundingRegion = aRect;
                 rNativeContentRegion = aRect;
                 toReturn = true;
@@ -1277,17 +1277,17 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     tools::Rectangle aRect(aCtrlBoundRect);
                     if( nStyle == DrawFrameStyle::DoubleIn )
                     {
-                        aRect.Left()    += 1;
-                        aRect.Top()     += 1;
+                        aRect.AdjustLeft(1);
+                        aRect.AdjustTop(1);
                         //rRect.Right() -= 1;
                         //rRect.Bottom()    -= 1;
                     }
                     else
                     {
-                        aRect.Left()    += 1;
-                        aRect.Top()     += 1;
-                        aRect.Right()   -= 1;
-                        aRect.Bottom()  -= 1;
+                        aRect.AdjustLeft(1);
+                        aRect.AdjustTop(1);
+                        aRect.AdjustRight(-1);
+                        aRect.AdjustBottom(-1);
                     }
 
                     rNativeContentRegion = aRect;

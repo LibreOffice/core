@@ -1502,7 +1502,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         OutputDevice *pOutDev = GetOutDev();
         if( pOutDev->HasMirroredGraphics() )
         {
-            mpGraphics->mirror( aPtDev.X(), this );
+            aPtDev.setX( mpGraphics->mirror2( aPtDev.X(), this ) );
 
             // #106948# always mirror our pos if our parent is not mirroring, even
             // if we are also not mirroring

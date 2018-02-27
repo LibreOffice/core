@@ -698,8 +698,8 @@ bool PspSalInfoPrinter::SetData(
 void PspSalInfoPrinter::GetPageInfo(
     const ImplJobSetup* pJobSetup,
     long& rOutWidth, long& rOutHeight,
-    long& rPageOffX, long& rPageOffY,
-    long& rPageWidth, long& rPageHeight )
+    Point& rPageOffset,
+    Size& rPaperSize )
 {
     if( ! pJobSetup )
         return;
@@ -728,10 +728,10 @@ return;
         aData.m_pParser->getMargins( aPaper, top, bottom, right, left );
     }
 
-    rPageWidth  = width * nDPI / 72;
-    rPageHeight = height * nDPI / 72;
-    rPageOffX   = left * nDPI / 72;
-    rPageOffY   = top * nDPI / 72;
+    rPaperSize.setWidth( width * nDPI / 72 );
+    rPaperSize.setHeight( height * nDPI / 72 );
+    rPageOffset.setX( left * nDPI / 72 );
+    rPageOffset.setY( top * nDPI / 72 );
     rOutWidth   = ( width  - left - right ) * nDPI / 72;
     rOutHeight  = ( height - top  - bottom ) * nDPI / 72;
 
