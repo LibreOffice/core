@@ -18165,7 +18165,7 @@ vcl/source/gdi/alpha.cxx
 vcl/source/gdi/animate.cxx
 vcl/source/gdi/base14.cxx
 vcl/source/gdi/bitmap.cxx
-vcl/source/gdi/bitmap3.cxx
+vcl/source/gdi/bitmapconvert.cxx
 vcl/source/gdi/bitmap4.cxx
 vcl/source/gdi/bitmapex.cxx
 vcl/source/gdi/bmpacc.cxx
