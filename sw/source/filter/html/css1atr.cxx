@@ -226,7 +226,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
     {
         m_bFirstCSS1Rule = false;
         OutNewLine();
-        sOut.append("<" OOO_STRING_SVTOOLS_HTML_style " "
+        sOut.append("<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_style " "
                     OOO_STRING_SVTOOLS_HTML_O_type "=\"text/css\">");
     //  Optional CSS2 code for dot leaders (dotted line between the Table of Contents titles and page numbers):
     //  (More information: http://www.w3.org/Style/Examples/007/leaders.en.html)
@@ -288,7 +288,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
             }
             else
             {
-                HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_span, false );
+                HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_span, false );
                 return;
             }
             break;
@@ -590,7 +590,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
         DecIndentLevel();
 
         OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_style, false );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_style, false );
     }
     else
     {
@@ -2822,7 +2822,7 @@ static Writer& OutCSS1_SwFormatDrop( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span, false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span, false );
     }
 
     return rWrt;
@@ -3384,7 +3384,7 @@ Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )
         }
         else
         {
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span, false );
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span, false );
             return rWrt;
         }
     }
