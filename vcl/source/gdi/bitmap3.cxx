@@ -340,26 +340,6 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
                         }
                     }
                 }
-                else if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr &&
-                         pWriteAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal )
-                {
-                    nShift += 8;
-
-                    for( long nY = 0; nY < nHeight; nY++ )
-                    {
-                        Scanline pReadScan = pReadAcc->GetScanline( nY );
-                        Scanline pWriteScan = pWriteAcc->GetScanline( nY );
-
-                        for( long nX = 0; nX < nWidth; nX++ )
-                        {
-                            const sal_uLong nB = *pReadScan++;
-                            const sal_uLong nG = *pReadScan++;
-                            const sal_uLong nR = *pReadScan++;
-
-                            *pWriteScan++ = static_cast<sal_uInt8>( ( nB * 28UL + nG * 151UL + nR * 77UL ) >> nShift );
-                        }
-                    }
-                }
                 else if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N24BitTcRgb &&
                          pWriteAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal )
                 {
