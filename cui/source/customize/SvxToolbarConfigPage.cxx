@@ -751,21 +751,17 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
     }
 
     SvxEntries* pEntries = pToolbar->GetEntries();
-    SvxEntries::const_iterator iter = pEntries->begin();
-
-    for ( ; iter != pEntries->end(); ++iter )
+    for (auto const& entry : *pEntries)
     {
-        SvxConfigEntry* pEntry = *iter;
+        SvTreeListEntry* pNewLBEntry = InsertEntryIntoUI(entry);
 
-        SvTreeListEntry* pNewLBEntry = InsertEntryIntoUI( pEntry );
-
-        if(pEntry->IsSeparator())
+        if(entry->IsSeparator())
             m_pContentsListBox->SetCheckButtonInvisible( pNewLBEntry );
 
-        if (pEntry->IsBinding())
+        if (entry->IsBinding())
         {
             m_pContentsListBox->SetCheckButtonState( pNewLBEntry,
-                pEntry->IsVisible() ? SvButtonState::Checked : SvButtonState::Unchecked );
+                entry->IsVisible() ? SvButtonState::Checked : SvButtonState::Unchecked );
         }
         else
         {

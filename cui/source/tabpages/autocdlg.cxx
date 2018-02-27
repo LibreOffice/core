@@ -1051,23 +1051,21 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
         SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eLang);
         m_pReplaceTLB->SetUpdateMode(false);
         SvxAutocorrWordList::Content aContent = pWordList->getSortedContent();
-        for( SvxAutocorrWordList::Content::const_iterator it = aContent.begin();
-             it != aContent.end(); ++it )
+        for (auto const& elem : aContent)
         {
-            SvxAutocorrWord* pWordPtr = *it;
-            bool bTextOnly = pWordPtr->IsTextOnly();
+            bool bTextOnly = elem->IsTextOnly();
             // formatted text is only in Writer
             if(bSWriter || bTextOnly)
             {
-                OUString sEntry = pWordPtr->GetShort() + "\t" + pWordPtr->GetLong();
+                OUString sEntry = elem->GetShort() + "\t" + elem->GetLong();
                 SvTreeListEntry* pEntry = m_pReplaceTLB->InsertEntry(sEntry);
-                m_pTextOnlyCB->Check(pWordPtr->IsTextOnly());
+                m_pTextOnlyCB->Check(elem->IsTextOnly());
                 if(!bTextOnly)
                     pEntry->SetUserData(m_pTextOnlyCB); // that means: with format info
             }
             else
             {
-                aFormatText.insert(pWordPtr->GetShort());
+                aFormatText.insert(elem->GetShort());
             }
         }
         m_pNewReplacePB->Enable(false);
@@ -1358,9 +1356,9 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit&, rEdt, void)
                                 SvTabListBox::GetEntryText( pFirstSel, 1 ) );
     if( bEnableNew )
     {
-        for(std::set<OUString>::iterator i = aFormatText.begin(); i != aFormatText.end(); ++i)
+        for (auto const& elem : aFormatText)
         {
-            if((*i) == rShortTxt)
+            if(elem == rShortTxt)
             {
                 bEnableNew = false;
                 break;
@@ -1372,9 +1370,9 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit&, rEdt, void)
 
 static bool lcl_FindInArray(std::vector<OUString>& rStrings, const OUString& rString)
 {
-    for(std::vector<OUString>::iterator i = rStrings.begin(); i != rStrings.end(); ++i)
+    for (auto const& elem : rStrings)
     {
-        if((*i) == rString)
+        if(elem == rString)
         {
             return true;
         }
@@ -1485,9 +1483,9 @@ bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet*  )
                     }
                 }
 
-                for(std::vector<OUString>::iterator it = rArrays.aDoubleCapsStrings.begin(); it != rArrays.aDoubleCapsStrings.end(); ++it)
+                for (auto const& elem : rArrays.aDoubleCapsStrings)
                 {
-                    pWrdList->insert(*it);
+                    pWrdList->insert(elem);
                 }
                 pAutoCorrect->SaveWrdSttExceptList(eCurLang);
             }
@@ -1507,9 +1505,9 @@ bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet*  )
                     }
                 }
 
-                for(std::vector<OUString>::iterator it = rArrays.aAbbrevStrings.begin(); it != rArrays.aAbbrevStrings.end(); ++it)
+                for (auto const& elem : rArrays.aAbbrevStrings)
                 {
-                    pCplList->insert(*it);
+                    pCplList->insert(elem);
                 }
 
                 pAutoCorrect->SaveCplSttExceptList(eCurLang);
@@ -1621,11 +1619,11 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(bool bFromReset,
     if(aStringsTable.find(eLang) != aStringsTable.end())
     {
         StringsArrays& rArrays = aStringsTable[eLang];
-        for(std::vector<OUString>::iterator i = rArrays.aAbbrevStrings.begin(); i != rArrays.aAbbrevStrings.end(); ++i)
-            m_pAbbrevLB->InsertEntry(*i);
+        for (auto const& elem : rArrays.aAbbrevStrings)
+            m_pAbbrevLB->InsertEntry(elem);
 
-        for(std::vector<OUString>::iterator i = rArrays.aDoubleCapsStrings.begin(); i != rArrays.aDoubleCapsStrings.end(); ++i)
-            m_pDoubleCapsLB->InsertEntry(*i);
+        for (auto const& elem : rArrays.aDoubleCapsStrings)
+            m_pDoubleCapsLB->InsertEntry(elem);
     }
     else
     {

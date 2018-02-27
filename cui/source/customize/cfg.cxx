@@ -158,13 +158,9 @@ void printProperties(
 
 void printEntries(SvxEntries* entries)
 {
-    SvxEntries::const_iterator iter = entries->begin();
-
-    for ( ; iter != entries->end(); ++iter )
+    for (auto const& entry : *entries)
     {
-        SvxConfigEntry* entry = *iter;
-
-        SAL_WARN("cui", "printEntries: " << entry->GetName());
+        SAL_WARN("cui", "printEntries: " << entry.GetName());
     }
 }
 
@@ -621,17 +617,12 @@ void MenuSaveInData::Apply(
     uno::Reference< container::XIndexContainer > const & rMenuBar,
     uno::Reference< lang::XSingleComponentFactory >& rFactory )
 {
-    SvxEntries::const_iterator iter = GetEntries()->begin();
-    SvxEntries::const_iterator end = GetEntries()->end();
-
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
 
-    for ( ; iter != end; ++iter )
+    for (auto const& entryData : *GetEntries())
     {
-        SvxConfigEntry* pEntryData = *iter;
-
         uno::Sequence< beans::PropertyValue > aPropValueSeq =
-            SvxConfigPageHelper::ConvertSvxConfigEntry( pEntryData );
+            SvxConfigPageHelper::ConvertSvxConfigEntry(entryData);
 
         uno::Reference< container::XIndexContainer > xSubMenuBar(
             rFactory->createInstanceWithContext( xContext ),
@@ -643,7 +634,7 @@ void MenuSaveInData::Apply(
         aPropValueSeq[nIndex].Value <<= xSubMenuBar;
         rMenuBar->insertByIndex(
             rMenuBar->getCount(), uno::Any( aPropValueSeq ));
-        ApplyMenu( xSubMenuBar, rFactory, pEntryData );
+        ApplyMenu( xSubMenuBar, rFactory, entryData );
     }
 }
 
@@ -654,17 +645,12 @@ void SaveInData::ApplyMenu(
 {
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
 
-    SvxEntries::const_iterator iter = pMenuData->GetEntries()->begin();
-    SvxEntries::const_iterator end = pMenuData->GetEntries()->end();
-
-    for ( ; iter != end; ++iter )
+    for (auto const& entry : *pMenuData->GetEntries())
     {
-        SvxConfigEntry* pEntry = *iter;
-
-        if ( pEntry->IsPopup() )
+        if (entry->IsPopup())
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
-                SvxConfigPageHelper::ConvertSvxConfigEntry( pEntry );
+                SvxConfigPageHelper::ConvertSvxConfigEntry(entry);
 
             uno::Reference< container::XIndexContainer > xSubMenuBar(
                 rFactory->createInstanceWithContext( xContext ),
@@ -678,10 +664,10 @@ void SaveInData::ApplyMenu(
             rMenuBar->insertByIndex(
                 rMenuBar->getCount(), uno::Any( aPropValueSeq ));
 
-            ApplyMenu( xSubMenuBar, rFactory, pEntry );
-            pEntry->SetModified( false );
+            ApplyMenu( xSubMenuBar, rFactory, entry );
+            entry->SetModified( false );
         }
-        else if ( pEntry->IsSeparator() )
+        else if (entry->IsSeparator())
         {
             rMenuBar->insertByIndex(
                 rMenuBar->getCount(), uno::Any( m_aSeparatorSeq ));
@@ -689,7 +675,7 @@ void SaveInData::ApplyMenu(
         else
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
-                SvxConfigPageHelper::ConvertSvxConfigEntry( pEntry );
+                SvxConfigPageHelper::ConvertSvxConfigEntry(entry);
             rMenuBar->insertByIndex(
                 rMenuBar->getCount(), uno::Any( aPropValueSeq ));
         }
@@ -1544,19 +1530,15 @@ void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry const * pToSelect )
 
     if ( GetSaveInData() && GetSaveInData()->GetEntries() )
     {
-        SvxEntries::const_iterator iter = GetSaveInData()->GetEntries()->begin();
-        SvxEntries::const_iterator end = GetSaveInData()->GetEntries()->end();
-
-        for ( ; iter != end; ++iter )
+        for (auto const& entryData : *GetSaveInData()->GetEntries())
         {
-            SvxConfigEntry* pEntryData = *iter;
-            const sal_Int32 nPos = m_pTopLevelListBox->InsertEntry( SvxConfigPageHelper::stripHotKey( pEntryData->GetName() ) );
-            m_pTopLevelListBox->SetEntryData( nPos, pEntryData );
+            const sal_Int32 nPos = m_pTopLevelListBox->InsertEntry( SvxConfigPageHelper::stripHotKey(entryData->GetName()) );
+            m_pTopLevelListBox->SetEntryData( nPos, entryData );
 
-            if ( pEntryData == pToSelect )
+            if ( entryData == pToSelect )
                 nSelectionPos = nPos;
 
-            AddSubMenusToUI( SvxConfigPageHelper::stripHotKey( pEntryData->GetName() ), pEntryData );
+            AddSubMenusToUI( SvxConfigPageHelper::stripHotKey( entryData->GetName() ), entryData );
         }
     }
 #ifdef DBG_UTIL
@@ -1578,21 +1560,16 @@ void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry const * pToSelect )
 void SvxConfigPage::AddSubMenusToUI(
     const OUString& rBaseTitle, SvxConfigEntry const * pParentData )
 {
-    SvxEntries::const_iterator iter = pParentData->GetEntries()->begin();
-    SvxEntries::const_iterator end = pParentData->GetEntries()->end();
-
-    for ( ; iter != end; ++iter )
+    for (auto const& entryData : *pParentData->GetEntries())
     {
-        SvxConfigEntry* pEntryData = *iter;
-
-        if ( pEntryData->IsPopup() )
+        if (entryData->IsPopup())
         {
-            OUString subMenuTitle = rBaseTitle + aMenuSeparatorStr + SvxConfigPageHelper::stripHotKey( pEntryData->GetName() );
+            OUString subMenuTitle = rBaseTitle + aMenuSeparatorStr + SvxConfigPageHelper::stripHotKey(entryData->GetName());
 
             const sal_Int32 nPos = m_pTopLevelListBox->InsertEntry( subMenuTitle );
-            m_pTopLevelListBox->SetEntryData( nPos, pEntryData );
+            m_pTopLevelListBox->SetEntryData( nPos, entryData );
 
-            AddSubMenusToUI( subMenuTitle, pEntryData );
+            AddSubMenusToUI( subMenuTitle, entryData );
         }
     }
 }
@@ -1600,21 +1577,17 @@ void SvxConfigPage::AddSubMenusToUI(
 SvxEntries* SvxConfigPage::FindParentForChild(
     SvxEntries* pRootEntries, SvxConfigEntry* pChildData )
 {
-    SvxEntries::const_iterator iter = pRootEntries->begin();
-    SvxEntries::const_iterator end = pRootEntries->end();
-
-    for ( ; iter != end; ++iter )
+    for (auto const& entryData : *pRootEntries)
     {
-        SvxConfigEntry* pEntryData = *iter;
 
-        if ( pEntryData == pChildData )
+        if (entryData == pChildData)
         {
             return pRootEntries;
         }
-        else if ( pEntryData->IsPopup() )
+        else if (entryData->IsPopup())
         {
             SvxEntries* result =
-                FindParentForChild( pEntryData->GetEntries(), pChildData );
+                FindParentForChild( entryData->GetEntries(), pChildData );
 
             if ( result != nullptr )
             {
@@ -1657,12 +1630,9 @@ SvTreeListEntry* SvxConfigPage::AddFunction(
 
     if ( !bAllowDuplicates )
     {
-        for (SvxEntries::const_iterator iter(pParent->GetEntries()->begin()), end(pParent->GetEntries()->end());
-             iter != end ; ++iter)
+        for (auto const& entry : *pParent->GetEntries())
         {
-            SvxConfigEntry *pCurEntry = *iter;
-
-            if ( pCurEntry->GetCommand() == pNewEntryData->GetCommand() )
+            if ( entry->GetCommand() == pNewEntryData->GetCommand() )
             {
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                           VclMessageType::Info, VclButtonsType::Ok, CuiResId(RID_SVXSTR_MNUCFG_ALREADY_INCLUDED)));
@@ -1932,21 +1902,17 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     if ( entries != nullptr )
     {
         mpEntries = new SvxEntries;
-        SvxEntries::const_iterator iter = entries->begin();
-
-        while ( iter != entries->end() )
+        for (auto const& entry : *entries)
         {
-            SvxConfigEntry* pEntry = *iter;
             SvTreeListEntry* pLBEntry =
-                m_pMenuListBox->InsertEntry( SvxConfigPageHelper::stripHotKey( pEntry->GetName() ) );
-            pLBEntry->SetUserData( pEntry );
-            mpEntries->push_back( pEntry );
+                m_pMenuListBox->InsertEntry( SvxConfigPageHelper::stripHotKey( entry->GetName() ) );
+            pLBEntry->SetUserData(entry);
+            mpEntries->push_back(entry);
 
-            if ( pEntry == selection )
+            if (entry == selection)
             {
                 m_pMenuListBox->Select( pLBEntry );
             }
-            ++iter;
         }
     }
 
@@ -2127,11 +2093,9 @@ SvxConfigEntry::~SvxConfigEntry()
 {
     if ( mpEntries != nullptr )
     {
-        SvxEntries::const_iterator iter = mpEntries->begin();
-
-        for ( ; iter != mpEntries->end(); ++iter )
+        for (auto const& entry : *mpEntries)
         {
-            delete *iter;
+            delete entry;
         }
         delete mpEntries;
     }
@@ -2445,19 +2409,12 @@ ToolbarSaveInData::SetEntries( SvxEntries* pNewEntries )
 bool
 ToolbarSaveInData::HasURL( const OUString& rURL )
 {
-    SvxEntries::const_iterator iter = GetEntries()->begin();
-    SvxEntries::const_iterator end = GetEntries()->end();
-
-    while ( iter != end )
+    for (auto const& entry : *GetEntries())
     {
-        SvxConfigEntry* pEntry = *iter;
-
-        if ( pEntry->GetCommand() == rURL )
+        if (entry->GetCommand() == rURL)
         {
-            return !pEntry->IsParentData();
+            return !entry->IsParentData();
         }
-
-        ++iter;
     }
     return false;
 }
@@ -2470,17 +2427,12 @@ bool ToolbarSaveInData::HasSettings()
 
 void ToolbarSaveInData::Reset()
 {
-    SvxEntries::const_iterator toolbars = GetEntries()->begin();
-    SvxEntries::const_iterator end = GetEntries()->end();
-
     // reset each toolbar by calling removeSettings for its toolbar URL
-    for ( ; toolbars != end; ++toolbars )
+    for (auto const& entry : *GetEntries())
     {
-        SvxConfigEntry* pToolbar = *toolbars;
-
         try
         {
-            OUString url = pToolbar->GetCommand();
+            OUString url = entry->GetCommand();
             GetConfigManager()->removeSettings( url );
         }
         catch ( uno::Exception& )
@@ -2522,17 +2474,12 @@ void ToolbarSaveInData::ApplyToolbar(
 {
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
 
-    SvxEntries::const_iterator iter = pToolbarData->GetEntries()->begin();
-    SvxEntries::const_iterator end = pToolbarData->GetEntries()->end();
-
-    for ( ; iter != end; ++iter )
+    for (auto const& entry : *pToolbarData->GetEntries())
     {
-        SvxConfigEntry* pEntry = *iter;
-
-        if ( pEntry->IsPopup() )
+        if (entry->IsPopup())
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
-                SvxConfigPageHelper::ConvertToolbarEntry( pEntry );
+                SvxConfigPageHelper::ConvertToolbarEntry(entry);
 
             uno::Reference< container::XIndexContainer > xSubMenuBar(
                 rFactory->createInstanceWithContext( xContext ),
@@ -2545,9 +2492,9 @@ void ToolbarSaveInData::ApplyToolbar(
             rToolbarBar->insertByIndex(
                 rToolbarBar->getCount(), uno::Any( aPropValueSeq ));
 
-            ApplyToolbar( xSubMenuBar, rFactory, pEntry );
+            ApplyToolbar(xSubMenuBar, rFactory, entry);
         }
-        else if ( pEntry->IsSeparator() )
+        else if (entry->IsSeparator())
         {
             rToolbarBar->insertByIndex(
                 rToolbarBar->getCount(), uno::Any( m_aSeparatorSeq ));
@@ -2555,7 +2502,7 @@ void ToolbarSaveInData::ApplyToolbar(
         else
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
-                SvxConfigPageHelper::ConvertToolbarEntry( pEntry );
+                SvxConfigPageHelper::ConvertToolbarEntry(entry);
 
             rToolbarBar->insertByIndex(
                 rToolbarBar->getCount(), uno::Any( aPropValueSeq ));
@@ -2720,12 +2667,10 @@ void ToolbarSaveInData::RestoreToolbar( SvxConfigEntry* pToolbar )
 
         // After reloading, ensure that the icon is reset of each entry
         // in the toolbar
-        SvxEntries::const_iterator iter = pToolbar->GetEntries()->begin();
         uno::Sequence< OUString > aURLSeq( 1 );
-        for ( ; iter != pToolbar->GetEntries()->end(); ++iter )
+        for (auto const& entry : *pToolbar->GetEntries())
         {
-            SvxConfigEntry* pEntry = *iter;
-            aURLSeq[ 0 ] = pEntry->GetCommand();
+            aURLSeq[ 0 ] = entry->GetCommand();
 
             try
             {
@@ -2940,16 +2885,15 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
             aImageInfo1.emplace( names[n], false );
     }
     sal_uInt16 nId = 1;
-    ImageInfo::const_iterator pConstIter = aImageInfo1.begin();
     uno::Sequence< OUString > name( 1 );
-    while ( pConstIter != aImageInfo1.end() )
+    for (auto const& elem : aImageInfo1)
     {
-        name[ 0 ] = pConstIter->first;
+        name[ 0 ] = elem.first;
         uno::Sequence< uno::Reference< graphic::XGraphic> > graphics = m_xImportedImageManager->getImages( SvxConfigPageHelper::GetImageType(), name );
         if ( graphics.getLength() > 0 )
         {
             Image img = Image( graphics[ 0 ] );
-            pTbSymbol->InsertItem( nId, img, pConstIter->first );
+            pTbSymbol->InsertItem( nId, img, elem.first );
 
             graphics[ 0 ]->acquire();
 
@@ -2958,7 +2902,6 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
 
             ++nId;
         }
-        ++pConstIter;
     }
 
     ImageInfo                 aImageInfo;
@@ -2981,15 +2924,14 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     }
 
     // large growth factor, expecting many entries
-    pConstIter = aImageInfo.begin();
-    while ( pConstIter != aImageInfo.end() )
+    for (auto const& elem : aImageInfo)
     {
-        name[ 0 ] = pConstIter->first;
+        name[ 0 ] = elem.first;
 
         uno::Sequence< uno::Reference< graphic::XGraphic> > graphics;
         try
         {
-            if ( pConstIter->second )
+            if (elem.second)
                 graphics = m_xImageManager->getImages( SvxConfigPageHelper::GetImageType(), name );
             else
                 graphics = m_xParentImageManager->getImages( SvxConfigPageHelper::GetImageType(), name );
@@ -3005,7 +2947,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
             Image img = Image( graphics[ 0 ] );
             if ( !img.GetBitmapEx().IsEmpty() )
             {
-                pTbSymbol->InsertItem( nId, img, pConstIter->first );
+                pTbSymbol->InsertItem( nId, img, elem.first );
 
                 uno::Reference< graphic::XGraphic > xGraphic = graphics[ 0 ];
 
@@ -3018,8 +2960,6 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
                 ++nId;
             }
         }
-
-        ++pConstIter;
     }
 
     pBtnDelete->Enable( false );

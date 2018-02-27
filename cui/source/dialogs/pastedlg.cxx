@@ -111,11 +111,9 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
 
     ObjectLB().SetUpdateMode( false );
 
-    DataFlavorExVector::iterator aIter( const_cast<DataFlavorExVector&>(*pFormats).begin() ),
-                                 aEnd( const_cast<DataFlavorExVector&>(*pFormats).end() );
-    while( aIter != aEnd )
+    for (auto const& format : *pFormats)
     {
-        SotClipboardFormatId nFormat = (*aIter++).mnSotId;
+        SotClipboardFormatId nFormat = format.mnSotId;
 
         std::map< SotClipboardFormatId, OUString >::iterator itName =
             aSupplementMap.find( nFormat );

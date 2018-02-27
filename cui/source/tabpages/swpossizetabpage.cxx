@@ -680,10 +680,9 @@ void SvxSwPosSizeTabPage::setOptimalFrmWidth()
     std::sort(aFrames.begin(), aFrames.end());
     aFrames.erase(std::unique(aFrames.begin(), aFrames.end()), aFrames.end());
 
-    for (std::vector<SvxSwFramePosString::StringId>::const_iterator aI = aFrames.begin(), aEnd = aFrames.end();
-        aI != aEnd; ++aI)
+    for (auto const& frame : aFrames)
     {
-        m_pHoriLB->InsertEntry(SvxSwFramePosString::GetString(*aI));
+        m_pHoriLB->InsertEntry(SvxSwFramePosString::GetString(frame));
     }
 
     Size aBiggest(m_pHoriLB->GetOptimalSize());
@@ -721,10 +720,9 @@ void SvxSwPosSizeTabPage::setOptimalRelWidth()
     std::sort(aRels.begin(), aRels.end());
     aRels.erase(std::unique(aRels.begin(), aRels.end()), aRels.end());
 
-    for (std::vector<SvxSwFramePosString::StringId>::const_iterator aI = aRels.begin(), aEnd = aRels.end();
-        aI != aEnd; ++aI)
+    for (auto const& elem : aRels)
     {
-        m_pHoriLB->InsertEntry(SvxSwFramePosString::GetString(*aI));
+        m_pHoriLB->InsertEntry(SvxSwFramePosString::GetString(elem));
     }
 
     Size aBiggest(m_pHoriLB->GetOptimalSize());

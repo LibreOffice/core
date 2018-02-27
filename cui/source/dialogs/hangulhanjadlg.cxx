@@ -1301,12 +1301,14 @@ namespace svx
     {
         if( m_nNumOfEntries )
         {
-            for( std::vector<OUString*>::iterator it = m_vElements.begin(); it != m_vElements.end(); ++it )
-                if( *it != nullptr )
+            for (auto & vElement : m_vElements)
+            {
+                if( vElement != nullptr )
                 {
-                    delete *it;
-                    *it = nullptr;
-                 }
+                    delete vElement;
+                    vElement = nullptr;
+                }
+            }
 
             m_nNumOfEntries = m_nAct = 0;
         }

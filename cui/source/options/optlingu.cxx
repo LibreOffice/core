@@ -1076,14 +1076,12 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
         if (!pLinguData)
             pLinguData = new SvxLinguData_Impl;
 
-        LangImplNameTable::const_iterator aIt;
-
         // update spellchecker configuration entries
         const LangImplNameTable *pTable = &pLinguData->GetSpellTable();
-        for (aIt = pTable->begin();  aIt != pTable->end();  ++aIt)
+        for (auto const& elem : *pTable)
         {
-            LanguageType nLang = aIt->first;
-            const Sequence< OUString > aImplNames( aIt->second );
+            LanguageType nLang = elem.first;
+            const Sequence< OUString > aImplNames(elem.second);
             uno::Reference< XLinguServiceManager2 > xMgr( pLinguData->GetManager() );
             Locale aLocale( LanguageTag::convertToLocale(nLang) );
             if (xMgr.is())
@@ -1092,10 +1090,10 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
 
         // update grammar checker configuration entries
         pTable = &pLinguData->GetGrammarTable();
-        for (aIt = pTable->begin();  aIt != pTable->end();  ++aIt)
+        for (auto const& elem : *pTable)
         {
-            LanguageType nLang = aIt->first;
-            const Sequence< OUString > aImplNames( aIt->second );
+            LanguageType nLang = elem.first;
+            const Sequence< OUString > aImplNames(elem.second);
             uno::Reference< XLinguServiceManager2 > xMgr( pLinguData->GetManager() );
             Locale aLocale( LanguageTag::convertToLocale(nLang) );
             if (xMgr.is())
@@ -1104,10 +1102,10 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
 
         // update hyphenator configuration entries
         pTable = &pLinguData->GetHyphTable();
-        for (aIt = pTable->begin();  aIt != pTable->end();  ++aIt)
+        for (auto const& elem : *pTable)
         {
-            LanguageType nLang = aIt->first;
-            const Sequence< OUString > aImplNames( aIt->second );
+            LanguageType nLang = elem.first;
+            const Sequence< OUString > aImplNames(elem.second);
             uno::Reference< XLinguServiceManager2 > xMgr( pLinguData->GetManager() );
             Locale aLocale( LanguageTag::convertToLocale(nLang) );
             if (xMgr.is())
@@ -1116,10 +1114,10 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
 
         // update thesaurus configuration entries
         pTable = &pLinguData->GetThesTable();
-        for (aIt = pTable->begin();  aIt != pTable->end();  ++aIt)
+        for (auto const& elem : *pTable)
         {
-            LanguageType nLang = aIt->first;
-            const Sequence< OUString > aImplNames( aIt->second );
+            LanguageType nLang = elem.first;
+            const Sequence< OUString > aImplNames(elem.second);
             uno::Reference< XLinguServiceManager2 > xMgr( pLinguData->GetManager() );
             Locale aLocale( LanguageTag::convertToLocale(nLang) );
             if (xMgr.is())

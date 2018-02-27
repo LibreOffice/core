@@ -212,9 +212,9 @@ void SvxColorTabPage::FillPaletteLB()
 {
     m_pSelectPalette->Clear();
     std::vector<OUString> aPaletteList = maPaletteManager.GetPaletteList();
-    for( std::vector<OUString>::iterator it = aPaletteList.begin(); it != aPaletteList.end(); ++it )
+    for (auto const& palette : aPaletteList)
     {
-        m_pSelectPalette->InsertEntry( *it );
+        m_pSelectPalette->InsertEntry(palette);
     }
     OUString aPaletteName( officecfg::Office::Common::UserColors::PaletteName::get() );
     m_pSelectPalette->SelectEntry(aPaletteName);

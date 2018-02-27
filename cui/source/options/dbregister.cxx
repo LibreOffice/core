@@ -223,12 +223,10 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet* rSet )
 
     const DatabaseRegistrations& rRegistrations = pRegistrations->getRegistrations();
     m_nOldCount = rRegistrations.size();
-    DatabaseRegistrations::const_iterator aIter = rRegistrations.begin();
-    DatabaseRegistrations::const_iterator aEnd = rRegistrations.end();
-    for ( ; aIter != aEnd; ++aIter )
+    for (auto const& elem : rRegistrations)
     {
-        OFileNotation aTransformer( aIter->second.sLocation );
-        insertNewEntry( aIter->first, aTransformer.get( OFileNotation::N_SYSTEM ), aIter->second.bReadOnly );
+        OFileNotation aTransformer( elem.second.sLocation );
+        insertNewEntry( elem.first, aTransformer.get( OFileNotation::N_SYSTEM ), elem.second.bReadOnly );
     }
 
     OUString aUserData = GetUserData();
