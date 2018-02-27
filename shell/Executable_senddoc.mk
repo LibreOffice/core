@@ -17,10 +17,6 @@ $(eval $(call gb_Executable_use_libraries,senddoc,\
 	sal \
 ))
 
-$(eval $(call gb_Executable_use_static_libraries,senddoc,\
-	simplemapi \
-))
-
 $(eval $(call gb_Executable_add_exception_objects,senddoc,\
     shell/source/win32/simplemail/senddoc \
 ))
