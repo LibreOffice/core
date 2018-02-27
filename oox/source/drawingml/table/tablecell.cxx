@@ -450,7 +450,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
         ::Color nCellColor( rCellColor.getColor(rFilterBase.getGraphicHelper()) );
         ::Color aResult( basegfx::interpolate(nBgColor.getBColor(), nCellColor.getBColor(), 1.0 - fTransparency) );
         aFillProperties.maFillColor.clearTransformations();
-        aFillProperties.maFillColor.setSrgbClr(aResult.GetRGBColor());
+        aFillProperties.maFillColor.setSrgbClr(sal_Int32(aResult.GetRGBColor()));
         aFillProperties.moFillType.set(XML_solidFill);
     }
     if (!aFillProperties.moFillType.has())
