@@ -224,7 +224,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                                     // the color value is given as #rrggbb and used the hexadecimal system!!
                                     sal_uInt32 nColor = aColor.copy( 1 ).toUInt32( 16 );
 
-                                    m_pImages->aMaskColor = Color( COLORDATA_RGB( nColor ) );
+                                    m_pImages->aMaskColor = Color( nColor );
                                 }
                             }
                             break;

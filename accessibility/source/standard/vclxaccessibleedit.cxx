@@ -319,7 +319,7 @@ Sequence< PropertyValue > VCLXAccessibleEdit::getCharacterAttributes( sal_Int32 
             {
                 if (aValue.Name == "CharColor")
                 {
-                    aValue.Value <<= static_cast< sal_Int32 >(COLORDATA_RGB(pFontColor->GetColor().GetColor()));
+                    aValue.Value <<= pFontColor->GetColor().GetRGBColor();
                     break;
                 }
             }
