@@ -120,6 +120,12 @@ public:
             break;
         case VclEventId::WindowMouseButtonUp:
             pLOKEv->mpWindow->LogicMouseButtonUp(pLOKEv->maMouseEvent);
+
+            // sometimes MouseButtonDown captures mouse and starts tracking, and VCL
+            // will not take care of releasing that with tiled rendering
+            if (pLOKEv->mpWindow->IsTracking())
+                pLOKEv->mpWindow->EndTracking(TrackingEventFlags::DontCallHdl);
+
             break;
         case VclEventId::WindowMouseMove:
             pLOKEv->mpWindow->LogicMouseMove(pLOKEv->maMouseEvent);
