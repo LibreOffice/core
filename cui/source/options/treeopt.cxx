@@ -490,7 +490,7 @@ void OfaTreeOptionsDialog::InitWidgets()
     get(pTabBox, "box");
     Size aSize(pTabBox->LogicToPixel(Size(278, 259), MapMode(MapUnit::MapAppFont)));
     pTreeLB->set_width_request(pTreeLB->approximate_char_width() * 25);
-    pTreeLB->set_height_request(pTreeLB->GetTextHeight() *  32);
+    pTreeLB->set_height_request(pTreeLB->GetTextHeight() *  36);
     pTabBox->set_width_request(aSize.Width());
 }
 
@@ -2162,7 +2162,7 @@ void ExtensionsTabPage::ActivatePage()
         if ( m_xPage.is() )
         {
             Point aPos = Point();
-            Size aSize = GetParent()->get_preferred_size();
+            Size aSize(GetParent()->LogicToPixel(Size(278, 259), MapMode(MapUnit::MapAppFont)));
             m_xPage->setPosSize( aPos.X() + 1, aPos.Y() + 1,
                                  aSize.Width() - 2, aSize.Height() - 2, awt::PosSize::POSSIZE );
             if ( !m_sEventHdl.isEmpty() )
