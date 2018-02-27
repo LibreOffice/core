@@ -165,7 +165,7 @@ SwTitlePageDlg::SwTitlePageDlg( vcl::Window *pParent ) :
     get(m_pSetPageNumberNF, "NF_SET_PAGE_NUMBER");
     get(m_pPagePropertiesLB, "LB_PAGE_PROPERTIES");
     get(m_pPagePropertiesPB, "PB_PAGE_PROPERTIES");
-    get(m_pOkPB, "PB_OK");
+    get(m_pOkPB, "ok");
 
     m_pOkPB->SetClickHdl(LINK(this, SwTitlePageDlg, OKHdl));
     m_pRestartNumberingCB->SetClickHdl(LINK(this, SwTitlePageDlg, RestartNumberingHdl));
