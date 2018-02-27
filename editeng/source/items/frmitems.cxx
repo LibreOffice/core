@@ -3243,15 +3243,14 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_BACK_COLOR:
         case MID_BACK_COLOR_R_G_B:
         {
-            sal_Int32 nCol = 0;
-            if ( !( rVal >>= nCol ) )
+            Color aNewCol;
+            if ( !( rVal >>= aNewCol ) )
                 return false;
             if(MID_BACK_COLOR_R_G_B == nMemberId)
             {
-                nCol = COLORDATA_RGB( nCol );
-                nCol += aColor.GetColor() & 0xff000000;
+                aNewCol.SetTransparency(aColor.GetTransparency());
             }
-            aColor = Color( nCol );
+            aColor = aNewCol;
         }
         break;
         case MID_BACK_COLOR_TRANSPARENCY:
