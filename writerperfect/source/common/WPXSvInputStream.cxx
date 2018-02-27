@@ -233,7 +233,7 @@ void OLEStorageImpl::traverse(const tools::SvRef<SotStorage> &rStorage, const rt
             if (!rvngName.isEmpty() && rvngName.toChar()<32)
                 rvngName=rvngName.copy(1);
             maStreams.emplace_back(rtl::OUStringToOString(concatPath(rPath, baseName), RTL_TEXTENCODING_UTF8),
-                                              rtl::OUStringToOString(concatPath(rPath, rvngName), RTL_TEXTENCODING_UTF8));
+                                   rtl::OUStringToOString(concatPath(rPath, rvngName), RTL_TEXTENCODING_UTF8));
             maNameMap[concatPath(rPath, rvngName)] = maStreams.size() - 1;
         }
         else if (aIt->IsStorage())
@@ -308,7 +308,7 @@ struct ZipStorageImpl
     void initialize();
 
     Reference<XInputStream> getStream(const rtl::OUString &rPath);
-    Reference<XInputStream> const & getStream(std::size_t nId);
+    Reference<XInputStream> const &getStream(std::size_t nId);
 
 private:
     void traverse(const Reference<container::XNameAccess> &rxEnum);
@@ -361,7 +361,7 @@ Reference<XInputStream> ZipStorageImpl::getStream(const rtl::OUString &rPath)
     return maStreams[aIt->second].xStream;
 }
 
-Reference<XInputStream> const & ZipStorageImpl::getStream(const std::size_t nId)
+Reference<XInputStream> const &ZipStorageImpl::getStream(const std::size_t nId)
 {
     if (!maStreams[nId].xStream.is())
         maStreams[nId].xStream = createStream(rtl::OStringToOUString(maStreams[nId].aName, RTL_TEXTENCODING_UTF8));

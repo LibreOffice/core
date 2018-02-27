@@ -22,29 +22,29 @@ namespace exp
 class XMLTextNoteCitationContext : public XMLImportContext
 {
 public:
-    XMLTextNoteCitationContext(XMLImport& rImport, librevenge::RVNGPropertyList& rProperties);
+    XMLTextNoteCitationContext(XMLImport &rImport, librevenge::RVNGPropertyList &rProperties);
 
-    void SAL_CALL characters(const OUString& rCharacters) override;
-    void SAL_CALL endElement(const OUString& rName) override;
+    void SAL_CALL characters(const OUString &rCharacters) override;
+    void SAL_CALL endElement(const OUString &rName) override;
 
 private:
-    librevenge::RVNGPropertyList& m_rProperties;
+    librevenge::RVNGPropertyList &m_rProperties;
     OUString m_aCharacters;
 };
 
-XMLTextNoteCitationContext::XMLTextNoteCitationContext(XMLImport& rImport,
-                                                       librevenge::RVNGPropertyList& rProperties)
+XMLTextNoteCitationContext::XMLTextNoteCitationContext(XMLImport &rImport,
+                                                       librevenge::RVNGPropertyList &rProperties)
     : XMLImportContext(rImport)
     , m_rProperties(rProperties)
 {
 }
 
-void XMLTextNoteCitationContext::endElement(const OUString& /*rName*/)
+void XMLTextNoteCitationContext::endElement(const OUString & /*rName*/)
 {
     m_rProperties.insert("librevenge:number", m_aCharacters.toUtf8().getStr());
 }
 
-void XMLTextNoteCitationContext::characters(const OUString& rCharacters)
+void XMLTextNoteCitationContext::characters(const OUString &rCharacters)
 {
     m_aCharacters += rCharacters;
 }
@@ -53,54 +53,54 @@ void XMLTextNoteCitationContext::characters(const OUString& rCharacters)
 class XMLFootnoteBodyImportContext : public XMLImportContext
 {
 public:
-    XMLFootnoteBodyImportContext(XMLImport& rImport,
-                                 const librevenge::RVNGPropertyList& rProperties);
+    XMLFootnoteBodyImportContext(XMLImport &rImport,
+                                 const librevenge::RVNGPropertyList &rProperties);
 
     rtl::Reference<XMLImportContext>
-    CreateChildContext(const OUString& rName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+    CreateChildContext(const OUString &rName,
+                       const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
 
     void SAL_CALL
-    startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
-    void SAL_CALL endElement(const OUString& rName) override;
+    startElement(const OUString &rName,
+                 const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    void SAL_CALL endElement(const OUString &rName) override;
 
 private:
-    const librevenge::RVNGPropertyList& m_rProperties;
+    const librevenge::RVNGPropertyList &m_rProperties;
 };
 
 XMLFootnoteBodyImportContext::XMLFootnoteBodyImportContext(
-    XMLImport& rImport, const librevenge::RVNGPropertyList& rProperties)
+    XMLImport &rImport, const librevenge::RVNGPropertyList &rProperties)
     : XMLImportContext(rImport)
     , m_rProperties(rProperties)
 {
 }
 
 rtl::Reference<XMLImportContext> XMLFootnoteBodyImportContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> & /*xAttribs*/)
 {
     return CreateTextChildContext(mrImport, rName);
 }
 
 void XMLFootnoteBodyImportContext::startElement(
-    const OUString& /*rName*/,
-    const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString & /*rName*/,
+    const css::uno::Reference<css::xml::sax::XAttributeList> & /*xAttribs*/)
 {
     mrImport.GetGenerator().openFootnote(m_rProperties);
 }
 
-void XMLFootnoteBodyImportContext::endElement(const OUString& /*rName*/)
+void XMLFootnoteBodyImportContext::endElement(const OUString & /*rName*/)
 {
     mrImport.GetGenerator().closeFootnote();
 }
 
-XMLFootnoteImportContext::XMLFootnoteImportContext(XMLImport& rImport)
+XMLFootnoteImportContext::XMLFootnoteImportContext(XMLImport &rImport)
     : XMLImportContext(rImport)
 {
 }
 
 rtl::Reference<XMLImportContext> XMLFootnoteImportContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> & /*xAttribs*/)
 {
     if (rName == "text:note-citation")
         return new XMLTextNoteCitationContext(mrImport, m_aProperties);
@@ -111,8 +111,8 @@ rtl::Reference<XMLImportContext> XMLFootnoteImportContext::CreateChildContext(
 }
 
 void XMLFootnoteImportContext::startElement(
-    const OUString& /*rName*/,
-    const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString & /*rName*/,
+    const css::uno::Reference<css::xml::sax::XAttributeList> & /*xAttribs*/)
 {
 }
 } // namespace exp
