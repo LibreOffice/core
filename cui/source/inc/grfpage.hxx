@@ -39,10 +39,10 @@ public:
     virtual void Resize() override;
     virtual Size GetOptimalSize() const override;
 
-    void SetTop( long nVal )                { aTopLeft.X() = nVal; }
-    void SetBottom( long nVal )             { aBottomRight.X() = nVal; }
-    void SetLeft( long nVal )               { aTopLeft.Y() = nVal; }
-    void SetRight( long nVal)               { aBottomRight.Y() = nVal; }
+    void SetTop( long nVal )                { aTopLeft.setX(nVal); }
+    void SetBottom( long nVal )             { aBottomRight.setX(nVal); }
+    void SetLeft( long nVal )               { aTopLeft.setY(nVal); }
+    void SetRight( long nVal)               { aBottomRight.setY(nVal); }
     void SetFrameSize( const Size& rSz );
     void SetGraphic( const Graphic& rGrf )  { aGrf = rGrf; }
 };

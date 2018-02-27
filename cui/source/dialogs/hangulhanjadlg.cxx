@@ -140,8 +140,10 @@ namespace svx
         sal_Int32 nCombinedWidth = std::max( aSecondaryRect.GetWidth(), aPrimaryRect.GetWidth() );
             // the rectangle where both texts will reside is as high as possible, and as wide as the
             // widest of both text rects
-        aPrimaryRect.Left() = aSecondaryRect.Left() = _rRect.Left();
-        aPrimaryRect.Right() = aSecondaryRect.Right() = _rRect.Left() + nCombinedWidth;
+        aPrimaryRect.SetLeft( _rRect.Left() );
+        aSecondaryRect.SetLeft( aPrimaryRect.Left() );
+        aPrimaryRect.SetRight( _rRect.Left() + nCombinedWidth );
+        aSecondaryRect.SetRight( aPrimaryRect.Right() );
         if (DrawTextFlags::Right & _nTextStyle)
         {
             // move the rectangles to the right
