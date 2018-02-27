@@ -959,7 +959,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
                         (_rRow->get())[i]->setNull();
                 }   break;
                 default:
-                    SAL_WARN( "connectivity.drivers","Falscher Type");
+                    SAL_WARN( "connectivity.drivers","Wrong type");
             }
             (_rRow->get())[i]->setTypeKind(nType);
         }

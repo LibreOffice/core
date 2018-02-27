@@ -157,7 +157,7 @@ void SvtUpButton_Impl::Select()
     if ( nId )
     {
         --nId;
-        assert( nId <= _aURLs.size() &&  "SvtUpButton_Impl:falscher Index" );
+        assert( nId <= _aURLs.size() &&  "SvtUpButton_Impl: wrong index" );
 
         GetDialogParent()->OpenURL_Impl(_aURLs[nId]);
     }

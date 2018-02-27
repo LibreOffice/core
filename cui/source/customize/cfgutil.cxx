@@ -1058,7 +1058,7 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
         }
 
         default:
-            OSL_FAIL( "Falscher Gruppentyp!" );
+            OSL_FAIL( "Wrong group type!" );
             break;
     }
 }

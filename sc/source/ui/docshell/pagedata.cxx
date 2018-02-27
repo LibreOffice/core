@@ -63,7 +63,7 @@ ScPrintRangeData& ScPageBreakData::GetData(size_t nPos)
 
     if ( nPos >= nUsed )
     {
-        OSL_ENSURE(nPos == nUsed, "ScPageBreakData::GetData falsche Reihenfolge");
+        OSL_ENSURE(nPos == nUsed, "ScPageBreakData::GetData wrong order");
         nUsed = nPos+1;
     }
 
@@ -79,7 +79,7 @@ bool ScPageBreakData::operator==( const ScPageBreakData& rOther ) const
         if ( pData[i].GetPrintRange() != rOther.pData[i].GetPrintRange() )
             return false;
 
-    //! ScPrintRangeData komplett vergleichen ??
+    //! compare ScPrintRangeData completely ??
 
     return true;
 }

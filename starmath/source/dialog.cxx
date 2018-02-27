@@ -1682,7 +1682,7 @@ void SmSymDefineDialog::FillSymbols(ComboBox &rComboBox, bool bDeleteText)
 
 void SmSymDefineDialog::FillSymbolSets(ComboBox &rComboBox, bool bDeleteText)
 {
-    assert((&rComboBox == pOldSymbolSets || &rComboBox == pSymbolSets) && "Sm : falsche ComboBox");
+    assert((&rComboBox == pOldSymbolSets || &rComboBox == pSymbolSets) && "Sm : wrong ComboBox");
 
     rComboBox.Clear();
     if (bDeleteText)
@@ -1807,7 +1807,7 @@ IMPL_LINK_NOARG( SmSymDefineDialog, SubsetChangeHdl, ListBox&, void )
 IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, ComboBox&, rComboBox, void )
 {
     (void) rComboBox;
-    assert(&rComboBox == pStyles && "Sm : falsches Argument");
+    assert(&rComboBox == pStyles && "Sm : wrong argument");
 
     SelectStyle(pStyles->GetText());
 }
