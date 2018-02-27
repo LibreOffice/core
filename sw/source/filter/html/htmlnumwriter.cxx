@@ -305,12 +305,12 @@ Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
 
         // a list is started or ended:
         sal_Int16 eType = rInfo.GetNumRule()->Get( i-1 ).GetNumberingType();
-        const sal_Char *pStr;
+        OString aTag;
         if( SVX_NUM_CHAR_SPECIAL == eType || SVX_NUM_BITMAP == eType)
-            pStr = OOO_STRING_SVTOOLS_HTML_unorderlist;
+            aTag = OOO_STRING_SVTOOLS_HTML_unorderlist;
         else
-            pStr = OOO_STRING_SVTOOLS_HTML_orderlist;
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, false );
+            aTag = OOO_STRING_SVTOOLS_HTML_orderlist;
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rWrt.GetNamespace() + aTag, false );
         rWrt.m_bLFPossible = true;
     }
 
