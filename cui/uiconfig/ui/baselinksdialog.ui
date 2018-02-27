@@ -18,7 +18,7 @@
             <property name="orientation">vertical</property>
             <property name="layout_style">start</property>
             <child>
-              <object class="GtkButton" id="CLOSE">
+              <object class="GtkButton" id="close">
                 <property name="label">gtk-close</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
@@ -35,7 +35,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="HELP">
+              <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
@@ -412,8 +412,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">CLOSE</action-widget>
-      <action-widget response="-11">HELP</action-widget>
+      <action-widget response="-7">close</action-widget>
+      <action-widget response="-11">help</action-widget>
       <action-widget response="0">UPDATE_NOW</action-widget>
       <action-widget response="0">CHANGE_SOURCE</action-widget>
       <action-widget response="0">BREAK_LINK</action-widget>

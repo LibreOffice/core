@@ -25,7 +25,7 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="PB_OK">
+              <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -40,7 +40,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="PB_CANCEL">
+              <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -54,7 +54,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="PB_HELP">
+              <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -523,9 +523,9 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">PB_OK</action-widget>
-      <action-widget response="0">PB_CANCEL</action-widget>
-      <action-widget response="0">PB_HELP</action-widget>
+      <action-widget response="-5">ok</action-widget>
+      <action-widget response="-6">cancel</action-widget>
+      <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

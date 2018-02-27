@@ -217,9 +217,9 @@ UpdateInstallDialog::UpdateInstallDialog(
     get(m_pMle_info, "INFO");
     m_pMle_info->set_height_request(m_pMle_info->GetTextHeight() * 5);
     m_pMle_info->set_width_request(m_pMle_info->approximate_char_width() * 56);
-    get(m_pHelp, "HELP");
-    get(m_pOk, "OK");
-    get(m_pCancel, "CANCEL");
+    get(m_pHelp, "help");
+    get(m_pOk, "ok");
+    get(m_pCancel, "cancel");
 
     m_xExtensionManager = css::deployment::ExtensionManager::get( xCtx );
 
