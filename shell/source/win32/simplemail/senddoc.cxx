@@ -20,6 +20,11 @@
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 
+#include <o3tl/char16_t2wchar_t.hxx>
+#include <rtl/bootstrap.hxx>
+#include <sfx2/strings.hrc>
+#include <unotools/resmgr.hxx>
+
 #include <wchar.h>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -38,7 +43,6 @@
 #endif
 
 typedef std::vector<std::wstring> StringList_t;
-typedef StringList_t::const_iterator StringListIterator_t;
 typedef std::vector<MapiRecipDescW> MapiRecipientList_t;
 typedef std::vector<MapiFileDescW> MapiAttachmentList_t;
 
@@ -46,13 +50,16 @@ const int LEN_SMTP_PREFIX = 5; // "SMTP:"
 
 namespace /* private */
 {
+    OUString gLangTag;
+    OUString gBootstrap;
     std::wstring gFrom;
     std::wstring gSubject;
     std::wstring gBody;
     StringList_t gTo;
     StringList_t gCc;
     StringList_t gBcc;
-    StringList_t gAttachments;
+    // Keep temp filepath and displayed name
+    std::vector<std::pair<std::wstring, std::wstring>> gAttachments;
     int gMapiFlags = 0;
 }
 
@@ -118,10 +125,8 @@ void initAttachmentList(MapiAttachmentList_t* pMapiAttachmentList)
     {
         MapiFileDescW mfd;
         ZeroMemory(&mfd, sizeof(mfd));
-        mfd.lpszPathName = const_cast<wchar_t*>(attachment.c_str());
-        // This is required for Outlook 2013 - otherwise using MAPI_DIALOG_MODELESS results in MAPI_E_FAILURE
-        // See http://peach.ease.lsoft.com/scripts/wa-PEACH.exe?A2=MAPI-L;d2bf3060.1604
-        mfd.lpszFileName = L"";
+        mfd.lpszPathName = const_cast<wchar_t*>(attachment.first.c_str());
+        mfd.lpszFileName = const_cast<wchar_t*>(attachment.second.c_str());
         mfd.nPosition = sal::static_int_cast<ULONG>(-1);
         pMapiAttachmentList->push_back(mfd);
     }
@@ -151,11 +156,12 @@ void initMapiMessage(
     pMapiMessage->lpOriginator = aMapiOriginator;
     pMapiMessage->lpRecips = aMapiRecipientList.size() ? &aMapiRecipientList[0] : nullptr;
     pMapiMessage->nRecipCount = aMapiRecipientList.size();
-    pMapiMessage->lpFiles = &aMapiAttachmentList[0];
+    if (!aMapiAttachmentList.empty())
+        pMapiMessage->lpFiles = &aMapiAttachmentList[0];
     pMapiMessage->nFileCount = aMapiAttachmentList.size();
 }
 
-const wchar_t* const KnownParameter[] =
+const wchar_t* const KnownParameters[] =
 {
     L"--to",
     L"--cc",
@@ -165,16 +171,16 @@ const wchar_t* const KnownParameter[] =
     L"--body",
     L"--attach",
     L"--mapi-dialog",
-    L"--mapi-logon-ui"
+    L"--mapi-logon-ui",
+    L"--langtag",
+    L"--bootstrap",
 };
-
-const size_t nKnownParameter = SAL_N_ELEMENTS(KnownParameter);
 
 /** @internal */
 bool isKnownParameter(const wchar_t* aParameterName)
 {
-    for (size_t i = 0; i < nKnownParameter; i++)
-        if (_wcsicmp(aParameterName, KnownParameter[i]) == 0)
+    for (const wchar_t* KnownParameter : KnownParameters)
+        if (_wcsicmp(aParameterName, KnownParameter) == 0)
             return true;
 
     return false;
@@ -215,11 +221,120 @@ void initParameter(int argc, wchar_t* argv[])
             else if (_wcsicmp(argv[i], L"--body") == 0)
                 gBody = argv[i+1];
             else if (_wcsicmp(argv[i], L"--attach") == 0)
-                gAttachments.push_back(argv[i+1]);
+            {
+                std::wstring sPath(argv[i + 1]);
+                // An attachment may optionally be immediately followed by --attach-name and user-visible name
+                std::wstring sName;
+                if ((i + 3) < argc && _wcsicmp(argv[i+2], L"--attach-name") == 0)
+                {
+                    sName = argv[i+3];
+                    i += 2;
+                }
+                gAttachments.emplace_back(sPath, sName);
+            }
+            else if (_wcsicmp(argv[i], L"--langtag") == 0)
+                gLangTag = o3tl::toU(argv[i+1]);
+            else if (_wcsicmp(argv[i], L"--bootstrap") == 0)
+                gBootstrap = o3tl::toU(argv[i+1]);
 
             i++;
         }
     }
+}
+
+void ShowError(ULONG nMAPIResult)
+{
+    if (!gBootstrap.isEmpty())
+        rtl::Bootstrap::setIniFilename(gBootstrap);
+    LanguageTag aLangTag(gLangTag);
+    std::locale aLocale = Translate::Create("sfx", aLangTag);
+    OUString sMessage = Translate::get(STR_ERROR_SEND_MAIL_CODE, aLocale);
+    OUString sErrorId;
+    switch (nMAPIResult)
+    {
+    case MAPI_E_FAILURE:
+        sErrorId = "MAPI_E_FAILURE";
+        break;
+    case MAPI_E_LOGON_FAILURE:
+        sErrorId = "MAPI_E_LOGON_FAILURE";
+        break;
+    case MAPI_E_DISK_FULL:
+        sErrorId = "MAPI_E_DISK_FULL";
+        break;
+    case MAPI_E_INSUFFICIENT_MEMORY:
+        sErrorId = "MAPI_E_INSUFFICIENT_MEMORY";
+        break;
+    case MAPI_E_ACCESS_DENIED:
+        sErrorId = "MAPI_E_ACCESS_DENIED";
+        break;
+    case MAPI_E_TOO_MANY_SESSIONS:
+        sErrorId = "MAPI_E_ACCESS_DENIED";
+        break;
+    case MAPI_E_TOO_MANY_FILES:
+        sErrorId = "MAPI_E_TOO_MANY_FILES";
+        break;
+    case MAPI_E_TOO_MANY_RECIPIENTS:
+        sErrorId = "MAPI_E_TOO_MANY_RECIPIENTS";
+        break;
+    case MAPI_E_ATTACHMENT_NOT_FOUND:
+        sErrorId = "MAPI_E_ATTACHMENT_NOT_FOUND";
+        break;
+    case MAPI_E_ATTACHMENT_OPEN_FAILURE:
+        sErrorId = "MAPI_E_ATTACHMENT_OPEN_FAILURE";
+        break;
+    case MAPI_E_ATTACHMENT_WRITE_FAILURE:
+        sErrorId = "MAPI_E_ATTACHMENT_WRITE_FAILURE";
+        break;
+    case MAPI_E_UNKNOWN_RECIPIENT:
+        sErrorId = "MAPI_E_UNKNOWN_RECIPIENT";
+        break;
+    case MAPI_E_BAD_RECIPTYPE:
+        sErrorId = "MAPI_E_BAD_RECIPTYPE";
+        break;
+    case MAPI_E_NO_MESSAGES:
+        sErrorId = "MAPI_E_NO_MESSAGES";
+        break;
+    case MAPI_E_INVALID_MESSAGE:
+        sErrorId = "MAPI_E_INVALID_MESSAGE";
+        break;
+    case MAPI_E_TEXT_TOO_LARGE:
+        sErrorId = "MAPI_E_TEXT_TOO_LARGE";
+        break;
+    case MAPI_E_INVALID_SESSION:
+        sErrorId = "MAPI_E_INVALID_SESSION";
+        break;
+    case MAPI_E_TYPE_NOT_SUPPORTED:
+        sErrorId = "MAPI_E_TYPE_NOT_SUPPORTED";
+        break;
+    case MAPI_E_AMBIGUOUS_RECIPIENT:
+        sErrorId = "MAPI_E_AMBIGUOUS_RECIPIENT";
+        break;
+    case MAPI_E_MESSAGE_IN_USE:
+        sErrorId = "MAPI_E_MESSAGE_IN_USE";
+        break;
+    case MAPI_E_NETWORK_FAILURE:
+        sErrorId = "MAPI_E_NETWORK_FAILURE";
+        break;
+    case MAPI_E_INVALID_EDITFIELDS:
+        sErrorId = "MAPI_E_INVALID_EDITFIELDS";
+        break;
+    case MAPI_E_INVALID_RECIPS:
+        sErrorId = "MAPI_E_INVALID_RECIPS";
+        break;
+    case MAPI_E_NOT_SUPPORTED:
+        sErrorId = "MAPI_E_NOT_SUPPORTED";
+        break;
+    case MAPI_E_UNICODE_NOT_SUPPORTED:
+        sErrorId = "MAPI_E_UNICODE_NOT_SUPPORTED";
+        break;
+    default:
+        sErrorId = OUString::number(nMAPIResult);
+    }
+    sMessage = sMessage.replaceAll("$1", sErrorId);
+    OUString sTitle(Translate::get(STR_ERROR_SEND_MAIL_HEADER, aLocale));
+
+    MessageBoxW(nullptr, o3tl::toW(sMessage.getStr()), o3tl::toW(sTitle.getStr()),
+        MB_OK | MB_ICONINFORMATION);
 }
 
 /**
@@ -275,6 +390,15 @@ int wmain(int argc, wchar_t* argv[])
     {
         OSL_FAIL(ex.what());
     }
+
+    // Now cleanup the temporary attachment files
+    for (const auto& rAttachment : gAttachments)
+        DeleteFileW(rAttachment.first.c_str());
+
+    // Only show the error message if UI was requested
+    if ((ulRet != SUCCESS_SUCCESS) && (gMapiFlags & (MAPI_DIALOG | MAPI_LOGON_UI)))
+        ShowError(ulRet);
+
     return ulRet;
 }
 
@@ -302,13 +426,23 @@ int wmain(int argc, wchar_t* argv[])
             oss << "--bcc " << address << std::endl;
 
         for (const auto& attachment : gAttachments)
-            oss << "--attach " << attachment << std::endl;
+        {
+            oss << "--attach " << attachment.first << std::endl;
+            if (!attachment.second.empty())
+                oss << "--attach-name " << attachment.second << std::endl;
+        }
 
         if (gMapiFlags & MAPI_DIALOG)
             oss << "--mapi-dialog" << std::endl;
 
         if (gMapiFlags & MAPI_LOGON_UI)
             oss << "--mapi-logon-ui" << std::endl;
+
+        if (!gLangTag.isEmpty())
+            oss << "--langtag " << gLangTag << std::endl;
+
+        if (!gBootstrap.isEmpty())
+            oss << "--bootstrap " << gBootstrap << std::endl;
 
         MessageBoxW(nullptr, oss.str().c_str(), L"Arguments", MB_OK | MB_ICONINFORMATION);
     }

@@ -19,6 +19,8 @@ $(eval $(call gb_Library_use_libraries,smplmail,\
 	cppu \
 	cppuhelper \
 	sal \
+    tl \
+    utl \
 ))
 
 $(eval $(call gb_Library_set_componentfile,smplmail,shell/source/win32/simplemail/smplmail))
