@@ -234,6 +234,9 @@
 #define STR_PRINT_NEWORISIZE                    NC_("STR_PRINT_NEWORISIZE", "The page size and orientation have been modified.\nWould you like to save the new settings in the\nactive document?")
 #define STR_CANT_CLOSE                          NC_("STR_CANT_CLOSE", "The document cannot be closed because a\n print job is being carried out.")
 #define STR_ERROR_SEND_MAIL                     NC_("STR_ERROR_SEND_MAIL", "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\nPlease check the %PRODUCTNAME settings or your e-mail program settings.")
+// Error codes look like "MAPI_E_FAILURE" or "1234"
+#define STR_ERROR_SEND_MAIL_CODE                NC_("STR_ERROR_SEND_MAIL_CODE", "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\n\nError code is $1")
+#define STR_ERROR_SEND_MAIL_HEADER              NC_("STR_ERROR_SEND_MAIL_HEADER", "Error sending mail")
 #define STR_QUERY_OPENASTEMPLATE                NC_("STR_QUERY_OPENASTEMPLATE", "This document cannot be edited, possibly due to missing access rights. Do you want to edit a copy of the document?")
 #define STR_QUERY_OPENASTEMPLATE_ALLOW_IGNORE   NC_("STR_QUERY_OPENASTEMPLATE_ALLOW_IGNORE", "This document cannot be edited, because it is locked in another session. Do you want to edit a copy of the document?\n\nYou can also try to ignore the lock and open the file for editing.")
 #define STR_QUERY_OPENASTEMPLATE_OPENCOPY_BTN   NC_("STR_QUERY_OPENASTEMPLATE_OPENCOPY_BTN", "Open ~Copy")

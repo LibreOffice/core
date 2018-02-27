@@ -28,10 +28,17 @@
 #include <com/sun/star/system/XSimpleMailMessage2.hpp>
 #include <osl/file.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/make_unique.hxx>
+#include <tools/urlobj.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/syslocale.hxx>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <mapi.h>
+#if defined GetTempPath
+#undef GetTempPath
+#endif
 
 #include <process.h>
 #include <vector>
@@ -56,8 +63,11 @@ const OUString FROM("--from");
 const OUString SUBJECT("--subject");
 const OUString BODY("--body");
 const OUString ATTACH("--attach");
+const OUString ATTACH_NAME("--attach-name");
 const OUString FLAG_MAPI_DIALOG("--mapi-dialog");
 const OUString FLAG_MAPI_LOGON_UI("--mapi-logon-ui");
+const OUString FLAG_LANGTAG("--langtag");
+const OUString FLAG_BOOTSTRAP("--bootstrap");
 
 namespace /* private */
 {
@@ -111,11 +121,13 @@ namespace /* private */
         @returns
         <TRUE/> on success.
     */
-    bool executeSenddoc(const std::vector<OUString>& rCommandArgs)
+    bool executeSenddoc(const std::vector<OUString>& rCommandArgs, bool bWait)
     {
         OUString senddocUrl = getSenddocUrl();
         if (senddocUrl.getLength() == 0)
             return false;
+
+        oslProcessOption nProcOption = osl_Process_DETACHED | (bWait ? osl_Process_WAIT : 0);
 
         oslProcess proc;
 
@@ -126,7 +138,7 @@ namespace /* private */
             senddocUrl.pData,
             const_cast<rtl_uString**>(reinterpret_cast<rtl_uString * const *>(&rCommandArgs[0])),
             rCommandArgs.size(),
-            osl_Process_WAIT | osl_Process_DETACHED,
+            nProcOption,
             nullptr,
             nullptr,
             nullptr,
@@ -135,6 +147,9 @@ namespace /* private */
 
         if (err != osl_Process_E_None)
             return false;
+
+        if (!bWait)
+            return true;
 
         oslProcessInfo procInfo;
         procInfo.Size = sizeof(oslProcessInfo);
@@ -147,6 +162,76 @@ namespace /* private */
 Reference<XSimpleMailMessage> SAL_CALL CSmplMailClient::createSimpleMailMessage()
 {
     return Reference<XSimpleMailMessage>(new CSmplMailMsg());
+}
+
+namespace {
+// We cannot use the session-local temporary directory for the attachment,
+// because it will get removed upon program exit; and it must be alive for
+// senddoc process lifetime. So we use base temppath for the attachments,
+// and let the senddoc to do the cleanup if it was started successfully.
+// This function works like Desktop::CreateTemporaryDirectory()
+OUString&& InitBaseTempDirURL()
+{
+    // No need to intercept an exception here, since
+    // Desktop::CreateTemporaryDirectory() has ensured that path manager is available
+    SvtPathOptions aOpt;
+    OUString aRetURL = aOpt.GetTempPath();
+    if (aRetURL.isEmpty())
+    {
+        osl::File::getTempDirURL(aRetURL);
+    }
+    if (aRetURL.endsWith("/"))
+        aRetURL = aRetURL.copy(0, aRetURL.getLength() - 1);
+
+    return std::move(aRetURL);
+}
+
+const OUString& GetBaseTempDirURL()
+{
+    static const OUString aRetURL(InitBaseTempDirURL());
+    return aRetURL;
+}
+}
+
+OUString CSmplMailClient::CopyAttachment(const OUString& sOrigAttachURL, OUString& sUserVisibleName)
+{
+    // We do two things here:
+    // 1. Make the attachment temporary filename to not contain any fancy characters possible in
+    // original filename, that could confuse mailer, and extract the original filename to explicitly
+    // define it;
+    // 2. Allow the copied files be outside of the session's temporary directory, and thus not be
+    // removed in Desktop::RemoveTemporaryDirectory() if soffice process gets closed before the
+    // mailer finishes using them.
+
+    maAttachmentFiles.emplace_back(o3tl::make_unique<utl::TempFile>(&GetBaseTempDirURL()));
+    maAttachmentFiles.back()->EnableKillingFile();
+    INetURLObject aFilePathObj(maAttachmentFiles.back()->GetURL());
+    OUString sNewAttachmentURL = aFilePathObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+    if (osl::File::copy(sOrigAttachURL, sNewAttachmentURL) == osl::FileBase::RC::E_None)
+    {
+        INetURLObject url(sOrigAttachURL, INetURLObject::EncodeMechanism::WasEncoded);
+        sUserVisibleName = url.getName(INetURLObject::LAST_SEGMENT, true,
+            INetURLObject::DecodeMechanism::WithCharset);
+    }
+    else
+    {
+        // Failed to copy original; the best effort is to use original file. It is possible that
+        // the file gets deleted before used in spawned process; but let's hope... the worst thing
+        // is the absent attachment file anyway.
+        sNewAttachmentURL = sOrigAttachURL;
+        maAttachmentFiles.pop_back();
+    }
+    return sNewAttachmentURL;
+}
+
+void CSmplMailClient::ReleaseAttachments()
+{
+    for (auto& pTempFile : maAttachmentFiles)
+    {
+        if (pTempFile)
+            pTempFile->EnableKillingFile(false);
+    }
+    maAttachmentFiles.clear();
 }
 
 /**
@@ -218,11 +303,12 @@ void CSmplMailClient::assembleCommandLine(
         rCommandArgs.push_back(subject);
     }
 
-    Sequence<OUString> attachments = xSimpleMailMessage->getAttachement();
-    for (int i = 0; i < attachments.getLength(); i++)
+    for (const auto& attachment : xSimpleMailMessage->getAttachement())
     {
+        OUString sDispalyName;
+        OUString sTempFileURL(CopyAttachment(attachment, sDispalyName));
         OUString sysPath;
-        osl::FileBase::RC err = osl::FileBase::getSystemPathFromFileURL(attachments[i], sysPath);
+        osl::FileBase::RC err = osl::FileBase::getSystemPathFromFileURL(sTempFileURL, sysPath);
         if (err != osl::FileBase::E_None)
             throw IllegalArgumentException(
                 "Invalid attachment file URL",
@@ -231,6 +317,11 @@ void CSmplMailClient::assembleCommandLine(
 
         rCommandArgs.push_back(ATTACH);
         rCommandArgs.push_back(sysPath);
+        if (!sDispalyName.isEmpty())
+        {
+            rCommandArgs.push_back(ATTACH_NAME);
+            rCommandArgs.push_back(sDispalyName);
+        }
     }
 
     if (!(aFlag & NO_USER_INTERFACE))
@@ -238,6 +329,19 @@ void CSmplMailClient::assembleCommandLine(
 
     if (!(aFlag & NO_LOGON_DIALOG))
         rCommandArgs.push_back(FLAG_MAPI_LOGON_UI);
+
+    rCommandArgs.push_back(FLAG_LANGTAG);
+    rCommandArgs.push_back(SvtSysLocale().GetUILanguageTag().getBcp47());
+
+    rtl::Bootstrap aBootstrap;
+    OUString sBootstrapPath;
+    aBootstrap.getIniName(sBootstrapPath);
+    if (!sBootstrapPath.isEmpty())
+    {
+        rCommandArgs.push_back(FLAG_BOOTSTRAP);
+        rCommandArgs.push_back(sBootstrapPath);
+    }
+
 }
 
 void SAL_CALL CSmplMailClient::sendSimpleMailMessage(
@@ -248,10 +352,14 @@ void SAL_CALL CSmplMailClient::sendSimpleMailMessage(
     std::vector<OUString> senddocParams;
     assembleCommandLine(xSimpleMailMessage, aFlag, senddocParams);
 
-    if (!executeSenddoc(senddocParams))
+    const bool bWait = aFlag & NO_USER_INTERFACE;
+    if (!executeSenddoc(senddocParams, bWait))
         throw Exception(
             "Send email failed",
             static_cast<XSimpleMailClient*>(this));
+    // Let the launched senddoc to cleanup the attachments temporary files
+    if (!bWait)
+        ReleaseAttachments();
 }
 
 void CSmplMailClient::validateParameter(

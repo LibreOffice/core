@@ -13,8 +13,12 @@ $(eval $(call gb_Executable_use_system_win32_libs,senddoc,\
 	kernel32 \
 ))
 
+$(eval $(call gb_Executable_use_sdk_api,senddoc))
+
 $(eval $(call gb_Executable_use_libraries,senddoc,\
+    i18nlangtag \
 	sal \
+    utl \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,senddoc,\
