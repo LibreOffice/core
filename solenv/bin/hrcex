@@ -29,7 +29,6 @@ with open(ofile, "a") as output:
         for entry in po:
             keyid = entry.msgctxt + '|' + entry.msgid
             print >> output, '#. ' + polib.genKeyId(keyid)
-            location = entry.occurrences[0][0]
-            location = os.path.relpath(location, os.environ['SRCDIR'])
-            entry.occurrences[0] = location, entry.occurrences[0][1]
+            for i, occurrence in enumerate(entry.occurrences):
+                entry.occurrences[i] = os.path.relpath(occurrence[0], os.environ['SRCDIR']), occurrence[1]
             print >> output, entry
