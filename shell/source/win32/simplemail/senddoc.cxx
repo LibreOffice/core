@@ -206,7 +206,7 @@ void initParameter(int argc, char* argv[])
 
         if (_stricmp(argv[i], "--mapi-dialog") == 0)
         {
-            gMapiFlags |= MAPI_DIALOG;
+            gMapiFlags |= MAPI_DIALOG_MODELESS;
         }
         else if (_stricmp(argv[i], "--mapi-logon-ui") == 0)
         {
