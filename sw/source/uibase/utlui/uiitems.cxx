@@ -18,6 +18,7 @@
  */
 
 #include <editeng/itemtype.hxx>
+#include <o3tl/any.hxx>
 #include <unosett.hxx>
 
 #include <swtypes.hxx>
@@ -86,7 +87,7 @@ bool SwPageFootnoteInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= (sal_Int8)(long)aTmp;
         }
         break;
-        case MID_LINE_ADJUST       :     rVal <<= (sal_Int16)aFootnoteInfo.GetAdj();break;//text::HorizontalAdjust
+        case MID_LINE_ADJUST       :     rVal <<= aFootnoteInfo.GetAdj();break;//text::HorizontalAdjust
         case MID_LINE_TEXT_DIST    :     rVal <<= (sal_Int32)convertTwipToMm100(aFootnoteInfo.GetTopDist());break;
         case MID_LINE_FOOTNOTE_DIST:     rVal <<= (sal_Int32)convertTwipToMm100(aFootnoteInfo.GetBottomDist());break;
         case MID_FTN_LINE_STYLE    :
@@ -156,12 +157,8 @@ bool SwPageFootnoteInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
         break;
         case MID_LINE_ADJUST       :
         {
-            sal_Int16 nSet = 0;
-            rVal >>= nSet;
-            if(nSet >= 0 && nSet < 3) //text::HorizontalAdjust
-                aFootnoteInfo.SetAdj((css::text::HorizontalAdjust)nSet);
-            else
-                bRet = false;
+            css::text::HorizontalAdjust nSet = *o3tl::forceAccess<css::text::HorizontalAdjust>(rVal);
+            aFootnoteInfo.SetAdj(nSet);
         }
         break;
         case MID_FTN_LINE_STYLE:
