@@ -828,7 +828,8 @@ SvBorder SfxWorkWindow::Arrange_Impl()
     {
         aBorder.Left() = aClientArea.Left();
         aBorder.Right() = aClientArea.Right();
-        aClientArea.Right() = aClientArea.Left() = aTmp.Left();
+        aClientArea.SetRight( aTmp.Left() );
+        aClientArea.SetLeft( aTmp.Left() );
     }
 
     if ( aClientArea.GetHeight() >= aBorder.Top() + aBorder.Bottom() )
@@ -840,7 +841,8 @@ SvBorder SfxWorkWindow::Arrange_Impl()
     {
         aBorder.Top() = aClientArea.Top();
         aBorder.Bottom() = aClientArea.Bottom();
-        aClientArea.Top() = aClientArea.Bottom() = aTmp.Top();
+        aClientArea.SetTop(aTmp.Top());
+        aClientArea.SetBottom(aTmp.Top());
     }
 
     return IsDockingAllowed() ? aBorder : SvBorder();

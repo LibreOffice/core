@@ -232,7 +232,7 @@ void OSectionWindow::Resize()
 
     const Point aThumbPos = m_pParent->getView()->getThumbPos();
     aOutputSize.AdjustWidth( -(aThumbPos.X()) );
-    aOutputSize.Height() -=  m_aSplitter->GetSizePixel().Height();
+    aOutputSize.AdjustHeight( -m_aSplitter->GetSizePixel().Height() );
 
     if ( m_aStartMarker->isCollapsed() )
     {
