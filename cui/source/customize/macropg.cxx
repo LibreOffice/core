@@ -326,11 +326,9 @@ bool SvxMacroTabPage_::FillItemSet( SfxItemSet* /*rSet*/ )
         OUString eventName;
         if( m_xAppEvents.is() )
         {
-            EventsHash::iterator h_itEnd =  m_appEventsHash.end();
-            EventsHash::iterator h_it = m_appEventsHash.begin();
-            for ( ; h_it !=  h_itEnd; ++h_it )
+            for (auto const& appEvent : m_appEventsHash)
             {
-                eventName = h_it->first;
+                eventName = appEvent.first;
                 try
                 {
                     m_xAppEvents->replaceByName( eventName, GetPropsByName( eventName, m_appEventsHash ) );
@@ -343,11 +341,9 @@ bool SvxMacroTabPage_::FillItemSet( SfxItemSet* /*rSet*/ )
         }
         if( m_xDocEvents.is() && bDocModified )
         {
-            EventsHash::iterator h_itEnd =  m_docEventsHash.end();
-            EventsHash::iterator h_it = m_docEventsHash.begin();
-            for ( ; h_it !=  h_itEnd; ++h_it )
+            for (auto const& docEvent : m_docEventsHash)
             {
-                eventName = h_it->first;
+                eventName = docEvent.first;
                 try
                 {
                     m_xDocEvents->replaceByName( eventName, GetPropsByName( eventName, m_docEventsHash ) );
@@ -387,20 +383,16 @@ void SvxMacroTabPage_::Reset( const SfxItemSet* )
     {
             if( m_xAppEvents.is() )
             {
-                EventsHash::iterator h_itEnd =  m_appEventsHash.end();
-                EventsHash::iterator h_it = m_appEventsHash.begin();
-                for ( ; h_it !=  h_itEnd; ++h_it )
+                for (auto & appEvent : m_appEventsHash)
                 {
-                    h_it->second.second.clear();
+                    appEvent.second.second.clear();
                 }
             }
             if( m_xDocEvents.is() && bDocModified )
             {
-                EventsHash::iterator h_itEnd =  m_docEventsHash.end();
-                EventsHash::iterator h_it = m_docEventsHash.begin();
-                for ( ; h_it !=  h_itEnd; ++h_it )
+                for (auto & docEvent : m_docEventsHash)
                 {
-                    h_it->second.second.clear();
+                    docEvent.second.second.clear();
                 }
                 // if we have a valid XModifiable (in the case of doc events)
                 // call setModified(true)
@@ -511,12 +503,9 @@ void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
         std::insert_iterator< std::set< OUString > >( aEventNamesCache, aEventNamesCache.end() )
     );
 
-    for (   EventDisplayNames::const_iterator displayableEvent = aDisplayNames.begin();
-            displayableEvent != aDisplayNames.end();
-            ++displayableEvent
-        )
+    for (auto const& displayableEvent : aDisplayNames)
     {
-        OUString sEventName( OUString::createFromAscii( displayableEvent->pAsciiEventName ) );
+        OUString sEventName( OUString::createFromAscii( displayableEvent.pAsciiEventName ) );
         if ( !nameReplace->hasByName( sEventName ) )
             continue;
 
@@ -528,7 +517,7 @@ void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
         }
 
         OUString eventURL = h_it->second.second;
-        OUString displayName(CuiResId(displayableEvent->pEventResourceID));
+        OUString displayName(CuiResId(displayableEvent.pEventResourceID));
 
         displayName += "\t";
 

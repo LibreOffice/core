@@ -282,19 +282,19 @@ void SvxLineTabPage::InitSymbols(MenuButton const * pButton)
         VclPtrInstance<PopupMenu> pPopup;
         sal_uInt32 i = 0;
         m_nNumMenuGalleryItems = m_aGrfNames.size();
-        for(std::vector<OUString>::iterator it = m_aGrfNames.begin(); it != m_aGrfNames.end(); ++it, ++i)
+        for (auto const& grfName : m_aGrfNames)
         {
-            const OUString *pUIName = &(*it);
+            const OUString *pUIName = &grfName;
 
             // Convert URL encodings to UI characters (e.g. %20 for spaces)
             OUString aPhysicalName;
-            if (osl::FileBase::getSystemPathFromFileURL(*it, aPhysicalName)
+            if (osl::FileBase::getSystemPathFromFileURL(grfName, aPhysicalName)
                 == osl::FileBase::E_None)
             {
                 pUIName = &aPhysicalName;
             }
 
-            SvxBrushItem* pBrushItem = new SvxBrushItem(*it, "", GPOS_AREA, SID_ATTR_BRUSH);
+            SvxBrushItem* pBrushItem = new SvxBrushItem(grfName, "", GPOS_AREA, SID_ATTR_BRUSH);
 
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo;
             pInfo->pBrushItem = pBrushItem;
@@ -329,6 +329,7 @@ void SvxLineTabPage::InitSymbols(MenuButton const * pButton)
                 Image aImage;
                 pPopup->InsertItem(pInfo->nItemId, *pUIName, aImage );
             }
+            ++i;
         }
         m_pSymbolMB->GetPopupMenu()->SetPopupMenu( MN_GALLERY, pPopup );
 
