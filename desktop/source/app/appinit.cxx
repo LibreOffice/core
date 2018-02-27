@@ -266,7 +266,7 @@ void Desktop::CreateTemporaryDirectory()
         if ( aTempBaseURL.endsWith( "/" ) )
             aTempBaseURL = aTempBaseURL.copy( 0, aTempBaseURL.getLength() - 1 );
 
-        aTempPath = aTempBaseURL;
+        aRet = aTempBaseURL;
         ::osl::FileBase::getFileURLFromSystemPath( aRet, aTempPath );
         aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempPath );
     }
