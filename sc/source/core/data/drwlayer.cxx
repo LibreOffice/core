@@ -646,6 +646,16 @@ void ScDrawLayer::ResizeLastRectFromAnchor( const SdrObject* pObj, ScDrawObjData
         aEnd += lcl_calcAvailableDiff(*pDoc, nCol2, nRow2, nTab2, rData.maEndOffset);
 
         tools::Rectangle aNew = tools::Rectangle( aPos, aEnd );
+
+        // Consider aspect ratio when scaling images, tdf#114552
+        if (dynamic_cast<const SdrGrafObj*>(pObj) != nullptr)
+        {
+            double nWidthFactor = (double) aNew.GetWidth() / (double) rData.maLastRect.GetWidth();
+            double nHeightFactor = (double) aNew.GetHeight() / (double) rData.maLastRect.GetHeight();
+            aNew.setWidth(rtl::math::round((double)aNew.GetWidth() * nHeightFactor));
+            aNew.setHeight(rtl::math::round((double)aNew.GetHeight() * nWidthFactor));
+        }
+
         if ( bNegativePage )
             MirrorRectRTL( aNew );
 
