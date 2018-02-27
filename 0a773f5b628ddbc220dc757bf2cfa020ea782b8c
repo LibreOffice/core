@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_5893c9fa",
+        "filename": "sal/osl/w32/file_url.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-02-27T21:49:03Z",
+      "side": 1,
+      "message": "This change just can\u0027t be right. Why did you remove the W? and the nSkip was important. The long path prefix is not correct here. Even if it should be used, it must be added with precautions, and not here - see https://gerrit.libreoffice.org/50079 for an example.",
+      "range": {
+        "startLine": 567,
+        "startChar": 20,
+        "endLine": 567,
+        "endChar": 91
+      },
+      "revId": "0a773f5b628ddbc220dc757bf2cfa020ea782b8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
