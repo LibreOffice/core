@@ -31,7 +31,7 @@
 
 #include <impbmp.hxx>
 #include <impoctree.hxx>
-#include "impvect.hxx"
+#include <impvect.hxx>
 
 #include <bitmapscalesuper.hxx>
 #include <octree.hxx>
