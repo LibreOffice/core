@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_b83be59b",
+        "filename": "sw/uiconfig/swriter/ui/editfielddialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-02-27T16:21:16Z",
+      "side": 1,
+      "message": "Please use 12, not 10; GNOME HIG says increments of 6 px should be used: https://developer.gnome.org/hig/stable/visual-layout.html.en",
+      "revId": "74a03f1ec562c92d9d4f6acc0f3f8af1520f7bd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
