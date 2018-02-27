@@ -490,6 +490,7 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         // a core dump in editeng ( so moved to here )
         xDocSh = saveAndReload( &(*xDocSh), FORMAT_ODS);
         ScDocument& rDoc2 = xDocSh->GetDocument();
+        // This ends up in row 4, not 3.
         impl_testLegacyCellAnchoredRotatedShape( rDoc2, aRect, aAnchor );
 
         xDocSh->DoClose();
