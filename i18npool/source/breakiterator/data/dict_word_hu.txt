@@ -50,6 +50,12 @@ $MidLetter = [[:name = APOSTROPHE:] [:name = GRAVE ACCENT:] \u0084 [:name = SOFT
               [:name = RIGHT SINGLE QUOTATION MARK:] [:name = HYPHENATION POINT:] [:name = PRIME:] [:name = HYPHEN-MINUS:]
               [:name = EURO SIGN:] [:name = PERCENT SIGN:] [:name = PER MILLE SIGN:] [:name = PER TEN THOUSAND SIGN:]
               [:name = EN DASH:] [:name = EM DASH:]
+              [:name = RIGHT DOUBLE QUOTATION MARK:]
+              [:name = LEFT PARENTHESIS:]
+              [:name = RIGHT PARENTHESIS:]
+              [:name = RIGHT SQUARE BRACKET:]
+              [:name = EXCLAMATION MARK:]
+              [:name = QUESTION MARK:]
               [:name = FULL STOP:] [:name = PERCENT SIGN:] [:name = SECTION SIGN:] [:name = DEGREE SIGN:]];  
               
 $SufixLetter = [:name= FULL STOP:];
