@@ -39,6 +39,7 @@
 #include <cmdid.h>
 #include <globals.hrc>
 #include <swabstdlg.hxx>
+#include <strings.hrc>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -146,7 +147,9 @@ void SwFieldEditDlg::Init()
         m_pPrevBT->Enable( bMove );
 
         if (pCurField->GetTypeId() == TYP_EXTUSERFLD)
-            m_pAddressBT->Show();
+            m_pAddressBT->Enable();
+        else
+            m_pAddressBT->Disable();
 
         pSh->DestroyCursor();
         pSh->EndAction();
