@@ -64,7 +64,7 @@ namespace drawinglayer
             maFillAttribute.reset(
                 new drawinglayer::attribute::SdrFillAttribute(
                     0.0,
-                    Color(rColor.GetRGBColor()).getBColor(),
+                    rColor.GetRGBColor().getBColor(),
                     drawinglayer::attribute::FillGradientAttribute(),
                     drawinglayer::attribute::FillHatchAttribute(),
                     drawinglayer::attribute::SdrFillGraphicAttribute()));

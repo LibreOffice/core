@@ -81,8 +81,8 @@ css::awt::Gradient Tools::VclToAwtGradient (const Gradient& rVclGradient)
 {
     css::awt::Gradient aAwtGradient (
         awt::GradientStyle(rVclGradient.GetStyle()),
-        rVclGradient.GetStartColor().GetRGBColor(),
-        rVclGradient.GetEndColor().GetRGBColor(),
+        sal_Int32(rVclGradient.GetStartColor().GetRGBColor()),
+        sal_Int32(rVclGradient.GetEndColor().GetRGBColor()),
         rVclGradient.GetAngle(),
         rVclGradient.GetBorder(),
         rVclGradient.GetOfsX(),
