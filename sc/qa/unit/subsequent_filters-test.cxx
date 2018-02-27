@@ -1761,7 +1761,7 @@ void ScFiltersTest::testCellAnchoredShapesODS()
         CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
         ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
         CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
-        CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
+        CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->getShapeRect().IsEmpty());
     }
 
     xDocSh->DoClose();
