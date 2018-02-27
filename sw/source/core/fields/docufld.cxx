@@ -89,6 +89,7 @@
 #include <editeng/outlobj.hxx>
 #include <calbck.hxx>
 #include <docary.hxx>
+#include <hints.hxx>
 
 #define URL_DECODE  INetURLObject::DecodeMechanism::Unambiguous
 

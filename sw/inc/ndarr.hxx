@@ -26,14 +26,10 @@
 #include <vector>
 #include <memory>
 
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
-
-#include <svtools/embedhlp.hxx>
-
 #include "bparr.hxx"
 #include "ndtyp.hxx"
+#include <rtl/ustring.hxx>
 #include <o3tl/sorted_vector.hxx>
-#include "ring.hxx"
 
 class Graphic;
 class GraphicObject;
@@ -67,6 +63,7 @@ class SwUndoTextToTable;
 struct SwPosition;
 
 namespace sw { class DocumentContentOperationsManager; }
+namespace svt { class EmbeddedObjectRef; }
 
 // class SwNodes
 

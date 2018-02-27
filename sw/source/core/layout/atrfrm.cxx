@@ -79,6 +79,7 @@
 #include <calbck.hxx>
 #include <pagedeschint.hxx>
 #include <drawdoc.hxx>
+#include <hints.hxx>
 
 #ifndef NDEBUG
 #include <ndtxt.hxx>

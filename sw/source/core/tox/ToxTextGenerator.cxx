@@ -38,6 +38,7 @@
 #include <ToxLinkProcessor.hxx>
 #include <ToxTabStopTokenHandler.hxx>
 #include <txatbase.hxx>
+#include <modeltoviewhelper.hxx>
 
 #include <svl/itemiter.hxx>
 

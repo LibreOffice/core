@@ -116,6 +116,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <svtools/embedhlp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

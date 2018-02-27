@@ -20,7 +20,7 @@
 #include <DocumentListItemsManager.hxx>
 #include <SwNodeNum.hxx>
 #include <ndtxt.hxx>
-
+#include <osl/diagnose.h>
 
 namespace sw
 {

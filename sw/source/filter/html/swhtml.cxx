@@ -117,6 +117,7 @@
 
 #include <strings.hrc>
 #include <swerror.h>
+#include <hints.hxx>
 #include "css1atr.hxx"
 
 #define FONTSIZE_MASK           7

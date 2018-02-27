@@ -22,7 +22,6 @@
 #include "swatrset.hxx"
 #include "swtypes.hxx"
 #include <vcl/vclptr.hxx>
-#include <vector>
 
 class SwFormat;
 class OutputDevice;

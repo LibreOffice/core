@@ -35,6 +35,7 @@
 #include <frmfmt.hxx>
 #include <fmtline.hxx>
 #include <numrule.hxx>
+#include <hints.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/fontitem.hxx>

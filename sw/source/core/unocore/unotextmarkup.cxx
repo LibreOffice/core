@@ -38,6 +38,7 @@
 
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
+#include <modeltoviewhelper.hxx>
 
 using namespace ::com::sun::star;
 

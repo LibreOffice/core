@@ -35,6 +35,7 @@
 #include <fmtftntx.hxx>
 #include <section.hxx>
 #include <calbck.hxx>
+#include <hints.hxx>
 
 namespace {
     /// Get a sorted list of the used footnote reference numbers.

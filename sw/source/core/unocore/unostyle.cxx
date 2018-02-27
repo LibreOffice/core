@@ -80,7 +80,7 @@
 #include <comphelper/sequence.hxx>
 #include <o3tl/make_unique.hxx>
 
-//
+#include <svl/stylepool.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <editeng/unoipset.hxx>
 #include <editeng/memberids.h>
@@ -91,6 +91,7 @@
 #include <svx/xbtmpit.hxx>
 
 #include <ccoll.hxx>
+#include <hints.hxx>
 
 #include <cassert>
 #include <memory>

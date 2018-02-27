@@ -35,6 +35,7 @@
 #include <pam.hxx>
 #include <tools/poly.hxx>
 #include <doc.hxx>
+#include <vcl/graph.hxx>
 
 class SwTextFormatColl;
 class SwCharFormat;
@@ -45,7 +46,6 @@ class SwNumFormat;
 class SwTextNode;
 class SwNoTextNode;
 class SwFormatCharFormat;
-class Graphic;
 class SwDoc;
 class SwNumRule;
 

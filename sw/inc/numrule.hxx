@@ -21,12 +21,10 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <editeng/svxenum.hxx>
 #include <editeng/numitem.hxx>
 #include "swdllapi.h"
 #include "swtypes.hxx"
 #include "calbck.hxx"
-#include "hints.hxx"
 #include "SwNumberTreeTypes.hxx"
 #include "ndarr.hxx"
 #include <unordered_map>
