@@ -73,10 +73,9 @@ struct SvxAsianLayoutPage_Impl
 
 SvxAsianLayoutPage_Impl::~SvxAsianLayoutPage_Impl()
 {
-    SvxForbiddenCharacterMap_Impl::iterator it;
-    for( it = aChangedLanguagesMap.begin(); it != aChangedLanguagesMap.end(); ++it )
+    for (auto const& changedLanguage : aChangedLanguagesMap)
     {
-        delete it->second;
+        delete changedLanguage.second;
     }
 }
 
@@ -202,15 +201,13 @@ bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )
     {
         try
         {
-            SvxForbiddenCharacterMap_Impl::iterator itElem;
-            for( itElem = pImpl->aChangedLanguagesMap.begin();
-                itElem != pImpl->aChangedLanguagesMap.end(); ++itElem )
+            for (auto const& changedLanguage : pImpl->aChangedLanguagesMap)
             {
-                Locale aLocale( LanguageTag::convertToLocale( itElem->first ));
-                if(itElem->second->bRemoved)
+                Locale aLocale( LanguageTag::convertToLocale(changedLanguage.first));
+                if(changedLanguage.second->bRemoved)
                     pImpl->xForbidden->removeForbiddenCharacters( aLocale );
-                else if(itElem->second->pCharacters)
-                    pImpl->xForbidden->setForbiddenCharacters( aLocale, *( itElem->second->pCharacters ) );
+                else if(changedLanguage.second->pCharacters)
+                    pImpl->xForbidden->setForbiddenCharacters( aLocale, *( changedLanguage.second->pCharacters ) );
             }
         }
         catch (const Exception&)
