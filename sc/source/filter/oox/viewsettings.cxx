@@ -534,8 +534,6 @@ void ViewSettings::setSheetViewSettings( sal_Int16 nSheet, const SheetViewModelR
 void ViewSettings::setSheetUsedArea( const ScRange& rUsedArea )
 {
     assert( rUsedArea.IsValid() );
-    assert( rUsedArea.aStart.Col() <= MAXCOLCOUNT );
-    assert( rUsedArea.aStart.Row() <= MAXROWCOUNT );
     maSheetUsedAreas[ rUsedArea.aStart.Tab() ] = rUsedArea;
 }
 
