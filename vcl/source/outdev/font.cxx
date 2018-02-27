@@ -1279,7 +1279,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
             if ( mpFontInstance->mnOrientation )
             {
                 Point aOriginPt(0, 0);
-                aOriginPt.RotateAround( aAdjPoint.X(), aAdjPoint.Y(), mpFontInstance->mnOrientation );
+                aOriginPt.RotateAround( aAdjPoint, mpFontInstance->mnOrientation );
             }
             aOutPoint += aAdjPoint;
             aOutPoint -= Point( nEmphasisWidth2, nEmphasisHeight2 );
