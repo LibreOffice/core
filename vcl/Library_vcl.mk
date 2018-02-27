@@ -246,7 +246,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/alpha \
     vcl/source/gdi/animate \
     vcl/source/gdi/base14 \
-    vcl/source/gdi/bitmap3 \
     vcl/source/gdi/bitmap4 \
     vcl/source/gdi/bitmap \
     vcl/source/gdi/bitmapex \
@@ -301,6 +300,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/wall \
     vcl/source/gdi/scrptrun \
     vcl/source/gdi/CommonSalLayout \
+    vcl/source/bitmap/bitmapconvert \
     vcl/source/bitmap/bitmapfilter \
     vcl/source/bitmap/bitmapscalesuper \
     vcl/source/bitmap/BitmapScaleConvolution \

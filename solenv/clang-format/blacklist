@@ -18057,6 +18057,7 @@ vcl/source/bitmap/BitmapSymmetryCheck.cxx
 vcl/source/bitmap/BitmapTools.cxx
 vcl/source/bitmap/bitmapfilter.cxx
 vcl/source/bitmap/bitmapscalesuper.cxx
+vcl/source/bitmap/bitmapconvert.cxx
 vcl/source/bitmap/checksum.cxx
 vcl/source/components/dtranscomp.cxx
 vcl/source/components/factory.cxx
@@ -18165,7 +18166,6 @@ vcl/source/gdi/alpha.cxx
 vcl/source/gdi/animate.cxx
 vcl/source/gdi/base14.cxx
 vcl/source/gdi/bitmap.cxx
-vcl/source/gdi/bitmap3.cxx
 vcl/source/gdi/bitmap4.cxx
 vcl/source/gdi/bitmapex.cxx
 vcl/source/gdi/bmpacc.cxx
