@@ -466,7 +466,12 @@ bool SwViewShell::PrintOrPDFExport(
     GDIMetaFile *pOrigRecorder(nullptr);
     GDIMetaFile *pMetaFile(nullptr);
     SwPostItMode nPostItMode = rPrintData.GetPrintPostIts();
-    if (nPostItMode == SwPostItMode::InMargins)
+
+    // tdf#91680 Reserve space in margin for comments only if there are comments
+    const bool bHasPostItsToPrintInMargins = ( nPostItMode == SwPostItMode::InMargins ) &&
+                                sw_GetPostIts( &GetDoc()->getIDocumentFieldsAccess(), nullptr );
+
+    if ( bHasPostItsToPrintInMargins )
     {
         //get and disable the existing recorder
         pOrigRecorder = pOutDev->GetConnectMetaFile();
@@ -537,8 +542,8 @@ bool SwViewShell::PrintOrPDFExport(
 
         SwPaintQueue::Repaint();
 
-        SwPostItMgr *pPostItManager = (nPostItMode == SwPostItMode::InMargins) ?
-            pShell->GetPostItMgr() : nullptr;
+        SwPostItMgr *pPostItManager = bHasPostItsToPrintInMargins ? pShell->GetPostItMgr() : nullptr;
+
         if (pPostItManager)
         {
             pPostItManager->CalcRects();
