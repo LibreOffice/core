@@ -175,6 +175,8 @@ public:
     virtual void            jobStartedPrinterUpdate() {}
     virtual void            jobEndedPrinterUpdate() {}
 
+    virtual void            updateMainThread() {}
+
     /// get information about underlying versions
     virtual OUString        getOSVersion() { return OUString("-"); }
 
