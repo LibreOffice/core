@@ -65,9 +65,9 @@ public:
         {
             tools::Rectangle aTemp = m_aComboListBox.GetDropDownPosSizePixel();
             Size aSize = aTemp.GetSize();
-            aSize.Height() /= m_aComboListBox.GetDisplayLineCount();
+            aSize.setHeight( aSize.Height() / m_aComboListBox.GetDisplayLineCount() );
             Point aTopLeft = aTemp.TopLeft();
-            aTopLeft.Y() += aSize.Height() * ( nItem - m_aComboListBox.GetTopEntry() );
+            aTopLeft.AdjustY( aSize.Height() * ( nItem - m_aComboListBox.GetTopEntry() ) );
             aRect = tools::Rectangle( aTopLeft, aSize );
         }
         else

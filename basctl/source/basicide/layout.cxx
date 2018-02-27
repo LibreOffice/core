@@ -349,7 +349,10 @@ void Layout::SplittedSide::ArrangeIn (tools::Rectangle const& rRect)
     {
         Item& rItem = vItems[iLastWin];
         Size aSize = rItem.pWin->GetDockingSize();
-        (bVertical ? aSize.Height() : aSize.Width()) += nLength - rItem.nEndPos;
+        if (bVertical)
+            aSize.AdjustHeight( nLength - rItem.nEndPos );
+        else
+            aSize.AdjustWidth( nLength - rItem.nEndPos );
         rItem.pWin->ResizeIfDocking(aSize);
         // and hiding the split line after the window
         if (iLastWin < vItems.size() - 1)
