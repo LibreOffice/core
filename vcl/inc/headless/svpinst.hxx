@@ -171,6 +171,7 @@ public:
     virtual bool            DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
     virtual bool            AnyInput( VclInputFlags nType ) override;
     virtual bool            IsMainThread() const override;
+    virtual void            updateMainThread() override;
 
     // may return NULL to disable session management
     virtual SalSession*     CreateSalSession() override;
