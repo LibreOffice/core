@@ -67,6 +67,7 @@
 #include <ndole.hxx>
 #include <memory>
 #include <swcrsr.hxx>
+#include <hints.hxx>
 #include <svl/itemiter.hxx>
 
 using namespace ::com::sun::star::i18n;

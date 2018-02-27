@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_HINTIDS_HXX
 #define INCLUDED_SW_INC_HINTIDS_HXX
 
-#include <tools/solar.h>
 #include <sal/types.h>
 #include <svx/xdef.hxx>
 #include "swdllapi.h"
@@ -27,6 +26,10 @@
 #include <vector>
 
 class SfxStringItem;
+class SwFormatChg;
+class SwUpdateAttr;
+class SwAttrSetChg;
+class SwDocPosUpdate;
 
 // For SwTextHints without end index the following char is added:
 

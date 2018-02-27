@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_NDINDEX_HXX
 #define INCLUDED_SW_INC_NDINDEX_HXX
 
-#include <limits.h>
 #include <iostream>
 
 #include <tools/solar.h>

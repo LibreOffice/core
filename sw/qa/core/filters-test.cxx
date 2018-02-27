@@ -18,6 +18,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/fcontnr.hxx>
 
 #include <svl/stritem.hxx>
 #include <unotools/tempfile.hxx>

@@ -25,7 +25,6 @@
 #include "node.hxx"
 #include "hintids.hxx"
 #include "ndhints.hxx"
-#include "modeltoviewhelper.hxx"
 #include "SwNumberTreeTypes.hxx"
 #include "IDocumentContentOperations.hxx"
 
@@ -43,6 +42,10 @@ class SvxLRSpaceItem;
 
 namespace utl {
     class TransliterationWrapper;
+}
+namespace vcl
+{
+class Font;
 }
 
 class SwTextFormatColl;

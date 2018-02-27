@@ -22,7 +22,6 @@
 #include <sal/config.h>
 
 #include <editeng/sizeitem.hxx>
-#include <tools/gen.hxx>
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include "hintids.hxx"

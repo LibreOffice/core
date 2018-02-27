@@ -54,6 +54,7 @@
 #include <strings.hrc>
 #include <viewsh.hxx>
 #include <txtfrm.hxx>
+#include <hints.hxx>
 #include <memory>
 #include "ndsect.hxx"
 #include <tools/datetimeutils.hxx>

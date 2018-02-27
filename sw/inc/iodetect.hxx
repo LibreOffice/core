@@ -20,11 +20,11 @@
 #ifndef INCLUDED_SW_INC_IODETECT_HXX
 #define INCLUDED_SW_INC_IODETECT_HXX
 
-#include <osl/endian.h>
+#include <memory>
 #include <rtl/ustring.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/fcontnr.hxx>
+#include <tools/lineend.hxx>
+#include <tools/solar.h>
+#include <com/sun/star/embed/XStorage.hpp>
 #include "swdllapi.h"
 
 #define FILTER_RTF      "RTF"       ///< RTF filter
@@ -43,6 +43,11 @@
 
 #define sSWRITER        "swriter"
 #define sSWRITERWEB     "swriter/web"
+
+class SfxFilter;
+class SfxFilterContainer;
+class SotStorage;
+class SvStream;
 
 struct SwIoDetect
 {

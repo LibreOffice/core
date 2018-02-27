@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_HHCWRP_HXX
 
 #include <editeng/hangulhanja.hxx>
+#include "swdllapi.h"
 
 class SwView;
 namespace vcl { class Window; }

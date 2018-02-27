@@ -107,6 +107,7 @@ using namespace ::com::sun::star;
 #include <unomid.h>
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
+#include <svtools/embedhlp.hxx>
 
 SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell)
 

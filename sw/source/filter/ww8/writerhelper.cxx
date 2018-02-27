@@ -48,6 +48,7 @@
 #include <charfmt.hxx>
 #include <fchrfmt.hxx>
 #include <unotools/streamwrap.hxx>
+#include <svtools/embedhlp.hxx>
 #include <numrule.hxx>
 #include <vcl/svapp.hxx>
 #include <IDocumentDrawModelAccess.hxx>

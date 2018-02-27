@@ -78,6 +78,7 @@
 #include <memory>
 
 #include <rdfhelper.hxx>
+#include <hints.hxx>
 
 #ifdef DBG_UTIL
 #define CHECK           Check(true);
