@@ -58,6 +58,11 @@ public:
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void RequestHelp( const HelpEvent& rHEvt ) override;
 
+    /// For LibreOfficeKit, we need to route these to the mouse events.
+    virtual void LogicMouseButtonDown(const MouseEvent&);
+    virtual void LogicMouseButtonUp(const MouseEvent&);
+    virtual void LogicMouseMove(const MouseEvent&);
+
     void ForceInvalidate();
     virtual void Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
     virtual void Invalidate( const Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
