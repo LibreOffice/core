@@ -2352,8 +2352,7 @@ void Document::disposeParagraphs()
 // static
 css::uno::Any Document::mapFontColor(::Color const & rColor)
 {
-    return css::uno::Any(
-        static_cast< ::sal_Int32 >(COLORDATA_RGB(rColor.GetColor())));
+    return css::uno::makeAny(rColor.GetRGBColor());
         // FIXME  keep transparency?
 }
 
