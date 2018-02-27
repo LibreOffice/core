@@ -40,9 +40,9 @@ TSAURLsDialog::TSAURLsDialog(vcl::Window* pParent)
         if (aUserSetTSAURLs)
         {
             const css::uno::Sequence<OUString>& rUserSetTSAURLs = aUserSetTSAURLs.get();
-            for (auto i = rUserSetTSAURLs.begin(); i != rUserSetTSAURLs.end(); ++i)
+            for (auto const& userSetTSAURL : rUserSetTSAURLs)
             {
-                AddTSAURL(*i);
+                AddTSAURL(userSetTSAURL);
             }
         }
     }
@@ -89,9 +89,9 @@ void TSAURLsDialog::AddTSAURL(const OUString& rURL)
     m_pURLListBox->SetUpdateMode(false);
     m_pURLListBox->Clear();
 
-    for (auto i = m_aURLs.cbegin(); i != m_aURLs.cend(); ++i)
+    for (auto const& url : m_aURLs)
     {
-        m_pURLListBox->InsertEntry(*i);
+        m_pURLListBox->InsertEntry(url);
     }
 
     m_pURLListBox->SetUpdateMode(true);

@@ -755,10 +755,10 @@ void SearchAndParseThread::execute()
         else
             vLearnmoreURLs.push_back( m_aURL );
 
-        for( it = vLearnmoreURLs.begin(); it!=vLearnmoreURLs.end() && nIndex < MAX_RESULTS; ++it )
+        for (auto const& learnMoreUrl : vLearnmoreURLs)
         {
             OUString sPreviewFile, aPersonaSetting;
-            bool bResult = getPreviewFile( *it, &sPreviewFile, &aPersonaSetting );
+            bool bResult = getPreviewFile( learnMoreUrl, &sPreviewFile, &aPersonaSetting );
             // parsing is buggy at times, as HTML is not proper. Skip it.
             if(aPersonaSetting.isEmpty() || !bResult)
             {
@@ -788,6 +788,8 @@ void SearchAndParseThread::execute()
             m_pPersonaDialog->SetImages( Image( aBmp ), nIndex++ );
             m_pPersonaDialog->setOptimalLayoutSize();
             m_pPersonaDialog->AddPersonaSetting( aPersonaSetting );
+            if (nIndex >= MAX_RESULTS)
+                break;
         }
 
         if( !m_bExecute )

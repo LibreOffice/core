@@ -109,13 +109,12 @@ namespace offapp
         if (m_aSettings.size() != m_aSavedSettings.size())
             return true;
 
-        DriverPoolingSettings::const_iterator aCurrent = m_aSettings.begin();
-        DriverPoolingSettings::const_iterator aCurrentEnd = m_aSettings.end();
         DriverPoolingSettings::const_iterator aSaved = m_aSavedSettings.begin();
-        for (;aCurrent != aCurrentEnd; ++aCurrent, ++aSaved)
+        for (auto const& currentSetting : m_aSettings)
         {
-            if (*aCurrent != *aSaved)
+            if (currentSetting != *aSaved)
                 return true;
+            ++aSaved;
         }
 
         return false;
