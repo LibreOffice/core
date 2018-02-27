@@ -591,6 +591,16 @@ bool ScTable::SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden)
     else
         bChanged = mpHiddenRows->setFalse(nStartRow, nEndRow);
 
+    std::vector<SdrObject*> aRowDrawObjects;
+    ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
+    if (pDrawLayer) {
+        aRowDrawObjects = pDrawLayer->GetObjectsAnchoredToRows(GetTab(), nStartRow, nEndRow);
+        for (auto aObj : aRowDrawObjects)
+        {
+            aObj->SetVisible(!bHidden);
+        }
+    }
+
     if (bChanged)
     {
         if (IsStreamValid())

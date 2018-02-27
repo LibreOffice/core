@@ -25,6 +25,7 @@
 #include <svtools/imap.hxx>
 #include "global.hxx"
 #include "address.hxx"
+#include "drwlayer.hxx"
 
 #define SC_DRAWLAYER 0x30334353     // Inventor: "SC30"
 
@@ -51,13 +52,32 @@ public:
     Point               maStartOffset;
     Point               maEndOffset;
     Type                meType;
-    Rectangle           maLastRect;
+
     bool                mbResizeWithCell = false;
+    bool                mbWasInHiddenRow = false;
 
     explicit            ScDrawObjData();
 
+    Rectangle getShapeRect() { return maShapeRect; };
+    Rectangle getLastCellRect() { return maLastCellRect; };
+    void setShapeRect(const ScDocument* rDoc, Rectangle rNewRect, bool bIsVisible=true)
+    {
+        // bIsVisible should be false when the object is hidden obviously. we dont want to store the old cell rect in that
+        // case because it will have height=0
+        if (maStart.IsValid() && mbResizeWithCell && bIsVisible)
+            maLastCellRect = ScDrawLayer::GetCellRect(const_cast<ScDocument&>(*rDoc), maStart, true);
+        maShapeRect = rNewRect;
+        mbWasInHiddenRow = !bIsVisible;
+    };
+
 private:
      virtual ScDrawObjData* Clone( SdrObject* pObj ) const override;
+
+    // Stores the last cell rect this shape was anchored to.
+    // Needed when the cell is resized to resize the image accordingly.
+    Rectangle maLastCellRect;
+    // Stores the rect of the shape to which this ScDrawObjData belongs.
+    Rectangle maShapeRect;
 };
 
 class ScIMapInfo : public SdrObjUserData

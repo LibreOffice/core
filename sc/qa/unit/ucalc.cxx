@@ -2583,14 +2583,18 @@ void Test::testGraphicsInGroup()
 
         m_pDoc->ShowRows(0, 100, 0, false);
         m_pDoc->SetDrawPageSize(0);
+
+        const long TOLERANCE = 30; //30 hmm
+
         CPPUNIT_ASSERT_MESSAGE("Left and Right should be unchanged",
-            aOrigRect.Left() == rNewRect.Left() && aOrigRect.Right() == rNewRect.Right());
+            testEqualsWithTolerance(aOrigRect.Left(), rNewRect.Left(), TOLERANCE) &&
+            testEqualsWithTolerance(aOrigRect.Right(), rNewRect.Right(), TOLERANCE));
         CPPUNIT_ASSERT_MESSAGE("Height should be minimum allowed height",
             (rNewRect.Bottom() - rNewRect.Top()) <= 1);
         m_pDoc->ShowRows(0, 100, 0, true);
         m_pDoc->SetDrawPageSize(0);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should not change when page anchored",
-                               static_cast<const Rectangle &>(aOrigRect), rNewRect);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should not change when cell anchored",
+                               const_cast<const Rectangle &>(aOrigRect), rNewRect);
     }
 
     {
