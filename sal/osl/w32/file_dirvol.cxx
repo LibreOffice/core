@@ -1655,9 +1655,9 @@ oslFileError SAL_CALL osl_getFileStatus(
         {
             ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
             sal_uInt32 nNewLen = GetCaseCorrectPathName( o3tl::toW( sFullPath.getStr() ),
-                                                         o3tl::toW( aBuffer ),
-                                                         aBuffer.getBufSizeInSymbols(),
-                                                         true );
+                                                   o3tl::toW( aBuffer ),
+                                                   aBuffer.getBufSizeInSymbols(),
+                                                   true );
 
             if ( nNewLen )
             {
