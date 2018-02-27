@@ -145,13 +145,13 @@ void SvSimpleTable::UpdateViewSize()
     Size HbSize=aHeaderBar->GetSizePixel();
 
     HbSize.setWidth(theWinSize.Width() );
-    theWinSize.Height()-=HbSize.Height();
+    theWinSize.AdjustHeight(-HbSize.Height());
     Point thePos(0,0);
 
     aHeaderBar->SetPosPixel(thePos);
     aHeaderBar->SetSizePixel(HbSize);
 
-    thePos.Y()+=HbSize.Height();
+    thePos.AdjustY(HbSize.Height());
     SvHeaderTabListBox::SetPosPixel(thePos);
     SvHeaderTabListBox::SetSizePixel(theWinSize);
     Invalidate();

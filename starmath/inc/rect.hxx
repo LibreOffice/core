@@ -116,7 +116,7 @@ public:
 
             void SetItalicSpaces(long nLeftSpace, long nRightSpace);
 
-            void SetWidth(sal_uLong nWidth)     { aSize.Width()  = nWidth; }
+            void SetWidth(sal_uLong nWidth)     { aSize.setWidth(nWidth); }
 
             void SetLeft(long nLeft);
             void SetRight(long nRight);

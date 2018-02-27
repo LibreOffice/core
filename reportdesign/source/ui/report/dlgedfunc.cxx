@@ -78,11 +78,11 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     aStartWidth *= m_pParent->GetMapMode().GetScaleX();
 
     aOut.AdjustWidth( -static_cast<long>(aStartWidth) );
-    aOut.Height() = m_pParent->GetOutputSizePixel().Height();
+    aOut.setHeight( m_pParent->GetOutputSizePixel().Height() );
 
     Point aPos = pScrollWindow->getThumbPos();
     aPos.setX( aPos.X() * 0.5 );
-    aPos.Y() *= 0.5;
+    aPos.setY( aPos.Y() * 0.5 );
     tools::Rectangle aOutRect( aPos, aOut );
     aOutRect = m_pParent->PixelToLogic( aOutRect );
     tools::Rectangle aWorkArea(Point(), pScrollWindow->getTotalSize());

@@ -770,8 +770,9 @@ void OViewsWindow::alignMarkedObjects(ControlModification _nControlModification,
 
     bool bMove = true;
 
-    ::std::function<long&(tools::Rectangle *)> aGetFun       = ::std::mem_fn(static_cast<long&(tools::Rectangle:: *)()>(&tools::Rectangle::Bottom));
-    ::std::function<long&(tools::Rectangle *)> aRefFun       = ::std::mem_fn(static_cast<long&(tools::Rectangle:: *)()>(&tools::Rectangle::Top));
+    auto aGetFun = ::std::mem_fn(static_cast<long(tools::Rectangle:: *)() const>(&tools::Rectangle::Bottom));
+    auto aSetFun = ::std::mem_fn(&tools::Rectangle::SetBottom);
+    auto aRefFun = ::std::mem_fn(static_cast<long(tools::Rectangle:: *)() const>(&tools::Rectangle::Top));
     TRectangleMap::const_iterator aRectIter = aSortRectangles.begin();
     TRectangleMap::const_iterator aRectEnd = aSortRectangles.end();
     for (;aRectIter != aRectEnd ; ++aRectIter)
@@ -790,8 +791,9 @@ void OViewsWindow::alignMarkedObjects(ControlModification _nControlModification,
             switch(_nControlModification)
             {
                 case ControlModification::TOP   :
-                    aGetFun  = ::std::mem_fn(static_cast<long&(tools::Rectangle:: *)()>(&tools::Rectangle::Top));
-                    aRefFun  = ::std::mem_fn(static_cast<long&(tools::Rectangle:: *)()>(&tools::Rectangle::Bottom));
+                    aGetFun  = ::std::mem_fn(static_cast<long(tools::Rectangle:: *)() const>(&tools::Rectangle::Top));
+                    aSetFun  = ::std::mem_fn(&tools::Rectangle::SetTop);
+                    aRefFun  = ::std::mem_fn(static_cast<long(tools::Rectangle:: *)() const>(&tools::Rectangle::Bottom));
                     pValue = &nYMov;
                     break;
                 case ControlModification::BOTTOM:
@@ -804,16 +806,18 @@ void OViewsWindow::alignMarkedObjects(ControlModification _nControlModification,
                     bMove = false;
                     break;
                 case ControlModification::RIGHT :
-                    aGetFun  = ::std::mem_fn(static_cast<long&(tools::Rectangle:: *)()>(&tools::Rectangle::Right));
-                    aRefFun  = ::std::mem_fn(static_cast<long&(tools::Rectangle:: *)()>(&tools::Rectangle::Left));
+                    aGetFun  = ::std::mem_fn(static_cast<long(tools::Rectangle:: *)() const>(&tools::Rectangle::Right));
+                    aSetFun  = ::std::mem_fn(&tools::Rectangle::SetRight);
+                    aRefFun  = ::std::mem_fn(static_cast<long(tools::Rectangle:: *)() const>(&tools::Rectangle::Left));
                     break;
                 case ControlModification::CENTER_HORIZONTAL:
                     nXMov = aCenter.X() - aObjRect.Center().X();
                     bMove = false;
                     break;
                 case ControlModification::LEFT  :
-                    aGetFun  = ::std::mem_fn(static_cast<long&(tools::Rectangle:: *)()>(&tools::Rectangle::Left));
-                    aRefFun  = ::std::mem_fn(static_cast<long&(tools::Rectangle:: *)()>(&tools::Rectangle::Right));
+                    aGetFun  = ::std::mem_fn(static_cast<long(tools::Rectangle:: *)() const>(&tools::Rectangle::Left));
+                    aSetFun  = ::std::mem_fn(&tools::Rectangle::SetLeft);
+                    aRefFun  = ::std::mem_fn(static_cast<long(tools::Rectangle:: *)() const>(&tools::Rectangle::Right));
                     break;
                 default:
                     bMove = false;
@@ -822,7 +826,7 @@ void OViewsWindow::alignMarkedObjects(ControlModification _nControlModification,
             if ( bMove )
             {
                 tools::Rectangle aTest = aObjRect;
-                aGetFun(&aTest) = aGetFun(&aBound);
+                aSetFun(&aTest, aGetFun(&aBound));
                 TRectangleMap::const_iterator aInterSectRectIter = aSortRectangles.begin();
                 for (; aInterSectRectIter != aRectIter; ++aInterSectRectIter)
                 {
