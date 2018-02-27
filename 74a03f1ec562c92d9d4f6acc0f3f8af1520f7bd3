@@ -16,6 +16,24 @@
       "revId": "74a03f1ec562c92d9d4f6acc0f3f8af1520f7bd3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_58f109cd",
+        "filename": "sw/uiconfig/swriter/ui/editfielddialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-02-27T17:47:29Z",
+      "side": 1,
+      "message": "Then let\u0027s go with 18 as for the non-related groups since Edit has nothing in common with the navigation.",
+      "parentUuid": "da36d5c6_b83be59b",
+      "revId": "74a03f1ec562c92d9d4f6acc0f3f8af1520f7bd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
