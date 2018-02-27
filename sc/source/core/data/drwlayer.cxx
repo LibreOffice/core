@@ -646,6 +646,15 @@ void ScDrawLayer::ResizeLastRectFromAnchor( const SdrObject* pObj, ScDrawObjData
         aEnd += lcl_calcAvailableDiff(*pDoc, nCol2, nRow2, nTab2, rData.maEndOffset);
 
         tools::Rectangle aNew = tools::Rectangle( aPos, aEnd );
+
+        if (pObj->shouldKeepAspectRatio())
+        {
+            double nWidthFactor = static_cast<double>(aNew.GetWidth()) / static_cast<double>(rData.maLastRect.GetWidth());
+            double nHeightFactor = static_cast<double>(aNew.GetHeight()) / static_cast<double>(rData.maLastRect.GetHeight());
+            aNew.setWidth(rtl::math::round(static_cast<double>(aNew.GetWidth()) * nHeightFactor));
+            aNew.setHeight(rtl::math::round(static_cast<double>(aNew.GetHeight()) * nWidthFactor));
+        }
+
         if ( bNegativePage )
             MirrorRectRTL( aNew );
 
@@ -944,16 +953,14 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         /*
          * If we were not allowed resize the object, then the end cell anchor
          * is possibly incorrect now, and if the object has no end-cell (e.g.
-         * missing in original .xml) we are also forced to generate one
+         * missing in original .xml) we are also forced to generate one.
+         * Also when the object was resized while keeping the aspect ratio,
+         * the end anchor also needs to be updated as it can now lay in a different cell.
         */
-        bool bEndAnchorIsBad = !bValid2 || pObj->IsResizeProtect();
-        if (bEndAnchorIsBad)
-        {
-            // update 'rotated' anchor
-            ScDrawLayer::UpdateCellAnchorFromPositionEnd(*pObj, rData, *pDoc, nTab1, false);
-            // update 'unrotated' anchor
-            ScDrawLayer::UpdateCellAnchorFromPositionEnd(*pObj, rNoRotatedAnchor, *pDoc, nTab1 );
-        }
+        // update 'rotated' anchor
+        ScDrawLayer::UpdateCellAnchorFromPositionEnd(*pObj, rData, *pDoc, nTab1, false);
+        // update 'unrotated' anchor
+        ScDrawLayer::UpdateCellAnchorFromPositionEnd(*pObj, rNoRotatedAnchor, *pDoc, nTab1 );
     }
 }
 
