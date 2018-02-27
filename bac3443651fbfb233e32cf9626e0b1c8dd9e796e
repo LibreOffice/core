@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_bde117d3",
+        "filename": "offapi/com/sun/star/document/ExoticFileLoadException.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-27T11:54:38Z",
+      "side": 1,
+      "message": "\"FileURL\" evokes the connotation of a file: URL (which it need not be).  \"DocumentURL\" or just \"URL\"?",
+      "revId": "bac3443651fbfb233e32cf9626e0b1c8dd9e796e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_fdeb8fae",
+        "filename": "sfx2/source/doc/exoticfileloadexception.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-27T11:54:38Z",
+      "side": 1,
+      "message": "unused",
+      "revId": "bac3443651fbfb233e32cf9626e0b1c8dd9e796e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
