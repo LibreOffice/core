@@ -752,7 +752,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     // if necessary, start a new list item
     if( rInfo.bInNumBulList && bNumbered )
     {
-        HtmlWriter html(rWrt.Strm());
+        HtmlWriter html(rWrt.Strm(), rHWrt.maNamespace);
         html.start(OOO_STRING_SVTOOLS_HTML_li);
         if( USHRT_MAX != nNumStart )
             html.attribute(OOO_STRING_SVTOOLS_HTML_O_value, OString::number(nNumStart));
@@ -2018,7 +2018,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 
         rHTMLWrt.m_bLFPossible = true;
 
-        HtmlWriter aHtml(rWrt.Strm());
+        HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
         aHtml.start(OOO_STRING_SVTOOLS_HTML_horzrule);
 
         const SfxItemSet* pItemSet = pNd->GetpSwAttrSet();
@@ -2468,7 +2468,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                     if( 0x0a == c )
                     {
                         HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
-                        HtmlWriter aHtml(rWrt.Strm());
+                        HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
                         aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak);
                     }
                     else if (c == CH_TXT_ATR_FORMELEMENT)
@@ -2518,7 +2518,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
         }
         else
         {
-            HtmlWriter aHtml(rHTMLWrt.Strm());
+            HtmlWriter aHtml(rHTMLWrt.Strm(), rHTMLWrt.maNamespace);
             aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak);
             const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>( pNd->GetSwAttrSet().Get(RES_UL_SPACE) );
             if (rULSpace.GetLower() > 0 &&
@@ -2546,7 +2546,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
             pString = OOO_STRING_SVTOOLS_HTML_AL_right;
         }
 
-        HtmlWriter aHtml(rHTMLWrt.Strm());
+        HtmlWriter aHtml(rHTMLWrt.Strm(), rHTMLWrt.maNamespace);
         aHtml.start(OOO_STRING_SVTOOLS_HTML_linebreak);
         aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_clear, pString);
         aHtml.end();

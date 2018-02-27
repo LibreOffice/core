@@ -39,6 +39,7 @@ public:
     void testSingleElementWithContent();
     void testSingleElementWithContentAndAttributes();
     void testNested();
+    void testNamespace();
     void testAttributeValues();
 
     CPPUNIT_TEST_SUITE(Test);
@@ -47,6 +48,7 @@ public:
     CPPUNIT_TEST(testSingleElementWithContent);
     CPPUNIT_TEST(testSingleElementWithContentAndAttributes);
     CPPUNIT_TEST(testNested);
+    CPPUNIT_TEST(testNamespace);
     CPPUNIT_TEST(testAttributeValues);
 
     CPPUNIT_TEST_SUITE_END();
@@ -155,6 +157,20 @@ void Test::testNested()
     OString aString = extractFromStream(aStream);
 
     CPPUNIT_ASSERT_EQUAL(OString("<abc><xyz/></abc>"), aString);
+}
+
+void Test::testNamespace()
+{
+    SvMemoryStream aStream;
+
+    HtmlWriter aHtml(aStream, "reqif-xhtml");
+    aHtml.prettyPrint(false);
+    aHtml.single("br");
+
+    OString aString = extractFromStream(aStream);
+
+    // This was <br/>, namespace request was ignored.
+    CPPUNIT_ASSERT_EQUAL(OString("<reqif-xhtml:br/>"), aString);
 }
 
 void Test::testAttributeValues()

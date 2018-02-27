@@ -390,6 +390,8 @@ public:
     bool mbEmbedImages : 1;
     /// If XHTML markup should be written instead of HTML.
     bool mbXHTML = false;
+    /// XML namespace, in case of XHTML.
+    OString maNamespace;
 
 #define sCSS2_P_CLASS_leaders "leaders"
     bool m_bCfgPrintLayout : 1;       // PrintLayout option for TOC dot leaders

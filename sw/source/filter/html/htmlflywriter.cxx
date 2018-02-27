@@ -1229,7 +1229,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
     if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine( true );
 
-    HtmlWriter aHtml(rWrt.Strm());
+    HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
 
     // <a name=...></a>...<img ...>
     if( pMarkType && !rFrameFormat.GetName().isEmpty() )

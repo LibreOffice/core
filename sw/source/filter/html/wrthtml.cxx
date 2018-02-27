@@ -183,8 +183,16 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
     {
         mbEmbedImages = true;
     }
-    else if (sFilterOptions == "XHTML")
-        mbXHTML = true;
+
+    uno::Sequence<OUString> aOptionSeq = comphelper::string::convertCommaSeparated(sFilterOptions);
+    const OUString aXhtmlNsKey("xhtmlns=");
+    for (const auto& rOption : aOptionSeq)
+    {
+        if (rOption == "XHTML")
+            mbXHTML = true;
+        else if (rOption.startsWith(aXhtmlNsKey))
+            maNamespace = rOption.copy(aXhtmlNsKey.getLength()).toUtf8();
+    }
 }
 
 sal_uLong SwHTMLWriter::WriteStream()
