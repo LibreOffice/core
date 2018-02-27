@@ -292,6 +292,9 @@ void Application::Abort( const OUString& rErrorText )
             break;
         }
     }
+#if OSL_DEBUG_LEVEL > 0
+    dumpCore = true;
+#endif
 
     SalAbort( rErrorText, dumpCore );
 }
