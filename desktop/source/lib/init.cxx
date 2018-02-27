@@ -3582,6 +3582,8 @@ static void lo_startmain(void*)
     if (comphelper::SolarMutex::get())
         Application::GetSolarMutex().tryToAcquire();
 
+    Application::UpdateMainThread();
+
     soffice_main();
 
     Application::ReleaseSolarMutex();

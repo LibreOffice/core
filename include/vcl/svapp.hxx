@@ -1352,6 +1352,9 @@ public:
     static void                 ShowNativeErrorBox(const OUString& sTitle  ,
                                                    const OUString& sMessage);
 
+    /** Update main thread identifier */
+    static void                 UpdateMainThread();
+
     /** Do we have a native / system file selector available?
 
      @returns True if native file selector is available, false otherwise.
