@@ -88,7 +88,7 @@ public:
     long                AdjustY( long nVertMove ) { nB += nVertMove; return nB; }
 
     void                RotateAround( long& rX, long& rY, short nOrientation ) const;
-
+    void                RotateAround( Point&, short nOrientation ) const;
 
     Point&              operator += ( const Point& rPoint );
     Point&              operator -= ( const Point& rPoint );
