@@ -1853,6 +1853,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDOCX(SvStream &rStream)
     catch (const css::lang::WrappedTargetRuntimeException&)
     {
     }
+    catch (const std::exception&)
+    {
+    }
     xDocSh->SetLoading(SfxLoadedFlags::ALL);
 
     xDocSh->DoClose();
