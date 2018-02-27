@@ -647,7 +647,7 @@ bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool 
                     {
                         OSL_ENSURE((cDecimalDelimiter && nType != DataType::INTEGER) ||
                                    (!cDecimalDelimiter && nType == DataType::INTEGER),
-                                   "FalscherTyp");
+                                   "Wrong type");
 
                         OUStringBuffer aBuf(aStr.getLength());
                         // convert to Standard-Notation (DecimalPOINT without thousands-comma):

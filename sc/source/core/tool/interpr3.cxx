@@ -3695,7 +3695,7 @@ void ScInterpreter::ScTrimMean()
         if (nIndex % 2 != 0)
             nIndex--;
         nIndex /= 2;
-        OSL_ENSURE(nIndex < nSize, "ScTrimMean: falscher Index");
+        OSL_ENSURE(nIndex < nSize, "ScTrimMean: wrong index");
         double fSum = 0.0;
         for (SCSIZE i = nIndex; i < nSize-nIndex; i++)
             fSum += aSortArray[i];

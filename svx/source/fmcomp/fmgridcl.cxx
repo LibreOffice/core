@@ -1567,7 +1567,7 @@ void FmGridControl::ColumnMoved(sal_uInt16 nId)
             }
         }
 
-        DBG_ASSERT(i < xColumns->getCount(), "Falscher css::sdbcx::Index");
+        DBG_ASSERT(i < xColumns->getCount(), "Wrong css::sdbcx::Index");
         xColumns->removeByIndex(i);
         Any aElement;
         aElement <<= xCol;

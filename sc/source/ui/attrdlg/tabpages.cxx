@@ -177,7 +177,7 @@ IMPL_LINK( ScTabPageProtection, ButtonClickHdl, Button*, pBox, void )
             bHidePrint = bOn;
         else
         {
-            OSL_FAIL("falscher Button");
+            OSL_FAIL("Wrong button");
         }
     }
 

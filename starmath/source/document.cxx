@@ -248,7 +248,7 @@ void SmDocShell::ArrangeFormula()
         }
     }
     OSL_ENSURE(pOutDev->GetMapMode().GetMapUnit() == MapUnit::Map100thMM,
-               "Sm : falscher MapMode");
+               "Sm : wrong MapMode");
 
     const SmFormat &rFormat = GetFormat();
     mpTree->Prepare(rFormat, *this, 0);

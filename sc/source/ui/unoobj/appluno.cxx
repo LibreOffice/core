@@ -524,7 +524,7 @@ static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, co
 {
     rDesc.initArgumentInfo();   // full argument info is needed
 
-    OSL_ENSURE( rSequence.getLength() == SC_FUNCDESC_PROPCOUNT, "Falscher Count" );
+    OSL_ENSURE( rSequence.getLength() == SC_FUNCDESC_PROPCOUNT, "Wrong count" );
 
     beans::PropertyValue* pArray = rSequence.getArray();
 
