@@ -750,6 +750,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mbDoubleBufferingRequested = bDoubleBuffer; // when we are not sure, assume it cannot do double-buffering via RenderContext
     mpLOKNotifier                       = nullptr;
     mnLOKWindowId                       = 0;
+    mbLOKParentNotifier                 = false;
 }
 
 WindowImpl::~WindowImpl()
@@ -3254,6 +3255,8 @@ void Window::SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier, bool 
         mpWindowImpl->mnLOKWindowId = sLastLOKWindowId++;
         GetLOKWindowsMap().insert(std::map<vcl::LOKWindowId, VclPtr<vcl::Window>>::value_type(mpWindowImpl->mnLOKWindowId, this));
     }
+    else
+        mpWindowImpl->mbLOKParentNotifier = true;
 
     mpWindowImpl->mpLOKNotifier = pNotifier;
 }
