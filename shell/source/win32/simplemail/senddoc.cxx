@@ -242,12 +242,6 @@ int wmain(int argc, wchar_t* argv[])
 
     try
     {
-        // we have to set the flag MAPI_NEW_SESSION,
-        // because in the case Outlook xxx (not Outlook Express!)
-        // is installed as Exchange and Mail Client a Profile
-        // selection dialog must appear because we specify no
-        // profile name, so the user has to specify a profile
-
         LHANDLE const hSession = 0;
 
         MapiRecipDescW mapiOriginator;
