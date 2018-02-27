@@ -484,7 +484,7 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         aAnchor.maStart.SetCol( 5 );
         aAnchor.maEnd.SetRow( 3 );
         aAnchor.maEnd.SetCol( 7 );
-        impl_testLegacyCellAnchoredRotatedShape( rDoc, aRect, aAnchor );
+        impl_testLegacyCellAnchoredRotatedShape( rDoc, aRect, aAnchor ); // fails here
         // test save and reload
         // for some reason having this test in subsequent_export-test.cxx causes
         // a core dump in editeng ( so moved to here )
