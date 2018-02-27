@@ -22,6 +22,16 @@
 #include <tools/gen.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
+void Point::RotateAround( Point& rPoint,
+                          short nOrientation ) const
+{
+    long nX = rPoint.X();
+    long nY = rPoint.Y();
+    RotateAround(nX, nY, nOrientation);
+    rPoint.setX(nX);
+    rPoint.setY(nY);
+}
+
 void Point::RotateAround( long& rX, long& rY,
                           short nOrientation ) const
 {

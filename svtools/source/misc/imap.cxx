@@ -36,8 +36,8 @@
 #include <memory>
 
 
-#define SCALEPOINT(aPT,aFracX,aFracY) (aPT).X()=long((aPT).X()*aFracX);  \
-                                      (aPT).Y()=long((aPT).Y()*aFracY);
+#define SCALEPOINT(aPT,aFracX,aFracY) (aPT).setX(long((aPT).X()*aFracX));  \
+                                      (aPT).setY(long((aPT).Y()*aFracY));
 
 
 /******************************************************************************/

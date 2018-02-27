@@ -158,9 +158,15 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
             double fWH = static_cast<double>(aSizePix.Width()) / aSizePix.Height();
 
             if( fWH <= 1.0 )
-                aSizePix.setWidth( FRound( ( aSizePix.Height() = 512 ) * fWH ) );
+            {
+                aSizePix.setHeight(512);
+                aSizePix.setWidth( FRound( ( aSizePix.Height() ) * fWH ) );
+            }
             else
-                aSizePix.setHeight( FRound( ( aSizePix.Width() = 512 ) / fWH ) );
+            {
+                aSizePix.setWidth(512);
+                aSizePix.setHeight( FRound( ( aSizePix.Width() ) / fWH ) );
+            }
         }
 
         if( pVDev->SetOutputSizePixel( aSizePix ) )
