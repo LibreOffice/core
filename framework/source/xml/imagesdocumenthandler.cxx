@@ -670,7 +670,7 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
     else
     {
         OUStringBuffer   aColorStrBuffer( 8 );
-        sal_Int64       nValue = pImageList->aMaskColor.GetRGBColor();
+        sal_Int64       nValue = sal_uInt32(pImageList->aMaskColor.GetRGBColor());
 
         aColorStrBuffer.append( "#" );
         aColorStrBuffer.append( OUString::number( nValue, 16 ));

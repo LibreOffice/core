@@ -95,7 +95,7 @@ public:
     {
         return mnColor;
     }
-    ColorData GetRGBColor() const
+    Color GetRGBColor() const
     {
         return COLORDATA_RGB(mnColor);
     }

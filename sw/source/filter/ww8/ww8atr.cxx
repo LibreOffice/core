@@ -4283,7 +4283,7 @@ WW8_BRCVer9 WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
             nWidth = 1;                         // don't omit
 
         // BRC.cv
-        nColBGR = wwUtility::RGBToBGR(rLine.GetColor().GetRGBColor());
+        nColBGR = wwUtility::RGBToBGR(sal_uInt32(rLine.GetColor().GetRGBColor()));
     }
 
     // BRC.dptSpace

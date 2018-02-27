@@ -550,7 +550,7 @@ OString ScHTMLExport::BorderToStyle(const char* pBorderName,
 
         // color
         char hex[7];
-        snprintf( hex, 7, "%06x", static_cast< unsigned int >( pLine->GetColor().GetRGBColor() ) );
+        snprintf( hex, 7, "%06x", static_cast<sal_uInt32>( pLine->GetColor().GetRGBColor() ) );
         hex[6] = 0;
 
         aOut.append(hex);
