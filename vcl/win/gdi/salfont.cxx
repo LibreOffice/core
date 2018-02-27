@@ -1345,8 +1345,8 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
 
     rRect = tools::Rectangle( Point( +aGM.gmptGlyphOrigin.x, -aGM.gmptGlyphOrigin.y ),
         Size( aGM.gmBlackBoxX, aGM.gmBlackBoxY ) );
-    rRect.Right()  += 1;
-    rRect.Bottom() += 1;
+    rRect.AdjustRight(1);
+    rRect.AdjustBottom(1);
     return true;
 }
 
@@ -1506,7 +1506,7 @@ bool WinSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
 
         // convert y-coordinates W32 -> VCL
         for( int i = 0; i < nPnt; ++i )
-            pPoints[i].Y() = -pPoints[i].Y();
+            pPoints[i].setY(-pPoints[i].Y());
 
         // insert into polypolygon
         tools::Polygon aPoly( nPnt, pPoints, (bHasOfflinePoints ? pFlags : nullptr) );
