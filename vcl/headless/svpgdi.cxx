@@ -1204,10 +1204,20 @@ void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceB
 {
     if (rSourceBitmap.GetBitCount() == 1)
     {
-        MaskHelper aMask(rSourceBitmap);
-        cairo_surface_t* source = aMask.getMask();
-        copySource(rTR, source);
-        return;
+        const SvpSalBitmap& rSrcBmp = static_cast<const SvpSalBitmap&>(rSourceBitmap);
+        const BitmapBuffer * pSourceBuffer = rSrcBmp.GetBuffer();
+        const BitmapPalette & rPalette = pSourceBuffer->maPalette;
+
+        if (rPalette.GetEntryCount() == 2 &&
+            rPalette[0] == BitmapColor(Color(COL_BLACK)) &&
+            rPalette[1] == BitmapColor(Color(COL_WHITE)) )
+        {
+            // This way we draw only monochrome b/w bitmaps
+            MaskHelper aMask(rSourceBitmap);
+            cairo_surface_t* source = aMask.getMask();
+            copySource(rTR, source);
+            return;
+        }
     }
 
     SourceHelper aSurface(rSourceBitmap);
