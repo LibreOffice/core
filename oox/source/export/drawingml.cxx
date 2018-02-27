@@ -3413,31 +3413,33 @@ sal_Int32 lcl_CalculateDir(const double dX, const double dY)
 
 void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
 {
-    if( !GetProperty( rXPropSet, "InteropGrabBag" ) )
-        return;
-
     Sequence< PropertyValue > aGrabBag, aEffects, aOuterShdwProps;
-    mAny >>= aGrabBag;
-    for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
+    if( GetProperty( rXPropSet, "InteropGrabBag" ) )
     {
-        if( aGrabBag[i].Name == "EffectProperties" )
+        mAny >>= aGrabBag;
+        for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
         {
-            aGrabBag[i].Value >>= aEffects;
-            for( sal_Int32 j=0; j < aEffects.getLength(); ++j )
+            if( aGrabBag[i].Name == "EffectProperties" )
             {
-                if( aEffects[j].Name == "outerShdw" )
+                aGrabBag[i].Value >>= aEffects;
+                for( sal_Int32 j=0; j < aEffects.getLength(); ++j )
                 {
-                    aEffects[j].Value >>= aOuterShdwProps;
-                    break;
+                    if( aEffects[j].Name == "outerShdw" )
+                    {
+                        aEffects[j].Value >>= aOuterShdwProps;
+                        break;
+                    }
                 }
+                break;
             }
-            break;
         }
     }
+
     if( aEffects.getLength() == 0 )
     {
         bool bHasShadow = false;
-        rXPropSet->getPropertyValue( "Shadow" ) >>= bHasShadow;
+        if( GetProperty( rXPropSet, "Shadow" ) )
+            mAny >>= bHasShadow;
         if( bHasShadow )
         {
             Sequence< PropertyValue > aShadowGrabBag( 3 );
