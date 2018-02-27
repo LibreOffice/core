@@ -52,7 +52,8 @@ namespace /* private */
     StringList_t gTo;
     StringList_t gCc;
     StringList_t gBcc;
-    StringList_t gAttachments;
+    // Keep temp filepath and displayed name
+    std::vector<std::pair<std::string, std::string>> gAttachments;
     int gMapiFlags = 0;
 }
 
@@ -120,13 +121,22 @@ void initAttachmentList(MapiAttachmentList_t* pMapiAttachmentList)
 {
     OSL_ASSERT(pMapiAttachmentList->empty());
 
-    StringListIterator_t iter = gAttachments.begin();
-    StringListIterator_t iter_end = gAttachments.end();
+    auto iter = gAttachments.begin();
+    auto iter_end = gAttachments.end();
     for (/**/; iter != iter_end; ++iter)
     {
         MapiFileDesc mfd;
         ZeroMemory(&mfd, sizeof(mfd));
-        mfd.lpszPathName = const_cast<char*>(iter->c_str());
+        mfd.lpszPathName = const_cast<char*>(iter->first.c_str());
+        // MapiFileDesc documentation (https://msdn.microsoft.com/en-us/library/hh707272)
+        // allows using here either nullptr, or a pointer to empty string. However,
+        // for Outlook 2013, we cannot use nullptr here, and must point to a (possibly
+        // empty) string: otherwise using MAPI_DIALOG_MODELESS results in MAPI_E_FAILURE.
+        // See http://peach.ease.lsoft.com/scripts/wa-PEACH.exe?A2=MAPI-L;d2bf3060.1604
+        // Since C++11, c_str() must return a pointer to single null character when the
+        // string is empty, so we are OK here in case when there's no explicit file name
+        // passed
+        mfd.lpszFileName = const_cast<char*>(iter->second.c_str());
         mfd.nPosition = sal::static_int_cast<ULONG>(-1);
         pMapiAttachmentList->push_back(mfd);
     }
@@ -166,11 +176,12 @@ void initMapiMessage(
     pMapiMessage->lpOriginator = aMapiOriginator;
     pMapiMessage->lpRecips = aMapiRecipientList.size() ? &aMapiRecipientList[0] : nullptr;
     pMapiMessage->nRecipCount = aMapiRecipientList.size();
-    pMapiMessage->lpFiles = &aMapiAttachmentList[0];
+    if (!aMapiAttachmentList.empty())
+        pMapiMessage->lpFiles = &aMapiAttachmentList[0];
     pMapiMessage->nFileCount = aMapiAttachmentList.size();
 }
 
-const char* KnownParameter[] =
+const char* KnownParameters[] =
 {
     "--to",
     "--cc",
@@ -183,13 +194,11 @@ const char* KnownParameter[] =
     "--mapi-logon-ui"
 };
 
-const size_t nKnownParameter = SAL_N_ELEMENTS(KnownParameter);
-
 /** @internal */
 bool isKnownParameter(const char* aParameterName)
 {
-    for (size_t i = 0; i < nKnownParameter; i++)
-        if (_stricmp(aParameterName, KnownParameter[i]) == 0)
+    for (const char* KnownParameter : KnownParameters)
+        if (_stricmp(aParameterName, KnownParameter) == 0)
             return true;
 
     return false;
@@ -229,11 +238,110 @@ void initParameter(int argc, char* argv[])
             else if (_stricmp(argv[i], "--body") == 0)
                 gBody = argv[i+1];
             else if ((_stricmp(argv[i], "--attach") == 0))
-                gAttachments.push_back(argv[i+1]);
+            {
+                std::string sPath(argv[i + 1]);
+                // An attachment may optionally be immediately followed by --attach-name and user-visible name
+                std::string sName;
+                if ((i+3) < argc && _stricmp(argv[i+2], "--attach-name") == 0)
+                {
+                    sName = argv[i+3];
+                    i += 2;
+                }
+                gAttachments.emplace_back(sPath, sName);
+            }
 
             i++;
         }
     }
+}
+
+void ShowError(ULONG nMAPIResult)
+{
+    std::string sMessage = "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\n\nError code is ";
+    std::string sErrorId;
+    switch (nMAPIResult)
+    {
+    case MAPI_E_FAILURE:
+        sErrorId = "MAPI_E_FAILURE";
+        break;
+    case MAPI_E_LOGON_FAILURE:
+        sErrorId = "MAPI_E_LOGON_FAILURE";
+        break;
+    case MAPI_E_DISK_FULL:
+        sErrorId = "MAPI_E_DISK_FULL";
+        break;
+    case MAPI_E_INSUFFICIENT_MEMORY:
+        sErrorId = "MAPI_E_INSUFFICIENT_MEMORY";
+        break;
+    case MAPI_E_ACCESS_DENIED:
+        sErrorId = "MAPI_E_ACCESS_DENIED";
+        break;
+    case MAPI_E_TOO_MANY_SESSIONS:
+        sErrorId = "MAPI_E_ACCESS_DENIED";
+        break;
+    case MAPI_E_TOO_MANY_FILES:
+        sErrorId = "MAPI_E_TOO_MANY_FILES";
+        break;
+    case MAPI_E_TOO_MANY_RECIPIENTS:
+        sErrorId = "MAPI_E_TOO_MANY_RECIPIENTS";
+        break;
+    case MAPI_E_ATTACHMENT_NOT_FOUND:
+        sErrorId = "MAPI_E_ATTACHMENT_NOT_FOUND";
+        break;
+    case MAPI_E_ATTACHMENT_OPEN_FAILURE:
+        sErrorId = "MAPI_E_ATTACHMENT_OPEN_FAILURE";
+        break;
+    case MAPI_E_ATTACHMENT_WRITE_FAILURE:
+        sErrorId = "MAPI_E_ATTACHMENT_WRITE_FAILURE";
+        break;
+    case MAPI_E_UNKNOWN_RECIPIENT:
+        sErrorId = "MAPI_E_UNKNOWN_RECIPIENT";
+        break;
+    case MAPI_E_BAD_RECIPTYPE:
+        sErrorId = "MAPI_E_BAD_RECIPTYPE";
+        break;
+    case MAPI_E_NO_MESSAGES:
+        sErrorId = "MAPI_E_NO_MESSAGES";
+        break;
+    case MAPI_E_INVALID_MESSAGE:
+        sErrorId = "MAPI_E_INVALID_MESSAGE";
+        break;
+    case MAPI_E_TEXT_TOO_LARGE:
+        sErrorId = "MAPI_E_TEXT_TOO_LARGE";
+        break;
+    case MAPI_E_INVALID_SESSION:
+        sErrorId = "MAPI_E_INVALID_SESSION";
+        break;
+    case MAPI_E_TYPE_NOT_SUPPORTED:
+        sErrorId = "MAPI_E_TYPE_NOT_SUPPORTED";
+        break;
+    case MAPI_E_AMBIGUOUS_RECIPIENT:
+        sErrorId = "MAPI_E_AMBIGUOUS_RECIPIENT";
+        break;
+    case MAPI_E_MESSAGE_IN_USE:
+        sErrorId = "MAPI_E_MESSAGE_IN_USE";
+        break;
+    case MAPI_E_NETWORK_FAILURE:
+        sErrorId = "MAPI_E_NETWORK_FAILURE";
+        break;
+    case MAPI_E_INVALID_EDITFIELDS:
+        sErrorId = "MAPI_E_INVALID_EDITFIELDS";
+        break;
+    case MAPI_E_INVALID_RECIPS:
+        sErrorId = "MAPI_E_INVALID_RECIPS";
+        break;
+    case MAPI_E_NOT_SUPPORTED:
+        sErrorId = "MAPI_E_NOT_SUPPORTED";
+        break;
+    case MAPI_E_UNICODE_NOT_SUPPORTED:
+        sErrorId = "MAPI_E_UNICODE_NOT_SUPPORTED";
+        break;
+    default:
+        sErrorId = std::to_string(nMAPIResult);
+    }
+    sMessage += sErrorId;
+
+    MessageBoxW(nullptr, sMessage.c_str(), "Error sending mail", MB_OK | MB_ICONINFORMATION);
 }
 
 /**
@@ -297,6 +405,15 @@ int main(int argc, char* argv[])
     {
         OSL_FAIL(ex.what());
     }
+
+    // Now cleanup the temporary attachment files
+    for (const auto& rAttachment : gAttachments)
+        DeleteFile(rAttachment.first.c_str());
+
+    // Only show the error message if UI was requested
+    if ((ulRet != SUCCESS_SUCCESS) && (gMapiFlags & (MAPI_DIALOG | MAPI_LOGON_UI)))
+        ShowError(ulRet);
+
     return ulRet;
 }
 
@@ -329,10 +446,12 @@ int main(int argc, char* argv[])
         for (/**/;iter != iter_end; ++iter)
             oss << "--bcc " << *iter << std::endl;
 
-        iter = gAttachments.begin();
-        iter_end = gAttachments.end();
-        for (/**/;iter != iter_end; ++iter)
-            oss << "--attach " << *iter << std::endl;
+        for (const auto& attachment : gAttachments)
+        {
+            oss << "--attach " << attachment.first << std::endl;
+            if (!attachment.second.empty())
+                oss << "--attach-name " << attachment.second << std::endl;
+        }
 
         if (gMapiFlags & MAPI_DIALOG)
             oss << "--mapi-dialog" << std::endl;
