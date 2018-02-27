@@ -28,9 +28,11 @@ private:
     bool mbElementOpen;
     bool mbContentWritten;
     bool mbPrettyPrint;
+    /// XML namespace, in case of XHTML.
+    OString maNamespace;
 
 public:
-    HtmlWriter(SvStream& rStream);
+    HtmlWriter(SvStream& rStream, const OString& rNamespace = OString());
     ~HtmlWriter();
 
     void prettyPrint(bool b);

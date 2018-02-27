@@ -11,12 +11,18 @@
 #include <svtools/HtmlWriter.hxx>
 #include <tools/stream.hxx>
 
-HtmlWriter::HtmlWriter(SvStream& rStream) :
+HtmlWriter::HtmlWriter(SvStream& rStream, const OString& rNamespace) :
     mrStream(rStream),
     mbElementOpen(false),
     mbContentWritten(false),
     mbPrettyPrint(true)
-{}
+{
+    if (!rNamespace.isEmpty())
+    {
+        // Convert namespace alias to a prefix.
+        maNamespace = rNamespace + ":";
+    }
+}
 
 HtmlWriter::~HtmlWriter()
 {}
@@ -46,7 +52,7 @@ void HtmlWriter::start(const OString& aElement)
     }
 
     mrStream.WriteChar('<');
-    mrStream.WriteOString(aElement);
+    mrStream.WriteOString(maNamespace + aElement);
     mbElementOpen = true;
 }
 
@@ -93,7 +99,7 @@ void HtmlWriter::end()
             }
         }
         mrStream.WriteCharPtr("</");
-        mrStream.WriteOString(maElementStack.back());
+        mrStream.WriteOString(maNamespace + maElementStack.back());
         mrStream.WriteCharPtr(">");
         if (mbPrettyPrint)
             mrStream.WriteCharPtr("\n");
