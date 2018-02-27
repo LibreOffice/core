@@ -368,7 +368,10 @@ namespace pcr
         if ( impl_textHitTest( rMEvt.GetPosPixel() ) )
             m_aMouseButtonDownPos = rMEvt.GetPosPixel();
         else
-            m_aMouseButtonDownPos.X() = m_aMouseButtonDownPos.Y() = -1;
+        {
+            m_aMouseButtonDownPos.setX(-1);
+            m_aMouseButtonDownPos.setY(-1);
+        }
     }
 
 

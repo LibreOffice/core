@@ -4248,7 +4248,8 @@ tools::Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 
         nX = GetXPos( pPortion, pLine, nIndex, bool( nFlags & GetCursorFlags::PreferPortionStart ) );
     }
 
-    aEditCursor.Left() = aEditCursor.Right() = nX;
+    aEditCursor.SetLeft(nX);
+    aEditCursor.SetRight(nX);
 
     if ( nFlags & GetCursorFlags::TextOnly )
         aEditCursor.SetTop( aEditCursor.Bottom() - pLine->GetTxtHeight() + 1 );
