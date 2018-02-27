@@ -206,7 +206,7 @@ void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
     {
         const static Color aTranspCol( COL_TRANSPARENT );
 
-        SetFillColor( rColor == aTranspCol ? GetSettings().GetStyleSettings().GetFieldColor() : Color(rColor.GetRGBColor()) );
+        SetFillColor( rColor == aTranspCol ? GetSettings().GetStyleSettings().GetFieldColor() : rColor.GetRGBColor() );
         Invalidate(aDrawRect);
     }
 }

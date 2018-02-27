@@ -198,7 +198,7 @@ SvStream& Color::Write( SvStream& rOStm ) const
 OUString Color::AsRGBHexString() const
 {
     std::stringstream ss;
-    ss << std::hex << std::setfill ('0') << std::setw(6) << GetRGBColor();
+    ss << std::hex << std::setfill ('0') << std::setw(6) << sal_uInt32(GetRGBColor());
     return OUString::createFromAscii(ss.str().c_str());
 }
 

@@ -331,7 +331,7 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
             {
                 Color aColor;
                 rOption.GetColor( aColor );
-                _rTextColor = aColor.GetRGBColor();
+                _rTextColor = sal_Int32(aColor.GetRGBColor());
             }
             break;
         case HtmlOptionId::FACE :
