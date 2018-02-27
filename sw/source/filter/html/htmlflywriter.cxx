@@ -424,7 +424,7 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
 {
     HtmlContainerFlags nCntnrMode = nMode.nContainer;
     HtmlOut nOutMode = nMode.nOut;
-    const sal_Char *pCntnrStr = nullptr;
+    OString aContainerStr;
     if( HtmlContainerFlags::NONE != nCntnrMode )
     {
 
@@ -432,10 +432,10 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
             OutNewLine();
 
         OStringBuffer sOut;
-        pCntnrStr = (HtmlContainerFlags::Div == nCntnrMode)
+        aContainerStr = (HtmlContainerFlags::Div == nCntnrMode)
                             ? OOO_STRING_SVTOOLS_HTML_division
                             : OOO_STRING_SVTOOLS_HTML_span;
-        sOut.append('<').append(pCntnrStr).append(' ')
+        sOut.append('<').append(GetNamespace() + aContainerStr).append(' ')
             .append(OOO_STRING_SVTOOLS_HTML_O_class).append("=\"")
             .append("sd-abs-pos").append('\"');
         Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
@@ -462,40 +462,40 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
     switch( nOutMode )
     {
     case HtmlOut::TableNode:      // OK
-        OSL_ENSURE( !pCntnrStr, "Table: Container is not supposed to be here" );
+        OSL_ENSURE( aContainerStr.isEmpty(), "Table: Container is not supposed to be here" );
         OutHTML_FrameFormatTableNode( *this, rFrameFormat );
         break;
     case HtmlOut::GraphicNode:      // OK
-        OutHTML_FrameFormatGrfNode( *this, rFrameFormat, pCntnrStr != nullptr );
+        OutHTML_FrameFormatGrfNode( *this, rFrameFormat, !aContainerStr.isEmpty() );
         break;
     case HtmlOut::OleNode:      // OK
-        OutHTML_FrameFormatOLENode( *this, rFrameFormat, pCntnrStr != nullptr );
+        OutHTML_FrameFormatOLENode( *this, rFrameFormat, !aContainerStr.isEmpty() );
         break;
     case HtmlOut::OleGraphic:       // OK
-        OutHTML_FrameFormatOLENodeGrf( *this, rFrameFormat, pCntnrStr != nullptr );
+        OutHTML_FrameFormatOLENodeGrf( *this, rFrameFormat, !aContainerStr.isEmpty() );
         break;
     case HtmlOut::Div:
     case HtmlOut::Span:
-        OSL_ENSURE( !pCntnrStr, "Div: Container is not supposed to be here" );
+        OSL_ENSURE( aContainerStr.isEmpty(), "Div: Container is not supposed to be here" );
         OutHTML_FrameFormatAsDivOrSpan( *this, rFrameFormat, HtmlOut::Span==nOutMode );
         break;
     case HtmlOut::MultiCol:     // OK
-        OutHTML_FrameFormatAsMulticol( *this, rFrameFormat, pCntnrStr != nullptr );
+        OutHTML_FrameFormatAsMulticol( *this, rFrameFormat, !aContainerStr.isEmpty() );
         break;
     case HtmlOut::Spacer:       // OK
-        OSL_ENSURE( !pCntnrStr, "Spacer: Container is not supposed to be here" );
+        OSL_ENSURE( aContainerStr.isEmpty(), "Spacer: Container is not supposed to be here" );
         OutHTML_FrameFormatAsSpacer( *this, rFrameFormat );
         break;
     case HtmlOut::Control:      // OK
         OutHTML_DrawFrameFormatAsControl( *this,
                                     static_cast<const SwDrawFrameFormat &>(rFrameFormat), dynamic_cast<const SdrUnoObj&>(*pSdrObject),
-                                    pCntnrStr != nullptr );
+                                    !aContainerStr.isEmpty() );
         break;
     case HtmlOut::AMarquee:
         OutHTML_FrameFormatAsMarquee( *this, rFrameFormat, *pSdrObject );
         break;
     case HtmlOut::Marquee:
-        OSL_ENSURE( !pCntnrStr, "Marquee: Container is not supposed to be here" );
+        OSL_ENSURE( aContainerStr.isEmpty(), "Marquee: Container is not supposed to be here" );
         OutHTML_DrawFrameFormatAsMarquee( *this,
                     static_cast<const SwDrawFrameFormat &>(rFrameFormat), *pSdrObject );
         break;
@@ -509,11 +509,11 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
         DecIndentLevel();
         if( m_bLFPossible )
             OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, false );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_division, false );
         m_bLFPossible = true;
     }
     else if( HtmlContainerFlags::Span == nCntnrMode )
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_span, false );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_span, false );
 }
 
 OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
@@ -1554,7 +1554,7 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
         rHTMLWrt.OutNewLine();
 
     OStringBuffer sOut;
-    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_multicol);
+    sOut.append('<').append(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_multicol);
 
     const SwFormatCol& rFormatCol = rFrameFormat.GetCol();
 
@@ -1614,7 +1614,7 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
     rHTMLWrt.DecIndentLevel();  // indent the content of Multicol;
     if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_multicol, false );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_multicol, false );
     rHTMLWrt.m_bLFPossible = true;
 
     return rWrt;
@@ -1649,24 +1649,24 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
 {
     SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
-    const sal_Char *pStr = nullptr;
+    OString aTag;
     if( !bSpan )
     {
         rHTMLWrt.ChangeParaToken( HtmlTokenId::NONE );
 
         // Close the current <DL>!
         rHTMLWrt.OutAndSetDefList( 0 );
-        pStr = OOO_STRING_SVTOOLS_HTML_division;
+        aTag = OOO_STRING_SVTOOLS_HTML_division;
     }
     else
-        pStr = OOO_STRING_SVTOOLS_HTML_span;
+        aTag = OOO_STRING_SVTOOLS_HTML_span;
 
     // output as DIV
     if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine();
 
     OStringBuffer sOut;
-    sOut.append('<').append(pStr);
+    sOut.append('<').append(rHTMLWrt.GetNamespace() + aTag);
 
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     HtmlFrmOpts nFrameFlags = HTML_FRMOPTS_DIV;
@@ -1701,7 +1701,7 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
     rHTMLWrt.DecIndentLevel();  // indent the content of Multicol;
     if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, false );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + aTag, false );
 
     if( !aEndTags.isEmpty() )
         rWrt.Strm().WriteCharPtr( aEndTags.getStr() );
@@ -1862,7 +1862,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
     sOut.append(OOO_STRING_SVTOOLS_HTML_division).append(' ')
         .append(OOO_STRING_SVTOOLS_HTML_O_title).append("=\"")
         .append( bHeader ? "header" : "footer" ).append("\"");
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOut.makeStringAndClear().getStr() );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + sOut.makeStringAndClear().getStr() );
 
     rHTMLWrt.IncIndentLevel();  // indent the content of Multicol;
 
@@ -1897,7 +1897,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
     if( !bHeader && !aSpacer.isEmpty() )
     {
         rHTMLWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), aSpacer.getStr() );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + aSpacer.getStr() );
     }
 
     {
@@ -1918,12 +1918,12 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
     if( bHeader && !aSpacer.isEmpty() )
     {
         rHTMLWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), aSpacer.getStr() );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + aSpacer.getStr() );
     }
 
     rHTMLWrt.DecIndentLevel();  // indent the content of Multicol;
     rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_division, false );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_division, false );
 
     rHTMLWrt.m_nHeaderFooterSpace = 0;
 

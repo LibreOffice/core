@@ -427,7 +427,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
 
     // Off-Tag ausgeben
     if( pTypeStr )
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_sdfield, false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_sdfield, false );
 
     return rWrt;
 }

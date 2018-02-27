@@ -136,7 +136,7 @@ void SwHTMLWriter::OutAndSetDefList( sal_uInt16 nNewLvl )
         {
             if( m_bLFPossible )
                 OutNewLine();
-            HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_deflist );
+            HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_deflist );
             IncIndentLevel();
             m_bLFPossible = true;
         }
@@ -148,7 +148,7 @@ void SwHTMLWriter::OutAndSetDefList( sal_uInt16 nNewLvl )
             DecIndentLevel();
             if( m_bLFPossible )
                 OutNewLine();
-            HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_deflist, false );
+            HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_deflist, false );
             m_bLFPossible = true;
         }
     }
@@ -160,7 +160,7 @@ void SwHTMLWriter::ChangeParaToken( HtmlTokenId nNew )
 {
     if( nNew != m_nLastParaToken && HtmlTokenId::PREFORMTXT_ON == m_nLastParaToken )
     {
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_preformtxt, false );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_preformtxt, false );
         m_bLFPossible = true;
     }
     m_nLastParaToken = nNew;
@@ -761,7 +761,8 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
 
     if( rHWrt.m_nDefListLvl > 0 && !bForceDL )
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), bDT ? OOO_STRING_SVTOOLS_HTML_dt : OOO_STRING_SVTOOLS_HTML_dd );
+        OString aTag = bDT ? OOO_STRING_SVTOOLS_HTML_dt : OOO_STRING_SVTOOLS_HTML_dd;
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHWrt.GetNamespace() + aTag );
     }
 
     if( pAdjItem &&
@@ -793,7 +794,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     if( !rHWrt.m_bCfgOutStyles && rInfo.bParaPossible && !bPara &&
         (bHasParSpace || pAdjItem) )
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rInfo.aToken.getStr() );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHWrt.GetNamespace() + rInfo.aToken );
         aToken = OOO_STRING_SVTOOLS_HTML_parabreak;
         bPara = true;
         rHWrt.m_bNoAlign = false;
@@ -850,7 +851,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         rHWrt.m_bTextAttr = false;
         rHWrt.m_bOutOpts = true;
 
-        OString sOut = "<" + aToken;
+        OString sOut = "<" + rHWrt.GetNamespace() + aToken;
 
         if( eLang != LANGUAGE_DONTKNOW && eLang != rHWrt.m_eLang )
         {
@@ -990,9 +991,9 @@ void OutHTML_SwFormatOff( Writer& rWrt, const SwHTMLTextCollOutputInfo& rInfo )
         // - no styles are written and
         // - a lower spacing exists
         if( rInfo.bParaPossible && rInfo.bOutPara )
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_parabreak, false );
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_parabreak, false );
 
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rInfo.aToken.getStr(), false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHWrt.GetNamespace() + rInfo.aToken, false );
         rHWrt.m_bLFPossible =
             rInfo.aToken != OOO_STRING_SVTOOLS_HTML_dt &&
             rInfo.aToken != OOO_STRING_SVTOOLS_HTML_dd &&
@@ -1003,7 +1004,7 @@ void OutHTML_SwFormatOff( Writer& rWrt, const SwHTMLTextCollOutputInfo& rInfo )
         rHWrt.DecIndentLevel();
         if( rHWrt.m_bLFPossible )
             rHWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_division, false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_division, false );
         rHWrt.m_bLFPossible = true;
     }
 
@@ -2633,7 +2634,7 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
         HTMLOutFuncs::Out_Color( rWrt.Strm(), aColor ).WriteChar( '>' );
     }
     else
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_font, false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_font, false );
 
     return rWrt;
 }
@@ -2647,7 +2648,7 @@ static Writer& OutHTML_SwPosture( Writer& rWrt, const SfxPoolItem& rHt )
     const FontItalic nPosture = static_cast<const SvxPostureItem&>(rHt).GetPosture();
     if( ITALIC_NORMAL == nPosture )
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_italic, rHTMLWrt.m_bTagOn );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_italic, rHTMLWrt.m_bTagOn );
     }
     else if( rHTMLWrt.m_bCfgOutStyles && rHTMLWrt.m_bTextAttr )
     {
@@ -2676,7 +2677,7 @@ static Writer& OutHTML_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
            .WriteCharPtr( "\">" );
     }
     else
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_font, false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_font, false );
 
     return rWrt;
 }
@@ -2706,7 +2707,7 @@ static Writer& OutHTML_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_font, false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_font, false );
     }
 
     return rWrt;
@@ -2731,7 +2732,7 @@ static Writer& OutHTML_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span, false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span, false );
     }
 
     return rWrt;
@@ -2745,7 +2746,7 @@ static Writer& OutHTML_SwWeight( Writer& rWrt, const SfxPoolItem& rHt )
     const FontWeight nBold = static_cast<const SvxWeightItem&>(rHt).GetWeight();
     if( WEIGHT_BOLD == nBold )
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_bold, rHTMLWrt.m_bTagOn );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_bold, rHTMLWrt.m_bTagOn );
     }
     else if( rHTMLWrt.m_bCfgOutStyles && rHTMLWrt.m_bTextAttr )
     {
@@ -2766,7 +2767,7 @@ static Writer& OutHTML_SwCrossedOut( Writer& rWrt, const SfxPoolItem& rHt )
     const FontStrikeout nStrike = static_cast<const SvxCrossedOutItem&>(rHt).GetStrikeout();
     if( STRIKEOUT_NONE != nStrike )
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_strike, rHTMLWrt.m_bTagOn );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_strike, rHTMLWrt.m_bTagOn );
     }
     else if( rHTMLWrt.m_bCfgOutStyles && rHTMLWrt.m_bTextAttr )
     {
@@ -2785,18 +2786,18 @@ static Writer& OutHTML_SvxEscapement( Writer& rWrt, const SfxPoolItem& rHt )
 
     const SvxEscapement eEscape =
         (const SvxEscapement)static_cast<const SvxEscapementItem&>(rHt).GetEnumValue();
-    const sal_Char *pStr = nullptr;
+    OString aTag;
     switch( eEscape )
     {
-    case SvxEscapement::Superscript: pStr = OOO_STRING_SVTOOLS_HTML_superscript; break;
-    case SvxEscapement::Subscript: pStr = OOO_STRING_SVTOOLS_HTML_subscript; break;
+    case SvxEscapement::Superscript: aTag = OOO_STRING_SVTOOLS_HTML_superscript; break;
+    case SvxEscapement::Subscript: aTag = OOO_STRING_SVTOOLS_HTML_subscript; break;
     default:
         ;
     }
 
-    if( pStr )
+    if( !aTag.isEmpty() )
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, rHTMLWrt.m_bTagOn );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + aTag, rHTMLWrt.m_bTagOn );
     }
     else if( rHTMLWrt.m_bCfgOutStyles && rHTMLWrt.m_bTextAttr )
     {
@@ -2816,7 +2817,7 @@ static Writer& OutHTML_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
     const FontLineStyle eUnder = static_cast<const SvxUnderlineItem&>(rHt).GetLineStyle();
     if( LINESTYLE_NONE != eUnder )
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_underline, rHTMLWrt.m_bTagOn );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_underline, rHTMLWrt.m_bTagOn );
     }
     else if( rHTMLWrt.m_bCfgOutStyles && rHTMLWrt.m_bTextAttr )
     {
@@ -2852,7 +2853,7 @@ static Writer& OutHTML_SwBlink( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( static_cast<const SvxBlinkItem&>(rHt).GetValue() )
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_blink, rHTMLWrt.m_bTagOn );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_blink, rHTMLWrt.m_bTagOn );
     }
     else if( rHTMLWrt.m_bCfgOutStyles && rHTMLWrt.m_bTextAttr )
     {
@@ -2878,7 +2879,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
     // bOn controls if we are writing the opening or closing tag
     if( !bOn )
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_anchor, false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor, false );
         return rWrt;
     }
 
@@ -3093,10 +3094,9 @@ static Writer& OutHTML_SwTextCharFormat( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(),
-                !pFormatInfo->aToken.isEmpty() ? pFormatInfo->aToken.getStr()
-                                       : OOO_STRING_SVTOOLS_HTML_span,
-                false );
+        OString aTag = !pFormatInfo->aToken.isEmpty() ? pFormatInfo->aToken.getStr()
+                                                      : OOO_STRING_SVTOOLS_HTML_span;
+        HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), rHTMLWrt.GetNamespace() + aTag, false);
     }
 
     return rWrt;

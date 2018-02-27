@@ -513,7 +513,7 @@ OString HTMLOutFuncs::ConvertStringToHTML( const OUString& rSrc,
     return aDest.makeStringAndClear();
 }
 
-SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, const sal_Char *pStr,
+SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, const OString& rStr,
                                       bool bOn, rtl_TextEncoding )
 {
     if(bOn)
@@ -521,7 +521,7 @@ SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, const sal_Char *pStr,
     else
         rStream.WriteCharPtr("</");
 
-    rStream.WriteCharPtr(pStr).WriteChar('>');
+    rStream.WriteOString(rStr).WriteChar('>');
 
     return rStream;
 }

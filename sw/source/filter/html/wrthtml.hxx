@@ -572,6 +572,9 @@ public:
     FieldUnit GetCSS1Unit() const { return m_eCSS1Unit; }
 
     sal_Int32 indexOfDotLeaders( sal_uInt16 nPoolId, const OUString& rText );
+
+    /// Determines the prefix string needed to respect the requested namespace alias.
+    OString GetNamespace() const;
 };
 
 inline bool SwHTMLWriter::IsCSS1Source( sal_uInt16 n ) const

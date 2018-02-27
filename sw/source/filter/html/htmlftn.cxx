@@ -292,8 +292,8 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
     rHTMLWrt.m_pFootEndNotes->insert( rHTMLWrt.m_pFootEndNotes->begin() + nPos, pTextFootnote );
 
     OStringBuffer sOut;
-    sOut.append("<" OOO_STRING_SVTOOLS_HTML_anchor " "
-                OOO_STRING_SVTOOLS_HTML_O_class "=\"");
+    OString aTag = rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor;
+    sOut.append("<" + aTag + " " OOO_STRING_SVTOOLS_HTML_O_class "=\"");
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     HTMLOutFuncs::Out_String( rWrt.Strm(), sClass, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
     sOut.append("\" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
@@ -308,12 +308,12 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_sdfixed);
     sOut.append(">");
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_superscript );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_superscript );
 
     HTMLOutFuncs::Out_String( rWrt.Strm(), rFormatFootnote.GetViewNumStr(*rWrt.pDoc),
                                  rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_superscript, false );
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_anchor, false );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_superscript, false );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor, false );
 
     return rWrt;
 }
@@ -375,7 +375,7 @@ void SwHTMLWriter::OutFootEndNotes()
         DecIndentLevel();   // indent content of <DIV>
         if( m_bLFPossible )
             OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, false );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_division, false );
         m_bLFPossible = true;
 
         OSL_ENSURE( !m_pFormatFootnote,
@@ -460,7 +460,7 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFormatFootnote& rFormatFootnote,
     }
 
     OStringBuffer sOut;
-    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_anchor).append(' ')
+    sOut.append('<').append(GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor).append(' ')
         .append(OOO_STRING_SVTOOLS_HTML_O_class).append("=\"");
     Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     HTMLOutFuncs::Out_String( Strm(), sClass, m_eDestEnc, &m_aNonConvertableCharacters );
@@ -475,7 +475,7 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFormatFootnote& rFormatFootnote,
     Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     HTMLOutFuncs::Out_String( Strm(), rNum, m_eDestEnc, &m_aNonConvertableCharacters );
-    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_anchor, false );
+    HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor, false );
 }
 
 static int lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,

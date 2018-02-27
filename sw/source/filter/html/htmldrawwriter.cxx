@@ -299,7 +299,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     HTMLOutFuncs::Out_String( rWrt.Strm(), aText,
                                 rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
 
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_marquee, false );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_marquee, false );
 
     if( !aEndTags.isEmpty() )
         rWrt.Strm().WriteCharPtr( aEndTags.getStr() );
