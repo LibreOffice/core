@@ -63,6 +63,7 @@ public:
 
 namespace sdr { namespace overlay { class OverlayObject; }}
 namespace sw { namespace overlay { class OverlayRangesOutline; }}
+class MapMode;
 
 class SwSelPaintRects : public SwRects
 {

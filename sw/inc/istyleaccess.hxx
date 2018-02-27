@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_ISTYLEACCESS_HXX
 
 #include <vector>
-#include <svl/stylepool.hxx>
 
 // Management of (automatic) styles
 class IStyleAccess

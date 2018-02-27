@@ -98,6 +98,7 @@ enum class SvtScriptType;
 enum class SfxClassificationPolicyType;
 enum class RedlineFlags;
 enum class TransliterationFlags;
+enum class GraphicType;
 
 namespace com { namespace sun { namespace star { namespace uno {
     template < class > class Sequence;

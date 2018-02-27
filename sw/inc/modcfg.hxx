@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_INC_MODCFG_HXX
 #define INCLUDED_SW_INC_MODCFG_HXX
 
-#include <tools/wintypes.hxx>
-#include <vcl/field.hxx>
 #include <unotools/configitem.hxx>
 #include "swdllapi.h"
 #include "authratr.hxx"
@@ -28,7 +26,6 @@
 #include "tblenum.hxx"
 #include "itabenum.hxx"
 #include <tools/globname.hxx>
-#include <editeng/svxenum.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <vector>

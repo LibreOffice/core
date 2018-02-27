@@ -26,6 +26,7 @@
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 
+#include <osl/diagnose.h>
 #include <ndtxt.hxx>
 #include <wrong.hxx>
 

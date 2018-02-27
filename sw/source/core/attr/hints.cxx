@@ -24,6 +24,7 @@
 #include <ndtxt.hxx>
 #include <swtypes.hxx>
 #include <vcl/outdev.hxx>
+#include <osl/diagnose.h>
 
 SwFormatChg::SwFormatChg( SwFormat* pFormat )
     : SwMsgPoolItem( RES_FMT_CHG ), pChangedFormat( pFormat )

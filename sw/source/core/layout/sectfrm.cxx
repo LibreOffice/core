@@ -43,6 +43,7 @@
 #include <fmtftntx.hxx>
 #include <flyfrms.hxx>
 #include <sortedobjs.hxx>
+#include <hints.hxx>
 
 SwSectionFrame::SwSectionFrame( SwSection &rSect, SwFrame* pSib )
     : SwLayoutFrame( rSect.GetFormat(), pSib )

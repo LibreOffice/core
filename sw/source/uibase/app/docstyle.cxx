@@ -65,6 +65,7 @@
 #include <svx/svxids.hrc>
 #include <svx/xdef.hxx>
 #include <SwRewriter.hxx>
+#include <hints.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/svdmodel.hxx>

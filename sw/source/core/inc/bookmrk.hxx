@@ -26,6 +26,7 @@
 #include <memory>
 #include <map>
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 #include <IMark.hxx>
 #include <swserv.hxx>
 

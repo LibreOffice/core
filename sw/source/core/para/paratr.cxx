@@ -28,6 +28,7 @@
 #include <charfmt.hxx>
 #include <cmdid.h>
 #include <libxml/xmlwriter.h>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_INC_NDTYP_HXX
 #define INCLUDED_SW_INC_NDTYP_HXX
 
-#include <tools/solar.h>
+#include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
 
 // IDs for different nodes. The member indicating the type of node is

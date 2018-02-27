@@ -68,6 +68,7 @@
 #include <numrule.hxx>
 #include <swtable.hxx>
 #include <tblafmt.hxx>
+#include <hints.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 

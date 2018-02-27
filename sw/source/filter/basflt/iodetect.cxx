@@ -24,6 +24,9 @@
 #include <svtools/parhtml.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/fcontnr.hxx>
+#include <sfx2/docfile.hxx>
 
 
 using namespace ::com::sun::star;

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_ITABENUM_HXX
 #define INCLUDED_SW_INC_ITABENUM_HXX
 
-#include <tools/solar.h>
+#include <sal/types.h>
 
 namespace tabopts
 {
