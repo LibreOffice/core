@@ -40,6 +40,7 @@ class MessageDialog;
 class NumericFormatter;
 class PopupMenu;
 class SalInstanceBuilder;
+class ScreenshotTest;
 class ScrollBar;
 class Slider;
 class DateField;
@@ -486,6 +487,7 @@ protected:
     std::unique_ptr<VclBuilder> m_pUIBuilder;
 
     friend class ::SalInstanceBuilder;
+    friend class ::ScreenshotTest;
 };
 
 /*
