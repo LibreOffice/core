@@ -3729,6 +3729,7 @@ void SwUiWriterTest::testTdf89954()
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 's', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 't', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '.', 0);
+    Scheduler::ProcessEventsToIdle();
 
     SwNodeIndex aNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
     // Placeholder character for the comment anchor was ^A (CH_TXTATR_BREAKWORD), not <fff9> (CH_TXTATR_INWORD).
@@ -4185,6 +4186,7 @@ void SwUiWriterTest::testTdf84695()
     SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
+    Scheduler::ProcessEventsToIdle();
 
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was empty, Enter did not start the fly frame edit mode.
@@ -4207,6 +4209,7 @@ void SwUiWriterTest::testTdf84695NormalChar()
     // Now pressing 'a' should add a character.
     SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
+    Scheduler::ProcessEventsToIdle();
 
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was empty, pressing a normal character did not start the fly frame edit mode.
