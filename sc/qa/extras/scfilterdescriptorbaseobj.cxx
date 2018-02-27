@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/sheet/sheetfilterdescriptor.hxx>
 #include <test/sheet/xsheetfilterdescriptor.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -22,7 +23,9 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScFilterDescriptorBaseObj : public CalcUnoApiTest, public apitest::XSheetFilterDescriptor
+class ScFilterDescriptorBaseObj : public CalcUnoApiTest,
+                                  public apitest::SheetFilterDescriptor,
+                                  public apitest::XSheetFilterDescriptor
 {
 public:
     ScFilterDescriptorBaseObj();
@@ -33,6 +36,9 @@ public:
     virtual uno::Reference< uno::XInterface > init() override;
 
     CPPUNIT_TEST_SUITE(ScFilterDescriptorBaseObj);
+
+    // SheetFilterDescriptor
+    CPPUNIT_TEST(testSheetFilterDescriptorProperties);
 
     // XSheetFilterDescriptor
     CPPUNIT_TEST(testGetSetFilterFields);
