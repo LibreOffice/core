@@ -2166,7 +2166,7 @@ void ScExportTest::testCellAnchoredGroupXLS()
     ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
     CPPUNIT_ASSERT_MESSAGE("Upper left of bounding rectangle should be nonnegative.",
-        pData->maLastRect.Left() >= 0 || pData->maLastRect.Top() >= 0);
+        pData->getShapeRect().Left() >= 0 || pData->getShapeRect().Top() >= 0);
     xDocSh->DoClose();
 }
 
@@ -3529,7 +3529,7 @@ void ScExportTest::testMoveCellAnchoredShapesODS()
     // Get anchor data
     ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
-    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->getShapeRect().IsEmpty());
 
     ScAddress aDataStart = pData->maStart;
     ScAddress aDataEnd   = pData->maEnd;
@@ -3537,7 +3537,7 @@ void ScExportTest::testMoveCellAnchoredShapesODS()
     // Get non rotated anchor data
     ScDrawObjData* pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
-    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->maLastRect.IsEmpty());
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->getShapeRect().IsEmpty());
 
     ScAddress aNDataStart = pNData->maStart;
     ScAddress aNDataEnd   = pNData->maEnd;
@@ -3550,12 +3550,12 @@ void ScExportTest::testMoveCellAnchoredShapesODS()
     // Get anchor data
     pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
-    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->getShapeRect().IsEmpty());
 
     // Get non rotated anchor data
     pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
-    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->maLastRect.IsEmpty());
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->getShapeRect().IsEmpty());
 
     // Check if data has moved to new rows
     CPPUNIT_ASSERT_EQUAL( pData->maStart.Row(), aDataStart.Row() + 2 );
@@ -3591,12 +3591,12 @@ void ScExportTest::testMoveCellAnchoredShapesODS()
     // Get anchor data
     pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
-    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->getShapeRect().IsEmpty());
 
     // Get non rotated anchor data
     pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
-    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->maLastRect.IsEmpty());
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->getShapeRect().IsEmpty());
 
     // Check if data after save it
     CPPUNIT_ASSERT_EQUAL(pData->maStart, aDataStart);
@@ -3611,12 +3611,12 @@ void ScExportTest::testMoveCellAnchoredShapesODS()
     // Get anchor data
     pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
-    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->getShapeRect().IsEmpty());
 
     // Get non rotated anchor data
     pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
-    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->maLastRect.IsEmpty());
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->getShapeRect().IsEmpty());
 
     // Check if data has moved to new rows
     CPPUNIT_ASSERT_EQUAL(pData->maStart.Col(), SCCOL(aDataStart.Col() + 1));
@@ -3652,12 +3652,12 @@ void ScExportTest::testMoveCellAnchoredShapesODS()
     // Get anchor data
     pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
-    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->maLastRect.IsEmpty());
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pData->getShapeRect().IsEmpty());
 
     // Get non rotated anchor data
     pNData = ScDrawLayer::GetNonRotatedObjData( pObj );
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve non rotated user data for this object.", pNData);
-    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->maLastRect.IsEmpty());
+    CPPUNIT_ASSERT_MESSAGE("Bounding rectangle should have been calculated upon import.", !pNData->getShapeRect().IsEmpty());
 
     // Check if data after save it
     CPPUNIT_ASSERT_EQUAL(pData->maStart, aDataStart);
