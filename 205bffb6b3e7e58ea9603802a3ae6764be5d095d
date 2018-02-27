@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_bd64b749",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1657,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-02-27T14:01:38Z",
+      "side": 1,
+      "message": "We don\u0027t rely on Unicode-dependent macros - please use explicit GetLongPathNameW",
+      "range": {
+        "startLine": 1657,
+        "startChar": 33,
+        "endLine": 1657,
+        "endChar": 48
+      },
+      "revId": "205bffb6b3e7e58ea9603802a3ae6764be5d095d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da36d5c6_fd5e2f75",
+        "filename": "sal/osl/w32/file_url.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-02-27T14:01:38Z",
+      "side": 1,
+      "message": "...and here",
+      "range": {
+        "startLine": 567,
+        "startChar": 41,
+        "endLine": 567,
+        "endChar": 56
+      },
+      "revId": "205bffb6b3e7e58ea9603802a3ae6764be5d095d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
