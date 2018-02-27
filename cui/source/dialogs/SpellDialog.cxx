@@ -1034,39 +1034,36 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
 
     if(!aSentence.empty())
     {
-        SpellPortions::iterator aStart = aSentence.begin();
         OUString sText;
-        while(aStart != aSentence.end())
+        for (auto const& elem : aSentence)
         {
             // hidden text has to be ignored
-            if(!aStart->bIsHidden)
-                sText += aStart->sText;
-            ++aStart;
+            if(!elem.bIsHidden)
+                sText += elem.sText;
         }
         m_pSentenceED->SetText(sText);
-        aStart = aSentence.begin();
         sal_Int32 nStartPosition = 0;
         sal_Int32 nEndPosition = 0;
 
-        while(aStart != aSentence.end())
+        for (auto const& elem : aSentence)
         {
             // hidden text has to be ignored
-            if(!aStart->bIsHidden)
+            if(!elem.bIsHidden)
             {
-                nEndPosition += aStart->sText.getLength();
-                if(aStart->xAlternatives.is())
+                nEndPosition += elem.sText.getLength();
+                if(elem.xAlternatives.is())
                 {
-                    uno::Reference< container::XNamed > xNamed( aStart->xAlternatives, uno::UNO_QUERY );
+                    uno::Reference< container::XNamed > xNamed( elem.xAlternatives, uno::UNO_QUERY );
                     OUString sServiceName;
                     if( xNamed.is() )
                         sServiceName = xNamed->getName();
-                    SpellErrorDescription aDesc( false, aStart->xAlternatives->getWord(),
-                                    aStart->xAlternatives->getLocale(), aStart->xAlternatives->getAlternatives(), nullptr);
+                    SpellErrorDescription aDesc( false, elem.xAlternatives->getWord(),
+                                    elem.xAlternatives->getLocale(), elem.xAlternatives->getAlternatives(), nullptr);
                     m_pSentenceED->SetAttrib( SpellErrorAttrib(aDesc), 0, nStartPosition, nEndPosition );
                 }
-                else if(aStart->bIsGrammarError )
+                else if(elem.bIsGrammarError )
                 {
-                    beans::PropertyValues  aProperties = aStart->aGrammarError.aProperties;
+                    beans::PropertyValues  aProperties = elem.aGrammarError.aProperties;
                     OUString sFullCommentURL;
                     sal_Int32 i = 0;
                     while ( sFullCommentURL.isEmpty() && i < aProperties.getLength() )
@@ -1080,22 +1077,21 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                     }
 
                     SpellErrorDescription aDesc( true,
-                        aStart->sText,
-                        LanguageTag::convertToLocale( aStart->eLanguage ),
-                        aStart->aGrammarError.aSuggestions,
-                        aStart->xGrammarChecker,
-                        &aStart->sDialogTitle,
-                        &aStart->aGrammarError.aFullComment,
-                        &aStart->aGrammarError.aRuleIdentifier,
+                        elem.sText,
+                        LanguageTag::convertToLocale( elem.eLanguage ),
+                        elem.aGrammarError.aSuggestions,
+                        elem.xGrammarChecker,
+                        &elem.sDialogTitle,
+                        &elem.aGrammarError.aFullComment,
+                        &elem.aGrammarError.aRuleIdentifier,
                         &sFullCommentURL );
                     m_pSentenceED->SetAttrib( SpellErrorAttrib(aDesc), 0, nStartPosition, nEndPosition );
                 }
-                if(aStart->bIsField)
+                if(elem.bIsField)
                     m_pSentenceED->SetAttrib( SpellBackgroundAttrib(COL_LIGHTGRAY), 0, nStartPosition, nEndPosition );
-                m_pSentenceED->SetAttrib( SpellLanguageAttrib(aStart->eLanguage), 0, nStartPosition, nEndPosition );
+                m_pSentenceED->SetAttrib( SpellLanguageAttrib(elem.eLanguage), 0, nStartPosition, nEndPosition );
                 nStartPosition = nEndPosition;
             }
-            ++aStart;
         }
         //the edit field needs to be modified to apply the change from the ApplyChangeAllList
         if(!bHasReplaced)
@@ -1114,31 +1110,29 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
 {
     bHasReplaced = false;
     bool bRet = true;
-    SpellPortions::iterator aStart = rSentence.begin();
     Reference<XDictionary> xChangeAll( LinguMgr::GetChangeAllList(), UNO_QUERY );
     if(!xChangeAll->getCount())
         return bRet;
     bRet = false;
-    while(aStart != rSentence.end())
+    for (auto & elem : rSentence)
     {
-        if(aStart->xAlternatives.is())
+        if(elem.xAlternatives.is())
         {
-            const OUString &rString = aStart->sText;
+            const OUString &rString = elem.sText;
 
             Reference<XDictionaryEntry> xEntry = xChangeAll->getEntry(rString);
 
             if(xEntry.is())
             {
-                aStart->sText = getDotReplacementString(rString, xEntry->getReplacementText());
-                aStart->xAlternatives = nullptr;
+                elem.sText = getDotReplacementString(rString, xEntry->getReplacementText());
+                elem.xAlternatives = nullptr;
                 bHasReplaced = true;
             }
             else
                 bRet = true;
         }
-        else if( aStart->bIsGrammarError )
+        else if( elem.bIsGrammarError )
             bRet = true;
-        ++aStart;
     }
     return bRet;
 }

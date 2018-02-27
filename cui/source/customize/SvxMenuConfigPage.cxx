@@ -302,12 +302,10 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenu, ListBox&, void )
         m_pMinusBtn->Enable( pMenuData->IsDeletable() );
 
         SvxEntries* pEntries = pMenuData->GetEntries();
-        SvxEntries::const_iterator iter = pEntries->begin();
 
-        for ( ; iter != pEntries->end(); ++iter )
+        for (auto const& entry : *pEntries)
         {
-            SvxConfigEntry* pEntry = *iter;
-            InsertEntryIntoUI( pEntry );
+            InsertEntryIntoUI(entry);
         }
     }
 

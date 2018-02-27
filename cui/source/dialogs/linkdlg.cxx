@@ -59,11 +59,10 @@ private:
 public:
     ~SvBaseLinkMemberList()
     {
-        for( std::vector<SvBaseLink*>::const_iterator it = mLinks.begin(); it != mLinks.end(); ++it )
+        for (auto const& link : mLinks)
         {
-            SvBaseLink* p = *it;
-            if( p )
-                p->ReleaseRef();
+            if( link )
+                link->ReleaseRef();
         }
     }
 

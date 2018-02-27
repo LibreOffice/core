@@ -535,12 +535,10 @@ bool CanvasSettings::IsHardwareAccelerationAvailable() const
 
         // check whether any of the service lists has an
         // implementation that presents the "HardwareAcceleration" property
-        ServiceVector::const_iterator       aCurr=maAvailableImplementations.begin();
-        const ServiceVector::const_iterator aEnd=maAvailableImplementations.end();
-        while( aCurr != aEnd )
+        for (auto const& availableImpl : maAvailableImplementations)
         {
-            const OUString* pCurrImpl = aCurr->second.getConstArray();
-            const OUString* const pEndImpl = pCurrImpl + aCurr->second.getLength();
+            const OUString* pCurrImpl = availableImpl.second.getConstArray();
+            const OUString* const pEndImpl = pCurrImpl + availableImpl.second.getLength();
 
             while( pCurrImpl != pEndImpl )
             {
@@ -563,8 +561,6 @@ bool CanvasSettings::IsHardwareAccelerationAvailable() const
 
                 ++pCurrImpl;
             }
-
-            ++aCurr;
         }
     }
 
@@ -679,8 +675,9 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
                                 ")";
     m_pIconStyleLB->InsertEntry(entryForAuto);
 
-    for (std::vector<vcl::IconThemeInfo>::const_iterator aI = mInstalledIconThemes.begin(); aI != mInstalledIconThemes.end(); ++aI) {
-        m_pIconStyleLB->InsertEntry(aI->GetDisplayName());
+    for (auto const& installIconTheme : mInstalledIconThemes)
+    {
+        m_pIconStyleLB->InsertEntry(installIconTheme.GetDisplayName());
     }
 
     // separate auto and other icon themes
