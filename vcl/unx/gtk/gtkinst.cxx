@@ -187,6 +187,14 @@ void GtkInstance::EnsureInit()
     pSVData->maAppData.mpToolkitName = new OUString("gtk2");
 #endif
 
+    const OUString &rEnv = Application::GetDesktopEnvironment();
+    if (rEnv.equalsIgnoreAsciiCase("windows") ||
+        rEnv.equalsIgnoreAsciiCase("tde") ||
+        rEnv.startsWithIgnoreAsciiCase("kde"))
+    {
+        g_object_set(gtk_settings_get_default(), "gtk-alternative-button-order", true, nullptr);
+    }
+
     bNeedsInit = false;
 }
 
