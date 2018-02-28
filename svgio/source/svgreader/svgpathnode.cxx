@@ -37,8 +37,6 @@ namespace svgio
 
         SvgPathNode::~SvgPathNode()
         {
-            delete mpPolyPolygon;
-            delete mpaTransform;
         }
 
         const SvgStyleAttributes* SvgPathNode::getSvgStyleAttributes() const
