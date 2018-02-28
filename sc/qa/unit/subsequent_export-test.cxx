@@ -3285,6 +3285,7 @@ void ScExportTest::testImageWithSpecialID()
         {
             OUString sURL;
             XPropSet->getPropertyValue("GraphicURL") >>= sURL;
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), !sURL.isEmpty());
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
         }
         // Check size
@@ -3303,6 +3304,7 @@ void ScExportTest::testImageWithSpecialID()
         {
             OUString sURL;
             XPropSet->getPropertyValue("GraphicURL") >>= sURL;
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), !sURL.isEmpty());
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
         }
         // Check size
@@ -3781,9 +3783,10 @@ void ScExportTest::testHeaderImageODS()
     uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> xPageStyles(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getByName("Default"), uno::UNO_QUERY);
-    OUString aURL;
-    xStyle->getPropertyValue("HeaderBackGraphicURL") >>= aURL;
-    CPPUNIT_ASSERT(aURL.startsWith("vnd.sun.star.GraphicObject:"));
+
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xStyle->getPropertyValue("HeaderBackGraphic") >>= xGraphic;
+    CPPUNIT_ASSERT(xGraphic.is());
     xDocSh->DoClose();
 }
 

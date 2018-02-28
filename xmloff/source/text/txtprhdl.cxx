@@ -37,6 +37,7 @@
 #include <com/sun/star/text/RubyPosition.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -56,6 +57,7 @@
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <XMLBitmapRepeatOffsetPropertyHandler.hxx>
+#include <vcl/graph.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1137,6 +1139,38 @@ bool XMLNumber8OneBasedHdl::exportXML(
     return bRet;
 }
 
+class XMLGraphicPropertyHandler : public XMLPropertyHandler
+{
+public:
+    XMLGraphicPropertyHandler() {}
+
+    virtual bool importXML(const OUString& , uno::Any& , const SvXMLUnitConverter& ) const override
+    {
+        SAL_WARN( "xmloff", "drop caps are an element import property" );
+        return false;
+    }
+
+    virtual bool exportXML(OUString& , const uno::Any& , const SvXMLUnitConverter& ) const override
+    {
+        SAL_WARN( "xmloff", "drop caps are an element import property" );
+        return false;
+    }
+
+    virtual bool equals(const css::uno::Any& rAny1, const css::uno::Any& rAny2) const override;
+};
+
+bool XMLGraphicPropertyHandler::equals(const Any& rAny1, const Any& rAny2) const
+{
+    uno::Reference<graphic::XGraphic> xGraphic1;
+    uno::Reference<graphic::XGraphic> xGraphic2;
+    rAny1 >>= xGraphic1;
+    rAny2 >>= xGraphic2;
+    Graphic aGraphic1(xGraphic1);
+    Graphic aGraphic2(xGraphic2);
+
+    return aGraphic1 == aGraphic2;
+}
+
 static const XMLPropertyHandler *GetPropertyHandler
     ( sal_Int32 nType )
 {
@@ -1327,7 +1361,9 @@ static const XMLPropertyHandler *GetPropertyHandler
     case XML_SW_TYPE_BITMAPREPOFFSETY:
         pHdl = new XMLBitmapRepeatOffsetPropertyHandler(XML_SW_TYPE_BITMAPREPOFFSETX == nType);
         break;
-
+    case XML_TYPE_GRAPHIC:
+        pHdl = new XMLGraphicPropertyHandler;
+        break;
     default:
     {
         OSL_ENSURE(false, "XMLPropertyHandler missing (!)");

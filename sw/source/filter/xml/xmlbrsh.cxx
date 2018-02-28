@@ -83,9 +83,7 @@ void SwXMLBrushItemImportContext::ProcessAttrs(
         switch( aTokenMap.Get( nPrefix, aLocalName ) )
         {
         case XML_TOK_BGIMG_HREF:
-            SvXMLImportItemMapper::PutXMLValue(
-                *pItem, GetImport().ResolveGraphicObjectURL( rValue, false),
-                MID_GRAPHIC_LINK, rUnitConv );
+            m_xGraphic = GetImport().loadGraphicByURL(rValue);
             break;
         case XML_TOK_BGIMG_TYPE:
         case XML_TOK_BGIMG_ACTUATE:
@@ -113,24 +111,16 @@ SvXMLImportContextRef SwXMLBrushItemImportContext::CreateChildContext(
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
-    if( xmloff::token::IsXMLToken( rLocalName,
-                                        xmloff::token::XML_BINARY_DATA ) )
+    if (xmloff::token::IsXMLToken(rLocalName, xmloff::token::XML_BINARY_DATA))
     {
-        if( !xBase64Stream.is() && pItem->GetGraphicLink().isEmpty() )
+        if (!m_xBase64Stream.is())
         {
-            const GraphicObject *pGrObj = pItem->GetGraphicObject();
-            if( !pGrObj || GraphicType::NONE == pGrObj->GetType() )
-            {
-                xBase64Stream =
-                    GetImport().GetStreamForGraphicObjectURLFromBase64();
-                if( xBase64Stream.is() )
-                    pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
-                                                        rLocalName, xAttrList,
-                                                        xBase64Stream );
-            }
+            m_xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
+            if (m_xBase64Stream.is())
+                pContext = new XMLBase64ImportContext(GetImport(), nPrefix, rLocalName, xAttrList, m_xBase64Stream);
         }
     }
-    if( !pContext )
+    if (!pContext)
     {
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
@@ -140,17 +130,21 @@ SvXMLImportContextRef SwXMLBrushItemImportContext::CreateChildContext(
 
 void SwXMLBrushItemImportContext::EndElement()
 {
-    if( xBase64Stream.is() )
+    if (m_xBase64Stream.is())
     {
-        const OUString sURL( GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream ) );
-        xBase64Stream = nullptr;
-        SvXMLImportItemMapper::PutXMLValue( *pItem, sURL, MID_GRAPHIC_LINK, GetImport().GetMM100UnitConverter() );
+        m_xGraphic = GetImport().loadGraphicFromBase64(m_xBase64Stream);
+        m_xBase64Stream = nullptr;
+    }
+    if (m_xGraphic.is())
+    {
+        Graphic aGraphic(m_xGraphic);
+        pItem->SetGraphic(aGraphic);
     }
 
-    if( pItem->GetGraphicLink().isEmpty() && !(pItem->GetGraphic()) )
-        pItem->SetGraphicPos( GPOS_NONE );
-    else if( GPOS_NONE == pItem->GetGraphicPos() )
-        pItem->SetGraphicPos( GPOS_TILED );
+    if (!(pItem->GetGraphic()))
+        pItem->SetGraphicPos(GPOS_NONE);
+    else if (GPOS_NONE == pItem->GetGraphicPos())
+        pItem->SetGraphicPos(GPOS_TILED);
 }
 
 SwXMLBrushItemImportContext::SwXMLBrushItemImportContext(
@@ -197,39 +191,42 @@ void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
 {
     GetExport().CheckAttrList();
 
-    OUString sURL;
-    const SvXMLUnitConverter& rUnitConv = GetExport().GetTwipUnitConverter();
-    if( SvXMLExportItemMapper::QueryXMLValue(
-            rItem, sURL, MID_GRAPHIC_LINK, rUnitConv ) )
+    uno::Reference<graphic::XGraphic> xGraphic;
+
+    const Graphic* pGraphic = rItem.GetGraphic();
+
+    if (pGraphic)
+        xGraphic = pGraphic->GetXGraphic();
+
+    if (xGraphic.is())
     {
-        OUString sValue = GetExport().AddEmbeddedGraphicObject( sURL );
-        if( !sValue.isEmpty() )
+        OUString sMimeType;
+        OUString sValue = GetExport().AddEmbeddedXGraphic(xGraphic, sMimeType);
+        if (!sValue.isEmpty())
         {
             GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sValue );
             GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
             GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
         }
 
-        if( SvXMLExportItemMapper::QueryXMLValue(
-                rItem, sValue, MID_GRAPHIC_POSITION, rUnitConv ) )
+        const SvXMLUnitConverter& rUnitConv = GetExport().GetTwipUnitConverter();
+        if (SvXMLExportItemMapper::QueryXMLValue(rItem, sValue, MID_GRAPHIC_POSITION, rUnitConv))
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_POSITION, sValue );
 
-        if( SvXMLExportItemMapper::QueryXMLValue(
-                rItem, sValue, MID_GRAPHIC_REPEAT, rUnitConv ) )
+        if (SvXMLExportItemMapper::QueryXMLValue(rItem, sValue, MID_GRAPHIC_REPEAT, rUnitConv))
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_REPEAT, sValue );
 
-        if( SvXMLExportItemMapper::QueryXMLValue(
-                rItem, sValue, MID_GRAPHIC_FILTER, rUnitConv ) )
+        if (SvXMLExportItemMapper::QueryXMLValue(rItem, sValue, MID_GRAPHIC_FILTER, rUnitConv))
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_FILTER_NAME, sValue );
     }
 
     {
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, XML_BACKGROUND_IMAGE,
                                   true, true );
-        if( !sURL.isEmpty() )
+        if (xGraphic.is())
         {
             // optional office:binary-data
-            GetExport().AddEmbeddedGraphicObjectAsBase64( sURL );
+            GetExport().AddEmbeddedXGraphicAsBase64(xGraphic);
         }
     }
 }

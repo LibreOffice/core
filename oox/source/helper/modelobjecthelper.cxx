@@ -152,6 +152,15 @@ OUString ModelObjectHelper::getFillBitmapUrl( const OUString &rGraphicName )
     return OUString();
 }
 
+uno::Reference<awt::XBitmap> ModelObjectHelper::getFillBitmap(OUString const & rGraphicName)
+{
+    uno::Reference<awt::XBitmap> xBitmap;
+    uno::Any aAny = maBitmapUrlContainer.getObject(rGraphicName);
+    if (aAny.has<uno::Reference<awt::XBitmap>>())
+        xBitmap = aAny.get<uno::Reference<awt::XBitmap>>();
+    return xBitmap;
+}
+
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

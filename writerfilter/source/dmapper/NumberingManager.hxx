@@ -46,7 +46,6 @@ class ListLevel : public PropertyMap
     sal_Int32                                     m_nJC;             //LN_JC
     sal_Int16                                     m_nXChFollow;      //LN_IXCHFOLLOW
     OUString                               m_sBulletChar;
-    OUString                               m_sGraphicURL;
     css::awt::Size                         m_aGraphicSize;
     css::uno::Reference<css::graphic::XGraphic> m_sGraphicBitmap;
     sal_Int32                                     m_nTabstop;
@@ -70,7 +69,6 @@ public:
     // Setters for the import
     void SetValue( Id nId, sal_Int32 nValue );
     void SetBulletChar( const OUString& sValue ) { m_sBulletChar = sValue; };
-    void SetGraphicURL( const OUString& sValue ) { m_sGraphicURL = sValue; };
     void SetGraphicSize( const css::awt::Size& aValue ) { m_aGraphicSize = aValue; };
 
     void SetGraphicBitmap(css::uno::Reference<css::graphic::XGraphic> const& sValue)

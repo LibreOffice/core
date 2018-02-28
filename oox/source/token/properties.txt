@@ -21,6 +21,7 @@ Autocomplete
 BackColor
 BackColorTransparency
 BackGraphicLocation
+BackGraphic
 BackGraphicURL
 Background
 BackgroundColor
@@ -167,6 +168,7 @@ FillBitmapRectanglePoint
 FillBitmapSizeX
 FillBitmapSizeY
 FillBitmapURL
+FillBitmap
 FillColor
 FillGradient
 FillGradientName

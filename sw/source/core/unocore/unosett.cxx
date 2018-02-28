@@ -1432,30 +1432,27 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
                 aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_BULLET_FONT, aDesc));
             }
         }
-        if(SVX_NUM_BITMAP == rFormat.GetNumberingType())
+        if (SVX_NUM_BITMAP == rFormat.GetNumberingType())
         {
             //GraphicURL
             const SvxBrushItem* pBrush = rFormat.GetBrush();
-            if(pBrush)
+            uno::Reference<graphic::XGraphic> xGraphic;
+            if (pBrush)
             {
-                Any aAny;
-                pBrush->QueryValue( aAny, MID_GRAPHIC_URL );
-                aAny >>= aUString;
+                xGraphic = pBrush->GetGraphic()->GetXGraphic();
+                aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_GRAPHIC, xGraphic));
             }
-            else
-                aUString.clear();
-            aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_GRAPHIC_URL, aUString));
 
-            //graphicbitmap
+            //GraphicBitmap
             const Graphic* pGraphic = nullptr;
-            if(pBrush )
+            if (pBrush)
                 pGraphic = pBrush->GetGraphic();
-            if(pGraphic)
+            if (pGraphic)
             {
                 uno::Reference<awt::XBitmap> xBitmap(pGraphic->GetXGraphic(), uno::UNO_QUERY);
                 aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_GRAPHIC_BITMAP, xBitmap));
             }
-             Size aSize = rFormat.GetGraphicSize();
+            Size aSize = rFormat.GetGraphicSize();
             // #i101131#
             // adjust conversion due to type mismatch between <Size> and <awt::Size>
             awt::Size aAwtSize(convertTwipToMm100(aSize.Width()), convertTwipToMm100(aSize.Height()));
@@ -1580,7 +1577,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         UNO_NAME_BULLET_FONT,                   // 17
         UNO_NAME_BULLET_FONT_NAME,              // 18
         UNO_NAME_BULLET_CHAR,                   // 19
-        UNO_NAME_GRAPHIC_URL,                   // 20
+        UNO_NAME_GRAPHIC,                       // 20
         UNO_NAME_GRAPHIC_BITMAP,                // 21
         UNO_NAME_GRAPHIC_SIZE,                  // 22
         UNO_NAME_VERT_ORIENT,                   // 23
@@ -1925,22 +1922,27 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     }
                 }
                 break;
-                case 20: //UNO_NAME_GRAPHIC_URL,
+                case 20: //UNO_NAME_GRAPHIC,
                 {
                     assert( !pDocShell );
-                    OUString sBrushURL;
-                    pProp->Value >>= sBrushURL;
-                    if(!pSetBrush)
+                    uno::Reference<graphic::XGraphic> xGraphic;
+                    if (pProp->Value >>= xGraphic)
                     {
-                        const SvxBrushItem* pOrigBrush = aFormat.GetBrush();
-                        if(pOrigBrush)
+                        if (!pSetBrush)
                         {
-                            pSetBrush = new SvxBrushItem(*pOrigBrush);
+                            const SvxBrushItem* pOrigBrush = aFormat.GetBrush();
+                            if(pOrigBrush)
+                            {
+                                pSetBrush = new SvxBrushItem(*pOrigBrush);
+                            }
+                            else
+                                pSetBrush = new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND);
                         }
-                        else
-                            pSetBrush = new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND);
+                        Graphic aGraphic(xGraphic);
+                        pSetBrush->SetGraphic(aGraphic);
                     }
-                    pSetBrush->PutValue( pProp->Value, MID_GRAPHIC_URL );
+                    else
+                        bWrongArg = true;
                 }
                 break;
                 case 21: //UNO_NAME_GRAPHIC_BITMAP,

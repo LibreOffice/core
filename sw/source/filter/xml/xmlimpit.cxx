@@ -661,17 +661,6 @@ bool SvXMLImportItemMapper::PutXMLValue(
                     }
                     break;
 
-                case MID_GRAPHIC_LINK:
-                {
-                    SvxGraphicPosition eOldGraphicPos = rBrush.GetGraphicPos();
-                    rBrush.PutValue( Any(rValue), MID_GRAPHIC_URL );
-                    if( GPOS_NONE == eOldGraphicPos &&
-                        GPOS_NONE != rBrush.GetGraphicPos() )
-                        rBrush.SetGraphicPos( GPOS_TILED );
-                    bOk = true;
-                }
-                break;
-
                 case MID_GRAPHIC_REPEAT:
                 {
                     SvxGraphicPosition eGraphicPos = rBrush.GetGraphicPos();
