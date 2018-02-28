@@ -18050,6 +18050,7 @@ vcl/source/app/timer.cxx
 vcl/source/app/unohelp.cxx
 vcl/source/app/unohelp2.cxx
 vcl/source/app/vclevent.cxx
+vcl/source/bitmap/bitmap.cxx
 vcl/source/bitmap/BitmapProcessor.cxx
 vcl/source/bitmap/BitmapScaleConvolution.cxx
 vcl/source/bitmap/BitmapSymmetryCheck.cxx
@@ -18163,7 +18164,6 @@ vcl/source/gdi/VerticalOrientationData.cxx
 vcl/source/gdi/alpha.cxx
 vcl/source/gdi/animate.cxx
 vcl/source/gdi/base14.cxx
-vcl/source/gdi/bitmap.cxx
 vcl/source/gdi/bitmap3.cxx
 vcl/source/gdi/bitmap4.cxx
 vcl/source/gdi/bitmapex.cxx
