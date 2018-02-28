@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_035c8224",
+        "filename": "sw/source/core/text/xmldump.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-02-28T00:51:18Z",
+      "side": 1,
+      "message": "is that a useful test? this-pointer being NULL is undefined behaviour anyway?",
+      "revId": "3e2ddd4ff61816dd9056f4b84c7492834a621a0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
