@@ -20,28 +20,29 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_STRINDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_STRINDLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
-class ScStringInputDlg : public ModalDialog
+class ScStringInputDlg
 {
+private:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Dialog> m_xDialog;
+    std::unique_ptr<weld::Label> m_xLabel;
+    std::unique_ptr<weld::Entry> m_xEdInput;
+
 public:
-    ScStringInputDlg(vcl::Window* pParent,
+    ScStringInputDlg(weld::Window* pParent,
         const OUString& rTitle,
         const OUString& rEditTitle,
         const OUString& rDefault,
         const OString& sHelpId, const OString& sEditHelpId);
-    virtual ~ScStringInputDlg() override;
-    virtual void dispose() override;
+
+    short run() { return m_xDialog->run(); }
+
     OUString GetInputString() const
     {
-        return m_pEdInput->GetText();
+        return m_xEdInput->get_text();
     }
-
-private:
-    VclPtr<FixedText> m_pFtEditTitle;
-    VclPtr<Edit>      m_pEdInput;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_STRINDLG_HXX

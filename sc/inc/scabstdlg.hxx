@@ -503,11 +503,12 @@ public:
                                                                 bool bEdit, bool bSheetProtected ) = 0;
     virtual VclPtr<AbstractScShowTabDlg> CreateScShowTabDlg(vcl::Window* pParent) = 0;
 
-    virtual VclPtr<AbstractScStringInputDlg> CreateScStringInputDlg (  vcl::Window* pParent,
-                                                                const OUString& rTitle,
-                                                                const OUString& rEditTitle,
-                                                                const OUString& rDefault,
-                                                                const OString& sHelpId, const OString& sEditHelpId ) = 0;
+    virtual VclPtr<AbstractScStringInputDlg> CreateScStringInputDlg(weld::Window* pParent,
+                                                                    const OUString& rTitle,
+                                                                    const OUString& rEditTitle,
+                                                                    const OUString& rDefault,
+                                                                    const OString& rHelpId,
+                                                                    const OString& rEditHelpId) = 0;
 
     virtual VclPtr<AbstractScTabBgColorDlg> CreateScTabBgColorDlg (  vcl::Window* pParent,
                                                                 const OUString& rTitle, //Dialog Title

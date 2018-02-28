@@ -389,8 +389,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
+                    vcl::Window* pWin = GetDialogParent();
                     ScopedVclPtr<AbstractScStringInputDlg> pDlg(pFact->CreateScStringInputDlg(
-                        GetDialogParent(), aDlgTitle, ScResId(SCSTR_NAME),
+                        pWin ? pWin->GetFrameWeld() : nullptr, aDlgTitle, ScResId(SCSTR_NAME),
                         aName, GetStaticInterface()->GetSlot(nSlot)->GetCommand(),
                         pHelpId));
 
@@ -429,7 +430,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 }
                                 else
                                 {
-                                    vcl::Window* pWin = GetDialogParent();
                                     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                               VclMessageType::Warning, VclButtonsType::Ok, aErrMsg));
                                     nRet = xBox->run();
