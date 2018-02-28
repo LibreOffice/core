@@ -3155,8 +3155,12 @@ static SwTwips lcl_CalcCellRstHeight( SwLayoutFrame *pCell )
 
 SwTwips CalcRowRstHeight( SwLayoutFrame *pRow )
 {
-    SwTwips nRstHeight = LONG_MAX;
     SwFrame *pLow = pRow->Lower();
+    if (!(pLow && pLow->IsLayoutFrame()))
+    {
+        return 0;
+    }
+    SwTwips nRstHeight = LONG_MAX;
     while (pLow && pLow->IsLayoutFrame())
     {
         nRstHeight = std::min(nRstHeight, ::lcl_CalcCellRstHeight(static_cast<SwLayoutFrame*>(pLow)));
