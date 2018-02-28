@@ -201,7 +201,7 @@ void StyleContainer::impl_emitStyle( sal_Int32           nStyleId,
             rContext.rEmitter.write( rStyle.Contents );
         if( rStyle.ContainedElement )
             rStyle.ContainedElement->visitedBy( rContainedElemVisitor,
-                                                std::list<Element*>::iterator() );
+                                                std::list<std::unique_ptr<Element>>::iterator() );
         rContext.rEmitter.endTag( rStyle.Name.getStr() );
     }
 }

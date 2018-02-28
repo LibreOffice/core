@@ -77,7 +77,7 @@ namespace pdfi
             : x( 0 ), y( 0 ), w( 0 ), h( 0 ), StyleId( -1 ), Parent( pParent )
         {
             if( pParent )
-                pParent->Children.push_back( this );
+                pParent->Children.emplace_back( this );
         }
 
     public:
@@ -87,7 +87,7 @@ namespace pdfi
             To be implemented by every tree node that needs to be
             visitable.
          */
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) = 0;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& rParentIt ) = 0;
         /// Apply visitor to all children
         void applyToChildren( ElementTreeVisitor& );
         /// Union element geometry with given element
@@ -100,18 +100,18 @@ namespace pdfi
         /** el must be a valid dereferenceable iterator of el->Parent->Children
             pNewParent must not be NULL
         */
-        static void setParent( std::list<Element*>::iterator const & el, Element* pNewParent );
+        static void setParent( std::list<std::unique_ptr<Element>>::iterator const & el, Element* pNewParent );
 
         double              x, y, w, h;
         sal_Int32           StyleId;
         Element*            Parent;
-        std::list<Element*> Children;
+        std::list<std::unique_ptr<Element>> Children;
     };
 
     struct ListElement : public Element
     {
         ListElement() : Element( nullptr ) {}
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) override;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
     };
 
     struct HyperlinkElement : public Element
@@ -121,7 +121,7 @@ namespace pdfi
         HyperlinkElement( Element* pParent, const OUString& rURI )
         : Element( pParent ), URI( rURI ) {}
     public:
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) override;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
 
         OUString URI;
     };
@@ -166,7 +166,7 @@ namespace pdfi
         : DrawElement( pParent, nGCId ) {}
 
     public:
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) override;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
     };
 
     struct TextElement : public GraphicalElement
@@ -177,7 +177,7 @@ namespace pdfi
         : GraphicalElement( pParent, nGCId ), FontId( nFontId ) {}
 
     public:
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) override;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
 
         OUStringBuffer Text;
         sal_Int32           FontId;
@@ -190,7 +190,7 @@ namespace pdfi
         explicit ParagraphElement( Element* pParent ) : Element( pParent ), Type( Normal ), bRtl( false ) {}
 
     public:
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) override;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& rParentIt ) override;
 
         // returns true only if only a single line is contained
         bool isSingleLined( PDFIProcessor const & rProc ) const;
@@ -213,7 +213,7 @@ namespace pdfi
                          const basegfx::B2DPolyPolygon& rPolyPoly,
                          sal_Int8 nAction );
     public:
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) override;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& rParentIt ) override;
 
         void updateGeometry();
 
@@ -233,7 +233,7 @@ namespace pdfi
         : DrawElement( pParent, nGCId ), Image( nImage ) {}
 
     public:
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) override;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
 
         ImageId Image;
     };
@@ -249,11 +249,11 @@ namespace pdfi
         {}
     private:
         // helper method for resolveHyperlinks
-        bool resolveHyperlink( const std::list<Element*>::iterator& link_it, std::list<Element*>& rElements );
+        bool resolveHyperlink( const std::list<std::unique_ptr<Element>>::iterator& link_it, std::list<std::unique_ptr<Element>>& rElements );
     public:
         virtual ~PageElement() override;
 
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) override;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& rParentIt ) override;
 
         static void updateParagraphGeometry( Element* pEle );
         void resolveHyperlinks();
@@ -266,8 +266,8 @@ namespace pdfi
         double         BottomMargin;
         double         LeftMargin;
         double         RightMargin;
-        Element*       HeaderElement;
-        Element*       FooterElement;
+        std::unique_ptr<Element> HeaderElement;
+        std::unique_ptr<Element> FooterElement;
     };
 
     struct DocumentElement : public Element
@@ -278,7 +278,7 @@ namespace pdfi
     public:
         virtual ~DocumentElement() override;
 
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) override;
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
     };
 
     // this class is the differentiator of document types: it will create
