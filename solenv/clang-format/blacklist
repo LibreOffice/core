@@ -7974,7 +7974,6 @@ include/vcl/abstdlg.hxx
 include/vcl/accel.hxx
 include/vcl/alpha.hxx
 include/vcl/animate.hxx
-include/vcl/bitmap.hxx
 include/vcl/bitmapaccess.hxx
 include/vcl/bitmapex.hxx
 include/vcl/btndlg.hxx
@@ -18164,7 +18163,6 @@ vcl/source/gdi/VerticalOrientationData.cxx
 vcl/source/gdi/alpha.cxx
 vcl/source/gdi/animate.cxx
 vcl/source/gdi/base14.cxx
-vcl/source/gdi/bitmap.cxx
 vcl/source/gdi/bitmap3.cxx
 vcl/source/gdi/bitmap4.cxx
 vcl/source/gdi/bitmapex.cxx
