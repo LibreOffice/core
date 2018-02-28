@@ -512,8 +512,8 @@ UpdateDialog::UpdateDialog(
     m_pDescriptions->set_width_request(aSize.Width());
     m_pDescriptions->set_height_request(aSize.Height());
     get(m_pOk, "INSTALL");
-    get(m_pClose, "gtk-close");
-    get(m_pHelp, "gtk-help");
+    get(m_pClose, "close");
+    get(m_pHelp, "help");
     OSL_ASSERT(updateData != nullptr);
 
     m_xExtensionManager = deployment::ExtensionManager::get( context );
