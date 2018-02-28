@@ -29,7 +29,7 @@ class Point;
 class ImpXPolygon
 {
 public:
-    Point*              pPointAry;
+    std::unique_ptr<Point[]> pPointAry;
     std::unique_ptr<PolyFlags[]>
                         pFlagAry;
     Point*              pOldPointAry;
