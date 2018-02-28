@@ -101,7 +101,7 @@ SdrObjEditView::~SdrObjEditView()
     assert(!IsTextEdit());
     if (IsTextEdit())
         SdrEndTextEdit();
-    delete pTextEditOutliner;
+    pTextEditOutliner.reset();
     assert(nullptr == mpOldTextEditUndoManager); // should have been reset
 }
 
@@ -820,7 +820,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, OutlinerVie
 
     if (pOutlView == nullptr)
     {
-        pOutlView = new OutlinerView(pTextEditOutliner, pWin);
+        pOutlView = new OutlinerView(pTextEditOutliner.get(), pWin);
     }
     else
     {
@@ -1078,8 +1078,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
     if(pTextEditOutliner)
     {
         OSL_FAIL("SdrObjEditView::SdrBeginTextEdit(): Old Outliner still exists.");
-        delete pTextEditOutliner;
-        pTextEditOutliner = nullptr;
+        pTextEditOutliner.reset();
     }
 
     if(!bBrk)
@@ -1087,9 +1086,9 @@ bool SdrObjEditView::SdrBeginTextEdit(
         pTextEditWin=pWin;
         pTextEditPV=pPV;
         mxTextEditObj.reset( pObj );
-        pTextEditOutliner=pGivenOutliner;
+        pTextEditOutliner.reset(pGivenOutliner);
         if (pTextEditOutliner==nullptr)
-            pTextEditOutliner = SdrMakeOutliner( OutlinerMode::TextObject, *mxTextEditObj->GetModel() );
+            pTextEditOutliner.reset(SdrMakeOutliner( OutlinerMode::TextObject, *mxTextEditObj->GetModel() ));
 
         {
             SvtAccessibilityOptions aOptions;
@@ -1335,9 +1334,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
             pGivenOutlinerView = nullptr;
         }
     }
-    delete pTextEditOutliner;
-
-    pTextEditOutliner=nullptr;
+    pTextEditOutliner.reset();
     pTextEditOutlinerView=nullptr;
     mxTextEditObj.reset(nullptr);
     pTextEditPV=nullptr;
@@ -1352,7 +1349,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     SdrEndTextEditKind eRet=SdrEndTextEditKind::Unchanged;
     SdrTextObj* pTEObj = mxTextEditObj.get();
     vcl::Window*       pTEWin         =pTextEditWin;
-    SdrOutliner*  pTEOutliner    =pTextEditOutliner;
+    SdrOutliner*  pTEOutliner    =pTextEditOutliner.release();
     OutlinerView* pTEOutlinerView=pTextEditOutlinerView;
     vcl::Cursor*  pTECursorMerker=pTextEditCursorMerker;
     SdrUndoManager* pUndoEditUndoManager = nullptr;
@@ -1422,7 +1419,6 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     mxTextEditObj.reset(nullptr);
     pTextEditPV=nullptr;
     pTextEditWin=nullptr;
-    pTextEditOutliner=nullptr;
     pTextEditOutlinerView=nullptr;
     pTextEditCursorMerker=nullptr;
     aTextEditArea=tools::Rectangle();
@@ -1927,7 +1923,7 @@ bool SdrObjEditView::ImpIsTextEditAllSelected() const
     bool bRet=false;
     if (pTextEditOutliner!=nullptr && pTextEditOutlinerView!=nullptr)
     {
-        if(SdrTextObj::HasTextImpl( pTextEditOutliner ) )
+        if(SdrTextObj::HasTextImpl( pTextEditOutliner.get() ) )
         {
             const sal_Int32 nParaCnt=pTextEditOutliner->GetParagraphCount();
             Paragraph* pLastPara=pTextEditOutliner->GetParagraph( nParaCnt > 1 ? nParaCnt - 1 : 0 );
