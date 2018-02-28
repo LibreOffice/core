@@ -40,8 +40,6 @@ namespace svgio
 
         SvgPolyNode::~SvgPolyNode()
         {
-            delete mpaTransform;
-            delete mpPolygon;
         }
 
         const SvgStyleAttributes* SvgPolyNode::getSvgStyleAttributes() const

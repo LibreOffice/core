@@ -35,8 +35,8 @@ namespace svgio
             SvgStyleAttributes          maSvgStyleAttributes;
 
             /// variable scan values, dependent of given XAttributeList
-            basegfx::B2DPolygon*        mpPolygon;
-            basegfx::B2DHomMatrix*      mpaTransform;
+            std::unique_ptr<basegfx::B2DPolygon>    mpPolygon;
+            std::unique_ptr<basegfx::B2DHomMatrix>  mpaTransform;
 
             bool                        mbIsPolyline : 1; // true = polyline, false = polygon
 
@@ -52,11 +52,11 @@ namespace svgio
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const override;
 
             /// Polygon content, set if found in current context
-            void setPolygon(const basegfx::B2DPolygon* pPolygon) { if(mpPolygon) delete mpPolygon; mpPolygon = nullptr; if(pPolygon) mpPolygon = new basegfx::B2DPolygon(*pPolygon); }
+            void setPolygon(const basegfx::B2DPolygon* pPolygon) { mpPolygon.reset(); if(pPolygon) mpPolygon.reset(new basegfx::B2DPolygon(*pPolygon)); }
 
             /// transform content, set if found in current context
-            const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform; }
-            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { if(mpaTransform) delete mpaTransform; mpaTransform = nullptr; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
+            const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform.get(); }
+            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { mpaTransform.reset(); if(pMatrix) mpaTransform.reset(new basegfx::B2DHomMatrix(*pMatrix)); }
         };
     } // end of namespace svgreader
 } // end of namespace svgio
