@@ -257,7 +257,7 @@ namespace svgio
 
                 for(sal_uInt32 a(0); a < nCount; a++)
                 {
-                    const SvgGradientStopNode* pCandidate = dynamic_cast< const SvgGradientStopNode* >(getChildren()[a]);
+                    const SvgGradientStopNode* pCandidate = dynamic_cast< const SvgGradientStopNode* >(getChildren()[a].get());
 
                     if(pCandidate)
                     {

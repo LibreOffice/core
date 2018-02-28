@@ -91,7 +91,7 @@ namespace svgio
             const SvgNode*              mpAlternativeParent;
 
             /// sub hierarchy
-            SvgNodeVector               maChildren;
+            std::vector< std::unique_ptr<SvgNode> >  maChildren;
 
             /// Id svan value
             std::unique_ptr<OUString>   mpId;
@@ -111,7 +111,7 @@ namespace svgio
             ::std::vector< const SvgStyleAttributes* > maCssStyleVector;
 
             /// possible local CssStyle, e.g. style="fill:red; stroke:red;"
-            SvgStyleAttributes*         mpLocalCssStyle;
+            std::unique_ptr<SvgStyleAttributes>        mpLocalCssStyle;
 
             // flag if maCssStyleVector is already computed (done only once)
             bool                        mbCssStyleVectorBuilt : 1;
@@ -152,7 +152,7 @@ namespace svgio
             SVGToken getType() const { return maType; }
             const SvgDocument& getDocument() const { return mrDocument; }
             const SvgNode* getParent() const { if(mpAlternativeParent) return mpAlternativeParent; return mpParent; }
-            const SvgNodeVector& getChildren() const { return maChildren; }
+            const std::vector< std::unique_ptr<SvgNode> > & getChildren() const { return maChildren; }
 
             /// InfoProvider support for %, em and ex values
             virtual const basegfx::B2DRange getCurrentViewPort() const override;

@@ -185,7 +185,7 @@ namespace svgio
             if(mpLocalCssStyle)
             {
                 // if we have one, use as first entry
-                maCssStyleVector.push_back(mpLocalCssStyle);
+                maCssStyleVector.push_back(mpLocalCssStyle.get());
             }
 
             // check the hierarchy for concatenated patterns of Selectors
@@ -275,7 +275,7 @@ namespace svgio
 
             if(pParent)
             {
-                pParent->maChildren.push_back(this);
+                pParent->maChildren.emplace_back(this);
             }
             else
             {
@@ -290,13 +290,6 @@ namespace svgio
 
         SvgNode::~SvgNode()
         {
-            while(maChildren.size())
-            {
-                delete maChildren[maChildren.size() - 1];
-                maChildren.pop_back();
-            }
-
-            delete mpLocalCssStyle;
         }
 
         void SvgNode::readLocalCssStyle(const OUString& aContent)
@@ -304,7 +297,7 @@ namespace svgio
             if(!mpLocalCssStyle)
             {
                 // create LocalCssStyle if needed but not yet added
-                mpLocalCssStyle = new SvgStyleAttributes(*this);
+                mpLocalCssStyle.reset(new SvgStyleAttributes(*this));
             }
             else
             {
@@ -504,7 +497,7 @@ namespace svgio
                 }
             }
 
-            const SvgNodeVector& rChildren = getChildren();
+            const auto& rChildren = getChildren();
 
             if(!rChildren.empty())
             {
@@ -512,11 +505,11 @@ namespace svgio
 
                 for(sal_uInt32 a(0); a < nCount; a++)
                 {
-                    SvgNode* pCandidate = rChildren[a];
+                    SvgNode* pCandidate = rChildren[a].get();
 
                     if(pCandidate && Display_none != pCandidate->getDisplay())
                     {
-                        const SvgNodeVector& rGrandChildren = pCandidate->getChildren();
+                        const auto& rGrandChildren = pCandidate->getChildren();
                         const SvgStyleAttributes* pChildStyles = pCandidate->getSvgStyleAttributes();
                         // decompose:
                         // - visible terminal nodes

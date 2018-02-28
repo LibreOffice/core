@@ -123,7 +123,7 @@ namespace svgio
                 {
                     // direct TextPath decompose
                     const SvgTextPathNode& rSvgTextPathNode = static_cast< const SvgTextPathNode& >(rCandidate);
-                    const SvgNodeVector& rChildren = rSvgTextPathNode.getChildren();
+                    const auto& rChildren = rSvgTextPathNode.getChildren();
                     const sal_uInt32 nCount(rChildren.size());
 
                     if(nCount && rSvgTextPathNode.isValid())
@@ -159,7 +159,7 @@ namespace svgio
                 {
                     // Tspan may have children, call recursively
                     const SvgTspanNode& rSvgTspanNode = static_cast< const SvgTspanNode& >(rCandidate);
-                    const SvgNodeVector& rChildren = rSvgTspanNode.getChildren();
+                    const auto& rChildren = rSvgTspanNode.getChildren();
                     const sal_uInt32 nCount(rChildren.size());
 
                     if(nCount)
@@ -188,7 +188,7 @@ namespace svgio
 
                     if(pRefText)
                     {
-                        const SvgNodeVector& rChildren = pRefText->getChildren();
+                        const auto& rChildren = pRefText->getChildren();
                         const sal_uInt32 nCount(rChildren.size());
                         drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
 
@@ -234,7 +234,7 @@ namespace svgio
                 {
                     SvgTextPosition aSvgTextPosition(nullptr, *this, maSvgTextPositions);
                     drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
-                    const SvgNodeVector& rChildren = getChildren();
+                    const auto& rChildren = getChildren();
                     const sal_uInt32 nCount(rChildren.size());
 
                     for(sal_uInt32 a(0); a < nCount; a++)
