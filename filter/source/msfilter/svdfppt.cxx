@@ -3202,15 +3202,15 @@ bool PPTExtParaProv::GetGraphic( sal_uInt32 nInstance, Graphic& rGraph ) const
     PPTBuGraEntry* pPtr = nullptr;
     if ( nInstance < aBuGraList.size() )
     {
-        pPtr = aBuGraList[ nInstance ];
+        pPtr = aBuGraList[ nInstance ].get();
         if ( pPtr->nInstance == nInstance )
             bRetValue = true;
     }
     if ( !bRetValue )
     {
-        for (PPTBuGraEntry* i : aBuGraList)
+        for (std::unique_ptr<PPTBuGraEntry> const & i : aBuGraList)
         {
-            pPtr = i;
+            pPtr = i.get();
             if ( pPtr->nInstance == nInstance )
             {
                 bRetValue = true;
@@ -3277,9 +3277,9 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                                     }
                                 }
                                 if ( n < nBuGraCount ) {
-                                    aBuGraList.insert( aBuGraList.begin() + n, pBuGra );
+                                    aBuGraList.emplace( aBuGraList.begin() + n, pBuGra );
                                 } else {
-                                    aBuGraList.push_back( pBuGra );
+                                    aBuGraList.emplace_back( pBuGra );
                                 }
                             }
 #ifdef DBG_UTIL
@@ -3370,9 +3370,6 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
 
 PPTExtParaProv::~PPTExtParaProv()
 {
-    for (PPTBuGraEntry* i : aBuGraList)
-        delete i;
-    aBuGraList.clear();
 }
 
 PPTNumberFormatCreator::PPTNumberFormatCreator( PPTExtParaProv* pParaProv )

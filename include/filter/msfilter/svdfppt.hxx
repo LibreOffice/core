@@ -720,7 +720,7 @@ struct PPTBuGraEntry
 
 class PPTExtParaProv
 {
-    ::std::vector< PPTBuGraEntry* > aBuGraList;
+    ::std::vector< std::unique_ptr<PPTBuGraEntry> > aBuGraList;
 
 public:
     bool                bStyles;
