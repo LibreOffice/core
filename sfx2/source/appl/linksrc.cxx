@@ -86,44 +86,35 @@ struct SvLinkSource_Entry_Impl
 
 class SvLinkSource_Array_Impl
 {
+friend class SvLinkSource_EntryIter_Impl;
 private:
-    std::vector<SvLinkSource_Entry_Impl*> mvData;
+    std::vector<std::unique_ptr<SvLinkSource_Entry_Impl>> mvData;
 
 public:
     SvLinkSource_Array_Impl() : mvData() {}
 
     size_t size() const { return mvData.size(); }
-    SvLinkSource_Entry_Impl *operator[](size_t idx) const { return mvData[idx]; }
-    std::vector<SvLinkSource_Entry_Impl*>::const_iterator cbegin() const { return mvData.cbegin(); }
-    std::vector<SvLinkSource_Entry_Impl*>::const_iterator cend() const { return mvData.cend(); }
-    void clear() { mvData.clear(); }
-    void push_back(SvLinkSource_Entry_Impl* rData) { mvData.push_back(rData); }
+    SvLinkSource_Entry_Impl *operator[](size_t idx) const { return mvData[idx].get(); }
+    void push_back(SvLinkSource_Entry_Impl* rData) { mvData.emplace_back(rData); }
 
     void DeleteAndDestroy(SvLinkSource_Entry_Impl* p)
     {
-        std::vector<SvLinkSource_Entry_Impl*>::iterator it = std::find(mvData.begin(), mvData.end(), p);
-        if (it != mvData.end())
-        {
-            mvData.erase(it);
-            delete p;
-        }
-    }
-
-    ~SvLinkSource_Array_Impl()
-    {
-        for (auto const& elem : mvData)
-            delete elem;
+        for (auto it = mvData.begin(); it != mvData.end(); ++it)
+            if (it->get() == p)
+            {
+                mvData.erase(it);
+                break;
+            }
     }
 };
 
 class SvLinkSource_EntryIter_Impl
 {
-    SvLinkSource_Array_Impl aArr;
+    std::vector<SvLinkSource_Entry_Impl*> aArr;
     const SvLinkSource_Array_Impl& rOrigArr;
     sal_uInt16 nPos;
 public:
     explicit SvLinkSource_EntryIter_Impl( const SvLinkSource_Array_Impl& rArr );
-    ~SvLinkSource_EntryIter_Impl();
     SvLinkSource_Entry_Impl* Curr()
                             { return nPos < aArr.size() ? aArr[ nPos ] : nullptr; }
     SvLinkSource_Entry_Impl* Next();
@@ -132,18 +123,22 @@ public:
 
 SvLinkSource_EntryIter_Impl::SvLinkSource_EntryIter_Impl(
         const SvLinkSource_Array_Impl& rArr )
-    : aArr( rArr ), rOrigArr( rArr ), nPos( 0 )
+    : rOrigArr( rArr ), nPos( 0 )
 {
-}
-SvLinkSource_EntryIter_Impl::~SvLinkSource_EntryIter_Impl()
-{
-    aArr.clear();
+    for (auto const & i : rArr.mvData)
+        aArr.push_back(i.get());
 }
 
 bool SvLinkSource_EntryIter_Impl::IsValidCurrValue( SvLinkSource_Entry_Impl* pEntry )
 {
-    return ( nPos < aArr.size() && aArr[nPos] == pEntry
-       && std::find( rOrigArr.cbegin(), rOrigArr.cend(), pEntry ) != rOrigArr.cend() );
+    if ( nPos >= aArr.size() )
+        return false;
+    if (aArr[nPos] != pEntry)
+        return false;
+    for (auto const & i : rOrigArr.mvData)
+        if (i.get() == pEntry)
+            return true;
+    return false;
 }
 
 SvLinkSource_Entry_Impl* SvLinkSource_EntryIter_Impl::Next()
@@ -160,8 +155,9 @@ SvLinkSource_Entry_Impl* SvLinkSource_EntryIter_Impl::Next()
             // then we must search the current (or the next) in the orig
             do {
                 pRet = aArr[ nPos ];
-                if( std::find(rOrigArr.cbegin(), rOrigArr.cend(), pRet ) != rOrigArr.cend() )
-                    break;
+                for (auto const & i : rOrigArr.mvData)
+                    if (i.get() == pRet)
+                        return pRet;
                 pRet = nullptr;
                 ++nPos;
             } while( nPos < aArr.size() );
