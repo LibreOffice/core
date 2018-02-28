@@ -20,6 +20,7 @@
 #define INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_RESULTSETBASE_HXX
 
 #include <vector>
+#include <memory>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -390,10 +391,10 @@ namespace chelp {
         css::uno::Sequence< css::beans::Property >           m_sProperty;
 
         osl::Mutex                          m_aMutex;
-        comphelper::OInterfaceContainerHelper2*   m_pDisposeEventListeners;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pDisposeEventListeners;
 
-        comphelper::OInterfaceContainerHelper2*   m_pRowCountListeners;
-        comphelper::OInterfaceContainerHelper2*   m_pIsFinalListeners;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pRowCountListeners;
+        std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pIsFinalListeners;
     };
 
 
