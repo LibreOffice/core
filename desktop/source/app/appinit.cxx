@@ -252,26 +252,19 @@ void Desktop::CreateTemporaryDirectory()
     if ( aTempBaseURL.endsWith( "/" ) )
         aTempBaseURL = aTempBaseURL.copy( 0, aTempBaseURL.getLength() - 1 );
 
-    OUString aRet;
-    OUString aTempPath( aTempBaseURL );
-
     // create new current temporary directory
-    osl::FileBase::getSystemPathFromFileURL( aTempBaseURL, aRet );
-    ::osl::FileBase::getFileURLFromSystemPath( aRet, aTempPath );
-    aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempPath );
-    if ( aTempPath.isEmpty() )
+    OUString aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempBaseURL );
+    if ( aTempPath.isEmpty()
+         && ::osl::File::getTempDirURL( aTempBaseURL ) == osl::FileBase::E_None )
     {
-        ::osl::File::getTempDirURL( aTempBaseURL );
-
         if ( aTempBaseURL.endsWith( "/" ) )
             aTempBaseURL = aTempBaseURL.copy( 0, aTempBaseURL.getLength() - 1 );
 
-        aTempPath = aTempBaseURL;
-        ::osl::FileBase::getFileURLFromSystemPath( aRet, aTempPath );
-        aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempPath );
+        aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempBaseURL );
     }
 
     // set new current temporary directory
+    OUString aRet;
     if (osl::FileBase::getFileURLFromSystemPath( aTempPath, aRet )
         != osl::FileBase::E_None)
     {
