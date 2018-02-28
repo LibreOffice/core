@@ -30,6 +30,15 @@
 #include <workbookfragment.hxx>
 #include <xestream.hxx>
 
+#include <addressconverter.hxx>
+#include <document.hxx>
+#include <docsh.hxx>
+#include <scerrors.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
+#include <svtools/sfxecode.hxx>
+#include <tools/urlobj.hxx>
+
 namespace oox {
 namespace xls {
 
@@ -97,9 +106,67 @@ bool ExcelFilter::importDocument()
             the class WorkbookHelper, and execute the import filter by constructing
             an instance of WorkbookFragment and loading the file. */
         WorkbookGlobalsRef xBookGlob(WorkbookHelper::constructGlobals(*this));
-        if (xBookGlob.get() && importFragment(new WorkbookFragment(*xBookGlob, aWorkbookPath)))
+        if (xBookGlob.get())
         {
-            return true;
+            rtl::Reference<FragmentHandler> xWorkbookFragment( new WorkbookFragment(*xBookGlob, aWorkbookPath));
+            bool bRet = importFragment( xWorkbookFragment);
+            if (bRet)
+            {
+                const WorkbookFragment* pWF = static_cast<const WorkbookFragment*>(xWorkbookFragment.get());
+                const AddressConverter& rAC = pWF->getAddressConverter();
+                if (rAC.isTabOverflow() || rAC.isColOverflow() || rAC.isRowOverflow())
+                {
+                    const ScDocument& rDoc = pWF->getScDocument();
+                    if (rDoc.IsUserInteractionEnabled())
+                    {
+                        // Show data loss warning.
+
+                        INetURLObject aURL( getFileUrl());
+                        SfxErrorContext aContext( ERRCTX_SFX_OPENDOC,
+                                aURL.getName( INetURLObject::LAST_SEGMENT, true,
+                                    INetURLObject::DecodeMechanism::WithCharset),
+                                nullptr, RID_ERRCTX);
+
+                        OUString aWarning;
+                        aContext.GetString( ERRCODE_NONE.MakeWarning(), aWarning);
+                        aWarning += ":\n";
+
+                        OUString aMsg;
+                        if (rAC.isTabOverflow())
+                        {
+                            if (ErrorHandler::GetErrorString( SCWARN_IMPORT_SHEET_OVERFLOW, aMsg))
+                                aWarning += aMsg;
+                        }
+                        if (rAC.isColOverflow())
+                        {
+                            if (!aMsg.isEmpty())
+                                aWarning += "\n";
+                            if (ErrorHandler::GetErrorString( SCWARN_IMPORT_COLUMN_OVERFLOW, aMsg))
+                                aWarning += aMsg;
+                        }
+                        if (rAC.isRowOverflow())
+                        {
+                            if (!aMsg.isEmpty())
+                                aWarning += "\n";
+                            if (ErrorHandler::GetErrorString( SCWARN_IMPORT_ROW_OVERFLOW, aMsg))
+                                aWarning += aMsg;
+                        }
+
+                        /* XXX displaying a dialog here is ugly and should
+                         * rather happen at UI level instead of at the filter
+                         * level, but it seems there's no way to transport
+                         * detailed information other than returning true or
+                         * false at this point? */
+
+                        vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
+                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                   VclMessageType::Warning, VclButtonsType::Ok,
+                                                                   aWarning));
+                        xWarn->run();
+                    }
+                }
+            }
+            return bRet;
         }
     }
     catch (...)
