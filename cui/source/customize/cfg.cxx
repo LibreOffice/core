@@ -1157,6 +1157,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     get(m_pTopLevelListBox, "toplevellist");
     get(m_pPlusBtn, "plusbtn");
     get(m_pMinusBtn, "minusbtn");
+    get(m_pGearBtn, "gearbtn");
     get(m_pMoveUpButton, "up");
     get(m_pMoveDownButton, "down");
     get(m_pSaveInListBox, "savein");
@@ -1194,6 +1195,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     m_pFunctions->SetDoubleClickHdl( LINK( this, SvxConfigPage, FunctionDoubleClickHdl ) );
     m_pFunctions->SetSelectHdl(
         LINK( this, SvxConfigPage, SelectFunctionHdl ) );
+    m_pGearBtn->SetDropDown(PushButtonDropdownStyle::NONE);
 }
 
 SvxConfigPage::~SvxConfigPage()
@@ -1206,6 +1208,7 @@ void SvxConfigPage::dispose()
     m_pTopLevelListBox.clear();
     m_pPlusBtn.clear();
     m_pMinusBtn.clear();
+    m_pGearBtn.clear();
     m_pSearchEdit.clear();
     m_pCommandCategoryListBox.clear();
     m_pEntries.clear();
@@ -2138,6 +2141,11 @@ SvxConfigEntry::~SvxConfigEntry()
 }
 
 bool SvxConfigEntry::IsDeletable()
+{
+    return !IsMain() || IsUserDefined();
+}
+
+bool SvxConfigEntry::IsRenamable()
 {
     return !IsMain() || IsUserDefined();
 }
