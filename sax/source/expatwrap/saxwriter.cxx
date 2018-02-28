@@ -566,6 +566,33 @@ inline void SaxWriterHelper::startDocument()
         nCurrentPos = writeSequence();
 }
 
+void CheckValidName(OUString const& rName)
+{
+#ifdef NDEBUG
+    (void) rName;
+#else
+    assert(!rName.isEmpty());
+    bool hasColon(false);
+    for (sal_Int32 i = 0; i < rName.getLength(); ++i)
+    {
+        auto const c(rName[i]);
+        if (c == ':')
+        {
+            if (hasColon)
+                assert("only one colon allowed");
+            else
+                hasColon = true;
+        }
+        else if (!rtl::isAsciiAlphanumeric(c) && c != '_' && c != '-' && c != '.')
+        {   // note: this will also warn about non-ASCII characters which
+            // are allowed by XML but surely unexpected in LO filters
+            // (OTOH we don't warn about invalid start chars)
+            assert(!"unexpected character in attribute name");
+        }
+    }
+#endif
+}
+
 inline SaxInvalidCharacterError SaxWriterHelper::startElement(const OUString& rName, const Reference< XAttributeList >& xAttribs)
 {
     FinishStartElement();
@@ -581,6 +608,7 @@ inline SaxInvalidCharacterError SaxWriterHelper::startElement(const OUString& rN
         nCurrentPos = writeSequence();
 
     SaxInvalidCharacterError eRet(SAX_NONE);
+    CheckValidName(rName);
     if (!writeString(rName, false, false))
         eRet = SAX_ERROR;
 
@@ -598,6 +626,7 @@ inline SaxInvalidCharacterError SaxWriterHelper::startElement(const OUString& rN
         assert(DebugAttributes.find(rAttrName) == DebugAttributes.end());
         DebugAttributes.insert(rAttrName);
 #endif
+        CheckValidName(rAttrName);
         if (!writeString(rAttrName, false, false))
             eRet = SAX_ERROR;
 
@@ -658,6 +687,7 @@ inline bool SaxWriterHelper::endElement(const OUString& rName)
     if (nCurrentPos == SEQUENCESIZE)
         nCurrentPos = writeSequence();
 
+    CheckValidName(rName);
     bool bRet(writeString( rName, false, false));
 
     mp_Sequence[nCurrentPos] = '>';

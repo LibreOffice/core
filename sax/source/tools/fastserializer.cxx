@@ -270,11 +270,18 @@ namespace sax_fastparser {
     void FastSaxSerializer::writeId( ::sal_Int32 nElement )
     {
         if( HAS_NAMESPACE( nElement ) ) {
-            writeBytes(mxFastTokenHandler->getUTF8Identifier(NAMESPACE(nElement)));
+            auto const Namespace(mxFastTokenHandler->getUTF8Identifier(NAMESPACE(nElement)));
+            assert(Namespace.getLength() != 0);
+            writeBytes(Namespace);
             writeBytes(sColon, N_CHARS(sColon));
-            writeBytes(mxFastTokenHandler->getUTF8Identifier(TOKEN(nElement)));
-        } else
-            writeBytes(mxFastTokenHandler->getUTF8Identifier(nElement));
+            auto const Element(mxFastTokenHandler->getUTF8Identifier(TOKEN(nElement)));
+            assert(Element.getLength() != 0);
+            writeBytes(Element);
+        } else {
+            auto const Element(mxFastTokenHandler->getUTF8Identifier(nElement));
+            assert(Element.getLength() != 0);
+            writeBytes(Element);
+        }
     }
 
 #ifdef DBG_UTIL
