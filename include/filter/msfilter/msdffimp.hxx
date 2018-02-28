@@ -397,7 +397,7 @@ public:
 */
 class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
 {
-    SvxMSDffBLIPInfos*      m_pBLIPInfos;
+    std::unique_ptr<SvxMSDffBLIPInfos>      m_pBLIPInfos;
     std::unique_ptr<SvxMSDffShapeInfos_ByTxBxComp> m_xShapeInfosByTxBxComp;
     std::unique_ptr<SvxMSDffShapeInfos_ById> m_xShapeInfosById;
     SvxMSDffShapeOrders     m_aShapeOrders;
@@ -528,7 +528,7 @@ protected:
     virtual bool ShapeHasText(sal_uLong nShapeId, sal_uLong nFilePos) const;
 
 public:
-    DffPropertyReader* pSecPropSet;
+    std::unique_ptr<DffPropertyReader> pSecPropSet;
     std::map<sal_uInt32,OString> aEscherBlipCache;
 
     DffRecordManager    maShapeRecords;

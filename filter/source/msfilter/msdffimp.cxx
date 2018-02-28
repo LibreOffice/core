@@ -4248,8 +4248,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     if ( aObjData.bOpt2 )
     {
         maShapeRecords.Current()->SeekToBegOfRecord( rSt );
-        delete pSecPropSet;
-        pSecPropSet = new DffPropertyReader( *this );
+        pSecPropSet.reset( new DffPropertyReader( *this ) );
         pSecPropSet->ReadPropSet( rSt, nullptr );
     }
 
@@ -5698,8 +5697,6 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const OUString& rBaseURL )
 
 SvxMSDffManager::~SvxMSDffManager()
 {
-    delete pSecPropSet;
-    delete m_pBLIPInfos;
 }
 
 void SvxMSDffManager::InitSvxMSDffManager( sal_uInt32 nOffsDgg_, SvStream* pStData_, sal_uInt32 nOleConvFlags )
