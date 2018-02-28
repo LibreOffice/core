@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_c8a44f0a",
+        "filename": ".git-hooks/commit-msg",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-02-28T07:06:44Z",
+      "side": 1,
+      "message": "You probably don\u0027t want to change this file.",
+      "revId": "bec29453bd3afdd3c2c1feeb3f9ffb12b87b6ade",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_e8a913e1",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-02-28T07:06:44Z",
+      "side": 1,
+      "message": "You dont need to add this comment, git has all the history who did which changes.",
+      "range": {
+        "startLine": 505,
+        "startChar": 12,
+        "endLine": 506,
+        "endChar": 59
+      },
+      "revId": "bec29453bd3afdd3c2c1feeb3f9ffb12b87b6ade",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
