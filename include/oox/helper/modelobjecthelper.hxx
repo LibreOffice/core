@@ -27,7 +27,8 @@
 #include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
-    namespace awt { struct Gradient; }
+    namespace awt { struct Gradient;
+                    class XBitmap; }
     namespace graphic { class XGraphic; }
     namespace container { class XNameContainer; }
     namespace drawing { struct LineDash; }
@@ -113,6 +114,7 @@ public:
     OUString insertFillBitmapXGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
 
     OUString     getFillBitmapUrl( const OUString& rGraphicName );
+    css::uno::Reference<css::awt::XBitmap> getFillBitmap(OUString const & rGraphicName);
 
 private:
     ObjectContainer     maMarkerContainer;      ///< Contains all named line markers (line end polygons).

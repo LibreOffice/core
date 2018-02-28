@@ -54,6 +54,7 @@
 #include <tools/mapunit.hxx>
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -841,16 +842,19 @@ Reference< XShape > const & Shape::createAndInsert(
                     aShapeProps.setAnyProperty(PROP_BackColorTransparency, aShapeProps.getProperty(PROP_FillTransparence));
                     aShapeProps.erase(PROP_FillTransparence);
                 }
-                // TextFrames have BackGrahicURL, not FillBitmapURL
-                if (aShapeProps.hasProperty(PROP_FillBitmapURL))
+                // TextFrames have BackGrahic, not FillBitmap
+                if (aShapeProps.hasProperty(PROP_FillBitmap))
                 {
-                    aShapeProps.setAnyProperty(PROP_BackGraphicURL, aShapeProps.getProperty(PROP_FillBitmapURL));
-                    aShapeProps.erase(PROP_FillBitmapURL);
+                    aShapeProps.setAnyProperty(PROP_BackGraphic, aShapeProps.getProperty(PROP_FillBitmap));
+                    aShapeProps.erase(PROP_FillBitmap);
                 }
                 if (aShapeProps.hasProperty(PROP_FillBitmapName))
                 {
                     uno::Any aAny = aShapeProps.getProperty(PROP_FillBitmapName);
-                    aShapeProps.setProperty(PROP_BackGraphicURL, rFilterBase.getModelObjectHelper().getFillBitmapUrl( aAny.get<OUString>() ));
+                    OUString aFillBitmapName = aAny.get<OUString>();
+                    uno::Reference<awt::XBitmap> xBitmap = rFilterBase.getModelObjectHelper().getFillBitmap(aFillBitmapName);
+                    uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
+                    aShapeProps.setProperty(PROP_BackGraphic, xGraphic);
                     // aShapeProps.erase(PROP_FillBitmapName);  // Maybe, leave the name as well
                 }
                 // And no LineColor property; individual borders can have colors

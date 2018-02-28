@@ -185,7 +185,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
         switch( aTokenMap.Get( nPrefix, aLocalName ) )
         {
         case XML_TOK_BGIMG_HREF:
-            sURL = rValue;
+            m_sURL = rValue;
             if( GraphicLocation_NONE == ePos )
                 ePos = GraphicLocation_TILED;
             break;
@@ -353,13 +353,13 @@ SvXMLImportContextRef XMLBackgroundImageContext::CreateChildContext(
         xmloff::token::IsXMLToken( rLocalName,
                                         xmloff::token::XML_BINARY_DATA ) )
     {
-        if( sURL.isEmpty() && !xBase64Stream.is() )
+        if( m_sURL.isEmpty() && !m_xBase64Stream.is() )
         {
-            xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
-            if( xBase64Stream.is() )
+            m_xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
+            if( m_xBase64Stream.is() )
                 pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
                                                     rLocalName, xAttrList,
-                                                    xBase64Stream );
+                                                    m_xBase64Stream );
         }
     }
     if( !pContext )
@@ -372,23 +372,24 @@ SvXMLImportContextRef XMLBackgroundImageContext::CreateChildContext(
 
 void XMLBackgroundImageContext::EndElement()
 {
-    if( !sURL.isEmpty() )
+    uno::Reference<graphic::XGraphic> xGraphic;
+    if (!m_sURL.isEmpty())
     {
-        sURL = GetImport().ResolveGraphicObjectURL( sURL, false );
+        xGraphic = GetImport().loadGraphicByURL(m_sURL);
     }
-    else if( xBase64Stream.is() )
+    else if (m_xBase64Stream.is())
     {
-        sURL = GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream );
-        xBase64Stream = nullptr;
+        xGraphic = GetImport().loadGraphicFromBase64(m_xBase64Stream);
+        m_xBase64Stream = nullptr;
     }
 
-    if( sURL.isEmpty() )
+    if (!xGraphic.is())
         ePos = GraphicLocation_NONE;
-    else if( GraphicLocation_NONE == ePos )
+    else if (GraphicLocation_NONE == ePos)
         ePos = GraphicLocation_TILED;
 
-    if (!sURL.isEmpty())
-        aProp.maValue <<= sURL;
+    if (xGraphic.is())
+        aProp.maValue <<= xGraphic;
     aPosProp.maValue <<= ePos;
     aFilterProp.maValue <<= sFilter;
     aTransparencyProp.maValue <<= nTransparency;

@@ -35,11 +35,11 @@ class XMLBackgroundImageContext : public XMLElementPropertyContext
     XMLPropertyState aTransparencyProp;
 
     css::style::GraphicLocation ePos;
-    OUString sURL;
+    OUString m_sURL;
     OUString sFilter;
     sal_Int8 nTransparency;
 
-    css::uno::Reference < css::io::XOutputStream > xBase64Stream;
+    css::uno::Reference < css::io::XOutputStream > m_xBase64Stream;
 
 private:
     void ProcessAttrs(

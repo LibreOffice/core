@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -36,7 +37,6 @@
 #include <o3tl/any.hxx>
 
 #include <rtl/ustrbuf.hxx>
-
 
 #include <sax/tools/converter.hxx>
 
@@ -95,8 +95,8 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
     FontPitch eBulletFontPitch = PITCH_DONTKNOW;
     rtl_TextEncoding eBulletFontEncoding = RTL_TEXTENCODING_DONTKNOW;
 
-    OUString sImageURL;
-    uno::Reference< css::awt::XBitmap >  xBitmap;
+    uno::Reference<graphic::XGraphic> xGraphic;
+
     sal_Int32 nImageWidth = 0, nImageHeight = 0;
     sal_Int16 eImageVertOrient = VertOrientation::LINE_CENTER;
 
@@ -155,13 +155,11 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
                 eBulletFontEncoding = static_cast<rtl_TextEncoding>(rFDesc.CharSet);
             }
         }
-        else if( rProp.Name == "GraphicURL" )
-        {
-            rProp.Value >>= sImageURL;
-        }
         else if( rProp.Name == "GraphicBitmap" )
         {
+            uno::Reference<awt::XBitmap> xBitmap;
             rProp.Value >>= xBitmap;
+            xGraphic.set(xBitmap, uno::UNO_QUERY);
         }
         else if( rProp.Name == "BulletColor" )
         {
@@ -299,14 +297,13 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 
         eElem = XML_LIST_LEVEL_STYLE_IMAGE;
 
-
-        if( !sImageURL.isEmpty() )
+        if (xGraphic.is())
         {
-            OUString sURL( GetExport().AddEmbeddedGraphicObject( sImageURL ) );
-            if( !sURL.isEmpty() )
+            OUString sUsedMimeType;
+            OUString sInternalURL = GetExport().AddEmbeddedXGraphic(xGraphic, sUsedMimeType);
+            if (!sInternalURL.isEmpty())
             {
-                GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sURL );
-
+                GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sInternalURL);
                 GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
                 GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
                 GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
@@ -314,8 +311,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         }
         else
         {
-            SAL_WARN_IF( xBitmap.is(), "xmloff",
-                        "embedded images are not supported by now" );
+            SAL_WARN_IF(xGraphic.is(), "xmloff", "embedded images are not supported by now");
         }
     }
     else
@@ -602,10 +598,10 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
             SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_STYLE,
                                       XML_TEXT_PROPERTIES, true, true );
         }
-        if( NumberingType::BITMAP == eType && !sImageURL.isEmpty() )
+        if (xGraphic.is() && NumberingType::BITMAP == eType)
         {
             // optional office:binary-data
-            GetExport().AddEmbeddedGraphicObjectAsBase64( sImageURL );
+            GetExport().AddEmbeddedXGraphicAsBase64(xGraphic);
         }
     }
 }
