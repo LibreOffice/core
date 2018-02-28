@@ -120,14 +120,14 @@ OQueryDescriptor_Base::OQueryDescriptor_Base(::osl::Mutex&  _rMutex,::cppu::OWea
     :m_bColumnsOutOfDate(true)
     ,m_rMutex(_rMutex)
 {
-    m_pColumns = new OColumns(_rMySelf, m_rMutex, true,std::vector< OUString>(), this,this);
+    m_pColumns.reset( new OColumns(_rMySelf, m_rMutex, true,std::vector< OUString>(), this,this) );
 }
 
 OQueryDescriptor_Base::OQueryDescriptor_Base(const OQueryDescriptor_Base& _rSource,::cppu::OWeakObject& _rMySelf)
     :m_bColumnsOutOfDate(true)
     ,m_rMutex(_rSource.m_rMutex)
 {
-    m_pColumns = new OColumns(_rMySelf, m_rMutex, true,std::vector< OUString>(), this,this);
+    m_pColumns.reset( new OColumns(_rMySelf, m_rMutex, true,std::vector< OUString>(), this,this) );
 
     m_sCommand = _rSource.m_sCommand;
     m_bEscapeProcessing = _rSource.m_bEscapeProcessing;
@@ -141,8 +141,6 @@ OQueryDescriptor_Base::~OQueryDescriptor_Base()
 {
     m_pColumns->acquire();
     m_pColumns->disposing();
-    delete m_pColumns;
-
 }
 
 sal_Int64 SAL_CALL OQueryDescriptor_Base::getSomething( const Sequence< sal_Int8 >& _rIdentifier )
@@ -204,7 +202,7 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( )
         }
     }
 
-    return m_pColumns;
+    return m_pColumns.get();
 }
 
 OUString SAL_CALL OQueryDescriptor_Base::getImplementationName(  )
