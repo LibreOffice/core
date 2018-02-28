@@ -1607,7 +1607,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                             {
                                 PPTTextSpecInfo aTxSI( 0 );
                                 if ( aTxSIStyle.bValid && !aTxSIStyle.aList.empty() )
-                                    aTxSI = *( aTxSIStyle.aList[ 0 ] );
+                                    aTxSI = aTxSIStyle.aList[ 0 ];
 
                                 rE2.xStyleSheet.reset(new PPTStyleSheet(aSlideHd, rStCtrl, *this, aTxPFStyle, aTxSI));
                                 pDefaultSheet = rE2.xStyleSheet.get();
@@ -4774,13 +4774,13 @@ bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHeader&
         sal_uInt32 nFlags(0);
         rIn.ReadUInt32(nFlags);
 
-        PPTTextSpecInfo* pEntry = new PPTTextSpecInfo( nCharIdx );
+        PPTTextSpecInfo aEntry( nCharIdx );
         if ( pTextSpecDefault )
         {
-            pEntry->nDontKnow = pTextSpecDefault->nDontKnow;
-            pEntry->nLanguage[ 0 ] = pTextSpecDefault->nLanguage[ 0 ];
-            pEntry->nLanguage[ 1 ] = pTextSpecDefault->nLanguage[ 1 ];
-            pEntry->nLanguage[ 2 ] = pTextSpecDefault->nLanguage[ 2 ];
+            aEntry.nDontKnow = pTextSpecDefault->nDontKnow;
+            aEntry.nLanguage[ 0 ] = pTextSpecDefault->nLanguage[ 0 ];
+            aEntry.nLanguage[ 1 ] = pTextSpecDefault->nLanguage[ 1 ];
+            aEntry.nLanguage[ 2 ] = pTextSpecDefault->nLanguage[ 2 ];
         }
         for (sal_uInt32 i = 1; nFlags && i ; i <<= 1)
         {
@@ -4788,7 +4788,7 @@ bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHeader&
             switch( nFlags & i )
             {
                 case 0 : break;
-                case 1 : rIn.ReadUInt16( pEntry->nDontKnow ); break;
+                case 1 : rIn.ReadUInt16( aEntry.nDontKnow ); break;
                 case 2 : rIn.ReadUInt16( nLang ); break;
                 case 4 : rIn.ReadUInt16( nLang ); break;
                 default :
@@ -4806,12 +4806,12 @@ bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHeader&
                 // load time.
                 if (i == 2)
                 {
-                    pEntry->nLanguage[ 0 ] = pEntry->nLanguage[ 1 ] = pEntry->nLanguage[ 2 ] = LanguageType(nLang);
+                    aEntry.nLanguage[ 0 ] = aEntry.nLanguage[ 1 ] = aEntry.nLanguage[ 2 ] = LanguageType(nLang);
                 }
             }
             nFlags &= ~i;
         }
-        aList.push_back( pEntry );
+        aList.push_back( aEntry );
     }
     bValid = rIn.Tell() == rRecHd.GetRecEndFilePos();
     return bValid;
@@ -4819,10 +4819,6 @@ bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHeader&
 
 PPTTextSpecInfoAtomInterpreter::~PPTTextSpecInfoAtomInterpreter()
 {
-    for (PPTTextSpecInfo* i : aList) {
-        delete i;
-    }
-    aList.clear();
 }
 
 void StyleTextProp9::Read( SvStream& rIn )
@@ -6702,9 +6698,9 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         &(rSdrPowerPointImport.pPPTStyleSheet->maTxSI) ) )
                                 {
                                     PPTCharPropSetList::size_type nI = 0;
-                                    for (PPTTextSpecInfo* pSpecInfo : aTextSpecInfoAtomInterpreter.aList)
+                                    for (PPTTextSpecInfo& rSpecInfo : aTextSpecInfoAtomInterpreter.aList)
                                     {
-                                        sal_uInt32 nCharIdx = pSpecInfo->nCharIdx;
+                                        sal_uInt32 nCharIdx = rSpecInfo.nCharIdx;
 
                                         // portions and text have to been splitted in some cases
                                         for ( ; nI < aStyleTextPropReader.aCharPropList.size(); ++nI)
@@ -6712,9 +6708,9 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                             PPTCharPropSet* pSet = aStyleTextPropReader.aCharPropList[nI];
                                             if (pSet->mnOriginalTextPos >= nCharIdx)
                                                 break;
-                                            pSet->mnLanguage[0] = pSpecInfo->nLanguage[0];
-                                            pSet->mnLanguage[1] = pSpecInfo->nLanguage[1];
-                                            pSet->mnLanguage[2] = pSpecInfo->nLanguage[2];
+                                            pSet->mnLanguage[0] = rSpecInfo.nLanguage[0];
+                                            pSet->mnLanguage[1] = rSpecInfo.nLanguage[1];
+                                            pSet->mnLanguage[2] = rSpecInfo.nLanguage[2];
                                             // test if the current portion needs to be splitted
                                             if (pSet->maString.getLength() <= 1)
                                                 continue;
