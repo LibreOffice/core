@@ -273,7 +273,6 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
     }
     else
         aModel.mnRow = ++mnRow;
-    mrAddressConv.checkRow( mnRow, true);
     mnCol = -1;
 
     aModel.mfHeight       = rAttribs.getDouble( XML_ht, -1.0 );
@@ -298,14 +297,8 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
         if( (0 < nSepPos) && (nSepPos + 1 < aColSpanToken.getLength()) )
         {
             // OOXML uses 1-based integer column indexes, row model expects 0-based colspans
-            const sal_Int32 nCol1 = aColSpanToken.copy( 0, nSepPos ).toInt32() - 1;
-            const bool bValid1 = mrAddressConv.checkCol( nCol1, true);
-            if (bValid1)
-            {
-                const sal_Int32 nCol2 = aColSpanToken.copy( nSepPos + 1 ).toInt32() - 1;
-                mrAddressConv.checkCol( nCol2, true);
-                aModel.insertColSpan( ValueRange( nCol1, ::std::min( nCol2, nMaxCol )));
-            }
+            sal_Int32 nLastCol = ::std::min( aColSpanToken.copy( nSepPos + 1 ).toInt32() - 1, nMaxCol );
+            aModel.insertColSpan( ValueRange( aColSpanToken.copy( 0, nSepPos ).toInt32() - 1, nLastCol ) );
         }
     }
 
@@ -321,9 +314,7 @@ bool SheetDataContext::importCell( const AttributeList& rAttribs )
     if (!p)
     {
         ++mnCol;
-        ScAddress aAddress( mnCol, mnRow, mnSheet );
-        bValid = mrAddressConv.checkCellAddress( aAddress, true );
-        maCellData.maCellAddr = aAddress;
+        maCellData.maCellAddr = ScAddress( mnCol, mnRow, mnSheet );
     }
     else
     {
@@ -383,7 +374,6 @@ void SheetDataContext::importRow( SequenceInputStream& rStrm )
     nSpanCount = rStrm.readInt32();
     maCurrPos.mnCol = 0;
 
-    mrAddressConv.checkRow( maCurrPos.mnRow, true);
     // row index is 0-based in BIFF12, but RowModel expects 1-based
     aModel.mnRow          = maCurrPos.mnRow + 1;
     // row height is in twips in BIFF12, convert to points
@@ -403,11 +393,8 @@ void SheetDataContext::importRow( SequenceInputStream& rStrm )
     {
         sal_Int32 nFirstCol, nLastCol;
         nFirstCol = rStrm.readInt32();
-        const bool bValid1 = mrAddressConv.checkCol( nFirstCol, true);
         nLastCol = rStrm.readInt32();
-        mrAddressConv.checkCol( nLastCol, true);
-        if (bValid1)
-            aModel.insertColSpan( ValueRange( nFirstCol, ::std::min( nLastCol, nMaxCol ) ) );
+        aModel.insertColSpan( ValueRange( nFirstCol, ::std::min( nLastCol, nMaxCol ) ) );
     }
 
     // set row properties in the current sheet
