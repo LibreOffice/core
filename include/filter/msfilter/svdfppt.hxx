@@ -673,7 +673,7 @@ struct PPTTextSpecInfo
 struct  PPTTextSpecInfoAtomInterpreter
 {
     bool                bValid;
-    ::std::vector< PPTTextSpecInfo* > aList;
+    ::std::vector< PPTTextSpecInfo > aList;
 
                     PPTTextSpecInfoAtomInterpreter();
                     ~PPTTextSpecInfoAtomInterpreter();
