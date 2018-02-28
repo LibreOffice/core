@@ -397,7 +397,10 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
                     m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, aVisibilityStatus.bVisible );
                 }
                 else
+                {
                     m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId );
+                    m_pVCLMenu->CheckItem( pMenuItemHandler->nItemId, false );
+                }
             }
 
             if ( Event.Requery )
