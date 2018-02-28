@@ -56,15 +56,15 @@ protected:
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet ) override;
 
 private:
-    std::vector< ItemConverter * >               m_aConverters;
+    std::vector< std::unique_ptr<ItemConverter> >  m_aConverters;
     css::uno::Reference<
         css::chart2::XAxis >  m_xAxis;
 
     css::uno::Reference<
         css::chart2::XChartDocument >      m_xChartDoc;
 
-    ExplicitScaleData*      m_pExplicitScale;
-    ExplicitIncrementData*  m_pExplicitIncrement;
+    std::unique_ptr<ExplicitScaleData>  m_pExplicitScale;
+    std::unique_ptr<ExplicitIncrementData>  m_pExplicitIncrement;
 };
 
 }}
