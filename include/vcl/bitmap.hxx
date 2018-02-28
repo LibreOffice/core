@@ -263,17 +263,28 @@ public:
 
 public:
 
-    bool                    MakeMonochrome(sal_uInt8 cThreshold);
-
-
     /** Convert bitmap format
 
         @param eConversion
         The format this bitmap should be converted to.
 
-        @return true, if the conversion was completed successfully.
+        @return true the conversion was completed successfully.
      */
     bool                    Convert( BmpConversion eConversion );
+
+
+    /** Convert to 2 color bitmap.
+
+        Converts to a 2 color indexed bitmap - note that we don't change to black and white
+        monochrome, but we pick the closest color to black and white in the bitmap.
+
+        @param cThreshold
+        Luminance value that determines whether the colour should be black (or closest
+        color to black) or white (or closest color to white).
+
+        @return true conversion to monochrome bitmap was successful
+    */
+    bool                    MakeMonochrome(sal_uInt8 cThreshold);
 
     /** Reduce number of colors for the bitmap
 
@@ -283,7 +294,7 @@ public:
         @param eReduce
         Algorithm to use for color reduction
 
-        @return true, if the color reduction operation was completed successfully.
+        @return true the color reduction operation was completed successfully.
      */
     bool                    ReduceColors(
                                 sal_uInt16 nNewColorCount,
@@ -310,7 +321,7 @@ public:
         dimension, i.e. negative left,top rectangle coordinates or
         exceeding width or height is ignored.
 
-        @return true, if cropping was performed successfully. If
+        @return true cropping was performed successfully. If
         nothing had to be cropped, because e.g. the crop rectangle
         included the bitmap, false is returned, too!
      */
