@@ -503,14 +503,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             // Get language from locale: ll or lll or ll-CC or lll-CC
 
             // Franklin.20180222: tdf#115795
-            // Since LOlang of both locale zh-tw and zh-cn is "zh", which
-            // would confuse the hub and isn't able to distinguish
-            // Send LOlocale to hub instead of LOlang to avoid the problem
-            // of zh-tw redirected to zh-cn forum.
+            // Change the parameter from LOlang to LOlocale
 
-            // locale is zh-TW, hub accept zh-tw only.
-            OUString aLocale = utl::ConfigManager::getLocale().toAsciiLowerCase();
-            OUString sURL("https://hub.libreoffice.org/forum/?LOlocale=" + aLocale);
+            OUString sURL("https://hub.libreoffice.org/forum/?LOlocale=" + utl::ConfigManager::getLocale());
             // Franklin.20180222: tdf#115795 end
             sfx2::openUriExternally(sURL, false);
             break;
