@@ -115,7 +115,7 @@ class ImplEESdrWriter
     EscherExHostAppData*    mpHostAppData;
     bool                    mbIsTitlePossible;
     const SdrPage*          mpSdrPage;
-    EscherSolverContainer*  mpSolverContainer;
+    std::unique_ptr<EscherSolverContainer> mpSolverContainer;
 
     bool                ImplInitPageValues();
     void                ImplWritePage( EscherSolverContainer& rSolver );
