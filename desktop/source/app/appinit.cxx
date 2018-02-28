@@ -248,18 +248,11 @@ void Desktop::CreateTemporaryDirectory()
         throw;
     }
 
-    // set temp base directory
-    if ( aTempBaseURL.endsWith( "/" ) )
-        aTempBaseURL = aTempBaseURL.copy( 0, aTempBaseURL.getLength() - 1 );
-
     // create new current temporary directory
     OUString aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempBaseURL );
     if ( aTempPath.isEmpty()
          && ::osl::File::getTempDirURL( aTempBaseURL ) == osl::FileBase::E_None )
     {
-        if ( aTempBaseURL.endsWith( "/" ) )
-            aTempBaseURL = aTempBaseURL.copy( 0, aTempBaseURL.getLength() - 1 );
-
         aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempBaseURL );
     }
 
