@@ -952,10 +952,10 @@ void SwTiledRenderingTest::testShapeViewCursors()
     Scheduler::ProcessEventsToIdle();
     // Make sure that aView1 gets a view-only cursor notification, while
     // aView2 gets a real cursor notification.
-    CPPUNIT_ASSERT(aView1.m_aOwnCursor == aLastOwnCursor1);
+    CPPUNIT_ASSERT_EQUAL(aView1.m_aOwnCursor, aLastOwnCursor1);
     CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated && aLastViewCursor1 != aView1.m_aViewCursor);
     CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated && aLastOwnCursor2 != aView2.m_aOwnCursor);
-    CPPUNIT_ASSERT(aLastViewCursor2 == aView2.m_aViewCursor);
+    CPPUNIT_ASSERT_EQUAL(aLastViewCursor2, aView2.m_aViewCursor);
     mxComponent->dispose();
     mxComponent.clear();
 
