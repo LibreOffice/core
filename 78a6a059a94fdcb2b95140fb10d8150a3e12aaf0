@@ -34,6 +34,24 @@
       "revId": "78a6a059a94fdcb2b95140fb10d8150a3e12aaf0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_abed5527",
+        "filename": "framework/source/uielement/menubarmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2018-02-28T15:01:27Z",
+      "side": 1,
+      "message": "Let\u0027s try different way: now checkbox removed only during disabling of checked items.",
+      "parentUuid": "ba2be162_8b7331b4",
+      "revId": "78a6a059a94fdcb2b95140fb10d8150a3e12aaf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
