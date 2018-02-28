@@ -479,6 +479,10 @@ public:
     static css::uno::Sequence<css::table::CellRangeAddress>
                         toApiSequence(const ScRangeList& orRanges);
 
+    bool                isColOverflow() const { return mbColOverflow; }
+    bool                isRowOverflow() const { return mbRowOverflow; }
+    bool                isTabOverflow() const { return mbTabOverflow; }
+
 private:
     void                initializeMaxPos(
                             sal_Int16 nMaxXlsTab, sal_Int32 nMaxXlsCol, sal_Int32 nMaxXlsRow );
