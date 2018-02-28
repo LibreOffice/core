@@ -24,49 +24,36 @@
 #include <shellres.hxx>
 #include <tautofmt.hxx>
 
-class SwStringInputDlg : public ModalDialog
+class SwStringInputDlg
 {
-public:
-    SwStringInputDlg(vcl::Window* pParent, const OUString& rTitle,
-                     const OUString& rEditTitle, const OUString& rDefault );
-    virtual ~SwStringInputDlg() override;
-    virtual void dispose() override;
-
-    OUString GetInputString() const;
-
 private:
-    VclPtr<Edit> m_pEdInput; // Edit obtains the focus.
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Dialog> m_xDialog;
+    std::unique_ptr<weld::Label> m_xLabel;
+    std::unique_ptr<weld::Entry> m_xEdInput; // Edit obtains the focus.
+
+public:
+    SwStringInputDlg(weld::Window* pParent, const OUString& rTitle,
+        const OUString& rEditTitle, const OUString& rDefault)
+        : m_xBuilder(Application::CreateBuilder(pParent, "modules/swriter/ui/stringinput.ui"))
+        , m_xDialog(m_xBuilder->weld_dialog("StringInputDialog"))
+        , m_xLabel(m_xBuilder->weld_label("name"))
+        , m_xEdInput(m_xBuilder->weld_entry("edit"))
+    {
+        m_xLabel->set_label(rEditTitle);
+        m_xDialog->set_title(rTitle);
+        m_xEdInput->set_text(rDefault);
+    }
+
+    OUString GetInputString() const
+    {
+        return m_xEdInput->get_text();
+    }
+
+    short run() {  return m_xDialog->run(); }
 };
 
-SwStringInputDlg::SwStringInputDlg(vcl::Window* pParent, const OUString& rTitle,
-    const OUString& rEditTitle, const OUString& rDefault)
-    : ModalDialog(pParent, "StringInputDialog", "modules/swriter/ui/stringinput.ui")
-{
-    get<FixedText>("name")->SetText(rEditTitle);
-    get(m_pEdInput, "edit");
-
-    SetText(rTitle);
-    m_pEdInput->SetText(rDefault);
-}
-
-OUString SwStringInputDlg::GetInputString() const
-{
-    return m_pEdInput->GetText();
-}
-
-SwStringInputDlg::~SwStringInputDlg()
-{
-    disposeOnce();
-}
-
-void SwStringInputDlg::dispose()
-{
-    m_pEdInput.clear();
-    ModalDialog::dispose();
-}
-
 // AutoFormat-Dialogue:
-
 SwAutoFormatDlg::SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pWrtShell,
                     bool bAutoFormat, const SwTableAutoFormat* pSelFormat )
     : SfxModalDialog(pParent, "AutoFormatTableDialog", "modules/swriter/ui/autoformattable.ui")
@@ -252,11 +239,10 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl, Button*, void)
     bool bOk = false, bFormatInserted = false;
     while( !bOk )
     {
-        VclPtrInstance<SwStringInputDlg> pDlg( this, aStrTitle,
-                                               aStrLabel, OUString() );
-        if( RET_OK == pDlg->Execute() )
+        SwStringInputDlg aDlg(GetFrameWeld(), aStrTitle, aStrLabel, OUString());
+        if (RET_OK == aDlg.run())
         {
-            const OUString aFormatName( pDlg->GetInputString() );
+            const OUString aFormatName(aDlg.GetInputString());
 
             if ( !aFormatName.isEmpty() )
             {
@@ -345,13 +331,11 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl, Button*, void)
     bool bOk = false;
     while( !bOk )
     {
-        VclPtrInstance<SwStringInputDlg> pDlg( this, aStrRenameTitle,
-                                               m_pLbFormat->GetSelectedEntry(),
-                                               OUString() );
-        if( pDlg->Execute() == RET_OK )
+        SwStringInputDlg aDlg(GetFrameWeld(), aStrRenameTitle, m_pLbFormat->GetSelectedEntry(), OUString());
+        if (aDlg.run() == RET_OK)
         {
             bool bFormatRenamed = false;
-            const OUString aFormatName( pDlg->GetInputString() );
+            const OUString aFormatName(aDlg.GetInputString());
 
             if ( !aFormatName.isEmpty() )
             {
