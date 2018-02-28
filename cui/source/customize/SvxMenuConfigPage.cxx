@@ -165,6 +165,9 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
         // TODO: Remove this when it is possible to reset menubar menus individually
         m_pResetBtn->Disable();
     }
+
+    //TODO: Remove this when the gear button is implemented for menus
+    m_pGearBtn->Disable();
 }
 
 SvxMenuConfigPage::~SvxMenuConfigPage()
