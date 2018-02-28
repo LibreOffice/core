@@ -740,7 +740,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
             (rHWrt.m_nDefListLvl-1) * rHWrt.m_nDefListMargin;
     }
 
-    if( rHWrt.m_bLFPossible )
+    if( rHWrt.m_bLFPossible && !rHWrt.m_bFirstLine )
         rHWrt.OutNewLine(); // paragraph tag on a new line
     rInfo.bOutPara = false;
 

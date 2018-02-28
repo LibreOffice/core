@@ -3068,6 +3068,10 @@ static Writer& OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( Writer& rWrt,
         }
     }
 
+    if (rHTMLWrt.mbSkipHeaderFooter)
+        // No page break when writing only a fragment.
+        return rWrt;
+
     if( pBreakBefore )
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_page_break_before,
                                         pBreakBefore );
