@@ -646,15 +646,12 @@ vcl::Region Bitmap::CreateRegion(const Color& rColor, const tools::Rectangle& rR
         const long nBottom = aRect.Bottom();
         const BitmapColor aMatch(pReadAcc->GetBestMatchingColor(rColor));
 
-        //RectangleVector aRectangles;
-        //aRegion.ImplBeginAddRect();
         std::vector<long> aLine;
         long nYStart(nTop);
         long nY(nTop);
 
         for (; nY <= nBottom; nY++)
         {
-            //aSubRect.Top() = aSubRect.Bottom() = nY;
             std::vector<long> aNewLine;
             long nX(nLeft);
             Scanline pScanlineRead = pReadAcc->GetScanline(nY);
@@ -667,7 +664,6 @@ vcl::Region Bitmap::CreateRegion(const Color& rColor, const tools::Rectangle& rR
                 if (nX <= nRight)
                 {
                     aNewLine.push_back(nX);
-                    //aSubRect.Left() = nX;
 
                     while ((nX <= nRight)
                            && (aMatch == pReadAcc->GetPixelFromData(pScanlineRead, nX)))
@@ -675,12 +671,7 @@ vcl::Region Bitmap::CreateRegion(const Color& rColor, const tools::Rectangle& rR
                         nX++;
                     }
 
-                    //aSubRect.Right() = nX - 1;
                     aNewLine.push_back(nX - 1);
-
-                    //aRegion.ImplAddRect( aSubRect );
-                    //aRectangles.push_back(aSubRect);
-                    //aRegion.Union(aSubRect);
                 }
             }
 
@@ -725,9 +716,6 @@ vcl::Region Bitmap::CreateRegion(const Color& rColor, const tools::Rectangle& rR
                 aRegion.Union(aSubRect);
             }
         }
-
-        //aRegion.ImplEndAddRect();
-        //aRegion.SetRegionRectangles(aRectangles);
 
         pReadAcc.reset();
     }
