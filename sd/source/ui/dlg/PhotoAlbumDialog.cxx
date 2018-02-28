@@ -43,7 +43,7 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pAc
 : ModalDialog(pWindow, "PhotoAlbumCreatorDialog", "modules/simpress/ui/photoalbum.ui"),
   pDoc(pActDoc)
 {
-    get(pCancelBtn, "cancel_btn");
+    get(pCancelBtn, "cancel");
     get(pCreateBtn, "create_btn");
 
     get(pAddBtn, "add_btn");

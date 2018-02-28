@@ -248,7 +248,7 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
     m_pErrorStatus(get<FixedText>("errorstatus")),
     m_pContainer(get<SvSimpleTableContainer>("container")),
     m_pStop(get<PushButton>("stop")),
-    m_pClose(get<PushButton>("close")),
+    m_pClose(get<PushButton>("cancel")),
     m_sContinue(SwResId( ST_CONTINUE )),
     m_sStop(m_pStop->GetText()),
     m_sTransferStatus(m_pTransferStatus->GetText()),

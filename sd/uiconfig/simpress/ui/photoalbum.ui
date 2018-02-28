@@ -71,7 +71,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="cancel_btn">
+              <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -425,7 +425,7 @@
     </child>
     <action-widgets>
       <action-widget response="0">create_btn</action-widget>
-      <action-widget response="0">cancel_btn</action-widget>
+      <action-widget response="-6">cancel</action-widget>
     </action-widgets>
   </object>
 </interface>
