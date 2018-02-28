@@ -303,7 +303,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">gtk-help</action-widget>
+      <action-widget response="-11">gtk-help</action-widget>
       <action-widget response="0">INSTALL</action-widget>
       <action-widget response="0">gtk-close</action-widget>
     </action-widgets>
