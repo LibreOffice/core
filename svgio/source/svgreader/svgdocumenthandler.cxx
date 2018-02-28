@@ -54,12 +54,12 @@ namespace
     {
         if(pNode)
         {
-            const svgio::svgreader::SvgNodeVector& rChilds = pNode->getChildren();
+            const auto& rChilds = pNode->getChildren();
             const sal_uInt32 nCount(rChilds.size());
 
             for(sal_uInt32 a(0); a < nCount; a++)
             {
-                svgio::svgreader::SvgNode* pCandidate = rChilds[a];
+                svgio::svgreader::SvgNode* pCandidate = rChilds[a].get();
 
                 if(pCandidate)
                 {
@@ -564,12 +564,12 @@ namespace svgio
                     case SVGTokenTspan:
                     case SVGTokenTextPath:
                     {
-                        const SvgNodeVector& rChilds = mpTarget->getChildren();
+                        const auto& rChilds = mpTarget->getChildren();
                         SvgCharacterNode* pTarget = nullptr;
 
                         if(rChilds.size())
                         {
-                            pTarget = dynamic_cast< SvgCharacterNode* >(rChilds[rChilds.size() - 1]);
+                            pTarget = dynamic_cast< SvgCharacterNode* >(rChilds[rChilds.size() - 1].get());
                         }
 
                         if(pTarget)
