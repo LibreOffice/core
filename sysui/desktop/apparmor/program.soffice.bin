@@ -50,7 +50,8 @@
 @{libreoffice_ext} += [rR][tT][fF]
 
 #Calc
-@{libreoffice_ext} += [xX][lL][sSwWtT]{,x,X}
+@{libreoffice_ext} += [xX][lL][sStT]{,x,X,m,M}
+@{libreoffice_ext} += [xX][lL][wW]
 #.dif dbf
 @{libreoffice_ext} += [dD][iIbB][fF]
 #.tsv .csv
