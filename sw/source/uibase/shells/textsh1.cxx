@@ -88,7 +88,6 @@
 #include <strings.hrc>
 #include <app.hrc>
 #include <paratr.hxx>
-#include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
 #include <breakit.hxx>
 #include <SwSmartTagMgr.hxx>

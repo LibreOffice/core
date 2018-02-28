@@ -45,7 +45,6 @@
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/combobox.hxx>
