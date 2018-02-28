@@ -393,41 +393,40 @@ bool ImplSdPPTImport::Import()
 
                                     nPropCount /= 6;    // 6 properties per hyperlink
 
-                                    SdHyperlinkEntry* pHyperlink = nullptr;
+                                    SdHyperlinkEntry aHyperlink;
                                     for ( i = 0; i < nPropCount; i++ )
                                     {
-                                        pHyperlink = new SdHyperlinkEntry;
-                                        pHyperlink->nIndex = 0;
+                                        aHyperlink.nIndex = 0;
                                         aPropItem.ReadUInt32( nType );
                                         if ( nType != VT_I4 )
                                             break;
-                                        aPropItem.ReadInt32( pHyperlink->nPrivate1 )
+                                        aPropItem.ReadInt32( aHyperlink.nPrivate1 )
                                                  .ReadUInt32( nType );
                                         if ( nType != VT_I4 )
                                             break;
-                                        aPropItem.ReadInt32( pHyperlink->nPrivate2 )
+                                        aPropItem.ReadInt32( aHyperlink.nPrivate2 )
                                                  .ReadUInt32( nType );
                                         if ( nType != VT_I4 )
                                             break;
-                                        aPropItem.ReadInt32( pHyperlink->nPrivate3 )
+                                        aPropItem.ReadInt32( aHyperlink.nPrivate3 )
                                                  .ReadUInt32( nType );
                                         if ( nType != VT_I4 )
                                             break;
-                                        aPropItem.ReadInt32( pHyperlink->nInfo );
-                                        if ( !aPropItem.Read( pHyperlink->aTarget ) )
+                                        aPropItem.ReadInt32( aHyperlink.nInfo );
+                                        if ( !aPropItem.Read( aHyperlink.aTarget ) )
                                             break;
 
                                         // Convert '\\' notation to 'smb://'
-                                        INetURLObject aUrl( pHyperlink->aTarget, INetProtocol::File );
-                                        pHyperlink->aTarget = aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+                                        INetURLObject aUrl( aHyperlink.aTarget, INetProtocol::File );
+                                        aHyperlink.aTarget = aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
-                                        if ( !aPropItem.Read( pHyperlink->aSubAdress ) )
+                                        if ( !aPropItem.Read( aHyperlink.aSubAdress ) )
                                             break;
 
-                                        if ( !pHyperlink->aSubAdress.isEmpty() ) // get the converted subaddress
+                                        if ( !aHyperlink.aSubAdress.isEmpty() ) // get the converted subaddress
                                         {
                                             sal_uInt32 nPageNumber = 0;
-                                            OUString aString( pHyperlink->aSubAdress );
+                                            OUString aString( aHyperlink.aSubAdress );
                                             OString aStringAry[ 3 ];
                                             size_t nTokenCount = 0;
                                             sal_Int32 nPos = 0;
@@ -497,23 +496,21 @@ bool ImplSdPPTImport::Import()
                                             if ( bDocInternalSubAddress )
                                             {
                                                 if ( nPageNumber < maSlideNameList.size() )
-                                                    pHyperlink->aConvSubString = maSlideNameList[ nPageNumber ];
-                                                if ( pHyperlink->aConvSubString.isEmpty() )
+                                                    aHyperlink.aConvSubString = maSlideNameList[ nPageNumber ];
+                                                if ( aHyperlink.aConvSubString.isEmpty() )
                                                 {
-                                                    pHyperlink->aConvSubString = SdResId( STR_PAGE ) + " " + ( mpDoc->CreatePageNumValue( static_cast<sal_uInt16>(nPageNumber) + 1 ) );
+                                                    aHyperlink.aConvSubString = SdResId( STR_PAGE ) + " " + ( mpDoc->CreatePageNumValue( static_cast<sal_uInt16>(nPageNumber) + 1 ) );
                                                 }
                                             } else {
                                                 // if sub address is given but not internal, use it as it is
-                                                if ( pHyperlink->aConvSubString.isEmpty() )
+                                                if ( aHyperlink.aConvSubString.isEmpty() )
                                                 {
-                                                    pHyperlink->aConvSubString = aString;
+                                                    aHyperlink.aConvSubString = aString;
                                                 }
                                             }
                                         }
-                                        aHyperList.push_back( pHyperlink );
+                                        aHyperList.push_back( aHyperlink );
                                     }
-                                    if ( i != nPropCount )
-                                        delete pHyperlink;
                                 }
                             }
                         }
@@ -532,7 +529,7 @@ bool ImplSdPPTImport::Import()
         if ( SeekToRec( rStCtrl, PPT_PST_ExObjList, maDocHd.GetRecEndFilePos(), &aHyperHd ) )
         {
             sal_uInt32 nExObjHyperListLen = aHyperHd.GetRecEndFilePos();
-            for (SdHyperlinkEntry* pPtr : aHyperList)
+            for (SdHyperlinkEntry & entry : aHyperList)
             {
                 DffRecordHeader aHyperE;
                 if ( !SeekToRec( rStCtrl, PPT_PST_ExHyperlink, nExObjHyperListLen, &aHyperE ) )
@@ -540,7 +537,7 @@ bool ImplSdPPTImport::Import()
                 if ( !SeekToRec( rStCtrl, PPT_PST_ExHyperlinkAtom, nExObjHyperListLen ) )
                     break;
                 rStCtrl.SeekRel( 8 );
-                rStCtrl.ReadUInt32( pPtr->nIndex );
+                rStCtrl.ReadUInt32( entry.nIndex );
                 if (!aHyperE.SeekToEndOfRecord(rStCtrl))
                     break;
             }
@@ -2111,9 +2108,9 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
         case 0x04 :
         {
             SdHyperlinkEntry* pPtr = nullptr;
-            for (SdHyperlinkEntry* pEntry : aHyperList) {
-                if ( pEntry->nIndex == pIAtom->nExHyperlinkId ) {
-                    pPtr = pEntry;
+            for (SdHyperlinkEntry & entry : aHyperList) {
+                if ( entry.nIndex == pIAtom->nExHyperlinkId ) {
+                    pPtr = &entry;
                     break;
                 }
             }
