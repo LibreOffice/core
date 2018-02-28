@@ -77,7 +77,7 @@ protected:
     tools::WeakReference<SdrTextObj>
                                 mxTextEditObj;         // current object in TextEdit
     SdrPageView*                pTextEditPV;
-    SdrOutliner*                pTextEditOutliner;     // outliner for the TextEdit
+    std::unique_ptr<SdrOutliner> pTextEditOutliner;     // outliner for the TextEdit
     OutlinerView*               pTextEditOutlinerView; // current view of the outliners
     VclPtr<vcl::Window>         pTextEditWin;          // matching window to pTextEditOutlinerView
     vcl::Cursor*                pTextEditCursorMerker; // to restore the cursor in each window
@@ -226,8 +226,8 @@ public:
 
     // Now at this outliner, events can be send, attributes can be set,
     // call Cut/Copy/Paste, call Undo/Redo, and so on...
-    const SdrOutliner* GetTextEditOutliner() const { return pTextEditOutliner; }
-    SdrOutliner* GetTextEditOutliner() { return pTextEditOutliner; }
+    const SdrOutliner* GetTextEditOutliner() const { return pTextEditOutliner.get(); }
+    SdrOutliner* GetTextEditOutliner() { return pTextEditOutliner.get(); }
     const OutlinerView* GetTextEditOutlinerView() const { return pTextEditOutlinerView; }
     OutlinerView* GetTextEditOutlinerView() { return pTextEditOutlinerView; }
 
