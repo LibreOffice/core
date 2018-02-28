@@ -191,7 +191,12 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
         if (rOption == "XHTML")
             mbXHTML = true;
         else if (rOption.startsWith(aXhtmlNsKey))
+        {
             maNamespace = rOption.copy(aXhtmlNsKey.getLength()).toUtf8();
+            if (maNamespace == "reqif-xhtml")
+                // XHTML is always just a fragment inside ReqIF.
+                mbSkipHeaderFooter = true;
+        }
     }
 }
 
