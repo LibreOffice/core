@@ -501,8 +501,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         {
             // Askbot has URL's normalized to languages, not locales
             // Get language from locale: ll or lll or ll-CC or lll-CC
-            OUString aLang = LanguageTag(utl::ConfigManager::getLocale()).getLanguage();
-            OUString sURL("https://hub.libreoffice.org/forum/?LOlang=" + aLang);
+
+            OUString sURL("https://hub.libreoffice.org/forum/?LOlocale=" + utl::ConfigManager::getLocale());
             sfx2::openUriExternally(sURL, false);
             break;
         }
