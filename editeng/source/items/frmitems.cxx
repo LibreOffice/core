@@ -44,6 +44,7 @@
 #include <com/sun/star/frame/status/UpperLowerMarginScale.hpp>
 #include <com/sun/star/frame/status/LeftRightMarginScale.hpp>
 #include <com/sun/star/drawing/ShadingPattern.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <i18nutil/unicode.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -84,6 +85,7 @@
 #include <editeng/editerr.hxx>
 #include <libxml/xmlwriter.h>
 #include <o3tl/enumrange.hxx>
+#include <vcl/GraphicLoader.hxx>
 
 using namespace ::editeng;
 using namespace ::com::sun::star;
@@ -3190,10 +3192,6 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= static_cast<style::GraphicLocation>(static_cast<sal_Int16>(eGraphicPos));
         break;
 
-        case MID_GRAPHIC:
-            SAL_WARN( "editeng.items", "not implemented" );
-        break;
-
         case MID_GRAPHIC_TRANSPARENT:
             rVal <<= ( aColor.GetTransparency() == 0xff );
         break;
@@ -3211,6 +3209,22 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 sLink = UNO_NAME_GRAPHOBJ_URLPREFIX + sId;
             }
             rVal <<= sLink;
+        }
+        break;
+
+        case MID_GRAPHIC:
+        {
+            uno::Reference<graphic::XGraphic> xGraphic;
+            if (!maStrLink.isEmpty())
+            {
+                Graphic aGraphic(vcl::graphic::loadFromURL(maStrLink));
+                xGraphic = aGraphic.GetXGraphic();
+            }
+            else if (xGraphicObject)
+            {
+                xGraphic = xGraphicObject->GetGraphic().GetXGraphic();
+            }
+            rVal <<= xGraphic;
         }
         break;
 
@@ -3276,10 +3290,6 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
 
-        case MID_GRAPHIC:
-            SAL_WARN( "editeng.items", "not implemented" );
-        break;
-
         case MID_GRAPHIC_TRANSPARENT:
             aColor.SetTransparency( Any2Bool( rVal ) ? 0xff : 0 );
         break;
@@ -3312,6 +3322,32 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     eGraphicPos = GPOS_MM;
                 else if( sLink.isEmpty() )
                     eGraphicPos = GPOS_NONE;
+            }
+        }
+        break;
+
+        case MID_GRAPHIC:
+        {
+            if (rVal.getValueType() == cppu::UnoType<graphic::XGraphic>::get())
+            {
+                auto xGraphic = rVal.get<uno::Reference<graphic::XGraphic>>();
+
+                Graphic aGraphic(xGraphic);
+                maStrLink.clear();
+
+                std::unique_ptr<GraphicObject> xOldGrfObj(std::move(xGraphicObject));
+                xGraphicObject.reset(new GraphicObject(aGraphic));
+                ApplyGraphicTransparency_Impl();
+                xOldGrfObj.reset();
+
+                if (aGraphic && eGraphicPos == GPOS_NONE)
+                {
+                    eGraphicPos = GPOS_MM;
+                }
+                else if (!aGraphic)
+                {
+                    eGraphicPos = GPOS_NONE;
+                }
             }
         }
         break;

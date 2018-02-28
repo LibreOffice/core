@@ -212,12 +212,14 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     const ::uno::Any* pTrans = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENT, pTrans );
     const ::uno::Any* pGrLoc = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_POSITION, pGrLoc );
     const ::uno::Any* pGrURL = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_URL, pGrURL     );
+    const ::uno::Any* pGraphic = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC, pGraphic     );
     const ::uno::Any* pGrFilter = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_FILTER, pGrFilter     );
     const ::uno::Any* pGrTranparency = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENCY, pGrTranparency     );
     const bool bSvxBrushItemPropertiesUsed(
         pCol ||
         pTrans ||
         pGrURL ||
+        pGraphic ||
         pGrFilter ||
         pGrLoc ||
         pGrTranparency ||
@@ -264,7 +266,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     // but there is a GraphicURL
     const bool bFillStyleUsed(pXFillStyleItem && pXFillStyleItem->hasValue() &&
         (pXFillStyleItem->get<drawing::FillStyle>() != drawing::FillStyle_SOLID
-         || !pGrURL));
+         || !pGrURL || !pGraphic));
     SAL_INFO_IF(pXFillStyleItem && pXFillStyleItem->hasValue() && !bFillStyleUsed,
             "sw.uno", "FillBaseProperties: ignoring invalid FillStyle");
     const bool bXFillStyleItemUsed(
@@ -327,6 +329,11 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         if(pGrURL)
         {
             bRet &= static_cast<SfxPoolItem&>(aBrush).PutValue(*pGrURL, MID_GRAPHIC_URL);
+        }
+
+        if (pGraphic)
+        {
+            bRet &= static_cast<SfxPoolItem&>(aBrush).PutValue(*pGraphic, MID_GRAPHIC);
         }
 
         if(pGrFilter)
