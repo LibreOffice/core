@@ -17,35 +17,40 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_PARSECHEMA_HXX
-#define INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_PARSECHEMA_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_ROWINPUTBINARY_HXX
+#define INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_ROWINPUTBINARY_HXX
 
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
 #include <vector>
-#include <map>
+#include <tools/stream.hxx>
+#include <cppuhelper/implbase.hxx>
+
+#include <com/sun/star/io/XInputStream.hpp>
+#include <tools/stream.hxx>
 
 namespace dbahsql
 {
-typedef std::vector<OUString> SqlStatementVector;
-
-class SchemaParser
+class HsqlRowInputStream
 {
 private:
-    css::uno::Reference<css::embed::XStorage>& m_rStorage;
+    std::unique_ptr<SvStream> m_pStream = nullptr;
 
-    // column type for each table. It is filled after parsing schema.
-    std::map<OUString, std::vector<sal_Int32>> m_ColumnTypes;
+protected:
+    OUString readString();
+    bool checkNull();
+
+    // reimplement reading of an UTF string with a given length
+    OUString readUTF(sal_Int32 nLen);
 
 public:
-    explicit SchemaParser(css::uno::Reference<css::embed::XStorage>& rStorage);
-
-    SqlStatementVector parseSchema();
-
-    std::vector<sal_Int32> getTableColumnTypes(const OUString& sTableName) const;
+    HsqlRowInputStream();
+    std::vector<css::uno::Any> readOneRow(const std::vector<sal_Int32>& colTypes);
+    void seek(sal_Int32 nPos);
+    void setInputStream(css::uno::Reference<css::io::XInputStream>& rStream);
+    SvStream* getInputStream() const;
 };
-}
 
-#endif // INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_PARSESCHEMA_HXX
+} // namespace dbahsql
+
+#endif // INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_ROWINPUTBINARY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

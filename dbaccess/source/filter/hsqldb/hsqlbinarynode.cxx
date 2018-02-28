@@ -17,35 +17,45 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_PARSECHEMA_HXX
-#define INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_PARSECHEMA_HXX
+#include "hsqlbinarynode.hxx"
+#include "rowinputbinary.hxx"
 
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <vector>
-#include <map>
 
 namespace dbahsql
 {
-typedef std::vector<OUString> SqlStatementVector;
+using ColumnTypeVector = std::vector<sal_Int32>;
 
-class SchemaParser
+HsqlBinaryNode::HsqlBinaryNode(sal_Int32 nPos)
+    : m_nPos(nPos)
 {
-private:
-    css::uno::Reference<css::embed::XStorage>& m_rStorage;
-
-    // column type for each table. It is filled after parsing schema.
-    std::map<OUString, std::vector<sal_Int32>> m_ColumnTypes;
-
-public:
-    explicit SchemaParser(css::uno::Reference<css::embed::XStorage>& rStorage);
-
-    SqlStatementVector parseSchema();
-
-    std::vector<sal_Int32> getTableColumnTypes(const OUString& sTableName) const;
-};
 }
 
-#endif // INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_PARSESCHEMA_HXX
+void HsqlBinaryNode::readChildren(HsqlRowInputStream& input)
+{
+    SvStream* pStream = input.getInputStream();
+    if (!pStream)
+        return;
+
+    pStream->Seek(m_nPos + 8); // skip size and balance
+    pStream->ReadInt32(m_nLeft);
+    if (m_nLeft <= 0)
+        m_nLeft = -1;
+    pStream->ReadInt32(m_nRight);
+    if (m_nRight <= 0)
+        m_nRight = -1;
+}
+
+std::vector<css::uno::Any> HsqlBinaryNode::readRow(HsqlRowInputStream& input,
+                                                   const ColumnTypeVector& aColTypes)
+{
+    input.seek(m_nPos + 20); // go to data
+    return input.readOneRow(aColTypes);
+}
+
+sal_Int32 HsqlBinaryNode::getLeft() const { return m_nLeft; }
+sal_Int32 HsqlBinaryNode::getRight() const { return m_nRight; }
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
