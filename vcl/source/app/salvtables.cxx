@@ -754,6 +754,11 @@ public:
         m_xEntry->SetWidthInChars(nChars);
     }
 
+    virtual void select_region(int nStartPos, int nEndPos) override
+    {
+        m_xEntry->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
+    }
+
     virtual ~SalInstanceEntry() override
     {
         m_xEntry->SetTextFilter(nullptr);

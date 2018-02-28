@@ -1793,6 +1793,11 @@ public:
         gtk_entry_set_width_chars(m_pEntry, nChars);
     }
 
+    virtual void select_region(int nStartPos, int nEndPos)
+    {
+        gtk_editable_select_region(GTK_EDITABLE(m_pEntry), nStartPos, nEndPos);
+    }
+
     virtual ~GtkInstanceEntry() override
     {
         g_signal_handler_disconnect(m_pEntry, m_nInsertTextSignalId);

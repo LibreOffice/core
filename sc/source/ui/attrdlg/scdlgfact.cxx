@@ -105,7 +105,6 @@ IMPL_ABSTDLG_BASE(AbstractScDPShowDetailDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScNewScenarioDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScSortWarningDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScStringInputDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScTabBgColorDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScTextImportOptionsDlg_Impl);
@@ -576,9 +575,14 @@ OUString AbstractScShowTabDlg_Impl::GetSelectedEntry(sal_Int32 nPos) const
     return pDlg->GetSelectedEntry(nPos);
 }
 
+short AbstractScStringInputDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 OUString AbstractScStringInputDlg_Impl::GetInputString() const
 {
-    return pDlg->GetInputString();
+    return m_xDlg->GetInputString();
 }
 
 void AbstractScTabBgColorDlg_Impl::GetSelectedColor( Color& rColor ) const
@@ -835,14 +839,12 @@ VclPtr<AbstractScShowTabDlg> ScAbstractDialogFactory_Impl::CreateScShowTabDlg(vc
     return VclPtr<AbstractScShowTabDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractScStringInputDlg> ScAbstractDialogFactory_Impl::CreateScStringInputDlg (  vcl::Window* pParent,
-                                                                const OUString& rTitle,
-                                                                const OUString& rEditTitle,
-                                                                const OUString& rDefault,
-                                                                const OString& sHelpId, const OString& sEditHelpId )
+VclPtr<AbstractScStringInputDlg> ScAbstractDialogFactory_Impl::CreateScStringInputDlg(weld::Window* pParent,
+        const OUString& rTitle, const OUString& rEditTitle, const OUString& rDefault, const OString& rHelpId,
+        const OString& rEditHelpId)
 {
-    VclPtr<ScStringInputDlg> pDlg = VclPtr<ScStringInputDlg>::Create( pParent, rTitle, rEditTitle, rDefault, sHelpId, sEditHelpId );
-    return VclPtr<AbstractScStringInputDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScStringInputDlg_Impl>::Create(new ScStringInputDlg(pParent, rTitle, rEditTitle,
+                rDefault, rHelpId, rEditHelpId));
 }
 
 VclPtr<AbstractScTabBgColorDlg> ScAbstractDialogFactory_Impl::CreateScTabBgColorDlg(
