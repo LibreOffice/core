@@ -1839,6 +1839,7 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
         MID_GRAPHIC_TRANSPARENT,
         MID_GRAPHIC_POSITION,
         MID_GRAPHIC_URL,
+        MID_GRAPHIC,
         MID_GRAPHIC_FILTER });
 
     bool bPutBreak = true;

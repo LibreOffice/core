@@ -313,6 +313,8 @@ bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet,
             {
                 case MID_GRAPHIC_URL:
                     return SfxItemState::SET == rSet.GetItemState(XATTR_FILLBITMAP);
+                case MID_GRAPHIC:
+                    return SfxItemState::SET == rSet.GetItemState(XATTR_FILLBITMAP);
                 case MID_GRAPHIC_POSITION:
                     return SfxItemState::SET == rSet.GetItemState(XATTR_FILLBMP_STRETCH)
                         || SfxItemState::SET == rSet.GetItemState(XATTR_FILLBMP_TILE)
