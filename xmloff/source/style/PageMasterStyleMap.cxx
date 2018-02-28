@@ -75,7 +75,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     PLMAP( "BackTransparent",            XML_NAMESPACE_FO,        XML_BACKGROUND_COLOR,            XML_TYPE_ISTRANSPARENT | MID_FLAG_MERGE_ATTRIBUTE,        0 ),
     PLMAP( "BackGraphicLocation",        XML_NAMESPACE_STYLE,    XML_POSITION,                    XML_TYPE_BUILDIN_CMP_ONLY | MID_FLAG_SPECIAL_ITEM,        CTF_PM_GRAPHICPOSITION ),
     PLMAP( "BackGraphicFilter",        XML_NAMESPACE_STYLE,    XML_FILTER_NAME,                XML_TYPE_STRING | MID_FLAG_SPECIAL_ITEM,                CTF_PM_GRAPHICFILTER ),
-    PLMAP( "BackGraphicURL",            XML_NAMESPACE_STYLE,    XML_BACKGROUND_IMAGE,            XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM,                CTF_PM_GRAPHICURL ),
+    PLMAP( "BackGraphic",            XML_NAMESPACE_STYLE,    XML_BACKGROUND_IMAGE,            XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM,                CTF_PM_GRAPHICURL ),
     PLMAP( "PrintAnnotations",        XML_NAMESPACE_STYLE,    XML_PRINT,                        XML_PM_TYPE_PRINTANNOTATIONS | MID_FLAG_MULTI_PROPERTY,                            CTF_PM_PRINT_ANNOTATIONS ),
     PLMAP( "PrintCharts",                XML_NAMESPACE_STYLE,    XML_PRINT,                        XML_PM_TYPE_PRINTCHARTS | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE,    CTF_PM_PRINT_CHARTS ),
     PLMAP( "PrintDrawing",            XML_NAMESPACE_STYLE,    XML_PRINT,                        XML_PM_TYPE_PRINTDRAWING | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE,    CTF_PM_PRINT_DRAWING ),
@@ -184,7 +184,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     HFMAP( "HeaderBackTransparent",        XML_NAMESPACE_FO,        XML_BACKGROUND_COLOR,            XML_TYPE_ISTRANSPARENT | MID_FLAG_MERGE_ATTRIBUTE,        CTF_PM_HEADERFLAG ),
     HFMAP( "HeaderBackGraphicLocation",    XML_NAMESPACE_STYLE,    XML_POSITION,                    XML_TYPE_BUILDIN_CMP_ONLY | MID_FLAG_SPECIAL_ITEM,        CTF_PM_HEADERGRAPHICPOSITION ),
     HFMAP( "HeaderBackGraphicFilter",        XML_NAMESPACE_STYLE,    XML_FILTER_NAME,                XML_TYPE_STRING | MID_FLAG_SPECIAL_ITEM,                CTF_PM_HEADERGRAPHICFILTER ),
-    HFMAP( "HeaderBackGraphicURL",        XML_NAMESPACE_STYLE,    XML_BACKGROUND_IMAGE,            XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM,                CTF_PM_HEADERGRAPHICURL ),
+    HFMAP( "HeaderBackGraphic",        XML_NAMESPACE_STYLE,    XML_BACKGROUND_IMAGE,            XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM,                CTF_PM_HEADERGRAPHICURL ),
     HFMAP( "HeaderDynamicSpacing",        XML_NAMESPACE_STYLE,    XML_DYNAMIC_SPACING,            XML_TYPE_BOOL,          CTF_PM_HEADERFLAG ),
 
     //Index 121: Header DrawingLayer FillAttributes
@@ -240,7 +240,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     HFMAP( "FooterBackTransparent",        XML_NAMESPACE_FO,        XML_BACKGROUND_COLOR,            XML_TYPE_ISTRANSPARENT | MID_FLAG_MERGE_ATTRIBUTE,        CTF_PM_FOOTERFLAG ),
     HFMAP( "FooterBackGraphicLocation",    XML_NAMESPACE_STYLE,    XML_POSITION,                    XML_TYPE_BUILDIN_CMP_ONLY | MID_FLAG_SPECIAL_ITEM,        CTF_PM_FOOTERGRAPHICPOSITION ),
     HFMAP( "FooterBackGraphicFilter",     XML_NAMESPACE_STYLE,    XML_FILTER_NAME,                XML_TYPE_STRING | MID_FLAG_SPECIAL_ITEM,                CTF_PM_FOOTERGRAPHICFILTER ),
-    HFMAP( "FooterBackGraphicURL",        XML_NAMESPACE_STYLE,    XML_BACKGROUND_IMAGE,            XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM,                CTF_PM_FOOTERGRAPHICURL ),
+    HFMAP( "FooterBackGraphic",           XML_NAMESPACE_STYLE,    XML_BACKGROUND_IMAGE,            XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM,                CTF_PM_FOOTERGRAPHICURL ),
     HFMAP( "FooterDynamicSpacing",        XML_NAMESPACE_STYLE,    XML_DYNAMIC_SPACING,           XML_TYPE_BOOL,          CTF_PM_FOOTERFLAG ),
 
     //Index 170: Footer DrawingLayer FillAttributes

@@ -902,18 +902,6 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                     bOk = true;
                     break;
 
-                case MID_GRAPHIC_LINK:
-                    if (rBrush.GetGraphicPos() != GPOS_NONE)
-                    {
-                        uno::Any aAny;
-                        rBrush.QueryValue( aAny, MID_GRAPHIC_URL );
-                        OUString sTmp;
-                        aAny >>= sTmp;
-                        aOut.append( sTmp );
-                        bOk = true;
-                    }
-                    break;
-
                 case MID_GRAPHIC_POSITION:
                     switch (rBrush.GetGraphicPos())
                     {

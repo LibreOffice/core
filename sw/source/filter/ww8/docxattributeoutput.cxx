@@ -8454,7 +8454,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
                     uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY );
                     uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY );
                     m_rDrawingML.SetFS(m_pSerializer);
-                    m_rDrawingML.WriteBlipFill( xPropertySet, "BackGraphicURL" );
+                    m_rDrawingML.WriteBlipFill(xPropertySet, "BackGraphic");
                 }
             }
         }
