@@ -26,6 +26,7 @@
 #include <svl/srchitem.hxx>
 #include <svx/numinf.hxx>
 #include <vcl/pngwrite.hxx>
+#include <vcl/weld.hxx>
 
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
@@ -207,7 +208,8 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
         case 8: // "modules/scalc/ui/inputstringdialog.ui"
         {
             const OString aEmpty("");
-            pReturnDialog = mpFact->CreateScStringInputDlg(mpViewShell->GetDialogParent(),
+            vcl::Window* pWindow = mpViewShell->GetDialogParent();
+            pReturnDialog = mpFact->CreateScStringInputDlg(pWindow ? pWindow->GetFrameWeld() : nullptr,
                                 ScResId(SCSTR_APDTABLE), ScResId(SCSTR_NAME),
                                 aDefaultSheetName, aEmpty, aEmpty );
             break;

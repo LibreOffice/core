@@ -220,15 +220,12 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl, Button*, void)
 
         while ( !bOk )
         {
-            VclPtrInstance<ScStringInputDlg> pDlg( this,
-                                                   aStrTitle,
-                                                   aStrLabel,
-                                                   aFormatName,
-                                                   HID_SC_ADD_AUTOFMT, HID_SC_AUTOFMT_NAME );
+            ScStringInputDlg aDlg(GetFrameWeld(), aStrTitle, aStrLabel, aFormatName,
+                                  HID_SC_ADD_AUTOFMT, HID_SC_AUTOFMT_NAME);
 
-            if ( pDlg->Execute() == RET_OK )
+            if (aDlg.run() == RET_OK)
             {
-                aFormatName = pDlg->GetInputString();
+                aFormatName = aDlg.GetInputString();
 
                 if ( !aFormatName.isEmpty() && aFormatName != aStrStandard && pFormat->find(aFormatName) == pFormat->end() )
                 {
@@ -326,15 +323,12 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl, Button*, void)
         OUString aFormatName = m_pLbFormat->GetSelectedEntry();
         OUString aEntry;
 
-        VclPtrInstance<ScStringInputDlg> pDlg( this,
-                                               aStrRename,
-                                               aStrLabel,
-                                               aFormatName,
-                                               HID_SC_REN_AFMT_DLG, HID_SC_REN_AFMT_NAME );
-        if( pDlg->Execute() == RET_OK )
+        ScStringInputDlg aDlg(GetFrameWeld(), aStrRename, aStrLabel, aFormatName,
+                              HID_SC_REN_AFMT_DLG, HID_SC_REN_AFMT_NAME);
+        if (aDlg.run() == RET_OK)
         {
             bool bFmtRenamed = false;
-            aFormatName = pDlg->GetInputString();
+            aFormatName = aDlg.GetInputString();
 
             if (!aFormatName.isEmpty())
             {

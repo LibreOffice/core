@@ -352,7 +352,14 @@ class AbstractScSortWarningDlg_Impl : public AbstractScSortWarningDlg
 
 class AbstractScStringInputDlg_Impl :  public AbstractScStringInputDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScStringInputDlg_Impl, ScStringInputDlg )
+protected:
+    std::unique_ptr<ScStringInputDlg> m_xDlg;
+public:
+    explicit AbstractScStringInputDlg_Impl(ScStringInputDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual OUString GetInputString() const override;
 };
 
@@ -501,11 +508,12 @@ public:
                                                                 bool bEdit, bool bSheetProtected ) override;
     virtual VclPtr<AbstractScShowTabDlg> CreateScShowTabDlg(vcl::Window* pParent) override;
 
-    virtual VclPtr<AbstractScStringInputDlg> CreateScStringInputDlg (  vcl::Window* pParent,
-                                                                const OUString& rTitle,
-                                                                const OUString& rEditTitle,
-                                                                const OUString& rDefault,
-                                                                const OString& sHelpId, const OString& sEditHelpId ) override;
+    virtual VclPtr<AbstractScStringInputDlg> CreateScStringInputDlg(weld::Window* pParent,
+                                                                    const OUString& rTitle,
+                                                                    const OUString& rEditTitle,
+                                                                    const OUString& rDefault,
+                                                                    const OString& rHelpId,
+                                                                    const OString& rEditHelpId) override;
 
     virtual VclPtr<AbstractScTabBgColorDlg> CreateScTabBgColorDlg (  vcl::Window* pParent,
                                                                 const OUString& rTitle, //Dialog Title
