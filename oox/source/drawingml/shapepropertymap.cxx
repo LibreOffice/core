@@ -180,17 +180,20 @@ bool ShapePropertyMap::setGradientTrans( sal_Int32 nPropId, const Any& rValue )
     return false;
 }
 
-bool ShapePropertyMap::setFillBitmapUrl( sal_Int32 nPropId, const Any& rValue )
+bool ShapePropertyMap::setFillBitmapUrl(sal_Int32 nPropId, const Any& rValue)
 {
-    // push bitmap URL explicitly
-    if( !maShapePropInfo.mbNamedFillBitmapUrl )
-        return setAnyProperty( nPropId, rValue );
+    // push bitmap explicitly
+    if (!maShapePropInfo.mbNamedFillBitmapUrl)
+    {
+        return setAnyProperty(nPropId, rValue);
+    }
 
     // create named bitmap URL and push its name
-    if( rValue.has< OUString >() )
+    if (rValue.has<uno::Reference<graphic::XGraphic>>())
     {
-        OUString aBitmapUrlName = mrModelObjHelper.insertFillBitmapUrl( rValue.get< OUString >() );
-        return !aBitmapUrlName.isEmpty() && setProperty( nPropId, aBitmapUrlName );
+        auto xGraphic = rValue.get<uno::Reference<graphic::XGraphic>>();
+        OUString aBitmapName = mrModelObjHelper.insertFillBitmapXGraphic(xGraphic);
+        return !aBitmapName.isEmpty() && setProperty(nPropId, aBitmapName);
     }
 
     return false;

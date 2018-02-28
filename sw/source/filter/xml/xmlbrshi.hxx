@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <xmloff/xmlictxt.hxx>
 
@@ -36,8 +37,10 @@ namespace com { namespace sun { namespace star {
 class SwXMLBrushItemImportContext : public SvXMLImportContext
 {
 private:
-    css::uno::Reference < css::io::XOutputStream > xBase64Stream;
-    std::unique_ptr<SvxBrushItem>                  pItem;
+    css::uno::Reference<css::io::XOutputStream> m_xBase64Stream;
+    css::uno::Reference<css::graphic::XGraphic> m_xGraphic;
+
+    std::unique_ptr<SvxBrushItem> pItem;
 
     void ProcessAttrs(
                const css::uno::Reference<css::xml::sax::XAttributeList > & xAttrList,

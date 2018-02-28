@@ -43,7 +43,7 @@ XMLBackgroundImageExport::~XMLBackgroundImageExport()
 {
 }
 
-void XMLBackgroundImageExport::exportXML( const Any& rURL,
+void XMLBackgroundImageExport::exportXML( const Any& rGraphicAny,
             const Any *pPos,
             const Any *pFilter,
             const Any *pTransparency,
@@ -54,18 +54,20 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
     if( !(pPos && ((*pPos) >>= ePos)) )
         ePos = GraphicLocation_AREA;
 
-    OUString sURL;
-    rURL >>= sURL;
-    if( !sURL.isEmpty() && GraphicLocation_NONE != ePos )
+    uno::Reference<graphic::XGraphic> xGraphic;
+    if (rGraphicAny.has<uno::Reference<graphic::XGraphic>>())
+        xGraphic = rGraphicAny.get<uno::Reference<graphic::XGraphic>>();
+
+    if (xGraphic.is() && GraphicLocation_NONE != ePos)
     {
-        OUString sTempURL( GetExport().AddEmbeddedGraphicObject( sURL ) );
-        if( !sTempURL.isEmpty() )
+        OUString sUsedMimeType;
+        OUString sInternalURL(GetExport().AddEmbeddedXGraphic(xGraphic, sUsedMimeType));
+
+        if (!sInternalURL.isEmpty())
         {
-            GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sTempURL );
-            GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE,
-                                      XML_SIMPLE );
-            GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE,
-                                      XML_ONLOAD );
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sInternalURL);
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD);
         }
 
         OUStringBuffer aOut;
@@ -154,11 +156,11 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
     }
 
     {
-        SvXMLElementExport aElem( GetExport(), nPrefix, rLocalName, true, true );
-        if( !sURL.isEmpty() && GraphicLocation_NONE != ePos )
+        SvXMLElementExport aElem(GetExport(), nPrefix, rLocalName, true, true);
+        if (xGraphic.is() && GraphicLocation_NONE != ePos)
         {
             // optional office:binary-data
-            GetExport().AddEmbeddedGraphicObjectAsBase64( sURL );
+            GetExport().AddEmbeddedXGraphicAsBase64(xGraphic);
         }
     }
 }

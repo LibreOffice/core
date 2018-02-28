@@ -1227,7 +1227,22 @@ void DrawingML::WriteBlipFill( const Reference< XPropertySet >& rXPropSet, const
             uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
             if (xBitmap.is() && xGraphic.is())
             {
-                WriteXGraphicBlipFill(rXPropSet, xGraphic, nXmlNamespace, true);
+                bool bWriteMode = false;
+                if (sURLPropName == "FillBitmap" || sURLPropName == "BackGraphic")
+                    bWriteMode = true;
+                WriteXGraphicBlipFill(rXPropSet, xGraphic, nXmlNamespace, bWriteMode);
+            }
+        }
+        else if (mAny.has<uno::Reference<graphic::XGraphic>>())
+        {
+            uno::Reference<graphic::XGraphic> xGraphic;
+            xGraphic = mAny.get<uno::Reference<graphic::XGraphic>>();
+            if (xGraphic.is())
+            {
+                bool bWriteMode = false;
+                if (sURLPropName == "FillBitmap" || sURLPropName == "BackGraphic")
+                    bWriteMode = true;
+                WriteXGraphicBlipFill(rXPropSet, xGraphic, nXmlNamespace, bWriteMode);
             }
         }
         else

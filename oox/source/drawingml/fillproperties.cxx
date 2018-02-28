@@ -604,17 +604,14 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
                     // TODO: "rotate with shape" is not possible with our current core
 
-                    OUString aGraphicUrl = rGraphicHelper.createGraphicObject( xGraphic );
-                    // push bitmap or named bitmap to property map
-
-                    if (!aGraphicUrl.isEmpty())
+                    if (xGraphic.is())
                     {
                         if (rPropMap.supportsProperty(ShapeProperty::FillBitmapNameFromUrl) &&
                             rPropMap.setProperty(ShapeProperty::FillBitmapNameFromUrl, xGraphic))
                         {
                             eFillStyle = FillStyle_BITMAP;
                         }
-                        else if (rPropMap.setProperty(ShapeProperty::FillBitmapUrl, aGraphicUrl))
+                        else if (rPropMap.setProperty(ShapeProperty::FillBitmapUrl, xGraphic))
                         {
                             eFillStyle = FillStyle_BITMAP;
                         }

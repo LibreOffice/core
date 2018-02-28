@@ -552,17 +552,20 @@ DECLARE_RTFEXPORT_TEST(testI120928, "i120928.rtf")
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    bool bIsGraphic = false;
+    uno::Reference<graphic::XGraphic> xGraphic;
+    sal_Int16 nNumberingType = -1;
+
     for (int i = 0; i < aProps.getLength(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
 
         if (rProp.Name == "NumberingType")
-            CPPUNIT_ASSERT_EQUAL(style::NumberingType::BITMAP, rProp.Value.get<sal_Int16>());
-        else if (rProp.Name == "GraphicURL")
-            bIsGraphic = true;
+            nNumberingType = rProp.Value.get<sal_Int16>();
+        else if (rProp.Name == "Graphic")
+            xGraphic = rProp.Value.get<uno::Reference<graphic::XGraphic>>();
     }
-    CPPUNIT_ASSERT_EQUAL(true, bIsGraphic);
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::BITMAP, nNumberingType);
+    CPPUNIT_ASSERT(xGraphic.is());
 }
 
 DECLARE_RTFEXPORT_TEST(testBookmark, "bookmark.rtf")

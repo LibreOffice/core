@@ -157,16 +157,15 @@
 //BrushItem
 #define MID_BACK_COLOR          0
 #define MID_GRAPHIC_POSITION    1
-#define MID_GRAPHIC_LINK        2
-#define MID_GRAPHIC             3
-#define MID_GRAPHIC_TRANSPARENT 4
-#define MID_GRAPHIC_URL         5
-#define MID_GRAPHIC_FILTER      6
-#define MID_GRAPHIC_REPEAT      7
-#define MID_GRAPHIC_TRANSPARENCY 8
-#define MID_BACK_COLOR_R_G_B    9
-#define MID_BACK_COLOR_TRANSPARENCY 10
-#define MID_SHADING_VALUE       11
+#define MID_GRAPHIC             2
+#define MID_GRAPHIC_TRANSPARENT 3
+#define MID_GRAPHIC_URL         4
+#define MID_GRAPHIC_FILTER      5
+#define MID_GRAPHIC_REPEAT      6
+#define MID_GRAPHIC_TRANSPARENCY 7
+#define MID_BACK_COLOR_R_G_B    8
+#define MID_BACK_COLOR_TRANSPARENCY 9
+#define MID_SHADING_VALUE       10
 
 //SvxFormatBreakItem
 #define MID_BREAK_BEFORE        0

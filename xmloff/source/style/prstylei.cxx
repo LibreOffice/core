@@ -77,7 +77,7 @@ namespace
             aSet.insert("BackColorRGB");
             aSet.insert("BackTransparent");
             aSet.insert("BackColorTransparency");
-            aSet.insert("BackGraphicURL");
+            aSet.insert("BackGraphic");
             aSet.insert("BackGraphicFilter");
             aSet.insert("BackGraphicLocation");
             aSet.insert("BackGraphicTransparency");
@@ -93,7 +93,7 @@ namespace
             aSet.insert("HeaderBackColorRGB");
             aSet.insert("HeaderBackTransparent");
             aSet.insert("HeaderBackColorTransparency");
-            aSet.insert("HeaderBackGraphicURL");
+            aSet.insert("HeaderBackGraphic");
             aSet.insert("HeaderBackGraphicFilter");
             aSet.insert("HeaderBackGraphicLocation");
             aSet.insert("HeaderBackGraphicTransparency");
@@ -109,7 +109,7 @@ namespace
             aSet.insert("FooterBackColorRGB");
             aSet.insert("FooterBackTransparent");
             aSet.insert("FooterBackColorTransparency");
-            aSet.insert("FooterBackGraphicURL");
+            aSet.insert("FooterBackGraphic");
             aSet.insert("FooterBackGraphicFilter");
             aSet.insert("FooterBackGraphicLocation");
             aSet.insert("FooterBackGraphicTransparency");
@@ -128,7 +128,7 @@ namespace
             aSet.insert("ParaBackTransparent");
             aSet.insert("ParaBackGraphicLocation");
             aSet.insert("ParaBackGraphicFilter");
-            aSet.insert("ParaBackGraphicURL");
+            aSet.insert("ParaBackGraphic");
 
             // These are not used in aXMLParaPropMap definition, thus not needed here
             // aSet.insert("ParaBackColorTransparency");
