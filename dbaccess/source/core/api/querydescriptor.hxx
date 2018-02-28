@@ -55,7 +55,7 @@ private:
     ::osl::Mutex&   m_rMutex;
 
 protected:
-    OColumns*       m_pColumns;                 // our column descriptions
+    std::unique_ptr<OColumns> m_pColumns;                 // our column descriptions
     OUString m_sElementName;
     virtual ~OQueryDescriptor_Base();
 
