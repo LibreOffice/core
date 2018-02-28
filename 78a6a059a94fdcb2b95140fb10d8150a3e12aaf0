@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_8b7331b4",
+        "filename": "framework/source/uielement/menubarmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-02-28T14:09:09Z",
+      "side": 1,
+      "message": "Hmm, any way to limit that to only radio/checkbox items?",
+      "revId": "78a6a059a94fdcb2b95140fb10d8150a3e12aaf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
