@@ -35,8 +35,8 @@ namespace svgio
             SvgStyleAttributes                  maSvgStyleAttributes;
 
             /// variable scan values, dependent of given XAttributeList
-            basegfx::B2DPolyPolygon*            mpPolyPolygon;
-            basegfx::B2DHomMatrix*              mpaTransform;
+            std::unique_ptr<basegfx::B2DPolyPolygon>  mpPolyPolygon;
+            std::unique_ptr<basegfx::B2DHomMatrix>    mpaTransform;
             SvgNumber                           maPathLength;
             basegfx::utils::PointIndexSet       maHelpPointIndices;
 
@@ -51,12 +51,12 @@ namespace svgio
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const override;
 
             /// path content, set if found in current context
-            const basegfx::B2DPolyPolygon* getPath() const { return mpPolyPolygon; }
-            void setPath(const basegfx::B2DPolyPolygon* pPath) { if(mpPolyPolygon) delete mpPolyPolygon; mpPolyPolygon = nullptr; if(pPath) mpPolyPolygon = new basegfx::B2DPolyPolygon(*pPath); }
+            const basegfx::B2DPolyPolygon* getPath() const { return mpPolyPolygon.get(); }
+            void setPath(const basegfx::B2DPolyPolygon* pPath) { mpPolyPolygon.reset(); if(pPath) mpPolyPolygon.reset(new basegfx::B2DPolyPolygon(*pPath)); }
 
             /// transform content, set if found in current context
-            const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform; }
-            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { if(mpaTransform) delete mpaTransform; mpaTransform = nullptr; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
+            const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform.get(); }
+            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { mpaTransform.reset(); if(pMatrix) mpaTransform.reset(new basegfx::B2DHomMatrix(*pMatrix)); }
 
             /// PathLength content
             const SvgNumber& getPathLength() const { return maPathLength; }
