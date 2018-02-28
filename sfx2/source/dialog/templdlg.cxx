@@ -499,7 +499,7 @@ void StyleTreeListBox_Impl::Recalc()
 
 /** Internal structure for the establishment of the hierarchical view */
 class StyleTree_Impl;
-typedef std::vector<StyleTree_Impl*> StyleTreeArr_Impl;
+typedef std::vector<std::unique_ptr<StyleTree_Impl>> StyleTreeArr_Impl;
 
 class StyleTree_Impl
 {
@@ -513,20 +513,14 @@ public:
 
     StyleTree_Impl(const OUString &rName, const OUString &rParent):
         aName(rName), aParent(rParent), pChildren(0) {}
-    ~StyleTree_Impl();
 
     const OUString& getName() { return aName; }
     const OUString& getParent() { return aParent; }
     StyleTreeArr_Impl& getChildren() { return pChildren; }
 };
 
-StyleTree_Impl::~StyleTree_Impl()
-{
-    for (auto const& child : pChildren)
-        delete child;
-}
 
-StyleTreeArr_Impl& MakeTree_Impl(StyleTreeArr_Impl& rArr)
+void MakeTree_Impl(StyleTreeArr_Impl& rArr)
 {
     const comphelper::string::NaturalStringSorter aSorter(
         ::comphelper::getProcessComponentContext(),
@@ -536,11 +530,11 @@ StyleTreeArr_Impl& MakeTree_Impl(StyleTreeArr_Impl& rArr)
     styleFinder.reserve(rArr.size());
     for (const auto& pEntry : rArr)
     {
-        styleFinder.emplace(pEntry->getName(), pEntry);
+        styleFinder.emplace(pEntry->getName(), pEntry.get());
     }
 
     // Arrange all under their Parents
-    for (const auto& pEntry : rArr)
+    for (auto& pEntry : rArr)
     {
         if (!pEntry->HasParent())
             continue;
@@ -550,21 +544,19 @@ StyleTreeArr_Impl& MakeTree_Impl(StyleTreeArr_Impl& rArr)
             StyleTree_Impl* pCmp = it->second;
             // Insert child entries sorted
             auto iPos = std::lower_bound(pCmp->getChildren().begin(), pCmp->getChildren().end(), pEntry,
-                [&aSorter](StyleTree_Impl* pEntry1, StyleTree_Impl* pEntry2) { return aSorter.compare(pEntry1->getName(), pEntry2->getName()) < 0; });
-            pCmp->getChildren().insert(iPos, pEntry);
+                [&aSorter](std::unique_ptr<StyleTree_Impl> const & pEntry1, std::unique_ptr<StyleTree_Impl> const & pEntry2) { return aSorter.compare(pEntry1->getName(), pEntry2->getName()) < 0; });
+            pCmp->getChildren().insert(iPos, std::move(pEntry));
         }
     }
 
     // Only keep tree roots in rArr, child elements can be accessed through the hierarchy
-    rArr.erase(std::remove_if(rArr.begin(), rArr.end(), [](StyleTree_Impl* pEntry) { return pEntry->HasParent(); }), rArr.end());
+    rArr.erase(std::remove_if(rArr.begin(), rArr.end(), [](std::unique_ptr<StyleTree_Impl> const & pEntry) { return !pEntry; }), rArr.end());
 
     // tdf#91106 sort top level styles
     std::sort(rArr.begin(), rArr.end(),
-        [&aSorter](StyleTree_Impl* pEntry1, StyleTree_Impl* pEntry2) {
+        [&aSorter](std::unique_ptr<StyleTree_Impl> const & pEntry1, std::unique_ptr<StyleTree_Impl> const & pEntry2) {
             return aSorter.compare(pEntry1->getName(), pEntry2->getName()) < 0;
         });
-
-    return rArr;
 }
 
 inline bool IsExpanded_Impl( const ExpandedEntries_t& rEntries,
@@ -595,7 +587,7 @@ SvTreeListEntry* FillBox_Impl(SvTreeListBox* pBox,
 
     for(size_t i = 0; i < pEntry->getChildren().size(); ++i)
     {
-        FillBox_Impl(pBox, pEntry->getChildren()[i], rEntries, eStyleFamily, pTreeListEntry);
+        FillBox_Impl(pBox, pEntry->getChildren()[i].get(), rEntries, eStyleFamily, pTreeListEntry);
     }
     return pTreeListEntry;
 }
@@ -1033,7 +1025,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         while (pStyle)
         {
             StyleTree_Impl* pNew = new StyleTree_Impl(pStyle->GetName(), pStyle->GetParent());
-            aArr.push_back(pNew);
+            aArr.emplace_back(pNew);
             pStyle = pStyleSheetPool->Next();
         }
 
@@ -1046,8 +1038,8 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
 
         for (sal_uInt16 i = 0; i < nCount; ++i)
         {
-            FillBox_Impl(pTreeBox, aArr[i], aEntries, pItem->GetFamily(), nullptr);
-            delete aArr[i];
+            FillBox_Impl(pTreeBox, aArr[i].get(), aEntries, pItem->GetFamily(), nullptr);
+            aArr[i].reset();
         }
         pTreeBox->Recalc();
 

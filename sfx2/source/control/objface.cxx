@@ -73,8 +73,10 @@ typedef std::vector<SfxObjectUI_Impl*> SfxObjectUIArr_Impl;
 
 struct SfxInterface_Impl
 {
-    SfxObjectUIArr_Impl     aObjectBars;    // registered ObjectBars
-    SfxObjectUIArr_Impl     aChildWindows;  // registered ChildWindows
+    std::vector<std::unique_ptr<SfxObjectUI_Impl>>
+                            aObjectBars;    // registered ObjectBars
+    std::vector<std::unique_ptr<SfxObjectUI_Impl>>
+                            aChildWindows;  // registered ChildWindows
     OUString                aPopupName;     // registered PopupMenu
     StatusBarId             eStatBarResId;  // registered StatusBar
     SfxModule*              pModule;
@@ -85,15 +87,6 @@ struct SfxInterface_Impl
         , pModule(nullptr)
         , bRegistered(false)
     {
-    }
-
-    ~SfxInterface_Impl()
-    {
-        for (auto const& objectBar : aObjectBars)
-            delete objectBar;
-
-        for (auto const& childWindow : aChildWindows)
-            delete childWindow;
     }
 };
 
@@ -280,7 +273,7 @@ void SfxInterface::RegisterObjectBar(sal_uInt16 nPos, SfxVisibilityFlags nFlags,
 {
     SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl(nPos, nFlags, eId, nFeature);
     if ( pUI )
-        pImplData->aObjectBars.push_back(pUI);
+        pImplData->aObjectBars.emplace_back(pUI);
 }
 
 SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, ToolbarId eId, SfxShellFeature nFeature)
@@ -365,7 +358,7 @@ void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext, SfxShellFe
 {
     SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, SfxVisibilityFlags::Invisible, nId, nFeature);
     pUI->bContext = bContext;
-    pImplData->aChildWindows.push_back(pUI);
+    pImplData->aChildWindows.emplace_back(pUI);
 }
 
 void SfxInterface::RegisterStatusBar(StatusBarId eId)
