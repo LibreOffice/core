@@ -80,6 +80,7 @@ void FastAttributeList::clear()
 
 void FastAttributeList::add( sal_Int32 nToken, const sal_Char* pValue, size_t nValueLength )
 {
+    assert(nToken != -1);
     maAttributeTokens.push_back( nToken );
     sal_Int32 nWritePosition = maAttributeValues.back();
     maAttributeValues.push_back( maAttributeValues.back() + nValueLength + 1 );
