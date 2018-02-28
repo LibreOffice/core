@@ -155,6 +155,11 @@ OdfFlatXml::importer(
         SAL_WARN("filter.odfflatxml", exc);
         return false;
     }
+    catch (const std::exception &exc)
+    {
+        SAL_WARN("filter.odfflatxml", exc.what());
+        return false;
+    }
     return true;
 }
 
