@@ -336,7 +336,18 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
 
                 // Enable/disable item
                 if ( bEnabledItem != bMenuItemEnabled )
+                {
                     m_pVCLMenu->EnableItem( pMenuItemHandler->nItemId, bEnabledItem );
+
+                    // Remove "checked" mark for disabled menu items.
+                    // Initially disabled but checkable menu items do not receive
+                    // checked/unchecked state, so can appear inconsistently after
+                    // enabling/disabling. Since we can not pass checked state for disabled
+                    // items, we will just reset checked state for them, anyway correct state
+                    // will be transferred from controller once item enabled.
+                    if ( !bEnabledItem && m_pVCLMenu->IsItemChecked( pMenuItemHandler->nItemId ) )
+                        m_pVCLMenu->CheckItem( pMenuItemHandler->nItemId, false );
+                }
 
                 if ( Event.State >>= bCheckmark )
                 {
