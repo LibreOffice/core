@@ -74,8 +74,6 @@
 
 typedef std::vector<SfxShell*> SfxShellStack_Impl;
 
-typedef std::vector<SfxRequest*> SfxRequestPtrArray;
-
 struct SfxToDo_Impl
 {
     SfxShell*  pCluster;
@@ -110,12 +108,8 @@ struct SfxDispatcher_Impl
 
     //The pointers are typically deleted in Post, only if we never get around
     //to posting them do we delete the unposted requests.
-    SfxRequestPtrArray aReqArr;
-    ~SfxDispatcher_Impl()
-    {
-        for (auto const& req : aReqArr)
-            delete req;
-    }
+    std::vector<std::unique_ptr<SfxRequest>>
+                         aReqArr;
     SfxShellStack_Impl   aStack;        // active functionality
     Idle                 aIdle;        // for Flush
     std::deque<SfxToDo_Impl> aToDoStack;    // not processed Push/Pop
@@ -1138,7 +1132,7 @@ IMPL_LINK(SfxDispatcher, PostMsgHandler, SfxRequest*, pReq, void)
         else
         {
             if ( xImp->bLocked )
-                xImp->aReqArr.push_back(new SfxRequest(*pReq));
+                xImp->aReqArr.emplace_back(new SfxRequest(*pReq));
             else
                 xImp->xPoster->Post(new SfxRequest(*pReq));
         }
@@ -1965,7 +1959,7 @@ void SfxDispatcher::Lock( bool bLock )
     if ( !bLock )
     {
         for(size_t i = 0; i < xImp->aReqArr.size(); ++i)
-            xImp->xPoster->Post(xImp->aReqArr[i]);
+            xImp->xPoster->Post(xImp->aReqArr[i].get());
         xImp->aReqArr.clear();
     }
 }
