@@ -543,7 +543,7 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
         rVisitorFactory.createOptimizingVisitor(*this));
     // FIXME: localization
     startIndicator( " " );
-    m_pDocument->visitedBy( *optimizingVisitor, std::list<Element*>::const_iterator());
+    m_pDocument->visitedBy( *optimizingVisitor, std::list<std::unique_ptr<Element>>::const_iterator());
 
 #if OSL_DEBUG_LEVEL > 0
     m_pDocument->emitStructure( 0 );
@@ -555,7 +555,7 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
         rVisitorFactory.createStyleCollectingVisitor(aStyles,*this));
     // FIXME: localization
 
-    m_pDocument->visitedBy( *finalizingVisitor, std::list<Element*>::const_iterator() );
+    m_pDocument->visitedBy( *finalizingVisitor, std::list<std::unique_ptr<Element>>::const_iterator() );
 
     EmitContext aContext( rEmitter, aStyles, m_aImages, *this, m_xStatusIndicator, m_xContext );
     ElementTreeVisitorSharedPtr aEmittingVisitor(
@@ -589,7 +589,7 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
     // emit style list
     aStyles.emit( aContext, *aEmittingVisitor );
 
-    m_pDocument->visitedBy( *aEmittingVisitor, std::list<Element*>::const_iterator() );
+    m_pDocument->visitedBy( *aEmittingVisitor, std::list<std::unique_ptr<Element>>::const_iterator() );
     aContext.rEmitter.endTag( "office:document" );
     endIndicator();
 }
@@ -625,7 +625,7 @@ void PDFIProcessor::endIndicator()
         m_xStatusIndicator->end();
 }
 
-static bool lr_tb_sort( Element* pLeft, Element* pRight )
+static bool lr_tb_sort( std::unique_ptr<Element> const & pLeft, std::unique_ptr<Element> const & pRight )
 {
     // Ensure irreflexivity (which could be compromised if h or w is negative):
     if (pLeft == pRight)
@@ -637,9 +637,9 @@ static bool lr_tb_sort( Element* pLeft, Element* pRight )
     // of the same order as font height whereas the real paint area
     // of text is usually smaller
     double fudge_factor_left = 0.0, fudge_factor_right = 0.0;
-    if( dynamic_cast< TextElement* >(pLeft) )
+    if( dynamic_cast< TextElement* >(pLeft.get()) )
         fudge_factor_left = 0.1;
-    if (dynamic_cast< TextElement* >(pRight))
+    if (dynamic_cast< TextElement* >(pRight.get()))
         fudge_factor_right = 0.1;
 
     // Allow negative height
