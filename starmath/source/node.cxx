@@ -1961,8 +1961,8 @@ void SmPolyLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     else
     {
         OSL_ENSURE(GetToken().eType == TWIDEBACKSLASH, "Sm : unexpected token");
-        aPointA.X() =
-        aPointA.Y() = nBorderwidth;
+        aPointA.setX( nBorderwidth );
+        aPointA.setY( nBorderwidth );
         aPointB.setX( maToSize.Width() - nBorderwidth );
         aPointB.setY( maToSize.Height() - nBorderwidth );
     }
