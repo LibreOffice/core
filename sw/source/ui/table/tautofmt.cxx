@@ -43,6 +43,7 @@ public:
         m_xLabel->set_label(rEditTitle);
         m_xDialog->set_title(rTitle);
         m_xEdInput->set_text(rDefault);
+        m_xEdInput->select_region(0, -1);
     }
 
     OUString GetInputString() const
@@ -331,7 +332,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl, Button*, void)
     bool bOk = false;
     while( !bOk )
     {
-        SwStringInputDlg aDlg(GetFrameWeld(), aStrRenameTitle, m_pLbFormat->GetSelectedEntry(), OUString());
+        SwStringInputDlg aDlg(GetFrameWeld(), aStrRenameTitle, aStrLabel, m_pLbFormat->GetSelectedEntry());
         if (aDlg.run() == RET_OK)
         {
             bool bFormatRenamed = false;
