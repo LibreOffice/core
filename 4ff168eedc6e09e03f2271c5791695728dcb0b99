@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_a8d71b22",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/UI/ToolbarMode.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-28T09:06:17Z",
+      "side": 1,
+      "message": "It should work to make this prop non-nillable and give it a default value (false, presumably) here.  Nillable props, esp. those of boolean type, are awkward to use, and are best avoided.",
+      "revId": "4ff168eedc6e09e03f2271c5791695728dcb0b99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
