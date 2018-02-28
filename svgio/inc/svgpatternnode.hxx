@@ -38,7 +38,8 @@ namespace svgio
             SvgStyleAttributes      maSvgStyleAttributes;
 
             /// variable scan values, dependent of given XAttributeList
-            basegfx::B2DRange*      mpViewBox;
+            std::unique_ptr<basegfx::B2DRange>
+                                    mpViewBox;
             SvgAspectRatio          maSvgAspectRatio;
             SvgNumber               maX;
             SvgNumber               maY;
@@ -48,7 +49,8 @@ namespace svgio
                                     mpPatternUnits;
             std::unique_ptr<SvgUnits>
                                     mpPatternContentUnits;
-            basegfx::B2DHomMatrix*  mpaPatternTransform;
+            std::unique_ptr<basegfx::B2DHomMatrix>
+                                    mpaPatternTransform;
 
             /// link to another pattern used as style. If maXLink
             /// is set, the node can be fetched on demand by using
@@ -79,7 +81,7 @@ namespace svgio
 
             /// viewBox content
             const basegfx::B2DRange* getViewBox() const;
-            void setViewBox(const basegfx::B2DRange* pViewBox) { if(mpViewBox) delete mpViewBox; mpViewBox = nullptr; if(pViewBox) mpViewBox = new basegfx::B2DRange(*pViewBox); }
+            void setViewBox(const basegfx::B2DRange* pViewBox) { mpViewBox.reset(); if(pViewBox) mpViewBox.reset(new basegfx::B2DRange(*pViewBox)); }
 
             /// SvgAspectRatio content
             const SvgAspectRatio& getSvgAspectRatio() const;
@@ -106,7 +108,7 @@ namespace svgio
 
             /// PatternTransform content
             const basegfx::B2DHomMatrix* getPatternTransform() const;
-            void setPatternTransform(const basegfx::B2DHomMatrix* pMatrix) { if(mpaPatternTransform) delete mpaPatternTransform; mpaPatternTransform = nullptr; if(pMatrix) mpaPatternTransform = new basegfx::B2DHomMatrix(*pMatrix); }
+            void setPatternTransform(const basegfx::B2DHomMatrix* pMatrix) { mpaPatternTransform.reset(); if(pMatrix) mpaPatternTransform.reset(new basegfx::B2DHomMatrix(*pMatrix)); }
 
         };
     } // end of namespace svgreader
