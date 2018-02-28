@@ -1,0 +1,30 @@
+From a2e4fb779cff37a2cfc6ddf747d7715c545578a6 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Wed, 28 Feb 2018 13:40:08 +0100
+Subject: [PATCH] tdf#116018 close shape group correctly
+
+Regression since commit bbe7f806b95ef427153ba18bff80e674b1704ae5 .
+
+Change-Id: Ib6d3f58373c7cb0e1ba7a7a720187cc68d9bc7b1
+---
+ src/lib/MSPUBCollector.cpp | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/src/lib/MSPUBCollector.cpp b/src/lib/MSPUBCollector.cpp
+index fae688d..405470e 100644
+--- a/src/lib/MSPUBCollector.cpp
++++ b/src/lib/MSPUBCollector.cpp
+@@ -558,9 +558,7 @@ bool MSPUBCollector::endGroup()
+   {
+     return false;
+   }
+-  auto parent = m_currentShapeGroup->getParent();
+-  if (parent)
+-    m_currentShapeGroup = parent;
++  m_currentShapeGroup = m_currentShapeGroup->getParent();
+   return true;
+ }
+ 
+-- 
+2.14.3
+
