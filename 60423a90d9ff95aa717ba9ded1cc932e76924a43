@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_6be43d3b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2018-02-28T15:12:23Z",
+      "side": 1,
+      "message": "that ID is about footnots, has nothing to do with BOM..",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 13
+      },
+      "revId": "60423a90d9ff95aa717ba9ded1cc932e76924a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_cbf28906",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 12174,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2018-02-28T15:12:23Z",
+      "side": 1,
+      "message": "make sure to clean up your patches before committing",
+      "range": {
+        "startLine": 12173,
+        "startChar": 0,
+        "endLine": 12174,
+        "endChar": 13
+      },
+      "revId": "60423a90d9ff95aa717ba9ded1cc932e76924a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_8bcfb1b2",
+        "filename": "sw/source/filter/ascii/wrtasc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2018-02-28T15:12:23Z",
+      "side": 1,
+      "message": "I can understand that it makes sense to not have a BOM for UTF8 case, but for UTF16, where endianess applies - does it eally make sense to have it optional?",
+      "revId": "60423a90d9ff95aa717ba9ded1cc932e76924a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_0bdd8170",
+        "filename": "sw/source/filter/ascii/wrtasc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2018-02-28T15:12:23Z",
+      "side": 1,
+      "message": "why the whitespace and unnecessary comment? (the variable\u0027s name should be clear enough, and the indent of the if already has) - not sure whether gerrit highlights this proplerly, but applies to all three instances)",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 50
+      },
+      "revId": "60423a90d9ff95aa717ba9ded1cc932e76924a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
