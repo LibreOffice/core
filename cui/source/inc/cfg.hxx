@@ -392,6 +392,7 @@ protected:
     // Used to add and remove toolbars/menus
     VclPtr<PushButton>                         m_pPlusBtn;
     VclPtr<PushButton>                         m_pMinusBtn;
+    VclPtr<MenuButton>                         m_pGearBtn;
     VclPtr<VclContainer>                       m_pEntries;
     VclPtr<SvTreeListBox>                      m_pContentsListBox;
 

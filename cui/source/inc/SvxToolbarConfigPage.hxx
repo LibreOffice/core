@@ -56,6 +56,7 @@ private:
 
     DECL_LINK( AddToolbarHdl, Button *, void );
     DECL_LINK( RemoveToolbarHdl, Button *, void );
+    DECL_LINK( GearHdl, MenuButton *, void );
 
     DECL_LINK( SelectCategory, ListBox&, void );
 
