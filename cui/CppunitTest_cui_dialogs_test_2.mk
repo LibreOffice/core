@@ -64,4 +64,8 @@ $(eval $(call gb_CppunitTest_use_rdb,cui_dialogs_test2,services))
 # $(eval $(call gb_CppunitTest_use_configuration,cui_dialogs_test2))
 $(eval $(call gb_CppunitTest_use_instdir_configuration,cui_dialogs_test2))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,cui_dialogs_test2, \
+    cui \
+))
+
 # vim: set noet sw=4 ts=4:
