@@ -119,6 +119,9 @@ void initAttachmentList(MapiAttachmentList_t* pMapiAttachmentList)
         MapiFileDescW mfd;
         ZeroMemory(&mfd, sizeof(mfd));
         mfd.lpszPathName = const_cast<wchar_t*>(attachment.c_str());
+        // This is required for Outlook 2013 - otherwise using MAPI_DIALOG_MODELESS results in MAPI_E_FAILURE
+        // See http://peach.ease.lsoft.com/scripts/wa-PEACH.exe?A2=MAPI-L;d2bf3060.1604
+        mfd.lpszFileName = L"";
         mfd.nPosition = sal::static_int_cast<ULONG>(-1);
         pMapiAttachmentList->push_back(mfd);
     }
@@ -190,7 +193,8 @@ void initParameter(int argc, wchar_t* argv[])
 
         if (_wcsicmp(argv[i], L"--mapi-dialog") == 0)
         {
-            gMapiFlags |= MAPI_DIALOG;
+            // Outlook 2013+; for earlier versions this equals to MAPI_DIALOG
+            gMapiFlags |= MAPI_DIALOG_MODELESS;
         }
         else if (_wcsicmp(argv[i], L"--mapi-logon-ui") == 0)
         {
