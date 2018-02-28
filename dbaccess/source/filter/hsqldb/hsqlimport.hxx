@@ -23,6 +23,9 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
+#include "rowinputbinary.hxx"
+#include "hsqlbinarynode.hxx"
+
 namespace dbahsql
 {
 class SAL_DLLPUBLIC_EXPORT HsqlImporter
@@ -32,7 +35,12 @@ private:
     css::uno::Reference<css::embed::XStorage> m_xStorage;
 
 protected:
-    void importSchema();
+    void insertRow(const std::vector<css::uno::Any>& xRows, const OUString& sTable,
+                   const std::vector<sal_Int32>& rColTypes);
+    void processTree(HsqlBinaryNode& rNode, HsqlRowInputStream& rStream,
+                     const std::vector<sal_Int32>& rColTypes, const OUString& sTableName);
+    void parseTableRows(const std::vector<sal_Int32>& rIndexes,
+                        const std::vector<sal_Int32>& rColTypes, const OUString& sTableName);
 
 public:
     HsqlImporter(css::uno::Reference<css::sdbc::XConnection>& rConnection,

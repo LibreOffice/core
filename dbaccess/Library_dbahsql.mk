@@ -27,6 +27,9 @@ $(eval $(call gb_Library_use_libraries,dbahsql,\
     sal \
     salhelper \
     dbtools \
+    ucbhelper \
+    utl \
+    tl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,dbahsql,\
@@ -35,6 +38,8 @@ $(eval $(call gb_Library_add_exception_objects,dbahsql,\
     dbaccess/source/filter/hsqldb/createparser \
     dbaccess/source/filter/hsqldb/columndef \
     dbaccess/source/filter/hsqldb/fbcreateparser \
+    dbaccess/source/filter/hsqldb/rowinputbinary \
+    dbaccess/source/filter/hsqldb/hsqlbinarynode \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -31,6 +31,8 @@ using namespace css::io;
 using namespace css::uno;
 using namespace css::embed;
 
+typedef std::vector<sal_Int32> ColumnTypeVector;
+
 SchemaParser::SchemaParser(Reference<XStorage>& rStorage)
     : m_rStorage(rStorage)
 {
@@ -60,16 +62,26 @@ SqlStatementVector SchemaParser::parseSchema()
         // every line contains exactly one DDL statement
         OUString sSql = xTextInput->readLine();
 
-        if (sSql.startsWith("SET") || sSql.startsWith("CREATE USER")
-            || sSql.startsWith("CREATE SCHEMA") || sSql.startsWith("GRANT"))
+        if (sSql.startsWith("SET TABLE") && sSql.indexOf("INDEX") > 0)
+        { // nothing
+        }
+        else if (sSql.startsWith("SET") || sSql.startsWith("CREATE USER")
+                 || sSql.startsWith("CREATE SCHEMA") || sSql.startsWith("GRANT"))
             continue;
-
-        if (sSql.startsWith("CREATE CACHED TABLE") || sSql.startsWith("CREATE TABLE"))
+        else if (sSql.startsWith("CREATE CACHED TABLE") || sSql.startsWith("CREATE TABLE"))
         {
             FbCreateStmtParser aCreateParser;
             aCreateParser.parse(sSql);
 
             sSql = aCreateParser.compose();
+
+            // Store columns for each table
+            ColumnTypeVector colTypes;
+            std::vector<ColumnDefinition> colDefs = aCreateParser.getColumnDef();
+            for (const auto& colDef : colDefs)
+                colTypes.push_back(colDef.getDataType());
+
+            m_ColumnTypes[aCreateParser.getTableName()] = colTypes;
         }
 
         parsedStatements.push_back(sSql);
@@ -77,6 +89,12 @@ SqlStatementVector SchemaParser::parseSchema()
 
     return parsedStatements;
 }
+
+ColumnTypeVector SchemaParser::getTableColumnTypes(const OUString& sTableName) const
+{
+    return m_ColumnTypes.at(sTableName);
 }
+
+} // namespace dbahsql
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
