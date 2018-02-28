@@ -50,6 +50,14 @@ private:
             setFilterOptions("EmbedImages");
         else if (getTestName().indexOf("XHTML") != -1)
             setFilterOptions("XHTML");
+        else if (getTestName().indexOf("ReqIf") != -1)
+        {
+            setImportFilterOptions("xhtmlns=reqif-xhtml");
+            // Bypass filter detect.
+            setImportFilterName("HTML (StarWriter)");
+            // Export options.
+            setFilterOptions("XHTML,xhtmlns=reqif-xhtml");
+        }
         else
             setFilterOptions("");
 
@@ -321,6 +329,17 @@ DECLARE_HTMLEXPORT_TEST(testXHTML, "hello.html")
     CPPUNIT_ASSERT(pDoc);
     // This was lang, not xml:lang.
     assertXPath(pDoc, "/html/body", "xml:lang", "en-US");
+}
+
+DECLARE_HTMLEXPORT_TEST(testReqIfParagraph, "reqif-p.xhtml")
+{
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+
+    OString aExpected("<reqif-xhtml:p>aaa<reqif-xhtml:br/>\nbbb</reqif-xhtml:p>" SAL_NEWLINE_STRING);
+    OString aActual(read_uInt8s_ToOString(*pStream, aExpected.getLength()));
+    // This was a HTML header, like '<!DOCTYPE html ...'.
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
