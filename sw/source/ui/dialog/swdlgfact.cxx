@@ -95,7 +95,7 @@ IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSplitTableDialog_Impl);
 short AbstractSwBreakDlg_Impl::Execute()
 {
-    return m_xDlg->Execute();
+    return m_xDlg->run();
 }
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwConvertTableDlg_Impl);

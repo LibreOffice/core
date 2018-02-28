@@ -59,7 +59,7 @@ class SwBreakDlg
 
 public:
     SwBreakDlg(weld::Window *pParent, SwWrtShell &rSh);
-    short Execute();
+    short run();
     const OUString& GetTemplateName() const { return aTemplate; }
     sal_uInt16 GetKind() const { return nKind; }
     const ::boost::optional<sal_uInt16>&  GetPageNumber() const { return oPgNum; }

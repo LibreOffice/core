@@ -21,34 +21,24 @@
 
 #include <strindlg.hxx>
 #include <scresid.hxx>
+#include <vcl/svapp.hxx>
 
-ScStringInputDlg::ScStringInputDlg( vcl::Window*         pParent,
-                                    const OUString&   rTitle,
-                                    const OUString&   rEditTitle,
-                                    const OUString&   rDefault,
-                                    const OString& sHelpId, const OString& sEditHelpId )
-    : ModalDialog(pParent, "InputStringDialog", "modules/scalc/ui/inputstringdialog.ui")
+ScStringInputDlg::ScStringInputDlg(weld::Window* pParent,
+                                   const OUString& rTitle,
+                                   const OUString& rEditTitle,
+                                   const OUString& rDefault,
+                                   const OString& rHelpId, const OString& rEditHelpId)
+    : m_xBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/inputstringdialog.ui"))
+    , m_xDialog(m_xBuilder->weld_dialog("InputStringDialog"))
+    , m_xLabel(m_xBuilder->weld_label("description_label"))
+    , m_xEdInput(m_xBuilder->weld_entry("name_entry"))
 {
-    SetHelpId( sHelpId );
-    SetText( rTitle );
-    get(m_pFtEditTitle, "description_label");
-    m_pFtEditTitle->SetText(rEditTitle);
-    get(m_pEdInput, "name_entry");
-    m_pEdInput->SetText( rDefault );
-    m_pEdInput->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
-    m_pEdInput->SetHelpId( sEditHelpId );
-}
-
-ScStringInputDlg::~ScStringInputDlg()
-{
-    disposeOnce();
-}
-
-void ScStringInputDlg::dispose()
-{
-    m_pFtEditTitle.clear();
-    m_pEdInput.clear();
-    ModalDialog::dispose();
+    m_xLabel->set_label(rEditTitle);
+    m_xDialog->set_title(rTitle);
+    m_xDialog->set_help_id(rHelpId);
+    m_xEdInput->set_text(rDefault);
+    m_xEdInput->set_help_id(rEditHelpId);
+    m_xEdInput->select_region(0, -1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
