@@ -82,6 +82,7 @@ LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader const &objHdr, LwpSvStream* p
     , m_bGettingMarginsValue(false)
     , m_bGettingExtMarginsValue(false)
     , m_bGettingUsePrinterSettings(false)
+    , m_bGettingUseWhen(false)
     , m_nAttributes(0)
     , m_nAttributes2(0)
     , m_nAttributes3(0)
@@ -227,6 +228,12 @@ bool LwpVirtualLayout::IsComplex()
 */
 LwpUseWhen* LwpVirtualLayout::GetUseWhen()
 {
+    if (m_bGettingUseWhen)
+        throw std::runtime_error("recursion in layout");
+    m_bGettingUseWhen= true;
+
+    LwpUseWhen* pRet = nullptr;
+
     /*
         If we have a parent, and I'm not a page layout,
         use my parents information.
@@ -236,11 +243,16 @@ LwpUseWhen* LwpVirtualLayout::GetUseWhen()
         //get parent
         rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
         if (xParent.is() && !xParent->IsHeader() && (xParent->GetLayoutType() != LWP_PAGE_LAYOUT))
-            return xParent->GetUseWhen();
+            pRet = xParent->GetUseWhen();
 
     }
 
-    return VirtualGetUseWhen();
+    if (!pRet)
+        pRet = VirtualGetUseWhen();
+
+    m_bGettingUseWhen = false;
+
+    return pRet;
 }
 /**
  * @descr:  Whether this layout is page layout or not

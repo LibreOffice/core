@@ -227,6 +227,7 @@ protected:
     bool m_bGettingMarginsValue;
     bool m_bGettingExtMarginsValue;
     bool m_bGettingUsePrinterSettings;
+    bool m_bGettingUseWhen;
     sal_uInt32 m_nAttributes;
     sal_uInt32 m_nAttributes2;
     sal_uInt32 m_nAttributes3;
