@@ -327,7 +327,11 @@ void SvpSalYieldMutex::doAcquire(sal_uInt32 const nLockCount)
                 m_bNoYieldLock = true;
                 bool const bEvents = pInst->DoYield(false, request == SvpRequest::MainThreadDispatchAllEvents);
                 m_bNoYieldLock = false;
+#ifdef IOS
+                (void)bEvents;
+#else
                 write(m_FeedbackFDs[1], &bEvents, sizeof(bool));
+#endif
             }
         }
         while (true);
@@ -454,10 +458,11 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
                 : SvpRequest::MainThreadDispatchOneEvent);
 
         bool bDidWork(false);
+#ifndef IOS
         // blocking read (for synchronisation)
         auto const nRet = read(pMutex->m_FeedbackFDs[0], &bDidWork, sizeof(bool));
         assert(nRet == 1); (void) nRet;
-
+#endif
         if (!bDidWork && bWait)
         {
             // block & release YieldMutex until the main thread does something
