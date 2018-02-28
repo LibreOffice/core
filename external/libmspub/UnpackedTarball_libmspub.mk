@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libmspub,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libmspub,\
     external/libmspub/ubsan.patch \
+    external/libmspub/0001-tdf-116018-close-shape-group-correctly.patch.1 \
 ))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libmspub))
