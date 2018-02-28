@@ -415,10 +415,7 @@ ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr,
     else
     {
         // handle weak BiDi mode
-
-        UBiDiLevel nLevel = UBIDI_DEFAULT_LTR;
-        if( mnFlags & SalLayoutFlags::BiDiRtl )
-            nLevel = UBIDI_DEFAULT_RTL;
+        UBiDiLevel nLevel = (mnFlags & SalLayoutFlags::BiDiRtl)? 1 : 0;
 
         // prepare substring for BiDi analysis
         // TODO: reuse allocated pParaBidi
