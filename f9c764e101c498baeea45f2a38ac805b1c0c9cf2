@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_ab62b5ab",
+        "filename": "cui/uiconfig/ui/splitcellsdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-02-28T16:03:26Z",
+      "side": 1,
+      "message": "what looks odd is that there is no\n\n  assert(mpDialogImpl-\u003eget_response(pButton) \u003d\u003d RET_CANCEL || mpDialogImpl-\u003eget_response(pButton) \u003d\u003d RET_CLOSE);\n\ntriggered for button2, which is labelled gtk-cancel",
+      "revId": "f9c764e101c498baeea45f2a38ac805b1c0c9cf2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
