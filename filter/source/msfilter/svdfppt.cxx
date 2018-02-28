@@ -1498,9 +1498,9 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
             // TODO:: PPT_PST_TxPFStyleAtom
 
             // read SlidePersists
-            m_pMasterPages = new PptSlidePersistList;
-            m_pSlidePages = new PptSlidePersistList;
-            m_pNotePages  = new PptSlidePersistList;
+            m_pMasterPages.reset( new PptSlidePersistList );
+            m_pSlidePages.reset( new PptSlidePersistList );
+            m_pNotePages.reset( new PptSlidePersistList );
 
             // now always creating the handout page, it will be the first in our masterpage list
             std::unique_ptr<PptSlidePersistEntry> pE(new PptSlidePersistEntry);
@@ -1655,13 +1655,9 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
 
 SdrPowerPointImport::~SdrPowerPointImport()
 {
-    for (SdHyperlinkEntry* i : aHyperList) {
-        delete i;
-    }
-    aHyperList.clear();
-    delete m_pMasterPages;
-    delete m_pSlidePages;
-    delete m_pNotePages;
+    m_pMasterPages.reset();
+    m_pSlidePages.reset();
+    m_pNotePages.reset();
 }
 
 bool PPTConvertOCXControls::ReadOCXStream( tools::SvRef<SotStorage>& rSrc,
@@ -2196,11 +2192,11 @@ bool SdrPowerPointImport::ReadFontCollection()
 PptSlidePersistList* SdrPowerPointImport::GetPageList(PptPageKind ePageKind) const
 {
     if ( ePageKind == PPT_MASTERPAGE )
-        return m_pMasterPages;
+        return m_pMasterPages.get();
     if ( ePageKind == PPT_SLIDEPAGE )
-        return m_pSlidePages;
+        return m_pSlidePages.get();
     if ( ePageKind == PPT_NOTEPAGE )
-        return m_pNotePages;
+        return m_pNotePages.get();
     return nullptr;
 }
 
@@ -6874,9 +6870,9 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         {
                                             PptInteractiveInfoAtom aInteractiveInfoAtom;
                                             ReadPptInteractiveInfoAtom( rIn, aInteractiveInfoAtom );
-                                            for (SdHyperlinkEntry* pHyperlink : rSdrPowerPointImport.aHyperList)
+                                            for (SdHyperlinkEntry& rHyperlink : rSdrPowerPointImport.aHyperList)
                                             {
-                                                if ( pHyperlink->nIndex == aInteractiveInfoAtom.nExHyperlinkId )
+                                                if ( rHyperlink.nIndex == aInteractiveInfoAtom.nExHyperlinkId )
                                                 {
                                                     if (!aTextHd.SeekToEndOfRecord(rIn))
                                                     {
@@ -6898,11 +6894,11 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             xEntry.reset(new PPTFieldEntry);
                                                             xEntry->nPos = static_cast<sal_uInt16>(nStartPos);
                                                             xEntry->nTextRangeEnd = static_cast<sal_uInt16>(nEndPos);
-                                                            OUString aTarget( pHyperlink->aTarget );
-                                                            if ( !pHyperlink->aConvSubString.isEmpty() )
+                                                            OUString aTarget( rHyperlink.aTarget );
+                                                            if ( !rHyperlink.aConvSubString.isEmpty() )
                                                             {
                                                                 aTarget += "#";
-                                                                aTarget += pHyperlink->aConvSubString;
+                                                                aTarget += rHyperlink.aConvSubString;
                                                             }
                                                             xEntry->xField1.reset(new SvxFieldItem( SvxURLField( aTarget, OUString(), SvxURLFormat::Repr ), EE_FEATURE_FIELD ));
                                                         }

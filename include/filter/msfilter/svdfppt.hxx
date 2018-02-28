@@ -558,7 +558,7 @@ protected:
     bool                    bOk;
     PptUserEditAtom         aUserEditAtom;
     PptColorSchemeAtom      aPageColors;
-    ::std::vector< SdHyperlinkEntry* > aHyperList;
+    ::std::vector< SdHyperlinkEntry > aHyperList;
     std::unique_ptr<sal_uInt32[]>
                             pPersistPtr;
     sal_uInt32              nPersistPtrCnt;
@@ -566,9 +566,9 @@ protected:
     const PPTStyleSheet*    pPPTStyleSheet; // this is the current stylesheet;
     const PPTStyleSheet*    pDefaultSheet;  // this is a sheet we are using if no masterpage can be found, but that should
                                             // never happen just preventing a crash
-    PptSlidePersistList*    m_pMasterPages;
-    PptSlidePersistList*    m_pSlidePages;
-    PptSlidePersistList*    m_pNotePages;
+    std::unique_ptr<PptSlidePersistList> m_pMasterPages;
+    std::unique_ptr<PptSlidePersistList> m_pSlidePages;
+    std::unique_ptr<PptSlidePersistList> m_pNotePages;
     sal_uInt16              nAktPageNum;
     sal_uLong               nDocStreamPos;
     sal_uInt16              nPageColorsNum;
