@@ -1,7 +1,7 @@
 {
     "id": "org.libreoffice.LibreOffice",
     "runtime": "org.gnome.Platform",
-    "runtime-version": "3.24",
+    "runtime-version": "3.26",
     "sdk": "org.gnome.Sdk",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.gcc7",
@@ -30,6 +30,19 @@
             "buildsystem": "simple",
             "build-commands": [
                 "/usr/lib/sdk/openjdk9/install.sh"
+            ]
+        },
+        {
+            "name": "gst-libav",
+            "buildsystem": "meson",
+            "builddir": true,
+            "config-opts": ["-Ddisable_gtkdoc=true"],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.12.4.tar.xz",
+                    "sha256": "2a56aa5d2d8cd912f2bce17f174713d2c417ca298f1f9c28ee66d4aa1e1d9e62"
+                }
             ]
         },
         {
