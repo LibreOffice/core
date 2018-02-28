@@ -358,11 +358,11 @@ private:
 
 private:
 
-    ::utl::TempFile*                mpTmp;
-    SvStream*                       mpOStm;
-    Reference< XOutputStream >      mxStmWrapper;
-    std::unique_ptr<GraphicObject>  mxGrfObj;
-    bool                        mbClosed;
+    std::unique_ptr<::utl::TempFile> mpTmp;
+    std::unique_ptr<SvStream>        mpOStm;
+    Reference< XOutputStream >       mxStmWrapper;
+    std::unique_ptr<GraphicObject>   mxGrfObj;
+    bool                             mbClosed;
 
 public:
 
@@ -383,7 +383,7 @@ SvXMLGraphicOutputStream::SvXMLGraphicOutputStream()
 {
     mpTmp->EnableKillingFile();
 
-    mpOStm = ::utl::UcbStreamHelper::CreateStream( mpTmp->GetURL(), StreamMode::WRITE | StreamMode::TRUNC );
+    mpOStm.reset( ::utl::UcbStreamHelper::CreateStream( mpTmp->GetURL(), StreamMode::WRITE | StreamMode::TRUNC ) );
 
     if( mpOStm )
         mxStmWrapper = new ::utl::OOutputStreamWrapper( *mpOStm );
@@ -391,8 +391,8 @@ SvXMLGraphicOutputStream::SvXMLGraphicOutputStream()
 
 SvXMLGraphicOutputStream::~SvXMLGraphicOutputStream()
 {
-    delete mpTmp;
-    delete mpOStm;
+    mpTmp.reset();
+    mpOStm.reset();
 }
 
 void SAL_CALL SvXMLGraphicOutputStream::writeBytes( const Sequence< sal_Int8 >& rData )
@@ -484,11 +484,9 @@ Graphic SvXMLGraphicOutputStream::GetGraphic()
 
     if (aGraphic.GetType() != GraphicType::NONE)
     {
-        delete mpOStm;
-        mpOStm = nullptr;
-        delete mpTmp;
-        mpTmp = nullptr;
-    }
+        mpOStm.reset();
+        mpTmp.reset();
+     }
     return aGraphic;
 }
 
