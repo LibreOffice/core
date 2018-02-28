@@ -5010,8 +5010,8 @@ void SvxMSDffManager::GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt
                     {
                         if ( !rGlobalChildRect.IsEmpty() && !rClientRect.IsEmpty() && rGlobalChildRect.GetWidth() && rGlobalChildRect.GetHeight() )
                         {
-                            double fWidth = r - l;
-                            double fHeight= u - o;
+                            double fWidth = o3tl::saturating_sub(r, l);
+                            double fHeight= o3tl::saturating_sub(u, o);
                             double fXScale = static_cast<double>(rClientRect.GetWidth()) / static_cast<double>(rGlobalChildRect.GetWidth());
                             double fYScale = static_cast<double>(rClientRect.GetHeight()) / static_cast<double>(rGlobalChildRect.GetHeight());
                             double fl = ( ( l - rGlobalChildRect.Left() ) * fXScale ) + rClientRect.Left();
