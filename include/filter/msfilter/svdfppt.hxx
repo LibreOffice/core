@@ -460,9 +460,9 @@ protected:
     PptDocumentAtom     aDocAtom;
     DffRecordManager    aDocRecManager;             // contains all first level container and atoms of the document container
 
-    ::std::vector< PPTOleEntry* > aOleObjectList;
+    ::std::vector< PPTOleEntry > aOleObjectList;
 
-    PptFontCollection*  m_pFonts;
+    std::unique_ptr<PptFontCollection> m_pFonts;
 
     sal_uInt32          nStreamLen;
 

@@ -525,10 +525,6 @@ SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam, const OUString&
 
 SdrEscherImport::~SdrEscherImport()
 {
-    for (PPTOleEntry* i : aOleObjectList)
-        delete i;
-    aOleObjectList.clear();
-    delete m_pFonts;
 }
 
 const PptSlideLayoutAtom* SdrEscherImport::GetSlideLayoutAtom() const
@@ -1820,12 +1816,12 @@ SdrObject* SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
         }
     }
 
-    for (PPTOleEntry* pOe : const_cast<SdrPowerPointImport*>(this)->aOleObjectList)
+    for (PPTOleEntry& rOe : const_cast<SdrPowerPointImport*>(this)->aOleObjectList)
     {
-        if ( pOe->nId != nOLEId )
+        if ( rOe.nId != nOLEId )
             continue;
 
-        rStCtrl.Seek( pOe->nRecHdOfs );
+        rStCtrl.Seek( rOe.nRecHdOfs );
 
         DffRecordHeader aHd;
         ReadDffRecordHeader( rStCtrl, aHd );
@@ -1878,23 +1874,23 @@ SdrObject* SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
                                 OUString aNm;
                                 // if ( nSvxMSDffOLEConvFlags )
                                 {
-                                    uno::Reference < embed::XStorage > xDestStorage( pOe->pShell->GetStorage() );
+                                    uno::Reference < embed::XStorage > xDestStorage( rOe.pShell->GetStorage() );
                                     uno::Reference < embed::XEmbeddedObject > xObj =
                                         CheckForConvertToSOObj(nSvxMSDffOLEConvFlags, *xObjStor, xDestStorage, rGraf, rVisArea, maBaseURL);
                                     if( xObj.is() )
                                     {
-                                        pOe->pShell->getEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aNm );
+                                        rOe.pShell->getEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aNm );
 
-                                        svt::EmbeddedObjectRef aObj( xObj, pOe->nAspect );
+                                        svt::EmbeddedObjectRef aObj( xObj, rOe.nAspect );
 
                                         // TODO/LATER: need MediaType for Graphic
                                         aObj.SetGraphic( rGraf, OUString() );
                                         pRet = new SdrOle2Obj( aObj, aNm, rBoundRect );
                                     }
                                 }
-                                if ( !pRet && ( pOe->nType == PPT_PST_ExControl ) )
+                                if ( !pRet && ( rOe.nType == PPT_PST_ExControl ) )
                                 {
-                                    uno::Reference< frame::XModel > xModel( pOe->pShell->GetModel() );
+                                    uno::Reference< frame::XModel > xModel( rOe.pShell->GetModel() );
                                     PPTConvertOCXControls aPPTConvertOCXControls( this, xModel, eAktPageKind );
                                     css::uno::Reference< css::drawing::XShape > xShape;
                                     if ( aPPTConvertOCXControls.ReadOCXStream( xObjStor, &xShape ) )
@@ -1903,10 +1899,10 @@ SdrObject* SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
                                 }
                                 if ( !pRet )
                                 {
-                                    aNm = pOe->pShell->getEmbeddedObjectContainer().CreateUniqueObjectName();
+                                    aNm = rOe.pShell->getEmbeddedObjectContainer().CreateUniqueObjectName();
 
                                     // object is not an own object
-                                    const css::uno::Reference < css::embed::XStorage >& rStorage = pOe->pShell->GetStorage();
+                                    const css::uno::Reference < css::embed::XStorage >& rStorage = rOe.pShell->GetStorage();
                                     if (rStorage.is())
                                     {
                                         tools::SvRef<SotStorage> xTarget = SotStorage::OpenOLEStorage(rStorage, aNm, StreamMode::READWRITE);
@@ -1920,34 +1916,34 @@ SdrObject* SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
                                     }
 
                                     uno::Reference < embed::XEmbeddedObject > xObj =
-                                        pOe->pShell->getEmbeddedObjectContainer().GetEmbeddedObject( aNm );
+                                        rOe.pShell->getEmbeddedObjectContainer().GetEmbeddedObject( aNm );
                                     if ( xObj.is() )
                                     {
-                                        if ( pOe->nAspect != embed::Aspects::MSOLE_ICON )
+                                        if ( rOe.nAspect != embed::Aspects::MSOLE_ICON )
                                         {
                                             //TODO/LATER: keep on hacking?!
                                             // we don't want to be modified
                                             //xInplaceObj->EnableSetModified( sal_False );
                                             if ( rVisArea.IsEmpty() )
                                             {
-                                                MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( pOe->nAspect ) );
+                                                MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( rOe.nAspect ) );
                                                 Size aSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
                                                     aGraphic.GetPrefMapMode(), MapMode( aMapUnit ) ) );
 
                                                 awt::Size aSz;
                                                 aSz.Width = aSize.Width();
                                                 aSz.Height = aSize.Height();
-                                                xObj->setVisualAreaSize( pOe->nAspect, aSz );
+                                                xObj->setVisualAreaSize( rOe.nAspect, aSz );
                                             }
                                             else
                                             {
                                                 awt::Size aSize( rVisArea.GetSize().Width(), rVisArea.GetSize().Height() );
-                                                xObj->setVisualAreaSize( pOe->nAspect, aSize );
+                                                xObj->setVisualAreaSize( rOe.nAspect, aSize );
                                             }
                                             //xInplaceObj->EnableSetModified( sal_True );
                                         }
 
-                                        svt::EmbeddedObjectRef aObj( xObj, pOe->nAspect );
+                                        svt::EmbeddedObjectRef aObj( xObj, rOe.nAspect );
 
                                         // TODO/LATER: need MediaType for Graphic
                                         aObj.SetGraphic( aGraphic, OUString() );
@@ -2136,8 +2132,8 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                             if ( aHd.nRecType == DFF_PST_ExOleObjStg )
                             {
                                 rStCtrl.ReadUInt32( nId );
-                                aOleObjectList.push_back(
-                                    new PPTOleEntry( aAt.nId, aHd.nFilePos, pShell, nRecType, aAt.nAspect ) );
+                                aOleObjectList.emplace_back(
+                                    aAt.nId, aHd.nFilePos, pShell, nRecType, aAt.nAspect );
                             }
                         }
                     }
@@ -2164,7 +2160,7 @@ bool SdrPowerPointImport::ReadFontCollection()
             {
                 bRet = true;
                 if (!m_pFonts)
-                    m_pFonts = new PptFontCollection;
+                    m_pFonts.reset( new PptFontCollection );
                 std::unique_ptr<PptFontEntityAtom> pFont(new PptFontEntityAtom);
                 ReadPptFontEntityAtom( rStCtrl, *pFont );
 
