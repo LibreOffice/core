@@ -857,7 +857,6 @@ ImplEESdrWriter::~ImplEESdrWriter()
     Reference<css::lang::XComponent> xComp(mXDrawPage, UNO_QUERY);
     if (xComp.is())
         xComp->dispose();
-    delete mpSolverContainer;
 }
 
 
@@ -881,7 +880,7 @@ bool ImplEESdrWriter::ImplInitPage( const SdrPage& rPage )
             return false;
         mpSdrPage = &rPage;
 
-        mpSolverContainer = new EscherSolverContainer;
+        mpSolverContainer.reset( new EscherSolverContainer );
     }
     else
         pSvxDrawPage = SvxDrawPage::getImplementation(mXDrawPage);
@@ -904,7 +903,7 @@ bool ImplEESdrWriter::ImplInitUnoShapes( const Reference< XShapes >& rxShapes )
     if( !ImplInitPageValues() )    // ImplEESdrWriter
         return false;
 
-    mpSolverContainer = new EscherSolverContainer;
+    mpSolverContainer.reset( new EscherSolverContainer );
     return true;
 }
 
@@ -924,8 +923,7 @@ void ImplEESdrWriter::ImplFlushSolverContainer()
     if ( mpSolverContainer )
     {
         mpSolverContainer->WriteSolver( mpEscherEx->GetStream() );
-        delete mpSolverContainer;
-        mpSolverContainer = nullptr;
+        mpSolverContainer.reset();
     }
 }
 
