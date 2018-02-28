@@ -80,22 +80,20 @@ AxisItemConverter::AxisItemConverter(
     ::chart::ExplicitIncrementData const * pIncrement /* = NULL */,
     const awt::Size* pRefSize ) :
         ItemConverter( rPropertySet, rItemPool ),
-        m_xChartDoc( xChartDoc ),
-        m_pExplicitScale( nullptr ),
-        m_pExplicitIncrement( nullptr )
+        m_xChartDoc( xChartDoc )
 {
     Reference< lang::XMultiServiceFactory > xNamedPropertyContainerFactory( xChartDoc, uno::UNO_QUERY );
 
     if( pScale )
-        m_pExplicitScale = new ::chart::ExplicitScaleData( *pScale );
+        m_pExplicitScale.reset( new ::chart::ExplicitScaleData( *pScale ) );
     if( pIncrement )
-        m_pExplicitIncrement = new ::chart::ExplicitIncrementData( *pIncrement );
+        m_pExplicitIncrement.reset( new ::chart::ExplicitIncrementData( *pIncrement ) );
 
-    m_aConverters.push_back( new GraphicPropertyItemConverter(
+    m_aConverters.emplace_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel,
                                  xNamedPropertyContainerFactory,
                                  GraphicObjectType::LineProperties ));
-    m_aConverters.push_back(
+    m_aConverters.emplace_back(
         new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
 
     m_xAxis.set( Reference< chart2::XAxis >( rPropertySet, uno::UNO_QUERY ) );
@@ -104,10 +102,6 @@ AxisItemConverter::AxisItemConverter(
 
 AxisItemConverter::~AxisItemConverter()
 {
-    delete m_pExplicitScale;
-    delete m_pExplicitIncrement;
-
-    std::for_each(m_aConverters.begin(), m_aConverters.end(), std::default_delete<ItemConverter>());
 }
 
 void AxisItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
