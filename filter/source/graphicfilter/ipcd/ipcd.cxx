@@ -148,7 +148,7 @@ bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
             nBMPWidth = nHeight;
             nBMPHeight = nWidth;
         }
-        mpBitmap.reset(new vcl::bitmap::RawBitmap( Size( nBMPWidth, nBMPHeight ) ));
+        mpBitmap.reset(new vcl::bitmap::RawBitmap( Size( nBMPWidth, nBMPHeight ), 24 ));
 
         ReadImage();
 

@@ -148,7 +148,7 @@ BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHe
     {
         for( long y = 0; y < nHeight; ++y )
         {
-            sal_uInt8 const *p = pData + y * nStride;
+            sal_uInt8 const *p = pData + (y * nStride);
             Scanline pScanline = pWrite->GetScanline(y);
             for (long x = 0; x < nWidth; ++x)
             {
@@ -158,7 +158,7 @@ BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHe
             }
             if (nBitCount == 32)
             {
-                p = pData + y * nStride + 3;
+                p = pData + (y * nStride) + 3;
                 Scanline pMaskScanLine = xMaskAcc->GetScanline(y);
                 for (long x = 0; x < nWidth; ++x)
                 {
@@ -179,27 +179,50 @@ BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHe
 */
 BitmapEx CreateFromData( RawBitmap&& rawBitmap )
 {
-    Bitmap aBmp( rawBitmap.maSize, /*nBitCount*/24 );
+    auto nBitCount = rawBitmap.GetBitCount();
+    assert( nBitCount == 24 || nBitCount == 32);
+    Bitmap aBmp( rawBitmap.maSize, nBitCount );
 
     Bitmap::ScopedWriteAccess pWrite(aBmp);
     assert(pWrite.get());
     if( !pWrite )
         return BitmapEx();
+    std::unique_ptr<AlphaMask> pAlphaMask;
+    AlphaMask::ScopedWriteAccess xMaskAcc;
+    if (nBitCount == 32)
+    {
+        pAlphaMask.reset( new AlphaMask( rawBitmap.maSize ) );
+        xMaskAcc = AlphaMask::ScopedWriteAccess(*pAlphaMask);
+    }
 
     auto nHeight = rawBitmap.maSize.getHeight();
     auto nWidth = rawBitmap.maSize.getWidth();
+    auto nStride = nWidth * nBitCount / 8;
     for( long y = 0; y < nHeight; ++y )
     {
-        sal_uInt8 const *p = rawBitmap.mpData.get() + (y * nWidth * 3);
+        sal_uInt8 const *p = rawBitmap.mpData.get() + (y * nStride);
         Scanline pScanline = pWrite->GetScanline(y);
         for (long x = 0; x < nWidth; ++x)
         {
             BitmapColor col(p[0], p[1], p[2]);
             pWrite->SetPixelOnData(pScanline, x, col);
-            p += 3;
+            p += nBitCount/8;
+        }
+        if (nBitCount == 32)
+        {
+            p = rawBitmap.mpData.get() + (y * nStride) + 3;
+            Scanline pMaskScanLine = xMaskAcc->GetScanline(y);
+            for (long x = 0; x < nWidth; ++x)
+            {
+                xMaskAcc->SetPixelOnData(pMaskScanLine, x, BitmapColor(*p));
+                p += 4;
+            }
         }
     }
-    return aBmp;
+    if (nBitCount == 32)
+        return BitmapEx(aBmp, *pAlphaMask);
+    else
+        return aBmp;
 }
 
 #if ENABLE_CAIRO_CANVAS

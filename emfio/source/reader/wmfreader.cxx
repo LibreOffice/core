@@ -715,7 +715,7 @@ namespace emfio
                 }
                 if (bOk)
                 {
-                    vcl::bitmap::RawBitmap aBmp( Size( nWidth, nHeight ) );
+                    vcl::bitmap::RawBitmap aBmp( Size( nWidth, nHeight ), 24 );
                     for (sal_uInt16 y = 0; y < nHeight && mpInputStream->good(); ++y)
                     {
                         sal_uInt16 x = 0;

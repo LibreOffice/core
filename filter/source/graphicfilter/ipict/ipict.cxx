@@ -850,7 +850,7 @@ sal_uLong PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bCo
                 return 0xffffffff;
         }
 
-        pBitmap.reset(new vcl::bitmap::RawBitmap( Size(nWidth, nHeight) ));
+        pBitmap.reset(new vcl::bitmap::RawBitmap( Size(nWidth, nHeight), 24 ));
 
         for (sal_uInt16 ny = 0; ny < nHeight; ++ny)
         {
@@ -932,7 +932,7 @@ sal_uLong PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bCo
                 return 0xffffffff;
         }
 
-        pBitmap.reset(new vcl::bitmap::RawBitmap( Size(nWidth, nHeight) ));
+        pBitmap.reset(new vcl::bitmap::RawBitmap( Size(nWidth, nHeight), 24 ));
 
         for (sal_uInt16 ny = 0; ny < nHeight; ++ny)
         {
@@ -1027,7 +1027,7 @@ sal_uLong PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bCo
             if (nWidth > nMaxCols)
                 return 0xffffffff;
 
-            pBitmap.reset(new vcl::bitmap::RawBitmap( Size(nWidth, nHeight) ));
+            pBitmap.reset(new vcl::bitmap::RawBitmap( Size(nWidth, nHeight), 24 ));
 
             for (sal_uInt16 ny = 0; ny < nHeight; ++ny)
             {
@@ -1050,7 +1050,7 @@ sal_uLong PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bCo
             if (nWidth > nMaxCols)
                 return 0xffffffff;
 
-            pBitmap.reset(new vcl::bitmap::RawBitmap( Size(nWidth, nHeight) ));
+            pBitmap.reset(new vcl::bitmap::RawBitmap( Size(nWidth, nHeight), 24 ));
 
             for (sal_uInt16 ny = 0; ny < nHeight; ++ny)
             {
@@ -1072,7 +1072,7 @@ sal_uLong PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bCo
                 if (nHeight > pPict->remainingSize() / nByteCountSize)
                     return 0xffffffff;
 
-                pBitmap.reset(new vcl::bitmap::RawBitmap( Size(nWidth, nHeight) ));
+                pBitmap.reset(new vcl::bitmap::RawBitmap( Size(nWidth, nHeight), 24 ));
 
                 size_t nByteWidth = static_cast<size_t>(nWidth) * nCmpCount;
                 std::vector<sal_uInt8> aScanline(nByteWidth);

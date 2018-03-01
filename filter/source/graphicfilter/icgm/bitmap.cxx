@@ -69,7 +69,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
     if (!(ImplGetDimensions(rDesc) && rDesc.mpBuf && isLegalBitsPerPixel(rDesc.mnDstBitsPerPixel)))
         return;
 
-    vcl::bitmap::RawBitmap aBitmap( Size( rDesc.mnX, rDesc.mnY ) );
+    vcl::bitmap::RawBitmap aBitmap( Size( rDesc.mnX, rDesc.mnY ), 24 );
 
     // the picture may either be read from left to right or right to left, from top to bottom ...
 

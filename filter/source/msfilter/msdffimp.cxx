@@ -1109,7 +1109,7 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
         double fFocusX = rManager.GetPropertyValue( DFF_Prop_fillToRight, 0 ) / 65536.0;
         double fFocusY = rManager.GetPropertyValue( DFF_Prop_fillToBottom, 0 ) / 65536.0;
 
-        vcl::bitmap::RawBitmap aBitmap(aBitmapSizePixel);
+        vcl::bitmap::RawBitmap aBitmap(aBitmapSizePixel, 24);
 
         for ( long nY = 0; nY < aBitmapSizePixel.Height(); nY++ )
         {
@@ -1364,7 +1364,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                                 aCol2 = rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillBackColor, 0 ), DFF_Prop_fillBackColor );
 
                             // Create a bitmap for the pattern with expected colors
-                            vcl::bitmap::RawBitmap aResult(Size(8, 8));
+                            vcl::bitmap::RawBitmap aResult(Size(8, 8), 24);
                             {
                                 Bitmap::ScopedReadAccess pRead(aBmp);
 

@@ -105,7 +105,7 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
     // Write BMP header and conditionally (maybe invalid for now) color palette:
     if (bStatus)
     {
-        mpBitmap.reset( new vcl::bitmap::RawBitmap( Size( nWidth, nHeight ) ) );
+        mpBitmap.reset( new vcl::bitmap::RawBitmap( Size( nWidth, nHeight ), 24 ) );
 
         if ( nDestBitsPerPixel <= 8 )
         {

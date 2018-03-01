@@ -92,7 +92,7 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
             if (nRemainingSize < nPixelsRequired / 8)
                 return false;
 
-            mpRawBmp.reset( new vcl::bitmap::RawBitmap( Size( mnWidth, mnHeight ) ) );
+            mpRawBmp.reset( new vcl::bitmap::RawBitmap( Size( mnWidth, mnHeight ), 24 ) );
             mvPalette.resize( 2 );
             mvPalette[0] = Color( 0xff, 0xff, 0xff );
             mvPalette[1] = Color( 0x00, 0x00, 0x00 );
@@ -102,7 +102,7 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
             if (nRemainingSize < nPixelsRequired)
                 return false;
 
-            mpRawBmp.reset( new vcl::bitmap::RawBitmap( Size( mnWidth, mnHeight ) ) );
+            mpRawBmp.reset( new vcl::bitmap::RawBitmap( Size( mnWidth, mnHeight ), 24 ) );
             mnCol = static_cast<sal_uInt16>(mnMaxVal) + 1;
             if ( mnCol > 256 )
                 mnCol = 256;
@@ -118,7 +118,7 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
             if (nRemainingSize / 3 < nPixelsRequired)
                 return false;
 
-            mpRawBmp.reset( new vcl::bitmap::RawBitmap( Size( mnWidth, mnHeight ) ) );
+            mpRawBmp.reset( new vcl::bitmap::RawBitmap( Size( mnWidth, mnHeight ), 24 ) );
             break;
     }
 
