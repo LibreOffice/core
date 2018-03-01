@@ -1008,6 +1008,9 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
         m_nSwNumLevel = 0xff;                 // no number
 
     SwTextNode* pNd = m_pPaM->GetNode().GetTextNode();
+    if (!pNd)
+        return;
+
     if (m_nSwNumLevel < MAXLEVEL)
         pNd->SetAttrListLevel( m_nSwNumLevel );
     else
