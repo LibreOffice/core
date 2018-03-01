@@ -1282,10 +1282,14 @@ void ScViewFunc::FillSimple( FillDir eDir )
         {
             pDocSh->UpdateOle(&GetViewData());
             UpdateScrollBars();
+
             bool bDoAutoSpell = pDocSh->GetDocument().GetDocOptions().IsAutoSpell();
             if ( bDoAutoSpell )
                 CopyAutoSpellData(eDir, aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(),
                         ::std::numeric_limits<sal_uLong>::max());
+
+            // Invalidate cell slots and update input line with new content.
+            CellContentChanged();
         }
     }
     else
