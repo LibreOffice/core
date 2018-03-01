@@ -85,11 +85,6 @@ class Decompression
 {
 public:
     Decompression(SvStream * pInStream, SvStream * pOutStream);
-    ~Decompression()
-    {
-        delete m_Tree1;
-        delete m_Tree2;
-    };
     /**
      * @brief
      * decompress from instream to outstream
@@ -117,7 +112,7 @@ public:
 
     sal_uInt32 m_iArrayOfM[16];
 
-    HuffmanTreeNode *m_Tree1, *m_Tree2;
+    std::unique_ptr<HuffmanTreeNode> m_Tree1, m_Tree2;
 
     void ConstructTree1();
     void ConstructTree2();
