@@ -70,18 +70,13 @@
 #include <lwpglobalmgr.hxx>
 
 LwpFribSection::LwpFribSection(LwpPara *pPara)
-     : LwpFrib(pPara),m_pMasterPage(nullptr)
+     : LwpFrib(pPara)
 {
 
 }
 
 LwpFribSection::~LwpFribSection()
 {
-    if(m_pMasterPage)
-    {
-        delete m_pMasterPage;
-        m_pMasterPage = nullptr;
-    }
 }
 
 /**
@@ -111,7 +106,7 @@ void LwpFribSection::RegisterSectionStyle()
     LwpPageLayout* pLayout = GetPageLayout();
     if(pLayout)
     {
-        m_pMasterPage = new LwpMasterPage(m_pPara, pLayout);
+        m_pMasterPage.reset( new LwpMasterPage(m_pPara, pLayout) );
         m_pMasterPage->RegisterMasterPage(this);
     }
 }
