@@ -223,7 +223,7 @@ private:
     virtual ~LwpLayoutColumns() override;
 
     sal_uInt16 m_nNumCols;
-    LwpColumnInfo* m_pColumns;
+    std::unique_ptr<LwpColumnInfo[]> m_pColumns;
 };
 
 class LwpLayoutGutters final : public LwpVirtualPiece

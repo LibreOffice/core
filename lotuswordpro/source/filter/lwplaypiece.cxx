@@ -269,12 +269,6 @@ LwpLayoutColumns::LwpLayoutColumns(LwpObjectHeader const & objHdr, LwpSvStream* 
 
 LwpLayoutColumns::~LwpLayoutColumns()
 {
-    if(m_pColumns)
-    {
-        delete[] m_pColumns;
-        m_pColumns = nullptr;
-    }
-
 }
 
 void LwpLayoutColumns::Read()
@@ -284,7 +278,7 @@ void LwpLayoutColumns::Read()
     if( LwpFileHeader::m_nFileRevision >= 0x000B )
     {
         m_nNumCols = m_pObjStrm->QuickReaduInt16();
-        m_pColumns = new LwpColumnInfo[m_nNumCols];
+        m_pColumns.reset( new LwpColumnInfo[m_nNumCols] );
         for(int i=0; i<m_nNumCols; i++)
         {
             m_pColumns[i].Read(m_pObjStrm.get());
