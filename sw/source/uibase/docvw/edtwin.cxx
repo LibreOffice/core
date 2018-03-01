@@ -2474,9 +2474,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
             }
             else
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui"));
+                std::shared_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui"));
                 std::unique_ptr<weld::MessageDialog> xInfo(xBuilder->weld_message_dialog("InfoReadonlyDialog"));
-                xInfo->run();
+                xInfo->runAsync(xBuilder, [](int) {});
                 eKeyState = SwKeyState::End;
             }
         break;

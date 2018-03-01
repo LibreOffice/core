@@ -20,6 +20,7 @@
 namespace weld
 {
 class Container;
+class Builder;
 
 class VCL_DLLPUBLIC Widget
 {
@@ -106,6 +107,7 @@ public:
 class VCL_DLLPUBLIC Dialog : virtual public Window
 {
 public:
+    virtual bool runAsync(std::shared_ptr<weld::Builder>, const std::function<void(sal_Int32)>&) { return false; }
     virtual int run() = 0;
     virtual void response(int response) = 0;
     virtual void add_button(const OUString& rText, int response) = 0;

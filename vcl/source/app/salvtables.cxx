@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/lok.hxx>
 #include <salframe.hxx>
 #include <salinst.hxx>
 #include <salvd.hxx>
@@ -420,6 +421,14 @@ public:
         : SalInstanceWindow(pDialog, bTakeOwnership)
         , m_xDialog(pDialog)
     {
+    }
+
+    virtual bool runAsync(std::shared_ptr<weld::Builder> aOwner, const std::function<void(sal_Int32)> &rEndDialogFn) override
+    {
+        VclAbstractDialog::AsyncContext aCtx;
+        aCtx.mxOwnerBuilder = aOwner;
+        aCtx.maEndDialogFn = rEndDialogFn;
+        return m_xDialog->StartExecuteAsync(aCtx);
     }
 
     virtual int run() override
