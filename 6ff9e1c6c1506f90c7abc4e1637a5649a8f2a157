@@ -16,6 +16,24 @@
       "revId": "6ff9e1c6c1506f90c7abc4e1637a5649a8f2a157",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_316552e1",
+        "filename": "xmloff/source/core/xmlictxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-03-01T14:57:27Z",
+      "side": 1,
+      "message": "well it depends on the input document; it\u0027s also possible that the foreign attribute isn\u0027t namespaced...",
+      "parentUuid": "ba2be162_ee167b54",
+      "revId": "6ff9e1c6c1506f90c7abc4e1637a5649a8f2a157",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
