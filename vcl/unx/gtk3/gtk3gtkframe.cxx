@@ -387,7 +387,7 @@ bool GtkSalFrame::doKeyCallback( guint state,
     char* pKeyDebug = nullptr;
     pKeyDebug = getenv("VCL_GTK3_PAINTDEBUG");
 
-    if (strlen(pKeyDebug) == 1 && pKeyDebug[0] == '1')
+    if (pKeyDebug && *pKeyDebug == '1')
     {
         if (bDown)
         {
