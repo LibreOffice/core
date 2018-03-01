@@ -39,8 +39,6 @@
 #define HID_HELP_TOOLBOXITEM_SEARCHDIALOG                     "SFX2_HID_HELP_TOOLBOXITEM_SEARCHDIALOG"
 #define HID_HELP_TEXT_SELECTION_MODE                          "SFX2_HID_HELP_TEXT_SELECTION_MODE"
 
-#define HID_CONFIG_SAVE                                       "SFX2_HID_CONFIG_SAVE"
-
 #define HID_QUERY_LOAD_TEMPLATE                               "SFX2_HID_QUERY_LOAD_TEMPLATE"
 
 #define HID_SIDEBAR_WINDOW                                     "SFX2_HID_SIDEBAR_WINDOW"
