@@ -2763,36 +2763,34 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool ImportPPT(
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportPPT(SvStream &rStream)
 {
-    tools::SvRef<SotStorage> xStorage;
+    bool bRet = false;
     try
     {
-        xStorage = tools::SvRef<SotStorage>(new SotStorage(rStream));
+        tools::SvRef<SotStorage> xStorage = tools::SvRef<SotStorage>(new SotStorage(rStream));
         if (xStorage->GetError())
             return false;
+
+        tools::SvRef<SotStorageStream> xDocStream(xStorage->OpenSotStream( "PowerPoint Document", StreamMode::STD_READ));
+        if ( !xDocStream.is() )
+            return false;
+
+        SdDLL::Init();
+
+        SfxMedium aSrcMed("", StreamMode::STD_READ);
+
+        xDocStream->SetVersion(xStorage->GetVersion());
+        xDocStream->SetCryptMaskKey(xStorage->GetKey());
+
+        ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Impress);
+        SdDrawDocument *pDoc = xDocShRef->GetDoc();
+
+        bRet = ImportPPT(pDoc, *xDocStream, *xStorage, aSrcMed);
+
+        xDocShRef->DoClose();
     }
     catch (...)
     {
-        return false;
     }
-
-    tools::SvRef<SotStorageStream> xDocStream(xStorage->OpenSotStream( "PowerPoint Document", StreamMode::STD_READ));
-    if ( !xDocStream.is() )
-        return false;
-
-    SdDLL::Init();
-
-    SfxMedium aSrcMed("", StreamMode::STD_READ);
-
-    xDocStream->SetVersion(xStorage->GetVersion());
-    xDocStream->SetCryptMaskKey(xStorage->GetKey());
-
-    ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Impress);
-    SdDrawDocument *pDoc = xDocShRef->GetDoc();
-
-    bool bRet = ImportPPT(pDoc, *xDocStream, *xStorage, aSrcMed);
-
-    xDocShRef->DoClose();
-
     return bRet;
 }
 
