@@ -62,21 +62,26 @@ sdr::contact::ViewContact* SdrRectObj::CreateObjectSpecificViewContact()
 }
 
 
-SdrRectObj::SdrRectObj()
-:   mpXPoly(nullptr)
-{
-    bClosedObj=true;
-}
-
-SdrRectObj::SdrRectObj(const tools::Rectangle& rRect)
-:   SdrTextObj(rRect),
+SdrRectObj::SdrRectObj(SdrModel& rSdrModel)
+:   SdrTextObj(rSdrModel),
     mpXPoly(nullptr)
 {
     bClosedObj=true;
 }
 
-SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind)
-:   SdrTextObj(eNewTextKind),
+SdrRectObj::SdrRectObj(
+    SdrModel& rSdrModel,
+    const tools::Rectangle& rRect)
+:   SdrTextObj(rSdrModel, rRect),
+    mpXPoly(nullptr)
+{
+    bClosedObj=true;
+}
+
+SdrRectObj::SdrRectObj(
+    SdrModel& rSdrModel,
+    SdrObjKind eNewTextKind)
+:   SdrTextObj(rSdrModel, eNewTextKind),
     mpXPoly(nullptr)
 {
     DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
@@ -85,8 +90,11 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind)
     bClosedObj=true;
 }
 
-SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const tools::Rectangle& rRect)
-:   SdrTextObj(eNewTextKind,rRect),
+SdrRectObj::SdrRectObj(
+    SdrModel& rSdrModel,
+    SdrObjKind eNewTextKind,
+    const tools::Rectangle& rRect)
+:   SdrTextObj(rSdrModel, eNewTextKind, rRect),
     mpXPoly(nullptr)
 {
     DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
@@ -97,21 +105,6 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const tools::Rectangle& rRect)
 
 SdrRectObj::~SdrRectObj()
 {
-}
-
-SdrRectObj& SdrRectObj::operator=(const SdrRectObj& rCopy)
-{
-    if ( this == &rCopy )
-        return *this;
-
-    SdrTextObj::operator=( rCopy );
-
-    if ( rCopy.mpXPoly )
-        mpXPoly.reset( new XPolygon( *rCopy.mpXPoly ) );
-    else
-        mpXPoly.reset();
-
-    return *this;
 }
 
 void SdrRectObj::SetXPolyDirty()
@@ -266,9 +259,24 @@ OUString SdrRectObj::TakeObjNamePlural() const
     return ImpGetResStr(pResId);
 }
 
-SdrRectObj* SdrRectObj::Clone() const
+SdrRectObj* SdrRectObj::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< SdrRectObj >();
+    return CloneHelper< SdrRectObj >(pTargetModel);
+}
+
+SdrRectObj& SdrRectObj::operator=(const SdrRectObj& rCopy)
+{
+    if ( this == &rCopy )
+        return *this;
+
+    SdrTextObj::operator=( rCopy );
+
+    if ( rCopy.mpXPoly )
+        mpXPoly.reset( new XPolygon( *rCopy.mpXPoly ) );
+    else
+        mpXPoly.reset();
+
+    return *this;
 }
 
 basegfx::B2DPolyPolygon SdrRectObj::TakeXorPoly() const

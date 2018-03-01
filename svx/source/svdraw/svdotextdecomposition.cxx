@@ -973,8 +973,9 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
             // Usual processing - always grow in one of directions
             bool bAllowGrowVertical = !bVerticalWriting;
             bool bAllowGrowHorizontal = bVerticalWriting;
+
             // Compatibility mode for tdf#99729
-            if (pModel->IsAnchoredTextOverflowLegacy())
+            if (getSdrModelFromSdrObject().IsAnchoredTextOverflowLegacy())
             {
                 bAllowGrowVertical = bHorizontalIsBlock;
                 bAllowGrowHorizontal = bVerticalIsBlock;
@@ -1466,7 +1467,7 @@ void SdrTextObj::impHandleChainingEventsDuringDecomposition(SdrOutliner &rOutlin
 
     if (bIsOverflow && !IsInEditMode()) {
         // Initialize Chaining Outliner
-        SdrOutliner &rChainingOutl = pModel->GetChainingOutliner(this);
+        SdrOutliner &rChainingOutl(getSdrModelFromSdrObject().GetChainingOutliner(this));
         ImpInitDrawOutliner( rChainingOutl );
         rChainingOutl.SetUpdateMode(true);
         // We must pass the chaining outliner otherwise we would mess up decomposition

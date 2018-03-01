@@ -177,10 +177,13 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 
     tools::Rectangle aRect ( aInsertPos, aLogicSize );
 
-    SdrGrafObj* pObj = new SdrGrafObj( rGraphic1, aRect );
+    SdrGrafObj* pObj = new SdrGrafObj(
+        pView->getSdrModelFromSdrView(), // TTTT pView should be reference
+        rGraphic1,
+        aRect);
 
     // calling SetGraphicLink here doesn't work
-
+    // Yes, due to the SdrObject had no SdrModel
     //  Path is no longer used as name for the graphics object
 
     ScDrawLayer* pLayer = static_cast<ScDrawLayer*>(pView->GetModel());
@@ -244,9 +247,10 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
 #endif
     }
 
-    SdrMediaObj* pObj = new SdrMediaObj( tools::Rectangle( aInsertPos, aSize ) );
+    SdrMediaObj* pObj = new SdrMediaObj(
+        *rData.GetDocument()->GetDrawLayer(),
+        tools::Rectangle(aInsertPos, aSize));
 
-    pObj->SetModel(rData.GetDocument()->GetDrawLayer()); // set before setURL
     pObj->setURL( realURL, ""/*TODO?*/ );
     pView->InsertObjectAtView( pObj, *pPV, bApi ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE );
 }

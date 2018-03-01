@@ -90,7 +90,7 @@ protected:
     void ImpCleanup3DDepthMapper();
 
 public:
-    E3dScene();
+    E3dScene(SdrModel& rSdrModel);
     virtual ~E3dScene() override;
 
     virtual void SetBoundRectDirty() override;
@@ -130,7 +130,7 @@ public:
     const Camera3D& GetCamera() const { return aCamera; }
     void removeAllNonSelectedObjects();
 
-    virtual E3dScene* Clone() const override;
+    virtual E3dScene* Clone(SdrModel* pTargetModel = nullptr) const override;
     E3dScene& operator=(const E3dScene&);
 
     virtual SdrObjGeoData *NewGeoData() const override;

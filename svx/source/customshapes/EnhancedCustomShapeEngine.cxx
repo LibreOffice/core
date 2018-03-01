@@ -167,7 +167,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText(
                 if ( dynamic_cast<const SdrObjGroup*>( pRenderedShape) ==  nullptr )
                 {
                     SdrObject* pTmp = pRenderedShape;
-                    pRenderedShape = new SdrObjGroup();
+                    pRenderedShape = new SdrObjGroup(rSdrObjCustomShape.getSdrModelFromSdrObject());
                     static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
                 }
                 static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pShadowGeometry->Clone(), 0 );
@@ -181,10 +181,9 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText(
         {
             // #i37011# also create a text object and add at rPos + 1
             SdrObject* pTextObj = SdrObjFactory::MakeNewObject(
+                rSdrObjCustomShape.getSdrModelFromSdrObject(),
                 rSdrObjCustomShape.GetObjInventor(),
-                OBJ_TEXT,
-                nullptr,
-                rSdrObjCustomShape.GetModel());
+                OBJ_TEXT);
 
             // Copy text content
             OutlinerParaObject* pParaObj(rSdrObjCustomShape.GetOutlinerParaObject());
@@ -233,7 +232,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText(
                 if ( dynamic_cast<const SdrObjGroup*>( pRenderedShape) ==  nullptr )
                 {
                     SdrObject* pTmp = pRenderedShape;
-                    pRenderedShape = new SdrObjGroup();
+                    pRenderedShape = new SdrObjGroup(rSdrObjCustomShape.getSdrModelFromSdrObject());
                     static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
                 }
                 static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTextObj );
@@ -248,12 +247,11 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText(
             if ( dynamic_cast<const SdrObjGroup*>( pRenderedShape) ==  nullptr )
             {
                 SdrObject* pTmp = pRenderedShape;
-                pRenderedShape = new SdrObjGroup();
+                pRenderedShape = new SdrObjGroup(rSdrObjCustomShape.getSdrModelFromSdrObject());
                 static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
             }
 
             pRenderedShape->SetPage(rSdrObjCustomShape.GetPage());
-            pRenderedShape->SetModel(rSdrObjCustomShape.GetModel());
         }
     }
 
@@ -391,9 +389,7 @@ awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds()
         SdrObjCustomShape& rSdrObjCustomShape(static_cast< SdrObjCustomShape& >(*GetSdrObjectFromXShape(mxShape)));
         uno::Reference< document::XActionLockable > xLockable( mxShape, uno::UNO_QUERY );
 
-        if(rSdrObjCustomShape.GetModel()
-            && xLockable.is()
-            && !xLockable->isActionLocked())
+        if(xLockable.is() && !xLockable->isActionLocked())
         {
             EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
             tools::Rectangle aRect( aCustomShape2d.GetTextRect() );

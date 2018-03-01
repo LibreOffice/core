@@ -25,28 +25,20 @@
 
 
 //   Forward Declarations
-
-
 class ImpCaptParams;
 
 namespace sdr { namespace properties {
     class CaptionProperties;
 }}
 
-
 //   Helper Class SdrCaptObjGeoData
-
-
 class SdrCaptObjGeoData : public SdrTextObjGeoData
 {
 public:
     tools::Polygon aTailPoly;
 };
 
-
 //   SdrCaptionObj
-
-
 class SVX_DLLPUBLIC SdrCaptionObj : public SdrRectObj
 {
 private:
@@ -73,13 +65,20 @@ private:
     SVX_DLLPRIVATE void ImpRecalcTail();
 
 public:
-    SdrCaptionObj();
-    SdrCaptionObj(const tools::Rectangle& rRect, const Point& rTail);
+    SdrCaptionObj(SdrModel& rSdrModel);
+    SdrCaptionObj(
+        SdrModel& rSdrModel,
+        const tools::Rectangle& rRect,
+        const Point& rTail);
+
     virtual ~SdrCaptionObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
-    virtual SdrCaptionObj* Clone() const override;
+    virtual SdrCaptionObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+
+    // implemented mainly for the purposes of Clone()
+    SdrCaptionObj& operator=(const SdrCaptionObj& rObj);
 
     // for calc: special shadow only for text box
     void SetSpecialTextBoxShadow() { mbSpecialTextBoxShadow = true; }
@@ -92,7 +91,6 @@ public:
     virtual OUString TakeObjNamePlural() const override;
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
-    virtual void SetModel(SdrModel* pNewModel) override;
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     virtual sal_uInt32 GetHdlCount() const override;

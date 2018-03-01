@@ -67,8 +67,9 @@ void ImpSdrObjTextLink::Closed()
     const OUString& /*rMimeType*/, const css::uno::Any & /*rValue */)
 {
     bool bForceReload = false;
-    SdrModel* pModel = pSdrObj ? pSdrObj->GetModel() : nullptr;
-    sfx2::LinkManager* pLinkManager= pModel ? pModel->GetLinkManager() : nullptr;
+    SdrModel* pModel(pSdrObj ? &pSdrObj->getSdrModelFromSdrObject() : nullptr);
+    sfx2::LinkManager* pLinkManager(pModel ? pModel->GetLinkManager() : nullptr);
+
     if( pLinkManager )
     {
         ImpSdrObjTextLinkUserData* pData=pSdrObj->GetLinkUserData();
@@ -254,7 +255,7 @@ ImpSdrObjTextLinkUserData* SdrTextObj::GetLinkUserData() const
 void SdrTextObj::ImpRegisterLink()
 {
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
-    sfx2::LinkManager* pLinkManager=pModel!=nullptr ? pModel->GetLinkManager() : nullptr;
+    sfx2::LinkManager* pLinkManager(getSdrModelFromSdrObject().GetLinkManager());
     if (pLinkManager!=nullptr && pData!=nullptr && pData->pLink==nullptr) { // don't register twice
         pData->pLink = new ImpSdrObjTextLink(this);
         pLinkManager->InsertFileLink(*pData->pLink,OBJECT_CLIENT_FILE,pData->aFileName,
@@ -266,7 +267,7 @@ void SdrTextObj::ImpRegisterLink()
 void SdrTextObj::ImpDeregisterLink()
 {
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
-    sfx2::LinkManager* pLinkManager=pModel!=nullptr ? pModel->GetLinkManager() : nullptr;
+    sfx2::LinkManager* pLinkManager(getSdrModelFromSdrObject().GetLinkManager());
     if (pLinkManager!=nullptr && pData!=nullptr && pData->pLink!=nullptr) { // don't register twice
         // when doing Remove, *pLink is deleted implicitly
         pLinkManager->Remove( pData->pLink.get() );

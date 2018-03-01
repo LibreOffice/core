@@ -35,9 +35,9 @@ SdrUndoAction* lcl_createUndo(SdrObject& rObject, Action _eAction, const char* p
     uno::Reference< report::XGroup> xGroup = xSection->getGroup();
     SdrUndoAction* pUndo = nullptr;
     if ( xGroup.is() )
-        pUndo = new OUndoGroupSectionAction(*rObject.GetModel(),_eAction,OGroupHelper::getMemberFunction(xSection),xGroup,xReportComponent,pCommentId);
+        pUndo = new OUndoGroupSectionAction(rObject.getSdrModelFromSdrObject(),_eAction,OGroupHelper::getMemberFunction(xSection),xGroup,xReportComponent,pCommentId);
     else
-        pUndo = new OUndoReportSectionAction(*rObject.GetModel(),_eAction,OReportHelper::getMemberFunction(xSection),xSection->getReportDefinition(),xReportComponent,pCommentId);
+        pUndo = new OUndoReportSectionAction(rObject.getSdrModelFromSdrObject(),_eAction,OReportHelper::getMemberFunction(xSection),xSection->getReportDefinition(),xReportComponent,pCommentId);
     return pUndo;
 }
 
