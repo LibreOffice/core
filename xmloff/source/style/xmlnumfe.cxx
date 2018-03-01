@@ -349,7 +349,7 @@ void SvXMLNumFmtExport::WriteColorElement_Impl( const Color& rColor )
     FinishTextElement_Impl();
 
     OUStringBuffer aColStr( 7 );
-    ::sax::Converter::convertColor( aColStr, rColor.GetColor() );
+    ::sax::Converter::convertColor( aColStr, rColor );
     rExport.AddAttribute( XML_NAMESPACE_FO, XML_COLOR,
                           aColStr.makeStringAndClear() );
 

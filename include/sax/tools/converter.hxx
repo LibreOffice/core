@@ -29,6 +29,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/util/MeasureUnit.hpp>
+#include <tools/color.hxx>
 
 
 namespace com { namespace sun { namespace star {
@@ -97,10 +98,21 @@ public:
     /** convert string to rgb color */
     static bool convertColor( sal_Int32& rColor,
                               const OUString&rValue );
+    static inline bool convertColor( ::Color& rColor,
+                              const OUString&rValue )
+    {
+        sal_Int32 n(rColor);
+        bool b = convertColor( n, rValue );
+        if (b) rColor = n;
+        return b;
+    }
 
     /** convert color to string */
     static void convertColor( OUStringBuffer &rBuffer,
                               sal_Int32 nColor );
+    static inline void convertColor( OUStringBuffer &rBuffer,
+                              ::Color nColor )
+    { convertColor( rBuffer, sal_Int32(nColor) ); }
 
     /** convert string to number with optional min and max values */
     static bool convertNumber( sal_Int32& rValue,
