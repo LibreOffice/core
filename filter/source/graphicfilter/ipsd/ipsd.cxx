@@ -115,7 +115,7 @@ bool PSDReader::ReadPSD(Graphic & rGraphic )
     }
 
     Size aBitmapSize( mpFileHeader->nColumns, mpFileHeader->nRows );
-    mpBitmap.reset( new vcl::bitmap::RawBitmap( aBitmapSize ) );
+    mpBitmap.reset( new vcl::bitmap::RawBitmap( aBitmapSize, 24 ) );
     if ( mpPalette && mbStatus )
     {
         mvPalette.resize( 256 );

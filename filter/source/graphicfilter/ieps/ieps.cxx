@@ -662,7 +662,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                     {
                         rStream.Seek( nBufStartPos + ( pDest - pBuf.get() ) );
 
-                        vcl::bitmap::RawBitmap aBitmap( Size( nWidth, nHeight ) );
+                        vcl::bitmap::RawBitmap aBitmap( Size( nWidth, nHeight ), 24 );
                         {
                             bool bIsValid = true;
                             sal_uInt8 nDat = 0;

@@ -30,28 +30,37 @@ class VCL_DLLPUBLIC RawBitmap
 friend BitmapEx VCL_DLLPUBLIC CreateFromData( RawBitmap&& rawBitmap );
     std::unique_ptr<sal_uInt8[]> mpData;
     Size maSize;
+    sal_uInt8 mnBitCount;
 public:
-    RawBitmap(Size const & rSize)
-        : mpData(new sal_uInt8[ rSize.getWidth() * 3 * rSize.getHeight()]),
-          maSize(rSize)
+    RawBitmap(Size const & rSize, sal_uInt8 nBitCount)
+        : mpData(new sal_uInt8[ rSize.getWidth() * nBitCount/8 * rSize.getHeight()]),
+          maSize(rSize),
+          mnBitCount(nBitCount)
     {
+        assert(nBitCount == 24 || nBitCount == 32);
     }
     void SetPixel(long nY, long nX, Color nColor)
     {
-        long p = (nY * maSize.getWidth() + nX) * 3;
+        long p = (nY * maSize.getWidth() + nX) * (mnBitCount/8);
         mpData[ p++ ] = nColor.GetRed();
         mpData[ p++ ] = nColor.GetGreen();
-        mpData[ p   ] = nColor.GetBlue();
+        mpData[ p++ ] = nColor.GetBlue();
+        if (mnBitCount == 32)
+            mpData[ p ] = nColor.GetTransparency();
     }
     Color GetPixel(long nY, long nX) const
     {
-        long p = (nY * maSize.getWidth() + nX) * 3;
-        return Color( mpData[p], mpData[p+1], mpData[p+2]);
+        long p = (nY * maSize.getWidth() + nX) * mnBitCount/8;
+        if (mnBitCount == 24)
+            return Color( mpData[p], mpData[p+1], mpData[p+2]);
+        else
+            return Color( mpData[p+3], mpData[p], mpData[p+1], mpData[p+2]);
     }
     // so we don't accidentally leave any code in that uses palette color indexes
     void SetPixel(long nY, long nX, BitmapColor nColor) = delete;
     long Height() { return maSize.Height(); }
     long Width() { return maSize.Width(); }
+    sal_uInt8 GetBitCount() { return mnBitCount; }
 };
 
 BitmapEx VCL_DLLPUBLIC loadFromName(const OUString& rFileName, const ImageLoadFlags eFlags = ImageLoadFlags::NONE);

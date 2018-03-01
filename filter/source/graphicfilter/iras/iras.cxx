@@ -173,7 +173,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     if (m_rRAS.remainingSize() * nMaxCompression < nBitSize / 8)
         return false;
 
-    vcl::bitmap::RawBitmap aBmp(Size(mnWidth, mnHeight));
+    vcl::bitmap::RawBitmap aBmp(Size(mnWidth, mnHeight), 24);
 
     // read in the bitmap data
     mbStatus = ImplReadBody(aBmp, aPalette);

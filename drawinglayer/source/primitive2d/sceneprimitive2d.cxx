@@ -49,7 +49,7 @@ namespace
         if(nWidth && nHeight)
         {
             const Size aDestSize(nWidth, nHeight);
-            vcl::bitmap::RawBitmap aContent(aDestSize);
+            vcl::bitmap::RawBitmap aContent(aDestSize, 32);
 
             if(mnAntiAlialize)
             {
