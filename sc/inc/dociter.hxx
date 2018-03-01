@@ -284,7 +284,7 @@ private:
     bool            bAdvanceQuery;
     bool            bIgnoreMismatchOnLeadingStrings;
 
-    bool            GetThis();
+    ScBaseCell*     GetThis();
 
                     /* Only works if no regular expression is involved, only
                        searches for rows in one column, and only the first
@@ -302,8 +302,8 @@ public:
                                         const ScQueryParam& aParam, bool bMod = true);
                                         // for bMod = FALSE the QueryParam has to be filled
                                         // (bIsString)
-    bool            GetFirst();
-    bool            GetNext();
+    ScBaseCell*     GetFirst();
+    ScBaseCell*     GetNext();
     SCCOL           GetCol() { return nCol; }
     SCROW           GetRow() { return nRow; }
 

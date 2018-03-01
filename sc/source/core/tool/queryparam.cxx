@@ -20,8 +20,6 @@
 #include "queryparam.hxx"
 #include "queryentry.hxx"
 
-#include <svl/zforlist.hxx>
-
 namespace {
 
 const size_t MAXQUERY = 8;
@@ -168,17 +166,17 @@ void ScQueryParamBase::Resize(size_t nNew)
     }
 }
 
-void ScQueryParamBase::FillInExcelSyntax(const OUString& rStr, SCSIZE nIndex, SvNumberFormatter *pFormatter)
+void ScQueryParamBase::FillInExcelSyntax(const OUString& rStr, SCSIZE nIndex)
 {
     const String aCellStr = rStr;
-    if ( nIndex >= maEntries.size() )
-        Resize( nIndex+1 );
-
-    ScQueryEntry& rEntry = GetEntry(nIndex);
-    ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-
     if (aCellStr.Len() > 0)
     {
+        if ( nIndex >= maEntries.size() )
+            Resize( nIndex+1 );
+
+        ScQueryEntry& rEntry = GetEntry(nIndex);
+        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+
         rEntry.bDoQuery = sal_True;
         // Operatoren herausfiltern
         if (aCellStr.GetChar(0) == '<')
@@ -220,21 +218,6 @@ void ScQueryParamBase::FillInExcelSyntax(const OUString& rStr, SCSIZE nIndex, Sv
                 rItem.maString = aCellStr;
             rEntry.eOp = SC_EQUAL;
         }
-
-    }
-
-    if (pFormatter)
-    {
-        sal_uInt32 nFormat = 0;
-        bool bNumber = pFormatter->IsNumberFormat( rItem.maString, nFormat, rItem.mfVal);
-        rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
-
-        /* TODO: pFormatter currently is also used as a flag whether matching
-         * empty cells with an empty string is triggered from the interpreter.
-         * This could be handled independently if all queries should support
-         * it, needs to be evaluated if that actually is desired. */
-        if (rItem.meType == ScQueryEntry::ByString)
-            rItem.mbMatchEmpty = (rEntry.eOp == SC_EQUAL && rItem.maString.isEmpty());
     }
 }
 

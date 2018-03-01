@@ -56,31 +56,6 @@ namespace
     {
         rStr = ScGlobal::pCharClass->uppercase(rStr.trim());
     }
-
-    void lcl_FillBlankCells( std::vector<ColEntry> &rSrcCols, std::vector<ColEntry> &rDestCols, SCROW nLastRow, bool bMatchEmpty )
-    {
-        rDestCols.clear();
-
-        if (!bMatchEmpty)
-        {
-            rDestCols = rSrcCols;
-            return;
-        }
-
-        for( SCROW i = 0, n = 0; i <= nLastRow; ++i )
-        {
-            rDestCols.push_back(ColEntry());
-            rDestCols.back().nRow = i;
-
-            if ( rSrcCols[n].nRow == i )
-            {
-                rDestCols.back().pCell = rSrcCols[n].pCell;
-                ++n;
-            }
-            else
-                rDestCols.back().pCell = NULL;
-        }
-    }
 }
 
 ScDocumentIterator::ScDocumentIterator( ScDocument* pDocument,
@@ -1203,7 +1178,7 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
     nAttrEndRow = 0;
 }
 
-bool ScQueryCellIterator::GetThis()
+ScBaseCell* ScQueryCellIterator::GetThis()
 {
     if (nTab >= pDoc->GetTableCount())
         OSL_FAIL("try to access index out of bounds, FIX IT");
@@ -1218,13 +1193,6 @@ bool ScQueryCellIterator::GetThis()
         !mpParam->bHasHeader && rItem.meType == ScQueryEntry::ByString &&
         ((mpParam->bByRow && nRow == mpParam->nRow1) ||
          (!mpParam->bByRow && nCol == mpParam->nCol1));
-
-    bool bMatchEmpty = ( rItem.mbMatchEmpty && rEntry.GetQueryItems().size() == 1 );
-
-    std::vector<ColEntry> rColItems;
-    SCROW nLastRow = pCol->GetLastDataPos();
-    lcl_FillBlankCells( pCol->maItems, rColItems, std::max(nLastRow, mpParam->nRow2), bMatchEmpty );
-
     for ( ;; )
     {
         if ( nRow > mpParam->nRow2 )
@@ -1235,16 +1203,13 @@ bool ScQueryCellIterator::GetThis()
             do
             {
                 if ( ++nCol > mpParam->nCol2 )
-                    return false; // Over and out
+                    return NULL; // Over and out
                 if ( bAdvanceQuery )
                 {
                     AdvanceQueryParamEntryField();
                     nFirstQueryField = rEntry.nField;
                 }
-
                 pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
-                nLastRow = pCol->GetLastDataPos();
-                lcl_FillBlankCells( pCol->maItems, rColItems, std::max(nLastRow, mpParam->nRow2), bMatchEmpty );
             } while ( pCol->maItems.empty() );
             pCol->Search( nRow, nColRow );
             bFirstStringIgnore = bIgnoreMismatchOnLeadingStrings &&
@@ -1252,19 +1217,13 @@ bool ScQueryCellIterator::GetThis()
                 mpParam->bByRow;
         }
 
-        while ( nColRow < rColItems.size() && rColItems[nColRow].nRow < nRow )
+        while ( nColRow < pCol->maItems.size() && pCol->maItems[nColRow].nRow < nRow )
             nColRow++;
 
-        if ( nColRow < rColItems.size() &&
-                (nRow = rColItems[nColRow].nRow) <= mpParam->nRow2 )
+        if ( nColRow < pCol->maItems.size() &&
+                (nRow = pCol->maItems[nColRow].nRow) <= mpParam->nRow2 )
         {
-            ScBaseCell* pCell = rColItems[nColRow].pCell;
-
-            // empty cell when empty cells should be matched
-            if ( bMatchEmpty && ( pCell == NULL ) )
-                return true;
-
-
+            ScBaseCell* pCell = pCol->maItems[nColRow].pCell;
             if (bAllStringIgnore && pCell->HasStringData())
                 ++nRow;
             else
@@ -1276,7 +1235,7 @@ bool ScQueryCellIterator::GetThis()
                 {
                     if ( nTestEqualCondition && bTestEqualCondition )
                         nTestEqualCondition |= nTestEqualConditionMatched;
-                    return true; // Found it!
+                    return pCell; // Found it!
                 }
                 else if ( nStopOnMismatch )
                 {
@@ -1287,7 +1246,7 @@ bool ScQueryCellIterator::GetThis()
                     {
                         nTestEqualCondition |= nTestEqualConditionMatched;
                         nStopOnMismatch |= nStopOnMismatchOccurred;
-                        return false;
+                        return NULL;
                     }
                     bool bStop;
                     if (bFirstStringIgnore)
@@ -1305,7 +1264,7 @@ bool ScQueryCellIterator::GetThis()
                     if (bStop)
                     {
                         nStopOnMismatch |= nStopOnMismatchOccurred;
-                        return false;
+                        return NULL;
                     }
                 }
                 else
@@ -1318,7 +1277,7 @@ bool ScQueryCellIterator::GetThis()
     }
 }
 
-bool ScQueryCellIterator::GetFirst()
+ScBaseCell* ScQueryCellIterator::GetFirst()
 {
     if (nTab >= pDoc->GetTableCount())
         OSL_FAIL("try to access index out of bounds, FIX IT");
@@ -1331,7 +1290,7 @@ bool ScQueryCellIterator::GetFirst()
     return GetThis();
 }
 
-bool ScQueryCellIterator::GetNext()
+ScBaseCell* ScQueryCellIterator::GetNext()
 {
     ++nRow;
     if ( nStopOnMismatch )
@@ -1404,17 +1363,17 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
     {
         // First equal entry or last smaller than (greater than) entry.
         SCSIZE nColRowSave;
-        bool bNext = false;
+        ScBaseCell* pNext = 0;
         do
         {
             nFoundCol = GetCol();
             nFoundRow = GetRow();
             nColRowSave = nColRow;
-        } while ( !IsEqualConditionFulfilled() && (bNext = GetNext() ) );
+        } while ( !IsEqualConditionFulfilled() && (pNext = GetNext()) != NULL );
 
         // There may be no pNext but equal condition fulfilled if regular
         // expressions are involved. Keep the found entry and proceed.
-        if (!bNext && !IsEqualConditionFulfilled())
+        if (!pNext && !IsEqualConditionFulfilled())
         {
             // Step back to last in range and adjust position markers for
             // GetNumberFormat() or similar.
