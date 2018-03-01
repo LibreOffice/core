@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_2eda5379",
+        "filename": "dbaccess/source/filter/hsqldb/hsqlbinarynode.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-03-01T08:53:40Z",
+      "side": 1,
+      "message": "You should probably use the MPL-only license header for new files.",
+      "revId": "d024fad6345c3f78556705a24f413d40ab982ccc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
