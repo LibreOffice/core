@@ -269,12 +269,12 @@ struct SwPaintProperties {
     // The help lines will be collected and merged in gProp.pSSubsLines. These will
     // be compared with pSLines before the work in order to avoid help lines
     // to hide borders.
-    BorderLines        *pBLines;
-    SwLineRects        *pSLines;
-    SwSubsRects        *pSSubsLines;
+    std::unique_ptr<BorderLines> pBLines;
+    std::unique_ptr<SwLineRects> pSLines;
+    std::unique_ptr<SwSubsRects> pSSubsLines;
 
     // global variable for sub-lines of body, header, footer, section and footnote frames.
-    SwSubsRects        *pSSpecSubsLines;
+    std::unique_ptr<SwSubsRects> pSSpecSubsLines;
     SfxProgress        *pSProgress;
 
     // Sizes of a pixel and the corresponding halves. Will be reset when
@@ -299,10 +299,6 @@ struct SwPaintProperties {
       , pSRetoucheFly(nullptr)
       , pSRetoucheFly2(nullptr)
       , pSFlyOnlyDraw(nullptr)
-      , pBLines(nullptr)
-      , pSLines(nullptr)
-      , pSSubsLines(nullptr)
-      , pSSpecSubsLines(nullptr)
       , pSProgress(nullptr)
       , nSPixelSzW(0)
       , nSPixelSzH(0)
@@ -418,10 +414,10 @@ SwSavePaintStatics::SwSavePaintStatics()
     pSRetoucheFly = gProp.pSRetoucheFly;
     pSRetoucheFly2 = gProp.pSRetoucheFly2;
     pSFlyOnlyDraw = gProp.pSFlyOnlyDraw;
-    pBLines = gProp.pBLines;
-    pSLines = gProp.pSLines;
-    pSSubsLines = gProp.pSSubsLines;
-    pSSpecSubsLines = gProp.pSSpecSubsLines;
+    pBLines = std::move(gProp.pBLines);
+    pSLines = std::move(gProp.pSLines);
+    pSSubsLines = std::move(gProp.pSSubsLines);
+    pSSpecSubsLines = std::move(gProp.pSSpecSubsLines);
     pSProgress = gProp.pSProgress;
     nSPixelSzW = gProp.nSPixelSzW;
     nSPixelSzH = gProp.nSPixelSzH;
@@ -442,10 +438,6 @@ SwSavePaintStatics::SwSavePaintStatics()
     gProp.nSHalfPixelSzW = gProp.nSHalfPixelSzH =
     gProp.nSMinDistPixelW = gProp.nSMinDistPixelH = 0;
     gProp.aSScaleX = gProp.aSScaleY = 1.0;
-    gProp.pBLines = nullptr;
-    gProp.pSLines = nullptr;
-    gProp.pSSubsLines = nullptr;
-    gProp.pSSpecSubsLines = nullptr;
     gProp.pSProgress = nullptr;
 }
 
@@ -458,10 +450,10 @@ SwSavePaintStatics::~SwSavePaintStatics()
     gProp.pSRetoucheFly       = pSRetoucheFly;
     gProp.pSRetoucheFly2      = pSRetoucheFly2;
     gProp.pSFlyOnlyDraw       = pSFlyOnlyDraw;
-    gProp.pBLines             = pBLines;
-    gProp.pSLines             = pSLines;
-    gProp.pSSubsLines         = pSSubsLines;
-    gProp.pSSpecSubsLines     = pSSpecSubsLines;
+    gProp.pBLines             = std::move(pBLines);
+    gProp.pSLines             = std::move(pSLines);
+    gProp.pSSubsLines         = std::move(pSSubsLines);
+    gProp.pSSpecSubsLines     = std::move(pSSpecSubsLines);
     gProp.pSProgress          = pSProgress;
     gProp.nSPixelSzW          = nSPixelSzW;
     gProp.nSPixelSzH          = nSPixelSzH;
@@ -3003,7 +2995,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
     const bool bExtraData = ::IsExtraData( GetFormat()->GetDoc() );
 
-    gProp.pSLines = new SwLineRects;   //Container for borders.
+    gProp.pSLines.reset(new SwLineRects); // Container for borders.
 
     // #104289#. During painting, something (OLE) can
     // load the linguistic, which in turn can cause a reformat
@@ -3056,10 +3048,10 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
             {
                 if ( pSh->GetWin() )
                 {
-                    gProp.pSSubsLines = new SwSubsRects;
-                    gProp.pSSpecSubsLines = new SwSubsRects;
+                    gProp.pSSubsLines.reset(new SwSubsRects);
+                    gProp.pSSpecSubsLines.reset(new SwSubsRects);
                 }
-                gProp.pBLines = new BorderLines;
+                gProp.pBLines.reset(new BorderLines);
 
                 aPaintRect.Intersection_( aRect );
 
@@ -3156,9 +3148,9 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                 gProp.pSLines->PaintLines( pSh->GetOut(), gProp );
                 if ( pSh->GetWin() )
                 {
-                    gProp.pSSubsLines->PaintSubsidiary( pSh->GetOut(), gProp.pSLines, gProp );
-                    DELETEZ( gProp.pSSubsLines );
-                    DELETEZ( gProp.pSSpecSubsLines );
+                    gProp.pSSubsLines->PaintSubsidiary( pSh->GetOut(), gProp.pSLines.get(), gProp );
+                    gProp.pSSubsLines.reset();
+                    gProp.pSSpecSubsLines.reset();
                 }
                 // fdo#42750: delay painting these until after subsidiary lines
                 // fdo#45562: delay painting these until after hell layer
@@ -3180,7 +3172,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                 if ( bExtraData )
                     pPage->RefreshExtraData( aPaintRect );
 
-                DELETEZ(gProp.pBLines);
+                gProp.pBLines.reset();
                 s_pVout->Leave();
 
                 // #i68597#
@@ -3267,7 +3259,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
         pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
     }
 
-    DELETEZ( gProp.pSLines );
+    gProp.pSLines.reset();
 
     if ( bResetRootPaint )
         SwRootFrame::s_isInPaint = false;
@@ -3861,17 +3853,16 @@ void SwCellFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
 struct BorderLinesGuard
 {
-    explicit BorderLinesGuard() : m_pBorderLines(gProp.pBLines)
+    explicit BorderLinesGuard() : m_pBorderLines(std::move(gProp.pBLines))
     {
-        gProp.pBLines = new BorderLines;
+        gProp.pBLines.reset(new BorderLines);
     }
     ~BorderLinesGuard()
     {
-        delete gProp.pBLines;
-        gProp.pBLines = m_pBorderLines;
+        gProp.pBLines = std::move(m_pBorderLines);
     }
 private:
-    BorderLines *const m_pBorderLines;
+    std::unique_ptr<BorderLines> m_pBorderLines;
 };
 
 void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
@@ -4079,7 +4070,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
         else
         {
             // create new subsidiary lines
-            gProp.pSSubsLines = new SwSubsRects;
+            gProp.pSSubsLines.reset(new SwSubsRects);
             bSubsLineRectsCreated = true;
         }
 
@@ -4093,20 +4084,22 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
         else
         {
             // create new special subsidiary lines
-            gProp.pSSpecSubsLines = new SwSubsRects;
+            gProp.pSSpecSubsLines.reset(new SwSubsRects);
             bSpecSubsLineRectsCreated = true;
         }
         // Add subsidiary lines of fly frame and its lowers
         RefreshLaySubsidiary( pPage, aRect );
         // paint subsidiary lines of fly frame and its lowers
         gProp.pSSpecSubsLines->PaintSubsidiary( &rRenderContext, nullptr, gProp );
-        gProp.pSSubsLines->PaintSubsidiary( &rRenderContext, gProp.pSLines, gProp );
+        gProp.pSSubsLines->PaintSubsidiary(&rRenderContext, gProp.pSLines.get(), gProp);
         if ( !bSubsLineRectsCreated )
             // unlock subsidiary lines
             gProp.pSSubsLines->LockLines( false );
         else
+        {
             // delete created subsidiary lines container
-            DELETEZ( gProp.pSSubsLines );
+            gProp.pSSubsLines.reset();
+        }
 
         if ( !bSpecSubsLineRectsCreated )
             // unlock special subsidiary lines
@@ -4114,7 +4107,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
         else
         {
             // delete created special subsidiary lines container
-            DELETEZ( gProp.pSSpecSubsLines );
+            gProp.pSSpecSubsLines.reset();
         }
     }
 
@@ -6356,9 +6349,9 @@ void SwPageFrame::RefreshSubsidiary( const SwRect &rRect ) const
             bool bDelSubs = false;
             if ( !gProp.pSSubsLines )
             {
-                gProp.pSSubsLines = new SwSubsRects;
+                gProp.pSSubsLines.reset(new SwSubsRects);
                 // OD 20.12.2002 #106318# - create container for special subsidiary lines
-                gProp.pSSpecSubsLines = new SwSubsRects;
+                gProp.pSSpecSubsLines.reset(new SwSubsRects);
                 bDelSubs = true;
             }
 
@@ -6369,10 +6362,10 @@ void SwPageFrame::RefreshSubsidiary( const SwRect &rRect ) const
                 // OD 20.12.2002 #106318# - paint special subsidiary lines
                 // and delete its container
                 gProp.pSSpecSubsLines->PaintSubsidiary( gProp.pSGlobalShell->GetOut(), nullptr, gProp );
-                DELETEZ( gProp.pSSpecSubsLines );
+                gProp.pSSpecSubsLines.reset();
 
-                gProp.pSSubsLines->PaintSubsidiary( gProp.pSGlobalShell->GetOut(), gProp.pSLines, gProp );
-                DELETEZ( gProp.pSSubsLines );
+                gProp.pSSubsLines->PaintSubsidiary(gProp.pSGlobalShell->GetOut(), gProp.pSLines.get(), gProp);
+                gProp.pSSubsLines.reset();
             }
         }
     }
@@ -6800,7 +6793,8 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
     // sub-lines in <pSpecSubsLine> array.
     const bool bSpecialSublines = IsBodyFrame() || IsHeaderFrame() || IsFooterFrame() ||
                                   IsFootnoteFrame() || IsSctFrame();
-    SwLineRects* pUsedSubsLines = bSpecialSublines ? gProp.pSSpecSubsLines : gProp.pSSubsLines;
+    SwLineRects *const pUsedSubsLines = bSpecialSublines
+            ? gProp.pSSpecSubsLines.get() : gProp.pSSubsLines.get();
 
     // NOTE: for cell frames only left and right (horizontal layout) respectively
     //      top and bottom (vertical layout) lines painted.
@@ -7333,7 +7327,7 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
 
         SwViewShellImp *pImp = pSh->Imp();
         gProp.pSFlyOnlyDraw = pFly;
-        gProp.pSLines = new SwLineRects;
+        gProp.pSLines.reset(new SwLineRects);
 
         // OD 09.12.2002 #103045# - determine page, fly frame is on
         const SwPageFrame* pFlyPage = pFly->FindPageFrame();
@@ -7356,7 +7350,7 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
                           pFlyPage->IsRightToLeft(),
                           &aSwRedirector );
         gProp.pSLines->PaintLines( pDev, gProp );
-        DELETEZ( gProp.pSLines );
+        gProp.pSLines.reset();
         gProp.pSFlyOnlyDraw = nullptr;
 
         gProp.pSFlyMetafileOut = nullptr;
