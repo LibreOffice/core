@@ -1442,7 +1442,7 @@ void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     if (xWatermark.is())
     {
         drawing::HomogenMatrix3 aMatrix;
-        sal_uInt32 nColor = 0xc0c0c0;
+        Color nColor = 0xc0c0c0;
         sal_Int16 nTransparency = 50;
         sal_Int16 nAngle = 45;
         OUString aFont = "";
@@ -1476,7 +1476,7 @@ void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     OUString sFont = rWatermark.GetFont();
     sal_Int16 nAngle = rWatermark.GetAngle();
     sal_Int16 nTransparency = rWatermark.GetTransparency();
-    sal_uInt32 nColor = rWatermark.GetColor();
+    Color nColor = rWatermark.GetColor();
 
     // Calc the ratio.
     double fRatio = 0;
