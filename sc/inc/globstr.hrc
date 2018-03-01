@@ -349,6 +349,7 @@
 
 #define STR_UNDO_CHARTDATA          261
 #define STR_UNDO_ORIGINALSIZE       262
+#define STR_UNDO_FITCELLSIZE        263
 
 #define STR_LINKERROR               263
 #define STR_LINKERRORFILE           264

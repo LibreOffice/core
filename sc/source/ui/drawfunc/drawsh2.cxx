@@ -209,6 +209,8 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         rSet.DisableItem( SID_DRAW_HLINK_EDIT );
         rSet.DisableItem( SID_DRAW_HLINK_DELETE );
         rSet.DisableItem( SID_OPEN_HYPERLINK );
+        // Fit to cell only works with a single graphic
+        rSet.DisableItem( SID_FITCELLSIZE );
     }
     else if ( nMarkCount == 1 )
     {
@@ -245,6 +247,11 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
                 rSet.DisableItem( SID_ANCHOR_TOGGLE );
             }
         }
+
+        // Fit to cell is only available for cell anchored graphics obviously
+        if (pView->GetAnchorType() != SCA_CELL &&
+            pView->GetAnchorType() != SCA_CELL_RESIZE)
+            rSet.DisableItem( SID_FITCELLSIZE );
     }
     if ( !bCanRename )
     {
@@ -268,6 +275,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
             //  sonstiges
         rSet.DisableItem( SID_ANCHOR_TOGGLE );
         rSet.DisableItem( SID_ORIGINALSIZE );
+        rSet.DisableItem( SID_FITCELLSIZE );
         rSet.DisableItem( SID_ATTR_TRANSFORM );
     }
 

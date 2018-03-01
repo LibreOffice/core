@@ -70,8 +70,9 @@ public:
                                     GetInputStream();
         void                        SetInputStream(css::uno::Reference<css::io::XInputStream> const&);
 
-protected:
+        virtual bool shouldKeepAspectRatio() const override { return true; }
 
+protected:
         void                mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
         virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 

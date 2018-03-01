@@ -348,6 +348,7 @@
             <menu:menu menu:id=".uno:FormatImageMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:Crop"/>
+                    <menu:menuitem menu:id=".uno:FitCellSize"/>
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:ExternalEdit"/>
                     <menu:menuitem menu:id=".uno:ChangePicture"/>

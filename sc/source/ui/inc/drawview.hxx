@@ -109,6 +109,7 @@ public:
     void            UpdateUserViewOptions();
 
     void            SetMarkedOriginalSize();
+    void            FitToCellSize();
 
     bool            SelectObject( const OUString& rName );
     bool            HasMarkedControl() const;

@@ -877,6 +877,9 @@ public:
     // #i25616#
     bool DoesSupportTextIndentingOnLineWidthChange() const { return mbSupportTextIndentingOnLineWidthChange;}
 
+    /// Whether the aspect ratio should be kept by default when resizing.
+    virtual bool shouldKeepAspectRatio() const { return false; }
+
     // application specific data
     sal_uInt16 GetUserDataCount() const;
     SdrObjUserData* GetUserData(sal_uInt16 nNum) const;

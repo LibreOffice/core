@@ -2015,6 +2015,11 @@
           <value xml:lang="en-US">~Original Size</value>
         </prop>
       </node>
+      <node oor:name=".uno:FitCellSize" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Fit to Cell Size</value>
+        </prop>
+      </node>
       <node oor:name=".uno:GridMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Gr~id and Helplines</value>

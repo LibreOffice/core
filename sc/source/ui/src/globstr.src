@@ -273,6 +273,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Original Size" ;
     };
+    String STR_UNDO_FITCELLSIZE
+    {
+        Text [ en-US ] = "Fit to Cell Size" ;
+    };
     String STR_UNDO_UPDATELINK
     {
         Text [ en-US ] = "Update Link" ;

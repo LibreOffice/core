@@ -40,6 +40,7 @@
 #include "globstr.hrc"
 #include "chartarr.hxx"
 #include <gridwin.hxx>
+#include <userdat.hxx>
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -540,6 +541,51 @@ void ScDrawView::SetMarkedOriginalSize()
     }
     else
         delete pUndoGroup;
+}
+
+void ScDrawView::FitToCellSize()
+{
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+
+    if (rMarkList.GetMarkCount() != 1)
+    {
+        SAL_WARN("sc.ui", "Fit to cell only works with one graphic!");
+        return;
+    }
+
+    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+
+    ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType(*pObj);
+    if (aAnchorType != SCA_CELL && aAnchorType != SCA_CELL_RESIZE)
+    {
+        SAL_WARN("sc.ui", "Fit to cell only works with cell anchored graphics!");
+        return;
+    }
+
+    SdrUndoGroup* pUndoGroup = new SdrUndoGroup(*GetModel());
+    ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObj);
+    Rectangle aGraphicRect = pObj->GetSnapRect();
+    Rectangle aCellRect = ScDrawLayer::GetCellRect( *pDoc, pObjData->maStart, true);
+
+    // For graphic objects, we want to keep the aspect ratio
+    if (pObj->shouldKeepAspectRatio())
+    {
+        double fScaleX = static_cast<double>(aCellRect.GetWidth()) / static_cast<double>(aGraphicRect.GetWidth());
+        double fScaleY = static_cast<double>(aCellRect.GetHeight()) / static_cast<double>(aGraphicRect.GetHeight());
+        double fScaleMin = std::min(fScaleX, fScaleY);
+
+        aCellRect.setWidth(static_cast<double>(aGraphicRect.GetWidth()) * fScaleMin);
+        aCellRect.setHeight(static_cast<double>(aGraphicRect.GetHeight()) * fScaleMin);
+    }
+
+    pUndoGroup->AddAction( new SdrUndoGeoObj( *pObj ) );
+
+    pObj->SetSnapRect(aCellRect);
+
+    pUndoGroup->SetComment(ScGlobal::GetRscString( STR_UNDO_FITCELLSIZE ));
+    ScDocShell* pDocSh = pViewData->GetDocShell();
+    pDocSh->GetUndoManager()->AddUndoAction(pUndoGroup);
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
