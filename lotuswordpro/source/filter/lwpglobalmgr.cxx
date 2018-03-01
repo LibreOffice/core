@@ -59,42 +59,20 @@ std::map< sal_uInt32,LwpGlobalMgr* > LwpGlobalMgr::m_ThreadMap;
 LwpGlobalMgr::LwpGlobalMgr(LwpSvStream* pSvStream)
 {
     if (pSvStream)
-        m_pObjFactory = new LwpObjectFactory(pSvStream);
-    else
-        m_pObjFactory = nullptr;
-    m_pBookmarkMgr = new LwpBookmarkMgr;
-    m_pChangeMgr = new LwpChangeMgr;
-    m_pXFFontFactory = new XFFontFactory;
-    m_pXFStyleManager = new XFStyleManager;
+        m_pObjFactory.reset( new LwpObjectFactory(pSvStream) );
+    m_pBookmarkMgr.reset( new LwpBookmarkMgr );
+    m_pChangeMgr.reset( new LwpChangeMgr );
+    m_pXFFontFactory.reset( new XFFontFactory );
+    m_pXFStyleManager.reset( new XFStyleManager );
 }
 
 LwpGlobalMgr::~LwpGlobalMgr()
 {
-    if (m_pObjFactory)
-    {
-        delete m_pObjFactory;
-        m_pObjFactory = nullptr;
-    }
-    if (m_pBookmarkMgr)
-    {
-        delete m_pBookmarkMgr;
-        m_pBookmarkMgr = nullptr;
-    }
-    if (m_pChangeMgr)
-    {
-        delete m_pChangeMgr;
-        m_pChangeMgr = nullptr;
-    }
-    if (m_pXFFontFactory)
-    {
-        delete m_pXFFontFactory;
-        m_pXFFontFactory = nullptr;
-    }
-    if (m_pXFStyleManager)
-    {
-        delete m_pXFStyleManager;
-        m_pXFStyleManager = nullptr;
-    }
+    m_pObjFactory.reset();
+    m_pBookmarkMgr.reset();
+    m_pChangeMgr.reset();
+    m_pXFFontFactory.reset();
+    m_pXFStyleManager.reset();
     m_EditorAttrMap.clear();
 }
 

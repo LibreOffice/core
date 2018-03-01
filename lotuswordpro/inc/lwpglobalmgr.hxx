@@ -79,11 +79,11 @@ public:
     ~LwpGlobalMgr();
     static LwpGlobalMgr* GetInstance(LwpSvStream* pSvStream=nullptr);
     static void DeleteInstance();
-    LwpObjectFactory* GetLwpObjFactory(){return m_pObjFactory;}
-    LwpBookmarkMgr* GetLwpBookmarkMgr(){return m_pBookmarkMgr;}
-    LwpChangeMgr* GetLwpChangeMgr(){return m_pChangeMgr;}
-    XFFontFactory* GetXFFontFactory(){return m_pXFFontFactory;}
-    XFStyleManager* GetXFStyleManager(){return m_pXFStyleManager;}
+    LwpObjectFactory* GetLwpObjFactory(){return m_pObjFactory.get();}
+    LwpBookmarkMgr* GetLwpBookmarkMgr(){return m_pBookmarkMgr.get();}
+    LwpChangeMgr* GetLwpChangeMgr(){return m_pChangeMgr.get();}
+    XFFontFactory* GetXFFontFactory(){return m_pXFFontFactory.get();}
+    XFStyleManager* GetXFStyleManager(){return m_pXFStyleManager.get();}
     void SetEditorAttrMap(sal_uInt16 nID, LwpEditorAttr* pAttr);
     OUString GetEditorName(sal_uInt8 nID);
     XFColor GetHighlightColor(sal_uInt8 nID);
@@ -91,11 +91,11 @@ private:
     explicit LwpGlobalMgr(LwpSvStream* pSvStream);
 private:
     static std::map< sal_uInt32,LwpGlobalMgr* > m_ThreadMap;
-    LwpObjectFactory* m_pObjFactory;
-    LwpBookmarkMgr* m_pBookmarkMgr;
-    LwpChangeMgr* m_pChangeMgr;
-    XFFontFactory* m_pXFFontFactory;
-    XFStyleManager* m_pXFStyleManager;
+    std::unique_ptr<LwpObjectFactory> m_pObjFactory;
+    std::unique_ptr<LwpBookmarkMgr> m_pBookmarkMgr;
+    std::unique_ptr<LwpChangeMgr> m_pChangeMgr;
+    std::unique_ptr<XFFontFactory> m_pXFFontFactory;
+    std::unique_ptr<XFStyleManager> m_pXFStyleManager;
     std::map<sal_uInt16, std::unique_ptr<LwpEditorAttr>> m_EditorAttrMap;
 };
 
