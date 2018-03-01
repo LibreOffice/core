@@ -27,14 +27,14 @@ HexColorControl::HexColorControl( vcl::Window* pParent, WinBits nStyle )
 
 VCL_BUILDER_FACTORY_ARGS(HexColorControl, WB_BORDER)
 
-void HexColorControl::SetColor(sal_Int32 nColor)
+void HexColorControl::SetColor(Color nColor)
 {
     OUStringBuffer aBuffer;
-    sax::Converter::convertColor(aBuffer, nColor);
+    sax::Converter::convertColor(aBuffer, sal_Int32(nColor));
     SetText(aBuffer.makeStringAndClear().copy(1));
 }
 
-sal_Int32 HexColorControl::GetColor()
+Color HexColorControl::GetColor()
 {
     sal_Int32 nColor = -1;
 
@@ -55,7 +55,7 @@ sal_Int32 HexColorControl::GetColor()
     else
         SetControlBackground();
 
-    return nColor;
+    return Color(nColor);
 }
 
 bool HexColorControl::PreNotify( NotifyEvent& rNEvt )

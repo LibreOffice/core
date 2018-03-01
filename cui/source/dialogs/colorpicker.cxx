@@ -1227,9 +1227,9 @@ IMPL_LINK(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
     }
     else if (&rEdit == mpEDHex)
     {
-        sal_Int32 nColor = mpEDHex->GetColor();
+        Color nColor = mpEDHex->GetColor();
 
-        if (nColor != -1)
+        if (nColor != Color(-1))
         {
             Color aColor(nColor);
 
