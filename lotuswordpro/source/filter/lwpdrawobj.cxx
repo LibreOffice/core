@@ -484,11 +484,6 @@ LwpDrawPolyLine::LwpDrawPolyLine(SvStream * pStream, DrawingOffsetAndScale* pTra
 }
 LwpDrawPolyLine::~LwpDrawPolyLine()
 {
-    if (m_pVector)
-    {
-        delete [] m_pVector;
-        m_pVector = nullptr;
-    }
 }
 
 /**
@@ -508,7 +503,7 @@ void LwpDrawPolyLine::Read()
     if (m_aPolyLineRec.nNumPoints > m_pStream->remainingSize() / 4)
         throw BadRead();
 
-    m_pVector= new SdwPoint[m_aPolyLineRec.nNumPoints];
+    m_pVector.reset( new SdwPoint[m_aPolyLineRec.nNumPoints] );
 
     for (sal_uInt16 nC = 0; nC < m_aPolyLineRec.nNumPoints; nC++)
     {

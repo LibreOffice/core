@@ -187,7 +187,7 @@ class LwpDrawPolyLine : public LwpDrawObj
 {
 private:
     SdwPolyLineRecord m_aPolyLineRec;
-    SdwPoint* m_pVector;
+    std::unique_ptr<SdwPoint[]> m_pVector;
 
 public:
     LwpDrawPolyLine(SvStream * pStream, DrawingOffsetAndScale* pTransData);
