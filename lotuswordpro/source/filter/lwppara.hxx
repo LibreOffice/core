@@ -199,18 +199,18 @@ protected:
     sal_uInt16  m_nFlags;
     sal_uInt16  m_nLevel;
     LwpFribPtr  m_Fribs;
-    LwpParaProperty*  m_pProps;
+    std::vector< std::unique_ptr<LwpParaProperty> >  m_vProps;
     //LwpForked3NotifyList* m_NotifyList;   //not saved
 
     OUString m_StyleName;
     OUString m_ParentStyleName;//Add to support toc
-    LwpBreaksOverride* m_pBreaks;
+    std::unique_ptr<LwpBreaksOverride> m_pBreaks;
     OUString m_AftPageBreakName;
     OUString m_BefPageBreakName;
     OUString m_AftColumnBreakName;
 
     OUString m_BefColumnBreakName;
-    LwpIndentOverride* m_pIndentOverride;
+    std::unique_ptr<LwpIndentOverride> m_pIndentOverride;
     OUString m_Content;//for silver bullet,get text of first frib
     sal_uInt32 m_FontID;//for silver bullet
     OUString m_AllText;//get all text in this paragraph
@@ -327,13 +327,11 @@ inline void LwpPara::SetXFContainer(XFContentContainer* pCont)
 }
 inline LwpIndentOverride* LwpPara::GetIndent()
 {
-    return m_pIndentOverride;
+    return m_pIndentOverride.get();
 }
 inline void LwpPara::SetIndent(LwpIndentOverride* pIndentOverride)
 {
-    if (m_pIndentOverride)
-        delete m_pIndentOverride;
-    m_pIndentOverride = pIndentOverride;
+    m_pIndentOverride.reset( pIndentOverride );
 }
 inline LwpObjectID& LwpPara::GetStoryID()
 {

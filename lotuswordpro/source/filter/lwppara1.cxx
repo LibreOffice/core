@@ -400,8 +400,7 @@ void LwpPara::OverrideParaBreaks(LwpParaProperty* pProps, XFParaStyle* pOverStyl
     }
 
     // save the breaks
-    delete m_pBreaks;
-    m_pBreaks = pFinalBreaks.release();
+    m_pBreaks.reset( pFinalBreaks.release() );
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     if (m_pBreaks->IsKeepWithNext())
@@ -554,16 +553,11 @@ void LwpPara::OverrideParaNumbering(LwpParaProperty const * pProps)
 **************************************************************************/
 LwpParaProperty* LwpPara::GetProperty(sal_uInt32 nPropType)
 {
-    LwpParaProperty* pProps = m_pProps;
-    while(pProps)
-    {
-        if(pProps->GetType() == nPropType)
+    for (auto & i : m_vProps)
+        if(i->GetType() == nPropType)
         {
-            return pProps;
+            return i.get();
         }
-        pProps = pProps->GetNext();
-
-    }
     return nullptr;
 }
 
