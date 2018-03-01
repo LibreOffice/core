@@ -32,6 +32,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <svtools/dialogclosedlistener.hxx>
+#include <svtools/restartdialog.hxx>
 #include <svtools/simptabl.hxx>
 #include <radiobtnbox.hxx>
 
@@ -46,6 +47,7 @@ typedef void* JavaInfo;
 class   SvxJavaParameterDlg;
 class   SvxJavaClassPathDlg;
 class   SvxJavaListBox;
+class   OfaTreeOptionsDialog;
 
 // class SvxJavaOptionsPage ----------------------------------------------
 
@@ -63,6 +65,7 @@ private:
 
     VclPtr<SvxJavaParameterDlg>        m_pParamDlg;
     VclPtr<SvxJavaClassPathDlg>        m_pPathDlg;
+    VclPtr<OfaTreeOptionsDialog>       m_pParentDlg;
 
 #if HAVE_FEATURE_JAVA
     std::vector<std::unique_ptr<JavaInfo>> m_parJavaInfo;
@@ -102,6 +105,7 @@ private:
     void                    AddJRE( JavaInfo const * _pInfo );
     void                    HandleCheckEntry( SvTreeListEntry* _pEntry );
     void                    AddFolder( const OUString& _rFolder );
+    void                    RequestRestart( svtools::RestartReason eReason );
 
 public:
     SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
