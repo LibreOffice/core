@@ -1285,8 +1285,13 @@ void ScViewFunc::FillSimple( FillDir eDir )
 
             bool bDoAutoSpell = pDocSh->GetDocument().GetDocOptions().IsAutoSpell();
             if ( bDoAutoSpell )
-                CopyAutoSpellData(eDir, aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(),
+            {
+                SCROW nFromRow = aRange.aStart.Row();
+                if (nFromRow > 0 && nFromRow == aRange.aEnd.Row())
+                    --nFromRow;     // copy AutoSpellData from row above if no selection
+                CopyAutoSpellData(eDir, aRange.aStart.Col(), nFromRow, aRange.aEnd.Col(), aRange.aEnd.Row(),
                         ::std::numeric_limits<sal_uLong>::max());
+            }
 
             // Invalidate cell slots and update input line with new content.
             CellContentChanged();
