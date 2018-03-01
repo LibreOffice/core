@@ -96,6 +96,7 @@
 #include <lwpdropcapmgr.hxx>
 #include "lwptable.hxx"
 #include <memory>
+#include <set>
 
 LwpPara::LwpPara(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpDLVList(objHdr, pStrm)
@@ -531,16 +532,10 @@ void LwpPara::RegisterStyle()
                     }
                     bool bHeading = pNumbering->IsHeading();
 
+                    std::set<LwpPara*> aSeen;
                     while(true)
                     {
-                        /*// When we hit the hint paragraph, we can stop and check the hint.
-                        if (qNumberHint && (qPara == qNumberHint->GetPara()) &&
-                            qNumberHint->Lookup(qSilverBullet, Level, Position, &Offset))
-                        {
-                            Num += Offset;
-                            break;
-                        }*/
-
+                        aSeen.insert(pPara);
                         LwpSilverBullet* pParaSilverBullet = pPara->GetSilverBullet();
                         pNumbering = pPara->GetParaNumbering();
 
@@ -580,18 +575,6 @@ void LwpPara::RegisterStyle()
                                     }
                                 }
                             }
-
-                            /*if (qSpecificStyle
-                            && qSpecificStyle == qPara->GetParaStyle(LTRUE))
-                                break;
-
-                            // See if we crossed a section boundary
-                            if (ResetSection)
-                            {
-                                CurrPos.SetPara(qPara);
-                                if (CurrPos <= SectionPos)
-                                    break;
-                            }*/
                         }
 
                         // Don't bump the number if this bullet is skipped
@@ -642,6 +625,8 @@ void LwpPara::RegisterStyle()
                             }
                         }
                         pPara = pPrePara;
+                        if (aSeen.find(pPara) != aSeen.end())
+                            throw std::runtime_error("loop in conversion");
                     }
                     nNum = nNum ? nNum : 1;
 
