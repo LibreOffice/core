@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_8e87bf11",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/UI/ToolbarMode.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-01T10:59:38Z",
+      "side": 1,
+      "message": "Better write this as\n\n  \u003cvalue\u003efalse\u003c/value\u003e\n\nwithout redundant whitespace.  Even if the configmgr code will normalize the \u003cvalue\u003e text of xs:boolean props that it reads, main.xcd  (in which the content of ToolbarMode.xcs ends up in installation sets) would still needlessly contain the extra whitespace.",
+      "revId": "1c92effb3100103b246f0faf2809cc3aae790787",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
