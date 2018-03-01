@@ -48,8 +48,6 @@
 #define HID_SC_ADD_AUTOFMT                                      "SC_HID_SC_ADD_AUTOFMT"
 #define HID_SC_AUTOFMT_NAME                                     "SC_HID_SC_AUTOFMT_NAME"
 
-#define HID_FUNCTION_BOX                                        "SC_HID_FUNCTION_BOX"
-
 //  wrong group - HID_SC_DLG_START is full
 #define HID_SC_REN_AFMT_NAME                                    "SC_HID_SC_REN_AFMT_NAME"
 
@@ -179,10 +177,6 @@
 #define HID_DAI_FUNC_DIFFWEEKS                                  "SC_HID_DAI_FUNC_DIFFWEEKS"
 #define HID_DAI_FUNC_DIFFYEARS                                  "SC_HID_DAI_FUNC_DIFFYEARS"
 #define HID_DAI_FUNC_ROT13                                      "SC_HID_DAI_FUNC_ROT13"
-
-#define HID_MN_FORMAT_STYLE                                     "SC_HID_MN_FORMAT_STYLE"
-#define HID_MN_FORMAT_ALGN                                      "SC_HID_MN_FORMAT_ALGN"
-#define HID_MN_FORMAT_LINESPACE                                 "SC_HID_MN_FORMAT_LINESPACE"
 
 // End help IDs ------------------------------------------------------------
 

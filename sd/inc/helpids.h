@@ -72,14 +72,6 @@
 #define HID_SD_RULER_HORIZONTAL                                 "SD_HID_SD_RULER_HORIZONTAL"
 #define HID_SD_RULER_VERTICAL                                   "SD_HID_SD_RULER_VERTICAL"
 
-
-#define HID_MN_SUB_GRAPHIC                                      "SD_HID_MN_SUB_GRAPHIC"
-#define HID_MN_SUB_FIELD                                        "SD_HID_MN_SUB_FIELD"
-#define HID_MN_SUB_TEMPLATES                                    "SD_HID_MN_SUB_TEMPLATES"
-#define HID_MN_SUB_SPELLING                                     "SD_HID_MN_SUB_SPELLING"
-#define HID_MN_SUB_CONVERT                                      "SD_HID_MN_SUB_CONVERT"
-#define HID_MN_SUB_MIRROR                                       "SD_HID_MN_SUB_MIRROR"
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
