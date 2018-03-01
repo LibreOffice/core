@@ -19,39 +19,46 @@
 #ifndef INCLUDED_TOOLS_COLOR_HXX
 #define INCLUDED_TOOLS_COLOR_HXX
 
+#include <sal/types.h>
 #include <tools/toolsdllapi.h>
-#include <tools/colordata.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <basegfx/color/bcolor.hxx>
 
 class SvStream;
 
+constexpr sal_uInt8  COLORDATA_RED( sal_uInt32 n )          { return static_cast<sal_uInt8>(n>>16); }
+constexpr sal_uInt8  COLORDATA_GREEN( sal_uInt32 n )        { return static_cast<sal_uInt8>(static_cast<sal_uInt16>(n) >> 8); }
+constexpr sal_uInt8  COLORDATA_BLUE( sal_uInt32 n )         { return static_cast<sal_uInt8>(n); }
+constexpr sal_uInt8  COLORDATA_TRANSPARENCY( sal_uInt32 n ) { return static_cast<sal_uInt8>(n>>24); }
+constexpr sal_uInt32 COLORDATA_RGB( sal_uInt32 n )          { return static_cast<sal_uInt32>(n & 0x00FFFFFF); }
 
 // Color
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Color final
 {
-    ColorData mnColor;
+    sal_uInt32 mnColor;
 
 public:
     constexpr Color()
         : mnColor(0) // black
     {}
-    constexpr Color(ColorData nColor)
+    constexpr Color(sal_uInt32 nColor)
         : mnColor(nColor)
     {}
-    constexpr Color(sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
-        : mnColor(RGB_COLORDATA(nRed, nGreen, nBlue))
-    {}
     constexpr Color(sal_uInt8 nTransparency, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
-        : mnColor(TRGB_COLORDATA(nTransparency, nRed, nGreen, nBlue))
+        : mnColor( sal_uInt32(nBlue) | (sal_uInt32(nGreen) << 8) | (sal_uInt32(nRed) << 16)
+                   | (sal_uInt32(nTransparency) << 24) )
+    {}
+    constexpr Color(sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
+        : Color(0, nRed, nGreen, nBlue)
     {}
 
     // constructor to create a tools-Color from ::basegfx::BColor
     explicit Color(const basegfx::BColor& rBColor)
-        : mnColor(RGB_COLORDATA(sal_uInt8((rBColor.getRed() * 255.0) + 0.5),
-                                sal_uInt8((rBColor.getGreen() * 255.0) + 0.5),
-                                sal_uInt8((rBColor.getBlue() * 255.0) + 0.5)))
+        : Color(0,
+                sal_uInt8((rBColor.getRed() * 255.0) + 0.5),
+                sal_uInt8((rBColor.getGreen() * 255.0) + 0.5),
+                sal_uInt8((rBColor.getBlue() * 255.0) + 0.5))
     {}
 
     /** Primarily used when passing Color objects to UNO API */
@@ -91,7 +98,7 @@ public:
         return COLORDATA_TRANSPARENCY(mnColor);
     }
 
-    ColorData GetColor() const
+    sal_uInt32 GetColor() const
     {
         return mnColor;
     }
@@ -197,6 +204,11 @@ inline sal_uInt8 Color::GetLuminance() const
                                    COLORDATA_GREEN(mnColor) * 151UL +
                                    COLORDATA_RED(mnColor) * 76UL) >> 8);
 }
+
+constexpr sal_uInt8 ColorChannelMerge(sal_uInt8 nDst, sal_uInt8 nSrc, sal_uInt8 nSrcTrans)
+{
+    return static_cast<sal_uInt8>(((static_cast<sal_Int32>(nDst)-nSrc)*nSrcTrans+((nSrc<<8)|nDst))>>8);
+};
 
 inline void Color::Merge( const Color& rMergeColor, sal_uInt8 cTransparency )
 {

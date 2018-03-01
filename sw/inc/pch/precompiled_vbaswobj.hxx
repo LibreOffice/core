@@ -433,7 +433,6 @@
 #include <tblenum.hxx>
 #include <tblsel.hxx>
 #include <tools/color.hxx>
-#include <tools/colordata.hxx>
 #include <tools/date.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

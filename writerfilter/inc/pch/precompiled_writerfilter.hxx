@@ -96,7 +96,6 @@
 #include <ooxml/resourceids.hxx>
 #include <sfx2/dllapi.h>
 #include <tools/color.hxx>
-#include <tools/colordata.hxx>
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>

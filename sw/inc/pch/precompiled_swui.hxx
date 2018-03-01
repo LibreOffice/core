@@ -638,7 +638,6 @@
 #include <tblenum.hxx>
 #include <tblsel.hxx>
 #include <tools/color.hxx>
-#include <tools/colordata.hxx>
 #include <tools/contnr.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>

@@ -321,7 +321,6 @@
 #include <svx/xpoly.hxx>
 #include <svx/xtable.hxx>
 #include <tools/color.hxx>
-#include <tools/colordata.hxx>
 #include <tools/contnr.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>

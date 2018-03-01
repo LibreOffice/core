@@ -131,7 +131,6 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/color.hxx>
-#include <tools/colordata.hxx>
 #include <tools/debug.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
