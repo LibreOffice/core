@@ -77,6 +77,7 @@
 #include <xfilter/xfdropcap.hxx>
 #include <xfilter/xfstylecont.hxx>
 #include <xfilter/xflineheight.hxx>
+#include <memory>
 
 #define     XFPARA_FLAG_FONT        0X00000001
 #define     XFPARA_FLAG_DROPCAP     0X00000002
@@ -231,8 +232,8 @@ protected:
     XFStyleContainer m_aTabs;
     rtl::Reference<XFFont> m_pFont;
     XFShadow    m_aShadow;
-    XFBorders   *m_pBorders;
-    XFBGImage   *m_pBGImage;
+    std::unique_ptr<XFBorders> m_pBorders;
+    std::unique_ptr<XFBGImage> m_pBGImage;
     XFDropcap   m_aDropcap;
     XFLineHeight m_aLineHeight;
     XFBreaks    m_aBreaks;

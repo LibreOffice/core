@@ -104,14 +104,10 @@ XFParaStyle::XFParaStyle(const XFParaStyle& other)
     , m_bNumberRight(other.m_bNumberRight)
 {
     if( other.m_pBorders )
-        m_pBorders = new XFBorders(*other.m_pBorders);
-    else
-        m_pBorders = nullptr;
+        m_pBorders.reset( new XFBorders(*other.m_pBorders) );
 
     if( other.m_pBGImage )
-        m_pBGImage = new XFBGImage(*other.m_pBGImage);
-    else
-        m_pBGImage = nullptr;
+        m_pBGImage.reset( new XFBGImage(*other.m_pBGImage) );
 
     for (size_t i = 0; i < other.m_aTabs.GetCount(); ++i)
     {
@@ -134,7 +130,7 @@ XFParaStyle& XFParaStyle::operator=(const XFParaStyle& other)
     if (this != &other)
     {
         // first , clean member
-        delete m_pBGImage;
+        m_pBGImage.reset();
         m_aTabs.Reset();
 
         m_strParentStyleName = other.m_strParentStyleName;
@@ -151,14 +147,14 @@ XFParaStyle& XFParaStyle::operator=(const XFParaStyle& other)
         m_pFont = other.m_pFont;
 
         if( other.m_pBorders )
-            m_pBorders = new XFBorders(*other.m_pBorders);
+            m_pBorders.reset( new XFBorders(*other.m_pBorders) );
         else
-            m_pBorders = nullptr;
+            m_pBorders.reset();
         m_aBackColor = other.m_aBackColor;
         if( other.m_pBGImage )
-            m_pBGImage = new XFBGImage(*other.m_pBGImage);
+            m_pBGImage.reset( new XFBGImage(*other.m_pBGImage) );
         else
-            m_pBGImage = nullptr;
+            m_pBGImage.reset();
 
         m_aShadow = other.m_aShadow;
         m_aMargin = other.m_aMargin;
@@ -186,8 +182,6 @@ XFParaStyle& XFParaStyle::operator=(const XFParaStyle& other)
 
 XFParaStyle::~XFParaStyle()
 {
-    delete m_pBorders;
-    delete m_pBGImage;
 }
 
 enumXFStyle XFParaStyle::GetStyleFamily()
@@ -232,14 +226,12 @@ void    XFParaStyle::SetBackColor(XFColor const & color)
 
 void    XFParaStyle::SetBackImage(XFBGImage *image)
 {
-    delete m_pBGImage;
-    m_pBGImage = image;
+    m_pBGImage.reset( image );
 }
 
 void    XFParaStyle::SetBorders(XFBorders *pBorders)
 {
-    delete m_pBorders;
-    m_pBorders = pBorders;
+    m_pBorders.reset( pBorders );
 }
 
 void    XFParaStyle::SetDropCap(sal_Int16 nLength,
