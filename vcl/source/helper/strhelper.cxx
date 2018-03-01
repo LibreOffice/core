@@ -300,9 +300,12 @@ OUString WhitespaceToSpace( const OUString& rLine, bool bProtect )
     *pLeap = 0;
 
     // there might be a space at beginning or end
-    pLeap--;
-    if( *pLeap == ' ' )
-        *pLeap = 0;
+    if (pLeap > pBuffer)
+    {
+        pLeap--;
+        if( *pLeap == ' ' )
+            *pLeap = 0;
+    }
 
     return OUString(*pBuffer == ' ' ? pBuffer+1 : pBuffer);
 }
