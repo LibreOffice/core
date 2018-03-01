@@ -208,7 +208,7 @@ class LwpDrawPolygon : public LwpDrawObj
 {
 private:
     sal_uInt16 m_nNumPoints;
-    SdwPoint* m_pVector;
+    std::unique_ptr<SdwPoint[]> m_pVector;
 
 public:
     LwpDrawPolygon(SvStream * pStream, DrawingOffsetAndScale* pTransData);
