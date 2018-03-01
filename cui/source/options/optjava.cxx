@@ -26,6 +26,7 @@
 
 #include "optaboutconfig.hxx"
 #include "optjava.hxx"
+#include <treeopt.hxx>
 #include <dialmgr.hxx>
 
 #include <officecfg/Office/Common.hxx>
@@ -125,6 +126,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
     get(m_pExperimentalCB, "experimental");
     get(m_pMacroCB, "macrorecording");
     get(m_pExpertConfigBtn, "expertconfig");
+    m_pParentDlg.reset(static_cast<OfaTreeOptionsDialog*>(getNonLayoutParent(pParent)));
     m_sAccessibilityText = get<FixedText>("a11y")->GetText();
     m_sAddDialogText = get<FixedText>("selectruntime")->GetText();
 
@@ -172,6 +174,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
 #else
     get<vcl::Window>("javaframe")->Disable();
 #endif
+
 }
 
 
@@ -191,6 +194,7 @@ void SvxJavaOptionsPage::dispose()
 
     jfw_unlock();
 #endif
+    m_pParentDlg.clear();
     m_pJavaEnableCB.clear();
     m_pJavaBox.clear();
     m_pJavaPathText.clear();
@@ -286,8 +290,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
             aParameterList = m_pParamDlg->GetParameters();
             if ( jfw_isVMRunning() )
             {
-                SolarMutexGuard aGuard;
-                svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_ASSIGNING_JAVAPARAMETERS);
+                m_pParentDlg->SetNeedsRestart( svtools::RESTART_REASON_ASSIGNING_JAVAPARAMETERS );
             }
         }
     }
@@ -326,8 +329,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl, Button*, void)
             sClassPath = m_pPathDlg->GetClassPath();
             if ( jfw_isVMRunning() )
             {
-                SolarMutexGuard aGuard;
-                svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_ASSIGNING_FOLDERS);
+                m_pParentDlg->SetNeedsRestart( svtools::RESTART_REASON_ASSIGNING_FOLDERS );
             }
         }
     }
@@ -578,8 +580,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetExperimentalMode( m_pExperimentalCB->IsChecked() );
         bModified = true;
-        SolarMutexGuard aGuard;
-        svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_EXP_FEATURES);
+        m_pParentDlg->SetNeedsRestart( svtools::RESTART_REASON_EXP_FEATURES );
     }
 
     if ( m_pMacroCB->IsValueChangedFromSaved() )
@@ -629,9 +630,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
                     if ( jfw_isVMRunning() ||
                         ( ( pInfo->nRequirements & JFW_REQUIRE_NEEDRESTART ) == JFW_REQUIRE_NEEDRESTART ) )
                     {
-                        svtools::executeRestartDialog(
-                            comphelper::getProcessComponentContext(), this,
-                            svtools::RESTART_REASON_JAVA);
+                            m_pParentDlg->SetNeedsRestart( svtools::RESTART_REASON_JAVA );
                     }
 
                     eErr = jfw_setSelectedJRE( pInfo );
