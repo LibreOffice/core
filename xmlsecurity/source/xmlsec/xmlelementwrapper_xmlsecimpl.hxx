@@ -82,17 +82,6 @@ public:
     xmlNodePtr getNativeElement( ) const { return m_pElement;}
 };
 
-/// @throws css::uno::RuntimeException
-OUString XMLElementWrapper_XmlSecImpl_getImplementationName();
-
-/// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > XMLElementWrapper_XmlSecImpl_getSupportedServiceNames(  );
-
-/// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface >
-XMLElementWrapper_XmlSecImpl_createInstance(
-    const css::uno::Reference< css::uno::XComponentContext > &);
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

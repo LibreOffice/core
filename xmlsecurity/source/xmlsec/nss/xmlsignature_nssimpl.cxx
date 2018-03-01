@@ -21,7 +21,7 @@
 #include <rtl/uuid.h>
 
 #include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
-#include <xmlsec/xmlelementwrapper_xmlsecimpl.hxx>
+#include <xmlelementwrapper_xmlsecimpl.hxx>
 #include <xmlsec/xmlstreamio.hxx>
 #include <xmlsec/errorcallback.hxx>
 

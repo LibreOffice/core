@@ -22,7 +22,6 @@
 
 #include <cppuhelper/factory.hxx>
 
-#include <xmlsec/xmlelementwrapper_xmlsecimpl.hxx>
 #include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
 #include "xsec_xmlsec.hxx"
 
@@ -56,14 +55,7 @@ SAL_DLLPUBLIC_EXPORT void* xsec_xmlsec_component_getFactory( const sal_Char* pIm
         }
         else
 #endif
-            if( XMLElementWrapper_XmlSecImpl_getImplementationName().equalsAscii( pImplName ) )
-        {
-            xFactory = cppu::createSingleComponentFactory(
-                XMLElementWrapper_XmlSecImpl_createInstance,
-                OUString::createFromAscii( pImplName ),
-                XMLElementWrapper_XmlSecImpl_getSupportedServiceNames() );
-        }
-        else if( XMLDocumentWrapper_XmlSecImpl_getImplementationName().equalsAscii( pImplName ) )
+        if( XMLDocumentWrapper_XmlSecImpl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = cppu::createSingleComponentFactory(
                 XMLDocumentWrapper_XmlSecImpl_createInstance,
