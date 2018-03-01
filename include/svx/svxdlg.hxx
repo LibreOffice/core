@@ -470,7 +470,7 @@ public:
 
     virtual VclPtr<SfxAbstractTabDialog> CreateSvxFormatCellsDialog( const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj )=0;
 
-    virtual VclPtr<SvxAbstractSplittTableDialog> CreateSvxSplittTableDialog( vcl::Window* pParent, bool bIsTableVertical, long nMaxVertical )=0;
+    virtual VclPtr<SvxAbstractSplittTableDialog> CreateSvxSplittTableDialog(weld::Window* pParent, bool bIsTableVertical, long nMaxVertical) = 0;
 
     virtual VclPtr<SvxAbstractNewTableDialog> CreateSvxNewTableDialog() = 0;
 

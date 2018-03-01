@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.2 -->
 <interface domain="cui">
-  <requires lib="gtk+" version="3.0"/>
+  <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">2</property>
     <property name="upper">20</property>
@@ -12,18 +12,21 @@
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/zetlhor2.png</property>
+    <property name="icon_name">svx/res/zetlhor2.png</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/zetlver2.png</property>
+    <property name="icon_name">svx/res/zetlver2.png</property>
   </object>
   <object class="GtkDialog" id="SplitCellsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="splitcellsdialog|SplitCellsDialog">Split Cells</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -182,6 +185,7 @@
                             <property name="image">image1</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="always_show_image">True</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">vert</property>
@@ -200,6 +204,7 @@
                             <property name="image">image2</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="always_show_image">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">hori</property>
                           </object>
@@ -265,5 +270,8 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>

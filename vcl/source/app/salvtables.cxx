@@ -268,6 +268,26 @@ public:
         return m_xWidget->GetHelpId();
     }
 
+    virtual void set_grid_left_attach(int nAttach) override
+    {
+        m_xWidget->set_grid_left_attach(nAttach);
+    }
+
+    virtual int get_grid_left_attach() const override
+    {
+        return m_xWidget->get_grid_left_attach();
+    }
+
+    virtual void set_grid_top_attach(int nAttach) override
+    {
+        m_xWidget->set_grid_top_attach(nAttach);
+    }
+
+    virtual int get_grid_top_attach() const override
+    {
+        return m_xWidget->get_grid_top_attach();
+    }
+
     virtual weld::Container* weld_parent() const override;
 
     virtual ~SalInstanceWidget() override

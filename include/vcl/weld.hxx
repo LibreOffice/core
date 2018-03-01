@@ -47,6 +47,12 @@ public:
     virtual OString get_buildable_name() const = 0;
     virtual void set_help_id(const OString& rName) = 0;
     virtual OString get_help_id() const = 0;
+
+    virtual void set_grid_left_attach(int nAttach) = 0;
+    virtual int get_grid_left_attach() const = 0;
+    virtual void set_grid_top_attach(int nAttach) = 0;
+    virtual int get_grid_top_attach() const = 0;
+
     virtual Container* weld_parent() const = 0;
 
     virtual ~Widget() {}

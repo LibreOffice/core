@@ -19,30 +19,26 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_SPLITCELLDLG_HXX
 #define INCLUDED_CUI_SOURCE_INC_SPLITCELLDLG_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/button.hxx>
-
-#include <svx/stddlg.hxx>
 #include <svx/svxdlg.hxx>
+#include <vcl/weld.hxx>
 
 class SvxSplitTableDlg : public SvxAbstractSplittTableDialog
 {
-    VclPtr<SvxStandardDialog> m_pDialog;
-    VclPtr<NumericField> m_pCountEdit;
-    VclPtr<RadioButton>  m_pHorzBox;
-    VclPtr<RadioButton>  m_pVertBox;
-    VclPtr<CheckBox>     m_pPropCB;
+private:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Dialog> m_xDialog;
+    std::unique_ptr<weld::SpinButton> m_xCountEdit;
+    std::unique_ptr<weld::RadioButton> m_xHorzBox;
+    std::unique_ptr<weld::RadioButton> m_xVertBox;
+    std::unique_ptr<weld::CheckButton> m_xPropCB;
 
     long                mnMaxVertical;
     long                mnMaxHorizontal;
 
 public:
-    SvxSplitTableDlg(vcl::Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal );
-    virtual ~SvxSplitTableDlg() override;
-    virtual void dispose() override;
+    SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal);
 
-    DECL_LINK( ClickHdl, Button *, void );
+    DECL_LINK(ClickHdl, weld::Button&, void);
 
     virtual bool IsHorizontal() const override;
     virtual bool IsProportional() const override;
