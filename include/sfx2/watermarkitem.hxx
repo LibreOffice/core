@@ -11,6 +11,7 @@
 
 #include <sfx2/dllapi.h>
 #include <svl/poolitem.hxx>
+#include <tools/color.hxx>
 
 class SFX2_DLLPUBLIC SfxWatermarkItem: public SfxPoolItem
 {
@@ -30,15 +31,15 @@ public:
     void                    SetAngle(const sal_Int16 nAngle) { m_nAngle = nAngle; }
     sal_Int16               GetTransparency() const { return m_nTransparency; }
     void                    SetTransparency(const sal_Int16 nTransparency) { m_nTransparency = nTransparency; }
-    sal_uInt32              GetColor() const { return m_nColor; }
-    void                    SetColor(const sal_uInt32 nColor) { m_nColor = nColor; }
+    Color                   GetColor() const { return m_nColor; }
+    void                    SetColor(Color nColor) { m_nColor = nColor; }
 
 private:
     OUString                m_aText;
     OUString                m_aFont;
     sal_Int16               m_nAngle;
     sal_Int16               m_nTransparency;
-    sal_uInt32              m_nColor;
+    Color                   m_nColor;
 };
 
 #endif
