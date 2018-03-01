@@ -76,6 +76,11 @@ protected:
      */
     void          assertXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rContent);
     /**
+     * Assert that rXPath exists and it has an rNSPrefix=rNSHref namespace definition.
+     */
+    void assertXPathNSDef(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rNSPrefix,
+                          const OUString& rNSHref);
+    /**
      * Assert that rXPath exists, and has exactly nNumberOfChildNodes child nodes.
      * Useful for checking that we do have a no child nodes to a specific node (nNumberOfChildNodes == 0).
      */
