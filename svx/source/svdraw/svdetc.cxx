@@ -531,9 +531,6 @@ namespace
         const SdrLayerIDSet& rVisLayers,
         Color& rCol)
     {
-        if(!rList.GetModel())
-            return false;
-
         bool bRet(false);
         bool bMaster(rList.GetPage() && rList.GetPage()->IsMasterPage());
 
@@ -576,9 +573,6 @@ namespace
         Color& rCol,
         bool bSkipBackgroundShape)
     {
-        if(!rPage.GetModel())
-            return false;
-
         bool bRet(impGetSdrObjListFillColor(rPage, rPnt, rTextEditPV, rVisLayers, rCol));
 
         if(!bRet && !rPage.IsMasterPage())

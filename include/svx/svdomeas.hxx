@@ -85,14 +85,20 @@ protected:
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
 
 public:
-    SdrMeasureObj();
-    SdrMeasureObj(const Point& rPt1, const Point& rPt2);
+    SdrMeasureObj(SdrModel& rSdrModel);
+    SdrMeasureObj(
+        SdrModel& rSdrModel,
+        const Point& rPt1,
+        const Point& rPt2);
     virtual ~SdrMeasureObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
-    virtual SdrMeasureObj* Clone() const override;
+    virtual SdrMeasureObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+
+    // implemented mainly for the purposes of Clone()
+    SdrMeasureObj& operator=(const SdrMeasureObj& rObj);
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;

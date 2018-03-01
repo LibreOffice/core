@@ -60,6 +60,8 @@ private:
     SVX_DLLPRIVATE SdrObject* createSdrGrafObjReplacement(bool bAddText) const;
     SVX_DLLPRIVATE void ImpSetVisAreaSize();
 
+    SVX_DLLPRIVATE void Init();
+
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
@@ -67,8 +69,15 @@ protected:
 public:
     OUString GetStyleString();
 
-    SdrOle2Obj( bool bFrame_ = false );
-    SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const OUString& rNewObjName, const tools::Rectangle& rNewRect );
+    SdrOle2Obj(
+        SdrModel& rSdrModel,
+        bool bFrame_ = false);
+    SdrOle2Obj(
+        SdrModel& rSdrModel,
+        const svt::EmbeddedObjectRef& rNewObjRef,
+        const OUString& rNewObjName,
+        const tools::Rectangle& rNewRect);
+
     virtual ~SdrOle2Obj() override;
 
     const svt::EmbeddedObjectRef& getEmbeddedObjectRef() const;
@@ -112,7 +121,6 @@ public:
     void AbandonObject();
 
     virtual void SetPage(SdrPage* pNewPage) override;
-    virtual void SetModel(SdrModel* pModel) override;
 
     /** Change the IsClosedObj attribute
 
@@ -129,7 +137,7 @@ public:
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 
-    virtual SdrOle2Obj* Clone() const override;
+    virtual SdrOle2Obj* Clone(SdrModel* pTargetModel = nullptr) const override;
 
     SdrOle2Obj& assignFrom(const SdrOle2Obj& rObj);
     SdrOle2Obj& operator=(const SdrOle2Obj& rObj);

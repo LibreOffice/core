@@ -37,10 +37,12 @@ class SVX_DLLPUBLIC SdrMediaObj final : public SdrRectObj
 public:
 
 
-                                    SdrMediaObj();
-                                    SdrMediaObj( const tools::Rectangle& rRect );
+        SdrMediaObj(SdrModel& rSdrModel);
+        SdrMediaObj(
+                SdrModel& rSdrModel,
+                const tools::Rectangle& rRect);
 
-        virtual                     ~SdrMediaObj() override;
+        virtual ~SdrMediaObj() override;
 
         virtual bool                HasTextEdit() const override;
 
@@ -50,7 +52,7 @@ public:
         virtual OUString            TakeObjNameSingul() const override;
         virtual OUString            TakeObjNamePlural() const override;
 
-        virtual SdrMediaObj*            Clone() const override;
+        virtual SdrMediaObj*            Clone(SdrModel* pTargetModel = nullptr) const override;
         SdrMediaObj&                operator=(const SdrMediaObj& rObj);
 
         virtual void                AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly = false ) override;

@@ -241,7 +241,7 @@ namespace sdr
                 aDraftText += " ...";
             }
 
-            if (!aDraftText.isEmpty() && GetGrafObject().GetModel())
+            if (!aDraftText.isEmpty())
             {
                 // #i103255# Goal is to produce TextPrimitives which hold the given text as
                 // BlockText in the available space. It would be very tricky to do
@@ -253,8 +253,7 @@ namespace sdr
                 // needed and can be deleted.
 
                 // create temp RectObj as TextObj and set needed attributes
-                SdrRectObj aRectObj(OBJ_TEXT);
-                aRectObj.SetModel(GetGrafObject().GetModel());
+                SdrRectObj aRectObj(GetGrafObject().getSdrModelFromSdrObject(), OBJ_TEXT);
                 aRectObj.NbcSetText(aDraftText);
                 aRectObj.SetMergedItem(SvxColorItem(COL_LIGHTRED, EE_CHAR_COLOR));
 

@@ -643,8 +643,9 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const tools::Rectan
     // case SID_DRAW_NOTEEDIT:
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
-        nullptr, pDrDoc);
+        *pDrDoc,
+        pView->GetCurrentObjInventor(),
+        pView->GetCurrentObjIdentifier());
 
     if(pObj)
     {

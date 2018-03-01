@@ -42,6 +42,7 @@ class HelpEvent;
 class SVX_DLLPUBLIC FmFormPage : public SdrPage
 {
     FmFormPage& operator=(const FmFormPage&) = delete;
+    FmFormPage(const FmFormPage&) = delete;
 
     friend class FmFormObj;
     std::unique_ptr<FmFormPageImpl>     m_pImpl;
@@ -52,10 +53,7 @@ public:
     explicit FmFormPage(FmFormModel& rModel, bool bMasterPage=false);
     virtual ~FmFormPage() override;
 
-    virtual void    SetModel(SdrModel* pNewModel) override;
-
-    virtual SdrPage* Clone() const override;
-    virtual SdrPage* Clone(SdrModel* pNewModel) const override;
+    virtual SdrPage* Clone(SdrModel* pNewModel = nullptr) const override;
 
     virtual void    InsertObject(SdrObject* pObj, size_t nPos = SAL_MAX_SIZE) override;
 
@@ -75,9 +73,8 @@ public:
                             const HelpEvent& rEvt );
 
 protected:
-    FmFormPage(const FmFormPage& rPage);
-
-    void lateInit(const FmFormPage& rPage, FmFormModel* pNewModel = nullptr);
+    // lateInit -> copyValuesToClonedInstance (?)
+    void lateInit(const FmFormPage& rPage);
 };
 
 #endif // INCLUDED_SVX_FMPAGE_HXX

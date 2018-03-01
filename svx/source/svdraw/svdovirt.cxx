@@ -42,8 +42,10 @@ sdr::contact::ViewContact* SdrVirtObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfVirtObj(*this);
 }
 
-
-SdrVirtObj::SdrVirtObj(SdrObject& rNewObj):
+SdrVirtObj::SdrVirtObj(
+    SdrModel& rSdrModel,
+    SdrObject& rNewObj)
+:   SdrObject(rSdrModel),
     rRefObj(rNewObj)
 {
     bVirtObj=true; // this is only a virtual object
@@ -55,7 +57,6 @@ SdrVirtObj::~SdrVirtObj()
 {
     rRefObj.DelReference(*this);
 }
-
 
 const SdrObject& SdrVirtObj::GetReferencedObj() const
 {
@@ -79,13 +80,6 @@ void SdrVirtObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
 void SdrVirtObj::NbcSetAnchorPos(const Point& rAnchorPos)
 {
     aAnchor=rAnchorPos;
-}
-
-
-void SdrVirtObj::SetModel(SdrModel* pNewModel)
-{
-    SdrObject::SetModel(pNewModel);
-    rRefObj.SetModel(pNewModel);
 }
 
 void SdrVirtObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
@@ -128,15 +122,29 @@ void SdrVirtObj::RecalcBoundRect()
     aOutRect+=aAnchor;
 }
 
-SdrVirtObj* SdrVirtObj::Clone() const
+SdrVirtObj* SdrVirtObj::Clone(SdrModel* pTargetModel) const
 {
-    return new SdrVirtObj(rRefObj); // only a further reference
+    return CloneHelper< SdrVirtObj >(pTargetModel);
+    // TTTT not sure if the above works - how could SdrObjFactory::MakeNewObject
+    // create an object wit correct rRefObj (?) OTOH VirtObj probably needs not
+    // to be cloned ever - only used in Writer for multiple instances e.g. Header/Footer
+    // return new SdrVirtObj(
+    //     getSdrModelFromSdrObject(),
+    //     rRefObj); // only a further reference
 }
 
 SdrVirtObj& SdrVirtObj::operator=(const SdrVirtObj& rObj)
-{   // reference different object??
+{
     SdrObject::operator=(rObj);
-    aAnchor=rObj.aAnchor;
+
+    // reference different object?? TTTT -> yes!
+    rRefObj.DelReference(*this);
+    rRefObj = rObj.rRefObj;
+    rRefObj.AddReference(*this);
+
+    aSnapRect = rObj.aSnapRect;
+    aAnchor = rObj.aAnchor;
+
     return *this;
 }
 
@@ -266,24 +274,11 @@ bool SdrVirtObj::supportsFullDrag() const
 
 SdrObject* SdrVirtObj::getFullDragClone() const
 {
-    static bool bSpecialHandling(false);
-    SdrObject* pRetval = nullptr;
-
-    if(bSpecialHandling)
-    {
-        // special handling for VirtObj. Do not create another
-        // reference to rRefObj, this would allow to change that
-        // one on drag. Instead, create a SdrGrafObj for drag containing
-        // the graphical representation
-        pRetval = new SdrGrafObj(SdrDragView::GetObjGraphic(GetModel(), this), GetLogicRect());
-    }
-    else
-    {
-        SdrObject& rReferencedObject = const_cast<SdrVirtObj*>(this)->ReferencedObj();
-        pRetval = new SdrGrafObj(SdrDragView::GetObjGraphic(GetModel(), &rReferencedObject), GetLogicRect());
-    }
-
-    return pRetval;
+    SdrObject& rReferencedObject = const_cast<SdrVirtObj*>(this)->ReferencedObj();
+    return new SdrGrafObj(
+        getSdrModelFromSdrObject(),
+        SdrDragView::GetObjGraphic(rReferencedObject),
+        GetLogicRect());
 }
 
 bool SdrVirtObj::beginSpecialDrag(SdrDragStat& rDrag) const

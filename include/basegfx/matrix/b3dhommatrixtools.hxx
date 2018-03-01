@@ -17,36 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_INC_SDRCELLDLG_HXX
-#define INCLUDED_CUI_SOURCE_INC_SDRCELLDLG_HXX
+#ifndef INCLUDED_BASEGFX_MATRIX_B3DHOMMATRIXTOOLS_HXX
+#define INCLUDED_BASEGFX_MATRIX_B3DHOMMATRIXTOOLS_HXX
 
+#include <sal/types.h>
+#include <basegfx/matrix/b3dhommatrix.hxx>
+#include <com/sun/star/drawing/HomogenMatrix.hpp>
 
-#include <sfx2/tabdlg.hxx>
-#include <svx/xtable.hxx>
-
-class SdrModel;
-class SvxFormatCellsDialog : public SfxTabDialog
+namespace basegfx
 {
-private:
-    const SfxItemSet&   mrOutAttrs;
+    namespace utils
+    {
+        /* tooling methods for converting API matrices (drawing::HomogenMatrix) to
+           B3DHomMatrix. drawing::HomogenMatrix4 is not used by OOo
+         */
+        BASEGFX_DLLPUBLIC B3DHomMatrix UnoHomogenMatrixToB3DHomMatrix(
+            const com::sun::star::drawing::HomogenMatrix& rMatrixIn);
 
-    XColorListRef       mpColorTab;
-    XGradientListRef    mpGradientList;
-    XHatchListRef       mpHatchingList;
-    XBitmapListRef      mpBitmapList;
-    XPatternListRef     mpPatternList;
+        BASEGFX_DLLPUBLIC void B3DHomMatrixToUnoHomogenMatrix(
+            const B3DHomMatrix& rMatrixIn,
+            com::sun::star::drawing::HomogenMatrix& rMatrixOut);
 
-    sal_uInt16          m_nAreaPageId;
-    sal_uInt16          m_nBorderPageId;
+    } // end of namespace tools
+} // end of namespace basegfx
 
-public:
-    SvxFormatCellsDialog( vcl::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel );
-
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
-
-};
-
-#endif // INCLUDED_CUI_SOURCE_INC_SDRCELLDLG_HXX
-
+#endif // INCLUDED_BASEGFX_MATRIX_B3DHOMMATRIXTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

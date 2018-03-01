@@ -807,7 +807,10 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
             // replacing the object which we will return with a SdrPageObj
             SdrObject::Free( pRet );
-            pRet = new SdrPageObj( rObjData.aBoundRect, pSdrModel->GetPage( nPageNum - 1 ) );
+            pRet = new SdrPageObj(
+                *pSdrModel,
+                rObjData.aBoundRect,
+                pSdrModel->GetPage(nPageNum - 1));
         }
         else
         {
@@ -1069,8 +1072,9 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         SdrObject::Free( pRet );
                         pRet = nullptr;
                     }
-                    pTObj = new SdrRectObj( eTextKind != OBJ_RECT ? eTextKind : OBJ_TEXT );
-                    pTObj->SetModel( pSdrModel );
+                    pTObj = new SdrRectObj(
+                        *pSdrModel,
+                        eTextKind != OBJ_RECT ? eTextKind : OBJ_TEXT);
                     SfxItemSet aSet( pSdrModel->GetItemPool() );
                     if ( !pRet )
                         ApplyAttributes( rSt, aSet, rObjData );
@@ -1197,7 +1201,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     }
                     if ( pRet )
                     {
-                        SdrObject* pGroup = new SdrObjGroup;
+                        SdrObject* pGroup = new SdrObjGroup(*pSdrModel);
                         pGroup->GetSubList()->NbcInsertObject( pRet );
                         pGroup->GetSubList()->NbcInsertObject( pTObj );
                         pRet = pGroup;
@@ -1880,7 +1884,11 @@ SdrObject* SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
 
                                         // TODO/LATER: need MediaType for Graphic
                                         aObj.SetGraphic( rGraf, OUString() );
-                                        pRet = new SdrOle2Obj( aObj, aNm, rBoundRect );
+                                        pRet = new SdrOle2Obj(
+                                            *pSdrModel,
+                                            aObj,
+                                            aNm,
+                                            rBoundRect);
                                     }
                                 }
                                 if ( !pRet && ( rOe.nType == PPT_PST_ExControl ) )
@@ -1943,7 +1951,11 @@ SdrObject* SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
                                         // TODO/LATER: need MediaType for Graphic
                                         aObj.SetGraphic( aGraphic, OUString() );
 
-                                        pRet = new SdrOle2Obj( aObj, aNm, rBoundRect );
+                                        pRet = new SdrOle2Obj(
+                                            *pSdrModel,
+                                            aObj,
+                                            aNm,
+                                            rBoundRect);
                                     }
                                 }
                             }
@@ -3062,12 +3074,17 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
         pSet->Put( XFillStyleItem( drawing::FillStyle_NONE ) );
     }
     pSet->Put( XLineStyleItem( drawing::LineStyle_NONE ) );
-    tools::Rectangle aRect( rPage.GetLeftBorder(), rPage.GetUpperBorder(), rPage.GetWidth()-rPage.GetRightBorder(), rPage.GetHeight()-rPage.GetLowerBorder() );
-    pRet = new SdrRectObj( aRect );
-    pRet->SetModel( pSdrModel );
+    tools::Rectangle aRect(
+        rPage.GetLeftBorder(),
+        rPage.GetUpperBorder(),
+        rPage.GetWidth() - rPage.GetRightBorder(),
+        rPage.GetHeight() - rPage.GetLowerBorder());
+
+    pRet = new SdrRectObj(
+        *pSdrModel,
+        aRect);
 
     pRet->SetMergedItemSet(*pSet);
-
     pRet->SetMarkProtect( true );
     pRet->SetMoveProtect( true );
     pRet->SetResizeProtect( true );
@@ -7572,7 +7589,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, const sal_uInt32
     if (aRows.empty())
         return pRet;
 
-    sdr::table::SdrTableObj* pTable = new sdr::table::SdrTableObj( pSdrModel );
+    sdr::table::SdrTableObj* pTable = new sdr::table::SdrTableObj(*pSdrModel);
     pTable->uno_lock();
     Reference< XTable > xTable( pTable->getTable() );
 
