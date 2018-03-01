@@ -70,11 +70,10 @@ namespace rptui
 using namespace ::com::sun::star;
 
 
-sal_Int32 lcl_getOverlappedControlColor(/*const uno::Reference <lang::XMultiServiceFactory> _rxFactory*/)
+Color lcl_getOverlappedControlColor(/*const uno::Reference <lang::XMultiServiceFactory> _rxFactory*/)
 {
     svtools::ExtendedColorConfig aConfig;
-    sal_Int32 nColor = aConfig.GetColorValue(CFG_REPORTDESIGNER, DBOVERLAPPEDCONTROL).getColor();
-    return nColor;
+    return aConfig.GetColorValue(CFG_REPORTDESIGNER, DBOVERLAPPEDCONTROL).getColor();
 }
 
 OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< report::XSection >& _xSection)

@@ -47,8 +47,8 @@ protected:
     Point           m_aMDPos;
     css::uno::Reference<css::uno::XInterface> m_xOverlappingObj;
     SdrObject *     m_pOverlappingObj;
-    sal_Int32       m_nOverlappedControlColor;
-    sal_Int32       m_nOldColor;
+    Color           m_nOverlappedControlColor;
+    Color           m_nOldColor;
     bool            m_bSelectionMode;
     bool            m_bUiActive;
     bool            m_bShowPropertyBrowser;
@@ -101,7 +101,7 @@ public:
     * \return <TRUE/> if overlapping, otherwise <FALSE/>
     */
     bool isOverlapping(const MouseEvent& rMEvt);
-    void setOverlappedControlColor(sal_Int32 _nColor);
+    void setOverlappedControlColor(Color _nColor);
     void stopScrollTimer();
 
     /** deactivate all ole object

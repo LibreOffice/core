@@ -53,7 +53,7 @@ namespace rptui
     }
 
 
-    sal_Int32 FormattedFieldBeautifier::getTextColor()
+    Color FormattedFieldBeautifier::getTextColor()
     {
         if (m_nTextColor == -1)
         {
