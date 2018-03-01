@@ -107,6 +107,7 @@ void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & /*rNamesp
         {
             const OUString& rAttrValue = unknownAttribs[i].Value;
             const OUString& rAttrName = unknownAttribs[i].Name;
+            // note: rAttrName is expected to be namespace-prefixed here
             mrImport.maAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
         }
     }
