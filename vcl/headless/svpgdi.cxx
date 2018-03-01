@@ -1212,12 +1212,12 @@ namespace
             rPalette.GetEntryCount() < 2 ||
 
             (rPalette.GetEntryCount() == 2 &&
-            rPalette[0] == Color(COL_BLACK) &&
-            rPalette[1] == Color(COL_WHITE) ) ||
+            rPalette[0] == COL_BLACK &&
+            rPalette[1] == COL_WHITE ) ||
 
             (rPalette.GetEntryCount() == 2 &&
-            rPalette[1] == Color(COL_BLACK) &&
-            rPalette[0] == Color(COL_WHITE) )
+            rPalette[1] == COL_BLACK &&
+            rPalette[0] == COL_WHITE )
             );
     }
 }
