@@ -82,6 +82,7 @@ public:
     void testTdf97630();
     void testSwappedOutImageExport();
     void testOOoXMLAnimations();
+    void testUnknownAttributes();
     void testTdf80020();
     void testLinkedGraphicRT();
     void testImageWithSpecialID();
@@ -102,6 +103,7 @@ public:
     CPPUNIT_TEST(testTdf97630);
     CPPUNIT_TEST(testSwappedOutImageExport);
     CPPUNIT_TEST(testOOoXMLAnimations);
+    CPPUNIT_TEST(testUnknownAttributes);
     CPPUNIT_TEST(testTdf80020);
     CPPUNIT_TEST(testLinkedGraphicRT);
     CPPUNIT_TEST(testImageWithSpecialID);
@@ -133,6 +135,8 @@ public:
             { "text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" },
             { "xlink", "http://www.w3c.org/1999/xlink" },
             { "loext", "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" },
+            // user-defined
+            { "foo", "http://example.com/" },
         };
         for (size_t i = 0; i < SAL_N_ELEMENTS(namespaces); ++i)
         {
@@ -434,6 +438,28 @@ void SdExportTest::testOOoXMLAnimations()
     assertXPath(pXmlDoc, "//anim:par[@presentation:node-type='timing-root']", 26);
     // currently getting 52 of these without the fix (depends on timing)
     assertXPath(pXmlDoc, "//anim:par", 223);
+}
+
+void SdExportTest::testUnknownAttributes()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/unknown-attribute.fodp"), FODP);
+
+    uno::Reference<lang::XComponent> xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(getFormat(ODP)->pFilterName), RTL_TEXTENCODING_UTF8);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDoc = parseExport(aTempFile, "content.xml");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/style:graphic-properties[@foo:non-existent-att='bar']");
+// TODO: if the namespace is *known*, the attribute is not preserved, but that seems to be a pre-existing problem, or maybe it's even intentional?
+//    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/style:graphic-properties[@svg:non-existent-att='blah']");
+    // this was on style:graphic-properties on the import, but the export moves it to root node which is OK
+    assertXPathNSDef(pXmlDoc, "/office:document-content", "foo", "http://example.com/");
 }
 
 void SdExportTest::testTdf80020()
