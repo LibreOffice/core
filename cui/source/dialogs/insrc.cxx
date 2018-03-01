@@ -19,49 +19,37 @@
 
 #include <dialmgr.hxx>
 #include <svx/svxdlg.hxx>
+#include <vcl/svapp.hxx>
 #include <strings.hrc>
 #include <insrc.hxx>
 
 bool SvxInsRowColDlg::isInsertBefore() const
 {
-    return !m_pAfterBtn->IsChecked();
+    return !m_xAfterBtn->get_active();
 }
 
 sal_uInt16 SvxInsRowColDlg::getInsertCount() const
 {
-    return static_cast< sal_uInt16 >( m_pCountEdit->GetValue() );
+    return m_xCountEdit->get_value();
 }
 
-SvxInsRowColDlg::SvxInsRowColDlg(vcl::Window* pParent, bool bCol, const OString& sHelpId )
-    : m_pDialog(VclPtr<ModalDialog>::Create(pParent, "InsertRowColumnDialog", "cui/ui/insertrowcolumn.ui"))
+SvxInsRowColDlg::SvxInsRowColDlg(weld::Window* pParent, bool bCol, const OString& rHelpId)
+    : m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/insertrowcolumn.ui"))
+    , m_xDialog(m_xBuilder->weld_dialog("InsertRowColumnDialog"))
+    , m_xCountEdit(m_xBuilder->weld_spin_button("insert_number"))
+    , m_xBeforeBtn(m_xBuilder->weld_radio_button("insert_before"))
+    , m_xAfterBtn(m_xBuilder->weld_radio_button("insert_after"))
     , aRow(CuiResId(RID_SVXSTR_ROW))
     , aCol(CuiResId(RID_SVXSTR_COL))
     , bColumn(bCol)
 {
-    m_pDialog->get(m_pCountEdit, "insert_number");
-    m_pDialog->get(m_pBeforeBtn, "insert_before");
-    m_pDialog->get(m_pAfterBtn,  "insert_after");
-    m_pDialog->SetText( bColumn ? aCol : aRow );
-    m_pDialog->SetHelpId( sHelpId );
-}
-
-SvxInsRowColDlg::~SvxInsRowColDlg()
-{
-    disposeOnce();
-}
-
-void SvxInsRowColDlg::dispose()
-{
-    m_pCountEdit.clear();
-    m_pBeforeBtn.clear();
-    m_pAfterBtn.clear();
-    m_pDialog.disposeAndClear();
-    SvxAbstractInsRowColDlg::dispose();
+    m_xDialog->set_title(bColumn ? aCol : aRow);
+    m_xDialog->set_help_id(rHelpId);
 }
 
 short SvxInsRowColDlg::Execute()
 {
-    return m_pDialog->Execute();
+    return m_xDialog->run();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
