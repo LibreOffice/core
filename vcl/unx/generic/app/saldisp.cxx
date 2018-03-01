@@ -1494,6 +1494,9 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
 }
 
 // Pointer
+static unsigned char nullmask_bits[] = { 0x00, 0x00, 0x00, 0x00 };
+static unsigned char nullcurs_bits[] = { 0x00, 0x00, 0x00, 0x00 };
+
 #define MAKE_BITMAP( name ) \
     XCreateBitmapFromData( pDisp_, \
                            DefaultRootWindow( pDisp_ ), \
