@@ -1250,6 +1250,8 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sTextFieldStart( "TextFieldStart"  ),
     sTextFieldEnd( "TextFieldEnd"  ),
     sTextFieldStartEnd( "TextFieldStartEnd"  ),
+    sBookmarkHidden("BookmarkHidden"),
+    sBookmarkCondition("BookmarkCondition"),
     aCharStyleNamesPropInfoCache( sCharStyleNames )
 {
     rtl::Reference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TextPropMap::PARA, true ));
