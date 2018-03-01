@@ -1499,19 +1499,75 @@ class GtkInstanceDialog : public GtkInstanceWindow, public virtual weld::Dialog
 {
 private:
     GtkDialog* m_pDialog;
+    std::shared_ptr<weld::DialogController> m_xDialogController;
+    std::function<void(sal_Int32)> m_aFunc;
     gulong m_nCloseSignalId;
+    gulong m_nResponseSignalId;
 
-    static void signalClose(GtkWidget *, gpointer widget)
+    static void signalClose(GtkWidget*, gpointer widget)
     {
         GtkInstanceDialog* pThis = static_cast<GtkInstanceDialog*>(widget);
         pThis->response(RET_CANCEL);
+    }
+
+    static void signalAsyncResponse(GtkWidget*, gint ret, gpointer widget)
+    {
+        GtkInstanceDialog* pThis = static_cast<GtkInstanceDialog*>(widget);
+        pThis->asyncresponse(ret);
+    }
+
+    static int GtkToVcl(int ret)
+    {
+        if (ret == GTK_RESPONSE_OK)
+            ret = RET_OK;
+        else if (ret == GTK_RESPONSE_CANCEL)
+            ret = RET_CANCEL;
+        else if (ret == GTK_RESPONSE_CLOSE)
+            ret = RET_CLOSE;
+        else if (ret == GTK_RESPONSE_YES)
+            ret = RET_YES;
+        else if (ret == GTK_RESPONSE_NO)
+            ret = RET_NO;
+        return ret;
+    }
+
+    void asyncresponse(gint ret)
+    {
+        if (ret == GTK_RESPONSE_HELP)
+        {
+            help();
+            return;
+        }
+
+        hide();
+        m_aFunc(GtkToVcl(ret));
+        m_xDialogController.reset();
     }
 public:
     GtkInstanceDialog(GtkDialog* pDialog, bool bTakeOwnership)
         : GtkInstanceWindow(GTK_WINDOW(pDialog), bTakeOwnership)
         , m_pDialog(pDialog)
         , m_nCloseSignalId(g_signal_connect(m_pDialog, "close", G_CALLBACK(signalClose), this))
+        , m_nResponseSignalId(0)
     {
+    }
+
+    virtual bool runAsync(std::shared_ptr<weld::DialogController> rDialogController, const std::function<void(sal_Int32)>& func) override
+    {
+        assert(!m_nResponseSignalId);
+
+        m_xDialogController = rDialogController;
+        m_aFunc = func;
+
+        if (!gtk_widget_get_visible(m_pWidget))
+        {
+            sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
+            gtk_widget_show(m_pWidget);
+        }
+
+        m_nResponseSignalId = g_signal_connect(m_pDialog, "response", G_CALLBACK(signalAsyncResponse), this);
+
+        return true;
     }
 
     virtual int run() override
@@ -1526,20 +1582,9 @@ public:
                 help();
                 continue;
             }
-            else if (ret == GTK_RESPONSE_OK)
-                ret = RET_OK;
-            else if (ret == GTK_RESPONSE_CANCEL)
-                ret = RET_CANCEL;
-            else if (ret == GTK_RESPONSE_CLOSE)
-                ret = RET_CLOSE;
-            else if (ret == GTK_RESPONSE_YES)
-                ret = RET_YES;
-            else if (ret == GTK_RESPONSE_NO)
-                ret = RET_NO;
-            break;
         }
         hide();
-        return ret;
+        return GtkToVcl(ret);
     }
 
     static int VclToGtk(int nResponse)
@@ -1577,6 +1622,8 @@ public:
     virtual ~GtkInstanceDialog() override
     {
         g_signal_handler_disconnect(m_pDialog, m_nCloseSignalId);
+        if (m_nResponseSignalId)
+            g_signal_handler_disconnect(m_pDialog, m_nResponseSignalId);
     }
 };
 
