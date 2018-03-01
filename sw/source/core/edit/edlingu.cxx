@@ -66,27 +66,27 @@ using namespace ::com::sun::star::linguistic2;
 class SwLinguIter
 {
     SwEditShell *pSh;
-    SwPosition  *pStart;
-    SwPosition  *pEnd;
-    SwPosition  *pCurr;
-    SwPosition  *pCurrX;
+    std::unique_ptr<SwPosition> m_pStart;
+    std::unique_ptr<SwPosition> m_pEnd;
+    std::unique_ptr<SwPosition> m_pCurr;
+    std::unique_ptr<SwPosition> m_pCurrX;
     sal_uInt16 nCursorCnt;
 public:
     SwLinguIter();
 
     SwEditShell *GetSh()             { return pSh; }
 
-    const SwPosition *GetEnd() const { return pEnd; }
-    void SetEnd( SwPosition* pNew ){ delete pEnd; pEnd = pNew; }
+    const SwPosition *GetEnd() const { return m_pEnd.get(); }
+    void SetEnd(SwPosition* pNew) { m_pEnd.reset(pNew); }
 
-    const SwPosition *GetStart() const { return pStart; }
-    void SetStart( SwPosition* pNew ){ delete pStart; pStart = pNew; }
+    const SwPosition *GetStart() const { return m_pStart.get(); }
+    void SetStart(SwPosition* pNew) { m_pStart.reset(pNew); }
 
-    const SwPosition *GetCurr() const { return pCurr; }
-    void SetCurr( SwPosition* pNew ){ delete pCurr; pCurr = pNew; }
+    const SwPosition *GetCurr() const { return m_pCurr.get(); }
+    void SetCurr(SwPosition* pNew) { m_pCurr.reset(pNew); }
 
-    const SwPosition *GetCurrX() const { return pCurrX; }
-    void SetCurrX( SwPosition* pNew ){ delete pCurrX; pCurrX = pNew; }
+    const SwPosition *GetCurrX() const { return m_pCurrX.get(); }
+    void SetCurrX(SwPosition* pNew) { m_pCurrX.reset(pNew); }
 
     sal_uInt16& GetCursorCnt(){ return nCursorCnt; }
 
@@ -181,10 +181,6 @@ static SwHyphIter*  g_pHyphIter = nullptr;
 
 SwLinguIter::SwLinguIter()
     : pSh(nullptr)
-    , pStart(nullptr)
-    , pEnd(nullptr)
-    , pCurr(nullptr)
-    , pCurrX(nullptr)
     , nCursorCnt(0)
 {
     // TODO missing: ensurance of re-entrance, OSL_ENSURE( etc.
@@ -203,7 +199,7 @@ void SwLinguIter::Start_( SwEditShell *pShell, SwDocPositions eStart,
 
     SET_CURR_SHELL( pSh );
 
-    OSL_ENSURE( !pEnd, "SwLinguIter::Start_ without End?");
+    OSL_ENSURE(!m_pEnd, "SwLinguIter::Start_ without End?");
 
     SwPaM *pCursor = pSh->GetCursor();
 
@@ -235,8 +231,8 @@ void SwLinguIter::Start_( SwEditShell *pShell, SwDocPositions eStart,
     if ( *pCursor->GetPoint() > *pCursor->GetMark() )
         pCursor->Exchange();
 
-    pStart = new SwPosition( *pCursor->GetPoint() );
-    pEnd = new SwPosition( *pCursor->GetMark() );
+    m_pStart.reset(new SwPosition(*pCursor->GetPoint()));
+    m_pEnd.reset(new SwPosition(*pCursor->GetMark()));
     if( bSetCurr )
     {
         SwPosition* pNew = new SwPosition( *GetStart() );
@@ -253,7 +249,7 @@ void SwLinguIter::End_(bool bRestoreSelection)
     if( !pSh )
         return;
 
-    OSL_ENSURE( pEnd, "SwLinguIter::End_ without end?");
+    OSL_ENSURE(m_pEnd, "SwLinguIter::End_ without end?");
     if(bRestoreSelection)
     {
         while( nCursorCnt-- )
@@ -262,10 +258,10 @@ void SwLinguIter::End_(bool bRestoreSelection)
         pSh->KillPams();
         pSh->ClearMark();
     }
-    DELETEZ(pStart);
-    DELETEZ(pEnd);
-    DELETEZ(pCurr);
-    DELETEZ(pCurrX);
+    m_pStart.reset();
+    m_pEnd.reset();
+    m_pCurr.reset();
+    m_pCurrX.reset();
 
     pSh = nullptr;
 }
