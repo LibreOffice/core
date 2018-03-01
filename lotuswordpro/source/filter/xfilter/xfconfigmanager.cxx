@@ -69,37 +69,31 @@ XFConfigManager::XFConfigManager()
 
 XFConfigManager::~XFConfigManager()
 {
-    delete m_pEndnoteConfig;
-    delete m_pFootnoteConfig;
-    delete m_pLineNumberConfig;
 }
 
 void XFConfigManager::SetLineNumberConfig(XFLineNumberConfig *pLNConfig)
 {
-    delete m_pLineNumberConfig;
-    m_pLineNumberConfig = pLNConfig;
+    m_pLineNumberConfig.reset( pLNConfig );
 }
 
 void    XFConfigManager::SetFootnoteConfig(XFFootnoteConfig *pFNConfig)
 {
-    delete m_pFootnoteConfig;
-    m_pFootnoteConfig = pFNConfig;
+    m_pFootnoteConfig.reset( pFNConfig );
 }
 
 void    XFConfigManager::SetEndnoteConfig(XFEndnoteConfig *pENConfig)
 {
-    delete m_pEndnoteConfig;
-    m_pEndnoteConfig = pENConfig;
+    m_pEndnoteConfig.reset( pENConfig );
 }
 
 void    XFConfigManager::ToXml(IXFStream *pStrm)
 {
     if( m_pLineNumberConfig )
-        AddStyle(m_pLineNumberConfig);
+        AddStyle(m_pLineNumberConfig.get());
     if( m_pFootnoteConfig )
-        AddStyle(m_pFootnoteConfig);
+        AddStyle(m_pFootnoteConfig.get());
     if( m_pEndnoteConfig )
-        AddStyle(m_pEndnoteConfig);
+        AddStyle(m_pEndnoteConfig.get());
 
     XFStyleContainer::ToXml(pStrm);
     XFStyleContainer::Reset();
