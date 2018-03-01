@@ -69,43 +69,34 @@ XFConfigManager::XFConfigManager()
 
 XFConfigManager::~XFConfigManager()
 {
-    delete m_pEndnoteConfig;
-    delete m_pFootnoteConfig;
-    delete m_pLineNumberConfig;
 }
 
 void XFConfigManager::SetLineNumberConfig(XFLineNumberConfig *pLNConfig)
 {
-    delete m_pLineNumberConfig;
-    m_pLineNumberConfig = pLNConfig;
+    m_pLineNumberConfig.reset( pLNConfig );
 }
 
 void    XFConfigManager::SetFootnoteConfig(XFFootnoteConfig *pFNConfig)
 {
-    delete m_pFootnoteConfig;
-    m_pFootnoteConfig = pFNConfig;
+    m_pFootnoteConfig.reset( pFNConfig );
 }
 
 void    XFConfigManager::SetEndnoteConfig(XFEndnoteConfig *pENConfig)
 {
-    delete m_pEndnoteConfig;
-    m_pEndnoteConfig = pENConfig;
+    m_pEndnoteConfig.reset( pENConfig );
 }
 
 void    XFConfigManager::ToXml(IXFStream *pStrm)
 {
     if( m_pLineNumberConfig )
-        AddStyle(m_pLineNumberConfig);
+        AddStyle(m_pLineNumberConfig.release());
     if( m_pFootnoteConfig )
-        AddStyle(m_pFootnoteConfig);
+        AddStyle(m_pFootnoteConfig.release());
     if( m_pEndnoteConfig )
-        AddStyle(m_pEndnoteConfig);
+        AddStyle(m_pEndnoteConfig.release());
 
     XFStyleContainer::ToXml(pStrm);
     XFStyleContainer::Reset();
-    m_pLineNumberConfig = nullptr;
-    m_pFootnoteConfig = nullptr;
-    m_pEndnoteConfig = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
