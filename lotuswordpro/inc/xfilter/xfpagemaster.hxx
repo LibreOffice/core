@@ -65,6 +65,7 @@
 #include <xfilter/xfstyle.hxx>
 #include <xfilter/xfcolor.hxx>
 #include <xfilter/xfmargins.hxx>
+#include <memory>
 
 class XFBorders;
 class XFShadow;
@@ -126,14 +127,14 @@ private:
     enumXFPageUsage m_eUsage;
     enumXFTextDir   m_eTextDir;
 
-    XFBorders   *m_pBorders;
-    XFShadow    *m_pShadow;
+    std::unique_ptr<XFBorders>   m_pBorders;
+    std::unique_ptr<XFShadow>    m_pShadow;
     XFColor     m_aBackColor;
-    XFColumns   *m_pColumns;
-    XFBGImage   *m_pBGImage;
+    std::unique_ptr<XFColumns>   m_pColumns;
+    std::unique_ptr<XFBGImage>   m_pBGImage;
 
-    XFHeaderStyle   *m_pHeaderStyle;
-    XFFooterStyle   *m_pFooterStyle;
+    std::unique_ptr<XFHeaderStyle> m_pHeaderStyle;
+    std::unique_ptr<XFFooterStyle> m_pFooterStyle;
     //separator:
     enumXFAlignType m_eSepAlign;
     double  m_fSepWidth;
