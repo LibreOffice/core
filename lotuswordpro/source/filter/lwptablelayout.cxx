@@ -1107,14 +1107,18 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
         LwpTableRange* pTableRange = pHolder ? dynamic_cast<LwpTableRange*>(pHolder->GetHeadID().obj().get()) : nullptr;
 
         //Look up the table
-        while (nullptr!=pTableRange)
+        std::set<LwpTableRange*> aTableSeen;
+        while (pTableRange)
         {
+            aTableSeen.insert(pTableRange);
             LwpObjectID aID = pTableRange->GetTableID();
             if (aID == aTableID)
             {
                 break;
             }
             pTableRange = pTableRange->GetNext();
+            if (aTableSeen.find(pTableRange) != aTableSeen.end())
+                throw std::runtime_error("loop in conversion");
         }
 
         if (!pTableRange)
