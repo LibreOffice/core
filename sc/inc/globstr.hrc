@@ -93,6 +93,7 @@
 #define STR_UNDO_DETREFRESH                     NC_("STR_UNDO_DETREFRESH", "Refresh Traces")
 #define STR_UNDO_CHARTDATA                      NC_("STR_UNDO_CHARTDATA", "Modify chart data range")
 #define STR_UNDO_ORIGINALSIZE                   NC_("STR_UNDO_ORIGINALSIZE", "Original Size")
+#define STR_UNDO_FITCELLSIZE                    NC_("STR_UNDO_FITCELLSIZE", "Fit to Cell Size")
 #define STR_UNDO_UPDATELINK                     NC_("STR_UNDO_UPDATELINK", "Update Link")
 #define STR_UNDO_REMOVELINK                     NC_("STR_UNDO_REMOVELINK", "Unlink")
 #define STR_UNDO_INSERTAREALINK                 NC_("STR_UNDO_INSERTAREALINK", "Insert Link")
