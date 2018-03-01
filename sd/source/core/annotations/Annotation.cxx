@@ -69,7 +69,7 @@ public:
     static sal_uInt32 m_nLastId;
 
     SdPage* GetPage() const { return mpPage; }
-    SdrModel* GetModel() { return (mpPage != nullptr) ? mpPage->GetModel() : nullptr; }
+    SdrModel* GetModel() { return (mpPage != nullptr) ? &mpPage->getSdrModelFromSdrPage() : nullptr; }
     sal_uInt32 GetId() const { return m_nId; }
 
     // XInterface:
@@ -366,7 +366,7 @@ Reference< XText > SAL_CALL Annotation::getTextRange()
     osl::MutexGuard g(m_aMutex);
     if( !m_TextRange.is() && (mpPage != nullptr) )
     {
-        m_TextRange = TextApiObject::create( static_cast< SdDrawDocument* >( mpPage->GetModel() ) );
+        m_TextRange = TextApiObject::create( static_cast< SdDrawDocument* >( &mpPage->getSdrModelFromSdrPage() ) );
     }
     return Reference< XText >( m_TextRange.get() );
 }

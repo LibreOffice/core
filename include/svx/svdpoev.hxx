@@ -25,7 +25,7 @@
 
 #include <svx/ipolypolygoneditorcontroller.hxx>
 
-class SVX_DLLPUBLIC SdrPolyEditView: public SdrEditView, public IPolyPolygonEditorController
+class SVX_DLLPUBLIC SdrPolyEditView : public SdrEditView, public IPolyPolygonEditorController
 {
     friend class                SdrEditView;
 
@@ -45,7 +45,10 @@ private:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrPolyEditView(SdrModel* pModel1, OutputDevice* pOut);
+    SdrPolyEditView(
+        SdrModel& rSdrModel,
+        OutputDevice* pOut);
+
     virtual ~SdrPolyEditView() override;
 
 public:

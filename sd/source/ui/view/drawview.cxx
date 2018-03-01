@@ -78,12 +78,15 @@ namespace sd {
  * that there is no page a page is created.
  */
 
-DrawView::DrawView( DrawDocShell* pDocSh, OutputDevice* pOutDev, DrawViewShell* pShell)
-: ::sd::View(*pDocSh->GetDoc(), pOutDev, pShell)
-, mpDocShell(pDocSh)
-, mpDrawViewShell(pShell)
-, mpVDev(nullptr)
-, mnPOCHSmph(0)
+DrawView::DrawView(
+    DrawDocShell* pDocSh,
+    OutputDevice* pOutDev,
+    DrawViewShell* pShell)
+:   ::sd::View(*pDocSh->GetDoc(), pOutDev, pShell)
+    ,mpDocShell(pDocSh)
+    ,mpDrawViewShell(pShell)
+    ,mpVDev(nullptr)
+    ,mnPOCHSmph(0)
 {
     SetCurrentObj(OBJ_RECT);
 }

@@ -4221,7 +4221,7 @@ void XclImpChartDrawing::ConvertObjects( XclImpDffConverter& rDffConv,
             Reference< XDrawPageSupplier > xDrawPageSupp( rxModel, UNO_QUERY_THROW );
             Reference< XDrawPage > xDrawPage( xDrawPageSupp->getDrawPage(), UNO_SET_THROW );
             pSdrPage = ::GetSdrPageFromXDrawPage( xDrawPage );
-            pSdrModel = pSdrPage ? pSdrPage->GetModel() : nullptr;
+            pSdrModel = pSdrPage ? &pSdrPage->getSdrModelFromSdrPage() : nullptr;
         }
         catch( Exception& )
         {

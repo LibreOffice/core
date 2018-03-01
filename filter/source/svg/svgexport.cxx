@@ -560,9 +560,9 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                         if( pSvxDrawPage )
                         {
                             mpDefaultSdrPage = pSvxDrawPage->GetSdrPage();
-                            mpSdrModel = mpDefaultSdrPage->GetModel();
+                            mpSdrModel = &mpDefaultSdrPage->getSdrModelFromSdrPage();
 
-                            if( mpSdrModel )
+                            if( mpSdrModel ) // TTTT should be reference
                             {
                                 SdrOutliner& rOutl = mpSdrModel->GetDrawOutliner();
 
@@ -921,8 +921,8 @@ void SVGFilter::implGenerateMetaData()
         if( pSvxDrawPage )
         {
             SdrPage* pSdrPage = pSvxDrawPage->GetSdrPage();
-            SdrModel* pSdrModel = pSdrPage->GetModel();
-            nPageNumberingType = pSdrModel->GetPageNumType();
+            SdrModel& rSdrModel(pSdrPage->getSdrModelFromSdrPage());
+            nPageNumberingType = rSdrModel.GetPageNumType();
 
             // That is used by CalcFieldHdl method.
             mVisiblePagePropSet.nPageNumberingType = nPageNumberingType;
@@ -1384,8 +1384,8 @@ void SVGFilter::implGetPagePropSet( const Reference< css::drawing::XDrawPage > &
                 if( pSvxDrawPage )
                 {
                     SdrPage* pSdrPage = pSvxDrawPage->GetSdrPage();
-                    SdrModel* pSdrModel = pSdrPage->GetModel();
-                    mVisiblePagePropSet.nPageNumberingType = pSdrModel->GetPageNumType();
+                    SdrModel& rSdrModel(pSdrPage->getSdrModelFromSdrPage());
+                    mVisiblePagePropSet.nPageNumberingType = rSdrModel.GetPageNumType();
                 }
             }
         }
@@ -1931,7 +1931,7 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< css::drawing::XDraw
 
         if( pObj )
         {
-            Graphic aGraphic( SdrExchangeView::GetObjGraphic( pObj->GetModel(), pObj ) );
+            const Graphic aGraphic(SdrExchangeView::GetObjGraphic(*pObj));
 
             if( aGraphic.GetType() != GraphicType::NONE )
             {

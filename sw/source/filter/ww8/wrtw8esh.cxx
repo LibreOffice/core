@@ -2966,10 +2966,8 @@ void SwEscherEx::WriteOCXControl( const SwFrameFormat& rFormat, sal_uInt32 nShap
 
     // #i71538# use complete SdrViews
     // SdrExchangeView aExchange(pModel, pDevice);
-    SdrView aExchange(pModel, pDevice);
-
-    Graphic aGraphic(SdrExchangeView::GetObjGraphic(pModel, pSdrObj));
-
+    SdrView aExchange(*pModel, pDevice);
+    const Graphic aGraphic(SdrExchangeView::GetObjGraphic(*pSdrObj));
     EscherPropertyContainer aPropOpt;
     WriteOLEPicture(aPropOpt,
         ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty | ShapeFlag::OLEShape, aGraphic,

@@ -27,14 +27,8 @@ namespace basctl
 
 
 DlgEdPage::DlgEdPage(DlgEdModel& rModel, bool bMasterPage)
-    : SdrPage(rModel, bMasterPage)
-    , pDlgEdForm(nullptr)
-{
-}
-
-DlgEdPage::DlgEdPage(const DlgEdPage& rSrcPage)
-    : SdrPage(rSrcPage)
-    , pDlgEdForm(nullptr)
+:   SdrPage(rModel, bMasterPage)
+    ,pDlgEdForm(nullptr)
 {
 }
 
@@ -43,23 +37,15 @@ DlgEdPage::~DlgEdPage()
     Clear();
 }
 
-
-SdrPage* DlgEdPage::Clone() const
-{
-    return Clone(nullptr);
-}
-
 SdrPage* DlgEdPage::Clone(SdrModel* const pNewModel) const
 {
-    DlgEdPage* const pNewPage = new DlgEdPage( *this );
-    DlgEdModel* pDlgEdModel = nullptr;
-    if ( pNewModel )
-    {
-        pDlgEdModel = dynamic_cast<DlgEdModel*>( pNewModel );
-        assert(pDlgEdModel);
-    }
-    pNewPage->lateInit( *this, pDlgEdModel );
-    return pNewPage;
+    DlgEdModel& rDlgEdModel(static_cast< DlgEdModel& >(nullptr == pNewModel ? getSdrModelFromSdrPage() : *pNewModel));
+    DlgEdPage* pClonedDlgEdPage(
+        new DlgEdPage(
+            rDlgEdModel,
+            IsMasterPage()));
+    pClonedDlgEdPage->SdrPage::lateInit(*this);
+    return pClonedDlgEdPage;
 }
 
 

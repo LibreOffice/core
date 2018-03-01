@@ -727,7 +727,7 @@ void ChartController::impl_createDrawViewController()
     {
         if( m_pDrawModelWrapper )
         {
-            m_pDrawViewWrapper = new DrawViewWrapper(&m_pDrawModelWrapper->getSdrModel(),GetChartWindow());
+            m_pDrawViewWrapper = new DrawViewWrapper(m_pDrawModelWrapper->getSdrModel(),GetChartWindow());
             m_pDrawViewWrapper->attachParentReferenceDevice( getModel() );
         }
     }

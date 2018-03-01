@@ -315,16 +315,15 @@ const Reference< css::form::XForms >& FmFormPageImpl::getForms( bool _bForceCrea
             m_aFormsCreationHdl.Call( *this );
         }
 
-        FmFormModel* pFormsModel = dynamic_cast<FmFormModel*>( m_rPage.GetModel()  );
+        FmFormModel& rFmFormModel(dynamic_cast< FmFormModel& >(m_rPage.getSdrModelFromSdrPage()));
 
         // give the newly created collection a place in the universe
-        SfxObjectShell* pObjShell = pFormsModel ? pFormsModel->GetObjectShell() : nullptr;
+        SfxObjectShell* pObjShell(rFmFormModel.GetObjectShell());
         if ( pObjShell )
             m_xForms->setParent( pObjShell->GetModel() );
 
         // tell the UNDO environment that we have a new forms collection
-        if ( pFormsModel )
-            pFormsModel->GetUndoEnv().AddForms( Reference<XNameContainer>(m_xForms,UNO_QUERY_THROW) );
+        rFmFormModel.GetUndoEnv().AddForms( Reference<XNameContainer>(m_xForms,UNO_QUERY_THROW) );
     }
     return m_xForms;
 }
@@ -396,13 +395,13 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
     // did not find an existing suitable form -> create a new one
     if ( !xForm.is() )
     {
-        SdrModel* pModel = m_rPage.GetModel();
+        SdrModel& rModel(m_rPage.getSdrModelFromSdrPage());
 
-        if( pModel->IsUndoEnabled() )
+        if( rModel.IsUndoEnabled() )
         {
             OUString aStr(SvxResId(RID_STR_FORM));
             OUString aUndoStr(SvxResId(RID_STR_UNDO_CONTAINER_INSERT));
-            pModel->BegUndo(aUndoStr.replaceFirst("'#'", aStr));
+            rModel.BegUndo(aUndoStr.replaceFirst("'#'", aStr));
         }
 
         try
@@ -417,13 +416,15 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
             OUString sName = SvxResId(RID_STR_STDFORMNAME);
             xFormProps->setPropertyValue( FM_PROP_NAME, makeAny( sName ) );
 
-            if( pModel->IsUndoEnabled() )
+            if( rModel.IsUndoEnabled() )
             {
-                pModel->AddUndo(new FmUndoContainerAction(*static_cast<FmFormModel*>(pModel),
-                                                           FmUndoContainerAction::Inserted,
-                                                           xForms,
-                                                           xForm,
-                                                           xForms->getCount()));
+                rModel.AddUndo(
+                    new FmUndoContainerAction(
+                        static_cast< FmFormModel& >(rModel),
+                        FmUndoContainerAction::Inserted,
+                        xForms,
+                        xForm,
+                        xForms->getCount()));
             }
             xForms->insertByName( sName, makeAny( xForm ) );
             xCurrentForm = xForm;
@@ -434,8 +435,8 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
             xForm.clear();
         }
 
-        if( pModel->IsUndoEnabled() )
-            pModel->EndUndo();
+        if( rModel.IsUndoEnabled() )
+            rModel.EndUndo();
     }
 
     return xForm;
@@ -474,16 +475,15 @@ Reference< css::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy
         // If no css::form found, then create a new one
         if (!xForm.is())
         {
-            SdrModel* pModel = m_rPage.GetModel();
-
-            const bool bUndo = pModel->IsUndoEnabled();
+            SdrModel& rModel(m_rPage.getSdrModelFromSdrPage());
+            const bool bUndo(rModel.IsUndoEnabled());
 
             if( bUndo )
             {
                 OUString aStr(SvxResId(RID_STR_FORM));
                 OUString aUndoStr(SvxResId(RID_STR_UNDO_CONTAINER_INSERT));
                 aUndoStr = aUndoStr.replaceFirst("#", aStr);
-                pModel->BegUndo(aUndoStr);
+                rModel.BegUndo(aUndoStr);
             }
 
             xForm.set(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), UNO_QUERY);
@@ -515,17 +515,19 @@ Reference< css::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy
             if( bUndo )
             {
                 Reference< css::container::XIndexContainer >  xContainer( getForms(), UNO_QUERY );
-                pModel->AddUndo(new FmUndoContainerAction(*static_cast<FmFormModel*>(pModel),
-                                                         FmUndoContainerAction::Inserted,
-                                                         xContainer,
-                                                         xForm,
-                                                         xContainer->getCount()));
+                rModel.AddUndo(
+                    new FmUndoContainerAction(
+                        static_cast< FmFormModel& >(rModel),
+                        FmUndoContainerAction::Inserted,
+                        xContainer,
+                        xForm,
+                        xContainer->getCount()));
             }
 
             getForms()->insertByName( sName, makeAny( xForm ) );
 
             if( bUndo )
-                pModel->EndUndo();
+                rModel.EndUndo();
         }
         xCurrentForm = xForm;
     }

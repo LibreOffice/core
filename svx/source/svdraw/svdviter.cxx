@@ -38,7 +38,7 @@ void SdrViewIter::ImpInitVars()
 SdrViewIter::SdrViewIter(const SdrPage* pPage)
 {
     mpPage = pPage;
-    mpModel = pPage ? pPage->GetModel() : nullptr;
+    mpModel = pPage ? &pPage->getSdrModelFromSdrPage() : nullptr;
     mpObject = nullptr;
     mbNoMasterPage = false;
     ImpInitVars();
@@ -48,7 +48,7 @@ SdrViewIter::SdrViewIter(const SdrPage* pPage)
 SdrViewIter::SdrViewIter(const SdrObject* pObject)
 {
     mpObject = pObject;
-    mpModel = pObject ? pObject->GetModel() : nullptr;
+    mpModel = pObject ? &pObject->getSdrModelFromSdrObject() : nullptr;
     mpPage = pObject ? pObject->GetPage() : nullptr;
     mbNoMasterPage = false;
 

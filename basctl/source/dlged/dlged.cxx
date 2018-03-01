@@ -347,7 +347,7 @@ void DlgEditor::SetDialog( const uno::Reference< container::XNameContainer >& xU
     m_xUnoControlDialogModel = xUnoControlDialogModel;
 
     // create dialog form
-    pDlgEdForm = new DlgEdForm(*this);
+    pDlgEdForm = new DlgEdForm(*pDlgEdModel, *this);
     uno::Reference< awt::XControlModel > xDlgMod( m_xUnoControlDialogModel , uno::UNO_QUERY );
     pDlgEdForm->SetUnoControlModel(xDlgMod);
     static_cast<DlgEdPage*>(pDlgEdModel->GetPage(0))->SetDlgEdForm( pDlgEdForm );
@@ -391,7 +391,7 @@ void DlgEditor::SetDialog( const uno::Reference< container::XNameContainer >& xU
             Any aCtrl = xNameAcc->getByName( indexToName.second );
             Reference< css::awt::XControlModel > xCtrlModel;
             aCtrl >>= xCtrlModel;
-            DlgEdObj* pCtrlObj = new DlgEdObj();
+            DlgEdObj* pCtrlObj = new DlgEdObj(*pDlgEdModel);
             pCtrlObj->SetUnoControlModel( xCtrlModel );
             pCtrlObj->SetDlgEdForm( pDlgEdForm );
             pDlgEdForm->AddChild( pCtrlObj );
@@ -609,7 +609,11 @@ void DlgEditor::SetInsertObj( sal_uInt16 eObj )
 void DlgEditor::CreateDefaultObject()
 {
     // create object by factory
-    SdrObject* pObj = SdrObjFactory::MakeNewObject( pDlgEdView->GetCurrentObjInventor(), pDlgEdView->GetCurrentObjIdentifier(), pDlgEdPage );
+    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+        *pDlgEdModel,
+        pDlgEdView->GetCurrentObjInventor(),
+        pDlgEdView->GetCurrentObjIdentifier(),
+        pDlgEdPage);
 
     if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pObj))
     {
@@ -920,7 +924,7 @@ void DlgEditor::Paste()
                         Reference< util::XCloneable > xClone( xCM, uno::UNO_QUERY );
                         Reference< awt::XControlModel > xCtrlModel( xClone->createClone(), uno::UNO_QUERY );
 
-                        DlgEdObj* pCtrlObj = new DlgEdObj();
+                        DlgEdObj* pCtrlObj = new DlgEdObj(*pDlgEdModel);
                         pCtrlObj->SetDlgEdForm(pDlgEdForm);         // set parent form
                         pDlgEdForm->AddChild(pCtrlObj);             // add child to parent form
                         pCtrlObj->SetUnoControlModel( xCtrlModel ); // set control model

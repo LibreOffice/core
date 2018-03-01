@@ -166,7 +166,10 @@ protected:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrMarkView(SdrModel* pModel1, OutputDevice* pOut);
+    SdrMarkView(
+        SdrModel& rSdrModel,
+        OutputDevice* pOut);
+
     virtual ~SdrMarkView() override;
 
 public:

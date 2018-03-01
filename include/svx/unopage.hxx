@@ -68,8 +68,8 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper6< css::drawin
  protected:
     cppu::OBroadcastHelper mrBHelper;
 
-    SdrPage*        mpPage;
-    SdrModel*       mpModel;
+    SdrPage*        mpPage;     // TTTT should be reference
+    SdrModel*       mpModel;    // TTTT probably not needed -> use from SdrPage
     SdrView*        mpView;
 
     void    SelectObjectsInView( const css::uno::Reference< css::drawing::XShapes >& aShapes, SdrPageView*   pPageView ) throw ();
@@ -83,7 +83,6 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper6< css::drawin
 
     // Internals
     SdrPage* GetSdrPage() const { return mpPage; }
-    void ChangeModel( SdrModel* pNewModel );
 
     // Creation of a SdrObject and insertion into the SdrPage
     SdrObject *CreateSdrObject( const css::uno::Reference< css::drawing::XShape >& xShape, bool bBeginning = false ) throw();
