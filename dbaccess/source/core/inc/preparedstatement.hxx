@@ -40,7 +40,7 @@ namespace dbaccess
                                public css::lang::XServiceInfo
     {
     protected:
-        OColumns*       m_pColumns;
+        std::unique_ptr<OColumns>  m_pColumns;
         css::uno::Reference< css::sdbc::XParameters > m_xAggregateAsParameters;
 
     public:
