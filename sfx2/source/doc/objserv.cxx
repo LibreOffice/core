@@ -468,30 +468,39 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 // creating dialog is done via virtual method; application will
                 // add its own statistics page
-                ScopedVclPtr<SfxDocumentInfoDialog> pDlg(CreateDocumentInfoDialog(aSet));
-                if ( RET_OK == pDlg->Execute() )
-                {
-                    const SfxDocumentInfoItem* pDocInfoItem = SfxItemSet::GetItem<SfxDocumentInfoItem>(pDlg->GetOutputItemSet(), SID_DOCINFO, false);
-                    if ( pDocInfoItem )
-                    {
-                        // user has done some changes to DocumentInfo
-                        pDocInfoItem->UpdateDocumentInfo(getDocProperties());
-                        uno::Sequence< document::CmisProperty > aNewCmisProperties =
-                            pDocInfoItem->GetCmisProperties( );
-                        if ( aNewCmisProperties.getLength( ) > 0 )
-                            xCmisDoc->updateCmisProperties( aNewCmisProperties );
-                        SetUseUserData( pDocInfoItem->IsUseUserData() );
-                        SetUseThumbnailSave( pDocInfoItem-> IsUseThumbnailSave() );
-                        // add data from dialog for possible recording purpose
-                        rReq.AppendItem( SfxDocumentInfoItem( GetTitle(),
-                            getDocProperties(), aNewCmisProperties, IsUseUserData(), IsUseThumbnailSave() ) );
-                    }
+                VclAbstractDialog::AsyncContext aCtx;
+                std::shared_ptr<SfxRequest> pReq = std::make_shared<SfxRequest>(rReq);
+                VclPtr<SfxDocumentInfoDialog> pDlg(CreateDocumentInfoDialog(aSet));
 
-                    rReq.Done();
-                }
-                else
-                    // nothing done; no recording
-                    rReq.Ignore();
+                aCtx.mxOwner = pDlg;
+                aCtx.maEndDialogFn = [this, pDlg, xCmisDoc, pReq](sal_Int32 nResult)
+                {
+                    if (RET_OK == nResult)
+                    {
+                        const SfxDocumentInfoItem* pDocInfoItem = SfxItemSet::GetItem<SfxDocumentInfoItem>(pDlg->GetOutputItemSet(), SID_DOCINFO, false);
+                        if ( pDocInfoItem )
+                        {
+                            // user has done some changes to DocumentInfo
+                            pDocInfoItem->UpdateDocumentInfo(getDocProperties());
+                            uno::Sequence< document::CmisProperty > aNewCmisProperties =
+                                pDocInfoItem->GetCmisProperties( );
+                            if ( aNewCmisProperties.getLength( ) > 0 )
+                                xCmisDoc->updateCmisProperties( aNewCmisProperties );
+                            SetUseUserData( pDocInfoItem->IsUseUserData() );
+                            SetUseThumbnailSave( pDocInfoItem-> IsUseThumbnailSave() );
+                            // add data from dialog for possible recording purpose
+                            pReq->AppendItem( SfxDocumentInfoItem( GetTitle(),
+                                getDocProperties(), aNewCmisProperties, IsUseUserData(), IsUseThumbnailSave() ) );
+                        }
+                        pReq->Done();
+                    }
+                    else
+                        // nothing done; no recording
+                        pReq->Ignore();
+                };
+
+                pDlg->StartExecuteAsync(aCtx);
+                rReq.Ignore();
             }
 
             return;
