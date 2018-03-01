@@ -458,6 +458,10 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             pView->SetMarkedOriginalSize();
             break;
 
+        case SID_FITCELLSIZE:
+            pView->FitToCellSize();
+            break;
+
         case SID_ENABLE_HYPHENATION:
             {
                 const SfxBoolItem* pItem = rReq.GetArg<SfxBoolItem>(SID_ENABLE_HYPHENATION);
