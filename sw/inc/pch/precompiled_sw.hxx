@@ -531,7 +531,6 @@
 #include <tgrditem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
-#include <tools/colordata.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/datetimeutils.hxx>

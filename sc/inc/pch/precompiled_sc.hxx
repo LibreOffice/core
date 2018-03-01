@@ -580,7 +580,6 @@
 #include <tokenstringcontext.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
-#include <tools/colordata.hxx>
 #include <tools/contnr.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>

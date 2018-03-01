@@ -232,7 +232,6 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
 #include <tools/color.hxx>
-#include <tools/colordata.hxx>
 #include <tools/debug.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>

@@ -544,7 +544,6 @@
 #include <svx/xtable.hxx>
 #include <svx/xtextit0.hxx>
 #include <tools/color.hxx>
-#include <tools/colordata.hxx>
 #include <tools/contnr.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>

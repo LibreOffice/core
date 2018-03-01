@@ -329,7 +329,6 @@
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/mutexhelper.hxx>
 #include <tools/color.hxx>
-#include <tools/colordata.hxx>
 #include <tools/date.hxx>
 #include <tools/debug.hxx>
 #include <tools/fldunit.hxx>

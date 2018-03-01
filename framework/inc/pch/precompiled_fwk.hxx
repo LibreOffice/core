@@ -311,7 +311,6 @@
 #include <toolkit/helper/mutexhelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
-#include <tools/colordata.hxx>
 #include <tools/debug.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
