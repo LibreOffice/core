@@ -45,6 +45,59 @@ namespace basegfx
         }
     }
 
+    double snapToZeroRange(double v, double fWidth)
+    {
+        if(fTools::equalZero(fWidth))
+        {
+            // with no range all snaps to range bound
+            return 0.0;
+        }
+        else
+        {
+            if(v < 0.0 || v > fWidth)
+            {
+                double fRetval(fmod(v, fWidth));
+
+                if(fRetval < 0.0)
+                {
+                    fRetval += fWidth;
+                }
+
+                return fRetval;
+            }
+            else
+            {
+                return v;
+            }
+        }
+    }
+
+    double snapToRange(double v, double fLow, double fHigh)
+    {
+        if(fTools::equal(fLow, fHigh))
+        {
+            // with no range all snaps to range bound
+            return 0.0;
+        }
+        else
+        {
+            if(fLow > fHigh)
+            {
+                // correct range order. Evtl. assert this (?)
+                std::swap(fLow, fHigh);
+            }
+
+            if(v < fLow || v > fHigh)
+            {
+                return snapToZeroRange(v - fLow, fHigh - fLow) + fLow;
+            }
+            else
+            {
+                return v;
+            }
+        }
+    }
+
     double normalizeToRange(double v, const double fRange)
     {
         if(fTools::lessOrEqual(fRange, 0.0))

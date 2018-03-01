@@ -248,6 +248,28 @@ namespace basegfx
             }
         }
 
+        T clamp(T nValue) const
+        {
+            if(isEmpty())
+            {
+                return nValue;
+            }
+            else
+            {
+                if(nValue < mnMinimum)
+                {
+                    return mnMinimum;
+                }
+
+                if(nValue > mnMaximum)
+                {
+                    return mnMaximum;
+                }
+
+                return nValue;
+            }
+        }
+
         typename Traits::DifferenceType getRange() const
         {
             if(isEmpty())

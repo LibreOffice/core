@@ -33,6 +33,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/utils/unotools.hxx>
+#include <basegfx/matrix/b3dhommatrixtools.hxx>
 
 using namespace ::com::sun::star;
 
@@ -600,22 +601,7 @@ void SdXMLImExTransform3D::AddMatrix(const ::basegfx::B3DHomMatrix& rNew)
 
 void SdXMLImExTransform3D::AddHomogenMatrix(const drawing::HomogenMatrix& xHomMat)
 {
-    ::basegfx::B3DHomMatrix aExportMatrix;
-
-    aExportMatrix.set(0, 0, xHomMat.Line1.Column1);
-    aExportMatrix.set(0, 1, xHomMat.Line1.Column2);
-    aExportMatrix.set(0, 2, xHomMat.Line1.Column3);
-    aExportMatrix.set(0, 3, xHomMat.Line1.Column4);
-    aExportMatrix.set(1, 0, xHomMat.Line2.Column1);
-    aExportMatrix.set(1, 1, xHomMat.Line2.Column2);
-    aExportMatrix.set(1, 2, xHomMat.Line2.Column3);
-    aExportMatrix.set(1, 3, xHomMat.Line2.Column4);
-    aExportMatrix.set(2, 0, xHomMat.Line3.Column1);
-    aExportMatrix.set(2, 1, xHomMat.Line3.Column2);
-    aExportMatrix.set(2, 2, xHomMat.Line3.Column3);
-    aExportMatrix.set(2, 3, xHomMat.Line3.Column4);
-
-    AddMatrix(aExportMatrix);
+    AddMatrix(basegfx::utils::UnoHomogenMatrixToB3DHomMatrix(xHomMat));
 }
 
 // gen string for export
@@ -928,26 +914,7 @@ bool SdXMLImExTransform3D::GetFullHomogenTransform(css::drawing::HomogenMatrix& 
 
     if(!aFullTransform.isIdentity())
     {
-        xHomMat.Line1.Column1 = aFullTransform.get(0, 0);
-        xHomMat.Line1.Column2 = aFullTransform.get(0, 1);
-        xHomMat.Line1.Column3 = aFullTransform.get(0, 2);
-        xHomMat.Line1.Column4 = aFullTransform.get(0, 3);
-
-        xHomMat.Line2.Column1 = aFullTransform.get(1, 0);
-        xHomMat.Line2.Column2 = aFullTransform.get(1, 1);
-        xHomMat.Line2.Column3 = aFullTransform.get(1, 2);
-        xHomMat.Line2.Column4 = aFullTransform.get(1, 3);
-
-        xHomMat.Line3.Column1 = aFullTransform.get(2, 0);
-        xHomMat.Line3.Column2 = aFullTransform.get(2, 1);
-        xHomMat.Line3.Column3 = aFullTransform.get(2, 2);
-        xHomMat.Line3.Column4 = aFullTransform.get(2, 3);
-
-        xHomMat.Line4.Column1 = aFullTransform.get(3, 0);
-        xHomMat.Line4.Column2 = aFullTransform.get(3, 1);
-        xHomMat.Line4.Column3 = aFullTransform.get(3, 2);
-        xHomMat.Line4.Column4 = aFullTransform.get(3, 3);
-
+        basegfx::utils::B3DHomMatrixToUnoHomogenMatrix(aFullTransform, xHomMat);
         return true;
     }
 
