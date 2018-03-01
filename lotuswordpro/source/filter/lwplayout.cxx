@@ -83,6 +83,7 @@ LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader const &objHdr, LwpSvStream* p
     , m_bGettingExtMarginsValue(false)
     , m_bGettingUsePrinterSettings(false)
     , m_bGettingUseWhen(false)
+    , m_bGettingStyleLayout(false)
     , m_nAttributes(0)
     , m_nAttributes2(0)
     , m_nAttributes3(0)
@@ -364,13 +365,22 @@ bool LwpVirtualLayout::NoContentReference()
 
 bool LwpVirtualLayout::IsStyleLayout()
 {
-    if (m_nAttributes3 & STYLE3_STYLELAYOUT)
-        return true;
+    if (m_bGettingStyleLayout)
+        throw std::runtime_error("recursion in layout");
+    m_bGettingStyleLayout = true;
 
-    rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
-    if (xParent.is())
-        return xParent->IsStyleLayout();
-    return false;
+    bool bRet = false;
+    if (m_nAttributes3 & STYLE3_STYLELAYOUT)
+        bRet = true;
+    else
+    {
+        rtl::Reference<LwpVirtualLayout> xParent(dynamic_cast<LwpVirtualLayout*>(GetParent().obj().get()));
+        if (xParent.is())
+            bRet = xParent->IsStyleLayout();
+    }
+
+    m_bGettingStyleLayout = false;
+    return bRet;
 }
 
 /**
