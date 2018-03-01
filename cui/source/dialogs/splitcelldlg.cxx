@@ -20,90 +20,71 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
+#include <vcl/svapp.hxx>
 #include <dialmgr.hxx>
 #include <splitcelldlg.hxx>
 
-namespace {
-    class NoApplyDialog : public SvxStandardDialog
-    {
-    public:
-        NoApplyDialog(vcl::Window *pParent, const OUString &rId, const OUString &rXML) :
-            SvxStandardDialog(pParent, rId, rXML) { }
-    protected:
-        virtual void Apply() override {}
-    };
-}
-
-SvxSplitTableDlg::SvxSplitTableDlg( vcl::Window *pParent, bool bIsTableVertical,
-    long nMaxVertical, long nMaxHorizontal )
-    : m_pDialog(VclPtr<NoApplyDialog>::Create(pParent, "SplitCellsDialog", "cui/ui/splitcellsdialog.ui"))
+SvxSplitTableDlg::SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal)
+    : m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/splitcellsdialog.ui"))
+    , m_xDialog(m_xBuilder->weld_dialog("SplitCellsDialog"))
+    , m_xCountEdit(m_xBuilder->weld_spin_button("countnf"))
+    , m_xHorzBox(!bIsTableVertical ? m_xBuilder->weld_radio_button("hori") : m_xBuilder->weld_radio_button("vert"))
+    , m_xVertBox(!bIsTableVertical ? m_xBuilder->weld_radio_button("vert") : m_xBuilder->weld_radio_button("hori"))
+    , m_xPropCB(m_xBuilder->weld_check_button("prop"))
     , mnMaxVertical(nMaxVertical)
     , mnMaxHorizontal(nMaxHorizontal)
 {
-    m_pDialog->get(m_pCountEdit, "countnf");
-    m_pDialog->get(m_pHorzBox, "hori");
-    m_pDialog->get(m_pVertBox, "vert");
-    m_pDialog->get(m_pPropCB, "prop");
-    m_pHorzBox->SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
-    m_pPropCB->SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
-    m_pVertBox->SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
+    m_xHorzBox->connect_clicked(LINK(this, SvxSplitTableDlg, ClickHdl));
+    m_xPropCB->connect_clicked(LINK(this, SvxSplitTableDlg, ClickHdl));
+    m_xVertBox->connect_clicked(LINK(this, SvxSplitTableDlg, ClickHdl));
 
-    if( mnMaxVertical < 2 )
-        m_pVertBox->Enable(false);
+    if (mnMaxVertical < 2)
+    {
+        if (!bIsTableVertical)
+            m_xVertBox->set_sensitive(false);
+        else
+            m_xHorzBox->set_sensitive(false);
+    }
 
     //exchange the meaning of horizontal and vertical for vertical text
-    if(bIsTableVertical)
+    if (bIsTableVertical)
     {
-        Image aTmpImg(m_pHorzBox->GetModeRadioImage());
-        OUString sTmp(m_pHorzBox->GetText());
-        m_pHorzBox->SetText(m_pVertBox->GetText());
-        m_pHorzBox->SetModeRadioImage(m_pVertBox->GetModeRadioImage());
-        m_pVertBox->SetText(sTmp);
-        m_pVertBox->SetModeRadioImage(aTmpImg);
+        int nHorzTopAttach = m_xHorzBox->get_grid_top_attach();
+        int nVertTopAttach = m_xVertBox->get_grid_top_attach();
+        m_xHorzBox->set_grid_top_attach(nVertTopAttach);
+        m_xVertBox->set_grid_top_attach(nHorzTopAttach);
+        m_xHorzBox->set_active(m_xVertBox->get_active());
     }
 }
 
-SvxSplitTableDlg::~SvxSplitTableDlg()
+IMPL_LINK(SvxSplitTableDlg, ClickHdl, weld::Button&, rButton, void)
 {
-    disposeOnce();
-}
-
-void SvxSplitTableDlg::dispose()
-{
-    m_pCountEdit.clear();
-    m_pHorzBox.clear();
-    m_pVertBox.clear();
-    m_pPropCB.clear();
-    m_pDialog.disposeAndClear();
-    SvxAbstractSplittTableDialog::dispose();
-}
-
-IMPL_LINK( SvxSplitTableDlg, ClickHdl, Button *, pButton, void )
-{
-    const bool bIsVert =  pButton == m_pVertBox ;
+    const bool bIsVert = &rButton == m_xVertBox.get();
     long nMax = bIsVert ? mnMaxVertical : mnMaxHorizontal;
-    m_pPropCB->Enable(!bIsVert);
-    m_pCountEdit->SetMax( nMax );
+    m_xPropCB->set_sensitive(!bIsVert);
+    int nMin, dummy;
+    m_xCountEdit->get_range(nMin, dummy);
+    m_xCountEdit->set_range(nMin, nMax);
 }
 
 bool SvxSplitTableDlg::IsHorizontal() const
 {
-    return m_pHorzBox->IsChecked();
+    return m_xHorzBox->get_active();
 }
 
 bool SvxSplitTableDlg::IsProportional() const
 {
-    return m_pPropCB->IsChecked() && m_pHorzBox->IsChecked();
+    return m_xPropCB->get_active() && m_xHorzBox->get_active();
 }
 
 long SvxSplitTableDlg::GetCount() const
 {
-    return sal::static_int_cast<long>( m_pCountEdit->GetValue() );
+    return m_xCountEdit->get_value();
 }
 
 short SvxSplitTableDlg::Execute()
 {
-    return m_pDialog->Execute();
+    return m_xDialog->run();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

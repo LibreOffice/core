@@ -1488,7 +1488,7 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxFormatCellsDia
     return VclPtr<CuiAbstractTabDialog_Impl>::Create( VclPtr<SvxFormatCellsDialog>::Create( nullptr, pAttr, pModel ) );
 }
 
-VclPtr<SvxAbstractSplittTableDialog> AbstractDialogFactory_Impl::CreateSvxSplittTableDialog( vcl::Window* pParent, bool bIsTableVertical, long nMaxVertical )
+VclPtr<SvxAbstractSplittTableDialog> AbstractDialogFactory_Impl::CreateSvxSplittTableDialog(weld::Window* pParent, bool bIsTableVertical, long nMaxVertical)
 {
     return VclPtr<SvxSplitTableDlg>::Create( pParent, bIsTableVertical, nMaxVertical, 99 );
 }

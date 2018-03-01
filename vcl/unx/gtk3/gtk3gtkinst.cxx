@@ -1272,6 +1272,34 @@ public:
         return Size(nWidth, nHeight);
     }
 
+    virtual void set_grid_left_attach(int nAttach) override
+    {
+        GtkContainer* pParent = GTK_CONTAINER(gtk_widget_get_parent(m_pWidget));
+        gtk_container_child_set(pParent, m_pWidget, "left-attach", nAttach, nullptr);
+    }
+
+    virtual int get_grid_left_attach() const override
+    {
+        GtkContainer* pParent = GTK_CONTAINER(gtk_widget_get_parent(m_pWidget));
+        gint nAttach(0);
+        gtk_container_child_get(pParent, m_pWidget, "left-attach", &nAttach, nullptr);
+        return nAttach;
+    }
+
+    virtual void set_grid_top_attach(int nAttach) override
+    {
+        GtkContainer* pParent = GTK_CONTAINER(gtk_widget_get_parent(m_pWidget));
+        gtk_container_child_set(pParent, m_pWidget, "top-attach", nAttach, nullptr);
+    }
+
+    virtual int get_grid_top_attach() const override
+    {
+        GtkContainer* pParent = GTK_CONTAINER(gtk_widget_get_parent(m_pWidget));
+        gint nAttach(0);
+        gtk_container_child_get(pParent, m_pWidget, "top-attach", &nAttach, nullptr);
+        return nAttach;
+    }
+
     virtual weld::Container* weld_parent() const override;
 
     virtual OString get_buildable_name() const override

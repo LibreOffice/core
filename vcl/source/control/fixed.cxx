@@ -972,7 +972,7 @@ Image FixedImage::loadThemeImage(const OUString &rFileName)
 
 bool FixedImage::set_property(const OString &rKey, const OUString &rValue)
 {
-    if (rKey == "pixbuf")
+    if (rKey == "pixbuf" || rKey == "icon-name")
     {
         SetImage(loadThemeImage(rValue));
     }
