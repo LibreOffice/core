@@ -1264,10 +1264,36 @@ void ScViewFunc::FillSimple( FillDir eDir )
         {
             pDocSh->UpdateOle(&GetViewData());
             UpdateScrollBars();
+
             bool bDoAutoSpell = pDocSh->GetDocument().GetDocOptions().IsAutoSpell();
             if ( bDoAutoSpell )
+            {
+                // Copy AutoSpellData from above(left/right/below) if no selection.
+                switch (eDir)
+                {
+                    case FILL_TO_BOTTOM:
+                        if (aRange.aStart.Row() > 0 && aRange.aStart.Row() == aRange.aEnd.Row())
+                            aRange.aStart.IncRow(-1);
+                    break;
+                    case FILL_TO_TOP:
+                        if (aRange.aEnd.Row() < MAXROW && aRange.aStart.Row() == aRange.aEnd.Row())
+                            aRange.aEnd.IncRow(1);
+                    break;
+                    case FILL_TO_RIGHT:
+                        if (aRange.aStart.Col() > 0 && aRange.aStart.Col() == aRange.aEnd.Col())
+                            aRange.aStart.IncCol(-1);
+                    break;
+                    case FILL_TO_LEFT:
+                        if (aRange.aEnd.Col() < MAXCOL && aRange.aStart.Col() == aRange.aEnd.Col())
+                            aRange.aEnd.IncCol(1);
+                    break;
+                }
                 CopyAutoSpellData(eDir, aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(),
                         ::std::numeric_limits<sal_uLong>::max());
+            }
+
+            // Invalidate cell slots and update input line with new content.
+            CellContentChanged();
         }
     }
     else
