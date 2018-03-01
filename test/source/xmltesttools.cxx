@@ -123,6 +123,33 @@ void XmlTestTools::assertXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath, 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("In <" + OString(pXmlDoc->name) + ">, XPath contents of child does not match").getStr(), rContent, getXPathContent(pXmlDoc, rXPath));
 }
 
+void XmlTestTools::assertXPathNSDef(xmlDocPtr pXmlDoc, const OString& rXPath,
+                                    const OUString& rNSPrefix, const OUString& rNSHref)
+{
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    CPPUNIT_ASSERT_MESSAGE(
+        OString("In <" + OString(pXmlDoc->name) + ">, XPath '" + rXPath + "' not found").getStr(),
+        xmlXPathNodeSetGetLength(pXmlNodes) > 0);
+
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    bool bFound = false;
+    for (xmlNsPtr pNamespace = pXmlNode->nsDef; pNamespace; pNamespace = pNamespace->next)
+    {
+        if (!pNamespace->prefix)
+            continue;
+
+        CPPUNIT_ASSERT(pNamespace->href);
+        if (rNSPrefix == convert(pNamespace->prefix) && rNSHref == convert(pNamespace->href))
+        {
+            bFound = true;
+            break;
+        }
+    }
+    xmlXPathFreeObject(pXmlObj);
+    CPPUNIT_ASSERT(bFound);
+}
+
 void XmlTestTools::assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfChildNodes)
 {
 #if LIBXML_VERSION >= 20703 /* xmlChildElementCount is only available in libxml2 >= 2.7.3 */
