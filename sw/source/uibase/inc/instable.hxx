@@ -54,7 +54,7 @@ class SwInsTableDlg : public SfxModalDialog
 
     VclPtr<ListBox>         m_pLbFormat;
 
-    VclPtr<AutoFormatPreview> m_pWndPreview;
+    VclPtr<AutoFormatPreviewWindow> m_pWndPreview;
 
     SwWrtShell*     pShell;
     SwTableAutoFormatTable* pTableTable;

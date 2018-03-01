@@ -23,10 +23,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <vcl/vclreferencebase.hxx>
-#include <vcl/button.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/window.hxx>
+#include <vcl/weld.hxx>
 
 #include "wrtsh.hxx"
 #include "autoformatpreview.hxx"
@@ -38,20 +35,23 @@ class SwWrtShell;
 
 enum AutoFormatLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 
-class SwAutoFormatDlg : public SfxModalDialog
+class SwAutoFormatDlg
 {
-    VclPtr<ListBox>        m_pLbFormat;
-    VclPtr<VclContainer>   m_pFormatting;
-    VclPtr<CheckBox>       m_pBtnNumFormat;
-    VclPtr<CheckBox>       m_pBtnBorder;
-    VclPtr<CheckBox>       m_pBtnFont;
-    VclPtr<CheckBox>       m_pBtnPattern;
-    VclPtr<CheckBox>       m_pBtnAlignment;
-    VclPtr<OKButton>       m_pBtnOk;
-    VclPtr<CancelButton>   m_pBtnCancel;
-    VclPtr<PushButton>     m_pBtnAdd;
-    VclPtr<PushButton>     m_pBtnRemove;
-    VclPtr<PushButton>     m_pBtnRename;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Dialog> m_xDialog;
+    std::unique_ptr<weld::TreeView> m_xLbFormat;
+    std::unique_ptr<weld::Container> m_xFormatting;
+    std::unique_ptr<weld::CheckButton> m_xBtnNumFormat;
+    std::unique_ptr<weld::CheckButton> m_xBtnBorder;
+    std::unique_ptr<weld::CheckButton> m_xBtnFont;
+    std::unique_ptr<weld::CheckButton> m_xBtnPattern;
+    std::unique_ptr<weld::CheckButton> m_xBtnAlignment;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
+    std::unique_ptr<weld::Button> m_xBtnAdd;
+    std::unique_ptr<weld::Button> m_xBtnRemove;
+    std::unique_ptr<weld::Button> m_xBtnRename;
+    AutoFormatPreview m_aWndPreview;
+    std::unique_ptr<SwTableAutoFormatTable> m_xTableTable;
     OUString        aStrTitle;
     OUString        aStrLabel;
     OUString        aStrClose;
@@ -59,33 +59,31 @@ class SwAutoFormatDlg : public SfxModalDialog
     OUString        aStrDelMsg;
     OUString        aStrRenameTitle;
     OUString        aStrInvalidFormat;
-    VclPtr<AutoFormatPreview> m_pWndPreview;
 
-    SwWrtShell*             pShell;
-    SwTableAutoFormatTable*     pTableTable;
-    sal_uInt8                   nIndex;
-    sal_uInt8                   nDfltStylePos;
-    bool                    bCoreDataChanged : 1;
-    bool                    bSetAutoFormat : 1;
+    SwWrtShell*     pShell;
+    sal_uInt8       m_nIndex;
+    sal_uInt8       nDfltStylePos;
+    bool            bCoreDataChanged : 1;
+    bool            bSetAutoFormat : 1;
 
     void Init( const SwTableAutoFormat* pSelFormat );
     void UpdateChecks( const SwTableAutoFormat&, bool bEnableBtn );
 
-    DECL_LINK( CheckHdl, Button*, void );
-    DECL_LINK(OkHdl, Button*, void);
-    DECL_LINK( AddHdl, Button*, void );
-    DECL_LINK( RemoveHdl, Button*, void );
-    DECL_LINK( RenameHdl, Button*, void );
-    DECL_LINK( SelFormatHdl, ListBox&, void );
+    DECL_LINK(CheckHdl, weld::ToggleButton&, void);
+    DECL_LINK(AddHdl, weld::Button&, void);
+    DECL_LINK(RemoveHdl, weld::Button&, void);
+    DECL_LINK(RenameHdl, weld::Button&, void);
+    DECL_LINK(SelFormatHdl, weld::TreeView&, void);
 
 public:
-    SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
-                        bool bSetAutoFormat,
-                        const SwTableAutoFormat* pSelFormat );
-    virtual ~SwAutoFormatDlg() override;
-    virtual void dispose() override;
+    SwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pShell,
+                    bool bSetAutoFormat, const SwTableAutoFormat* pSelFormat);
 
-    void FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const;
+    short run();
+
+    SwTableAutoFormat* FillAutoFormatOfIndex() const;
+
+    ~SwAutoFormatDlg();
 };
 
 #endif // SW_AUTOFMT_HXX

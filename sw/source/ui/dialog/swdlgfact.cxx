@@ -103,7 +103,10 @@ IMPL_ABSTDLG_BASE(AbstractSwInsertDBColAutoPilot_Impl);
 IMPL_ABSTDLG_BASE(AbstractDropDownFieldDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwLabDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwSelGlossaryDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractSwAutoFormatDlg_Impl);
+short AbstractSwAutoFormatDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 IMPL_ABSTDLG_BASE(AbstractSwFieldDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwRenameXNamedDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwModalRedlineAcceptDlg_Impl);
@@ -298,9 +301,9 @@ void AbstractSwSelGlossaryDlg_Impl::SelectEntryPos(sal_Int32 nIdx)
     pDlg->SelectEntryPos( nIdx );
 }
 
-void AbstractSwAutoFormatDlg_Impl::FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const
+SwTableAutoFormat* AbstractSwAutoFormatDlg_Impl::FillAutoFormatOfIndex() const
 {
-    pDlg->FillAutoFormatOfIndex(rToFill);
+    return m_xDlg->FillAutoFormatOfIndex();
 }
 
 void AbstractSwFieldDlg_Impl::SetCurPageId( sal_uInt16 nId )
@@ -801,11 +804,10 @@ VclPtr<AbstractSwSelGlossaryDlg> SwAbstractDialogFactory_Impl::CreateSwSelGlossa
     return VclPtr<AbstractSwSelGlossaryDlg_Impl>::Create(pDlg);
 }
 
-VclPtr<AbstractSwAutoFormatDlg> SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg(vcl::Window* pParent,
+VclPtr<AbstractSwAutoFormatDlg> SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg(weld::Window* pParent,
     SwWrtShell* pShell, bool bSetAutoFormat, const SwTableAutoFormat* pSelFormat)
 {
-    VclPtr<SwAutoFormatDlg> pDlg = VclPtr<SwAutoFormatDlg>::Create(pParent, pShell, bSetAutoFormat, pSelFormat);
-    return VclPtr<AbstractSwAutoFormatDlg_Impl>::Create(pDlg);
+    return VclPtr<AbstractSwAutoFormatDlg_Impl>::Create(new SwAutoFormatDlg(pParent, pShell, bSetAutoFormat, pSelFormat));
 }
 
 VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType )

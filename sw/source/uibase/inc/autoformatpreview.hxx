@@ -29,16 +29,64 @@
 #include <vcl/outdev.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/font.hxx>
 
 #include "wrtsh.hxx"
 #include <tblafmt.hxx>
 
-class AutoFormatPreview : public vcl::Window
+class AutoFormatPreview
 {
 public:
-    AutoFormatPreview(vcl::Window* pParent, WinBits nStyle);
-    virtual ~AutoFormatPreview() override;
+    AutoFormatPreview(weld::DrawingArea* pDrawingArea);
+
+    void NotifyChange(const SwTableAutoFormat& rNewData);
+
+    void DetectRTL(SwWrtShell const* pWrtShell);
+
+private:
+    std::unique_ptr<weld::DrawingArea> mxDrawingArea;
+    SwTableAutoFormat aCurData;
+    svx::frame::Array maArray; /// Implementation to draw the frame borders.
+    bool bFitWidth;
+    bool mbRTL;
+    Size aPrvSize;
+    long nLabelColWidth;
+    long nDataColWidth1;
+    long nDataColWidth2;
+    long nRowHeight;
+    const OUString aStrJan;
+    const OUString aStrFeb;
+    const OUString aStrMar;
+    const OUString aStrNorth;
+    const OUString aStrMid;
+    const OUString aStrSouth;
+    const OUString aStrSum;
+    std::unique_ptr<SvNumberFormatter> mxNumFormat;
+
+    uno::Reference<i18n::XBreakIterator> m_xBreak;
+
+    void Init();
+    DECL_LINK(DoPaint, vcl::RenderContext&, void);
+    DECL_LINK(DoResize, const Size& rSize, void);
+    void CalcCellArray(bool bFitWidth);
+    void CalcLineMap();
+    void PaintCells(vcl::RenderContext& rRenderContext);
+
+    sal_uInt8 GetFormatIndex(size_t nCol, size_t nRow) const;
+
+    void DrawString(vcl::RenderContext& rRenderContext, size_t nCol, size_t nRow);
+    void DrawBackground(vcl::RenderContext& rRenderContext);
+
+    void MakeFonts(vcl::RenderContext& rRenderContext, sal_uInt8 nIndex, vcl::Font& rFont,
+                   vcl::Font& rCJKFont, vcl::Font& rCTLFont);
+};
+
+class AutoFormatPreviewWindow : public vcl::Window
+{
+public:
+    AutoFormatPreviewWindow(vcl::Window* pParent, WinBits nStyle);
+    virtual ~AutoFormatPreviewWindow() override;
     virtual void dispose() override;
 
     void NotifyChange(const SwTableAutoFormat& rNewData);
