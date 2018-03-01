@@ -164,7 +164,7 @@ public:
     OUString GetNameByIndex(sal_uInt16 index);
 private:
     sal_uInt16 m_nCount;
-    LwpFontNameEntry* m_pFontNames;
+    std::unique_ptr<LwpFontNameEntry[]> m_pFontNames;
     LwpFontTable m_FontTbl;
 
 public:

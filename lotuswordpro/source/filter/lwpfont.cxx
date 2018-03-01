@@ -362,11 +362,6 @@ LwpFontNameManager::LwpFontNameManager()
 
 LwpFontNameManager::~LwpFontNameManager()
 {
-    if(m_pFontNames)
-    {
-        delete [] m_pFontNames;
-        m_pFontNames = nullptr;
-    }
 }
 
 void LwpFontNameManager::Read(LwpObjectStream *pStrm)
@@ -374,7 +369,7 @@ void LwpFontNameManager::Read(LwpObjectStream *pStrm)
     m_nCount = pStrm->QuickReaduInt16();
     if(m_nCount>0)
     {
-        m_pFontNames = new LwpFontNameEntry[m_nCount];
+        m_pFontNames.reset( new LwpFontNameEntry[m_nCount] );
         for(sal_uInt16 i=0; i<m_nCount; i++)
         {
             m_pFontNames[i].Read(pStrm);
