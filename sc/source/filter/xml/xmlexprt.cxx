@@ -3971,7 +3971,7 @@ void ScXMLExport::WriteScenario()
         if (!(nFlags & ScScenarioFlags::ShowFrame))
             AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_BORDER, XML_FALSE);
         OUStringBuffer aBuffer;
-        ::sax::Converter::convertColor(aBuffer, aColor.GetColor());
+        ::sax::Converter::convertColor(aBuffer, aColor);
         AddAttribute(XML_NAMESPACE_TABLE, XML_BORDER_COLOR, aBuffer.makeStringAndClear());
         if (!(nFlags & ScScenarioFlags::TwoWay))
             AddAttribute(XML_NAMESPACE_TABLE, XML_COPY_BACK, XML_FALSE);
@@ -4426,7 +4426,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
 
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*it[0]));
                             OUStringBuffer aBuffer;
-                            ::sax::Converter::convertColor(aBuffer, it[0]->GetColor().GetColor());
+                            ::sax::Converter::convertColor(aBuffer, it[0]->GetColor());
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_COLOR, aBuffer.makeStringAndClear());
                             SvXMLElementExport aElementColorScaleEntry(*this, XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE_ENTRY, true, true);
                         }
@@ -4450,13 +4450,13 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                             if(pFormatData->mpNegativeColor)
                             {
                                 OUStringBuffer aBuffer;
-                                ::sax::Converter::convertColor(aBuffer, pFormatData->mpNegativeColor->GetColor());
+                                ::sax::Converter::convertColor(aBuffer, *pFormatData->mpNegativeColor);
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_NEGATIVE_COLOR, aBuffer.makeStringAndClear());
                             }
                             else
                             {
                                 OUStringBuffer aBuffer;
-                                ::sax::Converter::convertColor(aBuffer, sal_Int32(COL_LIGHTRED));
+                                ::sax::Converter::convertColor(aBuffer, COL_LIGHTRED);
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_NEGATIVE_COLOR, aBuffer.makeStringAndClear());
                             }
                         }
@@ -4474,11 +4474,11 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                         }
 
                         OUStringBuffer aBuffer;
-                        ::sax::Converter::convertColor(aBuffer, pFormatData->maPositiveColor.GetColor());
+                        ::sax::Converter::convertColor(aBuffer, pFormatData->maPositiveColor);
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_POSITIVE_COLOR, aBuffer.makeStringAndClear());
 
                         aBuffer.truncate();
-                        ::sax::Converter::convertColor(aBuffer, pFormatData->maAxisColor.GetColor());
+                        ::sax::Converter::convertColor(aBuffer, pFormatData->maAxisColor);
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_AXIS_COLOR, aBuffer.makeStringAndClear());
                         SvXMLElementExport aElementDataBar(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_BAR, true, true);
 
