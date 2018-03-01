@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/report/XReportComponent.hpp>
+#include <tools/color.hxx>
 
 #include <vector>
 #include "IReportControllerObserver.hxx"
@@ -35,7 +36,7 @@ namespace rptui
     class FormattedFieldBeautifier : public IReportControllerObserver
     {
         const OReportController& m_rReportController;
-        sal_Int32 m_nTextColor;
+        Color m_nTextColor;
 
         /// @throws css::uno::RuntimeException
         css::uno::Reference< css::awt::XVclWindowPeer > getVclWindowPeer(const css::uno::Reference< css::report::XReportComponent >& _xComponent);
@@ -43,7 +44,7 @@ namespace rptui
         void setPlaceholderText( const css::uno::Reference< css::uno::XInterface >& _rxComponent );
         void setPlaceholderText( const css::uno::Reference< css::awt::XVclWindowPeer >& _xVclWindowPeer, const OUString& _rText );
 
-        sal_Int32 getTextColor();
+        Color getTextColor();
 
     public:
         FormattedFieldBeautifier(const OReportController & _aObserver);
