@@ -83,9 +83,9 @@ public:
     };
     virtual void Read(LwpObjectStream *pStrm) override;
 
-    LwpShadow*  GetShadow(){ return m_pShadow; }
-    LwpBorderStuff* GetBorderStuff(){ return m_pBorderStuff; }
-    LwpMargins* GetMargins() { return m_pMargins; };
+    LwpShadow*  GetShadow(){ return m_pShadow.get(); }
+    LwpBorderStuff* GetBorderStuff(){ return m_pBorderStuff.get(); }
+    LwpMargins* GetMargins() { return m_pMargins.get(); };
 
     void Override(LwpParaBorderOverride* pOther);
 
@@ -154,10 +154,10 @@ private:
         PBO_RIGHT           = 0x1000
     };
 
-    LwpBorderStuff      *m_pBorderStuff;
-    LwpBorderStuff      *m_pBetweenStuff;
-    LwpShadow           *m_pShadow;
-    LwpMargins          *m_pMargins;
+    std::unique_ptr<LwpBorderStuff> m_pBorderStuff;
+    std::unique_ptr<LwpBorderStuff> m_pBetweenStuff;
+    std::unique_ptr<LwpShadow>      m_pShadow;
+    std::unique_ptr<LwpMargins>     m_pMargins;
 
     BorderWidthType     m_eAboveType;
     BorderWidthType     m_eBelowType;
