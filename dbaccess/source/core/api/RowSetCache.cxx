@@ -353,18 +353,17 @@ ORowSetCache::~ORowSetCache()
     if(m_pMatrix)
     {
         m_pMatrix->clear();
-        delete m_pMatrix;
+        m_pMatrix.reset();
     }
 
     if(m_pInsertMatrix)
     {
         m_pInsertMatrix->clear();
-        delete m_pInsertMatrix;
+        m_pInsertMatrix.reset();
     }
     m_xSet          = WeakReference< XResultSet>();
     m_xMetaData     = nullptr;
     m_aUpdateTable  = nullptr;
-
 }
 
 void ORowSetCache::setFetchSize(sal_Int32 _nSize)
@@ -375,11 +374,11 @@ void ORowSetCache::setFetchSize(sal_Int32 _nSize)
     m_nFetchSize = _nSize;
     if(!m_pMatrix)
     {
-        m_pMatrix = new ORowSetMatrix(_nSize);
+        m_pMatrix.reset( new ORowSetMatrix(_nSize) );
         m_aMatrixIter = m_pMatrix->end();
         m_aMatrixEnd = m_pMatrix->end();
 
-        m_pInsertMatrix = new ORowSetMatrix(1); // a little bit overkill but ??? :-)
+        m_pInsertMatrix.reset( new ORowSetMatrix(1) ); // a little bit overkill but ??? :-)
         m_aInsertRow    = m_pInsertMatrix->end();
     }
     else

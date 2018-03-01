@@ -96,8 +96,8 @@ class OConnection final     :public ::cppu::BaseMutex
     typedef std::map< OUString, css::uno::Reference< css::uno::XInterface> > TSupportServices;
     TSupportServices                m_aSupportServices;
 
-    OTableContainer*                m_pTables;
-    OViewContainer*                 m_pViews;
+    std::unique_ptr<OTableContainer> m_pTables;
+    std::unique_ptr<OViewContainer>  m_pViews;
     ::dbtools::WarningsContainer    m_aWarnings;
     std::atomic<std::size_t>        m_nInAppend;
     bool                            m_bSupportsViews;       // true when the getTableTypes return "VIEW" as type
