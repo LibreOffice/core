@@ -2018,8 +2018,8 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
         else
         {
             Reference<XDatabaseMetaData> xMeta = m_xActiveConnection->getMetaData();
-            m_pColumns = new ORowSetDataColumns(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
-                                                aColumns,*this,m_aColumnsMutex,aNames);
+            m_pColumns.reset( new ORowSetDataColumns(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
+                                                aColumns,*this,m_aColumnsMutex,aNames) );
         }
     }
     else // !m_bCommandFacetsDirty
@@ -2837,8 +2837,8 @@ ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowS
         }
     }
     Reference<XDatabaseMetaData> xMeta = rParent.m_xActiveConnection->getMetaData();
-    m_pColumns = new ORowSetDataColumns(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
-                                        aColumns,*this,m_aMutex,aNames);
+    m_pColumns.reset( new ORowSetDataColumns(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
+                                        aColumns,*this,m_aMutex,aNames) );
 
     sal_Int32 const nRT = PropertyAttribute::READONLY   | PropertyAttribute::TRANSIENT;
 

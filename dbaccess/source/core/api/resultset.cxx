@@ -61,7 +61,7 @@ OResultSet::OResultSet(const css::uno::Reference< css::sdbc::XResultSet >& _xRes
            ,m_nResultSetConcurrency(0)
            ,m_bIsBookmarkable(false)
 {
-    m_pColumns = new OColumns(*this, m_aMutex, _bCaseSensitive, std::vector< OUString>(), nullptr,nullptr);
+    m_pColumns.reset( new OColumns(*this, m_aMutex, _bCaseSensitive, std::vector< OUString>(), nullptr,nullptr) );
 
     try
     {
@@ -96,8 +96,6 @@ OResultSet::~OResultSet()
 {
     m_pColumns->acquire();
     m_pColumns->disposing();
-    delete m_pColumns;
-
 }
 
 // css::lang::XTypeProvider
@@ -346,7 +344,7 @@ Reference< css::container::XNameAccess > OResultSet::getColumns()
                 // are allowed to return duplicate names, but we are required to have
                 // unique column names
                 if ( m_pColumns->hasByName( sName ) )
-                    sName = ::dbtools::createUniqueName( m_pColumns, sName );
+                    sName = ::dbtools::createUniqueName( m_pColumns.get(), sName );
 
                 m_pColumns->append( sName, pColumn );
             }
@@ -362,7 +360,7 @@ Reference< css::container::XNameAccess > OResultSet::getColumns()
         // this might be reasonable
         try
         {
-            const Reference< XNameAccess > xColNames( static_cast< XNameAccess* >( m_pColumns ), UNO_SET_THROW );
+            const Reference< XNameAccess > xColNames( static_cast< XNameAccess* >( m_pColumns.get() ), UNO_SET_THROW );
             const Sequence< OUString > aNames( xColNames->getElementNames() );
             SAL_WARN_IF( aNames.getLength() != nColCount, "dbaccess",
                 "OResultSet::getColumns: invalid column count!" );
@@ -381,7 +379,7 @@ Reference< css::container::XNameAccess > OResultSet::getColumns()
         }
     #endif
     }
-    return m_pColumns;
+    return m_pColumns.get();
 }
 
 // css::sdbc::XRow

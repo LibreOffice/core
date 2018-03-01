@@ -52,15 +52,13 @@ OPreparedStatement::OPreparedStatement(const Reference< XConnection > & _xConn,
     m_xAggregateAsParameters.set( m_xAggregateAsSet, UNO_QUERY_THROW );
 
     Reference<XDatabaseMetaData> xMeta = _xConn->getMetaData();
-    m_pColumns = new OColumns(*this, m_aMutex, xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),std::vector< OUString>(), nullptr,nullptr);
+    m_pColumns.reset( new OColumns(*this, m_aMutex, xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),std::vector< OUString>(), nullptr,nullptr) );
 }
 
 OPreparedStatement::~OPreparedStatement()
 {
     m_pColumns->acquire();
     m_pColumns->disposing();
-    delete m_pColumns;
-
 }
 
 // css::lang::XTypeProvider
@@ -169,7 +167,7 @@ Reference< css::container::XNameAccess > OPreparedStatement::getColumns()
         }
         m_pColumns->setInitialized();
     }
-    return m_pColumns;
+    return m_pColumns.get();
 }
 
 // XResultSetMetaDataSupplier

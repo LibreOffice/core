@@ -107,11 +107,7 @@ ORowSetBase::~ORowSetBase()
         TDataColumns().swap(m_aDataColumns);
         m_pColumns->acquire();
         m_pColumns->disposing();
-        delete m_pColumns;
-        m_pColumns = nullptr;
     }
-
-    delete m_pEmptyCollection;
 }
 
 // css::lang::XTypeProvider
@@ -551,11 +547,11 @@ Reference< XNameAccess > SAL_CALL ORowSetBase::getColumns(  )
     if(!m_pColumns)
     {
         if (!m_pEmptyCollection)
-            m_pEmptyCollection = new OEmptyCollection(*m_pMySelf,m_aColumnsMutex);
-        return m_pEmptyCollection;
+            m_pEmptyCollection.reset( new OEmptyCollection(*m_pMySelf,m_aColumnsMutex) );
+        return m_pEmptyCollection.get();
     }
 
-    return m_pColumns;
+    return m_pColumns.get();
 }
 
 // XResultSet

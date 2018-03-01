@@ -104,8 +104,8 @@ private:
 
     css::uno::Sequence< OUString >      m_aInterceptedURL;
 
-    comphelper::OInterfaceContainerHelper2*    m_pDisposeEventListeners;
-    PropertyChangeListenerContainer*    m_pStatCL;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper2>    m_pDisposeEventListeners;
+    std::unique_ptr<PropertyChangeListenerContainer>           m_pStatCL;
 };
 
 }   // namespace dbaccess
