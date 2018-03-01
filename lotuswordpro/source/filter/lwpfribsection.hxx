@@ -118,7 +118,7 @@ private:
 
 private:
     LwpObjectID m_Section;
-    LwpMasterPage* m_pMasterPage;
+    std::unique_ptr<LwpMasterPage> m_pMasterPage;
 };
 #endif
 
