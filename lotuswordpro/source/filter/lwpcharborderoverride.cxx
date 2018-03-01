@@ -80,16 +80,14 @@ LwpCharacterBorderOverride::LwpCharacterBorderOverride(LwpCharacterBorderOverrid
     , m_nAboveWidth(rOther.m_nAboveWidth)
     , m_nBelowWidth(rOther.m_nBelowWidth)
 {
-    std::unique_ptr<LwpBorderStuff> pBorderStuff(::clone(rOther.m_pBorderStuff));
-    std::unique_ptr<LwpMargins> pMargins(::clone(rOther.m_pMargins));
-    m_pBorderStuff = pBorderStuff.release();
-    m_pMargins = pMargins.release();
+    std::unique_ptr<LwpBorderStuff> pBorderStuff(::clone(rOther.m_pBorderStuff.get()));
+    std::unique_ptr<LwpMargins> pMargins(::clone(rOther.m_pMargins.get()));
+    m_pBorderStuff = std::move(pBorderStuff);
+    m_pMargins = std::move(pMargins);
 }
 
 LwpCharacterBorderOverride::~LwpCharacterBorderOverride()
 {
-    delete m_pBorderStuff;
-    delete m_pMargins;
 }
 
 LwpCharacterBorderOverride* LwpCharacterBorderOverride::clone() const

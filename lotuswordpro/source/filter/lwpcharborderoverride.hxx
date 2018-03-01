@@ -80,8 +80,8 @@ private:
     LwpCharacterBorderOverride(LwpCharacterBorderOverride const& rOther);
     LwpCharacterBorderOverride& operator=(LwpCharacterBorderOverride const& rOther) = delete;
 
-    LwpBorderStuff* m_pBorderStuff;
-    LwpMargins*     m_pMargins;
+    std::unique_ptr<LwpBorderStuff> m_pBorderStuff;
+    std::unique_ptr<LwpMargins>     m_pMargins;
     sal_Int32       m_nAboveWidth;
     sal_Int32       m_nBelowWidth;
 
