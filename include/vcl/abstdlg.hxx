@@ -26,10 +26,12 @@
 #include <vcl/vclreferencebase.hxx>
 #include <vector>
 #include <functional>
+#include <memory>
 
 namespace vcl { class Window; }
 class Dialog;
 class Bitmap;
+namespace weld { class DialogController; }
 
 /**
 * Some things multiple-inherit from VclAbstractDialog and OutputDevice,
@@ -45,6 +47,7 @@ public:
 
     struct AsyncContext {
         VclPtr<VclReferenceBase> mxOwner;
+        std::shared_ptr<weld::DialogController> mxOwnerDialog;
         std::function<void(sal_Int32)> maEndDialogFn;
         bool isSet() { return !!maEndDialogFn; }
     };
