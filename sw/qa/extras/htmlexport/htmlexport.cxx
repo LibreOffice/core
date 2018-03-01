@@ -337,6 +337,10 @@ DECLARE_HTMLEXPORT_TEST(testReqIfParagraph, "reqif-p.xhtml")
     CPPUNIT_ASSERT(pStream);
 
     OString aExpected("<reqif-xhtml:p>aaa<reqif-xhtml:br/>\nbbb</reqif-xhtml:p>" SAL_NEWLINE_STRING);
+
+    // This was '<table' instead.
+    aExpected += "<reqif-xhtml:table";
+
     OString aActual(read_uInt8s_ToOString(*pStream, aExpected.getLength()));
     // This was a HTML header, like '<!DOCTYPE html ...'.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
