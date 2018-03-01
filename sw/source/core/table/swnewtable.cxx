@@ -822,7 +822,10 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
     // i.e. contiguous cells in contiguous rows
     bool bMerge = false; // will be set if any content is transferred from
     // a "not already overlapped" cell into the new master cell.
-    SwTableBox *pMergeBox = pSel->maBoxes[0][0]; // the master cell box
+    const SwSelBoxes& rFirstBoxes = pSel->maBoxes[0];
+    if (rFirstBoxes.empty())
+        return false;
+    SwTableBox *pMergeBox = rFirstBoxes[0]; // the master cell box
     if( !pMergeBox )
         return false;
     (*ppMergeBox) = pMergeBox;
