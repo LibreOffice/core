@@ -196,8 +196,15 @@ class AbstractSwSelGlossaryDlg_Impl : public AbstractSwSelGlossaryDlg
 
 class AbstractSwAutoFormatDlg_Impl : public AbstractSwAutoFormatDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSwAutoFormatDlg_Impl,SwAutoFormatDlg )
-    virtual void FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const override;
+protected:
+    std::unique_ptr<SwAutoFormatDlg> m_xDlg;
+public:
+    explicit AbstractSwAutoFormatDlg_Impl(SwAutoFormatDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
+    virtual SwTableAutoFormat* FillAutoFormatOfIndex() const override;
 };
 
 class AbstractSwFieldDlg_Impl : public AbstractSwFieldDlg
@@ -426,9 +433,9 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateSwColumnDialog(vcl::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<AbstractSplitTableDialog> CreateSplitTableDialog ( vcl::Window * pParent, SwWrtShell &rSh ) override;
 
-    virtual VclPtr<AbstractSwAutoFormatDlg> CreateSwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
-                                                            bool bSetAutoFormat = true,
-                                                            const SwTableAutoFormat* pSelFormat = nullptr ) override;
+    virtual VclPtr<AbstractSwAutoFormatDlg> CreateSwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pShell,
+                                                                  bool bSetAutoFormat = true,
+                                                                  const SwTableAutoFormat* pSelFormat = nullptr) override;
     virtual VclPtr<SfxAbstractDialog> CreateSwBorderDlg (vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType ) override;
 
     virtual VclPtr<SfxAbstractDialog> CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh ) override;

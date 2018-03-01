@@ -126,7 +126,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     OUString        sNoTmpl;
 
     SwView*         pView;
-    SwTableAutoFormat* pTAutoFormat;
+    std::unique_ptr<SwTableAutoFormat> m_xTAutoFormat;
 
     SfxItemSet*     pTableSet;
     SwTableRep*     pRep;
