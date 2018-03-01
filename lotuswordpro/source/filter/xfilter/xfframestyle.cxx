@@ -65,10 +65,6 @@
 
 XFFrameStyle::XFFrameStyle()
     : m_eWrap(enumXFWrapNone)
-    , m_pBorders(nullptr)
-    , m_pColumns(nullptr)
-    , m_pShadow(nullptr)
-    , m_pBGImage(nullptr)
     , m_bProtectContent(false)
     , m_bProtectSize(false)
     , m_bProtectPos(false)
@@ -82,34 +78,26 @@ XFFrameStyle::XFFrameStyle()
 
 XFFrameStyle::~XFFrameStyle()
 {
-    delete m_pBorders;
-    delete m_pColumns;
-    delete m_pShadow;
-    delete m_pBGImage;
 }
 
 void    XFFrameStyle::SetBorders(XFBorders *pBorders)
 {
-    delete m_pBorders;
-    m_pBorders = pBorders;
+    m_pBorders.reset(pBorders);
 }
 
 void    XFFrameStyle::SetColumns(XFColumns *pColumns)
 {
-    delete m_pColumns;
-    m_pColumns = pColumns;
+    m_pColumns.reset(pColumns);
 }
 
 void    XFFrameStyle::SetShadow(XFShadow *pShadow)
 {
-    delete m_pShadow;
-    m_pShadow = pShadow;
+    m_pShadow.reset(pShadow);
 }
 
 void    XFFrameStyle::SetBackImage(XFBGImage *image)
 {
-    delete m_pBGImage;
-    m_pBGImage = image;
+    m_pBGImage.reset(image);
 }
 
 enumXFStyle XFFrameStyle::GetStyleFamily()
