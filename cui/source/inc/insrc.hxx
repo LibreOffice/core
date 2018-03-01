@@ -21,21 +21,17 @@
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-
 #include <svx/stddlg.hxx>
-
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/group.hxx>
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 
 class SvxInsRowColDlg : public SvxAbstractInsRowColDlg
 {
-    VclPtr<ModalDialog>    m_pDialog;
-    VclPtr<NumericField>   m_pCountEdit;
-
-    VclPtr<RadioButton>    m_pBeforeBtn;
-    VclPtr<RadioButton>    m_pAfterBtn;
+private:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Dialog> m_xDialog;
+    std::unique_ptr<weld::SpinButton> m_xCountEdit;
+    std::unique_ptr<weld::RadioButton> m_xBeforeBtn;
+    std::unique_ptr<weld::RadioButton> m_xAfterBtn;
 
     OUString   aRow;
     OUString   aCol;
@@ -43,9 +39,7 @@ class SvxInsRowColDlg : public SvxAbstractInsRowColDlg
     bool bColumn;
 
 public:
-    SvxInsRowColDlg( vcl::Window* pParent, bool bCol, const OString& sHelpId );
-    virtual ~SvxInsRowColDlg() override;
-    virtual void dispose() override;
+    SvxInsRowColDlg(weld::Window* pParent, bool bCol, const OString& rHelpId);
 
     virtual short Execute() override;
 

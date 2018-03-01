@@ -949,7 +949,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if ( FN_TABLE_INSERT_ROW_DLG != nSlot || !rSh.IsInRepeatedHeadline())
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<SvxAbstractInsRowColDlg> pDlg( pFact ? pFact->CreateSvxInsRowColDlg( GetView().GetWindow(), nSlot == FN_TABLE_INSERT_COL_DLG, pSlot->GetCommand() ) : nullptr);
+                vcl::Window* pWin =  GetView().GetWindow();
+                ScopedVclPtr<SvxAbstractInsRowColDlg> pDlg(pFact ? pFact->CreateSvxInsRowColDlg(pWin ? pWin->GetFrameWeld() : nullptr,
+                                                                                                nSlot == FN_TABLE_INSERT_COL_DLG, pSlot->GetCommand() ) : nullptr);
 
                 if( pDlg.get() && (pDlg->Execute() == 1) )
                 {

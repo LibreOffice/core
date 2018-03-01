@@ -60,6 +60,7 @@ typedef const sal_uInt16*  (*DialogGetRanges)();
 typedef ::std::vector< OUString > TargetList;
 
 namespace svx{ class SpellDialogChildWindow;}
+namespace weld{ class Window; }
 
 class AbstractSvxDistributeDialog :public VclAbstractDialog
 {
@@ -473,7 +474,7 @@ public:
 
     virtual VclPtr<SvxAbstractNewTableDialog> CreateSvxNewTableDialog() = 0;
 
-    virtual VclPtr<SvxAbstractInsRowColDlg> CreateSvxInsRowColDlg( vcl::Window* pParent, bool bCol, const OString& sHelpId ) = 0;
+    virtual VclPtr<SvxAbstractInsRowColDlg> CreateSvxInsRowColDlg(weld::Window* pParent, bool bCol, const OString& rHelpId) = 0;
 };
 
 #endif

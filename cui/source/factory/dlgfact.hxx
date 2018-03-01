@@ -624,7 +624,7 @@ public:
     virtual VclPtr<VclAbstractDialog>          CreateOptionsDialog(
         vcl::Window* pParent, const OUString& rExtensionId ) override;
 
-    virtual VclPtr<SvxAbstractInsRowColDlg> CreateSvxInsRowColDlg( vcl::Window* pParent, bool bCol, const OString& sHelpId ) override;
+    virtual VclPtr<SvxAbstractInsRowColDlg> CreateSvxInsRowColDlg(weld::Window* pParent, bool bCol, const OString& rHelpId) override;
 
     virtual VclPtr<AbstractPasswordToOpenModifyDialog> CreatePasswordToOpenModifyDialog(vcl::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify) override;
 

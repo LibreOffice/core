@@ -1504,9 +1504,9 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateOptionsDialog(
     return VclPtr<CuiVclAbstractDialog_Impl>::Create( VclPtr<OfaTreeOptionsDialog>::Create( pParent, rExtensionId ) );
 }
 
-VclPtr<SvxAbstractInsRowColDlg> AbstractDialogFactory_Impl::CreateSvxInsRowColDlg( vcl::Window* pParent, bool bCol, const OString& sHelpId )
+VclPtr<SvxAbstractInsRowColDlg> AbstractDialogFactory_Impl::CreateSvxInsRowColDlg(weld::Window* pParent, bool bCol, const OString& rHelpId)
 {
-    return VclPtr<SvxInsRowColDlg>::Create( pParent, bCol, sHelpId );
+    return VclPtr<SvxInsRowColDlg>::Create(pParent, bCol, rHelpId);
 }
 
 VclPtr<AbstractPasswordToOpenModifyDialog> AbstractDialogFactory_Impl::CreatePasswordToOpenModifyDialog(
