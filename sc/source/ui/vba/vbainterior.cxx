@@ -91,8 +91,7 @@ ScVbaInterior::ScVbaInterior( const uno::Reference< XHelperInterface >& xParent,
 uno::Any
 ScVbaInterior::getColor()
 {
-    Color aBackColor( GetBackColor() );
-    return uno::makeAny( OORGBToXLRGB( aBackColor.GetColor() ) );
+    return uno::makeAny( OORGBToXLRGB( GetBackColor() ) );
 }
 
 void
