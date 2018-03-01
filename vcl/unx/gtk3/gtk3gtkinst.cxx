@@ -2487,12 +2487,26 @@ namespace
         const ImplSVData* pSVData = ImplGetSVData();
         if (pSVData->maHelpData.mbBalloonHelp)
         {
+            /*This is how I would prefer things to be, only a few like this though*/
             AtkObject* pAtkObject = gtk_widget_get_accessible(pWidget);
             const char* pDesc = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
             if (pDesc)
             {
                 gtk_tooltip_set_text(tooltip, pDesc);
                 return true;
+            }
+
+            /*So fallback to existing mechanism which needs help installed*/
+            OString sHelpId = ::get_help_id(pWidget);
+            Help* pHelp = !sHelpId.isEmpty() ? Application::GetHelp() : nullptr;
+            if (pHelp)
+            {
+                OUString sHelpText = pHelp->GetHelpText(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), nullptr);
+                if (!sHelpText.isEmpty())
+                {
+                    gtk_tooltip_set_text(tooltip, OUStringToOString(sHelpText, RTL_TEXTENCODING_UTF8).getStr());
+                    return true;
+                }
             }
         }
 
@@ -2555,14 +2569,10 @@ namespace
         set_help_id(pWidget, sHelpId);
         //hook up for extended help
         const ImplSVData* pSVData = ImplGetSVData();
-        if (pSVData->maHelpData.mbBalloonHelp)
+        if (pSVData->maHelpData.mbBalloonHelp && !GTK_IS_DIALOG(pWidget))
         {
-            AtkObject* pAtkObject = gtk_widget_get_accessible(pWidget);
-            if (pAtkObject && atk_object_get_description(pAtkObject))
-            {
-                gtk_widget_set_has_tooltip(pWidget, true);
-                g_signal_connect(pObject, "query-tooltip", G_CALLBACK(signalTooltipQuery), nullptr);
-            }
+            gtk_widget_set_has_tooltip(pWidget, true);
+            g_signal_connect(pObject, "query-tooltip", G_CALLBACK(signalTooltipQuery), nullptr);
         }
     }
 }
