@@ -65,6 +65,7 @@
 #include <xfilter/xffootnoteconfig.hxx>
 #include <xfilter/xfendnoteconfig.hxx>
 #include <xfilter/xfdefs.hxx>
+#include <memory>
 
 /**
  * @brief
@@ -100,9 +101,9 @@ public:
     virtual void    ToXml(IXFStream *pStrm) override;
 
 private:
-    XFLineNumberConfig  *m_pLineNumberConfig;
-    XFFootnoteConfig    *m_pFootnoteConfig;
-    XFEndnoteConfig     *m_pEndnoteConfig;
+    std::unique_ptr<XFLineNumberConfig> m_pLineNumberConfig;
+    std::unique_ptr<XFFootnoteConfig>   m_pFootnoteConfig;
+    std::unique_ptr<XFEndnoteConfig>    m_pEndnoteConfig;
 };
 
 #endif
