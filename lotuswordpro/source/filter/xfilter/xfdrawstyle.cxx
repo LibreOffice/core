@@ -64,8 +64,7 @@
 #include "xffontworkstyle.hxx"
 #include <lwpglobalmgr.hxx>
 XFDrawStyle::XFDrawStyle()
-    : m_pFontWorkStyle(nullptr)
-    , m_eWrap(enumXFWrapNone)
+    : m_eWrap(enumXFWrapNone)
     , m_pLineStyle(nullptr)
     , m_pAreaStyle(nullptr)
     , m_fArrowStartSize(0.3)
@@ -77,11 +76,6 @@ XFDrawStyle::XFDrawStyle()
 XFDrawStyle::~XFDrawStyle()
 {
     //don't delete m_pLineStyle, it was managed by XFStyleManager.
-    if (m_pFontWorkStyle)
-    {
-        delete m_pFontWorkStyle;
-        m_pFontWorkStyle = nullptr;
-    }
 }
 
 void    XFDrawStyle::SetLineStyle(double width, XFColor color)
@@ -117,7 +111,7 @@ void XFDrawStyle::SetFontWorkStyle(enumXFFWStyle eStyle, enumXFFWAdjust eAdjust)
 {
     if (!m_pFontWorkStyle)
     {
-        m_pFontWorkStyle = new XFFontWorkStyle();
+        m_pFontWorkStyle.reset( new XFFontWorkStyle() );
     }
 
     m_pFontWorkStyle->SetButtonForm(0);

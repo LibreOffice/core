@@ -63,6 +63,7 @@
 #include <xfilter/xfstyle.hxx>
 #include <xfilter/xfcolor.hxx>
 #include <cassert>
+#include <memory>
 
 class XFDrawLineStyle;
 class XFDrawAreaStyle;
@@ -120,7 +121,7 @@ public:
     virtual void    ToXml(IXFStream *pStrm) override;
 
 private:
-    XFFontWorkStyle* m_pFontWorkStyle;
+    std::unique_ptr<XFFontWorkStyle> m_pFontWorkStyle;
     enumXFWrap  m_eWrap;
     XFDrawLineStyle *m_pLineStyle;
     XFDrawAreaStyle *m_pAreaStyle;
