@@ -245,6 +245,9 @@ GdkCursor* GtkSalDisplay::getFromXBM( const unsigned char *pBitmap,
               &aBlack, &aWhite, nXHot, nYHot);
 }
 
+static unsigned char nullmask_bits[] = { 0x00, 0x00, 0x00, 0x00 };
+static unsigned char nullcurs_bits[] = { 0x00, 0x00, 0x00, 0x00 };
+
 #define MAKE_CURSOR( vcl_name, name ) \
     case vcl_name: \
         pCursor = getFromXBM( name##curs##_bits, name##mask##_bits, \

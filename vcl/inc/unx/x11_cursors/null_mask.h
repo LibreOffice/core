@@ -18,6 +18,5 @@
  */
 #define nullmask_width 4
 #define nullmask_height 4
-static unsigned char nullmask_bits[] = { 0x00, 0x00, 0x00, 0x00 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
