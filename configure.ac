@@ -8147,13 +8147,17 @@ if test $enable_python = system; then
     PYTHON_FOR_BUILD=$PYTHON
 fi
 
-if -z "$PYTHON_FOR_BUILD"; then
+if test -z "$PYTHON_FOR_BUILD"; then
     case $build_os in
         cygwin)
             AC_MSG_WARN([No system-provided python lxml, gla11y will only report widget classes and ids])
             ;;
         *)
-            BUILD_TYPE="$BUILD_TYPE LXML"
+	    if test "$OS" != "IOS"; then
+	        if test "$enable_ios_simulator" != "yes"; then
+            	    BUILD_TYPE="$BUILD_TYPE LXML"
+	        fi
+	    fi
             ;;
     esac
 else
@@ -8166,8 +8170,12 @@ else
                 AC_MSG_RESULT([no, gla11y will only report widget classes and ids])
                 ;;
             *)
-                BUILD_TYPE="$BUILD_TYPE LXML"
-                AC_MSG_RESULT([no, using internal lxml])
+	        if test "$OS" != "IOS"; then
+	            if test "$enable_ios_simulator" != "yes"; then
+            	        BUILD_TYPE="$BUILD_TYPE LXML"
+                        AC_MSG_RESULT([no, using internal lxml])
+	            fi
+	        fi
                 ;;
         esac
     fi
