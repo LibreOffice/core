@@ -1036,6 +1036,7 @@ bool Dialog::StartExecuteAsync( VclAbstractDialog::AsyncContext &rCtx )
     if ( !ImplStartExecuteModal() )
     {
         rCtx.mxOwner.disposeAndClear();
+        rCtx.mxOwnerDialog.reset();
         return false;
     }
 
@@ -1103,7 +1104,9 @@ void Dialog::EndDialog( long nResult )
     mbInExecute = false;
 
     // Destroy ourselves (if we have a context with VclPtr owner)
+    std::shared_ptr<weld::DialogController> xOwnerDialog = std::move(mpDialogImpl->maEndCtx.mxOwnerDialog);
     mpDialogImpl->maEndCtx.mxOwner.disposeAndClear();
+    xOwnerDialog.reset();
 }
 
 long Dialog::GetResult() const
