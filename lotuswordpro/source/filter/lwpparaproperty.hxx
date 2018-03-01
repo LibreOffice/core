@@ -84,18 +84,13 @@
 #define PP_LOCAL_KINSOKU        0x4b494e53UL    /* "KINS" */
 #define PP_PROPLIST             0x50524f50UL    /* "PROP" */
 
-class LwpParaProperty : public LwpDLList
+class LwpParaProperty
 {
 public:
     LwpParaProperty(){}
+    virtual ~LwpParaProperty() {}
     virtual sal_uInt32  GetType() = 0;
-    inline  LwpParaProperty* GetNext();
 };
-
-inline LwpParaProperty* LwpParaProperty::GetNext()
-{
-    return static_cast<LwpParaProperty*>(LwpDLList::GetNext());
-}
 
 //align/indent/spacing
 //TO DO:border/background etc

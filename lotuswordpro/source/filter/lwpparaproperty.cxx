@@ -130,8 +130,7 @@ void LwpPara::ReadPropertyList(LwpObjectStream* pFile)
         // Stick it at the beginning of the list
         if (NewProp)
         {
-            NewProp->insert(m_pProps, nullptr);
-            m_pProps = NewProp;
+            m_vProps.emplace(m_vProps.begin(), NewProp);
         }
     }
 }
