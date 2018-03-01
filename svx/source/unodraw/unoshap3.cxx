@@ -45,6 +45,7 @@
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/matrix/b3dhommatrixtools.hxx>
 #include "shapeimpl.hxx"
 
 using namespace ::cppu;
@@ -227,27 +228,10 @@ sal_Bool SAL_CALL Svx3DSceneObject::hasElements()
 
 static bool ConvertHomogenMatrixToObject( E3dObject* pObject, const Any& rValue )
 {
-    drawing::HomogenMatrix m;
-    if( rValue >>= m )
+    drawing::HomogenMatrix aMat;
+    if( rValue >>= aMat )
     {
-        basegfx::B3DHomMatrix aMat;
-        aMat.set(0, 0, m.Line1.Column1);
-        aMat.set(0, 1, m.Line1.Column2);
-        aMat.set(0, 2, m.Line1.Column3);
-        aMat.set(0, 3, m.Line1.Column4);
-        aMat.set(1, 0, m.Line2.Column1);
-        aMat.set(1, 1, m.Line2.Column2);
-        aMat.set(1, 2, m.Line2.Column3);
-        aMat.set(1, 3, m.Line2.Column4);
-        aMat.set(2, 0, m.Line3.Column1);
-        aMat.set(2, 1, m.Line3.Column2);
-        aMat.set(2, 2, m.Line3.Column3);
-        aMat.set(2, 3, m.Line3.Column4);
-        aMat.set(3, 0, m.Line4.Column1);
-        aMat.set(3, 1, m.Line4.Column2);
-        aMat.set(3, 2, m.Line4.Column3);
-        aMat.set(3, 3, m.Line4.Column4);
-        pObject->SetTransform(aMat);
+        pObject->SetTransform(basegfx::utils::UnoHomogenMatrixToB3DHomMatrix(aMat));
         return true;
     }
     return false;
@@ -257,22 +241,7 @@ static void ConvertObjectToHomogenMatric( E3dObject const * pObject, Any& rValue
 {
     drawing::HomogenMatrix aHomMat;
     const basegfx::B3DHomMatrix& rMat = pObject->GetTransform();
-    aHomMat.Line1.Column1 = rMat.get(0, 0);
-    aHomMat.Line1.Column2 = rMat.get(0, 1);
-    aHomMat.Line1.Column3 = rMat.get(0, 2);
-    aHomMat.Line1.Column4 = rMat.get(0, 3);
-    aHomMat.Line2.Column1 = rMat.get(1, 0);
-    aHomMat.Line2.Column2 = rMat.get(1, 1);
-    aHomMat.Line2.Column3 = rMat.get(1, 2);
-    aHomMat.Line2.Column4 = rMat.get(1, 3);
-    aHomMat.Line3.Column1 = rMat.get(2, 0);
-    aHomMat.Line3.Column2 = rMat.get(2, 1);
-    aHomMat.Line3.Column3 = rMat.get(2, 2);
-    aHomMat.Line3.Column4 = rMat.get(2, 3);
-    aHomMat.Line4.Column1 = rMat.get(3, 0);
-    aHomMat.Line4.Column2 = rMat.get(3, 1);
-    aHomMat.Line4.Column3 = rMat.get(3, 2);
-    aHomMat.Line4.Column4 = rMat.get(3, 3);
+    basegfx::utils::B3DHomMatrixToUnoHomogenMatrix(rMat, aHomMat);
     rValue <<= aHomMat;
 }
 
@@ -824,25 +793,7 @@ bool Svx3DLatheObject::getPropertyValueImpl( const OUString& rName, const SfxIte
         // pack transformation to a homogeneous matrix
         drawing::HomogenMatrix aHomMat;
         basegfx::B3DHomMatrix aMat = static_cast<E3dObject*>(mpObj.get())->GetTransform();
-
-        // pack evtl. transformed matrix to output
-        aHomMat.Line1.Column1 = aMat.get(0, 0);
-        aHomMat.Line1.Column2 = aMat.get(0, 1);
-        aHomMat.Line1.Column3 = aMat.get(0, 2);
-        aHomMat.Line1.Column4 = aMat.get(0, 3);
-        aHomMat.Line2.Column1 = aMat.get(1, 0);
-        aHomMat.Line2.Column2 = aMat.get(1, 1);
-        aHomMat.Line2.Column3 = aMat.get(1, 2);
-        aHomMat.Line2.Column4 = aMat.get(1, 3);
-        aHomMat.Line3.Column1 = aMat.get(2, 0);
-        aHomMat.Line3.Column2 = aMat.get(2, 1);
-        aHomMat.Line3.Column3 = aMat.get(2, 2);
-        aHomMat.Line3.Column4 = aMat.get(2, 3);
-        aHomMat.Line4.Column1 = aMat.get(3, 0);
-        aHomMat.Line4.Column2 = aMat.get(3, 1);
-        aHomMat.Line4.Column3 = aMat.get(3, 2);
-        aHomMat.Line4.Column4 = aMat.get(3, 3);
-
+        basegfx::utils::B3DHomMatrixToUnoHomogenMatrix(aMat, aHomMat);
         rValue <<= aHomMat;
         break;
     }
@@ -923,25 +874,7 @@ bool Svx3DExtrudeObject::getPropertyValueImpl( const OUString& rName, const SfxI
         // pack transformation to a homogeneous matrix
         drawing::HomogenMatrix aHomMat;
         basegfx::B3DHomMatrix aMat = static_cast<E3dObject*>(mpObj.get())->GetTransform();
-
-        // pack evtl. transformed matrix to output
-        aHomMat.Line1.Column1 = aMat.get(0, 0);
-        aHomMat.Line1.Column2 = aMat.get(0, 1);
-        aHomMat.Line1.Column3 = aMat.get(0, 2);
-        aHomMat.Line1.Column4 = aMat.get(0, 3);
-        aHomMat.Line2.Column1 = aMat.get(1, 0);
-        aHomMat.Line2.Column2 = aMat.get(1, 1);
-        aHomMat.Line2.Column3 = aMat.get(1, 2);
-        aHomMat.Line2.Column4 = aMat.get(1, 3);
-        aHomMat.Line3.Column1 = aMat.get(2, 0);
-        aHomMat.Line3.Column2 = aMat.get(2, 1);
-        aHomMat.Line3.Column3 = aMat.get(2, 2);
-        aHomMat.Line3.Column4 = aMat.get(2, 3);
-        aHomMat.Line4.Column1 = aMat.get(3, 0);
-        aHomMat.Line4.Column2 = aMat.get(3, 1);
-        aHomMat.Line4.Column3 = aMat.get(3, 2);
-        aHomMat.Line4.Column4 = aMat.get(3, 3);
-
+        basegfx::utils::B3DHomMatrixToUnoHomogenMatrix(aMat, aHomMat);
         rValue <<= aHomMat;
         break;
     }
