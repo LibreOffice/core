@@ -15,7 +15,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
-#include <tools/colordata.hxx>
 #include <tools/mapunit.hxx>
 
 #include <ooxml/resourceids.hxx>

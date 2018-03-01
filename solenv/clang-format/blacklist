@@ -7767,7 +7767,6 @@ include/toolkit/helper/vclunohelper.hxx
 include/tools/b3dtrans.hxx
 include/tools/bigint.hxx
 include/tools/color.hxx
-include/tools/colordata.hxx
 include/tools/config.hxx
 include/tools/contnr.hxx
 include/tools/cpuid.hxx

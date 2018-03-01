@@ -384,7 +384,7 @@ namespace rptui
             aArgs[1].Value <<= VCLUnoHelper::GetInterface(this);
 
             aArgs[2].Name = PROPERTY_FONTCOLOR;
-            aArgs[2].Value <<= static_cast<sal_uInt32>(rColor.GetColor());
+            aArgs[2].Value <<= rColor;
 
             // we use this way to create undo actions
             m_rController.executeUnChecked(_nCommandId,aArgs);
