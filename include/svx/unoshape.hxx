@@ -137,8 +137,10 @@ protected:
     const SvxItemPropertySet* mpPropSet;
     const SfxItemPropertyMapEntry* maPropMapEntries;
 
-    ::tools::WeakReference< SdrObject > mpObj;
-    SdrModel* mpModel;
+private:
+    ::tools::WeakReference< SdrObject > mpSdrObjectWeakReference;
+
+protected:
     // translations for writer, which works in TWIPS
     void ForceMetricToItemPoolMetric(Pair& rPoint) const throw();
     void ForceMetricToItemPoolMetric(Point& rPoint) const throw() { ForceMetricToItemPoolMetric(rPoint.toPair()); }
@@ -206,10 +208,13 @@ public:
     void TakeSdrObjectOwnership();
     bool HasSdrObjectOwnership() const;
 
-    void ChangeModel( SdrModel* pNewModel );
+    // used exclusively by SdrObject
+    void InvalidateSdrObject();
 
-    void InvalidateSdrObject() { mpObj.reset( nullptr ); };
-    SdrObject* GetSdrObject() const {return mpObj.get();}
+    // Encapsulated access to SdrObject
+    SdrObject* GetSdrObject() const { return mpSdrObjectWeakReference.get(); }
+    bool HasSdrObject() const { return mpSdrObjectWeakReference.is(); }
+
     void SetShapeType( const OUString& ShapeType ) { maShapeType = ShapeType; }
     /// @throws css::uno::RuntimeException
     css::uno::Any GetBitmap( bool bMetaFile = false ) const;

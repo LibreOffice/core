@@ -125,7 +125,9 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
         getIDocumentDrawModelAccess().GetDrawModel()->InsertPage( pPg );
     }
 
-    SdrObject *pObj = rObj.Clone();
+    // TTTT Clone directly to target SdrModel
+    SdrObject *pObj = rObj.Clone(getIDocumentDrawModelAccess().GetDrawModel());
+
     if( bMoveWithinDoc && SdrInventor::FmForm == pObj->GetObjInventor() )
     {
         // We need to preserve the Name for Controls

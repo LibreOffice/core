@@ -1197,7 +1197,10 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (pModel)
     {
-        mpLOKDrawView.reset(new FmFormView(pModel, &rDevice));
+        mpLOKDrawView.reset(
+            new FmFormView(
+                *pModel,
+                &rDevice));
         mpLOKDrawView->ShowSdrPage(mpLOKDrawView->GetModel()->GetPage(nTab));
         aOutputData.SetDrawView(mpLOKDrawView.get());
         aOutputData.SetSpellCheckContext(mpSpellCheckCxt.get());

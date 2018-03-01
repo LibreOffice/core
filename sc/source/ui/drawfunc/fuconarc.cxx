@@ -123,8 +123,9 @@ SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const tools::Re
     // case SID_DRAW_CIRCLECUT:
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
-        nullptr, pDrDoc);
+        *pDrDoc,
+        pView->GetCurrentObjInventor(),
+        pView->GetCurrentObjIdentifier());
 
     if(pObj)
     {

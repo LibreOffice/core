@@ -93,6 +93,7 @@ namespace sd {
 class SD_DLLPUBLIC SdPage final : public FmFormPage, public SdrObjUserCall
 {
     SdPage& operator=(const SdPage&) = delete;
+    SdPage(const SdPage&) = delete;
 
 friend class SdGenericDrawPage;
 friend class SdDrawPage;
@@ -147,15 +148,14 @@ friend class sd::UndoAttrObject;
     sal_Int32 mnTransitionFadeColor;
     double mfTransitionDuration;
 
-    SdPage(const SdPage& rSrcPage);
     void lateInit(const SdPage& rSrcPage);
 
 public:
 
     SdPage(SdDrawDocument& rNewDoc, bool bMasterPage);
     virtual ~SdPage() override;
-    virtual SdrPage* Clone() const override;
-    virtual SdrPage* Clone(SdrModel* pNewModel) const override;
+
+    virtual SdrPage* Clone(SdrModel* pNewModel = nullptr) const override;
 
     virtual void    SetSize(const Size& aSize) override;
     virtual void    SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 Lwr) override;
@@ -163,7 +163,6 @@ public:
     virtual void    SetRightBorder(sal_Int32 nBorder) override;
     virtual void    SetUpperBorder(sal_Int32 nBorder) override;
     virtual void    SetLowerBorder(sal_Int32 nBorder) override;
-    virtual void    SetModel(SdrModel* pNewModel) override;
     virtual bool    IsReadOnly() const override;
 
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
@@ -388,6 +387,8 @@ private:
     sal_uInt16 mnPageId;
 
     /** clone the animations from this and set them to rTargetPage
+     *  TTTT: Order is strange, should be the other way around by
+     *  convention/convenience and makes usage a little dangerous...
     */
     void cloneAnimations( SdPage& rTargetPage ) const;
 

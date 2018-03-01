@@ -195,8 +195,33 @@ namespace basegfx
             maRangeZ.grow(fValue);
         }
 
+        /// clamp value on range
+        B3DTuple clamp(const B3DTuple& rTuple) const
+        {
+            return B3DTuple(
+                maRangeX.clamp(rTuple.getX()),
+                maRangeY.clamp(rTuple.getY()),
+                maRangeZ.clamp(rTuple.getZ()));
+        }
+
          BASEGFX_DLLPUBLIC void transform(const B3DHomMatrix& rMatrix);
+
+        /** Transform Range by given transformation matrix.
+
+            This operation transforms the Range by transforming all eight possible
+            extrema points (corners) of the given range and building a new one.
+            This means that the range will grow evtl. when a shear and/or rotation
+            is part of the transformation.
+        */
+        B3DRange& operator*=( const ::basegfx::B3DHomMatrix& rMat );
+
+        /** Get a range filled with (0.0, 0.0, 0.0, 1.0, 1.0, 1.0) */
+        static const B3DRange& getUnitB3DRange();
     };
+
+    /** Transform B3DRange by given transformation matrix (see operator*=())
+    */
+    B3DRange operator*( const B3DHomMatrix& rMat, const B3DRange& rB2DRange );
 
 } // end of namespace basegfx
 

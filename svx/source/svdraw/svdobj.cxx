@@ -226,6 +226,10 @@ sdr::properties::BaseProperties& SdrObject::GetProperties() const
 {
     if(!mpProperties)
     {
+        // CAUTION(!) Do *not* call this during SdrObject construction,
+        // that will lead to wrong type-casts (dependent on costructor-level)
+        // and thus eventually create the wrong sdr::properties (!). Is there
+        // a way to check if on the stack is a SdrObject-constructor (?)
         const_cast< SdrObject* >(this)->mpProperties.reset(
             const_cast< SdrObject* >(this)->CreateObjectSpecificProperties() );
     }
@@ -284,10 +288,10 @@ void SdrObject::SetBoundRectDirty()
 }
 
 
-SdrObject::SdrObject() :
-    mpFillGeometryDefiningShape(nullptr)
+SdrObject::SdrObject(SdrModel& rSdrModel)
+:   mpFillGeometryDefiningShape(nullptr)
+    ,mrSdrModelFromSdrObject(rSdrModel)
     ,pPage(nullptr)
-    ,pModel(nullptr)
     ,pUserCall(nullptr)
     ,pPlusData(nullptr)
     ,mpImpl(new Impl)
@@ -343,22 +347,7 @@ SdrObject::~SdrObject()
     // when they get called from ObjectInDestruction().
     mpImpl->maObjectUsers.clear();
 
-    try
-    {
-        SvxShape* pSvxShape = getSvxShape();
-        if ( pSvxShape )
-        {
-            OSL_ENSURE(!pSvxShape->HasSdrObjectOwnership(),"Please check where this call come from and replace it with SdrObject::Free");
-            pSvxShape->InvalidateSdrObject();
-            uno::Reference< lang::XComponent > xShapeComp( getWeakUnoShape(), uno::UNO_QUERY_THROW );
-            xShapeComp->dispose();
-        }
-    }
-    catch( const uno::Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION("svx");
-    }
-
+    // UserCall
     SendUserCall(SdrUserCallType::Delete, GetLastBoundRect());
     o3tl::reset_preserve_ptr_during(pPlusData);
 
@@ -370,14 +359,38 @@ SdrObject::~SdrObject()
 void SdrObject::Free( SdrObject*& _rpObject )
 {
     SdrObject* pObject = _rpObject; _rpObject = nullptr;
-    if ( pObject == nullptr )
+
+    if(nullptr == pObject)
+    {
         // nothing to do
         return;
+    }
 
-    SvxShape* pShape = pObject->getSvxShape();
-    if ( pShape && pShape->HasSdrObjectOwnership() )
-        // only the shape is allowed to delete me, and will reset the ownership before doing so
-        return;
+    SvxShape* pShape(pObject->getSvxShape());
+
+    if(pShape)
+    {
+        if(pShape->HasSdrObjectOwnership())
+        {
+            // only the SvxShape is allowed to delete me, and will reset
+            // the ownership before doing so
+            return;
+        }
+        else
+        {
+            // not only delete pObject, but also need to dispose uno shape
+            try
+            {
+                pShape->InvalidateSdrObject();
+                uno::Reference< lang::XComponent > xShapeComp( pObject->getWeakUnoShape(), uno::UNO_QUERY_THROW );
+                xShapeComp->dispose();
+            }
+            catch( const uno::Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION("svx");
+            }
+        }
+    }
 
     delete pObject;
 }
@@ -393,28 +406,6 @@ void SdrObject::SetRectsDirty(bool bNotMyself)
     }
 }
 
-void SdrObject::SetModel(SdrModel* pNewModel)
-{
-    if(pNewModel && pPage)
-    {
-        if(pPage->GetModel() != pNewModel)
-        {
-            pPage = nullptr;
-        }
-    }
-
-    // update listeners at possible API wrapper object
-    if( pModel != pNewModel )
-    {
-        SvxShape* pShape = getSvxShape();
-        if( pShape )
-            pShape->ChangeModel( pNewModel );
-    }
-
-    pModel = pNewModel;
-}
-
-
 void SdrObject::SetObjList(SdrObjList* pNewObjList)
 {
     pObjList=pNewObjList;
@@ -423,16 +414,23 @@ void SdrObject::SetObjList(SdrObjList* pNewObjList)
 
 void SdrObject::SetPage(SdrPage* pNewPage)
 {
-    SdrModel* pOldModel = pModel;
-    SdrPage* pOldPage = pPage;
+    SdrModel* pOldModel(&getSdrModelFromSdrObject());
+    SdrPage* pOldPage(pPage);
 
-    pPage=pNewPage;
-    if (pPage!=nullptr)
-    {
-        SdrModel* pMod=pPage->GetModel();
-        if (pMod!=pModel && pMod!=nullptr)
-            SetModel(pMod);
-    }
+    pPage = pNewPage;
+
+    // TTTT Possibility here to add a warning for the future -> SdrModel
+    // of SdrObject (this) and SdrPage it it added to *have* to have the
+    // same SdrModel
+    // if(nullptr != pPage)
+    // {
+    //     SdrModel* pMod(&pPage->getSdrModelFromSdrPage());
+    //
+    //     if(pMod != &getSdrModelFromSdrObject())
+    //     {
+    //         SetModel(pMod);
+    //     }
+    // }
 
     // The creation of the UNO shape in SdrObject::getUnoShape is influenced
     // by pPage, so when the page changes we need to discard the cached UNO
@@ -440,7 +438,14 @@ void SdrObject::SetPage(SdrPage* pNewPage)
     // If the page is changing to another page with the same model, we
     // assume they create compatible UNO shape objects so we shouldn't have
     // to invalidate.
-    if (pOldPage != pPage && !(pOldPage && pPage && pOldModel == pModel))
+    // TTTT: This causes quite some problems in SvxDrawPage::add when used
+    // e.g. from Writer - the SdrObject may be cloned to target model, and
+    // the xShape was added to it by purpose (see there). Thus it will be
+    // good to think about if this is really needed - it *seems* to be intended
+    // for a xShape being a on-demand-creatable resource - wit hthe argument that
+    // the SdrPage/UnoPage used influences the SvxShape creation. This uses
+    // ressources and would be nice to get rid of anyways.
+    if (pOldPage != pPage && !(pOldPage && pPage && pOldModel == &getSdrModelFromSdrObject()))
     {
         SvxShape* const pShape(getSvxShape());
         if (pShape && !pShape->HasSdrObjectOwnership())
@@ -512,13 +517,9 @@ sal_Int16 SdrObject::GetRelativeHeightRelation() const
     return mpImpl->meRelativeHeightRelation;
 }
 
-SfxItemPool & SdrObject::GetObjectItemPool() const
+SfxItemPool& SdrObject::GetObjectItemPool() const
 {
-    if(pModel)
-        return pModel->GetItemPool();
-
-    // use a static global default pool
-    return SdrObject::GetGlobalDrawObjectItemPool();
+    return getSdrModelFromSdrObject().GetItemPool();
 }
 
 SdrInventor SdrObject::GetObjInventor()   const
@@ -636,7 +637,7 @@ void SdrObject::SetName(const OUString& rStr)
     {
         // Undo/Redo for setting object's name (#i73249#)
         bool bUndo( false );
-        if ( GetModel() && GetModel()->IsUndoEnabled() )
+        if ( getSdrModelFromSdrObject().IsUndoEnabled() )
         {
             bUndo = true;
             SdrUndoAction* pUndoAction =
@@ -645,14 +646,14 @@ void SdrObject::SetName(const OUString& rStr)
                                                     SdrUndoObjStrAttr::ObjStrAttrType::Name,
                                                     GetName(),
                                                     rStr );
-            GetModel()->BegUndo( pUndoAction->GetComment() );
-            GetModel()->AddUndo( pUndoAction );
+            getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
+            getSdrModelFromSdrObject().AddUndo( pUndoAction );
         }
         pPlusData->aObjName = rStr;
         // Undo/Redo for setting object's name (#i73249#)
         if ( bUndo )
         {
-            GetModel()->EndUndo();
+            getSdrModelFromSdrObject().EndUndo();
         }
         SetChanged();
         BroadcastObjectChange();
@@ -680,7 +681,7 @@ void SdrObject::SetTitle(const OUString& rStr)
     {
         // Undo/Redo for setting object's title (#i73249#)
         bool bUndo( false );
-        if ( GetModel() && GetModel()->IsUndoEnabled() )
+        if ( getSdrModelFromSdrObject().IsUndoEnabled() )
         {
             bUndo = true;
             SdrUndoAction* pUndoAction =
@@ -689,14 +690,14 @@ void SdrObject::SetTitle(const OUString& rStr)
                                                     SdrUndoObjStrAttr::ObjStrAttrType::Title,
                                                     GetTitle(),
                                                     rStr );
-            GetModel()->BegUndo( pUndoAction->GetComment() );
-            GetModel()->AddUndo( pUndoAction );
+            getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
+            getSdrModelFromSdrObject().AddUndo( pUndoAction );
         }
         pPlusData->aObjTitle = rStr;
         // Undo/Redo for setting object's title (#i73249#)
         if ( bUndo )
         {
-            GetModel()->EndUndo();
+            getSdrModelFromSdrObject().EndUndo();
         }
         SetChanged();
         BroadcastObjectChange();
@@ -724,7 +725,7 @@ void SdrObject::SetDescription(const OUString& rStr)
     {
         // Undo/Redo for setting object's description (#i73249#)
         bool bUndo( false );
-        if ( GetModel() && GetModel()->IsUndoEnabled() )
+        if ( getSdrModelFromSdrObject().IsUndoEnabled() )
         {
             bUndo = true;
             SdrUndoAction* pUndoAction =
@@ -733,14 +734,14 @@ void SdrObject::SetDescription(const OUString& rStr)
                                                     SdrUndoObjStrAttr::ObjStrAttrType::Description,
                                                     GetDescription(),
                                                     rStr );
-            GetModel()->BegUndo( pUndoAction->GetComment() );
-            GetModel()->AddUndo( pUndoAction );
+            getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
+            getSdrModelFromSdrObject().AddUndo( pUndoAction );
         }
         pPlusData->aObjDescription = rStr;
         // Undo/Redo for setting object's description (#i73249#)
         if ( bUndo )
         {
-            GetModel()->EndUndo();
+            getSdrModelFromSdrObject().EndUndo();
         }
         SetChanged();
         BroadcastObjectChange();
@@ -835,7 +836,7 @@ const tools::Rectangle& SdrObject::GetLastBoundRect() const
 void SdrObject::RecalcBoundRect()
 {
     // #i101680# suppress BoundRect calculations on import(s)
-    if ((pModel && pModel->isLocked()) || utl::ConfigManager::IsFuzzing())
+    if ((getSdrModelFromSdrObject().isLocked()) || utl::ConfigManager::IsFuzzing())
         return;
 
     // central new method which will calculate the BoundRect using primitive geometry
@@ -865,7 +866,7 @@ void SdrObject::RecalcBoundRect()
 
 void SdrObject::BroadcastObjectChange() const
 {
-    if ((pModel && pModel->isLocked()) || utl::ConfigManager::IsFuzzing())
+    if ((getSdrModelFromSdrObject().isLocked()) || utl::ConfigManager::IsFuzzing())
         return;
 
     if (mbDelayBroadcastObjectChange)
@@ -875,7 +876,7 @@ void SdrObject::BroadcastObjectChange() const
     }
 
     bool bPlusDataBroadcast(pPlusData && pPlusData->pBroadcast);
-    bool bObjectChange(IsInserted() && pModel);
+    bool bObjectChange(IsInserted());
 
     if(bPlusDataBroadcast || bObjectChange)
     {
@@ -888,7 +889,7 @@ void SdrObject::BroadcastObjectChange() const
 
         if(bObjectChange)
         {
-            pModel->Broadcast(aHint);
+            getSdrModelFromSdrObject().Broadcast(aHint);
         }
     }
 }
@@ -899,9 +900,13 @@ void SdrObject::SetChanged()
     // notification now.
     ActionChanged();
 
-    if(IsInserted() && pModel)
+    // TTTT Need to check meaning/usage of IsInserted in one
+    // of the next changes. It should not mean to have a SdrModel
+    // set (this is guaranteed now), but should be connected to
+    // being added to a SdrPage (?)
+    if(IsInserted())
     {
-        pModel->SetChanged();
+        getSdrModelFromSdrObject().SetChanged();
     }
 }
 
@@ -929,9 +934,9 @@ bool SdrObject::HasLimitedRotation() const
     return false;
 }
 
-SdrObject* SdrObject::Clone() const
+SdrObject* SdrObject::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< SdrObject >();
+    return CloneHelper< SdrObject >(pTargetModel);
 }
 
 SdrObject& SdrObject::operator=(const SdrObject& rObj)
@@ -947,7 +952,6 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
     // draw object, an SdrObject needs to be provided, as in the normal constructor.
     mpProperties.reset( &rObj.GetProperties().Clone(*this) );
 
-    pModel  =rObj.pModel;
     pPage = rObj.pPage;
     aOutRect=rObj.aOutRect;
     mnLayerID = rObj.mnLayerID;
@@ -1021,19 +1025,9 @@ void SdrObject::ImpForcePlusData()
         pPlusData.reset( new SdrObjPlusData );
 }
 
-OUString SdrObject::GetAngleStr(long nAngle) const
-{
-    if (pModel!=nullptr)
-        return SdrModel::GetAngleString(nAngle);
-
-    return OUString();
-}
-
 OUString SdrObject::GetMetrStr(long nVal) const
 {
-    if (pModel!=nullptr)
-        return pModel->GetMetricString(nVal);
-    return OUString();
+    return getSdrModelFromSdrObject().GetMetricString(nVal);
 }
 
 basegfx::B2DPolyPolygon SdrObject::TakeXorPoly() const
@@ -2054,16 +2048,16 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     if (rAttr.GetItemState(SDRATTR_LAYERID,true,&pPoolItem)==SfxItemState::SET) {
         nLayer=static_cast<const SdrLayerIdItem*>(pPoolItem)->GetValue();
     }
-    if (rAttr.GetItemState(SDRATTR_LAYERNAME,true,&pPoolItem)==SfxItemState::SET && pModel!=nullptr) {
-        OUString aLayerName=static_cast<const SdrLayerNameItem*>(pPoolItem)->GetValue();
-        const SdrLayerAdmin* pLayAd=pPage!=nullptr ? &pPage->GetLayerAdmin() : pModel!=nullptr ? &pModel->GetLayerAdmin() : nullptr;
-        if (pLayAd!=nullptr) {
-            const SdrLayer* pLayer=pLayAd->GetLayer(aLayerName);
-            if (pLayer!=nullptr) {
-                nLayer=pLayer->GetID();
-            }
-        }
+    if (rAttr.GetItemState(SDRATTR_LAYERNAME,true,&pPoolItem)==SfxItemState::SET)
+    {
+        OUString aLayerName = static_cast<const SdrLayerNameItem*>(pPoolItem)->GetValue();
+        const SdrLayerAdmin& rLayAd(nullptr != pPage ? pPage->GetLayerAdmin() : getSdrModelFromSdrObject().GetLayerAdmin());
+        const SdrLayer* pLayer = rLayAd.GetLayer(aLayerName);
 
+        if(nullptr != pLayer)
+        {
+            nLayer=pLayer->GetID();
+        }
     }
     if (nLayer!=SDRLAYER_NOTFOUND) {
         NbcSetLayer(nLayer);
@@ -2126,12 +2120,11 @@ void SdrObject::TakeNotPersistAttr(SfxItemSet& rAttr) const
     }
 
     rAttr.Put(SdrLayerIdItem(GetLayer()));
-    const SdrLayerAdmin* pLayAd=pPage!=nullptr ? &pPage->GetLayerAdmin() : pModel!=nullptr ? &pModel->GetLayerAdmin() : nullptr;
-    if (pLayAd!=nullptr) {
-        const SdrLayer* pLayer=pLayAd->GetLayerPerID(GetLayer());
-        if (pLayer!=nullptr) {
-            rAttr.Put(SdrLayerNameItem(pLayer->GetName()));
-        }
+    const SdrLayerAdmin& rLayAd(nullptr != pPage ? pPage->GetLayerAdmin() : getSdrModelFromSdrObject().GetLayerAdmin());
+    const SdrLayer* pLayer = rLayAd.GetLayerPerID(GetLayer());
+    if(nullptr != pLayer)
+    {
+        rAttr.Put(SdrLayerNameItem(pLayer->GetName()));
     }
     Point aRef1(rSnap.Center());
     Point aRef2(aRef1); aRef2.AdjustY( 1 );
@@ -2309,15 +2302,15 @@ void extractLineContourFromPrimitive2DSequence(
 }
 
 
-SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDash)
+SdrObject* SdrObject::ImpConvertToContourObj(bool bForceLineDash)
 {
-    bool bNoChange(true);
+    SdrObject* pRetval(nullptr);
 
-    if(pRet->LineGeometryUsageIsNecessary())
+    if(LineGeometryUsageIsNecessary())
     {
         basegfx::B2DPolyPolygon aMergedLineFillPolyPolygon;
         basegfx::B2DPolyPolygon aMergedHairlinePolyPolygon;
-        const drawinglayer::primitive2d::Primitive2DContainer xSequence(pRet->GetViewContact().getViewIndependentPrimitive2DContainer());
+        const drawinglayer::primitive2d::Primitive2DContainer xSequence(GetViewContact().getViewIndependentPrimitive2DContainer());
 
         if(!xSequence.empty())
         {
@@ -2345,7 +2338,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
 
         if(aMergedLineFillPolyPolygon.count() || (bForceLineDash && aMergedHairlinePolyPolygon.count()))
         {
-            SfxItemSet aSet(pRet->GetMergedItemSet());
+            SfxItemSet aSet(GetMergedItemSet());
             drawing::FillStyle eOldFillStyle = aSet.Get(XATTR_FILLSTYLE).GetValue();
             SdrPathObj* aLinePolygonPart = nullptr;
             SdrPathObj* aLineHairlinePart = nullptr;
@@ -2354,8 +2347,10 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
             if(aMergedLineFillPolyPolygon.count())
             {
                 // create SdrObject for filled line geometry
-                aLinePolygonPart = new SdrPathObj(OBJ_PATHFILL, aMergedLineFillPolyPolygon);
-                aLinePolygonPart->SetModel(pRet->GetModel());
+                aLinePolygonPart = new SdrPathObj(
+                    getSdrModelFromSdrObject(),
+                    OBJ_PATHFILL,
+                    aMergedLineFillPolyPolygon);
 
                 // correct item properties
                 aSet.Put(XLineWidthItem(0));
@@ -2375,8 +2370,10 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
                 // OBJ_PATHLINE is necessary here, not OBJ_PATHFILL. This is intended
                 // to get a non-filled object. If the poly is closed, the PathObj takes care for
                 // the correct closed state.
-                aLineHairlinePart = new SdrPathObj(OBJ_PATHLINE, aMergedHairlinePolyPolygon);
-                aLineHairlinePart->SetModel(pRet->GetModel());
+                aLineHairlinePart = new SdrPathObj(
+                    getSdrModelFromSdrObject(),
+                    OBJ_PATHLINE,
+                    aMergedHairlinePolyPolygon);
 
                 aSet.Put(XLineWidthItem(0));
                 aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
@@ -2396,7 +2393,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
 
             // check if original geometry should be added (e.g. filled and closed)
             bool bAddOriginalGeometry(false);
-            SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pRet );
+            SdrPathObj* pPath = dynamic_cast<SdrPathObj*>(this);
 
             if(pPath && pPath->IsClosed())
             {
@@ -2409,20 +2406,17 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
             // do we need a group?
             if(bBuildGroup || bAddOriginalGeometry)
             {
-                SdrObject* pGroup = new SdrObjGroup;
-                pGroup->SetModel(pRet->GetModel());
+                SdrObject* pGroup = new SdrObjGroup(getSdrModelFromSdrObject());
 
                 if(bAddOriginalGeometry)
                 {
                     // Add a clone of the original geometry.
                     aSet.ClearItem();
-                    aSet.Put(pRet->GetMergedItemSet());
+                    aSet.Put(GetMergedItemSet());
                     aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
                     aSet.Put(XLineWidthItem(0));
 
-                    SdrObject* pClone = pRet->Clone();
-
-                    pClone->SetModel(pRet->GetModel());
+                    SdrObject* pClone = Clone();
                     pClone->SetMergedItemSet(aSet);
 
                     pGroup->GetSubList()->NbcInsertObject(pClone);
@@ -2438,38 +2432,30 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
                     pGroup->GetSubList()->NbcInsertObject(aLineHairlinePart);
                 }
 
-                pRet = pGroup;
-
-                // be more careful with the state describing bool
-                bNoChange = false;
+                pRetval = pGroup;
             }
             else
             {
                 if(aLinePolygonPart)
                 {
-                    pRet = aLinePolygonPart;
-                    // be more careful with the state describing bool
-                    bNoChange = false;
+                    pRetval = aLinePolygonPart;
                 }
                 else if(aLineHairlinePart)
                 {
-                    pRet = aLineHairlinePart;
-                    // be more careful with the state describing bool
-                    bNoChange = false;
+                    pRetval = aLineHairlinePart;
                 }
             }
         }
     }
 
-    if(bNoChange)
+    if(nullptr == pRetval)
     {
         // due to current method usage, create and return a clone when nothing has changed
-        SdrObject* pClone = pRet->Clone();
-        pClone->SetModel(pRet->GetModel());
-        pRet = pClone;
+        SdrObject* pClone = Clone();
+        pRetval = pClone;
     }
 
-    return pRet;
+    return pRetval;
 }
 
 
@@ -2497,8 +2483,7 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, bool bForceLineDash) 
     if(dynamic_cast<const SdrObjGroup*>( pRet) !=  nullptr)
     {
         SdrObjList* pObjList2 = pRet->GetSubList();
-        SdrObject* pGroup = new SdrObjGroup;
-        pGroup->SetModel(pRet->GetModel());
+        SdrObject* pGroup = new SdrObjGroup(getSdrModelFromSdrObject());
 
         for(size_t a=0; a<pObjList2->GetObjCount(); ++a)
         {
@@ -2518,7 +2503,7 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, bool bForceLineDash) 
             pPathObj->SetPathPoly(basegfx::utils::simplifyCurveSegments(pPathObj->GetPathPoly()));
         }
 
-        pRet = ImpConvertToContourObj(pRet, bForceLineDash);
+        pRet = pRet->ImpConvertToContourObj(bForceLineDash);
     }
 
     // #i73441# preserve LayerID
@@ -2601,10 +2586,10 @@ void SdrObject::SetPrintable(bool bPrn)
     {
         bNoPrint=!bPrn;
         SetChanged();
-        if (IsInserted() && pModel!=nullptr)
+        if (IsInserted())
         {
             SdrHint aHint(SdrHintKind::ObjectChange, *this);
-            pModel->Broadcast(aHint);
+            getSdrModelFromSdrObject().Broadcast(aHint);
         }
     }
 }
@@ -2615,10 +2600,10 @@ void SdrObject::SetVisible(bool bVisible)
     {
         mbVisible = bVisible;
         SetChanged();
-        if (IsInserted() && pModel!=nullptr)
+        if (IsInserted())
         {
             SdrHint aHint(SdrHintKind::ObjectChange, *this);
-            pModel->Broadcast(aHint);
+            getSdrModelFromSdrObject().Broadcast(aHint);
         }
     }
 }
@@ -2741,15 +2726,6 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& 
     default:
         // not interested in
         break;
-    }
-}
-
-// change ItemPool for this object
-void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
-{
-    if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
-    {
-        GetProperties().MoveToItemPool(pSrcPool, pDestPool, pNewModel);
     }
 }
 
@@ -2882,7 +2858,7 @@ bool SdrObject::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPo
     basegfx::B2DTuple aTranslate(aRectangle.Left(), aRectangle.Top());
 
     // position maybe relative to anchorpos, convert
-    if( pModel && pModel->IsWriter() )
+    if(getSdrModelFromSdrObject().IsWriter())
     {
         if(GetAnchorPos().X() || GetAnchorPos().Y())
         {
@@ -2966,7 +2942,7 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
     }
 
     // if anchor is used, make position relative to it
-    if( pModel && pModel->IsWriter() )
+    if(getSdrModelFromSdrObject().IsWriter())
     {
         if(GetAnchorPos().X() || GetAnchorPos().Y())
         {
@@ -2985,9 +2961,7 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
 // Give info if object is in destruction
 bool SdrObject::IsInDestruction() const
 {
-    if(pModel)
-        return pModel->IsInDestruction();
-    return false;
+    return getSdrModelFromSdrObject().IsInDestruction();
 }
 
 // return if fill is != drawing::FillStyle_NONE
@@ -3056,9 +3030,9 @@ SdrDelayBroadcastObjectChange::~SdrDelayBroadcastObjectChange()
 }
 
 
-SdrObject* SdrObjFactory::CreateObjectFromFactory( SdrInventor nInventor, sal_uInt16 nObjIdentifier  )
+SdrObject* SdrObjFactory::CreateObjectFromFactory(SdrModel& rSdrModel, SdrInventor nInventor, sal_uInt16 nObjIdentifier)
 {
-    SdrObjCreatorParams aParams { nInventor, nObjIdentifier };
+    SdrObjCreatorParams aParams { nInventor, nObjIdentifier, rSdrModel };
     for (const auto & i : ImpGetUserMakeObjHdl()) {
         SdrObject* pObj = i.Call(aParams);
         if (pObj) {
@@ -3068,78 +3042,15 @@ SdrObject* SdrObjFactory::CreateObjectFromFactory( SdrInventor nInventor, sal_uI
     return nullptr;
 }
 
-SdrObject* SdrObjFactory::MakeNewObject(SdrInventor nInvent, sal_uInt16 nIdent, SdrPage* pPage, SdrModel* pModel)
-{
-    if (!pModel && pPage)
-        pModel = pPage->GetModel();
-
-    SdrObject* pObj = nullptr;
-
-    if (nInvent == SdrInventor::Default)
-    {
-        switch (nIdent)
-        {
-            case sal_uInt16(OBJ_NONE       ): pObj=new SdrObject;                   break;
-            case sal_uInt16(OBJ_GRUP       ): pObj=new SdrObjGroup;                 break;
-            case sal_uInt16(OBJ_LINE       ): pObj=new SdrPathObj(OBJ_LINE       ); break;
-            case sal_uInt16(OBJ_POLY       ): pObj=new SdrPathObj(OBJ_POLY       ); break;
-            case sal_uInt16(OBJ_PLIN       ): pObj=new SdrPathObj(OBJ_PLIN       ); break;
-            case sal_uInt16(OBJ_PATHLINE   ): pObj=new SdrPathObj(OBJ_PATHLINE   ); break;
-            case sal_uInt16(OBJ_PATHFILL   ): pObj=new SdrPathObj(OBJ_PATHFILL   ); break;
-            case sal_uInt16(OBJ_FREELINE   ): pObj=new SdrPathObj(OBJ_FREELINE   ); break;
-            case sal_uInt16(OBJ_FREEFILL   ): pObj=new SdrPathObj(OBJ_FREEFILL   ); break;
-            case sal_uInt16(OBJ_PATHPOLY   ): pObj=new SdrPathObj(OBJ_POLY       ); break;
-            case sal_uInt16(OBJ_PATHPLIN   ): pObj=new SdrPathObj(OBJ_PLIN       ); break;
-            case sal_uInt16(OBJ_EDGE       ): pObj=new SdrEdgeObj;                  break;
-            case sal_uInt16(OBJ_RECT       ): pObj=new SdrRectObj;                  break;
-            case sal_uInt16(OBJ_CIRC       ): pObj=new SdrCircObj(OBJ_CIRC       ); break;
-            case sal_uInt16(OBJ_SECT       ): pObj=new SdrCircObj(OBJ_SECT       ); break;
-            case sal_uInt16(OBJ_CARC       ): pObj=new SdrCircObj(OBJ_CARC       ); break;
-            case sal_uInt16(OBJ_CCUT       ): pObj=new SdrCircObj(OBJ_CCUT       ); break;
-            case sal_uInt16(OBJ_TEXT       ): pObj=new SdrRectObj(OBJ_TEXT       ); break;
-            case sal_uInt16(OBJ_TEXTEXT    ): pObj=new SdrRectObj(OBJ_TEXTEXT    ); break;
-            case sal_uInt16(OBJ_TITLETEXT  ): pObj=new SdrRectObj(OBJ_TITLETEXT  ); break;
-            case sal_uInt16(OBJ_OUTLINETEXT): pObj=new SdrRectObj(OBJ_OUTLINETEXT); break;
-            case sal_uInt16(OBJ_MEASURE    ): pObj=new SdrMeasureObj;               break;
-            case sal_uInt16(OBJ_GRAF       ): pObj=new SdrGrafObj;                  break;
-            case sal_uInt16(OBJ_OLE2       ): pObj=new SdrOle2Obj;                  break;
-            case sal_uInt16(OBJ_FRAME      ): pObj=new SdrOle2Obj(true);            break;
-            case sal_uInt16(OBJ_CAPTION    ): pObj=new SdrCaptionObj;               break;
-            case sal_uInt16(OBJ_PAGE       ): pObj=new SdrPageObj;                  break;
-            case sal_uInt16(OBJ_UNO        ): pObj=new SdrUnoObj(OUString());       break;
-            case sal_uInt16(OBJ_CUSTOMSHAPE  ): pObj=new SdrObjCustomShape();       break;
-#if HAVE_FEATURE_AVMEDIA
-            case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
-#endif
-            case sal_uInt16(OBJ_TABLE      ): pObj=new sdr::table::SdrTableObj(pModel);   break;
-        }
-    }
-
-    if (!pObj)
-        pObj = CreateObjectFromFactory(nInvent, nIdent);
-
-    if (!pObj)
-    {
-        // Well, if no one wants it...
-        return nullptr;
-    }
-
-    if (pPage)
-        pObj->SetPage(pPage);
-    else if (pModel)
-        pObj->SetModel(pModel);
-
-    return pObj;
-}
-
 SdrObject* SdrObjFactory::MakeNewObject(
-    SdrInventor nInventor, sal_uInt16 nIdentifier, const tools::Rectangle& rSnapRect, SdrPage* pPage )
+    SdrModel& rSdrModel,
+    SdrInventor nInventor,
+    sal_uInt16 nIdentifier,
+    SdrPage* pPage,
+    const tools::Rectangle* pSnapRect)
 {
-    SdrModel* pModel = pPage ? pPage->GetModel() : nullptr;
-
-    SdrObject* pObj = nullptr;
-
-    bool bSetSnapRect = true;
+    SdrObject* pObj(nullptr);
+    bool bSetSnapRect(nullptr != pSnapRect);
 
     if (nInventor == SdrInventor::Default)
     {
@@ -3147,15 +3058,44 @@ SdrObject* SdrObjFactory::MakeNewObject(
         {
             case OBJ_MEASURE:
             {
-                pObj = new SdrMeasureObj(rSnapRect.TopLeft(), rSnapRect.BottomRight());
+                if(nullptr != pSnapRect)
+                {
+                    pObj = new SdrMeasureObj(
+                        rSdrModel,
+                        pSnapRect->TopLeft(),
+                        pSnapRect->BottomRight());
+                }
+                else
+                {
+                    pObj = new SdrMeasureObj(rSdrModel);
+                }
             }
             break;
             case OBJ_LINE:
             {
-                basegfx::B2DPolygon aPoly;
-                aPoly.append(basegfx::B2DPoint(rSnapRect.Left(), rSnapRect.Top()));
-                aPoly.append(basegfx::B2DPoint(rSnapRect.Right(), rSnapRect.Bottom()));
-                pObj = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPoly));
+                if(nullptr != pSnapRect)
+                {
+                    basegfx::B2DPolygon aPoly;
+
+                    aPoly.append(
+                        basegfx::B2DPoint(
+                            pSnapRect->Left(),
+                            pSnapRect->Top()));
+                    aPoly.append(
+                        basegfx::B2DPoint(
+                            pSnapRect->Right(),
+                            pSnapRect->Bottom()));
+                    pObj = new SdrPathObj(
+                        rSdrModel,
+                        OBJ_LINE,
+                        basegfx::B2DPolyPolygon(aPoly));
+                }
+                else
+                {
+                    pObj = new SdrPathObj(
+                        rSdrModel,
+                        OBJ_LINE);
+                }
             }
             break;
             case OBJ_TEXT:
@@ -3163,8 +3103,20 @@ SdrObject* SdrObjFactory::MakeNewObject(
             case OBJ_TITLETEXT:
             case OBJ_OUTLINETEXT:
             {
-                pObj = new SdrRectObj(static_cast<SdrObjKind>(nIdentifier), rSnapRect);
-                bSetSnapRect = false;
+                if(nullptr != pSnapRect)
+                {
+                    pObj = new SdrRectObj(
+                        rSdrModel,
+                        static_cast<SdrObjKind>(nIdentifier),
+                        *pSnapRect);
+                    bSetSnapRect = false;
+                }
+                else
+                {
+                    pObj = new SdrRectObj(
+                        rSdrModel,
+                        static_cast<SdrObjKind>(nIdentifier));
+                }
             }
             break;
             case OBJ_CIRC:
@@ -3172,38 +3124,52 @@ SdrObject* SdrObjFactory::MakeNewObject(
             case OBJ_CARC:
             case OBJ_CCUT:
             {
-                pObj = new SdrCircObj(static_cast<SdrObjKind>(nIdentifier), rSnapRect);
-                bSetSnapRect = false;
+                if(nullptr != pSnapRect)
+                {
+                    pObj = new SdrCircObj(
+                        rSdrModel,
+                        static_cast<SdrObjKind>(nIdentifier),
+                        *pSnapRect);
+                    bSetSnapRect = false;
+                }
+                else
+                {
+                    pObj = new SdrCircObj(
+                        rSdrModel,
+                        static_cast<SdrObjKind>(nIdentifier));
+                }
             }
             break;
-            case sal_uInt16(OBJ_NONE       ): pObj=new SdrObject;                   break;
-            case sal_uInt16(OBJ_GRUP       ): pObj=new SdrObjGroup;                 break;
-            case sal_uInt16(OBJ_POLY       ): pObj=new SdrPathObj(OBJ_POLY       ); break;
-            case sal_uInt16(OBJ_PLIN       ): pObj=new SdrPathObj(OBJ_PLIN       ); break;
-            case sal_uInt16(OBJ_PATHLINE   ): pObj=new SdrPathObj(OBJ_PATHLINE   ); break;
-            case sal_uInt16(OBJ_PATHFILL   ): pObj=new SdrPathObj(OBJ_PATHFILL   ); break;
-            case sal_uInt16(OBJ_FREELINE   ): pObj=new SdrPathObj(OBJ_FREELINE   ); break;
-            case sal_uInt16(OBJ_FREEFILL   ): pObj=new SdrPathObj(OBJ_FREEFILL   ); break;
-            case sal_uInt16(OBJ_PATHPOLY   ): pObj=new SdrPathObj(OBJ_POLY       ); break;
-            case sal_uInt16(OBJ_PATHPLIN   ): pObj=new SdrPathObj(OBJ_PLIN       ); break;
-            case sal_uInt16(OBJ_EDGE       ): pObj=new SdrEdgeObj;                  break;
-            case sal_uInt16(OBJ_RECT       ): pObj=new SdrRectObj;                  break;
-            case sal_uInt16(OBJ_GRAF       ): pObj=new SdrGrafObj;                  break;
-            case sal_uInt16(OBJ_OLE2       ): pObj=new SdrOle2Obj;                  break;
-            case sal_uInt16(OBJ_FRAME      ): pObj=new SdrOle2Obj(true);            break;
-            case sal_uInt16(OBJ_CAPTION    ): pObj=new SdrCaptionObj;               break;
-            case sal_uInt16(OBJ_PAGE       ): pObj=new SdrPageObj;                  break;
-            case sal_uInt16(OBJ_UNO        ): pObj=new SdrUnoObj(OUString());       break;
-            case sal_uInt16(OBJ_CUSTOMSHAPE  ): pObj=new SdrObjCustomShape();       break;
+            case sal_uInt16(OBJ_NONE       ): pObj=new SdrObject(rSdrModel);                   break;
+            case sal_uInt16(OBJ_GRUP       ): pObj=new SdrObjGroup(rSdrModel);                 break;
+            case sal_uInt16(OBJ_POLY       ): pObj=new SdrPathObj(rSdrModel, OBJ_POLY       ); break;
+            case sal_uInt16(OBJ_PLIN       ): pObj=new SdrPathObj(rSdrModel, OBJ_PLIN       ); break;
+            case sal_uInt16(OBJ_PATHLINE   ): pObj=new SdrPathObj(rSdrModel, OBJ_PATHLINE   ); break;
+            case sal_uInt16(OBJ_PATHFILL   ): pObj=new SdrPathObj(rSdrModel, OBJ_PATHFILL   ); break;
+            case sal_uInt16(OBJ_FREELINE   ): pObj=new SdrPathObj(rSdrModel, OBJ_FREELINE   ); break;
+            case sal_uInt16(OBJ_FREEFILL   ): pObj=new SdrPathObj(rSdrModel, OBJ_FREEFILL   ); break;
+            case sal_uInt16(OBJ_PATHPOLY   ): pObj=new SdrPathObj(rSdrModel, OBJ_POLY       ); break;
+            case sal_uInt16(OBJ_PATHPLIN   ): pObj=new SdrPathObj(rSdrModel, OBJ_PLIN       ); break;
+            case sal_uInt16(OBJ_EDGE       ): pObj=new SdrEdgeObj(rSdrModel);                  break;
+            case sal_uInt16(OBJ_RECT       ): pObj=new SdrRectObj(rSdrModel);                  break;
+            case sal_uInt16(OBJ_GRAF       ): pObj=new SdrGrafObj(rSdrModel);                  break;
+            case sal_uInt16(OBJ_OLE2       ): pObj=new SdrOle2Obj(rSdrModel);                  break;
+            case sal_uInt16(OBJ_FRAME      ): pObj=new SdrOle2Obj(rSdrModel, true);            break;
+            case sal_uInt16(OBJ_CAPTION    ): pObj=new SdrCaptionObj(rSdrModel);               break;
+            case sal_uInt16(OBJ_PAGE       ): pObj=new SdrPageObj(rSdrModel);                  break;
+            case sal_uInt16(OBJ_UNO        ): pObj=new SdrUnoObj(rSdrModel, OUString());       break;
+            case sal_uInt16(OBJ_CUSTOMSHAPE  ): pObj=new SdrObjCustomShape(rSdrModel);       break;
 #if HAVE_FEATURE_AVMEDIA
-            case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
+            case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj(rSdrModel);               break;
 #endif
-            case sal_uInt16(OBJ_TABLE      ): pObj=new sdr::table::SdrTableObj(pModel);   break;
+            case sal_uInt16(OBJ_TABLE      ): pObj=new sdr::table::SdrTableObj(rSdrModel);   break;
         }
     }
 
     if (!pObj)
-        pObj = CreateObjectFromFactory(nInventor, nIdentifier);
+    {
+        pObj = CreateObjectFromFactory(rSdrModel, nInventor, nIdentifier);
+    }
 
     if (!pObj)
     {
@@ -3211,11 +3177,15 @@ SdrObject* SdrObjFactory::MakeNewObject(
         return nullptr;
     }
 
-    if (pPage)
+    if(nullptr != pPage)
+    {
         pObj->SetPage(pPage);
+    }
 
-    if (bSetSnapRect)
-        pObj->SetSnapRect(rSnapRect);
+    if(bSetSnapRect && nullptr != pSnapRect)
+    {
+        pObj->SetSnapRect(*pSnapRect);
+    }
 
     return pObj;
 }

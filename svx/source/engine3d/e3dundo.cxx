@@ -38,36 +38,32 @@ bool E3dUndoAction::CanRepeat(SfxRepeatTarget&) const
 
 
 // Undo destructor for 3D-Rotation
-
-E3dRotateUndoAction::~E3dRotateUndoAction ()
+E3dRotateUndoAction::~E3dRotateUndoAction()
 {
 }
 
 // Undo for 3D-Rotation on the Rotation matrix
-
-void E3dRotateUndoAction::Undo ()
+void E3dRotateUndoAction::Undo()
 {
-    E3DModifySceneSnapRectUpdater aUpdater(pMy3DObj);
-    pMy3DObj->SetTransform(aMyOldRotation);
+    E3DModifySceneSnapRectUpdater aUpdater(&mrMy3DObj);
+    mrMy3DObj.SetTransform(maMyOldRotation);
 }
 
 // Redo for 3D-Rotation on the Rotation matrix
-
-void E3dRotateUndoAction::Redo ()
+void E3dRotateUndoAction::Redo()
 {
-    E3DModifySceneSnapRectUpdater aUpdater(pMy3DObj);
-    pMy3DObj->SetTransform(aMyNewRotation);
+    E3DModifySceneSnapRectUpdater aUpdater(&mrMy3DObj);
+    mrMy3DObj.SetTransform(maMyNewRotation);
 }
 
-
-E3dAttributesUndoAction::E3dAttributesUndoAction( SdrModel &rModel,
-                                                  E3dObject*  pInObject,
-                                                  const SfxItemSet& rNewSet,
-                                                  const SfxItemSet& rOldSet)
-    : SdrUndoAction( rModel )
-    , pObject      ( pInObject )
-    , aNewSet      ( rNewSet )
-    , aOldSet      ( rOldSet )
+E3dAttributesUndoAction::E3dAttributesUndoAction(
+    E3dObject& rInObject,
+    const SfxItemSet& rNewSet,
+    const SfxItemSet& rOldSet)
+:   SdrUndoAction(rInObject.getSdrModelFromSdrObject())
+    ,mrObject(rInObject)
+    ,maNewSet(rNewSet)
+    ,maOldSet(rOldSet)
 {
 }
 
@@ -80,18 +76,17 @@ E3dAttributesUndoAction::~E3dAttributesUndoAction()
 
 void E3dAttributesUndoAction::Undo()
 {
-    E3DModifySceneSnapRectUpdater aUpdater(pObject);
-    pObject->SetMergedItemSetAndBroadcast(aOldSet);
+    E3DModifySceneSnapRectUpdater aUpdater(&mrObject);
+    mrObject.SetMergedItemSetAndBroadcast(maOldSet);
 }
 
 void E3dAttributesUndoAction::Redo()
 {
-    E3DModifySceneSnapRectUpdater aUpdater(pObject);
-    pObject->SetMergedItemSetAndBroadcast(aNewSet);
+    E3DModifySceneSnapRectUpdater aUpdater(&mrObject);
+    mrObject.SetMergedItemSetAndBroadcast(maNewSet);
 }
 
 // Multiple Undo is not possible
-
 bool E3dAttributesUndoAction::CanRepeat(SfxRepeatTarget& /*rView*/) const
 {
     return false;

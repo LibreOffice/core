@@ -30,6 +30,7 @@ class SwDoc;
 class SwDPage final : public FmFormPage, public SdrObjUserCall
 {
     SwDPage &operator=(const SwDPage&) = delete;
+    SwDPage(const SwDPage&) = delete;
 
     std::unique_ptr<SdrPageGridFrameList>   pGridLst;
     SwDoc*                                  pDoc;
@@ -38,8 +39,7 @@ public:
     explicit SwDPage(SwDrawModel& rNewModel, bool bMasterPage);
     virtual ~SwDPage() override;
 
-    virtual SwDPage* Clone() const override;
-    virtual SwDPage* Clone(SdrModel* pNewModel) const override;
+    virtual SwDPage* Clone(SdrModel* pNewModel = nullptr) const override;
 
     // #i3694#
     // This GetOffset() method is not needed anymore, it even leads to errors.
@@ -54,9 +54,7 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
 
 private:
-    void lateInit(const SwDPage& rPage, SwDrawModel* pNewModel);
-
-    SwDPage(const SwDPage& rSrcPage);
+    void lateInit(const SwDPage& rSrcPage);
 };
 
 #endif // INCLUDED_SW_INC_DPAGE_HXX

@@ -104,10 +104,11 @@ using namespace com::sun::star::uno;
 using namespace sdr::table;
 namespace sd {
 
-
-View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
-               ViewShell* pViewShell)
-  : FmFormView(&rDrawDoc, pOutDev),
+View::View(
+    SdDrawDocument& rDrawDoc,
+    OutputDevice* pOutDev,
+    ViewShell* pViewShell)
+:   FmFormView(rDrawDoc, pOutDev),
     mrDoc(rDrawDoc),
     mpDocSh(rDrawDoc.GetDocSh()),
     mpViewSh(pViewShell),
@@ -658,7 +659,7 @@ bool View::SdrBeginTextEdit(
         EventMultiplexerEventId::BeginTextEdit, static_cast<void*>(pObj) );
 
     if( pOutl==nullptr && pObj )
-        pOutl = SdrMakeOutliner(OutlinerMode::TextObject, *pObj->GetModel());
+        pOutl = SdrMakeOutliner(OutlinerMode::TextObject, pObj->getSdrModelFromSdrObject());
 
     // make draw&impress specific initialisations
     if( pOutl )

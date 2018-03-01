@@ -55,25 +55,26 @@ using namespace ::com::sun::star::container;
 using namespace ::svxform;
 
 
-FmFormObj::FmFormObj(const OUString& rModelName)
-          :SdrUnoObj                ( rModelName    )
-          ,m_nPos                   ( -1            )
-          ,m_pLastKnownRefDevice    ( nullptr          )
+FmFormObj::FmFormObj(
+    SdrModel& rSdrModel,
+    const OUString& rModelName)
+:   SdrUnoObj(rSdrModel, rModelName)
+    ,m_nPos(-1)
+    ,m_pLastKnownRefDevice(nullptr)
 {
-
     // normally, this is done in SetUnoControlModel, but if the call happened in the base class ctor,
     // then our incarnation of it was not called (since we were not constructed at this time).
     impl_checkRefDevice_nothrow( true );
 }
 
-
-FmFormObj::FmFormObj()
-          :SdrUnoObj                ( ""  )
-          ,m_nPos                   ( -1        )
-          ,m_pLastKnownRefDevice    ( nullptr      )
+FmFormObj::FmFormObj(SdrModel& rSdrModel)
+:   SdrUnoObj(rSdrModel, "")
+    ,m_nPos(-1)
+    ,m_pLastKnownRefDevice(nullptr)
 {
+    // Stuff that old SetModel also did:
+    impl_checkRefDevice_nothrow();
 }
-
 
 FmFormObj::~FmFormObj()
 {
@@ -105,7 +106,7 @@ void FmFormObj::ClearObjEnv()
 
 void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
 {
-    const FmFormModel* pFormModel = dynamic_cast<FmFormModel*>( GetModel()  );
+    const FmFormModel* pFormModel = dynamic_cast<FmFormModel*>(&getSdrModelFromSdrObject());
     if ( !pFormModel || !pFormModel->ControlsUseRefDevice() )
         return;
 
@@ -357,21 +358,14 @@ void FmFormObj::clonedFrom(const FmFormObj* _pSource)
 }
 
 
-FmFormObj* FmFormObj::Clone() const
+FmFormObj* FmFormObj::Clone(SdrModel* pTargetModel) const
 {
-    FmFormObj* pFormObject = CloneHelper< FmFormObj >();
+    FmFormObj* pFormObject = CloneHelper< FmFormObj >(pTargetModel);
     DBG_ASSERT(pFormObject != nullptr, "FmFormObj::Clone : invalid clone !");
     if (pFormObject)
         pFormObject->clonedFrom(this);
 
     return pFormObject;
-}
-
-
-void FmFormObj::NbcReformatText()
-{
-    impl_checkRefDevice_nothrow();
-    SdrUnoObj::NbcReformatText();
 }
 
 
@@ -398,6 +392,13 @@ FmFormObj& FmFormObj::operator= (const FmFormObj& rObj)
     else
         aEvts = rObj.aEvts;
     return *this;
+}
+
+
+void FmFormObj::NbcReformatText()
+{
+    impl_checkRefDevice_nothrow();
+    SdrUnoObj::NbcReformatText();
 }
 
 
@@ -583,14 +584,6 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
 
     return Reference<XInterface>( xDestContainer, UNO_QUERY );
 }
-
-
-void FmFormObj::SetModel( SdrModel* _pNewModel )
-{
-    SdrUnoObj::SetModel( _pNewModel );
-    impl_checkRefDevice_nothrow();
-}
-
 
 FmFormObj* FmFormObj::GetFormObject( SdrObject* _pSdrObject )
 {
