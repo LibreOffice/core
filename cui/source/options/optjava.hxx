@@ -46,6 +46,7 @@ typedef void* JavaInfo;
 class   SvxJavaParameterDlg;
 class   SvxJavaClassPathDlg;
 class   SvxJavaListBox;
+class   OfaTreeOptionsDialog;
 
 // class SvxJavaOptionsPage ----------------------------------------------
 
@@ -63,6 +64,7 @@ private:
 
     VclPtr<SvxJavaParameterDlg>        m_pParamDlg;
     VclPtr<SvxJavaClassPathDlg>        m_pPathDlg;
+    VclPtr<OfaTreeOptionsDialog>       m_pParentDlg;
 
 #if HAVE_FEATURE_JAVA
     std::vector<std::unique_ptr<JavaInfo>> m_parJavaInfo;
