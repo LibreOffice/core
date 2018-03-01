@@ -55,18 +55,18 @@ gawk -e '
     {
         case 1:
             # lll
-            mapping = sprintf( "    { %-36s %5s, \"\"  , 0     },", usedef, "\"" arr[1] "\"");
+            mapping = sprintf( "    { %-36s %5s, \"\"  , k0    },", usedef, "\"" arr[1] "\"");
             break;
         case 2:
             if (length(arr[2]) == 2)
             {
                 # lll-CC
-                mapping = sprintf( "    { %-36s %5s, \"%s\", 0     },", usedef, "\"" arr[1] "\"", arr[2]);
+                mapping = sprintf( "    { %-36s %5s, \"%s\", k0    },", usedef, "\"" arr[1] "\"", arr[2]);
             }
             else if (length(arr[2]) == 4)
             {
                 # lll-Ssss
-                mapping = sprintf( "    { %-44s %10s, \"\"  , 0     },", usedef, "\"" tag "\"");
+                mapping = sprintf( "    { %-44s %10s, \"\"  , k0    },", usedef, "\"" tag "\"");
             }
             else
             {
@@ -83,7 +83,7 @@ gawk -e '
             else if (length(arr[2]) == 4)
             {
                 # lll-Ssss-CC
-                mapping = sprintf( "    { %-44s %10s, \"%s\", 0     },", usedef, "\"" arr[1] "-" arr[2] "\"", arr[3]);
+                mapping = sprintf( "    { %-44s %10s, \"%s\", k0    },", usedef, "\"" arr[1] "-" arr[2] "\"", arr[3]);
             }
             else
             {
