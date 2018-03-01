@@ -69,6 +69,8 @@ public:
                                     GetInputStream();
         void                        SetInputStream(css::uno::Reference<css::io::XInputStream> const&);
 
+        virtual bool shouldKeepAspectRatio() const { return true; }
+
 private:
 
         void                mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );

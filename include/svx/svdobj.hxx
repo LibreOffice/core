@@ -733,6 +733,9 @@ public:
     void SetMarkProtect(bool bProt);
     bool IsMarkProtect() const { return bMarkProt;}
 
+    /// Whether the aspect ratio should be kept by default when resizing.
+    virtual bool shouldKeepAspectRatio() const { return false; }
+
     // application specific data
     sal_uInt16 GetUserDataCount() const;
     SdrObjUserData* GetUserData(sal_uInt16 nNum) const;
