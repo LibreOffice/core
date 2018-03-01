@@ -23,14 +23,7 @@
 #include "swcommands.h"
 #include <svx/svxcommands.h>
 
-#define HID_CONFIG_SAVE                                         "SW_HID_CONFIG_SAVE"
-
-
-
 #define HID_EDIT_WIN                                            "SW_HID_EDIT_WIN"
-
-
-#define HID_SOURCEVIEW                                          "SW_HID_SOURCEVIEW"
 
 #define HID_NAVI_DRAG_HYP                                       "SW_HID_NAVI_DRAG_HYP"
 #define HID_NAVI_DRAG_LINK                                      "SW_HID_NAVI_DRAG_LINK"
@@ -69,31 +62,8 @@
 
 #define HID_REDLINE_CTRL                                        "SW_HID_REDLINE_CTRL"
 
-// sw::sidebar::PagePropertyPanel
-#define HID_SWPAGE_LEFT_MARGIN              "HID_SWPAGE_LEFT_MARGIN"
-#define HID_SWPAGE_RIGHT_MARGIN             "HID_SWPAGE_RIGHT_MARGIN"
-#define HID_SWPAGE_TOP_MARGIN               "HID_SWPAGE_TOP_MARGIN"
-#define HID_SWPAGE_BOTTOM_MARGIN            "HID_SWPAGE_BOTTOM_MARGIN"
-#define HID_SWPAGE_SIZE_MORE                "HID_SWPAGE_SIZE_MORE"
-#define HID_SWPAGE_COLUMN_MORE              "HID_SWPAGE_COLUMN_MORE"
-#define HID_SWPAGE_VS_ORIENTATION           "HID_SWPAGE_VS_ORIENTATION"
-#define HID_SWPAGE_VS_MARGIN                "HID_SWPAGE_VS_MARGIN"
-#define HID_SWPAGE_VS_SIZE                  "HID_SWPAGE_VS_SIZE"
-#define HID_SWPAGE_VS_COLUMN                "HID_SWPAGE_VS_COLUMN"
-
-// HelpIds for Menu
-
-#define HID_MN_SUB_TBLROW                                       "SW_HID_MN_SUB_TBLROW"
-#define HID_MN_SUB_TBLCOL                                       "SW_HID_MN_SUB_TBLCOL"
-#define HID_MN_SUB_FIELD                                        "SW_HID_MN_SUB_FIELD"
-#define HID_MN_SUB_GRAPHIC                                      "SW_HID_MN_SUB_GRAPHIC"
-#define HID_MN_SUB_TEMPLATES                                    "SW_HID_MN_SUB_TEMPLATES"
-#define HID_MN_SUB_SPELLING                                     "SW_HID_MN_SUB_SPELLING"
-#define HID_MN_SUB_MIRROR                                       "SW_HID_MN_SUB_MIRROR"
-
 #define HID_LINGU_AUTOCORR                                      "SW_HID_LINGU_AUTOCORR"
 #define HID_LINGU_REPLACE                                       "SW_HID_LINGU_REPLACE"
-#define HID_SMARTTAG_MAIN                                       "SW_HID_SMARTTAG_MAIN"    // SMARTTAGS
 #define HID_LINGU_IGNORE_SELECTION                              "SW_HID_LINGU_IGNORE_SELECTION"    // grammar check context menu
 
 // More Help-IDs

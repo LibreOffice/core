@@ -48,18 +48,6 @@
 #define HID_SMA_UPPERBORDER_DIST                          "STARMATH_HID_SMA_UPPERBORDER_DIST"
 #define HID_SMA_LOWERBORDER_DIST                          "STARMATH_HID_SMA_LOWERBORDER_DIST"
 #define HID_SMA_BRACKET_EXCHEIGHT2                        "STARMATH_HID_SMA_BRACKET_EXCHEIGHT2"
-#define HID_SMA_LMRANGLEXY                                "STARMATH_HID_SMA_LMRANGLEXY"
-#define HID_SMA_SLMRANGLEXY                               "STARMATH_HID_SMA_SLMRANGLEXY"
-#define HID_SMA_XWIDESLASHY                               "STARMATH_HID_SMA_XWIDESLASHY"
-#define HID_SMA_XWIDEBSLASHY                              "STARMATH_HID_SMA_XWIDEBSLASHY"
-#define HID_SMA_XOVERBRACEY                               "STARMATH_HID_SMA_XOVERBRACEY"
-#define HID_SMA_XUNDERBRACEY                              "STARMATH_HID_SMA_XUNDERBRACEY"
-#define HID_SMA_LRDBRACKETX                               "STARMATH_HID_SMA_LRDBRACKETX"
-#define HID_SMA_SLRDBRACKETX                              "STARMATH_HID_SMA_SLRDBRACKETX"
-#define HID_SMA_XEVALUATEDATY                             "STARMATH_HID_SMA_XEVALUATEDATY"
-
-
-#define HID_SMA_NOSPACE                                   "STARMATH_HID_SMA_NOSPACE"
 
 #endif
 
