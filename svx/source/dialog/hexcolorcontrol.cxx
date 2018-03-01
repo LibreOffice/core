@@ -30,7 +30,7 @@ VCL_BUILDER_FACTORY_ARGS(HexColorControl, WB_BORDER)
 void HexColorControl::SetColor(Color nColor)
 {
     OUStringBuffer aBuffer;
-    sax::Converter::convertColor(aBuffer, sal_Int32(nColor));
+    sax::Converter::convertColor(aBuffer, nColor);
     SetText(aBuffer.makeStringAndClear().copy(1));
 }
 
