@@ -54,6 +54,8 @@ enum RestartReason {
         // "For the extension to work properly,
         // %PRODUCTNAME must be restarted."
     RESTART_REASON_OPENGL,
+        // No particular reason
+    RESTART_REASON_NONE
 };
 
 // Must be called with the solar mutex locked:
