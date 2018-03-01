@@ -3510,7 +3510,6 @@ void ScInterpreter::ScModalValue()
         SCSIZE nMaxIndex = 0, nMax = 1, nCount = 1;
         double nOldVal = aSortArray[0];
         SCSIZE i;
-
         for ( i = 1; i < nSize; i++)
         {
             if (aSortArray[i] == nOldVal)
@@ -3537,6 +3536,54 @@ void ScInterpreter::ScModalValue()
             PushDouble(nOldVal);
         else
             PushDouble(aSortArray[nMaxIndex]);
+    }
+}
+
+void ScInterpreter::ScModalValue_MS()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( !MustHaveParamCountMin( nParamCount, 1 ) )
+        return;
+    vector<double> aArray;
+    GetNumberSequenceArray( nParamCount, aArray, false );
+    SCSIZE nSize = aArray.size();
+    if (nSize == 0 || nGlobalError != FormulaError::NONE)
+        PushNoValue();
+    else
+    {
+        SCSIZE nMaxIndex = 0, nMax = 1, nCount = 1;
+        double nOldVal = aArray[ nSize - 1 ];
+        int i, j;
+        for ( i = nSize - 2; i >= 0; i--)
+        {
+            for ( j = i; j >= 0; j--)
+            {
+                if ( aArray[j] == nOldVal )
+                    nCount++;
+            }
+            if (nCount > nMax)
+            {
+                nMax = nCount;
+                nMaxIndex = i + 1;
+            }
+            while ( nOldVal == aArray[ i ] && i > 0 )
+            {
+                i--;
+            }
+            if ( ( SCSIZE )i >= nMax )
+            {
+                nOldVal = aArray[ i ];
+                nCount = 1;
+            }
+            else
+                break;
+        }
+        if (nMax == 1 && nCount == 1)
+            PushNoValue();
+        else if (nMax == 1)
+            PushDouble(nOldVal);
+        else
+            PushDouble(aArray[nMaxIndex]);
     }
 }
 

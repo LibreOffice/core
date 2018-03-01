@@ -893,6 +893,8 @@ void ScInterpreter::ScModalValue_Multi()
             PushNoValue();
         else
         {
+            // TODO : for MODE.MULT in case of more than one number having the maximum amount of occurrences,
+            //        the number that occurs first in the arguments is to be returned.
             ScMatrixRef pResMatrix = GetNewMat( 1, aResultArray.size(), true );
             pResMatrix->PutDoubleVector( aResultArray, 0, 0 );
             PushMatrix( pResMatrix );
