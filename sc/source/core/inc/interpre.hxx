@@ -932,6 +932,7 @@ private:
     void GetSortArray( sal_uInt8 nParamCount, ::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder, bool bConvertTextInArray, bool bAllowEmptyArray );
     static void QuickSort(::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder);
     void ScModalValue();
+    void ScModalValue_MS();
     void ScModalValue_Multi();
     void ScAveDev();
     void ScAggregate();
