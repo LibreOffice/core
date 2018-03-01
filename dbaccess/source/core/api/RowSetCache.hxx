@@ -65,13 +65,13 @@ namespace dbaccess
 
         rtl::Reference<OCacheSet>                             m_xCacheSet; // is a bookmarkable, keyset or static resultset
 
-        ORowSetMatrix*                  m_pMatrix;              // represent the table struct
+        std::unique_ptr<ORowSetMatrix>  m_pMatrix;              // represent the table struct
         ORowSetMatrix::iterator         m_aMatrixIter;          // represent a row of the table
         ORowSetMatrix::iterator         m_aMatrixEnd;           // present the row behind the last row of the table
         ORowSetCacheMap                 m_aCacheIterators;
         TOldRowSetRows                  m_aOldRows;
 
-        ORowSetMatrix*                  m_pInsertMatrix;        // represent the rows which should be inserted normally this is only one
+        std::unique_ptr<ORowSetMatrix>  m_pInsertMatrix;        // represent the rows which should be inserted normally this is only one
         ORowSetMatrix::iterator         m_aInsertRow;           // represent a insert row
 
         connectivity::OSQLTable         m_aUpdateTable;         // used for updates/deletes and inserts
