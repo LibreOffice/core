@@ -149,7 +149,7 @@ private:
 public:
 
     // FIXME: Need to remove old StartExecuteModal in favour of this one.
-    /// Returns true of the dialog successfully starts
+    /// Returns true if the dialog successfully starts
     bool StartExecuteAsync(const std::function<void(sal_Int32)> &rEndDialogFn)
     {
         VclAbstractDialog::AsyncContext aCtx;
