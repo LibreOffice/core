@@ -980,7 +980,7 @@ void SwUiWriterTest::testWatermarkDOCX()
     CPPUNIT_ASSERT_EQUAL(OUString("CustomWatermark"), pWatermark->GetText());
     CPPUNIT_ASSERT_EQUAL(OUString("DejaVu Sans Light"), pWatermark->GetFont());
     CPPUNIT_ASSERT_EQUAL(sal_Int16(45), pWatermark->GetAngle());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x548dd4), pWatermark->GetColor());
+    CPPUNIT_ASSERT_EQUAL(Color(0x548dd4), pWatermark->GetColor());
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), pWatermark->GetTransparency());
 }
 
