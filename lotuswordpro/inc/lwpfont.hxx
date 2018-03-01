@@ -100,7 +100,7 @@ public:
 //  void RegisterFontDecls();
 private:
     sal_uInt16 m_nCount;
-    LwpFontTableEntry* m_pFontEntries;
+    std::unique_ptr<LwpFontTableEntry[]> m_pFontEntries;
 };
 
 class LwpFontNameEntry

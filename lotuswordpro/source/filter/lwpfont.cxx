@@ -253,7 +253,7 @@ void LwpFontTable::Read(LwpObjectStream *pStrm)
     m_nCount = pStrm->QuickReaduInt16();
     if(m_nCount>0)
     {
-        m_pFontEntries = new LwpFontTableEntry[m_nCount];
+        m_pFontEntries.reset( new LwpFontTableEntry[m_nCount] );
         for(sal_uInt16 i=0; i<m_nCount; i++)
         {
             m_pFontEntries[i].Read(pStrm);
@@ -270,11 +270,6 @@ OUString LwpFontTable::GetFaceName(sal_uInt16 index) //index: start from 1
 
 LwpFontTable::~LwpFontTable()
 {
-    if(m_pFontEntries)
-    {
-        delete [] m_pFontEntries;
-        m_pFontEntries = nullptr;
-    }
 }
 
 void LwpFontNameEntry::Read(LwpObjectStream *pStrm)
