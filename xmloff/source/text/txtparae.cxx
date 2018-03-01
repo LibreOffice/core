@@ -1248,6 +1248,8 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sTextFieldStart( "TextFieldStart"  ),
     sTextFieldEnd( "TextFieldEnd"  ),
     sTextFieldStartEnd( "TextFieldStartEnd"  ),
+    m_sBookmarkHidden("BookmarkHidden"),
+    m_sBookmarkCondition("BookmarkCondition"),
     sFrameStyleName("FrameStyleName"),
     aCharStyleNamesPropInfoCache( sCharStyleNames )
 {
