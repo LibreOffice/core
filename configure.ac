@@ -8141,6 +8141,13 @@ if test $enable_python = system; then
                AC_MSG_ERROR([no usable python found])])
         test -n "$PYTHON_CFLAGS" && break
     fi
+
+    dnl Check if the headers really work
+    save_CPPFLAGS="$CPPFLAGS"
+    CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
+    AC_CHECK_HEADER(Python.h)
+    CPPFLAGS="$save_CPPFLAGS"
+
     # let the PYTHON_FOR_BUILD match the same python installation that
     # provides PYTHON_CFLAGS/PYTHON_LDFLAGS for pyuno, which should be
     # better for PythonTests.
@@ -8153,11 +8160,9 @@ if test -z "$PYTHON_FOR_BUILD"; then
             AC_MSG_WARN([No system-provided python lxml, gla11y will only report widget classes and ids])
             ;;
         *)
-	    if test "$OS" != "IOS"; then
-	        if test "$enable_ios_simulator" != "yes"; then
-            	    BUILD_TYPE="$BUILD_TYPE LXML"
-	        fi
-	    fi
+            if test "$cross_compiling" != yes ; then
+                BUILD_TYPE="$BUILD_TYPE LXML"
+            fi
             ;;
     esac
 else
@@ -8170,12 +8175,12 @@ else
                 AC_MSG_RESULT([no, gla11y will only report widget classes and ids])
                 ;;
             *)
-	        if test "$OS" != "IOS"; then
-	            if test "$enable_ios_simulator" != "yes"; then
-            	        BUILD_TYPE="$BUILD_TYPE LXML"
-                        AC_MSG_RESULT([no, using internal lxml])
-	            fi
-	        fi
+                if test "$cross_compiling" != yes -a "x$ac_cv_header_Python_h" = "xyes"; then
+                    BUILD_TYPE="$BUILD_TYPE LXML"
+                    AC_MSG_RESULT([no, using internal lxml])
+                else
+                    AC_MSG_RESULT([no, and system does not provide python development headers, gla11y will only report widget classes and ids])
+                fi
                 ;;
         esac
     fi
@@ -8186,13 +8191,9 @@ case $enable_python in
 system)
     SYSTEM_PYTHON=TRUE
 
-    dnl Check if the headers really work
-    save_CPPFLAGS="$CPPFLAGS"
-    CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
-    AC_CHECK_HEADER(Python.h, [],
-       [AC_MSG_ERROR([Python headers not found. You probably want to set both the PYTHON_CFLAGS and PYTHON_LIBS environment variables.])],
-       [])
-    CPPFLAGS="$save_CPPFLAGS"
+    if test "x$ac_cv_header_Python_h" != "xyes"; then
+       AC_MSG_ERROR([Python headers not found. You probably want to set both the PYTHON_CFLAGS and PYTHON_LIBS environment variables.])
+    fi
 
     AC_LANG_PUSH(C)
     CFLAGS="$CFLAGS $PYTHON_CFLAGS"
