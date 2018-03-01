@@ -66,6 +66,7 @@
 #include <xfilter/xfmargins.hxx>
 #include <xfilter/xfcolor.hxx>
 #include <xfilter/xfpadding.hxx>
+#include <memory>
 
 class XFBorders;
 class XFColumns;
@@ -151,10 +152,10 @@ protected:
     enumXFWrap  m_eWrap;
     XFPadding   m_aPad;
     XFMargins   m_aMargins;
-    XFBorders   *m_pBorders;
-    XFColumns   *m_pColumns;
-    XFShadow    *m_pShadow;
-    XFBGImage   *m_pBGImage;
+    std::unique_ptr<XFBorders> m_pBorders;
+    std::unique_ptr<XFColumns> m_pColumns;
+    std::unique_ptr<XFShadow>  m_pShadow;
+    std::unique_ptr<XFBGImage> m_pBGImage;
     XFColor     m_aBackColor;
     bool        m_bProtectContent;
     bool        m_bProtectSize;
