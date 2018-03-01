@@ -82,7 +82,8 @@ public:
     void add( sal_Int32 nToken, const sal_Char* pValue, size_t nValueLength );
     void add( sal_Int32 nToken, const OString& rValue );
     void addNS( sal_Int32 nNamespaceToken, sal_Int32 nToken, const OString& rValue );
-    void addUnknown( const OUString& rNamespaceURL, const OString& rName, const OString& value );
+    // note: rQName is *namespace-prefixed*
+    void addUnknown( const OUString& rNamespaceURL, const OString& rQName, const OString& value );
     void addUnknown( const OString& rName, const OString& value );
     const std::vector< sal_Int32 >&  getFastAttributeTokens() const { return maAttributeTokens; }
     const char* getFastAttributeValue(size_t nIndex) const { return mpChunk + maAttributeValues[nIndex]; }
