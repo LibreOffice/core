@@ -104,7 +104,6 @@ TheExtensionManager::~TheExtensionManager()
 {
     m_pUpdReqDialog.disposeAndClear();
     m_pExtMgrDialog.disposeAndClear();
-    delete m_pExecuteCmdQueue;
 }
 
 
@@ -117,8 +116,7 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
         if ( !m_pUpdReqDialog )
         {
             m_pUpdReqDialog = VclPtr<UpdateRequiredDialog>::Create( nullptr, this );
-            delete m_pExecuteCmdQueue;
-            m_pExecuteCmdQueue = new ExtensionCmdQueue( m_pUpdReqDialog.get(), this, m_xContext );
+            m_pExecuteCmdQueue.reset( new ExtensionCmdQueue( m_pUpdReqDialog.get(), this, m_xContext ) );
             createPackageList();
         }
     }
@@ -128,8 +126,7 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
             m_pExtMgrDialog = VclPtr<ExtMgrDialog>::Create( VCLUnoHelper::GetWindow(m_xParent), this );
         else
             m_pExtMgrDialog = VclPtr<ExtMgrDialog>::Create( nullptr, this, Dialog::InitFlag::NoParent );
-        delete m_pExecuteCmdQueue;
-        m_pExecuteCmdQueue = new ExtensionCmdQueue( m_pExtMgrDialog.get(), this, m_xContext );
+        m_pExecuteCmdQueue.reset( new ExtensionCmdQueue( m_pExtMgrDialog.get(), this, m_xContext ) );
         m_pExtMgrDialog->setGetExtensionsURL( m_sGetExtensionsURL );
         createPackageList();
     }

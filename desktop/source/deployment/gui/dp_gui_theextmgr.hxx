@@ -55,7 +55,7 @@ private:
     css::uno::Reference< css::awt::XWindow >                  m_xParent;
     VclPtr<ExtMgrDialog>         m_pExtMgrDialog;
     VclPtr<UpdateRequiredDialog> m_pUpdReqDialog;
-    ExtensionCmdQueue           *m_pExecuteCmdQueue;
+    std::unique_ptr<ExtensionCmdQueue> m_pExecuteCmdQueue;
 
     OUString                     m_sGetExtensionsURL;
     bool                         m_bModified;
@@ -85,7 +85,7 @@ public:
             return m_pExtMgrDialog.get();
         return m_pUpdReqDialog.get();
     }
-    ExtensionCmdQueue* getCmdQueue() const { return m_pExecuteCmdQueue; }
+    ExtensionCmdQueue* getCmdQueue() const { return m_pExecuteCmdQueue.get(); }
 
     void SetText( const OUString &rTitle );
     void Show();
