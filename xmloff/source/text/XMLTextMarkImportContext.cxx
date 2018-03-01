@@ -173,6 +173,13 @@ void XMLTextMarkImportContext::StartElement(
         }
         m_rHelper.pushFieldCtx( m_sBookmarkName, m_sFieldName );
     }
+
+    if (IsXMLToken(GetLocalName(), XML_BOOKMARK_START))
+    {
+        OUString sHidden = xAttrList->getValueByName("loext:hidden");
+        OUString sCondition = xAttrList->getValueByName("loext:condition");
+        m_rHelper.setBookmarkAttributes(sHidden == "true", sCondition);
+    }
 }
 
 void XMLTextMarkImportContext::EndElement()
@@ -352,6 +359,12 @@ void XMLTextMarkImportContext::EndElement()
                                         xMeta(xContent, UNO_QUERY);
                                     GetImport().GetRDFaImportHelper().AddRDFa(
                                         xMeta, xRDFaAttributes);
+                                }
+                                const Reference<XPropertySet> xPropertySet(xContent, UNO_QUERY);
+                                if (xPropertySet.is())
+                                {
+                                    xPropertySet->setPropertyValue("BookmarkHidden",    uno::Any(m_rHelper.getBookmarkHidden()));
+                                    xPropertySet->setPropertyValue("BookmarkCondition", uno::Any(m_rHelper.getBookmarkCondition()));
                                 }
                             }
 

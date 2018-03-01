@@ -201,6 +201,8 @@ protected:
     const OUString sTextFieldStart;
     const OUString sTextFieldEnd;
     const OUString sTextFieldStartEnd;
+    const OUString sBookmarkHidden;
+    const OUString sBookmarkCondition;
 
     SinglePropertySetInfoCache aCharStyleNamesPropInfoCache;
 
