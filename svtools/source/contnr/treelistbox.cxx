@@ -428,7 +428,7 @@ void SvTreeListBox::DeselectHdl()
 bool SvTreeListBox::DoubleClickHdl()
 {
     aDoubleClickHdl.Call( this );
-    return true;
+    return false;
 }
 
 
