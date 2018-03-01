@@ -35,25 +35,31 @@ sdr::contact::ViewContact* E3dCubeObj::CreateObjectSpecificViewContact()
 }
 
 
-E3dCubeObj::E3dCubeObj(E3dDefaultAttributes& rDefault, const basegfx::B3DPoint& aPos, const basegfx::B3DVector& r3DSize)
-:   E3dCompoundObject()
+E3dCubeObj::E3dCubeObj(
+    SdrModel& rSdrModel,
+    const E3dDefaultAttributes& rDefault,
+    const basegfx::B3DPoint& aPos,
+    const basegfx::B3DVector& r3DSize)
+:   E3dCompoundObject(rSdrModel)
 {
     // Set Defaults
     SetDefaultAttributes(rDefault);
 
-    aCubePos = aPos; // position centre or left, bottom, back (dependent on bPosIsCenter)
+    // position centre or left, bottom, back (dependent on bPosIsCenter)
+    aCubePos = aPos;
     aCubeSize = r3DSize;
 }
 
-E3dCubeObj::E3dCubeObj()
-:   E3dCompoundObject()
+E3dCubeObj::E3dCubeObj(SdrModel& rSdrModel)
+:   E3dCompoundObject(rSdrModel)
 {
     // Set Defaults
-    E3dDefaultAttributes aDefault;
+    const E3dDefaultAttributes aDefault;
+
     SetDefaultAttributes(aDefault);
 }
 
-void E3dCubeObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
+void E3dCubeObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 {
     aCubePos = rDefault.GetDefaultCubePos();
     aCubeSize = rDefault.GetDefaultCubeSize();
@@ -72,9 +78,22 @@ SdrObject *E3dCubeObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) c
     return nullptr;
 }
 
-E3dCubeObj* E3dCubeObj::Clone() const
+E3dCubeObj* E3dCubeObj::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< E3dCubeObj >();
+    return CloneHelper< E3dCubeObj >(pTargetModel);
+}
+
+E3dCubeObj& E3dCubeObj::operator=(const E3dCubeObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
+    E3dCompoundObject::operator=(rObj);
+
+    aCubePos = rObj.aCubePos;
+    aCubeSize = rObj.aCubeSize;
+    bPosIsCenter = rObj.bPosIsCenter;
+
+    return *this;
 }
 
 // Set local parameters with geometry re-creating

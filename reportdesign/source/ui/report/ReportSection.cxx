@@ -183,7 +183,10 @@ void OReportSection::fill()
     m_pModel = m_pParent->getViewsWindow()->getView()->getReportView()->getController().getSdrModel();
     m_pPage = m_pModel->getPage(m_xSection);
 
-    m_pView = new OSectionView( m_pModel.get(), this, m_pParent->getViewsWindow()->getView() );
+    m_pView = new OSectionView(
+        *m_pModel,
+        this,
+        m_pParent->getViewsWindow()->getView());
 
     // #i93597# tell SdrPage that only left and right page border is defined
     // instead of the full rectangle definition
@@ -262,10 +265,10 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                         SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
                         if ( pObject )
                         {
-                            SdrObject* pNewObj = pObject->Clone();
+                            // Clone to target SdrModel
+                            SdrObject* pNewObj(pObject->Clone(m_pModel.get()));
 
                             pNewObj->SetPage( m_pPage );
-                            pNewObj->SetModel( m_pModel.get() );
                             m_pPage->InsertObject(pNewObj, SAL_MAX_SIZE);
 
                             tools::Rectangle aRet(VCLPoint((*pCopiesIter)->getPosition()),VCLSize((*pCopiesIter)->getSize()));
@@ -606,7 +609,7 @@ void OReportSection::createDefault(const OUString& _sType,SdrObject* _pObj)
                         {
                             const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
                             SfxItemSet aDest(
-                                _pObj->GetModel()->GetItemPool(),
+                                _pObj->getSdrModelFromSdrObject().GetItemPool(),
                                 svl::Items<
                                     // Ranges from SdrAttrObj:
                                     SDRATTR_START, SDRATTR_SHADOW_LAST,

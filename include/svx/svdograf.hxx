@@ -129,10 +129,16 @@ private:
 
 public:
 
-                            SdrGrafObj();
-                            SdrGrafObj(const Graphic& rGrf);
-                            SdrGrafObj(const Graphic& rGrf, const tools::Rectangle& rRect);
-    virtual                 ~SdrGrafObj() override;
+    SdrGrafObj(SdrModel& rSdrModel);
+    SdrGrafObj(
+        SdrModel& rSdrModel,
+        const Graphic& rGrf);
+    SdrGrafObj(
+        SdrModel& rSdrModel,
+        const Graphic& rGrf,
+        const tools::Rectangle& rRect);
+
+    virtual ~SdrGrafObj() override;
 
     void                    SetGraphicObject( const GraphicObject& rGrfObj );
     const GraphicObject&    GetGraphicObject(bool bForceSwapIn = false) const;
@@ -143,9 +149,7 @@ public:
     const Graphic&          GetGraphic() const;
 
     Graphic                 GetTransformedGraphic( SdrGrafObjTransformsAttrs nTransformFlags = SdrGrafObjTransformsAttrs::ALL ) const;
-
     GraphicType             GetGraphicType() const;
-
     GraphicAttr             GetGraphicAttr( SdrGrafObjTransformsAttrs nTransformFlags = SdrGrafObjTransformsAttrs::ALL  ) const;
 
     // Keep ATM for SD.
@@ -182,7 +186,7 @@ public:
     // #i25616#
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
 
-    virtual SdrGrafObj* Clone() const override;
+    virtual SdrGrafObj* Clone(SdrModel* pTargetModel = nullptr) const override;
     SdrGrafObj&             operator=(const SdrGrafObj& rObj);
 
     virtual sal_uInt32 GetHdlCount() const override;
@@ -197,7 +201,6 @@ public:
     bool                    HasGDIMetaFile() const;
 
     virtual void            SetPage(SdrPage* pNewPage) override;
-    virtual void            SetModel(SdrModel* pNewModel) override;
 
     bool isEmbeddedVectorGraphicData() const;
     GDIMetaFile getMetafileFromEmbeddedVectorGraphicData() const;

@@ -27,7 +27,7 @@ void SdAnimationPrmsUndoAction::Undo()
     // no new info created: restore data
     if (!bInfoCreated)
     {
-        SdDrawDocument* pDoc   = static_cast<SdDrawDocument*>(pObject->GetModel());
+        SdDrawDocument* pDoc(dynamic_cast< SdDrawDocument* >(&pObject->getSdrModelFromSdrObject()));
         if( pDoc )
         {
             SdAnimationInfo* pInfo = SdDrawDocument::GetAnimationInfo( pObject );

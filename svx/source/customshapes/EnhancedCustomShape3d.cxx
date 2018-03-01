@@ -255,27 +255,24 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
     const SdrObject* pShape2d,
     const SdrObjCustomShape& rSdrObjCustomShape)
 {
-    SdrObject*  pRet = nullptr;
-    SdrModel*   pModel = rSdrObjCustomShape.GetModel();
-    const SdrCustomShapeGeometryItem& rGeometryItem = rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+    SdrObject* pRet(nullptr);
+    const SdrCustomShapeGeometryItem& rGeometryItem(rSdrObjCustomShape.GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
+    double fMap(1.0), *pMap = nullptr;
+    Fraction aFraction( rSdrObjCustomShape.getSdrModelFromSdrObject().GetScaleFraction() );
 
-    double      fMap, *pMap = nullptr;
-    if ( pModel )
+    if ( aFraction.GetNumerator() != 1 || aFraction.GetDenominator() != 1 )
     {
-        fMap = 1.0;
-        Fraction aFraction( pModel->GetScaleFraction() );
-        if ( aFraction.GetNumerator() != 1 || aFraction.GetDenominator() != 1 )
-         {
-            fMap *= double(aFraction);
-            pMap = &fMap;
-        }
-        if ( pModel->GetScaleUnit() != MapUnit::Map100thMM )
-        {
-            DBG_ASSERT( pModel->GetScaleUnit() == MapUnit::MapTwip, "EnhancedCustomShape3d::Current MapMode is Unsupported" );
-            fMap *= 1440.0 / 2540.0;
-            pMap = &fMap;
-        }
+        fMap *= double(aFraction);
+        pMap = &fMap;
     }
+
+    if ( rSdrObjCustomShape.getSdrModelFromSdrObject().GetScaleUnit() != MapUnit::Map100thMM )
+    {
+        DBG_ASSERT( rSdrObjCustomShape.getSdrModelFromSdrObject().GetScaleUnit() == MapUnit::MapTwip, "EnhancedCustomShape3d::Current MapMode is Unsupported" );
+        fMap *= 1440.0 / 2540.0;
+        pMap = &fMap;
+    }
+
     if ( GetBool( rGeometryItem, "Extrusion", false ) )
     {
         bool bIsMirroredX(rSdrObjCustomShape.IsMirroredX());
@@ -326,7 +323,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
         a3DDefaultAttr.SetDefaultLatheCharacterMode( true );
         a3DDefaultAttr.SetDefaultExtrudeCharacterMode( true );
 
-        E3dScene* pScene = new E3dScene;
+        E3dScene* pScene = new E3dScene(rSdrObjCustomShape.getSdrModelFromSdrObject());
 
         bool bSceneHasObjects ( false );
         bool bUseTwoFillStyles( false );
@@ -480,10 +477,15 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                 aBoundRect2d.Union( aBoundRect );
 
                 // #i122777# depth 0 is okay for planes when using double-sided
-                E3dCompoundObject* p3DObj = new E3dExtrudeObj( a3DDefaultAttr, aPolyPoly, bUseTwoFillStyles ? 0 : fDepth );
+                E3dCompoundObject* p3DObj = new E3dExtrudeObj(
+                    rSdrObjCustomShape.getSdrModelFromSdrObject(),
+                    a3DDefaultAttr,
+                    aPolyPoly,
+                    bUseTwoFillStyles ? 0 : fDepth );
 
                 p3DObj->NbcSetLayer( pShape2d->GetLayer() );
                 p3DObj->SetMergedItemSet( aLocalSet );
+
                 if ( bIsPlaceholderObject )
                     aPlaceholderObjectList.push_back( p3DObj );
                 else if ( bUseTwoFillStyles )
@@ -530,7 +532,11 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                         }
                     }
                     pScene->Insert3DObj( p3DObj );
-                    p3DObj = new E3dExtrudeObj( a3DDefaultAttr, aPolyPoly, fDepth );
+                    p3DObj = new E3dExtrudeObj(
+                        rSdrObjCustomShape.getSdrModelFromSdrObject(),
+                        a3DDefaultAttr,
+                        aPolyPoly,
+                        fDepth);
                     p3DObj->NbcSetLayer( pShape2d->GetLayer() );
                     p3DObj->SetMergedItemSet( aLocalSet );
                     if ( bUseExtrusionColor )
@@ -541,7 +547,11 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                     pScene->Insert3DObj( p3DObj );
 
                     // #i122777# depth 0 is okay for planes when using double-sided
-                    p3DObj = new E3dExtrudeObj( a3DDefaultAttr, aPolyPoly, 0 );
+                    p3DObj = new E3dExtrudeObj(
+                        rSdrObjCustomShape.getSdrModelFromSdrObject(),
+                        a3DDefaultAttr,
+                        aPolyPoly,
+                        0);
 
                     p3DObj->NbcSetLayer( pShape2d->GetLayer() );
                     p3DObj->SetMergedItemSet( aLocalSet );
