@@ -111,6 +111,8 @@ void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & rPrefix, 
         {
             const OUString& rAttrValue = unknownAttribs[i].Value;
             OUString sAttrName = unknownAttribs[i].Name;
+            // NOTE: in *this* release branch, the NamespaceURL is *not*
+            // the URL, but the *prefix*!
             const OUString& rAttrNamespacePrefix = unknownAttribs[i].NamespaceURL;
             if ( !rAttrNamespacePrefix.isEmpty() )
                 sAttrName = rAttrNamespacePrefix + ":" + sAttrName;

@@ -2134,15 +2134,31 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         OUString aLocalAttrName;
+        OUString aPrefix;
+        OUString aNamespace;
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-        sal_uInt16 nAttrPrefix = mrImport->mpNamespaceMap->GetKeyByAttrName( rAttrName, &aLocalAttrName );
+        sal_uInt16 const nAttrPrefix(mrImport->mpNamespaceMap->GetKeyByAttrName(
+                rAttrName, &aPrefix, &aLocalAttrName, &aNamespace));
         if( XML_NAMESPACE_XMLNS != nAttrPrefix )
         {
             Sequence< sal_Int8 > aAttrSeq( reinterpret_cast<sal_Int8 const *>(
                                     OUStringToOString( aLocalAttrName, RTL_TEXTENCODING_UTF8 ).getStr()), aLocalAttrName.getLength() );
-            sal_Int32 nAttr = NAMESPACE_TOKEN( nAttrPrefix ) | mrImport->mxTokenHandler->getTokenFromUTF8( aAttrSeq ) ;
-            mxFastAttributes->add( nAttr, OUStringToOString( rAttrValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+            auto const nToken(mrImport->mxTokenHandler->getTokenFromUTF8(aAttrSeq));
+            if (nToken == xmloff::XML_TOKEN_INVALID)
+            {
+                // NOTE: in *this* release branch, the NamespaceURL is *not*
+                // the URL, but the *prefix*! see
+                // sax_fastparser::FastSaxParserImpl::callbackStartElement 1181
+                mxFastAttributes->addUnknown(aPrefix,
+                    OUStringToOString(aLocalAttrName, RTL_TEXTENCODING_UTF8),
+                    OUStringToOString(rAttrValue, RTL_TEXTENCODING_UTF8));
+            }
+            else
+            {
+                sal_Int32 const nAttr = NAMESPACE_TOKEN(nAttrPrefix) | nToken;
+                mxFastAttributes->add(nAttr, OUStringToOString(rAttrValue, RTL_TEXTENCODING_UTF8).getStr());
+            }
         }
     }
     mrImport->startFastElement( mnElement, mxFastAttributes.get() );
