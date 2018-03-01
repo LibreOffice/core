@@ -106,11 +106,6 @@ LwpFribPageBreak::LwpFribPageBreak( LwpPara* pPara )
 
 LwpFribPageBreak::~LwpFribPageBreak()
 {
-    if(m_pMasterPage)
-    {
-        delete m_pMasterPage;
-        m_pMasterPage = nullptr;
-    }
 }
 
 void LwpFribPageBreak::Read(LwpObjectStream * pObjStrm, sal_uInt16 /*len*/)
@@ -126,7 +121,7 @@ void LwpFribPageBreak::RegisterBreakStyle(LwpPara* pPara)
     LwpPageLayout* pLayout = dynamic_cast<LwpPageLayout*>(m_Layout.obj().get());
     if(pLayout)
     {
-        m_pMasterPage = new LwpMasterPage(pPara, pLayout);
+        m_pMasterPage.reset( new LwpMasterPage(pPara, pLayout) );
         m_pMasterPage->RegisterMasterPage(this);
         return;
     }

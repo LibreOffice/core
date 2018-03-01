@@ -81,7 +81,7 @@ private:
     LwpObjectID m_Layout;
     bool m_bLastFrib;
 
-    LwpMasterPage* m_pMasterPage;
+    std::unique_ptr<LwpMasterPage> m_pMasterPage;
 };
 
 class LwpFribLineBreak: public LwpFrib
