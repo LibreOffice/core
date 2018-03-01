@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_91819e50",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 11
+      },
+      "lineNbr": 1971,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-03-01T16:12:52Z",
+      "side": 1,
+      "message": "Maybe some clarification would be nice: \u0027to cell (move with cell)\u0027 vs. \u0027to cell (move and resize with cell)\u0027\n\nAt least in the tooltip, admittedly the string is rather long",
+      "revId": "aa207d24672407c556de12872ef2b468af178d6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_b186a263",
+        "filename": "sc/inc/global.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-03-01T16:12:52Z",
+      "side": 1,
+      "message": "\"independent of\" ;-)",
+      "revId": "aa207d24672407c556de12872ef2b468af178d6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_d1f23606",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1886,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-03-01T16:12:52Z",
+      "side": 1,
+      "message": "IIUC ScDrawObjData already contains the information whether or not to resize w/ cell, no? Then you wouldn\u0027t need 3rd argument ...",
+      "revId": "aa207d24672407c556de12872ef2b468af178d6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_f1f73af3",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1893,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-03-01T16:12:52Z",
+      "side": 1,
+      "message": "... and pAnchor-\u003embResizeWithCell \u003d rAnchor.mbResizeWithCell",
+      "revId": "aa207d24672407c556de12872ef2b468af178d6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_11ddae70",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1896,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-03-01T16:12:52Z",
+      "side": 1,
+      "message": "The same here",
+      "revId": "aa207d24672407c556de12872ef2b468af178d6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_31dab279",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-03-01T16:12:52Z",
+      "side": 1,
+      "message": "just \u0027break\u0027, it\u0027ll return \u0027absolute\u0027 anyway",
+      "revId": "aa207d24672407c556de12872ef2b468af178d6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_71e42a3b",
+        "filename": "sc/source/ui/drawfunc/drawsh5.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-03-01T16:12:52Z",
+      "side": 1,
+      "message": "then the corresponding toolbar button should be dropped as well ... or changed to 3-state dropdown",
+      "revId": "aa207d24672407c556de12872ef2b468af178d6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
