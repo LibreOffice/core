@@ -57,14 +57,15 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_EXPLODE_HXX
 
 #include <sal/types.h>
+#include <memory>
 
 class SvStream;
 
 class HuffmanTreeNode
 {
 public:
-    HuffmanTreeNode * left;
-    HuffmanTreeNode * right;
+    std::unique_ptr<HuffmanTreeNode> left;
+    std::unique_ptr<HuffmanTreeNode> right;
     sal_uInt32 value;
 
     explicit HuffmanTreeNode(sal_uInt32 value = 0xffffffff) ;

@@ -459,16 +459,6 @@ HuffmanTreeNode::HuffmanTreeNode(sal_uInt32 nValue )
 }
 HuffmanTreeNode::~HuffmanTreeNode()
 {
-    if (left)
-    {
-        delete left;
-        left = nullptr;
-    }
-    if (right)
-    {
-        delete right;
-        right = nullptr;
-    }
 }
 
 HuffmanTreeNode * HuffmanTreeNode::InsertNode(sal_uInt32 nValue, const sal_Char * pInCode)
@@ -485,9 +475,9 @@ HuffmanTreeNode * HuffmanTreeNode::InsertNode(sal_uInt32 nValue, const sal_Char 
         pParent = InsertNode(0xffffffff, aCode.c_str());
     }
     if (cLast == '0')
-        pParent->left = pNew;
+        pParent->left.reset(pNew);
     else // (cChar == '1')
-        pParent->right = pNew;
+        pParent->right.reset(pNew);
 
     return pNew;
 }
@@ -502,11 +492,11 @@ HuffmanTreeNode * HuffmanTreeNode::QueryNode(const sal_Char * pCode)
         sal_Char cChar= pCode[i];
         if (cChar == '0')
         {
-            pNode = pNode->left;
+            pNode = pNode->left.get();
         }
         else // (cChar == '1')
         {
-            pNode = pNode->right;
+            pNode = pNode->right.get();
         }
     }
     return pNode;
