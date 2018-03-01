@@ -3925,10 +3925,18 @@
      <table:table-cell table:number-columns-repeated="6"/>
     </table:table-row>
     <table:table-row table:style-name="ro8">
-     <table:table-cell table:style-name="ce12"/>
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce18"/>
-     <table:table-cell table:style-name="ce24"/>
+     <table:table-cell table:style-name="ce12" table:formula="of:=COM.MICROSOFT.MODE.SNGL([.H1:.H12])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce33" table:formula="of:=[.A24]=[.B24]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A24])" office:value-type="string" office:string-value="=MODE.SNGL(H1:H12)" calcext:value-type="string">
+      <text:p>=MODE.SNGL(H1:H12)</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell office:value-type="float" office:value="10" calcext:value-type="float">
       <text:p>10</text:p>
@@ -3942,15 +3950,97 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
     </table:table-row>
-    <table:table-row table:style-name="ro8" table:number-rows-repeated="2">
-     <table:table-cell table:style-name="science"/>
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce18"/>
-     <table:table-cell table:style-name="ce24"/>
+    <table:table-row table:style-name="ro8">
+     <table:table-cell table:style-name="ce12" table:formula="of:=COM.MICROSOFT.MODE.SNGL(4;2;3;1;1;2;3;4;1;2;3;4)" office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce33" table:formula="of:=[.A25]=[.B25]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A25])" office:value-type="string" office:string-value="=MODE.SNGL(4,2,3,1,1,2,3,4,1,2,3,4)" calcext:value-type="string">
+      <text:p>=MODE.SNGL(4,2,3,1,1,2,3,4,1,2,3,4)</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="14"/>
     </table:table-row>
-    <table:table-row table:style-name="ro8" table:number-rows-repeated="12">
-     <table:table-cell table:style-name="science"/>
+    <table:table-row table:style-name="ro8">
+     <table:table-cell table:style-name="ce12" table:formula="of:=COM.MICROSOFT.MODE.SNGL(5;1;3;4;5;5;1;[.H1:.H4])" office:value-type="float" office:value="5" calcext:value-type="float">
+      <text:p>5</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="5" calcext:value-type="float">
+      <text:p>5</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce33" table:formula="of:=[.A26]=[.B26]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A26])" office:value-type="string" office:string-value="=MODE.SNGL(5,1,3,4,5,5,1,H1:H4)" calcext:value-type="string">
+      <text:p>=MODE.SNGL(5,1,3,4,5,5,1,H1:H4)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="14"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro8">
+     <table:table-cell table:style-name="ce12" table:formula="of:=COM.MICROSOFT.MODE.SNGL(1;2;3;4;1;2;3;4;1;2;3;4;[.H1:.H12])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce33" table:formula="of:=[.A27]=[.B27]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A27])" office:value-type="string" office:string-value="=MODE.SNGL(1,2,3,4,1,2,3,4,1,2,3,4,H1:H12)" calcext:value-type="string">
+      <text:p>=MODE.SNGL(1,2,3,4,1,2,3,4,1,2,3,4,H1:H12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="14"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro8">
+     <table:table-cell table:style-name="ce12" table:formula="of:=COM.MICROSOFT.MODE.SNGL(4;2;3;1;1;2;3;4;1;2;3;4;[.H1:.H12])" office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce33" table:formula="of:=[.A28]=[.B28]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A28])" office:value-type="string" office:string-value="=MODE.SNGL(4,2,3,1,1,2,3,4,1,2,3,4,H1:H12)" calcext:value-type="string">
+      <text:p>=MODE.SNGL(4,2,3,1,1,2,3,4,1,2,3,4,H1:H12)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="14"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro8">
+     <table:table-cell table:style-name="ce12" table:formula="of:=COM.MICROSOFT.MODE.SNGL([.H1:.H12];4;2;3;1;1;2;3;4;1;2;3;4)" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1.00000000000000E+000</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce33" table:formula="of:=[.A29]=[.B29]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A29])" office:value-type="string" office:string-value="=MODE.SNGL(H1:H12,4,2,3,1,1,2,3,4,1,2,3,4)" calcext:value-type="string">
+      <text:p>=MODE.SNGL(H1:H12,4,2,3,1,1,2,3,4,1,2,3,4)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="14"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro8">
+     <table:table-cell table:style-name="ce12" table:formula="of:=COM.MICROSOFT.MODE.SNGL([.H2];[.H1];[.H3:.H12];4;2;3;1;1;2;3;4;1;2;3;4)" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2.00000000000000E+000</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce33" table:formula="of:=[.A30]=[.B30]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A30])" office:value-type="string" office:string-value="=MODE.SNGL(H2,H1,H3:H12,4,2,3,1,1,2,3,4,1,2,3,4)" calcext:value-type="string">
+      <text:p>=MODE.SNGL(H2,H1,H3:H12,4,2,3,1,1,2,3,4,1,2,3,4)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="14"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro8" table:number-rows-repeated="8">
      <table:table-cell/>
      <table:table-cell table:style-name="ce19"/>
      <table:table-cell table:style-name="ce24"/>
