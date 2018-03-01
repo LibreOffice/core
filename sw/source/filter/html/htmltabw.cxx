@@ -300,7 +300,8 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     rWrt.OutNewLine();  // <TH>/<TD> in new line
     OStringBuffer sOut;
     sOut.append('<');
-    sOut.append(bHead ? OOO_STRING_SVTOOLS_HTML_tableheader : OOO_STRING_SVTOOLS_HTML_tabledata);
+    OString aTag(bHead ? OOO_STRING_SVTOOLS_HTML_tableheader : OOO_STRING_SVTOOLS_HTML_tabledata);
+    sOut.append(rWrt.GetNamespace() + aTag);
 
     // output ROW- and COLSPAN
     if( nRowSpan>1 )
@@ -483,7 +484,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
 
     if( rWrt.m_bLFPossible )
         rWrt.OutNewLine();
-    OString aTag = bHead ? OOO_STRING_SVTOOLS_HTML_tableheader : OOO_STRING_SVTOOLS_HTML_tabledata;
+    aTag = bHead ? OOO_STRING_SVTOOLS_HTML_tableheader : OOO_STRING_SVTOOLS_HTML_tabledata;
     HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), rWrt.GetNamespace() + aTag, false);
     rWrt.m_bLFPossible = true;
 }
@@ -514,7 +515,7 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
     }
 
     rWrt.OutNewLine();  // <TR> in new line
-    rWrt.Strm().WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tablerow );
+    rWrt.Strm().WriteChar( '<' ).WriteOString( rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_tablerow );
     if( pBrushItem )
     {
         rWrt.OutBackground( pBrushItem, false );
@@ -598,7 +599,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     if( rWrt.m_bLFPossible )
         rWrt.OutNewLine();  // <TABLE> in new line
     OStringBuffer sOut;
-    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_table);
+    sOut.append('<').append(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_table);
 
     const SvxFrameDirection nOldDirection = rWrt.m_nDirection;
     if( pFrameFormat )
@@ -732,7 +733,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             const SwWriteTableCol *pColumn = m_aCols[nCol];
 
             OStringBuffer sOutStr;
-            sOutStr.append('<').append(OOO_STRING_SVTOOLS_HTML_col);
+            sOutStr.append('<').append(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_col);
 
             sal_uInt32 nWidth;
             bool bRel;
