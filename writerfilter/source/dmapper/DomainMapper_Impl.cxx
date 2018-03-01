@@ -2284,8 +2284,11 @@ void DomainMapper_Impl::PopShapeContext()
         {
             const uno::Reference<beans::XPropertySet> xShapePropertySet( xShape, uno::UNO_QUERY );
             SectionPropertyMap* pSectionContext = GetSectionContext();
-            if ( pSectionContext && !getTableManager().isInTable() && xShapePropertySet->getPropertySetInfo()->hasPropertyByName(getPropertyName(PROP_RELATIVE_WIDTH)) )
+            if ( pSectionContext && (!hasTableManager() || !getTableManager().isInTable()) &&
+                 xShapePropertySet->getPropertySetInfo()->hasPropertyByName(getPropertyName(PROP_RELATIVE_WIDTH)) )
+            {
                 pSectionContext->addRelativeWidthShape(xShape);
+            }
         }
 
         m_aAnchoredStack.pop();
