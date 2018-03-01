@@ -518,13 +518,17 @@ void LwpHeadLayout::RegisterStyle()
 rtl::Reference<LwpVirtualLayout> LwpHeadLayout::FindEnSuperTableLayout()
 {
     rtl::Reference<LwpVirtualLayout> xLayout(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+    std::set<LwpVirtualLayout*> aSeen;
     while (xLayout.get())
     {
+        aSeen.insert(xLayout.get());
         if (xLayout->GetLayoutType() == LWP_ENDNOTE_SUPERTABLE_LAYOUT)
         {
             return xLayout;
         }
         xLayout.set(dynamic_cast<LwpVirtualLayout*>(xLayout->GetNext().obj().get()));
+        if (aSeen.find(xLayout.get()) != aSeen.end())
+            throw std::runtime_error("loop in conversion");
     }
     return rtl::Reference<LwpVirtualLayout>();
 }
