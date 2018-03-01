@@ -547,6 +547,9 @@ struct XMLTextImportHelper::Impl
     // Used for frame deduplication, the name of the last frame imported directly before the current one
     OUString msLastImportedFrameName;
 
+    bool m_bBookmarkHidden;
+    OUString m_sBookmarkCondition;
+
     uno::Reference<text::XText> m_xText;
     uno::Reference<text::XTextCursor> m_xCursor;
     uno::Reference<text::XTextRange> m_xCursorAsRange;
@@ -592,6 +595,7 @@ struct XMLTextImportHelper::Impl
                 bool const bProgress, bool const bBlockMode,
                 bool const bOrganizerMode)
         :   m_xTextListsHelper( new XMLTextListsHelper() )
+        ,   m_bBookmarkHidden( false )
         // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
         ,   m_xServiceFactory( rModel, UNO_QUERY )
         ,   m_rSvXMLImport( rImport )
@@ -2949,6 +2953,22 @@ void XMLTextImportHelper::MapCrossRefHeadingFieldsHorribly()
         }
         xField->setPropertyValue("SourceName", uno::makeAny(iter->second));
     }
+}
+
+void XMLTextImportHelper::setBookmarkAttributes(bool hidden, OUString const& condition)
+{
+    m_xImpl->m_bBookmarkHidden = hidden;
+    m_xImpl->m_sBookmarkCondition = condition;
+}
+
+bool XMLTextImportHelper::getBookmarkHidden()
+{
+    return m_xImpl->m_bBookmarkHidden;
+}
+
+const OUString& XMLTextImportHelper::getBookmarkCondition()
+{
+    return m_xImpl->m_sBookmarkCondition;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
