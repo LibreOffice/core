@@ -126,14 +126,14 @@ DlgEdFunc::DlgEdFunc( OReportSection* _pParent )
     aScrollTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );
 }
 
-void DlgEdFunc::setOverlappedControlColor(sal_Int32 _nColor)
+void DlgEdFunc::setOverlappedControlColor(Color _nColor)
 {
     m_nOverlappedControlColor = _nColor;
 }
 
-sal_Int32 lcl_setColorOfObject(const uno::Reference< uno::XInterface >& _xObj, long _nColorTRGB)
+Color lcl_setColorOfObject(const uno::Reference< uno::XInterface >& _xObj, Color _nColorTRGB)
 {
-    sal_Int32 nBackColor = 0;
+    Color nBackColor;
     try
     {
         uno::Reference<report::XReportComponent> xComponent(_xObj, uno::UNO_QUERY_THROW);
