@@ -457,15 +457,13 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport,
 
     if(!sPositiveColor.isEmpty())
     {
-        sal_Int32 nColor = 0;
-        sax::Converter::convertColor( nColor, sPositiveColor );
-        mpFormatData->maPositiveColor = Color(nColor);
+        sax::Converter::convertColor( mpFormatData->maPositiveColor, sPositiveColor );
     }
 
     if(!sNegativeColor.isEmpty())
     {
         // we might check here for 0xff0000 and don't write it
-        sal_Int32 nColor = 0;
+        Color nColor;
         sax::Converter::convertColor( nColor, sNegativeColor );
         mpFormatData->mpNegativeColor.reset(new Color(nColor));
     }
@@ -482,9 +480,7 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport,
 
     if(!sAxisColor.isEmpty())
     {
-        sal_Int32 nColor = 0;
-        sax::Converter::convertColor( nColor, sAxisColor );
-        mpFormatData->maAxisColor = Color(nColor);
+        sax::Converter::convertColor( mpFormatData->maAxisColor, sAxisColor );
     }
 
     if(!sShowValue.isEmpty())
@@ -889,9 +885,7 @@ ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImpor
         }
     }
 
-    sal_Int32 nColor;
-    sax::Converter::convertColor(nColor, sColor);
-    aColor = Color(nColor);
+    sax::Converter::convertColor(aColor, sColor);
 
     if(!sVal.isEmpty())
         sax::Converter::convertDouble(nVal, sVal);
