@@ -7,10 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 # Generates language ID table and defines and mappings of
-# http://download.microsoft.com/download/9/5/E/95EF66AF-9026-4BB0-A41D-A4F81802D92C/%5BMS-LCID%5D.pdf
+# https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-LCID/[MS-LCID].pdf
 # downloaded from http://msdn.microsoft.com/library/cc233965.aspx
 # At least this worked for Release: Monday, July 22, 2013; 08/08/2013 Revision 6.0
 # Also worked for 6/30/2015 revision 7.0
+# Also worked for 12/1/2017 revision 11.0
 #
 # Uses pdftotext (from poppler-utils), grep and gawk.
 #
@@ -19,7 +20,10 @@
 # Files created/OVERWRITTEN: MS-LCID.txt, MS-LCID.lst, MS-LCID.lst.h
 #
 # Best invoked in a temporary directory ...
-# Layout may change, diff MS-LCID.lst with ignore spaces against the previous
+#
+# As the PDF layout may change, MS-LCID.lst is generated with uppercase hex
+# digits and unified spaces (which gawk $1=... automatically does).
+# Still, if needed, diff MS-LCID.lst with ignore spaces against the previous
 # version for changes and additions, e.g.
 # gvimdiff -c 'set diffopt+=iwhite' ../MS-LCID.lst MS-LCID.lst
 # The generated MS-LCID.lst.h file is only a copy&paste help to add entries in
@@ -27,10 +31,11 @@
 # lang.h and isolang.cxx
 
 pdftotext -layout MS-LCID.pdf
-grep '^ *0x[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F] ' MS-LCID.txt > MS-LCID.lst
+grep '^ *0x[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F] ' MS-LCID.txt | \
+    gawk -e '{ $1 = "0x" toupper( substr( $1, 3)); print; }' > MS-LCID.lst
 gawk -e '
 {
-    val = "0x" toupper( substr( $1, 3));
+    val = $1;
     tag = $2;
     tag = gensub( /,.*/, "", 1, tag);
     def = $2;
