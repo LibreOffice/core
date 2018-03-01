@@ -42,6 +42,7 @@ progname = os.path.basename(sys.argv[0])
 suppressions = {}
 gen_suppr = None
 gen_supprfile = None
+suppr_prefix = ""
 outfile = None
 pflag = False
 Werror = False
@@ -133,10 +134,12 @@ def elm_suppr(filename, tree, elm, msgtype):
     Return the prefix to be displayed to the user and the suppression line for
     the warning type "msgtype" for element "elm"
     """
-    global gen_suppr, gen_supprfile, pflag
+    global gen_suppr, gen_supprfile, suppr_prefix, pflag
 
     if suppressions or gen_suppr is not None or pflag:
         prefix = errpath(filename, tree, elm)
+        if prefix[0:len(suppr_prefix)] == suppr_prefix:
+            prefix = prefix[len(suppr_prefix):]
 
     if suppressions or gen_suppr is not None:
         suppr = '%s %s' % (prefix, msgtype)
@@ -151,6 +154,8 @@ def elm_suppr(filename, tree, elm, msgtype):
     if not pflag:
         # Use user-friendly line numbers
         prefix = elm_prefix(filename, elm)
+        if prefix[0:len(suppr_prefix)] == suppr_prefix:
+            prefix = prefix[len(suppr_prefix):]
 
     return (prefix, suppr)
 
@@ -322,20 +327,21 @@ def check_a11y_relation(filename, tree):
 
 
 def usage():
-    print("%s [-W error|none] [-p] [-g SUPPR_FILE] [-s SUPPR_FILE] [-o LOG_FILE] [file ... | -L filelist]" % progname,
+    print("%s [-W error|none] [-p] [-g SUPPR_FILE] [-s SUPPR_FILE] [-P SUPPR_PREFIX] [-o LOG_FILE] [file ... | -L filelist]" % progname,
           file=sys.stderr)
     print("  -p print XML class path instead of line number");
     print("  -g Generate suppression file SUPPR_FILE");
     print("  -s Suppress warnings given by file SUPPR_FILE");
+    print("  -P Suppress SUPPR_PREFIX from emitted warnings, e.g. absolute source directory");
     print("  -o Also prints errors and warnings to given file");
     sys.exit(2)
 
 
 def main():
-    global pflag, Werror, Wnone, gen_suppr, gen_supprfile, suppressions, errors, outfile
+    global pflag, Werror, Wnone, gen_suppr, gen_supprfile, suppressions, suppr_prefix, errors, outfile
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "W:pg:s:o:L:")
+        opts, args = getopt.getopt(sys.argv[1:], "W:pg:s:P:o:L:")
     except getopt.GetoptError:
         usage()
 
@@ -354,6 +360,8 @@ def main():
             gen_suppr = a
         elif o == "-s":
             suppr = a
+        elif o == "-P":
+            suppr_prefix = a
         elif o == "-o":
             out = a
         elif o == "-L":
