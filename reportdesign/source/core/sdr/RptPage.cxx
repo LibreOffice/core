@@ -28,48 +28,29 @@ namespace rptui
 {
 using namespace ::com::sun::star;
 
-
-OReportPage::OReportPage( OReportModel& _rModel
-                         ,const uno::Reference< report::XSection >& _xSection )
-    :SdrPage( _rModel, false/*bMasterPage*/ )
+OReportPage::OReportPage(
+    OReportModel& _rModel,
+    const uno::Reference< report::XSection >& _xSection)
+:   SdrPage(_rModel, false/*bMasterPage*/)
     ,rModel(_rModel)
     ,m_xSection(_xSection)
-     ,m_bSpecialInsertMode(false)
+    ,m_bSpecialInsertMode(false)
 {
 }
-
-
-OReportPage::OReportPage( const OReportPage& rPage )
-    :SdrPage( rPage )
-    ,rModel(rPage.rModel)
-     ,m_xSection(rPage.m_xSection)
-     ,m_bSpecialInsertMode(rPage.m_bSpecialInsertMode)
-     ,m_aTemporaryObjectList(rPage.m_aTemporaryObjectList)
-{
-}
-
 
 OReportPage::~OReportPage()
 {
 }
 
-
-SdrPage* OReportPage::Clone() const
+SdrPage* OReportPage::Clone(SdrModel* pNewModel) const
 {
-    return Clone(nullptr);
-}
-
-SdrPage* OReportPage::Clone( SdrModel* const pNewModel ) const
-{
-    OReportPage *const pNewPage = new OReportPage( *this );
-    OReportModel* pReportModel = nullptr;
-    if ( pNewModel )
-    {
-        pReportModel = dynamic_cast<OReportModel*>( pNewModel );
-        assert( pReportModel );
-    }
-    pNewPage->lateInit( *this, pReportModel );
-    return pNewPage;
+    OReportModel& rOReportModel(static_cast< OReportModel& >(nullptr == pNewModel ? getSdrModelFromSdrPage() : *pNewModel));
+    OReportPage* pClonedOReportPage(
+        new OReportPage(
+            rOReportModel,
+            m_xSection));
+    pClonedOReportPage->SdrPage::lateInit(*this);
+    return pClonedOReportPage;
 }
 
 

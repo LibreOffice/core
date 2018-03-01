@@ -64,9 +64,11 @@ void SdrPageObj::PageInDestruction(const SdrPage& rPage)
     }
 }
 
-
-SdrPageObj::SdrPageObj(SdrPage* pNewPage)
-:   mpShownPage(pNewPage)
+SdrPageObj::SdrPageObj(
+    SdrModel& rSdrModel,
+    SdrPage* pNewPage)
+:   SdrObject(rSdrModel),
+    mpShownPage(pNewPage)
 {
     if(mpShownPage)
     {
@@ -74,8 +76,12 @@ SdrPageObj::SdrPageObj(SdrPage* pNewPage)
     }
 }
 
-SdrPageObj::SdrPageObj(const tools::Rectangle& rRect, SdrPage* pNewPage)
-:   mpShownPage(pNewPage)
+SdrPageObj::SdrPageObj(
+    SdrModel& rSdrModel,
+    const tools::Rectangle& rRect,
+    SdrPage* pNewPage)
+:   SdrObject(rSdrModel),
+    mpShownPage(pNewPage)
 {
     if(mpShownPage)
     {
@@ -144,9 +150,9 @@ void SdrPageObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToPolyLineToArea=false;
 }
 
-SdrPageObj* SdrPageObj::Clone() const
+SdrPageObj* SdrPageObj::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< SdrPageObj >();
+    return CloneHelper< SdrPageObj >(pTargetModel);
 }
 
 SdrPageObj& SdrPageObj::operator=(const SdrPageObj& rObj)

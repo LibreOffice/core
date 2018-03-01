@@ -144,15 +144,17 @@ void SdrMarkView::ImpClearVars()
     BrkMarkGluePoints();
 }
 
-SdrMarkView::SdrMarkView(SdrModel* pModel1, OutputDevice* pOut)
-:   SdrSnapView(pModel1,pOut),
+SdrMarkView::SdrMarkView(
+    SdrModel& rSdrModel,
+    OutputDevice* pOut)
+:   SdrSnapView(rSdrModel, pOut),
     mpMarkObjOverlay(nullptr),
     mpMarkPointsOverlay(nullptr),
     mpMarkGluePointsOverlay(nullptr),
     maHdlList(this)
 {
     ImpClearVars();
-    StartListening(*pModel1);
+    StartListening(rSdrModel);
 }
 
 SdrMarkView::~SdrMarkView()

@@ -527,7 +527,7 @@ namespace drawinglayer
             bool bChainable = rTextObj.IsChainable();
 
 
-            if(rText.GetOutlinerParaObject() && rText.GetModel())
+            if(rText.GetOutlinerParaObject())
             {
                 // added TextEdit text suppression
                 bool bInEditMode(false);
@@ -564,7 +564,7 @@ namespace drawinglayer
                 const SdrTextAniKind eAniKind(rTextObj.GetTextAniKind());
 
                 // #i107346#
-                const SdrOutliner& rDrawTextOutliner = rText.GetModel()->GetDrawOutliner(&rTextObj);
+                const SdrOutliner& rDrawTextOutliner(rText.GetObject().getSdrModelFromSdrObject().GetDrawOutliner(&rTextObj));
                 const bool bWrongSpell(rDrawTextOutliner.GetControlWord() & EEControlBits::ONLINESPELLING);
 
                 return attribute::SdrTextAttribute(

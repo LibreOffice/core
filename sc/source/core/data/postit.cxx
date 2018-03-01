@@ -375,7 +375,11 @@ void ScCaptionCreator::CreateCaption( bool bShown, bool bTailFront )
     // create the caption drawing object
     tools::Rectangle aTextRect( Point( 0 , 0 ), Size( SC_NOTECAPTION_WIDTH, SC_NOTECAPTION_HEIGHT ) );
     Point aTailPos = CalcTailPos( bTailFront );
-    mxCaption.reset( new SdrCaptionObj( aTextRect, aTailPos ));
+    mxCaption.reset(
+        new SdrCaptionObj(
+            *mrDoc.GetDrawLayer(), // TTTT should ret a ref?
+            aTextRect,
+            aTailPos));
     // basic caption settings
     ScCaptionUtil::SetBasicCaptionSettings( *mxCaption, bShown );
 }
@@ -754,7 +758,7 @@ void ScCaptionPtr::removeFromDrawPageAndFree( bool bIgnoreUndo )
         bool bRecording = false;
         if (!bIgnoreUndo)
         {
-            ScDrawLayer* pDrawLayer = dynamic_cast<ScDrawLayer*>(mpCaption->GetModel());
+            ScDrawLayer* pDrawLayer(dynamic_cast< ScDrawLayer* >(&mpCaption->getSdrModelFromSdrObject()));
             SAL_WARN_IF( !pDrawLayer, "sc.core", "ScCaptionPtr::removeFromDrawPageAndFree - object without drawing layer");
             // create drawing undo action (before removing the object to have valid draw page in undo action)
             bRecording = (pDrawLayer && pDrawLayer->IsRecording());
@@ -1137,8 +1141,9 @@ void ScPostIt::RemoveCaption()
     /*  Remove caption object only, if this note is its owner (e.g. notes in
         undo documents refer to captions in original document, do not remove
         them from drawing layer here). */
+    // TTTT maybe no longer needed - can that still happen?
     ScDrawLayer* pDrawLayer = mrDoc.GetDrawLayer();
-    if (pDrawLayer == maNoteData.mxCaption->GetModel())
+    if (pDrawLayer == &maNoteData.mxCaption->getSdrModelFromSdrObject())
         maNoteData.mxCaption.removeFromDrawPageAndFree();
 
     SAL_INFO("sc.core","ScPostIt::RemoveCaption - refs: " << maNoteData.mxCaption.getRefs() <<

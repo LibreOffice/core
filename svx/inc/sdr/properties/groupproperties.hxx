@@ -103,9 +103,6 @@ namespace sdr
             // DefaultProperties::GetObjectItemSet() if a new ItemSet is created
             virtual void ForceDefaultAttributes() override;
 
-            // Move properties to a new ItemPool.
-            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel) override;
-
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style.
             virtual void ForceStyleToHardAttributes() override;

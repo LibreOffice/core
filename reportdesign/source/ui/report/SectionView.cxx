@@ -34,9 +34,11 @@ namespace rptui
 {
     using namespace ::com::sun::star;
 
-
-OSectionView::OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, OReportWindow* pEditor )
-    :SdrView( pModel, _pSectionWindow )
+OSectionView::OSectionView(
+    SdrModel& rSdrModel,
+    OReportSection* _pSectionWindow,
+    OReportWindow* pEditor)
+:   SdrView(rSdrModel, _pSectionWindow)
     ,m_pReportWindow( pEditor )
     ,m_pSectionWindow(_pSectionWindow)
 {

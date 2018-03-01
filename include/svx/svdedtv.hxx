@@ -68,7 +68,7 @@ namespace o3tl
     template<> struct typed_flags<SdrInsertFlags> : is_typed_flags<SdrInsertFlags, 0x1f> {};
 }
 
-class SVX_DLLPUBLIC SdrEditView: public SdrMarkView
+class SVX_DLLPUBLIC SdrEditView : public SdrMarkView
 {
     friend class                SdrPageView;
     friend class                SdrDragDistort;
@@ -163,7 +163,10 @@ protected:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrEditView(SdrModel* pModel1, OutputDevice* pOut);
+    SdrEditView(
+        SdrModel& rSdrModel,
+        OutputDevice* pOut);
+
     virtual ~SdrEditView() override;
 
 public:

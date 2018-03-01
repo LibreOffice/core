@@ -436,7 +436,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
             // To get the 3D aspect ratio's effect on the 2D scene size, the scene's 2D size needs to be adapted to
             // 3D content changes here. The tooling class remembers the current 3D transformation stack
             // and in its destructor, calculates a new 2D SnapRect for the scene and it's modified 3D geometry.
-            E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
+            E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene(m_xOuterGroupShape));
 
             m_xAspectRatio3D->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
                 , uno::Any(BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aResult )) );
@@ -599,7 +599,8 @@ void VDiagram::createShapes_3d()
                 aEffectiveTranformation.shearXY(m_fYAnglePi,-m_fXAnglePi);
 
             //#i98497# 3D charts are rendered with wrong size
-            E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
+            E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene(m_xOuterGroupShape));
+
             xDestProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX,
                     uno::Any( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aEffectiveTranformation ) ) );
         }
@@ -656,7 +657,8 @@ void VDiagram::createShapes_3d()
                 ::basegfx::B3DHomMatrix aM;
                 aM.translate(GRID_TO_WALL_DISTANCE/fXScale, GRID_TO_WALL_DISTANCE/fYScale, GRID_TO_WALL_DISTANCE/fZScale);
                 aM.scale( fXScale, fYScale, fZScale );
-                E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
+                E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene(m_xOuterGroupShape));
+
                 xShapeProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
                     , uno::Any(BaseGFXHelper::B3DHomMatrixToHomogenMatrix(aM)) );
             }

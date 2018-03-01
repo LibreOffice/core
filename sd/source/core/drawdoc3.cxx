@@ -608,7 +608,6 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                 // Assemble all link names
                 pPage->SetFileName(aBookmarkName);
                 pPage->SetBookmarkName(aName);
-                pPage->SetModel(this);
             }
 
             nActualInsertPos += 2;
@@ -705,7 +704,6 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                     SdPage* pPage = static_cast<SdPage*>( GetPage(nActualInsertPos) );
                     pPage->SetFileName(aBookmarkName);
                     pPage->SetBookmarkName(aPgName);
-                    pPage->SetModel(this);
                 }
 
                 if (bReplace)

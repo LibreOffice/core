@@ -40,12 +40,15 @@ private:
 
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
-    void SetDefaultAttributes(E3dDefaultAttributes const & rDefault);
+    void SetDefaultAttributes(const E3dDefaultAttributes& rDefault);
 
 public:
-
-    E3dExtrudeObj(E3dDefaultAttributes const & rDefault, const basegfx::B2DPolyPolygon& rPP, double fDepth);
-    E3dExtrudeObj();
+    E3dExtrudeObj(
+        SdrModel& rSdrModel,
+        const E3dDefaultAttributes& rDefault,
+        const basegfx::B2DPolyPolygon& rPP,
+        double fDepth);
+    E3dExtrudeObj(SdrModel& rSdrModel);
 
     // PercentDiagonal: 0..100, before 0.0..0.5
     sal_uInt16 GetPercentDiagonal() const
@@ -81,7 +84,10 @@ public:
 
     virtual sal_uInt16 GetObjIdentifier() const override;
 
-    virtual E3dExtrudeObj* Clone() const override;
+    virtual E3dExtrudeObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+
+    // implemented mainly for the purposes of Clone()
+    E3dExtrudeObj& operator=(const E3dExtrudeObj& rObj);
 
     // TakeObjName...() is for the display in the UI (for example "3 frames selected")
     virtual OUString TakeObjNameSingul() const override;
