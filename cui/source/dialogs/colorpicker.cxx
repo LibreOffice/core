@@ -1227,22 +1227,17 @@ IMPL_LINK(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
     }
     else if (&rEdit == mpEDHex)
     {
-        sal_Int32 nColor = mpEDHex->GetColor();
+        Color aColor = mpEDHex->GetColor();
 
-        if (nColor != -1)
+        if (aColor != Color(0xffffffff) && aColor != GetColor())
         {
-            Color aColor(nColor);
+            mdRed = static_cast<double>(aColor.GetRed()) / 255.0;
+            mdGreen = static_cast<double>(aColor.GetGreen()) / 255.0;
+            mdBlue = static_cast<double>(aColor.GetBlue()) / 255.0;
 
-            if (aColor != GetColor())
-            {
-                mdRed = static_cast<double>(aColor.GetRed()) / 255.0;
-                mdGreen = static_cast<double>(aColor.GetGreen()) / 255.0;
-                mdBlue = static_cast<double>(aColor.GetBlue()) / 255.0;
-
-                RGBtoHSV( mdRed, mdGreen, mdBlue, mdHue, mdSat, mdBri );
-                RGBtoCMYK( mdRed, mdGreen, mdBlue, mdCyan, mdMagenta, mdYellow, mdKey );
-                n = UpdateFlags::All & ~UpdateFlags::Hex;
-            }
+            RGBtoHSV( mdRed, mdGreen, mdBlue, mdHue, mdSat, mdBri );
+            RGBtoCMYK( mdRed, mdGreen, mdBlue, mdCyan, mdMagenta, mdYellow, mdKey );
+            n = UpdateFlags::All & ~UpdateFlags::Hex;
         }
     }
 

@@ -78,8 +78,8 @@ class XLineTransparenceItem;
 class XLineWidthItem;
 class XSecondaryFillColorItem;
 
-#define COL_DEFAULT_SHAPE_FILLING 0x729fcf
-#define COL_DEFAULT_SHAPE_STROKE  0x3465a4
+#define COL_DEFAULT_SHAPE_FILLING ::Color(0x729fcf)
+#define COL_DEFAULT_SHAPE_STROKE  ::Color(0x3465a4)
 
 #define XATTR_START             1000
 

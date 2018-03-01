@@ -29,6 +29,7 @@
 #include <sot/exchange.hxx>
 #include <sax/tools/converter.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/color.hxx>
 
 class SVX_DLLPUBLIC HexColorControl : public Edit
 {
@@ -38,8 +39,8 @@ public:
     virtual bool PreNotify( NotifyEvent& rNEvt ) override;
     virtual void Paste() override;
 
-    void SetColor( sal_Int32 nColor );
-    sal_Int32 GetColor();
+    void SetColor( ::Color nColor );
+    ::Color GetColor();
 
 private:
     static bool ImplProcessKeyInput( const KeyEvent& rKEv );
