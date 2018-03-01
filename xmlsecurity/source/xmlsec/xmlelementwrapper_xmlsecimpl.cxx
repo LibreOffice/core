@@ -19,32 +19,27 @@
 
 #include <string.h>
 
-#include <xmlsec/xmlelementwrapper_xmlsecimpl.hxx>
+#include "xmlelementwrapper_xmlsecimpl.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-namespace cssu = com::sun::star::uno;
-
-#define IMPLEMENTATION_NAME "com.sun.star.xml.security.bridge.xmlsec.XMLElementWrapper_XmlSecImpl"
+using namespace com::sun::star;
 
 XMLElementWrapper_XmlSecImpl::XMLElementWrapper_XmlSecImpl(const xmlNodePtr pNode)
     : m_pElement( pNode )
 {
 }
 
-/* XXMLElementWrapper */
-
-
 /* XUnoTunnel */
-cssu::Sequence< sal_Int8 > XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId()
+uno::Sequence< sal_Int8 > XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId implId;
 
     return implId.getImplementationId();
 }
 
-sal_Int64 SAL_CALL XMLElementWrapper_XmlSecImpl::getSomething( const cssu::Sequence< sal_Int8 >& aIdentifier )
+sal_Int64 SAL_CALL XMLElementWrapper_XmlSecImpl::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
 {
     if (aIdentifier.getLength() == 16 &&
         0 == memcmp(
@@ -60,37 +55,28 @@ sal_Int64 SAL_CALL XMLElementWrapper_XmlSecImpl::getSomething( const cssu::Seque
     }
 }
 
-
-OUString XMLElementWrapper_XmlSecImpl_getImplementationName ()
-{
-    return OUString ( IMPLEMENTATION_NAME );
-}
-
-cssu::Sequence< OUString > XMLElementWrapper_XmlSecImpl_getSupportedServiceNames(  )
-{
-    cssu::Sequence<OUString> aRet { "com.sun.star.xml.wrapper.XMLElementWrapper" };
-    return aRet;
-}
-
-cssu::Reference< cssu::XInterface >
-    XMLElementWrapper_XmlSecImpl_createInstance(
-        const cssu::Reference< cssu::XComponentContext > &)
-{
-    return static_cast<cppu::OWeakObject*>(new XMLElementWrapper_XmlSecImpl(nullptr));
-}
-
 /* XServiceInfo */
 OUString SAL_CALL XMLElementWrapper_XmlSecImpl::getImplementationName(  )
 {
-    return XMLElementWrapper_XmlSecImpl_getImplementationName();
+    return OUString("com.sun.star.xml.wrapper.XMLElementWrapper");
 }
+
 sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService( this, rServiceName );
 }
-cssu::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl::getSupportedServiceNames(  )
+
+uno::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl::getSupportedServiceNames(  )
 {
-    return XMLElementWrapper_XmlSecImpl_getSupportedServiceNames();
+    uno::Sequence<OUString> aRet { "com.sun.star.xml.wrapper.XMLElementWrapper" };
+    return aRet;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_xml_wrapper_XMLElementWrapper_get_implementation(
+    uno::XComponentContext* /*pCtx*/, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new XMLElementWrapper_XmlSecImpl(nullptr));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19676,7 +19676,6 @@ xmlsecurity/inc/xmlsec-wrapper.h
 xmlsecurity/inc/xmlsec/errorcallback.hxx
 xmlsecurity/inc/xmlsec/saxhelper.hxx
 xmlsecurity/inc/xmlsec/xmldocumentwrapper_xmlsecimpl.hxx
-xmlsecurity/inc/xmlsec/xmlelementwrapper_xmlsecimpl.hxx
 xmlsecurity/inc/xmlsec/xmlsec_init.hxx
 xmlsecurity/inc/xmlsec/xmlstreamio.hxx
 xmlsecurity/inc/xmlsecuritydllapi.h
@@ -19786,6 +19785,7 @@ xmlsecurity/source/xmlsec/nss/xsec_nss.cxx
 xmlsecurity/source/xmlsec/saxhelper.cxx
 xmlsecurity/source/xmlsec/xmldocumentwrapper_xmlsecimpl.cxx
 xmlsecurity/source/xmlsec/xmlelementwrapper_xmlsecimpl.cxx
+xmlsecurity/source/xmlsec/xmlelementwrapper_xmlsecimpl.hxx
 xmlsecurity/source/xmlsec/xmlsec_init.cxx
 xmlsecurity/source/xmlsec/xmlstreamio.cxx
 xmlsecurity/source/xmlsec/xsec_xmlsec.cxx
