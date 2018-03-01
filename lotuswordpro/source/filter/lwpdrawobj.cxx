@@ -565,17 +565,11 @@ XFFrame* LwpDrawPolyLine::CreateStandardDrawObj(const  OUString& rStyleName)
 LwpDrawPolygon::LwpDrawPolygon(SvStream * pStream, DrawingOffsetAndScale* pTransData)
     : LwpDrawObj(pStream, pTransData)
     , m_nNumPoints(0)
-    , m_pVector(nullptr)
 {
 }
 
 LwpDrawPolygon::~LwpDrawPolygon()
 {
-    if (m_pVector)
-    {
-        delete [] m_pVector;
-        m_pVector = nullptr;
-    }
 }
 
 /**
@@ -589,7 +583,7 @@ void LwpDrawPolygon::Read()
     if (m_nNumPoints > m_pStream->remainingSize() / 4)
         throw BadRead();
 
-    m_pVector = new SdwPoint[m_nNumPoints];
+    m_pVector.reset( new SdwPoint[m_nNumPoints] );
 
     for (sal_uInt16 nC = 0; nC < m_nNumPoints; nC++)
     {
