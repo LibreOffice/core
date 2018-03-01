@@ -1425,6 +1425,11 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 nStripsPerPlane = ( nImageLength - 1 ) / nDiv + 1;
             }
 
+            if (bStatus)
+            {
+                bStatus = nSamplesPerPixel != 0;
+            }
+
             if ( bStatus )
             {
                 sal_uInt64 nRowSize = (static_cast<sal_uInt64>(nImageWidth) * nSamplesPerPixel / nPlanes * nBitsPerSample + 7) >> 3;
