@@ -211,6 +211,8 @@ public:
     bool IsMirrored() const { return bMirrored;}
     void SetMirrored( bool _bMirrored );
 
+    virtual bool shouldKeepAspectRatio() const override { return true; }
+
     // Access to GrafAnimationAllowed flag
     void SetGrafAnimationAllowed(bool bNew);
 
