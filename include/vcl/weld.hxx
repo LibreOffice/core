@@ -20,6 +20,7 @@
 namespace weld
 {
 class Container;
+class DialogController;
 
 class VCL_DLLPUBLIC Widget
 {
@@ -120,6 +121,12 @@ public:
 
 class VCL_DLLPUBLIC Dialog : virtual public Window
 {
+private:
+    friend DialogController;
+    virtual bool runAsync(std::shared_ptr<DialogController>,
+                          const std::function<void(sal_Int32)>& func)
+        = 0;
+
 public:
     virtual int run() = 0;
     virtual void response(int response) = 0;
@@ -534,8 +541,33 @@ public:
     virtual DrawingArea* weld_drawing_area(const OString& id, bool bTakeOwnership = false) = 0;
     virtual ~Builder() {}
 };
-}
 
+class VCL_DLLPUBLIC DialogController
+{
+private:
+    virtual Dialog* getDialog() = 0;
+
+public:
+    short run() { return getDialog()->run(); }
+    static bool runAsync(const std::shared_ptr<DialogController>& rController,
+                         const std::function<void(sal_Int32)>&);
+    virtual ~DialogController() {}
+};
+
+class VCL_DLLPUBLIC GenericDialogController : public DialogController
+{
+private:
+    virtual Dialog* getDialog() override { return m_xDialog.get(); }
+
+protected:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Dialog> m_xDialog;
+
+public:
+    GenericDialogController(weld::Widget* pParent, const OUString& rUIFile,
+                            const OString& rDialogId);
+};
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

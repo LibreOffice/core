@@ -1036,6 +1036,7 @@ bool Dialog::StartExecuteAsync( VclAbstractDialog::AsyncContext &rCtx )
     if ( !ImplStartExecuteModal() )
     {
         rCtx.mxOwner.disposeAndClear();
+        rCtx.mxOwnerDialog.reset();
         return false;
     }
 
@@ -1104,6 +1105,7 @@ void Dialog::EndDialog( long nResult )
 
     // Destroy ourselves (if we have a context with VclPtr owner)
     mpDialogImpl->maEndCtx.mxOwner.disposeAndClear();
+    mpDialogImpl->maEndCtx.mxOwnerDialog.reset();
 }
 
 long Dialog::GetResult() const

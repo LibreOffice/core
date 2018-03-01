@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/lok.hxx>
 #include <salframe.hxx>
 #include <salinst.hxx>
 #include <salvd.hxx>
@@ -428,6 +429,14 @@ public:
         : SalInstanceWindow(pDialog, bTakeOwnership)
         , m_xDialog(pDialog)
     {
+    }
+
+    virtual bool runAsync(std::shared_ptr<weld::DialogController> aOwner, const std::function<void(sal_Int32)> &rEndDialogFn) override
+    {
+        VclAbstractDialog::AsyncContext aCtx;
+        aCtx.mxOwnerDialog = aOwner;
+        aCtx.maEndDialogFn = rEndDialogFn;
+        return m_xDialog->StartExecuteAsync(aCtx);
     }
 
     virtual int run() override
@@ -1456,6 +1465,20 @@ weld::Window* SalFrame::GetFrameWeld() const
             m_xFrameWeld.reset(new SalInstanceWindow(pSystemWindow, false));
     }
     return m_xFrameWeld.get();
+}
+
+namespace weld
+{
+    bool DialogController::runAsync(const std::shared_ptr<DialogController>& rController, const std::function<void(sal_Int32)>& func)
+    {
+        return rController->getDialog()->runAsync(rController, func);
+    }
+
+    GenericDialogController::GenericDialogController(weld::Widget* pParent, const OUString &rUIFile, const OString& rDialogId)
+        : m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
+        , m_xDialog(m_xBuilder->weld_dialog(rDialogId))
+    {
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
