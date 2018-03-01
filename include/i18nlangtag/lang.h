@@ -144,7 +144,7 @@ namespace o3tl
 #define LANGUAGE_ARABIC_TUNISIA             LanguageType(0x1C01)
 #define LANGUAGE_ARABIC_UAE                 LanguageType(0x3801)
 #define LANGUAGE_ARABIC_YEMEN               LanguageType(0x2401)
-#define LANGUAGE_ARMENIAN                   LanguageType(0x042B)
+#define LANGUAGE_ARMENIAN                   LanguageType(0x042B)  /* Eastern Armenian */
 #define LANGUAGE_ASSAMESE                   LanguageType(0x044D)
 #define LANGUAGE_AZERI_CYRILLIC             LanguageType(0x082C)
 #define LANGUAGE_AZERI_CYRILLIC_LSO         LanguageType(0x742C)
@@ -736,6 +736,10 @@ namespace o3tl
 #define LANGUAGE_USER_KITUBA_DRCONGO        LanguageType(0x069C)
 #define LANGUAGE_USER_FON                   LanguageType(0x069D)
 #define LANGUAGE_USER_PLAUTDIETSCH          LanguageType(0x069E)
+#define LANGUAGE_USER_ARMENIAN_RUSSIA       LanguageType(0x802B)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_ARMENIAN)) */
+#define LANGUAGE_USER_ARMENIAN_IRAN         LanguageType(0x842B)  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_ARMENIAN)) */
+#define LANGUAGE_USER_ARMENIAN_WESTERN      LanguageType(0x069F)
+#define LANGUAGE_USER_ARMENIAN_CLASSIC      LanguageType(0x06A0)
 
 
 /* XXX Add new user defined LCIDs ^^^ there.

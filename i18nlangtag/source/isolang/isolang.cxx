@@ -325,6 +325,8 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA,          "sh", "BA", kSAME },  // legacy kludge, is sr-Latn-BA now
     { LANGUAGE_SERBIAN_LATIN_LSO,                         "sh", ""  , kSAME },  // legacy kludge, is sr-Latn now
     { LANGUAGE_ARMENIAN,                    "hy", "AM", k0     },
+    { LANGUAGE_USER_ARMENIAN_RUSSIA,        "hy", "RU", k0     },
+    { LANGUAGE_USER_ARMENIAN_IRAN,          "hy", "IR", k0     },
     { LANGUAGE_AZERI_LATIN,                 "az", "AZ", k0     },    // macrolanguage code
     { LANGUAGE_UZBEK_LATIN,                 "uz", "UZ", k0     },    // macrolanguage code
     { LANGUAGE_UZBEK_LATIN_LSO,             "uz", ""  , k0     },    // macrolanguage code
@@ -670,6 +672,8 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_KITUBA_DRCONGO,        "ktu", "CD", k0     },
     { LANGUAGE_USER_FON,                   "fon", "BJ", k0     },
     { LANGUAGE_USER_PLAUTDIETSCH,          "pdt", "CA", k0     },
+    { LANGUAGE_USER_ARMENIAN_WESTERN,      "hyw", "AM", k0     },
+    { LANGUAGE_USER_ARMENIAN_CLASSIC,      "xcl", "AM", k0     },
     { LANGUAGE_MULTIPLE,                   "mul", ""  , k0     },    // multiple languages, many languages are used
     { LANGUAGE_UNDETERMINED,               "und", ""  , k0     },    // undetermined language, language cannot be identified
     { LANGUAGE_NONE,                       "zxx", ""  , k0     },    // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information

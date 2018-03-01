@@ -59,7 +59,7 @@ const std::pair<const char*, LanguageType> STR_ARR_SVT_LANGUAGE_TABLE[] =
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Arabic (UAE)") , LANGUAGE_ARABIC_UAE },
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Arabic (Yemen)") , LANGUAGE_ARABIC_YEMEN },
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Aragonese") , LANGUAGE_USER_ARAGONESE },
-    { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Armenian") , LANGUAGE_ARMENIAN },
+    { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Armenian, Eastern (Armenia)") , LANGUAGE_ARMENIAN },
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Assamese") , LANGUAGE_ASSAMESE },
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Azerbaijani Latin") , LANGUAGE_AZERI_LATIN },
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Azerbaijani Cyrillic") , LANGUAGE_AZERI_CYRILLIC },
@@ -406,7 +406,11 @@ const std::pair<const char*, LanguageType> STR_ARR_SVT_LANGUAGE_TABLE[] =
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Xibe") , LANGUAGE_USER_XIBE },
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Kituba (Democratic Republic of the Congo)"), LANGUAGE_USER_KITUBA_DRCONGO },
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Fon"), LANGUAGE_USER_FON },
-    { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Plautdietsch"), LANGUAGE_USER_PLAUTDIETSCH }
+    { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Plautdietsch"), LANGUAGE_USER_PLAUTDIETSCH },
+    { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Armenian, Eastern (Russia)") , LANGUAGE_USER_ARMENIAN_RUSSIA },
+    { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Armenian, Eastern (Iran)") , LANGUAGE_USER_ARMENIAN_IRAN },
+    { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Armenian, Western (Armenia)") , LANGUAGE_USER_ARMENIAN_WESTERN },
+    { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Armenian, Classic (Armenia)") , LANGUAGE_USER_ARMENIAN_CLASSIC }
 };
 
 #endif
