@@ -3516,7 +3516,7 @@
       </node>
       <node oor:name=".uno:FormatFormMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Form</value>
+          <value xml:lang="en-US">Fo~rm</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertGraphic" oor:op="replace">
