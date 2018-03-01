@@ -357,7 +357,7 @@ class LwpDrawBitmap : public LwpDrawObj
 {
 private:
     SdwBmpRecord m_aBmpRec;
-    sal_uInt8* m_pImageData;
+    std::unique_ptr<sal_uInt8[]> m_pImageData;
 public:
     explicit LwpDrawBitmap(SvStream* pStream);
     virtual ~LwpDrawBitmap() override;
