@@ -1337,17 +1337,12 @@ void LwpDrawMetafile::Read()
  * @descr   Constructor of class LwpDrawBitmap
  * @param   pStream   The memory stream which contains the lwp-sdw draw objects
  */
-LwpDrawBitmap::LwpDrawBitmap(SvStream* pStream) : LwpDrawObj(pStream), m_pImageData(nullptr)
+LwpDrawBitmap::LwpDrawBitmap(SvStream* pStream) : LwpDrawObj(pStream)
 {
 }
 
 LwpDrawBitmap::~LwpDrawBitmap()
 {
-    if (m_pImageData)
-    {
-        delete [] m_pImageData;
-        m_pImageData = nullptr;
-    }
 }
 
 /**
@@ -1361,7 +1356,7 @@ void LwpDrawBitmap::Read()
     // 20 == length of draw-specific fields.
     // 14 == length of bmp file header.
     m_aBmpRec.nFileSize = m_aObjHeader.nRecLen - 20 + 14;
-    m_pImageData = new sal_uInt8 [m_aBmpRec.nFileSize];
+    m_pImageData.reset( new sal_uInt8 [m_aBmpRec.nFileSize] );
 
     BmpInfoHeader2 aInfoHeader2;
     m_pStream->ReadUInt32( aInfoHeader2.nHeaderLen );
@@ -1421,7 +1416,7 @@ void LwpDrawBitmap::Read()
     m_pImageData[13] = static_cast<sal_uInt8>(nOffBits >> 24);
 
     sal_uInt32 nDIBRemaining;
-    sal_uInt8* pPicData = m_pImageData;
+    sal_uInt8* pPicData = m_pImageData.get();
     if (aInfoHeader2.nHeaderLen== sizeof(BmpInfoHeader))
     {
         m_pImageData[14] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen);
@@ -1479,7 +1474,7 @@ OUString LwpDrawBitmap::RegisterStyle()
 XFFrame* LwpDrawBitmap::CreateDrawObj(const OUString& rStyleName)
 {
     XFImage* pImage = new XFImage();
-    pImage->SetImageData(m_pImageData, m_aBmpRec.nFileSize);
+    pImage->SetImageData(m_pImageData.get(), m_aBmpRec.nFileSize);
     SetPosition(pImage);
 
     pImage->SetStyleName(rStyleName);
