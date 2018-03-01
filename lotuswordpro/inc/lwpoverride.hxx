@@ -356,19 +356,19 @@ public:
 
     void Override(LwpSpacingOverride* other);
 
-    LwpSpacingCommonOverride* GetSpacing(){return m_pSpacing;}
-    LwpSpacingCommonOverride* GetAboveLineSpacing(){return m_pAboveLineSpacing;}
-    LwpSpacingCommonOverride* GetAboveSpacing(){return m_pParaSpacingAbove;}
-    LwpSpacingCommonOverride* GetBelowSpacing(){return m_pParaSpacingBelow;}
+    LwpSpacingCommonOverride* GetSpacing(){return m_pSpacing.get();}
+    LwpSpacingCommonOverride* GetAboveLineSpacing(){return m_pAboveLineSpacing.get();}
+    LwpSpacingCommonOverride* GetAboveSpacing(){return m_pParaSpacingAbove.get();}
+    LwpSpacingCommonOverride* GetBelowSpacing(){return m_pParaSpacingBelow.get();}
 
 private:
     LwpSpacingOverride(LwpSpacingOverride const& rOther);
     LwpSpacingOverride& operator=(LwpSpacingOverride const& rOther) = delete;
 
-    LwpSpacingCommonOverride*   m_pSpacing;
-    LwpSpacingCommonOverride*   m_pAboveLineSpacing;
-    LwpSpacingCommonOverride*   m_pParaSpacingAbove;
-    LwpSpacingCommonOverride*   m_pParaSpacingBelow;
+    std::unique_ptr<LwpSpacingCommonOverride>   m_pSpacing;
+    std::unique_ptr<LwpSpacingCommonOverride>   m_pAboveLineSpacing;
+    std::unique_ptr<LwpSpacingCommonOverride>   m_pParaSpacingAbove;
+    std::unique_ptr<LwpSpacingCommonOverride>   m_pParaSpacingBelow;
 };
 
 class LwpIndentOverride final : public LwpOverride

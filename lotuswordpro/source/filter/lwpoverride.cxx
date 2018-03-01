@@ -359,10 +359,6 @@ m_pParaSpacingBelow(new LwpSpacingCommonOverride)
 
 LwpSpacingOverride::~LwpSpacingOverride()
 {
-    delete m_pSpacing;
-    delete m_pAboveLineSpacing;
-    delete m_pParaSpacingAbove;
-    delete m_pParaSpacingBelow;
 }
 
 LwpSpacingOverride::LwpSpacingOverride(LwpSpacingOverride const& rOther)
@@ -372,14 +368,10 @@ LwpSpacingOverride::LwpSpacingOverride(LwpSpacingOverride const& rOther)
     , m_pParaSpacingAbove(nullptr)
     , m_pParaSpacingBelow(nullptr)
 {
-    std::unique_ptr<LwpSpacingCommonOverride> pSpacing(::clone(rOther.m_pSpacing));
-    std::unique_ptr<LwpSpacingCommonOverride> pAboveLineSpacing(::clone(rOther.m_pAboveLineSpacing));
-    std::unique_ptr<LwpSpacingCommonOverride> pParaSpacingAbove(::clone(rOther.m_pParaSpacingAbove));
-    std::unique_ptr<LwpSpacingCommonOverride> pParaSpacingBelow(::clone(rOther.m_pParaSpacingBelow));
-    m_pSpacing = pSpacing.release();
-    m_pAboveLineSpacing = pAboveLineSpacing.release();
-    m_pParaSpacingAbove = pParaSpacingAbove.release();
-    m_pParaSpacingBelow = pParaSpacingBelow.release();
+    m_pSpacing.reset( ::clone(rOther.m_pSpacing.get()) );
+    m_pAboveLineSpacing.reset( ::clone(rOther.m_pAboveLineSpacing.get()) );
+    m_pParaSpacingAbove.reset( ::clone(rOther.m_pParaSpacingAbove.get()) );
+    m_pParaSpacingBelow.reset( ::clone(rOther.m_pParaSpacingBelow.get()) );
 }
 
 LwpSpacingOverride* LwpSpacingOverride::clone() const
