@@ -107,6 +107,7 @@ public:
     void testCustomDataLabel();
     void testCustomDataLabelMultipleSeries();
     void testNumberFormatExportPPTX();
+    void testTdf116163();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -176,6 +177,7 @@ public:
     CPPUNIT_TEST(testCustomDataLabel);
     CPPUNIT_TEST(testCustomDataLabelMultipleSeries);
     CPPUNIT_TEST(testNumberFormatExportPPTX);
+    CPPUNIT_TEST(testTdf116163);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1741,6 +1743,15 @@ void Chart2ExportTest::testNumberFormatExportPPTX()
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:numFmt", "formatCode", "#,##0.00,\\K");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:numFmt", "sourceLinked", "0");
+}
+
+void Chart2ExportTest::testTdf116163()
+{
+    load("/chart2/qa/extras/data/pptx/", "tdf116163.pptx");
+    xmlDocPtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:txPr/a:bodyPr", "rot", "-5400000");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
