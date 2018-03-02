@@ -224,12 +224,12 @@ ExcelGraphicHelper::ExcelGraphicHelper( const WorkbookHelper& rHelper ) :
 {
 }
 
-sal_Int32 ExcelGraphicHelper::getSchemeColor( sal_Int32 nToken ) const
+::Color ExcelGraphicHelper::getSchemeColor( sal_Int32 nToken ) const
 {
     return getTheme().getColorByToken( nToken );
 }
 
-sal_Int32 ExcelGraphicHelper::getPaletteColor( sal_Int32 nPaletteIdx ) const
+::Color ExcelGraphicHelper::getPaletteColor( sal_Int32 nPaletteIdx ) const
 {
     return getStyles().getPaletteColor( nPaletteIdx );
 }
@@ -271,7 +271,7 @@ void Color::importColor( const AttributeList& rAttribs )
     if( rAttribs.hasAttribute( XML_theme ) )
         setTheme( rAttribs.getInteger( XML_theme, -1 ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else if( rAttribs.hasAttribute( XML_rgb ) )
-        setRgb( rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT ), rAttribs.getDouble( XML_tint, 0.0 ) );
+        setRgb( rAttribs.getIntegerHex( XML_rgb, sal_Int32(API_RGB_TRANSPARENT) ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else if( rAttribs.hasAttribute( XML_indexed ) )
         setIndexed( rAttribs.getInteger( XML_indexed, -1 ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else if( rAttribs.getBool( XML_auto, false ) )
@@ -371,7 +371,7 @@ ColorPalette::ColorPalette( const WorkbookHelper& rHelper )
 
 void ColorPalette::importPaletteColor( const AttributeList& rAttribs )
 {
-    appendColor( rAttribs.getIntegerHex( XML_rgb, API_RGB_WHITE ) );
+    appendColor( rAttribs.getIntegerHex( XML_rgb, sal_Int32(API_RGB_WHITE) ) );
 }
 
 void ColorPalette::importPaletteColor( SequenceInputStream& rStrm )
@@ -382,7 +382,7 @@ void ColorPalette::importPaletteColor( SequenceInputStream& rStrm )
 
 sal_Int32 ColorPalette::getColor( sal_Int32 nPaletteIdx ) const
 {
-    sal_Int32 nColor = API_RGB_TRANSPARENT;
+    ::Color nColor = API_RGB_TRANSPARENT;
     if( const sal_Int32* pnPaletteColor = ContainerHelper::getVectorElement( maColors, nPaletteIdx ) )
     {
         nColor = *pnPaletteColor;
@@ -402,7 +402,7 @@ sal_Int32 ColorPalette::getColor( sal_Int32 nPaletteIdx ) const
         case OOX_COLOR_FONTAUTO:        nColor = API_RGB_TRANSPARENT;                                                   break;
         default:                        OSL_FAIL( "ColorPalette::getColor - unknown color index" );
     }
-    return nColor;
+    return sal_Int32(nColor);
 }
 
 void ColorPalette::appendColor( sal_Int32 nRGBValue )
@@ -1541,7 +1541,7 @@ bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel&
 {
     // Document: sc/qa/unit/data/README.cellborders
 
-    rBorderLine.Color = rModel.maColor.getColor( getBaseFilter().getGraphicHelper(), API_RGB_BLACK );
+    rBorderLine.Color = sal_Int32(rModel.maColor.getColor( getBaseFilter().getGraphicHelper(), API_RGB_BLACK ));
     switch( rModel.mnStyle )
     {
         case XML_dashDot:
@@ -1667,12 +1667,12 @@ inline sal_Int32 lclGetMixedColorComp( sal_Int32 nPatt, sal_Int32 nFill, sal_Int
     return ((nPatt - nFill) * nAlpha) / 0x80 + nFill;
 }
 
-sal_Int32 lclGetMixedColor( sal_Int32 nPattColor, sal_Int32 nFillColor, sal_Int32 nAlpha )
+::Color lclGetMixedColor( ::Color nPattColor, ::Color nFillColor, sal_Int32 nAlpha )
 {
-    return
-        (lclGetMixedColorComp( nPattColor & 0xFF0000, nFillColor & 0xFF0000, nAlpha ) & 0xFF0000) |
-        (lclGetMixedColorComp( nPattColor & 0x00FF00, nFillColor & 0x00FF00, nAlpha ) & 0x00FF00) |
-        (lclGetMixedColorComp( nPattColor & 0x0000FF, nFillColor & 0x0000FF, nAlpha ) & 0x0000FF);
+    return ::Color(
+        lclGetMixedColorComp( nPattColor.GetRed(), nFillColor.GetRed(), nAlpha ),
+        lclGetMixedColorComp( nPattColor.GetGreen(), nFillColor.GetGreen(), nAlpha ),
+        lclGetMixedColorComp( nPattColor.GetBlue(), nFillColor.GetBlue(), nAlpha ) );
 }
 
 } // namespace
@@ -1820,7 +1820,7 @@ void Fill::finalizeImport()
         maApiData.mbUsed = rModel.mbPatternUsed;
         if( rModel.mnPattern == XML_none )
         {
-            maApiData.mnColor = API_RGB_TRANSPARENT;
+            maApiData.mnColor = sal_Int32(API_RGB_TRANSPARENT);
             maApiData.mbTransparent = true;
         }
         else
@@ -1848,18 +1848,18 @@ void Fill::finalizeImport()
                 case XML_solid:             nAlpha = 0x80;  break;
             }
 
-            sal_Int32 nWinTextColor = rGraphicHelper.getSystemColor( XML_windowText );
-            sal_Int32 nWinColor = rGraphicHelper.getSystemColor( XML_window );
+            ::Color nWinTextColor = rGraphicHelper.getSystemColor( XML_windowText );
+            ::Color nWinColor = rGraphicHelper.getSystemColor( XML_window );
 
             if( !rModel.mbPattColorUsed )
                 rModel.maPatternColor.setAuto();
-            sal_Int32 nPattColor = rModel.maPatternColor.getColor( rGraphicHelper, nWinTextColor );
+            ::Color nPattColor = rModel.maPatternColor.getColor( rGraphicHelper, nWinTextColor );
 
             if( !rModel.mbFillColorUsed )
                 rModel.maFillColor.setAuto();
-            sal_Int32 nFillColor = rModel.maFillColor.getColor( rGraphicHelper, nWinColor );
+            ::Color nFillColor = rModel.maFillColor.getColor( rGraphicHelper, nWinColor );
 
-            maApiData.mnColor = lclGetMixedColor( nPattColor, nFillColor, nAlpha );
+            maApiData.mnColor = sal_Int32(lclGetMixedColor( nPattColor, nFillColor, nAlpha ));
             maApiData.mbTransparent = false;
         }
     }
@@ -1869,12 +1869,12 @@ void Fill::finalizeImport()
         maApiData.mbUsed = true;    // no support for differential attributes
         GradientFillModel::ColorMap::const_iterator aIt = rModel.maColors.begin();
         OSL_ENSURE( !aIt->second.isAuto(), "Fill::finalizeImport - automatic gradient color" );
-        maApiData.mnColor = aIt->second.getColor( rGraphicHelper, API_RGB_WHITE );
+        maApiData.mnColor = sal_Int32(aIt->second.getColor( rGraphicHelper, API_RGB_WHITE ));
         if( ++aIt != rModel.maColors.end() )
         {
             OSL_ENSURE( !aIt->second.isAuto(), "Fill::finalizeImport - automatic gradient color" );
-            sal_Int32 nEndColor = aIt->second.getColor( rGraphicHelper, API_RGB_WHITE );
-            maApiData.mnColor = lclGetMixedColor( maApiData.mnColor, nEndColor, 0x40 );
+            ::Color nEndColor = aIt->second.getColor( rGraphicHelper, API_RGB_WHITE );
+            maApiData.mnColor = sal_Int32(lclGetMixedColor( maApiData.mnColor, nEndColor, 0x40 ));
             maApiData.mbTransparent = false;
         }
     }

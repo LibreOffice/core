@@ -368,7 +368,7 @@ void LineProperties::assignUsed( const LineProperties& rSourceProps )
 }
 
 void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
-        const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr ) const
+        const GraphicHelper& rGraphicHelper, ::Color nPhClr ) const
 {
     // line fill type must exist, otherwise ignore other properties
     if( maLineFill.moFillType.has() )

@@ -170,7 +170,7 @@ void SlidePersist::createBackground( const XmlFilterBase& rFilterBase )
 {
     if ( mpBackgroundPropertiesPtr )
     {
-        sal_Int32 nPhClr = maBackgroundColor.isUsed() ?
+        ::Color nPhClr = maBackgroundColor.isUsed() ?
             maBackgroundColor.getColor( rFilterBase.getGraphicHelper() ) : API_RGB_TRANSPARENT;
 
         oox::drawingml::ShapePropertyIds aPropertyIds = oox::drawingml::ShapePropertyInfo::DEFAULT.mrPropertyIds;
