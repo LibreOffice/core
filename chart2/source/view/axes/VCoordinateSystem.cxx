@@ -343,6 +343,7 @@ void VCoordinateSystem::createVAxisList(
               const uno::Reference<chart2::XChartDocument> & /* xChartDoc */
             , const awt::Size& /* rFontReferenceSize */
             , const awt::Rectangle& /* rMaximumSpaceForLabels */
+            , bool /* bLimitSpaceForLabels */
             )
 {
 }

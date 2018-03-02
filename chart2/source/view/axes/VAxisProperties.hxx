@@ -137,6 +137,8 @@ struct AxisProperties final
     css::uno::Reference<css::chart2::data::XTextualDataSequence> m_xAxisTextProvider; //for categories or series names
     //<- category axes
 
+    bool                                m_bLimitSpaceForLabels;
+
     //methods:
 
     AxisProperties( const css::uno::Reference< css::chart2::XAxis >& xAxisModel
