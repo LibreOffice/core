@@ -1448,11 +1448,11 @@ SwLayoutFrame* SwFrame::GetNextCellLeaf()
 SwLayoutFrame* SwFrame::GetPrevCellLeaf()
 {
     SwFrame* pTmpFrame = this;
-    while ( !pTmpFrame->IsCellFrame() )
+    while (pTmpFrame && !pTmpFrame->IsCellFrame())
         pTmpFrame = pTmpFrame->GetUpper();
 
-    OSL_ENSURE( pTmpFrame, "SwFrame::GetNextPreviousLeaf() without cell" );
-    return static_cast<SwCellFrame*>(pTmpFrame)->GetPreviousCell();
+    SAL_WARN_IF(!pTmpFrame, "sw.core", "SwFrame::GetNextPreviousLeaf() without cell");
+    return pTmpFrame ? static_cast<SwCellFrame*>(pTmpFrame)->GetPreviousCell() : nullptr;
 }
 
 static SwCellFrame* lcl_FindCorrespondingCellFrame( const SwRowFrame& rOrigRow,
