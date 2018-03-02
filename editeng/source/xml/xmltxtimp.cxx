@@ -136,7 +136,7 @@ SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(
     SvXMLImport::setTargetDocument(new SvxSimpleUnoModel);
 }
 
-void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& rSel )
+EditPaM SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& rSel )
 {
     SvxEditEngineSource aEditSource( &rEditEngine );
 
@@ -156,6 +156,9 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
     //insert para breaks before inserting the copied text
     rEditEngine.InsertParaBreak( rEditEngine.CreateSelection( rSel ).Max() );
     rEditEngine.InsertParaBreak( rEditEngine.CreateSelection( rSel ).Max() );
+
+    // Init return PaM.
+    EditPaM aPaM( rEditEngine.CreateSelection( rSel ).Max());
 
     ESelection aSel(rSel.nStartPara+1, 0, rSel.nEndPara+1, 0);
     uno::Reference<text::XText > xParent;
@@ -225,12 +228,16 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
         rEditEngine.ParaAttribsToCharAttribs( pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.nEndPara - 2 ) );
         rEditEngine.ConnectParagraphs( pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.nEndPara - 2 ),
             pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.nEndPara -1 ), true );
-        rEditEngine.ConnectParagraphs( pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.nEndPara - 2 ),
+
+        // The final join is to be returned.
+        aPaM = rEditEngine.ConnectParagraphs( pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.nEndPara - 2 ),
             pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.nEndPara -1 ), true );
     }
     catch( const uno::Exception& )
     {
     }
+
+    return aPaM;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
