@@ -54,8 +54,8 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="hidden">
-            <property name="label" translatable="yes" context="insertbookmark|hidden">Hidden</property>
+          <object class="GtkCheckButton" id="hide">
+            <property name="label" translatable="yes" context="insertbookmark|hide">H_ide</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -72,13 +72,13 @@
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="spacing">6</property>
+            <property name="spacing">12</property>
             <child>
-              <object class="GtkLabel" id="label1">
+              <object class="GtkLabel" id="condlabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="insertbookmark|label1">On condition</property>
-                <property name="mnemonic_widget">condition</property>
+                <property name="label" translatable="yes" context="insertbookmark|condlabel">_With condition</property>
+                <property name="mnemonic_widget">withcond</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -87,7 +87,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="condition">
+              <object class="swlo-ConditionEdit" id="withcond">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
               </object>
@@ -171,14 +171,12 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">5</property>
+            <property name="position">4</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkBox" id="box6">
-            <property name="visible">True</property>
+        <child internal-child="action_area" id="dialog-action_area1">
+          <object class="GtkButtonBox">
             <property name="can_focus">False</property>
-            <property name="spacing">6</property>
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
@@ -189,7 +187,7 @@
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">False</property>
+                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -203,26 +201,16 @@
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">False</property>
+                <property name="fill">True</property>
                 <property name="pack_type">end</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">5</property>
-          </packing>
-        </child>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox">
-            <property name="can_focus">False</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">6</property>
           </packing>
         </child>
       </object>
