@@ -39,7 +39,6 @@
 
 #include <ViewShell.hxx>
 
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
 #include <EffectMigration.hxx>
