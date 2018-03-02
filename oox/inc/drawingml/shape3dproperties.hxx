@@ -78,10 +78,10 @@ struct Shape3DProperties
     css::uno::Sequence< css::beans::PropertyValue > getCameraAttributes();
     css::uno::Sequence< css::beans::PropertyValue > getLightRigAttributes();
     css::uno::Sequence< css::beans::PropertyValue > getShape3DAttributes(
-            const GraphicHelper& rGraphicHelper, sal_Int32 rPhClr );
+            const GraphicHelper& rGraphicHelper, ::Color rPhClr );
     static css::uno::Sequence< css::beans::PropertyValue > getBevelAttributes( BevelProperties rProps );
     static css::uno::Sequence< css::beans::PropertyValue > getColorAttributes(
-            const Color& rColor, const GraphicHelper& rGraphicHelper, sal_Int32 rPhClr );
+            const Color& rColor, const GraphicHelper& rGraphicHelper, ::Color rPhClr );
 };
 
 

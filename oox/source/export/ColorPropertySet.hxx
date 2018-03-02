@@ -23,6 +23,7 @@
 // FIXME? this file is identical to xmloff/source/chart/ColorPropertySet.hxx
 
 #include <cppuhelper/implbase.hxx>
+#include <tools/color.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -38,7 +39,7 @@ class ColorPropertySet : public ::cppu::WeakImplHelper<
 {
 public:
     // if bFillColor == false, the color is a LineColor
-    explicit ColorPropertySet( sal_Int32 nColor, bool bFillColor = true );
+    explicit ColorPropertySet( ::Color nColor, bool bFillColor = true );
     virtual ~ColorPropertySet() override;
 
 protected:
@@ -75,9 +76,9 @@ protected:
 private:
     css::uno::Reference< css::beans::XPropertySetInfo > m_xInfo;
     OUString         m_aColorPropName;
-    sal_Int32        m_nColor;
+    ::Color          m_nColor;
     bool             m_bIsFillColor;
-    sal_Int32        m_nDefaultColor;
+    ::Color          m_nDefaultColor;
 };
 
 } //  namespace chart
