@@ -802,8 +802,8 @@ void AutoFormatPreview::CalcCellArray(bool _bFitWidth)
 
     maArray.SetAllRowHeights(nRowHeight);
 
-    aPrvSize.Width() = maArray.GetWidth() + 4;
-    aPrvSize.Height() = maArray.GetHeight() + 4;
+    aPrvSize.setWidth(maArray.GetWidth() + 4);
+    aPrvSize.setHeight(maArray.GetHeight() + 4);
 }
 
 void AutoFormatPreview::CalcLineMap()
