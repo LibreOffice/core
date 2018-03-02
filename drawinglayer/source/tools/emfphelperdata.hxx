@@ -237,10 +237,10 @@ namespace emfplushelper
 
         // primitive creators
         void EMFPPlusDrawPolygon(const ::basegfx::B2DPolyPolygon& polygon, sal_uInt32 penIndex);
-        void EMFPPlusFillPolygon(const ::basegfx::B2DPolyPolygon& polygon, bool isColor, sal_uInt32 brushIndexOrColor);
+        void EMFPPlusFillPolygon(const ::basegfx::B2DPolyPolygon& polygon, const bool isColor, const sal_uInt32 brushIndexOrColor);
 
         // helper functions
-        ::basegfx::BColor EMFPGetBrushColorOrARGBColor(sal_uInt16 flags, sal_uInt32 brushIndexOrColor) const;
+        Color EMFPGetBrushColorOrARGBColor(const sal_uInt16 flags, const sal_uInt32 brushIndexOrColor) const;
 
     public:
         EmfPlusHelperData(

@@ -18,8 +18,6 @@
  */
 
 #include <svggnode.hxx>
-#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 
 namespace svgio
 {
