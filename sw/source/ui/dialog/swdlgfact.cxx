@@ -98,7 +98,10 @@ short AbstractSwBreakDlg_Impl::Execute()
     return m_xDlg->run();
 }
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractSwConvertTableDlg_Impl);
+short AbstractSwConvertTableDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 IMPL_ABSTDLG_BASE(AbstractSwInsertDBColAutoPilot_Impl);
 IMPL_ABSTDLG_BASE(AbstractDropDownFieldDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwLabDlg_Impl);
@@ -215,7 +218,7 @@ sal_uInt16 AbstractSwBreakDlg_Impl:: GetKind()
 void AbstractSwConvertTableDlg_Impl::GetValues( sal_Unicode& rDelim,SwInsertTableOptions& rInsTableFlags,
                                                 SwTableAutoFormat const*& prTAFormat)
 {
-    pDlg->GetValues(rDelim,rInsTableFlags, prTAFormat);
+    m_xDlg->GetValues(rDelim,rInsTableFlags, prTAFormat);
 }
 
 void AbstractSwInsertDBColAutoPilot_Impl::DataToDoc( const uno::Sequence< uno::Any >& rSelection,
@@ -702,8 +705,7 @@ VclPtr<SfxAbstractTabDialog>  SwAbstractDialogFactory_Impl::CreateSwCharDlg(vcl:
 
 VclPtr<AbstractSwConvertTableDlg> SwAbstractDialogFactory_Impl::CreateSwConvertTableDlg(SwView& rView, bool bToTable)
 {
-    VclPtr<SwConvertTableDlg> pDlg = VclPtr<SwConvertTableDlg>::Create(rView, bToTable);
-    return VclPtr<AbstractSwConvertTableDlg_Impl>::Create(pDlg);
+    return VclPtr<AbstractSwConvertTableDlg_Impl>::Create(new SwConvertTableDlg(rView, bToTable));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwCaptionDialog ( vcl::Window *pParent, SwView &rV)

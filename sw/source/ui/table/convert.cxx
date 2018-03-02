@@ -46,21 +46,21 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
                                     SwInsertTableOptions& rInsTableOpts,
                                     SwTableAutoFormat const*& prTAFormat )
 {
-    if( mpTabBtn->IsChecked() )
+    if (m_xTabBtn->get_active())
     {
         //0x0b mustn't be set when re-converting table into text
-        bIsKeepColumn = !mpKeepColumn->IsVisible() || mpKeepColumn->IsChecked();
+        bIsKeepColumn = !m_xKeepColumn->get_visible() || m_xKeepColumn->get_active();
         rDelim = bIsKeepColumn ? 0x09 : 0x0b;
         nSaveButtonState = 0;
     }
-    else if( mpSemiBtn->IsChecked() )
+    else if (m_xSemiBtn->get_active())
     {
         rDelim = ';';
         nSaveButtonState = 1;
     }
-    else if( mpOtherBtn->IsChecked() && !mpOtherEd->GetText().isEmpty() )
+    else if (m_xOtherBtn->get_active() && !m_xOtherEd->get_text().isEmpty())
     {
-        uOther = mpOtherEd->GetText()[0];
+        uOther = m_xOtherEd->get_text()[0];
         rDelim = uOther;
         nSaveButtonState = 3;
     }
@@ -68,7 +68,7 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
     {
         nSaveButtonState = 2;
         rDelim = cParaDelim;
-        if(mpOtherBtn->IsChecked())
+        if (m_xOtherBtn->get_active())
         {
             nSaveButtonState = 3;
             uOther = 0;
@@ -76,15 +76,15 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
     }
 
     sal_uInt16 nInsMode = 0;
-    if (mpBorderCB->IsChecked())
+    if (m_xBorderCB->get_active())
         nInsMode |= tabopts::DEFAULT_BORDER;
-    if (mpHeaderCB->IsChecked())
+    if (m_xHeaderCB->get_active())
         nInsMode |= tabopts::HEADLINE;
-    if (mpRepeatHeaderCB->IsEnabled() && mpRepeatHeaderCB->IsChecked())
-        rInsTableOpts.mnRowsToRepeat = sal_uInt16( mpRepeatHeaderNF->GetValue() );
+    if (m_xRepeatHeaderCB->get_sensitive() && m_xRepeatHeaderCB->get_active())
+        rInsTableOpts.mnRowsToRepeat = m_xRepeatHeaderNF->get_value();
     else
         rInsTableOpts.mnRowsToRepeat = 0;
-    if (!mpDontSplitCB->IsChecked())
+    if (!m_xDontSplitCB->get_active())
         nInsMode |= tabopts::SPLIT_LAYOUT;
 
     if (mxTAutoFormat)
@@ -93,65 +93,69 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
     rInsTableOpts.mnInsMode = nInsMode;
 }
 
-SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
-    : SfxModalDialog(&rView.GetViewFrame()->GetWindow(), "ConvertTextTableDialog", "modules/swriter/ui/converttexttable.ui" )
+SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
+    : m_xBuilder(Application::CreateBuilder(rView.GetViewFrame()->GetWindow().GetFrameWeld(), "modules/swriter/ui/converttexttable.ui"))
+    , m_xDialog(m_xBuilder->weld_dialog("ConvertTextTableDialog"))
+    , m_xTabBtn(m_xBuilder->weld_radio_button("tabs"))
+    , m_xSemiBtn(m_xBuilder->weld_radio_button("semicolons"))
+    , m_xParaBtn(m_xBuilder->weld_radio_button("paragraph"))
+    , m_xOtherBtn(m_xBuilder->weld_radio_button("other"))
+    , m_xOtherEd(m_xBuilder->weld_entry("othered"))
+    , m_xKeepColumn(m_xBuilder->weld_check_button("keepcolumn"))
+    , m_xOptions(m_xBuilder->weld_container("options"))
+    , m_xHeaderCB(m_xBuilder->weld_check_button("headingcb"))
+    , m_xRepeatHeaderCB(m_xBuilder->weld_check_button("repeatheading"))
+    , m_xRepeatRows(m_xBuilder->weld_container("repeatrows"))
+    , m_xRepeatHeaderNF(m_xBuilder->weld_spin_button("repeatheadersb"))
+    , m_xDontSplitCB(m_xBuilder->weld_check_button("dontsplitcb"))
+    , m_xBorderCB(m_xBuilder->weld_check_button("bordercb"))
+    , m_xAutoFormatBtn(m_xBuilder->weld_button("autofmt"))
     , sConvertTextTable(SwResId(STR_CONVERT_TEXT_TABLE))
     , pShell(&rView.GetWrtShell())
 {
-    get(mpTabBtn, "tabs");
-    get(mpSemiBtn, "semicolons");
-    get(mpParaBtn, "paragraph");
-    get(mpOtherBtn, "other");
-    get(mpOtherEd, "othered");
-    get(mpKeepColumn, "keepcolumn");
-    get(mpOptions, "options");
-    get(mpHeaderCB, "headingcb");
-    get(mpRepeatHeaderCB, "repeatheading");
-    get(mpRepeatRows, "repeatrows");
-    get(mpRepeatHeaderNF, "repeatheadersb");
-    get(mpDontSplitCB, "dontsplitcb");
-    get(mpBorderCB, "bordercb");
-    get(mpAutoFormatBtn, "autofmt");
-
-    if(nSaveButtonState > -1)
+    if (nSaveButtonState > -1)
     {
         switch (nSaveButtonState)
         {
             case 0:
-                mpTabBtn->Check();
-                mpKeepColumn->Check(bIsKeepColumn);
-            break;
-            case 1: mpSemiBtn->Check();break;
-            case 2: mpParaBtn->Check();break;
+                m_xTabBtn->set_active(true);
+                m_xKeepColumn->set_active(bIsKeepColumn);
+                break;
+            case 1:
+                m_xSemiBtn->set_active(true);
+                break;
+            case 2:
+                m_xParaBtn->set_active(true);
+                break;
             case 3:
-                mpOtherBtn->Check();
-                if(uOther)
-                    mpOtherEd->SetText(OUString(uOther));
+                m_xOtherBtn->set_active(true);
+                if (uOther)
+                    m_xOtherEd->set_text(OUString(uOther));
             break;
         }
 
     }
     if( bToTable )
     {
-        SetText( sConvertTextTable );
-        mpAutoFormatBtn->SetClickHdl(LINK(this, SwConvertTableDlg, AutoFormatHdl));
-        mpAutoFormatBtn->Show();
-        mpKeepColumn->Show();
-        mpKeepColumn->Enable( mpTabBtn->IsChecked() );
+        m_xDialog->set_title(sConvertTextTable);
+        m_xAutoFormatBtn->connect_clicked(LINK(this, SwConvertTableDlg, AutoFormatHdl));
+        m_xAutoFormatBtn->show();
+        m_xKeepColumn->show();
+        m_xKeepColumn->set_sensitive(m_xTabBtn->get_active());
     }
     else
     {
         //hide insert options
-        mpOptions->Hide();
+        m_xOptions->hide();
     }
-    mpKeepColumn->SaveValue();
+    m_xKeepColumn->save_state();
 
-    Link<Button*,void> aLk( LINK(this, SwConvertTableDlg, BtnHdl) );
-    mpTabBtn->SetClickHdl( aLk );
-    mpSemiBtn->SetClickHdl( aLk );
-    mpParaBtn->SetClickHdl( aLk );
-    mpOtherBtn->SetClickHdl(aLk );
-    mpOtherEd->Enable( mpOtherBtn->IsChecked() );
+    Link<weld::Button&,void> aLk( LINK(this, SwConvertTableDlg, BtnHdl) );
+    m_xTabBtn->connect_clicked(aLk);
+    m_xSemiBtn->connect_clicked(aLk);
+    m_xParaBtn->connect_clicked(aLk);
+    m_xOtherBtn->connect_clicked(aLk);
+    m_xOtherEd->set_sensitive(m_xOtherBtn->get_active());
 
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
@@ -160,77 +164,52 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTableFlags(bHTMLMode);
     sal_uInt16 nInsTableFlags = aInsOpts.mnInsMode;
 
-    mpHeaderCB->Check( 0 != (nInsTableFlags & tabopts::HEADLINE) );
-    mpRepeatHeaderCB->Check(aInsOpts.mnRowsToRepeat > 0);
-    mpDontSplitCB->Check( 0 == (nInsTableFlags & tabopts::SPLIT_LAYOUT));
-    mpBorderCB->Check( 0!= (nInsTableFlags & tabopts::DEFAULT_BORDER) );
+    m_xHeaderCB->set_active(0 != (nInsTableFlags & tabopts::HEADLINE));
+    m_xRepeatHeaderCB->set_active(aInsOpts.mnRowsToRepeat > 0);
+    m_xDontSplitCB->set_active(0 == (nInsTableFlags & tabopts::SPLIT_LAYOUT));
+    m_xBorderCB->set_active(0!= (nInsTableFlags & tabopts::DEFAULT_BORDER));
 
-    mpHeaderCB->SetClickHdl(LINK(this, SwConvertTableDlg, CheckBoxHdl));
-    mpRepeatHeaderCB->SetClickHdl(LINK(this, SwConvertTableDlg, ReapeatHeaderCheckBoxHdl));
-    ReapeatHeaderCheckBoxHdl(nullptr);
-    CheckBoxHdl(nullptr);
+    m_xHeaderCB->connect_clicked(LINK(this, SwConvertTableDlg, CheckBoxHdl));
+    m_xRepeatHeaderCB->connect_clicked(LINK(this, SwConvertTableDlg, ReapeatHeaderCheckBoxHdl));
+    ReapeatHeaderCheckBoxHdl(*m_xRepeatHeaderCB);
+    CheckBoxHdl(*m_xHeaderCB);
 }
 
-SwConvertTableDlg:: ~SwConvertTableDlg()
-{
-    disposeOnce();
-}
-
-void SwConvertTableDlg::dispose()
-{
-    mxTAutoFormat.reset();
-    mpTabBtn.clear();
-    mpSemiBtn.clear();
-    mpParaBtn.clear();
-    mpOtherBtn.clear();
-    mpOtherEd.clear();
-    mpKeepColumn.clear();
-    mpOptions.clear();
-    mpHeaderCB.clear();
-    mpRepeatHeaderCB.clear();
-    mpRepeatRows.clear();
-    mpRepeatHeaderNF.clear();
-    mpDontSplitCB.clear();
-    mpBorderCB.clear();
-    mpAutoFormatBtn.clear();
-    SfxModalDialog::dispose();
-}
-
-IMPL_LINK( SwConvertTableDlg, AutoFormatHdl, Button*, pButton, void )
+IMPL_LINK_NOARG(SwConvertTableDlg, AutoFormatHdl, weld::Button&, void)
 {
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton->GetFrameWeld(), pShell, false, mxTAutoFormat.get()));
+    ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(m_xDialog.get(), pShell, false, mxTAutoFormat.get()));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if (RET_OK == pDlg->Execute())
         mxTAutoFormat.reset(pDlg->FillAutoFormatOfIndex());
 }
 
-IMPL_LINK( SwConvertTableDlg, BtnHdl, Button*, pButton, void )
+IMPL_LINK(SwConvertTableDlg, BtnHdl, weld::Button&, rButton, void)
 {
-    if( pButton == mpTabBtn )
-        mpKeepColumn->SetState( mpKeepColumn->GetSavedValue() );
+    if (&rButton == m_xTabBtn.get())
+        m_xKeepColumn->set_state(m_xKeepColumn->get_saved_state());
     else
     {
-        if( mpKeepColumn->IsEnabled() )
-            mpKeepColumn->SaveValue();
-        mpKeepColumn->Check();
+        if (m_xKeepColumn->get_sensitive())
+            m_xKeepColumn->save_state();
+        m_xKeepColumn->set_active(true);
     }
-    mpKeepColumn->Enable( mpTabBtn->IsChecked() );
-    mpOtherEd->Enable( mpOtherBtn->IsChecked() );
+    m_xKeepColumn->set_sensitive(m_xTabBtn->get_active());
+    m_xOtherEd->set_sensitive(m_xOtherBtn->get_active());
 }
 
-IMPL_LINK_NOARG(SwConvertTableDlg, CheckBoxHdl, Button*, void)
+IMPL_LINK_NOARG(SwConvertTableDlg, CheckBoxHdl, weld::Button&, void)
 {
-    mpRepeatHeaderCB->Enable(mpHeaderCB->IsChecked());
-    ReapeatHeaderCheckBoxHdl(nullptr);
+    m_xRepeatHeaderCB->set_sensitive(m_xHeaderCB->get_active());
+    ReapeatHeaderCheckBoxHdl(*m_xRepeatHeaderCB);
 }
 
-IMPL_LINK_NOARG(SwConvertTableDlg, ReapeatHeaderCheckBoxHdl, Button*, void)
+IMPL_LINK_NOARG(SwConvertTableDlg, ReapeatHeaderCheckBoxHdl, weld::Button&, void)
 {
-    bool bEnable = mpHeaderCB->IsChecked() && mpRepeatHeaderCB->IsChecked();
-    mpRepeatRows->Enable(bEnable);
+    bool bEnable = m_xHeaderCB->get_active() && m_xRepeatHeaderCB->get_active();
+    m_xRepeatRows->set_sensitive(bEnable);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

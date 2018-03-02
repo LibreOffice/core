@@ -1797,7 +1797,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             }
         }
     }
-    SAL_WARN_IF(!xWindow, "vcl.layout", "probably need to implement " << name << " or add a make" << name << " function");
+    SAL_INFO_IF(!xWindow, "vcl.layout", "probably need to implement " << name << " or add a make" << name << " function");
     if (xWindow)
     {
         xWindow->SetHelpId(m_sHelpRoot + id);

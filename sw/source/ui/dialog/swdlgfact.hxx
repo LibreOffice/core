@@ -149,7 +149,14 @@ private:
 
 class AbstractSwConvertTableDlg_Impl :  public AbstractSwConvertTableDlg
 {
-    DECL_ABSTDLG_BASE( AbstractSwConvertTableDlg_Impl,SwConvertTableDlg)
+protected:
+    std::unique_ptr<SwConvertTableDlg> m_xDlg;
+public:
+    explicit AbstractSwConvertTableDlg_Impl(SwConvertTableDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual void GetValues( sal_Unicode& rDelim,SwInsertTableOptions& rInsTableFlags,
                     SwTableAutoFormat const*& prTAFormat) override;
 };
