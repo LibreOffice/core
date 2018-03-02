@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_f7864a12",
+        "filename": "sw/source/ui/table/convert.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-02T19:45:36Z",
+      "side": 1,
+      "message": "seeing changes like this, I have to ask: would this not be easier if the new methods used the same names as the old methods?",
+      "revId": "962a66ee8d4330e4bc1d2d58d8c68e544d443aa2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
