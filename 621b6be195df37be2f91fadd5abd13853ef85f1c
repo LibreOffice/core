@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "ba2be162_fc39d142",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-02T12:57:02Z",
+      "side": 1,
+      "message": "Please no leading :: before class names, here and throughout.",
+      "range": {
+        "startLine": 304,
+        "startChar": 8,
+        "endLine": 304,
+        "endChar": 10
+      },
+      "revId": "621b6be195df37be2f91fadd5abd13853ef85f1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_fc5c71ef",
         "filename": "drawinglayer/source/tools/emfphelperdata.hxx",
         "patchSetId": 4
