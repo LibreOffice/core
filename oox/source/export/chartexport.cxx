@@ -2270,11 +2270,25 @@ void ChartExport::exportShapeProps( const Reference< XPropertySet >& xPropSet )
     pFS->endElement( FSNS( XML_c, XML_spPr ) );
 }
 
-void ChartExport::exportTextProps(const Reference<XPropertySet>& xPropSet)
+void ChartExport::exportTextProps(const Reference<XPropertySet>& xPropSet, bool bAxis)
 {
     FSHelperPtr pFS = GetFS();
     pFS->startElement(FSNS(XML_c, XML_txPr), FSEND);
-    pFS->singleElement( FSNS( XML_a, XML_bodyPr ), FSEND );
+
+    sal_Int32 nRotation = 0;
+    if (bAxis)
+    {
+        double fTextRotation = 0;
+        uno::Any aAny = xPropSet->getPropertyValue("TextRotation");
+        if (aAny.hasValue() && (aAny >>= fTextRotation))
+            nRotation = fTextRotation * -600.0;
+    }
+
+    if (nRotation)
+        pFS->singleElement(FSNS(XML_a, XML_bodyPr), XML_rot, I32S(nRotation), FSEND);
+    else
+        pFS->singleElement(FSNS(XML_a, XML_bodyPr), FSEND);
+
     pFS->singleElement( FSNS( XML_a, XML_lstStyle ), FSEND );
 
     pFS->startElement(FSNS(XML_a, XML_p), FSEND);
@@ -2681,7 +2695,7 @@ void ChartExport::_exportAxis(
     // shape properties
     exportShapeProps( xAxisProp );
 
-    exportTextProps(xAxisProp);
+    exportTextProps(xAxisProp, true);
 
     pFS->singleElement( FSNS( XML_c, XML_crossAx ),
             XML_val, I32S( rAxisIdPair.nCrossAx ),
