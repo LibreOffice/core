@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba2be162_1ccea583",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 11
+      },
+      "lineNbr": 1971,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-03-02T11:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba2be162_91819e50",
+      "revId": "aa207d24672407c556de12872ef2b468af178d6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_b186a263",
         "filename": "sc/inc/global.hxx",
         "patchSetId": 11
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "ba2be162_3ccb6974",
+        "filename": "sc/inc/global.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-03-02T11:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba2be162_b186a263",
+      "revId": "aa207d24672407c556de12872ef2b468af178d6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_d1f23606",
         "filename": "sc/source/core/data/drwlayer.cxx",
         "patchSetId": 11
@@ -47,6 +83,24 @@
       "writtenOn": "2018-03-01T16:12:52Z",
       "side": 1,
       "message": "IIUC ScDrawObjData already contains the information whether or not to resize w/ cell, no? Then you wouldn\u0027t need 3rd argument ...",
+      "revId": "aa207d24672407c556de12872ef2b468af178d6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_5cc81d75",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1886,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-03-02T11:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba2be162_d1f23606",
       "revId": "aa207d24672407c556de12872ef2b468af178d6a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -104,6 +158,24 @@
     },
     {
       "key": {
+        "uuid": "ba2be162_7cc5e159",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-03-02T11:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba2be162_31dab279",
+      "revId": "aa207d24672407c556de12872ef2b468af178d6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_71e42a3b",
         "filename": "sc/source/ui/drawfunc/drawsh5.cxx",
         "patchSetId": 11
@@ -115,6 +187,24 @@
       "writtenOn": "2018-03-01T16:12:52Z",
       "side": 1,
       "message": "then the corresponding toolbar button should be dropped as well ... or changed to 3-state dropdown",
+      "revId": "aa207d24672407c556de12872ef2b468af178d6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_9ca0d5a7",
+        "filename": "sc/source/ui/drawfunc/drawsh5.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-03-02T11:18:58Z",
+      "side": 1,
+      "message": "I will leave this as it is for now.\nIt still works as before, switches between cell and page anchoring, so no regression.\n\nI will look into creating a 3 state dropdown in another patch.",
+      "parentUuid": "ba2be162_71e42a3b",
       "revId": "aa207d24672407c556de12872ef2b468af178d6a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
