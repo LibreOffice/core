@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_fc5c71ef",
+        "filename": "drawinglayer/source/tools/emfphelperdata.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-03-02T10:48:05Z",
+      "side": 1,
+      "message": "These consts look strange to me. Though they might help check that implementation of the method doesn\u0027t change them, still having consts for by-value arguments in interface just makes the interface harder to read imo",
+      "range": {
+        "startLine": 240,
+        "startChar": 75,
+        "endLine": 240,
+        "endChar": 81
+      },
+      "revId": "621b6be195df37be2f91fadd5abd13853ef85f1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
