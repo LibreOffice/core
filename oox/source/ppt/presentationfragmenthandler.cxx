@@ -188,7 +188,7 @@ void PresentationFragmentHandler::saveThemeToGrabBag(oox::drawingml::ThemePtr pT
                 {
                     sal_uInt32 nToken = PredefinedClrTokens[static_cast<PredefinedClrSchemeId>(nId)];
                     const OUString& sName = PredefinedClrNames[static_cast<PredefinedClrSchemeId>(nId)];
-                    sal_Int32 nColor = 0;
+                    ::Color nColor;
 
                     rClrScheme.getColor(nToken, nColor);
                     const uno::Any& rColor = uno::makeAny(nColor);

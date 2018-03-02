@@ -153,8 +153,8 @@ namespace ConversionHelper
                             const GraphicHelper& rGraphicHelper,
                             const OptValue< OUString >& roVmlColor,
                             const OptValue< double >& roVmlOpacity,
-                            sal_Int32 nDefaultRgb,
-                            sal_Int32 nPrimaryRgb = API_RGB_TRANSPARENT );
+                            ::Color nDefaultRgb,
+                            ::Color nPrimaryRgb = API_RGB_TRANSPARENT );
 
     /** Converts VML path string into point and flag vectors.
 

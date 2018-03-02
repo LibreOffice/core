@@ -222,7 +222,7 @@ void importBorderProperties( PropertySet& rPropSet, Shape& rShape, const Graphic
         rPropSet.setProperty(PROP_LabelBorderStyle, uno::makeAny(drawing::LineStyle_SOLID));
     }
     const Color& aColor = rLP.maLineFill.maFillColor;
-    sal_Int32 nColor = aColor.getColor(rGraphicHelper);
+    ::Color nColor = aColor.getColor(rGraphicHelper);
     rPropSet.setProperty(PROP_LabelBorderColor, uno::makeAny(nColor));
 }
 

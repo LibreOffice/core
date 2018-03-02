@@ -70,7 +70,7 @@ struct OOX_DLLPUBLIC LineProperties
     void                pushToPropMap(
                             ShapePropertyMap& rPropMap,
                             const GraphicHelper& rGraphicHelper,
-                            sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
+                            ::Color nPhClr = API_RGB_TRANSPARENT ) const;
 
     /** Calculates the line style attribute from the internal state of the object */
     css::drawing::LineStyle  getLineStyle() const;

@@ -77,7 +77,7 @@ void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
     if ( rLineProperties.maLineFill.moFillType.differsFrom( XML_noFill ))
     {
         Color aColor = rLineProperties.maLineFill.getBestSolidColor();
-        aBorderLine.Color = aColor.getColor( rFilterBase.getGraphicHelper() );
+        aBorderLine.Color = sal_Int32(aColor.getColor( rFilterBase.getGraphicHelper() ));
         aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
         aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
         aBorderLine.LineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 2 );
@@ -148,7 +148,7 @@ void applyBorder( const ::oox::core::XmlFilterBase& rFilterBase, TableStylePart&
         if (const Theme* pTheme = rFilterBase.getCurrentTheme())
         {
             rLineProperties.assignUsed( *pTheme->getLineStyle(rLineStyleRef.mnThemedIdx) );
-            sal_Int32 nPhClr = rLineStyleRef.maPhClr.getColor( rFilterBase.getGraphicHelper() );
+            ::Color nPhClr = rLineStyleRef.maPhClr.getColor( rFilterBase.getGraphicHelper() );
             rLineProperties.maLineFill.maFillColor.setSrgbClr( nPhClr );
         }
     }
@@ -175,7 +175,7 @@ void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
         if (pTheme && rFillStyleRef.mnThemedIdx != 0 )
         {
             rFillProperties.assignUsed( *pTheme->getFillStyle( rFillStyleRef.mnThemedIdx ) );
-            sal_Int32 nPhClr = rFillStyleRef.maPhClr.getColor( rFilterBase.getGraphicHelper() );
+            ::Color nPhClr = rFillStyleRef.maPhClr.getColor( rFilterBase.getGraphicHelper() );
             rFillProperties.maFillColor.setSrgbClr( nPhClr );
         }
     }
@@ -429,7 +429,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
     ShapePropertyMap aPropMap( rFilterBase.getModelObjectHelper() );
 
     Color aBgColor;
-    sal_Int32 nPhClr = API_RGB_TRANSPARENT;
+    ::Color nPhClr = API_RGB_TRANSPARENT;
     std::shared_ptr< ::oox::drawingml::FillProperties >& rBackgroundFillPropertiesPtr( rTable.getBackgroundFillProperties() );
     ::oox::drawingml::ShapeStyleRef& rBackgroundFillStyle( rTable.getBackgroundFillStyleRef() );
     if (rBackgroundFillPropertiesPtr.get())
