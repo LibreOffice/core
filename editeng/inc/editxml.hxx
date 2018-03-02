@@ -23,12 +23,13 @@
 class EditEngine;
 class SvStream;
 struct ESelection;
+class EditPaM;
 
 /** this function exports the selected content of an edit engine into a xml stream*/
 extern void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& rSel );
 
 /** this function imports xml from the stream into the selected of an edit engine */
-extern void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& rSel );
+extern EditPaM SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& rSel );
 
 #endif
 
