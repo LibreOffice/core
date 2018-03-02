@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ba2be162_3cce095b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-02T12:45:36Z",
+      "side": 1,
+      "message": "What happens if an old version reads a document where these values are absent?",
+      "revId": "28a15893df35cd41f06641782721a75c522e18de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_1ca305a0",
         "filename": "sc/source/core/data/drwlayer.cxx",
         "patchSetId": 12
