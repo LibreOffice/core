@@ -553,6 +553,16 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     InitSpecialKeyword( NF_KEY_TRUE );
     InitSpecialKeyword( NF_KEY_FALSE );
 
+    // Boolean equivalent format codes that are written to Excel files, may
+    // have been written to ODF as well, specifically if such loaded Excel file
+    // was saved as ODF, and shall result in proper Boolean again.
+    // "TRUE";"TRUE";"FALSE"
+    sBooleanEquivalent1 = "\"" + sKeyword[NF_KEY_TRUE] + "\";\"" +
+        sKeyword[NF_KEY_TRUE] + "\";\"" + sKeyword[NF_KEY_FALSE] + "\"";
+    // [>0]"TRUE";[<0]"TRUE";"FALSE"
+    sBooleanEquivalent2 = "[>0]\"" + sKeyword[NF_KEY_TRUE] + "\";[<0]\"" +
+        sKeyword[NF_KEY_TRUE] + "\";\"" + sKeyword[NF_KEY_FALSE] + "\"";
+
     // compatibility currency strings
     InitCompatCur();
 }
@@ -3300,6 +3310,16 @@ void ImpSvNumberformatScan::CopyInfo(ImpSvNumberformatInfo* pInfo, sal_uInt16 nC
     pInfo->nCntPre      = nCntPre;
     pInfo->nCntPost     = nCntPost;
     pInfo->nCntExp      = nCntExp;
+}
+
+void ImpSvNumberformatScan::ReplaceBooleanEquivalent( OUString& rString )
+{
+    InitKeywords();
+    /* TODO: compare case insensitive? Or rather leave as is and case not
+     * matching indicates user supplied on purpose? Written to file / generated
+     * was always uppercase. */
+    if (rString == sBooleanEquivalent1 || rString == sBooleanEquivalent2)
+        rString = GetKeywords()[NF_KEY_BOOLEAN];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

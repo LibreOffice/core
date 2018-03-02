@@ -441,7 +441,8 @@ void ScFiltersTest::testBooleanFormatXLSX()
     ScDocShellRef xDocSh = loadDoc("check-boolean.", FORMAT_XLSX);
     ScDocument& rDoc = xDocSh->GetDocument();
     SvNumberFormatter* pNumFormatter = rDoc.GetFormatTable();
-    const OUString aBooleanTypeStr = "\"TRUE\";\"TRUE\";\"FALSE\"";
+    // Saved as >"TRUE";"TRUE";"FALSE"< but reading converted back to >BOOLEAN<
+    const OUString aBooleanTypeStr = "BOOLEAN";
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load check-boolean.xlsx", xDocSh.is());
     sal_uInt32 nNumberFormat;
@@ -451,7 +452,7 @@ void ScFiltersTest::testBooleanFormatXLSX()
         rDoc.GetNumberFormat(0, i, 0, nNumberFormat);
         const SvNumberformat* pNumberFormat = pNumFormatter->GetEntry(nNumberFormat);
         const OUString& rFormatStr = pNumberFormat->GetFormatstring();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Number format != boolean", rFormatStr, aBooleanTypeStr);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Number format != boolean", aBooleanTypeStr, rFormatStr);
     }
 
     xDocSh->DoClose();
