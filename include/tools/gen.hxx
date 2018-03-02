@@ -102,8 +102,8 @@ public:
 
     long                getX() const { return X(); }
     long                getY() const { return Y(); }
-    void                setX(long nX)  { X() = nX; }
-    void                setY(long nY)  { Y() = nY; }
+    void                setX(long nX)  { nA = nX; }
+    void                setY(long nY)  { nB = nY; }
 
     Pair const &        toPair() const { return *this; }
     Pair &              toPair() { return *this; }
@@ -193,15 +193,13 @@ public:
     long            Width() const  { return nA; }
     long            Height() const { return nB; }
 
-    long&           Width()  { return nA; }
-    long&           Height() { return nB; }
     long            AdjustWidth( long n ) { nA += n; return nA; }
     long            AdjustHeight( long n ) { nB += n; return nB; }
 
     long            getWidth() const { return Width(); }
     long            getHeight() const { return Height(); }
-    void            setWidth(long nWidth)  { Width() = nWidth; }
-    void            setHeight(long nHeight)  { Height() = nHeight; }
+    void            setWidth(long nWidth)  { nA = nWidth; }
+    void            setHeight(long nHeight)  { nB = nHeight; }
 
     Pair const &    toPair() const { return *this; }
     Pair &          toPair() { return *this; }
@@ -389,11 +387,6 @@ public:
     long                Right() const   { return nRight;  }
     long                Top() const     { return nTop;    }
     long                Bottom() const  { return nBottom; }
-
-    long&               Left()          { return nLeft;   }
-    long&               Right()         { return nRight;  }
-    long&               Top()           { return nTop;    }
-    long&               Bottom()        { return nBottom; }
 
     void                SetLeft(long v)    { nLeft = v;   }
     void                SetRight(long v)   { nRight = v;  }
