@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_1ca305a0",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 2009,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-02T12:41:03Z",
+      "side": 1,
+      "message": "This IsResizeWithCell() calls GetObjData() a second time while we already have the valid ScDrawObjData* here. GetObjData() and the stuff it calls isn\u0027t a cheap operation so that should be avoided. This could simply check pObjData-\u003embResizeWithCell instead, or add a\n\n IsResizeWithCell( const ScDrawObjData* p ) { return p \u0026\u0026 p-\u003embResizeWithCell; }\n\nto encapsulate.",
+      "revId": "28a15893df35cd41f06641782721a75c522e18de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_bcbaf9be",
+        "filename": "sc/source/ui/drawfunc/drawsh2.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-02T12:41:03Z",
+      "side": 1,
+      "message": "Instead of adding yet another bool item with mutual exclusive true values, wouldn\u0027t it be better to change all to one enum item and have one SID_ANCHOR_TYPE or some such? Or is there any API part that forbids to do so? Of course the old PAGE and CELL slots still need to be supported for macros etc. This can be done later, it just looks awkward to me.",
+      "revId": "28a15893df35cd41f06641782721a75c522e18de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
