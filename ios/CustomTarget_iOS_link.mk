@@ -67,7 +67,7 @@ $(IOSKIT): $(IOSOBJ) $(IOSLIBS)
 	    -single_module \
 	    -compatibility_version 1 \
 	    -current_version 1 \
-	    $(IOSLIBS) \
+	    `$(SRCDIR)/bin/lo-all-static-libs` \
 	    $(IOSOBJ) \
 	    -o $(IOSKIT)
 ifeq ($(origin IOS_CODEID),undefined)
