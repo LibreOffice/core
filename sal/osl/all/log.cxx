@@ -162,8 +162,6 @@ std::ofstream * getLogFile() {
     static char logFilePath[INI_STRINGBUF_SIZE];
     if (getValueFromLoggingIniFile("LogFilePath", logFilePath))
         logFile = logFilePath;
-    else
-        return nullptr;
 #endif
 
     // stays until process exits
