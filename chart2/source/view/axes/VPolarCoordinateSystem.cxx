@@ -65,6 +65,7 @@ void VPolarCoordinateSystem::createVAxisList(
               const uno::Reference<chart2::XChartDocument> & xChartDoc
             , const awt::Size& rFontReferenceSize
             , const awt::Rectangle& rMaximumSpaceForLabels
+            , bool //bLimitSpaceForLabels
             )
 {
     // note: using xChartDoc itself as XNumberFormatsSupplier would cause
