@@ -135,9 +135,7 @@ EditPaM ImpEditEngine::ReadXML( SvStream& rInput, EditSelection aSel )
 
     ESelection aESel = CreateESel( aSel );
 
-    ::SvxReadXML( *GetEditEnginePtr(), rInput, aESel );
-
-    return aSel.Max();
+    return ::SvxReadXML( *GetEditEnginePtr(), rInput, aESel );
 }
 
 EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
