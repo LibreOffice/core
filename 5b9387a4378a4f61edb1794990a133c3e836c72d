@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_7cd8811e",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 2186,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-02T12:49:25Z",
+      "side": 1,
+      "message": "~F accelerator is unfortunate, as there is ~Forms below on the same level.",
+      "range": {
+        "startLine": 2186,
+        "startChar": 34,
+        "endLine": 2186,
+        "endChar": 36
+      },
+      "revId": "5b9387a4378a4f61edb1794990a133c3e836c72d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
