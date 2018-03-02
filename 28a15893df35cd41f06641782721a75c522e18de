@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba2be162_373e22b9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-03-02T16:08:17Z",
+      "side": 1,
+      "message": "The images are loaded just fine, they are cell anchored.",
+      "parentUuid": "ba2be162_3cce095b",
+      "revId": "28a15893df35cd41f06641782721a75c522e18de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_1ca305a0",
         "filename": "sc/source/core/data/drwlayer.cxx",
         "patchSetId": 12
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "ba2be162_573476dd",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 2009,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-03-02T16:08:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba2be162_1ca305a0",
+      "revId": "28a15893df35cd41f06641782721a75c522e18de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_bcbaf9be",
         "filename": "sc/source/ui/drawfunc/drawsh2.cxx",
         "patchSetId": 12
@@ -47,6 +83,24 @@
       "writtenOn": "2018-03-02T12:41:03Z",
       "side": 1,
       "message": "Instead of adding yet another bool item with mutual exclusive true values, wouldn\u0027t it be better to change all to one enum item and have one SID_ANCHOR_TYPE or some such? Or is there any API part that forbids to do so? Of course the old PAGE and CELL slots still need to be supported for macros etc. This can be done later, it just looks awkward to me.",
+      "revId": "28a15893df35cd41f06641782721a75c522e18de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_373702e5",
+        "filename": "sc/source/ui/drawfunc/drawsh2.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-03-02T16:08:17Z",
+      "side": 1,
+      "message": "Hm no idea if that is possible.\nWonder if it really makes sense, because we still need to keep the two old types.\nSo adding a new enum, or a new bool type, doesn\u0027t make much difference to me.",
+      "parentUuid": "ba2be162_bcbaf9be",
       "revId": "28a15893df35cd41f06641782721a75c522e18de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
