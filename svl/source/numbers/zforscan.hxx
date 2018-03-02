@@ -143,6 +143,9 @@ public:
             return sCurString;
         }
 
+    /// Replace Boolean equivalent format codes with proper Boolean format.
+    void ReplaceBooleanEquivalent( OUString& rString );
+
     void SetConvertMode(LanguageType eTmpLge, LanguageType eNewLge,
             bool bSystemToSystem = false, bool bForExcelExport = false)
     {
@@ -203,6 +206,8 @@ private: // Private section
     OUString sCurSymbol;                        // Currency symbol for compatibility format codes
     OUString sCurString;                        // Currency symbol in upper case
     OUString sCurAbbrev;                        // Currency abbreviation
+    OUString sBooleanEquivalent1;               // "TRUE";"TRUE";"FALSE"
+    OUString sBooleanEquivalent2;               // [>0]"TRUE";[<0]"TRUE";"FALSE"
     static const OUString sErrStr;              // String for error output
 
     bool bConvertMode;                          // Set in the convert mode
