@@ -44,6 +44,12 @@
 #undef min
 #endif
 #endif
+
+#ifdef OS2
+#define INCL_WIN
+#include <os2.h>
+#endif
+
 #include <vcl/sysdata.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -62,6 +68,9 @@
 #elif defined CAIRO_HAS_XLIB_SURFACE
 # include "cairo_xlib_cairo.hxx"
 # include <cairo-ft.h>
+#elif defined CAIRO_HAS_OS2_SURFACE
+# include "cairo_os2_cairo.hxx"
+# include <cairo-os2.h>
 #else
 # error Native API needed.
 #endif
@@ -486,6 +495,12 @@ namespace cairocanvas
                 // Cairo requires standard glyph indexes (ETO_GLYPH_INDEX), while vcl/win/* uses ucs4 chars.
                 // Convert to standard indexes
                 aGlyph.index = cairo::ucs4toindex((unsigned int) aGlyph.index, rSysFontData.hFont);
+    #elif defined(CAIRO_HAS_OS2_SURFACE)
+                // Cairo requires standard glyph indexes (ETO_GLYPH_INDEX), while vcl/os2/* uses codepage chars.
+                // Convert to standard indexes
+                ::rtl::OString aFontName = ::rtl::OUStringToOString(
+                            rOutDev.GetFont().GetName(), RTL_TEXTENCODING_UTF8);
+                aGlyph.index = cairo::ucs4toindex((unsigned int) aGlyph.index, aFontName);
     #endif
                 aGlyph.x = systemGlyph.x;
                 aGlyph.y = systemGlyph.y;
@@ -516,13 +531,27 @@ namespace cairocanvas
     #elif defined CAIRO_HAS_XLIB_SURFACE
             font_face = cairo_ft_font_face_create_for_ft_face((FT_Face)rSysFontData.nFontId,
                                                               rSysFontData.nFontFlags);
+    #elif defined CAIRO_HAS_OS2_SURFACE
+            // see below
     #else
     # error Native API needed.
     #endif
 
             CairoSharedPtr pSCairo = pSurface->getCairo();
 
-            cairo_set_font_face( pSCairo.get(), font_face);
+    #if defined CAIRO_HAS_OS2_SURFACE
+            ::rtl::OString aFontName = ::rtl::OUStringToOString(
+                        rOutDev.GetFont().GetName(), RTL_TEXTENCODING_UTF8);
+            cairo_font_slant_t slant = (rOutDev.GetFont().GetItalic() == ITALIC_NONE ?
+                                            CAIRO_FONT_SLANT_NORMAL : CAIRO_FONT_SLANT_ITALIC);
+            cairo_font_weight_t weight = (rOutDev.GetFont().GetWeight() == WEIGHT_NORMAL ?
+                                              CAIRO_FONT_WEIGHT_NORMAL : CAIRO_FONT_WEIGHT_BOLD);
+            cairo_select_font_face( pSCairo.get(), aFontName,
+                                    slant, weight);
+    #endif
+
+            if (font_face)
+                cairo_set_font_face( pSCairo.get(), font_face);
 
             // create default font options. cairo_get_font_options() does not retrieve the surface defaults,
             // only what has been set before with cairo_set_font_options()
@@ -611,7 +640,8 @@ namespace cairocanvas
             }
 
             cairo_restore( pSCairo.get() );
-            cairo_font_face_destroy(font_face);
+            if (font_face)
+                cairo_font_face_destroy(font_face);
         }
         return true;
     }

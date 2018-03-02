@@ -202,6 +202,9 @@ sal_Bool Os2SalVirtualDevice::SetSize( long nDX, long nDY )
 
 void Os2SalVirtualDevice::GetSize( long& rWidth, long& rHeight )
 {
-    DevQueryCaps( mpGraphics->mhDC, CAPS_WIDTH, CAPS_WIDTH, (LONG*)rWidth );
-    DevQueryCaps( mpGraphics->mhDC, CAPS_HEIGHT, CAPS_HEIGHT, (LONG*)rHeight );
+    LONG alData;
+    DevQueryCaps( mpGraphics->mhDC, CAPS_WIDTH, 1L, &alData);
+    rWidth = alData;
+    DevQueryCaps( mpGraphics->mhDC, CAPS_HEIGHT, 1L, &alData);
+    rHeight = alData;
 }

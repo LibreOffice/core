@@ -37,6 +37,7 @@
 #elif defined CAIRO_HAS_WIN32_SURFACE
 # include "cairo_win32_cairo.hxx"
 # include <cairo-win32.h>
+#elif defined OS2
 #else
 # error Native API needed.
 #endif
@@ -179,6 +180,8 @@ namespace cairocanvas
 
                 aRV = uno::Any( args );
                 // caller frees the bitmap
+#elif defined CAIRO_HAS_OS2_SURFACE
+                OSL_TRACE( "CanvasBitmap::getFastPropertyValue case 1");
 #else
 # error Please define fast prop retrieval for your platform!
 #endif
@@ -248,6 +251,8 @@ namespace cairocanvas
 
                 aRV = uno::Any( args );
                 // caller frees the bitmap
+#elif defined CAIRO_HAS_OS2_SURFACE
+                OSL_TRACE( "CanvasBitmap::getFastPropertyValue case 2");
 #else
 # error Please define fast prop retrieval for your platform!
 #endif

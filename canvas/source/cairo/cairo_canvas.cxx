@@ -49,6 +49,10 @@
 # include <tools/postwin.h>
 #endif
 
+#ifdef OS2
+# include <svpm.h>
+#endif
+
 #include <vcl/sysdata.hxx>
 
 #include "cairo_canvas.hxx"

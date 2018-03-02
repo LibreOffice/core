@@ -87,6 +87,13 @@ $(eval $(call gb_Library_add_linked_libs,cairocanvas,\
 	user32 \
 ))
 
+else ifeq ($(OS),OS2)
+$(eval $(call gb_Library_add_exception_objects,cairocanvas,\
+	canvas/source/cairo/cairo_os2_cairo \
+))
+$(eval $(call gb_Library_add_libs,cairocanvas,\
+    -lft2lib \
+))
 else
 
 ifeq ($(OS),MACOSX)
