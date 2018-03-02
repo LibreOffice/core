@@ -94,6 +94,7 @@ void VCartesianCoordinateSystem::createVAxisList(
               const uno::Reference<chart2::XChartDocument> & xChartDoc
             , const awt::Size& rFontReferenceSize
             , const awt::Rectangle& rMaximumSpaceForLabels
+            , bool bLimitSpaceForLabels
             )
 {
     // note: using xChartDoc itself as XNumberFormatsSupplier would cause
@@ -126,6 +127,7 @@ void VCartesianCoordinateSystem::createVAxisList(
             aAxisProperties.m_nDimensionIndex = nDimensionIndex;
             aAxisProperties.m_bSwapXAndY = bSwapXAndY;
             aAxisProperties.m_bIsMainAxis = (nAxisIndex==0);
+            aAxisProperties.m_bLimitSpaceForLabels = bLimitSpaceForLabels;
             Reference< XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( xAxis, m_xCooSysModel ) );
             if( xCrossingMainAxis.is() )
             {
