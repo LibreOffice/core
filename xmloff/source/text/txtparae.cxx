@@ -2547,9 +2547,9 @@ void XMLTextParagraphExport::exportTextMark(
                     OUString sCondition("BookmarkCondition");
                     if (bkmkPropInfo->hasPropertyByName(sCondition))
                     {
-                        OUString sBookmarkCondition;
-                        bkmkProps->getPropertyValue(sCondition) >>= sBookmarkCondition;
-                        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "condition", sBookmarkCondition);
+                        OUString _sBookmarkCondition;
+                        bkmkProps->getPropertyValue(sCondition) >>= _sBookmarkCondition;
+                        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "condition", _sBookmarkCondition);
                     }
                 }
             }
