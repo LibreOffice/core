@@ -27,6 +27,7 @@
 #include "emfpstringformat.hxx"
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <wmfemfhelper.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
@@ -452,7 +453,7 @@ namespace emfplushelper
         }
     }
 
-    void EmfPlusHelperData::EMFPPlusFillPolygon(const ::basegfx::B2DPolyPolygon& polygon, bool isColor, sal_uInt32 brushIndexOrColor)
+    void EmfPlusHelperData::EMFPPlusFillPolygon(const ::basegfx::B2DPolyPolygon& polygon, const bool isColor, const sal_uInt32 brushIndexOrColor)
     {
         if (!polygon.count())
           return;
@@ -460,10 +461,21 @@ namespace emfplushelper
         if (isColor) // use Color
         {
             SAL_INFO("drawinglayer", "EMF+\t Fill polygon, ARGB color: 0x" << std::hex << brushIndexOrColor << std::dec);
+
+            const drawinglayer::primitive2d::Primitive2DReference aGraphic(
+                new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                            polygon,
+                            ::Color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff, (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff).getBColor()));
+
+            drawinglayer::primitive2d::Primitive2DContainer aCombination(1);
+
+            aCombination[0] = aGraphic;
             mrTargetHolders.Current().append(
-                o3tl::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
-                    polygon,
-                    ::Color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff, (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff).getBColor()));
+                o3tl::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
+                    aCombination,
+                    // EMF Alpha (1 byte): An 8-bit unsigned integer that specifies the transparency of the background, ranging
+                    // from 0 for completely transparent to 0xFF for completely opaque.
+                    (brushIndexOrColor >> 24) / 255.0));
 
             mrPropertyHolders.Current().setFillColor(::Color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff, (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff).getBColor());
             mrPropertyHolders.Current().setFillColorActive(true);
@@ -1266,7 +1278,7 @@ namespace emfplushelper
 
                             basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(MapSize(font->emSize,font->emSize),Map(lx,ly+font->emSize));
 
-                            basegfx::BColor color = EMFPGetBrushColorOrARGBColor(flags,brushId);
+                            basegfx::BColor color = EMFPGetBrushColorOrARGBColor(flags, brushId);
 
                             mrPropertyHolders.Current().setTextColor(color);
                             mrPropertyHolders.Current().setTextColorActive(true);
