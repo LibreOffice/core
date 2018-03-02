@@ -578,17 +578,17 @@ public:
 
 protected:
     /** Returns the placeholder color which may depend on the passed series index. */
-    sal_Int32           getPhColor( sal_Int32 nSeriesIdx ) const;
+    ::Color         getPhColor( sal_Int32 nSeriesIdx ) const;
 
 private:
     /** Resolves and returns the scheme color with the passed transformation. */
-    sal_Int32           getSchemeColor( sal_Int32 nColorToken, sal_Int32 nModToken, sal_Int32 nModValue ) const;
+    ::Color         getSchemeColor( sal_Int32 nColorToken, sal_Int32 nModToken, sal_Int32 nModValue ) const;
 
 protected:
-    typedef ::std::vector< sal_Int32 > ColorPatternVec;
+    typedef ::std::vector< ::Color > ColorPatternVec;
 
     ObjectFormatterData& mrData;            /// Shared formatter data.
-    sal_Int32           mnPhClr;            /// RGB placeholder color for themed style.
+    ::Color             mnPhClr;            /// RGB placeholder color for themed style.
     ColorPatternVec     maColorPattern;     /// Different cycling colors for data series.
 };
 
@@ -718,7 +718,7 @@ struct ObjectFormatterData
 
 DetailFormatterBase::DetailFormatterBase( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry ) :
     mrData( rData ),
-    mnPhClr( -1 )
+    mnPhClr( 0xffffffff )
 {
     if( pAutoFormatEntry )
     {
@@ -740,13 +740,13 @@ DetailFormatterBase::DetailFormatterBase( ObjectFormatterData& rData, const Auto
 
 DetailFormatterBase::DetailFormatterBase( ObjectFormatterData& rData, const AutoTextEntry* pAutoTextEntry ) :
     mrData( rData ),
-    mnPhClr( -1 )
+    mnPhClr( 0xffffffff )
 {
     if( pAutoTextEntry && (pAutoTextEntry->mnColorToken != XML_TOKEN_INVALID) )
         mnPhClr = getSchemeColor( pAutoTextEntry->mnColorToken, XML_TOKEN_INVALID, 0 );
 }
 
-sal_Int32 DetailFormatterBase::getPhColor( sal_Int32 nSeriesIdx ) const
+::Color DetailFormatterBase::getPhColor( sal_Int32 nSeriesIdx ) const
 {
     if( maColorPattern.empty() || (mrData.mnMaxSeriesIdx < 0) || (nSeriesIdx < 0) )
         return mnPhClr;
@@ -782,7 +782,7 @@ sal_Int32 DetailFormatterBase::getPhColor( sal_Int32 nSeriesIdx ) const
             step 5:  42% -> Cycle #4 has 42% tint of accent colors 1...6
             step 6:  70% -> Not used.
      */
-    sal_Int32 nPhClr = maColorPattern[ static_cast< size_t >( nSeriesIdx % maColorPattern.size() ) ];
+    ::Color nPhClr = maColorPattern[ static_cast< size_t >( nSeriesIdx % maColorPattern.size() ) ];
     size_t nCycleIdx = static_cast< size_t >( nSeriesIdx / maColorPattern.size() );
     size_t nMaxCycleIdx = static_cast< size_t >( mrData.mnMaxSeriesIdx / maColorPattern.size() );
     double fShadeTint = static_cast< double >( nCycleIdx + 1 ) / (nMaxCycleIdx + 2) * 1.4 - 0.7;
@@ -797,7 +797,7 @@ sal_Int32 DetailFormatterBase::getPhColor( sal_Int32 nSeriesIdx ) const
     return nPhClr;
 }
 
-sal_Int32 DetailFormatterBase::getSchemeColor( sal_Int32 nColorToken, sal_Int32 nModToken, sal_Int32 nModValue ) const
+::Color DetailFormatterBase::getSchemeColor( sal_Int32 nColorToken, sal_Int32 nModToken, sal_Int32 nModValue ) const
 {
     Color aColor;
     aColor.setSchemeClr( nColorToken );
@@ -882,8 +882,8 @@ TextFormatter::TextFormatter( ObjectFormatterData& rData, const AutoTextEntry* p
         if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
             if( const TextCharacterProperties* pTextProps = pTheme->getFontStyle( pAutoTextEntry->mnThemedFont ) )
                 *mxAutoText = *pTextProps;
-        sal_Int32 nTextColor = getPhColor( -1 );
-        if( nTextColor >= 0 ) {
+        ::Color nTextColor = getPhColor( -1 );
+        if( sal_Int32(nTextColor) >= 0 ) {
             mxAutoText->maFillProperties.maFillColor.setSrgbClr( nTextColor );
             mxAutoText->maFillProperties.moFillType.set(XML_solidFill);
         }

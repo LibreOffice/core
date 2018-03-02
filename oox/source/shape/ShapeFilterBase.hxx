@@ -57,7 +57,7 @@ public:
     virtual bool importDocument() override { return true; }
     virtual bool exportDocument() override { return true; }
 
-    sal_Int32 getSchemeColor( sal_Int32 nToken ) const;
+    ::Color getSchemeColor( sal_Int32 nToken ) const;
 
 private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;

@@ -29,6 +29,7 @@
 #include <oox/helper/propertymap.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <tools/color.hxx>
 
 namespace oox { class ModelObjectHelper; }
 
@@ -124,6 +125,10 @@ public:
     bool setProperty(ShapeProperty ePropId, const Type& rValue)
     {
         return setAnyProperty(ePropId, css::uno::Any(rValue));
+    }
+    bool setProperty(ShapeProperty ePropId, const ::Color& rValue)
+    {
+        return setAnyProperty(ePropId, css::uno::makeAny(rValue));
     }
 
     using PropertyMap::setAnyProperty;

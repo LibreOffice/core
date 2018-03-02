@@ -102,7 +102,7 @@ namespace OleHelper
             True = OLE default color type is treated as BGR color.
             False = OLE default color type is treated as palette color.
      */
-    OOX_DLLPUBLIC sal_Int32    decodeOleColor(
+    OOX_DLLPUBLIC ::Color decodeOleColor(
                             const GraphicHelper& rGraphicHelper,
                             sal_uInt32 nOleColor,
                             bool bDefaultColorBgr );
@@ -110,6 +110,7 @@ namespace OleHelper
     /** Returns the OLE color from the passed UNO RGB color.
      */
     OOX_DLLPUBLIC sal_uInt32   encodeOleColor( sal_Int32 nRgbColor );
+    inline sal_uInt32          encodeOleColor( Color nRgbColor ) { return encodeOleColor(sal_Int32(nRgbColor)); }
 
     /** Imports a GUID from the passed binary stream and returns its string
         representation (in uppercase characters).
