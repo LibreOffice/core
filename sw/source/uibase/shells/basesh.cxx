@@ -131,6 +131,9 @@ static sal_uInt8 nFooterPos;
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 
+#include <cntfrm.hxx>
+#include <cellfrm.hxx>
+
 namespace
 {
     SvxContourDlg* GetContourDlg(SwView const &rView)
@@ -2103,6 +2106,30 @@ void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
             if (!bAuto)
             {
                 rSh.SetAttrSet( *pArgs );
+            }
+        }
+
+        if(rSh.IsCursorInTable())
+        {
+            SwShellTableCursor* pCursor = rSh.GetTableCursor();
+
+            if ( pCursor )
+            {
+                SwSelBoxes const& rBoxes( pCursor->GetSelectedBoxes() );
+                for (size_t i = 0; i < rBoxes.size(); ++i)
+                    rBoxes[i]->SetDirectFormatting( true );
+            }
+            else
+            {
+                SwFrame *pFrame = rSh.GetCurrFrame();
+                do {
+                    pFrame = pFrame->GetUpper();
+                } while ( pFrame && !pFrame->IsCellFrame() );
+                if( pFrame )
+                {
+                    SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
+                    pBox->SetDirectFormatting( true );
+                }
             }
         }
     }

@@ -119,6 +119,9 @@
 #include <numrule.hxx>
 #include <memory>
 
+#include <cntfrm.hxx>
+#include <cellfrm.hxx>
+
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -257,6 +260,29 @@ static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std:
     }
     else
         rWrtSh.SetAttrSet( aTmpSet );
+    if(rWrtSh.IsCursorInTable())
+    {
+        SwShellTableCursor* pCursor = rWrtSh.GetTableCursor();
+
+        if ( pCursor )
+        {
+            SwSelBoxes const& rBoxes( pCursor->GetSelectedBoxes() );
+            for (size_t i = 0; i < rBoxes.size(); ++i)
+                rBoxes[i]->SetDirectFormatting( true );
+        }
+        else
+        {
+            SwFrame *pFrame = rWrtSh.GetCurrFrame();
+            do {
+                pFrame = pFrame->GetUpper();
+            } while ( pFrame && !pFrame->IsCellFrame() );
+            if( pFrame )
+            {
+                SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
+                pBox->SetDirectFormatting( true );
+            }
+        }
+    }
     if (pReq)
         pReq->Done(aTmpSet);
     if(bInsert)
