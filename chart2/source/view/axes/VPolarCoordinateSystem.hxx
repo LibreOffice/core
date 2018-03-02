@@ -38,7 +38,8 @@ public:
     virtual void createVAxisList(
             const css::uno::Reference< css::chart2::XChartDocument> & xChartDoc
             , const css::awt::Size& rFontReferenceSize
-            , const css::awt::Rectangle& rMaximumSpaceForLabels ) override;
+            , const css::awt::Rectangle& rMaximumSpaceForLabels
+            , bool bLimitSpaceForLabels ) override;
 
     virtual void initVAxisInList() override;
     virtual void updateScalesAndIncrementsOnAxes() override;
