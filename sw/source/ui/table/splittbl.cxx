@@ -21,39 +21,26 @@
 #include <splittbl.hxx>
 #include <tblenum.hxx>
 
-SwSplitTableDlg::SwSplitTableDlg( vcl::Window *pParent, SwWrtShell &rSh )
-    : SvxStandardDialog( pParent, "SplitTableDialog", "modules/swriter/ui/splittable.ui" )
+SwSplitTableDlg::SwSplitTableDlg(weld::Window *pParent, SwWrtShell &rSh)
+    : m_xBuilder(Application::CreateBuilder(pParent, "modules/swriter/ui/splittable.ui"))
+    , m_xDialog(m_xBuilder->weld_dialog("SplitTableDialog"))
+    , m_xContentCopyRB(m_xBuilder->weld_radio_button("copyheading"))
+    , m_xBoxAttrCopyWithParaRB(m_xBuilder->weld_radio_button("customheadingapplystyle"))
+    , m_xBoxAttrCopyNoParaRB(m_xBuilder->weld_radio_button("customheading"))
+    , m_xBorderCopyRB(m_xBuilder->weld_radio_button("noheading"))
     , rShell(rSh)
     , m_nSplit(SplitTable_HeadlineOption::ContentCopy)
 {
-    get(mpContentCopyRB, "copyheading");
-    get(mpBoxAttrCopyWithParaRB, "customheadingapplystyle");
-    get(mpBoxAttrCopyNoParaRB, "customheading");
-    get(mpBorderCopyRB, "noheading");
-}
-
-SwSplitTableDlg::~SwSplitTableDlg()
-{
-    disposeOnce();
-}
-
-void SwSplitTableDlg::dispose()
-{
-    mpContentCopyRB.clear();
-    mpBoxAttrCopyWithParaRB.clear();
-    mpBoxAttrCopyNoParaRB.clear();
-    mpBorderCopyRB.clear();
-    SvxStandardDialog::dispose();
 }
 
 void SwSplitTableDlg::Apply()
 {
     m_nSplit = SplitTable_HeadlineOption::ContentCopy;
-    if(mpBoxAttrCopyWithParaRB->IsChecked())
+    if (m_xBoxAttrCopyWithParaRB->get_active())
         m_nSplit = SplitTable_HeadlineOption::BoxAttrAllCopy;
-    else if(mpBoxAttrCopyNoParaRB->IsChecked())
+    else if (m_xBoxAttrCopyNoParaRB->get_active())
         m_nSplit = SplitTable_HeadlineOption::BoxAttrCopy;
-    else if(mpBorderCopyRB->IsChecked())
+    else if (m_xBorderCopyRB->get_active())
         m_nSplit = SplitTable_HeadlineOption::BorderCopy;
 
     rShell.SplitTable(m_nSplit);

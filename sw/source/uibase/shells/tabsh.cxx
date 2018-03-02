@@ -1036,7 +1036,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                ScopedVclPtr<AbstractSplitTableDialog> pDlg(pFact->CreateSplitTableDialog( GetView().GetWindow(), rSh ));
+                vcl::Window* pWin = GetView().GetWindow();
+                ScopedVclPtr<AbstractSplitTableDialog> pDlg(pFact->CreateSplitTableDialog(pWin ? pWin->GetFrameWeld() : nullptr, rSh));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 pDlg->Execute();
                 rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(pDlg->GetSplitMode()) ) );
