@@ -7,7 +7,7 @@
 #
 
 # Various places in sc rely on floating-point division by zero to produce
-# infinity (as triggered by CppunitTest_sc_functions_test); silence those UBSan
+# infinity (as triggered by e.g. CppunitTest_sc_functions_test); silence those UBSan
 # reports by adding
 # suppressions=/path-to-this/solenv/sanitizers/ubsan-suppressions to the
 # UBSAN_OPTIONS environment variable (and making sure to compile with
@@ -15,5 +15,7 @@
 
 float-divide-by-zero:sc/source/core/tool/interpr1.cxx
 float-divide-by-zero:sc/source/core/tool/interpr2.cxx
+float-divide-by-zero:sc/source/core/tool/interpr3.cxx
+float-divide-by-zero:sc/source/core/tool/interpr8.cxx
 float-divide-by-zero:scaddins/source/analysis/analysis.cxx
 float-divide-by-zero:scaddins/source/analysis/financial.cxx
