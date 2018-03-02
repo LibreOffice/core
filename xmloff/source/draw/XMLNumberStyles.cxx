@@ -609,11 +609,8 @@ SdXMLNumberFormatImportContext::~SdXMLNumberFormatImportContext()
 
 void SdXMLNumberFormatImportContext::add( OUString& rNumberStyle, bool bLong, bool bTextual, bool   bDecimal02, OUString& rText )
 {
-    if( mnIndex == -1 || mnIndex == 16 )
-    {
-        mnIndex = -1;
+    if (mnIndex == 16)
         return;
-    }
 
     const SdXMLDataStyleNumber* pStyleMember = aSdXMLDataStyleNumbers;
     for( sal_uInt8 nIndex = 0; pStyleMember->meNumberStyle != XML_TOKEN_INVALID; nIndex++, pStyleMember++ )
