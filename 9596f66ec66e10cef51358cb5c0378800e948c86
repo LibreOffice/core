@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_dc0b2d7c",
+        "filename": "sc/source/core/data/segmenttree.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-02T13:10:41Z",
+      "side": 1,
+      "message": "That this return is never checked looks odd to me.. rather add a SAL_WARN_UNUSED_RESULT to the declaration.",
+      "revId": "9596f66ec66e10cef51358cb5c0378800e948c86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_1c26a516",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3461,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-02T13:10:41Z",
+      "side": 1,
+      "message": "Better SAL_WARN_UNUSED_RESULT",
+      "revId": "9596f66ec66e10cef51358cb5c0378800e948c86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_5c201df8",
+        "filename": "sc/source/filter/inc/orcusfiltersimpl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-02T13:10:41Z",
+      "side": 1,
+      "message": "Rather keep this as is, the Orcus filters are under development.",
+      "revId": "9596f66ec66e10cef51358cb5c0378800e948c86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
