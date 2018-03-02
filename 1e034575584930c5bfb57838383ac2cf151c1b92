@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_9cbb7575",
+        "filename": "xmloff/source/text/txtprmap.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-03-02T14:24:46Z",
+      "side": 1,
+      "message": "just a small issue here: it looks like this will be exported regardless of the ODF version, but if you set the ODF version to something non-\"extended\" i.e. ODF 1.1 or ODF 1.2 in Tools-Options-\u003eLoad/Save-\u003eGeneral-\u003eODF format version then no \"loext\" attributes should be exported.\n\nthere is some flag that can be set to SvtSaveOptions::ODFVER_012_EXT_COMPAT to achieve that, see the various ugly macros at the start of this file.",
+      "revId": "1e034575584930c5bfb57838383ac2cf151c1b92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
