@@ -692,8 +692,8 @@ Reference< XShape > const & Shape::createAndInsert(
 
         const GraphicHelper& rGraphicHelper = rFilterBase.getGraphicHelper();
 
-        sal_Int32 nLinePhClr = -1;
-        sal_Int32 nFillPhClr = -1;
+        ::Color nLinePhClr(0xffffffff);
+        ::Color nFillPhClr(0xffffffff);
         // TODO: use ph color when applying effect properties
         //sal_Int32 nEffectPhClr = -1;
 
@@ -1170,7 +1170,7 @@ Reference< XShape > const & Shape::createAndInsert(
             // character color on the shape, then.
             if(const ShapeStyleRef* pFontRef = getShapeStyleRef(XML_fontRef))
             {
-                sal_Int32 nCharColor = pFontRef->maPhClr.getColor(rGraphicHelper);
+                ::Color nCharColor = pFontRef->maPhClr.getColor(rGraphicHelper);
                 aPropertySet.setAnyProperty(PROP_CharColor, uno::makeAny(nCharColor));
             }
         }

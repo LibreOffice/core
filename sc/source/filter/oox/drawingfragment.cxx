@@ -692,7 +692,7 @@ sal_uInt32 VmlDrawing::convertControlTextColor( const OUString& rTextColor ) con
     /*  Predefined color names or system color names (resolve to RGB to detect
         valid color name). */
     sal_Int32 nColorToken = AttributeConversion::decodeToken( rTextColor );
-    sal_Int32 nRgbValue = Color::getVmlPresetColor( nColorToken, API_RGB_TRANSPARENT );
+    ::Color nRgbValue = Color::getVmlPresetColor( nColorToken, API_RGB_TRANSPARENT );
     if( nRgbValue == API_RGB_TRANSPARENT )
         nRgbValue = rGraphicHelper.getSystemColor( nColorToken );
     if( nRgbValue != API_RGB_TRANSPARENT )
@@ -750,9 +750,9 @@ void VmlDrawing::convertControlBackground( AxMorphDataModelBase& rAxModel, const
     if( bHasFill )
     {
         const GraphicHelper& rGraphicHelper = getBaseFilter().getGraphicHelper();
-        sal_Int32 nSysWindowColor = rGraphicHelper.getSystemColor( XML_window, API_RGB_WHITE );
+        ::Color nSysWindowColor = rGraphicHelper.getSystemColor( XML_window, API_RGB_WHITE );
         ::oox::drawingml::Color aColor = ::oox::vml::ConversionHelper::decodeColor( rGraphicHelper, rFillModel.moColor, rFillModel.moOpacity, nSysWindowColor );
-        sal_Int32 nRgbValue = aColor.getColor( rGraphicHelper );
+        ::Color nRgbValue = aColor.getColor( rGraphicHelper );
         rAxModel.mnBackColor = OleHelper::encodeOleColor( nRgbValue );
     }
 }

@@ -1764,7 +1764,7 @@ void ShapeExport::WriteTableCellBorders(const Reference< XPropertySet>& xCellPro
     if(nLeftBorder > 0)
     {
         mpFS->startElementNS( XML_a, XML_lnL, XML_w, I32S(nLeftBorder), FSEND );
-        DrawingML::WriteSolidFill(aLeftBorderColor);
+        DrawingML::WriteSolidFill(::Color(aLeftBorderColor));
         mpFS->endElementNS( XML_a, XML_lnL );
     }
 
@@ -1778,7 +1778,7 @@ void ShapeExport::WriteTableCellBorders(const Reference< XPropertySet>& xCellPro
     if(nRightBorder > 0)
     {
         mpFS->startElementNS( XML_a, XML_lnR, XML_w, I32S(nRightBorder), FSEND);
-        DrawingML::WriteSolidFill(aRightBorderColor);
+        DrawingML::WriteSolidFill(::Color(aRightBorderColor));
         mpFS->endElementNS( XML_a, XML_lnR);
     }
 
@@ -1792,7 +1792,7 @@ void ShapeExport::WriteTableCellBorders(const Reference< XPropertySet>& xCellPro
     if(nTopBorder > 0)
     {
         mpFS->startElementNS( XML_a, XML_lnT, XML_w, I32S(nTopBorder), FSEND);
-        DrawingML::WriteSolidFill(aTopBorderColor);
+        DrawingML::WriteSolidFill(::Color(aTopBorderColor));
         mpFS->endElementNS( XML_a, XML_lnT);
     }
 
@@ -1806,7 +1806,7 @@ void ShapeExport::WriteTableCellBorders(const Reference< XPropertySet>& xCellPro
     if(nBottomBorder > 0)
     {
         mpFS->startElementNS( XML_a, XML_lnB, XML_w, I32S(nBottomBorder), FSEND);
-        DrawingML::WriteSolidFill(aBottomBorderColor);
+        DrawingML::WriteSolidFill(::Color(aBottomBorderColor));
         mpFS->endElementNS( XML_a, XML_lnB);
     }
 }

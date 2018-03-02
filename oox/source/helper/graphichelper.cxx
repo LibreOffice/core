@@ -72,36 +72,36 @@ GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, c
         mxGraphicProvider.set( graphic::GraphicProvider::create( mxContext ), uno::UNO_QUERY );
 
     //! TODO: get colors from system
-    maSystemPalette[ XML_3dDkShadow ]               = 0x716F64;
-    maSystemPalette[ XML_3dLight ]                  = 0xF1EFE2;
-    maSystemPalette[ XML_activeBorder ]             = 0xD4D0C8;
-    maSystemPalette[ XML_activeCaption ]            = 0x0054E3;
-    maSystemPalette[ XML_appWorkspace ]             = 0x808080;
-    maSystemPalette[ XML_background ]               = 0x004E98;
-    maSystemPalette[ XML_btnFace ]                  = 0xECE9D8;
-    maSystemPalette[ XML_btnHighlight ]             = 0xFFFFFF;
-    maSystemPalette[ XML_btnShadow ]                = 0xACA899;
-    maSystemPalette[ XML_btnText ]                  = 0x000000;
-    maSystemPalette[ XML_captionText ]              = 0xFFFFFF;
-    maSystemPalette[ XML_gradientActiveCaption ]    = 0x3D95FF;
-    maSystemPalette[ XML_gradientInactiveCaption ]  = 0xD8E4F8;
-    maSystemPalette[ XML_grayText ]                 = 0xACA899;
-    maSystemPalette[ XML_highlight ]                = 0x316AC5;
-    maSystemPalette[ XML_highlightText ]            = 0xFFFFFF;
-    maSystemPalette[ XML_hotLight ]                 = 0x000080;
-    maSystemPalette[ XML_inactiveBorder ]           = 0xD4D0C8;
-    maSystemPalette[ XML_inactiveCaption ]          = 0x7A96DF;
-    maSystemPalette[ XML_inactiveCaptionText ]      = 0xD8E4F8;
-    maSystemPalette[ XML_infoBk ]                   = 0xFFFFE1;
-    maSystemPalette[ XML_infoText ]                 = 0x000000;
-    maSystemPalette[ XML_menu ]                     = 0xFFFFFF;
-    maSystemPalette[ XML_menuBar ]                  = 0xECE9D8;
-    maSystemPalette[ XML_menuHighlight ]            = 0x316AC5;
-    maSystemPalette[ XML_menuText ]                 = 0x000000;
-    maSystemPalette[ XML_scrollBar ]                = 0xD4D0C8;
-    maSystemPalette[ XML_window ]                   = 0xFFFFFF;
-    maSystemPalette[ XML_windowFrame ]              = 0x000000;
-    maSystemPalette[ XML_windowText ]               = 0x000000;
+    maSystemPalette[ XML_3dDkShadow ]               = Color(0x716F64);
+    maSystemPalette[ XML_3dLight ]                  = Color(0xF1EFE2);
+    maSystemPalette[ XML_activeBorder ]             = Color(0xD4D0C8);
+    maSystemPalette[ XML_activeCaption ]            = Color(0x0054E3);
+    maSystemPalette[ XML_appWorkspace ]             = Color(0x808080);
+    maSystemPalette[ XML_background ]               = Color(0x004E98);
+    maSystemPalette[ XML_btnFace ]                  = Color(0xECE9D8);
+    maSystemPalette[ XML_btnHighlight ]             = Color(0xFFFFFF);
+    maSystemPalette[ XML_btnShadow ]                = Color(0xACA899);
+    maSystemPalette[ XML_btnText ]                  = Color(0x000000);
+    maSystemPalette[ XML_captionText ]              = Color(0xFFFFFF);
+    maSystemPalette[ XML_gradientActiveCaption ]    = Color(0x3D95FF);
+    maSystemPalette[ XML_gradientInactiveCaption ]  = Color(0xD8E4F8);
+    maSystemPalette[ XML_grayText ]                 = Color(0xACA899);
+    maSystemPalette[ XML_highlight ]                = Color(0x316AC5);
+    maSystemPalette[ XML_highlightText ]            = Color(0xFFFFFF);
+    maSystemPalette[ XML_hotLight ]                 = Color(0x000080);
+    maSystemPalette[ XML_inactiveBorder ]           = Color(0xD4D0C8);
+    maSystemPalette[ XML_inactiveCaption ]          = Color(0x7A96DF);
+    maSystemPalette[ XML_inactiveCaptionText ]      = Color(0xD8E4F8);
+    maSystemPalette[ XML_infoBk ]                   = Color(0xFFFFE1);
+    maSystemPalette[ XML_infoText ]                 = Color(0x000000);
+    maSystemPalette[ XML_menu ]                     = Color(0xFFFFFF);
+    maSystemPalette[ XML_menuBar ]                  = Color(0xECE9D8);
+    maSystemPalette[ XML_menuHighlight ]            = Color(0x316AC5);
+    maSystemPalette[ XML_menuText ]                 = Color(0x000000);
+    maSystemPalette[ XML_scrollBar ]                = Color(0xD4D0C8);
+    maSystemPalette[ XML_window ]                   = Color(0xFFFFFF);
+    maSystemPalette[ XML_windowFrame ]              = Color(0x000000);
+    maSystemPalette[ XML_windowText ]               = Color(0x000000);
 
     // if no target frame has been passed (e.g. OLE objects), try to fallback to the active frame
     // TODO: we need some mechanism to keep and pass the parent frame
@@ -142,18 +142,18 @@ GraphicHelper::~GraphicHelper()
 
 // System colors and predefined colors ----------------------------------------
 
-sal_Int32 GraphicHelper::getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb ) const
+::Color GraphicHelper::getSystemColor( sal_Int32 nToken, ::Color nDefaultRgb ) const
 {
     return ContainerHelper::getMapElement( maSystemPalette, nToken, nDefaultRgb );
 }
 
-sal_Int32 GraphicHelper::getSchemeColor( sal_Int32 /*nToken*/ ) const
+::Color GraphicHelper::getSchemeColor( sal_Int32 /*nToken*/ ) const
 {
     OSL_FAIL( "GraphicHelper::getSchemeColor - scheme colors not implemented" );
     return API_RGB_TRANSPARENT;
 }
 
-sal_Int32 GraphicHelper::getPaletteColor( sal_Int32 /*nPaletteIdx*/ ) const
+::Color GraphicHelper::getPaletteColor( sal_Int32 /*nPaletteIdx*/ ) const
 {
     OSL_FAIL( "GraphicHelper::getPaletteColor - palette colors not implemented" );
     return API_RGB_TRANSPARENT;

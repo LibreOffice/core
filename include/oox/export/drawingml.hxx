@@ -169,14 +169,14 @@ public:
     /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
     OUString WriteImage( const Graphic &rGraphic , bool bRelPathToMedia = false);
 
-    void WriteColor( sal_uInt32 nColor, sal_Int32 nAlpha = MAX_PERCENT );
+    void WriteColor( ::Color nColor, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteColor( const OUString& sColorSchemeName, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations );
     void WriteColorTransformations( const css::uno::Sequence< css::beans::PropertyValue >& aTransformations );
-    void WriteGradientStop( sal_uInt16 nStop, sal_uInt32 nColor );
+    void WriteGradientStop( sal_uInt16 nStop, ::Color nColor );
     void WriteLineArrow( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, bool bLineStart );
     void WriteConnectorConnections( EscherConnectorListEntry& rConnectorEntry, sal_Int32 nStartID, sal_Int32 nEndID );
 
-    void WriteSolidFill( sal_uInt32 nColor, sal_Int32 nAlpha = MAX_PERCENT );
+    void WriteSolidFill( ::Color nColor, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteSolidFill( const OUString& sSchemeName, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations );
     void WriteSolidFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteGradientFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
@@ -266,7 +266,7 @@ public:
 
     static sal_Unicode SubstituteBullet( sal_Unicode cBulletId, css::awt::FontDescriptor& rFontDesc );
 
-    static sal_uInt32 ColorWithIntensity( sal_uInt32 nColor, sal_uInt32 nIntensity );
+    static ::Color ColorWithIntensity( sal_uInt32 nColor, sal_uInt32 nIntensity );
 
     static const char* GetAlignment( css::style::ParagraphAdjust nAlignment );
 

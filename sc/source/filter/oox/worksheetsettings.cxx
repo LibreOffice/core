@@ -282,7 +282,7 @@ void WorksheetSettings::finalizeImport()
     // sheet tab color
     if( !maSheetSettings.maTabColor.isAuto() )
     {
-        sal_Int32 nColor = maSheetSettings.maTabColor.getColor( getBaseFilter().getGraphicHelper() );
+        ::Color nColor = maSheetSettings.maTabColor.getColor( getBaseFilter().getGraphicHelper() );
         aPropSet.setProperty( PROP_TabColor, nColor );
     }
 }

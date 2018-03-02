@@ -147,7 +147,7 @@ struct OOX_DLLPUBLIC FillProperties
                             ShapePropertyMap& rPropMap,
                             const GraphicHelper& rGraphicHelper,
                             sal_Int32 nShapeRotation = 0,
-                            sal_Int32 nPhClr = API_RGB_TRANSPARENT,
+                            ::Color nPhClr = API_RGB_TRANSPARENT,
                             bool bFlipH = false,
                             bool bFlipV = false ) const;
 };

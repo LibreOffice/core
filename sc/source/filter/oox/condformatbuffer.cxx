@@ -209,8 +209,7 @@ namespace {
         oox::drawingml::Color aDMColor;
         aDMColor.setSrgbClr(nColor);
         aDMColor.addExcelTintTransformation(nTint);
-        nColor = aDMColor.getColor(rGraphicHelper);
-        aColor = ::Color(nColor);
+        aColor = aDMColor.getColor(rGraphicHelper);
     }
     else
         aColor = ARgbToARgbComponents( nColor );

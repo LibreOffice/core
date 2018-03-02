@@ -205,7 +205,7 @@ sal_Int32 ConversionHelper::decodeMeasureToHmm( const GraphicHelper& rGraphicHel
 
 Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
         const OptValue< OUString >& roVmlColor, const OptValue< double >& roVmlOpacity,
-        sal_Int32 nDefaultRgb, sal_Int32 nPrimaryRgb )
+        ::Color nDefaultRgb, ::Color nPrimaryRgb )
 {
     Color aDmlColor;
 
@@ -247,7 +247,7 @@ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
     /*  Predefined color names or system color names (resolve to RGB to detect
         valid color name). */
     sal_Int32 nColorToken = AttributeConversion::decodeToken( aColorName );
-    sal_Int32 nRgbValue = Color::getVmlPresetColor( nColorToken, API_RGB_TRANSPARENT );
+    ::Color nRgbValue = Color::getVmlPresetColor( nColorToken, API_RGB_TRANSPARENT );
     if( nRgbValue == API_RGB_TRANSPARENT )
         nRgbValue = rGraphicHelper.getSystemColor( nColorToken );
     if( nRgbValue != API_RGB_TRANSPARENT )
@@ -871,7 +871,7 @@ void ShadowModel::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelper&
     }
 
     table::ShadowFormat aFormat;
-    aFormat.Color = aColor.getColor(rGraphicHelper);
+    aFormat.Color = sal_Int32(aColor.getColor(rGraphicHelper));
     aFormat.Location = table::ShadowLocation_BOTTOM_RIGHT;
     // The width of the shadow is the average of the x and y values, see SwWW8ImplReader::MatchSdrItemsIntoFlySet().
     aFormat.ShadowWidth = ((nOffsetX + nOffsetY) / 2);

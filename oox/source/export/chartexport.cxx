@@ -3583,7 +3583,7 @@ void ChartExport::exportMarker(const Reference< chart2::XDataSeries >& xSeries)
             pFS->singleElement(FSNS(XML_a, XML_noFill), FSEND);
         }
         else
-            WriteSolidFill(aColor);
+            WriteSolidFill(::Color(aColor));
 
         pFS->endElement( FSNS( XML_c, XML_spPr ) );
     }
