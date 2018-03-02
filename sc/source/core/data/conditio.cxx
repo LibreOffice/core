@@ -2146,7 +2146,7 @@ void ScConditionalFormatList::RenameCellStyle( const OUString& rOld, const OUStr
     }
 }
 
-bool ScConditionalFormatList::CheckAllEntries()
+bool ScConditionalFormatList::CheckAllEntries(const Link<ScConditionalFormat*,void>& rLink)
 {
     bool bValid = true;
 
@@ -2157,6 +2157,8 @@ bool ScConditionalFormatList::CheckAllEntries()
         if ((*itr)->GetRange().empty())
         {
             bValid = false;
+            if (rLink.IsSet())
+                rLink.Call(itr->get());
             itr = m_ConditionalFormats.erase(itr);
         }
         else

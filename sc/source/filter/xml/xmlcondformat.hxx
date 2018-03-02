@@ -12,6 +12,7 @@
 
 #include <array>
 #include <memory>
+#include <tools/link.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include "xmlimprt.hxx"
 #include "importcontext.hxx"
@@ -40,6 +41,8 @@ private:
         ScConditionalFormat* mpFormat;
         SCTAB mnTab;
     };
+
+    DECL_LINK(FormatDeletedHdl, ScConditionalFormat*, void);
 
 public:
     ScXMLConditionalFormatsContext( ScXMLImport& rImport );
