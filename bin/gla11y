@@ -38,6 +38,9 @@ except ImportError:
     import xml.etree.ElementTree as ET
     lxml = False
 
+if sys.version_info < (2,7):
+    exit()
+
 progname = os.path.basename(sys.argv[0])
 suppressions = {}
 gen_suppr = None
