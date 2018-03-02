@@ -2367,9 +2367,8 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
             rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                             rInf.GetIdx(), rInf.GetLen() );
             long nCurrPos = pKernArray[nTextBreak] + nGridWidthAdd;
-            while( nTextBreak < rInf.GetLen() && nTextWidth >= nCurrPos)
+            while (++nTextBreak < rInf.GetLen() && nTextWidth >= nCurrPos)
             {
-                nTextBreak++;
                 nCurrPos = pKernArray[nTextBreak] + nGridWidthAdd * ( nTextBreak + 1 );
             }
             delete[] pKernArray;
