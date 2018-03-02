@@ -763,8 +763,14 @@ void WorksheetGlobals::setColumnModel( const ColumnModel& rModel )
     sal_Int32 nLastCol = rModel.maRange.mnLast - 1;
     if( getAddressConverter().checkCol( nFirstCol, true ) && (nFirstCol <= nLastCol) )
     {
-        // validate last column index
-        if( !getAddressConverter().checkCol( nLastCol, true ) )
+        // Validate last column index.
+        // If last column is equal to last possible column, Excel adds one
+        // more. We do that also in XclExpColinfo::SaveXml() and for 1024 end
+        // up with 1025 instead, which would lead to excess columns in
+        // checkCol(). Cater for this oddity.
+        if (nLastCol == mrMaxApiPos.Col() + 1)
+            --nLastCol;
+        else if( !getAddressConverter().checkCol( nLastCol, true ) )
             nLastCol = mrMaxApiPos.Col();
         // try to find entry in column model map that is able to merge with the passed model
         bool bInsertModel = true;
