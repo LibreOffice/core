@@ -12,8 +12,11 @@ from uitest.framework import UITestCase
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
+from uitest.path import get_srcdir_url
 from uitest.uihelper.calc import enter_text_to_cell
 
+def get_url_for_data_file(file_name):
+    return get_srcdir_url() + "/uitest/manual_tests/data/" + file_name
 
 class ManualCalcTests(UITestCase):
     def test_paste_special(self):
@@ -47,6 +50,45 @@ class ManualCalcTests(UITestCase):
         # Assert successful paste
         document = self.ui_test.get_component()
         self.assertEqual(get_cell_by_position(document, 0, 0, 2).getString(), "abcd")
+        self.ui_test.close_doc()
+
+    def test_hyperlink_copy(self):
+        # EN-21:Copy a cell containing an hyperlink
+        # Tests that the content formatted with hyperlink is correctly copied
+        # Refers to tdf#82719
+
+        doc = self.ui_test.load_file(get_url_for_data_file("tdf82719.ods"))
+        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+
+        #Copy the contents of cell C3 to cell G3
+        xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "C3"}))
+        self.xUITest.executeCommand(".uno:SetInputMode")
+        xGridWin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+a"}))
+        xGridWin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+c"}))
+        xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "G3"}))
+        self.xUITest.executeCommand(".uno:SetInputMode")
+        xGridWin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+v"}))
+        xGridWin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+
+        #Assert successful paste
+        document = self.ui_test.get_component()
+        self.assertEqual(get_cell_by_position(document, 0, 2, 2).getString(),
+            get_cell_by_position(document, 0, 6, 2).getString())
+
+        #Copy the contents of cell D3 to cell H3
+        xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "D3"}))
+        self.xUITest.executeCommand(".uno:SetInputMode")
+        xGridWin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+a"}))
+        xGridWin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+c"}))
+        xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "H3"}))
+        self.xUITest.executeCommand(".uno:SetInputMode")
+        xGridWin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+v"}))
+        xGridWin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+
+        #Assert successful paste
+        self.assertEqual(get_cell_by_position(document, 0, 3, 2).getString(),
+            get_cell_by_position(document, 0, 7, 2).getString())
+
         self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
