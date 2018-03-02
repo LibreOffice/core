@@ -107,7 +107,7 @@ $(dir $(call gb_UIConfig_get_target,%)).dir :
 $(dir $(call gb_UIConfig_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_UIConfig_get_target,%) : $(call gb_UIConfig_get_imagelist_target,%) $(call gb_UIConfig_get_a11yerrors_target,%)
+$(call gb_UIConfig_get_target,%) : $(call gb_UIConfig_get_imagelist_target,%)
 	$(call gb_Output_announce,$*,$(true),UIC,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		touch $@ \
