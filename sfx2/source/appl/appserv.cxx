@@ -271,25 +271,29 @@ static void showDocument( const char* pBaseName )
 
 namespace
 {
-    class LicenseDialog : public ModalDialog
+    class LicenseDialog
     {
     private:
-        DECL_LINK(ShowHdl, Button*, void);
+        std::unique_ptr<weld::Builder> m_xBuilder;
+        std::unique_ptr<weld::Dialog> m_xDialog;
+        std::unique_ptr<weld::Label> m_xLabel;
     public:
-        explicit LicenseDialog();
+        LicenseDialog()
+            : m_xBuilder(Application::CreateBuilder(nullptr, "sfx/ui/licensedialog.ui"))
+            , m_xDialog(m_xBuilder->weld_dialog("LicenseDialog"))
+            , m_xLabel(m_xBuilder->weld_label("label"))
+        {
+            m_xLabel->set_label(Translate::GetReadStringHook()(m_xLabel->get_label()));
+        }
+
+        short run()
+        {
+            short nRet = m_xDialog->run();
+            if (nRet == RET_OK)
+                showDocument("LICENSE");
+            return nRet;
+        }
     };
-
-    LicenseDialog::LicenseDialog()
-        : ModalDialog(nullptr, "LicenseDialog", "sfx/ui/licensedialog.ui")
-    {
-        get<PushButton>("show")->SetClickHdl(LINK(this, LicenseDialog, ShowHdl));
-    }
-
-    IMPL_LINK_NOARG(LicenseDialog, ShowHdl, Button*, void)
-    {
-        EndDialog(RET_OK);
-        showDocument("LICENSE");
-    }
 
     class SafeModeQueryDialog : public ModalDialog
     {
@@ -524,8 +528,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
         case SID_SHOW_LICENSE:
         {
-            ScopedVclPtrInstance< LicenseDialog > aDialog;
-            aDialog->Execute();
+            LicenseDialog aDialog;
+            aDialog.run();
             break;
         }
 

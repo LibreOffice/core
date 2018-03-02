@@ -442,6 +442,7 @@ class VCL_DLLPUBLIC Label : virtual public Widget
 {
 public:
     virtual void set_label(const OUString& rText) = 0;
+    virtual OUString get_label() const = 0;
 };
 
 class VCL_DLLPUBLIC TextView : virtual public Container

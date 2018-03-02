@@ -1015,6 +1015,11 @@ public:
     {
         m_xLabel->SetText(rText);
     }
+
+    virtual OUString get_label() const override
+    {
+        return m_xLabel->GetText();
+    }
 };
 
 class SalInstanceTextView : public SalInstanceContainer, public virtual weld::TextView
