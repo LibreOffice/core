@@ -118,7 +118,14 @@ public:
 
 class AbstractSplitTableDialog_Impl : public AbstractSplitTableDialog // add for
 {
-    DECL_ABSTDLG_BASE(AbstractSplitTableDialog_Impl, SwSplitTableDlg)
+protected:
+    std::unique_ptr<SwSplitTableDlg> m_xDlg;
+public:
+    explicit AbstractSplitTableDialog_Impl(SwSplitTableDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual SplitTable_HeadlineOption GetSplitMode() override;
 };
 
@@ -438,7 +445,7 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateSwSortingDialog(vcl::Window * pParent, SwWrtShell &rSh) override;
     virtual VclPtr<VclAbstractDialog> CreateSwTableHeightDialog(vcl::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<VclAbstractDialog> CreateSwColumnDialog(vcl::Window *pParent, SwWrtShell &rSh) override;
-    virtual VclPtr<AbstractSplitTableDialog> CreateSplitTableDialog ( vcl::Window * pParent, SwWrtShell &rSh ) override;
+    virtual VclPtr<AbstractSplitTableDialog> CreateSplitTableDialog(weld::Window* pParent, SwWrtShell &rSh) override;
 
     virtual VclPtr<AbstractSwAutoFormatDlg> CreateSwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pShell,
                                                                   bool bSetAutoFormat = true,

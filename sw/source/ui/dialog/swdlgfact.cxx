@@ -92,7 +92,10 @@ IMPL_ABSTDLG_BASE(AbstractSwInsertAbstractDlg_Impl);
 IMPL_ABSTDLG_BASE(SwAbstractSfxDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwAsciiFilterDlg_Impl);
 IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractSplitTableDialog_Impl);
+short AbstractSplitTableDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 short AbstractSwBreakDlg_Impl::Execute()
 {
     return m_xDlg->run();
@@ -197,7 +200,7 @@ void AbstractSwAsciiFilterDlg_Impl::FillOptions( SwAsciiOptions& rOptions )
 
 SplitTable_HeadlineOption AbstractSplitTableDialog_Impl::GetSplitMode()
 {
-    return pDlg->GetSplitMode();
+    return m_xDlg->GetSplitMode();
 }
 
 OUString AbstractSwBreakDlg_Impl::GetTemplateName()
@@ -795,9 +798,9 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwSortingDialog(vc
     return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractSplitTableDialog> SwAbstractDialogFactory_Impl::CreateSplitTableDialog ( vcl::Window *pParent, SwWrtShell &rSh )
+VclPtr<AbstractSplitTableDialog> SwAbstractDialogFactory_Impl::CreateSplitTableDialog(weld::Window *pParent, SwWrtShell &rSh)
 {
-    return VclPtr<AbstractSplitTableDialog_Impl>::Create( VclPtr<SwSplitTableDlg>::Create( pParent, rSh) );
+    return VclPtr<AbstractSplitTableDialog_Impl>::Create(new SwSplitTableDlg(pParent, rSh));
 }
 
 VclPtr<AbstractSwSelGlossaryDlg> SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg(const OUString &rShortName)
