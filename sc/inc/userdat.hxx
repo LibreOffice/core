@@ -25,6 +25,7 @@
 #include <svtools/imap.hxx>
 #include "global.hxx"
 #include "address.hxx"
+#include "drwlayer.hxx"
 
 // Object IDs for UserData
 #define SC_UD_OBJDATA       1
@@ -41,13 +42,24 @@ public:
     Point               maStartOffset;
     Point               maEndOffset;
     Type                meType;
-    tools::Rectangle           maLastRect;
     bool                mbResizeWithCell = false;
 
     explicit            ScDrawObjData();
 
+    tools::Rectangle getCurrentRect() { return maCurrentRect; };
+    tools::Rectangle getLastCellRect() { return maLastCellRect; };
+    void setRect(const ScDocument* rDoc, tools::Rectangle rNewRect)
+    {
+        if (maStart.IsValid() && mbResizeWithCell)
+            maLastCellRect = ScDrawLayer::GetCellRect(*rDoc, maStart, true);
+        maCurrentRect = rNewRect;
+    };
+
 private:
      virtual ScDrawObjData* Clone( SdrObject* pObj ) const override;
+
+    tools::Rectangle maLastCellRect;
+    tools::Rectangle maCurrentRect;
 };
 
 class ScIMapInfo : public SdrObjUserData
