@@ -416,6 +416,8 @@ void PDFSigningTest::testTokenize()
         // File that's intentionally smaller than 1024 bytes.
         OUStringLiteral("small.pdf"),
         OUStringLiteral("tdf107149.pdf"),
+        // Valgrind was unhappy about this.
+        OUStringLiteral("forcepoint16.pdf"),
     };
 
     for (const auto& rName : aNames)
