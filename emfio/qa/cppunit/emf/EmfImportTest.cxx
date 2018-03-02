@@ -40,6 +40,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
 
     void testWorking();
     void TestDrawString();
+    void TestDrawStringTransparent();
     void TestDrawLine();
 
     Primitive2DSequence parseEmf(const OUString& aSource);
@@ -48,6 +49,7 @@ public:
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testWorking);
     CPPUNIT_TEST(TestDrawString);
+    CPPUNIT_TEST(TestDrawStringTransparent);
     CPPUNIT_TEST(TestDrawLine);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -111,6 +113,30 @@ void Test::TestDrawString()
     assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "text", "TEST");
     assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "fontcolor", "#000000");
     assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "familyname", "CALIBRI");
+}
+
+void Test::TestDrawStringTransparent()
+{
+    // This unit checks for a correct import of an EMF+ file with one DrawString Record with transparency
+
+    // first, get the sequence of primitives and dump it
+    Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestDrawStringTransparent.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    //TODO Strange that transparency is set to 0 even if it is not fully transparent
+    // check correct import of the DrawString: transparency, height, position, text, color and font
+    assertXPath(pDocument, "/primitive2D/metafile/transform/unifiedtransparence", "transparence", "0");
+
+    //TODO Where was textsimpleportion gone?
+    //assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "height", "276");
+    //assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "x", "25");
+    //assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "y", "323");
+    //assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "text", "Transparent Text");
+    //assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "fontcolor", "#000000");
+    //assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "familyname", "CALIBRI");
 }
 
 void Test::TestDrawLine()
