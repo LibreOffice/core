@@ -243,6 +243,7 @@ public:
     void testEmptyRowsXLSXML();
     void testBorderDirectionsXLSXML();
     void testBorderColorsXLSXML();
+    void testHiddenRowsColumnsXLSXML();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -371,6 +372,7 @@ public:
     CPPUNIT_TEST(testEmptyRowsXLSXML);
     CPPUNIT_TEST(testBorderDirectionsXLSXML);
     CPPUNIT_TEST(testBorderColorsXLSXML);
+    CPPUNIT_TEST(testHiddenRowsColumnsXLSXML);
     CPPUNIT_TEST(testCondFormatFormulaListenerXLSX);
 
     CPPUNIT_TEST_SUITE_END();
@@ -3828,6 +3830,58 @@ void ScFiltersTest::testBorderColorsXLSXML()
     CPPUNIT_ASSERT(pLine);
     CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pLine->GetBorderLineStyle());
     CPPUNIT_ASSERT_EQUAL(Color(0,176,240), pLine->GetColor()); // light blue
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testHiddenRowsColumnsXLSXML()
+{
+    ScDocShellRef xDocSh = loadDoc("hidden-rows-columns.", FORMAT_XLS_XML);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load hidden-rows-columns.xml", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    struct Check
+    {
+        SCCOLROW nPos1;
+        SCCOLROW nPos2;
+        bool bVisible;
+    };
+
+    std::vector<Check> aRowChecks = {
+        { 0, 0, true  },
+        { 1, 2, false },
+        { 3, 3, true  },
+        { 4, 4, false },
+        { 5, 7, true  },
+        { 8, 8, false },
+        { 9, MAXROW, true },
+    };
+
+    for (const Check& c : aRowChecks)
+    {
+        SCROW nRow1 = -1, nRow2 = -1;
+        bool bVisible = !rDoc.RowHidden(c.nPos1, 0, &nRow1, &nRow2);
+        CPPUNIT_ASSERT_EQUAL(bVisible, c.bVisible);
+        CPPUNIT_ASSERT_EQUAL(c.nPos1, nRow1);
+        CPPUNIT_ASSERT_EQUAL(c.nPos2, nRow2);
+    }
+
+    std::vector<Check> aColChecks = {
+        { 0, 1, true  },
+        { 2, 5, false },
+        { 6, 9, true  },
+        { 10, 10, false },
+        { 11, MAXCOL, true },
+    };
+
+    for (const Check& c : aColChecks)
+    {
+        SCCOL nCol1 = -1, nCol2 = -1;
+        bool bVisible = !rDoc.ColHidden(c.nPos1, 1, &nCol1, &nCol2);
+        CPPUNIT_ASSERT_EQUAL(bVisible, c.bVisible);
+        CPPUNIT_ASSERT_EQUAL(c.nPos1, SCCOLROW(nCol1));
+        CPPUNIT_ASSERT_EQUAL(c.nPos2, SCCOLROW(nCol2));
+    }
 
     xDocSh->DoClose();
 }
