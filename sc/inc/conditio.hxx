@@ -35,6 +35,7 @@
 
 #include <rtl/math.hxx>
 #include <tools/date.hxx>
+#include <tools/link.hxx>
 
 #include <map>
 #include <memory>
@@ -604,10 +605,11 @@ public:
 
     /**
      * Checks that all cond formats have a non empty range.
-     * Deletes empty cond formats.
+     * Deletes empty cond formats. Optionall call rLink
+     * on the empty format before deleting it.
      * @return true if all cond formats were valid
      */
-    bool    CheckAllEntries();
+    bool    CheckAllEntries(const Link<ScConditionalFormat*,void>& rLink = Link<ScConditionalFormat*,void>());
 
     ScConditionalFormat* GetFormat( sal_uInt32 nKey );
     const ScConditionalFormat* GetFormat( sal_uInt32 nKey ) const;

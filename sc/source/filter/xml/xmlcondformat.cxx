@@ -49,13 +49,20 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLConditio
     return pContext;
 }
 
+IMPL_LINK(ScXMLConditionalFormatsContext, FormatDeletedHdl, ScConditionalFormat*, pFormat, void)
+{
+    mvCondFormatData.erase(std::remove_if(mvCondFormatData.begin(), mvCondFormatData.end(),
+                                          [pFormat](CondFormatData& r){ return r.mpFormat == pFormat; }),
+                           mvCondFormatData.end());
+}
+
 void SAL_CALL ScXMLConditionalFormatsContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScDocument* pDoc = GetScImport().GetDocument();
 
     SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
     ScConditionalFormatList* pCondFormatList = pDoc->GetCondFormList(nTab);
-    bool bDeleted = !pCondFormatList->CheckAllEntries();
+    bool bDeleted = !pCondFormatList->CheckAllEntries(LINK(this, ScXMLConditionalFormatsContext, FormatDeletedHdl));
 
     SAL_WARN_IF(bDeleted, "sc", "conditional formats have been deleted because they contained empty range info");
 
