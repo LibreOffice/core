@@ -38,7 +38,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objitem.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/request.hxx>
