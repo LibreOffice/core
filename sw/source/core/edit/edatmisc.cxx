@@ -24,6 +24,8 @@
 #include <edimp.hxx>
 #include <swundo.hxx>
 #include <ndtxt.hxx>
+#include <cntfrm.hxx>
+#include <cellfrm.hxx>
 
 /*
  * hard formatting (Attribute)
@@ -152,6 +154,29 @@ void SwEditShell::SetAttrSet( const SfxItemSet& rSet, SetAttrMode nFlags, SwPaM*
         if( !HasSelection() )
             UpdateAttr();
         GetDoc()->getIDocumentContentOperations().InsertItemSet( *pCursor, rSet, nFlags );
+    }
+    if(IsCursorInTable())
+    {
+        SwShellTableCursor* pCur = GetTableCursor();
+
+        if ( pCur )
+        {
+            SwSelBoxes const& rBoxes( pCur->GetSelectedBoxes() );
+            for (size_t i = 0; i < rBoxes.size(); ++i)
+                rBoxes[i]->SetDirectFormatting( true );
+        }
+        else
+        {
+            SwFrame *pFrame = GetCurrFrame();
+            do {
+                pFrame = pFrame->GetUpper();
+            } while ( pFrame && !pFrame->IsCellFrame() );
+            if( pFrame )
+            {
+                SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
+                pBox->SetDirectFormatting( true );
+            }
+        }
     }
     EndAllAction();
 }
