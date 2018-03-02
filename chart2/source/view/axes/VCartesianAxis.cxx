@@ -74,6 +74,53 @@ VCartesianAxis::~VCartesianAxis()
     m_pPosHelper = nullptr;
 }
 
+void lcl_ResizeTextShapeToFitAvailableSpace( Reference< drawing::XShape >& xShape2DText,
+                                             const AxisLabelProperties& rAxisLabelProperties,
+                                             const OUString& rLabel,
+                                             const tNameSequence& rPropNames,
+                                             const tAnySequence& rPropValues )
+{
+    uno::Reference< text::XTextRange > xTextRange( xShape2DText, uno::UNO_QUERY );
+
+    if( !xTextRange.is() )
+        return;
+
+    const sal_Int32 nFullHeight = rAxisLabelProperties.m_aFontReferenceSize.Height;
+
+    if( !nFullHeight || !rLabel.getLength() )
+        return;
+
+    sal_Int32 nMaxLabelsHeight = nFullHeight - rAxisLabelProperties.m_aMaximumSpaceForLabels.Height - rAxisLabelProperties.m_aMaximumSpaceForLabels.Y;
+    const sal_Int32 nAvgCharWidth = xShape2DText->getSize().Width / rLabel.getLength();
+    const sal_Int32 nTextSize = AbstractShapeFactory::getSizeAfterRotation( xShape2DText,
+                                            rAxisLabelProperties.fRotationAngleDegree ).Height;
+
+    if( !nAvgCharWidth )
+        return;
+
+    const OUString sDots = "...";
+    const sal_Int32 nCharsToRemove = ( nTextSize - nMaxLabelsHeight ) / nAvgCharWidth + 1;
+    sal_Int32 nNewLen = rLabel.getLength() - nCharsToRemove - sDots.getLength();
+    // Prevent from showing only dots
+    if (nNewLen < 0)
+        nNewLen = ( rLabel.getLength() >= sDots.getLength() ) ? sDots.getLength() : rLabel.getLength();
+
+    bool bCrop = nCharsToRemove > 0;
+    if( bCrop )
+    {
+        OUString aNewLabel = rLabel.copy( 0, nNewLen );
+        if( nNewLen > sDots.getLength() )
+            aNewLabel += sDots;
+        xTextRange->setString( aNewLabel );
+
+        uno::Reference< beans::XPropertySet > xProp( xTextRange, uno::UNO_QUERY );
+        if( xProp.is() )
+        {
+            PropertyMapper::setMultiProperties( rPropNames, rPropValues, xProp );
+        }
+    }
+}
+
 Reference< drawing::XShape > createSingleLabel(
             const Reference< lang::XMultiServiceFactory>& xShapeFactory
           , const Reference< drawing::XShapes >& xTarget
@@ -95,6 +142,9 @@ Reference< drawing::XShape > createSingleLabel(
 
     Reference< drawing::XShape > xShape2DText = AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory)
                     ->createText( xTarget, aLabel, rPropNames, rPropValues, aATransformation );
+
+    if( rAxisProperties.m_bLimitSpaceForLabels )
+        lcl_ResizeTextShapeToFitAvailableSpace(xShape2DText, rAxisLabelProperties, aLabel, rPropNames, rPropValues);
 
     LabelPositionHelper::correctPositionForRotation( xShape2DText
         , rAxisProperties.maLabelAlignment.meAlignment, rAxisLabelProperties.fRotationAngleDegree, rAxisProperties.m_bComplexCategories );
