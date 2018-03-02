@@ -30,6 +30,8 @@
 #include <cstddef>
 #include <memory>
 #include <vector>
+#include <boost/optional.hpp>
+
 
 class SfxItemSet;
 class SwView;
@@ -176,6 +178,8 @@ class SW_DLLPUBLIC SwRangeRedline : public SwPaM
     bool bIsVisible : 1;
     sal_uInt32 m_nId;
 
+    mutable boost::optional<sal_uLong> m_oLOKLastNodeIndex;
+
     void MoveToSection();
     void CopyToSection();
     void DelCopyOfSection(size_t nMyPos);
@@ -203,6 +207,9 @@ public:
 
     bool IsVisible() const { return bIsVisible; }
     bool IsDelLastPara() const { return bDelLastPara; }
+
+    virtual const SwPosition *GetPoint() const override;
+    virtual       SwPosition *GetPoint() override;
 
     void SetStart( const SwPosition& rPos, SwPosition* pSttPtr = nullptr );
     void SetEnd( const SwPosition& rPos, SwPosition* pEndPtr = nullptr );

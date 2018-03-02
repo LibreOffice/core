@@ -1083,6 +1083,28 @@ void MaybeNotifyRedlineModification(SwRangeRedline* pRedline, SwDoc* pDoc)
     }
 }
 
+const SwPosition* SwRangeRedline::GetPoint() const
+{
+    const SwPosition* pPoint = SwPaM::GetPoint();
+    if(!m_oLOKLastNodeIndex || *m_oLOKLastNodeIndex != pPoint->nNode.GetIndex())
+    {
+        m_oLOKLastNodeIndex = pPoint->nNode.GetIndex();
+        MaybeNotifyRedlineModification(const_cast<SwRangeRedline*>(this), GetDoc());
+    }
+    return pPoint;
+}
+
+SwPosition* SwRangeRedline::GetPoint()
+{
+    SwPosition* pPoint = SwPaM::GetPoint();
+    if(!m_oLOKLastNodeIndex || *m_oLOKLastNodeIndex != pPoint->nNode.GetIndex())
+    {
+        m_oLOKLastNodeIndex = pPoint->nNode.GetIndex();
+        MaybeNotifyRedlineModification(this, GetDoc());
+    }
+    return pPoint;
+}
+
 void SwRangeRedline::SetStart( const SwPosition& rPos, SwPosition* pSttPtr )
 {
     if( !pSttPtr ) pSttPtr = Start();

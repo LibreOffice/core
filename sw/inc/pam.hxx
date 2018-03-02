@@ -240,8 +240,8 @@ public:
      */
     bool HasMark() const { return m_pPoint != m_pMark; }
 
-    const SwPosition *GetPoint() const { return m_pPoint; }
-          SwPosition *GetPoint()       { return m_pPoint; }
+    virtual const SwPosition *GetPoint() const { return m_pPoint; }
+    virtual       SwPosition *GetPoint()       { return m_pPoint; }
     const SwPosition *GetMark()  const { return m_pMark; }
           SwPosition *GetMark()        { return m_pMark; }
 
