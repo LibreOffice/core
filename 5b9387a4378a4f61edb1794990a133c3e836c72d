@@ -22,6 +22,30 @@
       "revId": "5b9387a4378a4f61edb1794990a133c3e836c72d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_775fba0e",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 2186,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-03-02T16:17:35Z",
+      "side": 1,
+      "message": "I checked the menus and submenus where this appears, ~F is not used in those menus.\n~Forms does not appear together in a menu with FitCellSize.",
+      "parentUuid": "ba2be162_7cd8811e",
+      "range": {
+        "startLine": 2186,
+        "startChar": 34,
+        "endLine": 2186,
+        "endChar": 36
+      },
+      "revId": "5b9387a4378a4f61edb1794990a133c3e836c72d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
