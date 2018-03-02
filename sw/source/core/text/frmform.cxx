@@ -229,7 +229,11 @@ bool SwTextFrame::CalcFollow( const sal_Int32 nTextOfst )
         }
 
         // The footnote area must not get larger
-        SwSaveFootnoteHeight aSave( FindFootnoteBossFrame( true ), LONG_MAX );
+        SwFootnoteBossFrame *pBs = FindFootnoteBossFrame(true);
+        if (!pBs)
+            return false;
+
+        SwSaveFootnoteHeight aSave(pBs, LONG_MAX);
 
         pMyFollow->CalcFootnoteFlag();
         if ( !pMyFollow->GetNext() && !pMyFollow->HasFootnote() )

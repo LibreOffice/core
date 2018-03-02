@@ -614,11 +614,12 @@ namespace
     /// Checks if pFrame has a parent that can contain a split section frame.
     bool CanContainSplitSection(const SwFrame* pFrame)
     {
-        if (!pFrame->IsInTab())
+        const SwTabFrame* pTableFrame = pFrame->IsInTab() ? pFrame->FindTabFrame() : nullptr;
+        if (!pTableFrame)
             return true;
 
         // The frame is in a table, see if the table is in a section.
-        return !pFrame->FindTabFrame()->IsInSct();
+        return !pTableFrame->IsInSct();
     }
 }
 
@@ -1760,9 +1761,9 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
                             pNxtContent = static_cast<SwLayoutFrame*>(pTmp)->ContainsContent();
                     }
                 }
-                if( pNxtContent )
+                SwFootnoteBossFrame* pOldBoss = pNxtContent ? pSect->FindFootnoteBossFrame(true) : nullptr;
+                if (pOldBoss)
                 {
-                    SwFootnoteBossFrame* pOldBoss = pSect->FindFootnoteBossFrame( true );
                     if( pOldBoss == pNxtContent->FindFootnoteBossFrame( true ) )
                     {
                         SwSaveFootnoteHeight aHeight( pOldBoss,
