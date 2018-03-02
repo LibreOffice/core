@@ -1600,7 +1600,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
             pVCooSys->set3DWallPositions( eLeftWallPos, eBackWallPos, eBottomPos );
         }
 
-        pVCooSys->createVAxisList(xChartDoc, rPageSize, rParam.maRemainingSpace);
+        pVCooSys->createVAxisList(xChartDoc, rPageSize, rParam.maRemainingSpace, rParam.mbUseFixedInnerSize);
     }
 
     // - prepare list of all axis and how they are used
