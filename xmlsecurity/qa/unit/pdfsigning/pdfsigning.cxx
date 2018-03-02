@@ -452,6 +452,8 @@ void PDFSigningTest::testTokenize()
         "tdf107149.pdf",
         // Nested parentheses were not handled.
         "tdf114460.pdf",
+        // Valgrind was unhappy about this.
+        "forcepoint16.pdf",
     };
 
     for (const auto& rName : aNames)

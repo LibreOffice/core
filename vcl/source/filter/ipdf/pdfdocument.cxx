@@ -1260,8 +1260,10 @@ bool PDFDocument::Read(SvStream& rStream)
         if (pPrev)
             nStartXRef = pPrev->GetValue();
 
-        // Reset state, except object offsets and the edit buffer.
+        // Reset state, except the edit buffer.
         m_aElements.clear();
+        m_aOffsetObjects.clear();
+        m_aIDObjects.clear();
         m_aStartXRefs.clear();
         m_aEOFs.clear();
         m_pTrailer = nullptr;
