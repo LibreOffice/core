@@ -97,6 +97,7 @@ gb_UIConfig_INSTDIR := $(LIBO_SHARE_FOLDER)/config/soffice.cfg
 
 ifneq ($(filter LXML,$(BUILD_TYPE)),)
 gb_UIConfig_LXML_PATH := PYPATH=$${PYPATH:+$$PYPATH:}$(call gb_UnpackedTarball_get_dir,lxml)/install ;
+gb_UIConfig_LXML_TARGET := $(call gb_ExternalProject_get_target,lxml)
 endif
 gb_UIConfig_gla11y_SCRIPT := $(SRCDIR)/bin/gla11y
 
@@ -134,7 +135,7 @@ $(call gb_Output_announce,$(2),$(true),UIA,1)
 $(call gb_UIConfig__gla11y_command)
 endef
 
-$(call gb_UIConfig_get_a11yerrors_target,%) : $(call gb_ExternalProject_get_target,lxml) $(call gb_ExternalExecutable_get_dependencies,python) $(gb_UIConfig_gla11y_SCRIPT)
+$(call gb_UIConfig_get_a11yerrors_target,%) : $(gb_UIConfig_LXML_TARGET) $(call gb_ExternalExecutable_get_dependencies,python) $(gb_UIConfig_gla11y_SCRIPT)
 	$(call gb_UIConfig_a11yerrors__command,$@,$*)
 
 gb_UIConfig_get_packagename = UIConfig/$(1)
