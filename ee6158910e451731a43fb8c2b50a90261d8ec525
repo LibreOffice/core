@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_fcb471d2",
+        "filename": "sw/source/core/unocore/unomap1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-03-02T12:38:09Z",
+      "side": 1,
+      "message": "this is an incompatible API change, the type must remain \"short\"\n\nit\u0027s a bit confusing as there are multiple similar properties in offapi:\n\noffapi/com/sun/star/style/PageProperties.idl:    [optional,property] short FootnoteLineAdjust;\noffapi/com/sun/star/text/PageFootnoteInfo.idl:    [property] com::sun::star::text::HorizontalAdjust FootnoteSeparatorLineAdjust;\noffapi/com/sun/star/text/TextPageStyle.idl:    [property] short FootnoteLineAdjust;\n\nbut this one is #define UNO_NAME_FOOTNOTE_LINE_ADJUST \"FootnoteLineAdjust\"\nso one of the \"short\" ones.",
+      "revId": "ee6158910e451731a43fb8c2b50a90261d8ec525",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
