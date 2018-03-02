@@ -36,7 +36,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#if defined UNX && !defined MACOSX
+#if defined UNX && !defined MACOSX && !defined IOS
 #   include <libintl.h>
 #endif
 
@@ -119,7 +119,7 @@ namespace Translate
         osl::File::getSystemPathFromFileURL(uri, path);
         OString sPath(OUStringToOString(path, osl_getThreadTextEncoding()));
         gen.add_messages_path(sPath.getStr());
-#if defined UNX && !defined MACOSX
+#if defined UNX && !defined MACOSX && !defined IOS
         bindtextdomain(pPrefixName, sPath.getStr());
 #endif
         gen.add_messages_domain(pPrefixName);
