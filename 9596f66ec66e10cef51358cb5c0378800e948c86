@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba2be162_9c5ff574",
+        "filename": "sc/source/core/data/segmenttree.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-02T13:21:19Z",
+      "side": 1,
+      "message": "this is ignored all over the place\ne.g. \n    sc/source/core/data/markdata.cxx:717\nand other places in that file, as well as\n    sc/source/core/data/table5.cxx:209",
+      "parentUuid": "ba2be162_dc0b2d7c",
+      "revId": "9596f66ec66e10cef51358cb5c0378800e948c86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_1c26a516",
         "filename": "sc/source/core/data/table3.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2018-03-02T13:10:41Z",
       "side": 1,
       "message": "Better SAL_WARN_UNUSED_RESULT",
+      "revId": "9596f66ec66e10cef51358cb5c0378800e948c86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_3c6a891b",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3461,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-02T13:21:19Z",
+      "side": 1,
+      "message": "sc/source/core/data/documen3.cxx:1625 ignores it",
+      "parentUuid": "ba2be162_1c26a516",
       "revId": "9596f66ec66e10cef51358cb5c0378800e948c86",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
