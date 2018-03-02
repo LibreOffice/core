@@ -631,7 +631,7 @@ namespace emfplushelper
                     }
                 }
                 else // ok, no extra points: just start and end
-                {
+                {q
                     if (brush->type == BrushTypeLinearGradient)
                     {
                         aVector.emplace_back(0.0, aStartColor, 1. );
