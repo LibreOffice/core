@@ -111,7 +111,8 @@ public:
     virtual void createVAxisList(
             const css::uno::Reference< css::chart2::XChartDocument> & xChartDoc
             , const css::awt::Size& rFontReferenceSize
-            , const css::awt::Rectangle& rMaximumSpaceForLabels );
+            , const css::awt::Rectangle& rMaximumSpaceForLabels
+            , bool bLimitSpaceForLabels );
 
     virtual void initVAxisInList();
     virtual void updateScalesAndIncrementsOnAxes();
