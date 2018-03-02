@@ -490,6 +490,7 @@ void OTableWindow::Remove()
 {
     // Delete the window
     OJoinTableView* pTabWinCont = getTableView();
+    VclPtr<OTableWindow> aHoldSelf(this); // keep ourselves alive during the RemoveTabWin process
     pTabWinCont->RemoveTabWin( this );
     pTabWinCont->Invalidate();
 }
