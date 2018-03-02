@@ -3932,9 +3932,11 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
                 }
             }
             break;
+            case svExternalSingleRef :
+            case svExternalDoubleRef :
             case svMatrix :
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
                     SCSIZE nC, nR;
