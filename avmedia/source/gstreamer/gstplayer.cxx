@@ -29,7 +29,7 @@
 #include <math.h>
 #include <string>
 #include <gst/gstelement.h>
-#include <gst/interfaces/xoverlay.h>
+#include <gst/video/videooverlay.h>
 
 
 // maximum timeout time in nanoseconds
@@ -312,10 +312,7 @@ double SAL_CALL Player::getDuration()
 
     if( implInitPlayer() )
     {
-        GstFormat aFormat = GST_FORMAT_TIME;
-
-        if( !gst_element_query_duration( mpPlayer, &aFormat, &nDuration ) ||
-           ( GST_FORMAT_TIME != aFormat ) ||
+        if( !gst_element_query_duration( mpPlayer, GST_FORMAT_TIME, &nDuration ) ||
            ( nDuration < 0 ) )
         {
             nDuration = 0;
@@ -348,11 +345,9 @@ double SAL_CALL Player::getMediaTime()
     ::osl::MutexGuard aGuard(m_aMutex);
     if( implInitPlayer() )
     {
-        GstFormat aFormat = GST_FORMAT_TIME;
         gint64 nCurTime = 0;
 
-        if( gst_element_query_position( mpPlayer, &aFormat, &nCurTime ) &&
-           ( GST_FORMAT_TIME == aFormat ) &&
+        if( gst_element_query_position( mpPlayer, GST_FORMAT_TIME, &nCurTime ) &&
            ( nCurTime >= 0 ) )
         {
             fRet = static_cast< double >( nCurTime ) / NANO_TIME_FACTOR;
@@ -539,6 +534,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow(
 
         if( !pPlayerWindow->create( rArguments ) )
         {
+            OSL_ENSURE( false, "could not create player window\n" );
             xRet.clear();
         }
         else
@@ -557,8 +553,12 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow(
                 gst_element_get_state( mpPlayer, &aOldState, NULL, GST_MAX_TIMEOUT );
                 gst_element_set_state( mpPlayer, GST_STATE_READY );
                 g_object_set( mpPlayer, "video-sink", pVideoSink, NULL );
+                gst_video_overlay_set_window_handle( GST_VIDEO_OVERLAY( mpPlayer ),
+                    pPlayerWindow->getXWindowHandle() );
                 gst_element_set_state( mpPlayer, aOldState );
             }
+            else
+                OSL_ENSURE( false, "no video sink available\n" );
         }
     }
 
@@ -756,7 +756,7 @@ void Player::implHandleNewPadFunc( GstElement* pElement,
         g_free( pElementName );
 #endif
 
-        GstCaps* pCaps = gst_pad_get_caps( pPad );
+        GstCaps* pCaps = gst_pad_get_current_caps( pPad );
 
         // we are interested only in getting video properties
         // width and height or if we have a video source at all
@@ -863,7 +863,7 @@ gpointer Player::run()
 
         // add bus sync handler to intercept video window creation for setting our own window
         gst_bus_set_sync_handler( static_cast< GstBusSource* >( pBusSource )->mpBus,
-                                  &lcl_implHandleCreateWindowFunc, this );
+                                  &lcl_implHandleCreateWindowFunc, this, NULL );
 
         // watch for all elements (and pads) that will be added to the playbin,
         // in order to retrieve properties like video width and height
@@ -876,6 +876,14 @@ gpointer Player::run()
         // set video fake sink first, since we only create a player without window here
         // and don't want to have the gstreamer default window appearing
         g_object_set( mpPlayer, "video-sink", gst_element_factory_make( "fakesink", NULL ), NULL );
+
+        // This isn't ever going to happen, as createPlayerWindow() has to be called first
+        // to set the mpPlayerWindow, but let's keep it here in case it is called first some day:
+        if ( g_atomic_pointer_get( &mpPlayerWindow ) )
+        {
+            gst_video_overlay_set_window_handle( GST_VIDEO_OVERLAY( mpPlayer ), static_cast< Window* >( g_atomic_pointer_get(
+                                                                 &mpPlayerWindow ) )->getXWindowHandle() );
+        }
 
         // set state of player to READY or destroy object in case of FAILURE
         if( gst_element_set_state( mpPlayer, GST_STATE_READY ) == GST_STATE_CHANGE_FAILURE )
@@ -928,13 +936,12 @@ GstBusSyncReply Player::handleCreateWindow( GstBus* /* pBus */,
     GstBusSyncReply eRet = GST_BUS_PASS;
 
     if( pMsg &&
-       ( GST_MESSAGE_TYPE( pMsg ) == GST_MESSAGE_ELEMENT ) &&
-       gst_structure_has_name( pMsg->structure, "prepare-xwindow-id" ) &&
+       gst_is_video_overlay_prepare_window_handle_message( pMsg ) &&
        g_atomic_pointer_get( &mpPlayerWindow ) )
     {
         OSL_TRACE( ">>> Got Request to create XOverlay" );
 
-        gst_x_overlay_set_xwindow_id( GST_X_OVERLAY( GST_MESSAGE_SRC( pMsg ) ),
+        gst_video_overlay_set_window_handle( GST_VIDEO_OVERLAY( GST_MESSAGE_SRC( pMsg ) ),
                                      static_cast< Window* >( g_atomic_pointer_get(
                                                                 &mpPlayerWindow ) )->getXWindowHandle() );
 

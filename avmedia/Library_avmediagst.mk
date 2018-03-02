@@ -31,12 +31,11 @@ $(eval $(call gb_Library_set_include,avmediagst,\
         $$(INCLUDE) \
 	-I$(SRCDIR)/avmedia/inc \
 	-I$(SRCDIR)/avmedia/source/inc \
-	$(filter -I%,$(GTK_CFLAGS)) \
-	$(shell pkg-config --cflags-only-I gstreamer-0.10 gstreamer-interfaces-0.10) \
+	$(filter -I%,$(GSTREAMER_CFLAGS)) \
 ))
 
 $(eval $(call gb_Library_add_cflags,avmediagst,\
-	$(filter-out -I%,$(GTK_CFLAGS)) \
+	$(filter-out -I%,$(GSTREAMER_CFLAGS)) \
 ))
 
 ifeq ($(OS),MACOSX)
@@ -62,8 +61,7 @@ $(eval $(call gb_Library_add_linked_libs,avmediagst,\
 ))
 
 $(eval $(call gb_Library_add_libs,avmediagst,\
-	$(GTK_LIBS) \
-	$(shell pkg-config --libs gstreamer-0.10 gstreamer-interfaces-0.10) \
+	$(GSTREAMER_LIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,avmediagst,\

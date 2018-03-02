@@ -130,9 +130,9 @@ gboolean FrameGrabber::busCallback( GstBus* pBus, GstMessage* pMsg )
 {
     bool bDone = false;
 
-    if( pMsg && pMsg->structure )
+    if( pMsg && gst_message_get_structure( pMsg ) )
     {
-        GstStructure* pStruct = pMsg->structure;
+        const GstStructure* pStruct = gst_message_get_structure( pMsg );
         const gchar* pStructName = gst_structure_get_name( pStruct );
 
         if( ( ::std::string( pStructName ).find( "pixbuf" ) != ::std::string::npos ) &&
