@@ -175,6 +175,7 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
     , m_bComplexCategories(false)
     , m_pExplicitCategoriesProvider(pExplicitCategoriesProvider)
     , m_xAxisTextProvider(nullptr)
+    , m_bLimitSpaceForLabels(false)
 {
 }
 
@@ -201,6 +202,7 @@ AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
     , m_bComplexCategories( rAxisProperties.m_bComplexCategories )
     , m_pExplicitCategoriesProvider( rAxisProperties.m_pExplicitCategoriesProvider )
     , m_xAxisTextProvider( rAxisProperties.m_xAxisTextProvider )
+    , m_bLimitSpaceForLabels( rAxisProperties.m_bLimitSpaceForLabels )
 {
     if( rAxisProperties.m_pfMainLinePositionAtOtherAxis )
         m_pfMainLinePositionAtOtherAxis.reset(*rAxisProperties.m_pfMainLinePositionAtOtherAxis);
