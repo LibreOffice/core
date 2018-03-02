@@ -36,6 +36,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#if defined UNX && !defined MACOSX
+#   include <libintl.h>
+#endif
 
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
