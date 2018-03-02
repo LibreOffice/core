@@ -1157,6 +1157,7 @@ module com {
      [property] ::com::sun::star::util::Color TextLineColor;
      [property, optional] short WritingMode;
      [property, optional] short MouseWheelBehavior;
+     [property, optional] sequence< any > TypedItemList;
     };
     published interface XControlContainer {
      interface ::com::sun::star::uno::XInterface;
@@ -1627,6 +1628,7 @@ module com {
      [property, optional] short WritingMode;
      [property, optional] short MouseWheelBehavior;
      [property, maybevoid, optional] short ItemSeparatorPos;
+     [property, optional] sequence< any > TypedItemList;
     };
     published interface XNumericField {
      interface ::com::sun::star::uno::XInterface;
@@ -9759,7 +9761,7 @@ module com {
     published enum WrapTextMode {
      NONE = 0,
      THROUGH = 1,
-     THROUGHT = THROUGH,  //Errant spelling deprecated in version 5.4
+     THROUGHT = 1,
      PARALLEL = 2,
      DYNAMIC = 3,
      LEFT = 4,
@@ -13439,6 +13441,7 @@ module com {
      const short IROHA_HALFWIDTH_JA = 24;
      const short NATIVE_NUMBERING = 12;
      const short NUMBER_HANGUL_KO = 26;
+     const short NUMBER_HEBREW = 56;
      const short NUMBER_LOWER_ZH = 15;
      const short NUMBER_NONE = 5;
      const short NUMBER_TRADITIONAL_JA = 20;
