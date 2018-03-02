@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_71742afd",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-03-02T00:13:26Z",
+      "side": 1,
+      "message": "The transparency is properly displayed.\nUnfortunately the tests are failing.",
+      "revId": "96eb2cce162d8ed0e1e5a135ea2348e0e8fa6e04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
