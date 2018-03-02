@@ -271,25 +271,68 @@ static void showDocument( const char* pBaseName )
 
 namespace
 {
-    class LicenseDialog : public ModalDialog
+    Reference<XFrame> GetRequestFrame(SfxRequest& rReq)
+    {
+        const SfxItemSet* pArgs = rReq.GetInternalArgs_Impl();
+        const SfxPoolItem* pItem = nullptr;
+        Reference <XFrame> xFrame;
+        if (pArgs && pArgs->GetItemState(SID_FILLFRAME, false, &pItem) == SfxItemState::SET)
+        {
+            OSL_ENSURE( dynamic_cast< const SfxUnoFrameItem *>( pItem ) !=  nullptr, "SfxApplication::OfaExec_Impl: XFrames are to be transported via SfxUnoFrameItem by now!" );
+            xFrame = static_cast< const SfxUnoFrameItem*>( pItem )->GetFrame();
+        }
+        return xFrame;
+    }
+
+    weld::Window* getFrameWeld(const Reference<XFrame>& rFrame)
+    {
+        if (rFrame.is())
+        {
+            try
+            {
+                Reference< awt::XWindow > xContainerWindow(rFrame->getContainerWindow(), UNO_SET_THROW);
+                VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xContainerWindow);
+                if (pWindow)
+                    return pWindow->GetFrameWeld();
+            }
+            catch (const Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+
+        SAL_WARN( "sfx.appl", "no parent for dialogs" );
+        return nullptr;
+    }
+
+    weld::Window* GetRequestFrameWeld(SfxRequest& rReq)
+    {
+        return getFrameWeld(GetRequestFrame(rReq));
+    }
+
+    class LicenseDialog
     {
     private:
-        DECL_LINK(ShowHdl, Button*, void);
+        std::unique_ptr<weld::Builder> m_xBuilder;
+        std::unique_ptr<weld::Dialog> m_xDialog;
+        std::unique_ptr<weld::Label> m_xLabel;
     public:
-        explicit LicenseDialog();
+        LicenseDialog(weld::Window* pParent)
+            : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/licensedialog.ui"))
+            , m_xDialog(m_xBuilder->weld_dialog("LicenseDialog"))
+            , m_xLabel(m_xBuilder->weld_label("label"))
+        {
+            m_xLabel->set_label(Translate::GetReadStringHook()(m_xLabel->get_label()));
+        }
+
+        short run()
+        {
+            short nRet = m_xDialog->run();
+            if (nRet == RET_OK)
+                showDocument("LICENSE");
+            return nRet;
+        }
     };
-
-    LicenseDialog::LicenseDialog()
-        : ModalDialog(nullptr, "LicenseDialog", "sfx/ui/licensedialog.ui")
-    {
-        get<PushButton>("show")->SetClickHdl(LINK(this, LicenseDialog, ShowHdl));
-    }
-
-    IMPL_LINK_NOARG(LicenseDialog, ShowHdl, Button*, void)
-    {
-        EndDialog(RET_OK);
-        showDocument("LICENSE");
-    }
 
     class SafeModeQueryDialog : public ModalDialog
     {
@@ -412,12 +455,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         SID_CONFIG, pStringItem->GetValue() ) );
                 }
 
-                Reference< XFrame > xFrame;
-                const SfxItemSet* pIntSet = rReq.GetInternalArgs_Impl();
-                const SfxUnoFrameItem* pFrameItem = SfxItemSet::GetItem<SfxUnoFrameItem>(pIntSet, SID_FILLFRAME, false);
-                if ( pFrameItem )
-                    xFrame = pFrameItem->GetFrame();
-
+                Reference <XFrame> xFrame(GetRequestFrame(rReq));
                 ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateCustomizeTabDialog(
                     &aSet, xFrame ));
 
@@ -524,8 +562,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
         case SID_SHOW_LICENSE:
         {
-            ScopedVclPtrInstance< LicenseDialog > aDialog;
-            aDialog->Execute();
+            LicenseDialog aDialog(GetRequestFrameWeld(rReq));
+            aDialog.run();
             break;
         }
 
@@ -1307,14 +1345,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             const SfxStringItem* pURLItem = rReq.GetArg<SfxStringItem>(SID_OPTIONS_PAGEURL);
             if ( pURLItem )
                 sPageURL = pURLItem->GetValue();
-            const SfxItemSet* pArgs = rReq.GetInternalArgs_Impl();
-            const SfxPoolItem* pItem = nullptr;
-            Reference < XFrame > xFrame;
-            if ( pArgs && pArgs->GetItemState( SID_FILLFRAME, false, &pItem ) == SfxItemState::SET )
-            {
-                OSL_ENSURE( dynamic_cast< const SfxUnoFrameItem *>( pItem ) !=  nullptr, "SfxApplication::OfaExec_Impl: XFrames are to be transported via SfxUnoFrameItem by now!" );
-                xFrame = static_cast< const SfxUnoFrameItem*>( pItem )->GetFrame();
-            }
+            Reference <XFrame> xFrame(GetRequestFrame(rReq));
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if ( pFact )
             {
@@ -1455,12 +1486,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 }
             }
 
-            Reference< XFrame > xFrame;
-            const SfxItemSet* pIntSet = rReq.GetInternalArgs_Impl();
-            const SfxUnoFrameItem* pFrameItem = SfxItemSet::GetItem<SfxUnoFrameItem>(pIntSet, SID_FILLFRAME, false);
-            if (pFrameItem)
-                xFrame = pFrameItem->GetFrame();
-
+            Reference <XFrame> xFrame(GetRequestFrame(rReq));
             rReq.SetReturnValue(SfxStringItem(rReq.GetSlot(), ChooseMacro(xLimitToModel, xFrame, bChooseOnly)));
             rReq.Done();
         }
@@ -1487,12 +1513,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             SAL_INFO("sfx.appl", "SfxApplication::OfaExec_Impl: case ScriptOrg");
 
-            Reference< XFrame > xFrame;
-            const SfxItemSet* pIntSet = rReq.GetInternalArgs_Impl();
-            const SfxUnoFrameItem* pFrameItem = SfxItemSet::GetItem<SfxUnoFrameItem>(pIntSet, SID_FILLFRAME, false);
-            if ( pFrameItem )
-                xFrame = pFrameItem->GetFrame();
-
+            Reference <XFrame> xFrame(GetRequestFrame(rReq));
             if ( !xFrame.is() )
             {
                 const SfxViewFrame* pViewFrame = SfxViewFrame::Current();

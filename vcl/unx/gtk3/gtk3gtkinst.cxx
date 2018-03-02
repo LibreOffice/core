@@ -2215,6 +2215,12 @@ public:
     {
         gtk_label_set_label(m_pLabel, MapToGtkAccelerator(rText).getStr());
     }
+
+    virtual OUString get_label() const override
+    {
+        const char* pLabel = gtk_label_get_label(m_pLabel);
+        return OUString(pLabel, strlen(pLabel), RTL_TEXTENCODING_UTF8);
+    }
 };
 
 class GtkInstanceTextView : public GtkInstanceContainer, public virtual weld::TextView
