@@ -10826,9 +10826,13 @@ int main(int argc, char **argv) {
             #  02 00 80 3a  90 8a 4e d2 3a 00 00 00  f0 b4 b9 a7 ff 7f 00 00  00 00 00 00 00 00 00 00  20 d8 4e d2
             #               ^~~~~~~~~~~~~~~~~~~~~~~
             #               vptr for 'QObjectPrivate'
+            # so temporarily ignore here whichever way would be used to make such errors fatal
+            # (-fno-sanitize-recover=... or UBSAN_OPTIONS halt_on_error=1):
             save_CXX=$CXX
             CXX=$(printf %s "$CXX" \
                 | sed -e 's/-fno-sanitize-recover\(=[[0-9A-Za-z,_-]]*\)*//')
+            save_UBSAN_OPTIONS=$UBSAN_OPTIONS
+            UBSAN_OPTIONS=$UBSAN_OPTIONS:halt_on_error=0
             save_CXXFLAGS=$CXXFLAGS
             CXXFLAGS="$CXXFLAGS $KDE4_CFLAGS"
             save_LIBS=$LIBS
@@ -10905,6 +10909,7 @@ int main(int argc, char *argv[])
 
             LIBS=$save_LIBS
             CXXFLAGS=$save_CXXFLAGS
+            UBSAN_OPTIONS=$save_UBSAN_OPTIONS
             CXX=$save_CXX
             AC_LANG_POP([C++])
         ],
