@@ -28,6 +28,7 @@
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <tools/color.hxx>
 
 namespace oox { class GraphicHelper; }
 
@@ -41,14 +42,15 @@ public:
     Color();
 
     /** Returns the RGB value for the passed DrawingML color token, or nDefaultRgb on error. */
-    static sal_Int32    getDmlPresetColor( sal_Int32 nToken, sal_Int32 nDefaultRgb );
+    static ::Color      getDmlPresetColor( sal_Int32 nToken, ::Color nDefaultRgb );
     /** Returns the RGB value for the passed VML color token, or nDefaultRgb on error. */
-    static sal_Int32    getVmlPresetColor( sal_Int32 nToken, sal_Int32 nDefaultRgb );
+    static ::Color      getVmlPresetColor( sal_Int32 nToken, ::Color nDefaultRgb );
 
     /** Sets the color to unused state. */
     void                setUnused();
     /** Sets an RGB value (hexadecimal RRGGBB) from the a:srgbClr element. */
     void                setSrgbClr( sal_Int32 nRgb );
+    void                setSrgbClr( ::Color nRgb );
     /** Sets the percentual RGB values from the a:scrgbClr element. */
     void                setScrgbClr( sal_Int32 nR, sal_Int32 nG, sal_Int32 nB );
     /** Sets the HSL values from the a:hslClr element. */
@@ -84,7 +86,7 @@ public:
     bool                isPlaceHolder() const { return meMode == COLOR_PH; }
     /** Returns the final RGB color value.
         @param nPhClr  Actual color for the phClr placeholder color used in theme style lists. */
-    sal_Int32           getColor( const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
+    ::Color             getColor( const GraphicHelper& rGraphicHelper, ::Color nPhClr = API_RGB_TRANSPARENT ) const;
 
     /** Returns true, if the color is transparent. */
     bool                hasTransparency() const;
@@ -103,7 +105,7 @@ public:
 
 private:
     /** Internal helper for getColor(). */
-    void                setResolvedRgb( sal_Int32 nRgb ) const;
+    void                setResolvedRgb( ::Color nRgb ) const;
 
     /** Converts the color components to RGB values. */
     void                toRgb() const;

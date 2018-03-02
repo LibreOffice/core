@@ -424,9 +424,9 @@ namespace oox { namespace ppt {
                     rProps[ NP_COLORINTERPOLATION ] <<= mnColorSpace == XML_hsl ? AnimationColorSpace::HSL : AnimationColorSpace::RGB;
                     const GraphicHelper& rGraphicHelper = getFilter().getGraphicHelper();
                     if( maToClr.isUsed() )
-                        mpNode->setTo( Any( maToClr.getColor( rGraphicHelper ) ) );
+                        mpNode->setTo( makeAny( maToClr.getColor( rGraphicHelper ) ) );
                     if( maFromClr.isUsed() )
-                        mpNode->setFrom( Any( maFromClr.getColor( rGraphicHelper ) ) );
+                        mpNode->setFrom( makeAny( maFromClr.getColor( rGraphicHelper ) ) );
                     if( mbHasByColor )
                         mpNode->setBy( m_byColor.get() );
                 }

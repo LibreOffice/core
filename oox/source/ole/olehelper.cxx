@@ -80,9 +80,9 @@ inline sal_uInt32 lclSwapRedBlue( sal_uInt32 nColor )
 }
 
 /** Returns the UNO RGB color from the passed encoded OLE BGR color. */
-inline sal_Int32 lclDecodeBgrColor( sal_uInt32 nOleColor )
+inline ::Color lclDecodeBgrColor( sal_uInt32 nOleColor )
 {
-    return static_cast< sal_Int32 >( lclSwapRedBlue( nOleColor ) & 0xFFFFFF );
+    return ::Color( lclSwapRedBlue( nOleColor ) & 0xFFFFFF );
 }
 
 const sal_uInt32 OLE_STDPIC_ID              = 0x0000746C;
@@ -213,7 +213,7 @@ StdFontInfo::StdFontInfo( const OUString& rName, sal_uInt32 nHeight ) :
 {
 }
 
-sal_Int32 OleHelper::decodeOleColor(
+::Color OleHelper::decodeOleColor(
         const GraphicHelper& rGraphicHelper, sal_uInt32 nOleColor, bool bDefaultColorBgr )
 {
     static const sal_Int32 spnSystemColors[] =

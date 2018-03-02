@@ -26,6 +26,7 @@
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <tools/color.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace beans { class XMultiPropertySet; }
@@ -106,6 +107,8 @@ public:
     template< typename Type >
     bool         setProperty( sal_Int32 nPropId, const Type& rValue )
                             { return setAnyProperty( nPropId, css::uno::Any( rValue ) ); }
+    bool         setProperty( sal_Int32 nPropId, ::Color rValue )
+                            { return setAnyProperty( nPropId, css::uno::makeAny( rValue ) ); }
 
     /** Puts the passed properties into the property set. Tries to use the XMultiPropertySet interface.
         @param rPropNames  The property names. MUST be ordered alphabetically.

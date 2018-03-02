@@ -187,9 +187,9 @@ bool PowerPointImport::exportDocument() throw()
     return false;
 }
 
-sal_Int32 PowerPointImport::getSchemeColor( sal_Int32 nToken ) const
+::Color PowerPointImport::getSchemeColor( sal_Int32 nToken ) const
 {
-    sal_Int32 nColor = 0;
+    ::Color nColor;
     if ( mpActualSlidePersist )
     {
         bool bColorMapped = false;
@@ -285,8 +285,8 @@ class PptGraphicHelper : public GraphicHelper
 {
 public:
     explicit            PptGraphicHelper( const PowerPointImport& rFilter );
-    virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const override;
-    virtual sal_Int32 getDefaultChartAreaFillStyle() const override;
+    virtual ::Color     getSchemeColor( sal_Int32 nToken ) const override;
+    virtual sal_Int32   getDefaultChartAreaFillStyle() const override;
 private:
     const PowerPointImport& mrFilter;
 };
@@ -297,7 +297,7 @@ PptGraphicHelper::PptGraphicHelper( const PowerPointImport& rFilter ) :
 {
 }
 
-sal_Int32 PptGraphicHelper::getSchemeColor( sal_Int32 nToken ) const
+::Color PptGraphicHelper::getSchemeColor( sal_Int32 nToken ) const
 {
     return mrFilter.getSchemeColor( nToken );
 }

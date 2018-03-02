@@ -319,7 +319,7 @@ css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getBevelAttri
 }
 
 css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getColorAttributes(
-        const Color& rColor, const GraphicHelper& rGraphicHelper, sal_Int32 rPhClr )
+        const Color& rColor, const GraphicHelper& rGraphicHelper, ::Color rPhClr )
 {
     css::uno::Sequence<css::beans::PropertyValue> aSeq(2);
     const OUString& sColorScheme = rColor.getSchemeName();
@@ -343,7 +343,7 @@ css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getColorAttri
 }
 
 css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getShape3DAttributes(
-        const GraphicHelper& rGraphicHelper, sal_Int32 rPhClr )
+        const GraphicHelper& rGraphicHelper, ::Color rPhClr )
 {
     css::uno::Sequence<css::beans::PropertyValue> aSeq(8);
     sal_Int32 nSize = 0;
