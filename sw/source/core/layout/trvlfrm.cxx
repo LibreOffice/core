@@ -1693,10 +1693,10 @@ bool SwFrame::WannaRightPage() const
     const SwFrame *pFlow = pPage->FindFirstBodyContent();
     const SwPageDesc *pDesc = nullptr;
     ::boost::optional<sal_uInt16> oPgNum;
+    if (pFlow && pFlow->IsInTab())
+        pFlow = pFlow->FindTabFrame();
     if ( pFlow )
     {
-        if ( pFlow->IsInTab() )
-            pFlow = pFlow->FindTabFrame();
         const SwFlowFrame *pTmp = SwFlowFrame::CastFlowFrame( pFlow );
         if ( !pTmp->IsFollow() )
         {
