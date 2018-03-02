@@ -761,6 +761,8 @@ SvNumberformat::SvNumberformat(OUString& rString,
         , bAdditionalBuiltin( false )
         , bStarFlag( false )
 {
+    rScan.ReplaceBooleanEquivalent( rString);
+
     OUStringBuffer sBuff(rString);
 
     // If the group (AKA thousand) separator is a No-Break Space (French)
