@@ -605,7 +605,7 @@ public:
 
     /**
      * Checks that all cond formats have a non empty range.
-     * Deletes empty cond formats. Optionall call rLink
+     * Deletes empty cond formats. Optionally call rLink
      * on the empty format before deleting it.
      * @return true if all cond formats were valid
      */
