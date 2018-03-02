@@ -78,7 +78,7 @@ class ShapeGraphicHelper : public GraphicHelper
 {
 public:
     explicit            ShapeGraphicHelper( const ShapeFilterBase& rFilter );
-    virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const override;
+    virtual ::Color     getSchemeColor( sal_Int32 nToken ) const override;
 private:
     const ShapeFilterBase& mrFilter;
 };
@@ -89,7 +89,7 @@ ShapeGraphicHelper::ShapeGraphicHelper( const ShapeFilterBase& rFilter ) :
 {
 }
 
-sal_Int32 ShapeGraphicHelper::getSchemeColor( sal_Int32 nToken ) const
+::Color ShapeGraphicHelper::getSchemeColor( sal_Int32 nToken ) const
 {
     return mrFilter.getSchemeColor( nToken );
 }
@@ -99,9 +99,9 @@ GraphicHelper* ShapeFilterBase::implCreateGraphicHelper() const
     return new ShapeGraphicHelper( *this );
 }
 
-sal_Int32 ShapeFilterBase::getSchemeColor( sal_Int32 nToken ) const
+::Color ShapeFilterBase::getSchemeColor( sal_Int32 nToken ) const
 {
-    sal_Int32 nColor = 0;
+    ::Color nColor;
 
     if (mpTheme.get())
         mpTheme->getClrScheme().getColor( nToken, nColor );

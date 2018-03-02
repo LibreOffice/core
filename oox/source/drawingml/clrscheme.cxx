@@ -52,7 +52,7 @@ struct find_by_token
     {
     }
 
-    bool operator()(const std::pair<sal_Int32, sal_Int32>& r)
+    bool operator()(const std::pair<sal_Int32, ::Color>& r)
     {
         return r.first == m_token;
     }
@@ -61,7 +61,7 @@ private:
     sal_Int32 m_token;
 };
 
-bool ClrScheme::getColor( sal_Int32 nSchemeClrToken, sal_Int32& rColor ) const
+bool ClrScheme::getColor( sal_Int32 nSchemeClrToken, ::Color& rColor ) const
 {
     OSL_ASSERT((nSchemeClrToken & sal_Int32(0xFFFF0000))==0);
     switch( nSchemeClrToken )
@@ -80,7 +80,7 @@ bool ClrScheme::getColor( sal_Int32 nSchemeClrToken, sal_Int32& rColor ) const
     return aIter != maClrScheme.end();
 }
 
-void ClrScheme::setColor( sal_Int32 nSchemeClrToken, sal_Int32 nColor )
+void ClrScheme::setColor( sal_Int32 nSchemeClrToken, ::Color nColor )
 {
     const auto aIter = std::find_if(maClrScheme.begin(), maClrScheme.end(), find_by_token(nSchemeClrToken) );
     if ( aIter != maClrScheme.end() )
@@ -89,7 +89,7 @@ void ClrScheme::setColor( sal_Int32 nSchemeClrToken, sal_Int32 nColor )
         maClrScheme.emplace_back(nSchemeClrToken, nColor);
 }
 
-bool ClrScheme::getColorByIndex(size_t nIndex, sal_Int32& rColor) const
+bool ClrScheme::getColorByIndex(size_t nIndex, ::Color& rColor) const
 {
     if (nIndex >= maClrScheme.size())
         return false;

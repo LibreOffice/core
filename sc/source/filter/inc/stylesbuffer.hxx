@@ -78,9 +78,9 @@ public:
     explicit            ExcelGraphicHelper( const WorkbookHelper& rHelper );
 
     /** Derived classes may implement to resolve a scheme color from the passed XML token identifier. */
-    virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const override;
+    virtual ::Color     getSchemeColor( sal_Int32 nToken ) const override;
     /** Derived classes may implement to resolve a palette index to an RGB color. */
-    virtual sal_Int32   getPaletteColor( sal_Int32 nPaletteIdx ) const override;
+    virtual ::Color     getPaletteColor( sal_Int32 nPaletteIdx ) const override;
 };
 
 class Color : public ::oox::drawingml::Color
@@ -194,7 +194,7 @@ struct ApiFontData
     ApiScriptFontName        maAsianFont;        /// Font name for east-asian scripts.
     ApiScriptFontName        maCmplxFont;        /// Font name for complex scripts.
     css::awt::FontDescriptor maDesc;             /// Font descriptor (height in twips, weight in %).
-    sal_Int32                mnColor;            /// Font color.
+    ::Color                  mnColor;            /// Font color.
     sal_Int16                mnEscapement;       /// Escapement style.
     sal_Int8                 mnEscapeHeight;     /// Escapement font height.
     bool                     mbOutline;          /// True = outlined characters.

@@ -83,7 +83,7 @@ namespace oox
 namespace drawingml
 {
 
-ColorPropertySet::ColorPropertySet( sal_Int32 nColor, bool bFillColor /* = true */ ) :
+ColorPropertySet::ColorPropertySet( ::Color nColor, bool bFillColor /* = true */ ) :
         // note: length of FillColor and LineColor is 9
         m_aColorPropName( (bFillColor ? "FillColor" : "LineColor"), 9, RTL_TEXTENCODING_ASCII_US ),
         m_nColor( nColor ),
