@@ -472,10 +472,10 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
                     // #i39468#
                     // If current cell isn't valid, the test is allowed.
                     // The cell isn't valid, if e.g. there is a new row
-                    // <pTableDesc->nAktRow> >= <pTableDesc->pTabLines->Count()>
+                    // <pTableDesc->nCurrentRow> >= <pTableDesc->pTabLines->Count()>
                     bTestAllowed =
-                        m_xTableDesc->GetAktCol() == 0 &&
-                        ( !m_xTableDesc->IsValidCell( m_xTableDesc->GetAktCol() ) ||
+                        m_xTableDesc->GetCurrentCol() == 0 &&
+                        ( !m_xTableDesc->IsValidCell( m_xTableDesc->GetCurrentCol() ) ||
                           m_xTableDesc->InFirstParaInCell() );
                 }
             }
@@ -1140,26 +1140,26 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS, short nLen)
             ---
             Advantage: The work structure suits better.
         */
-        WW8_TCell* pAktTC  = pTCs;
+        WW8_TCell* pCurrentTC  = pTCs;
         if( bVer67 )
         {
             WW8_TCellVer6 const * pTc = reinterpret_cast<WW8_TCellVer6 const *>(pT);
-            for (int i = 0; i < nColsToRead; i++, ++pAktTC,++pTc)
+            for (int i = 0; i < nColsToRead; i++, ++pCurrentTC,++pTc)
             {
                 if( i < nColsToRead )
                 {               // TC from file ?
                     sal_uInt8 aBits1 = pTc->aBits1Ver6;
-                    pAktTC->bFirstMerged = sal_uInt8( ( aBits1 & 0x01 ) != 0 );
-                    pAktTC->bMerged = sal_uInt8( ( aBits1 & 0x02 ) != 0 );
-                    pAktTC->rgbrc[ WW8_TOP ]
+                    pCurrentTC->bFirstMerged = sal_uInt8( ( aBits1 & 0x01 ) != 0 );
+                    pCurrentTC->bMerged = sal_uInt8( ( aBits1 & 0x02 ) != 0 );
+                    pCurrentTC->rgbrc[ WW8_TOP ]
                         = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_TOP ] ));
-                    pAktTC->rgbrc[ WW8_LEFT ]
+                    pCurrentTC->rgbrc[ WW8_LEFT ]
                         = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_LEFT ] ));
-                    pAktTC->rgbrc[ WW8_BOT ]
+                    pCurrentTC->rgbrc[ WW8_BOT ]
                         = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_BOT ] ));
-                    pAktTC->rgbrc[ WW8_RIGHT ]
+                    pCurrentTC->rgbrc[ WW8_RIGHT ]
                         = WW8_BRCVer9(WW8_BRC( pTc->rgbrcVer6[ WW8_RIGHT ] ));
-                    if(    ( pAktTC->bMerged )
+                    if(    ( pCurrentTC->bMerged )
                             && ( i > 0             ) )
                     {
                         // Cell merged -> remember
@@ -1176,24 +1176,24 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS, short nLen)
         else
         {
             WW8_TCellVer8 const * pTc = reinterpret_cast<WW8_TCellVer8 const *>(pT);
-            for (int k = 0; k < nColsToRead; ++k, ++pAktTC, ++pTc )
+            for (int k = 0; k < nColsToRead; ++k, ++pCurrentTC, ++pTc )
             {
                 sal_uInt16 aBits1 = SVBT16ToShort( pTc->aBits1Ver8 );
-                pAktTC->bFirstMerged    = sal_uInt8( ( aBits1 & 0x0001 ) != 0 );
-                pAktTC->bMerged         = sal_uInt8( ( aBits1 & 0x0002 ) != 0 );
-                pAktTC->bVertical       = sal_uInt8( ( aBits1 & 0x0004 ) != 0 );
-                pAktTC->bBackward       = sal_uInt8( ( aBits1 & 0x0008 ) != 0 );
-                pAktTC->bRotateFont     = sal_uInt8( ( aBits1 & 0x0010 ) != 0 );
-                pAktTC->bVertMerge      = sal_uInt8( ( aBits1 & 0x0020 ) != 0 );
-                pAktTC->bVertRestart    = sal_uInt8( ( aBits1 & 0x0040 ) != 0 );
-                pAktTC->nVertAlign      = ( ( aBits1 & 0x0180 ) >> 7 );
+                pCurrentTC->bFirstMerged    = sal_uInt8( ( aBits1 & 0x0001 ) != 0 );
+                pCurrentTC->bMerged         = sal_uInt8( ( aBits1 & 0x0002 ) != 0 );
+                pCurrentTC->bVertical       = sal_uInt8( ( aBits1 & 0x0004 ) != 0 );
+                pCurrentTC->bBackward       = sal_uInt8( ( aBits1 & 0x0008 ) != 0 );
+                pCurrentTC->bRotateFont     = sal_uInt8( ( aBits1 & 0x0010 ) != 0 );
+                pCurrentTC->bVertMerge      = sal_uInt8( ( aBits1 & 0x0020 ) != 0 );
+                pCurrentTC->bVertRestart    = sal_uInt8( ( aBits1 & 0x0040 ) != 0 );
+                pCurrentTC->nVertAlign      = ( ( aBits1 & 0x0180 ) >> 7 );
                 // note: in aBits1 there are 7 bits unused,
                 //       followed by another 16 unused bits
 
-                pAktTC->rgbrc[ WW8_TOP   ] = WW8_BRCVer9(pTc->rgbrcVer8[ WW8_TOP   ]);
-                pAktTC->rgbrc[ WW8_LEFT  ] = WW8_BRCVer9(pTc->rgbrcVer8[ WW8_LEFT  ]);
-                pAktTC->rgbrc[ WW8_BOT   ] = WW8_BRCVer9(pTc->rgbrcVer8[ WW8_BOT   ]);
-                pAktTC->rgbrc[ WW8_RIGHT ] = WW8_BRCVer9(pTc->rgbrcVer8[ WW8_RIGHT ]);
+                pCurrentTC->rgbrc[ WW8_TOP   ] = WW8_BRCVer9(pTc->rgbrcVer8[ WW8_TOP   ]);
+                pCurrentTC->rgbrc[ WW8_LEFT  ] = WW8_BRCVer9(pTc->rgbrcVer8[ WW8_LEFT  ]);
+                pCurrentTC->rgbrc[ WW8_BOT   ] = WW8_BRCVer9(pTc->rgbrcVer8[ WW8_BOT   ]);
+                pCurrentTC->rgbrc[ WW8_RIGHT ] = WW8_BRCVer9(pTc->rgbrcVer8[ WW8_RIGHT ]);
             }
         }
 
@@ -1236,7 +1236,7 @@ void WW8TabBandDesc::ProcessSprmTSetBRC(int nBrcVer, const sal_uInt8* pParamsTSe
     bool bChangeLeft   = (nFlag & 0x02) != 0;
     bool bChangeTop    = (nFlag & 0x01) != 0;
 
-    WW8_TCell* pAktTC  = pTCs + nitcFirst;
+    WW8_TCell* pCurrentTC  = pTCs + nitcFirst;
     WW8_BRCVer9 brcVer9;
     if( nBrcVer == 6 )
         brcVer9 = WW8_BRCVer9(WW8_BRC(*reinterpret_cast<WW8_BRCVer6 const *>(pParamsTSetBRC+3)));
@@ -1245,16 +1245,16 @@ void WW8TabBandDesc::ProcessSprmTSetBRC(int nBrcVer, const sal_uInt8* pParamsTSe
     else
         brcVer9 = *reinterpret_cast<WW8_BRCVer9 const *>(pParamsTSetBRC+3);
 
-    for( int i = nitcFirst; i < nitcLim; ++i, ++pAktTC )
+    for( int i = nitcFirst; i < nitcLim; ++i, ++pCurrentTC )
     {
         if( bChangeTop )
-            pAktTC->rgbrc[ WW8_TOP   ] = brcVer9;
+            pCurrentTC->rgbrc[ WW8_TOP   ] = brcVer9;
         if( bChangeLeft )
-            pAktTC->rgbrc[ WW8_LEFT  ] = brcVer9;
+            pCurrentTC->rgbrc[ WW8_LEFT  ] = brcVer9;
         if( bChangeBottom )
-            pAktTC->rgbrc[ WW8_BOT   ] = brcVer9;
+            pCurrentTC->rgbrc[ WW8_BOT   ] = brcVer9;
         if( bChangeRight )
-            pAktTC->rgbrc[ WW8_RIGHT ] = brcVer9;
+            pCurrentTC->rgbrc[ WW8_RIGHT ] = brcVer9;
     }
 
 }
@@ -1501,7 +1501,7 @@ void WW8TabBandDesc::ProcessSprmTDelete(const sal_uInt8* pParamsTDelete)
 
         if (nShlCnt >= 0) //There exist entries whose index is greater than or equal to itcLim
         {
-            WW8_TCell* pAktTC  = pTCs + nitcFirst;
+            WW8_TCell* pCurrentTC  = pTCs + nitcFirst;
             int i = 0;
             while( i < nShlCnt )
             {
@@ -1509,10 +1509,10 @@ void WW8TabBandDesc::ProcessSprmTDelete(const sal_uInt8* pParamsTDelete)
                 nCenter[nitcFirst + i] = nCenter[nitcLim + i];
 
                 // adjust the cell's borders
-                *pAktTC = pTCs[ nitcLim + i];
+                *pCurrentTC = pTCs[ nitcLim + i];
 
                 ++i;
-                ++pAktTC;
+                ++pCurrentTC;
             }
             // adjust the left x-position of the dummy at the very end
             nCenter[nitcFirst + i] = nCenter[nitcLim + i];
@@ -2834,7 +2834,7 @@ bool WW8TabDesc::InFirstParaInCell() const
         return false;
     }
 
-    if (!IsValidCell(GetAktCol()))
+    if (!IsValidCell(GetCurrentCol()))
         return false;
 
     return m_pIo->m_pPaM->GetPoint()->nNode == m_pTabBox->GetSttIdx() + 1;
@@ -3526,9 +3526,9 @@ bool SwWW8ImplReader::IsInvalidOrToBeMergedTabCell() const
     if( !m_xTableDesc )
         return false;
 
-    const WW8_TCell* pCell = m_xTableDesc->GetAktWWCell();
+    const WW8_TCell* pCell = m_xTableDesc->GetCurrentWWCell();
 
-    return     !m_xTableDesc->IsValidCell( m_xTableDesc->GetAktCol() )
+    return     !m_xTableDesc->IsValidCell( m_xTableDesc->GetCurrentCol() )
             || (    pCell
                  && (    !pCell->bFirstMerged
                       && (    pCell->bMerged
