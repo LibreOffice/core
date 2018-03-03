@@ -422,12 +422,10 @@ void setStackModeAtSeries(
             aAxisIndexSet.insert(0);
         }
 
-        for( std::set< sal_Int32 >::const_iterator aIt = aAxisIndexSet.begin();
-            aIt != aAxisIndexSet.end(); ++aIt )
+        for (auto const& axisIndex : aAxisIndexSet)
         {
-            sal_Int32 nAxisIndex = *aIt;
             Reference< chart2::XAxis > xAxis(
-                xCorrespondingCoordinateSystem->getAxisByDimension( 1, nAxisIndex ));
+                xCorrespondingCoordinateSystem->getAxisByDimension(1, axisIndex));
             if( xAxis.is())
             {
                 bool bPercent = (eStackMode == StackMode::YStackedPercent);

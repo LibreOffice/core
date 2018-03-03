@@ -558,13 +558,12 @@ ObjectHierarchy::tChildContainer ImplObjectHierarchy::getSiblings( const ObjectI
 {
     if ( rNode.isValid() && !ObjectHierarchy::isRootNode( rNode ) )
     {
-        for( tChildMap::const_iterator aIt( m_aChildMap.begin());
-             aIt != m_aChildMap.end(); ++aIt )
+        for (auto const& child : m_aChildMap)
         {
             ObjectHierarchy::tChildContainer::const_iterator aElemIt(
-                std::find( aIt->second.begin(), aIt->second.end(), rNode ));
-            if( aElemIt != aIt->second.end())
-                return aIt->second;
+                std::find( child.second.begin(), child.second.end(), rNode ));
+            if( aElemIt != child.second.end())
+                return child.second;
         }
     }
     return ObjectHierarchy::tChildContainer();
@@ -582,10 +581,10 @@ ObjectIdentifier ImplObjectHierarchy::getParentImpl(
     if( aIt != aChildren.end())
         return rParentOID;
 
-    for( aIt = aChildren.begin(); aIt != aChildren.end(); ++aIt )
+    for (auto const& child : aChildren)
     {
         // recursion
-        ObjectIdentifier aTempParent( getParentImpl( *aIt, rOID ));
+        ObjectIdentifier aTempParent( getParentImpl( child, rOID ));
         if ( aTempParent.isValid() )
         {
             // exit on success
@@ -665,11 +664,12 @@ sal_Int32 ObjectHierarchy::getIndexInParent(
 {
     ObjectIdentifier aParentOID( m_apImpl->getParent( rNode ));
     tChildContainer aChildren( m_apImpl->getChildren( aParentOID ) );
-    tChildContainer::const_iterator aIt( aChildren.begin() );
-    for( sal_Int32 nIndex = 0; aIt != aChildren.end(); ++nIndex, ++aIt )
+    sal_Int32 nIndex = 0;
+    for (auto const& child : aChildren)
     {
-        if ( *aIt == rNode )
+        if ( child == rNode )
             return nIndex;
+        ++nIndex;
     }
     return -1;
 }
