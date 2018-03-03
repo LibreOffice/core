@@ -31,7 +31,7 @@
 void SdrViewIter::ImpInitVars()
 {
     mnListenerNum = 0;
-    mpAktView = nullptr;
+    mpCurrentView = nullptr;
 }
 
 
@@ -130,25 +130,25 @@ SdrView* SdrViewIter::ImpFindView()
         while(mnListenerNum < nLsCnt)
         {
             SfxListener* pLs = mpModel->GetListener(mnListenerNum);
-            mpAktView = dynamic_cast<SdrView*>( pLs );
+            mpCurrentView = dynamic_cast<SdrView*>( pLs );
 
-            if(mpAktView)
+            if(mpCurrentView)
             {
                 if(mpPage)
                 {
-                    SdrPageView* pPV = mpAktView->GetSdrPageView();
+                    SdrPageView* pPV = mpCurrentView->GetSdrPageView();
 
                     if(pPV)
                     {
                         if(ImpCheckPageView(pPV))
                         {
-                            return mpAktView;
+                            return mpCurrentView;
                         }
                     }
                 }
                 else
                 {
-                    return mpAktView;
+                    return mpCurrentView;
                 }
             }
 
@@ -156,8 +156,8 @@ SdrView* SdrViewIter::ImpFindView()
         }
     }
 
-    mpAktView = nullptr;
-    return mpAktView;
+    mpCurrentView = nullptr;
+    return mpCurrentView;
 }
 
 
