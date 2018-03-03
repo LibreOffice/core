@@ -13,6 +13,7 @@
 		39022C211EDC2D0800100066 /* icudt60l.dat in Resources */ = {isa = PBXBuildFile; fileRef = 39022C201EDC2D0800100066 /* icudt60l.dat */; };
 		39284DB31FA5F207006F43E4 /* DocumentActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39284DB21FA5F207006F43E4 /* DocumentActions.swift */; };
 		392ED9B31E5E4B03005C8435 /* ViewPrintManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */; };
+		3941EED7204B347B00082486 /* example.odt in Resources */ = {isa = PBXBuildFile; fileRef = 3941EED6204B347B00082486 /* example.odt */; };
 		396F92F71E7AE62400A28C82 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 396F92F61E7AE62400A28C82 /* Settings.bundle */; };
 		397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 397868D81E59A3EA007F9248 /* LaunchScreen.xib */; };
 		397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E08FD1E597BD8001374E0 /* AppDelegate.swift */; };
@@ -38,7 +39,6 @@
 		FCC2E3FC2004A01500CEB504 /* LibreOfficeKitWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC2E3F82004A01400CEB504 /* LibreOfficeKitWrapper.swift */; };
 		FCC2E3FD2004A01500CEB504 /* LOKitThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC2E3F92004A01400CEB504 /* LOKitThread.swift */; };
 		FCC2E3FF2004B59B00CEB504 /* DocumentTiledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC2E3FE2004B59B00CEB504 /* DocumentTiledView.swift */; };
-		FCC2E4012004B65E00CEB504 /* example.odt in Resources */ = {isa = PBXBuildFile; fileRef = FCC2E4002004B65E00CEB504 /* example.odt */; };
 		FCC2E4032004B72700CEB504 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC2E4022004B72700CEB504 /* Util.swift */; };
 		FCC2E4052004B74000CEB504 /* AsyncUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC2E4042004B74000CEB504 /* AsyncUtil.swift */; };
 		FCC7651D201C7F8A007D190C /* libKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FCC7651C201C7F8A007D190C /* libKit.dylib */; };
@@ -66,6 +66,8 @@
 		39022C201EDC2D0800100066 /* icudt60l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt60l.dat; path = ../generated/resources/icudt60l.dat; sourceTree = "<group>"; };
 		39284DB21FA5F207006F43E4 /* DocumentActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentActions.swift; sourceTree = "<group>"; };
 		392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewPrintManager.swift; path = LibreOfficeLight/ViewPrintManager.swift; sourceTree = SOURCE_ROOT; };
+		3941EED6204B347B00082486 /* example.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = example.odt; path = ../source/example.odt; sourceTree = "<group>"; };
+		3941EED8204B350900082486 /* example.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = example.odt; path = ../source/example.odt; sourceTree = "<group>"; };
 		39503A6F1F94C4AC00F19C78 /* lokit-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "lokit-Bridging-Header.h"; sourceTree = "<group>"; };
 		396F92F61E7AE62400A28C82 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		397275391E77D9F1006ACDCC /* LibreOfficeLight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LibreOfficeLight.entitlements; sourceTree = "<group>"; };
@@ -96,7 +98,6 @@
 		FCC2E3F82004A01400CEB504 /* LibreOfficeKitWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibreOfficeKitWrapper.swift; sourceTree = "<group>"; };
 		FCC2E3F92004A01400CEB504 /* LOKitThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LOKitThread.swift; sourceTree = "<group>"; };
 		FCC2E3FE2004B59B00CEB504 /* DocumentTiledView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentTiledView.swift; sourceTree = "<group>"; };
-		FCC2E4002004B65E00CEB504 /* example.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = example.odt; path = "../../android/default-document/example.odt"; sourceTree = "<group>"; };
 		FCC2E4022004B72700CEB504 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		FCC2E4042004B74000CEB504 /* AsyncUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncUtil.swift; sourceTree = "<group>"; };
 		FCC7651C201C7F8A007D190C /* libKit.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libKit.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -145,6 +146,7 @@
 		397E08F11E597BD8001374E0 = {
 			isa = PBXGroup;
 			children = (
+				3941EED8204B350900082486 /* example.odt */,
 				3956B72D1FAB3DBF00BF5DE4 /* extra */,
 				39B084E41E5F0B5200682A59 /* Resources */,
 				3911D89F1E5993600050D6BC /* Support files */,
@@ -187,7 +189,7 @@
 		39B084E41E5F0B5200682A59 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				FCC2E4002004B65E00CEB504 /* example.odt */,
+				3941EED6204B347B00082486 /* example.odt */,
 				39022C201EDC2D0800100066 /* icudt60l.dat */,
 				39022C1E1EDC2AB000100066 /* share */,
 				39022C1C1EDC2A2C00100066 /* services */,
@@ -290,6 +292,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3941EED7204B347B00082486 /* example.odt in Resources */,
 				397E09081E597BD8001374E0 /* Assets.xcassets in Resources */,
 				39B08BD71E5F0BB600682A59 /* rc in Resources */,
 				39B08B9E1E5F0BB600682A59 /* offapi.rdb in Resources */,
@@ -302,7 +305,6 @@
 				39B08B9F1E5F0BB600682A59 /* oovbaapi.rdb in Resources */,
 				39B08B9D1E5F0BB600682A59 /* fundamentalrc in Resources */,
 				39B091CD1E5F0BB800682A59 /* udkapi.rdb in Resources */,
-				FCC2E4012004B65E00CEB504 /* example.odt in Resources */,
 				39B08BD91E5F0BB600682A59 /* services.rdb in Resources */,
 				39B091CE1E5F0BB800682A59 /* unorc in Resources */,
 				39022C1F1EDC2AB000100066 /* share in Resources */,

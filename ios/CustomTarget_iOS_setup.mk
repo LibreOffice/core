@@ -61,12 +61,12 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	cp $(INSTDIR)/program/services/services.rdb $(IOSRES)/services
 	cp $(INSTDIR)/program/services.rdb          $(IOSRES)
 	cp -R $(INSTDIR)/share/config/soffice.cfg $(IOSRES)/share/config
-	cp $(WORKDIR)/CustomTarget/i18npool/breakiterator/dict_*.data $(IOSRES)/share
 	cp $(INSTDIR)/share/filter/oox-drawingml-adj-names $(IOSRES)/share/filter
 	cp $(INSTDIR)/share/filter/oox-drawingml-cs-presets $(IOSRES)/share/filter
 	cp $(INSTDIR)/share/filter/vml-shape-types $(IOSRES)/share/filter
 	cp -R $(INSTDIR)/share/registry $(IOSRES)/share
 	cp $(INSTDIR)/share/config/*zip $(IOSRES)/share/config
+	cp $(SRCDIR)/ios/source/example.odt $(IOSRES)
 
 	# Set up rc (the "inifile", fundamentalrc, unorc, bootstraprc and versionrc.
 	(echo '[Bootstrap]' \
