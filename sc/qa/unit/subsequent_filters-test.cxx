@@ -244,6 +244,7 @@ public:
     void testBorderDirectionsXLSXML();
     void testBorderColorsXLSXML();
     void testHiddenRowsColumnsXLSXML();
+    void testColumnWidthRowHeightXLSXML();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -373,6 +374,7 @@ public:
     CPPUNIT_TEST(testBorderDirectionsXLSXML);
     CPPUNIT_TEST(testBorderColorsXLSXML);
     CPPUNIT_TEST(testHiddenRowsColumnsXLSXML);
+    CPPUNIT_TEST(testColumnWidthRowHeightXLSXML);
     CPPUNIT_TEST(testCondFormatFormulaListenerXLSX);
 
     CPPUNIT_TEST_SUITE_END();
@@ -3882,6 +3884,64 @@ void ScFiltersTest::testHiddenRowsColumnsXLSXML()
         CPPUNIT_ASSERT_EQUAL(bVisible, c.bVisible);
         CPPUNIT_ASSERT_EQUAL(c.nPos1, SCCOLROW(nCol1));
         CPPUNIT_ASSERT_EQUAL(c.nPos2, SCCOLROW(nCol2));
+    }
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testColumnWidthRowHeightXLSXML()
+{
+    ScDocShellRef xDocSh = loadDoc("column-width-row-height.", FORMAT_XLS_XML);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load column-width-row-height.xml", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    struct RowHeight
+    {
+        SCROW nRow1;
+        SCROW nRow2;
+        sal_uInt16 nHeight; // in points (1 point == 20 twips)
+    };
+
+    std::vector<RowHeight> aRowChecks = {
+        {  2,  2, 20 },
+        {  3,  3, 30 },
+        {  4,  4, 40 },
+        {  5,  5, 50 },
+        {  7,  9, 25 },
+        { 12, 13, 35 },
+    };
+
+    for (const RowHeight& rh : aRowChecks)
+    {
+        for (SCROW i = rh.nRow1; i <= rh.nRow2; ++i)
+        {
+            sal_uInt16 nHeight = rDoc.GetRowHeight(i, 0);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(rh.nHeight*20), nHeight);
+        }
+    }
+
+    struct ColWidth
+    {
+        SCCOL nCol1;
+        SCCOL nCol2;
+        sal_uInt16 nWidth; // in points (1 point == 20 twips
+    };
+
+    std::vector<ColWidth> aColChecks = {
+        {  1,  1,  56 },
+        {  2,  2,  83 },
+        {  3,  3, 109 },
+        {  5,  7,  67 },
+        { 10, 11, 119 },
+    };
+
+    for (const ColWidth& cw : aColChecks)
+    {
+        for (SCCOL i = cw.nCol1; i <= cw.nCol2; ++i)
+        {
+            sal_uInt16 nWidth = rDoc.GetColWidth(i, 0);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(cw.nWidth*20), nWidth);
+        }
     }
 
     xDocSh->DoClose();
