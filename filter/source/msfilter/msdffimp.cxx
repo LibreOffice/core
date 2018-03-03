@@ -1576,8 +1576,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         const OUString sViewBox( "ViewBox" );
         aViewBox.X = GetPropertyValue( DFF_Prop_geoLeft, 0 );
         aViewBox.Y = GetPropertyValue( DFF_Prop_geoTop, 0 );
-        aViewBox.Width = nCoordWidth = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_geoRight, 21600 )) - aViewBox.X;
-        aViewBox.Height = nCoordHeight = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_geoBottom, 21600 )) - aViewBox.Y;
+        aViewBox.Width = nCoordWidth = o3tl::saturating_sub<sal_Int32>(GetPropertyValue(DFF_Prop_geoRight, 21600), aViewBox.X);
+        aViewBox.Height = nCoordHeight = o3tl::saturating_sub<sal_Int32>(GetPropertyValue(DFF_Prop_geoBottom, 21600), aViewBox.Y);
         aProp.Name = sViewBox;
         aProp.Value <<= aViewBox;
         aPropVec.push_back( aProp );
