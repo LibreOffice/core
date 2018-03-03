@@ -100,26 +100,23 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
     }
 
     // create DataSeries
-    vector< Reference< data::XLabeledDataSequence > >::const_iterator
-          aSequencesVecIt = aSequencesVec.begin();
-
-    sal_Int32 nSeriesIndex = 0;
     vector< Reference< XDataSeries > > aSeriesVec;
     aSeriesVec.reserve( aSequencesVec.size());
 
     Reference< data::XLabeledDataSequence > xClonedXValues = xValuesX;
     Reference< util::XCloneable > xCloneable( xValuesX, uno::UNO_QUERY );
 
-    for( ;aSequencesVecIt != aSequencesVec.end(); ++aSequencesVecIt, ++nSeriesIndex )
+    sal_Int32 nSeriesIndex = 0;
+    for (auto const& elem : aSequencesVec)
     {
         vector< Reference< data::XLabeledDataSequence > > aNewData;
 
-        if( aSequencesVecIt != aSequencesVec.begin() && xCloneable.is() )
+        if( nSeriesIndex && xCloneable.is() )
             xClonedXValues.set( xCloneable->createClone(), uno::UNO_QUERY );
         if( xValuesX.is() )
             aNewData.push_back( xClonedXValues );
 
-        aNewData.push_back( *aSequencesVecIt );
+        aNewData.push_back(elem);
 
         Reference< XDataSeries > xSeries;
         if( nSeriesIndex < aSeriesToReUse.getLength())
@@ -132,6 +129,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
         xSink->setData( comphelper::containerToSequence( aNewData ) );
 
         aSeriesVec.push_back( xSeries );
+        ++nSeriesIndex;
     }
 
     Sequence< Sequence< Reference< XDataSeries > > > aSeries(1);

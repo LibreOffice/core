@@ -745,9 +745,10 @@ void ControllerCommandDispatch::fireStatusEvent(
     }
 
     if( rURL.isEmpty() )
-        for( std::map< OUString, bool >::const_iterator aIt( m_aCommandAvailability.begin());
-             aIt != m_aCommandAvailability.end(); ++aIt )
-            fireStatusEventForURLImpl( aIt->first, xSingleListener );
+    {
+        for (auto const& elem : m_aCommandAvailability)
+            fireStatusEventForURLImpl( elem.first, xSingleListener );
+    }
     else if( !bIsChartSelectorURL )
         fireStatusEventForURLImpl( rURL, xSingleListener );
 

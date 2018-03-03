@@ -426,11 +426,10 @@ void Axis::AllocateSubGrids()
         }
     }
     //don't keep the mutex locked while calling out
-    std::vector< Reference< beans::XPropertySet > >::iterator aBroadcaster = aOldBroadcasters.begin();
-    for( ;aBroadcaster != aOldBroadcasters.end(); ++aBroadcaster )
-        ModifyListenerHelper::removeListener( *aBroadcaster, xModifyEventForwarder );
-    for( aBroadcaster = aNewBroadcasters.begin(); aBroadcaster != aNewBroadcasters.end(); ++aBroadcaster )
-        ModifyListenerHelper::addListener( *aBroadcaster, xModifyEventForwarder );
+    for (auto const& oldBroadcaster : aOldBroadcasters)
+        ModifyListenerHelper::removeListener(oldBroadcaster, xModifyEventForwarder );
+    for (auto const& newBroadcaster : aNewBroadcasters)
+        ModifyListenerHelper::addListener( newBroadcaster, xModifyEventForwarder );
 }
 
 // ____ XAxis ____

@@ -67,11 +67,9 @@ public:
         {
             std::vector< css::uno::Reference< css::chart2::XDataSeries > > aSeriesVector(
                 ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
-            std::vector< css::uno::Reference< css::chart2::XDataSeries > >::const_iterator aIter =
-                    aSeriesVector.begin();
-            for( ; aIter != aSeriesVector.end(); ++aIter )
+            for (auto const& series : aSeriesVector)
             {
-                PROPERTYTYPE aCurValue = getValueFromSeries( css::uno::Reference< css::beans::XPropertySet >::query( *aIter ) );
+                PROPERTYTYPE aCurValue = getValueFromSeries( css::uno::Reference< css::beans::XPropertySet >::query(series) );
                 if( !bHasDetectableInnerValue )
                     rValue = aCurValue;
                 else
@@ -96,11 +94,9 @@ public:
         {
             std::vector< css::uno::Reference< css::chart2::XDataSeries > > aSeriesVector(
                 ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
-            std::vector< css::uno::Reference< css::chart2::XDataSeries > >::const_iterator aIter =
-                    aSeriesVector.begin();
-            for( ; aIter != aSeriesVector.end(); ++aIter )
+            for (auto const& series : aSeriesVector)
             {
-                css::uno::Reference< css::beans::XPropertySet > xSeriesPropertySet( *aIter, css::uno::UNO_QUERY );
+                css::uno::Reference< css::beans::XPropertySet > xSeriesPropertySet(series, css::uno::UNO_QUERY);
                 if( xSeriesPropertySet.is() )
                 {
                     setValueToSeries( xSeriesPropertySet, aNewValue );

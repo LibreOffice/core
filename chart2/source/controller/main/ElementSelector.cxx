@@ -59,10 +59,9 @@ void lcl_addObjectsToList( const ObjectHierarchy& rHierarchy, const  ObjectIdent
                           , const sal_Int32 nHierarchyDepth, const Reference< chart2::XChartDocument >& xChartDoc )
 {
     ObjectHierarchy::tChildContainer aChildren( rHierarchy.getChildren(rParent) );
-    ObjectHierarchy::tChildContainer::const_iterator aIt( aChildren.begin());
-    while( aIt != aChildren.end() )
+    for (auto const& child : aChildren)
     {
-        ObjectIdentifier aOID = *aIt;
+        ObjectIdentifier aOID = child;
         OUString aCID = aOID.getObjectCID();
         ListBoxEntryData aEntry;
         aEntry.OID = aOID;
@@ -70,7 +69,6 @@ void lcl_addObjectsToList( const ObjectHierarchy& rHierarchy, const  ObjectIdent
         aEntry.nHierarchyDepth = nHierarchyDepth;
         rEntries.push_back(aEntry);
         lcl_addObjectsToList( rHierarchy, aOID, rEntries, nHierarchyDepth+1, xChartDoc );
-        ++aIt;
     }
 }
 
@@ -144,15 +142,16 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
         }
 
         sal_uInt16 nEntryPosToSelect = 0; bool bSelectionFound = false;
-        aIt = m_aEntries.begin();
-        for( sal_uInt16 nN=0; aIt != m_aEntries.end(); ++aIt, ++nN )
+        sal_uInt16 nN=0;
+        for (auto const& entry : m_aEntries)
         {
-            InsertEntry( aIt->UIName );
-            if ( !bSelectionFound && aSelectedOID == aIt->OID )
+            InsertEntry(entry.UIName);
+            if ( !bSelectionFound && aSelectedOID == entry.OID )
             {
                 nEntryPosToSelect = nN;
                 bSelectionFound = true;
             }
+            ++nN;
         }
 
         if( bSelectionFound )

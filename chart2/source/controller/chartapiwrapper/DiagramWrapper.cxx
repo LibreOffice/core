@@ -1603,9 +1603,9 @@ void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterVal
         std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
                 aSeriesVector.begin();
         sal_Int32 i = 0;
-        for( ; aIt != aSeriesVector.end(); ++aIt, ++i )
+        for (auto const& series : aSeriesVector)
         {
-            Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xProp(series, uno::UNO_QUERY);
             if( xProp.is())
             {
                 uno::Any aVal;
@@ -1619,6 +1619,7 @@ void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterVal
                 }
                 xProp->setPropertyValue( "AttributedDataPoints", aVal );
             }
+            ++i;
         }
     }
 }
@@ -1635,12 +1636,10 @@ Any WrappedAttributedDataPointsProperty::getPropertyValue( const Reference< bean
 
         uno::Sequence< uno::Sequence< sal_Int32 > > aResult( aSeriesVector.size() );
 
-        std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
-                aSeriesVector.begin();
         sal_Int32 i = 0;
-        for( ; aIt != aSeriesVector.end(); ++aIt, ++i )
+        for (auto const& series : aSeriesVector)
         {
-            Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xProp(series, uno::UNO_QUERY);
             if( xProp.is())
             {
                 uno::Any aVal(
@@ -1649,6 +1648,7 @@ Any WrappedAttributedDataPointsProperty::getPropertyValue( const Reference< bean
                 if( aVal >>= aSeq )
                     aResult[ i ] = aSeq;
             }
+            ++i;
         }
         m_aOuterValue <<= aResult;
     }

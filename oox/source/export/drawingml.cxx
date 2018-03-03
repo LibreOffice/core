@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include <iostream>
 #include <config_features.h>
 
 #include <config_folders.h>
@@ -1297,8 +1297,10 @@ void DrawingML::WriteXGraphicBlipFill(uno::Reference<beans::XPropertySet> const 
 
 void DrawingML::WritePattFill( const Reference< XPropertySet >& rXPropSet )
 {
-    if ( GetProperty( rXPropSet, "FillHatch" ) )
+std::cerr << "TODO DrawingML::WritePattFill\n";
+    if ( GetProperty( rXPropSet, "FillHatchName" ) )
     {
+std::cerr << "TODO DrawingML::WritePattFill if\n";
         drawing::Hatch aHatch;
         mAny >>= aHatch;
         WritePattFill(rXPropSet, aHatch);
@@ -1307,6 +1309,7 @@ void DrawingML::WritePattFill( const Reference< XPropertySet >& rXPropSet )
 
 void DrawingML::WritePattFill(const Reference<XPropertySet>& rXPropSet, const css::drawing::Hatch& rHatch)
 {
+std::cerr << "TODO DrawingML::WritePattFill 2\n";
         mpFS->startElementNS( XML_a , XML_pattFill, XML_prst, GetHatchPattern(rHatch), FSEND );
 
         mpFS->startElementNS( XML_a , XML_fgClr, FSEND );

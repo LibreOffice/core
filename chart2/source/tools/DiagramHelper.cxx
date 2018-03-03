@@ -860,12 +860,9 @@ void DiagramHelper::setCategoriesToDiagram(
     std::vector< Reference< chart2::XAxis > > aCatAxes(
         lcl_getAxisHoldingCategoriesFromDiagram( xDiagram ));
 
-    std::vector< Reference< chart2::XAxis > >::iterator aIt( aCatAxes.begin() );
-    std::vector< Reference< chart2::XAxis > >::const_iterator aEnd( aCatAxes.end() );
-
-    for( aIt = aCatAxes.begin(); aIt != aEnd; ++aIt )
+    for (auto const& elem : aCatAxes)
     {
-        Reference< chart2::XAxis > xCatAxis(*aIt);
+        Reference< chart2::XAxis > xCatAxis(elem);
         if( xCatAxis.is())
         {
             ScaleData aScaleData( xCatAxis->getScaleData());
@@ -892,12 +889,10 @@ Reference< data::XLabeledDataSequence >
     {
         std::vector< Reference< chart2::XAxis > > aCatAxes(
             lcl_getAxisHoldingCategoriesFromDiagram( xDiagram ));
-        std::vector< Reference< chart2::XAxis > >::iterator aIt( aCatAxes.begin() );
-        std::vector< Reference< chart2::XAxis > >::const_iterator aEnd( aCatAxes.end() );
         //search for first categories
-        if( aIt != aEnd )
+        if (!aCatAxes.empty())
         {
-            Reference< chart2::XAxis > xCatAxis(*aIt);
+            Reference< chart2::XAxis > xCatAxis(aCatAxes[0]);
             if( xCatAxis.is())
             {
                 ScaleData aScaleData( xCatAxis->getScaleData());
@@ -1505,13 +1500,12 @@ sal_Int32 DiagramHelper::getGeometry3D(
     if( aSeriesVec.empty())
         rbAmbiguous = true;
 
-    for( std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
-             aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
+    for (auto const& series : aSeriesVec)
     {
         try
         {
             sal_Int32 nGeom = 0;
-            Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY_THROW );
+            Reference< beans::XPropertySet > xProp(series, uno::UNO_QUERY_THROW);
             if( xProp->getPropertyValue( "Geometry3D") >>= nGeom )
             {
                 if( ! rbFound )
@@ -1544,11 +1538,10 @@ void DiagramHelper::setGeometry3D(
     std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
-    for( std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
-             aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
+    for (auto const& series : aSeriesVec)
     {
         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(
-            *aIt, "Geometry3D", uno::Any( nNewGeometry ));
+            series, "Geometry3D", uno::Any( nNewGeometry ));
     }
 }
 

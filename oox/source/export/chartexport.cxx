@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include <iostream>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/core/xmlfilterbase.hxx>
@@ -1288,6 +1288,7 @@ void ChartExport::exportFill( const Reference< XPropertySet >& xPropSet )
             exportBitmapFill( xPropSet );
             break;
         case FillStyle_HATCH:
+std::cerr << "TODO ChartExport::exportFill\n";
             exportHatch(xPropSet);
         break;
         default:

@@ -410,14 +410,15 @@ bool lcl_SeriesHeaderHasFocus(
     sal_Int32 * pOutIndex = nullptr )
 {
     sal_Int32 nIndex = 0;
-    for( auto aIt = rSeriesHeader.begin(); aIt != rSeriesHeader.end(); ++aIt, ++nIndex )
+    for (auto const& elem : rSeriesHeader)
     {
-        if( (*aIt)->HasFocus())
+        if(elem->HasFocus())
         {
             if( pOutIndex )
                 *pOutIndex = nIndex;
             return true;
         }
+        ++nIndex;
     }
     return false;
 }
@@ -604,25 +605,24 @@ void DataBrowser::RenewTable()
     Link<Control&,void> aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
     Link<impl::SeriesHeaderEdit*,void> aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
 
-    for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
-         aIt != aHeaders.end(); ++aIt )
+    for (auto const& elemHeader : aHeaders)
     {
         std::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( pWin, pColorWin ));
-        Reference< beans::XPropertySet > xSeriesProp( aIt->m_xDataSeries, uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xSeriesProp( elemHeader.m_xDataSeries, uno::UNO_QUERY );
         sal_Int32 nColor = 0;
         // @todo: Set "DraftColor", i.e. interpolated colors for gradients, bitmaps, etc.
         if( xSeriesProp.is() &&
             ( xSeriesProp->getPropertyValue( "Color" ) >>= nColor ))
             spHeader->SetColor( Color( nColor ));
-        spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis );
+        spHeader->SetChartType( elemHeader.m_xChartType, elemHeader.m_bSwapXAndYAxis );
         spHeader->SetSeriesName(
             DataSeriesHelper::getDataSeriesLabel(
-                        aIt->m_xDataSeries,
-                        (aIt->m_xChartType.is() ?
-                         aIt->m_xChartType->getRoleOfSequenceForSeriesLabel() :
+                        elemHeader.m_xDataSeries,
+                        (elemHeader.m_xChartType.is() ?
+                         elemHeader.m_xChartType->getRoleOfSequenceForSeriesLabel() :
                          OUString("values-y"))));
         // index is 1-based, as 0 is for the column that contains the row-numbers
-        spHeader->SetRange( aIt->m_nStartColumn + 1, aIt->m_nEndColumn + 1 );
+        spHeader->SetRange( elemHeader.m_nStartColumn + 1, elemHeader.m_nEndColumn + 1 );
         spHeader->SetGetFocusHdl( aFocusLink );
         spHeader->SetEditChangedHdl( aSeriesHeaderChangedLink );
         m_aSeriesHeaders.push_back( spHeader );
@@ -1254,23 +1254,22 @@ void DataBrowser::RenewSeriesHeaders()
     Link<Control&,void> aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
     Link<impl::SeriesHeaderEdit*,void> aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
 
-    for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
-         aIt != aHeaders.end(); ++aIt )
+    for (auto const& elemHeader : aHeaders)
     {
         std::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( pWin, pColorWin ));
-        Reference< beans::XPropertySet > xSeriesProp( aIt->m_xDataSeries, uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xSeriesProp(elemHeader.m_xDataSeries, uno::UNO_QUERY);
         sal_Int32 nColor = 0;
         if( xSeriesProp.is() &&
             ( xSeriesProp->getPropertyValue( "Color" ) >>= nColor ))
             spHeader->SetColor( Color( nColor ));
-        spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis );
+        spHeader->SetChartType( elemHeader.m_xChartType, elemHeader.m_bSwapXAndYAxis );
         spHeader->SetSeriesName(
             DataSeriesHelper::getDataSeriesLabel(
-                        aIt->m_xDataSeries,
-                        (aIt->m_xChartType.is() ?
-                         aIt->m_xChartType->getRoleOfSequenceForSeriesLabel() :
+                        elemHeader.m_xDataSeries,
+                        (elemHeader.m_xChartType.is() ?
+                         elemHeader.m_xChartType->getRoleOfSequenceForSeriesLabel() :
                          OUString( "values-y"))));
-        spHeader->SetRange( aIt->m_nStartColumn + 1, aIt->m_nEndColumn + 1 );
+        spHeader->SetRange( elemHeader.m_nStartColumn + 1, elemHeader.m_nEndColumn + 1 );
         spHeader->SetGetFocusHdl( aFocusLink );
         spHeader->SetEditChangedHdl( aSeriesHeaderChangedLink );
         m_aSeriesHeaders.push_back( spHeader );

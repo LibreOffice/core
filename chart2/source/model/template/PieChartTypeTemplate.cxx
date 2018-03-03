@@ -569,10 +569,9 @@ void SAL_CALL PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagr
     std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
     uno::Any aLineStyleAny( drawing::LineStyle_NONE );
-    for( std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeriesVec.begin());
-         aIt != aSeriesVec.end(); ++aIt )
+    for (auto const& series : aSeriesVec)
     {
-        Reference< beans::XPropertyState > xState( *aIt, uno::UNO_QUERY );
+        Reference< beans::XPropertyState > xState(series, uno::UNO_QUERY);
         if( xState.is())
         {
             xState->setPropertyToDefault( "VaryColorsByPoint");
