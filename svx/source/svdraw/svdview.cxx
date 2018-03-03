@@ -945,7 +945,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
     // Actions
     if (IsCreateObj())
     {
-        return pAktCreate->GetCreatePointer();
+        return pCurrentCreate->GetCreatePointer();
     }
     if (mpCurrentSdrDragMethod)
     {
@@ -1165,13 +1165,13 @@ OUString SdrView::GetStatusText()
 
     aStr += STR_NOTHING;
 
-    if (pAktCreate!=nullptr)
+    if (pCurrentCreate!=nullptr)
     {
-        aStr=pAktCreate->getSpecialDragComment(maDragStat);
+        aStr=pCurrentCreate->getSpecialDragComment(maDragStat);
 
         if(aStr.isEmpty())
         {
-            aName = pAktCreate->TakeObjNameSingul();
+            aName = pCurrentCreate->TakeObjNameSingul();
             aStr = ImpGetResStr(STR_ViewCreateObj);
         }
     }
