@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_02cf1eb1",
+        "filename": "chart2/source/controller/chartapiwrapper/DiagramWrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1604,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-03T15:35:01Z",
+      "side": 1,
+      "message": "this aIt looks unnecessary now",
+      "revId": "3babcaf489be2c9c76fb91270ea3e66b205a5e84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_22c42291",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-03T15:35:01Z",
+      "side": 1,
+      "message": "?",
+      "revId": "3babcaf489be2c9c76fb91270ea3e66b205a5e84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_42c11680",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1291,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-03T15:35:01Z",
+      "side": 1,
+      "message": "?",
+      "revId": "3babcaf489be2c9c76fb91270ea3e66b205a5e84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_62be1a01",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-03T15:35:01Z",
+      "side": 1,
+      "message": "?",
+      "revId": "3babcaf489be2c9c76fb91270ea3e66b205a5e84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
