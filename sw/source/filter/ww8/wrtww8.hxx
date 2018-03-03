@@ -1421,7 +1421,7 @@ private:
     std::vector<const EECharAttrib*> aChrTextAtrArr;
     std::vector<rtl_TextEncoding> aChrSetArr;
     sal_Int32 nPara;
-    sal_Int32 nAktSwPos;
+    sal_Int32 nCurrentSwPos;
     sal_Int32 nTmpSwPos;                   // for HasItem()
     rtl_TextEncoding eNdChrSet;
     sal_uInt16 nScript;
@@ -1443,12 +1443,12 @@ public:
 
     bool IsTextAttr(sal_Int32 nSwPos);
 
-    void NextPos() { if ( nAktSwPos < SAL_MAX_INT32 ) nAktSwPos = SearchNext( nAktSwPos + 1 ); }
+    void NextPos() { if ( nCurrentSwPos < SAL_MAX_INT32 ) nCurrentSwPos = SearchNext( nCurrentSwPos + 1 ); }
 
     void OutAttr( sal_Int32 nSwPos );
     virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const override;
     virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const override;
-    sal_Int32 WhereNext() const                { return nAktSwPos; }
+    sal_Int32 WhereNext() const                { return nCurrentSwPos; }
     rtl_TextEncoding GetNextCharSet() const;
     rtl_TextEncoding GetNodeCharSet() const     { return eNdChrSet; }
 };
@@ -1473,7 +1473,7 @@ private:
     bool mbCharIsRTL;
 
     const SwRangeRedline* pCurRedline;
-    sal_Int32 nAktSwPos;
+    sal_Int32 nCurrentSwPos;
     SwRedlineTable::size_type nCurRedlinePos;
 
     bool mbParaIsRTL;
@@ -1500,7 +1500,7 @@ public:
     bool IsDropCap( int nSwPos );
     bool RequiresImplicitBookmark();
 
-    void NextPos() { if ( nAktSwPos < SAL_MAX_INT32 ) nAktSwPos = SearchNext( nAktSwPos + 1 ); }
+    void NextPos() { if ( nCurrentSwPos < SAL_MAX_INT32 ) nCurrentSwPos = SearchNext( nCurrentSwPos + 1 ); }
 
     void OutAttr( sal_Int32 nSwPos, bool bRuby = false, bool bWriteCombinedChars = false );
     virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const override;
@@ -1510,7 +1510,7 @@ public:
     const SwRedlineData* GetRunLevelRedline( sal_Int32 nPos );
     FlyProcessingState OutFlys(sal_Int32 nSwPos);
 
-    sal_Int32 WhereNext() const { return nAktSwPos; }
+    sal_Int32 WhereNext() const { return nCurrentSwPos; }
     sal_uInt16 GetScript() const { return mnScript; }
     bool IsParaRTL() const { return mbParaIsRTL; }
     rtl_TextEncoding GetCharSet() const { return meChrSet; }
