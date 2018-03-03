@@ -7903,7 +7903,7 @@ void DocxAttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
     else if ( m_rExport.m_bOutPageDescs )
     {
         FastAttributeList *attrList = FastSerializerHelper::createAttrList( );
-        if ( m_rExport.m_pAktPageDesc->GetLandscape( ) )
+        if ( m_rExport.m_pCurrentPageDesc->GetLandscape( ) )
             attrList->add( FSNS( XML_w, XML_orient ), "landscape" );
 
         attrList->add( FSNS( XML_w, XML_w ), OString::number( rSize.GetWidth( ) ) );

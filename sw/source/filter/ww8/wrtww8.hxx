@@ -480,7 +480,7 @@ public:
     /* implicit bookmark vector containing pairs of node indexes and bookmark names */
     std::vector<aBookmarkPair> m_aImplicitBookmarks;
     ww8::Frames m_aFrames;             // The floating frames in this document
-    const SwPageDesc *m_pAktPageDesc;
+    const SwPageDesc *m_pCurrentPageDesc;
     bool m_bPrevTextNodeIsEmpty;
     WW8_WrPlcPn* m_pPapPlc;
     WW8_WrPlcPn* m_pChpPlc;
