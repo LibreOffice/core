@@ -97,7 +97,7 @@ private:
     VclPtr<VclContainer>   m_pFillFrame;
 
     // local variables, internal functions
-    SvxTabStop      aAktTab;
+    SvxTabStop      aCurrentTab;
     SvxTabStopItem  aNewTabs;
     long            nDefDist;
     FieldUnit       eDefUnit;
