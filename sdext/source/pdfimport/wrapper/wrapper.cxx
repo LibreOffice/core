@@ -1001,6 +1001,14 @@ public:
     }
 };
 
+bool xpdf_ImportFromFile_Poppler(const OUString& aSysUPath,
+                                 const ContentSinkSharedPtr& rSink,
+                                 const uno::Reference<task::XInteractionHandler>& xIHdl,
+                                 const bool bIsEncrypted,
+                                 const OUString& aPwd,
+                                 const uno::Reference<uno::XComponentContext>& xContext,
+                                 const OUString& rFilterOptions);
+
 bool xpdf_ImportFromFile( const OUString&                             rURL,
                           const ContentSinkSharedPtr&                        rSink,
                           const uno::Reference< task::XInteractionHandler >& xIHdl,
@@ -1031,6 +1039,19 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
         return false;
     }
 
+    return xpdf_ImportFromFile_Poppler(aSysUPath, rSink, xIHdl, bIsEncrypted, aPwd, xContext, rFilterOptions);
+}
+
+/// Parse PDf file using libpoppler, which is quite limited
+/// to be phased out in favor of pdfium.
+bool xpdf_ImportFromFile_Poppler(const OUString& aSysUPath,
+                                 const ContentSinkSharedPtr& rSink,
+                                 const uno::Reference<task::XInteractionHandler>& xIHdl,
+                                 const bool bIsEncrypted,
+                                 const OUString& aPwd,
+                                 const uno::Reference<uno::XComponentContext>& xContext,
+                                 const OUString& rFilterOptions)
+{
     // Determine xpdfimport executable URL:
     OUString converterURL("$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/xpdfimport");
     rtl::Bootstrap::expandMacros(converterURL); //TODO: detect failure
