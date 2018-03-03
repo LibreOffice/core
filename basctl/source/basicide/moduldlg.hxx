@@ -27,6 +27,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 class SvxPasswordDialog;
@@ -41,22 +42,24 @@ enum class ObjectMode
     Dialog  = 3,
 };
 
-class NewObjectDialog : public ModalDialog
+class NewObjectDialog
 {
 private:
-    VclPtr<Edit>           m_pEdit;
-    VclPtr<OKButton>       m_pOKButton;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Dialog> m_xDialog;
+    std::unique_ptr<weld::Entry> m_xEdit;
+    std::unique_ptr<weld::Button> m_xOKButton;
+    bool m_bCheckName;
 
-    DECL_LINK(OkButtonHandler, Button*, void);
+    DECL_LINK(OkButtonHandler, weld::Button&, void);
 public:
-    NewObjectDialog (vcl::Window* pParent, ObjectMode, bool bCheckName = false);
-    virtual ~NewObjectDialog() override;
-    virtual void dispose() override;
-    OUString GetObjectName() const { return m_pEdit->GetText(); }
-    void SetObjectName( const OUString& rName )
+    NewObjectDialog(weld::Window* pParent, ObjectMode, bool bCheckName = false);
+    short run() { return m_xDialog->run(); }
+    OUString GetObjectName() const { return m_xEdit->get_text(); }
+    void SetObjectName(const OUString& rName)
     {
-        m_pEdit->SetText( rName );
-        m_pEdit->SetSelection(Selection( 0, rName.getLength()));
+        m_xEdit->set_text(rName);
+        m_xEdit->select_region(0, -1);
     }
 };
 
@@ -252,10 +255,10 @@ public:
 };
 
 // Helper functions
-SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
-    TreeListBox& rBasicBox, const OUString& rLibName, const OUString& aModName, bool bMain );
-void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
-                    CheckBox* pLibBox, TreeListBox* pBasicBox );
+SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
+                        TreeListBox& rBasicBox, const OUString& rLibName, const OUString& aModName, bool bMain);
+void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
+                   CheckBox* pLibBox, TreeListBox* pBasicBox);
 
 } // namespace basctl
 

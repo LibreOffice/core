@@ -355,57 +355,41 @@ bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewName )
 }
 
 // NewObjectDialog
-IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler, Button*, void)
+IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler, weld::Button&, void)
 {
-    if (IsValidSbxName(m_pEdit->GetText()))
-        EndDialog(1);
+    if (!m_bCheckName || IsValidSbxName(m_xEdit->get_text()))
+        m_xDialog->response(RET_OK);
     else
     {
-        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                        VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_BADSBXNAME)));
         xErrorBox->run();
-        m_pEdit->GrabFocus();
+        m_xEdit->grab_focus();
     }
 }
 
-NewObjectDialog::NewObjectDialog(vcl::Window * pParent, ObjectMode eMode,
-    bool bCheckName)
-    : ModalDialog(pParent, "NewLibDialog", "modules/BasicIDE/ui/newlibdialog.ui")
+NewObjectDialog::NewObjectDialog(weld::Window * pParent, ObjectMode eMode, bool bCheckName)
+    : m_xBuilder(Application::CreateBuilder(pParent, "modules/BasicIDE/ui/newlibdialog.ui"))
+    , m_xDialog(m_xBuilder->weld_dialog("NewLibDialog"))
+    , m_xEdit(m_xBuilder->weld_entry("entry"))
+    , m_xOKButton(m_xBuilder->weld_button("ok"))
+    , m_bCheckName(bCheckName)
 {
-    get(m_pOKButton, "ok");
-    get(m_pEdit, "entry");
-
-    m_pEdit->GrabFocus();
-
     switch (eMode)
     {
         case ObjectMode::Library:
-            SetText( IDEResId(RID_STR_NEWLIB) );
+            m_xDialog->set_title(IDEResId(RID_STR_NEWLIB));
             break;
         case ObjectMode::Module:
-            SetText( IDEResId(RID_STR_NEWMOD) );
+            m_xDialog->set_title(IDEResId(RID_STR_NEWMOD));
             break;
         case ObjectMode::Dialog:
-            SetText( IDEResId(RID_STR_NEWDLG) );
+            m_xDialog->set_title(IDEResId(RID_STR_NEWDLG));
             break;
         default:
             assert(false);
     }
-
-    if (bCheckName)
-        m_pOKButton->SetClickHdl(LINK(this, NewObjectDialog, OkButtonHandler));
-}
-
-NewObjectDialog::~NewObjectDialog()
-{
-    disposeOnce();
-}
-
-void NewObjectDialog::dispose()
-{
-    m_pEdit.clear();
-    m_pOKButton.clear();
-    ModalDialog::dispose();
+    m_xOKButton->connect_clicked(LINK(this, NewObjectDialog, OkButtonHandler));
 }
 
 // GotoLineDialog
@@ -735,7 +719,7 @@ IMPL_LINK( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg, bool )
 
 void LibPage::NewLib()
 {
-    createLibImpl( static_cast<vcl::Window*>( this ), m_aCurDocument, m_pLibBox, nullptr);
+    createLibImpl(GetFrameWeld(), m_aCurDocument, m_pLibBox, nullptr);
 }
 
 void LibPage::InsertLib()
@@ -1478,8 +1462,8 @@ SvTreeListEntry* LibPage::ImpInsertLibEntry( const OUString& rLibName, sal_uLong
 }
 
 // Helper function
-void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
-                    CheckBox* pLibBox, TreeListBox* pBasicBox )
+void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
+                   CheckBox* pLibBox, TreeListBox* pBasicBox)
 {
     OSL_ENSURE( rDocument.isAlive(), "createLibImpl: invalid document!" );
     if ( !rDocument.isAlive() )
@@ -1497,29 +1481,29 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
         i++;
     }
 
-    ScopedVclPtrInstance< NewObjectDialog > aNewDlg(pWin, ObjectMode::Library);
-    aNewDlg->SetObjectName(aLibName);
+    NewObjectDialog aNewDlg(pWin, ObjectMode::Library);
+    aNewDlg.SetObjectName(aLibName);
 
-    if (aNewDlg->Execute())
+    if (aNewDlg.run())
     {
-        if (!aNewDlg->GetObjectName().isEmpty())
-            aLibName = aNewDlg->GetObjectName();
+        if (!aNewDlg.GetObjectName().isEmpty())
+            aLibName = aNewDlg.GetObjectName();
 
         if ( aLibName.getLength() > 30 )
         {
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin,
                                                            VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_LIBNAMETOLONG)));
             xErrorBox->run();
         }
         else if ( !IsValidSbxName( aLibName ) )
         {
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin,
                                                            VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_BADSBXNAME)));
             xErrorBox->run();
         }
         else if ( rDocument.hasLibrary( E_SCRIPTS, aLibName ) || rDocument.hasLibrary( E_DIALOGS, aLibName ) )
         {
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin,
                                                            VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_SBXNAMEALLREADYUSED2)));
             xErrorBox->run();
         }
