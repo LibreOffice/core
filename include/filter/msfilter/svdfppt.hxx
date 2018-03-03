@@ -569,11 +569,11 @@ protected:
     std::unique_ptr<PptSlidePersistList> m_pMasterPages;
     std::unique_ptr<PptSlidePersistList> m_pSlidePages;
     std::unique_ptr<PptSlidePersistList> m_pNotePages;
-    sal_uInt16              nAktPageNum;
+    sal_uInt16              nCurrentPageNum;
     sal_uLong               nDocStreamPos;
     sal_uInt16              nPageColorsNum;
     PptPageKind             ePageColorsKind;
-    PptPageKind             eAktPageKind;
+    PptPageKind             eCurrentPageKind;
 
 protected:
     using SdrEscherImport::ReadObjText;

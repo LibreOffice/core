@@ -1316,11 +1316,11 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
     m_pMasterPages      ( nullptr ),
     m_pSlidePages       ( nullptr ),
     m_pNotePages        ( nullptr ),
-    nAktPageNum         ( 0 ),
+    nCurrentPageNum     ( 0 ),
     nDocStreamPos       ( 0 ),
     nPageColorsNum      ( 0xFFFF ),
     ePageColorsKind     ( PPT_MASTERPAGE ),
-    eAktPageKind        ( PPT_MASTERPAGE )
+    eCurrentPageKind    ( PPT_MASTERPAGE )
 {
     if ( bOk )
     {
@@ -1887,7 +1887,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
                                 if ( !pRet && ( rOe.nType == PPT_PST_ExControl ) )
                                 {
                                     uno::Reference< frame::XModel > xModel( rOe.pShell->GetModel() );
-                                    PPTConvertOCXControls aPPTConvertOCXControls( this, xModel, eAktPageKind );
+                                    PPTConvertOCXControls aPPTConvertOCXControls( this, xModel, eCurrentPageKind );
                                     css::uno::Reference< css::drawing::XShape > xShape;
                                     if ( aPPTConvertOCXControls.ReadOCXStream( xObjStor, &xShape ) )
                                         pRet = GetSdrObjectFromXShape( xShape );
@@ -2420,19 +2420,19 @@ bool SdrPowerPointImport::SeekToContentOfProgTag( sal_Int32 nVersion, SvStream& 
 
 sal_uInt32 SdrPowerPointImport::GetAktPageId()
 {
-    PptSlidePersistList* pList = GetPageList( eAktPageKind );
-    if ( pList && nAktPageNum < pList->size() )
-        return (*pList)[ nAktPageNum ].aPersistAtom.nSlideId;
+    PptSlidePersistList* pList = GetPageList( eCurrentPageKind );
+    if ( pList && nCurrentPageNum < pList->size() )
+        return (*pList)[ nCurrentPageNum ].aPersistAtom.nSlideId;
     return 0;
 }
 
 bool SdrPowerPointImport::SeekToAktPage( DffRecordHeader* pRecHd ) const
 {
     bool bRet = false;
-    PptSlidePersistList* pList = GetPageList( eAktPageKind );
-    if ( pList && ( nAktPageNum < pList->size() ) )
+    PptSlidePersistList* pList = GetPageList( eCurrentPageKind );
+    if ( pList && ( nCurrentPageNum < pList->size() ) )
     {
-        sal_uLong nPersist = (*pList)[ static_cast<sal_uInt16>(nAktPageNum) ].aPersistAtom.nPsrReference;
+        sal_uLong nPersist = (*pList)[ static_cast<sal_uInt16>(nCurrentPageNum) ].aPersistAtom.nPsrReference;
         if ( nPersist > 0 && nPersist < nPersistPtrCnt )
         {
             sal_uLong nFPos = 0;
@@ -2459,8 +2459,8 @@ sal_uInt16 SdrPowerPointImport::GetPageCount( PptPageKind ePageKind ) const
 
 void SdrPowerPointImport::SetPageNum( sal_uInt16 nPageNum, PptPageKind eKind )
 {
-    eAktPageKind = eKind;
-    nAktPageNum = nPageNum;
+    eCurrentPageKind = eKind;
+    nCurrentPageNum = nPageNum;
 
     pPPTStyleSheet = nullptr;
 
@@ -2497,7 +2497,7 @@ void SdrPowerPointImport::SetPageNum( sal_uInt16 nPageNum, PptPageKind eKind )
 
 Size SdrPowerPointImport::GetPageSize() const
 {
-    Size aRet( IsNoteOrHandout( nAktPageNum ) ? aDocAtom.GetNotesPageSize() : aDocAtom.GetSlidesPageSize() );
+    Size aRet( IsNoteOrHandout( nCurrentPageNum ) ? aDocAtom.GetNotesPageSize() : aDocAtom.GetSlidesPageSize() );
     Scale( aRet );
     // PPT works with units of 576 dpi in any case. To avoid inaccuracies
     // I do round the last decimal digit away.
@@ -2527,14 +2527,14 @@ Size SdrPowerPointImport::GetPageSize() const
 
 bool SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) const
 {
-    if ( nPageColorsNum != nAktPageNum || ePageColorsKind != eAktPageKind )
+    if ( nPageColorsNum != nCurrentPageNum || ePageColorsKind != eCurrentPageKind )
     {
         sal_uInt16 nSlideFlags = 0;
-        PptSlidePersistList* pPageList = GetPageList( eAktPageKind );
-        if ( pPageList && ( nAktPageNum < pPageList->size() ) )
+        PptSlidePersistList* pPageList = GetPageList( eCurrentPageKind );
+        if ( pPageList && ( nCurrentPageNum < pPageList->size() ) )
         {
-            assert( !pPageList->is_null( nAktPageNum ) );
-            const PptSlidePersistEntry& rE = (*pPageList)[ nAktPageNum ];
+            assert( !pPageList->is_null( nCurrentPageNum ) );
+            const PptSlidePersistEntry& rE = (*pPageList)[ nCurrentPageNum ];
             nSlideFlags = rE.aSlideAtom.nFlags;
             if ( ! ( nSlideFlags & 2 ) )
                 const_cast<SdrPowerPointImport*>(this)->aPageColors = rE.aColorScheme;
@@ -2545,13 +2545,13 @@ bool SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) 
             if ( pPageList2 )
             {
                 PptSlidePersistEntry* pMasterPersist = nullptr;
-                if ( eAktPageKind == PPT_MASTERPAGE )
-                    pMasterPersist = &(*pPageList2)[ nAktPageNum ];
+                if ( eCurrentPageKind == PPT_MASTERPAGE )
+                    pMasterPersist = &(*pPageList2)[ nCurrentPageNum ];
                 else
                 {
-                    if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
+                    if ( HasMasterPage( nCurrentPageNum, eCurrentPageKind ) )
                     {
-                        sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
+                        sal_uInt16 nMasterNum = GetMasterPageIndex( nCurrentPageNum, eCurrentPageKind );
                         if ( nMasterNum < pPageList2->size() )
                             pMasterPersist = &(*pPageList2)[ nMasterNum ];
                     }
@@ -2577,8 +2577,8 @@ bool SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) 
             }
         }
         // register current color scheme
-        const_cast<SdrPowerPointImport*>(this)->nPageColorsNum = nAktPageNum;
-        const_cast<SdrPowerPointImport*>(this)->ePageColorsKind = eAktPageKind;
+        const_cast<SdrPowerPointImport*>(this)->nPageColorsNum = nCurrentPageNum;
+        const_cast<SdrPowerPointImport*>(this)->ePageColorsKind = eCurrentPageKind;
     }
     rColor = aPageColors.GetColor( nNum );
     return true;
@@ -2593,9 +2593,9 @@ bool SdrPowerPointImport::SeekToShape( SvStream& rSt, void* pClientData, sal_uIn
         PptSlidePersistEntry& rPersistEntry = rData.rPersistEntry;
         if ( rPersistEntry.ePageKind == PPT_SLIDEPAGE )
         {
-            if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
+            if ( HasMasterPage( nCurrentPageNum, eCurrentPageKind ) )
             {
-                sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
+                sal_uInt16 nMasterNum = GetMasterPageIndex( nCurrentPageNum, eCurrentPageKind );
                 PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
                 if ( pPageList && ( nMasterNum < pPageList->size() ) )
                 {
@@ -2735,10 +2735,10 @@ void ImportComment10( SvxMSDffManager const & rMan, SvStream& rStCtrl, SdrPage* 
 void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry* pMasterPersist )
 {
     sal_uInt32 nMerk = rStCtrl.Tell();
-    PptSlidePersistList* pList = GetPageList( eAktPageKind );
-    if ( ( !pList ) || ( pList->size() <= nAktPageNum ) )
+    PptSlidePersistList* pList = GetPageList( eCurrentPageKind );
+    if ( ( !pList ) || ( pList->size() <= nCurrentPageNum ) )
         return;
-    PptSlidePersistEntry& rSlidePersist = (*pList)[ nAktPageNum ];
+    PptSlidePersistEntry& rSlidePersist = (*pList)[ nCurrentPageNum ];
     if ( rSlidePersist.bStarDrawFiller )
         return;
 
@@ -2796,9 +2796,9 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                     tools::Rectangle aPageSize( Point(), pRet->GetSize() );
                                     if ( rSlidePersist.aSlideAtom.nFlags & 4 )          // follow master background?
                                     {
-                                        if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
+                                        if ( HasMasterPage( nCurrentPageNum, eCurrentPageKind ) )
                                         {
-                                            sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
+                                            sal_uInt16 nMasterNum = GetMasterPageIndex( nCurrentPageNum, eCurrentPageKind );
                                             PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
                                             PptSlidePersistEntry* pE = &(*pPageList)[ nMasterNum ];
                                             while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
@@ -2960,19 +2960,19 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
 
 const PptSlideLayoutAtom* SdrPowerPointImport::GetSlideLayoutAtom() const
 {
-    PptSlidePersistList* pPageList = GetPageList( eAktPageKind );
-    if ( pPageList && nAktPageNum < pPageList->size() )
+    PptSlidePersistList* pPageList = GetPageList( eCurrentPageKind );
+    if ( pPageList && nCurrentPageNum < pPageList->size() )
     {
-        assert( !pPageList->is_null( nAktPageNum ) );
-        return &(*pPageList)[ nAktPageNum ].aSlideAtom.aLayout;
+        assert( !pPageList->is_null( nCurrentPageNum ) );
+        return &(*pPageList)[ nCurrentPageNum ].aSlideAtom.aLayout;
     }
     return nullptr;
 }
 
 bool SdrPowerPointImport::IsNoteOrHandout( sal_uInt16 nPageNum ) const
 {
-    bool bNote = eAktPageKind == PPT_NOTEPAGE;
-    if ( eAktPageKind == PPT_MASTERPAGE )
+    bool bNote = eCurrentPageKind == PPT_NOTEPAGE;
+    if ( eCurrentPageKind == PPT_MASTERPAGE )
         bNote = ( nPageNum & 1 ) == 0;
     return bNote;
 }
@@ -6544,7 +6544,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                     nTextRulerAtomOfs = 0xffffffff;
 
                 sal_uInt32 nInstance = 0;
-                switch( rSdrPowerPointImport.eAktPageKind )
+                switch( rSdrPowerPointImport.eCurrentPageKind )
                 {
                     case PPT_NOTEPAGE :
                         nInstance++;
@@ -6601,10 +6601,10 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                             rIn.Seek( nOldPos );
                         }
                         // now pHd points to the right SlideListWithText Container
-                        PptSlidePersistList* pPageList = rSdrPowerPointImport.GetPageList( rSdrPowerPointImport.eAktPageKind );
+                        PptSlidePersistList* pPageList = rSdrPowerPointImport.GetPageList( rSdrPowerPointImport.eCurrentPageKind );
                         PptSlidePersistEntry* pE = nullptr;
-                        if ( pPageList && ( rSdrPowerPointImport.nAktPageNum < pPageList->size() ) )
-                            pE = &(*pPageList)[ rSdrPowerPointImport.nAktPageNum ];
+                        if ( pPageList && ( rSdrPowerPointImport.nCurrentPageNum < pPageList->size() ) )
+                            pE = &(*pPageList)[ rSdrPowerPointImport.nCurrentPageNum ];
                         if ( (!pE) || (!pE->nSlidePersistStartOffset) || ( pE->aPersistAtom.nSlideId != nSlideId ) )
                             bStatus = false;
                         else
