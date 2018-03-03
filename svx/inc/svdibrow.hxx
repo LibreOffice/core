@@ -34,12 +34,12 @@ class SdrItemBrowserControl final : public BrowseBox
 {
 friend class ImpItemEdit;
     std::vector<std::unique_ptr<ImpItemListRow>> aList;
-    long nAktPaintRow;
+    long nCurrentPaintRow;
     VclPtr<Edit> pEditControl;
     OUString aWNamMerk;
     Link<SdrItemBrowserControl&,void> aEntryChangedHdl;
     Link<SdrItemBrowserControl&,void> aSetDirtyHdl;
-    ImpItemListRow* pAktChangeEntry;
+    ImpItemListRow* pCurrentChangeEntry;
     long   nLastWhichOfs;
     sal_uInt16 nLastWhich;
     bool bWhichesButNames;
@@ -83,7 +83,7 @@ public:
     */
     virtual OUString  GetCellText(long _nRow, sal_uInt16 _nColId) const override;
 
-    const ImpItemListRow* GetAktChangeEntry() const { return pAktChangeEntry; }
+    const ImpItemListRow* GetCurrentChangeEntry() const { return pCurrentChangeEntry; }
     OUString GetNewEntryValue() const                 { return pEditControl->GetText(); }
     void SetEntryChangedHdl(const Link<SdrItemBrowserControl&,void>& rLink)    { aEntryChangedHdl=rLink; }
     void SetSetDirtyHdl(const Link<SdrItemBrowserControl&,void>& rLink)        { aSetDirtyHdl=rLink; }
