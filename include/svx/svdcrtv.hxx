@@ -36,7 +36,7 @@ class SVX_DLLPUBLIC SdrCreateView: public SdrDragView
     friend class                SdrPageView;
 
 protected:
-    SdrObject*                  pAktCreate;   // Currently in creation of the located object
+    SdrObject*                  pCurrentCreate;   // The currently being created object
     SdrPageView*                pCreatePV;    // Here, the creation is started
     ImplConnectMarkerOverlay*   mpCoMaOverlay;
 
@@ -111,8 +111,8 @@ public:
     bool EndCreateObj(SdrCreateCmd eCmd);
     void BckCreateObj();  // go back one polygon point
     void BrkCreateObj();
-    bool IsCreateObj() const { return pAktCreate!=nullptr; }
-    SdrObject* GetCreateObj() const { return pAktCreate; }
+    bool IsCreateObj() const { return pCurrentCreate!=nullptr; }
+    SdrObject* GetCreateObj() const { return pCurrentCreate; }
 
     // BegCreateCaptionObj() creates a SdrCaptionObj (legend item).
     // rObjSiz is the initial size of the legend text frame.
