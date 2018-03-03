@@ -840,7 +840,7 @@ void RtfExport::ExportDocument_Impl()
         // following title page are correctly added - i13107
         if (pSttPgDsc)
         {
-            m_pAktPageDesc = &rPageDesc;
+            m_pCurrentPageDesc = &rPageDesc;
         }
     }
 
@@ -1333,47 +1333,48 @@ const OUString* RtfExport::GetRedline(sal_uInt16 nId)
 void RtfExport::OutPageDescription(const SwPageDesc& rPgDsc, bool bCheckForFirstPage)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
-    const SwPageDesc* pSave = m_pAktPageDesc;
+    const SwPageDesc* pSave = m_pCurrentPageDesc;
 
-    m_pAktPageDesc = &rPgDsc;
-    if (bCheckForFirstPage && m_pAktPageDesc->GetFollow()
-        && m_pAktPageDesc->GetFollow() != m_pAktPageDesc)
-        m_pAktPageDesc = m_pAktPageDesc->GetFollow();
+    m_pCurrentPageDesc = &rPgDsc;
+    if (bCheckForFirstPage && m_pCurrentPageDesc->GetFollow()
+        && m_pCurrentPageDesc->GetFollow() != m_pCurrentPageDesc)
+        m_pCurrentPageDesc = m_pCurrentPageDesc->GetFollow();
 
-    if (m_pAktPageDesc->GetLandscape())
+    if (m_pCurrentPageDesc->GetLandscape())
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_LNDSCPSXN);
 
-    const SwFormat* pFormat = &m_pAktPageDesc->GetMaster(); //GetLeft();
+    const SwFormat* pFormat = &m_pCurrentPageDesc->GetMaster(); //GetLeft();
     m_bOutPageDescs = true;
     OutputFormat(*pFormat, true, false);
     m_bOutPageDescs = false;
 
     // normal header / footer (without a style)
     const SfxPoolItem* pItem;
-    if (m_pAktPageDesc->GetLeft().GetAttrSet().GetItemState(RES_HEADER, false, &pItem)
+    if (m_pCurrentPageDesc->GetLeft().GetAttrSet().GetItemState(RES_HEADER, false, &pItem)
         == SfxItemState::SET)
         WriteHeaderFooter(*pItem, true);
-    if (m_pAktPageDesc->GetLeft().GetAttrSet().GetItemState(RES_FOOTER, false, &pItem)
+    if (m_pCurrentPageDesc->GetLeft().GetAttrSet().GetItemState(RES_FOOTER, false, &pItem)
         == SfxItemState::SET)
         WriteHeaderFooter(*pItem, false);
 
     // title page
-    if (m_pAktPageDesc != &rPgDsc)
+    if (m_pCurrentPageDesc != &rPgDsc)
     {
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_TITLEPG);
-        m_pAktPageDesc = &rPgDsc;
-        if (m_pAktPageDesc->GetMaster().GetAttrSet().GetItemState(RES_HEADER, false, &pItem)
+        m_pCurrentPageDesc = &rPgDsc;
+        if (m_pCurrentPageDesc->GetMaster().GetAttrSet().GetItemState(RES_HEADER, false, &pItem)
             == SfxItemState::SET)
             WriteHeaderFooter(*pItem, true);
-        if (m_pAktPageDesc->GetMaster().GetAttrSet().GetItemState(RES_FOOTER, false, &pItem)
+        if (m_pCurrentPageDesc->GetMaster().GetAttrSet().GetItemState(RES_FOOTER, false, &pItem)
             == SfxItemState::SET)
             WriteHeaderFooter(*pItem, false);
     }
 
     // numbering type
-    AttrOutput().SectionPageNumbering(m_pAktPageDesc->GetNumType().GetNumberingType(), boost::none);
+    AttrOutput().SectionPageNumbering(m_pCurrentPageDesc->GetNumType().GetNumberingType(),
+                                      boost::none);
 
-    m_pAktPageDesc = pSave;
+    m_pCurrentPageDesc = pSave;
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
 }
 
@@ -1397,13 +1398,13 @@ void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
     const sal_Char* pStr
         = (bHeader ? OOO_STRING_SVTOOLS_RTF_HEADER : OOO_STRING_SVTOOLS_RTF_FOOTER);
     /* is this a title page? */
-    if (m_pAktPageDesc->GetFollow() && m_pAktPageDesc->GetFollow() != m_pAktPageDesc)
+    if (m_pCurrentPageDesc->GetFollow() && m_pCurrentPageDesc->GetFollow() != m_pCurrentPageDesc)
     {
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_TITLEPG);
         pStr = (bHeader ? OOO_STRING_SVTOOLS_RTF_HEADERF : OOO_STRING_SVTOOLS_RTF_FOOTERF);
     }
     Strm().WriteChar('{').WriteCharPtr(pStr);
-    WriteHeaderFooterText(m_pAktPageDesc->GetMaster(), bHeader);
+    WriteHeaderFooterText(m_pCurrentPageDesc->GetMaster(), bHeader);
     Strm().WriteChar('}');
 
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");

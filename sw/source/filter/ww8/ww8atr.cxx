@@ -375,22 +375,22 @@ bool MSWordExportBase::SetAktPageDescFromNode(const SwNode &rNd)
 {
     bool bNewPageDesc = false;
     const SwPageDesc* pCurrent = SwPageDesc::GetPageDescOfNode(rNd);
-    OSL_ENSURE(pCurrent && m_pAktPageDesc, "Not possible surely");
-    if (m_pAktPageDesc && pCurrent)
+    OSL_ENSURE(pCurrent && m_pCurrentPageDesc, "Not possible surely");
+    if (m_pCurrentPageDesc && pCurrent)
     {
-        if (pCurrent != m_pAktPageDesc)
+        if (pCurrent != m_pCurrentPageDesc)
         {
-            if (m_pAktPageDesc->GetFollow() != pCurrent)
+            if (m_pCurrentPageDesc->GetFollow() != pCurrent)
                 bNewPageDesc = true;
             else
             {
-                const SwFrameFormat& rTitleFormat = m_pAktPageDesc->GetFirstMaster();
+                const SwFrameFormat& rTitleFormat = m_pCurrentPageDesc->GetFirstMaster();
                 const SwFrameFormat& rFollowFormat = pCurrent->GetMaster();
 
                 bNewPageDesc = !IsPlausableSingleWordSection(rTitleFormat,
                     rFollowFormat);
             }
-            m_pAktPageDesc = pCurrent;
+            m_pCurrentPageDesc = pCurrent;
         }
         else
         {
@@ -430,9 +430,9 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     const SwPageDesc * pPageDesc = rNd.FindPageDesc();
 
     // Even if pAktPageDesc != pPageDesc ,it might be because of the different header & footer types.
-    if (m_pAktPageDesc != pPageDesc)
+    if (m_pCurrentPageDesc != pPageDesc)
     {
-        if ( ( isCellOpen && ( m_pAktPageDesc->GetName() != pPageDesc->GetName() )) ||
+        if ( ( isCellOpen && ( m_pCurrentPageDesc->GetName() != pPageDesc->GetName() )) ||
              ( isTextNodeEmpty || m_bPrevTextNodeIsEmpty ))
         {
             /* Do not output a section break in the following scenarios.
@@ -449,14 +449,14 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
              * If Table cell is open and page header types are different
              * set pSet to NULL as we don't want to add any section breaks.
              */
-            if ( isCellOpen && ( m_pAktPageDesc->GetName() != pPageDesc->GetName() ) )
+            if ( isCellOpen && ( m_pCurrentPageDesc->GetName() != pPageDesc->GetName() ) )
                 pSet = nullptr;
         }
-        else if (!sw::util::IsPlausableSingleWordSection(m_pAktPageDesc->GetFirstMaster(), pPageDesc->GetMaster()))
+        else if (!sw::util::IsPlausableSingleWordSection(m_pCurrentPageDesc->GetFirstMaster(), pPageDesc->GetMaster()))
         {
             bBreakSet = true;
             bNewPageDesc = true;
-            m_pAktPageDesc = pPageDesc;
+            m_pCurrentPageDesc = pPageDesc;
         }
     }
 
@@ -468,7 +468,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
             bBreakSet = true;
             bNewPageDesc = true;
             pPgDesc = static_cast<const SwFormatPageDesc*>(pItem);
-            m_pAktPageDesc = pPgDesc->GetPageDesc();
+            m_pCurrentPageDesc = pPgDesc->GetPageDesc();
         }
         else if ( SfxItemState::SET == pSet->GetItemState( RES_BREAK, false, &pItem ) )
         {
@@ -497,7 +497,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
 
             if ( !bRemoveHardBreakInsideTable )
             {
-                OSL_ENSURE(m_pAktPageDesc, "should not be possible");
+                OSL_ENSURE(m_pCurrentPageDesc, "should not be possible");
                 /*
                  If because of this pagebreak the page desc following the page
                  break is the follow style of the current page desc then output a
@@ -506,7 +506,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                  done when it happens when we get a new pagedesc because we
                  overflow from the first page style.
                 */
-                if ( m_pAktPageDesc )
+                if ( m_pCurrentPageDesc )
                 {
                     // #i76301# - assure that there is a page break before set at the node.
                     const SvxFormatBreakItem* pBreak = dynamic_cast<const SvxFormatBreakItem*>(pItem);
@@ -553,14 +553,14 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
 
     if ( bHackInBreak )
     {
-        OSL_ENSURE( m_pAktPageDesc, "should not be possible" );
-        if ( m_pAktPageDesc )
+        OSL_ENSURE( m_pCurrentPageDesc, "should not be possible" );
+        if ( m_pCurrentPageDesc )
             bNewPageDesc = SetAktPageDescFromNode( rNd );
     }
 
-    if ( bNewPageDesc && m_pAktPageDesc )
+    if ( bNewPageDesc && m_pCurrentPageDesc )
     {
-        PrepareNewPageDesc( pSet, rNd, pPgDesc, m_pAktPageDesc );
+        PrepareNewPageDesc( pSet, rNd, pPgDesc, m_pCurrentPageDesc );
     }
     m_bBreakBefore = false;
     m_bPrevTextNodeIsEmpty = isTextNodeEmpty ;
@@ -572,10 +572,10 @@ bool MSWordExportBase::OutputFollowPageDesc( const SfxItemSet* pSet, const SwTex
     bool bRet = false;
 
     if ( pNd &&
-         m_pAktPageDesc &&
-         m_pAktPageDesc != m_pAktPageDesc->GetFollow() )
+         m_pCurrentPageDesc &&
+         m_pCurrentPageDesc != m_pCurrentPageDesc->GetFollow() )
     {
-        PrepareNewPageDesc( pSet, *pNd, nullptr, m_pAktPageDesc->GetFollow() );
+        PrepareNewPageDesc( pSet, *pNd, nullptr, m_pCurrentPageDesc->GetFollow() );
         bRet = true;
     }
 
@@ -3640,7 +3640,7 @@ void WW8AttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
     }
     else if( m_rWW8Export.m_bOutPageDescs )            // PageDesc : width + height
     {
-        if( m_rWW8Export.m_pAktPageDesc->GetLandscape() )
+        if( m_rWW8Export.m_pCurrentPageDesc->GetLandscape() )
         {
             /*sprmSBOrientation*/
             m_rWW8Export.InsUInt16( NS_sprm::sprmSBOrientation );
@@ -4467,7 +4467,7 @@ void WW8AttributeOutput::FormatBox( const SvxBoxItem& rBox )
 
 SwTwips WW8Export::CurrentPageWidth(SwTwips &rLeft, SwTwips &rRight) const
 {
-    const SwFrameFormat* pFormat = m_pAktPageDesc ? &m_pAktPageDesc->GetMaster()
+    const SwFrameFormat* pFormat = m_pCurrentPageDesc ? &m_pCurrentPageDesc->GetMaster()
         : &m_pDoc->GetPageDesc(0).GetMaster();
 
     const SvxLRSpaceItem& rLR = pFormat->GetLRSpace();
@@ -4529,7 +4529,7 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
     {
         // get the page width without borders !!
 
-        const SwFrameFormat* pFormat = GetExport( ).m_pAktPageDesc ? &GetExport( ).m_pAktPageDesc->GetMaster() : &const_cast<const SwDoc *>(GetExport( ).m_pDoc)->GetPageDesc(0).GetMaster();
+        const SwFrameFormat* pFormat = GetExport( ).m_pCurrentPageDesc ? &GetExport( ).m_pCurrentPageDesc->GetMaster() : &const_cast<const SwDoc *>(GetExport( ).m_pDoc)->GetPageDesc(0).GetMaster();
         const SvxFrameDirectionItem &frameDirection = pFormat->GetFrameDir();
         SwTwips nPageSize;
         if ( frameDirection.GetValue() == SvxFrameDirection::Vertical_RL_TB || frameDirection.GetValue() == SvxFrameDirection::Vertical_LR_TB )

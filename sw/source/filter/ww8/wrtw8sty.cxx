@@ -968,7 +968,7 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
     : mbDocumentIsProtected( false )
 {
     const SwSectionFormat *pFormat = nullptr;
-    rExport.m_pAktPageDesc = &rExport.m_pDoc->GetPageDesc( 0 );
+    rExport.m_pCurrentPageDesc = &rExport.m_pDoc->GetPageDesc( 0 );
 
     const SfxPoolItem* pI;
     const SwNode* pNd = rExport.m_pCurPam->GetContentNode();
@@ -1009,7 +1009,7 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
         AppendSection( *static_cast<const SwFormatPageDesc*>(pI), *pNd, pFormat, nRstLnNum );
     }
     else
-        AppendSection( rExport.m_pAktPageDesc, pFormat, nRstLnNum );
+        AppendSection( rExport.m_pCurrentPageDesc, pFormat, nRstLnNum );
 }
 
 WW8_WrPlcSepx::WW8_WrPlcSepx( MSWordExportBase& rExport )
@@ -1513,7 +1513,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     if ( rSepInfo.pSectionFormat && !pPd )
         pPd = &m_pDoc->GetPageDesc( 0 );
 
-    m_pAktPageDesc = pPd;
+    m_pCurrentPageDesc = pPd;
 
     if ( !pPd )
         return;
@@ -1640,7 +1640,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
                 else
                     pPdFirstPgFormat = &pPd->GetMaster();
 
-                m_pAktPageDesc = pPd = pFollow;
+                m_pCurrentPageDesc = pPd = pFollow;
                 pPdFormat = &rFollowFormat;
 
                 // has different headers/footers for the title page
