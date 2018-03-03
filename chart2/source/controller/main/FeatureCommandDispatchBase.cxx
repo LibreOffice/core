@@ -54,11 +54,10 @@ void FeatureCommandDispatchBase::fireStatusEvent( const OUString& rURL,
 {
     if ( rURL.isEmpty() )
     {
-        SupportedFeatures::const_iterator aEnd( m_aSupportedFeatures.end() );
-        for ( SupportedFeatures::const_iterator aIter( m_aSupportedFeatures.begin() ); aIter != aEnd; ++aIter )
+        for (auto const& elem : m_aSupportedFeatures)
         {
-            FeatureState aFeatureState( getState( aIter->first ) );
-            fireStatusEventForURL( aIter->first, aFeatureState.aState, aFeatureState.bEnabled, xSingleListener );
+            FeatureState aFeatureState( getState(elem.first) );
+            fireStatusEventForURL( elem.first, aFeatureState.aState, aFeatureState.bEnabled, xSingleListener );
         }
     }
     else

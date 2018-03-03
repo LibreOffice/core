@@ -239,14 +239,13 @@ sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(
         std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
-        for( std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
-                 aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
+        for (auto const& series : aSeriesVec)
         {
             try
             {
                 chart2::Symbol aSymbProp;
                 drawing::LineStyle eLineStyle;
-                Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY_THROW );
+                Reference< beans::XPropertySet > xProp(series, uno::UNO_QUERY_THROW);
 
                 bool bCurrentHasSymbol = (xProp->getPropertyValue( "Symbol") >>= aSymbProp) &&
                     (aSymbProp.Style != chart2::SymbolStyle_NONE);

@@ -298,19 +298,18 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
             {
                 sal_Int32 nMaxFreq = 0;
                 // find most frequent key
-                for( tNumberformatFrequency::const_iterator aIt = aKeyMap.begin();
-                    aIt != aKeyMap.end(); ++aIt )
+                for (auto const& elem : aKeyMap)
                 {
                     SAL_INFO(
                         "chart2.tools",
-                        "NumberFormatKey " << (*aIt).first << " appears "
-                            << (*aIt).second << " times");
+                        "NumberFormatKey " << elem.first << " appears "
+                            << elem.second << " times");
                     // all values must at least be 1
-                    if( (*aIt).second > nMaxFreq )
+                    if( elem.second > nMaxFreq )
                     {
-                        nNumberFormatKey = (*aIt).first;
+                        nNumberFormatKey = elem.first;
                         bNumberFormatKeyFoundViaAttachedData = true;
-                        nMaxFreq = (*aIt).second;
+                        nMaxFreq = elem.second;
                     }
                 }
             }
@@ -510,10 +509,9 @@ void AxisHelper::hideAxisIfNoDataIsAttached( const Reference< XAxis >& xAxis, co
     //axis is hidden if no data is attached anymore but data is available
     bool bOtherSeriesAttachedToThisAxis = false;
     std::vector< Reference< chart2::XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
-    std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt = aSeriesVector.begin();
-    for( ; aIt != aSeriesVector.end(); ++aIt)
+    for (auto const& series : aSeriesVector)
     {
-        uno::Reference< chart2::XAxis > xCurrentAxis( DiagramHelper::getAttachedAxis( *aIt, xDiagram ), uno::UNO_QUERY );
+        uno::Reference< chart2::XAxis > xCurrentAxis( DiagramHelper::getAttachedAxis(series, xDiagram ), uno::UNO_QUERY );
         if( xCurrentAxis==xAxis )
         {
             bOtherSeriesAttachedToThisAxis = true;
@@ -1151,13 +1149,12 @@ Reference< XChartType > AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisInd
 {
     Reference< XChartType > xChartType;
     std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
-    std::vector< Reference< XDataSeries > >::const_iterator aIter = aSeriesVector.begin();
-    for( ; aIter != aSeriesVector.end(); ++aIter )
+    for (auto const& series : aSeriesVector)
     {
-        sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex( *aIter );
+        sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex(series);
         if( nAttachedAxisIndex == nCurrentIndex )
         {
-            xChartType = DiagramHelper::getChartTypeOfSeries( xDiagram, *aIter );
+            xChartType = DiagramHelper::getChartTypeOfSeries(xDiagram, series);
             if(xChartType.is())
                 break;
         }

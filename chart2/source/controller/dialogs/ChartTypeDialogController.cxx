@@ -199,13 +199,11 @@ void ChartTypeDialogController::adjustParameterToMainType( ChartTypeParameter& r
         rParameter.eStackMode = GlobalStackMode_NONE;
 
     const tTemplateServiceChartTypeParameterMap& rMap = getTemplateMap();
-    tTemplateServiceChartTypeParameterMap::const_iterator       aIter = rMap.begin();
-    const tTemplateServiceChartTypeParameterMap::const_iterator aEnd  = rMap.end();
     for( sal_Int32 nMatchPrecision=0; nMatchPrecision<7 && !bFoundSomeMatch; nMatchPrecision++ )
     {
-        for( aIter = rMap.begin(); aIter != aEnd; ++aIter )
+        for (auto const& elem : rMap)
         {
-            if( rParameter.mapsToSimilarService( (*aIter).second, nMatchPrecision ) )
+            if( rParameter.mapsToSimilarService( elem.second, nMatchPrecision ) )
             {
                 //remind some values
                 ThreeDLookScheme aScheme = rParameter.eThreeDLookScheme;
@@ -216,7 +214,7 @@ void ChartTypeDialogController::adjustParameterToMainType( ChartTypeParameter& r
                 bool             bSortByXValues = rParameter.bSortByXValues;
                 bool bRoundedEdge = rParameter.mbRoundedEdge;
 
-                rParameter = (*aIter).second;
+                rParameter = elem.second;
 
                 //some values should not be changed with charttype
                 rParameter.eThreeDLookScheme = aScheme;
@@ -248,21 +246,19 @@ OUString ChartTypeDialogController::getServiceNameForParameter( const ChartTypeP
     if(!aParameter.b3DLook && aParameter.eStackMode==GlobalStackMode_STACK_Z)
         aParameter.eStackMode = GlobalStackMode_NONE;
     const tTemplateServiceChartTypeParameterMap& rMap = getTemplateMap();
-    tTemplateServiceChartTypeParameterMap::const_iterator       aIter = rMap.begin();
-    const tTemplateServiceChartTypeParameterMap::const_iterator aEnd  = rMap.end();
-    for( ; aIter != aEnd; ++aIter )
+    for (auto const& elem : rMap)
     {
-        if( aParameter.mapsToSameService( (*aIter).second ) )
-            return (*aIter).first;
+        if( aParameter.mapsToSameService(elem.second) )
+            return elem.first;
     }
 
     OSL_FAIL( "ChartType not implemented yet - use fallback to similar type" );
     for( sal_Int32 nMatchPrecision=1; nMatchPrecision<8; nMatchPrecision++ )
     {
-        for( aIter = rMap.begin(); aIter != aEnd; ++aIter )
+        for (auto const& elem : rMap)
         {
-            if( aParameter.mapsToSimilarService( (*aIter).second, nMatchPrecision ) )
-                return (*aIter).first;
+            if( aParameter.mapsToSimilarService(elem.second, nMatchPrecision) )
+                return elem.first;
         }
     }
     return OUString();

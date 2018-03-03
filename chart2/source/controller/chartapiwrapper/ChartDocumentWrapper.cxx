@@ -997,9 +997,8 @@ Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
         OSL_ENSURE( xFoundShapes.is(), "Couldn't create a shape collection!" );
         if( xFoundShapes.is())
         {
-            std::vector< uno::Reference< drawing::XShape > >::iterator aIter;
-            for( aIter = aShapeVector.begin(); aIter != aShapeVector.end(); ++aIter )
-                xFoundShapes->add( *aIter );
+            for (auto const& shape : aShapeVector)
+                xFoundShapes->add(shape);
         }
     }
 

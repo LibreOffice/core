@@ -99,10 +99,9 @@ void lcl_CloneAttributedDataPoints(
     const lcl_tDataPointMap & rSource, lcl_tDataPointMap & rDestination,
     const uno::Reference< uno::XInterface > & xSeries )
 {
-    for( lcl_tDataPointMap::const_iterator aIt( rSource.begin());
-         aIt != rSource.end(); ++aIt )
+    for (auto const& elem : rSource)
     {
-        Reference< beans::XPropertySet > xPoint( (*aIt).second );
+        Reference< beans::XPropertySet > xPoint( elem.second );
         if( xPoint.is())
         {
             Reference< util::XCloneable > xCloneable( xPoint, uno::UNO_QUERY );
@@ -112,7 +111,7 @@ void lcl_CloneAttributedDataPoints(
                 if( xPoint.is())
                 {
                     lcl_SetParent( xPoint, xSeries );
-                    rDestination.emplace( (*aIt).first, xPoint );
+                    rDestination.emplace( elem.first, xPoint );
                 }
             }
         }

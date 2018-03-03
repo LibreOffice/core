@@ -405,10 +405,9 @@ void DataSourceTabPage::fillSeriesListBox()
         m_rDialogModel.getAllDataSeriesWithLabel() );
 
     sal_Int32 nUnnamedSeriesIndex = 1;
-    for( std::vector< DialogModel::tSeriesWithChartTypeByName >::const_iterator aIt = aSeries.begin();
-         aIt != aSeries.end(); ++aIt )
+    for (auto const& series : aSeries)
     {
-        OUString aLabel( (*aIt).first );
+        OUString aLabel(series.first);
         if( aLabel.isEmpty())
         {
             if( nUnnamedSeriesIndex > 1 )
@@ -432,9 +431,9 @@ void DataSourceTabPage::fillSeriesListBox()
             m_pLB_SERIES->InsertEntry( aLabel ));
         if( pEntry )
         {
-            pEntry->m_xDataSeries.set( (*aIt).second.first );
-            pEntry->m_xChartType.set(  (*aIt).second.second );
-            if( bHasSelectedEntry && ((*aIt).second.first == xSelected))
+            pEntry->m_xDataSeries.set(series.second.first);
+            pEntry->m_xChartType.set(series.second.second);
+            if( bHasSelectedEntry && (series.second.first == xSelected))
                 pSelectedEntry = pEntry;
         }
     }
@@ -468,10 +467,9 @@ void DataSourceTabPage::fillRoleListBox()
         m_pLB_ROLE->Clear();
         m_pLB_ROLE->RemoveSelection();
 
-        for( DialogModel::tRolesWithRanges::const_iterator aIt( aRoles.begin());
-             aIt != aRoles.end(); ++ aIt )
+        for (auto const& elemRole : aRoles)
         {
-            m_pLB_ROLE->InsertEntry( lcl_GetRoleLBEntry( aIt->first, aIt->second ));
+            m_pLB_ROLE->InsertEntry( lcl_GetRoleLBEntry(elemRole.first, elemRole.second));
         }
 
         // series may contain no roles, check listbox size before selecting entries

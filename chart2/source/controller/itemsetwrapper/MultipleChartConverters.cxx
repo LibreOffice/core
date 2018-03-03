@@ -106,19 +106,18 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
     std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
         ::chart::ChartModelHelper::getDataSeries( xChartModel ));
 
-    std::vector< uno::Reference< chart2::XDataSeries > >::const_iterator aIt;
-    for( aIt = aSeriesList.begin(); aIt != aSeriesList.end(); ++aIt )
+    for (auto const& series : aSeriesList)
     {
-        uno::Reference< beans::XPropertySet > xObjectProperties( *aIt, uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySet > xObjectProperties(series, uno::UNO_QUERY);
         uno::Reference< uno::XComponentContext> xContext(nullptr);//do not need Context for label properties
 
-        sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel( xObjectProperties, *aIt, -1/*nPointIndex*/, ChartModelHelper::findDiagram( xChartModel ) );
+        sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel( xObjectProperties, series, -1/*nPointIndex*/, ChartModelHelper::findDiagram( xChartModel ) );
         sal_Int32 nPercentNumberFormat=ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
                 xObjectProperties,uno::Reference< util::XNumberFormatsSupplier >(xChartModel, uno::UNO_QUERY));
 
         m_aConverters.push_back(
             new ::chart::wrapper::DataPointItemConverter(
-                xChartModel, xContext, xObjectProperties, *aIt, rItemPool, rDrawModel,
+                xChartModel, xContext, xObjectProperties, series, rItemPool, rDrawModel,
                 xNamedPropertyContainerFactory, GraphicObjectType::FilledDataPoint,
                 nullptr, true, false, 0, true, nNumberFormat, nPercentNumberFormat));
     }
@@ -171,10 +170,9 @@ AllSeriesStatisticsConverter::AllSeriesStatisticsConverter(
     std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
         ::chart::ChartModelHelper::getDataSeries( xChartModel ));
 
-    std::vector< uno::Reference< chart2::XDataSeries > >::const_iterator aIt;
-    for( aIt = aSeriesList.begin(); aIt != aSeriesList.end(); ++aIt )
+    for (auto const& series : aSeriesList)
     {
-        uno::Reference< beans::XPropertySet > xObjectProperties( *aIt, uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySet > xObjectProperties(series, uno::UNO_QUERY);
         m_aConverters.push_back( new ::chart::wrapper::StatisticsItemConverter(
                                      xChartModel, xObjectProperties, rItemPool ));
     }

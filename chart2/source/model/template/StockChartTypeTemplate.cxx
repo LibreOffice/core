@@ -263,10 +263,9 @@ void SAL_CALL StockChartTypeTemplate::resetStyles(
     {
         std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
-        for( std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeriesVec.begin());
-             aIt != aSeriesVec.end(); ++aIt )
+        for (auto const& series : aSeriesVec)
         {
-            Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xProp(series, uno::UNO_QUERY);
             if( xProp.is() )
                 xProp->setPropertyValue( "AttachedAxisIndex", uno::Any( sal_Int32(0) ) );
         }

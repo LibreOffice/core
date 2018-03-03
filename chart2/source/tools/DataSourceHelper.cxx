@@ -269,12 +269,11 @@ uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges(
             lcl_addRanges( aResult, xCategories );
 
         std::vector< uno::Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
-        for( std::vector< uno::Reference< XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
-                 ; aSeriesIt != aSeriesVector.end(); ++aSeriesIt )
+        for (auto const& series : aSeriesVector)
         {
-            uno::Reference< data::XDataSource > xDataSource( *aSeriesIt, uno::UNO_QUERY );
+            uno::Reference< data::XDataSource > xDataSource(series, uno::UNO_QUERY);
             lcl_addDataSourceRanges( aResult, xDataSource );
-            lcl_addErrorBarRanges( aResult, *aSeriesIt );
+            lcl_addErrorBarRanges( aResult, series );
         }
     }
 
@@ -304,10 +303,9 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
         aResult.push_back( xCategories );
 
     std::vector< uno::Reference< XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( xChartModel ) );
-    for( std::vector< uno::Reference< XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
-        ; aSeriesIt != aSeriesVector.end(); ++aSeriesIt )
+    for (auto const& series : aSeriesVector)
     {
-        uno::Reference< data::XDataSource > xDataSource( *aSeriesIt, uno::UNO_QUERY );
+        uno::Reference< data::XDataSource > xDataSource(series, uno::UNO_QUERY);
         if( !xDataSource.is() )
             continue;
         uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
@@ -330,10 +328,9 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
         aResult.push_back( xCategories );
 
     std::vector< uno::Reference< XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( rModel ) );
-    for( std::vector< uno::Reference< XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
-        ; aSeriesIt != aSeriesVector.end(); ++aSeriesIt )
+    for (auto const& series : aSeriesVector)
     {
-        uno::Reference< data::XDataSource > xDataSource( *aSeriesIt, uno::UNO_QUERY );
+        uno::Reference< data::XDataSource > xDataSource(series, uno::UNO_QUERY);
         if( !xDataSource.is() )
             continue;
         uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );

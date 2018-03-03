@@ -736,12 +736,10 @@ ChartTypeTabPage::ChartTypeTabPage(vcl::Window* pParent
     if ( aOpts.IsExperimentalMode() )
         m_aChartTypeDialogControllerList.push_back(new GL3DBarChartDialogController());
 
-    std::vector< ChartTypeDialogController* >::const_iterator       aIter = m_aChartTypeDialogControllerList.begin();
-    const std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
-    for( ; aIter != aEnd; ++aIter )
+    for (auto const& elem : m_aChartTypeDialogControllerList)
     {
-        m_pMainTypeList->InsertEntry( (*aIter)->getName(), (*aIter)->getImage() );
-        (*aIter)->setChangeListener( this );
+        m_pMainTypeList->InsertEntry( elem->getName(), elem->getImage() );
+        elem->setChangeListener( this );
     }
 
     m_pDim3DLookResourceGroup->setChangeListener( this );
@@ -760,11 +758,9 @@ ChartTypeTabPage::~ChartTypeTabPage()
 void ChartTypeTabPage::dispose()
 {
     //delete all dialog controller
-    std::vector< ChartTypeDialogController* >::const_iterator       aIter = m_aChartTypeDialogControllerList.begin();
-    const std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
-    for( ; aIter != aEnd; ++aIter )
+    for (auto const& elem : m_aChartTypeDialogControllerList)
     {
-        delete *aIter;
+        delete elem;
     }
     m_aChartTypeDialogControllerList.clear();
 
@@ -956,18 +952,17 @@ void ChartTypeTabPage::initializePage()
 
     bool bFound = false;
 
-    std::vector< ChartTypeDialogController* >::iterator             aIter = m_aChartTypeDialogControllerList.begin();
-    const std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
-    for( sal_uInt16 nM=0; aIter != aEnd; ++aIter, ++nM )
+    sal_uInt16 nM=0;
+    for (auto const& elem : m_aChartTypeDialogControllerList)
     {
-        if( (*aIter)->isSubType(aServiceName) )
+        if( elem->isSubType(aServiceName) )
         {
             bFound = true;
 
             m_pMainTypeList->SelectEntryPos( nM );
-            showAllControls( **aIter );
+            showAllControls(*elem);
             uno::Reference< beans::XPropertySet > xTemplateProps( aTemplate.first, uno::UNO_QUERY );
-            ChartTypeParameter aParameter = (*aIter)->getChartTypeParameterForService( aServiceName, xTemplateProps );
+            ChartTypeParameter aParameter = elem->getChartTypeParameterForService( aServiceName, xTemplateProps );
             m_pCurrentMainType = getSelectedMainType();
 
             //set ThreeDLookScheme
@@ -990,6 +985,7 @@ void ChartTypeTabPage::initializePage()
                 m_pCurrentMainType->fillExtraControls(aParameter,m_xChartModel,xTemplateProps);
             break;
         }
+        ++nM;
     }
 
     if( !bFound )

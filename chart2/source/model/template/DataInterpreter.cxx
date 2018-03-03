@@ -102,16 +102,13 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
     }
 
     // create DataSeries
-    vector< Reference< data::XLabeledDataSequence > >::const_iterator
-          aSequencesVecIt = aSequencesVec.begin();
-
     sal_Int32 nSeriesIndex = 0;
     vector< Reference< XDataSeries > > aSeriesVec;
     aSeriesVec.reserve( aSequencesVec.size());
 
-    for( ;aSequencesVecIt != aSequencesVec.end(); ++aSequencesVecIt, ++nSeriesIndex )
+    for (auto const& elem : aSequencesVec)
     {
-        Sequence< Reference< data::XLabeledDataSequence > > aNewData( & (*aSequencesVecIt), 1 );
+        Sequence< Reference< data::XLabeledDataSequence > > aNewData( &elem, 1 );
         Reference< XDataSeries > xSeries;
         if( nSeriesIndex < aSeriesToReUse.getLength())
             xSeries.set( aSeriesToReUse[nSeriesIndex] );
@@ -123,6 +120,7 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
         xSink->setData( aNewData );
 
         aSeriesVec.push_back( xSeries );
+        ++nSeriesIndex;
     }
 
     Sequence< Sequence< Reference< XDataSeries > > > aSeries(1);
