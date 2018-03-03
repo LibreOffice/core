@@ -60,15 +60,15 @@ namespace accessibility
                                 ,   css::accessibility::XAccessible
                                 >   AccessibleTextHelper_BASE;
     // implementation of a table cell of GridControl
-    class AccessibleGridControlTableCell    :public AccessibleGridControlCell
+    class AccessibleGridControlTableCell final   :public AccessibleGridControlCell
                                         ,public AccessibleTextHelper_BASE
                                         ,public ::comphelper::OCommonAccessibleText
     {
-    protected:
+    private:
         // OCommonAccessibleText
         virtual OUString                        implGetText() override;
         virtual css::lang::Locale               implGetLocale() override;
-        virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override;
+        virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override final;
         virtual tools::Rectangle implGetBoundingBox() override;
         virtual tools::Rectangle implGetBoundingBoxOnScreen() override;
 

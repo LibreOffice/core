@@ -53,7 +53,7 @@ protected:
     // OCommonAccessibleText
     virtual OUString                     implGetText() final override;
     virtual css::lang::Locale            implGetLocale() override;
-    virtual void                         implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override;
+    virtual void                         implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override final;
 
 public:
     VCLXAccessibleMenuItem( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu = nullptr );
@@ -79,9 +79,9 @@ public:
     virtual css::awt::Rectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex ) override;
     virtual sal_Int32 SAL_CALL getCharacterCount() final override;
     virtual sal_Int32 SAL_CALL getIndexAtPoint( const css::awt::Point& aPoint ) override;
-    virtual OUString SAL_CALL getSelectedText() override;
-    virtual sal_Int32 SAL_CALL getSelectionStart() override;
-    virtual sal_Int32 SAL_CALL getSelectionEnd() override;
+    virtual OUString SAL_CALL getSelectedText() override final;
+    virtual sal_Int32 SAL_CALL getSelectionStart() override final;
+    virtual sal_Int32 SAL_CALL getSelectionEnd() override final;
     virtual sal_Bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
     virtual OUString SAL_CALL getText() final override;
     virtual OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;

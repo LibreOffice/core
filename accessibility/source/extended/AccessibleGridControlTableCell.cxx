@@ -253,19 +253,19 @@ namespace accessibility
     {
         SolarMutexGuard aSolarGuard;
 
-        return OCommonAccessibleText::getSelectedText(  );
+        return OUString();
     }
     sal_Int32 SAL_CALL AccessibleGridControlTableCell::getSelectionStart(  )
     {
         SolarMutexGuard aSolarGuard;
 
-        return OCommonAccessibleText::getSelectionStart(  );
+        return 0;
     }
     sal_Int32 SAL_CALL AccessibleGridControlTableCell::getSelectionEnd(  )
     {
         SolarMutexGuard aSolarGuard;
 
-        return OCommonAccessibleText::getSelectionEnd(  );
+        return 0;
     }
     sal_Bool SAL_CALL AccessibleGridControlTableCell::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     {

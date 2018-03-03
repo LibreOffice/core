@@ -465,7 +465,7 @@ OUString SAL_CALL VCLXAccessibleListItem::getSelectedText()
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return OCommonAccessibleText::getSelectedText();
+    return OUString();
 }
 
 sal_Int32 SAL_CALL VCLXAccessibleListItem::getSelectionStart()
@@ -473,7 +473,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getSelectionStart()
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return OCommonAccessibleText::getSelectionStart();
+    return 0;
 }
 
 sal_Int32 SAL_CALL VCLXAccessibleListItem::getSelectionEnd()
@@ -481,7 +481,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getSelectionEnd()
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return OCommonAccessibleText::getSelectionEnd();
+    return 0;
 }
 
 sal_Bool SAL_CALL VCLXAccessibleListItem::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
