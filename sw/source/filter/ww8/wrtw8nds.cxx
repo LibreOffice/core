@@ -1556,8 +1556,8 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
 
 SvxFrameDirection MSWordExportBase::GetCurrentPageDirection() const
 {
-    const SwFrameFormat &rFormat = m_pAktPageDesc
-                    ? m_pAktPageDesc->GetMaster()
+    const SwFrameFormat &rFormat = m_pCurrentPageDesc
+                    ? m_pCurrentPageDesc->GetMaster()
                     : m_pDoc->GetPageDesc( 0 ).GetMaster();
     return rFormat.GetFrameDir().GetValue();
 }
@@ -1636,8 +1636,8 @@ SvxFrameDirection MSWordExportBase::TrueFrameDirection( const SwFrameFormat &rFl
 
 const SvxBrushItem* WW8Export::GetCurrentPageBgBrush() const
 {
-    const SwFrameFormat  &rFormat = m_pAktPageDesc
-                    ? m_pAktPageDesc->GetMaster()
+    const SwFrameFormat  &rFormat = m_pCurrentPageDesc
+                    ? m_pCurrentPageDesc->GetMaster()
                     : m_pDoc->GetPageDesc(0).GetMaster();
 
     const SfxPoolItem* pItem = nullptr;
@@ -2098,14 +2098,14 @@ void MSWordExportBase::GetSortedBookmarks( const SwTextNode& rNode, sal_Int32 nA
 
 bool MSWordExportBase::NeedSectionBreak( const SwNode& rNd ) const
 {
-    if ( m_bStyDef || m_bOutKF || m_bInWriteEscher || m_bOutPageDescs || m_pAktPageDesc == nullptr )
+    if ( m_bStyDef || m_bOutKF || m_bInWriteEscher || m_bOutPageDescs || m_pCurrentPageDesc == nullptr )
         return false;
 
     const SwPageDesc * pPageDesc = rNd.FindPageDesc()->GetFollow();
 
-    if (m_pAktPageDesc != pPageDesc)
+    if (m_pCurrentPageDesc != pPageDesc)
     {
-        if (!sw::util::IsPlausableSingleWordSection(m_pAktPageDesc->GetFirstMaster(), pPageDesc->GetMaster()))
+        if (!sw::util::IsPlausableSingleWordSection(m_pCurrentPageDesc->GetFirstMaster(), pPageDesc->GetMaster()))
         {
             return true;
         }
@@ -2608,7 +2608,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             {
                 // In this case the same paragraph holds the next page style
                 // too.
-                const SwPageDesc* pNextPageDesc = m_pAktPageDesc->GetFollow();
+                const SwPageDesc* pNextPageDesc = m_pCurrentPageDesc->GetFollow();
                 assert(pNextPageDesc);
                 PrepareNewPageDesc( rNode.GetpSwAttrSet(), rNode, nullptr , pNextPageDesc);
             }
@@ -3064,7 +3064,7 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
             const SwPageDesc *pCurrent =
                 SwPageDesc::GetPageDescOfNode(aIdxTmp.GetNode());
             if (!pCurrent)
-                pCurrent = m_pAktPageDesc;
+                pCurrent = m_pCurrentPageDesc;
 
             AppendSection( pCurrent, &rFormat, nRstLnNum );
         }

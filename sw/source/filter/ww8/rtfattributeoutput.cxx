@@ -1618,7 +1618,7 @@ void RtfAttributeOutput::WriteHeaderFooter_Impl(const SwFrameFormat& rFormat, bo
     m_aSectionHeaders.append(bHeader ? OOO_STRING_SVTOOLS_RTF_HEADERY
                                      : OOO_STRING_SVTOOLS_RTF_FOOTERY);
     m_aSectionHeaders.append(
-        static_cast<sal_Int32>(m_rExport.m_pAktPageDesc->GetMaster().GetULSpace().GetUpper()));
+        static_cast<sal_Int32>(m_rExport.m_pCurrentPageDesc->GetMaster().GetULSpace().GetUpper()));
     if (bTitlepg)
         m_aSectionHeaders.append(OOO_STRING_SVTOOLS_RTF_TITLEPG);
     m_aSectionHeaders.append('{');

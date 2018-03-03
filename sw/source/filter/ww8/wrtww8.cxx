@@ -1923,7 +1923,7 @@ void MSWordExportBase::SaveData( sal_uLong nStt, sal_uLong nEnd )
     aData.pOldPam = m_pCurPam;
     aData.pOldEnd = m_pOrigPam;
     aData.pOldFlyFormat = m_pParentFrame;
-    aData.pOldPageDesc = m_pAktPageDesc;
+    aData.pOldPageDesc = m_pCurrentPageDesc;
 
     aData.pOldFlyOffset = m_pFlyOffset;
     aData.eOldAnchorType = m_eNewAnchorType;
@@ -1960,7 +1960,7 @@ void MSWordExportBase::RestoreData()
     m_bInWriteTOX = rData.bOldInWriteTOX;
 
     m_pParentFrame = rData.pOldFlyFormat;
-    m_pAktPageDesc = rData.pOldPageDesc;
+    m_pCurrentPageDesc = rData.pOldPageDesc;
 
     m_eNewAnchorType = rData.eOldAnchorType;
     m_pFlyOffset = rData.pOldFlyOffset;
@@ -2718,7 +2718,7 @@ void MSWordExportBase::WriteText()
 
             const SwPageDesc* pTemp = rNd.FindPageDesc();
             if ( pTemp )
-                m_pAktPageDesc = pTemp;
+                m_pCurrentPageDesc = pTemp;
 
             m_pCurPam->GetPoint()->nContent.Assign( pCNd, 0 );
             OutputContentNode( *pCNd );
@@ -2792,7 +2792,7 @@ void MSWordExportBase::WriteText()
                     else
                         nRstLnNum = 0;
 
-                    AppendSection( m_pAktPageDesc, pParentFormat, nRstLnNum );
+                    AppendSection( m_pCurrentPageDesc, pParentFormat, nRstLnNum );
                 }
                 else
                 {
@@ -3562,7 +3562,7 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     , m_nUniqueList(0)
     , m_nHdFtIndex(0)
     , m_nOrigRedlineFlags(RedlineFlags::NONE)
-    , m_pAktPageDesc(nullptr)
+    , m_pCurrentPageDesc(nullptr)
     , m_bPrevTextNodeIsEmpty(false)
     , m_pPapPlc(nullptr)
     , m_pChpPlc(nullptr)
