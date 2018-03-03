@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/svapp.hxx>
 #include <dlgname.hxx>
 #include <defdlgname.hxx>
 #include <dialmgr.hxx>
@@ -27,42 +28,28 @@
 |*
 \************************************************************************/
 
-SvxNameDialog::SvxNameDialog( vcl::Window* pWindow, const OUString& rName, const OUString& rDesc ) :
-    ModalDialog     ( pWindow, "NameDialog", "cui/ui/namedialog.ui" )
+SvxNameDialog::SvxNameDialog(weld::Window* pParent, const OUString& rName, const OUString& rDesc)
+    : m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/namedialog.ui"))
+    , m_xDialog(m_xBuilder->weld_dialog("NameDialog"))
+    , m_xEdtName(m_xBuilder->weld_entry("name_entry"))
+    , m_xFtDescription(m_xBuilder->weld_label("description_label"))
+    , m_xBtnOK(m_xBuilder->weld_button("ok"))
 {
-    get(pBtnOK, "ok");
-    get(pFtDescription, "description_label");
-    get(pEdtName, "name_entry");
-
-    pFtDescription->SetText( rDesc );
-    pEdtName->SetText( rName );
-    pEdtName->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
-    ModifyHdl(*pEdtName.get());
-    pEdtName->SetModifyHdl(LINK(this, SvxNameDialog, ModifyHdl));
+    m_xFtDescription->set_label(rDesc);
+    m_xEdtName->set_text(rName);
+    m_xEdtName->select_region(0, -1);
+    ModifyHdl(*m_xEdtName);
+    m_xEdtName->connect_changed(LINK(this, SvxNameDialog, ModifyHdl));
 }
 
-SvxNameDialog::~SvxNameDialog()
-{
-    disposeOnce();
-}
-
-void SvxNameDialog::dispose()
-{
-    pFtDescription.clear();
-    pEdtName.clear();
-    pBtnOK.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl, weld::Entry&, void)
 {
     // Do not allow empty names
-    if(aCheckNameHdl.IsSet())
-        pBtnOK->Enable(!pEdtName->GetText().isEmpty() && aCheckNameHdl.Call(*this));
+    if (m_aCheckNameHdl.IsSet())
+        m_xBtnOK->set_sensitive(!m_xEdtName->get_text().isEmpty() && m_aCheckNameHdl.Call(*this));
     else
-        pBtnOK->Enable(!pEdtName->GetText().isEmpty());
+        m_xBtnOK->set_sensitive(!m_xEdtName->get_text().isEmpty());
 }
-
 
 // #i68101#
 // Dialog for editing Object Name

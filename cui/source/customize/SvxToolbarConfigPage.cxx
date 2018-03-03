@@ -472,13 +472,13 @@ IMPL_LINK( SvxToolbarConfigPage, ModifyItemHdl, MenuButton *, pButton, void )
         OUString aNewName( SvxConfigPageHelper::stripHotKey( pEntry->GetName() ) );
         OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
 
-        VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
-        pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM );
-        pNameDialog->SetText( CuiResId( RID_SVXSTR_RENAME_TOOLBAR ) );
+        SvxNameDialog aNameDialog(GetFrameWeld(), aNewName, aDesc);
+        aNameDialog.set_help_id(HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM);
+        aNameDialog.set_title(CuiResId(RID_SVXSTR_RENAME_TOOLBAR));
 
-        if ( pNameDialog->Execute() == RET_OK )
+        if (aNameDialog.run() == RET_OK)
         {
-            pNameDialog->GetName(aNewName);
+            aNewName = aNameDialog.GetName();
 
             if( aNewName.isEmpty() )    // tdf#80758 - Accelerator character ("~") is passed as
                 pEntry->SetName( "~" ); // the button name in case of empty values.

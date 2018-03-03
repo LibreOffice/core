@@ -302,7 +302,14 @@ class AbstractSvxNewDictionaryDialog_Impl :public AbstractSvxNewDictionaryDialog
 class SvxNameDialog;
 class AbstractSvxNameDialog_Impl :public AbstractSvxNameDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxNameDialog_Impl,SvxNameDialog)
+protected:
+    std::unique_ptr<SvxNameDialog> m_xDlg;
+public:
+    explicit AbstractSvxNameDialog_Impl(SvxNameDialog* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual void    GetName( OUString& rName ) override ;
     virtual void    SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink, bool bCheckImmediately = false ) override ;
     virtual void    SetEditHelpId(const OString&) override ;
@@ -554,8 +561,8 @@ public:
     virtual VclPtr<AbstractSvxNewDictionaryDialog> CreateSvxNewDictionaryDialog( vcl::Window* pParent ) override;
     virtual VclPtr<VclAbstractDialog>     CreateSvxEditDictionaryDialog( vcl::Window* pParent,
                                             const OUString& rName) override;
-    virtual VclPtr<AbstractSvxNameDialog>     CreateSvxNameDialog( vcl::Window* pParent,
-                                            const OUString& rName, const OUString& rDesc ) override;
+    virtual VclPtr<AbstractSvxNameDialog> CreateSvxNameDialog(weld::Window* pParent,
+                                            const OUString& rName, const OUString& rDesc) override;
     // #i68101#
     virtual VclPtr<AbstractSvxObjectNameDialog> CreateSvxObjectNameDialog(const OUString& rName ) override;
     virtual VclPtr<AbstractSvxObjectTitleDescDialog> CreateSvxObjectTitleDescDialog(const OUString& rTitle, const OUString& rDescription) override;
