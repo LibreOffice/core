@@ -35,11 +35,10 @@ try:
     import lxml.etree as ET
     lxml = True
 except ImportError:
+    if sys.version_info < (2,7):
+        exit()
     import xml.etree.ElementTree as ET
     lxml = False
-
-if sys.version_info < (2,7):
-    exit()
 
 progname = os.path.basename(sys.argv[0])
 suppressions = {}
