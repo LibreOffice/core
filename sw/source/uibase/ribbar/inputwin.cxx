@@ -66,7 +66,7 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher const * pDispat
     , pMgr(nullptr)
     , pWrtShell(nullptr)
     , pView(nullptr)
-    , aAktTableName(aEmptyOUStr)
+    , aCurrentTableName(aEmptyOUStr)
     , m_bDoesUndo(true)
     , m_bResetUndo(false)
     , m_bCallUndo(false)
@@ -208,7 +208,7 @@ void SwInputWindow::ShowWin()
             while( (nPos = rPos.indexOf( ':',nPos + 1 ) ) != -1 )
                 nSrch = static_cast<short>(nPos);
             aPos->SetText( rPos.copy( ++nSrch ) );
-            aAktTableName = pWrtShell->GetTableFormat()->GetName();
+            aCurrentTableName = pWrtShell->GetTableFormat()->GetName();
         }
         else
             aPos->SetText(SwResId(STR_TBL_FORMULA));
@@ -382,7 +382,7 @@ IMPL_LINK( SwInputWindow, SelTableCellsNotify, SwWrtShell&, rCaller, void )
         SwFrameFormat* pTableFormat = rCaller.GetTableFormat();
         OUString sBoxNms( rCaller.GetBoxNms() );
         OUString sTableNm;
-        if( pTableFormat && aAktTableName != pTableFormat->GetName() )
+        if( pTableFormat && aCurrentTableName != pTableFormat->GetName() )
             sTableNm = pTableFormat->GetName();
 
         aEdit->UpdateRange( sBoxNms, sTableNm );
