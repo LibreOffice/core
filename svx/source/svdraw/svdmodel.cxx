@@ -139,7 +139,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     pUndoStack=nullptr;
     pRedoStack=nullptr;
     nMaxUndoCount=16;
-    pAktUndoGroup=nullptr;
+    pCurrentUndoGroup=nullptr;
     nUndoLevel=0;
     mbUndoEnabled=true;
     bExtColorTable=false;
@@ -250,10 +250,10 @@ SdrModel::~SdrModel()
 
     ClearUndoBuffer();
 #ifdef DBG_UTIL
-    SAL_WARN_IF(pAktUndoGroup, "svx", "In the Dtor of the SdrModel there is an open Undo left: \""
-                    << pAktUndoGroup->GetComment() << '\"');
+    SAL_WARN_IF(pCurrentUndoGroup, "svx", "In the Dtor of the SdrModel there is an open Undo left: \""
+                    << pCurrentUndoGroup->GetComment() << '\"');
 #endif
-    pAktUndoGroup.reset();
+    pCurrentUndoGroup.reset();
 
     ClearModel(true);
 
@@ -442,9 +442,9 @@ void SdrModel::BegUndo()
     }
     else if( IsUndoEnabled() )
     {
-        if(!pAktUndoGroup)
+        if(!pCurrentUndoGroup)
         {
-            pAktUndoGroup.reset(new SdrUndoGroup(*this));
+            pCurrentUndoGroup.reset(new SdrUndoGroup(*this));
             nUndoLevel=1;
         }
         else
@@ -469,7 +469,7 @@ void SdrModel::BegUndo(const OUString& rComment)
         BegUndo();
         if (nUndoLevel==1)
         {
-            pAktUndoGroup->SetComment(rComment);
+            pCurrentUndoGroup->SetComment(rComment);
         }
     }
 }
@@ -494,9 +494,9 @@ void SdrModel::BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrR
         BegUndo();
         if (nUndoLevel==1)
         {
-            pAktUndoGroup->SetComment(rComment);
-            pAktUndoGroup->SetObjDescription(rObjDescr);
-            pAktUndoGroup->SetRepeatFunction(eFunc);
+            pCurrentUndoGroup->SetComment(rComment);
+            pCurrentUndoGroup->SetObjDescription(rObjDescr);
+            pCurrentUndoGroup->SetRepeatFunction(eFunc);
         }
     }
 }
@@ -514,20 +514,20 @@ void SdrModel::EndUndo()
     }
     else
     {
-        if(pAktUndoGroup!=nullptr && IsUndoEnabled())
+        if(pCurrentUndoGroup!=nullptr && IsUndoEnabled())
         {
             nUndoLevel--;
             if(nUndoLevel==0)
             {
-                if(pAktUndoGroup->GetActionCount()!=0)
+                if(pCurrentUndoGroup->GetActionCount()!=0)
                 {
-                    SdrUndoAction* pUndo=pAktUndoGroup.release();
+                    SdrUndoAction* pUndo=pCurrentUndoGroup.release();
                     ImpPostUndoAction(std::unique_ptr<SdrUndoAction>(pUndo));
                 }
                 else
                 {
                     // was empty
-                    pAktUndoGroup.reset();
+                    pCurrentUndoGroup.reset();
                 }
             }
         }
@@ -546,7 +546,7 @@ void SdrModel::SetUndoComment(const OUString& rComment)
     {
         if(nUndoLevel==1)
         {
-            pAktUndoGroup->SetComment(rComment);
+            pCurrentUndoGroup->SetComment(rComment);
         }
     }
 }
@@ -562,8 +562,8 @@ void SdrModel::SetUndoComment(const OUString& rComment, const OUString& rObjDesc
     {
         if (nUndoLevel==1)
         {
-            pAktUndoGroup->SetComment(rComment);
-            pAktUndoGroup->SetObjDescription(rObjDescr);
+            pCurrentUndoGroup->SetComment(rComment);
+            pCurrentUndoGroup->SetObjDescription(rObjDescr);
         }
     }
 }
@@ -580,9 +580,9 @@ void SdrModel::AddUndo(SdrUndoAction* pUndo)
     }
     else
     {
-        if (pAktUndoGroup)
+        if (pCurrentUndoGroup)
         {
-            pAktUndoGroup->AddAction(pUndo);
+            pCurrentUndoGroup->AddAction(pUndo);
         }
         else
         {

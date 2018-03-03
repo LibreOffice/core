@@ -172,11 +172,11 @@ protected:
     sfx2::LinkManager* pLinkManager;   // LinkManager
     std::unique_ptr<std::deque<std::unique_ptr<SfxUndoAction>>> pUndoStack;
     std::unique_ptr<std::deque<std::unique_ptr<SfxUndoAction>>> pRedoStack;
-    std::unique_ptr<SdrUndoGroup> pAktUndoGroup;  // for deeper
-    sal_uInt16          nUndoLevel;     // undo nesting
+    std::unique_ptr<SdrUndoGroup> pCurrentUndoGroup;  // For multi-level
+    sal_uInt16          nUndoLevel;                   // undo nesting
     bool                bMyPool:1;        // to clean up pMyPool from 303a
     bool                mbUndoEnabled:1;  // If false no undo is recorded or we are during the execution of an undo action
-    bool                bExtColorTable:1; // ne separate ColorTable
+    bool                bExtColorTable:1; // For no own ColorTable
     bool                mbChanged:1;
     bool                bPagNumsDirty:1;
     bool                bMPgNumsDirty:1;
