@@ -52,7 +52,7 @@ friend class InputEdit;
     SwFieldMgr*     pMgr;
     SwWrtShell*     pWrtShell;
     SwView*         pView;
-    OUString        aAktTableName, sOldFormula;
+    OUString        aCurrentTableName, sOldFormula;
 
     bool            bFirst : 1;  // initialisations at first call
     bool            bIsTable : 1;
