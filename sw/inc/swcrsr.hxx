@@ -284,7 +284,7 @@ public:
     const SwSelBoxes& GetSelectedBoxes() const { return m_SelectedBoxes; }
 
     // Creates cursor for all boxes.
-    SwCursor* MakeBoxSels( SwCursor* pAktCursor );
+    SwCursor* MakeBoxSels( SwCursor* pCurrentCursor );
     // Any boxes protected?
     bool HasReadOnlyBoxSel() const;
 
