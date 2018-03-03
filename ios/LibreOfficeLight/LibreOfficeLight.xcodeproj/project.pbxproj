@@ -13,7 +13,7 @@
 		39022C211EDC2D0800100066 /* icudt60l.dat in Resources */ = {isa = PBXBuildFile; fileRef = 39022C201EDC2D0800100066 /* icudt60l.dat */; };
 		39284DB31FA5F207006F43E4 /* DocumentActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39284DB21FA5F207006F43E4 /* DocumentActions.swift */; };
 		392ED9B31E5E4B03005C8435 /* ViewPrintManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */; };
-		3941EED7204B347B00082486 /* example.odt in Resources */ = {isa = PBXBuildFile; fileRef = 3941EED6204B347B00082486 /* example.odt */; };
+		3941EF05204B4AC200082486 /* welcome.odt in Resources */ = {isa = PBXBuildFile; fileRef = 3941EF04204B4AC200082486 /* welcome.odt */; };
 		396F92F71E7AE62400A28C82 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 396F92F61E7AE62400A28C82 /* Settings.bundle */; };
 		397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 397868D81E59A3EA007F9248 /* LaunchScreen.xib */; };
 		397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E08FD1E597BD8001374E0 /* AppDelegate.swift */; };
@@ -28,7 +28,6 @@
 		39B08BD91E5F0BB600682A59 /* services.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 39B085241E5F0BB400682A59 /* services.rdb */; };
 		39B091CD1E5F0BB800682A59 /* udkapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 39B08B9B1E5F0BB600682A59 /* udkapi.rdb */; };
 		39B091CE1E5F0BB800682A59 /* unorc in Resources */ = {isa = PBXBuildFile; fileRef = 39B08B9C1E5F0BB600682A59 /* unorc */; };
-		39E950531FC9842000D82C49 /* source in Resources */ = {isa = PBXBuildFile; fileRef = 39E950521FC9842000D82C49 /* source */; };
 		39EF4E2F1FA500C9001914AC /* PropertiesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EF4E2E1FA500C9001914AC /* PropertiesController.swift */; };
 		FC31D01E2012F65500E7F402 /* DocumentHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC31D01D2012F65500E7F402 /* DocumentHolder.swift */; };
 		FC31D0202012F6D300E7F402 /* RenderCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC31D01F2012F6D300E7F402 /* RenderCache.swift */; };
@@ -66,8 +65,7 @@
 		39022C201EDC2D0800100066 /* icudt60l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt60l.dat; path = ../generated/resources/icudt60l.dat; sourceTree = "<group>"; };
 		39284DB21FA5F207006F43E4 /* DocumentActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentActions.swift; sourceTree = "<group>"; };
 		392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewPrintManager.swift; path = LibreOfficeLight/ViewPrintManager.swift; sourceTree = SOURCE_ROOT; };
-		3941EED6204B347B00082486 /* example.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = example.odt; path = ../source/example.odt; sourceTree = "<group>"; };
-		3941EED8204B350900082486 /* example.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = example.odt; path = ../source/example.odt; sourceTree = "<group>"; };
+		3941EF04204B4AC200082486 /* welcome.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = welcome.odt; path = ../welcome.odt; sourceTree = "<group>"; };
 		39503A6F1F94C4AC00F19C78 /* lokit-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "lokit-Bridging-Header.h"; sourceTree = "<group>"; };
 		396F92F61E7AE62400A28C82 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		397275391E77D9F1006ACDCC /* LibreOfficeLight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LibreOfficeLight.entitlements; sourceTree = "<group>"; };
@@ -146,7 +144,6 @@
 		397E08F11E597BD8001374E0 = {
 			isa = PBXGroup;
 			children = (
-				3941EED8204B350900082486 /* example.odt */,
 				3956B72D1FAB3DBF00BF5DE4 /* extra */,
 				39B084E41E5F0B5200682A59 /* Resources */,
 				3911D89F1E5993600050D6BC /* Support files */,
@@ -189,7 +186,7 @@
 		39B084E41E5F0B5200682A59 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				3941EED6204B347B00082486 /* example.odt */,
+				3941EF04204B4AC200082486 /* welcome.odt */,
 				39022C201EDC2D0800100066 /* icudt60l.dat */,
 				39022C1E1EDC2AB000100066 /* share */,
 				39022C1C1EDC2A2C00100066 /* services */,
@@ -292,15 +289,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3941EED7204B347B00082486 /* example.odt in Resources */,
 				397E09081E597BD8001374E0 /* Assets.xcassets in Resources */,
 				39B08BD71E5F0BB600682A59 /* rc in Resources */,
 				39B08B9E1E5F0BB600682A59 /* offapi.rdb in Resources */,
 				39022C211EDC2D0800100066 /* icudt60l.dat in Resources */,
-				39E950531FC9842000D82C49 /* source in Resources */,
 				39022C1B1EDC2A0E00100066 /* program in Resources */,
 				39022C1D1EDC2A2C00100066 /* services in Resources */,
 				397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */,
+				3941EF05204B4AC200082486 /* welcome.odt in Resources */,
 				396F92F71E7AE62400A28C82 /* Settings.bundle in Resources */,
 				39B08B9F1E5F0BB600682A59 /* oovbaapi.rdb in Resources */,
 				39B08B9D1E5F0BB600682A59 /* fundamentalrc in Resources */,

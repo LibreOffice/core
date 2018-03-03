@@ -66,7 +66,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	cp $(INSTDIR)/share/filter/vml-shape-types $(IOSRES)/share/filter
 	cp -R $(INSTDIR)/share/registry $(IOSRES)/share
 	cp $(INSTDIR)/share/config/*zip $(IOSRES)/share/config
-	cp $(SRCDIR)/ios/source/example.odt $(IOSRES)
+	cp $(SRCDIR)/ios/welcome.odt $(IOSRES)
 
 	# Set up rc (the "inifile", fundamentalrc, unorc, bootstraprc and versionrc.
 	(echo '[Bootstrap]' \
