@@ -3699,7 +3699,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
     return bParaMark;
 }
 
-void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
+void SwWW8ImplReader::ProcessCurrentCollChange(WW8PLCFManResult& rRes,
     bool* pStartAttr, bool bCallProcessSpecial)
 {
     sal_uInt16 nOldColl = m_nCurrentColl;
@@ -3764,7 +3764,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStar
     // New paragraph over Plcx.Fkp.papx
     if ( (aRes.nFlags & MAN_MASK_NEW_PAP)|| rbStartLine )
     {
-        ProcessAktCollChange( aRes, &bStartAttr,
+        ProcessCurrentCollChange( aRes, &bStartAttr,
             MAN_MASK_NEW_PAP == (aRes.nFlags & MAN_MASK_NEW_PAP) &&
             !m_bIgnoreText );
         rbStartLine = false;
@@ -3849,7 +3849,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStar
     {
         m_xCtrlStck->KillUnlockedAttrs( *m_pPaM->GetPoint() );
         if( nOldColl != m_xPlcxMan->GetColl() )
-            ProcessAktCollChange(aRes, nullptr, false);
+            ProcessCurrentCollChange(aRes, nullptr, false);
     }
 
     return nNext;
@@ -6501,7 +6501,7 @@ SdrObjUserData* SwMacroInfo::Clone( SdrObject* /*pObj*/ ) const
    return new SwMacroInfo( *this );
 }
 
-std::unique_ptr<SfxItemSet> SwWW8ImplReader::SetAktItemSet(SfxItemSet* pItemSet)
+std::unique_ptr<SfxItemSet> SwWW8ImplReader::SetCurrentItemSet(SfxItemSet* pItemSet)
 {
     std::unique_ptr<SfxItemSet> xRet(std::move(m_xCurrentItemSet));
     m_xCurrentItemSet.reset(pItemSet);
