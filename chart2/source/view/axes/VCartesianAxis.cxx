@@ -532,14 +532,11 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( TickInfoArraysType
                 continue;
 
             sal_Int32 nCatIndex = 0;
-            std::vector<ComplexCategory>::const_iterator aIt = pComplexCategories->begin();
-            std::vector<ComplexCategory>::const_iterator aEnd = pComplexCategories->end();
 
-            for(;aIt!=aEnd;++aIt)
+            for (auto const& complexCategory : *pComplexCategories)
             {
                 TickInfo aTickInfo(nullptr);
-                ComplexCategory aCat(*aIt);
-                sal_Int32 nCount = aCat.Count;
+                sal_Int32 nCount = complexCategory.Count;
                 if( nCatIndex + 1.0 + nCount >= m_aScale.Maximum )
                 {
                     nCount = static_cast<sal_Int32>(m_aScale.Maximum - 1.0 - nCatIndex);
@@ -548,7 +545,7 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( TickInfoArraysType
                 }
                 aTickInfo.fScaledTickValue = nCatIndex + 1.0 + nCount/2.0;
                 aTickInfo.nFactorForLimitedTextWidth = nCount;
-                aTickInfo.aText = aCat.Text;
+                aTickInfo.aText = complexCategory.Text;
                 aTickInfoVector.push_back(aTickInfo);
                 nCatIndex += nCount;
                 if( nCatIndex + 1.0 >= m_aScale.Maximum )
@@ -570,15 +567,12 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( TickInfoArraysType
             sal_Int32 nCatIndex = 0;
             if (pComplexCategories)
             {
-                std::vector<ComplexCategory>::const_iterator aIt = pComplexCategories->begin();
-                std::vector<ComplexCategory>::const_iterator aEnd = pComplexCategories->end();
-                for(;aIt!=aEnd;++aIt)
+                for (auto const& complexCategory : *pComplexCategories)
                 {
                     TickInfo aTickInfo(nullptr);
-                    ComplexCategory aCat(*aIt);
                     aTickInfo.fScaledTickValue = nCatIndex + 1.0;
                     aTickInfoVector.push_back(aTickInfo);
-                    nCatIndex += aCat.Count;
+                    nCatIndex += complexCategory.Count;
                     if( nCatIndex + 1.0 > m_aScale.Maximum )
                         break;
                 }
@@ -1642,20 +1636,16 @@ void VCartesianAxis::updatePositions()
     //update positions of all existing text shapes
     pTickFactory2D->updateScreenValues( m_aAllTickInfos );
 
-    TickInfoArraysType::iterator aDepthIter = m_aAllTickInfos.begin();
-    const TickInfoArraysType::const_iterator aDepthEnd  = m_aAllTickInfos.end();
-    for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd; ++aDepthIter, nDepth++ )
+    sal_Int32 nDepth=0;
+    for (auto const& tickInfos : m_aAllTickInfos)
     {
-        TickInfoArrayType::iterator aTickIter = aDepthIter->begin();
-        const TickInfoArrayType::const_iterator aTickEnd  = aDepthIter->end();
-        for( ; aTickIter != aTickEnd; ++aTickIter )
+        for (auto const& tickInfo : tickInfos)
         {
-            TickInfo& rTickInfo = (*aTickIter);
-            Reference< drawing::XShape > xShape2DText( rTickInfo.xTextShape );
+            Reference< drawing::XShape > xShape2DText(tickInfo.xTextShape);
             if( xShape2DText.is() )
             {
                 B2DVector aTextToTickDistance( pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties, true ) );
-                B2DVector aTickScreenPos2D( rTickInfo.aTickScreenPosition );
+                B2DVector aTickScreenPos2D(tickInfo.aTickScreenPosition);
                 aTickScreenPos2D += aTextToTickDistance;
                 awt::Point aAnchorScreenPosition2D(
                     static_cast<sal_Int32>(aTickScreenPos2D.getX())
@@ -1694,6 +1684,7 @@ void VCartesianAxis::updatePositions()
                     , m_aAxisProperties.maLabelAlignment.meAlignment, fRotationAngleDegree, m_aAxisProperties.m_bComplexCategories );
             }
         }
+        ++nDepth;
     }
 
     doStaggeringOfLabels( m_aAxisLabelProperties, pTickFactory2D );
@@ -1704,12 +1695,10 @@ void VCartesianAxis::createTickMarkLineShapes( TickInfoArrayType& rTickInfos, co
     sal_Int32 nPointCount = rTickInfos.size();
     drawing::PointSequenceSequence aPoints(2*nPointCount);
 
-    TickInfoArrayType::const_iterator       aTickIter = rTickInfos.begin();
-    const TickInfoArrayType::const_iterator aTickEnd  = rTickInfos.end();
     sal_Int32 nN = 0;
-    for( ; aTickIter != aTickEnd; ++aTickIter )
+    for (auto const& tickInfo : rTickInfos)
     {
-        if( !(*aTickIter).bPaintIt )
+        if( !tickInfo.bPaintIt )
             continue;
 
         bool bTicksAtLabels = ( m_aAxisProperties.m_eTickmarkPos != css::chart::ChartAxisMarkPosition_AT_AXIS );
@@ -1718,11 +1707,11 @@ void VCartesianAxis::createTickMarkLineShapes( TickInfoArrayType& rTickInfos, co
             fInnerDirectionSign *= -1.0;
         bTicksAtLabels = bTicksAtLabels || bOnlyAtLabels;
         //add ticks at labels:
-        rTickFactory2D.addPointSequenceForTickLine( aPoints, nN++, (*aTickIter).fScaledTickValue
+        rTickFactory2D.addPointSequenceForTickLine( aPoints, nN++, tickInfo.fScaledTickValue
             , fInnerDirectionSign , rTickmarkProperties, bTicksAtLabels );
         //add ticks at axis (without labels):
         if( !bOnlyAtLabels && m_aAxisProperties.m_eTickmarkPos == css::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS )
-            rTickFactory2D.addPointSequenceForTickLine( aPoints, nN++, (*aTickIter).fScaledTickValue
+            rTickFactory2D.addPointSequenceForTickLine( aPoints, nN++, tickInfo.fScaledTickValue
                 , m_aAxisProperties.maLabelAlignment.mfInnerTickDirection, rTickmarkProperties, !bTicksAtLabels );
     }
     aPoints.realloc(nN);
@@ -1789,10 +1778,11 @@ void VCartesianAxis::createShapes()
             }
             TickInfoArraysType& rAllTickInfos = m_aScale.ShiftedCategoryPosition ? aUnshiftedTickInfos : m_aAllTickInfos;
 
+            if (rAllTickInfos.empty())
+                return;
+
             TickInfoArraysType::iterator aDepthIter             = rAllTickInfos.begin();
             const TickInfoArraysType::const_iterator aDepthEnd  = rAllTickInfos.end();
-            if(aDepthIter == aDepthEnd)//no tickmarks at all
-                return;
 
             sal_Int32 nTickmarkPropertiesCount = m_aAxisProperties.m_aTickmarkPropertiesList.size();
             for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd && nDepth < nTickmarkPropertiesCount; ++aDepthIter, nDepth++ )

@@ -167,13 +167,10 @@ VSeriesPlotter::~VSeriesPlotter()
     }
     m_aZSlots.clear();
 
-    tSecondaryPosHelperMap::iterator aPosIt = m_aSecondaryPosHelperMap.begin();
-    while( aPosIt != m_aSecondaryPosHelperMap.end() )
+    for (auto const& elem : m_aSecondaryPosHelperMap)
     {
-        PlottingPositionHelper* pPosHelper = aPosIt->second;
+        PlottingPositionHelper* pPosHelper = elem.second;
         delete pPosHelper;
-
-        ++aPosIt;
     }
     m_aSecondaryPosHelperMap.clear();
 
@@ -1456,12 +1453,12 @@ long VSeriesPlotter::calculateTimeResolutionOnXAxis()
     if( m_pExplicitCategoriesProvider )
     {
         const std::vector< double >&  rDateCategories = m_pExplicitCategoriesProvider->getDateCategories();
-        std::vector< double >::const_iterator aIt = rDateCategories.begin(), aEnd = rDateCategories.end();
         Date aNullDate(30,12,1899);
         if( m_apNumberFormatterWrapper.get() )
             aNullDate = m_apNumberFormatterWrapper->getNullDate();
-        if( aIt!=aEnd )
+        if( !rDateCategories.empty() )
         {
+            std::vector< double >::const_iterator aIt = rDateCategories.begin(), aEnd = rDateCategories.end();
             Date aPrevious(aNullDate); aPrevious.AddDays(rtl::math::approxFloor(*aIt));
             ++aIt;
             for(;aIt!=aEnd;++aIt)
@@ -1621,16 +1618,12 @@ void VSeriesPlotter::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximu
     ::rtl::math::setInf(&rfMinimum, false);
     ::rtl::math::setInf(&rfMaximum, true);
 
-    std::vector< std::vector< VDataSeriesGroup > >::const_iterator       aZSlotIter = m_aZSlots.begin();
-    const std::vector< std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
-    for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
+    for (auto const& ZSlot : m_aZSlots)
     {
-        std::vector< VDataSeriesGroup >::const_iterator      aXSlotIter = aZSlotIter->begin();
-        const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-        for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
+        for (auto const& XSlot : ZSlot)
         {
             double fLocalMinimum, fLocalMaximum;
-            aXSlotIter->getMinimumAndMaximiumX( fLocalMinimum, fLocalMaximum );
+            XSlot.getMinimumAndMaximiumX( fLocalMinimum, fLocalMaximum );
             if( !::rtl::math::isNan(fLocalMinimum) && fLocalMinimum< rfMinimum )
                 rfMinimum = fLocalMinimum;
             if( !::rtl::math::isNan(fLocalMaximum) && fLocalMaximum> rfMaximum )
@@ -1648,16 +1641,12 @@ void VSeriesPlotter::getMinimumAndMaximiumYInContinuousXRange( double& rfMinY, d
     ::rtl::math::setInf(&rfMinY, false);
     ::rtl::math::setInf(&rfMaxY, true);
 
-    std::vector< std::vector< VDataSeriesGroup > >::const_iterator       aZSlotIter = m_aZSlots.begin();
-    const std::vector< std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
-    for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
+    for (auto const& ZSlot : m_aZSlots)
     {
-        std::vector< VDataSeriesGroup >::const_iterator      aXSlotIter = aZSlotIter->begin();
-        const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-        for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
+        for (auto const& XSlot : ZSlot)
         {
             double fLocalMinimum, fLocalMaximum;
-            aXSlotIter->getMinimumAndMaximiumYInContinuousXRange( fLocalMinimum, fLocalMaximum, fMinX, fMaxX, nAxisIndex );
+            XSlot.getMinimumAndMaximiumYInContinuousXRange( fLocalMinimum, fLocalMaximum, fMinX, fMaxX, nAxisIndex );
             if( !::rtl::math::isNan(fLocalMinimum) && fLocalMinimum< rfMinY )
                 rfMinY = fLocalMinimum;
             if( !::rtl::math::isNan(fLocalMaximum) && fLocalMaximum> rfMaxY )
@@ -1674,17 +1663,11 @@ sal_Int32 VSeriesPlotter::getPointCount() const
 {
     sal_Int32 nRet = 0;
 
-    std::vector< std::vector< VDataSeriesGroup > >::const_iterator       aZSlotIter = m_aZSlots.begin();
-    const std::vector< std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
-
-    for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
+    for (auto const& ZSlot : m_aZSlots)
     {
-        std::vector< VDataSeriesGroup >::const_iterator       aXSlotIter = aZSlotIter->begin();
-        const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-
-        for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
+        for (auto const& XSlot : ZSlot)
         {
-            sal_Int32 nPointCount = aXSlotIter->getPointCount();
+            sal_Int32 nPointCount = XSlot.getPointCount();
             if( nPointCount>nRet )
                 nRet = nPointCount;
         }
@@ -1732,10 +1715,8 @@ sal_Int32 VDataSeriesGroup::getAttachedAxisIndexForFirstSeries() const
 {
     sal_Int32 nRet = 0;
 
-    std::vector<VDataSeries*>::const_iterator aSeriesIter = m_aSeriesVector.begin();
-
-    if (aSeriesIter != m_aSeriesVector.end())
-        nRet = (*aSeriesIter)->getAttachedAxisIndex();
+    if (!m_aSeriesVector.empty())
+        nRet = m_aSeriesVector[0]->getAttachedAxisIndex();
 
     return nRet;
 }
@@ -1858,10 +1839,9 @@ private:
             double fX = it.first;
 
             const SeriesMinMaxType& rSeries = *it.second;
-            SeriesMinMaxType::const_iterator itSeries = rSeries.begin(), itSeriesEnd = rSeries.end();
-            for (; itSeries != itSeriesEnd; ++itSeries)
+            for (auto const& series : rSeries)
             {
-                double fYMin = itSeries->second.first, fYMax = itSeries->second.second;
+                double fYMin = series.second.first, fYMax = series.second.second;
                 TotalStoreType::iterator itr = aStore.find(fX);
                 if (itr == aStore.end())
                     // New min-max pair for give X value.
@@ -2116,15 +2096,11 @@ VDataSeries* VSeriesPlotter::getFirstSeries() const
 {
     for (std::vector<VDataSeriesGroup> const & rGroup : m_aZSlots)
     {
-        std::vector<VDataSeriesGroup>::const_iterator       aXSlotIter = rGroup.begin();
-        const std::vector<VDataSeriesGroup>::const_iterator aXSlotEnd  = rGroup.end();
-
-        if (aXSlotIter != aXSlotEnd)
+        if (!rGroup.empty())
         {
-            VDataSeriesGroup aSeriesGroup(*aXSlotIter);
-            if (aSeriesGroup.m_aSeriesVector.size())
+            if (!rGroup[0].m_aSeriesVector.empty())
             {
-                VDataSeries* pSeries = aSeriesGroup.m_aSeriesVector[0];
+                VDataSeries* pSeries = rGroup[0].m_aSeriesVector[0];
                 if (pSeries)
                     return pSeries;
             }
@@ -2154,15 +2130,12 @@ uno::Sequence< OUString > VSeriesPlotter::getSeriesNames() const
     if( m_xChartTypeModel.is() )
         aRole = m_xChartTypeModel->getRoleOfSequenceForSeriesLabel();
 
-    for (std::vector<VDataSeriesGroup> const & rGroup : m_aZSlots)
+    for (auto const& rGroup : m_aZSlots)
     {
-        std::vector<VDataSeriesGroup>::const_iterator       aXSlotIter = rGroup.begin();
-        const std::vector<VDataSeriesGroup>::const_iterator aXSlotEnd  = rGroup.end();
-
-        if (aXSlotIter != aXSlotEnd)
+        if (!rGroup.empty())
         {
-            VDataSeriesGroup aSeriesGroup(*aXSlotIter);
-            if (aSeriesGroup.m_aSeriesVector.size())
+            VDataSeriesGroup aSeriesGroup(rGroup[0]);
+            if (!aSeriesGroup.m_aSeriesVector.empty())
             {
                 VDataSeries* pSeries = aSeriesGroup.m_aSeriesVector[0];
                 uno::Reference< XDataSeries > xSeries( pSeries ? pSeries->getModel() : nullptr );

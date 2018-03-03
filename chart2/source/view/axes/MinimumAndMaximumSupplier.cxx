@@ -50,9 +50,9 @@ double MergedMinimumAndMaximumSupplier::getMinimumX()
 {
     double fGlobalExtremum;
     ::rtl::math::setInf(&fGlobalExtremum, false);
-    for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
+    for (auto const& elem : m_aMinimumAndMaximumSupplierList)
     {
-        double fLocalExtremum = (*aIt)->getMinimumX();
+        double fLocalExtremum = elem->getMinimumX();
         if(fLocalExtremum<fGlobalExtremum)
             fGlobalExtremum=fLocalExtremum;
     }
@@ -65,9 +65,9 @@ double MergedMinimumAndMaximumSupplier::getMaximumX()
 {
     double fGlobalExtremum;
     ::rtl::math::setInf(&fGlobalExtremum, true);
-    for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
+    for (auto const& elem : m_aMinimumAndMaximumSupplierList)
     {
-        double fLocalExtremum = (*aIt)->getMaximumX();
+        double fLocalExtremum = elem->getMaximumX();
         if(fLocalExtremum>fGlobalExtremum)
             fGlobalExtremum=fLocalExtremum;
     }
@@ -80,9 +80,9 @@ double MergedMinimumAndMaximumSupplier::getMinimumYInRange( double fMinimumX, do
 {
     double fGlobalExtremum;
     ::rtl::math::setInf(&fGlobalExtremum, false);
-    for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
+    for (auto const& elem : m_aMinimumAndMaximumSupplierList)
     {
-        double fLocalExtremum = (*aIt)->getMinimumYInRange( fMinimumX, fMaximumX, nAxisIndex );
+        double fLocalExtremum = elem->getMinimumYInRange( fMinimumX, fMaximumX, nAxisIndex );
         if(fLocalExtremum<fGlobalExtremum)
             fGlobalExtremum=fLocalExtremum;
     }
@@ -95,9 +95,9 @@ double MergedMinimumAndMaximumSupplier::getMaximumYInRange( double fMinimumX, do
 {
     double fGlobalExtremum;
     ::rtl::math::setInf(&fGlobalExtremum, true);
-    for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
+    for (auto const& elem : m_aMinimumAndMaximumSupplierList)
     {
-        double fLocalExtremum = (*aIt)->getMaximumYInRange( fMinimumX, fMaximumX, nAxisIndex );
+        double fLocalExtremum = elem->getMaximumYInRange( fMinimumX, fMaximumX, nAxisIndex );
         if(fLocalExtremum>fGlobalExtremum)
             fGlobalExtremum=fLocalExtremum;
     }
@@ -110,9 +110,9 @@ double MergedMinimumAndMaximumSupplier::getMinimumZ()
 {
     double fGlobalExtremum;
     ::rtl::math::setInf(&fGlobalExtremum, false);
-    for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
+    for (auto const& elem : m_aMinimumAndMaximumSupplierList)
     {
-        double fLocalExtremum = (*aIt)->getMinimumZ();
+        double fLocalExtremum = elem->getMinimumZ();
         if(fLocalExtremum<fGlobalExtremum)
             fGlobalExtremum=fLocalExtremum;
     }
@@ -125,9 +125,9 @@ double MergedMinimumAndMaximumSupplier::getMaximumZ()
 {
     double fGlobalExtremum;
     ::rtl::math::setInf(&fGlobalExtremum, true);
-    for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
+    for (auto const& elem : m_aMinimumAndMaximumSupplierList)
     {
-        double fLocalExtremum = (*aIt)->getMaximumZ();
+        double fLocalExtremum = elem->getMaximumZ();
         if(fLocalExtremum>fGlobalExtremum)
             fGlobalExtremum=fLocalExtremum;
     }
@@ -139,8 +139,8 @@ double MergedMinimumAndMaximumSupplier::getMaximumZ()
 bool MergedMinimumAndMaximumSupplier::isExpandBorderToIncrementRhythm( sal_Int32 nDimensionIndex )
 {
     // only return true, if *all* suppliers want to scale to the main tick marks
-    for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
-        if( !(*aIt)->isExpandBorderToIncrementRhythm( nDimensionIndex ) )
+    for (auto const& elem : m_aMinimumAndMaximumSupplierList)
+        if( !elem->isExpandBorderToIncrementRhythm( nDimensionIndex ) )
             return false;
     return true;
 }
@@ -148,8 +148,8 @@ bool MergedMinimumAndMaximumSupplier::isExpandBorderToIncrementRhythm( sal_Int32
 bool MergedMinimumAndMaximumSupplier::isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex )
 {
     // only return true, if *all* suppliers want to expand the range
-    for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
-        if( !(*aIt)->isExpandIfValuesCloseToBorder( nDimensionIndex ) )
+    for (auto const& elem : m_aMinimumAndMaximumSupplierList)
+        if( !elem->isExpandIfValuesCloseToBorder( nDimensionIndex ) )
             return false;
     return true;
 }
@@ -157,8 +157,8 @@ bool MergedMinimumAndMaximumSupplier::isExpandIfValuesCloseToBorder( sal_Int32 n
 bool MergedMinimumAndMaximumSupplier::isExpandWideValuesToZero( sal_Int32 nDimensionIndex )
 {
     // already return true, if at least one supplier wants to expand the range
-    for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
-        if( (*aIt)->isExpandWideValuesToZero( nDimensionIndex ) )
+    for (auto const& elem : m_aMinimumAndMaximumSupplierList)
+        if( elem->isExpandWideValuesToZero( nDimensionIndex ) )
             return true;
     return false;
 }
@@ -166,8 +166,8 @@ bool MergedMinimumAndMaximumSupplier::isExpandWideValuesToZero( sal_Int32 nDimen
 bool MergedMinimumAndMaximumSupplier::isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex )
 {
     // already return true, if at least one supplier wants to expand the range
-    for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
-        if( (*aIt)->isExpandNarrowValuesTowardZero( nDimensionIndex ) )
+    for (auto const& elem : m_aMinimumAndMaximumSupplierList)
+        if( elem->isExpandNarrowValuesTowardZero( nDimensionIndex ) )
             return true;
     return false;
 }
@@ -175,8 +175,8 @@ bool MergedMinimumAndMaximumSupplier::isExpandNarrowValuesTowardZero( sal_Int32 
 bool MergedMinimumAndMaximumSupplier::isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex )
 {
     // should not be called
-    for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
-        if( (*aIt)->isSeparateStackingForDifferentSigns( nDimensionIndex ) )
+    for (auto const& elem : m_aMinimumAndMaximumSupplierList)
+        if( elem->isSeparateStackingForDifferentSigns( nDimensionIndex ) )
             return true;
     return false;
 }
@@ -189,9 +189,9 @@ void MergedMinimumAndMaximumSupplier::clearMinimumAndMaximumSupplierList()
 long MergedMinimumAndMaximumSupplier::calculateTimeResolutionOnXAxis()
 {
     long nRet = css::chart::TimeUnit::YEAR;
-    for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
+    for (auto const& elem : m_aMinimumAndMaximumSupplierList)
     {
-        long nCurrent = (*aIt)->calculateTimeResolutionOnXAxis();
+        long nCurrent = elem->calculateTimeResolutionOnXAxis();
         if(nRet>nCurrent)
             nRet=nCurrent;
     }
@@ -200,8 +200,8 @@ long MergedMinimumAndMaximumSupplier::calculateTimeResolutionOnXAxis()
 
 void MergedMinimumAndMaximumSupplier::setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate )
 {
-    for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
-        (*aIt)->setTimeResolutionOnXAxis( nTimeResolution, rNullDate );
+    for (auto const& elem : m_aMinimumAndMaximumSupplierList)
+        elem->setTimeResolutionOnXAxis( nTimeResolution, rNullDate );
 }
 
 } //namespace chart

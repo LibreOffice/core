@@ -218,14 +218,13 @@ std::vector< VCoordinateSystem* > AxisUsage::getCoordinateSystems( sal_Int32 nDi
 {
     std::vector< VCoordinateSystem* > aRet;
 
-    tCoordinateSystemMap::const_iterator aIter;
-    for( aIter = aCoordinateSystems.begin(); aIter!=aCoordinateSystems.end();++aIter )
+    for (auto const& coordinateSystem : aCoordinateSystems)
     {
-        if( aIter->second.first != nDimensionIndex )
+        if( coordinateSystem.second.first != nDimensionIndex )
             continue;
-        if( aIter->second.second != nAxisIndex )
+        if( coordinateSystem.second.second != nAxisIndex )
             continue;
-        aRet.push_back( aIter->first );
+        aRet.push_back( coordinateSystem.first );
     }
 
     return aRet;
@@ -705,8 +704,6 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
     }
 
     // Determine the highest axis index of all dimensions.
-    std::map< uno::Reference< XAxis >, AxisUsage >::iterator             aAxisIter    = m_aAxisUsageList.begin();
-    const std::map< uno::Reference< XAxis >, AxisUsage >::const_iterator aAxisEndIter = m_aAxisUsageList.end();
     m_nMaxAxisIndex = 0;
     for (VCoordinateSystem* pVCooSys : m_rVCooSysList)
     {
@@ -715,9 +712,9 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
 
         for (sal_Int32 nDimIndex = 0; nDimIndex < nDimCount; ++nDimIndex)
         {
-            for (aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter)
+            for (auto & axisUsage : m_aAxisUsageList)
             {
-                sal_Int32 nLocalMax = aAxisIter->second.getMaxAxisIndexForDimension(nDimIndex);
+                sal_Int32 nLocalMax = axisUsage.second.getMaxAxisIndexForDimension(nDimIndex);
                 if (m_nMaxAxisIndex < nLocalMax)
                     m_nMaxAxisIndex = nLocalMax;
             }
@@ -799,16 +796,13 @@ void SeriesPlotterContainer::doAutoScaling( ChartModel& rChartModel )
         // We need these two containers populated to do auto-scaling.  Bail out.
         return;
 
-    std::map< uno::Reference< XAxis >, AxisUsage >::iterator             aAxisIter    = m_aAxisUsageList.begin();
-    const std::map< uno::Reference< XAxis >, AxisUsage >::const_iterator aAxisEndIter = m_aAxisUsageList.end();
-
     //iterate over the main scales first than secondary axis
     for (sal_Int32 nAxisIndex = 0; nAxisIndex <= m_nMaxAxisIndex; ++nAxisIndex)
     {
         // - first do autoscale for all x and z scales (because they are treated independent)
-        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
+        for (auto & axisUsage : m_aAxisUsageList)
         {
-            AxisUsage& rAxisUsage = (*aAxisIter).second;
+            AxisUsage& rAxisUsage = axisUsage.second;
 
             rAxisUsage.prepareAutomaticAxisScaling(rAxisUsage.aAutoScaling, 0, nAxisIndex);
             rAxisUsage.prepareAutomaticAxisScaling(rAxisUsage.aAutoScaling, 2, nAxisIndex);
@@ -822,9 +816,9 @@ void SeriesPlotterContainer::doAutoScaling( ChartModel& rChartModel )
         }
 
         // - second do autoscale for the dependent y scales (the coordinate systems are prepared with x and z scales already )
-        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
+        for (auto & axisUsage : m_aAxisUsageList)
         {
-            AxisUsage& rAxisUsage = (*aAxisIter).second;
+            AxisUsage& rAxisUsage = axisUsage.second;
 
             rAxisUsage.prepareAutomaticAxisScaling(rAxisUsage.aAutoScaling, 1, nAxisIndex);
 
@@ -843,15 +837,11 @@ void SeriesPlotterContainer::doAutoScaling( ChartModel& rChartModel )
 void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel& rModel )
 {
     //issue #i80518#
-
-    std::map< uno::Reference< XAxis >, AxisUsage >::iterator             aAxisIter    = m_aAxisUsageList.begin();
-    const std::map< uno::Reference< XAxis >, AxisUsage >::const_iterator aAxisEndIter = m_aAxisUsageList.end();
-
     for( sal_Int32 nAxisIndex=0; nAxisIndex<=m_nMaxAxisIndex; nAxisIndex++ )
     {
-        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
+        for (auto & axisUsage : m_aAxisUsageList)
         {
-            AxisUsage& rAxisUsage = (*aAxisIter).second;
+            AxisUsage& rAxisUsage = axisUsage.second;
             std::vector< VCoordinateSystem* > aVCooSysList_Y = rAxisUsage.getCoordinateSystems( 1, nAxisIndex );
             if( aVCooSysList_Y.empty() )
                 continue;
@@ -864,10 +854,9 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
             sal_Int32 nAttachedAxisIndex = -1;
             {
                 std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
-                std::vector< Reference< XDataSeries > >::const_iterator aIter = aSeriesVector.begin();
-                for( ; aIter != aSeriesVector.end(); ++aIter )
+                for (auto const& series : aSeriesVector)
                 {
-                    sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex( *aIter );
+                    sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex(series);
                     if( nAxisIndex == nCurrentIndex )
                     {
                         bSeriesAttachedToThisAxis = true;
@@ -945,9 +934,9 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
         //correct origin for y main axis (the origin is where the other main axis crosses)
         sal_Int32 nAxisIndex=0;
         sal_Int32 nDimensionIndex=1;
-        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
+        for (auto & axisUsage : m_aAxisUsageList)
         {
-            AxisUsage& rAxisUsage = (*aAxisIter).second;
+            AxisUsage& rAxisUsage = axisUsage.second;
             std::vector< VCoordinateSystem* > aVCooSysList = rAxisUsage.getCoordinateSystems(nDimensionIndex,nAxisIndex);
             size_t nC;
             for( nC=0; nC < aVCooSysList.size(); nC++)
@@ -1247,11 +1236,9 @@ void ChartView::impl_deleteCoordinateSystems()
     //delete all coordinate systems
     std::vector< VCoordinateSystem* > aVectorToDeleteObjects;
     std::swap( aVectorToDeleteObjects, m_aVCooSysList );//#i109770#
-    std::vector< VCoordinateSystem* >::const_iterator       aIter = aVectorToDeleteObjects.begin();
-    const std::vector< VCoordinateSystem* >::const_iterator aEnd  = aVectorToDeleteObjects.end();
-    for( ; aIter != aEnd; ++aIter )
+    for (auto const& elem : aVectorToDeleteObjects)
     {
-        delete *aIter;
+        delete elem;
     }
     aVectorToDeleteObjects.clear();
 }

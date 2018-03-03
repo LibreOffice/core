@@ -117,14 +117,13 @@ uno::Sequence< beans::Property > SAL_CALL DummyPropertySetInfo::getProperties()
     uno::Sequence< beans::Property > aRet(mrProperties.size());
 
     size_t i = 0;
-    for(std::map<OUString, uno::Any>::const_iterator itr = mrProperties.begin(),
-            itrEnd = mrProperties.end(); itr != itrEnd; ++itr, ++i)
+    for (auto const& property : mrProperties)
     {
         beans::Property aProp;
 
-        aProp.Name = itr->first;
-        aProp.Type = itr->second.getValueType();
-        aRet[i] = aProp;
+        aProp.Name = property.first;
+        aProp.Type = property.second.getValueType();
+        aRet[i++] = aProp;
     }
     return aRet;
 }
@@ -900,10 +899,9 @@ awt::Point SAL_CALL DummyGroup2D::getPosition()
 {
     long nTop = std::numeric_limits<long>::max();
     long nLeft = std::numeric_limits<long>::max();
-    for(std::vector<DummyXShape*>::iterator itr = maShapes.begin(),
-            itrEnd = maShapes.end(); itr != itrEnd; ++itr)
+    for (auto const& shape : maShapes)
     {
-        awt::Point aPoint = (*itr)->getPosition();
+        awt::Point aPoint = shape->getPosition();
         if(aPoint.X >= 0 && aPoint.Y >= 0)
         {
             nLeft = std::min<long>(nLeft, aPoint.X);
@@ -920,13 +918,12 @@ awt::Size SAL_CALL DummyGroup2D::getSize()
     long nLeft = std::numeric_limits<long>::max();
     long nBottom = 0;
     long nRight = 0;
-    for(std::vector<DummyXShape*>::iterator itr = maShapes.begin(),
-            itrEnd = maShapes.end(); itr != itrEnd; ++itr)
+    for (auto const& shape : maShapes)
     {
-        awt::Point aPoint = (*itr)->getPosition();
+        awt::Point aPoint = shape->getPosition();
         nLeft = std::min<long>(nLeft, aPoint.X);
         nTop = std::min<long>(nTop, aPoint.Y);
-        awt::Size aSize = (*itr)->getSize();
+        awt::Size aSize = shape->getSize();
         nRight = std::max<long>(nRight, aPoint.X + aSize.Width);
         nBottom = std::max<long>(nBottom, aPoint.Y + aSize.Height);
     }
@@ -936,12 +933,11 @@ awt::Size SAL_CALL DummyGroup2D::getSize()
 
 void SAL_CALL DummyGroup2D::setPosition( const awt::Point& rPos )
 {
-    for(std::vector<DummyXShape*>::const_iterator itr = maShapes.begin(),
-            itrEnd = maShapes.end(); itr != itrEnd; ++itr)
+    for (auto const& shape : maShapes)
     {
-        const awt::Point& rOldPos = (*itr)->getPos();
+        const awt::Point& rOldPos = shape->getPos();
         awt::Point aNewPos( rPos.X + rOldPos.X, rPos.Y + rOldPos.Y);
-        (*itr)->setPosition(aNewPos);
+        shape->setPosition(aNewPos);
     }
 }
 
@@ -1044,10 +1040,9 @@ uno::Any SAL_CALL DummyXShapes::getByIndex(sal_Int32 nIndex)
 void DummyXShapes::render()
 {
     SAL_INFO("chart2.opengl", "render DummyShapes");
-    for(std::vector<DummyXShape*>::iterator itr = maShapes.begin(),
-            itrEnd = maShapes.end(); itr != itrEnd; ++itr)
+    for (auto const& shape : maShapes)
     {
-        (*itr)->render();
+        shape->render();
     }
 }
 

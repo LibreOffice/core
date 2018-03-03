@@ -97,10 +97,9 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
     std::vector< Reference< XDataSeries > > aSeries(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
-    for( std::vector< Reference< XDataSeries > >::const_iterator aIt( aSeries.begin());
-         aIt != aSeries.end(); ++aIt )
+    for (auto const& elem : aSeries)
     {
-        Reference< beans::XPropertySet > xSeriesProp( *aIt, uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xSeriesProp(elem, uno::UNO_QUERY );
         if( xSeriesProp.is())
         {
             // data points
@@ -111,7 +110,7 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
                 {
                     for( sal_Int32 i=0; i< aPointIndexes.getLength(); ++i )
                         setValuesAtPropertySet(
-                            (*aIt)->getDataPointByIndex( aPointIndexes[i] ) );
+                            elem->getDataPointByIndex( aPointIndexes[i] ) );
                 }
             }
             catch (const uno::Exception& ex)
@@ -268,10 +267,9 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
     std::vector< Reference< XDataSeries > > aSeries(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
-    for( std::vector< Reference< XDataSeries > >::const_iterator aIt( aSeries.begin());
-         aIt != aSeries.end(); ++aIt )
+    for (auto const& elem : aSeries)
     {
-        Reference< beans::XPropertySet > xSeriesProp( *aIt, uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xSeriesProp(elem, uno::UNO_QUERY);
         if( xSeriesProp.is())
         {
             getAutoResizeFromPropSet( xSeriesProp, eResult );
@@ -287,7 +285,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
                     for( sal_Int32 i=0; i< aPointIndexes.getLength(); ++i )
                     {
                         getAutoResizeFromPropSet(
-                            (*aIt)->getDataPointByIndex( aPointIndexes[i] ), eResult );
+                            elem->getDataPointByIndex( aPointIndexes[i] ), eResult );
                         if( eResult == AUTO_RESIZE_AMBIGUOUS )
                             return eResult;
                     }

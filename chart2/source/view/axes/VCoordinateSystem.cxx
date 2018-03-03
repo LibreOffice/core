@@ -134,11 +134,9 @@ void VCoordinateSystem::setTransformationSceneToScreen(
     m_aMatrixSceneToScreen = rMatrix;
 
     //correct transformation for axis
-    tVAxisMap::iterator aIt( m_aAxisMap.begin() );
-    tVAxisMap::const_iterator aEnd( m_aAxisMap.end() );
-    for( ; aIt != aEnd; ++aIt )
+    for (auto const& elem : m_aAxisMap)
     {
-        VAxisBase* pVAxis = aIt->second.get();
+        VAxisBase* pVAxis = elem.second.get();
         if( pVAxis )
         {
             if(pVAxis->getDimensionCount()==2)
@@ -325,13 +323,11 @@ OUString VCoordinateSystem::createCIDForGrid( sal_Int32 nDimensionIndex, sal_Int
 sal_Int32 VCoordinateSystem::getMaximumAxisIndexByDimension( sal_Int32 nDimensionIndex ) const
 {
     sal_Int32 nRet = 0;
-    tFullExplicitScaleMap::const_iterator aIt = m_aSecondaryExplicitScales.begin();
-    tFullExplicitScaleMap::const_iterator aEnd = m_aSecondaryExplicitScales.end();
-    for(; aIt!=aEnd; ++aIt)
+    for (auto const& elem : m_aSecondaryExplicitScales)
     {
-        if(aIt->first.first==nDimensionIndex)
+        if(elem.first.first==nDimensionIndex)
         {
-            sal_Int32 nLocalIdx = aIt->first.second;
+            sal_Int32 nLocalIdx = elem.first.second;
             if( nRet < nLocalIdx )
                 nRet = nLocalIdx;
         }
@@ -449,11 +445,9 @@ void VCoordinateSystem::set3DWallPositions( CuboidPlanePosition eLeftWallPos, Cu
 
 void VCoordinateSystem::createMaximumAxesLabels()
 {
-    tVAxisMap::iterator aIt( m_aAxisMap.begin() );
-    tVAxisMap::const_iterator aEnd( m_aAxisMap.end() );
-    for( ; aIt != aEnd; ++aIt )
+    for (auto const& elem : m_aAxisMap)
     {
-        VAxisBase* pVAxis = aIt->second.get();
+        VAxisBase* pVAxis = elem.second.get();
         if( pVAxis )
         {
             if(pVAxis->getDimensionCount()==2)
@@ -464,11 +458,9 @@ void VCoordinateSystem::createMaximumAxesLabels()
 }
 void VCoordinateSystem::createAxesLabels()
 {
-    tVAxisMap::iterator aIt( m_aAxisMap.begin() );
-    tVAxisMap::const_iterator aEnd( m_aAxisMap.end() );
-    for( ; aIt != aEnd; ++aIt )
+    for (auto const& elem : m_aAxisMap)
     {
-        VAxisBase* pVAxis = aIt->second.get();
+        VAxisBase* pVAxis = elem.second.get();
         if( pVAxis )
         {
             if(pVAxis->getDimensionCount()==2)
@@ -480,11 +472,9 @@ void VCoordinateSystem::createAxesLabels()
 
 void VCoordinateSystem::updatePositions()
 {
-    tVAxisMap::iterator aIt( m_aAxisMap.begin() );
-    tVAxisMap::const_iterator aEnd( m_aAxisMap.end() );
-    for( ; aIt != aEnd; ++aIt )
+    for (auto const& elem : m_aAxisMap)
     {
-        VAxisBase* pVAxis = aIt->second.get();
+        VAxisBase* pVAxis = elem.second.get();
         if( pVAxis )
         {
             if(pVAxis->getDimensionCount()==2)
@@ -496,17 +486,15 @@ void VCoordinateSystem::updatePositions()
 
 void VCoordinateSystem::createAxesShapes()
 {
-    tVAxisMap::iterator aIt( m_aAxisMap.begin() );
-    tVAxisMap::const_iterator aEnd( m_aAxisMap.end() );
-    for( ; aIt != aEnd; ++aIt )
+    for (auto const& elem : m_aAxisMap)
     {
-        VAxisBase* pVAxis = aIt->second.get();
+        VAxisBase* pVAxis = elem.second.get();
         if( pVAxis )
         {
             if(pVAxis->getDimensionCount()==2)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
 
-            tFullAxisIndex aFullAxisIndex = aIt->first;
+            tFullAxisIndex aFullAxisIndex = elem.first;
             if( aFullAxisIndex.second == 0 )
             {
                 if( aFullAxisIndex.first == 0 )

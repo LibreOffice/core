@@ -116,23 +116,19 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
     double fLogicOuterRadius = m_pPosHelper->getOuterLogicRadius();
 
     sal_Int32 nLinePropertiesCount = rLinePropertiesList.size();
-    TickInfoArraysType::iterator aDepthIter = rAngleTickInfos.begin();
     if(nLinePropertiesCount)
     {
         double fLogicZ      = 1.0;//as defined
         sal_Int32 nDepth=0;
         //create axis main lines
         drawing::PointSequenceSequence aAllPoints;
-        TickInfoArrayType::iterator             aTickIter = (*aDepthIter).begin();
-        const TickInfoArrayType::const_iterator aTickEnd  = (*aDepthIter).end();
-        for( ; aTickIter != aTickEnd; ++aTickIter )
+        for (auto const& tick : rAngleTickInfos[0])
         {
-            TickInfo& rTickInfo = *aTickIter;
-            if( !rTickInfo.bPaintIt )
+            if( !tick.bPaintIt )
                 continue;
 
             //xxxxx rTickInfo.updateUnscaledValue( xInverseScaling );
-            double fLogicAngle = rTickInfo.getUnscaledTickValue();
+            double fLogicAngle = tick.getUnscaledTickValue();
 
             drawing::PointSequenceSequence aPoints(1);
             aPoints[0].realloc(2);
@@ -190,16 +186,13 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
 
         //create axis main lines
         drawing::PointSequenceSequence aAllPoints;
-        TickInfoArrayType::iterator             aTickIter = (*aDepthIter).begin();
-        const TickInfoArrayType::const_iterator aTickEnd  = (*aDepthIter).end();
-        for( ; aTickIter != aTickEnd; ++aTickIter )
+        for (auto const& tick : *aDepthIter)
         {
-            TickInfo& rTickInfo = *aTickIter;
-            if( !rTickInfo.bPaintIt )
+            if( !tick.bPaintIt )
                 continue;
 
             //xxxxx rTickInfo.updateUnscaledValue( xInverseRadiusScaling );
-            double fLogicRadius = rTickInfo.getUnscaledTickValue();
+            double fLogicRadius = tick.getUnscaledTickValue();
             double const fLogicZ = 1.0;//as defined
 
             drawing::PointSequenceSequence aPoints(1);
