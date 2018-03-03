@@ -228,7 +228,7 @@ bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
 {
     uno::Sequence<sal_Int8> aPdfData;
     Bitmap aBitmap;
-    bool bRet = ImportPDF(rStream, aBitmap, aPdfData);
+    const bool bRet = ImportPDF(rStream, aBitmap, aPdfData);
     rGraphic = aBitmap;
     rGraphic.setPdfData(aPdfData);
     return bRet;
