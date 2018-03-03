@@ -530,6 +530,24 @@ public:
         return append( str.getStr(), str.getLength() );
     }
 
+
+    /**
+    Appends the string to this string buffer.
+
+    The characters of the <code>OUString</code> argument are appended, in
+    order, to the contents of this string buffer, increasing the
+    length of this string buffer by the length of the argument.
+
+    @param   str   a string.
+    @return  this string buffer.
+    */
+    OUStringBuffer & operator+(const OUString &str)
+    {
+        return append(str.getStr(), str.getLength());
+    }
+
+
+
     /**
         Appends the content of a stringbuffer to this string buffer.
 
@@ -551,6 +569,28 @@ public:
         return *this;
     }
 
+
+    /**
+    Appends the content of a stringbuffer to this string buffer.
+
+    The characters of the <code>OUStringBuffer</code> argument are appended, in
+    order, to the contents of this string buffer, increasing the
+    length of this string buffer by the length of the argument.
+
+    @param   str   a string.
+    @return  this string buffer.
+
+    @since LibreOffice 4.0
+    */
+    OUStringBuffer & operator+(const OUStringBuffer &str)
+    {
+        if (!str.isEmpty())
+        {
+            append(str.getStr(), str.getLength());
+        }
+        return *this;
+    }
+
     /**
         Appends the string representation of the <code>char</code> array
         argument to this string buffer.
@@ -566,6 +606,24 @@ public:
     {
         return append( str, rtl_ustr_getLength( str ) );
     }
+
+
+    /**
+    Appends the string representation of the <code>char</code> array
+    argument to this string buffer.
+
+    The characters of the array argument are appended, in order, to
+    the contents of this string buffer. The length of this string
+    buffer increases by the length of the argument.
+
+    @param   str   the characters to be appended.
+    @return  this string buffer.
+    */
+    OUStringBuffer & operator+(const sal_Unicode * str)
+    {
+        return append(str, rtl_ustr_getLength(str));
+    }
+
 
     /**
         Appends the string representation of the <code>char</code> array
@@ -617,8 +675,27 @@ public:
         return *this;
     }
 
+
+    template<typename T>
+    typename libreoffice_internal::ConstCharArrayDetector<
+        T, OUStringBuffer &>::TypeUtf16
+        operator+(T & literal) {
+        rtl_uStringbuffer_insert(
+            &pData, &nCapacity, getLength(),
+            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
+            libreoffice_internal::ConstCharArrayDetector<T>::length);
+        return *this;
+    }
+
     /** @overload @since LibreOffice 5.4 */
     OUStringBuffer & append(OUStringLiteral const & literal) {
+        rtl_uStringbuffer_insert_ascii(
+            &pData, &nCapacity, getLength(), literal.data, literal.size);
+        return *this;
+    }
+
+
+    OUStringBuffer & operator+(OUStringLiteral const & literal) {
         rtl_uStringbuffer_insert_ascii(
             &pData, &nCapacity, getLength(), literal.data, literal.size);
         return *this;
@@ -639,6 +716,22 @@ public:
         l += pData->length;
         rtl_uStringbuffer_ensureCapacity( &pData, &nCapacity, l );
         sal_Unicode* end = c.addData( pData->buffer + pData->length );
+        *end = '\0';
+        pData->length = l;
+        return *this;
+    }
+
+
+
+    template< typename T1, typename T2 >
+    OUStringBuffer& operator+(OUStringConcat< T1, T2 >&& c)
+    {
+        sal_Int32 l = c.length();
+        if (l == 0)
+            return *this;
+        l += pData->length;
+        rtl_uStringbuffer_ensureCapacity(&pData, &nCapacity, l);
+        sal_Unicode* end = c.addData(pData->buffer + pData->length);
         *end = '\0';
         pData->length = l;
         return *this;
@@ -709,6 +802,28 @@ public:
         return append( sz, rtl_ustr_valueOfBoolean( sz, b ) );
     }
 
+
+    /**
+    Appends the string representation of the <code>bool</code>
+    argument to the string buffer.
+
+    The argument is converted to a string as if by the method
+    <code>String.valueOf</code>, and the characters of that
+    string are then appended to this string buffer.
+
+    @param   b   a <code>bool</code>.
+    @return  this string buffer.
+
+    @since LibreOffice 4.1
+    */
+    OUStringBuffer & operator+(bool b)
+    {
+        sal_Unicode sz[RTL_USTR_MAX_VALUEOFBOOLEAN];
+        return append(sz, rtl_ustr_valueOfBoolean(sz, b));
+    }
+
+
+
     /// @cond INTERNAL
     // Pointer can be automatically converted to bool, which is unwanted here.
     // Explicitly delete all pointer append() overloads to prevent this
@@ -729,6 +844,17 @@ public:
         return append( OUString( str ));
     }
 
+
+    // This overload is needed because OUString has a ctor from rtl_uString*, but
+    // the bool overload above would be preferred to the conversion.
+    /**
+    @internal
+    */
+    OUStringBuffer & operator+(rtl_uString* str)
+    {
+        return append(OUString(str));
+    }
+
     /**
         Appends the string representation of the <code>sal_Bool</code>
         argument to the string buffer.
@@ -745,6 +871,26 @@ public:
         sal_Unicode sz[RTL_USTR_MAX_VALUEOFBOOLEAN];
         return append( sz, rtl_ustr_valueOfBoolean( sz, b ) );
     }
+
+
+
+    /**
+    Appends the string representation of the <code>sal_Bool</code>
+    argument to the string buffer.
+
+    The argument is converted to a string as if by the method
+    <code>String.valueOf</code>, and the characters of that
+    string are then appended to this string buffer.
+
+    @param   b   a <code>sal_Bool</code>.
+    @return  this string buffer.
+    */
+    OUStringBuffer & operator+(sal_Bool b)
+    {
+        sal_Unicode sz[RTL_USTR_MAX_VALUEOFBOOLEAN];
+        return append(sz, rtl_ustr_valueOfBoolean(sz, b));
+    }
+
 
     /**
         Appends the string representation of the ASCII <code>char</code>
@@ -764,6 +910,25 @@ public:
         return append(sal_Unicode(c));
     }
 
+
+    /**
+    Appends the string representation of the ASCII <code>char</code>
+    argument to this string buffer.
+
+    The argument is appended to the contents of this string buffer.
+    The length of this string buffer increases by <code>1</code>.
+
+    @param   c   an ASCII <code>char</code>.
+    @return  this string buffer.
+
+    @since LibreOffice 3.5
+    */
+    OUStringBuffer & operator+(char c)
+    {
+        assert(static_cast< unsigned char >(c) <= 0x7F);
+        return append(sal_Unicode(c));
+    }
+
     /**
         Appends the string representation of the <code>char</code>
         argument to this string buffer.
@@ -777,6 +942,21 @@ public:
     OUStringBuffer & append(sal_Unicode c)
     {
         return append( &c, 1 );
+    }
+
+    /**
+    Appends the string representation of the <code>char</code>
+    argument to this string buffer.
+
+    The argument is appended to the contents of this string buffer.
+    The length of this string buffer increases by <code>1</code>.
+
+    @param   c   a <code>char</code>.
+    @return  this string buffer.
+    */
+    OUStringBuffer & operator+(sal_Unicode c)
+    {
+        return append(&c, 1);
     }
 
 #if defined LIBO_INTERNAL_ONLY
@@ -801,6 +981,8 @@ public:
         return append( sz, rtl_ustr_valueOfInt32( sz, i, radix ) );
     }
 
+
+
     /**
         Appends the string representation of the <code>long</code>
         argument to this string buffer.
@@ -819,6 +1001,7 @@ public:
         return append( sz, rtl_ustr_valueOfInt64( sz, l, radix ) );
     }
 
+
     /**
         Appends the string representation of the <code>float</code>
         argument to this string buffer.
@@ -836,6 +1019,24 @@ public:
         return append( sz, rtl_ustr_valueOfFloat( sz, f ) );
     }
 
+
+    /**
+    Appends the string representation of the <code>float</code>
+    argument to this string buffer.
+
+    The argument is converted to a string as if by the method
+    <code>String.valueOf</code>, and the characters of that
+    string are then appended to this string buffer.
+
+    @param   f   a <code>float</code>.
+    @return  this string buffer.
+    */
+    OUStringBuffer & operator+(float f)
+    {
+        sal_Unicode sz[RTL_USTR_MAX_VALUEOFFLOAT];
+        return append(sz, rtl_ustr_valueOfFloat(sz, f));
+    }
+
     /**
         Appends the string representation of the <code>double</code>
         argument to this string buffer.
@@ -851,6 +1052,24 @@ public:
     {
         sal_Unicode sz[RTL_USTR_MAX_VALUEOFDOUBLE];
         return append( sz, rtl_ustr_valueOfDouble( sz, d ) );
+    }
+
+
+    /**
+    Appends the string representation of the <code>double</code>
+    argument to this string buffer.
+
+    The argument is converted to a string as if by the method
+    <code>String.valueOf</code>, and the characters of that
+    string are then appended to this string buffer.
+
+    @param   d   a <code>double</code>.
+    @return  this string buffer.
+    */
+    OUStringBuffer & operator+(double d)
+    {
+        sal_Unicode sz[RTL_USTR_MAX_VALUEOFDOUBLE];
+        return append(sz, rtl_ustr_valueOfDouble(sz, d));
     }
 
     /**
