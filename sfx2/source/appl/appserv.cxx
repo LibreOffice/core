@@ -334,28 +334,32 @@ namespace
         }
     };
 
-    class SafeModeQueryDialog : public ModalDialog
+    class SafeModeQueryDialog
     {
     private:
-        DECL_LINK(RestartHdl, Button*, void);
+        std::unique_ptr<weld::Builder> m_xBuilder;
+        std::unique_ptr<weld::MessageDialog> m_xDialog;
     public:
-        explicit SafeModeQueryDialog();
+        SafeModeQueryDialog(weld::Window* pParent)
+            : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/safemodequerydialog.ui"))
+            , m_xDialog(m_xBuilder->weld_message_dialog("SafeModeQueryDialog"))
+        {
+            m_xDialog->set_primary_text(Translate::GetReadStringHook()(m_xDialog->get_primary_text()));
+        }
+
+        short run()
+        {
+            short nRet = m_xDialog->run();
+            if (nRet == RET_OK)
+            {
+                sfx2::SafeMode::putFlag();
+                uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+                css::task::OfficeRestartManager::get(xContext)->requestRestart(
+                    css::uno::Reference< css::task::XInteractionHandler >());
+            }
+            return nRet;
+        }
     };
-
-    SafeModeQueryDialog::SafeModeQueryDialog()
-        : ModalDialog(nullptr, "SafeModeQueryDialog", "sfx/ui/safemodequerydialog.ui")
-    {
-        get<PushButton>("restart")->SetClickHdl(LINK(this, SafeModeQueryDialog, RestartHdl));
-    }
-
-    IMPL_LINK_NOARG(SafeModeQueryDialog, RestartHdl, Button*, void)
-    {
-        EndDialog(RET_OK);
-        sfx2::SafeMode::putFlag();
-        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-        css::task::OfficeRestartManager::get(xContext)->requestRestart(
-            css::uno::Reference< css::task::XInteractionHandler >());
-    }
 }
 
 void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
@@ -1026,8 +1030,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
         case SID_SAFE_MODE:
         {
-            ScopedVclPtrInstance< SafeModeQueryDialog > aDialog;
-            aDialog->Execute();
+            SafeModeQueryDialog aDialog(GetRequestFrameWeld(rReq));
+            aDialog.run();
             break;
         }
 
