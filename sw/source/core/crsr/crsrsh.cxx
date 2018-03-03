@@ -1271,16 +1271,16 @@ void SwCursorShell::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
     if( m_bHasFocus && !m_bBasicHideCursor )
     {
-        SwShellCursor* pAktCursor = m_pTableCursor ? m_pTableCursor : m_pCurrentCursor;
+        SwShellCursor* pCurrentCursor = m_pTableCursor ? m_pTableCursor : m_pCurrentCursor;
 
         if( !ActionPend() )
         {
             // so that right/bottom borders will not be cropped
-            pAktCursor->Invalidate( VisArea() );
-            pAktCursor->Show(nullptr);
+            pCurrentCursor->Invalidate( VisArea() );
+            pCurrentCursor->Show(nullptr);
         }
         else
-            pAktCursor->Invalidate( aRect );
+            pCurrentCursor->Invalidate( aRect );
 
     }
 
@@ -2122,8 +2122,8 @@ void SwCursorShell::HideCursors()
         m_pVisibleCursor->Hide();
     }
     // revoke inversion of SSelection
-    SwShellCursor* pAktCursor = m_pTableCursor ? m_pTableCursor : m_pCurrentCursor;
-    pAktCursor->Hide();
+    SwShellCursor* pCurrentCursor = m_pTableCursor ? m_pTableCursor : m_pCurrentCursor;
+    pCurrentCursor->Hide();
 }
 
 void SwCursorShell::ShowCursors( bool bCursorVis )
@@ -2132,8 +2132,8 @@ void SwCursorShell::ShowCursors( bool bCursorVis )
         return;
 
     SET_CURR_SHELL( this );
-    SwShellCursor* pAktCursor = m_pTableCursor ? m_pTableCursor : m_pCurrentCursor;
-    pAktCursor->Show(nullptr);
+    SwShellCursor* pCurrentCursor = m_pTableCursor ? m_pTableCursor : m_pCurrentCursor;
+    pCurrentCursor->Show(nullptr);
 
     if( m_bSVCursorVis && bCursorVis ) // also show SV cursor again
         m_pVisibleCursor->Show();
