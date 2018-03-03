@@ -3836,7 +3836,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
     pStyRule = nullptr;                   // recreate if necessary
     bTextColChanged = bFontChanged = bCJKFontChanged = bCTLFontChanged =
         bFSizeChanged = bFCTLSizeChanged = bWidowsChanged = false;
-    pIo->SetNAktColl( nThisStyle );
+    pIo->SetNCurrentColl( nThisStyle );
     pIo->m_bStyNormal = nThisStyle == 0;
     return bOldNoImp;
 }
@@ -3858,7 +3858,7 @@ void WW8RStyle::PostStyle(SwWW8StyInf const &rSI, bool bOldNoImp)
 
     pStyRule = nullptr;                   // to be on the safe side
     pIo->m_bStyNormal = false;
-    pIo->SetNAktColl( 0 );
+    pIo->SetNCurrentColl( 0 );
     pIo->m_bNoAttrImport = bOldNoImp;
     // reset the list-remember-fields, if used when reading styles
     pIo->m_nLFOPosition = USHRT_MAX;

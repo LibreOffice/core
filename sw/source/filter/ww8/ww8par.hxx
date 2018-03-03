@@ -1411,7 +1411,7 @@ private:
 
     void SetDocumentGrid(SwFrameFormat &rFormat, const wwSection &rSection);
 
-    void ProcessAktCollChange(WW8PLCFManResult& rRes, bool* pStartAttr,
+    void ProcessCurrentCollChange(WW8PLCFManResult& rRes, bool* pStartAttr,
         bool bCallProcessSpecial);
     long ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStartLine);
     void ReadAttrs(WW8_CP& rTextPos, WW8_CP& rNext, long nTextEnd, bool& rbStartLine);
@@ -1868,9 +1868,9 @@ public:     // really private, but can only be done public
 
     const WW8Fib& GetFib() const    { return *m_xWwFib; }
     SwDoc& GetDoc() const           { return m_rDoc; }
-    sal_uInt16 GetNAktColl()  const     { return m_nCurrentColl; }
-    void SetNAktColl( sal_uInt16 nColl ) { m_nCurrentColl = nColl;    }
-    std::unique_ptr<SfxItemSet> SetAktItemSet(SfxItemSet* pItemSet);
+    sal_uInt16 GetCurrentColl()  const     { return m_nCurrentColl; }
+    void SetNCurrentColl( sal_uInt16 nColl ) { m_nCurrentColl = nColl;    }
+    std::unique_ptr<SfxItemSet> SetCurrentItemSet(SfxItemSet* pItemSet);
     sal_uInt16 StyleUsingLFO( sal_uInt16 nLFOIndex ) const ;
     const SwFormat* GetStyleWithOrgWWName( OUString const & rName ) const ;
 
