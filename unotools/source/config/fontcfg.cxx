@@ -247,8 +247,6 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const LanguageTag& rLan
     #define FALLBACKFONT_UI_SANS_ARABIC "Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;clearlyU;Interface User;Arial Unicode MS;Lucida Sans Unicode;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif"
     #define FALLBACKFONT_UI_SANS_THAI "OONaksit;Tahoma;Lucidasans;Arial Unicode MS"
     #define FALLBACKFONT_UI_SANS_KOREAN "SunGulim;BaekmukGulim;Gulim;Roundgothic;Arial Unicode MS;Lucida Sans Unicode;gnu-unifont;Andale Sans UI"
-    #define FALLBACKFONT_UI_SANS_JAPANESE1 "HG-GothicB-Sun;Andale Sans UI;HG MhinchoLightJ"
-    #define FALLBACKFONT_UI_SANS_JAPANESE2 "Kochi Gothic;Gothic"
     #define FALLBACKFONT_UI_SANS_CHINSIM "Andale Sans UI;Arial Unicode MS;ZYSong18030;AR PL SungtiL GB;AR PL KaitiM GB;SimSun;Lucida Sans Unicode;Fangsong;Hei;Song;Kai;Ming;gnu-unifont;Interface User;"
     #define FALLBACKFONT_UI_SANS_CHINTRD "Andale Sans UI;Arial Unicode MS;AR PL Mingti2L Big5;AR PL KaitiM Big5;Kai;PMingLiU;MingLiU;Ming;Lucida Sans Unicode;gnu-unifont;Interface User;"
 
@@ -289,32 +287,6 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const LanguageTag& rLan
              aLanguage == "sb")
     {
         return OUString(FALLBACKFONT_UI_SANS_LATIN2);
-    }
-    else if ( aLanguage == "ja" )
-    {
-        // we need localized names for japanese fonts
-        const sal_Unicode aMSGothic[] = { 0xFF2D, 0xFF33, ' ', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
-        const sal_Unicode aMSPGothic[] = { 0xFF2D, 0xFF33, ' ', 0xFF30, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
-        const sal_Unicode aTLPGothic[] = { 0x0054, 0x004C, 0x0050, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
-        const sal_Unicode aLXGothic[] = { 0x004C, 0x0058, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
-        const sal_Unicode aKochiGothic[] = { 0x6771, 0x98A8, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
-
-        OUStringBuffer aFallBackJapaneseLocalized;
-        aFallBackJapaneseLocalized.append("MS UI Gothic;");
-        aFallBackJapaneseLocalized.append(FALLBACKFONT_UI_SANS_JAPANESE1);
-        aFallBackJapaneseLocalized.append(aMSPGothic);
-        aFallBackJapaneseLocalized.append(';');
-        aFallBackJapaneseLocalized.append(aMSGothic);
-        aFallBackJapaneseLocalized.append(';');
-        aFallBackJapaneseLocalized.append(aTLPGothic);
-        aFallBackJapaneseLocalized.append(';');
-        aFallBackJapaneseLocalized.append(aLXGothic);
-        aFallBackJapaneseLocalized.append(';');
-        aFallBackJapaneseLocalized.append(aKochiGothic);
-        aFallBackJapaneseLocalized.append(';');
-        aFallBackJapaneseLocalized.append(FALLBACKFONT_UI_SANS_JAPANESE2);
-
-        return aFallBackJapaneseLocalized.makeStringAndClear();
     }
     else
     {
