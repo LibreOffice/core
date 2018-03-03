@@ -115,7 +115,11 @@ IMPL_ABSTDLG_BASE(AbstractSvxCaptionDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxJSearchOptionsDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmInputRecordNoDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxNewDictionaryDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractSvxNameDialog_Impl);
+
+short AbstractSvxNameDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 // #i68101#
 IMPL_ABSTDLG_BASE(AbstractSvxObjectNameDialog_Impl);
@@ -555,29 +559,33 @@ long AbstractFmInputRecordNoDialog_Impl::GetValue() const
 
 void AbstractSvxNameDialog_Impl::GetName(OUString& rName)
 {
-    pDlg->GetName( rName );
+    rName = m_xDlg->GetName();
 }
 
 void AbstractSvxNameDialog_Impl::SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink, bool bCheckImmediately )
 {
     aCheckNameHdl = rLink;
     if( rLink.IsSet() )
-        pDlg->SetCheckNameHdl( LINK(this, AbstractSvxNameDialog_Impl, CheckNameHdl), bCheckImmediately );
+        m_xDlg->SetCheckNameHdl( LINK(this, AbstractSvxNameDialog_Impl, CheckNameHdl), bCheckImmediately );
     else
-        pDlg->SetCheckNameHdl( Link<SvxNameDialog&,bool>(), bCheckImmediately );
+        m_xDlg->SetCheckNameHdl( Link<SvxNameDialog&,bool>(), bCheckImmediately );
 }
-void AbstractSvxNameDialog_Impl::SetEditHelpId(const OString& aHelpId)
+
+void AbstractSvxNameDialog_Impl::SetEditHelpId(const OString& rHelpId)
 {
-    pDlg->SetEditHelpId( aHelpId );
+    m_xDlg->SetEditHelpId(rHelpId);
 }
-void AbstractSvxNameDialog_Impl::SetHelpId( const OString& aHelpId )
+
+void AbstractSvxNameDialog_Impl::SetHelpId(const OString& rHelpId)
 {
-    pDlg->SetHelpId( aHelpId );
+    m_xDlg->set_help_id(rHelpId);
 }
+
 void AbstractSvxNameDialog_Impl::SetText( const OUString& rStr )
 {
-    pDlg->SetText( rStr );
+    m_xDlg->set_title(rStr);
 }
+
 IMPL_LINK_NOARG(AbstractSvxNameDialog_Impl, CheckNameHdl, SvxNameDialog&, bool)
 {
     return aCheckNameHdl.Call(*this);
@@ -1090,11 +1098,10 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxEditDictionaryDia
     return VclPtr<CuiVclAbstractDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractSvxNameDialog> AbstractDialogFactory_Impl::CreateSvxNameDialog( vcl::Window* pParent,
-                                    const OUString& rName, const OUString& rDesc )
+VclPtr<AbstractSvxNameDialog> AbstractDialogFactory_Impl::CreateSvxNameDialog(weld::Window* pParent,
+                                    const OUString& rName, const OUString& rDesc)
 {
-    VclPtrInstance<SvxNameDialog> pDlg( pParent, rName, rDesc );
-    return VclPtr<AbstractSvxNameDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractSvxNameDialog_Impl>::Create(new SvxNameDialog(pParent, rName, rDesc));
 }
 
 VclPtr<AbstractSvxObjectNameDialog> AbstractDialogFactory_Impl::CreateSvxObjectNameDialog(const OUString& rName )

@@ -366,13 +366,13 @@ IMPL_LINK( SvxMenuConfigPage, InsertHdl, MenuButton *, pButton, void )
         OUString aNewName;
         OUString aDesc = CuiResId( RID_SVXSTR_SUBMENU_NAME );
 
-        VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
-        pNameDialog->SetHelpId( HID_SVX_CONFIG_NAME_SUBMENU );
-        pNameDialog->SetText( CuiResId( RID_SVXSTR_ADD_SUBMENU ) );
+        SvxNameDialog aNameDialog(GetFrameWeld(), aNewName, aDesc);
+        aNameDialog.set_help_id(HID_SVX_CONFIG_NAME_SUBMENU);
+        aNameDialog.set_title(CuiResId( RID_SVXSTR_ADD_SUBMENU));
 
-        if ( pNameDialog->Execute() == RET_OK )
+        if (aNameDialog.run() == RET_OK)
         {
-            pNameDialog->GetName(aNewName);
+            aNewName = aNameDialog.GetName();
 
             SvxConfigEntry* pNewEntryData =
                 new SvxConfigEntry( aNewName, aNewName, true, /*bParentData*/false );
@@ -415,13 +415,13 @@ IMPL_LINK( SvxMenuConfigPage, ModifyItemHdl, MenuButton *, pButton, void )
         OUString aNewName( SvxConfigPageHelper::stripHotKey( pEntry->GetName() ) );
         OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
 
-        VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
-        pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU_ITEM );
-        pNameDialog->SetText( CuiResId( RID_SVXSTR_RENAME_MENU ) );
+        SvxNameDialog aNameDialog(GetFrameWeld(), aNewName, aDesc);
+        aNameDialog.set_help_id(HID_SVX_CONFIG_RENAME_MENU_ITEM);
+        aNameDialog.set_title(CuiResId(RID_SVXSTR_RENAME_MENU));
 
-        if ( pNameDialog->Execute() == RET_OK )
+        if (aNameDialog.run() == RET_OK)
         {
-            pNameDialog->GetName( aNewName );
+            aNewName = aNameDialog.GetName();
 
             pEntry->SetName( aNewName );
             m_pContentsListBox->SetEntryText( pActEntry, aNewName );

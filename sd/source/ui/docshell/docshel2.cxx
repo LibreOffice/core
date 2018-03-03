@@ -275,7 +275,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage)
  * name.
  * @return sal_False if the user cancels the action.
  */
-bool DrawDocShell::CheckPageName (vcl::Window* pWin, OUString& rName )
+bool DrawDocShell::CheckPageName(weld::Window* pWin, OUString& rName)
 {
     const OUString aStrForDlg( rName );
     bool bIsNameValid = IsNewPageNameValid( rName, true );
@@ -286,7 +286,7 @@ bool DrawDocShell::CheckPageName (vcl::Window* pWin, OUString& rName )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if( pFact )
         {
-            ScopedVclPtr<AbstractSvxNameDialog> aNameDlg( pFact->CreateSvxNameDialog( pWin, aStrForDlg, aDesc ) );
+            ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(pWin, aStrForDlg, aDesc));
             aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
 
             aNameDlg->SetCheckNameHdl( LINK( this, DrawDocShell, RenameSlideHdl ) );
