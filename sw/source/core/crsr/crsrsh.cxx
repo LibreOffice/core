@@ -218,11 +218,11 @@ void SwCursorShell::StartAction()
     {
         // save for update of the ribbon bar
         const SwNode& rNd = m_pCurrentCursor->GetPoint()->nNode.GetNode();
-        m_nAktNode = rNd.GetIndex();
-        m_nAktContent = m_pCurrentCursor->GetPoint()->nContent.GetIndex();
-        m_nAktNdTyp = rNd.GetNodeType();
+        m_nCurrentNode = rNd.GetIndex();
+        m_nCurrentContent = m_pCurrentCursor->GetPoint()->nContent.GetIndex();
+        m_nCurrentNdTyp = rNd.GetNodeType();
         if( rNd.IsTextNode() )
-            m_nLeftFramePos = SwCallLink::getLayoutFrame( GetLayout(), *rNd.GetTextNode(), m_nAktContent, true );
+            m_nLeftFramePos = SwCallLink::getLayoutFrame( GetLayout(), *rNd.GetTextNode(), m_nCurrentContent, true );
         else
             m_nLeftFramePos = 0;
     }
@@ -272,10 +272,10 @@ void SwCursorShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
     UpdateCursor( eFlags, bIdleEnd );      // Show Cursor changes
 
     {
-        SwCallLink aLk( *this );        // watch Cursor-Moves
-        aLk.nNode = m_nAktNode;           // call Link if needed
-        aLk.nNdTyp = m_nAktNdTyp;
-        aLk.nContent = m_nAktContent;
+        SwCallLink aLk( *this );           // Watch cursor moves,
+        aLk.nNode = m_nCurrentNode;        // possibly call the link
+        aLk.nNdTyp = m_nCurrentNdTyp;
+        aLk.nContent = m_nCurrentContent;
         aLk.nLeftFramePos = m_nLeftFramePos;
 
         if( !m_nCursorMove ||
@@ -2644,9 +2644,9 @@ SwCursorShell::SwCursorShell( SwCursorShell& rShell, vcl::Window *pInitWin )
     , m_pBoxPtr( nullptr )
     , m_nUpDownX(0)
     , m_nLeftFramePos(0)
-    , m_nAktNode(0)
-    , m_nAktContent(0)
-    , m_nAktNdTyp(SwNodeType::NONE)
+    , m_nCurrentNode(0)
+    , m_nCurrentContent(0)
+    , m_nCurrentNdTyp(SwNodeType::NONE)
     , m_nCursorMove( 0 )
     , m_eMvState( MV_NONE )
     , m_sMarkedListId()
@@ -2680,9 +2680,9 @@ SwCursorShell::SwCursorShell( SwDoc& rDoc, vcl::Window *pInitWin,
     , m_pBoxPtr( nullptr )
     , m_nUpDownX(0)
     , m_nLeftFramePos(0)
-    , m_nAktNode(0)
-    , m_nAktContent(0)
-    , m_nAktNdTyp(SwNodeType::NONE)
+    , m_nCurrentNode(0)
+    , m_nCurrentContent(0)
+    , m_nCurrentNdTyp(SwNodeType::NONE)
     , m_nCursorMove( 0 )
     , m_eMvState( MV_NONE ) // state for crsr-travelling - GetCursorOfst
     , m_sMarkedListId()

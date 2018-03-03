@@ -191,9 +191,9 @@ private:
     long m_nUpDownX;              /**< try to move the cursor on up/down always
                                    in the same column */
     long m_nLeftFramePos;
-    sal_uLong m_nAktNode;             // save CursorPos at Start-Action
-    sal_Int32 m_nAktContent;
-    SwNodeType m_nAktNdTyp;
+    sal_uLong m_nCurrentNode;     // save CursorPos at Start-Action
+    sal_Int32 m_nCurrentContent;
+    SwNodeType m_nCurrentNdTyp;
 
     /*
      * Via the Method SttCursorMove and EndCursorMove this counter gets
