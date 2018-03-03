@@ -3598,7 +3598,7 @@ void SwColumnFrame::PaintBreak( ) const
                     aFont.SetFontHeight( 8 * 20 );
                     pOut->SetFont( aFont );
                     drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
-                            aFontSize, aFont, false, false );
+                            aFontSize, aFont, IsRightToLeft(), false );
 
                     tools::Rectangle aTextRect;
                     pOut->GetTextBoundRect( aTextRect, aBreakText );
