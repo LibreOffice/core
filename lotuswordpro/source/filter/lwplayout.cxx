@@ -1370,42 +1370,42 @@ XFBGImage* LwpMiddleLayout::GetXFBGImage()
         LwpGraphicObject* pGrfObj = dynamic_cast<LwpGraphicObject*>(pLay->GetContent().obj().get());
         if(pGrfObj)
         {
-            XFBGImage* pXFBGImage = new XFBGImage();
+            std::unique_ptr<XFBGImage> xXFBGImage(new XFBGImage);
 
             if(pGrfObj->IsLinked())
             {
                 //set file link
                 OUString linkedfilepath = pGrfObj->GetLinkedFilePath();
                 OUString fileURL = LwpTools::convertToFileUrl(OUStringToOString(linkedfilepath, osl_getThreadTextEncoding()));
-                pXFBGImage->SetFileLink(fileURL);
+                xXFBGImage->SetFileLink(fileURL);
             }
             else
             {
                 std::vector<sal_uInt8> aGrafData = pGrfObj->GetRawGrafData();
-                pXFBGImage->SetImageData(aGrafData.data(), aGrafData.size());
+                xXFBGImage->SetImageData(aGrafData.data(), aGrafData.size());
             }
 
             //automatic, top left
-            pXFBGImage->SetPosition(enumXFAlignStart,enumXFAlignTop);
+            xXFBGImage->SetPosition(enumXFAlignStart,enumXFAlignTop);
             if(pLay->GetScaleCenter())
             {
                 //center
-                pXFBGImage->SetPosition();
+                xXFBGImage->SetPosition();
             }
             else if(pLay->GetScaleTile())
             {
                 //tile
-                pXFBGImage->SetRepeate();
+                xXFBGImage->SetRepeate();
             }
             //fit type, area type
             if((pLay->GetScaleMode()& LwpLayoutScale::FIT_IN_FRAME)!=0)
             {
                 if((pLay->GetScaleMode()& LwpLayoutScale::MAINTAIN_ASPECT_RATIO)==0)
                 {
-                    pXFBGImage->SetStretch();
+                    xXFBGImage->SetStretch();
                 }
             }
-            return pXFBGImage;
+            return xXFBGImage.release();
         }
     }
     return nullptr;
