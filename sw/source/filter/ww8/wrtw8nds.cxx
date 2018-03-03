@@ -186,7 +186,7 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
     rNd(rTextNd),
     maCharRuns(GetPseudoCharRuns(rTextNd)),
     pCurRedline(nullptr),
-    nAktSwPos(0),
+    nCurrentSwPos(0),
     nCurRedlinePos(SwRedlineTable::npos),
     mrSwFormatDrop(rTextNd.GetSwAttrSet().GetDrop())
 {
@@ -227,7 +227,7 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
         pCurRedline = m_rExport.m_pDoc->getIDocumentRedlineAccess().GetRedline( aPosition, &nCurRedlinePos );
     }
 
-    nAktSwPos = SearchNext(1);
+    nCurrentSwPos = SearchNext(1);
 }
 
 sal_Int32 lcl_getMinPos( sal_Int32 pos1, sal_Int32 pos2 )
@@ -1205,7 +1205,7 @@ void SwWW8AttrIter::SplitRun( sal_Int32 nSplitEndPos )
             maCharRuns.insert( ++aIter, aNewEntry);
             maCharRunIter = maCharRuns.begin();
             IterToCurrent();
-            nAktSwPos = SearchNext(1);
+            nCurrentSwPos = SearchNext(1);
             break;
         }
     }

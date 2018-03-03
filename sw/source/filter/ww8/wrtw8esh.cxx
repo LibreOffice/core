@@ -1000,7 +1000,7 @@ void MSWord_SdrAttrIter::NextPara( sal_Int32 nPar )
     // the attributes are outputted at start of a paragraph anyway.
     aChrTextAtrArr.clear();
     aChrSetArr.clear();
-    nAktSwPos = nTmpSwPos = 0;
+    nCurrentSwPos = nTmpSwPos = 0;
 
     SfxItemSet aSet( pEditObj->GetParaAttribs( nPara ));
     pEditPool = aSet.GetPool();
@@ -1010,7 +1010,7 @@ void MSWord_SdrAttrIter::NextPara( sal_Int32 nPar )
     nScript = g_pBreakIt->GetBreakIter()->getScriptType( pEditObj->GetText(nPara), 0);
 
     pEditObj->GetCharAttribs( nPara, aTextAtrArr );
-    nAktSwPos = SearchNext( 1 );
+    nCurrentSwPos = SearchNext( 1 );
 }
 
 rtl_TextEncoding MSWord_SdrAttrIter::GetNextCharSet() const
