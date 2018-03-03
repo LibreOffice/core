@@ -369,8 +369,7 @@ SbMethod* MacroChooser::CreateMacro()
 
         if ( !pModule )
         {
-            pModule = createModImpl( static_cast<vcl::Window*>( this ),
-                aDocument, *m_pBasicBox, aLibName, aModName, false );
+            pModule = createModImpl(GetFrameWeld(), aDocument, *m_pBasicBox, aLibName, aModName, false);
         }
 
         DBG_ASSERT( !pModule || !pModule->FindMethod( aSubName, SbxClassType::Method ), "Macro exists already!" );
@@ -758,7 +757,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton, void )
         SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
         EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(pCurEntry);
         ScriptDocument aDocument( aDesc.GetDocument() );
-        createLibImpl( static_cast<vcl::Window*>( this ), aDocument, nullptr, m_pBasicBox );
+        createLibImpl(GetFrameWeld(), aDocument, nullptr, m_pBasicBox);
     }
     else if (pButton == m_pNewModButton)
     {
@@ -766,8 +765,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton, void )
         EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(pCurEntry);
         ScriptDocument aDocument( aDesc.GetDocument() );
         OUString aLibName( aDesc.GetLibName() );
-        createModImpl( static_cast<vcl::Window*>( this ), aDocument,
-            *m_pBasicBox, aLibName, OUString(), true );
+        createModImpl(GetFrameWeld(), aDocument, *m_pBasicBox, aLibName, OUString(), true);
     }
     else if (pButton == m_pOrganizeButton)
     {

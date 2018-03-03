@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.2 -->
 <interface domain="basctl">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="NewLibDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -80,10 +83,10 @@
               <object class="GtkLabel" id="area">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="newlibdialog|area">_Name:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">entry</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -111,8 +114,11 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
+      <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>
