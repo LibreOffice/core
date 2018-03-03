@@ -412,10 +412,9 @@ bool RegressionCurveHelper::removeAllExceptMeanValueLine(
                 }
             }
 
-            for( std::vector< uno::Reference< chart2::XRegressionCurve > >::const_iterator aIt = aCurvesToDelete.begin();
-                     aIt != aCurvesToDelete.end(); ++aIt )
+            for (auto const& curveToDelete : aCurvesToDelete)
             {
-                xRegCnt->removeRegressionCurve( *aIt );
+                xRegCnt->removeRegressionCurve(curveToDelete);
                 bRemovedSomething = true;
             }
         }
@@ -686,10 +685,9 @@ std::vector< Reference< chart2::XRegressionCurve > >
 {
     std::vector< Reference< chart2::XRegressionCurve > > aResult;
     std::vector< Reference< chart2::XDataSeries > > aSeries( DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
-    for( std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeries.begin());
-         aIt != aSeries.end(); ++aIt )
+    for (auto const& elem : aSeries)
     {
-        Reference< chart2::XRegressionCurveContainer > xContainer( *aIt, uno::UNO_QUERY );
+        Reference< chart2::XRegressionCurveContainer > xContainer(elem, uno::UNO_QUERY);
         if(xContainer.is())
         {
             uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(xContainer->getRegressionCurves());

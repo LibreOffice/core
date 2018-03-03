@@ -112,8 +112,10 @@ Sequence< OUString > SAL_CALL NameContainer::getElementNames()
     sal_Int32 nCount = m_aMap.size();
     Sequence< OUString > aSeq(nCount);
     sal_Int32 nN = 0;
-    for( tContentMap::iterator aIter = m_aMap.begin(); aIter != m_aMap.end() && nN < nCount; ++aIter, ++nN )
-        aSeq[nN]=aIter->first;
+    for (auto const& elem : m_aMap)
+    {
+        aSeq[nN++]=elem.first;
+    }
     return aSeq;
 }
 

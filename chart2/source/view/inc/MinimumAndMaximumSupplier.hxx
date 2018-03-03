@@ -85,9 +85,6 @@ public:
 private:
     typedef std::set< MinimumAndMaximumSupplier* > MinimumAndMaximumSupplierSet;
     MinimumAndMaximumSupplierSet m_aMinimumAndMaximumSupplierList;
-
-    MinimumAndMaximumSupplierSet::iterator begin() { return m_aMinimumAndMaximumSupplierList.begin(); }
-    MinimumAndMaximumSupplierSet::iterator end() { return m_aMinimumAndMaximumSupplierList.end(); }
 };
 
 } //namespace chart

@@ -208,19 +208,14 @@ void VAxisBase::removeTextShapesFromTicks()
 {
     if( m_xTextTarget.is() )
     {
-        TickInfoArraysType::iterator aDepthIter = m_aAllTickInfos.begin();
-        const TickInfoArraysType::const_iterator aDepthEnd  = m_aAllTickInfos.end();
-        for( ; aDepthIter != aDepthEnd; ++aDepthIter )
+        for (auto & tickInfos : m_aAllTickInfos)
         {
-            TickInfoArrayType::iterator aTickIter = (*aDepthIter).begin();
-            const TickInfoArrayType::const_iterator aTickEnd  = (*aDepthIter).end();
-            for( ; aTickIter != aTickEnd; ++aTickIter )
+            for (auto & tickInfo : tickInfos)
             {
-                TickInfo& rTickInfo = (*aTickIter);
-                if(rTickInfo.xTextShape.is())
+                if(tickInfo.xTextShape.is())
                 {
-                    m_xTextTarget->remove(rTickInfo.xTextShape);
-                    rTickInfo.xTextShape = nullptr;
+                    m_xTextTarget->remove(tickInfo.xTextShape);
+                    tickInfo.xTextShape = nullptr;
                 }
             }
         }

@@ -214,11 +214,12 @@ void VCartesianGrid::createShapes()
     aTickFactory.getAllTicks( aAllTickInfos );
 
     //create tick mark line shapes
+
+    if(aAllTickInfos.empty())//no tickmarks at all
+        return;
+
     TickInfoArraysType::iterator aDepthIter             = aAllTickInfos.begin();
     const TickInfoArraysType::const_iterator aDepthEnd  = aAllTickInfos.end();
-
-    if(aDepthIter == aDepthEnd)//no tickmarks at all
-        return;
 
     sal_Int32 nLinePropertiesCount = aLinePropertiesList.size();
     for( sal_Int32 nDepth=0
@@ -246,14 +247,12 @@ void VCartesianGrid::createShapes()
             sal_Int32 nPointCount = (*aDepthIter).size();
             drawing::PointSequenceSequence aPoints(nPointCount);
 
-            TickInfoArrayType::const_iterator       aTickIter = (*aDepthIter).begin();
-            const TickInfoArrayType::const_iterator aTickEnd  = (*aDepthIter).end();
             sal_Int32 nRealPointCount = 0;
-            for( ; aTickIter != aTickEnd; ++aTickIter )
+            for (auto const& tick : *aDepthIter)
             {
-                if( !(*aTickIter).bPaintIt )
+                if( !tick.bPaintIt )
                     continue;
-                aGridLinePoints.update( (*aTickIter).fScaledTickValue );
+                aGridLinePoints.update( tick.fScaledTickValue );
                 addLine2D( aPoints, nRealPointCount, aGridLinePoints, m_pPosHelper->getTransformationScaledLogicToScene() );
                 nRealPointCount++;
             }
@@ -284,18 +283,20 @@ void VCartesianGrid::createShapes()
             aPoints.SequenceY.realloc(nPointCount);
             aPoints.SequenceZ.realloc(nPointCount);
 
-            TickInfoArrayType::const_iterator       aTickIter = (*aDepthIter).begin();
-            const TickInfoArrayType::const_iterator aTickEnd  = (*aDepthIter).end();
             sal_Int32 nRealPointCount = 0;
             sal_Int32 nPolyIndex = 0;
-            for( ; aTickIter != aTickEnd; ++aTickIter, ++nPolyIndex )
+            for (auto const& tick : *aDepthIter)
             {
-                if( !(*aTickIter).bPaintIt )
+                if( !tick.bPaintIt )
+                {
+                    ++nPolyIndex;
                     continue;
+                }
 
-                aGridLinePoints.update( (*aTickIter).fScaledTickValue );
+                aGridLinePoints.update( tick.fScaledTickValue );
                 addLine3D( aPoints, nPolyIndex, aGridLinePoints, m_pPosHelper->getTransformationScaledLogicToScene() );
                 nRealPointCount+=3;
+                ++nPolyIndex;
             }
             aPoints.SequenceX.realloc(nRealPointCount);
             aPoints.SequenceY.realloc(nRealPointCount);

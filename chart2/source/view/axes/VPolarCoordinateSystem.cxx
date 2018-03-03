@@ -107,15 +107,13 @@ void VPolarCoordinateSystem::initVAxisInList()
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
     bool bSwapXAndY = getPropertySwapXAndYAxis();
 
-    tVAxisMap::iterator aIt( m_aAxisMap.begin() );
-    tVAxisMap::const_iterator aEnd( m_aAxisMap.end() );
-    for( ; aIt != aEnd; ++aIt )
+    for (auto const& elem : m_aAxisMap)
     {
-        VAxisBase* pVAxis = aIt->second.get();
+        VAxisBase* pVAxis = elem.second.get();
         if( pVAxis )
         {
-            sal_Int32 nDimensionIndex = aIt->first.first;
-            sal_Int32 nAxisIndex = aIt->first.second;
+            sal_Int32 nDimensionIndex = elem.first.first;
+            sal_Int32 nAxisIndex = elem.first.second;
             pVAxis->setExplicitScaleAndIncrement( getExplicitScale( nDimensionIndex, nAxisIndex ), getExplicitIncrement(nDimensionIndex, nAxisIndex) );
             pVAxis->initPlotter(m_xLogicTargetForAxes,m_xFinalTarget,m_xShapeFactory
                 , createCIDForAxis( nDimensionIndex, nAxisIndex ) );
@@ -137,15 +135,13 @@ void VPolarCoordinateSystem::updateScalesAndIncrementsOnAxes()
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
     bool bSwapXAndY = getPropertySwapXAndYAxis();
 
-    tVAxisMap::iterator aIt( m_aAxisMap.begin() );
-    tVAxisMap::const_iterator aEnd( m_aAxisMap.end() );
-    for( ; aIt != aEnd; ++aIt )
+    for (auto const& elem : m_aAxisMap)
     {
-        VAxisBase* pVAxis = aIt->second.get();
+        VAxisBase* pVAxis = elem.second.get();
         if( pVAxis )
         {
-            sal_Int32 nDimensionIndex = aIt->first.first;
-            sal_Int32 nAxisIndex = aIt->first.second;
+            sal_Int32 nDimensionIndex = elem.first.first;
+            sal_Int32 nAxisIndex = elem.first.second;
             pVAxis->setExplicitScaleAndIncrement( getExplicitScale( nDimensionIndex, nAxisIndex ), getExplicitIncrement(nDimensionIndex, nAxisIndex) );
             VPolarAxis* pVPolarAxis = dynamic_cast< VPolarAxis* >( pVAxis );
             if( pVPolarAxis )

@@ -850,10 +850,8 @@ bool PieChart::PieLabelInfo::moveAwayFrom( const PieChart::PieLabelInfo* pFix, c
 
 void PieChart::resetLabelPositionsToPreviousState()
 {
-    std::vector< PieLabelInfo >::iterator aIt = m_aLabelInfoList.begin();
-    std::vector< PieLabelInfo >::const_iterator aEnd = m_aLabelInfoList.end();
-    for( ;aIt!=aEnd; ++aIt )
-        aIt->xLabelGroupShape->setPosition(aIt->aPreviousPosition);
+    for (auto const& labelInfo : m_aLabelInfoList)
+        labelInfo.xLabelGroupShape->setPosition(labelInfo.aPreviousPosition);
 }
 
 bool PieChart::detectLabelOverlapsAndMove( const awt::Size& rPageSize )
@@ -1107,15 +1105,15 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
     ///pie and donut charts after text label creation;
     ///it tries to rearrange labels only when the label placement type is
     ///`AVOID_OVERLAP`.
-
+    // no need to do anything when we only have one label
+    if (m_aLabelInfoList.size() < 2)
+        return;
 
     ///check whether there are any labels that should be moved
-    std::vector< PieLabelInfo >::iterator aIt1 = m_aLabelInfoList.begin();
-    std::vector< PieLabelInfo >::const_iterator aEnd = m_aLabelInfoList.end();
     bool bMoveableFound = false;
-    for( ;aIt1!=aEnd; ++aIt1 )
+    for (auto const& labelInfo : m_aLabelInfoList)
     {
-        if(aIt1->bMovementAllowed)
+        if(labelInfo.bMovementAllowed)
         {
             bMoveableFound = true;
             break;
@@ -1129,10 +1127,9 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
         return;
 
     ///initialize next and previous member of `PieLabelInfo` objects
-    aIt1 = m_aLabelInfoList.begin();
+    auto aIt1 = m_aLabelInfoList.begin();
+    auto aEnd = m_aLabelInfoList.end();
     std::vector< PieLabelInfo >::iterator aIt2 = aIt1;
-    if( aIt1==aEnd )//no need to do anything when we only have one label
-        return;
     aIt1->pPrevious = &(*(m_aLabelInfoList.rbegin()));
     ++aIt2;
     for( ;aIt2!=aEnd; ++aIt1, ++aIt2 )
@@ -1150,18 +1147,16 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
         nMaxIterations--;
 
     ///create connection lines for the moved labels
-    aEnd = m_aLabelInfoList.end();
     VLineProperties aVLineProperties;
-    for( aIt1 = m_aLabelInfoList.begin(); aIt1!=aEnd; ++aIt1 )
+    for (auto const& labelInfo : m_aLabelInfoList)
     {
-        PieLabelInfo& rInfo( *aIt1 );
-        if( rInfo.bMoved )
+        if( labelInfo.bMoved )
         {
-            sal_Int32 nX1 = rInfo.aFirstPosition.getX();
-            sal_Int32 nY1 = rInfo.aFirstPosition.getY();
+            sal_Int32 nX1 = labelInfo.aFirstPosition.getX();
+            sal_Int32 nY1 = labelInfo.aFirstPosition.getY();
             sal_Int32 nX2 = nX1;
             sal_Int32 nY2 = nY1;
-            ::basegfx::B2IRectangle aRect( lcl_getRect( rInfo.xLabelGroupShape ) );
+            ::basegfx::B2IRectangle aRect( lcl_getRect( labelInfo.xLabelGroupShape ) );
             if( nX1 < aRect.getMinX() )
                 nX2 = aRect.getMinX();
             else if( nX1 > aRect.getMaxX() )
@@ -1184,7 +1179,7 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
             aPoints[0][1].X = nX2;
             aPoints[0][1].Y = nY2;
 
-            uno::Reference< beans::XPropertySet > xProp( rInfo.xTextShape, uno::UNO_QUERY);
+            uno::Reference< beans::XPropertySet > xProp( labelInfo.xTextShape, uno::UNO_QUERY);
             if( xProp.is() )
             {
                 sal_Int32 nColor = 0;
@@ -1192,7 +1187,7 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
                 if( nColor != -1 )//automatic font color does not work for lines -> fallback to black
                     aVLineProperties.Color <<= nColor;
             }
-            m_pShapeFactory->createLine2D( rInfo.xTextTarget, aPoints, &aVLineProperties );
+            m_pShapeFactory->createLine2D( labelInfo.xTextTarget, aPoints, &aVLineProperties );
         }
     }
 }

@@ -37,11 +37,8 @@ namespace
 void lcl_overwriteOrAppendValues(
     tPropertyNameValueMap &rMap, const tPropertyNameValueMap& rOverwriteMap )
 {
-    tPropertyNameValueMap::const_iterator aIt( rOverwriteMap.begin() );
-    tPropertyNameValueMap::const_iterator aEnd( rOverwriteMap.end() );
-
-    for( ; aIt != aEnd; ++aIt )
-        rMap[ aIt->first ] = aIt->second;
+    for (auto const& elem : rOverwriteMap)
+        rMap[ elem.first ] = elem.second;
 }
 
 } // anonymous namespace
@@ -77,23 +74,22 @@ void PropertyMapper::getValueMap(
                 , const uno::Reference< beans::XPropertySet >& xSourceProp
                 )
 {
-    tPropertyNameMap::const_iterator aIt( rNameMap.begin() );
-    tPropertyNameMap::const_iterator aEnd( rNameMap.end() );
-
     uno::Reference< beans::XMultiPropertySet > xMultiPropSet(xSourceProp, uno::UNO_QUERY);
     if((false) && xMultiPropSet.is())
     {
         uno::Sequence< rtl::OUString > aPropSourceNames(rNameMap.size());
         uno::Sequence< rtl::OUString > aPropTargetNames(rNameMap.size());
-        for(sal_Int32 i = 0; aIt != aEnd; ++aIt, ++i)
+        sal_Int32 i = 0;
+        for (auto const& elem : rNameMap)
         {
-            aPropTargetNames[i] = aIt->first;
-            aPropSourceNames[i] = aIt->second;
+            aPropTargetNames[i] = elem.first;
+            aPropSourceNames[i] = elem.second;
+            ++i;
         }
 
         uno::Sequence< uno::Any > xValues = xMultiPropSet->getPropertyValues(aPropSourceNames);
-
-        for(sal_Int32 i = 0, n = rNameMap.size(); i < n; ++i)
+        sal_Int32 n = rNameMap.size();
+        for(i = 0;i < n; ++i)
         {
             if( xValues[i].hasValue() )
                 rValueMap.emplace(  aPropTargetNames[i], xValues[i] );
@@ -101,10 +97,10 @@ void PropertyMapper::getValueMap(
     }
     else
     {
-        for( ; aIt != aEnd; ++aIt )
+        for (auto const& elem : rNameMap)
         {
-            OUString aTarget = aIt->first;
-            OUString aSource = aIt->second;
+            OUString aTarget = elem.first;
+            OUString aSource = elem.second;
             try
             {
                 uno::Any aAny( xSourceProp->getPropertyValue(aSource) );
@@ -142,16 +138,14 @@ void PropertyMapper::getMultiPropertyListsFromValueMap(
     rValues.realloc(nPropertyCount);
 
     //fill sequences
-    tPropertyNameValueMap::const_iterator aValueIt(  rValueMap.begin() );
-    tPropertyNameValueMap::const_iterator aValueEnd( rValueMap.end()   );
     sal_Int32 nN=0;
-    for( ; aValueIt != aValueEnd; ++aValueIt )
+    for (auto const& elem : rValueMap)
     {
-        const uno::Any& rAny = aValueIt->second;
+        const uno::Any& rAny = elem.second;
         if( rAny.hasValue() )
         {
             //do not set empty anys because of performance (otherwise SdrAttrObj::ItemChange will take much longer)
-            rNames[nN]  = aValueIt->first;
+            rNames[nN]  = elem.first;
             rValues[nN] = rAny;
             ++nN;
         }
