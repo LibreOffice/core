@@ -786,7 +786,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialog creation failed!");
-                ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog( GetActiveWindow(), aPageName, aDescr ));
+                ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aPageName, aDescr));
                 DBG_ASSERT(aNameDlg, "Dialog creation failed!");
                 aNameDlg->SetText( aTitle );
                 aNameDlg->SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ), true );

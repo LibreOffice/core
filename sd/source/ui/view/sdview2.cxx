@@ -870,7 +870,7 @@ bool View::GetExchangeList (std::vector<OUString> &rExchangeList,
         OUString aNewName = *pIter;
 
         if( nType == 0  || nType == 2 )
-            bNameOK = mpDocSh->CheckPageName(mpViewSh->GetActiveWindow(), aNewName);
+            bNameOK = mpDocSh->CheckPageName(mpViewSh->GetFrameWeld(), aNewName);
 
         if( bNameOK && ( nType == 1  || nType == 2 ) )
         {
@@ -880,7 +880,7 @@ bool View::GetExchangeList (std::vector<OUString> &rExchangeList,
                 OUString aDesc(SdResId(STR_DESC_NAMEGROUP));
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact ? pFact->CreateSvxNameDialog(mpViewSh->GetActiveWindow(), aNewName, aDesc) : nullptr);
+                ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact ? pFact->CreateSvxNameDialog(mpViewSh->GetFrameWeld(), aNewName, aDesc) : nullptr);
 
                 if (pDlg)
                 {

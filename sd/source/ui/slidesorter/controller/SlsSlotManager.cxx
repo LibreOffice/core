@@ -881,8 +881,9 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialog creation failed!");
+        vcl::Window* pWin = mrSlideSorter.GetContentWindow();
         ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
-                mrSlideSorter.GetContentWindow(),
+                pWin ? pWin->GetFrameWeld() : nullptr,
                 aPageName, aDescr));
         DBG_ASSERT(aNameDlg, "Dialog creation failed!");
         aNameDlg->SetText( aTitle );

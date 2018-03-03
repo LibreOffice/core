@@ -25,25 +25,30 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/vclmedit.hxx>
+#include <vcl/weld.hxx>
 
 /// Dialog for editing a name
-class SvxNameDialog : public ModalDialog
+class SvxNameDialog
 {
 private:
-    VclPtr<FixedText>      pFtDescription;
-    VclPtr<Edit>           pEdtName;
-    VclPtr<OKButton>       pBtnOK;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Dialog> m_xDialog;
+    std::unique_ptr<weld::Entry> m_xEdtName;
+    std::unique_ptr<weld::Label> m_xFtDescription;
+    std::unique_ptr<weld::Button> m_xBtnOK;
 
-    Link<SvxNameDialog&,bool> aCheckNameHdl;
+    Link<SvxNameDialog&,bool> m_aCheckNameHdl;
 
-    DECL_LINK(ModifyHdl, Edit&, void);
+    DECL_LINK(ModifyHdl, weld::Entry&, void);
 
 public:
-    SvxNameDialog( vcl::Window* pWindow, const OUString& rName, const OUString& rDesc );
-    virtual ~SvxNameDialog() override;
-    virtual void dispose() override;
+    SvxNameDialog(weld::Window* pWindow, const OUString& rName, const OUString& rDesc);
 
-    void    GetName( OUString& rName ){rName = pEdtName->GetText();}
+    void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
+    void set_help_id(const OString& rHelpId) { m_xDialog->set_help_id(rHelpId); }
+    OUString GetName() const { return m_xEdtName->get_text(); }
+
+    short run() { return m_xDialog->run(); }
 
     /** add a callback Link that is called whenever the content of the edit
         field is changed.  The Link result determines whether the OK
@@ -60,14 +65,14 @@ public:
         @todo Remove the parameter bCheckImmediately and incorporate the 'true'
               behaviour as default.
      */
-    void    SetCheckNameHdl( const Link<SvxNameDialog&,bool>& rLink, bool bCheckImmediately )
+    void SetCheckNameHdl(const Link<SvxNameDialog&,bool>& rLink, bool bCheckImmediately)
     {
-        aCheckNameHdl = rLink;
-        if ( bCheckImmediately )
-            pBtnOK->Enable( rLink.Call( *this ) );
+        m_aCheckNameHdl = rLink;
+        if (bCheckImmediately)
+            m_xBtnOK->set_sensitive(rLink.Call(*this));
     }
 
-    void    SetEditHelpId( const OString& aHelpId) {pEdtName->SetHelpId(aHelpId);}
+    void SetEditHelpId(const OString& aHelpId) { m_xEdtName->set_help_id(aHelpId);}
 };
 
 /** #i68101#

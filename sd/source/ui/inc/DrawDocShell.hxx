@@ -148,7 +148,7 @@ public:
                 a default name of a not-yet-existing slide (e.g. 'Slide 17'),
                 sal_True is returned, but rName is set to an empty string.
      */
-    bool                    CheckPageName(vcl::Window* pWin, OUString& rName );
+    bool                    CheckPageName(weld::Window* pWin, OUString& rName );
 
     void                    SetSlotFilter(bool bEnable = false, o3tl::array_view<sal_uInt16 const> pSIDs = o3tl::array_view<sal_uInt16 const>()) { mbFilterEnable = bEnable; mpFilterSIDs = pSIDs; }
     void                    ApplySlotFilter() const;

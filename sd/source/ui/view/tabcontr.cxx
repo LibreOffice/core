@@ -319,7 +319,7 @@ TabBarAllowRenamingReturnCode TabControl::AllowRenaming()
     if( aCompareName != aNewName )
     {
         // rename page
-        if( pDrViewSh->GetDocSh()->CheckPageName( this, aNewName ) )
+        if (pDrViewSh->GetDocSh()->CheckPageName(GetFrameWeld(), aNewName))
         {
             SetEditText( aNewName );
             EndRenaming();
