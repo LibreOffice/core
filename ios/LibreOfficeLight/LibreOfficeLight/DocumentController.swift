@@ -66,7 +66,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
         super.viewDidAppear(animated)
 
         // Always load the 'welcome' file, as per the android app
-        let res = Bundle.main.url(forResource: "example", withExtension: "odt")
+        let res = Bundle.main.url(forResource: "welcome", withExtension: "odt")
 
         // uncomment for test data in resources until the doc picker works properly
         //let res = Bundle.main.url(forResource: "testdata/2", withExtension: "xlsx")
