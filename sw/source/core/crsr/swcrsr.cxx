@@ -2151,7 +2151,7 @@ lcl_SeekEntry(const SwSelBoxes& rTmp, SwStartNode const*const pSrch,
     return false;
 }
 
-SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCursor )
+SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pCurrentCursor )
 {
     if (m_bChanged)
     {
@@ -2172,9 +2172,9 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCursor )
         SwSelBoxes aTmp(m_SelectedBoxes);
 
         // compare old and new ones
-        SwNodes& rNds = pAktCursor->GetDoc()->GetNodes();
+        SwNodes& rNds = pCurrentCursor->GetDoc()->GetNodes();
         const SwStartNode* pSttNd;
-        SwPaM* pCur = pAktCursor;
+        SwPaM* pCur = pCurrentCursor;
         do {
             size_t nPos;
             bool bDel = false;
@@ -2214,12 +2214,12 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCursor )
             {
                 SwPaM* pDel = pCur->GetPrev();
 
-                if( pDel == pAktCursor )
-                    pAktCursor->DeleteMark();
+                if( pDel == pCurrentCursor )
+                    pCurrentCursor->DeleteMark();
                 else
                     delete pDel;
             }
-        } while ( pAktCursor != pCur );
+        } while ( pCurrentCursor != pCur );
 
         for (size_t nPos = 0; nPos < aTmp.size(); ++nPos)
         {
@@ -2232,9 +2232,9 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCursor )
             if( !pNd->IsContentNode() )
                 pNd = rNds.GoNextSection( &aIdx, true, false );
 
-            SwPaM *const pNew = (!pAktCursor->IsMultiSelection() && !pAktCursor->HasMark())
-                ? pAktCursor
-                : pAktCursor->Create( pAktCursor );
+            SwPaM *const pNew = (!pCurrentCursor->IsMultiSelection() && !pCurrentCursor->HasMark())
+                ? pCurrentCursor
+                : pCurrentCursor->Create( pCurrentCursor );
             pNew->GetPoint()->nNode = *pNd;
             pNew->GetPoint()->nContent.Assign( static_cast<SwContentNode*>(pNd), 0 );
             pNew->SetMark();
@@ -2247,7 +2247,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCursor )
             pPos->nContent.Assign(static_cast<SwContentNode*>(pNd), pNd ? static_cast<SwContentNode*>(pNd)->Len() : 0);
         }
     }
-    return pAktCursor;
+    return pCurrentCursor;
 }
 
 void SwTableCursor::InsertBox( const SwTableBox& rTableBox )
