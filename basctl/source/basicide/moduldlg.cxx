@@ -802,8 +802,8 @@ void ObjectPage::NewModule()
 
     if ( GetSelection( aDocument, aLibName ) )
     {
-        createModImpl( static_cast<vcl::Window*>( this ), aDocument,
-                    *m_pBasicBox, aLibName, OUString(), true );
+        createModImpl(GetFrameWeld(), aDocument,
+                      *m_pBasicBox, aLibName, OUString(), true);
     }
 }
 
@@ -816,12 +816,12 @@ void ObjectPage::NewDialog()
     {
         aDocument.getOrCreateLibrary( E_DIALOGS, aLibName );
 
-        ScopedVclPtrInstance< NewObjectDialog > aNewDlg(this, ObjectMode::Dialog, true);
-        aNewDlg->SetObjectName( aDocument.createObjectName( E_DIALOGS, aLibName ) );
+        NewObjectDialog aNewDlg(GetFrameWeld(), ObjectMode::Dialog, true);
+        aNewDlg.SetObjectName(aDocument.createObjectName(E_DIALOGS, aLibName));
 
-        if (aNewDlg->Execute() != 0)
+        if (aNewDlg.run() != RET_CANCEL)
         {
-            OUString aDlgName = aNewDlg->GetObjectName();
+            OUString aDlgName = aNewDlg.GetObjectName();
             if (aDlgName.isEmpty())
                 aDlgName = aDocument.createObjectName( E_DIALOGS, aLibName);
 
@@ -959,7 +959,7 @@ void LibDialog::SetStorageName( const OUString& rName )
 }
 
 // Helper function
-SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
+SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
     TreeListBox& rBasicBox, const OUString& rLibName, const OUString& _aModName, bool bMain )
 {
     OSL_ENSURE( rDocument.isAlive(), "createModImpl: invalid document!" );
@@ -976,13 +976,13 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
     if ( aModName.isEmpty() )
         aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
 
-    ScopedVclPtrInstance< NewObjectDialog > aNewDlg(pWin, ObjectMode::Module, true);
-    aNewDlg->SetObjectName( aModName );
+    NewObjectDialog aNewDlg(pWin, ObjectMode::Module, true);
+    aNewDlg.SetObjectName(aModName);
 
-    if (aNewDlg->Execute() != 0)
+    if (aNewDlg.run() != RET_CANCEL)
     {
-        if (!aNewDlg->GetObjectName().isEmpty() )
-            aModName = aNewDlg->GetObjectName();
+        if (!aNewDlg.GetObjectName().isEmpty())
+            aModName = aNewDlg.GetObjectName();
 
         try
         {
@@ -1043,7 +1043,7 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
         }
         catch (const container::ElementExistException& )
         {
-            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(pWin,
                                                         VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_SBXNAMEALLREADYUSED2)));
             xError->run();
         }
