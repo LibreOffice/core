@@ -568,11 +568,11 @@ protected:
     PptSlidePersistList*    m_pMasterPages;
     PptSlidePersistList*    m_pSlidePages;
     PptSlidePersistList*    m_pNotePages;
-    sal_uInt16              nAktPageNum;
+    sal_uInt16              nCurrentPageNum;
     sal_uLong               nDocStreamPos;
     sal_uInt16              nPageColorsNum;
     PptPageKind             ePageColorsKind;
-    PptPageKind             eAktPageKind;
+    PptPageKind             eCurrentPageKind;
 
 protected:
     using SdrEscherImport::ReadObjText;

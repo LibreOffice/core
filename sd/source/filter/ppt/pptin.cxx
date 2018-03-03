@@ -581,11 +581,11 @@ bool ImplSdPPTImport::Import()
             SdPage* pPage = static_cast<SdPage*>(MakeBlancPage( true ));
             if ( pPage )
             {
-                bool bNotesMaster = (*GetPageList( eAktPageKind ) )[ nAktPageNum ].bNotesMaster;
-                bool bStarDrawFiller = (*GetPageList( eAktPageKind ) )[ nAktPageNum ].bStarDrawFiller;
+                bool bNotesMaster = (*GetPageList( eCurrentPageKind ) )[ nCurrentPageNum ].bNotesMaster;
+                bool bStarDrawFiller = (*GetPageList( eCurrentPageKind ) )[ nCurrentPageNum ].bStarDrawFiller;
 
                 PageKind ePgKind = bNotesMaster ? PageKind::Notes : PageKind::Standard;
-                bool bHandout = (*GetPageList( eAktPageKind ) )[ nAktPageNum ].bHandoutMaster;
+                bool bHandout = (*GetPageList( eCurrentPageKind ) )[ nCurrentPageNum ].bHandoutMaster;
                 if ( bHandout )
                     ePgKind = PageKind::Handout;
 
@@ -731,19 +731,19 @@ bool ImplSdPPTImport::Import()
         SetPageNum( i, PPT_MASTERPAGE );
 
         // importing master page objects
-        PptSlidePersistList* pList = GetPageList( eAktPageKind );
-        PptSlidePersistEntry* pPersist = ( pList && ( nAktPageNum < pList->size() ) )
-                                                    ? &(*pList)[ nAktPageNum ] : nullptr;
+        PptSlidePersistList* pList = GetPageList( eCurrentPageKind );
+        PptSlidePersistEntry* pPersist = ( pList && ( nCurrentPageNum < pList->size() ) )
+                                                    ? &(*pList)[ nCurrentPageNum ] : nullptr;
         if ( pPersist )
         {
-            if ( pPersist->bStarDrawFiller && pPersist->bNotesMaster && ( nAktPageNum > 2 ) && ( ( nAktPageNum & 1 ) == 0 ) )
+            if ( pPersist->bStarDrawFiller && pPersist->bNotesMaster && ( nCurrentPageNum > 2 ) && ( ( nCurrentPageNum & 1 ) == 0 ) )
             {
-                pSdrModel->DeleteMasterPage( nAktPageNum );
+                pSdrModel->DeleteMasterPage( nCurrentPageNum );
                 SdrPage* pNotesClone = static_cast<SdPage*>(pSdrModel->GetMasterPage( 2 ))->Clone();
-                pSdrModel->InsertMasterPage( pNotesClone, nAktPageNum );
+                pSdrModel->InsertMasterPage( pNotesClone, nCurrentPageNum );
                 if ( pNotesClone )
                 {
-                    OUString aLayoutName( static_cast<SdPage*>(pSdrModel->GetMasterPage( nAktPageNum - 1 ))->GetLayoutName() );
+                    OUString aLayoutName( static_cast<SdPage*>(pSdrModel->GetMasterPage( nCurrentPageNum - 1 ))->GetLayoutName() );
                     static_cast<SdPage*>(pNotesClone)->SetPresentationLayout( aLayoutName, false, false );
                     static_cast<SdPage*>(pNotesClone)->SetLayoutName( aLayoutName );
                 }
@@ -770,7 +770,7 @@ bool ImplSdPPTImport::Import()
                     pMPage->NbcInsertObject( pObj );
 
                 bool bNewAnimationsUsed = false;
-                ProcessData aProcessData( (*pList)[ nAktPageNum ], SdPageCapsule(pMPage) );
+                ProcessData aProcessData( (*pList)[ nCurrentPageNum ], SdPageCapsule(pMPage) );
                 sal_uInt32 nFPosMerk = rStCtrl.Tell();
                 DffRecordHeader aPageHd;
                 if ( SeekToAktPage( &aPageHd ) )
@@ -904,8 +904,8 @@ bool ImplSdPPTImport::Import()
     // importing slide pages
     {
         sal_uInt32          nFPosMerk = rStCtrl.Tell();
-        PptPageKind     ePageKind = eAktPageKind;
-        sal_uInt16          nPageNum = nAktPageNum;
+        PptPageKind     ePageKind = eCurrentPageKind;
+        sal_uInt16          nPageNum = nCurrentPageNum;
 
         SdPage* pHandoutPage = static_cast<SdPage*>(MakeBlancPage( false ));
         pHandoutPage->SetPageKind( PageKind::Handout );
@@ -922,7 +922,7 @@ bool ImplSdPPTImport::Import()
                 PptSlidePersistEntry* pMasterPersist = nullptr;
                 if ( HasMasterPage( nPage ) )     // try to get the LayoutName from the masterpage
                 {
-                    sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
+                    sal_uInt16 nMasterNum = GetMasterPageIndex( nCurrentPageNum, eCurrentPageKind );
                     pPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nMasterNum));
                     PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
                     if ( pPageList && nMasterNum < pPageList->size() )
@@ -994,7 +994,7 @@ bool ImplSdPPTImport::Import()
                 }
 
                 // creating the corresponding note page
-                eAktPageKind = PPT_NOTEPAGE;
+                eCurrentPageKind = PPT_NOTEPAGE;
                 SdPage* pNotesPage = static_cast<SdPage*>(MakeBlancPage( false ));
                 sal_uInt16 nNotesMasterNum = GetMasterPageIndex( nPage ) + 1;
                 sal_uInt32 nNotesPageId = GetNotesPageId( nPage );
@@ -1039,7 +1039,7 @@ bool ImplSdPPTImport::Import()
         else
         {
             // that can happen by document templates
-            eAktPageKind = PPT_SLIDEPAGE;
+            eCurrentPageKind = PPT_SLIDEPAGE;
             SdrPage* pPage = MakeBlancPage( false );
             pSdrModel->InsertPage( pPage );
 
@@ -1067,7 +1067,7 @@ bool ImplSdPPTImport::Import()
             }
             static_cast<SdPage*>(pPage)->SetAutoLayout( AUTOLAYOUT_TITLE, true, true );
 
-            eAktPageKind = PPT_NOTEPAGE;
+            eCurrentPageKind = PPT_NOTEPAGE;
             SdrPage* pNPage = MakeBlancPage( false );
             pSdrModel->InsertPage( pNPage );
         }
@@ -1416,17 +1416,17 @@ bool ImplSdPPTImport::Import()
 void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlidePersistEntry* pMasterPersist )
 {
     sal_uInt32 i;
-    PptSlidePersistList* pList = GetPageList( eAktPageKind );
-    if ( ( !pList ) || ( pList->size() <= nAktPageNum ) )
+    PptSlidePersistList* pList = GetPageList( eCurrentPageKind );
+    if ( ( !pList ) || ( pList->size() <= nCurrentPageNum ) )
         return;
-    PptSlidePersistEntry& rSlidePersist = (*pList)[ nAktPageNum ];
+    PptSlidePersistEntry& rSlidePersist = (*pList)[ nCurrentPageNum ];
     HeaderFooterEntry* pHFE = rSlidePersist.xHeaderFooterEntry.get();
     if (pHFE)
     {
         for ( i = 0; i < 4; i++ )
         {
             bool bVisible = pHFE->IsToDisplay( i );
-            if ( ( eAktPageKind == PPT_SLIDEPAGE )
+            if ( ( eCurrentPageKind == PPT_SLIDEPAGE )
                 && ( rSlidePersist.aSlideAtom.aLayout.eLayout == PptSlideLayout::TITLESLIDE )
                     && ( aDocAtom.bTitlePlaceholdersOmitted  ) )
             {
@@ -1512,11 +1512,11 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
     // set PageKind at page (up to now only PageKind::Standard or PageKind::Notes)
     if ( pPage->GetPageKind() == PageKind::Standard )
     {
-        PptSlidePersistList* pPersistList = GetPageList( eAktPageKind );
-        PptSlidePersistEntry* pActualSlidePersist = ( pPersistList && ( nAktPageNum < pPersistList->size() ) )
-                                                        ? &(*pPersistList)[ nAktPageNum ] : nullptr;
+        PptSlidePersistList* pPersistList = GetPageList( eCurrentPageKind );
+        PptSlidePersistEntry* pActualSlidePersist = ( pPersistList && ( nCurrentPageNum < pPersistList->size() ) )
+                                                        ? &(*pPersistList)[ nCurrentPageNum ] : nullptr;
 
-        if ( pActualSlidePersist && ( eAktPageKind == PPT_SLIDEPAGE ) )
+        if ( pActualSlidePersist && ( eCurrentPageKind == PPT_SLIDEPAGE ) )
         {
             if ( ! ( pActualSlidePersist->aSlideAtom.nFlags & 1 ) ) // do not follow master objects ?
             {
@@ -1533,7 +1533,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
         {
             sal_uLong nPageRecEnd = SanitizeEndPos(rStCtrl, aPageRecHd.GetRecEndFilePos());
 
-            bool bTryTwice = ( eAktPageKind == PPT_SLIDEPAGE );
+            bool bTryTwice = ( eCurrentPageKind == PPT_SLIDEPAGE );
             bool bSSSlideInfoAtom = false;
             while ( true )
             {
@@ -1546,7 +1546,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
                         case PPT_PST_SSSlideInfoAtom:
                         {
                             bSSSlideInfoAtom = true;
-                            if ( eAktPageKind == PPT_MASTERPAGE )
+                            if ( eCurrentPageKind == PPT_MASTERPAGE )
                             {
                                 if ( pActualSlidePersist )
                                     pActualSlidePersist->aPersistAtom.nReserved = aHd.GetRecBegFilePos();
@@ -1816,9 +1816,9 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
                 if ( bTryTwice && !bSSSlideInfoAtom )
                 {
                     bTryTwice = false;
-                    if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
+                    if ( HasMasterPage( nCurrentPageNum, eCurrentPageKind ) )
                     {
-                        sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
+                        sal_uInt16 nMasterNum = GetMasterPageIndex( nCurrentPageNum, eCurrentPageKind );
                         PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
                         if ( pPageList && ( nMasterNum < pPageList->size() ) )
                         {
@@ -2301,7 +2301,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
 
     if ( pPlaceHolder && pPlaceHolder->nPlaceholderId != PptPlaceholder::NONE )
     {
-        if ( eAktPageKind == PPT_MASTERPAGE )
+        if ( eCurrentPageKind == PPT_MASTERPAGE )
         {
             bool bCreatePlaceHolder = ( pTextObj->GetInstance() != TSS_Type::Unused );
             bool bIsHeaderFooter = ( ePresKind == PRESOBJ_HEADER) || (ePresKind == PRESOBJ_FOOTER)
@@ -2358,7 +2358,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         else
         {
             const PptSlideLayoutAtom* pSlideLayout = GetSlideLayoutAtom();
-            if ( pSlideLayout || ( eAktPageKind == PPT_NOTEPAGE ) )
+            if ( pSlideLayout || ( eCurrentPageKind == PPT_NOTEPAGE ) )
             {
                 sal_uInt32 nPlacementId = pPlaceHolder->nPlacementId;
                 PptPlaceholder nPlaceholderId = pPlaceHolder->nPlaceholderId;
@@ -2448,7 +2448,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                         }
                         pPresObj->SetMergedItemSet(aSet);
 
-                        if ((eAktPageKind != PPT_NOTEPAGE) && (nPlacementId != 0xffffffff) && pPage->TRG_HasMasterPage())
+                        if ((eCurrentPageKind != PPT_NOTEPAGE) && (nPlacementId != 0xffffffff) && pPage->TRG_HasMasterPage())
                         {
                             SdrObject* pTitleObj = static_cast<SdPage&>(pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_TITLE );
                             SdrObject* pOutlineObj = static_cast<SdPage&>(pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_OUTLINE );
