@@ -92,7 +92,7 @@ namespace accessibility
         // OCommonAccessibleText
         virtual OUString                        implGetText() override;
         virtual css::lang::Locale               implGetLocale() override;
-        virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override;
+        virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override final;
 
     public:
         /** Ctor()
