@@ -220,7 +220,7 @@ void SdrItemBrowserControl::dispose()
 {
     pEditControl.disposeAndClear();
 
-    delete pAktChangeEntry;
+    delete pCurrentChangeEntry;
 
     Clear();
     BrowseBox::dispose();
@@ -229,7 +229,7 @@ void SdrItemBrowserControl::dispose()
 void SdrItemBrowserControl::ImpCtor()
 {
     pEditControl = nullptr;
-    pAktChangeEntry = nullptr;
+    pCurrentChangeEntry = nullptr;
     nLastWhichOfs = 0;
     nLastWhich = 0;
     bWhichesButNames = false;
@@ -284,7 +284,7 @@ long SdrItemBrowserControl::GetRowCount() const
 
 bool SdrItemBrowserControl::SeekRow(long nRow)
 {
-    nAktPaintRow = nRow;
+    nCurrentPaintRow = nRow;
     return true;
 }
 
@@ -329,12 +329,12 @@ OUString SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) cons
 
 void SdrItemBrowserControl::PaintField(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId) const
 {
-    if (nAktPaintRow<0 || static_cast<std::size_t>(nAktPaintRow)>=aList.size()) {
+    if (nCurrentPaintRow<0 || static_cast<std::size_t>(nCurrentPaintRow)>=aList.size()) {
         return;
     }
     tools::Rectangle aR(rRect);
     aR.AdjustBottom( 1 );
-    auto& pEntry=aList[nAktPaintRow];
+    auto& pEntry=aList[nCurrentPaintRow];
     if (pEntry->bComment)
     {
         if (nColumnId==ITEMBROWSER_NAMECOL_ID)
@@ -348,7 +348,7 @@ void SdrItemBrowserControl::PaintField(OutputDevice& rDev, const tools::Rectangl
         }
     } else {
         rDev.SetClipRegion(vcl::Region(aR));
-        rDev.DrawText(aR.TopLeft(),GetCellText(nAktPaintRow,nColumnId));
+        rDev.DrawText(aR.TopLeft(),GetCellText(nCurrentPaintRow,nColumnId));
         rDev.SetClipRegion();
     }
 }
@@ -501,7 +501,7 @@ bool SdrItemBrowserControl::BeginChangeEntry(std::size_t nPos)
         }
         aNeuNam += " - Type 'del' to reset to default.";
         pParent->SetText(aNeuNam);
-        pAktChangeEntry=new ImpItemListRow(*pEntry);
+        pCurrentChangeEntry=new ImpItemListRow(*pEntry);
         bRet = true;
     }
     return bRet;
@@ -520,8 +520,8 @@ void SdrItemBrowserControl::BreakChangeEntry()
 {
     if (pEditControl!=nullptr) {
         pEditControl.disposeAndClear();
-        delete pAktChangeEntry;
-        pAktChangeEntry=nullptr;
+        delete pCurrentChangeEntry;
+        pCurrentChangeEntry=nullptr;
         vcl::Window* pParent=GetParent();
         pParent->SetText(aWNamMerk);
         SetMode(MYBROWSEMODE);
@@ -1110,7 +1110,7 @@ IMPL_LINK_NOARG(SdrItemBrowser, IdleHdl, Timer *, void)
 
 IMPL_LINK(SdrItemBrowser, ChangedHdl, SdrItemBrowserControl&, rBrowse, void)
 {
-    const ImpItemListRow* pEntry = rBrowse.GetAktChangeEntry();
+    const ImpItemListRow* pEntry = rBrowse.GetCurrentChangeEntry();
     if (pEntry!=nullptr)
     {
         SfxItemSet aSet(pView->GetModel()->GetItemPool());
