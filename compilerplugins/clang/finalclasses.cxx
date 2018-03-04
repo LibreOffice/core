@@ -21,7 +21,7 @@ These can be made private.
 
 The process goes something like this:
   $ make check
-  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='FinalClasses' check
+  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='finalclasses' check
   $ ./compilerplugins/clang/finalclasses.py
 
 */
