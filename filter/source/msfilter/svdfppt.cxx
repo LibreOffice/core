@@ -715,6 +715,25 @@ sal_uLong DffPropSet::SanitizeEndPos(SvStream &rIn, sal_uLong nEndRecPos)
     return nEndRecPos;
 }
 
+void SdrEscherImport::FreeObj(void* pData, SdrObject* pObj)
+{
+    ProcessData& rData = *static_cast<ProcessData*>(pData);
+    PptSlidePersistEntry& rPersistEntry = rData.rPersistEntry;
+    if (rPersistEntry.xSolverContainer)
+    {
+        for (auto & pPtr : rPersistEntry.xSolverContainer->aCList)
+        {
+            if (pPtr->pAObj == pObj)
+                pPtr->pAObj = nullptr;
+            if (pPtr->pBObj == pObj)
+                pPtr->pBObj = nullptr;
+            if (pPtr->pCObj == pObj)
+                pPtr->pCObj = nullptr;
+        }
+    }
+    SvxMSDffManager::FreeObj(pData, pObj);
+}
+
 /* ProcessObject is called from ImplSdPPTImport::ProcessObj to handle all application specific things,
    such as the import of text, animation effects, header footer and placeholder.
 

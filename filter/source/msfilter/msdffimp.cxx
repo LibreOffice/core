@@ -4116,7 +4116,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                                 insertShapeId(nShapeId, pTmp);
                         }
                         else
-                            SdrObject::Free(pTmp);
+                            FreeObj(pClientData, pTmp);
                     }
                 }
                 else if ( aRecHd2.nRecType == DFF_msofbtSpContainer )
@@ -4135,7 +4135,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                                 insertShapeId(nShapeId, pTmp);
                         }
                         else
-                            SdrObject::Free(pTmp);
+                            FreeObj(pClientData, pTmp);
                     }
                 }
                 if (!aRecHd2.SeekToEndOfRecord(rSt))
@@ -5033,6 +5033,11 @@ void SvxMSDffManager::GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt
         if (!aShapeHd.SeekToEndOfRecord(rSt))
             break;
     }
+}
+
+void SvxMSDffManager::FreeObj(void* /*pData*/, SdrObject* pObj)
+{
+    SdrObject::Free(pObj);
 }
 
 SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,

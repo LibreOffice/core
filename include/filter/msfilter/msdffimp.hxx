@@ -498,6 +498,8 @@ protected:
                                    void* pData,
                                    tools::Rectangle& rTextRect,
                                    SdrObject* pObj);
+    virtual void FreeObj(void* pData, SdrObject* pObj);
+
 
     /** Object finalization, used by the Excel filter to correctly
         compute the object anchoring after nested objects have been imported.
