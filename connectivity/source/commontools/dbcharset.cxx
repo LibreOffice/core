@@ -69,6 +69,8 @@ namespace dbtools
         bool bIsMimeEncoding = 0 != ( _rInfo.Flags & RTL_TEXTENCODING_INFO_MIME );
         OSL_ENSURE( !bIsMimeEncoding || rtl_getMimeCharsetFromTextEncoding( _eEncoding ),
                 "OCharsetMap::OCharsetMap: inconsistence in rtl!" );
+        if (!bIsMimeEncoding)
+            bIsMimeEncoding = rtl_getBestMimeCharsetFromTextEncoding(_eEncoding);
         return bIsMimeEncoding;
     }
 
