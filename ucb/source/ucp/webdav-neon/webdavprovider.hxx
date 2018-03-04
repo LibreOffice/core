@@ -48,7 +48,7 @@ namespace webdav_ucp {
 // contents for. The UCB will select the provider ( i.e. in order to create
 // contents ) according to this scheme.
 #define VNDSUNSTARWEBDAV_URL_SCHEME  "vnd.sun.star.webdav"
-#define VNDSUNSTARWEBDAVS_URL_SCHEME "vnd.sun.star.webdavs"
+#define VNDSUNSTARWEBDAVS_URL_SCHEME u"vnd.sun.star.webdavs"
 #define HTTP_URL_SCHEME              "http"
 #define HTTPS_URL_SCHEME             "https"
 #define DAV_URL_SCHEME               u"dav"

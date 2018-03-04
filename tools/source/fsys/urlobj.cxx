@@ -332,9 +332,6 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
             "vnd.sun.star.webdav", "vnd.sun.star.webdav://", true, false,
             false, false, true, true, true, true},
         SchemeInfo{
-            "vnd.sun.star.webdavs", "vnd.sun.star.webdavs://", true, false,
-            false, false, true, true, true, true},
-        SchemeInfo{
             "webdav", "webdav://", true, false, false, false, true, true,
             true, true},
         SchemeInfo{
@@ -2184,8 +2181,6 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.webdav:", nullptr, INetProtocol::VndSunStarWebdav,
               PrefixInfo::OFFICIAL },
-            { "vnd.sun.star.webdavs:", nullptr, INetProtocol::VndSunStarWebdavs,
-              PrefixInfo::OFFICIAL },
             { "webdav:", nullptr, INetProtocol::Webdav,
               PrefixInfo::OFFICIAL },
             { "webdavs:", nullptr, INetProtocol::Webdavs,
@@ -2939,7 +2934,6 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
 
         case INetProtocol::Http:
         case INetProtocol::VndSunStarWebdav:
-        case INetProtocol::VndSunStarWebdavs:
         case INetProtocol::Webdav:
         case INetProtocol::Webdavs:
         case INetProtocol::Https:
@@ -3905,7 +3899,7 @@ bool INetURLObject::isAnyKnownWebDAVScheme() const {
     return ( isSchemeEqualTo( INetProtocol::Http ) ||
              isSchemeEqualTo( INetProtocol::Https ) ||
              isSchemeEqualTo( INetProtocol::VndSunStarWebdav ) ||
-             isSchemeEqualTo( INetProtocol::VndSunStarWebdavs ) ||
+             isSchemeEqualTo( u"vnd.sun.star.webdavs" ) ||
              isSchemeEqualTo( INetProtocol::Webdav ) ||
              isSchemeEqualTo( INetProtocol::Webdavs ));
 }
