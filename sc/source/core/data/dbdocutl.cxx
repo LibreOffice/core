@@ -124,14 +124,17 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                                         css::util::NumberFormat::DATETIME, ScGlobal::eLnge );
 
                     util::DateTime aStamp = xRow->getTimestamp(nRowPos);
-                    nVal = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) -
-                                                pFormTable->GetNullDate() ) +
-                           aStamp.Hours       / static_cast<double>(::tools::Time::hourPerDay)   +
-                           aStamp.Minutes     / static_cast<double>(::tools::Time::minutePerDay) +
-                           aStamp.Seconds     / static_cast<double>(::tools::Time::secondPerDay) +
-                           aStamp.NanoSeconds / static_cast<double>(::tools::Time::nanoSecPerDay);
-                    bEmptyFlag = xRow->wasNull();
-                    bValue = true;
+                    if (aStamp.Year != 0)
+                    {
+                        nVal = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) -
+                                                    pFormTable->GetNullDate() ) +
+                               aStamp.Hours       / static_cast<double>(::tools::Time::hourPerDay)   +
+                               aStamp.Minutes     / static_cast<double>(::tools::Time::minutePerDay) +
+                               aStamp.Seconds     / static_cast<double>(::tools::Time::secondPerDay) +
+                               aStamp.NanoSeconds / static_cast<double>(::tools::Time::nanoSecPerDay);
+                        bEmptyFlag = xRow->wasNull();
+                        bValue = true;
+                    }
                 }
                 break;
 
