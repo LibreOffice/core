@@ -145,7 +145,7 @@ ContentProvider::queryContent(
         aURL.changeScheme( INetProtocol::Http );
         xCanonicId = new ::ucbhelper::ContentIdentifier( aURL.getExternalURL() );
     }
-    else if ( aURL.isSchemeEqualTo( INetProtocol::VndSunStarWebdavs ) ||
+    else if ( aURL.isSchemeEqualTo( VNDSUNSTARWEBDAVS_URL_SCHEME ) ||
         aURL.isSchemeEqualTo( DAVS_URL_SCHEME ) ||
         aURL.isSchemeEqualTo( INetProtocol::Webdavs ))
     {
