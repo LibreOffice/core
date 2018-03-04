@@ -178,6 +178,30 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113258, "tdf113258.docx")
                          getProperty<sal_Int32>(xShape->getStart(), "ParaTopMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf107035, "tdf107035.docx")
+{
+    // Select the second run containing the page number field
+    auto xPgNumRun = getRun(getParagraph(1), 2, "1");
+
+    // Check that the page number field colour is set to "automatic".
+    sal_Int32 nPgNumColour = getProperty<sal_Int32>(xPgNumRun, "CharColor");
+#if 0
+    // TODO Enable this once tdf#116179 is fixed
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_AUTO), nPgNumColour);
+
+#else
+    // Meanwhile just check that the page number field colour is different
+    // from the green text before it:
+
+    // Select the first run containing the green text
+    auto xTextRun = getRun(getParagraph(1), 1);
+
+    // Check that the page number field colour is different from the green text
+    CPPUNIT_ASSERT(getProperty<sal_Int32>(xTextRun, "CharColor") != nPgNumColour);
+#endif
+
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
