@@ -1285,17 +1285,16 @@ bool ScDocShell::ExecuteChangeProtectionDialog( bool bJustQueryIfProtected )
         OUString aText( ScResId( SCSTR_PASSWORD ) );
         OUString aPassword;
 
-        ScopedVclPtrInstance<SfxPasswordDialog> pDlg(
-            GetActiveDialogParent(), &aText );
-        pDlg->SetText( aTitle );
-        pDlg->SetMinLen( 1 );
-        pDlg->SetHelpId( GetStaticInterface()->GetSlot(SID_CHG_PROTECT)->GetCommand() );
-        pDlg->SetEditHelpId( HID_CHG_PROTECT );
+        vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
+        SfxPasswordDialog aDlg(pWin ? pWin->GetFrameWeld() : nullptr, &aText);
+        aDlg.set_title(aTitle);
+        aDlg.SetMinLen(1);
+        aDlg.set_help_id(GetStaticInterface()->GetSlot(SID_CHG_PROTECT)->GetCommand());
+        aDlg.SetEditHelpId( HID_CHG_PROTECT );
         if ( !bProtected )
-            pDlg->ShowExtras( SfxShowExtras::CONFIRM );
-        if ( pDlg->Execute() == RET_OK )
-            aPassword = pDlg->GetPassword();
-        pDlg.disposeAndClear();
+            aDlg.ShowExtras(SfxShowExtras::CONFIRM);
+        if (aDlg.run() == RET_OK)
+            aPassword = aDlg.GetPassword();
 
         if (!aPassword.isEmpty())
         {
@@ -1311,7 +1310,6 @@ bool ScDocShell::ExecuteChangeProtectionDialog( bool bJustQueryIfProtected )
                 }
                 else
                 {
-                    vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
                     std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                   VclMessageType::Info, VclButtonsType::Ok,
                                                                   ScResId(SCSTR_WRONGPASSWORD)));

@@ -1050,6 +1050,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                 }
 
+                vcl::Window* pWin = GetDialogParent();
                 ScDocProtection* pProtect = pDoc->GetDocProtection();
                 if (pProtect && pProtect->isProtected())
                 {
@@ -1060,14 +1061,14 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     {
                         OUString aText(ScResId(SCSTR_PASSWORD));
 
-                        VclPtrInstance< SfxPasswordDialog > pDlg(GetDialogParent(), &aText);
-                        pDlg->SetText( ScResId(SCSTR_UNPROTECTDOC) );
-                        pDlg->SetMinLen( 0 );
-                        pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_DOC)->GetCommand() );
-                        pDlg->SetEditHelpId( HID_PASSWD_DOC );
+                        SfxPasswordDialog aDlg(pWin ? pWin->GetFrameWeld() : nullptr, &aText);
+                        aDlg.set_title(ScResId(SCSTR_UNPROTECTDOC));
+                        aDlg.SetMinLen(0);
+                        aDlg.set_help_id(GetStaticInterface()->GetSlot(FID_PROTECT_DOC)->GetCommand());
+                        aDlg.SetEditHelpId(HID_PASSWD_DOC);
 
-                        if (pDlg->Execute() == RET_OK)
-                            aPassword = pDlg->GetPassword();
+                        if (aDlg.run() == RET_OK)
+                            aPassword = aDlg.GetPassword();
                         else
                             bCancel = true;
                     }
@@ -1082,17 +1083,17 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     OUString aText(ScResId(SCSTR_PASSWORDOPT));
 
-                    VclPtrInstance< SfxPasswordDialog > pDlg(GetDialogParent(), &aText);
-                    pDlg->SetText( ScResId(SCSTR_PROTECTDOC) );
-                    pDlg->SetMinLen( 0 );
-                    pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_DOC)->GetCommand() );
-                    pDlg->SetEditHelpId( HID_PASSWD_DOC );
-                    pDlg->ShowExtras( SfxShowExtras::CONFIRM );
-                    pDlg->SetConfirmHelpId( HID_PASSWD_DOC_CONFIRM );
+                    SfxPasswordDialog aDlg(pWin ? pWin->GetFrameWeld() : nullptr, &aText);
+                    aDlg.set_title(ScResId(SCSTR_PROTECTDOC));
+                    aDlg.SetMinLen( 0 );
+                    aDlg.set_help_id(GetStaticInterface()->GetSlot(FID_PROTECT_DOC)->GetCommand());
+                    aDlg.SetEditHelpId(HID_PASSWD_DOC);
+                    aDlg.ShowExtras(SfxShowExtras::CONFIRM);
+                    aDlg.SetConfirmHelpId(HID_PASSWD_DOC_CONFIRM);
 
-                    if (pDlg->Execute() == RET_OK)
+                    if (aDlg.run() == RET_OK)
                     {
-                        OUString aPassword = pDlg->GetPassword();
+                        OUString aPassword = aDlg.GetPassword();
                         Protect( TABLEID_DOC, aPassword );
                         rReq.AppendItem( SfxBoolItem( FID_PROTECT_DOC, true ) );
                         rReq.Done();
@@ -1129,15 +1130,16 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if (pProtect && pProtect->isProtectedWithPass())
                 {
                     OUString aText( ScResId(SCSTR_PASSWORDOPT) );
-                    VclPtrInstance< SfxPasswordDialog > pDlg(GetDialogParent(), &aText);
-                    pDlg->SetText( ScResId(SCSTR_UNPROTECTTAB) );
-                    pDlg->SetMinLen( 0 );
-                    pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_TABLE)->GetCommand() );
-                    pDlg->SetEditHelpId( HID_PASSWD_TABLE );
+                    vcl::Window* pWin = GetDialogParent();
+                    SfxPasswordDialog aDlg(pWin ? pWin->GetFrameWeld() : nullptr, &aText);
+                    aDlg.set_title(ScResId(SCSTR_UNPROTECTTAB));
+                    aDlg.SetMinLen(0);
+                    aDlg.set_help_id(GetStaticInterface()->GetSlot(FID_PROTECT_TABLE)->GetCommand());
+                    aDlg.SetEditHelpId(HID_PASSWD_TABLE);
 
-                    if (pDlg->Execute() == RET_OK)
+                    if (aDlg.run() == RET_OK)
                     {
-                        OUString aPassword = pDlg->GetPassword();
+                        OUString aPassword = aDlg.GetPassword();
                         Unprotect(nTab, aPassword);
                     }
                 }

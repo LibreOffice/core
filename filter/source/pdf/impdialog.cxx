@@ -1330,17 +1330,17 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
 
 IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, Button*, void)
 {
-    ScopedVclPtrInstance< SfxPasswordDialog > aPwdDialog( this, &msUserPwdTitle );
-    aPwdDialog->SetMinLen( 0 );
-    aPwdDialog->ShowMinLengthText(false);
-    aPwdDialog->ShowExtras( SfxShowExtras::CONFIRM | SfxShowExtras::PASSWORD2 | SfxShowExtras::CONFIRM2 );
-    aPwdDialog->SetText(msStrSetPwd);
-    aPwdDialog->SetGroup2Text(msOwnerPwdTitle);
-    aPwdDialog->AllowAsciiOnly();
-    if( aPwdDialog->Execute() == RET_OK )  // OK issued get password and set it
+    SfxPasswordDialog aPwdDialog(GetFrameWeld(), &msUserPwdTitle);
+    aPwdDialog.SetMinLen(0);
+    aPwdDialog.ShowMinLengthText(false);
+    aPwdDialog.ShowExtras( SfxShowExtras::CONFIRM | SfxShowExtras::PASSWORD2 | SfxShowExtras::CONFIRM2 );
+    aPwdDialog.set_title(msStrSetPwd);
+    aPwdDialog.SetGroup2Text(msOwnerPwdTitle);
+    aPwdDialog.AllowAsciiOnly();
+    if (aPwdDialog.run() == RET_OK)  // OK issued get password and set it
     {
-        OUString aUserPW( aPwdDialog->GetPassword() );
-        OUString aOwnerPW( aPwdDialog->GetPassword2() );
+        OUString aUserPW(aPwdDialog.GetPassword());
+        OUString aOwnerPW(aPwdDialog.GetPassword2());
 
         mbHaveUserPassword = !aUserPW.isEmpty();
         mbHaveOwnerPassword = !aOwnerPW.isEmpty();
