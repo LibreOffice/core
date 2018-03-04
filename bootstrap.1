@@ -136,6 +136,12 @@ if test -n "$DMAKE_URL" -a  ! -x "$SOLARENV/$INPATH/bin/dmake$EXEEXT"; then
         $GNUMAKE distclean || exit
     fi
 
+    # The config.guess for dmake is too old, overwrite it with ours:
+    cp $SOLARSRC/config.guess .
+
+    # We also need to patch dmake for Win64
+    patch -p0 < $SOLARSRC/solenv/src/dmake-cygwin64.patch
+
     ./configure $DMAKE_CONF || exit
         
     ## invoke the gnu make command set by configure.

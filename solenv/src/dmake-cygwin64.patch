@@ -1,0 +1,48 @@
+diff -Nur path.c path.c
+--- path.c	2011-09-25 18:53:42.000000000 +0200
++++ path.c	2018-03-04 08:13:24.836905800 +0200
+@@ -317,8 +317,8 @@
+ #if __CYGWIN__
+    /* Use cygwin function to convert a DOS path to a POSIX path. */
+    if( *path && path[1] == ':' && isalpha(*path) ) {
+-      int err = cygwin_conv_to_posix_path(path, cpath);
+-      if (err)
++      int err = cygwin_conv_path(CCP_WIN_A_TO_POSIX, path, cpath, PATH_MAX);
++      if (err < 0)
+ 	 Fatal( "error converting \"%s\" - %s\n",
+ 		path, strerror (errno));
+       if( path[2] != '/' && path[2] != '\\' )
+diff -Nur sysintf.c sysintf.c
+--- sysintf.c	2011-09-25 18:53:42.000000000 +0200
++++ sysintf.c	2018-03-04 08:15:54.315421400 +0200
+@@ -69,7 +69,7 @@
+ #   include <sys/timeb.h>
+ #endif
+ 
+-/* for cygwin_conv_to_posix_path() in Prolog() and for cygdospath()*/
++/* for cygwin_conv_path() in Prolog() and for cygdospath()*/
+ #if __CYGWIN__
+ #   include <sys/cygwin.h>
+ #endif
+@@ -538,8 +538,8 @@
+    if ( (CygDrvPre = MALLOC( PATH_MAX, char)) == NIL(char) )
+       No_ram();
+    else {
+-      int err = cygwin_conv_to_posix_path("c:", CygDrvPre);
+-      if (err)
++      int err = cygwin_conv_path(CCP_WIN_A_TO_POSIX, "c:", CygDrvPre, PATH_MAX);
++      if (err < 0)
+ 	 Fatal( "error converting \"%s\" - %s\n",
+ 		CygDrvPre, strerror (errno));
+       if( (CygDrvPreLen = strlen(CygDrvPre)) == 2 ) {
+@@ -1144,8 +1144,8 @@
+ 
+    if( *src && src[0] == '/' ) {
+       char *tmp;
+-      int err = cygwin_conv_to_win32_path(src, buf);
+-      if (err)
++      int err = cygwin_conv_path(CCP_WIN_A_TO_POSIX, src, buf, PATH_MAX);
++      if (err < 0)
+ 	 Fatal( "error converting \"%s\" - %s\n",
+ 		src, strerror (errno));
+ 
