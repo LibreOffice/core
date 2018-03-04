@@ -18,74 +18,64 @@
  */
 
 #include <unotools/securityoptions.hxx>
+#include <vcl/svapp.hxx>
 #include <dialmgr.hxx>
 #include "securityoptions.hxx"
 
 namespace
 {
-    bool enableAndSet( const SvtSecurityOptions& rOptions,
-                       SvtSecurityOptions::EOption eOption,
-                       CheckBox& rCheckBox, FixedImage& rFixedImage )
+    bool enableAndSet(const SvtSecurityOptions& rOptions,
+                      SvtSecurityOptions::EOption eOption,
+                      weld::CheckButton& rCheckBox, weld::Widget& rFixedImage)
     {
-        bool bEnable = rOptions.IsOptionEnabled( eOption );
-        rCheckBox.Enable( bEnable );
-        rFixedImage.Show( !bEnable );
-        rCheckBox.Check( rOptions.IsOptionSet( eOption ) );
+        bool bEnable = rOptions.IsOptionEnabled(eOption);
+        rCheckBox.set_sensitive(bEnable);
+        rFixedImage.show(!bEnable);
+        rCheckBox.set_active(rOptions.IsOptionSet(eOption));
         return bEnable;
     }
 }
 
-
 namespace svx
 {
 
-
-SecurityOptionsDialog::SecurityOptionsDialog(vcl::Window* pParent, SvtSecurityOptions const * pOptions)
-    : ModalDialog(pParent, "SecurityOptionsDialog", "cui/ui/securityoptionsdialog.ui")
+SecurityOptionsDialog::SecurityOptionsDialog(weld::Window* pParent, SvtSecurityOptions const * pOptions)
+    : m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/securityoptionsdialog.ui"))
+    , m_xDialog(m_xBuilder->weld_dialog("SecurityOptionsDialog"))
+    , m_xSaveOrSendDocsCB(m_xBuilder->weld_check_button("savesenddocs"))
+    , m_xSaveOrSendDocsImg(m_xBuilder->weld_widget("locksavesenddocs"))
+    , m_xSignDocsCB(m_xBuilder->weld_check_button("whensigning"))
+    , m_xSignDocsImg(m_xBuilder->weld_widget("lockwhensigning"))
+    , m_xPrintDocsCB(m_xBuilder->weld_check_button("whenprinting"))
+    , m_xPrintDocsImg(m_xBuilder->weld_widget("lockwhenprinting"))
+    , m_xCreatePdfCB(m_xBuilder->weld_check_button("whenpdf"))
+    , m_xCreatePdfImg(m_xBuilder->weld_widget("lockwhenpdf"))
+    , m_xRemovePersInfoCB(m_xBuilder->weld_check_button("removepersonal"))
+    , m_xRemovePersInfoImg(m_xBuilder->weld_widget("lockremovepersonal"))
+    , m_xRecommPasswdCB(m_xBuilder->weld_check_button("password"))
+    , m_xRecommPasswdImg(m_xBuilder->weld_widget("lockpassword"))
+    , m_xCtrlHyperlinkCB(m_xBuilder->weld_check_button("ctrlclick"))
+    , m_xCtrlHyperlinkImg(m_xBuilder->weld_widget("lockctrlclick"))
+    , m_xBlockUntrustedRefererLinksCB(m_xBuilder->weld_check_button("blockuntrusted"))
+    , m_xBlockUntrustedRefererLinksImg(m_xBuilder->weld_widget("lockblockuntrusted"))
 {
     DBG_ASSERT( pOptions, "SecurityOptionsDialog::SecurityOptionsDialog(): invalid SvtSecurityOptions" );
-    get(m_pSaveOrSendDocsCB, "savesenddocs");
-    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnSaveOrSend, *m_pSaveOrSendDocsCB,
-        *get<FixedImage>("locksavesenddocs"));
-    get(m_pSignDocsCB, "whensigning");
-    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnSigning, *m_pSignDocsCB,
-        *get<FixedImage>("lockwhensigning"));
-    get(m_pPrintDocsCB, "whenprinting");
-    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnPrint, *m_pPrintDocsCB,
-        *get<FixedImage>("lockwhenprinting"));
-    get(m_pCreatePdfCB, "whenpdf");
-    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnCreatePdf, *m_pCreatePdfCB,
-        *get<FixedImage>("lockwhenpdf"));
-    get(m_pRemovePersInfoCB, "removepersonal");
-    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo, *m_pRemovePersInfoCB,
-        *get<FixedImage>("lockremovepersonal"));
-    get(m_pRecommPasswdCB, "password");
-    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnRecommendPassword, *m_pRecommPasswdCB,
-        *get<FixedImage>("lockpassword"));
-    get(m_pCtrlHyperlinkCB, "ctrlclick");
-    enableAndSet(*pOptions, SvtSecurityOptions::EOption::CtrlClickHyperlink, *m_pCtrlHyperlinkCB,
-        *get<FixedImage>("lockctrlclick"));
-    get(m_pBlockUntrustedRefererLinksCB, "blockuntrusted");
-    enableAndSet(*pOptions, SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, *m_pBlockUntrustedRefererLinksCB,
-        *get<FixedImage>("lockblockuntrusted"));
-}
-
-SecurityOptionsDialog::~SecurityOptionsDialog()
-{
-    disposeOnce();
-}
-
-void SecurityOptionsDialog::dispose()
-{
-    m_pSaveOrSendDocsCB.clear();
-    m_pSignDocsCB.clear();
-    m_pPrintDocsCB.clear();
-    m_pCreatePdfCB.clear();
-    m_pRemovePersInfoCB.clear();
-    m_pRecommPasswdCB.clear();
-    m_pCtrlHyperlinkCB.clear();
-    m_pBlockUntrustedRefererLinksCB.clear();
-    ModalDialog::dispose();
+    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnSaveOrSend, *m_xSaveOrSendDocsCB,
+        *m_xSaveOrSendDocsImg);
+    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnSigning, *m_xSignDocsCB,
+        *m_xSignDocsImg);
+    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnPrint, *m_xPrintDocsCB,
+        *m_xPrintDocsImg);
+    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnCreatePdf, *m_xCreatePdfCB,
+        *m_xCreatePdfImg);
+    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo, *m_xRemovePersInfoCB,
+        *m_xRemovePersInfoImg);
+    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnRecommendPassword, *m_xRecommPasswdCB,
+        *m_xRecommPasswdImg);
+    enableAndSet(*pOptions, SvtSecurityOptions::EOption::CtrlClickHyperlink, *m_xCtrlHyperlinkCB,
+        *m_xCtrlHyperlinkImg);
+    enableAndSet(*pOptions, SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, *m_xBlockUntrustedRefererLinksCB,
+        *m_xBlockUntrustedRefererLinksImg);
 }
 
 }

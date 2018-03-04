@@ -559,7 +559,6 @@ IMPL_STATIC_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Control&, rControl, void )
 SvxSecurityTabPage::SvxSecurityTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptSecurityPage", "cui/ui/optsecuritypage.ui", &rSet)
     , mpSecOptions(new SvtSecurityOptions)
-    , mpSecOptDlg(nullptr)
     , mpCertPathDlg(nullptr)
 {
     get(m_pSecurityOptionsPB, "options");
@@ -611,7 +610,7 @@ void SvxSecurityTabPage::dispose()
     delete mpSecOptions;
     mpSecOptions = nullptr;
     mpCertPathDlg.disposeAndClear();
-    mpSecOptDlg.clear();
+    m_xSecOptDlg.reset();
     m_pSecurityOptionsPB.clear();
     m_pSavePasswordsCB.clear();
     m_pShowConnectionsPB.clear();
@@ -630,9 +629,9 @@ void SvxSecurityTabPage::dispose()
 
 IMPL_LINK_NOARG(SvxSecurityTabPage, SecurityOptionsHdl, Button*, void)
 {
-    if ( !mpSecOptDlg )
-        mpSecOptDlg = VclPtr<svx::SecurityOptionsDialog>::Create( this, mpSecOptions );
-    mpSecOptDlg->Execute();
+    if (!m_xSecOptDlg)
+        m_xSecOptDlg.reset(new svx::SecurityOptionsDialog(GetFrameWeld(), mpSecOptions));
+    m_xSecOptDlg->run();
 }
 
 IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl, Button*, void)
@@ -898,16 +897,16 @@ bool SvxSecurityTabPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false;
 
-    if ( mpSecOptDlg )
+    if (m_xSecOptDlg)
     {
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnSaveOrSend, mpSecOptDlg->IsSaveOrSendDocsChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnSigning, mpSecOptDlg->IsSignDocsChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnPrint, mpSecOptDlg->IsPrintDocsChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnCreatePdf, mpSecOptDlg->IsCreatePdfChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo, mpSecOptDlg->IsRemovePersInfoChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnRecommendPassword, mpSecOptDlg->IsRecommPasswdChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::CtrlClickHyperlink, mpSecOptDlg->IsCtrlHyperlinkChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, mpSecOptDlg->IsBlockUntrustedRefererLinksChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnSaveOrSend, m_xSecOptDlg->IsSaveOrSendDocsChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnSigning, m_xSecOptDlg->IsSignDocsChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnPrint, m_xSecOptDlg->IsPrintDocsChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnCreatePdf, m_xSecOptDlg->IsCreatePdfChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo, m_xSecOptDlg->IsRemovePersInfoChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnRecommendPassword, m_xSecOptDlg->IsRecommPasswdChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::CtrlClickHyperlink, m_xSecOptDlg->IsCtrlHyperlinkChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, m_xSecOptDlg->IsBlockUntrustedRefererLinksChecked(), bModified );
     }
 
     return bModified;
