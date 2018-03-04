@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_a2301209",
+        "filename": "cui/source/inc/treeopt.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-03-04T03:29:29Z",
+      "side": 1,
+      "message": "Looks like this could be a vector of reasons (for cases when several such options changed), and extended to other options as well (like UI language)?",
+      "range": {
+        "startLine": 144,
+        "startChar": 27,
+        "endLine": 144,
+        "endChar": 41
+      },
+      "revId": "b77ee3e1689399d67fe037995021b3a8d1e1cb30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
