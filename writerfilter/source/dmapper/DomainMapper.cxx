@@ -2834,15 +2834,19 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
                 {
                     double fontSize = 0;
                     font->second >>= fontSize;
-                    nEscapement = nIntValue * 100 / fontSize;
+                    if (fontSize != 0.0)
+                        nEscapement = nIntValue * 100 / fontSize;
                 }
                 // TODO if not direct formatting, check the style first, not directly the default char props.
                 else if (aDefaultFont)
                 {
                     double fHeight = 0;
                     aDefaultFont->second >>= fHeight;
-                    // fHeight is in points, nIntValue is in half points, nEscapement is in percents.
-                    nEscapement = nIntValue * 100 / fHeight / 2;
+                    if (fHeight != 0.0)
+                    {
+                        // fHeight is in points, nIntValue is in half points, nEscapement is in percents.
+                        nEscapement = nIntValue * 100 / fHeight / 2;
+                    }
                 }
                 else
                 { // TODO: Find out the font size. The 58/-58 values were here previous, but I have
