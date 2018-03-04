@@ -787,45 +787,78 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     checkParameterIndex(nParameterIndex);
 
-#if SAL_TYPES_SIZEOFPOINTER == 8
-    isc_blob_handle aBlobHandle = 0;
-#else
-    isc_blob_handle aBlobHandle = nullptr;
-#endif
-    ISC_QUAD aBlobId;
+    XSQLVAR* pVar = m_pInSqlda->sqlvar + (nParameterIndex - 1);
+    int dType = (pVar->sqltype & ~1); // drop flag bit for now
 
-    openBlobForWriting(aBlobHandle, aBlobId);
-
-    // Max segment size is 2^16 == SAL_MAX_UINT16
-    sal_uInt64 nDataWritten = 0;
-    ISC_STATUS aErr = 0;
-    while (xBytes.getLength() - nDataWritten > 0)
+    if( dType == SQL_BLOB )
     {
-        sal_uInt64 nDataRemaining = xBytes.getLength() - nDataWritten;
-        sal_uInt16 nWriteSize = std::min<sal_uInt64>(nDataRemaining, SAL_MAX_UINT16);
-        aErr = isc_put_segment(m_statusVector,
-                               &aBlobHandle,
-                               nWriteSize,
-                               reinterpret_cast<const char*>(xBytes.getConstArray()) + nDataWritten);
-        nDataWritten += nWriteSize;
+#if SAL_TYPES_SIZEOFPOINTER == 8
+        isc_blob_handle aBlobHandle = 0;
+#else
+        isc_blob_handle aBlobHandle = nullptr;
+#endif
+        ISC_QUAD aBlobId;
+
+        openBlobForWriting(aBlobHandle, aBlobId);
+
+        // Max segment size is 2^16 == SAL_MAX_UINT16
+        sal_uInt64 nDataWritten = 0;
+        ISC_STATUS aErr = 0;
+        while (xBytes.getLength() - nDataWritten > 0)
+        {
+            sal_uInt64 nDataRemaining = xBytes.getLength() - nDataWritten;
+            sal_uInt16 nWriteSize = std::min<sal_uInt64>(nDataRemaining, SAL_MAX_UINT16);
+            aErr = isc_put_segment(m_statusVector,
+                                   &aBlobHandle,
+                                   nWriteSize,
+                                   reinterpret_cast<const char*>(xBytes.getConstArray()) + nDataWritten);
+            nDataWritten += nWriteSize;
+
+            if (aErr)
+                break;
+        }
+
+        // We need to make sure we close the Blob even if their are errors, hence evaluate
+        // errors after closing.
+        closeBlobAfterWriting(aBlobHandle);
 
         if (aErr)
-            break;
+        {
+            evaluateStatusVector(m_statusVector,
+                                 "isc_put_segment failed",
+                                 *this);
+            assert(false);
+        }
+
+        setValue< ISC_QUAD >(nParameterIndex, aBlobId, SQL_BLOB);
     }
-
-    // We need to make sure we close the Blob even if their are errors, hence evaluate
-    // errors after closing.
-    closeBlobAfterWriting(aBlobHandle);
-
-    if (aErr)
+    else if( dType == SQL_VARYING )
     {
-        evaluateStatusVector(m_statusVector,
-                             "isc_put_segment failed",
-                             *this);
-        assert(false);
+            const sal_Int32 nMaxSize = 0xFFFF;
+            Sequence<sal_Int8> xBytesCopy(xBytes);
+            // First 2 bytes indicate string size
+            if (xBytesCopy.getLength() > nMaxSize)
+            {
+                xBytesCopy.realloc( nMaxSize );
+            }
+            const short nSize = xBytesCopy.getLength();
+            memcpy(pVar->sqldata, &nSize, 2);
+            // Actual data
+            memcpy(pVar->sqldata + 2, xBytesCopy.getConstArray(), nSize);
     }
-
-    setValue< ISC_QUAD >(nParameterIndex, aBlobId, SQL_BLOB);
+    else if( dType == SQL_TEXT )
+    {
+            memcpy(pVar->sqldata, xBytes.getConstArray(), xBytes.getLength() );
+            // Fill remainder with spaces
+            memset(pVar->sqldata + xBytes.getLength(), 0, pVar->sqllen - xBytes.getLength());
+    }
+    else
+    {
+        ::dbtools::throwSQLException(
+            "Incorrect type for setBytes",
+            ::dbtools::StandardSQLState::INVALID_SQL_DATA_TYPE,
+            *this);
+    }
 }
 
 
