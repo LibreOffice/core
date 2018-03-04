@@ -45,11 +45,11 @@ bool StarOfficeWriterImportFilter::doImportDocument(librevenge::RVNGInputStream 
         // try to ask for a password
         try
         {
-            ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(nullptr);
-            aPasswdDlg->SetMinLen(0);
-            if (!aPasswdDlg->Execute())
+            SfxPasswordDialog aPasswdDlg(nullptr);
+            aPasswdDlg.SetMinLen(0);
+            if (!aPasswdDlg.run())
                 return false;
-            OUString aPasswd = aPasswdDlg->GetPassword();
+            OUString aPasswd = aPasswdDlg.GetPassword();
             aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);
         }
         catch (...)

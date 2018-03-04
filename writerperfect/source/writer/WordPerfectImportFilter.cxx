@@ -112,11 +112,11 @@ bool WordPerfectImportFilter::importImpl(const Sequence< css::beans::PropertyVal
         int unsuccessfulAttempts = 0;
         while (true)
         {
-            ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(nullptr);
-            aPasswdDlg->SetMinLen(0);
-            if (!aPasswdDlg->Execute())
+            SfxPasswordDialog aPasswdDlg(nullptr);
+            aPasswdDlg.SetMinLen(0);
+            if (!aPasswdDlg.run())
                 return false;
-            OUString aPasswd = aPasswdDlg->GetPassword();
+            OUString aPasswd = aPasswdDlg.GetPassword();
             aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);
             if (libwpd::WPD_PASSWORD_MATCH_OK == libwpd::WPDocument::verifyPassword(&input, aUtf8Passwd.getStr()))
                 break;

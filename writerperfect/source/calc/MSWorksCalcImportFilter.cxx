@@ -241,11 +241,11 @@ bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream &rInp
         // try to ask for a password
         try
         {
-            ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(nullptr);
-            aPasswdDlg->SetMinLen(1);
-            if (!aPasswdDlg->Execute())
+            SfxPasswordDialog aPasswdDlg(nullptr);
+            aPasswdDlg.SetMinLen(1);
+            if (!aPasswdDlg.run())
                 return false;
-            OUString aPasswd = aPasswdDlg->GetPassword();
+            OUString aPasswd = aPasswdDlg.GetPassword();
             aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);
         }
         catch (...)

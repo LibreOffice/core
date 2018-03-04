@@ -407,11 +407,11 @@ bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
         if (!pRepr->GetTempPasswd().getLength()
             && pRepr->GetSectionData().GetPassword().getLength())
         {
-            ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(this);
+            SfxPasswordDialog aPasswdDlg(GetFrameWeld());
             bRet = false;
-            if (aPasswdDlg->Execute())
+            if (aPasswdDlg.run())
             {
-                const OUString sNewPasswd( aPasswdDlg->GetPassword() );
+                const OUString sNewPasswd(aPasswdDlg.GetPassword());
                 css::uno::Sequence <sal_Int8 > aNewPasswd;
                 SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
                 if (SvPasswordHelper::CompareHashPassword(
@@ -1260,12 +1260,12 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox, void )
         {
             if(!pRepr->GetTempPasswd().getLength() || bChange)
             {
-                ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(this);
-                aPasswdDlg->ShowExtras(SfxShowExtras::CONFIRM);
-                if(RET_OK == aPasswdDlg->Execute())
+                SfxPasswordDialog aPasswdDlg(GetFrameWeld());
+                aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
+                if (RET_OK == aPasswdDlg.run())
                 {
-                    const OUString sNewPasswd( aPasswdDlg->GetPassword() );
-                    if( aPasswdDlg->GetConfirm() == sNewPasswd )
+                    const OUString sNewPasswd(aPasswdDlg.GetPassword());
+                    if (aPasswdDlg.GetConfirm() == sNewPasswd)
                     {
                         SvPasswordHelper::GetHashPassword( pRepr->GetTempPasswd(), sNewPasswd );
                     }
@@ -1700,12 +1700,12 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton, void )
     {
         if(!m_aNewPasswd.getLength() || bChange)
         {
-            ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(this);
-            aPasswdDlg->ShowExtras(SfxShowExtras::CONFIRM);
-            if(RET_OK == aPasswdDlg->Execute())
+            SfxPasswordDialog aPasswdDlg(GetFrameWeld());
+            aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
+            if(RET_OK == aPasswdDlg.run())
             {
-                const OUString sNewPasswd( aPasswdDlg->GetPassword() );
-                if( aPasswdDlg->GetConfirm() == sNewPasswd )
+                const OUString sNewPasswd(aPasswdDlg.GetPassword());
+                if (aPasswdDlg.GetConfirm() == sNewPasswd)
                 {
                     SvPasswordHelper::GetHashPassword( m_aNewPasswd, sNewPasswd );
                 }

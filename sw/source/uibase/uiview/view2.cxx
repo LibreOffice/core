@@ -563,12 +563,12 @@ void SwView::Execute(SfxRequest &rReq)
                 {
                     OSL_ENSURE( !static_cast<const SfxBoolItem*>(pItem)->GetValue(), "SwView::Execute(): password set an redlining off doesn't match!" );
                     // xmlsec05:    new password dialog
-                    vcl::Window* pParent = &GetViewFrame()->GetWindow();
-                    ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg( pParent );
-                    aPasswdDlg->SetMinLen( 1 );
+                    weld::Window* pParent = GetViewFrame()->GetWindow().GetFrameWeld();
+                    SfxPasswordDialog aPasswdDlg(pParent);
+                    aPasswdDlg.SetMinLen(1);
                     //#i69751# the result of Execute() can be ignored
-                    (void)aPasswdDlg->Execute();
-                    OUString sNewPasswd( aPasswdDlg->GetPassword() );
+                    (void)aPasswdDlg.run();
+                    OUString sNewPasswd(aPasswdDlg.GetPassword());
                     Sequence <sal_Int8> aNewPasswd = rIDRA.GetRedlinePassword();
                     SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
                     if(SvPasswordHelper::CompareHashPassword(aPasswd, sNewPasswd))
@@ -604,15 +604,15 @@ void SwView::Execute(SfxRequest &rReq)
 
             // xmlsec05:    new password dialog
             //              message box for wrong password
-            vcl::Window* pParent = &GetViewFrame()->GetWindow();
-            ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg( pParent );
-            aPasswdDlg->SetMinLen( 1 );
-            if(!aPasswd.getLength())
-                aPasswdDlg->ShowExtras(SfxShowExtras::CONFIRM);
-            if (aPasswdDlg->Execute())
+            weld::Window* pParent = GetViewFrame()->GetWindow().GetFrameWeld();
+            SfxPasswordDialog aPasswdDlg(pParent);
+            aPasswdDlg.SetMinLen(1);
+            if (!aPasswd.getLength())
+                aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
+            if (aPasswdDlg.run())
             {
                 RedlineFlags nOn = RedlineFlags::On;
-                OUString sNewPasswd( aPasswdDlg->GetPassword() );
+                OUString sNewPasswd(aPasswdDlg.GetPassword());
                 Sequence <sal_Int8> aNewPasswd =
                         rIDRA.GetRedlinePassword();
                 SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );

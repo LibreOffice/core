@@ -21,12 +21,8 @@
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
 #include <sfx2/app.hxx>
+#include <vcl/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 // defines ---------------------------------------------------------------
@@ -47,26 +43,29 @@ namespace o3tl
 
 // class SfxPasswordDialog -----------------------------------------------
 
-class SFX2_DLLPUBLIC SfxPasswordDialog : public ModalDialog
+class SFX2_DLLPUBLIC SfxPasswordDialog
 {
 private:
-    VclPtr<VclFrame>       mpPassword1Box;
-    VclPtr<FixedText>      mpUserFT;
-    VclPtr<Edit>           mpUserED;
-    VclPtr<FixedText>      mpPassword1FT;
-    VclPtr<Edit>           mpPassword1ED;
-    VclPtr<FixedText>      mpConfirm1FT;
-    VclPtr<Edit>           mpConfirm1ED;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Dialog> m_xDialog;
 
-    VclPtr<VclFrame>       mpPassword2Box;
-    VclPtr<FixedText>      mpPassword2FT;
-    VclPtr<Edit>           mpPassword2ED;
-    VclPtr<FixedText>      mpConfirm2FT;
-    VclPtr<Edit>           mpConfirm2ED;
+    std::unique_ptr<weld::Frame> m_xPassword1Box;
+    std::unique_ptr<weld::Label> m_xUserFT;
+    std::unique_ptr<weld::Entry> m_xUserED;
+    std::unique_ptr<weld::Label> m_xPassword1FT;
+    std::unique_ptr<weld::Entry> m_xPassword1ED;
+    std::unique_ptr<weld::Label> m_xConfirm1FT;
+    std::unique_ptr<weld::Entry> m_xConfirm1ED;
 
-    VclPtr<FixedText>      mpMinLengthFT;
+    std::unique_ptr<weld::Frame> m_xPassword2Box;
+    std::unique_ptr<weld::Label> m_xPassword2FT;
+    std::unique_ptr<weld::Entry> m_xPassword2ED;
+    std::unique_ptr<weld::Label> m_xConfirm2FT;
+    std::unique_ptr<weld::Entry> m_xConfirm2ED;
 
-    VclPtr<OKButton>       mpOKBtn;
+    std::unique_ptr<weld::Label> m_xMinLengthFT;
+
+    std::unique_ptr<weld::Button> m_xOKBtn;
 
     OUString        maMinLenPwdStr;
     OUString        maMinLenPwdStr1;
@@ -76,47 +75,46 @@ private:
     SfxShowExtras  mnExtras;
 
     bool            mbAsciiOnly;
-    DECL_DLLPRIVATE_LINK(EditModifyHdl, Edit&, void);
-    DECL_DLLPRIVATE_LINK(OKHdl, Button *, void);
-    void            ModifyHdl(Edit*);
+    DECL_DLLPRIVATE_LINK(OKHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(InsertTextHdl, OUString&, bool);
+    DECL_DLLPRIVATE_LINK(EditModifyHdl, weld::Entry&, void);
+    void            ModifyHdl();
 
     void            SetPasswdText();
 
 public:
-    SfxPasswordDialog(vcl::Window* pParent, const OUString* pGroupText = nullptr);
-    virtual ~SfxPasswordDialog() override;
-    virtual void dispose() override;
+    SfxPasswordDialog(weld::Window* pParent, const OUString* pGroupText = nullptr);
 
     OUString GetUser() const
     {
-        return mpUserED->GetText();
+        return m_xUserED->get_text();
     }
     OUString GetPassword() const
     {
-        return mpPassword1ED->GetText();
+        return m_xPassword1ED->get_text();
     }
     OUString GetConfirm() const
     {
-        return mpConfirm1ED->GetText();
+        return m_xConfirm1ED->get_text();
     }
     OUString GetPassword2() const
     {
-        return mpPassword2ED->GetText();
+        return m_xPassword2ED->get_text();
     }
     void SetGroup2Text(const OUString& i_rText)
     {
-        mpPassword2Box->set_label(i_rText);
+        m_xPassword2Box->set_label(i_rText);
     }
     void SetMinLen(sal_uInt16 Len);
     void SetEditHelpId(const OString& rId)
     {
-        mpPassword1ED->SetHelpId( rId );
+        m_xPassword1ED->set_help_id(rId);
     }
     /* tdf#60874 we need a custom help ID for the Confirm
        field of the Protect Document window */
     void SetConfirmHelpId(const OString& rId)
     {
-        mpConfirm1ED->SetHelpId( rId );
+        m_xConfirm1ED->set_help_id(rId);
     }
 
     void ShowExtras(SfxShowExtras nExtras)
@@ -130,7 +128,9 @@ public:
 
     void ShowMinLengthText(bool bShow);
 
-    virtual short Execute() override;
+    void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
+    void set_help_id(const OString& rHelpId) { m_xDialog->set_help_id(rHelpId); }
+    short run();
 };
 
 #endif // INCLUDED_SFX2_PASSWD_HXX

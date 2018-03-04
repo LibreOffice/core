@@ -92,18 +92,18 @@ namespace
 
 
 static bool lcl_GetPassword(
-    vcl::Window *pParent,
+    weld::Window *pParent,
     bool bProtect,
     /*out*/OUString &rPassword )
 {
     bool bRes = false;
-    ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(pParent);
-    aPasswdDlg->SetMinLen( 1 );
+    SfxPasswordDialog aPasswdDlg(pParent);
+    aPasswdDlg.SetMinLen(1);
     if (bProtect)
-        aPasswdDlg->ShowExtras( SfxShowExtras::CONFIRM );
-    if (RET_OK == aPasswdDlg->Execute() && !aPasswdDlg->GetPassword().isEmpty())
+        aPasswdDlg.ShowExtras( SfxShowExtras::CONFIRM );
+    if (RET_OK == aPasswdDlg.run() && !aPasswdDlg.GetPassword().isEmpty())
     {
-        rPassword = aPasswdDlg->GetPassword();
+        rPassword = aPasswdDlg.GetPassword();
         bRes = true;
     }
     return bRes;
@@ -332,8 +332,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl, CheckBox&, void)
         bool bAlreadyDone = false;
         if (!m_bEndRedliningWarningDone)
         {
-            vcl::Window* pWin = m_rMyTabPage.GetParent();
-            std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+            std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_rMyTabPage.GetFrameWeld(),
                                                        VclMessageType::Warning, VclButtonsType::YesNo,
                                                        m_aEndRedliningWarning));
             xWarn->set_default_response(RET_NO);
@@ -350,7 +349,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl, CheckBox&, void)
             OUString aPasswordText;
 
             // dialog canceled or no password provided
-            if (!lcl_GetPassword( m_rMyTabPage.GetParent(), false, aPasswordText ))
+            if (!lcl_GetPassword( m_rMyTabPage.GetFrameWeld(), false, aPasswordText ))
                 bAlreadyDone = true;
 
             // ask for password and if dialog is canceled or no password provided return
@@ -390,7 +389,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl, Button*, void)
     if (bNeedPassword)
     {
         // ask for password and if dialog is canceled or no password provided return
-        if (!lcl_GetPassword( m_rMyTabPage.GetParent(), bNewProtection, aPasswordText ))
+        if (!lcl_GetPassword(m_rMyTabPage.GetFrameWeld(), bNewProtection, aPasswordText))
             return;
 
         // provided password still needs to be checked?

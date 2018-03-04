@@ -23,64 +23,81 @@
 #include <sfx2/strings.hrc>
 #include <vcl/weld.hxx>
 
-IMPL_LINK( SfxPasswordDialog, EditModifyHdl, Edit&, rEdit, void )
+IMPL_LINK_NOARG(SfxPasswordDialog, EditModifyHdl, weld::Entry&, void)
 {
-    ModifyHdl(&rEdit);
+    ModifyHdl();
 }
 
-void SfxPasswordDialog::ModifyHdl(Edit* pEdit)
+void SfxPasswordDialog::ModifyHdl()
 {
-    if (mbAsciiOnly && (pEdit == mpPassword1ED || pEdit == mpPassword2ED))
+    bool bEnable = m_xPassword1ED->get_text().getLength() >= mnMinLen;
+    if (m_xPassword2ED->get_visible())
+        bEnable = (bEnable && (m_xPassword2ED->get_text().getLength() >= mnMinLen));
+    m_xOKBtn->set_sensitive(bEnable);
+}
+
+IMPL_LINK(SfxPasswordDialog, InsertTextHdl, OUString&, rTest, bool)
+{
+    if (!mbAsciiOnly)
+        return true;
+
+    const sal_Unicode* pTest = rTest.getStr();
+    sal_Int32 nLen = rTest.getLength();
+    OUStringBuffer aFilter(nLen);
+    bool bReset = false;
+    for (sal_Int32 i = 0; i < nLen; ++i)
     {
-        OUString aTest( pEdit->GetText() );
-        const sal_Unicode* pTest = aTest.getStr();
-        sal_Int32 nLen = aTest.getLength();
-        OUStringBuffer aFilter( nLen );
-        bool bReset = false;
-        for( sal_Int32 i = 0; i < nLen; i++ )
-        {
-            if( *pTest > 0x007f )
-                bReset = true;
-            else
-                aFilter.append( *pTest );
-            pTest++;
-        }
-        if( bReset )
-        {
-            pEdit->SetSelection( Selection( 0, nLen ) );
-            pEdit->ReplaceSelected( aFilter.makeStringAndClear() );
-        }
-
+        if( *pTest > 0x007f )
+            bReset = true;
+        else
+            aFilter.append(*pTest);
+        ++pTest;
     }
-    bool bEnable = mpPassword1ED->GetText().getLength() >= mnMinLen;
-    if( mpPassword2ED->IsVisible() )
-        bEnable = (bEnable && (mpPassword2ED->GetText().getLength() >= mnMinLen));
-    mpOKBtn->Enable( bEnable );
+
+    if (bReset)
+        rTest = aFilter.makeStringAndClear();
+
+    return true;
 }
 
-IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl, Button*, void)
+IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl, weld::Button&, void)
 {
     bool bConfirmFailed = bool( mnExtras & SfxShowExtras::CONFIRM ) &&
                           ( GetConfirm() != GetPassword() );
-    if( ( mnExtras & SfxShowExtras::CONFIRM2 ) && ( mpConfirm2ED->GetText() != GetPassword2() ) )
+    if( ( mnExtras & SfxShowExtras::CONFIRM2 ) && ( m_xConfirm2ED->get_text() != GetPassword2() ) )
         bConfirmFailed = true;
     if ( bConfirmFailed )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                                  VclMessageType::Warning, VclButtonsType::Ok,
                                                                  SfxResId(STR_ERROR_WRONG_CONFIRM)));
         xBox->run();
-        mpConfirm1ED->SetText( OUString() );
-        mpConfirm1ED->GrabFocus();
+        m_xConfirm1ED->set_text(OUString());
+        m_xConfirm1ED->grab_focus();
     }
     else
-        EndDialog( RET_OK );
+        m_xDialog->response(RET_OK);
 }
 
 // CTOR / DTOR -----------------------------------------------------------
 
-SfxPasswordDialog::SfxPasswordDialog(vcl::Window* pParent, const OUString* pGroupText)
-    : ModalDialog(pParent, "PasswordDialog", "sfx/ui/password.ui")
+SfxPasswordDialog::SfxPasswordDialog(weld::Window* pParent, const OUString* pGroupText)
+    : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/password.ui"))
+    , m_xDialog(m_xBuilder->weld_dialog("PasswordDialog"))
+    , m_xPassword1Box(m_xBuilder->weld_frame("password1frame"))
+    , m_xUserFT(m_xBuilder->weld_label("userft"))
+    , m_xUserED(m_xBuilder->weld_entry("usered"))
+    , m_xPassword1FT(m_xBuilder->weld_label("pass1ft"))
+    , m_xPassword1ED(m_xBuilder->weld_entry("pass1ed"))
+    , m_xConfirm1FT(m_xBuilder->weld_label("confirm1ft"))
+    , m_xConfirm1ED(m_xBuilder->weld_entry("confirm1ed"))
+    , m_xPassword2Box(m_xBuilder->weld_frame("password2frame"))
+    , m_xPassword2FT(m_xBuilder->weld_label("pass2ft"))
+    , m_xPassword2ED(m_xBuilder->weld_entry("pass2ed"))
+    , m_xConfirm2FT(m_xBuilder->weld_label("confirm2ft"))
+    , m_xConfirm2ED(m_xBuilder->weld_entry("confirm2ed"))
+    , m_xMinLengthFT(m_xBuilder->weld_label("minlenft"))
+    , m_xOKBtn(m_xBuilder->weld_button("ok"))
     , maMinLenPwdStr(SfxResId(STR_PASSWD_MIN_LEN))
     , maMinLenPwdStr1(SfxResId(STR_PASSWD_MIN_LEN1))
     , maEmptyPwdStr(SfxResId(STR_PASSWD_EMPTY))
@@ -88,74 +105,35 @@ SfxPasswordDialog::SfxPasswordDialog(vcl::Window* pParent, const OUString* pGrou
     , mnExtras(SfxShowExtras::NONE)
     , mbAsciiOnly(false)
 {
-    get(mpPassword1Box, "password1frame");
-    get(mpUserFT, "userft");
-    get(mpUserED, "usered");
-    get(mpPassword1FT, "pass1ft");
-    get(mpPassword1ED, "pass1ed");
-    get(mpConfirm1FT, "confirm1ft");
-    get(mpConfirm1ED, "confirm1ed");
-
-    get(mpPassword2Box, "password2frame");
-    get(mpPassword2FT, "pass2ft");
-    get(mpPassword2ED, "pass2ed");
-    get(mpConfirm2FT, "confirm2ft");
-    get(mpConfirm2ED, "confirm2ed");
-
-    get(mpMinLengthFT, "minlenft");
-
-    get(mpOKBtn, "ok");
-
-    Link<Edit&,void> aLink = LINK( this, SfxPasswordDialog, EditModifyHdl );
-    mpPassword1ED->SetModifyHdl( aLink );
-    mpPassword2ED->SetModifyHdl( aLink );
-    mpOKBtn->SetClickHdl( LINK( this, SfxPasswordDialog, OKHdl ) );
+    Link<weld::Entry&,void> aLink = LINK(this, SfxPasswordDialog, EditModifyHdl);
+    m_xPassword1ED->connect_changed(aLink);
+    m_xPassword2ED->connect_changed(aLink);
+    Link<OUString&,bool> aLink2 = LINK(this, SfxPasswordDialog, InsertTextHdl);
+    m_xPassword1ED->connect_insert_text(aLink2);
+    m_xPassword2ED->connect_insert_text(aLink2);
+    m_xOKBtn->connect_clicked(LINK(this, SfxPasswordDialog, OKHdl));
 
     if (pGroupText)
-        mpPassword1Box->set_label(*pGroupText);
+        m_xPassword1Box->set_label(*pGroupText);
 
     //set the text to the password length
     SetPasswdText();
 }
 
-SfxPasswordDialog::~SfxPasswordDialog()
-{
-    disposeOnce();
-}
-
-void SfxPasswordDialog::dispose()
-{
-    mpPassword1Box.clear();
-    mpUserFT.clear();
-    mpUserED.clear();
-    mpPassword1FT.clear();
-    mpPassword1ED.clear();
-    mpConfirm1FT.clear();
-    mpConfirm1ED.clear();
-    mpPassword2Box.clear();
-    mpPassword2FT.clear();
-    mpPassword2ED.clear();
-    mpConfirm2FT.clear();
-    mpConfirm2ED.clear();
-    mpMinLengthFT.clear();
-    mpOKBtn.clear();
-    ModalDialog::dispose();
-}
-
 void SfxPasswordDialog::SetPasswdText( )
 {
-//set the new string to the minimum password length
-    if( mnMinLen == 0 )
-        mpMinLengthFT->SetText(maEmptyPwdStr);
+    //set the new string to the minimum password length
+    if (mnMinLen == 0)
+        m_xMinLengthFT->set_label(maEmptyPwdStr);
     else
     {
         if( mnMinLen == 1 )
-            mpMinLengthFT->SetText(maMinLenPwdStr1);
+            m_xMinLengthFT->set_label(maMinLenPwdStr1);
         else
         {
             maMainPwdStr = maMinLenPwdStr;
             maMainPwdStr = maMainPwdStr.replaceAll( "$(MINLEN)", OUString::number(static_cast<sal_Int32>(mnMinLen) ) );
-            mpMinLengthFT->SetText(maMainPwdStr);
+            m_xMinLengthFT->set_label(maMainPwdStr);
         }
     }
 }
@@ -165,54 +143,53 @@ void SfxPasswordDialog::SetMinLen( sal_uInt16 nLen )
 {
     mnMinLen = nLen;
     SetPasswdText();
-    ModifyHdl( nullptr );
+    ModifyHdl();
 }
 
 void SfxPasswordDialog::ShowMinLengthText(bool bShow)
 {
-    mpMinLengthFT->Show(bShow);
+    m_xMinLengthFT->show(bShow);
 }
 
-
-short SfxPasswordDialog::Execute()
+short SfxPasswordDialog::run()
 {
-    mpUserFT->Hide();
-    mpUserED->Hide();
-    mpConfirm1FT->Hide();
-    mpConfirm1ED->Hide();
-    mpPassword1FT->Hide();
-    mpPassword2Box->Hide();
-    mpPassword2FT->Hide();
-    mpPassword2ED->Hide();
-    mpPassword2FT->Hide();
-    mpConfirm2FT->Hide();
-    mpConfirm2ED->Hide();
+    m_xUserFT->hide();
+    m_xUserED->hide();
+    m_xConfirm1FT->hide();
+    m_xConfirm1ED->hide();
+    m_xPassword1FT->hide();
+    m_xPassword2Box->hide();
+    m_xPassword2FT->hide();
+    m_xPassword2ED->hide();
+    m_xPassword2FT->hide();
+    m_xConfirm2FT->hide();
+    m_xConfirm2ED->hide();
 
     if (mnExtras != SfxShowExtras::NONE)
-        mpPassword1FT->Show();
+        m_xPassword1FT->show();
     if (mnExtras & SfxShowExtras::USER)
     {
-        mpUserFT->Show();
-        mpUserED->Show();
+        m_xUserFT->show();
+        m_xUserED->show();
     }
     if (mnExtras & SfxShowExtras::CONFIRM)
     {
-        mpConfirm1FT->Show();
-        mpConfirm1ED->Show();
+        m_xConfirm1FT->show();
+        m_xConfirm1ED->show();
     }
     if (mnExtras & SfxShowExtras::PASSWORD2)
     {
-        mpPassword2Box->Show();
-        mpPassword2FT->Show();
-        mpPassword2ED->Show();
+        m_xPassword2Box->show();
+        m_xPassword2FT->show();
+        m_xPassword2ED->show();
     }
     if (mnExtras & SfxShowExtras::CONFIRM2)
     {
-        mpConfirm2FT->Show();
-        mpConfirm2ED->Show();
+        m_xConfirm2FT->show();
+        m_xConfirm2ED->show();
     }
 
-    return ModalDialog::Execute();
+    return m_xDialog->run();
 }
 
 

@@ -214,16 +214,16 @@ IMPL_LINK( OUserAdmin, UserHdl, Button *, pButton, void )
     {
         if(pButton == m_pNEWUSER)
         {
-            ScopedVclPtrInstance< SfxPasswordDialog > aPwdDlg(this);
-            aPwdDlg->ShowExtras(SfxShowExtras::ALL);
-            if(aPwdDlg->Execute())
+            SfxPasswordDialog aPwdDlg(GetFrameWeld());
+            aPwdDlg.ShowExtras(SfxShowExtras::ALL);
+            if (aPwdDlg.run())
             {
                 Reference<XDataDescriptorFactory> xUserFactory(m_xUsers,UNO_QUERY);
                 Reference<XPropertySet> xNewUser = xUserFactory->createDataDescriptor();
                 if(xNewUser.is())
                 {
-                    xNewUser->setPropertyValue(PROPERTY_NAME,makeAny(aPwdDlg->GetUser()));
-                    xNewUser->setPropertyValue(PROPERTY_PASSWORD,makeAny(aPwdDlg->GetPassword()));
+                    xNewUser->setPropertyValue(PROPERTY_NAME,makeAny(aPwdDlg.GetUser()));
+                    xNewUser->setPropertyValue(PROPERTY_PASSWORD,makeAny(aPwdDlg.GetPassword()));
                     Reference<XAppend> xAppend(m_xUsers,UNO_QUERY);
                     if(xAppend.is())
                         xAppend->appendByDescriptor(xNewUser);

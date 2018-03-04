@@ -216,12 +216,12 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
                 if ( ( aValue >>= bPassWord ) && bPassWord )
                 {
                     // ask for the password
-                    ScopedVclPtrInstance< SfxPasswordDialog > aPasswordDlg(nullptr);
-                    aPasswordDlg->ShowExtras( SfxShowExtras::CONFIRM );
-                    short nRet = aPasswordDlg->Execute();
+                    SfxPasswordDialog aPasswordDlg(m_xParent ? m_xParent->GetFrameWeld() : nullptr);
+                    aPasswordDlg.ShowExtras( SfxShowExtras::CONFIRM );
+                    short nRet = aPasswordDlg.run();
                     if ( RET_OK == nRet )
                     {
-                        m_pItemSet->Put( SfxStringItem( SID_PASSWORD, aPasswordDlg->GetPassword() ) );
+                        m_pItemSet->Put( SfxStringItem( SID_PASSWORD, aPasswordDlg.GetPassword() ) );
                     }
                     else
                     {

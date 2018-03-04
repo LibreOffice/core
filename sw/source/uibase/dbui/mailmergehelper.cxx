@@ -613,10 +613,10 @@ OUString SwAuthenticator::getPassword(  )
 {
     if(!m_aUserName.isEmpty() && m_aPassword.isEmpty() && m_pParentWindow)
     {
-       ScopedVclPtrInstance<SfxPasswordDialog> pPasswdDlg( m_pParentWindow );
-       pPasswdDlg->SetMinLen( 0 );
-       if(RET_OK == pPasswdDlg->Execute())
-            m_aPassword = pPasswdDlg->GetPassword();
+       SfxPasswordDialog aPasswdDlg(m_pParentWindow->GetFrameWeld());
+       aPasswdDlg.SetMinLen(0);
+       if (RET_OK == aPasswdDlg.run())
+            m_aPassword = aPasswdDlg.GetPassword();
     }
     return m_aPassword;
 }
