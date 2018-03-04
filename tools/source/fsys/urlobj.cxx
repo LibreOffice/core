@@ -332,12 +332,6 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
             "vnd.sun.star.webdav", "vnd.sun.star.webdav://", true, false,
             false, false, true, true, true, true},
         SchemeInfo{
-            "webdav", "webdav://", true, false, false, false, true, true,
-            true, true},
-        SchemeInfo{
-            "webdavs", "webdavs://", true, false, false, false, true, true,
-            true, true},
-        SchemeInfo{
             "private", "private:", false, false, false, false, false, false,
             false, true},
         SchemeInfo{
@@ -2180,10 +2174,6 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
             { "vnd.sun.star.tdoc:", nullptr, INetProtocol::VndSunStarTdoc,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.webdav:", nullptr, INetProtocol::VndSunStarWebdav,
-              PrefixInfo::OFFICIAL },
-            { "webdav:", nullptr, INetProtocol::Webdav,
-              PrefixInfo::OFFICIAL },
-            { "webdavs:", nullptr, INetProtocol::Webdavs,
               PrefixInfo::OFFICIAL }
         };
 /* This list needs to be sorted, or you'll introduce serious bugs */
@@ -2934,8 +2924,6 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
 
         case INetProtocol::Http:
         case INetProtocol::VndSunStarWebdav:
-        case INetProtocol::Webdav:
-        case INetProtocol::Webdavs:
         case INetProtocol::Https:
         case INetProtocol::Smb:
         case INetProtocol::Cmis:
@@ -3900,8 +3888,8 @@ bool INetURLObject::isAnyKnownWebDAVScheme() const {
              isSchemeEqualTo( INetProtocol::Https ) ||
              isSchemeEqualTo( INetProtocol::VndSunStarWebdav ) ||
              isSchemeEqualTo( u"vnd.sun.star.webdavs" ) ||
-             isSchemeEqualTo( INetProtocol::Webdav ) ||
-             isSchemeEqualTo( INetProtocol::Webdavs ));
+             isSchemeEqualTo( u"webdav" ) ||
+             isSchemeEqualTo( u"webdavs" ));
 }
 
 // static

@@ -130,14 +130,14 @@ ContentProvider::queryContent(
 
     if (aURL.isSchemeEqualTo(INetProtocol::VndSunStarWebdav) ||
         aURL.isSchemeEqualTo(DAV_URL_SCHEME) ||
-        aURL.isSchemeEqualTo(INetProtocol::Webdav))
+        aURL.isSchemeEqualTo(WEBDAV_URL_SCHEME))
     {
         aURL.changeScheme(INetProtocol::Http);
         xCanonicId = new ::ucbhelper::ContentIdentifier( aURL.getExternalURL() );
     }
     else if (aURL.isSchemeEqualTo(VNDSUNSTARWEBDAVS_URL_SCHEME) ||
         aURL.isSchemeEqualTo(DAVS_URL_SCHEME) ||
-        aURL.isSchemeEqualTo(INetProtocol::Webdavs))
+        aURL.isSchemeEqualTo(WEBDAVS_URL_SCHEME))
     {
         aURL.changeScheme(INetProtocol::Https);
         xCanonicId = new ::ucbhelper::ContentIdentifier( aURL.getExternalURL() );
