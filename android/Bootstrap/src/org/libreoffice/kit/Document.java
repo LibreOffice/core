@@ -232,6 +232,21 @@ public class Document {
     public native void setGraphicSelection(int type, int x, int y);
 
     /**
+     * Get selected text
+     * @param mimeType
+     * @return
+     */
+    public native String getTextSelection(String mimeType);
+
+    /**
+     * paste
+     * @param mimeType
+     * @param data
+     * @return
+     */
+    public native boolean paste(String mimeType, String data);
+
+    /**
      * Reset current (any kind of) selection.
      */
     public native void resetSelection();
