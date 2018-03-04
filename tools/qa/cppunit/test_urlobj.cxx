@@ -322,7 +322,7 @@ namespace tools_urlobj
 
         void urlobjTest_isSchemeEqualTo() {
             CPPUNIT_ASSERT(INetURLObject().isSchemeEqualTo(INetProtocol::NotValid));
-            CPPUNIT_ASSERT(!INetURLObject().isSchemeEqualTo(""));
+            CPPUNIT_ASSERT(!INetURLObject().isSchemeEqualTo(u""));
             CPPUNIT_ASSERT(
                 INetURLObject("http://example.org").isSchemeEqualTo(
                     INetProtocol::Http));
@@ -330,11 +330,11 @@ namespace tools_urlobj
                 !INetURLObject("http://example.org").isSchemeEqualTo(
                     INetProtocol::Https));
             CPPUNIT_ASSERT(
-                INetURLObject("http://example.org").isSchemeEqualTo("Http"));
+                INetURLObject("http://example.org").isSchemeEqualTo(u"Http"));
             CPPUNIT_ASSERT(
-                !INetURLObject("http://example.org").isSchemeEqualTo("dav"));
+                !INetURLObject("http://example.org").isSchemeEqualTo(u"dav"));
             CPPUNIT_ASSERT(
-                INetURLObject("dav://example.org").isSchemeEqualTo("dav"));
+                INetURLObject("dav://example.org").isSchemeEqualTo(u"dav"));
         }
 
         void urlobjTest_isAnyKnownWebDAVScheme() {

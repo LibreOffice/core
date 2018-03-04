@@ -3889,10 +3889,10 @@ OUString INetURLObject::getExternalURL() const
     return aTheExtURIRef;
 }
 
-bool INetURLObject::isSchemeEqualTo(OUString const & scheme) const {
+bool INetURLObject::isSchemeEqualTo(o3tl::u16string_view scheme) const {
     return m_aScheme.isPresent()
         && (rtl_ustr_compareIgnoreAsciiCase_WithLength(
-                scheme.getStr(), scheme.getLength(),
+                scheme.data(), scheme.size(),
                 m_aAbsURIRef.getStr() + m_aScheme.getBegin(),
                 m_aScheme.getLength())
             == 0);
