@@ -527,6 +527,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         aIllegal.Message = "first parameter invalid";
         throw aIllegal;
     }
+    // Any direct formatting ending at the insert position (xRange) should not
+    // be expanded to cover the inserted content (xContent)
+    GetDoc()->DontExpandFormat( *aPam.Start() );
+
     // first test if the range is at the right position, then call
     // xContent->attach
     const SwStartNode* pOwnStartNode = GetStartNode();
