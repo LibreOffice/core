@@ -746,7 +746,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             //    hex4 = 1*4HEXDIG
             //    UCS4 = <any UCS4 character>
 
-            // 1st Production (known scheme):
+            // 1st Production (known scheme; handled by the "if (pPrefix)" branch above):
             //    <one of the known schemes, ignoring case> ":" *UCS4
             // 2nd Production (mailto):
             //    domain "@" domain
@@ -764,6 +764,9 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             //    ALPHA ":" ["/" *UCS4]
             // 9th Production (DOS file; FSysStyle::Dos only):
             //    ALPHA ":" ["\" *UCS4]
+            // 10th Production (any scheme; handled by the "m_eScheme = INetProtocol::Generic;" code
+            // after this else branch):
+            //    <any scheme> ":" *UCS4
 
             // For the 'non URL' file productions 6--9, the interpretation of
             // the input as a (degenerate) URI is turned off, i.e., escape
