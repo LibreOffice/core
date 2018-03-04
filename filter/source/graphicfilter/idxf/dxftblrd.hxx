@@ -109,7 +109,7 @@ public:
     double fCenterY;                  // 22
     double fSnapBaseX;                // 13
     double fSnapBaseY;                // 23
-    double fSnapSapcingX;             // 14
+    double fSnapSpacingX;             // 14
     double fSnapSpacingY;             // 24
     double fGridX;                    // 15
     double fGridY;                    // 25

@@ -178,7 +178,7 @@ DXFVPort::DXFVPort()
     fCenterY=0;
     fSnapBaseX=0;
     fSnapBaseY=0;
-    fSnapSapcingX=0;
+    fSnapSpacingX=0;
     fSnapSpacingY=0;
     fGridX=0;
     fGridY=0;
@@ -215,7 +215,7 @@ void DXFVPort::Read(DXFGroupReader & rDGR)
         case 11: fMaxX=rDGR.GetF(); break;
         case 12: fCenterX=rDGR.GetF(); break;
         case 13: fSnapBaseX=rDGR.GetF(); break;
-        case 14: fSnapSapcingX=rDGR.GetF(); break;
+        case 14: fSnapSpacingX=rDGR.GetF(); break;
         case 15: fGridX=rDGR.GetF(); break;
         case 16: aDirection.fx=rDGR.GetF(); break;
         case 17: aTarget.fx=rDGR.GetF(); break;
