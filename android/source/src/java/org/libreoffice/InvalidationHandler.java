@@ -443,6 +443,7 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
             if (mContext.isSpreadsheet()) {
                 mDocumentOverlay.showHeaderSelection(null);
             }
+            mContext.getToolbarController().showHideClipboardCutAndCopy(false);
         } else {
             List<RectF> rectangles = convertPayloadToRectangles(payload);
             if (mState != OverlayState.SELECTION) {
@@ -453,6 +454,8 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
             if (mContext.isSpreadsheet()) {
                 mDocumentOverlay.showHeaderSelection(rectangles.get(0));
             }
+            String selectedText = mContext.getTileProvider().getTextSelection("");
+            mContext.getToolbarController().showClipboardActions(selectedText);
         }
     }
 
