@@ -47,8 +47,8 @@ namespace http_dav_ucp {
 #define HTTPS_URL_SCHEME             "https"
 #define DAV_URL_SCHEME               u"dav"
 #define DAVS_URL_SCHEME              u"davs"
-#define WEBDAV_URL_SCHEME            "webdav"
-#define WEBDAVS_URL_SCHEME           "webdavs"
+#define WEBDAV_URL_SCHEME            u"webdav"
+#define WEBDAVS_URL_SCHEME           u"webdavs"
 
 #define HTTP_CONTENT_TYPE      "application/" HTTP_URL_SCHEME "-content"
 

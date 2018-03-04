@@ -55,8 +55,6 @@ enum class INetProtocol
     File,
     Mailto,
     VndSunStarWebdav,
-    Webdav,
-    Webdavs,
     PrivSoffice,
     VndSunStarHelp,
     Https,
