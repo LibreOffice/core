@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_ddb32709",
+        "filename": "sw/source/filter/writer/writer.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-04T16:30:12Z",
+      "side": 1,
+      "message": "Oliver, seeing that you had resurrected this old code that had in the interim been removed with c54f77b7180b271fecff3737bc391e19f050ec11 \"callcatcher: update unused code\":  Any idea what this code actually wants to check aTargetURL for?  As written, the check would be OK for ftp, http, mailto, and vnd.sun.star.webdav.  What about other schemes like https or those other http/webdav aliases (dav, davs, vnd.sun.star.webdavs, webdav, webdavs), or smb, or...?  (And any idea what that \"this is our old without the Mail-Export\" comment is meant to mean?)",
+      "revId": "46fa816aa0a713c54836b9689fa7a1c9ff55ef5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
