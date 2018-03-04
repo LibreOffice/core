@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_dd7b277a",
+        "filename": "bin/gla11y",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-03-04T10:21:31Z",
+      "side": 0,
+      "message": "this was rather a quick fix to get spam-every-2-mins from the tinderboxes to subside - perhaps a better way would be disabling of the feature in configure, so we spare us running an essential /bin/true for all UI files?",
+      "revId": "70b448724f55958acd9907fe51d20ef1b779046a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
